@@ -1,791 +1,156 @@
-2013-03-26 19:35  gjanssens
+2013-04-18 07:20  cstim
 
-	* [r22834] src/gnome-utils/dialog-account.c: Bug #696469 -
+	* [r22913] po/de.po: Updated German translation. For plural forms,
+	  the singular does not need to specify the %d conversion
+	  specifier. See e.g. this thread
+	  http://article.gmane.org/gmane.comp.version-control.git/221583
+
+2013-04-17 20:18  cstim
+
+	* [r22912] packaging/win32/defaults.sh,
+	  packaging/win32/install-impl.sh: Win32 build: Update libofx to
+	  version 0.9.8, including version check
+
+2013-04-15 19:36  cstim
+
+	* [r22907] po/nl.po: Updated Dutch translation, copied from the
+	  Translation Project.
+
+2013-04-14 19:47  cstim
+
+	* [r22905] po/da.po: Updated Danish translation, via Translation
+	  Project.
+
+2013-04-11 20:33  cstim
+
+	* [r22896] packaging/win32/defaults.sh: [22895] Win32 build:
+	  Upgrade libofx to 0.9.7 due to bug #697133 with long lines
+
+2013-04-09 23:02  jralls
+
+	* [r22893] configure.ac, macros/ac_python_devel.m4: [r22892][Bug
+	  #697402] configure doesn't find python on Debian Lose the
+	  PKG_CHECK_MODULES for python and make sure that Python.h is
+	  present and findable in AC_PYTHON_DEVEL instead.
+
+2013-04-04 10:54  mikee
+
+	* [r22872] src/report/standard-reports/register.scm:
+	  [r22833]Prevent line break in date column on hyphen.
+
+2013-03-30 15:00  cstim
+
+	* [r22849] packaging/win32/defaults.sh: Update libofx version to
+	  0.9.6, released today
+
+2013-03-29 20:54  jralls
+
+	* [r22845] ChangeLog, ChangeLog.2011, ChangeLog.2012, NEWS: Update
+	  NEWS and Changelogs for 2.4.12 Release
+
+2013-03-29 20:22  jralls
+
+	* [r22844] configure.ac: Bump Version for 2.4.12
+
+2013-03-29 20:13  cstim
+
+	* [r22842] packaging/win32/defaults.sh: Win32 build: Update libofx
+	  version... there was a 0.9.5 release last year.
+
+2013-03-29 20:04  cstim
+
+	* [r22841] accounts/ru/acctchrt_common.gnucash-xea: [22840] Fix
+	  spell error in Russian translation, by enikulenkov. Patch
+	  submitted as github pull request, see here:
+	  https://github.com/enikulenkov/gnucash/commit/ceab7311fc6512349a73bfe927f7f0b53868d173
+
+2013-03-29 19:36  cstim
+
+	* [r22839] packaging/win32/defaults.sh: Win32 build: Update
+	  aqbanking versions (and libofx, ktoblzcheck, gwenhywfar) for 2.4
+	  branch
+
+2013-03-29 16:29  jralls
+
+	* [r22837] Makefile.am: [r22836]Modify the distcheck of
+	  POTFILES.skip to ignore scheme files They need to be in the skip
+	  file to mollify newer intltool versions, but still need to be
+	  handled by guile-strings.c for older versions of intltool.
+
+2013-03-26 19:47  gjanssens
+
+	* [r22835] src/gnome-utils/dialog-account.c: [22834] Bug #696469 -
 	  renumbering subaccounts does not preserve original order Author
-	  Sébastien Villemot <sebastien@debian.org> BP
+	  Sébastien Villemot <sebastien@debian.org>
 
-2013-03-24 14:03  mikee
+2013-03-09 10:24  cstim
 
-	* [r22833] src/report/standard-reports/register.scm: Prevent line
-	  break in date column on hyphen.
+	* [r22826] src/import-export/ofx/gnc-ofx-import.c: [22825] Bug
+	  #695423: Fix OFX Commodity Account handling. Patch by Burke.
 
-2013-03-24 00:03  mta
+2013-03-03 01:52  jralls
 
-	* [r22832] src/libqof/qof/Makefile.am: Compile md5.c with
-	  "-fno-strict-aliasing". The function md5_finish_ctx dereferences
-	  type-punned pointers which breaks strict aliasing rules.
+	* [r22823] src/gnome-utils/gnc-gnome-utils.c: [r22822]Mac: Adjust
+	  document path for new location
 
-2013-03-23 06:41  mta
+2013-03-02 00:25  jralls
 
-	* [r22831] src/bin/gnucash-bin.c: One more try to get
-	  initialization right. This doesn't change things unless
-	  --add-price-quotes is given. If it is then it must be handled
-	  before gtk is initialized since DISPLAY might not be set which
-	  will cause gtk initialization to fail. This happens when running
-	  the X version of GnuCash from launchd on a Mac to get price
-	  quotes updated.
+	* [r22819] src/backend/dbi/gnc-backend-dbi.c: [r22818][Bug
+	  #661832]MySQL database error after wireless reconnect After
+	  suggestion by Wang Xiaozhe <chaoslawful@gmail.com>
 
-2013-03-22 21:40  cstim
+2013-02-18 20:56  cstim
 
-	* [r22830] src/libqof/qof/gnc-date.c,
-	  src/libqof/qof/test/test-gnc-date.c: Fix erroneous conversion
-	  from time64 to struct tm because the Sunday weekday has a
-	  different number in GDateTime vs. struct tm. In struct tm, the
-	  weekday is in the range 0..6 with Sunday=0, but in GDateTime the
-	  weekday is in the range 1..7 with Sunday=7. This should better
-	  be added to the GDateTime documentation at
-	  g_date_time_get_day_of_week, but apparently nobody documented
-	  this so far.
+	* [r22785] po/de.po: Minor update of German translation, as
+	  suggested by Dietmar Wolf. I hope this wording is not a Swiss
+	  German issue but is valid for all German speakers.
 
-2013-03-22 21:39  cstim
+2013-02-18 19:59  cstim
 
-	* [r22829] src/business/business-ledger/gncEntryLedgerModel.c,
-	  src/core-utils/gnc-jalali.c,
-	  src/register/ledger-core/split-register-model.c: Fix memory
-	  leaks due to localtime -> gnc_localtime replacement in r22618,
-	  r22626, r22627
-	* [r22828] src/bin/gnucash-bin.c: Again reorder the initialization
-	  in gnucash-bin: gtk_init_check must be called before
-	  gnc_module_system_init. This commit reverts parts of r22399,
-	  because the gtk_init after module_system_init caused some
-	  messed-up locale settings in dependent modules (in particular,
-	  the aqbanking module).
+	* [r22782] po/uk.po: Updated Ukrainian translation, by Maksym
+	  Kobieliev, via Translation Project.
 
-2013-03-11 18:08  gjanssens
+2013-02-16 23:11  alex.aycinena
 
-	* [r22827] src/engine/Transaction.c, src/engine/Transaction.h,
-	  src/engine/engine-helpers.c,
-	  src/gnome-utils/gnc-tree-control-split-reg.c,
-	  src/gnome-utils/gnc-tree-control-split-reg.h,
-	  src/gnome-utils/gnc-tree-model-split-reg.c,
-	  src/gnome-utils/gnc-tree-model-split-reg.h,
-	  src/gnome-utils/gnc-tree-view-split-reg.c,
-	  src/gnome-utils/gnc-tree-view-split-reg.h,
-	  src/gnome/gnc-plugin-page-register2.c,
-	  src/gnome/gnc-split-reg2.c, src/gnome/gnc-split-reg2.h,
-	  src/gnome/gtkbuilder/gnc-plugin-page-register2.glade,
-	  src/gnome/ui/gnc-plugin-page-register2-ui.xml,
-	  src/register/ledger-core/gnc-ledger-display2.c,
-	  src/register/ledger-core/gnc-ledger-display2.h: Register rewrite
-	  Update This update is mainly to do with the change to using a
-	  tree model sort and model filter. The existing sort option has
-	  been removed and replaced with the model sort which saves the
-	  order to gconf. The filter option is still used but uses the
-	  model filter instead of the query and still saves to kvp entries
-	  in each register. There are also some changes to the cut, copy
-	  and paste of transactions along with the transaction auto
-	  complete. Author: Robert Fewell
-
-2013-03-09 10:22  cstim
-
-	* [r22825] src/import-export/ofx/gnc-ofx-import.c: Bug #695423:
-	  Fix OFX Commodity Account handling. Patch by Burke. BP
-
-2013-03-06 20:28  cstim
-
-	* [r22824] src/doc/xml/gnucash-v2.rnc: Adding statement about
-	  GPLv2 and v3 license as discussed on gnucash-devel yesterday.
-
-2013-03-03 01:50  jralls
-
-	* [r22822] src/gnome-utils/gnc-gnome-utils.c: Mac: Adjust document
-	  path for new location BP
-
-2013-03-02 14:03  cstim
-
-	* [r22821] packaging/win32/defaults.sh: Win32 installer: Update
-	  version numbers for gwenhywfar, aqbanking, ktoblzcheck. Once
-	  this compiles, the resulting binary can also run SEPA online
-	  transfers.
-
-2013-03-02 13:49  cstim
-
-	* [r22820] src/import-export/aqbanking/dialog-ab-trans.c: Minor
-	  bugfix: Guard against NULL pointer in sprintf argument.
-
-2013-03-02 00:21  jralls
-
-	* [r22818] src/backend/dbi/gnc-backend-dbi.c: [Bug #661832]MySQL
-	  database error after wireless reconnect After suggestion by Wang
-	  Xiaozhe <chaoslawful@gmail.com> BP
-
-2013-03-01 21:38  cstim
-
-	* [r22817] src/import-export/aqbanking/dialog-ab.glade,
-	  src/import-export/aqbanking/gnc-gwen-gui.c: Fix erroneous widget
-	  lookup after a widget in the glade file has been renamed This is
-	  a result of the glorious idea of glade to have all widget names
-	  in one file have unique names, but not verifying that we really
-	  can continue to do the lookup as before. Oh well.
-
-2013-03-01 21:28  cstim
-
-	* [r22816] src/import-export/aqbanking/dialog-ab-trans.c,
-	  src/import-export/aqbanking/gnc-gwen-gui.c: Aqbanking SEPA
-	  transfer: Really test and finish the implementation. Also,
-	  apparently the iTAN authentication method doesn't work unless
-	  one activates the GTK2_GUI code in gnc-gwen-gui.c:70 but I need
-	  to check this further.
-
-2013-02-28 09:52  gjanssens
-
-	* [r22815] po/POTFILES.in, src/engine/Split.c, src/engine/Split.h,
-	  src/engine/Transaction.c, src/engine/Transaction.h,
-	  src/gnome-utils/Makefile.am, src/gnome-utils/dialog-transfer.c,
-	  src/gnome-utils/gnc-tree-control-split-reg.c,
-	  src/gnome-utils/gnc-tree-control-split-reg.h,
-	  src/gnome-utils/gnc-tree-model-split-reg.c,
-	  src/gnome-utils/gnc-tree-model-split-reg.h,
-	  src/gnome-utils/gnc-tree-view-split-reg.c,
-	  src/gnome-utils/gnc-tree-view-split-reg.h,
-	  src/gnome-utils/gnc-tree-view.c,
-	  src/gnome-utils/gnc-tree-view.h,
-	  src/gnome/gnc-plugin-page-register2.c,
-	  src/gnome/gnc-plugin-page-register2.h,
-	  src/gnome/gnc-split-reg2.c, src/gnome/gnc-split-reg2.h,
-	  src/register/ledger-core/gnc-ledger-display2.c,
-	  src/register/ledger-core/gnc-ledger-display2.h: Register rewrite
-	  Update. The main things in this patch is I think the model is
-	  working correctly now, you can add, change and delete same
-	  currency transactions along with different currencies asking for
-	  exchange rates and also share accounts. Other changes: - use the
-	  default GTK_TREE_VIEW sort mechanism. - Added cut, copy & paste
-	  - Added right-click context menu. Author: Robert Fewell Register
-	  rewrite Update.
-
-2013-02-27 23:31  alex.aycinena
-
-	* [r22814]
-	  src/import-export/csv-import/assistant-csv-account-import.c,
-	  src/import-export/csv-import/assistant-csv-account-import.glade,
-	  src/import-export/csv-import/assistant-csv-account-import.h:
-	  Replace GtkLabel with a GtkTextView within a GtkScrolledWindow
-	  for error summary for csv account import so that window doesn't
-	  get larger than screen with large error messages.
-
-2013-02-25 10:13  gjanssens
-
-	* [r22813] packaging/win32/crossbuild_webkit.sh,
-	  packaging/win32/defaults.sh, packaging/win32/dist-impl.sh,
-	  packaging/win32/install-impl.sh: Winbuild: remove obsolete
-	  pixman dependency It was an internal depencency of libgnomeui,
-	  which is no longer used for GnuCash I found one more reference
-	  to libgnomeui in the crosbuild_webkit.sh script. I have removed
-	  it there as well.
-
-2013-02-23 22:53  gjanssens
-
-	* [r22812] po/POTFILES.in: Fix make check failure pointed out by
-	  Alex Aycinena
-
-2013-02-23 16:22  cstim
-
-	* [r22811]
-	  src/import-export/aqbanking/gnc-plugin-aqbanking-ui.xml:
-	  Aqbanking online transfer: Disable SEPA direct debit menu item
-	  again because no bank supports it. The (SEPA) banks apparently
-	  only support multi-jobs, not single jobs, but the former is not
-	  yet in aqbanking and not yet in gnucash.
-
-2013-02-23 16:11  cstim
-
-	* [r22810] lib/stf/stf-parse.c, lib/stf/stf-parse.h,
-	  packaging/win32/redirect.c, packaging/win32/webkitenumtypes.h,
-	  src/app-utils/gnc-ui-balances.c,
-	  src/app-utils/gnc-ui-balances.h,
-	  src/backend/dbi/test/test-backend-dbi.c,
-	  src/backend/dbi/test/utest-backend-dbi-basic.c,
-	  src/backend/dbi/test/utest-backend-dbi-business.c,
-	  src/backend/sql/test/test-sqlbe.c,
-	  src/backend/sql/test/utest-gnc-backend-sql.c,
-	  src/business/business-gnome/gnc-plugin-page-owner-tree.c,
-	  src/business/business-gnome/gnc-plugin-page-owner-tree.h,
-	  src/core-utils/gnc-features.c, src/core-utils/gnc-features.h,
-	  src/core-utils/gnc-guile-utils.c,
-	  src/core-utils/gnc-guile-utils.h, src/engine/test/test-engine.c,
-	  src/engine/test/utest-Account.c, src/engine/test/utest-Budget.c,
-	  src/engine/test/utest-Split.c,
-	  src/gnome-utils/assistant-utils.c,
-	  src/gnome-utils/assistant-utils.h,
-	  src/gnome-utils/dialog-query-view.c,
-	  src/gnome-utils/gnc-cell-renderer-date.c,
-	  src/gnome-utils/gnc-cell-renderer-date.h,
-	  src/gnome-utils/gnc-cell-renderer-popup-entry.c,
-	  src/gnome-utils/gnc-cell-renderer-popup-entry.h,
-	  src/gnome-utils/gnc-cell-renderer-popup.c,
-	  src/gnome-utils/gnc-cell-renderer-popup.h,
-	  src/gnome-utils/gnc-combott.c, src/gnome-utils/gnc-combott.h,
-	  src/gnome-utils/gnc-query-view.c,
-	  src/gnome-utils/gnc-query-view.h,
-	  src/gnome-utils/gnc-tree-model-owner.c,
-	  src/gnome-utils/gnc-tree-model-owner.h,
-	  src/gnome-utils/gnc-tree-model-split-reg.c,
-	  src/gnome-utils/gnc-tree-model-split-reg.h,
-	  src/gnome-utils/gnc-tree-view-owner.c,
-	  src/gnome-utils/gnc-tree-view-owner.h,
-	  src/gnome-utils/gnc-tree-view-split-reg.c,
-	  src/gnome-utils/gnc-tree-view-split-reg.h,
-	  src/gnome/gnc-budget-view.c, src/gnome/gnc-budget-view.h,
-	  src/gnome/gnc-plugin-page-register2.c,
-	  src/gnome/gnc-plugin-page-register2.h,
-	  src/gnome/gnc-plugin-register2.c,
-	  src/gnome/gnc-plugin-register2.h, src/gnome/gnc-split-reg2.c,
-	  src/gnome/gnc-split-reg2.h, src/gnome/reconcile-view.c,
-	  src/gnome/reconcile-view.h, src/libqof/qof/qof-string-cache.c,
-	  src/libqof/qof/qof-string-cache.h,
-	  src/libqof/qof/test/test-kvp_frame.c,
-	  src/libqof/qof/test/test-qof-string-cache.c,
-	  src/libqof/qof/test/test-qofobject.c,
-	  src/plugins/bi_import/dialog-bi-import-gui.c,
-	  src/plugins/bi_import/dialog-bi-import-gui.h,
-	  src/plugins/bi_import/dialog-bi-import-helper.c,
-	  src/plugins/bi_import/dialog-bi-import-helper.h,
-	  src/plugins/bi_import/dialog-bi-import.c,
-	  src/plugins/bi_import/dialog-bi-import.h,
-	  src/plugins/bi_import/gnc-plugin-bi-import.c,
-	  src/plugins/bi_import/gnc-plugin-bi-import.h,
-	  src/plugins/bi_import/gncmod-bi-import.c,
-	  src/plugins/customer_import/dialog-customer-import-gui.c,
-	  src/plugins/customer_import/dialog-customer-import-gui.h,
-	  src/plugins/customer_import/dialog-customer-import.c,
-	  src/plugins/customer_import/dialog-customer-import.h,
-	  src/plugins/customer_import/gnc-plugin-customer_import.c,
-	  src/plugins/customer_import/gnc-plugin-customer_import.h,
-	  src/plugins/customer_import/libgncmod-customer_import.c,
-	  src/register/ledger-core/gnc-ledger-display2.c,
-	  src/register/ledger-core/gnc-ledger-display2.h,
-	  src/register/register-gnome/gnucash-sheetP.h,
-	  src/test-core/unittest-support.c, test-templates/test-module.c,
-	  test-templates/test-suite.c, test-templates/testmain.c: Set
-	  svn:eol-style property to LF on .h and .c that did not yet have
-	  it so far.
-
-2013-02-23 15:58  cstim
-
-	* [r22809] src/report/jqplot/MIT-LICENSE.txt,
-	  src/report/jqplot/README.txt, src/report/jqplot/changes.txt,
-	  src/report/jqplot/copyright.txt, src/report/jqplot/excanvas.js,
-	  src/report/jqplot/excanvas.min.js,
-	  src/report/jqplot/gpl-2.0.txt,
-	  src/report/jqplot/jqPlotCssStyling.txt,
-	  src/report/jqplot/jqPlotOptions.txt,
-	  src/report/jqplot/jquery-1.4.2.min.js,
-	  src/report/jqplot/jquery.jqplot.js,
-	  src/report/jqplot/jquery.jqplot.min.js,
-	  src/report/jqplot/jquery.js, src/report/jqplot/jquery.min.js,
-	  src/report/jqplot/optionsTutorial.txt,
-	  src/report/jqplot/plugins/jqplot.BezierCurveRenderer.js,
-	  src/report/jqplot/plugins/jqplot.BezierCurveRenderer.min.js,
-	  src/report/jqplot/plugins/jqplot.barRenderer.js,
-	  src/report/jqplot/plugins/jqplot.barRenderer.min.js,
-	  src/report/jqplot/plugins/jqplot.blockRenderer.js,
-	  src/report/jqplot/plugins/jqplot.blockRenderer.min.js,
-	  src/report/jqplot/plugins/jqplot.bubbleRenderer.js,
-	  src/report/jqplot/plugins/jqplot.bubbleRenderer.min.js,
-	  src/report/jqplot/plugins/jqplot.canvasAxisLabelRenderer.js,
-	  src/report/jqplot/plugins/jqplot.canvasAxisLabelRenderer.min.js,
-	  src/report/jqplot/plugins/jqplot.canvasAxisTickRenderer.js,
-	  src/report/jqplot/plugins/jqplot.canvasAxisTickRenderer.min.js,
-	  src/report/jqplot/plugins/jqplot.canvasOverlay.js,
-	  src/report/jqplot/plugins/jqplot.canvasOverlay.min.js,
-	  src/report/jqplot/plugins/jqplot.canvasTextRenderer.js,
-	  src/report/jqplot/plugins/jqplot.canvasTextRenderer.min.js,
-	  src/report/jqplot/plugins/jqplot.categoryAxisRenderer.js,
-	  src/report/jqplot/plugins/jqplot.categoryAxisRenderer.min.js,
-	  src/report/jqplot/plugins/jqplot.ciParser.js,
-	  src/report/jqplot/plugins/jqplot.ciParser.min.js,
-	  src/report/jqplot/plugins/jqplot.cursor.js,
-	  src/report/jqplot/plugins/jqplot.cursor.min.js,
-	  src/report/jqplot/plugins/jqplot.dateAxisRenderer.js,
-	  src/report/jqplot/plugins/jqplot.dateAxisRenderer.min.js,
-	  src/report/jqplot/plugins/jqplot.donutRenderer.js,
-	  src/report/jqplot/plugins/jqplot.donutRenderer.min.js,
-	  src/report/jqplot/plugins/jqplot.dragable.js,
-	  src/report/jqplot/plugins/jqplot.dragable.min.js,
-	  src/report/jqplot/plugins/jqplot.enhancedLegendRenderer.js,
-	  src/report/jqplot/plugins/jqplot.enhancedLegendRenderer.min.js,
-	  src/report/jqplot/plugins/jqplot.funnelRenderer.js,
-	  src/report/jqplot/plugins/jqplot.funnelRenderer.min.js,
-	  src/report/jqplot/plugins/jqplot.highlighter.js,
-	  src/report/jqplot/plugins/jqplot.highlighter.min.js,
-	  src/report/jqplot/plugins/jqplot.json2.js,
-	  src/report/jqplot/plugins/jqplot.json2.min.js,
-	  src/report/jqplot/plugins/jqplot.logAxisRenderer.js,
-	  src/report/jqplot/plugins/jqplot.logAxisRenderer.min.js,
-	  src/report/jqplot/plugins/jqplot.mekkoAxisRenderer.js,
-	  src/report/jqplot/plugins/jqplot.mekkoAxisRenderer.min.js,
-	  src/report/jqplot/plugins/jqplot.mekkoRenderer.js,
-	  src/report/jqplot/plugins/jqplot.mekkoRenderer.min.js,
-	  src/report/jqplot/plugins/jqplot.meterGaugeRenderer.js,
-	  src/report/jqplot/plugins/jqplot.meterGaugeRenderer.min.js,
-	  src/report/jqplot/plugins/jqplot.mobile.js,
-	  src/report/jqplot/plugins/jqplot.mobile.min.js,
-	  src/report/jqplot/plugins/jqplot.ohlcRenderer.js,
-	  src/report/jqplot/plugins/jqplot.ohlcRenderer.min.js,
-	  src/report/jqplot/plugins/jqplot.pieRenderer.js,
-	  src/report/jqplot/plugins/jqplot.pieRenderer.min.js,
-	  src/report/jqplot/plugins/jqplot.pointLabels.js,
-	  src/report/jqplot/plugins/jqplot.pointLabels.min.js,
-	  src/report/jqplot/plugins/jqplot.pyramidAxisRenderer.js,
-	  src/report/jqplot/plugins/jqplot.pyramidAxisRenderer.min.js,
-	  src/report/jqplot/plugins/jqplot.pyramidGridRenderer.js,
-	  src/report/jqplot/plugins/jqplot.pyramidGridRenderer.min.js,
-	  src/report/jqplot/plugins/jqplot.pyramidRenderer.js,
-	  src/report/jqplot/plugins/jqplot.pyramidRenderer.min.js,
-	  src/report/jqplot/plugins/jqplot.trendline.js,
-	  src/report/jqplot/plugins/jqplot.trendline.min.js,
-	  src/report/jqplot/usage.txt: Also set svn:eol-style property LF
-	  on .js files so that the files will surely have LF line endings
-	  in SVN in all cases.
-
-2013-02-23 10:34  mikee
-
-	* [r22808] src/report/jqplot/excanvas.min.js,
-	  src/report/jqplot/jquery.jqplot.min.js,
-	  src/report/jqplot/plugins/jqplot.BezierCurveRenderer.min.js,
-	  src/report/jqplot/plugins/jqplot.barRenderer.min.js,
-	  src/report/jqplot/plugins/jqplot.blockRenderer.min.js,
-	  src/report/jqplot/plugins/jqplot.bubbleRenderer.min.js,
-	  src/report/jqplot/plugins/jqplot.canvasAxisLabelRenderer.min.js,
-	  src/report/jqplot/plugins/jqplot.canvasAxisTickRenderer.min.js,
-	  src/report/jqplot/plugins/jqplot.canvasOverlay.min.js,
-	  src/report/jqplot/plugins/jqplot.canvasTextRenderer.min.js,
-	  src/report/jqplot/plugins/jqplot.categoryAxisRenderer.min.js,
-	  src/report/jqplot/plugins/jqplot.ciParser.min.js: Normalise line
-	  endings of min.js files.
-
-2013-02-22 18:17  gjanssens
-
-	* [r22806] src/optional/python-bindings/gnucash_core.py: Add child
-	  functions to Account in python bindings. Add children discovery
-	  functions to Account type for the python bindings. Author:
-	  Hendrik van Antwerpen <hendrik@van-antwerpen.net>
-
-2013-02-22 18:15  gjanssens
-
-	* [r22805] src/base-typemaps.i,
-	  src/optional/python-bindings/gnucash_core.py: Add tax tables
-	  lookup to python bindings. Add function to lookup tax tables to
-	  Book and add taxtable conversion to base typemap. Author:
-	  Hendrik van Antwerpen <hendrik@van-antwerpen.net>
-
-2013-02-22 17:16  gjanssens
-
-	* [r22804] src/gnome-utils/Makefile.am: Fix compile error after
-	  r22799 due to missing CFLAGS
-
-2013-02-21 18:26  gjanssens
-
-	* [r22802] src/report/report-system/html-linechart.scm,
-	  src/report/standard-reports/net-linechart.scm: jqplot line
-	  chart: make markers and grid optional again This was a
-	  regression from the goffice based chart, pointed out by Mike
-	  Evans
-
-2013-02-21 16:51  gjanssens
-
-	* [r22801] src/report/report-system/html-barchart.scm,
-	  src/report/report-system/html-linechart.scm,
-	  src/report/report-system/html-piechart.scm,
-	  src/report/report-system/html-scatter.scm: Charts: improve
-	  tooltips on line and bar charts
-	* [r22800] src/report/report-system/html-barchart.scm,
-	  src/report/report-system/html-linechart.scm,
-	  src/report/report-system/html-piechart.scm,
-	  src/report/report-system/html-scatter.scm: Charts: source
-	  formatting - fix some whitespace - improveformatting of
-	  resulting html
-	* [r22799] src/gnome-utils/Makefile.am,
-	  src/gnome-utils/gnc-gnome-utils.c, src/html/Makefile.am,
-	  src/html/gnc-html-graph-gog-extras.h,
-	  src/html/gnc-html-graph-gog-webkit.c,
-	  src/html/gnc-html-graph-gog-webkit.h,
-	  src/html/gnc-html-graph-gog.c, src/html/gnc-html-graph-gog.h,
-	  src/html/gnc-html-webkit.c, src/html/gnc-html.i: Drop goffice
-	  dependency from our html engine
-
-2013-02-21 11:27  gjanssens
-
-	* [r22798] src/report/report-system/html-linechart.scm: Improve
-	  linechart - convert chart to jqplot - drop goffice based code
-
-2013-02-21 01:10  plongstaff
-
-	* [r22796] src/gnome/Makefile.am, src/gnome/gnc-budget-view.c,
-	  src/gnome/gnc-budget-view.h, src/gnome/gnc-plugin-page-budget.c:
-	  Initial changes to budget view. 1) Splits gnc-budget-view.c/.h
-	  out from gnc-plugin-page-budget.c. gnc-plugin-page-budget.c now
-	  creates a GncBudgetView and provides the overall UI and
-	  integration for it. 2) GncBudgetView changes: a) If an account
-	  has children but does not have a specific budget value for a
-	  period, the sum of the children's budget values will be
-	  displayed in gray b) Totals column on the right provides total
-	  for a budget row (account) c) At the bottom, totals lines with
-	  total income, total expenses, total transfers
-	  (assets+liabilities) and grand total (income - expenses -
-	  transfers)
-
-2013-02-20 18:52  gjanssens
-
-	* [r22795] src/report/report-system/html-scatter.scm,
-	  src/report/report-system/options-utilities.scm,
-	  src/report/standard-reports/price-scatter.scm: Improve
-	  scatterplot chart - drop goffice based chart, only keep jquery
-	  one - support all jqplot shapes for the markers
-
-2013-02-20 18:51  gjanssens
-
-	* [r22794] src/report/report-system/html-piechart.scm: Improve
-	  piechart - drop goffice based chart, only keep jquery one - move
-	  legend outside of plotting area
-	* [r22793] src/report/jqplot/plugins/jqplot.barRenderer.js:
-	  Improve jqplot's barchart renderer's barWidth and barPadding
-	  calculation The improved formula scales more gracefully from
-	  extremely small to extremely large. Note: this modifies jqplot
-	  itself. We may need to either - attempt to get this in the
-	  upstream code - see if we can get a similar result by improving
-	  our own code
-	* [r22792] .gitattributes,
-	  src/report/jqplot/plugins/jqplot.cursor.min.js,
-	  src/report/jqplot/plugins/jqplot.dateAxisRenderer.min.js,
-	  src/report/jqplot/plugins/jqplot.donutRenderer.min.js,
-	  src/report/jqplot/plugins/jqplot.dragable.min.js,
-	  src/report/jqplot/plugins/jqplot.enhancedLegendRenderer.min.js,
-	  src/report/jqplot/plugins/jqplot.funnelRenderer.min.js,
-	  src/report/jqplot/plugins/jqplot.highlighter.min.js,
-	  src/report/jqplot/plugins/jqplot.json2.min.js,
-	  src/report/jqplot/plugins/jqplot.logAxisRenderer.min.js,
-	  src/report/jqplot/plugins/jqplot.mekkoAxisRenderer.min.js,
-	  src/report/jqplot/plugins/jqplot.mekkoRenderer.min.js,
-	  src/report/jqplot/plugins/jqplot.meterGaugeRenderer.min.js,
-	  src/report/jqplot/plugins/jqplot.mobile.js,
-	  src/report/jqplot/plugins/jqplot.mobile.min.js,
-	  src/report/jqplot/plugins/jqplot.ohlcRenderer.min.js,
-	  src/report/jqplot/plugins/jqplot.pieRenderer.min.js,
-	  src/report/jqplot/plugins/jqplot.pointLabels.min.js,
-	  src/report/jqplot/plugins/jqplot.pyramidAxisRenderer.min.js,
-	  src/report/jqplot/plugins/jqplot.pyramidGridRenderer.min.js,
-	  src/report/jqplot/plugins/jqplot.pyramidRenderer.min.js,
-	  src/report/jqplot/plugins/jqplot.trendline.min.js: Define EOL
-	  style for javascript files
-	* [r22791] src/report/report-system/html-barchart.scm: Improve
-	  barchart - drop goffice based chart, only keep jquery one - move
-	  legend outside of plotting area
-
-2013-02-20 18:50  gjanssens
-
-	* [r22790] src/report/jqplot/MIT-LICENSE.txt,
-	  src/report/jqplot/Makefile.am, src/report/jqplot/README.txt,
-	  src/report/jqplot/changes.txt, src/report/jqplot/copyright.txt,
-	  src/report/jqplot/excanvas.js,
-	  src/report/jqplot/excanvas.min.js,
-	  src/report/jqplot/jqPlotCssStyling.txt,
-	  src/report/jqplot/jqPlotOptions.txt,
-	  src/report/jqplot/jquery.jqplot.css,
-	  src/report/jqplot/jquery.jqplot.js,
-	  src/report/jqplot/jquery.jqplot.min.css,
-	  src/report/jqplot/jquery.jqplot.min.js,
-	  src/report/jqplot/jquery.js, src/report/jqplot/jquery.min.js,
-	  src/report/jqplot/optionsTutorial.txt,
-	  src/report/jqplot/plugins/jqplot.BezierCurveRenderer.js,
-	  src/report/jqplot/plugins/jqplot.BezierCurveRenderer.min.js,
-	  src/report/jqplot/plugins/jqplot.barRenderer.js,
-	  src/report/jqplot/plugins/jqplot.barRenderer.min.js,
-	  src/report/jqplot/plugins/jqplot.blockRenderer.js,
-	  src/report/jqplot/plugins/jqplot.blockRenderer.min.js,
-	  src/report/jqplot/plugins/jqplot.bubbleRenderer.js,
-	  src/report/jqplot/plugins/jqplot.bubbleRenderer.min.js,
-	  src/report/jqplot/plugins/jqplot.canvasAxisLabelRenderer.js,
-	  src/report/jqplot/plugins/jqplot.canvasAxisLabelRenderer.min.js,
-	  src/report/jqplot/plugins/jqplot.canvasAxisTickRenderer.js,
-	  src/report/jqplot/plugins/jqplot.canvasAxisTickRenderer.min.js,
-	  src/report/jqplot/plugins/jqplot.canvasOverlay.js,
-	  src/report/jqplot/plugins/jqplot.canvasOverlay.min.js,
-	  src/report/jqplot/plugins/jqplot.canvasTextRenderer.js,
-	  src/report/jqplot/plugins/jqplot.canvasTextRenderer.min.js,
-	  src/report/jqplot/plugins/jqplot.categoryAxisRenderer.js,
-	  src/report/jqplot/plugins/jqplot.categoryAxisRenderer.min.js,
-	  src/report/jqplot/plugins/jqplot.ciParser.js,
-	  src/report/jqplot/plugins/jqplot.ciParser.min.js,
-	  src/report/jqplot/plugins/jqplot.cursor.js,
-	  src/report/jqplot/plugins/jqplot.cursor.min.js,
-	  src/report/jqplot/plugins/jqplot.dateAxisRenderer.js,
-	  src/report/jqplot/plugins/jqplot.dateAxisRenderer.min.js,
-	  src/report/jqplot/plugins/jqplot.donutRenderer.js,
-	  src/report/jqplot/plugins/jqplot.donutRenderer.min.js,
-	  src/report/jqplot/plugins/jqplot.dragable.js,
-	  src/report/jqplot/plugins/jqplot.dragable.min.js,
-	  src/report/jqplot/plugins/jqplot.enhancedLegendRenderer.js,
-	  src/report/jqplot/plugins/jqplot.enhancedLegendRenderer.min.js,
-	  src/report/jqplot/plugins/jqplot.funnelRenderer.js,
-	  src/report/jqplot/plugins/jqplot.funnelRenderer.min.js,
-	  src/report/jqplot/plugins/jqplot.highlighter.js,
-	  src/report/jqplot/plugins/jqplot.highlighter.min.js,
-	  src/report/jqplot/plugins/jqplot.json2.min.js,
-	  src/report/jqplot/plugins/jqplot.logAxisRenderer.js,
-	  src/report/jqplot/plugins/jqplot.logAxisRenderer.min.js,
-	  src/report/jqplot/plugins/jqplot.mekkoAxisRenderer.js,
-	  src/report/jqplot/plugins/jqplot.mekkoAxisRenderer.min.js,
-	  src/report/jqplot/plugins/jqplot.mekkoRenderer.js,
-	  src/report/jqplot/plugins/jqplot.mekkoRenderer.min.js,
-	  src/report/jqplot/plugins/jqplot.meterGaugeRenderer.js,
-	  src/report/jqplot/plugins/jqplot.meterGaugeRenderer.min.js,
-	  src/report/jqplot/plugins/jqplot.mobile.js,
-	  src/report/jqplot/plugins/jqplot.mobile.min.js,
-	  src/report/jqplot/plugins/jqplot.ohlcRenderer.js,
-	  src/report/jqplot/plugins/jqplot.ohlcRenderer.min.js,
-	  src/report/jqplot/plugins/jqplot.pieRenderer.js,
-	  src/report/jqplot/plugins/jqplot.pieRenderer.min.js,
-	  src/report/jqplot/plugins/jqplot.pointLabels.js,
-	  src/report/jqplot/plugins/jqplot.pointLabels.min.js,
-	  src/report/jqplot/plugins/jqplot.pyramidAxisRenderer.js,
-	  src/report/jqplot/plugins/jqplot.pyramidAxisRenderer.min.js,
-	  src/report/jqplot/plugins/jqplot.pyramidGridRenderer.js,
-	  src/report/jqplot/plugins/jqplot.pyramidGridRenderer.min.js,
-	  src/report/jqplot/plugins/jqplot.pyramidRenderer.js,
-	  src/report/jqplot/plugins/jqplot.pyramidRenderer.min.js,
-	  src/report/jqplot/plugins/jqplot.trendline.js,
-	  src/report/jqplot/plugins/jqplot.trendline.min.js,
-	  src/report/jqplot/usage.txt,
-	  src/report/report-system/html-barchart.scm,
-	  src/report/report-system/html-piechart.scm,
-	  src/report/report-system/html-scatter.scm: Update to jqplot 1.0.6
-	* [r22789] src/report/report-system/html-barchart.scm,
-	  src/report/report-system/html-piechart.scm,
-	  src/report/report-system/html-scatter.scm: jqplot: fix paths to
-	  js and css files
-	* [r22788] src/core-utils/gnc-filepath-utils.c: Fix code to find
-	  html files - look in pkg_data_dir as last resort (eg
-	  /usr/share/gnucash) - effectively test all directories instead
-	  of only the second one - add a debug print line
-	* [r22787] src/report/report-system/html-barchart.scm,
-	  src/report/report-system/html-piechart.scm,
-	  src/report/report-system/html-scatter.scm: Enable jqplot for
-	  barchart, piechart and scatterchart Patch by Andy Clayton This
-	  doesn't work anymore due to changes in other parts of GnuCash,
-	  but is a good starting point to fix it.
-
-2013-02-19 21:05  cstim
-
-	* [r22786] src/import-export/aqbanking/dialog-ab-trans.c:
-	  Aqbanking online transfer: Disable the non-SEPA verification
-	  rules for SEPA transactions. Eventually, the SEPA rules need to
-	  be implemented, but for now we just allow any alphanumerics.
-
-2013-02-18 20:48  cstim
-
-	* [r22784] src/gnome-utils/dialog-transfer.c,
-	  src/gnome-utils/dialog-transfer.h,
-	  src/import-export/aqbanking/gnc-ab-transfer.c: Aqbanking online
-	  transfer: Set the date in the gnucash txn dialog to
-	  non-sensitive. Users regularly expect that date to be the online
-	  job execution date, but that's not what is implemented. So we
-	  prevent editing here at all.
-
-2013-02-18 20:37  cstim
-
-	* [r22783]
-	  src/import-export/aqbanking/gnc-plugin-aqbanking-ui.xml,
-	  src/import-export/aqbanking/gnc-plugin-aqbanking.c: Minor update
-	  for SEPA (European) online transfers (after r22445) Add direct
-	  debit. Make menu items sensitive correctly.
-
-2013-02-16 22:50  alex.aycinena
-
-	* [r22780] src/report/locale-specific/us/taxtxf.scm: Update
+	* [r22781] src/report/locale-specific/us/taxtxf.scm: Update
 	  taxtxf.scm to fix beginning balance sign and signs for Transfer
-	  From/To amounts for
+	  From/To amounts for liability/equity accounts; bug 667093
 
-2013-02-12 23:09  jralls
+2013-02-05 01:45  alex.aycinena
 
-	* [r22776] src/libqof/qof/gnc-date.c,
-	  src/libqof/qof/test/test-gnc-date.c: Fix gnc-cdate format to
-	  match that of POSIX cdate
+	* [r22754] src/tax/us/txf.scm: Update txf.scm to reflect 2012
+	  changes to US Income Tax Forms and Schedules.
 
-2013-02-08 20:47  cstim
+2013-01-30 06:46  mta
 
-	* [r22767] src/CMakeLists.txt, src/core-utils/CMakeLists.txt,
-	  src/engine/CMakeLists.txt, src/gnc/CMakeLists.txt,
-	  src/gnc/main.cpp, src/libqof/CMakeLists.txt: Get cutecash/C++ to
-	  compile again.
+	* [r22737] src/register/ledger-core/split-register-util.c: [22673]
+	  Use the correct fraction when editing expanded multiple currency
+	  transactions. When a transaction is expanded and trading
+	  accounts are in use, the debit and credit cells contain values
+	  in the split's commodity not the transaction's currency. For
+	  example if you have a transaction involving JPY and USD
+	  currencies and the transaction's currency is JPY, you can only
+	  enter whole dollar amounts in the USD splits. This fixes this
+	  problem.
 
-2013-02-08 11:02  mikee
+2013-01-22 10:26  gjanssens
 
-	* [r22766] src/gnome/gnc-plugin-page-register.c,
-	  src/gnome/gnc-split-reg.c, src/gnome/gnc-split-reg.h,
-	  src/gnome/gtkbuilder/gnc-plugin-page-register.glade: Bug 683881
-	  Partial implementation. TODO: Saving search preferences doesn't
-	  save reverse sort. The blank_split remains at the bottom of the
-	  register when reverse sorted.
-
-2013-02-06 04:24  mta
-
-	* [r22755] src/register/register-gnome/datecell-gnome.c: Avoid a
-	  crash when entering invalid dates (e.g., enter "111" for a
-	  transaction date). gnc_parse_date is ignoring the return code
-	  from qof_scan_date which causes it to send uninitialized values
-	  to gnc_mktime which crashes if the date is too ridiculous.
-	  Presumably this worked before because mktime took anything
-	  without crashing.
-
-2013-02-05 00:35  alex.aycinena
-
-	* [r22753] src/tax/us/txf.scm: Update txf.scm to reflect changes
-	  to US Income Tax Forms and Schedules for 2012.
-
-2013-02-04 03:15  mta
-
-	* [r22752] src/scm/price-quotes.scm: Use gnc-commodity-equiv to
-	  compare commodites, not equal?
-
-2013-02-04 02:32  mta
-
-	* [r22751] src/scm/price-quotes.scm: Allow the price quotes perl
-	  script to return multiple quotes on a single call. This makes it
-	  easier to add historical prices using a different perl script.
-
-2013-02-04 00:50  mta
-
-	* [r22750] src/report/report-system/html-acct-table.scm: Improve
-	  HTML account table generator Make it possible to add to an
-	  existing row and do a better job of keeping track of whether any
-	  values were display for child accounts.
-
-2013-01-30 05:22  mta
-
-	* [r22736] src/register/ledger-core/split-register-control.c,
-	  src/register/ledger-core/split-register-util.c: Do a better job
-	  of calculating debit and credit fractions. Make
-	  gnc_split_register_set_cell_fractions agree with
-	  gnc_split_register_get_debcred_entry. If the account for a split
-	  changes recalculate the fractions.
-	* [r22735] src/register/ledger-core/split-register-control.c,
-	  src/register/ledger-core/split-register-load.c,
-	  src/register/ledger-core/split-register-model.c,
-	  src/register/ledger-core/split-register-p.h,
-	  src/register/ledger-core/split-register.c: Do a better job of
-	  prompting for an exchange rate only when needed. If the debit or
-	  credit value of a split changes, prompt for an exchange rate.
-	  Don't prompt for an exchange rate in a register that doesn't
-	  have a rate cell (and fix a bug so that it knows that portfolio
-	  registers don't have one). If the transaction has been
-	  autofilled and edited start with a nearby rate from the prices
-	  DB. If it is an existing transaction start with the exchange
-	  rate it already has.
-
-2013-01-22 22:25  mta
-
-	* [r22723] src/gnome/window-reconcile.c: Don't store a negative
-	  reconcile interval.
-
-2013-01-22 10:14  gjanssens
-
-	* [r22721] doc/Makefile.am: Bug #680086 - Each Tip of the Day has
+	* [r22722] doc/Makefile.am: Bug #680086 - Each Tip of the Day has
 	  an n shown at the end BP
-	* [r22720] packaging/win32/bootstrap_win_dev.vbs: Win32 build: add
-	  attribution for a code snippet in bootstrap
 
-2013-01-19 23:29  alex.aycinena
+2013-01-15 16:19  gjanssens
 
-	* [r22717] src/gnome/gnc-plugin-page-register.c,
-	  src/gnome/gnc-plugin-page-register.h,
-	  src/register/ledger-core/split-register.c: Remove circular
-	  dependency introduced in r22681
-
-2013-01-19 21:00  gjanssens
-
-	* [r22716] .gitattributes, src/bin/gnucash.rc: Fix another eol
-	  issue
-
-2013-01-19 18:28  gjanssens
-
-	* [r22715] packaging/win32/install-impl.sh: Win32 build: some more
-	  patchfile cleanups Wrap patching code in conditional in most
-	  cases to only run patch if there actually is a patch file
-	  available.
-
-2013-01-19 18:27  gjanssens
-
-	* [r22714] packaging/win32/Makefile.am,
-	  packaging/win32/aqbanking-4.2.4-r2132-patch.diff,
-	  packaging/win32/aqbanking-4.2.4-r2132.patch,
-	  packaging/win32/defaults.sh,
-	  packaging/win32/opensp-1.5.2-patch.diff,
-	  packaging/win32/opensp-1.5.2.patch: Win32 build: rename patch
-	  files to consistently end in .patch This way they will be
-	  checked in/out in proper line ending style on all supported
-	  platforms.
-	* [r22713] packaging/win32/Makefile.am,
-	  packaging/win32/aqbanking-3.8.3-patch.diff,
-	  packaging/win32/aqbanking-4.1.6-patch.diff,
-	  packaging/win32/defaults.sh,
-	  packaging/win32/goffice-0.7.2-patch.diff,
-	  packaging/win32/gwenhywfar-3.11.0-patch.diff,
-	  packaging/win32/gwenhywfar-3.11.1-patch.diff,
-	  packaging/win32/gwenhywfar-3.6.0-patch.diff,
-	  packaging/win32/libofx-0.8.3-patch.diff,
-	  packaging/win32/libofx-0.9.2-patch.diff: Win32 build: remove
-	  obsolete patches The code used to apply the patches if present
-	  still remains to cater for possible future patches.
-	* [r22712] .gitattributes, src/tax/us/de_DE/taxtxf - LIES
-	  MICH.txt, src/tax/us/de_DE/txf-USt-Bericht.html: Define line
-	  ending style for different file types Additionally, fix line
-	  endings on some files that were inconsistent in this regard.
-	  This gives a more consistent experience on all development
-	  platforms. All source files (be it scripts, makefiles,
-	  autoconf/automake files,...) are given an explicit line ending
-	  style. For most LF was chosen. Exceptions are typical windows
-	  scripts (.bat, .cmd, .vbs,...) and some files related to the
-	  windows installer. Those are fixed at CTRL/LF because the
-	  installer would have issues otherwise). The remainder of files
-	  are mostly plain text files (README's, CHANGELOG's,...). These
-	  files are stored with LF line ending in the repo, but checked
-	  out with the platform's native line ending style. git takes
-	  proper care of the necessary conversions automatically.
-
-2013-01-19 09:25  gjanssens
-
-	* [r22711] doc/tip_of_the_day.list.in: Bug #604520 Explain scope
-	  of find transaction tool. Signed-off-by: Yawar Amin
-	  <yawar.amin@gmail.com>
-
-2013-01-18 16:02  gjanssens
-
-	* [r22707] packaging/win32/bootstrap_win_dev.vbs: Win32 build
-	  system: Experimental bootstrap script The goal of this script is
-	  to make is extremely easy to start gnucash development on
-	  Windows. After downloading and running this script, the user
-	  should be ready to start coding. Note that this is not the case
-	  yet. The bootstrap script is only the first step in that
-	  direction.
-
-2013-01-15 16:15  gjanssens
-
-	* [r22703] src/backend/xml/sixtp.c: Bug #672364 - does not
+	* [r22704] src/backend/xml/sixtp.c: [22703] Bug #672364 - does not
 	  properly handle XML parse errors, leading to possible data loss
 	  Handle return value of xmlParseDocument() Ignoring errors can
 	  lead to data loss. Author: Sébastien Villemot
 	  <sebastien@debian.org> Bug-Debian: http://bugs.debian.org/696282
-	  BP
 
-2013-01-14 01:18  jralls
+2013-01-14 01:20  jralls
 
-	* [r22701] src/gnome-utils/dialog-book-close.c,
+	* [r22702] src/gnome-utils/dialog-book-close.c,
 	  src/gnome-utils/gnc-ui.h: Fix #638955 Connect the `Help' button
 	  in the `Close Book' dialog box (Tools > Close Book) to
 	  newly-written help section on book closing. Signed-off-by: Yawar
 	  Amin <yawar.amin@gmail.com>
 
-2013-01-13 22:51  jralls
-
-	* [r22698] src/gnome-utils/gnc-gnome-utils.c: Fix string leak in
-	  gnc_gnome_help() Thanks to Yawar Amin for pointing it out.
-
-2013-01-01 00:10  mta
-
-	* [r22688] src/libqof/qof/gnc-date.c, src/libqof/qof/gnc-date.h:
-	  Fix gnc_difftime so it is the same as difftime, which it
-	  replaces. It was computing the negative of the expected value.
-	  The most obvious effect of this was that the reconcile interval
-	  became negative when you reconciled an account so each
-	  reconciliation was earlier than the previous.

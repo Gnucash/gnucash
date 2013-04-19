@@ -196,8 +196,8 @@ if BUILDING_FROM_SVN
 # idea? Before a release, NEWS will get updated because of the version
 # change, so this should fit just fine.)
 ChangeLog: NEWS
-	$(SVN) log -v --xml -r HEAD:20021 http://svn.gnucash.org/repo/gnucash | \
-	  $(XSLTPROC) --stringparam strip-prefix "gnucash/trunk" \
+	$(SVN) log -v --xml -r HEAD:22702 http://svn.gnucash.org/repo/gnucash | \
+	  $(XSLTPROC) --stringparam strip-prefix "gnucash/branches/2.4" \
 	  --stringparam include-rev "yes" $(srcdir)/macros/svn2cl.xsl - > $@
 endif
 
