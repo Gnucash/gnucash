@@ -33,6 +33,7 @@
 
 #include "gnc-tree-control-split-reg.h"
 #include "gnc-tree-model-split-reg.h"
+#include "gnc-tree-util-split-reg.h"
 #include "gnc-tree-view-split-reg.h"
 #include "gnc-component-manager.h"
 #include "gnc-ui.h"
@@ -266,8 +267,6 @@ gnc_tree_control_split_reg_balance_trans (GncTreeViewSplitReg *view, Transaction
     window = gnc_tree_view_split_reg_get_parent (view);
     model = gnc_tree_view_split_reg_get_model_from_view (view);
 
-//FIXME ## Trading ## Copied from split-register-control, needs testing
-
     if (xaccTransUseTradingAccounts (trans))
     {
         MonetaryList *imbal_list;
@@ -297,7 +296,6 @@ gnc_tree_control_split_reg_balance_trans (GncTreeViewSplitReg *view, Transaction
     }
     else
         multi_currency = FALSE;
-//FIXME
 
     split = xaccTransGetSplit (trans, 0);
     other_split = xaccSplitGetOtherSplit (split);
@@ -452,6 +450,14 @@ gnc_tree_control_split_reg_exchange_rate (GncTreeViewSplitReg *view)
 
     window = gnc_tree_view_split_reg_get_parent (view);
 
+    /* Make sure we NEED this for this type of register */
+    if (!gnc_tree_util_split_reg_has_rate (view))
+    {
+        message = _("This register does not support editing exchange rates.");
+        gnc_error_dialog(window, "%s", message);
+        return;
+    }
+
     /* If the anchor commodity is not a currency, cancel */
     if (anchor && !gnc_commodity_is_currency (xaccAccountGetCommodity (anchor)))
     {
@@ -461,7 +467,7 @@ gnc_tree_control_split_reg_exchange_rate (GncTreeViewSplitReg *view)
     }
 
     /* If we're not expanded AND number of splits greater than two, nothing to do */
-    if ((num_splits > 2) && !expanded)
+    if ((gnc_tree_util_split_reg_is_multi (xaccTransGetSplit (trans, 0))) && !expanded)
     {
         message = _("You need to expand the transaction in order to modify its "
                     "exchange rates.");
@@ -469,9 +475,13 @@ gnc_tree_control_split_reg_exchange_rate (GncTreeViewSplitReg *view)
         return;
     }
 
-    if (num_splits == 2 && anchor != NULL && !expanded)
+    if (!gnc_tree_util_split_reg_is_multi (xaccTransGetSplit (trans, 0)) && anchor != NULL && !expanded)
     {
         split = gnc_tree_control_split_reg_get_current_trans_split (view);
+
+        if (xaccAccountGetType (xaccSplitGetAccount (split)) == ACCT_TYPE_TRADING) // trading split
+            return;
+
         osplit = xaccSplitGetOtherSplit (split);
 
         value = xaccSplitGetValue (split);
@@ -480,9 +490,9 @@ gnc_tree_control_split_reg_exchange_rate (GncTreeViewSplitReg *view)
         xaccTransBeginEdit (trans);
 
         if (txn_com == xaccAccountGetCommodity (xaccSplitGetAccount(split)))
-           gnc_tree_view_split_reg_set_value_for (view, trans, osplit, gnc_numeric_neg (value), TRUE);
+           gnc_tree_util_split_reg_set_value_for (view, trans, osplit, gnc_numeric_neg (value), TRUE);
         else
-           gnc_tree_view_split_reg_set_value_for (view, trans, split, value, TRUE);
+           gnc_tree_util_split_reg_set_value_for (view, trans, split, value, TRUE);
 
         xaccTransCommitEdit (trans);
         gnc_tree_view_split_reg_set_dirty_trans (view, NULL);
@@ -491,6 +501,9 @@ gnc_tree_control_split_reg_exchange_rate (GncTreeViewSplitReg *view)
     if (num_splits > 1 && expanded && depth == 3)
     {
         split = gnc_tree_view_split_reg_get_current_split (view);
+
+        if (xaccAccountGetType (xaccSplitGetAccount (split)) == ACCT_TYPE_TRADING) // trading split
+            return;
 
         value = xaccSplitGetValue (split);
 
@@ -505,7 +518,7 @@ gnc_tree_control_split_reg_exchange_rate (GncTreeViewSplitReg *view)
             gnc_tree_view_split_reg_set_dirty_trans (view, trans);
             xaccTransBeginEdit (trans);
 
-            gnc_tree_view_split_reg_set_value_for (view, trans, split, value, TRUE);
+            gnc_tree_util_split_reg_set_value_for (view, trans, split, value, TRUE);
 
             xaccTransCommitEdit (trans);
             gnc_tree_view_split_reg_set_dirty_trans (view, NULL);
@@ -839,7 +852,7 @@ gnc_tree_control_split_reg_goto_rel_trans_row (GncTreeViewSplitReg *view, gint r
 {
     GncTreeModelSplitReg *model;
     GtkTreePath *mpath, *spath;
-    GtkTreePath *new_spath;
+    GtkTreePath  *new_mpath, *new_spath;
     gint *indices;
 
     ENTER("Move relative, view is %p, relative is %d", view, relative);
@@ -867,7 +880,16 @@ gnc_tree_control_split_reg_goto_rel_trans_row (GncTreeViewSplitReg *view, gint r
     gtk_tree_view_set_cursor (GTK_TREE_VIEW (view), new_spath, NULL, FALSE);
 
     if (relative == 0)
+    {
         gnc_tree_view_split_reg_block_selection (view, FALSE);
+
+        /* Get the new model path we are pointing at */
+        new_mpath = gnc_tree_view_split_reg_get_model_path_from_sort_path (view, new_spath);
+
+        /* As we are not emitting selection change, we need to save the current path ref */
+        gnc_tree_view_split_reg_set_current_path (view, new_mpath);
+        gtk_tree_path_free (new_mpath);
+    }
 
     LEAVE("new_spath is %s", gtk_tree_path_to_string (new_spath));
 
@@ -2018,10 +2040,10 @@ gnc_tree_control_split_reg_sort_changed_cb (GtkTreeSortable *sortable, gpointer 
 
     view->sort_col = sortcol - 1;
 
-    if (type == GTK_SORT_ASCENDING)
-        view->sort_direction = 1;
-    else
+    if (type == GTK_SORT_DESCENDING)
         view->sort_direction = -1;
+    else
+        view->sort_direction = 1;
 
     /* Save the sort depth to gconf */
     gconf_section = gnc_tree_view_get_gconf_section (GNC_TREE_VIEW (view));

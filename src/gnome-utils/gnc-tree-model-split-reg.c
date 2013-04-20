@@ -49,7 +49,7 @@
 /* Signal codes */
 enum
 {
-    REFRESH_VIEW,
+    REFRESH_TRANS,
     REFRESH_STATUS_BAR,
     SELECTION_MOVE_DELETE,
     SELECTION_MOVE_FILTER,
@@ -288,14 +288,16 @@ gnc_tree_model_split_reg_class_init (GncTreeModelSplitRegClass *klass)
     o_class->finalize = gnc_tree_model_split_reg_finalize;
     o_class->dispose = gnc_tree_model_split_reg_dispose;
 
-    gnc_tree_model_split_reg_signals[REFRESH_VIEW] =
-        g_signal_new("refresh_view",
+    gnc_tree_model_split_reg_signals[REFRESH_TRANS] =
+        g_signal_new("refresh_trans",
                      G_TYPE_FROM_CLASS (o_class),
-                     G_SIGNAL_RUN_LAST,
-                     G_STRUCT_OFFSET (GncTreeModelSplitRegClass, refresh_view),
+                     G_SIGNAL_RUN_FIRST,
+                     G_STRUCT_OFFSET (GncTreeModelSplitRegClass, refresh_trans),
                      NULL, NULL,
-                     g_cclosure_marshal_VOID__VOID,
-                     G_TYPE_NONE, 0);
+                     g_cclosure_marshal_VOID__POINTER,
+                     G_TYPE_NONE,
+                     1,
+                     G_TYPE_POINTER);
 
     gnc_tree_model_split_reg_signals[REFRESH_STATUS_BAR] =
         g_signal_new("refresh_status_bar",
@@ -328,7 +330,7 @@ gnc_tree_model_split_reg_class_init (GncTreeModelSplitRegClass *klass)
                      1,
                      G_TYPE_POINTER);
 
-    klass->refresh_view = NULL;
+    klass->refresh_trans = NULL;
     klass->refresh_status_bar = NULL;
     klass->selection_move_delete = NULL;
     klass->selection_move_filter = NULL;
@@ -558,6 +560,9 @@ gnc_tree_model_split_reg_load (GncTreeModelSplitReg *model, GList *slist, Accoun
     /* Add the blank transaction to the tlist */
     priv->tlist = g_list_append (priv->tlist, priv->btrans);
 
+    PINFO("Register for Account '%s' has %d transactions and %d splits",
+          default_account ? xaccAccountGetName (default_account) : "NULL", g_list_length (priv->tlist), g_list_length (slist));
+
     /* Update the completion model liststores */
     gnc_tree_model_split_reg_update_completion (model);
 
@@ -744,7 +749,7 @@ gnc_tree_model_split_reg_get_column_type (GtkTreeModel *tree_model, int index)
     case GNC_TREE_MODEL_SPLIT_REG_COL_DUEDATE:
     case GNC_TREE_MODEL_SPLIT_REG_COL_NUMACT:
     case GNC_TREE_MODEL_SPLIT_REG_COL_DESCNOTES:
-    case GNC_TREE_MODEL_SPLIT_REG_COL_TRANSVOID:
+    case GNC_TREE_MODEL_SPLIT_REG_COL_TRANSFERVOID:
     case GNC_TREE_MODEL_SPLIT_REG_COL_RECN:
     case GNC_TREE_MODEL_SPLIT_REG_COL_DEBIT:
     case GNC_TREE_MODEL_SPLIT_REG_COL_CREDIT:
@@ -1201,7 +1206,7 @@ gnc_tree_model_split_reg_get_value (GtkTreeModel *tree_model,
     case GNC_TREE_MODEL_SPLIT_REG_COL_DESCNOTES:
         break;
 
-    case GNC_TREE_MODEL_SPLIT_REG_COL_TRANSVOID:
+    case GNC_TREE_MODEL_SPLIT_REG_COL_TRANSFERVOID:
         break;
 
     case GNC_TREE_MODEL_SPLIT_REG_COL_RECN:
@@ -2788,7 +2793,7 @@ gnc_tree_model_split_reg_event_handler (QofInstance *entity,
                 gtm_insert_row_at (model, &iter1);
                 iter2 = gtm_make_iter (model, TROW2 | BLANK, tnode, NULL);
                 gtm_insert_row_at (model, &iter2);
-                g_signal_emit_by_name (model, "refresh_view", NULL);
+                g_signal_emit_by_name (model, "refresh_trans", priv->btrans);
             }
 
             if (get_iter (model, trans, NULL, &iter1, &iter2))
@@ -2796,7 +2801,7 @@ gnc_tree_model_split_reg_event_handler (QofInstance *entity,
                 DEBUG ("change trans %p (%s)", trans, name);
                 gtm_changed_row_at (model, &iter1);
                 gtm_changed_row_at (model, &iter2);
-                g_signal_emit_by_name (model, "refresh_view", NULL);
+                g_signal_emit_by_name (model, "refresh_trans", trans);
             }
             break;
         case QOF_EVENT_DESTROY:
@@ -2815,7 +2820,6 @@ gnc_tree_model_split_reg_event_handler (QofInstance *entity,
                 DEBUG("destroy trans %p (%s)", trans, name);
                 g_signal_emit_by_name (model, "selection_move_delete", trans);
                 gtm_delete_trans (model, trans);
-                g_signal_emit_by_name (model, "refresh_view", NULL);
             }
             break;
         default:
@@ -2836,13 +2840,13 @@ gnc_tree_model_split_reg_event_handler (QofInstance *entity,
             {
                 DEBUG("Insert trans %p for gl (%s)", trans, name);
                 gtm_insert_trans (model, trans);
-                g_signal_emit_by_name (model, "refresh_view", NULL);
+                g_signal_emit_by_name (model, "refresh_trans", trans);
             }
             else if (!g_list_find (priv->tlist, trans) && ((xaccAccountHasAncestor (acc, priv->anchor) && priv->display_subacc) || acc == priv->anchor ))
             {
                 DEBUG("Insert trans %p (%s)", trans, name);
                 gtm_insert_trans (model, trans);
-                g_signal_emit_by_name (model, "refresh_view", NULL);
+                g_signal_emit_by_name (model, "refresh_trans", trans);
             }
             break;
         default:

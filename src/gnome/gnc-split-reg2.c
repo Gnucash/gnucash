@@ -271,10 +271,10 @@ gsr2_create_table (GNCSplitReg2 *gsr)
 
     /* Restore the sort order from gconf */
     sort_string = gnc_gconf_get_string (gconf_key, "sort_order", NULL);
-    if (g_strcmp0 ("ascending", sort_string) == 0)
-        view->sort_direction = 1;
-    else
+    if (g_strcmp0 ("descending", sort_string) == 0)
         view->sort_direction = -1;
+    else
+        view->sort_direction = 1;
 
     g_object_set (G_OBJECT (view), "gconf-section", gconf_key, 
                  "show-column-menu", FALSE, NULL);
@@ -755,7 +755,9 @@ gnc_split_reg2_change_style (GNCSplitReg2 *gsr, SplitRegisterStyle2 style)
         return;
 
     gnc_tree_model_split_reg_config (model, model->type, style, model->use_double_line);
-    gnc_ledger_display2_refresh (gsr->ledger);
+
+    // This will re-display the view.
+    gnc_tree_view_split_reg_set_format (gnc_ledger_display2_get_split_view_register (gsr->ledger));
 }
 
 void
@@ -803,7 +805,9 @@ gnc_split_reg2_double_line_cb (GtkWidget *w, gpointer data)
         return;
 
     gnc_tree_model_split_reg_config (model, model->type, model->style, use_double_line);
-    gnc_ledger_display2_refresh (gsr->ledger);
+
+    // This will re-display the view.
+    gnc_tree_view_split_reg_set_format (gnc_ledger_display2_get_split_view_register (gsr->ledger));
 }
 
 static

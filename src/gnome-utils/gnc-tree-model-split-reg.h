@@ -86,25 +86,25 @@ typedef enum
 
 typedef enum
 {
-    GNC_TREE_MODEL_SPLIT_REG_COL_GUID,      //0
-    GNC_TREE_MODEL_SPLIT_REG_COL_DATE,      //1
-    GNC_TREE_MODEL_SPLIT_REG_COL_DUEDATE,   //2
-    GNC_TREE_MODEL_SPLIT_REG_COL_NUMACT,    //3
-    GNC_TREE_MODEL_SPLIT_REG_COL_DESCNOTES, //4
-    GNC_TREE_MODEL_SPLIT_REG_COL_TRANSVOID, //5
-    GNC_TREE_MODEL_SPLIT_REG_COL_RECN,      //6
-    GNC_TREE_MODEL_SPLIT_REG_COL_DEBIT,     //7
-    GNC_TREE_MODEL_SPLIT_REG_COL_CREDIT,    //8
+    GNC_TREE_MODEL_SPLIT_REG_COL_GUID,         //0
+    GNC_TREE_MODEL_SPLIT_REG_COL_DATE,         //1
+    GNC_TREE_MODEL_SPLIT_REG_COL_DUEDATE,      //2
+    GNC_TREE_MODEL_SPLIT_REG_COL_NUMACT,       //3
+    GNC_TREE_MODEL_SPLIT_REG_COL_DESCNOTES,    //4
+    GNC_TREE_MODEL_SPLIT_REG_COL_TRANSFERVOID, //5
+    GNC_TREE_MODEL_SPLIT_REG_COL_RECN,         //6
+    GNC_TREE_MODEL_SPLIT_REG_COL_DEBIT,        //7
+    GNC_TREE_MODEL_SPLIT_REG_COL_CREDIT,       //8
 
     GNC_TREE_MODEL_SPLIT_REG_COL_LAST_VISIBLE = GNC_TREE_MODEL_SPLIT_REG_COL_CREDIT, //8
 
     /* internal hidden columns */
-    GNC_TREE_MODEL_SPLIT_REG_COL_RO,        //9
-    GNC_TREE_MODEL_SPLIT_REG_COL_FILTER_VIS,//10
-    GNC_TREE_MODEL_SPLIT_REG_COL_NUM_VIS,   //11
-    GNC_TREE_MODEL_SPLIT_REG_COL_ACT_VIS,   //12
+    GNC_TREE_MODEL_SPLIT_REG_COL_RO,           //9
+    GNC_TREE_MODEL_SPLIT_REG_COL_FILTER_VIS,   //10
+    GNC_TREE_MODEL_SPLIT_REG_COL_NUM_VIS,      //11
+    GNC_TREE_MODEL_SPLIT_REG_COL_ACT_VIS,      //12
 
-    GNC_TREE_MODEL_SPLIT_REG_NUM_COLUMNS    //13
+    GNC_TREE_MODEL_SPLIT_REG_NUM_COLUMNS       //13
 } GncTreeModelSplitRegColumn;
 
 /* typedefs & structures */
@@ -143,8 +143,9 @@ typedef struct
 {
     GncTreeModelClass gnc_tree_model;                   /**< The parent object data. */
 
-    /* This signal is emitted to refresh the view */
-    void (*refresh_view) (GncTreeModelSplitReg *model, gpointer user_data);
+    /* This signal is emitted to refresh the transaction view, the pointer has
+       the transaction */
+    void (*refresh_trans) (GncTreeModelSplitReg *model, gpointer item);
 
     /* This signal is emitted to refresh the status bar */
     void (*refresh_status_bar) (GncTreeModelSplitReg *model, gpointer user_data);

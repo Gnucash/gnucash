@@ -94,7 +94,7 @@ gnc_ledger_display2_internal (Account *lead_account, Query *q,
 
 static void gnc_ledger_display2_refresh_internal (GNCLedgerDisplay2 *ld, GList *splits);
 
-static void gnc_ledger_display2_refresh_cb (GncTreeModelSplitReg *model, gpointer user_data);
+static void gnc_ledger_display2_refresh_cb (GncTreeModelSplitReg *model, gpointer item, gpointer user_data);
 
 
 /** Implementations *************************************************/
@@ -827,7 +827,7 @@ gnc_ledger_display2_internal (Account *lead_account, Query *q,
     gnc_tree_model_split_reg_set_data (ld->model, ld, gnc_ledger_display2_parent);
 
     // This sets up a call back for the search_ledger2 to reload after changes
-    g_signal_connect (G_OBJECT (ld->model), "refresh_view",
+    g_signal_connect (G_OBJECT (ld->model), "refresh_trans",
                       G_CALLBACK (gnc_ledger_display2_refresh_cb), ld );
 
     splits = qof_query_run (ld->query);
@@ -889,18 +889,6 @@ gnc_ledger_display2_find_by_query (Query *q)
     }
     return ledger_display;
 }
-
-#ifdef skip
-GNCLedgerDisplay2 *
-gnc_ledger_display2_find_by_query (Query *q)
-{
-    if (!q)
-        return NULL;
-
-    return gnc_find_first_gui_component (REGISTER_GL_CM_CLASS, find_by_query, q);
-}
-#endif
-
 
 /********************************************************************\
  * refresh only the indicated register window                       *
@@ -1036,7 +1024,7 @@ gnc_ledger_display2_set_split_view_refresh (GNCLedgerDisplay2 *ld, gboolean ok)
 
 /* This is used for the search_ledger2 reload after any changes made */
 static void
-gnc_ledger_display2_refresh_cb (GncTreeModelSplitReg *model, gpointer user_data)
+gnc_ledger_display2_refresh_cb (GncTreeModelSplitReg *model, gpointer item, gpointer user_data)
 {
     GNCLedgerDisplay2 *ld = user_data;
 

@@ -92,6 +92,7 @@ libgncmod_gnome_utils_la_SOURCES = \
   gnc-tree-model-commodity.c \
   gnc-tree-model-price.c \
   gnc-tree-model-split-reg.c \
+  gnc-tree-util-split-reg.c \
   gnc-tree-view-account.c \
   gnc-tree-view-commodity.c \
   gnc-tree-view-owner.c \
@@ -170,6 +171,7 @@ gncinclude_HEADERS = \
   gnc-tree-model-commodity.h \
   gnc-tree-model-price.h \
   gnc-tree-model-split-reg.h \
+  gnc-tree-util-split-reg.h \
   gnc-tree-view-account.h \
   gnc-tree-view-commodity.h \
   gnc-tree-view-owner.h \

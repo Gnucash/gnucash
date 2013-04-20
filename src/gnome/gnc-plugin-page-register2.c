@@ -1120,7 +1120,10 @@ gnc_plugin_page_register2_create_widget (GncPluginPage *plugin_page)
         gnc_ppr_update_date_filter (page, FALSE);
     }
 
-    gnc_ledger_display2_refresh (priv->ledger);
+//    gnc_ledger_display2_refresh (priv->ledger);
+
+    /* This sets the default selection on load */
+    gnc_tree_view_split_reg_default_selection (view);
 
 
     plugin_page->summarybar = gsr2_create_summary_bar(priv->gsr);
@@ -3041,8 +3044,6 @@ gnc_plugin_page_register2_cmd_style_changed (GtkAction *action,
     value = gtk_radio_action_get_current_value (current);
     gnc_split_reg2_change_style (priv->gsr, value);
 
-    gtk_tree_view_collapse_all (GTK_TREE_VIEW (gnc_ledger_display2_get_split_view_register (priv->ledger)));
-
     gnc_plugin_page_register2_ui_update (NULL, plugin_page);
     LEAVE(" ");
 }
@@ -3058,10 +3059,10 @@ gnc_plugin_page_register2_cmd_style_double_line (GtkToggleAction *action,
 
     ENTER("(action %p, plugin_page %p)", action, plugin_page);
 
-    g_return_if_fail(GTK_IS_ACTION(action));
-    g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER2(plugin_page));
+    g_return_if_fail (GTK_IS_ACTION(action));
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER2 (plugin_page));
 
-    priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE(plugin_page);
+    priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE (plugin_page);
     model = gnc_ledger_display2_get_split_model_register (priv->ledger);
 
     view = gnc_ledger_display2_get_split_view_register (priv->ledger);
@@ -3070,8 +3071,9 @@ gnc_plugin_page_register2_cmd_style_double_line (GtkToggleAction *action,
     if (use_double_line != model->use_double_line)
     {
         gnc_tree_model_split_reg_config (model, model->type, model->style, use_double_line);
-        gtk_tree_view_collapse_all (GTK_TREE_VIEW(view));
-        gnc_ledger_display2_refresh (priv->ledger);
+
+        // This will re-display the view.
+        gnc_tree_view_split_reg_set_format (view);
     }
     LEAVE(" ");
 }
@@ -3086,11 +3088,11 @@ gnc_plugin_page_register2_cmd_transfer (GtkAction *action,
 
     ENTER("(action %p, plugin_page %p)", action, page);
 
-    g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER2(page));
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER2 (page));
 
     account = gnc_plugin_page_register2_get_account (page);
-    gnc_window = GNC_WINDOW(GNC_PLUGIN_PAGE (page)->window);
-    window = GTK_WIDGET(gnc_window_get_gtk_window(gnc_window));
+    gnc_window = GNC_WINDOW (GNC_PLUGIN_PAGE (page)->window);
+    window = GTK_WIDGET (gnc_window_get_gtk_window (gnc_window));
     gnc_xfer_dialog (window, account);
     LEAVE(" ");
 }
@@ -3728,29 +3730,26 @@ gnc_plugin_page_help_changed_cb (GNCSplitReg2 *gsr, GncPluginPageRegister2 *regi
 }
 
 static void
-gnc_plugin_page_register2_refresh_cb (GHashTable *changes, gpointer user_data)
+gnc_plugin_page_register2_refresh_cb (GHashTable *changes, gpointer user_data) //this works
 {
     GncPluginPageRegister2 *page = user_data;
     GncPluginPageRegister2Private *priv;
     GncTreeViewSplitReg *view;
 
-// Not sure what this really is but it gets fired from preference changes.
-
-//g_print("gnc_plugin_page_register2_refresh_cb\n");
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER2 (page));
     priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE (page);
     view = gnc_ledger_display2_get_split_view_register (priv->ledger);
-//g_print("gnc_plugin_page_register2_refresh_cb 0\n");
+
     if (changes)
     {
         const EventInfo* ei;
-//g_print("gnc_plugin_page_register2_refresh_cb 1\n");
-        ei = gnc_gui_get_entity_events(changes, &priv->key);
+
+        ei = gnc_gui_get_entity_events (changes, &priv->key);
         if (ei)
         {
             if (ei->event_mask & QOF_EVENT_DESTROY)
             {
-                gnc_main_window_close_page(GNC_PLUGIN_PAGE(page));
+                gnc_main_window_close_page (GNC_PLUGIN_PAGE (page));
                 return;
             }
             if (ei->event_mask & QOF_EVENT_MODIFY)
@@ -3760,10 +3759,8 @@ gnc_plugin_page_register2_refresh_cb (GHashTable *changes, gpointer user_data)
     }
     else
     {
-//g_print("gnc_plugin_page_register2_refresh_cb 2\n");
         /* Force updates */
         gnc_tree_view_split_reg_refresh_from_gconf (view);
-        gtk_widget_queue_draw (priv->widget);
     }
     gnc_plugin_page_register2_ui_update (NULL, page);
 }

@@ -36,6 +36,7 @@
 #include "gnc-tree-view-split-reg.h"
 #include "gnc-tree-model-split-reg.h"
 #include "gnc-tree-control-split-reg.h"
+#include "gnc-tree-util-split-reg.h"
 #include "gnc-ui.h"
 #include "dialog-utils.h"
 #include "gnc-gconf-utils.h"
@@ -43,7 +44,7 @@
 #include "engine-helpers.h"
 #include "Scrub.h"
 #include "gnc-exp-parser.h"
-#include "dialog-transfer.h"
+
 #include "gnc-amount-edit.h"
 
 
@@ -72,6 +73,8 @@ static void gnc_tree_view_split_reg_dispose (GObject *object);
 static void gnc_tree_view_split_reg_finalize (GObject *object);
 
 static guint gnc_tree_view_split_reg_signals[LAST_SIGNAL] = {0};
+
+static void gnc_tree_view_split_reg_gconf_changed (GConfEntry *entry, gpointer user_data);
 
 static void cdf0 (GtkTreeViewColumn *col, GtkCellRenderer *renderer, GtkTreeModel *s_model,
 				GtkTreeIter *s_iter, gpointer user_data);
@@ -115,7 +118,7 @@ static gboolean gtv_split_reg_focus_out_cb (GtkWidget *widget, GdkEventFocus *ev
 
 static void gtv_split_reg_motion_cb (GtkTreeSelection *sel, gpointer user_data);
 
-static void gtv_split_reg_refresh_cb (GncTreeModelSplitReg *model, gpointer user_data);
+static void gtv_split_reg_refresh_trans_cb (GncTreeModelSplitReg *model, gpointer item, gpointer user_data);
 
 static void gtv_split_reg_double_click_cb (GtkTreeView *treeview,
                                              GtkTreePath       *path,
@@ -164,8 +167,8 @@ static ColDef all_tree_view_split_reg_columns[] = {
      gtv_split_reg_edited_cb, gtv_get_editable_start_editing_cb,
      gnc_tree_control_split_reg_sort_by_dnm},
 
-    {COL_TRANSVOID, GNC_TREE_MODEL_SPLIT_REG_COL_TRANSVOID,
-     "Transfer / Void", "transvoid", "xxxxxxxxxxxxxxxxxxx",
+    {COL_TRANSFERVOID, GNC_TREE_MODEL_SPLIT_REG_COL_TRANSFERVOID,
+     "Transfer / Void", "transfervoid", "xxxxxxxxxxxxxxxxxxx",
      GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS, 1,
      gtv_split_reg_edited_cb, gtv_get_editable_start_editing_cb,
      gnc_tree_control_split_reg_sort_by_account},
@@ -257,11 +260,10 @@ struct GncTreeViewSplitRegPrivate
     gboolean             double_line;         // Use double line mode
     gboolean             expanded;            // Are we expanded to splits
     gboolean             auto_complete;       // Whether auto complete has run
-
+    gboolean             negative_in_red;     // Display negative numbers in red
+    gboolean             use_horizontal_lines;// Draw horizontal lines
+    gboolean             use_vertical_lines;  // Draw vertical lines
 };
-
-
-#define SPLIT_TRANS_STR _("-- Split Transaction --")
 
 /* Define some cell colors */
 #define PINKCELL "#F8BEC6"
@@ -318,7 +320,7 @@ gnc_tree_view_split_reg_get_type(void)
 
 
 static void
-gnc_tree_view_split_reg_class_init(GncTreeViewSplitRegClass *klass)
+gnc_tree_view_split_reg_class_init (GncTreeViewSplitRegClass *klass)
 {
     GObjectClass *o_class;
 
@@ -329,7 +331,7 @@ gnc_tree_view_split_reg_class_init(GncTreeViewSplitRegClass *klass)
     o_class->dispose =  gnc_tree_view_split_reg_dispose;
     o_class->finalize = gnc_tree_view_split_reg_finalize;
 
-    g_type_class_add_private(klass, sizeof(GncTreeViewSplitRegPrivate));
+    g_type_class_add_private (klass, sizeof(GncTreeViewSplitRegPrivate));
 
     gnc_tree_view_split_reg_signals[UPDATE_SIGNAL] =
         g_signal_new("update_signal",
@@ -449,7 +451,7 @@ gnc_tree_view_split_reg_refilter (GncTreeViewSplitReg *view)
 {
     GtkTreeModel *f_model, *s_model;
 
-    g_return_if_fail(GNC_IS_TREE_VIEW_SPLIT_REG(view));
+    g_return_if_fail (GNC_IS_TREE_VIEW_SPLIT_REG (view));
 
     s_model = gtk_tree_view_get_model (GTK_TREE_VIEW (view));
     f_model = gtk_tree_model_sort_get_model (GTK_TREE_MODEL_SORT (s_model));
@@ -469,10 +471,24 @@ gnc_tree_view_split_reg_init (GncTreeViewSplitReg *view)
     view->reg_closing = FALSE;
     view->priv->fo_handler_id = 0;
     view->sort_depth = 1;
+    view->sort_direction = 1;
     view->priv->auto_complete = FALSE;
     view->priv->trans_confirm = RESET;
 
     view->priv->acct_short_names = gnc_gconf_get_bool (GCONF_GENERAL_REGISTER, "show_leaf_account_names", NULL);
+    view->priv->negative_in_red = gnc_gconf_get_bool (GCONF_GENERAL, KEY_NEGATIVE_IN_RED, NULL);
+    view->priv->use_horizontal_lines = gnc_gconf_get_bool (GCONF_GENERAL_REGISTER,
+                                  "draw_horizontal_lines", NULL);
+
+    view->priv->use_vertical_lines = gnc_gconf_get_bool (GCONF_GENERAL_REGISTER,
+                                "draw_vertical_lines", NULL);
+
+    gnc_gconf_general_register_cb ("draw_horizontal_lines",
+                                  gnc_tree_view_split_reg_gconf_changed,
+                                  view);
+    gnc_gconf_general_register_cb ("draw_vertical_lines",
+                                  gnc_tree_view_split_reg_gconf_changed,
+                                  view);
 }
 
 
@@ -529,7 +545,7 @@ gnc_tree_view_split_reg_finalize (GObject *object)
 
 /* Update some settings from gconf */
 void
-gnc_tree_view_split_reg_refresh_from_gconf (GncTreeViewSplitReg *view) //FIXME Need to test and change.
+gnc_tree_view_split_reg_refresh_from_gconf (GncTreeViewSplitReg *view)
 {
     GncTreeModelSplitReg *model;
 
@@ -545,11 +561,47 @@ gnc_tree_view_split_reg_refresh_from_gconf (GncTreeViewSplitReg *view) //FIXME N
     model->alt_colors_by_txn = gnc_gconf_get_bool (GCONF_GENERAL_REGISTER,
                                "alternate_color_by_transaction", NULL);
 
-//    sheet->use_horizontal_lines = gnc_gconf_get_bool(GCONF_GENERAL_REGISTER,
-//                                  "draw_horizontal_lines", NULL);
+    view->priv->negative_in_red = gnc_gconf_get_bool (GCONF_GENERAL,
+                               KEY_NEGATIVE_IN_RED, NULL);
+}
 
-//    sheet->use_vertical_lines = gnc_gconf_get_bool(GCONF_GENERAL_REGISTER,
-//                                "draw_vertical_lines", NULL);
+
+static void
+gnc_tree_view_split_reg_gconf_changed (GConfEntry *entry, gpointer user_data)
+{
+    GncTreeViewSplitReg *view = user_data;
+
+    g_return_if_fail (entry && entry->key);
+
+    if (view == NULL)
+        return;
+
+//g_print("gnc_tree_view_split_reg_gconf_changed\n");
+
+    if (g_str_has_suffix (entry->key, "draw_horizontal_lines") || g_str_has_suffix (entry->key, "draw_vertical_lines"))
+    {
+        view->priv->use_horizontal_lines = gnc_gconf_get_bool (GCONF_GENERAL_REGISTER,
+                                  "draw_horizontal_lines", NULL);
+
+        view->priv->use_vertical_lines = gnc_gconf_get_bool (GCONF_GENERAL_REGISTER,
+                                "draw_vertical_lines", NULL);
+
+        if (view->priv->use_horizontal_lines)
+        {
+            if (view->priv->use_vertical_lines)
+                gtk_tree_view_set_grid_lines (GTK_TREE_VIEW (view), GTK_TREE_VIEW_GRID_LINES_BOTH);
+            else
+                gtk_tree_view_set_grid_lines (GTK_TREE_VIEW (view), GTK_TREE_VIEW_GRID_LINES_HORIZONTAL);
+        }
+        else if (view->priv->use_vertical_lines)
+            gtk_tree_view_set_grid_lines (GTK_TREE_VIEW (view), GTK_TREE_VIEW_GRID_LINES_VERTICAL);
+        else
+            gtk_tree_view_set_grid_lines (GTK_TREE_VIEW (view), GTK_TREE_VIEW_GRID_LINES_NONE);
+    }
+    else
+    {
+        g_warning("gnc_tree_view_split_reg_gconf_changed: Unknown gconf key %s", entry->key);
+    }
 }
 
 
@@ -585,7 +637,7 @@ gnc_tree_view_split_reg_get_colummn_list (GncTreeModelSplitReg *model)
     case INCOME_LEDGER2:
         {
         static ViewCol col_list[] = {
-        COL_DATE, COL_NUMACT, COL_DESCNOTES, COL_TRANSVOID, COL_RECN,
+        COL_DATE, COL_NUMACT, COL_DESCNOTES, COL_TRANSFERVOID, COL_RECN,
         COL_STATUS, COL_DEBIT, COL_CREDIT, COL_BALANCE, -1};
         return col_list;
         }
@@ -594,7 +646,7 @@ gnc_tree_view_split_reg_get_colummn_list (GncTreeModelSplitReg *model)
     case GENERAL_LEDGER2:
         {
         static ViewCol col_list[] = {
-        COL_DATE, COL_NUMACT, COL_DESCNOTES, COL_TRANSVOID, COL_RECN,
+        COL_DATE, COL_NUMACT, COL_DESCNOTES, COL_TRANSFERVOID, COL_RECN,
         COL_STATUS, COL_COMM, COL_VALUE, COL_RATE, COL_AMOUNT, COL_DEBIT, COL_CREDIT, -1};
         return col_list;
         }
@@ -604,7 +656,7 @@ gnc_tree_view_split_reg_get_colummn_list (GncTreeModelSplitReg *model)
     case CURRENCY_REGISTER2:
         {
         static ViewCol col_list[] = {
-        COL_DATE, COL_NUMACT, COL_DESCNOTES, COL_TRANSVOID, COL_RECN,
+        COL_DATE, COL_NUMACT, COL_DESCNOTES, COL_TRANSFERVOID, COL_RECN,
         COL_STATUS, COL_AMTVAL, COL_PRICE, COL_DEBIT, COL_CREDIT, COL_BALANCE, -1};
         return col_list;
         }
@@ -614,7 +666,7 @@ gnc_tree_view_split_reg_get_colummn_list (GncTreeModelSplitReg *model)
     case PAYABLE_REGISTER2:
         {
         static ViewCol col_list[] = {
-        COL_DATE, COL_TYPE, COL_DUEDATE, COL_NUMACT, COL_DESCNOTES, COL_TRANSVOID,
+        COL_DATE, COL_TYPE, COL_DUEDATE, COL_NUMACT, COL_DESCNOTES, COL_TRANSFERVOID,
         COL_STATUS, COL_DEBIT, COL_CREDIT, COL_BALANCE, -1};
         return col_list;
         }
@@ -622,7 +674,7 @@ gnc_tree_view_split_reg_get_colummn_list (GncTreeModelSplitReg *model)
      case PORTFOLIO_LEDGER2:
         {
         static ViewCol col_list[] = {
-        COL_DATE, COL_NUMACT, COL_DESCNOTES, COL_TRANSVOID, COL_RECN,
+        COL_DATE, COL_NUMACT, COL_DESCNOTES, COL_TRANSFERVOID, COL_RECN,
         COL_STATUS, COL_AMOUNT, COL_PRICE, COL_DEBIT, COL_CREDIT, -1};
         return col_list;
         }
@@ -630,7 +682,7 @@ gnc_tree_view_split_reg_get_colummn_list (GncTreeModelSplitReg *model)
     case SEARCH_LEDGER2:
         {
         static ViewCol col_list[] = {
-        COL_DATE, COL_NUMACT, COL_DESCNOTES, COL_TRANSVOID, COL_RECN,
+        COL_DATE, COL_NUMACT, COL_DESCNOTES, COL_TRANSFERVOID, COL_RECN,
         COL_STATUS, COL_RATE, COL_DEBIT, COL_CREDIT, -1};
         return col_list;
         }
@@ -639,7 +691,7 @@ gnc_tree_view_split_reg_get_colummn_list (GncTreeModelSplitReg *model)
     default:
         {
         static ViewCol col_list[] = {
-        COL_DATE, COL_NUMACT, COL_DESCNOTES, COL_TRANSVOID, COL_RECN, COL_STATUS,
+        COL_DATE, COL_NUMACT, COL_DESCNOTES, COL_TRANSFERVOID, COL_RECN, COL_STATUS,
         COL_VALUE, COL_AMOUNT, COL_RATE, COL_PRICE, COL_DEBIT, COL_CREDIT,
         COL_BALANCE, -1};
         return col_list;
@@ -678,7 +730,7 @@ gnc_tree_view_split_reg_set_cols (GncTreeViewSplitReg *view,
             i++;
             continue;
         }
-        if (col_list[i] == COL_TRANSVOID) {
+        if (col_list[i] == COL_TRANSFERVOID) {
 
             col = gnc_tree_view_add_combo_column (
                 GNC_TREE_VIEW (view), def.title, def.pref_name, def.sizer,
@@ -789,7 +841,7 @@ gnc_tree_view_split_reg_set_cols (GncTreeViewSplitReg *view,
     g_signal_connect (G_OBJECT (model), "selection_move_filter", G_CALLBACK (gtv_split_reg_selection_move_filter_cb), view);
 
     // This will refresh the view.
-    g_signal_connect (G_OBJECT (model), "refresh_view", G_CALLBACK (gtv_split_reg_refresh_cb), view);
+    g_signal_connect (G_OBJECT (model), "refresh_trans", G_CALLBACK (gtv_split_reg_refresh_trans_cb), view);
 
     // This is for key navigation, tabbing...
     g_signal_connect (G_OBJECT (view), "key-press-event", G_CALLBACK (gtv_split_reg_key_press_cb), NULL);
@@ -802,22 +854,17 @@ gnc_tree_view_split_reg_set_cols (GncTreeViewSplitReg *view,
 
 
 /* Set up the view */
-static gboolean
+gboolean
 gnc_tree_view_split_reg_set_format (GncTreeViewSplitReg *view)
 {
     GncTreeViewSplitRegPrivate *priv;
     GncTreeModelSplitReg *model;
-    GtkTreeModel *f_model, *s_model;
     GtkTreePath *mpath, *spath;
     gint total_num = 0;
 
     ENTER(" ");
 
     model = gnc_tree_view_split_reg_get_model_from_view (view);
-
-
-    s_model = gtk_tree_view_get_model (GTK_TREE_VIEW (view));
-    f_model = gtk_tree_model_sort_get_model (GTK_TREE_MODEL_SORT (s_model));
 
     priv = view->priv;
 
@@ -849,7 +896,7 @@ gnc_tree_view_split_reg_set_format (GncTreeViewSplitReg *view)
                     if (index != total_num -1)
                         gtk_tree_view_expand_row (GTK_TREE_VIEW (view), path, TRUE); // all rows a part from last
                     else if (indices[0] != total_num -1)
-                        gtk_tree_view_expand_to_path (GTK_TREE_VIEW (view), path); // selection not on balnk trans
+                        gtk_tree_view_expand_to_path (GTK_TREE_VIEW (view), path); // selection not on blank trans
                     else
                         gtk_tree_view_expand_row (GTK_TREE_VIEW (view), path, TRUE); // selection on blank trans
                 }
@@ -935,18 +982,69 @@ gnc_tree_view_split_reg_set_format (GncTreeViewSplitReg *view)
 }
 
 
+/* Set up the view for this transaction */
+static gboolean
+gnc_tree_view_split_reg_format_trans (GncTreeViewSplitReg *view, Transaction *trans)
+{
+    GncTreeViewSplitRegPrivate *priv;
+    GncTreeModelSplitReg *model;
+    GtkTreePath *mpath, *spath;
+
+    ENTER(" ");
+
+    model = gnc_tree_view_split_reg_get_model_from_view (view);
+
+    priv = view->priv;
+
+    mpath = gnc_tree_model_split_reg_get_path_to_split_and_trans (model, NULL, trans);
+
+    spath = gnc_tree_view_split_reg_get_sort_path_from_model_path (view, mpath);
+
+    if ((!model->use_double_line) && (model->style != REG2_STYLE_JOURNAL))
+    {
+        gtk_tree_view_collapse_row (GTK_TREE_VIEW (view), spath);
+        LEAVE("single line transaction foramt");
+    }
+
+    if ((model->use_double_line) && (model->style != REG2_STYLE_JOURNAL))
+    {
+        gtk_tree_view_expand_to_path (GTK_TREE_VIEW (view), spath);
+        gtk_tree_path_down (spath);
+        gtk_tree_view_collapse_row (GTK_TREE_VIEW (view), spath);
+        gtk_tree_path_up (spath);
+        LEAVE("double line transaction format");
+    }
+
+    /* This expands to split from top level auto.. */
+    if ((model->style == REG2_STYLE_AUTO_LEDGER) || (model->style == REG2_STYLE_JOURNAL))
+    {
+        gtk_tree_view_expand_row (GTK_TREE_VIEW (view), spath, TRUE);
+        priv->expanded = TRUE;
+        LEAVE("auto expand line transaction format");
+    }
+
+    gtk_tree_path_free (mpath);
+    gtk_tree_path_free (spath);
+
+    /* This updates the plugin page gui */
+    if (view->moved_cb)
+        (view->moved_cb)(view, view->moved_cb_data);
+
+    return (FALSE);
+}
+
+
 /* Callback to update the view after transactions are added or deleted */
 static void
-gtv_split_reg_refresh_cb (GncTreeModelSplitReg *model, gpointer user_data)
+gtv_split_reg_refresh_trans_cb (GncTreeModelSplitReg *model, gpointer item, gpointer user_data)
 {
     GncTreeViewSplitReg *view = user_data;
+    Transaction *trans = item;
 
     /* Refilter the tree view register */
-    gnc_tree_view_split_reg_refilter (view);
+    gnc_tree_view_split_reg_refilter (view); //FIXME is this needed ???
 
-    if (view->reg_closing != TRUE)
-        /* Set the view format */
-        g_idle_add ((GSourceFunc)gnc_tree_view_split_reg_set_format, view);
+    gnc_tree_view_split_reg_format_trans (view, trans);
 }
 
 
@@ -997,14 +1095,14 @@ gnc_tree_view_split_reg_new_with_model (GncTreeModelSplitReg *model)
     gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (view), TRUE);
 
     /* TreeView Grid lines */
-    if (gnc_gconf_get_bool (GCONF_GENERAL_REGISTER, "draw_horizontal_lines", NULL))
+    if (view->priv->use_horizontal_lines)
     {
-        if (gnc_gconf_get_bool (GCONF_GENERAL_REGISTER, "draw_vertical_lines", NULL))
+        if (view->priv->use_vertical_lines)
             gtk_tree_view_set_grid_lines (GTK_TREE_VIEW (view), GTK_TREE_VIEW_GRID_LINES_BOTH);
         else
             gtk_tree_view_set_grid_lines (GTK_TREE_VIEW (view), GTK_TREE_VIEW_GRID_LINES_HORIZONTAL);
     }
-    else if (gnc_gconf_get_bool (GCONF_GENERAL_REGISTER, "draw_vertical_lines", NULL))
+    else if (view->priv->use_vertical_lines)
             gtk_tree_view_set_grid_lines (GTK_TREE_VIEW (view), GTK_TREE_VIEW_GRID_LINES_VERTICAL);
     else
         gtk_tree_view_set_grid_lines (GTK_TREE_VIEW (view), GTK_TREE_VIEW_GRID_LINES_NONE);
@@ -1091,6 +1189,7 @@ gnc_tree_view_split_reg_default_selection (GncTreeViewSplitReg *view)
     LEAVE(" ");
 }
 
+/*###########################################################################*/
 
 /* Sets read only flag */
 void
@@ -1104,317 +1203,11 @@ gnc_tree_view_split_reg_set_read_only (GncTreeViewSplitReg *view, gboolean read_
 }
 
 
-/* Do we need an exchange rate */
-static gboolean
-needs_exchange_rate (GncTreeViewSplitReg *view, Transaction *trans, Split *split)
+/* Return the register commodity */
+gnc_commodity *
+gnc_tree_view_split_reg_get_reg_commodity (GncTreeViewSplitReg *view)
 {
-    gnc_commodity *split_com, *txn_curr, *reg_com;
-
-    ENTER("needs_exchange_rate - trans %p and split %p", trans, split);
-
-    txn_curr = xaccTransGetCurrency (trans);
-    split_com = xaccAccountGetCommodity (xaccSplitGetAccount (split));
-    if (split_com && txn_curr && !gnc_commodity_equiv (split_com, txn_curr))
-    {
-        LEAVE("needs_exchange_rate split_com to txn_curr return TRUE");
-        return TRUE;
-    }
-
-    reg_com = view->priv->reg_comm;
-    if (split_com && reg_com && !gnc_commodity_equiv (split_com, reg_com))
-    {
-        LEAVE("needs_exchange_rate split_com and reg_com return TRUE");
-        return TRUE;
-    }
-    LEAVE("No Exchange rate needed");
-    return FALSE;
-}
-
-
-/* Get the rate from the price db */
-static gnc_numeric
-gtv_get_rate_from_db (gnc_commodity *from, gnc_commodity *to)
-{
-    GNCPrice *prc;
-    gnc_numeric rate_split;
-    gboolean have_rate = FALSE;
-    QofBook *book = gnc_get_current_book ();
-
-    /* Do we have a rate allready */
-    prc = gnc_pricedb_lookup_latest (gnc_pricedb_get_db (book), from, to);
-    if (prc)
-    {
-        rate_split = gnc_price_get_value (prc);
-        gnc_price_unref (prc);
-        have_rate = TRUE;
-    }
-
-    /* Lets try reversing the commodities */
-    if (!have_rate)
-    {
-        prc = gnc_pricedb_lookup_latest (gnc_pricedb_get_db (book), to, from);
-        if (prc)
-        {
-            rate_split = gnc_numeric_div (gnc_numeric_create (1, 1), gnc_price_get_value (prc),
-                                 GNC_DENOM_AUTO, GNC_HOW_DENOM_REDUCE);
-
-            gnc_price_unref (prc);
-            have_rate = TRUE;
-        }
-    }
-
-    /* No rate, set to 1/1 */
-    if (!have_rate)
-        rate_split = gnc_numeric_create (1, 1);
-
-    return rate_split;
-}
-
-
-/* Either sets the value and amount for split and returns TRUE, or
-   does nothing and returns FALSE. */
-static gboolean
-handle_exchange_rate (GncTreeViewSplitReg *view, gnc_numeric amount, Transaction *trans, Split *split, gboolean force)
-{
-    XferDialog *xfer;
-    gboolean rate_split_ok, rate_reg_ok;
-    gnc_numeric rate_split, rate_reg, value;
-    Account *reg_acc = view->priv->anchor;
-    gnc_commodity *xfer_comm = xaccAccountGetCommodity (xaccSplitGetAccount (split));
-    gnc_commodity *reg_comm = view->priv->reg_comm;
-    gnc_commodity *trans_curr = xaccTransGetCurrency (trans);
-    gboolean expanded;
-    gboolean have_rate = TRUE;
-
-
-    ENTER("handle_exchange_rate amount %s, trans %p and split %p force %d", gnc_numeric_to_string (amount), trans, split, force);
-
-    /* Rate from trans-curr to split-comm */
-    rate_split_ok = xaccTransGetRateForCommodity (trans, xfer_comm, split, &rate_split);
-    DEBUG("rate_split_ok %d and xfer_comm %s", rate_split_ok, gnc_commodity_get_fullname (xfer_comm));
-
-    /* Rate from trans-curr to reg-comm */
-    rate_reg_ok = xaccTransGetRateForCommodity (trans, reg_comm, split, &rate_reg);
-    DEBUG("rate_reg_ok %d and reg_comm %s", rate_reg_ok, gnc_commodity_get_fullname (reg_comm));
-
-    /* Are we expanded */
-    expanded = view->priv->expanded;
-
-    if (gnc_commodity_equal (trans_curr, xfer_comm) && rate_split_ok)
-    {
-        xaccSplitSetAmount (split, amount);
-        xaccSplitSetValue (split, amount);
-        return TRUE;
-    }
-
-    if (rate_reg_ok && rate_split_ok && !force)
-    {
-        value = gnc_numeric_div (amount, rate_reg, gnc_commodity_get_fraction (trans_curr), GNC_HOW_DENOM_REDUCE);
-        amount = gnc_numeric_mul (value, rate_split, GNC_DENOM_AUTO, GNC_HOW_RND_ROUND);
-    }
-    else
-    {
-        if (!rate_split_ok)
-            rate_split = gtv_get_rate_from_db (reg_comm, xfer_comm);
-
-        /* create the exchange-rate dialog */
-        xfer = gnc_xfer_dialog (NULL, NULL);
-
-        gnc_xfer_dialog_is_exchange_dialog (xfer, &rate_split);
-
-        /* fill in the dialog entries */
-        gnc_xfer_dialog_set_description (xfer, xaccTransGetDescription (trans));
-        gnc_xfer_dialog_set_memo (xfer, xaccSplitGetMemo (split));
-
-        /* Get per book option */
-        gnc_xfer_dialog_set_num (xfer, gnc_get_num_action (trans, split));
-        gnc_xfer_dialog_set_date (xfer, timespecToTime64 (xaccTransRetDatePostedTS (trans)));
-
-        value = amount;
-        if (gnc_xfer_dialog_run_exchange_dialog (xfer, &rate_split, value, reg_acc, trans, xfer_comm, expanded))
-        {
-            if (!rate_split_ok)
-                rate_split = gnc_numeric_create (1, 1);
-            have_rate = FALSE;
-        }
-        else
-            have_rate = TRUE;
-
-        amount = gnc_numeric_mul (value, rate_split, GNC_DENOM_AUTO, GNC_HOW_RND_ROUND);
-    }
-    xaccSplitSetAmount (split, amount);
-    xaccSplitSetValue (split, value);
-
-    LEAVE("handle_exchange_rate set split %p amt=%s; and val=%s", split, gnc_numeric_to_string (amount), gnc_numeric_to_string (value));
-    return have_rate;
-}
-
-
-#define set_value_for gnc_tree_view_split_reg_set_value_for
-void
-gnc_tree_view_split_reg_set_value_for (GncTreeViewSplitReg *view, Transaction *trans, Split *split, gnc_numeric input, gboolean force)
-{
-    GtkWidget *window;
-    Account *anchor = view->priv->anchor;
-    Account *acct = xaccSplitGetAccount (split);
-    gnc_commodity *currency;
-    gnc_numeric value, amount, rate;
-
-    ENTER("set_value_for trans %p and split %p input %s force %d", trans, split, gnc_numeric_to_string (input), force);
-
-    currency = xaccTransGetCurrency (trans);
-
-    if (gnc_numeric_zero_p (input))
-    {
-        xaccSplitSetValue (split, input);
-        xaccSplitSetAmount (split, input);
-        LEAVE("input is zero");
-        return;
-    }
-
-    window = gnc_tree_view_split_reg_get_parent (view);
-
-    if (needs_exchange_rate (view, trans, split))
-    {
-        if (handle_exchange_rate (view, input, trans, split, force))
-        {
-            ; //FIXME ??????
-        }
-        else
-        {
-            gnc_error_dialog (window, "%s",
-                         _("Exchange Rate Canceled, using existing rate or default 1 to 1 rate if this is a new transaction."));
-        }
-        LEAVE("used exchange rate");
-        return;
-    }
-
-    /* Context determines the interpretation of the input.  If the
-       treeview is anchored to an account then the input is
-       interpreted as being in the Account's commodity.  Otherwise,
-       it's interpreted as being in the Transaction's currency. */
-    if (anchor)
-    {
-        gnc_commodity *reg_com = view->priv->reg_comm;
-        gnc_commodity *split_com = xaccAccountGetCommodity (acct);
-
-        /* Convert from the anchor account's commodity to trans currency */
-        if (gnc_commodity_equiv (currency, reg_com))
-            value = input;
-        else 
-        {
-            if (!xaccTransGetRateForCommodity (trans, reg_com, NULL, &rate))
-            {
-                LEAVE("");
-                return;
-            }
-
-            if (gnc_numeric_zero_p (rate))
-            {
-                xaccTransSetCurrency (trans, reg_com);
-                value = input;
-            }
-            else
-            {
-                value = gnc_numeric_div (
-                    input, rate,
-                    GNC_DENOM_AUTO, //?
-                    //gnc_commodity_get_fraction(currency),
-                    GNC_HOW_RND_ROUND);
-            }
-        }
-        xaccSplitSetValue (split, value);
-
-        if (gnc_commodity_equiv (split_com, reg_com))
-        {
-            amount = input;
-        }
-        else
-        {
-            rate = xaccTransGetAccountConvRate (trans, acct);
-            amount = gnc_numeric_mul (value, rate, xaccAccountGetCommoditySCU (acct), GNC_HOW_RND_ROUND);
-        }
-        xaccSplitSetAmount (split, amount);
-    }
-    else
-    {
-        value = input;
-        xaccSplitSetValue (split, value);
-
-        rate = xaccTransGetAccountConvRate (trans, acct);
-        amount = gnc_numeric_mul (value, rate, xaccAccountGetCommoditySCU (acct), GNC_HOW_RND_ROUND);
-        if (gnc_numeric_check (amount) == GNC_ERROR_OK)
-        {
-            xaccSplitSetAmount (split, amount);
-        }
-    }
-    LEAVE(" ");
-}
-
-
-/* Returns a value for display. */
-static gnc_numeric
-get_value_for (GncTreeViewSplitReg *view, Transaction *trans, Split *split, gboolean is_blank)
-{
-    gnc_commodity *currency = xaccTransGetCurrency (trans);
-    gnc_numeric total;
-
-    ENTER("get_value_for trans %p and split %p is_blank %d", trans, split, is_blank);
-
-    total = xaccSplitGetValue (split);
-
-    if (is_blank && gnc_numeric_zero_p (total)) //blank split and total zero
-    {
-        gnc_numeric rate;
-        total = gnc_numeric_neg (xaccTransGetImbalanceValue (trans));
-        if (!gnc_numeric_zero_p (total))
-        {
-            if (!xaccTransGetRateForCommodity (trans, view->priv->reg_comm, NULL, &rate))
-            {
-                LEAVE("zero");
-                return gnc_numeric_zero();
-            }
-
-            total = gnc_numeric_mul (
-                total, rate,
-                gnc_commodity_get_fraction (currency),
-                GNC_HOW_RND_ROUND);
-        }
-    }
-    else
-    {
-        if (!gnc_numeric_zero_p (total) && gnc_numeric_check (total) == GNC_ERROR_OK)
-        {
-            /* if needs conversion? */
-            gnc_commodity *commodity = view->priv->reg_comm;
-            if (commodity && gnc_commodity_is_currency (view->priv->reg_comm)) //test for a currency register
-            {
-                if (!gnc_commodity_equiv (commodity, currency))
-                {
-                    total = xaccSplitConvertAmount (split, view->priv->anchor);
-                }
-            }
-        }
-    }
-    LEAVE("return value is %s", gnc_numeric_to_string (total));
-    return total;
-}
-
-
-/* Returns the other Split based on the current Account */
-/* Only used with two split transactions */
-static Split *
-get_other_split (GncTreeViewSplitReg *view, Transaction *trans)
-{
-    int i;
-    Split *split = NULL;
-    Account *anchor = view->priv->anchor;
-
-    for (i = 0; (split = xaccTransGetSplit(trans, i)); i++) {
-        if (anchor == xaccSplitGetAccount(split))
-            return xaccSplitGetOtherSplit(split);
-    }
-    return NULL;
+    return view->priv->reg_comm;
 }
 
 
@@ -1425,9 +1218,11 @@ get_this_split (GncTreeViewSplitReg *view, Transaction *trans)
     GncTreeModelSplitReg *model;
     int i;
     Split *split = NULL;
-    Account *anchor = view->priv->anchor;
+    Account *anchor;
 
     model = gnc_tree_view_split_reg_get_model_from_view (view);
+
+    anchor = gnc_tree_model_split_reg_get_anchor (model);
 
     if (xaccTransCountSplits (trans) == 0)
         return gnc_tree_model_split_get_blank_split (model);
@@ -1499,9 +1294,6 @@ set_number_for_input (GncTreeViewSplitReg *view, Transaction *trans, Split *spli
 
     ENTER("set_number_for_input trans %p and split %p and input is %s and viewcol is %d", trans, split, gnc_numeric_to_string (input), viewcol);
 
-
-//FIXME ## Trading ## Copied from split-register, needs testing
-
     model = gnc_tree_view_split_reg_get_model_from_view (view);
 
     account = gnc_tree_model_split_reg_get_anchor (model);
@@ -1521,7 +1313,6 @@ set_number_for_input (GncTreeViewSplitReg *view, Transaction *trans, Split *spli
         if (!(xaccAccountIsPriced (account) || !gnc_commodity_is_iso (acc_commodity)))
             return;
     }
-//FIXME
 
     if (gnc_numeric_zero_p (input))
     {
@@ -1742,12 +1533,12 @@ set_number_for_input (GncTreeViewSplitReg *view, Transaction *trans, Split *spli
     }
 
     /* If the number of splits is two, change other split to balance */
-    if ((xaccTransCountSplits (trans) == 2) && view->priv->expanded)
+    if (!gnc_tree_util_split_reg_is_multi (split) && view->priv->expanded)
     {
         Split *osplit;
         gnc_commodity *osplit_com;
 
-        osplit = get_other_split (view, trans);
+        osplit = xaccSplitGetOtherSplit (split);
 
         value = xaccSplitGetValue (split);
 
@@ -1755,16 +1546,8 @@ set_number_for_input (GncTreeViewSplitReg *view, Transaction *trans, Split *spli
 
         if (gnc_commodity_is_currency (osplit_com))
         {
-            if (!gnc_numeric_negative_p (value))
-            {
-                xaccSplitSetValue (osplit, gnc_numeric_neg (value));
-                xaccSplitSetAmount (osplit, gnc_numeric_neg (value));
-            }
-            else
-            {
-                xaccSplitSetValue (osplit, value);
-                xaccSplitSetAmount (osplit, value);
-            }
+            xaccSplitSetValue (osplit, gnc_numeric_neg (value));
+            xaccSplitSetAmount (osplit, gnc_numeric_neg (value));
         }
     }
     LEAVE("");
@@ -1797,7 +1580,7 @@ set_value_for_amount (GncTreeViewSplitReg *view, Transaction *trans, Split *spli
 
     split_rate = gnc_numeric_div (value, amount, GNC_DENOM_AUTO, GNC_HOW_DENOM_EXACT);
     if (gnc_numeric_check (split_rate) != GNC_ERROR_OK)
-        split_rate = gnc_numeric_create (1,1);
+        split_rate = gnc_numeric_create (100,100);
 
     new_value = gnc_numeric_mul (input, split_rate, denom, GNC_HOW_RND_ROUND_HALF_UP);
 
@@ -1816,9 +1599,14 @@ get_rate_for (GncTreeViewSplitReg *view, Transaction *trans, Split *split, gbool
 
     ENTER("get_rate_for trans %p and split %p is_blank %d", trans, split, is_blank);
 
-    num = get_value_for (view, trans, split, is_blank);
-    num = gnc_numeric_div ( xaccSplitGetAmount (split), num, GNC_DENOM_AUTO, GNC_HOW_RND_ROUND);
-    LEAVE("get_rate_for split amount is %s and return num is %s", gnc_numeric_to_string (xaccSplitGetAmount (split)), gnc_numeric_to_string (num));
+    num = gnc_tree_util_split_reg_get_value_for (view, trans, split, is_blank);
+//FIXME Not sure about this...
+    if (xaccTransUseTradingAccounts (trans))
+        num = gnc_numeric_div (num, xaccSplitGetValue (split), GNC_DENOM_AUTO, GNC_HOW_RND_ROUND);
+    else
+        num = gnc_numeric_div (xaccSplitGetAmount (split), num, GNC_DENOM_AUTO, GNC_HOW_RND_ROUND);
+
+    LEAVE("get_rate_for split %p and return num is %s", split, gnc_numeric_to_string (num));
     return num;
 }
 
@@ -1845,26 +1633,30 @@ get_split_pair (GncTreeViewSplitReg *view, Transaction *trans, Split **osplit, S
         *osplit = xaccMallocSplit (book);
         xaccSplitSetParent (*osplit, trans);
     }
-    else if (count == 2)
+    else
     {
         int i;
-        Split *s;
+        Split *s, *first_split;
 
-        for (i = 0; (s = xaccTransGetSplit (trans, i)); i++)
+        first_split = xaccTransGetSplit (trans, 0);
+
+        if (gnc_tree_util_split_reg_is_multi (first_split)) // multi trans
+            return FALSE;
+        else // two split trans
         {
-            if (anchor == xaccSplitGetAccount (s))
+            for (i = 0; (s = xaccTransGetSplit (trans, i)); i++)
             {
-                *split = s;
-                break;
+                if (anchor == xaccSplitGetAccount (s))
+                {
+                    *split = s;
+                    break;
+                }
             }
+            g_assert (*split);
+            *osplit = xaccSplitGetOtherSplit(*split);
+            g_assert (*osplit);
         }
-        //*split = get_this_split (view, trans);
-        g_assert (*split);
-        *osplit = get_other_split (view, trans);
-        g_assert (*osplit);
     }
-    else
-        return FALSE;
     DEBUG("get_split_pair return - trans is %p, osplit is %p and split %p is set to anchor %p", trans, *osplit, *split, anchor);
     return TRUE;
 }
@@ -1901,21 +1693,27 @@ have_account (GncTreeViewSplitReg *view, RowDepth depth, gboolean expanded, Tran
 
     DEBUG("have_account trans %p, split %p, expanded %d, depth %d", trans, split, expanded, depth);
 
-    if ((depth == TRANS1) && !expanded && (xaccTransCountSplits (trans) == 2)) // normal trans
+    if ((depth == TRANS1) && !expanded && !gnc_tree_util_split_reg_is_multi (split)) // normal trans
     {
-        if (xaccSplitGetAccount (get_other_split (view, trans)) != NULL)
+        if (xaccSplitGetAccount (xaccSplitGetOtherSplit (split)) != NULL)
             have_account = TRUE;
     }
 
     if ((depth == SPLIT3) && (xaccTransCountSplits (trans) == 0)) // blank trans, blank split
         have_account = TRUE;
 
-    if (depth == SPLIT3) // normal split
+    if (depth == SPLIT3)
     {
-        if (xaccSplitGetAccount (split) != NULL)
-            have_account = TRUE;
+        Account *acc;
+        acc = xaccSplitGetAccount (split);
+        if (acc != NULL)
+        {
+            if (xaccAccountGetType (acc) != ACCT_TYPE_TRADING)
+                have_account = TRUE; // normal split
+            else
+                have_account = FALSE; // trading split
+        }
     }
-
     return have_account;
 }
 
@@ -1988,7 +1786,6 @@ cdf0 (GtkTreeViewColumn *col, GtkCellRenderer *cell, GtkTreeModel *s_model,
     gboolean editable = FALSE, expanded = FALSE;
     gboolean read_only = FALSE;
     gboolean open_edited = FALSE;
-    gint num_of_splits = 0;
     gnc_numeric num;
     const gchar *s = "";
     const gchar *row_color;
@@ -2041,10 +1838,9 @@ cdf0 (GtkTreeViewColumn *col, GtkCellRenderer *cell, GtkTreeModel *s_model,
         open_edited = TRUE;
     }
 
-    /* Lets see if the splits are expanded and count them */
+    /* Lets see if the splits are expanded */
     if (is_trow1 || is_trow2)
     {
-        num_of_splits = xaccTransCountSplits (trans);
         path = gtk_tree_model_get_path (GTK_TREE_MODEL (model), &m_iter);
         if (is_trow1)
             gtk_tree_path_down (path); /* Move the path down to trow2 */
@@ -2052,10 +1848,7 @@ cdf0 (GtkTreeViewColumn *col, GtkCellRenderer *cell, GtkTreeModel *s_model,
         gtk_tree_path_free (path);
     }
     else
-    {
-        num_of_splits = xaccTransCountSplits (trans);
         expanded = TRUE;
-    }
 
     switch (viewcol) {
     case COL_DATE:
@@ -2189,7 +1982,7 @@ cdf0 (GtkTreeViewColumn *col, GtkCellRenderer *cell, GtkTreeModel *s_model,
         g_object_set (cell, "text", s, "editable", editable, NULL);
         break;
 
-    case COL_TRANSVOID:
+    case COL_TRANSFERVOID:
         /* Column is TRANSFER / VOID */
         /* Not sure if this will stay here, this sets the combo column
            0 for short account names, 1 for long */
@@ -2201,28 +1994,17 @@ cdf0 (GtkTreeViewColumn *col, GtkCellRenderer *cell, GtkTreeModel *s_model,
         if (is_trow1)
         {
             if (expanded)
+            {
                 s = ""; /* blank-out if splits are visible */
-            else if (num_of_splits == 2)
-            {
-                Account *acct;
-                Split *osplit;
-                osplit = get_other_split (view, trans);
-                acct = xaccSplitGetAccount (osplit);
-                if (view->priv->acct_short_names)
-                    s = xaccAccountGetName (acct);
-                else
-                    s = gnc_account_get_full_name (acct);
+                editable = FALSE;
             }
-            else if (num_of_splits == 0)
+            else
             {
-                s = "";
+                gboolean is_multi;
+                s = gnc_tree_util_split_reg_get_transfer_entry (get_this_split (view, trans), &is_multi);
+
+                editable = anchor && !expanded && !is_multi;
             }
-                    
-            if (num_of_splits > 2)
-            {
-                s = SPLIT_TRANS_STR;
-            }
-            editable = anchor && !expanded && (num_of_splits < 3);
         }
         if (is_trow2)
         {
@@ -2329,8 +2111,8 @@ cdf0 (GtkTreeViewColumn *col, GtkCellRenderer *cell, GtkTreeModel *s_model,
         /* Column is VALUE */
         if (is_split)
         {
-            gnc_numeric val = xaccSplitGetValue (split);
-            s = xaccPrintAmount (val, gnc_commodity_print_info (xaccTransGetCurrency (trans), SHOW_SYMBOL));
+            num = xaccSplitGetValue (split);
+            s = xaccPrintAmount (num, gnc_commodity_print_info (xaccTransGetCurrency (trans), SHOW_SYMBOL));
             editable = FALSE;
 
             if (get_imbalance (trans))
@@ -2344,6 +2126,12 @@ cdf0 (GtkTreeViewColumn *col, GtkCellRenderer *cell, GtkTreeModel *s_model,
 
         editable = (read_only == TRUE) ? FALSE : editable;
 
+        // Display negative numbers in red by gconf
+        if (gnc_numeric_negative_p (num) && view->priv->negative_in_red)
+            g_object_set (cell, "foreground", "red", (gchar*)NULL);
+        else
+            g_object_set (cell, "foreground", NULL, (gchar*)NULL);
+
         g_object_set (cell, "text", s, "editable", editable, NULL);
         break;
 
@@ -2356,19 +2144,21 @@ cdf0 (GtkTreeViewColumn *col, GtkCellRenderer *cell, GtkTreeModel *s_model,
         }
         else
         {
+            GNCPrintAmountInfo print_info;
+
             gnc_commodity *split_com = xaccAccountGetCommodity (xaccSplitGetAccount (split));
-            num = get_rate_for (view, trans, split, is_blank);
+
+            print_info = gnc_default_price_print_info();
+            print_info.min_decimal_places = 2;
+
+            num = gnc_numeric_convert (get_rate_for (view, trans, split, is_blank), 1000000, GNC_HOW_RND_ROUND_HALF_UP);
+
             if (gnc_numeric_check (num) == GNC_ERROR_OK)
-            {
-                s = xaccPrintAmount (num, gnc_split_amount_print_info (split, SHOW_SYMBOL));
-                editable = !gnc_numeric_zero_p (num) && gnc_commodity_equiv (split_com, view->priv->reg_comm);
-                editable = FALSE;
-            }
+                s = xaccPrintAmount (num, print_info);
             else
-            {
                 s = "";
-                editable = FALSE;
-            }
+
+            editable = FALSE;
 
             if (get_imbalance (trans))
                 g_object_set (cell, "cell-background", PINKCELL, (gchar*)NULL);
@@ -2383,8 +2173,8 @@ cdf0 (GtkTreeViewColumn *col, GtkCellRenderer *cell, GtkTreeModel *s_model,
         /* Column is AMOUNT */
         if (is_split && (anchor == NULL))
         {
-            gnc_numeric amt = xaccSplitGetAmount (split);
-            s = xaccPrintAmount (amt, gnc_account_print_info (xaccSplitGetAccount (split), SHOW_SYMBOL));
+            num = xaccSplitGetAmount (split);
+            s = xaccPrintAmount (num, gnc_account_print_info (xaccSplitGetAccount (split), SHOW_SYMBOL));
             editable = FALSE;
 
             if (get_imbalance (trans))
@@ -2397,8 +2187,8 @@ cdf0 (GtkTreeViewColumn *col, GtkCellRenderer *cell, GtkTreeModel *s_model,
 
             if (!gnc_commodity_is_currency (split_comm) || (is_blank))
             {
-                gnc_numeric amt = xaccSplitGetAmount (split);
-                s = xaccPrintAmount (amt, gnc_account_print_info (xaccSplitGetAccount (split), SHOW_SYMBOL));
+                num = xaccSplitGetAmount (split);
+                s = xaccPrintAmount (num, gnc_account_print_info (xaccSplitGetAccount (split), SHOW_SYMBOL));
                 editable = FALSE;
             }
 
@@ -2413,6 +2203,12 @@ cdf0 (GtkTreeViewColumn *col, GtkCellRenderer *cell, GtkTreeModel *s_model,
 
         editable = (read_only == TRUE) ? FALSE : editable;
 
+        // Display negative numbers in red by gconf
+        if (gnc_numeric_negative_p (num) && view->priv->negative_in_red)
+            g_object_set (cell, "foreground", "red", (gchar*)NULL);
+        else
+            g_object_set (cell, "foreground", NULL, (gchar*)NULL);
+
         g_object_set (cell, "text", s, "editable", editable, NULL);
         break;
 
@@ -2423,16 +2219,22 @@ cdf0 (GtkTreeViewColumn *col, GtkCellRenderer *cell, GtkTreeModel *s_model,
             s = "";
             editable = FALSE;
         }
-        else if (is_trow1)
+        else if (is_trow1) // Value
         {
             if (anchor)
             {
-                gnc_numeric val = xaccSplitGetValue (get_this_split (view, trans));
-                editable = !expanded && (num_of_splits < 3);
+                Split *this_split;
+
+                this_split = get_this_split (view, trans);
+
+                num = xaccTransGetAccountValue (trans, anchor);
+
+                editable = !expanded && !gnc_tree_util_split_reg_is_multi (this_split);
+
                 if (expanded)
                     s = "";
                 else
-                    s = xaccPrintAmount (val, gnc_commodity_print_info (xaccTransGetCurrency (trans), SHOW_SYMBOL));
+                    s = xaccPrintAmount (num, gnc_commodity_print_info (xaccTransGetCurrency (trans), SHOW_SYMBOL));
             }
             else
             {
@@ -2441,12 +2243,12 @@ cdf0 (GtkTreeViewColumn *col, GtkCellRenderer *cell, GtkTreeModel *s_model,
             }
         }
 
-        if (is_split)
+        if (is_split) // Amount
         {
             if (anchor == NULL)
             {
-                gnc_numeric amt = xaccSplitGetAmount (split);
-                s = xaccPrintAmount (amt, gnc_account_print_info (xaccSplitGetAccount (split), SHOW_SYMBOL));
+                num = xaccSplitGetAmount (split);
+                s = xaccPrintAmount (num, gnc_account_print_info (xaccSplitGetAccount (split), SHOW_SYMBOL));
                 editable = TRUE;
             }
             else if (anchor)
@@ -2456,8 +2258,8 @@ cdf0 (GtkTreeViewColumn *col, GtkCellRenderer *cell, GtkTreeModel *s_model,
 
                 if (!gnc_commodity_is_currency (split_comm) || (is_blank))
                 {
-                    gnc_numeric amt = xaccSplitGetAmount (split);
-                    s = xaccPrintAmount (amt, gnc_account_print_info (xaccSplitGetAccount (split), SHOW_SYMBOL));
+                    num = xaccSplitGetAmount (split);
+                    s = xaccPrintAmount (num, gnc_account_print_info (xaccSplitGetAccount (split), SHOW_SYMBOL));
                     editable = TRUE;
                 }
             }
@@ -2476,6 +2278,12 @@ cdf0 (GtkTreeViewColumn *col, GtkCellRenderer *cell, GtkTreeModel *s_model,
 
         editable = (read_only == TRUE) ? FALSE : editable;
 
+        // Display negative numbers in red by gconf
+        if (gnc_numeric_negative_p (num) && view->priv->negative_in_red)
+            g_object_set (cell, "foreground", "red", (gchar*)NULL);
+        else
+            g_object_set (cell, "foreground", NULL, (gchar*)NULL);
+
         g_object_set (cell, "text", s, "editable", editable, NULL);
         break;
 
@@ -2490,8 +2298,17 @@ cdf0 (GtkTreeViewColumn *col, GtkCellRenderer *cell, GtkTreeModel *s_model,
         {
             if (anchor)
             {
-                num = xaccSplitGetSharePrice (get_this_split (view, trans));
-                editable = !expanded && (num_of_splits < 3);
+                Split *this_split;
+
+                this_split = get_this_split (view, trans);
+
+                if (gnc_tree_util_split_reg_is_multi (this_split))
+                    num = gnc_numeric_zero();
+                else
+                    num = xaccSplitGetSharePrice (this_split);
+
+                editable = !expanded && !gnc_tree_util_split_reg_is_multi (this_split);
+
                 if (expanded)
                     s = "";
                 else 
@@ -2555,48 +2372,53 @@ cdf0 (GtkTreeViewColumn *col, GtkCellRenderer *cell, GtkTreeModel *s_model,
     case COL_DEBIT:
     case COL_CREDIT:
         /* Column is CREDIT and DEBIT */
-        if (is_split)
         {
-            num = get_value_for (view, trans, split, is_blank);
-            editable = TRUE;
-            if (get_imbalance (trans))
-                g_object_set (cell, "cell-background", PINKCELL, (gchar*)NULL);
-        }
-        else if (is_trow1)
-        {
-            if (anchor)
+            GNCPrintAmountInfo print_info;
+            print_info = gnc_account_print_info (anchor, SHOW_SYMBOL);
+
+            if (is_split)
             {
-                editable = !expanded && (num_of_splits < 3 );
-                num = xaccTransGetAccountAmount (trans, anchor);
+                if (!gnc_tree_util_split_reg_get_debcred_entry (view, trans, split, is_blank, &num, &print_info))
+                    num = gnc_numeric_zero();
+
+                editable = TRUE;
+                if (get_imbalance (trans))
+                    g_object_set (cell, "cell-background", PINKCELL, (gchar*)NULL);
             }
-            else
+            else if (is_trow1)
+            {
+                if (anchor)
+                {
+                    editable = !expanded && !gnc_tree_util_split_reg_is_multi (get_this_split (view, trans));
+                    num = xaccTransGetAccountAmount (trans, anchor);
+                }
+                else
+                {
+                    editable = FALSE;
+                    num = gnc_numeric_zero();
+                }
+            }
+            else if (is_trow2)
             {
                 editable = FALSE;
                 num = gnc_numeric_zero();
             }
-        }
-        else if (is_trow2)
-        {
-            editable = FALSE;
-            num = gnc_numeric_zero();
-        }
 
-        if ((gnc_numeric_check(num) != GNC_ERROR_OK) ||
-             gnc_numeric_zero_p(num) ||
-            (gnc_numeric_negative_p(num) && viewcol == COL_DEBIT) ||
-            (gnc_numeric_positive_p(num) && viewcol == COL_CREDIT))
-        {
-            s = "";
-        }
-        else
-        {
-            if ((is_trow1 || is_trow2) && expanded)
+            if ((gnc_numeric_check(num) != GNC_ERROR_OK) ||
+                 gnc_numeric_zero_p(num) ||
+                (gnc_numeric_negative_p(num) && viewcol == COL_DEBIT) ||
+                (gnc_numeric_positive_p(num) && viewcol == COL_CREDIT))
+            {
                 s = "";
+            }
             else
-                s = xaccPrintAmount (gnc_numeric_abs (num),
-                                gnc_account_print_info (anchor, SHOW_SYMBOL));
+            {
+                if ((is_trow1 || is_trow2) && expanded)
+                    s = "";
+                else
+                    s = xaccPrintAmount (gnc_numeric_abs (num), print_info);
+            }
         }
-
         /* Only allow changes to entries if we have a valid split accounts */
         editable = have_account (view, depth, expanded, trans, split);
 
@@ -2615,8 +2437,9 @@ cdf0 (GtkTreeViewColumn *col, GtkCellRenderer *cell, GtkTreeModel *s_model,
             if (gnc_reverse_balance (anchor))
                 num = gnc_numeric_neg (num);
             s = xaccPrintAmount (num, gnc_account_print_info(anchor, FALSE));
-            if (gnc_numeric_negative_p (num)
-                && gnc_gconf_get_bool (GCONF_GENERAL, KEY_NEGATIVE_IN_RED, NULL))
+
+            // Display negative numbers in red by gconf
+            if (gnc_numeric_negative_p (num) && view->priv->negative_in_red)
                 g_object_set (cell, "foreground", "red", (gchar*)NULL);
             else
                 g_object_set (cell, "foreground", NULL, (gchar*)NULL);
@@ -2683,7 +2506,6 @@ cdf1 (GtkTreeViewColumn *col, GtkCellRenderer *cell, GtkTreeModel *s_model,
     gboolean editable = FALSE, expanded = FALSE;
     gboolean read_only = FALSE;
     gboolean open_edited = FALSE;
-    gint num_of_splits = 0;
     gnc_numeric num;
     const gchar *s = "";
     const gchar *row_color;
@@ -2736,10 +2558,9 @@ cdf1 (GtkTreeViewColumn *col, GtkCellRenderer *cell, GtkTreeModel *s_model,
         open_edited = TRUE;
     }
 
-    /* Lets see if the splits are expanded and count them */
+    /* Lets see if the splits are expanded */
     if (is_trow1 || is_trow2)
     {
-        num_of_splits = xaccTransCountSplits (trans);
         path = gtk_tree_model_get_path (GTK_TREE_MODEL (model), &m_iter);
         if (is_trow1)
             gtk_tree_path_down (path); /* Move the path down to trow2 */
@@ -2747,10 +2568,7 @@ cdf1 (GtkTreeViewColumn *col, GtkCellRenderer *cell, GtkTreeModel *s_model,
         gtk_tree_path_free (path);
     }
     else
-    {
-        num_of_splits = xaccTransCountSplits (trans);
         expanded = TRUE;
-    }
 
     switch (viewcol) {
     case COL_DATE:
@@ -2812,7 +2630,7 @@ cdf1 (GtkTreeViewColumn *col, GtkCellRenderer *cell, GtkTreeModel *s_model,
         /* Column is DESCRIPTION / NOTES */
         break;
 
-    case COL_TRANSVOID:
+    case COL_TRANSFERVOID:
         /* Column is TRANSFER / VOID */
         break;
 
@@ -2918,18 +2736,6 @@ gtv_begin_edit (GncTreeViewSplitReg *view, Split *split, Transaction *trans)
 
         xaccTransBeginEdit (trans);
         view->priv->dirty_trans = trans;
-
-        if (!xaccTransGetCurrency (trans))
-        {
-            if (gnc_commodity_is_currency (view->priv->reg_comm))
-            {
-                xaccTransSetCurrency (trans, view->priv->reg_comm);
-            }
-            else
-            {
-                xaccTransSetCurrency (trans, gnc_default_currency());
-            }
-        }
 
         if (ts.tv_sec == 0)
         {
@@ -3137,11 +2943,24 @@ transaction_changed_confirm (GncTreeViewSplitReg *view,
     if (!view->priv->dirty_trans || view->priv->dirty_trans == new_trans)
         return FALSE;
 
+    model = gnc_tree_view_split_reg_get_model_from_view (view);
+
+    // If using trading accounts, lets scrub them to make them work.
+    if (xaccTransUseTradingAccounts (view->priv->dirty_trans))
+    {
+        Account *default_account = gnc_tree_model_split_reg_get_anchor (model);
+        if (default_account != NULL)
+            xaccTransScrubImbalance (view->priv->dirty_trans, gnc_account_get_root(default_account), NULL);
+        else
+        {
+            Account *root = gnc_book_get_root_account (gnc_get_current_book());
+            xaccTransScrubImbalance (view->priv->dirty_trans, root, NULL);
+        }
+    }
+
     // Test if the transaction is balanced.
     if (gnc_tree_control_split_reg_balance_trans (view, view->priv->dirty_trans))
         return TRUE;
-
-    model = gnc_tree_view_split_reg_get_model_from_view (view);
 
     window = gnc_tree_view_split_reg_get_parent (view);
     dialog = gtk_message_dialog_new (GTK_WINDOW (window),
@@ -3177,8 +2996,7 @@ transaction_changed_confirm (GncTreeViewSplitReg *view,
         if (view->priv->dirty_trans && xaccTransIsOpen (view->priv->dirty_trans))
         {
             // Move selection to trans - selection is blocked
-            if (new_trans == NULL) // This is NULL for keyboard and enter...
-                gnc_tree_control_split_reg_goto_rel_trans_row (view, 0);
+            gnc_tree_control_split_reg_goto_rel_trans_row (view, 0);
 
             g_object_set_data (G_OBJECT (view), "data-edited", GINT_TO_POINTER (FALSE));
             xaccTransRollbackEdit (view->priv->dirty_trans);
@@ -3404,7 +3222,7 @@ gtv_split_reg_titles (GncTreeViewSplitReg *view, RowDepth depth)
             }
             break;
 
-        case COL_TRANSVOID:
+        case COL_TRANSFERVOID:
             switch (model->type)
             {
             case RECEIVABLE_REGISTER2:
@@ -3789,7 +3607,7 @@ gtv_split_reg_help (GncTreeViewSplitReg *view, GtkCellRenderer *cr, ViewCol view
         }
         break;
 
-    case COL_TRANSVOID:
+    case COL_TRANSFERVOID:
         switch(model->type)
         {
         default:
@@ -4272,6 +4090,14 @@ gtv_split_reg_key_press_cb (GtkWidget *widget, GdkEventKey *event, gpointer user
                         gnc_tree_view_split_reg_collapse_trans (view, view->priv->dirty_trans);
 
                     gnc_tree_view_split_reg_block_selection (view, FALSE);
+
+                    /* Remove the blank split and re-add - done so we keep it last in list */
+                    gnc_tree_model_split_reg_set_blank_split_parent (model, view->priv->dirty_trans, TRUE);
+                    gnc_tree_model_split_reg_set_blank_split_parent (model, view->priv->dirty_trans, FALSE);
+
+                    // Set the transaction to show correct view
+                    gnc_tree_view_split_reg_format_trans (view, view->priv->dirty_trans);
+
                     view->priv->dirty_trans = NULL;
                 }
             }
@@ -4306,14 +4132,15 @@ gtv_split_reg_motion_cb (GtkTreeSelection *sel, gpointer user_data)
     RowDepth depth = 0;
     GtkTreeIter m_iter;
 
-//g_print ("\n** gtv_split_reg_motion_cb start\n");
-
     model = gnc_tree_view_split_reg_get_model_from_view (view);
+
+    ENTER("View is %p and Model is %p", view, model);
+
     s_model = gtk_tree_view_get_model (GTK_TREE_VIEW (view));
     f_model = gtk_tree_model_sort_get_model (GTK_TREE_MODEL_SORT (s_model));
 
-//g_print("Motion - ** model is %p and view is %p dirty_trans is %p **\n", model, view, view->priv->dirty_trans);
-//g_print("Motion - ** o_trans is %p o_split is %p o_depth %d **\n", view->priv->current_trans, view->priv->current_split, view->priv->current_depth);
+    DEBUG("Current trans %p, Split %p, Depth %d and Dirty Trans %p", view->priv->current_trans, view->priv->current_split,
+                                                                     view->priv->current_depth, view->priv->dirty_trans);
 
     /* Reset help text */
     view->help_text = " ";
@@ -4324,20 +4151,10 @@ gtv_split_reg_motion_cb (GtkTreeSelection *sel, gpointer user_data)
         mpath = gtk_tree_model_get_path (GTK_TREE_MODEL (model), &m_iter);
         spath = gnc_tree_view_split_reg_get_sort_path_from_model_path (view, mpath);
 
-//g_print ("Motion - mpath is %s spath is %s\n\n", gtk_tree_path_to_string (mpath), gtk_tree_path_to_string (spath));
-
-//g_print("Motion - current_ref is valid %d\n", gtk_tree_row_reference_valid (view->priv->current_ref));
-
-//if (gtk_tree_row_reference_valid (view->priv->current_ref))
-//    g_print("Motion - Old Current Path is '%s'\n", gtk_tree_path_to_string (gtk_tree_row_reference_get_path (view->priv->current_ref)));
+        DEBUG("Valid Selection - mpath is %s,  spath is %s", gtk_tree_path_to_string (mpath), gtk_tree_path_to_string (spath));
 
         /* save the current path */
-        if(view->priv->current_ref != NULL)
-        {
-            gtk_tree_row_reference_free (view->priv->current_ref);
-            view->priv->current_ref = NULL;
-        }
-        view->priv->current_ref = gtk_tree_row_reference_new (GTK_TREE_MODEL (model), mpath);
+        gnc_tree_view_split_reg_set_current_path (view, mpath);
 
         /* Use depth to determine if it is a split or transaction */
         depth = gtk_tree_path_get_depth (mpath);
@@ -4347,13 +4164,10 @@ gtv_split_reg_motion_cb (GtkTreeSelection *sel, gpointer user_data)
 
         gtk_tree_path_free (mpath);
 
-//if (gtk_tree_row_reference_valid (view->priv->current_ref))
-//    g_print("Motion - Current Path is '%s'\n", gtk_tree_path_to_string (gtk_tree_row_reference_get_path (view->priv->current_ref)));
-
         gnc_tree_model_split_reg_get_split_and_trans (
                 GNC_TREE_MODEL_SPLIT_REG (model), &m_iter, &is_trow1, &is_trow2, &is_split, &is_blank, &split, &trans);
 
-//g_print("## Motion - get model split %p, trans %p, is_split %d, is_blank %d\n", split, trans, is_split, is_blank);
+        DEBUG("Get model trans %p, split %p, is_split %d, is_blank %d\n", trans, split, is_split, is_blank);
 
         /* Move the blank split */ 
         gnc_tree_model_split_reg_set_blank_split_parent (model, trans, FALSE);
@@ -4364,8 +4178,8 @@ gtv_split_reg_motion_cb (GtkTreeSelection *sel, gpointer user_data)
         view->priv->current_split = split;
         view->priv->current_depth = depth;
 
-//g_print("Motion - ** view->priv-> c_trans is %p c_split is %p depth %d, old_trans is %p **\n\n", view->priv->current_trans,
-//             view->priv->current_split, view->priv->current_depth, old_trans);
+        DEBUG("Current trans %p, split %p, depth %d and old_trans %p", view->priv->current_trans, view->priv->current_split,
+                                                                     view->priv->current_depth, old_trans);
 
         /* Auto expand transaction and collapse previous transaction */
         if (old_trans != trans)
@@ -4405,7 +4219,7 @@ gtv_split_reg_motion_cb (GtkTreeSelection *sel, gpointer user_data)
     }
     else
     {
-//g_print("Not valid selection\n");
+        DEBUG("Not Valid Selection");
         /* We do not have a valid iter */
         gtv_split_reg_titles (view, 0);
 
@@ -4415,9 +4229,12 @@ gtv_split_reg_motion_cb (GtkTreeSelection *sel, gpointer user_data)
         /* Set the default selection start position */
         gnc_tree_view_split_reg_default_selection (view);
     }
+
     /* This updates the plugin page gui */
     if (view->moved_cb)
         (view->moved_cb)(view, view->moved_cb_data);
+
+    LEAVE(" ");
 }
 
 
@@ -4576,7 +4393,7 @@ gtv_split_reg_edited_cb (GtkCellRendererText *cell, const gchar *path_string,
 
         break;
 
-    case COL_TRANSVOID:
+    case COL_TRANSFERVOID:
     case COL_AMTVAL:
     case COL_PRICE:
     case COL_DEBIT:
@@ -4602,7 +4419,7 @@ gtv_split_reg_edited_cb (GtkCellRendererText *cell, const gchar *path_string,
             }
 
             /* Setup the account field */
-            if (viewcol == COL_TRANSVOID)
+            if (viewcol == COL_TRANSFERVOID)
             {
                 acct = gnc_tree_control_split_reg_get_account_by_name (view, new_text);
                 if (acct == NULL)
@@ -4649,20 +4466,54 @@ gtv_split_reg_edited_cb (GtkCellRendererText *cell, const gchar *path_string,
                 }
             }
 
-            /* Set the transaction currency if not set or if this is a non currency register,
-                 this should be same as first currency split */
-            if (!xaccTransGetCurrency (trans) || !gnc_commodity_is_currency (view->priv->reg_comm))
+            /* Set the transaction currency if not set */
+            if (!xaccTransGetCurrency (trans))
             {
                 gnc_commodity *split_commodity;
-                split_commodity = xaccAccountGetCommodity (xaccSplitGetAccount (split));
 
-                if (gnc_commodity_is_currency (split_commodity))
-                    xaccTransSetCurrency (trans, xaccAccountGetCommodity (xaccSplitGetAccount (split)));
+                // set transaction currency to that of register if a currency
+                if (gnc_commodity_is_currency (view->priv->reg_comm))
+                    xaccTransSetCurrency (trans, view->priv->reg_comm);
+                else
+                    xaccTransSetCurrency (trans, gnc_default_currency());
+
+                // We are on General ledger
+                if (!anchor)
+                {
+                    split_commodity = xaccAccountGetCommodity (xaccSplitGetAccount (split));
+
+                    if (gnc_commodity_is_currency (split_commodity))
+                        xaccTransSetCurrency (trans, xaccAccountGetCommodity (xaccSplitGetAccount (split)));
+                    else
+                        xaccTransSetCurrency (trans, gnc_default_currency());
+                }
+            }
+
+            // if non currency register, we set the trans currency to the first currency split
+            if (xaccTransGetCurrency (trans) && !gnc_commodity_is_currency (view->priv->reg_comm))
+            {
+                if (!gnc_commodity_is_currency (xaccAccountGetCommodity (xaccSplitGetAccount (xaccTransGetSplit (trans, 0)))))
+                {
+                    int i;
+                    Split *s = NULL;
+                    gboolean currency = FALSE;
+
+                    for (i = 0; (s = xaccTransGetSplit (trans, i)); i++) {
+                        if (gnc_commodity_is_currency (xaccAccountGetCommodity (xaccSplitGetAccount (s))))
+                        {
+                            currency = TRUE;
+                            break;
+                        }
+                    }
+
+                    if (currency == FALSE && gnc_commodity_is_currency (xaccAccountGetCommodity (xaccSplitGetAccount (split))))
+                            xaccTransSetCurrency (trans, xaccAccountGetCommodity (xaccSplitGetAccount (split)));
+                }
             }
 
             /* This computes the value if we just commit the split after entering account */
             if (!valid_input)
-                input = get_value_for (view, trans, split, is_blank);
+                input = gnc_tree_util_split_reg_get_value_for (view, trans, split, is_blank);
 
             // Negate the input if COL_CREDIT
             if (viewcol == COL_CREDIT)
@@ -4699,7 +4550,7 @@ gtv_split_reg_edited_cb (GtkCellRendererText *cell, const gchar *path_string,
             if (input_used == FALSE)
             {
                 if (gnc_commodity_is_currency (xaccAccountGetCommodity (acct)))
-                    set_value_for (view, trans, split, input, force);
+                    gnc_tree_util_split_reg_set_value_for (view, trans, split, input, force);
                 else
                     set_value_for_amount (view, trans, split, input);
             }
@@ -4720,7 +4571,7 @@ gtv_split_reg_edited_cb (GtkCellRendererText *cell, const gchar *path_string,
                 xaccSplitSetParent (osplit, trans);
 
                 if (gnc_commodity_is_currency (xaccAccountGetCommodity (acct)))
-                    set_value_for (view, trans, osplit, gnc_numeric_neg (input), force);
+                    gnc_tree_util_split_reg_set_value_for (view, trans, osplit, gnc_numeric_neg (input), force);
                 else
                     set_value_for_amount (view, trans, osplit, gnc_numeric_neg (xaccSplitGetValue (split)));
             }
@@ -5072,7 +4923,7 @@ gtv_get_editable_start_editing_cb (GtkCellRenderer *cr, GtkCellEditable *editabl
     }
 
     /* TRANSFER / VOID COLUMN */
-    else if (viewcol == COL_TRANSVOID)
+    else if (viewcol == COL_TRANSFERVOID)
     {
         GtkEntry *entry;
 
@@ -5255,7 +5106,7 @@ gtv_split_reg_match_selected_cb (GtkEntryCompletion *widget, GtkTreeModel *model
 
 //FIXME g_print("gtv_split_reg_match_selected_cb\n\n");
 
-/* Not sure what I am going to put in here yet */
+/* Not sure what I am going to put in here yet if anything */
 
 }
 
@@ -5269,7 +5120,7 @@ gtv_split_reg_changed_cb (GtkCellRendererCombo *widget, gchar *path_string,
 
 //FIXME g_print("gtv_split_reg_changed_cb path string is '%s'\n\n", path_string);
 
-/* Not sure what I am going to put in here yet */
+/* Not sure what I am going to put in here yet if anything */
 
 }
 
@@ -5391,6 +5242,23 @@ GtkTreePath *
 gnc_tree_view_split_reg_get_current_path (GncTreeViewSplitReg *view)
 {
     return gtk_tree_row_reference_get_path (view->priv->current_ref);
+}
+
+
+/* Sets the current path reference to path */
+void
+gnc_tree_view_split_reg_set_current_path (GncTreeViewSplitReg *view, GtkTreePath *mpath)
+{
+    GncTreeModelSplitReg *model;
+
+    model = gnc_tree_view_split_reg_get_model_from_view (view);
+
+    if (view->priv->current_ref != NULL)
+    {
+        gtk_tree_row_reference_free (view->priv->current_ref);
+        view->priv->current_ref = NULL;
+    }
+    view->priv->current_ref = gtk_tree_row_reference_new (GTK_TREE_MODEL (model), mpath);
 }
 
 
@@ -5534,6 +5402,13 @@ gnc_tree_view_split_reg_enter (GncTreeViewSplitReg *view)
 
             gnc_tree_view_split_reg_block_selection (view, FALSE);
 
+            /* Remove the blank split and re-add - done so we keep it last in list */
+            gnc_tree_model_split_reg_set_blank_split_parent (model, view->priv->dirty_trans, TRUE);
+            gnc_tree_model_split_reg_set_blank_split_parent (model, view->priv->dirty_trans, FALSE);
+
+            // Set the transaction to show correct view
+            gnc_tree_view_split_reg_format_trans (view, view->priv->dirty_trans);
+
             view->priv->dirty_trans = NULL;
         }
     }
@@ -5566,6 +5441,10 @@ gnc_tree_view_split_reg_cancel_edit (GncTreeViewSplitReg *view, gboolean reg_clo
 
         // Add the split after rollback so it is last in list.
         gnc_tree_model_split_reg_set_blank_split_parent (model, trans, FALSE);
+
+        // Set the transaction to show correct view
+        gnc_tree_view_split_reg_format_trans (view, view->priv->dirty_trans);
+
         view->priv->dirty_trans = NULL;
 
         split = gnc_tree_model_split_get_blank_split (model);
@@ -5681,16 +5560,14 @@ gnc_tree_view_split_reg_collapse_trans (GncTreeViewSplitReg *view, Transaction *
 
         gtk_tree_view_collapse_row (GTK_TREE_VIEW (view), temp_spath);
 
-        if (view->priv->current_ref != NULL)
-        {
-            gtk_tree_row_reference_free (view->priv->current_ref);
-            view->priv->current_ref = NULL;
-        }
+        /* Update the tree view titles */
+        gtv_split_reg_titles (view, gtk_tree_path_get_depth (temp_spath));
 
         temp_fpath = gtk_tree_model_sort_convert_path_to_child_path (GTK_TREE_MODEL_SORT (s_model), temp_spath);
         temp_mpath = gtk_tree_model_filter_convert_path_to_child_path (GTK_TREE_MODEL_FILTER (f_model), temp_fpath);
 
-        view->priv->current_ref = gtk_tree_row_reference_new (GTK_TREE_MODEL (model), temp_mpath);
+        /* Save the new model path to path ref */
+        gnc_tree_view_split_reg_set_current_path (view, temp_mpath);
 
         gnc_tree_view_split_reg_block_selection (view, FALSE);
 
