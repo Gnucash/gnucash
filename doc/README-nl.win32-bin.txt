@@ -2,50 +2,51 @@
 onder de GNU General Public License (GPL) en is beschikbaar voor
 GNU/Linux, *BSD, Solaris, Mac OSX, en Microsoft Windows.
 
-Het is een eenvoudig te gebruiken, en tegelijkertijd krachtig en flexibel
-programma dat je helpt om je bankrekeningen, aandelen, inkomsten en uitgaven
-te beheren. Zo vlot en intuïtief te gebruiken als een dagboek enerzijds, en
-anderzijds gebaseerd op professionele boekhoudkundige principes om boeken in
-balans en nauwkeurige rapporten te verzekeren.
+GnuCash stelt u in staat om heel eenvoudig bankrekeningen, beleggingen,
+inkomsten en uitgaven bij te houden, zonder in te leveren op kracht of
+flexibiliteit. Net zo snel en intuïtief te gebruiken als een dagboek, maar
+gestoeld op boekhoudkundige principes om te zorgen voor een sluitende
+boekhouding en accurate rapporten.
 
 -------------------
 
 Beschikbare bronnen voor ondersteuning
 
-Online veel gestelde vragen (FAQ):    http://wiki.gnucash.org/wiki/FAQ
-Mailing Lijsten:  http://wiki.gnucash.org/wiki/Mailing_Lists
-IRC (Chat):    Channel #gnucash on server irc.gnome.org, see also http://wiki.gnucash.org/wiki/IRC
+Veelgestelde vragen (FAQ):    	http://wiki.gnucash.org/wiki/FAQ
+Mailinglijsten:  		http://wiki.gnucash.org/wiki/Mailing_Lists
+IRC (chat):    			kanaal #gnucash op server irc.gnome.org,
+				zie ook http://wiki.gnucash.org/wiki/IRC
 
-Als je programmafouten (bugs) of problemen ervaart, aarzel niet om deze te melden in ons
-bug opvolgsysteem "Bugzilla":
-http://bugzilla.gnome.org/enter_bug.cgi?product=GnuCash
+Als u programmafouten (bugs) of problemen tegenkomt, aarzel niet om deze te
+melden in ons foutenregistratiesysteem "Bugzilla":
+	http://bugzilla.gnome.org/enter_bug.cgi?product=GnuCash
 
 -------------------
 
-Interessante functies: 
+Belangrijkste functies: 
 
-    * Dubbele boekhouding
-    * Aandelen-/belegginsrekeningen
-    * QIF/OFX/HBCI import met dubbele transactie herkenning
-    * Rapporten, grafieken
-    * Klein-ondernemingsboekhouding
-    * Klanten, verkopers, opdrachten, Facturen, Lopende rekening
-    * Periodieke Transacties
+    * Dubbel boekhouden
+    * Ondersteunt aandelen, obligaties en beleggingsfondsen
+    * Functies voor kleine ondernemingen
+    * Rapporten en grafieken
+    * Import vanuit QIF-bestanden of Online Bankieren (OFX/HBCI),
+      herkenning van bestaande boekingen
+    * Periodiek terugkerende boekingen
     * Financiële berekeningen
 
-Meer informatie en een handleiding om je op weg te helpen vind je
-in het "Hulp" menu onder het "Tutorial en concepten gids".
+Meer informatie en een handleiding om u op weg te helpen vindt u
+in het "Help" menu onder het item "Tutorial en conceptengids".
 
 -------------------
 
 Over het programma:
 
-GnuCash is a  vrij, open source boekhoudprogramma uitgegeven onder de
-GNU General Public License (GPL). Het wordt door 12 personen uit meer dan
-6 landen gezamelijk ontwikkeld.
-
-De ontwikkeling van GnuCash begon in 1997, de de eerste uitgave was in 1998. 
+GnuCash is een vrij, open source boekhoudprogramma dat is uitgegeven onder
+de GNU General Public License (GPL). De ontwikkeling van GnuCash begon in
+1997, de de eerste uitgave was in 1998. Door de jaren heen hebben er meer
+dan 150 mensen uit meer dan 23 landen aan bijgedragen.
 
 -------------------
 
-Dit is het Nederlandstalige GnuCash 2.2.x LEESMIJ bestand voor het Windows installatie programma.
+Dit is het Nederlandstalige GnuCash 2.2.x LEESMIJ-bestand voor het Windows
+installatieprogramma.

@@ -620,31 +620,31 @@ lv.IconComment_Uninstall=Noņemt GnuCash grāmatvedības programmu
 ;; Dutch translation
 
 nl.FullInstall=Volledige installatie
-nl.CustomInstall=Aangepaste installatiie
-nl.CreateDesktopIcon=Een &bureablad icoon aanmaken
+nl.CustomInstall=Aangepaste installatie
+nl.CreateDesktopIcon=Een snelkoppeling op het &bureablad plaatsen
 nl.CreateMenuLink=Een verwijzing in het start menu aanmaken
 nl.RunPrg=GnuCash nu starten
 nl.AdditionalIcons=Deze iconen aanmaken:
-nl.StatusMsgFirewall=Windows firewall regels installeren...
+nl.StatusMsgFirewall=Regels voor de Windows firewall installeren...
 
-nl.MainFiles=GnuCash Programma
+nl.MainFiles=GnuCash-programma
 nl.TranslFiles=Vertalingsbestanden
 nl.TemplFiles=Grootboekrekeningssjablonen
 
-nl.IconComment_GnuCash=GnuCash Vrij Financieel Beheer
-nl.IconName_README=LEESMIJ Tonen
-nl.IconComment_README=Het LEESMIJ bestand tonen
+nl.IconComment_GnuCash=GnuCash, vrije boekhoudsoftware
+nl.IconName_README=LEESMIJ tonen
+nl.IconComment_README=Het LEESMIJ-bestand tonen
 nl.IconFilename_README=README-nl.win32-bin.txt
-nl.IconName_FAQ=FAQ (Online)
-nl.IconName_Bugzilla=Een Bug Melden (Online)
-nl.IconName_InstallFQ=Online Koersen Opvragen installeren
-nl.IconComment_InstallFQ=De benodigde perl module Finance Quote om online koersen op te vragen installeren.  Hiervoor is ActivePerl 5.8 of recenter nodig.
+nl.IconName_FAQ=Veelgestelde vragen (online)
+nl.IconName_Bugzilla=Een bug rapporteren (online)
+nl.IconName_InstallFQ=Online koersinformatie installeren
+nl.IconComment_InstallFQ=De benodigde perl module Finance Quote installeren om online koersen op te vragen. Hiervoor is ActivePerl versie 5.8 of hoger nodig.
 nl.IconName_Uninstall=GnuCash verwijderen
-nl.IconComment_Uninstall=Het financieel beheersprogramma GnuCash verwijderen
+nl.IconComment_Uninstall=De GnuCash boekhoudsoftware verwijderen
 
-nl.AIWP_Title=Een eerdere installatie werd gevonden
+nl.AIWP_Title=Eerdere installatie gevonden
 nl.AIWP_Description=%1 is momenteel op deze computer geïnstalleerd
-nl.AIWP_Message=Deze eerdere installatie moet verwijderd worden alvorens verder te gaan.%n%nAls je dat niet wil, klik dan nu op Annuleren om de huidige installatie af te breken.%n%nKlik op Volgende om %1 te verwijderen en de installatie te vervolgen.%n%nOpmerking: enkel het programma zal verwijderd worden, niet je financiële data.
+nl.AIWP_Message=Deze eerdere installatie moet verwijderd worden alvorens verder te gaan.%n%nAls u dat niet wilt, klik dan nu op Annuleren om de huidige installatie af te breken.%n%nKlik op Volgende om %1 te verwijderen en de installatie te vervolgen.%n%nOpmerking: alleen het programma zal verwijderd worden, niet de financiële data.
 
 
 ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
