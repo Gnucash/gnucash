@@ -29,7 +29,7 @@
 
 GncTaxTable* gnc_business_get_default_tax_table (QofBook *book, GncOwnerType ownertype)
 {
-    GncTaxTable *table;
+    GncTaxTable *table = NULL;
     GNCOptionDB *odb;
 
     odb = gnc_option_db_new_for_type (GNC_ID_BOOK);
