@@ -41,6 +41,7 @@
 #include "import-match-picker.h"
 #include "import-backend.h"
 #include "import-account-matcher.h"
+#include "app-utils/gnc-component-manager.h"
 
 #define GCONF_SECTION "dialogs/import/generic_matcher/transaction_list"
 
@@ -145,6 +146,10 @@ on_matcher_ok_clicked (GtkButton *button,
     if (!gtk_tree_model_get_iter_first(model, &iter))
         return;
 
+    /* Don't run any queries and/or split sorts while processing the matcher
+    results. */
+    gnc_suspend_gui_refresh();
+
     do
     {
         gtk_tree_model_get(model, &iter,
@@ -191,6 +196,9 @@ on_matcher_ok_clicked (GtkButton *button,
         gtk_tree_row_reference_free(ref);
     }
     g_slist_free(refs_list);
+
+    /* Allow GUI refresh again. */
+    gnc_resume_gui_refresh();
 
     gnc_gen_trans_list_delete (info);
     /* DEBUG ("End") */
