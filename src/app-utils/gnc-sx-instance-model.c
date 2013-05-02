@@ -1042,6 +1042,8 @@ create_each_transaction_helper(Transaction *template_txn, void *user_data)
             xaccTransGetDescription(new_txn),
             xaccSchedXactionGetName(creation_data->instance->parent->sx));
 
+    g_debug("template txn currency is %s", gnc_commodity_get_mnemonic(xaccTransGetCurrency (template_txn)));
+
     /* clear any copied KVP data */
     qof_instance_set_slots(QOF_INSTANCE(new_txn), kvp_frame_new());
 
@@ -1094,9 +1096,15 @@ create_each_transaction_helper(Transaction *template_txn, void *user_data)
         split_cmdty = xaccAccountGetCommodity(split_acct);
         if (first_cmdty == NULL)
         {
-            first_cmdty = split_cmdty;
-            xaccTransSetCurrency(new_txn, first_cmdty);
+            /* Set new_txn currency to template_txn if we have one, else first split */
+            if (xaccTransGetCurrency(template_txn))
+                xaccTransSetCurrency(new_txn, xaccTransGetCurrency(template_txn));
+            else
+                xaccTransSetCurrency(new_txn, split_cmdty);
+
+            first_cmdty = xaccTransGetCurrency(new_txn);
         }
+        g_debug("new txn currency is %s", gnc_commodity_get_mnemonic(first_cmdty));
 
         xaccSplitSetAccount(copying_split, split_acct);
 
@@ -1127,7 +1135,8 @@ create_each_transaction_helper(Transaction *template_txn, void *user_data)
             }
 
             xaccSplitSetValue(copying_split, final);
-            if (! gnc_commodity_equal(split_cmdty, first_cmdty))
+            g_debug("value is %s for memo split '%s'", gnc_numeric_to_string (final), xaccSplitGetMemo (copying_split));
+            if (! gnc_commodity_equal(split_cmdty, xaccTransGetCurrency (new_txn)))
             {
                 GString *exchange_rate_var_name = g_string_sized_new(16);
                 GncSxVariable *exchange_rate_var;
@@ -1166,17 +1175,29 @@ create_each_transaction_helper(Transaction *template_txn, void *user_data)
 
                 exchange_rate = gnc_numeric_zero();
                 g_string_printf(exchange_rate_var_name, "%s -> %s",
-                                gnc_commodity_get_mnemonic(split_cmdty),
-                                gnc_commodity_get_mnemonic(first_cmdty));
+                                gnc_commodity_get_mnemonic(first_cmdty),
+                                gnc_commodity_get_mnemonic(split_cmdty));
+
+                g_debug("var_name is %s -> %s", gnc_commodity_get_mnemonic(first_cmdty),
+                                                gnc_commodity_get_mnemonic(split_cmdty));
+
                 exchange_rate_var = (GncSxVariable*)g_hash_table_lookup(creation_data->instance->variable_bindings,
                                     exchange_rate_var_name->str);
+
                 if (exchange_rate_var != NULL)
                 {
                     exchange_rate = exchange_rate_var->value;
+                    g_debug("exchange_rate is %s", gnc_numeric_to_string (exchange_rate));
                 }
                 g_string_free(exchange_rate_var_name, TRUE);
 
-                amt = gnc_numeric_mul(final, exchange_rate, 1000, GNC_HOW_RND_ROUND_HALF_UP);
+                if (!gnc_commodity_is_currency (split_cmdty))
+                    amt = gnc_numeric_div(final, exchange_rate, gnc_commodity_get_fraction (split_cmdty), GNC_HOW_RND_ROUND_HALF_UP);
+                else
+                    amt = gnc_numeric_mul(final, exchange_rate, 1000, GNC_HOW_RND_ROUND_HALF_UP);
+
+
+                g_debug("amount is %s for memo split '%s'", gnc_numeric_to_string (amt), xaccSplitGetMemo (copying_split));
                 xaccSplitSetAmount(copying_split, amt);
             }
 
