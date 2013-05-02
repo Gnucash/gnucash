@@ -309,7 +309,7 @@ update to latest  darwin])
       PKG_CHECK_MODULES([GTK_MAC], gtk-mac-integration,
                         [_gtk_mac=yes], [_gtk_mac=no])
       if test "x$_gtk_mac" = xyes; then
-        GTK_MAC_LIBS="${GTK_MAC_LIBS} -lobjc"
+        GTK_MAC_LIBS="${GTK_MAC_LIBS} -lobjc -framework Cocoa"
         GTK_MAC_CFLAGS="${GTK_MAC_CFLAGS} -xobjective-c"
       fi
       AC_MSG_RESULT(${_gtk_mac})
