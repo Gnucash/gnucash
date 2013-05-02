@@ -144,7 +144,10 @@
          (y-label (gnc:html-scatter-y-axis-label scatter))
          (data (gnc:html-scatter-data scatter))
          (marker (gnc:html-scatter-marker scatter))
-         (markercolor (string-append "#" (gnc:html-scatter-markercolor scatter))))
+         (markercolor (string-append "#" (gnc:html-scatter-markercolor scatter)))
+         ; Use a unique chart-id for each chart. This prevents chart
+         ; clashed on multi-column reports
+         (chart-id (string-append "chart-" (number->string (random 999999)))))
     (if (and (list? data)
              (not (null? data)))
         (begin
@@ -152,7 +155,7 @@
             (push (gnc:html-js-include "jqplot/jquery.jqplot.js"))
             (push (gnc:html-css-include "jqplot/jquery.jqplot.css"))
 
-            (push "<div id=\"placeholder\" style=\"width:")
+            (push "<div id=\"")(push chart-id)(push "\" style=\"width:")
             (push (gnc:html-scatter-width scatter))
             (push "px;height:")
             (push (gnc:html-scatter-height scatter))
@@ -221,7 +224,7 @@
 
 
             (push "$.jqplot.config.enablePlugins = true;\n")
-            (push "var plot = $.jqplot('placeholder', [data], options);\n")
+            (push "var plot = $.jqplot('")(push chart-id)(push "', [data], options);\n")
 
             (push "});\n</script>"))
         (begin

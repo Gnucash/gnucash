@@ -203,7 +203,10 @@
          (labels 
           (catenate-escaped-strings (gnc:html-piechart-labels piechart)))
          (colors 
-          (catenate-escaped-strings (gnc:html-piechart-colors piechart))))
+          (catenate-escaped-strings (gnc:html-piechart-colors piechart)))
+         ; Use a unique chart-id for each chart. This prevents chart
+         ; clashed on multi-column reports
+         (chart-id (string-append "chart-" (number->string (random 999999)))))
     (if (and (list? data) 
              (not (null? data)))
         (begin 
@@ -212,7 +215,7 @@
             (push (gnc:html-js-include "jqplot/jqplot.pieRenderer.js"))
             (push (gnc:html-css-include "jqplot/jquery.jqplot.css"))
 
-            (push "<div id=\"placeholder\" style=\"width:")
+            (push "<div id=\"")(push chart-id)(push "\" style=\"width:")
             (push (gnc:html-piechart-width piechart))
             (push "px;height:")
             (push (gnc:html-piechart-height piechart))
@@ -251,7 +254,7 @@
                 (push subtitle) (push ")\";\n")))
 
             (push "$.jqplot.config.enablePlugins = true;\n")
-            (push "var plot = $.jqplot('placeholder', [data], options);\n")
+            (push "var plot = $.jqplot('")(push chart-id)(push "', [data], options);\n")
             (push "});\n</script>"))
         (begin (gnc:warn "null-data, not rendering piechart")
                " "))

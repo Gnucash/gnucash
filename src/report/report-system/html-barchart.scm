@@ -356,7 +356,10 @@
                          (push ");\n")
                          (push "series.push({ label: \"")
                          (push label)
-                         (push "\"});\n\n"))))
+                         (push "\"});\n\n")))
+         ; Use a unique chart-id for each chart. This prevents chart
+         ; clashed on multi-column reports
+         (chart-id (string-append "chart-" (number->string (random 999999)))))
     (if (and (list? data)
              (not (null? data))
              (gnc:not-all-zeros data))
@@ -370,7 +373,7 @@
             (push (gnc:html-js-include "jqplot/jqplot.canvasAxisTickRenderer.js"))
             (push (gnc:html-css-include "jqplot/jquery.jqplot.css"))
 
-            (push "<div id=\"placeholder\" style=\"width:")
+            (push "<div id=\"")(push chart-id)(push "\" style=\"width:")
             (push (gnc:html-barchart-width barchart))
             (push "px;height:")
             (push (gnc:html-barchart-height barchart))
@@ -473,7 +476,7 @@
 
 
             (push "$.jqplot.config.enablePlugins = true;")
-            (push "var plot = $.jqplot('placeholder', data, options);
+            (push "var plot = $.jqplot('")(push chart-id)(push"', data, options);
 
   function formatTooltip(str, seriesIndex, pointIndex) {
       if (options.axes.xaxis.ticks[pointIndex] !== undefined)
