@@ -1,7 +1,26 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <requires lib="gtk+" version="2.16"/>
   <!-- interface-naming-policy project-wide -->
+  <object class="GtkAdjustment" id="auto_decimal_places_adj">
+    <property name="lower">1</property>
+    <property name="upper">8</property>
+    <property name="value">2</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">4</property>
+  </object>
+  <object class="GtkAdjustment" id="autosave_interval_minutes_adj">
+    <property name="upper">99999</property>
+    <property name="value">3</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="date_backmonth_adj">
+    <property name="upper">11</property>
+    <property name="value">6</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">4</property>
+  </object>
   <object class="GtkDialog" id="GnuCash Preferences">
     <property name="can_focus">False</property>
     <property name="title" translatable="yes">GnuCash Preferences</property>
@@ -25,7 +44,6 @@
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
               </object>
               <packing>
@@ -41,7 +59,6 @@
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
               </object>
               <packing>
@@ -72,6 +89,24 @@
                 <property name="n_rows">11</property>
                 <property name="n_columns">4</property>
                 <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
                   <object class="GtkLabel" id="label91">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
@@ -84,7 +119,7 @@
                     <property name="top_attach">8</property>
                     <property name="bottom_attach">9</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                   </packing>
                 </child>
                 <child>
@@ -96,7 +131,6 @@
                     <property name="has_tooltip">True</property>
                     <property name="tooltip_markup">Show a grand total of all accounts converted to the default report currency.</property>
                     <property name="tooltip_text" translatable="yes">Show a grand total of all accounts converted to the default report currency.</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
                   </object>
@@ -105,7 +139,7 @@
                     <property name="top_attach">9</property>
                     <property name="bottom_attach">10</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                     <property name="x_padding">12</property>
                   </packing>
                 </child>
@@ -118,7 +152,6 @@
                     <property name="has_tooltip">True</property>
                     <property name="tooltip_markup">If checked, non-currency commodities will be shown in the summary bar.  If clear, only currencies will be shown.</property>
                     <property name="tooltip_text" translatable="yes">If checked, non-currency commodities will be shown in the summary bar.  If clear, only currencies will be shown.</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
                   </object>
@@ -127,7 +160,7 @@
                     <property name="top_attach">10</property>
                     <property name="bottom_attach">11</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                     <property name="x_padding">12</property>
                   </packing>
                 </child>
@@ -142,7 +175,7 @@
                   <packing>
                     <property name="right_attach">4</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                   </packing>
                 </child>
                 <child>
@@ -158,7 +191,7 @@
                     <property name="top_attach">4</property>
                     <property name="bottom_attach">5</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                   </packing>
                 </child>
                 <child>
@@ -170,7 +203,6 @@
                     <property name="has_tooltip">True</property>
                     <property name="tooltip_markup">Use the specified relative starting date for profit/loss calculations.</property>
                     <property name="tooltip_text" translatable="yes">Use the specified relative starting date for profit/loss calculations.</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="use_underline">True</property>
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
@@ -192,7 +224,6 @@
                     <property name="has_tooltip">True</property>
                     <property name="tooltip_markup">Use the specified absolute starting date for profit/loss calculations.</property>
                     <property name="tooltip_text" translatable="yes">Use the specified absolute starting date for profit/loss calculations.</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">gconf/window/pages/account_tree/summary/start_choice/relative</property>
@@ -214,7 +245,6 @@
                     <property name="has_tooltip">True</property>
                     <property name="tooltip_markup">Use the specified relative ending date for profit/loss calculations.  Also use this date for net assets calculations.</property>
                     <property name="tooltip_text" translatable="yes">Use the specified relative ending date for profit/loss calculations.  Also use this date for net assets calculations.</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="use_underline">True</property>
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
@@ -236,7 +266,6 @@
                     <property name="has_tooltip">True</property>
                     <property name="tooltip_markup">Use the specified absolute ending date for profit/loss calculations.  Also use this date for net assets calculations.</property>
                     <property name="tooltip_text" translatable="yes">Use the specified absolute ending date for profit/loss calculations.  Also use this date for net assets calculations.</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">gconf/window/pages/account_tree/summary/end_choice/relative</property>
@@ -259,7 +288,7 @@
                     <property name="top_attach">7</property>
                     <property name="bottom_attach">8</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                   </packing>
                 </child>
                 <child>
@@ -272,7 +301,7 @@
                     <property name="top_attach">3</property>
                     <property name="bottom_attach">4</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                   </packing>
                 </child>
                 <child>
@@ -343,24 +372,6 @@
                     <property name="y_options">GTK_FILL</property>
                   </packing>
                 </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
               </object>
             </child>
             <child type="tab">
@@ -383,6 +394,84 @@
                 <property name="n_columns">4</property>
                 <property name="column_spacing">12</property>
                 <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
                   <object class="GtkLabel" id="label12">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
@@ -393,7 +482,7 @@
                   <packing>
                     <property name="right_attach">3</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                   </packing>
                 </child>
                 <child>
@@ -405,7 +494,6 @@
                     <property name="has_tooltip">True</property>
                     <property name="tooltip_markup">Use only &amp;apos;debit&amp;apos; and &amp;apos;credit&amp;apos; instead of informal synonyms</property>
                     <property name="tooltip_text" translatable="yes">Use only 'debit' and 'credit' instead of informal synonyms</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
                   </object>
@@ -414,7 +502,7 @@
                     <property name="top_attach">10</property>
                     <property name="bottom_attach">11</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                     <property name="x_padding">12</property>
                   </packing>
                 </child>
@@ -430,7 +518,7 @@
                     <property name="top_attach">9</property>
                     <property name="bottom_attach">10</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                   </packing>
                 </child>
                 <child>
@@ -443,7 +531,7 @@
                     <property name="top_attach">8</property>
                     <property name="bottom_attach">9</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                   </packing>
                 </child>
                 <child>
@@ -455,7 +543,6 @@
                     <property name="has_tooltip">True</property>
                     <property name="tooltip_markup">Don&amp;apos;t sign reverse any accounts.</property>
                     <property name="tooltip_text" translatable="yes">Don't sign reverse any accounts.</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="use_underline">True</property>
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
@@ -465,7 +552,7 @@
                     <property name="top_attach">7</property>
                     <property name="bottom_attach">8</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                     <property name="x_padding">12</property>
                   </packing>
                 </child>
@@ -478,7 +565,6 @@
                     <property name="has_tooltip">True</property>
                     <property name="tooltip_markup">Sign reverse balances on the following: Credit Card, Payable, Liability, Equity, and Income.</property>
                     <property name="tooltip_text" translatable="yes">Sign reverse balances on the following: Credit Card, Payable, Liability, Equity, and Income.</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">gconf/general/reversed_accounts/none</property>
@@ -488,7 +574,7 @@
                     <property name="top_attach">6</property>
                     <property name="bottom_attach">7</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                     <property name="x_padding">12</property>
                   </packing>
                 </child>
@@ -501,7 +587,6 @@
                     <property name="has_tooltip">True</property>
                     <property name="tooltip_markup">Sign reverse balances on income and expense accounts.</property>
                     <property name="tooltip_text" translatable="yes">Sign reverse balances on income and expense accounts.</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">gconf/general/reversed_accounts/none</property>
@@ -511,7 +596,7 @@
                     <property name="top_attach">5</property>
                     <property name="bottom_attach">6</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                     <property name="x_padding">12</property>
                   </packing>
                 </child>
@@ -528,7 +613,7 @@
                     <property name="top_attach">4</property>
                     <property name="bottom_attach">5</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                   </packing>
                 </child>
                 <child>
@@ -541,7 +626,7 @@
                     <property name="top_attach">3</property>
                     <property name="bottom_attach">4</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                   </packing>
                 </child>
                 <child>
@@ -554,7 +639,7 @@
                     <property name="top_attach">11</property>
                     <property name="bottom_attach">12</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                   </packing>
                 </child>
                 <child>
@@ -569,7 +654,7 @@
                     <property name="top_attach">12</property>
                     <property name="bottom_attach">13</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                   </packing>
                 </child>
                 <child>
@@ -585,7 +670,7 @@
                     <property name="top_attach">13</property>
                     <property name="bottom_attach">14</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                   </packing>
                 </child>
                 <child>
@@ -602,7 +687,6 @@
                         <property name="has_tooltip">True</property>
                         <property name="tooltip_markup">Use the system locale currency for all newly created accounts.</property>
                         <property name="tooltip_text" translatable="yes">Use the system locale currency for all newly created accounts.</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="use_underline">True</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
@@ -630,7 +714,6 @@
                         <property name="has_tooltip">True</property>
                         <property name="tooltip_markup">Use the specified currency for all newly created accounts.</property>
                         <property name="tooltip_text" translatable="yes">Use the specified currency for all newly created accounts.</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="use_underline">True</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">gconf/general/currency_choice/locale</property>
@@ -663,7 +746,7 @@
                     <property name="right_attach">2</property>
                     <property name="top_attach">1</property>
                     <property name="bottom_attach">2</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                   </packing>
                 </child>
                 <child>
@@ -678,7 +761,7 @@
                     <property name="top_attach">2</property>
                     <property name="bottom_attach">3</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                   </packing>
                 </child>
                 <child>
@@ -692,7 +775,7 @@
                     <property name="top_attach">1</property>
                     <property name="bottom_attach">2</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                     <property name="x_padding">12</property>
                   </packing>
                 </child>
@@ -707,7 +790,7 @@
                     <property name="top_attach">2</property>
                     <property name="bottom_attach">3</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                     <property name="x_padding">12</property>
                   </packing>
                 </child>
@@ -738,8 +821,8 @@
                     <property name="right_attach">3</property>
                     <property name="top_attach">1</property>
                     <property name="bottom_attach">2</property>
-                    <property name="x_options"></property>
-                    <property name="y_options"></property>
+                    <property name="x_options"/>
+                    <property name="y_options"/>
                   </packing>
                 </child>
                 <child>
@@ -754,20 +837,36 @@
                     <property name="top_attach">16</property>
                     <property name="bottom_attach">17</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                   </packing>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="gconf/general/show_account_color">
                     <property name="label" translatable="yes">Show the Account Color as background</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="has_tooltip">True</property>
                     <property name="tooltip_markup">Show the Account Color as Account Name Background</property>
                     <property name="tooltip_text" translatable="yes">Show the Account Color as Account Name Background</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
                   </object>
@@ -776,7 +875,7 @@
                     <property name="top_attach">17</property>
                     <property name="bottom_attach">18</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                     <property name="x_padding">12</property>
                   </packing>
                 </child>
@@ -790,20 +889,18 @@
                     <property name="top_attach">15</property>
                     <property name="bottom_attach">16</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="gconf/general/show_account_color_tabs">
                     <property name="label" translatable="yes">Show the Account Color on tabs</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="has_tooltip">True</property>
                     <property name="tooltip_markup">Show the Account Color as tab background</property>
                     <property name="tooltip_text" translatable="yes">Show the Account Color as tab background</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
@@ -813,87 +910,9 @@
                     <property name="top_attach">18</property>
                     <property name="bottom_attach">19</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                     <property name="x_padding">12</property>
                   </packing>
-                 </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
                 </child>
                 <child>
                   <placeholder/>
@@ -923,6 +942,96 @@
                 <property name="n_rows">17</property>
                 <property name="n_columns">4</property>
                 <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
                   <object class="GtkLabel" id="label104">
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
@@ -934,7 +1043,7 @@
                     <property name="top_attach">10</property>
                     <property name="bottom_attach">11</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                   </packing>
                 </child>
                 <child>
@@ -947,7 +1056,7 @@
                     <property name="top_attach">9</property>
                     <property name="bottom_attach">10</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                   </packing>
                 </child>
                 <child>
@@ -963,7 +1072,7 @@
                     <property name="top_attach">8</property>
                     <property name="bottom_attach">9</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                   </packing>
                 </child>
                 <child>
@@ -979,7 +1088,7 @@
                     <property name="top_attach">7</property>
                     <property name="bottom_attach">8</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                   </packing>
                 </child>
                 <child>
@@ -995,7 +1104,7 @@
                     <property name="top_attach">6</property>
                     <property name="bottom_attach">7</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                   </packing>
                 </child>
                 <child>
@@ -1011,7 +1120,7 @@
                     <property name="top_attach">5</property>
                     <property name="bottom_attach">6</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                   </packing>
                 </child>
                 <child>
@@ -1026,7 +1135,7 @@
                     <property name="top_attach">4</property>
                     <property name="bottom_attach">5</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                   </packing>
                 </child>
                 <child>
@@ -1038,7 +1147,6 @@
                     <property name="has_tooltip">True</property>
                     <property name="tooltip_markup">Use the date format specified by the ISO-8601 standard.</property>
                     <property name="tooltip_text" translatable="yes">Use the date format specified by the ISO-8601 standard.</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="use_underline">True</property>
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
@@ -1047,7 +1155,7 @@
                     <property name="top_attach">8</property>
                     <property name="bottom_attach">9</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                     <property name="x_padding">12</property>
                   </packing>
                 </child>
@@ -1060,7 +1168,6 @@
                     <property name="has_tooltip">True</property>
                     <property name="tooltip_markup">Use the date format common in continental Europe.</property>
                     <property name="tooltip_text" translatable="yes">Use the date format common in continental Europe.</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">gconf/general/date_format/iso</property>
@@ -1069,7 +1176,7 @@
                     <property name="top_attach">7</property>
                     <property name="bottom_attach">8</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                     <property name="x_padding">12</property>
                   </packing>
                 </child>
@@ -1082,7 +1189,6 @@
                     <property name="has_tooltip">True</property>
                     <property name="tooltip_markup">Use the date format common in the United Kingdom.</property>
                     <property name="tooltip_text" translatable="yes">Use the date format common in the United Kingdom.</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">gconf/general/date_format/iso</property>
@@ -1091,7 +1197,7 @@
                     <property name="top_attach">6</property>
                     <property name="bottom_attach">7</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                     <property name="x_padding">12</property>
                   </packing>
                 </child>
@@ -1104,7 +1210,6 @@
                     <property name="has_tooltip">True</property>
                     <property name="tooltip_markup">Use the date format common in the United States.</property>
                     <property name="tooltip_text" translatable="yes">Use the date format common in the United States.</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">gconf/general/date_format/iso</property>
@@ -1113,7 +1218,7 @@
                     <property name="top_attach">5</property>
                     <property name="bottom_attach">6</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                     <property name="x_padding">12</property>
                   </packing>
                 </child>
@@ -1126,7 +1231,6 @@
                     <property name="has_tooltip">True</property>
                     <property name="tooltip_markup">Use the date format specified by the system locale.</property>
                     <property name="tooltip_text" translatable="yes">Use the date format specified by the system locale.</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">gconf/general/date_format/iso</property>
@@ -1135,7 +1239,7 @@
                     <property name="top_attach">4</property>
                     <property name="bottom_attach">5</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                     <property name="x_padding">12</property>
                   </packing>
                 </child>
@@ -1152,7 +1256,7 @@
                     <property name="top_attach">3</property>
                     <property name="bottom_attach">4</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                   </packing>
                 </child>
                 <child>
@@ -1165,7 +1269,7 @@
                   </object>
                   <packing>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                   </packing>
                 </child>
                 <child>
@@ -1178,7 +1282,7 @@
                     <property name="top_attach">2</property>
                     <property name="bottom_attach">3</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                   </packing>
                 </child>
                 <child>
@@ -1190,7 +1294,6 @@
                     <property name="has_tooltip">True</property>
                     <property name="tooltip_markup">Use a 24 hour (instead of a 12 hour) time format.</property>
                     <property name="tooltip_text" translatable="yes">Use a 24 hour (instead of a 12 hour) time format.</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
                   </object>
@@ -1199,7 +1302,7 @@
                     <property name="top_attach">1</property>
                     <property name="bottom_attach">2</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                     <property name="x_padding">12</property>
                   </packing>
                 </child>
@@ -1215,7 +1318,7 @@
                     <property name="top_attach">12</property>
                     <property name="bottom_attach">13</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                   </packing>
                 </child>
                 <child>
@@ -1231,8 +1334,14 @@
                     <property name="top_attach">13</property>
                     <property name="bottom_attach">14</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                   </packing>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
                 </child>
                 <child>
                   <object class="GtkRadioButton" id="gconf/general/date_completion/thisyear">
@@ -1243,7 +1352,6 @@
                     <property name="has_tooltip">True</property>
                     <property name="tooltip_markup">Dates will be completed so that they are within the current calendar year.</property>
                     <property name="tooltip_text" translatable="yes">Dates will be completed so that they are within the current calendar year.</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="use_underline">True</property>
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
@@ -1253,7 +1361,7 @@
                     <property name="top_attach">14</property>
                     <property name="bottom_attach">15</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                     <property name="x_padding">12</property>
                   </packing>
                 </child>
@@ -1267,7 +1375,6 @@ many months before the current month:</property>
                     <property name="has_tooltip">True</property>
                     <property name="tooltip_markup">Dates will be completed so that they are close to the current date. Enter the maximum number of months to go backwards in time when completing dates.</property>
                     <property name="tooltip_text" translatable="yes">Dates will be completed so that they are close to the current date. Enter the maximum number of months to go backwards in time when completing dates.</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">gconf/general/date_completion/thisyear</property>
@@ -1277,9 +1384,12 @@ many months before the current month:</property>
                     <property name="top_attach">15</property>
                     <property name="bottom_attach">16</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                     <property name="x_padding">12</property>
                   </packing>
+                </child>
+                <child>
+                  <placeholder/>
                 </child>
                 <child>
                   <object class="GtkSpinButton" id="gconf/general/date_backmonths">
@@ -1300,108 +1410,9 @@ many months before the current month:</property>
                   <packing>
                     <property name="top_attach">16</property>
                     <property name="bottom_attach">17</property>
-                    <property name="x_options"></property>
-                    <property name="y_options"></property>
+                    <property name="x_options"/>
+                    <property name="y_options"/>
                   </packing>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
                 </child>
               </object>
               <packing>
@@ -1428,6 +1439,96 @@ many months before the current month:</property>
                 <property name="n_rows">22</property>
                 <property name="n_columns">4</property>
                 <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
                   <object class="GtkLabel" id="label50">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
@@ -1437,7 +1538,7 @@ many months before the current month:</property>
                   </object>
                   <packing>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                   </packing>
                 </child>
                 <child>
@@ -1449,7 +1550,6 @@ many months before the current month:</property>
                     <property name="has_tooltip">True</property>
                     <property name="tooltip_markup">Present the new account list dialog when you choose &amp;quot;New File&amp;quot; from the &amp;quot;File&amp;quot; menu</property>
                     <property name="tooltip_text" translatable="yes">Present the new account list dialog when you choose "New File" from the "File" menu</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
                   </object>
@@ -1458,7 +1558,7 @@ many months before the current month:</property>
                     <property name="top_attach">3</property>
                     <property name="bottom_attach">4</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                     <property name="x_padding">12</property>
                   </packing>
                 </child>
@@ -1471,7 +1571,6 @@ many months before the current month:</property>
                     <property name="has_tooltip">True</property>
                     <property name="tooltip_markup">If selected, the default book option for new files is set so that the &amp;quot;Num&amp;quot; cell on registers shows/updates the split &amp;quot;action&amp;quot; field and the transaction &amp;quot;num&amp;quot; field is shown on the second line in double line mode (and is not visible in single line mode). Otherwise, the default book option for new files is set so that the &amp;quot;Num&amp;quot; cell on registers shows/updates the transaction &amp;quot;num&amp;quot; field.</property>
                     <property name="tooltip_text" translatable="yes">If selected, the default book option for new files is set so that the 'Num' cell on registers shows/updates the split 'action' field and the transaction 'num' field is shown on the second line in double line mode (and is not visible in single line mode). Otherwise, the default book option for new files is set so that the 'Num' cell on registers shows/updates the transaction 'num' field.</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
                   </object>
@@ -1480,7 +1579,7 @@ many months before the current month:</property>
                     <property name="top_attach">4</property>
                     <property name="bottom_attach">5</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                     <property name="x_padding">12</property>
                   </packing>
                 </child>
@@ -1493,7 +1592,6 @@ many months before the current month:</property>
                     <property name="has_tooltip">True</property>
                     <property name="tooltip_markup">Display hints for using GnuCash at startup</property>
                     <property name="tooltip_text" translatable="yes">Display hints for using GnuCash at startup</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
                   </object>
@@ -1502,7 +1600,7 @@ many months before the current month:</property>
                     <property name="top_attach">1</property>
                     <property name="bottom_attach">2</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                     <property name="x_padding">12</property>
                   </packing>
                 </child>
@@ -1570,7 +1668,7 @@ many months before the current month:</property>
                     <property name="top_attach">15</property>
                     <property name="bottom_attach">16</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                     <property name="x_padding">12</property>
                   </packing>
                 </child>
@@ -1583,7 +1681,6 @@ many months before the current month:</property>
                     <property name="has_tooltip">True</property>
                     <property name="tooltip_markup">Compress the data file with gzip when saving it to disk.</property>
                     <property name="tooltip_text" translatable="yes">Compress the data file with gzip when saving it to disk.</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
                   </object>
@@ -1592,7 +1689,7 @@ many months before the current month:</property>
                     <property name="top_attach">12</property>
                     <property name="bottom_attach">13</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                     <property name="x_padding">12</property>
                   </packing>
                 </child>
@@ -1608,7 +1705,7 @@ many months before the current month:</property>
                     <property name="top_attach">11</property>
                     <property name="bottom_attach">12</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                   </packing>
                 </child>
                 <child>
@@ -1616,12 +1713,12 @@ many months before the current month:</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                 </object>
-                 <packing>
+                  </object>
+                  <packing>
                     <property name="top_attach">10</property>
                     <property name="bottom_attach">11</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                   </packing>
                 </child>
                 <child>
@@ -1637,7 +1734,7 @@ many months before the current month:</property>
                     <property name="top_attach">9</property>
                     <property name="bottom_attach">10</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                     <property name="x_padding">12</property>
                   </packing>
                 </child>
@@ -1663,7 +1760,7 @@ many months before the current month:</property>
                     <property name="top_attach">9</property>
                     <property name="bottom_attach">10</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                   </packing>
                 </child>
                 <child>
@@ -1675,7 +1772,6 @@ many months before the current month:</property>
                     <property name="has_tooltip">True</property>
                     <property name="tooltip_markup">Automatically insert a decimal point into values that are entered without one.</property>
                     <property name="tooltip_text" translatable="yes">Automatically insert a decimal point into values that are entered without one.</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
                   </object>
@@ -1684,7 +1780,7 @@ many months before the current month:</property>
                     <property name="top_attach">8</property>
                     <property name="bottom_attach">9</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                     <property name="x_padding">12</property>
                   </packing>
                 </child>
@@ -1697,7 +1793,6 @@ many months before the current month:</property>
                     <property name="has_tooltip">True</property>
                     <property name="tooltip_markup">Display negative amounts in red</property>
                     <property name="tooltip_text" translatable="yes">Display negative amounts in red</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
                   </object>
@@ -1706,7 +1801,7 @@ many months before the current month:</property>
                     <property name="top_attach">7</property>
                     <property name="bottom_attach">8</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                     <property name="x_padding">12</property>
                   </packing>
                 </child>
@@ -1722,7 +1817,7 @@ many months before the current month:</property>
                     <property name="top_attach">6</property>
                     <property name="bottom_attach">7</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                   </packing>
                 </child>
                 <child>
@@ -1735,7 +1830,7 @@ many months before the current month:</property>
                     <property name="top_attach">5</property>
                     <property name="bottom_attach">6</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                   </packing>
                 </child>
                 <child>
@@ -1750,7 +1845,7 @@ many months before the current month:</property>
                     <property name="top_attach">20</property>
                     <property name="bottom_attach">21</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                   </packing>
                 </child>
                 <child>
@@ -1766,7 +1861,7 @@ many months before the current month:</property>
                     <property name="top_attach">21</property>
                     <property name="bottom_attach">22</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                     <property name="x_padding">12</property>
                   </packing>
                 </child>
@@ -1792,7 +1887,7 @@ many months before the current month:</property>
                     <property name="top_attach">21</property>
                     <property name="bottom_attach">22</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                   </packing>
                 </child>
                 <child>
@@ -1804,7 +1899,6 @@ many months before the current month:</property>
                     <property name="has_tooltip">True</property>
                     <property name="tooltip_markup">Show splash screen at startup.</property>
                     <property name="tooltip_text" translatable="yes">Show splash screen at startup.</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
                   </object>
@@ -1813,7 +1907,7 @@ many months before the current month:</property>
                     <property name="top_attach">2</property>
                     <property name="bottom_attach">3</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                     <property name="x_padding">12</property>
                   </packing>
                 </child>
@@ -1830,7 +1924,7 @@ many months before the current month:</property>
                     <property name="top_attach">14</property>
                     <property name="bottom_attach">15</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                     <property name="x_padding">12</property>
                   </packing>
                 </child>
@@ -1893,7 +1987,6 @@ many months before the current month:</property>
                     <property name="has_tooltip">True</property>
                     <property name="tooltip_markup">If active, GnuCash shows a confirmation question each time the auto-save feature is started. Otherwise no extra explanation is shown.</property>
                     <property name="tooltip_text" translatable="yes">If active, GnuCash shows a confirmation question each time the auto-save feature is started. Otherwise no extra explanation is shown.</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
                   </object>
@@ -1902,9 +1995,18 @@ many months before the current month:</property>
                     <property name="top_attach">13</property>
                     <property name="bottom_attach">14</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                     <property name="x_padding">12</property>
                   </packing>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
                 </child>
                 <child>
                   <object class="GtkLabel" id="label84">
@@ -1916,7 +2018,7 @@ many months before the current month:</property>
                     <property name="top_attach">19</property>
                     <property name="bottom_attach">20</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                   </packing>
                 </child>
                 <child>
@@ -1925,7 +2027,6 @@ many months before the current month:</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">gconf/general/retain_type/days</property>
                   </object>
@@ -1941,7 +2042,6 @@ many months before the current month:</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
                   </object>
@@ -1957,7 +2057,6 @@ many months before the current month:</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">gconf/general/retain_type/days</property>
                   </object>
@@ -1966,105 +2065,6 @@ many months before the current month:</property>
                     <property name="bottom_attach">19</property>
                     <property name="x_padding">12</property>
                   </packing>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
                 </child>
               </object>
               <packing>
@@ -2092,6 +2092,99 @@ many months before the current month:</property>
                 <property name="n_columns">4</property>
                 <property name="column_spacing">12</property>
                 <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
                   <object class="GtkLabel" id="label115">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
@@ -2102,7 +2195,7 @@ many months before the current month:</property>
                   <packing>
                     <property name="right_attach">4</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                   </packing>
                 </child>
                 <child>
@@ -2119,7 +2212,6 @@ many months before the current month:</property>
                         <property name="has_tooltip">True</property>
                         <property name="tooltip_markup">Below the actual date, print the format of that date in 8 point type.</property>
                         <property name="tooltip_text" translatable="yes">Below the actual date, print the format of that date in 8 point type.</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="use_underline">True</property>
                         <property name="draw_indicator">True</property>
                       </object>
@@ -2161,7 +2253,6 @@ many months before the current month:</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
-                    <property name="use_action_appearance">False</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -2169,7 +2260,7 @@ many months before the current month:</property>
                     <property name="top_attach">3</property>
                     <property name="bottom_attach">4</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                   </packing>
                 </child>
                 <child>
@@ -2186,7 +2277,6 @@ many months before the current month:</property>
                         <property name="has_tooltip">True</property>
                         <property name="tooltip_markup">Print &amp;apos;***&amp;apos; before and after each text field on the check.</property>
                         <property name="tooltip_text" translatable="yes">Print '***' before and after each text field on the check.</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="use_underline">True</property>
                         <property name="draw_indicator">True</property>
                       </object>
@@ -2199,78 +2289,6 @@ many months before the current month:</property>
                     <property name="x_options">GTK_FILL</property>
                     <property name="y_options">GTK_FILL</property>
                   </packing>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
                 </child>
               </object>
               <packing>
@@ -2298,6 +2316,39 @@ many months before the current month:</property>
                 <property name="n_columns">4</property>
                 <property name="column_spacing">12</property>
                 <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
                   <object class="GtkLabel" id="label56">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
@@ -2308,7 +2359,7 @@ many months before the current month:</property>
                   <packing>
                     <property name="right_attach">2</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                   </packing>
                 </child>
                 <child>
@@ -2320,7 +2371,6 @@ many months before the current month:</property>
                     <property name="has_tooltip">True</property>
                     <property name="tooltip_markup">If checked, pressing the &amp;apos;Enter&amp;apos; key will move to the blank transaction at the bottom of the register.  If clear, pressing the &amp;apos;Enter&amp;apos; key will move down one row.</property>
                     <property name="tooltip_text" translatable="yes">If checked, pressing the 'Enter' key will move to the blank transaction at the bottom of the register.  If clear, pressing the 'Enter' key will move down one row.</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
                   </object>
@@ -2329,7 +2379,7 @@ many months before the current month:</property>
                     <property name="top_attach">1</property>
                     <property name="bottom_attach">2</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                     <property name="x_padding">12</property>
                   </packing>
                 </child>
@@ -2343,7 +2393,7 @@ many months before the current month:</property>
                     <property name="top_attach">3</property>
                     <property name="bottom_attach">4</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                   </packing>
                 </child>
                 <child>
@@ -2355,7 +2405,6 @@ many months before the current month:</property>
                     <property name="has_tooltip">True</property>
                     <property name="tooltip_markup">Automatically raise the list of accounts or actions during input.</property>
                     <property name="tooltip_text" translatable="yes">Automatically raise the list of accounts or actions during input.</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="use_underline">True</property>
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
@@ -2365,7 +2414,7 @@ many months before the current month:</property>
                     <property name="top_attach">2</property>
                     <property name="bottom_attach">3</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                     <property name="x_padding">12</property>
                   </packing>
                 </child>
@@ -2381,7 +2430,7 @@ many months before the current month:</property>
                     <property name="top_attach">5</property>
                     <property name="bottom_attach">6</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                   </packing>
                 </child>
                 <child>
@@ -2394,7 +2443,7 @@ many months before the current month:</property>
                     <property name="top_attach">10</property>
                     <property name="bottom_attach">11</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                   </packing>
                 </child>
                 <child>
@@ -2406,7 +2455,6 @@ many months before the current month:</property>
                     <property name="has_tooltip">True</property>
                     <property name="tooltip_markup">Pre-check cleared transactions when creating a reconcile dialog.</property>
                     <property name="tooltip_text" translatable="yes">Pre-check cleared transactions when creating a reconcile dialog.</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
                   </object>
@@ -2415,7 +2463,7 @@ many months before the current month:</property>
                     <property name="top_attach">6</property>
                     <property name="bottom_attach">7</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                     <property name="x_padding">12</property>
                   </packing>
                 </child>
@@ -2428,7 +2476,6 @@ many months before the current month:</property>
                     <property name="has_tooltip">True</property>
                     <property name="tooltip_markup">Prior to reconciling an account which charges or pays interest, prompt the user to enter a transaction for the interest charge or payment. Currently only enabled for Bank, Credit, Mutual, Asset, Receivable, Payable, and Liability accounts.</property>
                     <property name="tooltip_text" translatable="yes">Prior to reconciling an account which charges or pays interest, prompt the user to enter a transaction for the interest charge or payment. Currently only enabled for Bank, Credit, Mutual, Asset, Receivable, Payable, and Liability accounts.</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
                   </object>
@@ -2437,7 +2484,7 @@ many months before the current month:</property>
                     <property name="top_attach">7</property>
                     <property name="bottom_attach">8</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                     <property name="x_padding">12</property>
                   </packing>
                 </child>
@@ -2450,7 +2497,6 @@ many months before the current month:</property>
                     <property name="has_tooltip">True</property>
                     <property name="tooltip_markup">After reconciling a credit card statement, prompt the user to enter a credit card payment.</property>
                     <property name="tooltip_text" translatable="yes">After reconciling a credit card statement, prompt the user to enter a credit card payment.</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
                   </object>
@@ -2459,7 +2505,7 @@ many months before the current month:</property>
                     <property name="top_attach">8</property>
                     <property name="bottom_attach">9</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                     <property name="x_padding">12</property>
                   </packing>
                 </child>
@@ -2472,7 +2518,6 @@ many months before the current month:</property>
                     <property name="has_tooltip">True</property>
                     <property name="tooltip_markup">Always open the reconcile dialog using today&amp;apos;s date for the statement date, regardless of previous reconciliations.</property>
                     <property name="tooltip_text" translatable="yes">Always open the reconcile dialog using today's date for the statement date, regardless of previous reconciliations.</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
                   </object>
@@ -2481,7 +2526,7 @@ many months before the current month:</property>
                     <property name="top_attach">9</property>
                     <property name="bottom_attach">10</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                     <property name="x_padding">12</property>
                   </packing>
                 </child>
@@ -2494,7 +2539,6 @@ many months before the current month:</property>
                     <property name="has_tooltip">True</property>
                     <property name="tooltip_markup">Show vertical borders on the cells.</property>
                     <property name="tooltip_text" translatable="yes">Show vertical borders on the cells.</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
                   </object>
@@ -2503,7 +2547,7 @@ many months before the current month:</property>
                     <property name="top_attach">15</property>
                     <property name="bottom_attach">16</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                     <property name="x_padding">12</property>
                   </packing>
                 </child>
@@ -2516,7 +2560,6 @@ many months before the current month:</property>
                     <property name="has_tooltip">True</property>
                     <property name="tooltip_markup">Show horizontal borders on the cells.</property>
                     <property name="tooltip_text" translatable="yes">Show horizontal borders on the cells.</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
                   </object>
@@ -2525,7 +2568,7 @@ many months before the current month:</property>
                     <property name="top_attach">14</property>
                     <property name="bottom_attach">15</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                     <property name="x_padding">12</property>
                   </packing>
                 </child>
@@ -2538,7 +2581,6 @@ many months before the current month:</property>
                     <property name="has_tooltip">True</property>
                     <property name="tooltip_markup">Alternate the primary and secondary colors by transaction instead of by alternating by row.</property>
                     <property name="tooltip_text" translatable="yes">Alternate the primary and secondary colors by transaction instead of by alternating by row.</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
                   </object>
@@ -2547,7 +2589,7 @@ many months before the current month:</property>
                     <property name="top_attach">13</property>
                     <property name="bottom_attach">14</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                     <property name="x_padding">12</property>
                   </packing>
                 </child>
@@ -2560,7 +2602,6 @@ many months before the current month:</property>
                     <property name="has_tooltip">True</property>
                     <property name="tooltip_markup">If checked, the system color theme will be applied to register windows.  If clear, the original GnuCash register colors will be used.</property>
                     <property name="tooltip_text" translatable="yes">If checked, the system color theme will be applied to register windows.  If clear, the original GnuCash register colors will be used.</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
                   </object>
@@ -2569,7 +2610,7 @@ many months before the current month:</property>
                     <property name="top_attach">12</property>
                     <property name="bottom_attach">13</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                     <property name="x_padding">12</property>
                   </packing>
                 </child>
@@ -2586,7 +2627,7 @@ many months before the current month:</property>
                     <property name="top_attach">11</property>
                     <property name="bottom_attach">12</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                   </packing>
                 </child>
                 <child>
@@ -2598,7 +2639,6 @@ many months before the current month:</property>
                     <property name="has_tooltip">True</property>
                     <property name="tooltip_markup">Move to Transfer field when memorised transaction auto filled.</property>
                     <property name="tooltip_text" translatable="yes">Move to Transfer field when memorised transaction auto filled.</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="use_underline">True</property>
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
@@ -2608,9 +2648,15 @@ many months before the current month:</property>
                     <property name="top_attach">3</property>
                     <property name="bottom_attach">4</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                     <property name="x_padding">12</property>
                   </packing>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
                 </child>
                 <child>
                   <object class="GtkLabel" id="label121">
@@ -2622,47 +2668,8 @@ many months before the current month:</property>
                     <property name="top_attach">4</property>
                     <property name="bottom_attach">5</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                   </packing>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
                 </child>
               </object>
               <packing>
@@ -2686,8 +2693,26 @@ many months before the current month:</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="border_width">6</property>
-                <property name="n_rows">10</property>
+                <property name="n_rows">14</property>
                 <property name="n_columns">4</property>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
                 <child>
                   <object class="GtkLabel" id="label63">
                     <property name="visible">True</property>
@@ -2698,7 +2723,7 @@ many months before the current month:</property>
                   </object>
                   <packing>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                   </packing>
                 </child>
                 <child>
@@ -2711,7 +2736,7 @@ many months before the current month:</property>
                     <property name="top_attach">4</property>
                     <property name="bottom_attach">5</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                   </packing>
                 </child>
                 <child>
@@ -2726,7 +2751,7 @@ many months before the current month:</property>
                     <property name="top_attach">5</property>
                     <property name="bottom_attach">6</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                   </packing>
                 </child>
                 <child>
@@ -2738,7 +2763,6 @@ many months before the current month:</property>
                     <property name="has_tooltip">True</property>
                     <property name="tooltip_markup">Show all transactions on one line. (Two in double line mode.)</property>
                     <property name="tooltip_text" translatable="yes">Show all transactions on one line. (Two in double line mode.)</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="use_underline">True</property>
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
@@ -2748,7 +2772,7 @@ many months before the current month:</property>
                     <property name="top_attach">1</property>
                     <property name="bottom_attach">2</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                     <property name="x_padding">12</property>
                   </packing>
                 </child>
@@ -2761,7 +2785,6 @@ many months before the current month:</property>
                     <property name="has_tooltip">True</property>
                     <property name="tooltip_markup">Automatically expand the current transaction to show all splits.  All other transactions are shown on one line. (Two in double line mode.)</property>
                     <property name="tooltip_text" translatable="yes">Automatically expand the current transaction to show all splits.  All other transactions are shown on one line. (Two in double line mode.)</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">gconf/general/register/default_style/ledger</property>
@@ -2771,7 +2794,7 @@ many months before the current month:</property>
                     <property name="top_attach">2</property>
                     <property name="bottom_attach">3</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                     <property name="x_padding">12</property>
                   </packing>
                 </child>
@@ -2784,7 +2807,6 @@ many months before the current month:</property>
                     <property name="has_tooltip">True</property>
                     <property name="tooltip_markup">All transactions are expanded to show all splits.</property>
                     <property name="tooltip_text" translatable="yes">All transactions are expanded to show all splits.</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">gconf/general/register/default_style/ledger</property>
@@ -2794,7 +2816,7 @@ many months before the current month:</property>
                     <property name="top_attach">3</property>
                     <property name="bottom_attach">4</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                     <property name="x_padding">12</property>
                   </packing>
                 </child>
@@ -2811,7 +2833,7 @@ many months before the current month:</property>
                     <property name="top_attach">9</property>
                     <property name="bottom_attach">10</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                     <property name="x_padding">12</property>
                   </packing>
                 </child>
@@ -2835,12 +2857,12 @@ many months before the current month:</property>
                     <property name="update_policy">if-valid</property>
                   </object>
                   <packing>
-                    <property name="left_attach">1</property>
-                    <property name="right_attach">2</property>
+                    <property name="left_attach">3</property>
+                    <property name="right_attach">4</property>
                     <property name="top_attach">9</property>
                     <property name="bottom_attach">10</property>
-                    <property name="x_options"></property>
-                    <property name="y_options"></property>
+                    <property name="x_options">GTK_FILL</property>
+                    <property name="y_options"/>
                   </packing>
                 </child>
                 <child>
@@ -2852,7 +2874,6 @@ many months before the current month:</property>
                     <property name="has_tooltip">True</property>
                     <property name="tooltip_markup">Show two lines of information for each transaction instead of one.  Does not affect expanded transactions.</property>
                     <property name="tooltip_text" translatable="yes">Show two lines of information for each transaction instead of one.  Does not affect expanded transactions.</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
                   </object>
@@ -2861,7 +2882,7 @@ many months before the current month:</property>
                     <property name="top_attach">7</property>
                     <property name="bottom_attach">8</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                     <property name="x_padding">12</property>
                   </packing>
                 </child>
@@ -2874,7 +2895,6 @@ many months before the current month:</property>
                     <property name="has_tooltip">True</property>
                     <property name="tooltip_markup">If checked, each register will be opened in its own top level window.  If clear, the register will be opened in the current window.</property>
                     <property name="tooltip_text" translatable="yes">If checked, each register will be opened in its own top level window.  If clear, the register will be opened in the current window.</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
                   </object>
@@ -2883,7 +2903,7 @@ many months before the current month:</property>
                     <property name="top_attach">6</property>
                     <property name="bottom_attach">7</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                     <property name="x_padding">12</property>
                   </packing>
                 </child>
@@ -2896,7 +2916,6 @@ many months before the current month:</property>
                     <property name="has_tooltip">True</property>
                     <property name="tooltip_markup">If checked, only the names of the leaf accounts are displayed in the register and in the account selection popup. The default behaviour is to display the full name, including the path in the account tree. Checking this option implies that you use unique leaf names.</property>
                     <property name="tooltip_text" translatable="yes">If checked, only the names of the leaf accounts are displayed in the register and in the account selection popup. The default behaviour is to display the full name, including the path in the account tree. Checking this option implies that you use unique leaf names.</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
                   </object>
@@ -2905,21 +2924,113 @@ many months before the current month:</property>
                     <property name="top_attach">8</property>
                     <property name="bottom_attach">9</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                     <property name="x_padding">12</property>
                   </packing>
                 </child>
                 <child>
-                  <placeholder/>
+                  <object class="GtkLabel" id="label14">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="tooltip_markup">This sets the number of characters before auto complete starts for description, notes and memo fields.</property>
+                    <property name="tooltip_text" translatable="yes">This sets the number of characters before auto complete starts for description, notes and memo fields.</property>
+                    <property name="xalign">0</property>
+                    <property name="label" translatable="yes">Number of _characters for auto complete:</property>
+                    <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">gconf/general/register/key_length</property>
+                  </object>
+                  <packing>
+                    <property name="top_attach">10</property>
+                    <property name="bottom_attach">11</property>
+                    <property name="x_options">GTK_FILL</property>
+                    <property name="y_options"/>
+                    <property name="x_padding">12</property>
+                  </packing>
                 </child>
                 <child>
-                  <placeholder/>
+                  <object class="GtkSpinButton" id="gconf/general/register/key_length">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="invisible_char">&#x25CF;</property>
+                    <property name="invisible_char_set">True</property>
+                    <property name="primary_icon_activatable">False</property>
+                    <property name="secondary_icon_activatable">False</property>
+                    <property name="primary_icon_sensitive">True</property>
+                    <property name="secondary_icon_sensitive">True</property>
+                    <property name="adjustment">key_length_adj</property>
+                    <property name="climb_rate">1</property>
+                    <property name="snap_to_ticks">True</property>
+                    <property name="numeric">True</property>
+                    <property name="update_policy">if-valid</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">3</property>
+                    <property name="right_attach">4</property>
+                    <property name="top_attach">10</property>
+                    <property name="bottom_attach">11</property>
+                    <property name="x_options">GTK_FILL</property>
+                    <property name="y_options"/>
+                  </packing>
                 </child>
                 <child>
-                  <placeholder/>
+                  <object class="GtkCheckButton" id="gconf/general/register/show_entered_date">
+                    <property name="label" translatable="yes">Show the _entered date</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="tooltip_markup">Show the date when the transaction was entered below the posted date.</property>
+                    <property name="tooltip_text" translatable="yes">Show the date when the transaction was entered below the posted date.</property>
+                    <property name="use_underline">True</property>
+                    <property name="draw_indicator">True</property>
+                  </object>
+                  <packing>
+                    <property name="right_attach">4</property>
+                    <property name="top_attach">11</property>
+                    <property name="bottom_attach">12</property>
+                    <property name="x_options">GTK_FILL</property>
+                    <property name="y_options"/>
+                    <property name="x_padding">12</property>
+                  </packing>
                 </child>
                 <child>
-                  <placeholder/>
+                  <object class="GtkCheckButton" id="gconf/general/register/show_calendar_buttons">
+                    <property name="label" translatable="yes">Show the calendar b_uttons</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="tooltip_markup">Show the calendar buttons Cancel, Today and Select.</property>
+                    <property name="tooltip_text" translatable="yes">Show the calendar buttons Cancel, Today and Select.</property>
+                    <property name="use_underline">True</property>
+                    <property name="draw_indicator">True</property>
+                  </object>
+                  <packing>
+                    <property name="right_attach">4</property>
+                    <property name="top_attach">12</property>
+                    <property name="bottom_attach">13</property>
+                    <property name="x_options">GTK_FILL</property>
+                    <property name="y_options"/>
+                    <property name="x_padding">12</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkCheckButton" id="gconf/general/register/selection_to_blank_on_expand">
+                    <property name="label" translatable="yes">_Move the selection to the blank split on expand</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="tooltip_markup">This will move the selection to the blank split when the transaction is expanded.</property>
+                    <property name="tooltip_text" translatable="yes">This will move the selection to the blank split when the transaction is expanded.</property>
+                    <property name="use_underline">True</property>
+                    <property name="draw_indicator">True</property>
+                  </object>
+                  <packing>
+                    <property name="right_attach">4</property>
+                    <property name="top_attach">13</property>
+                    <property name="bottom_attach">14</property>
+                    <property name="x_options">GTK_FILL</property>
+                    <property name="y_options"/>
+                    <property name="x_padding">12</property>
+                  </packing>
                 </child>
                 <child>
                   <placeholder/>
@@ -2967,6 +3078,18 @@ many months before the current month:</property>
                 <property name="n_rows">6</property>
                 <property name="n_columns">4</property>
                 <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
                   <object class="GtkLabel" id="locale_currency2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
@@ -2979,7 +3102,7 @@ many months before the current month:</property>
                     <property name="top_attach">1</property>
                     <property name="bottom_attach">2</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                   </packing>
                 </child>
                 <child>
@@ -2996,7 +3119,6 @@ many months before the current month:</property>
                         <property name="has_tooltip">True</property>
                         <property name="tooltip_markup">Use the specified currency for all newly created reports.</property>
                         <property name="tooltip_text" translatable="yes">Use the specified currency for all newly created reports.</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="use_underline">True</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
@@ -3024,7 +3146,6 @@ many months before the current month:</property>
                         <property name="has_tooltip">True</property>
                         <property name="tooltip_markup">Use the system locale currency for all newly created reports.</property>
                         <property name="tooltip_text" translatable="yes">Use the system locale currency for all newly created reports.</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="use_underline">True</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">gconf/general/report/currency_choice/other</property>
@@ -3049,7 +3170,7 @@ many months before the current month:</property>
                   <packing>
                     <property name="right_attach">3</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                   </packing>
                 </child>
                 <child>
@@ -3062,7 +3183,7 @@ many months before the current month:</property>
                     <property name="top_attach">3</property>
                     <property name="bottom_attach">4</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                   </packing>
                 </child>
                 <child>
@@ -3078,7 +3199,7 @@ many months before the current month:</property>
                     <property name="top_attach">4</property>
                     <property name="bottom_attach">5</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                   </packing>
                 </child>
                 <child>
@@ -3090,7 +3211,6 @@ many months before the current month:</property>
                     <property name="has_tooltip">True</property>
                     <property name="tooltip_markup">If checked, each report will be opened in its own top level window.  If clear, the report will be opened in the current window.</property>
                     <property name="tooltip_text" translatable="yes">If checked, each report will be opened in its own top level window.  If clear, the report will be opened in the current window.</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
                   </object>
@@ -3099,7 +3219,7 @@ many months before the current month:</property>
                     <property name="top_attach">5</property>
                     <property name="bottom_attach">6</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                     <property name="x_padding">12</property>
                   </packing>
                 </child>
@@ -3119,18 +3239,6 @@ many months before the current month:</property>
                     <property name="x_options">GTK_FILL</property>
                     <property name="y_options">GTK_FILL</property>
                   </packing>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
                 </child>
                 <child>
                   <placeholder/>
@@ -3161,6 +3269,48 @@ many months before the current month:</property>
                 <property name="n_columns">4</property>
                 <property name="column_spacing">12</property>
                 <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
                   <object class="GtkRadioButton" id="gconf/general/toolbar_style/text">
                     <property name="label" translatable="yes">_Text only</property>
                     <property name="visible">True</property>
@@ -3169,7 +3319,6 @@ many months before the current month:</property>
                     <property name="has_tooltip">True</property>
                     <property name="tooltip_markup">Display toolbar items as text only.</property>
                     <property name="tooltip_text" translatable="yes">Display toolbar items as text only.</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="use_underline">True</property>
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
@@ -3179,7 +3328,7 @@ many months before the current month:</property>
                     <property name="top_attach">8</property>
                     <property name="bottom_attach">9</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                     <property name="x_padding">12</property>
                   </packing>
                 </child>
@@ -3192,7 +3341,6 @@ many months before the current month:</property>
                     <property name="has_tooltip">True</property>
                     <property name="tooltip_markup">Display toolbar items as icons only.</property>
                     <property name="tooltip_text" translatable="yes">Display toolbar items as icons only.</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">gconf/general/toolbar_style/text</property>
@@ -3202,7 +3350,7 @@ many months before the current month:</property>
                     <property name="top_attach">7</property>
                     <property name="bottom_attach">8</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                     <property name="x_padding">12</property>
                   </packing>
                 </child>
@@ -3215,7 +3363,6 @@ many months before the current month:</property>
                     <property name="has_tooltip">True</property>
                     <property name="tooltip_markup">Display toolbar items with the text label beside the icon.  Labels are only shown for the most important items.</property>
                     <property name="tooltip_text" translatable="yes">Display toolbar items with the text label beside the icon.  Labels are only shown for the most important items.</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">gconf/general/toolbar_style/text</property>
@@ -3225,7 +3372,7 @@ many months before the current month:</property>
                     <property name="top_attach">6</property>
                     <property name="bottom_attach">7</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                     <property name="x_padding">12</property>
                   </packing>
                 </child>
@@ -3238,7 +3385,6 @@ many months before the current month:</property>
                     <property name="has_tooltip">True</property>
                     <property name="tooltip_markup">Display toolbar items with the text label below the icon.  Labels are show for all items.</property>
                     <property name="tooltip_text" translatable="yes">Display toolbar items with the text label below the icon.  Labels are show for all items.</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">gconf/general/toolbar_style/text</property>
@@ -3248,7 +3394,7 @@ many months before the current month:</property>
                     <property name="top_attach">5</property>
                     <property name="bottom_attach">6</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                     <property name="x_padding">12</property>
                   </packing>
                 </child>
@@ -3261,7 +3407,6 @@ many months before the current month:</property>
                     <property name="has_tooltip">True</property>
                     <property name="tooltip_markup">Use the system setting for displaying toolbar items.</property>
                     <property name="tooltip_text" translatable="yes">Use the system setting for displaying toolbar items.</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">gconf/general/toolbar_style/text</property>
@@ -3271,7 +3416,7 @@ many months before the current month:</property>
                     <property name="top_attach">4</property>
                     <property name="bottom_attach">5</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                     <property name="x_padding">12</property>
                   </packing>
                 </child>
@@ -3288,7 +3433,7 @@ many months before the current month:</property>
                     <property name="top_attach">3</property>
                     <property name="bottom_attach">4</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                   </packing>
                 </child>
                 <child>
@@ -3302,7 +3447,7 @@ many months before the current month:</property>
                   <packing>
                     <property name="right_attach">4</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                   </packing>
                 </child>
                 <child>
@@ -3315,7 +3460,7 @@ many months before the current month:</property>
                     <property name="top_attach">2</property>
                     <property name="bottom_attach">3</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                   </packing>
                 </child>
                 <child>
@@ -3324,7 +3469,6 @@ many months before the current month:</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
                   </object>
@@ -3333,7 +3477,7 @@ many months before the current month:</property>
                     <property name="top_attach">1</property>
                     <property name="bottom_attach">2</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                     <property name="x_padding">12</property>
                   </packing>
                 </child>
@@ -3343,7 +3487,6 @@ many months before the current month:</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
                   </object>
@@ -3352,7 +3495,7 @@ many months before the current month:</property>
                     <property name="top_attach">12</property>
                     <property name="bottom_attach">13</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                     <property name="x_padding">12</property>
                   </packing>
                 </child>
@@ -3366,7 +3509,7 @@ many months before the current month:</property>
                     <property name="top_attach">14</property>
                     <property name="bottom_attach">15</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                   </packing>
                 </child>
                 <child>
@@ -3382,7 +3525,7 @@ many months before the current month:</property>
                     <property name="top_attach">15</property>
                     <property name="bottom_attach">16</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                   </packing>
                 </child>
                 <child>
@@ -3394,7 +3537,6 @@ many months before the current month:</property>
                     <property name="has_tooltip">True</property>
                     <property name="tooltip_markup">Display the notebook tabs at the top of the window.</property>
                     <property name="tooltip_text" translatable="yes">Display the notebook tabs at the top of the window.</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="use_underline">True</property>
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
@@ -3404,7 +3546,7 @@ many months before the current month:</property>
                     <property name="top_attach">16</property>
                     <property name="bottom_attach">17</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                     <property name="x_padding">12</property>
                   </packing>
                 </child>
@@ -3417,7 +3559,6 @@ many months before the current month:</property>
                     <property name="has_tooltip">True</property>
                     <property name="tooltip_markup">Display the notebook tabs at the bottom of the window.</property>
                     <property name="tooltip_text" translatable="yes">Display the notebook tabs at the bottom of the window.</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">gconf/general/tab_position/top</property>
@@ -3427,7 +3568,7 @@ many months before the current month:</property>
                     <property name="top_attach">17</property>
                     <property name="bottom_attach">18</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                     <property name="x_padding">12</property>
                   </packing>
                 </child>
@@ -3440,7 +3581,6 @@ many months before the current month:</property>
                     <property name="has_tooltip">True</property>
                     <property name="tooltip_markup">Display the notebook tabs at the left of the window.</property>
                     <property name="tooltip_text" translatable="yes">Display the notebook tabs at the left of the window.</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">gconf/general/tab_position/top</property>
@@ -3450,7 +3590,7 @@ many months before the current month:</property>
                     <property name="top_attach">18</property>
                     <property name="bottom_attach">19</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                     <property name="x_padding">12</property>
                   </packing>
                 </child>
@@ -3463,7 +3603,6 @@ many months before the current month:</property>
                     <property name="has_tooltip">True</property>
                     <property name="tooltip_markup">Display the notebook tabs at the right of the window.</property>
                     <property name="tooltip_text" translatable="yes">Display the notebook tabs at the right of the window.</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">gconf/general/tab_position/top</property>
@@ -3473,7 +3612,7 @@ many months before the current month:</property>
                     <property name="top_attach">19</property>
                     <property name="bottom_attach">20</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                     <property name="x_padding">12</property>
                   </packing>
                 </child>
@@ -3491,7 +3630,7 @@ many months before the current month:</property>
                     <property name="top_attach">15</property>
                     <property name="bottom_attach">16</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                   </packing>
                 </child>
                 <child>
@@ -3503,7 +3642,6 @@ many months before the current month:</property>
                     <property name="has_tooltip">True</property>
                     <property name="tooltip_markup">Display the summary bar at the top of the page.</property>
                     <property name="tooltip_text" translatable="yes">Display the summary bar at the top of the page.</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="use_underline">True</property>
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
@@ -3514,7 +3652,7 @@ many months before the current month:</property>
                     <property name="top_attach">16</property>
                     <property name="bottom_attach">17</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                     <property name="x_padding">12</property>
                   </packing>
                 </child>
@@ -3527,7 +3665,6 @@ many months before the current month:</property>
                     <property name="has_tooltip">True</property>
                     <property name="tooltip_markup">Display the summary bar at the bottom of the page.</property>
                     <property name="tooltip_text" translatable="yes">Display the summary bar at the bottom of the page.</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">gconf/general/summarybar_position/top</property>
@@ -3538,7 +3675,7 @@ many months before the current month:</property>
                     <property name="top_attach">17</property>
                     <property name="bottom_attach">18</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                     <property name="x_padding">12</property>
                   </packing>
                 </child>
@@ -3552,7 +3689,7 @@ many months before the current month:</property>
                     <property name="top_attach">9</property>
                     <property name="bottom_attach">10</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                   </packing>
                 </child>
                 <child>
@@ -3568,7 +3705,7 @@ many months before the current month:</property>
                     <property name="top_attach">10</property>
                     <property name="bottom_attach">11</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                   </packing>
                 </child>
                 <child>
@@ -3580,7 +3717,6 @@ many months before the current month:</property>
                     <property name="has_tooltip">True</property>
                     <property name="tooltip_markup">Show a close button on each notebook tab.  These function identically to the &amp;apos;Close&amp;apos; menu item.</property>
                     <property name="tooltip_text" translatable="yes">Show a close button on each notebook tab.  These function identically to the 'Close' menu item.</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
                   </object>
@@ -3589,7 +3725,7 @@ many months before the current month:</property>
                     <property name="top_attach">11</property>
                     <property name="bottom_attach">12</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                     <property name="x_padding">12</property>
                   </packing>
                 </child>
@@ -3661,48 +3797,6 @@ many months before the current month:</property>
                     <property name="y_options">GTK_FILL</property>
                   </packing>
                 </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
               </object>
               <packing>
                 <property name="position">8</property>
@@ -3734,24 +3828,12 @@ many months before the current month:</property>
       <action-widget response="-7">closebutton2</action-widget>
     </action-widgets>
   </object>
-  <object class="GtkAdjustment" id="auto_decimal_places_adj">
+  <object class="GtkAdjustment" id="key_length_adj">
     <property name="lower">1</property>
-    <property name="upper">8</property>
+    <property name="upper">999</property>
     <property name="value">2</property>
     <property name="step_increment">1</property>
-    <property name="page_increment">4</property>
-  </object>
-  <object class="GtkAdjustment" id="autosave_interval_minutes_adj">
-    <property name="upper">99999</property>
-    <property name="value">3</property>
-    <property name="step_increment">1</property>
     <property name="page_increment">10</property>
-  </object>
-  <object class="GtkAdjustment" id="date_backmonth_adj">
-    <property name="upper">11</property>
-    <property name="value">6</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">4</property>
   </object>
   <object class="GtkAdjustment" id="max_transactions_adj">
     <property name="upper">999999</property>

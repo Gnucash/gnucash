@@ -1126,30 +1126,30 @@ gnc_plugin_page_register2_create_widget (GncPluginPage *plugin_page)
     if (!gnc_tree_model_split_reg_get_template (model))
        gnc_tree_view_split_reg_default_selection (view);
 
-    plugin_page->summarybar = gsr2_create_summary_bar(priv->gsr);
+    plugin_page->summarybar = gnc_split_reg2_create_summary_bar (priv->gsr);
     if (plugin_page->summarybar)
     {
-        gtk_widget_show_all(plugin_page->summarybar);
-        gtk_box_pack_start(GTK_BOX (priv->widget), plugin_page->summarybar,
+        gtk_widget_show_all (plugin_page->summarybar);
+        gtk_box_pack_start (GTK_BOX (priv->widget), plugin_page->summarybar,
                            FALSE, FALSE, 0);
-        gnc_plugin_page_register2_summarybar_position_changed(NULL, page);
-        gnc_gconf_general_register_cb(KEY_SUMMARYBAR_POSITION,
+        gnc_plugin_page_register2_summarybar_position_changed (NULL, page);
+        gnc_gconf_general_register_cb (KEY_SUMMARYBAR_POSITION,
                                       gnc_plugin_page_register2_summarybar_position_changed, page);
     }
 
     priv->event_handler_id = qof_event_register_handler
                              ((QofEventHandler)gnc_plugin_page_register2_event_handler, page);
     priv->component_manager_id =
-        gnc_register_gui_component(GNC_PLUGIN_PAGE_REGISTER2_NAME,
+        gnc_register_gui_component (GNC_PLUGIN_PAGE_REGISTER2_NAME,
                                    gnc_plugin_page_register2_refresh_cb,
                                    gnc_plugin_page_register2_close_cb,
                                    page);
     gnc_gui_component_set_session (priv->component_manager_id,
                                    gnc_get_current_session());
-    acct = gnc_plugin_page_register2_get_account(page);
+    acct = gnc_plugin_page_register2_get_account (page);
     if (acct)
         gnc_gui_component_watch_entity (
-            priv->component_manager_id, xaccAccountGetGUID(acct),
+            priv->component_manager_id, xaccAccountGetGUID (acct),
             QOF_EVENT_DESTROY | QOF_EVENT_MODIFY);
 
     /* This allows the plugin page to be updated from the view */

@@ -52,6 +52,8 @@ static GtkWidget* add_summary_label (GtkWidget *summarybar,
 
 static void gnc_split_reg2_determine_read_only (GNCSplitReg2 *gsr);
 
+static void gnc_split_reg2_determine_account_pr (GNCSplitReg2 *gsr);
+
 static GNCPlaceholderType gnc_split_reg2_get_placeholder (GNCSplitReg2 *gsr);
 static GtkWidget *gnc_split_reg2_get_parent (GNCLedgerDisplay2 *ledger);
 
@@ -74,7 +76,7 @@ static void gnc_split_reg2_refresh_toolbar (GNCSplitReg2 *gsr);
 
 static void gnc_split_reg2_ld_destroy (GNCLedgerDisplay2 *ledger);
 
-static Transaction* create_balancing_transaction (QofBook *book, Account *account,
+static Transaction* gsr2_create_balancing_transaction (QofBook *book, Account *account,
         time64 statement_date, gnc_numeric balancing_amount);
 
 static void gsr2_emit_simple_signal (GNCSplitReg2 *gsr, const char *sigName);
@@ -192,6 +194,8 @@ gnc_split_reg2_init2 (GNCSplitReg2 *gsr)
 
     gnc_split_reg2_determine_read_only (gsr);
 
+    gnc_split_reg2_determine_account_pr (gsr);
+
     gsr2_setup_status_widgets( gsr );
     /* ordering is important here... setup_status before create_table */
 
@@ -239,14 +243,14 @@ gsr2_create_table (GNCSplitReg2 *gsr)
 
     ENTER("create table gsr=%p", gsr);
 
-    gnc_ledger_display2_set_user_data (gsr->ledger, (gpointer)gsr );
+    gnc_ledger_display2_set_user_data (gsr->ledger, (gpointer)gsr);
     gnc_ledger_display2_set_handlers (gsr->ledger,
                                      gnc_split_reg2_ld_destroy,
-                                     gnc_split_reg2_get_parent );
+                                     gnc_split_reg2_get_parent);
 
     ledger_type = gnc_ledger_display2_type (gsr->ledger);
 
-    model = gnc_ledger_display2_get_split_model_register (gsr->ledger );
+    model = gnc_ledger_display2_get_split_model_register (gsr->ledger);
     view = gnc_tree_view_split_reg_new_with_model (model);
 
     g_object_unref (G_OBJECT (model));
@@ -683,7 +687,7 @@ gnc_split_reg2_balancing_entry (GNCSplitReg2 *gsr, Account *account,
     view = gnc_ledger_display2_get_split_view_register (gsr->ledger);
 
     // create transaction
-    transaction = create_balancing_transaction (gnc_get_current_book(),
+    transaction = gsr2_create_balancing_transaction (gnc_get_current_book(),
                   account, statement_date, balancing_amount);
 
     // jump to transaction
@@ -691,7 +695,7 @@ gnc_split_reg2_balancing_entry (GNCSplitReg2 *gsr, Account *account,
     if (split == NULL)
     {
         // default behaviour: jump to blank split
-        g_warning("create_balancing_transaction failed");
+        g_warning("gsr2_create_balancing_transaction failed");
         gnc_tree_control_split_reg_jump_to_blank (view);
     }
     else
@@ -702,7 +706,7 @@ gnc_split_reg2_balancing_entry (GNCSplitReg2 *gsr, Account *account,
 }
 
 static Transaction*
-create_balancing_transaction (QofBook *book, Account *account,
+gsr2_create_balancing_transaction (QofBook *book, Account *account,
                              time64 statement_date, gnc_numeric balancing_amount)
 {
     Transaction *trans;
@@ -817,22 +821,22 @@ add_summary_label (GtkWidget *summarybar, const char *label_str)
     GtkWidget *hbox;
     GtkWidget *label;
 
-    hbox = gtk_hbox_new(FALSE, 2);
-    gtk_box_pack_start( GTK_BOX(summarybar), hbox, FALSE, FALSE, 5 );
+    hbox = gtk_hbox_new (FALSE, 2);
+    gtk_box_pack_start (GTK_BOX (summarybar), hbox, FALSE, FALSE, 5);
 
-    label = gtk_label_new( label_str );
-    gtk_misc_set_alignment( GTK_MISC(label), 1.0, 0.5 );
-    gtk_box_pack_start( GTK_BOX(hbox), label, FALSE, FALSE, 0 );
+    label = gtk_label_new (label_str);
+    gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
+    gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
 
-    label = gtk_label_new( "" );
-    gtk_misc_set_alignment( GTK_MISC(label), 1.0, 0.5 );
-    gtk_box_pack_start( GTK_BOX(hbox), label, FALSE, FALSE, 0 );
+    label = gtk_label_new ("");
+    gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
+    gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
 
     return label;
 }
 
 GtkWidget *
-gsr2_create_summary_bar (GNCSplitReg2 *gsr)
+gnc_split_reg2_create_summary_bar (GNCSplitReg2 *gsr)
 {
     GtkWidget *summarybar;
 
@@ -840,7 +844,7 @@ gsr2_create_summary_bar (GNCSplitReg2 *gsr)
     gsr->balance_label    = NULL;
     gsr->reconciled_label = NULL;
     gsr->future_label     = NULL;
-    gsr->projectedminimum_label  = NULL;
+    gsr->projectedminimum_label = NULL;
     gsr->shares_label     = NULL;
     gsr->value_label      = NULL;
 
@@ -918,6 +922,8 @@ gnc_split_reg2_get_placeholder (GNCSplitReg2 *gsr)
     return xaccAccountGetDescendantPlaceholder (leader);
 }
 
+
+
 /**
  * @see gtk_callback_bug_workaround
  **/
@@ -926,6 +932,54 @@ typedef struct dialog_args
     GNCSplitReg2 *gsr;
     gchar *string;
 } dialog_args;
+
+
+/* This Register is an Account Payable / Receivable one */
+static
+gboolean
+gsr2_determine_account_pr_dialog (gpointer argp)
+{
+    dialog_args *args = argp;
+    GtkWidget *dialog;
+
+    const char *title = _("Account Payable / Receivable Register");
+    const char *message =
+            _("The register displayed is for Account Payable or Account Receivable. "
+              "Changing the entries may cause harm, please use the business "
+              "options to change the entries.");
+
+    dialog = gtk_message_dialog_new (GTK_WINDOW (args->gsr->window),
+                                     GTK_DIALOG_DESTROY_WITH_PARENT,
+                                     GTK_MESSAGE_WARNING,
+                                     GTK_BUTTONS_CLOSE,
+                                     "%s", title);
+    gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
+                                              "%s", message);
+
+    gnc_dialog_run (GTK_DIALOG (dialog), "accounts_payable_receivable");
+    gtk_widget_destroy (dialog);
+    g_free (args);
+    return FALSE;
+}
+
+
+/* This Register is an Account Payable / Recievable one */
+static void
+gnc_split_reg2_determine_account_pr (GNCSplitReg2 *gsr)
+{
+    dialog_args *args = g_malloc (sizeof (dialog_args));
+    GncTreeModelSplitReg *model;
+
+    model = gnc_ledger_display2_get_split_model_register (gsr->ledger);
+
+    if (model->type != PAYABLE_REGISTER2 && model->type != RECEIVABLE_REGISTER2)
+        return;
+
+    /* Put up a warning dialog */
+    args->gsr = gsr;
+    g_timeout_add (250, gsr2_determine_account_pr_dialog, args); /* 0.25 seconds */
+}
+
 
 /**
  * Gtk has occasional problems with performing function as part of a
@@ -970,10 +1024,10 @@ gnc_split_reg2_determine_read_only (GNCSplitReg2 *gsr) //this works
         gsr->read_only = TRUE;
     }
 
-    if ( !gsr->read_only )
+    if (!gsr->read_only)
     {
 
-        switch (gnc_split_reg2_get_placeholder(gsr))
+        switch (gnc_split_reg2_get_placeholder (gsr))
         {
         case PLACEHOLDER_NONE:
             /* stay as false. */

@@ -203,6 +203,36 @@
     </schema>
 
     <schema>
+      <key>/schemas/apps/gnucash/general/show_account_color</key>
+      <applyto>/apps/gnucash/general/show_account_color</applyto>
+      <owner>gnucash</owner>
+      <type>bool</type>
+      <default>FALSE</default>
+      <locale name="C">
+        <short>Use the account color as background</short>
+        <long>
+          If active, the background color of the Account Name column
+          on the Accounts page is displayed as the account color.
+        </long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnucash/general/show_account_color_tabs</key>
+      <applyto>/apps/gnucash/general/show_account_color_tabs</applyto>
+      <owner>gnucash</owner>
+      <type>bool</type>
+      <default>FALSE</default>
+      <locale name="C">
+        <short>Use the account color as background on tabs</short>
+        <long>
+          If active, the background color of the register tabs
+          will be displayed in the account color.
+        </long>
+      </locale>
+    </schema>
+
+    <schema>
       <key>/schemas/apps/gnucash/general/tab_close_buttons</key>
       <applyto>/apps/gnucash/general/tab_close_buttons</applyto>
       <owner>gnucash</owner>
@@ -363,6 +393,81 @@
           colors by editing the gtkrc file in the users home
           directory.  Otherwise the standard register colors will be
           used that GnuCash has always used.
+        </long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnucash/general/register/selection_to_blank_on_expand</key>
+      <applyto>/apps/gnucash/general/register/selection_to_blank_on_expand</applyto>
+      <owner>gnucash</owner>
+      <type>bool</type>
+      <default>FALSE</default>
+      <locale name="C">
+        <short>Move Selection to blank split on expand</short>
+        <long>
+          If active, the selection will be moved to the blank split
+          when the transaction is expanded.
+        </long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnucash/general/register/show_calendar_buttons</key>
+      <applyto>/apps/gnucash/general/register/show_calendar_buttons</applyto>
+      <owner>gnucash</owner>
+      <type>bool</type>
+      <default>FALSE</default>
+      <locale name="C">
+        <short>Show the Calendar buttons</short>
+        <long>
+          If active, the Cancel, Today and Select buttons will be
+          shown in the calendar when it is dispalyed in the register.
+        </long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnucash/general/register/show_entered_date</key>
+      <applyto>/apps/gnucash/general/register/show_entered_date</applyto>
+      <owner>gnucash</owner>
+      <type>bool</type>
+      <default>FALSE</default>
+      <locale name="C">
+        <short>Show the Date Entered</short>
+        <long>
+          If active, the date the transaction was entered is shown below
+          the posted date.
+        </long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnucash/general/register/key_length</key>
+      <applyto>/schemas/apps/gnucash/general/register/key_length</applyto>
+      <owner>gnucash</owner>
+      <type>float</type>
+      <default>2</default>
+      <locale name="C">
+        <short>The number of Characters needed</short>
+        <long>
+          This setting controls the number of characters needed before
+          the auto complete starts to work.
+        </long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnucash/general/register/max_transactions</key>
+      <applyto>/schemas/apps/gnucash/general/register/max_transactions</applyto>
+      <owner>gnucash</owner>
+      <type>float</type>
+      <default>0</default>
+      <locale name="C">
+        <short>The number of transactions displayed</short>
+        <long>
+          This setting controls the maximum number of transactions that
+          are displayed in the register.
         </long>
       </locale>
     </schema>

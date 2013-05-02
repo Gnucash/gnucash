@@ -1543,6 +1543,7 @@ gnc_preferences_dialog_create(void)
     gnc_builder_add_from_file (builder, "dialog-preferences.glade", "autosave_interval_minutes_adj");
     gnc_builder_add_from_file (builder, "dialog-preferences.glade", "date_backmonth_adj");
     gnc_builder_add_from_file (builder, "dialog-preferences.glade", "max_transactions_adj");
+    gnc_builder_add_from_file (builder, "dialog-preferences.glade", "key_length_adj");
     gnc_builder_add_from_file (builder, "dialog-preferences.glade", "new_search_limit_adj");
     gnc_builder_add_from_file (builder, "dialog-preferences.glade", "retain_days_adj");
     gnc_builder_add_from_file (builder, "dialog-preferences.glade", "tab_width_adj");

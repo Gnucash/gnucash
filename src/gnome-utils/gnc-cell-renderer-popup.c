@@ -194,6 +194,8 @@ gcrp_editing_done (GtkCellEditable     *editable,
 				  GNC_CELL_RENDERER_POPUP_PATH);
 	new_text = gnc_popup_entry_get_text (GNC_POPUP_ENTRY (editable));
 
+        gtk_cell_renderer_stop_editing (GTK_CELL_RENDERER (cell), FALSE);
+
 	g_signal_emit_by_name (cell,
 			       "edited",
 			       path,

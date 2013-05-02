@@ -1574,33 +1574,49 @@ gnc_tree_control_split_reg_save (GncTreeViewSplitReg *view, gboolean reg_closing
 
 /* Allow the reconcile flag to be changed */
 gboolean
-gnc_tree_control_split_reg_recn_change (GncTreeViewSplitReg *view)
+gnc_tree_control_split_reg_recn_change (GncTreeViewSplitReg *view, GtkTreePath *spath)
 {
     GtkWidget *dialog, *window;
-    gint response;
-    Transaction *trans;
-    Split *split;
-    RowDepth depth;
+    GncTreeModelSplitReg *model;
+    GtkTreePath *mpath;
+    GtkTreeIter m_iter;
+    Split *split = NULL;
+    Transaction *trans = NULL;
+    gboolean is_trow1, is_trow2, is_split, is_blank;
+    Account *anchor;
     char rec;
     const gchar *title = _("Mark split as unreconciled?");
     const gchar *message =
         _("You are about to mark a reconciled split as unreconciled.  Doing "
           "so might make future reconciliation difficult!  Continue "
           "with this change?");
+    gint response;
 
     ENTER(" ");
 
-    depth = gnc_tree_view_reg_get_selected_row_depth (view);
+    model = gnc_tree_view_split_reg_get_model_from_view (view);
 
-    if (depth == SPLIT3)
-        split = gnc_tree_view_split_reg_get_current_split (view);
-    else
-        split = gnc_tree_control_split_reg_get_current_trans_split (view);
+    anchor = gnc_tree_model_split_reg_get_anchor (model);
+
+    mpath = gnc_tree_view_split_reg_get_model_path_from_sort_path (view, spath);
+
+    if (!gtk_tree_model_get_iter (GTK_TREE_MODEL (model), &m_iter, mpath))
+    {
+        gtk_tree_path_free (mpath);
+        return FALSE;
+    }
+
+    gnc_tree_model_split_reg_get_split_and_trans (GNC_TREE_MODEL_SPLIT_REG (model), &m_iter,
+                                 &is_trow1, &is_trow2, &is_split, &is_blank, &split, &trans);
+
+    if (is_trow1 || is_trow2)
+        split = xaccTransFindSplitByAccount (trans, anchor);
 
     rec = xaccSplitGetReconcile (split);
 
     if (rec != YREC)
     {
+        gtk_tree_path_free (mpath);
         LEAVE("Not reconciled");
         return TRUE;
     }
@@ -1630,9 +1646,11 @@ gnc_tree_control_split_reg_recn_change (GncTreeViewSplitReg *view)
 
         xaccSplitSetReconcile (split, rec);
 
+        gtk_tree_path_free (mpath);
         LEAVE("mark split unreconciled");
         return TRUE;
     }
+    gtk_tree_path_free (mpath);
     LEAVE("Canceled split unreconciled");
     return FALSE;
 }
@@ -1640,11 +1658,15 @@ gnc_tree_control_split_reg_recn_change (GncTreeViewSplitReg *view)
 
 /* Test for splits being reconciled and decide to allow changes */
 gboolean
-gnc_tree_control_split_reg_recn_test (GncTreeViewSplitReg *view)
+gnc_tree_control_split_reg_recn_test (GncTreeViewSplitReg *view, GtkTreePath *spath)
 {
-    Transaction *trans;
-    Split *split;
-    RowDepth depth;
+    GncTreeModelSplitReg *model;
+    GtkTreePath *mpath;
+    GtkTreeIter m_iter;
+    Split *split = NULL;
+    Transaction *trans = NULL;
+    gboolean is_trow1, is_trow2, is_split, is_blank;
+    Account *anchor;
     char recn;
 
     ENTER(" ");
@@ -1655,20 +1677,32 @@ gnc_tree_control_split_reg_recn_test (GncTreeViewSplitReg *view)
         LEAVE("change allowed is set");
         return TRUE;
     }
-    depth = gnc_tree_view_reg_get_selected_row_depth (view);
 
-    if (depth == SPLIT3)
-        split = gnc_tree_view_split_reg_get_current_split (view);
-    else
-        split = gnc_tree_control_split_reg_get_current_trans_split (view);
+    model = gnc_tree_view_split_reg_get_model_from_view (view);
 
-    if (!split)
+    anchor = gnc_tree_model_split_reg_get_anchor (model);
+
+    mpath = gnc_tree_view_split_reg_get_model_path_from_sort_path (view, spath);
+
+    if (!gtk_tree_model_get_iter (GTK_TREE_MODEL (model), &m_iter, mpath))
     {
-        LEAVE("No split");
+        gtk_tree_path_free (mpath);
+        LEAVE("No path");
         return TRUE;
     }
 
-    trans = xaccSplitGetParent (split);
+    gnc_tree_model_split_reg_get_split_and_trans (GNC_TREE_MODEL_SPLIT_REG (model), &m_iter,
+                                 &is_trow1, &is_trow2, &is_split, &is_blank, &split, &trans);
+
+    if (is_trow1 || is_trow2)
+        split = xaccTransFindSplitByAccount (trans, anchor);
+
+    if (!split)
+    {
+        gtk_tree_path_free (mpath);
+        LEAVE("No split");
+        return TRUE;
+    }
 
     recn = xaccSplitGetReconcile (split);
 
@@ -1711,11 +1745,13 @@ gnc_tree_control_split_reg_recn_test (GncTreeViewSplitReg *view)
 
         if (response != GTK_RESPONSE_YES)
         {
+            gtk_tree_path_free (mpath);
             LEAVE("cancel reconciled split");
             return FALSE;
         }
     }
     view->change_allowed = TRUE;
+    gtk_tree_path_free (mpath);
     LEAVE(" ");
     return TRUE;
 }

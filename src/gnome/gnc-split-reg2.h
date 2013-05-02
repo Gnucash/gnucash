@@ -74,7 +74,7 @@ struct _GNCSplitReg2Class
     GtkVBoxClass parent_class;
 
     /* Signal defaults */
-    void (*help_changed) ( GNCSplitReg2 *w, gpointer user_data );
+    void (*help_changed) (GNCSplitReg2 *w, gpointer user_data);
 };
 
 /*FIXME Note sure about this == Coming from original gnc-split-reg.h */
@@ -95,17 +95,17 @@ GType gnc_split_reg2_get_type (void);
 GtkWidget* gnc_split_reg2_new (GNCLedgerDisplay2 *ld,
                               GtkWindow *parent,
                               gint numberOfLines,
-                              gboolean read_only );
+                              gboolean read_only);
 
 /**
  * Returns the GncTreeView Split Register in effect for this GNCSplitReg.
  **/
-GncTreeViewSplitReg *gnc_split_reg2_get_register (GNCSplitReg2 *gsr );
+GncTreeViewSplitReg *gnc_split_reg2_get_register (GNCSplitReg2 *gsr);
 
 /**
  * Create and returns a summarybar for this GNCSplitReg.
  **/
-GtkWidget *gsr2_create_summary_bar (GNCSplitReg2 *gsr );
+GtkWidget *gnc_split_reg2_create_summary_bar (GNCSplitReg2 *gsr);
 
 /**
  * Gets/sets the style of the GNCSplitReg.
@@ -115,7 +115,7 @@ void gnc_split_reg2_change_style (GNCSplitReg2 *gsr, SplitRegisterStyle2 style);
 /**
  * Can return NULL if the indicated subwidget was not created.
  **/
-GtkWidget *gnc_split_reg2_get_summarybar (GNCSplitReg2 *gsr );
+GtkWidget *gnc_split_reg2_get_summarybar (GNCSplitReg2 *gsr);
 
 /**
  * Jump to split.
@@ -138,7 +138,7 @@ void gnc_split_reg2_raise (GNCSplitReg2 *gsr);
  * status in the window which contains the GNCSplitReg.
  * @return TRUE if the register is read-only, FALSE if not.
  **/
-gboolean gnc_split_reg2_get_read_only (GNCSplitReg2 *gsr );
+gboolean gnc_split_reg2_get_read_only (GNCSplitReg2 *gsr);
 
 /*
  * Create a transaction entry with given amount and date. One account is
@@ -151,6 +151,6 @@ void gnc_split_reg2_balancing_entry (GNCSplitReg2 *gsr, Account *account,
                                     time64 statement_date, gnc_numeric balancing_amount);
 
 
-void gnc_split_reg2_set_moved_cb (GNCSplitReg2 *gsr, GFunc cb, gpointer cb_data );
+void gnc_split_reg2_set_moved_cb (GNCSplitReg2 *gsr, GFunc cb, gpointer cb_data);
 
 #endif /* GNC_SPLIT_REG2_H */
