@@ -56,7 +56,7 @@ static QofLogModule log_module = GNC_MOD_LEDGER;
 
 /* Read only dialog */
 static gboolean
-gtc_is_trans_readonly_and_warn (GncTreeViewSplitReg *view, Transaction *trans)
+gtc_sr_is_trans_readonly_and_warn (GncTreeViewSplitReg *view, Transaction *trans)
 {
     GncTreeModelSplitReg *model;
     GtkWidget *window;
@@ -119,7 +119,7 @@ gtc_is_trans_readonly_and_warn (GncTreeViewSplitReg *view, Transaction *trans)
 
 
 /* Transaction is being edited dialog */
-#define gtc_trans_open_and_warn gnc_tree_control_split_reg_trans_open_and_warn
+#define gtc_sr_trans_open_and_warn gnc_tree_control_split_reg_trans_open_and_warn
 gboolean
 gnc_tree_control_split_reg_trans_open_and_warn (GncTreeViewSplitReg *view, Transaction *trans)
 {
@@ -162,9 +162,9 @@ gnc_tree_control_split_reg_trans_open_and_warn (GncTreeViewSplitReg *view, Trans
 }
 
 
-#define gtc_trans_test_for_edit gnc_tree_control_split_reg_trans_test_for_edit
+#define gtc_sr_trans_test_for_edit gnc_tree_control_split_reg_trans_test_for_edit
 gboolean
-gtc_trans_test_for_edit (GncTreeViewSplitReg *view, Transaction *trans)
+gtc_sr_trans_test_for_edit (GncTreeViewSplitReg *view, Transaction *trans)
 {
     GtkWidget *window;
     Transaction *dirty_trans;
@@ -434,15 +434,15 @@ gnc_tree_control_split_reg_exchange_rate (GncTreeViewSplitReg *view)
         return;
 
     /* Test for read only */
-    if (gtc_is_trans_readonly_and_warn (view, trans))
+    if (gtc_sr_is_trans_readonly_and_warn (view, trans))
         return;
 
     /* See if we are being edited in another register */
-    if (gtc_trans_test_for_edit (view, trans))
+    if (gtc_sr_trans_test_for_edit (view, trans))
         return;
 
     /* Make sure we ask to commit any changes before we procede */
-    if (gtc_trans_open_and_warn (view, trans))
+    if (gtc_sr_trans_open_and_warn (view, trans))
         return;
 
     if (num_splits < 2)
@@ -562,15 +562,15 @@ gnc_tree_control_split_reg_void_current_trans (GncTreeViewSplitReg *view, const 
         return;
 
     /* Test for read only */
-    if (gtc_is_trans_readonly_and_warn (view, trans))
+    if (gtc_sr_is_trans_readonly_and_warn (view, trans))
         return;
 
     /* See if we are being edited in another register */
-    if (gtc_trans_test_for_edit (view, trans))
+    if (gtc_sr_trans_test_for_edit (view, trans))
         return;
 
     /* Make sure we ask to commit any changes before we procede */
-    if (gtc_trans_open_and_warn (view, trans))
+    if (gtc_sr_trans_open_and_warn (view, trans))
         return;
 
     gnc_tree_view_split_reg_set_dirty_trans (view, trans);
@@ -775,6 +775,7 @@ gnc_tree_control_split_reg_goto_rel_trans_row (GncTreeViewSplitReg *view, gint r
     GtkTreePath *mpath, *spath;
     GtkTreePath  *new_mpath, *new_spath;
     gint *indices;
+    gchar *sstring;
 
     ENTER("Move relative, view is %p, relative is %d", view, relative);
 
@@ -812,7 +813,9 @@ gnc_tree_control_split_reg_goto_rel_trans_row (GncTreeViewSplitReg *view, gint r
         gtk_tree_path_free (new_mpath);
     }
 
-    LEAVE("new_spath is %s", gtk_tree_path_to_string (new_spath));
+    sstring = gtk_tree_path_to_string (new_spath);
+    LEAVE("new_spath is %s", sstring);
+    g_free (sstring);
 
     gtk_tree_path_free (new_spath);
     gtk_tree_path_free (mpath);
@@ -902,15 +905,15 @@ gnc_tree_control_split_reg_reinit (GncTreeViewSplitReg *view, gpointer data)
         return;
 
     /* Test for read only */
-    if (gtc_is_trans_readonly_and_warn (view, trans))
+    if (gtc_sr_is_trans_readonly_and_warn (view, trans))
         return;
 
     /* See if we are being edited in another register */
-    if (gtc_trans_test_for_edit (view, trans))
+    if (gtc_sr_trans_test_for_edit (view, trans))
         return;
 
     /* Make sure we ask to commit any changes before we procede */
-    if (gtc_trans_open_and_warn (view, trans))
+    if (gtc_sr_trans_open_and_warn (view, trans))
         return;
 
     window = gnc_tree_view_split_reg_get_parent (view);
@@ -974,11 +977,11 @@ gnc_tree_control_split_reg_delete (GncTreeViewSplitReg *view, gpointer data)
         return;
 
     /* Test for read only */
-    if (gtc_is_trans_readonly_and_warn (view, trans))
+    if (gtc_sr_is_trans_readonly_and_warn (view, trans))
         return;
 
     /* See if we are being edited in another register */
-    if (gtc_trans_test_for_edit (view, trans))
+    if (gtc_sr_trans_test_for_edit (view, trans))
         return;
 
     depth = gnc_tree_view_reg_get_selected_row_depth (view);
@@ -1137,14 +1140,14 @@ gnc_tree_control_split_reg_reverse_current (GncTreeViewSplitReg *view)
     }
 
     /* Test for read only */
-    if (gtc_is_trans_readonly_and_warn (view, trans))
+    if (gtc_sr_is_trans_readonly_and_warn (view, trans))
     {
         LEAVE("Read only");
         return;
     }
 
     /* See if we are being edited in another register */
-    if (gtc_trans_test_for_edit (view, trans))
+    if (gtc_sr_trans_test_for_edit (view, trans))
     {
         LEAVE("Open in different register");
         return;
@@ -1161,7 +1164,7 @@ gnc_tree_control_split_reg_reverse_current (GncTreeViewSplitReg *view)
     }
 
     /* Make sure we ask to commit any changes before we add reverse transaction */
-    if (gtc_trans_open_and_warn (view, trans))
+    if (gtc_sr_trans_open_and_warn (view, trans))
     {
         LEAVE("save cancelled");
         return;
@@ -1244,21 +1247,21 @@ gnc_tree_control_split_reg_duplicate_current (GncTreeViewSplitReg *view)
     }
 
     /* Test for read only */
-    if (gtc_is_trans_readonly_and_warn (view, trans))
+    if (gtc_sr_is_trans_readonly_and_warn (view, trans))
     {
         LEAVE("Read only");
         return FALSE;
     }
 
     /* See if we are being edited in another register */
-    if (gtc_trans_test_for_edit (view, trans))
+    if (gtc_sr_trans_test_for_edit (view, trans))
     {
         LEAVE("Open in different register");
         return FALSE;
     }
 
     /* Make sure we ask to commit any changes before we procede */
-    if (gtc_trans_open_and_warn (view, trans))
+    if (gtc_sr_trans_open_and_warn (view, trans))
     {
         LEAVE("save cancelled");
         return FALSE;
@@ -1787,7 +1790,7 @@ gnc_tree_control_split_reg_cut_trans (GncTreeViewSplitReg *view)
         return;
 
     /* Test for read only */
-    if (gtc_is_trans_readonly_and_warn (view, from_trans))
+    if (gtc_sr_is_trans_readonly_and_warn (view, from_trans))
         return;
 
     xaccTransBeginEdit (clipboard_trans);
@@ -1802,7 +1805,7 @@ gnc_tree_control_split_reg_cut_trans (GncTreeViewSplitReg *view)
 
 /* Return the split account for which ancestor is it's parent */
 static Account *
-gtc_trans_get_account_for_splits_ancestor (const Transaction *trans, const Account *ancestor)
+gtc_sr_trans_get_account_for_splits_ancestor (const Transaction *trans, const Account *ancestor)
 {
     GList *node;
 
@@ -1837,7 +1840,7 @@ gnc_tree_control_split_reg_copy_trans (GncTreeViewSplitReg *view)
 
     anchor = gnc_tree_model_split_reg_get_anchor (model);
 
-    clipboard_acct = gtc_trans_get_account_for_splits_ancestor (from_trans, anchor);
+    clipboard_acct = gtc_sr_trans_get_account_for_splits_ancestor (from_trans, anchor);
 
     xaccTransBeginEdit (clipboard_trans);
     if (clipboard_trans)
@@ -1863,11 +1866,11 @@ gnc_tree_control_split_reg_paste_trans (GncTreeViewSplitReg *view)
         return;
 
     /* See if we are being edited in another register */
-    if (gtc_trans_test_for_edit (view, to_trans))
+    if (gtc_sr_trans_test_for_edit (view, to_trans))
         return;
 
     /* Test for read only */
-    if (gtc_is_trans_readonly_and_warn (view, to_trans))
+    if (gtc_sr_is_trans_readonly_and_warn (view, to_trans))
         return;
 
     //FIXME You can not paste from gl to a register, is this too simplistic
@@ -1978,7 +1981,7 @@ gnc_tree_control_split_reg_sort_changed_cb (GtkTreeSortable *sortable, gpointer 
 
 
 static GtkTreeModel *
-gtc_sort_cb_filter_iters (GtkTreeModel *f_model,
+gtc_sr_sort_cb_filter_iters (GtkTreeModel *f_model,
                        GtkTreeIter *f_iter_a,
                        GtkTreeIter *f_iter_b,
                        GtkTreeIter *iter_a,
@@ -2007,10 +2010,21 @@ gnc_tree_control_split_reg_sort_by_date (GtkTreeModel *fm, GtkTreeIter *fa, GtkT
     time64 i, j;
     int retval;
 
-    model = GNC_TREE_MODEL_SPLIT_REG (gtc_sort_cb_filter_iters (fm, fa, fb, ma, mb));
+    model = GNC_TREE_MODEL_SPLIT_REG (gtc_sr_sort_cb_filter_iters (fm, fa, fb, ma, mb));
 
-    if (gnc_tree_model_split_reg_is_blank_trans (model, ma)) return 1;
-    if (gnc_tree_model_split_reg_is_blank_trans (model, mb)) return -1;
+    if (gnc_tree_model_split_reg_is_blank_trans (model, ma))
+    {
+        gtk_tree_iter_free (ma);
+        gtk_tree_iter_free (mb);
+        return 1;
+    }
+
+    if (gnc_tree_model_split_reg_is_blank_trans (model, mb))
+    {
+        gtk_tree_iter_free (ma);
+        gtk_tree_iter_free (mb);
+        return -1;
+    }
 
     tnodea = ma->user_data2;
     tnodeb = mb->user_data2;
@@ -2060,10 +2074,21 @@ gnc_tree_control_split_reg_sort_by_numact (GtkTreeModel *fm, GtkTreeIter *fa, Gt
     int na, nb, retval;
     const char *ca, *cb;
 
-    model = GNC_TREE_MODEL_SPLIT_REG (gtc_sort_cb_filter_iters (fm, fa, fb, ma, mb));
+    model = GNC_TREE_MODEL_SPLIT_REG (gtc_sr_sort_cb_filter_iters (fm, fa, fb, ma, mb));
 
-    if (gnc_tree_model_split_reg_is_blank_trans (model, ma)) return 1;
-    if (gnc_tree_model_split_reg_is_blank_trans (model, mb)) return -1;
+    if (gnc_tree_model_split_reg_is_blank_trans (model, ma))
+    {
+        gtk_tree_iter_free (ma);
+        gtk_tree_iter_free (mb);
+        return 1;
+    }
+
+    if (gnc_tree_model_split_reg_is_blank_trans (model, mb))
+    {
+        gtk_tree_iter_free (ma);
+        gtk_tree_iter_free (mb);
+        return -1;
+    }
 
     tnodea = ma->user_data2;
     tnodeb = mb->user_data2;
@@ -2123,10 +2148,21 @@ gnc_tree_control_split_reg_sort_by_dnm (GtkTreeModel *fm, GtkTreeIter *fa, GtkTr
     int depth;
     int retval;
 
-    model = GNC_TREE_MODEL_SPLIT_REG (gtc_sort_cb_filter_iters (fm, fa, fb, ma, mb));
+    model = GNC_TREE_MODEL_SPLIT_REG (gtc_sr_sort_cb_filter_iters (fm, fa, fb, ma, mb));
 
-    if (gnc_tree_model_split_reg_is_blank_trans (model, ma)) return 1;
-    if (gnc_tree_model_split_reg_is_blank_trans (model, mb)) return -1;
+    if (gnc_tree_model_split_reg_is_blank_trans (model, ma))
+    {
+        gtk_tree_iter_free (ma);
+        gtk_tree_iter_free (mb);
+        return 1;
+    }
+
+    if (gnc_tree_model_split_reg_is_blank_trans (model, mb))
+    {
+        gtk_tree_iter_free (ma);
+        gtk_tree_iter_free (mb);
+        return -1;
+    }
 
     tnodea = ma->user_data2;
     tnodeb = mb->user_data2;
@@ -2192,10 +2228,21 @@ gnc_tree_control_split_reg_sort_by_recn (GtkTreeModel *fm, GtkTreeIter *fa, GtkT
     int depth;
     int na = 0, nb = 0, retval;
 
-    model = GNC_TREE_MODEL_SPLIT_REG (gtc_sort_cb_filter_iters (fm, fa, fb, ma, mb));
+    model = GNC_TREE_MODEL_SPLIT_REG (gtc_sr_sort_cb_filter_iters (fm, fa, fb, ma, mb));
 
-    if (gnc_tree_model_split_reg_is_blank_trans (model, ma)) return 1;
-    if (gnc_tree_model_split_reg_is_blank_trans (model, mb)) return -1;
+    if (gnc_tree_model_split_reg_is_blank_trans (model, ma))
+    {
+        gtk_tree_iter_free (ma);
+        gtk_tree_iter_free (mb);
+        return 1;
+    }
+
+    if (gnc_tree_model_split_reg_is_blank_trans (model, mb))
+    {
+        gtk_tree_iter_free (ma);
+        gtk_tree_iter_free (mb);
+        return -1;
+    }
 
     tnodea = ma->user_data2;
     tnodeb = mb->user_data2;
@@ -2285,10 +2332,21 @@ gnc_tree_control_split_reg_sort_by_account (GtkTreeModel *fm, GtkTreeIter *fa, G
     int depth;
     int retval;
 
-    model = GNC_TREE_MODEL_SPLIT_REG (gtc_sort_cb_filter_iters (fm, fa, fb, ma, mb));
+    model = GNC_TREE_MODEL_SPLIT_REG (gtc_sr_sort_cb_filter_iters (fm, fa, fb, ma, mb));
 
-    if (gnc_tree_model_split_reg_is_blank_trans (model, ma)) return 1;
-    if (gnc_tree_model_split_reg_is_blank_trans (model, mb)) return -1;
+    if (gnc_tree_model_split_reg_is_blank_trans (model, ma))
+    {
+        gtk_tree_iter_free (ma);
+        gtk_tree_iter_free (mb);
+        return 1;
+    }
+
+    if (gnc_tree_model_split_reg_is_blank_trans (model, mb))
+    {
+        gtk_tree_iter_free (ma);
+        gtk_tree_iter_free (mb);
+        return -1;
+    }
 
     tnodea = ma->user_data2;
     tnodeb = mb->user_data2;
@@ -2308,8 +2366,8 @@ gnc_tree_control_split_reg_sort_by_account (GtkTreeModel *fm, GtkTreeIter *fa, G
         if (anchor != NULL) // Registers and sub accounts.
         {
             // Get the split parent who has anchor as a parent, think of sub accounts.
-            accounta = gtc_trans_get_account_for_splits_ancestor (tnodea->data, anchor);
-            accountb = gtc_trans_get_account_for_splits_ancestor (tnodeb->data, anchor);
+            accounta = gtc_sr_trans_get_account_for_splits_ancestor (tnodea->data, anchor);
+            accountb = gtc_sr_trans_get_account_for_splits_ancestor (tnodeb->data, anchor);
 
             // Get the other split parent account.
             splita = xaccSplitGetOtherSplit (xaccTransFindSplitByAccount(tnodea->data, accounta));
@@ -2356,10 +2414,21 @@ gnc_tree_control_split_reg_sort_by_value (GtkTreeModel *fm, GtkTreeIter *fa, Gtk
     int na = 0, nb = 0, retval;
     gnc_numeric numa, numb;
 
-    model = GNC_TREE_MODEL_SPLIT_REG (gtc_sort_cb_filter_iters (fm, fa, fb, ma, mb));
+    model = GNC_TREE_MODEL_SPLIT_REG (gtc_sr_sort_cb_filter_iters (fm, fa, fb, ma, mb));
 
-    if (gnc_tree_model_split_reg_is_blank_trans (model, ma)) return 1;
-    if (gnc_tree_model_split_reg_is_blank_trans (model, mb)) return -1;
+    if (gnc_tree_model_split_reg_is_blank_trans (model, ma))
+    {
+        gtk_tree_iter_free (ma);
+        gtk_tree_iter_free (mb);
+        return 1;
+    }
+
+    if (gnc_tree_model_split_reg_is_blank_trans (model, mb))
+    {
+        gtk_tree_iter_free (ma);
+        gtk_tree_iter_free (mb);
+        return -1;
+    }
 
     tnodea = ma->user_data2;
     tnodeb = mb->user_data2;
@@ -2374,8 +2443,8 @@ gnc_tree_control_split_reg_sort_by_value (GtkTreeModel *fm, GtkTreeIter *fa, Gtk
     if (anchor != NULL) // Registers and sub accounts.
     {
         // Get the split parent who has anchor as a parent, think of sub accounts.
-        accounta = gtc_trans_get_account_for_splits_ancestor (tnodea->data, anchor);
-        accountb = gtc_trans_get_account_for_splits_ancestor (tnodeb->data, anchor);
+        accounta = gtc_sr_trans_get_account_for_splits_ancestor (tnodea->data, anchor);
+        accountb = gtc_sr_trans_get_account_for_splits_ancestor (tnodeb->data, anchor);
     }
     else // General ledger
     {

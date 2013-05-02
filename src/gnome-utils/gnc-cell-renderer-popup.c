@@ -385,7 +385,7 @@ gcrp_start_editing (GtkCellRenderer      *cell,
 	editable = g_object_new (GNC_TYPE_POPUP_ENTRY, NULL);
 
 	text = GTK_CELL_RENDERER_TEXT (cell)->text;
-        popup->cell_text = g_strdup(text);
+        popup->cell_text = text;
 
 	gnc_popup_entry_set_text (GNC_POPUP_ENTRY (editable), text ? text : "");
 	

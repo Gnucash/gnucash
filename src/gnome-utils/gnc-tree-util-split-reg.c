@@ -53,7 +53,7 @@ static QofLogModule log_module = GNC_MOD_LEDGER;
 
 /* Is current split a security account */
 static gboolean
-gtu_split_reg_use_security (GncTreeViewSplitReg *view)
+gtu_sr_use_security (GncTreeViewSplitReg *view)
 {
     RowDepth depth;
     Account *account = NULL;
@@ -87,7 +87,7 @@ gtu_split_reg_use_security (GncTreeViewSplitReg *view)
 
 /* Get the rate from the price db */
 static gnc_numeric
-gtu_split_reg_get_rate_from_db (gnc_commodity *from, gnc_commodity *to)
+gtu_sr_get_rate_from_db (gnc_commodity *from, gnc_commodity *to)
 {
     GNCPrice *prc;
     gnc_numeric rate_split;
@@ -127,24 +127,24 @@ gtu_split_reg_get_rate_from_db (gnc_commodity *from, gnc_commodity *to)
 
 /* Do we need an exchange rate */
 static gboolean
-gtu_split_reg_needs_exchange_rate (GncTreeViewSplitReg *view, Transaction *trans, Split *split)
+gtu_sr_needs_exchange_rate (GncTreeViewSplitReg *view, Transaction *trans, Split *split)
 {
     gnc_commodity *split_com, *txn_curr, *reg_com;
 
-    ENTER("gtu_split_reg_needs_exchange_rate - trans %p and split %p", trans, split);
+    ENTER("gtu_sr_needs_exchange_rate - trans %p and split %p", trans, split);
 
     txn_curr = xaccTransGetCurrency (trans);
     split_com = xaccAccountGetCommodity (xaccSplitGetAccount (split));
     if (split_com && txn_curr && !gnc_commodity_equiv (split_com, txn_curr))
     {
-        LEAVE("gtu_split_reg_needs_exchange_rate split_com to txn_curr return TRUE");
+        LEAVE("gtu_sr_needs_exchange_rate split_com to txn_curr return TRUE");
         return TRUE;
     }
 
     reg_com = gnc_tree_view_split_reg_get_reg_commodity (view);
     if (split_com && reg_com && !gnc_commodity_equiv (split_com, reg_com))
     {
-        LEAVE("gtu_split_reg_needs_exchange_rate split_com and reg_com return TRUE");
+        LEAVE("gtu_sr_needs_exchange_rate split_com and reg_com return TRUE");
         return TRUE;
     }
     LEAVE("No Exchange rate needed");
@@ -155,7 +155,7 @@ gtu_split_reg_needs_exchange_rate (GncTreeViewSplitReg *view, Transaction *trans
 /* Either sets the value and amount for split and returns TRUE, or
    does nothing and returns FALSE. */
 static gboolean
-gtu_split_reg_handle_exchange_rate (GncTreeViewSplitReg *view, gnc_numeric amount, Transaction *trans, Split *split, gboolean force)
+gtu_sr_handle_exchange_rate (GncTreeViewSplitReg *view, gnc_numeric amount, Transaction *trans, Split *split, gboolean force)
 {
     GncTreeModelSplitReg *model;
     XferDialog *xfer;
@@ -201,7 +201,7 @@ gtu_split_reg_handle_exchange_rate (GncTreeViewSplitReg *view, gnc_numeric amoun
     else
     {
         if (!rate_split_ok)
-            rate_split = gtu_split_reg_get_rate_from_db (reg_comm, xfer_comm);
+            rate_split = gtu_sr_get_rate_from_db (reg_comm, xfer_comm);
 
         /* create the exchange-rate dialog */
         xfer = gnc_xfer_dialog (NULL, NULL);
@@ -238,7 +238,7 @@ gtu_split_reg_handle_exchange_rate (GncTreeViewSplitReg *view, gnc_numeric amoun
 
 /* Returns the value denom */
 static int
-gtu_split_reg_get_value_denom (Split *split)
+gtu_sr_get_value_denom (Split *split)
 {
     gnc_commodity *currency;
     int denom;
@@ -258,7 +258,7 @@ gtu_split_reg_get_value_denom (Split *split)
 
 /* Returns the amount denom */
 static int
-gtu_split_reg_get_amount_denom (Split *split)
+gtu_sr_get_amount_denom (Split *split)
 {
     int denom;
 
@@ -446,6 +446,26 @@ gnc_tree_util_split_reg_template_get_fcred_entry (Split *split)
 }
 
 
+gchar *
+gnc_tree_util_split_reg_get_date_help (GDate *date)
+{
+    char string[1024];
+    struct tm tm;
+
+    if (g_date_valid (date))
+    {
+        struct tm tm;
+        memset (&tm, 0, sizeof (tm));
+        g_date_to_struct_tm (date, &tm);
+        qof_strftime (string, sizeof (string), "%A %d %B %Y", &tm);
+        return g_strdup (string);
+    }
+    else
+        return g_strdup (" ");
+
+
+}
+
 
 /*###########################################################################*/
 
@@ -612,7 +632,7 @@ gnc_tree_util_split_reg_get_debcred_entry (GncTreeViewSplitReg *view,
                 gnc_commodity *amount_commodity;
                 /* security register.  If this split has price and shares columns,
                    use the value, otherwise use the amount.  */
-                if (gtu_split_reg_use_security (view))
+                if (gtu_sr_use_security (view))
                 {
                     amount = xaccSplitGetValue (split);
                     amount_commodity = currency;
@@ -707,9 +727,9 @@ gnc_tree_util_split_reg_set_value_for (GncTreeViewSplitReg *view, Transaction *t
 
     window = gnc_tree_view_split_reg_get_parent (view);
 
-    if (gtu_split_reg_needs_exchange_rate (view, trans, split))
+    if (gtu_sr_needs_exchange_rate (view, trans, split))
     {
-        if (gtu_split_reg_handle_exchange_rate (view, input, trans, split, force))
+        if (gtu_sr_handle_exchange_rate (view, input, trans, split, force))
         {
             ; //FIXME ??????
         }
@@ -1043,7 +1063,7 @@ gnc_tree_util_set_number_for_input (GncTreeViewSplitReg *view, Transaction *tran
 
     if (recalc_amount)
     {
-        denom = gtu_split_reg_get_amount_denom (split);
+        denom = gtu_sr_get_amount_denom (split);
 
         if (amount_changed)
         {
@@ -1092,7 +1112,7 @@ gnc_tree_util_set_number_for_input (GncTreeViewSplitReg *view, Transaction *tran
 
     if (recalc_value)
     {
-        denom = gtu_split_reg_get_value_denom (split);
+        denom = gtu_sr_get_value_denom (split);
 
         if (value_changed)
         {
@@ -1162,7 +1182,7 @@ gnc_tree_util_set_value_for_amount (GncTreeViewSplitReg *view, Transaction *tran
     amount = xaccSplitGetAmount (split);
     value = xaccSplitGetValue (split);
 
-    denom = gtu_split_reg_get_value_denom (split);
+    denom = gtu_sr_get_value_denom (split);
 
     split_rate = gnc_numeric_div (value, amount, GNC_DENOM_AUTO, GNC_HOW_DENOM_EXACT);
     if (gnc_numeric_check (split_rate) != GNC_ERROR_OK)

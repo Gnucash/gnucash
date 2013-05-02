@@ -49,6 +49,10 @@ const char * gnc_tree_util_split_reg_template_get_fdebt_entry (Split *split);
 const char * gnc_tree_util_split_reg_template_get_fcred_entry (Split *split);
 
 
+gchar * gnc_tree_util_split_reg_get_date_help (GDate *date);
+
+
+
 
 gboolean gnc_tree_util_split_reg_is_multi (Split *split);
 
