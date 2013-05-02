@@ -190,6 +190,7 @@ src/gnome/dialog-print-check2.c
 src/gnome/dialog-print-check.c
 src/gnome/dialog-progress.c
 src/gnome/dialog-sx-editor.c
+src/gnome/dialog-sx-editor2.c
 src/gnome/dialog-sx-from-trans.c
 src/gnome/dialog-sx-since-last-run.c
 src/gnome/dialog-tax-info.c

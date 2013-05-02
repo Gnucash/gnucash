@@ -61,6 +61,9 @@
 #include "dialog-utils.h"
 #include "SX-book.h"
 #include "dialog-sx-editor.h"
+/*################## Added for Reg2 #################*/
+#include "dialog-sx-editor2.h"
+/*################## Added for Reg2 #################*/
 #include "dialog-sx-from-trans.h"
 #include "assistant-stock-split.h"
 #include "gnc-gconf-utils.h"
@@ -79,7 +82,6 @@
 #include "gnc-window.h"
 #include "gnc-main-window.h"
 #include "gnc-session.h"
-#include "gnucash-sheet.h"
 #include "dialog-lot-viewer.h"
 #include "Scrub.h"
 #include "qof.h"
@@ -1120,11 +1122,9 @@ gnc_plugin_page_register2_create_widget (GncPluginPage *plugin_page)
         gnc_ppr_update_date_filter (page, FALSE);
     }
 
-//    gnc_ledger_display2_refresh (priv->ledger);
-
-    /* This sets the default selection on load */
-    gnc_tree_view_split_reg_default_selection (view);
-
+    /* This sets the default selection on load, not required for templates */
+    if (!gnc_tree_model_split_reg_get_template (model))
+       gnc_tree_view_split_reg_default_selection (view);
 
     plugin_page->summarybar = gsr2_create_summary_bar(priv->gsr);
     if (plugin_page->summarybar)
@@ -3059,7 +3059,7 @@ gnc_plugin_page_register2_cmd_style_double_line (GtkToggleAction *action,
 
     ENTER("(action %p, plugin_page %p)", action, plugin_page);
 
-    g_return_if_fail (GTK_IS_ACTION(action));
+    g_return_if_fail (GTK_IS_ACTION (action));
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER2 (plugin_page));
 
     priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE (plugin_page);
@@ -3074,6 +3074,10 @@ gnc_plugin_page_register2_cmd_style_double_line (GtkToggleAction *action,
 
         // This will re-display the view.
         gnc_tree_view_split_reg_set_format (view);
+
+        // This will update the row colors in anything but ledgers
+        if (model->style != REG2_STYLE_LEDGER)
+            gnc_tree_view_split_reg_change_vis_rows (view);
     }
     LEAVE(" ");
 }
@@ -3506,7 +3510,7 @@ gnc_plugin_page_register2_cmd_schedule (GtkAction *action,
 
                 if (theSX)
                 {
-                    gnc_ui_scheduled_xaction_editor_dialog_create (theSX, FALSE);
+                    gnc_ui_scheduled_xaction_editor_dialog_create2 (theSX, FALSE);
                     LEAVE(" ");
                     return;
                 }

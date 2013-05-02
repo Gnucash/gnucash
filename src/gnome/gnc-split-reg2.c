@@ -281,7 +281,7 @@ gsr2_create_table (GNCSplitReg2 *gsr)
 
     gnc_tree_view_configure_columns (GNC_TREE_VIEW (view));
 
-    if (ledger_type == LD2_GL)
+    if (ledger_type == LD2_GL && model->type == GENERAL_LEDGER2)
         gnc_tree_view_set_show_column_menu (GNC_TREE_VIEW (view), TRUE);
     else
         gnc_tree_view_set_show_column_menu (GNC_TREE_VIEW (view), FALSE);

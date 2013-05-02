@@ -162,6 +162,9 @@ gboolean gnc_tree_view_split_reg_scroll_to_cell (GncTreeViewSplitReg *view);
 
 void gnc_tree_view_split_reg_refilter (GncTreeViewSplitReg *view);
 
+/* Change all visable view entries */
+void gnc_tree_view_split_reg_change_vis_rows (GncTreeViewSplitReg *view);
+
 /*************************************************************************************/
 
 void gnc_tree_view_split_reg_delete_current_split (GncTreeViewSplitReg *view);

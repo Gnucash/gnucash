@@ -42,6 +42,14 @@ gboolean gnc_tree_util_split_reg_needs_conv_rate (GncTreeViewSplitReg *view,
 
 const char * gnc_tree_util_split_reg_get_transfer_entry (Split *split, gboolean *is_multi);
 
+const char * gnc_tree_util_split_reg_template_get_transfer_entry (Split *split);
+
+const char * gnc_tree_util_split_reg_template_get_fdebt_entry (Split *split);
+
+const char * gnc_tree_util_split_reg_template_get_fcred_entry (Split *split);
+
+
+
 gboolean gnc_tree_util_split_reg_is_multi (Split *split);
 
 gboolean gnc_tree_util_split_reg_needs_amount (GncTreeViewSplitReg *view, Split *split);
@@ -61,8 +69,14 @@ gboolean gnc_tree_util_split_reg_get_debcred_entry (GncTreeViewSplitReg *view,
                                                     gboolean is_blank,gnc_numeric *ret_num,
                                                     GNCPrintAmountInfo *ret_print_info);
 
+void gnc_tree_util_set_number_for_input (GncTreeViewSplitReg *view, Transaction *trans,
+                                         Split *split, gnc_numeric input, gint viewcol);
 
+void gnc_tree_util_set_value_for_amount (GncTreeViewSplitReg *view, Transaction *trans,
+                                         Split *split, gnc_numeric input);
 
+gnc_numeric gnc_tree_util_get_rate_for (GncTreeViewSplitReg *view, Transaction *trans,
+                                        Split *split, gboolean is_blank);
 
 /*****************************************************************************/
 

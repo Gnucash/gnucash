@@ -616,8 +616,11 @@ refresh_handler (GHashTable *changes, gpointer user_data)
     splits = qof_query_run (ld->query);
 
 //FIXME Not Needed ?    gnc_ledger_display2_set_watches (ld, splits);
-
-    gnc_ledger_display2_refresh_internal (ld, splits);
+    //gconf changes come this way, we only want a full refresh for SEARCH-LEDGER2
+    if (ld->model->type == SEARCH_LEDGER2)
+        gnc_ledger_display2_refresh_internal (ld, splits);
+    else
+        gnc_tree_view_split_reg_change_vis_rows (ld->view);
     LEAVE(" ");
 }
 
@@ -912,6 +915,7 @@ gnc_ledger_display2_refresh_internal (GNCLedgerDisplay2 *ld, GList *splits)
     {
 	/* This is used for the reloading of registers to refresh them and to update the search_ledger */
         ld->loading = TRUE;
+
 	s_model = gtk_tree_view_get_model (GTK_TREE_VIEW (ld->view)); // this is the sort model
         f_model = gtk_tree_model_sort_get_model (GTK_TREE_MODEL_SORT (s_model)); // this is the filter model
         model = gtk_tree_model_filter_get_model (GTK_TREE_MODEL_FILTER (f_model)); // our model
@@ -921,13 +925,9 @@ gnc_ledger_display2_refresh_internal (GNCLedgerDisplay2 *ld, GList *splits)
         g_object_ref (model);
 
         gnc_tree_view_split_reg_block_selection (ld->view, TRUE); // This blocks the tree selection
-	
         gtk_tree_view_set_model (GTK_TREE_VIEW (ld->view), NULL); // Detach sort model from view
-	
         gnc_tree_model_split_reg_load (ld->model, splits, gnc_ledger_display2_leader (ld)); //reload splits
-
         gtk_tree_view_set_model (GTK_TREE_VIEW (ld->view), GTK_TREE_MODEL (s_model)); // Re-attach sort model to view
-
         gnc_tree_view_split_reg_block_selection (ld->view, FALSE); // This unblocks the tree selection
 
         /* Set the default selection start position */

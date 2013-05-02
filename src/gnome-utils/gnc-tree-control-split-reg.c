@@ -527,85 +527,6 @@ gnc_tree_control_split_reg_exchange_rate (GncTreeViewSplitReg *view)
 }
 
 
-
-#ifdef skip
-
-/**
- * Schedules the current transaction for recurring-entry.
- * If the selected transaction was created from a scheduled transaction,
- * opens the editor for that Scheduled Transaction.
- **/
-void
-gnc_tree_control_split_reg_schedule_current_trans (GncTreeViewSplitReg *view)
-{
-    Transaction *trans;
-
-    trans = gnc_tree_view_split_reg_get_current_trans (view);
-
-    if (trans == NULL)
-        return;
-
-    /* See if we were asked to schedule a blank trans. */
-    if (trans == gnc_tree_control_split_reg_get_blank_trans (view))
-        return;
-
-    /* Test for read only */
-    if (gtc_is_trans_readonly_and_warn (view, trans))
-        return;
-
-    /* See if we are being edited in another register */
-    if (gtc_trans_test_for_edit (view, trans))
-        return;
-
-    /* Make sure we ask to commit any changes before we procede */
-    if (gtc_trans_open_and_warn (view, trans))
-        return;
-
-    /* If the transaction has a sched-xact KVP frame, then go to the editor
-     * for the existing SX; otherwise, do the sx-from-trans dialog. */
-    {
-        kvp_frame *txn_frame;
-        kvp_value *kvp_val;
-        /* set a kvp-frame element in the transaction indicating and
-         * pointing-to the SX this was created from. */
-        txn_frame = xaccTransGetSlots (trans);
-        if ( txn_frame != NULL )
-        {
-            kvp_val = kvp_frame_get_slot (txn_frame, "from-sched-xaction");
-            if (kvp_val)
-            {
-                GncGUID *fromSXId = kvp_value_get_guid (kvp_val);
-                SchedXaction *theSX = NULL;
-                GList *sxElts;
-
-                /* Get the correct SX */
-                for ( sxElts = gnc_book_get_schedxactions (gnc_get_current_book())->sx_list;
-                        (!theSX) && sxElts;
-                        sxElts = sxElts->next )
-                {
-                    SchedXaction *sx = (SchedXaction*)sxElts->data;
-                    theSX =
-                        ( ( guid_equal (xaccSchedXactionGetGUID (sx), fromSXId))
-                          ? sx : NULL );
-                }
-
-                if (theSX)
-                {
-                    gnc_ui_scheduled_xaction_editor_dialog_create (theSX, FALSE);
-                    return;
-                }
-            }
-        }
-    }
-    gnc_sx_create_from_trans(pending_trans);
-}
-
-
-#endif
-
-
-
-
 /* Void current transaction */
 void
 gnc_tree_control_split_reg_void_current_trans (GncTreeViewSplitReg *view, const char *reason)
@@ -2048,6 +1969,9 @@ gnc_tree_control_split_reg_sort_changed_cb (GtkTreeSortable *sortable, gpointer 
     /* Save the sort depth to gconf */
     gconf_section = gnc_tree_view_get_gconf_section (GNC_TREE_VIEW (view));
     gnc_gconf_set_int (gconf_section, "sort_depth", view->sort_depth, NULL);
+
+    /* scroll when view idle */
+    g_idle_add ((GSourceFunc) gnc_tree_view_split_reg_scroll_to_cell, view);
 
     LEAVE("sort_col %d, sort_direction is %d  sort_depth is %d", view->sort_col, view->sort_direction, view->sort_depth );
 }

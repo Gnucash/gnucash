@@ -2216,16 +2216,13 @@ gboolean xaccTransIsReadonlyByPostedDate(const Transaction *trans)
 
 gboolean xaccTransInFutureByPostedDate (const Transaction *trans)
 {
-    GDate date_now;
-    GDate trans_date;
+    time64 present;
     gboolean result;
     g_assert(trans);
 
-    trans_date = xaccTransGetDatePostedGDate (trans);
+    present = gnc_time64_get_today_end ();
 
-    gnc_gdate_set_time64 (&date_now, gnc_time (NULL));
-
-    if (g_date_compare (&trans_date, &date_now) > 0)
+    if (trans->date_posted.tv_sec > present)
         result = TRUE;
     else
         result = FALSE;

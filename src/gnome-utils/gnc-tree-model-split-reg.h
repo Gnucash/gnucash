@@ -121,7 +121,7 @@ typedef struct
     SplitRegisterStyle2          style;                 /**<FIXME ? This may be the wrong place for these, may be the view ? */
     gboolean                     use_double_line;       /**<FIXME ? As above, whether to use two lines per transaction */
 
-    gboolean                     is_template;
+    gboolean                     is_template;           /**< Are we using a template */
 
     gboolean                     use_accounting_labels; /**< whether to use accounting Labels */
     gboolean                     separator_changed;     /**< whether the separator has changed */ 
@@ -133,7 +133,6 @@ typedef struct
     cleared_match_t              filter_cleared_match;  // Status for Filter.
     time64                       filter_start_time;     // Start time for Filter.
     time64                       filter_end_time;       // End time for Filter.
-
 
 }GncTreeModelSplitReg;
 
@@ -178,8 +177,14 @@ gnc_tree_model_split_reg_new (SplitRegisterType2 reg_type, SplitRegisterStyle2 s
 /** Load the model from a slist and set default account for register. */
 void gnc_tree_model_split_reg_load (GncTreeModelSplitReg *model, GList * slist, Account *default_account);
 
-/** FIXME Not sure what this is for yet. */
+/** Sets the template account. */
 void gnc_tree_model_split_reg_set_template_account (GncTreeModelSplitReg *model, Account *template_account);
+
+/** Returns the template account. */
+Account * gnc_tree_model_split_reg_get_template_account (GncTreeModelSplitReg *model);
+
+/** Return TRUE if this is a template register. */
+gboolean gnc_tree_model_split_reg_get_template (GncTreeModelSplitReg *model);
 
 /** Destroy the model. */
 void gnc_tree_model_split_reg_destroy (GncTreeModelSplitReg *model);
@@ -237,6 +242,9 @@ gboolean gnc_tree_model_split_reg_set_blank_split_parent (
 /* Return the blank split */
 Split * gnc_tree_model_split_get_blank_split (GncTreeModelSplitReg *model);
 
+/* Return TRUE if blank_split is on trans */
+gboolean gnc_tree_model_split_reg_is_blank_split_parent (GncTreeModelSplitReg *model, Transaction *trans);
+
 /* Return the blank trans */
 Transaction * gnc_tree_model_split_get_blank_trans (GncTreeModelSplitReg *model);
 
@@ -264,6 +272,10 @@ GtkTreePath * gnc_tree_model_split_reg_get_path_to_split_and_trans (
 
 /* Returns TRUE if iter is a blank transaction */
 gboolean gnc_tree_model_split_reg_is_blank_trans (GncTreeModelSplitReg *model, GtkTreeIter *iter);
+
+/* Emit change signal for all visable model entries */
+void gnc_tree_model_split_reg_change_vis_rows (GncTreeModelSplitReg *model,
+               GtkTreePath *start_path, GtkTreePath *end_path);
 
 /*****************************************************************************/
 

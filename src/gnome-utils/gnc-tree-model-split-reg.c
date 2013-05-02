@@ -94,35 +94,24 @@ static void update_completion_models (GncTreeModelSplitReg *model);
 /** The instance private data for the split register tree model. */
 struct GncTreeModelSplitRegPrivate
 {
-    QofBook *book;              // GNC Book
-    Account *anchor;            // Account of register
+    QofBook *book;                   // GNC Book
+    Account *anchor;                 // Account of register
 
-    GList *tlist;               // List of unique transactions derived from the query slist in same order
+    GList *tlist;                    // List of unique transactions derived from the query slist in same order
 
-    Transaction *btrans;        // The Blank transaction
+    Transaction *btrans;             // The Blank transaction
 
-    Split *bsplit;              // The Blank split
-    GList *bsplit_node;         // never added to any list, just for representation of the iter
-    GList *bsplit_parent_node;  // this equals the tnode of the transaction with the blank split
+    Split *bsplit;                   // The Blank split
+    GList *bsplit_node;              // never added to any list, just for representation of the iter
+    GList *bsplit_parent_node;       // this equals the tnode of the transaction with the blank split
 
+    gboolean display_subacc;         // Are we displaying subaccounts
+    gboolean display_gl;             // Is this the General ledger
 
-    gboolean display_subacc;    // Are we displaying subaccounts
-    gboolean display_gl;        // Is this the General ledger
+    const GncGUID *template_account; // The template account which template transaction should belong to
 
-
-
-/* vvvv ### This is stuff I have dumped here from old reg #### vvvv */
-
-    /* The template account which template transaction should belong to */
-    GncGUID template_account;
-
-    /* User data for users of SplitRegisters */
-    gpointer user_data; //FIXME This is used to get parent window, maybe move to view
-
-    /* hook to get parent widget */
-    SRGetParentCallback2 get_parent; //FIXME This is used to get parent window, maybe move to view
-
-/* ^^^^ #### This is stuff I have dumped here from old reg #### ^^^^ */
+    gpointer             user_data;  // User data for users of SplitRegisters, used to get parent window
+    SRGetParentCallback2 get_parent; // hook to get parent widget, used to get parent window
 
     GtkListStore *description_list;  // description field autocomplete list
     GtkListStore *notes_list;        // notes field autocomplete list
@@ -495,10 +484,9 @@ gnc_tree_model_split_reg_new (SplitRegisterType2 reg_type, SplitRegisterStyle2 s
     return model;
 }
 
-
-/* ForEach function to remove all model entries */
+/* ForEach function to walk the list of model entries */
 static gboolean
-gtm_remove_foreach_func (GtkTreeModel *model,
+gtm_split_reg_foreach_func (GtkTreeModel *model,
               GtkTreePath  *path,
               GtkTreeIter  *iter,
               GList       **rowref_list)
@@ -513,6 +501,39 @@ gtm_remove_foreach_func (GtkTreeModel *model,
 }
 
 
+/* Emit change signal for all visable model entries */
+void
+gnc_tree_model_split_reg_change_vis_rows (GncTreeModelSplitReg *model, GtkTreePath *start_path, GtkTreePath *end_path)
+{
+    GList *rr_list = NULL;    /* list of GtkTreeRowReferences */
+    GList *node;
+    GtkTreeIter iter;
+
+    gtk_tree_model_foreach (GTK_TREE_MODEL(model), (GtkTreeModelForeachFunc)gtm_split_reg_foreach_func, &rr_list);
+
+    for ( node = rr_list;  node != NULL;  node = node->next )
+    {
+        GtkTreePath *path;
+        path = gtk_tree_row_reference_get_path ((GtkTreeRowReference*)node->data);
+
+        if ((path) && gnc_tree_model_split_reg_get_iter (GTK_TREE_MODEL (model), &iter, path))
+        {
+            PINFO("path is - '%s'", gtk_tree_path_to_string (path));
+
+            // Only emit change if path > start_path and < end_path
+            if ((gtk_tree_path_compare (path, end_path) == -1) && (gtk_tree_path_compare (start_path, path) == -1))
+            {
+                PINFO("row_changed at path - '%s'", gtk_tree_path_to_string (path));
+                gtk_tree_model_row_changed (GTK_TREE_MODEL (model), path, &iter);
+            }
+            gtk_tree_path_free (path);
+        }
+    }
+    g_list_foreach (rr_list, (GFunc) gtk_tree_row_reference_free, NULL);
+    g_list_free (rr_list);
+}
+
+
 /* Remove all model entries */
 static void
 gtm_remove_all_rows (GncTreeModelSplitReg *model)
@@ -520,7 +541,7 @@ gtm_remove_all_rows (GncTreeModelSplitReg *model)
     GList *rr_list = NULL;    /* list of GtkTreeRowReferences to remove */
     GList *node;
 
-    gtk_tree_model_foreach (GTK_TREE_MODEL(model), (GtkTreeModelForeachFunc)gtm_remove_foreach_func, &rr_list);
+    gtk_tree_model_foreach (GTK_TREE_MODEL(model), (GtkTreeModelForeachFunc)gtm_split_reg_foreach_func, &rr_list);
 
     rr_list = g_list_reverse (rr_list);
 
@@ -573,15 +594,36 @@ gnc_tree_model_split_reg_load (GncTreeModelSplitReg *model, GList *slist, Accoun
 }
 
 
-/*FIXME Not sure about this */
+/* Set the template account for this register. */
 void
 gnc_tree_model_split_reg_set_template_account (GncTreeModelSplitReg *model, Account *template_account)
 {
     GncTreeModelSplitRegPrivate *priv;
 
-//g_print("gnc_tree_model_split_reg_set_template_account\n");
     priv = model->priv;
-    priv->template_account = *xaccAccountGetGUID (template_account);
+    priv->template_account = xaccAccountGetGUID (template_account);
+}
+
+
+/* Return the template account for this register. */
+Account *
+gnc_tree_model_split_reg_get_template_account (GncTreeModelSplitReg *model)
+{
+    GncTreeModelSplitRegPrivate *priv;
+    Account *acct;
+
+    priv = model->priv;
+
+    acct = xaccAccountLookup (priv->template_account, priv->book);
+    return acct;
+}
+
+
+/* Return TRUE if this is a template register. */
+gboolean
+gnc_tree_model_split_reg_get_template (GncTreeModelSplitReg *model)
+{
+    return model->is_template;
 }
 
 
@@ -1749,6 +1791,26 @@ gnc_tree_model_split_reg_get_split_and_trans (
     return TRUE;
 }
 
+/* Return TRUE if blank_split is on trans */
+gboolean
+gnc_tree_model_split_reg_is_blank_split_parent (GncTreeModelSplitReg *model, Transaction *trans)
+{
+    GncTreeModelSplitRegPrivate *priv;
+    GList *node;
+
+    priv = model->priv;
+
+    node = priv->bsplit_parent_node;
+
+    if (node == NULL)
+        return FALSE;
+
+    if (trans == priv->bsplit_parent_node->data)
+        return TRUE;
+    else
+        return FALSE;
+}
+
 
 /* Return the tree path of trans and split
    if trans and split NULL, return last in list */
@@ -2838,9 +2900,14 @@ gnc_tree_model_split_reg_event_handler (QofInstance *entity,
 
             if (!g_list_find (priv->tlist, trans) && priv->display_gl)
             {
-                DEBUG("Insert trans %p for gl (%s)", trans, name);
-                gtm_insert_trans (model, trans);
-                g_signal_emit_by_name (model, "refresh_trans", trans);
+                gnc_commodity *split_com;
+                split_com = xaccAccountGetCommodity (acc);
+                if (!g_strcmp0 (gnc_commodity_get_namespace (split_com), "template") == 0)
+                {
+                    DEBUG("Insert trans %p for gl (%s)", trans, name);
+                    gtm_insert_trans (model, trans);
+                    g_signal_emit_by_name (model, "refresh_trans", trans);
+                }
             }
             else if (!g_list_find (priv->tlist, trans) && ((xaccAccountHasAncestor (acc, priv->anchor) && priv->display_subacc) || acc == priv->anchor ))
             {

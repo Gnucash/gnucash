@@ -236,6 +236,45 @@ gtu_split_reg_handle_exchange_rate (GncTreeViewSplitReg *view, gnc_numeric amoun
 }
 
 
+/* Returns the value denom */
+static int
+gtu_split_reg_get_value_denom (Split *split)
+{
+    gnc_commodity *currency;
+    int denom;
+
+    currency = xaccTransGetCurrency (xaccSplitGetParent (split));
+    denom = gnc_commodity_get_fraction (currency);
+    if (denom == 0)
+    {
+        gnc_commodity *commodity = gnc_default_currency ();
+        denom = gnc_commodity_get_fraction (commodity);
+        if (denom == 0)
+            denom = 100;
+    }
+    return denom;
+}
+
+
+/* Returns the amount denom */
+static int
+gtu_split_reg_get_amount_denom (Split *split)
+{
+    int denom;
+
+    denom = xaccAccountGetCommoditySCU (xaccSplitGetAccount (split));
+    if (denom == 0)
+    {
+        gnc_commodity *commodity = gnc_default_currency ();
+        denom = gnc_commodity_get_fraction (commodity);
+        if (denom == 0)
+            denom = 100;
+    }
+    return denom;
+}
+
+
+
 /*###########################################################################*/
 
 
@@ -353,7 +392,58 @@ gnc_tree_util_split_reg_get_transfer_entry (Split *split, gboolean *is_multi)
 }
 
 
+/* Return the string entry for transfer column when template */
+const char *
+gnc_tree_util_split_reg_template_get_transfer_entry (Split *split)
+{
+    static char *name = NULL;
 
+    kvp_frame *kvpf;
+
+    if (!split)
+        return NULL;
+
+    kvpf = xaccSplitGetSlots (split);
+
+    g_free (name);
+
+    if (kvpf)
+    {
+        Account *account;
+        GncGUID *guid;
+
+        guid = kvp_value_get_guid(
+                   kvp_frame_get_slot_path (kvpf, "sched-xaction", "account", NULL));
+
+        account = xaccAccountLookup (guid, gnc_get_current_book ());
+
+        name = account ? gnc_get_account_name_for_register (account) : NULL;
+    }
+    else
+        name = NULL;
+
+    return name;
+}
+
+
+const char *
+gnc_tree_util_split_reg_template_get_fdebt_entry (Split *split)
+{
+    kvp_frame *kvpf = xaccSplitGetSlots (split);
+
+    return kvp_value_get_string(
+               kvp_frame_get_slot_path (kvpf, "sched-xaction", "debit-formula", NULL));
+}
+
+
+const char *
+gnc_tree_util_split_reg_template_get_fcred_entry (Split *split)
+{
+    kvp_frame *kvpf = xaccSplitGetSlots (split);
+
+    return kvp_value_get_string(
+               kvp_frame_get_slot_path (kvpf, "sched-xaction", "credit-formula", NULL));
+}
 
 
 
@@ -766,7 +856,345 @@ gnc_tree_util_split_reg_save_amount_values (GncTreeViewSplitReg *view, Transacti
 
 
 
+/* Takes the input with column and sets the price / amount / value so they are consistent */
+void
+gnc_tree_util_set_number_for_input (GncTreeViewSplitReg *view, Transaction *trans, Split *split, gnc_numeric input, gint viewcol)
+{
+    GncTreeModelSplitReg *model;
+    gnc_numeric  price;
+    gnc_numeric  amount;
+    gnc_numeric  value;
 
+    gboolean price_changed = FALSE;   // Price of each share
+    gboolean value_changed = FALSE;   // Total value of shares
+    gboolean amount_changed = FALSE;  // No of shares
+
+    gboolean recalc_amount = FALSE;
+    gboolean recalc_price = FALSE;
+    gboolean recalc_value = FALSE;
+    gboolean expanded = FALSE;
+    int denom;
+    Account *account;
+
+    ENTER("trans %p and split %p and input is %s and viewcol is %d", trans, split, gnc_numeric_to_string (input), viewcol);
+
+    model = gnc_tree_view_split_reg_get_model_from_view (view);
+
+    account = gnc_tree_model_split_reg_get_anchor (model);
+
+    expanded = gnc_tree_view_split_reg_trans_expanded (view, trans);
+
+    if (!account)
+        account = xaccSplitGetAccount (split);
+
+    if (!xaccAccountIsPriced (account))
+        return;
+
+    /* If we are using commodity trading accounts then the value may
+       not really be the value.  Punt if so. */
+    if (xaccTransUseTradingAccounts (xaccSplitGetParent (split)))
+    {
+        gnc_commodity *acc_commodity;
+        acc_commodity = xaccAccountGetCommodity (account);
+        if (!(xaccAccountIsPriced (account) || !gnc_commodity_is_iso (acc_commodity)))
+            return;
+    }
+
+    if (gnc_numeric_zero_p (input))
+    {
+        xaccSplitSetValue (split, input);
+        xaccSplitSetAmount (split, input);
+        LEAVE("zero");
+        return;
+    }
+
+    amount = xaccSplitGetAmount (split);
+    value = xaccSplitGetValue (split);
+
+    if (viewcol == COL_AMTVAL && !expanded)
+    {
+        value_changed = TRUE;
+        if (gnc_numeric_zero_p (amount))
+        {
+            xaccSplitSetValue (split, input);
+            xaccSplitSetAmount (split, input);
+            LEAVE("");
+            return;
+        }
+    }
+    else if (viewcol == COL_AMTVAL && expanded)
+    {
+        amount_changed = TRUE;
+        if (gnc_numeric_zero_p (value))
+        {
+            xaccSplitSetValue (split, input);
+            xaccSplitSetAmount (split, input);
+            LEAVE("");
+            return;
+        }
+    }
+
+    if (viewcol == COL_PRICE)
+    {
+        price_changed = TRUE;
+        if (gnc_numeric_zero_p (value))
+        {
+            amount = gnc_numeric_create (1,1);
+            value = gnc_numeric_mul (input, amount, GNC_DENOM_AUTO, GNC_HOW_RND_ROUND);
+            xaccSplitSetValue (split, input);
+            xaccSplitSetAmount (split, amount);
+            LEAVE("");
+            return;
+        }
+    }
+
+    if ((viewcol == COL_CREDIT || viewcol == COL_DEBIT) && !expanded)
+    {
+        amount_changed = TRUE;
+        if (gnc_numeric_zero_p (value))
+        {
+            xaccSplitSetValue (split, input);
+            xaccSplitSetAmount (split, input);
+            LEAVE("");
+            return;
+        }
+    }
+    else if ((viewcol == COL_CREDIT || viewcol == COL_DEBIT) && expanded)
+    {
+        value_changed = TRUE;
+        if (gnc_numeric_zero_p (value))
+        {
+            xaccSplitSetValue (split, input);
+            xaccSplitSetAmount (split, input);
+            LEAVE("");
+            return;
+        }
+    }
+
+    DEBUG("value_changed %d, price_changed %d, amount_changed %d", value_changed, price_changed, amount_changed);
+
+    {
+        int choice;
+        int default_value;
+        GList *node;
+        GList *radio_list = NULL;
+        const char *title = _("Recalculate Transaction");
+        const char *message = _("The values entered for this transaction "
+                                "are inconsistent. Which value would you "
+                                "like to have recalculated?");
+
+        if (amount_changed)
+            radio_list = g_list_append (radio_list,
+                                        g_strdup_printf ("%s (%s)",
+                                                _("_Shares"), _("Changed")));
+        else
+            radio_list = g_list_append (radio_list, g_strdup (_("_Shares")));
+
+        if (price_changed)
+            radio_list = g_list_append (radio_list,
+                                        g_strdup_printf ("%s (%s)",
+                                                _("_Price"), _("Changed")));
+        else
+            radio_list = g_list_append (radio_list, g_strdup (_("_Price")));
+
+        if (value_changed)
+            radio_list = g_list_append (radio_list,
+                                        g_strdup_printf ("%s (%s)",
+                                                _("_Value"), _("Changed")));
+        else
+            radio_list = g_list_append (radio_list, g_strdup (_("_Value")));
+
+        if (price_changed)
+            default_value = 0;  /* change the amount / shares */
+        else
+            default_value = 1;  /* change the value */
+
+        choice = gnc_choose_radio_option_dialog
+                 (gnc_tree_view_split_reg_get_parent (view),
+                  title,
+                  message,
+                  _("_Recalculate"),
+                  default_value,
+                  radio_list);
+
+        for (node = radio_list; node; node = node->next)
+            g_free (node->data);
+
+        g_list_free (radio_list);
+
+        switch (choice)
+        {
+        case 0: /* Modify number of shares */
+            recalc_amount = TRUE;
+            break;
+        case 1: /* Modify the share price */
+            recalc_price = TRUE;
+            break;
+        case 2: /* Modify total value */
+            recalc_value = TRUE;
+            break;
+        default: /* Cancel */
+            LEAVE(" " );
+            return;
+        }
+    }
+
+    DEBUG("recalc_value %d, recalc_price %d, recalc_amount %d", recalc_value, recalc_price, recalc_amount);
+
+    if (recalc_amount)
+    {
+        denom = gtu_split_reg_get_amount_denom (split);
+
+        if (amount_changed)
+        {
+            LEAVE("");
+            return;
+        }
+
+        if (price_changed)
+            price = input;
+        else
+            price = gnc_numeric_div (value, amount, GNC_DENOM_AUTO, GNC_HOW_DENOM_EXACT);
+
+        if (value_changed)
+        {
+            xaccSplitSetValue (split, input);
+            amount = gnc_numeric_div (input, price, denom, GNC_HOW_RND_ROUND_HALF_UP);
+            xaccSplitSetAmount (split, amount);
+        }
+        else
+        {
+            amount = gnc_numeric_div (value, price, denom, GNC_HOW_RND_ROUND_HALF_UP);
+            xaccSplitSetAmount (split, amount);
+        }
+    }
+
+    if (recalc_price)
+    {
+        if (price_changed)
+        {
+            LEAVE("");
+            return;
+        }
+
+        if (amount_changed)
+        {
+            xaccSplitSetAmount (split, input);
+            xaccSplitSetValue (split, value);
+        }
+
+        if (value_changed)
+        {
+            xaccSplitSetValue (split, input);
+            xaccSplitSetAmount (split, amount);
+        }
+    }
+
+    if (recalc_value)
+    {
+        denom = gtu_split_reg_get_value_denom (split);
+
+        if (value_changed)
+        {
+            LEAVE("");
+            return;
+        }
+
+        if (price_changed)
+            price = input;
+        else
+            price = gnc_numeric_div (value, amount, GNC_DENOM_AUTO, GNC_HOW_DENOM_EXACT);
+
+        if (amount_changed)
+        {
+            xaccSplitSetAmount (split, input);
+            value = gnc_numeric_mul (input, price, denom, GNC_HOW_RND_ROUND_HALF_UP);
+            xaccSplitSetValue (split, value);
+        }
+        else
+        {
+            value = gnc_numeric_mul (amount, price, denom, GNC_HOW_RND_ROUND_HALF_UP);
+            xaccSplitSetValue (split, value);
+        }
+    }
+
+    /* If the number of splits is two, change other split to balance */
+    if (!gnc_tree_util_split_reg_is_multi (split) && expanded)
+    {
+        Split *osplit;
+        gnc_commodity *osplit_com;
+
+        osplit = xaccSplitGetOtherSplit (split);
+
+        value = xaccSplitGetValue (split);
+
+        osplit_com = xaccAccountGetCommodity (xaccSplitGetAccount (osplit));
+
+        if (gnc_commodity_is_currency (osplit_com))
+        {
+            xaccSplitSetValue (osplit, gnc_numeric_neg (value));
+            xaccSplitSetAmount (osplit, gnc_numeric_neg (value));
+        }
+    }
+    LEAVE("");
+}
+
+
+/* Set the value for the given input amount */
+void
+gnc_tree_util_set_value_for_amount (GncTreeViewSplitReg *view, Transaction *trans, Split *split, gnc_numeric input)
+{
+    gnc_numeric  split_rate;
+    gnc_numeric  amount;
+    gnc_numeric  value, new_value;
+    int denom;
+
+    ENTER("trans %p and split %p and input is %s", trans, split, gnc_numeric_to_string (input));
+
+    if (gnc_numeric_zero_p (input))
+    {
+        xaccSplitSetValue (split, input);
+        xaccSplitSetAmount (split, input);
+        LEAVE("zero");
+        return;
+    }
+
+    amount = xaccSplitGetAmount (split);
+    value = xaccSplitGetValue (split);
+
+    denom = gtu_split_reg_get_value_denom (split);
+
+    split_rate = gnc_numeric_div (value, amount, GNC_DENOM_AUTO, GNC_HOW_DENOM_EXACT);
+    if (gnc_numeric_check (split_rate) != GNC_ERROR_OK)
+        split_rate = gnc_numeric_create (100,100);
+
+    new_value = gnc_numeric_mul (input, split_rate, denom, GNC_HOW_RND_ROUND_HALF_UP);
+
+    xaccSplitSetValue (split, new_value);
+    xaccSplitSetAmount (split, input);
+
+    LEAVE("");
+}
+
+
+/* Get the rate */
+gnc_numeric
+gnc_tree_util_get_rate_for (GncTreeViewSplitReg *view, Transaction *trans, Split *split, gboolean is_blank)
+{
+    gnc_numeric num;
+
+    ENTER("trans %p and split %p is_blank %d", trans, split, is_blank);
+
+    num = gnc_tree_util_split_reg_get_value_for (view, trans, split, is_blank);
+//FIXME Not sure about this...
+    if (xaccTransUseTradingAccounts (trans))
+        num = gnc_numeric_div (num, xaccSplitGetValue (split), GNC_DENOM_AUTO, GNC_HOW_RND_ROUND);
+    else
+        num = gnc_numeric_div (xaccSplitGetAmount (split), num, GNC_DENOM_AUTO, GNC_HOW_RND_ROUND);
+
+    LEAVE("split %p and return num is %s", split, gnc_numeric_to_string (num));
+    return num;
+}
 
 
 /*****************************************************************************/

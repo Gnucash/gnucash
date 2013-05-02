@@ -193,6 +193,7 @@ gtk_cell_editable_key_press_event (GtkEntry      *entry,
             return FALSE;
 
         gtk_entry_set_text (entry, qof_print_date (gnc_mktime (&when)));
+        gtk_widget_grab_focus (GTK_WIDGET (entry));
         return TRUE;
     }
     return FALSE;
@@ -204,7 +205,9 @@ gpw_key_press_event (GtkWidget   *box,
 {
 	GncPopupEntry *widget = GNC_POPUP_ENTRY (box);
 	GdkEvent       tmp_event;
-	
+
+	gtk_widget_grab_focus (widget->entry);
+
 	if (key_event->keyval == GDK_Escape) {
 		widget->editing_canceled = TRUE;
 
@@ -214,7 +217,17 @@ gpw_key_press_event (GtkWidget   *box,
 		return TRUE;
 	}
 
-	gtk_widget_grab_focus (widget->entry);
+        if (key_event->keyval == GDK_Left)
+        {
+            gtk_editable_set_position (GTK_EDITABLE (widget->entry), 0);
+            return TRUE;
+        }
+
+        if (key_event->keyval == GDK_Right)
+        {
+            gtk_editable_set_position (GTK_EDITABLE (widget->entry), -1);
+            return TRUE;
+        }
 
 	/* Hackish :/ Synthesize a key press event for the entry. */
 	memcpy (&tmp_event, key_event, sizeof (GdkEventKey));
