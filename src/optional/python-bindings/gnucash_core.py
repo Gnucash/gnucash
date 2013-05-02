@@ -666,6 +666,10 @@ GUID.add_method('xaccAccountLookup', 'AccountLookup')
 GUID.add_method('xaccTransLookup', 'TransLookup')
 GUID.add_method('xaccSplitLookup', 'SplitLookup')
 
+## define addition methods for GUID object - do we need these
+GUID.add_method('guid_to_string', 'to_string')
+#GUID.add_method('string_to_guid', 'string_to_guid')
+
 guid_dict = {
                 'copy' : GUID,
                 'TransLookup': Transaction,
@@ -673,6 +677,12 @@ guid_dict = {
                 'SplitLookup': Split
             }
 methods_return_instance(GUID, guid_dict)
+
+#GUIDString
+class GUIDString(GnuCashCoreClass):
+    pass
+
+GUIDString.add_constructor_and_methods_with_prefix('string_', 'to_guid')
 
 #Query
 from gnucash_core_c import \
@@ -682,7 +692,47 @@ from gnucash_core_c import \
     QOF_QUERY_NOR, \
     QOF_QUERY_XOR
 
+from gnucash_core_c import \
+    QOF_STRING_MATCH_NORMAL, \
+    QOF_STRING_MATCH_CASEINSENSITIVE
+
+from gnucash_core_c import \
+    QOF_COMPARE_LT, \
+    QOF_COMPARE_LTE, \
+    QOF_COMPARE_EQUAL, \
+    QOF_COMPARE_GT, \
+    QOF_COMPARE_GTE, \
+    QOF_COMPARE_NEQ
+
+from gnucash_core_c import \
+    INVOICE_TYPE
+
+from gnucash_core_c import \
+    INVOICE_IS_PAID
+
 class Query(GnuCashCoreClass):
     pass
 
 Query.add_constructor_and_methods_with_prefix('qof_query_', 'create')
+
+Query.add_method('qof_query_set_book', 'set_book')
+Query.add_method('qof_query_search_for', 'search_for')
+Query.add_method('qof_query_run', 'run')
+Query.add_method('qof_query_add_term', 'add_term')
+Query.add_method('qof_query_add_boolean_match', 'add_boolean_match')
+Query.add_method('qof_query_destroy', 'destroy')
+
+class QueryStringPredicate(GnuCashCoreClass):
+    pass
+
+QueryStringPredicate.add_constructor_and_methods_with_prefix('qof_query_', 'string_predicate')
+
+class QueryBooleanPredicate(GnuCashCoreClass):
+    pass
+
+QueryBooleanPredicate.add_constructor_and_methods_with_prefix('qof_query_', 'boolean_predicate')
+
+class QueryInt32Predicate(GnuCashCoreClass):
+    pass
+
+QueryInt32Predicate.add_constructor_and_methods_with_prefix('qof_query_', 'int32_predicate')

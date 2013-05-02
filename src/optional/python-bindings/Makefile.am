@@ -92,7 +92,10 @@ EXTRA_DIST = \
   example_scripts/change_tax_code.py \
   example_scripts/account_analysis.py \
   example_scripts/new_book_with_opening_balances.py \
-  example_scripts/test_imbalance_transaction.py
+  example_scripts/test_imbalance_transaction.py \
+  example_scripts/rest-api/gnucash_rest.py \
+  example_scripts/rest-api/gnucash_simple.py \
+  example_scripts/rest-api/README
 
 MAINTAINERCLEANFILES = gnucash_core.c
 
