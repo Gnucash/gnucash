@@ -26,9 +26,12 @@
 #include "gnc-core-prefs.h"
 #include "gnc-version.h"
 
-static gchar *namespace_regexp = NULL;
-static gboolean is_debugging = 0;
-static gboolean extras_enabled = 0;
+static gchar *namespace_regexp    = NULL;
+static gboolean is_debugging      = FALSE;
+static gboolean extras_enabled    = FALSE;
+static gboolean use_compression   = FALSE;
+static gint file_retention_policy = 0;
+static gint file_retention_days   = 0;
 static const gchar *gconf_path;
 
 const gchar *
@@ -57,6 +60,54 @@ void
 gnc_core_prefs_set_debugging(gboolean d)
 {
     is_debugging = d;
+}
+
+gboolean
+gnc_core_prefs_is_extra_enabled(void)
+{
+    return extras_enabled;
+}
+
+void
+gnc_core_prefs_set_extra(gboolean enabled)
+{
+    extras_enabled = enabled;
+}
+
+gboolean
+gnc_core_prefs_get_file_save_compressed(void)
+{
+    return use_compression;
+}
+
+void
+gnc_core_prefs_set_file_save_compressed(gboolean compressed)
+{
+    use_compression = compressed;
+}
+
+gint
+gnc_core_prefs_get_file_retention_policy(void)
+{
+    return file_retention_policy;
+}
+
+void
+gnc_core_prefs_set_file_retention_policy(gint policy)
+{
+    file_retention_policy = policy;
+}
+
+gint
+gnc_core_prefs_get_file_retention_days(void)
+{
+    return file_retention_days;
+}
+
+void
+gnc_core_prefs_set_file_retention_days(gint days)
+{
+    file_retention_days = days;
 }
 
 const gchar *

@@ -37,6 +37,15 @@ void gnc_core_prefs_set_debugging(gboolean d);
 gboolean gnc_core_prefs_is_extra_enabled(void);
 void gnc_core_prefs_set_extra(gboolean enabled);
 
+gboolean gnc_core_prefs_get_file_save_compressed(void);
+void gnc_core_prefs_set_file_save_compressed(gboolean compressed);
+
+gint gnc_core_prefs_get_file_retention_policy(void);
+void gnc_core_prefs_set_file_retention_policy(gint policy);
+
+gint gnc_core_prefs_get_file_retention_days(void);
+void gnc_core_prefs_set_file_retention_days(gint days);
+
 const gchar *gnc_gconf_get_path_prefix(void);
 void gnc_gconf_set_path_prefix(const gchar *prefix);
 
