@@ -24,7 +24,7 @@ _gnucash_core_c_la_CPPFLAGS = \
   -I${top_srcdir}/src/app-utils \
   -I${top_srcdir}/src/gnc-module \
   -I${top_srcdir}/src/gnome \
-	-I${top_srcdir}/src/core-utils \
+  -I${top_srcdir}/src/core-utils \
   -I${top_srcdir}/src/gnc-module
 
 # Suppress all warnings for now, but we really only need to -Wno-implicit
@@ -36,7 +36,8 @@ _gnucash_core_c_la_LIBADD = \
   ${GLIB_LIBS} \
   ${top_builddir}/src/libqof/qof/libgnc-qof.la \
   ${top_builddir}/src/gnc-module/libgnc-module.la \
-  ${top_builddir}/src/engine/libgncmod-engine.la
+  ${top_builddir}/src/engine/libgncmod-engine.la \
+  ${top_builddir}/src/app-utils/libgncmod-app-utils.la
 if BUILDING_FROM_SCM
 _gnucash_core_c_includes= \
 	${top_builddir}/config.h \
@@ -66,13 +67,14 @@ _gnucash_core_c_includes= \
 	${top_srcdir}/src/engine/gncEntry.h \
 	${top_srcdir}/src/engine/gncTaxTable.h \
 	${top_srcdir}/src/engine/gncIDSearch.h \
-	${top_srcdir}/src/engine/gnc-pricedb.h
+	${top_srcdir}/src/engine/gnc-pricedb.h \
+	${top_srcdir}/src/app-utils/gnc-prefs.h
 
 
 gnucash_core.c: $(SWIG_FILES) ${top_srcdir}/src/base-typemaps.i ${top_srcdir}/src/engine/engine-common.i $(_gnucash_core_c_includes)
 	swig -python -Wall -Werror \
 	-I$(top_srcdir)/src -I$(top_srcdir)/src/engine \
-	-I${top_srcdir}/src/libqof/qof \
+	-I$(top_srcdir)/src/app-utils -I${top_srcdir}/src/libqof/qof \
 	-o $@ $<
 
 gnucash_core_c.py: gnucash_core.c $(SWIG_FILES)

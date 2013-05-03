@@ -39,7 +39,7 @@
 #include "table-allgui.h"
 #include "pricecell.h"
 #include "dialog-tax-table.h"
-#include "core-utils/gnc-gconf-utils.h"
+#include "gnc-gconf-utils.h"
 #include "register/register-core/checkboxcell.h"
 
 #include "gncEntryLedgerP.h"

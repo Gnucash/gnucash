@@ -71,6 +71,11 @@
 #define KEY_DATE_BACKMONTHS 	"date_backmonths"
 #define KEY_SHOW_LEAF_ACCOUNT_NAMES "show_leaf_account_names"
 
+/* Keys used for core preferences */
+#define KEY_FILE_COMPRESSION  "file_compression"
+#define KEY_RETAIN_TYPE "retain_type"
+#define KEY_RETAIN_DAYS "retain_days"
+
 typedef void (*GncGconfGeneralCb)    (GConfEntry *entry, gpointer user_data);
 typedef void (*GncGconfGeneralAnyCb) (gpointer user_data);
 
@@ -78,6 +83,11 @@ typedef void (*GncGconfGeneralAnyCb) (gpointer user_data);
 /** @name GConf Miscellaneous Functions
  @{
 */
+
+/** This function is called early in the load process
+ *  to preload a number of preferences from gconf
+ */
+void gnc_gconf_prefs_init (void);
 
 /** This function takes an enum value and returns its nickname.
  *
@@ -171,7 +181,7 @@ void gnc_gconf_suggest_sync (void);
 /** Register a callback for when a specific key in the general section
  *  of Gnucash's gconf data is changed.  Any time the key's value
  *  changes, the routine will be invoked and will be passed both the
- *  changes gconf entry and the user data passed to this function.
+ *  changed gconf entry and the user data passed to this function.
  *
  *  @param key This value contains the name of the key within the
  *  "general" section to watch.

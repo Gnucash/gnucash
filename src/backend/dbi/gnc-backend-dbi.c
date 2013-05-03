@@ -46,7 +46,6 @@
 #include "SX-book.h"
 #include "Recurrence.h"
 
-#include "gnc-gconf-utils.h"
 #include "gnc-uri-utils.h"
 #include "gnc-filepath-utils.h"
 #include "gnc-locale-utils.h"

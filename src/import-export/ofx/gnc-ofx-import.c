@@ -46,7 +46,7 @@
 #include "gnc-engine.h"
 #include "gnc-ui-util.h"
 #include "gnc-glib-utils.h"
-#include "core-utils/gnc-gconf-utils.h"
+#include "gnc-gconf-utils.h"
 #include "gnome-utils/gnc-ui.h"
 #include "gnome-utils/dialog-account.h"
 #include "dialog-utils.h"

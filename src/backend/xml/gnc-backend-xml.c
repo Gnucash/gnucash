@@ -75,7 +75,7 @@ typedef int ssize_t;
 #include "io-gncxml.h"
 #include "io-gncxml-v2.h"
 #include "gnc-backend-xml.h"
-#include "gnc-gconf-utils.h"
+#include "gnc-core-prefs.h"
 
 #include "gnc-address-xml-v2.h"
 #include "gnc-bill-term-xml-v2.h"
@@ -92,10 +92,6 @@ typedef int ssize_t;
 #ifndef HAVE_STRPTIME
 # include "strptime.h"
 #endif
-
-#define KEY_FILE_COMPRESSION  "file_compression"
-#define KEY_RETAIN_TYPE "retain_type"
-#define KEY_RETAIN_DAYS "retain_days"
 
 static QofLogModule log_module = GNC_MOD_BACKEND;
 
@@ -724,7 +720,7 @@ gnc_xml_be_write_to_file(FileBackend *fbe,
         }
     }
 
-    if (gnc_book_write_to_xml_file_v2(book, tmp_name, fbe->file_compression))
+    if (gnc_book_write_to_xml_file_v2(book, tmp_name, gnc_core_prefs_get_file_save_compressed()))
     {
         /* Record the file's permissions before g_unlinking it */
         rc = g_stat(datafile, &statbuf);
@@ -949,13 +945,13 @@ gnc_xml_be_remove_old_files(FileBackend *be)
         /* The file is a backup or log file. Check the user's retention preference
          * to determine if we should keep it or not
          */
-        if (be->file_retention_type == XML_RETAIN_NONE)
+        if (gnc_core_prefs_get_file_retention_policy() == XML_RETAIN_NONE)
         {
             PINFO ("remove stale file: %s  - reason: preference XML_RETAIN_NONE", name);
             g_unlink(name);
         }
-        else if ((be->file_retention_type == XML_RETAIN_DAYS) &&
-                 (be->file_retention_days > 0))
+        else if ((gnc_core_prefs_get_file_retention_policy() == XML_RETAIN_DAYS) &&
+                 (gnc_core_prefs_get_file_retention_days() > 0))
         {
             int days;
 
@@ -967,8 +963,8 @@ gnc_xml_be_remove_old_files(FileBackend *be)
             }
             days = (int)(difftime(now, statbuf.st_mtime) / 86400);
 
-            PINFO ("file retention = %d days", be->file_retention_days);
-            if (days >= be->file_retention_days)
+            PINFO ("file retention = %d days", gnc_core_prefs_get_file_retention_days());
+            if (days >= gnc_core_prefs_get_file_retention_days())
             {
                 PINFO ("remove stale file: %s  - reason: more than %d days old", name, days);
                 g_unlink(name);
@@ -1226,46 +1222,6 @@ libgncmod_backend_file_LTX_gnc_backend_new(void)
 }
 #endif
 
-static void
-retain_changed_cb(GConfEntry *entry, gpointer user_data)
-{
-    FileBackend *be = (FileBackend*)user_data;
-    g_return_if_fail(be != NULL);
-    be->file_retention_days = (int)gnc_gconf_get_float(GCONF_GENERAL, KEY_RETAIN_DAYS, NULL);
-}
-
-static void
-retain_type_changed_cb(GConfEntry *entry, gpointer user_data)
-{
-    FileBackend *be = (FileBackend*)user_data;
-    gchar *choice = NULL;
-    g_return_if_fail(be != NULL);
-    choice = gnc_gconf_get_string(GCONF_GENERAL, KEY_RETAIN_TYPE, NULL);
-    if (!choice)
-        choice = g_strdup("days");
-
-    if (g_strcmp0 (choice, "never") == 0)
-        be->file_retention_type = XML_RETAIN_NONE;
-    else if (g_strcmp0 (choice, "forever") == 0)
-        be->file_retention_type = XML_RETAIN_ALL;
-    else
-    {
-        if (g_strcmp0 (choice, "days") != 0)
-            PERR("bad value '%s'", choice ? choice : "(null)");
-        be->file_retention_type = XML_RETAIN_DAYS;
-    }
-
-    g_free (choice);
-}
-
-static void
-compression_changed_cb(GConfEntry *entry, gpointer user_data)
-{
-    FileBackend *be = (FileBackend*)user_data;
-    g_return_if_fail(be != NULL);
-    be->file_compression = gnc_gconf_get_bool(GCONF_GENERAL, KEY_FILE_COMPRESSION, NULL);
-}
-
 static QofBackend*
 gnc_backend_new(void)
 {
@@ -1309,27 +1265,6 @@ gnc_backend_new(void)
     gnc_be->lockfd = -1;
 
     gnc_be->book = NULL;
-
-    gnc_be->file_retention_days = (int)gnc_gconf_get_float(GCONF_GENERAL, KEY_RETAIN_DAYS, NULL);
-    gnc_be->file_compression = gnc_gconf_get_bool(GCONF_GENERAL, KEY_FILE_COMPRESSION, NULL);
-    retain_type_changed_cb(NULL, (gpointer)be); /* Get retain_type from gconf */
-
-    if ( (gnc_be->file_retention_type == XML_RETAIN_DAYS) &&
-            (gnc_be->file_retention_days == 0 ) )
-    {
-        /* Backwards compatibility code. Pre 2.3.15, 0 retain_days meant
-         * "keep forever". From 2.3.15 on this is controlled via a multiple
-         * choice ("retain_type"). So if we find a 0 retain_days value with
-         * a "days" retain_type, we should interpret it as if we got a
-         * "forever" retain_type.
-         */
-        gnc_be->file_retention_type = XML_RETAIN_ALL;
-        gnc_gconf_set_string (GCONF_GENERAL, KEY_RETAIN_TYPE, "forever", NULL);
-    }
-
-    gnc_gconf_general_register_cb(KEY_RETAIN_DAYS, retain_changed_cb, be);
-    gnc_gconf_general_register_cb(KEY_RETAIN_TYPE, retain_type_changed_cb, be);
-    gnc_gconf_general_register_cb(KEY_FILE_COMPRESSION, compression_changed_cb, be);
 
     return be;
 }

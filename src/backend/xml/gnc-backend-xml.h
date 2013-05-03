@@ -64,10 +64,6 @@ struct FileBackend_struct
     int lockfd;
 
     QofBook *book;  /* The primary, main open book */
-
-    XMLFileRetentionType file_retention_type;
-    int file_retention_days;
-    gboolean file_compression;
 };
 
 typedef struct FileBackend_struct FileBackend;

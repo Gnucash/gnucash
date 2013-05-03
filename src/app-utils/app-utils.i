@@ -8,6 +8,7 @@
 #include <gnc-exp-parser.h>
 #include <gnc-ui-util.h>
 #include <gnc-gettext-util.h>
+#include <gnc-prefs.h>
 #include <gnc-helpers.h>
 #include <gnc-accounting-period.h>
 #include <gnc-session.h>
@@ -40,6 +41,8 @@ SWIG_init (void);
 
 typedef void (*GNCOptionChangeCallback) (gpointer user_data);
 typedef int GNCOptionDBHandle;
+
+void gnc_prefs_init();
 
 QofBook * gnc_get_current_book (void);
 const gchar * gnc_get_current_book_tax_name (void);

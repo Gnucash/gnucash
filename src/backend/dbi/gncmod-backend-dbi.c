@@ -41,12 +41,6 @@ gnc_module_init(int refcount)
     engine = gnc_module_load( "gnucash/engine", 0 );
     if ( !engine ) return FALSE;
 
-    /* Need to initialize g-type engine for gconf */
-    if (refcount == 0)
-    {
-        g_type_init();
-    }
-
     return TRUE;
 }
 

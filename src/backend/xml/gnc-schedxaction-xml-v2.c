@@ -44,8 +44,6 @@
 
 #include "sixtp-dom-parsers.h"
 
-#include "gnc-gconf-utils.h"
-
 #undef G_LOG_DOMAIN
 #define G_LOG_DOMAIN "gnc.backend.file.sx"
 

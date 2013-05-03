@@ -29,7 +29,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "gnc-gconf-utils.h"
 #include "gnc-xml-helper.h"
 
 #include "sixtp.h"

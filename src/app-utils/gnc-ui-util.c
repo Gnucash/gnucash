@@ -43,7 +43,7 @@
 
 #include "qof.h"
 #include "guile-mappings.h"
-#include "core-utils/gnc-gconf-utils.h"
+#include "gnc-gconf-utils.h"
 #include "gnc-module/gnc-module.h"
 #include "engine/Account.h"
 #include "engine/Transaction.h"

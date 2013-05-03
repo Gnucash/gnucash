@@ -77,6 +77,7 @@
 #include "gncTaxTable.h"
 #include "gncIDSearch.h"
 #include "engine/gnc-pricedb.h"
+#include "app-utils/gnc-prefs.h"
 %}
 
 %include <timespec.i>
@@ -204,7 +205,6 @@
 // Commodity prices includes and stuff
 %include <gnc-pricedb.h>
 
-
 %init %{
 qof_log_init();
 qof_init();
@@ -212,5 +212,6 @@ qof_query_init();
 gnc_module_system_init();
 char * no_args[1] = { NULL };
 gnc_engine_init(0, no_args);
+gnc_prefs_init();
 %}
 

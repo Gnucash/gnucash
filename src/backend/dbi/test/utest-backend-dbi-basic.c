@@ -1,5 +1,5 @@
 /*
- * utest-gnc-prefs-gconf.c
+ * utest-backend-dbi-basic.c
  *
  *  Created on: 2011-04-23
  *      Author: phil

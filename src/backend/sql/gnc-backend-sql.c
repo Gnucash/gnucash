@@ -46,8 +46,6 @@
 #include "gncTaxTable.h"
 #include "gncInvoice.h"
 
-#include "gnc-gconf-utils.h"
-
 #include "gnc-backend-sql.h"
 
 #include "gnc-account-sql.h"

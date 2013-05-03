@@ -25,14 +25,18 @@
 #include "config.h"
 #include "gnc-core-prefs.h"
 #include "gnc-version.h"
+#include "libqof/qof/qof.h"
 
 static gchar *namespace_regexp    = NULL;
 static gboolean is_debugging      = FALSE;
 static gboolean extras_enabled    = FALSE;
-static gboolean use_compression   = FALSE;
-static gint file_retention_policy = 0;
-static gint file_retention_days   = 0;
-static const gchar *gconf_path;
+static gboolean use_compression   = TRUE; // This is also the default in GConf
+static gint file_retention_policy = 1;    // 1 = "days", the default in GConf
+static gint file_retention_days   = 30;   // This is also the default in GConf
+static const gchar *gconf_path    = "/apps/gnucash";  // A sensible default
+
+/* This static indicates the debugging module that this .o belongs to.  */
+static QofLogModule log_module = G_LOG_DOMAIN;
 
 const gchar *
 gnc_core_prefs_get_namespace_regexp(void)
