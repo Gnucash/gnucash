@@ -229,15 +229,26 @@ fi
 ### --------------------------------------------------------------------------
 ### Glib checks.
 
-# We require glib >= 2.28, released together with gtk-2.24; There are
-# some thread deprecations that affect us in 2.32, so we check for
-# that first.
-PKG_CHECK_MODULES(GLIB,
-                  glib-2.0 >= 2.32 gthread-2.0 gobject-2.0 gmodule-2.0,
-		  [AC_DEFINE([HAVE_GLIB_2_32], [1],
-		             [Configure gthread deprecations])],
-		  [PKG_CHECK_MODULES(GLIB,
-		   glib-2.0 >= 2.28 gthread-2.0 gobject-2.0 gmodule-2.0)])
+# We require glib >= 2.28, released together with gtk-2.24;
+# We first check for other versions due to deprecations.
+# 2.36 deprecated g_type_init
+# 2.32 deprecated some gthread functions
+PKG_CHECK_MODULES(GLIB, glib-2.0 >= 2.36 gthread-2.0 gobject-2.0 gmodule-2.0,
+[
+  AC_DEFINE([HAVE_GLIB_2_36], [1], [Configure g_type_init deprecation])
+  AC_DEFINE([HAVE_GLIB_2_32], [1], [Configure gthread deprecations])
+],
+[
+  PKG_CHECK_MODULES(GLIB,
+                        glib-2.0 >= 2.32 gthread-2.0 gobject-2.0 gmodule-2.0,
+  [
+    AC_DEFINE([HAVE_GLIB_2_32], [1], [Configure gthread deprecations])
+  ],
+  [
+    PKG_CHECK_MODULES(GLIB,
+                        glib-2.0 >= 2.28 gthread-2.0 gobject-2.0 gmodule-2.0)
+  ])
+])
 
 AC_CHECK_HEADERS(dirent.h dlfcn.h dl.h utmp.h locale.h mcheck.h unistd.h wctype.h)
 
