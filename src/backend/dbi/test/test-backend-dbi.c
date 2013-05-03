@@ -35,11 +35,10 @@ int
 main (int   argc,
       char *argv[])
 {
-    g_type_init(); 			/* Initialize the GObject system */
-    g_test_init ( &argc, &argv, NULL ); 	/* initialize test program */
+    qof_init(); /* equally initializes gobject system */
     qof_log_init_filename_special("stderr"); /* Init the log system */
+    g_test_init ( &argc, &argv, NULL );     /* initialize test program */
     g_test_bug_base("https://bugzilla.gnome.org/show_bug.cgi?id="); /* init the bugzilla URL */
-    qof_init();
     cashobjects_register();
     g_assert (qof_load_backend_library ("../.libs/", GNC_LIB_NAME));
     g_assert (qof_load_backend_library ("../../xml/.libs",

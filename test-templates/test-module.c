@@ -34,13 +34,13 @@ int
 main (int   argc,
       char *argv[])
 {
-    g_type_init();     /* You may or may not need this, depending on
+    qof_init();     /* You may or may not need this, depending on
 			* whether the module you're testing or any
 			* dependencies use GObject. */
-    g_test_init ( &argc, &argv, NULL ); /* initialize test program */
     qof_log_init_filename_special("/dev/null");    /* Initialize the
 			* gnucash logging system. Your tests will
 			* crash on the first logging call otherwise */
+    g_test_init ( &argc, &argv, NULL ); /* initialize test program */
     test_suite_module1();           /* Call each suite assembly function */
     test_suite_module2();
     test_suite_module3();

@@ -115,7 +115,6 @@ main (int argc, char ** argv)
     const char *location = g_getenv("GNC_TEST_FILES");
     GDir *xml2_dir;
 
-    g_type_init();
     qof_init();
     cashobjects_register();
     do_test(qof_load_backend_library ("../.libs/", GNC_LIB_NAME),
