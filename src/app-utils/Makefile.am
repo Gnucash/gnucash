@@ -51,6 +51,7 @@ libgncmod_app_utils_la_SOURCES = \
   gnc-entry-quickfill.c \
   gnc-euro.c \
   gnc-exp-parser.c \
+  gnc-gconf-utils.c \
   gnc-gettext-util.c \
   gnc-helpers.c \
   gnc-sx-instance-model.c \
@@ -75,6 +76,7 @@ gncinclude_HEADERS = \
   gnc-entry-quickfill.h \
   gnc-euro.h \
   gnc-exp-parser.h \
+  gnc-gconf-utils.h \
   gnc-gettext-util.h \
   gnc-help-utils.h \
   gnc-helpers.h \

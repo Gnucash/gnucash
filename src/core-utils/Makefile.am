@@ -7,7 +7,6 @@ libgnc_core_utils_la_SOURCES = \
   gnc-core-prefs.c \
   gnc-features.c \
   gnc-filepath-utils.c \
-  gnc-gconf-utils.c \
   gnc-gdate-utils.c \
   gnc-gkeyfile-utils.c \
   gnc-glib-utils.c \
@@ -23,7 +22,6 @@ libgnc_core_utils_la_LIBADD = \
   ${GLIB_LIBS} \
   ${BINRELOC_LIBS} \
   ${GTK_MAC_LIBS} \
-  ${GCONF_LIBS} \
   ${QOF_LIBS}
 
 
@@ -32,7 +30,6 @@ noinst_HEADERS = \
   gnc-core-prefs.h \
   gnc-features.h \
   gnc-filepath-utils.h \
-  gnc-gconf-utils.h \
   gnc-gdate-utils.h \
   gnc-gkeyfile-utils.h \
   gnc-glib-utils.h \
@@ -54,7 +51,6 @@ endif
 AM_CPPFLAGS = \
   ${GUILE_INCS} \
   ${GLIB_CFLAGS} \
-  ${GCONF_CFLAGS} \
   ${GTK_MAC_CFLAGS} \
   ${QOF_CFLAGS} \
   -I${top_srcdir}/src/libqof/qof \
