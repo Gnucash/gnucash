@@ -74,7 +74,7 @@
 #include "gnc-tax-table-sql.h"
 #include "gnc-vendor-sql.h"
 
-#include "gnc-main.h"
+#include "gnc-core-prefs.h"
 
 #if defined( S_SPLINT_S )
 #include "splint-defs.h"
@@ -497,7 +497,7 @@ gnc_sql_sync_all( GncSqlBackend* be, /*@ dependent @*/ QofBook *book )
     ENTER( "book=%p, be->book=%p", book, be->book );
     update_progress( be );
     (void)reset_version_info( be );
-    gnc_sql_set_table_version( be, "Gnucash", gnc_get_long_version() );
+    gnc_sql_set_table_version( be, "Gnucash", gnc_core_prefs_get_long_version() );
     gnc_sql_set_table_version( be, "Gnucash-Resave", GNUCASH_RESAVE_VERSION );
 
     /* Create new tables */

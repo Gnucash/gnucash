@@ -42,7 +42,7 @@
 #include "top-level.h"
 #include "gfec.h"
 #include "gnc-commodity.h"
-#include "gnc-main.h"
+#include "gnc-core-prefs.h"
 #include "gnc-main-window.h"
 #include "gnc-splash.h"
 #include "gnc-gnome-utils.h"
@@ -550,8 +550,8 @@ gnc_parse_command_line(int *argc, char ***argv)
         exit(0);
     }
 
-    gnc_set_debugging(debugging);
-    gnc_set_extra(extra);
+    gnc_core_prefs_set_debugging(debugging);
+    gnc_core_prefs_set_extra(extra);
 
     if (!gconf_path)
     {
@@ -561,10 +561,10 @@ gnc_parse_command_line(int *argc, char ***argv)
         else
             gconf_path = GCONF_PATH;
     }
-    gnc_set_gconf_path(g_strdup(gconf_path));
+    gnc_gconf_set_path_prefix(g_strdup(gconf_path));
 
     if (namespace_regexp)
-        gnc_main_set_namespace_regexp(namespace_regexp);
+        gnc_core_prefs_set_namespace_regexp(namespace_regexp);
 
     if (args_remaining)
         file_to_load = args_remaining[0];
@@ -779,7 +779,7 @@ gnc_log_init()
 
     gnc_log_default();
 
-    if (gnc_is_debugging())
+    if (gnc_core_prefs_is_debugging_enabled())
     {
         qof_log_set_level("", QOF_LOG_INFO);
         qof_log_set_level("qof", QOF_LOG_INFO);

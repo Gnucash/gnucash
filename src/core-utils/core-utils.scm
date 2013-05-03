@@ -18,7 +18,7 @@
 
 (use-modules (sw_core_utils))
 
-(re-export gnc-is-debugging)
+(re-export gnc-core-prefs-is-debugging-enabled)
 (re-export gnc-path-get-bindir)
 (re-export gnc-path-get-stdreportsdir)
 (re-export gnc-path-find-localized-html-file)

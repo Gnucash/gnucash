@@ -1,5 +1,5 @@
 /*
- * gnc-main.c:
+ * gnc-core-prefs.c:
  *
  * Copyright (C) 2006 Chris Shoemaker <c.shoemaker@cox.net>
  *
@@ -23,16 +23,22 @@
 
 #include <stdlib.h>
 #include "config.h"
-#include "gnc-main.h"
-#include "core-utils/gnc-version.h"
+#include "gnc-core-prefs.h"
+#include "gnc-version.h"
 
 static gchar *namespace_regexp = NULL;
 static gboolean is_debugging = 0;
 static gboolean extras_enabled = 0;
 static const gchar *gconf_path;
 
+const gchar *
+gnc_core_prefs_get_namespace_regexp(void)
+{
+    return namespace_regexp;
+}
+
 void
-gnc_main_set_namespace_regexp(const gchar *str)
+gnc_core_prefs_set_namespace_regexp(const gchar *str)
 {
     if (namespace_regexp)
         g_free(namespace_regexp);
@@ -41,50 +47,32 @@ gnc_main_set_namespace_regexp(const gchar *str)
         namespace_regexp = g_strdup(str);
 }
 
-const gchar *
-gnc_main_get_namespace_regexp(void)
-{
-    return namespace_regexp;
-}
-
 gboolean
-gnc_is_debugging(void)
+gnc_core_prefs_is_debugging_enabled(void)
 {
     return is_debugging;
 }
 
 void
-gnc_set_debugging(gboolean d)
+gnc_core_prefs_set_debugging(gboolean d)
 {
     is_debugging = d;
 }
 
-gboolean
-gnc_is_extra_enabled(void)
-{
-    return extras_enabled;
-}
-
-void
-gnc_set_extra(gboolean enabled)
-{
-    extras_enabled = enabled;
-}
-
-void
-gnc_set_gconf_path (const gchar *path)
-{
-    gconf_path = path;
-}
-
 const gchar *
-gnc_get_gconf_path (void)
+gnc_gconf_get_path_prefix (void)
 {
     return gconf_path;
 }
 
+void
+gnc_gconf_set_path_prefix (const gchar *path)
+{
+    gconf_path = path;
+}
+
 guint
-gnc_get_long_version()
+gnc_core_prefs_get_long_version()
 {
     return GNUCASH_MAJOR_VERSION * 1000000 +
            GNUCASH_MINOR_VERSION * 10000 +

@@ -25,7 +25,7 @@
 
 #include "config.h"
 #include "qof.h"
-#include "gnc-main.h"
+#include "gnc-core-prefs.h"
 #include "qofsession-p.h"
 #include "cashobjects.h"
 #include "test-dbi-stuff.h"
@@ -385,7 +385,7 @@ test_dbi_version_control( const gchar* driver,  const gchar* url )
     QofBook *book;
     QofBackend *qbe;
     QofBackendError err;
-    gint ourversion = gnc_get_long_version();
+    gint ourversion = gnc_core_prefs_get_long_version();
 
     g_test_message ( "Testing safe save %s\n", driver );
 

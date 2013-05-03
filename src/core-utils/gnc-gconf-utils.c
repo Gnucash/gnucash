@@ -26,7 +26,7 @@
 
 #include <stdio.h>
 #include <string.h>
-#include "gnc-main.h"
+#include "gnc-core-prefs.h"
 #include "gnc-gconf-utils.h"
 
 #define CLIENT_TAG  "%s-%s-client"
@@ -273,7 +273,7 @@ gnc_gconf_section_name (const char *name)
     if (name == NULL)
     {
         /* Need to return a newly allocated string */
-        return g_strdup(gnc_get_gconf_path());
+        return g_strdup(gnc_gconf_get_path_prefix());
     }
     if (*name == '/')
     {
@@ -287,7 +287,7 @@ gnc_gconf_section_name (const char *name)
      * order to keep this file completely "gnome-free" this approach was
      * used.
      */
-    return g_strjoin("/", gnc_get_gconf_path(), name, NULL);
+    return g_strjoin("/", gnc_gconf_get_path_prefix(), name, NULL);
 }
 
 char *
@@ -305,7 +305,7 @@ gnc_gconf_schema_section_name (const char *name)
      * order to keep this file completely "gnome-free" this approach was
      * used.
      */
-    return g_strconcat("/schemas", gnc_get_gconf_path(), "/", name, NULL);
+    return g_strconcat("/schemas", gnc_gconf_get_path_prefix(), "/", name, NULL);
 }
 
 static gchar *

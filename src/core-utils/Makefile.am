@@ -4,6 +4,7 @@ lib_LTLIBRARIES = libgnc-core-utils.la
 
 libgnc_core_utils_la_SOURCES = \
   binreloc.c \
+  gnc-core-prefs.c \
   gnc-features.c \
   gnc-filepath-utils.c \
   gnc-gconf-utils.c \
@@ -13,7 +14,6 @@ libgnc_core_utils_la_SOURCES = \
   gnc-guile-utils.c \
   gnc-jalali.c \
   gnc-locale-utils.c \
-  gnc-main.c \
   gnc-path.c \
   gnc-uri-utils.c \
   swig-core-utils-guile.c
@@ -29,7 +29,7 @@ libgnc_core_utils_la_LIBADD = \
 
 noinst_HEADERS = \
   binreloc.h \
-  gnc-main.h \
+  gnc-core-prefs.h \
   gnc-features.h \
   gnc-filepath-utils.h \
   gnc-gconf-utils.h \

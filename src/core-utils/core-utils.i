@@ -1,7 +1,7 @@
 %module sw_core_utils
 %{
 #include <gnc-glib-utils.h>
-#include <gnc-main.h>
+#include <gnc-core-prefs.h>
 #include <gnc-path.h>
 #include <gnc-filepath-utils.h>
 #include <gnc-locale-utils.h>
@@ -25,7 +25,7 @@ void
 #endif
 %import "base-typemaps.i"
 
-gboolean gnc_is_debugging(void);
+gboolean gnc_core_prefs_is_debugging_enabled(void);
 
 %newobject gnc_path_get_bindir;
 gchar * gnc_path_get_bindir(void);
@@ -56,7 +56,7 @@ gchar * gnc_locale_from_utf8(const gchar *);
 %newobject gnc_locale_to_utf8;
 gchar * gnc_locale_to_utf8(const gchar *);
 
-gboolean gnc_is_extra_enabled();
+gboolean gnc_core_prefs_is_extra_enabled();
 
 const char * gnc_locale_default_iso_currency_code (void);
 

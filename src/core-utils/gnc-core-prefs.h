@@ -1,5 +1,5 @@
 /*
- * gnc-main.h:
+ * gnc-core-prefs.h:
  *
  * Copyright (C) 2006 Chris Shoemaker <c.shoemaker@cox.net>
  *
@@ -28,18 +28,18 @@
 
 #define GCONF_PATH "/apps/gnucash"
 
-void gnc_main_set_namespace_regexp(const gchar *str);
-const gchar *gnc_main_get_namespace_regexp(void);
+const gchar *gnc_core_prefs_get_namespace_regexp(void);
+void gnc_core_prefs_set_namespace_regexp(const gchar *str);
 
-gboolean gnc_is_debugging(void);
-void gnc_set_debugging(gboolean d);
+gboolean gnc_core_prefs_is_debugging_enabled(void);
+void gnc_core_prefs_set_debugging(gboolean d);
 
-gboolean gnc_is_extra_enabled(void);
-void gnc_set_extra(gboolean enabled);
+gboolean gnc_core_prefs_is_extra_enabled(void);
+void gnc_core_prefs_set_extra(gboolean enabled);
 
-void gnc_set_gconf_path(const gchar *prefix);
-const gchar *gnc_get_gconf_path(void);
+const gchar *gnc_gconf_get_path_prefix(void);
+void gnc_gconf_set_path_prefix(const gchar *prefix);
 
-guint gnc_get_long_version( void );
+guint gnc_core_prefs_get_long_version( void );
 
 #endif /* GNC_MAIN_H */
