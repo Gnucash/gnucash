@@ -14,7 +14,7 @@ Version history:
 
 	 Gnucash now requires Gtk+-2.24 and GLib-2.26. We've removed
 	 most of the dependencies on libraries obsoleted by project
-	 Ridley and will in position to move to Gtk+-3.x once the
+	 Ridley and will be in position to move to Gtk+-3.x once the
 	 GtkTreeModel register window work is complete. This means
 	 that Gnucash 2.5 requires Debian 6, RHEL 6, or one of the
 	 more aggressive distributions like Ubuntu.
@@ -30,7 +30,7 @@ Version history:
 
 	 When opening a locked "book" one now has the option of
 	 opening it read-only. Note that Gnucash is still a
-	 single-user program and that the databaase backends are still
+	 single-user program and that the database backends are still
 	 used only as a data store.
 
 	 Gnucash is no longer subject to the "2038" bug, so that
