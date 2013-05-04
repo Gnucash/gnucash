@@ -1,5 +1,24 @@
 Version history:
 ------- -------
+ 2.5.1 -  5 May 2013
+         This is the second release in the UNSTABLE 2.5 series.
+
+	 Robert Fewell has continued his work on the GtkTreeModel register.
+	 It is now the default for account registers.
+
+	 Geert Janssens has begun work on replacing the GConf configuration
+	 management tool with the newer GSettings API from recent versions
+	 of GLib.
+
+	 Tom Lofts contributed the beginning of a RESTful Python API
+	 to enable access to minimal account, invoice, and customer
+	 information in a JSON format.
+
+	 Christian Stimming fixed the very long wait time for the UI to
+	 become responsive when running the import matcher.
+
+	 Also some bug fixes, package upgrades, and minor improvements.
+
  2.5.0 - 30 Mar 2013
 
          The Gnucash Development Team is pleased to release Gnucash 2.5.0,
