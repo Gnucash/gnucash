@@ -80,9 +80,6 @@ static QofLogModule log_module = GNC_MOD_GUI;
 #define DELETE_DIALOG_SA_TRANS_MAS "sa_trans_mas"
 #define DELETE_DIALOG_OK_BUTTON    "deletebutton"
 
-/* This define will enable the New Register menu option, comment out to hide it */
-#define REG2ENABLE "yes"
-
 enum
 {
     ACCOUNT_SELECTED,
@@ -174,25 +171,23 @@ static GtkActionEntry gnc_plugin_page_account_tree_actions [] =
         G_CALLBACK (gnc_plugin_page_account_tree_cmd_file_new_hierarchy)
     },
     {
-        "FileOpenAccountAction", GNC_STOCK_OPEN_ACCOUNT, N_("Open _Account"), NULL,
+        "FileOpenAccount2Action", GNC_STOCK_OPEN_ACCOUNT, N_("Open _Account"), NULL,
         N_("Open the selected account"),
-        G_CALLBACK (gnc_plugin_page_account_tree_cmd_open_account)
-    },
-#ifdef REG2ENABLE
-    {
-        "FileOpenAccount2Action", GNC_STOCK_OPEN_ACCOUNT, N_("Open New Register2 _Account"), NULL,
-        N_("Open the New Register2 selected account"),
         G_CALLBACK (gnc_plugin_page_account_tree_cmd_open2_account)
     },
     {
-        "FileOpenSubaccounts2Action", GNC_STOCK_OPEN_ACCOUNT, N_("Open New Register2 _SubAccount"), NULL,
-        N_("Open the New Register2 selected subaccounts"),
+        "FileOpenAccountAction", GNC_STOCK_OPEN_ACCOUNT, N_("Open _Old Style Register Account"), NULL,
+        N_("Open the old style register selected account"),
+        G_CALLBACK (gnc_plugin_page_account_tree_cmd_open_account)
+    },
+    {
+        "FileOpenSubaccounts2Action", GNC_STOCK_OPEN_ACCOUNT, N_("Open _SubAccounts"), NULL,
+        N_("Open the selected account and all its subaccounts"),
         G_CALLBACK (gnc_plugin_page_account_tree_cmd_open2_subaccounts)
     },
-#endif
     {
-        "FileOpenSubaccountsAction", GNC_STOCK_OPEN_ACCOUNT, N_("Open _Subaccounts"), NULL,
-        N_("Open the selected account and all its subaccounts"),
+        "FileOpenSubaccountsAction", GNC_STOCK_OPEN_ACCOUNT, N_("Open Old St_yle Subaccounts"), NULL,
+        N_("Open the old style register selected account and all its subaccounts"),
         G_CALLBACK (gnc_plugin_page_account_tree_cmd_open_subaccounts)
     },
 
@@ -282,9 +277,7 @@ static const gchar *actions_requiring_account_rw[] =
 static const gchar *actions_requiring_account_always[] =
 {
     "FileOpenAccountAction",
-#ifdef REG2ENABLE
     "FileOpenAccount2Action",
-#endif
     "FileOpenSubaccountsAction",
     "ActionsLotsAction",
     NULL
@@ -311,11 +304,9 @@ static const gchar* readonly_inactive_actions[] =
 /** Short labels for use on the toolbar buttons. */
 static action_toolbar_labels toolbar_labels[] =
 {
-    { "FileOpenAccountAction", 	    N_("Open") },
-#ifdef REG2ENABLE
+    { "FileOpenAccountAction", 	            N_("Open") },
     { "FileOpenAccount2Action", 	    N_("Open2") },
-#endif
-    { "EditEditAccountAction", 	    N_("Edit") },
+    { "EditEditAccountAction", 	            N_("Edit") },
     { "FileNewAccountAction",    	    N_("New") },
     { "EditDeleteAccountAction", 	    N_("Delete") },
     { NULL, NULL },
@@ -409,11 +400,7 @@ gnc_plugin_page_account_tree_init (GncPluginPageAccountTree *plugin_page)
     g_object_set(G_OBJECT(plugin_page),
                  "page-name",      _("Accounts"),
                  "page-uri",       "default:",
-#ifdef REG2ENABLE
                  "ui-description", "gnc-plugin-page-account-tree2-ui.xml",
-#else
-                 "ui-description", "gnc-plugin-page-account-tree-ui.xml",
-#endif
                  NULL);
     g_signal_connect (G_OBJECT (plugin_page), "selected",
                       G_CALLBACK (gnc_plugin_page_account_tree_selected), plugin_page);
@@ -804,8 +791,6 @@ gppat_open_account_common (GncPluginPageAccountTree *page,
     gnc_main_window_open_page (GNC_MAIN_WINDOW(window), new_page);
 }
 
-
-#ifdef REG2ENABLE
 /*################## Added for Reg2 #################*/
 /*        New Register Common                        */
 static void
@@ -824,7 +809,6 @@ gppat_open2_account_common (GncPluginPageAccountTree *page,
     gnc_main_window_open_page (GNC_MAIN_WINDOW(window), new_page);
 }
 /*################## Added for Reg2 #################*/
-#endif
 
 static void
 gnc_plugin_page_account_tree_double_click_cb (GtkTreeView *treeview,
@@ -854,7 +838,7 @@ gnc_plugin_page_account_tree_double_click_cb (GtkTreeView *treeview,
         {
             /* It's an account without any children, so open its register */
             Account *account = gnc_tree_view_account_get_account_from_path (GNC_TREE_VIEW_ACCOUNT(treeview), path);
-            gppat_open_account_common (page, account, FALSE);
+            gppat_open2_account_common (page, account, FALSE);
         }
     }
 }
@@ -945,7 +929,6 @@ gnc_plugin_page_account_tree_cmd_open_subaccounts (GtkAction *action,
 }
 
 
-#ifdef REG2ENABLE
 /*################## Added for Reg2 #################*/
 /* Register Firing - Single Account to start with    */
 static void
@@ -970,7 +953,6 @@ gnc_plugin_page_account_tree_cmd_open2_subaccounts (GtkAction *action,
     gppat_open2_account_common (page, account, TRUE);
 }
 /*################## Added for Reg2 #################*/
-#endif
 
 
 static void
