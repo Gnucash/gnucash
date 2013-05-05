@@ -1065,7 +1065,7 @@ then
 	   AC_MSG_ERROR([Could not find python >= 2.4. If you use --enable-python, you MUST have python installed!])
     ])
   AC_PYTHON_DEVEL(>= '2.4')
-  if test x${PYTHON} = "x"
+  if test "x${PYTHON}" = "x"
   then
 	   AC_MSG_ERROR([Could not find Python development files. Make sure that the correct python-devel package is installed.])
   fi
