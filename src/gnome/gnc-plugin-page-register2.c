@@ -2465,7 +2465,7 @@ gnc_plugin_page_register2_cmd_print_check (GtkAction *action,
             return;
         }
 
-        /* Make sure we ask to commit any changes before we procede */
+        /* Make sure we ask to commit any changes before we proceed */
         if (gnc_tree_control_split_reg_trans_open_and_warn (view, trans))
         {
             LEAVE("trans being edited");
@@ -3006,7 +3006,7 @@ gnc_plugin_page_register2_cmd_reload (GtkAction *action, GncPluginPageRegister2 
 
     trans = gnc_tree_view_split_reg_get_current_trans (view);
 
-    /* Make sure we ask to commit any changes before we procede */
+    /* Make sure we ask to commit any changes before we proceed */
     if (gnc_tree_control_split_reg_trans_open_and_warn (view, trans))
     {
         LEAVE("trans being edited");
@@ -3123,7 +3123,7 @@ gnc_plugin_page_register2_cmd_reconcile (GtkAction *action,
 
     trans = gnc_tree_view_split_reg_get_current_trans (view);
 
-    /* Make sure we ask to commit any changes before we procede */
+    /* Make sure we ask to commit any changes before we proceed */
     if (gnc_tree_control_split_reg_trans_open_and_warn (view, trans))
     {
         LEAVE("trans being edited");
@@ -3473,7 +3473,7 @@ gnc_plugin_page_register2_cmd_schedule (GtkAction *action,
         return;
     }
 
-    /* Make sure we ask to commit any changes before we procede */
+    /* Make sure we ask to commit any changes before we proceed */
     if (gnc_tree_control_split_reg_trans_open_and_warn (view, trans))
     {
         LEAVE("trans being edited");

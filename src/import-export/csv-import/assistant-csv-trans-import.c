@@ -1385,7 +1385,7 @@ csv_import_trans_assistant_account_page_prepare (GtkAssistant *assistant,
     }
     else
     {
-        text = g_strdup_printf(gettext ("To Change the account, double click on the required account, click Forward to procede."));
+        text = g_strdup_printf(gettext ("To Change the account, double click on the required account, click Forward to proceed."));
         mtext = g_strdup_printf("<span size=\"medium\" color=\"red\"><b>%s</b></span>", text);
         gtk_label_set_markup(GTK_LABEL(info->account_label), mtext );
         g_free(mtext);

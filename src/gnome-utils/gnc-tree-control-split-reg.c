@@ -441,7 +441,7 @@ gnc_tree_control_split_reg_exchange_rate (GncTreeViewSplitReg *view)
     if (gtc_sr_trans_test_for_edit (view, trans))
         return;
 
-    /* Make sure we ask to commit any changes before we procede */
+    /* Make sure we ask to commit any changes before we proceed */
     if (gtc_sr_trans_open_and_warn (view, trans))
         return;
 
@@ -569,7 +569,7 @@ gnc_tree_control_split_reg_void_current_trans (GncTreeViewSplitReg *view, const 
     if (gtc_sr_trans_test_for_edit (view, trans))
         return;
 
-    /* Make sure we ask to commit any changes before we procede */
+    /* Make sure we ask to commit any changes before we proceed */
     if (gtc_sr_trans_open_and_warn (view, trans))
         return;
 
@@ -912,7 +912,7 @@ gnc_tree_control_split_reg_reinit (GncTreeViewSplitReg *view, gpointer data)
     if (gtc_sr_trans_test_for_edit (view, trans))
         return;
 
-    /* Make sure we ask to commit any changes before we procede */
+    /* Make sure we ask to commit any changes before we proceed */
     if (gtc_sr_trans_open_and_warn (view, trans))
         return;
 
@@ -1260,7 +1260,7 @@ gnc_tree_control_split_reg_duplicate_current (GncTreeViewSplitReg *view)
         return FALSE;
     }
 
-    /* Make sure we ask to commit any changes before we procede */
+    /* Make sure we ask to commit any changes before we proceed */
     if (gtc_sr_trans_open_and_warn (view, trans))
     {
         LEAVE("save cancelled");

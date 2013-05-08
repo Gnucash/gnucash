@@ -753,7 +753,7 @@ csv_export_assistant_summary_page_prepare (GtkAssistant *assistant,
     if (info->failed)
         text = _("There was a problem with the export, this could be due to lack of space, "
                  "permissions or unable to access folder. Check the trace file for further logging!\n"
-                 "You may need to enable debuging.\n");
+                 "You may need to enable debugging.\n");
     else
         text = _("File exported successfully!\n");
 
