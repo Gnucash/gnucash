@@ -229,7 +229,8 @@
 ( "Yemeni Rial" "riyal" "fils" "ISO4217" "YER" "886" 100 100 "Rl" )
 ( "Yugoslavian Dinar" "dinar" "para"  "ISO4217" "YUM"  "890" 100 100 "" ) ;; 2003 replaced by RSD 1
 ( "Rand" "rand" "cent" "ISO4217" "ZAR" "710" 100 100 "R" )
-( "Kwacha" "kwacha" "ngwee"  "ISO4217" "ZMK" "894" 100 100 "ZK" )
+( "Kwacha (old)" "kwacha" "ngwee"  "ISO4217" "ZMK" "894" 100 100 "ZK" ) ;; replaced by ZMW from 2013-01-01 onwards
+( "Zambian Kwacha" "kwacha" "ngwee" "ISO4217" "ZMW" "967" 100 100 "ZK" ) ;; replaced ZMK from 2013-01-01 onwards
 ( "Zimbabwe Dollar" "dollar" "cent" "ISO4217" "ZWD" "716" 100 100 "" ) ;; 2006-08-01 "ZWN" 1000, 2008-08-01 "ZWR" 10000000000, 2009-02-01 "ZWD" 1000000000000
 ( "Zimbabwe Dollar" "dollar" "cent" "ISO4217" "ZWL" "716" 100 100 "Z.$" ) ;; 2009-04 suspended for at least 1 year
 
