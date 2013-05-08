@@ -127,10 +127,10 @@ gnc_tree_control_split_reg_trans_open_and_warn (GncTreeViewSplitReg *view, Trans
     GtkWidget *window;
     GtkWidget *dialog;
     gint response;
-    const char *title = _("Save Transaction before proceding?");
+    const char *title = _("Save Transaction before proceeding?");
     const char *message =
             _("The current transaction has been changed. Would you like to "
-              "record the changes before proceding, or cancel?");
+              "record the changes before proceeding, or cancel?");
 
     window = gnc_tree_view_split_reg_get_parent (view);
     dirty_trans = gnc_tree_view_split_reg_get_dirty_trans (view);

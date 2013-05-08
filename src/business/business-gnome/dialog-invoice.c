@@ -1641,7 +1641,7 @@ gnc_invoice_update_window (InvoiceWindow *iw, GtkWidget *widget)
     }
 
     /* Set the type label */
-    gtk_label_set_text (GTK_LABEL(iw->type_label), iw->is_credit_note ? _("Credit note") : _("Invoice"));
+    gtk_label_set_text (GTK_LABEL(iw->type_label), iw->is_credit_note ? _("Credit Note") : _("Invoice"));
 
     if (iw->owner_choice)
         gtk_widget_show_all (iw->owner_choice);
