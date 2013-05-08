@@ -9,10 +9,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-glossary 1.8.9\n"
 "Report-Msgid-Bugs-To: Eneko Lacunza <enlar@enlar.net>\n"
-"POT-Creation-Date: 2010-11-24 02:25+0100\n"
+"POT-Creation-Date: 2013-05-08 22:16+0200\n"
 "PO-Revision-Date: 2004-11-23 22:19+0100\n"
 "Last-Translator: Eneko Lacunza <enlar@enlar.net>\n"
 "Language-Team: Spanish <es@li.org>\n"
+"Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=iso-8859-15\n"
 "Content-Transfer-Encoding: 8-bit\n"
@@ -80,6 +81,11 @@ msgstr "tipo de cuenta: cuenta de ahorro"
 #. "-"
 msgid "account type: Stock"
 msgstr "tipo de cuenta: Existencias"
+
+#. "This account type (new in gnucash-2.4.0) is used when exchanging or trading amounts from one currency into another"
+#, fuzzy
+msgid "account type: trading"
+msgstr "tipo de cuenta: cuenta de ahorro"
 
 #. "-"
 msgid "account: parent account"
@@ -197,6 +203,11 @@ msgstr "banco"
 msgid "bill"
 msgstr "factura"
 
+#. "see invoice owner"
+#, fuzzy
+msgid "bill owner"
+msgstr "condiciones de pago"
+
 #. "Conditions on paying a bill. Both an invoice and a bill have billing terms. For example, you can have 'terms' of 'Net-30', where the bill is due in full in 30 days."
 msgid "billing terms"
 msgstr "condiciones de pago"
@@ -261,6 +272,11 @@ msgstr "opción de valor: fracción"
 msgid "commodity option: Symbol"
 msgstr "opción de valor: Símbolo"
 
+#. "interest which is earned on both the initial deposit and on any interest that has already been earned but left on deposit."
+#, fuzzy
+msgid "compound interests"
+msgstr "interés"
+
 #. "(a) A sum of money paid into an account. (b) A record of such a payment. (c) The state of having money in one's bank account."
 msgid "Credit (column in register)"
 msgstr "Haber (columna en el libro), Abono"
@@ -271,6 +287,11 @@ msgstr "Tarjeta de crédito"
 
 #. "A transfer of money direct from one bank account to another, without using a cheque"
 msgid "credit transfer"
+msgstr "transferencia (bancaria)"
+
+#. "A document that you give to a client that says you owe money to the client, i.e. the opposite of an invoice"
+#, fuzzy
+msgid "credit note"
 msgstr "transferencia (bancaria)"
 
 #. "The system of money used in a country"
@@ -390,6 +411,11 @@ msgstr "interés"
 msgid "invoice"
 msgstr "factura"
 
+#. "The customer (or vendor) to which this invoice is sent to."
+#, fuzzy
+msgid "invoice owner"
+msgstr "factura"
+
 #. "In business accounting: Jobs are a mechanism by which you can group multiple invoices or bills that belong to the same customer or vendor. The job describes a (larger) piece of work or a task undertaken on order, for which one or many invoices or bills will be issued."
 msgid "job"
 msgstr "trabajo/tarea"
@@ -426,6 +452,11 @@ msgstr "recargar"
 
 #. "The thing that the scatter plot uses to mark each data point"
 msgid "marker"
+msgstr "marcador"
+
+#. "1. Some text annotation, but this meaning isn't used inside gnucash. 2. In the Customer summary report: The ratio of profit vs. sales, i.e. the profit amount divided by the sales amount, shown in percent."
+#, fuzzy
+msgid "markup"
 msgstr "marcador"
 
 #. "The way how more than one window is displayed in GnuCash at the same time. MDI = Multiple Document Interface."
@@ -516,9 +547,19 @@ msgstr "contenedor"
 msgid "portfolio"
 msgstr "cartera"
 
+#. "Register invoice, voucher in account register"
+#, fuzzy
+msgid "post, to"
+msgstr "cerrar"
+
 #. "A menu choice in many graphical user interface applications that allows the user to specify how the application will act each time it is used. "
 msgid "preferences"
 msgstr "preferencias"
+
+#. "Loan repayment calculator: your payments are split in interests payment and principal payment"
+#, fuzzy
+msgid "principal payment"
+msgstr "acción: pago"
 
 #. "An amount of money for which sth may be bought or sold"
 msgid "price (in a split)"
@@ -536,7 +577,7 @@ msgstr "tipo de precio: compra"
 msgid "price: quotes"
 msgstr "precio: cotizaciones"
 
-#. "Money gained in business, esp. the difference between the amount earned and the amount spent"
+#. "Money gained in business, esp. the difference between the amount earned (sales) and the amount spent (expenses/cost): Profit is sales minus expenses/cost."
 msgid "profit"
 msgstr "beneficio"
 
@@ -601,6 +642,10 @@ msgstr ""
 msgid "reverse transaction, to (Action in the register)"
 msgstr "Descripción"
 
+#. "(In the customer summary report) The total amount of money received because something was sold."
+msgid "sales"
+msgstr ""
+
 #. "To write data (typically a file) to a storage medium, such as a disk or tape."
 msgid "save, to (to a file)"
 msgstr "guardar"
@@ -640,6 +685,11 @@ msgstr "hoja de estilo"
 #. "The total of a set of figures that are part of a larger group of figures"
 msgid "subtotal"
 msgstr "subtotal"
+
+#. "On the goverment's tax forms, the tax code identifies the given line or place on the form where certain amounts must be specified according to the current country's legislation"
+#, fuzzy
+msgid "tax code"
+msgstr "información sobre impuestos"
 
 #. "field of an account"
 msgid "tax info"

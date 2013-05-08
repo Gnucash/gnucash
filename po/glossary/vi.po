@@ -6,10 +6,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-glossary-1.9.1\n"
 "Report-Msgid-Bugs-To: bug-gnucash@gnu.org\n"
-"POT-Creation-Date: 2010-11-24 02:25+0100\n"
+"POT-Creation-Date: 2013-05-08 22:16+0200\n"
 "PO-Revision-Date: 2006-03-09 22:30+1030\n"
 "Last-Translator: Clytie Siddall <clytie@riverland.net.au>\n"
 "Language-Team: Vietnamese <gnomevi-list@lists.sourceforge.net>\n"
+"Language: vi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -79,6 +80,11 @@ msgstr "kiểu tài khoản: tiết kiệm"
 #. "-"
 msgid "account type: Stock"
 msgstr "kiểu tài khoản: chứng khoán"
+
+#. "This account type (new in gnucash-2.4.0) is used when exchanging or trading amounts from one currency into another"
+#, fuzzy
+msgid "account type: trading"
+msgstr "kiểu tài khoản: tiết kiệm"
 
 #. "-"
 msgid "account: parent account"
@@ -196,6 +202,11 @@ msgstr "ngân hàng"
 msgid "bill"
 msgstr "hoá đơn nhận"
 
+#. "see invoice owner"
+#, fuzzy
+msgid "bill owner"
+msgstr "điều kiện hóa đơn"
+
 #. "Conditions on paying a bill. Both an invoice and a bill have billing terms. For example, you can have 'terms' of 'Net-30', where the bill is due in full in 30 days."
 msgid "billing terms"
 msgstr "điều kiện hóa đơn"
@@ -260,6 +271,11 @@ msgstr "tùy chọn hàng hóa: đơn vị"
 msgid "commodity option: Symbol"
 msgstr "tùy chọn hàng hóa: ký hiệu"
 
+#. "interest which is earned on both the initial deposit and on any interest that has already been earned but left on deposit."
+#, fuzzy
+msgid "compound interests"
+msgstr "lãi"
+
 #. "(a) A sum of money paid into an account. (b) A record of such a payment. (c) The state of having money in one's bank account."
 msgid "Credit (column in register)"
 msgstr "tín dụng (cột trong sổ)"
@@ -270,6 +286,11 @@ msgstr "Thẻ tín dụng"
 
 #. "A transfer of money direct from one bank account to another, without using a cheque"
 msgid "credit transfer"
+msgstr "chuyển tín dụng"
+
+#. "A document that you give to a client that says you owe money to the client, i.e. the opposite of an invoice"
+#, fuzzy
+msgid "credit note"
 msgstr "chuyển tín dụng"
 
 #. "The system of money used in a country"
@@ -389,6 +410,11 @@ msgstr "lãi"
 msgid "invoice"
 msgstr "hóa đơn gởi"
 
+#. "The customer (or vendor) to which this invoice is sent to."
+#, fuzzy
+msgid "invoice owner"
+msgstr "hóa đơn gởi"
+
 #. "In business accounting: Jobs are a mechanism by which you can group multiple invoices or bills that belong to the same customer or vendor. The job describes a (larger) piece of work or a task undertaken on order, for which one or many invoices or bills will be issued."
 msgid "job"
 msgstr "việc"
@@ -423,6 +449,11 @@ msgstr "hợp nhất"
 
 #. "The thing that the scatter plot uses to mark each data point"
 msgid "marker"
+msgstr "bộ đánh dấu"
+
+#. "1. Some text annotation, but this meaning isn't used inside gnucash. 2. In the Customer summary report: The ratio of profit vs. sales, i.e. the profit amount divided by the sales amount, shown in percent."
+#, fuzzy
+msgid "markup"
 msgstr "bộ đánh dấu"
 
 #. "The way how more than one window is displayed in GnuCash at the same time. MDI = Multiple Document Interface."
@@ -513,9 +544,19 @@ msgstr "giữ chỗ"
 msgid "portfolio"
 msgstr "danh sách vốn đầu tư"
 
+#. "Register invoice, voucher in account register"
+#, fuzzy
+msgid "post, to"
+msgstr "đóng"
+
 #. "A menu choice in many graphical user interface applications that allows the user to specify how the application will act each time it is used. "
 msgid "preferences"
 msgstr "sở thích"
+
+#. "Loan repayment calculator: your payments are split in interests payment and principal payment"
+#, fuzzy
+msgid "principal payment"
+msgstr "hành động: trả tiền"
 
 #. "An amount of money for which sth may be bought or sold"
 msgid "price (in a split)"
@@ -533,7 +574,7 @@ msgstr "kiểu giá: đặt"
 msgid "price: quotes"
 msgstr "giá: hiện thời"
 
-#. "Money gained in business, esp. the difference between the amount earned and the amount spent"
+#. "Money gained in business, esp. the difference between the amount earned (sales) and the amount spent (expenses/cost): Profit is sales minus expenses/cost."
 msgid "profit"
 msgstr "lợi"
 
@@ -597,6 +638,10 @@ msgstr "Lợi còn giữ"
 msgid "reverse transaction, to (Action in the register)"
 msgstr "ngược lại giao dịch (Hành động trong sổ ghi)"
 
+#. "(In the customer summary report) The total amount of money received because something was sold."
+msgid "sales"
+msgstr ""
+
 #. "To write data (typically a file) to a storage medium, such as a disk or tape."
 msgid "save, to (to a file)"
 msgstr "lưu (vào tập tin)"
@@ -636,6 +681,11 @@ msgstr "tờ kiểu dạng"
 #. "The total of a set of figures that are part of a larger group of figures"
 msgid "subtotal"
 msgstr "tổng phụ"
+
+#. "On the goverment's tax forms, the tax code identifies the given line or place on the form where certain amounts must be specified according to the current country's legislation"
+#, fuzzy
+msgid "tax code"
+msgstr "thông tin thuế"
 
 #. "field of an account"
 msgid "tax info"

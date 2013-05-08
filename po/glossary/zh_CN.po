@@ -5,10 +5,11 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-glossary\n"
-"POT-Creation-Date: 2010-11-24 02:25+0100\n"
+"POT-Creation-Date: 2013-05-08 22:16+0200\n"
 "PO-Revision-Date: 2010-05-05 13:47+1000\n"
 "Last-Translator: Tao Wang <dancefire@gmail.com>\n"
 "Language-Team: Simplified Chinese <LL@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -85,6 +86,13 @@ msgstr "科目类型：储蓄存款"
 #. "-"
 msgid "account type: Stock"
 msgstr "科目类型：股票"
+
+# 1. (美国) 任何赚取利息的账户类型
+# 2. (英国) 任何比现金流账户或存款账户利息更高的银行账户
+#. "This account type (new in gnucash-2.4.0) is used when exchanging or trading amounts from one currency into another"
+#, fuzzy
+msgid "account type: trading"
+msgstr "科目类型：储蓄存款"
 
 #. "-"
 msgid "account: parent account"
@@ -218,6 +226,13 @@ msgstr "账单"
 
 # 支付款额的条件。发票和账单都有结算条款。比如，您可以有“条款”：“Net-30”，既账单30天后到期。
 # http://en.wikipedia.org/wiki/Net_30
+#. "see invoice owner"
+#, fuzzy
+msgid "bill owner"
+msgstr "结算条款"
+
+# 支付款额的条件。发票和账单都有结算条款。比如，您可以有“条款”：“Net-30”，既账单30天后到期。
+# http://en.wikipedia.org/wiki/Net_30
 #. "Conditions on paying a bill. Both an invoice and a bill have billing terms. For example, you can have 'terms' of 'Net-30', where the bill is due in full in 30 days."
 msgid "billing terms"
 msgstr "结算条款"
@@ -296,6 +311,12 @@ msgstr "商品期权：最小单位"
 msgid "commodity option: Symbol"
 msgstr "商品期权：代码"
 
+# 借钱的费用，或者对某人的投资所支付的费用
+#. "interest which is earned on both the initial deposit and on any interest that has already been earned but left on deposit."
+#, fuzzy
+msgid "compound interests"
+msgstr "利息"
+
 # (a) 支付到一个科目中的金额
 # (b) 这种支付的记录
 # (c) 向一个银行账户存钱的状态
@@ -310,6 +331,12 @@ msgstr "信用卡"
 # 直接从一个银行账户转到另一个银行账户，而不使用支票。
 #. "A transfer of money direct from one bank account to another, without using a cheque"
 msgid "credit transfer"
+msgstr "转账"
+
+# 直接从一个银行账户转到另一个银行账户，而不使用支票。
+#. "A document that you give to a client that says you owe money to the client, i.e. the opposite of an invoice"
+#, fuzzy
+msgid "credit note"
 msgstr "转账"
 
 # 一个国家内使用的金钱
@@ -460,6 +487,15 @@ msgstr "利息"
 msgid "invoice"
 msgstr "发票"
 
+# 一个销售的物品或提供的服务含收费价格的列表。
+# 见：账单
+# 在 GnuCash 中，“发票”是我们发出(给客户)的声明，而“账单”是我们(从厂商)收到的声明。
+# Post Invoice，应该翻译为“入账”。
+#. "The customer (or vendor) to which this invoice is sent to."
+#, fuzzy
+msgid "invoice owner"
+msgstr "发票"
+
 # 在商业会计中：任务是一个你可以将同一个客户或厂商的多个发票或账单合起来的一种机制。任务描述了订购过程中一(大)块工作或任务，会处理它的一个或多个发票或账单。
 #. "In business accounting: Jobs are a mechanism by which you can group multiple invoices or bills that belong to the same customer or vendor. The job describes a (larger) piece of work or a task undertaken on order, for which one or many invoices or bills will be issued."
 msgid "job"
@@ -504,6 +540,12 @@ msgstr "合并"
 # 散点图用于标记每一个数据点的东西
 #. "The thing that the scatter plot uses to mark each data point"
 msgid "marker"
+msgstr "标记"
+
+# 散点图用于标记每一个数据点的东西
+#. "1. Some text annotation, but this meaning isn't used inside gnucash. 2. In the Customer summary report: The ratio of profit vs. sales, i.e. the profit amount divided by the sales amount, shown in percent."
+#, fuzzy
+msgid "markup"
 msgstr "标记"
 
 # 同时在 GnuCash 中显示多于一个窗口的形式。MDI = Multiple Document Interface (多文档界面)
@@ -618,9 +660,21 @@ msgstr "占位符"
 msgid "portfolio"
 msgstr "投资组合"
 
+# 结束应用程序与一个打开文件的关系，这样应用程序除非再次打开它，否则将不能够访问文件内容。
+#. "Register invoice, voucher in account register"
+#, fuzzy
+msgid "post, to"
+msgstr "关闭"
+
 #. "A menu choice in many graphical user interface applications that allows the user to specify how the application will act each time it is used. "
 msgid "preferences"
 msgstr "首选项"
+
+# 见：支付一
+#. "Loan repayment calculator: your payments are split in interests payment and principal payment"
+#, fuzzy
+msgid "principal payment"
+msgstr "操作：支付"
 
 # 用以购买或出售某物的金额
 #. "An amount of money for which sth may be bought or sold"
@@ -643,7 +697,7 @@ msgid "price: quotes"
 msgstr "价格：报价"
 
 # 公司收入的资金。特别是挣的金额减去支出的金额
-#. "Money gained in business, esp. the difference between the amount earned and the amount spent"
+#. "Money gained in business, esp. the difference between the amount earned (sales) and the amount spent (expenses/cost): Profit is sales minus expenses/cost."
 msgid "profit"
 msgstr "利润"
 
@@ -718,6 +772,10 @@ msgstr "留存收益"
 msgid "reverse transaction, to (Action in the register)"
 msgstr "反向交易至 (账簿中的操作)"
 
+#. "(In the customer summary report) The total amount of money received because something was sold."
+msgid "sales"
+msgstr ""
+
 # 写入数据(通常是一个文件)到存储介质，比如磁盘或磁带。
 #. "To write data (typically a file) to a storage medium, such as a disk or tape."
 msgid "save, to (to a file)"
@@ -767,6 +825,12 @@ msgstr "样式表"
 #. "The total of a set of figures that are part of a larger group of figures"
 msgid "subtotal"
 msgstr "小计"
+
+# 科目的一个字段
+#. "On the goverment's tax forms, the tax code identifies the given line or place on the form where certain amounts must be specified according to the current country's legislation"
+#, fuzzy
+msgid "tax code"
+msgstr "税务信息"
 
 # 科目的一个字段
 #. "field of an account"

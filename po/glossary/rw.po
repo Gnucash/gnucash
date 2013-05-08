@@ -14,10 +14,11 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-glossary 1.8.9\n"
-"POT-Creation-Date: 2010-11-24 02:25+0100\n"
+"POT-Creation-Date: 2013-05-08 22:16+0200\n"
 "PO-Revision-Date: 2005-04-04 10:55-0700\n"
 "Last-Translator: Steven Michael Murphy <murf@e-tools.com>\n"
 "Language-Team: Kinyarwanda <translation-team-rw@lists.sourceforge.net>\n"
+"Language: rw\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -102,6 +103,11 @@ msgstr "Aderesi Ubwoko Mu kubika"
 #, fuzzy
 msgid "account type: Stock"
 msgstr "Aderesi Ubwoko"
+
+#. "This account type (new in gnucash-2.4.0) is used when exchanging or trading amounts from one currency into another"
+#, fuzzy
+msgid "account type: trading"
+msgstr "Aderesi Ubwoko Mu kubika"
 
 #. "-"
 #, fuzzy
@@ -248,6 +254,10 @@ msgstr ""
 msgid "bill"
 msgstr ""
 
+#. "see invoice owner"
+msgid "bill owner"
+msgstr ""
+
 #. "Conditions on paying a bill. Both an invoice and a bill have billing terms. For example, you can have 'terms' of 'Net-30', where the bill is due in full in 30 days."
 msgid "billing terms"
 msgstr ""
@@ -320,6 +330,10 @@ msgstr "Ihitamo Imigabane"
 msgid "commodity option: Symbol"
 msgstr "Ihitamo"
 
+#. "interest which is earned on both the initial deposit and on any interest that has already been earned but left on deposit."
+msgid "compound interests"
+msgstr ""
+
 #. "(a) A sum of money paid into an account. (b) A record of such a payment. (c) The state of having money in one's bank account."
 #, fuzzy
 msgid "Credit (column in register)"
@@ -331,6 +345,10 @@ msgstr "ikarita y'inguzanyo"
 
 #. "A transfer of money direct from one bank account to another, without using a cheque"
 msgid "credit transfer"
+msgstr ""
+
+#. "A document that you give to a client that says you owe money to the client, i.e. the opposite of an invoice"
+msgid "credit note"
 msgstr ""
 
 # #-#-#-#-#  svx.pot (PACKAGE VERSION)  #-#-#-#-#
@@ -479,6 +497,10 @@ msgstr ""
 msgid "invoice"
 msgstr ""
 
+#. "The customer (or vendor) to which this invoice is sent to."
+msgid "invoice owner"
+msgstr ""
+
 #. "In business accounting: Jobs are a mechanism by which you can group multiple invoices or bills that belong to the same customer or vendor. The job describes a (larger) piece of work or a task undertaken on order, for which one or many invoices or bills will be issued."
 msgid "job"
 msgstr ""
@@ -514,6 +536,10 @@ msgstr "Kongera Gutangiza Kuri"
 
 #. "The thing that the scatter plot uses to mark each data point"
 msgid "marker"
+msgstr ""
+
+#. "1. Some text annotation, but this meaning isn't used inside gnucash. 2. In the Customer summary report: The ratio of profit vs. sales, i.e. the profit amount divided by the sales amount, shown in percent."
+msgid "markup"
 msgstr ""
 
 #. "The way how more than one window is displayed in GnuCash at the same time. MDI = Multiple Document Interface."
@@ -623,10 +649,20 @@ msgstr "Akarindamwanya"
 msgid "portfolio"
 msgstr ""
 
+#. "Register invoice, voucher in account register"
+#, fuzzy
+msgid "post, to"
+msgstr "Gufunga Kuri"
+
 #. "A menu choice in many graphical user interface applications that allows the user to specify how the application will act each time it is used. "
 #, fuzzy
 msgid "preferences"
 msgstr "Ibyahiswemo"
+
+#. "Loan repayment calculator: your payments are split in interests payment and principal payment"
+#, fuzzy
+msgid "principal payment"
+msgstr "Igikorwa"
 
 #. "An amount of money for which sth may be bought or sold"
 #, fuzzy
@@ -648,7 +684,7 @@ msgstr "Igiciro Ubwoko"
 msgid "price: quotes"
 msgstr "Igiciro"
 
-#. "Money gained in business, esp. the difference between the amount earned and the amount spent"
+#. "Money gained in business, esp. the difference between the amount earned (sales) and the amount spent (expenses/cost): Profit is sales minus expenses/cost."
 msgid "profit"
 msgstr ""
 
@@ -726,6 +762,10 @@ msgstr ""
 msgid "reverse transaction, to (Action in the register)"
 msgstr "Inkingi in Kwiyandikisha"
 
+#. "(In the customer summary report) The total amount of money received because something was sold."
+msgid "sales"
+msgstr ""
+
 #. "To write data (typically a file) to a storage medium, such as a disk or tape."
 #, fuzzy
 msgid "save, to (to a file)"
@@ -777,6 +817,11 @@ msgstr "Urupapuro rw'Imisusire"
 #, fuzzy
 msgid "subtotal"
 msgstr "IGITERANYOCYUNGIRIJE"
+
+#. "On the goverment's tax forms, the tax code identifies the given line or place on the form where certain amounts must be specified according to the current country's legislation"
+#, fuzzy
+msgid "tax code"
+msgstr "Ibisobanuro"
 
 #. "field of an account"
 #, fuzzy

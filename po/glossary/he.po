@@ -6,10 +6,11 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 2.2\n"
-"POT-Creation-Date: 2010-11-24 02:25+0100\n"
+"POT-Creation-Date: 2013-05-08 22:16+0200\n"
 "PO-Revision-Date: 2008-04-23 00:04+0200\n"
 "Last-Translator: Ori Hoch <ori@uumpa.com>\n"
 "Language-Team: HE\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -77,6 +78,11 @@ msgstr "חיסכון"
 #. "-"
 msgid "account type: Stock"
 msgstr "מניות"
+
+#. "This account type (new in gnucash-2.4.0) is used when exchanging or trading amounts from one currency into another"
+#, fuzzy
+msgid "account type: trading"
+msgstr "חיסכון"
 
 #. "-"
 msgid "account: parent account"
@@ -194,6 +200,11 @@ msgstr "בנק"
 msgid "bill"
 msgstr "חשבון"
 
+#. "see invoice owner"
+#, fuzzy
+msgid "bill owner"
+msgstr "תנאי תשלום"
+
 #. "Conditions on paying a bill. Both an invoice and a bill have billing terms. For example, you can have 'terms' of 'Net-30', where the bill is due in full in 30 days."
 msgid "billing terms"
 msgstr "תנאי תשלום"
@@ -259,6 +270,11 @@ msgstr "שבר"
 msgid "commodity option: Symbol"
 msgstr "סמל"
 
+#. "interest which is earned on both the initial deposit and on any interest that has already been earned but left on deposit."
+#, fuzzy
+msgid "compound interests"
+msgstr "ריבית"
+
 #. "(a) A sum of money paid into an account. (b) A record of such a payment. (c) The state of having money in one's bank account."
 msgid "Credit (column in register)"
 msgstr ""
@@ -269,6 +285,11 @@ msgstr "כרטיס אשראי"
 
 #. "A transfer of money direct from one bank account to another, without using a cheque"
 msgid "credit transfer"
+msgstr "העברה בנקאית"
+
+#. "A document that you give to a client that says you owe money to the client, i.e. the opposite of an invoice"
+#, fuzzy
+msgid "credit note"
 msgstr "העברה בנקאית"
 
 #. "The system of money used in a country"
@@ -391,6 +412,11 @@ msgstr "ריבית"
 msgid "invoice"
 msgstr "קבלה"
 
+#. "The customer (or vendor) to which this invoice is sent to."
+#, fuzzy
+msgid "invoice owner"
+msgstr "קבלה"
+
 #. "In business accounting: Jobs are a mechanism by which you can group multiple invoices or bills that belong to the same customer or vendor. The job describes a (larger) piece of work or a task undertaken on order, for which one or many invoices or bills will be issued."
 #, fuzzy
 msgid "job"
@@ -427,6 +453,10 @@ msgstr "לאחד"
 
 #. "The thing that the scatter plot uses to mark each data point"
 msgid "marker"
+msgstr ""
+
+#. "1. Some text annotation, but this meaning isn't used inside gnucash. 2. In the Customer summary report: The ratio of profit vs. sales, i.e. the profit amount divided by the sales amount, shown in percent."
+msgid "markup"
 msgstr ""
 
 #. "The way how more than one window is displayed in GnuCash at the same time. MDI = Multiple Document Interface."
@@ -522,9 +552,19 @@ msgstr ""
 msgid "portfolio"
 msgstr ""
 
+#. "Register invoice, voucher in account register"
+#, fuzzy
+msgid "post, to"
+msgstr "לסגור"
+
 #. "A menu choice in many graphical user interface applications that allows the user to specify how the application will act each time it is used. "
 msgid "preferences"
 msgstr "מאפיינים"
+
+#. "Loan repayment calculator: your payments are split in interests payment and principal payment"
+#, fuzzy
+msgid "principal payment"
+msgstr "תשלום"
 
 #. "An amount of money for which sth may be bought or sold"
 #, fuzzy
@@ -546,7 +586,7 @@ msgstr "סוג מדיה שבור"
 msgid "price: quotes"
 msgstr "ה&צג מרכאות"
 
-#. "Money gained in business, esp. the difference between the amount earned and the amount spent"
+#. "Money gained in business, esp. the difference between the amount earned (sales) and the amount spent (expenses/cost): Profit is sales minus expenses/cost."
 msgid "profit"
 msgstr ""
 
@@ -619,6 +659,10 @@ msgstr "Retained Earnings"
 msgid "reverse transaction, to (Action in the register)"
 msgstr ""
 
+#. "(In the customer summary report) The total amount of money received because something was sold."
+msgid "sales"
+msgstr ""
+
 #. "To write data (typically a file) to a storage medium, such as a disk or tape."
 #, fuzzy
 msgid "save, to (to a file)"
@@ -666,6 +710,11 @@ msgstr "גיליון מסוגנן"
 #. "The total of a set of figures that are part of a larger group of figures"
 msgid "subtotal"
 msgstr ""
+
+#. "On the goverment's tax forms, the tax code identifies the given line or place on the form where certain amounts must be specified according to the current country's legislation"
+#, fuzzy
+msgid "tax code"
+msgstr "מידע על הפרויקט"
 
 #. "field of an account"
 #, fuzzy

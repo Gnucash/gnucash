@@ -5,10 +5,11 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 1.7\n"
-"POT-Creation-Date: 2010-11-24 02:25+0100\n"
-"PO-Revision-Date: 2010-10-05 21:53+0200\n"
+"POT-Creation-Date: 2013-05-08 22:16+0200\n"
+"PO-Revision-Date: 2013-05-08 22:12+0200\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: DE\n"
+"Language: German\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -76,6 +77,11 @@ msgstr "Sparkonto"
 #. "-"
 msgid "account type: Stock"
 msgstr "Aktienkonto (früher: Depot)"
+
+#. "This account type (new in gnucash-2.4.0) is used when exchanging or trading amounts from one currency into another"
+#, fuzzy
+msgid "account type: trading"
+msgstr "Sparkonto"
 
 #. "-"
 msgid "account: parent account"
@@ -193,6 +199,11 @@ msgstr "Bank"
 msgid "bill"
 msgstr "Lieferantenrechnung (Rechnung, Rechnungseingang, Empfangene Rechnung)"
 
+#. "see invoice owner"
+#, fuzzy
+msgid "bill owner"
+msgstr "Zahlungsbedingungen"
+
 #. "Conditions on paying a bill. Both an invoice and a bill have billing terms. For example, you can have 'terms' of 'Net-30', where the bill is due in full in 30 days."
 msgid "billing terms"
 msgstr "Zahlungsbedingungen"
@@ -258,6 +269,11 @@ msgstr "Stückelung"
 msgid "commodity option: Symbol"
 msgstr "Symbol"
 
+#. "interest which is earned on both the initial deposit and on any interest that has already been earned but left on deposit."
+#, fuzzy
+msgid "compound interests"
+msgstr "Zinsen"
+
 #. "(a) A sum of money paid into an account. (b) A record of such a payment. (c) The state of having money in one's bank account."
 msgid "Credit (column in register)"
 msgstr ""
@@ -318,7 +334,8 @@ msgstr "Beschreibung (Verwendungszweck, Buchungstext, Text?)"
 
 #. "Reductions to a basic price of goods or services. Your language might distinguish between discounts dealing with payments (billing terms) and others (invoice)."
 msgid "discount"
-msgstr "Skonto (billingterms), Rabatt (invoice), Nachlass (als Oberbegriff sonst)"
+msgstr ""
+"Skonto (billingterms), Rabatt (invoice), Nachlass (als Oberbegriff sonst)"
 
 #. "Important Buzzword :)"
 msgid "double entry"
@@ -388,6 +405,11 @@ msgstr "Zinsen"
 msgid "invoice"
 msgstr "Rechnung (Rechnungsausgang, Versandte Rechnung)"
 
+#. "The customer (or vendor) to which this invoice is sent to."
+#, fuzzy
+msgid "invoice owner"
+msgstr "Rechnung (Rechnungsausgang, Versandte Rechnung)"
+
 #. "In business accounting: Jobs are a mechanism by which you can group multiple invoices or bills that belong to the same customer or vendor. The job describes a (larger) piece of work or a task undertaken on order, for which one or many invoices or bills will be issued."
 msgid "job"
 msgstr "Auftrag"
@@ -422,6 +444,11 @@ msgstr "fusionieren"
 
 #. "The thing that the scatter plot uses to mark each data point"
 msgid "marker"
+msgstr "Markierung"
+
+#. "1. Some text annotation, but this meaning isn't used inside gnucash. 2. In the Customer summary report: The ratio of profit vs. sales, i.e. the profit amount divided by the sales amount, shown in percent."
+#, fuzzy
+msgid "markup"
 msgstr "Markierung"
 
 #. "The way how more than one window is displayed in GnuCash at the same time. MDI = Multiple Document Interface."
@@ -534,7 +561,7 @@ msgstr "Geldkurs, Verkauf"
 msgid "price: quotes"
 msgstr "Börsenkurs, (Kurs, Börsennotierung, Marktwert)"
 
-#. "Money gained in business, esp. the difference between the amount earned and the amount spent"
+#. "Money gained in business, esp. the difference between the amount earned (sales) and the amount spent (expenses/cost): Profit is sales minus expenses/cost."
 msgid "profit"
 msgstr "Ergebnis, Gewinn"
 
@@ -638,6 +665,11 @@ msgstr "Stilvorlage"
 #. "The total of a set of figures that are part of a larger group of figures"
 msgid "subtotal"
 msgstr "Zwischensumme"
+
+#. "On the goverment's tax forms, the tax code identifies the given line or place on the form where certain amounts must be specified according to the current country's legislation"
+#, fuzzy
+msgid "tax code"
+msgstr "Steuerrelevante Informationen"
 
 #. "field of an account"
 msgid "tax info"

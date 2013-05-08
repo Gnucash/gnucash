@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-2.4\n"
-"POT-Creation-Date: 2011-07-02 22:25+0100\n"
+"POT-Creation-Date: 2013-05-08 22:16+0200\n"
 "PO-Revision-Date: 2011-08-17 13:23-0000\n"
 "Last-Translator: Tiago Neiva <tneiva@gmail.com>\n"
 "Language-Team: Portuguese <translation-team-pt@lists.sourceforge.net>\n"
@@ -82,8 +82,10 @@ msgstr "tipo de conta: a prazo"
 msgid "account type: Stock"
 msgstr "tipo de conta: Ações"
 
-msgid "account type: trading This account type (new in gnucash-2.4.0) is used when exchanging or trading amounts from one currency into another"
-msgstr "tipo de conta: câmbios"
+#. "This account type (new in gnucash-2.4.0) is used when exchanging or trading amounts from one currency into another"
+#, fuzzy
+msgid "account type: trading"
+msgstr "tipo de conta: a prazo"
 
 #. "-"
 msgid "account: parent account"
@@ -201,8 +203,10 @@ msgstr "banco"
 msgid "bill"
 msgstr "fatura de compra"
 
-msgid "bill owner see invoice owner"
-msgstr "fornecedor"
+#. "see invoice owner"
+#, fuzzy
+msgid "bill owner"
+msgstr "condições de pagamento"
 
 #. "Conditions on paying a bill. Both an invoice and a bill have billing terms. For example, you can have 'terms' of 'Net-30', where the bill is due in full in 30 days."
 msgid "billing terms"
@@ -273,6 +277,11 @@ msgstr "commodity option: fração"
 msgid "commodity option: Symbol"
 msgstr "commodity option: Símbolo"
 
+#. "interest which is earned on both the initial deposit and on any interest that has already been earned but left on deposit."
+#, fuzzy
+msgid "compound interests"
+msgstr "juro"
+
 #. "(a) A sum of money paid into an account. (b) A record of such a payment. (c) The state of having money in one's bank account."
 msgid "Credit (column in register)"
 msgstr "Crédito (coluna no registo)"
@@ -283,6 +292,11 @@ msgstr "Cartão de Crédito"
 
 #. "A transfer of money direct from one bank account to another, without using a cheque"
 msgid "credit transfer"
+msgstr "transferência"
+
+#. "A document that you give to a client that says you owe money to the client, i.e. the opposite of an invoice"
+#, fuzzy
+msgid "credit note"
 msgstr "transferência"
 
 #. "The system of money used in a country"
@@ -402,8 +416,10 @@ msgstr "juro"
 msgid "invoice"
 msgstr "fatura"
 
-msgid "invoice ownerThe customer (or vendor) to which this invoice is sent to."
-msgstr "entidade faturada"
+#. "The customer (or vendor) to which this invoice is sent to."
+#, fuzzy
+msgid "invoice owner"
+msgstr "fatura"
 
 #. "In business accounting: Jobs are a mechanism by which you can group multiple invoices or bills that belong to the same customer or vendor. The job describes a (larger) piece of work or a task undertaken on order, for which one or many invoices or bills will be issued."
 msgid "job"
@@ -442,8 +458,10 @@ msgstr "combinar"
 msgid "marker"
 msgstr "marcador"
 
-msgid "markup1. Some text annotation, but this meaning isn't used inside gnucash. 2. In the Customer summary report: The ratio of profit vs. sales, i.e. the profit amount divided by the sales amount, shown in percent."
-msgstr "margem de lucro"
+#. "1. Some text annotation, but this meaning isn't used inside gnucash. 2. In the Customer summary report: The ratio of profit vs. sales, i.e. the profit amount divided by the sales amount, shown in percent."
+#, fuzzy
+msgid "markup"
+msgstr "marcador"
 
 #. "The way how more than one window is displayed in GnuCash at the same time. MDI = Multiple Document Interface."
 msgid "MDI modus"
@@ -533,9 +551,19 @@ msgstr "placeholder"
 msgid "portfolio"
 msgstr "portefólio"
 
+#. "Register invoice, voucher in account register"
+#, fuzzy
+msgid "post, to"
+msgstr "fechar"
+
 #. "A menu choice in many graphical user interface applications that allows the user to specify how the application will act each time it is used. "
 msgid "preferences"
 msgstr "preferências"
+
+#. "Loan repayment calculator: your payments are split in interests payment and principal payment"
+#, fuzzy
+msgid "principal payment"
+msgstr "ação: pagamento"
 
 #. "An amount of money for which sth may be bought or sold"
 msgid "price (in a split)"
@@ -626,8 +654,9 @@ msgstr "Saldo de Exercícios Anteriores"
 msgid "reverse transaction, to (Action in the register)"
 msgstr "transação inversa, (ação no registo)"
 
-msgid "sales(In the customer summary report) The total amount of money received because something was sold."
-msgstr "vendas"
+#. "(In the customer summary report) The total amount of money received because something was sold."
+msgid "sales"
+msgstr ""
 
 #. "To write data (typically a file) to a storage medium, such as a disk or tape."
 msgid "save, to (to a file)"
@@ -669,8 +698,10 @@ msgstr "folha de estilo"
 msgid "subtotal"
 msgstr "subtotal"
 
-msgid "tax codeOn the goverment's tax forms, the tax code identifies the given line or place on the form where certain amounts must be specified according to the current country's legislation"
-msgstr "campo de declaração"
+#. "On the goverment's tax forms, the tax code identifies the given line or place on the form where certain amounts must be specified according to the current country's legislation"
+#, fuzzy
+msgid "tax code"
+msgstr "info impostos"
 
 #. "field of an account"
 msgid "tax info"
@@ -756,3 +787,32 @@ msgstr "comprovativo de despesa"
 msgid "withdraw (in the reconcile dialog)"
 msgstr "levantamento (no diálogo de reconciliação)"
 
+#~ msgid ""
+#~ "account type: trading This account type (new in gnucash-2.4.0) is used "
+#~ "when exchanging or trading amounts from one currency into another"
+#~ msgstr "tipo de conta: câmbios"
+
+#~ msgid "bill owner see invoice owner"
+#~ msgstr "fornecedor"
+
+#~ msgid ""
+#~ "invoice ownerThe customer (or vendor) to which this invoice is sent to."
+#~ msgstr "entidade faturada"
+
+#~ msgid ""
+#~ "markup1. Some text annotation, but this meaning isn't used inside "
+#~ "gnucash. 2. In the Customer summary report: The ratio of profit vs. "
+#~ "sales, i.e. the profit amount divided by the sales amount, shown in "
+#~ "percent."
+#~ msgstr "margem de lucro"
+
+#~ msgid ""
+#~ "sales(In the customer summary report) The total amount of money received "
+#~ "because something was sold."
+#~ msgstr "vendas"
+
+#~ msgid ""
+#~ "tax codeOn the goverment's tax forms, the tax code identifies the given "
+#~ "line or place on the form where certain amounts must be specified "
+#~ "according to the current country's legislation"
+#~ msgstr "campo de declaração"

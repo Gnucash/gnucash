@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: lt\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-09-09 12:02+0300\n"
+"POT-Creation-Date: 2013-05-08 22:16+0200\n"
 "PO-Revision-Date: 2011-08-28 20:55+0300\n"
 "Last-Translator: Aurimas Fišeras <aurimas@members.fsf.org>\n"
 "Language-Team: komp_lt@konf.lt\n"
@@ -270,6 +270,11 @@ msgstr "prekės parinktis: dalis"
 msgid "commodity option: Symbol"
 msgstr "prekės parinktis: Simbolis"
 
+#. "interest which is earned on both the initial deposit and on any interest that has already been earned but left on deposit."
+#, fuzzy
+msgid "compound interests"
+msgstr "palūkanos"
+
 #. "(a) A sum of money paid into an account. (b) A record of such a payment. (c) The state of having money in one's bank account."
 msgid "Credit (column in register)"
 msgstr "Kreditas (stulpelis registre)"
@@ -280,6 +285,11 @@ msgstr "Kreditinė kortelė"
 
 #. "A transfer of money direct from one bank account to another, without using a cheque"
 msgid "credit transfer"
+msgstr "kredito pervedimas"
+
+#. "A document that you give to a client that says you owe money to the client, i.e. the opposite of an invoice"
+#, fuzzy
+msgid "credit note"
 msgstr "kredito pervedimas"
 
 #. "The system of money used in a country"
@@ -537,6 +547,11 @@ msgstr "registruoti"
 #. "A menu choice in many graphical user interface applications that allows the user to specify how the application will act each time it is used. "
 msgid "preferences"
 msgstr "nuostatos"
+
+#. "Loan repayment calculator: your payments are split in interests payment and principal payment"
+#, fuzzy
+msgid "principal payment"
+msgstr "veiksmas: mokėjimas"
 
 #. "An amount of money for which sth may be bought or sold"
 msgid "price (in a split)"

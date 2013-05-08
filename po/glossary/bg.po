@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 2.2.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-11-24 02:25+0100\n"
+"POT-Creation-Date: 2013-05-08 22:16+0200\n"
 "PO-Revision-Date: 2011-10-25 13:18+0200\n"
 "Last-Translator: Rosi Dimova <pocu@bk.ru>\n"
 "Language-Team: BG <bg@li.org>\n"
@@ -82,6 +82,10 @@ msgstr "account type: спестовна сметка"
 #. "-"
 msgid "account type: Stock"
 msgstr "account type: акции"
+
+#. "This account type (new in gnucash-2.4.0) is used when exchanging or trading amounts from one currency into another"
+msgid "account type: trading"
+msgstr "account type: брокерска сметка"
 
 #. "-"
 msgid "account: parent account"
@@ -201,6 +205,10 @@ msgstr "банка"
 msgid "bill"
 msgstr "фактура от доставчик"
 
+#. "see invoice owner"
+msgid "bill owner"
+msgstr "получател на фактура от доставчик"
+
 #. "Conditions on paying a bill. Both an invoice and a bill have billing terms. For example, you can have 'terms' of 'Net-30', where the bill is due in full in 30 days."
 msgid "billing terms"
 msgstr "срок за плащане"
@@ -266,6 +274,11 @@ msgstr "commodity option: единична акция"
 msgid "commodity option: Symbol"
 msgstr "commodity option: символ"
 
+#. "interest which is earned on both the initial deposit and on any interest that has already been earned but left on deposit."
+#, fuzzy
+msgid "compound interests"
+msgstr "лихва"
+
 #. "(a) A sum of money paid into an account. (b) A record of such a payment. (c) The state of having money in one's bank account."
 msgid "Credit (column in register)"
 msgstr "Кредит"
@@ -276,6 +289,11 @@ msgstr "кредитна карта"
 
 #. "A transfer of money direct from one bank account to another, without using a cheque"
 msgid "credit transfer"
+msgstr "кредитен превод"
+
+#. "A document that you give to a client that says you owe money to the client, i.e. the opposite of an invoice"
+#, fuzzy
+msgid "credit note"
 msgstr "кредитен превод"
 
 #. "The system of money used in a country"
@@ -396,6 +414,11 @@ msgstr "лихва"
 msgid "invoice"
 msgstr "фактура на клиент"
 
+# (издадена фактура)
+#. "The customer (or vendor) to which this invoice is sent to."
+msgid "invoice owner"
+msgstr "получател на фактура"
+
 #. "In business accounting: Jobs are a mechanism by which you can group multiple invoices or bills that belong to the same customer or vendor. The job describes a (larger) piece of work or a task undertaken on order, for which one or many invoices or bills will be issued."
 msgid "job"
 msgstr "задание"
@@ -431,6 +454,10 @@ msgstr "сливане"
 #. "The thing that the scatter plot uses to mark each data point"
 msgid "marker"
 msgstr "записка"
+
+#. "1. Some text annotation, but this meaning isn't used inside gnucash. 2. In the Customer summary report: The ratio of profit vs. sales, i.e. the profit amount divided by the sales amount, shown in percent."
+msgid "markup"
+msgstr "прираст"
 
 #. "The way how more than one window is displayed in GnuCash at the same time. MDI = Multiple Document Interface."
 msgid "MDI modus"
@@ -522,9 +549,19 @@ msgstr "синтетична сметка"
 msgid "portfolio"
 msgstr "портфолио"
 
+#. "Register invoice, voucher in account register"
+#, fuzzy
+msgid "post, to"
+msgstr "приключване"
+
 #. "A menu choice in many graphical user interface applications that allows the user to specify how the application will act each time it is used. "
 msgid "preferences"
 msgstr "настройки"
+
+#. "Loan repayment calculator: your payments are split in interests payment and principal payment"
+#, fuzzy
+msgid "principal payment"
+msgstr "action: плащане"
 
 #. "An amount of money for which sth may be bought or sold"
 msgid "price (in a split)"
@@ -542,7 +579,7 @@ msgstr "цена: купува"
 msgid "price: quotes"
 msgstr "цена: борсова цена"
 
-#. "Money gained in business, esp. the difference between the amount earned and the amount spent"
+#. "Money gained in business, esp. the difference between the amount earned (sales) and the amount spent (expenses/cost): Profit is sales minus expenses/cost."
 msgid "profit"
 msgstr "печалба"
 
@@ -606,6 +643,10 @@ msgstr "неразпределена печалба"
 msgid "reverse transaction, to (Action in the register)"
 msgstr "сторнираща транзакция"
 
+#. "(In the customer summary report) The total amount of money received because something was sold."
+msgid "sales"
+msgstr "продажби"
+
 #. "To write data (typically a file) to a storage medium, such as a disk or tape."
 msgid "save, to (to a file)"
 msgstr "съхрани"
@@ -645,6 +686,10 @@ msgstr "таблица със стил"
 #. "The total of a set of figures that are part of a larger group of figures"
 msgid "subtotal"
 msgstr "междинна сума"
+
+#. "On the goverment's tax forms, the tax code identifies the given line or place on the form where certain amounts must be specified according to the current country's legislation"
+msgid "tax code"
+msgstr "данъчен код"
 
 #. "field of an account"
 msgid "tax info"
@@ -730,22 +775,3 @@ msgstr "ваучер"
 #. "see debit"
 msgid "withdraw (in the reconcile dialog)"
 msgstr "задължавам, дебитирам"
-
-#~ msgid "account type: trading"
-#~ msgstr "account type: брокерска сметка"
-
-#~ msgid "bill owner"
-#~ msgstr "получател на фактура от доставчик"
-
-# (издадена фактура)
-#~ msgid "invoice owner"
-#~ msgstr "получател на фактура"
-
-#~ msgid "markup"
-#~ msgstr "прираст"
-
-#~ msgid "sales"
-#~ msgstr "продажби"
-
-#~ msgid "tax code"
-#~ msgstr "данъчен код"
