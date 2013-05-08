@@ -287,6 +287,10 @@ msgstr "Kreditkarte"
 msgid "credit transfer"
 msgstr "Überweisung"
 
+#. "A document that you give to a client that says you owe money to the client, i.e. the opposite of an invoice"
+msgid "credit note"
+msgstr "Gutschrift"
+
 #. "The system of money used in a country"
 msgid "currency"
 msgstr "Währung"
@@ -541,9 +545,18 @@ msgstr "Platzhalter"
 msgid "portfolio"
 msgstr "Portfolio"
 
+#. "Register invoice, voucher in account register"
+msgid "post, to"
+msgstr "buchen? fakturieren?"
+
 #. "A menu choice in many graphical user interface applications that allows the user to specify how the application will act each time it is used. "
 msgid "preferences"
 msgstr "Einstellungen"
+
+#. "Loan repayment calculator: your payments are split in interests payment and principal payment"
+#, fuzzy
+msgid "principal payment"
+msgstr "Zahlung"
 
 #. "An amount of money for which sth may be bought or sold"
 msgid "price (in a split)"
@@ -625,6 +638,10 @@ msgstr "Gewinnrücklagen"
 #. "Create a new transaction that is the inverse of the old one.  When you add the two together they completely cancel out.  Accounts use this instead of voiding transactions, usually because the prior month has been closed and can no longer be changed, or the entire accounting system is 'write only'."
 msgid "reverse transaction, to (Action in the register)"
 msgstr "Stornierungsbuchung hinzufügen"
+
+#. "(In the customer summary report) The total amount of money received because something was sold."
+msgid "sales"
+msgstr "Umsatz"
 
 #. "To write data (typically a file) to a storage medium, such as a disk or tape."
 msgid "save, to (to a file)"
