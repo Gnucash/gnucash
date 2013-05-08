@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-05-07 12:19+0200\n"
-"PO-Revision-Date: 2013-04-18 09:17+0200\n"
+"POT-Creation-Date: 2013-05-08 21:23+0200\n"
+"PO-Revision-Date: 2013-05-08 22:36+0200\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: GnuCash-de <gnucash-de@gnucash.org>\n"
 "Language: German\n"
@@ -303,23 +303,18 @@ msgid "[datafile]"
 msgstr ""
 
 #: ../src/bin/gnucash-bin.c:154
-#, fuzzy
 msgid "This is a development version. It may or may not work."
 msgstr ""
 "Diese Version befindet sich noch in Entwicklung.\n"
-"Sie kann funktionieren, muss aber nicht.\n"
+"Sie kann funktionieren, muss aber nicht. "
 
 #: ../src/bin/gnucash-bin.c:155
-#, fuzzy
 msgid "Report bugs and other problems to gnucash-devel@gnucash.org"
-msgstr ""
-"Fehler und andere Probleme werden auf gnucash-devel@gnucash.org diskutiert.\n"
+msgstr "Fehler und andere Probleme werden auf gnucash-devel@gnucash.org diskutiert."
 
 #: ../src/bin/gnucash-bin.c:156
-#, fuzzy
 msgid "You can also lookup and file bug reports at http://bugzilla.gnome.org"
-msgstr ""
-"Fehlerberichte können auf http://bugzilla.gnome.org eingeschickt werden.\n"
+msgstr "Fehlerberichte können auf http://bugzilla.gnome.org eingeschickt werden."
 
 #: ../src/bin/gnucash-bin.c:157
 msgid "To find the last stable version, please refer to http://www.gnucash.org"
@@ -351,11 +346,13 @@ msgstr "GnuCash Entwicklungsversion %s"
 #. 3rd %s is the scm revision number;
 #. 4th %s is the build date
 #: ../src/bin/gnucash-bin.c:534 ../src/gnome-utils/gnc-main-window.c:4184
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s\n"
 "This copy was built from %s rev %s on %s."
-msgstr "%s  Dieses Programm wurde aus SVN r%s am %s erstellt."
+msgstr ""
+"%s\n"
+"Dieses Programm wurde aus %s Version %s am %s erstellt."
 
 #: ../src/bin/gnucash-bin.c:540
 #, c-format
@@ -366,11 +363,13 @@ msgstr "GnuCash %s"
 #. 2nd %s is the scm (svn/svk/git/bzr) revision number;
 #. 3rd %s is the build date
 #: ../src/bin/gnucash-bin.c:545 ../src/gnome-utils/gnc-main-window.c:4191
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s\n"
 "This copy was built from rev %s on %s."
-msgstr "%s  Dieses Programm wurde aus r%s am %s erstellt."
+msgstr ""
+"%s\n"
+"Dieses Programm wurde aus Version %s am %s erstellt."
 
 #: ../src/bin/gnucash-bin.c:651
 msgid "No quotes retrieved. Finance::Quote isn't installed properly.\n"
@@ -894,16 +893,14 @@ msgstr "Gesamt Belastung:"
 
 #. Set the type label
 #: ../src/business/business-gnome/dialog-invoice.c:1644
-#, fuzzy
 msgid "Credit note"
-msgstr "Kreditrahmen"
+msgstr "Gutschrift"
 
 #: ../src/business/business-gnome/dialog-invoice.c:1831
 #: ../src/business/business-gnome/dialog-invoice.c:1850
 #: ../src/business/business-gnome/dialog-invoice.c:1869
-#, fuzzy
 msgid "New Credit Note"
-msgstr "Habenkonto"
+msgstr "Neue Gutschrift"
 
 #: ../src/business/business-gnome/dialog-invoice.c:1832
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:278
@@ -915,9 +912,8 @@ msgstr "Neue Rechnung"
 #: ../src/business/business-gnome/dialog-invoice.c:1837
 #: ../src/business/business-gnome/dialog-invoice.c:1856
 #: ../src/business/business-gnome/dialog-invoice.c:1875
-#, fuzzy
 msgid "Edit Credit Note"
-msgstr "Berichtsoptionen ändern"
+msgstr "Gutschrift bearbeiten"
 
 #: ../src/business/business-gnome/dialog-invoice.c:1838
 msgid "Edit Invoice"
@@ -926,9 +922,8 @@ msgstr "Rechnung bearbeiten"
 #: ../src/business/business-gnome/dialog-invoice.c:1841
 #: ../src/business/business-gnome/dialog-invoice.c:1860
 #: ../src/business/business-gnome/dialog-invoice.c:1879
-#, fuzzy
 msgid "View Credit Note"
-msgstr "Auftrag anzeigen/bearbeiten"
+msgstr "Gutschrift anzeigen"
 
 #: ../src/business/business-gnome/dialog-invoice.c:1842
 msgid "View Invoice"
@@ -962,9 +957,8 @@ msgid "View Expense Voucher"
 msgstr "Auslagenerstattung anzeigen"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2703
-#, fuzzy
 msgid "Date of duplicated entries"
-msgstr "Eintrag _duplizieren"
+msgstr "Datum der kopierten Einträge"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2787
 msgid "View/Edit Invoice"
@@ -989,9 +983,8 @@ msgstr "Buchen"
 #: ../src/business/business-gnome/dialog-invoice.c:2791
 #: ../src/business/business-gnome/dialog-invoice.c:2800
 #: ../src/business/business-gnome/dialog-invoice.c:2811
-#, fuzzy
 msgid "Printable Report"
-msgstr "Einzelner Bericht"
+msgstr "Druckbarer Bericht"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2796
 #: ../src/business/business-gnome/dialog-invoice.c:3060
@@ -1212,7 +1205,7 @@ msgstr "Betrag"
 #. Translators: %d is the number of bills due. This is a
 #. ngettext(3) message.
 #: ../src/business/business-gnome/dialog-invoice.c:3122
-#, fuzzy, c-format
+#, c-format
 msgid "The following bill is due:"
 msgid_plural "The following %d bills are due:"
 msgstr[0] "Die folgende Rechnung ist fällig:"
@@ -1339,7 +1332,6 @@ msgid "Pre-Payment"
 msgstr "Vorauszahlung"
 
 #: ../src/business/business-gnome/dialog-payment.c:556
-#, fuzzy
 msgid ""
 "You must enter the amount of the payment.  The payment amount must not be "
 "zero."
@@ -1355,7 +1347,6 @@ msgid "You must select a transfer account from the account tree."
 msgstr "Sie müssen ein Herkunftskonto aus der Kontenhierarchie wählen."
 
 #: ../src/business/business-gnome/dialog-payment.c:585
-#, fuzzy
 msgid "You must enter a valid account name for posting."
 msgstr "Sie müssen einen Kontonamen zum Buchen eingeben."
 
@@ -1459,9 +1450,8 @@ msgid "_Customer"
 msgstr "_Kunden"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:156
-#, fuzzy
 msgid "Customers Overview"
-msgstr "Rechnungen des Kunden"
+msgstr "Kundenübersicht"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:157
 #, fuzzy
@@ -1674,14 +1664,12 @@ msgid "Initialize Test Data"
 msgstr "Testdaten zurücksetzen"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:312
-#, fuzzy
 msgid "Assign as payment..."
-msgstr "_Zahlung verarbeiten..."
+msgstr "Als Zahlung zuweisen..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:313
-#, fuzzy
 msgid "Assign the selected transaction as payment"
-msgstr "Ausgewählten Buchungssatz ausschneiden"
+msgstr "Ausgewählte Buchung als Zahlung einer Rechnung etc. zuweisen"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:97
 msgid "Sort _Order"
@@ -1943,34 +1931,28 @@ msgid "Unpost"
 msgstr "Buchung löschen"
 
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:144
-#, fuzzy
 msgid "E_dit Vendor"
-msgstr "Lieferant bearbeiten"
+msgstr "_Lieferant bearbeiten"
 
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:145
-#, fuzzy
 msgid "Edit the selected vendor"
-msgstr "Ausgewähltes Konto bearbeiten"
+msgstr "Ausgewählten Lieferant bearbeiten"
 
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:149
-#, fuzzy
 msgid "E_dit Customer"
-msgstr "Kunde bearbeiten"
+msgstr "_Kunde bearbeiten"
 
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:150
-#, fuzzy
 msgid "Edit the selected customer"
-msgstr "Ausgewähltes Konto bearbeiten"
+msgstr "Ausgewählten Kunden bearbeiten"
 
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:154
-#, fuzzy
 msgid "E_dit Employee"
-msgstr "Mitarbeiter bearbeiten"
+msgstr "_Mitarbeiter bearbeiten"
 
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:155
-#, fuzzy
 msgid "Edit the selected employee"
-msgstr "Ausgewähltes Konto bearbeiten"
+msgstr "Ausgewählten Mitarbeiter bearbeiten"
 
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:160
 #, fuzzy
@@ -2735,9 +2717,8 @@ msgstr "Zusätzlich auf Karte:"
 #: ../intl-scm/guile-strings.c:1150 ../intl-scm/guile-strings.c:1152
 #: ../intl-scm/guile-strings.c:1330 ../intl-scm/guile-strings.c:1332
 #: ../intl-scm/guile-strings.c:1334
-#, fuzzy
 msgid "Credit Note"
-msgstr "Habenkonto"
+msgstr "Gutschrift"
 
 #: ../src/business/business-gnome/gtkbuilder/dialog-invoice.glade.h:8
 msgid "Customer: "
@@ -2872,9 +2853,8 @@ msgstr ""
 "sinnvoller Wert gewählt."
 
 #: ../src/business/business-gnome/gtkbuilder/dialog-payment.glade.h:2
-#, fuzzy
 msgid "<b>Amount</b>"
-msgstr "<b>_Konten</b>"
+msgstr "<b>Betrag</b>"
 
 #. Header string
 #. Add the columns
@@ -3927,30 +3907,29 @@ msgstr "letzter %s"
 #: ../src/engine/Recurrence.c:642
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:11
 msgid "1st"
-msgstr ""
+msgstr "1."
 
 #: ../src/engine/Recurrence.c:642
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:29
-#, fuzzy
 msgid "2nd"
-msgstr "Ende"
+msgstr "2."
 
 #: ../src/engine/Recurrence.c:642
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:39
 msgid "3rd"
-msgstr ""
+msgstr "3."
 
 #: ../src/engine/Recurrence.c:642
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:47
 msgid "4th"
-msgstr ""
+msgstr "4."
 
 #. translators: %s is the string 1st, 2nd, 3rd and so on, and
 #. * %s is an already-localized form of the day of the week.
 #: ../src/engine/Recurrence.c:652
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s"
-msgstr "%s: %s - %s"
+msgstr "%s %s"
 
 #: ../src/engine/Recurrence.c:689
 #: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:29
@@ -5406,27 +5385,23 @@ msgstr "_Buchung löschen"
 
 #: ../src/gnome/gnc-plugin-page-register2.c:193
 #: ../src/gnome/gnc-plugin-page-register.c:194
-#, fuzzy
 msgid "Cu_t Split"
-msgstr "Automatische Buchung"
+msgstr "Buchungsteil aus_schneiden"
 
 #: ../src/gnome/gnc-plugin-page-register2.c:194
 #: ../src/gnome/gnc-plugin-page-register.c:195
-#, fuzzy
 msgid "_Copy Split"
-msgstr "Automatische Buchung"
+msgstr "Buchungsteil _kopieren"
 
 #: ../src/gnome/gnc-plugin-page-register2.c:195
 #: ../src/gnome/gnc-plugin-page-register.c:196
-#, fuzzy
 msgid "_Paste Split"
-msgstr "Buchungsteil _löschen"
+msgstr "Buchungsteil _einfügen"
 
 #: ../src/gnome/gnc-plugin-page-register2.c:196
 #: ../src/gnome/gnc-plugin-page-register.c:197
-#, fuzzy
 msgid "Dup_licate Split"
-msgstr "Eintrag _duplizieren"
+msgstr "Buchungsteil _duplizieren"
 
 #: ../src/gnome/gnc-plugin-page-register2.c:197
 #: ../src/gnome/gnc-plugin-page-register.c:198
@@ -5980,9 +5955,9 @@ msgid "Delete the selected scheduled transaction"
 msgstr "Ausgewählte terminierte Buchung löschen"
 
 #: ../src/gnome/gnc-plugin-page-sx-list.c:359
-#, fuzzy, c-format
+#, c-format
 msgid "Transactions"
-msgstr "Buchung"
+msgstr "Buchungen"
 
 #: ../src/gnome/gnc-plugin-page-sx-list.c:421
 #, fuzzy, c-format
@@ -6884,14 +6859,12 @@ msgid "Continuous"
 msgstr "Kontinuierlich"
 
 #: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:12
-#, fuzzy
 msgid "Daily (360)"
-msgstr "Täglich"
+msgstr "Täglich (360)"
 
 #: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:13
-#, fuzzy
 msgid "Daily (365)"
-msgstr "Täglich"
+msgstr "Täglich (365)"
 
 #: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:14
 msgid "Discrete"
@@ -6964,9 +6937,8 @@ msgid "total"
 msgstr "Betrag"
 
 #: ../src/gnome/gtkbuilder/dialog-lot-viewer.glade.h:1
-#, fuzzy
 msgid "<<"
-msgstr "<"
+msgstr "<<"
 
 #: ../src/gnome/gtkbuilder/dialog-lot-viewer.glade.h:2
 #, fuzzy
@@ -6991,9 +6963,8 @@ msgid "<b>_Title</b>"
 msgstr "<b>_Name</b>"
 
 #: ../src/gnome/gtkbuilder/dialog-lot-viewer.glade.h:7
-#, fuzzy
 msgid ">>"
-msgstr ">"
+msgstr ">>"
 
 #: ../src/gnome/gtkbuilder/dialog-lot-viewer.glade.h:8
 msgid "Delete the highlighted lot"
@@ -9746,7 +9717,7 @@ msgstr ""
 "und den gconf-Server neu starten."
 
 #: ../src/gnome-utils/assistant-gconf-setup.c:352
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "When you click Apply, GnuCash will install the gconf data into your local ~/."
 "gconf file and restart the gconf backend. The %s script must be found in "
@@ -9757,7 +9728,6 @@ msgstr ""
 "dazu in Ihrem Suchpfad zu finden sein, damit dies korrekt funktioniert."
 
 #: ../src/gnome-utils/assistant-gconf-setup.c:356
-#, fuzzy
 msgid ""
 "You have chosen to correct the problem by yourself. When you click Apply, "
 "GnuCash will exit. Please correct the problem and restart the gconf backend "
@@ -9772,7 +9742,7 @@ msgstr ""
 "klicken, um den notwendigen Text zu kopieren."
 
 #: ../src/gnome-utils/assistant-gconf-setup.c:362
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "You have chosen to correct the problem by yourself. When you click Apply, "
 "GnuCash will exit. Please run the %s script which will install the "
@@ -9783,7 +9753,6 @@ msgstr ""
 "notwendigen Daten schreibt und den gconf-Server neu startet."
 
 #: ../src/gnome-utils/assistant-gconf-setup.c:366
-#, fuzzy
 msgid ""
 "You have already corrected the problem and restarted the gconf backend with "
 "the command 'gconftool-2 --shutdown'. When you click Apply, there will be a "
@@ -9794,7 +9763,6 @@ msgstr ""
 "klicken, wird GnuCash mit dem Programmstart fortsetzen."
 
 #: ../src/gnome-utils/assistant-xml-encoding.c:160
-#, fuzzy
 msgid ""
 "\n"
 "The file you are trying to load is from an older version of GnuCash. The "
@@ -9816,27 +9784,16 @@ msgid ""
 "Press 'Forward' now to select the correct character encoding for your data "
 "file.\n"
 msgstr ""
-"Die zu öffnende Datei enthält keine Angaben zu der verwendeten "
-"Zeichenkodierung. Dies ist bei allen Dateien der GnuCash-Version 1.9 oder "
-"älter der Fall. Es bedeutet, dass GnuCash die enthaltenen Texte in "
-"mehrfacher Bedeutung lesen könnte. Eine solche Mehrdeutigkeit kann nicht "
-"automatisch behoben werden.\n"
 "\n"
-"Auf der nächsten Seite sollen Sie die besten Bedeutungen der gelesenen Texte "
-"auswählen. GnuCash versucht dafür, eine passende Zeichenkodierung zu "
-"erraten. Wenn die erratene Zeichenkodierung passend war, werden alle Texte "
-"richtig aussehen und Sie können einfach »Vor« klicken.\n"
+"Die zu öffnende Datei enthält keine Angaben zu der verwendeten Zeichenkodierung. Dies ist bei allen Dateien der GnuCash-Version 1.9 oder älter der Fall. Es bedeutet, dass GnuCash die enthaltenen Texte in mehrfacher Bedeutung lesen könnte. Eine solche Mehrdeutigkeit kann nicht automatisch behoben werden.\n"
 "\n"
-"Wenn die Texte nicht wie erwartet aussehen, sollten Sie eine andere "
-"Zeichenkodierung mit der oberen Auswahlbox probieren. Wenn auch dies noch "
-"nicht hilft, sollten Sie weitere Zeichenkodierungen auswählen, indem Sie auf "
-"den Knopf rechts oben klicken.\n"
+"Auf der nächsten Seite sollen Sie die besten Bedeutungen der gelesenen Texte auswählen. GnuCash versucht dafür, eine passende Zeichenkodierung zu erraten. Wenn die erratene Zeichenkodierung passend war, werden alle Texte richtig aussehen und Sie können einfach »Vor« klicken.\n"
 "\n"
-"Es werden keine Änderungen vorgenommen, bevor Sie nicht auf der allerletzten "
-"Seite »Anwenden« klicken. Sie können jederzeit mit »Zurück« auf diese Seite "
-"zurückkehren, um diese Erklärung erneut zu lesen.\n"
+"Wenn die Texte nicht wie erwartet aussehen, sollten Sie eine andere Zeichenkodierung mit der oberen Auswahlbox probieren. Wenn auch dies noch nicht hilft, sollten Sie weitere Zeichenkodierungen auswählen, indem Sie auf den Knopf rechts oben klicken.\n"
 "\n"
-"Klicken Sie nun »Vor«."
+"Es werden keine Änderungen vorgenommen, bevor Sie nicht auf der allerletzten Seite »Anwenden« klicken. Sie können jederzeit mit »Zurück« auf diese Seite zurückkehren, um diese Erklärung erneut zu lesen.\n"
+"\n"
+"Klicken Sie nun »Vor«.\n"
 
 #: ../src/gnome-utils/assistant-xml-encoding.c:180
 msgid "Ambiguous character encoding"
@@ -10462,13 +10419,9 @@ msgid_plural ""
 "\n"
 "Should your file be saved automatically?"
 msgstr[0] ""
-"Ihre Datei muss auf der Festplatte gespeichert werden, um Ihre Änderungen zu "
-"sichern.  GnuCash kann das Speichern automatisch alle %d Minuten auslösen, "
-"so als ob Sie jedesmal den Knopf »Speichern« klicken würden.\n"
+"Ihre Datei muss auf der Festplatte gespeichert werden, um Ihre Änderungen zu sichern.  GnuCash kann das Speichern automatisch alle %d Minute auslösen, so als ob Sie jedesmal den Knopf »Speichern« klicken würden.\n"
 "\n"
-"Wenn Sie das Zeitintervall ändern möchten, können Sie dies tun unter "
-"Bearbeiten -> Einstellungen -> Allgemein -> Zeitintervall automatisch "
-"Speichern, oder dieses Feature dort auch abschalten.\n"
+"Wenn Sie das Zeitintervall ändern möchten, können Sie dies tun unter Bearbeiten -> Einstellungen -> Allgemein -> Zeitintervall automatisch Speichern, oder dieses Feature dort auch abschalten.\n"
 "\n"
 "Soll Ihre Datei automatisch gespeichert werden?"
 msgstr[1] ""
@@ -10804,15 +10757,14 @@ msgstr ""
 "sie schreibgeschützt zu öffnen."
 
 #: ../src/gnome-utils/gnc-file.c:422
-#, fuzzy
 msgid ""
 "This database is from a newer version of GnuCash. This version can read it, "
 "but cannot safely save to it. It will be marked read-only until you do "
 "File>Save As, but data may be lost in writing to the old version."
 msgstr ""
-"Diese Datenbank ist von einer neueren Version von GnuCash. Diese Version "
-"kann das lesen, aber kann nicht alle Daten schreiben. Die Datenbank wird als "
-"schreibgeschützt geöffnet, bis Sie »Datei -> Speichern unter« auswählen."
+"Diese Datenbank ist von einer neueren Version von GnuCash. Diese Version kann das lesen, aber kann nicht alle Daten schreiben. Die Datenbank wird als schreibgeschützt geöffnet, bis Sie »Datei -> Speichern unter« auswählen.\n"
+"\n"
+"Wenn Sie die Datei in dieser älteren Version speichern, könnten allerdings Daten aus der neueren GnuCash-Version verloren gehen."
 
 #: ../src/gnome-utils/gnc-file.c:431
 msgid ""
@@ -10871,9 +10823,7 @@ msgstr "Änderungen in Datei speichern?"
 msgid "If you don't save, changes from the past %d minute will be discarded."
 msgid_plural ""
 "If you don't save, changes from the past %d minutes will be discarded."
-msgstr[0] ""
-"Wenn Sie nicht speichern, gehen die Änderungen der letzten %d Minuten "
-"verloren."
+msgstr[0] "Wenn Sie nicht speichern, gehen die Änderungen der letzten %d Minute verloren."
 msgstr[1] ""
 "Wenn Sie nicht speichern, gehen die Änderungen der letzten %d Minuten "
 "verloren."
@@ -10925,7 +10875,6 @@ msgid "_Create New File"
 msgstr "_Neue Datei anlegen"
 
 #: ../src/gnome-utils/gnc-file.c:773
-#, fuzzy
 msgid "Open _Anyway"
 msgstr "Tr_otzdem öffnen"
 
@@ -11851,9 +11800,8 @@ msgid "Dist"
 msgstr "Ausschüttung"
 
 #: ../src/gnome-utils/gnc-tree-util-split-reg.c:46
-#, fuzzy
 msgid "-- Stock Split --"
-msgstr "Aktienteilung"
+msgstr "-- Aktienteilung --"
 
 #: ../src/gnome-utils/gnc-tree-util-split-reg.c:739
 msgid ""
@@ -12012,9 +11960,8 @@ msgid "C"
 msgstr ""
 
 #: ../src/gnome-utils/gnc-tree-view-account.c:875
-#, fuzzy
 msgid "Account Color"
-msgstr "Konto_farbe:"
+msgstr "Kontofarbe"
 
 #: ../src/gnome-utils/gnc-tree-view-account.c:889
 msgid "Tax Info"
@@ -12466,7 +12413,6 @@ msgid "GnuCash will update the system path for you."
 msgstr "GnuCash aktualisiert den Systempfad für Sie."
 
 #: ../src/gnome-utils/gtkbuilder/assistant-gconf-setup.glade.h:10
-#, fuzzy
 msgid "Install Into Home Directory"
 msgstr "Im Benutzerverzeichnis (»home«) installieren"
 
@@ -12547,7 +12493,6 @@ msgstr ""
 "Beschreibung finden kann."
 
 #: ../src/gnome-utils/gtkbuilder/assistant-gconf-setup.glade.h:21
-#, fuzzy
 msgid "Update GnuCash Configuration Data"
 msgstr "GnuCash Konfigurationsdaten aktualisieren"
 
@@ -12556,12 +12501,10 @@ msgid "Update GnuCash configuration data"
 msgstr "GnuCash Konfigurationsdaten aktualisieren"
 
 #: ../src/gnome-utils/gtkbuilder/assistant-gconf-setup.glade.h:23
-#, fuzzy
 msgid "Update Search Path"
 msgstr "Suchpfad aktualisieren"
 
 #: ../src/gnome-utils/gtkbuilder/assistant-gconf-setup.glade.h:24
-#, fuzzy
 msgid ""
 "You have chosen to install the configuration data used by GnuCash into the "
 "~/.gconf directory. GnuCash can do this for you, or tell you how to do it "
@@ -12572,7 +12515,6 @@ msgstr ""
 "oder von Ihnen selber durchgeführt werden."
 
 #: ../src/gnome-utils/gtkbuilder/assistant-gconf-setup.glade.h:25
-#, fuzzy
 msgid ""
 "You have chosen to update the system search path. GnuCash can do this for "
 "you, or it can tell you how to do it yourself."
@@ -12581,7 +12523,6 @@ msgstr ""
 "entweder von GnuCash oder von Ihnen selber durchgeführt werden."
 
 #: ../src/gnome-utils/gtkbuilder/assistant-gconf-setup.glade.h:26
-#, fuzzy
 msgid ""
 "You will then need to restart the gconf backend with the command "
 "'gconftool-2 --shutdown'."
@@ -14082,11 +14023,9 @@ msgid "<b>Tax Tables</b>"
 msgstr "<b>Steuertabellen</b>"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-tax-table.glade.h:6
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Percent %"
-msgstr ""
-"Wert (Währung)\n"
-"Prozent (%)"
+msgstr "Prozent (%)"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-tax-table.glade.h:7
 msgid "Tax Tables"
@@ -14972,9 +14911,8 @@ msgstr "Beim Zugriff auf %s ist ein Fehler aufgetreten."
 #. file name. We will store the chosen directory in the gtk print settings
 #. as well.
 #: ../src/html/gnc-html-webkit.c:1140
-#, fuzzy
 msgid "Export to PDF File"
-msgstr "Berichtstitel"
+msgstr "Export in eine PDF-Datei"
 
 #: ../src/import-export/aqbanking/assistant-ab-initial.c:373
 #, c-format
@@ -16078,7 +16016,7 @@ msgid ""
 "There was a problem with the export, this could be due to lack of space, "
 "permissions or unable to access folder. Check the trace file for further "
 "logging!\n"
-"You may need to enable debuging.\n"
+"You may need to enable debugging.\n"
 msgstr ""
 
 #: ../src/import-export/csv-export/assistant-csv-export.c:758
@@ -16501,7 +16439,7 @@ msgstr ""
 #, c-format
 msgid ""
 "To Change the account, double click on the required account, click Forward "
-"to procede."
+"to proceed."
 msgstr ""
 
 #. A list of the transactions we create
@@ -18639,14 +18577,12 @@ msgid "Print the current report"
 msgstr "Aktuellen Bericht drucken"
 
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1022
-#, fuzzy
 msgid "Export as P_DF..."
-msgstr "_QIF-Datei importieren..."
+msgstr "Exportieren als _PDF..."
 
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1023
-#, fuzzy
 msgid "Export the current report as a PDF document"
-msgstr "Aktuellen Bericht drucken"
+msgstr "Aktuellen Bericht in eine PDF-Datei exportieren"
 
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1047
 msgid "Add _Report"
@@ -27002,7 +26938,6 @@ msgstr ""
 "#gnucash auf irc.gnome.org zu finden."
 
 #: ../doc/tip_of_the_day.list.in:94
-#, fuzzy
 msgid ""
 "There is a theory that if ever anyone discovers what the Universe is for and "
 "why it is here, it will instantly disappear and be replaced with something "
@@ -27022,717 +26957,3 @@ msgid ""
 "from the main accounts hierarchy page. To limit your search to a single "
 "account, start the search from that account's register."
 msgstr ""
-
-#~ msgid "The last stable version was "
-#~ msgstr "Die letzte stabile Version war: "
-
-#~ msgid "The next stable version will be "
-#~ msgstr "Die nächste stabile Version wird sein: "
-
-#~ msgid "Built %s from r%s"
-#~ msgstr "Build vom %s, Revision r%s"
-
-#~ msgid "You may not post an invoice with a negative total value."
-#~ msgstr "Sie können keine Rechnung buchen, die einen negativen Saldo hat."
-
-#~ msgid ""
-#~ "You may not post an expense voucher with a negative total cash value."
-#~ msgstr ""
-#~ "Sie können keine Auslagenerstattung buchen, die einen negativen Saldo hat."
-
-#~ msgid "Your selected post account, %s, does not exist"
-#~ msgstr "Das gewählte Buchungskonto %s existiert nicht"
-
-#~ msgid ""
-#~ "Days\n"
-#~ "Proximo"
-#~ msgstr ""
-#~ "Tage\n"
-#~ "Im nächsten Monat"
-
-#~ msgid "What Tax Table should be applied to this customer?"
-#~ msgstr "Welche Steuertabelle soll bei diesem Kunden angewendet werden?"
-
-#~ msgid ""
-#~ "The invoice being paid.\n"
-#~ "\n"
-#~ "Note that is field is optional. If you leave it blank, GnuCash will "
-#~ "automatically assign the payment to the first unpaid invoice for this "
-#~ "company."
-#~ msgstr ""
-#~ "Die Rechnung, welche beglichen wird.\n"
-#~ "\n"
-#~ "Dieses Feld ist optional. Wird es leer gelassen, ordnet GnuCash die "
-#~ "Zahlung automatisch der ersten noch offenen Rechnung dieses Lieferanten "
-#~ "zu."
-
-#~ msgid "What Tax Table should be applied to this vendor?"
-#~ msgstr "Welche Steuertabelle soll bei diesem Lieferanten angewendet werden?"
-
-#~ msgid "Reload invoice report"
-#~ msgstr "Rechnungsbericht neu laden"
-
-#~ msgid "Reload invoice report scheme file"
-#~ msgstr "Rechnungsbericht aus Quelltext neu laden"
-
-#~ msgid "Reload owner report"
-#~ msgstr "Mandantenbericht neu laden"
-
-#~ msgid "Reload owner report scheme file"
-#~ msgstr "Mandantenbericht aus Quelltext neu laden"
-
-#~ msgid "Reload receivable report"
-#~ msgstr "Forderungs-Bericht neu laden"
-
-#~ msgid "Reload receivable report scheme file"
-#~ msgstr "Forderungs-Bericht aus Quelltext neu laden"
-
-#~ msgid "Automatic Payment Forward"
-#~ msgstr "Automatische Zahlungsweiterleitung"
-
-#~ msgid "You must select a commodity."
-#~ msgstr "Sie müssen eine Devise/Wertpapier auswählen."
-
-#~ msgid ""
-#~ "You must select closing date that is greater than the closing date of the "
-#~ "previous book."
-#~ msgstr ""
-#~ "Sie müssen ein Datum wählen, das später liegt als das Abschlußdatum des "
-#~ "vorigen Buchs."
-
-#~ msgid "You must select closing date that is not in the future."
-#~ msgstr ""
-#~ "Sie müssen ein Abschlußdatum wählen, das nicht in der Zukunft liegt."
-
-#~ msgid "Are you sure you want to cancel the Mortgage/Loan Setup Assistant?"
-#~ msgstr "Wollen Sie den Darlehen-Assistent wirklich abbrechen?"
-
-#~ msgid "Please select a valid loan account."
-#~ msgstr "Sie müssen ein gültiges Darlehen-Konto auswählen."
-
-#~ msgid "Please select a valid Escrow Account."
-#~ msgstr "Sie müssen ein gültiges Treuhand-Konto auswählen."
-
-#~ msgid "Please select a valid \"from\" account."
-#~ msgstr "Sie müssen ein gültiges Herkunftskonto angeben."
-
-#~ msgid "Please select a valid \"to\" account."
-#~ msgstr "Sie müssen ein gültiges Zielkonto angeben."
-
-#~ msgid "Please select a valid \"interest\" account."
-#~ msgstr "Sie müssen ein gültiges Zinskonto angeben."
-
-#~ msgid "Payment: \"%s\""
-#~ msgstr "Zahlung: »%s«"
-
-#~ msgid "You must enter a valid distribution amount."
-#~ msgstr "Sie müssen einen gültigen Betrag eingeben."
-
-#~ msgid "You must enter a distribution amount."
-#~ msgstr "Sie müssen einen Betrag angeben."
-
-#~ msgid "You must either enter a valid price or leave it blank."
-#~ msgstr ""
-#~ "Sie müssen entweder einen gültigen Preis angeben oder das Feld frei "
-#~ "lassen."
-
-#~ msgid "The price must be positive."
-#~ msgstr "Der Preis muss eine positive Zahl sein."
-
-#~ msgid "You must either enter a valid cash amount or leave it blank."
-#~ msgstr ""
-#~ "Sie müssen entweder einen gültigen Betrag eingeben oder das Eingabefeld "
-#~ "leer lassen."
-
-#~ msgid "The cash distribution must be positive."
-#~ msgstr "Der Ausgleichsbetrag muss positiv sein."
-
-#~ msgid "You must select an income account for the cash distribution."
-#~ msgstr "Sie müssen ein Ertragskonto für den Ausgleichsbetrag angeben."
-
-#~ msgid "You must select an asset account for the cash distribution."
-#~ msgstr "Sie müssen ein Aktiva-Konto für den Ausgleichsbetrag angeben."
-
-#~ msgid "New Account (not implemented)"
-#~ msgstr "Neues Konto (unfertig)"
-
-#~ msgid "Select or add a GnuCash account"
-#~ msgstr "Auswählen oder Hinzufügen eines GnuCash Kontos"
-
-#~ msgid ""
-#~ "Use Commodity Value\n"
-#~ "1\n"
-#~ "1/10\n"
-#~ "1/100\n"
-#~ "1/1000\n"
-#~ "1/10000\n"
-#~ "1/100000\n"
-#~ "1/1000000"
-#~ msgstr ""
-#~ "Wie Wertpapier/Devise\n"
-#~ "1\n"
-#~ "1/10\n"
-#~ "1/100\n"
-#~ "1/1000\n"
-#~ "1/10000\n"
-#~ "1/100000\n"
-#~ "1/1000000"
-
-#~ msgid "Enter a title for this book."
-#~ msgstr "Geben Sie einen beschreibenden Namen für dieses Buch ein."
-
-#~ msgid "Enter notes that describe this book."
-#~ msgstr "Geben Sie Bemerkungen ein, die dieses Buch beschreiben."
-
-#~ msgid "Finish Closing Books"
-#~ msgstr "Buchabschluß abgeschlossen"
-
-#~ msgid ""
-#~ "day(s)\n"
-#~ "week(s)\n"
-#~ "month(s)\n"
-#~ "year(s)"
-#~ msgstr ""
-#~ "Tag(e)\n"
-#~ "Woche(n)\n"
-#~ "Monat(e)\n"
-#~ "Jahr(e)"
-
-#~ msgid "Account Information"
-#~ msgstr "Kontenbeschreibung"
-
-#~ msgid ""
-#~ "Annual\n"
-#~ "Semi-annual\n"
-#~ "Tri-annual\n"
-#~ "Quarterly\n"
-#~ "Bi-monthly\n"
-#~ "Monthly\n"
-#~ "Semi-monthly\n"
-#~ "Bi-weekly\n"
-#~ "Weekly\n"
-#~ "Daily (360)\n"
-#~ "Daily (365)"
-#~ msgstr ""
-#~ "Jährlich\n"
-#~ "Halbjährlich\n"
-#~ "Dreimal im Jahr\n"
-#~ "Vierteljährlich\n"
-#~ "Alle zwei Monate\n"
-#~ "Monatlich\n"
-#~ "Halbmonatlich\n"
-#~ "Alle zwei Wochen\n"
-#~ "Wöchentlich\n"
-#~ "Täglich (360 Tage)\n"
-#~ "Täglich (365 Tage)"
-
-#~ msgid "Co_mpounding:"
-#~ msgstr "Ver_zinsung:"
-
-#~ msgid "_Effective Date:"
-#~ msgstr "_Tatsächliches Datum:"
-
-#~ msgid "_Initial Payment:"
-#~ msgstr "_Anfängliche Zahlung:"
-
-#~ msgid "_Payments:"
-#~ msgstr "Z_ahlungen:"
-
-#~ msgid "<b>_Mini-Viewer</b>"
-#~ msgstr "<b>_Mini-Anzeige</b>"
-
-#~ msgid "A summary of all of the transactions in the selected lot"
-#~ msgstr "Eine Zusammenfassung aller Buchungen in dem gewählten Posten"
-
-#~ msgid ""
-#~ "Bid\n"
-#~ "Ask\n"
-#~ "Last\n"
-#~ "Net Asset Value\n"
-#~ "Unknown"
-#~ msgstr ""
-#~ "Geldkurs, Verkauf\n"
-#~ "Briefkurs, Ankauf\n"
-#~ "Letzter\n"
-#~ "Anlagevermögen\n"
-#~ "Unbekannt"
-
-#~ msgid ""
-#~ "Inches\n"
-#~ "Centimeters\n"
-#~ "Millimeters\n"
-#~ "Points"
-#~ msgstr ""
-#~ "Zoll\n"
-#~ "Zentimeter\n"
-#~ "Millimeter\n"
-#~ "Punkte"
-
-#~ msgid ""
-#~ "Quicken/QuickBooks (tm) US-Letter\n"
-#~ "Deluxe(tm) Personal Checks US-Letter\n"
-#~ "Quicken(tm) Wallet Checks w/ side stub\n"
-#~ "Custom"
-#~ msgstr ""
-#~ "Quicken/QuickBooks (tm) US-Letter\n"
-#~ "Deluxe(tm) Personal Checks US-Letter\n"
-#~ "Quicken(tm) Wallet Checks w/ side stub\n"
-#~ "Benutzerdefiniert"
-
-#~ msgid ""
-#~ "Top\n"
-#~ "Middle\n"
-#~ "Bottom\n"
-#~ "Custom"
-#~ msgstr ""
-#~ "Oben\n"
-#~ "Mitte\n"
-#~ "Unten\n"
-#~ "Benutzerdefiniert"
-
-#~ msgid "Copy Transaction"
-#~ msgstr "Buchung kopieren"
-
-#~ msgid "Copy the selected transaction"
-#~ msgstr "Ausgewählte Buchung kopieren"
-
-#~ msgid "Cut Transaction"
-#~ msgstr "Buchung ausschneiden"
-
-#~ msgid "Dup_licate Transaction..."
-#~ msgstr "Buchung duplizieren..."
-
-#~ msgid "Edit Exchange Rate"
-#~ msgstr "Wechselkurs bearbeiten"
-
-#~ msgid "Edit the exchange rate for the current split"
-#~ msgstr "Den Wechselkurs für den gewählten Buchungsteil bearbeiten"
-
-#~ msgid "Erase all splits except the one for this account."
-#~ msgstr "Alle Buchungsteile löschen, außer jenen in diesem Konto."
-
-#~ msgid "Jump"
-#~ msgstr "Gegen"
-
-#~ msgid "Remove Transaction Splits"
-#~ msgstr "Buchungsteile entfernen"
-
-#~ msgid "Schedule..."
-#~ msgstr "Terminiert..."
-
-#~ msgid "Sort by Amount"
-#~ msgstr "Sortiere nach Betrag"
-
-#~ msgid "Sort by Date"
-#~ msgstr "Sortiere nach Datum"
-
-#~ msgid "Sort by Description"
-#~ msgstr "Sortiere nach Beschreibung"
-
-#~ msgid "Sort by Memo"
-#~ msgstr "Sortiere nach Buchungstext"
-
-#~ msgid "Sort by Number"
-#~ msgstr "Sortiere nach Nummer"
-
-#~ msgid "St_yle"
-#~ msgstr "_Buchung"
-
-#~ msgid "_Amount"
-#~ msgstr "Betrag"
-
-#~ msgid "_Number"
-#~ msgstr "Nummer"
-
-#~ msgid "_Statement Date"
-#~ msgstr "Datum des Kontoauszugs"
-
-#~ msgid ""
-#~ "1st\n"
-#~ "2nd\n"
-#~ "3rd\n"
-#~ "4th\n"
-#~ "5th\n"
-#~ "6th\n"
-#~ "7th\n"
-#~ "8th\n"
-#~ "9th\n"
-#~ "10th\n"
-#~ "11th\n"
-#~ "12th\n"
-#~ "13th\n"
-#~ "14th\n"
-#~ "15th\n"
-#~ "16th\n"
-#~ "17th\n"
-#~ "18th\n"
-#~ "19th\n"
-#~ "20th\n"
-#~ "21st\n"
-#~ "22nd\n"
-#~ "23rd\n"
-#~ "24th\n"
-#~ "25th\n"
-#~ "26th\n"
-#~ "27th\n"
-#~ "28th\n"
-#~ "29th\n"
-#~ "30th\n"
-#~ "31st\n"
-#~ "Last day of month\n"
-#~ "Last Monday\n"
-#~ "Last Tuesday\n"
-#~ "Last Wednesday\n"
-#~ "Last Thursday\n"
-#~ "Last Friday\n"
-#~ "Last Saturday\n"
-#~ "Last Sunday"
-#~ msgstr ""
-#~ "1.\n"
-#~ "2.\n"
-#~ "3.\n"
-#~ "4.\n"
-#~ "5.\n"
-#~ "6.\n"
-#~ "7.\n"
-#~ "8.\n"
-#~ "9.\n"
-#~ "10.\n"
-#~ "11.\n"
-#~ "12.\n"
-#~ "13.\n"
-#~ "14.\n"
-#~ "15.\n"
-#~ "16.\n"
-#~ "17.\n"
-#~ "18.\n"
-#~ "19.\n"
-#~ "20.\n"
-#~ "21.\n"
-#~ "22.\n"
-#~ "23.\n"
-#~ "24.\n"
-#~ "25.\n"
-#~ "26.\n"
-#~ "27.\n"
-#~ "28.\n"
-#~ "29.\n"
-#~ "30.\n"
-#~ "31.\n"
-#~ "Letzter Tag des Monats\n"
-#~ "Letzter Montag\n"
-#~ "Letzter Dienstag\n"
-#~ "Letzter Mittwoch\n"
-#~ "Letzter Donnerstag\n"
-#~ "Letzter Freitag\n"
-#~ "Letzter Samstag\n"
-#~ "Letzter Sonntag"
-
-#~ msgid "<b>End</b>"
-#~ msgstr "<b>Ende</b>"
-
-#~ msgid "<b>Upcoming</b>"
-#~ msgstr "<b>Bevorstehend</b>"
-
-#~ msgid "Creation State"
-#~ msgstr "Erstellen Status"
-
-#~ msgid ""
-#~ "Current Year\n"
-#~ "Now + 1 Year\n"
-#~ "Whole Loan\n"
-#~ "Custom"
-#~ msgstr ""
-#~ "Dieses Jahr\n"
-#~ "Heute in einem Jahr\n"
-#~ "Gesamtes Darlehen\n"
-#~ "Benutzerdefiniert"
-
-#~ msgid ""
-#~ "Daily\n"
-#~ "Weekly\n"
-#~ "Bi-Weekly\n"
-#~ "Monthly\n"
-#~ "Quarterly\n"
-#~ "Yearly"
-#~ msgstr ""
-#~ "Täglich\n"
-#~ "Wöchentlich\n"
-#~ "Zweiwöchentlich\n"
-#~ "Monatlich\n"
-#~ "Vierteljährlich\n"
-#~ "Jährlich"
-
-#~ msgid "Do you..."
-#~ msgstr "Möchten Sie..."
-
-#~ msgid ""
-#~ "Fixed Rate\n"
-#~ "3/1 Year ARM\n"
-#~ "5/1 Year ARM\n"
-#~ "7/1 Year ARM\n"
-#~ "10/1 Year ARM"
-#~ msgstr ""
-#~ "Fester Zinssatz\n"
-#~ "3/1 Jahr Variabler Satz\n"
-#~ "5/1 Jahr Variabler Satz\n"
-#~ "7/1 Jahr Variabler Satz\n"
-#~ "10/1 Jahr Variabler Satz"
-
-#~ msgid "Loan Information"
-#~ msgstr "Darlehen Informationen"
-
-#~ msgid ""
-#~ "No change\n"
-#~ "Use previous weekday\n"
-#~ "Use next weekday"
-#~ msgstr ""
-#~ "Unverändert\n"
-#~ "Voriger Werktag\n"
-#~ "Nächster Werktag"
-
-#~ msgid ""
-#~ "None\n"
-#~ "Once\n"
-#~ "Daily\n"
-#~ "Weekly\n"
-#~ "Semi-Monthly\n"
-#~ "Monthly"
-#~ msgstr ""
-#~ "Nie\n"
-#~ "Einmalig\n"
-#~ "Täglich\n"
-#~ "Wöchentlich\n"
-#~ "Halbmonatlich\n"
-#~ "Monatlich"
-
-#~ msgid "Press apply to commit these changes."
-#~ msgstr "Klicken Sie »Anwenden«, um die Änderungen zu speichern."
-
-#~ msgid "Repayment Type"
-#~ msgstr "Rückzahlungsart"
-
-#~ msgid "Start Date: "
-#~ msgstr "Anfangsdatum: "
-
-#~ msgid ""
-#~ "months\n"
-#~ "years"
-#~ msgstr ""
-#~ "Monate\n"
-#~ "Jahre"
-
-#~ msgid "Set the budget options using this dialog."
-#~ msgstr "Mit diesem Dialog können Sie die Budgetoptionen bearbeiten."
-
-#~ msgid "Case Insensitive?"
-#~ msgstr "Groß-/Kleinschreibung ignorieren?"
-
-#~ msgid "That GnuCash XML file is already loaded. Please select another file."
-#~ msgstr ""
-#~ "Diese GnuCash-Datei ist bereits geöffnet. Bitte wählen Sie eine andere "
-#~ "Datei."
-
-#~ msgid ""
-#~ "No files to merge. Please add ones by clicking on 'Load another file'."
-#~ msgstr ""
-#~ "Keine Dateien, die zusammengefügt werden können. Bitte wählen Sie welche, "
-#~ "indem Sie auf »Weitere Datei laden« klicken."
-
-#~ msgid "Finish changes"
-#~ msgstr "Änderungen durchführen"
-
-#~ msgid "Update gconf settings - GnuCash"
-#~ msgstr "Gconf Einstellungen aktualisieren für GnuCash"
-
-#~ msgid ""
-#~ "Click \"Load another file\" if you have more data to import at this time. "
-#~ "Do this if you have saved your accounts to separate GnuCash files.\n"
-#~ "\n"
-#~ "Click \"Forward\" to finish loading files and move to the next step of "
-#~ "the GnuCash Datafile import process."
-#~ msgstr ""
-#~ "Wenn Sie jetzt noch mehr Dateien importieren möchten, klicken Sie bitte "
-#~ "»Eine andere Datei laden«. Das ist insbesondere sinnvoll, wenn Sie Ihre "
-#~ "Daten in mehreren seperaten GnuCash-Dateien gespeichert haben.\n"
-#~ "\n"
-#~ "Klicken Sie auf »Vor«, um das Laden von Dateien zu beenden und zum "
-#~ "nächsten Schritt des GnuCash-Importprozesses zu gehen."
-
-#~ msgid "Do not merge"
-#~ msgstr "Nicht zusammenfügen"
-
-#~ msgid "GnuCash data files you have loaded"
-#~ msgstr "GnuCash-Dateien, die Sie geladen haben"
-
-#~ msgid "Load another file"
-#~ msgstr "Eine weitere Datei öffnen"
-
-#~ msgid "Unload selected file"
-#~ msgstr "Gewählte Datei wieder entladen"
-
-#~ msgid "<b>Current File List</b>"
-#~ msgstr "<b>Aktuelle Dateiliste</b>"
-
-#~ msgid ""
-#~ "Click \"Load another file\" if you have more data to load at this time.\n"
-#~ "\n"
-#~ "Click \"Next\" to finish loading files and move to the next step. "
-#~ msgstr ""
-#~ "Wenn Sie noch mehr Dateien laden möchten, klicken Sie bitte »Weitere "
-#~ "Datei laden«.\n"
-#~ "\n"
-#~ "Klicken Sie »Vor«, um das Laden von Dateien zu beenden und zum nächsten "
-#~ "Schritt zu gehen."
-
-#~ msgid "<b>Exchange/Price Information</b>"
-#~ msgstr "<b>Wechselkurs/Preis-Informationen</b>"
-
-#~ msgid "To A_mount:"
-#~ msgstr "_Zum Betrag:"
-
-#~ msgid "_Exchange Rate:"
-#~ msgstr "_Wechselkurs:"
-
-#~ msgid "_From:"
-#~ msgstr "_Von:"
-
-#~ msgid "_To:"
-#~ msgstr "_Bis:"
-
-#~ msgid ""
-#~ "US (12/31/2001)\n"
-#~ "UK (31/12/2001)\n"
-#~ "Europe (31.12.2001)\n"
-#~ "ISO (2001-12-31)\n"
-#~ "UTC\n"
-#~ "Locale\n"
-#~ "Custom\n"
-#~ msgstr ""
-#~ "USA (12/31/2001)\n"
-#~ "GB (31/12/2001)\n"
-#~ "Europäisch (31.12.2001)\n"
-#~ "ISO (2001-12-31)\n"
-#~ "UTC\n"
-#~ "Länderspezifisch (Locale)\n"
-#~ "Benutzerdefiniert\n"
-
-#~ msgid "Don't tell me again this session."
-#~ msgstr "In dieser Sitzung nicht wieder anzeigen."
-
-#~ msgid "Don't tell me again."
-#~ msgstr "Nicht wieder anzeigen."
-
-#~ msgid "Remember the answer and don't tell me again this session."
-#~ msgstr "Antwort speichern und in dieser Sitzung nicht wieder anzeigen."
-
-#~ msgid "Remember the answer and don't tell me again."
-#~ msgstr "Antwort speichern und nicht wieder anzeigen."
-
-#~ msgid "Failed to process file: %s"
-#~ msgstr "Kann Datei nicht verarbeiten: %s"
-
-#~ msgid "Failed to open file: %s: %s"
-#~ msgstr "Kann Datei %s nicht öffnen: %s"
-
-#~ msgid "Add a new transaction to the account"
-#~ msgstr "Dem Konto einen neuen Buchungssatz hinzufügen"
-
-#~ msgid "Use Transaction Template"
-#~ msgstr "Überweisungsvorlage:"
-
-#~ msgid "Select an CSV/Fixed-Width file to import"
-#~ msgstr "Wählen Sie eine CSV-Datei, die importiert werden soll"
-
-#~ msgid "Import CSV/Fixed-Width File"
-#~ msgstr "CSV-Datei importieren"
-
-#~ msgid "Import _CSV/Fixed-Width..."
-#~ msgstr "_CSV importieren..."
-
-#~ msgid " a CSV/Fixed-Width file"
-#~ msgstr ""
-#~ "Eine CSV-Datei importieren: Komma-getrennte Felder oder Felder mit fester "
-#~ "Spaltenbreite."
-
-#~ msgid ""
-#~ "For a new transaction, click on the \"Other Account\" entry to choose the "
-#~ "other (destination) account of this transaction.\n"
-#~ "For a transaction that is a duplicate of an existing one, click on the "
-#~ "\"Other Account\" or \"Description\" entry to \n"
-#~ "check whether GnuCash chose the right existing transaction.\n"
-#~ "To switch transactions between both states, click on the checkmark in the "
-#~ "\"New\" column.\n"
-#~ "When all new transactions have the correct destination account and all "
-#~ "duplicates are matched with the right existing transaction, \n"
-#~ "click \"OK\"."
-#~ msgstr ""
-#~ "Für neue Buchungen wählen Sie das Gegenkonto durch Klick auf den Eintrag "
-#~ "»Anderes Konto«.\n"
-#~ "Für Buchungen, die schon existieren, überprüfen Sie die Zuordnung durch "
-#~ "Klick auf »Doppelte Buchung«.\n"
-#~ "Um zwischen beiden Möglichkeiten umzuschalten, klicken Sie auf das "
-#~ "Häkchen in der Spalte »Neu«.\n"
-#~ "Wenn allen neuen Buchungen ein »Anderes Konto« zugeordnet wurde und alle "
-#~ "Duplikate richtig erkannt wurden, klicken Sie »Ok«."
-
-#~ msgid "Other Account"
-#~ msgstr "Anderes Konto"
-
-#~ msgid "Period-as-decimal (1,000.00)"
-#~ msgstr "Punkt als Kommastelle (Englisch: 1,000.00)"
-
-#~ msgid "Comma-as-decimal (1.000,00)"
-#~ msgstr "Komma als Kommastelle (1.000,00)"
-
-#~ msgid "y-d-m"
-#~ msgstr "Jahr-Tag-Monat"
-
-#~ msgid "(no)"
-#~ msgstr "(kein(e))"
-
-#~ msgid "Sample data:"
-#~ msgstr "Beispieldatum:"
-
-#~ msgid "You must enter an account name."
-#~ msgstr "Sie müssen einen Kontonamen eingeben."
-
-#~ msgid ""
-#~ "No valid customer selected. Click on the Options button to select a "
-#~ "customer."
-#~ msgstr ""
-#~ "Keine gültiger Kunde gewählt.  Klicken Sie auf »Optionen«, um einen "
-#~ "Kunden zu wählen."
-
-#~ msgid ""
-#~ "No valid employee selected. Click on the Options button to select an "
-#~ "employee."
-#~ msgstr ""
-#~ "Kein gültiger Mitarbeiter gewählt.  Klicken Sie auf »Optionen«, um einen "
-#~ "Mitarbeiter zu wählen."
-
-#~ msgid ""
-#~ "No valid company selected. Click on the Options button to select a "
-#~ "company."
-#~ msgstr ""
-#~ "Keine gültige Firma gewählt.  Klicken Sie auf »Optionen«, um eine Firma "
-#~ "zu wählen."
-
-#~ msgid "Asterisk"
-#~ msgstr "Stern"
-
-#~ msgid ""
-#~ "A list of directories (strings) indicating where to look for html and "
-#~ "parsed-html files. Each element must be a string representing a directory "
-#~ "or a symbol where 'default expands to the default path, and 'current "
-#~ "expands to the current value of the path."
-#~ msgstr ""
-#~ "Eine Liste von Zeichenketten, die den Suchpfad für HTML und\n"
-#~ "GnuCash-HTML Dateien setzt. Jedes Element muss entweder eine\n"
-#~ "Zeichenkette oder ein Symbol sein, wobei die Zeichenkette ein gültiges\n"
-#~ "Verzeichnis sein muss und als Symbol entweder 'default für den\n"
-#~ "Voreinstellungs-Pfad oder 'current für den aktuellen Pfad gültig\n"
-#~ "sind."
-
-#~ msgid "Set the search path for documentation files"
-#~ msgstr "Suchpfad für Hilfedateien setzen"
