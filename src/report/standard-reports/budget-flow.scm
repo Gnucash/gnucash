@@ -134,9 +134,9 @@
           (let* (
               ;; Retrive the budgeted and actual amount and convert to <gnc:monetary>
               (comm (xaccAccountGetCommodity acct))
-              (bgt-numeric (gnc-budget-get-account-period-value budget acct period))
+              (bgt-numeric (gnc-budget-get-account-period-value budget acct (- period 1)))
               (bgt-monetary (gnc:make-gnc-monetary comm bgt-numeric))
-              (act-numeric (gnc-budget-get-account-period-actual-value budget acct period))
+              (act-numeric (gnc-budget-get-account-period-actual-value budget acct (- period 1)))
               (act-monetary (gnc:make-gnc-monetary comm act-numeric))
             )
             
