@@ -204,11 +204,30 @@
                       (gnc:timepair-ge parent-date-posted from-date-tp)
                     )
                   (let* (
-                          (parent-currency    (xaccTransGetCurrency    parent))
+                          (parent-currency   (xaccTransGetCurrency    parent))
+                          (transaction-value (gnc-numeric-zero))
+                          (split-value       (xaccSplitGetValue split))
                         )
                     ;(gnc:debug (xaccTransGetDescription parent)
                     ;           " - "
                     ;           (gnc-commodity-get-printname parent-currency))
+                    ;; -------------------------------------------------------------
+                    ;; get the transaction value - needed to fix bug 622778
+                    ;; -------------------------------------------------------------
+                    (for-each
+                      (lambda (parent-split)
+                        (let* (
+                                (psv (xaccSplitGetValue parent-split))
+                              )
+                          (if (gnc-numeric-positive-p psv) ;; meaning: if (psv>0)
+                            (set! transaction-value
+                              (gnc-numeric-add transaction-value psv GNC-DENOM-AUTO GNC-DENOM-LCD)
+                            )
+                          )
+                        )
+                      )
+                      (xaccTransGetSplitList parent)
+                    )
                     ;; -----------------------------------------
                     ;; process all splits of current transaction
                     ;; -----------------------------------------
@@ -216,7 +235,6 @@
                       (lambda (s)
                         (let* (
                                 (s-account   (xaccSplitGetAccount s))
-                                (s-amount    (xaccSplitGetAmount s))
                                 (s-value     (xaccSplitGetValue s))
                                 (s-commodity (xaccAccountGetCommodity s-account))
                               )
@@ -235,9 +253,30 @@
                           (if (and	 ;; make sure we don't have
                                 (not (null? s-account)) ;;  any dangling splits
 			        (not (account-in-list? s-account accounts))
+                                ;; only consider splits of opposite sign
+                                (gnc-numeric-negative-p (gnc-numeric-mul s-value split-value 0 GNC-DENOM-REDUCE))
                               )
                             (if (not (split-in-list? s seen-split-list))
-                              (begin
+                              (let (
+                                     (split-transaction-ratio (gnc-numeric-zero))
+                                   )
+                                ;; -------------------------------------------------------------
+                                ;; get the share of the current split from the total transaction- needed to fix bug 622778
+                                ;; -------------------------------------------------------------
+                                (set! split-transaction-ratio
+                                  (if (gnc-numeric-zero-p transaction-value)
+                                    ;; If the transaction-value remained zero, then the transaction is
+                                    ;; either 0 or we have a negative one-split-transaction.
+                                    ;; Either way, it means that we can set the transaction value equal to the split-value,
+                                    ;; and, in turn, the transaction ratio is 1.
+                                    (gnc:make-gnc-numeric 1 1)
+                                    ;; else
+                                    (gnc-numeric-abs
+                                      (gnc-numeric-div split-value transaction-value 0 GNC-DENOM-REDUCE)
+                                    )
+                                  )
+                                )
+				(set! s-value (gnc-numeric-mul split-transaction-ratio s-value GNC-DENOM-AUTO GNC-RND-ROUND))
 			        (set! seen-split-list (cons s seen-split-list))
 			        (if (gnc-numeric-negative-p s-value)
                                   ;; -----------------------------------------------
@@ -247,7 +286,7 @@
                                          (pair (account-in-alist s-account money-in-alist))
                                        )
 				    ;(gnc:debug "in:" (gnc-commodity-get-printname s-commodity)
-				    ;  (gnc-numeric-to-double s-amount)
+				    ;  (gnc-numeric-to-double (xaccSplitGetAmount s))
 				    ;  (gnc-commodity-get-printname parent-currency)
 				    ;  (gnc-numeric-to-double s-value))
 				    (if (not pair)
@@ -264,7 +303,7 @@
                                              (to-report-currency
                                                parent-currency
 				               (gnc-numeric-neg s-value)
-					       (gnc-transaction-get-date-posted parent)
+					       parent-date-posted
                                              )
                                            )
                                          )
@@ -280,7 +319,7 @@
                                          (pair (account-in-alist s-account money-out-alist))
                                        )
                                     ;(gnc:debug "out:" (gnc-commodity-get-printname s-commodity)
-                                    ;	     (gnc-numeric-to-double s-amount)
+                                    ;	     (gnc-numeric-to-double (xaccSplitGetAmount s))
                                     ;	     (gnc-commodity-get-printname parent-currency)
                                     ;	     (gnc-numeric-to-double s-value))
 				    (if (not pair)
@@ -297,7 +336,7 @@
 				             (to-report-currency
 					       parent-currency
 					       s-value
-					       (gnc-transaction-get-date-posted parent)
+					       parent-date-posted
                                              )
                                            )
                                          )
