@@ -167,7 +167,7 @@
 
 (define (add-split-row table split column-vector row-style transaction-info?
                        split-info? action-for-num? ledger-type? double? memo?
-                       description?)
+                       description? total-collector)
   (let* ((row-contents '())
          (parent (xaccSplitGetParent split))
          (account (xaccSplitGetAccount split))
@@ -311,7 +311,7 @@
                      (gnc:html-split-anchor
                       split
                       (gnc:make-gnc-monetary
-                       currency (gnc:split-get-balance-display split-info? split))))
+                        currency (cadr (total-collector 'getpair currency #f)))))
                     " ")))
 
     (gnc:html-table-append-row/markup! table row-style
@@ -453,8 +453,15 @@
 
   gnc:*report-options*)
 
+;; -----------------------------------------------------------------
+;; create the report result
+;; -----------------------------------------------------------------
+
 (define (make-split-table splits options
                           debit-string credit-string amount-string)
+  ;; ----------------------------------
+  ;; local helper
+  ;; ----------------------------------
   (define (opt-val section name)
     (gnc:option-value (gnc:lookup-option options section name)))
   (define (reg-report-journal?)
@@ -542,7 +549,7 @@
       (total-value 'add trans-currency split-value)))
 
   (define (add-other-split-rows split table used-columns row-style
-                                action-for-num? ledger-type?)
+                                action-for-num? ledger-type? total-collector)
     (define (other-rows-driver split parent table used-columns i)
       (let ((current (xaccTransGetSplit parent i)))
         (if (not (null? current))
@@ -550,13 +557,17 @@
               (add-split-row table current used-columns row-style #f #t
                                 action-for-num? ledger-type? #f
                                 (opt-val "Display" "Memo")
-                                (opt-val "Display" "Description"))
+                                (opt-val "Display" "Description")
+                                total-collector)
               (other-rows-driver split parent table
                                  used-columns (+ i 1))))))
 
     (other-rows-driver split (xaccSplitGetParent split)
                        table used-columns 0))
 
+  ;; ----------------------------------
+  ;; main loop
+  ;; ----------------------------------
   (define (do-rows-with-subtotals leader
                                   splits
                                   table
@@ -574,8 +585,13 @@
                                   debit-value
                                   credit-value)
     (if (null? splits)
+      ;; ----------------------------------
+      ;; exit condition reached
+      ;; ----------------------------------
 	(begin
-	  ;; add debit/credit totals
+          ;; ------------------------------------
+	  ;; add debit/credit totals to the table
+          ;; ------------------------------------
 	  (if (reg-report-show-totals?)
 	      (begin
 		(add-subtotal-row (_ "Total Debits") leader table used-columns
@@ -593,6 +609,9 @@
           (add-subtotal-row (_ "Value Change") leader table used-columns
                             total-value "grand-total" #t))
 
+      ;; ----------------------------------
+      ;; process the splits list
+      ;; ----------------------------------
         (let* ((current (car splits))
                (current-row-style (if multi-rows? "normal-row"
                                       (if odd-row? "normal-row"
@@ -600,28 +619,10 @@
                (rest (cdr splits))
                (next (if (null? rest) #f
                          (car rest)))
-               ;; The general ledger has a split that doesn't have an account
-               ;; set yet (the new entry transaction).
-               ;; This split should be skipped or the report errors out.
-               ;; See bug #639082
-               (valid-split? (not (null? (xaccSplitGetAccount current))))
-               (split-value (if valid-split?
-                            (add-split-row table 
-                                           current 
-                                           used-columns 
-                                           current-row-style
-                                           #t
-                                           (not multi-rows?)
-                                           action-for-num?
-                                           ledger-type?
-                                           double?
-                                           (opt-val "Display" "Memo")
-                                           (opt-val "Display" "Description")))))
-
-          (if (and multi-rows? valid-split?)
-              (add-other-split-rows 
-               current table used-columns "alternate-row" action-for-num? ledger-type?))
-
+               (valid-split? (not (null? (xaccSplitGetAccount current)))))
+          ;; ----------------------------------------------
+          ;; update totals, but don't add them to the table
+          ;; ----------------------------------------------
           (if (and multi-rows? valid-split?)
               (for-each (lambda (split)
                           (if (string=? (gncAccountGetGUID
@@ -637,6 +638,39 @@
                                  total-collector total-value
                                  debit-collector debit-value
                                  credit-collector credit-value))
+          ;; ----------------------------------
+          ;; add the splits to the table
+          ;; ----------------------------------
+          ;; The general ledger has a split that doesn't have an account
+          ;; set yet (the new entry transaction).
+          ;; This split should be skipped or the report errors out.
+          ;; See bug #639082
+          (if valid-split?
+            (add-split-row
+              table
+              current
+              used-columns
+              current-row-style
+              #t
+              (not multi-rows?)
+              action-for-num?
+              ledger-type?
+              double?
+              (opt-val "Display" "Memo")
+              (opt-val "Display" "Description")
+              total-collector
+            )
+          )
+          (if (and multi-rows? valid-split?)
+            (add-other-split-rows
+              current
+              table used-columns
+              "alternate-row"
+              action-for-num?
+              ledger-type?
+              total-collector
+            )
+          )
 
           (do-rows-with-subtotals leader
                                   rest
@@ -654,7 +688,9 @@
                                   total-value
                                   debit-value
                                   credit-value))))
-
+  ;; -----------------------------------------------
+  ;; needed for the call to (do-rows-with-subtotals)
+  ;; -----------------------------------------------
   (define (splits-leader splits)
     (let ((accounts (map xaccSplitGetAccount splits)))
       (if (null? accounts) '()
@@ -663,7 +699,9 @@
                                  (delete (car accounts) (cdr accounts))))
             (if (not (null? (cdr accounts))) '()
                 (car accounts))))))
-
+  ;; ----------------------------------
+  ;; make the split table
+  ;; ----------------------------------
   (let* ((table (gnc:make-html-table))
          (used-columns (build-column-used options))
          (width (num-columns-required used-columns))
@@ -696,7 +734,9 @@
                             (gnc:make-commodity-collector)
                             (gnc:make-commodity-collector))
     table))
-
+;; -----------------------------------------------------------------
+;; misc
+;; -----------------------------------------------------------------
 (define (string-expand string character replace-string)
   (define (car-line chars)
     (take-while (lambda (c) (not (eqv? c character))) chars))
