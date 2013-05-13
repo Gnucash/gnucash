@@ -56,10 +56,12 @@ class GnuCashBusinessEntity(GnuCashCoreClass):
                     "with either a book, id, and currency, or an existing "
                     "low level swig proxy in the argument instance")
             GnuCashCoreClass.__init__(self, book)
+            self.BeginEdit()
             self.SetID(id)
             self.SetCurrency(currency)
             if name != None:
                 self.SetName(name)
+            self.CommitEdit()
         else:
             GnuCashCoreClass.__init__(self, instance=instance)
 
