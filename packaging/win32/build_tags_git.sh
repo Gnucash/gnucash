@@ -39,6 +39,7 @@ $GIT_CMD pull
 ################################################################
 # determine if there are any new tags since the last time we ran
 #
+$GIT_CMD fetch -t
 
 # If we don't have a tagfile then start from 'now'
 tagfile=tags_git
