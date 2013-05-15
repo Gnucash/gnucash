@@ -56,6 +56,17 @@ mv -f ${tagfile}.new ${tagfile}
 for tag_rev in $tags ; do
   tag=${tag_rev#*/}
   tag=${tag%/*}
+  
+  # From 2.5 and up, tags are built from git
+  tag_major=${tag%%.*}
+  tag_tmp=${tag#*.}
+  tag_minor=${tag_tmp%%.*}
+  major_minor=$(( $tag_major*100 + $tag_minor ))
+  if (( $major_minor >= 205 ))
+  then
+     continue
+  fi
+  
   tagbasedir=/c/soft/gnucash-${tag}
   tagdir=${tagbasedir}/gnucash
   rm -fr $tagbasedir
