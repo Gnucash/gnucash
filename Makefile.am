@@ -183,8 +183,10 @@ intl-scm/guile-strings.c:
 
 .potfiles:
 
+GIT_CMD = @GIT_CMD@
 SVN = svn
 XSLTPROC = xsltproc
+SCM_TYPE = @SCM_TYPE@
 
 if BUILDING_FROM_SCM
 # This rule will generate a ChangeLog of gnucash/trunk commits, plus
@@ -193,9 +195,20 @@ if BUILDING_FROM_SCM
 # idea? Before a release, NEWS will get updated because of the version
 # change, so this should fit just fine.)
 ChangeLog: NEWS
-	$(SVN) log -v --xml -r HEAD:22687 http://svn.gnucash.org/repo/gnucash | \
-	  $(XSLTPROC) --stringparam strip-prefix "gnucash/trunk" \
-	  --stringparam include-rev "yes" $(srcdir)/macros/svn2cl.xsl - > $@
+	cd $(abs_srcdir) ; \
+	if test x$(SCM_TYPE) = xsvn ; then \
+	  $(SVN) log -v --xml -r HEAD:'{2013-01-01}' http://svn.gnucash.org/repo/gnucash | \
+	    $(XSLTPROC) --stringparam strip-prefix "gnucash/trunk" \
+	    --stringparam include-rev "yes" $(abs_srcdir)/macros/svn2cl.xsl - > $(abs_builddir)/$@ ; \
+	else \
+	  if test x$(SCM_TYPE) = xgit ; then \
+	    "$(GIT_CMD)" log --format="%ad %aN %n%n%x09* %s%d%n" --date=short --since=2013-01-01 > $(abs_builddir)/$@ ; \
+	  else \
+	    touch $(abs_builddir)/$@ ; \
+	    echo "Note: not in svn or git. ChangeLog not regenerated." ; \
+	  fi ; \
+	fi ; \
+	cd $(abs_builddir)
 endif
 
 ASTYLE = /usr/bin/astyle

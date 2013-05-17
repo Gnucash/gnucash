@@ -175,15 +175,35 @@ if test x$am_cv_scanf_lld = "xno"; then
 fi
 
 # test whether we are building directly from svn/svk/git/bzr
-${srcdir}/util/gnc-scm-info -r ${srcdir} >/dev/null 2>&1
+AC_MSG_CHECKING(if building from an scm managed directory)
+GIT_CMD=
+savedir="$PWD"
+cd "${srcdir}"
+./util/gnc-scm-info -r . >/dev/null 2>&1
 if test $? = 0 -o "x${BUILDING_FROM_SCM}" = "xyes" ; then
   BUILDING_FROM_SCM=yes
+  SCM_TYPE=$(./util/gnc-scm-info -t .)
+  AC_MSG_RESULT($SCM_TYPE)
+
+  if test "x${SCM_TYPE}" = "xgit"; then
+    AC_MSG_CHECKING(git command to use due to detected git repo)
+    # The windows build uses environment variable $GIT_CMD to invoke git (adding git
+    # to the PATH in Windows results in a build failure).
+    # So for platform independence, use GIT_CMD for all
+    if test -z "${GIT_CMD}" ; then
+      GIT_CMD=git
+    fi
+    AC_MSG_RESULT(${GIT_CMD})
+  fi
 
   # We need at least version 1.3.31 of SWIG because
   # that's when SWIG doesn't barf on the "inline" keyword in C headers anymore
   AC_PROG_SWIG(1.3.31)
 else
+  AC_MSG_RESULT(no)
   BUILDING_FROM_SCM=no
+  SCM_TYPE=
+
   # Make sure we've got swig-runtime.h and gnc-scm-info.h
   AC_CHECK_FILE(${srcdir}/src/swig-runtime.h, [],
     [AC_MSG_ERROR([
@@ -206,7 +226,10 @@ the tarball you downloaded is broken.
 
     ])])
 fi
+cd "${savedir}"
 AM_CONDITIONAL(BUILDING_FROM_SCM, test "x$BUILDING_FROM_SCM" = "xyes")
+AC_SUBST(SCM_TYPE)
+AC_SUBST(GIT_CMD)
 
 # Build dir adjustments
 AM_CONDITIONAL(GNUCASH_SEPARATE_BUILDDIR, test "x${srcdir}" != "x.")
