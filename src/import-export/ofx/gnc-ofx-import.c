@@ -318,9 +318,6 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void * transaction_u
     Account *account;
     Account *investment_account = NULL;
     Account *income_account = NULL;
-/***CPC 20130207 ref: OFX Commodity Account Patch, Burke***
-    gchar *investment_account_text;************************/
-/***CPC 20130207 ref: OFX Commodity Account Patch, Burke***/
     gchar *investment_account_text, *investment_account_onlineid;
     gnc_commodity *currency = NULL;
     gnc_commodity *investment_commodity = NULL;
@@ -529,32 +526,21 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void * transaction_u
                 // As we now have the commodity, select the account with that commodity.
 
                 investment_account_text = g_strdup_printf( /* This string is a default account
-								  name. It MUST NOT contain the
-								  character ':' anywhere in it or
-								  in any translations.  */
+                                                              name. It MUST NOT contain the
+                                                              character ':' anywhere in it or
+                                                              in any translations.  */
                                               _("Stock account for security \"%s\""),
                                               data.security_data_ptr->secname);
-/***CPC 20130207 ref: OFX Commodity Account Patch, Burke***/
-		investment_account_onlineid = g_strdup_printf( "%s%s", data.account_id, data.unique_id);
 
-/***CPC 20130207 ref: OFX Commodity Account Patch, Burke***
-*               // @FIXME: Add the automated selection or creation of account here!
-*
-*               // First check whether we can find the right investment_account without asking the user
-*               investment_account = gnc_import_select_account(NULL,
-*                                    data.unique_id, FALSE, investment_account_text,
-*                                    investment_commodity, ACCT_TYPE_STOCK, NULL, NULL);
-***********************************************************/
-
-/***CPC 20130207 ref: OFX Commodity Account Patch, Burke***/
-		investment_account = gnc_import_select_account(NULL, 
-								   investment_account_onlineid,
-								   1,
-								   investment_account_text,
-								   investment_commodity,
-								   ACCT_TYPE_STOCK,
-								   NULL,
-								   NULL);
+                investment_account_onlineid = g_strdup_printf( "%s%s", data.account_id, data.unique_id);
+                investment_account = gnc_import_select_account(NULL,
+                                                               investment_account_onlineid,
+                                                               1,
+                                                               investment_account_text,
+                                                               investment_commodity,
+                                                               ACCT_TYPE_STOCK,
+                                                               NULL,
+                                                               NULL);
 
                 // but use it only if that's really the right commodity
                 if (investment_account
@@ -640,8 +626,7 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void * transaction_u
                     PERR("No investment account found for text: %s\n", investment_account_text);
                 }
                 g_free (investment_account_text);
-/***CPC 20130207 ref: OFX Commodity Account Patch, Burke***/
-		g_free (investment_account_onlineid);
+                g_free (investment_account_onlineid);
                 investment_account_text = NULL;
 
                 if (investment_account != NULL &&
@@ -703,9 +688,9 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void * transaction_u
                     {
                         DEBUG("Couldn't find an associated income account");
                         investment_account_text = g_strdup_printf( /* This string is a default account
-									  name. It MUST NOT contain the
-									  character ':' anywhere in it or
-									  in any translations.  */
+                                                                      name. It MUST NOT contain the
+                                                                      character ':' anywhere in it or
+                                                                      in any translations.  */
                                                       _("Income account for security \"%s\""),
                                                       data.security_data_ptr->secname);
                         income_account = gnc_import_select_account(
@@ -882,15 +867,15 @@ int ofx_proc_account_cb(struct OfxAccountData data, void * account_user_data)
 
         gnc_utf8_strip_invalid(data.account_name);
         account_description = g_strdup_printf( /* This string is a default account
-					      name. It MUST NOT contain the
-					      character ':' anywhere in it or
-					      in any translation.  */
+                                                  name. It MUST NOT contain the
+                                                  character ':' anywhere in it or
+                                                  in any translation.  */
                                   "%s \"%s\"",
                                   account_type_name,
                                   data.account_name);
         gnc_import_select_account(NULL, data.account_id, 1,
-				  account_description, default_commodity,
-				  default_type, NULL, NULL);
+                                  account_description, default_commodity,
+                                  default_type, NULL, NULL);
         g_free(account_description);
     }
     else
