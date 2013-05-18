@@ -262,7 +262,7 @@ gchar * gnc_tree_model_split_reg_get_row_color (GncTreeModelSplitReg *model, gbo
 gboolean
 gnc_tree_model_split_reg_get_read_only (GncTreeModelSplitReg *model, Transaction *trans);
 
-/*FIXME this may not be required in the long run, return TRUE if this is a sub account view */
+/* Return TRUE if this is a sub account view */
 gboolean
 gnc_tree_model_split_reg_get_sub_account (GncTreeModelSplitReg *model);
 
@@ -276,6 +276,9 @@ gboolean gnc_tree_model_split_reg_is_blank_trans (GncTreeModelSplitReg *model, G
 /* Emit change signal for all visable model entries */
 void gnc_tree_model_split_reg_change_vis_rows (GncTreeModelSplitReg *model,
                GtkTreePath *start_path, GtkTreePath *end_path);
+
+/* Return the split for which ancestor is it's parent */
+Split * gnc_tree_model_split_reg_trans_get_split_equal_to_ancestor (const Transaction *trans, const Account *ancestor);
 
 /*****************************************************************************/
 

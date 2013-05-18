@@ -190,58 +190,6 @@ gtc_sr_trans_test_for_edit (GncTreeViewSplitReg *view, Transaction *trans)
 /*****************************************************************************/
 /*****************************************************************************/
 
-void
-gnc_tree_control_split_reg_parse_date (GDate *parsed, const char *datestr)
-{
-    int day, month, year;
-    gboolean use_autoreadonly = qof_book_uses_autoreadonly (gnc_get_current_book ());
-
-    if (!parsed) return;
-    if (!datestr) return;
-
-    if (!qof_scan_date (datestr, &day, &month, &year))
-    {
-        // Couldn't parse date, use today
-        struct tm tm_today;
-        gnc_tm_get_today_start (&tm_today);
-        day = tm_today.tm_mday;
-        month = tm_today.tm_mon + 1;
-        year = tm_today.tm_year + 1900;
-    }
-
-    // If we have an auto-read-only threshold, do not accept a date that is
-    // older than the threshold.
-    if (use_autoreadonly)
-    {
-        GDate *d = g_date_new_dmy (day, month, year);
-        GDate *readonly_threshold = qof_book_get_autoreadonly_gdate (gnc_get_current_book());
-        if (g_date_compare (d, readonly_threshold) < 0)
-        {
-            g_warning("Entered date %s is before the \"auto-read-only threshold\"; resetting to the threshold.", datestr);
-#if 0
-            GtkWidget *dialog = gtk_message_dialog_new (NULL,
-                                                       0,
-                                                       GTK_MESSAGE_ERROR,
-                                                       GTK_BUTTONS_OK,
-                                                       "%s", _("Cannot store a transaction at this date"));
-            gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
-                                                     "%s", _("The entered date of the new transaction is older than the \"Read-Only Threshold\" set for this book.  "
-                                                             "This setting can be changed in File -> Properties -> Accounts."));
-            gtk_dialog_run (GTK_DIALOG (dialog));
-            gtk_widget_destroy (dialog);
-#endif
-
-            // Reset the date to the threshold date
-            day = g_date_get_day (readonly_threshold);
-            month = g_date_get_month (readonly_threshold);
-            year = g_date_get_year (readonly_threshold);
-        }
-        g_date_free (d);
-        g_date_free (readonly_threshold);
-    }
-    g_date_set_dmy (parsed, day, month, year);
-}
-
 gboolean
 gnc_tree_control_split_reg_balance_trans (GncTreeViewSplitReg *view, Transaction *trans)
 {
@@ -747,7 +695,7 @@ gnc_tree_control_split_reg_get_current_trans_split (GncTreeViewSplitReg *view)
 
     anchor = gnc_tree_model_split_reg_get_anchor (model);
 
-    split = xaccTransFindSplitByAccount (trans, anchor);
+    split = gnc_tree_model_split_reg_trans_get_split_equal_to_ancestor (trans, anchor);
 
     gtk_tree_path_free (mpath);
 
@@ -952,6 +900,8 @@ gnc_tree_control_split_reg_reinit (GncTreeViewSplitReg *view, gpointer data)
 void
 gnc_tree_control_split_reg_delete (GncTreeViewSplitReg *view, gpointer data)
 {
+    GncTreeModelSplitReg *model;
+    Account *anchor;
     RowDepth depth;
     Transaction *trans;
     Split *split;
@@ -970,6 +920,10 @@ gnc_tree_control_split_reg_delete (GncTreeViewSplitReg *view, gpointer data)
             return;
         }
     }
+
+    model = gnc_tree_view_split_reg_get_model_from_view (view);
+
+    anchor = gnc_tree_model_split_reg_get_anchor (model);
 
     trans = xaccSplitGetParent (split);
 
@@ -1015,8 +969,8 @@ gnc_tree_control_split_reg_delete (GncTreeViewSplitReg *view, gpointer data)
         const char *memo;
         const char *desc;
         char recn;
-
-        if (split == gnc_tree_control_split_reg_get_current_trans_split (view))
+        if ((split == gnc_tree_control_split_reg_get_current_trans_split (view)) ||
+            (split == gnc_tree_model_split_reg_trans_get_split_equal_to_ancestor (trans, anchor)))
         {
             dialog = gtk_message_dialog_new (GTK_WINDOW (window),
                                             GTK_DIALOG_MODAL
@@ -1222,6 +1176,8 @@ gnc_tree_control_split_reg_duplicate_current (GncTreeViewSplitReg *view)
     blank_split = gnc_tree_control_split_reg_get_blank_split (view);
     split = gnc_tree_view_split_reg_get_current_split (view);
     trans_split = gnc_tree_control_split_reg_get_current_trans_split (view);
+
+
     depth = gnc_tree_view_reg_get_selected_row_depth (view);
 
     use_split_action_for_num_field = qof_book_use_split_action_for_num_field (gnc_get_current_book());
@@ -1312,7 +1268,8 @@ gnc_tree_control_split_reg_duplicate_current (GncTreeViewSplitReg *view)
             // Remove the blank split
             gnc_tree_model_split_reg_set_blank_split_parent (model, trans, TRUE);
 
-            xaccTransBeginEdit (trans);
+            if (!xaccTransIsOpen (trans))
+                xaccTransBeginEdit (trans);
             gnc_tree_view_split_reg_set_dirty_trans (view, trans);
 
             xaccSplitCopyOnto (split, new_split);
@@ -1544,7 +1501,7 @@ gnc_tree_control_split_reg_save (GncTreeViewSplitReg *view, gboolean reg_closing
                 gtk_dialog_add_button (GTK_DIALOG (dialog),
                               _("_Return"), GTK_RESPONSE_ACCEPT);
 
-                gtk_widget_grab_focus (gtk_dialog_get_widget_for_response(GTK_DIALOG(dialog), GTK_RESPONSE_ACCEPT));
+                gtk_widget_grab_focus (gtk_dialog_get_widget_for_response (GTK_DIALOG(dialog), GTK_RESPONSE_ACCEPT));
 
                 response = gtk_dialog_run (GTK_DIALOG (dialog));
 //                response = gnc_dialog_run (GTK_DIALOG (dialog), "transaction_incomplete");
@@ -1642,7 +1599,8 @@ gnc_tree_control_split_reg_recn_change (GncTreeViewSplitReg *view, GtkTreePath *
         trans = xaccSplitGetParent (split);
 
         gnc_tree_view_split_reg_set_dirty_trans (view, trans);
-        xaccTransBeginEdit (trans);
+        if (!xaccTransIsOpen (trans))
+            xaccTransBeginEdit (trans);
 
         xaccSplitSetReconcile (split, rec);
 
@@ -1811,15 +1769,42 @@ static Transaction *clipboard_trans = NULL;
 static const Account *clipboard_acct = NULL;
 
 
+/* Return the split account for which ancestor is it's parent */
+static Account *
+gtc_sr_get_account_for_trans_ancestor (const Transaction *trans, const Account *ancestor)
+{
+    GList *node;
+
+    for (node = xaccTransGetSplitList (trans); node; node = node->next)
+    {
+        Split *split = node->data;
+        Account *split_acc = xaccSplitGetAccount (split);
+
+        if (!xaccTransStillHasSplit (trans, split))
+            continue;
+
+        if (ancestor == split_acc)
+            return split_acc;
+
+        if (ancestor && xaccAccountHasAncestor (split_acc, ancestor))
+            return split_acc;
+    }
+    return NULL;
+}
+
+
 void
 gnc_tree_control_split_reg_cut_trans (GncTreeViewSplitReg *view)
 {
     GncTreeModelSplitReg *model;
     Transaction *from_trans;
+    Account *anchor;
 
     g_return_if_fail (GNC_IS_TREE_VIEW_SPLIT_REG (view));
 
     model = gnc_tree_view_split_reg_get_model_from_view (view);
+
+    anchor = gnc_tree_model_split_reg_get_anchor (model);
 
     from_trans = gnc_tree_view_split_reg_get_current_trans (view);
     if (!from_trans)
@@ -1829,35 +1814,17 @@ gnc_tree_control_split_reg_cut_trans (GncTreeViewSplitReg *view)
     if (gtc_sr_is_trans_readonly_and_warn (view, from_trans))
         return;
 
-    xaccTransBeginEdit (clipboard_trans);
+    if (!xaccTransIsOpen (clipboard_trans))
+        xaccTransBeginEdit (clipboard_trans);
     if (clipboard_trans)
         xaccTransDestroy (clipboard_trans);
 
     clipboard_trans = xaccTransCopyToClipBoard (from_trans);
-    clipboard_acct = gnc_tree_model_split_reg_get_anchor (model);
+    clipboard_acct = gtc_sr_get_account_for_trans_ancestor (from_trans, anchor);
 
     gnc_tree_view_split_reg_delete_current_trans (view);
 }
 
-/* Return the split account for which ancestor is it's parent */
-static Account *
-gtc_sr_trans_get_account_for_splits_ancestor (const Transaction *trans, const Account *ancestor)
-{
-    GList *node;
-
-    for (node = xaccTransGetSplitList (trans); node; node = node->next)
-    {
-        Split *split = node->data;
-        Account *split_acc = xaccSplitGetAccount(split);
-
-        if (!xaccTransStillHasSplit(trans, split))
-            continue;
-
-        if (ancestor && xaccAccountHasAncestor(split_acc, ancestor))
-            return split_acc;
-    }
-    return NULL;
-}
 
 void
 gnc_tree_control_split_reg_copy_trans (GncTreeViewSplitReg *view)
@@ -1876,9 +1843,10 @@ gnc_tree_control_split_reg_copy_trans (GncTreeViewSplitReg *view)
 
     anchor = gnc_tree_model_split_reg_get_anchor (model);
 
-    clipboard_acct = gtc_sr_trans_get_account_for_splits_ancestor (from_trans, anchor);
+    clipboard_acct = gtc_sr_get_account_for_trans_ancestor (from_trans, anchor);
 
-    xaccTransBeginEdit (clipboard_trans);
+    if (!xaccTransIsOpen (clipboard_trans))
+        xaccTransBeginEdit (clipboard_trans);
     if (clipboard_trans)
         xaccTransDestroy (clipboard_trans);
 
@@ -1920,8 +1888,9 @@ gnc_tree_control_split_reg_paste_trans (GncTreeViewSplitReg *view)
         return;
     }
 
-    xaccTransBeginEdit (to_trans);
     gnc_tree_view_split_reg_set_dirty_trans (view, to_trans);
+    if (!xaccTransIsOpen (to_trans))
+        xaccTransBeginEdit (to_trans);
 
     // Remove the blank split
     gnc_tree_model_split_reg_set_blank_split_parent (model, to_trans, TRUE);
@@ -1932,7 +1901,7 @@ gnc_tree_control_split_reg_paste_trans (GncTreeViewSplitReg *view)
     gnc_tree_model_split_reg_set_blank_split_parent (model, to_trans, FALSE);
 
     // Refresh the view
-    g_signal_emit_by_name (model, "refresh_view", NULL);
+    g_signal_emit_by_name (model, "refresh_trans", NULL);
 }
 
 void
@@ -1968,10 +1937,10 @@ gnc_tree_control_auto_complete (GncTreeViewSplitReg *view, Transaction *trans,  
         if (g_strcmp0 (text, new_text) == 0)
         {
             xaccTransCopyOnto (trans_from, trans);
-            g_free(text);
+            g_free (text);
             break;
         }
-        g_free(text);
+        g_free (text);
 
         valid = gtk_tree_model_iter_next (GTK_TREE_MODEL (desc_list), &iter);
     }
@@ -2402,8 +2371,8 @@ gnc_tree_control_split_reg_sort_by_account (GtkTreeModel *fm, GtkTreeIter *fa, G
         if (anchor != NULL) // Registers and sub accounts.
         {
             // Get the split parent who has anchor as a parent, think of sub accounts.
-            accounta = gtc_sr_trans_get_account_for_splits_ancestor (tnodea->data, anchor);
-            accountb = gtc_sr_trans_get_account_for_splits_ancestor (tnodeb->data, anchor);
+            accounta = gtc_sr_get_account_for_trans_ancestor (tnodea->data, anchor);
+            accountb = gtc_sr_get_account_for_trans_ancestor (tnodeb->data, anchor);
 
             // Get the other split parent account.
             splita = xaccSplitGetOtherSplit (xaccTransFindSplitByAccount(tnodea->data, accounta));
@@ -2479,8 +2448,8 @@ gnc_tree_control_split_reg_sort_by_value (GtkTreeModel *fm, GtkTreeIter *fa, Gtk
     if (anchor != NULL) // Registers and sub accounts.
     {
         // Get the split parent who has anchor as a parent, think of sub accounts.
-        accounta = gtc_sr_trans_get_account_for_splits_ancestor (tnodea->data, anchor);
-        accountb = gtc_sr_trans_get_account_for_splits_ancestor (tnodeb->data, anchor);
+        accounta = gtc_sr_get_account_for_trans_ancestor (tnodea->data, anchor);
+        accountb = gtc_sr_get_account_for_trans_ancestor (tnodeb->data, anchor);
     }
     else // General ledger
     {

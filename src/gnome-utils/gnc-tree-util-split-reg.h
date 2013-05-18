@@ -48,16 +48,16 @@ const char * gnc_tree_util_split_reg_template_get_fdebt_entry (Split *split);
 
 const char * gnc_tree_util_split_reg_template_get_fcred_entry (Split *split);
 
-
 gchar * gnc_tree_util_split_reg_get_date_help (GDate *date);
 
+void gnc_tree_util_split_reg_parse_date (GDate *parsed, const char *datestr);
 
-
+gboolean gnc_tree_util_split_reg_rotate (GncTreeViewSplitReg *view, GtkTreeViewColumn *col,
+                                         Transaction *trans, Split *split);
 
 gboolean gnc_tree_util_split_reg_is_multi (Split *split);
 
 gboolean gnc_tree_util_split_reg_needs_amount (GncTreeViewSplitReg *view, Split *split);
-
 
 void gnc_tree_util_split_reg_set_value_for (GncTreeViewSplitReg *view, Transaction *trans,
                                             Split *split, gnc_numeric input, gboolean force);

@@ -257,7 +257,6 @@ gnc_tree_model_split_reg_get_type (void)
                                      GTK_TYPE_TREE_MODEL,
                                      &tree_model_info);
     }
-
     return gnc_tree_model_split_reg_type;
 }
 
@@ -684,7 +683,7 @@ gnc_tree_model_split_reg_config (GncTreeModelSplitReg *model, SplitRegisterType2
 }
 
 
-//FIXME this may not be required in the long run, return TRUE if this is a sub account view
+/* Return TRUE if this is a sub account view */
 gboolean
 gnc_tree_model_split_reg_get_sub_account (GncTreeModelSplitReg *model)
 {
@@ -1025,6 +1024,9 @@ gtm_sr_trans_get_account_for_splits_ancestor (const Transaction *trans, const Ac
         if (!xaccTransStillHasSplit(trans, split))
             continue;
 
+        if (ancestor == split_acc)
+            return split_acc;
+
         if (ancestor && xaccAccountHasAncestor(split_acc, ancestor))
             return split_acc;
     }
@@ -1095,6 +1097,9 @@ gnc_tree_model_split_reg_get_filter_vis (GncTreeModelSplitReg *model, Transactio
         account = gtm_sr_trans_get_account_for_splits_ancestor (trans, model->priv->anchor);
     else
         account = model->priv->anchor;
+
+    if (account == NULL)
+        return FALSE;
 
      // Test for the status field.
     if (model->filter_cleared_match & CLEARED_CLEARED)
@@ -2745,6 +2750,30 @@ gnc_tree_model_split_reg_update_account_list (GncTreeModelSplitReg *model)
 }
 
 
+/* Return the split for which ancestor is it's parent */
+Split *
+gnc_tree_model_split_reg_trans_get_split_equal_to_ancestor (const Transaction *trans, const Account *ancestor)
+{
+    GList *node;
+
+    for (node = xaccTransGetSplitList (trans); node; node = node->next)
+    {
+        Split *split = node->data;
+        Account *split_acc = xaccSplitGetAccount (split);
+
+        if (!xaccTransStillHasSplit (trans, split))
+            continue;
+
+        if (ancestor == split_acc)
+            return split;
+
+        if (ancestor && xaccAccountHasAncestor (split_acc, ancestor))
+            return split;
+    }
+    return NULL;
+}
+
+
 /*******************************************************************/
 /*   Split Register Tree Model - Engine Event Handling Functions   */
 /*******************************************************************/
@@ -2819,9 +2848,16 @@ gnc_tree_model_split_reg_event_handler (QofInstance *entity,
                     Split *find_split;
                     Transaction *trans;
                     trans = xaccSplitGetParent (split);
-                    find_split = xaccTransFindSplitByAccount (trans, priv->anchor);
+                    if (priv->display_subacc) // Sub accounts
+                        find_split = gnc_tree_model_split_reg_trans_get_split_equal_to_ancestor (trans, priv->anchor);
+                    else
+                        find_split = xaccTransFindSplitByAccount (trans, priv->anchor);
+
                     if (find_split == NULL)
+                    {
+                        g_signal_emit_by_name (model, "selection_move_delete", trans);
                         gtm_sr_delete_trans (model, trans);
+                    }
                 }
             }
             break;
@@ -2829,7 +2865,7 @@ gnc_tree_model_split_reg_event_handler (QofInstance *entity,
             DEBUG ("ignored event for %p (%s)", split, name);
         }
     }
-    else if (g_strcmp0(type, GNC_ID_TRANS) == 0)
+    else if (g_strcmp0 (type, GNC_ID_TRANS) == 0)
     {
         /* Get the trans.*/
         trans = (Transaction *) entity;

@@ -462,10 +462,157 @@ gnc_tree_util_split_reg_get_date_help (GDate *date)
     }
     else
         return g_strdup (" ");
-
-
 }
 
+
+void
+gnc_tree_util_split_reg_parse_date (GDate *parsed, const char *datestr)
+{
+    int day, month, year;
+    gboolean use_autoreadonly = qof_book_uses_autoreadonly (gnc_get_current_book ());
+
+    if (!parsed) return;
+    if (!datestr) return;
+
+    if (!qof_scan_date (datestr, &day, &month, &year))
+    {
+        // Couldn't parse date, use today
+        struct tm tm_today;
+        gnc_tm_get_today_start (&tm_today);
+        day = tm_today.tm_mday;
+        month = tm_today.tm_mon + 1;
+        year = tm_today.tm_year + 1900;
+    }
+
+    // If we have an auto-read-only threshold, do not accept a date that is
+    // older than the threshold.
+    if (use_autoreadonly)
+    {
+        GDate *d = g_date_new_dmy (day, month, year);
+        GDate *readonly_threshold = qof_book_get_autoreadonly_gdate (gnc_get_current_book());
+        if (g_date_compare (d, readonly_threshold) < 0)
+        {
+            g_warning("Entered date %s is before the \"auto-read-only threshold\"; resetting to the threshold.", datestr);
+#if 0
+            GtkWidget *dialog = gtk_message_dialog_new (NULL,
+                                                       0,
+                                                       GTK_MESSAGE_ERROR,
+                                                       GTK_BUTTONS_OK,
+                                                       "%s", _("Cannot store a transaction at this date"));
+            gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
+                                                     "%s", _("The entered date of the new transaction is older than the \"Read-Only Threshold\" set for this book.  "
+                                                             "This setting can be changed in File -> Properties -> Accounts."));
+            gtk_dialog_run (GTK_DIALOG (dialog));
+            gtk_widget_destroy (dialog);
+#endif
+
+            // Reset the date to the threshold date
+            day = g_date_get_day (readonly_threshold);
+            month = g_date_get_month (readonly_threshold);
+            year = g_date_get_year (readonly_threshold);
+        }
+        g_date_free (d);
+        g_date_free (readonly_threshold);
+    }
+    g_date_set_dmy (parsed, day, month, year);
+}
+
+
+gboolean
+gnc_tree_util_split_reg_rotate (GncTreeViewSplitReg *view, GtkTreeViewColumn *col, Transaction *trans, Split *split)
+{
+    GtkCellRenderer *cr0 = NULL;
+    GList *renderers;
+    ViewCol viewcol;
+
+    // Get the first renderer, it has the view-column value.
+    renderers = gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (col));
+    cr0 = g_list_nth_data (renderers, 0);
+    g_list_free (renderers);
+
+    viewcol = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (cr0), "view_column"));
+
+    if (viewcol == COL_RECN)
+    {
+        const char recn_flags[] = {NREC, CREC, 0}; // List of reconciled flags
+        const gchar *flags;
+        const gchar *text;
+        gchar *this_flag;
+        gint index = 0;
+        char rec;
+
+        flags = recn_flags;
+
+        text = g_strdup_printf("%c", xaccSplitGetReconcile (split));
+
+        /* Find the existing text in the list of flags */
+        this_flag = strstr (flags, text);
+
+        if (this_flag != NULL && *this_flag != '\0')
+        {
+            /* In the list, choose the next item in the list
+               (wrapping around as necessary). */
+            index = this_flag - flags;
+
+            if (flags[index + 1] != '\0')
+                index = index + 1;
+            else
+                index = 0;
+
+            rec = recn_flags[index];
+        }
+        else
+            rec = NREC;
+
+        gnc_tree_view_split_reg_set_dirty_trans (view, trans);
+        if (!xaccTransIsOpen (trans))
+            xaccTransBeginEdit (trans);
+
+        xaccSplitSetReconcile (split, rec);
+        return TRUE;
+    }
+
+    if (viewcol == COL_TYPE)
+    {
+        const char type_flags[] = {TXN_TYPE_INVOICE, TXN_TYPE_PAYMENT, 0}; // list of type flags
+        const gchar *flags;
+        const gchar *text;
+        gchar *this_flag;
+        gint index = 0;
+        char type;
+
+        flags = type_flags;
+
+        text = g_strdup_printf("%c", xaccTransGetTxnType (trans));
+
+        /* Find the existing text in the list of flags */
+        this_flag = strstr (flags, text);
+
+        if (this_flag != NULL && *this_flag != '\0')
+        {
+            /* In the list, choose the next item in the list
+               (wrapping around as necessary). */
+            index = this_flag - flags;
+
+            if (flags[index + 1] != '\0')
+                index = index + 1;
+            else
+                index = 0;
+
+            type = type_flags[index];
+        }
+        else
+            type = TXN_TYPE_NONE;
+
+        gnc_tree_view_split_reg_set_dirty_trans (view, trans);
+        if (!xaccTransIsOpen (trans))
+            xaccTransBeginEdit (trans);
+
+        xaccTransSetTxnType (trans, type);
+        return TRUE;
+    }
+    return FALSE;
+}
 
 /*###########################################################################*/
 
@@ -894,13 +1041,15 @@ gnc_tree_util_set_number_for_input (GncTreeViewSplitReg *view, Transaction *tran
     gboolean recalc_value = FALSE;
     gboolean expanded = FALSE;
     int denom;
-    Account *account;
+    Account *account = NULL;
 
     ENTER("trans %p and split %p and input is %s and viewcol is %d", trans, split, gnc_numeric_to_string (input), viewcol);
 
     model = gnc_tree_view_split_reg_get_model_from_view (view);
 
-    account = gnc_tree_model_split_reg_get_anchor (model);
+    /* Check for sub account view */
+    if (!gnc_tree_model_split_reg_get_sub_account (model))
+        account = gnc_tree_model_split_reg_get_anchor (model);
 
     expanded = gnc_tree_view_split_reg_trans_expanded (view, trans);
 

@@ -80,8 +80,6 @@ gboolean gnc_tree_control_split_reg_recn_test (GncTreeViewSplitReg *view, GtkTre
 
 gboolean gnc_tree_control_split_reg_balance_trans (GncTreeViewSplitReg *view, Transaction *trans);
 
-void gnc_tree_control_split_reg_parse_date (GDate *parsed, const char *datestr);
-
 Account * gnc_tree_control_split_reg_get_account_by_name (GncTreeViewSplitReg *view, const char *name);
 
 /*****************************************************************************/

@@ -646,7 +646,7 @@ xaccTransCopyOnto(const Transaction *from_trans, Transaction *to_trans)
  *   Neither 'from_trans', nor 'from_acc', nor any of 'from's splits may
  *   be modified in any way.
  *
- *   'no_start' if TRUE will not copy the date posted or Num.
+ *   'no_date' if TRUE will not copy the date posted.
  *
  *   The 'to_trans' transaction will end up with valid copies of from's
  *   splits.  In addition, the copies of any of from's splits that were
@@ -654,7 +654,7 @@ xaccTransCopyOnto(const Transaction *from_trans, Transaction *to_trans)
 \********************************************************************/
 void
 xaccTransCopyFromClipBoard(const Transaction *from_trans, Transaction *to_trans,
-                           const Account *from_acc, Account *to_acc, gboolean no_start)
+                           const Account *from_acc, Account *to_acc, gboolean no_date)
 {
     Timespec ts = {0,0};
     gboolean change_accounts = FALSE;
@@ -671,10 +671,12 @@ xaccTransCopyFromClipBoard(const Transaction *from_trans, Transaction *to_trans,
     xaccTransSetCurrency(to_trans, xaccTransGetCurrency(from_trans));
     xaccTransSetDescription(to_trans, xaccTransGetDescription(from_trans));
 
-    xaccTransSetNotes(to_trans, xaccTransGetNotes(from_trans));
-    if(!no_start)
-    {
+    if ((xaccTransGetNum(to_trans) == NULL) || (g_strcmp0 (xaccTransGetNum(to_trans), "") == 0))
         xaccTransSetNum(to_trans, xaccTransGetNum(from_trans));
+
+    xaccTransSetNotes(to_trans, xaccTransGetNotes(from_trans));
+    if(!no_date)
+    {
         xaccTransGetDatePostedTS(from_trans, &ts);
         xaccTransSetDatePostedTS(to_trans, &ts);
     }
