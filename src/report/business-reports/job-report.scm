@@ -566,20 +566,24 @@
 			(opt-val gnc:pagename-general (N_ "To")))))
 	 (book (gnc-get-current-book)) ;XXX Grab this from elsewhere
 	 (type (opt-val "__reg" "owner-type"))
-	 (type-str ""))
+	 (type-str "")
+         (report-title-str ""))
 
     (cond
       ((eqv? type GNC-OWNER-CUSTOMER)
-       (set! type-str (N_ "Customer")))
+       (set! type-str (N_ "Customer"))
+       (set! report-title-str (_ "Customer Report")))
       ((eqv? type GNC-OWNER-JOB)
-       (set! type-str (N_ "Job")))
+       (set! type-str (N_ "Job"))
+       (set! report-title-str (_ "Job Report")))
       ((eqv? type GNC-OWNER-VENDOR)
-       (set! type-str (N_ "Vendor")))
+       (set! type-str (N_ "Vendor"))
+       (set! report-title-str (_ "Vendor Report")))
       ((eqv? type GNC-OWNER-EMPLOYEE)
-       (set! type-str (N_ "Employee"))))
+       (set! type-str (N_ "Employee"))
+       (set! report-title-str (_ "Employee Report"))))
 
-    (gnc:html-document-set-title!
-     document (string-append (_ type-str) " " (_ "Report")))
+    (gnc:html-document-set-title! document report-title-str)
 
     (if (gncOwnerIsValid owner)
 	(begin
@@ -587,13 +591,12 @@
 
 	  (gnc:html-document-set-title!
 	   document
-           (string-append (_ type-str ) " " (_ "Report:") " " (gncOwnerGetName owner)))
+           (string-append report-title-str ": " (gncOwnerGetName owner)))
 
            (gnc:html-document-set-headline!
             document (gnc:html-markup
                       "!" 
-                      (_ type-str )
-                      " " (_ "Report:") " "
+                      report-title-str ": "
                       (gnc:html-markup-anchor
 					   (gnc:job-anchor-text (gncOwnerGetJob owner))
                        (gncOwnerGetName owner))))
