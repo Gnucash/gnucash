@@ -63,7 +63,7 @@ typedef struct
 
 
 /** The gnc_file_csv_account_import() will let the user import
- *  accounts from a deliminated file.
+ *  accounts from a delimited file.
  */
 void gnc_file_csv_account_import (void);
 #endif

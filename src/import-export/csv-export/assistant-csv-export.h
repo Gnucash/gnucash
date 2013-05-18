@@ -92,7 +92,7 @@ typedef struct
 
 
 /** The gnc_file_csv_export() will let the user export thte
- *  account tree or transactions to a deliminated file.
+ *  account tree or transactions to a delimited file.
  */
 void gnc_file_csv_export (CsvExportType export_type);
 

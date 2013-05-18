@@ -30,7 +30,7 @@
 
 
 /** The gnc_file_csv_trans_import() will let the user import thte
- *  account tree or transactions to a deliminated file.
+ *  account tree or transactions to a delimited file.
  */
 void gnc_file_csv_trans_import (void);
 #endif

@@ -16,7 +16,7 @@
       <object class="GtkLabel" id="start_page">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">This assistant will help you import a deliminated file containing a list of transactions.
+        <property name="label" translatable="yes">This assistant will help you import a delimited file containing a list of transactions.
 
 All transactions imported will be associated to one account for each import and if you select the account column, the account in the first row will be used for all rows.
 
