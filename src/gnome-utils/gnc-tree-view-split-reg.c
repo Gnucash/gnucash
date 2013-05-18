@@ -4580,12 +4580,29 @@ gtv_sr_edited_template_cb (GtkCellRendererText *cell, const gchar *path_string,
     case COL_RECN:
         /* Column is RECONCILE */
         gtv_sr_begin_edit (view, NULL, trans);
-
         {
             char rec = 'n';
-            if (new_text != NULL)
-                rec = new_text[0];
 
+            if (new_text != NULL)
+            {
+                const gchar *cflag = gnc_get_reconcile_str (CREC);
+                const gchar *nflag = gnc_get_reconcile_str (NREC);
+                const char recn_flags[] = {NREC, CREC, 0}; // List of reconciled flags
+                const gchar *flags;
+                gchar *this_flag;
+                gint index = 0;
+
+                flags = g_strconcat (nflag, cflag, NULL); // List of translated strings.
+
+                /* Find the current flag in the list of flags */
+                this_flag = strstr (flags, new_text);
+
+                if (this_flag != NULL)
+                {
+                    index = this_flag - flags;
+                    rec = recn_flags[index];
+                }
+            }
             if (is_trow1)
                 xaccSplitSetReconcile (gtv_sr_get_this_split (view, trans), rec);
             if (is_split)
