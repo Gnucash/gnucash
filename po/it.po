@@ -54,7 +54,7 @@ msgstr ""
 "Project-Id-Version: Gnucash 2.3.12\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-07 12:19+0200\n"
-"PO-Revision-Date: 2013-05-08 13:03+0100\n"
+"PO-Revision-Date: 2013-05-18 15:18+0100\n"
 "Last-Translator: Cristian Marchi <cri.penta@gmail.com>\n"
 "Language-Team: Italian <gnucash-it@gnucash.org>\n"
 "Language: it\n"
@@ -443,7 +443,7 @@ msgstr "Sto caricando i dati..."
 
 #: ../src/bin/gnucash-bin.c:878
 msgid "Error: could not initialize graphical user interface and option add-price-quotes was not set."
-msgstr ""
+msgstr "Errore: impossibile inizializzare l'interfaccia grafica e l'opzione add-price-quotes non è stata impostata."
 
 #: ../src/business/business-gnome/business-gnome-utils.c:73
 #: ../src/business/business-gnome/business-gnome-utils.c:260
@@ -1404,9 +1404,8 @@ msgid "Pre-Payment"
 msgstr "Pre-pagamento"
 
 #: ../src/business/business-gnome/dialog-payment.c:556
-#, fuzzy
 msgid "You must enter the amount of the payment.  The payment amount must not be zero."
-msgstr "È necessario immettere l'importo del pagamento. L'importo del pagamento deve essere maggiore di zero."
+msgstr "È necessario immettere l'importo del pagamento. L'importo del pagamento deve essere diverso da zero."
 
 #: ../src/business/business-gnome/dialog-payment.c:566
 msgid "You must select a company for payment processing."
@@ -4059,7 +4058,7 @@ msgstr[0] "La data della transazione più vecchia in questo libro è %s. Sulla b
 msgstr[1] "La data della transazione più vecchia in questo libro è %s. Sulla base della selezione fatta più sopra, questo libro verrà diviso in %d libri."
 
 #: ../src/gnome/assistant-acct-period.c:371
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "You have asked for a book to be created.  This book will contain all transactions up to midnight %s (for a total of %d transactions spread over %d accounts).\n"
 "\n"
@@ -4068,7 +4067,8 @@ msgid ""
 msgstr ""
 "È stata richiesta la creazione di un libro. Questo libro conterrà tutte le transazioni fino a mezzanotte %s (per un totale di %d transazioni suddivise in %d conti).\n"
 "\n"
-" Controllare il titolo e le note o premere «Avanti» per procedere. Premere «Indietro» per modificare le date o «Annulla»."
+" Controllare il titolo e le note o premere «Avanti» per procedere.\n"
+" Premere «Indietro» per modificare le date o «Annulla»."
 
 #: ../src/gnome/assistant-acct-period.c:388
 #, c-format
@@ -5740,7 +5740,7 @@ msgstr "Liquidazione automatica"
 
 #: ../src/gnome/gnc-plugin-page-register2.c:660
 msgid "You have tried to open an account in the new register while it is open in the old register."
-msgstr ""
+msgstr "Si è cercato di aprire un conto nel nuovo registro quando è già aperto in quello vecchio."
 
 #: ../src/gnome/gnc-plugin-page-register2.c:733
 msgid "General Ledger2"
@@ -5885,7 +5885,7 @@ msgstr "_Ordina per..."
 
 #: ../src/gnome/gnc-plugin-page-register.c:662
 msgid "You have tried to open an account in the old register while it is open in the new register."
-msgstr ""
+msgstr "Si è cercato di aprire un conto nel vecchio registro quando è già aperto in quello nuovo."
 
 #: ../src/gnome/gnc-plugin-page-register.c:2959
 #: ../src/gnome/gnc-split-reg.c:889
@@ -6212,7 +6212,6 @@ msgstr ""
 
 #: ../src/gnome/gtkbuilder/assistant-hierarchy.glade.h:14
 #: ../src/import-export/qif-import/assistant-qif-import.glade.h:7
-#, fuzzy
 msgid "<b>Book Options</b>"
 msgstr "<b>Opzioni libro</b>"
 
@@ -8277,30 +8276,35 @@ msgstr "Se attivata, GnuCash verrà abilitato all'interruzione della compatibili
 msgid "If active, pressing the enter key will move to the bottom of the register. Otherwise pressing the enter key will move to the next transaction line."
 msgstr "Se attivata, premendo il tasto «Invio» ci si sposterà alla fine della lista.Diversamente premendo «Invio» ci si sposterà alla linea della transazione successiva"
 
+# Tooltip
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:37
 msgid "If active, the Cancel, Today and Select buttons will be shown in the calendar when it is dispalyed in the register."
-msgstr ""
+msgstr "Se attivata, i pulsanti \"Seleziona\", \"Oggi\" e \"Annulla\" saranno visualizzati nel calendario mostrato nel registro"
 
+# Tooltip
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:38
 msgid "If active, the background color of the Account Name column on the Accounts page is displayed as the account color."
-msgstr ""
+msgstr "Se attivata, il colore associato al conto verrà visualizzato come sfondo della colonna del nome del conto nella pagina dei conti"
 
+# Tooltip
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:39
 msgid "If active, the background color of the register tabs will be displayed in the account color."
-msgstr ""
+msgstr "Se attivata, il colore associato al conto verrà visualizzato come sfondo della scheda del relativo registro"
 
+# Tooltip
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:40
 msgid "If active, the date the transaction was entered is shown below the posted date."
-msgstr ""
+msgstr "Se attivata, la data di immissione della transazione verrà visualizzata sotto a quella di emissione"
 
 # Tooltip
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:41
 msgid "If active, the register will be colored as specified by the system theme. This can be overridden to provide custom colors by editing the gtkrc file in the users home directory. Otherwise the standard register colors will be used that GnuCash has always used."
 msgstr "Se attivata, il registro assumerà i colori specificati dal tema di sistema. Dei colori personalizzati possono essere assegnati modificando il file gtkrc nella cartella «home» dell'utente. Diversamente verranno applicati i colori predefiniti per il registro che GnuCash ha da sempre utilizzato"
 
+# Tooltip
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:42
 msgid "If active, the selection will be moved to the blank split when the transaction is expanded."
-msgstr ""
+msgstr "Se attivata, la selezione verrà spostata alla suddivisione vuota quando la transazione è espansa"
 
 # Tooltip
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:43
@@ -8323,7 +8327,7 @@ msgstr "Numero massimo di mesi di cui retrocedere."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:47
 msgid "Move Selection to blank split on expand"
-msgstr ""
+msgstr "Sposta la selezione alla suddivisione vuota quando si espande"
 
 # tooltip
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:48
@@ -8390,9 +8394,8 @@ msgid "Show the Calendar buttons"
 msgstr "Mostra i pulsanti del calendario"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:63
-#, fuzzy
 msgid "Show the Date Entered"
-msgstr "Visualizza la colonna della data"
+msgstr "Mostra la data di inserimento"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:65
 msgid "Show two lines of information for each transaction in a register. This is the default setting for when a register is first opened. The setting can be changed at any time via the \"View->Double Line\" menu item."
@@ -8468,13 +8471,15 @@ msgstr "Questa impostazione controlla la visualizzazione delle etichette nella b
 msgid "This setting controls the default currency used for reports. If set to \"locale\" then GnuCash will retrieve the default currency from the user's locale setting. If set to \"other\", GnuCash will use the setting specified by the currency_other key."
 msgstr "Questa impostazione controlla la fonte della valuta predefinita per i resoconti. Se impostata a «Locale» allora GnuCash prenderà la valuta predefinita dalle impostazioni locali dell'utente. Se impostata su «altri», GnuCash utilizzerà le impostazioni specificate dalla chiave altre_valute."
 
+# Tooltip
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:83
 msgid "This setting controls the maximum number of transactions that are displayed in the register."
-msgstr ""
+msgstr "Questa impostazione controlla il numero massimo di transazioni mostrate nel registro"
 
+# Tooltip
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:84
 msgid "This setting controls the number of characters needed before the auto complete starts to work."
-msgstr ""
+msgstr "Questa impostazione controlla il numero di caratteri necessario prima dell'avvio dell'autocompletamento"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:85
 msgid "This setting controls the source of the default currency for new accounts. If set to \"locale\" then GnuCash will retrieve the default currency from the user's locale setting. If set to \"other\", GnuCash will use the setting specified by the currency_other key."
@@ -9618,9 +9623,8 @@ msgid "Don't tell me again this _session."
 msgstr "Non dirmelo di nuovo in questa _sessione."
 
 #: ../src/gnome-utils/dialog-utils.c:628
-#, fuzzy
 msgid "New Book Options"
-msgstr "Nuove opzioni di canale"
+msgstr "Opzioni del nuovo libro"
 
 #. create the button.
 #: ../src/gnome-utils/gnc-account-sel.c:458
@@ -10631,7 +10635,7 @@ msgstr "Ca_mbia suddivisione"
 
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:1919
 msgid "You can not paste from the general ledger to a register."
-msgstr ""
+msgstr "Non è possibile incollare dal libro mastro generale al registro."
 
 #: ../src/gnome-utils/gnc-tree-model-account.c:636
 msgid "New top level account"
@@ -11237,9 +11241,8 @@ msgid "_Record Changes"
 msgstr "Salva i _cambiamenti"
 
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:2846
-#, fuzzy
 msgid "Date Entered"
-msgstr "%s [<I>%s</I>] è entrato nella stanza."
+msgstr "Data di immissione"
 
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:2873
 #, fuzzy
@@ -11420,9 +11423,8 @@ msgid "* Indicates the transaction Commodity."
 msgstr "Aggiungi una nuova commodity."
 
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:3421
-#, fuzzy
 msgid "Enter the rate"
-msgstr "Retribuzione predefinita: "
+msgstr ""
 
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:3431
 #: ../src/register/ledger-core/split-register-model.c:1323
@@ -12474,7 +12476,7 @@ msgstr "Soglia per una nuova _ricerca:"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:106
 msgid "Number of _characters for auto complete:"
-msgstr ""
+msgstr "N_umero di caratteri per l'autocompletamento"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:107
 msgid "Number of _transactions:"
@@ -12596,26 +12598,23 @@ msgstr "Mostra il colore del conto come sfondo della scheda"
 msgid "Show the Account Color on tabs"
 msgstr "Mostra il colore del conto nelle schede"
 
-# Tooltip
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:137
-#, fuzzy
 msgid "Show the _entered date"
-msgstr "Visualizza la colonna della data"
+msgstr "Mostra la data di inseri_mento"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:138
-#, fuzzy
 msgid "Show the calendar b_uttons"
-msgstr "Finestra principale del calendario"
+msgstr "Mostra i pulsanti del calen_dario"
 
+# Tooltip
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:139
 msgid "Show the calendar buttons Cancel, Today and Select."
-msgstr ""
+msgstr "Mostra i pulsanti del calendario \"Seleziona\", \"Oggi\" e \"Annulla\""
 
 # Tooltip
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:140
-#, fuzzy
 msgid "Show the date when the transaction was entered below the posted date."
-msgstr "Crea la transazione questo numero di giorni prima della sua data effettiva"
+msgstr "Mostra la data di inserimento della transazione sotto alla data di emissione"
 
 # Tooltip
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:141
@@ -12655,13 +12654,15 @@ msgstr "Testo sotto alle icon_e"
 msgid "The character that will be used between components of an account name.  A legal value is any single character except letters and numbers, or any of the following strings: \"colon\" \"slash\", \"backslash\", \"dash\" and \"period\"."
 msgstr "Il carattere che verrà utilizzato tra i componenti del nome di un conto. Un valore valido è un carattere qualsiasi a esclusione di numeri e lettere, oppure una delle seguenti stringhe: «colon», «slash», «backslash», «dash» e «period»"
 
+# Tooltip
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:150
 msgid "This sets the number of characters before auto complete starts for description, notes and memo fields."
-msgstr ""
+msgstr "Questo valore imposta il numero di caratteri dopo il quale si avvia l'autocompletamento per i campi \"descrizione\", \"note\" e \"promemoria\""
 
+# Tooltip
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:151
 msgid "This will move the selection to the blank split when the transaction is expanded."
-msgstr ""
+msgstr "Se abilitata, la selezione verrà spostata alla suddivisione vuota quando la transazione è espansa"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:152
 msgid "To_p"
@@ -12825,7 +12826,7 @@ msgstr "Si_nistra"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:190
 msgid "_Move the selection to the blank split on expand"
-msgstr ""
+msgstr "_Sposta la selezione alla suddivisione _vuota all'espansione"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:191
 msgid "_None"
@@ -13558,9 +13559,8 @@ msgid "Cannot uniquely clear splits. Found multiple possibilities."
 msgstr ""
 
 #: ../src/gnome/window-autoclear.c:249
-#, fuzzy
 msgid "The selected amount cannot be cleared."
-msgstr "Il tasso d'interesse non può essere zero."
+msgstr "L'importo selezionato non può essere liquidato."
 
 #: ../src/gnome/window-reconcile2.c:457
 #: ../src/gnome/window-reconcile.c:457
@@ -14679,6 +14679,9 @@ msgid ""
 "\n"
 "Select the settings you require for the file and then click 'Forward' to proceed or 'Cancel' to Abort Export.\n"
 msgstr ""
+"Questo assistente permette di esportare la struttura dei conti in un file.\n"
+"\n"
+"Selezionare le impostazioni richieste per il file e premere «Avanti» per proseguire o «Annulla» per interrompere l'esportazione.\n"
 
 #: ../src/import-export/csv-export/assistant-csv-export.c:97
 msgid ""
@@ -14686,23 +14689,29 @@ msgid ""
 "\n"
 "Select the settings you require for the file and then click 'Forward' to proceed or 'Cancel' to Abort Export.\n"
 msgstr ""
+"Questo assistente permette di esportare le transazioni in un file.\n"
+"\n"
+"Selezionare le impostazioni richieste per il file e premere «Avanti» per proseguire o «Annulla» per interrompere l'esportazione.\n"
 
 #: ../src/import-export/csv-export/assistant-csv-export.c:754
 msgid ""
 "There was a problem with the export, this could be due to lack of space, permissions or unable to access folder. Check the trace file for further logging!\n"
 "You may need to enable debuging.\n"
 msgstr ""
+"Si è verificato un errore con l'esportazione: potrebbe essere un problema di spazio, di permessi o di impossibilità di accedere alla  cartella. Controllare il file di tracciamento per maggiori informazioni.\n"
+"Potrebbe essere necessario abilitare il debugging.\n"
 
 #: ../src/import-export/csv-export/assistant-csv-export.c:758
 msgid "File exported successfully!\n"
 msgstr "Il file è stato esportato con successo!\n"
 
 #: ../src/import-export/csv-export/assistant-csv-export.glade.h:1
-#, fuzzy
 msgid ""
 "\n"
 "Enter file name and location for the Export...\n"
-msgstr "Non ci sono opzioni per questo resoconto."
+msgstr ""
+"\n"
+"Inserire il nome del file e la posizione per l'esportazione...\n"
 
 #: ../src/import-export/csv-export/assistant-csv-export.glade.h:4
 msgid ""
@@ -14713,9 +14722,8 @@ msgstr ""
 "Selezionare il tipo di esportazione richiesto e il separatore da utilizzare.\n"
 
 #: ../src/import-export/csv-export/assistant-csv-export.glade.h:9
-#, fuzzy
 msgid "<b>_Dates</b>"
-msgstr "Giorni di azione"
+msgstr "<b>_Date</b>"
 
 #: ../src/import-export/csv-export/assistant-csv-export.glade.h:10
 #: ../src/import-export/csv-import/assistant-csv-trans-import.glade.h:5
@@ -14727,14 +14735,12 @@ msgid "CSV Export Assistant"
 msgstr "Assistente per l'esportazione CSV"
 
 #: ../src/import-export/csv-export/assistant-csv-export.glade.h:15
-#, fuzzy
 msgid "Choose Export Settings"
-msgstr "Esporta le impostazioni di Colora"
+msgstr "Selezione impostazioni di esportazione"
 
 #: ../src/import-export/csv-export/assistant-csv-export.glade.h:16
-#, fuzzy
 msgid "Choose File Name for Export"
-msgstr "Scegliere un nome per la nuova sessione:"
+msgstr "Selezione del nome per l'esportazione"
 
 #: ../src/import-export/csv-export/assistant-csv-export.glade.h:17
 #: ../src/import-export/csv-import/assistant-csv-trans-import.glade.h:7
@@ -14748,7 +14754,7 @@ msgstr "Virgola (,)"
 
 #: ../src/import-export/csv-export/assistant-csv-export.glade.h:21
 msgid "Export Now..."
-msgstr "Esporta ora..."
+msgstr "Esportazione..."
 
 #: ../src/import-export/csv-export/assistant-csv-export.glade.h:22
 msgid "Export Summary"
@@ -14786,9 +14792,8 @@ msgid "Summary"
 msgstr "Sommario"
 
 #: ../src/import-export/csv-export/assistant-csv-export.glade.h:34
-#, fuzzy
 msgid "Use Quotes"
-msgstr "Ricevi _quotazioni"
+msgstr "Usa quote"
 
 #: ../src/import-export/csv-export/csv-transactions-export.c:346
 msgid "Category"
@@ -14908,6 +14913,9 @@ msgid ""
 "\n"
 "You can also go back and verify your selections by clicking on 'Back' or 'Cancel' to Abort Import.\n"
 msgstr ""
+"Premendo il tasto «Applica» ,i conti verranno importati dal file «%s».\n"
+"\n"
+"É anche possibile tornare indietro e verificare le proprie selezioni premendo «Indietro» o «Annulla» per interrompere l'importazione.\n"
 
 #: ../src/import-export/csv-import/assistant-csv-account-import.c:76
 #, c-format
@@ -14918,6 +14926,11 @@ msgid ""
 "\n"
 "If this is your initial import into a new file, you will first see a dialog for setting book options, since these can affect how imported data are converted to GnuCash transactions. If this is an existing file, the dialog will not be shown.\n"
 msgstr ""
+"Premendo il tasto «Applica» ,i conti verranno importati dal file «%s».\n"
+"\n"
+"É anche possibile tornare indietro e verificare le proprie selezioni premendo «Indietro» o «Annulla» per interrompere l'importazione.\n"
+"\n"
+"Se questa è la prima importazione in un nuovo file, verrà mostrata una finestra per l'impostazione delle opzioni del libro, data che possono influenzare il modo in cui i dati sono convertiti in transazioni per GnuCash. Se si tratta invece di un file esistente, la finestra non verrà mostrata.\n"
 
 #: ../src/import-export/csv-import/assistant-csv-account-import.c:119
 #: ../src/plugins/bi_import/dialog-bi-import-gui.c:219
@@ -14946,6 +14959,11 @@ msgid ""
 "\n"
 "See below for errors..."
 msgstr ""
+"Importazione completata con errori!\n"
+"\n"
+"Sono stati aggiunti %u conti e ne sono stati aggiornati %u.\n"
+"\n"
+"Gli errori sono elencati di seguito..."
 
 #: ../src/import-export/csv-import/assistant-csv-account-import.c:424
 #, c-format
@@ -14954,13 +14972,17 @@ msgid ""
 "\n"
 "The number of Accounts added was %u and updated was %u.\n"
 msgstr ""
+"Importazione completata con successo!\n"
+"\n"
+"Sono stati aggiunti %u conti e ne sono stati aggiornati %u.\n"
 
 #: ../src/import-export/csv-import/assistant-csv-account-import.glade.h:1
-#, fuzzy
 msgid ""
 "\n"
 "Enter file name and location for the Import...\n"
-msgstr "Non ci sono opzioni per questo resoconto."
+msgstr ""
+"\n"
+"Inserire il nome del file e la posizione per l'importazione...\n"
 
 #: ../src/import-export/csv-import/assistant-csv-account-import.glade.h:4
 msgid ""
@@ -14971,14 +14993,20 @@ msgid ""
 "\n"
 "Click on 'Forward' to proceed or 'Cancel' to Abort Import.\n"
 msgstr ""
+"\n"
+"Questo assistente permette di importare dei conti da un file.\n"
+"\n"
+"Il file deve essere nello stesso formato di quelli esportati poiché si tratta di una importazione a formato fisso. Se il conto è mancante, sulla base del nome completo, verrà aggiunto se la security/valuta indicata esiste. Se il conto esiste già, verranno aggiornati i seguenti quattro campi: codice, descrizione, note e colore.\n"
+"\n"
+"Premere «Avanti» per proseguire o «Annulla» per interrompere l'importazione.\n"
 
 #: ../src/import-export/csv-import/assistant-csv-account-import.glade.h:11
 msgid "CSV Import Assistant"
-msgstr "Assitente importazione file CSV"
+msgstr "Assistente importazione file CSV"
 
 #: ../src/import-export/csv-import/assistant-csv-account-import.glade.h:12
 msgid "Choose File to Import"
-msgstr "Scegliere un file da importare"
+msgstr "Scelta del file da importare"
 
 #: ../src/import-export/csv-import/assistant-csv-account-import.glade.h:13
 msgid "Comma Separated"
@@ -14998,7 +15026,7 @@ msgstr "Assistente importazione conto"
 
 #: ../src/import-export/csv-import/assistant-csv-account-import.glade.h:17
 msgid "Import Account Preview, first 10 rows only"
-msgstr ""
+msgstr "Anteprima importazione conti (solo le prime 10 righe)"
 
 #: ../src/import-export/csv-import/assistant-csv-account-import.glade.h:18
 msgid "Import Accounts Now"
@@ -15070,32 +15098,35 @@ msgid ""
 "There are problems with the import settings!\n"
 "The date format could be wrong or there are not enough columns set..."
 msgstr ""
+"Si sono verificati dei problemi con le impostazioni di importazione.\n"
+"Il formato della data potrebbe essere errato o non sono state impostate abbastanza colonne..."
 
 #: ../src/import-export/csv-import/assistant-csv-trans-import.c:1388
 #, c-format
 msgid "To Change the account, double click on the required account, click Forward to procede."
-msgstr ""
+msgstr "Per cambiare il conto fare doppio clic su di esso e premere «Avanti» per proseguire."
 
 #. A list of the transactions we create
 #: ../src/import-export/csv-import/assistant-csv-trans-import.c:1471
 msgid "Double click on rows to change, then click on Apply to Import"
-msgstr ""
+msgstr "Fare doppio clic sulle righe per modificarle, poi premere «Avanti» per importare"
 
 #: ../src/import-export/csv-import/assistant-csv-trans-import.c:1519
-#, fuzzy, c-format
+#, c-format
 msgid "The transactions were imported from the file '%s'."
-msgstr "Importa le transazioni da un file di testo"
+msgstr "Le transazioni sono state importate dal file «%s»."
 
 #: ../src/import-export/csv-import/assistant-csv-trans-import.glade.h:1
 msgid ""
 "\n"
 "Select location and file name for the Import, then click 'OK'...\n"
 msgstr ""
+"\n"
+"Selezionare posizione e nome del file da importare, poi premere «OK»...\n"
 
 #: ../src/import-export/csv-import/assistant-csv-trans-import.glade.h:4
-#, fuzzy
 msgid " and stop on row "
-msgstr "Ferm&a e rimuovi tutto"
+msgstr "e fermati alla riga"
 
 #: ../src/import-export/csv-import/assistant-csv-trans-import.glade.h:6
 msgid "CSV Transaction Import"
@@ -15187,10 +15218,17 @@ msgid ""
 "\n"
 "There is an option for specifying the start and end row which can be used if you have some header text or multiple accounts in the same file."
 msgstr ""
+"Questo assistente permette di importare un file delimitato contenente un elenco di transazioni.\n"
+"\n"
+"Tutte le transazioni importate verranno associate a un conto per ogni importazione e se si seleziona la colonna \"conto\", il conto nella prima riga verrà usato per tutte le altre.\n"
+"\n"
+"Sono presenti diverse opzioni per specificare il delimitatore insieme all'opzione larghezza fissa; con questa opzione abilitata, fare doppio clic sulla barra al di sopra delle righe visualizzate per impostare la larghezza della colonna.\n"
+"\n"
+"C'è anche un'opzione per specificare la riga iniziale e quella finale che può essere utile se sono presenti delle intestazioni o più cont all'interno del file."
 
 #: ../src/import-export/csv-import/assistant-csv-trans-import.glade.h:45
 msgid "Transaction Import Assistant"
-msgstr "Assitente importazione transazioni"
+msgstr "Assistente importazione transazioni"
 
 #: ../src/import-export/csv-import/assistant-csv-trans-import.glade.h:46
 msgid "Transaction Information"
@@ -15239,7 +15277,7 @@ msgstr "Punto: 123,456.78"
 #: ../src/import-export/csv-import/gnc-csv-model.c:40
 #: ../src/import-export/import-format-dialog.c:70
 msgid "Comma: 123.456,78"
-msgstr "virgola: 123.456,78"
+msgstr "Virgola: 123.456,78"
 
 #. src/app-utils/prefs.scm
 #: ../src/import-export/csv-import/gnc-csv-model.c:51
@@ -15801,7 +15839,7 @@ msgstr "Premendo il pulsante «Avvia», GnuCash procederà al caricamento del fi
 #: ../src/import-export/qif-import/assistant-qif-import.c:2518
 #: ../src/import-export/qif-import/assistant-qif-import.glade.h:11
 msgid "Choose the QIF file currency and select Book Options"
-msgstr ""
+msgstr "Selezionare la valuta del file QIF e selezionare le opzioni del libro."
 
 #: ../src/import-export/qif-import/assistant-qif-import.c:2525
 msgid "Choose the QIF file currency"
@@ -16032,7 +16070,7 @@ msgstr "Importazione file QIF"
 
 #: ../src/import-export/qif-import/assistant-qif-import.glade.h:55
 msgid "QIF Import Assistant"
-msgstr "Assitente importazione file QIF"
+msgstr "Assistente importazione file QIF"
 
 #: ../src/import-export/qif-import/assistant-qif-import.glade.h:56
 msgid ""
@@ -16070,7 +16108,7 @@ msgstr "Impostare il nome predefinito del conto QIF"
 
 #: ../src/import-export/qif-import/assistant-qif-import.glade.h:65
 msgid "Since you are creating a new file, you will next see a dialog for setting book options. These can affect how GnuCash imports transactions. If you come back to this page without cancelling and starting over, the dialog for setting book options will not be shown a second time when you go forward. You can access it directly from the menu via File->Properties."
-msgstr ""
+msgstr "Poiché si sta per creare un nuovo file, verrà mostrata una finestra per l'impostazione delle opzioni del libro; queste influenzano il modo in cui GnuCash importa le transazioni. Se si torna a questa pagina senza annullare o senza ricominciare da capo, la finestra per le opzioni del libro non verrà mostrata una seconda volta. É comunque possibile aprirla dal menu «File-Proprietà»"
 
 #: ../src/import-export/qif-import/assistant-qif-import.glade.h:66
 msgid "Summary Text"
@@ -16496,9 +16534,8 @@ msgid "For importing vendor lists."
 msgstr "Avvia la procedura di ricerca di un venditore."
 
 #: ../src/plugins/customer_import/gtkbuilder/dialog-customer-import-gui.glade.h:11
-#, fuzzy
 msgid "Import customers or vendors from text file"
-msgstr "Importa le transazioni da un file di testo"
+msgstr "Importa clienti o venditori da un file di testo"
 
 #: ../src/register/ledger-core/split-register.c:183
 msgid "This transaction is already being edited in another register. Please finish editing it there first."
@@ -25579,7 +25616,7 @@ msgstr "Fare clic con il tasto destro del mouse nella finestra principale per ap
 
 #: ../doc/tip_of_the_day.list.in:24
 msgid "To enter multiple-split transactions such as a paycheck with multiple deductions, click the Split button in the tool bar. Alternatively, in the View menu, you can choose the register style Auto-Split Ledger or Transaction Journal."
-msgstr "Per immettere transazioni suddivise come un pagamento con detrazione multiple, fare clic sul pulsante «Suddividi» nella barra degli strumenti. In alternativa, nel menu «Visualizza -> Stile», è possibile scegliere lo stile di registro «Mastro a espansione automatica» o «Giornale delle transazioni»."
+msgstr "Per immettere transazioni suddivise come uno stipendio con diverse detrazioni, fare clic sul pulsante «Suddividi» nella barra degli strumenti. In alternativa, nel menu «Visualizza -> Stile», è possibile scegliere lo stile di registro «Mastro a espansione automatica» o «Giornale delle transazioni»."
 
 #: ../doc/tip_of_the_day.list.in:29
 msgid "As you enter amounts in the register, you can use the GnuCash calculator to add, subtract, multiply and divide .  Simply type the first value, then select '+', '-','*', or '/'.  Type the second value and press Enter to record the calculated amount."
@@ -25656,7 +25693,7 @@ msgstr ""
 
 #: ../doc/tip_of_the_day.list.in:101
 msgid "To search through all your transactions, start a search (Edit > Find...) from the main accounts hierarchy page. To limit your search to a single account, start the search from that account's register."
-msgstr ""
+msgstr "Per effettuare una ricerca fra le proprie transazioni, avviare una ricerca (Modifica > Trova...) dalla pagina della struttura principale dei conti. Per limitare la ricerca a un singolo conto, avviare la ricerca dal registro del conto."
 
 #~ msgid "The last stable version was "
 #~ msgstr "L'ultima versione stabile era "
