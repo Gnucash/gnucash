@@ -773,55 +773,35 @@ gnc_tree_control_split_reg_goto_rel_trans_row (GncTreeViewSplitReg *view, gint r
 
 /* Enter the transaction */
 void
-gnc_tree_control_split_reg_enter (GncTreeViewSplitReg *view, gboolean next_transaction)
+gnc_tree_control_split_reg_enter (GncTreeViewSplitReg *view)
 {
     GncTreeModelSplitReg *model;
-    gboolean goto_blank;
-
-    ENTER("view=%p, next_transaction=%s", view, next_transaction ? "TRUE" : "FALSE");
-
-//FIXME Might need more...
+    Transaction *btrans, *ctrans;
+    gboolean goto_blank = FALSE;
+    gboolean next_trans = TRUE;
 
     model = gnc_tree_view_split_reg_get_model_from_view (view);
 
     goto_blank = gnc_gconf_get_bool (GCONF_GENERAL_REGISTER,
                                     "enter_moves_to_end", NULL);
 
-    /* If we are in single or double line mode and we hit enter
-     * on the blank split, go to the blank split instead of the
-     * next row. This prevents the cursor from jumping around
-     * when you are entering transactions. */
-    if ( !goto_blank && !next_transaction )
-    {
-        SplitRegisterStyle2 style = model->style;
+    ENTER("view=%p, goto_blank = %s", view, goto_blank ? "TRUE" : "FALSE");
 
-        if (style == REG2_STYLE_LEDGER)
-        {
-            Split *blank_split;
+    btrans = gnc_tree_model_split_get_blank_trans (model);
 
-            blank_split = gnc_tree_control_split_reg_get_blank_split (view);
-            if (blank_split != NULL)
-            {
-                Split *current_split;
+    ctrans = gnc_tree_view_split_reg_get_current_trans (view);
 
-                current_split = gnc_tree_view_split_reg_get_current_split (view);
-
-                if (blank_split == current_split)
-                    goto_blank = TRUE;
-            }
-        }
-    }
+    /* Are we on the blank transaction */
+    if (btrans == ctrans)
+        next_trans = FALSE;
 
     /* First record the transaction */
     if (gnc_tree_view_split_reg_enter (view))
     {
-        if (!goto_blank && next_transaction)
-            gnc_tree_view_split_reg_collapse_trans (view, NULL);
-
         /* Now move. */
-        if (goto_blank) //FIXME What do we want to do here...
+        if (goto_blank)
             gnc_tree_control_split_reg_jump_to_blank (view);
-        else if (next_transaction)
+        else if (next_trans)
             gnc_tree_control_split_reg_goto_rel_trans_row (view, 1);
     }
     LEAVE(" ");
@@ -1967,7 +1947,7 @@ gnc_tree_control_split_reg_sort_changed_cb (GtkTreeSortable *sortable, gpointer 
     if (sort_depth != 0)
         view->sort_depth = sort_depth;
 
-    view->sort_col = sortcol - 1;
+    view->sort_col = sortcol;
 
     if (type == GTK_SORT_DESCENDING)
         view->sort_direction = -1;

@@ -56,7 +56,7 @@ void gnc_tree_control_split_reg_cancel_edit (GncTreeViewSplitReg *view, gboolean
 
 void gnc_tree_control_split_reg_goto_rel_trans_row (GncTreeViewSplitReg *view, gint relative);
 
-void gnc_tree_control_split_reg_enter (GncTreeViewSplitReg *view, gboolean next_transaction);
+void gnc_tree_control_split_reg_enter (GncTreeViewSplitReg *view);
 
 void gnc_tree_control_split_reg_reinit (GncTreeViewSplitReg *view, gpointer data);
 

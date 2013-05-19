@@ -263,6 +263,8 @@ gnc_tree_view_init (GncTreeView *view, GncTreeViewClass *klass)
                  (gchar *)NULL);
     priv->spacer_column = column;
 
+    gtk_tree_view_column_set_sizing (column, GTK_TREE_VIEW_COLUMN_FIXED);
+
     /* Create the last column which contains the column selection
      * widget.  gnc_tree_view_add_text_column will do most of the
      * work. */
@@ -282,6 +284,8 @@ gnc_tree_view_init (GncTreeView *view, GncTreeViewClass *klass)
                      G_CALLBACK (gnc_tree_view_select_column_cb),
                      view);
     priv->column_menu_column = column;
+
+    gtk_tree_view_column_set_sizing (column, GTK_TREE_VIEW_COLUMN_FIXED);
 }
 
 /** Finalize the GncTreeView object.  This function is called from the
@@ -739,7 +743,6 @@ gtk_tree_view_size_allocate_cb (GtkWidget *widget,
     GList *column_list;
 
     g_return_if_fail(GNC_IS_TREE_VIEW(widget));
-
     view = GNC_TREE_VIEW(widget);
     column_list = gtk_tree_view_get_columns(GTK_TREE_VIEW(view));
     g_list_foreach(column_list, (GFunc)gtk_tree_view_size_allocate_helper, view);

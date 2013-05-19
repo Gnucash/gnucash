@@ -258,7 +258,8 @@ gsr2_create_table (GNCSplitReg2 *gsr)
     gnc_tree_model_split_reg_set_display (model, ((ledger_type == LD2_SUBACCOUNT)?TRUE:FALSE), ((ledger_type == LD2_GL)?TRUE:FALSE));
 
     // We need to give the General Ledger a Key other than all zeros which the search register gets.
-    if (model->type == GENERAL_LEDGER2)
+//    if (account == NULL && model->type == GENERAL_LEDGER2)
+    if (ledger_type == LD2_GL && model->type == GENERAL_LEDGER2)
         gconf_key = g_strconcat (GCONF_SECTION,"/", "00000000000000000000000000000001", NULL);
 
     scrolled_window = gtk_scrolled_window_new (NULL, NULL);

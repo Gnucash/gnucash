@@ -1173,11 +1173,20 @@ gnc_tree_util_set_number_for_input (GncTreeViewSplitReg *view, Transaction *tran
         else
             radio_list = g_list_append (radio_list, g_strdup (_("_Value")));
 
-        if (price_changed)
-            default_value = 0;  /* change the amount / shares */
+        if(expanded)
+        {
+            if (price_changed)
+                default_value = 2;  /* change the value */
+            else
+                default_value = 1;  /* change the price */
+        }
         else
-            default_value = 1;  /* change the value */
-
+        {
+            if (price_changed)
+                default_value = 0;  /* change the amount / shares */
+            else
+                default_value = 1;  /* change the price */
+        }
         choice = gnc_choose_radio_option_dialog
                  (gnc_tree_view_split_reg_get_parent (view),
                   title,

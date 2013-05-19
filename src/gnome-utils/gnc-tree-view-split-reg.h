@@ -87,23 +87,24 @@ typedef enum {
 }RowDepth;
 
 typedef enum {
-    COL_DATE,         //0
-    COL_DUEDATE,      //1
-    COL_NUMACT,       //2
-    COL_DESCNOTES,    //3
-    COL_TRANSFERVOID, //4
-    COL_RECN,         //5
-    COL_TYPE,         //6
-    COL_VALUE,        //7
-    COL_AMOUNT,       //8
-    COL_AMTVAL,       //9
-    COL_RATE,         //10
-    COL_PRICE,        //11
-    COL_DEBIT,        //12
-    COL_CREDIT,       //13
-    COL_BALANCE,      //14
-    COL_STATUS,       //15
-    COL_COMM,         //16
+    COL_CONTROL,      //0 TreeView Control columns
+    COL_DATE,         //1
+    COL_DUEDATE,      //2
+    COL_NUMACT,       //3
+    COL_DESCNOTES,    //4
+    COL_TRANSFERVOID, //5
+    COL_RECN,         //6
+    COL_TYPE,         //7
+    COL_VALUE,        //8
+    COL_AMOUNT,       //9
+    COL_AMTVAL,       //10
+    COL_RATE,         //11
+    COL_PRICE,        //12
+    COL_DEBIT,        //13
+    COL_CREDIT,       //14
+    COL_BALANCE,      //15
+    COL_STATUS,       //16
+    COL_COMM,         //17
 } ViewCol;
 
 /* Standard g_object type */
@@ -159,6 +160,8 @@ GtkTreePath * gnc_tree_view_split_reg_get_model_path_from_sort_path (GncTreeView
 GncTreeModelSplitReg * gnc_tree_view_split_reg_get_model_from_view (GncTreeViewSplitReg *view);
 
 gboolean gnc_tree_view_split_reg_scroll_to_cell (GncTreeViewSplitReg *view);
+
+gboolean gnc_tree_view_split_reg_scroll_to_bsplit (GncTreeViewSplitReg *view);
 
 void gnc_tree_view_split_reg_refilter (GncTreeViewSplitReg *view);
 

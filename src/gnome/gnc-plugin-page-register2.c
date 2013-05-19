@@ -3199,7 +3199,7 @@ gnc_plugin_page_register2_cmd_enter_transaction (GtkAction *action,
 
     priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE (plugin_page);
     view = gnc_ledger_display2_get_split_view_register (priv->ledger);
-    gnc_tree_control_split_reg_enter (view, FALSE);
+    gnc_tree_control_split_reg_enter (view);
     LEAVE(" ");
 }
 
