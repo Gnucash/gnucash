@@ -176,7 +176,6 @@ fi
 
 # test whether we are building directly from svn/svk/git/bzr
 AC_MSG_CHECKING(if building from an scm managed directory)
-GIT_CMD=
 savedir="$PWD"
 cd "${srcdir}"
 ./util/gnc-scm-info -r . >/dev/null 2>&1
