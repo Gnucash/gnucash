@@ -44,7 +44,11 @@ main (int   argc,
     g_assert (qof_load_backend_library ("../../xml/.libs",
 					"gncmod-backend-xml"));
 
-
+    /* Make the missing lock file warning not fatal so that it won't
+     * crash during teardown.
+     */
+    g_log_set_fatal_mask ("gnc.backend.dbi", G_LOG_FATAL_MASK | G_LOG_LEVEL_WARNING | G_LOG_LEVEL_CRITICAL);
+    g_log_set_always_fatal (G_LOG_FATAL_MASK);
     test_suite_gnc_backend_dbi_basic();
     test_suite_gnc_backend_dbi_business();
 
