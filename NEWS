@@ -1,5 +1,33 @@
 Version history:
 ------- -------
+ 2.5.2 - 27 May 2013
+         This is the third release in the UNSTABLE 2.5 series.
+
+	 Robert Fewell continues his work on the GtkTreeModel register,
+	 including better transaction editing without using the mouse and
+	 some display issues.
+
+	 Sam Morris contributed a patch supporting retrieving Bitcoin and
+	 Litecoin exchange rates from Mt. Gox with Finance::Quote
+
+	 Fix Bug 700197, backend errors when creating Customers with the
+	 Python bindings. Patch by Tom Lofts
+
+	 Carsten Rinke provided several patches:
+	 Bug #682800 Generated balances on Report different than calculated
+	 balances on Ledger when using "open subaccounts"
+	 Bug #622778 Miscalculation in cashflow reports
+	 Bug #584869 net change line in general journal report
+
+	 Bug #589865 - Budget flow period doesn't work. Patches by Carsten
+	 Rinke and Mikhail Tsaplin
+
+	 The translation files have been copied from the 2.4 branch.
+	 Translators may start working on the new strings, though string
+	 freeze is scheduled for 2.5.5 in early September.
+
+	 Translations Updated: Danish, German, Italian
+
  2.5.1 -  5 May 2013
          This is the second release in the UNSTABLE 2.5 series.
 
