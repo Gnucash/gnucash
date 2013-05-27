@@ -1,0 +1,602 @@
+#!/usr/bin/perl -w
+use strict;
+use English;
+use IO;
+
+my $pwd = `pwd`; chomp($pwd);
+push @INC, "$pwd/src";
+require 'CBBlib.pl';
+require 'CBBlib-auto.pl';
+require 'common.pl';
+
+# To do
+
+# URGENT -- convert '' statuses to ' '
+
+# Can we post process to check for leftover split destinations?
+# (i.e. straglers)
+
+# switch to checking credits and debits independently...
+
+# Check/convert all the cleared fields.  Change to status?
+#   Status: open cleared void -- lookup table?
+
+# Hope that forcing status into each relevant split line in
+# mark_matching is good enough...
+
+# I'm just killing preferred directions.  Someone else can deal with
+# it later.  I'm pretty sure getting it wrong won't hurt, and so no
+# one will ever see it.
+# my %preferred_directions;
+
+#### Offsets for old cbb fields
+
+my $date_old_idx = 0;
+my $checknum_old_idx = 1;
+my $description_old_idx = 2;
+my $debit_old_idx = 3;
+my $credit_old_idx = 4;
+my $category_old_idx = 5;
+my $comment_old_idx = 6;
+my $cleared_old_idx = 7;
+
+#### Offsets for new cbb fields
+
+#my $date_new_idx = 0;
+#my $source_new_idx = 1;
+#my $checknum_new_idx = 2;
+#my $description_new_idx = 3;
+#my $status_new_idx = 4;
+#my $splits_new_idx = 5;
+
+# Splits
+
+#my $category_new_idx = 0;
+#my $comment_new_idx = 1;
+#my $debit_new_idx = 2;
+#my $credit_new_idx = 3;
+#my $split_status_new_idx = 4;
+
+#my($account_ids, $category_ids);
+
+
+#sub invert_hash {
+#  my($hash) = @_;
+#  my %result;
+#	my ($key, $value);
+#	while(($key, $value) = each %$hash) {
+#    $result{$value} = $key;
+#  }
+#  return \%result;
+#}
+
+# date  check  desc  debit  credit  cat  com  cleared
+# 19930710		Transfer	0	200.00	[nb-savings]		*
+#19950216	DEP	Deposit	0	1303.81	|[dad]|All Old stuff|1103.00|[dad]|Allowance etc.|200.00|(Interest)|Interest Earned|0.81|		x
+
+sub cleanup_status_field {
+  my($status) = @_;
+
+  # Legal values are:
+  # "" (nothing) = new manually entered transaction, uncleared
+  # "*"          = selected from the balance window to tentatively be
+  #                cleared (stage one of the balance process)
+  # "x"          = cleared (stage two of the balance process)
+  # "?"          = a tentative future (recurring) transaction
+  # "!"          = a past (recurring) transaction
+
+  if($status !~ /^([\*xX\?\!]?)$/o) {
+    die "Illegal status value $status.";
+  }
+  # Handle X's left over from (who knows where).
+  return lc($status);
+}
+
+# Collect category and account name hashes mapping from names to id num.
+sub get_categories_and_accounts {
+  my(@files) = @_;
+  my %categories = ();
+  my %accounts = ();
+  my $fh = new IO::File;
+  my $file;
+
+  foreach $file (@files) {
+    print "Collecting categories and accounts from $file\n";
+    $fh->open($file) or die "Can't open input file $file.";
+
+    # Make sure all the accounts are listed as a [name] category.
+    $_ = <$fh>;
+    m|^# CBB Data File .*?[/ ]([^/]+)\.cbb$|o or
+      die "Couldn't find data file name in $_";
+    
+    $accounts{$1} = 1;
+    
+    while(<$fh>) {
+      next if /^#/;
+      chomp($_);
+      my @fields = split("\t", $_, 8);
+
+      if($fields[$category_old_idx] =~ /^\|/) {
+        $fields[$category_old_idx] = substr($fields[$category_old_idx], 1, -1);
+        my @split_fields = split('\|', $fields[$category_old_idx]);
+        
+        my $i;
+        for($i = 0; $i < $#split_fields; $i++) {
+          my $candidate = $split_fields[$i];
+          if($candidate =~ /^\[(.*)\]$/o) {
+            $accounts{$1} = 1;
+          } else {
+            $categories{$candidate} = 1;
+          }
+          $i+=2;
+        }
+      } else {
+        my $candidate = $fields[$category_old_idx];
+        if($candidate =~ /^\[(.*)\]$/o) {
+          $accounts{$1} = 1;
+        } else {
+          $categories{$candidate} = 1;
+        }
+      }
+    }
+    $fh->close() or die "Can't close file $file.";
+  }
+  
+  # Kill the special "no category" case
+  delete $accounts{''};
+  delete $categories{''};
+  
+  my @accounts = keys(%accounts);
+  my @categories = keys(%categories);
+  
+  return(\@accounts, \@categories);
+}
+
+
+sub load_old_cbb_transactions {
+  my($db, $acct_map, $cat_map, @files) = @_;
+  my @transactions = ();
+  my $fh = new IO::File;
+
+  my $file;
+  foreach $file (@files) {
+    print "Collecting transactions from $file\n";
+    $fh->open('<' . $file) or die "Can't open input file $file.";
+
+    # Make sure all the accounts are listed as a [name] category.
+    $_ = <$fh>;
+    m|^# CBB Data File .*?[/ ]([^/]+)\.cbb$|o or
+      die "Couldn't find data file name in $_";
+
+    my $current_account = $$acct_map{$1};
+    if(!$current_account) {
+      die "Couldn't find CBBlib::Acct for account name $1\n";
+    }
+
+    my $default_sink = $db->get_default_sink();
+    if(!$default_sink) {
+      die "No default sink!\n";
+    }
+
+    while(<$fh>) {
+      next if /^#/;
+      
+      chomp($_);
+      my @fields = split("\t", $_, 8);      
+      my @splits = ();
+      
+      if($fields[$category_old_idx] =~ /^\|/) {
+        # got to deal with splits.
+        $fields[$category_old_idx] = substr($fields[$category_old_idx], 1, -1);
+        my @split_fields = split('\|', $fields[$category_old_idx]);
+        
+        my $i;
+        for($i = 0; $i < $#split_fields; $i++) {
+          
+          my $destination = $split_fields[$i++];
+          # ??? Need to check for non-existent hash-entries.
+          if(!$destination) {
+            $destination = $default_sink;
+            
+          } elsif ($destination =~ /^\[(.*)\]$/o) {
+            $destination = $$acct_map{$1};
+            if(!$destination) {
+              die "No destintion acct matching $1\n";
+            }
+          } else {
+            my $name = $destination;
+            $destination = $$cat_map{$name};
+            if(!$destination) {
+              die "No destintion category matching $name\n";
+            }
+          }
+
+          my $note = $split_fields[$i++];
+          my $debit = 0;
+          my $credit = 0;
+
+          if($split_fields[$i] < 0) {
+            $debit = abs($split_fields[$i]);
+          } else {
+            $credit = $split_fields[$i];
+          }
+
+          push @splits, new CBBlib::Split($destination, $note,
+                                          $debit, $credit);
+        }
+      } else {  
+        # no splits
+        my $destination = $fields[$category_old_idx];
+        if(!$destination) {
+          $destination = $default_sink;
+        } elsif ($destination =~ /^\[(.*)\]$/o) {
+          $destination = $$acct_map{$1};
+        } else {
+          $destination = $$cat_map{$destination};
+        }
+        my $debit = $fields[$debit_old_idx];
+        my $credit = $fields[$credit_old_idx];
+        $debit = 0 if !$debit;
+        $credit = 0 if !$credit;
+
+        push @splits, new CBBlib::Split($destination,
+                                        $fields[$comment_old_idx],
+                                        $debit, $credit);
+      }
+
+      my $status = cleanup_status_field($fields[$cleared_old_idx]);
+      my $transaction = new CBBlib::Txn($fields[$date_old_idx],
+                                        $current_account,
+                                        $fields[$checknum_old_idx],
+                                        $fields[$description_old_idx],
+                                        $status);
+      map { $transaction->add_split($_) } @splits;      
+      push @transactions, $transaction;
+    }
+    $fh->close() or die "Can't open close file $file.";
+  }
+  return(\@transactions);
+}
+
+#sub preferred_direction {
+#  my($source, $destination) = @_;
+#  my $sourcename = $$account_ids{$source};
+#  my $destname = $$account_ids{$destination};
+#  
+#  my $preferred_targets = $preferred_directions{$sourcename};
+#  if(scalar(grep { /^$destname$/ } @$preferred_targets) >= 1) {
+#    print STDERR "  Preferred transsfer $sourcename -> $destname\n";
+#    return 1;
+#  }
+#  
+#  my($key, $value);
+#  foreach $key (keys(%preferred_directions)) {
+#    my $value = $preferred_directions{$key};
+#    my $potential_sources = $preferred_directions{$key};
+#    if(scalar(grep { /^$sourcename$/ } @$potential_sources) >= 1) {
+#      if($key eq $destname) {
+#        print STDERR "  Preferred transfer $sourcename <- $destname\n";
+#        return -1;
+#      }
+#    }
+#  }
+#  return 0;
+#}
+
+
+# This is really inefficient.
+
+sub mark_matching {
+  my($transaction, $destination, $amount, $split_idxs, $index,
+     $transactions, $transaction_status,
+     $handle_singles) = @_;
+
+  my $date = $transaction->get_date();
+  my $source = $transaction->get_source();
+  my $description = $transaction->get_desc(); # description iffy?
+  my $splits = $transaction->get_splits();
+
+  $$transaction_status[$index] = 'done';
+
+  print STDERR "Looking for match on $date <$index>\n" . 
+    "  ($source $destination $amount)\n";
+  if($source == $destination) {
+    print STDERR "  Skipping search for this transaction (self deposit)\n";
+    return;
+  }
+  
+  # Find all the ones on the right date
+  my $i = -1;
+  my @potentials = map {
+    my $ref = $_;
+    $i++;
+    if($_->get_date() == $date) {
+      $i;
+    } else {
+      ();
+    }
+  } @$transactions;
+
+  if(scalar(@potentials) > 0) {
+    print STDERR "  Found matches (" . join(" ", @potentials) . ")\n";
+
+    # I believe we're guaranteed that all the splits from a given
+    # transaction to a given account will result in a single
+    # transaction in the destination with the sum.  I'm assuming that
+    # here.
+
+    my $match;
+    my $performed_delete = 0;
+    foreach $match (@potentials) {
+      my $candidate_txn = $$transactions[$match];
+      #print STDERR "  Checking ($$transaction[1] eq $destination)\n";
+      $candidate_txn->print(\*STDERR);
+      if($candidate_txn->get_source() == $destination) {
+        my $candidate_splits = $candidate_txn->get_splits();
+        my $csplit = $$candidate_splits[0];
+
+        my $split_source = $csplit->get_dest();
+        if(ref($split_source) eq 'CBBlib::Acct') {
+          
+          # Sense of addition is screwy because we're trying to make
+          # sure that the totals match in both directions, but in the
+          # source a credit is a debit here.
+          #print STDERR "Checking ($split_source eq $source && " . 
+          #  "((- $$split[2] + $$split[3]) == $amount)\n";
+
+          if($split_source == $source &&
+             (abs((- $csplit->get_debit() + $csplit->get_credit()) - 
+                  $amount) < 0.0001)) {
+
+            # Not interactive, just go ahead and do something.
+            if($$transaction_status[$match] eq 'deleted') {
+              print STDERR "  Already deleted, skipping.\n";
+            } elsif($$transaction_status[$match] eq 'done') {
+              print STDERR "  Already considered, skipping.\n";
+            } elsif(!$$transaction_status[$match]) {
+              print STDERR "  Deleting transaction $match\n";
+              $$transaction_status[$match] = 'deleted';
+              
+              my $affected_split_idx;
+              foreach $affected_split_idx (@$split_idxs) {
+                my $split = $$splits[$affected_split_idx];
+                $split->set_status($candidate_txn->get_status());
+              }                
+              $performed_delete = 1;
+              last;
+            } else {
+              die "Fatal error, unknown transaction status.";
+            }
+          } else {
+            print STDERR "    Checking ($split_source eq $source && " . 
+              "((- " . $csplit->get_debit() . " + " . $csplit->get_credit() . 
+                  ") == $amount)\n";
+            print STDERR "    Source or amount did not match, skipping.\n";
+          }
+        } else {
+          print STDERR "    Not a transfer, skipping\n";
+        }
+      } else {
+        print STDERR '    Source ' . $candidate_txn->get_source() . 
+            " != destination $destination, skipping\n";
+      }
+    }
+    if(!$performed_delete) {
+      print STDERR
+          "\n\n" .
+          "*** ERROR: Couldn't find the other half of a split in the\n" .
+          "following transaction. This might be because you used a\n" .
+          "non-existent destination, or it could be because you entered\n" .
+          "a multiple-transfer split in the old CBB, which couldn't\n" .
+          "handle that.\n\n";
+
+      $transaction->print(\*STDERR);
+      exit(1);
+    }
+  }
+}
+
+sub handle_transaction_splits {
+  my($transaction, $index, $transactions, $transaction_status,
+     $handle_singles) = @_;
+  
+  # Skip if we've already dealt with this one.
+  return if($$transaction_status[$index]);
+
+  my $splits = $transaction->get_splits();
+  if(!$handle_singles) {
+    return if(scalar(@$splits) == 1);
+  }
+  
+  $$transaction_status[$index] = 'done';
+
+  my %transfers = ();
+  my %split_lines = ();
+  my $split;
+  my $split_idx= 0;
+  foreach $split (@$splits) {
+    my $destination = $split->get_dest();
+    if(ref($destination) eq 'CBBlib::Acct') {
+      $transfers{$destination} = 
+          [$destination, 0] if ! $transfers{$destination};
+      
+      # calculate the total effect on the *other* side.
+      # i.e. invert sense of credit and debit. 
+      my $data = $transfers{$destination};
+      $$data[1] += ($split->get_debit() - $split->get_credit());
+      if(!$split_lines{$destination}) {
+        $split_lines{$destination} = [];
+      }
+      my $listref = $split_lines{$destination};
+      push @$listref, $split_idx;
+    } 
+    $split_idx++;
+  }
+  my $data;
+  foreach $data (values(%transfers)) {
+    my $destination = $$data[0];
+    my $split_idxs = $split_lines{$destination};
+    
+    mark_matching($transaction,
+                  $destination,          # destination
+                  $$data[1],             # amount
+                  $split_idxs,
+                  $index,
+                  $transactions,
+                  $transaction_status,
+                  $handle_singles);
+  }
+}
+
+sub clean_old_cbb_transaction_splits {
+  # This is not the most efficient, but it's pretty straightforward.
+  my($transactions) = @_;
+  my @transaction_status = ("") x scalar(@$transactions); 
+  
+  my $index = 0;
+  # Lets deal with multiple splits first because we know which way they go.
+  my $transaction;
+  foreach $transaction (@$transactions) {
+    handle_transaction_splits($transaction, $index, $transactions,
+                              \@transaction_status, 0);
+    $index++;
+  }
+
+  # Now all we have left is the singles that didn't have a multi-split
+  # match.
+
+  $index = 0;  
+  foreach $transaction (@$transactions) {
+    handle_transaction_splits($transaction, $index, $transactions,
+                              \@transaction_status, 1);
+    $index++;
+  }
+
+  $index = 0;
+  my @preened_transactions = map {
+
+    my $status = $transaction_status[$index];
+    my @result;
+    if($status eq 'deleted') {
+      print STDERR "Deleting $index\n";
+      $_->print(\*STDERR);
+      print STDERR "\n";
+      @result = ();
+    } elsif($status eq 'done') {
+      @result = ($_);
+    } else {
+      print STDERR "Warning: found unprocessesed transaction " . 
+        "(status: $status)\n";
+      $_->print(\*STDERR);
+      die;
+    }
+    $index++;
+    @result;
+  } @$transactions;
+  return(\@preened_transactions);
+}
+
+sub choose_default_sink {
+  my($accounts, $categories) = @_;
+  my $result = undef;
+  
+  my $done = 0;
+  while(!$done) {
+    
+    print STDOUT
+  "In the old CBB, it was OK to have empty transaction destinations.\n" .
+  "This is no longer true.  Please choose one of the following categories\n" .
+  "or accounts as your default transaction destination.  All old\n" . 
+  "transactions will be modified to reflect this.  Note that if you\n" . 
+  "select the final <<unitemized>> category, then a new category with\n" .
+  "that name will be created and used:\n\n";
+
+    my $item_num = 0;
+    my @item_map;
+    print STDOUT "Accounts:\n";
+    map {
+      $item_map[$item_num] = $_;
+      printf STDOUT (" %6d [%s]\n", $item_num++, $_->get_name());
+    } sort { $a->get_name() cmp $b->get_name() } @$accounts;
+    print STDOUT "\nCategories:\n";
+    map {
+      $item_map[$item_num] = $_;
+      printf STDOUT (" %6d %s\n", $item_num++, $_->get_name());
+    } sort { $a->get_name() cmp $b->get_name() } @$categories;
+    printf STDOUT (" %6d %s\n", $item_num, '<<unitemized>>');
+    my $unitemized_id = $item_num;
+    
+    print STDOUT "Please choose an item by number: ";
+    flush STDOUT;
+    my $response = <STDIN>;
+    if($response !~ /^\s*(\d+)\s*$/o) {
+      printf STDOUT "  Invalid choice.  Please try again.\n";
+      sleep 2;
+    } else {
+      if($response == $unitemized_id) {
+        $result = 0;
+      } else {
+        $result = $item_map[$response];
+      }
+      $done = 1;
+    }
+  }
+  return $result;
+}
+
+
+STDOUT->autoflush(1);
+STDERR->autoflush(1);
+
+my $output_file = $ARGV[0];
+my @input_files = @ARGV[1..$#ARGV];
+
+die "Usage: convert-cbbfile output-file input-file ..." 
+    if !$output_file && @input_files;
+
+my($account_names, $category_names) = 
+    get_categories_and_accounts(@input_files);
+
+my @accounts = map { new CBBlib::Acct(undef, $_, ''); } @$account_names;
+my @categories = map { new CBBlib::Cat(undef, $_, ''); } @$category_names;
+
+my $default_sink = choose_default_sink(\@accounts, \@categories);
+
+if($default_sink) {
+  # So we don't add it to db twice;
+  @accounts = grep { $_ != $default_sink} @accounts;
+  @categories = grep { $_ != $default_sink} @categories;
+}
+
+my $db = new CBBlib::Db($default_sink);
+
+$db->add_sinks([@accounts, @categories]);
+
+my %name_to_acct_map;
+my $accts = $db->get_accts();
+map {
+  $name_to_acct_map{$_->get_name()} = $_;
+} @$accts;
+
+my %name_to_cat_map;
+my $cats = $db->get_cats();
+map {
+  $name_to_cat_map{$_->get_name()} = $_;
+} @$cats;
+
+my $transactions = load_old_cbb_transactions($db,
+                                             \%name_to_acct_map,
+                                             \%name_to_cat_map,
+                                             @input_files);
+
+my $purified_transactions = 
+    clean_old_cbb_transaction_splits($transactions);
+
+$db->add_txns($purified_transactions);
+
+open(OUTPUT, ">$output_file") or 
+    die "Couldn't open $output_file for output.\n";
+$db->print(\*OUTPUT);
+close(OUTPUT);
+
+__END__

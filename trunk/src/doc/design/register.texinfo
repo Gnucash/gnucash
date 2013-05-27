@@ -1,0 +1,162 @@
+@node Register, Reports, Component Manager, Top
+@chapter Register
+@cindex Register
+
+@strong{This whole document is completely outdated. Don't read this. All
+function names and every described structure has changed
+completely. Only read this if you want to know how gnucash looked like
+in 1999. This is completely outdated!}
+
+The register is an infrastructure for building a modular matrix of cells
+in which each cell may be specialized to perform a particular function,
+e.g., to read dates, numerical amounts, or text. The register has been
+designed to be easy to extend, modular, easy to maintain, and memory
+efficient. It is intended to be used for building financial apps and
+spread-sheets.
+
+The register object should not have any 'knowledge' of the accounting
+model of GnuCash or of the workings of the main application. The
+register should not be specific to a particular GUI (such as Gnome/GTK).
+It should be possible to use the register in a stand-alone fashion.
+
+The register is built from several types of components: Cells,
+Cellblocks, Cursors, the Table, and the Split Register.
+
+@menu
+* Cells::                       
+* Cellblocks::                  
+* Table::                       
+* Split Register::              
+@end menu
+
+
+@node Cells, Cellblocks, Register, Register
+@section Cells
+
+A @dfn{Cell} is an active object which is designed to read a specific
+kind of user input. A Cell object has callbacks that are called when
+the user enters the cell (e.g. by mouse-clicking on a cell in a table,
+or tabbing into it), when the user attempts to modify text in the cell
+(e.g. by typing in it), and when the user leaves the cell (e.g. by
+mouse-clicking elsewhere, or tabbing away).
+
+Special-purpose cells can be created by "inheriting" from the basic cell
+object. Thus, there are special-purpose cells for handling dates,
+pull-down menus, text fields with auto-completion from a list of
+alternatives, monetary amounts, etc.
+
+Cells implementations may or may not contain GUI code. Cells which
+require only that text be displayed are completely "GUI-independent",
+that is, they depend on the underlying table to display the text. Cells
+which require additional GUI elements (such as pull-down menus) must
+implement the proper GUI handling on their own (using, e.g., GTK).
+
+@menu
+* BasicCell::                   
+@end menu
+
+
+@node BasicCell,  , Cells, Cells
+@subsection BasicCell
+@tindex BasicCell
+
+The @dfn{BasicCell} interface defines the core functionality that all
+cells must implement. A BasicCell contains the following data members.
+
+@table @code
+
+@item char *value
+The 'value' of the cell stored as a character string.
+
+@item GdkWChar *w_value
+The 'value' of the cell stores as a wide character string.
+
+@item gint value_len
+The length of w_value.
+
+@item guint32 changed
+This member is set to have all 1-bits (2^32 - 1) to indicate the
+cell contents have been changed from the register value.
+
+@item guint32 conditionally_changed
+This member is set to have all 1-bits (2^32 - 1) to indicate the
+cell contents have been changed from the register value, but that
+the register should not be considered to be changed unless other
+cells have been changed (not conditionally).
+
+@item char * blank_help
+This member is a text string which may be used by a GUI implementation
+to display an informative help string when the value of a cell is empty
+(perhaps prompting the user to enter a particular kind of value).
+
+@end table
+
+
+@node Cellblocks, Table, Cells, Register
+@section Cellblocks
+
+A @dfn{Cellblock} is an array of active cells. The cells are laid out in
+rows and columns. The cellblock serves as a convenient container for
+organizing active cells in an array. Through the mechanism of Cursors
+(defined below), it allows a group of cells to be treated as a single
+transactional entity. That is, the cursor/cellblock allows all edits to
+a groups of cells to be simultaneously committed or rejected by
+underlying engines. This makes it appropriate for use as a GUI for
+transaction-processing applications with two-phase commit requirements.
+
+
+@node Table, Split Register, Cellblocks, Register
+@section Table
+
+The @dfn{Table} is a displayed matrix. The table is a complex object;
+it is @emph{not} merely a cellblock. The table provides all of the GUI
+infrastructure for displaying a row-column matrix of strings.
+
+The table provides one very important function for minimizing memory
+usage for large matrixes -- the notion of a @dfn{Cursor}. The cursor is
+a cellblock (an array of active cells) that is moved to the location
+that the user is currently editing. The cursor "virtualizes" cell
+functions; that is, it makes it seem to the user as if all cells in the
+table are active, when in fact the only cell that actually needs to be
+active is the one that the user is currently editing.
+
+The table design allows multiple cursors to be defined. When a user
+enters a cell, the appropriate cursor is positioned within the table.
+Cursors cannot overlap: any given cell can be mapped to at most one
+cursor. Multiple-cursor support allows tables to be designed that have a
+non-uniform layout. For example, the multiple-cursor support can be used
+to define a tree structure of headings and sub-headings, where the
+layout/format of the heading is different from the sub-headings. A
+financial example is a table which lists splits underneath their parent
+transaction. This is very different from a checkbook register, where all
+entries are uniform, and can be handled with a single repeated cursor.
+
+Users of the table must provide a TableView object which provides an API
+the table uses to obtain information about the data it is displaying
+such as strings, colors, etc. Thus, the table represents the non-GUI
+portion of the View object in the Model-View-Controller paradigm.
+
+
+@node Split Register,  , Table, Register
+@section Split Register
+
+The split register is a special-purpose object aimed at the display
+of financial transactions. It includes cells for the date, prices,
+balances, transfer accounts, etc. The register is where the cells,
+cursor and table get put together into a unified whole. The register
+defines specific, actual layouts and widths of the date, price, etc.
+cells in a table. It includes a table header, and defines more than
+ten specific layouts: bank, credit-card, stock, general ledger, etc.
+
+The split register implementation is divided into two components. The
+first component (src/register/splitreg.[ch]) defines the basic structure
+and implementation of a split register, but does not specifically use or
+depend on the other GnuCash modules, including the Engine. Of course,
+this implementation was created with the engine financial structures in
+mind.
+
+The second component (src/SplitLedger.[ch]) implements the full register
+behavior (the Controller in MVC) and makes full use of the Engine
+API. This component is responsible for loading transactions and splits
+into the register, modifying transactions and splits according to user
+input, and accomplishing tasks such as performing automatic completion.

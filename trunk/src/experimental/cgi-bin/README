@@ -1,0 +1,82 @@
+This directory contains some cgi-bin prototypes,
+including a prototype gnucash server.
+
+hello.c -- totally bogus cgi-bin example.
+           initializes the gnucash engine, sends gnc-xml data.
+
+hello2.c -- as above, but fiddles with gnucash query xml
+            (to see if they work)
+
+hello3.c -- a minimally functional gnc server.  No error checking,
+            no login, but it does listen to queries, and responds
+            to them.
+
+fastcgi-hello.c -- demo program illustrating how fast-cgi
+                   works.  
+
+gnc-server.c -- the prototype gnucash server, as it currently stands.
+                Currently, its a major hack job, but it tries to do
+                some things right.  See install instruction below.
+
+
+===================
+The fast-cgi applications require fast-cgi to be installed.
+www.fastcgi.com
+
+This takes some doing:
+-- there are two parts to fast_cgi -- the apache module,
+   and the development kit.  You need only the development
+   kit to build these demos; but you need the server module 
+   to run them.
+
+   (Note: instead of using the apache module, you can 
+   also use the 'cgi-fcgi' server that comes with the 
+   fcgi development kit.  With this program, you don't
+   need to recompile the apache server or install any 
+   modules.)
+
+-- To install the server module:
+   There are debian .debs, you can apt-get install fastcgi
+
+   I could not find redhat RPM's for this module, which means
+   apache must be compiled by hand with the fast-cgi module.
+
+   Next, configured as per directions on www.fastcgi.com
+   For example, the following enables any cgi-bin with
+   the .fcgi suffix to be treated as fast-cgi.
+
+    <IfModule mod_alias.c>
+    <IfModule mod_fastcgi.c>
+    <Directory "/home/wherever/cgi-bin">
+        AddHandler fastcgi-script fcg fcgi fpl
+        AllowOverride None
+        Options None
+        Order allow,deny
+        Allow from all
+    </Directory>
+    </IfModule>
+    </IfModule>
+
+
+-- the fast-cgi development toolkit must be downloaded 
+   and installed.
+
+===================
+To install and run gnc-server:
+
+-- copy some old gnucash data file to /tmp/demo.xac
+   (right now, because there's no sql backend for gnucash,
+   the demo runs off a data file.)
+-- copy login.html to somwhere in your web server path.
+-- copy gnc-server to /cgi-bin/gnc-server.fcgi
+
+-- power up a gnucash client, and load login.html with 
+   the gnucash help browser.
+
+
+===================
+The gnc-server is a pre-pre-alpha server for gnucash.
+A huge anmount of work is needed to make it run right.
+
+--linas
+January 2001

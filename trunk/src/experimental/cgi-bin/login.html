@@ -1,0 +1,40 @@
+
+<html>
+<head>
+<title>GnuCash Server Login Form</title>
+</head>
+<body bgcolor=#ffffff>
+<h1>GnuCash Experimental Server Login Form</h1>
+This is the login form for the demo of the experimental 
+Gnucash accounting server.  This server is meant to 
+demonstrate the multi-user, network-enabled abilities
+of GnuCash.  Note that this demo is alpha, most features
+don't work.
+<p>
+
+For this demo, any username and password will work.
+
+<FORM METHOD=POST ACTION="/cgi-bin/gnc-server.fcgi">
+<table>
+<tr>
+<td>Name
+<td><input type="text" name="name" value="">
+<tr>
+<td>Password
+<td><input type="password" name="passwd" value="">
+<tr>
+<td>
+<td><input type="submit" name="login" value="Login">
+</table>
+</form>
+
+You must use the GnuCash client to log into this server:
+you cannot do so with MSIE and Netscape.  This is because
+the GnuCash server returns financial data to client, 
+and ordinary web browsers would have no idea of what to do 
+with this data. 
+<p>
+
+
+</body>
+</html>

@@ -1,0 +1,25 @@
+# -*-Makefile-*-
+
+# These are in a separate file because we need to do one, and then the
+# other and we need to only consider the files listed inside
+# etags.files as valid dependencies *after* we've updated etags.files.
+
+# i.e. TAGS: etags.files $(shell cat etags.files) doesn't work right
+# because etags.files contents are expanded before it's re-generated.
+
+etags.files: $(shell find . -mindepth 1 -type d ! -name CVS ! -path "*/.*")
+	find . -path '*/.*' -prune -o \( -name '*.[ch]' -o -name '*.scm' \) \
+		-print | sort > etags.files.tmp
+	cmp -s etags.files etags.files.tmp || cp etags.files.tmp etags.files
+	rm -f etags.files.tmp
+	touch etags.files
+
+# we don't need an etags.files dep here b/c you always call this after
+# re-generating etags.files if needed from the top-level Makefile.am.
+TAGS: $(shell cat etags.files)
+	if [ -f TAGS ]; then rm TAGS; fi
+	cat etags.files | xargs -n 200 etags --append
+
+tags: $(shell cat etags.files)
+	if [ -f TAGS ]; then rm tags; fi
+	cat etags.files | xargs -n 200 ctags --append

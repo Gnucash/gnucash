@@ -1,0 +1,165 @@
+#!/usr/bin/perl -w
+use strict;
+use English;
+
+#sub new {
+#  my $class = shift;
+#  my ($db, $name, $notes) = @_;
+#
+#  my $self = make_internals_();
+#
+#  $self->set_db_($db);
+#  $self->set_name_($name);
+#  $self->set_notes_($notes);
+#
+#  bless $self, $class;
+#  return $self;
+#}
+
+
+my @acct_slots =
+  ({'name'=> 'db', 'options' => ['pub-get']},
+   {'name'=> 'name', 'options' => ['pub-get','pub-set']},
+   {'name'=> 'notes', 'options' => ['pub-get','pub-set']},
+   {'name'=> 'ledger', 'options' => []},
+   {'name'=> 'ledger_usage_count', 'init' => 0, 'options' => []},
+   {'name'=> 'cleared_balance', 'init' => 0, 'options' => ['pub-get']},
+   {'name'=> 'final_balance', 'init' => 0, 'options' => ['pub-get']});
+
+my @cat_slots = @acct_slots;
+
+my @txn_slots =
+  ({'name'=> 'db', 'options' => ['pub-get']},
+   {'name'=> 'clone', 'options' => []},
+   {'name'=> 'date', 'options' => ['modify']},
+   {'name'=> 'source', 'options' => ['pub-get']},
+   {'name'=> 'checkno', 'options' => ['modify']},
+   {'name'=> 'desc', 'options' => ['modify']},
+   {'name'=> 'status', 'init' => "''", 'options' => ['modify']},
+   {'name'=> 'splits', 'init' => '[]', 'options' => ['pub-get']});
+
+my @split_slots =
+  ({'name'=> 'txn', 'options' => ['pub-get']},
+   {'name'=> 'clone', 'options' => []},
+   {'name'=> 'pos_', 'options' => ['modify']},
+   {'name'=> 'dest', 'options' => ['modify']},
+   {'name'=> 'notes', 'options' => ['modify']},
+   {'name'=> 'debit', 'options' => ['modify']},
+   {'name'=> 'credit', 'options' => ['modify']},
+   {'name'=> 'desc', 'options' => ['modify']},
+   {'name'=> 'status', 'init' => "''", 'options' => ['modify']});
+
+my @db_slots =
+  ({'name'=> 'accts', 'init' => '[]', 'options' => ['pub-get']},
+   {'name'=> 'cats', 'init' => '[]', 'options' => ['pub-get']},
+   {'name'=> 'default_sink', 'options' => ['pub-get', 'pub-set']},
+   {'name'=> 'txns', 'init' => '[]', 'options' => ['pub-get']},
+   {'name'=> 'modified_txns', 'options' => []},
+   {'name'=> 'modified_txns_level', 'init' => 0, 'options' => []},
+   #{'name'=> 'modified_txns_serial_num', 'init' => 0, 'options' => []},
+   {'name'=> 'callbacks_hash', 'init' => '{}', 'options' => []});
+
+
+print "#!/usr/bin/perl -w\n" . 
+  "# This code is automatically generated.  Do not edit.\n\n";
+
+sub generate_slot_methods {
+  my($pkg, @slots) = @_;
+
+  print "package $pkg;\n";
+  print "use strict;\n\n";
+  
+  print "sub make_internals_ {\n";
+  print "  return [";
+  my @inits = map {
+    my $slot = $_;
+    my $init = $$slot{'init'};
+    if(defined($init)) {
+      $init;
+    } else {
+      'undef';
+    }
+  } @slots;
+  print join(",\n          ", @inits);
+  print "];\n";
+  print "}\n\n";
+  
+  my $index = 0;
+  my $slot;
+  foreach $slot (@slots) {
+    my $option_list = $$slot{'options'};
+    my %options;
+    
+    my $item;
+    foreach $item (@$option_list) {
+      $options{$item} = 1;
+    }
+    
+    # Everyone gets private getter/setter.
+    print 'sub get_' . $$slot{'name'} . '_ ' .
+      '{ my $self = shift; return $$self[' . $index . "]; }\n";
+    print 'sub set_' . $$slot{'name'} . '_ ' .
+      '{ my($self, $val) = @_; $$self[' . $index . '] = $val; }' . "\n\n";
+    
+    if($options{'pub-get'}) {
+      print 'sub get_' . $$slot{'name'} . ' ' .
+        '{ my $self = shift; return $$self[' . $index . "]; }\n\n";
+    }
+    if($options{'pub-set'}) {
+      print 'sub set_' . $$slot{'name'} . ' ' .
+        '{ my($self, $val) = @_; $$self[' . $index . '] = $val; }' . "\n\n";
+    }
+
+    # Don't forget to change $txn->add/remove_split in CBBlib.pl too
+    # whenever you make changes here.
+
+    if($options{'modify'}) {
+      print <<EOS;
+sub get_$${slot{name}} {
+  my \$self = shift;
+  my \$clone = \$self->get_clone_();
+  if(\$clone) {
+    return \$clone->get_$${slot{name}}_();
+  } else {
+    return \$self->get_$${slot{name}}_();
+  }
+}
+
+sub set_$${slot{name}} {
+  my(\$self, \$val) = \@_;
+
+  my \$db = \$self->get_db();
+  if(\$db) {
+    \$db->begin_txn_modifications();
+    
+    my \$clone = \$self->make_clone_();
+    \$clone->set_$${slot{name}}_(\$val);
+    \$db->record_txn_modification_(\$self);
+    \$db->end_txn_modifications();
+  } else {
+    \$self->set_$${slot{name}}_(\$val);    
+  }
+}
+EOS
+
+    }
+    $index++;
+  }
+}
+
+
+print "\n#### CBBlib::Acct slot methods ###########################\n\n";
+generate_slot_methods('CBBlib::Acct', @acct_slots);
+print "\n#### CBBlib::Cat slot methods ###########################\n\n";
+generate_slot_methods('CBBlib::Cat', @cat_slots);
+print "\n#### CBBlib::Txn slot methods #############################\n\n";
+generate_slot_methods('CBBlib::Txn', @txn_slots);
+print "\n#### CBBlib::Split slot methods ###########################\n\n";
+generate_slot_methods('CBBlib::Split', @split_slots);
+print "\n#### CBBlib::Db slot methods ###########################\n\n";
+generate_slot_methods('CBBlib::Db', @db_slots);
+
+print "1;\n__END__\n";
+
+1;
+__END__

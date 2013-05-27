@@ -1,0 +1,337 @@
+<HTML>
+<HEAD>
+
+<TITLE>Financial Equations Documentation</TITLE>
+</HEAD>
+<BODY>
+<A NAME="TOP"></A>
+<A HREF="./finutil.html#FinEquation">Return</A>
+<HR>
+<br>
+<dl>
+<dt><A HREF="#BasicEquation">Basic Equation</A></dt>
+<dt><A HREF="#SeriesSum">Series Sum</A></dt>
+</dl>
+<HR>
+<h1>Financial Equation Derivation</h1>
+<p>The financial equation is derived in the following manner:
+
+<p>Start with the basic equation to find the balance or Present Value, PV[1], after
+one payment period. Note PV[1] is the Present Value after one payment and PV[0]
+is the initial Present Value. PV[0] will be shortened to just PV.
+
+<p>The interest due at the end of the first payment period is the original present value,
+PV, times the interest rate for the payment period plus the periodic payment times the
+interest rate for beginning of period payments:
+
+<p>ID[1] = PV * i + X * PMT * i = (PV + X * PMT) * i
+
+<p>The Present Value after one payment is the original Present Value with the periodic
+payment, PMT, and interest due, ID[1], added:
+
+<pre>
+   PV[1] = PV + (PMT + ID[1])
+   PV[1] = PV + (PMT + (PV + X * PMT) * i)
+   PV[1] = PV * (1 + i) + PMT * (1 + Xi)
+</pre>
+
+<p>This equation works for all of the cash flow diagrams shown previously. The Present Value,
+money received or paid, is modified by a payment made at the beginning of a payment
+period and multiplied by the effective interest rate to compute the interest
+due during the payment period. The interest due is then added to the payment
+to obtain the amount to be added to the Present Value to compute the new Present Value.
+
+<p>For diagram 1): PV <  0, PMT == 0, PV[1] < 0
+<br>For diagram 2): PV == 0, PMT <  0, PV[1] < 0
+<br>For Diagram 3): PV >  0, PMT <  0, PV[1] >= 0 or PV[1] <= 0
+<br>For Diagram 4): PV <  0, PMT >  0, PV[1] <= 0 or PV[1] >= 0
+
+<p>X may be 0 or 1 for any diagram.
+
+<p>For the standard loan, PV is the money borrowed, PMT is the periodic payment to repay
+the loan, i is the effective interest rate agreed upon and FV is the residual loan amount
+after the agreed upon number of periodic payment periods. If the loan is fully paid off
+by the periodic payments, FV is zero, 0. If the loan is not completely paid off after the
+agreed upon number of payments, a balloon payment is necessary to completely pay off the loan.
+FV is then the amount of the needed balloon payment. For a loan in which the borrower pays
+only enough to repay the interest due during a payment period, interest only loan, the
+balloon payment is equal to the negative of PV.
+
+<p>To calculate the Present Value after the second payment period, the above calculation
+is applied iteratively to PV[1] to obtain PV[2]. In fact to calculate the Present Value
+after any payment period, PV[n], the above equation is applied iteratively to PV[n-1]
+as shown below.
+
+<pre>
+   PV[2] = PV[1] + (PMT + (PV[1] + X * PMT) * i)
+         = PV[1] * (1 + i) + PMT * (1 + iX)
+         = (PV * (1 + i) + PMT * (1 + iX)) * (1 + i) + PMT * (1 + iX)
+         = PV * (1 + i)^2 + PMT * (1 + iX) * (1 + i)
+                          + PMT * (1 + iX)
+</pre>
+
+<p>Similarly, PV[3] is computed from PV[2] as:
+
+<pre>
+   PV[3] = PV[2] + (PMT + (PV[2] + X * PMT) * i)
+         = PV[2] * (1 + i) + PMT * (1 + iX)
+         = (PV * (1 + i)^2 + PMT * (1 + iX) * (1 + i)
+                           + PMT * (1+  iX)) * (1 + i)
+                           + PMT * (1+  iX)
+         = PV * (1 + i)^3 + PMT * (1 + iX) * (1 + i)^2
+                          + PMT * (1 + iX) * (1 + i)
+                          + PMT * (1 + iX)
+</pre>
+
+<p>And for the n'th payment, PV[n] is computed from PV[n-1] as:
+
+<pre>
+   PV[n] = PV[n-1] + (PMT + (PV[n-1] + X * PMT) * i)
+   PV[n] = PV * (1 + i)^n + PMT * (1 + iX) * (1 + i)^(n-1)
+                          + PMT * (1 + iX) * (1 + i)^(n-2) +
+                          .
+                          .
+                          .
+                          + PMT * (1 + iX) * (1 + i)
+                          + PMT * (1 + iX)
+   PV[n] = PV * (1 + i)^n + PMT * (1 + iX) * [(1 + i)^(n-1) + ... + (1 + i) + 1]
+</pre>
+
+<p>The formula for PV[n] can be proven using mathematical induction.
+
+<A NAME="BasicEquation">
+<h1>Basic Financial Equation</h1></A>
+<p>As shown above, the basic financial transaction equation is simply:
+
+<pre>
+   PV[n] = PV[n-1] + (PMT + (PV[n-1] + X * PMT) * i)
+         = PV[n-1] * (1 + i) + PMT * (1 + iX)
+    for: n >= 1
+</pre>
+
+<p>relating the Present Value after n payments, PV[n] to the previous Present Value, PV[n-1].
+
+<!--########################################################################-->
+
+<hr>
+<A NAME="SeriesSum">
+<h1>Series Sum</h1></A>
+<p>The sum of the finite series:
+
+<p>1 + k + (k^2) + (k^3) + ... + (k^n) = (1-k^(n+1))/(1-k)
+
+<p>as can be seen by the following. Let S(n) be the series sum. Then
+
+<p>S(n) - k * S(n) = 1 - k^(n+1)
+
+<p>and solving for S(n):
+
+<p>S(n) = (1-k^(n+1))/(1-k) = 1 + k + (k^2) + (k^3) + ... + (k^n)
+
+<!--########################################################################-->
+<hr>
+
+<p>Using this in the equation above for PV[n], we have:
+
+<pre>
+   PV[n] = PV * (1 + i)^n + PMT * (1 + iX) * [(1 + i)^(n-1) + ... + (1 + i) + 1]
+         = PV * (1 + i)^n + PMT * (1 + iX) * [1 - (1 + i)^n]/[1 - (1 + i)]
+         = PV * (1 + i)^n + PMT * (1 + iX) * [1 - (1 + i)^n]/[-i]
+         = PV * (1 + i)^n + PMT * (1 + iX) * [(1 + i)^n - 1]/i
+</pre>
+
+<p>or:
+
+<pre>
+   PV * (1 + i)^n + PMT * [(1 + i)^n - 1]/i - PV[n] = 0
+</pre>
+
+<p>If after n payments, the remaining balance is repaid as a lump sum, the lump sum
+is known as the Future Value, FV[n]. Since FV[n] is negative if paid and positive
+if received, FV[n] is the negative of PV[n].
+
+<p>Setting: FV[n] = -PV[n]
+
+<p>Since n is assumed to be the last payment, FV[n] will be shortened to simply
+FV for the last payment period.
+
+<pre>
+   PV*(1 + i)^n + PMT*(1 + iX)*[(1 + i)^n - 1]/i + FV = 0
+</pre>
+
+<p>Up to this point, we have said nothing about the value of PMT. PMT can be any value mutually
+agreed upon by the lender and the borrower. From the equation for PV[1]:
+
+<pre>
+   PV[1] = PV + (PMT + (PV + X * PMT) * i),
+</pre>
+
+<p>Several things can be said about PMT.
+
+<ol>
+<li>If PMT = -(PV * i), and X = 0 (end of period payments):
+
+<p>The payment is exactly equal to the interest due and PV[1] = PV. In this case, the borrower
+must make larger future payments to reduce the balance due, or make a single payment, after
+some agreed upon number of payments, with PMT = -PV to completely pay off the loan. This is
+an interest only payment with a balloon payment at the end.
+
+<li>If |PMT| < |PV * i|, and X = 0 and PV > 0
+<p>The payment is insufficient to cover even the interest charged and the balance due grows
+
+<li>If |PMT| > |PV * i|, and X = 0 and PV > 0
+<p>The payment is sufficient to cover the interest charged with a residual amount to be
+applied to reduce the balance due. The larger the residual amount, the faster the loan is
+repaid. For most mortgages or other loans made today, the lender and borrower agree upon
+a certain number of repayment periods and the interest to be charged per payment period.
+The interest may be multiplied by 12 and stated as an annual interest rate. Then the
+lender and borrower want to compute a periodic payment, PMT, which will reduce the balance
+due to zero after the agreed upon number of payments have been made. If N is the agreed
+upon number of periodic payments, then we want to use:
+
+<pre>
+      PV * (1 + i)^N + PMT*(1 +iX)*[(1 + i)^N - 1]/i + FV = 0
+</pre>
+
+<p>with FV = 0 to compute PMT:
+
+<pre>
+      PMT = -[PV * i * (1 + i)^(N - X)]/[(1 + i)^N - 1]
+</pre>
+
+<p>The value of PMT computed will reduce the balance due to zero after N periodic payments.
+Note that this is strictly true only if PMT is not rounded to the nearest cent as is the
+usual case since it is hard to pay fractional cents. Rounding PMT to the nearest cent has
+an effect on the FV after N payments. If PMT is rounded up, then the final Nth payment
+will be smaller than PMT since the periodic PMTs have paid down the principal faster than
+the exact solution. If PMT is rounded down, then the final Nth payment will be larger than
+the periodic PMTs since the periodic PMTs have paid down the principal slower than the
+exact solution.
+</ol>
+
+<!--#############################################################################-->
+
+<p>With a simple alegebraic re-arrangement, The financial Equation becomes:
+
+<pre>
+  2) [PV + PMT*(1 + iX)/i][(1 + i)^n - 1] + PV + FV = 0
+</pre>
+
+<p>or
+
+<pre>
+  3) (PV + C)*A + PV + FV = 0
+</pre>
+
+<p>where:
+<pre>
+  4) A = (1 + i)^n - 1
+
+  5) B = (1 + iX)/i
+
+  6) C = PMT*B
+</pre>
+
+<p>The form of equation 3) simplifies the calculation procedure for all five
+variables, which are readily solved as follows:
+
+<pre>
+  7) n = ln[(C - FV)/(C + PV)]/ln((1 + i)
+
+  8) PV = -[FV + A*C]/(A + 1)
+
+  9) PMT = -[FV + PV*(A + 1)]/[A*B]
+
+ 10) FV = -[PV + A*(PV + C)]
+</pre>
+
+<p>Equations 4), 5) and 6) are computed by the functions in the <tt>"fin.exp"</tt> utility:
+
+<br><tt>_A</tt>
+<br><tt>_B</tt>
+<br><tt>_C</tt>
+
+<p>respectively. Equations 7), 8), 9) and 10) are computed by functions:
+
+<br><tt>_N</tt>
+<br><tt>_PV</tt>
+<br><tt>_PMT</tt>
+<br><tt>_FV</tt>
+
+<p>respectively.
+
+<p>The solution for interest is broken into two cases:
+
+<ol>
+<li>PMT == 0
+<p>Equation 3) can be solved exactly for i:
+
+<pre>
+       i = [FV/PV]^(1/n) - 1
+</pre>
+
+<li>PMT != 0
+<p>Since equation 3) cannot be solved explicitly for i in this case, an
+iterative technique must be employed. Newton's method, using exact
+expressions for the function of i and its derivative, are employed. The
+expressions are:
+
+<pre>
+ 12) i[k+1] = i[k] - f(i[k])/f'(i[k])
+       where: i[k+1] == (k+1)st iteration of i
+              i[k]   == kth iteration of i
+       and:
+
+ 13) f(i) = A*(PV+C) + PV + FV
+
+ 14) f'(i) = n*D*(PV+C) - (A*C)/i
+
+ 15) D = (1 + i)^(n-1) = (A+1)/(1+i)
+</pre>
+
+<p>To start the iterative solution for i, an initial guess must be made
+for the value of i. The closer this guess is to the actual value,
+the fewer iterations will have to be made, and the greater the
+probability that the required solution will be obtained. The initial
+guess for i is obtained as follows:
+
+<ol>
+<li>PV case, PMT*FV >= 0
+
+<pre>
+                | n*PMT + PV + FV |
+ 16)     i[0] = | ----------------|
+                |      n*PV       |
+
+              = abs[(n*PMT + PV + FV)/(n*PV)]
+</pre>
+
+<li>FV case, PMT*FV < 0
+<ol>
+<li>PV != 0
+
+<pre>
+                    |      FV - n*PMT           |
+ 17)         i[0] = |---------------------------|
+                    | 3*[PMT*(n-1)^2 + PV - FV] |
+
+                  = abs[(FV-n*PMT)/(3*(PMT*(n-1)^2+PV-FV))]
+</pre>
+
+
+<li>PV == 0
+
+<pre>
+                    |      FV + n*PMT           |
+ 18)         i[0] = |---------------------------|
+                    | 3*[PMT*(n-1)^2 + PV - FV] |
+
+                  = abs[(FV+n*PMT)/(3*(PMT*(n-1)^2+PV-FV))]
+</pre>
+
+</ol>
+</ol>
+</ol>
+<HR>
+<A HREF="./finutil.html#FinEquation"><IMG SRC="images/back.png" BORDER=0 HEIGHT=13 WIDTH=7>Return</A>
+</body>

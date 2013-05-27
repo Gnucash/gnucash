@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ui>
+  <menubar>
+
+    <menu name="Windows" action="WindowsAction">
+      <menuitem name="WindowNew"      action="WindowNewAction"/>
+      <menuitem name="WindowMovePage" action="WindowMovePageAction"/>
+      <separator name="ViewSep4"/>
+      <placeholder name="WindowsPlaceholder"/>
+    </menu>
+
+  </menubar>
+</ui>

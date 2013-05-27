@@ -1,0 +1,205 @@
+Gnucash Query API 
+
+
+BASIC QUERY API: With this API you can create arbitrary logical
+queries to find sets of splits in an account group.  To make simple
+queries (1 term, such as an account query), create the appropriate
+QueryTerm structure and stick it in a Query object using
+xaccInitQuery. The QueryTerm should be malloced but the Query object
+will handle freeing it.  To make compound queries, make multiple
+simple queries and combine them using xaccMergeQuery and the logical
+operations of your choice.
+
+-----------------------------------------------------------------
+Query * xaccMallocQuery() 
+
+Allocates and initializes a Query structure which must be freed by the
+user with xaccFreeQuery.  A newly-allocated Query object matches
+nothing (xaccQueryGetSplits will return NULL).
+
+-----------------------------------------------------------------
+void xaccInitQuery(Query * q, QueryTerm * qt) 
+
+Initializes an allocated Query object with initial term qt (possibly
+NULL).  Any previous query terms are freed.
+
+-----------------------------------------------------------------
+void xaccFreeQuery(Query * q)
+
+Frees the resources associate with a Query object. 
+
+-----------------------------------------------------------------
+void xaccQuerySetGroup(Query * q, AccountGroup * group) 
+
+Set the Gnucash account group that the query applies to.
+xaccQuerySetGroup must be called before a Query object created with
+xaccMallocQuery can be used.  Queries created with xaccQueryInvert and
+xaccQueryMerge inherit the account group of the arguments to those
+functions.
+
+-----------------------------------------------------------------
+Query * xaccQueryInvert(Query * q)
+
+Logically invert the query.  xaccInvertQuery returns a newly allocated
+Query object such that the union of the splits matched by query q and
+query (p = xaccQueryInvert(q)) is the entire account group that q
+applies to.
+
+-----------------------------------------------------------------
+Query * xaccQueryMerge(Query * q1, Query * q2, QueryOp how)
+
+Combine queries q1 and q2 using logical operator 'how'.  'how' must be
+one of QUERY_AND, QUERY_OR, QUERY_NAND, QUERY_NOR, QUERY_XOR.  The
+account groups of q1 and q2 must be the same.  xaccQueryMerge returns
+a newly-allocated Query object or NULL on error.
+
+-----------------------------------------------------------------
+void xaccQueryClear(Query * q)
+
+Remove all query terms from q.  q matches nothing after xaccQueryClear.
+
+-----------------------------------------------------------------
+void xaccQueryPurgeTerms(Query * q, pd_type_t type);
+
+Remove query terms of a particular type from q.  The "type" of a term
+is determined by the type of data that gets passed to the predicate
+function.  The currently-supported values of 'type' are PD_DATE,
+PD_AMOUNT, PD_ACCOUNT, PD_STRING, PD_CLEARED, PD_MISC.  This function
+is really only used in one place: in window-register.c, to modify
+in-place a query to remove any date tests prior to adding new ones.
+This should probably be removed from the API in favor of an extra
+argument to xaccQueryMerge specifying what to do with existing terms
+of that type.
+
+
+-----------------------------------------------------------------
+int xaccQueryHasTerms(Query * q)
+
+Returns the number of terms in the canonical form of the query.  Can
+be used as a predicate to see if the query has been initialized
+(return value > 0) or is "blank" (return value == 0).
+
+
+-----------------------------------------------------------------
+
+CONVENIENCE API: The remainder of the API (in particular, any function
+called xaccQueryAdd***Match) is a set of convenience functions for
+creating and modifying specific types of queries.  All of these
+functions can be duplicated using the Basic API specified above,
+directly manipulating QueryTerm objects and creating and merging
+queries as needed.  One slight advantage of the convenience API is
+that it uses a standard set of predicates that are more-or-less
+opaque.  This may be important later.
+
+It's probably more useful to describe the various types of
+PredicateData than the convenience functions, which are pretty
+self-explanatory once you understand what the underlying process is.
+For example, AddMemoMatch and AddDescriptionMatch are essentially the
+same function because they both use PD_STRING predicate data; they
+just use a different predicate (one compares data.string.matchstring
+with the split's Memo, one compares with the parent transaction's
+Description).
+
+Each function in the convenience API takes a Query *, some arguments
+which fill in the fields of the appropriate PredicateData type, and a
+QueryOp.  The Query object is modified in place, using the logical
+operation specified by the QueryOp to combine a single new QueryTerm
+with the existing Query.  This works by making a new Query of one term
+and combining with the existing Query using xaccQueryMerge and the
+specified QueryOp.  If you have an existing Query (a + b + c) and
+combine using QueryOp QUERY_AND in a convenience function representing
+predicate d, you will get (ad + bd + cd).
+
+
+STRUCTURE OF A QUERY: A Query is a logical function of any number of
+QueryTerms.  A QueryTerm consists of a C function pointer (the
+Predicate) and a PredicateData structure containing data passed to the
+predicate funtion.  The PredicateData structure is a constant
+associated with the Term and is identical for every Split that is
+tested.
+
+The terms of the Query may represent any logical function and are
+stored in canonical form, i.e. the function is expressed as a logical
+sum of logical products.  So if you have QueryTerms a, b, c, d, e and
+you have the logical function a(b+c) + !(c(d+e)), it gets stored as 
+ab + ac + !c + !c!e +!d!c + !d!e.  This may not be optimal for evaluation
+of some functions but it's easy to store, easy to manipulate, and it
+doesn't require a complete algebra system to deal with.
+
+The representation is of a GList of GLists of QueryTerms.  The
+"backbone" GList q->terms represents the OR-chain, and every item on
+the backbone is a GList of QueryTerms representing an AND-chain
+corresponding to a single product-term in the canonical
+representation.  QueryTerms are duplicated when necessary to fill out
+the canonical form, and the same predicate may be evaluated multiple
+times per split for complex queries.  This is a place where we could
+probably optimize.
+
+Evaluation of a Query (see xaccQueryGetSplits) is optimized as much as
+possible by short-circuited evaluation.  The predicates in each
+AND-chain are sorted by predicate type, with Account queries sorted
+first to allow the evaluator to completely eliminate accounts from the
+search if there's no chance of them having splits that match.
+
+
+PREDICATE DATA TYPES: All the predicate data types are rolled up into
+the union type PredicateData.  The "type" field specifies which type
+the union is.  The values of type are:
+
+-----------------------------------------------------------------
+PD_DATE : match a date range.  Specify a start date and an end date. 
+
+Used in: xaccQueryAddDateMatch
+         xaccQueryAddDateMatchTS
+         xaccQueryAddDateMatchTT
+
+-----------------------------------------------------------------
+PD_AMOUNT : match a numeric amount.  Specify an amount (always
+positive), a funds-flow direction (credit, debit, or either), and
+"how", specifying the type of amount comparison to be used :
+
+  AMT_MATCH_ATLEAST : split >= pd amount  
+  AMT_MATCH_ATMOST  : split >= pd amount 
+  AMT_MATCH_EXACTLY : split == pd amount
+
+Used in: xaccQueryAddAmountMatch
+         xaccQueryAddSharePriceMatch
+         xaccQueryAddSharesMatch
+         
+-----------------------------------------------------------------
+PD_ACCOUNT : match an account or set of accounts. Specify a set
+of accounts and "how":
+
+  ACCT_MATCH_ALL : a transaction must have at least one split 
+                   affecting each account in pd.acct.accounts.
+  ACCT_MATCH_ANY : a transaction must have at least one split 
+                   affecting any account in the set 
+  ACCT_MATCH_NONE : a transaction may not affect any account in 
+                   the set. 
+
+Used in: xaccQueryAddAccountMatch
+         xaccQueryAddSingleAccountMatch
+
+-----------------------------------------------------------------
+PD_STRING : match a string.  Specify a string, bool signifying
+case sensitivity, bool signifying regexp or simple string.
+
+Used in: xaccQueryAddDescriptionMatch
+         xaccQueryAddNumberMatch
+         xaccQueryAddActionMatch
+         xaccQueryAddMemoMatch
+
+-----------------------------------------------------------------
+PD_CLEARED : match the Cleared state of the transaction.  Specify
+a bit-mask that is an OR combination of one or more of the 
+following: 
+  CLEARED_NO         (state == 'n')
+  CLEARED_CLEARED    (state == 'c')
+  CLEARED_RECONCILED (state == 'y')
+
+Used in: xaccQueryAddClearedMatch
+
+-----------------------------------------------------------------
+PD_MISC : match some "other" user predicate. Not used at the moment. 
+
+-----------------------------------------------------------------

@@ -1,0 +1,4365 @@
+
+2012-12-22 18:21  gjanssens
+
+	* [r22687] src/app-utils/guile-util.c, src/app-utils/guile-util.h,
+	  src/core-utils/gnc-guile-utils.c,
+	  src/core-utils/gnc-guile-utils.h,
+	  src/report/report-gnome/gnc-plugin-page-report.c: Move
+	  gnc_guile_strip_comments to core-utils and normalize its name to
+	  gnc_scm_strip_comments Also make it a true convenience functions
+	  by doing the conversion from an scm string to a c string
+	  internally. This saves the caller a manual conversion step.
+
+2012-12-22 18:20  gjanssens
+
+	* [r22686] src/app-utils/option-util.c,
+	  src/core-utils/gnc-guile-utils.c,
+	  src/core-utils/gnc-guile-utils.h,
+	  src/gnome-utils/gnc-menu-extensions.c,
+	  src/import-export/qif-import/assistant-qif-import.c,
+	  src/report/report-gnome/dialog-report-style-sheet.c,
+	  src/report/report-system/gnc-report.c: Normalize naming
+	  convention for guile convenience functions Let them all start
+	  with gnc_scm_* Copy the guile naming convention as close as
+	  possible for the remainder
+	* [r22685] src/app-utils/gnc-ui-util.c,
+	  src/engine/engine-helpers.c: Properly use scm_dynwind_*
+	  functions where they still make sense
+	* [r22684] src/app-utils/gfec.c, src/app-utils/guile-util.c,
+	  src/app-utils/option-util.c,
+	  src/app-utils/test/test-scm-query-string.c,
+	  src/core-utils/gnc-guile-utils.c,
+	  src/core-utils/gnc-guile-utils.h, src/engine/engine-helpers.c,
+	  src/engine/glib-helpers.c, src/engine/kvp-scm.c,
+	  src/gnome-utils/dialog-options.c,
+	  src/gnome-utils/gnc-menu-extensions.c,
+	  src/gnome/dialog-tax-info.c,
+	  src/import-export/qif-import/dialog-account-picker.c,
+	  src/report/report-gnome/dialog-custom-report.c,
+	  src/report/report-gnome/dialog-report-column-view.c,
+	  src/report/report-gnome/gnc-plugin-page-report.c,
+	  src/report/report-gnome/window-report.c,
+	  src/report/report-system/Makefile.am,
+	  src/report/report-system/gnc-report.c: Readd
+	  gnc_scm_to_locale_string function and use it where appropriate
+	  This function is a wrapper around scm_to_locale_string which
+	  returns a gchar * to be freed with g_free. The return value of
+	  the original function has to be freed with free. This is
+	  confusing since most of the gnucash code relies on
+	  g_malloc/g_free. While at it, clean up a lot of memory handling
+	  issues around (gnc_)scm_to_locale_string
+	* [r22683] src/import-export/qif-import/assistant-qif-import.c,
+	  src/report/report-gnome/dialog-report-style-sheet.c,
+	  src/report/report-system/gnc-report.c: Use
+	  gnc_guile_call1_to_string convenience function where appropriate
+	  And improve memory handling surrounding it where needed.
+	* [r22682] src/app-utils/guile-util.c, src/app-utils/guile-util.h,
+	  src/core-utils/gnc-guile-utils.c,
+	  src/core-utils/gnc-guile-utils.h: Move some guile convenience
+	  routines to core utils They don't depend on any gui or engine
+	  code and are used throughout the source
+
+2012-12-22 06:00  alex.aycinena
+
+	* [r22681] src/app-utils/app-utils.scm,
+	  src/app-utils/business-prefs.scm, src/app-utils/gnc-ui-util.c,
+	  src/app-utils/gnc-ui-util.h,
+	  src/business/business-gnome/dialog-payment.c,
+	  src/core-utils/gnc-features.c, src/core-utils/gnc-features.h,
+	  src/core-utils/gnc-gconf-utils.h, src/engine/SchedXaction.c,
+	  src/engine/Split.c, src/engine/Split.h,
+	  src/engine/Transaction.c, src/engine/Transaction.h,
+	  src/engine/cap-gains.c, src/engine/engine-helpers.c,
+	  src/engine/engine-helpers.h, src/engine/engine.i,
+	  src/engine/gncInvoice.c, src/engine/gncOwner.c,
+	  src/engine/test/utest-Split.c, src/gnome-search/dialog-search.c,
+	  src/gnome-utils/dialog-dup-trans.c,
+	  src/gnome-utils/dialog-dup-trans.h,
+	  src/gnome-utils/dialog-options.c,
+	  src/gnome-utils/dialog-options.h,
+	  src/gnome-utils/dialog-transfer.c,
+	  src/gnome-utils/dialog-utils.c, src/gnome-utils/dialog-utils.h,
+	  src/gnome-utils/gnc-gnome-utils.c,
+	  src/gnome-utils/gnc-gnome-utils.h,
+	  src/gnome-utils/gnc-main-window.c,
+	  src/gnome-utils/gnc-main-window.h,
+	  src/gnome-utils/gnc-tree-model-split-reg.c,
+	  src/gnome-utils/gnc-tree-view-split-reg.c,
+	  src/gnome-utils/gnc-ui.h,
+	  src/gnome-utils/gtkbuilder/dialog-preferences.glade,
+	  src/gnome/assistant-hierarchy.c,
+	  src/gnome/assistant-stock-split.c,
+	  src/gnome/dialog-find-transactions.c,
+	  src/gnome/dialog-lot-viewer.c, src/gnome/dialog-print-check.c,
+	  src/gnome/dialog-sx-from-trans.c,
+	  src/gnome/gnc-plugin-page-register.c,
+	  src/gnome/gnc-plugin-page-register.h,
+	  src/gnome/gnc-plugin-page-register2.c,
+	  src/gnome/gnc-split-reg.c, src/gnome/gnc-split-reg.h,
+	  src/gnome/gtkbuilder/assistant-hierarchy.glade,
+	  src/gnome/gtkbuilder/gnc-plugin-page-register.glade,
+	  src/import-export/aqbanking/gnc-ab-utils.c,
+	  src/import-export/aqbanking/gnc-file-aqb-import.c,
+	  src/import-export/csv-export/csv-transactions-export.c,
+	  src/import-export/csv-import/assistant-csv-account-import.c,
+	  src/import-export/csv-import/assistant-csv-account-import.h,
+	  src/import-export/csv-import/assistant-csv-trans-import.c,
+	  src/import-export/csv-import/assistant-csv-trans-import.glade,
+	  src/import-export/csv-import/gnc-csv-model.c,
+	  src/import-export/csv-import/gnc-csv-model.h,
+	  src/import-export/import-backend.c,
+	  src/import-export/ofx/gnc-ofx-import.c,
+	  src/import-export/qif-import/assistant-qif-import.c,
+	  src/import-export/qif-import/assistant-qif-import.glade,
+	  src/import-export/qif-import/qif-to-gnc.scm,
+	  src/libqof/qof/qofbook.c, src/libqof/qof/qofbook.h,
+	  src/libqof/qof/qofbookslots.h,
+	  src/libqof/qof/test/test-qofbook.c,
+	  src/register/ledger-core/Makefile.am,
+	  src/register/ledger-core/split-register-control.c,
+	  src/register/ledger-core/split-register-layout.c,
+	  src/register/ledger-core/split-register-load.c,
+	  src/register/ledger-core/split-register-model-save.c,
+	  src/register/ledger-core/split-register-model.c,
+	  src/register/ledger-core/split-register-util.c,
+	  src/register/ledger-core/split-register.c,
+	  src/register/ledger-core/split-register.h,
+	  src/register/ledger-core/test/Makefile.am,
+	  src/report/business-reports/customer-summary.scm,
+	  src/report/business-reports/job-report.scm,
+	  src/report/business-reports/owner-report.scm,
+	  src/report/locale-specific/us/taxtxf.scm,
+	  src/report/standard-reports/register.scm,
+	  src/report/standard-reports/standard-reports.scm,
+	  src/report/standard-reports/transaction.scm: Implement a Book
+	  Option to give users the choice to use the transaction number
+	  field (default and current behaviour) or, alternatively, the
+	  split action field of the anchor split for 'Num' column on
+	  registers, reports, import and export, where applicable. The
+	  difference between the two is that with the default, the same
+	  'Num' is displayed for a given transaction regardless of what
+	  register it is viewed in and with the new option, a different
+	  'Num' can be entered/displayed for a given transaction in each
+	  register it is viewed in. In both cases, the 'next number logic'
+	  of the 'Num' cell is based on the account of the register the
+	  transaction is entered/viewed from but in one case it fills the
+	  transaction number, in the other, it fills the split action
+	  field of the anchor split (with the transaction number field
+	  displayed in the register cell labeled 'T-Num'). In both cases,
+	  both fields are visible and can be used as free-form text in
+	  double-line mode for any value the user wants. If the new option
+	  is not selected, there should be no change in Gnucash's
+	  behaviour with the exception of displaying the book options
+	  dialog in 'new book' situations. The changes made are: 1.
+	  Implement the new book option to select source for 'num' cell:
+	  libqof/qof/qofbookslots.h - define num source option
+	  engine/engine.i - define 'NUM-FIELD-SOURCE' as an option name
+	  and 'SPLIT-ACTION' as a term for sorting queries
+	  app-utils/business-prefs.scm - define book option for
+	  num-field-source app-utils/app-utils.scm - define and export
+	  book option for num-field-source 2. Implement functions to get
+	  book option setting and to test: libqof/qof/qofbook.c & .h -
+	  define function to get number source book option
+	  libqof/qof/test/test-qofbook.c - test function to get number
+	  source book option 3. Implement a notification mechanism for
+	  book option changes: engine/engine-helpers.c & .h - define
+	  functions to register callbacks, define function to remove
+	  callbacks and define function to initiate callbacks on book
+	  num-source option changes core-utils/gnc-features.c & .h -
+	  define feature for num-source app-utils/gnc-ui-util.c & .h -
+	  define gnc_book_option_num_field_source_change_cb; include
+	  setting of feature flag on initial use
+	  gnome-utils/gnc-main-window.c - change name of
+	  gnc_options_dialog_apply_cb function to
+	  gnc_book_options_dialog_apply_cb and adjust function to call
+	  function gnc_book_option_num_field_source_change_cb when book
+	  option for num-field-source changes; change name of
+	  gnc_options_dialog_close_cb to gnc_book_options_dialog_close_cb
+	  4. Implement 'help' button response on Book Option Dialog:
+	  gnome-utils/gnc-ui.h - define "book-options" section of help
+	  manual gnome-utils/gnc-gnome-utils.c & .h - implement Book
+	  Options help callback gnome-utils/gnc-main-window.c - use
+	  gnc_options_dialog_set_book_options_help_cb to make help button
+	  active 5. Implement utility functions to get/set number/action
+	  based on book option: engine/engine-helpers.c & .h - define
+	  'gnc_get_num_action' function define 'gnc_get_action_num'
+	  function define 'gnc_set_num_action' function engine/engine.i -
+	  make get/set num/action functions available to guile & allow #f
+	  to be used in place of NULL from guile engine/Transaction.h -
+	  add reference to utility functions in comments to
+	  xaccTransSetNum and xaccTransGetNum functions engine/Split.h -
+	  add reference to utility functions in comments to
+	  xaccSplitSetAction and xaccSplitGetAction functions 6. Implement
+	  register use of num source book option; for General, Income and
+	  Search Ledgers, since there is no anchor split, always show
+	  tran-num in transaction cursor, but vary label to correspond to
+	  book option: register/ledger-core/split-register.h - define
+	  TNUM_CELL define CURSOR_DOUBLE_LEDGER_NUM_ACTN cursor name to
+	  use TNUM_CELL define CURSOR_DOUBLE_JOURNAL_NUM_ACTN cursor name
+	  to use TNUM_CELL add boolean to split_reg structure to hold num
+	  source book option register/ledger-core/split-register-layout.c
+	  - add logic to define and set up new ledger/journal cursors with
+	  TNUM_CELLs add logic to add the new cursors to a layout add
+	  logic to add TNUM_CELL to a layout
+	  register/ledger-core/split-register-model.c - define function to
+	  get TNUM_CELL label add logic to recognize ledger/journal
+	  cursors with TNUM_CELL modify function to get NUM_CELL value
+	  based on book option and register type define function to get
+	  TNUM_CELL value adjust num help text to reflect book option
+	  choice define function to get TNUM_CELL help modify function to
+	  get action help to reflect book option choice set up handlers
+	  for TNUM_CELL register/ledger-core/split-register-model-save.c -
+	  use 'gnc_set_num_action' function to set num/action for NUM_CELL
+	  based on book option define function to save TNUM_CELL using
+	  'gnc_set_num_action' function set save handler for TNUM_CELL
+	  register/ledger-core/split-register-util.c - modify logic to
+	  recognize ledger/journal cursors with tnum_cell
+	  register/ledger-core/split-register.c - define
+	  split_register_book_option_changed function register
+	  split_register_book_option_changed function in register init
+	  initialize register structure setting to book option remove
+	  split_register_book_option_changed function in register destroy
+	  modify gnc_split_register_save_to_scm to handle TNUM_CELL 7.
+	  Enhance transaction copy/duplicate logic to accommodate new book
+	  option: gnome/gtkbuilder/gnc-plugin-page-register.glade - add
+	  widgets to handle trans number and/or split action based on book
+	  option gnome-utils/dialog-dup-trans.c & .h - add capability to
+	  display and handle 'Num' field according to book option
+	  gnome/gnc-plugin-page-register.c - define
+	  gnc_find_register_by_account
+	  register/ledger-core/split-register.c - modify
+	  gnc_split_register_duplicate_current to accomodate book option
+	  setting register/ledger-core/Makefile.am - add GNOME_CFLAGS
+	  register/ledger-core/test/Makefile.am - add libgnc-gnome.la 8.
+	  Adjust register sort and sort labels related to Num/Action radio
+	  buttons to correspond to book option for clarity:
+	  gnome/gnc-plugin-page-register.c - define
+	  gnc_plugin_page_register_sort_book_option_changed to adjust
+	  labels register function in
+	  gnc_plugin_page_register_cmd_view_sort_by and save num and
+	  action radio widgets initialize radio widget labels to
+	  correspond to book option remove function in
+	  gnc_plugin_page_register_sort_response_cb and clear num and
+	  action radio widgets gnome/gnc-split-reg.c & h. - create
+	  versions of gnc_split_reg_sort and gnc_split_reg_set_sort to
+	  force a re-sort to be used when num-source book option changes
+	  engine/Transaction.c & .h - modify default sort to use split
+	  action in place of tran num per book option if called from
+	  xaccSplitOrder engine/Split.c - modify xaccSplitOrder to call
+	  xaccTransOrder_num_action to switch use of split action and tran
+	  num per book option engine/test/utest-Split.c - modify
+	  test_xaccSplitOrder to call xaccTransOrder_num_action based on
+	  book option 9. Adjust transaction find labels related to
+	  Num/Action to correspond to book option for clarity:
+	  gnome/dialog-find-transactions.c - adjust labels in search
+	  criteria based on book option gnome-search/dialog-search.c -
+	  define gnc_search_dialog_book_option_changed to adjust labels
+	  register function in gnc_search_dialog_init_widgets when
+	  searching for splits remove function in
+	  gnc_search_dialog_close_cb if registered 10. Modify new file
+	  process to allow setting of num-source (actually, all) book
+	  option(s) during New Account Hierarchy Setup:
+	  gnome-utils/gtkbuilder/dialog-preferences.glade - add a user
+	  preference for the default setting for 'num-source' for new
+	  books core-utils/gnc-gconf-utils.h - define KEY_NUM_SOURCE
+	  gnome-utils/gnc-gnome-utils.c & h. - define
+	  gnc_options_dialog_set_new_book_option_values to retrieve
+	  preference values gnome-utils/dialog-options.c & .h - define
+	  gnc_options_dialog_new_modal to surpress apply button
+	  gnome-utils/gnc-main-window.c - define function
+	  gnc_book_options_dialog_cb with arguments so that the window can
+	  be called in modal mode and the title changed and return dialog
+	  widget; call gnc_options_dialog_new_modal instead of
+	  gnc_options_dialog_new; call this function from
+	  gnc_main_window_cmd_file_properties with new arguments; for
+	  modal mode, call gnc-options-dialog-set-new-book-option-values
+	  to initialize values from preferences app-utils/gnc-ui-util.c &
+	  h. - create function gnc_is_new_book for determining when a new
+	  book is being created gnome-utils/dialog-utils.c & h. - define
+	  gnc_new_book_option_display to display book options dialog in
+	  modal mode gnome/gtkbuilder/assistant-hierarchy.glade - add
+	  notification about book options to currency page
+	  gnome/assistant-hierarchy.c - add ability to set book option
+	  initialized from preferences value for new books by using
+	  functions gnc_is_new_book and gnc_new_book_option_display 11.
+	  Modify Import QIF process to recognize a new-book situation and
+	  allow setting of book options during first import into a new
+	  book; also follow book option setting for num source in
+	  importing number whether new book or not:
+	  import-export/qif-import/assistant-qif-import.glade - add
+	  notification about book options to currency page
+	  import-export/qif-import/assistant-qif-import.c - using function
+	  gnc_is_new_book to identify 'new book' situation and set flag;
+	  add logic to handle 'new-book' situation by calling
+	  gnc_new_book_option_display function
+	  import-export/qif-import/qif-to-gnc.scm - use
+	  'gnc_set_num_action' function to import number to correct field
+	  based on book option 12. Modify Import OFX/QFX process to
+	  recognize a new-book situation and allow setting of book options
+	  during first import into a new book; also follow book option
+	  setting for num source in importing number whether new book or
+	  not: import-export/ofx/gnc-ofx-import.c - use
+	  'gnc_set_num_action' function to import number based on book
+	  option; identify 'new book' situation using function
+	  gnc_is_new_book and set flag; add logic to handle 'new-book'
+	  situation by raising book options dialog by calling
+	  gnc_new_book_option_display function
+	  import-export/import-backend.c - use 'gnc_get_num_action'
+	  function to retrieve number from transactions to be matched
+	  based on book option 13. Modify Import AqBanking process to
+	  recognize a new-book situation and allow setting of book options
+	  during first import into a new book; also follow book option
+	  setting for num source in importing number:
+	  import-export/aqbanking/gnc-file-aqb-import.c - identify 'new
+	  book' situation using function gnc_is_new_book and handle by
+	  raising book options dialog by calling
+	  gnc_new_book_option_display function
+	  import-export/aqbanking/gnc-ab-utils.c - use
+	  'gnc_set_num_action' function to set number based on book option
+	  14. Modify Import Transactions from CSV process to recognize a
+	  new-book situation and allow setting of book options during
+	  first import into a new book; also follow book option setting
+	  for num source in importing number whether new book or not:
+	  import-export/csv-import/assistant-csv-trans-import.glade -
+	  modify commments to alert user of raising book options dialog in
+	  cases of csv import into a new book
+	  import-export/csv-import/gnc-csv-model.c & h. - use
+	  'gnc_set_num_action' function to import number based on book
+	  option import-export/csv-import/assistant-csv-trans-import.c -
+	  add logic to handle 'new-book' situation by raising book options
+	  dialog by calling gnc_new_book_option_display function; identify
+	  'new book' situation using function gnc_is_new_book and set flag
+	  15. Modify Import Accounts from CSV process to recognize a
+	  new-book situation and allow setting of book options during
+	  first import into a new book
+	  import-export/csv-import/assistant-csv-account-import.c & .h -
+	  add logic to handle 'new-book' situation by raising book options
+	  dialog by calling gnc_new_book_option_display function; identify
+	  'new book' situation using function gnc_is_new_book and set flag
+	  16. Modify Export Transactions to CSV process to follow book
+	  option setting for num source in exporting transactions:
+	  import-export/csv-export/csv-transactions-export.c - modify
+	  headings to reflect num-source book option and use
+	  'gnc_get_num_action' function to retrieve number and action 17.
+	  Modify register reporting to reflect book option setting for num
+	  source: gnome/gnc-plugin-page-register.c - determine and pass
+	  along ledger-type? argument to gnc:register-report-create
+	  function gnome/gnc-plugin-page-register2.c - determine and pass
+	  along ledger-type? argument to gnc:register-report-create
+	  function report/standard-reports/standard-reports.scm - add
+	  ledger-type? argument to gnc:register-report-create function;
+	  pass it along to gnc:register-report-create-internal function
+	  report/standard-reports/register.scm - add ledger-type? argument
+	  to gnc:register-report-create-internal function; use
+	  'gnc-get-num-action' function in place of xaccTransGetNum and
+	  'gnc-get-action-num' function in place of xaccSplitGetAction and
+	  modify report headings and option text accordingly 18. Modify
+	  all places that use xaccTransSetNum and/or xaccSplitSetAction to
+	  use 'gnc_set_num_action' function to set number based on book
+	  option except engine/Transaction.c & .h,
+	  engine/test-core/test-engine-stuff.c, engine/Split.c & .h,
+	  engine/test/utest-Split.c, engine/engine-helpers.c & .h,
+	  engine/engine-interface.scm,
+	  backend/xml/gnc-transaction-xml-v2.c,
+	  backend/xml/io-gncxml-v1.c,
+	  import-export/log-replay/gnc-log-replay.c: engine/gncOwner.c -
+	  use 'gnc_set_num_action' function to set number based on book
+	  option engine/gncInvoice.c - use 'gnc_set_num_action' function
+	  to set number based on book option engine/SchedXaction.c - use
+	  'gnc_set_num_action' function to set number and action
+	  engine/cap-gains.c - use 'gnc_set_num_action' function to set
+	  split-action gnome-utils/dialog-transfer.c - use
+	  'gnc_set_num_action' function to set number based on book option
+	  gnome-utils/gnc-tree-view-split-reg.c - use 'gnc_set_num_action'
+	  function to set number/action based on book option
+	  gnome/assistant-stock-split.c - use 'gnc_set_num_action'
+	  function to set split-action 19. Modify all places that use
+	  xaccTransGetNum and/or xaccSplitGetAction to use
+	  'gnc_get_num_action' or 'gnc_get_action_num' functions to get
+	  number based on book option except engine/Transaction.c & .h,
+	  engine/test-core/test-engine-stuff.c, engine/Split.c & h.,
+	  engine/test/utest-Split.c, engine/engine-helpers.c,
+	  engine/engine-interface.scm,
+	  backend/xml/gnc-transaction-xml-v2.c,
+	  backend/xml/test/test-xml-transaction.c:
+	  gnome/dialog-lot-viewer.c - use 'gnc_get_num_action' function to
+	  retrieve number based on book option
+	  gnome/dialog-sx-from-trans.c - use 'gnc_get_num_action' function
+	  to retrieve number and action gnome/dialog-print-check.c - use
+	  'gnc_get_num_action' function to retrieve number and
+	  'gnc_get_action_num' function to retrieve action
+	  register/ledger-core/split-register-model.c - use
+	  'gnc_get_num_action' function to retrieve number based on book
+	  option register/ledger-core/split-register-load.c - use
+	  'gnc_get_num_action' function to retrieve number based on book
+	  option register/ledger-core/split-register-control.c - use
+	  'gnc_get_num_action' function to retrieve action
+	  register/ledger-core/split-register.c - use 'gnc_get_num_action'
+	  function to retrieve transaction-num engine/cap-gains.c - use
+	  'gnc_get_num_action' function to get split-action
+	  gnome-utils/gnc-tree-view-split-reg.c - use 'gnc_get_num_action'
+	  function to retrieve number and 'gnc_get_action_num' function to
+	  retrieve action gnome-utils/gnc-tree-model-split-reg.c - use
+	  'gnc_get_num_action' function to retrieve transaction-number but
+	  may not be getting what is expected if book option to use
+	  split-action for 'num' is set
+	  report/locale-specific/us/taxtxf.scm - use 'gnc-get-num-action'
+	  function in place of xaccTransGetNum and 'gnc-get-action-num'
+	  function in place of xaccSplitGetAction and modify report
+	  headings and option text accordingly
+	  report/standard-reports/transaction.scm - use
+	  'gnc-get-num-action' function in place of xaccTransGetNum,
+	  adjust sorting based on book option and modify report headings
+	  and option text accordingly; add 'SPLIT-ACTION' as a term for
+	  sorting queries report/business-reports/customer-summary.scm -
+	  use 'gnc-get-num-action' function in place of xaccTransGetNum
+	  report/business-reports/owner-report.scm - use
+	  'gnc-get-num-action' function in place of xaccTransGetNum
+	  report/business-reports/job-report.scm - use
+	  'gnc-get-num-action' function in place of xaccTransGetNum
+	  business/business-gnome/dialog-payment.c - use
+	  'gnc_get_num_action' function to retrieve number based on book
+	  option
+
+2012-12-21 09:19  gjanssens
+
+	* [r22680] src/base-typemaps.i: Fix compiler warnings introduced
+	  by the guile 2 patches
+
+2012-12-19 05:34  mta
+
+	* [r22673] src/register/ledger-core/split-register-util.c: Use the
+	  correct fraction when editing expanded multiple currency
+	  transactions. When a transaction is expanded and trading
+	  accounts are in use, the debit and credit cells contain values
+	  in the split's commodity not the transaction's currency. For
+	  example if you have a transaction involving JPY and USD
+	  currencies and the transaction's currency is JPY, you can only
+	  enter whole dollar amounts in the USD splits. This fixes this
+	  problem.
+
+2012-12-18 18:10  gjanssens
+
+	* [r22672] src/app-utils/guile-util.c: Guile2 : replace deprecated
+	  SCM_LENGTH
+	* [r22671] src/app-utils/Makefile.am: Guile2: avoid build failure
+	  on deprecated guile symbols gfec.c has 3 calls to the deprecated
+	  scm_internal_stack_catch function. I have no idea how to replace
+	  this, so for now I just keep the functions in place. To prevent
+	  a build failure I have to tell the compiler to ignore the
+	  deprecated warnings.
+
+2012-12-18 11:33  gjanssens
+
+	* [r22670] src/app-utils/app-utils.scm,
+	  src/core-utils/core-utils.scm, src/gnc-module/gnc-module.scm,
+	  src/import-export/qif-import/qif-import.scm,
+	  src/report/business-reports/business-reports.scm: Guile 2: fix
+	  autocompile errors Note that a first gnucash run with guile 2
+	  will cause the scheme files to be autocompiled into a guile
+	  specific bytecode language (unless the environment variable
+	  GUILE_AUTO_COMPILE is set to 0). This compile run still causes a
+	  lot of warnings, but the files get properly compiled and gnucash
+	  runs fine.
+
+2012-12-18 10:25  gjanssens
+
+	* [r22669] src/core-utils/core-utils.i, src/engine/engine.i,
+	  src/report/report-system/report-system.scm: Fix double
+	  definition of gnc-build-dotgnucash-path
+	* [r22668] src/app-utils/app-utils.scm: Drop syntax export of N_
+	  and move related bits together N_ gets defined in the root
+	  module, so it's automatically available everywhere. Exporting it
+	  generated a a warning in guile 2.
+	* [r22667] intl-scm/xgettext.scm, src/app-utils/app-utils.scm:
+	  Drop unused custom gettext macro
+	* [r22666] src/scm/main.scm: Drop obsolete custom string-join
+	  definition. string-join has been a built-in function at least
+	  since guile 1.8.
+	* [r22665] src/scm/main.scm: Drop obsolete custom hash-fold
+	  definition. hash-fold has been a built-in function at least
+	  since guile 1.6.
+
+2012-12-18 06:07  mta
+
+	* [r22664] src/gnome-utils/dialog-transfer.c: Another but in
+	  r22646, still getting the existing price check wrong. It's a
+	  long-standing rule that I don't do numbers well. Third time's a
+	  charm, I hope.
+
+2012-12-17 13:51  gjanssens
+
+	* [r22663] po/POTFILES.in: Add new file to POTFILES
+	* [r22662] src/app-utils/guile-util.c: Remove code that was
+	  intended for guile before 1.6
+
+2012-12-17 05:35  mta
+
+	* [r22661] src/engine/engine-helpers.h: Fix r22656 so it compiles:
+	  delete duplicate def of scm_to_int64.
+	* [r22660] src/gnome-utils/dialog-transfer.c: Fix a bug in r22646:
+	  incorrect test for equivalent price already in price DB
+	* [r22659] src/register/ledger-core/split-register-control.c: Call
+	  gnc_split_register_current_trans_expanded instead of duplicating
+	  it.
+
+2012-12-15 19:15  gjanssens
+
+	* [r22658] configure.ac: Remove unused CFLAGS in configure test
+	* [r22657] configure.ac: Move configure test to a more appropriate
+	  location And remove a reference in the comment to a no longer
+	  existing function
+	* [r22656] src/base-typemaps.i, src/engine/engine-helpers.c,
+	  src/engine/engine-helpers.h, src/engine/kvp-scm.c: Replace now
+	  obsolete wrappers by the functions they called directly
+
+2012-12-15 17:59  gjanssens
+
+	* [r22655] configure.ac, src/engine/engine-helpers.c: Drop
+	  workarounds for potential guile issues with long long - The
+	  workarounds for long long were added more than 12 years back
+	  (pre guile 1.6). One would reasonably assume this issue would
+	  have been fixed by now. - But more importantly, we can guarantee
+	  a proper 64 type conversion by replacing scm_to/from_long_long
+	  with scm_to/from_int64 which is always 64bit, just as gint64 I
+	  have chosen nonetheless to keep this change in a separate commit
+	  so it's easier to track if some obscure platform still manages
+	  to screw this up.
+	* [r22654] src/report/report-system/html-style-info.scm,
+	  src/report/report-system/report-system.scm: Guile 2: drop custom
+	  kvtable in favour of standard hashtable The kvtable code is
+	  causing segfaults in guile 2 and I don't see any obvious
+	  advantages to using this custom code of the standard hash-table
+	  functions
+	* [r22653] src/app-utils/gnc-helpers.c,
+	  src/app-utils/guile-util.c, src/app-utils/option-util.c,
+	  src/app-utils/test/test-print-queries.c,
+	  src/app-utils/test/test-scm-query-string.c, src/base-typemaps.i,
+	  src/business/business-gnome/gnc-plugin-page-owner-tree.c,
+	  src/engine/engine-helpers.c, src/engine/glib-helpers.c,
+	  src/engine/kvp-scm.c, src/gnome-utils/dialog-options.c,
+	  src/gnome/gnc-plugin-page-register.c,
+	  src/gnome/gnc-plugin-page-register2.c,
+	  src/import-export/qif-import/assistant-qif-import.c,
+	  src/import-export/qif-import/dialog-account-picker.c,
+	  src/report/report-gnome/dialog-report-style-sheet.c,
+	  src/report/report-gnome/gnc-plugin-page-report.c: Guile 2 :
+	  replace deprecated scm_makfrom0str function The replacement
+	  function (scm_to_locale_string) doesn't deal well when the C
+	  string is NULL, so all replacements were adapted to handle this
+	  case. Depending on the context the replacement in case of a NULL
+	  input string will return SCM_BOOL_F or a sensible default string.
+
+2012-12-15 17:58  gjanssens
+
+	* [r22652] src/app-utils/gnc-exp-parser.c,
+	  src/app-utils/gnc-helpers.c, src/app-utils/gnc-ui-util.c,
+	  src/app-utils/guile-util.c, src/app-utils/option-util.c,
+	  src/base-typemaps.i,
+	  src/business/business-gnome/business-options-gnome.c,
+	  src/business/business-gnome/dialog-invoice.c,
+	  src/business/business-gnome/gnc-plugin-page-owner-tree.c,
+	  src/engine/engine-helpers.c, src/engine/kvp-scm.c,
+	  src/gnome-utils/dialog-options.c,
+	  src/gnome/gnc-plugin-page-register.c,
+	  src/gnome/gnc-plugin-page-register2.c, src/guile-mappings.h,
+	  src/import-export/qif-import/assistant-qif-import.c,
+	  src/report/report-gnome/dialog-custom-report.c,
+	  src/report/report-gnome/dialog-report-column-view.c,
+	  src/report/report-gnome/gnc-plugin-page-report.c,
+	  src/report/report-system/gnc-report.c: Guile 2: replace
+	  deprecated functions These are all simple one to one mappings.
+	  The replacements require guile 1.8 or newer.
+	* [r22651] src/app-utils/guile-util.c, src/app-utils/guile-util.h,
+	  src/app-utils/option-util.c, src/core-utils/Makefile.am,
+	  src/core-utils/gnc-guile-utils.c,
+	  src/core-utils/gnc-guile-utils.h, src/engine/engine-helpers.c,
+	  src/gnome/dialog-tax-info.c,
+	  src/import-export/qif-import/assistant-qif-import.c: Guile 2:
+	  replace deprecated SCM_SYMBOL_CHARS function The replacements
+	  require guile 1.8 or above
+	* [r22650] src/app-utils/option-util.c,
+	  src/app-utils/option-util.h, src/gnome-utils/gnc-main-window.c,
+	  src/scm/Makefile.am, src/scm/main-window.scm, src/scm/main.scm:
+	  Rewrite option dialog callback in C This reduces the number of
+	  guile<->c roundtrips for the book options dialog and eliminates
+	  the guile dependency from one more file.
+
+2012-12-15 10:30  gjanssens
+
+	* [r22649] src/app-utils/QuickFill.c,
+	  src/backend/dbi/gnc-backend-dbi.c,
+	  src/backend/xml/gnc-backend-xml.c,
+	  src/business/business-ledger/gncEntryLedgerLoad.c,
+	  src/engine/gnc-commodity.c,
+	  src/engine/test-core/test-engine-stuff.c,
+	  src/gnome-utils/dialog-reset-warnings.c,
+	  src/gnome-utils/dialog-transfer.c, src/gnome-utils/gnc-file.c,
+	  src/gnome-utils/gnc-tree-model-account.c,
+	  src/gnome/dialog-print-check.c, src/gnome/gnc-split-reg.c,
+	  src/gnome/gnc-split-reg2.c, src/import-export/import-backend.c,
+	  src/import-export/import-main-matcher.c,
+	  src/import-export/ofx/gnc-ofx-import.c,
+	  src/libqof/qof/gnc-date.c, src/libqof/qof/kvp_frame.c,
+	  src/libqof/qof/qofquery.c,
+	  src/register/ledger-core/split-register-model.c,
+	  src/register/ledger-core/split-register.c,
+	  src/register/register-gnome/gnucash-cursor.c,
+	  src/register/register-gnome/gnucash-sheet.c: Fix some warnings
+	  generated by Eclipse's static code analysis plugin
+
+2012-12-14 17:37  gjanssens
+
+	* [r22648] src/libqof/qof/gnc-date.c: Use correct parameter
+	  sequence for g_date_time_get_ymd
+
+2012-12-14 13:07  gjanssens
+
+	* [r22647] src/app-utils/guile-util.h: Make sure all functions are
+	  defined only once in the header file
+
+2012-12-13 05:13  mta
+
+	* [r22646] src/engine/gnc-pricedb.c, src/engine/gnc-pricedb.h,
+	  src/gnome-utils/dialog-transfer.c: Improvements to exchange rate
+	  dialog. Use a price on the same day as the transaction as
+	  default if there is one. Don't add a new price to the price DB
+	  if the nearest one on the same day is equivalent to the one
+	  being added.
+	* [r22645] src/engine/Transaction.c: Better detection of
+	  unbalanced transactions with trading accounts. A transaction's
+	  value should be balanced independently in trading and
+	  non-trading splits to be considered balanced. Incorrect
+	  adjustment of exchange rates on existing splits can cause this
+	  to be an issue.
+	* [r22644] src/gnome-utils/dialog-transfer.c: Don't leak a
+	  GNCPrice after fetching prices from finance-quote.
+
+2012-12-12 17:43  gjanssens
+
+	* [r22643] src/business/business-gnome/business-gnome.scm,
+	  src/business/business-gnome/gnc-plugin-business.c,
+	  src/business/business-gnome/ui/gnc-plugin-business-ui.xml: Drop
+	  non-functioning old test functions These functions were used in
+	  debugging business reports, but they don't work anymore. The
+	  report system has moved on to using unique guids.
+	* [r22642] configure.ac, lib/libc/Makefile.am,
+	  lib/libc/scm_strptime.c, src/backend/xml/sixtp-dom-generators.c,
+	  src/backend/xml/sixtp-utils.c,
+	  src/backend/xml/test/test-xml-commodity.c,
+	  src/business/business-ledger/Makefile.am,
+	  src/business/business-ledger/gncEntryLedgerLoad.c,
+	  src/gnc/CMakeLists.txt, src/gnc/main.cpp,
+	  src/gnome-search/gncmod-gnome-search.c,
+	  src/gnome-utils/gnc-file.c, src/gnome-utils/gnc-gnome-utils.c,
+	  src/gnome/dialog-new-user.c, src/gnome/dialog-print-check.c,
+	  src/gnome/dialog-print-check.h,
+	  src/gnome/gnc-plugin-page-budget.c, src/gnome/gnc-split-reg.c,
+	  src/gnome/gnc-split-reg2.c, src/html/gnc-html.c,
+	  src/import-export/CMakeLists.txt, src/import-export/Makefile.am,
+	  src/import-export/gncmod-generic-import.c,
+	  src/import-export/log-replay/Makefile.am,
+	  src/import-export/log-replay/gnc-log-replay.c,
+	  src/import-export/log-replay/gncmod-log-replay.c,
+	  src/import-export/ofx/Makefile.am,
+	  src/import-export/ofx/gnc-ofx-import.c,
+	  src/plugins/customer_import/libgncmod-customer_import.c,
+	  src/register/register-core/gncmod-register-core.c,
+	  src/register/register-gnome/Makefile.am,
+	  src/register/register-gnome/table-gnome.c: Remove unused guile
+	  references in various source files
+	* [r22641] src/bin/gnucash-bin.c, src/scm/main.scm: Drop gnc:main;
+	  it is an empty function by now
+
+2012-12-12 17:42  gjanssens
+
+	* [r22640] src/scm/Makefile.am, src/scm/command-line.scm,
+	  src/scm/main.scm: Remove guile commandline handling It's not
+	  used anymore and if someone wants to re-establish it, he/she
+	  should use (ice-9 getopt-long) to implement it instead of our
+	  own custom functions.
+	* [r22639] src/scm/Makefile.am, src/scm/doc.scm, src/scm/main.scm:
+	  Remove now unused scm file
+	* [r22638] src/core-utils/core-utils.i,
+	  src/core-utils/core-utils.scm,
+	  src/report/report-system/html-jqplot.scm: Eliminate use of
+	  gnc:find-file
+	* [r22637] src/app-utils/file-utils.c, src/app-utils/file-utils.h,
+	  src/core-utils/gnc-filepath-utils.c,
+	  src/core-utils/gnc-filepath-utils.h: Rewrite gncFindFile
+	  function in C and move it to file-utils. The code made a
+	  roundtrip into guile (for historical reasons I guess). The guile
+	  code used to be able to provide custom paths to search for based
+	  on some command line parameter set at startup. This parameter is
+	  no longer accepted since a very long time back. Also note that
+	  the gncFindFile function is not actively in use. It is only
+	  called by gncReadFile, which in turn is only called when our
+	  html code is asked to load a generic file or a help file to
+	  stream (protocol file or help). Both protocols are used nowhere
+	  in the current GnuCash code. gncFindFile (now
+	  gnc_path_find_localized_html_file) is only kept for a. custom
+	  reports that potentially use the file protocol b. jqplot which
+	  uses the guile equivalent of this function (see a subsequent
+	  commit)
+	* [r22636] src/report/report-gnome/window-report.c,
+	  src/report/utility-reports/hello-world.scm: Fix gnc-help
+	  protocol and illustrate its use in the hello world report
+
+2012-12-06 19:47  cmarchi
+
+	* [r22634] accounts/it/acctchrt_homeown.gnucash-xea: In Italy ICI
+	  is now IMU. BP
+
+2012-12-06 04:07  mta
+
+	* [r22631] src/scm/price-quotes.scm: Changes r22619 and r22620
+	  broke online price quote retrieval.
+
+2012-12-03 12:48  jralls
+
+	* [r22630] src/gnome/assistant-acct-period.c: Fix 64-bit
+	  formatting failure
+
+2012-12-02 02:04  jralls
+
+	* [r22629] src/gnome-utils/gnc-date-edit.c: Fix includes in
+	  gnc-date-edit.c
+
+2012-12-01 22:46  jralls
+
+	* [r22628] src/optional/gtkmm/gncmm/Transaction.hpp,
+	  src/plugins/bi_import/dialog-bi-import.c: Convert all time_t to
+	  time64: optional & plugins
+
+2012-12-01 22:45  jralls
+
+	* [r22627] src/register/ledger-core/gnc-ledger-display.c,
+	  src/register/ledger-core/gnc-ledger-display2.c,
+	  src/register/ledger-core/split-register-control.c,
+	  src/register/ledger-core/split-register-load.c,
+	  src/register/ledger-core/split-register-model.c,
+	  src/register/ledger-core/split-register-p.h,
+	  src/register/ledger-core/split-register-util.c,
+	  src/register/ledger-core/split-register.c,
+	  src/register/register-core/datecell.h,
+	  src/register/register-gnome/datecell-gnome.c: Convert all time_t
+	  to time64: register
+	* [r22626] src/gnome/assistant-acct-period.c,
+	  src/gnome/assistant-hierarchy.c, src/gnome/assistant-loan.c,
+	  src/gnome/assistant-stock-split.c,
+	  src/gnome/dialog-lot-viewer.c, src/gnome/dialog-price-editor.c,
+	  src/gnome/dialog-print-check.c, src/gnome/dialog-sx-editor.c,
+	  src/gnome/dialog-sx-from-trans.c,
+	  src/gnome/gnc-plugin-page-register.c,
+	  src/gnome/gnc-plugin-page-register2.c,
+	  src/gnome/gnc-plugin-page-sx-list.c, src/gnome/gnc-split-reg.c,
+	  src/gnome/gnc-split-reg.h, src/gnome/gnc-split-reg2.c,
+	  src/gnome/gnc-split-reg2.h, src/gnome/reconcile-view.c,
+	  src/gnome/reconcile-view.h, src/gnome/window-reconcile.c,
+	  src/gnome/window-reconcile.h: Convert all time_t to time64: gnome
+	* [r22625] src/gnome-search/search-date.c,
+	  src/gnome-utils/dialog-account.c,
+	  src/gnome-utils/dialog-book-close.c,
+	  src/gnome-utils/dialog-dup-trans.c,
+	  src/gnome-utils/dialog-dup-trans.h,
+	  src/gnome-utils/dialog-preferences.c,
+	  src/gnome-utils/dialog-transfer.c,
+	  src/gnome-utils/dialog-transfer.h,
+	  src/gnome-utils/dialog-utils.c,
+	  src/gnome-utils/gnc-cell-renderer-date.c,
+	  src/gnome-utils/gnc-cell-renderer-date.h,
+	  src/gnome-utils/gnc-date-edit.c,
+	  src/gnome-utils/gnc-date-edit.h,
+	  src/gnome-utils/gnc-date-format.c,
+	  src/gnome-utils/gnc-dense-cal-store.c,
+	  src/gnome-utils/gnc-dense-cal.c, src/gnome-utils/gnc-file.c,
+	  src/gnome-utils/gnc-main-window.c,
+	  src/gnome-utils/gnc-period-select.c,
+	  src/gnome-utils/gnc-period-select.h,
+	  src/gnome-utils/gnc-recurrence.c,
+	  src/gnome-utils/gnc-tree-model-account.c,
+	  src/gnome-utils/gnc-tree-view-account.c,
+	  src/gnome-utils/gnc-tree-view-split-reg.c,
+	  src/gnome-utils/window-main-summarybar.c: Convert all time_t to
+	  time64: gnome-utils and gnome-search
+	* [r22624] src/import-export/aqbanking/gnc-ab-gettrans.c,
+	  src/import-export/aqbanking/gnc-ab-utils.c,
+	  src/import-export/csv-export/assistant-csv-export.c,
+	  src/import-export/csv-export/assistant-csv-export.h,
+	  src/import-export/csv-import/gnc-csv-model.c,
+	  src/import-export/csv-import/gnc-csv-model.h,
+	  src/import-export/import-backend.c,
+	  src/import-export/ofx/gnc-ofx-import.c: Convert all time_t to
+	  time64: import-export
+	* [r22623] src/backend/dbi/gnc-backend-dbi.c,
+	  src/backend/sql/gnc-backend-sql.c,
+	  src/backend/sql/test/utest-gnc-backend-sql.c,
+	  src/backend/xml/gnc-backend-xml.c,
+	  src/backend/xml/sixtp-utils.c: Convert all time_t to time64:
+	  backend
+	* [r22622] src/business/business-gnome/dialog-invoice.c,
+	  src/business/business-gnome/dialog-order.c,
+	  src/business/business-gnome/gnc-plugin-business.c,
+	  src/business/business-ledger/gncEntryLedgerControl.c,
+	  src/business/business-ledger/gncEntryLedgerModel.c: Convert all
+	  time_t to time64:business
+
+2012-12-01 22:44  jralls
+
+	* [r22621] src/engine/Account.c, src/engine/Account.h,
+	  src/engine/Query.c, src/engine/Query.h, src/engine/Recurrence.c,
+	  src/engine/Recurrence.h, src/engine/SchedXaction.c,
+	  src/engine/Split.c, src/engine/Split.h, src/engine/TransLog.c,
+	  src/engine/Transaction.c, src/engine/Transaction.h,
+	  src/engine/cap-gains.c, src/engine/gnc-budget.c,
+	  src/engine/gncInvoice.c, src/engine/gncOwner.c,
+	  src/engine/gncTaxTable.c,
+	  src/engine/test/test-transaction-voiding.c,
+	  src/engine/test/utest-Account.c, src/engine/test/utest-Budget.c:
+	  Convert all time_t to time64: engine
+	* [r22620] src/app-utils/gnc-accounting-period.c,
+	  src/app-utils/gnc-accounting-period.h,
+	  src/app-utils/gnc-sx-instance-model.c,
+	  src/app-utils/gnc-ui-balances.c,
+	  src/app-utils/gnc-ui-balances.h, src/app-utils/gnc-ui-util.c,
+	  src/app-utils/gnc-ui-util.h, src/app-utils/guile-util.c,
+	  src/app-utils/guile-util.h, src/app-utils/option-util.c,
+	  src/app-utils/option-util.h, src/app-utils/test/test-sx.c:
+	  Convert all time_t to time64: app-utils
+	* [r22619] src/app-utils/app-utils.i, src/base-typemaps.i: Convert
+	  all time_t to time64: swig type maps
+	* [r22618] src/core-utils/gnc-gdate-utils.c,
+	  src/core-utils/gnc-gdate-utils.h, src/core-utils/gnc-jalali.c:
+	  Convert all time_t to time64: core-utils
+	* [r22617] src/libqof/qof/gnc-date.c, src/libqof/qof/gnc-date.h,
+	  src/libqof/qof/guid.c, src/libqof/qof/kvp-util-p.h,
+	  src/libqof/qof/kvp-util.c, src/libqof/qof/qofbook.c,
+	  src/libqof/qof/qofbook.h, src/libqof/qof/qoflog.c,
+	  src/libqof/qof/test/test-gnc-date.c,
+	  src/libqof/qof/test/test-qofbook.c: Convert all time_t to
+	  time64: libqof
+	* [r22616] src/core-utils/gnc-gdate-utils.c: Convenience GDate
+	  functions to set to today and an arbitrary time64. To replace
+	  most uses of g_date_set_time_t().
+
+2012-12-01 22:43  jralls
+
+	* [r22615] src/libqof/qof/gnc-date.c, src/libqof/qof/gnc-date.h:
+	  Create 64-bit time type time64 and replace gint64 with time64
+	* [r22614] src/backend/dbi/test/test-dbi-stuff.c,
+	  src/backend/dbi/test/test-dbi.xml, src/engine/test/test-date.c:
+	  Remove date exceptions. GncDate can now handle all dates between
+	  1 Jan 0001 and 31 Dec 9999 (proleptic Gregorian).
+	* [r22613] src/backend/xml/sixtp-dom-generators.c,
+	  src/backend/xml/sixtp-utils.c, src/backend/xml/sixtp-utils.h:
+	  Replace the time_t-based timespec_secs_to_given_string with
+	  gnc-date functions. Thus saving having to write gnc_timegm.
+	* [r22612] src/libqof/qof/gnc-date.c: Work around the way
+	  g_date_time_new truncates microseconds.
+	* [r22611] src/libqof/qof/gnc-date.c: Rewrite
+	  gnc_timespec_to_iso8601_buff to use g_date_time_format.
+	* [r22610] src/libqof/qof/gnc-date.c, src/libqof/qof/gnc-date.h:
+	  New public function gnc_g_date_time_new_from_timespec_local
+
+2012-12-01 22:42  jralls
+
+	* [r22609] src/libqof/qof/gnc-date.h,
+	  src/libqof/qof/test/test-gnc-date.c: Clean up some comments
+	* [r22608] src/backend/xml/gnc-backend-xml.c,
+	  src/engine/TransLog.c, src/libqof/qof/gnc-date.c,
+	  src/libqof/qof/gnc-date.h, src/libqof/qof/test/test-gnc-date.c:
+	  Rewrite and rename xaccDateUtilGetStampNow to
+	  gnc_date_timestamp. Removing an ugly and antiquated name and
+	  providing a more concise implementation.
+	* [r22607] src/libqof/qof/gnc-date.c, src/libqof/qof/gnc-date.h,
+	  src/libqof/qof/test/test-gnc-date.c: Remove gnc_dmy2gdate, which
+	  isn't used.
+	* [r22606] src/libqof/qof/gnc-date.c,
+	  src/libqof/qof/test/test-gnc-date.c: Rewrite
+	  gnc_iso8601_to_timespec_gmt Into something that isn't an ugly
+	  hack and actually works.
+	* [r22605] src/libqof/qof/gnc-date.c: Add a note pointing out the
+	  separate implementations in qof-win32.c
+	* [r22604] src/libqof/qof/gnc-date.c, src/libqof/qof/gnc-date.h,
+	  src/libqof/qof/test/test-gnc-date.c: Implement internal
+	  replacements for localtime, mktime, etc. The builtin time
+	  functions suffer from the "2038 bug" caused by overflowing a
+	  32-bit representation of seconds from 1 Jan 1970. Provide
+	  functions based on GDateTime which use a 64-bit representation
+	  (like our Timespec), replace all of the instances in gnc-date.c,
+	  and make other adjustments needed to ensure that the tests pass
+	  on a 32-bit system.
+	* [r22603] src/libqof/qof/gnc-date.c, src/libqof/qof/gnc-date.h,
+	  src/libqof/qof/test/test-gnc-date.c,
+	  src/libqof/qof/test/test-qof.c: Fix gnc-date and test-gnc-date
+	  to pass with MinGW Special-case MSWin results. Create a private
+	  struct of function pointers so that we can continue to use the
+	  Win32 workaround functions in test-gnc-date.c while we refactor
+	  gnc-date.c to use GDateTime instead of gmtime, localtime, and
+	  mktime.
+
+2012-12-01 22:41  jralls
+
+	* [r22602] test-templates/Makefile.decl: Update Makefile.decl to a
+	  newer version that works with MinGW
+	* [r22601] src/gnc-module/test/test-dynload.c: Set up the modpath
+	  correctly for Win32, OSX, and Unix in test-dynload.c
+	* [r22600] src/gnc-module/gnc-module.c: Reformat a comment to fit
+	  on an 80-col term
+	* [r22599] src/libqof/qof/test/test-gnc-date.c,
+	  src/libqof/qof/test/test-qof.c: Multi-platform fixes to
+	  test-gnc-date.c
+
+2012-11-20 14:32  gjanssens
+
+	* [r22582] DOCUMENTERS: Synchronize DOCUMENTERS document with
+	  gnucash doc's AUTHORS file BP
+
+2012-11-13 12:32  gjanssens
+
+	* [r22544] src/html/gnc-html-webkit.c: Fix potential crash with
+	  malformed reports If reports contain an opening <object> tag,
+	  but omit the closing tag, the html string is freed and still
+	  used some time later.
+
+2012-11-12 22:07  gjanssens
+
+	* [r22542] src/html/gnc-html-webkit.c: Bug #638971 - Multicolumn
+	  report does not show more than one graph BP
+
+2012-11-09 14:15  gjanssens
+
+	* [r22541] src/gnome-utils/gnc-tree-model-split-reg.c,
+	  src/gnome-utils/gnc-tree-model-split-reg.h,
+	  src/gnome-utils/gnc-tree-view-split-reg.c,
+	  src/gnome-utils/gnc-tree-view-split-reg.h,
+	  src/gnome/gnc-plugin-page-register2.c,
+	  src/register/ledger-core/gnc-ledger-display2.c: Bug 673193 -
+	  Possible Register migration to TreeView Another update fixing a
+	  crash on Windows and Geert's Fedora system
+
+2012-11-07 03:08  jralls
+
+	* [r22539] src/app-utils/Makefile.am, src/backend/dbi/Makefile.am,
+	  src/backend/dbi/test/Makefile.am, src/backend/sql/Makefile.am,
+	  src/backend/sql/test/Makefile.am, src/backend/xml/Makefile.am,
+	  src/backend/xml/test/Makefile.am, src/bin/Makefile.am,
+	  src/business/Makefile.am,
+	  src/business/business-gnome/Makefile.am,
+	  src/business/business-ledger/Makefile.am,
+	  src/core-utils/Makefile.am, src/debug/Makefile.am,
+	  src/debug/valgrind/Makefile.am, src/engine/Makefile.am,
+	  src/gnc-module/Makefile.am, src/gnome-search/Makefile.am,
+	  src/gnome-utils/Makefile.am, src/gnome-utils/test/Makefile.am,
+	  src/gnome/Makefile.am, src/html/Makefile.am,
+	  src/import-export/Makefile.am,
+	  src/import-export/aqbanking/Makefile.am,
+	  src/import-export/csv-export/Makefile.am,
+	  src/import-export/csv-import/Makefile.am,
+	  src/import-export/log-replay/Makefile.am,
+	  src/import-export/ofx/Makefile.am,
+	  src/import-export/qif-import/Makefile.am,
+	  src/import-export/qif/Makefile.am, src/libqof/qof/Makefile.am,
+	  src/optional/gtkmm/Makefile.am, src/pixmaps/Makefile.am,
+	  src/plugins/bi_import/Makefile.am,
+	  src/plugins/customer_import/Makefile.am, src/python/Makefile.am,
+	  src/register/ledger-core/Makefile.am,
+	  src/register/register-core/Makefile.am,
+	  src/register/register-gnome/Makefile.am,
+	  src/report/business-reports/Makefile.am,
+	  src/report/locale-specific/us/Makefile.am,
+	  src/report/report-gnome/Makefile.am,
+	  src/report/report-system/Makefile.am,
+	  src/report/standard-reports/Makefile.am,
+	  src/report/stylesheets/Makefile.am,
+	  src/report/utility-reports/Makefile.am,
+	  src/test-core/Makefile.am: Fix automake INCLUDE deprecation
+	  warnings
+
+2012-11-06 21:34  jralls
+
+	* [r22533] configure.ac, src/backend/xml/io-gncxml-v2.c,
+	  src/bin/gnucash-bin.c, src/gnome-utils/gnc-tree-model-account.c,
+	  src/gnome-utils/gnc-tree-model-commodity.c,
+	  src/gnome-utils/gnc-tree-model-owner.c,
+	  src/gnome-utils/gnc-tree-model-price.c,
+	  src/gnome-utils/gnc-tree-model-split-reg.c,
+	  src/libqof/qof/guid.c: Accommodate g_threads changes in
+	  GLib-2.32 and later. Guards older implementation with ifndef
+	  HAVE_GLIB_2_32 BP
+
+2012-11-05 18:57  gjanssens
+
+	* [r22529] src/report/business-reports/taxinvoice.scm: Rewrite
+	  misleading comment
+
+2012-11-03 11:58  gjanssens
+
+	* [r22519] src/bin/gnucash-bin.c, src/gnome/dialog-print-check.c,
+	  src/gnome/dialog-sx-editor.c, src/gnome/reconcile-view.c,
+	  src/libqof/qof/qofbook.c: Small spelling and comment
+	  improvements accumulated while working on other stuff
+
+2012-11-03 09:22  gjanssens
+
+	* [r22518] po/POTFILES.in: Updated POTFILES.in file This was
+	  updated automatically by running make dist
+
+2012-11-03 09:21  gjanssens
+
+	* [r22517] src/doc/xml/Makefile.am, src/doc/xml/README: Add README
+	  file to explain the gnucash.rnc Relax NG schema
+
+2012-11-03 08:31  gjanssens
+
+	* [r22515] src/doc/xml/gnucash-v2.rnc: Bug 680887 - Updated RELAX
+	  NG schema for trunk XML file format Author: Baptiste Carvello
+	  <devel@baptiste-carvello.net>
+
+2012-11-03 08:20  gjanssens
+
+	* [r22514] src/gnome-utils/gnc-tree-model-split-reg.c,
+	  src/gnome-utils/gnc-tree-model-split-reg.h,
+	  src/gnome-utils/gnc-tree-view-split-reg.c,
+	  src/gnome-utils/gnc-tree-view-split-reg.h,
+	  src/gnome/gnc-plugin-page-register2.c,
+	  src/gnome/gnc-split-reg2.c,
+	  src/register/ledger-core/gnc-ledger-display2.c: Register rewrite
+	  - another update Filter/sort should now work. Author: Robert
+	  Fewell <14ubobit@gmail.com>
+
+2012-11-02 22:21  jralls
+
+	* [r22512] src/optional/python-bindings/tests/Makefile.am: Fix
+	  python tests for out-of-source builds
+	* [r22511] src/backend/dbi/test/Makefile.am,
+	  src/backend/dbi/test/test-backend-dbi.c,
+	  src/backend/dbi/test/utest-backend-dbi-basic.c,
+	  src/backend/dbi/test/utest-backend-dbi-business.c: Fix
+	  backend-dbi tests to run from a separate build directory Include
+	  asserts to fail immediately if either the dbi or xml backends
+	  fail to load.
+
+2012-11-01 10:35  gjanssens
+
+	* [r22476] Makefile.am, configure.ac, intl-scm/Makefile.am,
+	  packaging/win32/build_package.sh,
+	  packaging/win32/build_package_git.sh,
+	  packaging/win32/defaults.sh, packaging/win32/dist-impl.sh,
+	  packaging/win32/install-impl.sh, src/Makefile.am,
+	  src/app-utils/Makefile.am, src/bin/gnucash-bin.c,
+	  src/core-utils/Makefile.am, src/engine/Makefile.am,
+	  src/gnc-module/Makefile.am,
+	  src/gnc-module/test/mod-bar/Makefile.am,
+	  src/gnc-module/test/mod-baz/Makefile.am,
+	  src/gnc-module/test/mod-foo/Makefile.am, src/gnc/main.cpp,
+	  src/gnome-utils/Makefile.am, src/gnome-utils/gnc-main-window.c,
+	  src/gnome-utils/gnc-splash.c, src/gnome/Makefile.am,
+	  src/html/Makefile.am, src/optional/python-bindings/Makefile.am,
+	  src/pixmaps/Makefile.am, src/report/report-gnome/Makefile.am,
+	  src/report/report-system/Makefile.am, src/test-core/Makefile.am,
+	  util/gnc-scm-info, util/gnc-vcs-info: Change of mind. Use scm
+	  instead of vcs. scm is the modern term. vcs is rather used to
+	  refer to archaic systems such as cvs and older. I wish I
+	  remembered this before my previous commit. Oh well...
+
+2012-10-31 21:38  gjanssens
+
+	* [r22475] Makefile.am, configure.ac, intl-scm/Makefile.am,
+	  packaging/win32/build_package.sh,
+	  packaging/win32/build_package_git.sh,
+	  packaging/win32/defaults.sh, packaging/win32/dist-impl.sh,
+	  packaging/win32/install-impl.sh, packaging/win32/install.sh,
+	  packaging/win32/reset.sh, src/Makefile.am,
+	  src/app-utils/Makefile.am, src/bin/gnucash-bin.c,
+	  src/bin/gnucash-strip-svn-datafile.sh,
+	  src/core-utils/Makefile.am, src/core-utils/gnc-main.h,
+	  src/doc/python-bindings-doxygen.py, src/engine/Makefile.am,
+	  src/gnc-module/Makefile.am,
+	  src/gnc-module/test/mod-bar/Makefile.am,
+	  src/gnc-module/test/mod-baz/Makefile.am,
+	  src/gnc-module/test/mod-foo/Makefile.am, src/gnc/main.cpp,
+	  src/gnome-utils/Makefile.am, src/gnome-utils/gnc-main-window.c,
+	  src/gnome-utils/gnc-splash.c, src/gnome/Makefile.am,
+	  src/html/Makefile.am, src/optional/python-bindings/Makefile.am,
+	  src/optional/python-bindings/gnucash_core.py,
+	  src/pixmaps/Makefile.am, src/report/report-gnome/Makefile.am,
+	  src/report/report-system/Makefile.am, src/test-core/Makefile.am,
+	  util/gnc-svnversion, util/gnc-vcs-info: Minor changes to
+	  indicate svn is not the only/primary vcs used. The code actually
+	  has provisions for svn, svk, git and bzr. Only svn and git are
+	  actively used by the core developers though. This involves
+	  changing - filenames that contained svn while meant for multiple
+	  vcs's - variable and macro names that are relevant for multiple
+	  vcs's - the various locations where the vcs revision info is
+	  displayed to the user, to mention the actual vcs used instead of
+	  standard "svn" While at the last item, I also changed the text
+	  printed when gnucash is called with the --version parameter, to
+	  reuse the translatable string that is also used for the about
+	  dialog. This saves us one string to translate.
+
+2012-10-31 12:14  gjanssens
+
+	* [r22474] packaging/win32/build_tags_git.sh,
+	  packaging/win32/defaults.sh, packaging/win32/install-impl.sh:
+	  Win32 build - build docs either from git (default) or svn
+
+2012-10-27 23:30  jralls
+
+	* [r22465] src/engine/SchedXaction.c: Allow SchedXaction to safely
+	  handle having g_object_property_set called on end_date and
+	  last_date with invalid GDates. This happens routinely when those
+	  values are empty and are restored from SQL. Thanks to all
+	  warnings being fatal when testing, this caused the dbi tests to
+	  fail. [BP]
+	* [r22464] src/backend/dbi/test/test-dbi-stuff.c: Enable and
+	  correct all store-and-reload basic tests Replacing printed
+	  errors and "do_test" with proper asserts. There's a fake do_test
+	  to let it compile with the still unfixed but also unused safe
+	  save and version check tests.
+	* [r22463] src/backend/dbi/test/test-dbi-business-stuff.c,
+	  src/backend/dbi/test/utest-backend-dbi-basic.c: Replace in-test
+	  setup and teardown with a fixture.
+	* [r22462] src/backend/dbi/test/test-dbi-business-stuff.c,
+	  src/backend/dbi/test/test-dbi-stuff.c,
+	  src/backend/dbi/test/utest-backend-dbi-basic.c: Remove local log
+	  handler and use checked handler from utest-support.
+	* [r22461] src/backend/dbi/test/Makefile.am: Fix dbi-test linking
+	  error
+
+2012-10-27 23:29  jralls
+
+	* [r22460] src/backend/dbi/test/test-backend-dbi.c: Load
+	  gncmod-backend-xml so that the tests actually run
+	* [r22459] src/libqof/qof/qofbackend.c: Try to load
+	  libgncmod_foo.dylib if libgncmod_foo.so doesn't exist Workaround
+	  for Darwin similar to what's already in gnc_module_refresh(). BP
+	* [r22458] configure.ac: [Bug 686830] Non-portable equality test
+	  in configure.ac [BP]
+	* [r22457] src/gnome/gnc-split-reg2.c: Fix typo from r22448
+
+2012-10-26 08:50  gjanssens
+
+	* [r22451] src/backend/dbi/test/test-dbi-stuff.c: Add sql drop
+	  index test to cover bug #677488
+
+2012-10-26 08:49  gjanssens
+
+	* [r22450] src/backend/dbi/gnc-backend-dbi-priv.h,
+	  src/backend/dbi/gnc-backend-dbi.c: Bug #677488 - DROP INDEX
+	  missing ON <table> BP
+	* [r22449] src/backend/dbi/test/utest-backend-dbi-basic.c: Add
+	  unittests for mysql and postgresql backends
+
+2012-10-18 08:15  gjanssens
+
+	* [r22448] po/POTFILES.in, src/engine/Split.c, src/engine/Split.h,
+	  src/engine/Transaction.c, src/engine/Transaction.h,
+	  src/gnome-utils/Makefile.am,
+	  src/gnome-utils/gnc-tree-model-split-reg.c,
+	  src/gnome-utils/gnc-tree-model-split-reg.h,
+	  src/gnome-utils/gnc-tree-view-split-reg.c,
+	  src/gnome-utils/gnc-tree-view-split-reg.h,
+	  src/gnome/Makefile.am, src/gnome/gnc-plugin-page-account-tree.c,
+	  src/gnome/gnc-plugin-page-register2.c,
+	  src/gnome/gnc-plugin-page-register2.h,
+	  src/gnome/gnc-split-reg2.c, src/gnome/gnc-split-reg2.h,
+	  src/gnome/gtkbuilder/Makefile.am,
+	  src/gnome/gtkbuilder/gnc-plugin-page-register2.glade,
+	  src/gnome/ui/gnc-plugin-page-account-tree2-ui.xml,
+	  src/register/ledger-core/Makefile.am,
+	  src/register/ledger-core/gnc-ledger-display2.c,
+	  src/register/ledger-core/gnc-ledger-display2.h: Further register
+	  rewrite work. This patch is an updated patch which I have been
+	  fighting with the sort model on. It allows you to add, delete
+	  and modify basic transactions and splits with the toolbar
+	  buttons. Jump and move to blank are also working. Visual
+	  indication of read only and future transactions are also
+	  implemented. As before, do not open same account in old and new
+	  register. Tab key works manually but needs more work, cell
+	  editable value does not seem to be reliable which was the way I
+	  was going to auto step over uneditable cells. There is another
+	  problem if you enter the debit/credit value before the account,
+	  you will get an error in the trace file but entries are
+	  recorded, not sure of answer. New transactions are not added in
+	  date order at the moment, this was going to be done by the sort
+	  model or the existing method of reload register via the
+	  commented out watchers in ledger-display. All the numeric
+	  functions are the existing ones from the rewrite and as such I
+	  have not proved they are correct but a basic transaction seems
+	  to work. Author: Robert Fewell <14ubobit@gmail.com>
+
+2012-10-18 07:56  gjanssens
+
+	* [r22447] src/gnome/gnc-plugin-register2.c,
+	  src/gnome/ui/gnc-plugin-register2-ui.xml: Register rewrite: make
+	  separate menu item for general ledger based on new register
+	  code. This should restore the original general ledger which was
+	  replaced by the new register rewrite code. Author: Robert Fewell
+	  <14ubobit@gmail.com>
+
+2012-10-16 20:06  cstim
+
+	* [r22445] src/import-export/aqbanking/dialog-ab-trans.c,
+	  src/import-export/aqbanking/dialog-ab-trans.h,
+	  src/import-export/aqbanking/gnc-ab-transfer.c,
+	  src/import-export/aqbanking/gnc-ab-utils.c,
+	  src/import-export/aqbanking/gnc-plugin-aqbanking-ui.xml,
+	  src/import-export/aqbanking/gnc-plugin-aqbanking.c: Add some
+	  initial implementation for international (European) SEPA online
+	  transfers. Needs testing, though - my bank doesn't offer it for
+	  me.
+
+2012-10-02 21:44  mikee
+
+	* [r22433] src/plugins/customer_import/dialog-customer-import.c:
+	  Re-indentation of source code. Done using the following options:
+	  astyle --indent=spaces=4 --brackets=break --pad-oper
+	  --pad-header --suffix=noneR
+
+2012-10-02 21:42  mikee
+
+	* [r22432] src/plugins/customer_import/dialog-customer-import.c:
+	  Fix bug in customer/vendor importer where new customers/vendors
+	  were always created even if one with a matching ID already
+	  exists. The intended behaviour is to update customer or vendor
+	  data if one already exists with a matching ID.
+
+2012-10-02 20:12  mikee
+
+	* [r22431]
+	  src/plugins/customer_import/dialog-customer-import-gui.c: Fix
+	  typo in regex. modified:
+	  customer_import/dialog-customer-import-gui.c
+
+2012-10-01 00:58  jralls
+
+	* [r22429] src/quotes/gnc-fq-update.in: Add Mozilla::CA as CPAN
+	  dependency for new F::Q TIAA-CREF module BP
+
+2012-09-30 19:05  cstim
+
+	* [r22428] packaging/win32/defaults.sh: Upgrade aqbanking package
+	  versions.
+
+2012-09-29 18:29  jralls
+
+	* [r22427] src/core-utils/binreloc.c,
+	  src/gnome-utils/gnc-main-window.c: Update to gtkosxapplication
+	  version 2
+
+2012-09-24 19:07  gjanssens
+
+	* [r22426] src/bin/gnucash-bin.c: Move option parsing back into
+	  its own function Since we can't use gtk_init_with_args, it makes
+	  more sense to keep the command line processing in one spot, more
+	  or less as it was before.
+
+2012-09-24 17:06  gjanssens
+
+	* [r22425] src/gnc-module/gnc-module.c: Don't set the log file in
+	  gnc_module_init This should fix the logging to stderr since
+	  r22419. gnc_module_init used to change the log path to stderr.
+	  Presumably this was needed before, as logging used to be
+	  initialized after module initialization. This has now changed,
+	  so gnc_module_init can make use of qoflog settings as chosen by
+	  the user (which by default means logging to gnucash.trace).
+
+2012-09-24 16:42  fell
+
+	* [r22424] doc, doc/Makefile.am, doc/gnc-fq-dump.1,
+	  doc/gnc-fq-helper.1: Bug #684719 - Man pages for gnc-fq-* perl
+	  scripts first (static) publishing of the pod extracted man pages
+	  until we have some consense.
+
+2012-09-24 10:25  fell
+
+	* [r22423] src/quotes/README, src/quotes/gnc-fq-dump,
+	  src/quotes/gnc-fq-update.in: Fix [13303] files were renamed, but
+	  content not adjusted. This would produce misguiding man pages -
+	  if we would produce them. Additional were a few typos incomments
+	  fixed. BP ?
+
+2012-09-23 19:53  cstim
+
+	* [r22419] src/import-export/aqbanking/gnc-plugin-aqbanking.c:
+	  Aqbanking plugin: Cache pointer to GncMainWindow each time the
+	  plugin command is started. Hopefully fixes bug#684632.
+
+2012-09-19 20:52  gjanssens
+
+	* [r22399] src/bin/gnucash-bin.c: Small code cleanups in the
+	  gnucash-bin code - Delay gtk_init until really required -
+	  Regroup some initialization functions - Drop qof_log
+	  initialization. gnc_log_init does it as well.
+
+2012-09-17 01:09  mta
+
+	* [r22398] src/bin/gnucash-bin.c: Parse arguments before
+	  initializing GTK so --add-price-quotes works when the GUI can't
+	  be initialized. gtk_init_with_args fails before parsing the
+	  arguments if the GUI can't be initialized.
+
+2012-09-16 15:17  fell
+
+	* [r22397] po/POTFILES.in, src/plugins/bi_import/glade: Fix of
+	  [21869]: src/plugins/bi_import/glade/* moved to gtkbuilder, but
+	  for some reason files were only trunkated.
+
+2012-09-16 13:32  fell
+
+	* [r22396] po/glossary/gnc-glossary.txt: Add "compound interest"
+	  and "principal payment" to glossary. IMHO fundamental terms
+	  found in fin.scm / loan repayment calulator
+
+2012-09-16 13:17  fell
+
+	* [r22395] src/scm/fin.scm: add futureValue and
+	  computeInterestIncrement to fin.scm as announced by jsled in
+	  http://lists.gnucash.org/pipermail/gnucash-user/2005-February/012964.html
+	  additional improving of comments
+
+2012-09-14 22:12  alex.aycinena
+
+	* [r22387] src/gnome-search/dialog-search.c: Correct error in
+	  search dialog where results sub-window(s) is(are) erroneously
+	  created. To reproduce the error, open Gnucash (for example with
+	  --nofile argument), open a Find Transactions dialog
+	  (Edit->Find), open a Find Customer dialog
+	  (Business->Customer->Find Customer), open a Gnucash Preferences
+	  dialog (Edit->Preferences) and change some preference (for
+	  example, under the Register tab, select Use system theme
+	  colors). Each time a preference is changed the Find dialogs get
+	  wider as a new results sub window is created and added to the
+	  dialog. This happens because any time gnc_gui_refresh_all is
+	  called, which is the case when a preference is changed, and on
+	  other occasions as well, the refresh_handler in dialog-search.c
+	  is called for any open search dialog which calls
+	  gnc_search_dialog_display_results which, in turn, erroneously
+	  creates and adds the sub window. If the search dialog was
+	  initially created with a result_cb, as is the case for Find
+	  Transactions, the results sub window should never be created. If
+	  it was not, as is the case with Find Customer and all other
+	  calls, only one sub window should be created per dialog and it
+	  should only be refreshed if it already exists.
+
+2012-09-11 13:10  gjanssens
+
+	* [r22384] src/register/register-gnome/Makefile.am: Add missing
+	  file to dist
+
+2012-09-11 03:29  mta
+
+	* [r22383] src/gnome-utils/dialog-transfer.c: [Bug 683222] Display
+	  the "to amount" in the exchange rate dialog when it is first
+	  shown. Also updated some comments to be more accurate.
+	* [r22382] src/engine/Transaction.c, src/engine/Transaction.h: Add
+	  xaccTransDump back, it is very useful when debugging. It was
+	  removed in SVN r21579, "Cruft Reduction"< but it's not cruft.
+
+2012-09-10 19:22  gjanssens
+
+	* [r22381] packaging/win32/install-impl.sh: Win32 build: more
+	  post-libgnome related build script changes The previous commit
+	  broke the build. Hopefully this one fixes it again.
+	* [r22380] packaging/win32/defaults.sh,
+	  packaging/win32/dist-impl.sh, packaging/win32/dist.sh,
+	  packaging/win32/install-impl.sh, packaging/win32/install.sh,
+	  packaging/win32/libbonoboui-2.24.2.patch: Win32 build: remove
+	  libgnome related parts from the build scripts
+	* [r22379] configure.ac, src/bin/Makefile.am,
+	  src/bin/gnucash-bin.c, src/core-utils/gnc-path.c,
+	  src/core-utils/gnc-path.h, src/gnome-utils/Makefile.am,
+	  src/gnome-utils/gnc-gnome-utils.c,
+	  src/gnome-utils/gnc-gnome-utils.h: Replace gnome_program_init
+	  with gtk_init This required some small reorganization of our
+	  setup code, but the end result is that gnucash is now
+	  independent of libgnome.
+
+2012-09-10 19:21  gjanssens
+
+	* [r22378] src/gnome-utils/gnc-gnome-utils.c,
+	  src/gnome-utils/gnc-ui.h: Show help and guide in gnome
+	  independent way The idea was taken from another gnome app:
+	  planner. Note that the documentation has to be installed
+	  properly for this to work on linux. Our current documentation
+	  build doesn't install the documentation in the right way and
+	  yelp won't find it. A fix has been committed, but it will only
+	  be available in the next documentation release.
+	* [r22377] src/core-utils/gnc-filepath-utils.c,
+	  src/core-utils/gnc-filepath-utils.h, src/core-utils/gnc-path.c,
+	  src/core-utils/gnc-path.h, src/gnome-utils/dialog-totd.c,
+	  src/gnome-utils/gnc-embedded-window.c,
+	  src/gnome-utils/gnc-gnome-utils.c,
+	  src/gnome-utils/gnc-gnome-utils.h, src/gnome-utils/gnc-icons.c,
+	  src/gnome-utils/gnc-main-window.c, src/gnome-utils/gnc-plugin.c,
+	  src/gnome/window-reconcile.c: Eliminate gnome dependency in file
+	  location functions As a side effect, they can now be grouped
+	  together with our other file location functions in core-utils.
+	  They no longer depend on any gui library.
+
+2012-09-09 20:26  cstim
+
+	* [r22376] src/import-export/ofx/gnc-ofx-import.c: Minor
+	  improvement of OFX import with missing date field. Unfortunately
+	  libofx doesn't do this right in any case.
+
+2012-09-09 19:01  gjanssens
+
+	* [r22375] src/gnome-utils/gnc-tree-view-account.c: Fix critical
+	  gtk warning introduced with r22360
+
+2012-09-05 13:34  gjanssens
+
+	* [r22360] src/gnome-utils/gnc-tree-view-account.c: Add comments
+	  and small code optimizations to the previous commit
+	* [r22359] src/gnome-utils/gnc-main-window.c,
+	  src/gnome-utils/gnc-tree-model-account.c,
+	  src/gnome-utils/gnc-tree-model-account.h,
+	  src/gnome-utils/gnc-tree-view-account.c,
+	  src/gnome-utils/gnc-tree-view-account.h,
+	  src/gnome-utils/gnc-tree-view.c,
+	  src/gnome-utils/gnc-tree-view.h,
+	  src/gnome-utils/gtkbuilder/dialog-preferences.glade: Bug #682660
+	  - Add Account background colour to Account page. Author: Robert
+	  Fewell <14ubobit@gmail.com>
+
+2012-09-05 10:45  gjanssens
+
+	* [r22358] configure.ac, src/app-utils/gnc-sx-instance-model.c,
+	  src/business/business-gnome/Makefile.am,
+	  src/business/business-gnome/dialog-invoice.c,
+	  src/business/business-gnome/dialog-order.c,
+	  src/gnome-utils/gnc-date-edit.c,
+	  src/gnome-utils/gnc-main-window.c, src/gnome/Makefile.am,
+	  src/gnome/dialog-sx-editor.c, src/gnome/gnc-split-reg.c,
+	  src/html/Makefile.am, src/import-export/aqbanking/Makefile.am,
+	  src/register/register-gnome/Makefile.am,
+	  src/register/register-gnome/combocell-gnome.c,
+	  src/register/register-gnome/datecell-gnome.c,
+	  src/register/register-gnome/formulacell-gnome.c,
+	  src/register/register-gnome/gnucash-color.c,
+	  src/register/register-gnome/gnucash-cursor.c,
+	  src/register/register-gnome/gnucash-cursor.h,
+	  src/register/register-gnome/gnucash-date-picker.c,
+	  src/register/register-gnome/gnucash-date-picker.h,
+	  src/register/register-gnome/gnucash-grid.c,
+	  src/register/register-gnome/gnucash-grid.h,
+	  src/register/register-gnome/gnucash-header.c,
+	  src/register/register-gnome/gnucash-header.h,
+	  src/register/register-gnome/gnucash-item-edit.c,
+	  src/register/register-gnome/gnucash-item-list.c,
+	  src/register/register-gnome/gnucash-item-list.h,
+	  src/register/register-gnome/gnucash-sheet.c,
+	  src/register/register-gnome/gnucash-sheet.h,
+	  src/register/register-gnome/gnucash-sheetP.h,
+	  src/register/register-gnome/gnucash-style.c,
+	  src/register/register-gnome/gnucash-style.h,
+	  src/register/register-gnome/pricecell-gnome.c,
+	  src/register/register-gnome/quickfillcell-gnome.c,
+	  src/register/register-gnome/table-gnome.c: Reduce dependency on
+	  libgnome After this patch the only parts still requiring gnome
+	  libraries are - src/bin/gnucash-bin.c (for gnome_program_init) -
+	  src/gnome-utils/gnc-gnome-utils.c (for gnome_program_init) -
+	  register-gnome (only uses libgnomecanvas) Some refactoring was
+	  required in register-gnome to prevent other parts of GnuCash to
+	  continue to depend on libgnomecanvas as well (the register
+	  interface needlessly exposed the implementation details, thus
+	  leaking GnomeCanvas dependencies to other parts of gnucash).
+	  Most other changes simply replaced gnome specific stuff with gtk
+	  equivalents.
+
+2012-09-05 10:44  gjanssens
+
+	* [r22357] src/gnome-utils/gnc-date-edit.c,
+	  src/gnome-utils/gnc-main-window.c,
+	  src/register/register-gnome/combocell-gnome.c,
+	  src/register/register-gnome/datecell-gnome.c,
+	  src/register/register-gnome/formulacell-gnome.c,
+	  src/register/register-gnome/gnucash-date-picker.c,
+	  src/register/register-gnome/gnucash-item-list.c,
+	  src/register/register-gnome/gnucash-sheet.c,
+	  src/register/register-gnome/pricecell-gnome.c,
+	  src/register/register-gnome/quickfillcell-gnome.c: Replace
+	  deprecated GDK_* with GDK_KEY_*
+	* [r22356] src/business/business-gnome/dialog-date-close.c,
+	  src/business/business-gnome/gtkbuilder/dialog-date-close.glade:
+	  Simplify dialog creation on date close dialog
+
+2012-09-02 19:49  gjanssens
+
+	* [r22354] src/report/standard-reports/advanced-portfolio.scm: Bug
+	  #632931 - Advanced portfolio: add "rate of gain" column
+
+2012-09-01 14:54  mikee
+
+	* [r22353] src/import-export/csv-export/assistant-csv-export.c,
+	  src/import-export/csv-import/assistant-csv-account-import.c,
+	  src/import-export/csv-import/assistant-csv-account-import.glade,
+	  src/import-export/csv-import/assistant-csv-trans-import.c: Bug
+	  #682869 - In CSV transaction importer, re-implement double mouse
+	  click for file selection. From a patch by Bob. Patch also
+	  resizes small OK button.
+
+2012-08-30 17:37  gjanssens
+
+	* [r22352] src/business/business-gnome/dialog-payment.c,
+	  src/business/business-gnome/gtkbuilder/dialog-payment.glade:
+	  Payment dialog: use more sensible names for payment amounts
+
+2012-08-29 20:09  gjanssens
+
+	* [r22351] src/register/ledger-core/split-register-model.c: Bug
+	  #344869 - No warning when you change a reconciled split from
+	  another account in basic ledger mode This patch brings up a
+	  dialogue when any field in a transaction/split is changed when
+	  the transaction has a reconciled split. Exceptions are the
+	  notes, action and memo fields. Those can be changed at all
+	  times. This patch will not be backported as it introduces new
+	  translatable strings. Author: Robert Fewell <14ubobit@gmail.com>
+
+2012-08-24 14:38  gjanssens
+
+	* [r22348] doc/tip_of_the_day.list.in: Added new tip for scheduled
+	  transactions
+
+2012-08-24 01:40  fell
+
+	* [r22346] DOCUMENTERS: Update DOCUMENTERS to gnucash-docs/AUTHORS
+	  r17603 [BP]
+
+2012-08-22 14:01  gjanssens
+
+	* [r22342] src/gnome-utils/dialog-utils.c: Question dialog: treat
+	  close button in title bar as "Cancel" iso "No" BP
+
+2012-08-22 13:22  gjanssens
+
+	* [r22340] src/gnome-utils/dialog-utils.c: Bug #610648 - Change
+	  Reconciled Split Dialog ignores pressing Cancel Author: Robert
+	  Fewell <14ubobit@gmail.com> BP
+
+2012-08-22 08:36  fell
+
+	* [r22338] configure.ac: Add info about usage of
+	  locale-specific-tax by german SKR04 to configure. Sequitur of
+	  Bug #473349 / r16503 [BP]
+
+2012-08-17 21:26  gjanssens
+
+	* [r22330] packaging/win32/dist-impl.sh: Win32 nightly: fix syntax
+	  error caused by previous commit
+
+2012-08-17 20:30  gjanssens
+
+	* [r22329] packaging/win32/dist-impl.sh: Win32 nightly: match
+	  built package name to the one expected for upload
+
+2012-08-17 16:13  gjanssens
+
+	* [r22328] packaging/win32/daily_build_git.sh,
+	  packaging/win32/weekly_build_git.sh: W32 nightly: fix typos in
+	  previous commit
+
+2012-08-17 15:55  gjanssens
+
+	* [r22327] packaging/win32/build_package_git.sh,
+	  packaging/win32/daily_build.bat,
+	  packaging/win32/daily_build_git.sh,
+	  packaging/win32/weekly_build_git.sh: Win32 nightlies: more small
+	  build tweaks - start from the proper base directory
+	  (daily_build.bat) - don't build daily/weekly unless there are
+	  new commits since the last build
+
+2012-08-16 18:13  gjanssens
+
+	* [r22326] src/gnome/ui/gnc-reconcile-window-ui.xml,
+	  src/gnome/window-reconcile.c: Follow up on bug #563565 Keep only
+	  one button in reconcile to create a new transaction. This button
+	  will automatically create a transaction that balances the
+	  currently ongoing reconciliation. The new button has been
+	  removed as it is just as easy to simply enter a transaction in
+	  the still open register.
+
+2012-08-16 16:21  gjanssens
+
+	* [r22325] packaging/win32/build_package_git.sh: Win32 nightly
+	  build: add timestamp in package name created from git
+
+2012-08-16 12:25  gjanssens
+
+	* [r22324] packaging/win32/build_tags_git.sh: Win32 tag build: fix
+	  yet another typo
+
+2012-08-16 11:12  gjanssens
+
+	* [r22323] packaging/win32/build_tags_git.sh: Win32 tag build:
+	  avoid Windows paths in git commands
+
+2012-08-16 11:01  gjanssens
+
+	* [r22322] packaging/win32/build_tags_git.sh: Win32 tag build: fix
+	  another typo
+
+2012-08-16 10:47  gjanssens
+
+	* [r22321] packaging/win32/build_tags_git.sh: Win32 tag build: fix
+	  typo
+
+2012-08-16 10:27  gjanssens
+
+	* [r22320] packaging/win32/build_tags_git.sh: Win32 tag builds:
+	  match tag cache syntax with the actual tag checks
+
+2012-08-16 10:15  gjanssens
+
+	* [r22319] packaging/win32/build_tags_git.sh: Win32: restore
+	  UPDATE_SOURCES in tags build script. The parameter has been
+	  obsoleted recently, but older tags may still depend on its
+	  availability and the tag script is supposed to be capable of
+	  building older tags as well.
+
+2012-08-16 10:05  gjanssens
+
+	* [r22318] packaging/win32/build_tags_git.sh: Win32: call proper
+	  script when building tags from git
+
+2012-08-16 09:37  gjanssens
+
+	* [r22317] packaging/win32/build_tags.sh,
+	  packaging/win32/build_tags_git.sh,
+	  packaging/win32/daily_build.sh,
+	  packaging/win32/daily_build_git.sh,
+	  packaging/win32/weekly_build.sh,
+	  packaging/win32/weekly_build_git.sh: Win32 automated build: add
+	  note about Windows' restriction on updating files that are in
+	  use in every file that can be affected.
+	* [r22316] packaging/win32/daily_build.bat: Win32: call proper
+	  script to autobuild from git
+
+2012-08-15 09:55  gjanssens
+
+	* [r22315] packaging/win32/build_package_git.sh: Win32: fix log
+	  file name generated by automated build
+	* [r22314] packaging/win32/weekly_build.sh: Make weekly build
+	  truly weekly again This was temporarily changed to daily during
+	  the 2.4.10 release timeframe to stomp out some release bugs.
+	  That should no longer be necessary.
+	* [r22313] src/gnome/reconcile-view.c: Small optimizations to the
+	  previous commit.
+
+2012-08-15 09:54  gjanssens
+
+	* [r22312] src/gnome/reconcile-view.c, src/gnome/reconcile-view.h,
+	  src/gnome/ui/gnc-reconcile-window-ui.xml,
+	  src/gnome/window-reconcile.c: Bug #463969 - Allow Selection of
+	  Multiple Transactions During Reconcile Bug #628402 - Ctrl-F in
+	  Reconcile doesn't invoke search, but (F)inishes the
+	  reconciliation Author: Robert Fewell <14ubobit@gmail.com>
+
+2012-08-15 08:37  gjanssens
+
+	* [r22311] packaging/win32/build_tags_git.sh: Win32: more fixes
+	  for git based tag build
+
+2012-08-14 16:04  gjanssens
+
+	* [r22310] packaging/win32/build_tags_git.sh: Win32: fix tag build
+	  for git
+
+2012-08-14 15:14  gjanssens
+
+	* [r22309] packaging/win32/README,
+	  packaging/win32/daily_build.bat: Win32 nightly build: build
+	  trunk from git by default. Additionally, update the README file
+	  to explain how the start from scratch with a git repository.
+	* [r22308] packaging/win32/build_tags_git.sh,
+	  packaging/win32/daily_build.sh, packaging/win32/defaults.sh,
+	  packaging/win32/install-impl.sh, packaging/win32/install.sh:
+	  Win32 build: remove UPDATE_SOURCES parameter Developers should
+	  manually choose when and how to update their checked out
+	  repository. Automated builders can simply write a short wrapper
+	  script around the install the does the update for them. The
+	  daily_build_git.sh and daily_build.sh scripts are fine examples.
+
+2012-08-12 23:21  jralls
+
+	* [r22307] src/gnome/assistant-loan.c: Fix compiler warning about
+	  'static' not being first in a declaration
+
+2012-08-12 19:36  gjanssens
+
+	* [r22306] packaging/win32/defaults.sh,
+	  packaging/win32/dist-impl.sh: Win32: more automated build from
+	  git fixes - use consistent naming for the final installer
+	  executable - Default to no for UPDATE_SOURCES
+
+2012-08-11 16:29  gjanssens
+
+	* [r22305] packaging/win32/build_package_git.sh,
+	  packaging/win32/daily_build_git.sh: Win32: bugfix in the git
+	  scripts
+
+2012-08-11 14:24  gjanssens
+
+	* [r22304] packaging/win32/build_package_git.sh,
+	  packaging/win32/build_tags_git.sh,
+	  packaging/win32/daily_build_git.sh,
+	  packaging/win32/weekly_build_git.sh: First attempt at rewriting
+	  the win32 automated build scripts for git
+	* [r22303] packaging/win32/install-impl.sh: Win32: fix
+	  UPDATE_SOURCES with a git repo IMPORTANT: the update mechanism
+	  from git has been kept deliberately simple because svn updates
+	  don't really match well to git's distributed repository concept.
+	  It assumes you are working as a non-committer (see
+	  http://wiki.gnucash.org/wiki/Git for what that means) and will
+	  simply try to pull the current branch from the upstream
+	  repository. I don't know of any currently active committer that
+	  works from Windows, so to start that should be sufficient.
+	  Setting up git-update instead of git pull requires more thorough
+	  changes in the Windows build system: - it requires at least perl
+	  5.8 (our default msys-dtk only install perl 5.6) - the
+	  environment variable GITPERLLIB should be set to the perl
+	  library that comes with the installed git. - git-update should
+	  be installed somewhere
+
+2012-08-10 18:41  gjanssens
+
+	* [r22302] po/POTFILES.in, po/POTFILES.skip: Update POTFILES.in
+	  after recent file additions/removals And remove the new register
+	  related c files from POTFILES.skip or we risk forgetting to
+	  translate them when the new register becomes production ready
+
+2012-08-10 16:06  gjanssens
+
+	* [r22301] src/gnome-utils/gnc-tree-model-split-reg.c,
+	  src/gnome-utils/gnc-tree-view-split-reg.c,
+	  src/gnome/gnc-plugin-page-account-tree.c,
+	  src/gnome/ui/Makefile.am,
+	  src/gnome/ui/gnc-plugin-page-account-tree-ui.xml,
+	  src/gnome/ui/gnc-plugin-page-account-tree2-ui.xml: Register2:
+	  small improvements - Fix make check warnings reported by Frank
+	  H. Ellenberger - Wrap code in ifdef's so it can easily be
+	  disabled. Patch by Robert Fewell
+
+2012-08-09 22:45  jralls
+
+	* [r22298] po/POTFILES.skip: [Bug 680402] Tests fail due to unused
+	  translations Add all scheme files to POTFILES.skip so that
+	  intltool-update > 0.50 will ignore them. Scheme file translation
+	  strings are handled by intl-scm/. BP
+
+2012-08-09 22:44  jralls
+
+	* [r22297] configure.ac: Configure won't accept python on Debian
+	  Wheezy Debian Wheezy uses python2.pc instead of python.pc. Check
+	  both. BP
+
+2012-08-08 16:25  gjanssens
+
+	* [r22296] src/gnome/reconcile-view.c: Bug #677859 - Allow space
+	  to (un)reconcile in the reconcile window This got lost in the
+	  conversion from clists to gtktreeview Patch by Robert Fewell
+
+2012-08-08 05:38  jralls
+
+	* [r22294] src/libqof/qof/test/test-gnc-date.c: Fix a compile
+	  error in test-gnc-date.c on 32-bit builds
+	* [r22293] src/bin/gnucash-bin.c: [Bug 680613] Date format setting
+	  seems to be ignored since version 2.4.9 Work around strange
+	  side-effect of r21665 which caused LC_TIME to be changed after
+	  it had been set by setlocale(LC_ALL) in set_mac_locale(). BP
+
+2012-08-07 18:24  gjanssens
+
+	* [r22292] po/POTFILES.in,
+	  src/business/business-gnome/dialog-customer.c,
+	  src/business/business-gnome/dialog-employee.c,
+	  src/business/business-gnome/dialog-invoice.c,
+	  src/business/business-gnome/dialog-invoice.h,
+	  src/business/business-gnome/dialog-job.c,
+	  src/business/business-gnome/dialog-order.c,
+	  src/business/business-gnome/dialog-vendor.c,
+	  src/gnome-search/dialog-search.c,
+	  src/gnome-search/dialog-search.h, src/gnome-utils/Makefile.am,
+	  src/gnome-utils/dialog-query-list.c,
+	  src/gnome-utils/dialog-query-list.h,
+	  src/gnome-utils/dialog-query-view.c,
+	  src/gnome-utils/dialog-query-view.h,
+	  src/gnome-utils/dialog-utils.c, src/gnome-utils/dialog-utils.h,
+	  src/gnome-utils/gnc-query-list.c,
+	  src/gnome-utils/gnc-query-list.h,
+	  src/gnome-utils/gnc-query-view.c,
+	  src/gnome-utils/gnc-query-view.h,
+	  src/gnome-utils/gtkbuilder/Makefile.am,
+	  src/gnome-utils/gtkbuilder/dialog-query-list.glade,
+	  src/gnome-utils/gtkbuilder/dialog-query-view.glade,
+	  src/gnome/Makefile.am, src/gnome/reconcile-list.c,
+	  src/gnome/reconcile-list.h, src/gnome/reconcile-view.c,
+	  src/gnome/reconcile-view.h, src/gnome/window-reconcile.c,
+	  src/gnome/window-reconcile.h: Bug #677859 - Remove depreciated
+	  CList functions Patch by Robert Fewell
+
+2012-08-07 17:25  gjanssens
+
+	* [r22291] src/import-export/import-main-matcher.c,
+	  src/register/ledger-core/split-register-model.c: Bug #672161 -
+	  New CSV account and transaction importer Final patch by Robert
+	  Fewell
+
+2012-08-07 17:24  gjanssens
+
+	* [r22290] src/app-utils/file-utils.c,
+	  src/app-utils/gnc-component-manager.c,
+	  src/app-utils/gnc-ui-util.c, src/app-utils/option-util.c,
+	  src/backend/sql/gnc-backend-sql.c,
+	  src/backend/sql/gnc-transaction-sql.c,
+	  src/backend/xml/gnc-account-xml-v2.c,
+	  src/backend/xml/gnc-backend-xml.c,
+	  src/backend/xml/gnc-commodity-xml-v2.c,
+	  src/backend/xml/gnc-freqspec-xml-v2.c,
+	  src/backend/xml/gnc-owner-xml-v2.c,
+	  src/backend/xml/gnc-pricedb-xml-v2.c,
+	  src/backend/xml/gnc-schedxaction-xml-v2.c,
+	  src/backend/xml/gnc-tax-table-xml-v2.c,
+	  src/backend/xml/gnc-transaction-xml-v2.c,
+	  src/backend/xml/io-example-account.c,
+	  src/backend/xml/io-gncxml-v1.c, src/backend/xml/io-gncxml-v2.c,
+	  src/backend/xml/sixtp-dom-parsers.c, src/backend/xml/sixtp.c,
+	  src/backend/xml/test/test-dom-converters1.c,
+	  src/backend/xml/test/test-file-stuff.c,
+	  src/backend/xml/test/test-load-xml2.c,
+	  src/backend/xml/test/test-string-converters.c,
+	  src/backend/xml/test/test-xml-account.c,
+	  src/backend/xml/test/test-xml-commodity.c,
+	  src/backend/xml/test/test-xml-transaction.c,
+	  src/business/business-gnome/dialog-customer.c,
+	  src/business/business-gnome/dialog-employee.c,
+	  src/business/business-gnome/dialog-invoice.c,
+	  src/business/business-gnome/dialog-job.c,
+	  src/business/business-gnome/dialog-order.c,
+	  src/business/business-gnome/dialog-payment.c,
+	  src/business/business-gnome/dialog-vendor.c,
+	  src/business/business-gnome/gnc-plugin-business.c,
+	  src/business/business-ledger/gncEntryLedgerControl.c,
+	  src/business/business-ledger/gncEntryLedgerModel.c,
+	  src/core-utils/test/test-gnc-uri-utils.c,
+	  src/core-utils/test/test-resolve-file-path.c,
+	  src/engine/Account.c, src/engine/Query.c,
+	  src/engine/Recurrence.c, src/engine/Split.c,
+	  src/engine/Transaction.c, src/engine/cap-gains.c,
+	  src/engine/engine-helpers.c, src/engine/gnc-commodity.c,
+	  src/engine/gnc-pricedb.c, src/engine/gncAddress.c,
+	  src/engine/gncBillTerm.c, src/engine/gncCustomer.c,
+	  src/engine/gncEmployee.c, src/engine/gncEntry.c,
+	  src/engine/gncInvoice.c, src/engine/gncJob.c,
+	  src/engine/gncOrder.c, src/engine/gncOwner.c,
+	  src/engine/gncTaxTable.c, src/engine/gncVendor.c,
+	  src/engine/test/test-address.c, src/engine/test/test-business.c,
+	  src/engine/test/test-commodities.c,
+	  src/engine/test/test-customer.c,
+	  src/engine/test/test-employee.c, src/engine/test/test-job.c,
+	  src/engine/test/test-object.c, src/engine/test/test-querynew.c,
+	  src/engine/test/test-vendor.c,
+	  src/gnome-utils/account-quickfill.c,
+	  src/gnome-utils/dialog-account.c,
+	  src/gnome-utils/dialog-commodity.c,
+	  src/gnome-utils/dialog-options.c,
+	  src/gnome-utils/dialog-transfer.c,
+	  src/gnome-utils/gnc-main-window.c,
+	  src/gnome-utils/gnc-menu-extensions.c,
+	  src/gnome-utils/gnc-query-list.c,
+	  src/gnome-utils/gnc-sx-list-tree-model-adapter.c,
+	  src/gnome-utils/gnc-tree-model-split-reg.c,
+	  src/gnome-utils/gnc-tree-view-account.c,
+	  src/gnome-utils/search-param.c, src/gnome/dialog-commodities.c,
+	  src/gnome/dialog-price-edit-db.c,
+	  src/gnome/dialog-price-editor.c, src/gnome/dialog-tax-info.c,
+	  src/html/gnc-html-webkit.c, src/html/gnc-html.c,
+	  src/import-export/csv-export/assistant-csv-export.c,
+	  src/import-export/csv-import/assistant-csv-trans-import.c,
+	  src/import-export/import-backend.c, src/libqof/qof/qofclass.c,
+	  src/libqof/qof/qofinstance.c, src/libqof/qof/qoflog.c,
+	  src/libqof/qof/qofobject.c, src/libqof/qof/qofquery.c,
+	  src/libqof/qof/qofquerycore.c, src/libqof/qof/qofreference.c,
+	  src/libqof/qof/qofsession.c, src/libqof/qof/qofutil.c,
+	  src/libqof/qof/qofutil.h,
+	  src/register/ledger-core/gnc-ledger-display.c,
+	  src/register/ledger-core/split-register-control.c,
+	  src/register/ledger-core/split-register-model.c,
+	  src/register/ledger-core/split-register.c,
+	  src/register/register-core/basiccell.c,
+	  src/register/register-core/numcell.c,
+	  src/register/register-core/pricecell.c,
+	  src/register/register-core/table-allgui.c,
+	  src/register/register-gnome/gnucash-item-list.c,
+	  src/report/report-gnome/gnc-plugin-page-report.c: Refactor
+	  safe_strcmp into the glib standard g_strcmp0
+	* [r22289] src/engine/Split.c, src/engine/Split.h,
+	  src/engine/Transaction.c, src/engine/Transaction.h,
+	  src/gnome-utils/Makefile.am,
+	  src/gnome-utils/gnc-cell-renderer-date.c,
+	  src/gnome-utils/gnc-cell-renderer-date.h,
+	  src/gnome-utils/gnc-cell-renderer-popup-entry.c,
+	  src/gnome-utils/gnc-cell-renderer-popup-entry.h,
+	  src/gnome-utils/gnc-cell-renderer-popup.c,
+	  src/gnome-utils/gnc-cell-renderer-popup.h,
+	  src/gnome-utils/gnc-tree-model-split-reg.c,
+	  src/gnome-utils/gnc-tree-model-split-reg.h,
+	  src/gnome-utils/gnc-tree-view-split-reg.c,
+	  src/gnome-utils/gnc-tree-view-split-reg.h,
+	  src/gnome-utils/gnc-tree-view.c,
+	  src/gnome-utils/gnc-tree-view.h, src/gnome/Makefile.am,
+	  src/gnome/gnc-plugin-page-account-tree.c,
+	  src/gnome/gnc-plugin-page-register2.c,
+	  src/gnome/gnc-plugin-page-register2.h,
+	  src/gnome/gnc-plugin-register2.c,
+	  src/gnome/gnc-plugin-register2.h, src/gnome/top-level.c,
+	  src/gnome/ui/Makefile.am,
+	  src/gnome/ui/gnc-plugin-page-account-tree-ui.xml,
+	  src/gnome/ui/gnc-plugin-page-register2-ui.xml,
+	  src/gnome/ui/gnc-plugin-register2-ui.xml: Initial code for a new
+	  register. This is very incomplete, but at the same time well
+	  isolated from the rest of the code, so it is easy to disable
+	  should it not get functional and stable before the next major
+	  release. I decided to include it in trunk to give it more
+	  visibility and prevent bitrot in the patch.
+
+2012-08-05 13:28  gjanssens
+
+	* [r22287] src/doc/xml/gnucash-v2.rnc: Bug #680887 - RELAX NG
+	  schema for 2.4.11 XML file format Contributed by Baptiste
+	  Carvello BP
+
+2012-08-04 16:09  gjanssens
+
+	* [r22286] src/business/business-gnome/dialog-payment.c,
+	  src/business/business-gnome/gtkbuilder/dialog-payment.glade,
+	  src/engine/gncOwner.c: Adapt payment dialog for credit notes. To
+	  deal with all possible combinations, a user must set a debit or
+	  credit amount for the payment. In most cases the right amount is
+	  prefilled by selecting documents from the list. In the process,
+	  this changes gets rid of some confusing sign reversal logic in
+	  the payment code (gncOwner.c). WARNING FOR SCRIPTERS: if you
+	  have written python or scheme code that relies on
+	  gncOwnerApplyPayment, be careful: you now need to pass a signed
+	  amount to the function instead of an absolute value, because a
+	  payment could be for both an invoice/bill or a credit note. No
+	  more sign reversals happen internally based on the owner being a
+	  vendor or a customer.
+
+2012-08-04 16:08  gjanssens
+
+	* [r22285] src/business/business-gnome/dialog-payment.c: Payment
+	  dialog - amend r22263 Properly fix selection of documents when
+	  first loading the dialog
+	* [r22284] src/gnome-utils/dialog-utils.c: Avoid windows with
+	  saved positions to reopen off-screen if possible
+	* [r22283] src/gnome-utils/dialog-utils.c,
+	  src/gnome/assistant-hierarchy.c,
+	  src/import-export/aqbanking/assistant-ab-initial.c,
+	  src/import-export/csv-export/assistant-csv-export.c,
+	  src/import-export/csv-import/assistant-csv-account-import.c,
+	  src/import-export/csv-import/assistant-csv-trans-import.c,
+	  src/import-export/qif-import/assistant-qif-import.c: Cleanups in
+	  save/restore window position and sizes - remove depreciated
+	  check on GtkObject flags (no longer required imo) - save
+	  position and size on window destruction consistently - add save
+	  and restore to some additional assistants (not all so far)
+
+2012-08-04 12:01  mikee
+
+	* [r22281] src/report/standard-reports/transaction.scm: Bug
+	  #680576 - Transaction report: date takes up two lines when using
+	  Canadian locale format. Change date cells type from text-cell to
+	  date-cell to apply white-space: nowrap style. BP
+
+2012-08-04 02:01  fell
+
+	* [r22279] configure.ac: Bug 680671: configure should check for
+	  the python-devel package if called with --enable-python
+	  https://bugzilla.gnome.org/show_bug.cgi?id=680671 BP
+
+2012-08-02 13:31  gjanssens
+
+	* [r22278] src/gnome/gnc-plugin-page-account-tree.c: Double click
+	  on parent account expands/collapses child account list instead
+	  of opening the account's register. The account's register can
+	  still be opened normally using the menu option or right-click
+	  popup menu.
+
+2012-08-01 13:54  gjanssens
+
+	* [r22277] configure.ac, src/gnome-utils/gnc-gobject-utils.c:
+	  Remove unused, depreciated functions Patch by Robert Fewell
+	* [r22276] src/gnome-utils/dialog-utils.c,
+	  src/gnome-utils/dialog-utils.h: Remove depreciated Option
+	  functions - part 3 There were some more option menu functions in
+	  dialog-utils that I could not find being used any where and this
+	  patch removes them. Patch by Robert Fewell
+	* [r22275] src/gnome-utils/gnc-date-edit.c,
+	  src/gnome-utils/gnc-date-edit.h: Remove depreciated Option
+	  functions - part 2 This patch removes the option menu functions
+	  from gnc-date-edit which come under the setting of time option.
+	  I do not think this bit is used but can be seen if you find a
+	  GNCDateEdit and set the second option to TRUE. Patch by Robert
+	  Fewell
+
+2012-08-01 13:53  gjanssens
+
+	* [r22274] src/gnome-utils/Makefile.am,
+	  src/gnome-utils/dialog-options.c,
+	  src/gnome-utils/dialog-options.h,
+	  src/gnome-utils/dialog-utils.c, src/gnome-utils/dialog-utils.h,
+	  src/gnome-utils/gnc-combott.c, src/gnome-utils/gnc-combott.h,
+	  src/import-export/import-format-dialog.c: Remove depreciated
+	  Option functions - part 1 The option menu's that appear in
+	  dialog options rely on per item tool tips that GtkComboBox did
+	  not have. From a comment in the code, this was highlighted on
+	  bug http://bugzilla.gnome.org/show_bug.cgi?id=303717 which
+	  implies this is now fixed but I could not see a way of adding
+	  them so I created my own basic combo with per item tooltips.
+	  This basic combo uses an external list store to reduce the
+	  functions needed and can be seen when changing report settings.
+	  It look like it does the job OK but may be I have missed
+	  something. I have added comments in the code in areas that would
+	  need to be changed if GtkComboBox ever has per item tool tips.
+	  Patch by Robert Fewell
+
+2012-07-27 15:45  warlord
+
+	* [r22272] configure.ac: Remove (unused) LIBXML_VERSION from
+	  configure.ac (#680708) BP
+
+2012-07-25 22:28  alex.aycinena
+
+	* [r22271]
+	  src/import-export/csv-import/assistant-csv-trans-import.c,
+	  src/import-export/csv-import/gnc-csv-model.c,
+	  src/import-export/csv-import/gnc-csv-model.h,
+	  src/import-export/import-account-matcher.c: Add ability to
+	  import a csv column to 'notes' field; fix 'OK' and 'New Account'
+	  button widths
+
+2012-07-09 17:54  gjanssens
+
+	* [r22263] src/business/business-gnome/dialog-payment.c: Properly
+	  calculate amount to pay when post-to account is not the first in
+	  the list when opening the payment dialog.
+
+2012-07-07 16:06  gjanssens
+
+	* [r22261] doc/tip_of_the_day.list.in: Modify one tip of the day
+	  to illustrate the use of \n in tips
+
+2012-07-07 16:04  gjanssens
+
+	* [r22260] src/gnome-utils/dialog-totd.c: Rewrite the
+	  tip-of-the-day parsing logic Since commit 22246, an empty tip of
+	  the day appears in the list of tips. This is due to the way the
+	  file is parsed. This commit rewrites the parsing logic to avoid
+	  such problems. As an added bonus, you can now add newlines in
+	  tips by using '\n' in the string. BP
+
+2012-07-02 21:24  jralls
+
+	* [r22259] test-templates/make-testfile: Fix make-testfile to
+	  count references in UI files Some functions may be called only
+	  by callback reference in a GtkBuilder XML file (*.glade, *.xml,
+	  or *.ui). Indicate that usage in the test-file function summary.
+
+2012-07-02 18:07  cmarchi
+
+	* [r22257] src/gnome-utils/gnc-date-edit.c,
+	  src/import-export/aqbanking/gnc-ab-kvp.c, src/libqof/qof/guid.c,
+	  src/libqof/qof/guid.h: G_CONST_RETURN is deprecated in 2.3.
+	  Patch provided by Aurimas Fišeras.
+
+2012-07-02 18:03  cmarchi
+
+	* [r22256] src/gnome/window-autoclear.c: Make strings translatable
+	  in auto clear dialog. Patch provided by Aurimas Fišeras.
+
+2012-07-01 21:48  plongstaff
+
+	* [r22255] src/gnome-utils/gnc-tree-view-account.c: Re-add
+	  function gppat_filter_select_default_cb() mistakenly removed in
+	  commit r21578. It's not used by C code, but is by the .glade
+	  file.
+
+2012-07-01 20:20  jralls
+
+	* [r22254] src/backend/dbi/gnc-backend-dbi.c: Fix "discarded
+	  return value warning" from r22203
+
+2012-07-01 18:45  plongstaff
+
+	* [r22253] src/engine/test, src/engine/test/Makefile.am,
+	  src/engine/test/test-engine.c, src/engine/test/utest-Budget.c:
+	  Add basic budget unit tests
+
+2012-06-29 14:45  gjanssens
+
+	* [r22252] src/app-utils/options.scm: Wrong parameter is used to
+	  load from and save to kvp
+
+2012-06-29 14:28  gjanssens
+
+	* [r22250] src/app-utils/options.scm,
+	  src/gnome-utils/dialog-options.c: Bug #494861 - Business reports
+	  lose a/p & a/r account options BP
+
+2012-06-28 16:13  gjanssens
+
+	* [r22248] src/report/business-reports/owner-report.scm: Bug
+	  #678848 - Customer/Vendor reports off-by-one on start date
+	  Additionally removes a superfluous module load BP
+
+2012-06-27 20:33  gjanssens
+
+	* [r22246] doc/Makefile.am: [PATCH] Fix tip-of-the-day with
+	  gcc-4.7 When making the text file tips-of-the-day, GnuCash
+	  expects 'gcc -E' to preserve at least one of the whitespace
+	  lines between entries. However, this relies on behavior of 'gcc
+	  -E' that isn't actually part of the spec, and is a historical
+	  accident. And it changed in gcc-4.7, such that all the
+	  whitespace is removed. Work around this by explicitly adding a
+	  newline in the sed expression. Pre gcc-4.7 there will be two
+	  newlines between tips, but this has no impact on the tip
+	  displaying code. Patch by Bill Nottingham BP
+
+2012-06-27 17:43  gjanssens
+
+	* [r22245] checks/Makefile.am, checks/quicken_3part.chk: Bug
+	  #677572 - 3-part check format Created by Andrew Hunt
+
+2012-06-27 15:52  gjanssens
+
+	* [r22243] src/gnome/dialog-print-check.c: Bug #631611 - Check
+	  printing fails because fonts are too tiny on Windows Lesson
+	  learned: don't use cairo_identity_matrix on a cairo_t managed by
+	  GtkPrintContext. It kills a number of transformations that were
+	  already configured by GtkPrintContext. On Windows this breaks
+	  proper scaling.
+
+2012-06-27 15:51  gjanssens
+
+	* [r22242] src/gnome/dialog-print-check.c: Some small code
+	  cleanups in check printing code - Remove useless typdef, use
+	  GtkPrintOperation directly instead - Position_combobox is read
+	  twice, remove second call
+
+2012-06-26 13:03  mikee
+
+	* [r22241] src/report/business-reports/invoice.scm: Revert GUID
+	  change as per Derek's suggestion.
+
+2012-06-24 04:05  mta
+
+	* [r22238] src/register/register-gnome/table-gnome.c: Fix
+	  uninitialized variable warning in r22234.
+
+2012-06-24 03:09  mta
+
+	* [r22237] src/optional/python-bindings/Makefile.am: Make python
+	  bindings build when using a separate build directory. Don't
+	  symlink a (possibly non-existant) file from the source tree on
+	  top of gnucash_core_c.py which was just generated by swig in the
+	  build tree.
+
+2012-06-24 02:58  mta
+
+	* [r22236] configure.ac: Don't lose optimization flags passed in
+	  CFLAGS. Change r17720 has a typo that causes it to lose all -Ox
+	  flags passed in CFLAGS when it was actually trying to preserve
+	  them.
+
+2012-06-23 14:42  gjanssens
+
+	* [r22235] src/report/business-reports/invoice.scm: Invoice report
+	  - display Job info in new line
+
+2012-06-23 12:25  mikee
+
+	* [r22234] src/business/business-gnome/dialog-invoice.c,
+	  src/business/business-gnome/dialog-order.c,
+	  src/gnome/gnc-split-reg.c,
+	  src/register/register-core/table-allgui.h,
+	  src/register/register-gnome/table-gnome.c: Bug #666576 - Balance
+	  Column Set Too Narrow
+
+2012-06-23 11:57  mikee
+
+	* [r22233] src/report/business-reports/invoice.scm: Bug 341048 -
+	  RFE: Printable Invoice should allow display of Job Name Add job
+	  name and number to printable invoice. This only applies to
+	  invoice.scm.
+
+2012-06-22 15:12  gjanssens
+
+	* [r22231]
+	  src/optional/python-bindings/example_scripts/account_analysis.py,
+	  src/optional/python-bindings/example_scripts/new_book_with_opening_balances.py,
+	  src/optional/python-bindings/example_scripts/simple_business_create.py,
+	  src/optional/python-bindings/example_scripts/test_imbalance_transaction.py:
+	  Bug #675201 - slight bugfix to prior enchancement post for
+	  example scripts Patch by Jamie Campbell
+
+2012-06-22 14:36  gjanssens
+
+	* [r22229] src/backend/xml/sixtp.c: Bug #678214 - GnuCash fails to
+	  open some post-processed XML files Patch by Daniel Harding BP
+
+2012-06-21 15:13  gjanssens
+
+	* [r22224] src/backend/sql/gnc-recurrence-sql.c: Bug #671323 -
+	  Scheduled monthly transactions lose "except on weekends" setting
+	  when using MySQL
+
+2012-06-16 11:52  mikee
+
+	* [r22222] src/report/standard-reports/net-linechart.scm: Add
+	  formatting to table. Add cell padding to columns in table.
+
+2012-06-13 15:43  gjanssens
+
+	* [r22219]
+	  src/backend/xml/test/test-files/xml2/Money95bank_fr.gml2,
+	  src/backend/xml/test/test-files/xml2/Money95invst.gml2,
+	  src/backend/xml/test/test-files/xml2/Money95mutual.gml2,
+	  src/backend/xml/test/test-files/xml2/Money95stocks.gml2,
+	  src/backend/xml/test/test-files/xml2/abc.gml2,
+	  src/backend/xml/test/test-files/xml2/abcall.gml2,
+	  src/backend/xml/test/test-files/xml2/carols-data-file.gml2,
+	  src/backend/xml/test/test-files/xml2/cbb-export.gml2,
+	  src/backend/xml/test/test-files/xml2/conrads-file.gml2,
+	  src/backend/xml/test/test-files/xml2/every.gml2,
+	  src/backend/xml/test/test-files/xml2/goonies-file.gml2,
+	  src/backend/xml/test/test-files/xml2/hierachical-data-file.gml2,
+	  src/backend/xml/test/test-files/xml2/ms-money.gml2,
+	  src/backend/xml/test/test-files/xml2/pricedb1.gml2: Revert some
+	  unintended testfile changes that accidentally slipped in in
+	  r22216
+
+2012-06-13 15:24  gjanssens
+
+	* [r22218] src/report/business-reports/payables.scm,
+	  src/report/business-reports/receivables.scm: Fix Account Report
+	  menu option when used on A/R or A/P registers. This has been
+	  broken since r20766
+	* [r22217] src/business/business-gnome/dialog-billterms.c,
+	  src/business/business-gnome/dialog-date-close.c,
+	  src/business/business-gnome/dialog-invoice.c,
+	  src/business/business-gnome/gtkbuilder/dialog-invoice.glade,
+	  src/gnome-search/dialog-search.c,
+	  src/gnome-search/gnc-general-search.c,
+	  src/gnome-utils/dialog-reset-warnings.c,
+	  src/gnome-utils/dialog-transfer.c,
+	  src/gnome-utils/dialog-utils.c,
+	  src/gnome-utils/gnc-amount-edit.c,
+	  src/gnome-utils/gnc-date-edit.c,
+	  src/gnome-utils/gnc-date-format.c,
+	  src/gnome-utils/gnc-dense-cal.c,
+	  src/gnome-utils/gnc-general-select.c,
+	  src/gnome-utils/gnc-gui-query.c,
+	  src/gnome-utils/gnc-main-window.c,
+	  src/gnome-utils/gnc-query-list.c,
+	  src/gnome/assistant-hierarchy.c, src/gnome/dialog-progress.c,
+	  src/gnome/dialog-sx-editor.c,
+	  src/gnome/gnc-plugin-page-account-tree.c,
+	  src/gnome/reconcile-list.c, src/html/gnc-html-webkit.c,
+	  src/import-export/aqbanking/dialog-ab-trans.c,
+	  src/import-export/aqbanking/gnc-gwen-gui.c,
+	  src/import-export/csv-import/assistant-csv-trans-import.c,
+	  src/register/register-gnome/gnucash-item-edit.c,
+	  src/register/register-gnome/gnucash-item-list.c,
+	  src/register/register-gnome/gnucash-sheet.c: Bug #677859 -
+	  Depreciated functions in Gtk+2.24 Replaces functions related to
+	  widget visibility. Additionally there are some more replacements
+	  in the area's handled in the previous two commits. Patch by
+	  Robert Fewell
+
+2012-06-13 15:23  gjanssens
+
+	* [r22216]
+	  src/backend/xml/test/test-files/xml2/Money95bank_fr.gml2,
+	  src/backend/xml/test/test-files/xml2/Money95invst.gml2,
+	  src/backend/xml/test/test-files/xml2/Money95mutual.gml2,
+	  src/backend/xml/test/test-files/xml2/Money95stocks.gml2,
+	  src/backend/xml/test/test-files/xml2/abc.gml2,
+	  src/backend/xml/test/test-files/xml2/abcall.gml2,
+	  src/backend/xml/test/test-files/xml2/carols-data-file.gml2,
+	  src/backend/xml/test/test-files/xml2/cbb-export.gml2,
+	  src/backend/xml/test/test-files/xml2/conrads-file.gml2,
+	  src/backend/xml/test/test-files/xml2/every.gml2,
+	  src/backend/xml/test/test-files/xml2/goonies-file.gml2,
+	  src/backend/xml/test/test-files/xml2/hierachical-data-file.gml2,
+	  src/backend/xml/test/test-files/xml2/ms-money.gml2,
+	  src/backend/xml/test/test-files/xml2/pricedb1.gml2,
+	  src/business/business-gnome/dialog-order.c,
+	  src/business/business-gnome/search-owner.c,
+	  src/business/business-gnome/search-owner.h,
+	  src/gnome-search/search-account.h,
+	  src/gnome-search/search-boolean.h,
+	  src/gnome-search/search-date.h,
+	  src/gnome-search/search-double.h,
+	  src/gnome-search/search-int64.h,
+	  src/gnome-search/search-numeric.h,
+	  src/gnome-search/search-reconciled.h,
+	  src/gnome-search/search-string.h, src/gnome-utils/cursors.c,
+	  src/gnome-utils/dialog-preferences.c,
+	  src/gnome-utils/gnc-date-format.h,
+	  src/gnome-utils/gnc-dense-cal.h,
+	  src/gnome-utils/gnc-gobject-utils.c,
+	  src/gnome-utils/gnc-query-list.h,
+	  src/gnome-utils/gnc-sx-list-tree-model-adapter.c,
+	  src/gnome-utils/gnc-tree-view-account.c,
+	  src/gnome-utils/gnc-tree-view-account.h,
+	  src/gnome-utils/gnc-tree-view-commodity.c,
+	  src/gnome-utils/gnc-tree-view-commodity.h,
+	  src/gnome-utils/gnc-tree-view-owner.c,
+	  src/gnome-utils/gnc-tree-view-owner.h,
+	  src/gnome-utils/gnc-tree-view-price.c,
+	  src/gnome-utils/gnc-tree-view-price.h,
+	  src/gnome-utils/gnc-tree-view.c, src/gnome/dialog-tax-info.c,
+	  src/gnome/gnc-plugin-page-sx-list.c, src/gnome/gnc-split-reg.h,
+	  src/import-export/csv-import/gnc-csv-gnumeric-popup.c,
+	  src/register/register-gnome/gnucash-date-picker.c,
+	  src/register/register-gnome/gnucash-date-picker.h: Bug #677859 -
+	  Depreciated functions in Gtk+2.24 Replaces a number of widget
+	  references that are now part of gobject. Patch by Robert Fewell
+	* [r22215] src/business/business-gnome/business-gnome-utils.c,
+	  src/business/business-gnome/dialog-payment.c,
+	  src/business/business-gnome/gtkbuilder/dialog-payment.glade,
+	  src/gnome-utils/assistant-xml-encoding.c,
+	  src/gnome-utils/dialog-commodity.c,
+	  src/gnome-utils/dialog-commodity.h,
+	  src/gnome-utils/dialog-file-access.c,
+	  src/gnome-utils/dialog-options.c,
+	  src/gnome-utils/gnc-account-sel.c,
+	  src/gnome-utils/gnc-account-sel.h,
+	  src/gnome-utils/gnc-currency-edit.c,
+	  src/gnome-utils/gnc-currency-edit.h,
+	  src/gnome-utils/gnc-date-delta.c,
+	  src/gnome-utils/gnc-gtk-utils.c,
+	  src/gnome-utils/gnc-gtk-utils.h,
+	  src/gnome-utils/gnc-period-select.c,
+	  src/gnome-utils/gtkbuilder/dialog-commodity.glade,
+	  src/gnome/dialog-price-editor.c, src/gnome/dialog-print-check.c,
+	  src/gnome/gtkbuilder/dialog-price.glade,
+	  src/import-export/qif-import/assistant-qif-import.c,
+	  src/report/report-gnome/dialog-report-style-sheet.c: Bug #677859
+	  - Depreciated functions in Gtk+2.24 GtkComboBox related fixes
+	  Patch by Robert Fewell
+
+2012-06-10 22:14  jralls
+
+	* [r22214] src/libqof/qof/test/test-qof.c: Disable test-gnc-date
+	  until it can be thoroughly tested on a wider variety of
+	  compilers.
+
+2012-06-10 19:59  cstim
+
+	* [r22213] src/libqof/qof/test/Makefile.am,
+	  src/libqof/qof/test/test-gnc-date.c: Fix windows/mingw build
+	  failure due to different struct tm length.
+
+2012-06-10 19:32  cstim
+
+	* [r22212] src/libqof/qof/test/test-gnc-date.c: Fix compiler error
+	  about overflow of integer calculations. To reproduce: gcc-4.6.1
+	  and -O2 switched on.
+
+2012-06-06 13:52  gjanssens
+
+	* [r22211] src/business/business-gnome/dialog-invoice.c: Fix
+	  credit note duplication. It was not possible to duplicate a
+	  credit note as an invoice (aka voiding a credit note).
+	* [r22210] src/business/business-gnome/gnc-plugin-page-invoice.c,
+	  src/business/business-gnome/gnc-plugin-page-invoice.h: Cosmetic:
+	  move include to source file. It's not used in the header file.
+
+2012-06-06 13:23  jralls
+
+	* [r22209] src/backend/sql/test/utest-gnc-backend-sql.c: Adjust
+	  test_gnc_sql_convert_timespec_to_string() for 64-bit time_t
+	* [r22208] src/libqof/qof/test/test-gnc-date.c: 64-bit adjustments
+	  to test-gnc-date
+
+2012-06-06 13:22  jralls
+
+	* [r22207] src/engine/gncBillTerm.c, src/libqof/qof/gnc-date.c,
+	  src/libqof/qof/gnc-date.h: Consolidate some little-used
+	  convenience functions.
+	* [r22206] src/backend/sql/test/utest-gnc-backend-sql.c: Test
+	  gnc_sql_convert_timespec_to_string() Note overridden failures on
+	  the second 3 values.
+	* [r22205] src/libqof/qof/gnc-date-p.h, src/libqof/qof/gnc-date.c,
+	  src/libqof/qof/test/test-gnc-date.c: Test of all major gnc-date
+	  functions, highlighting 2038 bug failures from using time_t on a
+	  32-bit system.
+
+2012-06-01 22:59  alex.aycinena
+
+	* [r22204] src/core-utils/gnc-features.c: Remove g_free of msg two
+	  lines before it is returned from function.
+
+2012-05-26 23:47  jralls
+
+	* [r22203] src/app-utils/calculation/fin.c,
+	  src/app-utils/file-utils.c, src/app-utils/gnc-addr-quickfill.c,
+	  src/app-utils/gnc-entry-quickfill.c, src/app-utils/gnc-euro.c,
+	  src/app-utils/gnc-sx-instance-model.c,
+	  src/app-utils/gnc-ui-balances.c, src/app-utils/gnc-ui-util.c,
+	  src/app-utils/guile-util.c, src/backend/dbi/gnc-backend-dbi.c,
+	  src/backend/dbi/test/test-dbi-business-stuff.c,
+	  src/backend/dbi/test/test-dbi-stuff.c,
+	  src/backend/dbi/test/utest-backend-dbi-business.c,
+	  src/backend/sql/gnc-account-sql.c,
+	  src/backend/sql/gnc-address-sql.c,
+	  src/backend/sql/gnc-backend-sql.c,
+	  src/backend/sql/gnc-bill-term-sql.c,
+	  src/backend/sql/gnc-book-sql.c,
+	  src/backend/sql/gnc-customer-sql.c,
+	  src/backend/sql/gnc-employee-sql.c,
+	  src/backend/sql/gnc-entry-sql.c,
+	  src/backend/sql/gnc-invoice-sql.c,
+	  src/backend/sql/gnc-job-sql.c, src/backend/sql/gnc-lots-sql.c,
+	  src/backend/sql/gnc-order-sql.c,
+	  src/backend/sql/gnc-owner-sql.c,
+	  src/backend/sql/gnc-recurrence-sql.c,
+	  src/backend/sql/gnc-schedxaction-sql.c,
+	  src/backend/sql/gnc-slots-sql.c,
+	  src/backend/sql/gnc-tax-table-sql.c,
+	  src/backend/sql/gnc-transaction-sql.c,
+	  src/backend/sql/gnc-vendor-sql.c,
+	  src/backend/xml/gnc-account-xml-v2.c,
+	  src/backend/xml/gnc-bill-term-xml-v2.c,
+	  src/backend/xml/gnc-book-xml-v2.c,
+	  src/backend/xml/gnc-customer-xml-v2.c,
+	  src/backend/xml/gnc-employee-xml-v2.c,
+	  src/backend/xml/gnc-entry-xml-v2.c,
+	  src/backend/xml/gnc-freqspec-xml-v2.c,
+	  src/backend/xml/gnc-invoice-xml-v2.c,
+	  src/backend/xml/gnc-job-xml-v2.c,
+	  src/backend/xml/gnc-lot-xml-v2.c,
+	  src/backend/xml/gnc-order-xml-v2.c,
+	  src/backend/xml/gnc-tax-table-xml-v2.c,
+	  src/backend/xml/gnc-transaction-xml-v2.c,
+	  src/backend/xml/gnc-vendor-xml-v2.c,
+	  src/backend/xml/io-gncxml-v1.c,
+	  src/backend/xml/test/test-xml-transaction.c,
+	  src/bin/gnucash-bin.c,
+	  src/business/business-gnome/business-gnome-utils.c,
+	  src/business/business-gnome/dialog-customer.c,
+	  src/business/business-gnome/dialog-invoice.c,
+	  src/business/business-gnome/dialog-order.c,
+	  src/business/business-gnome/dialog-payment.c,
+	  src/business/business-gnome/dialog-vendor.c,
+	  src/business/business-gnome/gnc-plugin-business.c,
+	  src/business/business-gnome/gnc-plugin-page-invoice.c,
+	  src/business/business-gnome/gnc-plugin-page-owner-tree.c,
+	  src/business/business-gnome/search-owner.c,
+	  src/business/business-ledger/gncEntryLedgerControl.c,
+	  src/business/business-ledger/gncEntryLedgerLoad.c,
+	  src/core-utils/gnc-filepath-utils.c,
+	  src/core-utils/gnc-uri-utils.c, src/engine/Account.c,
+	  src/engine/Scrub.c, src/engine/Transaction.c,
+	  src/engine/TransactionP.h, src/engine/gnc-hooks.c,
+	  src/engine/gnc-pricedb.c, src/engine/gncIDSearch.c,
+	  src/engine/gncInvoice.c, src/engine/gncJob.c,
+	  src/engine/policy.c, src/engine/test-core/test-engine-stuff.c,
+	  src/engine/test/test-account-object.c,
+	  src/engine/test/test-guid.c,
+	  src/engine/test/test-transaction-reversal.c,
+	  src/engine/test/test-vendor.c, src/engine/test/utest-Account.c,
+	  src/engine/test/utest-Invoice.c, src/engine/test/utest-Split.c,
+	  src/gnome-search/dialog-search.c,
+	  src/gnome-utils/assistant-gconf-setup.c,
+	  src/gnome-utils/assistant-xml-encoding.c,
+	  src/gnome-utils/dialog-book-close.c,
+	  src/gnome-utils/dialog-dup-trans.c,
+	  src/gnome-utils/dialog-file-access.c,
+	  src/gnome-utils/dialog-object-references.c,
+	  src/gnome-utils/dialog-options.c,
+	  src/gnome-utils/dialog-transfer.c,
+	  src/gnome-utils/gnc-account-sel.c,
+	  src/gnome-utils/gnc-autosave.c, src/gnome-utils/gnc-date-edit.c,
+	  src/gnome-utils/gnc-date-format.c,
+	  src/gnome-utils/gnc-dense-cal.c,
+	  src/gnome-utils/gnc-embedded-window.c,
+	  src/gnome-utils/gnc-file.c,
+	  src/gnome-utils/gnc-general-select.c,
+	  src/gnome-utils/gnc-gnome-utils.c,
+	  src/gnome-utils/gnc-keyring.c,
+	  src/gnome-utils/gnc-main-window.c,
+	  src/gnome-utils/gnc-plugin-file-history.c,
+	  src/gnome-utils/gnc-plugin-manager.c,
+	  src/gnome-utils/gnc-plugin-menu-additions.c,
+	  src/gnome-utils/gnc-plugin.c, src/gnome-utils/gnc-query-list.c,
+	  src/gnome-utils/gnc-recurrence.c,
+	  src/gnome-utils/gnc-tree-model-account-types.c,
+	  src/gnome-utils/gnc-tree-model-account.c,
+	  src/gnome-utils/gnc-tree-model-owner.c,
+	  src/gnome-utils/gnc-tree-model-price.c,
+	  src/gnome-utils/gnc-tree-model.c,
+	  src/gnome-utils/gnc-tree-view-account.c,
+	  src/gnome-utils/gnc-tree-view-commodity.c,
+	  src/gnome-utils/gnc-tree-view-owner.c,
+	  src/gnome-utils/gnc-tree-view-price.c,
+	  src/gnome-utils/gnc-tree-view-sx-list.c,
+	  src/gnome-utils/gnc-tree-view.c,
+	  src/gnome/assistant-acct-period.c,
+	  src/gnome/assistant-hierarchy.c, src/gnome/assistant-loan.c,
+	  src/gnome/assistant-stock-split.c,
+	  src/gnome/dialog-commodities.c, src/gnome/dialog-lot-viewer.c,
+	  src/gnome/dialog-price-editor.c, src/gnome/dialog-print-check.c,
+	  src/gnome/dialog-sx-editor.c, src/gnome/dialog-sx-from-trans.c,
+	  src/gnome/dialog-sx-since-last-run.c,
+	  src/gnome/dialog-tax-info.c,
+	  src/gnome/gnc-plugin-account-tree.c,
+	  src/gnome/gnc-plugin-basic-commands.c,
+	  src/gnome/gnc-plugin-budget.c,
+	  src/gnome/gnc-plugin-page-account-tree.c,
+	  src/gnome/gnc-plugin-page-budget.c,
+	  src/gnome/gnc-plugin-page-register.c,
+	  src/gnome/gnc-plugin-page-sx-list.c,
+	  src/gnome/gnc-plugin-register.c, src/gnome/gnc-split-reg.c,
+	  src/gnome/reconcile-list.c, src/gnome/top-level.c,
+	  src/gnome/window-reconcile.c, src/html/gnc-html-factory.c,
+	  src/html/gnc-html-graph-gog-webkit.c,
+	  src/html/gnc-html-graph-gog.c, src/html/gnc-html-webkit.c,
+	  src/html/gnc-html.c,
+	  src/import-export/aqbanking/assistant-ab-initial.c,
+	  src/import-export/aqbanking/dialog-ab-trans.c,
+	  src/import-export/aqbanking/gnc-ab-getbalance.c,
+	  src/import-export/aqbanking/gnc-ab-gettrans.c,
+	  src/import-export/aqbanking/gnc-ab-kvp.c,
+	  src/import-export/aqbanking/gnc-ab-trans-templ.c,
+	  src/import-export/aqbanking/gnc-ab-transfer.c,
+	  src/import-export/aqbanking/gnc-ab-utils.c,
+	  src/import-export/aqbanking/gnc-gwen-gui.c,
+	  src/import-export/csv-export/assistant-csv-export.c,
+	  src/import-export/csv-export/csv-transactions-export.c,
+	  src/import-export/csv-export/gnc-plugin-csv-export.c,
+	  src/import-export/csv-import/assistant-csv-account-import.c,
+	  src/import-export/csv-import/assistant-csv-trans-import.c,
+	  src/import-export/csv-import/gnc-csv-model.c,
+	  src/import-export/csv-import/gnc-plugin-csv-import.c,
+	  src/import-export/import-backend.c,
+	  src/import-export/import-main-matcher.c,
+	  src/import-export/log-replay/gnc-plugin-log-replay.c,
+	  src/import-export/ofx/gnc-ofx-import.c,
+	  src/import-export/ofx/gnc-ofx-kvp.c,
+	  src/import-export/ofx/gnc-plugin-ofx.c,
+	  src/import-export/qif-import/assistant-qif-import.c,
+	  src/import-export/qif-import/gnc-plugin-qif-import.c,
+	  src/libqof/qof/gnc-date.c, src/libqof/qof/kvp_frame.c,
+	  src/libqof/qof/qof-string-cache.c, src/libqof/qof/qofbackend.c,
+	  src/libqof/qof/qofbook.c, src/libqof/qof/qofchoice.c,
+	  src/libqof/qof/qofevent.c, src/libqof/qof/qofinstance.c,
+	  src/libqof/qof/qofquerycore.c, src/libqof/qof/qofsession.c,
+	  src/libqof/qof/qofutil.c, src/libqof/qof/test/test-gnc-date.c,
+	  src/libqof/qof/test/test-qof-string-cache.c,
+	  src/libqof/qof/test/test-qofbook.c,
+	  src/libqof/qof/test/test-qofsession.c,
+	  src/plugins/bi_import/dialog-bi-import-gui.c,
+	  src/plugins/bi_import/dialog-bi-import.c,
+	  src/plugins/customer_import/dialog-customer-import-gui.c,
+	  src/python/gncmod-python.c,
+	  src/register/ledger-core/split-register-control.c,
+	  src/register/ledger-core/split-register-load.c,
+	  src/register/register-core/table-allgui.c,
+	  src/register/register-gnome/gnucash-cursor.c,
+	  src/register/register-gnome/gnucash-grid.c,
+	  src/register/register-gnome/gnucash-header.c,
+	  src/register/register-gnome/gnucash-item-edit.c,
+	  src/register/register-gnome/gnucash-sheet.c,
+	  src/report/report-gnome/dialog-custom-report.c,
+	  src/report/report-gnome/gnc-plugin-page-report.c,
+	  src/report/stylesheets/gnc-plugin-stylesheets.c,
+	  src/test-core/unittest-support.c: Correct -Wunused warnings The
+	  actual change to configure.ac (at line 1106) to enable -Wunused
+	  -- or rather to un-disable it -- is not included in order to not
+	  break the build for folks with buggy versions of swig. (For
+	  example,
+	  https://sourceforge.net/tracker/?func=detail&aid=3530021&group_id=1645&atid=101645)
+
+2012-05-26 23:46  jralls
+
+	* [r22202] src/optional/python-bindings/Makefile.am: Set
+	  PYTHON_LINK_FILES to useful values.
+
+2012-05-22 17:57  jralls
+
+	* [r22201] src/core-utils/Makefile.am, src/html/Makefile.am:
+	  Delete remaining swig-foo.c files with maintainer-clean
+	* [r22200] src/backend/dbi/Makefile.am,
+	  src/backend/dbi/test/Makefile.am: Fix compilation on OSX One
+	  can't link a library created with -module on OSX, but one can
+	  dload a library compiled with -shared on both OSX and Linux.
+	  Also cleaned out the old "make check" files from test/Makefile.am
+
+2012-05-21 22:36  plongstaff
+
+	* [r22199] src/backend/xml/gnc-backend-xml.c: Fix memory leaks
+	  found by unit tests/valgrind Return value of g_build_filename()
+	  needs to be freed.
+
+2012-05-21 22:10  jralls
+
+	* [r22197] packaging/win32/custom.sh.sample: Add EXTRA_CFLAGS for
+	  compiling on Win7 Configure gets confused by some gcc builtins
+	  on Win7: Disable them so that configure finds the right
+	  settings. [BP]
+
+2012-05-21 18:35  plongstaff
+
+	* [r22193] src/libqof/qof/gnc-date.c, src/libqof/qof/qofsession.c:
+	  Fix some small problems (including a memory leak) found by
+	  running qof unit test with valgrind.
+	* [r22192] src/libqof/qof/test: Add test-qof to svn:ignore
+
+2012-05-21 17:38  plongstaff
+
+	* [r22191] accounts/sv_SE, src/business/business-gnome/gtkbuilder,
+	  src/import-export/csv-export,
+	  src/import-export/csv-export/schemas,
+	  src/import-export/csv-import,
+	  src/import-export/csv-import/schemas, src/optional/gtkmm/test,
+	  src/plugins/bi_import/gtkbuilder, src/plugins/customer_import,
+	  src/plugins/customer_import/gtkbuilder,
+	  src/plugins/customer_import/ui: Update some svn:ignore properties
+
+2012-05-21 17:28  plongstaff
+
+	* [r22190] src/app-utils/gnc-component-manager.c,
+	  src/libqof/qof/Makefile.am, src/libqof/qof/kvp_frame.c,
+	  src/libqof/qof/qof-string-cache.c,
+	  src/libqof/qof/qof-string-cache.h, src/libqof/qof/qof.h,
+	  src/libqof/qof/qofbook.c, src/libqof/qof/qofutil.c,
+	  src/libqof/qof/qofutil.h, src/libqof/qof/test/Makefile.am,
+	  src/libqof/qof/test/test-qof-string-cache.c,
+	  src/libqof/qof/test/test-qof.c: Since 2.32, GCache is deprecated
+	  and should be replaced by GHashTable. In the new string cache
+	  (split out from qofutil.c/.h), the GHashTable has the string as
+	  key and a small heap-allocated guint refcount as data. The value
+	  is allocated rather than being used by value because there is no
+	  way to just modify the data field of an existing key. The key
+	  would need to be changed at the same time, which would free the
+	  old key value and invalidate all gchar pointers of objects which
+	  have refs to the key. Unit tests added as well.
+
+2012-05-21 15:48  jralls
+
+	* [r22188] src/backend/dbi/gnc-backend-dbi.c: [Bug #674862]
+	  Gnucash crashes after creating a new SX using the Mortgage
+	  Wizard and SQL Backend Special-cases dbi_result_get_datetime
+	  returning -1 to work around a bug in MinGW's implementation of
+	  gmtime(). [BP]
+
+2012-05-21 15:43  jralls
+
+	* [r22187] src/backend/dbi/gnc-backend-dbi.c: Revert
+	  gnc-backend-dbi.c from 22186, should be a separate commit.
+
+2012-05-21 15:32  jralls
+
+	* [r22186] configure.ac, src/backend/dbi/gnc-backend-dbi.c: Fix
+	  double definition of DEBUG_MEMORY
+
+2012-05-20 21:24  plongstaff
+
+	* [r22185] src/html/gnc-html-webkit.c: Replace deprecated
+	  g_basename() by recommend g_path_get_basename()
+
+2012-05-20 21:23  plongstaff
+
+	* [r22184] src/backend/sql/gnc-backend-sql.c: Remove invalid
+	  routine arg check
+
+2012-05-20 21:22  plongstaff
+
+	* [r22183] src/backend/sql/gnc-tax-table-sql.c: Use new
+	  GncTaxTable g-object parameters
+
+2012-05-20 21:21  plongstaff
+
+	* [r22182] src/backend/dbi/test/Makefile.am,
+	  src/backend/dbi/test/test-backend-dbi.c,
+	  src/backend/dbi/test/test-dbi-stuff.h,
+	  src/backend/dbi/test/utest-backend-dbi-basic.c,
+	  src/backend/dbi/test/utest-backend-dbi-business.c: Convert DBI
+	  test to utest
+
+2012-05-20 21:18  plongstaff
+
+	* [r22181] src/engine/Transaction.c: Fix some g-object parameter
+	  types
+	* [r22180] src/engine/gncTaxTable.c: Add some more g-object
+	  parameters for GncTaxTable
+
+2012-05-20 21:12  plongstaff
+
+	* [r22179] src/import-export/csv-import/gnc-csv-model.c: Replace
+	  deprecated g_mapped_file_free() with recommended
+	  g_mapped_file_unref()
+
+2012-05-08 21:37  gjanssens
+
+	* [r22176] src/business/business-gnome/dialog-invoice.c: Allow to
+	  change document type when duplicating an invoice. This allows to
+	  quickly create a canceling credit note for an invoice.
+
+2012-05-08 11:39  gjanssens
+
+	* [r22175]
+	  src/optional/python-bindings/example_scripts/simple_business_create.py:
+	  Bug #674273 - fixes and enhancements to example
+	  simple_business_create.py Patch by Jamie Campbell, with minimal
+	  correction to match the new ApplyPayment functions.
+	* [r22174] src/business/business-gnome/dialog-payment.c,
+	  src/engine/gncInvoice.c, src/engine/gncInvoice.h,
+	  src/engine/gncOwner.c, src/engine/gncOwner.h,
+	  src/optional/python-bindings/gnucash_business.py: Add
+	  gnc{Owner,Invoice}ApplyPayment functions. Most payment use cases
+	  don't need to know the internal lot juggling mechanism behind it.
+
+2012-05-08 11:38  gjanssens
+
+	* [r22173] src/engine/gncEmployee.c, src/engine/gncEmployee.h,
+	  src/engine/gncOwner.c: Add getter/setter for fake Employee name
+	  propery. This is done to get a more consistent owner interface
+	  and simplifies the python bindings
+	* [r22172] src/business/business-gnome/gnc-plugin-page-invoice.c:
+	  Remove some unused function declarations
+
+2012-05-07 22:54  jralls
+
+	* [r22171] src/engine/SchedXaction.c: [Bug 674862] Gnucash crashes
+	  after creating a new SX using the Mortgage Wizard and SQL
+	  Backend This addresses the crash reported on Ubuntu with
+	  Postgres by Krzysiek. The stack trace he posted showed the crash
+	  was the result of dereferencing a NULL GDate*, and this change
+	  protects against that. It still doesn't address the more basic
+	  problem of why on Win32 and with mysql and pgsql (but not
+	  SQLite3) the mortgage wizard is writing corrupt dates. [BP]
+
+2012-05-06 21:19  gjanssens
+
+	* [r22170] packaging/win32/install-fq-mods.cmd: Rearrange
+	  install-fq-mods.cmd to avoid duplicate code and make it easier
+	  to understand
+	* [r22169] packaging/win32/Makefile.am,
+	  packaging/win32/dist-impl.sh, packaging/win32/getperl.vbs,
+	  packaging/win32/gnc-path-check,
+	  packaging/win32/install-fq-mods.cmd: Bug #670355 - Automated
+	  install of Perl with Finance-Quote With these changes
+	  install-fq-mods.cmd will automatically download and install
+	  Strawberry perl if now perl version if found on the system.
+	  Patches by Dave Roberts
+
+2012-05-06 18:03  gjanssens
+
+	* [r22168] configure.ac: Remove empty lines from AC_CONFIG_SOURCES
+	  as this will cause the Windows build to fail when using a git
+	  repo as source
+
+2012-04-28 16:18  gjanssens
+
+	* [r22167] packaging/win32/defaults.sh,
+	  packaging/win32/install-impl.sh, packaging/win32/install.sh,
+	  util/gnc-svnversion: Further tweaks to enable git on the windows
+	  build
+
+2012-04-28 13:37  gjanssens
+
+	* [r22166]
+	  src/optional/python-bindings/example_scripts/test_imbalance_transaction.py:
+	  Bug #674276 - fixes and enhancements to example
+	  test_imbalance_transaction.py a) added usage information b) put
+	  most everything into exception handling to prevent lock linger
+	  when a problem occurs Patch by Jamie Campbell
+	* [r22165]
+	  src/optional/python-bindings/example_scripts/account_analysis.py:
+	  Bug #673877 - fixes and enhancements to example script
+	  account_analysis.py a) added usage information when not enough
+	  arguments added b) put the majority of code into an exception
+	  handling block so that if something goes wrong the session is
+	  closed. Prior to this change a problem would result in a
+	  lingering lock. Patch by Jamie Campbell
+
+2012-04-28 13:36  gjanssens
+
+	* [r22164]
+	  src/optional/python-bindings/example_scripts/new_book_with_opening_balances.py:
+	  Bug #673855 - fixes and enhancements to example script
+	  new_book_with_opening_balances.py 1) Fixed typo for "new book"
+	  session creation in_new=True -> is_new=True 2) Added usage
+	  information echo when script is invoked without correct number
+	  of parameters 3) Put most of the operations into an exception
+	  handling block. When an exception occurs, sessions which were
+	  opened are closed. Prior to this, any error would result in a
+	  lingering lock. Patch by Jamie Campbell
+
+2012-04-22 20:51  cstim
+
+	* [r22157] packaging/win32/defaults.sh: Bug #674494: Fix version
+	  and method of downloading isocodes in win32 packaging Patch by
+	  Mark Jenkins BP
+
+2012-04-22 20:49  cstim
+
+	* [r22156] packaging/win32/libbonoboui-2.24.2.patch: Bug #674495:
+	  Fix libbonoboui build for win32 packaging insists on
+	  availability of glade Patch alters
+	  packaging/win32/libbonoboui-2.24.2.patch to not look for glade
+	  and not build libbonoboui-2.24.2/glade Patch by Mark Jenkins.
+
+2012-04-21 17:38  jralls
+
+	* [r22154] src/backend/sql/gnc-budget-sql.c: [Bug 674283] With
+	  mysql crash after deleting accounts included into a budget Never
+	  assume a pointer is NULL unless you set it to NULL! BP
+
+2012-04-19 20:11  jralls
+
+	* [r22153] src/engine/test/utest-Split.c: [Testing] Fix potential
+	  leaks in Split teardown.
+
+2012-04-19 20:00  jralls
+
+	* [r22152] src/import-export/test/Makefile.am,
+	  src/report/report-gnome/test/Makefile.am,
+	  src/report/report-system/test/Makefile.am: Fix some scheme test
+	  program linkage failures on Wheezy.
+	* [r22151] src/optional/python-bindings/tests/test_business.py:
+	  Remove test obsoleted by r22001 Which rearranged the
+	  ApplyPayments code so that it's done from the GncInvoice object
+	  instead of explicitly by the owner (or in this case,
+	  GncCustomer).
+
+2012-04-17 19:55  cstim
+
+	* [r22150] src/engine/test/Makefile.am: Finally clean up linker
+	  flags so that windows build builds again as well.
+
+2012-04-17 00:45  jralls
+
+	* [r22149] src/engine/test/Makefile.am: Testing: Make
+	  libutest-Split.la "noinst-LTLIBRARY" instead of
+	  test-engine-LTLIBRARY
+
+2012-04-15 18:57  cstim
+
+	* [r22148] configure.ac: Increase trunk requirements to gtk-2.24,
+	  glib-2.28. This means SVN trunk does no longer support a stock
+	  RHEL6 distribution. See
+	  http://lists.gnucash.org/pipermail/gnucash-devel/2012-April/033877.html
+	  and
+	  http://lists.gnucash.org/pipermail/gnucash-devel/2011-November/032931.html
+	  for the discussion.
+
+2012-04-15 18:47  cstim
+
+	* [r22147] src/engine/test/Makefile.am: Add library flags for
+	  newly introduced libutest-Split because Windows needs those.
+
+2012-04-13 20:43  cstim
+
+	* [r22146] configure.ac, src/libqof/qof/gnc-numeric.c: Check
+	  whether header <pow.h> really exists before including it. The
+	  windows build has been failing for several days due to this.
+
+2012-04-13 20:04  cstim
+
+	* [r22145] src/import-export/aqbanking/gnc-ab-transfer.c: In
+	  online banking transfer, on the "To-Account" selection side,
+	  make the "Show Income/Expense" button active by default.
+
+2012-04-10 20:24  cstim
+
+	* [r22144] src/business/business-gnome/dialog-job.c,
+	  src/business/business-gnome/dialog-order.c,
+	  src/business/business-gnome/dialog-payment.c: In "Process
+	  Payment" and "New Order", let the customer field have keyboard
+	  focus. In "New Job", focus the job name.
+
+2012-04-09 19:56  cstim
+
+	* [r22143] src/business/business-gnome/dialog-invoice.c,
+	  src/gnome-search/gnc-general-search.c,
+	  src/gnome-search/gnc-general-search.h: In the "New Customer"
+	  window, set keyboard focus to customer field.
+
+2012-04-09 15:29  mikee
+
+	* [r22142] src/report/business-reports/taxinvoice.eguile.scm:
+	  Remove hack for fixed bug #573645 which was fixed in r18056.
+
+2012-04-09 15:23  mikee
+
+	* [r22141] src/report/business-reports/taxinvoice.eguile.scm: Fix
+	  the annoying case where an invoice item has mistakenly(?) had a
+	  tax table applied, unchecking the taxable flag for that item
+	  didn't remove the tax related columns from the invoice where
+	  there are no other taxable items.
+
+2012-04-09 11:41  mikee
+
+	* [r22140] src/report/business-reports/taxinvoice.eguile.scm:
+	  Display job name and job number when invoice is "in progress...".
+
+2012-04-09 11:33  mikee
+
+	* [r22139] src/report/business-reports/taxinvoice.scm: Fix
+	  reversed "Job Name", "Job Number" in options dialog, Headings 2
+	  tab.
+
+2012-04-04 08:35  mikee
+
+	* [r22138] src/engine/gncInvoiceP.h,
+	  src/optional/python-bindings/Makefile.am,
+	  src/optional/python-bindings/gnucash_core.i,
+	  src/optional/python-bindings/gnucash_core.py: Expose
+	  InvoiceNextID to python bindings. Accessed as
+	  book.InvoiceNextID(customer)
+
+2012-04-03 21:36  jralls
+
+	* [r22137] src/engine/test/utest-Account.c: [Testing] Fix up
+	  utest-Account to use checked error messages in all tests.
+
+2012-04-03 21:35  jralls
+
+	* [r22136] src/engine/test/utest-Split.c: [Testing] Fix a missed
+	  execution path detected with error message counting.
+	* [r22135] src/backend/sql/test/utest-gnc-backend-sql.c,
+	  src/engine/test/utest-Account.c, src/engine/test/utest-Split.c,
+	  src/test-core/unittest-support.c,
+	  src/test-core/unittest-support.h: [Testing] Add hits field to
+	  TestErrorStruct Allows asserting on the number of times error
+	  messages are encountered.
+	* [r22134] .gitignore: Add test files to .gitignore
+	* [r22133] po/POTFILES.in: [Translation] Update POTFILES.in with
+	  some new filenames
+	* [r22132] src/app-utils/test/test-exp-parser.c,
+	  src/app-utils/test/test-print-parse-amount.c,
+	  src/backend/dbi/test/test-dbi-basic.c,
+	  src/backend/dbi/test/test-dbi-business-stuff.c,
+	  src/backend/dbi/test/test-dbi-stuff.c,
+	  src/backend/sql/test/utest-gnc-backend-sql.c,
+	  src/backend/xml/test/test-load-xml2.c,
+	  src/backend/xml/test/test-xml-account.c,
+	  src/backend/xml/test/test-xml-transaction.c,
+	  src/engine/test/test-querynew.c,
+	  src/engine/test/utest-Account.c,
+	  src/engine/test/utest-Invoice.c, src/engine/test/utest-Split.c,
+	  src/gnc-module/test/test-agedver.c,
+	  src/gnc-module/test/test-dynload.c,
+	  src/gnc-module/test/test-gwrapped-c,
+	  src/gnc-module/test/test-incompatdep.c,
+	  src/gnc-module/test/test-load-c.c,
+	  src/gnc-module/test/test-load-deps,
+	  src/gnc-module/test/test-load-scm,
+	  src/gnc-module/test/test-modsysver.c,
+	  src/gnc-module/test/test-scm-init,
+	  src/gnc-module/test/test-scm-module,
+	  src/gnc-module/test/test-scm-multi,
+	  src/libqof/qof/test/Makefile.am,
+	  src/libqof/qof/test/test-gnc-date.c,
+	  src/libqof/qof/test/test-kvp_frame.c,
+	  src/libqof/qof/test/test-qofbook.c,
+	  src/libqof/qof/test/test-qofinstance.c,
+	  src/libqof/qof/test/test-qofobject.c,
+	  src/libqof/qof/test/test-qofsession.c,
+	  src/optional/gtkmm/test/test-book.cpp,
+	  src/optional/python-bindings/tests/test_split.py,
+	  src/optional/python-bindings/tests/test_transaction.py,
+	  src/report/stylesheets/test/test-load-module,
+	  src/test-core/Makefile.am, src/test-core/test-stuff.c,
+	  src/test-core/test-stuff.h, src/test-core/test-stuff.i,
+	  src/test-core/test-stuff.scm, src/test-core/unittest-support.c,
+	  src/test-core/unittest-support.h,
+	  src/test-core/unittest-support.i,
+	  src/test-core/unittest-support.scm,
+	  test-templates/make-testfile: [Testing] Separate unit test
+	  functions from make check functions. I'd originally put the
+	  functions supporting log detection, qof event handling, and
+	  mock-counting in test-stuff along with the functions that
+	  support the older "make check" integration tests. There are now
+	  more unit test support functions than there are of the older
+	  functions, so it's time for them to move out on their own.
+
+2012-04-01 22:07  jralls
+
+	* [r22130] src/engine/test/utest-Split.c: Testing: Some very minor
+	  formatting changes in utest-Split.c comments.
+
+2012-04-01 19:51  cstim
+
+	* [r22129] src/engine/test/test-engine.c,
+	  src/engine/test/utest-Split.c: Fix minor compiler errors of
+	  r22127.
+
+2012-03-31 22:12  jralls
+
+	* [r22128] src/engine/Split.c: Fix error discovered in testing:
+	  xaccSplitCompareAccountCodes actually compared the account names.
+	* [r22127] src/engine/Split.c, src/engine/SplitP.h,
+	  src/engine/test/Makefile.am, src/engine/test/test-engine.c,
+	  src/engine/test/utest-Split.c: Testing: Unit tests for Split.c
+
+2012-03-31 12:07  mikee
+
+	* [r22126] src/report/business-reports/taxinvoice.eguile.scm: Bug
+	  670008 - taxinvoice lacks flexibility necessary to produce
+	  legally valid Australian Tax Invoice Patches supplied by Dmitry
+	  Smirnov, many thanks.
+
+2012-03-26 20:15  cstim
+
+	* [r22124] src/register/register-gnome/datecell-gnome.c: Take
+	  read-only date setting of QofBook into account (no pun intended)
+	  when entering transaction into accounts. The code will silently
+	  revert the entered date to the threshold and just not allow any
+	  older date to be entered. I wonder whether we can display some
+	  useful error message additionally, but unfortunately I didn't
+	  find the place in the code where one single error message would
+	  have resulted, only places where multiply (annoying) error
+	  messages would have resulted.
+
+2012-03-25 20:18  cstim
+
+	* [r22123] src/register/ledger-core/split-register.c: Take
+	  read-only setting of QofBook into account for the transaction
+	  duplication.
+
+2012-03-25 19:13  cstim
+
+	* [r22122] src/engine/Transaction.c,
+	  src/register/ledger-core/split-register-load.c: Fix segfault
+	  after behaviour change of qof_book_get_autoreadonly_gdate() in
+	  r22118.
+
+2012-03-25 16:52  jralls
+
+	* [r22121] test-templates/make-testfile: Testing: fix
+	  search_local() for detecting callbacks and references.mv
+	* [r22120] test-templates/make-testfile: Fix omitted "setup"
+	  argument to GNC_TEST_ADD insertion.
+
+2012-03-25 14:51  mikee
+
+	* [r22119] src/report/business-reports/taxinvoice.eguile.scm,
+	  src/report/business-reports/taxinvoice.scm: Bug 670008 -
+	  taxinvoice lacks flexibility necessary to produce legally valid
+	  Australian Tax Invoice Fix typo. Fix column misalignment when no
+	  taxes are present in the invoice.
+
+2012-03-24 22:34  cstim
+
+	* [r22118] src/app-utils/app-utils.scm,
+	  src/app-utils/business-prefs.scm, src/engine/Transaction.c,
+	  src/engine/engine.i, src/libqof/qof/qofbook.c,
+	  src/libqof/qof/qofbook.h, src/libqof/qof/qofbookslots.h,
+	  src/libqof/qof/test/test-qofbook.c,
+	  src/register/ledger-core/split-register-load.c: Rename internal
+	  function names for read-only option of r22107 also to
+	  "auto-read-only". (Initially I thought there were a relation to
+	  the "freeze" state of a transaction, but this turned out to be
+	  not the case.)
+	* [r22117] src/engine/Transaction.c, src/engine/Transaction.h,
+	  src/gnome/gnc-split-reg.c,
+	  src/register/ledger-core/split-register-model.c: Take read-only
+	  setting of QofBook into account for the transaction deletion as
+	  well.
+	* [r22116] src/register/register-gnome/gnucash-grid.c: Make
+	  read-only lines in account register window (r22109) somewhat
+	  more visible by changing the background color slightly.
+	* [r22115] src/register/ledger-core/split-register-load.c,
+	  src/register/ledger-core/split-register-model.c: Fix threshold
+	  treatment in r22108, r22109 to make visualization and behaviour
+	  match.
+
+2012-03-24 22:20  jralls
+
+	* [r22114] src/test-core/test-stuff.c, src/test-core/test-stuff.h:
+	  Testing: Provide a test_destroy function/macro combination.
+	  Works on GObjects. Asserts if the object isn't a GObject (which
+	  may be the case if it has already been finalized) or if the
+	  object's finalize method isn't called (indicating a leak).
+	* [r22113] src/test-core/test-stuff.c, src/test-core/test-stuff.h:
+	  Testing: Rewrite test_signal_assert_hits as a function/macro
+	  combination Now the assert reports the location in the test
+	  program where it fails instead of inside test-stuff.c.
+
+2012-03-24 22:19  jralls
+
+	* [r22112] src/test-core/test-stuff.c, src/test-core/test-stuff.h:
+	  Testing: Add a basic print-to-stdout log handler as a test
+	  debugging aid.
+
+2012-03-23 20:52  cstim
+
+	* [r22111] src/Makefile.am: Fix r22105 that was missing some
+	  dependency of the "optional" directory on other parts.
+
+2012-03-22 09:11  mikee
+
+	* [r22110] src/plugins/customer_import/dialog-customer-import.c:
+	  Some systems fail to compile with:
+	  dialog-customer-import.c:399:36: error: 'shipaddr' may be used
+	  uninitialized in this function [-Werror=uninitialized]
+
+2012-03-21 22:18  cstim
+
+	* [r22109] src/register/ledger-core/split-register-model.c: Add
+	  auto-read-only feature for old transactions after N days,
+	  denoted by the new red line in the register.
+	* [r22108] src/business/business-ledger/gncEntryLedgerLoad.c,
+	  src/register/ledger-core/split-register-load.c,
+	  src/register/register-core/table-model.c,
+	  src/register/register-core/table-model.h,
+	  src/register/register-gnome/gnucash-grid.c: Add a second "red"
+	  divider line to the register to denote the read-only section for
+	  older transactions.
+	* [r22107] src/app-utils/app-utils.scm,
+	  src/app-utils/business-prefs.scm, src/engine/Makefile.am,
+	  src/engine/engine.i, src/libqof/qof/qofbook.c,
+	  src/libqof/qof/qofbook.h, src/libqof/qof/qofbookslots.h,
+	  src/libqof/qof/test/test-qofbook.c: Add option for automatically
+	  setting old transactions to read-only. The number of days for
+	  this read-only threshold can be chosen.
+
+2012-03-21 20:19  cstim
+
+	* [r22106] src/gnome/assistant-hierarchy.c: Fix typo in r22026 (uh
+	  oh, broken all the way since then!)
+
+2012-03-21 20:15  cstim
+
+	* [r22105] lib/Makefile.am, src/Makefile.am: Bug #671737: Let
+	  configure --disable-gui only build gui code Patch by Kuang-che
+	  Wu.
+
+2012-03-20 10:08  gjanssens
+
+	* [r22104] src/engine/gncInvoice.c: Fix crash/invalid memory
+	  access when unposting an invoice. This is triggered when glib is
+	  configured with G_SLICE=always-malloc
+
+2012-03-19 21:01  cstim
+
+	* [r22103] src/report/business-reports/taxinvoice.eguile.scm,
+	  src/report/business-reports/taxinvoice.scm: Bug #670008: Improve
+	  taxinvoice flexibility necessary to produce legally valid
+	  Australian Tax Invoice Patch by Dmitry Smirnov: Original
+	  taxinvoice template lacks flexibility necessary to make legaly
+	  valid Australian Tax Invoices. This patch introduces
+	  customisation options useful to comply with Australian
+	  requirements, but not limited to. * Functional changes +
+	  Reference number moved to the right side from under the invoice
+	  owner address (improves visibility and makes invoice layout more
+	  compact) + added option to show Job Name + added option to show
+	  Job Number + added options to enable/disable columns with
+	  dynamic adjustments to the table layout. + added options to
+	  enable/disable display of some invoice elements + some spaces in
+	  Headings1 defaults replaced with non-breaking space + added
+	  "Thank you for your patronage" text as default value for
+	  footnote to match other invoices' defaults * Hardcoded messages
+	  in English are replaced with options and default values to match
+	  original report. This makes possible report localization, like
+	  changing "Invoice" to "Tax Invoice" where required by law etc. *
+	  New dialog element in [Report Options]:[General] + [Report
+	  Currency] (Because dollar sign '$' is used by many countries for
+	  their national currency, invoicing between Australia and New
+	  Zealand often causing confusion unless invoice currency is
+	  stated in the invoice.) * New dialog elements in [Report
+	  Options]:[Headings2] + Invoice number text (string) + To text
+	  (string) + Ref text (string) + Job Name text (string) + Job
+	  Number text (string) * New dialog elements page [Report
+	  Options]:[Elements] + column: Date (boolean) + column: Tax Rate
+	  (boolean) + column: Units (boolean) + row: Contact (boolean) +
+	  row: Address (boolean) + row: Invoice Number (boolean) + row:
+	  Company Name (boolean) + Invoice number next to title (boolean)
+	  + Show Job name (boolean) + Show Job number (boolean) * Fixed
+	  bug when customer name is listed twice above invoice owner
+	  address. (this change is hard to separate into standalone patch
+	  because fix involving changes affected by new customisation
+	  options) * Added modification date and copyright comments *
+	  spancols* variables renamed to have more readable names
+
+2012-03-19 20:49  cstim
+
+	* [r22102] src/report/business-reports/taxinvoice.eguile.scm,
+	  src/report/business-reports/taxinvoice.scm: Bug #670008: Add
+	  taxinvoice flexibility necessary to produce legally valid
+	  Australian Tax Invoice Patch by Dmitry Smirnov: Due to invoice
+	  limitations, Gnucash is not yet ready for small business use in
+	  Australia. Lack of customisation options in taxinvoice do not
+	  allow to change its presentation for compliance with legal
+	  requirements. Those patches make taxinvoice practically useful
+	  for invoicing. First patch introducing few changes to allow easy
+	  adjustments to report presentation.
+	* [r22101] src/gnome-utils/gnc-amount-edit.c,
+	  src/register/register-gnome/formulacell-gnome.c,
+	  src/register/register-gnome/gnucash-sheet.c,
+	  src/register/register-gnome/pricecell-gnome.c: Bug #486658:
+	  [win32] Cannot use period on decimal keypad in my locale Patch
+	  by Sebastien Alborini: On win32, gdk never sends GDK_KP_Decimal,
+	  so this key cannot be detected. Work around this by watching the
+	  underlying virtual keycode VK_DECIMAL.
+
+2012-03-19 20:48  cstim
+
+	* [r22100] src/bin/gnucash-bin.c: Bug #671444: Remove the warning
+	  message about binreloc Forwarded from debian
+	  http://bugs.debian.org/443774 Every time gnucash is started it
+	  prints the following message to the console: "main: binreloc
+	  relocation support was disabled at configure time." This
+	  unnecessarily worries people who usually take it as warning
+	  rather than normal informational message. It has been reported
+	  as especially annoying if gnucash is running as cron job because
+	  it requires special workaround against sending this message over
+	  email on each invocation. The attached patch suppresses printing
+	  the worthless message. Given the current status of binreloc
+	  we're unlikely to use it so there is no need to remind that it
+	  was disabled (which is default). Thanks.
+	* [r22099] src/Makefile.am: Bug #671737: Fix for configure
+	  --enable-python --enable-dbi --disable-gui Patch by Kuang-che Wu.
+
+2012-03-19 20:31  cstim
+
+	* [r22097] packaging/win32/defaults.sh: [Win32 build] Update
+	  gwenhywfar/aqbanking versions. BP
+
+2012-03-18 12:59  cstim
+
+	* [r22092] po/POTFILES.in,
+	  src/import-export/csv-export/csv-transactions-export.c,
+	  src/import-export/csv-import/Makefile.am,
+	  src/import-export/csv-import/assistant-csv-account-import.c,
+	  src/import-export/csv-import/assistant-csv-trans-import.c,
+	  src/import-export/csv-import/gnc-csv-import.c,
+	  src/import-export/csv-import/gnc-csv-import.glade,
+	  src/import-export/csv-import/gnc-csv-import.h,
+	  src/import-export/csv-import/gnc-plugin-csv-import-ui.xml,
+	  src/import-export/csv-import/gnc-plugin-csv-import.c,
+	  src/import-export/csv/example-file.csv,
+	  src/import-export/csv/test/test.csv: Bug #672161: Remove old CSV
+	  importer, now replaced by new one. Patch by Robert Fewell.
+
+2012-03-18 11:43  cstim
+
+	* [r22090] accounts/de_DE/acctchrt_skr03.gnucash-xea,
+	  accounts/de_DE/acctchrt_skr04.gnucash-xea: Revert r22083, "Adapt
+	  German account templates to updated tax rate." A pure renaming
+	  is not the correct solution, I've been told. BP
+
+2012-03-16 20:27  cstim
+
+	* [r22089] src/backend/dbi/gnc-backend-dbi.c,
+	  src/backend/sql/test/utest-gnc-backend-sql.c,
+	  src/backend/xml/gnc-backend-xml.c,
+	  src/backend/xml/io-gncxml-v2.c, src/backend/xml/sixtp.c,
+	  src/backend/xml/sixtp.h,
+	  src/business/business-gnome/dialog-payment.c,
+	  src/core-utils/gnc-features.c, src/engine/gncEmployee.c,
+	  src/engine/gncEntry.c, src/engine/gncIDSearch.c,
+	  src/engine/gncInvoice.c, src/engine/gncVendor.c,
+	  src/engine/test/utest-Account.c,
+	  src/gnome-utils/assistant-xml-encoding.c,
+	  src/gnome/assistant-hierarchy.c,
+	  src/gnome/gnc-plugin-basic-commands.c,
+	  src/html/gnc-html-webkit.c,
+	  src/import-export/csv-export/assistant-csv-export.c,
+	  src/import-export/csv-export/assistant-csv-export.h,
+	  src/import-export/csv-export/csv-transactions-export.c,
+	  src/import-export/csv-export/csv-transactions-export.h,
+	  src/import-export/csv-export/csv-tree-export.c,
+	  src/import-export/csv-export/csv-tree-export.h,
+	  src/import-export/csv-export/gnc-plugin-csv-export.c,
+	  src/import-export/csv-import/assistant-csv-account-import.c,
+	  src/import-export/csv-import/assistant-csv-trans-import.c,
+	  src/import-export/csv-import/assistant-csv-trans-import.h,
+	  src/import-export/csv-import/csv-account-import.c,
+	  src/import-export/csv-import/gnc-csv-model.c,
+	  src/import-export/csv-import/gnc-plugin-csv-import.c,
+	  src/import-export/import-account-matcher.c,
+	  src/import-export/import-account-matcher.h,
+	  src/import-export/import-format-dialog.c,
+	  src/import-export/import-main-matcher.c,
+	  src/import-export/import-main-matcher.h,
+	  src/import-export/qif-import/assistant-qif-import.c,
+	  src/import-export/qif-import/gnc-plugin-qif-import.c,
+	  src/libqof/qof/qofbook.c, src/libqof/qof/qofsession.c,
+	  src/libqof/qof/test/test-qofsession.c,
+	  src/plugins/bi_import/dialog-bi-import-gui.c,
+	  src/plugins/bi_import/dialog-bi-import.c,
+	  src/plugins/customer_import/dialog-customer-import-gui.c,
+	  src/plugins/customer_import/dialog-customer-import.c,
+	  src/register/register-gnome/gnucash-item-edit.c,
+	  src/register/register-gnome/gnucash-item-edit.h,
+	  src/register/register-gnome/gnucash-sheet.c: Re-indentation of
+	  source code. As usual, re-indentation was done using astyle-1.24
+	  using the following options: astyle --indent=spaces=4
+	  --brackets=break --pad-oper --pad-header --suffix=none
+
+2012-03-16 20:26  cstim
+
+	* [r22088] .gitignore: Add some more gitignores.
+	* [r22087] src/import-export/import-main-matcher.c: Bug #672161:
+	  Fix double-free error when importer dialog is canceled Patch by
+	  Robert Fewell: There is an existing problem with the main
+	  matcher which can causes the following errors if you have the
+	  relevant account register open: CRIT <qof>
+	  qof_instance_get_editlevel: assertion `QOF_IS_INSTANCE(ptr)'
+	  failed This is caused when you decide to not add all the
+	  transactions displayed on the matcher dialog and then the system
+	  trying to delete the temporary transaction twice. I think this
+	  patch comments out the offending lines, if correct I will
+	  provide a patch to remove them. The error below is only seen
+	  when the relevant account register is open and in the
+	  preferences you have double line mode enabled. Not sure how it
+	  gets fired, probably part of the register update process but it
+	  is because we do not have a valid transaction any more. CRIT
+	  <gnc.engine> xaccTransGetVoidReason: assertion `trans' failed
+	  The function concerned is gnc_split_register_get_vnotes_entry
+	  and could be solved by adding the following but not sure if this
+	  is a valid fix. if(trans == NULL) return g_strdup('\0'); else
+	  return xaccTransGetVoidReason(trans);
+	* [r22086] configure.ac, po/POTFILES.in, src/bin/gnucash-bin.c,
+	  src/import-export/Makefile.am, src/import-export/csv-import,
+	  src/import-export/csv-import/Makefile.am,
+	  src/import-export/csv-import/assistant-csv-account-import.c,
+	  src/import-export/csv-import/assistant-csv-account-import.glade,
+	  src/import-export/csv-import/assistant-csv-account-import.h,
+	  src/import-export/csv-import/assistant-csv-trans-import.c,
+	  src/import-export/csv-import/assistant-csv-trans-import.glade,
+	  src/import-export/csv-import/assistant-csv-trans-import.h,
+	  src/import-export/csv-import/csv-account-import.c,
+	  src/import-export/csv-import/csv-account-import.h,
+	  src/import-export/csv-import/gnc-csv-gnumeric-popup.c,
+	  src/import-export/csv-import/gnc-csv-gnumeric-popup.h,
+	  src/import-export/csv-import/gnc-csv-import.c,
+	  src/import-export/csv-import/gnc-csv-import.glade,
+	  src/import-export/csv-import/gnc-csv-import.h,
+	  src/import-export/csv-import/gnc-csv-model.c,
+	  src/import-export/csv-import/gnc-csv-model.h,
+	  src/import-export/csv-import/gnc-plugin-csv-import-ui.xml,
+	  src/import-export/csv-import/gnc-plugin-csv-import.c,
+	  src/import-export/csv-import/gnc-plugin-csv-import.h,
+	  src/import-export/csv-import/gncmod-csv-import.c,
+	  src/import-export/csv-import/schemas,
+	  src/import-export/csv-import/schemas/Makefile.am,
+	  src/import-export/csv-import/schemas/apps_gnucash_dialog_import_csv.schemas.in,
+	  src/import-export/csv/Makefile.am,
+	  src/import-export/csv/gnc-csv-gnumeric-popup.c,
+	  src/import-export/csv/gnc-csv-gnumeric-popup.h,
+	  src/import-export/csv/gnc-csv-import.c,
+	  src/import-export/csv/gnc-csv-import.glade,
+	  src/import-export/csv/gnc-csv-import.h,
+	  src/import-export/csv/gnc-csv-model.c,
+	  src/import-export/csv/gnc-csv-model.h,
+	  src/import-export/csv/gnc-plugin-csv-ui.xml,
+	  src/import-export/csv/gnc-plugin-csv.c,
+	  src/import-export/csv/gnc-plugin-csv.h,
+	  src/import-export/csv/gncmod-csv-import.c,
+	  src/import-export/dialog-import.glade,
+	  src/import-export/import-account-matcher.c,
+	  src/import-export/import-account-matcher.h,
+	  src/import-export/import-main-matcher.c,
+	  src/import-export/import-main-matcher.h: Bug #672161: New CSV
+	  account and transaction importer Patch by Robert Fewell:
+	  Firstly, this patch allows for the creating and updating
+	  accounts based on the CSV file being imported. New accounts are
+	  created if the commodity required exists and existing accounts
+	  are updated for the four fields: code, description, notes and
+	  colour. This can be used for doing bulk updates of these fields
+	  and also for importing the account structure from another file.
+	  The second part is the change of the existing CSV importer to
+	  use an assistant to guide you through the import. Additional
+	  features added is the ability to specify the start and end row
+	  to be imported allowing you to jump over a header or footer or
+	  just import a few rows. A currency format option was added which
+	  was requested in another bug to overcome a problem they were
+	  having with the downloaded format from there bank. You can also
+	  associate the account name to a GnuCash account using the
+	  'online_id' kvp, not sure if this is Ok or whether it should be
+	  a different one. To achieve the above, I split the dialogs used
+	  in import_account_matcher and import_main_matcher into the
+	  dialog and the content so I could load the content into the
+	  assistant saving on duplication, hope this makes sense.
+	* [r22085] configure.ac, po/POTFILES.in, src/bin/gnucash-bin.c,
+	  src/import-export/Makefile.am, src/import-export/csv-export,
+	  src/import-export/csv-export/Makefile.am,
+	  src/import-export/csv-export/assistant-csv-export.c,
+	  src/import-export/csv-export/assistant-csv-export.glade,
+	  src/import-export/csv-export/assistant-csv-export.h,
+	  src/import-export/csv-export/csv-transactions-export.c,
+	  src/import-export/csv-export/csv-transactions-export.h,
+	  src/import-export/csv-export/csv-tree-export.c,
+	  src/import-export/csv-export/csv-tree-export.h,
+	  src/import-export/csv-export/gnc-plugin-csv-export-ui.xml,
+	  src/import-export/csv-export/gnc-plugin-csv-export.c,
+	  src/import-export/csv-export/gnc-plugin-csv-export.h,
+	  src/import-export/csv-export/gncmod-csv-export.c,
+	  src/import-export/csv-export/schemas,
+	  src/import-export/csv-export/schemas/Makefile.am,
+	  src/import-export/csv-export/schemas/apps_gnucash_dialog_export_csv.schemas.in:
+	  Bug #672157: New CSV account and transaction exporter Patch by
+	  Robert Fewell: I have put together a new feature to export the
+	  account tree and transactions to a deliminated file. Both
+	  options allow you to select the deliminator and the use of
+	  quotes. Every thing seems to work on the testing I have done but
+	  may be some of the text and the headings in the output might
+	  need changing.
+
+2012-03-16 19:33  cstim
+
+	* [r22083] accounts/de_DE/acctchrt_skr03.gnucash-xea,
+	  accounts/de_DE/acctchrt_skr04.gnucash-xea: Adapt German account
+	  templates to updated tax rate. BP
+
+2012-03-14 22:26  cstim
+
+	* [r22082] src/engine/gncInvoice.c, src/engine/test/Makefile.am,
+	  src/engine/test/test-engine.c, src/engine/test/utest-Invoice.c:
+	  Add some unittest for GncInvoice and posting/unposting an
+	  invoice. I thought this would reproduce the crash when unposting
+	  a real invoice with G_SLICE=always-malloc set. However,
+	  apparently this test case isn't complete enough and does not
+	  crash. Maybe one needs to add further GncEntries?
+	* [r22081] po/POTFILES.in: Update POTFILES.in after recent file
+	  move.
+
+2012-03-14 17:24  gjanssens
+
+	* [r22080] accounts/sv_SE/Makefile.am: Fix make dist for Swedish
+	  accounts files Reported by Robert Fewell
+
+2012-03-13 21:22  gjanssens
+
+	* [r22079] src/engine/gncInvoice.c: Use correct list iterator
+	  instead of list pointer. (Bug pointed out by Christian Stimming)
+
+2012-03-13 13:18  cstim
+
+	* [r22078] src/CMakeLists.txt, src/app-utils/CMakeLists.txt,
+	  src/gnc/CMakeLists.txt: [Cutecash] Follow-up for r22075: Removal
+	  of "calculation" module in CMake.
+
+2012-03-12 13:23  mikee
+
+	* [r22076] src/report/business-reports/taxinvoice.eguile.scm:
+	  Prevent wrapping in date column.
+
+2012-03-11 22:05  cstim
+
+	* [r22075] configure.ac, src/Makefile.am,
+	  src/app-utils/Makefile.am, src/app-utils/calculation,
+	  src/app-utils/calculation/Makefile.calc,
+	  src/app-utils/calculation/README,
+	  src/app-utils/calculation/amort_opt.c,
+	  src/app-utils/calculation/amort_prt.c,
+	  src/app-utils/calculation/expression_parser.c,
+	  src/app-utils/calculation/fin-interactive.c,
+	  src/app-utils/calculation/fin-main.c,
+	  src/app-utils/calculation/fin-proto.sh,
+	  src/app-utils/calculation/fin.c,
+	  src/app-utils/calculation/fin_spl_protos.h,
+	  src/app-utils/calculation/fin_static_proto.h,
+	  src/app-utils/calculation/fini-input,
+	  src/app-utils/calculation/fini-output,
+	  src/app-utils/calculation/finproto.h,
+	  src/app-utils/calculation/finvar.h,
+	  src/app-utils/calculation/numeric_ops.c,
+	  src/app-utils/calculation/numeric_ops.h,
+	  src/app-utils/calculation/sample,
+	  src/app-utils/gncmod-app-utils.c,
+	  src/app-utils/test/Makefile.am, src/calculation/CMakeLists.txt,
+	  src/calculation/Makefile.am, src/calculation/Makefile.calc,
+	  src/calculation/README, src/calculation/amort_opt.c,
+	  src/calculation/amort_prt.c,
+	  src/calculation/expression_parser.c,
+	  src/calculation/fin-interactive.c, src/calculation/fin-main.c,
+	  src/calculation/fin-proto.sh, src/calculation/fin.c,
+	  src/calculation/fin_spl_protos.h,
+	  src/calculation/fin_static_proto.h, src/calculation/fini-input,
+	  src/calculation/fini-output, src/calculation/finproto.h,
+	  src/calculation/finvar.h, src/calculation/gncmod-calculation.c,
+	  src/calculation/numeric_ops.c, src/calculation/numeric_ops.h,
+	  src/calculation/sample, src/calculation/test/Makefile.am,
+	  src/calculation/test/test-link.c,
+	  src/gnome-utils/gncmod-gnome-utils.c,
+	  src/gnome-utils/test/Makefile.am, src/gnome/Makefile.am,
+	  src/html/Makefile.am, src/html/gncmod-html.c,
+	  src/import-export/test/Makefile.am,
+	  src/report/report-gnome/test/Makefile.am,
+	  src/report/report-system/test/Makefile.am,
+	  src/report/standard-reports/test/Makefile.am,
+	  src/report/stylesheets/test/Makefile.am,
+	  src/report/utility-reports/test/Makefile.am: Remove the separate
+	  "calculation" module and swallow it in app-utils. Those few
+	  source files do not justify an extra loadable module. They are
+	  just compiled-in into app-utils.
+
+2012-03-11 21:55  cstim
+
+	* [r22074] src/libqof/qof/qofobject.c: Replace g_list_append by
+	  g_list_prepend to increase performance. To my surprise, this
+	  apparently also fixes a memory leak, but I don't know why.
+
+2012-03-09 00:07  jralls
+
+	* [r22073] test-templates/make-testfile: New Perl program to
+	  create a skeleton test file from a C source file.
+
+2012-03-08 22:48  cstim
+
+	* [r22072] src/gnome-utils/gnc-file.c: Fix minor memory leak:
+	  Return value of gnc_uri_get_components must get free'd.
+
+2012-03-08 22:47  cstim
+
+	* [r22071] src/libqof/qof/gnc-numeric.c: Remove obsolete strspn()
+	  call that causes valgrind warnings about invalid read(). The
+	  strspn() call was added in r8500 but the usage of its return
+	  value was removed in r10315, so it isn't neccesary anyway. The
+	  macro GNC_DEPRECATED is defined nowhere and used nowhere else,
+	  so we can remove that block altogether.
+
+2012-03-08 21:20  cstim
+
+	* [r22070] src/backend/xml/gnc-backend-xml.c, src/html/gnc-html.c:
+	  Fix memory leak: Missing regfree() after regcomp().
+
+2012-02-29 20:50  cstim
+
+	* [r22067] packaging/Makefile.am, packaging/gnucash-2.1.x.ebuild:
+	  Remove potentially abandoned file (that has a GPLv2-only
+	  license, too). The last contributors here, Josh Sled and Chris
+	  Lyttle, have put their code under "GPLv2 and GPLv3" license, see
+	  r22063, but I'm too lazy to look up the copyright holders on the
+	  file as a whole so I'd rather remove it. If someone wants to add
+	  a similar packaging file again, feel free to do so, but please
+	  don't use GPLv2-only code to do so.
+	* [r22066] src/import-export/csv/gnc-csv-gnumeric-popup.c,
+	  src/import-export/csv/gnc-csv-gnumeric-popup.h,
+	  src/import-export/csv/gnc-csv-import.c: Bug #670727: Extend
+	  license of 3 files to be GPLv2 and GPLv3. This has been granted
+	  by the gnumeric copyright holders. See
+	  https://bugzilla.gnome.org/show_bug.cgi?id=670727#c7
+
+2012-02-28 18:38  mikee
+
+	* [r22065] configure.ac, doc/examples/customers_import.csv,
+	  src/engine/gncIDSearch.c, src/plugins/Makefile.am,
+	  src/plugins/customer_import,
+	  src/plugins/customer_import/Makefile.am,
+	  src/plugins/customer_import/dialog-customer-import-gui.c,
+	  src/plugins/customer_import/dialog-customer-import-gui.h,
+	  src/plugins/customer_import/dialog-customer-import.c,
+	  src/plugins/customer_import/dialog-customer-import.h,
+	  src/plugins/customer_import/gnc-plugin-customer_import.c,
+	  src/plugins/customer_import/gnc-plugin-customer_import.h,
+	  src/plugins/customer_import/gtkbuilder,
+	  src/plugins/customer_import/gtkbuilder/Makefile.am,
+	  src/plugins/customer_import/gtkbuilder/dialog-customer-import-gui.glade,
+	  src/plugins/customer_import/libgncmod-customer_import.c,
+	  src/plugins/customer_import/ui,
+	  src/plugins/customer_import/ui/Makefile.am,
+	  src/plugins/customer_import/ui/gnc-plugin-customer_import-ui.xml:
+	  New plugin to import customers and vendors from a csv type file.
+	  From a patch by Sebastian Held. Again the CSV file is of fixed
+	  number of fields, similar to invoice/bill importer. Please test
+	  this. Field list: id, company, name, addr1, addr2, addr3, addr4,
+	  phone, fax, email, notes, shipname, shipaddr1, shipaddr2,
+	  shipaddr3, shipaddr4, shipphone shipfax, shipemail Vendors don't
+	  have shipping information so even though the fields have to
+	  exist, leave them empty. The id field is optional, if empty a
+	  new id will be chosen. If an id is used this will UPDATE a
+	  vendor/customer with the same id. This may not be what the user
+	  wants. Maybe this should be optional/selectable behaviour. To
+	  enable the plugin, add the line: (gnc:module-load
+	  "gnucash/plugins/customer_import" 0) to ~/.gnucash/config.user
+
+2012-02-24 20:15  cstim
+
+	* [r22063] src/gnome-utils/gnc-dense-cal.h: Bug #670727: Clarify
+	  license of a file to be GPLv2 and GPLv3 gnc-dense-cal.h: License
+	  remark was forgotten in r19507, but the author Josh Sled agreed
+	  on GPLv2 and GPLv3 licensing in his gnucash-devel message on
+	  2010-08-28.
+
+2012-02-22 12:34  mikee
+
+	* [r22060] src/plugins/bi_import/dialog-bi-import.c: Fix
+	  gtk_entry_set_text error warnings.
+
+2012-02-20 23:02  mta
+
+	* [r22058] src/report/standard-reports/balance-sheet.scm,
+	  src/report/standard-reports/budget-balance-sheet.scm,
+	  src/report/standard-reports/budget-income-statement.scm,
+	  src/report/standard-reports/equity-statement.scm,
+	  src/report/standard-reports/income-statement.scm,
+	  src/report/standard-reports/trial-balance.scm: Fix r22010 to not
+	  crash if the current file has no company name.
+
+2012-02-20 22:14  mta
+
+	* [r22057] src/backend/xml/io-gncxml-v2.c: Fix a warning due to
+	  the wrong declaration for the return value of gzopen. The return
+	  value is off by a level of indirection, it should be a gzFile
+	  not gzFile *.
+
+2012-02-19 20:32  cstim
+
+	* [r22056] src/core-utils/CMakeLists.txt: [cutecash] add
+	  gnc-features.[hc] to cmake. Follow-up to r21981.
+
+2012-02-19 11:00  cstim
+
+	* [r22054] src/import-export/aqbanking/dialog-ab-trans.c: Bug
+	  #668693: aqbanking: Use "focus-out-event" to track amount
+	  changes in transaction dialog "amount-changed" is only emitted
+	  on KP_ENTER and thus doesn't help us while "changed" confuses
+	  the widget. Patch by Johannes Schmid.
+
+2012-02-17 21:10  cmarchi
+
+	* [r22053] src/report/standard-reports/price-scatter.scm: Fix
+	  translatable strings. Patch provided by Aurimas Fišeras.
+
+2012-02-17 19:13  gjanssens
+
+	* [r22050]
+	  src/business/business-gnome/gtkbuilder/dialog-payment.glade:
+	  Payment dialog ui tweaks. Make it slightly larger by default and
+	  enable sorting on the document list
+
+2012-02-17 09:15  cstim
+
+	* [r22049] src/app-utils/options.scm: Fix broken value-to-kvp
+	  conversion for number range option which doesn't get the kvp
+	  type correctly. This seems to be have been broken all along
+	  since r7094.
+
+2012-02-15 23:14  alex.aycinena
+
+	* [r22038] src/backend/xml/sixtp.c: Properly handle Windos
+	  end-of-line markers in determining xml file versions.
+
+2012-02-15 15:23  gjanssens
+
+	* [r22026] src/gnome/assistant-hierarchy.c: Add an additional test
+	  that hopefully will shed more light on bug 666855.
+
+2012-02-15 11:22  gjanssens
+
+	* [r22025] src/quotes/gnc-fq-check.in,
+	  src/quotes/gnc-fq-helper.in: Bug #670002 - updates to comments
+	  format for gnc-fq-check and gnc-fq-helper utilities. Patch by
+	  Dmitry Smirnov
+
+2012-02-13 15:47  gjanssens
+
+	* [r22021] src/engine/gncOwner.c: Fix "'txn' may be used
+	  uninitialized in this function" warning
+
+2012-02-13 15:02  gjanssens
+
+	* [r22018] src/report/standard-reports/advanced-portfolio.scm: Bug
+	  632931: Advanced Portfolio: total gains does not include income
+	  - new column layout as suggested on bugzilla. Total return is
+	  now an amount (not a percentage), and includes income as well as
+	  capital gains. New column "Rate of return" gives the percentage.
+	  - changed default value for "Ignore brokerage fees when
+	  calculating returns", the default is now to NOT ignore the fees.
+	  Patch by Sebastien Alborini <salborini@gmail.com> BP
+
+2012-02-12 20:29  gjanssens
+
+	* [r22012] accounts/Makefile.am, accounts/sv_SE/Makefile.am,
+	  accounts/sv_SE/bas_2012.gnucash-xea,
+	  accounts/sv_SE/swedish_small_business.gnucash-xea,
+	  accounts/sv_SE/swedish_small_business.gnucash.xea, configure.ac:
+	  Bug #669494 - Swedish account plan provided (BAS 2012)
+	  Additionally this commit adds some required changes to get the
+	  Swedish account plans to actually show up in GnuCash (both BAS
+	  and the earlier committed Swedish small business account plan) BP
+
+2012-02-12 20:28  gjanssens
+
+	* [r22011] src/gnome/assistant-hierarchy.c: Fix a GtkWarning in
+	  the Account Hierarchy Assistant which occurs if the Example
+	  Account file doesn't contain a long description.
+
+2012-02-12 18:43  gjanssens
+
+	* [r22010] src/app-utils/app-utils.scm,
+	  src/report/standard-reports/balance-sheet.scm,
+	  src/report/standard-reports/budget-balance-sheet.scm,
+	  src/report/standard-reports/budget-income-statement.scm,
+	  src/report/standard-reports/equity-statement.scm,
+	  src/report/standard-reports/income-statement.scm,
+	  src/report/standard-reports/trial-balance.scm: Bug #584819 -
+	  Company name is not shown by default on some reports Patch by
+	  Chris Dennis
+
+2012-02-12 10:20  cmarchi
+
+	* [r22007] src/business/business-gnome/dialog-payment.c: Fix a
+	  typo.
+
+2012-02-12 10:07  cmarchi
+
+	* [r22006] src/report/business-reports/taxinvoice.scm: Fix
+	  translatable strings code for tax invoice report.
+
+2012-02-12 09:44  gjanssens
+
+	* [r22005] packaging/win32/build_package.sh: Win32: tag builds
+	  when a tag is not x.y.z (like 2.4.10-1) fail to upload due to a
+	  typo in the build scripts.
+
+2012-02-12 09:15  cmarchi
+
+	* [r22004] src/report/report-system/html-acct-table.scm,
+	  src/report/standard-reports/equity-statement.scm,
+	  src/report/standard-reports/income-statement.scm,
+	  src/report/standard-reports/trial-balance.scm: Fix translatable
+	  strings code for some reports. Patch provided by Aurimas Fišeras.
+
+2012-02-10 15:35  gjanssens
+
+	* [r22002] src/business/business-gnome/dialog-payment.c,
+	  src/engine/gncOwner.c, src/engine/gncOwner.h: Keep the lot list
+	  sorted during payment processing to ensure the oldest open
+	  document is processed first. In the process, I renamed two
+	  helper functions (one of which I had to extend to work with
+	  payment lots).
+	* [r22001] src/engine/gncOwner.c, src/engine/gncOwner.h,
+	  src/optional/python-bindings/gnucash_business.py: Remove some
+	  obsolete (and now malfunctioning) code.
+
+2012-02-10 15:34  gjanssens
+
+	* [r22000] src/business/business-gnome/dialog-payment.c,
+	  src/business/business-gnome/gtkbuilder/dialog-payment.glade,
+	  src/engine/gncOwner.c, src/engine/gncOwner.h: Rework interaction
+	  between payments and invoices part 2. This commit deals with
+	  paying invoices.
+	* [r21999] src/business/business-gnome/dialog-payment.c,
+	  src/gnome-utils/gnc-tree-view-price.c: Small fixes in comments
+	* [r21998] src/engine/gncInvoice.c: Improve open lot selection
+	  when posting an invoice
+	* [r21997] src/engine/gncOwner.c: Optimization: don't sort lot
+	  list if it will only be traversed to calculate a sum
+	* [r21996] src/business/business-gnome/dialog-payment.c,
+	  src/engine/Transaction.h, src/engine/gncInvoice.c,
+	  src/engine/gncInvoice.h, src/engine/gncOwner.c,
+	  src/engine/gncOwner.h: Rework interaction between payments and
+	  invoices. This commit deals with invoice posting and unposting
+	  only. Before invoices and payments shared the same lot (meaning
+	  a payment was added to an existing invoice lot or vice versa).
+	  Now payments and lots have their own separate lots and payments
+	  are linked to invoices via linking transactions. This opens the
+	  way to "pay" invoices with credit notes.
+	* [r21995] src/engine/gncInvoice.c: Refactor code to avoid
+	  duplication
+
+2012-02-10 15:33  gjanssens
+
+	* [r21994] src/engine/gncInvoice.c: Fix credit card charges for
+	  credited vouchers ("credit notes for employees")
+	* [r21993] src/engine/gncEntry.c, src/engine/gncEntry.h: Hide some
+	  now internal-only functions from the public GncEntry interface
+	* [r21992] src/business/business-gnome/dialog-invoice.c,
+	  src/engine/gncInvoice.c, src/engine/gncInvoice.h: Make invoice
+	  totals always document values. These functions are only used for
+	  displaying.
+	* [r21991] src/report/business-reports/taxinvoice.eguile.scm:
+	  Modify Tax Invoice report to work properly with credit notes
+	  Note that contrary to the other invoice reports the invoice
+	  title is not automatically set to "Credit Note", because on the
+	  tax invoice report that title is a user settable option.
+	* [r21990] src/business/business-ledger/gncEntryLedgerControl.c,
+	  src/business/business-ledger/gncEntryLedgerModel.c,
+	  src/engine/gncEntry.c, src/engine/gncEntry.h,
+	  src/report/business-reports/easy-invoice.scm,
+	  src/report/business-reports/fancy-invoice.scm,
+	  src/report/business-reports/invoice.scm: Introduce two
+	  convenience functions to simplify quantity handling for
+	  invoice/credit note entries.
+	* [r21989] src/report/business-reports/fancy-invoice.scm: Modify
+	  fancy invoice to work with credit notes.
+
+2012-02-10 15:32  gjanssens
+
+	* [r21988] src/engine/gncInvoice.c: Modify gncInvoice to use the
+	  new entry value getters
+	* [r21987] src/report/business-reports/easy-invoice.scm,
+	  src/report/business-reports/invoice.scm: Update invoice reports
+	  to use the new entry value getters.
+	* [r21986] src/engine/gncEntry.c, src/engine/gncEntry.h: Introduce
+	  entry getters that return the balance value as opposed to
+	  internal value and document value.
+	* [r21985] src/business/business-gnome/dialog-invoice.c,
+	  src/business/business-ledger/gncEntryLedgerModel.c,
+	  src/engine/gncEntry.c, src/engine/gncEntry.h,
+	  src/engine/gncInvoice.c,
+	  src/report/business-reports/easy-invoice.scm,
+	  src/report/business-reports/fancy-invoice.scm,
+	  src/report/business-reports/invoice.scm,
+	  src/report/business-reports/taxinvoice.eguile.scm: Rework entry
+	  value getters Make it clear when the values are rounded or not
+	  and that the values are as on the document (opposed to how they
+	  impact the balance).
+	* [r21984] src/engine/gncEntry.c: Use better variable name to
+	  avoid confusion with is_cn
+	* [r21983] src/engine/gncEntry.c: Small cleanups: - improve
+	  comments, fix spelling - fix some static code analysis warnings
+	  - expand and remove a macro that wasn't adding much other than
+	  reduced code readability
+
+2012-02-10 15:31  gjanssens
+
+	* [r21982] src/business/business-gnome/business-gnome-utils.c,
+	  src/business/business-gnome/business-gnome-utils.h,
+	  src/business/business-gnome/dialog-payment.c,
+	  src/business/business-gnome/gtkbuilder/dialog-payment.glade:
+	  Rework payment dialog for credit notes
+
+2012-02-10 14:40  gjanssens
+
+	* [r21981] po/POTFILES.in, src/app-utils/Makefile.am,
+	  src/app-utils/gnc-features.c, src/app-utils/gnc-features.h,
+	  src/core-utils/Makefile.am, src/core-utils/gnc-features.c,
+	  src/core-utils/gnc-features.h, src/engine/gncInvoice.c,
+	  src/gnome-utils/gnc-file.c: Add function to set a feature as
+	  used and use it for a first feature: Credit Notes. Other changes
+	  in this commit: * The feature code moved to core-utils, because
+	  the engine can't use app-utils. * I remove the gettext wrapper
+	  around the feature description. As mentioned on the mailing
+	  list, by definition unknown features can't have translated
+	  descriptions.
+
+2012-02-10 09:19  cstim
+
+	* [r21980] packaging/win32/defaults.sh: Win32 build: Update gtk to
+	  2.4.10 [21977] and update other packages to Nov 2011 versions as
+	  well.
+
+2012-02-09 17:17  gjanssens
+
+	* [r21978] po/POTFILES.in, src/app-utils/Makefile.am,
+	  src/app-utils/gnc-features.c, src/app-utils/gnc-features.h,
+	  src/gnome-utils/gnc-file.c: Move the features tests to its own
+	  source files. This allows for - other engine consumers to use
+	  the features test as well (think CuteCash, python bindings,...)
+	  - a central point for developers to check for feature
+	  definitions - a central point to manage all feature related code
+	  BP
+
+2012-02-03 13:49  gjanssens
+
+	* [r21931] src/report/business-reports/easy-invoice.scm,
+	  src/report/business-reports/invoice.scm: Restore missing
+	  customer|vendor in easy invoice. This got broken in r21552
+
+2012-02-03 13:16  mikee
+
+	* [r21930] src/report/business-reports/invoice.scm: Restore
+	  missing customer|vendor in printable invoice.
+
+2012-01-31 01:17  plongstaff
+
+	* [r21922] src/backend/sql/gnc-order-sql.c, src/engine/gncOrder.c:
+	  Add more order gobject properties and convert sql backend to use
+	  them for loading/saving.
+
+2012-01-31 00:00  plongstaff
+
+	* [r21921] src/backend/sql/gnc-address-sql.c,
+	  src/backend/sql/gnc-employee-sql.c, src/engine/gncEmployee.c:
+	  Add more properties to employee object and convert sql backend
+	  to use them to save/load objects
+
+2012-01-30 13:38  cmarchi
+
+	* [r21920] accounts/C/acctchrt_business.gnucash-xea,
+	  accounts/en_GB/acctchrt_business.gnucash-xea,
+	  accounts/zh_HK/acctchrt_business.gnucash-xea,
+	  accounts/zh_TW/acctchrt_business.gnucash-xea: Bug#667105: Fix
+	  grammatical error in some accounts file.
+
+2012-01-30 13:35  cmarchi
+
+	* [r21919] accounts/ko/acctchrt_brokerage.gnucash-xea,
+	  accounts/ko/acctchrt_business.gnucash-xea,
+	  accounts/ko/acctchrt_carloan.gnucash-xea,
+	  accounts/ko/acctchrt_cdmoneymkt.gnucash-xea,
+	  accounts/ko/acctchrt_checkbook.gnucash-xea,
+	  accounts/ko/acctchrt_childcare.gnucash-xea,
+	  accounts/ko/acctchrt_common.gnucash-xea,
+	  accounts/ko/acctchrt_eduloan.gnucash-xea,
+	  accounts/ko/acctchrt_fixedassets.gnucash-xea,
+	  accounts/ko/acctchrt_homeloan.gnucash-xea,
+	  accounts/ko/acctchrt_homeown.gnucash-xea,
+	  accounts/ko/acctchrt_otherloan.gnucash-xea,
+	  accounts/ko/acctchrt_renter.gnucash-xea,
+	  accounts/ko/acctchrt_retiremt.gnucash-xea,
+	  accounts/ko/acctchrt_spouseinc.gnucash-xea,
+	  accounts/ko/acctchrt_spouseretire.gnucash-xea: Bug #667276: Fix
+	  Korean accounts files. Patch submitted by Eulgyoon Lim.
+
+2012-01-30 01:54  jralls
+
+	* [r21918] src/register/register-gnome/gnucash-item-edit.c,
+	  src/register/register-gnome/gnucash-item-edit.h,
+	  src/register/register-gnome/gnucash-sheet.c: [r21886][Bug
+	  #667900] No clipboard copy and paste Forward-port of r21886,
+	  done in the 2.4 branch to quickly resolve bug #667900 and to
+	  give windows users a nightly build to test with. Extends that
+	  change by also converting the GDK_SELECTION_PRIMARY operations
+	  to use GtkClipboard instead of GtkSelection.
+
+2012-01-30 00:28  jralls
+
+	* [r21917] src/import-export/aqbanking/dialog-ab-trans.c: Fix
+	  compile error td isn't declared unless HAVE_KTOBLZCHECK_H is
+	  true, so we can't use it outside of the #if block.
+
+2012-01-29 20:26  cstim
+
+	* [r21914] src/backend/xml/io-gncxml-v2.c: xml-backend: Fix an
+	  uninitialized variable Patch by Johannes Schmid.
+
+2012-01-29 20:25  cstim
+
+	* [r21913] src/import-export/aqbanking/dialog-ab-trans.c: Disable
+	  "changed" callback on transaction amount field temporarily, as
+	  it does not yet seem to work correctly.
+
+2012-01-29 06:32  alex.aycinena
+
+	* [r21910] src/gnome-utils/test/Makefile.am: Add to the includes
+	  in Makefile.am, which were implicitly included by until taken
+	  out in r21880; this gets make check complete
+
+2012-01-29 01:12  alex.aycinena
+
+	* [r21908] src/backend/xml/gnc-backend-xml.c,
+	  src/backend/xml/gnc-backend-xml.h,
+	  src/backend/xml/io-example-account.c,
+	  src/backend/xml/io-example-account.h,
+	  src/backend/xml/io-gncxml-v1.c, src/backend/xml/io-gncxml-v2.c,
+	  src/backend/xml/io-gncxml-v2.h, src/backend/xml/sixtp.c,
+	  src/backend/xml/sixtp.h,
+	  src/backend/xml/test/test-date-converting.c,
+	  src/backend/xml/test/test-dom-converters1.c,
+	  src/backend/xml/test/test-kvp-frames.c,
+	  src/backend/xml/test/test-string-converters.c,
+	  src/backend/xml/test/test-xml-account.c,
+	  src/backend/xml/test/test-xml-commodity.c,
+	  src/backend/xml/test/test-xml-pricedb.c,
+	  src/gnome-utils/gnc-file.c, src/libqof/qof/qofbackend.h,
+	  src/libqof/qof/qofsession.c: Update xml file backend to
+	  recognize a newer version file on load attempt, not load, and
+	  alert user of need to upgrade Gnucash.
+
+2012-01-28 22:32  cstim
+
+	* [r21906] src/report/standard-reports/budget-flow.scm: reports:
+	  Make report Budget Flow 100% translatable Patch by Aurimas
+	  Fišeras BP
+
+2012-01-28 22:16  cstim
+
+	* [r21905] src/optional/python-bindings/Makefile.am: Bug #668196:
+	  Fix installation of python bindings With this patch, files are
+	  correctly installed together. Patch by Vincent Untz. BP
+
+2012-01-28 22:12  cstim
+
+	* [r21904] src/import-export/aqbanking/assistant-ab-initial.c,
+	  src/import-export/aqbanking/dialog-ab-trans.c: Re-indentation of
+	  source code. As usual, re-indentation was done using astyle-1.24
+	  using the following options: astyle --indent=spaces=4
+	  --brackets=break --pad-oper --pad-header --suffix=none
+	* [r21903] src/import-export/aqbanking/dialog-ab-trans.c,
+	  src/import-export/aqbanking/dialog-ab.glade: Bug #668693:
+	  aqbanking: Improve transaction UI * Use expander to show/hide
+	  templates * Disable execute button as long as field values are
+	  incorrect * Use icons and tooltips in entries to indicate that
+	  an incorrect value was inserted Patch by Johannes Schmid.
+	* [r21902] src/import-export/aqbanking/dialog-ab-trans.c,
+	  src/import-export/aqbanking/dialog-ab.glade: Bug #668693:
+	  aqbanking: Big code cleanup in transaction dialog Patch by
+	  Johannes Schmid.
+	* [r21901] src/import-export/aqbanking/dialog-ab-trans.h: Bug
+	  #668693: aqbanking: Added API docs for transaction Patch by
+	  Johannes Schmid.
+
+2012-01-28 22:05  cstim
+
+	* [r21900] src/backend/xml/gnc-backend-xml.c: Bug #668926: Fixes
+	  build on GNU/Hurd A buffer of fixed size PATH_MAX is created,
+	  but this constant is non-existent on GNU/Hurd, so the package
+	  FTBFS on that architecture. The fix consists in using a
+	  dynamically (re-)allocated buffer, as recommended on:
+	  http://www.gnu.org/software/hurd/hurd/porting/guidelines.html
+
+2012-01-28 00:15  plongstaff
+
+	* [r21898] src/backend/sql/gnc-vendor-sql.c,
+	  src/engine/gncVendor.c: Add more vendor gobject attributes and
+	  use those to save/restore to sql db
+
+2012-01-27 20:09  gjanssens
+
+	* [r21894] packaging/win32/gnucash.iss.in: Win32 installer: always
+	  remove previously installed versions. This avoids problems when
+	  libraries or reports have been moved around in newer versions.
+
+2012-01-27 17:36  plongstaff
+
+	* [r21893] src/backend/sql/gnc-address-sql.c: Convert to using
+	  gobject attribute names to save/restore address fields.
+
+2012-01-26 00:09  alex.aycinena
+
+	* [r21889] src/tax/us/txf.scm: Update txf.scm to reflect changes
+	  to US Income Tax Forms and Schedules for 2011.
+
+2012-01-23 20:45  gjanssens
+
+	* [r21880] README.dependencies, configure.ac,
+	  packaging/win32/defaults.sh, packaging/win32/dist-impl.sh,
+	  packaging/win32/install-impl.sh,
+	  src/business/business-gnome/Makefile.am,
+	  src/business/business-ledger/Makefile.am,
+	  src/core-utils/gnc-path.c, src/core-utils/gnc-path.h,
+	  src/gnome-search/Makefile.am, src/gnome-utils/Makefile.am,
+	  src/gnome-utils/dialog-utils.c, src/gnome-utils/dialog-utils.h,
+	  src/gnome-utils/test/Makefile.am, src/gnome/Makefile.am,
+	  src/gnome/assistant-loan.c, src/gnome/gnc-plugin-page-budget.c,
+	  src/html/Makefile.am, src/import-export/Makefile.am,
+	  src/import-export/aqbanking/Makefile.am,
+	  src/import-export/csv/Makefile.am,
+	  src/import-export/log-replay/Makefile.am,
+	  src/import-export/ofx/Makefile.am,
+	  src/import-export/qif-import/Makefile.am,
+	  src/optional/gtkmm/Makefile.am,
+	  src/optional/gtkmm/test/Makefile.am,
+	  src/optional/python-bindings/Makefile.am,
+	  src/plugins/bi_import/Makefile.am,
+	  src/register/ledger-core/Makefile.am,
+	  src/register/register-core/Makefile.am,
+	  src/register/register-gnome/Makefile.am,
+	  src/report/report-gnome/Makefile.am: Remove some stray
+	  references to libglade. It's no longer used by GnuCash. Yay!
+
+2012-01-23 19:33  gjanssens
+
+	* [r21878] src/core-utils/core-utils.i: Avoid guile dependency in
+	  the python bindings
+
+2012-01-22 21:26  gjanssens
+
+	* [r21877] src/bin/gnucash-bin.c: Remove the stable version
+	  numbers from the Development warning version. Instead, a pointer
+	  to the GnuCash website is added for those who are actually
+	  looking for a stable release. This follows an in my opinion good
+	  suggestion from Colin Law on the mailing list.
+
+2012-01-22 21:25  gjanssens
+
+	* [r21876] doc/examples/README_invoice, doc/examples/invoice.csv:
+	  Bug #667581 - Migrate Invoice / Bill plugin to Builder Add two
+	  new files that were in the original patch also.
+
+2012-01-22 21:09  cstim
+
+	* [r21874] src/import-export/aqbanking/dialog-ab-trans.c: Bug
+	  #668454: Make it easier to paste account/bank in online
+	  transaction dialog Patch by Johannes Schmid (with indentation
+	  fixed by our usual astyle call): The patch actually fixes two
+	  issues: * Only allow digits in account/bank code field * Filter
+	  spaces when pasting content. This has annoyed me for a while
+	  because quite often I paste account informations from the
+	  browser or some email into gnucash and people tend to group the
+	  numbers like this: BLZ: 763 510 40 The result of the paste is
+	  that the number looks like 763 510<end> because the number of
+	  characters in the entry is limited. With the patch the spaces
+	  will be removed and you will see 763 510 40 -> 76351040
+
+2012-01-21 16:28  mikee
+
+	* [r21872] src/plugins/bi_import/gncmod-bi-import.c: Bug 667581 -
+	  Migrate Invoice / Bill plugin to Builder Add the renamed files.
+	  Oops, missed one, here it is.
+
+2012-01-21 16:22  mikee
+
+	* [r21871] src/plugins/bi_import/dialog-bi-import-gui.c,
+	  src/plugins/bi_import/dialog-bi-import-gui.h,
+	  src/plugins/bi_import/dialog-bi-import-helper.c,
+	  src/plugins/bi_import/dialog-bi-import-helper.h,
+	  src/plugins/bi_import/dialog-bi-import.c,
+	  src/plugins/bi_import/dialog-bi-import.h,
+	  src/plugins/bi_import/gnc-plugin-bi-import.c,
+	  src/plugins/bi_import/gnc-plugin-bi-import.h,
+	  src/plugins/bi_import/gtkbuilder,
+	  src/plugins/bi_import/gtkbuilder/Makefile.am,
+	  src/plugins/bi_import/gtkbuilder/dialog-bi-import-gui.glade,
+	  src/plugins/bi_import/ui/gnc-plugin-bi-import-ui.xml: Bug 667581
+	  - Migrate Invoice / Bill plugin to Builder Add the renamed
+	  files. Patch supplied by Bob Fewell. Many thanks.
+
+2012-01-21 12:20  mikee
+
+	* [r21870] src/plugins/bi_import/bi_import.c,
+	  src/plugins/bi_import/bi_import.h,
+	  src/plugins/bi_import/gnc-plugin-bi_import.c,
+	  src/plugins/bi_import/gnc-plugin-bi_import.h,
+	  src/plugins/bi_import/gncmod-bi_import.c,
+	  src/plugins/bi_import/gui.c, src/plugins/bi_import/gui.h,
+	  src/plugins/bi_import/helpers.c,
+	  src/plugins/bi_import/helpers.h: Bug 667581 - Migrate Invoice /
+	  Bill plugin to Builder Remove empty files renamed and updated by
+	  patch.
+	* [r21869] configure.ac, doc/examples/Makefile.am, po/POTFILES.in,
+	  src/plugins/bi_import/Makefile.am,
+	  src/plugins/bi_import/bi_import.c,
+	  src/plugins/bi_import/bi_import.h,
+	  src/plugins/bi_import/glade/Makefile.am,
+	  src/plugins/bi_import/glade/bi_import.glade,
+	  src/plugins/bi_import/gnc-plugin-bi_import.c,
+	  src/plugins/bi_import/gnc-plugin-bi_import.h,
+	  src/plugins/bi_import/gncmod-bi_import.c,
+	  src/plugins/bi_import/gui.c, src/plugins/bi_import/gui.h,
+	  src/plugins/bi_import/helpers.c,
+	  src/plugins/bi_import/helpers.h,
+	  src/plugins/bi_import/ui/Makefile.am,
+	  src/plugins/bi_import/ui/gnc-plugin-bi_import-ui.xml: Bug 667581
+	  - Migrate Invoice / Bill plugin to Builder Patch supplied by Bob
+	  Fewell. Many thanks.
+
+2012-01-20 21:06  jralls
+
+	* [r21867] configure.ac: Reverse the test for HAVE_DBI
+	  ac_cv_header_dbi_dbi_h is set only if want_dbi is true, so
+	  testing for != no succeeds if dbi isn't enabled -- which is not
+	  what we want. BP
+
+2012-01-17 08:47  gjanssens
+
+	* [r21860] src/gnome-utils/gnc-frequency.c: Bug #667417 - Fix
+	  build with glib 2.31.x Patch by Vincent Untz BP
+
+2012-01-16 17:47  gjanssens
+
+	* [r21859] src/gnome-utils/glade, src/import-export/binary-import:
+	  Remove empty directories (which the git-svn bridge ignores)
+
+2012-01-16 17:42  gjanssens
+
+	* [r21858] src/gnome-utils/assistant-gconf-setup.c,
+	  src/gnome-utils/assistant-xml-encoding.c,
+	  src/gnome-utils/gnc-gui-query.c,
+	  src/register/register-gnome/gnucash-color.h,
+	  src/register/register-gnome/pricecell-gnome.h: Some small gnome
+	  header cleanups.
+	* [r21857] po/POTFILES.in, src/gnome-utils/Makefile.am,
+	  src/gnome-utils/druid-utils.c, src/gnome-utils/druid-utils.h,
+	  src/gnome-utils/gnome-utils.i, src/html/gnc-html.i: Remove no
+	  longer used druid-utils (replaced with assistant-utils) With
+	  this, the code is no longer using any deprecated Gnome symbols
+	  (though it still uses deprecated Glib and Gtk symbols).
+	* [r21856] src/import-export/binary-import/Makefile.am,
+	  src/import-export/binary-import/binary-import.glade,
+	  src/import-export/binary-import/druid-commodity.c,
+	  src/import-export/binary-import/druid-commodity.h,
+	  src/import-export/binary-import/gncmod-binary-import.c,
+	  src/import-export/binary-import/test/Makefile.am,
+	  src/import-export/binary-import/test/test-link-module.c: Delete
+	  unmaintained and unused binary importer.
+	* [r21855] configure.ac, po/POTFILES.in,
+	  src/gnome-utils/Makefile.am,
+	  src/gnome-utils/assistant-xml-encoding.c,
+	  src/gnome-utils/assistant-xml-encoding.h,
+	  src/gnome-utils/druid-gnc-xml-import.c,
+	  src/gnome-utils/druid-gnc-xml-import.h,
+	  src/gnome-utils/glade/Makefile.am,
+	  src/gnome-utils/glade/druid-gnc-xml-import.glade,
+	  src/gnome-utils/gnc-file.c,
+	  src/gnome-utils/gtkbuilder/Makefile.am,
+	  src/gnome-utils/gtkbuilder/assistant-xml-encoding.glade: Bug
+	  #667871 - Migrate druid old xml file import to an assistant
+	  Patch by Bob Fewell
+
+2012-01-15 22:06  cstim
+
+	* [r21853] src/gnome-utils/gnc-file.c: Read-only mode: Don't
+	  create a LCK file when opening a file in read-only mode and also
+	  ignore existing locks.
+
+2012-01-11 21:48  cstim
+
+	* [r21847] packaging/win32/install.sh: [Win32 build] Disable
+	  git.exe package again, as it might collide with DLLs.
+
+2012-01-10 21:34  cstim
+
+	* [r21840] src/engine/Makefile.am: Add dependency on qofbook.h for
+	  swig generated file. Otherwise the old generated file complains
+	  about a missing declaration from r21832.
+
+2012-01-10 05:06  jralls
+
+	* [r21837] src/libqof/qof/qofsession.c: Fix missing-prototype
+	  warnings from r21829 Thanks, Alex.
+
+2012-01-09 23:10  jralls
+
+	* [r21833] src/gnome/gnc-plugin-basic-commands.c: Fix Read-only
+	  Action Sensitivity So that FileSaveAction isn't made sensitive
+	  when the session isn't dirty.
+	* [r21832] src/backend/sql/gnc-backend-sql.c,
+	  src/backend/sql/test/utest-gnc-backend-sql.c,
+	  src/backend/xml/gnc-backend-xml.c,
+	  src/backend/xml/io-gncxml-v2.c, src/gnome-utils/gnc-file.c,
+	  src/gnome-utils/gnc-main-window.c,
+	  src/import-export/aqbanking/gnc-ab-kvp.c,
+	  src/libqof/qof/qofbook.c, src/libqof/qof/qofbook.h,
+	  src/libqof/qof/test/test-qofbook.c: [Bug 666329] - Empty
+	  database after a little while Separate the two uses of
+	  QofBook::dirty -- indicating that the book object itself has
+	  been edited and indicating that some object in the dataset has
+	  been changed -- into two separate variables with separate
+	  getters & setters. The latter purpose, indicating that some
+	  object has been changed, is moved to a new member variable of
+	  QofBook, session_dirty. Its new setter
+	  qof_book_mark_session_dirty() and canceler
+	  qof_book_mark_session_saved() are called only from the xml
+	  backend or gnc-autosave(). Its tester,
+	  qof_book_session_not_saved() is used to check for the need to
+	  autosave and to activate FileSaveAction. BP
+	* [r21831] src/backend/dbi/gnc-backend-dbi.c: [Bug 666329] Empty
+	  database after a little while Use gnc_dbi_safe_sync_all (which
+	  doesn't lose data if the save partion errors out) for all
+	  be->sync. This is a bit of a half-way solution; we really
+	  shouldn't ever have to do this except when creating a new
+	  database, but fixing that will take major surgery. BP
+
+2012-01-09 23:09  jralls
+
+	* [r21830] src/libqof/qof/test/test-qofsession.c: [GSOC][Testing]
+	  Unit tests for qofsession Author: Muslim Chochlov
+	* [r21829] src/libqof/qof/Makefile.am,
+	  src/libqof/qof/qofsession-p.h, src/libqof/qof/qofsession.c:
+	  [GSOC][Testing] Modifications to qofsession for testability
+	  Author: Muslim Chochlov
+
+2012-01-08 20:08  cstim
+
+	* [r21826] src/engine/test-core/Makefile.am: Let the
+	  libgncmod-test-engine be built by the noinst target instead of
+	  check target. This is needed to compile the backend/sql test
+	  target, which requires this library to be built even if this
+	  isn't the "check" target.
+
+2012-01-07 00:53  jralls
+
+	* [r21825] src/backend/sql/gnc-backend-sql.c: [Bug 666329] Empty
+	  database after a little while Reverse qof_book_mark_saved and
+	  qof_instance_mark_clean so that the book is dirty for
+	  qof_book_mark_saved when it's the instance. BP
+	* [r21824] src/backend/sql/Makefile.am,
+	  src/backend/sql/test/Makefile.am,
+	  src/backend/sql/test/test-sqlbe.c,
+	  src/backend/sql/test/utest-gnc-backend-sql.c,
+	  test-templates/Makefile.am: [Bug 666329] Empty database after a
+	  little while Create failing test for gnc_sql_commit_edit()
+	  showing that it doesn't call book->dirty_cb when the instance
+	  gnc_sql_commit_edit() is called on the book itself.
+
+2012-01-02 12:51  cstim
+
+	* [r21818] packaging/win32/defaults.sh,
+	  packaging/win32/install-impl.sh, packaging/win32/install.sh:
+	  [Win32 build] Let git.exe be downloaded and unpacked as well. We
+	  might start using it sooner or later. BP
+
+2012-01-01 20:36  cstim
+
+	* [r21816] src/app-utils/gnc-ui-util.c,
+	  src/app-utils/test/test-exp-parser.c,
+	  src/app-utils/test/test-print-parse-amount.c,
+	  src/backend/dbi/test/test-dbi-basic.c,
+	  src/backend/dbi/test/test-dbi-business-stuff.c,
+	  src/backend/dbi/test/test-dbi-stuff.c,
+	  src/backend/xml/test/test-load-xml2.c,
+	  src/backend/xml/test/test-xml-account.c,
+	  src/backend/xml/test/test-xml-transaction.c,
+	  src/business/business-gnome/dialog-customer.c,
+	  src/business/business-gnome/dialog-invoice.c,
+	  src/business/business-gnome/dialog-job.c,
+	  src/business/business-gnome/dialog-order.c,
+	  src/business/business-gnome/dialog-payment.c,
+	  src/business/business-gnome/dialog-vendor.c,
+	  src/business/business-ledger/gncEntryLedger.c,
+	  src/business/business-ledger/gncEntryLedgerControl.c,
+	  src/business/business-ledger/gncEntryLedgerModel.c,
+	  src/core-utils/gnc-path.c, src/engine/Account.c,
+	  src/engine/AccountP.h, src/engine/Transaction.c,
+	  src/engine/gnc-commodity.h, src/engine/gnc-engine.c,
+	  src/engine/gncInvoice.c, src/engine/gncOwner.c,
+	  src/engine/test/test-business.c,
+	  src/engine/test/test-querynew.c,
+	  src/gnc-module/test/test-agedver.c,
+	  src/gnc-module/test/test-dynload.c,
+	  src/gnc-module/test/test-incompatdep.c,
+	  src/gnc-module/test/test-load-c.c,
+	  src/gnc-module/test/test-modsysver.c,
+	  src/gnome-search/dialog-search.h,
+	  src/gnome-utils/assistant-gconf-setup.c,
+	  src/gnome-utils/dialog-file-access.c,
+	  src/gnome-utils/dialog-options.c,
+	  src/gnome-utils/dialog-preferences.c,
+	  src/gnome-utils/dialog-query-list.c,
+	  src/gnome-utils/dialog-reset-warnings.c,
+	  src/gnome-utils/dialog-totd.c,
+	  src/gnome-utils/dialog-transfer.c, src/gnome-utils/gnc-file.c,
+	  src/gnome-utils/gnc-query-list.c,
+	  src/gnome-utils/gnc-tree-view-commodity.h,
+	  src/gnome/dialog-sx-editor.c, src/gnome/dialog-tax-info.c,
+	  src/gnome/gnc-plugin-page-register.c,
+	  src/html/gnc-html-graph-gog.c, src/libqof/qof/qofsession.c,
+	  src/libqof/qof/test/test-qofbook.c,
+	  src/libqof/qof/test/test-qofinstance.c,
+	  src/report/report-gnome/gnc-plugin-page-report.c,
+	  src/report/report-system/gnc-report.c,
+	  src/test-core/test-stuff.c, src/test-core/test-stuff.h:
+	  Re-indentation of source code. As usual, re-indentation was done
+	  using astyle-1.24 using the following options: astyle
+	  --indent=spaces=4 --brackets=break --pad-oper --pad-header
+	  --suffix=none
+	* [r21815] src/gnome/gnc-plugin-basic-commands.c,
+	  src/import-export/aqbanking/gnc-plugin-aqbanking.c: Read-only
+	  mode: More menu items grayed out: Close Book; Online Banking
+	  Setup.
+
+2012-01-01 19:49  cstim
+
+	* [r21814] src/app-utils/CMakeLists.txt: [Cutecash] Remove removed
+	  files of r21799 also from CMake.
+
+2012-01-01 19:43  cstim
+
+	* [r21812] packaging/win32/defaults.sh: [Win32 build] Update
+	  aqbanking version again. BP

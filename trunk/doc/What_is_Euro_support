@@ -1,0 +1,12 @@
+The following changes occur in the Gnucash GUI when the "Euro support"
+preference is enabled:
+
+1) In any register denominated in a national currency that been
+   replaced by the Euro (e.g. an account in DEM), the summarybar will
+   show totals in both the old currency and in EUR.
+
+2) There is an additional line labeled "EUR, total" in the account
+   tree summarybar.  The totals in this line are a sum of all accounts
+   denominated in currencies that have been replaced by the Euro.
+   (E.G. The sum of all accounts in DEM, plus all accounts in FRF,
+   etc., etc.)

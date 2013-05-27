@@ -1,0 +1,12 @@
+<ui>
+  <menubar>
+    <menu name="File" action="FileAction">
+      <menu name="FileImport" action="FileImportAction">
+      	<placeholder name="FileImportPlaceholder">
+      	   <menuitem name="FileCsvImportAccounts" action="CsvImportAccountAction"/>
+      	   <menuitem name="FileCsvImportTrans" action="CsvImportTransAction"/>
+      	</placeholder>
+      </menu>
+    </menu>
+  </menubar>
+</ui>

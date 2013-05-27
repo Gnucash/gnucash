@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gnc-account-example>
+    <gnc-act:title>
+      Minimāla ienākumu un izdevumu uzskaite
+    </gnc-act:title>
+    <gnc-act:short-description>
+     Minimāla ienākumu un izdevumu uzskaite
+    </gnc-act:short-description>
+    <gnc-act:long-description>
+     Izmantojiet šos kontus, lai veiktu vienkāršu ienākumu un izdevumu uzskaiti. Vēlāk jūs varat pievienot citus kontus, lai veiktu detalizētāku uzskaiti.
+    </gnc-act:long-description>
+<gnc:account version="2.0.0">
+  <act:name>Root Account</act:name>
+  <act:id type="new">1972cce2e2364f95b2b0bc014502661d</act:id>
+  <act:type>ROOT</act:type>
+  <act:commodity-scu>0</act:commodity-scu>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Aktīvi</act:name>
+  <act:id type="new">d90864ec1d660176244b05a0e43e621a</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:description>Aktīvi</act:description>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Bankas konts</act:name>
+  <act:id type="new">ab2dc28552256b8d1ef4fdea4ba45717</act:id>
+  <act:type>BANK</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:description>Bankas konts</act:description>
+  <act:parent type="new">d90864ec1d660176244b05a0e43e621a</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Ienākumi</act:name>
+  <act:id type="new">e96c0691c219f5f55590e20fb9a3309b</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:description>Ienākumi</act:description>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Izdevumi</act:name>
+  <act:id type="new">3b95fbbcc06ef20d61aa082b84938287</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:description>Izdevumi</act:description>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Bilance</act:name>
+  <act:id type="new">b8b72887da1adf889f171923d23efbdd</act:id>
+  <act:type>EQUITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:description>Bilance</act:description>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Sākuma bilance</act:name>
+  <act:id type="new">bdb4dd9be2b98f03a0b400036452232c</act:id>
+  <act:type>EQUITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:description>Sākuma bilance</act:description>
+  <act:parent type="new">b8b72887da1adf889f171923d23efbdd</act:parent>
+</gnc:account>
+</gnc-account-example>
+
+
+<!-- Local variables: -->
+<!-- mode: xml        -->
+<!-- End:             -->

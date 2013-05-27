@@ -1,0 +1,70 @@
+
+Guide to *.qfx Files:
+---------------------
+QFX is the extension given to files that contain OFX XML data.
+Some banks allow users to download QFX files containing statement
+data, instead of allowing the PFM to talk to the bank directly.
+(Presumably, these banks block direct PFM OFX exchanges for security
+reasons).  The goal here is to be sure that we can import QFX files
+properly.
+
+Note that these files are all single-entry statements, rather than
+double-entry ledgers.  Thus, we only know where the money is coming
+from, and have no idea of where its going to: a human will have to
+pick through these during import. #@$%^&*(
+
+rbc_gi.qfx
+    Royal Bank of Canada statement.
+
+cibc_checking.qfx
+cibc_visa.qfx
+    Canadian Bank of Commerce checking and visa card statements.
+    Note dissimilarities.
+
+wamu.qfx
+    Washington Mutual checking account with debit card
+
+
+Guide to *.gnucash Files:
+---------------------
+Many of the *.gnucash files are from older versions of X-Accountant,
+and will cause a warning message to be displayed.  They are
+here to help ensure backwards-compatibility with older
+versions of GnuCash.  They should otherwise work just fine.
+currency_tree_xml.gnucash  reg_doc_example.gnucash  taxreport.gnucash
+currency_tree_xml.gnucash
+    A simple demo showing a book with accounts in multiple currencies.
+    This demo can be used to test the multi-currency features of
+    GnuCash.
+
+reg_doc_example.gnucash
+    This is the demo file that is used in much of the documentation.
+
+taxreport.gnucash
+    A demo that can be used with the tax report to show income tax
+    related income and expenses.
+
+Guide to QIF Files:
+-------------------
+QIF Files are 'quicken interchange format' files, and may com from
+from a large variety of sources.
+
+Money95*_fr.qif 
+    QIF files for Microsoft Money95, French edition.
+
+ms-money.qif
+    QIF from Microsoft Money95, US edition.
+
+web.qif
+    QIF downloaded from a bank via web page
+
+cbb-export.qif
+    QIF file that is exported by Olsen's CBB version 0.73
+
+abc-all.qif
+abc.qif
+bogus.qif
+every.qif
+quicktest.qif
+swipe.qif
+    QIF files exported by Quicken(TM) Version 3.0

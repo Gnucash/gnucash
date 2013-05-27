@@ -1,0 +1,22 @@
+<ui>
+  <menubar>
+    <placeholder name="AdditionalMenusPlaceholder">
+      <menu action="SxListAction">
+        <menuitem name="SxListNew" action="SxListNewAction"/>
+        <menuitem name="SxListNew2" action="SxListNewAction2"/>
+        <menuitem name="SxListEdit" action="SxListEditAction"/>
+        <menuitem name="SxListEdit2" action="SxListEditAction2"/>
+        <menuitem name="SxListDelete" action="SxListDeleteAction"/>
+      </menu>
+    </placeholder>
+  </menubar>
+
+  <toolbar name="DefaultToolbar">
+    <placeholder name="DefaultToolbarPlaceholder">
+      <separator name="ToolbarSep2" />
+      <toolitem name="SxListToolbarNew" action="SxListNewAction"/>
+      <toolitem name="SxListToolbarEdit" action="SxListEditAction"/>
+      <toolitem name="SxListToolbarDelete" action="SxListDeleteAction"/>
+    </placeholder>
+  </toolbar>
+</ui>

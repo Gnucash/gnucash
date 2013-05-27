@@ -1,0 +1,30 @@
+Unit Test Templates
+
+This directory contains three template files for setting up GLib
+g_test operated unit tests in a test directory. If your module
+directory doesn't already have one, create a test subdirectory and add
+it to configure.ac.
+
+If there is already a test directory with make check tests in it, copy
+the contents of the Makefile.am in this directory to the existing
+Makefile.am; otherwise, copy the Makefile.am to your test directory.
+
+Copy test-module.c and test-suite.c to your test directory and rename
+them appropriately. You will very likely want several copies of
+test-suite.c, one corresponding to each c file in the module directory
+that you're testing.
+
+Edit the test module file to call the (renamed) test_suite_module() in
+each test-suite file. Add tests and fixtures as needed to the
+test-suite files and add them to the (renamed) test_suite_module()
+function.
+
+Edit Makefile.am according to the comments in the file.
+
+Run autogen.sh and configure. "make check" will run all tests; "make
+test" will run only the GLib unit tests not guarded by conditionals
+(see test-suite.c).
+
+See http://www.mail-archive.com/gtk-devel-list@gnome.org/msg06994.html
+and http://library.gnome.org/devel/glib/stable/glib-Testing.html
+for detailed documentation.

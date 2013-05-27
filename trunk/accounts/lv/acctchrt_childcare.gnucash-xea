@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gnc-account-example>
+    <gnc-act:title>
+      Bērni
+    </gnc-act:title>
+    <gnc-act:short-description>
+      Izdevumiem par pērniem
+    </gnc-act:short-description>
+    <gnc-act:long-description>
+    Pievienojiet šos kontus, lai uzskaitītu ar bērniem saistītos izdevumus.
+  </gnc-act:long-description>    
+<gnc:account version="2.0.0">
+  <act:name>Root Account</act:name>
+  <act:id type="new">1972cce2e2364f95b2b0bc014502661d</act:id>
+  <act:type>ROOT</act:type>
+  <act:commodity-scu>0</act:commodity-scu>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Izdevumi</act:name>
+  <act:id type="new">ee8238ee2c2ce590160761df09b99b72</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>Izdevumi</act:description>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Bērni</act:name>
+  <act:id type="new">8999739a6bfc46088a3ea5ec45e5f8a4</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>Bērni</act:description>
+  <act:parent type="new">ee8238ee2c2ce590160761df09b99b72</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Bērnudārzs un skola</act:name>
+  <act:id type="new">5e9aa569c7964fb7a53d1acf1169f43f</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>Bērnudārzs un skola</act:description>
+  <act:parent type="new">8999739a6bfc46088a3ea5ec45e5f8a4</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Aukle</act:name>
+  <act:id type="new">505b0f4a0e9145f89924ab335d36a948</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>Aukle</act:description>
+  <act:parent type="new">8999739a6bfc46088a3ea5ec45e5f8a4</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Pulciņi</act:name>
+  <act:id type="new">19d9fc21621a4b15b588f4a8d3792901</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>Pulciņi</act:description>
+  <act:parent type="new">8999739a6bfc46088a3ea5ec45e5f8a4</act:parent>
+</gnc:account>
+</gnc-account-example>
+
+<!-- Local variables: -->
+<!-- mode: xml        -->
+<!-- End:             -->
