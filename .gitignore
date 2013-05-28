@@ -125,7 +125,7 @@ src/business/business-reports/gnucash
 src/business/business-utils/gnucash
 src/business/dialog-tax-table/gnucash
 src/calculation/test/test-link
-src/core-utils/gnc-svninfo.h
+src/core-utils/gnc-scm-info.h
 src/core-utils/gnc-version.h
 src/core-utils/gncla-dir.h
 src/core-utils/gnucash
