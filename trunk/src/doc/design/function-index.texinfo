@@ -1,4 +1,0 @@
-@node Function Index, Data Type Index, User Preferences, Top
-@unnumbered Function Index
-
-@printindex fn

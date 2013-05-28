@@ -1,9 +1,0 @@
-<ui>
-  <menubar>
-    <menu name="View" action="ViewAction">
-      <placeholder name="ViewMiddlePlaceholder">
-        <menuitem name="ViewAccountTree" action="ViewAccountTreeAction"/>
-      </placeholder>
-    </menu>
-  </menubar>
-</ui>

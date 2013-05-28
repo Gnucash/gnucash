@@ -1,6 +1,0 @@
-!TRNS	TRNSID	TRNSTYPE	DATE	ACCNT	NAME	AMOUNT	DOCNUM	CLEAR	TOPRINT	ADDR1
-!SPL	SPLID	TRNSTYPE	DATE	ACCNT	NAME	AMOUNT	DOCNUM	CLEAR	QNTY	INVITEM
-!ENDTRNS										
-TRNS	 	SALESTAXPMT	8/5/98	Checking	State Board of Equalization	-66.57		N	Y	State Board of Equalization
-SPL	 	SALESTAXPMT	8/5/98	Sales Tax Payable	State Board of Equalization	66.57	 	N		San Domingo
-ENDTRNS										
