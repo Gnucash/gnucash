@@ -271,7 +271,7 @@ static GtkActionEntry gnc_plugin_page_register2_actions [] =
         G_CALLBACK (gnc_plugin_page_register2_cmd_delete_transaction)
     },
     {
-        "RemoveTransactionSplitsAction", GTK_STOCK_CLEAR, N_("Remo_ve Transaction Splits"), NULL,
+        "RemoveTransactionSplitsAction", GTK_STOCK_CLEAR, N_("Remo_ve Other Splits"), NULL,
         N_("Remove all splits in the current transaction"),
         G_CALLBACK (gnc_plugin_page_register2_cmd_reinitialize_transaction)
     },
