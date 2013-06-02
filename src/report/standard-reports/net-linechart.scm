@@ -470,11 +470,16 @@
     (gnc:report-finished)
     document))
 
+;; Export reports
+
+(export net-worth-linechart-uuid)
+(define net-worth-linechart-uuid "d8b63264186b11e19038001558291366")
+
 ;; Here we define the actual report
 (gnc:define-report
  'version 1
  'name (N_ "Net Worth Linechart")
- 'report-guid "d8b63264186b11e19038001558291366"
+ 'report-guid net-worth-linechart-uuid
  'menu-path (list gnc:menuname-asset-liability)
  'options-generator (lambda () (options-generator #f))
  'renderer (lambda (report-obj) (net-renderer report-obj #f)))

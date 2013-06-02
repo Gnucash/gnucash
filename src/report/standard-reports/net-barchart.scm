@@ -416,11 +416,19 @@
     (gnc:report-finished)
     document))
 
+;; Export reports
+
+(export net-worth-barchart-uuid)
+(export income-expense-barchart-uuid)
+
+(define net-worth-barchart-uuid "cbba1696c8c24744848062c7f1cf4a72")
+(define income-expense-barchart-uuid "80769921e87943adade887b9835a7685")
+
 ;; Here we define the actual report
 (gnc:define-report
  'version 1
  'name (N_ "Net Worth Barchart")
- 'report-guid "cbba1696c8c24744848062c7f1cf4a72"
+ 'report-guid net-worth-barchart-uuid
  'menu-path (list gnc:menuname-asset-liability)
  'options-generator (lambda () (options-generator #f))
  'renderer (lambda (report-obj) (net-renderer report-obj #f)))
@@ -428,7 +436,7 @@
 (gnc:define-report
  'version 1
  'name reportname
- 'report-guid "80769921e87943adade887b9835a7685"
+ 'report-guid income-expense-barchart-uuid
  'menu-name (N_ "Income & Expense Chart")
  'menu-path (list gnc:menuname-income-expense)
  'options-generator (lambda () (options-generator #t))

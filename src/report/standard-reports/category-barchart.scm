@@ -676,6 +676,16 @@ developing over time"))
     (gnc:report-finished)
     document))
 
+;; Export reports
+
+(export category-barchart-income-uuid category-barchart-expense-uuid
+	category-barchart-asset-uuid category-barchart-liability-uuid)
+
+(define category-barchart-income-uuid "44f81bee049b4b3ea908f8dac9a9474e")
+(define category-barchart-expense-uuid "b1f15b2052c149df93e698fe85a81ea6")
+(define category-barchart-asset-uuid "e9cf815f79db44bcb637d0295093ae3d")
+(define category-barchart-liability-uuid "faf410e8f8da481fbc09e4763da40bcc")
+
 (for-each 
  (lambda (l)
    (let ((tip-and-rev (cddddr l)))
@@ -700,15 +710,15 @@ developing over time"))
  (list 
   ;; reportname, account-types, do-intervals?, 
   ;; menu-reportname, menu-tip
-  (list reportname-income (list ACCT-TYPE-INCOME) #t menuname-income menutip-income (lambda (x) #t) "44f81bee049b4b3ea908f8dac9a9474e")
-  (list reportname-expense (list ACCT-TYPE-EXPENSE) #t menuname-expense menutip-expense (lambda (x) #f) "b1f15b2052c149df93e698fe85a81ea6")
+  (list reportname-income (list ACCT-TYPE-INCOME) #t menuname-income menutip-income (lambda (x) #t) category-barchart-income-uuid)
+  (list reportname-expense (list ACCT-TYPE-EXPENSE) #t menuname-expense menutip-expense (lambda (x) #f) category-barchart-expense-uuid)
   (list reportname-assets 
         (list ACCT-TYPE-ASSET ACCT-TYPE-BANK ACCT-TYPE-CASH ACCT-TYPE-CHECKING
               ACCT-TYPE-SAVINGS ACCT-TYPE-MONEYMRKT
               ACCT-TYPE-RECEIVABLE ACCT-TYPE-STOCK ACCT-TYPE-MUTUAL
               ACCT-TYPE-CURRENCY)
-        #f menuname-assets menutip-assets (lambda (x) #f) "e9cf815f79db44bcb637d0295093ae3d")
+        #f menuname-assets menutip-assets (lambda (x) #f) category-barchart-asset-uuid)
   (list reportname-liabilities 
         (list ACCT-TYPE-LIABILITY ACCT-TYPE-PAYABLE ACCT-TYPE-CREDIT
               ACCT-TYPE-CREDITLINE)
-        #f menuname-liabilities menutip-liabilities (lambda (x) #t) "faf410e8f8da481fbc09e4763da40bcc")))
+        #f menuname-liabilities menutip-liabilities (lambda (x) #t) category-barchart-liability-uuid)))
