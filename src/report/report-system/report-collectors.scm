@@ -28,6 +28,9 @@
 (define (split->date split)
   (xaccTransGetDate (xaccSplitGetParent split)))
 
+(define (split->account split)
+  (xaccSplitGetAccount split))
+
 (define (split-closing? split)
   (xaccTransGetIsClosingTxn (xaccSplitGetParent split)))
 
@@ -59,25 +62,13 @@
 ;; into a collector structure.  This way there's no O(n^2) or worse
 ;; complexity.
 
-(define (build-account-collector accounts account-destination-alist
-				 split->account
+(define (build-account-collector account-destination-alist
 				 per-account-collector)
   (let ((slotset (slotset-map-input split->account
 				    (alist->slotset account-destination-alist))))
     (collector-from-slotset slotset per-account-collector)))
 
-(define (filter-for-account the-account destination-alist split->account)
-  (let ((wanted-accounts (fold (lambda (pair acc)
-				 (if (equal? (cdr pair) the-account)
-				     (cons (car pair) acc)
-				     acc))
-			       '()
-			       destination-alist)))
-    (make-filter the-account
-		 (lambda (split)
-		   (member (split->account split) wanted-accounts)))))
-
-(define (build-date-collector split->date dates per-date-collector)
+(define (build-date-collector dates per-date-collector)
   (let* ((date-vector (list->vector dates))
 	 (slotset (make-slotset (lambda (split)
 				  (let* ((date (split->date split))
@@ -90,13 +81,12 @@
 				dates)))
     (collector-from-slotset slotset per-date-collector)))
 
-(define (build-category-by-account-collector accounts account-destination-alist dates cell-accumulator result-collector)
-  (build-account-collector accounts account-destination-alist
-			   xaccSplitGetAccount
+(define (build-category-by-account-collector account-destination-alist dates cell-accumulator result-collector)
+  (build-account-collector account-destination-alist
 			   (lambda (account)
 			     (collector-reformat (lambda (result)
 						   (list account (result-collector account result)))
-						 (build-date-collector split->date dates
+						 (build-date-collector dates
 								       (lambda (date)
 									 (cell-accumulator account date)))))))
 
@@ -108,12 +98,9 @@
 (define (category-by-account-report-intervals datepairs account-alist split-collector result-collector progress-range)
   (let* ((min-date (car (list-min-max (map first datepairs) gnc:timepair-lt)))
 	  (max-date (cdr (list-min-max (map second datepairs) gnc:timepair-lt)))
-	  (dest-accounts (collector-add-all (make-eq-set-collector '())
-					    (map cdr account-alist)))
 	  (splits (splits-up-to (map car account-alist)
 			      min-date max-date))
-	  (collector (build-category-by-account-collector dest-accounts
-							 account-alist datepairs
+	  (collector (build-category-by-account-collector account-alist datepairs
 							 split-collector
 							 result-collector)))
      (collector-add-all (collector-do (collector-where (predicate-not split-closing?) collector)
@@ -128,11 +115,9 @@
 						 (pairs-so-far (cdr acc)))
 					     (cons next (cons (list prev next) pairs-so-far))))
 					 (cons min-date '()) dates))))
-	 (dest-accounts (collector-add-all (make-eq-set-collector '())
-					   (map cdr account-alist)))
 	 (splits (splits-up-to (map car account-alist)
 			       min-date max-date))
-	 (collector (build-category-by-account-collector dest-accounts account-alist datepairs split-collector
+	 (collector (build-category-by-account-collector account-alist datepairs split-collector
 							 result-collector)))
     (collector-add-all (collector-do (collector-where (predicate-not split-closing?) collector)
 				     (progress-collector (length splits) progress-range))
