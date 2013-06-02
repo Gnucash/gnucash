@@ -384,12 +384,12 @@ developing over time"))
 						 (collector-into-list)
 						 result dates-list))))))
 
-		   (the-report (category-by-account-report do-intervals?
+		   (the-work (category-by-account-report-work do-intervals?
 				dates-list the-acount-destination-alist
 				(lambda (account date)
 				  (make-gnc-collector-collector))
-				account-reformat
-				progress-range)))
+				account-reformat))
+		   (the-report (category-by-account-report-do-work the-work progress-range)))
 	      the-report))
 
           ;; The percentage done numbers here are a hack so that

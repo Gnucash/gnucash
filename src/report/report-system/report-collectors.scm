@@ -17,6 +17,8 @@
 
 (export account-destination-alist)
 (export category-by-account-report)
+(export category-by-account-report-work)
+(export category-by-account-report-do-work)
 (export make-gnc-collector-collector)
 
 (export splits-up-to)
@@ -90,38 +92,60 @@
 								       (lambda (date)
 									 (cell-accumulator account date)))))))
 
-(define (category-by-account-report do-intervals? datepairs account-alist split-collector result-collector progress-range)
-  (if do-intervals?
-      (category-by-account-report-intervals datepairs account-alist split-collector result-collector progress-range)
-      (category-by-account-report-accumulate datepairs account-alist split-collector result-collector progress-range)))
+(define (category-by-account-report do-intervals? datepairs account-alist
+				    split-collector result-collector progress-range)
+  (let* ((work (category-by-account-report-work do-intervals? datepairs
+					       account-alist split-collector result-collector))
+	 (splits-fn (car work))
+	 (collector (cdr work))
+	 (splits (splits-fn)))
+    (collector-add-all (collector-do collector
+				     (progress-collector (length splits) progress-range))
+		       splits)))
 
-(define (category-by-account-report-intervals datepairs account-alist split-collector result-collector progress-range)
+(define (category-by-account-report-do-work work progress-range)
+  (let* ((splits-fn (car work))
+	 (collector (cdr work))
+	 (splits (splits-fn)))
+    (collector-add-all (collector-do collector
+				     (progress-collector (length splits) progress-range))
+		       splits)))
+
+;; Decide how to run the given report (but don't actually do any work)
+
+(define (category-by-account-report-work do-intervals? datepairs account-alist
+				    split-collector result-collector)
+  (let* ((dateinfo (if do-intervals? (category-report-dates-intervals datepairs)
+		       (category-report-dates-accumulate datepairs)))
+	 (processed-datepairs (third dateinfo))
+	 (splits-fn (lambda () (category-report-splits dateinfo account-alist)))
+	 (collector (collector-where (predicate-not split-closing?)
+				     (build-category-by-account-collector account-alist
+									  processed-datepairs split-collector
+									  result-collector))))
+    (cons splits-fn collector)))
+
+(define (category-report-splits dateinfo account-alist)
+  (let ((min-date (first dateinfo))
+	(max-date (second dateinfo)))
+    (splits-up-to (map car account-alist) min-date max-date)))
+
+(define (category-report-dates-intervals datepairs)
   (let* ((min-date (car (list-min-max (map first datepairs) gnc:timepair-lt)))
-	  (max-date (cdr (list-min-max (map second datepairs) gnc:timepair-lt)))
-	  (splits (splits-up-to (map car account-alist)
-			      min-date max-date))
-	  (collector (build-category-by-account-collector account-alist datepairs
-							 split-collector
-							 result-collector)))
-     (collector-add-all (collector-do (collector-where (predicate-not split-closing?) collector)
-				      (progress-collector (length splits) progress-range))
-			splits)))
+	 (max-date (cdr (list-min-max (map second datepairs) gnc:timepair-lt))))
+    (list min-date max-date datepairs)))
 
-(define (category-by-account-report-accumulate dates account-alist split-collector result-collector progress-range)
+(define (category-report-dates-accumulate dates)
   (let* ((min-date (gnc:secs->timepair 0))
 	 (max-date (cdr (list-min-max dates gnc:timepair-lt)))
 	 (datepairs (reverse! (cdr (fold (lambda (next acc)
 					   (let ((prev (car acc))
 						 (pairs-so-far (cdr acc)))
 					     (cons next (cons (list prev next) pairs-so-far))))
-					 (cons min-date '()) dates))))
-	 (splits (splits-up-to (map car account-alist)
-			       min-date max-date))
-	 (collector (build-category-by-account-collector account-alist datepairs split-collector
-							 result-collector)))
-    (collector-add-all (collector-do (collector-where (predicate-not split-closing?) collector)
-				     (progress-collector (length splits) progress-range))
-		       splits)))
+					 (cons min-date '()) dates)))))
+    (list min-date max-date datepairs)))
+
+
 
 (define (progress-collector size range)
   (let* ((from (car range))

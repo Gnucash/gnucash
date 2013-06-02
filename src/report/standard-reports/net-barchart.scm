@@ -287,13 +287,13 @@
 							     (collector-into-list)
 							     result
 							     dates-list))))))
-	      (rpt (category-by-account-report inc-exp?
+	      (work (category-by-account-report-work inc-exp?
 					  dates-list
 					  the-acount-destination-alist
 					  (lambda (account date)
 					    (make-gnc-collector-collector))
-					  account-reformat
-					  progress-range))
+					  account-reformat))
+	      (rpt (category-by-account-report-do-work work progress-range))
 	      (assets (assoc-ref rpt 'asset))
 	      (liabilities (assoc-ref rpt 'liability)))
 	 (set! assets-list (if assets (car assets)
