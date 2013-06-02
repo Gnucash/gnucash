@@ -39,6 +39,10 @@
 (define (gnc:date->timepair date)
   (gnc:secs->timepair (car (mktime date))))
 
+(define (gnc:timepair? date)
+  (and (number? (car date))
+       (number? (cdr date))))
+
 ;; get stuff from localtime date vector
 (define (gnc:date-get-year datevec)
   (+ 1900 (tm:year datevec)))
@@ -431,6 +435,9 @@
 
 (define (gnc:timepair-previous-day tp)
   (decdate tp DayDelta))
+
+(define (gnc:timepair-next-day tp)
+  (incdate tp DayDelta))
 
 (define (gnc:reldate-get-symbol x) (vector-ref x 0))
 (define (gnc:reldate-get-string x) (vector-ref x 1))
