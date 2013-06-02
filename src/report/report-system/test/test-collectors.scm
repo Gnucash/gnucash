@@ -16,6 +16,8 @@
        (test test-collector-from-slotset)
        (test test-binary-search-lt)
        (test test-collector-into-list)
+       (test test-function-state->collector)
+       (test test-collector-do)
        #t))
 
 
@@ -177,3 +179,24 @@
 					     (stream-range 0 (+ (* (vector-length vector) 2) 1))))
 					  vectors)))
 	 (stream-for-each (lambda (x) x) tested-vectors))))
+
+(define (test-function-state->collector)
+  (define (count v current-count) (+ current-count 1))
+  (define (check-count l)
+    (= (length l) (collector-add-all (function-state->collector count 0) l)))
+  (check-count '())
+  (check-count '(1))
+  (check-count '(1 2 3)))
+
+(define (test-collector-do)
+  (let ((count 0))
+    (let ((add-to-list-and-count (collector-do (collector-into-list)
+					       (function-state->collector (lambda (v n)
+									    (set! count (+ n 1))
+									    (+ n 1))
+									  0))))
+      (let* ((orig '(one two three))
+	     (collected (collector-add-all add-to-list-and-count orig)))
+	(format #t "~a ~a ~a\n" count collected orig)
+	(and (equal? orig collected)
+	     (= count (length orig)))))))

@@ -26,7 +26,8 @@
 (export collector-where)
 (export collector-reformat)
 (export collector-print)
-
+(export collector-do)
+(export function-state->collector)
 (export make-eq-set-collector)
 (export make-extreme-collector)
 
@@ -299,6 +300,19 @@
 			    (collector-reformat (lambda (result)
 						  (cons slot result))
 						(slot-collector slot)))))
+
+
+(define (function-state->collector fn state)
+  (make-collector (lambda (value)
+		    (let ((next (fn value state)))
+		      (function-state->collector fn next)))
+		  (lambda ()
+		    state)))
+
+(define (collector-do collector . other-collectors)
+  (collector-reformat (lambda (final)
+			(car final))
+		      (make-list-collector (cons collector other-collectors))))
 
 ;;
 ;; Predicates
