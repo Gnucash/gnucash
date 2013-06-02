@@ -28,6 +28,9 @@
 (define (split->date split)
   (xaccTransGetDate (xaccSplitGetParent split)))
 
+(define (split-closing? split)
+  (xaccTransGetIsClosingTxn (xaccSplitGetParent split)))
+
 (define (splits-up-to accounts startdate enddate)
   (gnc:account-get-trans-type-splits-interval accounts #f
 					      startdate
@@ -113,7 +116,7 @@
 							 account-alist datepairs
 							 split-collector
 							 result-collector)))
-     (collector-add-all (collector-do collector
+     (collector-add-all (collector-do (collector-where (predicate-not split-closing?) collector)
 				      (progress-collector (length splits) progress-range))
 			splits)))
 
@@ -131,8 +134,8 @@
 			       min-date max-date))
 	 (collector (build-category-by-account-collector dest-accounts account-alist datepairs split-collector
 							 result-collector)))
-    (collector-add-all (collector-do collector
-				   (progress-collector (length splits) progress-range))
+    (collector-add-all (collector-do (collector-where (predicate-not split-closing?) collector)
+				     (progress-collector (length splits) progress-range))
 		       splits)))
 
 (define (progress-collector size range)
