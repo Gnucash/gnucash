@@ -700,6 +700,8 @@
 			    0))
 
 (define (gnc:report-percent-done percent)
+  (if (> percent 100)
+      (gnc:warn "report more than 100% finished. " percent))
   (gnc-window-show-progress "" percent))
 
 (define (gnc:report-finished)
