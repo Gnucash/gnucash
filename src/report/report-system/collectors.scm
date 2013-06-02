@@ -11,6 +11,7 @@
 (export make-collector)
 (export collector-accumulate-from)
 (export collector-count-from)
+(export collector-into-list)
 (export collector-per-property)
 (export collector-filtered-list)
 (export collector-split)
@@ -173,6 +174,12 @@
 (define (collector-count-from total)
   (make-collector (lambda (x) (collector-count-from (+ total 1)))
 		  (lambda () total)))
+
+(define (collector-into-list)
+  (define (collect-into l)
+    (make-collector (lambda (x) (collect-into (cons x l)))
+		    (lambda () (reverse! l))))
+  (collect-into '()))
 
 (define (collector-per-property items make-property-filter make-per-property-collector)
   (let ((collectors (map (lambda (item)

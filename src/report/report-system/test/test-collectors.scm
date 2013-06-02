@@ -15,6 +15,7 @@
        (test test-slotset)
        (test test-collector-from-slotset)
        (test test-binary-search-lt)
+       (test test-collector-into-list)
        #t))
 
 
@@ -93,6 +94,15 @@
 	(c2 (collector-count-from 0)))
     (and (equal? '(10 4) (collector-add-all (make-list-collector (list c1 c2)) '(1 2 3 4))))))
 
+
+(define (test-collector-into-list)
+  (define (check l)
+    (equal? l (collector-add-all (collector-into-list) l)))
+  (logging-and (check '())
+       (check '(1))
+       (check '(1 2))
+       (check '(1 2 3))
+       (check '(1 2 3 4))))
 
 (define (test-collector-from-slotset)
   ;;(define (add-trace name collector)
