@@ -15,13 +15,20 @@ LDADD = \
 
 TESTS = \
   test-link-module \
-  test-load-module
+  test-load-module \
+  $(SCM_TESTS)
+
+SCM_TESTS = \
+	test-collectors.scm \
+	test-list-extras.scm \
+	test-test-extras.scm
 
 GNC_TEST_DEPS = --gnc-module-dir ${top_builddir}/src/engine \
   --gnc-module-dir ${top_builddir}/src/app-utils \
   --gnc-module-dir ${top_builddir}/src/gnome-utils \
   --gnc-module-dir ${top_builddir}/src/html \
   --gnc-module-dir ${top_builddir}/src/report/report-system \
+  --gnc-module-dir ${top_builddir}/src/report/report-system/test \
 \
   --guile-load-dir ${top_builddir}/src/gnc-module \
   --guile-load-dir ${top_builddir}/src/scm \
@@ -30,6 +37,7 @@ GNC_TEST_DEPS = --gnc-module-dir ${top_builddir}/src/engine \
   --guile-load-dir ${top_builddir}/src/app-utils \
   --guile-load-dir ${top_builddir}/src/gnome-utils \
   --guile-load-dir ${top_builddir}/src/report/report-system \
+  --guile-load-dir ${top_builddir}/src/report/report-system/test \
 \
   --library-dir    ${top_builddir}/src/libqof/qof \
   --library-dir    ${top_builddir}/src/core-utils \
@@ -39,6 +47,10 @@ GNC_TEST_DEPS = --gnc-module-dir ${top_builddir}/src/engine \
   --library-dir    ${top_builddir}/src/backend/xml \
   --library-dir    ${top_builddir}/src/backend/sql  \
   --library-dir    ${top_builddir}/src/gnc-module
+
+$(SCM_TESTS): %.scm: Makefile
+	echo 'guile --debug -l $(srcdir)/$*.scm -c "(exit (run-test))"' > $@
+	chmod a+x $@
 
 TESTS_ENVIRONMENT = \
   GUILE_WARN_DEPRECATED=no \
@@ -52,3 +64,29 @@ EXTRA_DIST = test-load-module
 
 testit:
 	$(TESTS_ENVIRONMENT) libtool --mode execute gdb test-link-module
+
+
+if GNUCASH_SEPARATE_BUILDDIR
+SCM_FILE_LINKS = test-extras.scm
+endif
+
+.scm-links:
+	$(RM) -rf gnucash
+	mkdir -p  gnucash/report/report-system/test
+if GNUCASH_SEPARATE_BUILDDIR
+	for X in ${SCM_FILE_LINKS} ; do \
+	  $(LN_S) -f ${srcdir}/$$X . ; \
+	done
+endif
+	( cd gnucash/report/report-system/test; for A in $(SCM_FILE_LINKS) ; do $(LN_S) -f ../../../../$$A . ; done )
+if ! OS_WIN32
+# Windows knows no "ln -s" but uses "cp": must copy every time (see bug #566567).
+	touch .scm-links
+endif
+
+clean-local:
+	$(RM) -rf gnucash
+
+noinst_DATA = .scm-links
+CLEANFILES = .scm-links
+DISTCLEANFILES = ${SCM_FILE_LINKS}

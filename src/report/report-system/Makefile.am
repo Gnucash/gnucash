@@ -54,9 +54,16 @@ gncscm_DATA = \
      html-jqplot.scm \
      options-utilities.scm \
      report-utilities.scm \
-     report.scm 
+     report.scm
 
 gncmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash/report-system
+
+gncmodscmdir = ${GNC_SHAREDIR}/guile-modules/gnucash/report/report-system
+
+gncmodscm_DATA = \
+     collectors.scm \
+     list-extras.scm
+
 
 gncscmmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash/report/
 gncscmmod_DATA = \
@@ -70,19 +77,22 @@ if GNUCASH_SEPARATE_BUILDDIR
 # for running
 SCM_FILE_LINKS = \
   ${gncscmmod_DATA} \
-  ${gncscm_DATA}
+  ${gncscm_DATA} \
+  ${gncmodscm_DATA}
 endif
 
 .scm-links:
 	$(RM) -rf gnucash
 	mkdir -p  gnucash
 	mkdir -p  gnucash/report
+	mkdir -p  gnucash/report/report-system
 if GNUCASH_SEPARATE_BUILDDIR
 	for X in ${SCM_FILE_LINKS} ; do \
 	  $(LN_S) -f ${srcdir}/$$X . ; \
 	done
 endif
 	( cd gnucash/report; for A in $(gncscmmod_DATA) ; do $(LN_S) -f ../../$$A . ; done )
+	( cd gnucash/report/report-system; for A in $(gncmodscm_DATA) ; do $(LN_S) -f ../../../$$A . ; done )
 if ! OS_WIN32
 # Windows knows no "ln -s" but uses "cp": must copy every time (see bug #566567).
 	touch .scm-links
