@@ -30,7 +30,7 @@ GNUCASH_RESOURCE_FILE = gnucash.rc
 dist_noinst_DATA = gnucash.rc
 
 .rc.o:
-	$(AM_V_GEN)$(RC) -i '$<' --input-format=rc -o '$@' -O coff
+	$(AM_V_GEN)$(RC) -I${top_srcdir}/src/pixmaps -i '$<' --input-format=rc -o '$@' -O coff
 
 configdir = ${GNC_CONFIGDIR}
 config_DATA = environment
