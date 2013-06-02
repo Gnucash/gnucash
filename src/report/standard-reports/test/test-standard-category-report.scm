@@ -13,9 +13,6 @@
 (use-modules (sw_engine))
 (use-modules (gnucash report standard-reports net-barchart))
 
-(use-modules (gnucash report report-system streamers))
-;(use-modules (gnucash report new-reports reports-2))
-
 (use-modules (gnucash report report-system test test-extras))
 
 (use-modules (gnucash report standard-reports test test-generic-category-report))

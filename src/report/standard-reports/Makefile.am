@@ -81,7 +81,7 @@ noinst_DATA = .scm-links
 
 EXTRA_DIST = ${gncscmmod_DATA} ${gncscmreportmod_DATA}
 
-CLEANFILES = .scm-links
-DISTCLEANFILES = ${SCM_FILE_LINKS}
+CLEANFILES = .scm-links ${SCM_FILE_LINKS}
+DISTCLEANFILES =
 
 AM_CPPFLAGS += -DG_LOG_DOMAIN=\"gnc.report.standard\"

@@ -62,7 +62,8 @@ gncmodscmdir = ${GNC_SHAREDIR}/guile-modules/gnucash/report/report-system
 
 gncmodscm_DATA = \
      collectors.scm \
-     list-extras.scm
+     list-extras.scm \
+     report-collectors.scm
 
 
 gncscmmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash/report/

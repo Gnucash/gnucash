@@ -24,6 +24,8 @@
 
 ;; depends must be outside module scope -- and should eventually go away.
 (define-module (gnucash report standard-reports category-barchart))
+(use-modules (gnucash report report-system report-collectors))
+(use-modules (gnucash report report-system collectors))
 (use-modules (srfi srfi-1))
 (use-modules (gnucash main)) ;; FIXME: delete after we finish modularizing.
 (use-modules (ice-9 regex))
@@ -242,9 +244,7 @@ developing over time"))
         (width (get-option gnc:pagename-display optname-plot-width))
 	(sort-method (get-option gnc:pagename-display optname-sort-method))
 	(reverse-balance? (get-option "__report" "reverse-balance?"))
-        
-	(work-done 0)
-	(work-to-do 0)
+
         (show-table? (get-option gnc:pagename-display (N_ "Show table")))
         (document (gnc:make-html-document))
         (chart (gnc:make-html-barchart))
@@ -324,7 +324,9 @@ developing over time"))
           ;; the user wants to see the amounts averaged over some value.
           (define (collector->double c date)
             ;; Future improvement: Let the user choose which kind of
-            ;; currency combining she want to be done. 
+            ;; currency combining she want to be done.
+	    (if (not (gnc:timepair? date))
+		(throw 'wrong))
             (*
               (gnc-numeric-to-double
               (gnc:gnc-monetary-amount
@@ -333,34 +335,6 @@ developing over time"))
                 (lambda (a b) (exchange-fn a b date)))))
              averaging-multiplier))
 
-          ;; Calculates the net balance (profit or loss) of an account in
-          ;; the given time interval. date-list-entry is a pair containing
-          ;; the start- and end-date of that interval. If subacct?==#t,
-          ;; the subaccount's balances are included as well. Returns a
-          ;; double, exchanged into the report-currency by the above
-          ;; conversion function, and possibly with reversed sign.
-          (define (get-balance account date-list-entry subacct?)
-            ((if (reverse-balance? account)
-                 - +)
-             (if do-intervals?
-                 (collector->double
-                  (gnc:account-get-comm-balance-interval 
-                   account 
-                   (first date-list-entry) 
-                   (second date-list-entry) subacct?)
-                  (second date-list-entry))
-                 (collector->double
-                  (gnc:account-get-comm-balance-at-date
-                   account date-list-entry subacct?)
-                  date-list-entry))))
-          
-          ;; Creates the <balance-list> to be used in the function
-          ;; below. 
-          (define (account->balance-list account subacct?)
-            (map 
-             (lambda (d) (get-balance account d subacct?))
-             dates-list))
-          
 	  (define (count-accounts current-depth accts)
 	    (if (< current-depth tree-depth)
 		(let ((sum 0))
@@ -386,32 +360,37 @@ developing over time"))
           ;; show-acct? is true. This is necessary because otherwise we
           ;; would forget an account that is selected but not its
           ;; parent.
-          (define (traverse-accounts current-depth accts)
-            (if (< current-depth tree-depth)
-                (let ((res '()))
-                  (for-each
-                   (lambda (a)
-                     (begin
-		       (set! work-done (+ 1 work-done))
-		       (gnc:report-percent-done (+ 20 (* 70 (/ work-done work-to-do))))
-                       (if (show-acct? a)
-                           (set! res 
-                                 (cons (list a (account->balance-list a #f))
-                                       res)))
-                       (set! res (append
-                                  (traverse-accounts
-                                   (+ 1 current-depth)
-                                   (gnc-account-get-children a))
-                                  res))))
-                   accts)
-                  res)
-                ;; else (i.e. current-depth == tree-depth)
-                (map
-                 (lambda (a)
-		   (set! work-done (+ 1 work-done))
-		   (gnc:report-percent-done (+ 20 (* 70 (/ work-done work-to-do))))
-                   (list a (account->balance-list a #t)))
-                 (filter show-acct? accts))))
+	  (define (apply-sign account x)
+	    (if (reverse-balance? account) (- x) x))
+          (define (calculate-report accounts progress-range)
+	    (let* ((the-acount-destination-alist (account-destination-alist accounts
+									    account-types
+									    tree-depth))
+		   (account-reformat
+		    (if do-intervals?
+			(lambda (account result)
+			  (map (lambda (collector datepair)
+				 (let ((date (second datepair)))
+				   (apply-sign account (collector->double collector date))))
+			       result dates-list))
+			(lambda (account result)
+			  (let ((commodity-collector (gnc:make-commodity-collector)))
+			    (collector-end (fold (lambda (next date list-collector)
+						   (commodity-collector 'merge next #f)
+						   (collector-add list-collector
+								  (apply-sign account
+									      (collector->double commodity-collector
+												 date))))
+						 (collector-into-list)
+						 result dates-list))))))
+
+		   (the-report (category-by-account-report do-intervals?
+				dates-list the-acount-destination-alist
+				(lambda (account date)
+				  (make-gnc-collector-collector))
+				account-reformat
+				progress-range)))
+	      the-report))
 
           ;; The percentage done numbers here are a hack so that
           ;; something gets displayed. On my system the
@@ -430,13 +409,12 @@ developing over time"))
                              price-source report-currency 
                              commodity-list to-date-tp
 			     5 15))
-	  (set! work-to-do (count-accounts 1 topl-accounts))
 
           ;; Sort the account list according to the account code field.
-          (set! all-data (sort 
-                          (filter (lambda (l) 
-                                    (not (= 0.0 (apply + (cadr l))))) 
-                                  (traverse-accounts 1 topl-accounts))
+          (set! all-data (sort
+                          (filter (lambda (l)
+                                    (not (= 0.0 (apply + (cadr l)))))
+                                  (calculate-report accounts (cons 0 90)))
 			  (cond
 			   ((eq? sort-method 'acct-code)
 			    (lambda (a b) 

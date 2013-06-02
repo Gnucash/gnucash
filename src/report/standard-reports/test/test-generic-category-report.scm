@@ -14,7 +14,7 @@
 (use-modules (gnucash engine))
 (use-modules (sw_engine))
 
-(use-modules (gnucash report report-system streamers))
+(use-modules (gnucash report report-system collectors))
 (use-modules (gnucash report report-system test test-extras))
 
 (export run-category-income-expense-test)
@@ -240,4 +240,3 @@
 			 (= (/ (* row-count (+ row-count 1)) 2)
 			    (string->number (car (tbl-ref tbl (- row-count 1) 1))))
 			 #t)))))))
-
