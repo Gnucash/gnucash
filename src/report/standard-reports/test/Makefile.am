@@ -37,20 +37,25 @@ TESTS_ENVIRONMENT = \
   GNC_BUILDDIR=`\cd ${top_builddir} && pwd` \
   $(shell ${top_srcdir}/src/gnc-test-env --no-exports ${GNC_TEST_DEPS})
 
-EXTRA_DIST = test-load-module
+SCM_TEST_HELPERS = \
+	test-generic-category-report.scm \
+	test-generic-net-barchart.scm \
+	test-generic-net-linechart.scm
 
 SCM_TESTS = \
-	test-standard-category-report.scm \
-	test-standard-net-barchart.scm \
-	test-standard-net-linechart.scm
+	test-standard-category-report.sh \
+	test-standard-net-barchart.sh \
+	test-standard-net-linechart.sh
+
+SCM_TEST_SRCS = $(SCM_TESTS:%.sh=%.scm)
+
+EXTRA_DIST = test-load-module $(SCM_TEST_HELPERS) $(SCM_TEST_SRCS)
 
 if GNUCASH_SEPARATE_BUILDDIR
 #For executing test cases
 SCM_FILE_LINKS = \
-	test-generic-category-report.scm \
-	test-generic-net-barchart.scm \
-	test-generic-net-linechart.scm \
-	$(SCM_TESTS)
+	$(SCM_TEST_HELPERS) \
+	$(SCM_TEST_SRCS)
 endif
 
 .scm-links:
@@ -67,7 +72,7 @@ if ! OS_WIN32
 	touch .scm-links
 endif
 
-$(patsubst %.scm,%,$(SCM_TESTS)): %: Makefile .scm-links
+$(SCM_TESTS): %.sh: Makefile .scm-links
 	echo 'guile --debug -l $(srcdir)/$*.scm -c "(exit (run-test))"' > $@
 	chmod a+x $@
 
@@ -77,13 +82,12 @@ interp:
 debug:
 	$(TESTS_ENVIRONMENT) gdb --args $(shell cat $(TEST))
 
-TESTS = $(patsubst %.scm,%,$(SCM_TESTS)) $(MODULE_TESTS)
+TESTS = $(SCM_TESTS) $(MODULE_TESTS)
 
 clean-local:
 	$(RM) -rf gnucash
 
 noinst_DATA = .scm-links
-CLEANFILES = .scm-links
-DISTCLEANFILES = ${SCM_FILE_LINKS}
-
+CLEANFILES = .scm-links *.log
+DISTCLEANFILES = ${SCM_FILE_LINKS} $(SCM_TESTS)
 

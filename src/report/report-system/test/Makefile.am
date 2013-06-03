@@ -19,9 +19,11 @@ TESTS = \
   $(SCM_TESTS)
 
 SCM_TESTS = \
-	test-collectors.scm \
-	test-list-extras.scm \
-	test-test-extras.scm
+	test-collectors.sh \
+	test-list-extras.sh \
+	test-test-extras.sh
+
+SCM_TEST_SRCS = $(SCM_TESTS:%.sh=%.scm)
 
 GNC_TEST_DEPS = --gnc-module-dir ${top_builddir}/src/engine \
   --gnc-module-dir ${top_builddir}/src/app-utils \
@@ -48,7 +50,7 @@ GNC_TEST_DEPS = --gnc-module-dir ${top_builddir}/src/engine \
   --library-dir    ${top_builddir}/src/backend/sql  \
   --library-dir    ${top_builddir}/src/gnc-module
 
-$(SCM_TESTS): %.scm: Makefile
+$(SCM_TESTS): %.sh: Makefile .scm-links
 	echo 'guile --debug -l $(srcdir)/$*.scm -c "(exit (run-test))"' > $@
 	chmod a+x $@
 
@@ -60,14 +62,17 @@ TESTS_ENVIRONMENT = \
 
 check_PROGRAMS = test-link-module
 
-EXTRA_DIST = test-load-module
+EXTRA_DIST = \
+	test-load-module \
+	test-extras.scm \
+	$(SCM_TEST_SRCS)
 
 testit:
 	$(TESTS_ENVIRONMENT) libtool --mode execute gdb test-link-module
 
 
 if GNUCASH_SEPARATE_BUILDDIR
-SCM_FILE_LINKS = test-extras.scm
+SCM_FILE_LINKS = test-extras.scm $(SCM_TEST_SRCS)
 endif
 
 .scm-links:
@@ -89,4 +94,4 @@ clean-local:
 
 noinst_DATA = .scm-links
 CLEANFILES = .scm-links
-DISTCLEANFILES = ${SCM_FILE_LINKS}
+DISTCLEANFILES = ${SCM_FILE_LINKS} $(SCM_TESTS)

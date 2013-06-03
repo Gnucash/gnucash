@@ -101,7 +101,7 @@ endif
 
 noinst_DATA = .scm-links
 
-EXTRA_DIST = report-system.i ${gncscmmod_DATA} ${gncscm_DATA}
+EXTRA_DIST = report-system.i ${gncscmmod_DATA} ${gncscm_DATA} ${gncmodscm_DATA}
 
 clean-local:
 	rm -rf gnucash
