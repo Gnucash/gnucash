@@ -46,6 +46,7 @@
        (asset-test asset-report-uuid)
        #t))
 
+;; No real test here, just confirm that no exceptions are thrown
 (define (null-test uuid)
   (let* ((template (gnc:find-report-template uuid))
 	 (options (gnc:make-report-options uuid))
@@ -56,7 +57,7 @@
     (let ((doc (renderer report)))
       (gnc:html-document-set-style-sheet! doc
 					  (gnc:report-stylesheet report))
-      (format #t "render: ~a\n" (gnc:html-document-render doc #f))
+      #t
       )))
 
 
@@ -87,13 +88,6 @@
 	(set-option income-report gnc:pagename-accounts "Accounts" (list my-income-account))
 	(set-option income-report gnc:pagename-accounts "Show Accounts until level"  'all)
 
-	(gnc:options-for-each (lambda (option)
-				(format #t "Option: ~a.~a Value ~a\n"
-					(gnc:option-section option)
-					(gnc:option-name option)
-					(gnc:option-value option)))
-			      income-options)
-
 	(let ((doc (income-renderer income-report)))
 	  (gnc:html-document-set-style-sheet! doc
 					      (gnc:report-stylesheet income-report))
@@ -106,8 +100,6 @@
 	    (every (lambda (date value-list)
 		     (let ((day (second date))
 			   (value (first value-list)))
-		       (format #t "[~a] [~a]\n"
-			       (string->number day) (string->number value))
 		       (= (string->number day) (string->number value))))
 		   (map first tbl)
 		   (map second tbl))))))))
@@ -136,7 +128,6 @@
 				  (list "Bank"))))
 	   (leaf-expense-accounts (list-leaves expense-accounts))
 	   (bank-account (car (car (cdr asset-accounts)))))
-      (format #t "Expense accounts ~a\n" leaf-expense-accounts)
       (for-each (lambda (expense-account)
 		  (env-create-daily-transactions env
 						 (gnc:get-start-this-month)
@@ -179,7 +170,6 @@
   (let ((columns (stream->list (pattern-streamer "<th>"
 						 (list (list "<string> ([^<]*)</" 1))
 						 doc))))
-    (format #t "Columns ~a\n" columns)
     (map caar columns)))
 
 ;;
@@ -214,14 +204,6 @@
 	(set-option asset-report gnc:pagename-accounts "Accounts" (list my-asset-account))
 	(set-option asset-report gnc:pagename-accounts "Show Accounts until level"  'all)
 
-	(gnc:options-for-each (lambda (option)
-				(format #t "Option: ~a.~a Value ~a\n"
-					(gnc:option-section option)
-					(gnc:option-name option)
-					(gnc:option-value option)))
-			      asset-options)
-
-
 	(let ((doc (asset-renderer asset-report)))
 	  (gnc:html-document-set-style-sheet! doc
 					      (gnc:report-stylesheet asset-report))
@@ -233,8 +215,7 @@
 					       (list "<number> ([^<]*)</td>" 1))
 					 html-document)))
 		 (row-count (tbl-row-count tbl)))
-	    (format #t "Report: ~a\n" tbl)
-	    (logging-and (member "account-1" columns)
+	    (and (member "account-1" columns)
 			 (= 2 (length columns))
 			 (= 1 (string->number (car (tbl-ref tbl 0 1))))
 			 (= (/ (* row-count (+ row-count 1)) 2)

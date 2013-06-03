@@ -132,7 +132,6 @@
 	(split-1 (xaccMallocSplit  (gnc-get-current-book)))
 	(split-2 (xaccMallocSplit  (gnc-get-current-book)))
 	(localtime (gnc:timepair->date date)))
-    (format #t "amount ~a ~a\n" aaa debit)
     (with-transaction txn
 		      (lambda ()
 			(xaccTransSetDescription txn (env-string env "ponies"))

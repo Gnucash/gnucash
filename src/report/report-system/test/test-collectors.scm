@@ -100,7 +100,7 @@
 (define (test-collector-into-list)
   (define (check l)
     (equal? l (collector-add-all (collector-into-list) l)))
-  (logging-and (check '())
+  (and (check '())
        (check '(1))
        (check '(1 2))
        (check '(1 2 3))
