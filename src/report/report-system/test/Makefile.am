@@ -71,9 +71,7 @@ testit:
 	$(TESTS_ENVIRONMENT) libtool --mode execute gdb test-link-module
 
 
-if GNUCASH_SEPARATE_BUILDDIR
 SCM_FILE_LINKS = test-extras.scm $(SCM_TEST_SRCS)
-endif
 
 .scm-links:
 	$(RM) -rf gnucash

@@ -51,12 +51,10 @@ SCM_TEST_SRCS = $(SCM_TESTS:%.sh=%.scm)
 
 EXTRA_DIST = test-load-module $(SCM_TEST_HELPERS) $(SCM_TEST_SRCS)
 
-if GNUCASH_SEPARATE_BUILDDIR
 #For executing test cases
 SCM_FILE_LINKS = \
 	$(SCM_TEST_HELPERS) \
 	$(SCM_TEST_SRCS)
-endif
 
 .scm-links:
 	$(RM) -rf gnucash
