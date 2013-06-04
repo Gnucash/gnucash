@@ -240,6 +240,7 @@ src/test-core/test_stuff.py
 src/test-core/unittest_support.py
 stamp-h1
 swig-*.c
+test-driver
 translog.*.log
 CMakeLists.txt.user
 gnucash.config
