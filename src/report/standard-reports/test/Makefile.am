@@ -1,5 +1,14 @@
 MODULE_TESTS=test-load-module
 
+TESTS = $(SCM_TESTS) $(MODULE_TESTS)
+
+SCM_TESTS = \
+	test-standard-category-report \
+	test-standard-net-barchart \
+	test-standard-net-linechart
+
+SCM_TEST_SRCS = $(SCM_TESTS:%=%.scm)
+
 GNC_TEST_DEPS = \
   --gnc-module-dir ${top_builddir}/src/engine \
   --gnc-module-dir ${top_builddir}/src/app-utils \
@@ -31,30 +40,32 @@ GNC_TEST_DEPS = \
   --library-dir    ${top_builddir}/src/backend/sql \
   --library-dir    ${top_builddir}/src/gnc-module
 
+$(SCM_TESTS): %: $(srcdir)/%.scm Makefile .scm-links
+	echo 'guile --debug -l $(srcdir)/$*.scm -c "(exit (run-test))"' > $@
+	chmod a+x $@
 
 TESTS_ENVIRONMENT = \
   GUILE_WARN_DEPRECATED=no \
   GNC_BUILDDIR=`\cd ${top_builddir} && pwd` \
   $(shell ${top_srcdir}/src/gnc-test-env --no-exports ${GNC_TEST_DEPS})
 
+
 SCM_TEST_HELPERS = \
 	test-generic-category-report.scm \
 	test-generic-net-barchart.scm \
 	test-generic-net-linechart.scm
 
-SCM_TESTS = \
-	test-standard-category-report.sh \
-	test-standard-net-barchart.sh \
-	test-standard-net-linechart.sh
+EXTRA_DIST = \
+	test-load-module \
+	$(SCM_TEST_HELPERS) \
+	$(SCM_TEST_SRCS)
 
-SCM_TEST_SRCS = $(SCM_TESTS:%.sh=%.scm)
-
-EXTRA_DIST = test-load-module $(SCM_TEST_HELPERS) $(SCM_TEST_SRCS)
-
+if GNUCASH_SEPARATE_BUILDDIR
 #For executing test cases
 SCM_FILE_LINKS = \
 	$(SCM_TEST_HELPERS) \
 	$(SCM_TEST_SRCS)
+endif
 
 .scm-links:
 	$(RM) -rf gnucash
@@ -64,23 +75,17 @@ if GNUCASH_SEPARATE_BUILDDIR
 	  $(LN_S) -f ${srcdir}/$$X . ; \
 	done
 endif
-	( cd gnucash/report/standard-reports/test; for A in $(SCM_FILE_LINKS) ; do $(LN_S) -f ../../../../$$A . ; done )
+	( cd gnucash/report/standard-reports/test; for A in $(SCM_TEST_HELPERS) ; do $(LN_S) -f ../../../../$$A . ; done )
 if ! OS_WIN32
 # Windows knows no "ln -s" but uses "cp": must copy every time (see bug #566567).
 	touch .scm-links
 endif
-
-$(SCM_TESTS): %.sh: Makefile .scm-links
-	echo 'guile --debug -l $(srcdir)/$*.scm -c "(exit (run-test))"' > $@
-	chmod a+x $@
 
 interp:
 	$(TESTS_ENVIRONMENT) guile --debug
 
 debug:
 	$(TESTS_ENVIRONMENT) gdb --args $(shell cat $(TEST))
-
-TESTS = $(SCM_TESTS) $(MODULE_TESTS)
 
 clean-local:
 	$(RM) -rf gnucash

@@ -19,11 +19,11 @@ TESTS = \
   $(SCM_TESTS)
 
 SCM_TESTS = \
-	test-collectors.sh \
-	test-list-extras.sh \
-	test-test-extras.sh
+	test-collectors \
+	test-list-extras \
+	test-test-extras
 
-SCM_TEST_SRCS = $(SCM_TESTS:%.sh=%.scm)
+SCM_TEST_SRCS = $(SCM_TESTS:%=%.scm)
 
 GNC_TEST_DEPS = --gnc-module-dir ${top_builddir}/src/engine \
   --gnc-module-dir ${top_builddir}/src/app-utils \
@@ -50,7 +50,7 @@ GNC_TEST_DEPS = --gnc-module-dir ${top_builddir}/src/engine \
   --library-dir    ${top_builddir}/src/backend/sql  \
   --library-dir    ${top_builddir}/src/gnc-module
 
-$(SCM_TESTS): %.sh: Makefile .scm-links
+$(SCM_TESTS): %: $(srcdir)/%.scm Makefile .scm-links
 	echo 'guile --debug -l $(srcdir)/$*.scm -c "(exit (run-test))"' > $@
 	chmod a+x $@
 
@@ -62,16 +62,22 @@ TESTS_ENVIRONMENT = \
 
 check_PROGRAMS = test-link-module
 
+SCM_TEST_HELPERS = test-extras.scm
+
 EXTRA_DIST = \
 	test-load-module \
-	test-extras.scm \
+	$(SCM_TEST_HELPERS) \
 	$(SCM_TEST_SRCS)
 
 testit:
 	$(TESTS_ENVIRONMENT) libtool --mode execute gdb test-link-module
 
 
-SCM_FILE_LINKS = test-extras.scm $(SCM_TEST_SRCS)
+if GNUCASH_SEPARATE_BUILDDIR
+SCM_FILE_LINKS = \
+	$(SCM_TEST_HELPERS) \
+	$(SCM_TEST_SRCS)
+endif
 
 .scm-links:
 	$(RM) -rf gnucash
@@ -81,7 +87,7 @@ if GNUCASH_SEPARATE_BUILDDIR
 	  $(LN_S) -f ${srcdir}/$$X . ; \
 	done
 endif
-	( cd gnucash/report/report-system/test; for A in $(SCM_FILE_LINKS) ; do $(LN_S) -f ../../../../$$A . ; done )
+	( cd gnucash/report/report-system/test; for A in $(SCM_TEST_HELPERS) ; do $(LN_S) -f ../../../../$$A . ; done )
 if ! OS_WIN32
 # Windows knows no "ln -s" but uses "cp": must copy every time (see bug #566567).
 	touch .scm-links
