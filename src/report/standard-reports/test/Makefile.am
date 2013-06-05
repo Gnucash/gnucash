@@ -60,22 +60,10 @@ EXTRA_DIST = \
 	$(SCM_TEST_HELPERS) \
 	$(SCM_TEST_SRCS)
 
-if GNUCASH_SEPARATE_BUILDDIR
-#For executing test cases
-SCM_FILE_LINKS = \
-	$(SCM_TEST_HELPERS) \
-	$(SCM_TEST_SRCS)
-endif
-
 .scm-links:
 	$(RM) -rf gnucash
 	mkdir -p  gnucash/report/standard-reports/test
-if GNUCASH_SEPARATE_BUILDDIR
-	for X in ${SCM_FILE_LINKS} ; do \
-	  $(LN_S) -f ${srcdir}/$$X . ; \
-	done
-endif
-	( cd gnucash/report/standard-reports/test; for A in $(SCM_TEST_HELPERS) ; do $(LN_S) -f ../../../../$$A . ; done )
+	( cd gnucash/report/standard-reports/test; for A in $(SCM_TEST_HELPERS) ; do $(LN_S) -f $(abs_srcdir)/$$A . ; done )
 if ! OS_WIN32
 # Windows knows no "ln -s" but uses "cp": must copy every time (see bug #566567).
 	touch .scm-links
@@ -92,5 +80,5 @@ clean-local:
 
 noinst_DATA = .scm-links
 CLEANFILES = .scm-links *.log
-DISTCLEANFILES = ${SCM_FILE_LINKS} $(SCM_TESTS)
+DISTCLEANFILES = $(SCM_TESTS)
 
