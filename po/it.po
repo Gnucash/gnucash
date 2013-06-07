@@ -54,7 +54,7 @@ msgstr ""
 "Project-Id-Version: Gnucash 2.3.12\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-07 12:19+0200\n"
-"PO-Revision-Date: 2013-05-18 15:18+0100\n"
+"PO-Revision-Date: 2013-05-18 18:15+0100\n"
 "Last-Translator: Cristian Marchi <cri.penta@gmail.com>\n"
 "Language-Team: Italian <gnucash-it@gnucash.org>\n"
 "Language: it\n"
@@ -2069,9 +2069,8 @@ msgstr "Crea una nuova nota spese"
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:205
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:280
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:907
-#, fuzzy
 msgid "Vendor Listing"
-msgstr "listino azionario"
+msgstr "Elenco venditor"
 
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:206
 msgid "Show vendor aging overview for all vendors"
@@ -2080,9 +2079,8 @@ msgstr ""
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:210
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:281
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:913
-#, fuzzy
 msgid "Customer Listing"
-msgstr "listino azionario"
+msgstr "Elenco cliente"
 
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:211
 msgid "Show customer aging overview for all customers"
@@ -4403,9 +4401,8 @@ msgstr "Valore"
 #: ../src/gnome-search/dialog-search.c:863
 #: ../src/import-export/csv-export/csv-transactions-export.c:348
 #: ../intl-scm/guile-strings.c:4570
-#, fuzzy
 msgid "Number/Action"
-msgstr "esempio: operazione"
+msgstr "Numero/azione"
 
 #. src/report/standard-reports/transaction.scm
 #: ../src/gnome/dialog-find-transactions2.c:132
@@ -4692,7 +4689,7 @@ msgstr ""
 
 #: ../src/gnome/dialog-sx-editor2.c:1325
 msgid "Note: If you have already accepted changes to the Template, Cancel will not revoke them."
-msgstr ""
+msgstr "Nota: se sono stati già confermati i cambiamenti al modello, il tasto «Annulla» non li annullerà."
 
 #: ../src/gnome/dialog-sx-editor2.c:1372
 #: ../src/gnome/dialog-sx-editor.c:1380
@@ -6261,7 +6258,7 @@ msgstr ""
 # Tooltip
 #: ../src/gnome/gtkbuilder/assistant-hierarchy.glade.h:27
 msgid "Setup selected accounts"
-msgstr "Imposta i conti selezionati"
+msgstr "Impostazione dei conti selezionati"
 
 #: ../src/gnome/gtkbuilder/assistant-hierarchy.glade.h:28
 msgid "Since you are creating a new file, you will next see a dialog for setting book options. These can affect how GnuCash transactions are handled later, during account setup. If you come back to this page without cancelling and starting over, the dialog for setting book options will not be shown a second time when you go forward. You can access it directly from the menu via File->Properties."
@@ -9394,9 +9391,8 @@ msgstr "Immettere una stringa non vuota per \"nome completo\", \"simbolo/abbrevi
 
 #. The "date" and the "tnum" fields aren't being asked for, this is a split copy
 #: ../src/gnome-utils/dialog-dup-trans.c:235
-#, fuzzy
 msgid "Action/Number:"
-msgstr "Numero del lavoro"
+msgstr "Azione/numero:"
 
 #: ../src/gnome-utils/dialog-file-access.c:295
 msgid "Open..."
@@ -11064,8 +11060,8 @@ msgstr "Totale (resoconto)"
 msgid "Total (Period)"
 msgstr "Totale (periodo)"
 
+# Intestazione colonna del colore del conto nella struttura dei conti
 #: ../src/gnome-utils/gnc-tree-view-account.c:865
-#, fuzzy
 msgid "C"
 msgstr "C"
 
@@ -11170,7 +11166,6 @@ msgid "Owner ID"
 msgstr "ID intestatario"
 
 #: ../src/gnome-utils/gnc-tree-view-owner.c:419
-#, fuzzy
 msgid "Address Name"
 msgstr "Nome indirizzo"
 
@@ -11972,17 +11967,20 @@ msgstr "Selezionare le informazioni dell'utente qui..."
 msgid "Si_ngle:"
 msgstr "Si_ngola:"
 
+# Tooltip
 #: ../src/gnome-utils/gtkbuilder/dialog-commodity.glade.h:14
 msgid "These are F::Q quote sources that retrieve information from a single site on the internet.  If that site is unavailable, you will not be able to retrieve quotes."
-msgstr "Queste sono fonti per le quotazioni di tipo F::Q e recuperano le informazioni da un unico sito internet. Se questo sito non è disponibile, sarà impossibile ricevere le quotazioni."
+msgstr "Queste sono fonti per le quotazioni di tipo F::Q e recuperano le informazioni da un unico sito internet. Se questo sito non è disponibile, sarà impossibile ricevere le quotazioni"
 
+# Tooltip
 #: ../src/gnome-utils/gtkbuilder/dialog-commodity.glade.h:15
 msgid "These are F::Q quote sources that retrieve information from multiple sites on the internet.  If one of the sites is unavailable, F::Q will attempt to retrieve the information from another site."
-msgstr "Queste sono fonti per le quotazioni di tipo F::Q e recuperano le informazioni da più siti internet. Se uno di questi siti non è disponibile, F::Q tenterà di ricevere le informazioni da un altro sito."
+msgstr "Queste sono fonti per le quotazioni di tipo F::Q e recuperano le informazioni da più siti internet. Se uno di questi siti non è disponibile, F::Q tenterà di ricevere le informazioni da un altro sito"
 
+# Tooltip
 #: ../src/gnome-utils/gtkbuilder/dialog-commodity.glade.h:16
 msgid "These are quote sources that were recently added to F::Q.  GnuCash does not know if these sources retrieve information from a single site or from multiple sites on the internet."
-msgstr "Queste sono fonti delle quotazioni che sono state aggiunte recentemente a F::Q. GnuCash non è in grado di conoscere se queste ricevono informazioni da un singolo sito o da più siti internet."
+msgstr "Queste sono fonti delle quotazioni che sono state aggiunte recentemente a F::Q. GnuCash non è in grado di conoscere se queste ricevono informazioni da un singolo sito o da più siti internet"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-commodity.glade.h:17
 msgid "Time_zone:"
@@ -12604,7 +12602,7 @@ msgstr "Mostra la data di inseri_mento"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:138
 msgid "Show the calendar b_uttons"
-msgstr "Mostra i pulsanti del calen_dario"
+msgstr "Mostra i pulsanti del ca_lendario"
 
 # Tooltip
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:139
@@ -12826,7 +12824,7 @@ msgstr "Si_nistra"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:190
 msgid "_Move the selection to the blank split on expand"
-msgstr "_Sposta la selezione alla suddivisione _vuota all'espansione"
+msgstr "Sposta la selezione alla suddivisione _vuota all'espansione"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:191
 msgid "_None"
@@ -13134,7 +13132,7 @@ msgstr "19°"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:12
 msgid "1st Fri"
-msgstr "1° venerdì"
+msgstr "1° Ven"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:13
 msgid "1st Mon"
@@ -19526,9 +19524,8 @@ msgstr "Dettagli del lavoro"
 # tooltip
 #. src/report/business-reports/invoice.scm
 #: ../intl-scm/guile-strings.c:1296
-#, fuzzy
 msgid "Display the job name for this invoice?"
-msgstr "Visualizzare i pagamenti applicati a questa fattura?"
+msgstr "Visualizzare il nome del lavoro?"
 
 #. src/report/business-reports/invoice.scm
 #: ../intl-scm/guile-strings.c:1350
@@ -21137,6 +21134,7 @@ msgstr "Perso_nalizzato"
 msgid "Report name"
 msgstr "Nome del resoconto"
 
+# Tooltip
 #. src/report/report-system/report.scm
 #: ../intl-scm/guile-strings.c:2318
 #: ../intl-scm/guile-strings.c:2330
