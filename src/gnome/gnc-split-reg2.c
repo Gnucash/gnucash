@@ -89,7 +89,7 @@ void gnc_split_reg2_double_line_cb (GtkWidget *w, gpointer data);
 
 void gnc_split_reg2_destroy_cb (GtkWidget *widget, gpointer data);
 
-static void gnc_split_reg2_class_init (GNCSplitReg2Class *class);
+static void gnc_split_reg2_class_init (GNCSplitReg2Class *klass);
 static void gnc_split_reg2_init (GNCSplitReg2 *gsr);
 static void gnc_split_reg2_init2 (GNCSplitReg2 *gsr);
 
@@ -132,11 +132,11 @@ enum
 static guint gnc_split_reg2_signals[LAST_SIGNAL] = { 0 };
 
 static void
-gnc_split_reg2_class_init (GNCSplitReg2Class *class)
+gnc_split_reg2_class_init (GNCSplitReg2Class *klass)
 {
     GtkObjectClass *object_class;
 
-    object_class = (GtkObjectClass*) class;
+    object_class = (GtkObjectClass*) klass;
 
     gnc_split_reg2_signals[HELP_CHANGED] =
         g_signal_new("help-changed",
@@ -148,7 +148,7 @@ gnc_split_reg2_class_init (GNCSplitReg2Class *class)
                      G_TYPE_NONE, 0);
 
     /* Setup the default handlers. */
-    class->help_changed = NULL;
+    klass->help_changed = NULL;
 
 }
 
