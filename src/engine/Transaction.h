@@ -556,10 +556,26 @@ void          xaccTransSetDate (Transaction *trans,
 void xaccTransSetDatePostedGDate (Transaction *trans, GDate date);
 
 /** The xaccTransSetDatePostedSecs() method will modify the <i>posted</i>
-    date of the transaction, specified by a time64 (see ctime(3)). The
-    posted date is the date when this transaction was posted at the
-    bank. */
+ *  date of the transaction, specified by a time64 (see ctime(3)). The
+ *  posted date is the date when this transaction was posted at the
+ *  bank.
+ *
+ * Please do not use this function, as the extra time-of-day part messes up a
+ * lot of places. Rather, please use xaccTransSetDatePostedGDate() or
+ * xaccTransSetDatePostedSecsNormalized().
+ */
 void          xaccTransSetDatePostedSecs (Transaction *trans, time64 time);
+
+/** This function sets the <i>posted</i> date of the transaction, specified by
+ * a time64 (see ctime(3)). Contrary to xaccTransSetDatePostedSecs(), the time
+ * will be normalized to only the date part, and the time-of-day will be
+ * ignored. The resulting date is the same as if it had been set as a GDate
+ * through xaccTransSetDatePostedGDate().
+ *
+ * Please prefer this function over xaccTransSetDatePostedSecs().
+ *
+ * The posted date is the date when this transaction was posted at the bank. */
+void          xaccTransSetDatePostedSecsNormalized (Transaction *trans, time64 time);
 
 /**  The xaccTransSetDatePostedTS() method does the same thing as
      xaccTransSetDatePostedSecs(), but takes a struct timespec64. */

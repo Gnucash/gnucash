@@ -1804,6 +1804,14 @@ xaccTransSetDatePostedSecs (Transaction *trans, time64 secs)
 }
 
 void
+xaccTransSetDatePostedSecsNormalized (Transaction *trans, time64 time)
+{
+    GDate date;
+    gnc_gdate_set_time64(&date, time);
+    xaccTransSetDatePostedGDate(trans, date);
+}
+
+void
 xaccTransSetDatePostedGDate (Transaction *trans, GDate date)
 {
     KvpValue* kvp_value;
