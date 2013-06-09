@@ -367,16 +367,16 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void * transaction_u
     if (data.date_posted_valid && (data.date_posted != 0))
     {
         /* The hopeful case: We have a posted_date */
-        xaccTransSetDatePostedSecs(transaction, data.date_posted);
+        xaccTransSetDatePostedSecsNormalized(transaction, data.date_posted);
     } else if (data.date_initiated_valid && (data.date_initiated != 0))
     {
         /* No posted date? Maybe we have an initiated_date */
-        xaccTransSetDatePostedSecs(transaction, data.date_initiated);
+        xaccTransSetDatePostedSecsNormalized(transaction, data.date_initiated);
     }
     else
     {
         /* Uh no, no valid date. As a workaround use today's date */
-        xaccTransSetDatePostedSecs(transaction, current_time);
+        xaccTransSetDatePostedSecsNormalized(transaction, current_time);
     }
 
     xaccTransSetDateEnteredSecs(transaction, current_time);

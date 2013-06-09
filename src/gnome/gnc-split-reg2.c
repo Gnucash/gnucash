@@ -726,7 +726,7 @@ gsr2_create_balancing_transaction (QofBook *book, Account *account,
 
     // fill Transaction
     xaccTransSetCurrency (trans, xaccAccountGetCommodity (account));
-    xaccTransSetDatePostedSecs (trans, statement_date);
+    xaccTransSetDatePostedSecsNormalized (trans, statement_date);
     xaccTransSetDescription (trans, _("Balancing entry from reconcilation"));
 
     // 1. Split

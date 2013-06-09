@@ -2818,7 +2818,7 @@ gnc_plugin_page_register2_cmd_shift_transaction_forward (GtkAction *action,
     qof_event_suspend();
 
     xaccTransGetDatePostedTS (trans, &entered);
-    xaccTransSetDatePostedSecs (trans, entered.tv_sec + 1);
+    xaccTransSetDatePostedSecsNormalized (trans, entered.tv_sec + 1);
 
     qof_event_resume();
 

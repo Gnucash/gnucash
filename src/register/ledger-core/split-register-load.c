@@ -348,7 +348,7 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
         xaccTransBeginEdit (new_trans);
         xaccTransSetCurrency (new_trans,
                               currency ? currency : gnc_default_currency());
-        xaccTransSetDatePostedSecs (new_trans, info->last_date_entered);
+        xaccTransSetDatePostedSecsNormalized(new_trans, info->last_date_entered);
         blank_split = xaccMallocSplit (gnc_get_current_book ());
         xaccSplitSetParent(blank_split, new_trans);
         /* We don't want to commit this transaction yet, because the split

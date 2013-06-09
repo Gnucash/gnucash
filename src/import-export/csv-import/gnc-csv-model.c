@@ -923,7 +923,7 @@ static GncCsvTransLine* trans_property_list_to_trans(TransPropertyList* list, gc
         switch (prop->type)
         {
         case GNC_CSV_DATE:
-            xaccTransSetDatePostedSecs(trans_line->trans, *((time64*)(prop->value)));
+            xaccTransSetDatePostedSecsNormalized(trans_line->trans, *((time64*)(prop->value)));
             break;
 
         case GNC_CSV_DESCRIPTION:

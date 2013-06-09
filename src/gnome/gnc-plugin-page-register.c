@@ -2964,7 +2964,7 @@ gnc_plugin_page_register_cmd_reverse_transaction (GtkAction *action,
     new_trans = xaccTransReverse(trans);
 
     /* Clear transaction level info */
-    xaccTransSetDatePostedSecs (new_trans, gnc_time (NULL));
+    xaccTransSetDatePostedSecsNormalized (new_trans, gnc_time (NULL));
     xaccTransSetDateEnteredSecs (new_trans, gnc_time (NULL));
 
     qof_event_resume();
@@ -2997,7 +2997,7 @@ gnc_plugin_page_register_cmd_shift_transaction_forward (GtkAction *action,
     qof_event_suspend();
 
     xaccTransGetDatePostedTS(trans, &entered);
-    xaccTransSetDatePostedSecs(trans, entered.tv_sec + 1);
+    xaccTransSetDatePostedSecsNormalized(trans, entered.tv_sec + 1);
 
     qof_event_resume();
 

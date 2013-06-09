@@ -384,7 +384,7 @@ gnc_stock_split_assistant_finish (GtkAssistant *assistant,
     xaccTransSetCurrency (trans, gnc_default_currency ());
 
     date = gnc_date_edit_get_date (GNC_DATE_EDIT (info->date_edit));
-    xaccTransSetDatePostedSecs (trans, date);
+    xaccTransSetDatePostedSecsNormalized (trans, date);
 
     {
         const char *description;

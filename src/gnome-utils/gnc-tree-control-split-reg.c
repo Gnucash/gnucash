@@ -1110,7 +1110,7 @@ gnc_tree_control_split_reg_reverse_current (GncTreeViewSplitReg *view)
     xaccTransBeginEdit (new_trans);
 
     /* Clear transaction level info */
-    xaccTransSetDatePostedSecs (new_trans, gnc_time (NULL));
+    xaccTransSetDatePostedSecsNormalized (new_trans, gnc_time (NULL));
     xaccTransSetDateEnteredSecs (new_trans, gnc_time (NULL));
 
     xaccTransCommitEdit (new_trans);
@@ -1350,7 +1350,7 @@ gnc_tree_control_split_reg_duplicate_current (GncTreeViewSplitReg *view)
 
         xaccTransCopyOnto (trans, new_trans);
 
-        xaccTransSetDatePostedSecs (new_trans, date);
+        xaccTransSetDatePostedSecsNormalized (new_trans, date);
 
         /* set per book option */
         gnc_set_num_action (new_trans, NULL, out_num, out_tnum);

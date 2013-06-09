@@ -102,7 +102,7 @@ find_or_create_txn(struct CloseAccountsCB* cacb, gnc_commodity* cmdty)
         txn->txn = xaccMallocTransaction(cacb->cbw->book);
         xaccTransBeginEdit(txn->txn);
         xaccTransSetDateEnteredSecs(txn->txn, gnc_time (NULL));
-        xaccTransSetDatePostedSecs(txn->txn, cacb->cbw->close_date);
+        xaccTransSetDatePostedSecsNormalized(txn->txn, cacb->cbw->close_date);
         xaccTransSetDescription(txn->txn, cacb->cbw->desc);
         xaccTransSetCurrency(txn->txn, cmdty);
         xaccTransSetIsClosingTxn(txn->txn, TRUE);

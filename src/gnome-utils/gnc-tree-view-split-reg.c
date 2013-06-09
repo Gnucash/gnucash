@@ -2612,7 +2612,7 @@ gtv_sr_begin_edit (GncTreeViewSplitReg *view, Split *split, Transaction *trans)
             //date on new transactions
 
             ts.tv_sec = gnc_time (NULL);
-            xaccTransSetDatePostedSecs (trans, ts.tv_sec);
+            xaccTransSetDatePostedSecsNormalized (trans, ts.tv_sec);
         }
     }
     LEAVE(" ");

@@ -946,7 +946,7 @@ gnc_import_process_trans_item (GncImportMatchMap *matchmap,
             /*DEBUG("BeginEdit selected_match")*/
             xaccTransBeginEdit(selected_match->trans);
 
-            xaccTransSetDatePostedSecs(selected_match->trans,
+            xaccTransSetDatePostedSecsNormalized(selected_match->trans,
                                        xaccTransGetDate(xaccSplitGetParent(
                                                    gnc_import_TransInfo_get_fsplit(trans_info))));
 

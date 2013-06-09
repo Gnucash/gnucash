@@ -1113,7 +1113,7 @@ xaccSchedXactionSetTemplateTrans(SchedXaction *sx, GList *t_t_list,
         xaccTransSetDescription(new_trans,
                                 gnc_ttinfo_get_description(tti));
 
-        xaccTransSetDatePostedSecs(new_trans, gnc_time (NULL));
+        xaccTransSetDatePostedSecsNormalized(new_trans, gnc_time (NULL));
 
         /* Set tran-num with gnc_set_num_action which is the same as
          * xaccTransSetNum with these arguments */
