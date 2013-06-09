@@ -1352,6 +1352,10 @@ gnc_tree_control_split_reg_duplicate_current (GncTreeViewSplitReg *view)
 
         xaccTransSetDatePostedSecsNormalized (new_trans, date);
 
+        /* We also must set a new DateEntered on the new entry
+         * because otherwise the ordering is not deterministic */
+        xaccTransSetDateEnteredSecs(new_trans, gnc_time(NULL));
+
         /* set per book option */
         gnc_set_num_action (new_trans, NULL, out_num, out_tnum);
 

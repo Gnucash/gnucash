@@ -1453,6 +1453,9 @@ create_balancing_transaction(QofBook *book, Account *account,
     xaccTransSetCurrency(trans, xaccAccountGetCommodity(account));
     xaccTransSetDatePostedSecsNormalized(trans, statement_date);
     xaccTransSetDescription(trans, _("Balancing entry from reconcilation"));
+    /* We also must set a new DateEntered on the new entry
+     * because otherwise the ordering is not deterministic */
+    xaccTransSetDateEnteredSecs(trans, gnc_time(NULL));
 
     // 1. Split
     split = xaccMallocSplit(book);

@@ -634,6 +634,10 @@ gnc_split_register_duplicate_current (SplitRegister *reg)
         xaccTransBeginEdit (new_trans);
         gnc_copy_trans_onto_trans (trans, new_trans, FALSE, FALSE);
         xaccTransSetDatePostedSecsNormalized (new_trans, date);
+        /* We also must set a new DateEntered on the new entry
+         * because otherwise the ordering is not deterministic */
+        xaccTransSetDateEnteredSecs(new_trans, gnc_time(NULL));
+
         /* set per book option */
         gnc_set_num_action (new_trans, NULL, out_num, out_tnum);
         if (!reg->use_tran_num_for_num_field)
