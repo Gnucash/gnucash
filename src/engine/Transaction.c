@@ -780,7 +780,7 @@ xaccTransEqual(const Transaction *ta, const Transaction *tb,
 
     if (!ta || !tb)
     {
-        PWARN ("one is NULL");
+        PINFO ("one is NULL");
         return FALSE;
     }
 
@@ -792,14 +792,14 @@ xaccTransEqual(const Transaction *ta, const Transaction *tb,
     {
         if (qof_instance_guid_compare(ta, tb) != 0)
         {
-            PWARN ("GUIDs differ");
+            PINFO ("GUIDs differ");
             return FALSE;
         }
     }
 
     if (!gnc_commodity_equal(ta->common_currency, tb->common_currency))
     {
-        PWARN ("commodities differ %s vs %s",
+        PINFO ("commodities differ %s vs %s",
                gnc_commodity_get_unique_name (ta->common_currency),
                gnc_commodity_get_unique_name (tb->common_currency));
         return FALSE;
@@ -812,7 +812,7 @@ xaccTransEqual(const Transaction *ta, const Transaction *tb,
 
         (void)gnc_timespec_to_iso8601_buff(ta->date_entered, buf1);
         (void)gnc_timespec_to_iso8601_buff(tb->date_entered, buf2);
-        PWARN ("date entered differs: '%s' vs '%s'", buf1, buf2);
+        PINFO ("date entered differs: '%s' vs '%s'", buf1, buf2);
         return FALSE;
     }
 
@@ -823,7 +823,7 @@ xaccTransEqual(const Transaction *ta, const Transaction *tb,
 
         (void)gnc_timespec_to_iso8601_buff(ta->date_posted, buf1);
         (void)gnc_timespec_to_iso8601_buff(tb->date_posted, buf2);
-        PWARN ("date posted differs: '%s' vs '%s'", buf1, buf2);
+        PINFO ("date posted differs: '%s' vs '%s'", buf1, buf2);
         return FALSE;
     }
 
@@ -832,14 +832,14 @@ xaccTransEqual(const Transaction *ta, const Transaction *tb,
      */
     if ((same_book && ta->num != tb->num) || (!same_book && g_strcmp0(ta->num, tb->num) != 0))
     {
-        PWARN ("num differs: %s vs %s", ta->num, tb->num);
+        PINFO ("num differs: %s vs %s", ta->num, tb->num);
         return FALSE;
     }
 
     if ((same_book && ta->description != tb->description)
             || (!same_book && g_strcmp0(ta->description, tb->description)))
     {
-        PWARN ("descriptions differ: %s vs %s", ta->description, tb->description);
+        PINFO ("descriptions differ: %s vs %s", ta->description, tb->description);
         return FALSE;
     }
 
@@ -851,7 +851,7 @@ xaccTransEqual(const Transaction *ta, const Transaction *tb,
         frame_a = kvp_frame_to_string (ta->inst.kvp_data);
         frame_b = kvp_frame_to_string (tb->inst.kvp_data);
 
-        PWARN ("kvp frames differ:\n%s\n\nvs\n\n%s", frame_a, frame_b);
+        PINFO ("kvp frames differ:\n%s\n\nvs\n\n%s", frame_a, frame_b);
 
         g_free (frame_a);
         g_free (frame_b);
@@ -863,7 +863,7 @@ xaccTransEqual(const Transaction *ta, const Transaction *tb,
     {
         if ((!ta->splits && tb->splits) || (!tb->splits && ta->splits))
         {
-            PWARN ("only one has splits");
+            PINFO ("only one has splits");
             return FALSE;
         }
 
@@ -885,7 +885,7 @@ xaccTransEqual(const Transaction *ta, const Transaction *tb,
 
                 if (!node_b)
                 {
-                    PWARN ("first has split %s and second does not",
+                    PINFO ("first has split %s and second does not",
                            guid_to_string (xaccSplitGetGUID (split_a)));
                     return FALSE;
                 }
@@ -901,14 +901,14 @@ xaccTransEqual(const Transaction *ta, const Transaction *tb,
                     guid_to_string_buff (xaccSplitGetGUID (split_a), str_a);
                     guid_to_string_buff (xaccSplitGetGUID (split_b), str_b);
 
-                    PWARN ("splits %s and %s differ", str_a, str_b);
+                    PINFO ("splits %s and %s differ", str_a, str_b);
                     return FALSE;
                 }
             }
 
             if (g_list_length (ta->splits) != g_list_length (tb->splits))
             {
-                PWARN ("different number of splits");
+                PINFO ("different number of splits");
                 return FALSE;
             }
         }
