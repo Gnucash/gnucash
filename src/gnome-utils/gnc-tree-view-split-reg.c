@@ -410,7 +410,9 @@ gtv_sr_get_model_iter_from_selection (GncTreeViewSplitReg *view,
     return FALSE;
 }
 
-/* Get sort model path from the model path */
+/* Get sort model path from the model path
+ *
+ * \return A newly allocated GtkTreePath, or NULL */
 GtkTreePath *
 gnc_tree_view_split_reg_get_sort_path_from_model_path (GncTreeViewSplitReg *view, GtkTreePath *mpath)
 {
@@ -421,6 +423,7 @@ gnc_tree_view_split_reg_get_sort_path_from_model_path (GncTreeViewSplitReg *view
     f_model = gtk_tree_model_sort_get_model (GTK_TREE_MODEL_SORT (s_model));
 
     fpath = gtk_tree_model_filter_convert_child_path_to_path (GTK_TREE_MODEL_FILTER (f_model), mpath);
+    g_return_val_if_fail(fpath, NULL);
 
     spath = gtk_tree_model_sort_convert_child_path_to_path (GTK_TREE_MODEL_SORT (s_model), fpath);
 
@@ -429,17 +432,25 @@ gnc_tree_view_split_reg_get_sort_path_from_model_path (GncTreeViewSplitReg *view
     return spath;
 }
 
-/* Get model path from the sort model path */
+/* Get model path from the sort model path
+ *
+ * \return A newly allocated GtkTreePath, or NULL. */
 GtkTreePath *
 gnc_tree_view_split_reg_get_model_path_from_sort_path (GncTreeViewSplitReg *view, GtkTreePath *spath)
 {
     GtkTreeModel *f_model, *s_model;
     GtkTreePath *fpath, *mpath;
+    g_return_val_if_fail(spath, NULL);
 
     s_model = gtk_tree_view_get_model (GTK_TREE_VIEW (view));
     f_model = gtk_tree_model_sort_get_model (GTK_TREE_MODEL_SORT (s_model));
 
     fpath = gtk_tree_model_sort_convert_path_to_child_path (GTK_TREE_MODEL_SORT (s_model), spath);
+    if (!fpath)
+    {
+        /* No child path available */
+        return NULL;
+    }
 
     mpath = gtk_tree_model_filter_convert_path_to_child_path (GTK_TREE_MODEL_FILTER (f_model), fpath);
 
@@ -5736,10 +5747,12 @@ gnc_tree_view_split_reg_set_dirty_trans (GncTreeViewSplitReg *view, Transaction 
 }
 
 
-/* Returns the current path */
+/* Returns the current path, or NULL if the current path is the blank split. */
 GtkTreePath *
 gnc_tree_view_split_reg_get_current_path (GncTreeViewSplitReg *view)
 {
+    if (!view->priv->current_ref)
+        return NULL;
     return gtk_tree_row_reference_get_path (view->priv->current_ref);
 }
 
