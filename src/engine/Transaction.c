@@ -792,7 +792,7 @@ xaccTransEqual(const Transaction *ta, const Transaction *tb,
     {
         if (qof_instance_guid_compare(ta, tb) != 0)
         {
-            PWARN ("GUIDs differ");
+            PINFO ("GUIDs differ");
             return FALSE;
         }
     }
