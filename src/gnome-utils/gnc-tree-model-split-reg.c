@@ -836,7 +836,7 @@ gnc_tree_model_split_reg_get_iter (GtkTreeModel *tree_model,
 
     {
         gchar *path_string = gtk_tree_path_to_string (path);
-        ENTER("model %p, iter %p, path %s", tree_model, iter, path_string);
+        //ENTER("model %p, iter %p, path %s", tree_model, iter, path_string);
         g_free (path_string);
     }
 
@@ -933,11 +933,11 @@ gnc_tree_model_split_reg_get_iter (GtkTreeModel *tree_model,
 
     *iter = gtm_sr_make_iter (model, flags, tnode, snode);
 /*    g_assert(VALID_ITER(model, iter)); */
-    LEAVE("True");
+    //LEAVE("True");
     return TRUE;
  fail:
     iter->stamp = 0;
-    LEAVE("False");
+    //LEAVE("False");
     return FALSE;
 }
 
@@ -954,7 +954,7 @@ gnc_tree_model_split_reg_get_path (GtkTreeModel *tree_model, GtkTreeIter *iter)
 
     g_return_val_if_fail (GNC_IS_TREE_MODEL_SPLIT_REG (model), NULL);
 
-    ENTER("model %p, iter %s", model, iter_to_string (iter));
+    //ENTER("model %p, iter %s", model, iter_to_string (iter));
 /*    g_assert(VALID_ITER(model, iter)); */
 
     path = gtk_tree_path_new();
@@ -999,13 +999,13 @@ gnc_tree_model_split_reg_get_path (GtkTreeModel *tree_model, GtkTreeIter *iter)
 
     {
         gchar *path_string = gtk_tree_path_to_string (path);
-        LEAVE("get path  %s", path_string);
+        //LEAVE("get path  %s", path_string);
         g_free (path_string);
     }
     return path;
 
  fail:
-    LEAVE("No Valid Path");
+    //LEAVE("No Valid Path");
     return NULL;
 }
 
@@ -1238,7 +1238,7 @@ gnc_tree_model_split_reg_get_value (GtkTreeModel *tree_model,
 
     g_return_if_fail (GNC_IS_TREE_MODEL_SPLIT_REG (model));
 
-    ENTER("model %p, iter %s, col %d", tree_model, iter_to_string (iter), column);
+    //ENTER("model %p, iter %s, col %d", tree_model, iter_to_string (iter), column);
 
     tnode = (GList *) iter->user_data2;
 
@@ -1294,7 +1294,7 @@ gnc_tree_model_split_reg_get_value (GtkTreeModel *tree_model,
     default:
         g_assert_not_reached ();
     }
-    LEAVE(" ");
+    //LEAVE(" ");
 }
 
 
@@ -1781,7 +1781,7 @@ gnc_tree_model_split_reg_get_split_and_trans (
     GList *node;
 
 /*    g_return_val_if_fail(VALID_ITER(model, iter), FALSE); */
-    ENTER("model pointer is %p", model);
+    //ENTER("model pointer is %p", model);
     if (is_trow1)
         *is_trow1 = !!IS_TROW1(iter);
     if (is_trow2)
@@ -1802,7 +1802,7 @@ gnc_tree_model_split_reg_get_split_and_trans (
         node = iter->user_data3;
         *split = node ? (Split *) node->data : NULL;
     }
-    LEAVE("");
+    //LEAVE("");
     return TRUE;
 }
 
