@@ -47,6 +47,7 @@
 #include "gnc-plugin-manager.h"
 #include "gnc-plugin-page-account-tree.h"
 #include "gnc-plugin-page-register.h"
+#include "gnc-plugin-page-register2.h"
 #include "gnc-main-window.h"
 #include "gnc-ui-util.h" // for gnc_get_current_book
 
@@ -443,6 +444,12 @@ main_window_to_account(GncMainWindow *window)
         DEBUG("register page");
         account = gnc_plugin_page_register_get_account(
                       GNC_PLUGIN_PAGE_REGISTER(page));
+    }
+    else if (strcmp(page_name, GNC_PLUGIN_PAGE_REGISTER2_NAME) == 0)
+    {
+        DEBUG("register2 page");
+        account = gnc_plugin_page_register2_get_account(
+                      GNC_PLUGIN_PAGE_REGISTER2(page));
     }
     else if (strcmp(page_name, GNC_PLUGIN_PAGE_ACCOUNT_TREE_NAME) == 0)
     {
