@@ -1164,6 +1164,7 @@ create_account_page(void)
     GncPluginPage *page;
     page = gnc_plugin_page_account_tree_new();
     gnc_main_window_open_page(NULL, page);
+    qof_book_mark_session_dirty(gnc_get_current_book());
     gnc_ui_file_access_for_save_as();
 }
 

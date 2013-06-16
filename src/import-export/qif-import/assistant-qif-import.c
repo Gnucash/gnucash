@@ -1333,7 +1333,10 @@ gnc_ui_qif_import_close_cb(GtkAssistant *gtkassistant, gpointer user_data)
 
     /* If We did not have an account tree, lets save it */
     if (!wind->acct_tree_found)
+    {
+        qof_book_mark_session_dirty(gnc_get_current_book());
         gnc_ui_file_access_for_save_as();
+    }
 
     gnc_close_gui_component_by_data( ASSISTANT_QIF_IMPORT_CM_CLASS, wind );
 }

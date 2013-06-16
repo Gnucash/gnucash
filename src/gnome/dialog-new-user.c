@@ -37,6 +37,7 @@
 #include "gnc-main-window.h"
 #include "gnc-plugin-page-account-tree.h"
 #include "gnc-session.h"
+#include "app-utils/gnc-ui-util.h" // for gnc_get_current_book
 
 #define GCONF_SECTION "dialogs/new_user"
 #define FIRST_STARTUP "first_startup"
@@ -72,6 +73,7 @@ after_hierarchy_assistant(void)
 
     page = gnc_plugin_page_account_tree_new();
     gnc_main_window_open_page(NULL, page);
+    qof_book_mark_session_dirty(gnc_get_current_book());
     gnc_ui_file_access_for_save_as();
 }
 
