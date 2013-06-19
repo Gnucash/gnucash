@@ -479,6 +479,10 @@ static void  process_trans_record(  FILE *log_file)
                         {
                             acct = xaccAccountLookupDirect(record.acc_guid, book);
                             xaccAccountInsertSplit(acct, split);
+
+                            // No currency in the txn yet? Set one now.
+                            if (!xaccTransGetCurrency(trans))
+                                xaccTransSetCurrency(trans, gnc_account_or_default_currency(acct, NULL));
                         }
                         if (is_new_split)
                             xaccTransAppendSplit(trans, split);
