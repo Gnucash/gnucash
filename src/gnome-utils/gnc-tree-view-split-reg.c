@@ -248,7 +248,8 @@ struct GncTreeViewSplitRegPrivate
     gboolean             disposed;
   
     Account             *anchor;              // The register default Account
-    gnc_commodity       *reg_comm;            // The register commodity
+    gnc_commodity       *reg_comm;            // The register commodity (which may be a non-currency)
+    gnc_commodity       *reg_currency;        // The currency for txns in this register (guaranteed to be a currency)
 
     Transaction         *current_trans;       // The current highlighted transaction
     Split               *current_split;       // The current highlighted split
@@ -1137,6 +1138,9 @@ gnc_tree_view_split_reg_new_with_model (GncTreeModelSplitReg *model)
 
     view->priv->anchor = gnc_tree_model_split_reg_get_anchor (model);
     view->priv->reg_comm = xaccAccountGetCommodity (view->priv->anchor);
+    view->priv->reg_currency = gnc_account_or_default_currency (view->priv->anchor, NULL);
+    g_assert(view->priv->reg_currency);
+    g_assert(gnc_commodity_is_currency(view->priv->reg_currency));
     view->help_text = g_strdup ("Help Text");
 
     gnc_tree_view_split_reg_set_cols (view, gnc_tree_view_split_reg_get_colummn_list (model));
@@ -4467,47 +4471,18 @@ gtv_sr_edited_normal_cb (GtkCellRendererText *cell, const gchar *path_string,
             /* Set the transaction currency if not set */
             if (!xaccTransGetCurrency (trans))
             {
-                gnc_commodity *split_commodity;
-
-                // set transaction currency to that of register if a currency
-                if (gnc_commodity_is_currency (view->priv->reg_comm))
-                    xaccTransSetCurrency (trans, view->priv->reg_comm);
-                else
-                    xaccTransSetCurrency (trans, gnc_default_currency());
+                // set transaction currency to that of register (which is guaranteed to be a currency)
+                xaccTransSetCurrency (trans, view->priv->reg_currency);
 
                 // We are on General ledger
                 if (!anchor)
                 {
-                    split_commodity = xaccAccountGetCommodity (xaccSplitGetAccount (split));
-
-                    if (gnc_commodity_is_currency (split_commodity))
-                        xaccTransSetCurrency (trans, xaccAccountGetCommodity (xaccSplitGetAccount (split)));
-                    else
-                        xaccTransSetCurrency (trans, gnc_default_currency());
+                    xaccTransSetCurrency (trans, gnc_account_or_default_currency (xaccSplitGetAccount (split), NULL));
                 }
             }
 
-            // if non currency register, we set the trans currency to the first currency split
-            if (xaccTransGetCurrency (trans) && !gnc_commodity_is_currency (view->priv->reg_comm))
-            {
-                if (!gnc_commodity_is_currency (xaccAccountGetCommodity (xaccSplitGetAccount (xaccTransGetSplit (trans, 0)))))
-                {
-                    int i;
-                    Split *s = NULL;
-                    gboolean currency = FALSE;
-
-                    for (i = 0; (s = xaccTransGetSplit (trans, i)); i++) {
-                        if (gnc_commodity_is_currency (xaccAccountGetCommodity (xaccSplitGetAccount (s))))
-                        {
-                            currency = TRUE;
-                            break;
-                        }
-                    }
-
-                    if (currency == FALSE && gnc_commodity_is_currency (xaccAccountGetCommodity (xaccSplitGetAccount (split))))
-                            xaccTransSetCurrency (trans, xaccAccountGetCommodity (xaccSplitGetAccount (split)));
-                }
-            }
+            // No need to check for a non-currency register because that's what
+            // was already checked when reg_currency was stored.
 
             /* This computes the value if we just commit the split after entering account */
             if (!valid_input)
@@ -4748,37 +4723,11 @@ gtv_sr_edited_template_cb (GtkCellRendererText *cell, const gchar *path_string,
             /* Set the transaction currency if not set */
             if (!xaccTransGetCurrency (trans))
             {
-                gnc_commodity *split_commodity;
-
-                split_commodity = xaccAccountGetCommodity (xaccSplitGetAccount (split));
-
-                if (gnc_commodity_is_currency (split_commodity))
-                    xaccTransSetCurrency (trans, xaccAccountGetCommodity (xaccSplitGetAccount (split)));
-                else
-                    xaccTransSetCurrency (trans, gnc_default_currency());
+                xaccTransSetCurrency (trans, gnc_account_or_default_currency (xaccSplitGetAccount (split), NULL));
             }
 
-            // if non currency register, we set the trans currency to the first currency split
-            if (xaccTransGetCurrency (trans))
-            {
-                if (!gnc_commodity_is_currency (xaccAccountGetCommodity (xaccSplitGetAccount (xaccTransGetSplit (trans, 0)))))
-                {
-                    int i;
-                    Split *s = NULL;
-                    gboolean currency = FALSE;
-
-                    for (i = 0; (s = xaccTransGetSplit (trans, i)); i++) {
-                        if (gnc_commodity_is_currency (xaccAccountGetCommodity (xaccSplitGetAccount (s))))
-                        {
-                            currency = TRUE;
-                            break;
-                        }
-                    }
-
-                    if (currency == FALSE && gnc_commodity_is_currency (xaccAccountGetCommodity (xaccSplitGetAccount (split))))
-                            xaccTransSetCurrency (trans, xaccAccountGetCommodity (xaccSplitGetAccount (split)));
-                }
-            }
+            // No need to check for a non-currency register because that's what
+            // was already checked when reg_currency was stored.
 
             /* Setup the debit and credit fields */
             if (viewcol == COL_DEBIT)
