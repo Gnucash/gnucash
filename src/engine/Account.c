@@ -2972,6 +2972,39 @@ xaccAccountGetCommodity (const Account *acc)
     return GET_PRIVATE(acc)->commodity;
 }
 
+gnc_commodity * gnc_account_get_currency_or_parent(const Account* account)
+{
+    gnc_commodity * commodity;
+    g_assert(account);
+
+    commodity = xaccAccountGetCommodity (account);
+    if (gnc_commodity_is_currency(commodity))
+        return commodity;
+    else
+    {
+        const Account *parent_account = account;
+        /* Account commodity is not a currency, walk up the tree until
+         * we find a parent account that is a currency account and use
+         * it's currency.
+         */
+        do
+        {
+            parent_account = gnc_account_get_parent (parent_account);
+            if (parent_account)
+            {
+                commodity = xaccAccountGetCommodity (parent_account);
+                if (gnc_commodity_is_currency(commodity))
+                {
+                    return commodity;
+                    //break;
+                }
+            }
+        }
+        while (parent_account);
+    }
+    return NULL; // no suitable commodity found.
+}
+
 /********************************************************************\
 \********************************************************************/
 void

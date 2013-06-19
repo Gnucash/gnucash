@@ -298,47 +298,20 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
     if (blank_split == NULL)
     {
         Transaction *new_trans;
-        gnc_commodity * currency = NULL;
+        gboolean currency_from_account = TRUE;
 
         /* Determine the proper currency to use for this transaction.
          * if default_account != NULL and default_account->commodity is
          * a currency, then use that.  Otherwise use the default currency.
          */
-        if (default_account != NULL)
-        {
-            gnc_commodity * commodity = xaccAccountGetCommodity (default_account);
-            if (gnc_commodity_is_currency(commodity))
-                currency = commodity;
-            else
-            {
-                Account *parent_account = default_account;
-                /* Account commodity is not a currency, walk up the tree until
-                 * we find a parent account that is a currency account and use
-                 * it's currency.
-                 */
-                do
-                {
-                    parent_account = gnc_account_get_parent (parent_account);
-                    if (parent_account)
-                    {
-                        commodity = xaccAccountGetCommodity (parent_account);
-                        if (gnc_commodity_is_currency(commodity))
-                        {
-                            currency = commodity;
-                            break;
-                        }
-                    }
-                }
-                while (parent_account && !currency);
-            }
+        gnc_commodity * currency = gnc_account_or_default_currency(default_account, &currency_from_account);
 
+        if (default_account != NULL && !currency_from_account)
+        {
             /* If we don't have a currency then pop up a warning dialog */
-            if (!currency)
-            {
-                gnc_info_dialog(NULL, "%s",
-                                _("Could not determine the account currency.  "
-                                  "Using the default currency provided by your system."));
-            }
+            gnc_info_dialog(NULL, "%s",
+                            _("Could not determine the account currency.  "
+                              "Using the default currency provided by your system."));
         }
 
         gnc_suspend_gui_refresh ();
@@ -346,8 +319,7 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
         new_trans = xaccMallocTransaction (gnc_get_current_book ());
 
         xaccTransBeginEdit (new_trans);
-        xaccTransSetCurrency (new_trans,
-                              currency ? currency : gnc_default_currency());
+        xaccTransSetCurrency (new_trans, currency);
         xaccTransSetDatePostedSecsNormalized(new_trans, info->last_date_entered);
         blank_split = xaccMallocSplit (gnc_get_current_book ());
         xaccSplitSetParent(blank_split, new_trans);

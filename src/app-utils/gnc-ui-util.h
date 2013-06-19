@@ -168,6 +168,30 @@ const char * gnc_locale_default_iso_currency_code (void);
  */
 gnc_commodity * gnc_default_currency (void);
 
+/** Returns a gnc_commodity that is a currency, suitable for being a
+Transaction's currency. The gnc_commodity is taken either from the current
+account, or from the next parent account that has a gnc_commodity that is a
+currency, or from gnc_default_currency().
+
+If the given account or any of its parent account have a commodity that is a
+currency, it is returned and the gboolean currency_from_account_found is set to
+TRUE (if non-NULL). If neither this account nor any of its parent accounts have
+such a commodity, gnc_default_currency() is returned and the gboolean
+currency_from_account_found is set to FALSE (if non-NULL). This can be used to
+show an appropriate warning message.
+
+If account is NULL, gnc_default_currency() is returned and
+currency_from_account_found is set to FALSE.
+
+@param account The account where the currency should be looked up. May be NULL.
+
+@param currency_from_account_found A gboolean pointer that takes the output
+argument of whether the returned currency was found in the account. May be
+NULL.
+
+@return A currency pointer (and never NULL).
+*/
+gnc_commodity * gnc_account_or_default_currency(const Account* account, gboolean * currency_from_account_found);
 
 /** Return the default currency for use in reports, as set by the
  *  user.  If the user's preference is invalid, then this routine will

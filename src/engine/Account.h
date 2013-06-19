@@ -483,6 +483,14 @@ void xaccAccountSetCommodity (Account *account, gnc_commodity *comm);
 /*@ dependent @*/
 gnc_commodity * xaccAccountGetCommodity (const Account *account);
 
+/** Returns a gnc_commodity that is a currency, suitable for being a
+Transaction's currency. The gnc_commodity is taken either from the current
+account, or from the next parent account that has a gnc_commodity that is a
+currency. If neither this account nor any of its parent has such a commodity
+that is a currency, NULL is returned. In that case, you can use
+gnc_default_currency() but you might want to show a warning dialog first. */
+gnc_commodity * gnc_account_get_currency_or_parent(const Account* account);
+
 /** Return the SCU for the account.  If a non-standard SCU has been
  *   set for the account, that is returned; else the default SCU for
  *   the account commodity is returned.

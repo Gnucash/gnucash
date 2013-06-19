@@ -940,6 +940,33 @@ gnc_default_currency (void)
     return gnc_default_currency_common (user_default_currency, GCONF_GENERAL);
 }
 
+gnc_commodity * gnc_account_or_default_currency(const Account* account, gboolean * currency_from_account_found)
+{
+    gnc_commodity *currency;
+    if (!account)
+    {
+        if (currency_from_account_found)
+            *currency_from_account_found = FALSE;
+        return gnc_default_currency();
+    }
+
+    currency = gnc_account_get_currency_or_parent(account);
+    if (currency)
+    {
+        if (currency_from_account_found)
+            *currency_from_account_found = TRUE;
+    }
+    else
+    {
+        if (currency_from_account_found)
+            *currency_from_account_found = FALSE;
+        currency = gnc_default_currency();
+    }
+    return currency;
+}
+
+
+
 gnc_commodity *
 gnc_default_report_currency (void)
 {
