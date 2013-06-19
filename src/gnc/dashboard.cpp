@@ -275,7 +275,7 @@ Dashboard::on_btnCreateBasicTxn_clicked()
     ::xaccTransSetNum(transaction, lineNum->text().toUtf8());
     ::xaccTransSetDescription(transaction, lineDescription->text().toUtf8());
 
-    currency = xaccAccountGetCommodity(account);
+    currency = gnc_account_or_default_currency(account, NULL);
     ::xaccTransSetCurrency(transaction, currency);
 
     denom = ::gnc_commodity_get_fraction(currency);

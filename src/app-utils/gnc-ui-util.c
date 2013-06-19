@@ -791,7 +791,7 @@ gnc_account_create_opening_balance (Account *account,
 
     xaccTransBeginEdit (trans);
 
-    xaccTransSetCurrency (trans, xaccAccountGetCommodity (account));
+    xaccTransSetCurrency (trans, gnc_account_or_default_currency (account, NULL));
     xaccTransSetDatePostedSecsNormalized (trans, date);
     xaccTransSetDescription (trans, _("Opening Balance"));
 

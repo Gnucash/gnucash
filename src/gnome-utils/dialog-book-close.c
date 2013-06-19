@@ -41,6 +41,7 @@
 #include "gnc-component-manager.h"
 #include "gnc-date-edit.h"
 #include "gnc-session.h"
+#include "app-utils/gnc-ui-util.h"
 
 #define DIALOG_BOOK_CLOSE_CM_CLASS "dialog-book-close"
 
@@ -145,7 +146,7 @@ static void close_accounts_cb(Account *a, gpointer data)
     if (gnc_numeric_zero_p(bal))
         return;
 
-    acct_commodity = xaccAccountGetCommodity(a);
+    acct_commodity = gnc_account_or_default_currency(a, NULL);
     g_assert(acct_commodity);
 
     txn = find_or_create_txn(cacb, acct_commodity);

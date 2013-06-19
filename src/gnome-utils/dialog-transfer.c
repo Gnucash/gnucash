@@ -448,7 +448,7 @@ gnc_xfer_dialog_from_tree_selection_changed_cb (GtkTreeSelection *selection,
     if (!account)
         return;
 
-    commodity = xaccAccountGetCommodity(account);
+    commodity = gnc_account_or_default_currency(account, NULL);
     gtk_label_set_text(GTK_LABEL(xferData->from_currency_label),
                        gnc_commodity_get_printname(commodity));
 
