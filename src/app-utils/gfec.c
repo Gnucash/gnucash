@@ -13,10 +13,26 @@
 #include "gfec.h"
 #include "gnc-guile-utils.h"
 #include "platform.h"
+#include <glib.h>
 #if COMPILER(MSVC)
 # define strdup _strdup
 #endif
 
+typedef struct {
+    char **msg;
+    SCM *scm_string;
+} helper_data_t;
+
+static SCM helper_scm_to_string(void *ptr_void)
+{
+    helper_data_t* ptr = ptr_void;
+    g_assert(ptr);
+    *(ptr->msg) = gnc_scm_to_locale_string(*ptr->scm_string);
+    return SCM_UNDEFINED;
+}
+
+
+static int gfec_catcher_recursion_level = 0;
 
 /* We assume that data is actually a char**. The way we return results
  * from this function is to malloc a fresh string, and store it in
@@ -24,7 +40,13 @@
  * smart with this freshly allocated storage. the caller can determine
  * whether there was an error by initializing the char* passed in to
  * NULL. If there is an error, the char string will not be NULL on
- * return. */
+ * return.
+ *
+ * This function might call itself recursively: The conversion of the error
+ * object to a string might itself throw an exception, hence the scm_to_string
+ * function must be wrapped into a stack_catch block as well. To avoid infinite
+ * recursion, we check the recursion level by gfec_catcher_recursion_level.
+ */
 static SCM
 gfec_catcher(void *data, SCM tag, SCM throw_args)
 {
@@ -32,12 +54,44 @@ gfec_catcher(void *data, SCM tag, SCM throw_args)
     SCM result;
     char *msg = NULL;
 
+    // To much recursion? Better jump out of here quickly.
+    if (gfec_catcher_recursion_level > 2)
+    {
+        *(char**)data = strdup("Guile error: Too many recursions in error catch handler.");
+        return SCM_UNDEFINED;
+    }
+
+    gfec_catcher_recursion_level++;
+
     func = scm_c_eval_string("gnc:error->string");
     if (scm_is_procedure(func))
     {
         result = scm_call_2(func, tag, throw_args);
         if (scm_is_string(result))
-            msg = gnc_scm_to_locale_string (result);
+        {
+            char *internal_err_msg = NULL;
+            helper_data_t helper_data;
+
+            helper_data.msg = &msg;
+            helper_data.scm_string = &result;
+
+            // The conversion to string can itself throw as well
+            scm_internal_stack_catch(SCM_BOOL_T,
+                                     helper_scm_to_string,
+                                     (void *) &helper_data,
+                                     gfec_catcher,
+                                     &internal_err_msg);
+            // Previously: msg = gnc_scm_to_locale_string (result);
+
+            // Did we run into an exception? Then the output argument msg is
+            // not set (due to the exception), but err_msg is set and contains
+            // that error message. We thus pass the err_msg instead of msg to
+            // our caller.
+            if (internal_err_msg)
+            {
+                msg = internal_err_msg;
+            }
+        }
     }
 
     if (msg == NULL)
@@ -50,6 +104,7 @@ gfec_catcher(void *data, SCM tag, SCM throw_args)
         g_free(msg);
     }
 
+    --gfec_catcher_recursion_level;
     return SCM_UNDEFINED;
 }
 
@@ -86,7 +141,12 @@ gfec_eval_file(const char *file, gfec_error_handler error_handler)
     if (err_msg != NULL)
     {
         if (error_handler)
-            error_handler(err_msg);
+        {
+            gchar *full_msg = g_strdup_printf("Could not load file %s: %s",
+                                              file, err_msg);
+            error_handler(full_msg);
+            g_free(full_msg);
+        }
 
         free(err_msg);
 
