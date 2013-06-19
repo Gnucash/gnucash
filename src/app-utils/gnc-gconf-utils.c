@@ -28,7 +28,7 @@
 #include <string.h>
 #include "gnc-core-prefs.h"
 #include "gnc-gconf-utils.h"
-#include "gnc-backend-xml.h"
+#include "backend/xml/gnc-backend-xml.h"
 
 #define CLIENT_TAG  "%s-%s-client"
 #define NOTIFY_TAG  "%s-%s-notify_id"
