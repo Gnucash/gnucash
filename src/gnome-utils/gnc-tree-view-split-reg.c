@@ -981,8 +981,7 @@ gnc_tree_view_split_reg_set_format (GncTreeViewSplitReg *view)
             gtk_tree_path_free (spath);
 
             /* This updates the plugin page gui */
-            if (view->moved_cb)
-                (view->moved_cb)(view, view->moved_cb_data);
+            gnc_tree_view_split_reg_call_uiupdate_cb(view);
 
             LEAVE("journal format");
             return (FALSE);
@@ -1030,8 +1029,7 @@ gnc_tree_view_split_reg_set_format (GncTreeViewSplitReg *view)
     gtk_tree_path_free (spath);
 
     /* This updates the plugin page gui */
-    if (view->moved_cb)
-        (view->moved_cb)(view, view->moved_cb_data);
+    gnc_tree_view_split_reg_call_uiupdate_cb(view);
 
     return (FALSE);
 }
@@ -1084,8 +1082,7 @@ gnc_tree_view_split_reg_format_trans (GncTreeViewSplitReg *view, Transaction *tr
     gtk_tree_path_free (spath);
 
     /* This updates the plugin page gui */
-    if (view->moved_cb)
-        (view->moved_cb)(view, view->moved_cb_data);
+    gnc_tree_view_split_reg_call_uiupdate_cb(view);
 
     return (FALSE);
 }
@@ -3764,8 +3761,7 @@ gtv_sr_button_cb (GtkWidget *widget, GdkEventButton *event, gpointer user_data)
                 gnc_tree_view_split_reg_expand_trans (view, NULL);
 
             /* This updates the plugin page gui */
-            if (view->moved_cb)
-                (view->moved_cb)(view, view->moved_cb_data);
+            gnc_tree_view_split_reg_call_uiupdate_cb(view);
         }
         return TRUE;
     }
@@ -4189,8 +4185,7 @@ gtv_sr_motion_cb (GtkTreeSelection *sel, gpointer user_data)
     }
 
     /* This updates the plugin page gui */
-    if (view->moved_cb)
-        (view->moved_cb)(view, view->moved_cb_data);
+    gnc_tree_view_split_reg_call_uiupdate_cb(view);
 
     LEAVE(" ");
 }
@@ -5880,8 +5875,7 @@ gnc_tree_view_split_reg_cancel_edit (GncTreeViewSplitReg *view, gboolean reg_clo
     view->priv->auto_complete = FALSE; // reset auto_complete has run flag
 
     /* This updates the plugin page gui */
-    if (view->moved_cb)
-        (view->moved_cb)(view, view->moved_cb_data);
+    gnc_tree_view_split_reg_call_uiupdate_cb(view);
 
     LEAVE(" ");
 }
@@ -6006,8 +6000,7 @@ gnc_tree_view_split_reg_collapse_trans (GncTreeViewSplitReg *view, Transaction *
     view->priv->expanded = FALSE;
 
     /* This updates the plugin page gui */
-    if (view->moved_cb)
-        (view->moved_cb)(view, view->moved_cb_data);
+    gnc_tree_view_split_reg_call_uiupdate_cb(view);
 
     LEAVE(" ");
 }
@@ -6074,8 +6067,7 @@ gnc_tree_view_split_reg_expand_trans (GncTreeViewSplitReg *view, Transaction *tr
     gtk_tree_path_free (spath);
 
     /* This updates the plugin page gui */
-    if (view->moved_cb)
-        (view->moved_cb)(view, view->moved_cb_data);
+    gnc_tree_view_split_reg_call_uiupdate_cb(view);
 
     LEAVE(" ");
 }
@@ -6133,9 +6125,21 @@ gnc_tree_view_split_reg_get_parent (GncTreeViewSplitReg *view)
 
 /* This sets up the page gui update from the tree view motion callback */
 void
-gnc_tree_view_split_reg_moved_cb (GncTreeViewSplitReg *view, GFunc cb, gpointer cb_data)
+gnc_tree_view_split_reg_set_uiupdate_cb (GncTreeViewSplitReg *view, GFunc cb, gpointer cb_data)
 {
-    view->moved_cb = cb;
-    view->moved_cb_data = cb_data;
+    view->uiupdate_cb = cb;
+    view->uiupdate_cb_data = cb_data;
+}
+
+/** Call the moved_cb callback that is used to update the page ui, if it is
+set. If it is not set, this function does nothing.
+
+\return FALSE so that this function can be used in g_idle_add() */
+gboolean gnc_tree_view_split_reg_call_uiupdate_cb(GncTreeViewSplitReg *view)
+{
+    g_assert(view);
+    if (view->uiupdate_cb)
+        (view->uiupdate_cb)(view, view->uiupdate_cb_data);
+    return FALSE;
 }
 

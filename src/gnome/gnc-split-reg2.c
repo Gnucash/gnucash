@@ -1110,5 +1110,5 @@ gnc_split_reg2_get_read_only (GNCSplitReg2 *gsr)
 void
 gnc_split_reg2_set_moved_cb (GNCSplitReg2 *gsr, GFunc cb, gpointer cb_data ) //this works
 {
-    gnc_tree_view_split_reg_moved_cb (gnc_ledger_display2_get_split_view_register (gsr->ledger), cb, cb_data);
+    gnc_tree_view_split_reg_set_uiupdate_cb (gnc_ledger_display2_get_split_view_register (gsr->ledger), cb, cb_data);
 }

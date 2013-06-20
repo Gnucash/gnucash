@@ -53,8 +53,8 @@ typedef struct
     int                         stamp;
 
     GtkWidget                  *window;                   // Parent Window.
-    GFunc                       moved_cb;                 // Used for page gui update
-    gpointer                    moved_cb_data;            // Used for page gui update
+    GFunc                       uiupdate_cb;                 // Used for page gui update
+    gpointer                    uiupdate_cb_data;            // Used for page gui update
 
     gchar                      *help_text;                // This is the help text to be displayed.
     gint                        sort_depth;               // This is the row the sort direction is based on.
@@ -134,7 +134,9 @@ void gnc_tree_view_split_reg_set_current_path (GncTreeViewSplitReg *view, GtkTre
 
 RowDepth gnc_tree_view_reg_get_selected_row_depth (GncTreeViewSplitReg *view);
 
-void gnc_tree_view_split_reg_moved_cb (GncTreeViewSplitReg *view, GFunc cb, gpointer cb_data);
+void gnc_tree_view_split_reg_set_uiupdate_cb (GncTreeViewSplitReg *view, GFunc cb, gpointer cb_data);
+
+gboolean gnc_tree_view_split_reg_call_uiupdate_cb(GncTreeViewSplitReg *view);
 
 void gnc_tree_view_split_reg_refresh_from_gconf (GncTreeViewSplitReg *view);
 
