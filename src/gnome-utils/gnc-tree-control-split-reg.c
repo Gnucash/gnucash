@@ -1393,6 +1393,230 @@ gnc_tree_control_split_reg_duplicate_current (GncTreeViewSplitReg *view)
 }
 
 
+static gboolean gtcsr_move_current_entry_updown(GncTreeViewSplitReg *view,
+                                                gboolean move_up, gboolean really_do_it)
+{
+    GncTreeModelSplitReg *model;
+    GtkTreePath *mpath = NULL, *spath = NULL, *spath_target = NULL, *mpath_target = NULL;
+    GtkTreeIter m_iter, m_iter_target;
+    gboolean resultvalue = FALSE;
+    g_return_val_if_fail(view, FALSE);
+
+    ENTER("");
+
+    if (view->sort_col != COL_DATE)
+    {
+        LEAVE("Not sorted by date - no up/down move available");
+        return FALSE;
+    }
+
+    // The allocated memory references will all be cleaned up in the
+    // updown_finish: label.
+
+    model = gnc_tree_view_split_reg_get_model_from_view (view);
+    g_return_val_if_fail(model, FALSE);
+
+    mpath = gnc_tree_view_split_reg_get_current_path (view);
+    if (!mpath)
+    {
+        LEAVE("No current path available - probably on the blank split.");
+        goto updown_finish;
+    }
+
+    spath = gnc_tree_view_split_reg_get_sort_path_from_model_path (view, mpath);
+    g_return_val_if_fail(spath, FALSE);
+
+    spath_target = gtk_tree_path_copy(spath);
+    if (move_up)
+    {
+        gboolean move_was_made = gtk_tree_path_prev(spath_target);
+        if (!move_was_made)
+        {
+            LEAVE("huh, no path_prev() possible");
+            goto updown_finish;
+        }
+    }
+    else
+    {
+        gtk_tree_path_next(spath_target);
+        // The path_next() function does not give a return value, see
+        // https://mail.gnome.org/archives/gtk-list/2010-January/msg00171.html
+    }
+
+    if (gtk_tree_path_compare(spath, spath_target) == 0)
+    {
+        LEAVE("oops, paths are equal");
+        goto updown_finish;
+    }
+
+    mpath_target = gnc_tree_view_split_reg_get_model_path_from_sort_path (view, spath_target);
+    if (!mpath_target)
+    {
+        LEAVE("no path to target row");
+        goto updown_finish;
+    }
+
+    if (!gtk_tree_model_get_iter (GTK_TREE_MODEL (model), &m_iter, mpath))
+    {
+        LEAVE("No iter for current row");
+        goto updown_finish;
+    }
+    if (!gtk_tree_model_get_iter (GTK_TREE_MODEL (model), &m_iter_target, mpath_target))
+    {
+        LEAVE("No iter for target row");
+        goto updown_finish;
+    }
+
+    {
+        gboolean is_blank, is_blank_target;
+        Split *current_split, *target_split;
+        Transaction *current_trans, *target_trans;
+        gnc_tree_model_split_reg_get_split_and_trans (GNC_TREE_MODEL_SPLIT_REG (model), &m_iter,
+                                                      NULL, NULL, NULL, &is_blank,
+                                                      &current_split, &current_trans);
+        gnc_tree_model_split_reg_get_split_and_trans (GNC_TREE_MODEL_SPLIT_REG (model), &m_iter_target,
+                                                      NULL, NULL, NULL, &is_blank_target,
+                                                      &target_split, &target_trans);
+        if (is_blank || is_blank_target)
+        {
+            LEAVE("blank split involved, ignored.");
+            goto updown_finish;
+        }
+        if (xaccTransEqual(current_trans, target_trans, TRUE, FALSE, FALSE, FALSE))
+        {
+            LEAVE("two times the same txn, ignored.");
+            goto updown_finish;
+        }
+        if (xaccTransGetIsClosingTxn(current_trans)
+                || xaccTransGetIsClosingTxn(target_trans))
+        {
+            LEAVE("One of the txn is book-closing - no re-ordering allowed.");
+            goto updown_finish;
+        }
+
+        /* Only continue if both have the same date and num, because the
+         * "standard ordering" is tied to the date anyway. */
+        {
+            Timespec t1, t2;
+            GDate d1 = xaccTransGetDatePostedGDate(current_trans),
+                  d2 = xaccTransGetDatePostedGDate(target_trans);
+            if (g_date_compare(&d1, &d2) != 0)
+            {
+                LEAVE("unequal DatePosted, ignoring");
+                goto updown_finish;
+            }
+            if (g_strcmp0(xaccTransGetNum(current_trans),
+                          xaccTransGetNum(target_trans)) != 0)
+            {
+                LEAVE("unequal Num, ignoring");
+                goto updown_finish;
+            }
+
+            /* Special treatment if the equality doesn't hold if we access the
+            dates as timespec. See the comment in gncEntrySetDateGDate() for the
+            reason: Some code used the timespec at noon for the EntryDate, other
+            code used the timespec at the start of day. */
+            t1 = xaccTransRetDatePostedTS(current_trans);
+            t2 = xaccTransRetDatePostedTS(target_trans);
+            if (really_do_it && !timespec_equal(&t1, &t2))
+            {
+                /* Timespecs are not equal, even though the GDates were equal? Then
+                we set the GDates again. This will force the timespecs to be equal
+                as well. */
+                xaccTransSetDatePostedGDate(current_trans, d1);
+                xaccTransSetDatePostedGDate(target_trans, d2);
+            }
+        }
+
+        // Check whether any of the two splits are frozen
+        if (xaccSplitGetReconcile(current_split) == FREC
+                || xaccSplitGetReconcile(target_split) == FREC)
+        {
+            LEAVE("either current or target split is frozen. No modification allowed.");
+            goto updown_finish;
+        }
+
+        // If really_do_it is FALSE, we are only in query mode and shouldn't
+        // modify anything. But if it is TRUE, please go ahead and do the move.
+        if (really_do_it)
+        {
+            // Check whether any of the two splits are reconciled
+            if (xaccSplitGetReconcile(current_split) == YREC
+                    && !gnc_tree_control_split_reg_recn_test(view, spath))
+            {
+                LEAVE("current split is reconciled and user chose not to modify it");
+                goto updown_finish;
+            }
+            if (xaccSplitGetReconcile(target_split) == YREC
+                    && !gnc_tree_control_split_reg_recn_test(view, spath_target))
+            {
+                LEAVE("target split is reconciled and user chose not to modify it");
+                goto updown_finish;
+            }
+
+            PINFO("Ok, about to switch ordering for current desc='%s' target desc='%s'",
+                  xaccTransGetDescription(current_trans),
+                  xaccTransGetDescription(target_trans));
+
+            gnc_suspend_gui_refresh ();
+
+            /* Swap the date-entered of both entries. That's already
+             * sufficient! */
+            {
+                Timespec time_current = xaccTransRetDateEnteredTS(current_trans);
+                Timespec time_target = xaccTransRetDateEnteredTS(target_trans);
+
+                /* Special treatment for identical times (potentially caused
+                 * by the "duplicate entry" command) */
+                if (timespec_equal(&time_current, &time_target))
+                {
+                    g_warning("Surprise - both DateEntered are equal.");
+                    /* We just increment the DateEntered of the previously
+                     * lower of the two by one second. This might still cause
+                     * issues if multiple entries had this problem, but
+                     * whatever. */
+                    if (move_up)
+                        time_current.tv_sec++;
+                    else
+                        time_target.tv_sec++;
+                }
+
+                /* Write the new DateEntered. */
+                xaccTransSetDateEnteredTS(current_trans, &time_target);
+                xaccTransSetDateEnteredTS(target_trans, &time_current);
+
+                /* FIXME: Do we need to notify anyone about the changed ordering? */
+            }
+
+            gnc_resume_gui_refresh ();
+
+            LEAVE("two txn switched, done.");
+        }
+        resultvalue = TRUE;
+        goto updown_finish;
+    }
+updown_finish:
+    // memory cleanup
+    //gtk_tree_path_free (mpath); // Should this be freed??
+    gtk_tree_path_free(spath);
+    gtk_tree_path_free(spath_target);
+    gtk_tree_path_free(mpath_target);
+    return resultvalue;
+}
+
+gboolean gnc_tree_control_split_reg_move_current_entry_updown (GncTreeViewSplitReg *view,
+                                                            gboolean move_up)
+{
+    return gtcsr_move_current_entry_updown(view, move_up, TRUE);
+}
+
+gboolean gnc_tree_control_split_reg_is_current_movable_updown (GncTreeViewSplitReg *view,
+                                                               gboolean move_up)
+{
+    return gtcsr_move_current_entry_updown(view, move_up, FALSE);
+}
+
+
 /* Save any open edited transactions on closing register */
 gboolean
 gnc_tree_control_split_reg_save (GncTreeViewSplitReg *view, gboolean reg_closing)
@@ -1964,6 +2188,9 @@ gnc_tree_control_split_reg_sort_changed_cb (GtkTreeSortable *sortable, gpointer 
 
     /* scroll when view idle */
     g_idle_add ((GSourceFunc) gnc_tree_view_split_reg_scroll_to_cell, view);
+
+    /* Update the plugin page gui when idle */
+    g_idle_add ((GSourceFunc) gnc_tree_view_split_reg_call_uiupdate_cb, view);
 
     LEAVE("sort_col %d, sort_direction is %d  sort_depth is %d", view->sort_col, view->sort_direction, view->sort_depth );
 }

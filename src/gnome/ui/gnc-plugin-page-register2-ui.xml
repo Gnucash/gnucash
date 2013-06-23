@@ -10,6 +10,8 @@
       <menuitem name="CutTransaction"     	action="CutTransactionAction"/>
       <menuitem name="CopyTransaction"    	action="CopyTransactionAction"/>
       <menuitem name="PasteTransaction"   	action="PasteTransactionAction"/>
+      <menuitem name="TransactionUp"            action="TransactionUpAction"/>
+      <menuitem name="TransactionDown"          action="TransactionDownAction"/>
       <menuitem name="DuplicateTransaction"    	action="DuplicateTransactionAction"/>
       <menuitem name="DeleteTransaction"       	action="DeleteTransactionAction"/>
       <menuitem name="RemoveTransactionSplits" 	action="RemoveTransactionSplitsAction"/>
@@ -64,6 +66,8 @@
 
   <toolbar name="DefaultToolbar">
     <placeholder name="DefaultToolbarPlaceholder">
+      <toolitem name="ToolbarTransactionUp"        action="TransactionUpAction"/>
+      <toolitem name="ToolbarTransactionDown"      action="TransactionDownAction"/>
       <toolitem name="ToolbarDuplicateTransaction" action="DuplicateTransactionAction"/>
       <toolitem name="ToolbarDeleteTransaction"    action="DeleteTransactionAction"/>
       <separator name="ToolbarSep66"/>
@@ -85,6 +89,8 @@
       <menuitem name="ViewFilterBy"            action="ViewFilterByAction"/>
     </placeholder>
     <placeholder name="PopupPlaceholder2">
+      <menuitem name="TransactionUp"           action="TransactionUpAction"/>
+      <menuitem name="TransactionDown"         action="TransactionDownAction"/>
       <menuitem name="DuplicateTransaction"    action="DuplicateTransactionAction"/>
       <menuitem name="DeleteTransaction"       action="DeleteTransactionAction"/>
       <menuitem name="RemoveTransactionSplits" action="RemoveTransactionSplitsAction"/>
