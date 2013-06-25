@@ -557,7 +557,7 @@ xaccSplitEqualCheckBal (const char *tag, gnc_numeric a, gnc_numeric b)
     str_a = gnc_numeric_to_string (a);
     str_b = gnc_numeric_to_string (b);
 
-    PINFO ("%sbalances differ: %s vs %s", tag, str_a, str_b);
+    PWARN ("%sbalances differ: %s vs %s", tag, str_a, str_b);
 
     g_free (str_a);
     g_free (str_b);
@@ -580,7 +580,7 @@ xaccSplitEqual(const Split *sa, const Split *sb,
 
     if (!sa || !sb)
     {
-        PINFO ("one is NULL");
+        PWARN ("one is NULL");
         return FALSE;
     }
 
@@ -592,7 +592,7 @@ xaccSplitEqual(const Split *sa, const Split *sb,
     {
         if (qof_instance_guid_compare(sa, sb) != 0)
         {
-            PINFO ("GUIDs differ");
+            PWARN ("GUIDs differ");
             return FALSE;
         }
     }
@@ -600,14 +600,14 @@ xaccSplitEqual(const Split *sa, const Split *sb,
     /* If the same book, since these strings are cached we can just use pointer equality */
     if ((same_book && sa->memo != sb->memo) || (!same_book && g_strcmp0(sa->memo, sb->memo) != 0))
     {
-        PINFO ("memos differ: (%p)%s vs (%p)%s",
+        PWARN ("memos differ: (%p)%s vs (%p)%s",
                sa->memo, sa->memo, sb->memo, sb->memo);
         return FALSE;
     }
 
     if ((same_book && sa->action != sb->action) || (!same_book && g_strcmp0(sa->action, sb->action) != 0))
     {
-        PINFO ("actions differ: %s vs %s", sa->action, sb->action);
+        PWARN ("actions differ: %s vs %s", sa->action, sb->action);
         return FALSE;
     }
 
@@ -619,7 +619,7 @@ xaccSplitEqual(const Split *sa, const Split *sb,
         frame_a = kvp_frame_to_string (sa->inst.kvp_data);
         frame_b = kvp_frame_to_string (sb->inst.kvp_data);
 
-        PINFO ("kvp frames differ:\n%s\n\nvs\n\n%s", frame_a, frame_b);
+        PWARN ("kvp frames differ:\n%s\n\nvs\n\n%s", frame_a, frame_b);
 
         g_free (frame_a);
         g_free (frame_b);
@@ -629,13 +629,13 @@ xaccSplitEqual(const Split *sa, const Split *sb,
 
     if (sa->reconciled != sb->reconciled)
     {
-        PINFO ("reconcile flags differ: %c vs %c", sa->reconciled, sb->reconciled);
+        PWARN ("reconcile flags differ: %c vs %c", sa->reconciled, sb->reconciled);
         return FALSE;
     }
 
     if (timespec_cmp(&(sa->date_reconciled), &(sb->date_reconciled)))
     {
-        PINFO ("reconciled date differs");
+        PWARN ("reconciled date differs");
         return FALSE;
     }
 
@@ -647,7 +647,7 @@ xaccSplitEqual(const Split *sa, const Split *sb,
         str_a = gnc_numeric_to_string (xaccSplitGetAmount (sa));
         str_b = gnc_numeric_to_string (xaccSplitGetAmount (sb));
 
-        PINFO ("amounts differ: %s vs %s", str_a, str_b);
+        PWARN ("amounts differ: %s vs %s", str_a, str_b);
 
         g_free (str_a);
         g_free (str_b);
@@ -663,7 +663,7 @@ xaccSplitEqual(const Split *sa, const Split *sb,
         str_a = gnc_numeric_to_string (xaccSplitGetValue (sa));
         str_b = gnc_numeric_to_string (xaccSplitGetValue (sb));
 
-        PINFO ("values differ: %s vs %s", str_a, str_b);
+        PWARN ("values differ: %s vs %s", str_a, str_b);
 
         g_free (str_a);
         g_free (str_b);
@@ -686,7 +686,7 @@ xaccSplitEqual(const Split *sa, const Split *sb,
     if (!xaccTransEqual(sa->parent, sb->parent, check_guids, check_txn_splits,
                         check_balances, FALSE))
     {
-        PINFO ("transactions differ");
+        PWARN ("transactions differ");
         return FALSE;
     }
 
