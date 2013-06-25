@@ -145,7 +145,6 @@ static void gnc_plugin_page_register_cmd_paste_transaction (GtkAction *action, G
 static void gnc_plugin_page_register_cmd_void_transaction (GtkAction *action, GncPluginPageRegister *plugin_page);
 static void gnc_plugin_page_register_cmd_unvoid_transaction (GtkAction *action, GncPluginPageRegister *plugin_page);
 static void gnc_plugin_page_register_cmd_reverse_transaction (GtkAction *action, GncPluginPageRegister *plugin_page);
-static void gnc_plugin_page_register_cmd_shift_transaction_forward (GtkAction *action, GncPluginPageRegister *plugin_page);
 static void gnc_plugin_page_register_cmd_view_sort_by (GtkAction *action, GncPluginPageRegister *plugin_page);
 static void gnc_plugin_page_register_cmd_view_filter_by (GtkAction *action, GncPluginPageRegister *plugin_page);
 static void gnc_plugin_page_register_cmd_style_changed (GtkAction *action, GtkRadioAction *current, GncPluginPageRegister *plugin_page);
@@ -297,10 +296,6 @@ static GtkActionEntry gnc_plugin_page_register_actions [] =
     {
         "ReverseTransactionAction", NULL, N_("Add _Reversing Transaction"), NULL, NULL,
         G_CALLBACK (gnc_plugin_page_register_cmd_reverse_transaction)
-    },
-    {
-        "ShiftTransactionForwardAction", NULL, N_("_Shift Transaction Forward"), NULL, NULL,
-        G_CALLBACK (gnc_plugin_page_register_cmd_shift_transaction_forward)
     },
 
     /* View menu */
@@ -803,7 +798,6 @@ static const char* readonly_inactive_actions[] =
     "UnvoidTransactionAction",
     "VoidTransactionAction",
     "ReverseTransactionAction",
-    "ShiftTransactionForwardAction",
     "ActionsTransferAction",
     "ActionsReconcileAction",
     "ActionsStockSplitAction",
@@ -2972,35 +2966,6 @@ gnc_plugin_page_register_cmd_reverse_transaction (GtkAction *action,
     /* Now jump to new trans */
     gsr = gnc_plugin_page_register_get_gsr(GNC_PLUGIN_PAGE(page));
     gnc_split_reg_jump_to_split(gsr, xaccTransGetSplit(new_trans, 0));
-    LEAVE(" ");
-}
-
-static void
-gnc_plugin_page_register_cmd_shift_transaction_forward (GtkAction *action,
-        GncPluginPageRegister *page)
-{
-    GncPluginPageRegisterPrivate *priv;
-    SplitRegister *reg;
-    Transaction *trans;
-    Timespec entered;
-
-    ENTER("(action %p, page %p)", action, page);
-
-    g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER(page));
-
-    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(page);
-    reg = gnc_ledger_display_get_split_register(priv->ledger);
-    trans = gnc_split_register_get_current_trans(reg);
-    if (trans == NULL)
-        return;
-
-    qof_event_suspend();
-
-    xaccTransGetDatePostedTS(trans, &entered);
-    xaccTransSetDatePostedSecsNormalized(trans, entered.tv_sec + 1);
-
-    qof_event_resume();
-
     LEAVE(" ");
 }
 

@@ -144,7 +144,6 @@ static void gnc_plugin_page_register2_cmd_paste_transaction (GtkAction *action, 
 static void gnc_plugin_page_register2_cmd_void_transaction (GtkAction *action, GncPluginPageRegister2 *plugin_page);
 static void gnc_plugin_page_register2_cmd_unvoid_transaction (GtkAction *action, GncPluginPageRegister2 *plugin_page);
 static void gnc_plugin_page_register2_cmd_reverse_transaction (GtkAction *action, GncPluginPageRegister2 *plugin_page);
-static void gnc_plugin_page_register2_cmd_shift_transaction_forward (GtkAction *action, GncPluginPageRegister2 *plugin_page);
 static void gnc_plugin_page_register2_cmd_reload (GtkAction *action, GncPluginPageRegister2 *plugin_page);
 static void gnc_plugin_page_register2_cmd_view_filter_by (GtkAction *action, GncPluginPageRegister2 *plugin_page);
 static void gnc_plugin_page_register2_cmd_style_changed (GtkAction *action, GtkRadioAction *current, GncPluginPageRegister2 *plugin_page);
@@ -301,10 +300,6 @@ static GtkActionEntry gnc_plugin_page_register2_actions [] =
     {
         "ReverseTransactionAction", NULL, N_("Add _Reversing Transaction"), NULL, NULL,
         G_CALLBACK (gnc_plugin_page_register2_cmd_reverse_transaction)
-    },
-    {
-        "ShiftTransactionForwardAction", NULL, N_("_Shift Transaction Forward"), NULL, NULL,
-        G_CALLBACK (gnc_plugin_page_register2_cmd_shift_transaction_forward)
     },
     {
         TRANSACTION_UP_ACTION, GTK_STOCK_GO_UP, N_("Move Transaction _Up"), NULL,
@@ -825,7 +820,6 @@ static const char* readonly_inactive_actions[] =
     "UnvoidTransactionAction",
     "VoidTransactionAction",
     "ReverseTransactionAction",
-    "ShiftTransactionForwardAction",
     "ActionsTransferAction",
     "ActionsReconcileAction",
     "ActionsStockSplitAction",
@@ -2822,38 +2816,6 @@ gnc_plugin_page_register2_cmd_reverse_transaction (GtkAction *action,
     view = gnc_ledger_display2_get_split_view_register (priv->ledger);
 
     gnc_tree_control_split_reg_reverse_current (view);
-    LEAVE(" ");
-}
-
-static void
-gnc_plugin_page_register2_cmd_shift_transaction_forward (GtkAction *action,
-        GncPluginPageRegister2 *page) //this works
-{
-    GncPluginPageRegister2Private *priv;
-    GncTreeViewSplitReg *view;
-    Transaction *trans, *new_trans;
-    Timespec entered;
-
-    ENTER("(action %p, page %p)", action, page);
-
-    g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER2(page));
-
-    priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE(page);
-    view = gnc_ledger_display2_get_split_view_register (priv->ledger);
-    trans = gnc_tree_view_split_reg_get_current_trans (view);
-    if (trans == NULL)
-    {
-        LEAVE("trans is NULL");
-        return;
-    }
-
-    qof_event_suspend();
-
-    xaccTransGetDatePostedTS (trans, &entered);
-    xaccTransSetDatePostedSecsNormalized (trans, entered.tv_sec + 1);
-
-    qof_event_resume();
-
     LEAVE(" ");
 }
 

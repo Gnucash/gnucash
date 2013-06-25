@@ -13,7 +13,6 @@
       <menuitem name="DuplicateTransaction"    	action="DuplicateTransactionAction"/>
       <menuitem name="DeleteTransaction"       	action="DeleteTransactionAction"/>
       <menuitem name="RemoveTransactionSplits" 	action="RemoveTransactionSplitsAction"/>
-      <!--menuitem name="ShiftTransactionForward" 	action="ShiftTransactionForwardAction"/-->
       <separator name="TransactionSep1"/>
       <menuitem name="RecordTransaction"        action="RecordTransactionAction"/>
       <menuitem name="CancelTransaction"        action="CancelTransactionAction"/>
@@ -89,7 +88,6 @@
       <menuitem name="DuplicateTransaction"    action="DuplicateTransactionAction"/>
       <menuitem name="DeleteTransaction"       action="DeleteTransactionAction"/>
       <menuitem name="RemoveTransactionSplits" action="RemoveTransactionSplitsAction"/>
-      <!--menuitem name="ShiftTransactionForward" 	action="ShiftTransactionForwardAction"/-->
       <separator name="PopupSep2"/>
       <menuitem name="RecordTransaction"       action="RecordTransactionAction"/>
       <menuitem name="CancelTransaction"       action="CancelTransactionAction"/>
