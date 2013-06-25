@@ -374,27 +374,20 @@ xaccSplitEqualCheckBal (const char *tag, gnc_numeric a, gnc_numeric b)//
 static void
 test_xaccSplitEqualCheckBal (Fixture *fixture, gconstpointer pData)
 {
-    gchar *msg = "[xaccSplitEqualCheckBal()] test balances differ: 123/100 vs 456/100";
-    guint loglevel = G_LOG_LEVEL_WARNING | G_LOG_FLAG_FATAL, hdlr;
+    gchar *msg = "[xaccSplitEqualCheckBal] test balances differ: 123/100 vs 456/100";
+    guint loglevel = G_LOG_LEVEL_INFO, hdlr;
     TestErrorStruct check = { loglevel, "gnc.engine", msg, 0 };
 
-    GLogFunc oldlogger;
     gnc_numeric foo = gnc_numeric_create (123, 100);
     gnc_numeric bar = gnc_numeric_create (456, 100);
 
     hdlr = g_log_set_handler ("gnc.engine", loglevel,
 			      (GLogFunc)test_checked_handler, &check);
-    test_add_error (&check);
-    oldlogger = g_log_set_default_handler ((GLogFunc)test_null_handler, &check);
-    g_test_log_set_fatal_handler ((GTestLogFatalFunc)test_list_handler, NULL);
-
 
     g_assert_cmpint (fixture->func->xaccSplitEqualCheckBal ("test ", foo, foo), ==, TRUE);
     g_assert_cmpint (fixture->func->xaccSplitEqualCheckBal ("test ", foo, bar), ==, FALSE);
-    g_assert_cmpint (check.hits, ==, 2);
+    g_assert_cmpint (check.hits, ==, 1);
     g_log_remove_handler ("gnc.engine", hdlr);
-    g_log_set_default_handler (oldlogger, NULL);
-    test_clear_error_list ();
 
 }
 /* xaccSplitEqual
@@ -407,41 +400,39 @@ test_xaccSplitEqual (Fixture *fixture, gconstpointer pData)
 {
     Split *split1 = xaccSplitClone (fixture->split);
     Split *split2 = xaccDupeSplit (fixture->split);
-    gchar *msg01 = "[xaccSplitEqual()] one is NULL";
-    gchar *msg02 = "[xaccSplitEqual()] GUIDs differ";
+    gchar *msg01 = "[xaccSplitEqual] one is NULL";
+    gchar *msg02 = "[xaccSplitEqual] GUIDs differ";
     gchar *msg03;
-    gchar *msg04 = "[xaccSplitEqual()] actions differ: foo vs bar";
-    G_GNUC_UNUSED gchar *msg05 = "[xaccSplitEqual()] kvp frames: differ foo vs bar";
-    G_GNUC_UNUSED gchar *msg06 = "[xaccSplitEqual()] reconcile flags differ: foo vs bar";
-    G_GNUC_UNUSED gchar *msg07 = "[xaccSplitEqual()] reconciled date differs";
-    G_GNUC_UNUSED gchar *msg08 = "[xaccSplitEqual()] amounts differ: foo vs bar";
-    gchar *msg10 = "[xaccSplitEqual()] transactions differ";
-    gchar *msg11 = "[xaccTransEqual()] one is NULL";
-    gchar *msg12 = "[xaccSplitEqualCheckBal()] balances differ: 321/1000 vs 0/1";
-    gchar *msg13 = "[xaccSplitEqualCheckBal()] cleared balances differ: 321/1000 vs 0/1";
-    gchar *msg14 = "[xaccSplitEqualCheckBal()] reconciled balances differ: 321/1000 vs 0/1";
+    gchar *msg04 = "[xaccSplitEqual] actions differ: foo vs bar";
+    G_GNUC_UNUSED gchar *msg05 = "[xaccSplitEqual] kvp frames: differ foo vs bar";
+    G_GNUC_UNUSED gchar *msg06 = "[xaccSplitEqual] reconcile flags differ: foo vs bar";
+    G_GNUC_UNUSED gchar *msg07 = "[xaccSplitEqual] reconciled date differs";
+    G_GNUC_UNUSED gchar *msg08 = "[xaccSplitEqual] amounts differ: foo vs bar";
+    gchar *msg10 = "[xaccSplitEqual] transactions differ";
+    gchar *msg11 = "[xaccTransEqual] one is NULL";
+    gchar *msg12 = "[xaccSplitEqualCheckBal] balances differ: 321/1000 vs 0/1";
+    gchar *msg13 = "[xaccSplitEqualCheckBal] cleared balances differ: 321/1000 vs 0/1";
+    gchar *msg14 = "[xaccSplitEqualCheckBal] reconciled balances differ: 321/1000 vs 0/1";
     gchar *logdomain = "gnc.engine";
-    guint loglevel = G_LOG_LEVEL_WARNING | G_LOG_FLAG_FATAL;
+    guint loglevel = G_LOG_LEVEL_INFO;
     TestErrorStruct checkA = { loglevel, logdomain, msg01, 0 };
     TestErrorStruct checkB = { loglevel, logdomain, msg10, 0 };
     TestErrorStruct checkC = { loglevel, logdomain, msg11, 0 };
     TestErrorStruct checkD = { loglevel, logdomain, msg14, 0 };
     guint hdlr;
-    GLogFunc oldlogger;
-    oldlogger = g_log_set_default_handler ((GLogFunc)test_null_handler, &checkA);
+
     test_add_error (&checkA);
     test_add_error (&checkB);
     test_add_error (&checkC);
     test_add_error (&checkD);
 
-    g_test_log_set_fatal_handler ((GTestLogFatalFunc)test_list_handler, &checkA);
     hdlr  = g_log_set_handler (logdomain, loglevel,
-			       (GLogFunc)test_checked_handler, &checkA);
+			       (GLogFunc)test_list_handler, &checkA);
 /* Note that check_splits is just passed through to xaccTransEqual, so we don't vary it here. */
 /* Test that a NULL comparison fails */
     g_assert (xaccSplitEqual (fixture->split, NULL, TRUE, TRUE, TRUE) == FALSE);
     g_assert (xaccSplitEqual (NULL, split1, TRUE, TRUE, TRUE) == FALSE);
-    g_assert_cmpint (checkA.hits, ==, 4);
+    g_assert_cmpint (checkA.hits, ==, 2);
     g_assert_cmpint (checkB.hits, ==, 0);
     g_assert_cmpint (checkC.hits, ==, 0);
     g_assert_cmpint (checkD.hits, ==, 0);
@@ -449,39 +440,33 @@ test_xaccSplitEqual (Fixture *fixture, gconstpointer pData)
 /* Clone creates splits with different GUIDs: Make sure that it fails comparison */
     g_assert (xaccSplitEqual (fixture->split, split1, TRUE, TRUE, TRUE) == FALSE);
 /* Test that the parent comparison fails */
-    g_log_remove_handler (logdomain, hdlr);
-    hdlr = g_log_set_handler (logdomain, loglevel,
-			      (GLogFunc)test_list_handler, &checkA);
     g_assert (xaccSplitEqual (fixture->split, split1, FALSE, TRUE, TRUE) == FALSE);
 /* Now set split1's parent so that it passes -- we're also checking that the GUID check is disabled when we pass FALSE to check_guids */
-    g_assert_cmpint (checkA.hits, ==, 6);
-    g_assert_cmpint (checkB.hits, ==, 2);
-    g_assert_cmpint (checkC.hits, ==, 2);
+    g_assert_cmpint (checkA.hits, ==, 3);
+    g_assert_cmpint (checkB.hits, ==, 1);
+    g_assert_cmpint (checkC.hits, ==, 1);
     g_assert_cmpint (checkD.hits, ==, 0);
     split1->parent = fixture->split->parent;
-    g_log_remove_handler (logdomain, hdlr);
-    hdlr = g_log_set_handler (logdomain, loglevel,
-			      (GLogFunc)test_list_handler, &checkA);
     g_assert (xaccSplitEqual (fixture->split, split1, FALSE, TRUE, TRUE) == TRUE);
 /* Now set the GUIDs equal and see that the comparison passes */
     g_object_set (G_OBJECT (split1),
 		  "guid", qof_instance_get_guid (QOF_INSTANCE(fixture->split)),
 		  NULL);
     g_assert (xaccSplitEqual (fixture->split, split1, TRUE, TRUE, TRUE) == TRUE);
-    g_assert_cmpint (checkA.hits, ==, 6);
-    g_assert_cmpint (checkB.hits, ==, 2);
-    g_assert_cmpint (checkC.hits, ==, 2);
+    g_assert_cmpint (checkA.hits, ==, 3);
+    g_assert_cmpint (checkB.hits, ==, 1);
+    g_assert_cmpint (checkC.hits, ==, 1);
     g_assert_cmpint (checkD.hits, ==, 0);
 /* Change the memo and action and test that each in turn causes the comparison to fail */
     split1->memo = "baz";
-    msg03 = g_strdup_printf ("[xaccSplitEqual()] memos differ: (%p)%s vs (%p)%s",
+    msg03 = g_strdup_printf ("[xaccSplitEqual] memos differ: (%p)%s vs (%p)%s",
 		     fixture->split->memo, fixture->split->memo,
 		     split1->memo, split1->memo);
     checkA.msg = msg03;
     g_assert (xaccSplitEqual (fixture->split, split1, TRUE, TRUE, TRUE) == FALSE);
-    g_assert_cmpint (checkA.hits, ==, 8);
-    g_assert_cmpint (checkB.hits, ==, 2);
-    g_assert_cmpint (checkC.hits, ==, 2);
+    g_assert_cmpint (checkA.hits, ==, 4);
+    g_assert_cmpint (checkB.hits, ==, 1);
+    g_assert_cmpint (checkC.hits, ==, 1);
     g_assert_cmpint (checkD.hits, ==, 0);
     split1->memo = fixture->split->memo;
     split1->action = "bar";
@@ -490,40 +475,41 @@ test_xaccSplitEqual (Fixture *fixture, gconstpointer pData)
     g_log_remove_handler (logdomain, hdlr);
     hdlr  = g_log_set_handler (logdomain, loglevel,
 			       (GLogFunc)test_list_handler, &checkA);
-   g_assert (xaccSplitEqual (fixture->split, split1, TRUE, TRUE, TRUE) == FALSE);
-    g_assert_cmpint (checkA.hits, ==, 12);
-    g_assert_cmpint (checkB.hits, ==, 2);
-    g_assert_cmpint (checkC.hits, ==, 2);
+    g_assert (xaccSplitEqual (fixture->split, split1, TRUE, TRUE, TRUE) == FALSE);
+    g_assert_cmpint (checkA.hits, ==, 6);
+    g_assert_cmpint (checkB.hits, ==, 1);
+    g_assert_cmpint (checkC.hits, ==, 1);
     g_assert_cmpint (checkD.hits, ==, 0);
 /* Split2 doesn't have balances copied from fixture->split, so the balance test fails */
     checkB.msg = msg12;
     checkC.msg = msg13;
     g_assert (xaccSplitEqual (fixture->split, split2, TRUE, TRUE, TRUE) == FALSE);
-    g_assert_cmpint (checkA.hits, ==, 12);
-    g_assert_cmpint (checkB.hits, ==, 4);
-    g_assert_cmpint (checkC.hits, ==, 2);
+    g_assert_cmpint (checkA.hits, ==, 6);
+    g_assert_cmpint (checkB.hits, ==, 2);
+    g_assert_cmpint (checkC.hits, ==, 1);
     g_assert_cmpint (checkD.hits, ==, 0);
 
     split2->balance = fixture->split->balance;
     g_assert (xaccSplitEqual (fixture->split, split2, TRUE, TRUE, TRUE) == FALSE);
-    g_assert_cmpint (checkA.hits, ==, 12);
-    g_assert_cmpint (checkB.hits, ==, 4);
-    g_assert_cmpint (checkC.hits, ==, 4);
+    g_assert_cmpint (checkA.hits, ==, 6);
+    g_assert_cmpint (checkB.hits, ==, 2);
+    g_assert_cmpint (checkC.hits, ==, 2);
     g_assert_cmpint (checkD.hits, ==, 0);
 
     split2->cleared_balance = fixture->split->cleared_balance;
     g_assert (xaccSplitEqual (fixture->split, split2, TRUE, TRUE, TRUE) == FALSE);
-    g_assert_cmpint (checkA.hits, ==, 12);
-    g_assert_cmpint (checkB.hits, ==, 4);
-    g_assert_cmpint (checkC.hits, ==, 4);
-    g_assert_cmpint (checkD.hits, ==, 2);
+    g_assert_cmpint (checkA.hits, ==, 6);
+    g_assert_cmpint (checkB.hits, ==, 2);
+    g_assert_cmpint (checkC.hits, ==, 2);
+    g_assert_cmpint (checkD.hits, ==, 1);
 
     test_clear_error_list ();
     g_assert (xaccSplitEqual (fixture->split, split2, TRUE, FALSE, TRUE) == TRUE);
     g_object_unref (split1);
     g_object_unref (split2);
     test_clear_error_list ();
-    g_log_set_default_handler (oldlogger, NULL);
+    g_log_remove_handler (logdomain, hdlr);
+
     g_free (msg03);
 }
 /* xaccSplitGetAccount
@@ -558,6 +544,7 @@ test_xaccSplitCommitEdit (Fixture *fixture, gconstpointer pData)
     gchar *msg2 = "[xaccSplitCommitEdit()] Account grabbed split prematurely.";
     gchar *logdomain = "gnc.engine";
     guint loglevel = G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL;
+    guint infolevel = G_LOG_LEVEL_INFO;
     guint hdlr;
     TestErrorStruct checkA = { loglevel, logdomain, msg1, 0 };
     TestErrorStruct checkB = { loglevel, logdomain, msg2, 0 };
@@ -599,7 +586,6 @@ test_xaccSplitCommitEdit (Fixture *fixture, gconstpointer pData)
     g_assert_cmpint (checkA.hits, ==, 4);
     g_assert_cmpint (checkB.hits, ==, 2);
 
-    g_log_remove_handler (logdomain, hdlr);
     qof_instance_mark_clean (QOF_INSTANCE (fixture->split->parent));
     g_object_set (fixture->split->acc,
 		  "sort-dirty", FALSE,
@@ -626,6 +612,7 @@ test_xaccSplitCommitEdit (Fixture *fixture, gconstpointer pData)
     g_assert (fixture->split->orig_parent == fixture->split->parent);
 
 
+    g_log_remove_handler (logdomain, hdlr);
     test_signal_free (sig1);
     test_signal_free (sig2);
     test_destroy (oacc);
@@ -1272,6 +1259,18 @@ test_get_corr_account_split (Fixture *fixture, gconstpointer pData)
     Account *acc1 = xaccMallocAccount (book);
     Account *acc2 = xaccMallocAccount (book);
     Account *acc3 = xaccMallocAccount (book);
+    gchar *msg1 = "get_corr_account_split: assertion `sa' failed";
+    gchar *logdomain = "gnc.engine";
+    guint loglevel = G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL;
+    TestErrorStruct check = { loglevel, logdomain, msg1, 0 };
+    gnc_numeric value = { 360, 240 };
+    gnc_numeric old_val = fixture->split->value;
+    gnc_numeric old_amt = fixture->split->amount;
+
+    GLogFunc oldlogger = g_log_set_default_handler ((GLogFunc)test_null_handler, &check);
+    g_test_log_set_fatal_handler ((GTestLogFatalFunc)test_checked_handler,
+				  &check);
+
 
     xaccAccountSetCommodity (acc1, fixture->curr);
     xaccAccountSetCommodity (acc2, fixture->curr);
@@ -1302,12 +1301,13 @@ test_get_corr_account_split (Fixture *fixture, gconstpointer pData)
 
     g_assert (!fixture->func->get_corr_account_split(fixture->split, &result));
     g_assert (result == NULL);
+    g_assert_cmpint (check.hits, ==, 0);
 
-    g_test_log_set_fatal_handler ((GTestLogFatalFunc)test_null_handler,
-				  NULL);
     g_assert (!fixture->func->get_corr_account_split(NULL, &result));
     g_assert (result == NULL);
+    g_assert_cmpint (check.hits, ==, 1);
 
+    g_log_set_default_handler (oldlogger, NULL);
     test_destroy (split1);
     test_destroy (split2);
     test_destroy (split3);
