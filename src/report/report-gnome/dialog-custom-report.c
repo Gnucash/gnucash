@@ -97,28 +97,28 @@ cancel_custom_report_clicked_cb(GtkWidget* widget, gpointer data)
 static void
 update_report_list(GtkListStore *store, CustomReportDialog *crd)
 {
-    SCM get_names = scm_c_eval_string("gnc:custom-report-template-names");
+    SCM get_rpt_guids = scm_c_eval_string("gnc:custom-report-template-guids");
     SCM template_menu_name = scm_c_eval_string("gnc:report-template-menu-name/report-guid");
-    SCM names;
+    SCM rpt_guids;
     int i;
     GtkTreeIter iter;
 
     gtk_tree_sortable_set_sort_column_id(GTK_TREE_SORTABLE(store), COL_NAME, GTK_SORT_ASCENDING);
 
-    crd->reportlist = scm_call_0(get_names);
-    names = crd->reportlist;
+    crd->reportlist = scm_call_0(get_rpt_guids);
+    rpt_guids = crd->reportlist;
 
     gtk_list_store_clear(store);
 
-    if (scm_is_list(names))
+    if (scm_is_list(rpt_guids))
     {
-        /* for all the names in the list, store them, with a reference,
+        /* for all the report guids in the list, store them, with a reference,
         	 in the gtkliststore */
-        for (i = 0; !scm_is_null(names); i++)
+        for (i = 0; !scm_is_null(rpt_guids); i++)
         {
             gchar *name;
 
-            name = gnc_scm_to_locale_string (scm_call_2(template_menu_name, SCM_CAR(names), SCM_BOOL_F));
+            name = gnc_scm_to_locale_string (scm_call_2(template_menu_name, SCM_CAR(rpt_guids), SCM_BOOL_F));
 
             gtk_list_store_append(store, &iter);
             gtk_list_store_set(store, &iter,
@@ -127,7 +127,7 @@ update_report_list(GtkListStore *store, CustomReportDialog *crd)
                                -1);
             g_free (name);
 
-            names = SCM_CDR(names);
+            rpt_guids = SCM_CDR(rpt_guids);
         }
     }
 }

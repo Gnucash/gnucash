@@ -105,10 +105,10 @@ gnc_column_view_edit_destroy(gnc_column_view_edit * view)
 static void
 update_display_lists(gnc_column_view_edit * view)
 {
-    SCM   get_names = scm_c_eval_string("gnc:all-report-template-names");
+    SCM   get_rpt_guids = scm_c_eval_string("gnc:all-report-template-guids");
     SCM   template_menu_name = scm_c_eval_string("gnc:report-template-menu-name/report-guid");
     SCM   report_menu_name = scm_c_eval_string("gnc:report-menu-name");
-    SCM   names = scm_call_0(get_names);
+    SCM   rpt_guids = scm_call_0(get_rpt_guids);
     SCM   contents =
         gnc_option_db_lookup_option(view->odb, "__general", "report-list",
                                     SCM_BOOL_F);
@@ -136,19 +136,19 @@ update_display_lists(gnc_column_view_edit * view)
     }
 
     scm_gc_unprotect_object(view->available_list);
-    view->available_list = names;
+    view->available_list = rpt_guids;
     scm_gc_protect_object(view->available_list);
 
     store = GTK_LIST_STORE(gtk_tree_view_get_model(view->available));
     gtk_list_store_clear(store);
 
-    if (scm_is_list(names))
+    if (scm_is_list(rpt_guids))
     {
-        for (i = 0; !scm_is_null(names); names = SCM_CDR(names), i++)
+        for (i = 0; !scm_is_null(rpt_guids); rpt_guids = SCM_CDR(rpt_guids), i++)
         {
-            if (scm_is_equal (SCM_CAR(names), selection))
+            if (scm_is_equal (SCM_CAR(rpt_guids), selection))
                 row = i;
-            name = gnc_scm_to_locale_string (scm_call_2(template_menu_name, SCM_CAR(names),
+            name = gnc_scm_to_locale_string (scm_call_2(template_menu_name, SCM_CAR(rpt_guids),
                                                    SCM_BOOL_F));
 
             gtk_list_store_append(store, &iter);

@@ -24,11 +24,32 @@
 (use-modules (gnucash printf))
 (use-modules (sw_report_system))
 
+;; Terminology in this file:
+;; report-template: a report definition of some form. This can be a report
+;;      included in gnucash by default, or a new report definition added by
+;;      the user in the .gnucash directory or a custom report
+;; custom report: like a report-template, but saved with a different set
+;;      of default options. A better name would probably be "preconfigured
+;;      report" or something similar. These templates are managed by the
+;;      user via the "Custom Reports" menu item
+;; report: an instantiation of a report-template (custom or otherwise). One
+;;      specific instance of a template, loaded and configured by the user
+;;      while the program is running.
+;; saved report: a report that was still open at the time a book is closed.
+;;      GnuCash dumps the current settings and template id for such a report
+;;      in a meta file in .gnucash/books. When the book is reopened, the template
+;;      id and settings are used to restore the report to the state it was
+;;      in before the book was closed.
+;;
+;; This file will define record types for report-templates and reports. From what
+;; I understand the latter is used mostly to handle saved reports as defined above,
+;; while the former manages report-templates (including custom-reports).
+
 ;; This hash should contain all the reports available and will be used
 ;; to generate the reports menu whenever a new window opens and to
 ;; figure out what to do when a report needs to be generated.
 ;;
-;; The key is the string naming the report (the report "type") and the
+;; The key is the report guid and the
 ;; value is the report definition structure.
 (define *gnc:_report-templates_* (make-hash-table 23))
 
@@ -46,8 +67,8 @@
 (define gnc:optname-reportname (N_ "Report name"))
 (define gnc:optname-stylesheet (N_ "Stylesheet"))
 
-;; we want to warn users if they've got an old-style, non-guid saved
-;; report, but only once
+;; We want to warn users if they've got an old-style, non-guid custom
+;; report-template, but only once
 (define gnc:old-style-report-warned #f)
 
 ;; A <report-template> represents one of the available report types.
@@ -72,8 +93,8 @@
     ((record-constructor <report-template>)
      #f                         ;; version
      #f                         ;; name
-     #f                         ;; report-guid for backwards compat of newer reports
-     #f                         ;; parent-type for backwards compat of newer reports
+     #f                         ;; report-guid
+     #f                         ;; parent-type (meaning guid of report-template this template is based on)
      #f                         ;; options-generator
      #f                         ;; options-cleanup-cb
      #f                         ;; options-changed-cb
@@ -158,12 +179,12 @@
   (record-modifier <report-template> 'report-guid))
 (define gnc:report-template-name
   (record-accessor <report-template> 'name))
+(define gnc:report-template-set-name
+  (record-modifier <report-template> 'name))
 (define gnc:report-template-parent-type
   (record-accessor <report-template> 'parent-type))
 (define gnc:report-template-set-parent-type!
   (record-modifier <report-template> 'parent-type))
-(define gnc:report-template-set-name
-  (record-modifier <report-template> 'name))
 (define gnc:report-template-options-generator
   (record-accessor <report-template> 'options-generator))
 (define gnc:report-template-options-cleanup-cb
@@ -448,18 +469,17 @@
    (string->symbol 
     (gnc:html-style-sheet-name stylesheet))))
 
-(define (gnc:all-report-template-names)
-  (sort 
+
+;; Load and save helper functions
+
+(define (gnc:all-report-template-guids)
    (hash-fold 
     (lambda (k v p)
       (cons k p)) 
-    '() *gnc:_report-templates_*)
-   string<?))
+    '() *gnc:_report-templates_*))
 
-;; return a list of the custom report template "names" (really a list
-;; of report-guids).
-(define (gnc:custom-report-template-names)
-  (sort 
+;; return a list of the custom report template guids.
+(define (gnc:custom-report-template-guids)
    (hash-fold
     (lambda (k v p)
        (if (gnc:report-template-parent-type v)
@@ -467,11 +487,13 @@
 	    (gnc:debug "template " v)
 	    (cons k p))
 	  p))
-      '() *gnc:_report-templates_*)
-    string<?))
+      '() *gnc:_report-templates_*))
 
 (define (gnc:find-report-template report-type) 
   (hash-ref *gnc:_report-templates_* report-type))
+
+
+;; Load and save functions
 
 (define (gnc:report-generate-restore-forms report)
   ;; clean up the options if necessary.  this is only needed 
