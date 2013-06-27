@@ -638,9 +638,9 @@ gnc_invoice_window_print_invoice(GncInvoice *invoice)
 
     g_return_if_fail (invoice);
     if (!reportname)
-        reportname = "Printable Invoice"; // fallback if the option lookup failed
+        reportname = "5123a759ceb9483abf2182d01c140e8d"; // fallback if the option lookup failed
 
-    func = scm_c_eval_string ("gnc:invoice-report-create-withname");
+    func = scm_c_eval_string ("gnc:invoice-report-create");
     g_return_if_fail (scm_is_procedure (func));
 
     arg = SWIG_NewPointerObj(invoice, SWIG_TypeQuery("_p__gncInvoice"), 0);

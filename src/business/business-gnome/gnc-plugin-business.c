@@ -1101,12 +1101,15 @@ static void gnc_plugin_business_add_to_window (GncPlugin *plugin,
 
 static const char* invoice_printreport_values[] =
 {
-    // FIXME: You must manually keep this list in sync with the one at the end
-    // of business-prefs.glade
-    "Printable Invoice",
-    "Tax Invoice",
-    "Easy Invoice",
-    "Fancy Invoice",
+    /* The list below are the guids of reports that can
+     * be used to print an invoice.
+     * Important: this list must be kept in sync with the one at the end
+     * of business-prefs.glade
+     */
+    "5123a759ceb9483abf2182d01c140e8d", // "Printable Invoice"
+    "0769e242be474010b4acf264a5512e6e", // "Tax Invoice"
+    "67112f318bef4fc496bdc27d106bbda4", // "Easy Invoice"
+    "3ce293441e894423a2425d7a22dd1ac6", // "Fancy Invoice"
     NULL
 };
 
