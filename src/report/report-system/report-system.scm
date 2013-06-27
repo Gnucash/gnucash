@@ -116,11 +116,8 @@
 
 (export gnc:define-report)
 (export <report>)
-(export gnc:report-template-new-options/name)
 (export gnc:report-template-new-options/report-guid)
-(export gnc:report-template-menu-name/name)
 (export gnc:report-template-menu-name/report-guid)
-(export gnc:report-template-renderer/name)
 (export gnc:report-template-renderer/report-guid)
 (export gnc:report-template-new-options)
 (export gnc:report-template-version)
@@ -152,7 +149,6 @@
 (export gnc:report-ctext)
 (export gnc:report-set-ctext!)
 (export gnc:make-report)
-(export gnc:restore-report)
 (export gnc:restore-report-by-guid)
 (export gnc:make-report-options)
 (export gnc:report-export-types)
@@ -172,7 +168,14 @@
 (export gnc:report-run)
 (export gnc:report-templates-for-each)
 (export gnc:report-embedded-list)
-(export gnc:report-template-name-to-id)
+;; Legacy : the following 3 functions are only needed to
+;; load a saved-reports file version 2.0
+(export gnc:report-template-new-options/name)
+(export gnc:report-template-menu-name/name)
+(export gnc:report-template-renderer/name)
+;; Legacy: this function is needed only to restore
+;; a open report when loading a book last saved in GnuCash 2.2
+(export gnc:restore-report)
 
 ;; html-barchart.scm
 

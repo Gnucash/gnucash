@@ -206,62 +206,23 @@
 (define gnc:report-template-export-thunk
   (record-accessor <report-template> 'export-thunk))
 
-(define (gnc:report-template-name-to-id template-name)
-  (let ((template-id #f))
-    (hash-for-each
-     (lambda (id rec)
-       (if (equal? template-name (gnc:report-template-name rec))
-	   (set! template-id id))) *gnc:_report-templates_*)
-    template-id))
-
 (define (gnc:report-template-new-options/report-guid template-id template-name)
   (let ((templ (hash-ref *gnc:_report-templates_* template-id)))
     (if templ
         (gnc:report-template-new-options templ)
         #f)))
 
-(define (gnc:report-template-new-options/name template-name)
-  (let ((templ #f))
-    (hash-for-each 
-     (lambda (id rec)
-       (if (equal? template-name (gnc:report-template-name rec))
-	   (set! templ (hash-ref *gnc:_report-templates_* id)))) *gnc:_report-templates_*)
-    (if templ
-	(gnc:report-template-new-options templ)
-	#f)))
-
 (define (gnc:report-template-menu-name/report-guid template-id template-name)
   (let ((templ (hash-ref *gnc:_report-templates_* template-id)))
     (if templ
-	(or (gnc:report-template-menu-name templ)
-	    (gnc:report-template-name templ))
-        #f)))
-
-(define (gnc:report-template-menu-name/name template-name)
-  (let ((templ #f))
-    (hash-for-each
-     (lambda (id rec)
-       (if (equal? template-name (gnc:report-template-name rec))
-	   (set! templ (hash-ref *gnc:_report-templates_* id)))) *gnc:_report-templates_*)
-    (if templ
-	(or (gnc:report-template-menu-name templ)
-	    (gnc:report-template-name templ))
+        (or (gnc:report-template-menu-name templ)
+            (gnc:report-template-name templ))
         #f)))
 
 (define (gnc:report-template-renderer/report-guid template-id template-name)
   (let ((templ (hash-ref *gnc:_report-templates_* template-id)))
     (if templ
-	(gnc:report-template-renderer templ)
-        #f)))
-
-(define (gnc:report-template-renderer/name template-name)
-  (let ((templ #f))
-    (hash-for-each
-     (lambda (id rec)
-       (if (equal? template-name (gnc:report-template-name rec))
-	   (set! templ (hash-ref *gnc:_report-templates_* id)))) *gnc:_report-templates_*)
-    (if templ
-	(gnc:report-template-renderer templ)
+        (gnc:report-template-renderer templ)
         #f)))
 
 (define (gnc:report-template-new-options report-template)
@@ -392,16 +353,6 @@
     (gnc:report-id r))
   )
 
-;; This is the function that is called when saved reports are evaluated.
-(define (gnc:restore-report id template-name options)
-  (if options
-      (let ((r ((record-constructor <report>)
-		(gnc:report-template-name-to-id template-name) id options #t #t #f #f)))
-	(gnc-report-add r))
-      (begin
-	(gnc-error-dialog '() (string-append "Report Failed! One of your previously opened reports has failed to open. The template on which it was based: " template-name ", was not found."))
-	#f))
-  )
 
 (define (gnc:restore-report-by-guid id template-id template-name options)
   (if options
@@ -722,3 +673,62 @@
        (gnc:debug "Deleting report " report)
        (hash-remove! *gnc:_report-templates_* report)
        (gnc:save-all-reports))))
+
+;; Legacy functions
+;;;;;;;;;;;;;;;;;;;
+
+;; Legacy : the following 3 functions are only needed to
+;; load a saved-reports file version 2.0
+
+(define (gnc:report-template-new-options/name template-name)
+  (let ((templ #f))
+    (hash-for-each 
+     (lambda (id rec)
+       (if (equal? template-name (gnc:report-template-name rec))
+           (set! templ (hash-ref *gnc:_report-templates_* id)))) *gnc:_report-templates_*)
+    (if templ
+        (gnc:report-template-new-options templ)
+        #f)))
+
+(define (gnc:report-template-menu-name/name template-name)
+  (let ((templ #f))
+    (hash-for-each
+     (lambda (id rec)
+       (if (equal? template-name (gnc:report-template-name rec))
+           (set! templ (hash-ref *gnc:_report-templates_* id)))) *gnc:_report-templates_*)
+    (if templ
+        (or (gnc:report-template-menu-name templ)
+            (gnc:report-template-name templ))
+        #f)))
+
+(define (gnc:report-template-renderer/name template-name)
+  (let ((templ #f))
+    (hash-for-each
+     (lambda (id rec)
+       (if (equal? template-name (gnc:report-template-name rec))
+           (set! templ (hash-ref *gnc:_report-templates_* id)))) *gnc:_report-templates_*)
+    (if templ
+        (gnc:report-template-renderer templ)
+        #f)))
+
+;; Used internally only to convert a report template name into a corresponding guid
+;; Note that this may fail if several reports exist with the same name
+(define (gnc:report-template-name-to-id template-name)
+  (let ((template-id #f))
+    (hash-for-each
+     (lambda (id rec)
+       (if (equal? template-name (gnc:report-template-name rec))
+           (set! template-id id))) *gnc:_report-templates_*)
+    template-id))
+
+;; Legacy: this function is needed only to restore
+;; a saved report when loading a book last saved in GnuCash 2.2
+(define (gnc:restore-report id template-name options)
+  (if options
+      (let ((r ((record-constructor <report>)
+                (gnc:report-template-name-to-id template-name) id options #t #t #f #f)))
+        (gnc-report-add r))
+      (begin
+        (gnc-error-dialog '() (string-append "Report Failed! One of your previously opened reports has failed to open. The template on which it was based: " template-name ", was not found."))
+        #f))
+  )
