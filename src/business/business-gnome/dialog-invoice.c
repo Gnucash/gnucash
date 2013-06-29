@@ -664,15 +664,94 @@ gnc_invoice_window_printCB (GtkWidget *unused_widget, gpointer data)
     gnc_invoice_window_print_invoice(iw_get_invoice (iw));
 }
 
-void
-gnc_invoice_window_postCB (GtkWidget *unused_widget, gpointer data)
+static gboolean
+gnc_dialog_post_invoice(InvoiceWindow *iw, char *message,
+                        Timespec *ddue, Timespec *postdate,
+                        char **memo, Account **acc, gboolean *accumulate)
 {
-    InvoiceWindow *iw = data;
     GncInvoice *invoice;
-    char *message, *memo, *ddue_label, *post_label, *acct_label, *question_label;
-    Account *acc = NULL;
+    char *ddue_label, *post_label, *acct_label, *question_label;
     GList * acct_types = NULL;
     GList * acct_commodities = NULL;
+    QofInstance *owner_inst;
+    KvpFrame *kvpf;
+    EntryList *entries, *entries_iter;
+
+    invoice = iw_get_invoice (iw);
+    if (!invoice)
+        return FALSE;
+        
+    ddue_label = _("Due Date");
+    post_label = _("Post Date");
+    acct_label = _("Post to Account");
+    question_label = _("Accumulate Splits?");
+
+    /* Determine the type of account to post to */
+    acct_types = gncOwnerGetAccountTypesList (&(iw->owner));
+
+    /* Determine which commodity we're working with */
+    acct_commodities = gncOwnerGetCommoditiesList(&(iw->owner));
+
+    /* Get the invoice entries */
+    entries = gncInvoiceGetEntries (invoice);
+
+    /* Find the most suitable post date.
+     * For Customer Invoices that would be today.
+     * For Vendor Bills and Employee Vouchers
+     * that would be the date of the most recent invoice entry.
+     * Failing that, today is used as a fallback */
+    *postdate = timespec_now();
+
+    if (entries && ((gncInvoiceGetOwnerType (invoice) == GNC_OWNER_VENDOR) ||
+                    (gncInvoiceGetOwnerType (invoice) == GNC_OWNER_EMPLOYEE)))
+    {
+        *postdate = gncEntryGetDate ((GncEntry*)entries->data);
+        for (entries_iter = entries; entries_iter != NULL; entries_iter = g_list_next(entries_iter))
+        {
+            Timespec entrydate;
+
+            entrydate = gncEntryGetDate ((GncEntry*)entries_iter->data);
+            if (timespec_cmp(&entrydate, postdate) > 0)
+                *postdate = entrydate;
+        }
+    }
+
+    /* Get the due date and posted account */
+    *ddue = *postdate;
+    *memo = NULL;
+
+    owner_inst = qofOwnerGetOwner (gncOwnerGetEndOwner (&(iw->owner)));
+    kvpf = qof_instance_get_slots (owner_inst);
+    *acc = xaccAccountLookup (kvp_frame_get_guid (kvpf, LAST_POSTED_TO_ACCT),
+                             iw->book);
+
+    /* Get the default for the accumulate option */
+    *accumulate = gnc_gconf_get_bool(GCONF_SECTION_INVOICE, "accumulate_splits", NULL);
+
+    if (!gnc_dialog_dates_acct_question_parented (iw_get_window(iw), message, ddue_label,
+            post_label, acct_label, question_label, TRUE, TRUE,
+            acct_types, acct_commodities, iw->book, iw->terms,
+            ddue, postdate, memo, acc, accumulate))
+        return FALSE;
+    
+    return TRUE;
+}
+
+struct post_invoice_params 
+{
+    Timespec ddue;          /* Due date */
+    Timespec postdate;      /* Date posted */
+    char *memo;             /* Memo for posting transaction */
+    Account *acc;           /* Account to post to */
+    gboolean accumulate;    /* Whether to accumulate splits */
+};
+
+static void
+gnc_invoice_post(InvoiceWindow *iw, struct post_invoice_params *post_params)
+{
+    GncInvoice *invoice;
+    char *message, *memo;
+    Account *acc = NULL;
     Timespec ddue, postdate;
     gboolean accumulate;
     QofInstance *owner_inst;
@@ -708,59 +787,22 @@ gnc_invoice_window_postCB (GtkWidget *unused_widget, gpointer data)
     /* Ok, we can post this invoice.  Ask for verification, set the due date,
      * post date, and posted account
      */
-    message = _("Do you really want to post the invoice?");
-    ddue_label = _("Due Date");
-    post_label = _("Post Date");
-    acct_label = _("Post to Account");
-    question_label = _("Accumulate Splits?");
-
-    /* Determine the type of account to post to */
-    acct_types = gncOwnerGetAccountTypesList (&(iw->owner));
-
-    /* Determine which commodity we're working with */
-    acct_commodities = gncOwnerGetCommoditiesList(&(iw->owner));
-
-    /* Get the invoice entries */
-    entries = gncInvoiceGetEntries (invoice);
-
-    /* Find the most suitable post date.
-     * For Customer Invoices that would be today.
-     * For Vendor Bills and Employee Vouchers
-     * that would be the date of the most recent invoice entry.
-     * Failing that, today is used as a fallback */
-    postdate = timespec_now();
-
-    if (entries && ((gncInvoiceGetOwnerType (invoice) == GNC_OWNER_VENDOR) ||
-                    (gncInvoiceGetOwnerType (invoice) == GNC_OWNER_EMPLOYEE)))
+    if (post_params)
     {
-        postdate = gncEntryGetDate ((GncEntry*)entries->data);
-        for (entries_iter = entries; entries_iter != NULL; entries_iter = g_list_next(entries_iter))
-        {
-            Timespec entrydate;
-
-            entrydate = gncEntryGetDate ((GncEntry*)entries_iter->data);
-            if (timespec_cmp(&entrydate, &postdate) > 0)
-                postdate = entrydate;
-        }
+        ddue = post_params->ddue;
+        postdate = post_params->postdate;
+        // Dup it since it will free it below
+        memo = g_strdup (post_params->memo);
+        acc = post_params->acc;
+        accumulate = post_params->accumulate;
     }
-
-    /* Get the due date and posted account */
-    ddue = postdate;
-    memo = NULL;
-
-    owner_inst = qofOwnerGetOwner (gncOwnerGetEndOwner (&(iw->owner)));
-    kvpf = qof_instance_get_slots (owner_inst);
-    acc = xaccAccountLookup (kvp_frame_get_guid (kvpf, LAST_POSTED_TO_ACCT),
-                             iw->book);
-
-    /* Get the default for the accumulate option */
-    accumulate = gnc_gconf_get_bool(GCONF_SECTION_INVOICE, "accumulate_splits", NULL);
-
-    if (!gnc_dialog_dates_acct_question_parented (iw_get_window(iw), message, ddue_label,
-            post_label, acct_label, question_label, TRUE, TRUE,
-            acct_types, acct_commodities, iw->book, iw->terms,
-            &ddue, &postdate, &memo, &acc, &accumulate))
-        return;
+    else
+    {
+        message = _("Do you really want to post the invoice?");
+        if (!gnc_dialog_post_invoice(iw, message,
+                                     &ddue, &postdate, &memo, &acc, &accumulate))
+            return;
+    }
 
     /* Yep, we're posting.  So, save the invoice...
      * Note that we can safely ignore the return value; we checked
@@ -772,6 +814,9 @@ gnc_invoice_window_postCB (GtkWidget *unused_widget, gpointer data)
 
     /* Fill in the conversion prices with feedback from the user */
     text = _("One or more of the entries are for accounts different from the invoice/bill currency.  You will be asked a conversion rate for each.");
+
+    /* Get the invoice entries */
+    entries = gncInvoiceGetEntries (invoice);
 
     for (entries_iter = entries; entries_iter != NULL; entries_iter = g_list_next(entries_iter))
     {
@@ -874,6 +919,8 @@ gnc_invoice_window_postCB (GtkWidget *unused_widget, gpointer data)
 
 
     /* Save account as last used account in the kvp frame of the invoice owner */
+    owner_inst = qofOwnerGetOwner (gncOwnerGetEndOwner (&(iw->owner)));
+    kvpf = qof_instance_get_slots (owner_inst);
     kvp_val = kvp_value_new_guid (qof_instance_get_guid (QOF_INSTANCE (acc)));;
     qof_begin_edit (owner_inst);
     kvp_frame_set_slot_nc (kvpf, LAST_POSTED_TO_ACCT, kvp_val);
@@ -905,6 +952,13 @@ cleanup:
     /* ... and redisplay here. */
     gnc_invoice_update_window (iw, NULL);
     gnc_table_refresh_gui (gnc_entry_ledger_get_table (iw->ledger), FALSE);
+}
+
+void
+gnc_invoice_window_postCB (GtkWidget *unused_widget, gpointer data)
+{
+    InvoiceWindow *iw =data;
+    gnc_invoice_post(iw, NULL);
 }
 
 void
@@ -2719,18 +2773,35 @@ multi_duplicate_invoice_cb (GList *invoice_list, gpointer user_data)
 static void post_one_invoice_cb(gpointer data, gpointer user_data)
 {
     GncInvoice *invoice = data;
+    struct post_invoice_params *post_params = user_data;
     InvoiceWindow *iw = gnc_ui_invoice_edit(invoice);
-    gnc_invoice_window_ok_save (iw);
-    gnc_invoice_window_postCB(NULL, iw);
+    gnc_invoice_post(iw, post_params);
 }
 
 static void
 multi_post_invoice_cb (GList *invoice_list, gpointer user_data)
 {
+    struct post_invoice_params post_params;
+    InvoiceWindow *iw;
+    
     if (g_list_length(invoice_list) == 0)
         return;
+        
+    // Get the posting parameters for these invoices
+    iw = gnc_ui_invoice_edit(invoice_list->data);
+    if (!gnc_dialog_post_invoice(iw, _("Do you really want to post these invoices?"),
+                                 &post_params.ddue, &post_params.postdate,
+                                 &post_params.memo, &post_params.acc,
+                                 &post_params.accumulate))
+        return;
 
-    g_list_foreach(invoice_list, post_one_invoice_cb, user_data);
+    // Turn off GUI refresh for the duration.  This is more than just an
+    // optimization.  If the search that got us here is based on the "posted"
+    // status of an invoice, the updating the GUI will change the list we're
+    // working on which leads to bad things happening.
+    gnc_suspend_gui_refresh ();
+    g_list_foreach(invoice_list, post_one_invoice_cb, &post_params);
+    gnc_resume_gui_refresh ();
 }
 
 static void print_one_invoice_cb(gpointer data, gpointer user_data)
