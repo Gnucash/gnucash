@@ -2672,8 +2672,8 @@ static void multi_duplicate_invoice_one(gpointer data, gpointer user_data)
         InvoiceWindow *iw = gnc_ui_invoice_duplicate(old_invoice, FALSE, &dup_user_data->date);
         // FIXME: Now we could use this invoice and manipulate further data.
         g_assert(iw);
-        new_invoice = iw->created_invoice;
-        g_assert(new_invoice); // FIXME: This is NULL?!?
+        new_invoice = iw_get_invoice(iw);
+        g_assert(new_invoice);
     }
 }
 

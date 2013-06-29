@@ -359,7 +359,7 @@ GncInvoice *gncInvoiceCopy (const GncInvoice *from)
     {
         GncEntry *from_entry = node->data;
         GncEntry *to_entry = gncEntryCreate(book);
-        gncEntryCopy(from_entry, to_entry);
+        gncEntryCopy(from_entry, to_entry, FALSE);
 
         switch (gncInvoiceGetOwnerType (invoice))
         {

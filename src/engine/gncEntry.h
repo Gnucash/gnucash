@@ -205,7 +205,7 @@ GncOwner *gncEntryGetBillTo (GncEntry *entry);
 GncEntryPaymentType gncEntryGetBillPayment (const GncEntry* entry);
 /** @} */
 
-void gncEntryCopy (const GncEntry *src, GncEntry *dest);
+void gncEntryCopy (const GncEntry *src, GncEntry *dest, gboolean add_entry);
 
 /** @name Getting Values
  *

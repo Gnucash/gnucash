@@ -797,7 +797,7 @@ void gncEntrySetBill (GncEntry *entry, GncInvoice *bill)
     gncEntryCommitEdit (entry);
 }
 
-void gncEntryCopy (const GncEntry *src, GncEntry *dest)
+void gncEntryCopy (const GncEntry *src, GncEntry *dest, gboolean add_entry)
 {
     if (!src || !dest) return;
 
@@ -831,14 +831,17 @@ void gncEntryCopy (const GncEntry *src, GncEntry *dest)
     if (src->b_tax_table)
         gncEntrySetBillTaxTable (dest, src->b_tax_table);
 
-    if (src->order)
-        gncOrderAddEntry (src->order, dest);
+    if (add_entry)
+    {
+        if (src->order)
+            gncOrderAddEntry (src->order, dest);
 
-    if (src->invoice)
-        gncInvoiceAddEntry (src->invoice, dest);
+        if (src->invoice)
+            gncInvoiceAddEntry (src->invoice, dest);
 
-    if (src->bill)
-        gncBillAddEntry (src->bill, dest);
+        if (src->bill)
+            gncBillAddEntry (src->bill, dest);
+    }
 
     dest->values_dirty = TRUE;
     gncEntryCommitEdit (dest);

@@ -931,7 +931,7 @@ gnc_entry_ledger_duplicate_current_entry (GncEntryLedger *ledger)
         GncEntry * new_entry;
 
         new_entry = gncEntryCreate (ledger->book);
-        gncEntryCopy (entry, new_entry);
+        gncEntryCopy (entry, new_entry, TRUE);
         gncEntrySetDateGDate (new_entry, &ledger->last_date_entered);
 
         /* We also must set a new DateEntered on the new entry
