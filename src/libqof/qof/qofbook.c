@@ -190,6 +190,15 @@ void qof_book_mark_session_dirty (QofBook *book)
     }
 }
 
+void
+qof_book_print_dirty (const QofBook *book)
+{
+    if (qof_book_session_not_saved(book))
+        printf("book is dirty.\n");
+    qof_book_foreach_collection
+    (book, (QofCollectionForeachCB)qof_collection_print_dirty, NULL);
+}
+
 time64
 qof_book_get_session_dirty_time (const QofBook *book)
 {
