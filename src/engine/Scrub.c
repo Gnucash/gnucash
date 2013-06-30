@@ -1042,7 +1042,7 @@ xaccTransFindCommonCurrency (Transaction *trans, QofBook *book)
     }
     found = g_slist_sort( comlist, commodity_compare);
 
-    if ( ((CommodityCount*)(found->data))->commodity != NULL)
+    if ( found && found->data && (((CommodityCount*)(found->data))->commodity != NULL))
     {
         return ((CommodityCount*)(found->data))->commodity;
     }
