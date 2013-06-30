@@ -262,14 +262,20 @@ gnc_date_edit_popup (GNCDateEdit *gde)
 {
     GtkWidget *toplevel;
     struct tm mtm;
+    gboolean date_was_valid;
 
     g_return_if_fail (GNC_IS_DATE_EDIT (gde));
 
     ENTER("gde %p", gde);
 
     /* This code is pretty much just copied from gtk_date_edit_get_date */
-    qof_scan_date (gtk_entry_get_text (GTK_ENTRY (gde->date_entry)),
+    date_was_valid = qof_scan_date (gtk_entry_get_text (GTK_ENTRY (gde->date_entry)),
                    &mtm.tm_mday, &mtm.tm_mon, &mtm.tm_year);
+    if (!date_was_valid)
+    {
+        /* No valid date. Hacky workaround: Instead of crashing we randomly choose today's date. */
+        gnc_tm_get_today_start(&mtm);
+    }
 
     mtm.tm_mon--;
 
@@ -949,13 +955,23 @@ gnc_date_edit_get_date_internal (GNCDateEdit *gde)
     struct tm tm = {0};
     char *str;
     gchar *flags = NULL;
+    gboolean date_was_valid;
 
     /* Assert, because we're just hosed if it's NULL */
     g_assert(gde != NULL);
     g_assert(GNC_IS_DATE_EDIT(gde));
 
-    qof_scan_date (gtk_entry_get_text (GTK_ENTRY (gde->date_entry)),
+    date_was_valid = qof_scan_date (gtk_entry_get_text (GTK_ENTRY (gde->date_entry)),
                    &tm.tm_mday, &tm.tm_mon, &tm.tm_year);
+
+    if (!date_was_valid)
+    {
+        /* Hm... no valid date. What should we do not? As a hacky workaround we
+        revert to today's date. Alternatively we can return some value that
+        signals that we don't get a valid date, but all callers of this
+        function will have to check this. Alas, I'm too lazy to do this here. */
+        gnc_tm_get_today_start(&tm);
+    }
 
     tm.tm_mon--;
 

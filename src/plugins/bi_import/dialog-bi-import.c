@@ -574,6 +574,7 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
             gncInvoiceSetCurrency (invoice, gncOwnerGetCurrency (owner));	// Set the invoice currency based on the owner
             if (strlen (date_opened) != 0)	// If a date is specified in CSV
             {
+                // FIXME: Must check for the return value of qof_scan_date!
                 qof_scan_date (date_opened, &day, &month, &year);
                 gncInvoiceSetDateOpened (invoice,
                                          gnc_dmy2timespec (day, month, year));
@@ -657,6 +658,7 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
 
         // add entry to invoice/bill
         entry = gncEntryCreate (book);
+        // FIXME: Must check for the return value of qof_scan_date!
         qof_scan_date (date, &day, &month, &year);
         {
             GDate *date = g_date_new_dmy(day, month, year);
@@ -720,6 +722,7 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
                     // autopost this invoice
                     Timespec d1, d2;
                     d1 = gnc_dmy2timespec (day, month, year);
+                    // FIXME: Must check for the return value of qof_scan_date!
                     qof_scan_date (due_date, &day, &month, &year);	// obtains the due date, or leaves it at date_posted
                     d2 = gnc_dmy2timespec (day, month, year);
                     acc = gnc_account_lookup_for_register
