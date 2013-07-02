@@ -33,7 +33,7 @@ Danger: this feature does not work correctly at this time; it is still under dev
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">
-Select an accounting period and the closing date which must not be in the furure and is greater than the closing date of the previous book.
+Select an accounting period and the closing date which must not be in the future and is greater than the closing date of the previous book.
 
 Books will be closed at midnight on the selected date.</property>
             <property name="justify">center</property>
