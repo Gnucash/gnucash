@@ -169,6 +169,8 @@
 (export gnc:report-run)
 (export gnc:report-templates-for-each)
 (export gnc:report-embedded-list)
+(export gnc:report-template-is-custom/template-guid?)
+(export gnc:is-custom-report-type)
 ;; Legacy : the following 3 functions are only needed to
 ;; load a saved-reports file version 2.0
 (export gnc:report-template-new-options/name)
