@@ -567,16 +567,11 @@
               (begin
                 (display saved-form report-port)
                 (close report-port)
-                (let ((report-name (gnc:report-name report)))
-                  (gnc-info-dialog
-                   '()
-                   (sprintf
-                    #f (_ "Your report \"%s\" has been saved into the configuration file \"%s\".")
-                    (if (and report-name (not (string-null? report-name)))
-                        (gnc:gettext report-name)
-                        (gnc:gettext "Untitled"))
-                    gnc:current-saved-reports)))
-                ))))))
+                ))
+          ;; Inform the calling function of the newly created template's guid
+          (gnc:report-template-report-guid save-result))
+          ;; Couldn't save report - return false
+          #f)))
 
 (define (gnc:report-template-save-to-savefile report-template)
   (let* ((report-port (gnc:open-saved-reports "a")))
