@@ -3552,6 +3552,7 @@ gnc_quartz_set_menu(GncMainWindow* window)
     gtkosx_application_set_window_menu(theApp, GTK_MENU_ITEM(item));
     g_signal_connect(theApp, "NSApplicationBlockTermination",
                      G_CALLBACK(gnc_quartz_should_quit), window);
+    gtkosx_application_set_use_quartz_accelerators (theApp, FALSE);
 
 }
 #endif //MAC_INTEGRATION
