@@ -711,6 +711,16 @@
        (hash-remove! *gnc:_report-templates_* template-guid)
        (gnc:save-all-reports))))
 
+;; rename an existing report from the hash table and then
+;; resave the saved-reports file
+(define (gnc:rename-report template-guid new-name)
+  (let ((templ (hash-ref *gnc:_report-templates_* template-guid)))
+    (if templ
+      (begin
+        (gnc:debug "Renaming report " template-guid)
+        (gnc:report-template-set-name templ new-name)
+        (gnc:save-all-reports)))))
+
 ;; Legacy functions
 ;;;;;;;;;;;;;;;;;;;
 

@@ -161,6 +161,7 @@
 (export gnc:all-report-template-guids)
 (export gnc:custom-report-template-guids)
 (export gnc:delete-report)
+(export gnc:rename-report)
 (export gnc:find-report-template)
 (export gnc:report-generate-restore-forms)
 (export gnc:report-generate-saved-forms)
