@@ -34,7 +34,7 @@
   (let* ((template (gnc:find-report-template uuid))
 	 (options (gnc:make-report-options uuid))
 	 (report (constructor uuid "bar" options
-			      #t #t #f #f))
+			      #t #t #f #f ""))
 	 (renderer (gnc:report-template-renderer template)))
 
     (let ((doc (renderer report)))
@@ -48,7 +48,7 @@
   (let* ((template (gnc:find-report-template uuid))
 	 (options (gnc:make-report-options uuid))
 	 (report (constructor uuid "bar" options
-				     #t #t #f #f))
+				     #t #t #f #f ""))
 	 (renderer (gnc:report-template-renderer template)))
     (let* ((env (create-test-env))
 	   (my-asset-account (env-create-root-account env ACCT-TYPE-ASSET
@@ -96,7 +96,7 @@
   (let* ((template (gnc:find-report-template uuid))
 	 (options (gnc:make-report-options uuid))
 	 (report (constructor uuid "bar" options
-				     #t #t #f #f))
+				     #t #t #f #f ""))
 	 (renderer (gnc:report-template-renderer template)))
     (let* ((env (create-test-env))
 	   (my-asset-account (env-create-root-account env ACCT-TYPE-ASSET
@@ -154,7 +154,7 @@
   (let* ((template (gnc:find-report-template uuid))
 	 (options (gnc:make-report-options uuid))
 	 (report (constructor uuid "bar" options
-				     #t #t #f #f))
+				     #t #t #f #f ""))
 	 (renderer (gnc:report-template-renderer template)))
     (let* ((env (create-test-env))
 	   (my-asset-account (env-create-root-account env ACCT-TYPE-ASSET
@@ -210,7 +210,7 @@
   (let* ((template (gnc:find-report-template uuid))
 	 (options (gnc:make-report-options uuid))
 	 (report (constructor uuid "bar" options
-				     #t #t #f #f))
+				     #t #t #f #f ""))
 	 (renderer (gnc:report-template-renderer template)))
     (let* ((env (create-test-env))
 	   (my-asset-account (env-create-root-account env ACCT-TYPE-ASSET
@@ -267,7 +267,7 @@
   (let* ((template (gnc:find-report-template uuid))
 	 (options (gnc:make-report-options uuid))
 	 (report (constructor uuid "bar" options
-			      #t #t #f #f))
+			      #t #t #f #f ""))
 	 (renderer (gnc:report-template-renderer template)))
     (let* ((env (create-test-env))
 	   (my-asset-account (env-create-root-account env ACCT-TYPE-ASSET

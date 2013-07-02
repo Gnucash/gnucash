@@ -51,7 +51,7 @@
   (let* ((template (gnc:find-report-template uuid))
 	 (options (gnc:make-report-options uuid))
 	 (report (constructor uuid "bar" options
-				     #t #t #f #f))
+				     #t #t #f #f ""))
 	 (renderer (gnc:report-template-renderer template)))
 
     (let ((doc (renderer report)))
@@ -65,7 +65,7 @@
   (let* ((income-template (gnc:find-report-template uuid))
 	 (income-options (gnc:make-report-options uuid))
 	 (income-report (constructor uuid "bar" income-options
-				     #t #t #f #f))
+				     #t #t #f #f ""))
 	 (income-renderer (gnc:report-template-renderer income-template)))
     (let* ((env (create-test-env))
 	   (my-asset-account (env-create-root-account env ACCT-TYPE-ASSET
@@ -117,7 +117,7 @@
   (let* ((expense-template (gnc:find-report-template expense-report-uuid))
 	 (expense-options (gnc:make-report-options expense-report-uuid))
 	 (expense-report (constructor expense-report-uuid "bar" expense-options
-				     #t #t #f #f))
+				     #t #t #f #f ""))
 	 (expense-renderer (gnc:report-template-renderer expense-template)))
     (let* ((env (create-test-env))
 	   (expense-accounts (env-expense-account-structure env))
@@ -180,7 +180,7 @@
     (let* ((asset-template (gnc:find-report-template uuid))
 	   (asset-options (gnc:make-report-options uuid))
 	   (asset-report (constructor uuid "bar" asset-options
-				      #t #t #f #f))
+				      #t #t #f #f ""))
 	   (asset-renderer (gnc:report-template-renderer asset-template)))
       (let* ((env (create-test-env))
 	     (my-asset-account (env-create-root-account env ACCT-TYPE-ASSET

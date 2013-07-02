@@ -150,6 +150,7 @@
 (export gnc:report-set-ctext!)
 (export gnc:make-report)
 (export gnc:restore-report-by-guid)
+(export gnc:restore-report-by-guid-with-custom-template)
 (export gnc:make-report-options)
 (export gnc:report-export-types)
 (export gnc:report-export-thunk)

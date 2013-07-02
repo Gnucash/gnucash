@@ -264,7 +264,7 @@
 ;; A <report> represents an instantiation of a particular report type.
 (define <report>
   (make-record-type "<report>"
-                    '(type id options dirty? needs-save? editor-widget ctext)))
+                    '(type id options dirty? needs-save? editor-widget ctext custom-template)))
 
 (define gnc:report-type 
   (record-accessor <report> 'type))
@@ -317,6 +317,12 @@
 (define gnc:report-set-ctext!
   (record-modifier <report> 'ctext))
 
+(define gnc:report-custom-template
+  (record-accessor <report> 'custom-template))
+
+(define gnc:report-set-custom-template!
+  (record-modifier <report> 'custom-template))
+
 ;; gnc:make-report instantiates a report from a report-template.
 ;; The actual report is stored away in a hash-table -- only the id is returned.
 (define (gnc:make-report template-id . rest)
@@ -324,6 +330,9 @@
 	 (report-type (if template-parent
 			  template-parent
 			  template-id))
+         (custom-template (if template-parent
+                              template-id
+                              ""))
 	 (r ((record-constructor <report>) 
             report-type ;; type
             #f            ;; id
@@ -332,6 +341,7 @@
             #f            ;; needs-save
             #f            ;; editor-widget
             #f            ;; ctext
+            custom-template ;; custom-template
             ))
         (template (hash-ref *gnc:_report-templates_* template-id))
         )
@@ -357,11 +367,21 @@
 (define (gnc:restore-report-by-guid id template-id template-name options)
   (if options
       (let ((r ((record-constructor <report>)
-		 template-id id options #t #t #f #f)))
+		 template-id id options #t #t #f #f "")))
 	 (gnc-report-add r))
       (begin
 	(gnc-error-dialog '() (string-append "Report Failed! One of your previously opened reports has failed to open. The template on which it was based: " template-name ", was not found."))
 	#f))
+  )
+
+(define (gnc:restore-report-by-guid-with-custom-template id template-id template-name custom-template-id options)
+  (if options
+      (let ((r ((record-constructor <report>)
+                 template-id id options #t #t #f #f custom-template-id)))
+         (gnc-report-add r))
+      (begin
+        (gnc-error-dialog '() (string-append "Report Failed! One of your previously opened reports has failed to open. The template on which it was based: " template-name ", was not found."))
+        #f))
   )
 
 (define (gnc:make-report-options template-id)
@@ -464,8 +484,11 @@
     (gnc:report-type report) (gnc:report-template-name (hash-ref *gnc:_report-templates_* (gnc:report-type report))))
    (gnc:generate-restore-forms (gnc:report-options report) "options")
    (format 
-    #f "  (gnc:restore-report-by-guid ~S ~S ~S options))\n"
-    (gnc:report-id report) (gnc:report-type report) (gnc:report-template-name (hash-ref *gnc:_report-templates_* (gnc:report-type report))))))
+    #f "  (gnc:restore-report-by-guid-with-custom-template ~S ~S ~S ~S options))\n"
+    (gnc:report-id report) (gnc:report-type report)
+    (gnc:report-template-name (hash-ref *gnc:_report-templates_* (gnc:report-type report)))
+    (gnc:report-custom-template report)
+  )))
 
 ;; Loop over embedded reports and concat result of each gnc:report-generate-restore-forms
 (define (gnc:report-generate-options-embedded report)
@@ -733,7 +756,7 @@
 (define (gnc:restore-report id template-name options)
   (if options
       (let ((r ((record-constructor <report>)
-                (gnc:report-template-name-to-id template-name) id options #t #t #f #f)))
+                (gnc:report-template-name-to-id template-name) id options #t #t #f #f "")))
            ;; Warn user (one time) we're attempting to restore old style reports
            (if (not gnc:old-style-restore-warned)
                (begin
