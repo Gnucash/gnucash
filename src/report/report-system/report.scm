@@ -583,12 +583,17 @@
     (if report-port
         (let ((saved-form (gnc:report-template-generate-saved-forms report-template)))
           (display saved-form report-port)
-          (close report-port)))))
+          (close report-port)
+          #t)
+        ;; Couldn't save report
+        #f)))
 
 ;; save all custom reports, moving the old version of the
 ;; saved-reports file aside as a backup
+;; return #t if all templates were saved successfully
 (define (gnc:save-all-reports)
-  (let ((temp-path (gnc-build-dotgnucash-path "saved-reports-2.4-backup")))
+  (let ((save-ok? #t)
+        (temp-path (gnc-build-dotgnucash-path "saved-reports-2.4-backup")))
     (gnc:debug "saving all reports...")
     ;; On windows, it seems to crash if we try to rename without deleting the old file first.
     (if (access? temp-path F_OK)
@@ -598,8 +603,11 @@
 		     (if (gnc:report-template-parent-type v)
 			 (begin
 			   (gnc:debug "saving report " k)
-			   (gnc:report-template-save-to-savefile v))))
-		   *gnc:_report-templates_*)))
+			   (if (not (gnc:report-template-save-to-savefile v))
+                               (set! save-ok? #f)
+                          ))))
+		   *gnc:_report-templates_*)
+    save-ok?))
 
 
 ;; gets the renderer from the report template;
