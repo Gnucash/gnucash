@@ -134,6 +134,7 @@
 (export gnc:report-template-menu-tip)
 (export gnc:report-template-export-types)
 (export gnc:report-template-export-thunk)
+(export gnc:report-template-has-unique-name?)
 (export gnc:report-type)
 (export gnc:report-set-type!)
 (export gnc:report-id)

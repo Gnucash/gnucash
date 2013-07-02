@@ -410,9 +410,19 @@ void custom_report_name_edited_cb(GtkCellRendererText *renderer, gchar *path, gc
 {
     CustomReportDialog *crd = data;
     SCM guid = get_custom_report_selection(crd, _("Unable to change report name."));
-    custom_report_edit_report_name (guid, crd, new_text);
+    SCM unique_name_func = scm_c_eval_string("gnc:report-template-has-unique-name?");
+    SCM new_name_scm = scm_from_locale_string(new_text);
 
     g_object_set(G_OBJECT(crd->namerenderer), "editable", FALSE, NULL);
+    if (scm_is_null (guid))
+        return;
+
+    if (scm_is_true (scm_call_2 (unique_name_func, guid, new_name_scm)))
+        custom_report_edit_report_name (guid, crd, new_text);
+    else
+        gnc_error_dialog(crd->dialog, "%s",
+                _("A custom report with this name already exists, please choose another name.") );
+
 
 }
 void custom_report_query_tooltip_cb (GtkTreeView  *view,
