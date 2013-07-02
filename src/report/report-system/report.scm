@@ -667,11 +667,11 @@
 
 ;; delete an existing report from the hash table and then call to
 ;; resave the saved-reports file... report is gone
-(define (gnc:delete-report report)
- (if (hash-ref *gnc:_report-templates_* report)
+(define (gnc:delete-report template-guid)
+ (if (hash-ref *gnc:_report-templates_* template-guid)
      (begin
-       (gnc:debug "Deleting report " report)
-       (hash-remove! *gnc:_report-templates_* report)
+       (gnc:debug "Deleting report " template-guid)
+       (hash-remove! *gnc:_report-templates_* template-guid)
        (gnc:save-all-reports))))
 
 ;; Legacy functions
