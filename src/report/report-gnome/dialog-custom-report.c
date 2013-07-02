@@ -122,12 +122,26 @@ update_report_list(GtkListStore *store, CustomReportDialog *crd)
     SCM rpt_guids;
     int i;
     GtkTreeIter iter;
+    GtkTreeModel *model = GTK_TREE_MODEL (store);
+    gboolean valid_iter;
 
     gtk_tree_sortable_set_sort_column_id(GTK_TREE_SORTABLE(store), COL_NAME, GTK_SORT_ASCENDING);
 
     crd->reportlist = scm_call_0(get_rpt_guids);
     rpt_guids = crd->reportlist;
 
+    /* Empty current liststore */
+    valid_iter = gtk_tree_model_get_iter_first (model, &iter);
+    while (valid_iter)
+    {
+        GValue value = G_VALUE_INIT;
+        GncGUID *row_guid;
+        gtk_tree_model_get_value (model, &iter, COL_NUM, &value);
+        row_guid = (GncGUID *) g_value_get_pointer (&value);
+        guid_free (row_guid);
+        g_value_unset (&value);
+        valid_iter = gtk_tree_model_iter_next (model, &iter);
+    }
     gtk_list_store_clear(store);
 
     if (scm_is_list(rpt_guids))
@@ -136,16 +150,20 @@ update_report_list(GtkListStore *store, CustomReportDialog *crd)
         	 in the gtkliststore */
         for (i = 0; !scm_is_null(rpt_guids); i++)
         {
-            gchar *name;
+            GncGUID *guid = guid_malloc ();
+            gchar *guid_str = scm_to_locale_string (SCM_CAR(rpt_guids));
+            gchar *name = gnc_scm_to_locale_string (scm_call_2(template_menu_name, SCM_CAR(rpt_guids), SCM_BOOL_F));
 
-            name = gnc_scm_to_locale_string (scm_call_2(template_menu_name, SCM_CAR(rpt_guids), SCM_BOOL_F));
-
-            gtk_list_store_append(store, &iter);
-            gtk_list_store_set(store, &iter,
-                               COL_NAME, name,
-                               COL_NUM, i,
-                               -1);
+            if (string_to_guid (guid_str, guid))
+            {
+                gtk_list_store_append(store, &iter);
+                gtk_list_store_set(store, &iter,
+                                   COL_NAME, name,
+                                   COL_NUM, guid,
+                                   -1);
+            }
             g_free (name);
+            g_free (guid_str);
 
             rpt_guids = SCM_CDR(rpt_guids);
         }
@@ -158,7 +176,7 @@ create_and_fill_report_list(CustomReportDialog *crd)
 {
     GtkListStore *store;
 
-    store = gtk_list_store_new(NUM_COLS, G_TYPE_STRING, G_TYPE_INT);
+    store = gtk_list_store_new(NUM_COLS, G_TYPE_STRING, G_TYPE_POINTER);
 
     update_report_list(store, crd);
 
@@ -167,7 +185,7 @@ create_and_fill_report_list(CustomReportDialog *crd)
 
 
 static void
-set_reports_model(CustomReportDialog *crd)
+set_reports_view_and_model(CustomReportDialog *crd)
 {
     GtkCellRenderer *renderer;
     GtkTreeModel *model;
@@ -313,15 +331,16 @@ get_custom_report_selection(CustomReportDialog *crd,
     GtkTreeSelection *sel;
     GtkTreeModel *model;
     GtkTreeIter iter;
-    SCM guid;
+    GncGUID *guid = guid_malloc ();
+    gchar *guid_str;
 
     sel = gtk_tree_view_get_selection(GTK_TREE_VIEW(crd->reportview));
 
     if (gtk_tree_selection_get_selected(sel, &model, &iter))
     {
-        int num;
-        gtk_tree_model_get(model, &iter, COL_NUM, &num, -1);
-        guid = scm_list_ref(crd->reportlist, scm_from_int (num));
+        gtk_tree_model_get(model, &iter, COL_NUM, &guid, -1);
+        guid_str = g_new0 (gchar, GUID_ENCODING_LENGTH+1 );
+        guid_to_string_buff (guid, guid_str);
     }
     else
     {
@@ -330,7 +349,7 @@ get_custom_report_selection(CustomReportDialog *crd,
         return SCM_EOL;
 
     }
-    return guid;
+    return scm_from_locale_string (guid_str);
 }
 
 
@@ -353,14 +372,14 @@ custom_report_list_view_row_activated_cb(GtkTreeView *view, GtkTreePath *path,
 
     if (gtk_tree_model_get_iter(model, &iter, path))
     {
-        int num;
-        SCM guid;
+        GncGUID *guid = guid_malloc ();
+        gchar *guid_str;
 
-        gtk_tree_model_get(model, &iter, COL_NUM, &num, -1);
+        gtk_tree_model_get(model, &iter, COL_NUM, &guid, -1);
+        guid_str = g_new0 (gchar, GUID_ENCODING_LENGTH+1 );
+        guid_to_string_buff (guid, guid_str);
 
-        guid = scm_list_ref(crd->reportlist, scm_from_int (num));
-
-        custom_report_run_report(guid, crd);
+        custom_report_run_report(scm_from_locale_string (guid_str), crd);
     }
 }
 
@@ -475,7 +494,7 @@ void gnc_ui_custom_report(GncMainWindow * window)
 
     crd->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "custom_report_dialog"));
     crd->reportview = GTK_WIDGET(gtk_builder_get_object (builder, "custom_report_list_view"));
-    set_reports_model(crd);
+    set_reports_view_and_model(crd);
     crd->window = window;
 
     /* connect the signals */
