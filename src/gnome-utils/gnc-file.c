@@ -303,6 +303,8 @@ show_session_error (QofBackendError io_error,
                                GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
                                label, GTK_RESPONSE_YES,
                                NULL);
+        if (parent == NULL)
+            gtk_window_set_skip_taskbar_hint(GTK_WINDOW(dialog), FALSE);
         response = gtk_dialog_run(GTK_DIALOG(dialog));
         gtk_widget_destroy(dialog);
         uh_oh = (response != GTK_RESPONSE_YES);
@@ -765,6 +767,7 @@ RESTART:
                                         fmt1, displayname);
         gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
                 "%s", fmt2);
+        gtk_window_set_skip_taskbar_hint(GTK_WINDOW(dialog), FALSE);
 
         gnc_gtk_dialog_add_button(dialog, _("_Open Read-Only"),
                                   GTK_STOCK_REVERT_TO_SAVED, RESPONSE_READONLY);

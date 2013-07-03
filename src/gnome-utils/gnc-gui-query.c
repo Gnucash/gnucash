@@ -74,6 +74,9 @@ gnc_ok_cancel_dialog(GtkWidget *parent,
     g_free(buffer);
     va_end(args);
 
+    if (parent == NULL)
+        gtk_window_set_skip_taskbar_hint(GTK_WINDOW(dialog), FALSE);
+
     gtk_dialog_set_default_response (GTK_DIALOG(dialog), default_result);
     result = gtk_dialog_run(GTK_DIALOG(dialog));
     gtk_widget_destroy (dialog);
@@ -119,6 +122,9 @@ gnc_verify_dialog(GtkWidget *parent, gboolean yes_is_default,
     g_free(buffer);
     va_end(args);
 
+    if (parent == NULL)
+        gtk_window_set_skip_taskbar_hint(GTK_WINDOW(dialog), FALSE);
+
     gtk_dialog_set_default_response(GTK_DIALOG(dialog),
                                     (yes_is_default ? GTK_RESPONSE_YES : GTK_RESPONSE_NO));
     result = gtk_dialog_run(GTK_DIALOG(dialog));
@@ -158,6 +164,9 @@ gnc_info_dialog(GtkWidget *parent, const gchar *format, ...)
                                      buffer);
     va_end(args);
 
+    if (parent == NULL)
+        gtk_window_set_skip_taskbar_hint(GTK_WINDOW(dialog), FALSE);
+
     gtk_dialog_run(GTK_DIALOG(dialog));
     gtk_widget_destroy (dialog);
 }
@@ -192,6 +201,9 @@ gnc_warning_dialog_common(GtkWidget *parent, const gchar *format, va_list args)
                                      "%s",
                                      buffer);
     g_free(buffer);
+
+    if (parent == NULL)
+        gtk_window_set_skip_taskbar_hint(GTK_WINDOW(dialog), FALSE);
 
     gtk_dialog_run (GTK_DIALOG (dialog));
     gtk_widget_destroy (dialog);
@@ -236,6 +248,9 @@ gnc_error_dialog_common(GtkWidget *parent, const gchar *format, va_list args)
                                      "%s",
                                      buffer);
     g_free(buffer);
+
+    if (parent == NULL)
+        gtk_window_set_skip_taskbar_hint(GTK_WINDOW(dialog), FALSE);
 
     gtk_dialog_run(GTK_DIALOG(dialog));
     gtk_widget_destroy (dialog);
