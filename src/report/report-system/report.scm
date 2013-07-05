@@ -639,19 +639,19 @@
 (define (gnc:save-all-reports)
   (let ((save-ok? #t)
         (temp-path (gnc-build-dotgnucash-path "saved-reports-2.4-backup")))
-    (gnc:debug "saving all reports...")
-    ;; On windows, it seems to crash if we try to rename without deleting the old file first.
-    (if (access? temp-path F_OK)
-        (delete-file temp-path))
-    (rename-file gnc:current-saved-reports temp-path)
-    (hash-for-each (lambda (k v)
-		     (if (gnc:report-template-parent-type v)
-			 (begin
-			   (gnc:debug "saving report " k)
-			   (if (not (gnc:report-template-save-to-savefile v))
-                               (set! save-ok? #f)
-                          ))))
-		   *gnc:_report-templates_*)
+       (gnc:debug "saving all reports...")
+       ;; On windows, it seems to crash if we try to rename without deleting the old file first.
+       (if (access? temp-path F_OK)
+           (delete-file temp-path))
+       (rename-file gnc:current-saved-reports temp-path)
+       (hash-for-each (lambda (k v)
+                        (if (gnc:report-template-parent-type v)
+                            (begin
+                              (gnc:debug "saving report " k)
+                              (if (not (gnc:report-template-save-to-savefile v))
+                                  (set! save-ok? #f)
+                              ))))
+                      *gnc:_report-templates_*)
     save-ok?))
 
 
