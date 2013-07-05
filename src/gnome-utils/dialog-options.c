@@ -608,7 +608,9 @@ gnc_option_create_multichoice_widget(GNCOption *option)
             itemstring = gnc_option_permissible_value_name(option, i);
             description = gnc_option_permissible_value_description(option, i);
             gtk_list_store_append (store, &iter);
-            gtk_list_store_set (store, &iter, 0, itemstring, 1, description, -1);
+            gtk_list_store_set (store, &iter, 0, 
+                                (itemstring && *itemstring) ? _(itemstring) : "", 1,
+                                (description && *description) ? _(description) : "", -1);
             if (itemstring)
                 g_free(itemstring);
             if (description)
