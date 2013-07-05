@@ -643,7 +643,8 @@
        ;; On windows, it seems to crash if we try to rename without deleting the old file first.
        (if (access? temp-path F_OK)
            (delete-file temp-path))
-       (rename-file gnc:current-saved-reports temp-path)
+       (if (access? gnc:current-saved-reports F_OK)
+           (rename-file gnc:current-saved-reports temp-path))
        (hash-for-each (lambda (k v)
                         (if (gnc:report-template-parent-type v)
                             (begin
