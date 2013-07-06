@@ -4228,9 +4228,6 @@ gnc_main_window_show_all_windows(void)
     for (window_iter = active_windows; window_iter != NULL; window_iter = window_iter->next)
     {
         gtk_widget_show(GTK_WIDGET(window_iter->data));
-#ifdef MAC_INTEGRATION
-        gnc_quartz_set_menu(window_iter->data);
-#endif
     }
 #ifdef MAC_INTEGRATION
     g_signal_connect(theApp, "NSApplicationWillTerminate",
