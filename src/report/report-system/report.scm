@@ -490,6 +490,21 @@
        *gnc:_report-templates_*))
     unique?))
 
+;; Generate a unique custom template name using the given string as a base
+;; If this string already exists as a custom template name, a
+;; number will be appended to it.
+(define (gnc:report-template-make-unique-name new-name)
+  (let* ((unique-name new-name)
+         (counter 0)
+         (unique? (gnc:report-template-has-unique-name? #f unique-name)))
+
+    (while (not unique?)
+      (begin
+           (set! counter (+ counter 1))
+           (set! unique-name (string-append new-name (number->string counter)))
+           (set! unique? (gnc:report-template-has-unique-name? #f unique-name))))
+    unique-name))
+
 
 ;; Load and save functions
 
@@ -571,7 +586,7 @@
         (thunk report)))
   
   ;; save them
-  (let ((name (gnc:report-name report))
+  (let ((name (gnc:report-template-make-unique-name (gnc:report-name report)))
 	(type (gnc:report-type report))
 	(templ-name (gnc:report-template-name (hash-ref *gnc:_report-templates_* (gnc:report-type report))))
 	(options (gnc:report-options report))
@@ -604,24 +619,60 @@
                (string-append (symbol->string key) " - " (car (caddr args)))))
              #f))))
 
-(define (gnc:report-save-to-savefile report)
-  (let* ((saved-form (gnc:report-generate-saved-forms report))
-         ;; Immediate evaluate the saved form to both load it into the
-         ;; runtime, but also so we can check if it's "allowed" to actually
-         ;; be written to the saved reports file by inspecting the result.
-         ;; #Bug#342206.
+;; Convert a report into a report template and save this template in the savefile
+;; Under specific conditions the we will attempt to replace the current report's
+;; template instead of simply adding a new template to the file.
+;; These condititions are:
+;; 1. the report is an instance of an existing custom report template
+;;    (ie a template that is stored in the savefile already)
+;; 2. an overwrite is requestes by setting overwrite? to #t
+(define (gnc:report-to-template report overwrite?)
+  (let* ((custom-template-id (gnc:report-custom-template report))
+         (overwrite-ok? (and (gnc:report-template-is-custom/template-guid? custom-template-id) overwrite?))
+         ;; Generate a serialized report-template with a random guid
+         (saved-form (gnc:report-generate-saved-forms report))
+         ;; Immediatly evaluate the serialized report template to
+         ;; - check if it's error free and can be deserialized
+         ;; - load it into the runtime for immediate use by the user
+         ;; (Bug #342206)
          (save-result (eval-string saved-form)))
+
     (if (record? save-result)
-        (let ((report-port (gnc:open-saved-reports "a")))
-          (if report-port
-              (begin
-                (display saved-form report-port)
-                (close report-port)
-                ))
-          ;; Inform the calling function of the newly created template's guid
-          (gnc:report-template-report-guid save-result))
-          ;; Couldn't save report - return false
-          #f)))
+        (begin
+          ;; If it's ok to overwrite the old template, delete it now.
+          (if overwrite-ok?
+            (let ((templ-name (gnc:report-template-name (hash-ref *gnc:_report-templates_* custom-template-id))))
+              ;; We're overwriting, which needs some additional steps
+              ;; 1. Remove the newly generated template from the template list again
+              (hash-remove! *gnc:_report-templates_* (gnc:report-template-report-guid save-result))
+              ;; 2. We still have the template record available though, so adapt it to
+              ;;    the template we want to override (ie update guid and name)
+              (gnc:report-template-set-report-guid! save-result custom-template-id)
+              (gnc:report-template-set-name save-result templ-name)
+              ;; 3. Overwrite the template with the new one
+              (hash-set! *gnc:_report-templates_* custom-template-id save-result)
+              ))
+
+          ;; Regardless of how we got here, we now have a new template to write
+          ;; so let's write it
+          (if (gnc:save-all-reports)
+              (let ((templ-guid (gnc:report-template-report-guid save-result)))
+                   ;; Indicate the report was instantiated from the new template
+                   (gnc:report-set-custom-template! report templ-guid)
+                   ;; Inform the calling function of the new template's guid
+                   templ-guid)
+              #f))
+        #f)))
+
+;; Convert a report into a new report template and add this template to the save file
+(define (gnc:report-to-template-new report)
+  (gnc:report-to-template report #f))
+
+;; Get the current report's template and try to update it with the report's current
+;; settings. This will only be possible if the report was already based on a
+;; custom report template. If that's not the case, a new template will be added instead.
+(define (gnc:report-to-template-update report)
+  (gnc:report-to-template report #t))
 
 (define (gnc:report-template-save-to-savefile report-template)
   (let* ((report-port (gnc:open-saved-reports "a")))

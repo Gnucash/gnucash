@@ -47,6 +47,7 @@
 #include <errno.h>
 
 #include "gfec.h"
+#include "dialog-custom-report.h"
 #include "gnc-component-manager.h"
 #include "gnc-engine.h"
 #include "gnc-gconf-utils.h"
@@ -173,6 +174,7 @@ static void gnc_plugin_page_report_back_cb(GtkAction *action, GncPluginPageRepor
 static void gnc_plugin_page_report_reload_cb(GtkAction *action, GncPluginPageReport *rep);
 static void gnc_plugin_page_report_stop_cb(GtkAction *action, GncPluginPageReport *rep);
 static void gnc_plugin_page_report_save_cb(GtkAction *action, GncPluginPageReport *rep);
+static void gnc_plugin_page_report_save_as_cb(GtkAction *action, GncPluginPageReport *rep);
 static void gnc_plugin_page_report_export_cb(GtkAction *action, GncPluginPageReport *rep);
 static void gnc_plugin_page_report_options_cb(GtkAction *action, GncPluginPageReport *rep);
 static void gnc_plugin_page_report_print_cb(GtkAction *action, GncPluginPageReport *rep);
@@ -582,8 +584,6 @@ gnc_plugin_page_report_option_change_cb(gpointer data)
 {
     GncPluginPageReport *report;
     GncPluginPageReportPrivate *priv;
-    GtkActionGroup *action_group;
-    GtkAction *action;
     SCM dirty_report = scm_c_eval_string("gnc:report-set-dirty?!");
     const gchar *old_name;
     gchar *new_name;
@@ -602,12 +602,7 @@ gnc_plugin_page_report_option_change_cb(gpointer data)
     new_name = gnc_option_db_lookup_string_option(priv->cur_odb, "General",
                "Report name", NULL);
     if (strcmp(old_name, new_name) != 0)
-    {
         main_window_update_page_name(GNC_PLUGIN_PAGE(report), new_name);
-        action_group = gnc_plugin_page_get_action_group(GNC_PLUGIN_PAGE(report));
-        action = gtk_action_group_get_action (action_group, "ReportSaveAction");
-        gtk_action_set_sensitive(action, TRUE);
-    }
     g_free(new_name);
 
     /* it's probably already dirty, but make sure */
@@ -894,8 +889,6 @@ static void
 gnc_plugin_page_report_name_changed (GncPluginPage *page, const gchar *name)
 {
     GncPluginPageReportPrivate *priv;
-    GtkActionGroup *action_group;
-    GtkAction *action;
     static gint count = 1, max_count = 10;
     const gchar *old_name;
 
@@ -923,15 +916,6 @@ gnc_plugin_page_report_name_changed (GncPluginPage *page, const gchar *name)
 
     /* Have to manually call the option change hook. */
     gnc_plugin_page_report_option_change_cb(page);
-
-    /* Careful. This is called at report construction time. */
-    action_group = gnc_plugin_page_get_action_group(page);
-    if (action_group)
-    {
-        /* Allow the user to save the report now. */
-        action = gtk_action_group_get_action (action_group, "ReportSaveAction");
-        gtk_action_set_sensitive(action, TRUE);
-    }
     LEAVE(" ");
 }
 
@@ -1044,12 +1028,16 @@ static GtkActionEntry report_actions[] =
         G_CALLBACK (gnc_plugin_page_report_reload_cb)
     },
     {
-        "ReportSaveAction", GTK_STOCK_SAVE, N_("Add _Report"), "",
-        N_("Add the current report to the `Custom' menu for later use. "
-        "The report will be saved in the file ~/.gnucash/saved-reports-2.4. "
-        "It will be accessible as menu entry in the report menu at the "
-        "next startup of GnuCash."),
+        "ReportSaveAction", GTK_STOCK_SAVE, N_("Save _Report"), "<control><alt>s",
+        N_("Update the current report's saved configuration. "
+        "The report will be saved in the file ~/.gnucash/saved-reports-2.4. "),
         G_CALLBACK(gnc_plugin_page_report_save_cb)
+    },
+    {
+        "ReportSaveAsAction", GTK_STOCK_SAVE_AS, N_("Save Report As..."), "<control><alt><shift>s",
+        N_("Add the current report's configuration to the `Custom Reports' menu. "
+        "The report will be saved in the file ~/.gnucash/saved-reports-2.4. "),
+        G_CALLBACK(gnc_plugin_page_report_save_as_cb)
     },
     {
         "ReportExportAction", GTK_STOCK_CONVERT, N_("Export _Report"), NULL,
@@ -1096,7 +1084,6 @@ static action_toolbar_labels toolbar_labels[] =
 
 static const gchar *initially_insensitive_actions[] =
 {
-    "ReportSaveAction",
     NULL
 };
 
@@ -1473,24 +1460,63 @@ gnc_get_export_filename (SCM choice)
 }
 
 static void
-gnc_plugin_page_report_save_cb( GtkAction *action, GncPluginPageReport *report )
+gnc_plugin_page_report_save_as_cb( GtkAction *action, GncPluginPageReport *report )
 {
     GncPluginPageReportPrivate *priv;
     SCM save_func;
+    SCM rpt_id;
 
     priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(report);
     if (priv->cur_report == SCM_BOOL_F)
         return;
 
-    save_func = scm_c_eval_string("gnc:report-save-to-savefile");
-    scm_call_1(save_func, priv->cur_report);
+    /* Create a new report template based on the current report's settings
+     * and allow the user to rename the template.
+     */
+    save_func = scm_c_eval_string("gnc:report-to-template-new");
+    rpt_id = scm_call_1(save_func, priv->cur_report);
 
+    /* Open Custom Reports dialog to allow user to change the name */
+    if (!scm_is_null (rpt_id))
     {
-        GtkActionGroup *action_group =
-            gnc_plugin_page_get_action_group(GNC_PLUGIN_PAGE(report));
-        GtkAction *action =
-            gtk_action_group_get_action (action_group, "ReportSaveAction");
-        gtk_action_set_sensitive(action, FALSE);
+        GncPluginPage *reportPage = GNC_PLUGIN_PAGE (report);
+        GtkWidget *window = reportPage->window;
+
+        if (window)
+            g_return_if_fail(GNC_IS_MAIN_WINDOW(window));
+
+        gnc_ui_custom_report_edit_name (GNC_MAIN_WINDOW (window), rpt_id);
+    }
+
+}
+
+static void
+gnc_plugin_page_report_save_cb( GtkAction *action, GncPluginPageReport *report )
+{
+    GncPluginPageReportPrivate *priv;
+    SCM check_func, save_func;
+    SCM rpt_id;
+
+    priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(report);
+    if (priv->cur_report == SCM_BOOL_F)
+        return;
+
+    check_func = scm_c_eval_string("gnc:is-custom-report-type");
+    if (scm_is_true (scm_call_1 (check_func, priv->cur_report)))
+    {
+        /* The current report is already based on a custom report.
+         * Replace the existing one instead of adding a new one
+         */
+        save_func = scm_c_eval_string("gnc:report-to-template-update");
+        rpt_id = scm_call_1(save_func, priv->cur_report);
+    }
+    else
+    {
+        /* The current report is not based on a custom report.
+         * So let's create a new report template based on this report
+         * and allow the user to change the name.
+         */
+        gnc_plugin_page_report_save_as_cb (action, report);
     }
 }
 
