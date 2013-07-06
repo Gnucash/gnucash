@@ -476,13 +476,8 @@ void custom_report_query_tooltip_cb (GtkTreeView  *view,
 
 }
 
-
-/***********************************************************
- * gnc_ui_custom_report
- *
- * this is the primary driver for the custom report dialog.
- ***********************************************************/
-void gnc_ui_custom_report(GncMainWindow * window)
+/* Internal function that builds the dialog */
+static CustomReportDialog *gnc_ui_custom_report_internal(GncMainWindow * window)
 {
 
     GtkBuilder *builder;
@@ -504,4 +499,80 @@ void gnc_ui_custom_report(GncMainWindow * window)
     gtk_widget_show_all(crd->dialog);
 
     g_object_unref(G_OBJECT(builder));
+
+    return crd;
+}
+
+
+/***********************************************************
+ * gnc_ui_custom_report
+ *
+ * this is the primary driver for the custom report dialog.
+ ***********************************************************/
+void gnc_ui_custom_report(GncMainWindow * window)
+{
+    gnc_ui_custom_report_internal (window);
+}
+
+
+/***********************************************************
+ * gnc_ui_custom_report_edit_name
+ *
+ * open the custom report dialog and highlight the given
+ * report's name for editing.
+ ***********************************************************/
+void gnc_ui_custom_report_edit_name (GncMainWindow * window, SCM scm_guid)
+{
+    SCM is_custom_report;
+    CustomReportDialog *crd = gnc_ui_custom_report_internal (window);
+    GtkTreeModel *model;
+    GtkTreeIter iter;
+    GncGUID *guid;
+    gchar *guid_str;
+    gboolean valid_iter;
+
+    is_custom_report = scm_c_eval_string ("gnc:report-template-is-custom/template-guid?");
+    if (scm_is_false (scm_call_1 (is_custom_report, scm_guid)))
+        return;
+
+    guid = guid_malloc ();
+    guid_str = scm_to_locale_string (scm_guid);
+    if (!string_to_guid (guid_str, guid))
+        goto cleanup;
+
+    /* Look up the row for the requested guid */
+    model = gtk_tree_view_get_model (GTK_TREE_VIEW (crd->reportview));
+    valid_iter = gtk_tree_model_get_iter_first (model, &iter);
+
+    while (valid_iter)
+    {
+        GValue value = { 0, };
+        GncGUID *row_guid;
+        g_value_init (&value, G_TYPE_POINTER);
+        gtk_tree_model_get_value (model, &iter, COL_NUM, &value);
+        row_guid = (GncGUID *) g_value_get_pointer (&value);
+
+        if (guid_equal (guid, row_guid))
+        {
+            /* We found the row for the requested guid
+             * Now let's set the report's name cell in edit mode
+             * so the user can edit the name.
+             */
+            GtkTreePath *path;
+            GtkTreeSelection *selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (crd->reportview));
+            gtk_tree_selection_select_iter (selection, &iter);
+            path = gtk_tree_model_get_path (model, &iter);
+            g_object_set(G_OBJECT(crd->namerenderer), "editable", TRUE, NULL);
+            gtk_tree_view_set_cursor_on_cell (GTK_TREE_VIEW (crd->reportview),
+                                              path, crd->namecol,
+                                              crd->namerenderer, TRUE);
+            break;
+        }
+
+        g_value_unset (&value);
+        valid_iter = gtk_tree_model_iter_next (model, &iter);
+    }
+
+cleanup:
+    guid_free (guid);
 }

@@ -40,6 +40,8 @@
 
 void
 gnc_ui_custom_report(GncMainWindow * window);
+void
+gnc_ui_custom_report_edit_name(GncMainWindow * window, SCM scm_guid);
 
 /** @} */
 
