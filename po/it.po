@@ -54,7 +54,7 @@ msgstr ""
 "Project-Id-Version: Gnucash 2.3.12\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-07 12:19+0200\n"
-"PO-Revision-Date: 2013-05-18 18:15+0100\n"
+"PO-Revision-Date: 2013-07-06 19:49+0100\n"
 "Last-Translator: Cristian Marchi <cri.penta@gmail.com>\n"
 "Language-Team: Italian <gnucash-it@gnucash.org>\n"
 "Language: it\n"
@@ -1687,7 +1687,7 @@ msgstr "_Tabella imposte di vendita"
 # tooltip
 #: ../src/business/business-gnome/gnc-plugin-business.c:275
 msgid "View and edit the list of Sales Tax Tables (GST/VAT)"
-msgstr "Visualizza e permette di modificare la lista delle tabelle delle imposte di vendita (GST/VAT)"
+msgstr "Visualizza e permette di modificare l'elenco delle tabelle delle imposte di vendita (GST/VAT)"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:279
 msgid "_Billing Terms Editor"
@@ -1695,7 +1695,7 @@ msgstr "Editor dei termini di _pagamento"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:280
 msgid "View and edit the list of Billing Terms"
-msgstr "Visualizza e permette di modificare la lista dei termini di pagamento"
+msgstr "Visualizza e permette di modificare l'elenco dei termini di pagamento"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:284
 msgid "Bills _Due Reminder"
@@ -1803,7 +1803,7 @@ msgstr "_Inserisci"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:151
 msgid "Record the current entry"
-msgstr "Registra l'immissione corrente"
+msgstr "Registra l'elemento corrente"
 
 #. Add the Cancel button for the matcher
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:155
@@ -1815,7 +1815,7 @@ msgstr "A_nnulla"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:156
 msgid "Cancel the current entry"
-msgstr "Annulla l'immissione corrente"
+msgstr "Annulla l'elemento corrente"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:160
 #: ../src/gnome/gnc-plugin-page-sx-list.c:153
@@ -1826,7 +1826,7 @@ msgstr "C_ancella"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:161
 msgid "Delete the current entry"
-msgstr "Cancella l'immissione corrente"
+msgstr "Elimina l'elemento corrente"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:165
 msgid "_Blank"
@@ -1967,7 +1967,7 @@ msgstr "Annulla"
 #: ../src/gnome/gnc-plugin-page-register2.c:462
 #: ../src/gnome/gnc-plugin-page-register.c:462
 msgid "Delete"
-msgstr "Cancella"
+msgstr "Elimina"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:261
 msgid "Up"
@@ -2268,7 +2268,7 @@ msgstr "Se le tasse sono incluse nelle voci delle ricevute. Questa impostazione 
 # Tooltip
 #: ../src/business/business-gnome/gtkbuilder/business-prefs.glade.h:18
 msgid "Whether to display the list of Bills Due at startup."
-msgstr "Visualizza o non visualizza la lista delle scadenze per le ricevute all'avvio"
+msgstr "Visualizza o non visualizza l'elenco delle scadenze per le ricevute all'avvio"
 
 #: ../src/business/business-gnome/gtkbuilder/business-prefs.glade.h:19
 msgid "_Accumulate splits on post"
@@ -2332,7 +2332,7 @@ msgstr "D_escrizione:"
 # Tooltip
 #: ../src/business/business-gnome/gtkbuilder/dialog-billterms.glade.h:11
 msgid "Delete the current Billing Term"
-msgstr "Cancella il termine di pagamento corrente"
+msgstr "Elimina il termine di pagamento corrente"
 
 #: ../src/business/business-gnome/gtkbuilder/dialog-billterms.glade.h:13
 #, no-c-format
@@ -3525,7 +3525,7 @@ msgstr "Addebitabile?"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:557
 msgid "Enter the income/expense account for the Entry, or choose one from the list"
-msgstr "Immettere il conto entrate/uscite per l'elemento o sceglierne uno dalla lista"
+msgstr "Immettere il conto entrate/uscite per l'elemento o sceglierne uno dall'elenco"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:570
 msgid "Enter the type of Entry"
@@ -3677,7 +3677,7 @@ msgstr ""
 "Il percorso\n"
 " «%s»\n"
 "esiste ma non è una cartella.\n"
-"Cancellare il file e riavviare GnuCash.\n"
+"Eliminare il file e riavviare GnuCash.\n"
 
 #: ../src/core-utils/gnc-filepath-utils.c:355
 #, c-format
@@ -3719,7 +3719,7 @@ msgstr ""
 "\n"
 "Questo comporta l'insorgere di problemi. SI consiglia di cambiare di nomi dei conti o di utilizzare un differente carattere separatore.\n"
 "\n"
-"Di seguito è riportata una lista dei nomi di conti non validi:\n"
+"Di seguito è riportato un elenco dei nomi di conti non validi:\n"
 "%s"
 
 #. src/report/report-system/report-utilities.scm
@@ -4324,7 +4324,7 @@ msgstr "Si è sicuri di voler cancellare la commodity selezionata?"
 
 #: ../src/gnome/dialog-commodities.c:183
 msgid "Delete commodity?"
-msgstr "Cancellare la commodity?"
+msgstr "Eliminare la commodity?"
 
 #: ../src/gnome/dialog-fincalc.c:312
 msgid "This program can only calculate one value at a time. You must enter values for all but one quantity."
@@ -4496,12 +4496,12 @@ msgstr "Lotti nel conto \"%s\""
 #, c-format
 msgid "Are you sure you want to delete the selected price?"
 msgid_plural "Are you sure you want to delete the %d selected prices?"
-msgstr[0] "Cancellare il prezzo selezionato?"
-msgstr[1] "Cancellare i %d prezzi selezionati?"
+msgstr[0] "Eliminare il prezzo selezionato?"
+msgstr[1] "Eliminare i %d prezzi selezionati?"
 
 #: ../src/gnome/dialog-price-edit-db.c:191
 msgid "Delete prices?"
-msgstr "Cancellare i prezzi?"
+msgstr "Eliminare i prezzi?"
 
 #: ../src/gnome/dialog-price-editor.c:215
 msgid "You must select a Security."
@@ -4898,7 +4898,7 @@ msgstr "Editor transazioni _pianificate"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:161
 msgid "The list of Scheduled Transactions"
-msgstr "La lista delle transazioni programmate"
+msgstr "L'elenco delle transazioni programmate"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:165
 msgid "Since _Last Run..."
@@ -5080,7 +5080,7 @@ msgstr "Modifica il conto selezionato"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:201
 msgid "_Delete Account..."
-msgstr "_Cancella conto..."
+msgstr "Elimina _conto..."
 
 # Tooltip
 #: ../src/gnome/gnc-plugin-page-account-tree.c:202
@@ -5250,7 +5250,7 @@ msgstr "Conti"
 #: ../src/gnome/gnc-plugin-page-account-tree.c:1146
 #, c-format
 msgid "Deleting account %s"
-msgstr "Cancellazione del conto \"%s\""
+msgstr "Eliminazione del conto \"%s\""
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:1270
 #, c-format
@@ -5294,11 +5294,11 @@ msgstr "Apri i _sottoconti"
 
 #: ../src/gnome/gnc-plugin-page-budget.c:141
 msgid "_Delete Budget"
-msgstr "_Cancella bilancio"
+msgstr "_Elimina bilancio"
 
 #: ../src/gnome/gnc-plugin-page-budget.c:142
 msgid "Delete this budget"
-msgstr "Cancella questo bilancio"
+msgstr "Elimina questo bilancio"
 
 #: ../src/gnome/gnc-plugin-page-budget.c:146
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-budget.glade.h:3
@@ -5351,7 +5351,7 @@ msgstr "Bilancio"
 #: ../src/gnome/gnc-plugin-page-budget.c:845
 #, c-format
 msgid "Delete %s?"
-msgstr "Cancellare «%s»?"
+msgstr "Eliminare «%s»?"
 
 #: ../src/gnome/gnc-plugin-page-budget.c:916
 msgid "You must select at least one account to estimate."
@@ -5412,7 +5412,7 @@ msgstr "Dup_lica suddivisione"
 #: ../src/gnome/gnc-split-reg.c:1128
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:1063
 msgid "_Delete Split"
-msgstr "_Cancella suddivisione"
+msgstr "_Elimina suddivisione"
 
 #: ../src/gnome/gnc-plugin-page-register2.c:198
 #: ../src/gnome/gnc-plugin-page-register.c:199
@@ -5438,7 +5438,7 @@ msgstr "Crea una copia della transazione selezionata"
 #: ../src/gnome/gnc-plugin-page-register2.c:202
 #: ../src/gnome/gnc-plugin-page-register.c:203
 msgid "Delete the current transaction"
-msgstr "Cancella la transazione corrente"
+msgstr "Elimina la transazione corrente"
 
 #: ../src/gnome/gnc-plugin-page-register2.c:203
 #: ../src/gnome/gnc-plugin-page-register.c:204
@@ -5759,7 +5759,7 @@ msgstr "Questo registro ha delle transazioni modificate e non salvate. Salvare i
 #: ../src/gnome/gnc-plugin-page-register2.c:1555
 #: ../src/gnome/gnc-plugin-page-register.c:1501
 msgid "_Discard Transaction"
-msgstr "_Cancella transazione"
+msgstr "_Elimina transazione"
 
 #: ../src/gnome/gnc-plugin-page-register2.c:1559
 #: ../src/gnome/gnc-plugin-page-register.c:1505
@@ -5930,7 +5930,7 @@ msgstr "Modifica la transazione pianificata selezionata 2"
 
 #: ../src/gnome/gnc-plugin-page-sx-list.c:154
 msgid "Delete the selected scheduled transaction"
-msgstr "Cancella la transazione pianificata selezionata"
+msgstr "Elimina la transazione pianificata selezionata"
 
 #: ../src/gnome/gnc-plugin-page-sx-list.c:359
 #, c-format
@@ -5948,7 +5948,7 @@ msgstr "Transazioni imminenti"
 #. dialog-sx-since-last-run.c:807
 #: ../src/gnome/gnc-plugin-page-sx-list.c:741
 msgid "Do you really want to delete this scheduled transaction?"
-msgstr "Cancellare veramente questa transazione pianificata?"
+msgstr "Eliminare veramente questa transazione pianificata?"
 
 #: ../src/gnome/gnc-plugin-register2.c:49
 msgid "_General Ledger"
@@ -6072,7 +6072,7 @@ msgstr "_Rimuovi suddivisioni"
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:1002
 #, c-format
 msgid "Delete the split '%s' from the transaction '%s'?"
-msgstr "Cancellare la suddivisione «%s» dalla transazione «%s»?"
+msgstr "Eliminare la suddivisione «%s» dalla transazione «%s»?"
 
 #: ../src/gnome/gnc-split-reg.c:1068
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:1003
@@ -6103,7 +6103,7 @@ msgstr "(nessuna descrizione)"
 #: ../src/gnome/gnc-split-reg.c:1144
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:1079
 msgid "Delete the current transaction?"
-msgstr "Cancellare la transazione selezionata?"
+msgstr "Eliminare la transazione selezionata?"
 
 #: ../src/gnome/gnc-split-reg.c:1145
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:1080
@@ -6713,7 +6713,7 @@ msgstr "Calcola"
 
 #: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:10
 msgid "Clear the entry"
-msgstr "Cancella il valore"
+msgstr "Elimina il valore"
 
 #: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:11
 msgid "Continuous"
@@ -6831,7 +6831,7 @@ msgstr ">>"
 # Tooltip
 #: ../src/gnome/gtkbuilder/dialog-lot-viewer.glade.h:8
 msgid "Delete the highlighted lot"
-msgstr "Cancella il lotto selezionato"
+msgstr "Elimina il lotto selezionato"
 
 # Tooltip
 #: ../src/gnome/gtkbuilder/dialog-lot-viewer.glade.h:9
@@ -6916,15 +6916,15 @@ msgstr "Val_uta:"
 
 #: ../src/gnome/gtkbuilder/dialog-price.glade.h:5
 msgid "Delete _last price for a stock"
-msgstr "Cancella _l'ultimo prezzo per un'azione"
+msgstr "Elimina _l'ultimo prezzo per un'azione"
 
 #: ../src/gnome/gtkbuilder/dialog-price.glade.h:6
 msgid "Delete _manually entered prices"
-msgstr "Cancella i prezzi inseriti _manualmente"
+msgstr "Elimina i prezzi inseriti _manualmente"
 
 #: ../src/gnome/gtkbuilder/dialog-price.glade.h:7
 msgid "Delete all stock prices before the date below based upon the following criteria:"
-msgstr "Cancella tutti i prezzi delle azioni precedenti la data riportata sotto in base al seguente criterio:"
+msgstr "Elimina tutti i prezzi delle azioni precedenti la data riportata sotto in base al seguente criterio:"
 
 #: ../src/gnome/gtkbuilder/dialog-price.glade.h:8
 #: ../src/gnome-utils/gtkbuilder/dialog-commodity.glade.h:3
@@ -7196,7 +7196,7 @@ msgstr "<b>Predefinite dell'editor transazioni</b>"
 
 #: ../src/gnome/gtkbuilder/dialog-sx.glade.h:8
 msgid "Account Deletion"
-msgstr "Cancellazione conto"
+msgstr "Eliminazione conto"
 
 #: ../src/gnome/gtkbuilder/dialog-sx.glade.h:9
 msgid "Advanced..."
@@ -7460,7 +7460,7 @@ msgstr "Crea una nuova attività"
 
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-budget.glade.h:7
 msgid "Delete the Selected Budget"
-msgstr "Cancella il bilancio selezionato"
+msgstr "Elimina il bilancio selezionato"
 
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-budget.glade.h:8
 msgid "Estimate Budget Values"
@@ -7788,7 +7788,7 @@ msgstr "Mostra la colonna del simbolo"
 #: ../src/gnome/schemas/apps_gnucash_dialog_commodities.schemas.in.h:14
 #: ../src/gnome/schemas/apps_gnucash_dialog_prices.schemas.in.h:8
 msgid "This setting contains a list of names which controls the order in which the columns are listed in the dialog. Names may be reordered or removed from this list to control which columns appear in the dialog and in what order."
-msgstr "Questa impostazione contiene una lista di nomi che controllano l'ordine con cui le colonne sono visualizzate nella finestra. I nomi possono essere riordinati o rimossi da questa lista per impostare quali colonne debbano essere visualizzate e in quale posizione."
+msgstr "Questa impostazione contiene un elenco di nomi che controllano l'ordine con cui le colonne sono visualizzate nella finestra. I nomi possono essere riordinati o rimossi da questa lista per impostare quali colonne debbano essere visualizzate e in quale posizione."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_common.schemas.in.h:1
 msgid "Columns used for sorting"
@@ -8021,7 +8021,7 @@ msgstr "Questo valore identifica la coordinata Y del margine inferiore dell'asse
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_print_checks.schemas.in.h:24
 msgid "This value specifies the predefined check format to use. The number is the 0-based index into the list of known check formats."
-msgstr "Questo valore indica il formato predefinito per gli assegni da utilizzare. Il numero è basato sulla lista dei formati di assegni conosciuti."
+msgstr "Questo valore indica il formato predefinito per gli assegni da utilizzare. Il numero è basato sull'elenco dei formati di assegni conosciuti."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_print_checks.schemas.in.h:25
 msgid "Which check position to print"
@@ -8135,7 +8135,7 @@ msgstr "Inserisci automaticamente un punto decimale"
 # Tooltip
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:6
 msgid "Automatically raise the list of accounts or actions during input"
-msgstr "Espande automaticamente la lista dei conti o delle operazioni durante l'immissione dei dati"
+msgstr "Espande automaticamente l'elenco dei conti o delle operazioni durante l'immissione dei dati"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:7
 msgid "Character to use as separator between account names"
@@ -8190,7 +8190,7 @@ msgstr "Stile di visualizzazione predefinito per un nuovo registro"
 # Tooltip
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:19
 msgid "Delete old log/backup files after this many days (0 = never)"
-msgstr "Cancella i file di log/backup trascorsi questi giorni (0 = mai)"
+msgstr "Elimina i file di log/backup trascorsi questi giorni (0 = mai)"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:20
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:67
@@ -8271,7 +8271,7 @@ msgstr "Se attivata, GnuCash verrà abilitato all'interruzione della compatibili
 # Tooltip
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:36
 msgid "If active, pressing the enter key will move to the bottom of the register. Otherwise pressing the enter key will move to the next transaction line."
-msgstr "Se attivata, premendo il tasto «Invio» ci si sposterà alla fine della lista.Diversamente premendo «Invio» ci si sposterà alla linea della transazione successiva"
+msgstr "Se attivata, premendo il tasto «Invio» ci si sposterà alla fine dell'elenco.Diversamente premendo «Invio» ci si sposterà alla linea della transazione successiva"
 
 # Tooltip
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:37
@@ -8545,19 +8545,19 @@ msgstr "Applicazione dei cambiamenti a una transazione"
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:4
 msgid "Delete a commodity"
-msgstr "Cancellazione di una commodity"
+msgstr "Eliminazione di una commodity"
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:5
 msgid "Delete a commodity and prices"
-msgstr "Cancellazione di una commodity e dei prezzi"
+msgstr "Eliminazione di una commodity e dei prezzi"
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:6
 msgid "Delete a transaction"
-msgstr "Cancellazione di una transazione"
+msgstr "Eliminazione di una transazione"
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:7
 msgid "Delete multiple price quotes"
-msgstr "Cancellazione dei prezzi multipli delle quote"
+msgstr "Eliminazione dei prezzi multipli delle quote"
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:8
 msgid "Duplicating a changed invoice_entry"
@@ -8597,7 +8597,7 @@ msgstr "Questo dialogo viene visualizzato prima di autorizzare la modifica di un
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:17
 msgid "This dialog is presented before allowing you to delete a commodity that has price quotes attached. Deleting the commodity will delete the quotes as well."
-msgstr "Questo dialogo viene visualizzato prima di autorizzare la cancellazione di una commodity a cui sono associati dei prezzi delle quote. Cancellare la commodity cancellerà anche le quote."
+msgstr "Questo dialogo viene visualizzato prima di autorizzare l'eliminazione di una commodity a cui sono associati dei prezzi delle quote. Eliminando la commodity verranno rimosse anche le quote."
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:18
 msgid "This dialog is presented before allowing you to delete a commodity."
@@ -10045,7 +10045,7 @@ msgstr "GnuCash non è riuscito a trovare i file per la documentazione di Aiuto.
 
 #: ../src/gnome-utils/gnc-icons.c:19
 msgid "_Delete Account"
-msgstr "_Cancella conto"
+msgstr "_Elimina conto"
 
 #: ../src/gnome-utils/gnc-icons.c:20
 #: ../src/gnome/window-reconcile2.c:2238
@@ -10387,7 +10387,7 @@ msgstr "Inizio di quest'anno"
 #: ../src/gnome-utils/gnc-period-select.c:75
 #: ../intl-scm/guile-strings.c:132
 msgid "Start of previous year"
-msgstr "Inizio dell'anno precedente"
+msgstr "Inizio dell'anno scorso"
 
 #. FY Strings
 #: ../src/gnome-utils/gnc-period-select.c:78
@@ -11346,7 +11346,7 @@ msgstr "Inserire il riferimento alla transazione, quali il numero della fattura 
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:3296
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:3303
 msgid "Enter the type of transaction, or choose one from the list"
-msgstr "Immettere il tipo di transazione, o sceglierne una dalla lista"
+msgstr "Immettere il tipo di transazione, o sceglierne uno dall'elenco"
 
 # tooltip
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:3301
@@ -11386,7 +11386,7 @@ msgstr "Immettere una descrizione per la transazione"
 #: ../src/register/ledger-core/split-register-model.c:1410
 #: ../src/register/ledger-core/split-register-model.c:1476
 msgid "Enter the account to transfer from, or choose one from the list"
-msgstr "Inserire qui il conto da cui trasferire, o sceglierne uno dalla lista"
+msgstr "Inserire qui il conto da cui trasferire, o sceglierne uno dall'elenco"
 
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:3347
 #: ../src/register/ledger-core/split-register-model.c:1125
@@ -11709,15 +11709,15 @@ msgstr "Predefinito"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-account.glade.h:21
 msgid "Delete Account"
-msgstr "Cancellazione del conto"
+msgstr "Eliminazione del conto"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-account.glade.h:22
 msgid "Delete all _subaccounts"
-msgstr "_Cancella tutti i sottoconti"
+msgstr "_Elimina tutti i sottoconti"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-account.glade.h:23
 msgid "Delete all _transactions"
-msgstr "Cancella tutte le _transazioni"
+msgstr "Elimina tutte le _transazioni"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-account.glade.h:24
 msgid "Examples:"
@@ -12244,7 +12244,7 @@ msgstr "Inserisce automaticamente un punto decimale nei valori che vengono digit
 # Tooltip
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:48
 msgid "Automatically raise the list of accounts or actions during input."
-msgstr "Mostra automaticamente la lista dei conti o delle operazioni durante l'immissione dei dati"
+msgstr "Mostra automaticamente l'elenco dei conti o delle operazioni durante l'immissione dei dati"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:49
 msgid "B_ottom"
@@ -12892,7 +12892,7 @@ msgstr "Avvisi temporanei"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-reset-warnings.glade.h:5
 msgid "You have requested that the following warning dialogs not be presented.  To re-enable any of these dialogs, select the check box next to the dialog, then click OK."
-msgstr "Sono state disabilitate le finestre di avviso relative alle operazioni riportate nella lista seguente. Per riabilitarle,  spuntare l'opzione vicino all'operazione per cui ripristinare di nuovo la finestra di avviso, e premere «Ok»."
+msgstr "Sono state disabilitate le finestre di avviso relative alle operazioni riportate nell'elenco seguente. Per riabilitarle,  spuntare l'opzione vicino all'operazione per cui ripristinare di nuovo la finestra di avviso, e premere «Ok»."
 
 #: ../src/gnome-utils/gtkbuilder/dialog-reset-warnings.glade.h:7
 msgid "_Unselect All"
@@ -13743,7 +13743,7 @@ msgstr "Modifica la transazione selezionata"
 #: ../src/gnome/window-reconcile2.c:2268
 #: ../src/gnome/window-reconcile.c:2268
 msgid "Delete the selected transaction"
-msgstr "Cancella la transazione selezionata"
+msgstr "Elimina la transazione selezionata"
 
 #: ../src/gnome/window-reconcile2.c:2272
 #: ../src/gnome/window-reconcile.c:2272
@@ -13998,7 +13998,7 @@ msgstr "Intervallo di dati in cui ricercare le transazioni: "
 
 #: ../src/import-export/aqbanking/dialog-ab.glade.h:16
 msgid "Delete the currently selected transaction template"
-msgstr "Cancella il modello di transazione selezionato"
+msgstr "Elimina il modello di transazione selezionato"
 
 #: ../src/import-export/aqbanking/dialog-ab.glade.h:17
 msgid "E_nter date:"
@@ -14106,7 +14106,7 @@ msgstr "Ordina"
 
 #: ../src/import-export/aqbanking/dialog-ab.glade.h:43
 msgid "Sort the list of transaction templates alphabetically"
-msgstr "Ordina alfabeticamente la lista dei modelli di transazioni"
+msgstr "Ordina alfabeticamente l'elenco dei modelli di transazioni"
 
 #: ../src/import-export/aqbanking/dialog-ab.glade.h:44
 msgid "Templates"
@@ -14285,7 +14285,7 @@ msgstr "L'Online Banking non ha fornito transazioni per il periodo di tempo indi
 
 #: ../src/import-export/aqbanking/gnc-ab-transfer.c:61
 msgid "You have changed the list of online transfer templates, but you cancelled the transfer dialog. Do you nevertheless want to store the changes?"
-msgstr "La lista dei modelli per i trasferimenti online è stata modificata, ma poi è statz annullata la finestra del trasferimento. Salvare comunque i cambiamenti?"
+msgstr "L'elenco dei modelli per i trasferimenti online è stato modificato, ma poi è stato annullata la finestra del trasferimento. Salvare comunque i cambiamenti?"
 
 #: ../src/import-export/aqbanking/gnc-ab-transfer.c:186
 msgid ""
@@ -15789,7 +15789,7 @@ msgstr "_Riprendi"
 #: ../src/import-export/qif-import/assistant-qif-import.c:1828
 #: ../src/import-export/qif-import/assistant-qif-import.c:2864
 msgid "Canceled"
-msgstr "Cancellato"
+msgstr "Eliminato"
 
 #: ../src/import-export/qif-import/assistant-qif-import.c:1772
 #: ../src/import-export/qif-import/assistant-qif-import.c:1776
@@ -15854,7 +15854,7 @@ msgstr "È avvenuto un errore mentre si tentava di convertire il file QIF."
 
 #: ../src/import-export/qif-import/assistant-qif-import.c:2937
 msgid "Canceling"
-msgstr "Cancellazione in corso"
+msgstr "Eliminazione in corso"
 
 #: ../src/import-export/qif-import/assistant-qif-import.c:2951
 #: ../src/import-export/qif-import/assistant-qif-import.c:2955
@@ -16285,7 +16285,7 @@ msgstr "Questo campo specifica la tassa aggiuntiva che entra in conto quando si 
 # Tooltip
 #: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:15
 msgid "This field specifies the minimum matching score a potential matching transaction must have to be displayed in the match list."
-msgstr "Questo campo specifica il minimo punteggio di corrispondenza che una probabile transazione corrispondente deve avere per essere visualizzata nella lista delle corrispondenze"
+msgstr "Questo campo indica il minimo punteggio di corrispondenza che una potenziale transazione corrispondente deve avere per essere visualizzata nella lista delle corrispondenze"
 
 # Tooltip
 #: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:16
@@ -16693,14 +16693,12 @@ msgid "Enter a transaction reference, that will be common to all entry lines (sp
 msgstr ""
 
 #: ../src/register/ledger-core/split-register-model.c:1222
-#, fuzzy
 msgid "Enter an action type, or choose one from the list"
-msgstr "Immettere il tipo di transazione, o sceglierne una dalla lista"
+msgstr "Immettere il tipo di azione, o sceglierne una dall'elenco"
 
 #: ../src/register/ledger-core/split-register-model.c:1223
-#, fuzzy
 msgid "Enter a reference number, such as the next check number, or choose an action type from the list"
-msgstr "Immettere il conto entrate/uscite per l'elemento o sceglierne uno dalla lista"
+msgstr "Immettere il conto entrate/uscite per l'elemento o sceglierne uno dall'elenco"
 
 #: ../src/register/ledger-core/split-register-model.c:1486
 msgid "This transaction has multiple splits; press the Split button to see them all"
@@ -16735,7 +16733,7 @@ msgstr "È necessario selezionare un resoconto da avviare"
 
 #: ../src/report/report-gnome/dialog-custom-report.glade.h:1
 msgid "Delete the currently selected report"
-msgstr "Cancella il resoconto selezionato"
+msgstr "Elimina il resoconto selezionato"
 
 #: ../src/report/report-gnome/dialog-custom-report.glade.h:2
 msgid "Exit the custom report dialog"
@@ -17440,7 +17438,7 @@ msgstr "Inizio dell'anno prossimo"
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:142
 msgid "First day of the next calendar year"
-msgstr "Il primo giorno del prossimo anno"
+msgstr "Il primo giorno dell'anno prossimo"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:144
@@ -17515,7 +17513,7 @@ msgstr "L'ultimo giorno del mese prossimo"
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:180
 msgid "Start of current quarter"
-msgstr "Inizio di questo quadrimestre"
+msgstr "Inizio di questo trimestre"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:182
@@ -17525,7 +17523,7 @@ msgstr "Il primo giorno del trimestre contabile corrente"
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:184
 msgid "End of current quarter"
-msgstr "Fine di questo quadrimestre"
+msgstr "Fine di questo trimestre"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:186
@@ -18346,7 +18344,7 @@ msgstr "Numero massimo di livelli da visualizzare nell'albero dei conti"
 #: ../intl-scm/guile-strings.c:3228
 #: ../intl-scm/guile-strings.c:3650
 msgid "Flatten list to depth limit"
-msgstr "Comprimi la lista al limite di profondità"
+msgstr "Comprimi l'elenco al limite di profondità"
 
 #. src/report/business-reports/balsheet-eg.scm
 #. src/report/standard-reports/balance-sheet.scm
@@ -21960,7 +21958,7 @@ msgstr "Metodo di calcolo base"
 #. src/report/standard-reports/advanced-portfolio.scm
 #: ../intl-scm/guile-strings.c:2592
 msgid "Set preference for price list data"
-msgstr "Imposta la preferenza per i dati della lista prezzi"
+msgstr "Imposta la preferenza per i dati dell'elenco dei prezzi"
 
 #. src/report/standard-reports/advanced-portfolio.scm
 #: ../intl-scm/guile-strings.c:2594
@@ -25626,7 +25624,7 @@ msgstr "Quickfill semplifica l'immissione di transazioni comuni. Digitando le pr
 
 #: ../doc/tip_of_the_day.list.in:39
 msgid "Type the first letter(s) of an existing account name in the Transfer register column, and GnuCash will complete the name from your list of accounts. For subaccounts, type the first letter(s) of the parent account, followed by ':' and the first letter(s) of the subaccount (e.g. A:C for Assets:Cash.)"
-msgstr "Digitando le prime lettere del nome di un conto esistente nella colonna Transazione del registro, GnuCash completerà il nome prendendolo dalla lista di conti. Per i sottoconti, digitare le prime lettere del conto padre seguito da «:» e dalle prime lettere del sottoconto (cioè A:L per Attività:Liquidi)."
+msgstr "Digitando le prime lettere del nome di un conto esistente nella colonna Transazione del registro, GnuCash completerà il nome prendendolo dall'elenco dei conti. Per i sottoconti, digitare le prime lettere del conto padre seguito da «:» e dalle prime lettere del sottoconto (cioè A:L per Attività:Liquidi)."
 
 #: ../doc/tip_of_the_day.list.in:45
 msgid "Want to see all your subaccount transactions in one register? From the main menu, highlight the parent account and select Accounts -> Open Subaccounts from the menu."
@@ -25658,7 +25656,7 @@ msgstr "I fogli di stile influenzano il modo in cui i resoconti sono visualizzat
 
 #: ../doc/tip_of_the_day.list.in:74
 msgid "To raise the accounts menu in the transfer field of a register page, press the Menu key or the Ctrl-Down key combination."
-msgstr "Per far comparire la lista dei conti nel campo «trasferimenti» di una pagina del registro, basta premere la freccia o la combinazione di tasti «Ctrl-FrecciaGiù»."
+msgstr "Per far comparire l'elenco dei conti nel campo «trasferimenti» di una pagina del registro, basta premere la freccia o la combinazione di tasti «Ctrl-FrecciaGiù»."
 
 #: ../doc/tip_of_the_day.list.in:77
 msgid ""
