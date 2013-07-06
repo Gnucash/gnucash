@@ -134,8 +134,9 @@ update_report_list(GtkListStore *store, CustomReportDialog *crd)
     valid_iter = gtk_tree_model_get_iter_first (model, &iter);
     while (valid_iter)
     {
-        GValue value = G_VALUE_INIT;
+        GValue value = { 0, };
         GncGUID *row_guid;
+        g_value_init ( &value, G_TYPE_POINTER);
         gtk_tree_model_get_value (model, &iter, COL_NUM, &value);
         row_guid = (GncGUID *) g_value_get_pointer (&value);
         guid_free (row_guid);
