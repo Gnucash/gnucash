@@ -210,7 +210,7 @@
                                     ((square) "square")
                                     ((cross) "x")
                                     ((plus) "plus")
-                                    ((dash) "dasg")
+                                    ((dash) "dash")
                                     ((filleddiamond) "filledDiamond")
                                     ((filledcircle) "filledCircle")
                                     ((filledsquare) "filledSquare")))
