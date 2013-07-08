@@ -460,13 +460,13 @@ totals to report currency")
   ;; more general interval scheme in this report
   (define (make-heading-list)
     (list 
-     (N_ "Company")
-     (N_ "Current")
-     (N_ "0-30 days")
-     (N_ "31-60 days")
-     (N_ "61-90 days")
-     (N_ "91+ days")
-     (N_ "Total")))
+     (_ "Company")
+     (_ "Current")
+     (_ "0-30 days")
+     (_ "31-60 days")
+     (_ "61-90 days")
+     (_ "91+ days")
+     (_ "Total")))
 
 
   ;;  Make a list of commodity collectors for column totals
