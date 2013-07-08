@@ -127,7 +127,7 @@ csv_import_read_file (const gchar *filename, const gchar *parser_regexp,
         line_utf8 = g_locale_to_utf8 (line, -1, NULL, NULL, NULL);
 
         // parse the line
-        match_info = NULL;	// it seems, that in contrast to documentation, match_info is not alsways set -> g_match_info_free will segfault
+        match_info = NULL;	// it seems, that in contrast to documentation, match_info is not always set -> g_match_info_free will segfault
         if (g_regex_match (regexpat, line_utf8, 0, &match_info))
         {
             match_found = TRUE;

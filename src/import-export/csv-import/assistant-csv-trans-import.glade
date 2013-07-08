@@ -20,7 +20,7 @@
 
 All transactions imported will be associated to one account for each import and if you select the account column, the account in the first row will be used for all rows.
 
-Various options exist for specifing the deliminator as well as a fixed width option. With the fixed width option, double click on the bar above the displayed rows to set the column width.
+Various options exist for specifying the delimiter as well as a fixed width option. With the fixed width option, double click on the bar above the displayed rows to set the column width.
 
 There is an option for specifying the start and end row which can be used if you have some header text or multiple accounts in the same file.</property>
         <property name="wrap">True</property>
@@ -782,7 +782,7 @@ If this is your initial import into a new file, you will first see a dialog for 
 
 The confidence of a correct association is displayed as a colored bar.
 
-More infomation can be displayed by using the help button.</property>
+More information can be displayed by using the help button.</property>
             <property name="wrap">True</property>
           </object>
           <packing>

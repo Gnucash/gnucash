@@ -668,9 +668,9 @@ csv_export_assistant_start_page_prepare (GtkAssistant *assistant,
 
     /* Set Start page text */
     if (info->export_type == XML_EXPORT_TREE)
-        gtk_label_set_text (GTK_LABEL(info->start_label), start_tree_string);
+        gtk_label_set_text (GTK_LABEL(info->start_label), gettext (start_tree_string));
     else
-        gtk_label_set_text (GTK_LABEL(info->start_label), start_trans_string);
+        gtk_label_set_text (GTK_LABEL(info->start_label), gettext (start_trans_string));
 
     /* Enable the Assistant Buttons */
     gtk_assistant_set_page_complete (assistant, page, TRUE);
