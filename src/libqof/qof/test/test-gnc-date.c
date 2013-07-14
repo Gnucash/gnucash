@@ -93,7 +93,6 @@ test_gnc_localtime (void)
 	else
 	    g_assert_cmpint (time->tm_isdst, ==, 0);
 #ifdef HAVE_STRUCT_TM_GMTOFF
-	g_assert_cmpint (time->tm_gmtoff, ==, - timezone);
 	g_assert_cmpint (time->tm_gmtoff, ==,
 	    g_date_time_get_utc_offset (gdt) / G_TIME_SPAN_SECOND);
 #endif

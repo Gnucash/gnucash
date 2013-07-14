@@ -299,6 +299,11 @@ gnc_localtime (const time64 *secs)
      return time;
 }
 
+/* Linux, Darwin, and MSWindows implementations of this function set the
+ * globals timezone and daylight; BSD doesn't have those globals, and
+ * Gnucash never uses them, so they're ommitted from this
+ * implementation. Bug 704185.
+ */
 struct tm*
 gnc_localtime_r (const time64 *secs, struct tm* time)
 {
@@ -307,16 +312,14 @@ gnc_localtime_r (const time64 *secs, struct tm* time)
      g_return_val_if_fail (gdt != NULL, NULL);
 
      gnc_g_date_time_fill_struct_tm (gdt, time);
-     timezone = - g_date_time_get_utc_offset (gdt) / G_TIME_SPAN_SECOND;
      if (g_date_time_is_daylight_savings (gdt))
      {
 	  index = 1;
-	  daylight = 1;
           time->tm_isdst = 1;
      }
 
 #ifdef HAVE_STRUCT_TM_GMTOFF
-     time->tm_gmtoff = - timezone;
+     time->tm_gmtoff = g_date_time_get_utc_offset (gdt) / G_TIME_SPAN_SECOND;
 #endif
 
      g_date_time_unref (gdt);
