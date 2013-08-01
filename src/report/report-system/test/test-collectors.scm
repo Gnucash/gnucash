@@ -1,3 +1,4 @@
+(debug-set! stack 50000)
 (use-modules (srfi srfi-1))
 
 (use-modules (gnucash report report-system collectors))

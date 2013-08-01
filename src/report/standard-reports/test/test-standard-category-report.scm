@@ -1,3 +1,4 @@
+(debug-set! stack 50000)
 (use-modules (ice-9 format))
 (use-modules (ice-9 streams))
 (use-modules (srfi srfi-1))

@@ -1,3 +1,4 @@
+(debug-set! stack 50000)
 ;(use-modules (gnucash report new-reports reports-2))
 
 (use-modules (gnucash gnc-module))

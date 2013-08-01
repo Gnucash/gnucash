@@ -1,3 +1,4 @@
+(debug-set! stack 50000)
 (use-modules (gnucash report report-system list-extras))
 (use-modules (gnucash report report-system test test-extras))
 
