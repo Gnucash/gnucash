@@ -45,7 +45,7 @@ msgstr ""
 "Project-Id-Version: gnucash 2.5.2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-27 14:33-0700\n"
-"PO-Revision-Date: 2013-06-07 15:33+0200\n"
+"PO-Revision-Date: 2013-08-01 17:49+0200\n"
 "Last-Translator: Walter Garcia-Fontes <walter.garcia@upf.edu>\n"
 "Language-Team: Catalan <ca@dodds.net>\n"
 "Language: ca\n"
@@ -324,30 +324,27 @@ msgstr "EXPREG"
 
 #: ../src/bin/gnucash-bin.c:144
 msgid "[datafile]"
-msgstr ""
+msgstr "[fitxer de dades]"
 
 #: ../src/bin/gnucash-bin.c:154
-#, fuzzy
 msgid "This is a development version. It may or may not work."
-msgstr "Aquesta és una versió de desenvolupament. Pot ser que funcioni o que no.\n"
+msgstr "Aquesta és una versió de desenvolupament. Pot ser que funcioni o que no."
 
 #: ../src/bin/gnucash-bin.c:155
-#, fuzzy
 msgid "Report bugs and other problems to gnucash-devel@gnucash.org"
-msgstr "Informeu sobre els errors i altres problemes a gnucash-devel@gnucash.org.\n"
+msgstr "Informeu sobre els errors i altres problemes a gnucash-devel@gnucash.org."
 
 #: ../src/bin/gnucash-bin.c:156
-#, fuzzy
 msgid "You can also lookup and file bug reports at http://bugzilla.gnome.org"
-msgstr "També podeu consultar i crear informes d'error a http://bugzilla.gnome.org\n"
+msgstr "També podeu consultar i crear informes d'error a http://bugzilla.gnome.org"
 
 #: ../src/bin/gnucash-bin.c:157
 msgid "To find the last stable version, please refer to http://www.gnucash.org"
-msgstr ""
+msgstr "Per trobar l'última versió estable, si us plau referiu-vos a http://www.gnucash.org"
 
 #: ../src/bin/gnucash-bin.c:509
 msgid "- GnuCash personal and small business finance management"
-msgstr ""
+msgstr "- Gestió financera personal i per a petites empreses GnuCash"
 
 #: ../src/bin/gnucash-bin.c:515 ../src/bin/gnucash-bin.c:877
 #, c-format
@@ -355,6 +352,8 @@ msgid ""
 "%s\n"
 "Run '%s --help' to see a full list of available command line options.\n"
 msgstr ""
+"%s\n"
+"Executeu '%s --help' per veure una llista completa d'opcions de la línia d'ordres.\n"
 
 #: ../src/bin/gnucash-bin.c:528
 #, c-format
@@ -371,11 +370,13 @@ msgstr "Versió de desenvolupament del GnuCash %s"
 #. 3rd %s is the scm revision number;
 #. 4th %s is the build date
 #: ../src/bin/gnucash-bin.c:534 ../src/gnome-utils/gnc-main-window.c:4184
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s\n"
 "This copy was built from %s rev %s on %s."
-msgstr "%s Aquesta còpia s'ha muntat a partir de la versió r%s de l'svn el %s."
+msgstr ""
+"%s\n"
+"Aquesta còpia s'ha muntat a partir de %s rev %s sobre %s."
 
 #: ../src/bin/gnucash-bin.c:540
 #, c-format
@@ -386,11 +387,11 @@ msgstr "GnuCash %s"
 #. 2nd %s is the scm (svn/svk/git/bzr) revision number;
 #. 3rd %s is the build date
 #: ../src/bin/gnucash-bin.c:545 ../src/gnome-utils/gnc-main-window.c:4191
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s\n"
 "This copy was built from rev %s on %s."
-msgstr "%s Aquesta còpia s'ha muntat a partir de la versió r%s el %s."
+msgstr "%s Aquesta còpia s'ha muntat a partir de la versió %s el %s."
 
 # Finance::Quote no s'hauria de traduir. És un mòdul del Perl:
 # http://finance-quote.sourceforge.net/
@@ -410,6 +411,8 @@ msgstr "S'estan carregant les dades..."
 #: ../src/bin/gnucash-bin.c:878
 msgid "Error: could not initialize graphical user interface and option add-price-quotes was not set."
 msgstr ""
+"Error: no s'ha pogut inicialitzar l'interfície gràfica d'usuari i\n"
+"l'opció add-price-quotes no s'ha establert."
 
 #: ../src/business/business-gnome/business-gnome-utils.c:73
 #: ../src/business/business-gnome/business-gnome-utils.c:260
@@ -724,9 +727,8 @@ msgid "No Account selected.  Please try again."
 msgstr "No hi ha cap compte seleccionat.  Torneu-ho a intentar."
 
 #: ../src/business/business-gnome/dialog-date-close.c:82
-#, fuzzy
 msgid "Placeholder account selected.  Please try again."
-msgstr "No hi ha cap compte seleccionat.  Torneu-ho a intentar."
+msgstr "S'ha seleccionat el compte contenidor. Torneu-ho a intentar."
 
 #: ../src/business/business-gnome/dialog-employee.c:225
 msgid "You must enter a username."
@@ -897,16 +899,14 @@ msgstr "Càrrec total:"
 #: ../intl-scm/guile-strings.c:1150 ../intl-scm/guile-strings.c:1152
 #: ../intl-scm/guile-strings.c:1330 ../intl-scm/guile-strings.c:1332
 #: ../intl-scm/guile-strings.c:1334
-#, fuzzy
 msgid "Credit Note"
-msgstr "Compte de crèdit:"
+msgstr "Nota de crèdit"
 
 #: ../src/business/business-gnome/dialog-invoice.c:1831
 #: ../src/business/business-gnome/dialog-invoice.c:1850
 #: ../src/business/business-gnome/dialog-invoice.c:1869
-#, fuzzy
 msgid "New Credit Note"
-msgstr "Compte de crèdit:"
+msgstr "Nova nota de crèdit"
 
 #: ../src/business/business-gnome/dialog-invoice.c:1832
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:278
@@ -918,9 +918,8 @@ msgstr "Factura nova"
 #: ../src/business/business-gnome/dialog-invoice.c:1837
 #: ../src/business/business-gnome/dialog-invoice.c:1856
 #: ../src/business/business-gnome/dialog-invoice.c:1875
-#, fuzzy
 msgid "Edit Credit Note"
-msgstr "Edita les opcions de l'informe"
+msgstr "Edita la nota de crèdit"
 
 #: ../src/business/business-gnome/dialog-invoice.c:1838
 msgid "Edit Invoice"
@@ -929,9 +928,8 @@ msgstr "Edita la factura"
 #: ../src/business/business-gnome/dialog-invoice.c:1841
 #: ../src/business/business-gnome/dialog-invoice.c:1860
 #: ../src/business/business-gnome/dialog-invoice.c:1879
-#, fuzzy
 msgid "View Credit Note"
-msgstr "Visualitza/edita la tasca"
+msgstr "Visualitza la nota de crèdit"
 
 #: ../src/business/business-gnome/dialog-invoice.c:1842
 msgid "View Invoice"
@@ -965,9 +963,8 @@ msgid "View Expense Voucher"
 msgstr "Mostra el justificant de despesa"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2703
-#, fuzzy
 msgid "Date of duplicated entries"
-msgstr "Dup_lica l'assentament"
+msgstr "Data de les entrades duplicades"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2787
 msgid "View/Edit Invoice"
@@ -992,9 +989,8 @@ msgstr "Comptabilitza"
 #: ../src/business/business-gnome/dialog-invoice.c:2791
 #: ../src/business/business-gnome/dialog-invoice.c:2800
 #: ../src/business/business-gnome/dialog-invoice.c:2811
-#, fuzzy
 msgid "Printable Report"
-msgstr "Informe únic"
+msgstr "Informe imprimible"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2796
 #: ../src/business/business-gnome/dialog-invoice.c:3060
@@ -1215,11 +1211,11 @@ msgstr "Quantitat"
 #. Translators: %d is the number of bills due. This is a
 #. ngettext(3) message.
 #: ../src/business/business-gnome/dialog-invoice.c:3122
-#, fuzzy, c-format
+#, c-format
 msgid "The following bill is due:"
 msgid_plural "The following %d bills are due:"
-msgstr[0] "La factura següent és pagable"
-msgstr[1] "La factura següent és pagable"
+msgstr[0] "La factura següent és pagable:"
+msgstr[1] "Les %d factures següents són pagables:"
 
 #: ../src/business/business-gnome/dialog-invoice.c:3127
 msgid "Due Bills Reminder"
@@ -1337,7 +1333,6 @@ msgid "Pre-Payment"
 msgstr "Pre-pagament"
 
 #: ../src/business/business-gnome/dialog-payment.c:556
-#, fuzzy
 msgid "You must enter the amount of the payment.  The payment amount must not be zero."
 msgstr "Heu d'introduir la quantitat a pagar.  La quantitat a pagar ha de ser més gran que zero."
 
@@ -1350,9 +1345,8 @@ msgid "You must select a transfer account from the account tree."
 msgstr "Heu de seleccionar un compte d'origen de l'arbre de comptes."
 
 #: ../src/business/business-gnome/dialog-payment.c:585
-#, fuzzy
 msgid "You must enter a valid account name for posting."
-msgstr "Heu d'introduir un nom de compte per a la comptabilització."
+msgstr "Heu d'introduir un nom de compte vàlid per a la comptabilització."
 
 #: ../src/business/business-gnome/dialog-payment.c:614
 msgid "The transfer and post accounts are associated with different currencies.  Please specify the conversion rate."
@@ -1364,13 +1358,13 @@ msgid "You have no valid \"Post To\" accounts.  Please create an account of type
 msgstr "No teniu cap compte del tipus «Comptabilitza a» vàlid.  Hauríeu de crear un compte del tipus «%s» abans de continuar amb el processament d'aquest pagament.  Potser hauríeu de crear una factura abans de res."
 
 #: ../src/business/business-gnome/dialog-vendor.c:214
-#, fuzzy
 msgid ""
 "You must enter a company name. If this vendor is an individual (and not a company) you should enter the same value for:\n"
 "Identification - Company Name, and\n"
 "Payment Address - Name."
 msgstr ""
-"Heu d'introduir un nom d'empresa. Si aquest client és una persona (una empresa) hauríeu d'entrar el mateix valor per a:\n"
+"Heu d'introduir un nom d'empresa. Si aquest proveïdor és una persona ( i\n"
+"no una empresa) hauríeu d'entrar el mateix valor per a:\n"
 "Identificació - Nom d'empresa, i\n"
 "Adreça de pagament - Nom."
 
@@ -1428,14 +1422,12 @@ msgid "_Customer"
 msgstr "_Client"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:156
-#, fuzzy
 msgid "Customers Overview"
-msgstr "Factures del client"
+msgstr "Panoràmica de clients"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:157
-#, fuzzy
 msgid "Open a Customer overview page"
-msgstr "Obre el diàleg de creació d'un usuari nou"
+msgstr "Obre una pàgina de panoràmica de clients"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:161
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:164
@@ -1506,14 +1498,12 @@ msgid "Open the Process Payment dialog"
 msgstr "Obre el diàleg de processament del pagament"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:198
-#, fuzzy
 msgid "Vendors Overview"
-msgstr "Número de proveïdor: "
+msgstr "Panoràmica de proveïdors"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:199
-#, fuzzy
 msgid "Open a Vendor overview page"
-msgstr "Obre una pàgina d'arbre de comptes nova"
+msgstr "Obre una pàgina de panoràmica de proveïdors"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:202
 msgid "_Vendor"
@@ -1554,14 +1544,12 @@ msgid "Open the Find Bill dialog"
 msgstr "Obre el diàleg per a trobar una factura"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:241
-#, fuzzy
 msgid "Employees Overview"
-msgstr "Nom d'usuari del treballador"
+msgstr "Panoràmica de treballadors"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:242
-#, fuzzy
 msgid "Open a Employee overview page"
-msgstr "Obre el diàleg per a crear un treballador nou"
+msgstr "Obre una pàgina de panoràmica de treballadors"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:245
 msgid "_Employee"
@@ -1601,14 +1589,12 @@ msgid "Open the Find Expense Voucher dialog"
 msgstr "Obre el diàleg per a trobar un justificant de despeses"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:274
-#, fuzzy
 msgid "Sales _Tax Table"
-msgstr "Taula d'impostos"
+msgstr "Taula d'impostos sobre les vendes"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:275
-#, fuzzy
 msgid "View and edit the list of Sales Tax Tables (GST/VAT)"
-msgstr "Visualitza i edita la llista de taules d'impostos"
+msgstr "Visualitza i edita la llista de taules d'impostes sobre les vendes (IVA)"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:279
 msgid "_Billing Terms Editor"
@@ -1641,14 +1627,12 @@ msgid "Initialize Test Data"
 msgstr "Inicialitza les dades de prova"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:312
-#, fuzzy
 msgid "Assign as payment..."
-msgstr "_Processa el pagament..."
+msgstr "Assigna com un pagament..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:313
-#, fuzzy
 msgid "Assign the selected transaction as payment"
-msgstr "Retalla l'assentament selecciónat"
+msgstr "Assigna la transacció seleccionada com un pagament"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:97
 msgid "Sort _Order"
@@ -1765,33 +1749,28 @@ msgid "Make a copy of the current entry"
 msgstr "Fes una còpia de l'assentament actual"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:175
-#, fuzzy
 msgid "Move Entry _Up"
-msgstr "Mou cap a_munt"
+msgstr "Mou la entrada cap am_unt"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:176
-#, fuzzy
 msgid "Move the current entry one row upwards"
-msgstr "Voleu desar l'assentament actual?"
+msgstr "Mou la entrada actual una fila cap a dalt"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:180
-#, fuzzy
 msgid "Move Entry Do_wn"
-msgstr "Mou a_vall"
+msgstr "Mou l'entrada cap a baix"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:181
-#, fuzzy
 msgid "Move the current entry one row downwards"
-msgstr "Mou l'assentament plantilla seleccionat una fila cap avall"
+msgstr "Mou l'entrada actual seleccionat una fila cap avall"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:187
 msgid "New _Invoice"
 msgstr "_Factura nova"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:188
-#, fuzzy
 msgid "Create a new invoice for the same owner as the current one"
-msgstr "Crea una finestra nova per a cada registre"
+msgstr "Crea una factura nova per al mateix propietari que l'actual"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:192
 msgid "_Pay Invoice"
@@ -1814,9 +1793,8 @@ msgid "_Standard"
 msgstr "E_stàndard"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:208
-#, fuzzy
 msgid "Keep normal invoice order"
-msgstr "Mantingues l'ordenació de comptes normal"
+msgstr "Manté l'ordre normal de les factures"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:209
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:29
@@ -1845,7 +1823,6 @@ msgid "_Quantity"
 msgstr "_Quantitat"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:211
-#, fuzzy
 msgid "Sort by quantity"
 msgstr "Ordena per quantitat"
 
@@ -1858,9 +1835,8 @@ msgid "_Price"
 msgstr "_Preu"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:212
-#, fuzzy
 msgid "Sort by price"
-msgstr "Ordena per data"
+msgstr "Ordena per preu"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:213
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:41
@@ -1914,59 +1890,48 @@ msgid "Unpost"
 msgstr "Descomptabilitza"
 
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:144
-#, fuzzy
 msgid "E_dit Vendor"
-msgstr "Edita el proveïdor"
+msgstr "E_dita el proveïdor"
 
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:145
-#, fuzzy
 msgid "Edit the selected vendor"
-msgstr "Edita el compte seleccionat"
+msgstr "Edita el proveïdor seleccionat"
 
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:149
-#, fuzzy
 msgid "E_dit Customer"
-msgstr "Edita el client"
+msgstr "Edita el _client"
 
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:150
-#, fuzzy
 msgid "Edit the selected customer"
-msgstr "Edita el compte seleccionat"
+msgstr "Edita el client seleccionat"
 
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:154
-#, fuzzy
 msgid "E_dit Employee"
-msgstr "Edita el treballador"
+msgstr "E_dita el treballador"
 
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:155
-#, fuzzy
 msgid "Edit the selected employee"
-msgstr "Edita el compte seleccionat"
+msgstr "Edita el treballador seleccionat"
 
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:160
-#, fuzzy
 msgid "Create a new vendor"
-msgstr "Crea un fitxer now"
+msgstr "Crea un nou proveïdor"
 
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:165
-#, fuzzy
 msgid "Create a new customer"
-msgstr "Crea un compte nou"
+msgstr "Crea un client nou"
 
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:170
-#, fuzzy
 msgid "Create a new employee"
-msgstr "Crea un fitxer now"
+msgstr "Crea un treballador nou"
 
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:176
-#, fuzzy
 msgid "_Delete Owner..."
-msgstr "_Suprimeix el compte..."
+msgstr "_Suprimeix el propietari..."
 
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:177
-#, fuzzy
 msgid "Delete selected owner"
-msgstr "Suprimeix el compte seleccionat"
+msgstr "Suprimeix el propietari seleccionat"
 
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:184
 #: ../src/gnome-utils/gnc-main-window.c:313
@@ -1978,45 +1943,40 @@ msgid "_Filter By..."
 msgstr "_Filtra per..."
 
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:191
-#, fuzzy
 msgid "Create a new bill"
-msgstr "Crea un fitxer now"
+msgstr "Crea una factura nova"
 
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:196
 msgid "Create a new invoice"
 msgstr "Crea una factura nova"
 
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:200
-#, fuzzy
 msgid "New _Voucher..."
 msgstr "Justificant de d_espesa nou..."
 
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:201
-#, fuzzy
 msgid "Create a new voucher"
-msgstr "Crea una factura nova"
+msgstr "Crea una nou justificant de despesa"
 
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:205
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:280
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:907
-#, fuzzy
 msgid "Vendor Listing"
-msgstr "Índex"
+msgstr "Llistat de proveïdors"
 
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:206
 msgid "Show vendor aging overview for all vendors"
-msgstr ""
+msgstr "Mostra la panoràmica de venciment de proveïdors per a tots els distribuïdors"
 
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:210
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:281
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:913
-#, fuzzy
 msgid "Customer Listing"
-msgstr "Clients"
+msgstr "Llistast de clients"
 
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:211
 msgid "Show customer aging overview for all customers"
-msgstr ""
+msgstr "Mostra la panoràmica de venciment de clients per a tots els clients"
 
 #. src/report/business-reports/job-report.scm
 #. src/report/business-reports/owner-report.scm
@@ -2026,9 +1986,8 @@ msgid "Vendor Report"
 msgstr "Informe de proveïdor"
 
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:216
-#, fuzzy
 msgid "Show vendor report"
-msgstr "Informe de proveïdor"
+msgstr "Mostra l'informe de proveïdor"
 
 #. src/report/business-reports/job-report.scm
 #. src/report/business-reports/owner-report.scm
@@ -2038,9 +1997,8 @@ msgid "Customer Report"
 msgstr "Informe de client"
 
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:221
-#, fuzzy
 msgid "Show customer report"
-msgstr "Informe de client"
+msgstr "Mostra l'informe de client"
 
 #. src/report/business-reports/job-report.scm
 #. src/report/business-reports/owner-report.scm
@@ -2050,9 +2008,8 @@ msgid "Employee Report"
 msgstr "Informe de treballador"
 
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:226
-#, fuzzy
 msgid "Show employee report"
-msgstr "Informe de treballador"
+msgstr "Mostra l'informe de treballador"
 
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:271
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:272
@@ -2070,9 +2027,8 @@ msgid "New"
 msgstr "Nou"
 
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:279
-#, fuzzy
 msgid "New Voucher"
-msgstr "Comprovant"
+msgstr "Nou justificant de despesa"
 
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:387
 msgid "Customers"
@@ -2080,21 +2036,19 @@ msgstr "Clients"
 
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:393
 msgid "Jobs"
-msgstr ""
+msgstr "Llocs de treball"
 
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:399
 msgid "Vendors"
 msgstr "Proveïdors"
 
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:405
-#, fuzzy
 msgid "Employees"
-msgstr "Treballador"
+msgstr "Treballadors"
 
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:471
-#, fuzzy
 msgid "Owners"
-msgstr "Nom del client"
+msgstr "Propietaris"
 
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:1069
 #: ../src/gnome/gnc-plugin-page-account-tree.c:1121
@@ -2102,11 +2056,13 @@ msgid "(no name)"
 msgstr "(sense nom)"
 
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:1077
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The owner %s will be deleted.\n"
 "Are you sure you want to do this?"
-msgstr "Aquest compte no està saldat. Esteu segur de voler finalitzar?"
+msgstr ""
+"El propietari %s s'esborrarà.\n"
+"Teniu seguretat de fer això?"
 
 #. * @}
 #. For the grep-happy:
@@ -2193,9 +2149,8 @@ msgid "<b>General</b>"
 msgstr "<b>General</b>"
 
 #: ../src/business/business-gnome/gtkbuilder/business-prefs.glade.h:17
-#, fuzzy
 msgid "Enable extra _buttons"
-msgstr "Habilita l'acció d'edició de la concordança"
+msgstr "Habilita els _botons extra"
 
 #: ../src/business/business-gnome/gtkbuilder/business-prefs.glade.h:18
 #: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:6
@@ -2203,9 +2158,8 @@ msgid "If active, extra toolbar buttons for common business functions are shown 
 msgstr "Si està actiu, es mostren també botons extra de la barra d'eines per a funcions empresarials comuns. En cas contrari no es mostren."
 
 #: ../src/business/business-gnome/gtkbuilder/business-prefs.glade.h:19
-#, fuzzy
 msgid "Report for printing:"
-msgstr "Opcions de l'inf_orme"
+msgstr "Informe per imprimir:"
 
 #. src/report/business-reports/invoice.scm
 #: ../src/business/business-gnome/gtkbuilder/business-prefs.glade.h:20
@@ -2220,9 +2174,8 @@ msgstr "Factura imprimible"
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1663
 #: ../intl-scm/guile-strings.c:1642 ../intl-scm/guile-strings.c:1646
 #: ../intl-scm/guile-strings.c:1822 ../intl-scm/guile-strings.c:1824
-#, fuzzy
 msgid "Tax Invoice"
-msgstr "_Paga una factura"
+msgstr "Factura d'impostos"
 
 #. src/report/business-reports/easy-invoice.scm
 #: ../src/business/business-gnome/gtkbuilder/business-prefs.glade.h:22
@@ -2567,7 +2520,7 @@ msgstr "Pregunta"
 
 #: ../src/business/business-gnome/gtkbuilder/dialog-date-close.glade.h:2
 msgid "Dummy message"
-msgstr ""
+msgstr "Missatge comodí"
 
 #: ../src/business/business-gnome/gtkbuilder/dialog-date-close.glade.h:3
 msgid "postd"
@@ -2588,9 +2541,8 @@ msgstr "pregunta"
 #: ../src/business/business-gnome/gtkbuilder/dialog-date-close.glade.h:8
 #: ../src/import-export/csv-import/assistant-csv-account-import.glade.h:26
 #: ../src/import-export/csv-import/assistant-csv-trans-import.glade.h:45
-#, fuzzy
 msgid "label"
-msgstr "etiqueta1"
+msgstr "etiqueta"
 
 #: ../src/business/business-gnome/gtkbuilder/dialog-employee.glade.h:2
 msgid "Employee Number: "
@@ -2862,9 +2814,8 @@ msgid "Number"
 msgstr "Número"
 
 #: ../src/business/business-gnome/gtkbuilder/dialog-payment.glade.h:10
-#, fuzzy
 msgid "Documents"
-msgstr "Ajustaments"
+msgstr "Documents"
 
 #: ../src/business/business-gnome/gtkbuilder/dialog-payment.glade.h:11
 msgid ""
@@ -2881,9 +2832,8 @@ msgstr ""
 "En cas d'un sobre-pagament o si no s'ha seleccionat cap factura, Gnucash assignarà la quantitat restant automàticament a la primera factura inpagada d'aquesta empresa."
 
 #: ../src/business/business-gnome/gtkbuilder/dialog-payment.glade.h:16
-#, fuzzy
 msgid "<b>Amount</b>"
-msgstr "<b>_Comptes</b>"
+msgstr "<b>Quantitat</b>"
 
 #. set per book option
 #. src/app-utils/prefs.scm
@@ -2912,7 +2862,7 @@ msgstr "Pagament"
 
 #: ../src/business/business-gnome/gtkbuilder/dialog-payment.glade.h:18
 msgid "Refund"
-msgstr ""
+msgstr "Devolució"
 
 #. src/report/standard-reports/general-ledger.scm
 #. src/report/standard-reports/register.scm
@@ -2939,9 +2889,8 @@ msgid "Memo"
 msgstr "Nota d'abonament"
 
 #: ../src/business/business-gnome/gtkbuilder/dialog-payment.glade.h:21
-#, fuzzy
 msgid "Transaction Details"
-msgstr "Informe d'assentaments"
+msgstr "Detalls de la transacció"
 
 #: ../src/business/business-gnome/gtkbuilder/dialog-payment.glade.h:22
 msgid "Transfer Account"
@@ -2999,17 +2948,16 @@ msgid "If active, only the 'active' items in the current class will be searched.
 msgstr "Si està habilitat, sols es buscarà entre els elements 'actius\" a la classe actual. En cas contrari es buscarà entre tots els elements de la clase actual."
 
 #: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:5
-#, fuzzy
 msgid "Enable extra toolbar buttons for business"
-msgstr "Habilita botons addicionals de les barres d'eines per a empreses"
+msgstr "Habilita els botons extra de la barra d'eines per a empresa"
 
 #: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:7
 msgid "The invoice report to be used for printing"
-msgstr ""
+msgstr "L'informe de factura a fer servir per imprimir"
 
 #: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:8
 msgid "The name of the report to be used for invoice printing."
-msgstr ""
+msgstr "El nom de l'informe a fer servir per a l'impressió de factures"
 
 #: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:9
 msgid "Open new invoice in new window"
@@ -3437,23 +3385,20 @@ msgid "Is the tax already included in the price of this entry?"
 msgstr "Els impostos ja estan inclosos en el preu d'aquest element?"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:751
-#, fuzzy
 msgid "Is this entry invoiced?"
 msgstr "Està facturat aquest element?"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:757
-#, fuzzy
 msgid "Is this entry credited?"
-msgstr "Està facturat aquest element?"
+msgstr "S'ha donat crèdit per a aquest element?"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:761
 msgid "Include this entry on this invoice?"
 msgstr "Voleu incloure aquest element en aquesta factura?"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:765
-#, fuzzy
 msgid "Include this entry on this credit note?"
-msgstr "Voleu incloure aquest element en aquesta factura?"
+msgstr "Voleu incloure aquest element en aquesta nota de crèdit?"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:768
 msgid "Unknown EntryLedger Type"
@@ -3476,9 +3421,11 @@ msgid "How did you pay for this item?"
 msgstr "Com vau pagar per aquest article?"
 
 #: ../src/core-utils/gnc-features.c:115
-#, fuzzy
 msgid "This Dataset contains features not supported by this version of GnuCash.  You must use a newer version of GnuCash in order to support the following features:"
-msgstr "Aquest fitxer o URL sembla ser d'una versió més nova del GnuCash. Cal que actualitzeu la vostra versió del GnuCash per a poder treballar amb aquestes dades."
+msgstr ""
+"Aquest fitxer de dades conté característiques no suportades per\n"
+"aquesta versió de Gnucash. Heu de fer servir una versió més nova de\n"
+"Gnucash per poder donar suport a les característiques següents:"
 
 #: ../src/core-utils/gnc-filepath-utils.c:324
 #, c-format
@@ -3543,6 +3490,9 @@ msgid ""
 "  %s\n"
 "They must be at least 'rwx' for the user.\n"
 msgstr ""
+"Són incorrectes els permisos al directori\n"
+"  %s\n"
+"Han de ser almenys 'rwx\" per a l'usuari.\n"
 
 #: ../src/engine/Account.c:168
 #, c-format
@@ -3682,30 +3632,29 @@ msgstr "darrer %s"
 #: ../src/engine/Recurrence.c:642
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:27
 msgid "1st"
-msgstr ""
+msgstr "1er"
 
 #: ../src/engine/Recurrence.c:642
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:28
-#, fuzzy
 msgid "2nd"
-msgstr "i"
+msgstr "2on"
 
 #: ../src/engine/Recurrence.c:642
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:29
 msgid "3rd"
-msgstr ""
+msgstr "3er"
 
 #: ../src/engine/Recurrence.c:642
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:30
 msgid "4th"
-msgstr ""
+msgstr "4rt"
 
 #. translators: %s is the string 1st, 2nd, 3rd and so on, and
 #. * %s is an already-localized form of the day of the week.
 #: ../src/engine/Recurrence.c:652
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s"
-msgstr "Període %s - %s"
+msgstr "%s %s"
 
 #: ../src/engine/Recurrence.c:689
 #: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:30
@@ -3810,19 +3759,16 @@ msgid "Lot"
 msgstr "Molt"
 
 #: ../src/engine/gncInvoice.c:909
-#, fuzzy
 msgid "Customer Credit Note"
-msgstr "Informe de client"
+msgstr "Nota de crèdit del client"
 
 #: ../src/engine/gncInvoice.c:911
-#, fuzzy
 msgid "Vendor Credit Note"
-msgstr "Informe de proveïdor"
+msgstr "Nota de crèdit del distribuïdor"
 
 #: ../src/engine/gncInvoice.c:913
-#, fuzzy
 msgid "Employee Credit Note"
-msgstr "Informe de treballador"
+msgstr "Nota de crèdit de treballador"
 
 #. Set memo.
 #: ../src/engine/gncInvoice.c:1445
@@ -3844,11 +3790,11 @@ msgstr " (tancat)"
 #. Strings used when creating splits later on.
 #: ../src/engine/gncOwner.c:882
 msgid "Lot Link"
-msgstr ""
+msgstr "Enllaç de lot"
 
 #: ../src/engine/gncOwner.c:883
 msgid "Internal link between invoice and payment lots"
-msgstr ""
+msgstr "Enllaç intern entre lots de factures i pagaments"
 
 #: ../src/gnome-search/dialog-search.c:237
 msgid "You must select an item from the list"
@@ -3872,9 +3818,8 @@ msgstr "Seleccioneu"
 #: ../src/gnome/gnc-plugin-page-register.c:3068
 #: ../src/import-export/csv-export/csv-transactions-export.c:348
 #: ../intl-scm/guile-strings.c:4572
-#, fuzzy
 msgid "Number/Action"
-msgstr "Opció numèrica"
+msgstr "Número/Acció"
 
 #. src/report/standard-reports/transaction.scm
 #: ../src/gnome-search/dialog-search.c:859
@@ -3889,32 +3834,28 @@ msgstr "Opció numèrica"
 #: ../src/gnome/gnc-plugin-page-register.c:3067
 #: ../src/import-export/csv-export/csv-transactions-export.c:344
 #: ../intl-scm/guile-strings.c:4576
-#, fuzzy
 msgid "Transaction Number"
-msgstr "Informe d'assentaments"
+msgstr "Transacció número"
 
 #: ../src/gnome-search/dialog-search.c:1047
-#, fuzzy
 msgid "New Transaction"
-msgstr "Asse_ntament"
+msgstr "Nova transacció"
 
 #: ../src/gnome-search/dialog-search.c:1051
-#, fuzzy
 msgid "New Split"
-msgstr "Desglossa"
+msgstr "Nou desglossament"
 
 #: ../src/gnome-search/dialog-search.c:1060
-#, fuzzy
 msgid "New item"
-msgstr "Element _nou..."
+msgstr "Element nou..."
 
 #: ../src/gnome-search/dialog-search.c:1109
 msgid "all criteria are met"
-msgstr "concordin amb tots els criteris"
+msgstr "tots els criteris es compleixen"
 
 #: ../src/gnome-search/dialog-search.c:1110
 msgid "any criteria are met"
-msgstr "concordin amb qualsevol criteri"
+msgstr "qualsevol criteri es compleix"
 
 #. FIXME: All this does is leak.
 #: ../src/gnome-search/dialog-search.c:1413
@@ -3940,9 +3881,8 @@ msgid "Search for items where"
 msgstr "Cerca elements que"
 
 #: ../src/gnome-search/dialog-search.glade.h:5
-#, fuzzy
 msgid "<b>Match all entries</b>"
-msgstr "<b>Entrades de la taula d'impostos</b>"
+msgstr "<b>Fes concordar tots ele elements</b>"
 
 #: ../src/gnome-search/dialog-search.glade.h:6
 msgid "Search Criteria"
@@ -4135,9 +4075,8 @@ msgid "Voided"
 msgstr "Invalidat"
 
 #: ../src/gnome-search/search-string.c:191
-#, fuzzy
 msgid "You need to enter some search text."
-msgstr "Heu d'entrar un valor de cadena de text"
+msgstr "Heu d'entrar algun text per cercar."
 
 #: ../src/gnome-search/search-string.c:220
 #: ../src/import-export/csv-import/csv-account-import.c:91
@@ -4166,17 +4105,23 @@ msgstr "no concorda amb l'expr. reg."
 #. Build and connect the case-sensitive check button; defaults to off
 #: ../src/gnome-search/search-string.c:329
 msgid "Match case"
-msgstr ""
+msgstr "Respecta majúscules i minúscules"
 
 #: ../src/gnome-utils/assistant-gconf-setup.c:348
-#, fuzzy
 msgid "When you click Apply, GnuCash will modify your ~/.gconf.path file and restart the gconf backend. There will be a short delay before GnuCash is loaded."
-msgstr "En clicar a «Aplica», el GnuCash modificarà el vostre fitxer ~/.gconf.path i reinicialitzarà el rerefons gconf."
+msgstr ""
+"En clicar a «Aplica», el GnuCash modificarà el vostre fitxer\n"
+"~/.gconf.path i reinicialitzarà el rerefons gconf. Hi haurà un petit\n"
+"retard fins que GnuCash es carregui."
 
 #: ../src/gnome-utils/assistant-gconf-setup.c:352
-#, fuzzy, c-format
+#, c-format
 msgid "When you click Apply, GnuCash will install the gconf data into your local ~/.gconf file and restart the gconf backend. The %s script must be found in your search path for this to work correctly."
-msgstr "En clicar a «Aplica», el GnuCash modificarà el vostre fitxer ~/.gconf.path i reinicialitzarà el rerefons gconf."
+msgstr ""
+"En clicar a Aplica, el Gnucash instal·larà les dades gconf al vostre\n"
+"fitxer local ~/.gconf i reiniciarà el dorsal gconf. El fitxer de seqüència\n"
+"d'ordres %s ha de estar en el camí de búsqueda perquè això funcioni\n"
+"correctament."
 
 #: ../src/gnome-utils/assistant-gconf-setup.c:356
 msgid "You have chosen to correct the problem by yourself. When you click Apply, GnuCash will exit. Please correct the problem and restart the gconf backend with the command 'gconftool-2 --shutdown' before restarting GnuCash. If you have not already done so, you can click the Back button and copy the necessary text from the dialog."
@@ -4186,10 +4131,17 @@ msgstr ""
 #, c-format
 msgid "You have chosen to correct the problem by yourself. When you click Apply, GnuCash will exit. Please run the %s script which will install the configuration data and restart the gconf backend."
 msgstr ""
+"Heu escollit corregir vos mateix el problema. Quan cliqueu Aplica,\n"
+"GnuCash es tancarà. Si us plau executeu el fitxer de seqüència\n"
+"d'ordres %s que instal·larà la\n"
+"dades de configuració i reiniciaran el dorsal gconf."
 
 #: ../src/gnome-utils/assistant-gconf-setup.c:366
 msgid "You have already corrected the problem and restarted the gconf backend with the command 'gconftool-2 --shutdown'. When you click Apply, there will be a short delay before GnuCash is loaded."
 msgstr ""
+"Ja heu corregit correctament el problema i heu reinciat el dorsal\n"
+"gconf amb l'ordre 'gconftool-2 --shutdown'. Quan cliqueu Aplica, hi\n"
+"haurà un petit retard abans que GnuCash es carregui."
 
 #: ../src/gnome-utils/assistant-xml-encoding.c:160
 msgid ""
@@ -4211,6 +4163,11 @@ msgid ""
 "\n"
 "You can also go back and verify your selections by clicking on 'Back'."
 msgstr ""
+"El fitxer s'ha carregat amb èxit. Si cliqueu 'Aplica' es desarà i es\n"
+"recarregarà al programa principal. D'aquesta manera tindreu un fitxer\n"
+"de treball com a còpia de seguretat al mateix directori.\n"
+"\n"
+"Podeu retornar i verificar les vostres seleccions clicant a 'Enrere'."
 
 #: ../src/gnome-utils/assistant-xml-encoding.c:206
 msgid "Unicode"
@@ -4419,10 +4376,14 @@ msgstr "Voleu renumerar els subcomptes més immediats de %s? Això farà que es 
 #: ../src/gnome-utils/dialog-book-close.c:293
 msgid "Please select an Equity account to hold the total Period Income."
 msgstr ""
+"Si us plau escolliu un compte d'Entitat per contenir el total\n"
+"d'Ingressos del Període."
 
 #: ../src/gnome-utils/dialog-book-close.c:300
 msgid "Please select an Equity account to hold the total Period Expense."
 msgstr ""
+"Si us plau escolliu un compte d'Entitat per contenir el total de\n"
+"Despeses del Període."
 
 #: ../src/gnome-utils/dialog-commodity.c:170
 msgid ""
@@ -4445,16 +4406,14 @@ msgstr ""
 #. like gb:SEDOL, de:WKN, ch:Valorennummer, fr:SICOVAM ...
 #. See http://en.wikipedia.org/wiki/ISIN for hints.
 #: ../src/gnome-utils/dialog-commodity.c:183
-#, fuzzy
 msgid ""
 "\n"
 "Exchange code (ISIN, CUSIP or similar): "
 msgstr ""
 "\n"
-"Codi de canvi (CUSIP o similar): "
+"Codi de intercanvi (ISIN, CUSIP o similar): "
 
 #: ../src/gnome-utils/dialog-commodity.c:185
-#, fuzzy
 msgid ""
 "\n"
 "Mnemonic (Ticker symbol or similar): "
@@ -4531,19 +4490,16 @@ msgstr "Heu d'introduir el «Nom complet», el «Símbol/abreviació» i el «Ti
 
 #. The "date" and the "tnum" fields aren't being asked for, this is a split copy
 #: ../src/gnome-utils/dialog-dup-trans.c:235
-#, fuzzy
 msgid "Action/Number:"
-msgstr "_Número:"
+msgstr "Acció/Número:"
 
 #: ../src/gnome-utils/dialog-file-access.c:295
-#, fuzzy
 msgid "Open..."
-msgstr "_Obre..."
+msgstr "Obre..."
 
 #: ../src/gnome-utils/dialog-file-access.c:302
-#, fuzzy
 msgid "Save As..."
-msgstr "_Anomena i desa..."
+msgstr "Anomena i desa..."
 
 #: ../src/gnome-utils/dialog-file-access.c:311
 #: ../src/gnome-utils/gnc-file.c:118 ../src/gnome-utils/gnc-file.c:288
@@ -4570,14 +4526,12 @@ msgid "Clear the selection and unselect all accounts."
 msgstr "Esborra la selecció i no seleccionis cap compte."
 
 #: ../src/gnome-utils/dialog-options.c:821
-#, fuzzy
 msgid "Select Children"
-msgstr "Escolliu la divisa"
+msgstr "Escolliu els fills"
 
 #: ../src/gnome-utils/dialog-options.c:823
-#, fuzzy
 msgid "Select all descendents of selected account."
-msgstr "Suprimeix el compte seleccionat"
+msgstr "Selecciona tots els descendents del compte seleccionat."
 
 #: ../src/gnome-utils/dialog-options.c:829
 #: ../src/gnome-utils/dialog-options.c:963
@@ -4589,14 +4543,12 @@ msgid "Select the default account selection."
 msgstr "Selecciona el grup de comptes per defecte."
 
 #: ../src/gnome-utils/dialog-options.c:845
-#, fuzzy
 msgid "Show Hidden Accounts"
-msgstr "Mostra els comptes _ocults"
+msgstr "Mostra els comptes ocults"
 
 #: ../src/gnome-utils/dialog-options.c:847
-#, fuzzy
 msgid "Show accounts that have been marked hidden."
-msgstr "Inclou els comptes amb un saldo zero d'accions"
+msgstr "Mostra els comptes que han estat marcats com a ocults."
 
 # FIXME: entries potser no són assentaments
 #: ../src/gnome-utils/dialog-options.c:951
@@ -4614,9 +4566,8 @@ msgstr "Selecciona la selecció per defecte."
 
 #. The reset button on each option page
 #: ../src/gnome-utils/dialog-options.c:1120
-#, fuzzy
 msgid "Reset defaults"
-msgstr "Valors per defecte del registre"
+msgstr "Reestabliu els valors per defecte"
 
 # FIXME: a què es refereix per «values»?
 #: ../src/gnome-utils/dialog-options.c:1122
@@ -4625,7 +4576,7 @@ msgstr "Reinicialitza-ho tot al valor predeterminat."
 
 #: ../src/gnome-utils/dialog-options.c:1427
 msgid "Page"
-msgstr ""
+msgstr "Pàgina"
 
 #: ../src/gnome-utils/dialog-options.c:2042
 msgid "Clear"
@@ -4664,9 +4615,8 @@ msgid "You must provide a unique name for this Tax Table. Your choice \"%s\" is 
 msgstr "Heu de donar un nom únic a aquesta taula d'impostos. El que heu escollit, «%s», ja està sent utilitzat."
 
 #: ../src/gnome-utils/dialog-tax-table.c:137
-#, fuzzy
 msgid "Percentage amount must be between -100 and 100."
-msgstr "El valor del percentatge ha d'estar entre 0 i 100."
+msgstr "El valor del percentatge ha d'estar entre -100 i 100."
 
 #: ../src/gnome-utils/dialog-tax-table.c:146
 msgid "You must choose a Tax Account."
@@ -4761,9 +4711,8 @@ msgid "Don't tell me again this _session."
 msgstr "No m'ho recordis durant aquesta _sessió."
 
 #: ../src/gnome-utils/dialog-utils.c:628
-#, fuzzy
 msgid "New Book Options"
-msgstr "Opcions del llibre"
+msgstr "Noves opcions del llibre"
 
 #. create the button.
 #: ../src/gnome-utils/gnc-account-sel.c:458
@@ -4771,9 +4720,8 @@ msgid "New..."
 msgstr "Nou..."
 
 #: ../src/gnome-utils/gnc-autosave.c:98
-#, fuzzy
 msgid "Save file automatically?"
-msgstr "(omplert automàticament)"
+msgstr "Desa el fitxer automàticament?"
 
 #: ../src/gnome-utils/gnc-autosave.c:101
 #, c-format
@@ -4793,22 +4741,20 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: ../src/gnome-utils/gnc-autosave.c:116
-#, fuzzy
 msgid "_Yes, this time"
-msgstr "La més propera"
+msgstr "_Sí, aquest cop"
 
 #: ../src/gnome-utils/gnc-autosave.c:117
 msgid "Yes, _always"
-msgstr ""
+msgstr "Sí, _sempre"
 
 #: ../src/gnome-utils/gnc-autosave.c:118
-#, fuzzy
 msgid "No, n_ever"
-msgstr "Mai"
+msgstr "No, m_ai"
 
 #: ../src/gnome-utils/gnc-autosave.c:119
 msgid "_No, not this time"
-msgstr ""
+msgstr "No, no aquest cop"
 
 #. CY Strings
 #. src/app-utils/date-utilities.scm
@@ -5050,6 +4996,8 @@ msgstr "No s'ha pogut fer una còpia de seguretat del fitxer %s"
 #, c-format
 msgid "Could not write to file %s.  Check that you have permission to write to this file and that there is sufficient space to create it."
 msgstr ""
+"No s'ha pogut escriure al fitxer %s. Verifiqueu que teniu permisos per\n"
+"escriure a aquest fitxer i que hi ha suficient espai per crear-lo."
 
 #: ../src/gnome-utils/gnc-file.c:398
 #, c-format
@@ -5070,13 +5018,19 @@ msgid ""
 msgstr ""
 
 #: ../src/gnome-utils/gnc-file.c:413
-#, fuzzy
 msgid "This database is from an older version of GnuCash. Select OK to upgrade it to the current version, Cancel to mark it read-only."
-msgstr "La base de dades és d'una versió més antiga de GnuCash. Voleu actualitzar-la a la versió actual?"
+msgstr ""
+"La base de dades és d'una versió més antiga de GnuCash. Seleccioneu\n"
+"D'acord per actualitzar-la a la versió actual. Cancel·leu per\n"
+"marcar-la com de sols-lectura."
 
 #: ../src/gnome-utils/gnc-file.c:422
 msgid "This database is from a newer version of GnuCash. This version can read it, but cannot safely save to it. It will be marked read-only until you do File>Save As, but data may be lost in writing to the old version."
 msgstr ""
+"La base de dades és d'una versió més nova de GnuCash. Aquesta versió\n"
+"la pot llegir, però no pot desar amb seguretat a ella. Es marcarà com\n"
+"de sols lectura fins que feu un Fitxer>Desar Com, però es poden perdre\n"
+"dades en escriure a la versió antiga."
 
 #: ../src/gnome-utils/gnc-file.c:431
 msgid "The SQL database is in use by other users, and the upgrade cannot be performed until they logoff. If there are currently no other users, consult the  documentation to learn how to clear out dangling login sessions."
@@ -5085,14 +5039,30 @@ msgstr "Altres usuaris estan utilitzant la base de dades SQL, i l'actualització
 #: ../src/gnome-utils/gnc-file.c:441
 msgid "The library \"libdbi\" installed on your system doesn't correctly store large numbers.  This means GnuCash cannot use SQL databases correctly.  Gnucash will not open or save to SQL databases until this is fixed by installing a different version of \"libdbi\".  Please see https://bugzilla.gnome.org/show_bug.cgi?id=611936 for more information."
 msgstr ""
+"La llibreria \"libdbi\" instal·lada al vostre sistema no emmagatzema\n"
+"correctament nombres grans. Això vol dir que el GnuCash no pot usar bases\n"
+"de dades SQL correctament. El Gnucash no obrirà o desarà a bases de\n"
+"dades SQL fins que això es coregeixi instal·lant una versió diferent\n"
+"de \"libdbi\". Si us plau mireu https://bugzilla.gnome.org/show_bug.cgi?id=611936 \n"
+"per a més informació."
 
 #: ../src/gnome-utils/gnc-file.c:453
 msgid "GnuCash could not complete a critical test for the presence of a bug in the \"libdbi\" library. This may be caused by a permissions misconfiguration of your SQL database. Please see https://bugzilla.gnome.org/show_bug.cgi?id=645216 for more information."
 msgstr ""
+"El GnuCash no ha pogut completar una prova crítica sobre la presència\n"
+"d'un eror a la llibreria \"libdbi\". Això pot estar provocat per una\n"
+"configuració incorrecta dels permisos de la vostra base de dades\n"
+"SQL. Si us plau mireu https://bugzilla.gnome.org/show_bug.cgi?id=645216 \n"
+"per a més informació."
 
 #: ../src/gnome-utils/gnc-file.c:463
 msgid "This file is from an older version of GnuCash and will be upgraded when saved by this version. You will not be able to read the saved file from the older version of Gnucash (it will report an \"error parsing the file\"). If you wish to preserve the old version, exit without saving."
 msgstr ""
+"Aquest fitxer és d'una versió més antiga de GnuCash i s'actualitzarà\n"
+"quen es deci per a aquesta versió. No podreu llegir el fitxer desat\n"
+"des de la versió més antiga de GnuCash (informarà d'un error\n"
+"\"analitzant el fitxer\"). Si voleu preserver la versió antiga, sortiu\n"
+"sense desar."
 
 #: ../src/gnome-utils/gnc-file.c:474
 #, c-format
@@ -5104,11 +5074,11 @@ msgid "Save changes to the file?"
 msgstr "Voleu desar els canvis del fitxer?"
 
 #: ../src/gnome-utils/gnc-file.c:582 ../src/gnome-utils/gnc-main-window.c:1176
-#, fuzzy, c-format
+#, c-format
 msgid "If you don't save, changes from the past %d minute will be discarded."
 msgid_plural "If you don't save, changes from the past %d minutes will be discarded."
-msgstr[0] "Si no deseu les modificacions, es descartaran els canvis dels darrers %d minuts."
-msgstr[1] "Si no deseu les modificacions, es descartaran els canvis dels darrers %d minuts."
+msgstr[0] "Si no deseu, els canvis de l'últim minut %d es descartaran."
+msgstr[1] "Si no deseu, es descartaran els canvis dels darrers %d minuts."
 
 #: ../src/gnome-utils/gnc-file.c:586
 msgid "Continue _Without Saving"
@@ -5126,30 +5096,30 @@ msgstr "És possible que un altre usuari estigui utilitzant aquella base de dade
 #: ../src/gnome-utils/gnc-file.c:744
 msgid "That database may be on a read-only file system, or you may not have write permission for the directory. If you proceed you may not be able to save any changes. What would you like to do?"
 msgstr ""
+"Aquella base de dades pot estar en un sistema de fitxers de sols\n"
+"lectura, o potser no teniu permisos d'escriptura al directori. Si\n"
+"continueu potser no podreu desar cap canvi. Què voldríeu fer?"
 
 #: ../src/gnome-utils/gnc-file.c:769
 msgid "_Open Read-Only"
-msgstr ""
+msgstr "_Obrir Sols-lectura"
 
 #: ../src/gnome-utils/gnc-file.c:771
 msgid "_Create New File"
 msgstr "_Crea un fitxer nou"
 
 #: ../src/gnome-utils/gnc-file.c:773
-#, fuzzy
 msgid "Open _Anyway"
 msgstr "_Obre de totes maneres"
 
 #. try to load once again
 #: ../src/gnome-utils/gnc-file.c:857 ../src/gnome-utils/gnc-file.c:877
-#, fuzzy
 msgid "Loading user data..."
-msgstr "S'estan carregant les dades..."
+msgstr "S'estan carregant les dades d'usuari..."
 
 #: ../src/gnome-utils/gnc-file.c:893
-#, fuzzy
 msgid "Re-saving user data..."
-msgstr "S'estan carregant les dades..."
+msgstr "S'estan recarregant les dades d'usuari..."
 
 #: ../src/gnome-utils/gnc-file.c:1174 ../src/gnome-utils/gnc-file.c:1415
 #: ../src/import-export/csv-export/assistant-csv-export.c:124
@@ -5175,16 +5145,16 @@ msgstr ""
 "%s"
 
 #: ../src/gnome-utils/gnc-file.c:1248
-#, fuzzy
 msgid "The database was opened read-only. Do you want to save it to a different place?"
-msgstr "La base de dades %s no existeix. Voleu crear-la?"
+msgstr ""
+"La base de dades s'ha obert com de sols-lectura. Voleu desar-la en un\n"
+"lloc diferent?"
 
 #: ../src/gnome-utils/gnc-general-select.c:218
 msgid "View..."
 msgstr "Visualitza..."
 
 #: ../src/gnome-utils/gnc-gnome-utils.c:273
-#, fuzzy
 msgid "GnuCash could not find the files for the help documentation.  This is likely because the 'gnucash-docs' package is not installed"
 msgstr "El GnuCash no ha trobat els fitxers de documentació de l'ajuda. Segurament això és degut al fet que no teniu el paquet «gnucash-docs» instal·lat."
 
@@ -5266,9 +5236,9 @@ msgstr "_Salta"
 #. Translators: %s is a path to a database or any other url,
 #. like mysql://user@server.somewhere/somedb, http://www.somequotes.com/thequotes
 #: ../src/gnome-utils/gnc-keyring.c:193
-#, fuzzy, c-format
+#, c-format
 msgid "Enter a user name and password to connect to: %s"
-msgstr "Escriviu el vostre nom d'usuari i contrasenya"
+msgstr "Entreu un nom d'usuari i clau per connectar a: %s"
 
 #. Toplevel
 #: ../src/gnome-utils/gnc-main-window.c:240
@@ -5331,13 +5301,12 @@ msgid "Print the currently active page"
 msgstr "Imprimeix la pàgina activa"
 
 #: ../src/gnome-utils/gnc-main-window.c:263
-#, fuzzy
 msgid "Pa_ge Setup..."
-msgstr "_Configura"
+msgstr "Configuració de pà_gina..."
 
 #: ../src/gnome-utils/gnc-main-window.c:264
 msgid "Specify the page size and orientation for printing"
-msgstr ""
+msgstr "Especifiqueu el tamany de la pàgina i l'orientació per imprimir"
 
 #: ../src/gnome-utils/gnc-main-window.c:268
 msgid "Proper_ties"
@@ -5442,13 +5411,12 @@ msgid "Reset _Warnings..."
 msgstr "Reinicialitza els a_visos..."
 
 #: ../src/gnome-utils/gnc-main-window.c:327
-#, fuzzy
 msgid "Reset the state of all warning messages so they will be shown again."
-msgstr "Reinicialitza l'estat de tots els avisos de manera que es puguin tornar a mostrar."
+msgstr "Reinicialitza l'estat de tots els avisos d'advertiment de manera que es puguin tornar a mostrar."
 
 #: ../src/gnome-utils/gnc-main-window.c:331
 msgid "Re_name Page"
-msgstr "Can_via el nom de la pàgina"
+msgstr "Ca_nvia el nom de la pàgina"
 
 #: ../src/gnome-utils/gnc-main-window.c:332
 msgid "Rename this page."
@@ -5585,20 +5553,19 @@ msgstr "Tanca _sense desar"
 #. document is, well, read-only.
 #: ../src/gnome-utils/gnc-main-window.c:1395
 msgid "(read-only)"
-msgstr ""
+msgstr "(sols-lectura)"
 
 #: ../src/gnome-utils/gnc-main-window.c:1403
-#, fuzzy
 msgid "Unsaved Book"
-msgstr "Tanca el llibre"
+msgstr "Llibre sense desar"
 
 #: ../src/gnome-utils/gnc-main-window.c:2460
 msgid "Unable to save to database."
-msgstr ""
+msgstr "No s'ha pogut desar la base de dades."
 
 #: ../src/gnome-utils/gnc-main-window.c:2462
 msgid "Unable to save to database: Book is marked read-only."
-msgstr ""
+msgstr "No s'ha pogut desar la base dades: El llibre està marcat com de sols-lectura."
 
 #: ../src/gnome-utils/gnc-main-window.c:3799
 msgid "Book Options"
@@ -5645,14 +5612,12 @@ msgstr "Inici de l'any anterior"
 
 #. FY Strings
 #: ../src/gnome-utils/gnc-period-select.c:78
-#, fuzzy
 msgid "Start of this accounting period"
-msgstr "Inici del període de l'informe"
+msgstr "Inici del període comptable"
 
 #: ../src/gnome-utils/gnc-period-select.c:79
-#, fuzzy
 msgid "Start of previous accounting period"
-msgstr "L'inici de l'anterior període comptable trimestral"
+msgstr "L'inici de l'anterior període comptable"
 
 #. src/app-utils/date-utilities.scm
 #: ../src/gnome-utils/gnc-period-select.c:86 ../intl-scm/guile-strings.c:160
@@ -5685,14 +5650,12 @@ msgstr "Final de l'any anterior"
 
 #. FY Strings
 #: ../src/gnome-utils/gnc-period-select.c:94
-#, fuzzy
 msgid "End of this accounting period"
-msgstr "El final de l'anterior període comptable trimestral"
+msgstr "El final de l'anterior període comptable"
 
 #: ../src/gnome-utils/gnc-period-select.c:95
-#, fuzzy
 msgid "End of previous accounting period"
-msgstr "El final de l'anterior període comptable trimestral"
+msgstr "El final de l'anterior període comptable"
 
 #. Development version
 #. Translators: 1st %s is the GnuCash version (eg 2.4.11);
@@ -5700,27 +5663,26 @@ msgstr "El final de l'anterior període comptable trimestral"
 #. 3rd %s is the scm revision number;
 #. 4th %s is the build date
 #: ../src/gnome-utils/gnc-splash.c:94
-#, fuzzy, c-format
+#, c-format
 msgid "Version: GnuCash-%s %s (rev %s built %s)"
-msgstr "Versió: Gnucash-%s svn (r%s muntada el %s)"
+msgstr "Versió: Gnucash-%s %s (rev %s muntada el %s)"
 
 #. Dist Tarball
 #. Translators: 1st %s is the GnuCash version (eg 2.4.11);
 #. 2nd %s is the scm (svn/svk/git/bzr) revision number;
 #. 3rd %s is the build date
 #: ../src/gnome-utils/gnc-splash.c:102
-#, fuzzy, c-format
+#, c-format
 msgid "Version: GnuCash-%s (rev %s built %s)"
-msgstr "Versió: Gnucash-%s (r%s muntada el %s)"
+msgstr "Versió: Gnucash-%s (rev %s muntada el %s)"
 
 #: ../src/gnome-utils/gnc-splash.c:119
 msgid "Loading..."
 msgstr "S'està carregant..."
 
 #: ../src/gnome-utils/gnc-sx-list-tree-model-adapter.c:490
-#, fuzzy
 msgid "never"
-msgstr "(mai)"
+msgstr "mai"
 
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:65
 #: ../src/gnome/gnc-split-reg.c:916
@@ -5743,14 +5705,12 @@ msgid "You can not change this transaction, the Book or Register is set to Read 
 msgstr ""
 
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:130
-#, fuzzy
 msgid "Save Transaction before proceeding?"
-msgstr "Voleu desar l'assentament abans de tancar?"
+msgstr "Voleu desar la transacció abans de continuar?"
 
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:132
-#, fuzzy
 msgid "The current transaction has been changed. Would you like to record the changes before proceeding, or cancel?"
-msgstr "La transacció actual s'ha canviat. Us agradaria registrar els canvis abans de duplicar aquesta entrada, o cancel·lar la duplicació?"
+msgstr "La transacció actual s'ha canviat. Us agradaria registrar els canvis abans de continuar, o cancel·lar?"
 
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:184
 msgid "This transaction is being edited in a different register."
@@ -5888,9 +5848,8 @@ msgstr "Ja s'ha creat l'invers per a aquest assentament."
 
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:1228
 #: ../src/register/ledger-core/split-register.c:506
-#, fuzzy
 msgid "New Split Information"
-msgstr "<b>Informació del desglossament</b>"
+msgstr "Nova informació del desglossament"
 
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:1278
 msgid "This is the split anchoring this transaction to the register. You can not duplicate it from this register window."
@@ -5900,9 +5859,8 @@ msgstr ""
 #: ../src/gnome-utils/gnc-tree-util-split-reg.c:501
 #: ../src/register/ledger-core/split-register.c:608
 #: ../src/register/register-gnome/datecell-gnome.c:127
-#, fuzzy
 msgid "Cannot store a transaction at this date"
-msgstr "Raó per la qual fou invalidada"
+msgstr "No es pot emmagetzemar una transacció en aquesta data"
 
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:1333
 #: ../src/register/ledger-core/split-register.c:610
@@ -5910,19 +5868,18 @@ msgid "The entered date of the duplicated transaction is older than the \"Read-O
 msgstr ""
 
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:1469
-#, fuzzy
 msgid "Not enough information for Blank Transaction?"
-msgstr "Mostra dues línies d'informació per a cada assentament"
+msgstr "No hi ha suficient informació per a una transacció buida?"
 
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:1471
-#, fuzzy
 msgid "The blank transaction does not have enough information to save it. Would you like to return to the transaction to update, or cancel the save?"
-msgstr "La transacció actual s'ha canviat. Us agradaria registrar els canvis abans de duplicar aquesta entrada, o cancel·lar la duplicació?"
+msgstr ""
+"La transacció buida no té suficient informació per desar-la. Voldríeu\n"
+"tornar a la transacció per actualizar-la, cancel·lar-la o desar-la?"
 
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:1482
-#, fuzzy
 msgid "_Return"
-msgstr "Rendiment total"
+msgstr "_Rendiment"
 
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:1525
 #: ../src/register/ledger-core/split-register-control.c:1827
@@ -5951,15 +5908,13 @@ msgstr ""
 
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:1663
 #: ../src/register/ledger-core/split-register-model.c:2049
-#, fuzzy
 msgid "Change split linked to a reconciled split?"
-msgstr "Voleu canviar l'assentament conciliat?"
+msgstr "Voleu canviar el desglossament enllaçat a un desglossament reconciliat?"
 
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:1665
 #: ../src/register/ledger-core/split-register-model.c:2051
-#, fuzzy
 msgid "You are about to change a split that is linked to a reconciled split.  Doing so might make future reconciliation difficult!  Continue with this change?"
-msgstr "Esteu a punt de marcar un desglossament conciliat com a no conciliat. Si continueu, és possible que una futura conciliació sigui difícil de realitzar. Voleu portar endavant aquest canvi?"
+msgstr "Esteu a punt de canviar un desglossament enllaçat a un desglossament reconciliat. Si continueu, és possible que una futura conciliació sigui difícil de realitzar. Voleu portar endavant aquest canvi?"
 
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:1679
 #: ../src/register/ledger-core/split-register-model.c:2065
@@ -6013,9 +5968,8 @@ msgstr "Interès"
 #: ../src/gnome-utils/gnc-tree-model-split-reg.c:2589
 #: ../src/register/ledger-core/split-register.c:2352
 #: ../src/register/ledger-core/split-register.c:2383
-#, fuzzy
 msgid "ATM Deposit"
-msgstr "Ingrés"
+msgstr "Dipòsit per caixer automàtic"
 
 #: ../src/gnome-utils/gnc-tree-model-split-reg.c:2559
 #: ../src/register/ledger-core/split-register.c:2353
@@ -6030,7 +5984,6 @@ msgstr "Caixer"
 
 #: ../src/gnome-utils/gnc-tree-model-split-reg.c:2563
 #: ../src/register/ledger-core/split-register.c:2357
-#, fuzzy
 msgid "Receipt"
 msgstr "Rebut"
 
@@ -6177,9 +6130,8 @@ msgid "Fee"
 msgstr "Comissió"
 
 #: ../src/gnome-utils/gnc-tree-model-split-reg.c:2590
-#, fuzzy
 msgid "ATM Withdraw"
-msgstr "Càrrec"
+msgstr "Retiro del caixer automàtic"
 
 #: ../src/gnome-utils/gnc-tree-model-split-reg.c:2601
 #: ../src/gnome/assistant-loan.c:913
@@ -6197,7 +6149,6 @@ msgstr "Descompte"
 
 #: ../src/gnome-utils/gnc-tree-model-split-reg.c:2621
 #: ../src/register/ledger-core/split-register.c:2415
-#, fuzzy
 msgid "Paycheck"
 msgstr "Xec"
 
@@ -6229,7 +6180,6 @@ msgstr "Preu"
 #. Action: Dividend
 #: ../src/gnome-utils/gnc-tree-model-split-reg.c:2644
 #: ../src/register/ledger-core/split-register.c:2438
-#, fuzzy
 msgid "Dividend"
 msgstr "Dividends"
 
@@ -6258,14 +6208,12 @@ msgstr "Distribució"
 #: ../src/gnome-utils/gnc-tree-model-split-reg.c:2654
 #: ../src/gnome/assistant-stock-split.c:410
 #: ../src/register/ledger-core/split-register.c:2448
-#, fuzzy
 msgid "Action Column|Split"
-msgstr "Desglossament automàtic"
+msgstr "Columna|Desglossament d'acció"
 
 #: ../src/gnome-utils/gnc-tree-util-split-reg.c:46
-#, fuzzy
 msgid "-- Stock Split --"
-msgstr "Divisió d'accions"
+msgstr "-- Divisió d'accions --"
 
 #: ../src/gnome-utils/gnc-tree-util-split-reg.c:503
 #: ../src/register/register-gnome/datecell-gnome.c:129
@@ -6397,9 +6345,8 @@ msgid "Reconciled (Report)"
 msgstr "Conciliat (informe)"
 
 #: ../src/gnome-utils/gnc-tree-view-account.c:822
-#, fuzzy
 msgid "Last Reconcile Date"
-msgstr "Data de conciliació"
+msgstr "Última data de conciliació"
 
 #: ../src/gnome-utils/gnc-tree-view-account.c:828
 msgid "Future Minimum"
@@ -6447,9 +6394,8 @@ msgid "C"
 msgstr ""
 
 #: ../src/gnome-utils/gnc-tree-view-account.c:875
-#, fuzzy
 msgid "Account Color"
-msgstr "Codi de compte"
+msgstr "Color del compte"
 
 #: ../src/gnome-utils/gnc-tree-view-account.c:889
 msgid "Tax Info"
@@ -6567,70 +6513,58 @@ msgid "Timezone"
 msgstr "Zona horària"
 
 #: ../src/gnome-utils/gnc-tree-view-owner.c:398
-#, fuzzy
 msgid "Owner Name"
-msgstr "Nom del client "
+msgstr "Nom del propietari"
 
 #: ../src/gnome-utils/gnc-tree-view-owner.c:409
-#, fuzzy
 msgid "Owner ID"
-msgstr "Identificador de la comanda"
+msgstr "Identificador del propietari"
 
 #: ../src/gnome-utils/gnc-tree-view-owner.c:419
-#, fuzzy
 msgid "Address Name"
-msgstr "Adreça: "
+msgstr "Nom de l'adreça: "
 
 #: ../src/gnome-utils/gnc-tree-view-owner.c:424
-#, fuzzy
 msgid "Address 1"
-msgstr "Adreça: "
+msgstr "Adreça 1"
 
 #: ../src/gnome-utils/gnc-tree-view-owner.c:429
-#, fuzzy
 msgid "Address 2"
-msgstr "Adreça: "
+msgstr "Adreça 2"
 
 #: ../src/gnome-utils/gnc-tree-view-owner.c:434
-#, fuzzy
 msgid "Address 3"
-msgstr "Adreça: "
+msgstr "Adreça 3"
 
 #: ../src/gnome-utils/gnc-tree-view-owner.c:439
-#, fuzzy
 msgid "Address 4"
-msgstr "Adreça: "
+msgstr "Adreça 4"
 
 #. src/report/business-reports/taxinvoice.eguile.scm
 #: ../src/gnome-utils/gnc-tree-view-owner.c:449
 #: ../intl-scm/guile-strings.c:1626
-#, fuzzy
 msgid "Fax"
-msgstr "Fax:"
+msgstr "Fax"
 
 #: ../src/gnome-utils/gnc-tree-view-owner.c:454
-#, fuzzy
 msgid "E-mail"
-msgstr "Correu-e: "
+msgstr "Correu-e"
 
 #. Translators: This string has a context prefix; the translation
 #. must only contain the part after the | character.
 #: ../src/gnome-utils/gnc-tree-view-owner.c:483
-#, fuzzy
 msgid "Column letter for 'Active'|A"
-msgstr "Q"
+msgstr "Lletra de columna per 'Actiu'|A"
 
 #: ../src/gnome-utils/gnc-tree-view-price.c:426
 msgid "Security"
 msgstr "Valor"
 
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:835
-#, fuzzy
 msgid "Status Bar"
-msgstr "Barra d'es_tat"
+msgstr "Barra d'estat"
 
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:1603
-#, fuzzy
 msgid " Scheduled "
 msgstr "Planificat"
 
@@ -6640,9 +6574,8 @@ msgid "Save the changed transaction?"
 msgstr "Voleu desar el canvi a l'assentament?"
 
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:2468
-#, fuzzy
 msgid "The current transaction has changed.  Would you like to record the changes, or discard the changes?"
-msgstr "L'assentament plantilla actual ha canviat. Voleu enregistrar-ne els canvis?"
+msgstr "La transacció actual ha canviat. Voldríeu registrar els canvis o descartar-los?"
 
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:2506
 #: ../src/register/ledger-core/split-register-control.c:1545
@@ -6655,17 +6588,14 @@ msgid "_Record Changes"
 msgstr "_Registra els canvis"
 
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:2858
-#, fuzzy
 msgid "Date Entered"
-msgstr "Data de comptabilització"
+msgstr "S'ha entrat la data"
 
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:2885
-#, fuzzy
 msgid "Reference / Action"
-msgstr "Referència"
+msgstr "Referència / Acció"
 
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:2899
-#, fuzzy
 msgid "T-Number"
 msgstr "Número"
 
@@ -16130,14 +16060,16 @@ msgid "Scheduled"
 msgstr "Planificat"
 
 #: ../src/register/ledger-core/split-register-model.c:985
-#, fuzzy
 msgid "Enter a reference, such as an invoice or check number , common to all entry lines (splits)"
-msgstr "Escriviu la referència de l'assentament, com ara el número de factura o de xec"
+msgstr ""
+"Entreu una referència, com ara un número de factura o de xec, comú a\n"
+"totes les línes d'entrada (desglossaments)"
 
 #: ../src/register/ledger-core/split-register-model.c:987
-#, fuzzy
 msgid "Enter a reference, such as an invoice or check number , unique to each entry line (split)"
-msgstr "Escriviu la referència de l'assentament, com ara el número de factura o de xec"
+msgstr ""
+"Entreu una referència, tal com un número de factura o de xec, únic per\n"
+"a cada linia d'entrada (desglossament)"
 
 #: ../src/register/ledger-core/split-register-model.c:992
 msgid "Enter a reference, such as a check number , common to all entry lines (splits)"
@@ -16148,9 +16080,8 @@ msgid "Enter a reference, such as a check number , unique to each entry line (sp
 msgstr ""
 
 #: ../src/register/ledger-core/split-register-model.c:1015
-#, fuzzy
 msgid "Enter a transaction reference, such as an invoice or check number, common to all entry lines (splits)"
-msgstr "Escriviu la referència de l'assentament, com ara el número de factura o de xec"
+msgstr "Entreu una referència de transacció, com ara un número de factura o de xec, comú a totes les línes d'entrada (desglossaments)"
 
 #: ../src/register/ledger-core/split-register-model.c:1019
 msgid "Enter a transaction reference, that will be common to all entry lines (splits)"
