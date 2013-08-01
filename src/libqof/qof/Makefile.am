@@ -38,8 +38,7 @@ libgnc_qof_la_SOURCES =  \
    qofquerycore.c    \
    qofreference.c    \
    qofutil.c         \
-   qofsession.c      \
-   qofbookmerge.c
+   qofsession.c
 
 qofincludedir = ${pkgincludedir}
 
@@ -73,7 +72,6 @@ qofinclude_HEADERS = \
    qofsql.h          \
    qof-string-cache.h  \
    qofutil.h         \
-   qofbookmerge.h    \
    qof-gobject.h
 
 noinst_HEADERS = \

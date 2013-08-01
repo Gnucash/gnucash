@@ -60,9 +60,6 @@
 /** @addtogroup Choice Choice and collect : One to many links.
 	@ingroup QOF
 */
-/** @addtogroup BookMerge Merging QofBook structures
-	@ingroup QOF
-*/
 /** \addtogroup Reference Referring to entities outside a partial book.
 	\ingroup QOF
 */
@@ -94,7 +91,6 @@
 #include "qofsession.h"
 #include "qofsql.h"
 #include "qofchoice.h"
-#include "qofbookmerge.h"
 #include "qofreference.h"
 #include "qof-string-cache.h"
 
