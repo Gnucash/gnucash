@@ -81,6 +81,37 @@ static const gchar *new_book_finish_tree_string = N_(
             "imported data are converted to GnuCash transactions. If this is an "
             "existing file, the dialog will not be shown.\n");
 
+/* Escape '_' in string */
+static gchar *mnemonic_escape (const gchar *source);
+static gchar *mnemonic_escape (const gchar *source)
+{
+    const guchar *p;
+    gchar *dest;
+    gchar *q;
+
+    g_return_val_if_fail (source != NULL, NULL);
+
+    p = (guchar *) source;
+    q = dest = g_malloc (strlen (source) * 2 + 1);
+
+    while (*p)
+      {
+        switch (*p)
+          {
+          case '_':
+            *q++ = '_';
+            *q++ = '_';
+            break;
+          default:
+            *q++ = *p;
+            break;
+          }
+        p++;
+      }
+    *q = 0;
+    return dest;
+}
+
 /*************************************************************************/
 
 /**************************************************
@@ -586,12 +617,12 @@ csv_import_assistant_create (CsvImportInfo *info)
     gtk_tree_view_set_model( GTK_TREE_VIEW(info->tree_view), GTK_TREE_MODEL(info->store) );
 #define CREATE_COLUMN(description,column_id) \
   renderer = gtk_cell_renderer_text_new (); \
-  column = gtk_tree_view_column_new_with_attributes (description, renderer, "text", column_id, NULL); \
+  column = gtk_tree_view_column_new_with_attributes (mnemonic_escape(_(description)), renderer, "text", column_id, NULL); \
   gtk_tree_view_column_add_attribute(column, renderer, "background", ROW_COLOR); \
   gtk_tree_view_column_set_resizable (column, TRUE); \
   gtk_tree_view_append_column (GTK_TREE_VIEW (info->tree_view), column);
     CREATE_COLUMN ("type", TYPE);
-    CREATE_COLUMN ("full__name", FULL_NAME);
+    CREATE_COLUMN ("full_name", FULL_NAME);
     CREATE_COLUMN ("name", NAME);
     CREATE_COLUMN ("code", CODE);
     CREATE_COLUMN ("description", DESCRIPTION);
@@ -601,7 +632,7 @@ csv_import_assistant_create (CsvImportInfo *info)
     CREATE_COLUMN ("commodityn", COMMODITYN);
     CREATE_COLUMN ("hidden", HIDDEN);
     CREATE_COLUMN ("tax", TAX);
-    CREATE_COLUMN ("place__holder", PLACE_HOLDER);
+    CREATE_COLUMN ("place_holder", PLACE_HOLDER);
 
     /* Finish Page */
     info->finish_label = GTK_WIDGET(gtk_builder_get_object(builder, "end_page"));
