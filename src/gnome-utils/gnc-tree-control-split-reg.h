@@ -48,7 +48,7 @@ void gnc_tree_control_split_reg_void_current_trans (GncTreeViewSplitReg *view, c
 
 void gnc_tree_control_split_reg_unvoid_current_trans (GncTreeViewSplitReg *view);
 
-void gnc_tree_control_split_reg_jump_to_blank (GncTreeViewSplitReg *view);
+gboolean gnc_tree_control_split_reg_jump_to_blank (GncTreeViewSplitReg *view);
 
 void gnc_tree_control_split_reg_jump_to (GncTreeViewSplitReg *view, Transaction *trans, Split *split, gboolean amount);
 
@@ -118,35 +118,6 @@ void gnc_tree_control_split_reg_paste_trans (GncTreeViewSplitReg *view);
 
 /* Copy the last transaction with given description to the blank transaction */
 void gnc_tree_control_auto_complete (GncTreeViewSplitReg *view, Transaction *trans,  const gchar *new_text);
-
-/*****************************************************************************/
-
-/* Sort changed callback */
-void gnc_tree_control_split_reg_sort_changed_cb (GtkTreeSortable *sortable, gpointer user_data);
-
-/* Sort by date */
-gint gnc_tree_control_split_reg_sort_by_date (GtkTreeModel *fm, GtkTreeIter *fa, GtkTreeIter *fb,
-                       gpointer user_data);
-
-/* Sort by Description / Notes / Memo */
-gint gnc_tree_control_split_reg_sort_by_dnm (GtkTreeModel *fm, GtkTreeIter *fa, GtkTreeIter *fb,
-                       gpointer user_data);
-
-/* Sort function for Number / Action column */
-gint gnc_tree_control_split_reg_sort_by_numact (GtkTreeModel *fm, GtkTreeIter *fa, GtkTreeIter *fb,
-                  gpointer user_data);
-
-/* Sort function for Reconcile column */
-gint gnc_tree_control_split_reg_sort_by_recn (GtkTreeModel *fm, GtkTreeIter *fa, GtkTreeIter *fb,
-                  gpointer user_data);
-
-/* Sort function for transfer column */
-gint gnc_tree_control_split_reg_sort_by_account (GtkTreeModel *fm, GtkTreeIter *fa, GtkTreeIter *fb,
-                  gpointer user_data);
-
-/* Sort function for debit / credit column */
-gint gnc_tree_control_split_reg_sort_by_value (GtkTreeModel *fm, GtkTreeIter *fa, GtkTreeIter *fb,
-                  gpointer user_data);
 
 /*****************************************************************************/
 

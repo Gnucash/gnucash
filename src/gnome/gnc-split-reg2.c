@@ -81,6 +81,9 @@ static Transaction* gsr2_create_balancing_transaction (QofBook *book, Account *a
 
 static void gsr2_emit_simple_signal (GNCSplitReg2 *gsr, const char *sigName);
 static void gsr2_emit_help_changed (GncTreeViewSplitReg *view, gpointer user_data);
+static void gsr2_scroll_value_changed_cb (GtkAdjustment *adj, gpointer user_data);
+static gboolean gsr2_scroll_button_event_cb (GtkWidget *widget, GdkEventButton *event, gpointer user_data);
+static void gsr2_scroll_sync_cb (GncTreeModelSplitReg *model, gpointer user_data);
 
 void gnc_split_reg2_style_ledger_cb (GtkWidget *w, gpointer data);
 void gnc_split_reg2_style_auto_ledger_cb (GtkWidget *w, gpointer data);
@@ -92,6 +95,8 @@ void gnc_split_reg2_destroy_cb (GtkWidget *widget, gpointer data);
 static void gnc_split_reg2_class_init (GNCSplitReg2Class *klass);
 static void gnc_split_reg2_init (GNCSplitReg2 *gsr);
 static void gnc_split_reg2_init2 (GNCSplitReg2 *gsr);
+
+static void gnc_split_reg2_sort_changed_cb (GtkTreeSortable *sortable, gpointer user_data);
 
 
 GType
@@ -196,11 +201,11 @@ gnc_split_reg2_init2 (GNCSplitReg2 *gsr)
 
     gnc_split_reg2_determine_account_pr (gsr);
 
-    gsr2_setup_status_widgets( gsr );
+    gsr2_setup_status_widgets (gsr);
     /* ordering is important here... setup_status before create_table */
 
-    gsr2_create_table( gsr );
-    gsr2_setup_table( gsr );
+    gsr2_create_table (gsr);
+    gsr2_setup_table (gsr);
 
 }
 
@@ -226,9 +231,12 @@ gsr2_create_table (GNCSplitReg2 *gsr)
     GtkWidget *register_widget;
     GncTreeViewSplitReg *view;
     GncTreeModelSplitReg *model;
+    GtkTreeModel *s_model;
     GtkWidget *scrolled_window;
     GtkTreeViewColumn *col;
     GNCLedgerDisplay2Type ledger_type;
+    GtkWidget *hbox;
+    gdouble num_of_trans;
 
     gchar *gconf_key;
     const GncGUID * guid;
@@ -266,12 +274,28 @@ gsr2_create_table (GNCSplitReg2 *gsr)
     if (ledger_type == LD2_GL && model->type == GENERAL_LEDGER2)
         gconf_key = g_strconcat (GCONF_SECTION,"/", "00000000000000000000000000000001", NULL);
 
+    // Create a hbox for treeview and scrollbar.
+    hbox = gtk_hbox_new (FALSE, 0);
+    gtk_widget_show (hbox);
+
     scrolled_window = gtk_scrolled_window_new (NULL, NULL);
     gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window),
                                    GTK_POLICY_AUTOMATIC,
                                    GTK_POLICY_AUTOMATIC);
+
     gtk_widget_show (scrolled_window);
-    gtk_box_pack_start (GTK_BOX (gsr), scrolled_window, TRUE, TRUE, 0);
+
+    gtk_box_pack_start (GTK_BOX (gsr), hbox, TRUE, TRUE, 0);
+
+    num_of_trans = model->number_of_trans_in_full_tlist - 1;
+
+    gsr->scroll_adj = GTK_ADJUSTMENT (gtk_adjustment_new (model->position_of_trans_in_full_tlist, 0.0, num_of_trans + 10, 1.0, 10.0, 10.0));
+
+    gsr->scroll_bar = gtk_vscrollbar_new (GTK_ADJUSTMENT (gsr->scroll_adj));
+    gtk_widget_show (gsr->scroll_bar);
+
+    gtk_box_pack_start (GTK_BOX (hbox), gsr->scroll_bar, FALSE, FALSE, 2);
+    gtk_box_pack_start (GTK_BOX (hbox), scrolled_window, TRUE, TRUE, 0);
 
     gnc_ledger_display2_set_split_view_register (gsr->ledger, view);
 
@@ -284,6 +308,9 @@ gsr2_create_table (GNCSplitReg2 *gsr)
         view->sort_direction = -1;
     else
         view->sort_direction = 1;
+
+    /* Restore the sort column from gconf */
+    view->sort_col = model->sort_col;
 
     g_object_set (G_OBJECT (view), "gconf-section", gconf_key, 
                  "show-column-menu", FALSE, NULL);
@@ -321,11 +348,31 @@ gsr2_create_table (GNCSplitReg2 *gsr)
 
     /* This triggers the update of the summary bar */
     g_signal_connect_after (model, "refresh_status_bar",
-                      G_CALLBACK(gsr2_redraw_all_cb), gsr); //this works
+                      G_CALLBACK (gsr2_redraw_all_cb), gsr); //this works
+
+    // This will keep scrollbar in sync.
+    g_signal_connect (model, "scroll_sync",
+                      G_CALLBACK (gsr2_scroll_sync_cb), gsr);
 
     /* This triggers the update of the help text */
     g_signal_connect (view, "help_signal",
                       G_CALLBACK (gsr2_emit_help_changed), gsr); // this works
+
+    gsr2_scroll_value_changed_cb (GTK_ADJUSTMENT (gsr->scroll_adj), gsr);
+
+    /* This triggers the tooltip to change when scrolling */
+    g_signal_connect (gsr->scroll_adj, "value-changed",
+                      G_CALLBACK (gsr2_scroll_value_changed_cb), gsr); // this works
+
+    /* This triggers the model update when mouse button released */
+    g_signal_connect (gsr->scroll_bar, "button-release-event",
+                      G_CALLBACK (gsr2_scroll_button_event_cb), gsr);
+
+    s_model = gtk_tree_view_get_model (GTK_TREE_VIEW (view));
+
+    // Connect a call back to update the sort settings.
+    g_signal_connect (GTK_TREE_SORTABLE (s_model), "sort-column-changed",
+          G_CALLBACK (gnc_split_reg2_sort_changed_cb), gsr);
 
     LEAVE(" ");
 }
@@ -753,6 +800,56 @@ gsr2_create_balancing_transaction (QofBook *book, Account *account,
     return trans;
 }
 
+
+/* Sort changed callback */
+static void
+gnc_split_reg2_sort_changed_cb (GtkTreeSortable *sortable, gpointer user_data)
+{
+    Query *query;
+    GNCSplitReg2 *gsr = user_data;
+    GncTreeViewSplitReg *view;
+    GncTreeModelSplitReg *model; 
+    GtkSortType   type;
+    gint          sortcol;
+    gint          sort_depth;
+    const gchar  *gconf_section;
+
+    gtk_tree_sortable_get_sort_column_id (sortable, &sortcol, &type);
+    ENTER("sortcol is %d", sortcol);
+
+    view = gnc_ledger_display2_get_split_view_register (gsr->ledger);
+    model = gnc_ledger_display2_get_split_model_register (gsr->ledger);
+
+    query = gnc_ledger_display2_get_query (gsr->ledger);
+
+    sort_depth = gnc_tree_view_reg_get_selected_row_depth (view);
+    if (sort_depth != 0)
+        view->sort_depth = sort_depth;
+
+    view->sort_col = sortcol;
+    model->sort_col = sortcol;
+
+    if (type == GTK_SORT_DESCENDING)
+    {
+        view->sort_direction = -1;
+        model->sort_direction = -1;
+    }
+    else
+    {
+        view->sort_direction = 1;
+        model->sort_direction = 1;
+    }
+
+    /* Save the sort depth to gconf */
+    gconf_section = gnc_tree_view_get_gconf_section (GNC_TREE_VIEW (view));
+    gnc_gconf_set_int (gconf_section, "sort_depth", view->sort_depth, NULL);
+    gnc_gconf_set_int (gconf_section, "sort_col", view->sort_col, NULL);
+
+    LEAVE("v_sort_col %d, v_sort_direction is %d  v_sort_depth is %d", view->sort_col, view->sort_direction, view->sort_depth);
+
+    if (sortcol != -1)
+        gnc_ledger_display2_refresh (gsr->ledger);
+}
 /* ############################## End Handlers ############################ */
 
 void
@@ -1074,16 +1171,72 @@ gnc_split_reg2_get_parent (GNCLedgerDisplay2 *ledger)
     return gsr->window;
 }
 
-static
-void
-gsr2_emit_help_changed (GncTreeViewSplitReg *view, gpointer user_data) //this works
+static void
+gsr2_emit_help_changed (GncTreeViewSplitReg *view, gpointer user_data)
 {
     gsr2_emit_simple_signal ((GNCSplitReg2*)user_data, "help-changed" );
 }
 
+/* Callback to keep vertical scroll bar in sync */
+static void
+gsr2_scroll_sync_cb (GncTreeModelSplitReg *model, gpointer user_data)
+{
+    GNCSplitReg2 *gsr = user_data;
+    gint trans_position;
+
+    trans_position = model->position_of_trans_in_full_tlist;
+
+    gtk_adjustment_set_value (gsr->scroll_adj, trans_position);
+
+    gtk_adjustment_set_upper (gsr->scroll_adj, model->number_of_trans_in_full_tlist + 9);
+}
+
+static void
+gsr2_scroll_value_changed_cb (GtkAdjustment *adj, gpointer user_data)
+{
+    GNCSplitReg2 *gsr = user_data;
+    GncTreeModelSplitReg *model;
+    gchar *text;
+    gint  trans_position;
+
+    model = gnc_ledger_display2_get_split_model_register (gsr->ledger);
+
+    trans_position = gtk_adjustment_get_value (adj);
+
+    text = gnc_tree_model_split_reg_get_tooltip (model, trans_position);
+
+    g_object_set (gtk_widget_get_settings (gsr->scroll_bar), "gtk-tooltip-timeout", 2, NULL);
+
+    gtk_widget_set_tooltip_text (gsr->scroll_bar, text);
+
+    g_free (text);
+}
+
+static
+gboolean
+gsr2_scroll_button_event_cb (GtkWidget *widget, GdkEventButton *event, gpointer user_data)
+{
+    GNCSplitReg2 *gsr = user_data;
+    GncTreeModelSplitReg *model;
+    gint trans_position;
+
+    model = gnc_ledger_display2_get_split_model_register (gsr->ledger);
+
+    trans_position = gtk_adjustment_get_value (gsr->scroll_adj);
+
+    gnc_tree_model_split_reg_set_current_trans_by_position (model, trans_position);
+
+//FIXME should we store what it was...
+    g_object_set (gtk_widget_get_settings (gsr->scroll_bar), "gtk-tooltip-timeout", 500, NULL);
+
+    g_signal_emit_by_name (model, "refresh_trans");
+
+    return FALSE;
+}
+
 static
 void
-gsr2_emit_simple_signal (GNCSplitReg2 *gsr, const char *sigName) //this works
+gsr2_emit_simple_signal (GNCSplitReg2 *gsr, const char *sigName)
 {
     g_signal_emit_by_name( gsr, sigName, NULL );
 }

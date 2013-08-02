@@ -59,9 +59,6 @@ struct gnc_ledger_display2
 
     GNCLedgerDisplay2Type ld_type;
 
-    /* Needs to be removed at some point */
-    SplitRegister *reg;
-
     GncTreeModelSplitReg *model; //FIXME Might get rid of this and use function to find.
     GncTreeViewSplitReg *view;
 
@@ -95,7 +92,6 @@ gnc_ledger_display2_internal (Account *lead_account, Query *q,
 static void gnc_ledger_display2_refresh_internal (GNCLedgerDisplay2 *ld, GList *splits);
 
 static void gnc_ledger_display2_refresh_cb (GncTreeModelSplitReg *model, gpointer item, gpointer user_data);
-
 
 /** Implementations *************************************************/
 
@@ -146,17 +142,6 @@ gnc_ledger_display2_set_handlers (GNCLedgerDisplay2 *ld,
     ld->destroy = destroy;
     ld->get_parent = get_parent;
 }
-
-/*FIXME */
-SplitRegister *
-gnc_ledger_display2_get_split_register (GNCLedgerDisplay2 *ld)
-{
-    if (!ld)
-        return NULL;
-
-    return ld->reg;
-}
-
 
 GncTreeModelSplitReg *
 gnc_ledger_display2_get_split_model_register (GNCLedgerDisplay2 *ld)
@@ -616,11 +601,11 @@ refresh_handler (GHashTable *changes, gpointer user_data)
     splits = qof_query_run (ld->query);
 
 //FIXME Not Needed ?    gnc_ledger_display2_set_watches (ld, splits);
-    //gconf changes come this way, we only want a full refresh for SEARCH-LEDGER2
-    if (ld->model->type == SEARCH_LEDGER2)
-        gnc_ledger_display2_refresh_internal (ld, splits);
-    else
-        gnc_tree_view_split_reg_change_vis_rows (ld->view);
+//    gnc_ledger_display2_set_watches (ld, splits);
+
+    //gconf changes come this way
+    gnc_ledger_display2_refresh_internal (ld, splits);
+
     LEAVE(" ");
 }
 
@@ -829,13 +814,20 @@ gnc_ledger_display2_internal (Account *lead_account, Query *q,
 
     gnc_tree_model_split_reg_set_data (ld->model, ld, gnc_ledger_display2_parent);
 
-    // This sets up a call back for the search_ledger2 to reload after changes
+//FIXME We should get the load filter and sort here so we run query once on load....
+
+    gnc_tree_model_split_reg_set_display (ld->model, ((ld_type == LD2_SUBACCOUNT)?TRUE:FALSE), ((ld_type == LD2_GL)?TRUE:FALSE));
+
+    gnc_tree_model_split_reg_default_query (ld->model, lead_account, ld->query);
+
+    // This sets up a call back to reload after changes
     g_signal_connect (G_OBJECT (ld->model), "refresh_trans",
                       G_CALLBACK (gnc_ledger_display2_refresh_cb), ld );
 
     splits = qof_query_run (ld->query);
 
 //FIXME Not Needed ?    gnc_ledger_display2_set_watches (ld, splits);
+//    gnc_ledger_display2_set_watches (ld, splits);
 
     gnc_ledger_display2_refresh_internal (ld, splits);
 
@@ -900,7 +892,7 @@ gnc_ledger_display2_find_by_query (Query *q)
 static void
 gnc_ledger_display2_refresh_internal (GNCLedgerDisplay2 *ld, GList *splits)
 {
-    GtkTreeModel *s_model, *f_model, *model;
+    GtkTreeModel *s_model, *model;
 
     if (!ld || ld->loading)
         return;
@@ -917,11 +909,9 @@ gnc_ledger_display2_refresh_internal (GNCLedgerDisplay2 *ld, GList *splits)
         ld->loading = TRUE;
 
 	s_model = gtk_tree_view_get_model (GTK_TREE_VIEW (ld->view)); // this is the sort model
-        f_model = gtk_tree_model_sort_get_model (GTK_TREE_MODEL_SORT (s_model)); // this is the filter model
-        model = gtk_tree_model_filter_get_model (GTK_TREE_MODEL_FILTER (f_model)); // our model
+        model = gtk_tree_model_sort_get_model (GTK_TREE_MODEL_SORT (s_model)); // this is the model
 
         g_object_ref (s_model);
-        g_object_ref (f_model);
         g_object_ref (model);
 
         gnc_tree_view_split_reg_block_selection (ld->view, TRUE); // This blocks the tree selection
@@ -930,12 +920,11 @@ gnc_ledger_display2_refresh_internal (GNCLedgerDisplay2 *ld, GList *splits)
         gtk_tree_view_set_model (GTK_TREE_VIEW (ld->view), GTK_TREE_MODEL (s_model)); // Re-attach sort model to view
         gnc_tree_view_split_reg_block_selection (ld->view, FALSE); // This unblocks the tree selection
 
+        g_object_unref (model);
+        g_object_unref (s_model);
+
         /* Set the default selection start position */
         gnc_tree_view_split_reg_default_selection (ld->view);
-
-        g_object_unref (model);
-        g_object_unref (f_model);
-        g_object_unref (s_model);
 
         ld->loading = FALSE;
     }
@@ -949,6 +938,26 @@ gnc_ledger_display2_refilter (GNCLedgerDisplay2 *ld)
     /* Set the default selection start position and refilter */
     gnc_tree_view_split_reg_default_selection (ld->view);
 
+    LEAVE(" ");
+}
+
+void
+gnc_ledger_display2_refresh_sched (GNCLedgerDisplay2 *ld, GList *splits)
+{
+    ENTER("ld=%p", ld);
+
+    if (!ld)
+    {
+        LEAVE("no display");
+        return;
+    }
+
+    if (ld->loading)
+    {
+        LEAVE("already loading");
+        return;
+    }
+    gnc_ledger_display2_refresh_internal (ld, splits);
     LEAVE(" ");
 }
 
@@ -969,6 +978,8 @@ gnc_ledger_display2_refresh (GNCLedgerDisplay2 *ld)
         return;
     }
 
+    // Update the query before refresh
+    gnc_tree_model_split_reg_update_query (ld->model, ld->query);
     gnc_ledger_display2_refresh_internal (ld, qof_query_run (ld->query));
     LEAVE(" ");
 }
@@ -1022,15 +1033,14 @@ gnc_ledger_display2_set_split_view_refresh (GNCLedgerDisplay2 *ld, gboolean ok)
     ld->refresh_ok = ok;
 }
 
-/* This is used for the search_ledger2 reload after any changes made */
+/* This is used to reload after any changes made */
 static void
 gnc_ledger_display2_refresh_cb (GncTreeModelSplitReg *model, gpointer item, gpointer user_data)
 {
     GNCLedgerDisplay2 *ld = user_data;
 
-    if (model->type == SEARCH_LEDGER2)
-        /* Refresh the view when idle */
-        g_idle_add ((GSourceFunc)gnc_ledger_display2_refresh, ld);
+    /* Refresh the view when idle */
+    g_idle_add ((GSourceFunc)gnc_ledger_display2_refresh, ld);
 }
 
 void

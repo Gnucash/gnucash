@@ -45,6 +45,10 @@ G_BEGIN_DECLS
 #define GNC_TREE_MODEL_SPLIT_REG_NAME            "GncTreeModelSplitReg"
 
 
+/* Define the number of transaction to load */
+#define NUM_OF_TRANS 30
+
+
 /** @brief Register types
  *
  * "registers" are single-account display windows.
@@ -100,12 +104,25 @@ typedef enum
 
     /* internal hidden columns */
     GNC_TREE_MODEL_SPLIT_REG_COL_RO,           //9
-    GNC_TREE_MODEL_SPLIT_REG_COL_FILTER_VIS,   //10
-    GNC_TREE_MODEL_SPLIT_REG_COL_NUM_VIS,      //11
-    GNC_TREE_MODEL_SPLIT_REG_COL_ACT_VIS,      //12
+    GNC_TREE_MODEL_SPLIT_REG_COL_NUM_VIS,      //10
+    GNC_TREE_MODEL_SPLIT_REG_COL_ACT_VIS,      //11
 
-    GNC_TREE_MODEL_SPLIT_REG_NUM_COLUMNS       //13
+    GNC_TREE_MODEL_SPLIT_REG_NUM_COLUMNS       //12
 } GncTreeModelSplitRegColumn;
+
+
+
+typedef enum
+{
+    VIEW_HOME,    //0
+    VIEW_UP,      //1
+    VIEW_PGUP,    //2
+    VIEW_GOTO,    //3
+    VIEW_PGDOWN,  //4
+    VIEW_DOWN,    //5
+    VIEW_END,     //6
+} GncTreeModelSplitRegUpdate;
+
 
 /* typedefs & structures */
 typedef struct GncTreeModelSplitRegPrivate GncTreeModelSplitRegPrivate;
@@ -123,6 +140,10 @@ typedef struct
 
     gboolean                     is_template;           /**< Are we using a template */
 
+    gint                         sort_depth;            /**< This is the row the sort direction is based on. */
+    gint                         sort_col;              /**< This is the column the sort direction is based on. */
+    gint                         sort_direction;        /**< This is the direction of sort, 1 for ascending or -1 rest */
+
     gboolean                     use_accounting_labels; /**< whether to use accounting Labels */
     gboolean                     separator_changed;     /**< whether the separator has changed */ 
     gboolean                     alt_colors_by_txn;     /**< whether to use alternative colors by transaction */ 
@@ -130,9 +151,10 @@ typedef struct
 
     gboolean                     read_only;             /**< register is read only */
 
-    cleared_match_t              filter_cleared_match;  // Status for Filter.
-    time64                       filter_start_time;     // Start time for Filter.
-    time64                       filter_end_time;       // End time for Filter.
+    Transaction                 *current_trans;         /**< Current transaction */
+    gint                         current_row;           /**< Current row in treeview */
+    gint                         number_of_trans_in_full_tlist;     /**< The total number of transactions in full_tlist */
+    gint                         position_of_trans_in_full_tlist;   /**< The position of current transaction in full_tlist */
 
 }GncTreeModelSplitReg;
 
@@ -146,16 +168,18 @@ typedef struct
        the transaction */
     void (*refresh_trans) (GncTreeModelSplitReg *model, gpointer item);
 
+    /* This signal is emitted to refresh the model */
+    void (*refresh_view) (GncTreeModelSplitReg *model, gpointer user_data);
+
+    /* This signal is emitted to keep scrollbar in sync */
+    void (*scroll_sync) (GncTreeModelSplitReg *model, gpointer user_data);
+
     /* This signal is emitted to refresh the status bar */
     void (*refresh_status_bar) (GncTreeModelSplitReg *model, gpointer user_data);
 
     /* This signal is emitted before a transaction delete, the pointer has
        the transaction */
     void (*selection_move_delete) (GncTreeModelSplitReg *model, gpointer item);
-
-    /* This signal is emitted before a refilter, the pointer has
-       the transaction */
-    void (*selection_move_filter) (GncTreeModelSplitReg *model, gpointer item);
 
 } GncTreeModelSplitRegClass;
 
@@ -193,6 +217,12 @@ void gnc_tree_model_split_reg_destroy (GncTreeModelSplitReg *model);
 void gnc_tree_model_split_reg_set_data (GncTreeModelSplitReg *model, gpointer user_data,
                                   SRGetParentCallback2 get_parent);
 
+/** Sets the default query for the register. */
+void gnc_tree_model_split_reg_default_query (GncTreeModelSplitReg *model, Account *default_account, Query *query);
+
+/** Update the query for the register. */
+void gnc_tree_model_split_reg_update_query (GncTreeModelSplitReg *model, Query *query);
+
 /** Returns the parent Window of the register. */
 GtkWidget * gnc_tree_model_split_reg_get_parent (GncTreeModelSplitReg *model);
 
@@ -208,6 +238,18 @@ void gnc_tree_model_split_reg_commit_blank_split (GncTreeModelSplitReg *model);
 
 /** Set display general ledger and show sub accounts. */
 void gnc_tree_model_split_reg_set_display (GncTreeModelSplitReg *model, gboolean subacc, gboolean gl);
+
+/** Change transactions in the tlist based on view movement. */
+void gnc_tree_model_split_reg_move (GncTreeModelSplitReg *model, GncTreeModelSplitRegUpdate model_update);
+
+/* Sync the vertical scrollbar to position in full_tlist. */
+void gnc_tree_model_split_reg_sync_scrollbar (GncTreeModelSplitReg *model);
+
+/** Return the first transaction, opposite to blank transaction in the full list. */
+Transaction * gnc_tree_model_split_reg_get_first_trans (GncTreeModelSplitReg *model);
+
+/** Return TRUE if transaction is in the view list. */
+gboolean gnc_tree_model_split_reg_trans_is_in_view (GncTreeModelSplitReg *model, Transaction *trans);
 
 /* These are to do with autocompletion */
 GtkListStore * gnc_tree_model_split_reg_get_description_list (GncTreeModelSplitReg *model);
@@ -258,6 +300,12 @@ gboolean gnc_tree_model_split_reg_get_iter_from_trans_and_split (
 gchar * gnc_tree_model_split_reg_get_row_color (GncTreeModelSplitReg *model, gboolean is_trow1,
          gboolean is_trow2, gboolean is_split, gint num);
 
+/* Return the tooltip for transaction at position in full_tlist. */
+gchar * gnc_tree_model_split_reg_get_tooltip (GncTreeModelSplitReg *model, gint position);
+
+/* Set the current transaction to that at position in full_tlist */
+void gnc_tree_model_split_reg_set_current_trans_by_position (GncTreeModelSplitReg *model, gint position);
+
 /* Return TRUE if this transaction is read only for the view */
 gboolean
 gnc_tree_model_split_reg_get_read_only (GncTreeModelSplitReg *model, Transaction *trans);
@@ -275,6 +323,9 @@ gboolean gnc_tree_model_split_reg_is_blank_trans (GncTreeModelSplitReg *model, G
 
 /* Return the split for which ancestor is it's parent */
 Split * gnc_tree_model_split_reg_trans_get_split_equal_to_ancestor (const Transaction *trans, const Account *ancestor);
+
+/* Dummy Sort function */
+gint gnc_tree_model_split_reg_sort_iter_compare_func (GtkTreeModel *tm, GtkTreeIter *a, GtkTreeIter *b, gpointer user_data);
 
 /*****************************************************************************/
 

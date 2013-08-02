@@ -48,6 +48,8 @@ struct _GNCSplitReg2
 
     /* The containing window. */
     GtkWidget *window;
+    GtkWidget *scroll_bar;
+    GtkAdjustment *scroll_adj;
 
     GtkWidget *toolbar;
     GtkWidget *summarybar;

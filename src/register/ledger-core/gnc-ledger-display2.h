@@ -86,11 +86,7 @@ void gnc_ledger_display2_set_split_view_refresh (GNCLedgerDisplay2 *ld, gboolean
 GtkWidget *gnc_ledger_display2_get_parent( GNCLedgerDisplay2 *ld );
 
 /* return the split register associated with a ledger display */
-SplitRegister * gnc_ledger_display2_get_split_register (GNCLedgerDisplay2 *ld);
-
-/* return the split register associated with a ledger display */
 GncTreeModelSplitReg * gnc_ledger_display2_get_split_model_register (GNCLedgerDisplay2 *ld);
-
 
 /* opens up a register window to display a single account */
 GNCLedgerDisplay2 * gnc_ledger_display2_simple (Account *account);
@@ -131,6 +127,9 @@ GNCLedgerDisplay2 * gnc_ledger_display2_find_by_query (Query *q);
  * thing, they differ only by the argument they take. */
 void gnc_ledger_display2_refresh (GNCLedgerDisplay2 * ledger_display);
 void gnc_ledger_display2_refresh_by_split_register (GncTreeModelSplitReg *model);
+
+/* This is used to load the register for the schedule */
+void gnc_ledger_display2_refresh_sched (GNCLedgerDisplay2 *ld, GList *splits);
 
 /* Refilter the register */
 void gnc_ledger_display2_refilter (GNCLedgerDisplay2 *ld);

@@ -160,16 +160,14 @@ GtkTreePath * gnc_tree_view_split_reg_get_sort_path_from_model_path (GncTreeView
 /* Get model path from the sort model path */
 GtkTreePath * gnc_tree_view_split_reg_get_model_path_from_sort_path (GncTreeViewSplitReg *view, GtkTreePath *spath);
 
+/* Get model from the view */
 GncTreeModelSplitReg * gnc_tree_view_split_reg_get_model_from_view (GncTreeViewSplitReg *view);
 
+/* Scroll the view to the current transaction */
 gboolean gnc_tree_view_split_reg_scroll_to_cell (GncTreeViewSplitReg *view);
 
+/* Scroll the view to the blank split */
 gboolean gnc_tree_view_split_reg_scroll_to_bsplit (GncTreeViewSplitReg *view);
-
-void gnc_tree_view_split_reg_refilter (GncTreeViewSplitReg *view);
-
-/* Change all visable view entries */
-void gnc_tree_view_split_reg_change_vis_rows (GncTreeViewSplitReg *view);
 
 /*************************************************************************************/
 

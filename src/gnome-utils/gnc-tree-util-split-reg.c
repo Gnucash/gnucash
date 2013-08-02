@@ -1021,8 +1021,6 @@ gnc_tree_util_split_reg_save_amount_values (GncTreeViewSplitReg *view, Transacti
 
 /*###########################################################################*/
 
-
-
 /* Takes the input with column and sets the price / amount / value so they are consistent */
 void
 gnc_tree_util_set_number_for_input (GncTreeViewSplitReg *view, Transaction *trans, Split *split, gnc_numeric input, gint viewcol)
