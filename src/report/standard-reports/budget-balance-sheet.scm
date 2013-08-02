@@ -40,14 +40,14 @@
 ;; define all option's names and help text so that they are properly
 ;; defined in *one* place.
 (define optname-report-title (N_ "Report Title"))
-(define opthelp-report-title (N_ "Title for this report"))
+(define opthelp-report-title (N_ "Title for this report."))
 
 (define optname-party-name (N_ "Company name"))
-(define opthelp-party-name (N_ "Name of company/individual"))
+(define opthelp-party-name (N_ "Name of company/individual."))
 
 (define optname-report-form (N_ "Single column Balance Sheet"))
 (define opthelp-report-form
-  (N_ "Print liability/equity section in the same column under the assets section as opposed to a second column right of the assets section"))
+  (N_ "Print liability/equity section in the same column under the assets section as opposed to a second column right of the assets section."))
 ;; FIXME this needs an indent option
 
 (define optname-accounts (N_ "Accounts"))
@@ -55,58 +55,58 @@
   (N_ "Report on these accounts, if display depth allows."))
 (define optname-depth-limit (N_ "Levels of Subaccounts"))
 (define opthelp-depth-limit
-  (N_ "Maximum number of levels in the account tree displayed"))
+  (N_ "Maximum number of levels in the account tree displayed."))
 (define optname-bottom-behavior (N_ "Flatten list to depth limit"))
 (define opthelp-bottom-behavior
-  (N_ "Displays accounts which exceed the depth limit at the depth limit"))
+  (N_ "Displays accounts which exceed the depth limit at the depth limit."))
 
 (define optname-parent-balance-mode (N_ "Parent account balances"))
 (define optname-parent-total-mode (N_ "Parent account subtotals"))
 
 (define optname-show-zb-accts (N_ "Include accounts with zero total balances"))
 (define opthelp-show-zb-accts
-  (N_ "Include accounts with zero total (recursive) balances in this report"))
+  (N_ "Include accounts with zero total (recursive) balances in this report."))
 (define optname-omit-zb-bals (N_ "Omit zero balance figures"))
 (define opthelp-omit-zb-bals
-  (N_ "Show blank space in place of any zero balances which would be shown"))
+  (N_ "Show blank space in place of any zero balances which would be shown."))
 
 (define optname-use-rules (N_ "Show accounting-style rules"))
 (define opthelp-use-rules
-  (N_ "Use rules beneath columns of added numbers like accountants do"))
+  (N_ "Use rules beneath columns of added numbers like accountants do."))
 
 (define optname-account-links (N_ "Display accounts as hyperlinks"))
-(define opthelp-account-links (N_ "Shows each account in the table as a hyperlink to its register window"))
+(define opthelp-account-links (N_ "Shows each account in the table as a hyperlink to its register window."))
 
 (define optname-label-assets (N_ "Label the assets section"))
 (define opthelp-label-assets
-  (N_ "Whether or not to include a label for the assets section"))
+  (N_ "Whether or not to include a label for the assets section."))
 (define optname-total-assets (N_ "Include assets total"))
 (define opthelp-total-assets
-  (N_ "Whether or not to include a line indicating total assets"))
+  (N_ "Whether or not to include a line indicating total assets."))
 (define optname-label-liabilities (N_ "Label the liabilities section"))
 (define opthelp-label-liabilities
-  (N_ "Whether or not to include a label for the liabilities section"))
+  (N_ "Whether or not to include a label for the liabilities section."))
 (define optname-total-liabilities (N_ "Include liabilities total"))
 (define opthelp-total-liabilities
-  (N_ "Whether or not to include a line indicating total liabilities"))
+  (N_ "Whether or not to include a line indicating total liabilities."))
 (define optname-label-equity (N_ "Label the equity section"))
 (define opthelp-label-equity
-  (N_ "Whether or not to include a label for the equity section"))
+  (N_ "Whether or not to include a label for the equity section."))
 (define optname-total-equity (N_ "Include equity total"))
 (define opthelp-total-equity
-  (N_ "Whether or not to include a line indicating total equity"))
+  (N_ "Whether or not to include a line indicating total equity."))
 (define optname-new-existing (N_ "Include new/existing totals"))
 (define opthelp-new-existing
-  (N_ "Whether or not to include lines indicating change in totals introduced by budget"))
+  (N_ "Whether or not to include lines indicating change in totals introduced by budget."))
 
 (define pagename-commodities (N_ "Commodities"))
 (define optname-report-commodity (N_ "Report's currency"))
 (define optname-price-source (N_ "Price Source"))
 (define optname-show-foreign (N_ "Show Foreign Currencies"))
 (define opthelp-show-foreign
-  (N_ "Display any foreign currency amount in an account"))
+  (N_ "Display any foreign currency amount in an account."))
 (define optname-show-rates (N_ "Show Exchange Rates"))
-(define opthelp-show-rates (N_ "Show the exchange rates used"))
+(define opthelp-show-rates (N_ "Show the exchange rates used."))
 
 (define optname-budget (N_ "Budget"))
 (define opthelp-budget (N_ "Budget to use."))

@@ -492,8 +492,8 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="has_tooltip">True</property>
-                    <property name="tooltip_markup">Use only &amp;apos;debit&amp;apos; and &amp;apos;credit&amp;apos; instead of informal synonyms</property>
-                    <property name="tooltip_text" translatable="yes">Use only 'debit' and 'credit' instead of informal synonyms</property>
+                    <property name="tooltip_markup">Use only &amp;apos;debit&amp;apos; and &amp;apos;credit&amp;apos; instead of informal synonyms.</property>
+                    <property name="tooltip_text" translatable="yes">Use only 'debit' and 'credit' instead of informal synonyms.</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
                   </object>
@@ -865,8 +865,8 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="has_tooltip">True</property>
-                    <property name="tooltip_markup">Show the Account Color as Account Name Background</property>
-                    <property name="tooltip_text" translatable="yes">Show the Account Color as Account Name Background</property>
+                    <property name="tooltip_markup">Show the Account Color as Account Name Background.</property>
+                    <property name="tooltip_text" translatable="yes">Show the Account Color as Account Name Background.</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
                   </object>
@@ -899,8 +899,8 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="has_tooltip">True</property>
-                    <property name="tooltip_markup">Show the Account Color as tab background</property>
-                    <property name="tooltip_text" translatable="yes">Show the Account Color as tab background</property>
+                    <property name="tooltip_markup">Show the Account Color as tab background.</property>
+                    <property name="tooltip_text" translatable="yes">Show the Account Color as tab background.</property>
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
@@ -1548,8 +1548,8 @@ many months before the current month:</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="has_tooltip">True</property>
-                    <property name="tooltip_markup">Present the new account list dialog when you choose &amp;quot;New File&amp;quot; from the &amp;quot;File&amp;quot; menu</property>
-                    <property name="tooltip_text" translatable="yes">Present the new account list dialog when you choose "New File" from the "File" menu</property>
+                    <property name="tooltip_markup">Present the new account list dialog when you choose File -&gt; New File.</property>
+                    <property name="tooltip_text" translatable="yes">Present the new account list dialog when you choose File -> New File.</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
                   </object>
@@ -1590,8 +1590,8 @@ many months before the current month:</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="has_tooltip">True</property>
-                    <property name="tooltip_markup">Display hints for using GnuCash at startup</property>
-                    <property name="tooltip_text" translatable="yes">Display hints for using GnuCash at startup</property>
+                    <property name="tooltip_markup">Display hints for using GnuCash at startup.</property>
+                    <property name="tooltip_text" translatable="yes">Display hints for using GnuCash at startup.</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
                   </object>
@@ -1791,8 +1791,8 @@ many months before the current month:</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="has_tooltip">True</property>
-                    <property name="tooltip_markup">Display negative amounts in red</property>
-                    <property name="tooltip_text" translatable="yes">Display negative amounts in red</property>
+                    <property name="tooltip_markup">Display negative amounts in red.</property>
+                    <property name="tooltip_text" translatable="yes">Display negative amounts in red.</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
                   </object>
@@ -2027,6 +2027,9 @@ many months before the current month:</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
+                    <property name="has_tooltip">True</property>
+                    <property name="tooltip_markup">Do not create log/backup files.</property>
+                    <property name="tooltip_text" translatable="yes">Do not create log/backup files.</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">gconf/general/retain_type/days</property>
                   </object>
@@ -2042,6 +2045,9 @@ many months before the current month:</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
+                    <property name="has_tooltip">True</property>
+                    <property name="tooltip_markup">Delete old log/backup files after this many days (0 = never).</property>
+                    <property name="tooltip_text" translatable="yes">Delete old log/backup files after this many days (0 = never).</property>
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
                   </object>
@@ -2057,6 +2063,9 @@ many months before the current month:</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
+                    <property name="has_tooltip">True</property>
+                    <property name="tooltip_markup">Do not delete log/backup files.</property>
+                    <property name="tooltip_text" translatable="yes">Do not delete log/backup files.</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">gconf/general/retain_type/days</property>
                   </object>
@@ -2294,7 +2303,10 @@ many months before the current month:</property>
                   <object class="GtkFontButton" id="gconf/dialogs/print_checks/default_font">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
+                    <property name="receives_default">True</property>.
+                    <property name="has_tooltip">True</property>
+                    <property name="tooltip_markup">The default check printing font.</property>
+                    <property name="tooltip_text" translatable="yes">The default check printing font.</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -2986,8 +2998,6 @@ many months before the current month:</property>
                   <object class="GtkLabel" id="label14">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="tooltip_markup">This sets the number of characters before auto complete starts for description, notes and memo fields.</property>
-                    <property name="tooltip_text" translatable="yes">This sets the number of characters before auto complete starts for description, notes and memo fields.</property>
                     <property name="xalign">0</property>
                     <property name="label" translatable="yes">Number of _characters for auto complete:</property>
                     <property name="use_underline">True</property>
@@ -3005,6 +3015,9 @@ many months before the current month:</property>
                   <object class="GtkSpinButton" id="gconf/general/register/key_length">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="has_tooltip">True</property>
+                    <property name="tooltip_markup">This sets the number of characters before auto complete starts for description, notes and memo fields.</property>
+                    <property name="tooltip_text" translatable="yes">This sets the number of characters before auto complete starts for description, notes and memo fields.</property>
                     <property name="invisible_char">&#x25CF;</property>
                     <property name="invisible_char_set">True</property>
                     <property name="primary_icon_activatable">False</property>
@@ -3531,6 +3544,9 @@ many months before the current month:</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
+                    <property name="has_tooltip">True</property>
+                    <property name="tooltip_markup">Save window size and location when it is closed.</property>
+                    <property name="tooltip_text" translatable="yes">Save window size and location when it is closed.</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
                   </object>
@@ -3549,6 +3565,9 @@ many months before the current month:</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
+                    <property name="has_tooltip">True</property>
+                    <property name="tooltip_markup">Closing a tab moves to the most recently visited tab.</property>
+                    <property name="tooltip_text" translatable="yes">Closing a tab moves to the most recently visited tab.</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
                   </object>
@@ -3820,6 +3839,9 @@ many months before the current month:</property>
                       <object class="GtkSpinButton" id="gconf/general/tab_width">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="has_tooltip">True</property>
+                        <property name="tooltip_markup">If the text in the tab is longer than this value (the test is approximate) then the tab label will have the middle cut and replaced with an ellipsis.</property>
+                        <property name="tooltip_text" translatable="yes">If the text in the tab is longer than this value (the test is approximate) then the tab label will have the middle cut and replaced with an ellipsis.</property>
                         <property name="invisible_char">&#x25CF;</property>
                         <property name="invisible_char_set">True</property>
                         <property name="primary_icon_activatable">False</property>

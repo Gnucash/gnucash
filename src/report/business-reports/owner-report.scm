@@ -492,7 +492,7 @@
 
   (gnc:register-inv-option
    (gnc:make-owner-option owner-page (owner-string owner-type) "v"
-              (N_ "The company for this report")
+              (N_ "The company for this report.")
               (lambda () '()) #f owner-type))
 
   (gnc:register-inv-option
@@ -500,7 +500,7 @@
 
   (gnc:register-inv-option
    (gnc:make-account-sel-limited-option owner-page acct-string "w"
-                    (N_ "The account to search for transactions")
+                    (N_ "The account to search for transactions.")
                     #f #f acct-type-list))
 
   (gnc:options-add-date-interval!
@@ -563,11 +563,11 @@
     gnc:pagename-general 
     optname-date-driver 
     "k" 
-    (N_ "Leading date") 
+    (N_ "Leading date.") 
     'duedate 
     (list 
-     (vector 'duedate (N_ "Due Date") (N_ "Due date is leading")) ;; Should be using standard label for due date? 
-     (vector 'postdate (N_ "Post Date") (N_ "Post date is leading"))))) ;; Should be using standard label for post date? 
+     (vector 'duedate (N_ "Due Date") (N_ "Due date is leading.")) ;; Should be using standard label for due date? 
+     (vector 'postdate (N_ "Post Date") (N_ "Post date is leading."))))) ;; Should be using standard label for post date? 
 
   (gnc:options-set-default-section gnc:*report-options* "General")
 

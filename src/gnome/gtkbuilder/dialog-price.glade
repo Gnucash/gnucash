@@ -622,7 +622,7 @@
                     <property name="can_focus">True</property>
                     <property name="can_default">True</property>
                     <property name="receives_default">False</property>
-                    <property name="tooltip_text" translatable="yes">Remove the current price</property>
+                    <property name="tooltip_text" translatable="yes">Remove the current price.</property>
                     <property name="use_action_appearance">False</property>
                     <property name="use_stock">True</property>
                     <signal name="clicked" handler="gnc_prices_dialog_remove_clicked" swapped="no"/>
@@ -698,7 +698,7 @@
                     <property name="can_focus">True</property>
                     <property name="can_default">True</property>
                     <property name="receives_default">False</property>
-                    <property name="tooltip_text" translatable="yes">Remove prices older than a user-entered date</property>
+                    <property name="tooltip_text" translatable="yes">Remove prices older than a user-entered date.</property>
                     <property name="use_action_appearance">False</property>
                     <signal name="clicked" handler="gnc_prices_dialog_remove_old_clicked" swapped="no"/>
                     <child>

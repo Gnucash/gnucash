@@ -180,19 +180,19 @@
     "taxinvoice.css"))
   (add-option (gnc:make-font-option 
                 displaypage optname-heading-font "c" 
-                (N_ "Font to use for the main heading") "Sans Bold 18"))
+                (N_ "Font to use for the main heading.") "Sans Bold 18"))
   (add-option (gnc:make-font-option 
                 displaypage optname-text-font "d" 
-                (N_ "Font to use for everything else") "Sans 10"))
+                (N_ "Font to use for everything else.") "Sans 10"))
   (add-option (gnc:make-pixmap-option
                 displaypage optname-logofile "e" 
-                (N_ "Name of a file containing a logo to be used on the report") 
+                (N_ "Name of a file containing a logo to be used on the report.") 
                 ""))
   (add-option (gnc:make-string-option
                 displaypage optname-logo-width "f" (N_ "Width of the logo in CSS format, e.g. 10% or 32px.  Leave blank to display the logo at its natural width.  The height of the logo will be scaled accordingly.") ""))
 (add-option (gnc:make-simple-boolean-option	displaypage	optname-border-collapse	"g" (N_ "Border-collapse?") #f))
-(add-option (gnc:make-string-option		displaypage	optname-border-color-th "h" "CSS color" (N_ "black")))
-(add-option (gnc:make-string-option		displaypage	optname-border-color-td "i" "CSS color" (N_ "black")))
+(add-option (gnc:make-string-option		displaypage	optname-border-color-th "h" (N_ "CSS color.") "black"))
+(add-option (gnc:make-string-option		displaypage	optname-border-color-td "i" (N_ "CSS color.") "black"))
 
   ;; Heading options
   (add-option (gnc:make-string-option
@@ -236,12 +236,12 @@
 
   (add-option (gnc:make-text-option
                 notespage optname-extra-notes "a"
-                (_ "Notes added at end of invoice -- may contain HTML markup") 
+                (_ "Notes added at end of invoice -- may contain HTML markup.") 
                 "Thank you for your patronage."))
                 ;(N_ "(Development version -- don't rely on the numbers on this report without double-checking them.<br>Change the 'Extra Notes' option to get rid of this message)")))
 
   (add-option (gnc:make-text-option	notespage optname-extra-css "b"
-                (N_ "Embedded CSS")	"h1.coyname { text-align: left; }"))
+                (N_ "Embedded CSS.")	"h1.coyname { text-align: left; }"))
   (gnc:options-set-default-section
     report-options gnc:pagename-general)
 

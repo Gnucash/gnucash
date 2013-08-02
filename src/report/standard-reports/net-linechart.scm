@@ -57,7 +57,7 @@
 (define optname-plot-height (N_ "Plot Height"))
 
 (define optname-line-width (N_ "Line Width"))
-(define opthelp-line-width (N_ "Set line width in pixels"))
+(define opthelp-line-width (N_ "Set line width in pixels."))
 
 (define optname-markers (N_ "Data markers?"))
 

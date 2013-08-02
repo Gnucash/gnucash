@@ -247,7 +247,7 @@
 ;; define all option's names and help text so that they are properly
 ;; defined in *one* place.
 (define optname-report-title (N_ "Report Title"))
-(define opthelp-report-title (N_ "Title for this report"))
+(define opthelp-report-title (N_ "Title for this report."))
 
 (define optname-date    (N_ "Balance Sheet Date"))
 (define optname-columns (N_ "1- or 2-column report"))
@@ -255,26 +255,26 @@
   (N_ "The balance sheet can be displayed with either 1 or 2 columns.  'auto' means that the layout will be adjusted to fit the width of the page."))
 
 (define optname-depth-limit (N_ "Levels of Subaccounts"))
-(define opthelp-depth-limit (N_ "Maximum number of levels in the account tree displayed"))
+(define opthelp-depth-limit (N_ "Maximum number of levels in the account tree displayed."))
 (define optname-flatten?    (N_ "Flatten list to depth limit"))
 (define opthelp-flatten?
-  (N_ "Displays accounts which exceed the depth limit at the depth limit"))
+  (N_ "Displays accounts which exceed the depth limit at the depth limit."))
 
 (define optname-omit-zb-accts (N_ "Exclude accounts with zero total balances"))
 (define opthelp-omit-zb-accts
-  (N_ "Exclude non-top-level accounts with zero balance and no non-zero sub-accounts"))
+  (N_ "Exclude non-top-level accounts with zero balance and no non-zero sub-accounts."))
 
 (define optname-account-links (N_ "Display accounts as hyperlinks"))
-(define opthelp-account-links (N_ "Shows each account in the table as a hyperlink to its register window"))
+(define opthelp-account-links (N_ "Shows each account in the table as a hyperlink to its register window."))
 
 (define optname-neg-format (N_ "Negative amount format"))
 (define opthelp-neg-format
-  (N_ "The formatting to use for negative amounts: with a leading sign, or enclosing brackets"))
+  (N_ "The formatting to use for negative amounts: with a leading sign, or enclosing brackets."))
 
 (define optname-font-family    (N_ "Font family"))
-(define opthelp-font-family    (N_ "Font definition in CSS font-family format"))
+(define opthelp-font-family    (N_ "Font definition in CSS font-family format."))
 (define optname-font-size      (N_ "Font size"))
-(define opthelp-font-size      (N_ "Font size in CSS font-size format (e.g. \"medium\" or \"10pt\")"))
+(define opthelp-font-size      (N_ "Font size in CSS font-size format (e.g. \"medium\" or \"10pt\")."))
 (define optname-template-file  (N_ "Template file"))
 (define opthelp-template-file
   (N_ "The file name of the eguile template part of this report.  This file must be in your .gnucash directory, or else in its proper place within the GnuCash installation directories."))
@@ -282,13 +282,13 @@
 (define opthelp-css-file
   (N_ "The file name of the CSS stylesheet to use with this report.  If specified, this file should be in your .gnucash directory, or else in its proper place within the GnuCash installation directories."))
 (define optname-extra-notes (N_ "Extra Notes"))
-(define opthelp-extra-notes (N_ "Notes added at end of invoice -- may contain HTML markup"))
+(define opthelp-extra-notes (N_ "Notes added at end of invoice -- may contain HTML markup."))
 
 (define optname-report-commodity (N_ "Report's currency"))
 (define optname-price-source (N_ "Price Source"))
 (define optname-show-foreign (N_ "Show Foreign Currencies"))
 (define opthelp-show-foreign
-  (N_ "Display any foreign currency amount in an account"))
+  (N_ "Display any foreign currency amount in an account."))
 
 (define accounts-page    gnc:pagename-accounts)
 (define commodities-page (N_ "Commodities"))
@@ -326,22 +326,22 @@
                   "a" opthelp-columns 'onecol
                   (list (vector 'autocols
                                 (N_ "Auto")
-                                (N_ "Adjust the layout to fit the width of the screen or page"))
+                                (N_ "Adjust the layout to fit the width of the screen or page."))
                         (vector 'onecol
                                 (N_ "One")
-                                (N_ "Display liabilities and equity below assets"))
+                                (N_ "Display liabilities and equity below assets."))
                         (vector 'twocols
                                 (N_ "Two")
-                                (N_ "Display assets on the left, liabilities and equity on the right")))))
+                                (N_ "Display assets on the left, liabilities and equity on the right.")))))
     (add-option (gnc:make-multichoice-option
                   display-page optname-neg-format
                   "b" opthelp-neg-format 'negsign
                   (list (vector 'negsign
                                 (N_ "Sign")
-                                (N_ "Prefix negative amounts with a minus sign, e.g. -$10.00"))
+                                (N_ "Prefix negative amounts with a minus sign, e.g. -$10.00."))
                         (vector 'negbrackets
                                 (N_ "Brackets")
-                                (N_ "Surround negative amounts with brackets, e.g. ($100.00)")))))
+                                (N_ "Surround negative amounts with brackets, e.g. ($100.00).")))))
     (add-option (gnc:make-string-option display-page optname-font-family "c"
                                         opthelp-font-family "sans"))
     (add-option (gnc:make-string-option display-page optname-font-size "d"

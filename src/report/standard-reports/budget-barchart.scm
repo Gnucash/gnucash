@@ -54,7 +54,7 @@
     ;; Option to select Budget
     (add-option (gnc:make-budget-option
         gnc:pagename-general optname-budget
-        "a" (N_ "Budget")))
+        "a" (N_ "Budget to use.")))
 
     ;; Display tab
     (add-option
@@ -68,7 +68,7 @@
     ;; Option to select the accounts to that will be displayed
     (add-option (gnc:make-account-list-option
         gnc:pagename-accounts optname-accounts
-        "a" (N_ "Report on these accounts")
+        "a" (N_ "Report on these accounts.")
         (lambda ()
 	  (gnc:filter-accountlist-type
 	    (list ACCT-TYPE-BANK ACCT-TYPE-ASSET ACCT-TYPE-LIABILITY)

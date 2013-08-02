@@ -600,19 +600,19 @@
   (gnc:register-trep-option
    (gnc:make-multichoice-option
     gnc:pagename-general (N_ "Style")
-    "d" (N_ "Report style")
+    "d" (N_ "Report style.")
     'single
     (list (vector 'multi-line
                   (N_ "Multi-Line")
-                  (N_ "Display N lines"))
+                  (N_ "Display N lines."))
           (vector 'single
                   (N_ "Single")
-                  (N_ "Display 1 line")))))
+                  (N_ "Display 1 line.")))))
 
   (gnc:register-trep-option
    (gnc:make-complex-boolean-option
     gnc:pagename-general optname-common-currency
-    "e" (N_ "Convert all transactions into a common currency") #f
+    "e" (N_ "Convert all transactions into a common currency.") #f
     #f
     (lambda (x) (gnc-option-db-set-option-selectable-by-name
 		 gnc:*transaction-report-options*
@@ -627,7 +627,7 @@
   (gnc:register-trep-option
    (gnc:make-simple-boolean-option
     gnc:pagename-general optname-table-export
-    "g" (N_ "Formats the table suitable for cut & paste exporting with extra cells") #f))  
+    "g" (N_ "Formats the table suitable for cut & paste exporting with extra cells.") #f))  
   
   ;; Accounts options
   
@@ -635,7 +635,7 @@
   (gnc:register-trep-option
    (gnc:make-account-list-option
     gnc:pagename-accounts (N_ "Accounts")
-    "a" (N_ "Report on these accounts")
+    "a" (N_ "Report on these accounts.")
     ;; select, by default, no accounts! Selecting all accounts will
     ;; always imply an insanely long waiting time upon opening, and it
     ;; is almost never useful. So we instead display the normal error
@@ -648,7 +648,7 @@
   (gnc:register-trep-option
    (gnc:make-account-list-option
     gnc:pagename-accounts (N_ "Filter By...")
-    "b" (N_ "Filter on these accounts")
+    "b" (N_ "Filter on these accounts.")
     (lambda ()
       ;; FIXME : gnc:get-current-accounts disappeared.
       (let* ((current-accounts '())
@@ -664,17 +664,17 @@
   (gnc:register-trep-option
    (gnc:make-multichoice-option
     gnc:pagename-accounts (N_ "Filter Type")
-    "c" (N_ "Filter account")
+    "c" (N_ "Filter account.")
     'none
     (list (vector 'none
 		  (N_ "None")
-		  (N_ "Do not do any filtering"))
+		  (N_ "Do not do any filtering."))
 	  (vector 'include
 		  (N_ "Include Transactions to/from Filter Accounts")
-		  (N_ "Include transactions to/from filter accounts only"))
+		  (N_ "Include transactions to/from filter accounts only."))
 	  (vector 'exclude
 		  (N_ "Exclude Transactions to/from Filter Accounts")
-		  (N_ "Exclude transactions to/from all filter accounts"))
+		  (N_ "Exclude transactions to/from all filter accounts."))
 	  )))
 
   ;;
@@ -682,20 +682,20 @@
   (gnc:register-trep-option
    (gnc:make-multichoice-option
     gnc:pagename-accounts optname-void-transactions
-    "d" (N_ "How to handle void transactions")
+    "d" (N_ "How to handle void transactions.")
     'non-void-only
     (list (vector
 	   'non-void-only
 	   (N_ "Non-void only")
-	   (N_ "Show only non-voided transactions"))
+	   (N_ "Show only non-voided transactions."))
 	  (vector
 	   'void-only
 	   (N_ "Void only")
-	   (N_ "Show only voided transactions"))
+	   (N_ "Show only voided transactions."))
 	  (vector 
 	   'both
 	   (N_ "Both")
-	   (N_ "Show both (and include void transactions in totals)")))))
+	   (N_ "Show both (and include void transactions in totals).")))))
 
   ;; Sorting options
       
@@ -705,133 +705,133 @@
          (if (qof-book-use-split-action-for-num-field (gnc-get-current-book))
              (list (vector 'none
                            (N_ "None")
-                           (N_ "Do not sort"))
+                           (N_ "Do not sort."))
 
                    (vector 'account-name
                            (N_ "Account Name")
-                           (N_ "Sort & subtotal by account name"))
+                           (N_ "Sort & subtotal by account name."))
 
                    (vector 'account-code
                            (N_ "Account Code")
-                           (N_ "Sort & subtotal by account code"))
+                           (N_ "Sort & subtotal by account code."))
 
                    (vector 'date
                            (N_ "Date")
-                           (N_ "Sort by date"))
+                           (N_ "Sort by date."))
 
                    (vector 'exact-time
                            (N_ "Exact Time")
-                           (N_ "Sort by exact time"))
+                           (N_ "Sort by exact time."))
 
                    (vector 'reconciled-date
                            (N_ "Reconciled Date")
-                           (N_ "Sort by the Reconciled Date"))
+                           (N_ "Sort by the Reconciled Date."))
 
                    (vector 'register-order
                            (N_ "Register Order")
-                           (N_ "Sort as with the register"))
+                           (N_ "Sort as with the register."))
 
                    (vector 'corresponding-acc-name 
                            (N_ "Other Account Name")
-                           (N_ "Sort by account transferred from/to's name"))
+                           (N_ "Sort by account transferred from/to's name."))
 
                    (vector 'corresponding-acc-code
                            (N_ "Other Account Code")
-                           (N_ "Sort by account transferred from/to's code"))
+                           (N_ "Sort by account transferred from/to's code."))
                
                    (vector 'amount
                            (N_ "Amount")
-                           (N_ "Sort by amount"))
+                           (N_ "Sort by amount."))
                
                    (vector 'description
                            (N_ "Description")
-                           (N_ "Sort by description"))
+                           (N_ "Sort by description."))
                
                    (vector 'number
                            (N_ "Number/Action")
-                           (N_ "Sort by check number/action"))
+                           (N_ "Sort by check number/action."))
 
                    (vector 't-number
                            (N_ "Transaction Number")
-                           (N_ "Sort by transaction number"))
+                           (N_ "Sort by transaction number."))
                
                    (vector 'memo
                            (N_ "Memo")
-                           (N_ "Sort by memo")))
+                           (N_ "Sort by memo.")))
              (list (vector 'none
                            (N_ "None")
-                           (N_ "Do not sort"))
+                           (N_ "Do not sort."))
 
                    (vector 'account-name
                            (N_ "Account Name")
-                           (N_ "Sort & subtotal by account name"))
+                           (N_ "Sort & subtotal by account name."))
 
                    (vector 'account-code
                            (N_ "Account Code")
-                           (N_ "Sort & subtotal by account code"))
+                           (N_ "Sort & subtotal by account code."))
 
                    (vector 'date
                            (N_ "Date")
-                           (N_ "Sort by date"))
+                           (N_ "Sort by date."))
 
                    (vector 'exact-time
                            (N_ "Exact Time")
-                           (N_ "Sort by exact time"))
+                           (N_ "Sort by exact time."))
 
                    (vector 'reconciled-date
                            (N_ "Reconciled Date")
-                           (N_ "Sort by the Reconciled Date"))
+                           (N_ "Sort by the Reconciled Date."))
 
                    (vector 'register-order
                            (N_ "Register Order")
-                           (N_ "Sort as with the register"))
+                           (N_ "Sort as with the register."))
 
                    (vector 'corresponding-acc-name 
                            (N_ "Other Account Name")
-                           (N_ "Sort by account transferred from/to's name"))
+                           (N_ "Sort by account transferred from/to's name."))
 
                    (vector 'corresponding-acc-code
                            (N_ "Other Account Code")
-                           (N_ "Sort by account transferred from/to's code"))
+                           (N_ "Sort by account transferred from/to's code."))
                
                    (vector 'amount
                            (N_ "Amount")
-                           (N_ "Sort by amount"))
+                           (N_ "Sort by amount."))
                
                    (vector 'description
                            (N_ "Description")
-                           (N_ "Sort by description"))
+                           (N_ "Sort by description."))
                
                    (vector 'number
                            (N_ "Number")
-                           (N_ "Sort by check/transaction number"))
+                           (N_ "Sort by check/transaction number."))
 
                    (vector 'memo
                            (N_ "Memo")
-                           (N_ "Sort by memo")))))
+                           (N_ "Sort by memo.")))))
 
         (ascending-choice-list 
          (list
           (vector 'ascend
                   (N_ "Ascending")
-                  (N_ "smallest to largest, earliest to latest"))
+                  (N_ "Smallest to largest, earliest to latest."))
           (vector 'descend
                   (N_ "Descending")
-                  (N_ "largest to smallest, latest to earliest"))))
+                  (N_ "Largest to smallest, latest to earliest."))))
 
         (subtotal-choice-list
          (list
-          (vector 'none (N_ "None") (N_ "None"))
-          (vector 'weekly (N_ "Weekly") (N_ "Weekly"))
-          (vector 'monthly (N_ "Monthly") (N_ "Monthly"))
-          (vector 'quarterly (N_ "Quarterly") (N_ "Quarterly"))
-          (vector 'yearly (N_ "Yearly") (N_ "Yearly")))))
+          (vector 'none (N_ "None") (N_ "None."))
+          (vector 'weekly (N_ "Weekly") (N_ "Weekly."))
+          (vector 'monthly (N_ "Monthly") (N_ "Monthly."))
+          (vector 'quarterly (N_ "Quarterly") (N_ "Quarterly."))
+          (vector 'yearly (N_ "Yearly") (N_ "Yearly.")))))
     
     ;; primary sorting criterion
     (gnc:register-trep-option
      (gnc:make-multichoice-callback-option
       pagename-sorting optname-prime-sortkey
-      "a" (N_ "Sort by this criterion first")
+      "a" (N_ "Sort by this criterion first.")
       'account-name
       key-choice-list #f
       (lambda (x)
@@ -866,14 +866,14 @@
     (gnc:register-trep-option
      (gnc:make-multichoice-option
       pagename-sorting optname-prime-date-subtotal
-      "d" (N_ "Do a date subtotal")
+      "d" (N_ "Do a date subtotal.")
       'monthly
       subtotal-choice-list))
     
     (gnc:register-trep-option
      (gnc:make-multichoice-option
       pagename-sorting (N_ "Primary Sort Order")
-      "e" (N_ "Order of primary sorting")
+      "e" (N_ "Order of primary sorting.")
       'ascend
       ascending-choice-list))
     
@@ -882,7 +882,7 @@
      (gnc:make-multichoice-callback-option
       pagename-sorting optname-sec-sortkey
       "f"
-      (N_ "Sort by this criterion second")
+      (N_ "Sort by this criterion second.")
       'register-order
       key-choice-list #f
       (lambda (x)
@@ -903,14 +903,14 @@
     (gnc:register-trep-option
      (gnc:make-multichoice-option
       pagename-sorting optname-sec-date-subtotal
-      "h" (N_ "Do a date subtotal")
+      "h" (N_ "Do a date subtotal.")
       'monthly
       subtotal-choice-list))
     
     (gnc:register-trep-option
      (gnc:make-multichoice-option
       pagename-sorting (N_ "Secondary Sort Order")
-      "i" (N_ "Order of Secondary sorting")
+      "i" (N_ "Order of Secondary sorting.")
       'ascend
       ascending-choice-list)))
   
@@ -932,16 +932,16 @@
     (list (N_ "Description")                  "c"  (N_ "Display the description?") #t)
     (list (N_ "Notes")                        "d2" (N_ "Display the notes if the memo is unavailable?") #t)
     (list (N_ "Account Name")                 "e"  (N_ "Display the account name?") #f)
-    (list (N_ "Use Full Account Name")        "f"  (N_ "Display the full account name") #t)
-    (list (N_ "Account Code")                 "g"  (N_ "Display the account code") #f)
+    (list (N_ "Use Full Account Name")        "f"  (N_ "Display the full account name?") #t)
+    (list (N_ "Account Code")                 "g"  (N_ "Display the account code?") #f)
     (list (N_ "Other Account Name")           "h"  (N_ "Display the other account name?\
  (if this is a split transaction, this parameter is guessed).") #f)
-    (list (N_ "Use Full Other Account Name")  "i"  (N_ "Display the full account name") #t)
-    (list (N_ "Other Account Code")           "j"  (N_ "Display the other account code") #f)
+    (list (N_ "Use Full Other Account Name")  "i"  (N_ "Display the full account name?") #t)
+    (list (N_ "Other Account Code")           "j"  (N_ "Display the other account code?") #f)
     (list (N_ "Shares")                       "k"  (N_ "Display the number of shares?") #f)
     (list (N_ "Price")                        "l"  (N_ "Display the shares price?") #f)
     ;; note the "Amount" multichoice option in between here
-    (list (N_ "Running Balance")              "n"  (N_ "Display a running balance") #f)
+    (list (N_ "Running Balance")              "n"  (N_ "Display a running balance?") #f)
     (list (N_ "Totals")                       "o"  (N_ "Display the totals?") #t)))
 
   (if (qof-book-use-split-action-for-num-field (gnc-get-current-book))
@@ -969,22 +969,22 @@
     "m" (N_ "Display the amount?")  
     'single
     (list
-     (vector 'none (N_ "None") (N_ "No amount display"))
-     (vector 'single (N_ "Single") (N_ "Single Column Display"))
-     (vector 'double (N_ "Double") (N_ "Two Column Display")))))
+     (vector 'none (N_ "None") (N_ "No amount display."))
+     (vector 'single (N_ "Single") (N_ "Single Column Display."))
+     (vector 'double (N_ "Double") (N_ "Two Column Display.")))))
   
   (gnc:register-trep-option
    (gnc:make-multichoice-option
     gnc:pagename-display (N_ "Sign Reverses")
-    "p" (N_ "Reverse amount display for certain account types")
+    "p" (N_ "Reverse amount display for certain account types.")
     'credit-accounts
     (list 
-     (vector 'none (N_ "None") (N_ "Don't change any displayed amounts"))
+     (vector 'none (N_ "None") (N_ "Don't change any displayed amounts."))
      (vector 'income-expense (N_ "Income and Expense")
-             (N_ "Reverse amount display for Income and Expense Accounts"))
+             (N_ "Reverse amount display for Income and Expense Accounts."))
      (vector 'credit-accounts (N_ "Credit Accounts")
              (N_ "Reverse amount display for Liability, Payable, Equity, \
-Credit Card, and Income accounts")))))
+Credit Card, and Income accounts.")))))
 
 
   (gnc:options-set-default-section gnc:*transaction-report-options*

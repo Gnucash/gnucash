@@ -54,14 +54,14 @@
       options
       (gnc:make-budget-option
         gnc:pagename-general optname-budget
-        "a" (N_ "Budget")))
+        "a" (N_ "Budget to use.")))
 
     ;; Option to select Period of selected Budget
     (gnc:register-option
       options
       (gnc:make-number-range-option
         gnc:pagename-general optname-periods
-        "b" (N_ "Period") 1 1 12 0 1))
+        "b" (N_ "Period number.") 1 1 12 0 1))
 
     ;; Option to select the currency the report will be shown in
     (gnc:options-add-currency!
@@ -78,7 +78,7 @@
       (gnc:make-account-list-option
         gnc:pagename-accounts optname-accounts
         (string-append "a" "c")
-        (N_ "Report on these accounts")
+        (N_ "Report on these accounts.")
         (lambda ()
           (gnc-account-get-descendants-sorted (gnc-get-current-root-account)))
         #f #t))

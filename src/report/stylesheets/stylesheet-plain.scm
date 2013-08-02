@@ -67,17 +67,17 @@
          (opt-register
           (gnc:make-number-range-option
            (N_ "Tables")
-           (N_ "Table cell spacing") "a" (N_ "Space between table cells")
+           (N_ "Table cell spacing") "a" (N_ "Space between table cells.")
            0 0 20 0 1))
          (opt-register
           (gnc:make-number-range-option
            (N_ "Tables")
-           (N_ "Table cell padding") "b" (N_ "Space between table cell edge and content")
+           (N_ "Table cell padding") "b" (N_ "Space between table cell edge and content.")
            4 0 20 0 1))
          (opt-register
           (gnc:make-number-range-option
            (N_ "Tables")
-           (N_ "Table border width") "c" (N_ "Bevel depth on tables")
+           (N_ "Table border width") "c" (N_ "Bevel depth on tables.")
            0 0 20 0 1))
          (register-font-options options)
 

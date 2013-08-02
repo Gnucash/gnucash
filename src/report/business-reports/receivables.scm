@@ -47,7 +47,7 @@
     (add-option
      (gnc:make-account-sel-limited-option
       acc-page this-acc
-      "w" (N_ "The receivables account you wish to examine") 
+      "w" (N_ "The receivables account you wish to examine.") 
       #f #f (list ACCT-TYPE-RECEIVABLE)))
 
     (aging-options-generator options)))

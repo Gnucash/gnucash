@@ -49,32 +49,32 @@
      (gnc:make-string-option
       (N_ "General")
       (N_ "Preparer") "a"
-      (N_ "Name of person preparing the report") 
+      (N_ "Name of person preparing the report.") 
       ""))
     (opt-register 
      (gnc:make-string-option
       (N_ "General")
       (N_ "Prepared for") "b"
-      (N_ "Name of organization or company prepared for") 
+      (N_ "Name of organization or company prepared for.") 
       ""))
     (opt-register 
      (gnc:make-simple-boolean-option
       (N_ "General")
       (N_ "Show preparer info") "c"
-      (N_ "Name of organization or company") 
+      (N_ "Name of organization or company.") 
       #f))
     (opt-register 
      (gnc:make-simple-boolean-option
       (N_ "General")
       (N_ "Enable Links") "d"
-      (N_ "Enable hyperlinks in reports") 
+      (N_ "Enable hyperlinks in reports.") 
       #t))
     ; FIXME: put this in a more sensible tab like Text or Header/Footer
     (opt-register
      (gnc:make-text-option
       (N_ "General")
       (N_ "Footer") "e"
-      (N_ "String to be placed as a footer")
+      (N_ "String to be placed as a footer.")
       ""))
 
     (opt-register
@@ -95,13 +95,13 @@
       'left
       (list (vector 'left
                      (N_ "Left")
-                     (N_ "Align the banner to the left"))
+                     (N_ "Align the banner to the left."))
             (vector 'center
                      (N_ "Center")
-                     (N_ "Align the banner in the center"))
+                     (N_ "Align the banner in the center."))
             (vector 'right
                      (N_ "Right")
-                     (N_ "Align the banner to the right"))
+                     (N_ "Align the banner to the right."))
             )))
     (opt-register
      (gnc:make-pixmap-option
@@ -157,7 +157,7 @@
      (gnc:make-color-option
       (N_ "Colors")
       (N_ "Sub-subheading/total Cell Color") "f"
-      (N_ "Color for subsubtotals")
+      (N_ "Color for subsubtotals.")
       (list #xfa #xfa #xd2 0)
       255 #f))
 
@@ -165,26 +165,26 @@
      (gnc:make-color-option
       (N_ "Colors")
       (N_ "Grand Total Cell Color") "g"
-      (N_ "Color for grand totals")
+      (N_ "Color for grand totals.")
       (list #xff #xff #x00 0)
       255 #f))
 
     (opt-register 
      (gnc:make-number-range-option 
       (N_ "Tables")
-      (N_ "Table cell spacing") "a" (N_ "Space between table cells")
+      (N_ "Table cell spacing") "a" (N_ "Space between table cells.")
       1 0 20 0 1))
 
     (opt-register 
      (gnc:make-number-range-option 
       (N_ "Tables")
-      (N_ "Table cell padding") "b" (N_ "Space between table cell edge and content")
+      (N_ "Table cell padding") "b" (N_ "Space between table cell edge and content.")
       1 0 20 0 1))
 
     (opt-register 
      (gnc:make-number-range-option 
       (N_ "Tables")
-      (N_ "Table border width") "c" (N_ "Bevel depth on tables")
+      (N_ "Table border width") "c" (N_ "Bevel depth on tables.")
       1 0 20 0 1))
     (register-font-options options)
 

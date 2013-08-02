@@ -76,7 +76,7 @@ balance at a given time"))
 (define optname-sort-method (N_ "Sort Method"))
 
 (define optname-averaging (N_ "Show Average"))
-(define opthelp-averaging (N_ "Select whether the amounts should be shown over the full time period or rather as the average e.g. per month"))
+(define opthelp-averaging (N_ "Select whether the amounts should be shown over the full time period or rather as the average e.g. per month."))
 
 ;; The option-generator. The only dependance on the type of piechart
 ;; is the list of account types that the account selection option
@@ -113,16 +113,16 @@ balance at a given time"))
           'None
           (list (vector 'None
                         (N_ "No Averaging")
-                        (N_ "Just show the amounts, without any averaging"))
+                        (N_ "Just show the amounts, without any averaging."))
                 (vector 'YearDelta
                         (N_ "Yearly")
-                        (N_ "Show the average yearly amount during the reporting period"))
+                        (N_ "Show the average yearly amount during the reporting period."))
                 (vector 'MonthDelta
                         (N_ "Monthly")
-                        (N_ "Show the average monthly amount during the reporting period"))
+                        (N_ "Show the average monthly amount during the reporting period."))
                 (vector 'WeekDelta
                         (N_ "Weekly")
-                        (N_ "Show the average weekly amount during the reporting period"))
+                        (N_ "Show the average weekly amount during the reporting period."))
                 )
           ))
         )
@@ -145,7 +145,7 @@ balance at a given time"))
 
     (gnc:options-add-account-levels! 
      options gnc:pagename-accounts optname-levels "b" 
-     (N_ "Show accounts to this depth and not further") 
+     (N_ "Show accounts to this depth and not further.") 
      2)
 
     (add-option
@@ -168,7 +168,7 @@ balance at a given time"))
     (add-option
      (gnc:make-number-range-option
       gnc:pagename-display optname-slices
-      "c" (N_ "Maximum number of slices in pie") 7
+      "c" (N_ "Maximum number of slices in pie.") 7
       2 24 0 1))
 
     (gnc:options-add-plot-size!

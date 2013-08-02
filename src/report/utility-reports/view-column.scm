@@ -49,7 +49,7 @@
     (opt-register
      (gnc:make-number-range-option 
       (N_ "General") (N_ "Number of columns") "a"
-      (N_ "Number of columns before wrapping to a new row")
+      (N_ "Number of columns before wrapping to a new row.")
       1 0 20 0 1))
     
     options))

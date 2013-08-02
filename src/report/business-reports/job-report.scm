@@ -364,7 +364,7 @@
 
   (gnc:register-inv-option
    (gnc:make-owner-option owner-page owner-string "v"
-			  (N_ "The job for this report")
+			  (N_ "The job for this report.")
 			  (lambda () '()) #f owner-type))
 
   (gnc:register-inv-option
@@ -372,7 +372,7 @@
 
   (gnc:register-inv-option
    (gnc:make-account-sel-limited-option owner-page acct-string "w"
-					(N_ "The account to search for transactions")
+					(N_ "The account to search for transactions.")
 					#f #f acct-type-list))
 
   (gnc:options-add-date-interval!

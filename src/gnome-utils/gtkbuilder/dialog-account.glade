@@ -1397,6 +1397,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
+                    <property name="tooltip_text" translatable="yes">Show accounts which have the option "Hidden" checked.</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
                     <signal name="toggled" handler="gppat_filter_show_hidden_toggled_cb"/>
@@ -1413,7 +1414,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="tooltip_text" translatable="yes">Hide accounts which have a zero total value.</property>
+                    <property name="tooltip_text" translatable="yes">Show accounts which have a zero total value.</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
                     <signal name="toggled" handler="gppat_filter_show_zero_toggled_cb"/>

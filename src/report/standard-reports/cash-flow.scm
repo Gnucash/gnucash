@@ -74,13 +74,13 @@
      options
      (gnc:make-simple-boolean-option
       gnc:pagename-general optname-show-rates
-      "d" (N_ "Show the exchange rates used") #f))
+      "d" (N_ "Show the exchange rates used.") #f))
 
     (gnc:register-option 
      options
      (gnc:make-simple-boolean-option
       gnc:pagename-general optname-show-full-names
-      "e" (N_ "Show full account names (including parent accounts)") #t))
+      "e" (N_ "Show full account names (including parent accounts).") #t))
 
     ;; accounts to work on
     (gnc:options-add-account-selection! 

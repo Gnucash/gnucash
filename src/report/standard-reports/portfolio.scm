@@ -61,7 +61,7 @@
     (add-option
      (gnc:make-number-range-option
       gnc:pagename-general optname-shares-digits
-      "e" (N_ "The number of decimal places to use for share numbers") 2
+      "e" (N_ "The number of decimal places to use for share numbers.") 2
       0 6 0 1))
 
     ;; Account tab
@@ -69,7 +69,7 @@
      (gnc:make-account-list-option
       gnc:pagename-accounts (N_ "Accounts")
       "b"
-      (N_ "Stock Accounts to report on")
+      (N_ "Stock Accounts to report on.")
       (lambda () (filter gnc:account-is-stock?
                          (gnc-account-get-descendants-sorted
                           (gnc-get-current-root-account))))

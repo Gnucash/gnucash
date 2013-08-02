@@ -49,15 +49,15 @@
       (list (list->vector
              (list 'first
                    (N_ "First Option")
-                   (N_ "Help for first option")))
+                   (N_ "Help for first option.")))
             (list->vector
              (list 'second
                    (N_ "Second Option")
-                   (N_ "Help for second option")))
+                   (N_ "Help for second option.")))
             (list->vector
              (list 'third
                    (N_ "Third Option")
-                   (N_ "Help for third option")))
+                   (N_ "Help for third option.")))
             (list->vector
              (list 'fourth
                    (N_ "Fourth Options")
@@ -71,7 +71,7 @@
     (add-option
      (gnc:make-string-option
       (N_ "Hello, World!") (N_ "String Option")
-      "c" (N_ "This is a string option") (N_ "Hello, World")))
+      "c" (N_ "This is a string option.") (N_ "Hello, World")))
     
     ;; This is a date/time option. The user can pick a date and,
     ;; possibly, a time. Times are stored as a pair
@@ -82,7 +82,7 @@
     (add-option
      (gnc:make-date-option
       (N_ "Hello, World!") (N_ "Just a Date Option")
-      "d" (N_ "This is a date option")
+      "d" (N_ "This is a date option.")
       (lambda () (cons 'absolute (cons (current-time) 0)))
       #f 'absolute #f ))
     
@@ -91,21 +91,21 @@
     (add-option
      (gnc:make-date-option
       (N_ "Hello, World!") (N_ "Time and Date Option")
-      "e" (N_ "This is a date option with time")
+      "e" (N_ "This is a date option with time.")
       (lambda () (cons 'absolute (cons (current-time) 0)))
       #t 'absolute #f ))
     
     (add-option
      (gnc:make-date-option
       (N_ "Hello, World!") (N_ "Combo Date Option")
-      "y" (N_ "This is a combination date option")
+      "y" (N_ "This is a combination date option.")
       (lambda () (cons 'relative 'start-cal-year))
       #f 'both '(start-cal-year start-prev-year end-prev-year) ))
     
     (add-option
      (gnc:make-date-option
       (N_ "Hello, World!") (N_ "Relative Date Option")
-      "x" (N_ "This is a relative date option")
+      "x" (N_ "This is a relative date option.")
       (lambda () (cons 'relative 'start-cal-year))
       #f 'relative '(start-cal-year start-prev-year end-prev-year) ))
     
@@ -134,14 +134,14 @@
     (add-option
      (gnc:make-color-option
       (N_ "Hello, World!") (N_ "Background Color")
-      "f" (N_ "This is a color option")
+      "f" (N_ "This is a color option.")
       (list #xf6 #xff #xdb 0)
       255
       #f))
     (add-option
      (gnc:make-color-option
       (N_ "Hello, World!") (N_ "Text Color")
-      "f" (N_ "This is a color option")
+      "f" (N_ "This is a color option.")
       (list #x00 #x00 #x00 0)
       255
       #f))
@@ -163,7 +163,7 @@
     (add-option
      (gnc:make-account-list-option
       (N_ "Hello Again") (N_ "An account list option")
-      "g" (N_ "This is an account list option")
+      "g" (N_ "This is an account list option.")
       ;; FIXME : this used to be gnc:get-current-accounts, but 
       ;; that doesn't exist any more.
       (lambda () '())
@@ -176,20 +176,20 @@
     (add-option
      (gnc:make-list-option
       (N_ "Hello Again") (N_ "A list option")
-      "h" (N_ "This is a list option")
+      "h" (N_ "This is a list option.")
       (list 'good)
       (list (list->vector
              (list 'good
                    (N_ "The Good")
-                   (N_ "Good option")))
+                   (N_ "Good option.")))
             (list->vector
              (list 'bad
                    (N_ "The Bad")
-                   (N_ "Bad option")))
+                   (N_ "Bad option.")))
             (list->vector
              (list 'ugly
                    (N_ "The Ugly")
-                   (N_ "Ugly option"))))))
+                   (N_ "Ugly option."))))))
     
     ;; This option is for testing. When true, the report generates
     ;; an exception.

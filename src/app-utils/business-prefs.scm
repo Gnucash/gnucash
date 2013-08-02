@@ -67,42 +67,42 @@
   (reg-option
    (gnc:make-string-option
     gnc:*business-label* gnc:*company-name*
-    "a" (N_ "The name of your business") ""))
+    "a" (N_ "The name of your business.") ""))
 
   (reg-option
    (gnc:make-text-option
     gnc:*business-label* gnc:*company-addy*
-    "b1" (N_ "The address of your business") ""))
+    "b1" (N_ "The address of your business.") ""))
 
   (reg-option
    (gnc:make-string-option
     gnc:*business-label* gnc:*company-contact*
-    "b2" (N_ "The contact person to print on invoices") ""))
+    "b2" (N_ "The contact person to print on invoices.") ""))
 
   (reg-option
    (gnc:make-string-option
     gnc:*business-label* gnc:*company-phone*
-    "c1" (N_ "The phone number of your business") ""))
+    "c1" (N_ "The phone number of your business.") ""))
 
   (reg-option
    (gnc:make-string-option
     gnc:*business-label* gnc:*company-fax*
-    "c2" (N_ "The fax number of your business") ""))
+    "c2" (N_ "The fax number of your business.") ""))
 
   (reg-option
    (gnc:make-string-option
     gnc:*business-label* gnc:*company-email*
-    "c3" (N_ "The email address of your business") ""))
+    "c3" (N_ "The email address of your business.") ""))
 
   (reg-option
    (gnc:make-string-option
     gnc:*business-label* gnc:*company-url*
-    "c4" (N_ "The URL address of your website") ""))
+    "c4" (N_ "The URL address of your website.") ""))
 
   (reg-option
    (gnc:make-string-option
     gnc:*business-label* gnc:*company-id*
-    "c5" (N_ "The ID for your company (eg 'Tax-ID: 00-000000)")
+    "c5" (N_ "The ID for your company (eg 'Tax-ID: 00-000000).")
     ""))
  
   (reg-option
@@ -120,7 +120,7 @@
   (reg-option
    (gnc:make-dateformat-option
     gnc:*business-label* (N_ "Fancy Date Format")
-    "g" (N_ "The default date format used for fancy printed dates")
+    "g" (N_ "The default date format used for fancy printed dates.")
     #f))
 
   ;; Accounts tab
@@ -128,7 +128,7 @@
   (reg-option 
    (gnc:make-simple-boolean-option
     gnc:*option-section-accounts* gnc:*option-name-trading-accounts*
-    "a" (N_ "Check to have trading accounts used for transactions involving more than one currency or commodity")
+    "a" (N_ "Check to have trading accounts used for transactions involving more than one currency or commodity.")
     #f))
 
   (reg-option
@@ -153,7 +153,7 @@
   (reg-option
    (gnc:make-budget-option
     gnc:*option-section-budgeting* gnc:*option-name-default-budget*
-    "a" (N_ "Budget to be used when none has been otherwise specified")))
+    "a" (N_ "Budget to be used when none has been otherwise specified.")))
 
   ;; Counters Tab
   (map (lambda (vals)

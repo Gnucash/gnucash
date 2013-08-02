@@ -53,7 +53,7 @@
     (register-option
      (gnc:make-simple-boolean-option
       gnc:pagename-accounts optname-subacct
-      "a" (N_ "Include sub-accounts of all selected accounts") #t))
+      "a" (N_ "Include sub-accounts of all selected accounts.") #t))
 
     (register-option
      (gnc:make-simple-boolean-option
@@ -66,7 +66,7 @@
     (register-option
      (gnc:make-account-list-option
       gnc:pagename-accounts (N_ "Accounts")
-      "c" (N_ "Do transaction report on this account")
+      "c" (N_ "Do transaction report on this account.")
       (lambda ()
         ;; FIXME : gnc:get-current-accounts disappeared
         (let ((current-accounts '()))
@@ -100,11 +100,11 @@
     (register-option
      (gnc:make-list-option
       gnc:pagename-display (N_ "Plot Type")
-      "c" (N_ "The type of graph to generate") (list 'AvgBalPlot)
+      "c" (N_ "The type of graph to generate.") (list 'AvgBalPlot)
       (list 
-       (vector 'AvgBalPlot (N_ "Average") (N_ "Average Balance"))
-       (vector 'GainPlot (N_ "Profit") (N_ "Profit (Gain minus Loss)"))
-       (vector 'GLPlot (N_ "Gain/Loss") (N_ "Gain And Loss")))))
+       (vector 'AvgBalPlot (N_ "Average") (N_ "Average Balance."))
+       (vector 'GainPlot (N_ "Profit") (N_ "Profit (Gain minus Loss)."))
+       (vector 'GLPlot (N_ "Gain/Loss") (N_ "Gain And Loss.")))))
 
     (gnc:options-add-plot-size! 
      options gnc:pagename-display (N_ "Plot Width") (N_ "Plot Height")

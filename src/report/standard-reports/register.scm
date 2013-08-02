@@ -376,7 +376,7 @@
   (gnc:register-reg-option
    (gnc:make-string-option
     (N_ "General") (N_ "Title")
-    "a" (N_ "The title of the report")
+    "a" (N_ "The title of the report.")
     (N_ "Register Report")))
 
   (gnc:register-reg-option
@@ -430,8 +430,8 @@
     "ia" (N_ "Display the amount?")  
     'double
     (list
-     (vector 'single (N_ "Single") (N_ "Single Column Display"))
-     (vector 'double (N_ "Double") (N_ "Two Column Display")))))
+     (vector 'single (N_ "Single") (N_ "Single Column Display."))
+     (vector 'double (N_ "Double") (N_ "Two Column Display.")))))
 
   (gnc:register-reg-option
    (gnc:make-simple-boolean-option
@@ -441,7 +441,7 @@
   (gnc:register-reg-option
    (gnc:make-simple-boolean-option
     (N_ "Display") (N_ "Running Balance")
-    "k" (N_ "Display a running balance") #t))
+    "k" (N_ "Display a running balance?") #t))
 
   (gnc:register-reg-option
    (gnc:make-simple-boolean-option

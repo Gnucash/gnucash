@@ -98,6 +98,6 @@ inexplicable.\n\
 There is another theory that this has already happened.\n\n\
 Douglas Adams, \"The Restaurant at the End of the Universe\"")
 
- N_( "To search through all your transactions, start a search (Edit > \
+ N_( "To search through all your transactions, start a search (Edit -> \
 Find...) from the main accounts hierarchy page. To limit your search \
 to a single account, start the search from that account's register.")

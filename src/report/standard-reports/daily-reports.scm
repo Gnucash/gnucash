@@ -91,7 +91,7 @@
     (add-option
      (gnc:make-simple-boolean-option
       gnc:pagename-accounts optname-subacct
-      "a" (N_ "Include sub-accounts of all selected accounts") #t))
+      "a" (N_ "Include sub-accounts of all selected accounts.") #t))
 
     (add-option
      (gnc:make-account-list-option
@@ -111,7 +111,7 @@
 
     (gnc:options-add-account-levels! 
      options gnc:pagename-accounts optname-levels "b" 
-     (N_ "Show accounts to this depth and not further") 
+     (N_ "Show accounts to this depth and not further.") 
      2)
 
     (add-option

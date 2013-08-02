@@ -50,22 +50,22 @@
 (define optname-show-full-names (N_ "Show Full Account Names"))
 (define optname-select-columns (N_ "Select Columns"))
 (define optname-show-budget (N_ "Show Budget"))
-(define opthelp-show-budget (N_ "Display a column for the budget values"))
+(define opthelp-show-budget (N_ "Display a column for the budget values."))
 (define optname-show-actual (N_ "Show Actual"))
-(define opthelp-show-actual (N_ "Display a column for the actual values"))
+(define opthelp-show-actual (N_ "Display a column for the actual values."))
 (define optname-show-difference (N_ "Show Difference"))
-(define opthelp-show-difference (N_ "Display the difference as budget - actual"))
+(define opthelp-show-difference (N_ "Display the difference as budget - actual."))
 (define optname-show-totalcol (N_ "Show Column with Totals"))
-(define opthelp-show-totalcol (N_ "Display a column with the row totals"))
+(define opthelp-show-totalcol (N_ "Display a column with the row totals."))
 (define optname-rollup-budget (N_ "Roll up budget amounts to parent"))
-(define opthelp-rollup-budget (N_ "If parent account does not have its own budget value, use the sum of the child account budget values"))
+(define opthelp-rollup-budget (N_ "If parent account does not have its own budget value, use the sum of the child account budget values."))
 (define optname-show-zb-accounts (N_ "Include accounts with zero total balances and budget values"))
-(define opthelp-show-zb-accounts (N_ "Include accounts with zero total (recursive) balances and budget values in this report"))
+(define opthelp-show-zb-accounts (N_ "Include accounts with zero total (recursive) balances and budget values in this report."))
 (define optname-compress-periods (N_ "Compress prior/later periods"))
 (define opthelp-compress-periods (N_ "Accumulate columns for periods before and after the current period to allow focus on the current period."))
 (define optname-bottom-behavior (N_ "Flatten list to depth limit"))
 (define opthelp-bottom-behavior
-  (N_ "Displays accounts which exceed the depth limit at the depth limit"))
+  (N_ "Displays accounts which exceed the depth limit at the depth limit."))
 
 (define optname-budget (N_ "Budget"))
 
@@ -80,7 +80,7 @@
      options
      (gnc:make-budget-option
       gnc:pagename-general optname-budget
-      "a" (N_ "Budget")))
+      "a" (N_ "Budget to use.")))
 
     ;; date interval
     ;;(gnc:options-add-date-interval!
@@ -100,7 +100,7 @@
      options
      (gnc:make-simple-boolean-option
       gnc:pagename-general optname-show-full-names
-      "e" (N_ "Show full account names (including parent accounts)") #t))
+      "e" (N_ "Show full account names (including parent accounts).") #t))
 
     ;; accounts to work on
     (gnc:options-add-account-selection!

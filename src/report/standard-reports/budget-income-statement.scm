@@ -51,10 +51,10 @@
 ;; define all option's names and help text so that they are properly
 ;; defined in *one* place.
 (define optname-report-title (N_ "Report Title"))
-(define opthelp-report-title (N_ "Title for this report"))
+(define opthelp-report-title (N_ "Title for this report."))
 
 (define optname-party-name (N_ "Company name"))
-(define opthelp-party-name (N_ "Name of company/individual"))
+(define opthelp-party-name (N_ "Name of company/individual."))
 
 (define optname-budget (N_ "Budget"))
 (define opthelp-budget (N_ "Budget to use."))
@@ -79,59 +79,59 @@
   (N_ "Report on these accounts, if display depth allows."))
 (define optname-depth-limit (N_ "Levels of Subaccounts"))
 (define opthelp-depth-limit
-  (N_ "Maximum number of levels in the account tree displayed"))
+  (N_ "Maximum number of levels in the account tree displayed."))
 (define optname-bottom-behavior (N_ "Flatten list to depth limit"))
 (define opthelp-bottom-behavior
-  (N_ "Displays accounts which exceed the depth limit at the depth limit"))
+  (N_ "Displays accounts which exceed the depth limit at the depth limit."))
 
 (define optname-parent-balance-mode (N_ "Parent account balances"))
 (define optname-parent-total-mode (N_ "Parent account subtotals"))
 
 (define optname-show-zb-accts (N_ "Include accounts with zero total balances"))
 (define opthelp-show-zb-accts
-  (N_ "Include accounts with zero total (recursive) balances in this report"))
+  (N_ "Include accounts with zero total (recursive) balances in this report."))
 (define optname-omit-zb-bals (N_ "Omit zero balance figures"))
 (define opthelp-omit-zb-bals
-  (N_ "Show blank space in place of any zero balances which would be shown"))
+  (N_ "Show blank space in place of any zero balances which would be shown."))
 
 (define optname-use-rules (N_ "Show accounting-style rules"))
 (define opthelp-use-rules
-  (N_ "Use rules beneath columns of added numbers like accountants do"))
+  (N_ "Use rules beneath columns of added numbers like accountants do."))
 
 (define optname-account-links (N_ "Display accounts as hyperlinks"))
-(define opthelp-account-links (N_ "Shows each account in the table as a hyperlink to its register window"))
+(define opthelp-account-links (N_ "Shows each account in the table as a hyperlink to its register window."))
 
 (define optname-label-revenue (N_ "Label the revenue section"))
 (define opthelp-label-revenue
-  (N_ "Whether or not to include a label for the revenue section"))
+  (N_ "Whether or not to include a label for the revenue section."))
 (define optname-total-revenue (N_ "Include revenue total"))
 (define opthelp-total-revenue
-  (N_ "Whether or not to include a line indicating total revenue"))
+  (N_ "Whether or not to include a line indicating total revenue."))
 (define optname-label-expense (N_ "Label the expense section"))
 (define opthelp-label-expense
-  (N_ "Whether or not to include a label for the expense section"))
+  (N_ "Whether or not to include a label for the expense section."))
 (define optname-total-expense (N_ "Include expense total"))
 (define opthelp-total-expense
-  (N_ "Whether or not to include a line indicating total expense"))
+  (N_ "Whether or not to include a line indicating total expense."))
 
 (define pagename-commodities (N_ "Commodities"))
 (define optname-report-commodity (N_ "Report's currency"))
 (define optname-price-source (N_ "Price Source"))
 (define optname-show-foreign (N_ "Show Foreign Currencies"))
 (define opthelp-show-foreign
-  (N_ "Display any foreign currency amount in an account"))
+  (N_ "Display any foreign currency amount in an account."))
 (define optname-show-rates (N_ "Show Exchange Rates"))
-(define opthelp-show-rates (N_ "Show the exchange rates used"))
+(define opthelp-show-rates (N_ "Show the exchange rates used."))
 
 (define pagename-entries (N_ "Entries"))
 (define optname-two-column
   (N_ "Display as a two column report"))
 (define opthelp-two-column
-  (N_ "Divides the report into an income column and an expense column"))
+  (N_ "Divides the report into an income column and an expense column."))
 (define optname-standard-order
   (N_ "Display in standard, income first, order"))
 (define opthelp-standard-order
-  (N_ "Causes the report to display in the standard order, placing income before expenses"))
+  (N_ "Causes the report to display in the standard order, placing income before expenses."))
 
 ;; options generator
 (define (budget-income-statement-options-generator-internal reportname)

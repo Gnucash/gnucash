@@ -68,31 +68,31 @@
     (add-option
      (gnc:make-multichoice-option
       gnc:pagename-general optname-price-source
-      "d" (N_ "The source of price information") 'pricedb-nearest
+      "d" (N_ "The source of price information.") 'pricedb-nearest
       (list (vector 'pricedb-latest 
 		    (N_ "Most recent")
-		    (N_ "The most recent recorded price"))
+		    (N_ "The most recent recorded price."))
 	    (vector 'pricedb-nearest
 		    (N_ "Nearest in time")
-		    (N_ "The price recorded nearest in time to the report date"))
+		    (N_ "The price recorded nearest in time to the report date."))
 	    (vector 'pricedb-latest-before
 		    (N_ "Most recent to report")
-		    (N_ "The most recent recorded price before report date"))
+		    (N_ "The most recent recorded price before report date."))
 	    )))
     
     (add-option
      (gnc:make-multichoice-option
       gnc:pagename-general optname-basis-method
-      "e" (N_ "Basis calculation method") 'average-basis
+      "e" (N_ "Basis calculation method.") 'average-basis
       (list (vector 'average-basis
 		    (N_ "Average")
-		    (N_ "Use average cost of all shares for basis"))
+		    (N_ "Use average cost of all shares for basis."))
 	    (vector 'fifo-basis
 		    (N_ "FIFO")
-		    (N_ "Use first-in first-out method for basis"))
+		    (N_ "Use first-in first-out method for basis."))
 	    (vector 'filo-basis
 		    (N_ "FILO")
-		    (N_ "Use first-in last-out method for basis"))
+		    (N_ "Use first-in last-out method for basis."))
 	    )))
 
     (add-option
@@ -104,41 +104,41 @@
     (add-option
      (gnc:make-simple-boolean-option
       gnc:pagename-general optname-ignore-brokerage-fees "g"
-      (N_ "Ignore brokerage fees when calculating returns")
+      (N_ "Ignore brokerage fees when calculating returns.")
       #f))
 
     (gnc:register-option
       options
       (gnc:make-simple-boolean-option
 	gnc:pagename-display optname-show-symbol "a"
-	(N_ "Display the ticker symbols")
+	(N_ "Display the ticker symbols.")
 	#t))
 
     (gnc:register-option
       options
       (gnc:make-simple-boolean-option
 	gnc:pagename-display optname-show-listing "b"
-	(N_ "Display exchange listings")
+	(N_ "Display exchange listings.")
 	#t))
 
     (gnc:register-option
       options
       (gnc:make-simple-boolean-option
 	gnc:pagename-display optname-show-shares "c"
-	(N_ "Display numbers of shares in accounts")
+	(N_ "Display numbers of shares in accounts.")
 	#t))
 
     (add-option
      (gnc:make-number-range-option
       gnc:pagename-display optname-shares-digits
-      "d" (N_ "The number of decimal places to use for share numbers") 2
+      "d" (N_ "The number of decimal places to use for share numbers.") 2
       0 6 0 1))
 
     (gnc:register-option
       options
       (gnc:make-simple-boolean-option
 	gnc:pagename-display optname-show-price "e"
-	(N_ "Display share prices")
+	(N_ "Display share prices.")
 	#t))
 
     ;; Account tab
@@ -146,7 +146,7 @@
      (gnc:make-account-list-option
       gnc:pagename-accounts (N_ "Accounts")
       "b"
-      (N_ "Stock Accounts to report on")
+      (N_ "Stock Accounts to report on.")
       (lambda () (filter gnc:account-is-stock?
                          (gnc-account-get-descendants-sorted
                           (gnc-get-current-root-account))))

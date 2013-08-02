@@ -230,7 +230,7 @@
         (namer 
          (gnc:make-string-option 
           gnc:pagename-general gnc:optname-reportname "0a"
-          (N_ "Enter a descriptive name for this report")
+          (N_ "Enter a descriptive name for this report.")
           (_ (gnc:report-template-name report-template))))
         (stylesheet 
          (gnc:make-multichoice-option 
@@ -243,7 +243,7 @@
               (string->symbol (gnc:html-style-sheet-name ss))
               (gnc:html-style-sheet-name ss)
               (string-append (gnc:html-style-sheet-name ss) 
-                             " " (_ "Stylesheet"))))
+                             " " (_ "stylesheet."))))
            (gnc:get-html-style-sheets)))))
 
     (let ((options

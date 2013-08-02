@@ -65,17 +65,17 @@
         (opt-register
             (gnc:make-font-option
                 (N_ "Fonts")
-                (N_ "Title") "a" (N_ "Font info for the report title")
+                (N_ "Title") "a" (N_ "Font info for the report title.")
                 (string-append font-family " Bold 15")))
         (opt-register
             (gnc:make-font-option
                 (N_ "Fonts")
-                (N_ "Account link") "b" (N_ "Font info for account name")
+                (N_ "Account link") "b" (N_ "Font info for account name.")
                 (string-append font-family " Italic 10")))
         (opt-register
             (gnc:make-font-option
                 (N_ "Fonts")
-                (N_ "Number cell") "c" (N_ "Font info for regular number cells")
+                (N_ "Number cell") "c" (N_ "Font info for regular number cells.")
                 (string-append font-family " 10")))
         (opt-register
             (gnc:make-simple-boolean-option
@@ -85,27 +85,27 @@
         (opt-register
             (gnc:make-font-option
                 (N_ "Fonts")
-                (N_ "Number header") "e" (N_ "Font info for number headers")
+                (N_ "Number header") "e" (N_ "Font info for number headers.")
                 (string-append font-family " 10")))
         (opt-register
             (gnc:make-font-option
                 (N_ "Fonts")
-                (N_ "Text cell") "f" (N_ "Font info for regular text cells")
+                (N_ "Text cell") "f" (N_ "Font info for regular text cells.")
                 (string-append font-family " 10")))
         (opt-register
             (gnc:make-font-option
                 (N_ "Fonts")
-                (N_ "Total number cell") "g" (N_ "Font info for number cells containing a total")
+                (N_ "Total number cell") "g" (N_ "Font info for number cells containing a total.")
                 (string-append font-family " Bold 12")))
         (opt-register
             (gnc:make-font-option
                 (N_ "Fonts")
-                (N_ "Total label cell") "h" (N_ "Font info for cells containing total labels")
+                (N_ "Total label cell") "h" (N_ "Font info for cells containing total labels.")
                 (string-append font-family " Bold 12")))
         (opt-register
             (gnc:make-font-option
                 (N_ "Fonts")
-                (N_ "Centered label cell") "i" (N_ "Font info for centered label cells")
+                (N_ "Centered label cell") "i" (N_ "Font info for centered label cells.")
                 (string-append font-family " Bold 12")))
     )
 )

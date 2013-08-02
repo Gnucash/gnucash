@@ -417,8 +417,8 @@
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
                                     <property name="has_tooltip">True</property>
-                                    <property name="tooltip_markup">Choose whether to search all your data or only that marked as &amp;quot;active&amp;quot;</property>
-                                    <property name="tooltip_text" translatable="yes">Choose whether to search all your data or only that marked as "active"</property>
+                                    <property name="tooltip_markup">Choose whether to search all your data or only that marked as &amp;quot;active&amp;quot;.</property>
+                                    <property name="tooltip_text" translatable="yes">Choose whether to search all your data or only that marked as "active".</property>
                                     <property name="use_action_appearance">False</property>
                                     <property name="use_underline">True</property>
                                     <property name="active">True</property>

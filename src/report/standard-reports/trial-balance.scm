@@ -63,26 +63,26 @@
 ;; define all option's names and help text so that they are properly
 ;; defined in *one* place.
 (define optname-report-title (N_ "Report Title"))
-(define opthelp-report-title (N_ "Title for this report"))
+(define opthelp-report-title (N_ "Title for this report."))
 
 (define optname-party-name (N_ "Company name"))
-(define opthelp-party-name (N_ "Name of company/individual"))
+(define opthelp-party-name (N_ "Name of company/individual."))
 
 (define optname-start-date (N_ "Start of Adjusting/Closing"))
 (define optname-end-date (N_ "Date of Report"))
 (define optname-report-variant (N_ "Report variation"))
-(define opthelp-report-variant (N_ "Kind of trial balance to generate"))
+(define opthelp-report-variant (N_ "Kind of trial balance to generate."))
 ;; FIXME this needs an indent option
 
 (define optname-accounts (N_ "Accounts"))
 (define opthelp-accounts
-  (N_ "Report on these accounts"))
+  (N_ "Report on these accounts."))
 (define optname-depth-limit (N_ "Levels of Subaccounts"))
 (define opthelp-depth-limit
-  (N_ "Maximum number of levels in the account tree displayed"))
+  (N_ "Maximum number of levels in the account tree displayed."))
 
 (define pagename-merchandising (N_ "Merchandising"))
-(define optname-gross-adjustment-accounts (N_ "Gross adjustment accounts"))
+(define optname-gross-adjustment-accounts (N_ "Gross adjustment accounts."))
 (define opthelp-gross-adjustment-accounts
   (N_ "Do not net, but show gross debit/credit adjustments to these accounts. Merchandising businesses will normally select their inventory accounts here."))
 (define optname-income-summary-accounts (N_ "Income summary accounts"))
@@ -92,27 +92,27 @@
 (define pagename-entries (N_ "Entries"))
 (define optname-adjusting-pattern (N_ "Adjusting Entries pattern"))
 (define opthelp-adjusting-pattern
-  (N_ "Any text in the Description column which identifies adjusting entries"))
+  (N_ "Any text in the Description column which identifies adjusting entries."))
 (define optname-adjusting-casing
   (N_ "Adjusting Entries pattern is case-sensitive"))
 (define opthelp-adjusting-casing
-  (N_ "Causes the Adjusting Entries Pattern match to be case-sensitive"))
+  (N_ "Causes the Adjusting Entries Pattern match to be case-sensitive."))
 (define optname-adjusting-regexp
   (N_ "Adjusting Entries Pattern is regular expression"))
 (define opthelp-adjusting-regexp
-  (N_ "Causes the Adjusting Entries Pattern to be treated as a regular expression"))
+  (N_ "Causes the Adjusting Entries Pattern to be treated as a regular expression."))
 
 (define optname-closing-pattern (N_ "Closing Entries pattern"))
 (define opthelp-closing-pattern
-  (N_ "Any text in the Description column which identifies closing entries"))
+  (N_ "Any text in the Description column which identifies closing entries."))
 (define optname-closing-casing
   (N_ "Closing Entries pattern is case-sensitive"))
 (define opthelp-closing-casing
-  (N_ "Causes the Closing Entries Pattern match to be case-sensitive"))
+  (N_ "Causes the Closing Entries Pattern match to be case-sensitive."))
 (define optname-closing-regexp
   (N_ "Closing Entries Pattern is regular expression"))
 (define opthelp-closing-regexp
-  (N_ "Causes the Closing Entries Pattern to be treated as a regular expression"))
+  (N_ "Causes the Closing Entries Pattern to be treated as a regular expression."))
 
 ;; FIXME: this option doesn't produce a correct work sheet when
 ;; selected after closing... it omits adjusted temporary accounts
@@ -121,19 +121,19 @@
 ;; gnc:make-html-acct-table
 (define optname-show-zb-accts (N_ "Include accounts with zero total balances"))
 (define opthelp-show-zb-accts
-  (N_ "Include accounts with zero total (recursive) balances in this report"))
+  (N_ "Include accounts with zero total (recursive) balances in this report."))
 
 (define optname-account-links (N_ "Display accounts as hyperlinks"))
-(define opthelp-account-links (N_ "Shows each account in the table as a hyperlink to its register window"))
+(define opthelp-account-links (N_ "Shows each account in the table as a hyperlink to its register window."))
 
 (define pagename-commodities (N_ "Commodities"))
 (define optname-report-commodity (N_ "Report's currency"))
 (define optname-price-source (N_ "Price Source"))
 (define optname-show-foreign (N_ "Show Foreign Currencies"))
 (define opthelp-show-foreign
-  (N_ "Display any foreign currency amount in an account"))
+  (N_ "Display any foreign currency amount in an account."))
 (define optname-show-rates (N_ "Show Exchange Rates"))
-(define opthelp-show-rates (N_ "Show the exchange rates used"))
+(define opthelp-show-rates (N_ "Show the exchange rates used."))
 
 ;; options generator
 (define (trial-balance-options-generator)

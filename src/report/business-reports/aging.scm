@@ -346,23 +346,23 @@ more than one currency.  This report is not designed to cope with this possibili
       gnc:pagename-general
       optname-sort-by
       "i"
-      (N_ "Sort companies by")
+      (N_ "Sort companies by.")
       'name
       (list 
-       (vector 'name (N_ "Name") (N_ "Name of the company"))
-       (vector 'total (N_ "Total Owed") (N_ "Total amount owed to/from Company"))
-       (vector 'oldest-bracket (N_ "Bracket Total Owed") (N_ "Amount owed in oldest bracket - if same go to next oldest")))))
+       (vector 'name (N_ "Name") (N_ "Name of the company."))
+       (vector 'total (N_ "Total Owed") (N_ "Total amount owed to/from Company."))
+       (vector 'oldest-bracket (N_ "Bracket Total Owed") (N_ "Amount owed in oldest bracket - if same go to next oldest.")))))
 
     (add-option 
      (gnc:make-multichoice-option
       gnc:pagename-general
        optname-sort-order
        "ia"
-       (N_ "Sort order")
+       (N_ "Sort order.")
        'increasing
        (list
-	(vector 'increasing (N_ "Increasing") (N_ "0 -> $999,999.99, A->Z"))
-	(vector 'decreasing (N_ "Decreasing") (N_ "$999,999.99 -> $0, Z->A")))))
+	(vector 'increasing (N_ "Increasing") (N_ "0 -> $999,999.99, A->Z."))
+	(vector 'decreasing (N_ "Decreasing") (N_ "$999,999.99 -> $0, Z->A.")))))
 
     (add-option
      (gnc:make-simple-boolean-option
@@ -370,7 +370,7 @@ more than one currency.  This report is not designed to cope with this possibili
       optname-multicurrency-totals
       "i"
       (N_ "Show multi-currency totals.  If not selected, convert all \
-totals to report currency")
+totals to report currency.")
       #f))
 
     (add-option
@@ -386,11 +386,11 @@ totals to report currency")
        gnc:pagename-general
        optname-date-driver
        "k"
-       (N_ "Leading date")
+       (N_ "Leading date.")
        'duedate
        (list
-         (vector 'duedate (N_ "Due Date") (N_ "Due date is leading")) ;; Should be using standard label for due date?
-	 (vector 'postdate (N_ "Post Date") (N_ "Post date is leading"))))) ;; Should be using standard label for post date?
+         (vector 'duedate (N_ "Due Date") (N_ "Due date is leading.")) ;; Should be using standard label for due date?
+	 (vector 'postdate (N_ "Post Date") (N_ "Post date is leading."))))) ;; Should be using standard label for post date?
     
     (gnc:options-set-default-section options "General")      
     options))

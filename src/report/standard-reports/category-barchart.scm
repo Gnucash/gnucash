@@ -84,7 +84,7 @@ developing over time"))
 (define optname-sort-method (N_ "Sort Method"))
 
 (define optname-averaging (N_ "Show Average"))
-(define opthelp-averaging (N_ "Select whether the amounts should be shown over the full time period or rather as the average e.g. per month"))
+(define opthelp-averaging (N_ "Select whether the amounts should be shown over the full time period or rather as the average e.g. per month."))
 
 (define (options-generator account-types reverse-balance? do-intervals?)
   (let* ((options (gnc:new-options)) 
@@ -119,16 +119,16 @@ developing over time"))
           'None
           (list (vector 'None
                         (N_ "No Averaging")
-                        (N_ "Just show the amounts, without any averaging"))
+                        (N_ "Just show the amounts, without any averaging."))
                 (vector 'MonthDelta
                         (N_ "Monthly")
-                        (N_ "Show the average monthly amount during the reporting period"))
+                        (N_ "Show the average monthly amount during the reporting period."))
                 (vector 'WeekDelta
                         (N_ "Weekly")
-                        (N_ "Show the average weekly amount during the reporting period"))
+                        (N_ "Show the average weekly amount during the reporting period."))
                 (vector 'DayDelta
                         (N_ "Daily")
-                        (N_ "Show the average daily amount during the reporting period"))
+                        (N_ "Show the average daily amount during the reporting period."))
                 )
           ))
         )
@@ -151,7 +151,7 @@ developing over time"))
     
     (gnc:options-add-account-levels! 
      options gnc:pagename-accounts optname-levels "c" 
-     (N_ "Show accounts to this depth and not further") 
+     (N_ "Show accounts to this depth and not further.") 
      2)
 
     ;; Display tab
@@ -170,7 +170,7 @@ developing over time"))
     (add-option
      (gnc:make-number-range-option
       gnc:pagename-display optname-slices
-      "c" (N_ "Maximum number of bars in the chart") 8
+      "c" (N_ "Maximum number of bars in the chart.") 8
       2 24 0 1))
 
     (add-option

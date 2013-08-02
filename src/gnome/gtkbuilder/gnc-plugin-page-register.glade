@@ -849,7 +849,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
-                <property name="tooltip_text" translatable="yes">Keep normal account order</property>
+                <property name="tooltip_text" translatable="yes">Keep normal account order.</property>
                 <property name="use_action_appearance">False</property>
                 <property name="use_underline">True</property>
                 <property name="draw_indicator">True</property>
@@ -878,7 +878,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
-                <property name="tooltip_text" translatable="yes">Sort by date</property>
+                <property name="tooltip_text" translatable="yes">Sort by date.</property>
                 <property name="use_action_appearance">False</property>
                 <property name="use_underline">True</property>
                 <property name="draw_indicator">True</property>
@@ -897,7 +897,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
-                <property name="tooltip_text" translatable="yes">Sort by the date of entry</property>
+                <property name="tooltip_text" translatable="yes">Sort by the date of entry.</property>
                 <property name="use_action_appearance">False</property>
                 <property name="use_underline">True</property>
                 <property name="draw_indicator">True</property>
@@ -916,7 +916,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
-                <property name="tooltip_text" translatable="yes">Sort by the statement date (unreconciled items last)</property>
+                <property name="tooltip_text" translatable="yes">Sort by the statement date (unreconciled items last).</property>
                 <property name="use_action_appearance">False</property>
                 <property name="use_underline">True</property>
                 <property name="draw_indicator">True</property>
@@ -935,7 +935,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
-                <property name="tooltip_text" translatable="yes">Sort by number</property>
+                <property name="tooltip_text" translatable="yes">Sort by number.</property>
                 <property name="use_action_appearance">False</property>
                 <property name="use_underline">True</property>
                 <property name="draw_indicator">True</property>
@@ -954,7 +954,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
-                <property name="tooltip_text" translatable="yes">Sort by amount</property>
+                <property name="tooltip_text" translatable="yes">Sort by amount.</property>
                 <property name="use_action_appearance">False</property>
                 <property name="use_underline">True</property>
                 <property name="draw_indicator">True</property>
@@ -973,7 +973,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
-                <property name="tooltip_text" translatable="yes">Sort by memo</property>
+                <property name="tooltip_text" translatable="yes">Sort by memo.</property>
                 <property name="use_action_appearance">False</property>
                 <property name="use_underline">True</property>
                 <property name="draw_indicator">True</property>
@@ -992,7 +992,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
-                <property name="tooltip_text" translatable="yes">Sort by description</property>
+                <property name="tooltip_text" translatable="yes">Sort by description.</property>
                 <property name="use_action_appearance">False</property>
                 <property name="use_underline">True</property>
                 <property name="draw_indicator">True</property>
@@ -1011,7 +1011,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
-                <property name="tooltip_text" translatable="yes">Sort by action field</property>
+                <property name="tooltip_text" translatable="yes">Sort by action field.</property>
                 <property name="use_action_appearance">False</property>
                 <property name="use_underline">True</property>
                 <property name="draw_indicator">True</property>
@@ -1030,7 +1030,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
-                <property name="tooltip_text" translatable="yes">Sort by notes field</property>
+                <property name="tooltip_text" translatable="yes">Sort by notes field.</property>
                 <property name="use_action_appearance">False</property>
                 <property name="use_underline">True</property>
                 <property name="draw_indicator">True</property>
@@ -1075,6 +1075,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
+                    <property name="tooltip_text" translatable="yes">Save the sort order for this register.</property>
                     <property name="use_action_appearance">False</property>
                     <property name="use_underline">True</property>
                     <property name="xalign">1</property>
@@ -1095,6 +1096,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
+                    <property name="tooltip_text" translatable="yes">Sort in descending order.</property>
                     <property name="use_action_appearance">False</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>

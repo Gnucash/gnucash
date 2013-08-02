@@ -237,7 +237,7 @@
   (gnc:register-inv-option
    (gnc:make-string-option
     gnc:pagename-general (N_ "Custom Title")
-    "z" (N_ "A custom string to replace Invoice, Bill or Expense Voucher")
+    "z" (N_ "A custom string to replace Invoice, Bill or Expense Voucher.")
     ""))
 
   (gnc:register-inv-option
@@ -268,22 +268,22 @@
   (gnc:register-inv-option
    (gnc:make-simple-boolean-option
     (N_ "Display Columns") (N_ "Discount")
-    "k" (N_ "Display the entry's discount") #t))
+    "k" (N_ "Display the entry's discount?") #t))
 
   (gnc:register-inv-option
    (gnc:make-simple-boolean-option
     (N_ "Display Columns") (N_ "Taxable")
-    "l" (N_ "Display the entry's taxable status") #t))
+    "l" (N_ "Display the entry's taxable status?") #t))
 
   (gnc:register-inv-option
    (gnc:make-simple-boolean-option
     (N_ "Display Columns") (N_ "Tax Amount")
-    "m" (N_ "Display each entry's total total tax") #f))
+    "m" (N_ "Display each entry's total total tax?") #f))
 
   (gnc:register-inv-option
    (gnc:make-simple-boolean-option
     (N_ "Display Columns") (N_ "Total")
-    "n" (N_ "Display the entry's value") #t))
+    "n" (N_ "Display the entry's value?") #t))
 
   (gnc:register-inv-option
    (gnc:make-simple-boolean-option
@@ -329,7 +329,7 @@
   (gnc:register-inv-option
    (gnc:make-text-option
     (N_ "Display") (N_ "Extra Notes")
-     "u" (N_ "Extra notes to put on the invoice")
+     "u" (N_ "Extra notes to put on the invoice.")
      (_ "Thank you for your patronage")))
 
   (gnc:register-inv-option

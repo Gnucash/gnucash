@@ -83,17 +83,17 @@
     (add-option
      (gnc:make-multichoice-option
       pagename-price optname-price-source
-      "f" (N_ "The source of price information") 
+      "f" (N_ "The source of price information.") 
       'actual-transactions
       (list (vector 'weighted-average 
                     (N_ "Weighted Average")
-                    (N_ "The weighted average of all currency transactions of the past"))
+                    (N_ "The weighted average of all currency transactions of the past."))
             (vector 'actual-transactions
                     (N_ "Actual Transactions")
-                    (N_ "The instantaneous price of actual currency transactions in the past"))
+                    (N_ "The instantaneous price of actual currency transactions in the past."))
             (vector 'pricedb
                     (N_ "Price Database")
-                    (N_ "The recorded prices"))
+                    (N_ "The recorded prices."))
             )))
 
     (add-option
@@ -116,7 +116,7 @@
      (gnc:make-color-option
       gnc:pagename-display optname-markercolor
       "b"
-      (N_ "Color of the marker")
+      (N_ "Color of the marker.")
       (list #xb2 #x22 #x22 0)
       255 #f))
 

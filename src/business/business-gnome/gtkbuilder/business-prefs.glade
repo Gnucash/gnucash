@@ -265,6 +265,9 @@
           <object class="GtkComboBox" id="gconf/dialogs/business/invoice/invoice_printreport">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="has_tooltip">True</property>
+            <property name="tooltip_markup">The invoice report to be used for printing.</property>
+            <property name="tooltip_text" translatable="yes">The invoice report to be used for printing.</property>
             <property name="model">liststore_printinvoice</property>
             <child>
               <object class="GtkCellRendererText" id="cellrenderertext2"/>

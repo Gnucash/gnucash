@@ -59,43 +59,43 @@
 ;; define all option's names and help text so that they are properly
 ;; defined in *one* place.
 (define optname-report-title (N_ "Report Title"))
-(define opthelp-report-title (N_ "Title for this report"))
+(define opthelp-report-title (N_ "Title for this report."))
 
 (define optname-party-name (N_ "Company name"))
-(define opthelp-party-name (N_ "Name of company/individual"))
+(define opthelp-party-name (N_ "Name of company/individual."))
 
 (define optname-start-date (N_ "Start Date"))
 (define optname-end-date (N_ "End Date"))
 
 (define optname-accounts (N_ "Accounts"))
 (define opthelp-accounts
-  (N_ "Report only on these accounts"))
+  (N_ "Report only on these accounts."))
 
 (define optname-use-rules (N_ "Show accounting-style rules"))
 (define opthelp-use-rules
-  (N_ "Use rules beneath columns of added numbers like accountants do"))
+  (N_ "Use rules beneath columns of added numbers like accountants do."))
 
 (define pagename-commodities (N_ "Commodities"))
 (define optname-report-commodity (N_ "Report's currency"))
 (define optname-price-source (N_ "Price Source"))
 (define optname-show-foreign (N_ "Show Foreign Currencies"))
 (define opthelp-show-foreign
-  (N_ "Display any foreign currency amount in an account"))
+  (N_ "Display any foreign currency amount in an account."))
 (define optname-show-rates (N_ "Show Exchange Rates"))
-(define opthelp-show-rates (N_ "Show the exchange rates used"))
+(define opthelp-show-rates (N_ "Show the exchange rates used."))
 
 (define pagename-entries (N_ "Entries"))
 (define optname-closing-pattern (N_ "Closing Entries pattern"))
 (define opthelp-closing-pattern
-  (N_ "Any text in the Description column which identifies closing entries"))
+  (N_ "Any text in the Description column which identifies closing entries."))
 (define optname-closing-casing
   (N_ "Closing Entries pattern is case-sensitive"))
 (define opthelp-closing-casing
-  (N_ "Causes the Closing Entries Pattern match to be case-sensitive"))
+  (N_ "Causes the Closing Entries Pattern match to be case-sensitive."))
 (define optname-closing-regexp
   (N_ "Closing Entries Pattern is regular expression"))
 (define opthelp-closing-regexp
-  (N_ "Causes the Closing Entries Pattern to be treated as a regular expression"))
+  (N_ "Causes the Closing Entries Pattern to be treated as a regular expression."))
 
 ;; options generator
 (define (equity-statement-options-generator)

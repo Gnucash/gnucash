@@ -252,7 +252,7 @@
   (gnc:register-inv-option
    (gnc:make-string-option
     gnc:pagename-general (N_ "Custom Title")
-    "z" (N_ "A custom string to replace Invoice, Bill or Expense Voucher")
+    "z" (N_ "A custom string to replace Invoice, Bill or Expense Voucher.")
     ""))
 
   (gnc:register-inv-option
@@ -283,22 +283,22 @@
   (gnc:register-inv-option
    (gnc:make-simple-boolean-option
     (N_ "Display Columns") (N_ "Discount")
-    "k" (N_ "Display the entry's discount") #f))
+    "k" (N_ "Display the entry's discount?") #f))
 
   (gnc:register-inv-option
    (gnc:make-simple-boolean-option
     (N_ "Display Columns") (N_ "Taxable")
-    "l" (N_ "Display the entry's taxable status") #f))
+    "l" (N_ "Display the entry's taxable status?") #f))
 
   (gnc:register-inv-option
    (gnc:make-simple-boolean-option
     (N_ "Display Columns") (N_ "Tax Amount")
-    "m" (N_ "Display each entry's total total tax") #f))
+    "m" (N_ "Display each entry's total total tax?") #f))
 
   (gnc:register-inv-option
    (gnc:make-simple-boolean-option
     (N_ "Display Columns") (N_ "Total")
-    "n" (N_ "Display the entry's value") #t))
+    "n" (N_ "Display the entry's value?") #t))
 
   (gnc:register-inv-option
    (gnc:make-simple-boolean-option
@@ -338,39 +338,39 @@
   (gnc:register-inv-option
    (gnc:make-number-range-option
     (N_ "Display") (N_ "Minimum # of entries")
-    "u" (N_ "The minimum number of invoice entries to display. (-1)") 23
+    "u" (N_ "The minimum number of invoice entries to display.") 23
     4 23 0 1))
 
   (gnc:register-inv-option
    (gnc:make-text-option
     (N_ "Display") (N_ "Extra Notes")
-     "u" (N_ "Extra notes to put on the invoice")
+     "u" (N_ "Extra notes to put on the invoice.")
      (_ "Thank you for your patronage")))
 
   (gnc:register-inv-option
    (gnc:make-complex-boolean-option
     (N_ "Display") (N_ "Payable to")
-     "ua1" (N_ "Display the Payable to: information") #t #f
+     "ua1" (N_ "Display the Payable to: information.") #t #f
      (lambda (x) (gnc-option-db-set-option-selectable-by-name
 		  gnc:*report-options* "Display" "Payable to string" x))))
 
   (gnc:register-inv-option
    (gnc:make-text-option
     (N_ "Display") (N_ "Payable to string")
-    "ua2" (N_ "The phrase for specifying to whom payments should be made")
+    "ua2" (N_ "The phrase for specifying to whom payments should be made.")
     (_ "Make all cheques Payable to")))
 
   (gnc:register-inv-option
    (gnc:make-complex-boolean-option
     (N_ "Display") (N_ "Company contact")
-     "ub1" (N_ "Display the Company contact information") #t #f
+     "ub1" (N_ "Display the Company contact information.") #t #f
      (lambda (x) (gnc-option-db-set-option-selectable-by-name
 		  gnc:*report-options* "Display" "Company contact string" x))))
 
   (gnc:register-inv-option
    (gnc:make-text-option
     (N_ "Display") (N_ "Company contact string")
-    "ub2" (N_ "The phrase used to introduce the company contact")
+    "ub2" (N_ "The phrase used to introduce the company contact.")
     (_ "Direct all inquiries to")))
 
 ; not used
