@@ -156,7 +156,10 @@ def method_function_returns_instance(method_function, cls):
     assert( 'instance' == INSTANCE_ARGUMENT )
     def new_function(*args):
         kargs = { INSTANCE_ARGUMENT : method_function(*args) }
-        return cls( **kargs )
+        if kargs['instance'] == None:
+            return None
+        else:
+            return cls( **kargs )
     
     return new_function
 
