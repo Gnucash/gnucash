@@ -2185,6 +2185,48 @@ many months before the current month:</property>
                   <placeholder/>
                 </child>
                 <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
                   <object class="GtkLabel" id="label115">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
@@ -2693,8 +2735,20 @@ many months before the current month:</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="border_width">6</property>
-                <property name="n_rows">14</property>
+                <property name="n_rows">15</property>
                 <property name="n_columns">4</property>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
                 <child>
                   <placeholder/>
                 </child>
@@ -2973,13 +3027,13 @@ many months before the current month:</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkCheckButton" id="gconf/general/register/show_entered_date">
-                    <property name="label" translatable="yes">Show the _entered date</property>
+                  <object class="GtkCheckButton" id="gconf/general/register/show_extra_dates">
+                    <property name="label" translatable="yes">Show the _entered and reconcile dates</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="tooltip_markup">Show the date when the transaction was entered below the posted date.</property>
-                    <property name="tooltip_text" translatable="yes">Show the date when the transaction was entered below the posted date.</property>
+                    <property name="tooltip_markup">Show the date when the transaction was entered below the posted date and reconciled date on split row.</property>
+                    <property name="tooltip_text" translatable="yes">Show the date when the transaction was entered below the posted date and reconciled date on split row.</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
                   </object>
@@ -3005,8 +3059,8 @@ many months before the current month:</property>
                   </object>
                   <packing>
                     <property name="right_attach">4</property>
-                    <property name="top_attach">12</property>
-                    <property name="bottom_attach">13</property>
+                    <property name="top_attach">13</property>
+                    <property name="bottom_attach">14</property>
                     <property name="x_options">GTK_FILL</property>
                     <property name="y_options"/>
                     <property name="x_padding">12</property>
@@ -3025,24 +3079,32 @@ many months before the current month:</property>
                   </object>
                   <packing>
                     <property name="right_attach">4</property>
-                    <property name="top_attach">13</property>
-                    <property name="bottom_attach">14</property>
+                    <property name="top_attach">14</property>
+                    <property name="bottom_attach">15</property>
                     <property name="x_options">GTK_FILL</property>
                     <property name="y_options"/>
                     <property name="x_padding">12</property>
                   </packing>
                 </child>
                 <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
+                  <object class="GtkCheckButton" id="gconf/general/register/show_extra_dates_on_selection">
+                    <property name="label" translatable="yes">_Show entered and reconciled dates on selection</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="tooltip_markup">Show the entered date and reconciled date on selection</property>
+                    <property name="tooltip_text" translatable="yes">Show the entered date and reconciled date on selection</property>
+                    <property name="use_underline">True</property>
+                    <property name="draw_indicator">True</property>
+                  </object>
+                  <packing>
+                    <property name="right_attach">4</property>
+                    <property name="top_attach">12</property>
+                    <property name="bottom_attach">13</property>
+                    <property name="x_options">GTK_FILL</property>
+                    <property name="y_options"/>
+                    <property name="x_padding">12</property>
+                  </packing>
                 </child>
                 <child>
                   <placeholder/>

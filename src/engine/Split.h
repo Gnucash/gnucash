@@ -210,6 +210,11 @@ void          xaccSplitGetDateReconciledTS (const Split *split,
 /** Returns the date (as Timespec) on which this split was reconciled. */
 Timespec      xaccSplitRetDateReconciledTS (const Split *split);
 
+/*################## Added for Reg2 #################*/
+/** Retrieve the date when the Split was reconciled. */
+time64        xaccSplitGetDateReconciled (const Split *split);
+/*################## Added for Reg2 #################*/
+
 /** @} */
 
 

@@ -148,6 +148,7 @@ static void gnc_plugin_page_register2_cmd_reload (GtkAction *action, GncPluginPa
 static void gnc_plugin_page_register2_cmd_view_filter_by (GtkAction *action, GncPluginPageRegister2 *plugin_page);
 static void gnc_plugin_page_register2_cmd_style_changed (GtkAction *action, GtkRadioAction *current, GncPluginPageRegister2 *plugin_page);
 static void gnc_plugin_page_register2_cmd_style_double_line (GtkToggleAction *action, GncPluginPageRegister2 *plugin_page);
+static void gnc_plugin_page_register2_cmd_style_extra_dates (GtkToggleAction *action, GncPluginPageRegister2 *plugin_page);
 
 static void gnc_plugin_page_register2_cmd_reconcile (GtkAction *action, GncPluginPageRegister2 *plugin_page);
 static void gnc_plugin_page_register2_cmd_autoclear (GtkAction *action, GncPluginPageRegister2 *plugin_page);
@@ -275,7 +276,7 @@ static GtkActionEntry gnc_plugin_page_register2_actions [] =
         G_CALLBACK (gnc_plugin_page_register2_cmd_delete_transaction)
     },
     {
-        "RemoveTransactionSplitsAction", GTK_STOCK_CLEAR, N_("Remo_ve Other Splits"), NULL,
+        "RemoveTransactionSplitsAction", GTK_STOCK_CLEAR, N_("Remo_ve All Splits"), NULL,
         N_("Remove all splits in the current transaction"),
         G_CALLBACK (gnc_plugin_page_register2_cmd_reinitialize_transaction)
     },
@@ -402,6 +403,12 @@ static GtkToggleActionEntry toggle_entries[] =
         "ViewStyleDoubleLineAction", NULL, N_("_Double Line"), NULL,
         N_("Show two lines of information for each transaction"),
         G_CALLBACK (gnc_plugin_page_register2_cmd_style_double_line), FALSE
+    },
+
+    {
+        "ViewStyleExtraDatesAction", NULL, N_("Show _Extra Dates"), NULL,
+        N_("Show entered and reconciled dates"),
+        G_CALLBACK (gnc_plugin_page_register2_cmd_style_extra_dates), FALSE
     },
 
     {
@@ -996,6 +1003,7 @@ gnc_plugin_page_register2_ui_initial_state (GncPluginPageRegister2 *page) // thi
     GtkActionGroup *action_group;
     GtkAction *action;
     Account *account;
+    GncTreeViewSplitReg *view;
     GncTreeModelSplitReg *model;
     GNCLedgerDisplay2Type ledger_type;
     int i;
@@ -1030,12 +1038,21 @@ gnc_plugin_page_register2_ui_initial_state (GncPluginPageRegister2 *page) // thi
     gtk_toggle_action_set_active(GTK_TOGGLE_ACTION(action), TRUE);
     g_signal_handlers_unblock_by_func(action, gnc_plugin_page_register2_cmd_style_changed, page);
 
+    view = gnc_split_reg2_get_register (priv->gsr);
+
     /* Set "double line" toggle button */
     action = gtk_action_group_get_action (action_group,
                                           "ViewStyleDoubleLineAction");
     g_signal_handlers_block_by_func(action, gnc_plugin_page_register2_cmd_style_double_line, page);
     gtk_toggle_action_set_active (GTK_TOGGLE_ACTION(action), model->use_double_line);
     g_signal_handlers_unblock_by_func(action, gnc_plugin_page_register2_cmd_style_double_line, page);
+
+    /* Set "extar dates" toggle button */
+    action = gtk_action_group_get_action (action_group,
+                                          "ViewStyleExtraDatesAction");
+    g_signal_handlers_block_by_func(action, gnc_plugin_page_register2_cmd_style_extra_dates, page);
+    gtk_toggle_action_set_active (GTK_TOGGLE_ACTION(action), view->show_extra_dates);
+    g_signal_handlers_unblock_by_func(action, gnc_plugin_page_register2_cmd_style_extra_dates, page);
 }
 
 
@@ -1295,7 +1312,7 @@ static const gchar *style_names[] =
 #define KEY_ACCOUNT_NAME        "AccountName"
 #define KEY_REGISTER_STYLE      "RegisterStyle"
 #define KEY_DOUBLE_LINE         "DoubleLineMode"
-
+#define KEY_EXTRA_DATES         "ExtraDatesMode"
 
 #define LABEL_ACCOUNT		"Account"
 #define LABEL_SUBACCOUNT	"SubAccount"
@@ -1321,6 +1338,7 @@ gnc_plugin_page_register2_save_page (GncPluginPage *plugin_page,
     GncPluginPageRegister2 *page;
     GncPluginPageRegister2Private *priv;
     GNCLedgerDisplay2Type ledger_type;
+    GncTreeViewSplitReg *view;
     GncTreeModelSplitReg *model;
     Account *leader;
 
@@ -1334,6 +1352,7 @@ gnc_plugin_page_register2_save_page (GncPluginPage *plugin_page,
     page = GNC_PLUGIN_PAGE_REGISTER2 (plugin_page);
     priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE (page);
 
+    view = gnc_ledger_display2_get_split_view_register (priv->ledger);
     model = gnc_ledger_display2_get_split_model_register (priv->ledger);
     ledger_type = gnc_ledger_display2_type (priv->ledger);
     if (ledger_type > LD2_GL)
@@ -1370,6 +1389,7 @@ gnc_plugin_page_register2_save_page (GncPluginPage *plugin_page,
 
     g_key_file_set_string (key_file, group_name, KEY_REGISTER_STYLE, style_names[model->style]);
     g_key_file_set_boolean (key_file, group_name, KEY_DOUBLE_LINE, model->use_double_line);
+    g_key_file_set_boolean (key_file, group_name, KEY_EXTRA_DATES, view->show_extra_dates);
 
     LEAVE(" ");
 }
@@ -1397,6 +1417,7 @@ gnc_plugin_page_register2_restore_edit_menu (GncPluginPage *page,
     gchar *style_name;
     gint i;
     gboolean use_double_line;
+    gboolean show_extra_dates;
 
     ENTER(" ");
     priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE (page);
@@ -1428,6 +1449,13 @@ gnc_plugin_page_register2_restore_edit_menu (GncPluginPage *page,
     DEBUG("Setting double_line_mode: %d", use_double_line);
     action = gnc_plugin_page_get_action (page, "ViewStyleDoubleLineAction");
     gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action), use_double_line);
+
+    /* Update the extra dates action on this page */
+    show_extra_dates =
+        g_key_file_get_boolean (key_file, group_name, KEY_EXTRA_DATES, &error);
+    DEBUG("Setting extra_dates_mode: %d", show_extra_dates);
+    action = gnc_plugin_page_get_action (page, "ViewStyleExtraDatesAction");
+    gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action), show_extra_dates);
 
     LEAVE(" ");
 }
@@ -3103,8 +3131,38 @@ gnc_plugin_page_register2_cmd_style_double_line (GtkToggleAction *action,
         gnc_tree_view_split_reg_set_format (view);
 
         // This will update the row colors in anything but ledgers
-        if (model->style != REG2_STYLE_LEDGER)
+//        if (model->style != REG2_STYLE_LEDGER)
             gnc_tree_view_split_reg_change_vis_rows (view);
+    }
+    LEAVE(" ");
+}
+
+static void
+gnc_plugin_page_register2_cmd_style_extra_dates (GtkToggleAction *action,
+        GncPluginPageRegister2 *plugin_page) // this works
+{
+    GncPluginPageRegister2Private *priv;
+    GncTreeModelSplitReg *model;
+    GncTreeViewSplitReg *view;
+    gboolean show_extra_dates;
+
+    ENTER("(action %p, plugin_page %p)", action, plugin_page);
+
+    g_return_if_fail (GTK_IS_ACTION (action));
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER2 (plugin_page));
+
+    priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE (plugin_page);
+    model = gnc_ledger_display2_get_split_model_register (priv->ledger);
+
+    view = gnc_ledger_display2_get_split_view_register (priv->ledger);
+
+    show_extra_dates = gtk_toggle_action_get_active (action);
+    if (show_extra_dates != view->show_extra_dates)
+    {
+        view->show_extra_dates = show_extra_dates;
+
+        gnc_tree_view_split_reg_change_vis_rows (view);
+
     }
     LEAVE(" ");
 }

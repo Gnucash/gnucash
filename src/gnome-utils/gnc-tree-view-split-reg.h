@@ -63,6 +63,7 @@ typedef struct
     gboolean                    reg_closing;              // This is set when closing the register.
     gboolean                    change_allowed;           // This is set when we allow the reconciled split to change.
     gboolean                    editing_now;              // This is set while editing of a cell.
+    gboolean                    show_extra_dates;         // Show the entered date below the posted date and reconciled date on split row
 
 
 } GncTreeViewSplitReg;

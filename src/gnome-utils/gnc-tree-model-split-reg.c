@@ -496,44 +496,6 @@ gtm_sr_foreach_func (GtkTreeModel *model,
     return FALSE; /* do not stop walking the store, call us with next row */
 }
 
-
-/* Emit change signal for all visable model entries */
-void
-gnc_tree_model_split_reg_change_vis_rows (GncTreeModelSplitReg *model, GtkTreePath *start_path, GtkTreePath *end_path)
-{
-    GList *rr_list = NULL;    /* list of GtkTreeRowReferences */
-    GList *node;
-    GtkTreeIter iter;
-
-    gtk_tree_model_foreach (GTK_TREE_MODEL(model), (GtkTreeModelForeachFunc)gtm_sr_foreach_func, &rr_list);
-
-    for ( node = rr_list;  node != NULL;  node = node->next )
-    {
-        GtkTreePath *path;
-        path = gtk_tree_row_reference_get_path ((GtkTreeRowReference*)node->data);
-
-        if ((path) && gnc_tree_model_split_reg_get_iter (GTK_TREE_MODEL (model), &iter, path))
-        {
-            gchar *path_string;
-            path_string = gtk_tree_path_to_string (path);
-            PINFO("path is - '%s'", path_string);
-
-            // Only emit change if path > start_path and < end_path
-            if ((gtk_tree_path_compare (path, end_path) == -1) && (gtk_tree_path_compare (start_path, path) == -1))
-            {
-                path_string = gtk_tree_path_to_string (path);
-                PINFO("row_changed at path - '%s'", path_string);
-                gtk_tree_model_row_changed (GTK_TREE_MODEL (model), path, &iter);
-            }
-            g_free (path_string);
-            gtk_tree_path_free (path);
-        }
-    }
-    g_list_foreach (rr_list, (GFunc) gtk_tree_row_reference_free, NULL);
-    g_list_free (rr_list);
-}
-
-
 /* Remove all model entries */
 static void
 gtm_sr_remove_all_rows (GncTreeModelSplitReg *model)
@@ -560,14 +522,13 @@ gtm_sr_remove_all_rows (GncTreeModelSplitReg *model)
     g_list_free (rr_list);
 }
 
-
 /* Load the model with unique transactions based on a GList of splits */
 void
 gnc_tree_model_split_reg_load (GncTreeModelSplitReg *model, GList *slist, Account *default_account)
 {
     GncTreeModelSplitRegPrivate *priv;
 
-    ENTER("Load ModelSplitReg = %p and slist length is %d", model, g_list_length (slist));
+    ENTER("#### Load ModelSplitReg = %p and slist length is %d ####", model, g_list_length (slist));
 
     priv = model->priv;
 
@@ -581,7 +542,7 @@ gnc_tree_model_split_reg_load (GncTreeModelSplitReg *model, GList *slist, Accoun
     /* Add the blank transaction to the tlist */
     priv->tlist = g_list_append (priv->tlist, priv->btrans);
 
-    PINFO("Register for Account '%s' has %d transactions and %d splits",
+    PINFO("#### Register for Account '%s' has %d transactions and %d splits ####",
           default_account ? xaccAccountGetName (default_account) : "NULL", g_list_length (priv->tlist), g_list_length (slist));
 
     /* Update the completion model liststores */
@@ -590,7 +551,7 @@ gnc_tree_model_split_reg_load (GncTreeModelSplitReg *model, GList *slist, Accoun
     priv->anchor = default_account;
     priv->bsplit_parent_node = NULL;
 
-    LEAVE("Leave Model Load");
+    LEAVE("#### Leave Model Load ####");
 }
 
 
@@ -706,17 +667,17 @@ iter_to_string (GtkTreeIter *iter)
     string = g_static_private_get (&gtmits_buffer_key);
     if (string == NULL)
     {
-        string = g_malloc(ITER_STRING_LEN + 1);
+        string = g_malloc (ITER_STRING_LEN + 1);
         g_static_private_set (&gtmits_buffer_key, string, g_free);
     }
 #else
-    static GPrivate gtmits_buffer_key = G_PRIVATE_INIT(g_free);
+    static GPrivate gtmits_buffer_key = G_PRIVATE_INIT (g_free);
     gchar *string;
 
     string = g_private_get (&gtmits_buffer_key);
     if (string == NULL)
     {
-        string = g_malloc(ITER_STRING_LEN + 1);
+        string = g_malloc (ITER_STRING_LEN + 1);
         g_private_set (&gtmits_buffer_key, string);
     }
 #endif
@@ -728,17 +689,17 @@ iter_to_string (GtkTreeIter *iter)
         snprintf(
             string, ITER_STRING_LEN,
             "[stamp:%x data:%d, %p (%p:%s), %p (%p:%s)]",
-            iter->stamp, GPOINTER_TO_INT(iter->user_data),
+            iter->stamp, GPOINTER_TO_INT (iter->user_data),
             iter->user_data2,
             iter->user_data2 ? ((GList *) iter->user_data2)->data : 0,
             iter->user_data2 ?
-            (QOF_INSTANCE(((GList *) iter->user_data2)->data))->e_type : "",
+            (QOF_INSTANCE (((GList *) iter->user_data2)->data))->e_type : "",
             iter->user_data3,
             iter->user_data3 ? ((GList *) iter->user_data3)->data : 0,
             iter->user_data3 ?
-            (QOF_INSTANCE(((GList *) iter->user_data3)->data))->e_type : "");
+            (QOF_INSTANCE (((GList *) iter->user_data3)->data))->e_type : "");
     else
-        strcpy(string, "(null)");
+        strcpy (string, "(null)");
     return string;
 }
 
@@ -925,7 +886,6 @@ gnc_tree_model_split_reg_get_iter (GtkTreeModel *tree_model,
             goto fail;
         }
     }
-
     else {
         DEBUG("Invalid path depth");
         goto fail;
@@ -1019,15 +979,15 @@ gtm_sr_trans_get_account_for_splits_ancestor (const Transaction *trans, const Ac
     for (node = xaccTransGetSplitList (trans); node; node = node->next)
     {
         Split *split = node->data;
-        Account *split_acc = xaccSplitGetAccount(split);
+        Account *split_acc = xaccSplitGetAccount (split);
 
-        if (!xaccTransStillHasSplit(trans, split))
+        if (!xaccTransStillHasSplit (trans, split))
             continue;
 
         if (ancestor == split_acc)
             return split_acc;
 
-        if (ancestor && xaccAccountHasAncestor(split_acc, ancestor))
+        if (ancestor && xaccAccountHasAncestor (split_acc, ancestor))
             return split_acc;
     }
     return NULL;
@@ -1045,7 +1005,7 @@ gnc_tree_model_split_reg_get_numact_vis (GncTreeModelSplitReg *model, gboolean t
 
     if (trow2)
     {
-        if (qof_book_use_split_action_for_num_field (gnc_get_current_book()))
+        if (qof_book_use_split_action_for_num_field (model->priv->book))
             return TRUE;
         else
             return FALSE;
@@ -1058,17 +1018,13 @@ gnc_tree_model_split_reg_get_numact_vis (GncTreeModelSplitReg *model, gboolean t
 static gboolean
 gnc_tree_model_split_reg_get_filter_vis (GncTreeModelSplitReg *model, Transaction *trans, gboolean trow1)
 {
-    GList *tnode, *tnode_last = NULL;
     gboolean return_value = FALSE;
     char chars[6];
     int i = 0;
     time64 date_posted;
     Account *account;
 
-    tnode = g_list_find (model->priv->tlist, trans); // row trans
-    tnode_last = g_list_last (model->priv->tlist); // Blank trans
-
-    if (tnode == tnode_last) // Blank trans is always visable.
+    if (trans == model->priv->btrans) // Blank trans is always visable.
        return TRUE;
 
     // Get the posted date
@@ -1092,15 +1048,6 @@ gnc_tree_model_split_reg_get_filter_vis (GncTreeModelSplitReg *model, Transactio
     if (model->filter_cleared_match == CLEARED_ALL)
         return TRUE;
 
-    // Test for sub account register, if so, check split accounts against ancestor
-    if (model->priv->display_subacc)
-        account = gtm_sr_trans_get_account_for_splits_ancestor (trans, model->priv->anchor);
-    else
-        account = model->priv->anchor;
-
-    if (account == NULL)
-        return FALSE;
-
      // Test for the status field.
     if (model->filter_cleared_match & CLEARED_CLEARED)
         chars[i++] = CREC;
@@ -1114,13 +1061,34 @@ gnc_tree_model_split_reg_get_filter_vis (GncTreeModelSplitReg *model, Transactio
         chars[i++] = VREC;
     chars[i] = '\0';
 
-    // Loop through splits checking state.
-    for (i = 0; i < 5; i++)
+    // Test for sub account register, if so, check split accounts against ancestor
+    if (model->priv->display_subacc)
+        account = gtm_sr_trans_get_account_for_splits_ancestor (trans, model->priv->anchor);
+    else
+        account = model->priv->anchor;
+
+    if (account != NULL) // Normal Register and Subaccounts
     {
-        if (xaccTransHasSplitsInStateByAccount (trans, chars[i], account))
+        // Loop through splits checking state.
+        for (i = 0; i < 5; i++)
         {
-            return_value = TRUE;
-            break;
+            if (xaccTransHasSplitsInStateByAccount (trans, chars[i], account))
+            {
+                return_value = TRUE;
+                break;
+            }
+        }
+    }
+    else // General Register
+    {
+        // Loop through splits checking state.
+        for (i = 0; i < 5; i++)
+        {
+            if (xaccTransHasSplitsInState (trans, chars[i]))
+            {
+                return_value = TRUE;
+                break;
+            }
         }
     }
 
@@ -1135,15 +1103,7 @@ gnc_tree_model_split_reg_get_filter_vis (GncTreeModelSplitReg *model, Transactio
 gboolean
 gnc_tree_model_split_reg_get_read_only (GncTreeModelSplitReg *model, Transaction *trans)
 {
-    QofBook *book;
-    GList *tnode, *tnode_last = NULL;
-
-    book = gnc_get_current_book ();
-
-    tnode = g_list_find (model->priv->tlist, trans);
-    tnode_last = g_list_last (model->priv->tlist);
-
-    if (qof_book_is_readonly (book)) // book is read only
+    if (qof_book_is_readonly (model->priv->book)) // book is read only
         return TRUE;
 
     if (model->read_only) // register is read only
@@ -1153,9 +1113,9 @@ gnc_tree_model_split_reg_get_read_only (GncTreeModelSplitReg *model, Transaction
     if (xaccTransHasSplitsInState (trans, VREC))
         return TRUE;
 
-    if (qof_book_uses_autoreadonly (book)) // use auto read only
+    if (qof_book_uses_autoreadonly (model->priv->book)) // use auto read only
     {
-        if (tnode == tnode_last) // blank transaction
+        if (trans == model->priv->btrans) // blank transaction
             return FALSE;
         else
             return xaccTransIsReadonlyByPostedDate (trans);
@@ -1844,9 +1804,9 @@ gnc_tree_model_split_reg_get_path_to_split_and_trans (GncTreeModelSplitReg *mode
 
     if (trans == NULL && split == NULL)
     {
-        gchar *path_string = gtk_tree_path_to_string (path);
-
+        gchar *path_string;
         gtk_tree_path_append_index (path, number);
+        path_string = gtk_tree_path_to_string (path);
         LEAVE("path is %s", path_string);
         g_free (path_string);
         return path;
@@ -2126,7 +2086,7 @@ gtm_sr_insert_trans (GncTreeModelSplitReg *model, Transaction *trans)
     gtk_tree_model_get_iter (GTK_TREE_MODEL (model), &iter, path);
     gtk_tree_model_row_has_child_toggled (GTK_TREE_MODEL (model), path, &iter);
 
-    DEBUG("insert %d splits for transaction %p\n", xaccTransCountSplits (trans), trans);
+    DEBUG("insert %d splits for transaction %p", xaccTransCountSplits (trans), trans);
 
     for (snode = xaccTransGetSplitList (trans); snode; snode = snode->next)
     {
@@ -2323,7 +2283,7 @@ gnc_tree_model_split_reg_commit_blank_split (GncTreeModelSplitReg *model)
 }
 
 
-/* Update the dsiplay sub account and general ledger settings */
+/* Update the display sub account and general ledger settings */
 void
 gnc_tree_model_split_reg_set_display (GncTreeModelSplitReg *model, gboolean subacc, gboolean gl)
 {
@@ -2719,7 +2679,7 @@ gnc_tree_model_split_reg_update_account_list (GncTreeModelSplitReg *model)
     /* Clear the liststore, Store is short name, full name and account pointer */
     gtk_list_store_clear (priv->account_list);
 
-    root = gnc_book_get_root_account (gnc_get_current_book());
+    root = gnc_book_get_root_account (priv->book);
 
     // Get a list of accounts.
     accts = gnc_account_get_descendants (root);

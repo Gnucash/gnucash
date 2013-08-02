@@ -273,10 +273,6 @@ GtkTreePath * gnc_tree_model_split_reg_get_path_to_split_and_trans (
 /* Returns TRUE if iter is a blank transaction */
 gboolean gnc_tree_model_split_reg_is_blank_trans (GncTreeModelSplitReg *model, GtkTreeIter *iter);
 
-/* Emit change signal for all visable model entries */
-void gnc_tree_model_split_reg_change_vis_rows (GncTreeModelSplitReg *model,
-               GtkTreePath *start_path, GtkTreePath *end_path);
-
 /* Return the split for which ancestor is it's parent */
 Split * gnc_tree_model_split_reg_trans_get_split_equal_to_ancestor (const Transaction *trans, const Account *ancestor);
 

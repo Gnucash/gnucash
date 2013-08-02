@@ -238,8 +238,6 @@ gsr2_create_table (GNCSplitReg2 *gsr)
     
     account = gnc_ledger_display2_leader (gsr->ledger);
     guid = xaccAccountGetGUID (account);
-    /* Used for saving different register column widths under seperate keys */
-    gconf_key = g_strconcat (GCONF_SECTION,"/", (gchar*)guid_to_string (guid), NULL);
 
     ENTER("create table gsr=%p", gsr);
 
@@ -251,14 +249,20 @@ gsr2_create_table (GNCSplitReg2 *gsr)
     ledger_type = gnc_ledger_display2_type (gsr->ledger);
 
     model = gnc_ledger_display2_get_split_model_register (gsr->ledger);
+
+    /* Used for saving different register column widths under seperate keys */
+    if (ledger_type == LD2_SUBACCOUNT)
+        gconf_key = g_strconcat (GCONF_SECTION,"/", (gchar*)guid_to_string (guid), "_sub", NULL);
+    else
+        gconf_key = g_strconcat (GCONF_SECTION,"/", (gchar*)guid_to_string (guid), NULL);
+
+    gnc_tree_model_split_reg_set_display (model, ((ledger_type == LD2_SUBACCOUNT)?TRUE:FALSE), ((ledger_type == LD2_GL)?TRUE:FALSE));
+
     view = gnc_tree_view_split_reg_new_with_model (model);
 
     g_object_unref (G_OBJECT (model));
 
-    gnc_tree_model_split_reg_set_display (model, ((ledger_type == LD2_SUBACCOUNT)?TRUE:FALSE), ((ledger_type == LD2_GL)?TRUE:FALSE));
-
     // We need to give the General Ledger a Key other than all zeros which the search register gets.
-//    if (account == NULL && model->type == GENERAL_LEDGER2)
     if (ledger_type == LD2_GL && model->type == GENERAL_LEDGER2)
         gconf_key = g_strconcat (GCONF_SECTION,"/", "00000000000000000000000000000001", NULL);
 

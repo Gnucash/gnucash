@@ -400,7 +400,7 @@ void gnc_tree_view_expand_columns (GncTreeView *view,
  *
  *  @param view The tree view.
  *
- *  @param column The column in the model containg color strings.
+ *  @param column The column in the model containing color strings.
  *
  *  @param func This is a cell data function that sets the "cell-background".
  */
@@ -408,15 +408,14 @@ void
 gnc_tree_view_set_control_column_background (GncTreeView *view, gint column,
                                              GtkTreeCellDataFunc func);
 
-
-/** This function sets the user_data value used in the sort callback
+/** This allows the columns to be setup without the model connected
  *
  *  @param view The tree view.
  *
- *  @param user_data pointer to the user_data to be used.
+ *  @param sort model.
  */
 void
-gnc_tree_view_set_sort_user_data (GncTreeView *view, gpointer user_data);
+gnc_tree_view_set_sort_user_data (GncTreeView *view, GtkTreeModel *s_model);
 
 /** This function is called to set the "show-column-menu" property on
  *  this view.  This function has no visible effect if the

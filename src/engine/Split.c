@@ -1657,6 +1657,14 @@ xaccSplitRetDateReconciledTS (const Split * split)
     return split ? split->date_reconciled : ts;
 }
 
+/*################## Added for Reg2 #################*/
+time64
+xaccSplitGetDateReconciled (const Split * split)
+{
+    return split ? split->date_reconciled.tv_sec : 0;
+}
+/*################## Added for Reg2 #################*/
+
 /********************************************************************\
 \********************************************************************/
 

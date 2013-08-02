@@ -928,6 +928,14 @@ gnc_tree_control_split_reg_delete (GncTreeViewSplitReg *view, gpointer data)
             return;
     }
 
+    /* Deleting the blank trans just cancels */
+    {
+        Transaction *blank_trans = gnc_tree_control_split_reg_get_blank_trans (view);
+
+        if (trans == blank_trans)
+            return;
+    }
+
     window = gnc_tree_view_split_reg_get_parent (view);
 
     /* On a split cursor, just delete the one split. */
@@ -2222,6 +2230,7 @@ gnc_tree_control_split_reg_sort_by_date (GtkTreeModel *fm, GtkTreeIter *fa, GtkT
     GtkTreeIter *ma = gtk_tree_iter_copy (fa);
     GtkTreeIter *mb = gtk_tree_iter_copy (fb);
     GList *tnodea, *tnodeb;
+    Account *anchor;
     int depth;
     time64 i, j;
     int retval;
@@ -2255,8 +2264,8 @@ gnc_tree_control_split_reg_sort_by_date (GtkTreeModel *fm, GtkTreeIter *fa, GtkT
         retval = xaccTransOrder (tnodea->data, tnodeb->data);
         if (retval)
            return retval;
-
         break;
+
         case 2: // Date Entered
         i = xaccTransGetDateEntered (tnodea->data);
         j = xaccTransGetDateEntered (tnodeb->data);
@@ -2268,6 +2277,27 @@ gnc_tree_control_split_reg_sort_by_date (GtkTreeModel *fm, GtkTreeIter *fa, GtkT
         }
 
         return (gint)(i - j);
+        break;
+
+        case 3: // Date Reconciled
+        anchor = gnc_tree_model_split_reg_get_anchor (model);
+
+        if (anchor != NULL)
+        {
+            i = xaccSplitGetDateReconciled (xaccTransFindSplitByAccount (tnodea->data, anchor))
+               ? xaccSplitGetDateReconciled (xaccTransFindSplitByAccount (tnodea->data, anchor)) : 0;
+            j = xaccSplitGetDateReconciled (xaccTransFindSplitByAccount (tnodeb->data, anchor))
+               ? xaccSplitGetDateReconciled (xaccTransFindSplitByAccount (tnodeb->data, anchor)) : 0;
+
+            if ((gint)(i - j) == 0)
+            {
+                i = xaccTransGetDate (tnodeb->data);
+                j = xaccTransGetDate (tnodea->data);
+            }
+            return (gint)(i - j);
+        }
+        else
+            return 0;
         break;
     }
     return 0;

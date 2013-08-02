@@ -111,8 +111,8 @@ typedef struct GncTreeViewPrivate
     GtkWidget         *column_menu;
     gboolean           show_column_menu;
 
-    /* Sort callback user_data */
-    gpointer           sort_user_data;
+    /* Sort callback model */
+    GtkTreeModel      *sort_model;
 
     /* Gconf related values */
     gchar             *gconf_section;
@@ -238,7 +238,7 @@ gnc_tree_view_init (GncTreeView *view, GncTreeViewClass *klass)
     priv = GNC_TREE_VIEW_GET_PRIVATE(view);
     priv->column_menu = NULL;
     priv->show_column_menu = FALSE;
-    priv->sort_user_data = NULL;
+    priv->sort_model = NULL;
     priv->gconf_section = NULL;
     priv->seen_gconf_visibility = FALSE;
     priv->columns_changed_cb_id = 0;
@@ -1658,18 +1658,19 @@ gnc_tree_view_set_control_column_background (GncTreeView *view, gint column, Gtk
 }
 
 
-/* This set the user_data value used in the sort callback */
+/* This allows the columns to be setup without the model connected */
+//FIXME I think this should be specified as a parameter to the add columns functions...
 void
-gnc_tree_view_set_sort_user_data (GncTreeView *view, gpointer user_data)
+gnc_tree_view_set_sort_user_data (GncTreeView *view, GtkTreeModel *s_model)
 {
     GncTreeViewPrivate *priv;
 
     g_return_if_fail (GNC_IS_TREE_VIEW (view));
 
-    ENTER("view %p, user_data %p", view, user_data);
+    ENTER("view %p, sort_model %p", view, s_model);
     priv = GNC_TREE_VIEW_GET_PRIVATE (view);
 
-    priv->sort_user_data = user_data;
+    priv->sort_model = s_model;
     LEAVE(" ");
 }
 
@@ -1906,17 +1907,24 @@ gnc_tree_view_column_properties (GncTreeView *view,
         gtk_tree_view_column_set_sort_column_id (column, data_column);
         if (column_sort_fn)
         {
-            priv = GNC_TREE_VIEW_GET_PRIVATE(view);
-            if (priv->sort_user_data != NULL)
-                gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE(s_model),
-                                             data_column, column_sort_fn,
-                                             priv->sort_user_data,
-                                             NULL /* destroy fn */);
-            else
-                gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE(s_model),
-                                             data_column, column_sort_fn,
-                                             GINT_TO_POINTER(data_column),
-                                             NULL /* destroy fn */);
+            gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE(s_model),
+                                         data_column, column_sort_fn,
+                                         GINT_TO_POINTER(data_column),
+                                         NULL /* destroy fn */);
+        }
+    }
+
+    // Used in registers, sort model not connected to view yet
+    priv = GNC_TREE_VIEW_GET_PRIVATE(view);
+    if (priv->sort_model != NULL)
+    {
+        gtk_tree_view_column_set_sort_column_id (column, data_column);
+        if (column_sort_fn)
+        {
+            gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE(priv->sort_model),
+                                         data_column, column_sort_fn,
+                                         view,
+                                         NULL /* destroy fn */);
         }
     }
 
