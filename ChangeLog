@@ -1,6 +1,78 @@
+2013-08-02 Cristian Marchi 
+
+	* More consistency for UI strings. Patch by Aurimas Fišeras. (HEAD, trunk, origin/trunk, trunk)
+
+2013-08-02 John Ralls 
+
+	* Revert "Support for querying Bitcoin/Litecoin prices via F::Q's MtGox module"
+
+2013-08-02 Cristian Marchi 
+
+	* Update Italian translation.
+
+2013-08-02 John Ralls 
+
+	* - Functions which can return null always return a Python object
+
+2013-08-02 John Ralls 
+
+	* Bug 704183 - ofx file import tries to match online_id against ACCTID[space]ACCTKEY even when ACCTKEY is empty
+
+2013-08-02 John Ralls 
+
+	* Register rewrite Update, add delete transaction up/down function. This update corrects a mistake in the removal of previous gui update. Author: Robert Fewell
+
+2013-08-02 John Ralls 
+
+	* Register rewrite Update, change to using original query. This update changes the model to drop the filter and sort models to use the qof query to do these parts. This is in response to the slowness of large transaction lists with the intention to load only a subset of them. This is the start and this update should result in the same out put as using the filter and sort model. Author: Robert Fewell
+
+2013-08-02 John Ralls 
+
+	* Register rewrite Update, added extra dates and cursor changes. This update fixes the following, allow the cursor to move between cells and make active, changed the preference for showing date entered to include reconcile date and added another option to show when transaction selected. Also added menu option to show these extra dates. Author: Robert Fewell
+
+2013-08-01 Cristian Marchi 
+
+	* Make CSV account import table header translatable. Patch by Aurimas Fišeras.
+
+2013-08-01 Cristian Marchi 
+
+	* Update Catalan translation copied from the Translation Project.
+
+2013-08-01 John Ralls 
+
+	* Fix report tests which fail in OSX
+
+2013-07-14 John Ralls 
+
+	* Bug #704185: GnuCash 2.5 doesn't build on FreeBSD
+
+2013-07-10 Cristian Marchi 
+
+	* Update Danish TRanslation, copied from the Translation Project.
+
+2013-07-08 Cristian Marchi 
+
+	* Update Lithuanian translation thanks to Aurimas Fišeras.
+
+2013-07-08 Cristian Marchi 
+
+	* Fix some translation issues. Author: Aurimas Fišeras.
+
+2013-07-08 Cristian Marchi 
+
+	* Fix translation of table headers. Author: Aurimas Fišeras.
+
+2013-07-08 Cristian Marchi 
+
+	* Fix typo preventing dash marker usage. Author: Aurimas Fišeras.
+
+2013-07-07 John Ralls 
+
+	* Bump version for 2.5.3 release
+
 2013-07-06 John Ralls 
 
-	* Bug 703272 - list of windows in Windows menu outdated (HEAD, trunk, origin/trunk, origin/HEAD, trunk)
+	* Bug 703272 - list of windows in Windows menu outdated
 
 2013-07-06 Geert Janssens 
 
@@ -340,7 +412,7 @@
 
 2013-05-21 Geert Janssens 
 
-	* Fix windows build after it got broken by r22982 (jralls/trunk)
+	* Fix windows build after it got broken by r22982
 
 2013-05-20 Christian Stimming 
 

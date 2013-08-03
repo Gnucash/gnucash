@@ -1,5 +1,32 @@
 Version history:
 ------- -------
+ 2.5.4 - 4 August 2013
+         This is the fifth release in the UNSTABLE 2.5 series.
+
+	 New Features:
+
+	 Register2 work: Restore the delete-transaction-up/down
+	 feature, replace the filter-and-sort model with a qof query
+	 which loads only a subset of transactions to improve speed,
+	 and some date and cursor changes.
+
+	 Aurimas Fišeras contribued patches to make CSV Account import
+	 table header translatable, to fix translation of table
+	 headers, fix dash marker usage, and some other translation
+	 issues.
+
+	 Revert the Bitcoin support until the patch is rewritten with
+	 a better UI.
+
+	 Bug Fixes:
+	 703897: Functions which can return null always return a Python
+	  object, Tom Lofts.
+	 704183: ofx file import tries to match online_id against
+	  ACCTID[space]ACCTKEY even when ACCTKEY is empty, G. Paul Ziemba
+	 704185: GnuCash 2.5 doesn't build on FreeBSD
+
+	 Translations Updated: Catalan, Danish, Italian, and  Lithuanian
+
  2.5.3 - 7 July 2013
          This is the fourth release in the UNSTABLE 2.5 series.
 
