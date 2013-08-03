@@ -3216,7 +3216,7 @@ static void
 gtv_sr_help (GncTreeViewSplitReg *view, GtkCellRenderer *cr, ViewCol viewcol, RowDepth depth)
 {
     GncTreeModelSplitReg *model;
-    gchar *help;
+    gchar *help = NULL;
     const gchar *current_string;
 
     ENTER("Help Viewcol is %d and depth is %d", viewcol, depth);

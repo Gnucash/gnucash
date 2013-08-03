@@ -571,7 +571,7 @@ static void
 menuitem_response_cb (GtkMenuItem *item, gpointer *user_data )
 {
     const gchar *label_text;
-    GtkTreeIter iter, iter_now;
+    GtkTreeIter iter, iter_now = {0, NULL, NULL, NULL};
     gboolean valid;
     gint active = 1;
     gint active_now = 1;
