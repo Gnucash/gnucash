@@ -335,7 +335,7 @@ gnc_validate_directory (const gchar *dirname)
             g_fprintf(stderr,
                       _("The directory\n"
                         "  %s\n"
-                        "exists but cannot be accessed.  This program \n"
+                        "exists but cannot be accessed. This program \n"
                         "must have full access (read/write/execute) to \n"
                         "the directory in order to function properly.\n"),
                       dirname);
@@ -355,7 +355,7 @@ gnc_validate_directory (const gchar *dirname)
                       _("An unknown error occurred when validating that the\n"
                         "  %s\n"
                         "directory exists and is usable. Please correct the\n"
-                        "problem and restart GnuCash.  The reported error \n"
+                        "problem and restart GnuCash. The reported error \n"
                         "was '%s' (errno %d)."),
                       dirname, g_strerror(errno) ? g_strerror(errno) : "", errno);
             exit(1);

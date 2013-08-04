@@ -79,7 +79,7 @@ gtc_sr_is_trans_readonly_and_warn (GncTreeViewSplitReg *view, Transaction *trans
                                         GTK_BUTTONS_OK,
                                         "%s", title);
         gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
-                "%s", _("The date of this transaction is older than the \"Read-Only Threshold\" set for this book.  "
+                "%s", _("The date of this transaction is older than the \"Read-Only Threshold\" set for this book. "
                         "This setting can be changed in File -> Properties -> Accounts."));
         gtk_dialog_run (GTK_DIALOG (dialog));
         gtk_widget_destroy (dialog);
@@ -962,7 +962,7 @@ gnc_tree_control_split_reg_delete (GncTreeViewSplitReg *view, gpointer data)
         const char *anchor_error = _("You cannot delete this split.");
         const char *anchor_split = _("This is the split anchoring this transaction "
                                      "to the register. You may not delete it from "
-                                     "this register window.  You may delete the "
+                                     "this register window. You may delete the "
                                      "entire transaction from this window, or you "
                                      "may navigate to a register that shows "
                                      "another side of this same transaction and "
@@ -1352,7 +1352,7 @@ gnc_tree_control_split_reg_duplicate_current (GncTreeViewSplitReg *view)
                                     GTK_BUTTONS_OK,
                                     "%s", _("Cannot store a transaction at this date"));
                 gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
-                        "%s", _("The entered date of the duplicated transaction is older than the \"Read-Only Threshold\" set for this book.  "
+                        "%s", _("The entered date of the duplicated transaction is older than the \"Read-Only Threshold\" set for this book. "
                                 "This setting can be changed in File -> Properties -> Accounts."));
                 gtk_dialog_run (GTK_DIALOG (dialog));
                 gtk_widget_destroy (dialog);
@@ -1774,8 +1774,8 @@ gnc_tree_control_split_reg_recn_change (GncTreeViewSplitReg *view, GtkTreePath *
     char rec;
     const gchar *title = _("Mark split as unreconciled?");
     const gchar *message =
-        _("You are about to mark a reconciled split as unreconciled.  Doing "
-          "so might make future reconciliation difficult!  Continue "
+        _("You are about to mark a reconciled split as unreconciled. Doing "
+          "so might make future reconciliation difficult! Continue "
           "with this change?");
     gint response;
 
@@ -1905,15 +1905,15 @@ gnc_tree_control_split_reg_recn_test (GncTreeViewSplitReg *view, GtkTreePath *sp
         {
             title = _("Change reconciled split?");
             message =
-             _("You are about to change a reconciled split.  Doing so might make "
-               "future reconciliation difficult!  Continue with this change?");
+             _("You are about to change a reconciled split. Doing so might make "
+               "future reconciliation difficult! Continue with this change?");
         }
         else
         {
             title = _("Change split linked to a reconciled split?");
             message =
-            _("You are about to change a split that is linked to a reconciled split.  "
-              "Doing so might make future reconciliation difficult!  Continue with this change?");
+            _("You are about to change a split that is linked to a reconciled split. "
+              "Doing so might make future reconciliation difficult! Continue with this change?");
         }
 
         /* Does the user want to be warned? */

@@ -1482,7 +1482,7 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
     gncInvoiceAttachToTxn (invoice, txn);
     gncInvoiceSetPostedAcc (invoice, acc);
 
-    xaccTransSetReadOnly (txn, _("Generated from an invoice.  Try unposting the invoice."));
+    xaccTransSetReadOnly (txn, _("Generated from an invoice. Try unposting the invoice."));
     xaccTransCommitEdit (txn);
 
     gncAccountValueDestroy (splitinfo);

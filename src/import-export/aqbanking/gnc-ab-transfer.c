@@ -291,7 +291,7 @@ gnc_ab_maketrans(GtkWidget *parent, Account *gnc_acc,
                 successful = FALSE;
                 if (!gnc_verify_dialog(
                             parent, FALSE, "%s",
-                            _("An error occurred while executing the job.  Please check "
+                            _("An error occurred while executing the job. Please check "
                               "the log window for the exact error message.\n"
                               "\n"
                               "Do you want to enter the job again?")))

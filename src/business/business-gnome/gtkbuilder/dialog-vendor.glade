@@ -164,7 +164,7 @@
                               <object class="GtkEntry" id="id_entry">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
-                                <property name="tooltip_text" translatable="yes">The vendor ID number.  If left blank a reasonable number will be chosen for you</property>
+                                <property name="tooltip_text" translatable="yes">The vendor ID number. If left blank a reasonable number will be chosen for you</property>
                                 <property name="activates_default">True</property>
                                 <signal name="changed" handler="gnc_vendor_name_changed_cb" swapped="no"/>
                               </object>

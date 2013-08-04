@@ -813,7 +813,7 @@ gnc_invoice_post(InvoiceWindow *iw, struct post_invoice_params *post_params)
     gnc_invoice_window_ok_save (iw);
 
     /* Fill in the conversion prices with feedback from the user */
-    text = _("One or more of the entries are for accounts different from the invoice/bill currency.  You will be asked a conversion rate for each.");
+    text = _("One or more of the entries are for accounts different from the invoice/bill currency. You will be asked a conversion rate for each.");
 
     /* Get the invoice entries */
     entries = gncInvoiceGetEntries (invoice);

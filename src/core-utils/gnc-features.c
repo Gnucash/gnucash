@@ -113,7 +113,7 @@ gchar *gnc_features_test_unknown (QofBook *book)
             GList *i;
             char* msg = g_strdup(
                             _("This Dataset contains features not supported by this "
-                              "version of GnuCash.  You must use a newer version of "
+                              "version of GnuCash. You must use a newer version of "
                               "GnuCash in order to support the following features:"
                              ));
 

@@ -310,7 +310,7 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
         {
             /* If we don't have a currency then pop up a warning dialog */
             gnc_info_dialog(NULL, "%s",
-                            _("Could not determine the account currency.  "
+                            _("Could not determine the account currency. "
                               "Using the default currency provided by your system."));
         }
 

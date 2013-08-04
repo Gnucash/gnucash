@@ -73,14 +73,14 @@ gcoi_create_dialog(Split* split)
         gncOwnerInitCustomer(&(dco->owner), NULL);
         gtk_label_set_text(GTK_LABEL(widget),
                            _("This transaction needs to be assigned to a Customer."
-                             "  Please choose the Customer below."));
+                             " Please choose the Customer below."));
     }
     else
     {
         gncOwnerInitVendor(&(dco->owner), NULL);
         gtk_label_set_text(GTK_LABEL(widget),
                            _("This transaction needs to be assigned to a Vendor."
-                             "  Please choose the Vendor below."));
+                             " Please choose the Vendor below."));
     }
 
     /* Get the transaction description and set it */

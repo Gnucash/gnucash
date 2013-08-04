@@ -338,8 +338,8 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="has_tooltip">True</property>
-                <property name="tooltip_markup">Enter the ticker symbol for the commodity (e.g. CSCO or AAPL).  If you are retrieving quotes online, this field must exactly match the ticker symbol used by the quote source (including case). </property>
-                <property name="tooltip_text" translatable="yes">Enter the ticker symbol for the commodity (e.g. CSCO or AAPL).  If you are retrieving quotes online, this field must exactly match the ticker symbol used by the quote source (including case). </property>
+                <property name="tooltip_markup">Enter the ticker symbol for the commodity (e.g. CSCO or AAPL). If you are retrieving quotes online, this field must exactly match the ticker symbol used by the quote source (including case). </property>
+                <property name="tooltip_text" translatable="yes">Enter the ticker symbol for the commodity (e.g. CSCO or AAPL). If you are retrieving quotes online, this field must exactly match the ticker symbol used by the quote source (including case). </property>
                 <property name="invisible_char">●</property>
                 <property name="activates_default">True</property>
                 <property name="invisible_char_set">True</property>
@@ -759,8 +759,8 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="has_tooltip">True</property>
-                    <property name="tooltip_markup">These are F::Q quote sources that retrieve information from a single site on the internet.  If that site is unavailable, you will not be able to retrieve quotes.</property>
-                    <property name="tooltip_text" translatable="yes">These are F::Q quote sources that retrieve information from a single site on the internet.  If that site is unavailable, you will not be able to retrieve quotes.</property>
+                    <property name="tooltip_markup">These are F::Q quote sources that retrieve information from a single site on the internet. If that site is unavailable, you will not be able to retrieve quotes.</property>
+                    <property name="tooltip_text" translatable="yes">These are F::Q quote sources that retrieve information from a single site on the internet. If that site is unavailable, you will not be able to retrieve quotes.</property>
                     <property name="use_action_appearance">False</property>
                     <property name="use_underline">True</property>
                     <property name="active">True</property>
@@ -789,8 +789,8 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="has_tooltip">True</property>
-                    <property name="tooltip_markup">These are F::Q quote sources that retrieve information from multiple sites on the internet.  If one of the sites is unavailable, F::Q will attempt to retrieve the information from another site.</property>
-                    <property name="tooltip_text" translatable="yes">These are F::Q quote sources that retrieve information from multiple sites on the internet.  If one of the sites is unavailable, F::Q will attempt to retrieve the information from another site.</property>
+                    <property name="tooltip_markup">These are F::Q quote sources that retrieve information from multiple sites on the internet. If one of the sites is unavailable, F::Q will attempt to retrieve the information from another site.</property>
+                    <property name="tooltip_text" translatable="yes">These are F::Q quote sources that retrieve information from multiple sites on the internet. If one of the sites is unavailable, F::Q will attempt to retrieve the information from another site.</property>
                     <property name="use_action_appearance">False</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
@@ -819,8 +819,8 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="has_tooltip">True</property>
-                    <property name="tooltip_markup">These are quote sources that were recently added to F::Q.  GnuCash does not know if these sources retrieve information from a single site or from multiple sites on the internet.</property>
-                    <property name="tooltip_text" translatable="yes">These are quote sources that were recently added to F::Q.  GnuCash does not know if these sources retrieve information from a single site or from multiple sites on the internet.</property>
+                    <property name="tooltip_markup">These are quote sources that were recently added to F::Q. GnuCash does not know if these sources retrieve information from a single site or from multiple sites on the internet.</property>
+                    <property name="tooltip_text" translatable="yes">These are quote sources that were recently added to F::Q. GnuCash does not know if these sources retrieve information from a single site or from multiple sites on the internet.</property>
                     <property name="use_action_appearance">False</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>

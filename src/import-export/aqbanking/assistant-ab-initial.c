@@ -373,8 +373,8 @@ aai_wizard_button_clicked_cb(GtkButton *button, gpointer user_data)
          _("The external program \"AqBanking Setup Wizard\" has not "
            "been found. \n\n"
            "The %s package should include the "
-           "program \"qt3-wizard\".  Please check your installation to "
-           "ensure this program is present.  On some distributions this "
+           "program \"qt3-wizard\". Please check your installation to "
+           "ensure this program is present. On some distributions this "
            "may require installing additional packages."),
          QT3_WIZARD_PACKAGE);
     }
@@ -529,16 +529,16 @@ child_exit_cb(GPid pid, gint status, gpointer data)
             (info->window, "%s",
              _("The external program \"AqBanking Setup Wizard\" failed "
                "to run successfully because the "
-               "additional software \"Qt\" was not found.  "
+               "additional software \"Qt\" was not found. "
                "Please install the \"Qt/Windows Open Source Edition\" "
                "from Trolltech by downloading it from www.trolltech.com"
                "\n\n"
                "If you have installed Qt already, you will have to adapt "
-               "the PATH variable of your system appropriately.  "
+               "the PATH variable of your system appropriately. "
                "Contact the GnuCash developers if you need further "
                "assistance on how to install Qt correctly."
                "\n\n"
-               "Online Banking cannot be setup without Qt.  Press \"Close\" "
+               "Online Banking cannot be setup without Qt. Press \"Close\" "
                "now, then \"Cancel\" to cancel the Online Banking setup."));
         }
         else
@@ -549,8 +549,8 @@ child_exit_cb(GPid pid, gint status, gpointer data)
             gnc_error_dialog
             (info->window, "%s",
              _("The external program \"AqBanking Setup Wizard\" failed "
-               "to run successfully.  Online Banking can only be setup "
-               "if this wizard has run successfully.  "
+               "to run successfully. Online Banking can only be setup "
+               "if this wizard has run successfully. "
                "Please try running the \"AqBanking Setup Wizard\" again."));
         }
         gtk_assistant_set_page_complete (GTK_ASSISTANT(info->window), page, FALSE);

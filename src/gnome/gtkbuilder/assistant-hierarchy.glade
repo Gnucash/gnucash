@@ -135,7 +135,7 @@ Please choose the currency to use for new accounts.</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">
-Select categories that correspond to the ways that you will use GnuCash.  Each category you select will cause several accounts to be created.  Select the categories that are relevant to you.  You can always create additional accounts by hand later.</property>
+Select categories that correspond to the ways that you will use GnuCash. Each category you select will cause several accounts to be created. Select the categories that are relevant to you. You can always create additional accounts by hand later.</property>
             <property name="wrap">True</property>
             <property name="width_chars">75</property>
           </object>
@@ -447,7 +447,7 @@ Note: all accounts except Equity and placeholder accounts may have an opening ba
       <object class="GtkLabel" id="finish_page_label">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Press `Apply' to create your new accounts.  You will then be able to save them to a file or database.
+        <property name="label" translatable="yes">Press `Apply' to create your new accounts. You will then be able to save them to a file or database.
 
 Press `Back' to review your selections.
 

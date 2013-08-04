@@ -173,10 +173,10 @@
 
   ;; Display options
   (add-option (gnc:make-string-option displaypage optname-template-file "a" 
-    (N_ "The file name of the eguile template part of this report.  This file should either be in your .gnucash directory, or else in its proper place within the GnuCash installation directories.")
+    (N_ "The file name of the eguile template part of this report. This file should either be in your .gnucash directory, or else in its proper place within the GnuCash installation directories.")
     "taxinvoice.eguile.scm"))
   (add-option (gnc:make-string-option displaypage optname-css-file "b" 
-    (N_ "The file name of the CSS stylesheet to use with this report.  This file should either be in your .gnucash directory, or else in its proper place within the GnuCash installation directories.") 
+    (N_ "The file name of the CSS stylesheet to use with this report. This file should either be in your .gnucash directory, or else in its proper place within the GnuCash installation directories.") 
     "taxinvoice.css"))
   (add-option (gnc:make-font-option 
                 displaypage optname-heading-font "c" 
@@ -189,7 +189,7 @@
                 (N_ "Name of a file containing a logo to be used on the report.") 
                 ""))
   (add-option (gnc:make-string-option
-                displaypage optname-logo-width "f" (N_ "Width of the logo in CSS format, e.g. 10% or 32px.  Leave blank to display the logo at its natural width.  The height of the logo will be scaled accordingly.") ""))
+                displaypage optname-logo-width "f" (N_ "Width of the logo in CSS format, e.g. 10% or 32px. Leave blank to display the logo at its natural width. The height of the logo will be scaled accordingly.") ""))
 (add-option (gnc:make-simple-boolean-option	displaypage	optname-border-collapse	"g" (N_ "Border-collapse?") #f))
 (add-option (gnc:make-string-option		displaypage	optname-border-color-th "h" (N_ "CSS color.") "black"))
 (add-option (gnc:make-string-option		displaypage	optname-border-color-td "i" (N_ "CSS color.") "black"))

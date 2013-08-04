@@ -210,8 +210,8 @@
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
             <property name="has_tooltip">True</property>
-            <property name="tooltip_markup">If checked, each invoice will be opened in its own top level window.  If clear, the invoice will be opened in the current window.</property>
-            <property name="tooltip_text" translatable="yes">If checked, each invoice will be opened in its own top level window.  If clear, the invoice will be opened in the current window.</property>
+            <property name="tooltip_markup">If checked, each invoice will be opened in its own top level window. If clear, the invoice will be opened in the current window.</property>
+            <property name="tooltip_text" translatable="yes">If checked, each invoice will be opened in its own top level window. If clear, the invoice will be opened in the current window.</property>
             <property name="use_action_appearance">False</property>
             <property name="use_underline">True</property>
             <property name="draw_indicator">True</property>

@@ -252,7 +252,7 @@
 (define optname-date    (N_ "Balance Sheet Date"))
 (define optname-columns (N_ "1- or 2-column report"))
 (define opthelp-columns
-  (N_ "The balance sheet can be displayed with either 1 or 2 columns.  'auto' means that the layout will be adjusted to fit the width of the page."))
+  (N_ "The balance sheet can be displayed with either 1 or 2 columns. 'auto' means that the layout will be adjusted to fit the width of the page."))
 
 (define optname-depth-limit (N_ "Levels of Subaccounts"))
 (define opthelp-depth-limit (N_ "Maximum number of levels in the account tree displayed."))
@@ -277,10 +277,10 @@
 (define opthelp-font-size      (N_ "Font size in CSS font-size format (e.g. \"medium\" or \"10pt\")."))
 (define optname-template-file  (N_ "Template file"))
 (define opthelp-template-file
-  (N_ "The file name of the eguile template part of this report.  This file must be in your .gnucash directory, or else in its proper place within the GnuCash installation directories."))
+  (N_ "The file name of the eguile template part of this report. This file must be in your .gnucash directory, or else in its proper place within the GnuCash installation directories."))
 (define optname-css-file  (N_ "CSS stylesheet file"))
 (define opthelp-css-file
-  (N_ "The file name of the CSS stylesheet to use with this report.  If specified, this file should be in your .gnucash directory, or else in its proper place within the GnuCash installation directories."))
+  (N_ "The file name of the CSS stylesheet to use with this report. If specified, this file should be in your .gnucash directory, or else in its proper place within the GnuCash installation directories."))
 (define optname-extra-notes (N_ "Extra Notes"))
 (define opthelp-extra-notes (N_ "Notes added at end of invoice -- may contain HTML markup."))
 

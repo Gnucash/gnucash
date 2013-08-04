@@ -211,7 +211,7 @@
 		     (gnc:error error-str)
 		     (cons #f (sprintf
 			       (_ "Transactions relating to '%s' contain \
-more than one currency.  This report is not designed to cope with this possibility.")  (gncOwnerGetName owner))))
+more than one currency. This report is not designed to cope with this possibility.")  (gncOwnerGetName owner))))
 		   (begin
 		     (gnc:debug "it's an old company")
 		     (if (gnc-numeric-negative-p value)
@@ -369,7 +369,7 @@ more than one currency.  This report is not designed to cope with this possibili
       gnc:pagename-general
       optname-multicurrency-totals
       "i"
-      (N_ "Show multi-currency totals.  If not selected, convert all \
+      (N_ "Show multi-currency totals. If not selected, convert all \
 totals to report currency.")
       #f))
 
@@ -672,7 +672,7 @@ totals to report currency.")
 	(gnc:html-document-add-object!
 	 document
 	 (gnc:make-html-text
-	  (_ "No valid account selected.  Click on the Options button and select the account to use."))))
+	  (_ "No valid account selected. Click on the Options button and select the account to use."))))
     (qof-query-destroy query)
     (gnc:report-finished)
     document))

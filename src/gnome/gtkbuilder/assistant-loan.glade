@@ -13,7 +13,7 @@
       <object class="GtkLabel" id="loan_intro_page">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">This is a step-by-step method for creating a loan repayment within GnuCash.  In this assistant, you can input the details of your loan and its repayment along with the details of its payback. Using that information, the appropriate Scheduled Transactions will be created.
+        <property name="label" translatable="yes">This is a step-by-step method for creating a loan repayment within GnuCash. In this assistant, you can input the details of your loan and its repayment along with the details of its payback. Using that information, the appropriate Scheduled Transactions will be created.
 
 If you make a mistake or want to make changes later, you can edit the created Scheduled Transactions directly.</property>
         <property name="justify">center</property>

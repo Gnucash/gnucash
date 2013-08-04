@@ -270,7 +270,7 @@ subdir = [[[subdir lowercaseString] componentsSeparatedByString: @" "]
 if (![[NSFileManager defaultManager] fileExistsAtPath: docs_dir])
         {
             const gchar *message =
-                _("GnuCash could not find the files for the help documentation.  "
+                _("GnuCash could not find the files for the help documentation. "
                   "This is likely because the 'gnucash-docs' package is not installed");
             gnc_error_dialog(NULL, "%s at %s", message, [docs_dir UTF8String]);
             [pool release];
@@ -363,7 +363,7 @@ url = [NSURL fileURLWithPath: [[NSBundle mainBundle]
     else
     {
         const gchar *message =
-            _("GnuCash could not find the files for the help documentation.  "
+            _("GnuCash could not find the files for the help documentation. "
               "This is likely because the 'gnucash-docs' package is not installed.");
         gnc_error_dialog(NULL, "%s", message);
     }
@@ -425,7 +425,7 @@ gnc_gnome_help (const char *file_name, const char *anchor)
     g_assert(error != NULL);
     {
         const gchar *message =
-            _("GnuCash could not find the files for the help documentation.  "
+            _("GnuCash could not find the files for the help documentation. "
               "This is likely because the 'gnucash-docs' package is not installed.");
         gnc_error_dialog(NULL, "%s", message);
     }

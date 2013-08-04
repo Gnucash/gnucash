@@ -145,7 +145,7 @@ Press "Cancel" if you do not wish to setup any Online Banking connection now.
       <object class="GtkLabel" id="finish_page">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">The setup for matching Online Banking accounts to GnuCash accounts is now finished.  You can now invoke Online Banking actions on those accounts.
+        <property name="label" translatable="yes">The setup for matching Online Banking accounts to GnuCash accounts is now finished. You can now invoke Online Banking actions on those accounts.
 
 If you want to add another bank, user, or account, you can start this assistant again anytime.
 

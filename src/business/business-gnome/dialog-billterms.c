@@ -641,7 +641,7 @@ billterms_delete_term_cb (GtkButton *button, BillTermsWindow *btw)
     if (gncBillTermGetRefcount (btw->current_term) > 0)
     {
         gnc_error_dialog (btw->dialog,
-                          _("Term \"%s\" is in use.  You cannot delete it."),
+                          _("Term \"%s\" is in use. You cannot delete it."),
                           gncBillTermGetName (btw->current_term));
         return;
     }

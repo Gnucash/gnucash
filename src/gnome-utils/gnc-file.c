@@ -390,7 +390,7 @@ show_session_error (QofBackendError io_error,
         break;
 
     case ERR_FILEIO_WRITE_ERROR:
-        fmt = _("Could not write to file %s.  Check that you have "
+        fmt = _("Could not write to file %s. Check that you have "
                 "permission to write to this file and that "
                 "there is sufficient space to create it.");
         gnc_error_dialog(parent, fmt, displayname);
@@ -405,7 +405,7 @@ show_session_error (QofBackendError io_error,
         /* Translators: the first %s is a path in the filesystem,
          * the second %s is PACKAGE_NAME, which by default is "GnuCash"
          */
-        fmt = _("You attempted to save in\n%s\nor a subdirectory thereof.  "
+        fmt = _("You attempted to save in\n%s\nor a subdirectory thereof. "
                 "This is not allowed as %s reserves that directory for internal use.\n\n"
                 "Please try again in a different directory.");
         gnc_error_dialog (parent, fmt, gnc_dotgnucash_dir(), PACKAGE_NAME);
@@ -441,9 +441,9 @@ show_session_error (QofBackendError io_error,
     case ERR_SQL_BAD_DBI:
 
         fmt = _("The library \"libdbi\" installed on your system doesn't correctly "
-                "store large numbers.  This means GnuCash cannot use SQL databases "
-                "correctly.  Gnucash will not open or save to SQL databases until this is "
-                "fixed by installing a different version of \"libdbi\".  Please see "
+                "store large numbers. This means GnuCash cannot use SQL databases "
+                "correctly. Gnucash will not open or save to SQL databases until this is "
+                "fixed by installing a different version of \"libdbi\". Please see "
                 "https://bugzilla.gnome.org/show_bug.cgi?id=611936 for more "
                 "information.");
 

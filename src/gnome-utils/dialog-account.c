@@ -1987,7 +1987,7 @@ gnc_account_renumber_create_dialog (GtkWidget *window, Account *account)
     g_object_set_data_full(G_OBJECT(data->dialog), "builder", builder, g_object_unref);
 
     widget = GTK_WIDGET(gtk_builder_get_object (builder, "header_label"));
-    string = g_strdup_printf(_( "Renumber the immediate sub-accounts of %s?  "
+    string = g_strdup_printf(_( "Renumber the immediate sub-accounts of %s? "
                                 "This will replace the account code field of "
                                 "each child account with a newly generated code."),
                              gnc_account_get_full_name(account));

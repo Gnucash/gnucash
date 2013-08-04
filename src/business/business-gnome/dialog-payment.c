@@ -553,7 +553,7 @@ gnc_payment_ok_cb (GtkWidget *widget, gpointer data)
 
     if (gnc_numeric_check (amount_tot) || gnc_numeric_zero_p (amount_tot))
     {
-        text = _("You must enter the amount of the payment.  "
+        text = _("You must enter the amount of the payment. "
                  "The payment amount must not be zero.");
         gnc_error_dialog (pw->dialog, "%s", text);
         return;
@@ -611,7 +611,7 @@ gnc_payment_ok_cb (GtkWidget *widget, gpointer data)
         {
             XferDialog* xfer;
 
-            text = _("The transfer and post accounts are associated with different currencies.  Please specify the conversion rate.");
+            text = _("The transfer and post accounts are associated with different currencies. Please specify the conversion rate.");
 
             xfer = gnc_xfer_dialog(pw->dialog, acc);
             gnc_info_dialog(pw->dialog, "%s", text);
@@ -928,9 +928,9 @@ new_payment_window (GncOwner *owner, QofBook *book, GncInvoice *invoice)
             g_assert (g_list_length (pw->acct_types) == 1);
             acct_type = xaccAccountGetTypeStr(GPOINTER_TO_INT(pw->acct_types->data));
             gnc_warning_dialog(pw->dialog,
-                               _("You have no valid \"Post To\" accounts.  "
+                               _("You have no valid \"Post To\" accounts. "
                                  "Please create an account of type \"%s\" "
-                                 "before you continue to process this payment.  "
+                                 "before you continue to process this payment. "
                                  "Perhaps you want to create an Invoice or "
                                  "Bill first?"),
                                acct_type);

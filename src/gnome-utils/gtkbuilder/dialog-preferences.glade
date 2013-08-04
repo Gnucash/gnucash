@@ -150,8 +150,8 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="has_tooltip">True</property>
-                    <property name="tooltip_markup">If checked, non-currency commodities will be shown in the summary bar.  If clear, only currencies will be shown.</property>
-                    <property name="tooltip_text" translatable="yes">If checked, non-currency commodities will be shown in the summary bar.  If clear, only currencies will be shown.</property>
+                    <property name="tooltip_markup">If checked, non-currency commodities will be shown in the summary bar. If clear, only currencies will be shown.</property>
+                    <property name="tooltip_text" translatable="yes">If checked, non-currency commodities will be shown in the summary bar. If clear, only currencies will be shown.</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
                   </object>
@@ -243,8 +243,8 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="has_tooltip">True</property>
-                    <property name="tooltip_markup">Use the specified relative ending date for profit/loss calculations.  Also use this date for net assets calculations.</property>
-                    <property name="tooltip_text" translatable="yes">Use the specified relative ending date for profit/loss calculations.  Also use this date for net assets calculations.</property>
+                    <property name="tooltip_markup">Use the specified relative ending date for profit/loss calculations. Also use this date for net assets calculations.</property>
+                    <property name="tooltip_text" translatable="yes">Use the specified relative ending date for profit/loss calculations. Also use this date for net assets calculations.</property>
                     <property name="use_underline">True</property>
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
@@ -264,8 +264,8 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="has_tooltip">True</property>
-                    <property name="tooltip_markup">Use the specified absolute ending date for profit/loss calculations.  Also use this date for net assets calculations.</property>
-                    <property name="tooltip_text" translatable="yes">Use the specified absolute ending date for profit/loss calculations.  Also use this date for net assets calculations.</property>
+                    <property name="tooltip_markup">Use the specified absolute ending date for profit/loss calculations. Also use this date for net assets calculations.</property>
+                    <property name="tooltip_text" translatable="yes">Use the specified absolute ending date for profit/loss calculations. Also use this date for net assets calculations.</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">gconf/window/pages/account_tree/summary/end_choice/relative</property>
@@ -732,8 +732,8 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="has_tooltip">True</property>
-                    <property name="tooltip_markup">The character that will be used between components of an account name.  A legal value is any single character except letters and numbers, or any of the following strings: &amp;quot;colon&amp;quot; &amp;quot;slash&amp;quot;, &amp;quot;backslash&amp;quot;, &amp;quot;dash&amp;quot; and &amp;quot;period&amp;quot;.</property>
-                    <property name="tooltip_text" translatable="yes">The character that will be used between components of an account name.  A legal value is any single character except letters and numbers, or any of the following strings: "colon" "slash", "backslash", "dash" and "period".</property>
+                    <property name="tooltip_markup">The character that will be used between components of an account name. A legal value is any single character except letters and numbers, or any of the following strings: &amp;quot;colon&amp;quot; &amp;quot;slash&amp;quot;, &amp;quot;backslash&amp;quot;, &amp;quot;dash&amp;quot; and &amp;quot;period&amp;quot;.</property>
+                    <property name="tooltip_text" translatable="yes">The character that will be used between components of an account name. A legal value is any single character except letters and numbers, or any of the following strings: "colon" "slash", "backslash", "dash" and "period".</property>
                     <property name="invisible_char">&#x25CF;</property>
                     <property name="invisible_char_set">True</property>
                     <property name="primary_icon_activatable">False</property>
@@ -2423,8 +2423,8 @@ many months before the current month:</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="has_tooltip">True</property>
-                    <property name="tooltip_markup">If checked, pressing the &amp;apos;Enter&amp;apos; key will move to the blank transaction at the bottom of the register.  If clear, pressing the &amp;apos;Enter&amp;apos; key will move down one row.</property>
-                    <property name="tooltip_text" translatable="yes">If checked, pressing the 'Enter' key will move to the blank transaction at the bottom of the register.  If clear, pressing the 'Enter' key will move down one row.</property>
+                    <property name="tooltip_markup">If checked, pressing the &amp;apos;Enter&amp;apos; key will move to the blank transaction at the bottom of the register. If clear, pressing the &amp;apos;Enter&amp;apos; key will move down one row.</property>
+                    <property name="tooltip_text" translatable="yes">If checked, pressing the 'Enter' key will move to the blank transaction at the bottom of the register. If clear, pressing the 'Enter' key will move down one row.</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
                   </object>
@@ -2654,8 +2654,8 @@ many months before the current month:</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="has_tooltip">True</property>
-                    <property name="tooltip_markup">If checked, the system color theme will be applied to register windows.  If clear, the original GnuCash register colors will be used.</property>
-                    <property name="tooltip_text" translatable="yes">If checked, the system color theme will be applied to register windows.  If clear, the original GnuCash register colors will be used.</property>
+                    <property name="tooltip_markup">If checked, the system color theme will be applied to register windows. If clear, the original GnuCash register colors will be used.</property>
+                    <property name="tooltip_text" translatable="yes">If checked, the system color theme will be applied to register windows. If clear, the original GnuCash register colors will be used.</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
                   </object>
@@ -2849,8 +2849,8 @@ many months before the current month:</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="has_tooltip">True</property>
-                    <property name="tooltip_markup">Automatically expand the current transaction to show all splits.  All other transactions are shown on one line. (Two in double line mode.)</property>
-                    <property name="tooltip_text" translatable="yes">Automatically expand the current transaction to show all splits.  All other transactions are shown on one line. (Two in double line mode.)</property>
+                    <property name="tooltip_markup">Automatically expand the current transaction to show all splits. All other transactions are shown on one line. (Two in double line mode.)</property>
+                    <property name="tooltip_text" translatable="yes">Automatically expand the current transaction to show all splits. All other transactions are shown on one line. (Two in double line mode.)</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">gconf/general/register/default_style/ledger</property>
@@ -2938,8 +2938,8 @@ many months before the current month:</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="has_tooltip">True</property>
-                    <property name="tooltip_markup">Show two lines of information for each transaction instead of one.  Does not affect expanded transactions.</property>
-                    <property name="tooltip_text" translatable="yes">Show two lines of information for each transaction instead of one.  Does not affect expanded transactions.</property>
+                    <property name="tooltip_markup">Show two lines of information for each transaction instead of one. Does not affect expanded transactions.</property>
+                    <property name="tooltip_text" translatable="yes">Show two lines of information for each transaction instead of one. Does not affect expanded transactions.</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
                   </object>
@@ -2959,8 +2959,8 @@ many months before the current month:</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="has_tooltip">True</property>
-                    <property name="tooltip_markup">If checked, each register will be opened in its own top level window.  If clear, the register will be opened in the current window.</property>
-                    <property name="tooltip_text" translatable="yes">If checked, each register will be opened in its own top level window.  If clear, the register will be opened in the current window.</property>
+                    <property name="tooltip_markup">If checked, each register will be opened in its own top level window. If clear, the register will be opened in the current window.</property>
+                    <property name="tooltip_text" translatable="yes">If checked, each register will be opened in its own top level window. If clear, the register will be opened in the current window.</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
                   </object>
@@ -3284,8 +3284,8 @@ many months before the current month:</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="has_tooltip">True</property>
-                    <property name="tooltip_markup">If checked, each report will be opened in its own top level window.  If clear, the report will be opened in the current window.</property>
-                    <property name="tooltip_text" translatable="yes">If checked, each report will be opened in its own top level window.  If clear, the report will be opened in the current window.</property>
+                    <property name="tooltip_markup">If checked, each report will be opened in its own top level window. If clear, the report will be opened in the current window.</property>
+                    <property name="tooltip_text" translatable="yes">If checked, each report will be opened in its own top level window. If clear, the report will be opened in the current window.</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
                   </object>
@@ -3436,8 +3436,8 @@ many months before the current month:</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="has_tooltip">True</property>
-                    <property name="tooltip_markup">Display toolbar items with the text label beside the icon.  Labels are only shown for the most important items.</property>
-                    <property name="tooltip_text" translatable="yes">Display toolbar items with the text label beside the icon.  Labels are only shown for the most important items.</property>
+                    <property name="tooltip_markup">Display toolbar items with the text label beside the icon. Labels are only shown for the most important items.</property>
+                    <property name="tooltip_text" translatable="yes">Display toolbar items with the text label beside the icon. Labels are only shown for the most important items.</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">gconf/general/toolbar_style/text</property>
@@ -3458,8 +3458,8 @@ many months before the current month:</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="has_tooltip">True</property>
-                    <property name="tooltip_markup">Display toolbar items with the text label below the icon.  Labels are show for all items.</property>
-                    <property name="tooltip_text" translatable="yes">Display toolbar items with the text label below the icon.  Labels are show for all items.</property>
+                    <property name="tooltip_markup">Display toolbar items with the text label below the icon. Labels are show for all items.</property>
+                    <property name="tooltip_text" translatable="yes">Display toolbar items with the text label below the icon. Labels are show for all items.</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">gconf/general/toolbar_style/text</property>
@@ -3796,8 +3796,8 @@ many months before the current month:</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="has_tooltip">True</property>
-                    <property name="tooltip_markup">Show a close button on each notebook tab.  These function identically to the &amp;apos;Close&amp;apos; menu item.</property>
-                    <property name="tooltip_text" translatable="yes">Show a close button on each notebook tab.  These function identically to the 'Close' menu item.</property>
+                    <property name="tooltip_markup">Show a close button on each notebook tab. These function identically to the &amp;apos;Close&amp;apos; menu item.</property>
+                    <property name="tooltip_text" translatable="yes">Show a close button on each notebook tab. These function identically to the 'Close' menu item.</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
                   </object>

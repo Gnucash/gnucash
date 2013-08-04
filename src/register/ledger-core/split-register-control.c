@@ -1529,7 +1529,7 @@ transaction_changed_confirm(VirtualLocation *p_new_virt_loc,
     gint response;
     const char *title = _("Save the changed transaction?");
     const char *message =
-        _("The current transaction has been changed.  Would you like to "
+        _("The current transaction has been changed. Would you like to "
           "record the changes before moving to a new transaction, discard the "
           "changes, or return to the changed transaction?");
 
@@ -1826,8 +1826,8 @@ gnc_split_register_recn_cell_confirm (char old_flag, gpointer data)
     gint response;
     const gchar *title = _("Mark split as unreconciled?");
     const gchar *message =
-        _("You are about to mark a reconciled split as unreconciled.  Doing "
-          "so might make future reconciliation difficult!  Continue "
+        _("You are about to mark a reconciled split as unreconciled. Doing "
+          "so might make future reconciliation difficult! Continue "
           "with this change?");
 
     if (old_flag != YREC)

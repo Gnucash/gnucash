@@ -84,7 +84,7 @@
               <object class="GtkLabel" id="label65">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">You have requested that the following warning dialogs not be presented.  To re-enable any of these dialogs, select the check box next to the dialog, then click OK.</property>
+                <property name="label" translatable="yes">You have requested that the following warning dialogs not be presented. To re-enable any of these dialogs, select the check box next to the dialog, then click OK.</property>
                 <property name="wrap">True</property>
               </object>
               <packing>

@@ -560,7 +560,7 @@ tax_table_delete_table_cb (GtkButton *button, TaxTableWindow *ttw)
     if (gncTaxTableGetRefcount (ttw->current_table) > 0)
     {
         char *message =
-            g_strdup_printf (_("Tax table \"%s\" is in use.  You cannot delete it."),
+            g_strdup_printf (_("Tax table \"%s\" is in use. You cannot delete it."),
                              gncTaxTableGetName (ttw->current_table));
         gnc_error_dialog (ttw->dialog, "%s", message);
         g_free (message);

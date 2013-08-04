@@ -2400,7 +2400,7 @@ gtv_sr_transaction_changed_confirm (GncTreeViewSplitReg *view,
     gint response;
     const char *title = _("Save the changed transaction?");
     const char *message = _(
-        "The current transaction has changed.  Would you like to "
+        "The current transaction has changed. Would you like to "
         "record the changes, or discard the changes?");
 
     // Look for dirty_trans not being new_trans.

@@ -867,7 +867,7 @@ static gboolean gnc_entry_ledger_traverse (VirtualLocation *p_new_virt_loc,
         GtkWidget *dialog;
         const char *title = _("Save the current entry?");
         const char *message =
-            _("The current entry has been changed.  However, this entry is "
+            _("The current entry has been changed. However, this entry is "
               "part of an existing order. Would you like to record the change "
               "and effectively change your order?");
 

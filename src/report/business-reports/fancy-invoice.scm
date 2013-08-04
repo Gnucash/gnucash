@@ -1002,7 +1002,7 @@
 	(gnc:html-document-add-object!
 	 document
 	 (gnc:make-html-text
-	  (_ "No valid invoice selected.  Click on the Options button and select the invoice to use."))))
+	  (_ "No valid invoice selected. Click on the Options button and select the invoice to use."))))
 
     document))
 

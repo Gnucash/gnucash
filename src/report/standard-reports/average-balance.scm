@@ -59,7 +59,7 @@
      (gnc:make-simple-boolean-option
       gnc:pagename-accounts optname-internal
       "b"
-      (N_ "Exclude transactions that only involve two accounts, both of which are selected below.  This only affects the profit and loss columns of the table.")
+      (N_ "Exclude transactions that only involve two accounts, both of which are selected below. This only affects the profit and loss columns of the table.")
       #f))
 
     ;; account(s) to do report on

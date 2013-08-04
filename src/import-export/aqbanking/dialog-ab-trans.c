@@ -546,7 +546,7 @@ gnc_ab_trans_dialog_verify_values(GncABTransDialog *td)
             const char* localAccountCode = AB_Transaction_GetLocalAccountNumber(td->ab_trans);
             values_ok = FALSE;
             gnc_error_dialog(td->dialog,
-                             _("Your local bank account does not yet have the SEPA account information stored. "
+                             _("Your local bank account does not yet have the SEPA account information stored."
                                " We are sorry, but in this development version one additional step is necessary "
                                "which has not yet been implemented directly in gnucash. "
                                "Please execute the command line program \"aqhbci-tool\" for your account, as follows: "
@@ -561,7 +561,7 @@ gnc_ab_trans_dialog_verify_values(GncABTransDialog *td)
     if (!othername || !strlen(othername))
     {
         gnc_ab_trans_dialog_entry_set (td->recp_name_entry,
-                                       _("You did not enter a recipient name.  A recipient name is "
+                                       _("You did not enter a recipient name. A recipient name is "
                                          "required for an online transfer.\n"),
                                        GTK_STOCK_CANCEL);
 
@@ -581,7 +581,7 @@ gnc_ab_trans_dialog_verify_values(GncABTransDialog *td)
     if (!account || !strlen(account))
     {
         gnc_ab_trans_dialog_entry_set (td->recp_account_entry,
-                                       _("You did not enter a recipient account.  A recipient account is "
+                                       _("You did not enter a recipient account. A recipient account is "
                                          "required for an online transfer.\n"),
                                        GTK_STOCK_CANCEL);
         values_ok = FALSE;
@@ -597,7 +597,7 @@ gnc_ab_trans_dialog_verify_values(GncABTransDialog *td)
     if (!bankcode || !strlen(bankcode))
     {
         gnc_ab_trans_dialog_entry_set (td->recp_bankcode_entry,
-                                       _("You did not enter a recipient bank.  A recipient bank is "
+                                       _("You did not enter a recipient bank. A recipient bank is "
                                          "required for an online transfer.\n"),
                                        GTK_STOCK_CANCEL);
         values_ok = FALSE;
@@ -1095,7 +1095,7 @@ gnc_ab_trans_dialog_add_templ_cb(GtkButton *button, gpointer user_data)
         if (data.pointer)
         {
             gnc_error_dialog(dialog, "%s",
-                             _("A template with the given name already exists.  "
+                             _("A template with the given name already exists. "
                                "Please enter another name."));
             continue;
         }

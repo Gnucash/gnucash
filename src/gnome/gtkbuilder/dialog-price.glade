@@ -87,7 +87,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
-                <property name="tooltip_text" translatable="yes">If activated, delete manually entered stock prices dated earlier than the specified date.  Otherwise only stock prices added by Finance::Quote will be deleted.</property>
+                <property name="tooltip_text" translatable="yes">If activated, delete manually entered stock prices dated earlier than the specified date. Otherwise only stock prices added by Finance::Quote will be deleted.</property>
                 <property name="use_action_appearance">False</property>
                 <property name="use_underline">True</property>
                 <property name="draw_indicator">True</property>
@@ -107,7 +107,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
-                <property name="tooltip_text" translatable="yes">If activated, delete all prices before the specified date.  Otherwise the last stock price dated before the date will be kept and all earlier quotes deleted.</property>
+                <property name="tooltip_text" translatable="yes">If activated, delete all prices before the specified date. Otherwise the last stock price dated before the date will be kept and all earlier quotes deleted.</property>
                 <property name="use_action_appearance">False</property>
                 <property name="use_underline">True</property>
                 <property name="draw_indicator">True</property>

@@ -194,7 +194,7 @@
                 <property name="yalign">0</property>
                 <property name="label" translatable="yes">&lt;b&gt;Cannot find default values&lt;/b&gt;
 
-The configuration data used to specify default values for GnuCash cannot be found in the default system locations.  Without this data GnuCash will still operate properly but it may require some extra time to setup.  Do you wish to setup the configuration data?</property>
+The configuration data used to specify default values for GnuCash cannot be found in the default system locations. Without this data GnuCash will still operate properly but it may require some extra time to setup. Do you wish to setup the configuration data?</property>
                 <property name="use_markup">True</property>
                 <property name="wrap">True</property>
               </object>
@@ -234,7 +234,7 @@ The configuration data used to specify default values for GnuCash cannot be foun
       <object class="GtkLabel" id="start_page">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">The configuration data used by GnuCash to specify its default values cannot be found in the default system locations.  Without this data GnuCash will still operate properly, but it may require some extra time to set up.</property>
+        <property name="label" translatable="yes">The configuration data used by GnuCash to specify its default values cannot be found in the default system locations. Without this data GnuCash will still operate properly, but it may require some extra time to set up.</property>
         <property name="wrap">True</property>
       </object>
       <packing>

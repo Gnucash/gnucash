@@ -927,7 +927,7 @@ is_trans_readonly_and_warn (const Transaction *trans)
                                         GTK_BUTTONS_OK,
                                         "%s", title);
         gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
-                "%s", _("The date of this transaction is older than the \"Read-Only Threshold\" set for this book.  "
+                "%s", _("The date of this transaction is older than the \"Read-Only Threshold\" set for this book. "
                         "This setting can be changed in File -> Properties -> Accounts."));
         gtk_dialog_run(GTK_DIALOG(dialog));
         gtk_widget_destroy(dialog);
@@ -1071,7 +1071,7 @@ gsr_default_delete_handler( GNCSplitReg *gsr, gpointer data )
         const char *anchor_error = _("You cannot delete this split.");
         const char *anchor_split = _("This is the split anchoring this transaction "
                                      "to the register. You may not delete it from "
-                                     "this register window.  You may delete the "
+                                     "this register window. You may delete the "
                                      "entire transaction from this window, or you "
                                      "may navigate to a register that shows "
                                      "another side of this same transaction and "
@@ -2036,7 +2036,7 @@ gnc_split_reg_determine_read_only( GNCSplitReg *gsr )
             return;
 
         case PLACEHOLDER_THIS:
-            args->string = _("This account may not be edited.  If you want "
+            args->string = _("This account may not be edited. If you want "
                              "to edit transactions in this register, please "
                              "open the account options and turn off the "
                              "placeholder checkbox.");
@@ -2044,7 +2044,7 @@ gnc_split_reg_determine_read_only( GNCSplitReg *gsr )
 
         default:
             args->string = _("One of the sub-accounts selected may not be "
-                             "edited.  If you want to edit transactions in "
+                             "edited. If you want to edit transactions in "
                              "this register, please open the sub-account "
                              "options and turn off the placeholder checkbox. "
                              "You may also open an individual account instead "

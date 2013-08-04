@@ -1407,7 +1407,7 @@ gnc_xfer_dialog_response_cb (GtkDialog *dialog, gint response, gpointer data)
 
         if (!gnc_commodity_is_iso (xferData->from_commodity))
         {
-            const char *message = _("You can't transfer from a non-currency account.  "
+            const char *message = _("You can't transfer from a non-currency account. "
                                     "Try reversing the \"from\" and \"to\" accounts "
                                     "and making the \"amount\" negative.");
             gnc_error_dialog(xferData->dialog, "%s", message);

@@ -62,7 +62,7 @@
           <object class="GtkLabel" id="label847683">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
-            <property name="label" translatable="yes">Enter a title for this custom format.  This title will appear in the "Check format" selector of the Print Check dialog.  Using the title of an existing custom format will cause that format to be overwritten.</property>
+            <property name="label" translatable="yes">Enter a title for this custom format. This title will appear in the "Check format" selector of the Print Check dialog. Using the title of an existing custom format will cause that format to be overwritten.</property>
             <property name="wrap">True</property>
             <property name="selectable">True</property>
           </object>

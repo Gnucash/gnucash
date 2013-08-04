@@ -368,7 +368,7 @@ ap_assistant_book_prepare (GtkAssistant *assistant, gpointer user_data)
 
     /* Display the book info */
     period_text =
-        _("You have asked for a book to be created.  This book "
+        _("You have asked for a book to be created. This book "
           "will contain all transactions up to midnight %s "
           "(for a total of %d transactions spread over %d accounts).\n\n "
           "Amend the Title and Notes or Click on 'Forward' to proceed.\n "

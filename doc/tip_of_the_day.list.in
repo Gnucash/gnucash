@@ -2,18 +2,18 @@
 You can access the manual under the Help menu.")
 
  N_( "You can easily import your existing financial data from Quicken, \
-MS Money or other programs that export QIF files or OFX files.  In the \
+MS Money or other programs that export QIF files or OFX files. In the \
 File menu, click on the sub-menu Import and click on QIF or OFX file, \
 respectively. Then, follow the instructions provided.")
 
  N_( "If you are familiar with other financial programs such as Quicken, \
 note that GnuCash uses accounts instead of categories to track \
-income and expenses.  For more information on income and expense \
+income and expenses. For more information on income and expense \
 accounts, please see the GnuCash online manual.")
 
  N_( "Create new accounts by clicking the New button in the main window \
-tool bar.  This will bring up a dialog box where you can enter \
-account details.  For more information on choosing an account type \
+tool bar. This will bring up a dialog box where you can enter \
+account details. For more information on choosing an account type \
 or setting up a chart of accounts, please see the GnuCash online \
 manual.")
 
@@ -27,11 +27,11 @@ Alternatively, in the View menu, you can choose the register \
 style Auto-Split Ledger or Transaction Journal.")
 
  N_( "As you enter amounts in the register, you can use the GnuCash \
-calculator to add, subtract, multiply and divide .  Simply type \
-the first value, then select '+', '-','*', or '/'.  Type the \
+calculator to add, subtract, multiply and divide. Simply type \
+the first value, then select '+', '-','*', or '/'. Type the \
 second value and press Enter to record the calculated amount.")
 
- N_( "Quick-fill makes it easy to enter common transactions.  When you \
+ N_( "Quick-fill makes it easy to enter common transactions. When you \
 type the first letter(s) of a common transaction description, \
 then press the Tab key, GnuCash will automatically complete \
 the remainder of the transaction as it was last entered.")
@@ -54,7 +54,7 @@ decrement check numbers as well.")
 Control+Page Up/Down.")
 
  N_( "In the reconcile window, you can press the spacebar to mark \
-transactions as reconciled.  You can also press Tab and Shift-Tab to \
+transactions as reconciled. You can also press Tab and Shift-Tab to \
 move between deposits and withdrawals.")
 
  N_( "To transfer funds between accounts with different currencies, \
@@ -67,7 +67,7 @@ providing all the financial information you want at a glance. \
 To do so, use the Sample & Custom -> \"Custom Multicolumn Report\" \
 report.")
 
- N_( "Style Sheets affect how reports are displayed.  Choose \
+ N_( "Style Sheets affect how reports are displayed. Choose \
 a style sheet for your report as a report option, and use \
 the Edit -> Style Sheets menu to customize style sheets.")
 
@@ -87,7 +87,7 @@ you can choose the monthly basic frequency and then set 'Every \
 register after midnight, to get the new date as default for new \
 transactions. It is not necessary to restart GnuCash therefore.")
 
- N_( "The GnuCash developers are easy to contact.  As well \
+ N_( "The GnuCash developers are easy to contact. As well \
 as several mailing lists, you can chat to them live on IRC! \
 Join them on #gnucash at irc.gnome.org")
 

@@ -276,7 +276,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
-                            <property name="tooltip_text" translatable="yes">This account is present solely as a placeholder in the hierarchy.  Transactions may not be posted to this account, only to sub-accounts of this account.</property>
+                            <property name="tooltip_text" translatable="yes">This account is present solely as a placeholder in the hierarchy. Transactions may not be posted to this account, only to sub-accounts of this account.</property>
                             <property name="use_underline">True</property>
                             <property name="draw_indicator">True</property>
                           </object>
@@ -293,7 +293,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
-                            <property name="tooltip_text" translatable="yes">This account (and any sub-accounts) will be hidden in the account tree and will not appear in the popup account list in the register.  To reset this option, you will first need to open the "Filter By..." dialog for the account tree and check the "show hidden accounts" option.  Doing so will allow you to select the account and reopen this dialog.</property>
+                            <property name="tooltip_text" translatable="yes">This account (and any sub-accounts) will be hidden in the account tree and will not appear in the popup account list in the register. To reset this option, you will first need to open the "Filter By..." dialog for the account tree and check the "show hidden accounts" option. Doing so will allow you to select the account and reopen this dialog.</property>
                             <property name="use_underline">True</property>
                             <property name="draw_indicator">True</property>
                           </object>
@@ -1023,7 +1023,7 @@
                           <object class="GtkLabel" id="label8477420">
                             <property name="visible">True</property>
                             <property name="xalign">0</property>
-                            <property name="label" translatable="yes">This account contains sub-accounts.  What would you like to do with these sub-accounts?</property>
+                            <property name="label" translatable="yes">This account contains sub-accounts. What would you like to do with these sub-accounts?</property>
                             <property name="wrap">True</property>
                           </object>
                           <packing>

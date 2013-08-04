@@ -52,7 +52,7 @@
               <object class="GtkLabel" id="label847994">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">The following Scheduled Transactions reference the deleted account and must now be corrected.  Press OK to edit them.</property>
+                <property name="label" translatable="yes">The following Scheduled Transactions reference the deleted account and must now be corrected. Press OK to edit them.</property>
                 <property name="wrap">True</property>
               </object>
               <packing>

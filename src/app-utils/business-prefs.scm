@@ -134,7 +134,7 @@
   (reg-option
    (gnc:make-number-range-option
 	gnc:*option-section-accounts* gnc:*option-name-auto-readonly-days*
-	"b" (N_ "Choose the number of days after which transactions will be read-only and cannot be edited anymore.  This threshold is marked by a red line in the account register windows.  If zero, all transactions can be edited and none are read-only.")
+	"b" (N_ "Choose the number of days after which transactions will be read-only and cannot be edited anymore. This threshold is marked by a red line in the account register windows. If zero, all transactions can be edited and none are read-only.")
 	0 ;; default
 	0 ;; lower bound
 	3650 ;; upper bound

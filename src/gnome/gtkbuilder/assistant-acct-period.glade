@@ -15,7 +15,7 @@
         <property name="can_focus">False</property>
         <property name="label" translatable="yes">This assistant will help you setup and use accounting periods. 
  
-Danger: this feature does not work correctly at this time; it is still under development.  It will probably damage your data in such a way that it cannot be repaired!</property>
+Danger: this feature does not work correctly at this time; it is still under development. It will probably damage your data in such a way that it cannot be repaired!</property>
         <property name="wrap">True</property>
       </object>
       <packing>

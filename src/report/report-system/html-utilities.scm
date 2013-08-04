@@ -790,7 +790,7 @@
 (define (gnc:html-make-generic-budget-warning report-title-string)
   (gnc:html-make-generic-simple-warning
     report-title-string
-    (_ "No budgets exist.  You must create at least one budget.")))
+    (_ "No budgets exist. You must create at least one budget.")))
 
 
 (define (gnc:html-make-generic-simple-warning report-title-string message)

@@ -831,8 +831,8 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="has_tooltip">True</property>
-                        <property name="tooltip_markup">The cutoff day for applying bills to the next month.  After the cutoff, bills are applied to the following month.  Negative values count backwards from the end of the month.</property>
-                        <property name="tooltip_text" translatable="yes">The cutoff day for applying bills to the next month.  After the cutoff, bills are applied to the following month.  Negative values count backwards from the end of the month.</property>
+                        <property name="tooltip_markup">The cutoff day for applying bills to the next month. After the cutoff, bills are applied to the following month. Negative values count backwards from the end of the month.</property>
+                        <property name="tooltip_text" translatable="yes">The cutoff day for applying bills to the next month. After the cutoff, bills are applied to the following month. Negative values count backwards from the end of the month.</property>
                         <property name="invisible_char">&#x25CF;</property>
                         <property name="invisible_char_set">True</property>
                         <property name="primary_icon_activatable">False</property>

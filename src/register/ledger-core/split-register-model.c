@@ -2041,15 +2041,15 @@ gnc_split_register_confirm (VirtualLocation virt_loc, gpointer user_data)
         {
             title = _("Change reconciled split?");
             message =
-             _("You are about to change a reconciled split.  Doing so might make "
-               "future reconciliation difficult!  Continue with this change?");
+             _("You are about to change a reconciled split. Doing so might make "
+               "future reconciliation difficult! Continue with this change?");
         }
         else
         {
             title = _("Change split linked to a reconciled split?");
             message =
-            _("You are about to change a split that is linked to a reconciled split.  "
-              "Doing so might make future reconciliation difficult!  Continue with this change?");
+            _("You are about to change a split that is linked to a reconciled split. "
+              "Doing so might make future reconciliation difficult! Continue with this change?");
         }
 
         /* Does the user want to be warned? */

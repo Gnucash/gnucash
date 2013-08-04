@@ -98,13 +98,13 @@ static gboolean autosave_confirm(GtkWidget *toplevel)
                                _("Save file automatically?"));
     gtk_message_dialog_format_secondary_text
     (GTK_MESSAGE_DIALOG(dialog),
-     ngettext("Your data file needs to be saved to your hard disk to save your changes.  "
+     ngettext("Your data file needs to be saved to your hard disk to save your changes. "
               "GnuCash has a feature to save the file automatically every %d minute, "
               "just as if you had pressed the \"Save\" button each time. \n\n"
               "You can change the time interval or turn off this feature under "
               "Edit -> Preferences -> General -> Auto-save time interval. \n\n"
               "Should your file be saved automatically?",
-              "Your data file needs to be saved to your hard disk to save your changes.  "
+              "Your data file needs to be saved to your hard disk to save your changes. "
               "GnuCash has a feature to save the file automatically every %d minutes, "
               "just as if you had pressed the \"Save\" button each time. \n\n"
               "You can change the time interval or turn off this feature under "
