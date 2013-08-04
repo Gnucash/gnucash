@@ -3105,8 +3105,8 @@ many months before the current month:</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="tooltip_markup">Show the entered date and reconciled date on selection</property>
-                    <property name="tooltip_text" translatable="yes">Show the entered date and reconciled date on selection</property>
+                    <property name="tooltip_markup">Show the entered date and reconciled date on transaction selection.</property>
+                    <property name="tooltip_text" translatable="yes">Show the entered date and reconciled date on transaction selection.</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
                   </object>
