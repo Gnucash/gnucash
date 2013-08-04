@@ -592,7 +592,7 @@ msgstr "Desconegut"
 
 #: ../src/business/business-gnome/dialog-billterms.c:644
 #, c-format
-msgid "Term \"%s\" is in use.  You cannot delete it."
+msgid "Term \"%s\" is in use. You cannot delete it."
 msgstr "El terme «%s» ja s'està utilitzant i no el podeu esborrar."
 
 #: ../src/business/business-gnome/dialog-billterms.c:650
@@ -602,12 +602,12 @@ msgid "Are you sure you want to delete \"%s\"?"
 msgstr "Esteu segur que voleu esborrar «%s»?"
 
 #: ../src/business/business-gnome/dialog-choose-owner.c:75
-msgid "This transaction needs to be assigned to a Customer.  Please choose the Customer below."
-msgstr "Aquest assentament s'ha d'assignar a un client.  Escolliu un client dels de sota."
+msgid "This transaction needs to be assigned to a Customer. Please choose the Customer below."
+msgstr "Aquest assentament s'ha d'assignar a un client. Escolliu un client dels de sota."
 
 #: ../src/business/business-gnome/dialog-choose-owner.c:82
-msgid "This transaction needs to be assigned to a Vendor.  Please choose the Vendor below."
-msgstr "Aquesta assentament s'ha d'assignar a un proveïdor.  Escolliu un proveïdor dels de sota."
+msgid "This transaction needs to be assigned to a Vendor. Please choose the Vendor below."
+msgstr "Aquesta assentament s'ha d'assignar a un proveïdor. Escolliu un proveïdor dels de sota."
 
 #: ../src/business/business-gnome/dialog-customer.c:329
 msgid ""
@@ -723,11 +723,11 @@ msgid "Find Customer"
 msgstr "Cerca un client"
 
 #: ../src/business/business-gnome/dialog-date-close.c:75
-msgid "No Account selected.  Please try again."
-msgstr "No hi ha cap compte seleccionat.  Torneu-ho a intentar."
+msgid "No Account selected. Please try again."
+msgstr "No hi ha cap compte seleccionat. Torneu-ho a intentar."
 
 #: ../src/business/business-gnome/dialog-date-close.c:82
-msgid "Placeholder account selected.  Please try again."
+msgid "Placeholder account selected. Please try again."
 msgstr "S'ha seleccionat el compte contenidor. Torneu-ho a intentar."
 
 #: ../src/business/business-gnome/dialog-employee.c:225
@@ -816,7 +816,7 @@ msgstr "Aquest assentament està associat a una comanda, que també s'esborrarà
 msgid "The Invoice must have at least one Entry."
 msgstr "La factura ha de tenir com a mínim un element."
 
-#. Ok, we can post this invoice.  Ask for verification, set the due date,
+#. Ok, we can post this invoice. Ask for verification, set the due date,
 #. * post date, and posted account
 #.
 #: ../src/business/business-gnome/dialog-invoice.c:711
@@ -860,7 +860,7 @@ msgstr "Voleu acumular els desglossaments?"
 
 #. Fill in the conversion prices with feedback from the user
 #: ../src/business/business-gnome/dialog-invoice.c:774
-msgid "One or more of the entries are for accounts different from the invoice/bill currency.  You will be asked a conversion rate for each."
+msgid "One or more of the entries are for accounts different from the invoice/bill currency. You will be asked a conversion rate for each."
 msgstr "Una o més de les entrades són per comptes diferents a la moneda de la factura/albarà. Se us demanarà un tipus de canvi per cada u."
 
 #: ../src/business/business-gnome/dialog-invoice.c:901
@@ -1277,14 +1277,14 @@ msgstr "La comanda ha de tenir un identificador."
 msgid "The Order must have at least one Entry."
 msgstr "La comanda ha de tenir com a mínim un assentament."
 
-#. Damn; yes.  Well, ask the user to make sure they REALLY want to
+#. Damn; yes. Well, ask the user to make sure they REALLY want to
 #. * close this order!
 #.
 #: ../src/business/business-gnome/dialog-order.c:299
 msgid "This order contains entries that have not been invoiced. Are you sure you want to close it out before you invoice all the entries?"
 msgstr "Aquesta comanda té entrades que no han estat facturades. Esteu segur que voleu tancar-la abans de facturar totes les entrades?"
 
-#. Ok, we can close this.  Ask for verification and set the closed date
+#. Ok, we can close this. Ask for verification and set the closed date
 #: ../src/business/business-gnome/dialog-order.c:308
 msgid "Do you really want to close the order?"
 msgstr "Esteu segur que voleu tancar la comanda?"
@@ -1333,8 +1333,8 @@ msgid "Pre-Payment"
 msgstr "Pre-pagament"
 
 #: ../src/business/business-gnome/dialog-payment.c:556
-msgid "You must enter the amount of the payment.  The payment amount must not be zero."
-msgstr "Heu d'introduir la quantitat a pagar.  La quantitat a pagar ha de ser més gran que zero."
+msgid "You must enter the amount of the payment. The payment amount must not be zero."
+msgstr "Heu d'introduir la quantitat a pagar. La quantitat a pagar ha de ser més gran que zero."
 
 #: ../src/business/business-gnome/dialog-payment.c:566
 msgid "You must select a company for payment processing."
@@ -1349,13 +1349,13 @@ msgid "You must enter a valid account name for posting."
 msgstr "Heu d'introduir un nom de compte vàlid per a la comptabilització."
 
 #: ../src/business/business-gnome/dialog-payment.c:614
-msgid "The transfer and post accounts are associated with different currencies.  Please specify the conversion rate."
+msgid "The transfer and post accounts are associated with different currencies. Please specify the conversion rate."
 msgstr "Els comptes de transferència i comptabilització estan associats a monedes diferents. Si us plau especifiqueu el tipus de canvi."
 
 #: ../src/business/business-gnome/dialog-payment.c:931
 #, c-format
-msgid "You have no valid \"Post To\" accounts.  Please create an account of type \"%s\" before you continue to process this payment.  Perhaps you want to create an Invoice or Bill first?"
-msgstr "No teniu cap compte del tipus «Comptabilitza a» vàlid.  Hauríeu de crear un compte del tipus «%s» abans de continuar amb el processament d'aquest pagament.  Potser hauríeu de crear una factura abans de res."
+msgid "You have no valid \"Post To\" accounts. Please create an account of type \"%s\" before you continue to process this payment. Perhaps you want to create an Invoice or Bill first?"
+msgstr "No teniu cap compte del tipus «Comptabilitza a» vàlid. Hauríeu de crear un compte del tipus «%s» abans de continuar amb el processament d'aquest pagament. Potser hauríeu de crear una factura abans de res."
 
 #: ../src/business/business-gnome/dialog-vendor.c:214
 msgid ""
@@ -2140,8 +2140,8 @@ msgid "_Open in new window"
 msgstr "_Obre en una finestra nova"
 
 #: ../src/business/business-gnome/gtkbuilder/business-prefs.glade.h:15
-msgid "If checked, each invoice will be opened in its own top level window.  If clear, the invoice will be opened in the current window."
-msgstr "Si s'habilita, cada factura s'obrirà en una finestra principal pròpia.  Si no s'habilita, la factura s'obrirà a la finestra actual."
+msgid "If checked, each invoice will be opened in its own top level window. If clear, the invoice will be opened in the current window."
+msgstr "Si s'habilita, cada factura s'obrirà en una finestra principal pròpia. Si no s'habilita, la factura s'obrirà a la finestra actual."
 
 #: ../src/business/business-gnome/gtkbuilder/business-prefs.glade.h:16
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:71
@@ -2280,8 +2280,8 @@ msgid "The discount percentage applied if paid early."
 msgstr "El percentatge de descompte aplicat per pagament immediat."
 
 #: ../src/business/business-gnome/gtkbuilder/dialog-billterms.glade.h:24
-msgid "The cutoff day for applying bills to the next month.  After the cutoff, bills are applied to the following month.  Negative values count backwards from the end of the month."
-msgstr "El dia límit per carregar les factures el mes següent. Després del dia límit, les factures s'aplicaran el mes següent.  Els valors negatius compten enrere des del final de mes."
+msgid "The cutoff day for applying bills to the next month. After the cutoff, bills are applied to the following month. Negative values count backwards from the end of the month."
+msgstr "El dia límit per carregar les factures el mes següent. Després del dia límit, les factures s'aplicaran el mes següent. Els valors negatius compten enrere des del final de mes."
 
 #: ../src/business/business-gnome/gtkbuilder/dialog-billterms.glade.h:26
 msgid "Table"
@@ -2386,8 +2386,8 @@ msgid "Active"
 msgstr "Actiu"
 
 #: ../src/business/business-gnome/gtkbuilder/dialog-customer.glade.h:5
-msgid "The customer ID number.  If left blank a reasonable number will be chosen for you"
-msgstr "El número ID del client.  Si el deixeu en blanc, el sistema us escollirà un nombre raonable."
+msgid "The customer ID number. If left blank a reasonable number will be chosen for you"
+msgstr "El número ID del client. Si el deixeu en blanc, el sistema us escollirà un nombre raonable."
 
 #: ../src/business/business-gnome/gtkbuilder/dialog-customer.glade.h:6
 #: ../src/business/business-gnome/gtkbuilder/dialog-employee.glade.h:6
@@ -2553,8 +2553,8 @@ msgid "Username: "
 msgstr "Nom d'usuari: "
 
 #: ../src/business/business-gnome/gtkbuilder/dialog-employee.glade.h:5
-msgid "The employee ID number.  If left blank a reasonable number will be chosen for you"
-msgstr "El número d'identificació del treballador.  Si el deixeu en blanc, el sistema escollirà un nombre raonable."
+msgid "The employee ID number. If left blank a reasonable number will be chosen for you"
+msgstr "El número d'identificació del treballador. Si el deixeu en blanc, el sistema escollirà un nombre raonable."
 
 #: ../src/business/business-gnome/gtkbuilder/dialog-employee.glade.h:12
 #: ../src/business/business-gnome/gtkbuilder/dialog-vendor.glade.h:12
@@ -2651,8 +2651,8 @@ msgid "Invoice Entries"
 msgstr "Assentaments de factura"
 
 #: ../src/business/business-gnome/gtkbuilder/dialog-invoice.glade.h:23
-msgid "The invoice ID number.  If left blank a reasonable number will be chosen for you."
-msgstr "El número d'identificador de la factura.  Si el deixeu en blanc, el sistema escollirà un nombre raonable."
+msgid "The invoice ID number. If left blank a reasonable number will be chosen for you."
+msgstr "El número d'identificador de la factura. Si el deixeu en blanc, el sistema escollirà un nombre raonable."
 
 #: ../src/business/business-gnome/gtkbuilder/dialog-invoice.glade.h:25
 msgid ""
@@ -2679,8 +2679,8 @@ msgid "Job Dialog"
 msgstr "Diàleg de tasques"
 
 #: ../src/business/business-gnome/gtkbuilder/dialog-job.glade.h:4
-msgid "The job ID number.  If left blank a reasonable number will be chosen for you"
-msgstr "El número d'identificació de la tasca.  Si el deixeu en blanc, el sistema us escollirà un nombre raonable."
+msgid "The job ID number. If left blank a reasonable number will be chosen for you"
+msgstr "El número d'identificació de la tasca. Si el deixeu en blanc, el sistema us escollirà un nombre raonable."
 
 #: ../src/business/business-gnome/gtkbuilder/dialog-job.glade.h:5
 msgid "Job Information"
@@ -2700,8 +2700,8 @@ msgid "New Order"
 msgstr "Comanda nova"
 
 #: ../src/business/business-gnome/gtkbuilder/dialog-order.glade.h:4
-msgid "The order ID number.  If left blank a reasonable number will be chosen for you"
-msgstr "El nombre ID de la comanda.  Si el deixeu en blanc, el sistema us escollirà un nombre raonable."
+msgid "The order ID number. If left blank a reasonable number will be chosen for you"
+msgstr "El nombre ID de la comanda. Si el deixeu en blanc, el sistema us escollirà un nombre raonable."
 
 #: ../src/business/business-gnome/gtkbuilder/dialog-order.glade.h:5
 msgid "Order Information"
@@ -2901,8 +2901,8 @@ msgid "Vendor Number: "
 msgstr "Número de proveïdor: "
 
 #: ../src/business/business-gnome/gtkbuilder/dialog-vendor.glade.h:5
-msgid "The vendor ID number.  If left blank a reasonable number will be chosen for you"
-msgstr "El número ID del proveïdor.  Si el deixeu en blanc, el sistema us escollirà un nombre raonable."
+msgid "The vendor ID number. If left blank a reasonable number will be chosen for you"
+msgstr "El número ID del proveïdor. Si el deixeu en blanc, el sistema us escollirà un nombre raonable."
 
 #. src/report/business-reports/customer-summary.scm
 #. src/report/business-reports/job-report.scm
@@ -3079,7 +3079,7 @@ msgid "The tax table %s does not exist. Would you like to create it?"
 msgstr "La taula d'impostos %s no existeix. Voleu crear-la?"
 
 #: ../src/business/business-ledger/gncEntryLedgerControl.c:870
-msgid "The current entry has been changed.  However, this entry is part of an existing order. Would you like to record the change and effectively change your order?"
+msgid "The current entry has been changed. However, this entry is part of an existing order. Would you like to record the change and effectively change your order?"
 msgstr "L'entrada actual ha canviat. Aquesta entrada forma part d'una comanda existent. Voleu registrar els canvis i per tant modificar la comanda?"
 
 #: ../src/business/business-ledger/gncEntryLedgerControl.c:888
@@ -3421,7 +3421,7 @@ msgid "How did you pay for this item?"
 msgstr "Com vau pagar per aquest article?"
 
 #: ../src/core-utils/gnc-features.c:115
-msgid "This Dataset contains features not supported by this version of GnuCash.  You must use a newer version of GnuCash in order to support the following features:"
+msgid "This Dataset contains features not supported by this version of GnuCash. You must use a newer version of GnuCash in order to support the following features:"
 msgstr ""
 "Aquest fitxer de dades conté característiques no suportades per\n"
 "aquesta versió de Gnucash. Heu de fer servir una versió més nova de\n"
@@ -3445,7 +3445,7 @@ msgstr ""
 msgid ""
 "The directory\n"
 "  %s\n"
-"exists but cannot be accessed.  This program \n"
+"exists but cannot be accessed. This program \n"
 "must have full access (read/write/execute) to \n"
 "the directory in order to function properly.\n"
 msgstr ""
@@ -3475,7 +3475,7 @@ msgid ""
 "An unknown error occurred when validating that the\n"
 "  %s\n"
 "directory exists and is usable. Please correct the\n"
-"problem and restart GnuCash.  The reported error \n"
+"problem and restart GnuCash. The reported error \n"
 "was '%s' (errno %d)."
 msgstr ""
 "Ha ocorregut un error desconetug quan s'estava validant que el directori\n"
@@ -3776,8 +3776,8 @@ msgid "Extra to Charge Card"
 msgstr "Costos addicionals per a carregar a la targeta"
 
 #: ../src/engine/gncInvoice.c:1485
-msgid "Generated from an invoice.  Try unposting the invoice."
-msgstr "Generat des d'una factura.  Per a modificar-lo, hauríeu de suprimir-ne l'assentament."
+msgid "Generated from an invoice. Try unposting the invoice."
+msgstr "Generat des d'una factura. Per a modificar-lo, hauríeu de suprimir-ne l'assentament."
 
 #: ../src/engine/gncInvoice.c:1914
 msgid " (posted)"
@@ -4370,7 +4370,7 @@ msgstr "Compte nou"
 
 #: ../src/gnome-utils/dialog-account.c:1990
 #, c-format
-msgid "Renumber the immediate sub-accounts of %s?  This will replace the account code field of each child account with a newly generated code."
+msgid "Renumber the immediate sub-accounts of %s? This will replace the account code field of each child account with a newly generated code."
 msgstr "Voleu renumerar els subcomptes més immediats de %s? Això farà que es generi un codi nou, el qual reemplaçarà del camp del codi de compte de cada subcompte."
 
 #: ../src/gnome-utils/dialog-book-close.c:293
@@ -4624,8 +4624,8 @@ msgstr "Heu de seleccionar un compte d'impostos."
 
 #: ../src/gnome-utils/dialog-tax-table.c:563
 #, c-format
-msgid "Tax table \"%s\" is in use.  You cannot delete it."
-msgstr "La taula d'impostos «%s» està sent utilitzada.  NO la podeu suprimir."
+msgid "Tax table \"%s\" is in use. You cannot delete it."
+msgstr "La taula d'impostos «%s» està sent utilitzada. NO la podeu suprimir."
 
 #: ../src/gnome-utils/dialog-tax-table.c:611
 msgid "You cannot remove the last entry from the tax table. Try deleting the tax table if you want to do that."
@@ -4652,7 +4652,7 @@ msgid "You can't transfer from and to the same account!"
 msgstr "No podeu fer una transferència a un mateix compte."
 
 #: ../src/gnome-utils/dialog-transfer.c:1410
-msgid "You can't transfer from a non-currency account.  Try reversing the \"from\" and \"to\" accounts and making the \"amount\" negative."
+msgid "You can't transfer from a non-currency account. Try reversing the \"from\" and \"to\" accounts and making the \"amount\" negative."
 msgstr "No podeu transferir des d'un compte no monetari. Proveu d'invertir els comptes «de» i «a», i fer la «quantitat» negativa."
 
 #: ../src/gnome-utils/dialog-transfer.c:1421
@@ -4726,13 +4726,13 @@ msgstr "Desa el fitxer automàticament?"
 #: ../src/gnome-utils/gnc-autosave.c:101
 #, c-format
 msgid ""
-"Your data file needs to be saved to your hard disk to save your changes.  GnuCash has a feature to save the file automatically every %d minute, just as if you had pressed the \"Save\" button each time. \n"
+"Your data file needs to be saved to your hard disk to save your changes. GnuCash has a feature to save the file automatically every %d minute, just as if you had pressed the \"Save\" button each time. \n"
 "\n"
 "You can change the time interval or turn off this feature under Edit -> Preferences -> General -> Auto-save time interval. \n"
 "\n"
 "Should your file be saved automatically?"
 msgid_plural ""
-"Your data file needs to be saved to your hard disk to save your changes.  GnuCash has a feature to save the file automatically every %d minutes, just as if you had pressed the \"Save\" button each time. \n"
+"Your data file needs to be saved to your hard disk to save your changes. GnuCash has a feature to save the file automatically every %d minutes, just as if you had pressed the \"Save\" button each time. \n"
 "\n"
 "You can change the time interval or turn off this feature under Edit -> Preferences -> General -> Auto-save time interval. \n"
 "\n"
@@ -4994,7 +4994,7 @@ msgstr "No s'ha pogut fer una còpia de seguretat del fitxer %s"
 
 #: ../src/gnome-utils/gnc-file.c:391
 #, c-format
-msgid "Could not write to file %s.  Check that you have permission to write to this file and that there is sufficient space to create it."
+msgid "Could not write to file %s. Check that you have permission to write to this file and that there is sufficient space to create it."
 msgstr ""
 "No s'ha pogut escriure al fitxer %s. Verifiqueu que teniu permisos per\n"
 "escriure a aquest fitxer i que hi ha suficient espai per crear-lo."
@@ -5012,7 +5012,7 @@ msgstr "No teniu permís de lectura per al fitxer %s."
 msgid ""
 "You attempted to save in\n"
 "%s\n"
-"or a subdirectory thereof.  This is not allowed as %s reserves that directory for internal use.\n"
+"or a subdirectory thereof. This is not allowed as %s reserves that directory for internal use.\n"
 "\n"
 "Please try again in a different directory."
 msgstr ""
@@ -5037,7 +5037,7 @@ msgid "The SQL database is in use by other users, and the upgrade cannot be perf
 msgstr "Altres usuaris estan utilitzant la base de dades SQL, i l'actualització no es podrà dur a terme fins que se'n desconnectin. Si no hi ha altres usuaris connectats, consulteu la documentació per a determinar com eliminar sessions penjades."
 
 #: ../src/gnome-utils/gnc-file.c:441
-msgid "The library \"libdbi\" installed on your system doesn't correctly store large numbers.  This means GnuCash cannot use SQL databases correctly.  Gnucash will not open or save to SQL databases until this is fixed by installing a different version of \"libdbi\".  Please see https://bugzilla.gnome.org/show_bug.cgi?id=611936 for more information."
+msgid "The library \"libdbi\" installed on your system doesn't correctly store large numbers. This means GnuCash cannot use SQL databases correctly. Gnucash will not open or save to SQL databases until this is fixed by installing a different version of \"libdbi\". Please see https://bugzilla.gnome.org/show_bug.cgi?id=611936 for more information."
 msgstr ""
 "La llibreria \"libdbi\" instal·lada al vostre sistema no emmagatzema\n"
 "correctament nombres grans. Això vol dir que el GnuCash no pot usar bases\n"
@@ -5155,12 +5155,12 @@ msgid "View..."
 msgstr "Visualitza..."
 
 #: ../src/gnome-utils/gnc-gnome-utils.c:273
-msgid "GnuCash could not find the files for the help documentation.  This is likely because the 'gnucash-docs' package is not installed"
+msgid "GnuCash could not find the files for the help documentation. This is likely because the 'gnucash-docs' package is not installed"
 msgstr "El GnuCash no ha trobat els fitxers de documentació de l'ajuda. Segurament això és degut al fet que no teniu el paquet «gnucash-docs» instal·lat."
 
 #: ../src/gnome-utils/gnc-gnome-utils.c:366
 #: ../src/gnome-utils/gnc-gnome-utils.c:428
-msgid "GnuCash could not find the files for the help documentation.  This is likely because the 'gnucash-docs' package is not installed."
+msgid "GnuCash could not find the files for the help documentation. This is likely because the 'gnucash-docs' package is not installed."
 msgstr "El GnuCash no ha trobat els fitxers de documentació de l'ajuda. Segurament això és degut al fet que no teniu el paquet «gnucash-docs» instal·lat."
 
 #: ../src/gnome-utils/gnc-gnome-utils.c:397
@@ -5697,7 +5697,7 @@ msgstr "Aquest assentament s'ha marcat com a només de lectura amb el comentari 
 
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:82
 #: ../src/gnome/gnc-split-reg.c:930
-msgid "The date of this transaction is older than the \"Read-Only Threshold\" set for this book.  This setting can be changed in File -> Properties -> Accounts."
+msgid "The date of this transaction is older than the \"Read-Only Threshold\" set for this book. This setting can be changed in File -> Properties -> Accounts."
 msgstr ""
 
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:112
@@ -5803,7 +5803,7 @@ msgstr "No podeu suprimir aquest desglossament."
 
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:941
 #: ../src/gnome/gnc-split-reg.c:1072
-msgid "This is the split anchoring this transaction to the register. You may not delete it from this register window.  You may delete the entire transaction from this window, or you may navigate to a register that shows another side of this same transaction and delete the split from that register."
+msgid "This is the split anchoring this transaction to the register. You may not delete it from this register window. You may delete the entire transaction from this window, or you may navigate to a register that shows another side of this same transaction and delete the split from that register."
 msgstr ""
 
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:969
@@ -5864,7 +5864,7 @@ msgstr "No es pot emmagetzemar una transacció en aquesta data"
 
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:1333
 #: ../src/register/ledger-core/split-register.c:610
-msgid "The entered date of the duplicated transaction is older than the \"Read-Only Threshold\" set for this book.  This setting can be changed in File -> Properties -> Accounts."
+msgid "The entered date of the duplicated transaction is older than the \"Read-Only Threshold\" set for this book. This setting can be changed in File -> Properties -> Accounts."
 msgstr ""
 
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:1469
@@ -5888,7 +5888,7 @@ msgstr "Voleu marcar el desglossament com a no conciliat?"
 
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:1527
 #: ../src/register/ledger-core/split-register-control.c:1829
-msgid "You are about to mark a reconciled split as unreconciled.  Doing so might make future reconciliation difficult!  Continue with this change?"
+msgid "You are about to mark a reconciled split as unreconciled. Doing so might make future reconciliation difficult! Continue with this change?"
 msgstr "Esteu a punt de marcar un desglossament conciliat com a no conciliat. Si continueu, és possible que una futura conciliació sigui difícil de realitzar. Voleu portar endavant aquest canvi?"
 
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:1571
@@ -5903,7 +5903,7 @@ msgstr "Voleu canviar l'assentament conciliat?"
 
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:1658
 #: ../src/register/ledger-core/split-register-model.c:2044
-msgid "You are about to change a reconciled split.  Doing so might make future reconciliation difficult!  Continue with this change?"
+msgid "You are about to change a reconciled split. Doing so might make future reconciliation difficult! Continue with this change?"
 msgstr ""
 
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:1663
@@ -5913,7 +5913,7 @@ msgstr "Voleu canviar el desglossament enllaçat a un desglossament reconciliat?
 
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:1665
 #: ../src/register/ledger-core/split-register-model.c:2051
-msgid "You are about to change a split that is linked to a reconciled split.  Doing so might make future reconciliation difficult!  Continue with this change?"
+msgid "You are about to change a split that is linked to a reconciled split. Doing so might make future reconciliation difficult! Continue with this change?"
 msgstr "Esteu a punt de canviar un desglossament enllaçat a un desglossament reconciliat. Si continueu, és possible que una futura conciliació sigui difícil de realitzar. Voleu portar endavant aquest canvi?"
 
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:1679
@@ -6217,7 +6217,7 @@ msgstr "-- Divisió d'accions --"
 
 #: ../src/gnome-utils/gnc-tree-util-split-reg.c:503
 #: ../src/register/register-gnome/datecell-gnome.c:129
-msgid "The entered date of the new transaction is older than the \"Read-Only Threshold\" set for this book.  This setting can be changed in File -> Properties -> Accounts."
+msgid "The entered date of the new transaction is older than the \"Read-Only Threshold\" set for this book. This setting can be changed in File -> Properties -> Accounts."
 msgstr ""
 
 #: ../src/gnome-utils/gnc-tree-util-split-reg.c:886
@@ -6574,7 +6574,7 @@ msgid "Save the changed transaction?"
 msgstr "Voleu desar el canvi a l'assentament?"
 
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:2468
-msgid "The current transaction has changed.  Would you like to record the changes, or discard the changes?"
+msgid "The current transaction has changed. Would you like to record the changes, or discard the changes?"
 msgstr "La transacció actual ha canviat. Voldríeu registrar els canvis o descartar-los?"
 
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:2506
@@ -6892,7 +6892,7 @@ msgstr "_Configura"
 msgid ""
 "<b>Cannot find default values</b>\n"
 "\n"
-"The configuration data used to specify default values for GnuCash cannot be found in the default system locations.  Without this data GnuCash will still operate properly but it may require some extra time to setup.  Do you wish to setup the configuration data?"
+"The configuration data used to specify default values for GnuCash cannot be found in the default system locations. Without this data GnuCash will still operate properly but it may require some extra time to setup. Do you wish to setup the configuration data?"
 msgstr ""
 
 #: ../src/gnome-utils/gtkbuilder/assistant-gconf-setup.glade.h:6
@@ -6901,7 +6901,7 @@ msgid "Update GnuCash Configuration Data"
 msgstr "Actualitza les dades de configuració del GnuCash"
 
 #: ../src/gnome-utils/gtkbuilder/assistant-gconf-setup.glade.h:7
-msgid "The configuration data used by GnuCash to specify its default values cannot be found in the default system locations.  Without this data GnuCash will still operate properly, but it may require some extra time to set up."
+msgid "The configuration data used by GnuCash to specify its default values cannot be found in the default system locations. Without this data GnuCash will still operate properly, but it may require some extra time to set up."
 msgstr ""
 
 #: ../src/gnome-utils/gtkbuilder/assistant-gconf-setup.glade.h:8
@@ -7145,7 +7145,7 @@ msgid "Placeholde_r"
 msgstr "Contenido_r"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-account.glade.h:22
-msgid "This account is present solely as a placeholder in the hierarchy.  Transactions may not be posted to this account, only to sub-accounts of this account."
+msgid "This account is present solely as a placeholder in the hierarchy. Transactions may not be posted to this account, only to sub-accounts of this account."
 msgstr "Aquest compte és només un contenidor. No és possible registrar-hi assentaments, únicament en els seus subcomptes."
 
 #: ../src/gnome-utils/gtkbuilder/dialog-account.glade.h:23
@@ -7153,7 +7153,7 @@ msgid "H_idden"
 msgstr "_Ocult"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-account.glade.h:24
-msgid "This account (and any sub-accounts) will be hidden in the account tree and will not appear in the popup account list in the register.  To reset this option, you will first need to open the \"Filter By...\" dialog for the account tree and check the \"show hidden accounts\" option.  Doing so will allow you to select the account and reopen this dialog."
+msgid "This account (and any sub-accounts) will be hidden in the account tree and will not appear in the popup account list in the register. To reset this option, you will first need to open the \"Filter By...\" dialog for the account tree and check the \"show hidden accounts\" option. Doing so will allow you to select the account and reopen this dialog."
 msgstr ""
 
 #: ../src/gnome-utils/gtkbuilder/dialog-account.glade.h:25
@@ -7259,7 +7259,7 @@ msgid "<b>Sub-accounts</b>"
 msgstr "<b>Subcomptes</b>"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-account.glade.h:43
-msgid "This account contains sub-accounts.  What would you like to do with these sub-accounts?"
+msgid "This account contains sub-accounts. What would you like to do with these sub-accounts?"
 msgstr ""
 
 #: ../src/gnome-utils/gtkbuilder/dialog-account.glade.h:44
@@ -7390,7 +7390,7 @@ msgid "Enter the full name of the commodity. Example: Cisco Systems Inc., or App
 msgstr "Entreu el nom complet de la divisa o valor, com ara Gas Natural, Abertis, etc."
 
 #: ../src/gnome-utils/gtkbuilder/dialog-commodity.glade.h:5
-msgid "Enter the ticker symbol for the commodity (e.g. CSCO or AAPL).  If you are retrieving quotes online, this field must exactly match the ticker symbol used by the quote source (including case). "
+msgid "Enter the ticker symbol for the commodity (e.g. CSCO or AAPL). If you are retrieving quotes online, this field must exactly match the ticker symbol used by the quote source (including case). "
 msgstr "Introduïu el símbol abreviat de l'acció o divisa (p.ex. GAS o ABE). En cas que vulgueu baixar les cotitzacions d'internet, aquest camp ha de concordar exactament amb el símbol abreviat que la font de cotització utilitza (amb distinció entre majúscules i minúscules). "
 
 #: ../src/gnome-utils/gtkbuilder/dialog-commodity.glade.h:6
@@ -7443,7 +7443,7 @@ msgid "Si_ngle:"
 msgstr "Ú_nica:"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-commodity.glade.h:18
-msgid "These are F::Q quote sources that retrieve information from a single site on the internet.  If that site is unavailable, you will not be able to retrieve quotes."
+msgid "These are F::Q quote sources that retrieve information from a single site on the internet. If that site is unavailable, you will not be able to retrieve quotes."
 msgstr "Fonts de cotització del mòdul Finance::Quote que recuperen informació d'un únic lloc web a Internet. Si aquest lloc web no està disponible, el Finance::Quote no podrà recuperar les cotitzacions."
 
 #: ../src/gnome-utils/gtkbuilder/dialog-commodity.glade.h:19
@@ -7451,7 +7451,7 @@ msgid "_Multiple:"
 msgstr "_Múltiple:"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-commodity.glade.h:20
-msgid "These are F::Q quote sources that retrieve information from multiple sites on the internet.  If one of the sites is unavailable, F::Q will attempt to retrieve the information from another site."
+msgid "These are F::Q quote sources that retrieve information from multiple sites on the internet. If one of the sites is unavailable, F::Q will attempt to retrieve the information from another site."
 msgstr "Fonts de cotització del mòdul Finance::Quote que recuperen informació de diversos llocs web a Internet. Si un d'aquests llocs web no està disponible, el Finance::Quote intentarà recuperar la informació d'un altre lloc web."
 
 #: ../src/gnome-utils/gtkbuilder/dialog-commodity.glade.h:21
@@ -7459,7 +7459,7 @@ msgid "_Unknown:"
 msgstr "Desconeg_uda:"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-commodity.glade.h:22
-msgid "These are quote sources that were recently added to F::Q.  GnuCash does not know if these sources retrieve information from a single site or from multiple sites on the internet."
+msgid "These are quote sources that were recently added to F::Q. GnuCash does not know if these sources retrieve information from a single site or from multiple sites on the internet."
 msgstr "Fonts de cotització afegides recentment al mòdul F::Q. El GnuCash no pot determinar si aquestes fonts recuperen informació d'un únic lloc web o bé de múltiples llocs web a Internet."
 
 #: ../src/gnome-utils/gtkbuilder/dialog-commodity.glade.h:23
@@ -7544,7 +7544,7 @@ msgid "Include _non-currency totals"
 msgstr "Inclou els totals _no monetaris"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:6
-msgid "If checked, non-currency commodities will be shown in the summary bar.  If clear, only currencies will be shown."
+msgid "If checked, non-currency commodities will be shown in the summary bar. If clear, only currencies will be shown."
 msgstr "Si s'habilita, es mostraran els béns no monetaris a la barra de sumari. Si no s'habilita, només es mostraran els béns monetaris."
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:7
@@ -7576,7 +7576,7 @@ msgid "Re_lative:"
 msgstr "Re_lativa:"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:14
-msgid "Use the specified relative ending date for profit/loss calculations.  Also use this date for net assets calculations."
+msgid "Use the specified relative ending date for profit/loss calculations. Also use this date for net assets calculations."
 msgstr "Utilitza la data de finalització relativa especificada per a calcular els beneficis i pèrdues. També s'utilitzarà aquesta dara per als càlculs del valor net patrimonial."
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:15
@@ -7584,7 +7584,7 @@ msgid "Ab_solute:"
 msgstr "Ab_soluta:"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:16
-msgid "Use the specified absolute ending date for profit/loss calculations.  Also use this date for net assets calculations."
+msgid "Use the specified absolute ending date for profit/loss calculations. Also use this date for net assets calculations."
 msgstr "Utilitza la data de finalització absoluta especificada per a calcular els beneficis i pèrdues. També s'utilitzarà aquesta dara per als càlculs del valor net patrimonial."
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:17
@@ -7660,7 +7660,7 @@ msgid "Use the specified currency for all newly created accounts."
 msgstr "Utilitza la divisa especificada per als comptes nous."
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:35
-msgid "The character that will be used between components of an account name.  A legal value is any single character except letters and numbers, or any of the following strings: \"colon\" \"slash\", \"backslash\", \"dash\" and \"period\"."
+msgid "The character that will be used between components of an account name. A legal value is any single character except letters and numbers, or any of the following strings: \"colon\" \"slash\", \"backslash\", \"dash\" and \"period\"."
 msgstr "El caràcter a utilitzar entre els components d'un nom de compte. S'acceptarà qualsevol caràcter únic excepte lletres i números, o qualsevol de les cadenes de text següents: «colon», «slash», «backslash», «dash» i «period»."
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:36
@@ -7980,7 +7980,7 @@ msgid "'_Enter' moves to blank transaction"
 msgstr "«_Retorn» porta a l'assentament en blanc"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:114
-msgid "If checked, pressing the 'Enter' key will move to the blank transaction at the bottom of the register.  If clear, pressing the 'Enter' key will move down one row."
+msgid "If checked, pressing the 'Enter' key will move to the blank transaction at the bottom of the register. If clear, pressing the 'Enter' key will move down one row."
 msgstr "Si s'habilita, s'anirà a l'assentament en blanc a la part de baix del registre en prémer la tecla de retorn. Si no s'habilita, la tecla de retorn avançarà una fila cap avall."
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:115
@@ -8057,7 +8057,7 @@ msgid "_Use system theme colors"
 msgstr "_Utilitza els colors del tema del sistema"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:133
-msgid "If checked, the system color theme will be applied to register windows.  If clear, the original GnuCash register colors will be used."
+msgid "If checked, the system color theme will be applied to register windows. If clear, the original GnuCash register colors will be used."
 msgstr "Si s'habilita, s'utilitzaran els colors del tema de sistema en les finestres de registre. Si no s'habilita, s'utilitzaran els colors originals del GnuCash per als registres."
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:134
@@ -8102,7 +8102,7 @@ msgid "_Auto-split ledger"
 msgstr "Llibre major _autodesglossat"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:143
-msgid "Automatically expand the current transaction to show all splits.  All other transactions are shown on one line. (Two in double line mode.)"
+msgid "Automatically expand the current transaction to show all splits. All other transactions are shown on one line. (Two in double line mode.)"
 msgstr "Amplia l'assentament actual automàticament, de manera que es mostrin tots els desglossaments. La resta d'assentaments es mostraran en una línia (o bé dues en el mode de línia doble)."
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:144
@@ -8128,7 +8128,7 @@ msgid "_Double line mode"
 msgstr "Mode de _doble línia"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:149
-msgid "Show two lines of information for each transaction instead of one.  Does not affect expanded transactions."
+msgid "Show two lines of information for each transaction instead of one. Does not affect expanded transactions."
 msgstr "Mostra dues línies d'informació per a cada assentament en lloc d'una. Això no afecta els assentaments ampliats."
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:150
@@ -8136,7 +8136,7 @@ msgid "Register opens in a new _window"
 msgstr "Obre els registres en una _finestra nova"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:151
-msgid "If checked, each register will be opened in its own top level window.  If clear, the register will be opened in the current window."
+msgid "If checked, each register will be opened in its own top level window. If clear, the register will be opened in the current window."
 msgstr "Si s'habilita, cada registre s'obrirà en la seva pròpia finestra de nivell superior. Si no s'habilita, el registre s'obrirà a la finestra actual."
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:152
@@ -8208,7 +8208,7 @@ msgid "Report opens in a new _window"
 msgstr "Obre els informes en una _finestra nova"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:168
-msgid "If checked, each report will be opened in its own top level window.  If clear, the report will be opened in the current window."
+msgid "If checked, each report will be opened in its own top level window. If clear, the report will be opened in the current window."
 msgstr "Si s'habilita, cada informe s'obrirà en la seva pròpia finestra de nivell superior. Si no s'habilita, l'informe s'obrirà a la finestra actual."
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:169
@@ -8236,7 +8236,7 @@ msgid "Priority text besi_de icons"
 msgstr "Text al co_stat de les icones més importants"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:175
-msgid "Display toolbar items with the text label beside the icon.  Labels are only shown for the most important items."
+msgid "Display toolbar items with the text label beside the icon. Labels are only shown for the most important items."
 msgstr "Mostra els elements de la barra d'eines amb l'etiqueta de text al costat de la icona. Les etiquetes es mostraran només per a les icones més importants."
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:176
@@ -8244,7 +8244,7 @@ msgid "Text _below icons"
 msgstr "Text _sota les icones"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:177
-msgid "Display toolbar items with the text label below the icon.  Labels are show for all items."
+msgid "Display toolbar items with the text label below the icon. Labels are show for all items."
 msgstr "Mostra els elements de la barra d'eines amb l'etiqueta de text sota la icona. Les etiquetes es mostraran per a tots els elements."
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:178
@@ -8345,7 +8345,7 @@ msgid "Show close button on _notebook tabs"
 msgstr "Mostra el botó per tancar a les _pestanyes"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:200
-msgid "Show a close button on each notebook tab.  These function identically to the 'Close' menu item."
+msgid "Show a close button on each notebook tab. These function identically to the 'Close' menu item."
 msgstr "Mostra un botó per a tancar a cada pestanya. La seva funcionalitat és idèntica a la de l'element de menú «Tanca»."
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:201
@@ -8365,7 +8365,7 @@ msgid "Reset Warnings"
 msgstr "Reinicialització dels avisos"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-reset-warnings.glade.h:2
-msgid "You have requested that the following warning dialogs not be presented.  To re-enable any of these dialogs, select the check box next to the dialog, then click OK."
+msgid "You have requested that the following warning dialogs not be presented. To re-enable any of these dialogs, select the check box next to the dialog, then click OK."
 msgstr "Heu optat per no mostrar els diàlegs d'avís següents. Si voleu tornar a habilitar qualsevol d'aquests diàlegs, seleccioneu la casella de verificació al costat del diàleg corresponent, i llavors feu clic al botó «D'acord»."
 
 #: ../src/gnome-utils/gtkbuilder/dialog-reset-warnings.glade.h:4
@@ -9012,7 +9012,7 @@ msgid "same week & day"
 msgstr "la mateixa setmana i dia"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-recurrence.glade.h:11
-msgid "Match the \"day of week\" and \"week of month\"?  (for example, the \"second Tuesday\" of every month)"
+msgid "Match the \"day of week\" and \"week of month\"? (for example, the \"second Tuesday\" of every month)"
 msgstr "Concordança amb el «dia de la setmana» i la «setmana del mes»? (p.ex. el «segon dimarts» de cada mes)"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-tree-view-owner.glade.h:2
@@ -9094,7 +9094,7 @@ msgstr[1] "La data més primerenca de transacció que s'ha trobat en aquest llib
 #: ../src/gnome/assistant-acct-period.c:371
 #, fuzzy, c-format
 msgid ""
-"You have asked for a book to be created.  This book will contain all transactions up to midnight %s (for a total of %d transactions spread over %d accounts).\n"
+"You have asked for a book to be created. This book will contain all transactions up to midnight %s (for a total of %d transactions spread over %d accounts).\n"
 "\n"
 " Amend the Title and Notes or Click on 'Forward' to proceed.\n"
 " Click on 'Back' to adjust the dates or 'Cancel'."
@@ -10354,7 +10354,7 @@ msgstr "Voleu desar els canvis a %s?"
 
 #: ../src/gnome/gnc-plugin-page-register.c:1498
 #: ../src/gnome/gnc-plugin-page-register2.c:1552
-msgid "This register has pending changes to a transaction.  Would you like to save the changes to this transaction, discard the transaction, or cancel the operation?"
+msgid "This register has pending changes to a transaction. Would you like to save the changes to this transaction, discard the transaction, or cancel the operation?"
 msgstr ""
 
 #: ../src/gnome/gnc-plugin-page-register.c:1501
@@ -10581,11 +10581,11 @@ msgid "This account register is read-only."
 msgstr "El registre d'aquest compte és només de lectura."
 
 #: ../src/gnome/gnc-split-reg.c:2036 ../src/gnome/gnc-split-reg2.c:1038
-msgid "This account may not be edited.  If you want to edit transactions in this register, please open the account options and turn off the placeholder checkbox."
+msgid "This account may not be edited. If you want to edit transactions in this register, please open the account options and turn off the placeholder checkbox."
 msgstr "Aquest compte no es pot editar. En cas que vulgueu editar els assentaments en aquest registre, haureu de modificar les opcions del compte i desactivar la casella «Contenidor»."
 
 #: ../src/gnome/gnc-split-reg.c:2043 ../src/gnome/gnc-split-reg2.c:1045
-msgid "One of the sub-accounts selected may not be edited.  If you want to edit transactions in this register, please open the sub-account options and turn off the placeholder checkbox. You may also open an individual account instead of a set of accounts."
+msgid "One of the sub-accounts selected may not be edited. If you want to edit transactions in this register, please open the sub-account options and turn off the placeholder checkbox. You may also open an individual account instead of a set of accounts."
 msgstr ""
 
 #: ../src/gnome/gnc-split-reg2.c:946
@@ -10601,7 +10601,7 @@ msgstr ""
 msgid ""
 "This assistant will help you setup and use accounting periods. \n"
 " \n"
-"Danger: this feature does not work correctly at this time; it is still under development.  It will probably damage your data in such a way that it cannot be repaired!"
+"Danger: this feature does not work correctly at this time; it is still under development. It will probably damage your data in such a way that it cannot be repaired!"
 msgstr ""
 
 #: ../src/gnome/gtkbuilder/assistant-acct-period.glade.h:4
@@ -10688,7 +10688,7 @@ msgstr "Escolliu la divisa"
 #, fuzzy
 msgid ""
 "\n"
-"Select categories that correspond to the ways that you will use GnuCash.  Each category you select will cause several accounts to be created.  Select the categories that are relevant to you.  You can always create additional accounts by hand later."
+"Select categories that correspond to the ways that you will use GnuCash. Each category you select will cause several accounts to be created. Select the categories that are relevant to you. You can always create additional accounts by hand later."
 msgstr "Seleccioneu les categories que es corresponguin amb la manera com fareu servir el GnuCash. Cada categoria que seleccioneu crearà diversos comptes. Seleccioneu les categories que cregueu rellevants. Sempre podreu crear categories manualment més tard."
 
 #: ../src/gnome/gtkbuilder/assistant-hierarchy.glade.h:12
@@ -10731,7 +10731,7 @@ msgstr "Suprimeix el compte seleccionat"
 #: ../src/gnome/gtkbuilder/assistant-hierarchy.glade.h:27
 #, fuzzy
 msgid ""
-"Press `Apply' to create your new accounts.  You will then be able to save them to a file or database.\n"
+"Press `Apply' to create your new accounts. You will then be able to save them to a file or database.\n"
 "\n"
 "Press `Back' to review your selections.\n"
 "\n"
@@ -10750,7 +10750,7 @@ msgstr "Finalització de la configuració dels comptes"
 #: ../src/gnome/gtkbuilder/assistant-loan.glade.h:1
 #, fuzzy
 msgid ""
-"This is a step-by-step method for creating a loan repayment within GnuCash.  In this assistant, you can input the details of your loan and its repayment along with the details of its payback. Using that information, the appropriate Scheduled Transactions will be created.\n"
+"This is a step-by-step method for creating a loan repayment within GnuCash. In this assistant, you can input the details of your loan and its repayment along with the details of its payback. Using that information, the appropriate Scheduled Transactions will be created.\n"
 "\n"
 "If you make a mistake or want to make changes later, you can edit the created Scheduled Transactions directly."
 msgstr ""
@@ -11329,7 +11329,7 @@ msgid "Delete _manually entered prices"
 msgstr "Suprimeix les cotitzacions introduïdes _manualment"
 
 #: ../src/gnome/gtkbuilder/dialog-price.glade.h:3
-msgid "If activated, delete manually entered stock prices dated earlier than the specified date.  Otherwise only stock prices added by Finance::Quote will be deleted."
+msgid "If activated, delete manually entered stock prices dated earlier than the specified date. Otherwise only stock prices added by Finance::Quote will be deleted."
 msgstr "Si està habilitat, se suprimiran les cotitzacions anteriors a la data especificada que s'hagin introduït manualment. Si no està habilitat només se suprimiran aquelles que s'hagin afegit a través del mòdul Finance::Quote."
 
 #: ../src/gnome/gtkbuilder/dialog-price.glade.h:4
@@ -11337,7 +11337,7 @@ msgid "Delete _last price for a stock"
 msgstr "Suprimeix la _darrera cotització d'un valor"
 
 #: ../src/gnome/gtkbuilder/dialog-price.glade.h:5
-msgid "If activated, delete all prices before the specified date.  Otherwise the last stock price dated before the date will be kept and all earlier quotes deleted."
+msgid "If activated, delete all prices before the specified date. Otherwise the last stock price dated before the date will be kept and all earlier quotes deleted."
 msgstr "Si està habilitat, se suprimiran totes les cotitzacions anteriors a la data especificada. Si no està habilitat, es mantindrà la darrera cotització abans d'aquesta data i se suprimiran totes les anteriors."
 
 #: ../src/gnome/gtkbuilder/dialog-price.glade.h:7
@@ -11407,7 +11407,7 @@ msgid "Save Custom Check Format"
 msgstr "Desa el format de xec personalitzat"
 
 #: ../src/gnome/gtkbuilder/dialog-print-check.glade.h:2
-msgid "Enter a title for this custom format.  This title will appear in the \"Check format\" selector of the Print Check dialog.  Using the title of an existing custom format will cause that format to be overwritten."
+msgid "Enter a title for this custom format. This title will appear in the \"Check format\" selector of the Print Check dialog. Using the title of an existing custom format will cause that format to be overwritten."
 msgstr ""
 
 #: ../src/gnome/gtkbuilder/dialog-print-check.glade.h:3
@@ -11566,7 +11566,7 @@ msgstr "Supressió d'un compte"
 
 #: ../src/gnome/gtkbuilder/dialog-sx.glade.h:2
 #, fuzzy
-msgid "The following Scheduled Transactions reference the deleted account and must now be corrected.  Press OK to edit them."
+msgid "The following Scheduled Transactions reference the deleted account and must now be corrected. Press OK to edit them."
 msgstr "Els assentaments periòdics següents fan referència al compte suprimit, i per tant s'han de corregir. Premeu «D'acord» per a editar-los."
 
 #: ../src/gnome/gtkbuilder/dialog-sx.glade.h:4
@@ -13298,22 +13298,22 @@ msgstr "Títol de l'informe"
 msgid ""
 "The external program \"AqBanking Setup Wizard\" has not been found. \n"
 "\n"
-"The %s package should include the program \"qt3-wizard\".  Please check your installation to ensure this program is present.  On some distributions this may require installing additional packages."
+"The %s package should include the program \"qt3-wizard\". Please check your installation to ensure this program is present. On some distributions this may require installing additional packages."
 msgstr ""
 "No s'ha trobat el programa extern «Assistent de configuració de l'AqBanking». \n"
 "El paquet de l'%s hauria d'incloure el programa «qt3-wizard». Comproveu la vostra instal·lació per a assegurar-vos que teniu aquest programa. En algunes distribucions això requereix la instal·lació de paquets addicionals."
 
 #: ../src/import-export/aqbanking/assistant-ab-initial.c:530
 msgid ""
-"The external program \"AqBanking Setup Wizard\" failed to run successfully because the additional software \"Qt\" was not found.  Please install the \"Qt/Windows Open Source Edition\" from Trolltech by downloading it from www.trolltech.com\n"
+"The external program \"AqBanking Setup Wizard\" failed to run successfully because the additional software \"Qt\" was not found. Please install the \"Qt/Windows Open Source Edition\" from Trolltech by downloading it from www.trolltech.com\n"
 "\n"
-"If you have installed Qt already, you will have to adapt the PATH variable of your system appropriately.  Contact the GnuCash developers if you need further assistance on how to install Qt correctly.\n"
+"If you have installed Qt already, you will have to adapt the PATH variable of your system appropriately. Contact the GnuCash developers if you need further assistance on how to install Qt correctly.\n"
 "\n"
-"Online Banking cannot be setup without Qt.  Press \"Close\" now, then \"Cancel\" to cancel the Online Banking setup."
+"Online Banking cannot be setup without Qt. Press \"Close\" now, then \"Cancel\" to cancel the Online Banking setup."
 msgstr ""
 
 #: ../src/import-export/aqbanking/assistant-ab-initial.c:551
-msgid "The external program \"AqBanking Setup Wizard\" failed to run successfully.  Online Banking can only be setup if this wizard has run successfully.  Please try running the \"AqBanking Setup Wizard\" again."
+msgid "The external program \"AqBanking Setup Wizard\" failed to run successfully. Online Banking can only be setup if this wizard has run successfully. Please try running the \"AqBanking Setup Wizard\" again."
 msgstr "No s'ha pogut executar correctament el programa extern «Assistent de configuració de l'AqBanking». L'accés a la banca electrònica només es pot configurar un cop aquest programa s'ha executat correctament. Torneu a intentar l'execució de l'«Assistent de configuració de l'AqBanking»."
 
 #: ../src/import-export/aqbanking/assistant-ab-initial.c:582
@@ -13393,7 +13393,7 @@ msgstr "Fes concordar els comptes de banca electrònica amb els comptes del GnuC
 
 #: ../src/import-export/aqbanking/assistant-ab-initial.glade.h:24
 msgid ""
-"The setup for matching Online Banking accounts to GnuCash accounts is now finished.  You can now invoke Online Banking actions on those accounts.\n"
+"The setup for matching Online Banking accounts to GnuCash accounts is now finished. You can now invoke Online Banking actions on those accounts.\n"
 "\n"
 "If you want to add another bank, user, or account, you can start this assistant again anytime.\n"
 "\n"
@@ -13477,19 +13477,19 @@ msgstr ""
 
 #: ../src/import-export/aqbanking/dialog-ab-trans.c:549
 #, c-format
-msgid "Your local bank account does not yet have the SEPA account information stored.  We are sorry, but in this development version one additional step is necessary which has not yet been implemented directly in gnucash. Please execute the command line program \"aqhbci-tool\" for your account, as follows: aqhbci-tool4 getaccsepa -b %s -a %s"
+msgid "Your local bank account does not yet have the SEPA account information stored. We are sorry, but in this development version one additional step is necessary which has not yet been implemented directly in gnucash. Please execute the command line program \"aqhbci-tool\" for your account, as follows: aqhbci-tool4 getaccsepa -b %s -a %s"
 msgstr ""
 
 #: ../src/import-export/aqbanking/dialog-ab-trans.c:564
-msgid "You did not enter a recipient name.  A recipient name is required for an online transfer.\n"
+msgid "You did not enter a recipient name. A recipient name is required for an online transfer.\n"
 msgstr ""
 
 #: ../src/import-export/aqbanking/dialog-ab-trans.c:584
-msgid "You did not enter a recipient account.  A recipient account is required for an online transfer.\n"
+msgid "You did not enter a recipient account. A recipient account is required for an online transfer.\n"
 msgstr ""
 
 #: ../src/import-export/aqbanking/dialog-ab-trans.c:600
-msgid "You did not enter a recipient bank.  A recipient bank is required for an online transfer.\n"
+msgid "You did not enter a recipient bank. A recipient bank is required for an online transfer.\n"
 msgstr ""
 
 #: ../src/import-export/aqbanking/dialog-ab-trans.c:618
@@ -13506,7 +13506,7 @@ msgid "Do you really want to overwrite your changes with the contents of the tem
 msgstr ""
 
 #: ../src/import-export/aqbanking/dialog-ab-trans.c:1098
-msgid "A template with the given name already exists.  Please enter another name."
+msgid "A template with the given name already exists. Please enter another name."
 msgstr ""
 
 #: ../src/import-export/aqbanking/dialog-ab-trans.c:1233
@@ -13782,7 +13782,7 @@ msgstr "Transacció per banca electrònica"
 
 #: ../src/import-export/aqbanking/gnc-ab-transfer.c:294
 msgid ""
-"An error occurred while executing the job.  Please check the log window for the exact error message.\n"
+"An error occurred while executing the job. Please check the log window for the exact error message.\n"
 "\n"
 "Do you want to enter the job again?"
 msgstr ""
@@ -14777,8 +14777,8 @@ msgstr "<b>Importador genèric</b>"
 
 #: ../src/import-export/dialog-import.glade.h:7
 #, fuzzy
-msgid "In some places commercial ATMs (not belonging to a financial institution) are installed in places like convenience stores.  These ATMs add their fee directly to the amount instead of showing up as a separate transaction or in your monthly banking fees.  For example, you withdraw $100, and you are charged $101,50 plus Interac fees.  If you manually entered that $100, the amounts won't match.  You should set this to whatever is the maximum such fee in your area (in units of your local currency), so the transaction will be recognised as a match."
-msgstr "En alguns llocs els caixers automatics comercials (no pertanyents a cap institució financera) s'instal·len en comerços.  Aquests caixers afegeixen la seva comissió directament a l'operació enlloc de mostrar-la com una operació separada en el resum bancari mensual.  Per exemple, quan feu un reintegrament de 100€ i se us fa un càrrec de 101,50€.  Si entreu manualment aquests 100€, els totals no quadraran. Hauríeu d'assignar aquest valor a la comissió vigent a la vostra àrea (en unitats de la vostra moneda local), per tal que la transació es reconegui com a quadrada."
+msgid "In some places commercial ATMs (not belonging to a financial institution) are installed in places like convenience stores. These ATMs add their fee directly to the amount instead of showing up as a separate transaction or in your monthly banking fees. For example, you withdraw $100, and you are charged $101,50 plus Interac fees. If you manually entered that $100, the amounts won't match. You should set this to whatever is the maximum such fee in your area (in units of your local currency), so the transaction will be recognised as a match."
+msgstr "En alguns llocs els caixers automatics comercials (no pertanyents a cap institució financera) s'instal·len en comerços. Aquests caixers afegeixen la seva comissió directament a l'operació enlloc de mostrar-la com una operació separada en el resum bancari mensual. Per exemple, quan feu un reintegrament de 100€ i se us fa un càrrec de 101,50€. Si entreu manualment aquests 100€, els totals no quadraran. Hauríeu d'assignar aquest valor a la comissió vigent a la vostra àrea (en unitats de la vostra moneda local), per tal que la transació es reconegui com a quadrada."
 
 #: ../src/import-export/dialog-import.glade.h:8
 msgid "A transaction whose best match's score is in the green zone (above or equal to the Auto-CLEAR threshold) will be CLEARed by default."
@@ -15066,7 +15066,7 @@ msgid "The log file you selected was empty."
 msgstr "El fitxer de registre que heu seleccionat és buit."
 
 #: ../src/import-export/log-replay/gnc-log-replay.c:621
-msgid "The log file you selected cannot be read.  The file header was not recognized."
+msgid "The log file you selected cannot be read. The file header was not recognized."
 msgstr "El fitxer de registre que heu seleccionat no es pot llegir. No se n'ha reconegut l'encapçalament del fitxer."
 
 #: ../src/import-export/log-replay/gnc-plugin-log-replay.c:48
@@ -15074,7 +15074,7 @@ msgid "_Replay GnuCash .log file..."
 msgstr "_Reprodueix un fitxer .log del GnuCash..."
 
 #: ../src/import-export/log-replay/gnc-plugin-log-replay.c:49
-msgid "Replay a GnuCash log file after a crash.  This cannot be undone."
+msgid "Replay a GnuCash log file after a crash. This cannot be undone."
 msgstr "Reprodueix un fitxer de registre del GnuCash després d'una fallada. Aquesta acció no es pot desfer."
 
 #. As we now have the commodity, select the account with that commodity.
@@ -15384,9 +15384,9 @@ msgstr "S'està carregant el fitxer QIF..."
 
 #: ../src/import-export/qif-import/assistant-qif-import.glade.h:16
 msgid ""
-"The QIF file format does not specify which order the day, month, and year components of a date are printed.  In most cases, it is possible to automatically determine which format is in use in a particular file. However, in the file you have just imported there exist more than one possible format that fits the data.  \n"
+"The QIF file format does not specify which order the day, month, and year components of a date are printed. In most cases, it is possible to automatically determine which format is in use in a particular file. However, in the file you have just imported there exist more than one possible format that fits the data. \n"
 "\n"
-"Please select a date format for the file.  QIF files created by European software are likely  to be in \"d-m-y\" or day-month-year format, where US QIF files are likely to be \"m-d-y\" or month-day-year.    \n"
+"Please select a date format for the file. QIF files created by European software are likely  to be in \"d-m-y\" or day-month-year format, where US QIF files are likely to be \"m-d-y\" or month-day-year.   \n"
 msgstr ""
 
 #: ../src/import-export/qif-import/assistant-qif-import.glade.h:20
@@ -15400,11 +15400,11 @@ msgstr "Establiu un format de data per a aquest fitxer QIF"
 #: ../src/import-export/qif-import/assistant-qif-import.glade.h:22
 #, fuzzy
 msgid ""
-"The QIF file that you just loaded appears to contain transactions for just one account, but the file does not specify a name for that account.  \n"
+"The QIF file that you just loaded appears to contain transactions for just one account, but the file does not specify a name for that account. \n"
 "\n"
 "Please enter a name for the account. If the file was exported from another accounting program, you should use the same account name that was used in that program.\n"
 msgstr ""
-"El fitxer QIF que acabeu de carregar conté assentaments per a un únic compte, però en el fitxer no s'especifica el nom del compte.  \n"
+"El fitxer QIF que acabeu de carregar conté assentaments per a un únic compte, però en el fitxer no s'especifica el nom del compte. \n"
 "\n"
 "Hauríeu d'introduir un nom per al compte. Si el fitxer fou exportat des d'un altre programa de comptabilitat, hauríeu de fer servir el mateix nom de compte utilitzat en aquell programa.\n"
 
@@ -15489,7 +15489,7 @@ msgstr ""
 
 #: ../src/import-export/qif-import/assistant-qif-import.glade.h:50
 msgid ""
-"QIF files downloaded from banks and other financial institutions may not have information about Accounts and Categories which would allow them to be correctly assigned to GnuCash accounts.  \n"
+"QIF files downloaded from banks and other financial institutions may not have information about Accounts and Categories which would allow them to be correctly assigned to GnuCash accounts. \n"
 "\n"
 "In the following page, you will see the text that appears in the Payee and Memo fields of transactions with no QIF Account or Category. By default these transactions are assigned to the 'Unspecified' account in GnuCash. If you select a different account, it will be remembered for future QIF files. "
 msgstr ""
@@ -15713,7 +15713,7 @@ msgstr "Comissió màxima dels caixers automàtics a la zona on viviu"
 #: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:18
 #, fuzzy
 msgid "This field specifies the extra fee that is taken into account when matching imported transactions. In some places commercial ATMs (not belonging to a financial institution) are installed in places like convenience stores. These ATMs add their fee directly to the amount instead of showing up as a separate transaction or in your monthly banking fees. For example, you withdraw $100, and you are charged $101,50 plus Interac fees. If you manually entered that $100, the amounts won't match. You should set this to whatever is the maximum such fee in your area (in units of your local currency), so the transaction will be recognised as a match."
-msgstr "Aquest camp especifica la comissió addicional tinguda en compte en fer concordar els assentaments importats. En alguns llocs els caixers automatics comercials (no pertanyents a cap institució financera) s'instal·len en comerços.  Aquests caixers afegeixen la seva comissió directament a l'operació enlloc de mostrar-la com una operació separada en el resum bancari mensual.  Per exemple, quan feu un reintegrament de 100€ i se us fa un càrrec de 101,50€.  Si entreu manualment aquests 100€, els totals no quadraran. Hauríeu d'assignar aquest valor a la comissió vigent a la vostra àrea (en unitats de la vostra moneda local), per tal que la transació es reconegui com a concordant."
+msgstr "Aquest camp especifica la comissió addicional tinguda en compte en fer concordar els assentaments importats. En alguns llocs els caixers automatics comercials (no pertanyents a cap institució financera) s'instal·len en comerços. Aquests caixers afegeixen la seva comissió directament a l'operació enlloc de mostrar-la com una operació separada en el resum bancari mensual. Per exemple, quan feu un reintegrament de 100€ i se us fa un càrrec de 101,50€. Si entreu manualment aquests 100€, els totals no quadraran. Hauríeu d'assignar aquest valor a la comissió vigent a la vostra àrea (en unitats de la vostra moneda local), per tal que la transació es reconegui com a concordant."
 
 #. The default date format for use with strftime in Win32.
 #: ../src/libqof/qof/gnc-date.c:79
@@ -15966,7 +15966,7 @@ msgid "The split's amount is zero, so no exchange rate is needed."
 msgstr ""
 
 #: ../src/register/ledger-core/split-register-control.c:1532
-msgid "The current transaction has been changed.  Would you like to record the changes before moving to a new transaction, discard the changes, or return to the changed transaction?"
+msgid "The current transaction has been changed. Would you like to record the changes before moving to a new transaction, discard the changes, or return to the changed transaction?"
 msgstr "S'ha modificat l'assentament actual. Voleu registrar els canvis abans de passar a un assentament nou, descartar els canvis, o bé tornar a l'assentament modificat?"
 
 #. Translators: The 'sample:' items are
@@ -16018,7 +16018,7 @@ msgid "sample:(x + 0.33 * y + (x+y) )"
 msgstr "sample:(x + 0.33 * y + (x+y) )"
 
 #: ../src/register/ledger-core/split-register-load.c:339
-msgid "Could not determine the account currency.  Using the default currency provided by your system."
+msgid "Could not determine the account currency. Using the default currency provided by your system."
 msgstr ""
 
 #: ../src/register/ledger-core/split-register-model.c:215
@@ -16778,7 +16778,7 @@ msgstr ""
 
 #. src/app-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:116
-msgid "Choose the number of days after which transactions will be read-only and cannot be edited anymore.  This threshold is marked by a red line in the account register windows.  If zero, all transactions can be edited and none are read-only."
+msgid "Choose the number of days after which transactions will be read-only and cannot be edited anymore. This threshold is marked by a red line in the account register windows. If zero, all transactions can be edited and none are read-only."
 msgstr ""
 
 #. src/app-utils/business-prefs.scm
@@ -17458,7 +17458,7 @@ msgstr "Data de comptabilització"
 #. src/report/business-reports/aging.scm
 #: ../intl-scm/guile-strings.c:456
 #, c-format
-msgid "Transactions relating to '%s' contain more than one currency.  This report is not designed to cope with this possibility."
+msgid "Transactions relating to '%s' contain more than one currency. This report is not designed to cope with this possibility."
 msgstr ""
 
 #. src/report/business-reports/aging.scm
@@ -17519,7 +17519,7 @@ msgstr "999.999,99 € -> 0 €, Z->A"
 
 #. src/report/business-reports/aging.scm
 #: ../intl-scm/guile-strings.c:482
-msgid "Show multi-currency totals.  If not selected, convert all totals to report currency"
+msgid "Show multi-currency totals. If not selected, convert all totals to report currency"
 msgstr "Mostra els totals en divises múltiples. Si no es seleccions, es convertiran tots els totals a la moneda de l'informe"
 
 #. src/report/business-reports/aging.scm
@@ -17589,7 +17589,7 @@ msgstr "més de 91 dies"
 #. src/report/business-reports/aging.scm
 #. src/report/business-reports/job-report.scm
 #: ../intl-scm/guile-strings.c:512 ../intl-scm/guile-strings.c:1454
-msgid "No valid account selected.  Click on the Options button and select the account to use."
+msgid "No valid account selected. Click on the Options button and select the account to use."
 msgstr "No s'ha seleccionat cap compte vàlid. Cliqueu al botó «Opcions» i seleccioneu el compte a utilitzar."
 
 #. src/report/business-reports/balsheet-eg.eguile.scm
@@ -17694,7 +17694,7 @@ msgstr "Mostra l'informe %s"
 
 #. src/report/business-reports/balsheet-eg.scm
 #: ../intl-scm/guile-strings.c:544
-msgid "The balance sheet can be displayed with either 1 or 2 columns.  'auto' means that the layout will be adjusted to fit the width of the page."
+msgid "The balance sheet can be displayed with either 1 or 2 columns. 'auto' means that the layout will be adjusted to fit the width of the page."
 msgstr ""
 
 #. src/report/business-reports/balsheet-eg.scm
@@ -17832,7 +17832,7 @@ msgstr "_Plantilla:"
 
 #. src/report/business-reports/balsheet-eg.scm
 #: ../intl-scm/guile-strings.c:576
-msgid "The file name of the eguile template part of this report.  This file must be in your .gnucash directory, or else in its proper place within the GnuCash installation directories."
+msgid "The file name of the eguile template part of this report. This file must be in your .gnucash directory, or else in its proper place within the GnuCash installation directories."
 msgstr ""
 
 #. src/report/business-reports/balsheet-eg.scm
@@ -17844,7 +17844,7 @@ msgstr "Full d'estil"
 
 #. src/report/business-reports/balsheet-eg.scm
 #: ../intl-scm/guile-strings.c:580
-msgid "The file name of the CSS stylesheet to use with this report.  If specified, this file should be in your .gnucash directory, or else in its proper place within the GnuCash installation directories."
+msgid "The file name of the CSS stylesheet to use with this report. If specified, this file should be in your .gnucash directory, or else in its proper place within the GnuCash installation directories."
 msgstr ""
 
 #. src/report/business-reports/balsheet-eg.scm
@@ -18203,7 +18203,7 @@ msgstr "Període %s - %s"
 #. src/report/business-reports/job-report.scm
 #: ../intl-scm/guile-strings.c:750 ../intl-scm/guile-strings.c:1460
 #, c-format
-msgid "No valid %s selected.  Click on the Options button to select a company."
+msgid "No valid %s selected. Click on the Options button to select a company."
 msgstr ""
 
 #. src/report/business-reports/customer-summary.scm
@@ -18635,7 +18635,7 @@ msgstr "FACTURA NO COMPTABILITZADA"
 #: ../intl-scm/guile-strings.c:956 ../intl-scm/guile-strings.c:1166
 #: ../intl-scm/guile-strings.c:1352
 #, fuzzy
-msgid "No valid invoice selected.  Click on the Options button and select the invoice to use."
+msgid "No valid invoice selected. Click on the Options button and select the invoice to use."
 msgstr "No s'ha seleccionat cap compte vàlid. Cliqueu al botó «Opcions» i seleccioneu el compte a utilitzar."
 
 #. src/report/business-reports/fancy-invoice.scm
@@ -19227,12 +19227,12 @@ msgstr "Número de factura"
 
 #. src/report/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:1764
-msgid "The file name of the eguile template part of this report.  This file should either be in your .gnucash directory, or else in its proper place within the GnuCash installation directories."
+msgid "The file name of the eguile template part of this report. This file should either be in your .gnucash directory, or else in its proper place within the GnuCash installation directories."
 msgstr ""
 
 #. src/report/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:1766
-msgid "The file name of the CSS stylesheet to use with this report.  This file should either be in your .gnucash directory, or else in its proper place within the GnuCash installation directories."
+msgid "The file name of the CSS stylesheet to use with this report. This file should either be in your .gnucash directory, or else in its proper place within the GnuCash installation directories."
 msgstr ""
 
 #. src/report/business-reports/taxinvoice.scm
@@ -19254,7 +19254,7 @@ msgstr ""
 #. src/report/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:1774
 #, c-format
-msgid "Width of the logo in CSS format, e.g. 10% or 32px.  Leave blank to display the logo at its natural width.  The height of the logo will be scaled accordingly."
+msgid "Width of the logo in CSS format, e.g. 10% or 32px. Leave blank to display the logo at its natural width. The height of the logo will be scaled accordingly."
 msgstr ""
 
 #. src/report/business-reports/taxinvoice.scm
@@ -19879,7 +19879,7 @@ msgstr "Tipus de canvi"
 
 #. src/report/report-system/html-utilities.scm
 #: ../intl-scm/guile-strings.c:2118
-msgid "No budgets exist.  You must create at least one budget."
+msgid "No budgets exist. You must create at least one budget."
 msgstr ""
 
 #. src/report/report-system/html-utilities.scm
@@ -21205,7 +21205,7 @@ msgstr "Inclou els subcomptes de tots els comptes seleccionats"
 
 #. src/report/standard-reports/average-balance.scm
 #: ../intl-scm/guile-strings.c:2708
-msgid "Exclude transactions that only involve two accounts, both of which are selected below.  This only affects the profit and loss columns of the table."
+msgid "Exclude transactions that only involve two accounts, both of which are selected below. This only affects the profit and loss columns of the table."
 msgstr ""
 
 #. src/report/standard-reports/average-balance.scm
@@ -24293,16 +24293,16 @@ msgid "The GnuCash online manual has lots of helpful information. You can access
 msgstr ""
 
 #: ../doc/tip_of_the_day.list.in:4
-msgid "You can easily import your existing financial data from Quicken, MS Money or other programs that export QIF files or OFX files.  In the File menu, click on the sub-menu Import and click on QIF or OFX file, respectively. Then, follow the instructions provided."
+msgid "You can easily import your existing financial data from Quicken, MS Money or other programs that export QIF files or OFX files. In the File menu, click on the sub-menu Import and click on QIF or OFX file, respectively. Then, follow the instructions provided."
 msgstr ""
 
 #: ../doc/tip_of_the_day.list.in:9
-msgid "If you are familiar with other financial programs such as Quicken, note that GnuCash uses accounts instead of categories to track income and expenses.  For more information on income and expense accounts, please see the GnuCash online manual."
+msgid "If you are familiar with other financial programs such as Quicken, note that GnuCash uses accounts instead of categories to track income and expenses. For more information on income and expense accounts, please see the GnuCash online manual."
 msgstr ""
 
 #: ../doc/tip_of_the_day.list.in:14
-msgid "Create new accounts by clicking the New button in the main window tool bar.  This will bring up a dialog box where you can enter account details.  For more information on choosing an account type or setting up a chart of accounts, please see the GnuCash online manual."
-msgstr "Creeu nous comptes tot clicant el botó «Nou» a la barra d'einesde la finestra principal.  En fer-ho es mostrarà un quadre de diàlegon podreu introduir els detalls del compte.  Per a més informaciósobre els diferents tipus de comptes o com crear-ne un conjuntestructurat, consulteu el manual en línia de GnuCash."
+msgid "Create new accounts by clicking the New button in the main window tool bar. This will bring up a dialog box where you can enter account details. For more information on choosing an account type or setting up a chart of accounts, please see the GnuCash online manual."
+msgstr "Creeu nous comptes tot clicant el botó «Nou» a la barra d'einesde la finestra principal. En fer-ho es mostrarà un quadre de diàlegon podreu introduir els detalls del compte. Per a més informaciósobre els diferents tipus de comptes o com crear-ne un conjuntestructurat, consulteu el manual en línia de GnuCash."
 
 #: ../doc/tip_of_the_day.list.in:20
 msgid "Click the right mouse button in the main window to bring up the account menu options. Within each register, clicking the right mouse button brings up the transaction menu options."
@@ -24313,12 +24313,12 @@ msgid "To enter multiple-split transactions such as a paycheck with multiple ded
 msgstr ""
 
 #: ../doc/tip_of_the_day.list.in:29
-msgid "As you enter amounts in the register, you can use the GnuCash calculator to add, subtract, multiply and divide .  Simply type the first value, then select '+', '-','*', or '/'.  Type the second value and press Enter to record the calculated amount."
+msgid "As you enter amounts in the register, you can use the GnuCash calculator to add, subtract, multiply and divide . Simply type the first value, then select '+', '-','*', or '/'. Type the second value and press Enter to record the calculated amount."
 msgstr ""
 
 #: ../doc/tip_of_the_day.list.in:34
 #, fuzzy
-msgid "Quick-fill makes it easy to enter common transactions.  When you type the first letter(s) of a common transaction description, then press the Tab key, GnuCash will automatically complete the remainder of the transaction as it was last entered."
+msgid "Quick-fill makes it easy to enter common transactions. When you type the first letter(s) of a common transaction description, then press the Tab key, GnuCash will automatically complete the remainder of the transaction as it was last entered."
 msgstr "«Emplenar ràpid» facilita la introducció d'assentaments. Quanescriviu la primera lletra o lletres de la descripció d'un assentament habitual, elGnuCash completarà automàticament la resta de l'assentament tal i com fou introduït la darrera vegada."
 
 #: ../doc/tip_of_the_day.list.in:39
@@ -24339,8 +24339,8 @@ msgid "To switch between multiple tabs in the main window, press Control+Page Up
 msgstr "Per a deplaçar-vos entre múltiples pestanyes a la finestra principal, premeu la combinació de tecles Ctrl-Alt-AvPg/RePg"
 
 #: ../doc/tip_of_the_day.list.in:56
-msgid "In the reconcile window, you can press the spacebar to mark transactions as reconciled.  You can also press Tab and Shift-Tab to move between deposits and withdrawals."
-msgstr "A la finestra de conciliació podeu prémer la barra espaiadora per a marcarles transaccions com a conciliades.  També podeu prémer Tab i Majús-Tab per adesplaçar-vos entre imposicions i reintegraments."
+msgid "In the reconcile window, you can press the spacebar to mark transactions as reconciled. You can also press Tab and Shift-Tab to move between deposits and withdrawals."
+msgstr "A la finestra de conciliació podeu prémer la barra espaiadora per a marcarles transaccions com a conciliades. També podeu prémer Tab i Majús-Tab per adesplaçar-vos entre imposicions i reintegraments."
 
 #: ../doc/tip_of_the_day.list.in:60
 msgid "To transfer funds between accounts with different currencies, click on the Transfer button in the register toolbar, select the accounts, and the Currency Transfer options for entering the exchange rate or the other currency's amount will be available."
@@ -24351,8 +24351,8 @@ msgid "You can pack multiple reports into a single window,  providing all the fi
 msgstr ""
 
 #: ../doc/tip_of_the_day.list.in:70
-msgid "Style Sheets affect how reports are displayed.  Choose a style sheet for your report as a report option, and use the Edit -> Style Sheets menu to customize style sheets."
-msgstr "Els fulls d'estil afecten  la visualització dels informes.  Trieuun full d'estil per al vostre informe, i feu servirel menú Edita -> Fulls d'estil per personalitzar els fulls d'estil."
+msgid "Style Sheets affect how reports are displayed. Choose a style sheet for your report as a report option, and use the Edit -> Style Sheets menu to customize style sheets."
+msgstr "Els fulls d'estil afecten  la visualització dels informes. Trieuun full d'estil per al vostre informe, i feu servirel menú Edita -> Fulls d'estil per personalitzar els fulls d'estil."
 
 #: ../doc/tip_of_the_day.list.in:74
 msgid "To raise the accounts menu in the transfer field of a register page, press the Menu key or the Ctrl-Down key combination."
@@ -24372,7 +24372,7 @@ msgid "If you work overnight, you should close and reopen your working register 
 msgstr ""
 
 #: ../doc/tip_of_the_day.list.in:90
-msgid "The GnuCash developers are easy to contact.  As well as several mailing lists, you can chat to them live on IRC! Join them on #gnucash at irc.gnome.org"
+msgid "The GnuCash developers are easy to contact. As well as several mailing lists, you can chat to them live on IRC! Join them on #gnucash at irc.gnome.org"
 msgstr ""
 
 #: ../doc/tip_of_the_day.list.in:94
@@ -24990,7 +24990,7 @@ msgstr ""
 #~ msgid "You must enter an account name."
 #~ msgstr "Heu d'introduir un nom de compte"
 
-#~| msgid "No valid account selected.  Click on the Options button and select the account to use."
+#~| msgid "No valid account selected. Click on the Options button and select the account to use."
 #~ msgid "No valid customer selected. Click on the Options button to select a customer."
 #~ msgstr "No s'ha seleccionat cap compte vàlid. Cliqueu al botó «Opcions» i seleccioneu el compte a utilitzar."
 
@@ -24998,7 +24998,7 @@ msgstr ""
 #~ msgid "No valid employee selected. Click on the Options button to select an employee."
 #~ msgstr "No s'ha seleccionat cap compte vàlid. Cliqueu al botó «Opcions» i seleccioneu el compte a utilitzar."
 
-#~| msgid "No valid account selected.  Click on the Options button and select the account to use."
+#~| msgid "No valid account selected. Click on the Options button and select the account to use."
 #~ msgid "No valid company selected. Click on the Options button to select a company."
 #~ msgstr "No s'ha seleccionat cap compte vàlid. Cliqueu al botó «Opcions» i seleccioneu el compte a utilitzar."
 
@@ -25180,7 +25180,7 @@ msgstr ""
 #~ msgid "Select the date to use and click Export to choose the filename and location."
 #~ msgstr "Seleccioneu la data a utilitzar i cliqueu a «Exporta» per a seleccionar el nom del fitxer i la ubicació."
 
-#~ msgid "The Chart of Accounts includes the balance for each account, on the date specified.  Note that future dates are not supported."
+#~ msgid "The Chart of Accounts includes the balance for each account, on the date specified. Note that future dates are not supported."
 #~ msgstr "El grup de comptes inclou el saldo de cada compte a la data especificada. Teniu en compte que les dates en el futur no estan implementades."
 
 #~ msgid "You can export the Chart of Accounts to a QSF XML file that can be imported into another GnuCash file or used in other programs."
@@ -25237,10 +25237,10 @@ msgstr ""
 #~ msgid "Template Transaction (Read-Only)"
 #~ msgstr "Assentament plantilla (només lectura)"
 
-#~ msgid "The following scheduled transactions have expired.  Select those you wish to delete."
+#~ msgid "The following scheduled transactions have expired. Select those you wish to delete."
 #~ msgstr "Els assentaments periòdics següents han vençut. Seleccioneu els que vulgueu suprimir."
 
-#~ msgid "The listed Scheduled Transactions are to-be created soon.  Select any which you would like to create now, and click \"Forward\" to create them."
+#~ msgid "The listed Scheduled Transactions are to-be created soon. Select any which you would like to create now, and click \"Forward\" to create them."
 #~ msgstr "Els assentaments periòdics llistats són a punt d'ésser creats. Seleccioneu-ne qualsevol que vuñgueu crear ara, i feu clic a «Endavant» per a crear-los."
 
 #~ msgid "This druid will walk you through any scheduled transactions that should be created."
@@ -25285,7 +25285,7 @@ msgstr ""
 #~ msgid "Select the QSF file to import into GnuCash"
 #~ msgstr "Trieu el fitxer QSF a importar al GnuCash"
 
-#~ msgid "The current transaction has been changed.  Would you like to record the changes before closing this page, close the page without recording the changes, or cancel the close?"
+#~ msgid "The current transaction has been changed. Would you like to record the changes before closing this page, close the page without recording the changes, or cancel the close?"
 #~ msgstr "S'ha modificat l'assentament actual. Voleu registrar-ne els canvis abans de tancar aquesta pàgina, tancar la pàgina sense registrar els canvis, o bé no tancar la pàgina?"
 
 #~ msgid "New %s"
@@ -25492,7 +25492,7 @@ msgstr ""
 #~ msgid "clear:autoswitch"
 #~ msgstr "clear:autoswitch"
 
-#~ msgid "The Date format is ambiguous.  Please choose the correct format."
+#~ msgid "The Date format is ambiguous. Please choose the correct format."
 #~ msgstr "El format de la data és ambigu. Trieu el format correcte."
 
 #~ msgid "Enable EDIT transaction action"
@@ -25533,7 +25533,7 @@ msgstr ""
 #~ msgid "Blue items are exportable to a .TXF file."
 #~ msgstr "Les entrades de color blau es poden exportar a un fitxer TXF."
 
-#~ msgid "No Tax Related accounts were found.  Go to the Edit->Tax Options dialog to set up tax-related accounts."
+#~ msgid "No Tax Related accounts were found. Go to the Edit->Tax Options dialog to set up tax-related accounts."
 #~ msgstr "No s'han trobat comptes relacionats amb impostos. Obriu el diàleg Edita->Opcions dels impostos per a establir comptes relacionats amb impostos."
 
 #~ msgid "TXF"
@@ -25554,7 +25554,7 @@ msgstr ""
 #~ msgid " Stylesheet"
 #~ msgstr " Full d'estil"
 
-#~ msgid "Your report \"%s\" has been saved into the configuration file \"%s\".  The report will be available in the menu Reports -> Custom at the next startup of GnuCash."
+#~ msgid "Your report \"%s\" has been saved into the configuration file \"%s\". The report will be available in the menu Reports -> Custom at the next startup of GnuCash."
 #~ msgstr "L'informe «%s» s'ha desat en el fitxer de configuració «%s», i hi podreu accedir des del menú «Informes -> Personalitzat» la propera vegada que inicieu el GnuCash."
 
 #~ msgid "INVOICE"
@@ -25807,7 +25807,7 @@ msgstr ""
 #~ "\n"
 #~ "This dialog will prompt you for some additional information about \n"
 #~ "each currency, stock, and mutual fund that appear in your\n"
-#~ "accounts.  After you have entered this information, you can\n"
+#~ "accounts. After you have entered this information, you can\n"
 #~ "update your accounts for the new version of GnuCash.\n"
 #~ "\n"
 #~ "Hit \"Cancel\" now to stop loading the file. "
@@ -25817,7 +25817,7 @@ msgstr ""
 #~ "a la nova versió. \n"
 #~ "\n"
 #~ "Aquesta caixa de diàleg us demanarà alguna informació addicional sobre \n"
-#~ " cara divisa, acció o fons d'inversió que aparegui als vostres comptes.  Després\n"
+#~ " cara divisa, acció o fons d'inversió que aparegui als vostres comptes. Després\n"
 #~ "que hagueu introduït aquesta informació, podreu actualitzar els vostres comptes\n"
 #~ "a la nova versió de GnuCash.\n"
 #~ "\n"
@@ -25827,14 +25827,14 @@ msgstr ""
 #~ "Click \"Finish\" to update your accounts to use the new \n"
 #~ "information you have entered.\n"
 #~ "\n"
-#~ "Click \"Cancel\" to cancel the file-loading process.  \n"
+#~ "Click \"Cancel\" to cancel the file-loading process. \n"
 #~ "\n"
 #~ "Click \"Back\" to review your currency selections."
 #~ msgstr ""
 #~ "Feu clic a \"Acabar\" per actualitzar els vostres comptes \n"
 #~ "amb la nova informació que heu entrat.\n"
 #~ "\n"
-#~ "Feu clic a \"Cancel·lar\" per cancel·lar la càrrega del fitxer.  \n"
+#~ "Feu clic a \"Cancel·lar\" per cancel·lar la càrrega del fitxer. \n"
 #~ "\n"
 #~ "Feu clic a \"Enrere\" per revisar les vostres seleccions de divisa."
 

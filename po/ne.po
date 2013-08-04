@@ -564,7 +564,7 @@ msgstr "अज्ञात"
 
 #: ../src/business/business-gnome/dialog-billterms.c:644
 #, c-format
-msgid "Term \"%s\" is in use.  You cannot delete it."
+msgid "Term \"%s\" is in use. You cannot delete it."
 msgstr "सर्त \"%s\"प्रयोगमा छ। तपाईँले यसलाई मेट्न सक्नुहुन्न।"
 
 #: ../src/business/business-gnome/dialog-billterms.c:650
@@ -575,13 +575,13 @@ msgstr "के तपाईँ \"%s\" लाई निश्चित रुप�
 
 #: ../src/business/business-gnome/dialog-choose-owner.c:75
 msgid ""
-"This transaction needs to be assigned to a Customer.  Please choose the "
+"This transaction needs to be assigned to a Customer. Please choose the "
 "Customer below."
 msgstr "यो कारोबार ग्राहकसँग मानाङ्कन गर्नु आवश्यक छ। कृपया तल ग्राहक रोज्नुहोस्।"
 
 #: ../src/business/business-gnome/dialog-choose-owner.c:82
 msgid ""
-"This transaction needs to be assigned to a Vendor.  Please choose the Vendor "
+"This transaction needs to be assigned to a Vendor. Please choose the Vendor "
 "below."
 msgstr "यो कारोबार बिक्रेतासँग मानाङ्कन गर्नु आवश्यक छ। कृपया तल बिक्रेता रोज्नुहोस्।"
 
@@ -700,12 +700,12 @@ msgid "Find Customer"
 msgstr "ग्राहक फेला पार्नुहोस्"
 
 #: ../src/business/business-gnome/dialog-date-close.c:75
-msgid "No Account selected.  Please try again."
+msgid "No Account selected. Please try again."
 msgstr "खाता चयन गरिएको छैन। कृपया फेरि प्रयास गर्नुहोस्।"
 
 #: ../src/business/business-gnome/dialog-date-close.c:82
 #, fuzzy
-msgid "Placeholder account selected.  Please try again."
+msgid "Placeholder account selected. Please try again."
 msgstr "खाता चयन गरिएको छैन। कृपया फेरि प्रयास गर्नुहोस्।"
 
 #: ../src/business/business-gnome/dialog-employee.c:225
@@ -795,7 +795,7 @@ msgstr "यो प्रविष्टि क्रमसँग संलग्
 msgid "The Invoice must have at least one Entry."
 msgstr "बीजकसँग कम्तीमा एउटा प्रबिष्टि हुनुपर्दछ।"
 
-#. Ok, we can post this invoice.  Ask for verification, set the due date,
+#. Ok, we can post this invoice. Ask for verification, set the due date,
 #. * post date, and posted account
 #.
 #: ../src/business/business-gnome/dialog-invoice.c:711
@@ -841,7 +841,7 @@ msgstr "विभाजनहरू एकट्ठा गर्नुहुन�
 #: ../src/business/business-gnome/dialog-invoice.c:774
 msgid ""
 "One or more of the entries are for accounts different from the invoice/bill "
-"currency.  You will be asked a conversion rate for each."
+"currency. You will be asked a conversion rate for each."
 msgstr ""
 
 #: ../src/business/business-gnome/dialog-invoice.c:901
@@ -1255,7 +1255,7 @@ msgstr "आदेशलाई एउटा आई डी दिनुपर्�
 msgid "The Order must have at least one Entry."
 msgstr "आदेशसँग कम्तीमा एउटा प्रविष्टि हुनुपर्दछ।"
 
-#. Damn; yes.  Well, ask the user to make sure they REALLY want to
+#. Damn; yes. Well, ask the user to make sure they REALLY want to
 #. * close this order!
 #.
 #: ../src/business/business-gnome/dialog-order.c:299
@@ -1266,7 +1266,7 @@ msgstr ""
 "यस आदेशमा प्रविष्टिहरू समावेश छन् जुन बीजकमा लेखिएको छैन। के तपाईँ सबै प्रविष्टिहरू बीजकमा "
 "लेखिनु अघि त्यसलाई बन्द गर्न चाहनुहुन्छ?"
 
-#. Ok, we can close this.  Ask for verification and set the closed date
+#. Ok, we can close this. Ask for verification and set the closed date
 #: ../src/business/business-gnome/dialog-order.c:308
 msgid "Do you really want to close the order?"
 msgstr "तपाईँ वास्तवमै आदेश बन्द गर्न चाहनुहुन्छ?"
@@ -1317,7 +1317,7 @@ msgstr "पूर्व-भुक्तानी"
 #: ../src/business/business-gnome/dialog-payment.c:556
 #, fuzzy
 msgid ""
-"You must enter the amount of the payment.  The payment amount must not be "
+"You must enter the amount of the payment. The payment amount must not be "
 "zero."
 msgstr "तपाईँले भुक्तानीको रकम प्रविष्ट गर्नु पर्दछ। भुक्तानी रकम शून्य भन्दा ठूलो हुनुपर्दछ।"
 
@@ -1336,15 +1336,15 @@ msgstr "प्रविष्टिका लागि तपाईँले ख
 
 #: ../src/business/business-gnome/dialog-payment.c:614
 msgid ""
-"The transfer and post accounts are associated with different currencies.  "
+"The transfer and post accounts are associated with different currencies. "
 "Please specify the conversion rate."
 msgstr ""
 
 #: ../src/business/business-gnome/dialog-payment.c:931
 #, c-format
 msgid ""
-"You have no valid \"Post To\" accounts.  Please create an account of type "
-"\"%s\" before you continue to process this payment.  Perhaps you want to "
+"You have no valid \"Post To\" accounts. Please create an account of type "
+"\"%s\" before you continue to process this payment. Perhaps you want to "
 "create an Invoice or Bill first?"
 msgstr ""
 "तपाईँसँग खाताहरू \"मा प्रविष्ट\" गर्न वैध छैन। यस भुक्तानीका लागि प्रक्रिया जारी राख्नु "
@@ -2159,7 +2159,7 @@ msgstr ""
 
 #: ../src/business/business-gnome/gtkbuilder/business-prefs.glade.h:9
 msgid ""
-"If checked, each invoice will be opened in its own top level window.  If "
+"If checked, each invoice will be opened in its own top level window. If "
 "clear, the invoice will be opened in the current window."
 msgstr ""
 "यदि जाँचिएको छ भने, हरेक बीजकहरू त्यसकै माथिल्लो तहको सञ्झ्यालमा खुल्दछ। यदि खाली गरेमा, "
@@ -2328,8 +2328,8 @@ msgstr "सर्त"
 
 #: ../src/business/business-gnome/gtkbuilder/dialog-billterms.glade.h:22
 msgid ""
-"The cutoff day for applying bills to the next month.  After the cutoff, "
-"bills are applied to the following month.  Negative values count backwards "
+"The cutoff day for applying bills to the next month. After the cutoff, "
+"bills are applied to the following month. Negative values count backwards "
 "from the end of the month."
 msgstr ""
 "पछिल्लो महिनामा बिलहरू लागू गर्नका लागि काटेका दिन। काटिसकेपछि, बिलहरू निम्न महिनामा "
@@ -2576,7 +2576,7 @@ msgstr "सर्तहरू: "
 
 #: ../src/business/business-gnome/gtkbuilder/dialog-customer.glade.h:24
 msgid ""
-"The customer ID number.  If left blank a reasonable number will be chosen "
+"The customer ID number. If left blank a reasonable number will be chosen "
 "for you"
 msgstr "ग्राहक आई डी नम्बर। यदि बायाँ खाली भएमातपाईँका लागि एउटा उचित नम्बर रोजिनेछ"
 
@@ -2665,7 +2665,7 @@ msgstr "भुक्तानी ठेगाना"
 
 #: ../src/business/business-gnome/gtkbuilder/dialog-employee.glade.h:21
 msgid ""
-"The employee ID number.  If left blank a reasonable number will be chosen "
+"The employee ID number. If left blank a reasonable number will be chosen "
 "for you"
 msgstr ""
 "कर्मचारी आई डी नम्बर। यदि  बायाँ खाली छोडियो भने तपाईँका लागि एउटा उचित नम्बर "
@@ -2743,7 +2743,7 @@ msgstr "वर्तमान मानहरूमा कर तालिका
 
 #: ../src/business/business-gnome/gtkbuilder/dialog-invoice.glade.h:25
 msgid ""
-"The invoice ID number.  If left blank a reasonable number will be chosen for "
+"The invoice ID number. If left blank a reasonable number will be chosen for "
 "you."
 msgstr ""
 "बीजक आई डी नम्बर। यदि  बायाँ खाली छोडियो भने तपाईँका लागि एउटा उचित नम्बर रोजिनेछ।"
@@ -2778,7 +2778,7 @@ msgstr "मालिकको सूचना"
 
 #: ../src/business/business-gnome/gtkbuilder/dialog-job.glade.h:9
 msgid ""
-"The job ID number.  If left blank a reasonable number will be chosen for you"
+"The job ID number. If left blank a reasonable number will be chosen for you"
 msgstr ""
 "काम आई डी नम्बर। यदि बायाँ खाली छोडियो भने तपाईँका लागि एउटा उचित नम्बर रोजिनेछ"
 
@@ -2822,7 +2822,7 @@ msgstr "सन्दर्भ"
 
 #: ../src/business/business-gnome/gtkbuilder/dialog-order.glade.h:15
 msgid ""
-"The order ID number.  If left blank a reasonable number will be chosen for "
+"The order ID number. If left blank a reasonable number will be chosen for "
 "you"
 msgstr ""
 "आदेश आई डी नम्बर। यदि  बायाँ खाली छोडियो भनेतपाईँका लागि एउटा उचित नम्बर रोजिनेछ"
@@ -3005,7 +3005,7 @@ msgstr "कर तालिका:"
 
 #: ../src/business/business-gnome/gtkbuilder/dialog-vendor.glade.h:18
 msgid ""
-"The vendor ID number.  If left blank a reasonable number will be chosen for "
+"The vendor ID number. If left blank a reasonable number will be chosen for "
 "you"
 msgstr ""
 "बिक्रेता आई डी नम्बर। यदि  बांया खाली छोडियो भने तपाईँका लागि एउटा उचित नम्बर रोजिनेछ"
@@ -3217,7 +3217,7 @@ msgstr "कर तालिका %s अवस्थित छैन। तप�
 
 #: ../src/business/business-ledger/gncEntryLedgerControl.c:870
 msgid ""
-"The current entry has been changed.  However, this entry is part of an "
+"The current entry has been changed. However, this entry is part of an "
 "existing order. Would you like to record the change and effectively change "
 "your order?"
 msgstr ""
@@ -3569,7 +3569,7 @@ msgstr "यस वस्तुका लागि तपाईँले कस�
 #: ../src/core-utils/gnc-features.c:115
 #, fuzzy
 msgid ""
-"This Dataset contains features not supported by this version of GnuCash.  "
+"This Dataset contains features not supported by this version of GnuCash. "
 "You must use a newer version of GnuCash in order to support the following "
 "features:"
 msgstr ""
@@ -3594,7 +3594,7 @@ msgstr ""
 msgid ""
 "The directory\n"
 "  %s\n"
-"exists but cannot be accessed.  This program \n"
+"exists but cannot be accessed. This program \n"
 "must have full access (read/write/execute) to \n"
 "the directory in order to function properly.\n"
 msgstr ""
@@ -3624,7 +3624,7 @@ msgid ""
 "An unknown error occurred when validating that the\n"
 "  %s\n"
 "directory exists and is usable. Please correct the\n"
-"problem and restart GnuCash.  The reported error \n"
+"problem and restart GnuCash. The reported error \n"
 "was '%s' (errno %d)."
 msgstr ""
 "%s डाइरेक्टरी अवस्थित र प्रयोगयोग्य\n"
@@ -3782,7 +3782,7 @@ msgid "Extra to Charge Card"
 msgstr "कार्ड चार्ज गर्न अतिरिक्त"
 
 #: ../src/engine/gncInvoice.c:1485
-msgid "Generated from an invoice.  Try unposting the invoice."
+msgid "Generated from an invoice. Try unposting the invoice."
 msgstr "बीजकबाट उत्पन्न गरियो।  बीजक प्रविष्टि हटाउने प्रयास गर्नुहोस्।"
 
 #: ../src/engine/gncInvoice.c:1914
@@ -3976,7 +3976,7 @@ msgstr[1] ""
 #: ../src/gnome/assistant-acct-period.c:371
 #, fuzzy, c-format
 msgid ""
-"You have asked for a book to be created.  This book will contain all "
+"You have asked for a book to be created. This book will contain all "
 "transactions up to midnight %s (for a total of %d transactions spread over "
 "%d accounts).\n"
 "\n"
@@ -5708,7 +5708,7 @@ msgstr "परिवर्तनहरू %s मा बचत गर्नुह
 #: ../src/gnome/gnc-plugin-page-register2.c:1552
 #: ../src/gnome/gnc-plugin-page-register.c:1498
 msgid ""
-"This register has pending changes to a transaction.  Would you like to save "
+"This register has pending changes to a transaction. Would you like to save "
 "the changes to this transaction, discard the transaction, or cancel the "
 "operation?"
 msgstr ""
@@ -5998,7 +5998,7 @@ msgstr "खाता रजिस्टर पढ्ने-मात्र ह�
 
 #: ../src/gnome/gnc-split-reg2.c:1037 ../src/gnome/gnc-split-reg.c:2036
 msgid ""
-"This account may not be edited.  If you want to edit transactions in this "
+"This account may not be edited. If you want to edit transactions in this "
 "register, please open the account options and turn off the placeholder "
 "checkbox."
 msgstr ""
@@ -6007,7 +6007,7 @@ msgstr ""
 
 #: ../src/gnome/gnc-split-reg2.c:1044 ../src/gnome/gnc-split-reg.c:2043
 msgid ""
-"One of the sub-accounts selected may not be edited.  If you want to edit "
+"One of the sub-accounts selected may not be edited. If you want to edit "
 "transactions in this register, please open the sub-account options and turn "
 "off the placeholder checkbox. You may also open an individual account "
 "instead of a set of accounts."
@@ -6031,7 +6031,7 @@ msgstr "यो कारोबार टिप्पणी: '%s' सहित �
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:82
 msgid ""
 "The date of this transaction is older than the \"Read-Only Threshold\" set "
-"for this book.  This setting can be changed in File -> Properties -> "
+"for this book. This setting can be changed in File -> Properties -> "
 "Accounts."
 msgstr ""
 
@@ -6078,7 +6078,7 @@ msgstr "तपाईँले यो विभाजन मेट्न सक�
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:1007
 msgid ""
 "This is the split anchoring this transaction to the register. You may not "
-"delete it from this register window.  You may delete the entire transaction "
+"delete it from this register window. You may delete the entire transaction "
 "from this window, or you may navigate to a register that shows another side "
 "of this same transaction and delete the split from that register."
 msgstr ""
@@ -6162,7 +6162,7 @@ msgid ""
 "This assistant will help you setup and use accounting periods. \n"
 " \n"
 "Danger: this feature does not work correctly at this time; it is still under "
-"development.  It will probably damage your data in such a way that it cannot "
+"development. It will probably damage your data in such a way that it cannot "
 "be repaired!"
 msgstr ""
 "यस ड्रुइडले लेखा अवधिहरू सेटअप गर्न र प्रयोग गर्न तपाईँलाई मद्दत गर्दछ। \n"
@@ -6208,9 +6208,9 @@ msgstr "कृपया नयाँ खाताहरूको प्रयो
 #, fuzzy
 msgid ""
 "\n"
-"Select categories that correspond to the ways that you will use GnuCash.  "
-"Each category you select will cause several accounts to be created.  Select "
-"the categories that are relevant to you.  You can always create additional "
+"Select categories that correspond to the ways that you will use GnuCash. "
+"Each category you select will cause several accounts to be created. Select "
+"the categories that are relevant to you. You can always create additional "
 "accounts by hand later."
 msgstr ""
 "तपाईँले जिएनयुक्यास प्रयोग गर्ने तरिकासँग मिल्दो कोटिहरू चयन गर्नुहोस्। तपाईँले चयन गर्नुहुने "
@@ -6255,7 +6255,7 @@ msgstr "नयाँ खाता सोपानक्रम सेटअप"
 #: ../src/gnome/gtkbuilder/assistant-hierarchy.glade.h:22
 #, fuzzy
 msgid ""
-"Press `Apply' to create your new accounts.  You will then be able to save "
+"Press `Apply' to create your new accounts. You will then be able to save "
 "them to a file or database.\n"
 "\n"
 "Press `Back' to review your selections.\n"
@@ -6559,7 +6559,7 @@ msgstr "सुरु मिति:"
 #: ../src/gnome/gtkbuilder/assistant-loan.glade.h:64
 #, fuzzy
 msgid ""
-"This is a step-by-step method for creating a loan repayment within GnuCash.  "
+"This is a step-by-step method for creating a loan repayment within GnuCash. "
 "In this assistant, you can input the details of your loan and its repayment "
 "along with the details of its payback. Using that information, the "
 "appropriate Scheduled Transactions will be created.\n"
@@ -7030,7 +7030,7 @@ msgstr "स्टक खाताहरूका लागि एउटा न�
 
 #: ../src/gnome/gtkbuilder/dialog-price.glade.h:13
 msgid ""
-"If activated, delete all prices before the specified date.  Otherwise the "
+"If activated, delete all prices before the specified date. Otherwise the "
 "last stock price dated before the date will be kept and all earlier quotes "
 "deleted."
 msgstr ""
@@ -7040,7 +7040,7 @@ msgstr ""
 #: ../src/gnome/gtkbuilder/dialog-price.glade.h:14
 msgid ""
 "If activated, delete manually entered stock prices dated earlier than the "
-"specified date.  Otherwise only stock prices added by Finance::Quote will be "
+"specified date. Otherwise only stock prices added by Finance::Quote will be "
 "deleted."
 msgstr ""
 "यदि सक्रिय पारिएको भए, म्यानुअल तरिकाले प्रविष्टि गरिएका उल्लेखित मिति भन्दा अघि "
@@ -7144,8 +7144,8 @@ msgstr ""
 
 #: ../src/gnome/gtkbuilder/dialog-print-check.glade.h:15
 msgid ""
-"Enter a title for this custom format.  This title will appear in the \"Check "
-"format\" selector of the Print Check dialog.  Using the title of an existing "
+"Enter a title for this custom format. This title will appear in the \"Check "
+"format\" selector of the Print Check dialog. Using the title of an existing "
 "custom format will cause that format to be overwritten."
 msgstr ""
 
@@ -7422,7 +7422,7 @@ msgstr "<b>टेम्प्लेट॒ कारोबार</b>"
 #, fuzzy
 msgid ""
 "The following Scheduled Transactions reference the deleted account and must "
-"now be corrected.  Press OK to edit them."
+"now be corrected. Press OK to edit them."
 msgstr ""
 "निम्न निर्धारित कारोबारहरूले मेटेका खाता सोधपुछ गर्दछ, र अहिले नै सच्याउनुपर्दछ।तिनीहरूलाई "
 "सम्पादन गर्न 'ठीक छ' बटन थिच्नुहोस्।"
@@ -9887,7 +9887,7 @@ msgstr "नयाँ खाता"
 #: ../src/gnome-utils/dialog-account.c:1990
 #, c-format
 msgid ""
-"Renumber the immediate sub-accounts of %s?  This will replace the account "
+"Renumber the immediate sub-accounts of %s? This will replace the account "
 "code field of each child account with a newly generated code."
 msgstr ""
 "%s को नजिकको उप-खातालाई पुन:नम्बर दिने हो? यसले नयाँ उत्पादित कोडसँगै हरेक शाखा "
@@ -10146,7 +10146,7 @@ msgstr "तपाईँले एउटा कर खाता रोज्न�
 
 #: ../src/gnome-utils/dialog-tax-table.c:563
 #, c-format
-msgid "Tax table \"%s\" is in use.  You cannot delete it."
+msgid "Tax table \"%s\" is in use. You cannot delete it."
 msgstr "कर तालिकामा \"%s\"प्रयोगमा छ।  तपाईँले यसलाईं मेट्न सक्नुहुन्न।"
 
 #: ../src/gnome-utils/dialog-tax-table.c:611
@@ -10183,7 +10183,7 @@ msgstr "तपाईँले उस्तै खातामा वा खा�
 
 #: ../src/gnome-utils/dialog-transfer.c:1410
 msgid ""
-"You can't transfer from a non-currency account.  Try reversing the \"from\" "
+"You can't transfer from a non-currency account. Try reversing the \"from\" "
 "and \"to\" accounts and making the \"amount\" negative."
 msgstr ""
 "तपाईँले एउटा अमौद्रिक खाता बाट स्थानान्तरण गर्न सक्नुहुन्न।  खाताहरू\"बाट\" र \"मा\" "
@@ -10256,7 +10256,7 @@ msgstr "(स्वचालित रूपमा भरिएको)"
 #: ../src/gnome-utils/gnc-autosave.c:101
 #, c-format
 msgid ""
-"Your data file needs to be saved to your hard disk to save your changes.  "
+"Your data file needs to be saved to your hard disk to save your changes. "
 "GnuCash has a feature to save the file automatically every %d minute, just "
 "as if you had pressed the \"Save\" button each time. \n"
 "\n"
@@ -10265,7 +10265,7 @@ msgid ""
 "\n"
 "Should your file be saved automatically?"
 msgid_plural ""
-"Your data file needs to be saved to your hard disk to save your changes.  "
+"Your data file needs to be saved to your hard disk to save your changes. "
 "GnuCash has a feature to save the file automatically every %d minutes, just "
 "as if you had pressed the \"Save\" button each time. \n"
 "\n"
@@ -10545,7 +10545,7 @@ msgstr "फाइल %s को जगेडा बनाउन सकिएन�
 #: ../src/gnome-utils/gnc-file.c:391
 #, fuzzy, c-format
 msgid ""
-"Could not write to file %s.  Check that you have permission to write to this "
+"Could not write to file %s. Check that you have permission to write to this "
 "file and that there is sufficient space to create it."
 msgstr ""
 "फाइल %s मा लेख्न सकिएन। तपाईँसँग यस फाइलमा लेख्ने अनुमति छ कि छैन र त्यसलाई सिर्जना गर्न "
@@ -10564,7 +10564,7 @@ msgstr "तपाईसँग %s मा पहँच गर्ने अनु�
 msgid ""
 "You attempted to save in\n"
 "%s\n"
-"or a subdirectory thereof.  This is not allowed as %s reserves that "
+"or a subdirectory thereof. This is not allowed as %s reserves that "
 "directory for internal use.\n"
 "\n"
 "Please try again in a different directory."
@@ -10599,9 +10599,9 @@ msgstr ""
 #: ../src/gnome-utils/gnc-file.c:441
 msgid ""
 "The library \"libdbi\" installed on your system doesn't correctly store "
-"large numbers.  This means GnuCash cannot use SQL databases correctly.  "
+"large numbers. This means GnuCash cannot use SQL databases correctly. "
 "Gnucash will not open or save to SQL databases until this is fixed by "
-"installing a different version of \"libdbi\".  Please see https://bugzilla."
+"installing a different version of \"libdbi\". Please see https://bugzilla."
 "gnome.org/show_bug.cgi?id=611936 for more information."
 msgstr ""
 
@@ -10727,14 +10727,14 @@ msgstr "दृश्य..."
 #: ../src/gnome-utils/gnc-gnome-utils.c:273
 #, fuzzy
 msgid ""
-"GnuCash could not find the files for the help documentation.  This is likely "
+"GnuCash could not find the files for the help documentation. This is likely "
 "because the 'gnucash-docs' package is not installed"
 msgstr "%s को लागि जिएनयुक्यासले लक प्राप्त गर्न सकेन।"
 
 #: ../src/gnome-utils/gnc-gnome-utils.c:366
 #: ../src/gnome-utils/gnc-gnome-utils.c:428
 msgid ""
-"GnuCash could not find the files for the help documentation.  This is likely "
+"GnuCash could not find the files for the help documentation. This is likely "
 "because the 'gnucash-docs' package is not installed."
 msgstr ""
 
@@ -11187,7 +11187,7 @@ msgstr "कारोबार मिति प्रदर्शन गर्न
 #: ../src/register/register-gnome/datecell-gnome.c:129
 msgid ""
 "The entered date of the new transaction is older than the \"Read-Only "
-"Threshold\" set for this book.  This setting can be changed in File -> "
+"Threshold\" set for this book. This setting can be changed in File -> "
 "Properties -> Accounts."
 msgstr ""
 
@@ -11262,7 +11262,7 @@ msgstr ""
 #: ../src/register/ledger-core/split-register.c:610
 msgid ""
 "The entered date of the duplicated transaction is older than the \"Read-Only "
-"Threshold\" set for this book.  This setting can be changed in File -> "
+"Threshold\" set for this book. This setting can be changed in File -> "
 "Properties -> Accounts."
 msgstr ""
 
@@ -11293,8 +11293,8 @@ msgstr "मिलाननगरिएको जस्तै विभाजन�
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:1590
 #: ../src/register/ledger-core/split-register-control.c:1829
 msgid ""
-"You are about to mark a reconciled split as unreconciled.  Doing so might "
-"make future reconciliation difficult!  Continue with this change?"
+"You are about to mark a reconciled split as unreconciled. Doing so might "
+"make future reconciliation difficult! Continue with this change?"
 msgstr ""
 "तपाईँले मिलान नगरिएको जस्तै मिलानगरिएको विभाजन चिन्ह लागउनु भयो। यसो गर्नाले भविष्यमा "
 "हिसाब मिलान समस्या बनाउन सक्दछ! यी परिवर्तनसँगै जारी राख्ने हो?"
@@ -11312,8 +11312,8 @@ msgstr "मिलान गरिएको विभाजन परिवर्
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:1720
 #: ../src/register/ledger-core/split-register-model.c:2044
 msgid ""
-"You are about to change a reconciled split.  Doing so might make future "
-"reconciliation difficult!  Continue with this change?"
+"You are about to change a reconciled split. Doing so might make future "
+"reconciliation difficult! Continue with this change?"
 msgstr ""
 "तपाईँले मिलान नगरिएको विभाजन चिन्ह लागउनु लाग्नु भयो। यसो गर्नाले भविष्यमा हिसाब "
 "मिलान समस्या बनाउन सक्दछ! यी परिवर्तनसँगै जारी राख्ने हो?"
@@ -11328,8 +11328,8 @@ msgstr "मिलान गरिएको विभाजन परिवर्
 #: ../src/register/ledger-core/split-register-model.c:2051
 #, fuzzy
 msgid ""
-"You are about to change a split that is linked to a reconciled split.  Doing "
-"so might make future reconciliation difficult!  Continue with this change?"
+"You are about to change a split that is linked to a reconciled split. Doing "
+"so might make future reconciliation difficult! Continue with this change?"
 msgstr ""
 "तपाईँले मिलान नगरिएको विभाजन चिन्ह लागउनु लाग्नु भयो। यसो गर्नाले भविष्यमा हिसाब "
 "मिलान समस्या बनाउन सक्दछ! यी परिवर्तनसँगै जारी राख्ने हो?"
@@ -11920,7 +11920,7 @@ msgstr "परिवर्तन गरिएको कारोबार बच
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:2462
 #, fuzzy
 msgid ""
-"The current transaction has changed.  Would you like to record the changes, "
+"The current transaction has changed. Would you like to record the changes, "
 "or discard the changes?"
 msgstr ""
 "हालको टेम्प्लेट कारोबार परिवर्तन भइसकेको छ। के तपाईँ परिवर्तनहरू रेकर्ड गर्न चाहनुहुन्छ?"
@@ -12168,8 +12168,8 @@ msgid ""
 "<b>Cannot find default values</b>\n"
 "\n"
 "The configuration data used to specify default values for GnuCash cannot be "
-"found in the default system locations.  Without this data GnuCash will still "
-"operate properly but it may require some extra time to setup.  Do you wish "
+"found in the default system locations. Without this data GnuCash will still "
+"operate properly but it may require some extra time to setup. Do you wish "
 "to setup the configuration data?"
 msgstr ""
 "<b>पूर्वनिर्धारित मानहरू फेला परेन</b>\n"
@@ -12242,7 +12242,7 @@ msgstr ""
 #: ../src/gnome-utils/gtkbuilder/assistant-gconf-setup.glade.h:16
 msgid ""
 "The configuration data used by GnuCash to specify its default values cannot "
-"be found in the default system locations.  Without this data GnuCash will "
+"be found in the default system locations. Without this data GnuCash will "
 "still operate properly, but it may require some extra time to set up."
 msgstr ""
 "जिएनयुक्यासको लागि पूर्वनिर्धारित मानहरू उल्लेख गर्न प्रयोग गरिने कन्फिगरेशन डेटा "
@@ -12605,9 +12605,9 @@ msgstr "करसँग सम्बन्धित"
 #: ../src/gnome-utils/gtkbuilder/dialog-account.glade.h:45
 msgid ""
 "This account (and any sub-accounts) will be hidden in the account tree and "
-"will not appear in the popup account list in the register.  To reset this "
+"will not appear in the popup account list in the register. To reset this "
 "option, you will first need to open the \"Filter By...\" dialog for the "
-"account tree and check the \"show hidden accounts\" option.  Doing so will "
+"account tree and check the \"show hidden accounts\" option. Doing so will "
 "allow you to select the account and reopen this dialog."
 msgstr ""
 "यो लेखा (र कुनै पनि उप-लेखाहरु) लेखा ट्रिमा लुक्नेछ र रजिस्टरमा पपअप मेनुमा खाता सूचीमा "
@@ -12621,7 +12621,7 @@ msgstr "यो खातामा पढ्ने-मात्र कारो�
 
 #: ../src/gnome-utils/gtkbuilder/dialog-account.glade.h:47
 msgid ""
-"This account contains sub-accounts.  What would you like to do with these "
+"This account contains sub-accounts. What would you like to do with these "
 "sub-accounts?"
 msgstr "यो खातामा उप-खाताहरू समावेश छ। यी उप-खाताहरुसँग तपाईँ के गर्न चाहनुहुन्छ?"
 
@@ -12633,7 +12633,7 @@ msgstr "यो खातामा कारोबार समावेश छ�
 
 #: ../src/gnome-utils/gtkbuilder/dialog-account.glade.h:49
 msgid ""
-"This account is present solely as a placeholder in the hierarchy.  "
+"This account is present solely as a placeholder in the hierarchy. "
 "Transactions may not be posted to this account, only to sub-accounts of this "
 "account."
 msgstr ""
@@ -12733,7 +12733,7 @@ msgstr ""
 
 #: ../src/gnome-utils/gtkbuilder/dialog-commodity.glade.h:8
 msgid ""
-"Enter the ticker symbol for the commodity (e.g. CSCO or AAPL).  If you are "
+"Enter the ticker symbol for the commodity (e.g. CSCO or AAPL). If you are "
 "retrieving quotes online, this field must exactly match the ticker symbol "
 "used by the quote source (including case). "
 msgstr ""
@@ -12765,7 +12765,7 @@ msgstr "एकल:"
 #: ../src/gnome-utils/gtkbuilder/dialog-commodity.glade.h:14
 msgid ""
 "These are F::Q quote sources that retrieve information from a single site on "
-"the internet.  If that site is unavailable, you will not be able to retrieve "
+"the internet. If that site is unavailable, you will not be able to retrieve "
 "quotes."
 msgstr ""
 "यी F::Q मूल्य विवरण हुन् जसले इन्टरनेटमा एकल साइटबाट सूचना प्राप्त गर्दछ। यदि त्यो साइट "
@@ -12774,7 +12774,7 @@ msgstr ""
 #: ../src/gnome-utils/gtkbuilder/dialog-commodity.glade.h:15
 msgid ""
 "These are F::Q quote sources that retrieve information from multiple sites "
-"on the internet.  If one of the sites is unavailable, F::Q will attempt to "
+"on the internet. If one of the sites is unavailable, F::Q will attempt to "
 "retrieve the information from another site."
 msgstr ""
 "यी F::Q मूल्य विवरण स्रोतहरू हुन् जसले इन्टरनेटमा बहुसङ्ख्यक साइटहरूबाट सूचना प्राप्त गर्दछ। "
@@ -12783,7 +12783,7 @@ msgstr ""
 
 #: ../src/gnome-utils/gtkbuilder/dialog-commodity.glade.h:16
 msgid ""
-"These are quote sources that were recently added to F::Q.  GnuCash does not "
+"These are quote sources that were recently added to F::Q. GnuCash does not "
 "know if these sources retrieve information from a single site or from "
 "multiple sites on the internet."
 msgstr ""
@@ -13063,7 +13063,7 @@ msgstr "स्वचालित क्रेडिट कार्ड भुक
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:46
 msgid ""
-"Automatically expand the current transaction to show all splits.  All other "
+"Automatically expand the current transaction to show all splits. All other "
 "transactions are shown on one line. (Two in double line mode.)"
 msgstr ""
 "सबै विभाजनहरू देखाउन स्वचालित तरिकाले हालको कारोबार विस्तार भयो। अन्य सबै कारोबारहरू "
@@ -13184,7 +13184,7 @@ msgstr "पाठको रूपमा मात्र उपकरणपट्
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:76
 msgid ""
-"Display toolbar items with the text label below the icon.  Labels are show "
+"Display toolbar items with the text label below the icon. Labels are show "
 "for all items."
 msgstr ""
 "प्रतिमाको तल पाठ लेबुलसँगै उपकरणपट्टी वस्तुहरू प्रदर्शन गर्नुहोस्। लेबुलहरू सबै वस्तुहरूको लागि "
@@ -13193,7 +13193,7 @@ msgstr ""
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:77
 #, fuzzy
 msgid ""
-"Display toolbar items with the text label beside the icon.  Labels are only "
+"Display toolbar items with the text label beside the icon. Labels are only "
 "shown for the most important items."
 msgstr ""
 "प्रतिमाको छेउमा पाठ लेबुलसँगै उपकरणपट्टी वस्तुहरू प्रदर्शन गर्नुहोस्। लेबुलहरू बारम्बार प्रयोग "
@@ -13240,7 +13240,7 @@ msgstr ""
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:90
 msgid ""
-"If checked, each register will be opened in its own top level window.  If "
+"If checked, each register will be opened in its own top level window. If "
 "clear, the register will be opened in the current window."
 msgstr ""
 "यदि जाँचिएको छ भने, हरेक रजिस्टर त्यसको आफ्नै माथिल्लो तह सञ्झ्यालमा खोलिनेछ। यदि खाली "
@@ -13248,7 +13248,7 @@ msgstr ""
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:91
 msgid ""
-"If checked, each report will be opened in its own top level window.  If "
+"If checked, each report will be opened in its own top level window. If "
 "clear, the report will be opened in the current window."
 msgstr ""
 "यदि जाँचिएको छ भने, हरेक प्रतिवेदन त्यसको आफ्नै माथिल्लो तह सञ्झ्यालमा खोलिनेछ। यदि खाली "
@@ -13256,7 +13256,7 @@ msgstr ""
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:92
 msgid ""
-"If checked, non-currency commodities will be shown in the summary bar.  If "
+"If checked, non-currency commodities will be shown in the summary bar. If "
 "clear, only currencies will be shown."
 msgstr ""
 "यदि जाँचिएको छ भने, अमौद्रिक वस्तुहरू संक्षेपपट्टीमा देखाइनेछ। यदि खाली भए, मुद्रा मात्र "
@@ -13273,7 +13273,7 @@ msgstr ""
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:94
 msgid ""
 "If checked, pressing the 'Enter' key will move to the blank transaction at "
-"the bottom of the register.  If clear, pressing the 'Enter' key will move "
+"the bottom of the register. If clear, pressing the 'Enter' key will move "
 "down one row."
 msgstr ""
 "यदि जाँचिएको छ भने, 'प्रविष्टि' कुञ्जी दबाउनाले खाली कारोबार रजिस्टरको तल सर्दछ। यदि "
@@ -13281,7 +13281,7 @@ msgstr ""
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:95
 msgid ""
-"If checked, the system color theme will be applied to register windows.  If "
+"If checked, the system color theme will be applied to register windows. If "
 "clear, the original GnuCash register colors will be used."
 msgstr ""
 "यदि जाँचिएको छ भने, प्रणाली रङ विषय रजिष्टर सञ्झ्यालमा लागू गरिनेछ। यदि खाली भए, "
@@ -13407,7 +13407,7 @@ msgstr ""
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:125
 msgid ""
-"Show a close button on each notebook tab.  These function identically to the "
+"Show a close button on each notebook tab. These function identically to the "
 "'Close' menu item."
 msgstr ""
 "हरेक नोटबुक ट्याबमा बन्द बटन देखाउनुहोस्। यी कार्य 'बन्द गर्नुहोस्' मेनु वस्तुमा पहिचान छ।"
@@ -13490,7 +13490,7 @@ msgstr ""
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:142
 msgid ""
-"Show two lines of information for each transaction instead of one.  Does not "
+"Show two lines of information for each transaction instead of one. Does not "
 "affect expanded transactions."
 msgstr ""
 "एउटाको सट्टा हरेक कारोबारको लागि दुई लाइन सूचना देखाउनुहोस्। विस्तारित कारोबारहरूलाई "
@@ -13523,7 +13523,7 @@ msgstr "प्रतिमाहरूको तल पाठ"
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:148
 #, fuzzy
 msgid ""
-"The character that will be used between components of an account name.  A "
+"The character that will be used between components of an account name. A "
 "legal value is any single character except letters and numbers, or any of "
 "the following strings: \"colon\" \"slash\", \"backslash\", \"dash\" and "
 "\"period\"."
@@ -13603,7 +13603,7 @@ msgstr "प्रणाली लोकेलद्वारा उल्ले�
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:167
 msgid ""
-"Use the specified absolute ending date for profit/loss calculations.  Also "
+"Use the specified absolute ending date for profit/loss calculations. Also "
 "use this date for net assets calculations."
 msgstr ""
 "नाफा/नोक्सान गणनाहरूको लागि उल्लेखित अप्रचलित अन्तिम मिति प्रयोग गर्नुहोस्। खुद सम्पत्ति "
@@ -13623,7 +13623,7 @@ msgstr "नयाँ सिर्जना गरिएका सबै प्�
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:171
 msgid ""
-"Use the specified relative ending date for profit/loss calculations.  Also "
+"Use the specified relative ending date for profit/loss calculations. Also "
 "use this date for net assets calculations."
 msgstr ""
 "नाफा/नोक्सान गणनाहरूको लागि उल्लेखित सम्बन्धित अन्तिम मिति प्रयोग गर्नुहोस्। खुद सम्पत्ति "
@@ -13775,7 +13775,7 @@ msgstr "अस्थायी चेतावनी"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-reset-warnings.glade.h:5
 msgid ""
-"You have requested that the following warning dialogs not be presented.  To "
+"You have requested that the following warning dialogs not be presented. To "
 "re-enable any of these dialogs, select the check box next to the dialog, "
 "then click OK."
 msgstr ""
@@ -14349,10 +14349,10 @@ msgstr "प्रत्येक "
 
 #: ../src/gnome-utils/gtkbuilder/gnc-recurrence.glade.h:3
 msgid ""
-"Match the \"day of week\" and \"week of month\"?  (for example, the \"second "
+"Match the \"day of week\" and \"week of month\"? (for example, the \"second "
 "Tuesday\" of every month)"
 msgstr ""
-"\"हप्ताको दिन\" र \"महिनाको हप्ता\" मिलाउनुहुन्छ ?  (उदाहरणको लागि, हरेक महिनाको "
+"\"हप्ताको दिन\" र \"महिनाको हप्ता\" मिलाउनुहुन्छ ? (उदाहरणको लागि, हरेक महिनाको "
 "\"दोस्रो मंगलबार\")"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-recurrence.glade.h:4
@@ -14694,8 +14694,8 @@ msgstr "प्रतिवेदन शीर्षक"
 msgid ""
 "The external program \"AqBanking Setup Wizard\" has not been found. \n"
 "\n"
-"The %s package should include the program \"qt3-wizard\".  Please check your "
-"installation to ensure this program is present.  On some distributions this "
+"The %s package should include the program \"qt3-wizard\". Please check your "
+"installation to ensure this program is present. On some distributions this "
 "may require installing additional packages."
 msgstr ""
 "आन्तरिक कार्यक्रम \"%s सेटअप विईजार्ड\" फेला परिसकेको छैन। \n"
@@ -14706,23 +14706,23 @@ msgstr ""
 #: ../src/import-export/aqbanking/assistant-ab-initial.c:530
 msgid ""
 "The external program \"AqBanking Setup Wizard\" failed to run successfully "
-"because the additional software \"Qt\" was not found.  Please install the "
+"because the additional software \"Qt\" was not found. Please install the "
 "\"Qt/Windows Open Source Edition\" from Trolltech by downloading it from www."
 "trolltech.com\n"
 "\n"
 "If you have installed Qt already, you will have to adapt the PATH variable "
-"of your system appropriately.  Contact the GnuCash developers if you need "
+"of your system appropriately. Contact the GnuCash developers if you need "
 "further assistance on how to install Qt correctly.\n"
 "\n"
-"Online Banking cannot be setup without Qt.  Press \"Close\" now, then "
+"Online Banking cannot be setup without Qt. Press \"Close\" now, then "
 "\"Cancel\" to cancel the Online Banking setup."
 msgstr ""
 
 #: ../src/import-export/aqbanking/assistant-ab-initial.c:551
 #, fuzzy
 msgid ""
-"The external program \"AqBanking Setup Wizard\" failed to run successfully.  "
-"Online Banking can only be setup if this wizard has run successfully.  "
+"The external program \"AqBanking Setup Wizard\" failed to run successfully. "
+"Online Banking can only be setup if this wizard has run successfully. "
 "Please try running the \"AqBanking Setup Wizard\" again."
 msgstr ""
 "आन्तरिक कार्यक्रम \"%s सेटअप विजार्ड\" ले शून्य नभएको बन्द गर्ने कोड फर्काउदछ जसको मतलब "
@@ -14850,7 +14850,7 @@ msgstr ""
 #, fuzzy
 msgid ""
 "The setup for matching Online Banking accounts to GnuCash accounts is now "
-"finished.  You can now invoke Online Banking actions on those accounts.\n"
+"finished. You can now invoke Online Banking actions on those accounts.\n"
 "\n"
 "If you want to add another bank, user, or account, you can start this "
 "assistant again anytime.\n"
@@ -15155,7 +15155,7 @@ msgstr ""
 #, c-format
 msgid ""
 "Your local bank account does not yet have the SEPA account information "
-"stored.  We are sorry, but in this development version one additional step "
+"stored. We are sorry, but in this development version one additional step "
 "is necessary which has not yet been implemented directly in gnucash. Please "
 "execute the command line program \"aqhbci-tool\" for your account, as "
 "follows: aqhbci-tool4 getaccsepa -b %s -a %s"
@@ -15164,7 +15164,7 @@ msgstr ""
 #: ../src/import-export/aqbanking/dialog-ab-trans.c:564
 #, fuzzy
 msgid ""
-"You did not enter a recipient name.  A recipient name is required for an "
+"You did not enter a recipient name. A recipient name is required for an "
 "online transfer.\n"
 msgstr ""
 "तपाईँले कुनै पनि कारोबार उद्देश्य प्रविष्ट गर्नुभएको छैन। उद्देश्य अनलाइन स्थानान्तरणको लागि "
@@ -15175,7 +15175,7 @@ msgstr ""
 #: ../src/import-export/aqbanking/dialog-ab-trans.c:584
 #, fuzzy
 msgid ""
-"You did not enter a recipient account.  A recipient account is required for "
+"You did not enter a recipient account. A recipient account is required for "
 "an online transfer.\n"
 msgstr ""
 "तपाईँले कुनै पनि कारोबार उद्देश्य प्रविष्ट गर्नुभएको छैन। उद्देश्य अनलाइन स्थानान्तरणको लागि "
@@ -15186,7 +15186,7 @@ msgstr ""
 #: ../src/import-export/aqbanking/dialog-ab-trans.c:600
 #, fuzzy
 msgid ""
-"You did not enter a recipient bank.  A recipient bank is required for an "
+"You did not enter a recipient bank. A recipient bank is required for an "
 "online transfer.\n"
 msgstr ""
 "तपाईँले कुनै पनि कारोबार उद्देश्य प्रविष्ट गर्नुभएको छैन। उद्देश्य अनलाइन स्थानान्तरणको लागि "
@@ -15227,7 +15227,7 @@ msgstr ""
 
 #: ../src/import-export/aqbanking/dialog-ab-trans.c:1098
 msgid ""
-"A template with the given name already exists.  Please enter another name."
+"A template with the given name already exists. Please enter another name."
 msgstr ""
 
 #: ../src/import-export/aqbanking/dialog-ab-trans.c:1233
@@ -15322,7 +15322,7 @@ msgstr "अनलाइन कारोबार"
 
 #: ../src/import-export/aqbanking/gnc-ab-transfer.c:294
 msgid ""
-"An error occurred while executing the job.  Please check the log window for "
+"An error occurred while executing the job. Please check the log window for "
 "the exact error message.\n"
 "\n"
 "Do you want to enter the job again?"
@@ -16537,11 +16537,11 @@ msgstr "आयात गरिएको कारोबारहरू पहि
 #, fuzzy
 msgid ""
 "In some places commercial ATMs (not belonging to a financial institution) "
-"are installed in places like convenience stores.  These ATMs add their fee "
+"are installed in places like convenience stores. These ATMs add their fee "
 "directly to the amount instead of showing up as a separate transaction or in "
-"your monthly banking fees.  For example, you withdraw $100, and you are "
-"charged $101,50 plus Interac fees.  If you manually entered that $100, the "
-"amounts won't match.  You should set this to whatever is the maximum such "
+"your monthly banking fees. For example, you withdraw $100, and you are "
+"charged $101,50 plus Interac fees. If you manually entered that $100, the "
+"amounts won't match. You should set this to whatever is the maximum such "
 "fee in your area (in units of your local currency), so the transaction will "
 "be recognised as a match."
 msgstr ""
@@ -16783,7 +16783,7 @@ msgstr "तपाईँले चयन गर्नुभएको लग फ�
 
 #: ../src/import-export/log-replay/gnc-log-replay.c:621
 msgid ""
-"The log file you selected cannot be read.  The file header was not "
+"The log file you selected cannot be read. The file header was not "
 "recognized."
 msgstr "तपाईँले चयन गर्नुभएको लग फाइल पढ्न सकिंदैन। फाइल हेडर चिनिएन।"
 
@@ -16792,7 +16792,7 @@ msgid "_Replay GnuCash .log file..."
 msgstr "जिएनयुक्यास .लग फाइल पुन:प्ले गर्नुहोस्..."
 
 #: ../src/import-export/log-replay/gnc-plugin-log-replay.c:49
-msgid "Replay a GnuCash log file after a crash.  This cannot be undone."
+msgid "Replay a GnuCash log file after a crash. This cannot be undone."
 msgstr "जिएनयुक्यास लग फाइल बिग्रिए पछि फेरि प्ले गर्नुहोस्।  यो नगर्न सकिँदैन।"
 
 #. As we now have the commodity, select the account with that commodity.
@@ -17308,7 +17308,7 @@ msgstr "QIF आयात"
 msgid ""
 "QIF files downloaded from banks and other financial institutions may not "
 "have information about Accounts and Categories which would allow them to be "
-"correctly assigned to GnuCash accounts.  \n"
+"correctly assigned to GnuCash accounts. \n"
 "\n"
 "In the following page, you will see the text that appears in the Payee and "
 "Memo fields of transactions with no QIF Account or Category. By default "
@@ -17368,14 +17368,14 @@ msgstr "संक्षेपपट्टी"
 #, fuzzy
 msgid ""
 "The QIF file format does not specify which order the day, month, and year "
-"components of a date are printed.  In most cases, it is possible to "
+"components of a date are printed. In most cases, it is possible to "
 "automatically determine which format is in use in a particular file. "
 "However, in the file you have just imported there exist more than one "
-"possible format that fits the data.  \n"
+"possible format that fits the data. \n"
 "\n"
-"Please select a date format for the file.  QIF files created by European "
+"Please select a date format for the file. QIF files created by European "
 "software are likely  to be in \"d-m-y\" or day-month-year format, where US "
-"QIF files are likely to be \"m-d-y\" or month-day-year.    \n"
+"QIF files are likely to be \"m-d-y\" or month-day-year.   \n"
 msgstr ""
 "क्यु आइ एफ ढाँचाले छापिएको मितिको दिन, महिना, र बर्ष अवयवहरू कुन क्रममा छ सो उल्लेख "
 "गरेको छैन। धेरै केसहरूमा, एउटा निश्चित फाइलमा कुन ढाँचा प्रयोगमा छ सो स्वचालित तरिकाले "
@@ -17390,7 +17390,7 @@ msgstr ""
 #, fuzzy
 msgid ""
 "The QIF file that you just loaded appears to contain transactions for just "
-"one account, but the file does not specify a name for that account.  \n"
+"one account, but the file does not specify a name for that account. \n"
 "\n"
 "Please enter a name for the account. If the file was exported from another "
 "accounting program, you should use the same account name that was used in "
@@ -17918,7 +17918,7 @@ msgstr ""
 
 #: ../src/register/ledger-core/split-register-control.c:1532
 msgid ""
-"The current transaction has been changed.  Would you like to record the "
+"The current transaction has been changed. Would you like to record the "
 "changes before moving to a new transaction, discard the changes, or return "
 "to the changed transaction?"
 msgstr ""
@@ -17975,7 +17975,7 @@ msgstr "नमूना:(x + 0.33 * y + (x+y) )"
 
 #: ../src/register/ledger-core/split-register-load.c:339
 msgid ""
-"Could not determine the account currency.  Using the default currency "
+"Could not determine the account currency. Using the default currency "
 "provided by your system."
 msgstr ""
 
@@ -18778,8 +18778,8 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:116
 msgid ""
 "Choose the number of days after which transactions will be read-only and "
-"cannot be edited anymore.  This threshold is marked by a red line in the "
-"account register windows.  If zero, all transactions can be edited and none "
+"cannot be edited anymore. This threshold is marked by a red line in the "
+"account register windows. If zero, all transactions can be edited and none "
 "are read-only."
 msgstr ""
 
@@ -19468,7 +19468,7 @@ msgstr "पछिको मिति"
 #: ../intl-scm/guile-strings.c:456
 #, fuzzy, c-format
 msgid ""
-"Transactions relating to '%s' contain more than one currency.  This report "
+"Transactions relating to '%s' contain more than one currency. This report "
 "is not designed to cope with this possibility."
 msgstr ""
 "कम्पनी %d सँग सम्बन्धित कारोबारहरूले एकभन्दा बढी मुद्राहरू समाहित गर्दछ। यो प्रतिवेदन यो "
@@ -19534,7 +19534,7 @@ msgstr "$999,999.99 -> $0, Z->A"
 #. src/report/business-reports/aging.scm
 #: ../intl-scm/guile-strings.c:482
 msgid ""
-"Show multi-currency totals.  If not selected, convert all totals to report "
+"Show multi-currency totals. If not selected, convert all totals to report "
 "currency"
 msgstr ""
 "बहुविध-मुद्रा जोडहरू देखाउनुहोस्। यदि चयन गरिएको छैन भने , मुद्रा प्रतिवेदनमा सबै जोडहरू "
@@ -19608,7 +19608,7 @@ msgstr "९१+ दिन"
 #. src/report/business-reports/job-report.scm
 #: ../intl-scm/guile-strings.c:512 ../intl-scm/guile-strings.c:1452
 msgid ""
-"No valid account selected.  Click on the Options button and select the "
+"No valid account selected. Click on the Options button and select the "
 "account to use."
 msgstr ""
 "कुनै वैध खाता चयन गरिएको छैन। विकल्प बटनमा क्लिक गर्नुहोस् र प्रयोग गर्न खाता चयन "
@@ -19717,7 +19717,7 @@ msgstr " %s प्रतिवेदन प्रदर्शन गर्नु
 #. src/report/business-reports/balsheet-eg.scm
 #: ../intl-scm/guile-strings.c:544
 msgid ""
-"The balance sheet can be displayed with either 1 or 2 columns.  'auto' means "
+"The balance sheet can be displayed with either 1 or 2 columns. 'auto' means "
 "that the layout will be adjusted to fit the width of the page."
 msgstr ""
 
@@ -19862,7 +19862,7 @@ msgstr "टेम्प्लेट:"
 #. src/report/business-reports/balsheet-eg.scm
 #: ../intl-scm/guile-strings.c:576
 msgid ""
-"The file name of the eguile template part of this report.  This file must be "
+"The file name of the eguile template part of this report. This file must be "
 "in your .gnucash directory, or else in its proper place within the GnuCash "
 "installation directories."
 msgstr ""
@@ -19877,7 +19877,7 @@ msgstr "शैलीपाना"
 #. src/report/business-reports/balsheet-eg.scm
 #: ../intl-scm/guile-strings.c:580
 msgid ""
-"The file name of the CSS stylesheet to use with this report.  If specified, "
+"The file name of the CSS stylesheet to use with this report. If specified, "
 "this file should be in your .gnucash directory, or else in its proper place "
 "within the GnuCash installation directories."
 msgstr ""
@@ -20248,7 +20248,7 @@ msgstr "%s - %s"
 #. src/report/business-reports/job-report.scm
 #: ../intl-scm/guile-strings.c:750 ../intl-scm/guile-strings.c:1458
 #, c-format
-msgid "No valid %s selected.  Click on the Options button to select a company."
+msgid "No valid %s selected. Click on the Options button to select a company."
 msgstr "कुनै वैध %s चयन गरिएको छैन। कम्पनी चयन गर्न विकल्प बटनमा क्लिक गर्नुहोस्।"
 
 #. src/report/business-reports/customer-summary.scm
@@ -20681,7 +20681,7 @@ msgstr "बीजक प्रविष्टि भएन"
 #: ../intl-scm/guile-strings.c:1352
 #, fuzzy
 msgid ""
-"No valid invoice selected.  Click on the Options button and select the "
+"No valid invoice selected. Click on the Options button and select the "
 "invoice to use."
 msgstr ""
 "कुनै वैध खाता चयन गरिएको छैन। विकल्प बटनमा क्लिक गर्नुहोस् र प्रयोग गर्न खाता चयन "
@@ -21284,7 +21284,7 @@ msgstr "बीजक सङ्ख्या"
 #. src/report/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:1762
 msgid ""
-"The file name of the eguile template part of this report.  This file should "
+"The file name of the eguile template part of this report. This file should "
 "either be in your .gnucash directory, or else in its proper place within the "
 "GnuCash installation directories."
 msgstr ""
@@ -21292,7 +21292,7 @@ msgstr ""
 #. src/report/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:1764
 msgid ""
-"The file name of the CSS stylesheet to use with this report.  This file "
+"The file name of the CSS stylesheet to use with this report. This file "
 "should either be in your .gnucash directory, or else in its proper place "
 "within the GnuCash installation directories."
 msgstr ""
@@ -21317,8 +21317,8 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:1772
 #, c-format
 msgid ""
-"Width of the logo in CSS format, e.g. 10% or 32px.  Leave blank to display "
-"the logo at its natural width.  The height of the logo will be scaled "
+"Width of the logo in CSS format, e.g. 10% or 32px. Leave blank to display "
+"the logo at its natural width. The height of the logo will be scaled "
 "accordingly."
 msgstr ""
 
@@ -21956,7 +21956,7 @@ msgstr "विनिमय दर"
 
 #. src/report/report-system/html-utilities.scm
 #: ../intl-scm/guile-strings.c:2116
-msgid "No budgets exist.  You must create at least one budget."
+msgid "No budgets exist. You must create at least one budget."
 msgstr ""
 
 #. src/report/report-system/html-utilities.scm
@@ -23310,7 +23310,7 @@ msgstr "सबै चयन गरिएको खाताहरूको स�
 #: ../intl-scm/guile-strings.c:2706
 msgid ""
 "Exclude transactions that only involve two accounts, both of which are "
-"selected below.  This only affects the profit and loss columns of the table."
+"selected below. This only affects the profit and loss columns of the table."
 msgstr ""
 
 #. src/report/standard-reports/average-balance.scm
@@ -26491,7 +26491,7 @@ msgstr ""
 #: ../doc/tip_of_the_day.list.in:4
 msgid ""
 "You can easily import your existing financial data from Quicken, MS Money or "
-"other programs that export QIF files or OFX files.  In the File menu, click "
+"other programs that export QIF files or OFX files. In the File menu, click "
 "on the sub-menu Import and click on QIF or OFX file, respectively. Then, "
 "follow the instructions provided."
 msgstr ""
@@ -26503,7 +26503,7 @@ msgstr ""
 #: ../doc/tip_of_the_day.list.in:9
 msgid ""
 "If you are familiar with other financial programs such as Quicken, note that "
-"GnuCash uses accounts instead of categories to track income and expenses.  "
+"GnuCash uses accounts instead of categories to track income and expenses. "
 "For more information on income and expense accounts, please see the GnuCash "
 "online manual."
 msgstr ""
@@ -26513,8 +26513,8 @@ msgstr ""
 
 #: ../doc/tip_of_the_day.list.in:14
 msgid ""
-"Create new accounts by clicking the New button in the main window tool bar.  "
-"This will bring up a dialog box where you can enter account details.  For "
+"Create new accounts by clicking the New button in the main window tool bar. "
+"This will bring up a dialog box where you can enter account details. For "
 "more information on choosing an account type or setting up a chart of "
 "accounts, please see the GnuCash online manual."
 msgstr ""
@@ -26547,8 +26547,8 @@ msgstr ""
 #: ../doc/tip_of_the_day.list.in:29
 msgid ""
 "As you enter amounts in the register, you can use the GnuCash calculator to "
-"add, subtract, multiply and divide .  Simply type the first value, then "
-"select '+', '-','*', or '/'.  Type the second value and press Enter to "
+"add, subtract, multiply and divide . Simply type the first value, then "
+"select '+', '-','*', or '/'. Type the second value and press Enter to "
 "record the calculated amount."
 msgstr ""
 "तपाईँले रजिस्टरमा प्रविष्ट गर्नु भएका रकमहरू जस्तै, तपाईँले जोड्न, घटाउन, गुणन गर्न र भाग "
@@ -26559,7 +26559,7 @@ msgstr ""
 #: ../doc/tip_of_the_day.list.in:34
 #, fuzzy
 msgid ""
-"Quick-fill makes it easy to enter common transactions.  When you type the "
+"Quick-fill makes it easy to enter common transactions. When you type the "
 "first letter(s) of a common transaction description, then press the Tab key, "
 "GnuCash will automatically complete the remainder of the transaction as it "
 "was last entered."
@@ -26607,7 +26607,7 @@ msgstr ""
 #: ../doc/tip_of_the_day.list.in:56
 msgid ""
 "In the reconcile window, you can press the spacebar to mark transactions as "
-"reconciled.  You can also press Tab and Shift-Tab to move between deposits "
+"reconciled. You can also press Tab and Shift-Tab to move between deposits "
 "and withdrawals."
 msgstr ""
 "मिलान सञ्झ्यालमा, तपाईँले मिलान गरिएको रूपमा कारोबारहरू चिन्ह लगाउन स्पेसबार दबाउन "
@@ -26636,7 +26636,7 @@ msgstr ""
 
 #: ../doc/tip_of_the_day.list.in:70
 msgid ""
-"Style Sheets affect how reports are displayed.  Choose a style sheet for "
+"Style Sheets affect how reports are displayed. Choose a style sheet for "
 "your report as a report option, and use the Edit -> Style Sheets menu to "
 "customize style sheets."
 msgstr ""
@@ -26673,7 +26673,7 @@ msgstr ""
 
 #: ../doc/tip_of_the_day.list.in:90
 msgid ""
-"The GnuCash developers are easy to contact.  As well as several mailing "
+"The GnuCash developers are easy to contact. As well as several mailing "
 "lists, you can chat to them live on IRC! Join them on #gnucash at irc.gnome."
 "org"
 msgstr ""
@@ -27127,7 +27127,7 @@ msgstr ""
 #~ msgstr "QIF आयात गर्नुहोस्..."
 
 #~ msgid ""
-#~ "Enable the SKIP action in the transaction matcher.  If enabled, a "
+#~ "Enable the SKIP action in the transaction matcher. If enabled, a "
 #~ "transaction whose best match's score is in the yellow zone (above the "
 #~ "Auto-ADD threshold but below the Auto-CLEAR threshold) will be SKIPed by "
 #~ "default."
@@ -27207,7 +27207,7 @@ msgstr ""
 #~ "निर्यात गर्नुहोस् थिच्नुहोस्।"
 
 #~ msgid ""
-#~ "No Tax Related accounts were found.  Go to the Edit->Tax Options dialog "
+#~ "No Tax Related accounts were found. Go to the Edit->Tax Options dialog "
 #~ "to set up tax-related accounts."
 #~ msgstr ""
 #~ "कर सम्बन्धित खाताहरू फेला परेनन्।  कर-सम्बन्धित खाताहरू सेटअप गर्न सम्पादन गर्नुहोस्->कर "
@@ -27282,7 +27282,7 @@ msgstr ""
 #~ msgstr "खोल्नुहोस्"
 
 #~ msgid ""
-#~ "Enable the EDIT action in the transaction matcher.  NOT YET SUPPORTED"
+#~ "Enable the EDIT action in the transaction matcher. NOT YET SUPPORTED"
 #~ msgstr "कारोबार मिलाउनेमा EDIT कार्य सक्षम पार्नुहोस्। अहिले सम्म समर्थित छैन"
 
 #~ msgid ""
@@ -27542,14 +27542,14 @@ msgstr ""
 #~ msgstr "टेम्लेट कारोबार (पढ्ने-मात्र)"
 
 #~ msgid ""
-#~ "The following scheduled transactions have expired.  Select those you wish "
+#~ "The following scheduled transactions have expired. Select those you wish "
 #~ "to delete."
 #~ msgstr ""
 #~ "निम्न निर्दिष्ट गरेको कारोबारहरूको म्याद समाप्त भइसकेको छ।  तपाईँले मेट्न चाहनु भएको "
 #~ "जति चयन गर्नुहोस्।"
 
 #~ msgid ""
-#~ "The listed Scheduled Transactions are to-be created soon.  Select any "
+#~ "The listed Scheduled Transactions are to-be created soon. Select any "
 #~ "which you would like to create now, and click \"Forward\" to create them."
 #~ msgstr ""
 #~ "सूचीबद्ध तोकिएका कारोबारहरू चाँडैनै सिर्जना गर्नु पर्दछ। तपाईँले सिर्जना गर्न चाहनु भएको "
@@ -27726,7 +27726,7 @@ msgstr ""
 
 #~ msgid ""
 #~ "The Chart of Accounts includes the balance for each account, on the date "
-#~ "specified.  Note that future dates are not supported."
+#~ "specified. Note that future dates are not supported."
 #~ msgstr ""
 #~ "लेखाहरूको चित्रपटले, उल्लेखित मितिमा हरेक खाताको लागि सन्तुलन समावेश गर्दछ। याद "
 #~ "गर्नुहोस् कि भविष्यका मितिहरू समर्थित छैनन्।"
@@ -27871,7 +27871,7 @@ msgstr ""
 #~ "भयो। XML फाइलको वनावट ठीक-ढाँचा नभएको वा अवैध डेटा समावेश छ।"
 
 #~ msgid ""
-#~ "The QSF Map file %s was written for a different version of QOF.  It may "
+#~ "The QSF Map file %s was written for a different version of QOF. It may "
 #~ "need to be modified to work with your current QOF installation."
 #~ msgstr ""
 #~ "QSF Map फाइल %s QOF को फरक संस्करणको लागि लेखिएको छ। त्यसलाई तपाईँको हालको QOF "
@@ -27900,7 +27900,7 @@ msgstr ""
 
 #~ msgid ""
 #~ "Wrong QSF map selected. The selected map %s validates but was written for "
-#~ "different QOF objects.  The list of objects defined in this map does not "
+#~ "different QOF objects. The list of objects defined in this map does not "
 #~ "include all the objects described in the current QSF object file."
 #~ msgstr ""
 #~ "गलत QSF नक्शा चयन गरियो। चयन गरिएको नक्शा %s वैध छ तर फरक QOF वस्तुहरूको लागि "
@@ -28223,7 +28223,7 @@ msgstr ""
 #~ msgstr "क्वेरी कार्यान्वयन गर्न सकिँदैन"
 
 #~ msgid ""
-#~ "The current transaction has been changed.  Would you like to record the "
+#~ "The current transaction has been changed. Would you like to record the "
 #~ "changes before closing this page, close the page without recording the "
 #~ "changes, or cancel the close?"
 #~ msgstr ""
@@ -28302,13 +28302,13 @@ msgstr ""
 #~ msgid ""
 #~ "If you are importing a QIF file downloaded from a bank or other financial "
 #~ "institution, some of the information in the QIF file may duplicate "
-#~ "information already in your GnuCash accounts.  GnuCash will try to detect "
-#~ "duplicates of existing transactions.  \n"
+#~ "information already in your GnuCash accounts. GnuCash will try to detect "
+#~ "duplicates of existing transactions. \n"
 #~ "\n"
 #~ "On the next page, you will be asked to confirm that an existing "
-#~ "transaction matches an imported transaction.  Imported transactions are "
+#~ "transaction matches an imported transaction. Imported transactions are "
 #~ "shown on the left side of the page, and possible matches for the selected "
-#~ "left-hand transaction are shown to the right.  There may be several old "
+#~ "left-hand transaction are shown to the right. There may be several old "
 #~ "transactions that could match an imported transaction; you will be able "
 #~ "to select the correct one by double-clicking in the \"Dup?\" column of "
 #~ "the correct transaction.\n"
@@ -28492,7 +28492,7 @@ msgstr ""
 #~ msgid "clear:autoswitch"
 #~ msgstr "खाली गर्नुहोस्::स्वत:स्विच"
 
-#~ msgid "The Date format is ambiguous.  Please choose the correct format."
+#~ msgid "The Date format is ambiguous. Please choose the correct format."
 #~ msgstr "मिति ढाँचा अस्पष्ट छ।  कृपया ठीक ढाँचा रोज्नुहोस्।"
 
 #~ msgid " Stylesheet"
@@ -28836,8 +28836,8 @@ msgstr ""
 #~ msgstr "जिएनयुक्यास बन्द गर्नुहोस्?"
 
 #~ msgid ""
-#~ "You are attempting to close the last GnuCash window.  Doing so will quit "
-#~ "the application.  Are you sure that this is what you want to do?"
+#~ "You are attempting to close the last GnuCash window. Doing so will quit "
+#~ "the application. Are you sure that this is what you want to do?"
 #~ msgstr ""
 #~ "तपाईँले अन्तिमको जिएनयुक्यास सञ्झ्याल बन्द गर्ने प्रयास गर्नुभएको छ। यसो गर्नाले अनुप्रयोग "
 #~ "बन्द हुन्छ। तपाईँले यसो गर्न चाहनु भएको हो ?"
@@ -28921,7 +28921,7 @@ msgstr ""
 #~ "Click \"Finish\" to update your accounts to use the new information you "
 #~ "have entered.\n"
 #~ "\n"
-#~ "Click \"Cancel\" to cancel the file-loading process.  \n"
+#~ "Click \"Cancel\" to cancel the file-loading process. \n"
 #~ "\n"
 #~ "Click \"Back\" to review your currency selections."
 #~ msgstr ""
@@ -28941,7 +28941,7 @@ msgstr ""
 #~ "new version. \n"
 #~ "\n"
 #~ "This dialog will prompt you for some additional information about each "
-#~ "currency, stock, and mutual fund that appear in your accounts.  After you "
+#~ "currency, stock, and mutual fund that appear in your accounts. After you "
 #~ "have entered this information, you can update your accounts for the new "
 #~ "version of GnuCash.\n"
 #~ "\n"

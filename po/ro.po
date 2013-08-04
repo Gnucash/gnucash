@@ -570,7 +570,7 @@ msgstr "Necunoscut"
 
 #: ../src/business/business-gnome/dialog-billterms.c:644
 #, c-format
-msgid "Term \"%s\" is in use.  You cannot delete it."
+msgid "Term \"%s\" is in use. You cannot delete it."
 msgstr "Termenul \"%s\" este folosit. Nu poţi să il ştergi."
 
 #: ../src/business/business-gnome/dialog-billterms.c:650
@@ -581,7 +581,7 @@ msgstr "Esti sigur că vrei să ştergi \"%s\"?"
 
 #: ../src/business/business-gnome/dialog-choose-owner.c:75
 msgid ""
-"This transaction needs to be assigned to a Customer.  Please choose the "
+"This transaction needs to be assigned to a Customer. Please choose the "
 "Customer below."
 msgstr ""
 "Această tranzacție trebuie să aibă un client. Te rog alege un client de mai "
@@ -589,7 +589,7 @@ msgstr ""
 
 #: ../src/business/business-gnome/dialog-choose-owner.c:82
 msgid ""
-"This transaction needs to be assigned to a Vendor.  Please choose the Vendor "
+"This transaction needs to be assigned to a Vendor. Please choose the Vendor "
 "below."
 msgstr ""
 "Această tranzacție trebuie să aibă un vânzător. Te rog alege un vânzător de "
@@ -712,13 +712,13 @@ msgid "Find Customer"
 msgstr "Găseşte client"
 
 #: ../src/business/business-gnome/dialog-date-close.c:75
-msgid "No Account selected.  Please try again."
-msgstr "Niciun cont selectat.  Te rog încearcă încă o dată."
+msgid "No Account selected. Please try again."
+msgstr "Niciun cont selectat. Te rog încearcă încă o dată."
 
 #: ../src/business/business-gnome/dialog-date-close.c:82
 #, fuzzy
-msgid "Placeholder account selected.  Please try again."
-msgstr "Niciun cont selectat.  Te rog încearcă încă o dată."
+msgid "Placeholder account selected. Please try again."
+msgstr "Niciun cont selectat. Te rog încearcă încă o dată."
 
 #: ../src/business/business-gnome/dialog-employee.c:225
 msgid "You must enter a username."
@@ -808,7 +808,7 @@ msgstr ""
 msgid "The Invoice must have at least one Entry."
 msgstr "Factura trebuie să aibă cel puţin o intrare."
 
-#. Ok, we can post this invoice.  Ask for verification, set the due date,
+#. Ok, we can post this invoice. Ask for verification, set the due date,
 #. * post date, and posted account
 #.
 #: ../src/business/business-gnome/dialog-invoice.c:711
@@ -854,7 +854,7 @@ msgstr "Acumulez împărțiri?"
 #: ../src/business/business-gnome/dialog-invoice.c:774
 msgid ""
 "One or more of the entries are for accounts different from the invoice/bill "
-"currency.  You will be asked a conversion rate for each."
+"currency. You will be asked a conversion rate for each."
 msgstr ""
 
 #: ../src/business/business-gnome/dialog-invoice.c:901
@@ -1269,7 +1269,7 @@ msgstr "Trebuie dat un ID proprietarului."
 msgid "The Order must have at least one Entry."
 msgstr "Comanda trebuie să aibă cel puţin o intrare."
 
-#. Damn; yes.  Well, ask the user to make sure they REALLY want to
+#. Damn; yes. Well, ask the user to make sure they REALLY want to
 #. * close this order!
 #.
 #: ../src/business/business-gnome/dialog-order.c:299
@@ -1280,7 +1280,7 @@ msgstr ""
 "Această comandă conţine intrări care nu au fost facturate. Esti sigur că "
 "vrei să o închizi înainte de a factura toate intrările?"
 
-#. Ok, we can close this.  Ask for verification and set the closed date
+#. Ok, we can close this. Ask for verification and set the closed date
 #: ../src/business/business-gnome/dialog-order.c:308
 msgid "Do you really want to close the order?"
 msgstr "Chiar vrei să închizi comanda?"
@@ -1331,10 +1331,10 @@ msgstr "Avans"
 #: ../src/business/business-gnome/dialog-payment.c:556
 #, fuzzy
 msgid ""
-"You must enter the amount of the payment.  The payment amount must not be "
+"You must enter the amount of the payment. The payment amount must not be "
 "zero."
 msgstr ""
-"Trebuie să scrii valoarea plăţii.  Valoarea plăţii trebuie să fie mai mare "
+"Trebuie să scrii valoarea plăţii. Valoarea plăţii trebuie să fie mai mare "
 "decat zero."
 
 #: ../src/business/business-gnome/dialog-payment.c:566
@@ -1352,19 +1352,19 @@ msgstr "Trebuie să scrii un nume de cont pentru postare."
 
 #: ../src/business/business-gnome/dialog-payment.c:614
 msgid ""
-"The transfer and post accounts are associated with different currencies.  "
+"The transfer and post accounts are associated with different currencies. "
 "Please specify the conversion rate."
 msgstr ""
 
 #: ../src/business/business-gnome/dialog-payment.c:931
 #, c-format
 msgid ""
-"You have no valid \"Post To\" accounts.  Please create an account of type "
-"\"%s\" before you continue to process this payment.  Perhaps you want to "
+"You have no valid \"Post To\" accounts. Please create an account of type "
+"\"%s\" before you continue to process this payment. Perhaps you want to "
 "create an Invoice or Bill first?"
 msgstr ""
-"Nu e valid niciun cont de tipul \"Postat către\".  Te rog crează un cont de "
-"tipul \"%s\" înainte să continui procesarea acestei plăți.  Poate că vrei să "
+"Nu e valid niciun cont de tipul \"Postat către\". Te rog crează un cont de "
+"tipul \"%s\" înainte să continui procesarea acestei plăți. Poate că vrei să "
 "creezi mai întâi o factură?"
 
 #: ../src/business/business-gnome/dialog-vendor.c:214
@@ -2179,11 +2179,11 @@ msgstr ""
 
 #: ../src/business/business-gnome/gtkbuilder/business-prefs.glade.h:9
 msgid ""
-"If checked, each invoice will be opened in its own top level window.  If "
+"If checked, each invoice will be opened in its own top level window. If "
 "clear, the invoice will be opened in the current window."
 msgstr ""
 "Daca e bifat, fiecare factură va fi deschisă în fereastra din nivelul "
-"superior.  Daca e gol, factura va fi deschisă în fereastra curentă."
+"superior. Daca e gol, factura va fi deschisă în fereastra curentă."
 
 #: ../src/business/business-gnome/gtkbuilder/business-prefs.glade.h:10
 #: ../src/gnome/gtkbuilder/dialog-sx.glade.h:34
@@ -2349,8 +2349,8 @@ msgstr "Termeni"
 
 #: ../src/business/business-gnome/gtkbuilder/dialog-billterms.glade.h:22
 msgid ""
-"The cutoff day for applying bills to the next month.  After the cutoff, "
-"bills are applied to the following month.  Negative values count backwards "
+"The cutoff day for applying bills to the next month. After the cutoff, "
+"bills are applied to the following month. Negative values count backwards "
 "from the end of the month."
 msgstr ""
 "Ziua scadentă pentru aplicarea facturilor lunii următoare. După ziua "
@@ -2599,10 +2599,10 @@ msgstr "Termeni:"
 
 #: ../src/business/business-gnome/gtkbuilder/dialog-customer.glade.h:24
 msgid ""
-"The customer ID number.  If left blank a reasonable number will be chosen "
+"The customer ID number. If left blank a reasonable number will be chosen "
 "for you"
 msgstr ""
-"Numărul ID al clientului.  Daca e lăsat gol, un număr rezonabil va fi ales "
+"Numărul ID al clientului. Daca e lăsat gol, un număr rezonabil va fi ales "
 "pentru tine"
 
 #: ../src/business/business-gnome/gtkbuilder/dialog-date-close.glade.h:2
@@ -2689,7 +2689,7 @@ msgstr "Adresa plăţii"
 
 #: ../src/business/business-gnome/gtkbuilder/dialog-employee.glade.h:21
 msgid ""
-"The employee ID number.  If left blank a reasonable number will be chosen "
+"The employee ID number. If left blank a reasonable number will be chosen "
 "for you"
 msgstr ""
 "Numărul ID al angajatului. Daca e lăsat gol, un număr rezonabil va fi ales "
@@ -2767,10 +2767,10 @@ msgstr "Resetez tabelul de taxe la valorile prezente?"
 
 #: ../src/business/business-gnome/gtkbuilder/dialog-invoice.glade.h:25
 msgid ""
-"The invoice ID number.  If left blank a reasonable number will be chosen for "
+"The invoice ID number. If left blank a reasonable number will be chosen for "
 "you."
 msgstr ""
-"Numărul ID al facturii.  Daca e lăsat gol, un număr rezonabil va fi ales "
+"Numărul ID al facturii. Daca e lăsat gol, un număr rezonabil va fi ales "
 "pentru tine."
 
 #: ../src/business/business-gnome/gtkbuilder/dialog-invoice.glade.h:27
@@ -2803,9 +2803,9 @@ msgstr "Informații despre proprietar"
 
 #: ../src/business/business-gnome/gtkbuilder/dialog-job.glade.h:9
 msgid ""
-"The job ID number.  If left blank a reasonable number will be chosen for you"
+"The job ID number. If left blank a reasonable number will be chosen for you"
 msgstr ""
-"Numărul ID al funcţiei.  Daca e lăsat gol, un număr rezonabil va fi ales "
+"Numărul ID al funcţiei. Daca e lăsat gol, un număr rezonabil va fi ales "
 "pentru tine"
 
 #: ../src/business/business-gnome/gtkbuilder/dialog-order.glade.h:4
@@ -2848,10 +2848,10 @@ msgstr "Referinţă"
 
 #: ../src/business/business-gnome/gtkbuilder/dialog-order.glade.h:15
 msgid ""
-"The order ID number.  If left blank a reasonable number will be chosen for "
+"The order ID number. If left blank a reasonable number will be chosen for "
 "you"
 msgstr ""
-"Numărul ID al comenzii.  Daca e lăsat gol, un număr rezonabil va fi ales "
+"Numărul ID al comenzii. Daca e lăsat gol, un număr rezonabil va fi ales "
 "pentru tine"
 
 #: ../src/business/business-gnome/gtkbuilder/dialog-payment.glade.h:2
@@ -3032,10 +3032,10 @@ msgstr "Tabelul de taxe:"
 
 #: ../src/business/business-gnome/gtkbuilder/dialog-vendor.glade.h:18
 msgid ""
-"The vendor ID number.  If left blank a reasonable number will be chosen for "
+"The vendor ID number. If left blank a reasonable number will be chosen for "
 "you"
 msgstr ""
-"Numărul ID al vânzătorului.  Dacă e lăsat gol, un număr rezonabil va fi ales "
+"Numărul ID al vânzătorului. Dacă e lăsat gol, un număr rezonabil va fi ales "
 "pentru tine"
 
 #. src/report/business-reports/customer-summary.scm
@@ -3248,11 +3248,11 @@ msgstr "Tabelul de taxe %s nu există. Vrei să îl creezi?"
 
 #: ../src/business/business-ledger/gncEntryLedgerControl.c:870
 msgid ""
-"The current entry has been changed.  However, this entry is part of an "
+"The current entry has been changed. However, this entry is part of an "
 "existing order. Would you like to record the change and effectively change "
 "your order?"
 msgstr ""
-"Intrarea curentă a fost modificată.  Totuşi, această intrare face parte "
+"Intrarea curentă a fost modificată. Totuşi, această intrare face parte "
 "dintr-o comandă. Vrei să înregistrezi modificarea şi efectiv să modifici "
 "comanda?"
 
@@ -3602,7 +3602,7 @@ msgstr "Cum ai plătit pentru acest item?"
 #: ../src/core-utils/gnc-features.c:115
 #, fuzzy
 msgid ""
-"This Dataset contains features not supported by this version of GnuCash.  "
+"This Dataset contains features not supported by this version of GnuCash. "
 "You must use a newer version of GnuCash in order to support the following "
 "features:"
 msgstr ""
@@ -3627,7 +3627,7 @@ msgstr ""
 msgid ""
 "The directory\n"
 "  %s\n"
-"exists but cannot be accessed.  This program \n"
+"exists but cannot be accessed. This program \n"
 "must have full access (read/write/execute) to \n"
 "the directory in order to function properly.\n"
 msgstr ""
@@ -3657,7 +3657,7 @@ msgid ""
 "An unknown error occurred when validating that the\n"
 "  %s\n"
 "directory exists and is usable. Please correct the\n"
-"problem and restart GnuCash.  The reported error \n"
+"problem and restart GnuCash. The reported error \n"
 "was '%s' (errno %d)."
 msgstr ""
 "O eroare necunoscută a apărut în timpul validării directorului\n"
@@ -3818,7 +3818,7 @@ msgid "Extra to Charge Card"
 msgstr "Extra pentru încărcare card"
 
 #: ../src/engine/gncInvoice.c:1485
-msgid "Generated from an invoice.  Try unposting the invoice."
+msgid "Generated from an invoice. Try unposting the invoice."
 msgstr "Generat de o factură. Încearcă sa nu postezi factura."
 
 #: ../src/engine/gncInvoice.c:1914
@@ -4017,7 +4017,7 @@ msgstr[2] ""
 #: ../src/gnome/assistant-acct-period.c:371
 #, fuzzy, c-format
 msgid ""
-"You have asked for a book to be created.  This book will contain all "
+"You have asked for a book to be created. This book will contain all "
 "transactions up to midnight %s (for a total of %d transactions spread over "
 "%d accounts).\n"
 "\n"
@@ -5752,7 +5752,7 @@ msgstr "Salvez schimbările în %s?"
 #: ../src/gnome/gnc-plugin-page-register2.c:1552
 #: ../src/gnome/gnc-plugin-page-register.c:1498
 msgid ""
-"This register has pending changes to a transaction.  Would you like to save "
+"This register has pending changes to a transaction. Would you like to save "
 "the changes to this transaction, discard the transaction, or cancel the "
 "operation?"
 msgstr ""
@@ -6037,7 +6037,7 @@ msgstr "Acest registru de cont este doar pentru citire."
 
 #: ../src/gnome/gnc-split-reg2.c:1037 ../src/gnome/gnc-split-reg.c:2036
 msgid ""
-"This account may not be edited.  If you want to edit transactions in this "
+"This account may not be edited. If you want to edit transactions in this "
 "register, please open the account options and turn off the placeholder "
 "checkbox."
 msgstr ""
@@ -6046,7 +6046,7 @@ msgstr ""
 
 #: ../src/gnome/gnc-split-reg2.c:1044 ../src/gnome/gnc-split-reg.c:2043
 msgid ""
-"One of the sub-accounts selected may not be edited.  If you want to edit "
+"One of the sub-accounts selected may not be edited. If you want to edit "
 "transactions in this register, please open the sub-account options and turn "
 "off the placeholder checkbox. You may also open an individual account "
 "instead of a set of accounts."
@@ -6072,7 +6072,7 @@ msgstr ""
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:82
 msgid ""
 "The date of this transaction is older than the \"Read-Only Threshold\" set "
-"for this book.  This setting can be changed in File -> Properties -> "
+"for this book. This setting can be changed in File -> Properties -> "
 "Accounts."
 msgstr ""
 
@@ -6119,7 +6119,7 @@ msgstr "Această parte a tranzacţiei nu poate fi ştearsă."
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:1007
 msgid ""
 "This is the split anchoring this transaction to the register. You may not "
-"delete it from this register window.  You may delete the entire transaction "
+"delete it from this register window. You may delete the entire transaction "
 "from this window, or you may navigate to a register that shows another side "
 "of this same transaction and delete the split from that register."
 msgstr ""
@@ -6203,7 +6203,7 @@ msgid ""
 "This assistant will help you setup and use accounting periods. \n"
 " \n"
 "Danger: this feature does not work correctly at this time; it is still under "
-"development.  It will probably damage your data in such a way that it cannot "
+"development. It will probably damage your data in such a way that it cannot "
 "be repaired!"
 msgstr ""
 "Acest druid te va ajuta să instalezi şi să foloseşti perioadele pentru "
@@ -6251,9 +6251,9 @@ msgstr "Te rog alege moneda de folosit în noile conturi."
 #, fuzzy
 msgid ""
 "\n"
-"Select categories that correspond to the ways that you will use GnuCash.  "
-"Each category you select will cause several accounts to be created.  Select "
-"the categories that are relevant to you.  You can always create additional "
+"Select categories that correspond to the ways that you will use GnuCash. "
+"Each category you select will cause several accounts to be created. Select "
+"the categories that are relevant to you. You can always create additional "
 "accounts by hand later."
 msgstr ""
 "Selectează categoriile care corespund modului în care vei folosi GnuCash. "
@@ -6299,7 +6299,7 @@ msgstr "Setează un nou plan de conturi"
 #: ../src/gnome/gtkbuilder/assistant-hierarchy.glade.h:22
 #, fuzzy
 msgid ""
-"Press `Apply' to create your new accounts.  You will then be able to save "
+"Press `Apply' to create your new accounts. You will then be able to save "
 "them to a file or database.\n"
 "\n"
 "Press `Back' to review your selections.\n"
@@ -6601,7 +6601,7 @@ msgstr "Data de start:"
 #: ../src/gnome/gtkbuilder/assistant-loan.glade.h:64
 #, fuzzy
 msgid ""
-"This is a step-by-step method for creating a loan repayment within GnuCash.  "
+"This is a step-by-step method for creating a loan repayment within GnuCash. "
 "In this assistant, you can input the details of your loan and its repayment "
 "along with the details of its payback. Using that information, the "
 "appropriate Scheduled Transactions will be created.\n"
@@ -7078,7 +7078,7 @@ msgstr "Obţine noile cotaţii online pentru conturile de acţiuni."
 
 #: ../src/gnome/gtkbuilder/dialog-price.glade.h:13
 msgid ""
-"If activated, delete all prices before the specified date.  Otherwise the "
+"If activated, delete all prices before the specified date. Otherwise the "
 "last stock price dated before the date will be kept and all earlier quotes "
 "deleted."
 msgstr ""
@@ -7089,7 +7089,7 @@ msgstr ""
 #: ../src/gnome/gtkbuilder/dialog-price.glade.h:14
 msgid ""
 "If activated, delete manually entered stock prices dated earlier than the "
-"specified date.  Otherwise only stock prices added by Finance::Quote will be "
+"specified date. Otherwise only stock prices added by Finance::Quote will be "
 "deleted."
 msgstr ""
 "Dacă e activată, şterge preţurile de acţiuni introduse manual a căror dată e "
@@ -7191,8 +7191,8 @@ msgstr ""
 
 #: ../src/gnome/gtkbuilder/dialog-print-check.glade.h:15
 msgid ""
-"Enter a title for this custom format.  This title will appear in the \"Check "
-"format\" selector of the Print Check dialog.  Using the title of an existing "
+"Enter a title for this custom format. This title will appear in the \"Check "
+"format\" selector of the Print Check dialog. Using the title of an existing "
 "custom format will cause that format to be overwritten."
 msgstr ""
 "Introdu un titlu pentru această formatare personalizată. Acest titlu va "
@@ -7470,7 +7470,7 @@ msgstr "Tranzacție șablon"
 #, fuzzy
 msgid ""
 "The following Scheduled Transactions reference the deleted account and must "
-"now be corrected.  Press OK to edit them."
+"now be corrected. Press OK to edit them."
 msgstr ""
 "Următoarele tranzacţii automate se referă la contul şters şi trebuie acum să "
 "fie corectate. Apasă OK pentru a le edita."
@@ -10038,7 +10038,7 @@ msgstr "Cont nou"
 #: ../src/gnome-utils/dialog-account.c:1990
 #, c-format
 msgid ""
-"Renumber the immediate sub-accounts of %s?  This will replace the account "
+"Renumber the immediate sub-accounts of %s? This will replace the account "
 "code field of each child account with a newly generated code."
 msgstr ""
 "Renumerotez subconturile imediate din %s? Aceasta va înlocui câmpul de cod "
@@ -10297,7 +10297,7 @@ msgstr "Trebuie să alegi o taxă de cont."
 
 #: ../src/gnome-utils/dialog-tax-table.c:563
 #, c-format
-msgid "Tax table \"%s\" is in use.  You cannot delete it."
+msgid "Tax table \"%s\" is in use. You cannot delete it."
 msgstr "Tabelul de taxe \"%s\" este în uz. Nu poate fi șters."
 
 #: ../src/gnome-utils/dialog-tax-table.c:611
@@ -10334,7 +10334,7 @@ msgstr "Nu poți transfera din același cont!"
 
 #: ../src/gnome-utils/dialog-transfer.c:1410
 msgid ""
-"You can't transfer from a non-currency account.  Try reversing the \"from\" "
+"You can't transfer from a non-currency account. Try reversing the \"from\" "
 "and \"to\" accounts and making the \"amount\" negative."
 msgstr ""
 "Nu poți transfera dintr-un cont non-valutar. Încearcă să schimbi conturile  "
@@ -10406,7 +10406,7 @@ msgstr "Salvez automat fişierul?"
 #: ../src/gnome-utils/gnc-autosave.c:101
 #, fuzzy, c-format
 msgid ""
-"Your data file needs to be saved to your hard disk to save your changes.  "
+"Your data file needs to be saved to your hard disk to save your changes. "
 "GnuCash has a feature to save the file automatically every %d minute, just "
 "as if you had pressed the \"Save\" button each time. \n"
 "\n"
@@ -10415,7 +10415,7 @@ msgid ""
 "\n"
 "Should your file be saved automatically?"
 msgid_plural ""
-"Your data file needs to be saved to your hard disk to save your changes.  "
+"Your data file needs to be saved to your hard disk to save your changes. "
 "GnuCash has a feature to save the file automatically every %d minutes, just "
 "as if you had pressed the \"Save\" button each time. \n"
 "\n"
@@ -10724,7 +10724,7 @@ msgstr "Nu am putut face o copie de siguranţă a fişierului %s"
 #: ../src/gnome-utils/gnc-file.c:391
 #, c-format
 msgid ""
-"Could not write to file %s.  Check that you have permission to write to this "
+"Could not write to file %s. Check that you have permission to write to this "
 "file and that there is sufficient space to create it."
 msgstr ""
 "Nu s-a putut scrie în fişierul %s. Verifică dacă ai permisiuni de scriere "
@@ -10744,7 +10744,7 @@ msgstr "Nu există permisiuni pentru a citi din fişierul %s."
 msgid ""
 "You attempted to save in\n"
 "%s\n"
-"or a subdirectory thereof.  This is not allowed as %s reserves that "
+"or a subdirectory thereof. This is not allowed as %s reserves that "
 "directory for internal use.\n"
 "\n"
 "Please try again in a different directory."
@@ -10780,9 +10780,9 @@ msgstr ""
 #: ../src/gnome-utils/gnc-file.c:441
 msgid ""
 "The library \"libdbi\" installed on your system doesn't correctly store "
-"large numbers.  This means GnuCash cannot use SQL databases correctly.  "
+"large numbers. This means GnuCash cannot use SQL databases correctly. "
 "Gnucash will not open or save to SQL databases until this is fixed by "
-"installing a different version of \"libdbi\".  Please see https://bugzilla."
+"installing a different version of \"libdbi\". Please see https://bugzilla."
 "gnome.org/show_bug.cgi?id=611936 for more information."
 msgstr ""
 
@@ -10911,7 +10911,7 @@ msgstr "Vizualizează..."
 #: ../src/gnome-utils/gnc-gnome-utils.c:273
 #, fuzzy
 msgid ""
-"GnuCash could not find the files for the help documentation.  This is likely "
+"GnuCash could not find the files for the help documentation. This is likely "
 "because the 'gnucash-docs' package is not installed"
 msgstr ""
 "GnuCash nu a putut găsi documentaţia. Acest lucru se explică probabil pentru "
@@ -10920,7 +10920,7 @@ msgstr ""
 #: ../src/gnome-utils/gnc-gnome-utils.c:366
 #: ../src/gnome-utils/gnc-gnome-utils.c:428
 msgid ""
-"GnuCash could not find the files for the help documentation.  This is likely "
+"GnuCash could not find the files for the help documentation. This is likely "
 "because the 'gnucash-docs' package is not installed."
 msgstr ""
 "GnuCash nu a putut găsi documentaţia. Acest lucru se explică probabil pentru "
@@ -11384,7 +11384,7 @@ msgstr "Se afişează data tranzacţiei?"
 #: ../src/register/register-gnome/datecell-gnome.c:129
 msgid ""
 "The entered date of the new transaction is older than the \"Read-Only "
-"Threshold\" set for this book.  This setting can be changed in File -> "
+"Threshold\" set for this book. This setting can be changed in File -> "
 "Properties -> Accounts."
 msgstr ""
 
@@ -11459,7 +11459,7 @@ msgstr ""
 #: ../src/register/ledger-core/split-register.c:610
 msgid ""
 "The entered date of the duplicated transaction is older than the \"Read-Only "
-"Threshold\" set for this book.  This setting can be changed in File -> "
+"Threshold\" set for this book. This setting can be changed in File -> "
 "Properties -> Accounts."
 msgstr ""
 
@@ -11490,8 +11490,8 @@ msgstr "Marchează partea ca nereconciliată?"
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:1590
 #: ../src/register/ledger-core/split-register-control.c:1829
 msgid ""
-"You are about to mark a reconciled split as unreconciled.  Doing so might "
-"make future reconciliation difficult!  Continue with this change?"
+"You are about to mark a reconciled split as unreconciled. Doing so might "
+"make future reconciliation difficult! Continue with this change?"
 msgstr ""
 "Eşti pe cale să marchezi o parte reconciliată drept nereconciliată. Făcând "
 "astfel, poţi face reconcilierea viitoare dificilă! Continui cu această "
@@ -11510,8 +11510,8 @@ msgstr "Modifică partea reconciliată?"
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:1720
 #: ../src/register/ledger-core/split-register-model.c:2044
 msgid ""
-"You are about to change a reconciled split.  Doing so might make future "
-"reconciliation difficult!  Continue with this change?"
+"You are about to change a reconciled split. Doing so might make future "
+"reconciliation difficult! Continue with this change?"
 msgstr ""
 "Eşti pe cale să schimbi o parte reconciliată. Făcând astfel poţi face "
 "viitoarea reconciliere dificilă! Continui cu această schimbare?"
@@ -11526,8 +11526,8 @@ msgstr "Modifică partea reconciliată?"
 #: ../src/register/ledger-core/split-register-model.c:2051
 #, fuzzy
 msgid ""
-"You are about to change a split that is linked to a reconciled split.  Doing "
-"so might make future reconciliation difficult!  Continue with this change?"
+"You are about to change a split that is linked to a reconciled split. Doing "
+"so might make future reconciliation difficult! Continue with this change?"
 msgstr ""
 "Eşti pe cale să schimbi o parte reconciliată. Făcând astfel poţi face "
 "viitoarea reconciliere dificilă! Continui cu această schimbare?"
@@ -12118,7 +12118,7 @@ msgstr "Se salvează tranzacţia modificată?"
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:2462
 #, fuzzy
 msgid ""
-"The current transaction has changed.  Would you like to record the changes, "
+"The current transaction has changed. Would you like to record the changes, "
 "or discard the changes?"
 msgstr ""
 "Modelul curent de tranzacție a fost modificat. Vrei să înregistrezi "
@@ -12365,8 +12365,8 @@ msgid ""
 "<b>Cannot find default values</b>\n"
 "\n"
 "The configuration data used to specify default values for GnuCash cannot be "
-"found in the default system locations.  Without this data GnuCash will still "
-"operate properly but it may require some extra time to setup.  Do you wish "
+"found in the default system locations. Without this data GnuCash will still "
+"operate properly but it may require some extra time to setup. Do you wish "
 "to setup the configuration data?"
 msgstr ""
 "<b>Nu pot găsi valorile implicite</b>\n"
@@ -12440,7 +12440,7 @@ msgstr ""
 #: ../src/gnome-utils/gtkbuilder/assistant-gconf-setup.glade.h:16
 msgid ""
 "The configuration data used by GnuCash to specify its default values cannot "
-"be found in the default system locations.  Without this data GnuCash will "
+"be found in the default system locations. Without this data GnuCash will "
 "still operate properly, but it may require some extra time to set up."
 msgstr ""
 "Datele de configurare folosite de GnuCash pentru a specifica valorile sale "
@@ -12803,9 +12803,9 @@ msgstr "Ta_xă înrudită"
 #: ../src/gnome-utils/gtkbuilder/dialog-account.glade.h:45
 msgid ""
 "This account (and any sub-accounts) will be hidden in the account tree and "
-"will not appear in the popup account list in the register.  To reset this "
+"will not appear in the popup account list in the register. To reset this "
 "option, you will first need to open the \"Filter By...\" dialog for the "
-"account tree and check the \"show hidden accounts\" option.  Doing so will "
+"account tree and check the \"show hidden accounts\" option. Doing so will "
 "allow you to select the account and reopen this dialog."
 msgstr ""
 "Acest cont (şi oricare din subconturile lui) vor fi ascunse în planul de "
@@ -12822,7 +12822,7 @@ msgstr ""
 
 #: ../src/gnome-utils/gtkbuilder/dialog-account.glade.h:47
 msgid ""
-"This account contains sub-accounts.  What would you like to do with these "
+"This account contains sub-accounts. What would you like to do with these "
 "sub-accounts?"
 msgstr "Acest cont conţine subconturi. Ce vrei să faci cu aceste subconturi?"
 
@@ -12834,7 +12834,7 @@ msgstr "Acest cont conţine tranzacţii. Ce vrei să faci cu aceste tranzacţii?
 
 #: ../src/gnome-utils/gtkbuilder/dialog-account.glade.h:49
 msgid ""
-"This account is present solely as a placeholder in the hierarchy.  "
+"This account is present solely as a placeholder in the hierarchy. "
 "Transactions may not be posted to this account, only to sub-accounts of this "
 "account."
 msgstr ""
@@ -12936,7 +12936,7 @@ msgstr ""
 
 #: ../src/gnome-utils/gtkbuilder/dialog-commodity.glade.h:8
 msgid ""
-"Enter the ticker symbol for the commodity (e.g. CSCO or AAPL).  If you are "
+"Enter the ticker symbol for the commodity (e.g. CSCO or AAPL). If you are "
 "retrieving quotes online, this field must exactly match the ticker symbol "
 "used by the quote source (including case). "
 msgstr ""
@@ -12968,7 +12968,7 @@ msgstr "_Singur:"
 #: ../src/gnome-utils/gtkbuilder/dialog-commodity.glade.h:14
 msgid ""
 "These are F::Q quote sources that retrieve information from a single site on "
-"the internet.  If that site is unavailable, you will not be able to retrieve "
+"the internet. If that site is unavailable, you will not be able to retrieve "
 "quotes."
 msgstr ""
 "Acestea sunt surse de cotaţii F::C care îşi iau informaţiile dintr-un singur "
@@ -12978,7 +12978,7 @@ msgstr ""
 #: ../src/gnome-utils/gtkbuilder/dialog-commodity.glade.h:15
 msgid ""
 "These are F::Q quote sources that retrieve information from multiple sites "
-"on the internet.  If one of the sites is unavailable, F::Q will attempt to "
+"on the internet. If one of the sites is unavailable, F::Q will attempt to "
 "retrieve the information from another site."
 msgstr ""
 "Acestea sunt surse de cotaţii F::C care îşi iau informaţiile din mai multe "
@@ -12987,7 +12987,7 @@ msgstr ""
 
 #: ../src/gnome-utils/gtkbuilder/dialog-commodity.glade.h:16
 msgid ""
-"These are quote sources that were recently added to F::Q.  GnuCash does not "
+"These are quote sources that were recently added to F::Q. GnuCash does not "
 "know if these sources retrieve information from a single site or from "
 "multiple sites on the internet."
 msgstr ""
@@ -13262,7 +13262,7 @@ msgstr "_Plată automată pentru cardul de credit"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:46
 msgid ""
-"Automatically expand the current transaction to show all splits.  All other "
+"Automatically expand the current transaction to show all splits. All other "
 "transactions are shown on one line. (Two in double line mode.)"
 msgstr ""
 "Desfăşoară automat tranzacţia curentă pentru a afişa toate părţile. Toate "
@@ -13383,7 +13383,7 @@ msgstr "Afișează itemii barei de instrumente doar ca text."
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:76
 msgid ""
-"Display toolbar items with the text label below the icon.  Labels are show "
+"Display toolbar items with the text label below the icon. Labels are show "
 "for all items."
 msgstr ""
 "Afișează itemii barei de instrumente cu textul etichetă sub iconiță. "
@@ -13391,7 +13391,7 @@ msgstr ""
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:77
 msgid ""
-"Display toolbar items with the text label beside the icon.  Labels are only "
+"Display toolbar items with the text label beside the icon. Labels are only "
 "shown for the most important items."
 msgstr ""
 "Afişează itemii de pe bara de instrumente cu textul etichetei lângă iconiţă. "
@@ -13440,7 +13440,7 @@ msgstr ""
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:90
 msgid ""
-"If checked, each register will be opened in its own top level window.  If "
+"If checked, each register will be opened in its own top level window. If "
 "clear, the register will be opened in the current window."
 msgstr ""
 "Dacă e selectată, fiecare registru va fi deschis în propria sa fereastră. "
@@ -13448,7 +13448,7 @@ msgstr ""
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:91
 msgid ""
-"If checked, each report will be opened in its own top level window.  If "
+"If checked, each report will be opened in its own top level window. If "
 "clear, the report will be opened in the current window."
 msgstr ""
 "Dacă e selectată, fiecare raprot va fi deschis în propria sa fereastră. Dacă "
@@ -13456,7 +13456,7 @@ msgstr ""
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:92
 msgid ""
-"If checked, non-currency commodities will be shown in the summary bar.  If "
+"If checked, non-currency commodities will be shown in the summary bar. If "
 "clear, only currencies will be shown."
 msgstr ""
 "Dacă e selectată, vor fi afişate mărfurile fără valută în bara de sumar. "
@@ -13473,7 +13473,7 @@ msgstr ""
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:94
 msgid ""
 "If checked, pressing the 'Enter' key will move to the blank transaction at "
-"the bottom of the register.  If clear, pressing the 'Enter' key will move "
+"the bottom of the register. If clear, pressing the 'Enter' key will move "
 "down one row."
 msgstr ""
 "Dacă e selectată, apăsarea tastei 'Enter' va muta cursorul la o tranzacţie "
@@ -13482,7 +13482,7 @@ msgstr ""
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:95
 msgid ""
-"If checked, the system color theme will be applied to register windows.  If "
+"If checked, the system color theme will be applied to register windows. If "
 "clear, the original GnuCash register colors will be used."
 msgstr ""
 "Dacă e selectată, tema de culori a sistemului va fi aplicată ferestrei "
@@ -13609,7 +13609,7 @@ msgstr ""
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:125
 msgid ""
-"Show a close button on each notebook tab.  These function identically to the "
+"Show a close button on each notebook tab. These function identically to the "
 "'Close' menu item."
 msgstr ""
 "Afişează un buton de închidere pe fiecare filă a registrului. Această "
@@ -13697,7 +13697,7 @@ msgstr ""
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:142
 msgid ""
-"Show two lines of information for each transaction instead of one.  Does not "
+"Show two lines of information for each transaction instead of one. Does not "
 "affect expanded transactions."
 msgstr ""
 "Afişează două linii de informaţii pentru fiecare tranzacţie în loc de una. "
@@ -13730,7 +13730,7 @@ msgstr "Text _sub iconiţe"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:148
 msgid ""
-"The character that will be used between components of an account name.  A "
+"The character that will be used between components of an account name. A "
 "legal value is any single character except letters and numbers, or any of "
 "the following strings: \"colon\" \"slash\", \"backslash\", \"dash\" and "
 "\"period\"."
@@ -13806,7 +13806,7 @@ msgstr "Utilizează formatul de dată folosit de sistemul local."
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:167
 msgid ""
-"Use the specified absolute ending date for profit/loss calculations.  Also "
+"Use the specified absolute ending date for profit/loss calculations. Also "
 "use this date for net assets calculations."
 msgstr ""
 "Filosește data sfârșitului absolut pentru calculele de profit/pierderi. De "
@@ -13828,7 +13828,7 @@ msgstr "Utilizează moneda specificată pentru toate rapoartele nou create."
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:171
 msgid ""
-"Use the specified relative ending date for profit/loss calculations.  Also "
+"Use the specified relative ending date for profit/loss calculations. Also "
 "use this date for net assets calculations."
 msgstr ""
 "Foloseşte data de sfârşit relativă, specificată pentru calculele de profit/"
@@ -13981,7 +13981,7 @@ msgstr "Avertismente temporare"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-reset-warnings.glade.h:5
 msgid ""
-"You have requested that the following warning dialogs not be presented.  To "
+"You have requested that the following warning dialogs not be presented. To "
 "re-enable any of these dialogs, select the check box next to the dialog, "
 "then click OK."
 msgstr ""
@@ -14559,7 +14559,7 @@ msgstr "Fiecare"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-recurrence.glade.h:3
 msgid ""
-"Match the \"day of week\" and \"week of month\"?  (for example, the \"second "
+"Match the \"day of week\" and \"week of month\"? (for example, the \"second "
 "Tuesday\" of every month)"
 msgstr ""
 "Potriveşte \"ziua săptămânii\" şi \"ziua lunii\"? (de exemplu, \"a doua joi"
@@ -14906,8 +14906,8 @@ msgstr "Titlu raport"
 msgid ""
 "The external program \"AqBanking Setup Wizard\" has not been found. \n"
 "\n"
-"The %s package should include the program \"qt3-wizard\".  Please check your "
-"installation to ensure this program is present.  On some distributions this "
+"The %s package should include the program \"qt3-wizard\". Please check your "
+"installation to ensure this program is present. On some distributions this "
 "may require installing additional packages."
 msgstr ""
 "Programul extern \"Vrăjitorul de instalare al AqBanking\" nu a fost găsit. \n"
@@ -14919,15 +14919,15 @@ msgstr ""
 #: ../src/import-export/aqbanking/assistant-ab-initial.c:530
 msgid ""
 "The external program \"AqBanking Setup Wizard\" failed to run successfully "
-"because the additional software \"Qt\" was not found.  Please install the "
+"because the additional software \"Qt\" was not found. Please install the "
 "\"Qt/Windows Open Source Edition\" from Trolltech by downloading it from www."
 "trolltech.com\n"
 "\n"
 "If you have installed Qt already, you will have to adapt the PATH variable "
-"of your system appropriately.  Contact the GnuCash developers if you need "
+"of your system appropriately. Contact the GnuCash developers if you need "
 "further assistance on how to install Qt correctly.\n"
 "\n"
-"Online Banking cannot be setup without Qt.  Press \"Close\" now, then "
+"Online Banking cannot be setup without Qt. Press \"Close\" now, then "
 "\"Cancel\" to cancel the Online Banking setup."
 msgstr ""
 "Programul extern \"Vrăjitorul de instalare AqBanking\" nu a putut să ruleze "
@@ -14944,8 +14944,8 @@ msgstr ""
 
 #: ../src/import-export/aqbanking/assistant-ab-initial.c:551
 msgid ""
-"The external program \"AqBanking Setup Wizard\" failed to run successfully.  "
-"Online Banking can only be setup if this wizard has run successfully.  "
+"The external program \"AqBanking Setup Wizard\" failed to run successfully. "
+"Online Banking can only be setup if this wizard has run successfully. "
 "Please try running the \"AqBanking Setup Wizard\" again."
 msgstr ""
 "Programul extern \"Vrăjitorul de instalare al AqBanking\" nu a rulat cu "
@@ -15073,7 +15073,7 @@ msgstr ""
 #, fuzzy
 msgid ""
 "The setup for matching Online Banking accounts to GnuCash accounts is now "
-"finished.  You can now invoke Online Banking actions on those accounts.\n"
+"finished. You can now invoke Online Banking actions on those accounts.\n"
 "\n"
 "If you want to add another bank, user, or account, you can start this "
 "assistant again anytime.\n"
@@ -15377,7 +15377,7 @@ msgstr ""
 #, c-format
 msgid ""
 "Your local bank account does not yet have the SEPA account information "
-"stored.  We are sorry, but in this development version one additional step "
+"stored. We are sorry, but in this development version one additional step "
 "is necessary which has not yet been implemented directly in gnucash. Please "
 "execute the command line program \"aqhbci-tool\" for your account, as "
 "follows: aqhbci-tool4 getaccsepa -b %s -a %s"
@@ -15386,7 +15386,7 @@ msgstr ""
 #: ../src/import-export/aqbanking/dialog-ab-trans.c:564
 #, fuzzy
 msgid ""
-"You did not enter a recipient name.  A recipient name is required for an "
+"You did not enter a recipient name. A recipient name is required for an "
 "online transfer.\n"
 msgstr ""
 "Nu ai introdus un nume de recipient. Este nevoie de un nume de recipient "
@@ -15397,7 +15397,7 @@ msgstr ""
 #: ../src/import-export/aqbanking/dialog-ab-trans.c:584
 #, fuzzy
 msgid ""
-"You did not enter a recipient account.  A recipient account is required for "
+"You did not enter a recipient account. A recipient account is required for "
 "an online transfer.\n"
 msgstr ""
 "Nu ai introdus un nume de recipient. Este nevoie de un nume de recipient "
@@ -15408,7 +15408,7 @@ msgstr ""
 #: ../src/import-export/aqbanking/dialog-ab-trans.c:600
 #, fuzzy
 msgid ""
-"You did not enter a recipient bank.  A recipient bank is required for an "
+"You did not enter a recipient bank. A recipient bank is required for an "
 "online transfer.\n"
 msgstr ""
 "Nu ai introdus un nume de recipient. Este nevoie de un nume de recipient "
@@ -15450,7 +15450,7 @@ msgstr ""
 
 #: ../src/import-export/aqbanking/dialog-ab-trans.c:1098
 msgid ""
-"A template with the given name already exists.  Please enter another name."
+"A template with the given name already exists. Please enter another name."
 msgstr ""
 
 #: ../src/import-export/aqbanking/dialog-ab-trans.c:1233
@@ -15543,7 +15543,7 @@ msgstr "Tranzacție bancară online"
 
 #: ../src/import-export/aqbanking/gnc-ab-transfer.c:294
 msgid ""
-"An error occurred while executing the job.  Please check the log window for "
+"An error occurred while executing the job. Please check the log window for "
 "the exact error message.\n"
 "\n"
 "Do you want to enter the job again?"
@@ -16777,11 +16777,11 @@ msgstr "Prima parte a tranzacţiei importate: "
 #: ../src/import-export/dialog-import.glade.h:25
 msgid ""
 "In some places commercial ATMs (not belonging to a financial institution) "
-"are installed in places like convenience stores.  These ATMs add their fee "
+"are installed in places like convenience stores. These ATMs add their fee "
 "directly to the amount instead of showing up as a separate transaction or in "
-"your monthly banking fees.  For example, you withdraw $100, and you are "
-"charged $101,50 plus Interac fees.  If you manually entered that $100, the "
-"amounts won't match.  You should set this to whatever is the maximum such "
+"your monthly banking fees. For example, you withdraw $100, and you are "
+"charged $101,50 plus Interac fees. If you manually entered that $100, the "
+"amounts won't match. You should set this to whatever is the maximum such "
 "fee in your area (in units of your local currency), so the transaction will "
 "be recognised as a match."
 msgstr ""
@@ -17033,7 +17033,7 @@ msgstr "Fişierul jurnal pe care l-ai selectat a fost gol."
 
 #: ../src/import-export/log-replay/gnc-log-replay.c:621
 msgid ""
-"The log file you selected cannot be read.  The file header was not "
+"The log file you selected cannot be read. The file header was not "
 "recognized."
 msgstr ""
 "Fişierul log pe care l-ai selectat nu poate fi citit. Antetul de fişier nu a "
@@ -17044,7 +17044,7 @@ msgid "_Replay GnuCash .log file..."
 msgstr "_Reîncarcă un fişier GnuCash .log"
 
 #: ../src/import-export/log-replay/gnc-plugin-log-replay.c:49
-msgid "Replay a GnuCash log file after a crash.  This cannot be undone."
+msgid "Replay a GnuCash log file after a crash. This cannot be undone."
 msgstr ""
 "Trimite lui GnuCash un fişier log după defectare. Această operaţiune nu "
 "poate fi anulată."
@@ -17571,7 +17571,7 @@ msgstr "Import QIF"
 msgid ""
 "QIF files downloaded from banks and other financial institutions may not "
 "have information about Accounts and Categories which would allow them to be "
-"correctly assigned to GnuCash accounts.  \n"
+"correctly assigned to GnuCash accounts. \n"
 "\n"
 "In the following page, you will see the text that appears in the Payee and "
 "Memo fields of transactions with no QIF Account or Category. By default "
@@ -17630,14 +17630,14 @@ msgstr "Bară de su_mar"
 #: ../src/import-export/qif-import/assistant-qif-import.glade.h:67
 msgid ""
 "The QIF file format does not specify which order the day, month, and year "
-"components of a date are printed.  In most cases, it is possible to "
+"components of a date are printed. In most cases, it is possible to "
 "automatically determine which format is in use in a particular file. "
 "However, in the file you have just imported there exist more than one "
-"possible format that fits the data.  \n"
+"possible format that fits the data. \n"
 "\n"
-"Please select a date format for the file.  QIF files created by European "
+"Please select a date format for the file. QIF files created by European "
 "software are likely  to be in \"d-m-y\" or day-month-year format, where US "
-"QIF files are likely to be \"m-d-y\" or month-day-year.    \n"
+"QIF files are likely to be \"m-d-y\" or month-day-year.   \n"
 msgstr ""
 "Formatul de fişier QIF nu specifică în ce ordine sunt tipărite componentele "
 "datei (zi, lună, an). În cele mai multe cazuri este posibilă determinarea "
@@ -17654,7 +17654,7 @@ msgstr ""
 #, fuzzy
 msgid ""
 "The QIF file that you just loaded appears to contain transactions for just "
-"one account, but the file does not specify a name for that account.  \n"
+"one account, but the file does not specify a name for that account. \n"
 "\n"
 "Please enter a name for the account. If the file was exported from another "
 "accounting program, you should use the same account name that was used in "
@@ -18192,7 +18192,7 @@ msgstr ""
 
 #: ../src/register/ledger-core/split-register-control.c:1532
 msgid ""
-"The current transaction has been changed.  Would you like to record the "
+"The current transaction has been changed. Would you like to record the "
 "changes before moving to a new transaction, discard the changes, or return "
 "to the changed transaction?"
 msgstr ""
@@ -18250,7 +18250,7 @@ msgstr "exemplu:(x + 0.33 * y + (x+y) )"
 
 #: ../src/register/ledger-core/split-register-load.c:339
 msgid ""
-"Could not determine the account currency.  Using the default currency "
+"Could not determine the account currency. Using the default currency "
 "provided by your system."
 msgstr ""
 
@@ -19060,8 +19060,8 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:116
 msgid ""
 "Choose the number of days after which transactions will be read-only and "
-"cannot be edited anymore.  This threshold is marked by a red line in the "
-"account register windows.  If zero, all transactions can be edited and none "
+"cannot be edited anymore. This threshold is marked by a red line in the "
+"account register windows. If zero, all transactions can be edited and none "
 "are read-only."
 msgstr ""
 
@@ -19751,7 +19751,7 @@ msgstr "Data postării"
 #: ../intl-scm/guile-strings.c:456
 #, fuzzy, c-format
 msgid ""
-"Transactions relating to '%s' contain more than one currency.  This report "
+"Transactions relating to '%s' contain more than one currency. This report "
 "is not designed to cope with this possibility."
 msgstr ""
 "Tranzacţiile legate de '%s' conţin mai mult de o valută. Acest rapor nu este "
@@ -19817,7 +19817,7 @@ msgstr "$999,999.99 -> $0, Z->A"
 #. src/report/business-reports/aging.scm
 #: ../intl-scm/guile-strings.c:482
 msgid ""
-"Show multi-currency totals.  If not selected, convert all totals to report "
+"Show multi-currency totals. If not selected, convert all totals to report "
 "currency"
 msgstr ""
 "Afişează totalurile în monedă multiplă. Dacă nu e selectat, converteşte "
@@ -19891,7 +19891,7 @@ msgstr "Mai mult de 91 zile"
 #. src/report/business-reports/job-report.scm
 #: ../intl-scm/guile-strings.c:512 ../intl-scm/guile-strings.c:1452
 msgid ""
-"No valid account selected.  Click on the Options button and select the "
+"No valid account selected. Click on the Options button and select the "
 "account to use."
 msgstr ""
 "Niciun cont valid nu este selectat. Apăsaţi pe butonul Opţiuni şi alegeţi "
@@ -20000,7 +20000,7 @@ msgstr "Afişează ca raport cu două coloane"
 #. src/report/business-reports/balsheet-eg.scm
 #: ../intl-scm/guile-strings.c:544
 msgid ""
-"The balance sheet can be displayed with either 1 or 2 columns.  'auto' means "
+"The balance sheet can be displayed with either 1 or 2 columns. 'auto' means "
 "that the layout will be adjusted to fit the width of the page."
 msgstr ""
 
@@ -20147,7 +20147,7 @@ msgstr "_Şablon:"
 #. src/report/business-reports/balsheet-eg.scm
 #: ../intl-scm/guile-strings.c:576
 msgid ""
-"The file name of the eguile template part of this report.  This file must be "
+"The file name of the eguile template part of this report. This file must be "
 "in your .gnucash directory, or else in its proper place within the GnuCash "
 "installation directories."
 msgstr ""
@@ -20162,7 +20162,7 @@ msgstr "Foaie de stil"
 #. src/report/business-reports/balsheet-eg.scm
 #: ../intl-scm/guile-strings.c:580
 msgid ""
-"The file name of the CSS stylesheet to use with this report.  If specified, "
+"The file name of the CSS stylesheet to use with this report. If specified, "
 "this file should be in your .gnucash directory, or else in its proper place "
 "within the GnuCash installation directories."
 msgstr ""
@@ -20535,7 +20535,7 @@ msgstr "%s: %s"
 #. src/report/business-reports/job-report.scm
 #: ../intl-scm/guile-strings.c:750 ../intl-scm/guile-strings.c:1458
 #, c-format
-msgid "No valid %s selected.  Click on the Options button to select a company."
+msgid "No valid %s selected. Click on the Options button to select a company."
 msgstr ""
 "Nu este selectat niciun %s valid. Apăsaţi pe butonul Opţiuni pentru a "
 "selecta o companie"
@@ -20969,7 +20969,7 @@ msgstr "FACTURĂ NEPOSTATĂ"
 #: ../intl-scm/guile-strings.c:956 ../intl-scm/guile-strings.c:1166
 #: ../intl-scm/guile-strings.c:1352
 msgid ""
-"No valid invoice selected.  Click on the Options button and select the "
+"No valid invoice selected. Click on the Options button and select the "
 "invoice to use."
 msgstr ""
 "Nu e selectată nicio factură validă. Click pe butonul Opțiuni și selectează "
@@ -21573,7 +21573,7 @@ msgstr "Numărul facturii"
 #. src/report/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:1762
 msgid ""
-"The file name of the eguile template part of this report.  This file should "
+"The file name of the eguile template part of this report. This file should "
 "either be in your .gnucash directory, or else in its proper place within the "
 "GnuCash installation directories."
 msgstr ""
@@ -21581,7 +21581,7 @@ msgstr ""
 #. src/report/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:1764
 msgid ""
-"The file name of the CSS stylesheet to use with this report.  This file "
+"The file name of the CSS stylesheet to use with this report. This file "
 "should either be in your .gnucash directory, or else in its proper place "
 "within the GnuCash installation directories."
 msgstr ""
@@ -21606,8 +21606,8 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:1772
 #, c-format
 msgid ""
-"Width of the logo in CSS format, e.g. 10% or 32px.  Leave blank to display "
-"the logo at its natural width.  The height of the logo will be scaled "
+"Width of the logo in CSS format, e.g. 10% or 32px. Leave blank to display "
+"the logo at its natural width. The height of the logo will be scaled "
 "accordingly."
 msgstr ""
 
@@ -22247,7 +22247,7 @@ msgstr "Rate de schimb"
 
 #. src/report/report-system/html-utilities.scm
 #: ../intl-scm/guile-strings.c:2116
-msgid "No budgets exist.  You must create at least one budget."
+msgid "No budgets exist. You must create at least one budget."
 msgstr ""
 
 #. src/report/report-system/html-utilities.scm
@@ -23620,7 +23620,7 @@ msgstr "Include subconturile tuturor conturilor selectate"
 #: ../intl-scm/guile-strings.c:2706
 msgid ""
 "Exclude transactions that only involve two accounts, both of which are "
-"selected below.  This only affects the profit and loss columns of the table."
+"selected below. This only affects the profit and loss columns of the table."
 msgstr ""
 
 #. src/report/standard-reports/average-balance.scm
@@ -26841,7 +26841,7 @@ msgstr ""
 #: ../doc/tip_of_the_day.list.in:4
 msgid ""
 "You can easily import your existing financial data from Quicken, MS Money or "
-"other programs that export QIF files or OFX files.  In the File menu, click "
+"other programs that export QIF files or OFX files. In the File menu, click "
 "on the sub-menu Import and click on QIF or OFX file, respectively. Then, "
 "follow the instructions provided."
 msgstr ""
@@ -26853,7 +26853,7 @@ msgstr ""
 #: ../doc/tip_of_the_day.list.in:9
 msgid ""
 "If you are familiar with other financial programs such as Quicken, note that "
-"GnuCash uses accounts instead of categories to track income and expenses.  "
+"GnuCash uses accounts instead of categories to track income and expenses. "
 "For more information on income and expense accounts, please see the GnuCash "
 "online manual."
 msgstr ""
@@ -26865,8 +26865,8 @@ msgstr ""
 
 #: ../doc/tip_of_the_day.list.in:14
 msgid ""
-"Create new accounts by clicking the New button in the main window tool bar.  "
-"This will bring up a dialog box where you can enter account details.  For "
+"Create new accounts by clicking the New button in the main window tool bar. "
+"This will bring up a dialog box where you can enter account details. For "
 "more information on choosing an account type or setting up a chart of "
 "accounts, please see the GnuCash online manual."
 msgstr ""
@@ -26901,8 +26901,8 @@ msgstr ""
 #: ../doc/tip_of_the_day.list.in:29
 msgid ""
 "As you enter amounts in the register, you can use the GnuCash calculator to "
-"add, subtract, multiply and divide .  Simply type the first value, then "
-"select '+', '-','*', or '/'.  Type the second value and press Enter to "
+"add, subtract, multiply and divide . Simply type the first value, then "
+"select '+', '-','*', or '/'. Type the second value and press Enter to "
 "record the calculated amount."
 msgstr ""
 "În timp ce introduci sume în registru poţi folosi calculatorul GnuCash "
@@ -26913,7 +26913,7 @@ msgstr ""
 #: ../doc/tip_of_the_day.list.in:34
 #, fuzzy
 msgid ""
-"Quick-fill makes it easy to enter common transactions.  When you type the "
+"Quick-fill makes it easy to enter common transactions. When you type the "
 "first letter(s) of a common transaction description, then press the Tab key, "
 "GnuCash will automatically complete the remainder of the transaction as it "
 "was last entered."
@@ -26969,7 +26969,7 @@ msgstr ""
 #: ../doc/tip_of_the_day.list.in:56
 msgid ""
 "In the reconcile window, you can press the spacebar to mark transactions as "
-"reconciled.  You can also press Tab and Shift-Tab to move between deposits "
+"reconciled. You can also press Tab and Shift-Tab to move between deposits "
 "and withdrawals."
 msgstr ""
 "În fereastra de reconciliere, puteţi apăsa pe spaţiu pentru a marca "
@@ -27001,7 +27001,7 @@ msgstr ""
 
 #: ../doc/tip_of_the_day.list.in:70
 msgid ""
-"Style Sheets affect how reports are displayed.  Choose a style sheet for "
+"Style Sheets affect how reports are displayed. Choose a style sheet for "
 "your report as a report option, and use the Edit -> Style Sheets menu to "
 "customize style sheets."
 msgstr ""
@@ -27040,7 +27040,7 @@ msgstr ""
 
 #: ../doc/tip_of_the_day.list.in:90
 msgid ""
-"The GnuCash developers are easy to contact.  As well as several mailing "
+"The GnuCash developers are easy to contact. As well as several mailing "
 "lists, you can chat to them live on IRC! Join them on #gnucash at irc.gnome."
 "org"
 msgstr ""
@@ -27678,7 +27678,7 @@ msgstr ""
 #~ msgstr "Importă un CSV şi trimit_e..."
 
 #~ msgid ""
-#~ "Enable the SKIP action in the transaction matcher.  If enabled, a "
+#~ "Enable the SKIP action in the transaction matcher. If enabled, a "
 #~ "transaction whose best match's score is in the yellow zone (above the "
 #~ "Auto-ADD threshold but below the Auto-CLEAR threshold) will be SKIPed by "
 #~ "default."
@@ -27764,7 +27764,7 @@ msgstr ""
 #~ "Export pentru a-i exporta."
 
 #~ msgid ""
-#~ "No Tax Related accounts were found.  Go to the Edit->Tax Options dialog "
+#~ "No Tax Related accounts were found. Go to the Edit->Tax Options dialog "
 #~ "to set up tax-related accounts."
 #~ msgstr ""
 #~ "Nu s-au găsit conturi pentru taxe înrudite. Mergi la dialogul Editeză-"
@@ -27839,7 +27839,7 @@ msgstr ""
 #~ msgstr "_Deschide"
 
 #~ msgid ""
-#~ "Enable the EDIT action in the transaction matcher.  NOT YET SUPPORTED"
+#~ "Enable the EDIT action in the transaction matcher. NOT YET SUPPORTED"
 #~ msgstr ""
 #~ "Activează acţiunea EDIT în organizatorul de tranzacţii. ÎNCĂ NESUPORTATĂ"
 
@@ -28122,14 +28122,14 @@ msgstr ""
 #~ msgstr "Model tranzacţie (doar-citire)"
 
 #~ msgid ""
-#~ "The following scheduled transactions have expired.  Select those you wish "
+#~ "The following scheduled transactions have expired. Select those you wish "
 #~ "to delete."
 #~ msgstr ""
 #~ "Următoare tranzacţii automate au expirat. Selectează-le pe cele pe care "
 #~ "vrei să le ştergi."
 
 #~ msgid ""
-#~ "The listed Scheduled Transactions are to-be created soon.  Select any "
+#~ "The listed Scheduled Transactions are to-be created soon. Select any "
 #~ "which you would like to create now, and click \"Forward\" to create them."
 #~ msgstr ""
 #~ "Tranzacţiile automate listate sunt pe cale să fie create curând. "
@@ -28309,7 +28309,7 @@ msgstr ""
 
 #~ msgid ""
 #~ "The Chart of Accounts includes the balance for each account, on the date "
-#~ "specified.  Note that future dates are not supported."
+#~ "specified. Note that future dates are not supported."
 #~ msgstr ""
 #~ "Planul de conturi include balanţa pentru fiecare cont, pe data "
 #~ "specificată. Reţine că datele viitoare nu sunt suportate."
@@ -28463,7 +28463,7 @@ msgstr ""
 #~ "formată, sau conţine date ilegale."
 
 #~ msgid ""
-#~ "The QSF Map file %s was written for a different version of QOF.  It may "
+#~ "The QSF Map file %s was written for a different version of QOF. It may "
 #~ "need to be modified to work with your current QOF installation."
 #~ msgstr ""
 #~ "Fişierul hartă QSF %s a fost scris pentru o versiune diferită de QOF. "
@@ -28496,7 +28496,7 @@ msgstr ""
 
 #~ msgid ""
 #~ "Wrong QSF map selected. The selected map %s validates but was written for "
-#~ "different QOF objects.  The list of objects defined in this map does not "
+#~ "different QOF objects. The list of objects defined in this map does not "
 #~ "include all the objects described in the current QSF object file."
 #~ msgstr ""
 #~ "A fost selectată o hartă QSF greşită. Harta selectată %s e validă, dar a "
@@ -28806,7 +28806,7 @@ msgstr ""
 #~ msgstr "Estimează câştigurile şi pierderile nerealizate"
 
 #~ msgid ""
-#~ "Include unrealized gains and losses in the computation.  Will produce "
+#~ "Include unrealized gains and losses in the computation. Will produce "
 #~ "incorrect results if the current file uses commodity trading accounts"
 #~ msgstr ""
 #~ "Include câştigurile şi pierderile nerealizate în calculare. Vor apărea "
@@ -28841,7 +28841,7 @@ msgstr ""
 #~ msgstr "Interogarea nu a putut fi executată"
 
 #~ msgid ""
-#~ "The current transaction has been changed.  Would you like to record the "
+#~ "The current transaction has been changed. Would you like to record the "
 #~ "changes before closing this page, close the page without recording the "
 #~ "changes, or cancel the close?"
 #~ msgstr ""
@@ -28926,13 +28926,13 @@ msgstr ""
 #~ msgid ""
 #~ "If you are importing a QIF file downloaded from a bank or other financial "
 #~ "institution, some of the information in the QIF file may duplicate "
-#~ "information already in your GnuCash accounts.  GnuCash will try to detect "
-#~ "duplicates of existing transactions.  \n"
+#~ "information already in your GnuCash accounts. GnuCash will try to detect "
+#~ "duplicates of existing transactions. \n"
 #~ "\n"
 #~ "On the next page, you will be asked to confirm that an existing "
-#~ "transaction matches an imported transaction.  Imported transactions are "
+#~ "transaction matches an imported transaction. Imported transactions are "
 #~ "shown on the left side of the page, and possible matches for the selected "
-#~ "left-hand transaction are shown to the right.  There may be several old "
+#~ "left-hand transaction are shown to the right. There may be several old "
 #~ "transactions that could match an imported transaction; you will be able "
 #~ "to select the correct one by double-clicking in the \"Dup?\" column of "
 #~ "the correct transaction.\n"
@@ -29002,7 +29002,7 @@ msgstr ""
 #~ "rapoartele tale salvate şi ştergi secţiunea cu următorul nume:"
 
 #~ msgid ""
-#~ "Your report \"%s\" has been saved into the configuration file \"%s\".  "
+#~ "Your report \"%s\" has been saved into the configuration file \"%s\". "
 #~ "The report will be available in the menu Reports -> Custom at the next "
 #~ "startup of GnuCash."
 #~ msgstr ""
