@@ -1347,7 +1347,8 @@ gnc_main_window_event_handler (QofInstance *entity,  QofEventId event_type,
  *  with the window.
  *
  *  As a side-effect, the save action is set sensitive iff the book
- *  is dirty.
+ *  is dirty, and the immutable_page_actions are set sensitive iff the page is
+ *  mutable.
  *
  *  @param window The window whose title should be generated.
  *
@@ -1362,6 +1363,7 @@ gnc_main_window_generate_title (GncMainWindow *window)
     GncMainWindowPrivate *priv;
     GncPluginPage *page;
     QofBook *book;
+    gboolean immutable;
     gchar *filename = NULL;
     const gchar *book_id = NULL;
     const gchar *dirty = "";
@@ -1432,6 +1434,12 @@ gnc_main_window_generate_title (GncMainWindow *window)
     {
         title = g_strdup_printf("%s%s%s - GnuCash", dirty, filename, readonly);
     }
+    /* Update the menus based upon whether this is an "immutable" page. */
+    immutable = page &&
+        g_object_get_data (G_OBJECT (page), PLUGIN_PAGE_IMMUTABLE);
+    gnc_plugin_update_actions(priv->action_group,
+                              immutable_page_actions,
+                              "sensitive", !immutable);
     g_free( filename );
     g_free(readonly);
 
@@ -3661,12 +3669,6 @@ gnc_main_window_switch_page (GtkNotebook *notebook,
         priv->usage_order = g_list_prepend (priv->usage_order, page);
     }
 
-    /* Update the menus based upon whether this is an "immutable" page. */
-    immutable = page &&
-                g_object_get_data (G_OBJECT (page), PLUGIN_PAGE_IMMUTABLE);
-    gnc_plugin_update_actions(priv->action_group,
-                              immutable_page_actions,
-                              "sensitive", !immutable);
     gnc_plugin_update_actions(priv->action_group,
                               multiple_page_actions,
                               "sensitive",
