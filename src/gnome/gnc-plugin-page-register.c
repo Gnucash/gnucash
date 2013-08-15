@@ -2508,7 +2508,7 @@ gnc_reg_get_name (GNCLedgerDisplay *ledger, gboolean for_window)
         if (for_window)
             reg_name = _("General Ledger");
         else
-            reg_name = _("General Ledger Report");
+            reg_name = _("Transaction Report");
         break;
     case PORTFOLIO_LEDGER:
         if (for_window)
@@ -2526,7 +2526,7 @@ gnc_reg_get_name (GNCLedgerDisplay *ledger, gboolean for_window)
         if (for_window)
             reg_name = _("Register");
         else
-            reg_name = _("Register Report");
+            reg_name = _("Transaction Report");
         break;
     }
 
