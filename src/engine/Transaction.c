@@ -1039,7 +1039,9 @@ xaccTransIsBalanced (const Transaction *trans)
     gboolean result;
     gnc_numeric imbal = gnc_numeric_zero();
     gnc_numeric imbal_trading = gnc_numeric_zero();
-    
+
+    if (trans == NULL) return FALSE;
+
     if (xaccTransUseTradingAccounts(trans))
     {
         /* Transaction is imbalanced if the value is imbalanced in either 
