@@ -1114,6 +1114,9 @@ xaccTransGetRateForCommodity(const Transaction *trans,
     GList *splits;
     gnc_commodity *trans_curr;
 
+    if (trans == NULL || split_com == NULL || split == NULL)
+	return FALSE;
+
     trans_curr = xaccTransGetCurrency (trans);
     if (gnc_commodity_equal (trans_curr, split_com))
     {
