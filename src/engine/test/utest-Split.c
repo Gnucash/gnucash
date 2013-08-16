@@ -87,6 +87,7 @@ setup (Fixture *fixture, gconstpointer pData)
     qof_instance_mark_clean (QOF_INSTANCE (fixture->split));
     qof_instance_mark_clean (QOF_INSTANCE (acc));
     qof_instance_mark_clean (QOF_INSTANCE (txn));
+    fixture->hdlrs = NULL;
 }
 
 static void
@@ -105,7 +106,8 @@ teardown (Fixture *fixture, gconstpointer pData)
     test_destroy (fixture->comm);
     test_destroy (book);
     g_free (fixture->func);
-
+    g_slist_free_full (fixture->hdlrs, test_free_log_handler);
+    test_clear_error_list();
 }
 
 /* gnc_split_init
@@ -1260,14 +1262,12 @@ test_get_corr_account_split (Fixture *fixture, gconstpointer pData)
     Account *acc1 = xaccMallocAccount (book);
     Account *acc2 = xaccMallocAccount (book);
     Account *acc3 = xaccMallocAccount (book);
-    gchar *msg1 = "get_corr_account_split: assertion `sa' failed";
-    gchar *logdomain = "gnc.engine";
+    gchar *msg = "get_corr_account_split: assertion `sa' failed";
     guint loglevel = G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL;
     TestErrorStruct *check = test_error_struct_new ("gnc.engine",
 						    loglevel, msg);
-    fixture->hdlrs = test_log_set_handler (fixture->hdlrs, check,
-					   (GLogFunc)test_checked_handler);
-    g_test_log_set_fatal_handler ((GTestLogFatalFunc)test_null_handler, NULL);
+    fixture->hdlrs = test_log_set_fatal_handler (fixture->hdlrs, check,
+						 (GLogFunc)test_checked_handler);
 
     xaccAccountSetCommodity (acc1, fixture->curr);
     xaccAccountSetCommodity (acc2, fixture->curr);
