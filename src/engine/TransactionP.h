@@ -174,6 +174,23 @@ void xaccDisableDataScrubbing(void);
 void xaccTransRemoveSplit (Transaction *trans, const Split *split);
 void check_open (const Transaction *trans);
 
+/* Structure for accessing static functions for testing */
+typedef struct
+{
+    void (*mark_trans)(Transaction*);
+    void (*gen_event_trans)(Transaction*);
+    void (*xaccFreeTransaction)(Transaction*);
+    void (*destroy_gains)(Transaction*);
+    void (*do_destroy)(Transaction*);
+    gboolean (*was_trans_emptied)(Transaction*);
+    void (*trans_on_error)(Transaction*, QofBackendError);
+    void (*trans_cleanup_commit)(Transaction*);
+    void (*xaccTransScrubGainsDate)(Transaction*);
+
+} TransTestFunctions;
+
+TransTestFunctions* _utest_trans_fill_functions (void);
+
 /*@}*/
 
 

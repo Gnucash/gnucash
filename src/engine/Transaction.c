@@ -234,7 +234,6 @@ void mark_trans (Transaction *trans)
 G_INLINE_FUNC void gen_event_trans (Transaction *trans);
 void gen_event_trans (Transaction *trans)
 {
-#ifndef REGISTER_STILL_DEPENDS_ON_ACCOUNT_EVENTS
     GList *node;
 
     for (node = trans->splits; node; node = node->next)
@@ -251,7 +250,6 @@ void gen_event_trans (Transaction *trans)
             qof_event_gen (QOF_INSTANCE(lot), QOF_EVENT_MODIFY, NULL);
         }
     }
-#endif
 }
 
 /* GObject Initialization */
@@ -1576,11 +1574,26 @@ xaccTransRollbackEdit (Transaction *trans)
     Transaction *orig;
     GList *slist;
     int num_preexist, i;
+
+/* FIXME: This isn't quite the right way to handle nested edits --
+ * there should be a stack of transaction states that are popped off
+ * and restored at each level -- but it does prevent restoring to the
+ * editlevel 0 state until one is returning to editlevel 0, and
+ * thereby prevents a crash caused by trans->orig getting NULLed too
+ * soon.
+ */
+    if (!qof_instance_get_editlevel (QOF_INSTANCE (trans))) return;
+    if (qof_instance_get_editlevel (QOF_INSTANCE (trans)) > 1) {
+	 qof_instance_decrease_editlevel (QOF_INSTANCE (trans));
+	 return;
+    }
+
     ENTER ("trans addr=%p\n", trans);
 
     check_open(trans);
 
     /* copy the original values back in. */
+
     orig = trans->orig;
     SWAP(trans->num, orig->num);
     SWAP(trans->description, orig->description);
@@ -2714,6 +2727,23 @@ gboolean xaccTransRegister (void)
     qof_class_register (GNC_ID_TRANS, (QofSortFunc)xaccTransOrder, params);
 
     return qof_object_register (&trans_object_def);
+}
+
+TransTestFunctions*
+_utest_trans_fill_functions (void)
+{
+    TransTestFunctions *func = g_new (TransTestFunctions, 1);
+
+    func->mark_trans = mark_trans;
+    func->gen_event_trans = gen_event_trans;
+    func->xaccFreeTransaction = xaccFreeTransaction;
+    func->destroy_gains = destroy_gains;
+    func->do_destroy = do_destroy;
+    func->was_trans_emptied = was_trans_emptied;
+    func->trans_on_error = trans_on_error;
+    func->trans_cleanup_commit = trans_cleanup_commit;
+    func->xaccTransScrubGainsDate = xaccTransScrubGainsDate;
+    return func;
 }
 
 /************************ END OF ************************************\

@@ -21,14 +21,15 @@
 \********************************************************************/
 
 
-#include "config.h"
+#include <config.h>
 #include <glib.h>
-#include "qof.h"
+#include <qof.h>
+#include <TransLog.h>
 
 extern void test_suite_account();
 extern void test_suite_budget();
 extern void test_suite_gncInvoice();
-//extern void test_suite_transaction();
+extern void test_suite_transaction();
 extern void test_suite_split();
 
 int
@@ -40,11 +41,13 @@ main (int   argc,
     g_test_init ( &argc, &argv, NULL ); 	/* initialize test program */
     //qof_log_set_level("gnc", G_LOG_LEVEL_DEBUG);
     g_test_bug_base("https://bugzilla.gnome.org/show_bug.cgi?id="); /* init the bugzilla URL */
+    /* Disable the transaction log */
+    xaccLogDisable();
 
     test_suite_account();
     test_suite_budget();
     test_suite_gncInvoice();
-//    test_suite_transaction();
+    test_suite_transaction();
     test_suite_split();
 
     return g_test_run( );

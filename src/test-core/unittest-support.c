@@ -47,6 +47,7 @@ test_error_struct_new (gchar *log_domain, GLogLevelFlags log_level, gchar *msg)
     err->log_domain = g_strdup (log_domain);
     err->log_level = log_level;
     err->msg = g_strdup (msg);
+    return err;
 }
 
 void
@@ -176,7 +177,7 @@ gboolean
 test_list_nohit_handler (const char *log_domain, GLogLevelFlags log_level,
 			 const gchar *msg, gpointer user_data)
 {
-    return do_test_list_handler (log_domain, log_level, msg, user_data, TRUE);
+    return do_test_list_handler (log_domain, log_level, msg, user_data, FALSE);
 }
 
 static gboolean
@@ -207,14 +208,16 @@ gboolean
 test_checked_handler (const char *log_domain, GLogLevelFlags log_level,
                       const gchar *msg, gpointer user_data )
 {
-    do_test_checked_handler (log_domain, log_level, msg, user_data, TRUE);
+    return do_test_checked_handler (log_domain, log_level, msg,
+				    user_data, TRUE);
 }
 
 static gboolean
 test_checked_nohit_handler (const char *log_domain, GLogLevelFlags log_level,
 			    const gchar *msg, gpointer user_data )
 {
-    do_test_checked_handler (log_domain, log_level, msg, user_data, FALSE);
+    return do_test_checked_handler (log_domain, log_level, msg,
+				    user_data, FALSE);
 }
 
 gboolean

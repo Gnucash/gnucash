@@ -37,6 +37,8 @@
 # define g_fopen fopen
 #endif
 
+static QofLogModule log_module = "gnc.translog";
+
 /*
  * Some design philosphy that I think would be good to keep in mind:
  * (0) Simplicity and foolproofness are the over-riding design points.
@@ -157,7 +159,11 @@ xaccOpenLog (void)
     char * filename;
     char * timestamp;
 
-    if (!gen_logs) return;
+    if (!gen_logs)
+    {
+	 PINFO ("Attempt to open disabled transaction log");
+	 return;
+    }
     if (trans_log) return;
 
     if (!log_base_name) log_base_name = g_strdup ("translog");
@@ -221,7 +227,11 @@ xaccTransWriteLog (Transaction *trans, char flag)
     char dnow[100], dent[100], dpost[100], drecn[100];
     Timespec ts;
 
-    if (!gen_logs) return;
+    if (!gen_logs)
+    {
+	 PINFO ("Attempt to write disabled transaction log");
+	 return;
+    }
     if (!trans_log) return;
 
     timespecFromTime64(&ts, gnc_time (NULL));

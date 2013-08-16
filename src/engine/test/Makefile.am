@@ -118,8 +118,8 @@ test_engine_SOURCES = \
 
 test_engine_LDADD = \
 	libutest-Split.la \
+	libutest-Trans.la \
 	$(LDADD)
-
 test_engine_CFLAGS = \
 	${DEFAULT_INCLUDES} \
 	-I${top_srcdir}/${MODULEPATH}/ \
@@ -127,13 +127,21 @@ test_engine_CFLAGS = \
 	${GLIB_CFLAGS}
 
 noinst_LTLIBRARIES = \
-	libutest-Split.la
+	libutest-Split.la \
+	libutest-Trans.la
 
 libutest_Split_la_SOURCES = \
 	utest-Split.c \
 	${top_srcdir}/src/libqof/qof/gnc-numeric.c
 
+
 libutest_Split_la_LIBADD = $(LDADD)
+
+libutest_Trans_la_SOURCES = \
+	utest-Transaction.c
+
+libutest_Trans_la_LIBADD = $(LDADD)
+
 
 clean-local:
 	rm -f translog.*
