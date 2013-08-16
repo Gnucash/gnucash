@@ -59,6 +59,21 @@
  * g_test_log_set_fatal_handler to both avoid the assertion and
  * suppress the error message. The callbacks work in either role, just
  * cast them appropriately for the use.
+ *
+ * To simplify the process a bit and make sure that everything gets
+ * cleaned up at the end of each test, add a GSList for handlers to
+ * your Fixture and set it to NULL in setup(), then call
+ * g_slist_free_full() on it with test_free_log_handler as the
+ * function. Create new TestErrorStruct instances with
+ * test_error_struct_new, and pass that along with your handler of
+ * choice to test_log_set_handler or test_log_set_fatal_handler. This
+ * is much simpler, as teardown will clean everything up for you and
+ * you need call only those functions. As an added bonus, the hit
+ * count won't be doubled as it is if you do everything by hand.
+ *
+ * NB: If you have more than one fatal error in a test function be
+ * sure to use the test_list_handler: You can have only one fatal
+ * handler.
  */
 
 /**
@@ -76,6 +91,75 @@ typedef struct
     gchar *msg;
     guint hits;
 } TestErrorStruct;
+
+/**
+ * Convenience function to create an error struct. If you use this
+ * with test_set_log_handler it will get cleaned up at tesrdown,
+ * otherwise call test_error_free() at the end of your test function.
+ *
+ * NB: If you need to change the message, be sure to free the old one
+ * and to allocate the new one on the stack.
+ *
+ * @param log_domain: The string representing the domain of the log message
+ * @param log_level: The GLogLevelFlags for the message
+ * @param msg: The exact error message that the logger will emit
+ * @return: A TestErrorStruct *
+ */
+TestErrorStruct* test_error_struct_new (gchar *log_domain,
+					GLogLevelFlags log_level,
+					gchar *msg);
+
+/**
+ * Free a TestErrorStruct created with test_error_struct_new
+ * @param error: The TestErrorStruct to be freed
+ */
+void test_error_struct_free (TestErrorStruct *);
+
+typedef struct
+{
+    TestErrorStruct *error;
+    gint handler;
+    gboolean list_handler;
+} TestLogHandler;
+
+
+/**
+ * Set a log handler and add it to a GList for removal at teardown
+ *
+ * Don't pass a NULL TestErrorStruct! It's needed to set the
+ * parameters for g_log_set_handler. Use a TestErrorStruct created
+ * with test_error_struct_new() or you'll have errors with freeing it
+ * in teardown.
+ *
+ * @param handler_list: A GSList of LogHandlers
+ * @param error: A TestErrorStruct with the necessary data
+ * @param handler: The Handler to set the data with
+ * @return: The new GSList pointer.
+ */
+GSList *test_log_set_handler (GSList *list, TestErrorStruct *error,
+			      GLogFunc handler);
+
+/**
+ * Set a log handler and add it to a GList for removal at teardown;
+ * also set the fatal handler so that the test program doesn't abort
+ * for fatal log messages. If a test function has more than one fatal
+ * message, be sure to use the test_list_handler!
+ *
+ * Don't pass a NULL TestErrorStruct! It's needed to set the
+ * parameters for g_log_set_handler. Use a TestErrorStruct created
+ * with test_error_struct_new() or you'll have errors with freeing it
+ * in teardown.
+ *
+ * @param handler_list: A GSList of LogHandlers
+ * @param error: A TestErrorStruct with the necessary data
+ * @param handler: The Handler to set the data with
+ * @return: The new GSList pointer.
+ */
+GSList *test_log_set_fatal_handler (GSList *list, TestErrorStruct *error,
+			      GLogFunc handler);
+
+/* Clears all the log handlers. Pass this to g_slist_free() in teardown */
+void test_free_log_handler (gpointer item);
 
 /**
  * Check the user_data against the actual error and assert on any

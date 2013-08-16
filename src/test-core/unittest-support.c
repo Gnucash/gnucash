@@ -1,6 +1,6 @@
 /********************************************************************
  * unittest-support.c: Support structures for GLib Unit Testing     *
- * Copyright 2011-12 John Ralls <jralls@ceridwen.us>		    *
+ * Copyright 2011-13 John Ralls <jralls@ceridwen.us>		    *
  * Copyright 2011 Muslim Chochlov <muslim.chochlov@gmail.com>       *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
@@ -33,6 +33,63 @@ typedef struct
 } TestStruct;
 
 static TestStruct tdata;
+static gboolean
+test_checked_nohit_handler (const char *log_domain, GLogLevelFlags log_level,
+			    const gchar *msg, gpointer user_data);
+static gboolean
+test_list_nohit_handler (const char *log_domain, GLogLevelFlags log_level,
+			 const gchar *msg, gpointer user_data);
+
+TestErrorStruct*
+test_error_struct_new (gchar *log_domain, GLogLevelFlags log_level, gchar *msg)
+{
+    TestErrorStruct *err = g_slice_new0 (TestErrorStruct);
+    err->log_domain = g_strdup (log_domain);
+    err->log_level = log_level;
+    err->msg = g_strdup (msg);
+}
+
+void
+test_error_struct_free (TestErrorStruct *err)
+{
+    g_free (err->log_domain);
+    g_free (err->msg);
+    g_slice_free (TestErrorStruct, err);
+}
+
+GSList*
+test_log_set_handler (GSList *list, TestErrorStruct *error, GLogFunc handler)
+{
+    TestLogHandler *hdlr = g_slice_new0 (TestLogHandler);
+    hdlr->error = error;
+    hdlr->handler = g_log_set_handler (error->log_domain, error->log_level,
+				       handler, error);
+    return g_slist_prepend (list, hdlr);
+}
+
+GSList*
+test_log_set_fatal_handler (GSList *list, TestErrorStruct *error,
+			    GLogFunc handler)
+{
+    TestLogHandler *hdlr = g_slice_new0 (TestLogHandler);
+    GTestLogFatalFunc f_hdlr = handler == (GLogFunc)test_list_handler ?
+	(GTestLogFatalFunc)test_list_nohit_handler :
+	(GTestLogFatalFunc)test_checked_nohit_handler;
+    hdlr->error = error;
+    hdlr->handler = g_log_set_handler (error->log_domain, error->log_level,
+				       handler, error);
+    g_test_log_set_fatal_handler (f_hdlr, error);
+    return g_slist_prepend (list, hdlr);
+}
+
+void
+test_free_log_handler (gpointer item)
+{
+    TestLogHandler *handler = (TestLogHandler*)item;
+    g_log_remove_handler (handler->error->log_domain, handler->handler);
+    test_error_struct_free (handler->error);
+    g_slice_free (TestLogHandler, handler);
+}
 
 gboolean
 test_null_handler (const char *log_domain, GLogLevelFlags log_level,
@@ -84,9 +141,9 @@ test_clear_error_list (void)
     message_queue = NULL;
 }
 
-gboolean
-test_list_handler (const char *log_domain, GLogLevelFlags log_level,
-                   const gchar *msg, gpointer user_data )
+static gboolean
+do_test_list_handler (const char *log_domain, GLogLevelFlags log_level,
+		      const gchar *msg, gpointer user_data, gboolean hits)
 {
     GList *list = g_list_first (message_queue);
     const guint fatal = G_LOG_FLAG_FATAL;
@@ -98,7 +155,8 @@ test_list_handler (const char *log_domain, GLogLevelFlags log_level,
                 && ((log_level | fatal) == (error->log_level | fatal))
                 && !g_strcmp0 (msg, error->msg))
 	{
-	    ++(error->hits);
+	    if (hits)
+		++(error->hits);
             return FALSE;
 	}
         list = g_list_next (list);
@@ -107,10 +165,23 @@ test_list_handler (const char *log_domain, GLogLevelFlags log_level,
     return test_checked_handler (log_domain, log_level, msg, user_data);
 }
 
+gboolean
+test_list_handler (const char *log_domain, GLogLevelFlags log_level,
+		      const gchar *msg, gpointer user_data)
+{
+    return do_test_list_handler (log_domain, log_level, msg, user_data, TRUE);
+}
 
 gboolean
-test_checked_handler (const char *log_domain, GLogLevelFlags log_level,
-                      const gchar *msg, gpointer user_data )
+test_list_nohit_handler (const char *log_domain, GLogLevelFlags log_level,
+			 const gchar *msg, gpointer user_data)
+{
+    return do_test_list_handler (log_domain, log_level, msg, user_data, TRUE);
+}
+
+static gboolean
+do_test_checked_handler (const char *log_domain, GLogLevelFlags log_level,
+			 const gchar *msg, gpointer user_data, gboolean hits)
 {
     TestErrorStruct *tdata = (TestErrorStruct*)user_data;
 
@@ -126,9 +197,24 @@ test_checked_handler (const char *log_domain, GLogLevelFlags log_level,
         g_assert (log_level ^ G_LOG_FLAG_FATAL);
         return FALSE;
     }
-    ++(tdata->hits);
+    if (hits)
+	++(tdata->hits);
     return FALSE;
 
+}
+
+gboolean
+test_checked_handler (const char *log_domain, GLogLevelFlags log_level,
+                      const gchar *msg, gpointer user_data )
+{
+    do_test_checked_handler (log_domain, log_level, msg, user_data, TRUE);
+}
+
+static gboolean
+test_checked_nohit_handler (const char *log_domain, GLogLevelFlags log_level,
+			    const gchar *msg, gpointer user_data )
+{
+    do_test_checked_handler (log_domain, log_level, msg, user_data, FALSE);
 }
 
 gboolean
