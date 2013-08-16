@@ -44,6 +44,7 @@ typedef struct
     SplitTestFunctions *func;
     gnc_commodity *curr;
     gnc_commodity *comm;
+    GSList *hdlrs;
 } Fixture;
 
 static void
@@ -1262,15 +1263,11 @@ test_get_corr_account_split (Fixture *fixture, gconstpointer pData)
     gchar *msg1 = "get_corr_account_split: assertion `sa' failed";
     gchar *logdomain = "gnc.engine";
     guint loglevel = G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL;
-    TestErrorStruct check = { loglevel, logdomain, msg1, 0 };
-    gnc_numeric value = { 360, 240 };
-    gnc_numeric old_val = fixture->split->value;
-    gnc_numeric old_amt = fixture->split->amount;
-
-    GLogFunc oldlogger = g_log_set_default_handler ((GLogFunc)test_null_handler, &check);
-    g_test_log_set_fatal_handler ((GTestLogFatalFunc)test_checked_handler,
-				  &check);
-
+    TestErrorStruct *check = test_error_struct_new ("gnc.engine",
+						    loglevel, msg);
+    fixture->hdlrs = test_log_set_handler (fixture->hdlrs, check,
+					   (GLogFunc)test_checked_handler);
+    g_test_log_set_fatal_handler ((GTestLogFatalFunc)test_null_handler, NULL);
 
     xaccAccountSetCommodity (acc1, fixture->curr);
     xaccAccountSetCommodity (acc2, fixture->curr);
@@ -1301,13 +1298,12 @@ test_get_corr_account_split (Fixture *fixture, gconstpointer pData)
 
     g_assert (!fixture->func->get_corr_account_split(fixture->split, &result));
     g_assert (result == NULL);
-    g_assert_cmpint (check.hits, ==, 0);
+    g_assert_cmpint (check->hits, ==, 0);
 
     g_assert (!fixture->func->get_corr_account_split(NULL, &result));
     g_assert (result == NULL);
-    g_assert_cmpint (check.hits, ==, 1);
+    g_assert_cmpint (check->hits, ==, 1);
 
-    g_log_set_default_handler (oldlogger, NULL);
     test_destroy (split1);
     test_destroy (split2);
     test_destroy (split3);
