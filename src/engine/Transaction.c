@@ -1590,6 +1590,9 @@ xaccTransRollbackEdit (Transaction *trans)
     /* The splits at the front of trans->splits are exactly the same
        splits as in the original, but some of them may have changed, so
        we restore only those. */
+/* FIXME: Runs off the transaction's splits, so deleted splits are not
+ * restored!
+ */
     num_preexist = g_list_length(orig->splits);
     slist = g_list_copy(trans->splits);
     for (i = 0, node = slist, onode = orig->splits; node;
