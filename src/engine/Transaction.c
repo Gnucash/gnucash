@@ -210,12 +210,12 @@ check_open (const Transaction *trans)
 gboolean
 xaccTransStillHasSplit(const Transaction *trans, const Split *s)
 {
-    return (s->parent == trans && !qof_instance_get_destroying(s));
+    return (s && s->parent == trans && !qof_instance_get_destroying(s));
 }
 
 /* Executes 'cmd_block' for each split currently in the transaction,
  * using the in-edit state.  Use the variable 's' for each split. */
-#define FOR_EACH_SPLIT(trans, cmd_block) do {                           \
+#define FOR_EACH_SPLIT(trans, cmd_block) if (trans->splits) {		\
         GList *splits;                                                  \
         for (splits = (trans)->splits; splits; splits = splits->next) { \
             Split *s = splits->data;                                    \
@@ -223,7 +223,7 @@ xaccTransStillHasSplit(const Transaction *trans, const Split *s)
                 cmd_block;                                              \
             }                                                           \
         }                                                               \
-    } while (0)
+    }
 
 G_INLINE_FUNC void mark_trans (Transaction *trans);
 void mark_trans (Transaction *trans)
@@ -1371,7 +1371,7 @@ do_destroy (Transaction *trans)
     for (node = trans->splits; node; node = node->next)
     {
         Split *s = node->data;
-        if (s->parent == trans)
+        if (s && s->parent == trans)
         {
             xaccSplitDestroy(s);
         }
@@ -1379,7 +1379,7 @@ do_destroy (Transaction *trans)
     for (node = trans->splits; node; node = node->next)
     {
         Split *s = node->data;
-        if (s->parent == trans)
+        if (s && s->parent == trans)
         {
             xaccSplitCommitEdit(s);
         }
