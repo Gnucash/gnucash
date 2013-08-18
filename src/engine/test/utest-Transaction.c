@@ -744,13 +744,13 @@ test_xaccFreeTransaction (Fixture *fixture, gconstpointer pData)
 
     g_assert (split == NULL);
     g_assert (txn->splits == NULL);
-    g_assert_cmpint ((int)txn->num, ==, 1);
+    g_assert_cmpint (GPOINTER_TO_INT(txn->num), ==, 1);
     g_assert (txn->description == NULL);
     g_assert_cmpint (txn->date_entered.tv_sec, ==, 0);
     g_assert_cmpint (txn->date_entered.tv_nsec, ==, 0);
     g_assert_cmpint (txn->date_posted.tv_sec, ==, 0);
     g_assert_cmpint (txn->date_posted.tv_nsec, ==, 0);
-    g_assert_cmpint ((int)orig->num, ==, 1);
+    g_assert_cmpint (GPOINTER_TO_INT(orig->num), ==, 1);
     g_assert (txn->orig == NULL);
     test_destroy (orig);
 
@@ -780,7 +780,7 @@ test_xaccTransEqual (Fixture *fixture, gconstpointer pData)
     const GncGUID *guid_f_txn = qof_instance_get_guid (txn0);
     gchar entered[DATE_BUF_SIZE], posted[DATE_BUF_SIZE];
     gchar *msg1 = "[xaccTransEqual] one is NULL";
-    gchar *msg2;
+    gchar *msg2 = NULL;
     gchar *cleanup_fmt = "[trans_cleanup_commit] get rid of rollback trans=%p";
     gchar split_guid0[GUID_ENCODING_LENGTH + 1];
     gchar split_guid1[GUID_ENCODING_LENGTH + 1];
@@ -1447,7 +1447,7 @@ test_do_destroy (GainsFixture *fixture, gconstpointer pData)
     base->func->do_destroy (base->txn);
     g_assert_cmpint (test_signal_return_hits (sig), ==, 1);
     g_assert (base->txn->description == NULL);
-    g_assert_cmpint ((int)base->txn->num, ==, 1);
+    g_assert_cmpint (GPOINTER_TO_INT(base->txn->num), ==, 1);
     g_assert (qof_instance_get_destroying (QOF_INSTANCE (fixture->gains_txn)));
     g_assert (base_split == NULL);
 
@@ -1575,7 +1575,7 @@ test_trans_cleanup_commit (Fixture *fixture, gconstpointer pData)
     g_assert_cmpint (test_signal_return_hits (sig_a_changed), ==, 2);
     g_assert_cmpint (g_list_index (fixture->txn->splits, destr_split), ==, -1);
     g_assert_cmpint (g_list_index (fixture->txn->splits, bogus_split), ==, 0);
-    g_assert_cmpint ((int)(orig->num), ==, 1);
+    g_assert_cmpint (GPOINTER_TO_INT(orig->num), ==, 1);
     test_destroy (orig);
 
 }
@@ -1713,7 +1713,7 @@ test_xaccTransRollbackEdit (Fixture *fixture, gconstpointer pData)
     xaccTransRollbackEdit (txn);
     g_assert (txn->orig == NULL);
     g_assert_cmpstr (txn->num, ==, "123");
-    g_assert_cmpint ((guint)(orig->num), ==, 1);
+    g_assert_cmpint (GPOINTER_TO_INT(orig->num), ==, 1);
     g_assert_cmpstr (txn->description, ==, "Waldo Pepper");
     g_assert (txn->inst.kvp_data == base_frame);
     g_assert (txn->common_currency == fixture->curr);
@@ -1721,7 +1721,7 @@ test_xaccTransRollbackEdit (Fixture *fixture, gconstpointer pData)
     g_assert (timespec_equal (&(txn->date_entered), &orig_entered));
     g_assert_cmpuint (test_signal_return_hits (sig_account), ==, 1);
     g_assert_cmpuint (g_list_length (txn->splits), ==, 2);
-    g_assert_cmpint ((guint)(split_02->memo), ==, 1);
+    g_assert_cmpint (GPOINTER_TO_INT(split_02->memo), ==, 1);
     g_assert (xaccSplitEqual (txn->splits->data, split_10,
 			      FALSE, FALSE, FALSE));
     g_assert (xaccSplitEqual (txn->splits->next->data, split_10,
@@ -1757,7 +1757,7 @@ test_xaccTransRollbackEdit_BackendErrors (Fixture *fixture, gconstpointer pData)
     xaccTransBeginEdit (fixture->txn);
     mock_backend_set_error (mbe, ERR_BACKEND_MOD_DESTROY);
     xaccTransRollbackEdit (fixture->txn);
-    g_assert_cmpint ((guint)(fixture->txn->num), ==, 1);
+    g_assert_cmpint (GPOINTER_TO_INT(fixture->txn->num), ==, 1);
     g_assert_cmpstr (mbe->last_call, ==, "rollback");
 
 }
