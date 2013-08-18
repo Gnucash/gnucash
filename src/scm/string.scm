@@ -95,6 +95,82 @@
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;  gnc:substring-replace-from-to
+;;  same as gnc:substring-replace extended by:
+;;  start: from which occurrance onwards the replacement shall start
+;;  end-after: max. number times the replacement should executed
+;;
+;;  Example: (gnc:substring-replace-from-to "foobarfoobarfoobar" "bar" "xyz" 2 2)
+;;           returns "foobarfooxyzfoobar".
+;;
+;; start=1 and end-after<=0 will call gnc:substring-replace (replace all)
+;; start>1 and end-after<=0 will the replace from "start" until end of file
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(define-public (gnc:substring-replace-from-to s1 s2 s3 start end-after)
+  (let (
+         (s2len (string-length s2))
+       )
+
+    ;; if start<=0 and end<=0 => don't do anything
+
+    (if (and
+          (<= start 0)
+          (<= end-after 0)
+        )
+      s1
+    )
+
+    ;; else
+    (begin
+
+      ;; normalize start
+      (if (= start 0)
+        (set! start 1)
+      )
+      ;; start=1 and end<=0 => replace all
+      ;; call gnc:substring-replace for that
+      (if (and (= start 1) (<= end-after 0))
+        (gnc:substring-replace s1 s2 s3)
+
+        ;; else
+        (begin
+          (let loop (
+                      (start1 0)
+                      (i (string-contains s1 s2))
+                    )
+            (if i
+              (begin
+                (set! start (- start 1))
+                (if (or
+                        (> start 0)
+                        (and (> end-after 0)
+                             (<= (+ end-after start) 0)
+                        )
+                    )
+                  (string-append
+                    (substring s1 start1 i)
+                    s2 ;; means: do not change anything
+                    (loop (+ i s2len) (string-contains s1 s2 (+ i s2len)))
+                  )
+                  (string-append
+                    (substring s1 start1 i)
+                    s3
+                    (loop (+ i s2len) (string-contains s1 s2 (+ i s2len)))
+                  )
+                )
+              )
+              ;; else
+              (substring s1 start1)
+            )
+          )
+        )
+      )
+    )
+  )
+)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  gnc:string-replace-char
 ;;
 ;;  Replaces all occurrences in string "s" of character "old"
