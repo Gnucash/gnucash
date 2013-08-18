@@ -151,6 +151,7 @@ Hubert Figuiere <hfiguiere@teaser.fr> patch to gnc-prices
 Valek Filippov <frob@df.ru> messages Russian translation
 Jan-Uwe Finck <jufi@nerdnet.de> for messages German translation
 Kevin Finn <kevinfinn@mediaone.net> auto-decimal point, options, auto interest xfer patches
+Aurimas Fišeras <aurimas@members.fsf.org> Lithuanian Translation, general i18n
 Danny Fischer <dan.pescaru@gmail.com> Romanian translation
 Ron Forrester <rjf@aracnet.com> for gnome patches
 Christoph Franzen <ChristophFranzen@gmx.net> German account template for Wohnungswirtschaft business
@@ -187,6 +188,8 @@ Jeff Kletsky <gnomebugzilla@allycomm.com> Various patches, including for OFX imp
 Tom Kludy <tkludy@csd.sgi.com> for SGI Irix port
 Tuomo Kohvakka <tuomo.kohvakka@iki.fi> Finnish translation
 Matt Kraai <kraai@alumni.carnegiemellon.edu> date accelerator bug fix
+Mantas Kriaučiūnas <mantas@akl.lt> Lithuanian Translation
+Rafał Krzewski <rafal.krzewski@caltha.pl> bi module fixes
 Sven Kuenzler <sk@xgm.de> for SuSE README file
 Fabrice Kurz <kurzf@voila.fr> French translation
 Eneko Lacunza <enlar@enlar.net> Spanish Translation
@@ -212,6 +215,7 @@ Kjartan Maraas <kmaraas@gnome.org> Norwegian translations
 Heath Martin <martinh@pegasus.cc.ucf.edu> gnome patches, major register work, x86_64 support
 Matt Martin <mgmartin@abacusnet.net> guile error handling code
 Yves-Eric Martin <yem_lists.gnucash.org@filter.yve.net> work on financial year end work
+Tadas Masiulionis <tadzikaz@gmail.com> Lithuanian Translation
 Juan Manuel García Molina <juanmagm@mail.com> messages Spanish translation
 David Montenegro <sunrise2000@comcast.net> all sorts of Scheme reports
 Orestes Mas <orestes@tsc.upc.es> Catalan translation
@@ -288,6 +292,6 @@ Kuang-che Wu <kcwu@csie.org> Traditional Chinese translation
 Ken Yamaguchi <gooch@ic.EECS.Berkeley.EDU> QIF import fixes; MYM import
 Shimpei Yamashita <shimpei@gol.com> messages Japanese translation
 Alex Zepeda <jazepeda@pacbell.net> postgres configure patch
-Rafał Krzewski <rafal.krzewski@caltha.pl> bi module fixes
+
 
 ... and I am sure that I have missed many others ...
