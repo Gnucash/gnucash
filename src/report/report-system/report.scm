@@ -743,6 +743,10 @@
 
 ;; looks up the report by id and renders it with gnc:report-render-html
 ;; marks the cursor busy during rendering; returns the html
+;; Note: the final html document is post-processed to ensure there's only one single
+;;       inclusion of the jquery/jqplot libraries. This is only needed to fix multicolumn
+;;       reports with multiple charts, but doing it more generally is an
+;;       acceptable hack until a cleaner solution can be found (bug #704525)
 (define (gnc:report-run id)
   (let ((report (gnc-report-find id))
 	(html #f))
