@@ -373,7 +373,7 @@ static GtkActionEntry gnc_plugin_page_register_actions [] =
         G_CALLBACK (gnc_plugin_page_register_cmd_account_report)
     },
     {
-        "ReportsAcctTransReportAction", NULL, N_("Account Transaction Report"), NULL,
+        "ReportsAcctTransReportAction", NULL, N_("Account Report - Single Transaction"), NULL,
         N_("Open a register report for the selected Transaction"),
         G_CALLBACK (gnc_plugin_page_register_cmd_transaction_report)
     },
