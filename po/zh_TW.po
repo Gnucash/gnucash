@@ -1,7 +1,7 @@
 # traditional Chinese translation for gnucash.
 # Copyright (C) 2003 Free Software Foundation, Inc.
 # Chao-Hsiung Liao <pesder.liao@msa.hinet.net>, 2003.
-# Kuang-che Wu <kcwu@csie.org>, 2007, 2011.
+# Kuang-che Wu <kcwu@csie.org>, 2007, 2011-2013.
 # Barlos Lee <barlos.lee@gmail.com>, 2010
 #
 msgid ""
@@ -289,19 +289,16 @@ msgid "[datafile]"
 msgstr ""
 
 #: ../src/bin/gnucash-bin.c:154
-#, fuzzy
 msgid "This is a development version. It may or may not work."
-msgstr "這是發展中版本。它可能不能使用。\n"
+msgstr "這是開發中版本。它可能會運作不正常。"
 
 #: ../src/bin/gnucash-bin.c:155
-#, fuzzy
 msgid "Report bugs and other problems to gnucash-devel@gnucash.org"
-msgstr "請將程式錯誤或其他的問題回報到 gnucash-devel@gnucash.org 。\n"
+msgstr "請將程式錯誤或其他的問題回報到 gnucash-devel@gnucash.org"
 
 #: ../src/bin/gnucash-bin.c:156
-#, fuzzy
 msgid "You can also lookup and file bug reports at http://bugzilla.gnome.org"
-msgstr "您也可以在 http://bugzilla.gnome.org 查詢和回報錯誤\n"
+msgstr "您也可以在 http://bugzilla.gnome.org 查詢和回報錯誤"
 
 #: ../src/bin/gnucash-bin.c:157
 msgid "To find the last stable version, please refer to http://www.gnucash.org"
@@ -333,11 +330,11 @@ msgstr "GnuCash %s 開發版"
 #. 3rd %s is the scm revision number;
 #. 4th %s is the build date
 #: ../src/bin/gnucash-bin.c:534 ../src/gnome-utils/gnc-main-window.c:4184
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s\n"
 "This copy was built from %s rev %s on %s."
-msgstr "%s  這是從 svn r%s 建立的開發版, 日期 %s。"
+msgstr "%s\n本份程式是從 %s rev %s 版本編譯製作, 日期 %s。"
 
 #: ../src/bin/gnucash-bin.c:540
 #, c-format
@@ -348,11 +345,11 @@ msgstr "GnuCash %s"
 #. 2nd %s is the scm (svn/svk/git/bzr) revision number;
 #. 3rd %s is the build date
 #: ../src/bin/gnucash-bin.c:545 ../src/gnome-utils/gnc-main-window.c:4191
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s\n"
 "This copy was built from rev %s on %s."
-msgstr "%s  這是從 r%s 建立的版本, 日期 %s。"
+msgstr "%s\n本份程式是從 rev %s 版本編譯製作, 日期 %s。"
 
 #: ../src/bin/gnucash-bin.c:651
 msgid "No quotes retrieved. Finance::Quote isn't installed properly.\n"
@@ -4272,7 +4269,7 @@ msgstr "尋找交易"
 #: ../src/gnome-utils/gnc-file.c:1025 ../src/gnome/window-reconcile2.c:1744
 #: ../src/gnome/window-reconcile.c:1744
 msgid "Open"
-msgstr "開啟舊檔"
+msgstr "開啟"
 
 #. src/report/report-system/html-fonts.scm
 #. src/report/standard-reports/general-journal.scm
@@ -4667,11 +4664,11 @@ msgstr ""
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:127
 msgid "Re_vert"
-msgstr ""
+msgstr "還原(_V)"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:128
 msgid "Reload the current database, reverting all unsaved changes"
-msgstr ""
+msgstr "重新載入資料庫，還原所有未存檔的更改"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:133
 msgid "Export _Accounts"
@@ -5006,9 +5003,8 @@ msgid ""
 msgstr "檢查並修復所有科目中未結算的交易與無主的分割"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:308
-#, fuzzy
 msgid "Open2"
-msgstr "開啟舊檔"
+msgstr "開啟2"
 
 #.
 #. * Various option sections and options within those sections
@@ -10249,9 +10245,8 @@ msgid "_Create New File"
 msgstr "建立新檔案(_C)"
 
 #: ../src/gnome-utils/gnc-file.c:773
-#, fuzzy
 msgid "Open _Anyway"
-msgstr "無論如何都開啟(_O)"
+msgstr "無論如何都開啟(_A)"
 
 #. try to load once again
 #: ../src/gnome-utils/gnc-file.c:857 ../src/gnome-utils/gnc-file.c:877
@@ -10611,7 +10606,7 @@ msgstr "GnuCash 個人財務管理員。管理您金錢的 GNU 解決方案！"
 msgid "translator_credits"
 msgstr ""
 "Chao-Hsiung Liao <pesder.liao@msa.hinet.net>, 2003.\n"
-"Kuang-che Wu <kcwu@csie.org>, 2007, 2011-2012.\n"
+"Kuang-che Wu <kcwu@csie.org>, 2007, 2011-2013.\n"
 "Barlos Lee <barlos.lee@gmail.com>, 2010.\n"
 "Tryneeds (http://tryneeds.westart.tw/tryneeds/) team, 2011-2012."
 
@@ -10861,7 +10856,7 @@ msgstr "將分割標記為未對帳？"
 #: ../src/register/ledger-core/split-register-control.c:1829
 msgid ""
 "You are about to mark a reconciled split as unreconciled. Doing so might "
-"make future reconciliation difficult! Continue with this change?"
+"make future reconciliation difficult!  Continue with this change?"
 msgstr ""
 "您即將把已對帳交易改標記成未對帳。這麼做可能使未來的對帳很困難！繼續這個修"
 "改？"
@@ -10880,7 +10875,7 @@ msgstr "變更已對帳的分割？"
 #: ../src/register/ledger-core/split-register-model.c:2044
 msgid ""
 "You are about to change a reconciled split. Doing so might make future "
-"reconciliation difficult! Continue with this change?"
+"reconciliation difficult!  Continue with this change?"
 msgstr "您即將要修改已對帳的交易。這麼做可能使未來的對帳很困難！繼續這個修改？"
 
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:1725
@@ -10894,7 +10889,7 @@ msgstr "變更已對帳的分割？"
 #, fuzzy
 msgid ""
 "You are about to change a split that is linked to a reconciled split. Doing "
-"so might make future reconciliation difficult! Continue with this change?"
+"so might make future reconciliation difficult!  Continue with this change?"
 msgstr "您即將要修改已對帳的交易。這麼做可能使未來的對帳很困難！繼續這個修改？"
 
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:1741
@@ -13028,7 +13023,7 @@ msgstr "使用會計名詞標籤(_F)"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:159
 msgid "Use a 24 hour (instead of a 12 hour) time format."
-msgstr "使用 24 小時制(代替 12 小時制)時間。"
+msgstr "使用 24 小時制(而不是 12 小時制)時間格式。"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:160
 msgid "Use only 'debit' and 'credit' instead of informal synonyms"
@@ -15643,14 +15638,12 @@ msgid ""
 msgstr ""
 
 #: ../src/import-export/csv-import/assistant-csv-trans-import.glade.h:45
-#, fuzzy
 msgid "Transaction Import Assistant"
-msgstr "GnuCash 資料檔匯入精靈"
+msgstr "交易匯入精靈"
 
 #: ../src/import-export/csv-import/assistant-csv-trans-import.glade.h:46
-#, fuzzy
 msgid "Transaction Information"
-msgstr "<b>新增交易資訊</b>"
+msgstr "交易資訊"
 
 #: ../src/import-export/csv-import/csv-account-import.c:240
 #, c-format
@@ -17110,9 +17103,8 @@ msgstr ""
 
 #. Menu Items
 #: ../src/plugins/customer_import/gnc-plugin-customer_import.c:56
-#, fuzzy
 msgid "I_mport"
-msgstr "匯入"
+msgstr "匯入(_M)"
 
 #: ../src/plugins/customer_import/gnc-plugin-customer_import.c:57
 msgid "Import Customers and Vendors"
@@ -17123,24 +17115,20 @@ msgid "customer_import tooltip"
 msgstr ""
 
 #: ../src/plugins/customer_import/gtkbuilder/dialog-customer-import-gui.glade.h:1
-#, fuzzy
 msgid "<b>1. Choose the file to import</b>"
-msgstr "1. 選擇匯入檔"
+msgstr "<b>1. 選擇匯入檔</b>"
 
 #: ../src/plugins/customer_import/gtkbuilder/dialog-customer-import-gui.glade.h:2
-#, fuzzy
 msgid "<b>2. Select Import Type</b>"
-msgstr "2. 選擇匯入類別"
+msgstr "<b>2. 選擇匯入類別</b>"
 
 #: ../src/plugins/customer_import/gtkbuilder/dialog-customer-import-gui.glade.h:3
-#, fuzzy
 msgid "<b>3. Preview</b>"
-msgstr "4. 預覽"
+msgstr "<b>3. 預覽</b>"
 
 #: ../src/plugins/customer_import/gtkbuilder/dialog-customer-import-gui.glade.h:4
-#, fuzzy
 msgid "<b>3. Select import options</b>"
-msgstr "3. 選擇匯入選項"
+msgstr "<b>3. 選擇匯入選項</b>"
 
 #: ../src/plugins/customer_import/gtkbuilder/dialog-customer-import-gui.glade.h:9
 msgid "For importing customer lists."
@@ -17518,14 +17506,12 @@ msgid "Print the current report"
 msgstr "列印目前的報表"
 
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1022
-#, fuzzy
 msgid "Export as P_DF..."
-msgstr "匯入 _QIF..."
+msgstr "匯出為 P_DF..."
 
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1023
-#, fuzzy
 msgid "Export the current report as a PDF document"
-msgstr "列印目前的報表"
+msgstr "將這份報表匯出為 PDF 文件"
 
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1047
 msgid "Add _Report"
@@ -17639,9 +17625,8 @@ msgid "There are no options for this report."
 msgstr "這個報表沒有可用的選項。"
 
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1598
-#, fuzzy
 msgid "GnuCash-Report"
-msgstr "GnuCash 選項"
+msgstr "GnuCash-報表"
 
 #: ../src/report/report-gnome/window-report.c:103
 msgid "Set the report options you want using this dialog."
@@ -17679,14 +17664,12 @@ msgid "Edit report style sheets."
 msgstr "編輯報表樣式表。"
 
 #: ../src/gnome/gnucash.desktop.in.in.h:1
-#, fuzzy
 msgid "Finance Management"
-msgstr "GnuCash 財務管理"
+msgstr "財務管理"
 
 #: ../src/gnome/gnucash.desktop.in.in.h:2
-#, fuzzy
 msgid "GnuCash"
-msgstr "GnuCash %s"
+msgstr "GnuCash"
 
 #: ../src/gnome/gnucash.desktop.in.in.h:3
 msgid "Manage your finances, accounts, and investments"
@@ -18070,27 +18053,23 @@ msgstr "%s 到 %s"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:126
-#, fuzzy
 msgid "First day of the current calendar year"
-msgstr "目前日曆年的起點"
+msgstr "目前日曆年的第一天"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:130
-#, fuzzy
 msgid "Last day of the current calendar year"
-msgstr "目前日曆年的起點"
+msgstr "目前日曆年的最後一天"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:134
-#, fuzzy
 msgid "First day of the previous calendar year"
-msgstr "前一日曆年的開始"
+msgstr "前一日曆年的第一天"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:138
-#, fuzzy
 msgid "Last day of the previous calendar year"
-msgstr "前一日曆年的開始"
+msgstr "前一日曆年的最後一天"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:140
@@ -18099,9 +18078,8 @@ msgstr "明年初"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:142
-#, fuzzy
 msgid "First day of the next calendar year"
-msgstr "目前日曆年的起點"
+msgstr "下一日曆年的第一天"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:144
@@ -18126,7 +18104,7 @@ msgstr "於全域偏好設定的，會計期間的第一天"
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:152
 msgid "End of accounting period"
-msgstr "會計期間的終點"
+msgstr "會計期間的期末"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:154
@@ -18156,27 +18134,27 @@ msgstr "前一月份的最後一天"
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:172
 msgid "Start of next month"
-msgstr "下月月初"
+msgstr "下個月月初"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:174
 msgid "First day of the next month"
-msgstr "下一月份的第一天"
+msgstr "下個月的第一天"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:176
 msgid "End of next month"
-msgstr "下月月底"
+msgstr "下個月月底"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:178
 msgid "Last day of next month"
-msgstr "下一月份的最後一天"
+msgstr "下個月的最後一天"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:180
 msgid "Start of current quarter"
-msgstr "本季起點"
+msgstr "本季初"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:182
@@ -18186,7 +18164,7 @@ msgstr "本季會計週期的第一天"
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:184
 msgid "End of current quarter"
-msgstr "本季終點"
+msgstr "本季末"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:186
@@ -18206,22 +18184,22 @@ msgstr "前一季會計週期的最後一天"
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:196
 msgid "Start of next quarter"
-msgstr "下一季起點"
+msgstr "下一季初"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:198
 msgid "First day of the next quarterly accounting period"
-msgstr "下一季會計週期的起點"
+msgstr "下一季會計週期的第一天"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:200
 msgid "End of next quarter"
-msgstr "下一季終點"
+msgstr "下一季末"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:202
 msgid "Last day of next quarterly accounting period"
-msgstr "下一季會計週期的終點"
+msgstr "下一季會計週期的最後一天"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:206
@@ -18656,15 +18634,13 @@ msgstr "價格來源"
 
 #. src/report/business-reports/aging.scm
 #: ../intl-scm/guile-strings.c:450
-#, fuzzy
 msgid "Show Multi-currency Totals"
-msgstr "顯示多重貨幣加總？"
+msgstr "顯示多重貨幣加總"
 
 #. src/report/business-reports/aging.scm
 #: ../intl-scm/guile-strings.c:452
-#, fuzzy
 msgid "Show zero balance items"
-msgstr "顯示零結餘的項目？"
+msgstr "顯示零結餘的項目"
 
 #. src/report/business-reports/aging.scm
 #. src/report/business-reports/owner-report.scm
@@ -21144,17 +21120,17 @@ msgstr "選擇提出報表的日期"
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2132
 msgid "Start of reporting period"
-msgstr "報表週期的起點"
+msgstr "報表週期的期初"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2134
 msgid "End of reporting period"
-msgstr "報表週期的終點"
+msgstr "報表週期的期末"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2136
 msgid "The amount of time between data points"
-msgstr "資料點之間的時間總數"
+msgstr "資料點之間的時間長度"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2138 ../intl-scm/guile-strings.c:2140
