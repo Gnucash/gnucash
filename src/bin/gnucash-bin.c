@@ -342,10 +342,22 @@ set_mac_locale()
     NSArray *languages = [defs objectForKey: @"AppleLanguages"];
     const gchar *langs = NULL;
     NSLocale *locale = [NSLocale currentLocale];
-    NSString *locale_str = [[[locale objectForKey: NSLocaleLanguageCode]
-			     stringByAppendingString: @"_"]
-			    stringByAppendingString:
-			    [locale objectForKey: NSLocaleCountryCode]];
+    NSString *locale_str;
+    @try
+    {
+	locale_str = [[[locale objectForKey: NSLocaleLanguageCode]
+		       stringByAppendingString: @"_"]
+		      stringByAppendingString:
+		      [locale objectForKey: NSLocaleCountryCode]];
+    }
+    @catch (NSException *err)
+    {
+	PWARN("Locale detection raised error %s: %s. "
+	      "Check that your locale settings in "
+	      "System Preferences>Languages & Text are set correctly.",
+	      [[err name] UTF8String], [[err reason] UTF8String]);
+	locale_str = @"_";
+    }
 /* If we didn't get a valid current locale, the string will be just "_" */
     if ([locale_str isEqualToString: @"_"])
 	locale_str = @"en_US";
