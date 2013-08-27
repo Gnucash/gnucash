@@ -481,7 +481,9 @@ qof_util_param_as_string(QofInstance *ent, QofParam *param)
 void
 qof_init (void)
 {
+#ifndef HAVE_GLIB_2_36
     g_type_init();
+#endif
     qof_log_init();
     qof_string_cache_init();
     guid_init ();

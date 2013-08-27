@@ -261,6 +261,14 @@ then
 else
   AC_MSG_RESULT(no)
 fi
+AC_MSG_CHECKING([for GLib 2.36 or later (glib >=2.36.0)])
+if $PKG_CONFIG "glib-2.0 >= 2.36.0"
+then
+  AC_MSG_RESULT(yes)
+  AC_DEFINE([HAVE_GLIB_2_36], [1], [Configure g_type_init deprecation])
+else
+  AC_MSG_RESULT(no)
+fi
 AM_CONDITIONAL(HAVE_GLIB_TESTING, test "x$_have_glib_testing" = "xyes")
 
 AC_CHECK_HEADERS(dirent.h dlfcn.h dl.h utmp.h locale.h mcheck.h unistd.h wctype.h)
@@ -310,7 +318,7 @@ update to latest  darwin])
       PKG_CHECK_MODULES([GTK_MAC], gtk-mac-integration,
                         [_gtk_mac=yes], [_gtk_mac=no])
       if test "x$_gtk_mac" = xyes; then
-        GTK_MAC_LIBS="${GTK_MAC_LIBS} -lobjc"
+        GTK_MAC_LIBS="${GTK_MAC_LIBS} -lobjc -framework Cocoa"
         GTK_MAC_CFLAGS="${GTK_MAC_CFLAGS} -xobjective-c"
       fi
       AC_MSG_RESULT(${_gtk_mac})

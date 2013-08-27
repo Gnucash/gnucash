@@ -34,7 +34,9 @@ int
 main (int   argc,
       char *argv[])
 {
+#ifndef HAVE_GLIB_2_36
     g_type_init(); 			/* Initialize the GObject system */
+#endif
     g_test_init ( &argc, &argv, NULL ); 	/* initialize test program */
     qof_log_init_filename_special("stderr"); /* Init the log system */
     g_test_bug_base("https://bugzilla.gnome.org/show_bug.cgi?id="); /* init the bugzilla URL */
