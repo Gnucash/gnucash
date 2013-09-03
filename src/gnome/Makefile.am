@@ -63,6 +63,10 @@ gnomeapp_DATA = $(gnomeapp_in_files:.desktop.in=.desktop)
 
 appicondir = $(datadir)/pixmaps
 
+appdatadir = $(datadir)/appdata
+appdata_files = gnucash.appdata.xml
+appdata_DATA = $(appdata_files)
+
 noinst_HEADERS = \
   dialog-fincalc.h \
   dialog-find-transactions.h \
@@ -98,8 +102,9 @@ swig-gnome.c: gnome.i dialog-progress.h ${top_srcdir}/src/base-typemaps.i
 endif
 
 EXTRA_DIST = \
-  gnucash.desktop.in \
-  gnome.i
+  gnome.i \
+  $(gnomeapp_in_files) \
+  $(appdata_files)
 
 AM_CPPFLAGS = \
   -I${top_srcdir}/src \
