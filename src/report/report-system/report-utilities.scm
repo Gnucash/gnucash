@@ -759,6 +759,74 @@
     total
     )
   )
+
+;; Filters the splits from the source to the target accounts
+;; returns a commodity collector
+;; does NOT do currency exchanges
+(define (gnc:account-get-total-flow direction target-account-list from-date-tp to-date-tp)
+
+  (let* (
+          (total-flow (gnc:make-commodity-collector))
+        )
+
+    ;; ------------------------------------------------------------------
+    ;; process all target accounts
+    ;; ------------------------------------------------------------------
+    (for-each
+      (lambda (target-account)
+        ;; -------------------------------------
+        ;; process all splits of current account
+        ;; -------------------------------------
+        (for-each
+          (lambda (target-account-split)
+            ;; ----------------------------------------------------
+            ;; only target account splits that are within the specified time range
+            ;; ----------------------------------------------------
+            (let* (
+                    (transaction (xaccSplitGetParent target-account-split))
+                    (transaction-date-posted (gnc-transaction-get-date-posted transaction))
+                  )
+              (if (and
+                    (gnc:timepair-le transaction-date-posted to-date-tp)
+                    (gnc:timepair-ge transaction-date-posted from-date-tp)
+                  )
+                ;; -------------------------------------------------------------
+                ;; get the split information
+                ;; -------------------------------------------------------------
+                (let* (
+                        (transaction-currency   (xaccTransGetCurrency transaction))
+                        (transaction-value (gnc-numeric-zero))
+                        (split-value       (xaccSplitGetAmount target-account-split))
+                      )
+                  ;; -------------------------------------------------------------
+                  ;; update the return value
+                  ;; -------------------------------------------------------------
+                  (case direction
+                    ((in)
+                      (if (gnc-numeric-positive-p split-value)
+                        (total-flow 'add transaction-currency split-value)
+                      )
+                    )
+                    ((out)
+                      (if (gnc-numeric-negative-p split-value)
+                        (total-flow 'add transaction-currency split-value)
+                      )
+                    )
+                    (else  (gnc:warn  "bad gnc:account-get-total-flow action: "  direction))
+                  )
+                )
+              )
+            )
+          )
+          (xaccAccountGetSplitList target-account)
+        )
+      )
+      target-account-list
+    )
+    total-flow ;; RETURN
+  )
+)
+
 ;; similar, but only counts transactions with non-negative shares and
 ;; *ignores* any closing entries
 (define (gnc:account-get-pos-trans-total-interval
