@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<application>
+ <id type="desktop">gnucash.desktop</id>
+ <licence>CC0</licence>
+ <description>
+  <p>
+   GnuCash is a program for personal and small-business financial-accounting.
+  </p>
+  <p>
+   Designed to be easy to use, yet powerful and flexible, GnuCash allows you
+   to track bank accounts, stocks, income and expenses. As quick
+   and intuitive to use as a checkbook register, it is based on professional
+   accounting principles to ensure balanced books and accurate reports. 
+  </p>
+  <p>Some feature highlights:</p>
+  <ul>
+   <li>Double-Entry Accounting</li>
+   <li>Stock/Bond/Mutual Fund Accounts</li>
+   <li>Small-Business Accounting</li>
+   <li>Reports, Graphs</li>
+   <li>QIF/OFX/HBCI Import, Transaction Matching</li>
+   <li>Scheduled Transactions</li>
+   <li>Financial Calculations</li>
+
+   <li>First item</li>
+   <li>Second item</li>
+  </ul>
+ </description>
+ <screenshots>
+  <screenshot type="default" width="416" height="255">http://www.gnucash.org/images/gnucash-perspective.png</screenshot>
+  <screenshot width="400" height="309">http://www.gnucash.org/images/features/feature_register.png</screenshot>
+  <screenshot width="400" height="362">http://www.gnucash.org/images/features/feature_graph-report.png</screenshot>
+ </screenshots>
+ <url type="homepage">http://www.gnucash.org/</url>
+ <updatecontact>gnucash-devel@gnucash.org</updatecontact>
+</application>
