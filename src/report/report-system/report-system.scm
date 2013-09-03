@@ -683,6 +683,7 @@
 (export gnc-commodity-collector-allzero?)
 (export gnc:account-get-trans-type-balance-interval)
 (export gnc:account-get-trans-type-balance-interval-with-closing)
+(export gnc:account-get-total-flow)
 (export gnc:account-get-pos-trans-total-interval)
 (export gnc:account-get-trans-type-splits-interval)
 (export gnc:double-col)
