@@ -541,12 +541,9 @@
 	  (set! net-investment (gnc:make-commodity-collector))  ;; 0
 	  (net-investment 'minusmerge neg-pre-closing-equity #f);; > 0
 	  (net-investment 'merge neg-start-equity-balance #f)   ;; net increase
-	  
-	  (set! withdrawals (gnc:make-commodity-collector))
-	  (withdrawals 'merge (gnc:account-get-pos-trans-total-interval
-				    equity-accounts closing-pattern
-				    start-date-tp end-date-tp)
-		       #f)
+
+	  (set! withdrawals (gnc:account-get-total-flow 'in  equity-accounts start-date-tp end-date-tp))
+
 	  (set! investments (gnc:make-commodity-collector))
 	  (investments 'merge net-investment #f)
 	  (investments 'merge withdrawals #f)
