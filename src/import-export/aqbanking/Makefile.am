@@ -32,7 +32,9 @@ noinst_HEADERS = \
   gnc-plugin-aqbanking.h
 
 libgncmod_aqbanking_la_LDFLAGS = -avoid-version
-
+if OS_WIN32
+libgncmod_aqbanking_la_LDFLAGS += -export-symbols-regex .*
+endif
 libgncmod_aqbanking_la_LIBADD = \
   ${top_builddir}/src/import-export/libgncmod-generic-import.la \
   ${top_builddir}/src/gnome/libgnc-gnome.la \
