@@ -1,5 +1,50 @@
 Version history:
 ------- -------
+ 2.5.5 - 10 September 2013
+       	 This is the sixth release in the UNSTABLE 2.5 series.
+
+	 No new features are added in this release.
+
+	 Bug Fixes:
+
+	 334939 - Account Report and Account Transaction Report are
+	 apparently the same, but different. Change menu entry for the single
+	 transaction Account Report from "Accout Transaction Report" to
+	 "Account Report - Single Transaction" Author: Carsten Rinke
+
+	 603183 - Equity statement shows incorrect changes
+	 Add function gnc:account-get-total-flow to report-utilities.scm
+	 This function filters the splits from the source to the target accounts
+	 and returns a commodity collector.
+	 It does NOT do currency exchanges. Export the new function
+	 gnc:account-get-total-flow from report-utilities.scm. Apply the new
+	 function gnc:account-get-total-flow for the "Withdrawal" calculation.
+	 Author: Carsten Rinke
+
+	 629136: Move the code that updates the sensitivity
+	 of immutable page actions from gnc_main_window_switch_page to
+	 gnc_main_window_generate_title. Patch by Guilherme Salgado.
+
+	 696492: Change report name in menu or in report output to be
+	 consistent Change the register name to "Accout Transaction Report"
+	 when the register type is GENERAL_LEDGER, INCOME_LEDGER, or default
+	 in function gnc_reg_get_name().  Patch by Carsten Rinke.
+
+	 704039 time zone is not respected on windows Author: Kuang-che Wu
+
+	 704056 - Online Banking (Online Actions) does not appear in Action menu
+	 Ensure that all functions are exported to the dll.
+
+	 704525 - When you have a mix of chart types (bar charts and pie
+	 charts). Add new procedure gnc:substring-replace-from-to
+	 Similar to gnc:substring-replace, but offers the possibility to
+	 replace substrings in a range of occurances. Add calls to
+	 gnc:substring-replace-from-to to procedure gnc:report-run.
+	 Filter out all occurances of jquery.min.js and jquery.jqplot.js
+	 except for the first occurances.  Author: Carsten Rinke
+
+	 Translations updated: Lithuatnian
+
  2.5.4 - 4 August 2013
          This is the fifth release in the UNSTABLE 2.5 series.
 

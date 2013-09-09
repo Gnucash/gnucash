@@ -20,7 +20,7 @@ dnl Process this file with autoconf to produce a configure script.
 
 # Autoconf initialization
 AC_PREREQ(2.60)
-AC_INIT([GnuCash], [2.5.4], [gnucash-devel@gnucash.org])
+AC_INIT([GnuCash], [2.5.5], [gnucash-devel@gnucash.org])
 AC_CONFIG_HEADERS(config.h)
 AC_CONFIG_SRCDIR(src/engine/Transaction.h)
 
