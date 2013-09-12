@@ -1016,7 +1016,10 @@ gnc_sx_set_instance_count(SchedXaction *sx, gint instance_num)
     g_return_if_fail(sx);
     if (sx->instance_num == instance_num)
         return;
+    gnc_sx_begin_edit(sx);
     sx->instance_num = instance_num;
+    qof_instance_set_dirty(&sx->inst);
+    gnc_sx_commit_edit(sx);
 }
 
 GList *
