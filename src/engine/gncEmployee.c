@@ -550,6 +550,7 @@ qofEmployeeSetAddr (GncEmployee *employee, QofInstance *addr_ent)
     }
     gncEmployeeBeginEdit(employee);
     employee->addr = addr;
+    mark_employee (employee);
     gncEmployeeCommitEdit(employee);
 }
 

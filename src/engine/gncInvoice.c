@@ -380,7 +380,7 @@ GncInvoice *gncInvoiceCopy (const GncInvoice *from)
 
     // Posted-date and the posted Txn is intentionally not copied; the
     // copy isn't "posted" but needs to be posted by the user.
-
+    mark_invoice (invoice);
     gncInvoiceCommitEdit(invoice);
 
     return invoice;
@@ -621,27 +621,33 @@ void gncInvoiceAddEntry (GncInvoice *invoice, GncEntry *entry)
     if (old == invoice) return;	/* I already own this one */
     if (old) gncInvoiceRemoveEntry (old, entry);
 
+    gncInvoiceBeginEdit (invoice);
     gncEntrySetInvoice (entry, invoice);
     invoice->entries = g_list_insert_sorted (invoice->entries, entry,
                        (GCompareFunc)gncEntryCompare);
     mark_invoice (invoice);
+    gncInvoiceCommitEdit (invoice);
 }
 
 void gncInvoiceRemoveEntry (GncInvoice *invoice, GncEntry *entry)
 {
     if (!invoice || !entry) return;
 
+    gncInvoiceBeginEdit (invoice);
     gncEntrySetInvoice (entry, NULL);
     invoice->entries = g_list_remove (invoice->entries, entry);
     mark_invoice (invoice);
+    gncInvoiceCommitEdit (invoice);
 }
 
 void gncInvoiceAddPrice (GncInvoice *invoice, GNCPrice *price)
 {
     if (!invoice || !price) return;
 
+    gncInvoiceBeginEdit (invoice);
     invoice->prices = g_list_prepend(invoice->prices, price);
     mark_invoice (invoice);
+    gncInvoiceCommitEdit (invoice);
 }
 
 void gncBillAddEntry (GncInvoice *bill, GncEntry *entry)
@@ -656,19 +662,23 @@ void gncBillAddEntry (GncInvoice *bill, GncEntry *entry)
     if (old == bill) return;	/* I already own this one */
     if (old) gncBillRemoveEntry (old, entry);
 
+    gncInvoiceBeginEdit (bill);
     gncEntrySetBill (entry, bill);
     bill->entries = g_list_insert_sorted (bill->entries, entry,
                                           (GCompareFunc)gncEntryCompare);
     mark_invoice (bill);
+    gncInvoiceCommitEdit (bill);
 }
 
 void gncBillRemoveEntry (GncInvoice *bill, GncEntry *entry)
 {
     if (!bill || !entry) return;
 
+    gncInvoiceBeginEdit (bill);
     gncEntrySetBill (entry, NULL);
     bill->entries = g_list_remove (bill->entries, entry);
     mark_invoice (bill);
+    gncInvoiceCommitEdit (bill);
 }
 
 void gncInvoiceSortEntries (GncInvoice *invoice)
@@ -676,7 +686,9 @@ void gncInvoiceSortEntries (GncInvoice *invoice)
     if (!invoice) return;
     invoice->entries = g_list_sort(invoice->entries,
                                    (GCompareFunc)gncEntryCompare);
+    gncInvoiceBeginEdit (invoice);
     mark_invoice(invoice);
+    gncInvoiceCommitEdit (invoice);
 }
 
 /* ================================================================== */
@@ -1488,6 +1500,10 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
     gncAccountValueDestroy (splitinfo);
 
     gnc_lot_commit_edit (lot);
+    /* Not strictly necessary, since it was done by the Set calls
+     * above, but good insurance. */
+    DEBUG("Committing Invoice %s", invoice->id);
+    mark_invoice (invoice);
     gncInvoiceCommitEdit (invoice);
 
     /* If requested, attempt to automatically apply open payments

@@ -399,21 +399,25 @@ void gncOrderAddEntry (GncOrder *order, GncEntry *entry)
     if (old == order) return;			/* I already own it */
     if (old) gncOrderRemoveEntry (old, entry);
 
+    gncOrderBeginEdit (order);
     order->entries = g_list_insert_sorted (order->entries, entry,
                                            (GCompareFunc)gncEntryCompare);
 
     /* This will send out an event -- make sure we're attached */
     gncEntrySetOrder (entry, order);
     mark_order (order);
+    gncOrderCommitEdit (order);
 }
 
 void gncOrderRemoveEntry (GncOrder *order, GncEntry *entry)
 {
     if (!order || !entry) return;
 
+    gncOrderBeginEdit (order);
     gncEntrySetOrder (entry, NULL);
     order->entries = g_list_remove (order->entries, entry);
     mark_order (order);
+    gncOrderCommitEdit (order);
 }
 
 /* Get Functions */

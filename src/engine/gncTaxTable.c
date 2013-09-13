@@ -499,6 +499,7 @@ void gncTaxTableSetParent (GncTaxTable *table, GncTaxTable *parent)
         gncTaxTableAddChild(parent, table);
     table->refcount = 0;
     gncTaxTableMakeInvisible (table);
+    mark_table (table);
     gncTaxTableCommitEdit (table);
 }
 
@@ -507,6 +508,7 @@ void gncTaxTableSetChild (GncTaxTable *table, GncTaxTable *child)
     if (!table) return;
     gncTaxTableBeginEdit (table);
     table->child = child;
+    mark_table (table);
     gncTaxTableCommitEdit (table);
 }
 
@@ -516,6 +518,7 @@ void gncTaxTableIncRef (GncTaxTable *table)
     if (table->parent || table->invisible) return;        /* children dont need refcounts */
     gncTaxTableBeginEdit (table);
     table->refcount++;
+    mark_table (table);
     gncTaxTableCommitEdit (table);
 }
 
@@ -523,16 +526,21 @@ void gncTaxTableDecRef (GncTaxTable *table)
 {
     if (!table) return;
     if (table->parent || table->invisible) return;        /* children dont need refcounts */
+    g_return_if_fail (table->refcount > 0);
     gncTaxTableBeginEdit (table);
     table->refcount--;
-    g_return_if_fail (table->refcount >= 0);
+    mark_table (table);
     gncTaxTableCommitEdit (table);
 }
 
 void gncTaxTableSetRefcount (GncTaxTable *table, gint64 refcount)
 {
     if (!table) return;
+    g_return_if_fail (refcount >= 0);
+    gncTaxTableBeginEdit (table);
     table->refcount = refcount;
+    mark_table (table);
+    gncTaxTableCommitEdit (table);
 }
 
 void gncTaxTableMakeInvisible (GncTaxTable *table)

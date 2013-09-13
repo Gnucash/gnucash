@@ -404,6 +404,7 @@ void gncBillTermSetParent (GncBillTerm *term, GncBillTerm *parent)
     {
         gncBillTermMakeInvisible (term);
     }
+    mark_term (term);
     gncBillTermCommitEdit (term);
 }
 
@@ -412,6 +413,7 @@ void gncBillTermSetChild (GncBillTerm *term, GncBillTerm *child)
     if (!term) return;
     gncBillTermBeginEdit (term);
     term->child = child;
+    mark_term (term);
     gncBillTermCommitEdit (term);
 }
 
@@ -421,6 +423,7 @@ void gncBillTermIncRef (GncBillTerm *term)
     if (term->parent || term->invisible) return;        /* children dont need refcounts */
     gncBillTermBeginEdit (term);
     term->refcount++;
+    mark_term (term);
     gncBillTermCommitEdit (term);
 }
 
@@ -428,16 +431,20 @@ void gncBillTermDecRef (GncBillTerm *term)
 {
     if (!term) return;
     if (term->parent || term->invisible) return;        /* children dont need refcounts */
+    g_return_if_fail (term->refcount >= 1);
     gncBillTermBeginEdit (term);
     term->refcount--;
-    g_return_if_fail (term->refcount >= 0);
+    mark_term (term);
     gncBillTermCommitEdit (term);
 }
 
 void gncBillTermSetRefcount (GncBillTerm *term, gint64 refcount)
 {
     if (!term) return;
+    gncBillTermBeginEdit (term);
     term->refcount = refcount;
+    mark_term (term);
+    gncBillTermCommitEdit (term);
 }
 
 void gncBillTermMakeInvisible (GncBillTerm *term)
@@ -446,6 +453,7 @@ void gncBillTermMakeInvisible (GncBillTerm *term)
     gncBillTermBeginEdit (term);
     term->invisible = TRUE;
     remObj (term);
+    mark_term (term);
     gncBillTermCommitEdit (term);
 }
 
@@ -578,6 +586,7 @@ static GncBillTerm *gncBillTermCopy (const GncBillTerm *term)
     t->discount = term->discount;
     t->cutoff = term->cutoff;
 
+    mark_term (t);
     gncBillTermCommitEdit(t);
 
     return t;

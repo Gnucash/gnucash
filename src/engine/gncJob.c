@@ -338,10 +338,11 @@ qofJobSetOwner (GncJob *job, QofInstance *ent)
     {
         return;
     }
-    qof_begin_edit(&job->inst);
+
+    gncJobBeginEdit (job);
     qofOwnerSetEntity(&job->owner, ent);
     mark_job (job);
-    qof_commit_edit(&job->inst);
+    gncJobCommitEdit (job);
 }
 
 void gncJobBeginEdit (GncJob *job)
