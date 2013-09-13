@@ -562,6 +562,9 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
         {
             // new invoice
             invoice = gncInvoiceCreate (book);
+/* Protect against thrashing the DB and trying to write the invoice
+ * record prematurely */
+	    gncInvoiceBeginEdit (invoice);
             gncInvoiceSetID (invoice, id);
             owner = gncOwnerNew ();
             if (g_ascii_strcasecmp (type, "BILL") == 0)
@@ -601,6 +604,7 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
                 iw =  gnc_ui_invoice_edit (invoice);
                 gnc_plugin_page_invoice_new (iw);
             }
+	    gncInvoiceCommitEdit (invoice);
         }
 // I want to warn the user that an existing billvoice exists, but not every
 // time.
