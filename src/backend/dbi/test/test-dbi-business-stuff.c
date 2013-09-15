@@ -176,8 +176,8 @@ compare_taxtables( QofBook* book_1, QofBook* book_2 )
     do_compare( book_1, book_2, GNC_ID_TAXTABLE, compare_single_taxtable, "TaxTable lists match" );
 }
 
-static void
-compare_books( QofBook* book_1, QofBook* book_2 )
+void
+compare_business_books( QofBook* book_1, QofBook* book_2 )
 {
     compare_billterms( book_1, book_2 );
     compare_taxtables( book_1, book_2 );
@@ -189,43 +189,3 @@ compare_books( QofBook* book_1, QofBook* book_2 )
     compare_vendors( book_1, book_2 );
 }
 
-void
-test_dbi_business_store_and_reload( const gchar* driver, QofSession* session_1, const gchar* url )
-{
-    QofSession* session_2;
-    QofSession* session_3;
-
-    gchar *msg = "[gnc_dbi_unlock()] There was no lock entry in the Lock table";
-    gchar *log_domain = "gnc.backend.dbi";
-    guint loglevel = G_LOG_LEVEL_WARNING | G_LOG_FLAG_FATAL, hdlr;
-    TestErrorStruct check = { loglevel, log_domain, msg, 0 };
-    GLogFunc dhdlr = g_log_set_default_handler ((GLogFunc)test_null_handler,
-						&check);
-    g_test_log_set_fatal_handler ((GTestLogFatalFunc)test_checked_handler,
-				  &check);
-
-    g_test_message ( "Testing %s\n", driver );
-
-    // Save the session data
-    session_2 = qof_session_new();
-    qof_session_begin( session_2, url, FALSE, TRUE, TRUE );
-    qof_session_swap_data( session_1, session_2 );
-    qof_session_save( session_2, NULL );
-
-    // Reload the session data
-    session_3 = qof_session_new();
-    qof_session_begin( session_3, url, TRUE, FALSE, FALSE );
-    qof_session_load( session_3, NULL );
-
-    // Compare with the original data
-    compare_books( qof_session_get_book( session_2 ), qof_session_get_book( session_3 ) );
-    qof_session_end( session_2 );
-    qof_session_destroy( session_2 );
-
-    hdlr = g_log_set_handler (log_domain, loglevel,
-                              (GLogFunc)test_checked_handler, &check);
-    qof_session_end( session_3 );
-    g_log_remove_handler (log_domain, hdlr);
-    g_log_set_default_handler (dhdlr, NULL);
-    qof_session_destroy( session_3 );
-}

@@ -61,8 +61,7 @@ endif
 
 test_backend_dbi_SOURCES = \
     test-backend-dbi.c \
-    utest-backend-dbi-basic.c \
-    utest-backend-dbi-business.c \
+    test-backend-dbi-basic.c \
     test-dbi-stuff.c \
     test-dbi-business-stuff.c
 
