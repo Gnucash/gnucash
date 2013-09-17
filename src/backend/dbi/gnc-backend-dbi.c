@@ -1292,7 +1292,7 @@ conn_get_index_list_pgsql( dbi_conn conn )
     GSList *list = NULL;
     const gchar *errmsg;
     dbi_result result;
-    g_print( "Retrieving postgres index list\n");
+    PINFO ( "Retrieving postgres index list\n");
     result = dbi_conn_query( conn, "SELECT relname FROM pg_class AS a INNER JOIN pg_index AS b ON (b.indexrelid = a.oid) INNER JOIN pg_namespace AS c ON (a.relnamespace = c.oid) WHERE reltype = '0' AND indisprimary = 'f' AND nspname = 'public'" );
     if ( dbi_conn_error( conn, &errmsg ) != DBI_ERROR_NONE )
     {
