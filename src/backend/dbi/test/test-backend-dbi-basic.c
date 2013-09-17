@@ -224,6 +224,7 @@ destroy_database (gchar* url)
     gchar *basename = NULL;
     gint portnum = 0;
     gchar *port = NULL;
+    gchar *pgsql = "pgsql";
     dbi_conn conn = NULL;
     gchar *errfmt = "Unable to delete tables in %s: %s";
     gint fail = 0;
@@ -232,7 +233,10 @@ destroy_database (gchar* url)
 
     gnc_uri_get_components  (url, &protocol, &host, &portnum,
                              &username, &password, &dbname);
-    conn = dbi_conn_new (protocol);
+    if (g_strcmp0 (protocol, "postgres") == 0)
+	conn = dbi_conn_new (pgsql);
+    else
+	conn = dbi_conn_new (protocol);
     port = g_strdup_printf ("%d", portnum);
     if (conn == NULL)
     {
@@ -240,7 +244,7 @@ destroy_database (gchar* url)
         return;
     }
     fail = dbi_conn_set_option (conn, "host", host);
-    if (!fail)
+    if (!fail && portnum)
         fail = dbi_conn_set_option (conn, "port", port);
     if (!fail)
         fail = dbi_conn_set_option (conn, "dbname", dbname);
@@ -580,6 +584,9 @@ test_suite_gnc_backend_dbi (void)
     if (strlen (TEST_MYSQL_URL) > 0)
         create_dbi_test_suite ("mysql", TEST_MYSQL_URL);
     if (strlen (TEST_PGSQL_URL) > 0)
+    {
+	g_setenv ("PGOPTIONS", "-c client_min_messages=WARNING", FALSE);
         create_dbi_test_suite ("postgres", TEST_PGSQL_URL);
+    }
 
 }
