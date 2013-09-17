@@ -1248,6 +1248,20 @@ xaccAccountDestroy (Account *acc)
 
 /********************************************************************\
 \********************************************************************/
+static gint
+compare_account_by_name (gconstpointer a, gconstpointer b)
+{
+    AccountPrivate *priv_a, *priv_b;
+    if (a && !b) return 1;
+    if (b && !a) return -1;
+    if (!a && !b) return 0;
+    priv_a = GET_PRIVATE((Account*)a);
+    priv_b = GET_PRIVATE((Account*)b);
+    if ((priv_a->accountCode && strlen (priv_a->accountCode)) ||
+	(priv_b->accountCode && strlen (priv_b->accountCode)))
+	return g_strcmp0 (priv_a->accountCode, priv_b->accountCode);
+    return g_strcmp0 (priv_a->accountName, priv_b->accountName);
+}
 
 static gboolean
 xaccAcctChildrenEqual(const GList *na,
@@ -1256,15 +1270,28 @@ xaccAcctChildrenEqual(const GList *na,
 {
     if ((!na && nb) || (na && !nb))
     {
-        PWARN ("only one has accounts");
+        PINFO ("only one has accounts");
         return(FALSE);
     }
+    if (g_list_length ((GList*)na) != g_list_length ((GList*)nb))
+    {
+	PINFO ("Accounts have different numbers of children");
+	return (FALSE);
+    }
 
-    while (na && nb)
+    while (na)
     {
         Account *aa = na->data;
-        Account *ab = nb->data;
+        Account *ab;
+	GList *node = g_list_find_custom ((GList*)nb, aa,
+					  (GCompareFunc)compare_account_by_name);
 
+	if (!node)
+	{
+	    PINFO ("Unable to find matching child account.");
+	    return FALSE;
+	}
+	ab = node->data;
         if (!xaccAccountEqual(aa, ab, check_guids))
         {
             char sa[GUID_ENCODING_LENGTH + 1];
@@ -1279,13 +1306,6 @@ xaccAcctChildrenEqual(const GList *na,
         }
 
         na = na->next;
-        nb = nb->next;
-    }
-
-    if (na || nb)
-    {
-        PWARN ("different numbers of accounts");
-        return(FALSE);
     }
 
     return(TRUE);
