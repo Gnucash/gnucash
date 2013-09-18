@@ -1007,6 +1007,7 @@ gnc_budget_view_refresh(GncBudgetView *view)
     GtkTreeViewColumn *col;
     GList *col_list;
     GList *totals_col_list;
+    ENTER("view %p", view);
 
     g_return_if_fail(view != NULL);
     priv = GNC_BUDGET_VIEW_GET_PRIVATE(view);
@@ -1058,7 +1059,7 @@ gnc_budget_view_refresh(GncBudgetView *view)
         col = gbv_create_totals_column(view, num_periods_visible);
         if (col != NULL)
         {
-            gtk_tree_view_append_column(priv->totals_tree_view, col);
+            /*gtk_tree_view_append_column(priv->totals_tree_view, col);*/
             totals_col_list = g_list_append(totals_col_list, col);
         }
 
@@ -1077,10 +1078,11 @@ gnc_budget_view_refresh(GncBudgetView *view)
         col = gbv_create_totals_column(view, -1);
         if (col != NULL)
         {
-            gtk_tree_view_append_column(priv->totals_tree_view, col);
+            /*gtk_tree_view_append_column(priv->totals_tree_view, col);*/
         }
     }
 
     gbv_refresh_col_titles(view);
+    LEAVE(" ");
 }
 
