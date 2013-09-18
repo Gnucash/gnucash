@@ -1059,7 +1059,6 @@ gnc_budget_view_refresh(GncBudgetView *view)
         col = gbv_create_totals_column(view, num_periods_visible);
         if (col != NULL)
         {
-            /*gtk_tree_view_append_column(priv->totals_tree_view, col);*/
             totals_col_list = g_list_append(totals_col_list, col);
         }
 
@@ -1076,10 +1075,6 @@ gnc_budget_view_refresh(GncBudgetView *view)
         g_object_set_data(G_OBJECT(priv->total_col), "budget", priv->budget);
 
         col = gbv_create_totals_column(view, -1);
-        if (col != NULL)
-        {
-            /*gtk_tree_view_append_column(priv->totals_tree_view, col);*/
-        }
     }
 
     gbv_refresh_col_titles(view);
