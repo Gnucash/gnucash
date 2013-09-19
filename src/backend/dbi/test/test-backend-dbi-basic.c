@@ -73,8 +73,6 @@ setup_memory (Fixture *fixture, gconstpointer pData)
     KvpFrame* frame;
     Transaction* tx;
     Split *spl1, *spl2;
-    Timespec ts;
-    struct timeval tv;
     gnc_commodity_table* table;
     gnc_commodity* currency;
 
@@ -95,11 +93,7 @@ setup_memory (Fixture *fixture, gconstpointer pData)
     kvp_frame_set_double (frame, "double-val", 3.14159);
     kvp_frame_set_numeric (frame, "numeric-val", gnc_numeric_zero());
 
-    time (&(tv.tv_sec));
-    tv.tv_usec = 0;
-    ts.tv_sec = tv.tv_sec;
-    ts.tv_nsec = 1000 * tv.tv_usec;
-    kvp_frame_set_timespec (frame, "timespec-val", ts);
+    kvp_frame_set_timespec (frame, "timespec-val", timespec_now ());
 
     kvp_frame_set_string (frame, "string-val", "abcdefghijklmnop");
     kvp_frame_set_guid (frame, "guid-val", qof_instance_get_guid (QOF_INSTANCE(acct1)));
@@ -408,7 +402,7 @@ test_dbi_safe_save (Fixture *fixture, gconstpointer pData)
         g_warning ("Session Error: %d, %s", qof_session_get_error (session_1),
                    qof_session_get_error_message (session_1));
         g_test_message ("DB Session Creation Failed");
-        g_test_fail ();
+        g_assert (FALSE);
         goto cleanup;
     }
     qof_session_swap_data (fixture->session, session_1);
@@ -420,7 +414,7 @@ test_dbi_safe_save (Fixture *fixture, gconstpointer pData)
         g_warning ("Session Error: %s",
                    qof_session_get_error_message(session_1));
         g_test_message ("DB Session Safe Save Failed");
-        g_test_fail ();
+        g_assert (FALSE);
         goto cleanup;
     }
     /* Destroy the session and reload it */
@@ -433,7 +427,7 @@ test_dbi_safe_save (Fixture *fixture, gconstpointer pData)
         g_warning ("Session Error: %d, %s", qof_session_get_error(session_2),
                    qof_session_get_error_message(session_2));
         g_test_message ("DB Session re-creation Failed");
-        g_test_fail ();
+        g_assert (FALSE);
         goto cleanup;
     }
     qof_session_load (session_2, NULL);
@@ -481,7 +475,7 @@ test_dbi_version_control (Fixture *fixture, gconstpointer pData)
         g_warning ("Session Error: %d, %s", qof_session_get_error(sess),
                   qof_session_get_error_message(sess));
         g_test_message ("DB Session Creation Failed");
-	g_test_fail ();
+	g_assert (FALSE);
         goto cleanup;
     }
     qof_session_swap_data (fixture->session, sess);
