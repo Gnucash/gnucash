@@ -193,7 +193,9 @@ int
 main(int argc, char **argv)
 {
     g_setenv ("GNC_UNINSTALLED", "1", TRUE);
+#ifndef HAVE_GLIB_2_36
     g_type_init();
+#endif
     qof_init();
     gnc_engine_init(0, NULL);
 

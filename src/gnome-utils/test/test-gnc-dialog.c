@@ -133,7 +133,9 @@ int main (int argc, char ** argv)
 
     gtk_init(&argc, &argv);
 
+#ifndef HAVE_GLIB_2_36
     g_type_init();
+#endif
     pw = gnc_dialog_new("budget.glade", "SampleOptions");
     gnc_dialog_set_cb(pw, apply_cb, close_cb, NULL, NULL);
 
