@@ -580,10 +580,20 @@ g_free (subsuite);
 void
 test_suite_gnc_backend_dbi (void)
 {
-    create_dbi_test_suite ("sqlite3", "sqlite3");
-    if (strlen (TEST_MYSQL_URL) > 0)
+    dbi_driver driver = NULL;
+    GList *drivers = NULL;
+    while ((driver = dbi_driver_list (driver)))
+    {
+	drivers = g_list_prepend (drivers,
+				  (gchar*)dbi_driver_get_name (driver));
+    }
+    if (g_list_find_custom (drivers, "sqlite3", (GCompareFunc)g_strcmp0))
+	create_dbi_test_suite ("sqlite3", "sqlite3");
+    if (strlen (TEST_MYSQL_URL) > 0 &&
+	g_list_find_custom (drivers, "mysql", (GCompareFunc)g_strcmp0))
         create_dbi_test_suite ("mysql", TEST_MYSQL_URL);
-    if (strlen (TEST_PGSQL_URL) > 0)
+    if (strlen (TEST_PGSQL_URL) > 0 &&
+	g_list_find_custom (drivers, "pgsql", (GCompareFunc)g_strcmp0))
     {
 	g_setenv ("PGOPTIONS", "-c client_min_messages=WARNING", FALSE);
         create_dbi_test_suite ("postgres", TEST_PGSQL_URL);
