@@ -1951,8 +1951,13 @@ load_timespec( const GncSqlBackend* be, GncSqlRow* row,
     }
     else
     {
-        if ( G_VALUE_HOLDS_STRING( val ) )
+        if ( G_VALUE_HOLDS_INT64( val ) )
         {
+	    ts.tv_sec = g_value_get_int64 (val);
+	    isOK = TRUE;
+	}
+	else if (G_VALUE_HOLDS_STRING (val))
+	{
             const gchar* s = g_value_get_string( val );
             if ( s != NULL )
             {
@@ -1968,7 +1973,6 @@ load_timespec( const GncSqlBackend* be, GncSqlRow* row,
                 g_free( buf );
                 isOK = TRUE;
             }
-
         }
         else
         {
@@ -2060,7 +2064,6 @@ load_date( const GncSqlBackend* be, GncSqlRow* row,
            const GncSqlColumnTableEntry* table_row )
 {
     const GValue* val;
-    GDate* date;
 
     g_return_if_fail( be != NULL );
     g_return_if_fail( row != NULL );
@@ -2071,11 +2074,28 @@ load_date( const GncSqlBackend* be, GncSqlRow* row,
     val = gnc_sql_row_get_value_at_col_name( row, table_row->col_name );
     if ( val != NULL )
     {
-        if ( G_VALUE_HOLDS_STRING( val ) )
+	if (G_VALUE_HOLDS_INT64 (val))
+	{
+	    Timespec ts = {0, 0};
+	    GDate date;
+	    ts.tv_sec = g_value_get_int64 (val);
+	    date = timespec_to_gdate (ts);
+
+	    if ( table_row->gobj_param_name != NULL )
+	    {
+		g_object_set( pObject, table_row->gobj_param_name,
+			      &date, NULL );
+	    }
+	    else
+	    {
+		(*setter)( pObject, &date );
+	    }
+	}
+        else if ( G_VALUE_HOLDS_STRING( val ) )
         {
             // Format of date is YYYYMMDD
             const gchar* s = g_value_get_string( val );
-
+	    GDate *date;
             if ( s != NULL )
             {
                 gchar buf[5];
