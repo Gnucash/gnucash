@@ -142,7 +142,7 @@ gnc_g_time_zone_adjust_for_dst (GTimeZone* tz, GDateTime *date)
 	bias = tzinfo.Bias + tzinfo.DaylightBias;
 	hours = -bias / 60; // 60 minutes per hour
 	minutes = (bias < 0 ? -bias : bias) % 60;
-	tzstr = g_strdup_printf ("%+03d%02d", hours, minutes);
+	tzstr = g_strdup_printf ("%+02d%02d", hours, minutes);
 	tz = g_time_zone_new(tzstr);
     }
 #endif
