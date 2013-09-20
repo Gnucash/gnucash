@@ -1791,8 +1791,9 @@ xaccTransSetDateInternal(Transaction *trans, Timespec *dadate, Timespec val)
     {
         time64 secs = (time64) val.tv_sec;
         gchar *tstr = gnc_ctime (&secs);
-        PINFO ("addr=%p set date to %" G_GUINT64_FORMAT ".%09ld %s",
+        PINFO ("addr=%p set date to %" G_GUINT64_FORMAT ".%09ld %s\n",
                trans, val.tv_sec, val.tv_nsec, tstr ? tstr : "(null)");
+        g_free(tstr);
     }
 
     *dadate = val;
