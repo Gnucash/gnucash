@@ -234,6 +234,12 @@ time64 gnc_time_utc (time64 *tbuf);
  */
 gdouble gnc_difftime (const time64 secs1, const time64 secs2);
 
+/** Wrapper for g_date_time_new_from_unix_local() that takes special care on
+ * windows to take the local timezone into account. On unix, it just calles the
+ * g_date function. */
+GDateTime*
+gnc_g_date_time_new_from_unix_local (time64 time);
+
 /** \brief free a struct tm* created with gnc_localtime() or gnc_gmtime()
  * \param time: The struct tm* to be freed.
  */

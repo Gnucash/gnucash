@@ -189,7 +189,7 @@ gnc_g_date_time_adjust_for_dst (GDateTime *gdt, GTimeZone *tz)
     return gdt;
 }
 
-static GDateTime*
+GDateTime*
 gnc_g_date_time_new_from_unix_local (time64 time)
 {
 #ifndef G_OS_WIN32
