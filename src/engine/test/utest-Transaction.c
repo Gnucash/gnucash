@@ -99,7 +99,7 @@ mock_backend_new (void)
 {
     MockBackend *mbe = g_new0 (MockBackend, 1);
     mbe->be.rollback = mock_backend_rollback;
-    memset (mbe->last_call, sizeof (mbe->last_call), 0);
+    memset (mbe->last_call, 0, sizeof (mbe->last_call));
     return mbe;
 }
 
@@ -1753,7 +1753,7 @@ test_xaccTransRollbackEdit_BackendErrors (Fixture *fixture, gconstpointer pData)
     xaccTransRollbackEdit (fixture->txn);
     g_assert_cmpint (check->hits, ==, 1);
     g_assert_cmpstr (mbe->last_call, ==, "rollback");
-    memset (mbe->last_call, sizeof (mbe->last_call), 0);
+    memset (mbe->last_call, 0, sizeof (mbe->last_call));
     xaccTransBeginEdit (fixture->txn);
     mock_backend_set_error (mbe, ERR_BACKEND_MOD_DESTROY);
     xaccTransRollbackEdit (fixture->txn);
