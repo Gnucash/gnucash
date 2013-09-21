@@ -204,50 +204,13 @@
               </packing>
             </child>
             <child>
-              <object class="GtkHBox" id="date_box">
-                <property name="visible">True</property>
-                <child>
-                  <placeholder/>
-                </child>
-              </object>
-              <packing>
-                <property name="left_attach">1</property>
-                <property name="right_attach">2</property>
-                <property name="x_options">GTK_FILL</property>
-                <property name="y_options"></property>
-              </packing>
+              <placeholder/>
             </child>
             <child>
-              <object class="GtkHBox" id="distribution_box">
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <child>
-                  <placeholder/>
-                </child>
-              </object>
-              <packing>
-                <property name="left_attach">1</property>
-                <property name="right_attach">2</property>
-                <property name="top_attach">1</property>
-                <property name="bottom_attach">2</property>
-                <property name="y_options"></property>
-              </packing>
+              <placeholder/>
             </child>
             <child>
-              <object class="GtkHBox" id="price_box">
-                <property name="visible">True</property>
-                <child>
-                  <placeholder/>
-                </child>
-              </object>
-              <packing>
-                <property name="left_attach">1</property>
-                <property name="right_attach">2</property>
-                <property name="top_attach">5</property>
-                <property name="bottom_attach">6</property>
-                <property name="x_options">GTK_FILL</property>
-                <property name="y_options"></property>
-              </packing>
+              <placeholder/>
             </child>
             <child>
               <object class="GtkHBox" id="price_currency_box">
@@ -348,7 +311,6 @@
             <child>
               <object class="GtkHBox" id="cash_box">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
                 <child>
                   <placeholder/>
                 </child>

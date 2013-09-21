@@ -88,8 +88,6 @@ void     gnc_stock_split_assistant_prepare           (GtkAssistant  *assistant,
         gpointer user_data);
 void     gnc_stock_split_assistant_details_prepare   (GtkAssistant *assistant,
         gpointer user_data);
-void     gnc_stock_split_assistant_cash_prepare      (GtkAssistant *assistant,
-        gpointer user_data);
 gboolean gnc_stock_split_assistant_details_complete  (GtkAssistant *assistant,
         gpointer user_data);
 gboolean gnc_stock_split_assistant_cash_complete     (GtkAssistant *assistant,
@@ -255,17 +253,8 @@ void gnc_stock_split_assistant_prepare (GtkAssistant  *assistant, GtkWidget *pag
 {
     gint currentpage = gtk_assistant_get_current_page(assistant);
 
-    switch (currentpage)
-    {
-    case 2:
-        /* Current page is details page */
+    if (currentpage == 2) /* Current page is details page */
         gnc_stock_split_assistant_details_prepare(assistant, user_data);
-        break;
-    case 3:
-        /* Current page is Cash in Lieu page */
-        gnc_stock_split_assistant_cash_prepare (assistant, user_data);
-        break;
-    }
 }
 
 
@@ -276,24 +265,6 @@ gnc_stock_split_assistant_details_prepare (GtkAssistant *assistant,
     StockSplitInfo *info = user_data;
 
     refresh_details_page(info);
-
-    gtk_widget_set_can_focus(GTK_WIDGET (info->distribution_edit), TRUE);
-    gtk_widget_grab_focus(GTK_WIDGET (info->distribution_edit));
-
-    /** FIXME The focus does not seem to work ? **/
-}
-
-
-void
-gnc_stock_split_assistant_cash_prepare (GtkAssistant *assistant,
-                                        gpointer user_data)
-{
-    StockSplitInfo *info = user_data;
-
-    gtk_widget_grab_focus(info->cash_edit);
-
-    /** FIXME The focus does not seem to work ? **/
-
 }
 
 
@@ -627,39 +598,41 @@ gnc_stock_split_assistant_create (StockSplitInfo *info)
 
     /* Details Page Widgets */
     {
-        GtkWidget *box;
+        GtkWidget *table;
         GtkWidget *amount;
         GtkWidget *date;
         GtkWidget *label;
 
+        table = GTK_WIDGET(gtk_builder_get_object(builder, "stock_details_table"));
         info->description_entry = GTK_WIDGET(gtk_builder_get_object(builder, "description_entry"));
 
-        box = GTK_WIDGET(gtk_builder_get_object(builder, "date_box"));
         date = gnc_date_edit_new (gnc_time (NULL), FALSE, FALSE);
-        gtk_box_pack_start (GTK_BOX (box), date, TRUE, TRUE, 0);
+        gtk_table_attach_defaults (GTK_TABLE (table), date, 1, 2, 0, 1);
+        gtk_widget_show (date);
         info->date_edit = date;
+
         label = GTK_WIDGET(gtk_builder_get_object(builder, "date_label"));
         gnc_date_make_mnemonic_target (GNC_DATE_EDIT(date), label);
 
-        box = GTK_WIDGET(gtk_builder_get_object(builder, "distribution_box"));
         amount = gnc_amount_edit_new ();
         g_signal_connect (amount, "changed",
                           G_CALLBACK (gnc_stock_split_details_valid_cb), info);
         gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT (amount), TRUE);
-        gtk_box_pack_start (GTK_BOX (box), amount, TRUE, TRUE, 0);
+        gtk_table_attach_defaults (GTK_TABLE (table), amount, 1, 2, 1, 2);
+        gtk_widget_show (amount);
         info->distribution_edit = amount;
 
         label = GTK_WIDGET(gtk_builder_get_object(builder, "distribution_label"));
         gtk_label_set_mnemonic_widget(GTK_LABEL(label), amount);
 
-        box = GTK_WIDGET(gtk_builder_get_object(builder, "price_box"));
         amount = gnc_amount_edit_new ();
         gnc_amount_edit_set_print_info (GNC_AMOUNT_EDIT (amount),
                                         gnc_default_price_print_info ());
         g_signal_connect (amount, "changed",
                           G_CALLBACK (gnc_stock_split_details_valid_cb), info);
         gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT (amount), TRUE);
-        gtk_box_pack_start (GTK_BOX (box), amount, TRUE, TRUE, 0);
+        gtk_table_attach_defaults (GTK_TABLE (table), amount, 1, 2, 5, 6);
+        gtk_widget_show (amount);
         info->price_edit = amount;
 
         label = GTK_WIDGET(gtk_builder_get_object(builder, "price_label"));
@@ -668,9 +641,7 @@ gnc_stock_split_assistant_create (StockSplitInfo *info)
         info->price_currency_edit = gnc_currency_edit_new();
         gnc_currency_edit_set_currency (GNC_CURRENCY_EDIT(info->price_currency_edit), gnc_default_currency());
         gtk_widget_show (info->price_currency_edit);
-
-        box = GTK_WIDGET(gtk_builder_get_object (builder, "price_currency_box"));
-        gtk_box_pack_start(GTK_BOX(box), info->price_currency_edit, TRUE, TRUE, 0);
+        gtk_table_attach_defaults (GTK_TABLE (table), info->price_currency_edit, 1, 2, 6, 7);
     }
 
     /* Cash page Widgets */
