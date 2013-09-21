@@ -537,41 +537,41 @@ then
       [AS_HELP_STRING([--with-dbi-dbd-dir=PATH],[specify location of libdbi drivers @<:@default=${libdir}/dbd@:>@])],
       GNC_DBD_DIR="$with_dbi_dbd_dir",
       GNC_DBD_DIR="")
-#      case $host_os in
-#      	   win32*|mingw*)
-#	     LDINC="#include <windows.h>"
-#	     LDFUNC=LoadLibrary
-#	     LDFUNCARGS=""
-#	     LDEXT=dll
-#	     ;;
-#	   Darwin*)
-#	     LDINC="#include <dlfcn.h>"
-#	     LDFUNC=dlopen
-#	     LDFUNCARGS=", RTLD_NOW"
-#	     LDEXT=so
-#	     ;;
-#      	   *)
-#	     LDINC="#include <dlfcn.h>"
-#	     LDFUNC=dlopen
-#	     LDFUNCARGS=", RTLD_NOW"
-#	     LDEXT=so
-#	     export LDFLAGS="$LDFLAGS -ldl"
-#	     ;;
-#      esac
-#      export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$GNC_DBD_DIR"
-#      AC_MSG_CHECKING([Looking for at least one supported DBD module])
-#      AC_RUN_IFELSE([AC_LANG_PROGRAM([$LDINC],
-#				     [[if (!$LDFUNC("libdbdsqlite3.$LDEXT"$LDFUNCARGS)) return -1;
-#				     ]])],AC_MSG_RESULT([SQLite3]),
-#      	AC_RUN_IFELSE([AC_LANG_PROGRAM([$LDINC],
-#				     [[if (!$LDFUNC("libdbdmysql.$LDEXT"$LDFUNCARGS)) return -1;
-#					]])],AC_MSG_RESULT([MySql]),
-#	  AC_RUN_IFELSE([AC_LANG_PROGRAM([$LDINC],
-#				     [[if (!$LDFUNC("libdbdpgsql.$LDEXT"$LDFUNCARGS)) return -1;
-#					 ]])],AC_MSG_RESULT([Postgresql]),
-#        				 AC_MSG_FAILURE([[
-#Unable to find any of the supported dbd modules (libdbdsqlite3, libdbdmysql, or libdbdpgsql) needed to actually use the SQL backend. Please install one or more of them to proceed.
-#       ]]))))
+      case $host_os in
+      	   win32*|mingw*)
+	     LDINC="#include <windows.h>"
+	     LDFUNC=LoadLibrary
+	     LDFUNCARGS=""
+	     LDEXT=dll
+	     ;;
+	   Darwin*)
+	     LDINC="#include <dlfcn.h>"
+	     LDFUNC=dlopen
+	     LDFUNCARGS=", RTLD_NOW"
+	     LDEXT=so
+	     ;;
+      	   *)
+	     LDINC="#include <dlfcn.h>"
+	     LDFUNC=dlopen
+	     LDFUNCARGS=", RTLD_NOW"
+	     LDEXT=so
+	     export LDFLAGS="$LDFLAGS -ldl"
+	     ;;
+      esac
+      export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$GNC_DBD_DIR"
+      AC_MSG_CHECKING([Looking for at least one supported DBD module])
+      AC_RUN_IFELSE([AC_LANG_PROGRAM([$LDINC],
+				     [[if (!$LDFUNC("libdbdsqlite3.$LDEXT"$LDFUNCARGS)) return -1;
+				     ]])],AC_MSG_RESULT([SQLite3]),
+      	AC_RUN_IFELSE([AC_LANG_PROGRAM([$LDINC],
+				     [[if (!$LDFUNC("libdbdmysql.$LDEXT"$LDFUNCARGS)) return -1;
+					]])],AC_MSG_RESULT([MySql]),
+	  AC_RUN_IFELSE([AC_LANG_PROGRAM([$LDINC],
+				     [[if (!$LDFUNC("libdbdpgsql.$LDEXT"$LDFUNCARGS)) return -1;
+					 ]])],AC_MSG_RESULT([Postgresql]),
+        				 AC_MSG_FAILURE([[
+Unable to find any of the supported dbd modules (libdbdsqlite3, libdbdmysql, or libdbdpgsql) needed to actually use the SQL backend. Please install one or more of them to proceed.
+       ]]))))
 
     LIBDBI_LIBS=-ldbi
     _COMPONENTS="$_COMPONENTS dbi"
