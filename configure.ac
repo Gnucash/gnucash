@@ -531,47 +531,53 @@ AC_ARG_ENABLE(dbi,
    [want_dbi=true])
 if test x${want_dbi} = xtrue
 then
+  EXTRA_SEARCH_LIBS=""
   AC_CHECK_HEADERS(dbi/dbi.h)
   if test "x$ac_cv_header_dbi_dbi_h" != xno; then
     AC_ARG_WITH( dbi-dbd-dir,
       [AS_HELP_STRING([--with-dbi-dbd-dir=PATH],[specify location of libdbi drivers @<:@default=${libdir}/dbd@:>@])],
-      GNC_DBD_DIR="$with_dbi_dbd_dir",
-      GNC_DBD_DIR="")
-      case $host_os in
-      	   win32*|mingw*)
-	     LDINC="#include <windows.h>"
-	     LDFUNC=LoadLibrary
-	     LDFUNCARGS=""
-	     LDEXT=dll
-	     ;;
-	   Darwin*)
-	     LDINC="#include <dlfcn.h>"
-	     LDFUNC=dlopen
-	     LDFUNCARGS=", RTLD_NOW"
-	     LDEXT=so
-	     ;;
-      	   *)
-	     LDINC="#include <dlfcn.h>"
-	     LDFUNC=dlopen
-	     LDFUNCARGS=", RTLD_NOW"
-	     LDEXT=so
-	     export LDFLAGS="$LDFLAGS -ldl"
-	     ;;
+      [[GNC_DBD_DIR="$with_dbi_dbd_dir"
+       EXTRA_SEARCH_LIBS=$GNC_DBD_DIR]],
+      [[GNC_DBD_DIR=""
+       EXTRA_SEARCH_LIBS="/usr/lib/dbd:/usr/lib64/dbd:${libdir}/dbd"]]
+       )
+    case $host_os in
+       win32*|mingw*)
+	 LDINC="#include <windows.h>"
+	 LDFUNCARGS=""
+	 LDEXT=dll
+	 ;;
+       *)
+	 LDINC="#include <dlfcn.h>"
+	 LDFUNCARGS=", RTLD_NOW"
+	 LDEXT=so
+	 export LDFLAGS="$LDFLAGS $lt_cv_dlopen_libs"
+	 ;;
       esac
-      export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$GNC_DBD_DIR"
+      export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$EXTRA_SEARCH_LIBS"
       AC_MSG_CHECKING([Looking for at least one supported DBD module])
       AC_RUN_IFELSE([AC_LANG_PROGRAM([$LDINC],
-				     [[if (!$LDFUNC("libdbdsqlite3.$LDEXT"$LDFUNCARGS)) return -1;
+				     [[if (!$lt_cv_dlopen("libdbdsqlite3.$LDEXT"$LDFUNCARGS)) return -1;
 				     ]])],AC_MSG_RESULT([SQLite3]),
       	AC_RUN_IFELSE([AC_LANG_PROGRAM([$LDINC],
-				     [[if (!$LDFUNC("libdbdmysql.$LDEXT"$LDFUNCARGS)) return -1;
+				     [[if (!$lt_cv_dlopen("libdbdmysql.$LDEXT"$LDFUNCARGS)) return -1;
 					]])],AC_MSG_RESULT([MySql]),
 	  AC_RUN_IFELSE([AC_LANG_PROGRAM([$LDINC],
-				     [[if (!$LDFUNC("libdbdpgsql.$LDEXT"$LDFUNCARGS)) return -1;
+				     [[if (!$lt_cv_dlopen("libdbdpgsql.$LDEXT"$LDFUNCARGS)) return -1;
 					 ]])],AC_MSG_RESULT([Postgresql]),
-        				 AC_MSG_FAILURE([[
-Unable to find any of the supported dbd modules (libdbdsqlite3, libdbdmysql, or libdbdpgsql) needed to actually use the SQL backend. Please install one or more of them to proceed.
-       ]]))))
+        				 AC_MSG_ERROR([
+Unable to find any of the supported dbd modules
+(libdbdsqlite3, libdbdmysql, or libdbdpgsql) needed to actually use the SQL
+backend.
+
+If you do have them installed the problem is either that dlopen cannot
+find them or that dlopen itself is not getting linked. Check config.log
+to find out which.  You can add the option --with-dbi-dbd-dir pointing to
+the directory in which they are located.
+
+If you do not actually want to build with libdi add --disable-dbi
+to the configure argument list and run it again.
+       ]))))
 
     LIBDBI_LIBS=-ldbi
     _COMPONENTS="$_COMPONENTS dbi"
