@@ -3459,6 +3459,7 @@ gnc_quartz_set_menu(GncMainWindow* window)
     g_signal_connect(theApp, "NSApplicationBlockTermination",
                      G_CALLBACK(gnc_quartz_should_quit), window);
     gtkosx_application_set_use_quartz_accelerators (theApp, FALSE);
+    g_object_unref (theApp);
 
 }
 #endif //MAC_INTEGRATION
@@ -4083,6 +4084,7 @@ gnc_main_window_show_all_windows(void)
                      G_CALLBACK(gnc_quartz_shutdown), NULL);
     gtkosx_application_ready(theApp);
 #endif
+    g_object_unref (theApp);
 }
 
 /** Get a pointer to the first active top level window or NULL
