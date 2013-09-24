@@ -638,7 +638,12 @@ gnc_commodity_finalize(GObject* comp)
 {
     G_OBJECT_CLASS(gnc_commodity_parent_class)->finalize(comp);
 }
-
+/* Note that g_value_set_object() refs the object, as does
+ * g_object_get(). But g_object_get() only unrefs once when it disgorges
+ * the object, leaving an unbalanced ref, which leaks. So instead of
+ * using g_value_set_object(), use g_value_take_object() which doesn't
+ * ref the object when used in get_property().
+ */
 static void
 gnc_commodity_get_property (GObject         *object,
                             guint            prop_id,
@@ -655,7 +660,7 @@ gnc_commodity_get_property (GObject         *object,
     switch (prop_id)
     {
     case PROP_NAMESPACE:
-        g_value_set_object(value, priv->namespace);
+        g_value_take_object(value, priv->namespace);
         break;
     case PROP_FULL_NAME:
         g_value_set_string(value, priv->fullname);

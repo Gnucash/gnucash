@@ -108,6 +108,12 @@ gnc_vendor_finalize(GObject* vendorp)
     G_OBJECT_CLASS(gnc_vendor_parent_class)->finalize(vendorp);
 }
 
+/* Note that g_value_set_object() refs the object, as does
+ * g_object_get(). But g_object_get() only unrefs once when it disgorges
+ * the object, leaving an unbalanced ref, which leaks. So instead of
+ * using g_value_set_object(), use g_value_take_object() which doesn't
+ * ref the object when used in get_property().
+ */
 static void
 gnc_vendor_get_property (GObject         *object,
                          guint            prop_id,

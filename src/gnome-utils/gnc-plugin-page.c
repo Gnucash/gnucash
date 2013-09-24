@@ -605,6 +605,12 @@ gnc_plugin_page_finalize (GObject *object)
  *
  *  @param pspec A pointer to the meta data that described the property
  *  being retrieved. */
+/* Note that g_value_set_object() refs the object, as does
+ * g_object_get(). But g_object_get() only unrefs once when it disgorges
+ * the object, leaving an unbalanced ref, which leaks. So instead of
+ * using g_value_set_object(), use g_value_take_object() which doesn't
+ * ref the object when used in get_property().
+ */
 static void
 gnc_plugin_page_get_property (GObject     *object,
                               guint        prop_id,
@@ -639,10 +645,10 @@ gnc_plugin_page_get_property (GObject     *object,
         g_value_set_string (value, priv->ui_description);
         break;
     case PROP_UI_MERGE:
-        g_value_set_object (value, priv->ui_merge);
+        g_value_take_object (value, priv->ui_merge);
         break;
     case PROP_ACTION_GROUP:
-        g_value_set_object (value, priv->action_group);
+        g_value_take_object (value, priv->action_group);
         break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);

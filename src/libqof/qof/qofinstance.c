@@ -353,6 +353,12 @@ qof_instance_finalize_real (GObject *instp)
     priv->dirty = FALSE;
 }
 
+/* Note that g_value_set_object() refs the object, as does
+ * g_object_get(). But g_object_get() only unrefs once when it disgorges
+ * the object, leaving an unbalanced ref, which leaks. So instead of
+ * using g_value_set_object(), use g_value_take_object() which doesn't
+ * ref the object when used in get_property().
+ */
 static void
 qof_instance_get_property (GObject         *object,
                            guint            prop_id,
@@ -376,7 +382,7 @@ qof_instance_get_property (GObject         *object,
         g_value_set_pointer(value, priv->collection);
         break;
     case PROP_BOOK:
-        g_value_set_object(value, priv->book);
+        g_value_take_object(value, priv->book);
         break;
     case PROP_KVP_DATA:
         g_value_set_pointer(value, inst->kvp_data);
