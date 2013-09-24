@@ -595,6 +595,12 @@ gnc_header_event (GnomeCanvasItem *item, GdkEvent *event)
 }
 
 
+/* Note that g_value_set_object() refs the object, as does
+ * g_object_get(). But g_object_get() only unrefs once when it disgorges
+ * the object, leaving an unbalanced ref, which leaks. So instead of
+ * using g_value_set_object(), use g_value_take_object() which doesn't
+ * ref the object when used in get_property().
+ */
 static void
 gnc_header_get_property (GObject *object,
                          guint param_id,
@@ -606,7 +612,7 @@ gnc_header_get_property (GObject *object,
     switch (param_id)
     {
     case PROP_SHEET:
-        g_value_set_object (value, header->sheet);
+        g_value_take_object (value, header->sheet);
         break;
     case PROP_CURSOR_NAME:
         g_value_set_string (value, header->cursor_name);

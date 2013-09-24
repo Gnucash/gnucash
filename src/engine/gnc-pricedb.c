@@ -73,6 +73,12 @@ gnc_price_finalize(GObject* pricep)
     G_OBJECT_CLASS(gnc_price_parent_class)->finalize(pricep);
 }
 
+/* Note that g_value_set_object() refs the object, as does
+ * g_object_get(). But g_object_get() only unrefs once when it disgorges
+ * the object, leaving an unbalanced ref, which leaks. So instead of
+ * using g_value_set_object(), use g_value_take_object() which doesn't
+ * ref the object when used in get_property().
+ */
 static void
 gnc_price_get_property(GObject* object, guint prop_id, GValue* value, GParamSpec* pspec)
 {
@@ -93,10 +99,10 @@ gnc_price_get_property(GObject* object, guint prop_id, GValue* value, GParamSpec
         g_value_set_boxed(value, &price->value);
         break;
     case PROP_COMMODITY:
-        g_value_set_object(value, price->commodity);
+        g_value_take_object(value, price->commodity);
         break;
     case PROP_CURRENCY:
-        g_value_set_object(value, price->currency);
+        g_value_take_object(value, price->currency);
         break;
     case PROP_DATE:
         g_value_set_boxed(value, &price->tmspec);

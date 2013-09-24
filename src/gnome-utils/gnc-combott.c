@@ -277,7 +277,12 @@ gctt_set_property (GObject      *object,
     }
 }
 
-
+/* Note that g_value_set_object() refs the object, as does
+ * g_object_get(). But g_object_get() only unrefs once when it disgorges
+ * the object, leaving an unbalanced ref, which leaks. So instead of
+ * using g_value_set_object(), use g_value_take_object() which doesn't
+ * ref the object when used in get_property().
+ */
 static void
 gctt_get_property (GObject    *object,
 		   guint       param_id,
@@ -289,7 +294,7 @@ gctt_get_property (GObject    *object,
 	
     switch (param_id) {
     case PROP_MODEL:
-	 g_value_set_object (value, priv->model);
+	 g_value_take_object (value, priv->model);
 	 break;
 
     case PROP_ACTIVE:

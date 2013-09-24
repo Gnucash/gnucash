@@ -121,6 +121,12 @@ gnc_vendor_finalize(GObject* vendorp)
     G_OBJECT_CLASS(gnc_vendor_parent_class)->finalize(vendorp);
 }
 
+/* Note that g_value_set_object() refs the object, as does
+ * g_object_get(). But g_object_get() only unrefs once when it disgorges
+ * the object, leaving an unbalanced ref, which leaks. So instead of
+ * using g_value_set_object(), use g_value_take_object() which doesn't
+ * ref the object when used in get_property().
+ */
 static void
 gnc_vendor_get_property (GObject         *object,
                          guint            prop_id,
@@ -144,7 +150,7 @@ gnc_vendor_get_property (GObject         *object,
         g_value_set_string(value, vendor->notes);
         break;
     case PROP_CURRENCY:
-        g_value_set_object(value, vendor->currency);
+        g_value_take_object(value, vendor->currency);
         break;
     case PROP_ACTIVE:
         g_value_set_boolean(value, vendor->active);
@@ -153,13 +159,13 @@ gnc_vendor_get_property (GObject         *object,
         g_value_set_boolean(value, vendor->taxtable_override);
         break;
     case PROP_BILLTERMS:
-        g_value_set_object(value, vendor->terms);
+        g_value_take_object(value, vendor->terms);
         break;
     case PROP_TAXTABLE:
-        g_value_set_object(value, vendor->taxtable);
+        g_value_take_object(value, vendor->taxtable);
         break;
     case PROP_ADDRESS:
-        g_value_set_object(value, vendor->addr);
+        g_value_take_object(value, vendor->addr);
         break;
     case PROP_TAX_INCLUDED:
         g_value_set_int(value, vendor->taxincluded);

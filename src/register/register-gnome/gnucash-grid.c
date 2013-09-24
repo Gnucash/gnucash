@@ -822,6 +822,12 @@ gnucash_grid_set_property (GObject         *object,
 }
 
 
+/* Note that g_value_set_object() refs the object, as does
+ * g_object_get(). But g_object_get() only unrefs once when it disgorges
+ * the object, leaving an unbalanced ref, which leaks. So instead of
+ * using g_value_set_object(), use g_value_take_object() which doesn't
+ * ref the object when used in get_property().
+ */
 static void
 gnucash_grid_get_property (GObject         *object,
                            guint            prop_id,
@@ -833,7 +839,7 @@ gnucash_grid_get_property (GObject         *object,
     switch (prop_id)
     {
     case PROP_SHEET:
-        g_value_set_object (value, grid->sheet);
+        g_value_take_object (value, grid->sheet);
         break;
     default:
         break;

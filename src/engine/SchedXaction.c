@@ -92,6 +92,12 @@ gnc_schedxaction_finalize(GObject* sxp)
     G_OBJECT_CLASS(gnc_schedxaction_parent_class)->finalize(sxp);
 }
 
+/* Note that g_value_set_object() refs the object, as does
+ * g_object_get(). But g_object_get() only unrefs once when it disgorges
+ * the object, leaving an unbalanced ref, which leaks. So instead of
+ * using g_value_set_object(), use g_value_take_object() which doesn't
+ * ref the object when used in get_property().
+ */
 static void
 gnc_schedxaction_get_property (GObject         *object,
                                guint            prop_id,
@@ -148,7 +154,7 @@ gnc_schedxaction_get_property (GObject         *object,
         g_value_set_int(value, sx->instance_num);
         break;
     case PROP_TEMPLATE_ACCOUNT:
-        g_value_set_object(value, sx->template_acct);
+        g_value_take_object(value, sx->template_acct);
         break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);

@@ -113,7 +113,12 @@ gnc_split_finalize(GObject* splitp)
 {
     G_OBJECT_CLASS(gnc_split_parent_class)->finalize(splitp);
 }
-
+/* Note that g_value_set_object() refs the object, as does
+ * g_object_get(). But g_object_get() only unrefs once when it disgorges
+ * the object, leaving an unbalanced ref, which leaks. So instead of
+ * using g_value_set_object(), use g_value_take_object() which doesn't
+ * ref the object when used in get_property().
+ */
 static void
 gnc_split_get_property(GObject         *object,
                        guint            prop_id,
@@ -143,13 +148,13 @@ gnc_split_get_property(GObject         *object,
         g_value_set_boxed(value, &split->date_reconciled);
         break;
     case PROP_TX:
-        g_value_set_object(value, split->parent);
+        g_value_take_object(value, split->parent);
         break;
     case PROP_ACCOUNT:
-        g_value_set_object(value, split->acc);
+        g_value_take_object(value, split->acc);
         break;
     case PROP_LOT:
-        g_value_set_object(value, split->lot);
+        g_value_take_object(value, split->lot);
         break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);

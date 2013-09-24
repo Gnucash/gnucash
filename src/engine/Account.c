@@ -268,6 +268,12 @@ gnc_account_finalize(GObject* acctp)
     G_OBJECT_CLASS(gnc_account_parent_class)->finalize(acctp);
 }
 
+/* Note that g_value_set_object() refs the object, as does
+ * g_object_get(). But g_object_get() only unrefs once when it disgorges
+ * the object, leaving an unbalanced ref, which leaks. So instead of
+ * using g_value_set_object(), use g_value_take_object() which doesn't
+ * ref the object when used in get_property().
+ */
 static void
 gnc_account_get_property (GObject         *object,
                           guint            prop_id,
@@ -306,7 +312,7 @@ gnc_account_get_property (GObject         *object,
         g_value_set_int(value, priv->type);
         break;
     case PROP_COMMODITY:
-        g_value_set_object(value, priv->commodity);
+        g_value_take_object(value, priv->commodity);
         break;
     case PROP_COMMODITY_SCU:
         g_value_set_int(value, priv->commodity_scu);

@@ -111,6 +111,12 @@ gnc_employee_finalize(GObject* empp)
     G_OBJECT_CLASS(gnc_employee_parent_class)->finalize(empp);
 }
 
+/* Note that g_value_set_object() refs the object, as does
+ * g_object_get(). But g_object_get() only unrefs once when it disgorges
+ * the object, leaving an unbalanced ref, which leaks. So instead of
+ * using g_value_set_object(), use g_value_take_object() which doesn't
+ * ref the object when used in get_property().
+ */
 static void
 gnc_employee_get_property (GObject         *object,
                            guint            prop_id,
@@ -137,13 +143,13 @@ gnc_employee_get_property (GObject         *object,
         g_value_set_string(value, emp->language);
         break;
     case PROP_CURRENCY:
-        g_value_set_object(value, emp->currency);
+        g_value_take_object(value, emp->currency);
         break;
     case PROP_ACL:
         g_value_set_string(value, emp->acl);
         break;
     case PROP_ADDRESS:
-        g_value_set_object(value, emp->addr);
+        g_value_take_object(value, emp->addr);
         break;
     case PROP_WORKDAY:
         g_value_set_boxed(value, &emp->workday);
@@ -152,7 +158,7 @@ gnc_employee_get_property (GObject         *object,
         g_value_set_boxed(value, &emp->rate);
         break;
     case PROP_CCARD:
-        g_value_set_object(value, emp->ccard_acc);
+        g_value_take_object(value, emp->ccard_acc);
         break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
