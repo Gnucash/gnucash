@@ -57,10 +57,14 @@ LDADD = \
   ${top_builddir}/src/test-core/libtest-core.la
 
 test_gnc_recurrence_SOURCES=test-gnc-recurrence.c
+test_gnc_recurrence_LDADD = \
+  ${GTK_LIBS} \
+  ${LDADD}
 
 test_link_module_SOURCES=test-link-module.c
 test_link_module_LDADD = \
   ${GUILE_LIBS} \
+  ${GLIB_LIBS} \
   ${top_builddir}/src/gnc-module/libgnc-module.la
 
 EXTRA_DIST = \
