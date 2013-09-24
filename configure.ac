@@ -534,6 +534,7 @@ then
   EXTRA_SEARCH_LIBS=""
   AC_CHECK_HEADERS(dbi/dbi.h)
   if test "x$ac_cv_header_dbi_dbi_h" != xno; then
+    save_libs=$LIBS
     AC_ARG_WITH( dbi-dbd-dir,
       [AS_HELP_STRING([--with-dbi-dbd-dir=PATH],[specify location of libdbi drivers @<:@default=${libdir}/dbd@:>@])],
       [[GNC_DBD_DIR="$with_dbi_dbd_dir"
@@ -551,7 +552,7 @@ then
 	 LDINC="#include <dlfcn.h>"
 	 LDFUNCARGS=", RTLD_NOW"
 	 LDEXT=so
-	 export LDFLAGS="$LDFLAGS $lt_cv_dlopen_libs"
+	 export LIBS="$lt_cv_dlopen_libs $LIBS"
 	 ;;
       esac
       export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$EXTRA_SEARCH_LIBS"
@@ -581,6 +582,7 @@ to the configure argument list and run it again.
 
     LIBDBI_LIBS=-ldbi
     _COMPONENTS="$_COMPONENTS dbi"
+    LIBS=$saved_libs
   else
     AC_MSG_ERROR([
 
