@@ -4364,8 +4364,8 @@ gnc_main_window_show_all_windows(void)
     g_signal_connect(theApp, "NSApplicationWillTerminate",
                      G_CALLBACK(gnc_quartz_shutdown), NULL);
     gtkosx_application_ready(theApp);
-#endif
     g_object_unref (theApp);
+#endif
 }
 
 /** Get a pointer to the first active top level window or NULL
