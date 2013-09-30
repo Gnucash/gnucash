@@ -982,17 +982,17 @@ gnc_split_register_get_num_help (VirtualLocation virt_loc,
         case RECEIVABLE_REGISTER:
         case PAYABLE_REGISTER:
             help = reg->use_tran_num_for_num_field ?
-                    _("Enter a reference, such as an invoice or check number "
-                        ", common to all entry lines (splits)") :
-                    _("Enter a reference, such as an invoice or check number "
-                        ", unique to each entry line (split)");
+                    _("Enter a reference, such as an invoice or check number, "
+                        "common to all entry lines (splits)") :
+                    _("Enter a reference, such as an invoice or check number, "
+                        "unique to each entry line (split)");
             break;
         default:
             help = reg->use_tran_num_for_num_field ?
-                    _("Enter a reference, such as a check number "
-                        ", common to all entry lines (splits)") :
-                    _("Enter a reference, such as a check number "
-                        ", unique to each entry line (split)");
+                    _("Enter a reference, such as a check number, "
+                        "common to all entry lines (splits)") :
+                    _("Enter a reference, such as a check number, "
+                        "unique to each entry line (split)");
             break;
         }
 
