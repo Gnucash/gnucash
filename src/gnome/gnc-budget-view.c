@@ -112,7 +112,6 @@ static void gbv_selection_changed_cb(
     GtkTreeSelection *selection, GncBudgetView *view);
 #endif
 static void gbv_treeview_resized_cb(GtkWidget* widget, GtkAllocation* allocation, GncBudgetView* view);
-static void gbv_column_resized_cb(GtkWidget* widget, GtkAllocation* allocation, GtkTreeViewColumn* col);
 static gnc_numeric gbv_get_accumulated_budget_amount(GncBudget* budget,
                                        Account* account, guint period_num);
 
@@ -317,8 +316,10 @@ gbv_create_widget(GncBudgetView *view)
     GtkTreeSelection *selection;
     GtkTreeView *tree_view;
     GtkWidget *scrolled_window;
+    GtkWidget *inner_scrolled_window;
     const gchar *budget_guid_str;
     GtkVBox* vbox;
+    GtkWidget* inner_vbox;
     GtkListStore* totals_tree_model;
     GtkTreeView* totals_tree_view;
     GtkTreeViewColumn* totals_title_col;
@@ -334,11 +335,21 @@ gbv_create_widget(GncBudgetView *view)
     scrolled_window = gtk_scrolled_window_new(NULL, NULL);
     gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scrolled_window),
                                    GTK_POLICY_AUTOMATIC,
-                                   GTK_POLICY_AUTOMATIC);
+                                   GTK_POLICY_NEVER);
     gtk_widget_show(scrolled_window);
     gtk_box_pack_start(GTK_BOX(vbox), scrolled_window, /*expand*/TRUE, /*fill*/TRUE, 0);
 
+    inner_vbox = gtk_vbox_new(FALSE, 0);
+    gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(scrolled_window), GTK_WIDGET(inner_vbox));
+    gtk_widget_show(GTK_WIDGET(inner_vbox));
+
+    inner_scrolled_window = gtk_scrolled_window_new(NULL, NULL);
+    gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(inner_scrolled_window),
+                                   GTK_POLICY_NEVER,
+                                   GTK_POLICY_AUTOMATIC);
+    gtk_widget_show(inner_scrolled_window);
     tree_view = gnc_tree_view_account_new(FALSE);
+    gtk_container_add(GTK_CONTAINER(inner_scrolled_window), GTK_WIDGET(tree_view));
 
     g_object_set(G_OBJECT(tree_view), "gconf-section", priv->gconf_section, NULL);
 
@@ -364,7 +375,7 @@ gbv_create_widget(GncBudgetView *view)
 #endif
     gtk_tree_view_set_headers_visible(tree_view, TRUE);
     gtk_widget_show(GTK_WIDGET(tree_view));
-    gtk_container_add(GTK_CONTAINER(scrolled_window), GTK_WIDGET(tree_view));
+    gtk_box_pack_start(GTK_BOX(inner_vbox), GTK_WIDGET(inner_scrolled_window), /*expand*/TRUE, /*fill*/TRUE, 0);
     priv->fd->tree_view = GNC_TREE_VIEW_ACCOUNT(priv->tree_view);
     gnc_tree_view_account_set_filter(
         GNC_TREE_VIEW_ACCOUNT(tree_view),
@@ -391,13 +402,14 @@ gbv_create_widget(GncBudgetView *view)
     gtk_tree_view_set_model(totals_tree_view, GTK_TREE_MODEL(totals_tree_model));
 
     totals_title_col = gtk_tree_view_column_new_with_attributes("", gtk_cell_renderer_text_new(), "text", 0, NULL);
+    gtk_tree_view_column_set_expand(totals_title_col, TRUE);
     gtk_tree_view_append_column(totals_tree_view, totals_title_col);
 
-    gtk_box_pack_end(GTK_BOX(vbox), GTK_WIDGET(totals_tree_view), /*expand*/FALSE, /*fill*/TRUE, 0);
+    gtk_box_pack_end(GTK_BOX(inner_vbox), GTK_WIDGET(totals_tree_view), /*expand*/FALSE, /*fill*/TRUE, 0);
 
     h_separator = gtk_hseparator_new();
     gtk_widget_show(h_separator);
-    gtk_box_pack_end(GTK_BOX(vbox), h_separator, /*expand*/FALSE, /*fill*/TRUE, 0);
+    gtk_box_pack_end(GTK_BOX(inner_vbox), h_separator, /*expand*/FALSE, /*fill*/TRUE, 0);
 
     gnc_budget_view_refresh(view);
 }
@@ -555,52 +567,45 @@ gbv_key_press_cb(GtkWidget *treeview, GdkEventKey *event, gpointer userdata)
 }
 
 static void
-gbv_column_resized_cb(GtkWidget* widget, GtkAllocation* allocation, GtkTreeViewColumn* col)
-{
-    guint period_num;
-
-    period_num = GPOINTER_TO_UINT(g_object_get_data(G_OBJECT(col),
-                                  "period_num"));
-    printf("Col %d: x=%d y=%d w=%d h=%d\n", period_num, allocation->x, allocation->y, allocation->width, allocation->height);
-}
-
-static void
 gbv_treeview_resized_cb(GtkWidget* widget, GtkAllocation* allocation, GncBudgetView* view)
 {
-    guint ncols;
+    gint ncols;
     GncBudgetViewPrivate* priv;
-    guint i;
+    gint i;
+    gint j;
+    GList *columns;
 
+    ENTER("");
     priv = GNC_BUDGET_VIEW_GET_PRIVATE(view);
 
-    /* Num cols is number of budget periods + 1 for name.  Ignore totals column.  We
-     * don't want to set the width of the last column so that the user can shrink the
-     * display. */
-    ncols = gnc_budget_get_num_periods(priv->budget) + 1;
-    for (i = 0; i < ncols; ++i)
+    /* There's no easy way to get this number. */
+    columns = gtk_tree_view_get_columns(GTK_TREE_VIEW(priv->tree_view));
+    ncols = g_list_length(columns);
+    g_list_free(columns);
+    /* i is the column we are examining
+     * j is the corresponding column in totals_tree_view */
+    for (i = 0, j = 0; i < ncols; ++i)
     {
         gint col_width;
         GtkTreeViewColumn* tree_view_col;
         GtkTreeViewColumn* totals_view_col;
-        gint fixed_width;
-        gint min_width;
-        gint max_width;
 
-        /* Get the width. */
         tree_view_col = gtk_tree_view_get_column(priv->tree_view, i);
-        col_width = gtk_tree_view_column_get_width(tree_view_col);
-        fixed_width = gtk_tree_view_column_get_fixed_width(tree_view_col);
-        min_width = gtk_tree_view_column_get_min_width(tree_view_col);
-        max_width = gtk_tree_view_column_get_max_width(tree_view_col);
 
-        /* Set total view col's width the same. */
-        if (col_width != 0)
+        if (gtk_tree_view_column_get_visible(tree_view_col))
         {
-            totals_view_col = gtk_tree_view_get_column(priv->totals_tree_view, i);
-            gtk_tree_view_column_set_min_width(totals_view_col, col_width);
-            gtk_tree_view_column_set_max_width(totals_view_col, col_width);
+            col_width = gtk_tree_view_column_get_width(tree_view_col);
+            totals_view_col = gtk_tree_view_get_column(priv->totals_tree_view, j);
+            /* Don't set the width of the first column, which was set up
+             * in gbv_create_widget. It has a sizing of GROW_ONLY. */
+            if (gtk_tree_view_column_get_sizing(totals_view_col) == GTK_TREE_VIEW_COLUMN_FIXED)
+            {
+                gtk_tree_view_column_set_fixed_width(totals_view_col, col_width);
+            }
+            j++;
         }
     }
+    LEAVE("");
 }
 
 static void
@@ -974,12 +979,7 @@ gbv_create_totals_column(GncBudgetView* view, gint period_num)
     gtk_tree_view_column_set_cell_data_func(col, renderer, totals_col_source, view, NULL);
     g_object_set_data(G_OBJECT(col), "budget", priv->budget);
     g_object_set_data(G_OBJECT(col), "period_num", GUINT_TO_POINTER(period_num));
-    if (period_num >= 0)
-    {
-        gint col_width = 86;
-        gtk_tree_view_column_set_min_width(col, col_width);
-        gtk_tree_view_column_set_max_width(col, col_width);
-    }
+    gtk_tree_view_column_set_sizing(col, GTK_TREE_VIEW_COLUMN_FIXED);
 
     return col;
 }
@@ -1044,8 +1044,6 @@ gnc_budget_view_refresh(GncBudgetView *view)
         g_object_set_data(G_OBJECT(col), "budget", priv->budget);
         g_object_set_data(G_OBJECT(col), "period_num",
                           GUINT_TO_POINTER(num_periods_visible));
-        g_signal_connect(G_OBJECT(col), "size-allocate",
-                     G_CALLBACK(gbv_column_resized_cb), col);
         col_list = g_list_append(col_list, col);
 
         renderer_list = gtk_cell_layout_get_cells(GTK_CELL_LAYOUT(col));
@@ -1059,6 +1057,7 @@ gnc_budget_view_refresh(GncBudgetView *view)
         col = gbv_create_totals_column(view, num_periods_visible);
         if (col != NULL)
         {
+            gtk_tree_view_append_column(priv->totals_tree_view, col);
             totals_col_list = g_list_append(totals_col_list, col);
         }
 
@@ -1075,6 +1074,10 @@ gnc_budget_view_refresh(GncBudgetView *view)
         g_object_set_data(G_OBJECT(priv->total_col), "budget", priv->budget);
 
         col = gbv_create_totals_column(view, -1);
+        if (col != NULL)
+        {
+           gtk_tree_view_append_column(priv->totals_tree_view, col);
+        }
     }
 
     gbv_refresh_col_titles(view);
