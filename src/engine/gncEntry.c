@@ -768,11 +768,6 @@ void gncEntrySetOrder (GncEntry *entry, GncOrder *order)
     mark_entry (entry);
     gncEntryCommitEdit (entry);
 
-    /* Generate an event modifying the Order's end-owner */
-#if 0
-    qof_event_gen (gncOwnerGetEndGUID (gncOrderGetOwner (order)),
-                   QOF_EVENT_MODIFY, NULL);
-#endif
 }
 
 /* called from gncInvoice when we're added to the Invoice */

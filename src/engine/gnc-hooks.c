@@ -208,18 +208,7 @@ gnc_hook_add_scm_dangler (const gchar *name, SCM proc)
     g_hook_append(gnc_hook->scm_danglers, hook);
     LEAVE("");
 }
-#if 0 /* Not Used */
-static gboolean
-hook_remove_scm_runner (GHook *hook, gpointer data)
-{
-    GncScmDangler *scm1 = data;
-    GncScmDangler *scm2 = hook->data;
-    SCM res;
 
-    res = scm_equal_p(scm1->proc, scm2->proc);
-    return(scm_is_true(res));
-}
-#endif
 static void
 call_c_hook (GHook *hook, gpointer data)
 {
