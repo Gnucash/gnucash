@@ -466,10 +466,6 @@ test_gnc_transaction_set_get_property (Fixture *fixture, gconstpointer pData)
     g_assert_cmpint (check2->hits, ==, 2);
     xaccTransRollbackEdit (txn);
     test_destroy (txn);
-/* Transaction refs the currency when it sets it but doesn't unref
- * when it's destroyed
- */
-    g_object_unref (curr);
     test_destroy (curr);
     test_destroy (book);
     g_free (t_entered);
