@@ -35,6 +35,12 @@
 #include <gnc-event.h>
 #include <qofbookslots.h>
 
+#ifdef HAVE_GLIB_2_38
+#define _Q "'"
+#else
+#define _Q "" _Q ""
+#endif
+
 static const gchar *suitename = "/engine/Split";
 void test_suite_split ( void );
 
@@ -1262,7 +1268,7 @@ test_get_corr_account_split (Fixture *fixture, gconstpointer pData)
     Account *acc1 = xaccMallocAccount (book);
     Account *acc2 = xaccMallocAccount (book);
     Account *acc3 = xaccMallocAccount (book);
-    gchar *msg = "get_corr_account_split: assertion `sa' failed";
+    gchar *msg = "get_corr_account_split: assertion " _Q "sa' failed";
     guint loglevel = G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL;
     TestErrorStruct *check = test_error_struct_new ("gnc.engine",
 						    loglevel, msg);

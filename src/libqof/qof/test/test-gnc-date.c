@@ -35,6 +35,12 @@
 #  include "strptime.h"
 #endif
 
+#ifdef HAVE_GLIB_2_38
+#define _Q "'"
+#else
+#define _Q "" _Q ""
+#endif
+
 static const gchar *suitename = "/qof/gnc-date";
 void test_suite_gnc_date ( void );
 
@@ -63,7 +69,7 @@ test_gnc_localtime (void)
                                   // difference between g_date_time and tm->tm_wday)
                      };
     guint ind;
-    gchar *msg = "gnc_localtime_r: assertion `gdt != NULL' failed";
+    gchar *msg = "gnc_localtime_r: assertion " _Q "gdt != NULL' failed";
     gint loglevel = G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL;
     gchar *logdomain = "qof";
     TestErrorStruct check = {loglevel, logdomain, msg, 0};
@@ -126,7 +132,7 @@ test_gnc_gmtime (void)
 #endif
     };
     guint ind;
-    gchar *msg = "gnc_gmtime: assertion `gdt != NULL' failed";
+    gchar *msg = "gnc_gmtime: assertion " _Q "gdt != NULL' failed";
     gint loglevel = G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL;
     gchar *logdomain = "qof";
     TestErrorStruct check = {loglevel, logdomain, msg, 0};
@@ -1689,7 +1695,7 @@ test_gnc_timespec_to_iso8601_buff (void)
     gchar *end;
     gchar *logdomain = "qof";
     guint loglevel = G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL;
-    gchar *msg = "gnc_timespec_to_iso8601_buff: assertion `buff != NULL' failed";
+    gchar *msg = "gnc_timespec_to_iso8601_buff: assertion " _Q "buff != NULL' failed";
     TestErrorStruct check = { loglevel, logdomain, msg, 0 };
     GLogFunc oldlogger = g_log_set_default_handler ((GLogFunc)test_null_handler,
 						    &check);

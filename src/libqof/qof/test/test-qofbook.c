@@ -27,6 +27,12 @@
 #include "../qofbook-p.h"
 #include "../qofbookslots.h"
 
+#ifdef HAVE_GLIB_2_38
+#define _Q "'"
+#else
+#define _Q "`"
+#endif
+
 static const gchar *suitename = "/qof/qofbook";
 void test_suite_qofbook ( void );
 
@@ -604,8 +610,8 @@ test_book_foreach_collection( Fixture *fixture, gconstpointer pData )
     G_GNUC_UNUSED QofCollection *m_col, *m_col2;
     QofIdType my_type = "my_type", my_type2 = "my_type2";
     guint param = (guint) g_test_rand_int();
-    gchar *msg1 = "qof_book_foreach_collection: assertion `book' failed";
-    gchar *msg2 = "qof_book_foreach_collection: assertion `cb' failed";
+    gchar *msg1 = "qof_book_foreach_collection: assertion " _Q "book' failed";
+    gchar *msg2 = "qof_book_foreach_collection: assertion " _Q "cb' failed";
     gchar *log_domain = "qof";
     guint loglevel = G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL, hdlr;
     TestErrorStruct check1 = { loglevel, log_domain, msg1 };
@@ -628,7 +634,7 @@ test_book_foreach_collection( Fixture *fixture, gconstpointer pData )
     qof_book_foreach_collection( NULL, mock_foreach_collection, (gpointer)(&param) );
     g_assert( !col_struct.col1_called );
     g_assert( !col_struct.col2_called );
-    g_assert_cmpstr( test_struct.msg, == , "qof_book_foreach_collection: assertion `book' failed" );
+    g_assert_cmpstr( test_struct.msg, == , "qof_book_foreach_collection: assertion " _Q "book' failed" );
     g_free( test_struct.msg );
 
     g_test_message( "Testing when cb is null" );
@@ -636,7 +642,7 @@ test_book_foreach_collection( Fixture *fixture, gconstpointer pData )
     qof_book_foreach_collection( fixture->book, NULL, (gpointer)(&param) );
     g_assert( !col_struct.col1_called );
     g_assert( !col_struct.col2_called );
-    g_assert_cmpstr( test_struct.msg, == , "qof_book_foreach_collection: assertion `cb' failed" );
+    g_assert_cmpstr( test_struct.msg, == , "qof_book_foreach_collection: assertion " _Q "cb' failed" );
     g_free( test_struct.msg );
     g_log_remove_handler (log_domain, hdlr);
     test_clear_error_list ();

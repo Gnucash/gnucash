@@ -36,6 +36,12 @@
 #include <qofbookslots.h>
 #include <qofbackend-p.h>
 
+#ifdef HAVE_GLIB_2_38
+#define _Q "'"
+#else
+#define _Q "" _Q ""
+#endif
+
 static const gchar *suitename = "/engine/Transaction";
 void test_suite_transaction ( void );
 
@@ -406,7 +412,7 @@ test_gnc_transaction_set_get_property (Fixture *fixture, gconstpointer pData)
 					    "GNR", "", 240), *t_curr = NULL;
     Timespec now = timespec_now (), *t_entered = NULL, *t_posted = NULL;
     time_t secs = (time_t)now.tv_sec;
-    gchar *msg1 = "g_object_set_valist: object class `Transaction' has no property named `bogus'";
+    gchar *msg1 = "g_object_set_valist: object class " _Q "Transaction' has no property named " _Q "bogus'";
     gchar *msg2 = g_strdup_printf ("[xaccTransSetDateInternal] addr=%p set date to %" G_GUINT64_FORMAT ".%09ld %s",
 				   txn, now.tv_sec, now.tv_nsec, ctime (&secs));
     GLogLevelFlags loglevel1 = G_LOG_LEVEL_WARNING | G_LOG_FLAG_FATAL;
@@ -447,7 +453,7 @@ test_gnc_transaction_set_get_property (Fixture *fixture, gconstpointer pData)
     g_assert_cmpint (check2->hits, ==, 2);
 
     g_free (check1->msg);
-    check1->msg = g_strdup ("g_object_get_valist: object class `Transaction' has no property named `bogus'");
+    check1->msg = g_strdup ("g_object_get_valist: object class " _Q "Transaction' has no property named " _Q "bogus'");
     g_object_get (G_OBJECT (txn),
 		  "num", &t_num,
 		  "description", &t_desc,
@@ -480,7 +486,7 @@ test_xaccMallocTransaction (Fixture *fixture, gconstpointer pData)
     QofBook *book = qof_book_new ();
     TestSignal sig1 = test_signal_new (NULL, QOF_EVENT_CREATE,NULL);
     Transaction *txn;
-    gchar *msg = "xaccMallocTransaction: assertion `book' failed";
+    gchar *msg = "xaccMallocTransaction: assertion " _Q "book' failed";
     gchar *logdomain = "gnc.engine";
     guint loglevel = G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL;
     TestErrorStruct *check = test_error_struct_new ("gnc.engine", loglevel,
@@ -1259,7 +1265,7 @@ xaccTransGetAccountBalance (const Transaction *trans,// C: 1  Local: 0:0:0
 static void
 test_xaccTransGetAccountBalance (Fixture *fixture, gconstpointer pData)
 {
-    gchar *msg1 = "xaccTransGetAccountBalance: assertion `account && trans' failed";
+    gchar *msg1 = "xaccTransGetAccountBalance: assertion " _Q "account && trans' failed";
     guint loglevel = G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL;
     TestErrorStruct *check = test_error_struct_new ("gnc.engine", loglevel,
 						    msg1);

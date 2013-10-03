@@ -32,6 +32,11 @@
 #include "../Transaction.h"
 #include "../gnc-lot.h"
 
+#ifdef HAVE_GLIB_2_38
+#define _Q "'"
+#else
+#define _Q "" _Q ""
+#endif
 
 static const gchar *suitename = "/engine/Account";
 void test_suite_account (void);
@@ -457,7 +462,7 @@ test_gnc_account_list_name_violations (Fixture *fixture, gconstpointer pData)
 {
     guint log_level = G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL;
     gchar *log_domain = "gnc.engine";
-    gchar *msg = "gnc_account_list_name_violations: assertion `separator != NULL' failed";
+    gchar *msg = "gnc_account_list_name_violations: assertion " _Q "separator != NULL' failed";
     TestErrorStruct check = { log_level, log_domain, msg, 0 };
     GList *results, *res_iter;
     gchar *sep = ":";
@@ -738,8 +743,8 @@ test_xaccCloneAccount (Fixture *fixture, gconstpointer pData)
     Account *clone;
     QofBook *book = gnc_account_get_book (fixture->acct);
     guint loglevel = G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL;
-    gchar *msg1 = "xaccCloneAccount: assertion `GNC_IS_ACCOUNT(from)' failed";
-    gchar *msg2 = "xaccCloneAccount: assertion `QOF_IS_BOOK(book)' failed";
+    gchar *msg1 = "xaccCloneAccount: assertion " _Q "GNC_IS_ACCOUNT(from)' failed";
+    gchar *msg2 = "xaccCloneAccount: assertion " _Q "QOF_IS_BOOK(book)' failed";
     TestErrorStruct check = { loglevel, "gnc.engine", msg1, 0 };
     GLogFunc oldlogger;
     AccountPrivate *acct_p, *clone_p;
@@ -835,7 +840,7 @@ test_xaccFreeAccount (Fixture *fixture, gconstpointer pData)
 {
     gchar *msg1 = "[xaccFreeAccount()]  instead of calling xaccFreeAccount(), please call \n"
                   " xaccAccountBeginEdit(); xaccAccountDestroy(); \n";
-    gchar *msg2 = "xaccTransGetSplitIndex: assertion `trans && split' failed";
+    gchar *msg2 = "xaccTransGetSplitIndex: assertion " _Q "trans && split' failed";
     guint loglevel = G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL;
     TestErrorStruct check1 = { loglevel, "gnc.account", msg1, 0 };
     TestErrorStruct check2 = { loglevel, "gnc.engine", msg2, 0 };
@@ -943,7 +948,7 @@ test_xaccAccountCommitEdit (Fixture *fixture, gconstpointer pData)
 {
     gchar *msg1 = "[xaccFreeAccount()]  instead of calling xaccFreeAccount(), please call \n"
                   " xaccAccountBeginEdit(); xaccAccountDestroy(); \n";
-    gchar *msg2 = "xaccTransGetSplitIndex: assertion `trans && split' failed";
+    gchar *msg2 = "xaccTransGetSplitIndex: assertion " _Q "trans && split' failed";
     guint loglevel = G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL;
     TestErrorStruct check1 = { loglevel, "gnc.account", msg1, 0 };
     TestErrorStruct check2 = { loglevel, "gnc.engine", msg2, 0 };
@@ -1054,8 +1059,8 @@ test_gnc_account_insert_remove_split (Fixture *fixture, gconstpointer pData)
     Split *split3 = xaccMallocSplit (book);
     TestSignal sig1, sig2, sig3;
     AccountPrivate *priv = fixture->func->get_private (fixture->acct);
-    gchar *msg1 = "gnc_account_insert_split: assertion `GNC_IS_ACCOUNT(acc)' failed";
-    gchar *msg2 = "gnc_account_insert_split: assertion `GNC_IS_SPLIT(s)' failed";
+    gchar *msg1 = "gnc_account_insert_split: assertion " _Q "GNC_IS_ACCOUNT(acc)' failed";
+    gchar *msg2 = "gnc_account_insert_split: assertion " _Q "GNC_IS_SPLIT(s)' failed";
     guint loglevel = G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL;
 //    gchar *log_domain = "gnc.engine";
     TestErrorStruct check1 = { loglevel, "gnc.engine", msg1, 0 };
