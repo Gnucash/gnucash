@@ -33,17 +33,6 @@
 #ifndef QOF_STRING_UTIL_H
 #define QOF_STRING_UTIL_H
 
-#if 0
-#include <stddef.h>
-#include "qof.h"
-#include "qoflog.h"
-#include "qofutil.h"
-#include "qofbackend.h"
-#include "qofclass.h"
-#include "qofbook.h"
-#include "qofinstance.h"
-#endif
-
 #define QOF_MOD_UTIL "qof.utilities"
 
 /** The QOF String Cache:

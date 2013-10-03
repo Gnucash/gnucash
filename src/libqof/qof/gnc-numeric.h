@@ -486,16 +486,6 @@ gnc_numeric gnc_numeric_div_with_error(gnc_numeric a, gnc_numeric b,
 gnc_numeric gnc_numeric_convert(gnc_numeric n, gint64 denom,
                                 gint how);
 
-#if 0
-/* Implementation missing! */
-/* Same as gnc_numeric_convert, but return a remainder
- *  value for accumulating conversion error.
-*/
-gnc_numeric gnc_numeric_convert_with_error(gnc_numeric n, gint64 denom,
-        gint how,
-        gnc_numeric * error);
-#endif
-
 /** Return input after reducing it by Greated Common Factor (GCF)
  *  elimination */
 gnc_numeric gnc_numeric_reduce(gnc_numeric n);

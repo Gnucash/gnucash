@@ -700,65 +700,6 @@ kvp_frame_set_slot_path_gslist (KvpFrame *frame,
             return;
     }
 }
-#if 0 /*decode isn't used*/
-/* ============================================================ */
-/* decode url-encoded string, do it in place
- * + == space
- * %xx == asci char where xx is hexadecimal ascii value
- */
-
-static void
-decode (char *enc)
-{
-    char * p, *w;
-
-    /* Loop, convert +'s to blanks */
-    p = strchr (enc, '+');
-    while (p)
-    {
-        *p = ' ';
-        p = strchr (p, '+');
-    }
-
-    p = strchr (enc, '%');
-    w = p;
-
-    while (p)
-    {
-        int ch, cl;
-        p++;
-        ch = *p - 0x30;               /* ascii 0 = 0x30 */
-        if (9 < ch) ch -= 0x11 - 10;  /* uppercase A = 0x41 */
-        if (16 < ch) ch -= 0x20;      /* lowercase a = 0x61 */
-
-        p++;
-        cl = *p - 0x30;               /* ascii 0 = 0x30 */
-        if (9 < cl) cl -= 0x11 - 10;  /* uppercase A = 0x41 */
-        if (16 < cl) cl -= 0x20;      /* lowercase a = 0x61 */
-
-        *w = (char) (ch << 4 | cl);
-
-        do
-        {
-            ++w;
-            ++p;
-            *w = *p;
-            if (0x0 == *p)
-            {
-                p = 0;
-                break;
-            }
-            if ('%' == *p)
-            {
-                break;
-            }
-        }
-        while (*p);
-    }
-}
-
-/* ============================================================ */
-#endif
 
 gint64
 kvp_frame_get_gint64(const KvpFrame *frame, const char *path)

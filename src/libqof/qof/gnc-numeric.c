@@ -46,19 +46,6 @@
 /* static short module = MOD_ENGINE; */
 
 /* =============================================================== */
-
-#if 0
-static const char * _numeric_error_strings[] =
-{
-    "No error",
-    "Argument is not a valid number",
-    "Intermediate result overflow",
-    "Argument denominators differ in GNC_HOW_DENOM_FIXED operation",
-    "Remainder part in GNC_HOW_RND_NEVER operation"
-};
-#endif
-
-/* =============================================================== */
 /* This function is small, simple, and used everywhere below,
  * lets try to inline it.
  */
@@ -581,14 +568,6 @@ gnc_numeric_mul(gnc_numeric a, gnc_numeric b,
             }
         }
     }
-
-#if 0  /* currently, product denom won't ever be zero */
-    if (product.denom < 0)
-    {
-        product.num   = -product.num;
-        product.denom = -product.denom;
-    }
-#endif
 
     result = gnc_numeric_convert(product, denom, how);
     return result;
