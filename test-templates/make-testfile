@@ -222,6 +222,7 @@ sub print_preamble {
     my @date = localtime(time());
     my $year = $date[5] + 1900;
     delete $indirs[-1];
+    $inname =~ tr/-/_/;
     $indirs[0] = "";
     eval{
 	$indir = File::Spec->catfile((@indirs, $inName));
