@@ -1205,22 +1205,6 @@ gnc_xml_be_write_accounts_to_file(QofBackend *be, QofBook *book)
 }
 
 /* ================================================================= */
-#if 0 //def GNUCASH_MAJOR_VERSION
-QofBackend *
-libgncmod_backend_file_LTX_gnc_backend_new(void)
-{
-
-    fbe->dirname = NULL;
-    fbe->fullpath = NULL;
-    fbe->lockfile = NULL;
-    fbe->linkfile = NULL;
-    fbe->lockfd = -1;
-
-    fbe->primary_book = NULL;
-
-    return be;
-}
-#endif
 
 static QofBackend*
 gnc_backend_new(void)

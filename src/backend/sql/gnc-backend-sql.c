@@ -78,9 +78,6 @@
 #include "splint-defs.h"
 #endif
 
-#if 0
-static const gchar* convert_search_obj( QofIdType objType );
-#endif
 static void gnc_sql_init_object_handlers( void );
 static void update_progress( GncSqlBackend* be );
 static void finish_progress( GncSqlBackend* be );
@@ -278,59 +275,6 @@ gnc_sql_load( GncSqlBackend* be, /*@ dependent @*/ QofBook *book, QofBackendLoad
 }
 
 /* ================================================================= */
-
-#if 0
-static gint
-compare_namespaces(gconstpointer a, gconstpointer b)
-{
-    const gchar *sa = (const gchar *) a;
-    const gchar *sb = (const gchar *) b;
-
-    return( g_strcmp0( sa, sb ) );
-}
-
-static gint
-compare_commodity_ids(gconstpointer a, gconstpointer b)
-{
-    const gnc_commodity *ca = (const gnc_commodity *) a;
-    const gnc_commodity *cb = (const gnc_commodity *) b;
-
-    return( g_strcmp0( gnc_commodity_get_mnemonic( ca ),
-    gnc_commodity_get_mnemonic( cb ) ) );
-}
-
-static void
-write_commodities( GncSqlBackend* be, QofBook* book )
-{
-    gnc_commodity_table* tbl;
-    GList* namespaces;
-    GList* lp;
-
-    g_return_if_fail( be != NULL );
-    g_return_if_fail( book != NULL );
-
-    tbl = gnc_commodity_table_get_table( book );
-    namespaces = gnc_commodity_table_get_namespaces( tbl );
-    if ( namespaces != NULL )
-    {
-        namespaces = g_list_sort( namespaces, compare_namespaces );
-    }
-    for ( lp = namespaces; lp != NULL; lp = lp->next )
-    {
-        GList* comms;
-        GList* lp2;
-
-        comms = gnc_commodity_table_get_commodities( tbl, lp->data );
-        comms = g_list_sort( comms, compare_commodity_ids );
-
-        for ( lp2 = comms; lp2 != NULL; lp2 = lp2->next )
-        {
-            gnc_sql_save_commodity( be, GNC_COMMODITY(lp2->data) );
-        }
-    }
-    update_progress( be );
-}
-#endif
 
 static gboolean
 write_account_tree( GncSqlBackend* be, Account* root )

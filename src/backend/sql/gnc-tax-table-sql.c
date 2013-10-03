@@ -139,18 +139,6 @@ set_obj_guid( gpointer pObject, gpointer pValue )
 {
     // Nowhere to put the GncGUID
 }
-#if 0 /* Not Used */
-static gpointer
-get_child( gpointer pObject, const QofParam* param )
-{
-    GncTaxTable* tt = GNC_TAXTABLE(pObject);
-
-    g_return_val_if_fail( pObject != NULL, NULL );
-    g_return_val_if_fail( GNC_IS_TAXTABLE(pObject), NULL );
-
-    return gncTaxTableGetChild( tt );
-}
-#endif
 
 static /*@ null @*//*@ dependent @*/ gpointer
 bt_get_parent( gpointer pObject )

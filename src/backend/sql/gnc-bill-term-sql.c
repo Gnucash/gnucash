@@ -75,12 +75,6 @@ static GncSqlColumnTableEntry col_table[] =
         "parent",       CT_GUID,       0,                   0,                 NULL, NULL,
         (QofAccessFunc)bt_get_parent,    (QofSetterFunc)bt_set_parent
     },
-#if 0
-    {
-        "child",        CT_BILLTERMREF, 0,                   0,                 NULL, NULL,
-        (QofAccessFunc)gncBillTermReturnChild,  (QofSetterFunc)gncBillTermSetChild
-    },
-#endif
     { "type",         CT_STRING,      MAX_TYPE_LEN,        COL_NNUL,          NULL, GNC_BILLTERM_TYPE },
     { "duedays",      CT_INT,         0,                   0,                 0,    GNC_BILLTERM_DUEDAYS },
     { "discountdays", CT_INT,         0,                   0,                 0,    GNC_BILLTERM_DISCDAYS },

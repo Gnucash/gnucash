@@ -167,16 +167,6 @@ set_split_reconcile_state( gpointer pObject, /*@ null @*/ gpointer pValue )
 
     xaccSplitSetReconcile( GNC_SPLIT(pObject), s[0] );
 }
-#if 0 /* Not Used */
-static void
-set_split_reconcile_date( gpointer pObject, Timespec ts )
-{
-    g_return_if_fail( pObject != NULL );
-    g_return_if_fail( GNC_IS_SPLIT(pObject) );
-
-    xaccSplitSetDateReconciledTS( GNC_SPLIT(pObject), &ts );
-}
-#endif
 
 static void
 set_split_lot( gpointer pObject, /*@ null @*/ gpointer pLot )
@@ -319,53 +309,6 @@ typedef struct
     gnc_numeric end_reconciled_bal;
 } full_acct_balances_t;
 
-#if 0 /* Not Used */
-/**
- * Saves the start/end balances for an account.
- *
- * @param acc Account
- * @param pData Pointer to balances info list
- */
-static void
-save_account_balances( Account* acc, gpointer pData )
-{
-    GSList** pBal_list = (GSList**)pData;
-    full_acct_balances_t* newbal;
-    gnc_numeric* pstart;
-    gnc_numeric* pend;
-    gnc_numeric* pstart_c;
-    gnc_numeric* pend_c;
-    gnc_numeric* pstart_r;
-    gnc_numeric* pend_r;
-
-    newbal = g_malloc( (gsize)sizeof( full_acct_balances_t ) );
-    g_assert( newbal != NULL );
-
-    newbal->acc = acc;
-    g_object_get( acc,
-                  "start-balance", &pstart,
-                  "end-balance", &pend,
-                  "start-cleared-balance", &pstart_c,
-                  "end-cleared-balance", &pend_c,
-                  "start-reconciled-balance", &pstart_r,
-                  "end-reconciled-balance", &pend_r,
-                  NULL );
-    newbal->start_bal = *pstart;
-    newbal->end_bal = *pend;
-    newbal->start_cleared_bal = *pstart_c;
-    newbal->end_cleared_bal = *pend_c;
-    newbal->start_reconciled_bal = *pstart_r;
-    newbal->end_reconciled_bal = *pend_r;
-    *pBal_list = g_slist_append( *pBal_list, newbal );
-
-    g_free( pstart );
-    g_free( pend );
-    g_free( pstart_c );
-    g_free( pend_c );
-    g_free( pstart_r );
-    g_free( pend_r );
-}
-#endif
 /**
  * Executes a transaction query statement and loads the transactions and all
  * of the splits.
@@ -820,38 +763,6 @@ commit_transaction( GncSqlBackend* be, QofInstance* inst )
 }
 
 /* ================================================================= */
-#if 0 /* Not Used */
-static /*@ dependent @*//*@ null @*/ const GncGUID*
-get_guid_from_query( QofQuery* pQuery )
-{
-    GList* pOrTerms;
-    GList* pAndTerms;
-    GList* andTerm;
-    QofQueryTerm* pTerm;
-    QofQueryPredData* pPredData;
-    GSList* pParamPath;
-
-    g_return_val_if_fail( pQuery != NULL, NULL );
-
-    pOrTerms = qof_query_get_terms( pQuery );
-    pAndTerms = (GList*)pOrTerms->data;
-    andTerm = pAndTerms->next;
-    pTerm = (QofQueryTerm*)andTerm->data;
-
-    pPredData = qof_query_term_get_pred_data( pTerm );
-    pParamPath = qof_query_term_get_param_path( pTerm );
-
-    if ( strcmp( pPredData->type_name, "guid" ) == 0 )
-    {
-        query_guid_t pData = (query_guid_t)pPredData;
-        return pData->guids->data;
-    }
-    else
-    {
-        return NULL;
-    }
-}
-#endif
 /**
  * Loads all transactions for an account.
  *

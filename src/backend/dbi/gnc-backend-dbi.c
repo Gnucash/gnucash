@@ -1559,49 +1559,6 @@ conn_table_operation( GncSqlConnection *sql_conn, GSList *table_name_list,
     return result;
 }
 
-#if 0 /* Not Used */
-/**
- * Really a bit of an understatement. More like "delete everything in
- * storage and replace with what's in memory".
- *
- * THIS ROUTINE IS EXTREMELY DANGEROUS AND CAN LEAD TO SEVERE DATA
- * LOSS It should be used *only* by gnc_dbi_safe_sync_all!
- *
- * @param qbe: QofBackend for the session.
- * @param book: QofBook to be saved in the database.
- */
-static void
-gnc_dbi_sync_all( QofBackend* qbe, /*@ dependent @*/ QofBook *book )
-{
-    GncDbiBackend* be = (GncDbiBackend*)qbe;
-    GncDbiSqlConnection *conn = (GncDbiSqlConnection*)(((GncSqlBackend*)be)->conn);
-    GSList* table_name_list;
-    const gchar* dbname;
-
-    g_return_if_fail( be != NULL );
-    g_return_if_fail( book != NULL );
-
-    ENTER( "book=%p, primary=%p", book, be->primary_book );
-
-    /* Destroy the current contents of the database */
-    dbname = dbi_conn_get_option( be->conn, "dbname" );
-    table_name_list = conn->provider->get_table_list( conn->conn, dbname );
-    if ( !conn_table_operation( (GncSqlConnection*)conn, table_name_list,
-                                drop ) )
-    {
-        qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
-        return;
-    }
-    gnc_table_slist_free( table_name_list );
-    /* Save all contents */
-    be->is_pristine_db = TRUE;
-    be->primary_book = book;
-    gnc_sql_sync_all( &be->sql_be, book );
-
-    LEAVE( "book=%p", book );
-}
-#endif
-
 /**
  * Safely resave a database by renaming all of its tables, recreating
  * everything, and then dropping the backup tables only if there were
@@ -2342,22 +2299,6 @@ conn_create_statement_from_sql( /*@ observer @*/ GncSqlConnection* conn, const g
 
     return create_dbi_statement( conn, sql );
 }
-
-#if 0 /* Not Used */
-static GValue*
-create_gvalue_from_string( /*@ only @*/ gchar* s )
-{
-    GValue* s_gval;
-
-    s_gval = g_new0( GValue, 1 );
-    g_assert( s_gval != NULL );
-
-    (void)g_value_init( s_gval, G_TYPE_STRING );
-    g_value_take_string( s_gval, s );
-
-    return s_gval;
-}
-#endif
 
 static gboolean
 conn_does_table_exist( GncSqlConnection* conn, const gchar* table_name )
