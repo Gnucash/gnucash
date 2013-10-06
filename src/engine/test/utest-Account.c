@@ -35,7 +35,7 @@
 #ifdef HAVE_GLIB_2_38
 #define _Q "'"
 #else
-#define _Q "" _Q ""
+#define _Q "`"
 #endif
 
 static const gchar *suitename = "/engine/Account";
