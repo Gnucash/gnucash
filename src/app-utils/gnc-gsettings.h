@@ -220,6 +220,333 @@ void gnc_gsettings_remove_any_cb_by_func (const gchar *schema,
                                           GCallback func,
                                           gpointer user_data);
 
+
+/** @name GSettings Get Functions
+ @{
+*/
+
+/** Get a boolean value from GSettings.
+ *
+ *  Retrieve a TRUE/FALSE value from GSettings.  The schema name
+ *  provided as argument is combined with the default gnucash schema
+ *  prefix to produce a fully qualified schema name.
+ *
+ *  @param schema This string provides a grouping of keys within the
+ *  GnuCash schema of the gsettings database.  It can be a simple string
+ *  as in "history" for settings that are common to many areas of
+ *  gnucash, or it can be a partial path name as in
+ *  "dialogs.business.invoice" for setting that only apply to one
+ *  specific area of the program.
+ *
+ *  @param key This string is the name of the particular key within
+ *  the named schema of gsettings.
+ *
+ *  @return This function returns the TRUE or FALSE value stored at
+ *  the requested key in the gsettings database.  If the key has never
+ *  been set, this function passes on the default value returned by
+ *  GSettings as specified in the schema for this key.
+ */
+gboolean gnc_gsettings_get_bool (const gchar *schema,
+                                 /*@ null @*/ const gchar *key);
+
+/** Get an integer value from GSettings.
+ *
+ *  Retrieve an integer value from GSettings.  The schema name
+ *  provided as argument is combined with the default gnucash schema
+ *  prefix to produce a fully qualified schema name.
+ *
+ *  @param schema This string provides a grouping of keys within the
+ *  GnuCash schema of the gsettings database.  It can be a simple string
+ *  as in "history" for settings that are common to many areas of
+ *  gnucash, or it can be a partial path name as in
+ *  "dialogs.business.invoice" for setting that only apply to one
+ *  specific area of the program.
+ *
+ *  @param key This string is the name of the particular key within
+ *  the named schema of gsettings.
+ *
+ *  @return This function returns the integer value stored at the
+ *  requested key in the gsettings database.  If the key has never been
+ *  set, this function passes on the default value returned by GSettings
+ *  as specified in the schema for this key.  If there is an error in
+ *  processing, this function passed on the value of zero as returned
+ *  by GSettings.
+ */
+gint gnc_gsettings_get_int (const gchar *schema,
+                            const gchar *key);
+
+/** Get an float value from GSettings.
+ *
+ *  Retrieve an float value from GSettings.  The schema name
+ *  provided as argument is combined with the default gnucash schema
+ *  prefix to produce a fully qualified schema name.
+ *
+ *  @param schema This string provides a grouping of keys within the
+ *  GnuCash schema of the gsettings database.  It can be a simple string
+ *  as in "history" for settings that are common to many areas of
+ *  gnucash, or it can be a partial path name as in
+ *  "dialogs.business.invoice" for setting that only apply to one
+ *  specific area of the program.
+ *
+ *  @param key This string is the name of the particular key within
+ *  the named schema of gsettings.
+ *
+ *  @return This function returns the float value stored at the
+ *  requested key in the gsettings database.  If the key has never been
+ *  set, this function passes on the default value returned by GSettings
+ *  as specified in the schema for this key.  If there is an error in
+ *  processing, this function passed on the value of zero as returned
+ *  by GSettings.
+ */
+gdouble gnc_gsettings_get_float (const gchar *schema,
+                                 const gchar *key);
+
+/** Get a string value from GSettings.
+ *
+ *  Retrieve an string value from GSettings.  The schema name
+ *  provided as argument is combined with the default gnucash schema
+ *  prefix to produce a fully qualified schema name.
+ *
+ *  @param schema This string provides a grouping of keys within the
+ *  GnuCash schema of the gsettings database.  It can be a simple string
+ *  as in "history" for settings that are common to many areas of
+ *  gnucash, or it can be a partial path name as in
+ *  "dialogs.business.invoice" for setting that only apply to one
+ *  specific area of the program.
+ *
+ *  @param key This string is the name of the particular key within
+ *  the named schema of gsettings.
+ *
+ *  @return This function returns the string value stored at the
+ *  requested key in the gsettings database.  If the key has never been
+ *  set, this function passes on the default value returned by GSettings
+ *  as specified in the schema for this key.  If there is an error in
+ *  processing, this function passed on the NULL value as returned by
+ *  GSettings.  It is the callers responsibility to free any string
+ *  returned by this function.
+ */
+gchar *gnc_gsettings_get_string (const gchar *schema,
+                                const gchar *key);
+
+/** Get an enum value from GSettings.
+ *
+ *  Retrieve an enum value from GSettings.  The schema name
+ *  provided as argument is combined with the default gnucash schema
+ *  prefix to produce a fully qualified schema name.
+ *
+ *  @param schema This string provides a grouping of keys within the
+ *  GnuCash schema of the gsettings database.  It can be a simple string
+ *  as in "history" for settings that are common to many areas of
+ *  gnucash, or it can be a partial path name as in
+ *  "dialogs.business.invoice" for setting that only apply to one
+ *  specific area of the program.
+ *
+ *  @param key This string is the name of the particular key within
+ *  the named schema of gsettings.
+ *
+ *  @return This function returns the enum value stored at the
+ *  requested key in the gsettings database.  If the key has never been
+ *  set, this function passes on the default value returned by GSettings
+ *  as specified in the schema for this key.  If there is an error in
+ *  processing, this function passed on the value of zero as returned
+ *  by GSettings.
+ */
+gint gnc_gsettings_get_enum (const gchar *schema,
+                             const gchar *key);
+
+/** Get an arbitrary combination of values from GSettings.
+ *
+ *  Retrieve an arbitrary combination of values from GSettings.   This
+ *  combination of values can be anything that can be encapsulated
+ *  in a GVariant structure.  The schema name
+ *  provided as argument is combined with the default gnucash schema
+ *  prefix to produce a fully qualified schema name.
+ *
+ *  @param schema This string provides a grouping of keys within the
+ *  GnuCash schema of the gsettings database.  It can be a simple string
+ *  as in "history" for settings that are common to many areas of
+ *  gnucash, or it can be a partial path name as in
+ *  "dialogs.business.invoice" for setting that only apply to one
+ *  specific area of the program.
+ *
+ *  @param key This string is the name of the particular key within
+ *  the named schema of gsettings.
+ *
+ *  @return This function returns the a GVariant encapsulating the combination
+ *  of values stored at the requested key in the gsettings database.
+ *  If the key has never been set, this function passes on the default
+ *  value returned by GSettings as specified in the schema for this key.
+ *  If there is an error in processing, this function passed on the NULL
+ *  value as returned by GSettings.
+ *  It is the callers responsibility to free any GVariant data returned
+ *  by this function.
+ */
+GVariant *gnc_gsettings_get_value (const gchar *schema,
+                                   const gchar *key);
+
+/** @} */
+
+/** @name GSettings Set/Unset Functions
+ @{
+*/
+
+
+/** Store a boolean value into GSettings.
+ *
+ *  Store a boolean value into GSettings.  The schema name
+ *  provided as argument is combined with the default gnucash schema
+ *  prefix to produce a fully qualified schema name.
+ *
+ *  @param schema This string provides a grouping of keys within the
+ *  GnuCash schema of the gsettings database.  It can be a simple string
+ *  as in "history" for settings that are common to many areas of
+ *  gnucash, or it can be a partial path name as in
+ *  "dialogs.business.invoice" for setting that only apply to one
+ *  specific area of the program.
+ *
+ *  @param key This string is the name of the particular key within
+ *  the named schema of gsettings.
+ *
+ *  @param value The boolean value to be stored.
+ *
+ *  @return This function returns true if the value was set successfully
+ *  on the key or false if not.
+ */
+gboolean gnc_gsettings_set_bool (const gchar *schema,
+                                 const gchar *key,
+                                 gboolean value);
+
+/** Store an integer value into GSettings.
+ *
+ *  Store an integer into GSettings.  The schema name
+ *  provided as argument is combined with the default gnucash schema
+ *  prefix to produce a fully qualified schema name.
+ *
+ *  @param schema This string provides a grouping of keys within the
+ *  GnuCash schema of the gsettings database.  It can be a simple string
+ *  as in "history" for settings that are common to many areas of
+ *  gnucash, or it can be a partial path name as in
+ *  "dialogs.business.invoice" for setting that only apply to one
+ *  specific area of the program.
+ *
+ *  @param key This string is the name of the particular key within
+ *  the named schema of gsettings.
+ *
+ *  @param value The integer number to be stored.
+ *
+ *  @return This function returns true if the value was set successfully
+ *  on the key or false if not.
+ */
+gboolean gnc_gsettings_set_int (const gchar *schema,
+                                const gchar *key,
+                                gint value);
+
+/** Store a float value into GSettings.
+ *
+ *  Store a float into GSettings.  The schema name
+ *  provided as argument is combined with the default gnucash schema
+ *  prefix to produce a fully qualified schema name.
+ *
+ *  @param schema This string provides a grouping of keys within the
+ *  GnuCash schema of the gsettings database.  It can be a simple string
+ *  as in "history" for settings that are common to many areas of
+ *  gnucash, or it can be a partial path name as in
+ *  "dialogs.business.invoice" for setting that only apply to one
+ *  specific area of the program.
+ *
+ *  @param key This string is the name of the particular key within
+ *  the named schema of gsettings.
+ *
+ *  @param value The floating point number to be stored.
+ *
+ *  @return This function returns true if the value was set successfully
+ *  on the key or false if not.
+ */
+gboolean gnc_gsettings_set_float (const gchar *schema,
+                                  const gchar *key,
+                                  gdouble value);
+
+
+/** Store a string into GSettings.
+ *
+ *  Store a single string into GSettings. The schema name
+ *  provided as argument is combined with the default gnucash schema
+ *  prefix to produce a fully qualified schema name.
+ *
+ *  @param schema This string provides a grouping of keys within the
+ *  GnuCash schema of the gsettings database.  It can be a simple string
+ *  as in "history" for settings that are common to many areas of
+ *  gnucash, or it can be a partial path name as in
+ *  "dialogs.business.invoice" for setting that only apply to one
+ *  specific area of the program.
+ *
+ *  @param key This string is the name of the particular key within
+ *  the named schema of gsettings.
+ *
+ *  @param value The string to be stored.  GSettings will make a copy of this
+ *  string, so it is the callers responsibility to free the space used
+ *  by this string (if necessary).
+ *
+ *  @return This function returns true if the value was set successfully
+ *  on the key or false if not.
+ */
+gboolean gnc_gsettings_set_string (const gchar *schema,
+                                   const gchar *key,
+                                   const gchar *value);
+
+/** Store an enum value into GSettings.
+ *
+ *  Store an enum into GSettings.  The schema name
+ *  provided as argument is combined with the default gnucash schema
+ *  prefix to produce a fully qualified schema name.
+ *
+ *  @param schema This string provides a grouping of keys within the
+ *  GnuCash schema of the gsettings database.  It can be a simple string
+ *  as in "history" for settings that are common to many areas of
+ *  gnucash, or it can be a partial path name as in
+ *  "dialogs.business.invoice" for setting that only apply to one
+ *  specific area of the program.
+ *
+ *  @param key This string is the name of the particular key within
+ *  the named schema of gsettings.
+ *
+ *  @param value The enum number to be stored.
+ *
+ *  @return This function returns true if the value was set successfully
+ *  on the key or false if not.
+ */
+gboolean gnc_gsettings_set_enum (const gchar *schema,
+                                 const gchar *key,
+                                 gint value);
+
+/** Store an arbitrary combination of values into GSettings.
+ *
+ *  Store an arbitrary combination of values into GSettings.  This
+ *  combination of values can be anything that can be encapsulated
+ *  in a GVariant structure.  The schema name
+ *  provided as argument is combined with the default gnucash schema
+ *  prefix to produce a fully qualified schema name.
+ *
+ *  @param schema This string provides a grouping of keys within the
+ *  GnuCash schema of the gsettings database.  It can be a simple string
+ *  as in "history" for settings that are common to many areas of
+ *  gnucash, or it can be a partial path name as in
+ *  "dialogs.business.invoice" for setting that only apply to one
+ *  specific area of the program.
+ *
+ *  @param key This string is the name of the particular key within
+ *  the named schema of gsettings.
+ *
+ *  @param value The combination of values encapsulated in a GVariant
+ *  to be stored.
+ *
+ *  @return This function returns true if the value was set successfully
+ *  on the key or false if not.
+ */
+gboolean gnc_gsettings_set_value (const gchar *schema,
+                                  const gchar *key,
+                                  GVariant *value);
+
 /** @} */
 
 

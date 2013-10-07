@@ -220,3 +220,230 @@ gnc_gsettings_remove_any_cb_by_func (const gchar *schema,
 {
     gnc_gsettings_remove_cb_by_func (schema, NULL, func, user_data);
 }
+
+
+/************************************************************/
+/*                      Getters/Setters                     */
+/************************************************************/
+
+gboolean
+gnc_gsettings_get_bool (const gchar *schema,
+                        const gchar *key)
+{
+    GSettings *schema_ptr = gnc_gsettings_get_schema_ptr (schema);
+    g_return_val_if_fail (G_IS_SETTINGS (schema_ptr), FALSE);
+
+    if (gnc_gsettings_is_valid_key (schema_ptr, key))
+        return g_settings_get_boolean (schema_ptr, key);
+    else
+    {
+        PERR ("Invalid key %s for schema %s", key, schema);
+        return FALSE;
+    }
+}
+
+gboolean
+gnc_gsettings_set_bool (const gchar *schema,
+                        const gchar *key,
+                        gboolean value)
+{
+    gboolean result = FALSE;
+    GSettings *schema_ptr = gnc_gsettings_get_schema_ptr (schema);
+    g_return_val_if_fail (G_IS_SETTINGS (schema_ptr), FALSE);
+
+    if (gnc_gsettings_is_valid_key (schema_ptr, key))
+    {
+        result = g_settings_set_boolean (schema_ptr, key, value);
+        if (!result)
+            PERR ("Unable to set value for key %s in schema %s", key, schema);
+    }
+    else
+        PERR ("Invalid key %s for schema %s", key, schema);
+
+    return result;
+}
+
+gint
+gnc_gsettings_get_int (const gchar *schema,
+                       const gchar *key)
+{
+    GSettings *schema_ptr = gnc_gsettings_get_schema_ptr (schema);
+    g_return_val_if_fail (G_IS_SETTINGS (schema_ptr), 0);
+
+    if (gnc_gsettings_is_valid_key (schema_ptr, key))
+        return g_settings_get_int (schema_ptr, key);
+    else
+    {
+        PERR ("Invalid key %s for schema %s", key, schema);
+        return 0;
+    }
+}
+
+gboolean
+gnc_gsettings_set_int (const gchar *schema,
+                       const gchar *key,
+                       gint value)
+{
+    gboolean result = FALSE;
+    GSettings *schema_ptr = gnc_gsettings_get_schema_ptr (schema);
+    g_return_val_if_fail (G_IS_SETTINGS (schema_ptr), FALSE);
+
+    if (gnc_gsettings_is_valid_key (schema_ptr, key))
+    {
+        result = g_settings_set_int (schema_ptr, key, value);
+        if (!result)
+            PERR ("Unable to set value for key %s in schema %s", key, schema);
+    }
+    else
+        PERR ("Invalid key %s for schema %s", key, schema);
+
+    return result;
+}
+
+gdouble
+gnc_gsettings_get_float (const gchar *schema,
+                         const gchar *key)
+{
+    GSettings *schema_ptr = gnc_gsettings_get_schema_ptr (schema);
+    g_return_val_if_fail (G_IS_SETTINGS (schema_ptr), 0);
+
+    if (gnc_gsettings_is_valid_key (schema_ptr, key))
+        return g_settings_get_double (schema_ptr, key);
+    else
+    {
+        PERR ("Invalid key %s for schema %s", key, schema);
+        return 0;
+    }
+}
+
+gboolean
+gnc_gsettings_set_float (const gchar *schema,
+                         const gchar *key,
+                         gdouble value)
+{
+    gboolean result = FALSE;
+    GSettings *schema_ptr = gnc_gsettings_get_schema_ptr (schema);
+    g_return_val_if_fail (G_IS_SETTINGS (schema_ptr), FALSE);
+
+    if (gnc_gsettings_is_valid_key (schema_ptr, key))
+    {
+        result = g_settings_set_double (schema_ptr, key, value);
+        if (!result)
+            PERR ("Unable to set value for key %s in schema %s", key, schema);
+    }
+    else
+        PERR ("Invalid key %s for schema %s", key, schema);
+
+    return result;
+}
+
+gchar *
+gnc_gsettings_get_string (const gchar *schema,
+                          const gchar *key)
+{
+    GSettings *schema_ptr = gnc_gsettings_get_schema_ptr (schema);
+    g_return_val_if_fail (G_IS_SETTINGS (schema_ptr), NULL);
+
+    if (gnc_gsettings_is_valid_key (schema_ptr, key))
+        return g_settings_get_string (schema_ptr, key);
+    else
+    {
+        PERR ("Invalid key %s for schema %s", key, schema);
+        return NULL;
+    }
+}
+
+gboolean
+gnc_gsettings_set_string (const gchar *schema,
+                          const gchar *key,
+                          const gchar *value)
+{
+    gboolean result = FALSE;
+    GSettings *schema_ptr = gnc_gsettings_get_schema_ptr (schema);
+    g_return_val_if_fail (G_IS_SETTINGS (schema_ptr), FALSE);
+
+    if (gnc_gsettings_is_valid_key (schema_ptr, key))
+    {
+        result = g_settings_set_string (schema_ptr, key, value);
+        if (!result)
+            PERR ("Unable to set value for key %s in schema %s", key, schema);
+    }
+    else
+        PERR ("Invalid key %s for schema %s", key, schema);
+
+    return result;
+}
+
+gint
+gnc_gsettings_get_enum (const gchar *schema,
+                        const gchar *key)
+{
+    GSettings *schema_ptr = gnc_gsettings_get_schema_ptr (schema);
+    g_return_val_if_fail (G_IS_SETTINGS (schema_ptr), 0);
+
+    if (gnc_gsettings_is_valid_key (schema_ptr, key))
+        return g_settings_get_enum (schema_ptr, key);
+    else
+    {
+        PERR ("Invalid key %s for schema %s", key, schema);
+        return 0;
+    }
+}
+
+gboolean
+gnc_gsettings_set_enum (const gchar *schema,
+                        const gchar *key,
+                        gint value)
+{
+    gboolean result = FALSE;
+    GSettings *schema_ptr = gnc_gsettings_get_schema_ptr (schema);
+    g_return_val_if_fail (G_IS_SETTINGS (schema_ptr), FALSE);
+
+    if (gnc_gsettings_is_valid_key (schema_ptr, key))
+    {
+        result = g_settings_set_enum (schema_ptr, key, value);
+        if (!result)
+            PERR ("Unable to set value for key %s in schema %s", key, schema);
+    }
+    else
+        PERR ("Invalid key %s for schema %s", key, schema);
+
+    return result;
+}
+
+GVariant *
+gnc_gsettings_get_value (const gchar *schema,
+                         const gchar *key)
+{
+    GSettings *schema_ptr = gnc_gsettings_get_schema_ptr (schema);
+    g_return_val_if_fail (G_IS_SETTINGS (schema_ptr), NULL);
+
+    if (gnc_gsettings_is_valid_key (schema_ptr, key))
+        return g_settings_get_value (schema_ptr, key);
+    else
+    {
+        PERR ("Invalid key %s for schema %s", key, schema);
+        return NULL;
+    }
+}
+
+gboolean
+gnc_gsettings_set_value (const gchar *schema,
+                         const gchar *key,
+                         GVariant *value)
+{
+    gboolean result = FALSE;
+    GSettings *schema_ptr = gnc_gsettings_get_schema_ptr (schema);
+    g_return_val_if_fail (G_IS_SETTINGS (schema_ptr), FALSE);
+
+    if (gnc_gsettings_is_valid_key (schema_ptr, key))
+    {
+        result = g_settings_set_value (schema_ptr, key, value);
+        if (!result)
+            PERR ("Unable to set value for key %s in schema %s", key, schema);
+    }
+    else
+        PERR ("Invalid key %s for schema %s", key, schema);
+
+    return result;
+}
