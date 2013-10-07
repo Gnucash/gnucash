@@ -66,16 +66,26 @@
 #include "gnc-commodity.h"
 #include "gnc-gtk-utils.h"
 #include "gnc-ui-util.h"
+#include "gnc-engine.h"
+
+/** The debugging module used by this file. */
+static QofLogModule log_module = GNC_MOD_GUI;
 
 static void gnc_currency_edit_init         (GNCCurrencyEdit      *gce);
 static void gnc_currency_edit_class_init   (GNCCurrencyEditClass *class);
+static void gnc_currency_edit_finalize     (GObject *object);
+static void gnc_currency_edit_mnemonic_changed (GObject    *gobject,
+                                                GParamSpec *pspec,
+                                                gpointer    user_data);
+static void gnc_currency_edit_active_changed (GtkComboBox *gobject,
+                                              gpointer     user_data);
 
 static GtkComboBoxClass *parent_class;
 
 /** The instance private data for a content plugin. */
 typedef struct _GNCCurrencyEditPrivate
 {
-    gint dummy;
+    gchar *mnemonic;
 } GNCCurrencyEditPrivate;
 
 #define GET_PRIVATE(o)  \
@@ -115,6 +125,65 @@ gnc_currency_edit_get_type (void)
     return currency_edit_type;
 }
 
+enum
+{
+  PROP_0,
+
+  PROP_GCE_MNEMONIC,
+
+  N_PROPERTIES
+};
+
+static GParamSpec *obj_properties[N_PROPERTIES] = { NULL, };
+
+static void
+gnc_currency_edit_set_property (GObject      *object,
+                                guint         property_id,
+                                const GValue *value,
+                                GParamSpec   *pspec)
+{
+    GNCCurrencyEdit *self = GNC_CURRENCY_EDIT (object);
+    GNCCurrencyEditPrivate *priv = GET_PRIVATE (self);
+
+    switch (property_id)
+    {
+        case PROP_GCE_MNEMONIC:
+            g_free (priv->mnemonic);
+              priv->mnemonic = g_value_dup_string (value);
+              DEBUG ("mnemonic: %s\n", priv->mnemonic);
+              break;
+
+        default:
+            /* We don't have any other property... */
+            G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
+            break;
+    }
+}
+
+static void
+gnc_currency_edit_get_property (GObject    *object,
+                                guint       property_id,
+                                GValue     *value,
+                                GParamSpec *pspec)
+{
+    GNCCurrencyEdit *self = GNC_CURRENCY_EDIT (object);
+    GNCCurrencyEditPrivate *priv = GET_PRIVATE (self);
+
+    switch (property_id)
+    {
+        case PROP_GCE_MNEMONIC:
+            g_value_set_string (value, priv->mnemonic);
+            break;
+
+        default:
+            /* We don't have any other property... */
+            G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
+            break;
+    }
+}
+
+
+
 
 /** Initialize the GncCurrencyEdit class object.
  *
@@ -125,14 +194,29 @@ gnc_currency_edit_get_type (void)
 static void
 gnc_currency_edit_class_init (GNCCurrencyEditClass *klass)
 {
+    GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
     parent_class = g_type_class_peek_parent (klass);
 
     g_type_class_add_private(klass, sizeof(GNCCurrencyEditPrivate));
+
+    gobject_class->set_property = gnc_currency_edit_set_property;
+    gobject_class->get_property = gnc_currency_edit_get_property;
+    gobject_class->finalize     = gnc_currency_edit_finalize;
+
+    obj_properties[PROP_GCE_MNEMONIC] =
+            g_param_spec_string ("mnemonic",
+                                 "Active currency's mnemonic",
+                                 "Active currency's mnemonic",
+                                 "USD" /* default value */,
+                                 G_PARAM_READWRITE);
+
+    g_object_class_install_properties (gobject_class,
+                                       N_PROPERTIES,
+                                       obj_properties);
 }
 
 
-/** Initialize a GncCurrencyEdit object.  This function is currently a
- *  noop.
+/** Initialize a GncCurrencyEdit object.
  *
  *  @internal
  *
@@ -141,8 +225,89 @@ gnc_currency_edit_class_init (GNCCurrencyEditClass *klass)
 static void
 gnc_currency_edit_init (GNCCurrencyEdit *gce)
 {
+    g_signal_connect (gce, "notify::mnemonic",
+                      G_CALLBACK (gnc_currency_edit_mnemonic_changed), gce);
+    g_signal_connect (gce, "changed",
+                      G_CALLBACK (gnc_currency_edit_active_changed), gce);
 }
 
+
+/** Finalize the GncCurrencyEdit object.  This function is called from
+ *  the G_Object level to complete the destruction of the object.  It
+ *  should release any memory not previously released by the destroy
+ *  function (i.e. the private data structure), then chain up to the
+ *  parent's destroy function.
+ *
+ *  @param object The object being destroyed.
+ *
+ *  @internal
+ */
+static void
+gnc_currency_edit_finalize (GObject *object)
+{
+    GNCCurrencyEditPrivate *priv;
+    GNCCurrencyEdit *period;
+
+    g_return_if_fail (object != NULL);
+    g_return_if_fail (GNC_IS_CURRENCY_EDIT (object));
+
+    period = GNC_CURRENCY_EDIT(object);
+    priv = GET_PRIVATE(period);
+
+    g_free (priv->mnemonic);
+
+    /* Do not free the private data structure itself. It is part of
+     * a larger memory block allocated by the type system. */
+
+    if (G_OBJECT_CLASS(parent_class)->finalize)
+        (* G_OBJECT_CLASS(parent_class)->finalize) (object);
+}
+
+
+static void
+gnc_currency_edit_mnemonic_changed (GObject    *gobject,
+                                    GParamSpec *pspec,
+                                    gpointer    user_data)
+{
+
+    GNCCurrencyEdit *self = GNC_CURRENCY_EDIT (gobject);
+    GNCCurrencyEditPrivate *priv = GET_PRIVATE (self);
+
+    gnc_commodity *currency = gnc_commodity_table_lookup (gnc_get_current_commodities (),
+                                                          GNC_COMMODITY_NS_CURRENCY,
+                                                          priv->mnemonic);
+
+    /* If there isn't any such commodity, get the default */
+    if (!currency)
+    {
+        currency = gnc_locale_default_currency();
+        DEBUG("gce %p, default currency mnemonic %s",
+              self, gnc_commodity_get_mnemonic(currency));
+    }
+
+    g_signal_handlers_block_by_func(G_OBJECT(self),
+                                    G_CALLBACK(gnc_currency_edit_mnemonic_changed), user_data);
+    gnc_currency_edit_set_currency(self, currency);
+    g_signal_handlers_unblock_by_func(G_OBJECT(self),
+                                      G_CALLBACK(gnc_currency_edit_mnemonic_changed), user_data);
+}
+
+
+static void gnc_currency_edit_active_changed (GtkComboBox *gobject,
+                                              gpointer     user_data)
+{
+    GNCCurrencyEdit *self = GNC_CURRENCY_EDIT (gobject);
+    GNCCurrencyEditPrivate *priv = GET_PRIVATE (self);
+
+    gnc_commodity *currency = gnc_currency_edit_get_currency (self);
+    const gchar *mnemonic = gnc_commodity_get_mnemonic (currency);
+
+    g_signal_handlers_block_by_func(G_OBJECT(self),
+                                    G_CALLBACK(gnc_currency_edit_active_changed), user_data);
+    g_object_set (G_OBJECT (self), "mnemonic", mnemonic, NULL);
+    g_signal_handlers_unblock_by_func(G_OBJECT(self),
+                                      G_CALLBACK(gnc_currency_edit_active_changed), user_data);
+}
 
 /** This auxiliary function adds a single currency name to the combo
  *  box.  It is called as an iterator function when running a list of
