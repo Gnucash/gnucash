@@ -547,6 +547,46 @@ gboolean gnc_gsettings_set_value (const gchar *schema,
                                   const gchar *key,
                                   GVariant *value);
 
+/** Reset a key to its default value in GSettings.
+ *
+ *  Reset a key to its default value in GSettings.  Internally this
+ *  is done by removing the value from the database.  The next attempt
+ *  to read this value will return the default as specified in the
+ *  GSettings schema for this key.  The schema name
+ *  provided as argument is combined with the default gnucash schema
+ *  prefix to produce a fully qualified schema name.
+ *
+ *  @param schema This string provides a grouping of keys within the
+ *  GnuCash schema of the gsettings database.  It can be a simple string
+ *  as in "history" for settings that are common to many areas of
+ *  gnucash, or it can be a partial path name as in
+ *  "dialogs.business.invoice" for setting that only apply to one
+ *  specific area of the program.
+ *
+ *  @param key This string is the name of the particular key within
+ *  the named schema of gsettings.
+ */
+void gnc_gsettings_reset (const gchar *schema,
+                          const gchar *key);
+
+/** Reset all keys in a schema to their default values in GSettings.
+ *
+ *  Reset a keys in schema to their default values in GSettings.  Internally
+ *  this is done by removing the values from the database.  The next attempt
+ *  to read a keys will return its default as specified in the
+ *  GSettings schema for this key.  The schema name
+ *  provided as argument is combined with the default gnucash schema
+ *  prefix to produce a fully qualified schema name.
+ *
+ *  @param schema This string provides a grouping of keys within the
+ *  GnuCash schema of the gsettings database.  It can be a simple string
+ *  as in "history" for settings that are common to many areas of
+ *  gnucash, or it can be a partial path name as in
+ *  "dialogs.business.invoice" for setting that only apply to one
+ *  specific area of the program.
+ */
+void gnc_gsettings_reset_schema (const gchar *schema);
+
 /** @} */
 
 

@@ -447,3 +447,36 @@ gnc_gsettings_set_value (const gchar *schema,
 
     return result;
 }
+
+void
+gnc_gsettings_reset (const gchar *schema,
+                     const gchar *key)
+{
+    GSettings *schema_ptr = gnc_gsettings_get_schema_ptr (schema);
+    g_return_if_fail (G_IS_SETTINGS (schema_ptr));
+
+    if (gnc_gsettings_is_valid_key (schema_ptr, key))
+        g_settings_reset (schema_ptr, key);
+    else
+        PERR ("Invalid key %s for schema %s", key, schema);
+}
+
+void
+gnc_gsettings_reset_schema (const gchar *schema)
+{
+    gchar **keys;
+    gint counter = 0;
+
+    keys = g_settings_list_keys (gnc_gsettings_get_schema_ptr (schema));
+
+    if (!keys)
+        return;
+
+    while (keys[counter])
+    {
+        gnc_gsettings_reset (schema, keys[counter]);
+        counter++;
+    }
+
+    g_strfreev (keys);
+}
