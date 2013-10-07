@@ -106,6 +106,6 @@ typedef struct
 
 } PrefsBackend;
 
-PrefsBackend prefsbackend;
+extern PrefsBackend prefsbackend;
 
 #endif /* GNC_PREFS_P_H_ */

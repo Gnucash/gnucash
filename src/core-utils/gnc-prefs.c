@@ -35,6 +35,8 @@ static gboolean use_compression   = TRUE; // This is also the default in the pre
 static gint file_retention_policy = 1;    // 1 = "days", the default in the prefs backend
 static gint file_retention_days   = 30;   // This is also the default in the prefs backend
 
+PrefsBackend prefsbackend;
+
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = G_LOG_DOMAIN;
 
