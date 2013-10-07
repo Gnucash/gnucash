@@ -46,6 +46,7 @@
 #include "csv-transactions-export.h"
 
 #define GCONF_SECTION "dialogs/export/csv"
+#define GNC_PREFS_GROUP  "dialogs.export.csv"
 #define PANED_POSITION "paned_position"
 #define ASSISTANT_CSV_EXPORT_CM_CLASS "assistant-csv-export"
 
@@ -250,7 +251,7 @@ void load_settings (CsvExportInfo *info)
     info->starting_dir = NULL;
 
     /* The default directory for the user to select files. */
-    info->starting_dir = gnc_get_default_directory(GCONF_SECTION);
+    info->starting_dir = gnc_get_default_directory(GNC_PREFS_GROUP);
 }
 
 /* =============================================================== */
@@ -748,7 +749,7 @@ csv_export_assistant_summary_page_prepare (GtkAssistant *assistant,
     /* Save the Window size, paned position and directory */
     gnc_gconf_set_int(GCONF_SECTION, PANED_POSITION,
                       gtk_paned_get_position(GTK_PANED(info->csva.paned)), NULL);
-    gnc_set_default_directory(GCONF_SECTION, info->starting_dir);
+    gnc_set_default_directory(GNC_PREFS_GROUP, info->starting_dir);
 
     if (info->failed)
         text = _("There was a problem with the export, this could be due to lack of space, "

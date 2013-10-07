@@ -59,6 +59,7 @@
 
 #define ASSISTANT_QIF_IMPORT_CM_CLASS "assistant-qif-import"
 #define GCONF_SECTION "dialogs/import/qif"
+#define GNC_PREFS_GROUP "dialogs.import.qif"
 #define GCONF_NAME_SHOW_DOC "show_doc"
 #define GCONF_NAME_DEFAULT_TRANSACTION_STATUS "default_status"
 
@@ -1601,7 +1602,7 @@ gnc_ui_qif_import_select_file_cb(GtkButton * button,
     char *file_name, *default_dir;
 
     /* Default to whatever's already present */
-    default_dir = gnc_get_default_directory(GCONF_SECTION);
+    default_dir = gnc_get_default_directory(GNC_PREFS_GROUP);
 
     filter = gtk_file_filter_new();
     gtk_file_filter_set_name(filter, "*.qif");
@@ -1627,7 +1628,7 @@ gnc_ui_qif_import_select_file_cb(GtkButton * button,
         /* Update the working directory */
         g_free(default_dir);
         default_dir = g_path_get_dirname(file_name);
-        gnc_set_default_directory(GCONF_SECTION, default_dir);
+        gnc_set_default_directory(GNC_PREFS_GROUP, default_dir);
     }
     g_free(default_dir);
 

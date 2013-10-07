@@ -46,14 +46,16 @@ typedef QofSession * (*QofSessionCB) (void);
 gboolean gnc_reverse_balance(const Account *account);
 
 /* Default directory sections ***************************************/
-#define GCONF_DIR_OPEN_SAVE "dialogs/open_save"
-#define GCONF_DIR_EXPORT "dialogs/export_accounts"
-#define GCONF_DIR_REPORT "dialogs/report"
+#define GNC_PREFS_GROUP_OPEN_SAVE    "dialogs.open_save"
+#define GNC_PREFS_GROUP_EXPORT       "dialogs.export_accounts"
+#define GNC_PREFS_GROUP_REPORT       "dialogs.report"
+#define GNC_PREF_AUTO_DECIMAL_POINT  "auto_decimal_point"
+#define GNC_PREF_AUTO_DECIMAL_PLACES "auto_decimal_places"
 
 /* Default directories **********************************************/
 
-gchar *gnc_get_default_directory (const gchar *gconf_section);
-void gnc_set_default_directory (const gchar *gconf_section,
+gchar *gnc_get_default_directory (const gchar *section);
+void gnc_set_default_directory (const gchar *section,
                                 const gchar *directory);
 
 /* Engine enhancements & i18n ***************************************/

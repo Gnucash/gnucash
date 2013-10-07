@@ -260,7 +260,7 @@ gnc_ui_file_access( int type )
     gint active_access_method_index = -1;
     const gchar* default_db;
     const gchar *button_label = NULL;
-    const gchar *gconf_section = NULL;
+    const gchar *settings_section = NULL;
     gchar *last;
 
     g_return_if_fail( type == FILE_ACCESS_OPEN || type == FILE_ACCESS_SAVE_AS || type == FILE_ACCESS_EXPORT );
@@ -295,14 +295,14 @@ gnc_ui_file_access( int type )
         gtk_window_set_title(GTK_WINDOW(faw->dialog), _("Open..."));
         button_label = "gtk-open";
         fileChooserAction = GTK_FILE_CHOOSER_ACTION_OPEN;
-        gconf_section = GCONF_DIR_OPEN_SAVE;
+        settings_section = GNC_PREFS_GROUP_OPEN_SAVE;
         break;
 
     case FILE_ACCESS_SAVE_AS:
         gtk_window_set_title(GTK_WINDOW(faw->dialog), _("Save As..."));
         button_label = "gtk-save-as";
         fileChooserAction = GTK_FILE_CHOOSER_ACTION_SAVE;
-        gconf_section = GCONF_DIR_OPEN_SAVE;
+        settings_section = GNC_PREFS_GROUP_OPEN_SAVE;
         gtk_widget_destroy(faw->readonly_checkbutton);
         faw->readonly_checkbutton = NULL;
         break;
@@ -311,7 +311,7 @@ gnc_ui_file_access( int type )
         gtk_window_set_title(GTK_WINDOW(faw->dialog), _("Export"));
         button_label = "gtk-save-as";
         fileChooserAction = GTK_FILE_CHOOSER_ACTION_SAVE;
-        gconf_section = GCONF_DIR_EXPORT;
+        settings_section = GNC_PREFS_GROUP_EXPORT;
         gtk_widget_destroy(faw->readonly_checkbutton);
         faw->readonly_checkbutton = NULL;
         break;
@@ -341,7 +341,7 @@ gnc_ui_file_access( int type )
         }
     }
     if (!faw->starting_dir)
-        faw->starting_dir = gnc_get_default_directory(gconf_section);
+        faw->starting_dir = gnc_get_default_directory(settings_section);
     gtk_file_chooser_set_current_folder(faw->fileChooser, faw->starting_dir);
 
     g_object_connect( G_OBJECT(faw->fileChooser), "signal::file-activated",

@@ -46,18 +46,18 @@
 #include "gnc-accounting-period.h"
 #include "gnc-gdate-utils.h"
 #include "gnc-date.h"
-#include "gnc-gconf-utils.h"
+#include "gnc-prefs.h"
 #include "qof.h"
 #include "gnc-ui-util.h"
 
 /* TODO: This should probably be changed eventually. */
-#define GCONF_SECTION    "window/pages/account_tree/summary"
-#define KEY_START_CHOICE "start_choice"
-#define KEY_START_DATE   "start_date"
-#define KEY_START_PERIOD "start_period"
-#define KEY_END_CHOICE 	 "end_choice"
-#define KEY_END_DATE   	 "end_date"
-#define KEY_END_PERIOD 	 "end_period"
+#define GNC_PREFS_GROUP           "window.pages.account_tree.summary"
+#define GNC_PREF_START_CHOICE "start_choice"
+#define GNC_PREF_START_DATE   "start_date"
+#define GNC_PREF_START_PERIOD "start_period"
+#define GNC_PREF_END_CHOICE   "end_choice"
+#define GNC_PREF_END_DATE     "end_date"
+#define GNC_PREF_END_PERIOD   "end_period"
 
 static time64 gnc_accounting_period_start_time64 (GncAccountingPeriod which,
 						   const GDate *fy_end,
@@ -77,14 +77,14 @@ lookup_start_date_option(const gchar *section,
     time64 time;
     int which;
 
-    choice = gnc_gconf_get_string(section, key_choice, NULL);
+    choice = gnc_prefs_get_string(section, key_choice);
     if (choice && strcmp(choice, "absolute") == 0)
     {
-        time = gnc_gconf_get_int(section, key_absolute, NULL);
+        time = gnc_prefs_get_int(section, key_absolute);
     }
     else
     {
-        which = gnc_gconf_get_int(section, key_relative, NULL);
+        which = gnc_prefs_get_int(section, key_relative);
         time = gnc_accounting_period_start_time64(which, fy_end, NULL);
     }
     g_free(choice);
@@ -106,15 +106,15 @@ lookup_end_date_option(const gchar *section,
     time64 time;
     int which;
 
-    choice = gnc_gconf_get_string(section, key_choice, NULL);
+    choice = gnc_prefs_get_string(section, key_choice);
     if (choice && strcmp(choice, "absolute") == 0)
     {
-        time = gnc_gconf_get_int(section, key_absolute, NULL);
+        time = gnc_prefs_get_int(section, key_absolute);
         time = gnc_time64_get_day_end(time);
     }
     else
     {
-        which = gnc_gconf_get_int(section, key_relative, NULL);
+        which = gnc_prefs_get_int(section, key_relative);
         time = gnc_accounting_period_end_time64(which, fy_end, NULL);
     }
     g_free(choice);
@@ -144,8 +144,9 @@ gnc_accounting_period_fiscal_start(void)
 {
     time64 t;
     GDate *fy_end = get_fy_end();
-    t = lookup_start_date_option(GCONF_SECTION, KEY_START_CHOICE,
-                                 KEY_START_DATE, KEY_START_PERIOD, fy_end);
+    t = lookup_start_date_option(GNC_PREFS_GROUP, GNC_PREF_START_CHOICE,
+                                 GNC_PREF_START_DATE, GNC_PREF_START_PERIOD,
+                                 fy_end);
     if (fy_end)
         g_date_free(fy_end);
     return t;
@@ -157,8 +158,9 @@ gnc_accounting_period_fiscal_end(void)
     time64 t;
     GDate *fy_end = get_fy_end();
 
-    t = lookup_end_date_option(GCONF_SECTION, KEY_END_CHOICE,
-                               KEY_END_DATE, KEY_END_PERIOD, fy_end);
+    t = lookup_end_date_option(GNC_PREFS_GROUP, GNC_PREF_END_CHOICE,
+                               GNC_PREF_END_DATE, GNC_PREF_END_PERIOD,
+                               fy_end);
     if (fy_end)
         g_date_free(fy_end);
     return t;

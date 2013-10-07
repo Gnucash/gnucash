@@ -42,6 +42,7 @@
 #include "csv-account-import.h"
 
 #define GCONF_SECTION "dialogs/import/csv"
+#define GNC_PREFS_GROUP "dialogs.import.csv"
 #define ASSISTANT_CSV_IMPORT_CM_CLASS "assistant-csv-account-import"
 
 /* This static indicates the debugging module that this .o belongs to.  */
@@ -275,7 +276,7 @@ void load_settings (CsvImportInfo *info)
     info->error = "";
 
     /* The default directory for the user to select files. */
-    info->starting_dir = gnc_get_default_directory(GCONF_SECTION);
+    info->starting_dir = gnc_get_default_directory(GNC_PREFS_GROUP);
 }
 
 
@@ -420,7 +421,7 @@ csv_import_assistant_finish_page_prepare (GtkAssistant *assistant,
     g_free(text);
 
     /* Save the Window size and directory */
-    gnc_set_default_directory(GCONF_SECTION, info->starting_dir);
+    gnc_set_default_directory(GNC_PREFS_GROUP, info->starting_dir);
 
     /* Enable the Assistant Buttons */
     gtk_assistant_set_page_complete (assistant, page, TRUE);

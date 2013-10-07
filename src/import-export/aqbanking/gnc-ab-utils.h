@@ -71,6 +71,7 @@ G_BEGIN_DECLS
 #endif
 
 #define GCONF_SECTION_AQBANKING "dialogs/import/hbci"
+#define GNC_PREFS_GROUP_AQBANKING "dialogs.import.hbci"
 #define KEY_FORMAT_SWIFT940 "format_swift_mt940"
 #define KEY_FORMAT_SWIFT942 "format_swift_mt942"
 #define KEY_FORMAT_DTAUS "format_dtaus"

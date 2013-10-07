@@ -1402,7 +1402,7 @@ gnc_get_export_filename (SCM choice)
 
     /* %s is the type of what is about to be saved, e.g. "HTML". */
     title = g_strdup_printf (_("Save %s To File"), type);
-    default_dir = gnc_get_default_directory(GCONF_DIR_REPORT);
+    default_dir = gnc_get_default_directory(GNC_PREFS_GROUP_REPORT);
 
     filepath = gnc_file_dialog (title, NULL, default_dir, GNC_FILE_DIALOG_EXPORT);
 
@@ -1418,7 +1418,7 @@ gnc_get_export_filename (SCM choice)
         return NULL;
 
     default_dir = g_path_get_dirname(filepath);
-    gnc_set_default_directory (GCONF_DIR_REPORT, default_dir);
+    gnc_set_default_directory (GNC_PREFS_GROUP_REPORT, default_dir);
     g_free(default_dir);
 
     rc = g_stat (filepath, &statbuf);

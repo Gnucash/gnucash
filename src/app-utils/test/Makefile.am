@@ -40,8 +40,7 @@ LDADD = \
    ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
    ${top_builddir}/src/test-core/libtest-core.la \
    ${top_builddir}/src/engine/test-core/libgncmod-test-engine.la \
-   ${GUILE_LIBS} \
-   ${GCONF_LIBS}
+   ${GUILE_LIBS}
 
 check_PROGRAMS = \
   test-link-module \
@@ -64,5 +63,4 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/src/core-utils \
   -I${top_srcdir}/src/libqof/qof \
   ${GUILE_INCS} \
-  ${GLIB_CFLAGS} \
-  ${GCONF_CFLAGS}
+  ${GLIB_CFLAGS}

@@ -687,7 +687,7 @@ RESTART:
     if (gnc_uri_is_file_protocol(protocol))
     {
         gchar *default_dir = g_path_get_dirname(path);
-        gnc_set_default_directory (GCONF_DIR_OPEN_SAVE, default_dir);
+        gnc_set_default_directory (GNC_PREFS_GROUP_OPEN_SAVE, default_dir);
         g_free(default_dir);
     }
 
@@ -723,7 +723,7 @@ RESTART:
         if (g_file_test (filename, G_FILE_TEST_IS_DIR))
             directory = g_strdup (filename);
         else
-            directory = gnc_get_default_directory (GCONF_DIR_OPEN_SAVE);
+            directory = gnc_get_default_directory (GNC_PREFS_GROUP_OPEN_SAVE);
 
         filename = gnc_file_dialog (NULL, NULL, directory,
                                     GNC_FILE_DIALOG_OPEN);
@@ -1023,7 +1023,7 @@ gnc_file_open (void)
         g_free ( filepath );
     }
     else
-        default_dir = gnc_get_default_directory(GCONF_DIR_OPEN_SAVE);
+        default_dir = gnc_get_default_directory(GNC_PREFS_GROUP_OPEN_SAVE);
 
     newfile = gnc_file_dialog (_("Open"), NULL, default_dir, GNC_FILE_DIALOG_OPEN);
     g_free ( last );
@@ -1072,7 +1072,7 @@ gnc_file_export (void)
         g_free ( filepath );
     }
     else
-        default_dir = gnc_get_default_directory(GCONF_DIR_EXPORT);
+        default_dir = gnc_get_default_directory(GNC_PREFS_GROUP_EXPORT);
 
     filename = gnc_file_dialog (_("Save"), NULL, default_dir,
                                 GNC_FILE_DIALOG_SAVE);
@@ -1137,7 +1137,7 @@ gnc_file_do_export(const char * filename)
     {
         /* Remember the directory as the default. */
         gchar *default_dir = g_path_get_dirname(path);
-        gnc_set_default_directory (GCONF_DIR_OPEN_SAVE, default_dir);
+        gnc_set_default_directory (GNC_PREFS_GROUP_OPEN_SAVE, default_dir);
         g_free(default_dir);
 
         /* Prevent user to store file in GnuCash' private configuration
@@ -1308,7 +1308,7 @@ gnc_file_save_as (void)
         g_free ( filepath );
     }
     else
-        default_dir = gnc_get_default_directory(GCONF_DIR_OPEN_SAVE);
+        default_dir = gnc_get_default_directory(GNC_PREFS_GROUP_OPEN_SAVE);
 
     filename = gnc_file_dialog (_("Save"), NULL, default_dir,
                                 GNC_FILE_DIALOG_SAVE);
@@ -1375,7 +1375,7 @@ gnc_file_do_save_as (const char* filename)
     {
         /* Remember the directory as the default. */
         gchar *default_dir = g_path_get_dirname(path);
-        gnc_set_default_directory (GCONF_DIR_OPEN_SAVE, default_dir);
+        gnc_set_default_directory (GNC_PREFS_GROUP_OPEN_SAVE, default_dir);
         g_free(default_dir);
 
         /* Prevent user to store file in GnuCash' private configuration

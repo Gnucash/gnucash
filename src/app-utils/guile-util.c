@@ -39,9 +39,9 @@
 #include "qof.h"
 #include "engine-helpers-guile.h"
 #include "glib-helpers.h"
-#include "gnc-gconf-utils.h"
 #include "gnc-glib-utils.h"
 #include "gnc-guile-utils.h"
+#include "gnc-prefs.h"
 #include "guile-util.h"
 #include "guile-mappings.h"
 
@@ -902,7 +902,7 @@ gnc_get_debit_string(GNCAccountType account_type)
 
     initialize_scm_functions();
 
-    if (gnc_gconf_get_bool(GCONF_GENERAL, KEY_ACCOUNTING_LABELS, NULL))
+    if (gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL, GNC_PREF_ACCOUNTING_LABELS))
         return g_strdup(_("Debit"));
 
     if ((account_type < ACCT_TYPE_NONE) || (account_type >= NUM_ACCOUNT_TYPES))
@@ -933,7 +933,7 @@ gnc_get_credit_string(GNCAccountType account_type)
 
     initialize_scm_functions();
 
-    if (gnc_gconf_get_bool(GCONF_GENERAL, KEY_ACCOUNTING_LABELS, NULL))
+    if (gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL, GNC_PREF_ACCOUNTING_LABELS))
         return g_strdup(_("Credit"));
 
     if ((account_type < ACCT_TYPE_NONE) || (account_type >= NUM_ACCOUNT_TYPES))

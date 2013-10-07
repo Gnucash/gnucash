@@ -113,7 +113,7 @@ GSList *add_ins = NULL;
 
 
 /** This function is called whenever the account separator is changed
- *  in gconf.  It updates the label in the "Account" page of the
+ *  in gconf.  It updates the example label in the "Account" page of the
  *  preferences dialog.
  *
  *  @internal

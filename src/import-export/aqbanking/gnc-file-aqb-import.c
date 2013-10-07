@@ -90,7 +90,7 @@ gnc_file_aqbanking_import(const gchar *aqbanking_importername,
     GString *errstr = NULL;
 
     /* Select a file */
-    default_dir = gnc_get_default_directory(GCONF_SECTION_AQBANKING);
+    default_dir = gnc_get_default_directory(GNC_PREFS_GROUP_AQBANKING);
     selected_filename = gnc_file_dialog(_("Select a file to import"),
                                         NULL, default_dir,
                                         GNC_FILE_DIALOG_IMPORT);
@@ -102,7 +102,7 @@ gnc_file_aqbanking_import(const gchar *aqbanking_importername,
 
     /* Remember the directory as the default */
     default_dir = g_path_get_dirname(selected_filename);
-    gnc_set_default_directory(GCONF_SECTION_AQBANKING, default_dir);
+    gnc_set_default_directory(GNC_PREFS_GROUP_AQBANKING, default_dir);
     g_free(default_dir);
 
     dtaus_fd = g_open(selected_filename, O_RDONLY, 0);

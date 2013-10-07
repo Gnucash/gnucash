@@ -53,7 +53,7 @@
 
 #include "gnc-ofx-kvp.h"
 
-#define GCONF_SECTION "dialogs/import/ofx"
+#define GNC_PREFS_GROUP "dialogs.import.ofx"
 
 static QofLogModule log_module = GNC_MOD_IMPORT;
 
@@ -929,7 +929,7 @@ void gnc_file_ofx_import (void)
 
     DEBUG("gnc_file_ofx_import(): Begin...\n");
 
-    default_dir = gnc_get_default_directory(GCONF_SECTION);
+    default_dir = gnc_get_default_directory(GNC_PREFS_GROUP);
     selected_filename = gnc_file_dialog(_("Select an OFX/QFX file to process"),
                                         NULL,
                                         default_dir,
@@ -944,7 +944,7 @@ void gnc_file_ofx_import (void)
 
         /* Remember the directory as the default. */
         default_dir = g_path_get_dirname(selected_filename);
-        gnc_set_default_directory(GCONF_SECTION, default_dir);
+        gnc_set_default_directory(GNC_PREFS_GROUP, default_dir);
         g_free(default_dir);
 
         /*strncpy(file,selected_filename, 255);*/

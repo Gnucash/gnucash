@@ -50,6 +50,7 @@
 
 #define MIN_COL_WIDTH 70
 #define GCONF_SECTION "dialogs/import/csv"
+#define GNC_PREFS_GROUP "dialogs.import.csv"
 #define ASSISTANT_CSV_IMPORT_TRANS_CM_CLASS "assistant-csv-trans-import"
 
 /* This static indicates the debugging module that this .o belongs to.  */
@@ -1270,7 +1271,7 @@ void load_settings (CsvImportTrans *info)
     info->starting_dir = NULL;
 
     /* The default directory for the user to select files. */
-    info->starting_dir = gnc_get_default_directory(GCONF_SECTION);
+    info->starting_dir = gnc_get_default_directory(GNC_PREFS_GROUP);
 }
 
 /*======================================================================*/
@@ -1510,7 +1511,7 @@ csv_import_trans_assistant_summary_page_prepare (GtkAssistant *assistant,
     gchar *text, *mtext;
 
     /* Save the Window size and directory */
-    gnc_set_default_directory(GCONF_SECTION, info->starting_dir);
+    gnc_set_default_directory(GNC_PREFS_GROUP, info->starting_dir);
 
     /* Remove the added button */
     gtk_assistant_remove_action_widget (assistant, info->help_button);

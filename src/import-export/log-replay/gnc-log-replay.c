@@ -43,7 +43,7 @@
 #include "gnc-ui-util.h"
 #include "gnc-gui-query.h"
 
-#define GCONF_SECTION "dialogs/log_replay"
+#define GNC_PREFS_GROUP "dialogs.log_replay"
 
 /* NW: If you want a new log_module, just define
 a unique string either in gnc-engine.h or
@@ -562,7 +562,7 @@ void gnc_file_log_replay (void)
     /* Don't log the log replay. This would only result in redundant logs */
     xaccLogDisable();
 
-    default_dir = gnc_get_default_directory(GCONF_SECTION);
+    default_dir = gnc_get_default_directory(GNC_PREFS_GROUP);
 
     filter = gtk_file_filter_new();
     gtk_file_filter_set_name(filter, "*.log");
@@ -577,7 +577,7 @@ void gnc_file_log_replay (void)
     {
         /* Remember the directory as the default. */
         default_dir = g_path_get_dirname(selected_filename);
-        gnc_set_default_directory(GCONF_SECTION, default_dir);
+        gnc_set_default_directory(GNC_PREFS_GROUP, default_dir);
         g_free(default_dir);
 
         /*strncpy(file,selected_filename, 255);*/
