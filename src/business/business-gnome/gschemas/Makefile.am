@@ -9,6 +9,6 @@ gsettings_SCHEMAS = $(gschema_in_files:.gschema.xml.in=.gschema.xml)
 
 @GSETTINGS_RULES@
 
-EXTRA_DIST = $(gschemas_in_files)
+EXTRA_DIST = $(gschema_in_files)
 
 CLEANFILES = $(gsettings_SCHEMAS)
