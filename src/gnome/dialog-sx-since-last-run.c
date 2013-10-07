@@ -61,8 +61,8 @@ G_GNUC_UNUSED static QofLogModule log_module = GNC_MOD_GUI_SX;
 
 #define DIALOG_SX_SINCE_LAST_RUN_CM_CLASS "dialog-sx-since-last-run"
 
-#define GNC_PREFS_GROUP        "dialogs.sxs.since_last_run"
-#define GNC_PREF_SHOW_AT_FOPEN "show_at_file_open"
+#define GNC_PREFS_GROUP        "dialogs.sxs.since-last-run"
+#define GNC_PREF_SHOW_AT_FOPEN "show-at-file-open"
 
 struct _GncSxSinceLastRunDialog
 {

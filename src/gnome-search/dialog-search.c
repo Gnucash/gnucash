@@ -51,8 +51,8 @@ static QofLogModule log_module = G_LOG_DOMAIN;
 
 #define DIALOG_SEARCH_CM_CLASS "dialog-search"
 #define GNC_PREFS_GROUP_SEARCH_GENERAL "dialogs.search"
-#define GNC_PREF_NEW_SEARCH_LIMIT  "new_search_limit"
-#define GNC_PREF_ACTIVE_ONLY       "search_for_active_only"
+#define GNC_PREF_NEW_SEARCH_LIMIT  "new-search-limit"
+#define GNC_PREF_ACTIVE_ONLY       "search-for-active-only"
 
 typedef enum
 {

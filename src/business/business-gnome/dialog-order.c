@@ -52,7 +52,7 @@
 #define DIALOG_EDIT_ORDER_CM_CLASS "dialog-edit-order"
 #define DIALOG_VIEW_ORDER_CM_CLASS "dialog-view-order"
 
-#define GNC_PREFS_GROUP_SEARCH "dialogs.business.order_search"
+#define GNC_PREFS_GROUP_SEARCH "dialogs.business.order-search"
 
 void gnc_order_window_ok_cb (GtkWidget *widget, gpointer data);
 void gnc_order_window_cancel_cb (GtkWidget *widget, gpointer data);

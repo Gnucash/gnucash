@@ -28,13 +28,13 @@
 
 /** The preferences used by the importer */
 #define GNC_PREFS_GROUP_IMPORT        "dialogs.import.generic"
-#define GNC_PREF_ENABLE_SKIP          "enable_skip"
-#define GNC_PREF_ENABLE_UPDATE        "enable_update"
-#define GNC_PREF_USE_BAYES            "use_bayes"
-#define GNC_PREF_ATM_FEE_THRESHOLD    "atm_fee_threshold"
-#define GNC_PREF_AUTO_CLEAR_THRESHOLD "auto_clear_threshold"
-#define GNC_PREF_AUTO_ADD_THRESHOLD   "auto_add_threshold"
-#define GNC_PREF_MATCH_THRESHOLD      "match_threshold"
+#define GNC_PREF_ENABLE_SKIP          "enable-skip"
+#define GNC_PREF_ENABLE_UPDATE        "enable-update"
+#define GNC_PREF_USE_BAYES            "use-bayes"
+#define GNC_PREF_ATM_FEE_THRESHOLD    "atm-fee-threshold"
+#define GNC_PREF_AUTO_CLEAR_THRESHOLD "auto-clear-threshold"
+#define GNC_PREF_AUTO_ADD_THRESHOLD   "auto-add-threshold"
+#define GNC_PREF_MATCH_THRESHOLD      "match-threshold"
 
 
 #include "Account.h"

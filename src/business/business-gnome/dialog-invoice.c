@@ -85,10 +85,10 @@
 #define DIALOG_NEW_INVOICE_CM_CLASS "dialog-new-invoice"
 #define DIALOG_VIEW_INVOICE_CM_CLASS "dialog-view-invoice"
 
-#define GNC_PREFS_GROUP_SEARCH   "dialogs.business.invoice_search"
-#define GNC_PREF_NOTIFY_WHEN_DUE "notify_when_due"
-#define GNC_PREF_ACCUM_SPLITS    "accumulate_splits"
-#define GNC_PREF_DAYS_IN_ADVANCE "days_in_advance"
+#define GNC_PREFS_GROUP_SEARCH   "dialogs.business.invoice-search"
+#define GNC_PREF_NOTIFY_WHEN_DUE "notify-when-due"
+#define GNC_PREF_ACCUM_SPLITS    "accumulate-splits"
+#define GNC_PREF_DAYS_IN_ADVANCE "days-in-advance"
 
 #define LAST_POSTED_TO_ACCT "last-posted-to-acct"
 

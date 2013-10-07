@@ -13,7 +13,7 @@
         <property name="n_rows">10</property>
         <property name="n_columns">4</property>
         <child>
-          <object class="GtkCheckButton" id="pref/dialogs.import.generic/enable_skip">
+          <object class="GtkCheckButton" id="pref/dialogs.import.generic/enable-skip">
             <property name="label" translatable="yes">Enable skip transaction action</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
@@ -35,7 +35,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkCheckButton" id="pref/dialogs.import.generic/enable_update">
+          <object class="GtkCheckButton" id="pref/dialogs.import.generic/enable-update">
             <property name="label" translatable="yes">Enable update match action</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
@@ -71,7 +71,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkSpinButton" id="pref/dialogs.import.generic/atm_fee_threshold">
+          <object class="GtkSpinButton" id="pref/dialogs.import.generic/atm-fee-threshold">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="has_tooltip">True</property>
@@ -99,7 +99,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkSpinButton" id="pref/dialogs.import.generic/auto_clear_threshold">
+          <object class="GtkSpinButton" id="pref/dialogs.import.generic/auto-clear-threshold">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="has_tooltip">True</property>
@@ -126,7 +126,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkSpinButton" id="pref/dialogs.import.generic/auto_add_threshold">
+          <object class="GtkSpinButton" id="pref/dialogs.import.generic/auto-add-threshold">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="has_tooltip">True</property>
@@ -153,7 +153,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkSpinButton" id="pref/dialogs.import.generic/match_threshold">
+          <object class="GtkSpinButton" id="pref/dialogs.import.generic/match-threshold">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="has_tooltip">True</property>
@@ -186,7 +186,7 @@
             <property name="xalign">0</property>
             <property name="label" translatable="yes">Commercial ATM _fees threshold</property>
             <property name="use_underline">True</property>
-            <property name="mnemonic_widget">pref/dialogs.import.generic/atm_fee_threshold</property>
+            <property name="mnemonic_widget">pref/dialogs.import.generic/atm-fee-threshold</property>
           </object>
           <packing>
             <property name="top_attach">7</property>
@@ -203,7 +203,7 @@
             <property name="xalign">0</property>
             <property name="label" translatable="yes">Auto-c_lear threshold</property>
             <property name="use_underline">True</property>
-            <property name="mnemonic_widget">pref/dialogs.import.generic/auto_clear_threshold</property>
+            <property name="mnemonic_widget">pref/dialogs.import.generic/auto-clear-threshold</property>
           </object>
           <packing>
             <property name="top_attach">6</property>
@@ -220,7 +220,7 @@
             <property name="xalign">0</property>
             <property name="label" translatable="yes">Auto-_add threshold</property>
             <property name="use_underline">True</property>
-            <property name="mnemonic_widget">pref/dialogs.import.generic/auto_add_threshold</property>
+            <property name="mnemonic_widget">pref/dialogs.import.generic/auto-add-threshold</property>
           </object>
           <packing>
             <property name="top_attach">5</property>
@@ -237,7 +237,7 @@
             <property name="xalign">0</property>
             <property name="label" translatable="yes">Match _display threshold</property>
             <property name="use_underline">True</property>
-            <property name="mnemonic_widget">pref/dialogs.import.generic/match_threshold</property>
+            <property name="mnemonic_widget">pref/dialogs.import.generic/match-threshold</property>
           </object>
           <packing>
             <property name="top_attach">4</property>
@@ -248,7 +248,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkCheckButton" id="pref/dialogs.import.generic/use_bayes">
+          <object class="GtkCheckButton" id="pref/dialogs.import.generic/use-bayes">
             <property name="label" translatable="yes">Use _bayesian matching</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
@@ -270,7 +270,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkCheckButton" id="pref/dialogs.import.generic/auto_create_commodity">
+          <object class="GtkCheckButton" id="pref/dialogs.import.generic/auto-create-commodity">
             <property name="label" translatable="yes">Automatically create new commodities</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>

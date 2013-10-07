@@ -47,7 +47,7 @@
 #include "gnucash-sheetP.h"
 #include "table-allgui.h"
 
-#define GNC_PREF_AUTO_RAISE_LISTS "auto_raise_lists"
+#define GNC_PREF_AUTO_RAISE_LISTS "auto-raise-lists"
 
 typedef struct _PopBox
 {

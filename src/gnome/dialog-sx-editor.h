@@ -28,10 +28,10 @@
 #define DIALOG_SCHEDXACTION_CM_CLASS "dialog-scheduledtransactions"
 #define DIALOG_SCHEDXACTION_EDITOR_CM_CLASS "dialog-scheduledtransaction-editor"
 
-#define GNC_PREF_CREATE_DAYS "create_days"
-#define GNC_PREF_REMIND_DAYS "remind_days"
-#define GNC_PREFS_GROUP_SXED "dialogs.sxs.transaction_editor"
-#define GNC_PREF_CREATE_AUTO "create_auto"
+#define GNC_PREFS_GROUP_SXED "dialogs.sxs.transaction-editor"
+#define GNC_PREF_CREATE_DAYS "create-days"
+#define GNC_PREF_REMIND_DAYS "remind-days"
+#define GNC_PREF_CREATE_AUTO "create-auto"
 #define GNC_PREF_NOTIFY      "notify"
 
 typedef struct _GncSxEditorDialog GncSxEditorDialog;

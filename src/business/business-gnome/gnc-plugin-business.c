@@ -132,8 +132,8 @@ static void update_inactive_actions(GncPluginPage *page);
 #define PLUGIN_ACTIONS_NAME "gnc-plugin-business-actions"
 #define PLUGIN_UI_FILENAME  "gnc-plugin-business-ui.xml"
 
-#define GNC_PREF_EXTRA_TOOLBUTTONS "enable_toolbuttons"
-#define GNC_PREF_INV_PRINT_RPT     "invoice_printreport"
+#define GNC_PREF_EXTRA_TOOLBUTTONS "enable-toolbuttons"
+#define GNC_PREF_INV_PRINT_RPT     "invoice-printreport"
 
 /** This variable maintains a pointer to the last window where a
  *  Business command was executed.  It is used to determine where new

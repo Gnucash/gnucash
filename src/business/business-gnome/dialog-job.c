@@ -46,7 +46,7 @@
 #define DIALOG_NEW_JOB_CM_CLASS "dialog-new-job"
 #define DIALOG_EDIT_JOB_CM_CLASS "dialog-edit-job"
 
-#define GNC_PREFS_GROUP_SEARCH "dialogs.business.job_search"
+#define GNC_PREFS_GROUP_SEARCH "dialogs.business.job-search"
 
 void gnc_job_window_ok_cb (GtkWidget *widget, gpointer data);
 void gnc_job_window_cancel_cb (GtkWidget *widget, gpointer data);

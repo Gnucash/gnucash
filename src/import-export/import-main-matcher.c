@@ -50,7 +50,7 @@
 #include "import-account-matcher.h"
 #include "app-utils/gnc-component-manager.h"
 
-#define GNC_PREFS_GROUP "dialogs.import.generic.transaction_list"
+#define GNC_PREFS_GROUP "dialogs.import.generic.transaction-list"
 
 struct _main_matcher_info
 {

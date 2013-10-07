@@ -1,64 +1,64 @@
 <schemalist gettext-domain="GETTEXT_PACKAGE">
-  <schema id="org.gnucash.dialogs.import.generic" path="/apps/gnucash/dialogs/import/generic_matcher/">
-    <key name="enable_skip" type="b">
+  <schema id="org.gnucash.dialogs.import.generic" path="/org/gnucash/dialogs/import/generic-matcher/">
+    <key name="enable-skip" type="b">
       <default>true</default>
       <summary>Enable SKIP transaction action</summary>
       <description>Enable the SKIP action in the transaction matcher. If enabled, a transaction whose best match's score is in the yellow zone (above the Auto-ADD threshold but below the Auto-CLEAR threshold) will be skipped by default.</description>
     </key>
-    <key name="enable_update" type="b">
+    <key name="enable-update" type="b">
       <default>true</default>
       <summary>Enable UPDATE match action</summary>
       <description>Enable the UPDATE AND RECONCILE action in the transaction matcher. If enabled, a transaction whose best match's score is above the Auto-CLEAR threshold and has a different date or amount than the matching existing transaction will cause the existing transaction to be updated and cleared by default.</description>
     </key>
-    <key name="use_bayes" type="b">
+    <key name="use-bayes" type="b">
       <default>true</default>
       <summary>Use bayesian matching</summary>
       <description>Enables bayesian matching when matching imported transaction against existing transactions. Otherwise a less sophisticated rule-based matching mechanism will be used.</description>
     </key>
-    <key name="match_threshold" type="d">
+    <key name="match-threshold" type="d">
       <default>1.0</default>
       <summary>Minimum score to be displayed</summary>
       <description>This field specifies the minimum matching score a potential matching transaction must have to be displayed in the match list.</description>
     </key>
-    <key name="auto_add_threshold" type="d">
+    <key name="auto-add-threshold" type="d">
       <default>3.0</default>
       <summary>Add matching transactions below this score</summary>
       <description>This field specifies the threshold below which a matching transaction will be added automatically. A transaction whose best match's score is in the red zone (above the display minimum score but below or equal to the Add match score) will be added to the GnuCash file by default.</description>
     </key>
-    <key name="auto_clear_threshold" type="d">
+    <key name="auto-clear-threshold" type="d">
       <default>6.0</default>
       <summary>Clear matching transactions above this score</summary>
       <description>This field specifies the threshold above which a matching transaction will be cleared by default. A transaction whose best match's score is in the green zone (above or equal to this Clear threshold) will be cleared by default.</description>
     </key>
-    <key name="atm_fee_threshold" type="d">
+    <key name="atm-fee-threshold" type="d">
       <default>2.0</default>
       <summary>Maximum ATM fee amount in your area</summary>
       <description>This field specifies the extra fee that is taken into account when matching imported transactions. In some places commercial ATMs (not belonging to a financial institution) are installed in places like convenience stores.  These ATMs add their fee directly to the amount instead of showing up as a separate transaction or in your monthly banking fees.  For example, you withdraw $100, and you are charged $101,50 plus Interac fees.  If you manually entered that $100, the amounts won't match.  You should set this to whatever is the maximum such fee in your area (in units of your local currency), so the transaction will be recognised as a match.</description>
     </key>
-    <key name="auto_create_commodity" type="b">
+    <key name="auto-create-commodity" type="b">
       <default>false</default>
       <summary>Automatically create new commodities</summary>
       <description>Enables the automatic creation of new commodities if any unknown commodity is encountered during import. Otherwise the user will be asked what to do with each unknown commodity.</description>
     </key>
-    <child name="account_matcher" schema="org.gnucash.dialogs.import.generic.account_matcher"/>
-    <child name="matcher_picker" schema="org.gnucash.dialogs.import.generic.matcher_picker"/>
-    <child name="transaction_list" schema="org.gnucash.dialogs.import.generic.transaction_list"/>
+    <child name="account-matcher" schema="org.gnucash.dialogs.import.generic.account-matcher"/>
+    <child name="matcher-picker" schema="org.gnucash.dialogs.import.generic.matcher-picker"/>
+    <child name="transaction-list" schema="org.gnucash.dialogs.import.generic.transaction-list"/>
   </schema>
 
-  <schema id="org.gnucash.dialogs.import.generic.account_matcher" path="/apps/gnucash/dialogs/import/generic_matcher/account_matcher/">
-    <key name="account-code_visible" type="b">
+  <schema id="org.gnucash.dialogs.import.generic.account-matcher" path="/org/gnucash/dialogs/import/generic-matcher/account-matcher/">
+    <key name="account-code-visible" type="b">
       <default>false</default>
       <summary>Whether or not to display this column</summary>
       <description>This setting controls wether the given column will be visible in the view. True means visible, false means hidden.</description>
     </key>
-    <key name="account-code_width" type="i">
+    <key name="account-code-width" type="i">
       <default>0</default>
       <summary>Width of this column</summary>
       <description>This setting stores the width of the given column in pixels.</description>
     </key>
   </schema>
 
-  <schema id="org.gnucash.dialogs.import.generic.matcher_picker" path="/apps/gnucash/dialogs/import/generic_matcher/matcher_picker/">
+  <schema id="org.gnucash.dialogs.import.generic.matcher-picker" path="/org/gnucash/dialogs/import/generic-matcher/matcher-picker/">
     <key name="last-geometry" type="(iiii)">
       <default>(-1,-1,-1,-1)</default>
       <summary>Last window position and size</summary>
@@ -68,7 +68,7 @@
     </key>
   </schema>
 
-  <schema id="org.gnucash.dialogs.import.generic.transaction_list" path="/apps/gnucash/dialogs/import/generic_matcher/transaction_list/">
+  <schema id="org.gnucash.dialogs.import.generic.transaction-list" path="/org/gnucash/dialogs/import/generic-matcher/transaction-list/">
     <key name="last-geometry" type="(iiii)">
       <default>(-1,-1,-1,-1)</default>
       <summary>Last window position and size</summary>

@@ -92,14 +92,14 @@ enum
 #define PLUGIN_PAGE_CLOSE_BUTTON "close-button"
 #define PLUGIN_PAGE_TAB_LABEL    "label"
 
-#define GNC_PREF_SHOW_CLOSE_BUTTON    "tab_close_buttons"
-#define GNC_PREF_TAB_NEXT_RECENT      "tab_next_recent"
-#define GNC_PREF_TAB_POSITION_TOP     "tab_position-top"
-#define GNC_PREF_TAB_POSITION_BOTTOM  "tab_position-bottom"
-#define GNC_PREF_TAB_POSITION_LEFT    "tab_position-left"
-#define GNC_PREF_TAB_POSITION_RIGHT   "tab_position-right"
-#define GNC_PREF_TAB_WIDTH            "tab_width"
-#define GNC_PREF_TAB_COLOR            "show_account_color_tabs"
+#define GNC_PREF_SHOW_CLOSE_BUTTON    "tab-close-buttons"
+#define GNC_PREF_TAB_NEXT_RECENT      "tab-next-recent"
+#define GNC_PREF_TAB_POSITION_TOP     "tab-position-top"
+#define GNC_PREF_TAB_POSITION_BOTTOM  "tab-position-bottom"
+#define GNC_PREF_TAB_POSITION_LEFT    "tab-position-left"
+#define GNC_PREF_TAB_POSITION_RIGHT   "tab-position-right"
+#define GNC_PREF_TAB_WIDTH            "tab-width"
+#define GNC_PREF_TAB_COLOR            "show-account-color-tabs"
 
 #define GNC_MAIN_WINDOW_NAME "GncMainWindow"
 

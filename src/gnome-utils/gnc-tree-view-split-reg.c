@@ -291,11 +291,11 @@ struct GncTreeViewSplitRegPrivate
 #define ORANGECELL "#F39536"
 
 
-#define GNC_PREF_SHOW_EXTRA_DATES        "show_extra_dates"
-#define GNC_PREF_SHOW_EXTRA_DATES_ON_SEL "show_extra_dates_on_selection"
-#define GNC_PREF_SHOW_CAL_BUTTONS        "show_calendar_buttons"
-#define GNC_PREF_SEL_TO_BLANK_ON_EXPAND  "selection_to_blank_on_expand"
-#define GNC_PREF_KEY_LENGTH              "key_length"
+#define GNC_PREF_SHOW_EXTRA_DATES        "show-extra-dates"
+#define GNC_PREF_SHOW_EXTRA_DATES_ON_SEL "show-extra-dates-on-selection"
+#define GNC_PREF_SHOW_CAL_BUTTONS        "show-calendar-buttons"
+#define GNC_PREF_SEL_TO_BLANK_ON_EXPAND  "selection-to-blank-on-expand"
+#define GNC_PREF_KEY_LENGTH              "key-length"
 
 /* This could be a preference setting, show currency / commodity symbols */
 #define SHOW_SYMBOL FALSE

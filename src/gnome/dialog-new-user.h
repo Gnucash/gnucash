@@ -23,8 +23,8 @@
 #ifndef DIALOG_NEW_USER_H
 #define DIALOG_NEW_USER_H
 
-#define GNC_PREFS_GROUP_NEW_USER "dialogs.new_user"
-#define GNC_PREF_FIRST_STARTUP "first_startup"
+#define GNC_PREFS_GROUP_NEW_USER "dialogs.new-user"
+#define GNC_PREF_FIRST_STARTUP "first-startup"
 
 void gnc_ui_new_user_dialog (void);
 void gnc_set_first_startup (gboolean first_startup);

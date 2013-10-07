@@ -49,7 +49,7 @@
 #include "window-main-summarybar.h"
 
 #define SAMPLE_ACCOUNT_VALUE   "$1,000,000.00"
-#define GNC_PREF_ACCOUNT_COLOR "show_account_color"
+#define GNC_PREF_ACCOUNT_COLOR "show-account-color"
 
 /** Static Globals *******************************************************/
 

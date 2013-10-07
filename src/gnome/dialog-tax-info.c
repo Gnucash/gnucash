@@ -44,8 +44,8 @@
 #include "gnc-ui.h"
 
 #define DIALOG_TAX_INFO_CM_CLASS "dialog-tax-info"
-#define GNC_PREFS_GROUP    "dialogs.tax_info"
-#define GNC_PREF_PANED_POS "paned_position"
+#define GNC_PREFS_GROUP    "dialogs.tax-info"
+#define GNC_PREF_PANED_POS "paned-position"
 
 enum
 {

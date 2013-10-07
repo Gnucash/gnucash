@@ -58,12 +58,12 @@
 #include "gnc-features.h"
 #include "gnc-guile-utils.h"
 
-#define GNC_PREF_CURRENCY_CHOICE_LOCALE "currency_choice-locale"
-#define GNC_PREF_CURRENCY_CHOICE_OTHER  "currency_choice-other"
-#define GNC_PREF_CURRENCY_OTHER         "currency_other"
-#define GNC_PREF_REVERSED_ACCTS_NONE    "reversed_accounts-none"
-#define GNC_PREF_REVERSED_ACCTS_CREDIT  "reversed_accounts-credit"
-#define GNC_PREF_REVERSED_ACCTS_INC_EXP "reversed_accounts-incomeexpense"
+#define GNC_PREF_CURRENCY_CHOICE_LOCALE "currency-choice-locale"
+#define GNC_PREF_CURRENCY_CHOICE_OTHER  "currency-choice-other"
+#define GNC_PREF_CURRENCY_OTHER         "currency-other"
+#define GNC_PREF_REVERSED_ACCTS_NONE    "reversed-accounts-none"
+#define GNC_PREF_REVERSED_ACCTS_CREDIT  "reversed-accounts-credit"
+#define GNC_PREF_REVERSED_ACCTS_INC_EXP "reversed-accounts-incomeexpense"
 
 static QofLogModule log_module = GNC_MOD_GUI;
 

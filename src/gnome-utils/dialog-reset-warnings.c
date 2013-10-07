@@ -37,7 +37,7 @@
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_PREFS;
 
-#define GNC_PREFS_GROUP                 "dialogs.reset_warnings"
+#define GNC_PREFS_GROUP                 "dialogs.reset-warnings"
 #define DIALOG_RESET_WARNINGS_CM_CLASS  "reset-warnings"
 #define TIPS_STRING                     "tips"
 

@@ -1,16 +1,16 @@
 <schemalist gettext-domain="GETTEXT_PACKAGE">
-  <schema id="org.gnucash.dialogs.import.qif" path="/apps/gnucash/dialogs/import/qif/">
-    <key name="default_status-notcleared" type="b">
+  <schema id="org.gnucash.dialogs.import.qif" path="/org/gnucash/dialogs/import/qif/">
+    <key name="default-status-notcleared" type="b">
       <default>true</default>
       <summary>Default QIF transaction status</summary>
       <description>Default status for QIF transaction when not specified in QIF file.</description>
     </key>
-    <key name="default_status-cleared" type="b">
+    <key name="default-status-cleared" type="b">
       <default>false</default>
       <summary>Default QIF transaction status</summary>
       <description>Default status for QIF transaction when not specified in QIF file.</description>
     </key>
-    <key name="default_status-reconciled" type="b">
+    <key name="default-status-reconciled" type="b">
       <default>false</default>
       <summary>When the status is not specified in a QIF file, the transactions are marked as reconciled.</summary>
       <description>Default status for QIF transaction when not specified in QIF file.</description>
@@ -22,12 +22,12 @@
         The numbers are the X and Y coordinates of the top left corner of the window
         followed by the width and height of the window.</description>
     </key>
-    <key name="last_path" type="s">
+    <key name="last-path" type="s">
       <default>''</default>
       <summary>Last pathname used</summary>
       <description>This field contains the last pathname used by this window. It will be used as the initial filename/pathname the next time this window is opened.</description>
     </key>
-    <key name="show_doc" type="b">
+    <key name="show-doc" type="b">
       <default>true</default>
       <summary>Show documentation</summary>
       <description>Show some documentation-only pages in QIF Import assistant.</description>

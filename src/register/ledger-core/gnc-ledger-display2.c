@@ -50,11 +50,11 @@
 #define REGISTER_GL_CM_CLASS         "register-gl"
 #define REGISTER_TEMPLATE_CM_CLASS   "register-template"
 
-#define GNC_PREF_DOUBLE_LINE_MODE         "double_line_mode"
-#define GNC_PREF_MAX_TRANS                "max_transactions"
-#define GNC_PREF_DEFAULT_STYLE_LEDGER     "default_style-ledger"
-#define GNC_PREF_DEFAULT_STYLE_AUTOLEDGER "default_style-autoledger"
-#define GNC_PREF_DEFAULT_STYLE_JOURNAL    "default_style-journal"
+#define GNC_PREF_DOUBLE_LINE_MODE         "double-line-mode"
+#define GNC_PREF_MAX_TRANS                "max-transactions"
+#define GNC_PREF_DEFAULT_STYLE_LEDGER     "default-style-ledger"
+#define GNC_PREF_DEFAULT_STYLE_AUTOLEDGER "default-style-autoledger"
+#define GNC_PREF_DEFAULT_STYLE_JOURNAL    "default-style-journal"
 
 
 struct gnc_ledger_display2

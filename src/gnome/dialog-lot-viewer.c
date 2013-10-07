@@ -82,9 +82,9 @@ enum split_cols
 #define RESPONSE_SCRUB_ACCOUNT 4
 #define RESPONSE_NEW_LOT       5
 
-#define GNC_PREFS_GROUP "dialogs.lot_viewer"
-#define GNC_PREF_HPOS   "hpane_position"
-#define GNC_PREF_VPOS   "vpane_position"
+#define GNC_PREFS_GROUP "dialogs.lot-viewer"
+#define GNC_PREF_HPOS   "hpane-position"
+#define GNC_PREF_VPOS   "vpane-position"
 
 struct _GNCLotViewer
 {

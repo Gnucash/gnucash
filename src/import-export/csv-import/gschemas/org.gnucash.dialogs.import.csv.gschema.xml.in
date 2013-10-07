@@ -1,5 +1,5 @@
 <schemalist gettext-domain="GETTEXT_PACKAGE">
-  <schema id="org.gnucash.dialogs.import.csv" path="/apps/gnucash/dialogs/import/csv/">
+  <schema id="org.gnucash.dialogs.import.csv" path="/org/gnucash/dialogs/import/csv/">
     <key name="last-geometry" type="(iiii)">
       <default>(-1,-1,-1,-1)</default>
       <summary>Last window position and size</summary>
@@ -7,7 +7,7 @@
         The numbers are the X and Y coordinates of the top left corner of the window
         followed by the width and height of the window.</description>
     </key>
-    <key name="last_path" type="s">
+    <key name="last-path" type="s">
       <default>''</default>
       <summary>Last pathname used</summary>
       <description>This field contains the last pathname used by this window. It will be used as the initial filename/pathname the next time this window is opened.</description>

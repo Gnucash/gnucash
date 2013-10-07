@@ -150,7 +150,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkCheckButton" id="pref/dialogs.sxs.since_last_run/show_at_file_open">
+          <object class="GtkCheckButton" id="pref/dialogs.sxs.since-last-run/show-at-file-open">
             <property name="label" translatable="yes">_Run when data file opened</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
@@ -170,7 +170,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkCheckButton" id="pref/dialogs.sxs.transaction_editor/create_auto">
+          <object class="GtkCheckButton" id="pref/dialogs.sxs.transaction-editor/create-auto">
             <property name="label" translatable="yes">_Auto-create new transactions</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
@@ -202,7 +202,7 @@
                 <property name="xalign">0</property>
                 <property name="label" translatable="yes">Crea_te in advance:</property>
                 <property name="use_underline">True</property>
-                <property name="mnemonic_widget">pref/dialogs.sxs.transaction_editor/create_days</property>
+                <property name="mnemonic_widget">pref/dialogs.sxs.transaction-editor/create-days</property>
               </object>
             </child>
           </object>
@@ -225,7 +225,7 @@
                 <property name="xalign">0</property>
                 <property name="label" translatable="yes">R_emind in advance:</property>
                 <property name="use_underline">True</property>
-                <property name="mnemonic_widget">pref/dialogs.sxs.transaction_editor/remind_days</property>
+                <property name="mnemonic_widget">pref/dialogs.sxs.transaction-editor/remind-days</property>
               </object>
             </child>
           </object>
@@ -242,7 +242,7 @@
             <property name="can_focus">False</property>
             <property name="spacing">6</property>
             <child>
-              <object class="GtkSpinButton" id="pref/dialogs.sxs.transaction_editor/remind_days">
+              <object class="GtkSpinButton" id="pref/dialogs.sxs.transaction-editor/remind-days">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="tooltip_text" translatable="yes">Begin notifications this many days before the transaction is created.</property>
@@ -288,7 +288,7 @@
             <property name="can_focus">False</property>
             <property name="spacing">6</property>
             <child>
-              <object class="GtkSpinButton" id="pref/dialogs.sxs.transaction_editor/create_days">
+              <object class="GtkSpinButton" id="pref/dialogs.sxs.transaction-editor/create-days">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="tooltip_text" translatable="yes">Create the transaction this many days before its effective date.</property>
@@ -329,7 +329,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkCheckButton" id="pref/dialogs.sxs.transaction_editor/notify">
+          <object class="GtkCheckButton" id="pref/dialogs.sxs.transaction-editor/notify">
             <property name="label" translatable="yes">_Notify before transactions are created </property>
             <property name="visible">True</property>
             <property name="sensitive">False</property>

@@ -43,8 +43,8 @@
 
 #define DIALOG_COMMODITIES_CM_CLASS "dialog-commodities"
 #define STATE_SECTION "dialogs/edit_commodities"
-#define GNC_PREFS_GROUP   "dialogs.edit_commodities"
-#define GNC_PREF_INCL_ISO "include_iso"
+#define GNC_PREFS_GROUP   "dialogs.edit-commodities"
+#define GNC_PREF_INCL_ISO "include-iso"
 
 /* This static indicates the debugging module that this .o belongs to.  */
 /* static short module = MOD_GUI; */

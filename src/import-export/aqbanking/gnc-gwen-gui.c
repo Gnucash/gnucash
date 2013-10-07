@@ -56,9 +56,9 @@
 #endif
 
 #define GWEN_GUI_CM_CLASS "dialog-hbcilog"
-#define GNC_PREFS_GROUP_CONNECTION GNC_PREFS_GROUP_AQBANKING ".connection_dialog"
-#define GNC_PREF_CLOSE_ON_FINISH   "close_on_finish"
-#define GNC_PREF_REMEMBER_PIN      "remember_pin"
+#define GNC_PREFS_GROUP_CONNECTION GNC_PREFS_GROUP_AQBANKING ".connection-dialog"
+#define GNC_PREF_CLOSE_ON_FINISH   "close-on-finish"
+#define GNC_PREF_REMEMBER_PIN      "remember-pin"
 
 #ifdef USING_GWENHYWFAR_GTK2_GUI
 # include <gwen-gui-gtk2/gtk2_gui.h>

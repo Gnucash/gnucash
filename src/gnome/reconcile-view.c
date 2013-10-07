@@ -38,7 +38,7 @@
 #include "search-param.h"
 #include "gnc-component-manager.h"
 
-#define GNC_PREF_CHECK_CLEARED "check_cleared"
+#define GNC_PREF_CHECK_CLEARED "check-cleared"
 
 /* Signal codes */
 enum

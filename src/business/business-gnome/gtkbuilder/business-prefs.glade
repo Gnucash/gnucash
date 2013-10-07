@@ -44,7 +44,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkCheckButton" id="pref/dialogs.business.bill/tax_included">
+          <object class="GtkCheckButton" id="pref/dialogs.business.bill/tax-included">
             <property name="label" translatable="yes">Ta_x included</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
@@ -65,7 +65,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkSpinButton" id="pref/dialogs.business.bill/days_in_advance">
+          <object class="GtkSpinButton" id="pref/dialogs.business.bill/days-in-advance">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="has_tooltip">True</property>
@@ -97,7 +97,7 @@
             <property name="xalign">0</property>
             <property name="label" translatable="yes">_Days in advance:</property>
             <property name="use_underline">True</property>
-            <property name="mnemonic_widget">pref/dialogs.business.bill/days_in_advance</property>
+            <property name="mnemonic_widget">pref/dialogs.business.bill/days-in-advance</property>
           </object>
           <packing>
             <property name="left_attach">2</property>
@@ -109,7 +109,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkCheckButton" id="pref/dialogs.business.bill/notify_when_due">
+          <object class="GtkCheckButton" id="pref/dialogs.business.bill/notify-when-due">
             <property name="label" translatable="yes">_Notify when due</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
@@ -160,7 +160,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkCheckButton" id="pref/dialogs.business.invoice/tax_included">
+          <object class="GtkCheckButton" id="pref/dialogs.business.invoice/tax-included">
             <property name="label" translatable="yes">_Tax included</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
@@ -182,7 +182,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkCheckButton" id="pref/dialogs.business.invoice/accumulate_splits">
+          <object class="GtkCheckButton" id="pref/dialogs.business.invoice/accumulate-splits">
             <property name="label" translatable="yes">_Accumulate splits on post</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
@@ -204,7 +204,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkCheckButton" id="pref/dialogs.business.invoice/use_new_window">
+          <object class="GtkCheckButton" id="pref/dialogs.business.invoice/use-new-window">
             <property name="label" translatable="yes">_Open in new window</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
@@ -240,7 +240,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkCheckButton" id="pref/dialogs.business.invoice/enable_toolbuttons">
+          <object class="GtkCheckButton" id="pref/dialogs.business.invoice/enable-toolbuttons">
             <property name="label" translatable="yes">Enable extra _buttons</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
@@ -262,7 +262,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkComboBox" id="pref/dialogs.business.invoice/invoice_printreport">
+          <object class="GtkComboBox" id="pref/dialogs.business.invoice/invoice-printreport">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="has_tooltip">True</property>

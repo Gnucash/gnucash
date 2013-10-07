@@ -42,7 +42,7 @@
 #include "dialog-tax-table.h"
 
 #define DIALOG_TAX_TABLE_CM_CLASS "tax-table-dialog"
-#define GNC_PREFS_GROUP "dialogs.business.tax_tables"
+#define GNC_PREFS_GROUP "dialogs.business.tax-tables"
 
 enum tax_table_cols
 {

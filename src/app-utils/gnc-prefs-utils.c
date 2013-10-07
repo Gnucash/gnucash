@@ -31,11 +31,11 @@
 static QofLogModule log_module = G_LOG_DOMAIN;
 
 /* Keys used for core preferences */
-#define GNC_PREF_FILE_COMPRESSION    "file_compression"
-#define GNC_PREF_RETAIN_TYPE_NEVER   "retain_type-never"
-#define GNC_PREF_RETAIN_TYPE_DAYS    "retain_type-days"
-#define GNC_PREF_RETAIN_TYPE_FOREVER "retain_type-forever"
-#define GNC_PREF_RETAIN_DAYS         "retain_days"
+#define GNC_PREF_FILE_COMPRESSION    "file-compression"
+#define GNC_PREF_RETAIN_TYPE_NEVER   "retain-type-never"
+#define GNC_PREF_RETAIN_TYPE_DAYS    "retain-type-days"
+#define GNC_PREF_RETAIN_TYPE_FOREVER "retain-type-forever"
+#define GNC_PREF_RETAIN_DAYS         "retain-days"
 
 /***************************************************************
  * Initialization                                              *

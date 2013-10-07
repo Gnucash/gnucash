@@ -54,7 +54,7 @@
 #include "gnc-ofx-kvp.h"
 
 #define GNC_PREFS_GROUP "dialogs.import.ofx"
-#define GNC_PREF_AUTO_COMMODITY "auto_create_commodity"
+#define GNC_PREF_AUTO_COMMODITY "auto-create-commodity"
 
 static QofLogModule log_module = GNC_MOD_IMPORT;
 

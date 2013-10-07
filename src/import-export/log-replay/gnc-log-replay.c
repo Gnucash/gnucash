@@ -43,7 +43,7 @@
 #include "gnc-ui-util.h"
 #include "gnc-gui-query.h"
 
-#define GNC_PREFS_GROUP "dialogs.log_replay"
+#define GNC_PREFS_GROUP "dialogs.log-replay"
 
 /* NW: If you want a new log_module, just define
 a unique string either in gnc-engine.h or

@@ -41,7 +41,7 @@
  *   Constants   *
 \********************************************************************/
 
-#define GNC_PREFS_GROUP "dialogs.import.generic.match_picker"
+#define GNC_PREFS_GROUP "dialogs.import.generic.match-picker"
 
 enum downloaded_cols
 {

@@ -1613,9 +1613,9 @@ static GncInvoice *lookup_invoice(GncPluginPageReportPrivate *priv)
             "Invoice Number", NULL);
 }
 
-#define GNC_PREFS_GROUP_REPORT_PDFEXPORT GNC_PREFS_GROUP_GENERAL_REPORT "/pdf_export"
-#define GNC_PREF_FILENAME_DATE_FMT "filename_date_format"
-#define GNC_PREF_FILENAME_FMT "filename_format"
+#define GNC_PREFS_GROUP_REPORT_PDFEXPORT GNC_PREFS_GROUP_GENERAL_REPORT "/pdf-export"
+#define GNC_PREF_FILENAME_DATE_FMT "filename-date-format"
+#define GNC_PREF_FILENAME_FMT "filename-format"
 
 static gchar *report_create_jobname(GncPluginPageReportPrivate *priv)
 {

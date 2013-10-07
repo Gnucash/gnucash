@@ -1112,37 +1112,43 @@ gnc_preferences_dialog_create(void)
         g_date_set_dmy(&fy_end, day, month, G_DATE_BAD_YEAR);
     }
 
-    box = GTK_WIDGET(gtk_builder_get_object (builder, "pref/window.pages.account_tree.summary/start_period"));
+    box = GTK_WIDGET(gtk_builder_get_object (builder,
+                     "pref/" GNC_PREFS_GROUP_ACCT_SUMMARY "/" GNC_PREF_START_PERIOD));
     period = gnc_period_select_new(TRUE);
     gtk_widget_show (period);
     gtk_box_pack_start (GTK_BOX (box), period, TRUE, TRUE, 0);
     if (date_is_valid)
         gnc_period_select_set_fy_end(GNC_PERIOD_SELECT (period), &fy_end);
 
-    box = GTK_WIDGET(gtk_builder_get_object (builder, "pref/window.pages.account_tree.summary/end_period"));
+    box = GTK_WIDGET(gtk_builder_get_object (builder,
+                     "pref/" GNC_PREFS_GROUP_ACCT_SUMMARY "/" GNC_PREF_END_PERIOD));
     period = gnc_period_select_new(FALSE);
     gtk_widget_show (period);
     gtk_box_pack_start (GTK_BOX (box), period, TRUE, TRUE, 0);
     if (date_is_valid)
         gnc_period_select_set_fy_end(GNC_PERIOD_SELECT (period), &fy_end);
 
-    box = GTK_WIDGET(gtk_builder_get_object (builder, "pref/window.pages.account_tree.summary/start_date"));
+    box = GTK_WIDGET(gtk_builder_get_object (builder,
+                     "pref/" GNC_PREFS_GROUP_ACCT_SUMMARY "/" GNC_PREF_START_DATE));
     date = gnc_date_edit_new(gnc_time (NULL), FALSE, FALSE);
     gtk_widget_show (date);
     gtk_box_pack_start (GTK_BOX (box), date, TRUE, TRUE, 0);
 
-    box = GTK_WIDGET(gtk_builder_get_object (builder, "pref/window.pages.account_tree.summary/end_date"));
+    box = GTK_WIDGET(gtk_builder_get_object (builder,
+                     "pref/" GNC_PREFS_GROUP_ACCT_SUMMARY "/" GNC_PREF_END_DATE));
     date = gnc_date_edit_new(gnc_time (NULL), FALSE, FALSE);
     gtk_widget_show (date);
     gtk_box_pack_start (GTK_BOX (box), date, TRUE, TRUE, 0);
 
-    box = GTK_WIDGET(gtk_builder_get_object (builder, "pref/general/currency_other"));
+    box = GTK_WIDGET(gtk_builder_get_object (builder,
+                     "pref/" GNC_PREFS_GROUP_GENERAL "/" GNC_PREF_CURRENCY_OTHER));
     currency = gnc_currency_edit_new();
     gnc_currency_edit_set_currency (GNC_CURRENCY_EDIT(currency), gnc_default_currency());
     gtk_widget_show (currency);
     gtk_box_pack_start(GTK_BOX (box), currency, TRUE, TRUE, 0);
 
-    box = GTK_WIDGET(gtk_builder_get_object (builder, "pref/general.report/currency_other"));
+    box = GTK_WIDGET(gtk_builder_get_object (builder,
+                     "pref/" GNC_PREFS_GROUP_GENERAL_REPORT "/" GNC_PREF_CURRENCY_OTHER));
     currency = gnc_currency_edit_new();
     gnc_currency_edit_set_currency (GNC_CURRENCY_EDIT(currency), gnc_default_currency());
     gtk_widget_show (currency);

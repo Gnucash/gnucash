@@ -46,7 +46,7 @@
 #include "csv-transactions-export.h"
 
 #define GNC_PREFS_GROUP    "dialogs.export.csv"
-#define GNC_PREF_PANED_POS "paned_position"
+#define GNC_PREF_PANED_POS "paned-position"
 #define ASSISTANT_CSV_EXPORT_CM_CLASS "assistant-csv-export"
 
 /* This static indicates the debugging module that this .o belongs to.  */

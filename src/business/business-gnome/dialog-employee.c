@@ -50,7 +50,7 @@
 #define DIALOG_NEW_EMPLOYEE_CM_CLASS "dialog-new-employee"
 #define DIALOG_EDIT_EMPLOYEE_CM_CLASS "dialog-edit-employee"
 
-#define GNC_PREFS_GROUP_SEARCH "dialogs.business.employee_search"
+#define GNC_PREFS_GROUP_SEARCH "dialogs.business.employee-search"
 
 void gnc_employee_window_ok_cb (GtkWidget *widget, gpointer data);
 void gnc_employee_window_cancel_cb (GtkWidget *widget, gpointer data);

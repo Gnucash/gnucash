@@ -42,7 +42,7 @@
 #include "quickfillcell.h"
 #include "app-utils/gnc-entry-quickfill.h"
 
-#define GNC_PREF_TAX_INCL "tax_included"
+#define GNC_PREF_TAX_INCL "tax-included"
 
 /* XXX: This should go elsewhere */
 const char * gnc_entry_ledger_type_string_getter (char flag)

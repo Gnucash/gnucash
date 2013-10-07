@@ -62,7 +62,7 @@
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_ASSISTANT;
 
-#define GNC_PREFS_GROUP "dialogs.ab_initial"
+#define GNC_PREFS_GROUP "dialogs.ab-initial"
 #define ASSISTANT_AB_INITIAL_CM_CLASS "assistant-ab-initial"
 
 typedef struct _ABInitialInfo ABInitialInfo;

@@ -55,7 +55,7 @@
 #define DIALOG_NEW_CUSTOMER_CM_CLASS "dialog-new-customer"
 #define DIALOG_EDIT_CUSTOMER_CM_CLASS "dialog-edit-customer"
 
-#define GNC_PREFS_GROUP_SEARCH "dialogs.business.customer_search"
+#define GNC_PREFS_GROUP_SEARCH "dialogs.business.customer-search"
 
 void gnc_customer_taxtable_check_cb (GtkToggleButton *togglebutton,
                                      gpointer user_data);

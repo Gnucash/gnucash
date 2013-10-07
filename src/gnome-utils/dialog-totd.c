@@ -36,8 +36,8 @@
 #include "gnc-engine.h"
 
 #define GNC_PREFS_GROUP      "dialogs.totd"
-#define GNC_PREF_CURRENT_TIP "current_tip"
-#define GNC_PREF_SHOW_TIPS   "show_at_startup"
+#define GNC_PREF_CURRENT_TIP "current-tip"
+#define GNC_PREF_SHOW_TIPS   "show-at-startup"
 #define DIALOG_TOTD_CM_CLASS "dialog-totd"
 
 #define GNC_RESPONSE_FORWARD 1

@@ -49,9 +49,9 @@ typedef struct
 
 #define WINDOW_SUMMARYBAR_CM_CLASS "summary-bar"
 
-#define GNC_PREFS_GROUP       "window.pages.account_tree.summary"
-#define GNC_PREF_GRAND_TOTAL  "grand_total"
-#define GNC_PREF_NON_CURRENCY "non_currency"
+#define GNC_PREFS_GROUP       "window.pages.account-tree.summary"
+#define GNC_PREF_GRAND_TOTAL  "grand-total"
+#define GNC_PREF_NON_CURRENCY "non-currency"
 
 /**
  * An accumulator for a given currency.

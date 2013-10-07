@@ -1,21 +1,21 @@
 <schemalist gettext-domain="GETTEXT_PACKAGE">
-  <schema id="org.gnucash.dialogs.reconcile" path="/apps/gnucash/dialogs/reconcile/">
-    <key name="check_cleared" type="b">
+  <schema id="org.gnucash.dialogs.reconcile" path="/org/gnucash/dialogs/reconcile/">
+    <key name="check-cleared" type="b">
       <default>true</default>
       <summary>Pre-select cleared transactions</summary>
       <description>If active, all transactions marked as cleared in the register will appear already selected in the reconcile dialog.  Otherwise no transactions will be initially selected.</description>
     </key>
-    <key name="auto_interest_transfer" type="b">
+    <key name="auto-interest-transfer" type="b">
       <default>false</default>
       <summary>Prompt for interest charges</summary>
       <description>Prior to reconciling an account which charges or pays interest, prompt the user to enter a transaction for the interest charge or payment.  Currently only enabled for Bank, Credit, Mutual, Asset, Receivable, Payable, and Liability accounts.</description>
     </key>
-    <key name="auto_cc_payment" type="b">
+    <key name="auto-cc-payment" type="b">
       <default>true</default>
       <summary>Prompt for credit card payment</summary>
       <description>If active, after reconciling a credit card account, prompt the user to enter a credit card payment. Otherwise do not prompt the user for this.</description>
     </key>
-    <key name="always_reconcile_to_today" type="b">
+    <key name="always-reconcile-to-today" type="b">
       <default>false</default>
       <summary>Always reconcile to today</summary>
       <description>If active, always open the reconcile dialog using today's date for the statement date, regardless of previous reconciliations.</description>

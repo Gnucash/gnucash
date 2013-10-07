@@ -59,10 +59,10 @@
 
 #define ASSISTANT_QIF_IMPORT_CM_CLASS "assistant-qif-import"
 #define GNC_PREFS_GROUP   "dialogs.import.qif"
-#define GNC_PREF_SHOW_DOC "show_doc"
-#define GNC_PREF_DEFAULT_TRANS_STATUS_CLEARED "default_status-cleared"
-#define GNC_PREF_DEFAULT_TRANS_STATUS_NOTCLEARED "default_status-notcleared"
-#define GNC_PREF_DEFAULT_TRANS_STATUS_RECONCILED "default_status-reconciled"
+#define GNC_PREF_SHOW_DOC "show-doc"
+#define GNC_PREF_DEFAULT_TRANS_STATUS_CLEARED "default-status-cleared"
+#define GNC_PREF_DEFAULT_TRANS_STATUS_NOTCLEARED "default-status-notcleared"
+#define GNC_PREF_DEFAULT_TRANS_STATUS_RECONCILED "default-status-reconciled"
 
 #define PREV_ROW "prev_row"
 

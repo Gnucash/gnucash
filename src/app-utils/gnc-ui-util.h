@@ -47,11 +47,11 @@ gchar *gnc_normalize_account_separator (const gchar* separator);
 gboolean gnc_reverse_balance(const Account *account);
 
 /* Default directory sections ***************************************/
-#define GNC_PREFS_GROUP_OPEN_SAVE    "dialogs.open_save"
-#define GNC_PREFS_GROUP_EXPORT       "dialogs.export_accounts"
+#define GNC_PREFS_GROUP_OPEN_SAVE    "dialogs.open-save"
+#define GNC_PREFS_GROUP_EXPORT       "dialogs.export-accounts"
 #define GNC_PREFS_GROUP_REPORT       "dialogs.report"
-#define GNC_PREF_AUTO_DECIMAL_POINT  "auto_decimal_point"
-#define GNC_PREF_AUTO_DECIMAL_PLACES "auto_decimal_places"
+#define GNC_PREF_AUTO_DECIMAL_POINT  "auto-decimal-point"
+#define GNC_PREF_AUTO_DECIMAL_PLACES "auto-decimal-places"
 
 /* Default directories **********************************************/
 

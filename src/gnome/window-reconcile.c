@@ -59,9 +59,9 @@
 #include "window-reconcile.h"
 
 #define WINDOW_RECONCILE_CM_CLASS "window-reconcile"
-#define GNC_PREF_AUTO_INTEREST_TRANSFER "auto_interest_transfer"
-#define GNC_PREF_AUTO_CC_PAYMENT        "auto_cc_payment"
-#define GNC_PREF_ALWAYS_REC_TO_TODAY    "always_reconcile_to_today"
+#define GNC_PREF_AUTO_INTEREST_TRANSFER "auto-interest-transfer"
+#define GNC_PREF_AUTO_CC_PAYMENT        "auto-cc-payment"
+#define GNC_PREF_ALWAYS_REC_TO_TODAY    "always-reconcile-to-today"
 
 
 /** STRUCTS *********************************************************/

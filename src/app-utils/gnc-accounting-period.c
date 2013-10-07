@@ -50,17 +50,6 @@
 #include "qof.h"
 #include "gnc-ui-util.h"
 
-/* TODO: This should probably be changed eventually. */
-#define GNC_PREFS_GROUP           "window.pages.account_tree.summary"
-#define GNC_PREF_START_CHOICE_ABS "start_choice-absolute"
-#define GNC_PREF_START_CHOICE_REL "start_choice-relative"
-#define GNC_PREF_START_DATE       "start_date"
-#define GNC_PREF_START_PERIOD     "start_period"
-#define GNC_PREF_END_CHOICE_ABS   "end_choice-absolute"
-#define GNC_PREF_END_CHOICE_REL   "end_choice-relative"
-#define GNC_PREF_END_DATE         "end_date"
-#define GNC_PREF_END_PERIOD       "end_period"
-
 static time64 gnc_accounting_period_start_time64 (GncAccountingPeriod which,
 						   const GDate *fy_end,
 						   const GDate *contains);
@@ -76,15 +65,15 @@ lookup_start_date_option(GDate *fy_end)
     int which;
 
 
-    if (gnc_prefs_get_bool (GNC_PREFS_GROUP, GNC_PREF_START_CHOICE_ABS))
+    if (gnc_prefs_get_bool (GNC_PREFS_GROUP_ACCT_SUMMARY, GNC_PREF_START_CHOICE_ABS))
     {
-        GVariant *var = gnc_prefs_get_value(GNC_PREFS_GROUP, GNC_PREF_START_DATE);
+        GVariant *var = gnc_prefs_get_value(GNC_PREFS_GROUP_ACCT_SUMMARY, GNC_PREF_START_DATE);
         time = g_variant_get_int64 (var);
         g_variant_unref (var);
     }
     else
     {
-        which = gnc_prefs_get_int(GNC_PREFS_GROUP, GNC_PREF_START_PERIOD);
+        which = gnc_prefs_get_int(GNC_PREFS_GROUP_ACCT_SUMMARY, GNC_PREF_START_PERIOD);
         time = gnc_accounting_period_start_time64(which, fy_end, NULL);
     }
     /* we will need the balance of the last transaction before the start
@@ -100,16 +89,16 @@ lookup_end_date_option(GDate *fy_end)
     time64 time;
     int which;
 
-    if (gnc_prefs_get_bool (GNC_PREFS_GROUP, GNC_PREF_END_CHOICE_ABS))
+    if (gnc_prefs_get_bool (GNC_PREFS_GROUP_ACCT_SUMMARY, GNC_PREF_END_CHOICE_ABS))
     {
-        GVariant *var = gnc_prefs_get_value(GNC_PREFS_GROUP, GNC_PREF_END_DATE);
+        GVariant *var = gnc_prefs_get_value(GNC_PREFS_GROUP_ACCT_SUMMARY, GNC_PREF_END_DATE);
         time = g_variant_get_int64 (var);
         time = gnc_time64_get_day_end(time);
         g_variant_unref (var);
     }
     else
     {
-        which = gnc_prefs_get_int(GNC_PREFS_GROUP, GNC_PREF_END_PERIOD);
+        which = gnc_prefs_get_int(GNC_PREFS_GROUP_ACCT_SUMMARY, GNC_PREF_END_PERIOD);
         time = gnc_accounting_period_end_time64(which, fy_end, NULL);
     }
     if (time == 0)

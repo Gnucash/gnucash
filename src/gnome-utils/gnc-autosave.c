@@ -35,8 +35,8 @@
 #include "gnc-main-window.h"
 #include "gnc-gui-query.h"
 
-#define GNC_PREF_AUTOSAVE_SHOW_EXPLANATION "autosave_show_explanation"
-#define GNC_PREF_AUTOSAVE_INTERVAL         "autosave_interval_minutes"
+#define GNC_PREF_AUTOSAVE_SHOW_EXPLANATION "autosave-show-explanation"
+#define GNC_PREF_AUTOSAVE_INTERVAL         "autosave-interval-minutes"
 #define AUTOSAVE_SOURCE_ID "autosave_source_id"
 
 #ifdef G_LOG_DOMAIN

@@ -31,7 +31,7 @@
 #include "gnc-prefs.h"
 
 #define MARKUP_STRING "<span size='small'>%s</span>"
-#define GNC_PREF_SHOW_SPLASH "show_splash_screen"
+#define GNC_PREF_SHOW_SPLASH "show-splash-screen"
 
 static GtkWidget * splash = NULL;
 static GtkWidget * progress = NULL;

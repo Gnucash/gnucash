@@ -1,16 +1,16 @@
 <schemalist gettext-domain="GETTEXT_PACKAGE">
-  <schema id="org.gnucash.dialogs.prices" path="/apps/gnucash/dialogs/edit_prices/">
-    <key name="column_order" type="as">
+  <schema id="org.gnucash.dialogs.prices" path="/org/gnucash/dialogs/edit-prices/">
+    <key name="column-order" type="as">
       <default>[ 'commodity', 'currency', 'date', 'source', 'type', 'price' ]</default>
       <summary>Order of columns in the dialog</summary>
       <description>This setting contains a list of names which controls the order in which the columns are listed in the dialog.  Names may be reordered or removed from this list to control which columns appear in the dialog and in what order.</description>
     </key>
-    <key name="commodity_visible" type="b">
+    <key name="commodity-visible" type="b">
       <default>true</default>
       <summary>Display this column</summary>
       <description>This setting controls wether the given column will be visible in the view. TRUE means visible, FALSE means hidden.</description>
     </key>
-    <key name="commodity_width" type="i">
+    <key name="commodity-width" type="i">
       <default>0</default>
       <summary>Width of this column</summary>
       <description>This setting stores the width of the given column in pixels.</description>

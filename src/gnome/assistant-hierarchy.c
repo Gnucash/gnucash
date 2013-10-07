@@ -56,8 +56,8 @@
 #include "gnc-engine.h"
 static QofLogModule log_module = GNC_MOD_IMPORT;
 
-#define GNC_PREFS_GROUP           "dialogs.new_hierarchy"
-#define GNC_PREF_SHOW_ON_NEW_FILE "show_on_new_file"
+#define GNC_PREFS_GROUP           "dialogs.new-hierarchy"
+#define GNC_PREF_SHOW_ON_NEW_FILE "show-on-new-file"
 
 typedef enum
 {
