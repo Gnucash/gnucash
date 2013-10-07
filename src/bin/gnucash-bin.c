@@ -48,7 +48,6 @@
 #include "gnc-splash.h"
 #include "gnc-gnome-utils.h"
 #include "gnc-plugin-file-history.h"
-#include "gnc-gconf-utils.h"
 #include "dialog-new-user.h"
 #include "gnc-session.h"
 #include "engine-helpers-guile.h"
@@ -81,7 +80,6 @@ static int          extra            = 0;
 static gchar      **log_flags        = NULL;
 static gchar       *log_to_filename  = NULL;
 static int          nofile           = 0;
-static const gchar *gconf_path       = NULL;
 static const gchar *gsettings_prefix = NULL;
 static const char  *add_quotes_file  = NULL;
 static char        *namespace_regexp = NULL;
@@ -120,13 +118,6 @@ static GOptionEntry options[] =
     {
         "nofile", '\0', 0, G_OPTION_ARG_NONE, &nofile,
         N_("Do not load the last file opened"), NULL
-    },
-    {
-        "gconf-path", '\0', 0, G_OPTION_ARG_STRING, &gconf_path,
-        N_("Set the prefix path for gconf queries"),
-        /* Translators: Argument description for autohelp; see
-           http://developer.gnome.org/doc/API/2.0/glib/glib-Commandline-option-parser.html */
-        N_("GCONFPATH")
     },
     {
         "gsettings-prefix", '\0', 0, G_OPTION_ARG_STRING, &gsettings_prefix,
@@ -573,16 +564,6 @@ gnc_parse_command_line(int *argc, char ***argv)
 
     gnc_prefs_set_debugging(debugging);
     gnc_prefs_set_extra(extra);
-
-    if (!gconf_path)
-    {
-        const char *path = g_getenv("GNC_GCONF_PATH");
-        if (path)
-            gconf_path = path;
-        else
-            gconf_path = GCONF_PATH;
-    }
-    gnc_gconf_set_path_prefix(g_strdup(gconf_path));
 
     if (!gsettings_prefix)
     {

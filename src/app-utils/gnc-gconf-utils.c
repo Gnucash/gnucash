@@ -31,6 +31,7 @@
 
 #define CLIENT_TAG  "%s-%s-client"
 #define NOTIFY_TAG  "%s-%s-notify_id"
+#define GCONF_PREFIX "/apps/gnucash"
 
 static GConfClient *our_client = NULL;
 
@@ -274,7 +275,7 @@ gnc_gconf_section_name (const char *name)
     if (name == NULL)
     {
         /* Need to return a newly allocated string */
-        return g_strdup(gnc_gconf_get_path_prefix());
+        return g_strdup(GCONF_PREFIX);
     }
     if (*name == '/')
     {
@@ -288,7 +289,7 @@ gnc_gconf_section_name (const char *name)
      * order to keep this file completely "gnome-free" this approach was
      * used.
      */
-    return g_strjoin("/", gnc_gconf_get_path_prefix(), name, NULL);
+    return g_strjoin("/", GCONF_PREFIX, name, NULL);
 }
 
 char *
@@ -306,7 +307,7 @@ gnc_gconf_schema_section_name (const char *name)
      * order to keep this file completely "gnome-free" this approach was
      * used.
      */
-    return g_strconcat("/schemas", gnc_gconf_get_path_prefix(), "/", name, NULL);
+    return g_strconcat("/schemas", GCONF_PREFIX, "/", name, NULL);
 }
 
 static gchar *

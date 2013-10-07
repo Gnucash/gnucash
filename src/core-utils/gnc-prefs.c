@@ -34,7 +34,6 @@ static gboolean extras_enabled    = FALSE;
 static gboolean use_compression   = TRUE; // This is also the default in the prefs backend
 static gint file_retention_policy = 1;    // 1 = "days", the default in the prefs backend
 static gint file_retention_days   = 30;   // This is also the default in the prefs backend
-static const gchar *gconf_path    = "/apps/gnucash";  // A sensible default
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = G_LOG_DOMAIN;
@@ -113,18 +112,6 @@ void
 gnc_prefs_set_file_retention_days(gint days)
 {
     file_retention_days = days;
-}
-
-const gchar *
-gnc_gconf_get_path_prefix (void)
-{
-    return gconf_path;
-}
-
-void
-gnc_gconf_set_path_prefix (const gchar *path)
-{
-    gconf_path = path;
 }
 
 guint

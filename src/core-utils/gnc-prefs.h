@@ -47,8 +47,6 @@
 
 #include <glib.h>
 
-#define GCONF_PATH "/apps/gnucash"
-
 /* Preference groups used across multiple modules */
 #define GNC_PREFS_GROUP_GENERAL           "general"
 #define GNC_PREFS_GROUP_GENERAL_REGISTER  "general.register"
@@ -99,9 +97,6 @@ void gnc_prefs_set_file_retention_policy(gint policy);
 
 gint gnc_prefs_get_file_retention_days(void);
 void gnc_prefs_set_file_retention_days(gint days);
-
-const gchar *gnc_gconf_get_path_prefix(void);
-void gnc_gconf_set_path_prefix(const gchar *prefix);
 
 guint gnc_prefs_get_long_version( void );
 
