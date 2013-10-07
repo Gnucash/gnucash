@@ -472,7 +472,7 @@
       <gconfkey>auto_raise_lists</gconfkey>
     </pref>
     <pref>
-      <gschemaname>tab-includes-transfer-on-memorised</gschemaname>
+      <gschemaname>tab-to-transfer-on-memorised</gschemaname>
       <gschematype>b</gschematype>
       <gconfkey>tab_includes_transfer_on_memorised</gconfkey>
     </pref>

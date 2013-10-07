@@ -209,7 +209,7 @@
       <summary>Automatically raise the list of accounts or actions during input</summary>
       <description>Automatically raise the list of accounts or actions during input</description>
     </key>
-    <key name="tab-includes-transfer-on-memorised" type="b">
+    <key name="tab-to-transfer-on-memorised" type="b">
       <default>false</default>
       <summary>Move to Transfer field when memorised transaction auto filled</summary>
       <description>If active then after a memorised transaction is automatically filled in the cursor will move to the Transfer field. If not active then it skips to the value field.</description>

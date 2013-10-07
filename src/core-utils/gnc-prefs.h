@@ -75,7 +75,7 @@
 #define GNC_PREF_DRAW_VERT_LINES     "draw-vertical-lines"
 #define GNC_PREF_ALT_COLOR_BY_TRANS  "alternate-color-by-transaction"
 #define GNC_PREF_USE_THEME_COLORS    "use-theme-colors"
-#define GNC_PREF_TAB_TRANS_MEMORISED "tab-includes-transfer-on-memorised"
+#define GNC_PREF_TAB_TRANS_MEMORISED "tab-to-transfer-on-memorised"
 /* Date preferences */
 #define GNC_PREF_START_CHOICE_ABS    "start-choice-absolute"
 #define GNC_PREF_START_CHOICE_REL    "start-choice-relative"
