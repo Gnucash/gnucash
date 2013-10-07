@@ -2288,7 +2288,7 @@ many months before the current month:</property>
                         <property name="label" translatable="yes">Default _font:</property>
                         <property name="use_markup">True</property>
                         <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">gconf/dialogs/print_checks/default_font</property>
+                        <property name="mnemonic_widget">pref/dialogs.checkprinting/default_font</property>
                       </object>
                     </child>
                   </object>
@@ -2300,7 +2300,7 @@ many months before the current month:</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkFontButton" id="gconf/dialogs/print_checks/default_font">
+                  <object class="GtkFontButton" id="pref/dialogs.checkprinting/default_font">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>.

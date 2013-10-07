@@ -40,6 +40,7 @@
 #include "qof.h"
 #include "gnc-date.h"
 #include "gnc-gconf-utils.h"
+#include "gnc-prefs.h"
 #include "gnc-numeric.h"
 #include "gnc-plugin-page-register.h"
 #include "dialog-print-check.h"
@@ -65,7 +66,7 @@
 G_GNUC_UNUSED static QofLogModule log_module = "gnc.printing.checks";
 
 #define GCONF_SECTION          "dialogs/print_checks"
-#define GNC_PREFS_GROUP                 "dialogs.print_checks"
+#define GNC_PREFS_GROUP             "dialogs.checkprinting"
 #define KEY_CHECK_FORMAT_GUID  "check_format_guid"
 #define KEY_CHECK_FORMAT       "check_format"
 #define KEY_CHECK_POSITION     "check_position"
@@ -82,11 +83,12 @@ G_GNUC_UNUSED static QofLogModule log_module = "gnc.printing.checks";
 #define KEY_CUSTOM_ROTATION    "custom_rotation"
 #define KEY_CUSTOM_UNITS       "custom_units"
 #define KEY_PRINT_DATE_FMT     "print_date_format"
-#define KEY_DEFAULT_FONT       "default_font"
+#define GNC_PREF_DEFAULT_FONT       "default_font"
 #define KEY_BLOCKING_CHARS     "blocking_chars"
 #define KEY_SPLITS_AMOUNT      "splits_amount"
 #define KEY_SPLITS_MEMO        "splits_memo"
 #define KEY_SPLITS_ACCOUNT     "splits_account"
+
 
 #define DEFAULT_FONT            "sans 12"
 #define CHECK_FMT_DIR           "checks"
@@ -1734,7 +1736,7 @@ gnc_ui_print_check_dialog_create(GncPluginPageRegister *plugin_page,
     gtk_table_attach_defaults(GTK_TABLE(table), pcd->date_format, 1, 3, 4, 7);
 
     /* Default font (set in preferences) */
-    font = gnc_gconf_get_string(GCONF_SECTION, KEY_DEFAULT_FONT, NULL);
+    font = gnc_prefs_get_string(GNC_PREFS_GROUP, GNC_PREF_DEFAULT_FONT);
     pcd->default_font = font ? font : g_strdup(DEFAULT_FONT);
 
     /* Update the combo boxes bases on the available check formats */
