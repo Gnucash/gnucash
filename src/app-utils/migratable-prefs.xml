@@ -746,6 +746,7 @@
     </pref>
   </prefsgroup>
 
+<!--
   <prefsgroup>
     <gschemaid>org.gnucash.dialogs.import.hbci</gschemaid>
     <gconfpath>dialogs-import-hbci.xml</gconfpath>
@@ -791,6 +792,7 @@
       <gconfkey>last_path</gconfkey>
     </pref>
   </prefsgroup>
+  -->
 
   <prefsgroup>
     <gschemaid>org.gnucash.dialogs.import.generic</gschemaid>
