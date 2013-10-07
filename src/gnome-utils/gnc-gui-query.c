@@ -25,7 +25,6 @@
 #include <glib/gi18n.h>
 
 #include "dialog-utils.h"
-#include "gnc-gconf-utils.h"
 #include "qof.h"
 #include "gnc-gui-query.h"
 #include "gnc-ui.h"

@@ -25,7 +25,6 @@
 #include <gtk/gtk.h>
 
 #include "print-session.h"
-#include "gnc-gconf-utils.h" /* for gnc_gconf_set_string() */
 
 #undef G_LOG_DOMAIN
 #define G_LOG_DOMAIN "gnc.printing"

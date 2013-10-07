@@ -29,7 +29,6 @@
 #include "gnucash-sheet.h"
 #include "gnucash-sheetP.h"
 #include "gnucash-style.h"
-#include "gnc-gconf-utils.h"
 #include "gnc-engine.h"		// For debugging, e.g. ENTER(), LEAVE()
 
 /** GLOBALS *********************************************************/

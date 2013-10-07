@@ -40,7 +40,6 @@
 #include "file-utils.h"
 #include "gnc-component-manager.h"
 #include "gnc-engine.h"
-#include "gnc-gconf-utils.h"
 #include "gnc-file.h"
 #include "gnc-hooks.h"
 #include "gfec.h"

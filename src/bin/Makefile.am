@@ -5,7 +5,7 @@ else
 SUBDIRS = . test
 endif
 
-AM_CPPFLAGS = -I${top_builddir} ${GLIB_CFLAGS} ${GCONF_CFLAGS} ${GNOME_CFLAGS} ${GTK_CFLAGS} \
+AM_CPPFLAGS = -I${top_builddir} ${GLIB_CFLAGS} ${GNOME_CFLAGS} ${GTK_CFLAGS} \
   -DPKGSYSCONFDIR=\"${GNC_CONFIGDIR}\" \
   -DPKGDATADIR=\"${GNC_SHAREDIR}\" \
   -I${top_srcdir}/src \
@@ -71,7 +71,6 @@ gnucash_LDADD = \
   ${top_builddir}/src/libqof/qof/libgnc-qof.la \
   ${GUILE_LIBS} \
   ${GLIB_LIBS} \
-  ${GCONF_LIBS} \
   ${GTK_LIBS}
 
 GNUCASH_BIN_INSTALL_NAME=`echo ${BIN_NAME} | sed -e '$(transform)'`
@@ -154,7 +153,6 @@ gnc_common_scripts = gnucash-env gnucash-make-guids
 
 bin_SCRIPTS = \
     ${gnc_common_scripts} \
-	update-gnucash-gconf \
 	${PLATFORM_FILES}
 
 # if you change gncoverridedir, make sure you change ./overrides/Makefile.am too.
@@ -164,25 +162,12 @@ gncoverridesdir = ${GNC_LIBEXECDIR}/overrides
 ${gnc_common_scripts}: generate-gnc-script ${top_builddir}/config.status
 	${srcdir}/generate-gnc-script $@ "${gncoverridesdir}"
 
-CLEANFILES += ${gnc_common_scripts} update-gnucash-gconf
-
-## We borrow guile's convention and use @-...-@ as the substitution
-## brackets here, instead of the usual @...@.  This prevents autoconf
-## from substituting the values directly into the left-hand sides of
-## the sed substitutions.
-update-gnucash-gconf: update-gnucash-gconf.in \
-		${top_builddir}/config.status Makefile
-	rm -f $@.tmp
-	sed < $< > $@.tmp \
-	    -e 's#@-GCONF_SCHEMA_FILE_DIR-@#${GCONF_SCHEMA_FILE_DIR}#g'
-	mv $@.tmp $@
-	chmod +x $@
+CLEANFILES += ${gnc_common_scripts}
 
 endif
 
 EXTRA_DIST = \
     generate-gnc-script \
-	update-gnucash-gconf.in \
 	gnucash-launcher.in \
 	gnucash-valgrind.in \
 	gnucash-gdb.in \

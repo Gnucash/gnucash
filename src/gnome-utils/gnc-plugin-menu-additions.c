@@ -44,7 +44,6 @@
 #include "gnc-main-window.h"
 #include "gnc-plugin-menu-additions.h"
 #include "gnc-window.h"
-#include "gnc-gconf-utils.h"
 #include "gnc-ui.h"
 #include "gnc-menu-extensions.h"
 

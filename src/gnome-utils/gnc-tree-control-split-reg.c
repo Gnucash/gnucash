@@ -37,7 +37,6 @@
 #include "gnc-tree-view-split-reg.h"
 #include "gnc-component-manager.h"
 #include "gnc-ui.h"
-#include "gnc-gconf-utils.h"
 #include "gnc-prefs.h"
 #include "gnc-gdate-utils.h"
 #include "dialog-utils.h"

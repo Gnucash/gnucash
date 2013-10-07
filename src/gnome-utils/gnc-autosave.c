@@ -31,7 +31,6 @@
 #include "gnc-ui.h"
 #include "gnc-file.h"
 #include "gnc-window.h"
-#include "gnc-gconf-utils.h"
 #include "gnc-prefs.h"
 #include "gnc-main-window.h"
 #include "gnc-gui-query.h"

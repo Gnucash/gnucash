@@ -9,7 +9,6 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/src/gnc-module \
   -I${top_srcdir}/src/libqof/qof \
   ${GUILE_INCS} \
-  ${GCONF_CFLAGS} \
   ${GTK_CFLAGS} \
   ${GLIB_CFLAGS}
 
@@ -54,7 +53,6 @@ libgncmod_gnome_search_la_LIBADD = \
   ${top_builddir}/src/core-utils/libgnc-core-utils.la \
   ${top_builddir}/src/libqof/qof/libgnc-qof.la \
   ${GUILE_LIBS} \
-  ${GCONF_LIBS} \
   ${GLIB_LIBS} \
   ${REGEX_LIBS}
 

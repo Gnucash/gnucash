@@ -1,4 +1,4 @@
-SUBDIRS = . gtkbuilder schemas gschemas ui
+SUBDIRS = . gtkbuilder gschemas ui
 
 pkglib_LTLIBRARIES = libgncmod-business-gnome.la
 
@@ -20,7 +20,6 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/src/register/ledger-core \
   -I${top_srcdir}/src/libqof/qof \
   ${GTK_CFLAGS} \
-  ${GCONF_CFLAGS} \
   ${GLIB_CFLAGS} \
   ${GUILE_INCS}
 
@@ -80,7 +79,6 @@ libgncmod_business_gnome_la_LIBADD = \
   ${top_builddir}/src/gnc-module/libgnc-module.la \
   ${top_builddir}/src/libqof/qof/libgnc-qof.la \
   ${GTK_LIBS} \
-  ${GCONF_LIBS} \
   ${GUILE_LIBS} \
   ${GLIB_LIBS} \
   ${EFENCE_LIBS}

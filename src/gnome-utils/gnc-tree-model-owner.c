@@ -32,7 +32,6 @@
 #include "gnc-component-manager.h"
 #include "gncOwner.h"
 #include "gnc-commodity.h"
-#include "gnc-gconf-utils.h"
 #include "gnc-prefs.h"
 #include "gnc-engine.h"
 #include "gnc-event.h"

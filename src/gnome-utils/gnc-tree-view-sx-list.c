@@ -41,7 +41,6 @@
 #include "gnc-tree-view.h"
 #include "gnc-tree-view-sx-list.h"
 #include "gnc-sx-list-tree-model-adapter.h"
-#include "gnc-gconf-utils.h"
 
 #define LOG_MOD "gnc.ui.tree-view.sx-list"
 static QofLogModule log_module = LOG_MOD;

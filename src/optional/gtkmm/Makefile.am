@@ -42,7 +42,6 @@ libgncmod_gtkmm_la_LIBADD = \
   ${top_builddir}/src/gnc-module/libgnc-module.la \
   ${top_builddir}/src/libqof/qof/libgnc-qof.la \
   ${GTKMM_LIBS} \
-  ${GCONF_LIBS} \
   ${GLIB_LIBS}
 
 AM_CPPFLAGS = \
@@ -52,7 +51,6 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/src/core-utils \
   -I${top_srcdir}/src/engine \
   ${GTKMM_CFLAGS} \
-  ${GCONF_CFLAGS} \
   ${GLIB_CFLAGS}
 
 uidir = $(GNC_UI_DIR)

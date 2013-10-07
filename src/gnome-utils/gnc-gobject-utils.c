@@ -33,7 +33,7 @@
 static void gnc_gobject_weak_cb (gpointer user_data, GObject *object);
 
 /************************************************************/
-/*                      Gconf Utilities                     */
+/*                     GObject Utilities                    */
 /************************************************************/
 
 

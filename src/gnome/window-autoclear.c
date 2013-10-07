@@ -34,7 +34,6 @@
 #include "gnc-component-manager.h"
 #include "gnc-date-edit.h"
 #include "gnc-event.h"
-#include "gnc-gconf-utils.h"
 #include "gnc-gnome-utils.h"
 #include "gnc-main-window.h"
 #include "gnc-plugin-page-register.h"

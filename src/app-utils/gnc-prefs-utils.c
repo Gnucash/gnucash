@@ -23,7 +23,6 @@
 
 #include "config.h"
 
-#include "gnc-gconf-utils.h"
 #include "gnc-gsettings.h"
 #include "gnc-prefs-utils.h"
 #include "gnc-prefs.h"
