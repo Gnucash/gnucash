@@ -31,10 +31,14 @@
 #include "gnc-component-manager.h"
 #include "gnc-plugin-register2.h"
 #include "gnc-plugin-page-register2.h"
+#include "gnc-prefs.h"
 
 static void gnc_plugin_register2_class_init (GncPluginRegister2Class *klass);
 static void gnc_plugin_register2_init (GncPluginRegister2 *plugin);
 static void gnc_plugin_register2_finalize (GObject *object);
+
+static void gnc_plugin_register2_add_to_window (GncPlugin *plugin, GncMainWindow *window, GQuark type);
+static void gnc_plugin_register2_remove_from_window (GncPlugin *plugin, GncMainWindow *window, GQuark type);
 
 /* Command callbacks */
 static void gnc_plugin_register2_cmd_general_ledger (GtkAction *action, GncMainWindowActionData *data);
@@ -69,23 +73,19 @@ static QofLogModule log_module = GNC_MOD_GUI;
  ************************************************************/
 
 /** This function is called whenever an entry in the general register
- *  section of gconf is changed.  It does nothing more than kick off a
+ *  preferences group is changed.  It does nothing more than kick off a
  *  gui refresh which should be delivered to any open register page.
- *  The register pages will then reread their settings from gconf and
+ *  The register pages will then reread their preferences and
  *  update the screen.
  *
- *  @client Unused.
+ *  @prefs Unused.
  *
- *  @cnxn_id Unused.
- *
- *  @entry Unused.
+ *  @pref Unused.
  *
  *  @user_data Unused.
  */
 static void
-gnc_plugin_register2_gconf_changed (GConfClient *client,
-                                   guint cnxn_id,
-                                   GConfEntry *entry,
+gnc_plugin_register2_pref_changed (gpointer prefs, gchar *pref,
                                    gpointer user_data)
 {
     ENTER("");
@@ -153,13 +153,16 @@ gnc_plugin_register2_class_init (GncPluginRegister2Class *klass)
     /* plugin info */
     plugin_class->plugin_name  = GNC_PLUGIN_REGISTER2_NAME;
 
+    /* function overrides */
+    plugin_class->add_to_window = gnc_plugin_register2_add_to_window;
+    plugin_class->remove_from_window =
+        gnc_plugin_register2_remove_from_window;
+
     /* widget addition/removal */
     plugin_class->actions_name = PLUGIN_ACTIONS_NAME;
     plugin_class->actions      = gnc_plugin_actions;
     plugin_class->n_actions    = gnc_plugin_n_actions;
     plugin_class->ui_filename  = PLUGIN_UI_FILENAME;
-    plugin_class->gconf_section = GCONF_REGISTER2_SECTION;
-    plugin_class->gconf_notifications = gnc_plugin_register2_gconf_changed;
 
     g_type_class_add_private(klass, sizeof(GncPluginRegister2Private));
 }
@@ -181,6 +184,54 @@ gnc_plugin_register2_finalize (GObject *object)
     priv = GNC_PLUGIN_REGISTER2_GET_PRIVATE(plugin);
 
     G_OBJECT_CLASS (parent_class)->finalize (object);
+}
+
+/************************************************************
+ *              Plugin Function Implementation              *
+ ************************************************************/
+
+/** Initialize the registeru for a window.  This function is
+ *  called as part of the initialization of a window, after all the
+ *  plugin menu items have been added to the menu structure.  Its job
+ *  is to correctly initialize the register.  It does this by
+ *  installing a function that listens for preference changes. Each
+ *  time a preference changes, it kicks off a gui refresh.
+ *
+ *  @param plugin A pointer to the gnc-plugin object responsible for
+ *  adding/removing the register.
+ *
+ *  @param window A pointer to the gnc-main-window that is being initialized.
+ *
+ *  @param type Unused
+ */
+static void
+gnc_plugin_register2_add_to_window (GncPlugin *plugin,
+                                   GncMainWindow *window,
+                                   GQuark type)
+{
+    gnc_prefs_register_cb (GNC_PREFS_GROUP_GENERAL_REGISTER, NULL,
+                           gnc_plugin_register2_pref_changed, window);
+}
+
+
+/** Finalize the register for this window.  This function is
+ *  called as part of the destruction of a window.
+ *
+ *  @param plugin A pointer to the gnc-plugin object responsible for
+ *  adding/removing the register.  It stops listening for
+ *  changes in the register preferences.
+ *
+ *  @param window A pointer the gnc-main-window that is being destroyed.
+ *
+ *  @param type Unused
+ */
+static void
+gnc_plugin_register2_remove_from_window (GncPlugin *plugin,
+                                        GncMainWindow *window,
+                                        GQuark type)
+{
+    gnc_prefs_remove_cb_by_func (GNC_PREFS_GROUP_GENERAL_REGISTER, NULL,
+                                 gnc_plugin_register2_pref_changed, window);
 }
 
 /************************************************************

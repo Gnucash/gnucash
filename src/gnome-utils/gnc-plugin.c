@@ -40,7 +40,6 @@
 #include "gnc-plugin.h"
 #include "gnc-engine.h"
 #include "gnc-filepath-utils.h"
-#include "gnc-gconf-utils.h"
 #include "gnc-gnome-utils.h"
 #include "gnc-gobject-utils.h"
 
@@ -150,9 +149,8 @@ gnc_plugin_finalize (GObject *object)
 
 
 /** Add the specified plugin from the specified window.  This function
- *  will add the page's user interface from the window, set up gconf
- *  notifications if the page uses gconf, and call the plugin to
- *  perform any plugin specific actions.
+ *  will add the page's user interface from the window and call the
+ *  plugin to perform any plugin specific actions.
  *
  *  See gnc-plugin.h for documentation on the function arguments. */
 void
@@ -191,16 +189,6 @@ gnc_plugin_add_to_window (GncPlugin *plugin,
     }
 
     /*
-     * Setup gconf notifications if requested
-     */
-    if (class->gconf_section && class->gconf_notifications)
-    {
-        DEBUG ("Requesting notification for section %s", class->gconf_section);
-        gnc_gconf_add_notification(G_OBJECT(window), class->gconf_section,
-                                   class->gconf_notifications, GNC_PLUGIN_NAME);
-    }
-
-    /*
      * Do plugin specific actions.
      */
     if (GNC_PLUGIN_GET_CLASS (plugin)->add_to_window)
@@ -214,8 +202,7 @@ gnc_plugin_add_to_window (GncPlugin *plugin,
 
 /*  Remove the specified plugin from the specified window.  This
  *  function will call the plugin to perform any plugin specific
- *  actions, remove any gconf notifications that were set up for the
- *  page, and remove the page's user interface from the window.
+ *  actions and remove the page's user interface from the window.
  *
  *  See gnc-plugin.h for documentation on the function arguments. */
 void
@@ -238,16 +225,6 @@ gnc_plugin_remove_from_window (GncPlugin *plugin,
         DEBUG ("Calling child class function %p",
                GNC_PLUGIN_GET_CLASS (plugin)->remove_from_window);
         GNC_PLUGIN_GET_CLASS (plugin)->remove_from_window (plugin, window, type);
-    }
-
-    /*
-     * Remove any gconf notifications
-     */
-    if (class->gconf_section && class->gconf_notifications)
-    {
-        DEBUG ("Remove notification for section %s", class->gconf_section);
-        gnc_gconf_remove_notification (G_OBJECT(window), class->gconf_section,
-                                       GNC_PLUGIN_NAME);
     }
 
     /*
