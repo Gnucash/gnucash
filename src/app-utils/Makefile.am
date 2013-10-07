@@ -54,6 +54,7 @@ libgncmod_app_utils_la_SOURCES = \
   gnc-exp-parser.c \
   gnc-gconf-utils.c \
   gnc-gettext-util.c \
+  gnc-gsettings.c \
   gnc-helpers.c \
   gnc-prefs.c \
   gnc-sx-instance-model.c \
@@ -80,6 +81,7 @@ gncinclude_HEADERS = \
   gnc-exp-parser.h \
   gnc-gconf-utils.h \
   gnc-gettext-util.h \
+  gnc-gsettings.h \
   gnc-help-utils.h \
   gnc-helpers.h \
   gnc-prefs.h \

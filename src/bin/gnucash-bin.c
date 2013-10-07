@@ -43,6 +43,7 @@
 #include "gfec.h"
 #include "gnc-commodity.h"
 #include "gnc-core-prefs.h"
+#include "gnc-gsettings.h"
 #include "gnc-main-window.h"
 #include "gnc-splash.h"
 #include "gnc-gnome-utils.h"
@@ -81,6 +82,7 @@ static gchar      **log_flags        = NULL;
 static gchar       *log_to_filename  = NULL;
 static int          nofile           = 0;
 static const gchar *gconf_path       = NULL;
+static const gchar *gsettings_prefix = NULL;
 static const char  *add_quotes_file  = NULL;
 static char        *namespace_regexp = NULL;
 static const char  *file_to_load     = NULL;
@@ -125,6 +127,13 @@ static GOptionEntry options[] =
         /* Translators: Argument description for autohelp; see
            http://developer.gnome.org/doc/API/2.0/glib/glib-Commandline-option-parser.html */
         N_("GCONFPATH")
+    },
+    {
+        "gsettings-prefix", '\0', 0, G_OPTION_ARG_STRING, &gsettings_prefix,
+        N_("Set the prefix for gsettings schemas for gsettings queries. This can be useful to have a different settings tree while debugging."),
+        /* Translators: Argument description for autohelp; see
+           http://developer.gnome.org/doc/API/2.0/glib/glib-Commandline-option-parser.html */
+        N_("GSETTINGSPREFIX")
     },
     {
         "add-price-quotes", '\0', 0, G_OPTION_ARG_STRING, &add_quotes_file,
@@ -574,6 +583,16 @@ gnc_parse_command_line(int *argc, char ***argv)
             gconf_path = GCONF_PATH;
     }
     gnc_gconf_set_path_prefix(g_strdup(gconf_path));
+
+    if (!gsettings_prefix)
+    {
+        const char *prefix = g_getenv("GNC_GSETTINGS_PREFIX");
+        if (prefix)
+            gsettings_prefix = prefix;
+        else
+            gsettings_prefix = GSET_SCHEMA_PREFIX;
+    }
+    gnc_gsettings_set_prefix(g_strdup(gsettings_prefix));
 
     if (namespace_regexp)
         gnc_core_prefs_set_namespace_regexp(namespace_regexp);
