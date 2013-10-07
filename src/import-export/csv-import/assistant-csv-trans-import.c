@@ -49,7 +49,6 @@
 #include <goffice/gtk/go-charmap-sel.h>
 
 #define MIN_COL_WIDTH 70
-#define GCONF_SECTION "dialogs/import/csv"
 #define GNC_PREFS_GROUP "dialogs.import.csv"
 #define ASSISTANT_CSV_IMPORT_TRANS_CM_CLASS "assistant-csv-trans-import"
 
@@ -1620,7 +1619,7 @@ csv_import_trans_close_handler (gpointer user_data)
     if (!(info->gnc_csv_importer_gui == NULL))
         info->gnc_csv_importer_gui = NULL;
 
-    gnc_save_window_size(GCONF_SECTION, GTK_WINDOW(info->window));
+    gnc_save_window_size(GNC_PREFS_GROUP, GTK_WINDOW(info->window));
     gtk_widget_destroy (info->window);
 }
 
@@ -1816,7 +1815,7 @@ csv_import_trans_assistant_create (CsvImportTrans *info)
     g_signal_connect (G_OBJECT(window), "destroy",
                       G_CALLBACK (csv_import_trans_assistant_destroy_cb), info);
 
-    gnc_restore_window_size (GCONF_SECTION, GTK_WINDOW(info->window));
+    gnc_restore_window_size (GNC_PREFS_GROUP, GTK_WINDOW(info->window));
 
     gtk_builder_connect_signals(builder, info);
     g_object_unref(G_OBJECT(builder));

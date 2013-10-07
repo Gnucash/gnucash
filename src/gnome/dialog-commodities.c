@@ -42,6 +42,7 @@
 
 #define DIALOG_COMMODITIES_CM_CLASS "dialog-commodities"
 #define GCONF_SECTION "dialogs/edit_commodities"
+#define GNC_PREFS_GROUP "dialogs.edit_commodities"
 
 /* This static indicates the debugging module that this .o belongs to.  */
 /* static short module = MOD_GUI; */
@@ -356,7 +357,7 @@ gnc_commodities_dialog_create (GtkWidget * parent, CommoditiesDialog *cd)
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(button), cd->show_currencies);
 
     g_object_unref(G_OBJECT(builder));
-    gnc_restore_window_size (GCONF_SECTION, GTK_WINDOW(cd->dialog));
+    gnc_restore_window_size (GNC_PREFS_GROUP, GTK_WINDOW(cd->dialog));
 }
 
 static void
@@ -364,7 +365,7 @@ close_handler (gpointer user_data)
 {
     CommoditiesDialog *cd = user_data;
 
-    gnc_save_window_size(GCONF_SECTION, GTK_WINDOW(cd->dialog));
+    gnc_save_window_size(GNC_PREFS_GROUP, GTK_WINDOW(cd->dialog));
 
     gnc_gconf_set_bool(GCONF_SECTION, "include_iso", cd->show_currencies, NULL);
 

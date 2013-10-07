@@ -1,4 +1,14 @@
 <schemalist gettext-domain="GETTEXT_PACKAGE">
+  <schema id="org.gnucash.dialogs.ab_initial" path="/apps/gnucash/dialogs/ab_initial/">
+    <key name="last-geometry" type="(iiii)">
+      <default>(-1,-1,-1,-1)</default>
+      <summary>Last window position and size</summary>
+      <description>This setting describes the size and position of the window when it was last closed.
+        The numbers are the X and Y coordinates of the top left corner of the window
+        followed by the width and height of the window.</description>
+    </key>
+  </schema>
+
   <schema id="org.gnucash.dialogs.import.hbci" path="/apps/gnucash/dialogs/import/hbci/">
     <key name="close_on_finish" type="b">
       <default>true</default>
@@ -39,6 +49,17 @@
       <default>''</default>
       <summary>Last pathname used</summary>
       <description>This field contains the last pathname used by this window. It will be used as the initial filename/pathname the next time this window is opened.</description>
+    </key>
+    <child name="connection_dialog" schema="org.gnucash.dialogs.import.hbci.connection_dialog"/>
+  </schema>
+
+  <schema id="org.gnucash.dialogs.import.hbci.connection_dialog" path="/apps/gnucash/dialogs/import/hbci/connection_dialog/">
+    <key name="last-geometry" type="(iiii)">
+      <default>(-1,-1,-1,-1)</default>
+      <summary>Last window position and size</summary>
+      <description>This setting describes the size and position of the window when it was last closed.
+        The numbers are the X and Y coordinates of the top left corner of the window
+        followed by the width and height of the window.</description>
     </key>
   </schema>
 </schemalist>

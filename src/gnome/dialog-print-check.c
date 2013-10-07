@@ -64,7 +64,8 @@
  */
 G_GNUC_UNUSED static QofLogModule log_module = "gnc.printing.checks";
 
-#define GCONF_SECTION 	       "dialogs/print_checks"
+#define GCONF_SECTION          "dialogs/print_checks"
+#define GNC_PREFS_GROUP                 "dialogs.print_checks"
 #define KEY_CHECK_FORMAT_GUID  "check_format_guid"
 #define KEY_CHECK_FORMAT       "check_format"
 #define KEY_CHECK_POSITION     "check_position"
@@ -1764,7 +1765,7 @@ gnc_ui_print_check_dialog_create(GncPluginPageRegister *plugin_page,
     gtk_widget_destroy(GTK_WIDGET(gtk_builder_get_object (builder, "lower_left")));
 
     gnc_ui_print_restore_dialog(pcd);
-    gnc_restore_window_size(GCONF_SECTION, GTK_WINDOW(pcd->dialog));
+    gnc_restore_window_size(GNC_PREFS_GROUP, GTK_WINDOW(pcd->dialog));
 
     g_object_unref(G_OBJECT(builder));
     gtk_widget_show_all(pcd->dialog);
@@ -2674,11 +2675,11 @@ gnc_ui_print_check_response_cb(GtkDialog *dialog,
     case GTK_RESPONSE_OK:
         gnc_ui_print_check_dialog_ok_cb(pcd);
         gnc_ui_print_save_dialog(pcd);
-        gnc_save_window_size(GCONF_SECTION, GTK_WINDOW(dialog));
+        gnc_save_window_size(GNC_PREFS_GROUP, GTK_WINDOW(dialog));
         break;
 
     case GTK_RESPONSE_CANCEL:
-        gnc_save_window_size(GCONF_SECTION, GTK_WINDOW(dialog));
+        gnc_save_window_size(GNC_PREFS_GROUP, GTK_WINDOW(dialog));
         break;
     }
 

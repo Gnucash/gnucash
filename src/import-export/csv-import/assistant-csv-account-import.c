@@ -41,7 +41,6 @@
 #include "assistant-csv-account-import.h"
 #include "csv-account-import.h"
 
-#define GCONF_SECTION "dialogs/import/csv"
 #define GNC_PREFS_GROUP "dialogs.import.csv"
 #define ASSISTANT_CSV_IMPORT_CM_CLASS "assistant-csv-account-import"
 
@@ -540,7 +539,7 @@ csv_import_close_handler (gpointer user_data)
     g_free(info->file_name);
     g_string_free(info->regexp, TRUE);
 
-    gnc_save_window_size(GCONF_SECTION, GTK_WINDOW(info->window));
+    gnc_save_window_size(GNC_PREFS_GROUP, GTK_WINDOW(info->window));
     gtk_widget_destroy (info->window);
 }
 
@@ -644,7 +643,7 @@ csv_import_assistant_create (CsvImportInfo *info)
     g_signal_connect (G_OBJECT(window), "destroy",
                       G_CALLBACK (csv_import_assistant_destroy_cb), info);
 
-    gnc_restore_window_size (GCONF_SECTION, GTK_WINDOW(info->window));
+    gnc_restore_window_size (GNC_PREFS_GROUP, GTK_WINDOW(info->window));
 
     gtk_builder_connect_signals(builder, info);
     g_object_unref(G_OBJECT(builder));

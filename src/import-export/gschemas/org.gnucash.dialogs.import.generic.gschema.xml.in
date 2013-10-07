@@ -41,7 +41,10 @@
       <description>Enables the automatic creation of new commodities if any unknown commodity is encountered during import. Otherwise the user will be asked what to do with each unknown commodity.</description>
     </key>
     <child name="account_matcher" schema="org.gnucash.dialogs.import.generic.account_matcher"/>
+    <child name="matcher_picker" schema="org.gnucash.dialogs.import.generic.matcher_picker"/>
+    <child name="transaction_list" schema="org.gnucash.dialogs.import.generic.transaction_list"/>
   </schema>
+
   <schema id="org.gnucash.dialogs.import.generic.account_matcher" path="/apps/gnucash/dialogs/import/generic_matcher/account_matcher/">
     <key name="account-code_visible" type="b">
       <default>false</default>
@@ -52,6 +55,26 @@
       <default>0</default>
       <summary>Width of this column</summary>
       <description>This setting stores the width of the given column in pixels.</description>
+    </key>
+  </schema>
+
+  <schema id="org.gnucash.dialogs.import.generic.matcher_picker" path="/apps/gnucash/dialogs/import/generic_matcher/matcher_picker/">
+    <key name="last-geometry" type="(iiii)">
+      <default>(-1,-1,-1,-1)</default>
+      <summary>Last window position and size</summary>
+      <description>This setting describes the size and position of the window when it was last closed.
+        The numbers are the X and Y coordinates of the top left corner of the window
+        followed by the width and height of the window.</description>
+    </key>
+  </schema>
+
+  <schema id="org.gnucash.dialogs.import.generic.transaction_list" path="/apps/gnucash/dialogs/import/generic_matcher/transaction_list/">
+    <key name="last-geometry" type="(iiii)">
+      <default>(-1,-1,-1,-1)</default>
+      <summary>Last window position and size</summary>
+      <description>This setting describes the size and position of the window when it was last closed.
+        The numbers are the X and Y coordinates of the top left corner of the window
+        followed by the width and height of the window.</description>
     </key>
   </schema>
 </schemalist>

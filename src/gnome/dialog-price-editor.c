@@ -49,7 +49,7 @@
 
 
 #define DIALOG_PRICE_EDIT_CM_CLASS "dialog-price-edit"
-#define GCONF_SECTION "dialogs/price_editor"
+#define GNC_PREFS_GROUP "dialogs.price_editor"
 #define DIALOG_PRICE_EDIT_SOURCE "user:price-editor"
 
 
@@ -304,7 +304,7 @@ pedit_dialog_response_cb (GtkDialog *dialog, gint response, gpointer data)
     }
     else
     {
-        gnc_save_window_size(GCONF_SECTION, GTK_WINDOW(pedit_dialog->dialog));
+        gnc_save_window_size(GNC_PREFS_GROUP, GTK_WINDOW(pedit_dialog->dialog));
         gtk_widget_destroy (GTK_WIDGET (pedit_dialog->dialog));
         pedit_dialog_destroy_cb (NULL, pedit_dialog);
     }
@@ -542,7 +542,7 @@ gnc_price_edit_dialog (GtkWidget * parent,
 
     pedit_dialog = g_new0 (PriceEditDialog, 1);
     gnc_price_pedit_dialog_create (parent, pedit_dialog, session);
-    gnc_restore_window_size(GCONF_SECTION, GTK_WINDOW(pedit_dialog->dialog));
+    gnc_restore_window_size(GNC_PREFS_GROUP, GTK_WINDOW(pedit_dialog->dialog));
     pedit_dialog->type = type;
 
     switch (type)

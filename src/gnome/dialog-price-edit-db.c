@@ -52,6 +52,7 @@
 
 #define DIALOG_PRICE_DB_CM_CLASS "dialog-price-edit-db"
 #define GCONF_SECTION "dialogs/edit_prices"
+#define GNC_PREFS_GROUP "dialogs.edit_prices"
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_GUI;
@@ -482,7 +483,7 @@ gnc_prices_dialog_create (GtkWidget * parent, PricesDialog *pdb_dialog)
 
     g_object_unref(G_OBJECT(builder));
 
-    gnc_restore_window_size(GCONF_SECTION, GTK_WINDOW(pdb_dialog->dialog));
+    gnc_restore_window_size(GNC_PREFS_GROUP, GTK_WINDOW(pdb_dialog->dialog));
     LEAVE(" ");
 }
 
@@ -493,7 +494,7 @@ close_handler (gpointer user_data)
     PricesDialog *pdb_dialog = user_data;
 
     ENTER(" ");
-    gnc_save_window_size(GCONF_SECTION, GTK_WINDOW(pdb_dialog->dialog));
+    gnc_save_window_size(GNC_PREFS_GROUP, GTK_WINDOW(pdb_dialog->dialog));
 
     gtk_widget_destroy (GTK_WIDGET (pdb_dialog->dialog));
     LEAVE(" ");

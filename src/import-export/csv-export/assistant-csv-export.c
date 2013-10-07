@@ -842,7 +842,7 @@ csv_export_close_handler (gpointer user_data)
     g_free(info->file_name);
     g_free(info->starting_dir);
 
-    gnc_save_window_size(GCONF_SECTION, GTK_WINDOW(info->window));
+    gnc_save_window_size(GNC_PREFS_GROUP, GTK_WINDOW(info->window));
     gtk_widget_destroy (info->window);
 }
 
@@ -1004,7 +1004,7 @@ csv_export_assistant_create (CsvExportInfo *info)
     g_signal_connect (G_OBJECT(window), "destroy",
                       G_CALLBACK (csv_export_assistant_destroy_cb), info);
 
-    gnc_restore_window_size (GCONF_SECTION, GTK_WINDOW(info->window));
+    gnc_restore_window_size (GNC_PREFS_GROUP, GTK_WINDOW(info->window));
 
     info->csva.paned = GTK_WIDGET(gtk_builder_get_object (builder, "paned"));
 

@@ -34,7 +34,7 @@
 #include "gnc-ui.h"
 #include "gnc-gui-query.h"
 #include "gnc-query-view.h"
-#include "gnc-gconf-utils.h"
+#include "gnc-prefs.h"
 #include "gnc-session.h"
 #include "qof.h"
 #include "engine-helpers.h"
@@ -50,7 +50,9 @@
 static QofLogModule log_module = G_LOG_DOMAIN;
 
 #define DIALOG_SEARCH_CM_CLASS "dialog-search"
-#define KEY_ACTIVE_ONLY "search_for_active_only"
+#define GNC_PREFS_GROUP_SEARCH_GENERAL "dialogs.search"
+#define GNC_PREF_NEW_SEARCH_LIMIT  "new_search_limit"
+#define GNC_PREF_ACTIVE_ONLY       "search_for_active_only"
 
 typedef enum
 {
@@ -123,7 +125,7 @@ struct _GNCSearchWindow
     GList                    *crit_list;    /* List of crit_data */
 
     gint                      component_id;
-    const gchar              *gconf_section;
+    const gchar              *prefs_group;
 };
 
 struct _crit_data
@@ -390,7 +392,7 @@ gnc_search_dialog_display_results (GNCSearchWindow *sw)
     gnc_query_view_unselect_all (GNC_QUERY_VIEW(sw->result_view));
 
     /* set 'new search' if fewer than max_count items is returned. */
-    max_count = gnc_gconf_get_float("dialogs/search", "new_search_limit", NULL);
+    max_count = gnc_prefs_get_float(GNC_PREFS_GROUP_SEARCH_GENERAL, GNC_PREF_NEW_SEARCH_LIMIT);
     if (gnc_query_view_get_num_entries(GNC_QUERY_VIEW(sw->result_view)) < max_count)
         gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON (sw->new_rb), TRUE);
 }
@@ -420,8 +422,8 @@ static void
 search_active_only_cb (GtkToggleButton *button, GNCSearchWindow *sw)
 {
 
-    gnc_gconf_set_bool(sw->gconf_section, KEY_ACTIVE_ONLY,
-                       gtk_toggle_button_get_active (button), NULL);
+    gnc_prefs_set_bool(sw->prefs_group, GNC_PREF_ACTIVE_ONLY,
+                       gtk_toggle_button_get_active (button));
 }
 
 
@@ -1132,7 +1134,7 @@ gnc_search_dialog_init_widgets (GNCSearchWindow *sw, const gchar *title)
     g_signal_connect (sw->del_rb, "toggled",
                       G_CALLBACK (search_type_cb), sw);
 
-    active = gnc_gconf_get_bool(sw->gconf_section, KEY_ACTIVE_ONLY, NULL);
+    active = gnc_prefs_get_bool(sw->prefs_group, GNC_PREF_ACTIVE_ONLY);
     sw->active_only_check = GTK_WIDGET(gtk_builder_get_object (builder, "active_only_check"));
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (sw->active_only_check), active);
     g_signal_connect (sw->active_only_check, "toggled",
@@ -1209,8 +1211,8 @@ void
 gnc_search_dialog_destroy (GNCSearchWindow *sw)
 {
     if (!sw) return;
-    if (sw->gconf_section)
-        gnc_save_window_size(sw->gconf_section, GTK_WINDOW(sw->dialog));
+    if (sw->prefs_group)
+        gnc_save_window_size(sw->prefs_group, GTK_WINDOW(sw->dialog));
     gnc_close_gui_component (sw->component_id);
 }
 
@@ -1231,7 +1233,7 @@ gnc_search_dialog_create (QofIdTypeConst obj_type, const gchar *title,
                           GNCSearchResultCB result_callback,
                           GNCSearchNewItemCB new_item_cb,
                           gpointer user_data, GNCSearchFree free_cb,
-                          const gchar *gconf_section,
+                          const gchar *prefs_group,
                           const gchar *type_label)
 {
     GNCSearchWindow *sw = g_new0 (GNCSearchWindow, 1);
@@ -1255,7 +1257,7 @@ gnc_search_dialog_create (QofIdTypeConst obj_type, const gchar *title,
     sw->new_item_cb = new_item_cb;
     sw->user_data = user_data;
     sw->free_cb = free_cb;
-    sw->gconf_section = gconf_section;
+    sw->prefs_group = prefs_group;
     sw->type_label = type_label;
 
     /* Grab the get_guid function */
@@ -1265,8 +1267,8 @@ gnc_search_dialog_create (QofIdTypeConst obj_type, const gchar *title,
     sw->q = show_start_query;
 
     gnc_search_dialog_init_widgets (sw, title);
-    if (sw->gconf_section)
-        gnc_restore_window_size(sw->gconf_section, GTK_WINDOW(sw->dialog));
+    if (sw->prefs_group)
+        gnc_restore_window_size(sw->prefs_group, GTK_WINDOW(sw->dialog));
     gtk_widget_show(sw->dialog);
 
     /* Maybe display the original query results? */

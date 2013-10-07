@@ -1237,7 +1237,7 @@ gnc_ui_scheduled_xaction_editor_dialog_create (SchedXaction *sx,
 
     /* Allow resize */
     gtk_window_set_resizable (GTK_WINDOW(sxed->dialog), TRUE);
-    gnc_restore_window_size(SXED_GCONF_SECTION, GTK_WINDOW(sxed->dialog));
+    gnc_restore_window_size(GNC_PREFS_GROUP_SXED, GTK_WINDOW(sxed->dialog));
 
     /* create the frequency-selection widget and example [dense-]calendar. */
     schedXact_editor_create_freq_sel( sxed );
@@ -1271,7 +1271,7 @@ static
 void
 gnc_sxed_record_size( GncSxEditorDialog *sxed )
 {
-    gnc_save_window_size( SXED_GCONF_SECTION, GTK_WINDOW(sxed->dialog) );
+    gnc_save_window_size( GNC_PREFS_GROUP_SXED, GTK_WINDOW(sxed->dialog) );
 }
 
 

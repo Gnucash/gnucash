@@ -42,7 +42,7 @@
 #include "dialog-tax-table.h"
 
 #define DIALOG_TAX_TABLE_CM_CLASS "tax-table-dialog"
-#define GCONF_SECTION "dialogs/business/tax_tables"
+#define GNC_PREFS_GROUP "dialogs.business.tax_tables"
 
 enum tax_table_cols
 {
@@ -652,7 +652,7 @@ tax_table_window_close (GtkWidget *widget, gpointer data)
 {
     TaxTableWindow *ttw = data;
 
-    gnc_save_window_size (GCONF_SECTION, GTK_WINDOW (ttw->dialog));
+    gnc_save_window_size (GNC_PREFS_GROUP, GTK_WINDOW (ttw->dialog));
     gnc_ui_tax_table_window_destroy (ttw);
 }
 
@@ -762,7 +762,7 @@ gnc_ui_tax_table_window_new (QofBook *book)
                                     ttw);
 
     tax_table_window_refresh (ttw);
-    gnc_restore_window_size (GCONF_SECTION, GTK_WINDOW (ttw->dialog));
+    gnc_restore_window_size (GNC_PREFS_GROUP, GTK_WINDOW (ttw->dialog));
     gtk_widget_show_all (ttw->dialog);
 
     g_object_unref(G_OBJECT(builder));

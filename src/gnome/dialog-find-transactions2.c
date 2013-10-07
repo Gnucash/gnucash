@@ -36,7 +36,7 @@
 #include "gnc-plugin-page-register2.h"
 #include "search-param.h"
 
-#define GCONF_SECTION "dialogs/find"
+#define GNC_PREFS_GROUP_SEARCH "dialogs.find"
 
 struct _ftd_data
 {
@@ -204,7 +204,7 @@ gnc_ui_find_transactions_dialog_create2 (GNCLedgerDisplay2 * orig_ledg)
     ftd->sw = gnc_search_dialog_create (type, _("Find Transaction"),
                                         params, NULL, start_q, show_q,
                                         NULL, do_find_cb, NULL,
-                                        ftd, free_ftd_cb, GCONF_SECTION, NULL);
+                                        ftd, free_ftd_cb, GNC_PREFS_GROUP_SEARCH, NULL);
 
     if (!ftd->sw)
     {

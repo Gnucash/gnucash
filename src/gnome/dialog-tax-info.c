@@ -46,6 +46,7 @@
 #define DIALOG_TAX_INFO_CM_CLASS "dialog-tax-info"
 #define GCONF_SECTION "dialogs/tax_info"
 #define PANED_POSITION "paned_position"
+#define GNC_PREFS_GROUP "dialogs.tax_info"
 
 enum
 {
@@ -1457,7 +1458,7 @@ gnc_tax_info_dialog_create (GtkWidget * parent, TaxInfoDialog *ti_dialog)
     clear_gui (ti_dialog);
     gnc_tax_info_set_changed (ti_dialog, FALSE);
 
-    gnc_restore_window_size(GCONF_SECTION, GTK_WINDOW(ti_dialog->dialog));
+    gnc_restore_window_size(GNC_PREFS_GROUP, GTK_WINDOW(ti_dialog->dialog));
 
     ti_dialog->paned = GTK_WIDGET(gtk_builder_get_object (builder, "paned"));
 
@@ -1480,7 +1481,7 @@ close_handler (gpointer user_data)
                           gtk_paned_get_position(GTK_PANED(ti_dialog->paned)), NULL);
     }
 
-    gnc_save_window_size(GCONF_SECTION, GTK_WINDOW(ti_dialog->dialog));
+    gnc_save_window_size(GNC_PREFS_GROUP, GTK_WINDOW(ti_dialog->dialog));
     gtk_widget_destroy (ti_dialog->dialog);
 }
 

@@ -53,7 +53,7 @@
 
 #define DIALOG_NEW_ACCOUNT_CM_CLASS "dialog-new-account"
 #define DIALOG_EDIT_ACCOUNT_CM_CLASS "dialog-edit-account"
-#define GCONF_SECTION "dialogs/account"
+#define GNC_PREFS_GROUP "dialogs.account"
 #define DEFAULT_COLOR "#ededececebeb"
 
 enum account_cols
@@ -1401,7 +1401,7 @@ gnc_account_window_create(AccountWindow *aw)
     aw->type_view = GTK_WIDGET(gtk_builder_get_object (builder, "type_view"));
     gnc_account_type_view_create (aw);
 
-    gnc_restore_window_size (GCONF_SECTION, GTK_WINDOW(aw->dialog));
+    gnc_restore_window_size (GNC_PREFS_GROUP, GTK_WINDOW(aw->dialog));
 
     gtk_widget_grab_focus(GTK_WIDGET(aw->name_entry));
 
@@ -1483,7 +1483,7 @@ close_handler (gpointer user_data)
     AccountWindow *aw = user_data;
 
     ENTER("aw %p, modal %d", aw, aw->modal);
-    gnc_save_window_size (GCONF_SECTION, GTK_WINDOW(aw->dialog));
+    gnc_save_window_size (GNC_PREFS_GROUP, GTK_WINDOW(aw->dialog));
 
     gtk_widget_destroy (GTK_WIDGET (aw->dialog));
     LEAVE(" ");

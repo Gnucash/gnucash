@@ -33,6 +33,7 @@
 #define KEY_NOTIFY "notify"
 #define KEY_CREATE_DAYS	"create_days"
 #define KEY_REMIND_DAYS	"remind_days"
+#define GNC_PREFS_GROUP_SXED "dialogs.sxs.transaction_editor"
 
 typedef struct _GncSxEditorDialog GncSxEditorDialog;
 

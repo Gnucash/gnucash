@@ -56,7 +56,7 @@
 #endif
 
 #define GWEN_GUI_CM_CLASS "dialog-hbcilog"
-#define GCONF_SECTION_CONNECTION GCONF_SECTION_AQBANKING "/connection_dialog"
+#define GNC_PREFS_GROUP_CONNECTION GNC_PREFS_GROUP_AQBANKING ".connection_dialog"
 #define KEY_CLOSE_ON_FINISH "close_on_finish"
 #define KEY_REMEMBER_PIN "remember_pin"
 
@@ -614,7 +614,7 @@ reset_dialog(GncGWENGui *gui)
     if (gui->parent)
         gtk_window_set_transient_for(GTK_WINDOW(gui->dialog),
                                      GTK_WINDOW(gui->parent));
-    gnc_restore_window_size(GCONF_SECTION_CONNECTION, GTK_WINDOW(gui->dialog));
+    gnc_restore_window_size(GNC_PREFS_GROUP_CONNECTION, GTK_WINDOW(gui->dialog));
 
     gui->keep_alive = TRUE;
     gui->state = INIT;
@@ -725,7 +725,7 @@ hide_dialog(GncGWENGui *gui)
         NULL);
 
     /* Remember size and position of the dialog */
-    gnc_save_window_size(GCONF_SECTION_CONNECTION, GTK_WINDOW(gui->dialog));
+    gnc_save_window_size(GNC_PREFS_GROUP_CONNECTION, GTK_WINDOW(gui->dialog));
 
     /* Do not serve as GUI anymore */
     gui->state = HIDDEN;

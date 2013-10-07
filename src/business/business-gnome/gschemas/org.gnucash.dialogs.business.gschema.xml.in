@@ -1,16 +1,106 @@
 <schemalist gettext-domain="GETTEXT_PACKAGE">
   <schema id="org.gnucash.dialogs.business" path="/apps/gnucash/dialogs/business/">
     <child name="customer_search" schema="org.gnucash.dialogs.business.customer_search"/>
+    <child name="employee_search" schema="org.gnucash.dialogs.business.employee_search"/>
+    <child name="invoice_search" schema="org.gnucash.dialogs.business.invoice_search"/>
+    <child name="job_search" schema="org.gnucash.dialogs.business.job_search"/>
+    <child name="order_search" schema="org.gnucash.dialogs.business.order_search"/>
+    <child name="vendor_search" schema="org.gnucash.dialogs.business.vendor_search"/>
     <child name="invoice" schema="org.gnucash.dialogs.business.invoice"/>
     <child name="bill" schema="org.gnucash.dialogs.business.bill"/>
+    <child name="tax_tables" schema="org.gnucash.dialogs.business.tax_tables"/>
   </schema>
+
   <schema id="org.gnucash.dialogs.business.customer_search" path="/apps/gnucash/dialogs/business/customer_search/">
+    <key name="last-geometry" type="(iiii)">
+      <default>(-1,-1,-1,-1)</default>
+      <summary>Last window position and size</summary>
+      <description>This setting describes the size and position of the window when it was last closed.
+        The numbers are the X and Y coordinates of the top left corner of the window
+        followed by the width and height of the window.</description>
+    </key>
     <key name="search_for_active_only" type="b">
       <default>false</default>
       <summary>Search only in active items</summary>
       <description>If active, only the 'active' items in the current class will be searched. Otherwise all items in the current class will be searched.</description>
     </key>
   </schema>
+
+  <schema id="org.gnucash.dialogs.business.employee_search" path="/apps/gnucash/dialogs/business/employee_search/">
+    <key name="last-geometry" type="(iiii)">
+      <default>(-1,-1,-1,-1)</default>
+      <summary>Last window position and size</summary>
+      <description>This setting describes the size and position of the window when it was last closed.
+        The numbers are the X and Y coordinates of the top left corner of the window
+        followed by the width and height of the window.</description>
+    </key>
+    <key name="search_for_active_only" type="b">
+      <default>false</default>
+      <summary>Search only in active items</summary>
+      <description>If active, only the 'active' items in the current class will be searched. Otherwise all items in the current class will be searched.</description>
+    </key>
+  </schema>
+
+  <schema id="org.gnucash.dialogs.business.invoice_search" path="/apps/gnucash/dialogs/business/invoice_search/">
+    <key name="last-geometry" type="(iiii)">
+      <default>(-1,-1,-1,-1)</default>
+      <summary>Last window position and size</summary>
+      <description>This setting describes the size and position of the window when it was last closed.
+        The numbers are the X and Y coordinates of the top left corner of the window
+        followed by the width and height of the window.</description>
+    </key>
+    <key name="search_for_active_only" type="b">
+      <default>false</default>
+      <summary>Search only in active items</summary>
+      <description>If active, only the 'active' items in the current class will be searched. Otherwise all items in the current class will be searched.</description>
+    </key>
+  </schema>
+
+  <schema id="org.gnucash.dialogs.business.job_search" path="/apps/gnucash/dialogs/business/job_search/">
+    <key name="last-geometry" type="(iiii)">
+      <default>(-1,-1,-1,-1)</default>
+      <summary>Last window position and size</summary>
+      <description>This setting describes the size and position of the window when it was last closed.
+        The numbers are the X and Y coordinates of the top left corner of the window
+        followed by the width and height of the window.</description>
+    </key>
+    <key name="search_for_active_only" type="b">
+      <default>false</default>
+      <summary>Search only in active items</summary>
+      <description>If active, only the 'active' items in the current class will be searched. Otherwise all items in the current class will be searched.</description>
+    </key>
+  </schema>
+
+  <schema id="org.gnucash.dialogs.business.order_search" path="/apps/gnucash/dialogs/business/order_search/">
+    <key name="last-geometry" type="(iiii)">
+      <default>(-1,-1,-1,-1)</default>
+      <summary>Last window position and size</summary>
+      <description>This setting describes the size and position of the window when it was last closed.
+        The numbers are the X and Y coordinates of the top left corner of the window
+        followed by the width and height of the window.</description>
+    </key>
+    <key name="search_for_active_only" type="b">
+      <default>false</default>
+      <summary>Search only in active items</summary>
+      <description>If active, only the 'active' items in the current class will be searched. Otherwise all items in the current class will be searched.</description>
+    </key>
+  </schema>
+
+  <schema id="org.gnucash.dialogs.business.vendor_search" path="/apps/gnucash/dialogs/business/vendor_search/">
+    <key name="last-geometry" type="(iiii)">
+      <default>(-1,-1,-1,-1)</default>
+      <summary>Last window position and size</summary>
+      <description>This setting describes the size and position of the window when it was last closed.
+        The numbers are the X and Y coordinates of the top left corner of the window
+        followed by the width and height of the window.</description>
+    </key>
+    <key name="search_for_active_only" type="b">
+      <default>false</default>
+      <summary>Search only in active items</summary>
+      <description>If active, only the 'active' items in the current class will be searched. Otherwise all items in the current class will be searched.</description>
+    </key>
+  </schema>
+
   <schema id="org.gnucash.dialogs.business.invoice" path="/apps/gnucash/dialogs/business/invoice/">
     <key name="tax_included" type="b">
       <default>true</default>
@@ -53,6 +143,16 @@
       <default>7.0</default>
       <summary>Show bills due within this many days</summary>
       <description>This field defines the number of days in advance that GnuCash will check for due bills.  Its value is only used if the "Notify when due" setting is active.</description>
+    </key>
+  </schema>
+
+  <schema id="org.gnucash.dialogs.business.tax_tables" path="/apps/gnucash/dialogs/business/tax_tables/">
+    <key name="last-geometry" type="(iiii)">
+      <default>(-1,-1,-1,-1)</default>
+      <summary>Last window position and size</summary>
+      <description>This setting describes the size and position of the window when it was last closed.
+        The numbers are the X and Y coordinates of the top left corner of the window
+        followed by the width and height of the window.</description>
     </key>
   </schema>
 </schemalist>

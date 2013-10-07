@@ -69,6 +69,7 @@ typedef struct
 } GNCReconcileViewClass;
 
 #define GCONF_RECONCILE_SECTION "dialogs/reconcile"
+#define GNC_PREFS_GROUP_RECONCILE "dialogs.reconcile"
 
 /***********************************************************
  *                public functions                         *

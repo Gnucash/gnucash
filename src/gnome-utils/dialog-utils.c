@@ -40,6 +40,7 @@
 #include "gnc-euro.h"
 #include "gnc-ui-util.h"
 #include "gnc-gconf-utils.h"
+#include "gnc-prefs.h"
 #include "guile-util.h"
 #include "gnc-main-window.h"
 #include <gnc-gdate-utils.h>
@@ -47,8 +48,7 @@
 /* This static indicates the debugging module that this .o belongs to. */
 static QofLogModule log_module = GNC_MOD_GUI;
 
-#define WINDOW_POSITION		"window_position"
-#define WINDOW_GEOMETRY		"window_geometry"
+#define GNC_PREF_LAST_GEOMETRY "last-geometry"
 
 /********************************************************************\
  * gnc_get_toolbar_style                                            *
@@ -141,61 +141,60 @@ gnc_set_label_color(GtkWidget *label, gnc_numeric value)
 
 /********************************************************************\
  * gnc_restore_window_size                                          *
- *   returns the window size to use for the given option prefix,    *
- *   if window sizes are being saved, otherwise returns 0 for both. *
+ *   restores the position and size of the given window, if these   *
+ *   these parameters have been saved earlier. Does nothing if no   *
+ *   saved values are found.                                        *
  *                                                                  *
- * Args: prefix - the option name prefix                            *
- *       width  - pointer to width                                  *
- *       height - pointer to height                                 *
+ * Args: group - the preferences group to look in for saved coords  *
+ *       window - the window for which the coords are to be         *
+ *                restored                                          *
  * Returns: nothing                                                 *
  \*******************************************************************/
 void
-gnc_restore_window_size(const char *section, GtkWindow *window)
+gnc_restore_window_size(const char *group, GtkWindow *window)
 {
-    GSList *coord_list;
-    gint coords[2];
+    gint wpos[2], wsize[2];
+    GVariant *geometry;
 
     ENTER("");
 
-    g_return_if_fail(section != NULL);
+    g_return_if_fail(group != NULL);
     g_return_if_fail(window != NULL);
 
     if (!gnc_gconf_get_bool(GCONF_GENERAL, KEY_SAVE_GEOMETRY, NULL))
         return;
 
-    coord_list = gnc_gconf_get_list(section, WINDOW_POSITION,
-                                    GCONF_VALUE_INT, NULL);
-    if (coord_list)
+    geometry = gnc_prefs_get_value (group, GNC_PREF_LAST_GEOMETRY);
+    if (g_variant_is_of_type (geometry, (const GVariantType *) "(iiii)") )
     {
         gint screen_width = gdk_screen_width();
         gint screen_height = gdk_screen_height();
 
-        coords[0] = GPOINTER_TO_INT(g_slist_nth_data(coord_list, 0));
-        coords[1] = GPOINTER_TO_INT(g_slist_nth_data(coord_list, 1));
-        DEBUG("from gconf - coords[0]: %d, coords[1]: %d", coords[0], coords[1]);
+        g_variant_get (geometry, "(iiii)",
+                                 &wpos[0],  &wpos[1],
+                                 &wsize[0], &wsize[1]);
+        DEBUG("geometry from preferences - wpos[0]: %d, wpos[1]: %d, wsize[0]: %d, wsize[1]: %d",
+                wpos[0],  wpos[1], wsize[0], wsize[1]);
 
-        /* Keep the window on screen if possible */
-        if (screen_width != 0)
-            coords[0] = coords[0] % screen_width;
-        if (screen_height != 0)
-            coords[1] = coords[1] % screen_height;
-        DEBUG("after screen adaption - coords[0]: %d, coords[1]: %d", coords[0], coords[1]);
+        /* (-1, -1) means no geometry was saved (default preferences value) */
+        if ((wpos[0] != -1) && (wpos[1] != -1))
+        {
+            /* Keep the window on screen if possible */
+            if (screen_width != 0)
+                wpos[0] = wpos[0] % screen_width;
+            if (screen_height != 0)
+                wpos[1] = wpos[1] % screen_height;
+            DEBUG("geometry after screen adaption - wpos[0]: %d, wpos[1]: %d, wsize[0]: %d, wsize[1]: %d",
+                    wpos[0],  wpos[1], wsize[0], wsize[1]);
 
-        gtk_window_move(window, coords[0], coords[1]);
-        g_slist_free(coord_list);
+            gtk_window_move(window, wpos[0], wpos[1]);
+        }
+
+        /* Don't attempt to restore invalid sizes */
+        if ((wsize[0] > 0) && (wsize[1] > 0))
+            gtk_window_resize(window, wsize[0], wsize[1]);
     }
-
-    coord_list = gnc_gconf_get_list(section, WINDOW_GEOMETRY,
-                                    GCONF_VALUE_INT, NULL);
-    if (coord_list)
-    {
-        coords[0] = GPOINTER_TO_INT(g_slist_nth_data(coord_list, 0));
-        coords[1] = GPOINTER_TO_INT(g_slist_nth_data(coord_list, 1));
-        DEBUG("coords[0]: %d, coords[1]: %d", coords[0], coords[1]);
-        if ((coords[0] != 0) && (coords[1] != 0))
-            gtk_window_resize(window, coords[0], coords[1]);
-        g_slist_free(coord_list);
-    }
+    g_variant_unref (geometry);
 
     LEAVE("");
 }
@@ -203,40 +202,32 @@ gnc_restore_window_size(const char *section, GtkWindow *window)
 
 /********************************************************************\
  * gnc_save_window_size                                             *
- *   save the window size into options whose names are determined   *
- *   by the string prefix.                                          *
+ *   save the window position and size into options whose names are *
+ *   prefixed by the group name.                                   *
  *                                                                  *
- * Args: prefix - determines the options used to save the values    *
- *       width  - width of the window to save                       *
- *       height - height of the window to save                      *
+ * Args: group - preferences group to save the options in           *
+ *       window - the window for which current position and size    *
+ *                are to be saved                                   *
  * Returns: nothing                                                 *
 \********************************************************************/
 void
-gnc_save_window_size(const char *section, GtkWindow *window)
+gnc_save_window_size(const char *group, GtkWindow *window)
 {
-    GSList *coord_list = NULL;
-    gint coords[2];
+    gint wpos[2], wsize[2];
+    GVariant *geometry;
 
-    g_return_if_fail(section != NULL);
+    g_return_if_fail(group != NULL);
     g_return_if_fail(window != NULL);
 
     if (!gnc_gconf_get_bool(GCONF_GENERAL, KEY_SAVE_GEOMETRY, NULL))
         return;
 
-    gtk_window_get_size(GTK_WINDOW(window), &coords[0], &coords[1]);
-    coord_list = g_slist_append(coord_list, GUINT_TO_POINTER(coords[0]));
-    coord_list = g_slist_append(coord_list, GUINT_TO_POINTER(coords[1]));
-    gnc_gconf_set_list(section, WINDOW_GEOMETRY, GCONF_VALUE_INT,
-                       coord_list, NULL);
-    g_slist_free(coord_list);
-    coord_list = NULL;
-
-    gtk_window_get_position(GTK_WINDOW(window), &coords[0], &coords[1]);
-    coord_list = g_slist_append(coord_list, GUINT_TO_POINTER(coords[0]));
-    coord_list = g_slist_append(coord_list, GUINT_TO_POINTER(coords[1]));
-    gnc_gconf_set_list(section, WINDOW_POSITION, GCONF_VALUE_INT,
-                       coord_list, NULL);
-    g_slist_free(coord_list);
+    gtk_window_get_position(GTK_WINDOW(window), &wpos[0], &wpos[1]);
+    gtk_window_get_size(GTK_WINDOW(window), &wsize[0], &wsize[1]);
+    geometry = g_variant_new ("(iiii)", wpos[0],  wpos[1],
+                                        wsize[0], wsize[1]);
+    gnc_prefs_set_value (group, GNC_PREF_LAST_GEOMETRY, geometry);
+    g_variant_unref (geometry);
 }
 
 

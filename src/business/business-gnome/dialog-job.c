@@ -46,7 +46,7 @@
 #define DIALOG_NEW_JOB_CM_CLASS "dialog-new-job"
 #define DIALOG_EDIT_JOB_CM_CLASS "dialog-edit-job"
 
-#define GCONF_SECTION_SEARCH "dialogs/business/job_search"
+#define GNC_PREFS_GROUP_SEARCH "dialogs.business.job_search"
 
 void gnc_job_window_ok_cb (GtkWidget *widget, gpointer data);
 void gnc_job_window_cancel_cb (GtkWidget *widget, gpointer data);
@@ -628,7 +628,7 @@ gnc_job_search (GncJob *start, GncOwner *owner, QofBook *book)
     return gnc_search_dialog_create (type, _("Find Job"),
                                      params, columns, q, q2, buttons, NULL,
                                      new_job_cb, sw, free_userdata_cb,
-                                     GCONF_SECTION_SEARCH, NULL);
+                                     GNC_PREFS_GROUP_SEARCH, NULL);
 }
 
 /* Functions for widgets for job selection */

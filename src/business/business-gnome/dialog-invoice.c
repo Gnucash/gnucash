@@ -85,7 +85,7 @@
 #define DIALOG_NEW_INVOICE_CM_CLASS "dialog-new-invoice"
 #define DIALOG_VIEW_INVOICE_CM_CLASS "dialog-view-invoice"
 
-#define GCONF_SECTION_SEARCH  "dialogs/business/invoice_search"
+#define GNC_PREFS_GROUP_SEARCH  "dialogs.business.invoice_search"
 
 #define LAST_POSTED_TO_ACCT "last-posted-to-acct"
 
@@ -3109,7 +3109,7 @@ gnc_invoice_search (GncInvoice *start, GncOwner *owner, QofBook *book)
     }
     return gnc_search_dialog_create (type, title, params, columns, q, q2,
                                      buttons, NULL, new_invoice_cb,
-                                     sw, free_invoice_cb, GCONF_SECTION_SEARCH,
+                                     sw, free_invoice_cb, GNC_PREFS_GROUP_SEARCH,
                                      label);
 }
 

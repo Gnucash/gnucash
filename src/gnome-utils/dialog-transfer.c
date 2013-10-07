@@ -52,7 +52,7 @@
 
 
 #define DIALOG_TRANSFER_CM_CLASS "dialog-transfer"
-#define GCONF_SECTION "dialogs/transfer"
+#define GNC_PREFS_GROUP "dialogs.transfer"
 
 #define PRECISION 1000000
 
@@ -1942,7 +1942,7 @@ gnc_xfer_dialog_create(GtkWidget *parent, XferDialog *xferData)
     }
 
     gtk_builder_connect_signals(builder, xferData);
-    gnc_restore_window_size (GCONF_SECTION, GTK_WINDOW (xferData->dialog));
+    gnc_restore_window_size (GNC_PREFS_GROUP, GTK_WINDOW (xferData->dialog));
     LEAVE(" ");
 }
 
@@ -1955,7 +1955,7 @@ close_handler (gpointer user_data)
     ENTER(" ");
     dialog = GTK_WIDGET (xferData->dialog);
 
-    gnc_save_window_size (GCONF_SECTION, GTK_WINDOW (dialog));
+    gnc_save_window_size (GNC_PREFS_GROUP, GTK_WINDOW (dialog));
     gtk_widget_hide (dialog);
     gnc_xfer_dialog_close_cb(GTK_DIALOG(dialog), xferData);
     gtk_widget_destroy (dialog);

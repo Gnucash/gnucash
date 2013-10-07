@@ -83,6 +83,7 @@ enum split_cols
 #define RESPONSE_NEW_LOT       5
 
 #define GCONF_SECTION "dialogs/lot_viewer"
+#define GNC_PREFS_GROUP "dialogs.lot_viewer"
 #define GCONF_KEY_HPOSITION "hpane_position"
 #define GCONF_KEY_VPOSITION "vpane_position"
 
@@ -613,7 +614,7 @@ lv_close_handler (gpointer user_data)
 
     lv_save_current_lot (lv);
 
-    gnc_save_window_size(GCONF_SECTION, GTK_WINDOW(lv->window));
+    gnc_save_window_size(GNC_PREFS_GROUP, GTK_WINDOW(lv->window));
     gtk_widget_destroy (lv->window);
 }
 
@@ -1017,7 +1018,7 @@ lv_create (GNCLotViewer *lv)
 
     lv_update_split_buttons(lv);
 
-    gnc_restore_window_size(GCONF_SECTION, GTK_WINDOW(lv->window));
+    gnc_restore_window_size(GNC_PREFS_GROUP, GTK_WINDOW(lv->window));
 }
 
 /* ======================================================================== */

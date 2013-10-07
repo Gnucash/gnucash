@@ -50,7 +50,7 @@
 #include "import-account-matcher.h"
 #include "app-utils/gnc-component-manager.h"
 
-#define GCONF_SECTION "dialogs/import/generic_matcher/transaction_list"
+#define GNC_PREFS_GROUP "dialogs.import.generic.transaction_list"
 
 struct _main_matcher_info
 {
@@ -137,7 +137,7 @@ void gnc_gen_trans_list_delete (GNCImportMainMatcher *info)
 
     if (!(info->dialog == NULL))
     {
-        gnc_save_window_size(GCONF_SECTION, GTK_WINDOW(info->dialog));
+        gnc_save_window_size(GNC_PREFS_GROUP, GTK_WINDOW(info->dialog));
         gnc_import_Settings_delete (info->user_settings);
         gtk_widget_destroy (GTK_WIDGET (info->dialog));
     }
@@ -574,7 +574,7 @@ GNCImportMainMatcher *gnc_gen_trans_list_new (GtkWidget *parent,
     if (heading)
         gtk_label_set_text (GTK_LABEL (heading_label), heading);
 
-    gnc_restore_window_size(GCONF_SECTION, GTK_WINDOW(info->dialog));
+    gnc_restore_window_size(GNC_PREFS_GROUP, GTK_WINDOW(info->dialog));
     gtk_widget_show_all (GTK_WIDGET (info->dialog));
 
     info->transaction_processed_cb = NULL;

@@ -36,9 +36,10 @@
 #include "gnc-engine.h"
 
 #define GCONF_SECTION   "dialogs/tip_of_the_day"
+#define GNC_PREFS_GROUP      "dialogs.totd"
 #define KEY_CURRENT_TIP "current_tip"
 #define KEY_SHOW_TIPS   "show_at_startup"
-#define DIALOG_TOTD_CM_CLASS	"dialog-totd"
+#define DIALOG_TOTD_CM_CLASS "dialog-totd"
 
 #define GNC_RESPONSE_FORWARD 1
 #define GNC_RESPONSE_BACK    2
@@ -145,7 +146,7 @@ void gnc_totd_dialog_response_cb (GtkDialog *dialog,
         break;
 
     case GTK_RESPONSE_CLOSE:
-        gnc_save_window_size(GCONF_SECTION, GTK_WINDOW(totd_dialog->dialog));
+        gnc_save_window_size(GNC_PREFS_GROUP, GTK_WINDOW(totd_dialog->dialog));
         /* fall through */
 
     default:
@@ -349,7 +350,7 @@ gnc_totd_dialog (GtkWindow *parent, gboolean startup)
 
     gnc_new_tip_number(totd_dialog, 1);
 
-    gnc_restore_window_size(GCONF_SECTION, GTK_WINDOW(totd_dialog->dialog));
+    gnc_restore_window_size(GNC_PREFS_GROUP, GTK_WINDOW(totd_dialog->dialog));
     gtk_widget_show(GTK_WIDGET (totd_dialog->dialog));
 
     gnc_register_gui_component(DIALOG_TOTD_CM_CLASS,

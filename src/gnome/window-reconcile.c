@@ -52,13 +52,13 @@
 #include "gnc-gnome-utils.h"
 #include "gnc-main-window.h"
 #include "gnc-plugin-page-register.h"
+#include "gnc-prefs.h"
 #include "gnc-ui.h"
 #include "gnc-ui-balances.h"
 #include "guile-util.h"
 #include "reconcile-view.h"
 #include "window-reconcile.h"
 
-#define GCONF_SECTION "dialogs/window-reconcile"
 #define WINDOW_RECONCILE_CM_CLASS "window-reconcile"
 
 
@@ -1613,7 +1613,7 @@ close_handler (gpointer user_data)
 {
     RecnWindow *recnData = user_data;
 
-    gnc_save_window_size(GCONF_SECTION, GTK_WINDOW(recnData->window));
+    gnc_save_window_size(GNC_PREFS_GROUP_RECONCILE, GTK_WINDOW(recnData->window));
     gtk_widget_destroy (recnData->window);
 }
 
@@ -1801,7 +1801,7 @@ recnWindowWithBalance (GtkWidget *parent, Account *account,
 
         /* Force a reasonable starting size */
         gtk_window_set_default_size(GTK_WINDOW(recnData->window), 800, 600);
-        gnc_restore_window_size (GCONF_SECTION, GTK_WINDOW(recnData->window));
+        gnc_restore_window_size (GNC_PREFS_GROUP_RECONCILE, GTK_WINDOW(recnData->window));
 
         gtk_container_add(GTK_CONTAINER(frame), main_area);
         gtk_container_set_border_width(GTK_CONTAINER(main_area), 10);

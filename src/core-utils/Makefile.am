@@ -80,7 +80,6 @@ libgnc_core_utils_python_la_LIBADD = \
 
 libgnc_core_utils_python_la_CPPFLAGS = \
   ${GLIB_CFLAGS} \
-  ${GCONF_CFLAGS} \
   ${GTK_MAC_CFLAGS} \
   ${QOF_CFLAGS} \
   ${PYTHON_CPPFLAGS} \

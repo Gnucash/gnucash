@@ -76,7 +76,7 @@
 #include "dialog-preferences.h"
 
 #define DIALOG_PREFERENCES_CM_CLASS "dialog-newpreferences"
-#define GCONF_SECTION               "dialogs/preferences"
+#define GNC_PREFS_GROUP                 "dialogs.preferences"
 #define PREFIX_LEN                   sizeof("gconf/") - 1
 #define WIDGET_HASH                 "widget_hash"
 #define NOTEBOOK                    "notebook"
@@ -1410,7 +1410,7 @@ gnc_preferences_response_cb(GtkDialog *dialog, gint response, GtkDialog *unused)
         break;
 
     default:
-        gnc_save_window_size(GCONF_SECTION, GTK_WINDOW(dialog));
+        gnc_save_window_size(GNC_PREFS_GROUP, GTK_WINDOW(dialog));
         gnc_unregister_gui_component_by_data(DIALOG_PREFERENCES_CM_CLASS,
                                              dialog);
         gnc_gconf_general_remove_cb(
@@ -1886,7 +1886,7 @@ gnc_preferences_dialog (void)
 
     dialog = gnc_preferences_dialog_create();
 
-    gnc_restore_window_size(GCONF_SECTION, GTK_WINDOW(dialog));
+    gnc_restore_window_size(GNC_PREFS_GROUP, GTK_WINDOW(dialog));
     gtk_widget_show(dialog);
 
     gnc_gconf_add_notification(G_OBJECT(dialog), NULL,

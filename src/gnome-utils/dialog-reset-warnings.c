@@ -36,7 +36,7 @@
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_PREFS;
 
-#define GCONF_SECTION                   "dialogs/reset_warnings"
+#define GNC_PREFS_GROUP                 "dialogs.reset_warnings"
 #define DIALOG_RESET_WARNINGS_CM_CLASS  "reset-warnings"
 #define GCONF_ENTRY_LIST                "gconf_entries"
 #define TIPS_STRING                     "tips"
@@ -215,7 +215,7 @@ gnc_reset_warnings_response_cb (GtkDialog *dialog,
         gnc_gconf_remove_notification(G_OBJECT(rw_dialog->dialog), GCONF_WARNINGS,
                                       DIALOG_RESET_WARNINGS_CM_CLASS);
         gnc_reset_warnings_apply_changes(rw_dialog);
-        gnc_save_window_size(GCONF_SECTION, GTK_WINDOW(rw_dialog->dialog));
+        gnc_save_window_size(GNC_PREFS_GROUP, GTK_WINDOW(rw_dialog->dialog));
         gnc_unregister_gui_component_by_data(DIALOG_RESET_WARNINGS_CM_CLASS,
                                              rw_dialog);
         gtk_widget_destroy(GTK_WIDGET(rw_dialog->dialog));
@@ -552,7 +552,7 @@ gnc_reset_warnings_dialog (GtkWindow *parent)
                                gnc_reset_warnings_gconf_changed,
                                DIALOG_RESET_WARNINGS_CM_CLASS);
 
-    gnc_restore_window_size(GCONF_SECTION, GTK_WINDOW(rw_dialog->dialog));
+    gnc_restore_window_size(GNC_PREFS_GROUP, GTK_WINDOW(rw_dialog->dialog));
 
     gnc_register_gui_component (DIALOG_RESET_WARNINGS_CM_CLASS,
                                 NULL, close_handler, rw_dialog);

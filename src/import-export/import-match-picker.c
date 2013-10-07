@@ -41,7 +41,7 @@
  *   Constants   *
 \********************************************************************/
 
-#define GCONF_SECTION "dialogs/import/generic_matcher/match_picker"
+#define GNC_PREFS_GROUP "dialogs.import.generic.match_picker"
 
 enum downloaded_cols
 {
@@ -426,7 +426,7 @@ init_match_picker_gui(GNCImportMatchPicker * matcher)
        ", add_threshold:",matcher->add_threshold,
        ", display_threshold:",matcher->display_threshold); */
 
-    gnc_restore_window_size(GCONF_SECTION,
+    gnc_restore_window_size(GNC_PREFS_GROUP,
                             GTK_WINDOW (matcher->transaction_matcher));
     gtk_widget_show(matcher->transaction_matcher);
 
@@ -462,7 +462,7 @@ gnc_import_match_picker_run_and_close (GNCImportTransInfo *transaction_info)
     /*DEBUG("Right before run and close");*/
     gtk_window_set_modal(GTK_WINDOW(matcher->transaction_matcher), TRUE);
     response = gtk_dialog_run (GTK_DIALOG (matcher->transaction_matcher));
-    gnc_save_window_size(GCONF_SECTION,
+    gnc_save_window_size(GNC_PREFS_GROUP,
                          GTK_WINDOW (matcher->transaction_matcher));
     gtk_widget_destroy (matcher->transaction_matcher);
     /*DEBUG("Right after run and close");*/
