@@ -58,13 +58,6 @@
 #define GNC_PREFS_GROUP_WARNINGS_PERM     "general.warnings.permanent"
 
 /* Preference names used across multiple modules */
-/* Currently the first one conflicts with same definition in gnc-gconf-utils.h
- * Only load it if gnc-gconf-utils.h isn't loaded yet.
- */
-#ifndef GNC_GCONF_UTILS_H
-#define DESKTOP_GNOME_INTERFACE "/desktop/gnome/interface"
-#endif /* GNC_GCONF_UTILS_H */
-#define GNC_PREF_TOOLBAR_STYLE       "toolbar_style"
 #define GNC_PREF_SAVE_GEOMETRY       "save_window_geometry"
 #define GNC_PREF_LAST_PATH           "last_path"
 #define GNC_PREF_USE_NEW             "use_new_window"

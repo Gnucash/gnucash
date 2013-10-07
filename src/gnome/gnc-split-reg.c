@@ -82,8 +82,6 @@ static void gsr_update_summary_label( GtkWidget *label,
 
 static void gsr_redraw_all_cb (GnucashRegister *g_reg, gpointer data);
 
-static void gnc_split_reg_refresh_toolbar( GNCSplitReg *gsr );
-
 static void gnc_split_reg_ld_destroy( GNCLedgerDisplay *ledger );
 
 static Transaction* create_balancing_transaction(QofBook *book, Account *account,
@@ -372,7 +370,6 @@ gsr_setup_table( GNCSplitReg *gsr )
     gnc_split_register_show_present_divider( sr, TRUE );
     /* events should be sufficient to redraw this */
     /* gnc_ledger_display_refresh( gsr->ledger ); */
-    gnc_split_reg_refresh_toolbar( gsr );
 
     LEAVE(" ");
 }
@@ -681,18 +678,6 @@ gsr_redraw_all_cb (GnucashRegister *g_reg, gpointer data)
             gnc_price_unref (price);
         }
     }
-}
-
-static void
-gnc_split_reg_refresh_toolbar( GNCSplitReg *gsr )
-{
-    GtkToolbarStyle tbstyle;
-
-    if ((gsr == NULL) || (gsr->toolbar == NULL))
-        return;
-
-    tbstyle = gnc_get_toolbar_style ();
-    gtk_toolbar_set_style( GTK_TOOLBAR(gsr->toolbar), tbstyle );
 }
 
 static void

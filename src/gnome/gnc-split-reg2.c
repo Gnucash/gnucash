@@ -72,8 +72,6 @@ static void gsr2_update_summary_label (GtkWidget *label,
 
 static void gsr2_redraw_all_cb (GncTreeViewSplitReg *view, gpointer data);
 
-static void gnc_split_reg2_refresh_toolbar (GNCSplitReg2 *gsr);
-
 static void gnc_split_reg2_ld_destroy (GNCLedgerDisplay2 *ledger);
 
 static Transaction* gsr2_create_balancing_transaction (QofBook *book, Account *account,
@@ -218,8 +216,6 @@ gsr2_setup_table (GNCSplitReg2 *gsr)
     ENTER("gsr=%p", gsr);
 
     model = gnc_ledger_display2_get_split_model_register (gsr->ledger);
-
-    gnc_split_reg2_refresh_toolbar (gsr);
 
     LEAVE(" ");
 }
@@ -680,18 +676,6 @@ gsr2_redraw_all_cb (GncTreeViewSplitReg *view, gpointer user_data)
             gnc_price_unref (price);
         }
     }
-}
-
-static void
-gnc_split_reg2_refresh_toolbar (GNCSplitReg2 *gsr)
-{
-    GtkToolbarStyle tbstyle;
-
-    if ((gsr == NULL) || (gsr->toolbar == NULL))
-        return;
-
-    tbstyle = gnc_get_toolbar_style ();
-    gtk_toolbar_set_style (GTK_TOOLBAR (gsr->toolbar), tbstyle );
 }
 
 static void

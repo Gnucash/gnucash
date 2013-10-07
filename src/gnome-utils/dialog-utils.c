@@ -50,38 +50,6 @@ static QofLogModule log_module = GNC_MOD_GUI;
 
 #define GNC_PREF_LAST_GEOMETRY "last-geometry"
 
-/********************************************************************\
- * gnc_get_toolbar_style                                            *
- *   returns the current toolbar style for gnucash toolbars         *
- *                                                                  *
- * Args: none                                                       *
- * Returns: toolbar style                                           *
- \*******************************************************************/
-GtkToolbarStyle
-gnc_get_toolbar_style(void)
-{
-    GtkToolbarStyle tbstyle = GTK_TOOLBAR_BOTH;
-    char *style_string;
-
-    style_string = gnc_gconf_get_string(GCONF_GENERAL,
-                                        KEY_TOOLBAR_STYLE, NULL);
-    if (!style_string || strcmp(style_string, "system") == 0)
-    {
-        if (style_string)
-            g_free(style_string);
-        style_string = gnc_gconf_get_string(DESKTOP_GNOME_INTERFACE,
-                                            KEY_TOOLBAR_STYLE, NULL);
-    }
-
-    if (style_string == NULL)
-        return GTK_TOOLBAR_BOTH;
-    tbstyle = gnc_enum_from_nick(GTK_TYPE_TOOLBAR_STYLE, style_string,
-                                 GTK_TOOLBAR_BOTH);
-    g_free(style_string);
-
-    return tbstyle;
-}
-
 
 /********************************************************************\
  * gnc_get_deficit_color                                            *

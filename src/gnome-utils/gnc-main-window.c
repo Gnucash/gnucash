@@ -63,7 +63,6 @@
 #include "core-utils/gnc-version.h"
 #include "gnc-window.h"
 #include "gnc-prefs.h"
-#include "gnc-gconf-utils.h"
 #include "gnc-prefs.h"
 #include "option-util.h"
 // +JSLED
@@ -2543,10 +2542,6 @@ gnc_main_window_destroy (GtkObject *object)
         /* Update the "Windows" menu in all other windows */
         gnc_main_window_update_all_menu_items();
 #endif
-        gnc_gconf_remove_notification(G_OBJECT(window), DESKTOP_GNOME_INTERFACE,
-                                      GNC_MAIN_WINDOW_NAME);
-        gnc_gconf_remove_notification(G_OBJECT(window), GCONF_GENERAL,
-                                      GNC_MAIN_WINDOW_NAME);
         gnc_prefs_remove_cb_by_func (GNC_PREFS_GROUP_GENERAL,
                                      GNC_PREF_TAB_COLOR,
                                      gnc_main_window_update_tab_color,
@@ -3186,22 +3181,6 @@ gnc_main_window_get_action_group (GncMainWindow *window,
     return entry->action_group;
 }
 
-
-static void
-gnc_main_window_update_toolbar (GncMainWindow *window)
-{
-    GtkToolbarStyle style;
-    GSList *list;
-
-    ENTER("window %p", window);
-
-    style = gnc_get_toolbar_style();
-    list = gtk_ui_manager_get_toplevels(window->ui_merge, GTK_UI_MANAGER_TOOLBAR);
-    g_slist_foreach(list, (GFunc)gtk_toolbar_set_style, GINT_TO_POINTER(style));
-    g_slist_free(list);
-    LEAVE("");
-}
-
 static void
 gnc_main_window_update_tab_position (GncMainWindow *window)
 {
@@ -3357,11 +3336,7 @@ gnc_main_window_gconf_changed (GConfClient *client,
     key_tail = strrchr(key, '/');
     if (key_tail != NULL)
         key_tail++;
-    if (strcmp(key_tail, KEY_TOOLBAR_STYLE) == 0)
-    {
-        gnc_main_window_update_toolbar(window);
-    }
-    else if (strcmp(key_tail, KEY_TAB_POSITION) == 0)
+    if (strcmp(key_tail, KEY_TAB_POSITION) == 0)
     {
         gnc_main_window_update_tab_position(window);
     }
@@ -3593,10 +3568,6 @@ gnc_main_window_setup_window (GncMainWindow *window)
     gnc_gconf_add_notification(G_OBJECT(window), GCONF_GENERAL,
                                gnc_main_window_gconf_changed,
                                GNC_MAIN_WINDOW_NAME);
-    gnc_gconf_add_notification(G_OBJECT(window), DESKTOP_GNOME_INTERFACE,
-                               gnc_main_window_gconf_changed,
-                               GNC_MAIN_WINDOW_NAME);
-    gnc_main_window_update_toolbar(window);
     gnc_main_window_update_tab_position(window);
 
     gnc_main_window_init_menu_updaters(window);

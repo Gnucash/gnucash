@@ -69,11 +69,6 @@
       <summary>Use account colors in the tabs of open account registers</summary>
       <description>If active the account register tabs will be colored using the account's custom color if set. This can serve as a visual aid to quickly identify accounts.</description>
     </key>
-    <key name="toolbar_style" type="s">
-      <default>'system'</default>
-      <summary>Labels on toolbar buttons</summary>
-      <description>This setting controls how the labels on toolbar buttons are shown.  If set to "system" then GnuCash will use the desktop setting for how to draw toolbar buttons.  If set to "icon" then only icons will be show on toolbar buttons..  If set to "text" only the labels will be shown.  If set to "both" then both icons and labels will be shown.  If set to "both-horiz" then icons will be shown for all buttons with labels added on important buttons.</description>
-    </key>
     <key name="use_accounting_labels" type="b">
       <default>false</default>
       <summary>Use formal account labels</summary>

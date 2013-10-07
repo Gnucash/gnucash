@@ -47,7 +47,6 @@
 #include "gnc-date-edit.h"
 #include "gnc-event.h"
 #include "gnc-filepath-utils.h"
-#include "gnc-gconf-utils.h"
 #include <gnc-gdate-utils.h>
 #include "gnc-gnome-utils.h"
 #include "gnc-main-window.h"
@@ -78,9 +77,6 @@ struct _RecnWindow2
 
     GtkUIManager *ui_merge;
     GtkActionGroup *action_group;
-    GtkWidget *toolbar;          /* Toolbar widget                       */
-    gint toolbar_change_cb_id;   /* id for toolbar preference change cb  */
-    gint toolbar_change_cb_id2;  /* id for toolbar preference change cb  */
 
     GtkWidget *starting;         /* The starting balance                 */
     GtkWidget *ending;           /* The ending balance                   */
@@ -1395,47 +1391,6 @@ gnc_recn_open_cb (GtkAction *action, gpointer data)
 
 
 static void
-gnc_recn_refresh_toolbar (RecnWindow2 *recnData)
-{
-    GtkToolbarStyle style;
-    GSList *list;
-
-    if ((recnData == NULL) || (recnData->toolbar == NULL))
-        return;
-
-    style = gnc_get_toolbar_style();
-    list = gtk_ui_manager_get_toplevels (recnData->ui_merge, GTK_UI_MANAGER_TOOLBAR);
-    g_slist_foreach (list, (GFunc) gtk_toolbar_set_style, GINT_TO_POINTER(style));
-    g_slist_free (list);
-}
-
-
-static void
-gnc_toolbar_change_cb (GConfClient *client,
-                       guint cnxn_id,
-                       GConfEntry *entry,
-                       gpointer data)
-{
-    RecnWindow2 *recnData = data;
-    GConfValue *value;
-    const gchar *key, *key_tail;
-
-    key = gconf_entry_get_key (entry);
-    value = gconf_entry_get_value (entry);
-    if (!key || !value)
-        return;
-
-    key_tail = strrchr(key, '/');
-    if (key_tail != NULL)
-        key_tail++;
-    if (strcmp(key_tail, KEY_TOOLBAR_STYLE) == 0)
-    {
-        gnc_recn_refresh_toolbar (recnData);
-    }
-}
-
-
-static void
 gnc_get_reconcile_info (Account *account,
                         gnc_numeric *new_ending,
                         time64 *statement_date)
@@ -1767,13 +1722,6 @@ recnWindow2WithBalance (GtkWidget *parent, Account *account,
             g_assert (merge_id != 0);
         }
         g_free (filename);
-
-        recnData->toolbar_change_cb_id =
-            gnc_gconf_add_anon_notification (GCONF_GENERAL,
-                                            gnc_toolbar_change_cb, recnData);
-        recnData->toolbar_change_cb_id2 =
-            gnc_gconf_add_anon_notification (DESKTOP_GNOME_INTERFACE,
-                                            gnc_toolbar_change_cb, recnData);
     }
 
     g_signal_connect (recnData->window, "popup-menu",
@@ -1912,8 +1860,6 @@ recnWindow2WithBalance (GtkWidget *parent, Account *account,
 
     recnRecalculateBalance (recnData);
 
-    gnc_recn_refresh_toolbar (recnData);
-
     gnc_window_adjust_for_screen (GTK_WINDOW (recnData->window));
 
     /* Set the sort orders of the debit and credit tree views */
@@ -1960,11 +1906,6 @@ recn_destroy_cb (GtkWidget *w, gpointer data)
     RecnWindow2 *recnData = data;
 
     gnc_unregister_gui_component_by_data (WINDOW_RECONCILE_CM_CLASS, recnData);
-
-    gnc_gconf_remove_anon_notification (GCONF_GENERAL,
-                                       recnData->toolbar_change_cb_id);
-    gnc_gconf_remove_anon_notification (DESKTOP_GNOME_INTERFACE,
-                                       recnData->toolbar_change_cb_id2);
 
     if (recnData->delete_refresh)
         gnc_resume_gui_refresh ();
