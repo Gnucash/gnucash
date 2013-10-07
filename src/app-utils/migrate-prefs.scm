@@ -72,6 +72,7 @@
         (migration-cleanup-internal)))
   (mkdir migration-dir)
   (format #t "Copy all gconf files to tmp dir ~A\n" migration-dir)
+  (display "Note: you can ignore the failed to load extnral entity warnings below. They are harmless.\n")
   (apply find copy-one-file (list gconf-dir))
 )
 

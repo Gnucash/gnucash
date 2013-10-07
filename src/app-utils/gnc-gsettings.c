@@ -621,7 +621,7 @@ void gnc_gsettings_migrate_from_gconf (void)
     gchar *pkgdatadir, *stylesheet, *input, *output;
     gchar *migr_dir;
     SCM migr_script;
-    SCM result = scm_c_eval_string ("(use-modules (gnucash app-utils))(migration-prepare)");
+    SCM result;
     xsltStylesheetPtr stylesheetptr = NULL;
     xmlDocPtr inputxml, transformedxml;
     FILE *outfile;
@@ -629,6 +629,17 @@ void gnc_gsettings_migrate_from_gconf (void)
     pkgdatadir = gnc_path_get_pkgdatadir();
     stylesheet = g_build_filename(pkgdatadir, "make-prefs-migration-script.xsl", NULL);
     input      = g_build_filename(pkgdatadir, "migratable-prefs.xml", NULL);
+
+    if ((!g_file_test (stylesheet, G_FILE_TEST_IS_REGULAR)) ||
+        (!g_file_test (input, G_FILE_TEST_IS_REGULAR)))
+   {
+        /* Critical files not found, abort migration */
+        g_free (stylesheet);
+        g_free (input);
+        return;
+   }
+    result = scm_c_eval_string ("(use-modules (migrate-prefs))(migration-prepare)");
+
     migr_dir   = g_build_filename(g_getenv ("HOME"), ".gnc-migration-tmp", NULL);
     output     = g_build_filename(migr_dir, "migrate-prefs-user.scm", NULL);
     xmlSubstituteEntitiesDefault(1);
@@ -654,7 +665,7 @@ void gnc_gsettings_migrate_from_gconf (void)
     xsltCleanupGlobals();
     xmlCleanupParser();
 
-    result = scm_c_eval_string ("(use-modules (gnucash app-utils))(migration-cleanup)");
+    result = scm_c_eval_string ("(use-modules (migrate-prefs))(migration-cleanup)");
 
     g_free (pkgdatadir);
     g_free (stylesheet);
