@@ -61,3 +61,7 @@ DYLD_LIBRARY_PATH={GNC_LIBRARY_PATH};{DYLD_LIBRARY_PATH}
 # below and set LANG to your preferred locale
 # LANG=nl_BE
 # LANGUAGE={LANG}
+
+# Temporarily use gconf as backend for GSettings
+# This allows for a gradual transition from GConf to GSettings
+GSETTINGS_BACKEND=gconf
