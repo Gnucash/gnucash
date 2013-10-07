@@ -770,8 +770,7 @@ inner_main (void *closure, int argc, char **argv)
         gnc_file_open_file(fn, /*open_readonly*/ FALSE);
         g_free(fn);
     }
-    else if (gnc_gconf_get_bool("dialogs/new_user", "first_startup", &error)
-             && !error)
+    else if (gnc_prefs_get_bool(GNC_PREFS_GROUP_NEW_USER, GNC_PREF_FIRST_STARTUP))
     {
         gnc_destroy_splash_screen();
         gnc_ui_new_user_dialog();

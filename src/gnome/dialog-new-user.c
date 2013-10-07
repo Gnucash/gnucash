@@ -30,17 +30,14 @@
 #include "dialog-file-access.h"
 #include "assistant-hierarchy.h"
 #include "gnc-engine.h"
-#include "gnc-gconf-utils.h"
 #include "gnc-hooks.h"
 #include "gnc-ui.h"
 #include "gnc-file.h"
+#include "gnc-prefs.h"
 #include "gnc-main-window.h"
 #include "gnc-plugin-page-account-tree.h"
 #include "gnc-session.h"
 #include "app-utils/gnc-ui-util.h" // for gnc_get_current_book
-
-#define GCONF_SECTION "dialogs/new_user"
-#define FIRST_STARTUP "first_startup"
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_GUI;
@@ -60,7 +57,7 @@ gnc_new_user_dialog_register_qif_assistant (void (*cb_fcn)(void))
 void
 gnc_set_first_startup (gboolean first_startup)
 {
-    gnc_gconf_set_bool(GCONF_SECTION, FIRST_STARTUP, first_startup, NULL);
+    gnc_prefs_set_bool (GNC_PREFS_GROUP_NEW_USER, GNC_PREF_FIRST_STARTUP, first_startup);
 }
 
 static void
