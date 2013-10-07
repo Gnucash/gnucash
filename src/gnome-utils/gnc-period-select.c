@@ -35,8 +35,8 @@
 #include <glib/gi18n.h>
 
 #include "gnc-date.h"
-#include "gnc-gconf-utils.h"
 #include "gnc-period-select.h"
+#include "gnc-prefs.h"
 #include <gnc-gdate-utils.h>
 
 enum
@@ -150,7 +150,7 @@ gnc_period_sample_update_date_label (GncPeriodSelect *period)
         return;
     which = gtk_combo_box_get_active (GTK_COMBO_BOX (priv->selector));
     if (which == -1)
-        date = g_date_new_dmy (1, 1, 1970);
+        date = g_date_new_dmy (31, 7, 2013);
 
     else if (priv->start)
         date = gnc_accounting_period_start_gdate (which, priv->fy_end,
@@ -186,17 +186,19 @@ gnc_period_sample_combobox_changed (GtkComboBox *box, GncPeriodSelect *period)
 
 
 /** Handle an application wide change in the date format.  This
- *  function will be called when the GConf key for the date format is
+ *  function will be called when the preference for the date format is
  *  updated.  It doesn't really care what the new format is, because
  *  the date string is generated elsewhere.  It just needs to know to
  *  update the date label so that it matches the newly selected format.
  *
- *  @param unused The new value for the Gnucash date format.
+ *  @param prefs Unused.
+ *
+ *  @param pref Unused.
  *
  *  @param period The GncPeriodSelect that needs to be updated.
  */
 static void
-gnc_period_sample_new_date_format (GConfEntry *unused,
+gnc_period_sample_new_date_format (gpointer prefs, gchar *pref,
                                    GncPeriodSelect *period)
 {
     gnc_period_sample_update_date_label(period);
@@ -639,8 +641,8 @@ gnc_period_select_finalize (GObject *object)
     priv = GNC_PERIOD_SELECT_GET_PRIVATE(period);
 
     /* Stop tracking changes to date formatting */
-    gnc_gconf_general_remove_cb(KEY_DATE_FORMAT,
-                                (GncGconfGeneralCb)gnc_period_sample_new_date_format, period);
+    gnc_prefs_remove_cb_by_func (GNC_PREFS_GROUP_GENERAL, GNC_PREF_DATE_FORMAT,
+                                 gnc_period_sample_new_date_format, period);
 
     /* The selector and date_label were added to the hbox.  They will be
      * freed automatically. */
@@ -697,8 +699,8 @@ gnc_period_select_new (gboolean starting_labels)
     }
 
     /* Track changes to date formatting */
-    gnc_gconf_general_register_cb(KEY_DATE_FORMAT,
-                                  (GncGconfGeneralCb)gnc_period_sample_new_date_format, period);
+    gnc_prefs_register_cb (GNC_PREFS_GROUP_GENERAL, GNC_PREF_DATE_FORMAT,
+                           gnc_period_sample_new_date_format, period);
 
     return GTK_WIDGET (period);
 }

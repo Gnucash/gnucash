@@ -127,31 +127,20 @@ gnc_commodity_help_cb (void)
 static void
 gnc_configure_date_format (void)
 {
-    char *format_code = gnc_gconf_get_string(GCONF_GENERAL,
-                        KEY_DATE_FORMAT, NULL);
+    QofDateFormat df = gnc_prefs_get_int(GCONF_GENERAL,
+                                         GNC_PREF_DATE_FORMAT);
 
-    QofDateFormat df;
-
-    if (format_code == NULL)
-        format_code = g_strdup("locale");
-    if (*format_code == '\0')
+    /* Only a subset of the qof date formats is currently
+     * supported for date entry.
+     */
+    if ((df > QOF_DATE_FORMAT_LOCALE)
+            || (df > QOF_DATE_FORMAT_LOCALE))
     {
-        g_free(format_code);
-        format_code = g_strdup("locale");
-    }
-
-    if (gnc_date_string_to_dateformat(format_code, &df))
-    {
-        PERR("Incorrect date format code");
-        if (format_code != NULL)
-            free(format_code);
+        PERR("Incorrect date format");
         return;
     }
 
     qof_date_format_set(df);
-
-    if (format_code != NULL)
-        free(format_code);
 }
 
 /* gnc_configure_date_completion
@@ -643,8 +632,10 @@ gnc_gui_init(void)
     gnc_configure_date_format();
     gnc_configure_date_completion();
 
-    gnc_gconf_general_register_cb(
-        KEY_DATE_FORMAT, (GncGconfGeneralCb)gnc_configure_date_format, NULL);
+    gnc_prefs_register_cb (GNC_PREFS_GROUP_GENERAL,
+                           GNC_PREF_DATE_FORMAT,
+                           gnc_configure_date_format,
+                           NULL);
     gnc_gconf_general_register_cb(
         KEY_DATE_COMPLETION, (GncGconfGeneralCb)gnc_configure_date_completion, NULL);
     gnc_prefs_register_cb (GNC_PREFS_GROUP_GENERAL,

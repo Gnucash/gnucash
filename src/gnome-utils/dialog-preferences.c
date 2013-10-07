@@ -1391,6 +1391,9 @@ gnc_preferences_dialog_create(void)
     GHashTable *prefs_table;
     GDate* gdate;
     gchar buf[128];
+    GtkListStore *store;
+    GtkTreePath *path;
+    GtkTreeIter iter;
     gnc_commodity *locale_currency;
     const gchar *currency_name;
 
@@ -1406,6 +1409,7 @@ gnc_preferences_dialog_create(void)
     gnc_builder_add_from_file (builder, "dialog-preferences.glade", "new_search_limit_adj");
     gnc_builder_add_from_file (builder, "dialog-preferences.glade", "retain_days_adj");
     gnc_builder_add_from_file (builder, "dialog-preferences.glade", "tab_width_adj");
+    gnc_builder_add_from_file (builder, "dialog-preferences.glade", "date_formats");
     gnc_builder_add_from_file (builder, "dialog-preferences.glade", "GnuCash Preferences");
     dialog = GTK_WIDGET(gtk_builder_get_object (builder, "GnuCash Preferences"));
 
@@ -1477,10 +1481,12 @@ gnc_preferences_dialog_create(void)
     DEBUG("Done with interesting widgets.");
 
     /* Other stuff */
-    gdate = g_date_new_dmy(31, G_DATE_JULY, 2005);
+    gdate = g_date_new_dmy(31, G_DATE_JULY, 2013);
     g_date_strftime(buf, sizeof(buf), "%x", gdate);
-    label = GTK_WIDGET(gtk_builder_get_object (builder, "locale_date_sample"));
-    gtk_label_set_text(GTK_LABEL(label), buf);
+    store = GTK_LIST_STORE(gtk_builder_get_object (builder, "date_formats"));
+    path = gtk_tree_path_new_from_indices (QOF_DATE_FORMAT_LOCALE, -1);
+    if (gtk_tree_model_get_iter (GTK_TREE_MODEL (store), &iter, path))
+            gtk_list_store_set (store, &iter, 1, buf, -1);
     g_date_free(gdate);
 
     locale_currency = gnc_locale_default_currency ();
