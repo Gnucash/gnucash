@@ -66,6 +66,7 @@
 #include "gnc-currency-edit.h"
 #include "gnc-date-edit.h"
 #include "gnc-gconf-utils.h"
+#include "gnc-prefs.h"
 #include "gnc-gobject-utils.h"
 #include "gnc-period-select.h"
 #include "gnc-engine.h"
@@ -76,9 +77,11 @@
 #include "dialog-preferences.h"
 
 #define DIALOG_PREFERENCES_CM_CLASS "dialog-newpreferences"
-#define GNC_PREFS_GROUP                 "dialogs.preferences"
+#define GNC_PREFS_GROUP             "dialogs.preferences"
 #define PREFIX_LEN                   sizeof("gconf/") - 1
+#define PREF_PREFIX_LEN              sizeof("pref/") - 1
 #define WIDGET_HASH                 "widget_hash"
+#define PREFS_WIDGET_HASH           "prefs_widget_hash"
 #define NOTEBOOK                    "notebook"
 
 /** The debugging module that this .o belongs to.  */
@@ -331,13 +334,19 @@ static void
 gnc_prefs_build_widget_table (GtkBuilder *builder,
                               GtkWidget *dialog)
 {
-    GHashTable *table;
+    /* FIXME to be removed when gconf conversion of preferences complete: */
+    GHashTable *gconf_table;
+    /* FIXME remove until here */
+    GHashTable *prefs_table;
     GSList *interesting, *runner;
     const gchar *name;
     const gchar *wname;
     GtkWidget *widget;
 
-    table = g_object_get_data(G_OBJECT(dialog), WIDGET_HASH);
+    /* FIXME to be removed when gconf conversion of preferences complete: */
+    gconf_table = g_object_get_data(G_OBJECT(dialog), WIDGET_HASH);
+    /* FIXME remove until here */
+    prefs_table = g_object_get_data(G_OBJECT(dialog), PREFS_WIDGET_HASH);
 
     interesting = gtk_builder_get_objects(builder);
 
@@ -349,11 +358,16 @@ gnc_prefs_build_widget_table (GtkBuilder *builder,
             wname = gtk_widget_get_name(widget);
             name = gtk_buildable_get_name(GTK_BUILDABLE(widget));
             DEBUG("Widget type is %s and buildable get name is %s", wname, name);
+            /* FIXME to be removed when gconf conversion of preferences complete: */
             if (g_str_has_prefix (name, "gconf"))
-                g_hash_table_insert(table, (gchar *)name, widget);
+                g_hash_table_insert(gconf_table, (gchar *)name, widget);
+            /* FIXME remove until here */
+            if (g_str_has_prefix (name, "pref"))
+                g_hash_table_insert(prefs_table, (gchar *)name, widget);
         }
     }
     g_slist_free(interesting);
+
 }
 
 
@@ -501,7 +515,7 @@ gnc_preferences_build_page (gpointer data,
 
     /* Connect the signals in this glade file. The dialog is passed in
      * so the the callback can find "interesting" widgets from other
-     * glade files if necessary (via the WIDGET_HASH hash table). */
+     * glade files if necessary (via the GPREFS_WIDGET_HASH hash table). */
     gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, dialog);
 
     /* Prepare for recursion */
@@ -620,6 +634,18 @@ gnc_prefs_sort_pages (GtkNotebook *notebook)
 /* Dynamically added Callbacks */
 /*******************************/
 
+static void
+gnc_prefs_split_widget_name (const gchar *name, gchar **group, gchar **pref)
+{
+    const gchar *group_with_pref = name + PREF_PREFIX_LEN;
+    gchar **splits = g_strsplit (group_with_pref, "/", 0);
+
+    *group = g_strdup (splits[0]);
+    *pref = g_strdup (splits[1]);
+    g_strfreev (splits);
+}
+
+/* FIXME to remove when gconf conversion of preferences is complete */
 /** The user changed a GtkFontButton.  Update gconf.  Font selection
  *  choices are stored as a string.
  *
@@ -630,7 +656,7 @@ gnc_prefs_sort_pages (GtkNotebook *notebook)
  *  @param user_data Unused.
  */
 static void
-gnc_prefs_font_button_user_cb (GtkFontButton *fb,
+gnc_prefs_font_button_user_cb_gconf (GtkFontButton *fb,
                                gpointer user_data)
 {
     const gchar *key, *font;
@@ -654,7 +680,7 @@ gnc_prefs_font_button_user_cb (GtkFontButton *fb,
  *  @param value The new value of the GtkFontButton.
  */
 static void
-gnc_prefs_font_button_gconf_cb (GtkFontButton *fb,
+gnc_prefs_font_button_gconf_cb_gconf (GtkFontButton *fb,
                                 GConfEntry *entry)
 {
     const gchar *font;
@@ -665,10 +691,10 @@ gnc_prefs_font_button_gconf_cb (GtkFontButton *fb,
     font = gconf_value_get_string(entry->value);
 
     g_signal_handlers_block_by_func(G_OBJECT(fb),
-                                    G_CALLBACK(gnc_prefs_font_button_user_cb), NULL);
+                                    G_CALLBACK(gnc_prefs_font_button_user_cb_gconf), NULL);
     gtk_font_button_set_font_name(fb, font);
     g_signal_handlers_unblock_by_func(G_OBJECT(fb),
-                                      G_CALLBACK(gnc_prefs_font_button_user_cb), NULL);
+                                      G_CALLBACK(gnc_prefs_font_button_user_cb_gconf), NULL);
     LEAVE(" ");
 }
 
@@ -681,7 +707,7 @@ gnc_prefs_font_button_gconf_cb (GtkFontButton *fb,
  *  @param gde A pointer to the date_edit that should be connected.
  */
 static void
-gnc_prefs_connect_font_button (GtkFontButton *fb)
+gnc_prefs_connect_font_button_gconf (GtkFontButton *fb)
 {
     const gchar *name;
     gchar *font;
@@ -697,7 +723,7 @@ gnc_prefs_connect_font_button (GtkFontButton *fb)
     g_free(font);
 
     g_signal_connect(G_OBJECT(fb), "font_set",
-                     G_CALLBACK(gnc_prefs_font_button_user_cb), NULL);
+                     G_CALLBACK(gnc_prefs_font_button_user_cb_gconf), NULL);
 
     gtk_widget_show_all(GTK_WIDGET(fb));
 }
@@ -716,7 +742,7 @@ gnc_prefs_connect_font_button (GtkFontButton *fb)
  *  @param user_data Unused.
  */
 static void
-gnc_prefs_radio_button_user_cb (GtkRadioButton *button,
+gnc_prefs_radio_button_user_cb_gconf (GtkRadioButton *button,
                                 gpointer user_data)
 {
     gchar *key, *button_name;
@@ -747,15 +773,15 @@ gnc_prefs_radio_button_user_cb (GtkRadioButton *button,
  *  as selected.
  */
 static void
-gnc_prefs_radio_button_gconf_cb (GtkRadioButton *button)
+gnc_prefs_radio_button_gconf_cb_gconf (GtkRadioButton *button)
 {
     g_return_if_fail(GTK_IS_RADIO_BUTTON(button));
     ENTER("button %p", button);
     g_signal_handlers_block_by_func(G_OBJECT(button),
-                                    G_CALLBACK(gnc_prefs_radio_button_user_cb), NULL);
+                                    G_CALLBACK(gnc_prefs_radio_button_user_cb_gconf), NULL);
     gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), TRUE);
     g_signal_handlers_unblock_by_func(G_OBJECT(button),
-                                      G_CALLBACK(gnc_prefs_radio_button_user_cb), NULL);
+                                      G_CALLBACK(gnc_prefs_radio_button_user_cb_gconf), NULL);
     LEAVE(" ");
 }
 
@@ -770,7 +796,7 @@ gnc_prefs_radio_button_gconf_cb (GtkRadioButton *button)
  *  connected.
  */
 static void
-gnc_prefs_connect_radio_button (GtkRadioButton *button)
+gnc_prefs_connect_radio_button_gconf (GtkRadioButton *button)
 {
     gchar *key, *button_name, *value;
     gboolean active;
@@ -801,7 +827,7 @@ gnc_prefs_connect_radio_button (GtkRadioButton *button)
     /* Wire up the button */
     gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), active);
     g_signal_connect(G_OBJECT(button), "toggled",
-                     G_CALLBACK(gnc_prefs_radio_button_user_cb), NULL);
+                     G_CALLBACK(gnc_prefs_radio_button_user_cb_gconf), NULL);
     g_free(value);
     g_free(key);
 }
@@ -818,7 +844,7 @@ gnc_prefs_connect_radio_button (GtkRadioButton *button)
  *  @param user_data Unused.
  */
 static void
-gnc_prefs_check_button_user_cb (GtkCheckButton *button,
+gnc_prefs_check_button_user_cb_gconf (GtkCheckButton *button,
                                 gpointer user_data)
 {
     const gchar *name;
@@ -842,16 +868,16 @@ gnc_prefs_check_button_user_cb (GtkCheckButton *button,
  *  @param active The new state of the check button.
  */
 static void
-gnc_prefs_check_button_gconf_cb (GtkCheckButton *button,
+gnc_prefs_check_button_gconf_cb_gconf (GtkCheckButton *button,
                                  gboolean active)
 {
     g_return_if_fail(GTK_IS_CHECK_BUTTON(button));
     ENTER("button %p, active %d", button, active);
     g_signal_handlers_block_by_func(G_OBJECT(button),
-                                    G_CALLBACK(gnc_prefs_check_button_user_cb), NULL);
+                                    G_CALLBACK(gnc_prefs_check_button_user_cb_gconf), NULL);
     gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), active);
     g_signal_handlers_unblock_by_func(G_OBJECT(button),
-                                      G_CALLBACK(gnc_prefs_check_button_user_cb), NULL);
+                                      G_CALLBACK(gnc_prefs_check_button_user_cb_gconf), NULL);
     LEAVE(" ");
 }
 
@@ -865,7 +891,7 @@ gnc_prefs_check_button_gconf_cb (GtkCheckButton *button,
  *  connected.
  */
 static void
-gnc_prefs_connect_check_button (GtkCheckButton *button)
+gnc_prefs_connect_check_button_gconf (GtkCheckButton *button)
 {
     const gchar *name;
     gboolean active;
@@ -875,7 +901,7 @@ gnc_prefs_connect_check_button (GtkCheckButton *button)
     DEBUG(" Checkbox %s initially %sactive", name, active ? "" : "in");
     gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), active);
     g_signal_connect(G_OBJECT(button), "toggled",
-                     G_CALLBACK(gnc_prefs_check_button_user_cb), NULL);
+                     G_CALLBACK(gnc_prefs_check_button_user_cb_gconf), NULL);
 }
 
 /****************************************************************************/
@@ -890,7 +916,7 @@ gnc_prefs_connect_check_button (GtkCheckButton *button)
  *  @param user_data Unused.
  */
 static void
-gnc_prefs_spin_button_user_cb (GtkSpinButton *spin,
+gnc_prefs_spin_button_user_cb_gconf (GtkSpinButton *spin,
                                gpointer user_data)
 {
     const gchar *name;
@@ -914,16 +940,16 @@ gnc_prefs_spin_button_user_cb (GtkSpinButton *spin,
  *  @param value The new value of the spin button.
  */
 static void
-gnc_prefs_spin_button_gconf_cb (GtkSpinButton *spin,
+gnc_prefs_spin_button_gconf_cb_gconf (GtkSpinButton *spin,
                                 gdouble value)
 {
     g_return_if_fail(GTK_IS_SPIN_BUTTON(spin));
     ENTER("button %p, value %f", spin, value);
     g_signal_handlers_block_by_func(G_OBJECT(spin),
-                                    G_CALLBACK(gnc_prefs_spin_button_user_cb), NULL);
+                                    G_CALLBACK(gnc_prefs_spin_button_user_cb_gconf), NULL);
     gtk_spin_button_set_value(spin, value);
     g_signal_handlers_unblock_by_func(G_OBJECT(spin),
-                                      G_CALLBACK(gnc_prefs_spin_button_user_cb), NULL);
+                                      G_CALLBACK(gnc_prefs_spin_button_user_cb_gconf), NULL);
     LEAVE(" ");
 }
 
@@ -937,7 +963,7 @@ gnc_prefs_spin_button_gconf_cb (GtkSpinButton *spin,
  *  connected.
  */
 static void
-gnc_prefs_connect_spin_button (GtkSpinButton *spin)
+gnc_prefs_connect_spin_button_gconf (GtkSpinButton *spin)
 {
     const gchar *name;
     gdouble value;
@@ -948,7 +974,7 @@ gnc_prefs_connect_spin_button (GtkSpinButton *spin)
     gtk_spin_button_set_value(spin, value);
     DEBUG(" Spin button %s has initial value %f", name, value);
     g_signal_connect(G_OBJECT(spin), "value-changed",
-                     G_CALLBACK(gnc_prefs_spin_button_user_cb), NULL);
+                     G_CALLBACK(gnc_prefs_spin_button_user_cb_gconf), NULL);
 }
 
 /****************************************************************************/
@@ -963,7 +989,7 @@ gnc_prefs_connect_spin_button (GtkSpinButton *spin)
  *  @param user_data Unused.
  */
 static void
-gnc_prefs_combo_box_user_cb (GtkComboBox *box,
+gnc_prefs_combo_box_user_cb_gconf (GtkComboBox *box,
                              gpointer user_data)
 {
     const gchar *name;
@@ -987,16 +1013,16 @@ gnc_prefs_combo_box_user_cb (GtkComboBox *box,
  *  @param value The new value of the combo box.
  */
 static void
-gnc_prefs_combo_box_gconf_cb (GtkComboBox *box,
+gnc_prefs_combo_box_gconf_cb_gconf (GtkComboBox *box,
                               gint value)
 {
     g_return_if_fail(GTK_IS_COMBO_BOX(box));
     ENTER("box %p, value %d", box, value);
     g_signal_handlers_block_by_func(G_OBJECT(box),
-                                    G_CALLBACK(gnc_prefs_combo_box_user_cb), NULL);
+                                    G_CALLBACK(gnc_prefs_combo_box_user_cb_gconf), NULL);
     gtk_combo_box_set_active(box, value);
     g_signal_handlers_unblock_by_func(G_OBJECT(box),
-                                      G_CALLBACK(gnc_prefs_combo_box_user_cb), NULL);
+                                      G_CALLBACK(gnc_prefs_combo_box_user_cb_gconf), NULL);
     LEAVE(" ");
 }
 
@@ -1009,7 +1035,7 @@ gnc_prefs_combo_box_gconf_cb (GtkComboBox *box,
  *  @param box A pointer to the combo box that should be connected.
  */
 static void
-gnc_prefs_connect_combo_box (GtkComboBox *box)
+gnc_prefs_connect_combo_box_gconf (GtkComboBox *box)
 {
     const gchar *name;
     gint active;
@@ -1020,7 +1046,7 @@ gnc_prefs_connect_combo_box (GtkComboBox *box)
     gtk_combo_box_set_active(GTK_COMBO_BOX(box), active);
     DEBUG(" Combo box %s set to item %d", name, active);
     g_signal_connect(G_OBJECT(box), "changed",
-                     G_CALLBACK(gnc_prefs_combo_box_user_cb), NULL);
+                     G_CALLBACK(gnc_prefs_combo_box_user_cb_gconf), NULL);
 }
 
 /****************************************************************************/
@@ -1035,7 +1061,7 @@ gnc_prefs_connect_combo_box (GtkComboBox *box)
  *  @param user_data Unused.
  */
 static void
-gnc_prefs_currency_edit_user_cb (GNCCurrencyEdit *gce,
+gnc_prefs_currency_edit_user_cb_gconf (GNCCurrencyEdit *gce,
                                  gpointer user_data)
 {
     const gchar *name, *mnemonic;
@@ -1061,7 +1087,7 @@ gnc_prefs_currency_edit_user_cb (GNCCurrencyEdit *gce,
  *  @param value The new value of the currency_edit.
  */
 static void
-gnc_prefs_currency_edit_gconf_cb (GNCCurrencyEdit *gce,
+gnc_prefs_currency_edit_gconf_cb_gconf (GNCCurrencyEdit *gce,
                                   GConfEntry *entry)
 {
     const gchar *mnemonic;
@@ -1084,10 +1110,10 @@ gnc_prefs_currency_edit_gconf_cb (GNCCurrencyEdit *gce,
     }
 
     g_signal_handlers_block_by_func(G_OBJECT(gce),
-                                    G_CALLBACK(gnc_prefs_currency_edit_user_cb), NULL);
+                                    G_CALLBACK(gnc_prefs_currency_edit_user_cb_gconf), NULL);
     gnc_currency_edit_set_currency(GNC_CURRENCY_EDIT(gce), currency);
     g_signal_handlers_unblock_by_func(G_OBJECT(gce),
-                                      G_CALLBACK(gnc_prefs_currency_edit_user_cb), NULL);
+                                      G_CALLBACK(gnc_prefs_currency_edit_user_cb_gconf), NULL);
     LEAVE(" ");
 }
 
@@ -1100,7 +1126,7 @@ gnc_prefs_currency_edit_gconf_cb (GNCCurrencyEdit *gce,
  *  @param gce A pointer to the currency_edit that should be connected.
  */
 static void
-gnc_prefs_connect_currency_edit (GNCCurrencyEdit *gce, const gchar *boxname )
+gnc_prefs_connect_currency_edit_gconf (GNCCurrencyEdit *gce, const gchar *boxname )
 {
     gnc_commodity *currency;
     const gchar *name;
@@ -1128,7 +1154,7 @@ gnc_prefs_connect_currency_edit (GNCCurrencyEdit *gce, const gchar *boxname )
           gnc_commodity_get_mnemonic(currency));
 
     g_signal_connect(G_OBJECT(gce), "changed",
-                     G_CALLBACK(gnc_prefs_currency_edit_user_cb), NULL);
+                     G_CALLBACK(gnc_prefs_currency_edit_user_cb_gconf), NULL);
 
     gtk_widget_show_all(GTK_WIDGET(gce));
 }
@@ -1144,7 +1170,7 @@ gnc_prefs_connect_currency_edit (GNCCurrencyEdit *gce, const gchar *boxname )
  *  @param user_data Unused.
  */
 static void
-gnc_prefs_entry_user_cb (GtkEntry *entry,
+gnc_prefs_entry_user_cb_gconf (GtkEntry *entry,
                          gpointer user_data)
 {
     const gchar *name, *text;
@@ -1166,16 +1192,16 @@ gnc_prefs_entry_user_cb (GtkEntry *entry,
  *  @param value The new value of the combo box.
  */
 static void
-gnc_prefs_entry_gconf_cb (GtkEntry *entry,
+gnc_prefs_entry_gconf_cb_gconf (GtkEntry *entry,
                           const gchar *value)
 {
     g_return_if_fail(GTK_IS_ENTRY(entry));
     ENTER("entry %p, value '%s'", entry, value);
     g_signal_handlers_block_by_func(G_OBJECT(entry),
-                                    G_CALLBACK(gnc_prefs_entry_user_cb), NULL);
+                                    G_CALLBACK(gnc_prefs_entry_user_cb_gconf), NULL);
     gtk_entry_set_text(entry, value);
     g_signal_handlers_unblock_by_func(G_OBJECT(entry),
-                                      G_CALLBACK(gnc_prefs_entry_user_cb), NULL);
+                                      G_CALLBACK(gnc_prefs_entry_user_cb_gconf), NULL);
     LEAVE(" ");
 }
 
@@ -1188,7 +1214,7 @@ gnc_prefs_entry_gconf_cb (GtkEntry *entry,
  *  @param entry A pointer to the entry that should be connected.
  */
 static void
-gnc_prefs_connect_entry (GtkEntry *entry)
+gnc_prefs_connect_entry_gconf (GtkEntry *entry)
 {
     const gchar *name;
     gchar *text;
@@ -1200,7 +1226,7 @@ gnc_prefs_connect_entry (GtkEntry *entry)
     DEBUG(" Entry %s set to '%s'", name ? name : "(null)", text ? text : "(null)");
     g_free(text);
     g_signal_connect(G_OBJECT(entry), "changed",
-                     G_CALLBACK(gnc_prefs_entry_user_cb), NULL);
+                     G_CALLBACK(gnc_prefs_entry_user_cb_gconf), NULL);
 }
 
 /****************************************************************************/
@@ -1215,7 +1241,7 @@ gnc_prefs_connect_entry (GtkEntry *entry)
  *  @param user_data Unused.
  */
 static void
-gnc_prefs_period_select_user_cb (GncPeriodSelect *period,
+gnc_prefs_period_select_user_cb_gconf (GncPeriodSelect *period,
                                  gpointer user_data)
 {
     const gchar *name;
@@ -1239,16 +1265,16 @@ gnc_prefs_period_select_user_cb (GncPeriodSelect *period,
  *  @param value The new value of the GncPeriodSelect.
  */
 static void
-gnc_prefs_period_select_gconf_cb (GncPeriodSelect *period,
+gnc_prefs_period_select_gconf_cb_gconf (GncPeriodSelect *period,
                                   gint value)
 {
     g_return_if_fail(GNC_IS_PERIOD_SELECT(period));
     ENTER("period %p, value %d", period, value);
     g_signal_handlers_block_by_func(G_OBJECT(period),
-                                    G_CALLBACK(gnc_prefs_period_select_user_cb), NULL);
+                                    G_CALLBACK(gnc_prefs_period_select_user_cb_gconf), NULL);
     gnc_period_select_set_active(period, value);
     g_signal_handlers_unblock_by_func(G_OBJECT(period),
-                                      G_CALLBACK(gnc_prefs_period_select_user_cb), NULL);
+                                      G_CALLBACK(gnc_prefs_period_select_user_cb_gconf), NULL);
     LEAVE(" ");
 }
 
@@ -1261,7 +1287,7 @@ gnc_prefs_period_select_gconf_cb (GncPeriodSelect *period,
  *  @param period A pointer to the GncPeriodSelect that should be connected.
  */
 static void
-gnc_prefs_connect_period_select (GncPeriodSelect *period, const gchar *boxname )
+gnc_prefs_connect_period_select_gconf (GncPeriodSelect *period, const gchar *boxname )
 {
     const gchar *name;
     gint active;
@@ -1290,7 +1316,7 @@ gnc_prefs_connect_period_select (GncPeriodSelect *period, const gchar *boxname )
     gnc_period_select_set_active(period, active);
     DEBUG(" Period select %s set to item %d", name, active);
     g_signal_connect(G_OBJECT(period), "changed",
-                     G_CALLBACK(gnc_prefs_period_select_user_cb), NULL);
+                     G_CALLBACK(gnc_prefs_period_select_user_cb_gconf), NULL);
 }
 
 /****************************************************************************/
@@ -1305,7 +1331,7 @@ gnc_prefs_connect_period_select (GncPeriodSelect *period, const gchar *boxname )
  *  @param user_data Unused.
  */
 static void
-gnc_prefs_date_edit_user_cb (GNCDateEdit *gde,
+gnc_prefs_date_edit_user_cb_gconf (GNCDateEdit *gde,
                              gpointer user_data)
 {
     const gchar *name;
@@ -1330,7 +1356,7 @@ gnc_prefs_date_edit_user_cb (GNCDateEdit *gde,
  *  @param value The new value of the date_edit.
  */
 static void
-gnc_prefs_date_edit_gconf_cb (GNCDateEdit *gde,
+gnc_prefs_date_edit_gconf_cb_gconf (GNCDateEdit *gde,
                               GConfEntry *entry)
 {
     time64 time;
@@ -1341,10 +1367,10 @@ gnc_prefs_date_edit_gconf_cb (GNCDateEdit *gde,
     time = gconf_value_get_int(entry->value);
 
     g_signal_handlers_block_by_func(G_OBJECT(gde),
-                                    G_CALLBACK(gnc_prefs_date_edit_user_cb), NULL);
+                                    G_CALLBACK(gnc_prefs_date_edit_user_cb_gconf), NULL);
     gnc_date_edit_set_time(GNC_DATE_EDIT(gde), time);
     g_signal_handlers_unblock_by_func(G_OBJECT(gde),
-                                      G_CALLBACK(gnc_prefs_date_edit_user_cb), NULL);
+                                      G_CALLBACK(gnc_prefs_date_edit_user_cb_gconf), NULL);
     LEAVE(" ");
 }
 
@@ -1357,7 +1383,7 @@ gnc_prefs_date_edit_gconf_cb (GNCDateEdit *gde,
  *  @param gde A pointer to the date_edit that should be connected.
  */
 static void
-gnc_prefs_connect_date_edit (GNCDateEdit *gde , const gchar *boxname )
+gnc_prefs_connect_date_edit_gconf (GNCDateEdit *gde , const gchar *boxname )
 {
     const gchar *name;
     time64 time;
@@ -1375,10 +1401,12 @@ gnc_prefs_connect_date_edit (GNCDateEdit *gde , const gchar *boxname )
     DEBUG(" date_edit %s set", name);
 
     g_signal_connect(G_OBJECT(gde), "date_changed",
-                     G_CALLBACK(gnc_prefs_date_edit_user_cb), NULL);
+                     G_CALLBACK(gnc_prefs_date_edit_user_cb_gconf), NULL);
 
     gtk_widget_show_all(GTK_WIDGET(gde));
 }
+/* FIXME end of section to remove */
+
 
 
 /****************************************************************************/
@@ -1429,6 +1457,90 @@ gnc_preferences_response_cb(GtkDialog *dialog, gint response, GtkDialog *unused)
 /*    Creation      */
 /********************/
 
+/* FIXME to remove when gconf conversion of preferences is complete */
+/** Connect one dialog widget to the appropriate callback function for
+ *  its type.
+ *
+ *  @internal
+ *
+ *  @param name The name of the widget.
+ *
+ *  @param widget A pointer to the widget.
+ *
+ *  @param dialog A pointer to the dialog.
+ */
+static void
+gnc_prefs_connect_one_gconf (const gchar *name,
+                             GtkWidget *widget,
+                             gpointer user_data)
+{
+    /* These tests must be ordered from more specific widget to less
+     * specific widget. */
+
+    if (GTK_IS_FONT_BUTTON(widget))
+    {
+        DEBUG("  %s - entry", name);
+        gnc_prefs_connect_font_button_gconf(GTK_FONT_BUTTON(widget));
+    }
+    else if (GTK_IS_RADIO_BUTTON(widget))
+    {
+        DEBUG("  %s - radio button", name);
+        gnc_prefs_connect_radio_button_gconf(GTK_RADIO_BUTTON(widget));
+    }
+    else if (GTK_IS_CHECK_BUTTON(widget))
+    {
+        DEBUG("  %s - check button", name);
+        gnc_prefs_connect_check_button_gconf(GTK_CHECK_BUTTON(widget));
+    }
+    else if (GTK_IS_SPIN_BUTTON(widget))
+    {
+        DEBUG("  %s - spin button", name);
+        gnc_prefs_connect_spin_button_gconf(GTK_SPIN_BUTTON(widget));
+    }
+    else if (GTK_IS_COMBO_BOX(widget))
+    {
+        DEBUG("  %s - combo box", name);
+        gnc_prefs_connect_combo_box_gconf(GTK_COMBO_BOX(widget));
+    }
+    else if (GTK_IS_ENTRY(widget))
+    {
+        DEBUG("  %s - entry", name);
+        gnc_prefs_connect_entry_gconf(GTK_ENTRY(widget));
+    }
+    else if (GTK_IS_HBOX(widget))
+    {
+        /* Test custom widgets are all children of a hbox */
+        GtkWidget *widget_child;
+        GList* child = gtk_container_get_children(GTK_CONTAINER(widget));
+        widget_child = child->data;
+        g_list_free(child);
+        DEBUG("  %s - hbox", name);
+        DEBUG("Hbox widget type is %s and name is %s", gtk_widget_get_name(GTK_WIDGET(widget_child)), name);
+
+        if (GNC_IS_CURRENCY_EDIT(widget_child))
+        {
+            DEBUG("  %s - currency_edit", name);
+            gnc_prefs_connect_currency_edit_gconf(GNC_CURRENCY_EDIT(widget_child), name );
+        }
+        else if (GNC_IS_PERIOD_SELECT(widget_child))
+        {
+            DEBUG("  %s - period_Select", name);
+            gnc_prefs_connect_period_select_gconf(GNC_PERIOD_SELECT(widget_child), name );
+        }
+        else if (GNC_IS_DATE_EDIT(widget_child))
+        {
+            DEBUG("  %s - date_edit", name);
+            gnc_prefs_connect_date_edit_gconf(GNC_DATE_EDIT(widget_child), name );
+        }
+    }
+    else
+    {
+        DEBUG("  %s - unsupported %s", name,
+              G_OBJECT_TYPE_NAME(G_OBJECT(widget)));
+    }
+}
+/* FIXME end of section to be removed */
+
 /** Connect one dialog widget to the appropriate callback function for
  *  its type.
  *
@@ -1448,67 +1560,6 @@ gnc_prefs_connect_one (const gchar *name,
     /* These tests must be ordered from more specific widget to less
      * specific widget. */
 
-    if (GTK_IS_FONT_BUTTON(widget))
-    {
-        DEBUG("  %s - entry", name);
-        gnc_prefs_connect_font_button(GTK_FONT_BUTTON(widget));
-    }
-    else if (GTK_IS_RADIO_BUTTON(widget))
-    {
-        DEBUG("  %s - radio button", name);
-        gnc_prefs_connect_radio_button(GTK_RADIO_BUTTON(widget));
-    }
-    else if (GTK_IS_CHECK_BUTTON(widget))
-    {
-        DEBUG("  %s - check button", name);
-        gnc_prefs_connect_check_button(GTK_CHECK_BUTTON(widget));
-    }
-    else if (GTK_IS_SPIN_BUTTON(widget))
-    {
-        DEBUG("  %s - spin button", name);
-        gnc_prefs_connect_spin_button(GTK_SPIN_BUTTON(widget));
-    }
-    else if (GTK_IS_COMBO_BOX(widget))
-    {
-        DEBUG("  %s - combo box", name);
-        gnc_prefs_connect_combo_box(GTK_COMBO_BOX(widget));
-    }
-    else if (GTK_IS_ENTRY(widget))
-    {
-        DEBUG("  %s - entry", name);
-        gnc_prefs_connect_entry(GTK_ENTRY(widget));
-    }
-    else if (GTK_IS_HBOX(widget))
-    {
-        /* Test custom widgets are all children of a hbox */
-        GtkWidget *widget_child;
-        GList* child = gtk_container_get_children(GTK_CONTAINER(widget));
-        widget_child = child->data;
-        g_list_free(child);
-        DEBUG("  %s - hbox", name);
-        DEBUG("Hbox widget type is %s and name is %s", gtk_widget_get_name(GTK_WIDGET(widget_child)), name);
-
-        if (GNC_IS_CURRENCY_EDIT(widget_child))
-        {
-            DEBUG("  %s - currency_edit", name);
-            gnc_prefs_connect_currency_edit(GNC_CURRENCY_EDIT(widget_child), name );
-        }
-        else if (GNC_IS_PERIOD_SELECT(widget_child))
-        {
-            DEBUG("  %s - period_Select", name);
-            gnc_prefs_connect_period_select(GNC_PERIOD_SELECT(widget_child), name );
-        }
-        else if (GNC_IS_DATE_EDIT(widget_child))
-        {
-            DEBUG("  %s - date_edit", name);
-            gnc_prefs_connect_date_edit(GNC_DATE_EDIT(widget_child), name );
-        }
-    }
-    else
-    {
-        DEBUG("  %s - unsupported %s", name,
-              G_OBJECT_TYPE_NAME(G_OBJECT(widget)));
-    }
 }
 
 
@@ -1529,7 +1580,8 @@ gnc_preferences_dialog_create(void)
     GtkBuilder *builder;
     GtkWidget *dialog, *notebook, *label, *image;
     GtkWidget *box, *date, *period, *currency;
-    GHashTable *table;
+    GHashTable *gconf_table;
+    GHashTable *prefs_table;
     GDate* gdate;
     gchar buf[128];
     gnc_commodity *locale_currency;
@@ -1556,10 +1608,13 @@ gnc_preferences_dialog_create(void)
     DEBUG("done");
 
     notebook = GTK_WIDGET(gtk_builder_get_object (builder, "notebook1"));
-    table = g_hash_table_new(g_str_hash, g_str_equal);
+    gconf_table = g_hash_table_new(g_str_hash, g_str_equal);
+    prefs_table = g_hash_table_new(g_str_hash, g_str_equal);
     g_object_set_data(G_OBJECT(dialog), NOTEBOOK, notebook);
     g_object_set_data_full(G_OBJECT(dialog), WIDGET_HASH,
-                           table, (GDestroyNotify)g_hash_table_destroy);
+                           gconf_table, (GDestroyNotify)g_hash_table_destroy);
+    g_object_set_data_full(G_OBJECT(dialog), PREFS_WIDGET_HASH,
+                           prefs_table, (GDestroyNotify)g_hash_table_destroy);
 
     box = GTK_WIDGET(gtk_builder_get_object (builder, "gconf/window/pages/account_tree/summary/start_period"));
     period = gnc_period_select_new(TRUE);
@@ -1604,7 +1659,8 @@ gnc_preferences_dialog_create(void)
     gtk_notebook_set_current_page(GTK_NOTEBOOK(notebook), 0);
 
     DEBUG("We have the following interesting widgets:");
-    g_hash_table_foreach(table, (GHFunc)gnc_prefs_connect_one, dialog);
+    g_hash_table_foreach(gconf_table, (GHFunc)gnc_prefs_connect_one_gconf, dialog);
+    g_hash_table_foreach(prefs_table, (GHFunc)gnc_prefs_connect_one, dialog);
     DEBUG("Done with interesting widgets.");
 
     /* Other stuff */
@@ -1750,35 +1806,35 @@ gnc_preferences_gconf_changed (GConfClient *client,
         if (GTK_IS_FONT_BUTTON(widget))
         {
             DEBUG("widget %p - font button", widget);
-            gnc_prefs_font_button_gconf_cb(GTK_FONT_BUTTON(widget), entry);
+            gnc_prefs_font_button_gconf_cb_gconf(GTK_FONT_BUTTON(widget), entry);
         }
         else if (GTK_IS_RADIO_BUTTON(widget))
         {
             DEBUG("widget %p - radio button", widget);
-            gnc_prefs_radio_button_gconf_cb(GTK_RADIO_BUTTON(widget));
+            gnc_prefs_radio_button_gconf_cb_gconf(GTK_RADIO_BUTTON(widget));
         }
         else if (GTK_IS_CHECK_BUTTON(widget))
         {
             DEBUG("widget %p - check button", widget);
-            gnc_prefs_check_button_gconf_cb(GTK_CHECK_BUTTON(widget),
+            gnc_prefs_check_button_gconf_cb_gconf(GTK_CHECK_BUTTON(widget),
                                             gconf_value_get_bool(entry->value));
         }
         else if (GTK_IS_SPIN_BUTTON(widget))
         {
             DEBUG("widget %p - spin button", widget);
-            gnc_prefs_spin_button_gconf_cb(GTK_SPIN_BUTTON(widget),
+            gnc_prefs_spin_button_gconf_cb_gconf(GTK_SPIN_BUTTON(widget),
                                            gconf_value_get_float(entry->value));
         }
         else if (GTK_IS_COMBO_BOX(widget))
         {
             DEBUG("widget %p - combo_box", widget);
-            gnc_prefs_combo_box_gconf_cb(GTK_COMBO_BOX(widget),
+            gnc_prefs_combo_box_gconf_cb_gconf(GTK_COMBO_BOX(widget),
                                          gconf_value_get_int(entry->value));
         }
         else if (GTK_IS_ENTRY(widget))
         {
             DEBUG("widget %p - entry", widget);
-            gnc_prefs_entry_gconf_cb(GTK_ENTRY(widget),
+            gnc_prefs_entry_gconf_cb_gconf(GTK_ENTRY(widget),
                                      gconf_value_get_string(entry->value));
         }
         else if (GTK_IS_HBOX(widget))
@@ -1795,18 +1851,18 @@ gnc_preferences_gconf_changed (GConfClient *client,
             if (GNC_IS_CURRENCY_EDIT(widget_child))
             {
                 DEBUG("widget %p - currency_edit", widget_child);
-                gnc_prefs_currency_edit_gconf_cb(GNC_CURRENCY_EDIT(widget_child), entry);
+                gnc_prefs_currency_edit_gconf_cb_gconf(GNC_CURRENCY_EDIT(widget_child), entry);
             }
             else if (GNC_IS_PERIOD_SELECT(widget_child))
             {
                 DEBUG("widget %p - period_select", widget_child);
-                gnc_prefs_period_select_gconf_cb(GNC_PERIOD_SELECT(widget_child),
+                gnc_prefs_period_select_gconf_cb_gconf(GNC_PERIOD_SELECT(widget_child),
                                                  gconf_value_get_int(entry->value));
             }
             else if (GNC_IS_DATE_EDIT(widget_child))
             {
                 DEBUG("widget %p - date_edit", widget_child);
-                gnc_prefs_date_edit_gconf_cb(GNC_DATE_EDIT(widget_child), entry);
+                gnc_prefs_date_edit_gconf_cb_gconf(GNC_DATE_EDIT(widget_child), entry);
             }
         }
         else
