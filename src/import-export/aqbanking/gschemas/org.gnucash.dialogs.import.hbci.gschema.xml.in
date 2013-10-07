@@ -35,5 +35,10 @@
       <summary>SWIFT MT942 import data format</summary>
       <description>This setting specifies the data format when importing SWIFT MT942 files.  The AqBanking library offers various import formats (called "profiles") of which you can choose one here.</description>
     </key>
+    <key name="last_path" type="s">
+      <default>''</default>
+      <summary>Last pathname used</summary>
+      <description>This field contains the last pathname used by this window. It will be used as the initial filename/pathname the next time this window is opened.</description>
+    </key>
   </schema>
 </schemalist>

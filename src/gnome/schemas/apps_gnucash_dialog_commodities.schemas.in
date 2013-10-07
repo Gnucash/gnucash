@@ -140,6 +140,29 @@
     </schema>
 
     <schema>
+      <key>/schemas/apps/gnucash/dialogs/edit_commodities/width</key>
+      <applyto>/apps/gnucash/dialogs/edit_commodities/cusip_code_width</applyto>
+      <applyto>/apps/gnucash/dialogs/edit_commodities/fraction_width</applyto>
+      <applyto>/apps/gnucash/dialogs/edit_commodities/fullname_width</applyto>
+      <applyto>/apps/gnucash/dialogs/edit_commodities/namespace_width</applyto>
+      <applyto>/apps/gnucash/dialogs/edit_commodities/name_width</applyto>
+      <key>/schemas/apps/gnucash/dialogs/edit_commodities/printname_width</key>
+      <key>/schemas/apps/gnucash/dialogs/edit_commodities/quote_flag_width</key>
+      <key>/schemas/apps/gnucash/dialogs/edit_commodities/quote_source_width</key>
+      <key>/schemas/apps/gnucash/dialogs/edit_commodities/quote_timezone_width</key>
+      <applyto>/apps/gnucash/dialogs/edit_commodities/symbol_width</applyto>
+      <key>/schemas/apps/gnucash/dialogs/edit_commodities/uniquename_width</key>
+      <owner>gnucash</owner>
+      <type>int</type>
+      <locale name="C">
+        <short>Width of this column</short>
+        <long>
+          This setting stores the width of the given column in pixels.
+        </long>
+      </locale>
+    </schema>
+
+    <schema>
       <key>/schemas/apps/gnucash/dialogs/edit_commodities/include_iso</key>
       <applyto>/apps/gnucash/dialogs/edit_commodities/include_iso</applyto>
       <owner>gnucash</owner>

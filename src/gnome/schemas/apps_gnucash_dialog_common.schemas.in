@@ -4,49 +4,91 @@
 
     <schema>
       <key>/schemas/apps/gnucash/dialogs/position</key>
+      <applyto>/apps/gnucash/dialogs/account/window_position</applyto>
+      <applyto>/apps/gnucash/dialogs/business/bill/window_position</applyto>
+      <applyto>/apps/gnucash/dialogs/business/customer_search/window_position</applyto>
+      <applyto>/apps/gnucash/dialogs/business/employee_search/window_position</applyto>
+      <applyto>/apps/gnucash/dialogs/business/invoice/window_position</applyto>
+      <applyto>/apps/gnucash/dialogs/business/invoice_search/window_position</applyto>
+      <applyto>/apps/gnucash/dialogs/business/job_search/window_position</applyto>
+      <applyto>/apps/gnucash/dialogs/business/order_search/window_position</applyto>
+      <applyto>/apps/gnucash/dialogs/business/vendor_search/window_position</applyto>
+      <applyto>/apps/gnucash/dialogs/business/voucher/window_position</applyto>
       <applyto>/apps/gnucash/dialogs/edit_commodities/window_position</applyto>
-      <applyto>/apps/gnucash/dialogs/find/window_position</applyto>
       <applyto>/apps/gnucash/dialogs/edit_prices/window_position</applyto>
+      <applyto>/apps/gnucash/dialogs/export/csv/window_position</applyto>
+      <applyto>/apps/gnucash/dialogs/find/window_position</applyto>
+      <applyto>/apps/gnucash/dialogs/import/csv/window_position</applyto>
+      <applyto>/apps/gnucash/dialogs/import/generic_matcher/match_picker/window_position</applyto>
+      <applyto>/apps/gnucash/dialogs/import/generic_matcher/transaction_list/window_position</applyto>
+      <applyto>/apps/gnucash/dialogs/import/hbci/connection_dialog/window_position</applyto>
+      <applyto>/apps/gnucash/dialogs/new_hierarchy/window_position</applyto>
       <applyto>/apps/gnucash/dialogs/scheduled_trans/since_last_run/window_position</applyto>
       <applyto>/apps/gnucash/dialogs/scheduled_trans/transaction_editor/window_position</applyto>
       <applyto>/apps/gnucash/dialogs/scheduled_trans/transaction_list/window_position</applyto>
-      <applyto>/apps/gnucash/dialogs/tax_info/window_position</applyto>
       <applyto>/apps/gnucash/dialogs/preferences/window_position</applyto>
+      <applyto>/apps/gnucash/dialogs/price_editor/window_position</applyto>
       <applyto>/apps/gnucash/dialogs/print_checks/window_position</applyto>
       <applyto>/apps/gnucash/dialogs/reset_warnings/window_position</applyto>
+      <applyto>/apps/gnucash/dialogs/tax_info/window_position</applyto>
       <applyto>/apps/gnucash/dialogs/tip_of_the_day/window_position</applyto>
+      <applyto>/apps/gnucash/dialogs/transfer/window_position</applyto>
+      <applyto>/apps/gnucash/dialogs/window-reconcile/window_position</applyto>
       <owner>gnucash</owner>
       <type>list</type>
       <list_type>int</list_type>
+      <default>[]</default>
       <locale name="C">
         <short>Window position</short>
         <long>
-          The X,Y coordinates of the top left corner of the window
-          when it was last closed.
+          This setting describes the last position of the window.
+          The numbers are the X and Y coordinates of the top left
+          corner of the window.
         </long>
       </locale>
     </schema>
 
     <schema>
       <key>/schemas/apps/gnucash/dialogs/geometry</key>
+      <applyto>/apps/gnucash/dialogs/account/window_geometry</applyto>
+      <applyto>/apps/gnucash/dialogs/business/bill/window_geometry</applyto>
+      <applyto>/apps/gnucash/dialogs/business/customer_search/window_geometry</applyto>
+      <applyto>/apps/gnucash/dialogs/business/employee_search/window_geometry</applyto>
+      <applyto>/apps/gnucash/dialogs/business/invoice/window_geometry</applyto>
+      <applyto>/apps/gnucash/dialogs/business/invoice_search/window_geometry</applyto>
+      <applyto>/apps/gnucash/dialogs/business/job_search/window_geometry</applyto>
+      <applyto>/apps/gnucash/dialogs/business/order_search/window_geometry</applyto>
+      <applyto>/apps/gnucash/dialogs/business/vendor_search/window_geometry</applyto>
+      <applyto>/apps/gnucash/dialogs/business/voucher/window_geometry</applyto>
       <applyto>/apps/gnucash/dialogs/edit_commodities/window_geometry</applyto>
-      <applyto>/apps/gnucash/dialogs/find/window_geometry</applyto>
       <applyto>/apps/gnucash/dialogs/edit_prices/window_geometry</applyto>
+      <applyto>/apps/gnucash/dialogs/export/csv/window_geometry</applyto>
+      <applyto>/apps/gnucash/dialogs/find/window_geometry</applyto>
+      <applyto>/apps/gnucash/dialogs/import/csv/window_geometry</applyto>
+      <applyto>/apps/gnucash/dialogs/import/generic_matcher/match_picker/window_geometry</applyto>
+      <applyto>/apps/gnucash/dialogs/import/generic_matcher/transaction_list/window_geometry</applyto>
+      <applyto>/apps/gnucash/dialogs/import/hbci/connection_dialog/window_geometry</applyto>
+      <applyto>/apps/gnucash/dialogs/new_hierarchy/window_geometry</applyto>
       <applyto>/apps/gnucash/dialogs/scheduled_trans/since_last_run/window_geometry</applyto>
       <applyto>/apps/gnucash/dialogs/scheduled_trans/transaction_editor/window_geometry</applyto>
       <applyto>/apps/gnucash/dialogs/scheduled_trans/transaction_list/window_geometry</applyto>
       <applyto>/apps/gnucash/dialogs/tax_info/window_geometry</applyto>
       <applyto>/apps/gnucash/dialogs/preferences/window_geometry</applyto>
+      <applyto>/apps/gnucash/dialogs/price_editor/window_geometry</applyto>
       <applyto>/apps/gnucash/dialogs/print_checks/window_geometry</applyto>
       <applyto>/apps/gnucash/dialogs/reset_warnings/window_geometry</applyto>
       <applyto>/apps/gnucash/dialogs/tip_of_the_day/window_geometry</applyto>
+      <applyto>/apps/gnucash/dialogs/transfer/window_geometry</applyto>
+      <applyto>/apps/gnucash/dialogs/window-reconcile/window_geometry</applyto>
       <owner>gnucash</owner>
       <type>list</type>
       <list_type>int</list_type>
+      <default>[]</default>
       <locale name="C">
-        <short>Window geometry</short>
+        <short>Window size</short>
         <long>
-          The width and size of the window when it was last closed.
+          This setting describes the size of the window when it was last closed.
+          The numbers are the width and height of the window.
         </long>
       </locale>
     </schema>
@@ -69,10 +111,13 @@
     <schema>
       <key>/schemas/apps/gnucash/dialogs/last_path</key>
       <applyto>/apps/gnucash/dialogs/export_accounts/last_path</applyto>
-      <applyto>/apps/gnucash/dialogs/log_replay/last_path</applyto>
+      <applyto>/apps/gnucash/dialogs/export/csv/last_path</applyto>
+      <applyto>/apps/gnucash/dialogs/import/csv/last_path</applyto>
       <applyto>/apps/gnucash/dialogs/import/mt940/last_path</applyto>
       <applyto>/apps/gnucash/dialogs/import/ofx/last_path</applyto>
       <applyto>/apps/gnucash/dialogs/import/qif/last_path</applyto>
+      <applyto>/apps/gnucash/dialogs/log_replay/last_path</applyto>
+      <applyto>/apps/gnucash/dialogs/open_save/last_path</applyto>
       <owner>gnucash</owner>
       <type>string</type>
       <locale name="C">
@@ -93,6 +138,7 @@
       <owner>gnucash</owner>
       <type>list</type>
       <list_type>string</list_type>
+      <default>[]</default>
       <locale name="C">
         <short>Columns used for sorting</short>
         <long>
@@ -112,6 +158,7 @@
       <owner>gnucash</owner>
       <type>list</type>
       <list_type>string</list_type>
+      <default>[]</default>
       <locale name="C">
         <short>Sort column ascending or descending</short>
         <long>

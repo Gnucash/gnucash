@@ -1,4 +1,4 @@
-SUBDIRS = . schemas
+SUBDIRS = . gschemas
 
 pkglib_LTLIBRARIES=libgncmod-csv-import.la
 

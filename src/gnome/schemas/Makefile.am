@@ -10,6 +10,7 @@ schemas_in_files = \
   apps_gnucash_general.schemas.in \
   apps_gnucash_warnings.schemas.in \
   apps_gnucash_window_pages_account_tree.schemas.in \
+  apps_gnucash_window_pages_common.schemas.in \
   apps_gnucash_window_pages_register.schemas.in
 schema_DATA = $(schemas_in_files:.schemas.in=.schemas)
 

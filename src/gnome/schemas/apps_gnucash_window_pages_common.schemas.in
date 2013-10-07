@@ -1,0 +1,121 @@
+<?xml version="1.0"?>
+<gconfschemafile>
+  <schemalist>
+
+    <schema>
+      <key>/schemas/apps/gnucash/window/pages/visibility</key>
+      <applyto>/apps/gnucash/window/pages/account_tree/account-code_visible</applyto>
+      <applyto>/apps/gnucash/window/pages/account_tree/balance-period_visible</applyto>
+      <applyto>/apps/gnucash/window/pages/account_tree/balance_report_visible</applyto>
+      <applyto>/apps/gnucash/window/pages/account_tree/balance_visible</applyto>
+      <applyto>/apps/gnucash/window/pages/account_tree/cleared_report_visible</applyto>
+      <applyto>/apps/gnucash/window/pages/account_tree/cleared_visible</applyto>
+      <applyto>/apps/gnucash/window/pages/account_tree/commodity_visible</applyto>
+      <applyto>/apps/gnucash/window/pages/account_tree/description_visible</applyto>
+      <applyto>/apps/gnucash/window/pages/account_tree/future_min_report_visible</applyto>
+      <applyto>/apps/gnucash/window/pages/account_tree/future_min_visible</applyto>
+      <applyto>/apps/gnucash/window/pages/account_tree/lastnum_visible</applyto>
+      <applyto>/apps/gnucash/window/pages/account_tree/last-recon-date_visible</applyto>
+      <applyto>/apps/gnucash/window/pages/account_tree/name_visible</applyto>
+      <applyto>/apps/gnucash/window/pages/account_tree/notes_visible</applyto>
+      <applyto>/apps/gnucash/window/pages/account_tree/placeholder_visible</applyto>
+      <applyto>/apps/gnucash/window/pages/account_tree/present_report_visible</applyto>
+      <applyto>/apps/gnucash/window/pages/account_tree/present_visible</applyto>
+      <applyto>/apps/gnucash/window/pages/account_tree/reconciled_report_visible</applyto>
+      <applyto>/apps/gnucash/window/pages/account_tree/reconciled_visible</applyto>
+      <applyto>/apps/gnucash/window/pages/account_tree/tax-info_visible</applyto>
+      <applyto>/apps/gnucash/window/pages/account_tree/total-period_visible</applyto>
+      <applyto>/apps/gnucash/window/pages/account_tree/total_report_visible</applyto>
+      <applyto>/apps/gnucash/window/pages/account_tree/total_visible</applyto>
+      <applyto>/apps/gnucash/window/pages/account_tree/type_visible</applyto>
+      <applyto>/apps/gnucash/window/pages/customer_tree/active_visible</applyto>
+      <applyto>/apps/gnucash/window/pages/customer_tree/address-1_visible</applyto>
+      <applyto>/apps/gnucash/window/pages/customer_tree/address-2_visible</applyto>
+      <applyto>/apps/gnucash/window/pages/customer_tree/address-3_visible</applyto>
+      <applyto>/apps/gnucash/window/pages/customer_tree/address-4_visible</applyto>
+      <applyto>/apps/gnucash/window/pages/customer_tree/address-name_visible</applyto>
+      <applyto>/apps/gnucash/window/pages/customer_tree/balance-report_visible</applyto>
+      <applyto>/apps/gnucash/window/pages/customer_tree/balance_visible</applyto>
+      <applyto>/apps/gnucash/window/pages/customer_tree/currency_visible</applyto>
+      <applyto>/apps/gnucash/window/pages/customer_tree/email_visible</applyto>
+      <applyto>/apps/gnucash/window/pages/customer_tree/fax_visible</applyto>
+      <applyto>/apps/gnucash/window/pages/customer_tree/name_visible</applyto>
+      <applyto>/apps/gnucash/window/pages/customer_tree/notes_visible</applyto>
+      <applyto>/apps/gnucash/window/pages/customer_tree/owner-id_visible</applyto>
+      <applyto>/apps/gnucash/window/pages/customer_tree/phone_visible</applyto>
+      <applyto>/apps/gnucash/window/pages/customer_tree/type_visible</applyto>
+      <applyto>/apps/gnucash/window/pages/sx_list/enabled_visible</applyto>
+      <applyto>/apps/gnucash/window/pages/sx_list/frequency_visible</applyto>
+      <applyto>/apps/gnucash/window/pages/sx_list/last-occur_visible</applyto>
+      <applyto>/apps/gnucash/window/pages/sx_list/name_visible</applyto>
+      <applyto>/apps/gnucash/window/pages/sx_list/next-occur_visible</applyto>
+      <owner>gnucash</owner>
+      <type>bool</type>
+      <locale name="C">
+        <short>Display this column</short>
+        <long>
+          This setting controls wether the given column will be visible in the
+          view. TRUE means visible, FALSE means hidden.
+        </long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnucash/window/pages/width</key>
+      <applyto>/apps/gnucash/window/pages/account_tree/account-code_width</applyto>
+      <applyto>/apps/gnucash/window/pages/account_tree/balance-period_width</applyto>
+      <applyto>/apps/gnucash/window/pages/account_tree/balance_report_width</applyto>
+      <applyto>/apps/gnucash/window/pages/account_tree/balance_width</applyto>
+      <applyto>/apps/gnucash/window/pages/account_tree/cleared_report_width</applyto>
+      <applyto>/apps/gnucash/window/pages/account_tree/cleared_width</applyto>
+      <applyto>/apps/gnucash/window/pages/account_tree/commodity_width</applyto>
+      <applyto>/apps/gnucash/window/pages/account_tree/description_width</applyto>
+      <applyto>/apps/gnucash/window/pages/account_tree/future_min_report_width</applyto>
+      <applyto>/apps/gnucash/window/pages/account_tree/future_min_width</applyto>
+      <applyto>/apps/gnucash/window/pages/account_tree/lastnum_width</applyto>
+      <applyto>/apps/gnucash/window/pages/account_tree/last-recon-date_width</applyto>
+      <applyto>/apps/gnucash/window/pages/account_tree/name_width</applyto>
+      <applyto>/apps/gnucash/window/pages/account_tree/notes_width</applyto>
+      <applyto>/apps/gnucash/window/pages/account_tree/placeholder_width</applyto>
+      <applyto>/apps/gnucash/window/pages/account_tree/present_report_width</applyto>
+      <applyto>/apps/gnucash/window/pages/account_tree/present_width</applyto>
+      <applyto>/apps/gnucash/window/pages/account_tree/reconciled_report_width</applyto>
+      <applyto>/apps/gnucash/window/pages/account_tree/reconciled_width</applyto>
+      <applyto>/apps/gnucash/window/pages/account_tree/tax-info_width</applyto>
+      <applyto>/apps/gnucash/window/pages/account_tree/total-period_width</applyto>
+      <applyto>/apps/gnucash/window/pages/account_tree/total_report_width</applyto>
+      <applyto>/apps/gnucash/window/pages/account_tree/total_width</applyto>
+      <applyto>/apps/gnucash/window/pages/account_tree/type_width</applyto>
+      <applyto>/apps/gnucash/window/pages/customer_tree/active_width</applyto>
+      <applyto>/apps/gnucash/window/pages/customer_tree/address-1_width</applyto>
+      <applyto>/apps/gnucash/window/pages/customer_tree/address-2_width</applyto>
+      <applyto>/apps/gnucash/window/pages/customer_tree/address-3_width</applyto>
+      <applyto>/apps/gnucash/window/pages/customer_tree/address-4_width</applyto>
+      <applyto>/apps/gnucash/window/pages/customer_tree/address-name_width</applyto>
+      <applyto>/apps/gnucash/window/pages/customer_tree/balance-report_width</applyto>
+      <applyto>/apps/gnucash/window/pages/customer_tree/balance_width</applyto>
+      <applyto>/apps/gnucash/window/pages/customer_tree/currency_width</applyto>
+      <applyto>/apps/gnucash/window/pages/customer_tree/email_width</applyto>
+      <applyto>/apps/gnucash/window/pages/customer_tree/fax_width</applyto>
+      <applyto>/apps/gnucash/window/pages/customer_tree/name_width</applyto>
+      <applyto>/apps/gnucash/window/pages/customer_tree/notes_width</applyto>
+      <applyto>/apps/gnucash/window/pages/customer_tree/owner-id_width</applyto>
+      <applyto>/apps/gnucash/window/pages/customer_tree/phone_width</applyto>
+      <applyto>/apps/gnucash/window/pages/customer_tree/type_width</applyto>
+      <applyto>/apps/gnucash/window/pages/sx_list/enabled_width</applyto>
+      <applyto>/apps/gnucash/window/pages/sx_list/frequency_width</applyto>
+      <applyto>/apps/gnucash/window/pages/sx_list/last-occur_width</applyto>
+      <applyto>/apps/gnucash/window/pages/sx_list/name_width</applyto>
+      <applyto>/apps/gnucash/window/pages/sx_list/next-occur_width</applyto>
+      <owner>gnucash</owner>
+      <type>int</type>
+      <locale name="C">
+        <short>Width of this column</short>
+        <long>
+          This setting stores the width of the given column in pixels.
+        </long>
+      </locale>
+    </schema>
+
+  </schemalist>
+</gconfschemafile>

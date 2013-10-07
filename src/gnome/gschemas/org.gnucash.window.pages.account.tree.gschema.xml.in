@@ -1,5 +1,5 @@
 <schemalist gettext-domain="GETTEXT_PACKAGE">
-  <schema id="org.gnucash.window.pages.account.tree" path="/apps/gnucash/window/pages/account_tree/summary/">
+  <schema id="org.gnucash.window.pages.account_tree.summary" path="/apps/gnucash/window/pages/account_tree/summary/">
     <key name="grand_total" type="b">
       <default>true</default>
       <summary>Show a grand total of all accounts converted to the default report currency</summary>

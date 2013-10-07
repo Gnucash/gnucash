@@ -3,8 +3,7 @@
 gschema_in_files = \
   org.gnucash.dialogs.business.gschema.xml
 
-gsettings_SCHEMAS = \
-  org.gnucash.dialogs.business.gschema.xml
+gsettings_SCHEMAS = $(gschema_in_files:.gschema.xml.in=.gschema.xml)
 
 # During the conversion from GConf to GSettings we are using
 # the gconf backend for GSettings. Allow the more liberal

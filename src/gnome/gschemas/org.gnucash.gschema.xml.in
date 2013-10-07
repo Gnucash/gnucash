@@ -1,9 +1,9 @@
 <schemalist gettext-domain="GETTEXT_PACKAGE">
-  <schema id="org.gnucash.general" path="/apps/gnucash/">
-    <child name="general" schema="org.gnucash.general.general"/>
-    <child name="dev" schema="org.gnucash.general.dev"/>
+  <schema id="org.gnucash" path="/apps/gnucash/">
+    <child name="general" schema="org.gnucash.general"/>
+    <child name="dev" schema="org.gnucash.dev"/>
   </schema>
-  <schema id="org.gnucash.general.general" path="/apps/gnucash/general/">
+  <schema id="org.gnucash.general" path="/apps/gnucash/general/">
     <key name="save_window_geometry" type="b">
       <default>true</default>
       <summary>Save window sizes and locations</summary>
@@ -34,11 +34,6 @@
       <summary>Display negative amounts in red</summary>
       <description>Display negative amounts in red</description>
     </key>
-    <key name="enable_euro" type="b">
-      <default>false</default>
-      <summary>Enables Euro support</summary>
-      <description>Enables additional support for the European Union EURO currency.</description>
-    </key>
     <key name="auto_decimal_point" type="b">
       <default>false</default>
       <summary>Automatically insert a decimal point</summary>
@@ -63,6 +58,16 @@
       <default>'credit'</default>
       <summary>Accounts to reverse the balance</summary>
       <description>This setting allows certain accounts to have their balances reversed in sign from positive to negative, or vice versa. The setting "income_expense" is for users who like to see negative expenses and positive income.  The setting of "credit" is for users who want to see balances reflect the debit/credit status of the account.  The setting "none" doesn't reverse the sign on any balances.</description>
+    </key>
+    <key name="show_account_color" type="b">
+      <default>false</default>
+      <summary>Use account colors in the account hierarchy</summary>
+      <description>If active the account hierarchy will colorize the account using the account's custom color if set. This can serve as a visual aid to quickly identify accounts.</description>
+    </key>
+    <key name="show_account_color_tabs" type="b">
+      <default>false</default>
+      <summary>Use account colors in the tabs of open account registers</summary>
+      <description>If active the account register tabs will be colored using the account's custom color if set. This can serve as a visual aid to quickly identify accounts.</description>
     </key>
     <key name="toolbar_style" type="s">
       <default>'system'</default>
@@ -94,7 +99,7 @@
       <summary>Default currency for new accounts</summary>
       <description>This setting specifies the default currency used for new accounts if the currency_choice setting is set to "other". This field must contain the three letter ISO 4217 code for a currency (e.g. USD, GBP, RUB).</description>
     </key>
-    <key name="clock_24h" type="b">
+    <key name="24hour_clock" type="b">
       <default>false</default>
       <summary>Use 24 hour time format</summary>
       <description>If active, use a 24 hour time format. Otherwise use a 12 hour time format.</description>
@@ -134,10 +139,16 @@
       <summary>Closing a tab moves to the most recently visited tab.</summary>
       <description>If active, closing a tab moves to the most recently visited tab.  Otherwise closing a tab moves one tab to the left.</description>
     </key>
-    <child name="register" schema="org.gnucash.general.general.register"/>
-    <child name="report" schema="org.gnucash.general.general.report"/>
+    <key name="num_source" type="b">
+      <default>false</default>
+      <summary>Set book option on new files to use split "action" field for "Num" field on registers/reports</summary>
+      <description>If selected, the default book option for new files is set so that the 'Num' cell on registers shows/updates the split 'action' field and the transaction 'num' field is shown on the second line in double line mode (and is not visible in single line mode). Otherwise, the default book option for new files is set so that the 'Num' cell on registers shows/updates the transaction 'num' field.</description>
+    </key>
+    <child name="register" schema="org.gnucash.general.register"/>
+    <child name="report" schema="org.gnucash.general.report"/>
   </schema>
-  <schema id="org.gnucash.general.general.register" path="/apps/gnucash/general/register/">
+
+  <schema id="org.gnucash.general.register" path="/apps/gnucash/general/register/">
     <key name="use_theme_colors" type="b">
       <default>false</default>
       <summary>Color the register as specified by the system theme</summary>
@@ -193,8 +204,39 @@
       <summary>Only display leaf account names.</summary>
       <description>Show only the names of the leaf accounts in the register and in the account selection popup. The default behaviour is to display the full name, including the path in the account tree. Activating this option implies that you use unique leaf names.</description>
     </key>
+    <key name="show_extra_dates" type="b">
+      <default>false</default>
+      <summary>Show the entered and reconcile dates</summary>
+      <description>Show the date when the transaction was entered below the posted date and reconciled date on split row.</description>
+    </key>
+    <key name="show_extra_dates_on_selection" type="b">
+      <default>false</default>
+      <summary>Show entered and reconciled dates on selection</summary>
+      <description>Show the entered date and reconciled date on transaction selection.</description>
+    </key>
+    <key name="show_calendar_buttons" type="b">
+      <default>false</default>
+      <summary>Show the calendar buttons</summary>
+      <description>Show the calendar buttons Cancel, Today and Select.</description>
+    </key>
+    <key name="selection_to_blank_on_expand" type="b">
+      <default>false</default>
+      <summary>Move the selection to the blank split on expand</summary>
+      <description>This will move the selection to the blank split when the transaction is expanded.</description>
+    </key>
+    <key name="max_transactions" type="d">
+      <default>0.0</default>
+      <summary>Number of transactions to show in a register.</summary>
+      <description>Show this many transactions in a register. A value of zero means show all transactions.</description>
+    </key>
+    <key name="key_length" type="d">
+      <default>2.0</default>
+      <summary>Number of characters for auto complete.</summary>
+      <description>This sets the number of characters before auto complete starts for description, notes and memo fields.</description>
+    </key>
   </schema>
-  <schema id="org.gnucash.general.general.report" path="/apps/gnucash/general/report/">
+  
+  <schema id="org.gnucash.general.report" path="/apps/gnucash/general/report/">
     <key name="use_new_window" type="b">
       <default>false</default>
       <summary>Create a new window for each new report</summary>
@@ -210,9 +252,9 @@
       <summary>Default currency for new reports</summary>
       <description>This setting specifies the default currency used for reports if the currency_choice setting is set to "other".  This field must contain the three letter ISO 4217 code for a currency (e.g. USD, GBP, RUB).</description>
     </key>
-    <child name="pdf_export" schema="org.gnucash.general.general.report.pdf_export"/>
+    <child name="pdf_export" schema="org.gnucash.general.report.pdf_export"/>
   </schema>
-  <schema id="org.gnucash.general.general.report.pdf_export" path="/apps/gnucash/general/report/pdf_export/">
+  <schema id="org.gnucash.general.report.pdf_export" path="/apps/gnucash/general/report/pdf_export/">
     <key name="filename_format" type="s">
       <default>'%1$s_%2$s_%3$s'</default>
       <summary>PDF export file name format</summary>
@@ -224,7 +266,7 @@
       <description>This setting chooses the way dates are used in the filename of PDF export. Possible values for this setting are "locale" to use the system locale setting, "ce" for Continental Europe style dates, "iso" for ISO 8601 standard dates , "uk" for United Kingdom style dates, and "us" for United States style dates.</description>
     </key>
   </schema>
-  <schema id="org.gnucash.general.dev" path="/apps/gnucash/dev/">
+  <schema id="org.gnucash.dev" path="/apps/gnucash/dev/">
     <key name="allow_file_incompatibility" type="b">
       <default>false</default>
       <summary>Allow file incompatibility with older versions.</summary>

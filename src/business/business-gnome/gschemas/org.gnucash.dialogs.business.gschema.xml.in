@@ -12,6 +12,11 @@
     </key>
   </schema>
   <schema id="org.gnucash.dialogs.business.invoice" path="/apps/gnucash/dialogs/business/invoice/">
+    <key name="tax_included" type="b">
+      <default>true</default>
+      <summary>Is tax included in this type of business entry?</summary>
+      <description>If set to active then tax is included by default in entries of this type.  This setting is inherited by new customers and vendors.</description>
+    </key>
     <key name="enable_toolbuttons" type="b">
       <default>false</default>
       <summary>Enable extra toolbar buttons for business</summary>

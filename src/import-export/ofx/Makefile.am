@@ -1,4 +1,4 @@
-SUBDIRS = . test
+SUBDIRS = . gschemas test
 
 pkglib_LTLIBRARIES=libgncmod-ofx.la
 
