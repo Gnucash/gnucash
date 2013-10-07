@@ -13,12 +13,12 @@ src/app-utils/gnc-component-manager.c
 src/app-utils/gnc-entry-quickfill.c
 src/app-utils/gnc-euro.c
 src/app-utils/gnc-exp-parser.c
-src/app-utils/gnc-gconf-utils.c
 src/app-utils/gnc-gettext-util.c
+src/app-utils/gnc-gsettings.c
 src/app-utils/gnc-helpers.c
 src/app-utils/gnc-help-utils.c
 src/app-utils/gncmod-app-utils.c
-src/app-utils/gnc-prefs.c
+src/app-utils/gnc-prefs-utils.c
 src/app-utils/gnc-sx-instance-model.c
 src/app-utils/gnc-ui-balances.c
 src/app-utils/gnc-ui-util.c
@@ -112,7 +112,6 @@ src/business/business-gnome/gtkbuilder/dialog-job.glade
 src/business/business-gnome/gtkbuilder/dialog-order.glade
 src/business/business-gnome/gtkbuilder/dialog-payment.glade
 src/business/business-gnome/gtkbuilder/dialog-vendor.glade
-src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in
 src/business/business-gnome/search-owner.c
 src/business/business-ledger/gncEntryLedger.c
 src/business/business-ledger/gncEntryLedgerControl.c
@@ -121,7 +120,6 @@ src/business/business-ledger/gncEntryLedgerLayout.c
 src/business/business-ledger/gncEntryLedgerLoad.c
 src/business/business-ledger/gncEntryLedgerModel.c
 src/core-utils/binreloc.c
-src/core-utils/gnc-core-prefs.c
 src/core-utils/gnc-features.c
 src/core-utils/gnc-filepath-utils.c
 src/core-utils/gnc-gdate-utils.c
@@ -131,6 +129,7 @@ src/core-utils/gnc-guile-utils.c
 src/core-utils/gnc-jalali.c
 src/core-utils/gnc-locale-utils.c
 src/core-utils/gnc-path.c
+src/core-utils/gnc-prefs.c
 src/core-utils/gnc-uri-utils.c
 src/doc/doxygen_main_page.c
 src/engine/Account.c
@@ -227,17 +226,6 @@ src/gnome/gtkbuilder/gnc-plugin-page-register.glade
 src/gnome/gtkbuilder/window-autoclear.glade
 src/gnome/gtkbuilder/window-reconcile.glade
 src/gnome/reconcile-view.c
-src/gnome/schemas/apps_gnucash_dialog_commodities.schemas.in
-src/gnome/schemas/apps_gnucash_dialog_common.schemas.in
-src/gnome/schemas/apps_gnucash_dialog_prices.schemas.in
-src/gnome/schemas/apps_gnucash_dialog_print_checks.schemas.in
-src/gnome/schemas/apps_gnucash_dialog_reconcile.schemas.in
-src/gnome/schemas/apps_gnucash_dialog_scheduled_transctions.schemas.in
-src/gnome/schemas/apps_gnucash_dialog_totd.schemas.in
-src/gnome/schemas/apps_gnucash_general.schemas.in
-src/gnome/schemas/apps_gnucash_warnings.schemas.in
-src/gnome/schemas/apps_gnucash_window_pages_account_tree.schemas.in
-src/gnome/schemas/apps_gnucash_window_pages_register.schemas.in
 src/gnome-search/dialog-search.c
 src/gnome-search/dialog-search.glade
 src/gnome-search/gnc-general-search.c
@@ -254,7 +242,6 @@ src/gnome-search/search-reconciled.c
 src/gnome-search/search-string.c
 src/gnome/top-level.c
 src/gnome-utils/account-quickfill.c
-src/gnome-utils/assistant-gconf-setup.c
 src/gnome-utils/assistant-utils.c
 src/gnome-utils/assistant-xml-encoding.c
 src/gnome-utils/cursors.c
@@ -330,7 +317,6 @@ src/gnome-utils/gnc-tree-view-price.c
 src/gnome-utils/gnc-tree-view-split-reg.c
 src/gnome-utils/gnc-tree-view-sx-list.c
 src/gnome-utils/gnc-window.c
-src/gnome-utils/gtkbuilder/assistant-gconf-setup.glade
 src/gnome-utils/gtkbuilder/assistant-xml-encoding.glade
 src/gnome-utils/gtkbuilder/dialog-account.glade
 src/gnome-utils/gtkbuilder/dialog-book-close.glade
@@ -351,7 +337,6 @@ src/gnome-utils/gtkbuilder/gnc-recurrence.glade
 src/gnome-utils/gtkbuilder/gnc-tree-view-owner.glade
 src/gnome-utils/misc-gnome-utils.c
 src/gnome-utils/print-session.c
-src/gnome-utils/schemas/apps_gnucash_history.schemas.in
 src/gnome-utils/search-param.c
 src/gnome-utils/window-main-summarybar.c
 src/gnome/window-autoclear.c
@@ -377,14 +362,12 @@ src/import-export/aqbanking/gnc-file-aqb-import.c
 src/import-export/aqbanking/gnc-gwen-gui.c
 src/import-export/aqbanking/gncmod-aqbanking.c
 src/import-export/aqbanking/gnc-plugin-aqbanking.c
-src/import-export/aqbanking/schemas/apps_gnucash_dialog_hbci.schemas.in
 src/import-export/csv-export/assistant-csv-export.c
 src/import-export/csv-export/assistant-csv-export.glade
 src/import-export/csv-export/csv-transactions-export.c
 src/import-export/csv-export/csv-tree-export.c
 src/import-export/csv-export/gncmod-csv-export.c
 src/import-export/csv-export/gnc-plugin-csv-export.c
-src/import-export/csv-export/schemas/apps_gnucash_dialog_export_csv.schemas.in
 src/import-export/csv-import/assistant-csv-account-import.c
 src/import-export/csv-import/assistant-csv-account-import.glade
 src/import-export/csv-import/assistant-csv-trans-import.c
@@ -394,7 +377,6 @@ src/import-export/csv-import/gnc-csv-gnumeric-popup.c
 src/import-export/csv-import/gnc-csv-model.c
 src/import-export/csv-import/gncmod-csv-import.c
 src/import-export/csv-import/gnc-plugin-csv-import.c
-src/import-export/csv-import/schemas/apps_gnucash_dialog_import_csv.schemas.in
 src/import-export/dialog-import.glade
 src/import-export/gncmod-generic-import.c
 src/import-export/import-account-matcher.c
@@ -420,11 +402,9 @@ src/import-export/qif-import/dialog-account-picker.c
 src/import-export/qif-import/dialog-account-picker.glade
 src/import-export/qif-import/gncmod-qif-import.c
 src/import-export/qif-import/gnc-plugin-qif-import.c
-src/import-export/qif-import/schemas/apps_gnucash_import_qif.schemas.in
 src/import-export/qif/qif-context.c
 src/import-export/qif/qif-file.c
 src/import-export/qif/qif-objects.c
-src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in
 src/libqof/qof/gnc-date.c
 src/libqof/qof/gnc-numeric.c
 src/libqof/qof/guid.c
