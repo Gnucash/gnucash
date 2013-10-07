@@ -108,6 +108,121 @@ void gnc_gsettings_set_prefix (const gchar *prefix);
  */
 const gchar *gnc_gsettings_get_prefix (void);
 
+
+/** @name Listening for changes
+ @{
+*/
+
+
+/** Register a callback for when a specific key in the settings
+ *  schema is changed.  Any time the key's value changes, the routine
+ *  will be invoked and will be passed both the changed gsettings entry
+ *  and the user data passed to this function.
+ *
+ *  @param schema This value contains the schema name of the key
+ *  to watch.
+ *
+ *  @param key This value contains the name of the key to watch.
+ *
+ *  @param func This is a pointer to the function to call when the key
+ *  changes.
+ *
+ *  @param user_data This pointer will be passed to the callback
+ *  function.
+ *
+ *  @return This function returns the handler id for the registered
+ *  callback.
+ */
+gulong gnc_gsettings_register_cb (const char *schema,
+                                  const gchar *key,
+                                  GCallback func,
+                                  gpointer user_data);
+
+
+/** Remove a function that was registered for a callback when a
+ *  specific key in the settings schema changed.  Both the func and
+ *  user_data arguments are used to match up the callback to remove.
+ *  If no matching func and user_data are found to be registered
+ *  for the given key, nothing will happen.
+ *
+ *  @param schema This value contains the schema name of the key
+ *  that is being watched.
+ *
+ *  @param key This value contains the name of the key being watched.
+ *
+ *  @param func This is a pointer to the function that was registered
+ *  earlier.
+ *
+ *  @param user_data This pointer was passed to the callback
+ *  function when it was registered.
+ */
+void gnc_gsettings_remove_cb_by_func (const gchar *schema,
+                                      const gchar *key,
+                                      GCallback func,
+                                      gpointer user_data);
+
+
+/** Remove a function that was registered for a callback when a
+ *  specific key in the settings schema changed.  The handler id
+ *  that was generated when the callback was registered is
+ *  use to find the callback to remove.
+ *  If no handler id is found nothing will happen.
+ *
+ *  @param schema This value contains the schema name of the key
+ *  that is being watched.
+ *
+ *  @param id The handler id of the callback to be removed.
+ */
+void gnc_gsettings_remove_cb_by_id (const gchar *schema,
+                                    guint id);
+
+
+/** Register a callback for when any key in the settings schema
+ *  is changed.  Any time the value of a key in this schema changes,
+ *  the routine will be invoked and will be passed the specified
+ *  user data.
+ *
+ *  @param schema This value contains the name of the schema
+ *  that is being watched.
+ *
+ *  @param func This is a pointer to the function to call when a key
+ *  changes.
+ *
+ *  @param user_data This pointer will be passed to the callback
+ *  function.
+ */
+guint gnc_gsettings_register_any_cb (const gchar *schema,
+                                     GCallback func,
+                                     gpointer user_data);
+
+
+/** Remove a function that was registered for a callback when any key
+ *  in the given settings schema changed.  Both the func and user_data
+ *  arguments are used to match up the callback to remove.
+ *  If no matching func and user_data are found to be registered
+ *  for the given key, nothing will happen.
+ *
+ *  @param schema This value contains the name of the schema
+ *  that is being watched.
+ *
+ *  @param func This is a pointer to the function that was registered
+ *  earlier.
+ *
+ *  @param user_data This pointer was passed to the callback
+ *  function when it was registered.
+ *
+ *  @note there is no gnc_settings_remove_any_cb_by_id. Use
+ *  gnc_settings_remove_cb_by_id instead if you want to
+ *  remove a callback set with gnc_settings_register_any_cb
+ *  by its handler id.
+ */
+void gnc_gsettings_remove_any_cb_by_func (const gchar *schema,
+                                          GCallback func,
+                                          gpointer user_data);
+
+/** @} */
+
+
 #endif /* GNC_GSETTINGS_H */
 /** @} */
 /** @} */

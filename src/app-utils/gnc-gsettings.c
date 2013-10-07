@@ -27,12 +27,16 @@
 #include <stdio.h>
 #include <string.h>
 #include "gnc-gsettings.h"
+#include "libqof/qof/qof.h"
 
 #define CLIENT_TAG  "%s-%s-client"
 #define NOTIFY_TAG  "%s-%s-notify_id"
 
 static GHashTable *schema_hash = NULL;
 static const gchar *gsettings_prefix;
+
+/* This static indicates the debugging module that this .o belongs to.  */
+static QofLogModule log_module = G_LOG_DOMAIN;
 
 /************************************************************/
 /*               Internal helper functions                  */
@@ -89,7 +93,6 @@ static GSettings * gnc_gsettings_get_schema_ptr (const gchar *schema_str)
 }
 
 
-
 /************************************************************/
 /*                      GSettings Utilities                 */
 /************************************************************/
@@ -121,4 +124,99 @@ gnc_gsettings_normalize_schema_name (const gchar *name)
     }
 
     return g_strjoin(".", gnc_gsettings_get_prefix(), name, NULL);
+}
+
+
+/************************************************************/
+/*                   Change notification                    */
+/************************************************************/
+
+gulong
+gnc_gsettings_register_cb (const gchar *schema,
+                           const gchar *key,
+                           GCallback func,
+                           gpointer user_data)
+{
+    gulong retval = 0;
+    gchar *signal = NULL;
+
+    GSettings *schema_ptr = gnc_gsettings_get_schema_ptr (schema);
+    g_return_val_if_fail (G_IS_SETTINGS (schema_ptr), retval);
+
+    if ((!key) || (*key == '\0'))
+        signal = g_strdup ("changed");
+    else
+    {
+        if (gnc_gsettings_is_valid_key(schema_ptr, key))
+            signal = g_strconcat ("changed::", key, NULL);
+    }
+
+    retval = g_signal_connect (schema_ptr, signal, func, user_data);
+
+    g_free (signal);
+
+    return retval;
+}
+
+
+void
+gnc_gsettings_remove_cb_by_func (const gchar *schema,
+                                 const gchar *key,
+                                 GCallback func,
+                                 gpointer user_data)
+{
+    gint matched = 0;
+    gchar *signal = NULL;
+
+    GSettings *schema_ptr = gnc_gsettings_get_schema_ptr (schema);
+    g_return_if_fail (G_IS_SETTINGS (schema_ptr));
+
+    if ((!key) || (*key == '\0'))
+        signal = g_strdup ("changed");
+    else
+    {
+        if (gnc_gsettings_is_valid_key(schema_ptr, key))
+            signal = g_strconcat ("changed::", key, NULL);
+    }
+
+    matched = g_signal_handlers_disconnect_matched (
+            schema_ptr,
+            G_SIGNAL_MATCH_DETAIL ||G_SIGNAL_MATCH_FUNC || G_SIGNAL_MATCH_DATA,
+            0, /* signal_id */
+            g_quark_from_string (signal),   /* signal_detail */
+            NULL, /* closure */
+            func, /* callback function */
+            user_data);
+    DEBUG ("Removed %d handlers for signal '%s' from schema '%s'", matched, signal, schema);
+
+    g_free (signal);
+}
+
+
+void
+gnc_gsettings_remove_cb_by_id (const gchar *schema,
+                               guint handlerid)
+{
+    GSettings *schema_ptr = gnc_gsettings_get_schema_ptr (schema);
+    g_return_if_fail (G_IS_SETTINGS (schema_ptr));
+
+    g_signal_handler_disconnect (schema_ptr, handlerid);
+}
+
+
+guint
+gnc_gsettings_register_any_cb (const gchar *schema,
+                               GCallback func,
+                               gpointer user_data)
+{
+    return gnc_gsettings_register_cb (schema, NULL, func, user_data);
+}
+
+
+void
+gnc_gsettings_remove_any_cb_by_func (const gchar *schema,
+                                     GCallback func,
+                                     gpointer user_data)
+{
+    gnc_gsettings_remove_cb_by_func (schema, NULL, func, user_data);
 }
