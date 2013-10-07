@@ -130,10 +130,17 @@ gulong gnc_prefs_register_cb (const char *group,
                               gpointer func,
                               gpointer user_data)
 {
+    ENTER("group %s; pref_name %s, prefsbackend.register_cb %p", group, pref_name, prefsbackend.register_cb);
     if (prefsbackend.register_cb)
+    {
+        LEAVE("");
         return (prefsbackend.register_cb) (group, pref_name, func, user_data);
+    }
     else
+    {
+        LEAVE("");
         return 0;
+    }
 }
 
 

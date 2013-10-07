@@ -76,20 +76,23 @@ static GSettings * gnc_gsettings_get_schema_ptr (const gchar *schema_str)
     GSettings *gset = NULL;
     gchar *full_name = gnc_gsettings_normalize_schema_name (schema_str);
 
+    ENTER("");
     if (!schema_hash)
         schema_hash = g_hash_table_new (g_str_hash, g_str_equal);
 
     gset = g_hash_table_lookup (schema_hash, full_name);
+    DEBUG ("Looking for schema %s returned gsettings %p", full_name, gset);
     if (!gset)
     {
         gset = g_settings_new (full_name);
+        DEBUG ("Created gsettings object %p for schema %s", gset, full_name);
         if (G_IS_SETTINGS(gset))
             g_hash_table_insert (schema_hash, full_name, gset);
         else
             PWARN ("Ignoring attempt to access unknown gsettings schema %s", full_name);
     }
 
-    g_free (full_name);
+    LEAVE("");
     return gset;
 }
 
@@ -142,6 +145,8 @@ gnc_gsettings_register_cb (const gchar *schema,
     gchar *signal = NULL;
 
     GSettings *schema_ptr = gnc_gsettings_get_schema_ptr (schema);
+
+    ENTER("");
     g_return_val_if_fail (G_IS_SETTINGS (schema_ptr), retval);
     g_return_val_if_fail (func, retval);
 
@@ -157,6 +162,7 @@ gnc_gsettings_register_cb (const gchar *schema,
 
     g_free (signal);
 
+    LEAVE("");
     return retval;
 }
 
@@ -502,6 +508,7 @@ gnc_gsettings_reset_schema (const gchar *schema)
 
 void gnc_gsettings_load_backend (void)
 {
+    ENTER("");
     prefsbackend.register_cb = gnc_gsettings_register_cb;
     prefsbackend.remove_cb_by_func = gnc_gsettings_remove_cb_by_func;
     prefsbackend.remove_cb_by_id = gnc_gsettings_remove_cb_by_id;
@@ -522,4 +529,5 @@ void gnc_gsettings_load_backend (void)
     prefsbackend.set_value = gnc_gsettings_set_value;
     prefsbackend.reset = gnc_gsettings_reset;
     prefsbackend.reset_group = gnc_gsettings_reset_schema;
+    LEAVE("Prefsbackend bind = %p", prefsbackend.bind);
 }
