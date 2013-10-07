@@ -28,35 +28,33 @@
     @brief Dialog for handling user preferences.
     @author Copyright (c) 2005 David Hampton <hampton@employees.org>
 
-    These functions are the external API available for the new user
-    preference dialog.  Preferences are now stored in GConf.  This
-    code ends up being nothing more than a pretty interface to set
-    key/value pairs in that database.  Any module may add a page (or
-    partial page) of preferences to the dialog.  These additions are
-    done by providing the name of a glade file, and a widget in that
-    file.  If a partial page is added, the widget name provided must
-    be that of a GtkTable containing four columns. If a full page is
-    added, the widget name provided to this code can be any kind of
+    These functions are the external API available for the user
+    preference dialog. This dialog allows a user to modify
+    several user preferences in the gnucash preferences database.
+    Any module may add a page (or partial page) of preferences
+    to the dialog.  These additions are done by providing
+    the name of a glade file and the content to load from that
+    file along with a widget in that file.  If a partial
+    page is added, the widget name provided must be that of
+    a GtkTable containing four columns. If a full page is added,
+    the widget name provided to this code can be any kind of
     widget, but for consistency it should probably be the same.
 
-    If a widget names is in the form gconf/xxx/yyy... and it is a type
-    of widget this code knows how to handle, then the callback signals
-    will be automatically wired up for the widget.  The only fields
-    that is required to be set in the glade file is the widget name.
-    This code currently knows about radio buttons, check buttons, spin
-    boxes, combo boxes, gnucash currency select widgets, gnucash
-    accounting period widgets, and a gnucash date edit widget.  (Combo
-    boxes should not be used for less than six choices.  Use a radio
-    button group instead.)
+    If a widget name is in the form pref/aaa.bbb/ccc... and it is a type
+    of widget this code knows how to handle, then the widget is bound
+    to the preference named ccc in group aaa.bbb. This means that if
+    the widget's value changes, the preference is automatically updated.
+    The same goes the other way around. This code currently knows about
+    font buttons, radio buttons, check buttons, spin boxes, combo boxes,
+    gnucash currency select widgets, gnucash accounting period widgets,
+    and a gnucash date edit widget. (Combo boxes should not be used for
+    less than five choices. Use a radio button group instead.)
 
     The argument *is* a glade file, so if your code has special
     requirements (e.g. make one widget insensitive until another is
     selected) feel free to go ahead and add your own callbacks to the
     glade file.  This code will connect any callbacks that exist in
     the glade file.
-
-    The tab names are user-visible strings, so they must be translated
-    each time the tab name is accessed or specified.
 */
 
 #ifndef GNC_DIALOG_PREFERENCES_H

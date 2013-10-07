@@ -3,6 +3,7 @@
  *                                                                  *
  * Copyright (C) 2005 David Hampton                                 *
  * Copyright (C) 2011 Robert Fewell                                 *
+ * Copyright (C) 2013 Geert Janssens                                *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -30,25 +31,27 @@
     @brief Dialog for handling user preferences.
     @author Copyright (c) 2005 David Hampton <hampton@employees.org>
 
-    These functions are the external API available for the new user
-    preference dialog.  Preferences are now stored in GConf.  This
-    code ends up being nothing more than a pretty interface to set
-    key/value pairs in that database.  Any module may add a page (or
-    partial page) of preferences to the dialog.  These additions are
-    done by providing the name of a glade file and the content to
-    load from that file along with a widget in that file.  If a
-    partial page is added, the widget name provided must be that of
+    These functions are the external API available for the user
+    preference dialog. This dialog allows a user to modify
+    several user preferences in the gnucash preferences database.
+    Any module may add a page (or partial page) of preferences
+    to the dialog.  These additions are done by providing
+    the name of a glade file and the content to load from that
+    file along with a widget in that file.  If a partial
+    page is added, the widget name provided must be that of
     a GtkTable containing four columns. If a full page is added,
     the widget name provided to this code can be any kind of
-    widget, but for consistence it should probably be the same.
+    widget, but for consistency it should probably be the same.
 
-    If a widget name is in the form gconf/xxx/yyy... and it is a type
-    of widget this code knows how to handle, then the callback signals
-    will be automatically wired up for the widget. This code currently
-    knows about radio buttons, check buttons, spin boxes, combo boxes,
+    If a widget name is in the form pref/aaa.bbb/ccc... and it is a type
+    of widget this code knows how to handle, then the widget is bound
+    to the preference named ccc in group aaa.bbb. This means that if
+    the widget's value changes, the preference is automatically updated.
+    The same goes the other way around. This code currently knows about
+    font buttons, radio buttons, check buttons, spin boxes, combo boxes,
     gnucash currency select widgets, gnucash accounting period widgets,
     and a gnucash date edit widget. (Combo boxes should not be used for
-    less than six choices. Use a radio button group instead.)
+    less than five choices. Use a radio button group instead.)
 
     The argument *is* a glade file, so if your code has special
     requirements (e.g. make one widget insensitive until another is
@@ -65,12 +68,11 @@
 #include "dialog-utils.h"
 #include "gnc-currency-edit.h"
 #include "gnc-date-edit.h"
-#include "gnc-gconf-utils.h"
-#include "gnc-prefs.h"
 #include "gnc-gobject-utils.h"
 #include "gnc-period-select.h"
 #include "gnc-engine.h"
 #include "Account.h"
+#include "gnc-prefs.h"
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"
 #include "gnc-component-manager.h"
@@ -78,9 +80,7 @@
 
 #define DIALOG_PREFERENCES_CM_CLASS "dialog-newpreferences"
 #define GNC_PREFS_GROUP             "dialogs.preferences"
-#define PREFIX_LEN                   sizeof("gconf/") - 1
 #define PREF_PREFIX_LEN              sizeof("pref/") - 1
-#define WIDGET_HASH                 "widget_hash"
 #define PREFS_WIDGET_HASH           "prefs_widget_hash"
 #define NOTEBOOK                    "notebook"
 
@@ -349,9 +349,9 @@ gnc_preferences_add_to_page (const gchar *filename,
 /*******************************************************************/
 
 /** This function builds a hash table of "interesting" widgets,
- *  i.e. widgets whose name starts with "gconf/".  This table is
- *  needed to perform name->widget lookups in the gconf callback
- *  functions as they are coming from multiple glade files.
+ *  i.e. widgets whose name starts with "pref/".  This table is
+ *  needed to perform name->widget lookups when binding the widgets
+ *  to their matching preferences.
  *
  *  @internal
  *
@@ -359,24 +359,18 @@ gnc_preferences_add_to_page (const gchar *filename,
  *  added to the dialog.
  *
  *  @param dialog A pointer to the dialog. The hash table is stored
- *  as a pointer off the dialog so that it can be found in the
- *  callback from gconf. */
+ *  as a pointer off the dialog so that it can be found in the binding
+ *  code. */
 static void
 gnc_prefs_build_widget_table (GtkBuilder *builder,
                               GtkWidget *dialog)
 {
-    /* FIXME to be removed when gconf conversion of preferences complete: */
-    GHashTable *gconf_table;
-    /* FIXME remove until here */
     GHashTable *prefs_table;
     GSList *interesting, *runner;
     const gchar *name;
     const gchar *wname;
     GtkWidget *widget;
 
-    /* FIXME to be removed when gconf conversion of preferences complete: */
-    gconf_table = g_object_get_data(G_OBJECT(dialog), WIDGET_HASH);
-    /* FIXME remove until here */
     prefs_table = g_object_get_data(G_OBJECT(dialog), PREFS_WIDGET_HASH);
 
     interesting = gtk_builder_get_objects(builder);
@@ -389,10 +383,6 @@ gnc_prefs_build_widget_table (GtkBuilder *builder,
             wname = gtk_widget_get_name(widget);
             name = gtk_buildable_get_name(GTK_BUILDABLE(widget));
             DEBUG("Widget type is %s and buildable get name is %s", wname, name);
-            /* FIXME to be removed when gconf conversion of preferences complete: */
-            if (g_str_has_prefix (name, "gconf"))
-                g_hash_table_insert(gconf_table, (gchar *)name, widget);
-            /* FIXME remove until here */
             if (g_str_has_prefix (name, "pref"))
                 g_hash_table_insert(prefs_table, (gchar *)name, widget);
         }
@@ -953,8 +943,6 @@ gnc_preferences_response_cb(GtkDialog *dialog, gint response, GtkDialog *unused)
         gnc_save_window_size(GNC_PREFS_GROUP, GTK_WINDOW(dialog));
         gnc_unregister_gui_component_by_data(DIALOG_PREFERENCES_CM_CLASS,
                                              dialog);
-        gnc_gconf_remove_notification(G_OBJECT(dialog), NULL,
-                                      DIALOG_PREFERENCES_CM_CLASS);
         gtk_widget_destroy(GTK_WIDGET(dialog));
         break;
     }
@@ -964,28 +952,6 @@ gnc_preferences_response_cb(GtkDialog *dialog, gint response, GtkDialog *unused)
 /********************/
 /*    Creation      */
 /********************/
-
-/* FIXME to remove when gconf conversion of preferences is complete */
-/** Connect one dialog widget to the appropriate callback function for
- *  its type.
- *
- *  @internal
- *
- *  @param name The name of the widget.
- *
- *  @param widget A pointer to the widget.
- *
- *  @param dialog A pointer to the dialog.
- */
-static void
-gnc_prefs_connect_one_gconf (const gchar *name,
-                             GtkWidget *widget,
-                             gpointer user_data)
-{
-    /* These tests must be ordered from more specific widget to less
-     * specific widget. */
-}
-/* FIXME end of section to be removed */
 
 /** Connect one dialog widget to the appropriate callback function for
  *  its type.
@@ -1087,7 +1053,6 @@ gnc_preferences_dialog_create(void)
     GtkBuilder *builder;
     GtkWidget *dialog, *notebook, *label, *image;
     GtkWidget *box, *date, *period, *currency;
-    GHashTable *gconf_table;
     GHashTable *prefs_table;
     GDate* gdate;
     gchar buf[128];
@@ -1130,11 +1095,8 @@ gnc_preferences_dialog_create(void)
     DEBUG("done");
 
     notebook = GTK_WIDGET(gtk_builder_get_object (builder, "notebook1"));
-    gconf_table = g_hash_table_new(g_str_hash, g_str_equal);
     prefs_table = g_hash_table_new(g_str_hash, g_str_equal);
     g_object_set_data(G_OBJECT(dialog), NOTEBOOK, notebook);
-    g_object_set_data_full(G_OBJECT(dialog), WIDGET_HASH,
-                           gconf_table, (GDestroyNotify)g_hash_table_destroy);
     g_object_set_data_full(G_OBJECT(dialog), PREFS_WIDGET_HASH,
                            prefs_table, (GDestroyNotify)g_hash_table_destroy);
 
@@ -1197,7 +1159,6 @@ gnc_preferences_dialog_create(void)
     gtk_notebook_set_current_page(GTK_NOTEBOOK(notebook), 0);
 
     DEBUG("We have the following interesting widgets:");
-    g_hash_table_foreach(gconf_table, (GHFunc)gnc_prefs_connect_one_gconf, dialog);
     g_hash_table_foreach(prefs_table, (GHFunc)gnc_prefs_connect_one, dialog);
     DEBUG("Done with interesting widgets.");
 
@@ -1225,119 +1186,9 @@ gnc_preferences_dialog_create(void)
 
 
 /*************************************/
-/*    GConf common callback code     */
+/*    Common callback code           */
 /*************************************/
 
-/** Find a partial match from gconf key to widget name.  This function
- *  is needed if the user manually updates the value of a radio button
- *  setting (a string) and types in an illegal value.  This function
- *  is called on all the "interesting" widgets in the dialog until
- *  there is a match.  This matched widget represents a legal value
- *  for the radio button.  The calling function can then force this
- *  radio button to be "on", thus insuring that Gnucash always has a
- *  legal value for the radio group.
- *
- *  @internal
- *
- *  @param key The name of a widget.
- *
- *  @param widget A pointer to the widget.
- *
- *  @param user_data The name of the gconf key that was changed.
- *
- *  @return Zero if the gconf key is a subset of this button's
- *  name. Non-zero otherwise.
- */
-static gboolean
-gnc_prefs_nearest_match (gpointer key,
-                         gpointer value,
-                         gpointer user_data)
-{
-    const gchar *widget_name = key;
-    const gchar *gconf_name = user_data;
-
-    return (strncmp(widget_name, gconf_name, strlen(gconf_name)) == 0);
-}
-
-
-/** Create the preferences dialog. This function first reads the
- *  dialog-preferences.glade file to obtain the dialog and a set of common
- *  preferences.  It then runs the list of add-ins, calling a helper
- *  function to add each full/partial page to this dialog, Finally it
- *  runs the list of "interesting widgets" that it has built and
- *  connects these widgets up to the callback functions.
- *
- *  @internal
- *
- *  @return A pointer to the newly created dialog.
- */
-static void
-gnc_preferences_gconf_changed (GConfClient *client,
-                               guint cnxn_id,
-                               GConfEntry *entry,
-                               gpointer dialog)
-{
-    GConfValue *value;
-    const gchar *key, *string_value;
-    gchar  **parts, *name, *group_name = NULL;
-    GtkWidget *widget;
-    GHashTable *table;
-
-    ENTER("key %s, value %p", entry->key, entry->value);
-    key = gconf_entry_get_key(entry);
-    value = gconf_entry_get_value(entry);
-    if (!value)
-    {
-        /* Values can be unset */
-        LEAVE("Unset valued for %s", key);
-        return;
-    }
-
-    parts = g_strsplit(entry->key, "/", 4);
-    name = g_strconcat("gconf/", parts[3], NULL);
-    g_strfreev(parts);
-    DEBUG("proposed widget name %s", name);
-
-    /* Can't just do a glade lookup here because not all of the widgets
-     * came from the same xml file. That's why the extra hash table. */
-    table = g_object_get_data(G_OBJECT(dialog), WIDGET_HASH);
-    widget = g_hash_table_lookup(table, name);
-    if ((widget == NULL) && (entry->value->type == GCONF_VALUE_STRING))
-    {
-        string_value = gconf_value_get_string(entry->value);
-        group_name = name;
-        name = g_strjoin("/", group_name, string_value, NULL);
-        DEBUG("proposed widget name %s", name);
-        widget = g_hash_table_lookup(table, name);
-        if (widget == NULL)
-        {
-            /* Mutter, mutter. Someone must have typed a bad string into
-             * gconf.  Force the value to a legal string.  Do this by
-             * directly setting the first widget in the group. This will
-             * ensure synchronization of Gnucash, Gconf, and the Prefs
-             * Dialog. */
-            DEBUG("bad value");
-            widget = g_hash_table_find(table, gnc_prefs_nearest_match, group_name);
-            if (widget)
-            {
-                DEBUG("forcing %s", gtk_widget_get_name(widget));
-                gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), TRUE);
-            }
-            g_free(group_name);
-            g_free(name);
-            LEAVE("no exact match");
-            return;
-        }
-        g_free(group_name);
-    }
-    if (widget != NULL)
-    {
-        /* These tests must be ordered from more specific widget to less
-         * specific widget. */
-    }
-    g_free(name);
-    LEAVE(" ");
-}
 
 
 /** Raise the preferences dialog to the top of the window stack.  This
@@ -1409,9 +1260,6 @@ gnc_preferences_dialog (void)
     gnc_restore_window_size(GNC_PREFS_GROUP, GTK_WINDOW(dialog));
     gtk_widget_show(dialog);
 
-    gnc_gconf_add_notification(G_OBJECT(dialog), NULL,
-                               gnc_preferences_gconf_changed,
-                               DIALOG_PREFERENCES_CM_CLASS);
     gnc_register_gui_component(DIALOG_PREFERENCES_CM_CLASS,
                                NULL, close_handler, dialog);
 
