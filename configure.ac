@@ -485,6 +485,14 @@ AC_CHECK_LIB(xml2, xmlElemDump, [:], [
 LIBS="$oLIBS"
 
 ### --------------------------------------------------------------------------
+### LIBXSLT
+
+PKG_CHECK_MODULES(LIBXSLT, libxslt)
+AS_SCRUB_INCLUDE(LIBXLT_CFLAGS)
+AC_SUBST(LIBXSLT_CFLAGS)
+AC_SUBST(LIBXSLT_LIBS)
+
+### --------------------------------------------------------------------------
 ### Zlib
 
 ZLIB_LIBS=-lz

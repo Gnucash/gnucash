@@ -595,6 +595,11 @@ void gnc_gsettings_reset_schema (const gchar *schema);
  */
 void gnc_gsettings_load_backend (void);
 
+
+/* Attempt to migrate preferences from gconf files
+    to gsettings if not already done so */
+void gnc_gsettings_migrate_from_gconf (void);
+
 #endif /* GNC_GSETTINGS_H */
 /** @} */
 /** @} */

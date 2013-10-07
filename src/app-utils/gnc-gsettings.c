@@ -27,14 +27,29 @@
 #include <stdio.h>
 #include <string.h>
 #include "gnc-gsettings.h"
+#include "gnc-path.h"
+#include "guile-mappings.h"
+#include <libguile.h>
 #include "libqof/qof/qof.h"
 #include "gnc-prefs-p.h"
+
+#include <libxml/xmlmemory.h>
+#include <libxml/debugXML.h>
+#include <libxml/HTMLtree.h>
+#include <libxml/xmlIO.h>
+#include <libxml/xinclude.h>
+#include <libxml/catalog.h>
+#include <libxslt/xslt.h>
+#include <libxslt/xsltInternals.h>
+#include <libxslt/transform.h>
+#include <libxslt/xsltutils.h>
 
 #define CLIENT_TAG  "%s-%s-client"
 #define NOTIFY_TAG  "%s-%s-notify_id"
 
 static GHashTable *schema_hash = NULL;
 static const gchar *gsettings_prefix;
+static xmlExternalEntityLoader defaultEntityLoader = NULL;
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = G_LOG_DOMAIN;
@@ -276,6 +291,7 @@ gnc_gsettings_set_bool (const gchar *schema,
     GSettings *schema_ptr = gnc_gsettings_get_schema_ptr (schema);
     g_return_val_if_fail (G_IS_SETTINGS (schema_ptr), FALSE);
 
+    ENTER("schema: %s, key: %s", schema, key);
     if (gnc_gsettings_is_valid_key (schema_ptr, key))
     {
         result = g_settings_set_boolean (schema_ptr, key, value);
@@ -285,6 +301,7 @@ gnc_gsettings_set_bool (const gchar *schema,
     else
         PERR ("Invalid key %s for schema %s", key, schema);
 
+    LEAVE("result %i", result);
     return result;
 }
 
@@ -387,6 +404,7 @@ gnc_gsettings_set_string (const gchar *schema,
     GSettings *schema_ptr = gnc_gsettings_get_schema_ptr (schema);
     g_return_val_if_fail (G_IS_SETTINGS (schema_ptr), FALSE);
 
+    ENTER("schema: %s, key: %s", schema, key);
     if (gnc_gsettings_is_valid_key (schema_ptr, key))
     {
         result = g_settings_set_string (schema_ptr, key, value);
@@ -396,6 +414,7 @@ gnc_gsettings_set_string (const gchar *schema,
     else
         PERR ("Invalid key %s for schema %s", key, schema);
 
+    LEAVE("result %i", result);
     return result;
 }
 
@@ -529,5 +548,118 @@ void gnc_gsettings_load_backend (void)
     prefsbackend.set_value = gnc_gsettings_set_value;
     prefsbackend.reset = gnc_gsettings_reset;
     prefsbackend.reset_group = gnc_gsettings_reset_schema;
+
     LEAVE("Prefsbackend bind = %p", prefsbackend.bind);
+}
+
+/* Attempt to migrate preferences from gconf files
+    to gsettings if not already done so */
+
+/* This snippet is borrowed from the xsltproc source
+ * and adapted to help the xsl transform find our temporary
+ * files in $HOME/.gnc-migration-tmp/
+ */
+static xmlParserInputPtr
+xsltprocExternalEntityLoader(const char *URL, const char *ID,
+                             xmlParserCtxtPtr ctxt) {
+    xmlParserInputPtr ret;
+    warningSAXFunc warning = NULL;
+        xmlChar *newURL;
+    gchar *tmpdir = g_build_filename (g_getenv ("HOME"), ".gnc-migration-tmp", NULL);
+
+    int i;
+    const char *lastsegment = URL;
+    const char *iter = URL;
+
+    while (*iter != 0) {
+        if (*iter == '/')
+            lastsegment = iter + 1;
+        iter++;
+    }
+
+    if ((ctxt != NULL) && (ctxt->sax != NULL)) {
+        warning = ctxt->sax->warning;
+        ctxt->sax->warning = NULL;
+    }
+
+    if (defaultEntityLoader != NULL) {
+        ret = defaultEntityLoader(URL, ID, ctxt);
+        if (ret != NULL) {
+            if (warning != NULL)
+                ctxt->sax->warning = warning;
+            return(ret);
+        }
+    }
+
+    newURL = xmlStrdup((const xmlChar *) tmpdir);
+    newURL = xmlStrcat(newURL, (const xmlChar *) "/");
+    newURL = xmlStrcat(newURL, (const xmlChar *) lastsegment);
+    g_free (tmpdir);
+    if (newURL != NULL) {
+        ret = defaultEntityLoader((const char *)newURL, ID, ctxt);
+        if (ret != NULL) {
+            if (warning != NULL)
+                ctxt->sax->warning = warning;
+            xmlFree(newURL);
+            return(ret);
+        }
+        xmlFree(newURL);
+    }
+    if (warning != NULL) {
+        ctxt->sax->warning = warning;
+        if (URL != NULL)
+            warning(ctxt, "failed to load external entity \"%s\"\n", URL);
+        else if (ID != NULL)
+            warning(ctxt, "failed to load external entity \"%s\"\n", ID);
+    }
+    return(NULL);
+}
+
+
+void gnc_gsettings_migrate_from_gconf (void)
+{
+    gchar *pkgdatadir, *stylesheet, *input, *output;
+    gchar *migr_dir;
+    SCM migr_script;
+    SCM result = scm_c_eval_string ("(use-modules (gnucash app-utils))(migration-prepare)");
+    xsltStylesheetPtr stylesheetptr = NULL;
+    xmlDocPtr inputxml, transformedxml;
+    FILE *outfile;
+
+    pkgdatadir = gnc_path_get_pkgdatadir();
+    stylesheet = g_build_filename(pkgdatadir, "make-prefs-migration-script.xsl", NULL);
+    input      = g_build_filename(pkgdatadir, "migratable-prefs.xml", NULL);
+    migr_dir   = g_build_filename(g_getenv ("HOME"), ".gnc-migration-tmp", NULL);
+    output     = g_build_filename(migr_dir, "migrate-prefs-user.scm", NULL);
+    xmlSubstituteEntitiesDefault(1);
+    xmlLoadExtDtdDefaultValue = 1;
+    defaultEntityLoader = xmlGetExternalEntityLoader();
+    xmlSetExternalEntityLoader(xsltprocExternalEntityLoader);
+    stylesheetptr = xsltParseStylesheetFile((const xmlChar *)stylesheet);
+    inputxml = xmlParseFile(input);
+    transformedxml = xsltApplyStylesheet(stylesheetptr, inputxml, NULL);
+
+    outfile = fopen(output, "w");
+    xsltSaveResultToFile(outfile, transformedxml, stylesheetptr);
+    fclose(outfile);
+
+    migr_script = scm_from_locale_string (output);
+    scm_primitive_load (migr_script);
+    result = scm_c_eval_string ("(use-modules (migrate-prefs-user))(run-migration)");
+
+    xsltFreeStylesheet(stylesheetptr);
+    xmlFreeDoc(inputxml);
+    xmlFreeDoc(transformedxml);
+
+    xsltCleanupGlobals();
+    xmlCleanupParser();
+
+    result = scm_c_eval_string ("(use-modules (gnucash app-utils))(migration-cleanup)");
+
+    g_free (pkgdatadir);
+    g_free (stylesheet);
+    g_free (input);
+    g_free (output);
+    g_free (migr_dir);
+
 }

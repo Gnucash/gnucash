@@ -34,3 +34,10 @@
 (re-export gnc-scm-log-msg)
 (re-export gnc-scm-log-debug)
 (re-export gnc-locale-default-iso-currency-code)
+
+(re-export gnc-prefs-set-bool)
+(re-export gnc-prefs-set-int)
+(re-export gnc-prefs-set-int64)
+(re-export gnc-prefs-set-float)
+(re-export gnc-prefs-set-string)
+(re-export gnc-prefs-set-coords)

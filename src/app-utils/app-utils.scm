@@ -21,6 +21,7 @@
 (use-modules (gnucash main)) ;; FIXME: delete after we finish modularizing.
 (use-modules (gnucash gnc-module))
 (use-modules (ice-9 syncase))
+(use-modules (migrate-prefs))
 
 ;; Guile 2 needs to find the symbols from the c module at compile time already
 (cond-expand
@@ -275,6 +276,10 @@
 (export simple-obj-to-list)
 (export simple-obj-from-list)
 (export make-simple-obj)
+
+;; migrate-prefs.scm
+(re-export migration-prepare)
+(re-export migration-cleanup)
 
 (define gnc:*kvp-option-path* (list KVP-OPTION-PATH))
 (export gnc:*kvp-option-path*)

@@ -33,7 +33,9 @@ AM_CPPFLAGS = \
   ${GUILE_INCS} \
   ${PYTHON_CPPFLAGS} \
   ${GLIB_CFLAGS} \
-  ${GTK_CFLAGS}
+  ${GTK_CFLAGS} \
+  ${LIBXML2_CFLAGS} \
+  ${LIBXSLT_CFLAGS}
 
 libgncmod_app_utils_la_SOURCES = \
   calculation/expression_parser.c \
@@ -97,7 +99,9 @@ libgncmod_app_utils_la_LIBADD = \
   ${top_builddir}/src/libqof/qof/libgnc-qof.la \
   ${GTK_LIBS} \
   ${GUILE_LIBS} \
-  ${GLIB_LIBS}
+  ${GLIB_LIBS} \
+  ${LIBXML2_LIBS} \
+  ${LIBXSLT_LIBS}
 
 if BUILDING_FROM_SCM
 swig-app-utils-guile.c: app-utils.i ${top_srcdir}/src/base-typemaps.i
@@ -134,9 +138,15 @@ gncscm_DATA = \
   config-var.scm \
   date-utilities.scm \
   hooks.scm \
+  migrate-prefs.scm \
   options.scm \
   prefs.scm \
   simple-obj.scm
+  
+prefsmigrationdir = $(GNC_SHAREDIR)
+prefsmigration_DATA = \
+  make-prefs-migration-script.xsl \
+  migratable-prefs.xml
 
 noinst_DATA = .scm-links
 
@@ -150,7 +160,8 @@ EXTRA_DIST = \
   swig-app-utils-python.c \
   app-utils.i \
   ${gncmod_DATA} \
-  ${gncscm_DATA}
+  ${gncscm_DATA} \
+  ${prefsmigration_DATA}
 
 if OS_WIN32
 libgncmod_app_utils_la_SOURCES += gnc-help-utils.c
