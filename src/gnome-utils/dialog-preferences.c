@@ -752,79 +752,6 @@ gnc_prefs_connect_radio_button_gconf (GtkRadioButton *button)
 
 /****************************************************************************/
 
-/** The user updated a spin button.  Update gconf.  Spin button
- *  choices are stored as a float.
- *
- *  @internal
- *
- *  @param button A pointer to the spin button that was clicked.
- *
- *  @param user_data Unused.
- */
-static void
-gnc_prefs_spin_button_user_cb_gconf (GtkSpinButton *spin,
-                               gpointer user_data)
-{
-    const gchar *name;
-    gdouble value;
-
-    g_return_if_fail(GTK_IS_SPIN_BUTTON(spin));
-    name = gtk_buildable_get_name(GTK_BUILDABLE(spin)) + PREFIX_LEN;
-    value = gtk_spin_button_get_value(spin);
-    DEBUG("Spin button %s has value %f", name, value);
-    gnc_gconf_set_float(name, NULL, value, NULL);
-}
-
-
-/** A spin button choice was updated in gconf.  Update the user
- *  visible dialog.
- *
- *  @internal
- *
- *  @param button A pointer to the spin button that changed.
- *
- *  @param value The new value of the spin button.
- */
-static void
-gnc_prefs_spin_button_gconf_cb_gconf (GtkSpinButton *spin,
-                                gdouble value)
-{
-    g_return_if_fail(GTK_IS_SPIN_BUTTON(spin));
-    ENTER("button %p, value %f", spin, value);
-    g_signal_handlers_block_by_func(G_OBJECT(spin),
-                                    G_CALLBACK(gnc_prefs_spin_button_user_cb_gconf), NULL);
-    gtk_spin_button_set_value(spin, value);
-    g_signal_handlers_unblock_by_func(G_OBJECT(spin),
-                                      G_CALLBACK(gnc_prefs_spin_button_user_cb_gconf), NULL);
-    LEAVE(" ");
-}
-
-
-/** Connect a spin button widget to the user callback function.  Set
- *  the starting state of the button from its value in gconf.
- *
- *  @internal
- *
- *  @param button A pointer to the spin button that should be
- *  connected.
- */
-static void
-gnc_prefs_connect_spin_button_gconf (GtkSpinButton *spin)
-{
-    const gchar *name;
-    gdouble value;
-
-    g_return_if_fail(GTK_IS_SPIN_BUTTON(spin));
-    name = gtk_buildable_get_name(GTK_BUILDABLE(spin)) + PREFIX_LEN;
-    value = gnc_gconf_get_float(name, NULL, NULL);
-    gtk_spin_button_set_value(spin, value);
-    DEBUG(" Spin button %s has initial value %f", name, value);
-    g_signal_connect(G_OBJECT(spin), "value-changed",
-                     G_CALLBACK(gnc_prefs_spin_button_user_cb_gconf), NULL);
-}
-
-/****************************************************************************/
-
 /** The user changed a combo box.  Update gconf.  Combo box
  *  choices are stored as an int.
  *
@@ -1307,6 +1234,35 @@ gnc_prefs_connect_check_button (GtkCheckButton *button)
     g_free (pref);
 }
 
+/****************************************************************************/
+
+/** Connect a GtkSpinButton widget to its stored value in the preferences database.
+ *
+ *  @internal
+ *
+ *  @param button A pointer to the spin button that should be
+ *  connected.
+ */
+static void
+gnc_prefs_connect_spin_button (GtkSpinButton *spin)
+{
+    gchar *group, *pref;
+    gdouble value;
+
+    g_return_if_fail(GTK_IS_SPIN_BUTTON(spin));
+
+    gnc_prefs_split_widget_name (gtk_buildable_get_name(GTK_BUILDABLE(spin)), &group, &pref);
+
+//    value = gnc_prefs_get_float (group, pref);
+//    gtk_spin_button_set_value(spin, value);
+//    DEBUG(" Spin button %s/%s has initial value %f", group, pref, value);
+
+    gnc_prefs_bind (group, pref, G_OBJECT (spin), "value");
+
+    g_free (group);
+    g_free (pref);
+}
+
 
 
 /****************************************************************************/
@@ -1382,11 +1338,6 @@ gnc_prefs_connect_one_gconf (const gchar *name,
         DEBUG("  %s - radio button", name);
         gnc_prefs_connect_radio_button_gconf(GTK_RADIO_BUTTON(widget));
     }
-    else if (GTK_IS_SPIN_BUTTON(widget))
-    {
-        DEBUG("  %s - spin button", name);
-        gnc_prefs_connect_spin_button_gconf(GTK_SPIN_BUTTON(widget));
-    }
     else if (GTK_IS_COMBO_BOX(widget))
     {
         DEBUG("  %s - combo box", name);
@@ -1459,6 +1410,11 @@ gnc_prefs_connect_one (const gchar *name,
     {
         DEBUG("  %s - check button", name);
         gnc_prefs_connect_check_button(GTK_CHECK_BUTTON(widget));
+    }
+    else if (GTK_IS_SPIN_BUTTON(widget))
+    {
+        DEBUG("  %s - spin button", name);
+        gnc_prefs_connect_spin_button(GTK_SPIN_BUTTON(widget));
     }
     else
     {
@@ -1712,12 +1668,6 @@ gnc_preferences_gconf_changed (GConfClient *client,
         {
             DEBUG("widget %p - radio button", widget);
             gnc_prefs_radio_button_gconf_cb_gconf(GTK_RADIO_BUTTON(widget));
-        }
-        else if (GTK_IS_SPIN_BUTTON(widget))
-        {
-            DEBUG("widget %p - spin button", widget);
-            gnc_prefs_spin_button_gconf_cb_gconf(GTK_SPIN_BUTTON(widget),
-                                           gconf_value_get_float(entry->value));
         }
         else if (GTK_IS_COMBO_BOX(widget))
         {

@@ -139,7 +139,7 @@ void gnc_tree_view_split_reg_set_uiupdate_cb (GncTreeViewSplitReg *view, GFunc c
 
 gboolean gnc_tree_view_split_reg_call_uiupdate_cb(GncTreeViewSplitReg *view);
 
-void gnc_tree_view_split_reg_refresh_from_gconf (GncTreeViewSplitReg *view);
+void gnc_tree_view_split_reg_refresh_from_prefs (GncTreeViewSplitReg *view);
 
 GtkWidget * gnc_tree_view_split_reg_get_parent (GncTreeViewSplitReg *view);
 

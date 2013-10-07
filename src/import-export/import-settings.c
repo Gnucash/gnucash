@@ -29,7 +29,6 @@
 #include <glib.h>
 
 #include "import-settings.h"
-#include "gnc-gconf-utils.h"
 #include "gnc-prefs.h"
 
 /********************************************************************\
@@ -90,14 +89,14 @@ gnc_import_Settings_new (void)
     settings->action_add_enabled = DEFAULT_ACTION_ADD_ENABLED;
     settings->action_clear_enabled = DEFAULT_ACTION_CLEAR_ENABLED;
     settings->clear_threshold =
-        (int)gnc_gconf_get_float(GCONF_IMPORT_SECTION, "auto_clear_threshold", NULL);
+        (int)gnc_prefs_get_float (GNC_PREFS_GROUP_IMPORT, GNC_PREF_AUTO_CLEAR_THRESHOLD);
     settings->add_threshold =
-        (int)gnc_gconf_get_float(GCONF_IMPORT_SECTION, "auto_add_threshold", NULL);
+        (int)gnc_prefs_get_float (GNC_PREFS_GROUP_IMPORT, GNC_PREF_AUTO_ADD_THRESHOLD);
     settings->display_threshold =
-        (int)gnc_gconf_get_float(GCONF_IMPORT_SECTION, "match_threshold", NULL);
+        (int)gnc_prefs_get_float (GNC_PREFS_GROUP_IMPORT, GNC_PREF_MATCH_THRESHOLD);
 
     settings->fuzzy_amount =
-        gnc_gconf_get_float(GCONF_IMPORT_SECTION, "atm_fee_threshold", NULL);
+        gnc_prefs_get_float (GNC_PREFS_GROUP_IMPORT, GNC_PREF_ATM_FEE_THRESHOLD);
 
     settings->match_date_hardlimit = 42; /* 6 weeks */
     return settings;

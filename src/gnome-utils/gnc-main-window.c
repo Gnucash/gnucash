@@ -96,7 +96,7 @@ enum
 #define GNC_PREF_SHOW_CLOSE_BUTTON    "tab_close_buttons"
 #define GNC_PREF_TAB_NEXT_RECENT      "tab_next_recent"
 #define KEY_TAB_POSITION         "tab_position"
-#define KEY_TAB_WIDTH            "tab_width"
+#define GNC_PREF_TAB_WIDTH            "tab_width"
 #define GNC_PREF_TAB_COLOR            "show_account_color_tabs"
 
 #define GNC_MAIN_WINDOW_NAME "GncMainWindow"
@@ -1883,8 +1883,9 @@ gnc_main_window_update_tab_close_one_page (GncPluginPage *page,
  *
  *  @internal
  *
- *  @param entry A pointer to the GConfEntry which describes the new
- *  state of whether close buttons should be visible on notebook tabs.
+ *  @param prefs Unused.
+ *
+ *  @param pref Unused.
  *
  *  @param user_data Unused.
  */
@@ -1947,13 +1948,14 @@ gnc_main_window_update_tab_color_one_page (GncPluginPage *page,
  *
  *  @internal
  *
- *  @param entry A pointer to the GConfEntry which describes the new
- *  state of whether the account color should be visible on notebook tabs.
+ *  @param prefs Unused.
+ *
+ *  @param pref Name of the preference that was changed.
  *
  *  @param user_data GncMainWindow.
  */
 static void
-gnc_main_window_update_tab_color (gpointer gsettings, gchar *key, gpointer user_data)
+gnc_main_window_update_tab_color (gpointer gsettings, gchar *pref, gpointer user_data)
 {
     GncMainWindowPrivate *priv;
     GncMainWindow        *window;
@@ -1962,7 +1964,7 @@ gnc_main_window_update_tab_color (gpointer gsettings, gchar *key, gpointer user_
     g_return_if_fail(GNC_IS_MAIN_WINDOW(user_data));
     window = user_data;
     priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
-    if (g_strcmp0 (GNC_PREF_TAB_COLOR, key) == 0)
+    if (g_strcmp0 (GNC_PREF_TAB_COLOR, pref) == 0)
         priv->show_color_tabs = gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_TAB_COLOR);
     gnc_main_window_foreach_page (gnc_main_window_update_tab_color_one_page, window);
     LEAVE(" ");
@@ -1972,7 +1974,7 @@ gnc_main_window_update_tab_color (gpointer gsettings, gchar *key, gpointer user_
 /** Update the width of the label in the tab of a notebook page.  This
  *  function adjusts both the width and the ellipsize mode so that the tab
  *  label looks correct.  The special check for a zero value handles the
- *  case where a user hasn't set a tab width and the gconf default isn't
+ *  case where a user hasn't set a tab width and the preference default isn't
  *  detected.
  *
  *  @internal
@@ -2016,18 +2018,19 @@ gnc_main_window_update_tab_width_one_page (GncPluginPage *page,
  *
  *  @internal
  *
- *  @param entry A pointer to the GConfEntry which describes the new
- *  size of the tab label width.
+ *  @param prefs Unused.
+ *
+ *  @param pref Unused.
  *
  *  @param user_data Unused.
  */
 static void
-gnc_main_window_update_tab_width (GConfEntry *entry, gpointer user_data)
+gnc_main_window_update_tab_width (gpointer prefs, gchar *pref, gpointer user_data)
 {
     gint new_value;
 
     ENTER(" ");
-    new_value = gconf_value_get_float(entry->value);
+    new_value = gnc_prefs_get_float (GNC_PREFS_GROUP_GENERAL, GNC_PREF_TAB_WIDTH);
     gnc_main_window_foreach_page(
         gnc_main_window_update_tab_width_one_page,
         &new_value);
@@ -2435,9 +2438,10 @@ gnc_main_window_class_init (GncMainWindowClass *klass)
                            GNC_PREF_SHOW_CLOSE_BUTTON,
                            gnc_main_window_update_tab_close,
                            NULL);
-    gnc_gconf_general_register_cb (KEY_TAB_WIDTH,
-                                   gnc_main_window_update_tab_width,
-                                   NULL);
+    gnc_prefs_register_cb (GNC_PREFS_GROUP_GENERAL,
+                           GNC_PREF_TAB_WIDTH,
+                           gnc_main_window_update_tab_width,
+                           NULL);
 
     gnc_hook_add_dangler(HOOK_BOOK_SAVED,
                          (GFunc)gnc_main_window_update_all_titles, NULL);
@@ -2468,7 +2472,7 @@ gnc_main_window_init (GncMainWindow *window,
     priv->event_handler_id =
         qof_event_register_handler(gnc_main_window_event_handler, window);
 
-    /* Get the show_color_tabs value from gconf */
+    /* Get the show_color_tabs value preference */
     priv->show_color_tabs = gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL, GNC_PREF_TAB_COLOR);
 
     gnc_prefs_register_cb (GNC_PREFS_GROUP_GENERAL,
@@ -2829,7 +2833,7 @@ gnc_main_window_open_page (GncMainWindow *window,
     /*
      * The page tab.
      */
-    width = gnc_gconf_get_float(GCONF_GENERAL, KEY_TAB_WIDTH, NULL);
+    width = gnc_prefs_get_float(GNC_PREFS_GROUP_GENERAL, GNC_PREF_TAB_WIDTH);
     icon = GNC_PLUGIN_PAGE_GET_CLASS(page)->tab_icon;
     label = gtk_label_new (gnc_plugin_page_get_page_name(page));
     if (width != 0)

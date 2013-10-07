@@ -71,7 +71,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkSpinButton" id="gconf/dialogs/import/generic_matcher/atm_fee_threshold">
+          <object class="GtkSpinButton" id="pref/dialogs.import.generic/atm_fee_threshold">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="has_tooltip">True</property>
@@ -99,7 +99,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkSpinButton" id="gconf/dialogs/import/generic_matcher/auto_clear_threshold">
+          <object class="GtkSpinButton" id="pref/dialogs.import.generic/auto_clear_threshold">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="has_tooltip">True</property>
@@ -126,7 +126,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkSpinButton" id="gconf/dialogs/import/generic_matcher/auto_add_threshold">
+          <object class="GtkSpinButton" id="pref/dialogs.import.generic/auto_add_threshold">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="has_tooltip">True</property>
@@ -153,7 +153,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkSpinButton" id="gconf/dialogs/import/generic_matcher/match_threshold">
+          <object class="GtkSpinButton" id="pref/dialogs.import.generic/match_threshold">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="has_tooltip">True</property>
@@ -186,7 +186,7 @@
             <property name="xalign">0</property>
             <property name="label" translatable="yes">Commercial ATM _fees threshold</property>
             <property name="use_underline">True</property>
-            <property name="mnemonic_widget">gconf/dialogs/import/generic_matcher/atm_fee_threshold</property>
+            <property name="mnemonic_widget">pref/dialogs.import.generic/atm_fee_threshold</property>
           </object>
           <packing>
             <property name="top_attach">7</property>
@@ -203,7 +203,7 @@
             <property name="xalign">0</property>
             <property name="label" translatable="yes">Auto-c_lear threshold</property>
             <property name="use_underline">True</property>
-            <property name="mnemonic_widget">gconf/dialogs/import/generic_matcher/auto_clear_threshold</property>
+            <property name="mnemonic_widget">pref/dialogs.import.generic/auto_clear_threshold</property>
           </object>
           <packing>
             <property name="top_attach">6</property>
@@ -220,7 +220,7 @@
             <property name="xalign">0</property>
             <property name="label" translatable="yes">Auto-_add threshold</property>
             <property name="use_underline">True</property>
-            <property name="mnemonic_widget">gconf/dialogs/import/generic_matcher/auto_add_threshold</property>
+            <property name="mnemonic_widget">pref/dialogs.import.generic/auto_add_threshold</property>
           </object>
           <packing>
             <property name="top_attach">5</property>
@@ -237,7 +237,7 @@
             <property name="xalign">0</property>
             <property name="label" translatable="yes">Match _display threshold</property>
             <property name="use_underline">True</property>
-            <property name="mnemonic_widget">gconf/dialogs/import/generic_matcher/match_threshold</property>
+            <property name="mnemonic_widget">pref/dialogs.import.generic/match_threshold</property>
           </object>
           <packing>
             <property name="top_attach">4</property>

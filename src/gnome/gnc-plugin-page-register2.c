@@ -3900,7 +3900,7 @@ gnc_plugin_page_register2_refresh_cb (GHashTable *changes, gpointer user_data) /
     else
     {
         /* Force updates */
-        gnc_tree_view_split_reg_refresh_from_gconf (view);
+        gnc_tree_view_split_reg_refresh_from_prefs (view);
     }
     gnc_plugin_page_register2_ui_update (NULL, page);
 }

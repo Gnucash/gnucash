@@ -52,6 +52,7 @@
 #define REGISTER_TEMPLATE_CM_CLASS   "register-template"
 
 #define GNC_PREF_DOUBLE_LINE_MODE "double_line_mode"
+#define GNC_PREF_MAX_TRANS        "max_transactions"
 
 
 struct gnc_ledger_display2
@@ -795,7 +796,7 @@ gnc_ledger_display2_internal (Account *lead_account, Query *q,
     ld->get_parent = NULL;
     ld->user_data = NULL;
 
-    limit = gnc_gconf_get_float(GCONF_GENERAL_REGISTER, "max_transactions", NULL);
+    limit = gnc_prefs_get_float(GNC_PREFS_GROUP_GENERAL_REGISTER, GNC_PREF_MAX_TRANS);
 
     /* set up the query filter */
     if (q)

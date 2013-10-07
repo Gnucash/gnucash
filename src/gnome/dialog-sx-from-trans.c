@@ -36,7 +36,6 @@
 #include "gnc-dense-cal.h"
 #include "gnc-engine.h"
 #include "engine-helpers.h"
-#include "gnc-gconf-utils.h"
 #include "gnc-prefs.h"
 #include "gnc-ui-util.h"
 #include "gnc-ui.h"
@@ -507,11 +506,11 @@ sxftd_compute_sx(SXFromTransInfo *sxfti)
                                        (autoCreateState & notifyState) );
 
         daysInAdvance =
-            gnc_gconf_get_float( SXED_GCONF_SECTION, KEY_CREATE_DAYS, NULL );
+            gnc_prefs_get_float (GNC_PREFS_GROUP_SXED, GNC_PREF_CREATE_DAYS);
         xaccSchedXactionSetAdvanceCreation( sx, daysInAdvance );
 
         daysInAdvance =
-            gnc_gconf_get_float( SXED_GCONF_SECTION, KEY_REMIND_DAYS, NULL );
+            gnc_prefs_get_float (GNC_PREFS_GROUP_SXED, GNC_PREF_REMIND_DAYS);
         xaccSchedXactionSetAdvanceReminder( sx, daysInAdvance );
     }
 

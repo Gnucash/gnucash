@@ -28,9 +28,8 @@
 #define DIALOG_SCHEDXACTION2_CM_CLASS "dialog-scheduledtransactions"
 #define DIALOG_SCHEDXACTION2_EDITOR_CM_CLASS "dialog-scheduledtransaction-editor"
 
-#define SXED_GCONF_SECTION "dialogs/scheduled_trans/transaction_editor"
-#define KEY_CREATE_DAYS	"create_days"
-#define KEY_REMIND_DAYS	"remind_days"
+#define GNC_PREF_CREATE_DAYS "create_days"
+#define GNC_PREF_REMIND_DAYS "remind_days"
 #define GNC_PREFS_GROUP_SXED "dialogs.sxs.transaction_editor"
 #define GNC_PREF_CREATE_AUTO "create_auto"
 #define GNC_PREF_NOTIFY      "notify"

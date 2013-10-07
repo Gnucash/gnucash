@@ -2279,16 +2279,18 @@ xaccParseAmountExtended (const char * in_str, gboolean monetary,
 
 /* enable/disable the auto_decimal_enabled option */
 static void
-gnc_set_auto_decimal_enabled (GSettings *settings, gchar *key, gpointer user_data)
+gnc_set_auto_decimal_enabled (gpointer settings, gchar *key, gpointer user_data)
 {
-    auto_decimal_enabled = g_settings_get_boolean (settings, key);
+    auto_decimal_enabled =
+            gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_AUTO_DECIMAL_POINT);
 }
 
 /* set the number of auto decimal places to use */
 static void
-gnc_set_auto_decimal_places (GSettings *settings, gchar *key, gpointer user_data)
+gnc_set_auto_decimal_places (gpointer settings, gchar *key, gpointer user_data)
 {
-    auto_decimal_places = g_settings_get_int (settings, key);
+    auto_decimal_places =
+            gnc_prefs_get_float (GNC_PREFS_GROUP_GENERAL, GNC_PREF_AUTO_DECIMAL_PLACES);
 }
 
 static void

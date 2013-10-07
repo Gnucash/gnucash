@@ -39,7 +39,6 @@
 #include "gnc-tree-util-split-reg.h"
 #include "gnc-ui.h"
 #include "dialog-utils.h"
-#include "gnc-gconf-utils.h"
 #include "gnc-prefs.h"
 #include "Transaction.h"
 #include "engine-helpers.h"
@@ -295,6 +294,7 @@ struct GncTreeViewSplitRegPrivate
 #define GNC_PREF_SHOW_EXTRA_DATES_ON_SEL "show_extra_dates_on_selection"
 #define GNC_PREF_SHOW_CAL_BUTTONS        "show_calendar_buttons"
 #define GNC_PREF_SEL_TO_BLANK_ON_EXPAND  "selection_to_blank_on_expand"
+#define GNC_PREF_KEY_LENGTH              "key_length"
 
 /* This could be a preference setting, show currency / commodity symbols */
 #define SHOW_SYMBOL FALSE
@@ -478,7 +478,7 @@ gnc_tree_view_split_reg_init (GncTreeViewSplitReg *view)
     view->show_extra_dates = gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL_REGISTER, GNC_PREF_SHOW_EXTRA_DATES);
     view->priv->show_extra_dates_on_selection = gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL_REGISTER, GNC_PREF_SHOW_EXTRA_DATES_ON_SEL);
     view->priv->selection_to_blank_on_expand = gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL_REGISTER, GNC_PREF_SEL_TO_BLANK_ON_EXPAND);
-    view->priv->key_length = gnc_gconf_get_float(GCONF_GENERAL_REGISTER, "key_length", NULL);
+    view->priv->key_length = gnc_prefs_get_float (GNC_PREFS_GROUP_GENERAL_REGISTER, GNC_PREF_KEY_LENGTH);
 
     view->priv->acct_short_names = gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL_REGISTER, GNC_PREF_SHOW_LEAF_ACCT_NAMES);
     view->priv->negative_in_red = gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_NEGATIVE_IN_RED);
@@ -567,7 +567,7 @@ gnc_tree_view_split_reg_finalize (GObject *object)
 
 /* Update internal settings based on preferences */
 void
-gnc_tree_view_split_reg_refresh_from_gconf (GncTreeViewSplitReg *view)
+gnc_tree_view_split_reg_refresh_from_prefs (GncTreeViewSplitReg *view)
 {
     GncTreeModelSplitReg *model;
 

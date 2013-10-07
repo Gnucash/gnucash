@@ -36,7 +36,6 @@
 #include "dialog-utils.h"
 #include "gnc-component-manager.h"
 #include "gnc-ui.h"
-#include "gnc-gconf-utils.h"
 #include "gnc-gui-query.h"
 #include "gnc-prefs.h"
 #include "gnc-ui-util.h"
@@ -89,6 +88,7 @@
 #define GNC_PREFS_GROUP_SEARCH   "dialogs.business.invoice_search"
 #define GNC_PREF_NOTIFY_WHEN_DUE "notify_when_due"
 #define GNC_PREF_ACCUM_SPLITS    "accumulate_splits"
+#define GNC_PREF_DAYS_IN_ADVANCE "days_in_advance"
 
 #define LAST_POSTED_TO_ACCT "last-posted-to-acct"
 
@@ -3217,7 +3217,7 @@ gnc_invoice_remind_bills_due (void)
 
     if (!gnc_current_session_exist()) return;
     book = qof_session_get_book(gnc_get_current_session());
-    days = gnc_gconf_get_float(GCONF_SECTION_BILL, "days_in_advance", NULL);
+    days = gnc_prefs_get_float(GNC_PREFS_GROUP_BILL, GNC_PREF_DAYS_IN_ADVANCE);
 
     gnc_invoice_show_bills_due(book, days);
 }

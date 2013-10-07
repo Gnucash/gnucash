@@ -1392,7 +1392,7 @@ many months before the current month:</property>
                   <placeholder/>
                 </child>
                 <child>
-                  <object class="GtkSpinButton" id="gconf/general/date_backmonths">
+                  <object class="GtkSpinButton" id="pref/general/date_backmonths">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="has_tooltip">True</property>
@@ -1610,7 +1610,7 @@ many months before the current month:</property>
                     <property name="can_focus">False</property>
                     <property name="spacing">6</property>
                     <child>
-                      <object class="GtkSpinButton" id="gconf/general/retain_days">
+                      <object class="GtkSpinButton" id="pref/general/retain_days">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="has_tooltip">True</property>
@@ -1728,7 +1728,7 @@ many months before the current month:</property>
                     <property name="xalign">0</property>
                     <property name="label" translatable="yes">_Decimal places:</property>
                     <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">gconf/general/auto_decimal_places</property>
+                    <property name="mnemonic_widget">pref/general/auto_decimal_places</property>
                   </object>
                   <packing>
                     <property name="top_attach">9</property>
@@ -1739,7 +1739,7 @@ many months before the current month:</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkSpinButton" id="gconf/general/auto_decimal_places">
+                  <object class="GtkSpinButton" id="pref/general/auto_decimal_places">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="has_tooltip">True</property>
@@ -1855,7 +1855,7 @@ many months before the current month:</property>
                     <property name="xalign">0</property>
                     <property name="label" translatable="yes">New search _limit:</property>
                     <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">gconf/dialogs/search/new_search_limit</property>
+                    <property name="mnemonic_widget">pref/dialogs.search/new_search_limit</property>
                   </object>
                   <packing>
                     <property name="top_attach">21</property>
@@ -1866,7 +1866,7 @@ many months before the current month:</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkSpinButton" id="gconf/dialogs/search/new_search_limit">
+                  <object class="GtkSpinButton" id="pref/dialogs.search/new_search_limit">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="has_tooltip">True</property>
@@ -1918,7 +1918,7 @@ many months before the current month:</property>
                     <property name="xalign">0</property>
                     <property name="label" translatable="yes">Auto-save time _interval:</property>
                     <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">gconf/general/autosave_interval_minutes</property>
+		    <property name="mnemonic_widget">pref/general/autosave_interval_minutes</property>
                   </object>
                   <packing>
                     <property name="top_attach">14</property>
@@ -1934,7 +1934,7 @@ many months before the current month:</property>
                     <property name="can_focus">False</property>
                     <property name="spacing">6</property>
                     <child>
-                      <object class="GtkSpinButton" id="gconf/general/autosave_interval_minutes">
+		      <object class="GtkSpinButton" id="pref/general/autosave_interval_minutes">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="has_tooltip">True</property>
@@ -2893,7 +2893,7 @@ many months before the current month:</property>
                     <property name="xalign">0</property>
                     <property name="label" translatable="yes">Number of _transactions:</property>
                     <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">gconf/general/register/max_transactions</property>
+                    <property name="mnemonic_widget">pref/general.register/max_transactions</property>
                   </object>
                   <packing>
                     <property name="top_attach">9</property>
@@ -2904,7 +2904,7 @@ many months before the current month:</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkSpinButton" id="gconf/general/register/max_transactions">
+                  <object class="GtkSpinButton" id="pref/general.register/max_transactions">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="has_tooltip">True</property>
@@ -3001,7 +3001,7 @@ many months before the current month:</property>
                     <property name="xalign">0</property>
                     <property name="label" translatable="yes">Number of _characters for auto complete:</property>
                     <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">gconf/general/register/key_length</property>
+                    <property name="mnemonic_widget">pref/general.register/key_length</property>
                   </object>
                   <packing>
                     <property name="top_attach">10</property>
@@ -3012,7 +3012,7 @@ many months before the current month:</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkSpinButton" id="gconf/general/register/key_length">
+                  <object class="GtkSpinButton" id="pref/general.register/key_length">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="has_tooltip">True</property>
@@ -3836,7 +3836,7 @@ many months before the current month:</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <child>
-                      <object class="GtkSpinButton" id="gconf/general/tab_width">
+                      <object class="GtkSpinButton" id="pref/general/tab_width">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="has_tooltip">True</property>
@@ -3921,7 +3921,7 @@ many months before the current month:</property>
   </object>
   <object class="GtkAdjustment" id="max_transactions_adj">
     <property name="upper">999999</property>
-    <property name="value">1</property>
+    <property name="value">0</property>
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
   </object>

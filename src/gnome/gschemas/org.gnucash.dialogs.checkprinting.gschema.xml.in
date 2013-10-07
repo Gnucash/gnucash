@@ -20,35 +20,70 @@
       <summary>Custom date format</summary>
       <description>If the 'date_format' is set to indicate a custom date format, this value is used as an argument to strftime to produce the date to be printed.  It may be any valid strftime string; for more information about this format, read the manual page of strftime by "man 3 strftime".</description>
     </key>
-    <key name="custom_payee" type="ai">
-      <default>[]</default>
+    <key name="custom_units" type="i">
+      <default>0</default>
+      <summary>Units in which the custom coordinates are expressed</summary>
+      <description>Units in which the custom coordinates are expressed (inches, mm, ...).</description>
+    </key>
+    <key name="custom_payee" type="(dd)">
+      <default>(0,0)</default>
       <summary>Position of payee name</summary>
       <description>This value contains the X,Y coordinates for the start of the payee line on the check.</description>
     </key>
-    <key name="custom_date" type="ai">
-      <default>[]</default>
+    <key name="custom_date" type="(dd)">
+      <default>(0,0)</default>
       <summary>Position of date line</summary>
       <description>This value contains the X,Y coordinates for the start of the date line on the check.  Coordinates are from the lower left corner of the specified check position.</description>
     </key>
-    <key name="custom_amount_words" type="ai">
-      <default>[]</default>
+    <key name="custom_amount_words" type="(dd)">
+      <default>(0,0)</default>
       <summary>Position of check amount in words</summary>
       <description>This value contains the X,Y coordinates for the start of the written amount line on the check.  Coordinates are from the lower left corner of the specified check position.</description>
     </key>
-    <key name="custom_amount_number" type="ai">
-      <default>[]</default>
+    <key name="custom_amount_number" type="(dd)">
+      <default>(0,0)</default>
       <summary>Position of check amount in numbers</summary>
       <description>This value contains the X,Y coordinates for the start of the numerical amount line on the check.  Coordinates are from the lower left corner of the specified check position.</description>
     </key>
-    <key name="custom_memo" type="ai">
-      <default>[]</default>
+    <key name="custom_address" type="(dd)">
+      <default>(0,0)</default>
+      <summary>Position of payee address</summary>
+      <description>This value contains the X,Y coordinates for the start of the payee address line on the check.  Coordinates are from the lower left corner of the specified check position.</description>
+    </key>
+    <key name="custom_notes" type="(dd)">
+      <default>(0,0)</default>
+      <summary>Position of notes line</summary>
+      <description>This value contains the X,Y coordinates for the start of the notes line on the check.  Coordinates are from the lower left corner of the specified check position.</description>
+    </key>
+    <key name="custom_memo" type="(dd)">
+      <default>(0,0)</default>
       <summary>Position of memo line</summary>
       <description>This value contains the X,Y coordinates for the start of the memo line on the check.  Coordinates are from the lower left corner of the specified check position.</description>
     </key>
-    <key name="custom_position" type="ai">
-      <default>[]</default>
-      <summary>Position of check on page</summary>
-      <description>This value contains the Y coordinate for the bottom edge of the check.  This coordinate is from the bottom edge of the sheet of paper.</description>
+    <key name="custom_translation" type="(dd)">
+      <default>(0,0)</default>
+      <summary>Offset for complete check</summary>
+      <description>This value contains the X,Y offset for the complete check.  Coordinates are from the lower left corner of the specified check position.</description>
+    </key>
+    <key name="custom_rotation" type="d">
+      <default>0.0</default>
+      <summary>Rotation angle</summary>
+      <description>Number of degrees to rotate the check.</description>
+    </key>
+    <key name="splits_amount" type="(dd)">
+      <default>(0,0)</default>
+      <summary>Position of split's amount in numbers</summary>
+      <description>This value contains the X,Y coordinates for the start of the split's amount line on the check.  Coordinates are from the lower left corner of the specified check position.</description>
+    </key>
+    <key name="splits_memo" type="(dd)">
+      <default>(0,0)</default>
+      <summary>Position of split's memo line</summary>
+      <description>This value contains the X,Y coordinates for the start of the split's memo line on the check.  Coordinates are from the lower left corner of the specified check position.</description>
+    </key>
+    <key name="splits_account" type="(dd)">
+      <default>(0,0)</default>
+      <summary>Position of split's account line</summary>
+      <description>This value contains the X,Y coordinates for the start of the split's account line on the check.  Coordinates are from the lower left corner of the specified check position.</description>
     </key>
     <key name="print_date_format" type="b">
       <default>false</default>

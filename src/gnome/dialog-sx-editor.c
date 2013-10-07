@@ -54,7 +54,6 @@
 #include "gnc-embedded-window.h"
 #include "gnc-engine.h"
 #include "gnc-frequency.h"
-#include "gnc-gconf-utils.h"
 #include "gnc-gui-query.h"
 #include "gnc-hooks.h"
 #include "gnc-ledger-display.h"
@@ -1429,7 +1428,7 @@ schedXact_editor_populate( GncSxEditorDialog *sxed )
     if ( sxed->newsxP )
     {
         daysInAdvance =
-            gnc_gconf_get_float( SXED_GCONF_SECTION, KEY_CREATE_DAYS, NULL );
+            gnc_prefs_get_float (GNC_PREFS_GROUP_SXED, GNC_PREF_CREATE_DAYS);
     }
     else
     {
@@ -1447,7 +1446,7 @@ schedXact_editor_populate( GncSxEditorDialog *sxed )
     if ( sxed->newsxP )
     {
         daysInAdvance =
-            gnc_gconf_get_float( SXED_GCONF_SECTION, KEY_REMIND_DAYS, NULL );
+            gnc_prefs_get_float (GNC_PREFS_GROUP_SXED, GNC_PREF_REMIND_DAYS);
     }
     else
     {

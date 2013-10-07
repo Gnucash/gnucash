@@ -40,9 +40,9 @@ static QofLogModule log_module = G_LOG_DOMAIN;
  * Initialization                                              *
  ***************************************************************/
 static void
-file_retain_changed_cb(GConfEntry *entry, gpointer user_data)
+file_retain_changed_cb(gpointer gsettings, gchar *key, gpointer user_data)
 {
-    gint days = (int)gnc_gconf_get_float(GCONF_GENERAL, KEY_RETAIN_DAYS, NULL);
+    gint days = (int)gnc_prefs_get_float(GNC_PREFS_GROUP_GENERAL, GNC_PREF_RETAIN_DAYS);
     gnc_prefs_set_file_retention_days (days);
 }
 
@@ -82,13 +82,14 @@ void gnc_prefs_init (void)
     gnc_gsettings_load_backend();
 
     /* Add hooks to update core preferences whenever the associated gconf key changes */
-    gnc_gconf_general_register_cb(KEY_RETAIN_DAYS, file_retain_changed_cb, NULL);
+    gnc_prefs_register_cb(GNC_PREFS_GROUP_GENERAL, GNC_PREF_RETAIN_DAYS,
+                          (GCallback) file_retain_changed_cb, NULL);
     gnc_gconf_general_register_cb(KEY_RETAIN_TYPE, file_retain_type_changed_cb, NULL);
     gnc_prefs_register_cb(GNC_PREFS_GROUP_GENERAL, GNC_PREF_FILE_COMPRESSION,
-                              (GCallback) file_compression_changed_cb, NULL);
+                          (GCallback) file_compression_changed_cb, NULL);
 
     /* Call the hooks once manually to initialize the core preferences */
-    file_retain_changed_cb (NULL, NULL);
+    file_retain_changed_cb (NULL, NULL, NULL);
     file_retain_type_changed_cb (NULL, NULL);
     file_compression_changed_cb (NULL, NULL, NULL);
 

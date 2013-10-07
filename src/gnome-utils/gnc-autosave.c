@@ -37,7 +37,7 @@
 #include "gnc-gui-query.h"
 
 #define GNC_PREF_AUTOSAVE_SHOW_EXPLANATION "autosave_show_explanation"
-#define KEY_AUTOSAVE_INTERVAL "autosave_interval_minutes"
+#define GNC_PREF_AUTOSAVE_INTERVAL         "autosave_interval_minutes"
 #define AUTOSAVE_SOURCE_ID "autosave_source_id"
 
 #ifdef G_LOG_DOMAIN
@@ -80,7 +80,7 @@ static gboolean autosave_confirm(GtkWidget *toplevel)
 {
     GtkWidget *dialog;
     guint interval_mins =
-        gnc_gconf_get_float(GCONF_GENERAL, KEY_AUTOSAVE_INTERVAL, NULL);
+        gnc_prefs_get_float(GNC_PREFS_GROUP_GENERAL, GNC_PREF_AUTOSAVE_INTERVAL);
     gboolean switch_off_autosave, show_expl_again, save_now;
     gint response;
 
@@ -158,7 +158,7 @@ static gboolean autosave_confirm(GtkWidget *toplevel)
     /* Should we switch off autosave? */
     if (switch_off_autosave)
     {
-        gnc_gconf_set_float(GCONF_GENERAL, KEY_AUTOSAVE_INTERVAL, 0, NULL);
+        gnc_prefs_set_float(GNC_PREFS_GROUP_GENERAL, GNC_PREF_AUTOSAVE_INTERVAL, 0);
         g_debug("autosave_timeout_cb: User chose to disable auto-save.\n");
     }
 
@@ -253,7 +253,7 @@ void gnc_autosave_remove_timer(QofBook *book)
 static void gnc_autosave_add_timer(QofBook *book)
 {
     guint interval_mins =
-        gnc_gconf_get_float(GCONF_GENERAL, KEY_AUTOSAVE_INTERVAL, NULL);
+        gnc_prefs_get_float(GNC_PREFS_GROUP_GENERAL, GNC_PREF_AUTOSAVE_INTERVAL);
 
     /* Interval zero means auto-save is turned off. */
     if ( interval_mins > 0

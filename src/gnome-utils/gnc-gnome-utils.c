@@ -168,8 +168,8 @@ gnc_configure_date_completion (void)
 {
     char *date_completion = gnc_gconf_get_string(GCONF_GENERAL,
                             KEY_DATE_COMPLETION, NULL);
-    int backmonths = gnc_gconf_get_float(GCONF_GENERAL,
-                                         KEY_DATE_BACKMONTHS, NULL);
+    int backmonths = gnc_prefs_get_float(GNC_PREFS_GROUP_GENERAL,
+                                         GNC_PREF_DATE_BACKMONTHS);
     QofDateCompletion dc;
 
     if (backmonths < 0)
@@ -196,7 +196,7 @@ gnc_configure_date_completion (void)
         dc = QOF_DATE_COMPLETION_THISYEAR;
         backmonths = 6;
         gnc_gconf_set_string (GCONF_GENERAL, KEY_DATE_COMPLETION, "thisyear", NULL);
-        gnc_gconf_set_float (GCONF_GENERAL, KEY_DATE_BACKMONTHS, 6.0, NULL);
+        gnc_prefs_set_float (GNC_PREFS_GROUP_GENERAL, GNC_PREF_DATE_BACKMONTHS, 6.0);
     }
     qof_date_completion_set(dc, backmonths);
 
@@ -647,8 +647,10 @@ gnc_gui_init(void)
         KEY_DATE_FORMAT, (GncGconfGeneralCb)gnc_configure_date_format, NULL);
     gnc_gconf_general_register_cb(
         KEY_DATE_COMPLETION, (GncGconfGeneralCb)gnc_configure_date_completion, NULL);
-    gnc_gconf_general_register_cb(
-        KEY_DATE_BACKMONTHS, (GncGconfGeneralCb)gnc_configure_date_completion, NULL);
+    gnc_prefs_register_cb (GNC_PREFS_GROUP_GENERAL,
+                           GNC_PREF_DATE_BACKMONTHS,
+                           gnc_configure_date_completion,
+                           NULL);
     gnc_gconf_general_register_any_cb(
         (GncGconfGeneralAnyCb)gnc_gui_refresh_all, NULL);
 
