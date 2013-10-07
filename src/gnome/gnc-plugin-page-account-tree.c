@@ -50,7 +50,6 @@
 #include "gnc-account-sel.h"
 #include "gnc-component-manager.h"
 #include "gnc-engine.h"
-#include "gnc-gconf-utils.h"
 #include "gnc-gnome-utils.h"
 #include "gnc-gobject-utils.h"
 #include "gnc-icons.h"
@@ -72,7 +71,7 @@
 static QofLogModule log_module = GNC_MOD_GUI;
 
 #define PLUGIN_PAGE_ACCT_TREE_CM_CLASS "plugin-page-acct-tree"
-#define GCONF_SECTION "window/pages/account_tree"
+#define STATE_SECTION "window/pages/account_tree"
 
 #define DELETE_DIALOG_FILTER       "filter"
 #define DELETE_DIALOG_ACCOUNT      "account"
@@ -535,7 +534,7 @@ gnc_plugin_page_account_tree_create_widget (GncPluginPage *plugin_page)
     g_object_set_data(G_OBJECT(col), DEFAULT_VISIBLE, GINT_TO_POINTER(1));
     gnc_tree_view_configure_columns(GNC_TREE_VIEW(tree_view));
     g_object_set(G_OBJECT(tree_view),
-                 "gconf-section", GCONF_SECTION,
+                 "state-section", STATE_SECTION,
                  "show-column-menu", TRUE,
                  NULL);
 

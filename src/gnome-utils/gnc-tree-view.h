@@ -368,12 +368,12 @@ gnc_tree_view_find_column_by_name (GncTreeView *view,
  *  everything after "/apps/gnucash".  I.E. "dialogs/edit_prices".
  *  Use NULL to disconnect a gconf association.
  */
-void gnc_tree_view_set_gconf_section (GncTreeView *view,
+void gnc_tree_view_set_state_section (GncTreeView *view,
                                       const gchar *section);
 
 /** This function is called to get the current association between a
  *  gconf section and the display of a view.  It returns the same
- *  value passed to gnc_tree_view_set_gconf_section(); i.e. a string
+ *  value passed to gnc_tree_view_set_state_section(); i.e. a string
  *  like "dialogs/edit_prices".
  *
  *  @param view The tree view.
@@ -381,7 +381,21 @@ void gnc_tree_view_set_gconf_section (GncTreeView *view,
  *  @return The current gconf section.  This is everything after
  *  "/apps/gnucash".  I.E "dialogs/edit_prices".
  */
-const gchar *gnc_tree_view_get_gconf_section (GncTreeView *view);
+const gchar *gnc_tree_view_get_state_section (GncTreeView *view);
+
+
+/** This function is called to completely wipe the treeview's state
+ *  information (column visibility, width, sorting order,..). This
+ *  information is currently saved in gconf, so the gconf section
+ *  associated to the tree view will be wiped. It will first disconnect
+ *  the tree view from the gconf section and then removes the gconf
+ *  section with keys from gconf.  This function may
+ *  be called at any time; either when the user wants to disconnect or
+ *  when the view object is being destroyed.
+ *
+ *  @param view The tree view.
+ */
+void gnc_tree_view_remove_state_information(GncTreeView *view);
 
 /** This function set the columns that will be allocated the free space
  *  in the view.
@@ -419,7 +433,7 @@ gnc_tree_view_set_sort_user_data (GncTreeView *view, GtkTreeModel *s_model);
 
 /** This function is called to set the "show-column-menu" property on
  *  this view.  This function has no visible effect if the
- *  "gconf-section" property has not been set.
+ *  "state-section" property has not been set.
  *
  *  @param view The tree view.
  *

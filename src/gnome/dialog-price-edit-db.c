@@ -51,7 +51,7 @@
 
 
 #define DIALOG_PRICE_DB_CM_CLASS "dialog-price-edit-db"
-#define GCONF_SECTION "dialogs/edit_prices"
+#define STATE_SECTION "dialogs/edit_prices"
 #define GNC_PREFS_GROUP "dialogs.edit_prices"
 
 /* This static indicates the debugging module that this .o belongs to.  */
@@ -443,7 +443,7 @@ gnc_prices_dialog_create (GtkWidget * parent, PricesDialog *pdb_dialog)
     /* price tree */
     scrolled_window = GTK_WIDGET(gtk_builder_get_object (builder, "price_list_window"));
     view = gnc_tree_view_price_new(pdb_dialog->book,
-                                   "gconf-section", GCONF_SECTION,
+                                   "state-section", STATE_SECTION,
                                    "show-column-menu", TRUE,
                                    NULL);
     pdb_dialog->price_tree = GNC_TREE_VIEW_PRICE(view);

@@ -51,7 +51,6 @@
 #include "dialog-utils.h"
 #include "gnc-component-manager.h"
 #include "gnc-engine.h"
-#include "gnc-gconf-utils.h"
 #include "gnc-gnome-utils.h"
 #include "gnc-gobject-utils.h"
 #include "gnc-icons.h"
@@ -67,7 +66,7 @@
 static QofLogModule log_module = GNC_MOD_GUI;
 
 #define PLUGIN_PAGE_ACCT_TREE_CM_CLASS "plugin-page-owner-tree"
-#define GCONF_SECTION "window/pages/owner_tree"
+#define STATE_SECTION_PREFIX "window/pages/"
 
 #define DELETE_DIALOG_FILTER  "filter"
 #define DELETE_DIALOG_OWNER "owner"
@@ -84,7 +83,6 @@ typedef struct GncPluginPageOwnerTreePrivate
     GtkTreeView *tree_view;
     gint         component_id;
     GncOwnerType owner_type;
-    const gchar *gconf_section;
     OwnerFilterDialog fd;
 } GncPluginPageOwnerTreePrivate;
 
@@ -347,7 +345,6 @@ gnc_plugin_page_owner_tree_new (GncOwnerType owner_type)
     GncPluginPageOwnerTree *plugin_page;
 
     GncPluginPageOwnerTreePrivate *priv;
-    gchar* label = "";
     const GList *item;
 
     GtkActionGroup *action_group;
@@ -377,37 +374,6 @@ gnc_plugin_page_owner_tree_new (GncOwnerType owner_type)
     priv = GNC_PLUGIN_PAGE_OWNER_TREE_GET_PRIVATE(plugin_page);
     priv->owner_type = owner_type;
 
-    switch (owner_type)
-    {
-    case GNC_OWNER_NONE :
-    case GNC_OWNER_UNDEFINED :
-        break;
-    case GNC_OWNER_CUSTOMER :
-    {
-        label = N_("Customers");
-        priv->gconf_section = g_strdup("window/pages/customer_tree");
-        break;
-    }
-    case GNC_OWNER_JOB :
-    {
-        label = N_("Jobs");
-        priv->gconf_section = g_strdup("window/pages/job_tree");
-        break;
-    }
-    case GNC_OWNER_VENDOR :
-    {
-        label = N_("Vendors");
-        priv->gconf_section = g_strdup("window/pages/vendor_tree");
-        break;
-    }
-    case GNC_OWNER_EMPLOYEE :
-    {
-        label = N_("Employees");
-        priv->gconf_section = g_strdup("window/pages/employee_tree");
-        break;
-    }
-    }
-
     /* Hide menu and toolbar items that are not relevant for the active owner list */
     action_group = gnc_plugin_page_get_action_group(GNC_PLUGIN_PAGE(plugin_page));
     g_value_init (&gvalue, G_TYPE_BOOLEAN);
@@ -417,9 +383,6 @@ gnc_plugin_page_owner_tree_new (GncOwnerType owner_type)
         g_value_set_boolean (&gvalue, (priv->owner_type == action_owners[i].owner_type) );
         g_object_set_property (G_OBJECT(action), "visible", &gvalue);
     }
-
-
-    g_object_set(G_OBJECT(plugin_page), "page-name", label, NULL);
 
     LEAVE("new %s tree page %p", gncOwnerTypeToQofIdType(owner_type), plugin_page);
     return GNC_PLUGIN_PAGE(plugin_page);
@@ -596,6 +559,8 @@ gnc_plugin_page_owner_tree_create_widget (GncPluginPage *plugin_page)
     GtkTreeView *tree_view;
     GtkWidget *scrolled_window;
     GtkTreeViewColumn *col;
+    gchar *state_section = NULL;
+    gchar* label = "";
 
     ENTER("page %p", plugin_page);
     page = GNC_PLUGIN_PAGE_OWNER_TREE (plugin_page);
@@ -633,10 +598,37 @@ gnc_plugin_page_owner_tree_create_widget (GncPluginPage *plugin_page)
     g_object_set_data(G_OBJECT(col), DEFAULT_VISIBLE, GINT_TO_POINTER(1));
     gnc_tree_view_configure_columns(GNC_TREE_VIEW(tree_view));
 
-    g_object_set(G_OBJECT(tree_view),
-                 "gconf-section", priv->gconf_section,
-                 "show-column-menu", TRUE,
-                 NULL);
+
+
+    switch (priv->owner_type)
+    {
+    case GNC_OWNER_NONE :
+    case GNC_OWNER_UNDEFINED :
+        break;
+    case GNC_OWNER_CUSTOMER :
+        label = N_("Customers");
+        state_section = g_strconcat(STATE_SECTION_PREFIX, "customer_tree", NULL);
+        break;
+    case GNC_OWNER_JOB :
+        label = N_("Jobs");
+        state_section = g_strconcat(STATE_SECTION_PREFIX, "job_tree", NULL);
+        break;
+    case GNC_OWNER_VENDOR :
+        label = N_("Vendors");
+        state_section = g_strconcat(STATE_SECTION_PREFIX, "vendor_tree", NULL);
+        break;
+    case GNC_OWNER_EMPLOYEE :
+        label = N_("Employees");
+        state_section = g_strconcat(STATE_SECTION_PREFIX, "job_tree", NULL);
+        break;
+    }
+
+    g_object_set(G_OBJECT(tree_view), "state-section", state_section,
+                                      "show-column-menu", TRUE,
+                                      NULL);
+    g_free (state_section);
+
+    g_object_set(G_OBJECT(plugin_page), "page-name", label, NULL);
 
     priv->tree_view = tree_view;
     selection = gtk_tree_view_get_selection(tree_view);

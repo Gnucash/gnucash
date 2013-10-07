@@ -1338,7 +1338,6 @@ AC_CONFIG_FILES(
   src/import-export/qif-import/gschemas/Makefile
   src/import-export/qif-import/test/Makefile
   src/import-export/gschemas/Makefile
-  src/import-export/schemas/Makefile
   src/import-export/ofx/Makefile
   src/import-export/ofx/test/Makefile
   src/import-export/csv-import/Makefile
@@ -1393,7 +1392,6 @@ AC_CONFIG_FILES(
   src/business/business-gnome/Makefile
   src/business/business-gnome/gtkbuilder/Makefile
   src/business/business-gnome/gschemas/Makefile
-  src/business/business-gnome/schemas/Makefile
   src/business/business-gnome/ui/Makefile
   src/business/business-ledger/Makefile
   dnl # Stuff for bill/invoice import plugin

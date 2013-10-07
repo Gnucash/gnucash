@@ -45,7 +45,7 @@
 
 static QofLogModule log_module = GNC_MOD_IMPORT;
 
-#define GCONF_SECTION "dialogs/import/generic_matcher/account_matcher"
+#define STATE_SECTION "dialogs/import/generic_matcher/account_matcher"
 
 /*-******************************************************************\
  * Functions needed by gnc_import_select_account
@@ -124,7 +124,7 @@ build_acct_tree(AccountPickerDialog *picker)
     /* Configure the columns */
     gnc_tree_view_configure_columns (GNC_TREE_VIEW(picker->account_tree));
     g_object_set(account_tree,
-                 "gconf-section", GCONF_SECTION,
+                 "state-section", STATE_SECTION,
                  "show-column-menu", TRUE,
                  (gchar*) NULL);
 }

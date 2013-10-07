@@ -45,7 +45,6 @@
 
 #include "dialog-options.h"
 #include "dialog-utils.h"
-#include "gnc-gconf-utils.h"
 #include "gnc-gnome-utils.h"
 #include "gnc-gobject-utils.h"
 #include "gnc-icons.h"
@@ -69,7 +68,7 @@
 static QofLogModule log_module = GNC_MOD_BUDGET;
 
 #define PLUGIN_PAGE_BUDGET_CM_CLASS "budget-view"
-#define GCONF_SECTION "window/pages/budget"
+#define STATE_SECTION_PREFIX "window/pages/budget"
 
 typedef struct GncBudgetViewPrivate GncBudgetViewPrivate;
 
@@ -120,7 +119,6 @@ struct GncBudgetViewPrivate
     GtkTreeView *tree_view;
     GtkTreeView *totals_tree_view;
 
-    gchar* gconf_section;
     GncBudget* budget;
     GncGUID key;
 
@@ -141,7 +139,7 @@ struct GncBudgetViewPrivate
 G_DEFINE_TYPE(GncBudgetView, gnc_budget_view, GTK_TYPE_VBOX)
 
 GncBudgetView *
-gnc_budget_view_new(GncBudget *budget, AccountFilterDialog* fd, const gchar* gconf_section)
+gnc_budget_view_new(GncBudget *budget, AccountFilterDialog* fd)
 {
     GncBudgetView *budget_view;
     GncBudgetViewPrivate *priv;
@@ -157,7 +155,6 @@ gnc_budget_view_new(GncBudget *budget, AccountFilterDialog* fd, const gchar* gco
     priv->budget = budget;
     priv->key = *gnc_budget_get_guid(budget);
     priv->fd = fd;
-    priv->gconf_section = g_strdup(gconf_section);
     priv->total_col = NULL;
     gbv_create_widget(budget_view);
 
@@ -232,10 +229,6 @@ gnc_budget_view_finalize(GObject *object)
     ENTER("object %p", object);
     view = GNC_BUDGET_VIEW(object);
     g_return_if_fail(GNC_IS_BUDGET_VIEW(view));
-
-    priv = GNC_BUDGET_VIEW_GET_PRIVATE(view);
-
-    g_free(priv->gconf_section);
 
     G_OBJECT_CLASS(gnc_budget_view_parent_class)->finalize(object);
     LEAVE(" ");
@@ -317,7 +310,6 @@ gbv_create_widget(GncBudgetView *view)
     GtkTreeView *tree_view;
     GtkWidget *scrolled_window;
     GtkWidget *inner_scrolled_window;
-    const gchar *budget_guid_str;
     GtkVBox* vbox;
     GtkWidget* inner_vbox;
     GtkListStore* totals_tree_model;
@@ -325,6 +317,7 @@ gbv_create_widget(GncBudgetView *view)
     GtkTreeViewColumn* totals_title_col;
     GtkTreeIter iter;
     GtkWidget* h_separator;
+    gchar *state_section;
 
     priv = GNC_BUDGET_VIEW_GET_PRIVATE(view);
     vbox = GTK_VBOX(view);
@@ -351,7 +344,9 @@ gbv_create_widget(GncBudgetView *view)
     tree_view = gnc_tree_view_account_new(FALSE);
     gtk_container_add(GTK_CONTAINER(inner_scrolled_window), GTK_WIDGET(tree_view));
 
-    g_object_set(G_OBJECT(tree_view), "gconf-section", priv->gconf_section, NULL);
+    state_section = g_strjoin("/", STATE_SECTION_PREFIX, guid_to_string(&priv->key), NULL);
+    g_object_set(G_OBJECT(tree_view), "state-section", state_section, NULL);
+    g_free (state_section);
 
     gnc_tree_view_configure_columns(GNC_TREE_VIEW(tree_view));
     priv->tree_view = tree_view;
@@ -509,6 +504,27 @@ gnc_budget_view_restore(GncBudgetView* view, GKeyFile *key_file, const gchar *gr
 
     return TRUE;
 }
+
+/***********************************************************************
+ *  The budget associated with this view is about to be removed from   *
+ *  the book. So drop any saved state we still have.                   *
+ *                                                                     *
+ *  @param view The view to which the budget is associated.            *
+ **********************************************************************/
+void
+gnc_budget_view_delete_budget(GncBudgetView *view)
+{
+    GncBudgetViewPrivate *priv;
+
+    g_return_if_fail(view != NULL);
+
+    ENTER("view %p", view);
+
+    gnc_tree_view_remove_state_information (GNC_TREE_VIEW (view));
+
+    LEAVE(" ");
+}
+
 
 
 #if 0

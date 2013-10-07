@@ -47,7 +47,7 @@
 
 #define TREE_MODEL_SPLIT_REG_CM_CLASS "tree-model-split-reg"
 
-#define GCONF_SECTION "window/pages/register2"
+#define STATE_SECTION_PREFIX "window/pages/register2/"
 
 /* Signal codes */
 enum
@@ -1003,40 +1003,39 @@ gnc_tree_model_split_reg_get_sub_account (GncTreeModelSplitReg *model)
 void
 gnc_tree_model_split_reg_default_query (GncTreeModelSplitReg *model, Account *default_account, Query *query)
 {
-    gchar *gconf_key;
+    gchar *state_key;
     const GncGUID * guid;
-    const gchar *gconf_section;
     const gchar *sort_string;
     gint  depth, col;
     
     guid = xaccAccountGetGUID (default_account);
 
     /* Used for saving different register column widths under seperate keys */
-    if (model->priv->display_subacc == TRUE)
-        gconf_key = g_strconcat (GCONF_SECTION,"/", (gchar*)guid_to_string (guid), "_sub", NULL);
-    else
-        gconf_key = g_strconcat (GCONF_SECTION,"/", (gchar*)guid_to_string (guid), NULL);
- 
     // We need to give the General Ledger a Key other than all zeros which the search register gets.
     if (model->priv->display_gl == TRUE && model->type == GENERAL_LEDGER2)
-        gconf_key = g_strconcat (GCONF_SECTION,"/", "00000000000000000000000000000001", NULL);
+        state_key = g_strconcat (STATE_SECTION_PREFIX, "00000000000000000000000000000001", NULL);
+    else if (model->priv->display_subacc == TRUE)
+        state_key = g_strconcat (STATE_SECTION_PREFIX, (gchar*)guid_to_string (guid), "_sub", NULL);
+    else
+        state_key = g_strconcat (STATE_SECTION_PREFIX, (gchar*)guid_to_string (guid), NULL);
+ 
 
     /* Restore the sort column from gconf */
-    col = gnc_gconf_get_int (gconf_key, "sort_col", NULL);
+    col = gnc_gconf_get_int (state_key, "sort_col", NULL);
     if (col == 0)    
         model->sort_col = 1;
     else
         model->sort_col = col;
 
     /* Restore the sort depth from gconf */
-    depth = gnc_gconf_get_int (gconf_key, "sort_depth", NULL);
+    depth = gnc_gconf_get_int (state_key, "sort_depth", NULL);
     if (depth == 0)
         model->sort_depth = 1;
     else
         model->sort_depth = depth;
 
     /* Restore the sort order from gconf */
-    sort_string = gnc_gconf_get_string (gconf_key, "sort_order", NULL);
+    sort_string = gnc_gconf_get_string (state_key, "sort_order", NULL);
     if (g_strcmp0 ("descending", sort_string) == 0)
         model->sort_direction = -1;
     else

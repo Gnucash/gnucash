@@ -41,7 +41,7 @@
 
 
 #define DIALOG_COMMODITIES_CM_CLASS "dialog-commodities"
-#define GCONF_SECTION "dialogs/edit_commodities"
+#define STATE_SECTION "dialogs/edit_commodities"
 #define GNC_PREFS_GROUP   "dialogs.edit_commodities"
 #define GNC_PREF_INCL_ISO "include_iso"
 
@@ -336,7 +336,7 @@ gnc_commodities_dialog_create (GtkWidget * parent, CommoditiesDialog *cd)
 
     scrolled_window = GTK_WIDGET(gtk_builder_get_object (builder, "commodity_list_window"));
     view = gnc_tree_view_commodity_new(cd->book,
-                                       "gconf-section", GCONF_SECTION,
+                                       "state-section", STATE_SECTION,
                                        "show-column-menu", TRUE,
                                        NULL);
     cd->commodity_tree = GNC_TREE_VIEW_COMMODITY(view);

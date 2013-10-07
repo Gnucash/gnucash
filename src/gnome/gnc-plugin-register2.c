@@ -45,7 +45,6 @@ static void gnc_plugin_register2_cmd_general_ledger (GtkAction *action, GncMainW
 
 #define PLUGIN_ACTIONS_NAME "gnc-plugin-register2-actions"
 #define PLUGIN_UI_FILENAME  "gnc-plugin-register2-ui.xml"
-#define GCONF_REGISTER2_SECTION "general/register"
 
 static GtkActionEntry gnc_plugin_actions [] =
 {

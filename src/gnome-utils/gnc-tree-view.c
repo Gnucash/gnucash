@@ -45,26 +45,26 @@
 #include "gnc-gobject-utils.h"
 #include "gnc-cell-renderer-date.h"
 
-/* The actual gconf key for a particular column visibility.  This is
+/* The actual state key for a particular column visibility.  This is
  * attached to the menu items that are in the column selection menu.
- * Makes it very easy to update gconf when a menu item is toggled. */
-#define GCONF_KEY  "gconf-key"
+ * Makes it very easy to update saved state when a menu item is toggled. */
+#define STATE_KEY  "state-key"
 
-/* Gconf keys within this particular section of gconf. */
-#define GCONF_KEY_SORT_COLUMN  "sort_column"
-#define GCONF_KEY_SORT_ORDER   "sort_order"
-#define GCONF_KEY_COLUMN_ORDER "column_order"
+/* State keys within this particular saved state section. */
+#define STATE_KEY_SORT_COLUMN  "sort_column"
+#define STATE_KEY_SORT_ORDER   "sort_order"
+#define STATE_KEY_COLUMN_ORDER "column_order"
 
-/* Partial gconf keys within this particular section of gconf. These
+/* Partial state keys within this particular saved state section. These
    are appended to the various column names to create the actual
    keys. */
-#define GCONF_KEY_VISIBLE      "visible"
-#define GCONF_KEY_WIDTH        "width"
+#define STATE_KEY_VISIBLE      "visible"
+#define STATE_KEY_WIDTH        "width"
 
 enum
 {
     PROP_0,
-    PROP_GCONF_SECTION,
+    PROP_STATE_SECTION,
     PROP_SHOW_COLUMN_MENU,
 };
 
@@ -86,7 +86,7 @@ static void gnc_tree_view_get_property (GObject         *object,
                                         guint            prop_id,
                                         GValue          *value,
                                         GParamSpec      *pspec);
-static void gnc_tree_view_remove_gconf(GncTreeView *view);
+static void gnc_tree_view_remove_gconf_callbacks(GncTreeView *view);
 static gboolean gnc_tree_view_drop_ok_cb (GtkTreeView *view,
         GtkTreeViewColumn *column,
         GtkTreeViewColumn *prev_column,
@@ -114,9 +114,9 @@ typedef struct GncTreeViewPrivate
     /* Sort callback model */
     GtkTreeModel      *sort_model;
 
-    /* Gconf related values */
-    gchar             *gconf_section;
-    gboolean           seen_gconf_visibility;
+    /* State related values */
+    gchar             *state_section;
+    gboolean           seen_state_visibility;
     gulong             columns_changed_cb_id;
     gulong             sort_column_changed_cb_id;
     gulong             size_allocate_cb_id;
@@ -195,10 +195,10 @@ gnc_tree_view_class_init (GncTreeViewClass *klass)
     g_type_class_add_private(klass, sizeof(GncTreeViewPrivate));
 
     g_object_class_install_property (gobject_class,
-                                     PROP_GCONF_SECTION,
-                                     g_param_spec_string ("gconf-section",
-                                             "Gconf Section",
-                                             "The Gconf section to use for storing settings",
+                                     PROP_STATE_SECTION,
+                                     g_param_spec_string ("state-section",
+                                             "State Section",
+                                             "The section name in the saved state to use for (re)storing the treeview's visual state (visible columns, sort order,...",
                                              NULL,
                                              G_PARAM_READWRITE));
     g_object_class_install_property (gobject_class,
@@ -239,8 +239,8 @@ gnc_tree_view_init (GncTreeView *view, GncTreeViewClass *klass)
     priv->column_menu = NULL;
     priv->show_column_menu = FALSE;
     priv->sort_model = NULL;
-    priv->gconf_section = NULL;
-    priv->seen_gconf_visibility = FALSE;
+    priv->state_section = NULL;
+    priv->seen_state_visibility = FALSE;
     priv->columns_changed_cb_id = 0;
     priv->sort_column_changed_cb_id = 0;
     priv->size_allocate_cb_id = 0;
@@ -335,7 +335,7 @@ gnc_tree_view_destroy (GtkObject *object)
 
     view = GNC_TREE_VIEW (object);
 
-    gnc_tree_view_remove_gconf(view);
+    gnc_tree_view_remove_gconf_callbacks(view);
 
     priv = GNC_TREE_VIEW_GET_PRIVATE(view);
 
@@ -379,8 +379,8 @@ gnc_tree_view_get_property (GObject     *object,
     priv = GNC_TREE_VIEW_GET_PRIVATE(view);
     switch (prop_id)
     {
-    case PROP_GCONF_SECTION:
-        g_value_set_string (value, priv->gconf_section);
+    case PROP_STATE_SECTION:
+        g_value_set_string (value, priv->state_section);
         break;
     case PROP_SHOW_COLUMN_MENU:
         g_value_set_boolean (value, priv->show_column_menu);
@@ -410,8 +410,8 @@ gnc_tree_view_set_property (GObject      *object,
 
     switch (prop_id)
     {
-    case PROP_GCONF_SECTION:
-        gnc_tree_view_set_gconf_section (view, g_value_get_string (value));
+    case PROP_STATE_SECTION:
+        gnc_tree_view_set_state_section (view, g_value_get_string (value));
         break;
     case PROP_SHOW_COLUMN_MENU:
         gnc_tree_view_set_show_column_menu (view, g_value_get_boolean (value));
@@ -471,7 +471,7 @@ view_column_find_by_model_id (GncTreeView *view,
     return found;
 }
 
-/** Find a tree column given the "pref name" used with gconf.  This
+/** Find a tree column given the "pref name" used with saved state.  This
  *  function simply runs the list of all (visible and invisible)
  *  columns looking for a match.  Column names were attached to each
  *  column at the time the column was created.
@@ -590,7 +590,6 @@ gtk_tree_view_sort_column_changed_cb (GtkTreeSortable *treesortable,
 {
     GncTreeViewPrivate *priv;
     GtkTreeViewColumn *column;
-    const gchar  	    *gconf_section;
     gchar        	    *column_pref_name;
     GtkSortType  	     order;
     gint         	     id;
@@ -600,9 +599,9 @@ gtk_tree_view_sort_column_changed_cb (GtkTreeSortable *treesortable,
 
     ENTER(" ");
     priv = GNC_TREE_VIEW_GET_PRIVATE(view);
-    if (!priv->gconf_section)
+    if (!priv->state_section)
     {
-        LEAVE("no gconf section");
+        LEAVE("no state section");
         return;
     }
 
@@ -619,10 +618,9 @@ gtk_tree_view_sort_column_changed_cb (GtkTreeSortable *treesortable,
         column_pref_name = "none";
 
     /* Store the values in gconf */
-    gconf_section = priv->gconf_section;
-    gnc_gconf_set_string(gconf_section, GCONF_KEY_SORT_COLUMN,
+    gnc_gconf_set_string(priv->state_section, STATE_KEY_SORT_COLUMN,
                          column_pref_name, NULL);
-    gnc_gconf_set_string(gconf_section, GCONF_KEY_SORT_ORDER,
+    gnc_gconf_set_string(priv->state_section, STATE_KEY_SORT_ORDER,
                          gnc_enum_to_nick(GTK_TYPE_SORT_TYPE, order), NULL);
     LEAVE(" ");
 }
@@ -662,7 +660,7 @@ gtk_tree_view_columns_changed_cb (GncTreeView *view,
     }
     g_list_free(column_list);
 
-    gnc_gconf_set_list(priv->gconf_section, GCONF_KEY_COLUMN_ORDER,
+    gnc_gconf_set_list(priv->state_section, STATE_KEY_COLUMN_ORDER,
                        GCONF_VALUE_STRING, column_names, NULL);
     g_slist_free(column_names);
     //LEAVE(" ");
@@ -670,9 +668,9 @@ gtk_tree_view_columns_changed_cb (GncTreeView *view,
 
 /** This is the helper function for gtk_tree_view_size_allocate_cb().
  *  It compares the actual column width to the width as stored in
- *  gconf.  If the two are different, it the updates gconf with the
+ *  gconf.  If the two are different, it updates gconf with the
  *  actual width.  This will trigger a notification from gconf that
- *  the size has changes, and that code must be smart enough to
+ *  the size has changed, and that code must be smart enough to
  *  prevent an infinite loop.  Not storing unchanged values prevents
  *  spurious callbacks from gconf and just saves processing time.
  *
@@ -704,11 +702,11 @@ gtk_tree_view_size_allocate_helper (GtkTreeViewColumn *column,
         return;
 
     /* Do it */
-    key = g_strdup_printf("%s_%s", column_pref_name, GCONF_KEY_WIDTH);
-    current_width = gnc_gconf_get_int(priv->gconf_section, key, NULL);
+    key = g_strdup_printf("%s_%s", column_pref_name, STATE_KEY_WIDTH);
+    current_width = gnc_gconf_get_int(priv->state_section, key, NULL);
     if (new_width != current_width)
     {
-        gnc_gconf_set_int(priv->gconf_section, key, new_width, NULL);
+        gnc_gconf_set_int(priv->state_section, key, new_width, NULL);
         DEBUG("set %s width to %d", column_pref_name, new_width);
     }
     g_free(key);
@@ -809,12 +807,12 @@ gnc_tree_view_column_visible (GncTreeView *view,
     }
 
     /* Using gconf? */
-    if (priv->gconf_section)
+    if (priv->state_section)
     {
-        if (priv->seen_gconf_visibility)
+        if (priv->seen_state_visibility)
         {
-            key = g_strdup_printf("%s_%s", pref_name, GCONF_KEY_VISIBLE);
-            visible = gnc_gconf_get_bool(priv->gconf_section, key, NULL);
+            key = g_strdup_printf("%s_%s", pref_name, STATE_KEY_VISIBLE);
+            visible = gnc_gconf_get_bool(priv->state_section, key, NULL);
             g_free(key);
             LEAVE("%d, gconf visibility", visible);
             return visible;
@@ -858,7 +856,7 @@ gnc_tree_view_update_visibility (GtkTreeViewColumn *column,
     priv = GNC_TREE_VIEW_GET_PRIVATE(view);
     visible = gnc_tree_view_column_visible(view, column, NULL);
     gtk_tree_view_column_set_visible(column, visible);
-    if (priv->gconf_section)
+    if (priv->state_section)
     {
         name = (gchar *)g_object_get_data(G_OBJECT(column), PREF_NAME);
         if (!name)
@@ -866,8 +864,8 @@ gnc_tree_view_update_visibility (GtkTreeViewColumn *column,
             LEAVE("no pref name");
             return;
         }
-        key = g_strdup_printf("%s_%s", name, GCONF_KEY_VISIBLE);
-        gnc_gconf_set_bool(priv->gconf_section, key, visible, NULL);
+        key = g_strdup_printf("%s_%s", name, STATE_KEY_VISIBLE);
+        gnc_gconf_set_bool(priv->state_section, key, visible, NULL);
         g_free(key);
         LEAVE("made %s, set gconf key", visible ? "visible" : "invisible");
         return;
@@ -1071,15 +1069,15 @@ gnc_tree_view_gconf_changed (GConfClient *client,
 
     DEBUG("Key %s, value %p", key, value);
     local = strrchr(key, '/') + 1;
-    if (strcmp(local, GCONF_KEY_SORT_COLUMN) == 0)
+    if (strcmp(local, STATE_KEY_SORT_COLUMN) == 0)
     {
         gnc_tree_view_set_sort_column(view, gconf_value_get_string(value));
     }
-    else if (strcmp(local, GCONF_KEY_SORT_ORDER) == 0)
+    else if (strcmp(local, STATE_KEY_SORT_ORDER) == 0)
     {
         gnc_tree_view_set_sort_order(view, gconf_value_get_string(value));
     }
-    else if (strcmp(local, GCONF_KEY_COLUMN_ORDER) == 0)
+    else if (strcmp(local, STATE_KEY_COLUMN_ORDER) == 0)
     {
         gnc_tree_view_set_column_order(view, gconf_value_get_list(value));
     }
@@ -1092,9 +1090,9 @@ gnc_tree_view_gconf_changed (GConfClient *client,
         type_name = strrchr(column_name, '_');
         *type_name++ = '\0';
 
-        if (strcmp(type_name, GCONF_KEY_VISIBLE) == 0)
+        if (strcmp(type_name, STATE_KEY_VISIBLE) == 0)
         {
-            priv->seen_gconf_visibility = TRUE;
+            priv->seen_state_visibility = TRUE;
             column = gnc_tree_view_find_column_by_name(view, column_name);
             if (column)
             {
@@ -1105,7 +1103,7 @@ gnc_tree_view_gconf_changed (GConfClient *client,
                 }
             }
         }
-        else if (strcmp(type_name, GCONF_KEY_WIDTH) == 0)
+        else if (strcmp(type_name, STATE_KEY_WIDTH) == 0)
         {
             width = gconf_value_get_int(value);
             column = gnc_tree_view_find_column_by_name(view, column_name);
@@ -1147,12 +1145,12 @@ gnc_tree_view_gconf_force_update (GncTreeView *view)
 
     ENTER("view %p", view);
     priv = GNC_TREE_VIEW_GET_PRIVATE(view);
-    all_entries = gnc_gconf_client_all_entries(priv->gconf_section);
+    all_entries = gnc_gconf_client_all_entries(priv->state_section);
 
     /* Set a flag indicating that the gconf data section may be empty.
      * It will be checked later on and appropriate action taken if its
      * still set. */
-    priv->seen_gconf_visibility = FALSE;
+    priv->seen_state_visibility = FALSE;
 
     /* Pull all the entries from gconf */
     for (etmp = all_entries; etmp; etmp = g_slist_next(etmp))
@@ -1163,7 +1161,7 @@ gnc_tree_view_gconf_force_update (GncTreeView *view)
     g_slist_free(all_entries);
 
     /* No visibilities seen yet.  Write out any columns we may have */
-    if (!priv->seen_gconf_visibility)
+    if (!priv->seen_state_visibility)
     {
         columns = gtk_tree_view_get_columns(GTK_TREE_VIEW(view));
         g_list_foreach(columns, (GFunc)gnc_tree_view_update_visibility, view);
@@ -1185,14 +1183,14 @@ gnc_tree_view_gconf_force_update (GncTreeView *view)
  *  @internal
  */
 static void
-gnc_tree_view_remove_gconf(GncTreeView *view)
+gnc_tree_view_remove_gconf_callbacks(GncTreeView *view)
 {
     GncTreeViewPrivate *priv;
     GtkTreeModel *model;
 
     ENTER(" ");
     priv = GNC_TREE_VIEW_GET_PRIVATE(view);
-    if (!priv->gconf_section)
+    if (!priv->state_section)
     {
         LEAVE("no gconf section");
         return;
@@ -1229,24 +1227,61 @@ gnc_tree_view_remove_gconf(GncTreeView *view)
     }
 
     DEBUG("removing gconf notification");
-    gnc_gconf_remove_notification(G_OBJECT(view), priv->gconf_section,
+    gnc_gconf_remove_notification(G_OBJECT(view), priv->state_section,
                                   GNC_TREE_VIEW_NAME);
-    g_free(priv->gconf_section);
-    priv->gconf_section = NULL;
+    g_free(priv->state_section);
+    priv->state_section = NULL;
+    LEAVE(" ");
+}
+
+/** This function is called to completely wipe the treeview's state
+ *  information (column visibility, width, sorting order,..). This
+ *  information is currently saved in gconf, so the gconf section
+ *  associated to the tree view will be wiped. It will first disconnect
+ *  the tree view from the gconf section and then removes the gconf
+ *  section with keys from gconf.  This function may
+ *  be called at any time; either when the user wants to disconnect or
+ *  when the view object is being destroyed.
+ *
+ *  @param view The tree view.
+ */
+
+void gnc_tree_view_remove_state_information(GncTreeView *view)
+{
+    GncTreeViewPrivate *priv;
+    gchar *section = NULL;
+
+    ENTER(" ");
+    priv = GNC_TREE_VIEW_GET_PRIVATE(view);
+    if (!priv->state_section)
+    {
+        LEAVE("no state section");
+        return;
+    }
+
+    /* Make a copy of the section name, because
+     * the call to gnc_tree_view_remove_gconf_callbacks
+     * unsets it and we still need it to really remove
+     * the gconf section itself.
+     */
+    section = g_strdup (priv->state_section);
+    gnc_tree_view_remove_gconf_callbacks (view);
+    gnc_gconf_unset_dir (section, NULL);
+    g_free (section);
     LEAVE(" ");
 }
 
 /** This function is called to set up or remove an association between
- *  a gconf section and the display of a view.  It will first remove
+ *  a saved state section and the display of a view.  It will first remove
  *  any existing association, and then install the new one.  This
- *  involves storing the gconf section value, requesting notification
+ *  involves storing the state section value, requesting notification
  *  from gconf of any changes to keys in that section, then attaching
  *  several signals to catch user changes to the view.
  *
  *  Parameters are defined in gnc-tree-view.h
  */
 void
-gnc_tree_view_set_gconf_section (GncTreeView *view,
+gnc_tree_view_set_state_section (GncTreeView *view,
                                  const gchar *section)
 {
     GncTreeViewPrivate *priv;
@@ -1256,7 +1291,7 @@ gnc_tree_view_set_gconf_section (GncTreeView *view,
     g_return_if_fail(GNC_IS_TREE_VIEW(view));
 
     ENTER("view %p, section %s", view, section);
-    gnc_tree_view_remove_gconf(view);
+    gnc_tree_view_remove_gconf_callbacks(view);
 
     if (!section)
     {
@@ -1266,7 +1301,7 @@ gnc_tree_view_set_gconf_section (GncTreeView *view,
 
     /* Catch changes in gconf. Propagate to view. */
     priv = GNC_TREE_VIEW_GET_PRIVATE(view);
-    priv->gconf_section = g_strdup(section);
+    priv->state_section = g_strdup(section);
     gnc_gconf_add_notification(G_OBJECT(view), section,
                                gnc_tree_view_gconf_changed,
                                GNC_TREE_VIEW_NAME);
@@ -1299,20 +1334,20 @@ gnc_tree_view_set_gconf_section (GncTreeView *view,
 
 /** This function is called to get the current association between a
  *  gconf section and the display of a view.  It returns the same
- *  value passed to gnc_tree_view_set_gconf_section(); i.e. a string
+ *  value passed to gnc_tree_view_set_state_section(); i.e. a string
  *  like "dialogs/edit_prices".
  *
  *  Parameters are defined in gnc-tree-view.h
  */
 const gchar *
-gnc_tree_view_get_gconf_section (GncTreeView *view)
+gnc_tree_view_get_state_section (GncTreeView *view)
 {
     GncTreeViewPrivate *priv;
 
     g_return_val_if_fail(GNC_IS_TREE_VIEW(view), NULL);
 
     priv = GNC_TREE_VIEW_GET_PRIVATE(view);
-    return(priv->gconf_section);
+    return(priv->state_section);
 }
 
 
@@ -1349,23 +1384,23 @@ gnc_tree_view_menu_item_toggled (GtkCheckMenuItem *checkmenuitem,
 
     ENTER("checkmenuitem %p, view %p", checkmenuitem, view);
     priv = GNC_TREE_VIEW_GET_PRIVATE(view);
-    if (!priv->gconf_section)
+    if (!priv->state_section)
     {
-        LEAVE("no gconf section");
+        LEAVE("no state section");
         return;
     }
 
-    key = g_object_get_data(G_OBJECT(checkmenuitem), GCONF_KEY);
+    key = g_object_get_data(G_OBJECT(checkmenuitem), STATE_KEY);
     value = gtk_check_menu_item_get_active(checkmenuitem);
-    gnc_gconf_set_bool(priv->gconf_section, key, value, NULL);
-    LEAVE("set gconf section %s, key %s, visible %d",
-          priv->gconf_section, key, value);
+    gnc_gconf_set_bool(priv->state_section, key, value, NULL);
+    LEAVE("set state section %s, key %s, visible %d",
+          priv->state_section, key, value);
 }
 
 /** This function is called to create a single checkmenuitem in the
  *  column selection menu.  It is called once for each column in the
  *  view.  It creates a menu item for the corresponding column, and
- *  attaches to it a copy of the gconf key for this column's
+ *  attaches to it a copy of the state key for this column's
  *  visibility.  This makes the toggle callback function trivial.
  *
  *  This function will create the column selection menu if one doesn't
@@ -1388,9 +1423,9 @@ gnc_tree_view_create_menu_item (GtkTreeViewColumn *column,
 
     // ENTER("view %p, column %p", view, column);
     priv = GNC_TREE_VIEW_GET_PRIVATE(view);
-    if (!priv->gconf_section)
+    if (!priv->state_section)
     {
-        // LEAVE("no gconf section");
+        // LEAVE("no state section");
         return;
     }
 
@@ -1427,8 +1462,8 @@ gnc_tree_view_create_menu_item (GtkTreeViewColumn *column,
 		     (GCallback)gnc_tree_view_menu_item_toggled, view);
 
     /* Store data on the widget for callbacks */
-    key = g_strdup_printf("%s_%s", pref_name, GCONF_KEY_VISIBLE);
-    g_object_set_data_full(G_OBJECT(widget), GCONF_KEY, key, g_free);
+    key = g_strdup_printf("%s_%s", pref_name, STATE_KEY_VISIBLE);
+    g_object_set_data_full(G_OBJECT(widget), STATE_KEY, key, g_free);
     // LEAVE(" ");
 }
 
@@ -1436,7 +1471,7 @@ gnc_tree_view_create_menu_item (GtkTreeViewColumn *column,
  *  first destroys any old column selection menu, then checks to see
  *  if a new menu should be built.  If so, it calls the
  *  gnc_tree_view_create_menu_item() for each column in the view.
- *  This function is invoked then either the "gconf-section" or the
+ *  This function is invoked when either the "state-section" or the
  *  "show-column-menu" property is changed on the view.
  *
  *  @param view Build a selection menu for this tree view.
@@ -1461,7 +1496,7 @@ gnc_tree_view_build_column_menu (GncTreeView *view)
         priv->column_menu = NULL;
     }
 
-    if (priv->show_column_menu && priv->gconf_section)
+    if (priv->show_column_menu && priv->state_section)
     {
         /* Show the menu popup button */
         if (priv->column_menu_column)
@@ -1479,14 +1514,14 @@ gnc_tree_view_build_column_menu (GncTreeView *view)
             gtk_tree_view_column_set_visible(priv->column_menu_column, FALSE);
     }
     LEAVE("menu: show %d, section %s", priv->show_column_menu,
-          priv->gconf_section ? priv->gconf_section : "(null)");
+          priv->state_section ? priv->state_section : "(null)");
 }
 
 /** This function is called to synchronize the checkbox on a menu item
- *  with the current gconf visibility value for the corresponding
+ *  with the current state visibility value for the corresponding
  *  column (which will be the visibility of the column if the rest of
  *  the code in this file is working correctly).  It simply takes the
- *  gconf key attached to the menu item, reads it, and sets the menu
+ *  state key attached to the menu item, reads it, and sets the menu
  *  item to the retrieved value.  It does take care to block signals
  *  from the menu item to prevent updating gconf (since the value was
  *  just read from gconf).
@@ -1509,14 +1544,14 @@ gnc_tree_view_update_column_menu_item (GtkCheckMenuItem *checkmenuitem,
     g_return_if_fail(GNC_IS_TREE_VIEW(view));
 
     priv = GNC_TREE_VIEW_GET_PRIVATE(view);
-    key = g_object_get_data(G_OBJECT(checkmenuitem), GCONF_KEY);
+    key = g_object_get_data(G_OBJECT(checkmenuitem), STATE_KEY);
     if (g_object_get_data(G_OBJECT(checkmenuitem), ALWAYS_VISIBLE))
     {
         visible = TRUE;
     }
     else
     {
-        visible = gnc_gconf_get_bool(priv->gconf_section, key, NULL);
+        visible = gnc_gconf_get_bool(priv->state_section, key, NULL);
     }
 
     g_signal_handlers_block_by_func(checkmenuitem,
@@ -1528,7 +1563,7 @@ gnc_tree_view_update_column_menu_item (GtkCheckMenuItem *checkmenuitem,
 
 /** This function when the user clicks on the button to show the
  *  column selection menu.  It first synchronize the checkboxes on all
- *  menu item with the gconf visibility values.  It then pops up the
+ *  menu item with the state visibility values.  It then pops up the
  *  menu for the user to choose from.
  *
  *  @param column The tree column containing the column selection
@@ -1677,7 +1712,7 @@ gnc_tree_view_set_sort_user_data (GncTreeView *view, GtkTreeModel *s_model)
 
 /** This function is called to set the "show-column-menu" property on
  *  this view.  This function has no visible effect if the
- *  "gconf-section" property has not been set.
+ *  "state-section" property has not been set.
  *
  *  Parameters are defined in gnc-tree-view.h
  */
@@ -1746,7 +1781,7 @@ gnc_tree_view_set_model(GncTreeView *view, GtkTreeModel *model)
     gtk_tree_view_set_model (GTK_TREE_VIEW(view), model);
 
     /* Maybe add a new callback */
-    if (model && priv->gconf_section)
+    if (model && priv->state_section)
     {
         priv->sort_column_changed_cb_id =
             g_signal_connect(GTK_TREE_SORTABLE(model), "sort-column-changed",
@@ -1791,8 +1826,8 @@ gnc_tree_view_configure_columns (GncTreeView *view)
     g_list_free(columns);
 
     priv = GNC_TREE_VIEW_GET_PRIVATE(view);
-    if (priv->gconf_section)
-        priv->seen_gconf_visibility = TRUE;
+    if (priv->state_section)
+        priv->seen_state_visibility = TRUE;
 
     /* If only the first column is visible, hide the spacer and make that
      * column expand. */
@@ -1816,7 +1851,7 @@ gnc_tree_view_configure_columns (GncTreeView *view)
  *  @param pref_name The internal name of this column.  This name is
  *  used in several functions to look up the column, and it is also
  *  used to create the keys used to record the column width and
- *  visibility in gconf.
+ *  visibility in saved state.
  *
  *  @param data_column The index of the GtkTreeModel data column used
  *  to determine the data that will be displayed in this column for
@@ -1824,7 +1859,7 @@ gnc_tree_view_configure_columns (GncTreeView *view)
  *  plan on using an non-model data source for this column.
  *
  *  @param default_width The width this column should be if not
- *  specified by gconf.  If the this value is zero, the column will
+ *  specified by saved state.  If the this value is zero, the column will
  *  be marked as automatically sized.
  *
  *  @param resizable Whether to mark the column as user resizable.
@@ -1879,10 +1914,10 @@ gnc_tree_view_column_properties (GncTreeView *view,
     else
     {
         priv = GNC_TREE_VIEW_GET_PRIVATE(view);
-        if (priv->gconf_section)
+        if (priv->state_section)
         {
-            key = g_strdup_printf("%s_%s", pref_name, GCONF_KEY_WIDTH);
-            width = gnc_gconf_get_int(priv->gconf_section, key, NULL);
+            key = g_strdup_printf("%s_%s", pref_name, STATE_KEY_WIDTH);
+            width = gnc_gconf_get_int(priv->state_section, key, NULL);
             g_free(key);
         }
 
@@ -1939,7 +1974,7 @@ gnc_tree_view_column_properties (GncTreeView *view,
  *  It takes all the parameters necessary to hook a GtkTreeModel
  *  column to a GtkTreeViewColumn.  It handles creating a tooltip to
  *  show the full title name, and setting the sort and edit callback
- *  functions.  If the tree has a gconf section associated with it,
+ *  functions.  If the tree has a state section associated with it,
  *  this function also wires up the column so that its visibility and
  *  width are remembered.
  *
@@ -1992,7 +2027,7 @@ gnc_tree_view_add_toggle_column (GncTreeView *view,
 
 /** This function adds a new text column to a GncTreeView base view.
  *  It takes all the parameters necessary to hook a GtkTreeModel
- *  column to a GtkTreeViewColumn.  If the tree has a gconf section
+ *  column to a GtkTreeViewColumn.  If the tree has a state section
  *  associated with it, this function also wires up the column so that
  *  its visibility and width are remembered.
  *
@@ -2059,7 +2094,7 @@ gnc_tree_view_add_text_column (GncTreeView *view,
 
 /** This function adds a new date column to a GncTreeView base view.
  *  It takes all the parameters necessary to hook a GtkTreeModel
- *  column to a GtkTreeViewColumn.  If the tree has a gconf section
+ *  column to a GtkTreeViewColumn.  If the tree has a state section
  *  associated with it, this function also wires up the column so that
  *  its visibility and width are remembered.
  *
@@ -2201,7 +2236,7 @@ gnc_tree_view_column_get_renderer(GtkTreeViewColumn *column)
 /** This function adds a new numeric column to a GncTreeView base
  *  view.  It takes all the parameters necessary to hook a
  *  GtkTreeModel column to a GtkTreeViewColumn.  If the tree has a
- *  gconf section associated with it, this function also wires up the
+ *  state section associated with it, this function also wires up the
  *  column so that its visibility and width are remembered.  A numeric
  *  column is nothing more then a text column with a few extra
  *  attributes.

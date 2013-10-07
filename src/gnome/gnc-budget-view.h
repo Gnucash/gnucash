@@ -60,10 +60,10 @@ GType gnc_budget_view_get_type (void);
  *
  *  @return The newly created widget
  */
-GncBudgetView *gnc_budget_view_new(GncBudget *budget, AccountFilterDialog* fd,
-                                   const gchar* gconf_section);
+GncBudgetView *gnc_budget_view_new(GncBudget *budget, AccountFilterDialog* fd);
 void gnc_budget_view_save(GncBudgetView* view, GKeyFile *key_file, const gchar* group_name);
 void gnc_budget_view_refresh(GncBudgetView* view);
+void gnc_budget_view_delete_budget(GncBudgetView* view);
 gboolean gnc_budget_view_restore(GncBudgetView* view, GKeyFile *key_file, const gchar* group_name);
 GtkTreeSelection* gnc_budget_view_get_selection(GncBudgetView* view);
 Account* gnc_budget_view_get_account_from_path(GncBudgetView* view, GtkTreePath* path);

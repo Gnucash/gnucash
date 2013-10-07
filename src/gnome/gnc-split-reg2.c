@@ -40,7 +40,7 @@
 #include "gnc-gconf-utils.h"
 #include "dialog-utils.h"
 
-#define GCONF_SECTION "window/pages/register2"
+#define STATE_SECTION_PREFIX "window/pages/register2/"
 
 static QofLogModule log_module = GNC_MOD_GUI;
 
@@ -234,10 +234,9 @@ gsr2_create_table (GNCSplitReg2 *gsr)
     GtkWidget *hbox;
     gdouble num_of_trans;
 
-    gchar *gconf_key;
+    gchar *state_key;
     const GncGUID * guid;
     Account * account;
-    const gchar *gconf_section;
     const gchar *sort_string;
     
     account = gnc_ledger_display2_leader (gsr->ledger);
@@ -251,24 +250,20 @@ gsr2_create_table (GNCSplitReg2 *gsr)
                                      gnc_split_reg2_get_parent);
 
     ledger_type = gnc_ledger_display2_type (gsr->ledger);
-
     model = gnc_ledger_display2_get_split_model_register (gsr->ledger);
 
-    /* Used for saving different register column widths under seperate keys */
-    if (ledger_type == LD2_SUBACCOUNT)
-        gconf_key = g_strconcat (GCONF_SECTION,"/", (gchar*)guid_to_string (guid), "_sub", NULL);
-    else
-        gconf_key = g_strconcat (GCONF_SECTION,"/", (gchar*)guid_to_string (guid), NULL);
-
-    gnc_tree_model_split_reg_set_display (model, ((ledger_type == LD2_SUBACCOUNT)?TRUE:FALSE), ((ledger_type == LD2_GL)?TRUE:FALSE));
-
-    view = gnc_tree_view_split_reg_new_with_model (model);
-
-    g_object_unref (G_OBJECT (model));
-
+    /* Used for saving different register column widths under separate keys */
     // We need to give the General Ledger a Key other than all zeros which the search register gets.
     if (ledger_type == LD2_GL && model->type == GENERAL_LEDGER2)
-        gconf_key = g_strconcat (GCONF_SECTION,"/", "00000000000000000000000000000001", NULL);
+        state_key = g_strconcat (STATE_SECTION_PREFIX, "00000000000000000000000000000001", NULL);
+    else if (ledger_type == LD2_SUBACCOUNT)
+        state_key = g_strconcat (STATE_SECTION_PREFIX, (gchar*)guid_to_string (guid), "_sub", NULL);
+    else
+        state_key = g_strconcat (STATE_SECTION_PREFIX, (gchar*)guid_to_string (guid), NULL);
+
+    gnc_tree_model_split_reg_set_display (model, ((ledger_type == LD2_SUBACCOUNT)?TRUE:FALSE), ((ledger_type == LD2_GL)?TRUE:FALSE));
+    view = gnc_tree_view_split_reg_new_with_model (model);
+    g_object_unref (G_OBJECT (model));
 
     // Create a hbox for treeview and scrollbar.
     hbox = gtk_hbox_new (FALSE, 0);
@@ -296,19 +291,19 @@ gsr2_create_table (GNCSplitReg2 *gsr)
     gnc_ledger_display2_set_split_view_register (gsr->ledger, view);
 
     /* Restore the sort depth from gconf */
-    view->sort_depth = gnc_gconf_get_int (gconf_key, "sort_depth", NULL);
+    view->sort_depth = gnc_gconf_get_int (state_key, "sort_depth", NULL);
 
     /* Restore the sort order from gconf */
-    sort_string = gnc_gconf_get_string (gconf_key, "sort_order", NULL);
+    sort_string = gnc_gconf_get_string (state_key, "sort_order", NULL);
     if (g_strcmp0 ("descending", sort_string) == 0)
         view->sort_direction = -1;
     else
         view->sort_direction = 1;
 
-    /* Restore the sort column from gconf */
+    /* Restore the sort column from saved state */
     view->sort_col = model->sort_col;
 
-    g_object_set (G_OBJECT (view), "gconf-section", gconf_key, 
+    g_object_set (G_OBJECT (view), "state-section", state_key,
                  "show-column-menu", FALSE, NULL);
 
     gnc_tree_view_configure_columns (GNC_TREE_VIEW (view));
@@ -683,13 +678,13 @@ gnc_split_reg2_ld_destroy (GNCLedgerDisplay2 *ledger)
 {
     GNCSplitReg2 *gsr = gnc_ledger_display2_get_user_data (ledger);
     
-    gchar *gconf_key;
+    gchar *state_key;
     const GncGUID * guid;
     Account * account;
     
     account = gnc_ledger_display2_leader (ledger);
     guid = xaccAccountGetGUID (account);
-    gconf_key = (gchar*)guid_to_string (guid);
+    state_key = (gchar*)guid_to_string (guid);
     
     if (gsr)
     {
@@ -699,7 +694,7 @@ gnc_split_reg2_ld_destroy (GNCLedgerDisplay2 *ledger)
 
 /*FIXME This may not be required
         if (model && model->table)
-            gnc_table_save_state (model->table, gconf_key);
+            gnc_table_save_state (model->table, state_key);
 */
         /*
          * Don't destroy the window here any more.  The register no longer
@@ -796,7 +791,7 @@ gnc_split_reg2_sort_changed_cb (GtkTreeSortable *sortable, gpointer user_data)
     GtkSortType   type;
     gint          sortcol;
     gint          sort_depth;
-    const gchar  *gconf_section;
+    const gchar  *state_section;
 
     gtk_tree_sortable_get_sort_column_id (sortable, &sortcol, &type);
     ENTER("sortcol is %d", sortcol);
@@ -825,9 +820,9 @@ gnc_split_reg2_sort_changed_cb (GtkTreeSortable *sortable, gpointer user_data)
     }
 
     /* Save the sort depth to gconf */
-    gconf_section = gnc_tree_view_get_gconf_section (GNC_TREE_VIEW (view));
-    gnc_gconf_set_int (gconf_section, "sort_depth", view->sort_depth, NULL);
-    gnc_gconf_set_int (gconf_section, "sort_col", view->sort_col, NULL);
+    state_section = gnc_tree_view_get_state_section (GNC_TREE_VIEW (view));
+    gnc_gconf_set_int (state_section, "sort_depth", view->sort_depth, NULL);
+    gnc_gconf_set_int (state_section, "sort_col", view->sort_col, NULL);
 
     LEAVE("v_sort_col %d, v_sort_direction is %d  v_sort_depth is %d", view->sort_col, view->sort_direction, view->sort_depth);
 

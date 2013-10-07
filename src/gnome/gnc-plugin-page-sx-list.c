@@ -79,7 +79,7 @@
 G_GNUC_UNUSED static QofLogModule log_module = GNC_MOD_GUI_SX;
 
 #define PLUGIN_PAGE_SX_LIST_CM_CLASS "plugin-page-sx-list"
-#define GCONF_SECTION "window/pages/sx_list"
+#define STATE_SECTION "window/pages/sx_list"
 
 typedef struct GncPluginPageSxListPrivate
 {
@@ -402,7 +402,7 @@ gnc_plugin_page_sx_list_create_widget (GncPluginPage *plugin_page)
 
         priv->tree_view = GTK_TREE_VIEW(gnc_tree_view_sx_list_new(priv->instances));
         g_object_set(G_OBJECT(priv->tree_view),
-                     "gconf-section", GCONF_SECTION,
+                     "state-section", STATE_SECTION,
                      "show-column-menu", TRUE,
                      NULL);
         gtk_container_add(GTK_CONTAINER( swin ), GTK_WIDGET(priv->tree_view));

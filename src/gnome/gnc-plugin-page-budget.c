@@ -47,7 +47,6 @@
 
 #include "dialog-options.h"
 #include "dialog-utils.h"
-#include "gnc-gconf-utils.h"
 #include "gnc-gnome-utils.h"
 #include "gnc-gobject-utils.h"
 #include "gnc-icons.h"
@@ -74,7 +73,6 @@
 static QofLogModule log_module = GNC_MOD_BUDGET;
 
 #define PLUGIN_PAGE_BUDGET_CM_CLASS "plugin-page-budget"
-#define GCONF_SECTION "window/pages/budget"
 
 /************************************************************
  *                        Prototypes                        *
@@ -191,7 +189,6 @@ typedef struct GncPluginPageBudgetPrivate
     GncBudgetView* budget_view;
     GtkTreeView *tree_view;
 
-    gchar* gconf_section;
     gint component_id;
 
     GncBudget* budget;
@@ -272,7 +269,6 @@ gnc_plugin_page_budget_new (GncBudget *budget)
     priv->budget = budget;
     priv->delete_budget = FALSE;
     priv->key = *gnc_budget_get_guid(budget);
-    priv->gconf_section = g_strjoin("/", GCONF_SECTION, guid_to_string(&priv->key), NULL);
     label = g_strdup_printf("%s: %s", _("Budget"), gnc_budget_get_name(budget));
     g_object_set(G_OBJECT(plugin_page), "page-name", label, NULL);
     g_free(label);
@@ -356,10 +352,6 @@ gnc_plugin_page_budget_finalize (GObject *object)
     page = GNC_PLUGIN_PAGE_BUDGET (object);
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_BUDGET (page));
 
-    priv = GNC_PLUGIN_PAGE_BUDGET_GET_PRIVATE(page);
-
-    g_free(priv->gconf_section);
-
     G_OBJECT_CLASS (parent_class)->finalize (object);
     LEAVE(" ");
 }
@@ -425,7 +417,7 @@ gnc_plugin_page_budget_create_widget (GncPluginPage *plugin_page)
         return GTK_WIDGET(priv->budget_view);
     }
 
-    priv->budget_view = gnc_budget_view_new(priv->budget, &priv->fd, priv->gconf_section);
+    priv->budget_view = gnc_budget_view_new(priv->budget, &priv->fd);
 
 #if 0
     g_signal_connect(G_OBJECT(selection), "changed",
@@ -462,16 +454,13 @@ gnc_plugin_page_budget_destroy_widget (GncPluginPage *plugin_page)
     ENTER("page %p", plugin_page);
     priv = GNC_PLUGIN_PAGE_BUDGET_GET_PRIVATE(plugin_page);
 
-    if (priv->delete_budget)
-    {
-        if (priv->gconf_section)
-        {
-            gnc_gconf_unset_dir (priv->gconf_section, NULL);
-        }
-    }
-
     if (priv->budget_view)
     {
+        if (priv->delete_budget)
+        {
+            gnc_budget_view_delete_budget (priv->budget_view);
+        }
+
         g_object_unref(G_OBJECT(priv->budget_view));
         priv->budget_view = NULL;
     }
