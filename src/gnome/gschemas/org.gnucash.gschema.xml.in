@@ -39,8 +39,8 @@
       <summary>Automatically insert a decimal point</summary>
       <description>If active, GnuCash will automatically insert a decimal point into values that are entered without one.  Otherwise GnuCash will not modify entered numbers.</description>
     </key>
-    <key name="auto-decimal-places" type="d">
-      <default>2.0</default>
+    <key name="auto-decimal-places" type="i">
+      <default>2</default>
       <summary>Number of automatic decimal places</summary>
       <description>This field specifies the number of automatic decimal places that will be filled in.</description>
     </key>
@@ -296,11 +296,6 @@
       <default>false</default>
       <summary>Create a new window for each new report</summary>
       <description>If active, each new report will be opened in its own window. Otherwise new reports will be opened as tabs in the main window.</description>
-    </key>
-    <key name="currency-choice" type="s">
-      <default>'locale'</default>
-      <summary>Source of default report currency</summary>
-      <description>This setting controls the default currency used for reports. If set to "locale" then GnuCash will retrieve the default currency from the user's locale setting.  If set to "other", GnuCash will use the setting specified by the currency-other key.</description>
     </key>
     <key name="currency-choice-locale" type="b">
       <default>true</default>

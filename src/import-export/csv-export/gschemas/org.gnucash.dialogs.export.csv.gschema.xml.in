@@ -1,5 +1,5 @@
 <schemalist gettext-domain="GETTEXT_PACKAGE">
-  <schema id="org.gnucash.dialogs.export.csv" path="/apps/gnucash/dialogs/export/csv/">
+  <schema id="org.gnucash.dialogs.export.csv" path="/org/gnucash/dialogs/export/csv/">
     <key name="last-geometry" type="(iiii)">
       <default>(-1,-1,-1,-1)</default>
       <summary>Last window position and size</summary>

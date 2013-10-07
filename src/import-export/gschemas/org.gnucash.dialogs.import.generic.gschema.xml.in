@@ -1,5 +1,5 @@
 <schemalist gettext-domain="GETTEXT_PACKAGE">
-  <schema id="org.gnucash.dialogs.import.generic" path="/org/gnucash/dialogs/import/generic-matcher/">
+  <schema id="org.gnucash.dialogs.import.generic" path="/org/gnucash/dialogs/import/generic/">
     <key name="enable-skip" type="b">
       <default>true</default>
       <summary>Enable SKIP transaction action</summary>
@@ -40,25 +40,11 @@
       <summary>Automatically create new commodities</summary>
       <description>Enables the automatic creation of new commodities if any unknown commodity is encountered during import. Otherwise the user will be asked what to do with each unknown commodity.</description>
     </key>
-    <child name="account-matcher" schema="org.gnucash.dialogs.import.generic.account-matcher"/>
-    <child name="matcher-picker" schema="org.gnucash.dialogs.import.generic.matcher-picker"/>
+    <child name="match-picker" schema="org.gnucash.dialogs.import.generic.match-picker"/>
     <child name="transaction-list" schema="org.gnucash.dialogs.import.generic.transaction-list"/>
   </schema>
 
-  <schema id="org.gnucash.dialogs.import.generic.account-matcher" path="/org/gnucash/dialogs/import/generic-matcher/account-matcher/">
-    <key name="account-code-visible" type="b">
-      <default>false</default>
-      <summary>Whether or not to display this column</summary>
-      <description>This setting controls wether the given column will be visible in the view. True means visible, false means hidden.</description>
-    </key>
-    <key name="account-code-width" type="i">
-      <default>0</default>
-      <summary>Width of this column</summary>
-      <description>This setting stores the width of the given column in pixels.</description>
-    </key>
-  </schema>
-
-  <schema id="org.gnucash.dialogs.import.generic.matcher-picker" path="/org/gnucash/dialogs/import/generic-matcher/matcher-picker/">
+  <schema id="org.gnucash.dialogs.import.generic.match-picker" path="/org/gnucash/dialogs/import/generic/match-picker/">
     <key name="last-geometry" type="(iiii)">
       <default>(-1,-1,-1,-1)</default>
       <summary>Last window position and size</summary>
@@ -68,7 +54,7 @@
     </key>
   </schema>
 
-  <schema id="org.gnucash.dialogs.import.generic.transaction-list" path="/org/gnucash/dialogs/import/generic-matcher/transaction-list/">
+  <schema id="org.gnucash.dialogs.import.generic.transaction-list" path="/org/gnucash/dialogs/import/generic/transaction-list/">
     <key name="last-geometry" type="(iiii)">
       <default>(-1,-1,-1,-1)</default>
       <summary>Last window position and size</summary>

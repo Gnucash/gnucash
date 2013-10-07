@@ -2290,7 +2290,7 @@ static void
 gnc_set_auto_decimal_places (gpointer settings, gchar *key, gpointer user_data)
 {
     auto_decimal_places =
-            gnc_prefs_get_float (GNC_PREFS_GROUP_GENERAL, GNC_PREF_AUTO_DECIMAL_PLACES);
+            gnc_prefs_get_int (GNC_PREFS_GROUP_GENERAL, GNC_PREF_AUTO_DECIMAL_PLACES);
 }
 
 static void
@@ -2299,7 +2299,7 @@ gnc_auto_decimal_init (void)
     auto_decimal_enabled =
         gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_AUTO_DECIMAL_POINT);
     auto_decimal_places =
-        gnc_prefs_get_float (GNC_PREFS_GROUP_GENERAL, GNC_PREF_AUTO_DECIMAL_PLACES);
+        gnc_prefs_get_int (GNC_PREFS_GROUP_GENERAL, GNC_PREF_AUTO_DECIMAL_PLACES);
 }
 
 void

@@ -10,8 +10,7 @@ gschema_in_files = \
   org.gnucash.dialogs.totd.gschema.xml.in \
   org.gnucash.gschema.xml.in \
   org.gnucash.window.pages.account.tree.gschema.xml.in \
-  org.gnucash.window.pages.gschema.xml.in \
-  org.gnucash.window.pages.register.gschema.xml.in
+  org.gnucash.window.pages.gschema.xml.in
 
 gsettings_SCHEMAS = $(gschema_in_files:.gschema.xml.in=.gschema.xml)
 

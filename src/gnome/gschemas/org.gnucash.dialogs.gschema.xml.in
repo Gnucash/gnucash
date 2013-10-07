@@ -1,7 +1,6 @@
 <schemalist gettext-domain="GETTEXT_PACKAGE">
   <schema id="org.gnucash.dialogs" path="/org/gnucash/dialogs/">
     <child name="account" schema="org.gnucash.dialogs.account"/>
-    <child name="edit-commodities" schema="org.gnucash.dialogs.edit-commodities"/>
     <child name="edit-prices" schema="org.gnucash.dialogs.edit-prices"/>
     <child name="preferences" schema="org.gnucash.dialogs.preferences"/>
     <child name="price-editor" schema="org.gnucash.dialogs.price-editor"/>
@@ -22,16 +21,6 @@
   </schema>
 
   <schema id="org.gnucash.dialogs.account" path="/org/gnucash/dialogs/account/">
-    <key name="last-geometry" type="(iiii)">
-      <default>(-1,-1,-1,-1)</default>
-      <summary>Last window position and size</summary>
-      <description>This setting describes the size and position of the window when it was last closed.
-        The numbers are the X and Y coordinates of the top left corner of the window
-        followed by the width and height of the window.</description>
-    </key>
-  </schema>
-
-  <schema id="org.gnucash.dialogs.edit-prices" path="/org/gnucash/dialogs/edit-prices/">
     <key name="last-geometry" type="(iiii)">
       <default>(-1,-1,-1,-1)</default>
       <summary>Last window position and size</summary>
@@ -150,26 +139,6 @@
       <default>''</default>
       <summary>Last pathname used</summary>
       <description>This field contains the last pathname used by this window. It will be used as the initial filename/pathname the next time this window is opened.</description>
-    </key>
-  </schema>
-
-  <schema id="org.gnucash.dialogs.edit-commodities" path="/org/gnucash/dialogs/edit-commodities/">
-    <key name="last-geometry" type="(iiii)">
-      <default>(-1,-1,-1,-1)</default>
-      <summary>Last window position and size</summary>
-      <description>This setting describes the size and position of the window when it was last closed.
-        The numbers are the X and Y coordinates of the top left corner of the window
-        followed by the width and height of the window.</description>
-    </key>
-    <key name="sort-column" type="as">
-      <default>[]</default>
-      <summary>Columns used for sorting</summary>
-      <description>This setting indicates which column in the tree is used for sorting.  Possible values for this setting are the name of any column in this window (see the column-order key) or the keyword 'none'.</description>
-    </key>
-    <key name="sort-order" type="as">
-      <default>[]</default>
-      <summary>Sort column ascending or descending</summary>
-      <description>This setting indicates how the key column is sorted.  Possible values for this setting are 'ascending' and 'descending'.</description>
     </key>
   </schema>
 
