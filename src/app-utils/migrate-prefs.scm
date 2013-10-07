@@ -10,8 +10,6 @@
 
 (define-module (migrate-prefs))
 
-(use-modules (gnucash core-utils))
-
 (define gconf-dir (string-append (getenv "HOME") "/.gconf/apps/gnucash"))
 (define prefix-length (+ (string-length gconf-dir) 1))
 (define migration-dir (string-append (getenv "HOME") "/.gnc-migration-tmp"))

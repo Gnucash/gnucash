@@ -75,7 +75,7 @@
 <xsl:template match="entry">
  <xsl:param name="curr-pref"/>
   <xsl:choose>
-   <xsl:when test="$curr-pref/gschematype = 'b'">
+   <xsl:when test="$curr-pref/gschematype = 'b'"><xsl:if test="./@value">
 ;; Gconf value (boolean): <xsl:value-of select="./@value"/>
 (gnc-prefs-set-bool
     ; preference group
@@ -86,10 +86,10 @@
     <xsl:if test="./@value = 'true'">#t</xsl:if>
     <xsl:if test="./@value = 'false'">#f</xsl:if>
 )
-   </xsl:when>
+   </xsl:if></xsl:when>
    
 
-   <xsl:when test="$curr-pref/gschematype = 'datefmt'">
+   <xsl:when test="$curr-pref/gschematype = 'datefmt'"><xsl:if test="./stringvalue">
 ;; Gconf value (string): "<xsl:value-of select="./stringvalue"/>" -> gsettings (integer)
 (gnc-prefs-set-int
     ; preference group
@@ -101,7 +101,7 @@
      <xsl:with-param name="curr-entry" select="."/>
     </xsl:apply-templates>
 )
-   </xsl:when>
+   </xsl:if></xsl:when>
 
 
    <xsl:when test="$curr-pref/gschematype = '(dd)'">
@@ -110,7 +110,7 @@
    </xsl:when>
 
 
-   <xsl:when test="$curr-pref/gschematype = 'd'">
+   <xsl:when test="$curr-pref/gschematype = 'd'"><xsl:if test="./@value">
 ;; Gconf value (decimal): <xsl:value-of select="./@value"/>
 (gnc-prefs-set-float
     ; preference group
@@ -120,10 +120,10 @@
     ; preference value
     <xsl:value-of select="./@value"/>
 )
-   </xsl:when>
+   </xsl:if></xsl:when>
 
 
-   <xsl:when test="$curr-pref/gschematype = 'i'">
+   <xsl:when test="$curr-pref/gschematype = 'i'"><xsl:if test="./@value">
 ;; Gconf value (integer): <xsl:value-of select="./@value"/>
 (gnc-prefs-set-int
     ; preference group
@@ -133,10 +133,10 @@
     ; preference value
     <xsl:value-of select="./@value"/>
 )
-   </xsl:when>
+   </xsl:if></xsl:when>
 
 
-   <xsl:when test="$curr-pref/gschematype = 's2b'">
+   <xsl:when test="$curr-pref/gschematype = 's2b'"><xsl:if test="./stringvalue">
 ;; Gconf value (string): "<xsl:value-of select="./stringvalue"/>" -> gsettings (boolean)
 (let ((suffix (string-delete "<xsl:value-of select="./stringvalue"/>" #\_)))
      (gnc-prefs-set-bool
@@ -146,10 +146,10 @@
          "<xsl:value-of select="$curr-pref/gschemaname"/>"
          ; preference value
          (string-suffix? suffix "<xsl:value-of select="$curr-pref/gschemaname"/>")))
-   </xsl:when>
+   </xsl:if></xsl:when>
 
 
-   <xsl:when test="$curr-pref/gschematype = 's'">
+   <xsl:when test="$curr-pref/gschematype = 's'"><xsl:if test="./stringvalue">
 ;; Gconf value (string): "<xsl:value-of select="./stringvalue"/>"
 (gnc-prefs-set-string
     ; preference group
@@ -159,10 +159,10 @@
     ; preference value
     "<xsl:value-of select="./stringvalue"/>"
 )
-   </xsl:when>
+   </xsl:if></xsl:when>
 
 
-   <xsl:when test="$curr-pref/gschematype = 'x'">
+   <xsl:when test="$curr-pref/gschematype = 'x'"><xsl:if test="./@value">
 ;; Gconf value (64bit integer): <xsl:value-of select="./@value"/>
 (gnc-prefs-set-int64
     ; preference group
@@ -172,7 +172,7 @@
     ; preference value
     <xsl:value-of select="./@value"/>
 )
-   </xsl:when>
+   </xsl:if></xsl:when>
   </xsl:choose>
 </xsl:template>
 
