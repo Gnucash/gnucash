@@ -45,8 +45,8 @@
 #include "dialog-utils.h"
 #include "dialog-lot-viewer.h"
 #include "gnc-component-manager.h"
+#include "gnc-prefs.h"
 #include "gnc-ui-util.h"
-#include "gnc-gconf-utils.h"
 #include "misc-gnome-utils.h"
 
 #define LOT_VIEWER_CM_CLASS "dialog-lot-viewer"
@@ -82,10 +82,9 @@ enum split_cols
 #define RESPONSE_SCRUB_ACCOUNT 4
 #define RESPONSE_NEW_LOT       5
 
-#define GCONF_SECTION "dialogs/lot_viewer"
 #define GNC_PREFS_GROUP "dialogs.lot_viewer"
-#define GCONF_KEY_HPOSITION "hpane_position"
-#define GCONF_KEY_VPOSITION "vpane_position"
+#define GNC_PREF_HPOS   "hpane_position"
+#define GNC_PREF_VPOS   "vpane_position"
 
 struct _GNCLotViewer
 {
@@ -96,8 +95,6 @@ struct _GNCLotViewer
     GtkButton     * delete_button;
     GtkButton     * scrub_lot_button;
     GtkButton     * new_lot_button;
-    GtkPaned      * lot_hpaned;
-    GtkPaned      * lot_vpaned;
     GtkTreeView   * lot_view;
     GtkListStore  * lot_store;
     GtkTextView   * lot_notes;
@@ -723,32 +720,6 @@ lv_only_show_open_lots_changed_cb (GtkWidget *widget, GNCLotViewer * lv)
 }
 
 /* ======================================================================== */
-/* Divider moved */
-
-void
-lv_paned_notify_cb (GObject *gobject,
-                    GParamSpec *pspec,
-                    gpointer user_data)
-{
-    const gchar *param_name;
-    gint value;
-
-    param_name = g_param_spec_get_name(pspec);
-    if (strcmp(param_name, "position") != 0)
-        return;
-    g_object_get(gobject, "position", &value, NULL);
-
-    if (GTK_IS_HPANED(gobject))
-    {
-        gnc_gconf_set_int(GCONF_SECTION, GCONF_KEY_HPOSITION, value, NULL);
-    }
-    else
-    {
-        gnc_gconf_set_int(GCONF_SECTION, GCONF_KEY_VPOSITION, value, NULL);
-    }
-}
-
-/* ======================================================================== */
 /* Any button was pressed */
 
 void
@@ -968,6 +939,7 @@ lv_create (GNCLotViewer *lv)
     gchar *win_title;
     gint position;
     GtkBuilder *builder;
+    GtkWidget *widget;
 
     builder = gtk_builder_new();
     gnc_builder_add_from_file (builder, "dialog-lot-viewer.glade", "Lot Viewer Window");
@@ -1000,15 +972,16 @@ lv_create (GNCLotViewer *lv)
     lv->remove_split_from_lot_button = GTK_BUTTON(gtk_builder_get_object (builder, "remove split from lot button"));
     lv_init_split_buttons(lv);
 
-    lv->lot_vpaned = GTK_PANED (gtk_builder_get_object (builder, "lot vpaned"));
-    position = gnc_gconf_get_int(GCONF_SECTION, GCONF_KEY_VPOSITION, NULL);
-    if (position)
-        gtk_paned_set_position (lv->lot_vpaned, position);
 
-    lv->lot_hpaned = GTK_PANED (gtk_builder_get_object (builder, "lot hpaned"));
-    position = gnc_gconf_get_int(GCONF_SECTION, GCONF_KEY_HPOSITION, NULL);
-    if (position)
-        gtk_paned_set_position (lv->lot_hpaned, position);
+    if (gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL, GNC_PREF_SAVE_GEOMETRY))
+    {
+        GObject *object;
+        object = gtk_builder_get_object (builder, "lot vpaned");
+        gnc_prefs_bind (GNC_PREFS_GROUP, GNC_PREF_VPOS, object, "position");
+
+        object = gtk_builder_get_object (builder, "lot hpaned");
+        gnc_prefs_bind (GNC_PREFS_GROUP, GNC_PREF_HPOS, object, "position");
+    }
 
     lv->selected_lot = NULL;
 

@@ -48,8 +48,7 @@
 #include "gnc-session.h"
 #include "gnome-utils/gnc-icons.h" /* for GNC_STOCK_INVOICE_NEW */
 
-#include "gnc-prefs.h" /* for GCONF_PATH */
-#include "gnc-gconf-utils.h"
+#include "gnc-prefs.h"
 #include "gnome-utils/gnc-main-window.h"
 
 #include "gnc-plugin-page-register.h"
@@ -134,6 +133,7 @@ static void update_inactive_actions(GncPluginPage *page);
 #define PLUGIN_UI_FILENAME  "gnc-plugin-business-ui.xml"
 
 #define GNC_PREF_EXTRA_TOOLBUTTONS "enable_toolbuttons"
+#define GNC_PREF_INV_PRINT_RPT     "invoice_printreport"
 
 /** This variable maintains a pointer to the last window where a
  *  Business command was executed.  It is used to determine where new
@@ -396,9 +396,6 @@ gnc_plugin_business_class_init (GncPluginBusinessClass *klass)
     plugin_class->actions      = gnc_plugin_actions;
     plugin_class->n_actions    = gnc_plugin_n_actions;
     plugin_class->ui_filename  = PLUGIN_UI_FILENAME;
-
-    plugin_class->gconf_notifications = NULL;
-    plugin_class->gconf_section = NULL;
 
     g_type_class_add_private(klass, sizeof(GncPluginBusinessPrivate));
 }
@@ -1078,8 +1075,7 @@ static const char* invoice_printreport_values[] =
 
 const char *gnc_plugin_business_get_invoice_printreport(void)
 {
-    int value = gnc_gconf_get_int(GCONF_SECTION_INVOICE,
-                                  "invoice_printreport", NULL);
+    int value = gnc_prefs_get_int (GNC_PREFS_GROUP_INVOICE, GNC_PREF_INV_PRINT_RPT);
     if (value >= 0 && value < 4)
         return invoice_printreport_values[value];
     else

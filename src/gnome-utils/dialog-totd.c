@@ -31,14 +31,12 @@
 #include "dialog-utils.h"
 #include "gnc-component-manager.h"
 #include "gnc-filepath-utils.h"
-#include "gnc-gconf-utils.h"
 #include "gnc-prefs.h"
 #include "gnc-gnome-utils.h"
 #include "gnc-engine.h"
 
-#define GCONF_SECTION   "dialogs/tip_of_the_day"
 #define GNC_PREFS_GROUP      "dialogs.totd"
-#define KEY_CURRENT_TIP "current_tip"
+#define GNC_PREF_CURRENT_TIP "current_tip"
 #define GNC_PREF_SHOW_TIPS   "show_at_startup"
 #define DIALOG_TOTD_CM_CLASS "dialog-totd"
 
@@ -68,7 +66,7 @@ typedef struct
 /***********************************************************************
  *  This function should be called to change the tip number.  It
  *  handles clamping the number to the range of tips available, saving
- *  the number in the GConf database, and updating the dialog window
+ *  the number in the preferences database, and updating the dialog window
  *  with the text of the newly selected tip.
  *
  *  @param Tip of the day structure. This points to the dialog and
@@ -93,7 +91,7 @@ gnc_new_tip_number (TotdDialog *totd_dialog, gint offset)
         current_tip_number = tip_count - 1;
     if (current_tip_number >= tip_count)
         current_tip_number = 0;
-    gnc_gconf_set_int(GCONF_SECTION, KEY_CURRENT_TIP, current_tip_number, NULL);
+    gnc_prefs_set_int(GNC_PREFS_GROUP, GNC_PREF_CURRENT_TIP, current_tip_number);
 
     /* A tip consists of a translatable string, which might contain a %s
      * placeholder, optionally followed by a | and a (non-translated)
@@ -322,7 +320,7 @@ gnc_totd_dialog (GtkWindow *parent, gboolean startup)
     {
         if (!gnc_totd_initialize())
             return;
-        current_tip_number =  gnc_gconf_get_int(GCONF_SECTION, KEY_CURRENT_TIP, NULL);
+        current_tip_number =  gnc_prefs_get_int(GNC_PREFS_GROUP, GNC_PREF_CURRENT_TIP);
     }
 
     if (gnc_forall_gui_components(DIALOG_TOTD_CM_CLASS, show_handler, NULL))

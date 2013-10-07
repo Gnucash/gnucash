@@ -1,14 +1,19 @@
 <schemalist gettext-domain="GETTEXT_PACKAGE">
   <schema id="org.gnucash.dialogs.checkprinting" path="/apps/gnucash/dialogs/print_checks/">
-    <key name="check_format" type="i">
-      <default>0</default>
-      <summary>Index of predefined check format to use</summary>
-      <description>This value specifies the predefined check format to use.  The number is the 0-based index into the list of known check formats.</description>
+    <key name="check_format_guid" type="s">
+      <default>''</default>
+      <summary>GUID of predefined check format to use</summary>
+      <description>This value specifies the predefined check format to use.  The number is the guid of a known check format.</description>
     </key>
     <key name="check_position" type="i">
       <default>0</default>
       <summary>Which check position to print</summary>
       <description>On preprinted checks containing multiple checks per page, this setting specifies which check position to print.  The possible values are 0, 1 and 2, corresponding to the top, middle and bottom checks on the page.</description>
+    </key>
+    <key name="first_page_count" type="i">
+      <default>0</default>
+      <summary>Number of checks to print on the first page.</summary>
+      <description>Number of checks to print on the first page.</description>
     </key>
     <key name="date_format" type="i">
       <default>0</default>

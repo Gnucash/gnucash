@@ -68,9 +68,8 @@ G_GNUC_UNUSED static QofLogModule log_module = "gnc.printing.checks";
 #define GCONF_SECTION          "dialogs/print_checks"
 #define GNC_PREFS_GROUP             "dialogs.checkprinting"
 #define KEY_CHECK_FORMAT_GUID  "check_format_guid"
-#define KEY_CHECK_FORMAT       "check_format"
-#define KEY_CHECK_POSITION     "check_position"
-#define KEY_FIRST_PAGE_COUNT   "first_page_count"
+#define GNC_PREF_CHECK_POSITION     "check_position"
+#define GNC_PREF_FIRST_PAGE_COUNT   "first_page_count"
 #define KEY_DATE_FORMAT_USER   "date_format_custom"
 #define GNC_PREF_CUSTOM_PAYEE       "custom_payee"
 #define GNC_PREF_CUSTOM_DATE        "custom_date"
@@ -81,7 +80,7 @@ G_GNUC_UNUSED static QofLogModule log_module = "gnc.printing.checks";
 #define GNC_PREF_CUSTOM_MEMO        "custom_memo"
 #define GNC_PREF_CUSTOM_TRANSLATION "custom_translation"
 #define GNC_PREF_CUSTOM_ROTATION    "custom_rotation"
-#define KEY_CUSTOM_UNITS       "custom_units"
+#define GNC_PREF_CUSTOM_UNITS       "custom_units"
 #define GNC_PREF_PRINT_DATE_FMT     "print_date_format"
 #define GNC_PREF_DEFAULT_FONT       "default_font"
 #define GNC_PREF_BLOCKING_CHARS     "blocking_chars"
@@ -569,11 +568,11 @@ gnc_ui_print_save_dialog(PrintCheckDialog *pcd)
                              check ? check->guid : "custom", NULL);
     }
     active = gtk_combo_box_get_active(GTK_COMBO_BOX(pcd->position_combobox));
-    gnc_gconf_set_int(GCONF_SECTION, KEY_CHECK_POSITION, active, NULL);
+    gnc_prefs_set_int(GNC_PREFS_GROUP, GNC_PREF_CHECK_POSITION, active);
     active = gtk_spin_button_get_value_as_int(pcd->first_page_count);
-    gnc_gconf_set_int(GCONF_SECTION, KEY_FIRST_PAGE_COUNT, active, NULL);
+    gnc_prefs_set_int(GNC_PREFS_GROUP, GNC_PREF_FIRST_PAGE_COUNT, active);
     active = gnc_date_format_get_format (GNC_DATE_FORMAT(pcd->date_format));
-    gnc_gconf_set_int(GCONF_SECTION, KEY_DATE_FORMAT, active, NULL);
+    gnc_prefs_set_int(GNC_PREFS_GROUP, GNC_PREF_DATE_FORMAT, active);
     if (active == QOF_DATE_FORMAT_CUSTOM)
     {
         format = gnc_date_format_get_custom (GNC_DATE_FORMAT(pcd->date_format));
@@ -621,7 +620,7 @@ gnc_ui_print_save_dialog(PrintCheckDialog *pcd)
     gnc_prefs_set_float(GNC_PREFS_GROUP, GNC_PREF_CUSTOM_ROTATION,
                         gtk_spin_button_get_value(pcd->check_rotation));
     active = gtk_combo_box_get_active(GTK_COMBO_BOX(pcd->units_combobox));
-    gnc_gconf_set_int(GCONF_SECTION, KEY_CUSTOM_UNITS, active, NULL);
+    gnc_prefs_set_int(GNC_PREFS_GROUP, GNC_PREF_CUSTOM_UNITS, active);
 }
 
 
@@ -637,15 +636,10 @@ gnc_ui_print_restore_dialog(PrintCheckDialog *pcd)
     /* Options page */
     guid = gnc_gconf_get_string(GCONF_SECTION, KEY_CHECK_FORMAT_GUID, NULL);
     if (guid == NULL)
-    {
-        active = gnc_gconf_get_int(GCONF_SECTION, KEY_CHECK_FORMAT, NULL);
-        gtk_combo_box_set_active(GTK_COMBO_BOX(pcd->format_combobox), active);
-    }
+        gtk_combo_box_set_active(GTK_COMBO_BOX(pcd->format_combobox), 0);
     else if (strcmp(guid, "custom") == 0)
-    {
         gtk_combo_box_set_active(GTK_COMBO_BOX(pcd->format_combobox),
                                  pcd->format_max - 1);
-    }
     else
     {
         model = gtk_combo_box_get_model(GTK_COMBO_BOX(pcd->format_combobox));
@@ -658,16 +652,16 @@ gnc_ui_print_restore_dialog(PrintCheckDialog *pcd)
             gtk_combo_box_set_active(GTK_COMBO_BOX(pcd->format_combobox), 0);
         }
     }
-    active = gnc_gconf_get_int(GCONF_SECTION, KEY_CHECK_POSITION, NULL);
+    active = gnc_prefs_get_int(GNC_PREFS_GROUP, GNC_PREF_CHECK_POSITION);
 
     /* If the check format used last time no longer exists, then the saved check
        position may be invalid.  If so set it to the first position. */
     if (active < 0 || active > pcd->position_max)
         active = 0;
     gtk_combo_box_set_active(GTK_COMBO_BOX(pcd->position_combobox), active);
-    active = gnc_gconf_get_int(GCONF_SECTION, KEY_FIRST_PAGE_COUNT, NULL);
+    active = gnc_prefs_get_int(GNC_PREFS_GROUP, GNC_PREF_FIRST_PAGE_COUNT);
     gtk_spin_button_set_value(pcd->first_page_count, (gdouble) active);
-    active = gnc_gconf_get_int(GCONF_SECTION, KEY_DATE_FORMAT, NULL);
+    active = gnc_prefs_get_int(GNC_PREFS_GROUP, GNC_PREF_DATE_FORMAT);
     gnc_date_format_set_format(GNC_DATE_FORMAT(pcd->date_format), active);
     if (active == QOF_DATE_FORMAT_CUSTOM)
     {
@@ -716,7 +710,7 @@ gnc_ui_print_restore_dialog(PrintCheckDialog *pcd)
     gtk_spin_button_set_value(pcd->translation_y, y);
     x = gnc_prefs_get_float(GNC_PREFS_GROUP, GNC_PREF_CUSTOM_ROTATION);
     gtk_spin_button_set_value(pcd->check_rotation, x);
-    active = gnc_gconf_get_int(GCONF_SECTION, KEY_CUSTOM_UNITS, NULL);
+    active = gnc_prefs_get_int(GNC_PREFS_GROUP, GNC_PREF_CUSTOM_UNITS);
     gtk_combo_box_set_active(GTK_COMBO_BOX(pcd->units_combobox), active);
 }
 

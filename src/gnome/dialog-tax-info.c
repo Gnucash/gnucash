@@ -36,7 +36,6 @@
 #include "Account.h"
 #include "gnc-ui-util.h"
 #include "dialog-utils.h"
-#include "gnc-gconf-utils.h"
 #include "gnc-prefs.h"
 #include "gnc-tree-view-account.h"
 #include "gnc-component-manager.h"
@@ -45,9 +44,8 @@
 #include "gnc-ui.h"
 
 #define DIALOG_TAX_INFO_CM_CLASS "dialog-tax-info"
-#define GCONF_SECTION "dialogs/tax_info"
-#define PANED_POSITION "paned_position"
-#define GNC_PREFS_GROUP "dialogs.tax_info"
+#define GNC_PREFS_GROUP    "dialogs.tax_info"
+#define GNC_PREF_PANED_POS "paned_position"
 
 enum
 {
@@ -97,7 +95,6 @@ typedef struct
 typedef struct
 {
     GtkWidget * dialog;
-    GtkWidget * paned;
 
     GtkWidget * entity_name_display;
     GtkWidget * entity_name_entry;
@@ -1461,12 +1458,11 @@ gnc_tax_info_dialog_create (GtkWidget * parent, TaxInfoDialog *ti_dialog)
 
     gnc_restore_window_size(GNC_PREFS_GROUP, GTK_WINDOW(ti_dialog->dialog));
 
-    ti_dialog->paned = GTK_WIDGET(gtk_builder_get_object (builder, "paned"));
 
     if (gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL, GNC_PREF_SAVE_GEOMETRY))
     {
-        gint position = gnc_gconf_get_int(GCONF_SECTION, PANED_POSITION, NULL);
-        gtk_paned_set_position(GTK_PANED(ti_dialog->paned), position);
+        GObject *object = gtk_builder_get_object (builder, "paned");
+        gnc_prefs_bind (GNC_PREFS_GROUP, GNC_PREF_PANED_POS, object, "position");
     }
     g_object_unref (builder);
 }
@@ -1475,12 +1471,6 @@ static void
 close_handler (gpointer user_data)
 {
     TaxInfoDialog *ti_dialog = user_data;
-
-    if (gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL, GNC_PREF_SAVE_GEOMETRY))
-    {
-        gnc_gconf_set_int(GCONF_SECTION, PANED_POSITION,
-                          gtk_paned_get_position(GTK_PANED(ti_dialog->paned)), NULL);
-    }
 
     gnc_save_window_size(GNC_PREFS_GROUP, GTK_WINDOW(ti_dialog->dialog));
     gtk_widget_destroy (ti_dialog->dialog);

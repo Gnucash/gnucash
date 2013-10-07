@@ -34,7 +34,6 @@
 #include "gnc-uri-utils.h"
 #include "gnc-component-manager.h"
 #include "gnc-date-edit.h"
-#include "gnc-gconf-utils.h"
 #include "gnc-prefs.h"
 #include "gnc-tree-view-account.h"
 #include "dialog-utils.h"
@@ -46,9 +45,8 @@
 #include "csv-tree-export.h"
 #include "csv-transactions-export.h"
 
-#define GCONF_SECTION "dialogs/export/csv"
-#define GNC_PREFS_GROUP  "dialogs.export.csv"
-#define PANED_POSITION "paned_position"
+#define GNC_PREFS_GROUP    "dialogs.export.csv"
+#define GNC_PREF_PANED_POS "paned_position"
 #define ASSISTANT_CSV_EXPORT_CM_CLASS "assistant-csv-export"
 
 /* This static indicates the debugging module that this .o belongs to.  */
@@ -746,13 +744,6 @@ csv_export_assistant_summary_page_prepare (GtkAssistant *assistant,
 {
     CsvExportInfo *info = user_data;
     gchar *text, *mtext;
-
-    /* Save the Window size, paned position and directory */
-    if (gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL, GNC_PREF_SAVE_GEOMETRY))
-    {
-        gnc_gconf_set_int(GCONF_SECTION, PANED_POSITION,
-                          gtk_paned_get_position(GTK_PANED(info->csva.paned)), NULL);
-    }
     gnc_set_default_directory(GNC_PREFS_GROUP, info->starting_dir);
 
     if (info->failed)
@@ -1009,13 +1000,10 @@ csv_export_assistant_create (CsvExportInfo *info)
                       G_CALLBACK (csv_export_assistant_destroy_cb), info);
 
     gnc_restore_window_size (GNC_PREFS_GROUP, GTK_WINDOW(info->window));
-
-    info->csva.paned = GTK_WIDGET(gtk_builder_get_object (builder, "paned"));
-
     if (gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL, GNC_PREF_SAVE_GEOMETRY))
     {
-        gint position = gnc_gconf_get_int(GCONF_SECTION, PANED_POSITION, NULL);
-        gtk_paned_set_position(GTK_PANED(info->csva.paned), position);
+        GObject *object = gtk_builder_get_object (builder, "paned");
+        gnc_prefs_bind (GNC_PREFS_GROUP, GNC_PREF_PANED_POS, object, "position");
     }
 
     gtk_builder_connect_signals(builder, info);

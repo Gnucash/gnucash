@@ -752,76 +752,6 @@ gnc_prefs_connect_radio_button_gconf (GtkRadioButton *button)
 
 /****************************************************************************/
 
-/** The user changed a combo box.  Update gconf.  Combo box
- *  choices are stored as an int.
- *
- *  @internal
- *
- *  @param box A pointer to the combo box that was changed.
- *
- *  @param user_data Unused.
- */
-static void
-gnc_prefs_combo_box_user_cb_gconf (GtkComboBox *box,
-                             gpointer user_data)
-{
-    const gchar *name;
-    gint active;
-
-    g_return_if_fail(GTK_IS_COMBO_BOX(box));
-    name = gtk_buildable_get_name(GTK_BUILDABLE(box)) + PREFIX_LEN;
-    active = gtk_combo_box_get_active(box);
-    DEBUG("Combo box %s set to item %d", name, active);
-    gnc_gconf_set_int(name, NULL, active, NULL);
-}
-
-
-/** A combo box choice was updated in gconf.  Update the user
- *  visible dialog.
- *
- *  @internal
- *
- *  @param box A pointer to the combo box that changed.
- *
- *  @param value The new value of the combo box.
- */
-static void
-gnc_prefs_combo_box_gconf_cb_gconf (GtkComboBox *box,
-                              gint value)
-{
-    g_return_if_fail(GTK_IS_COMBO_BOX(box));
-    ENTER("box %p, value %d", box, value);
-    g_signal_handlers_block_by_func(G_OBJECT(box),
-                                    G_CALLBACK(gnc_prefs_combo_box_user_cb_gconf), NULL);
-    gtk_combo_box_set_active(box, value);
-    g_signal_handlers_unblock_by_func(G_OBJECT(box),
-                                      G_CALLBACK(gnc_prefs_combo_box_user_cb_gconf), NULL);
-    LEAVE(" ");
-}
-
-
-/** Connect a combo box widget to the user callback function.  Set
- *  the starting state of the box from its value in gconf.
- *
- *  @internal
- *
- *  @param box A pointer to the combo box that should be connected.
- */
-static void
-gnc_prefs_connect_combo_box_gconf (GtkComboBox *box)
-{
-    const gchar *name;
-    gint active;
-
-    g_return_if_fail(GTK_IS_COMBO_BOX(box));
-    name = gtk_buildable_get_name(GTK_BUILDABLE(box)) + PREFIX_LEN;
-    active = gnc_gconf_get_int(name, NULL, NULL);
-    gtk_combo_box_set_active(GTK_COMBO_BOX(box), active);
-    DEBUG(" Combo box %s set to item %d", name, active);
-    g_signal_connect(G_OBJECT(box), "changed",
-                     G_CALLBACK(gnc_prefs_combo_box_user_cb_gconf), NULL);
-}
-
 /****************************************************************************/
 
 /** The user changed a currency_edit.  Update gconf.  Currency_edit
@@ -1263,6 +1193,34 @@ gnc_prefs_connect_spin_button (GtkSpinButton *spin)
     g_free (pref);
 }
 
+/****************************************************************************/
+
+/** Connect a GtkComboBox widget to its stored value in the preferences database.
+ *
+ *  @internal
+ *
+ *  @param box A pointer to the combo box that should be connected.
+ */
+static void
+gnc_prefs_connect_combo_box (GtkComboBox *box)
+{
+    gchar *group, *pref;
+    gint active;
+
+    g_return_if_fail(GTK_IS_COMBO_BOX(box));
+
+    gnc_prefs_split_widget_name (gtk_buildable_get_name(GTK_BUILDABLE(box)), &group, &pref);
+
+//    active = gnc_prefs_get_int(group, pref);
+//    gtk_combo_box_set_active(GTK_COMBO_BOX(box), active);
+//    DEBUG(" Combo box %s/%s set to item %d", group, pref, active);
+
+    gnc_prefs_bind (group, pref, G_OBJECT (box), "active");
+
+    g_free (group);
+    g_free (pref);
+}
+
 
 
 /****************************************************************************/
@@ -1338,11 +1296,6 @@ gnc_prefs_connect_one_gconf (const gchar *name,
         DEBUG("  %s - radio button", name);
         gnc_prefs_connect_radio_button_gconf(GTK_RADIO_BUTTON(widget));
     }
-    else if (GTK_IS_COMBO_BOX(widget))
-    {
-        DEBUG("  %s - combo box", name);
-        gnc_prefs_connect_combo_box_gconf(GTK_COMBO_BOX(widget));
-    }
     else if (GTK_IS_ENTRY(widget))
     {
         DEBUG("  %s - entry", name);
@@ -1415,6 +1368,11 @@ gnc_prefs_connect_one (const gchar *name,
     {
         DEBUG("  %s - spin button", name);
         gnc_prefs_connect_spin_button(GTK_SPIN_BUTTON(widget));
+    }
+    else if (GTK_IS_COMBO_BOX(widget))
+    {
+        DEBUG("  %s - combo box", name);
+        gnc_prefs_connect_combo_box(GTK_COMBO_BOX(widget));
     }
     else
     {
@@ -1668,12 +1626,6 @@ gnc_preferences_gconf_changed (GConfClient *client,
         {
             DEBUG("widget %p - radio button", widget);
             gnc_prefs_radio_button_gconf_cb_gconf(GTK_RADIO_BUTTON(widget));
-        }
-        else if (GTK_IS_COMBO_BOX(widget))
-        {
-            DEBUG("widget %p - combo_box", widget);
-            gnc_prefs_combo_box_gconf_cb_gconf(GTK_COMBO_BOX(widget),
-                                         gconf_value_get_int(entry->value));
         }
         else if (GTK_IS_ENTRY(widget))
         {

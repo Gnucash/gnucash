@@ -52,7 +52,6 @@ typedef struct
 
 typedef struct
 {
-    GtkWidget        *paned;
     GtkWidget        *acct_info;
     GtkWidget        *expense_radio;
     GtkWidget        *asset_radio;

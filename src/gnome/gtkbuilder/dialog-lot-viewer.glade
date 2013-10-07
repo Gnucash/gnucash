@@ -18,7 +18,6 @@
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="position">200</property>
-            <signal name="notify" handler="lv_paned_notify_cb"/>
             <child>
               <object class="GtkHPaned" id="lot hpaned">
                 <property name="width_request">300</property>
@@ -27,7 +26,6 @@
                 <property name="can_focus">True</property>
                 <property name="border_width">3</property>
                 <property name="position">200</property>
-                <signal name="notify" handler="lv_paned_notify_cb"/>
                 <child>
                   <object class="GtkTable" id="table1">
                     <property name="visible">True</property>
