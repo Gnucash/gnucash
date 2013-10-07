@@ -37,6 +37,7 @@
 
 #include "gnc-component-manager.h"
 #include "gnc-ui.h"
+#include "gnome-utils/gnc-warnings.h"
 
 #include "gncEntry.h"
 #include "gncEntryLedger.h"
@@ -44,6 +45,7 @@
 #include "gncEntryLedgerLayout.h"
 #include "gncEntryLedgerModel.h"
 #include "gncEntryLedgerControl.h"
+
 
 /** Static Functions ***************************************************/
 
@@ -910,7 +912,7 @@ gnc_entry_ledger_duplicate_current_entry (GncEntryLedger *ledger)
                                GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
                                _("_Record"), GTK_RESPONSE_ACCEPT,
                                NULL);
-        response = gnc_dialog_run(GTK_DIALOG(dialog), "invoice_entry_duplicated");
+        response = gnc_dialog_run(GTK_DIALOG(dialog), GNC_PREF_WARN_INV_ENTRY_DUP);
         gtk_widget_destroy(dialog);
 
         if (response != GTK_RESPONSE_ACCEPT)

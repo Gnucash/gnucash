@@ -38,6 +38,7 @@
 #include "gnc-ui-util.h"
 #include "gnc-gnome-utils.h"
 #include "gnc-session.h"
+#include "gnome-utils/gnc-warnings.h"
 
 
 #define DIALOG_COMMODITIES_CM_CLASS "dialog-commodities"
@@ -169,13 +170,13 @@ remove_clicked (CommoditiesDialog *cd)
         message = _("This commodity has price quotes. Are "
                     "you sure you want to delete the selected "
                     "commodity and its price quotes?");
-        warning = "delete_commodity2";
+        warning = GNC_PREF_WARN_PRICE_COMM_DEL_QUOTES;
     }
     else
     {
         message = _("Are you sure you want to delete the "
                     "selected commodity?");
-        warning = "delete_commodity";
+        warning = GNC_PREF_WARN_PRICE_COMM_DEL;
     }
 
     dialog = gtk_message_dialog_new(GTK_WINDOW(cd->dialog),

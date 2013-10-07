@@ -38,6 +38,7 @@
 
 #include "gnc-euro.h"
 #include "gnc-gconf-utils.h"
+#include "gnome-utils/gnc-warnings.h"
 #include "dialog-utils.h"
 
 #define STATE_SECTION_PREFIX "window/pages/register2/"
@@ -1037,14 +1038,14 @@ gsr2_determine_account_pr_dialog (gpointer argp)
     gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
                                               "%s", message);
 
-    gnc_dialog_run (GTK_DIALOG (dialog), "accounts_payable_receivable");
+    gnc_dialog_run (GTK_DIALOG (dialog), GNC_PREF_WARN_REG_IS_ACCT_PAY_REC);
     gtk_widget_destroy (dialog);
     g_free (args);
     return FALSE;
 }
 
 
-/* This Register is an Account Payable / Recievable one */
+/* This Register is an Account Payable / Receivable one */
 static void
 gnc_split_reg2_determine_account_pr (GNCSplitReg2 *gsr)
 {
@@ -1082,7 +1083,7 @@ gtk_callback_bug_workaround (gpointer argp)
                                     "%s", read_only);
     gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
             "%s", args->string);
-    gnc_dialog_run (GTK_DIALOG (dialog), "register_read_only");
+    gnc_dialog_run (GTK_DIALOG (dialog), GNC_PREF_WARN_REG_IS_READ_ONLY);
     gtk_widget_destroy (dialog);
     g_free (args);
     return FALSE;

@@ -99,6 +99,7 @@ libgncmod_gnome_utils_la_SOURCES = \
   gnc-tree-view-split-reg.c \
   gnc-tree-view-sx-list.c \
   gnc-tree-view.c \
+  gnc-warnings.c \
   gnc-window.c \
   gncmod-gnome-utils.c \
   misc-gnome-utils.c \
@@ -210,6 +211,14 @@ libgncmod_gnome_utils_la_LIBADD = \
   ${LIBXML2_LIBS} \
   ${GTK_MAC_LIBS}
 
+BUILT_SOURCES = gnc-warnings.c gnc-warnings.h
+
+gnc-warnings.c: gschemas/org.gnucash.warnings.gschema.xml.in make-gnc-warnings-c.xsl
+	xsltproc -o $@ $(srcdir)/make-gnc-warnings-c.xsl $<
+
+gnc-warnings.h: gschemas/org.gnucash.warnings.gschema.xml.in make-gnc-warnings-h.xsl
+	xsltproc -o $@ $(srcdir)/make-gnc-warnings-h.xsl $<
+
 if HAVE_X11_XLIB_H
   libgncmod_gnome_utils_la_LIBADD += -lX11
 endif
@@ -229,6 +238,8 @@ gncscm_DATA = gnc-menu-extensions.scm
 
 EXTRA_DIST = \
   gnome-utils.i \
+  make-gnc-warnings-c.xsl \
+  make-gnc-warnings-h.xsl \
   ${gncmod_DATA} \
   ${gncscm_DATA}
 

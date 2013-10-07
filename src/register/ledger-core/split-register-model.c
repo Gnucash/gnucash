@@ -30,6 +30,7 @@
 #include "gnc-engine.h"
 #include "gnc-prefs.h"
 #include "gnc-ui.h"
+#include "gnome-utils/gnc-warnings.h"
 #include "pricecell.h"
 #include "recncell.h"
 #include "split-register.h"
@@ -2062,7 +2063,7 @@ gnc_split_register_confirm (VirtualLocation virt_loc, gpointer user_data)
                 "%s", message);
         gtk_dialog_add_button(GTK_DIALOG(dialog), _("Chan_ge Split"),
                               GTK_RESPONSE_YES);
-        response = gnc_dialog_run(GTK_DIALOG(dialog), "change_reconciled_split");
+        response = gnc_dialog_run(GTK_DIALOG(dialog), GNC_PREF_WARN_REG_RECD_SPLIT_MOD);
         gtk_widget_destroy(dialog);
         if (response != GTK_RESPONSE_YES)
             return FALSE;

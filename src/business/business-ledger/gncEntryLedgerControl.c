@@ -37,6 +37,7 @@
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"
 #include "gnc-gui-query.h"
+#include "gnome-utils/gnc-warnings.h"
 #include "table-allgui.h"
 #include "pricecell.h"
 #include "dialog-tax-table.h"
@@ -44,6 +45,7 @@
 
 #include "gncEntryLedgerP.h"
 #include "gncEntryLedgerControl.h"
+
 
 static gboolean
 gnc_entry_ledger_save (GncEntryLedger *ledger, gboolean do_commit)
@@ -889,7 +891,7 @@ static gboolean gnc_entry_ledger_traverse (VirtualLocation *p_new_virt_loc,
                                        GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
                                        _("_Record"), GTK_RESPONSE_ACCEPT,
                                        NULL);
-                response = gnc_dialog_run(GTK_DIALOG(dialog), "invoice_entry_changed");
+                response = gnc_dialog_run(GTK_DIALOG(dialog), GNC_PREF_WARN_INV_ENTRY_MOD);
                 gtk_widget_destroy(dialog);
                 break;
             }

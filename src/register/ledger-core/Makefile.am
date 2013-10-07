@@ -41,6 +41,7 @@ libgncmod_ledger_core_la_LIBADD = \
 
 AM_CPPFLAGS = \
   -I${top_srcdir}/src \
+  -I${top_builddir}/src \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/gnc-module \
   -I${top_srcdir}/src/core-utils \

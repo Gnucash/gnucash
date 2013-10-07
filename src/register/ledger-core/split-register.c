@@ -37,6 +37,7 @@
 #include "gnc-ledger-display.h"
 #include "gnc-prefs.h"
 #include "gnc-ui.h"
+#include "gnome-utils/gnc-warnings.h"
 #include "guile-util.h"
 #include "numcell.h"
 #include "pricecell.h"
@@ -463,7 +464,7 @@ gnc_split_register_duplicate_current (SplitRegister *reg)
                 "%s", message);
         gtk_dialog_add_button(GTK_DIALOG(dialog),
                               _("_Record"), GTK_RESPONSE_ACCEPT);
-        response = gnc_dialog_run(GTK_DIALOG(dialog), "transaction_duplicated");
+        response = gnc_dialog_run(GTK_DIALOG(dialog), GNC_PREF_WARN_REG_TRANS_DUP);
         gtk_widget_destroy(dialog);
 
         if (response != GTK_RESPONSE_ACCEPT)

@@ -9,7 +9,6 @@ gschema_in_files = \
   org.gnucash.dialogs.sxs.gschema.xml.in \
   org.gnucash.dialogs.totd.gschema.xml.in \
   org.gnucash.gschema.xml.in \
-  org.gnucash.warnings.gschema.xml.in \
   org.gnucash.window.pages.account.tree.gschema.xml.in \
   org.gnucash.window.pages.gschema.xml.in \
   org.gnucash.window.pages.register.gschema.xml.in

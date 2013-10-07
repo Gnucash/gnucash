@@ -52,8 +52,8 @@
 #define GNC_PREFS_GROUP_GENERAL_REGISTER  "general.register"
 #define GNC_PREFS_GROUP_GENERAL_REPORT    "general.report"
 #define GNC_PREFS_GROUP_WARNINGS          "general.warnings"
-#define GNC_PREFS_GROUP_WARNINGS_TEMP     "general.warnings.temporary"
-#define GNC_PREFS_GROUP_WARNINGS_PERM     "general.warnings.permanent"
+#define GNC_PREFS_GROUP_WARNINGS_TEMP     "warnings.temporary"
+#define GNC_PREFS_GROUP_WARNINGS_PERM     "warnings.permanent"
 
 /* Preference names used across multiple modules */
 #define GNC_PREF_SAVE_GEOMETRY       "save_window_geometry"

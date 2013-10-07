@@ -38,6 +38,7 @@
 #include "gnc-tree-control-split-reg.h"
 #include "gnc-tree-util-split-reg.h"
 #include "gnc-ui.h"
+#include "gnome-utils/gnc-warnings.h"
 #include "dialog-utils.h"
 #include "gnc-prefs.h"
 #include "Transaction.h"
@@ -2453,7 +2454,7 @@ gtv_sr_transaction_changed_confirm (GncTreeViewSplitReg *view,
                             GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
                             _("_Record Changes"), GTK_RESPONSE_ACCEPT, NULL);
 
-    response = gnc_dialog_run (GTK_DIALOG (dialog), "transaction_changed");
+    response = gnc_dialog_run (GTK_DIALOG (dialog), GNC_PREF_WARN_REG_TRANS_MOD);
     gtk_widget_destroy (dialog);
 
     switch (response)

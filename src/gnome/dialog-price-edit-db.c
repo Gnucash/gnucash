@@ -45,6 +45,7 @@
 #include "gnc-tree-view-price.h"
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"
+#include "gnome-utils/gnc-warnings.h"
 #include "guile-util.h"
 #include "engine-helpers-guile.h"
 #include "swig-runtime.h"
@@ -198,7 +199,7 @@ gnc_prices_dialog_remove_clicked (GtkWidget *widget, gpointer data)
                                GTK_STOCK_DELETE, GTK_RESPONSE_YES,
                                (gchar *)NULL);
         gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_YES);
-        response = gnc_dialog_run(GTK_DIALOG(dialog), "pricedb_remove_multiple");
+        response = gnc_dialog_run(GTK_DIALOG(dialog), GNC_PREF_WARN_PRICE_QUOTES_DEL);
         gtk_widget_destroy(dialog);
     }
     else

@@ -27,9 +27,10 @@
 #include <gtk/gtk.h>
 
 #include "dialog-utils.h"
-#include "gnc-gconf-utils.h"
 #include "gnc-engine.h"
+#include "gnc-prefs.h"
 #include "gnc-ui.h"
+#include "gnome-utils/gnc-warnings.h"
 #include "gnc-component-manager.h"
 #include "dialog-reset-warnings.h"
 
@@ -38,7 +39,6 @@ static QofLogModule log_module = GNC_MOD_PREFS;
 
 #define GNC_PREFS_GROUP                 "dialogs.reset_warnings"
 #define DIALOG_RESET_WARNINGS_CM_CLASS  "reset-warnings"
-#define GCONF_ENTRY_LIST                "gconf_entries"
 #define TIPS_STRING                     "tips"
 
 typedef struct
@@ -56,12 +56,9 @@ typedef struct
 void gnc_reset_warnings_select_all_cb (GtkButton *button, gpointer user_data);
 void gnc_reset_warnings_unselect_all_cb (GtkButton *button, gpointer user_data);
 void gnc_reset_warnings_response_cb (GtkDialog *dialog, gint response, gpointer user_data);
-static GSList *gnc_reset_warnings_add_section (RWDialog *rw_dialog,
-        const gchar *section, GtkWidget *box);
-static void gnc_reset_warnings_release_entries (GSList *entries);
+static void gnc_reset_warnings_add_section (RWDialog *rw_dialog,
+                                            const gchar *section, GtkWidget *box);
 static void gnc_reset_warnings_update_widgets (RWDialog *rw_dialog);
-static void gnc_reset_warnings_gconf_changed (GConfClient *client, guint cnxn_id,
-        GConfEntry *entry, gpointer user_data);
 
 
 /****************************************************
@@ -140,7 +137,8 @@ static void
 gnc_reset_warnings_apply_one (GtkWidget *widget,
                               GtkDialog *dialog)
 {
-    const char *name;
+    const gchar *pref = NULL;
+    const gchar *prefs_group = NULL;
 
     ENTER("widget %p, dialog %p", widget, dialog);
 
@@ -150,8 +148,10 @@ gnc_reset_warnings_apply_one (GtkWidget *widget,
         return;
     }
 
-    name = gtk_widget_get_name(widget);
-    gnc_gconf_unset(NULL, name, NULL);
+    pref = gtk_widget_get_name(widget);
+    prefs_group = g_object_get_data (G_OBJECT (widget), "prefs-group");
+    if (prefs_group)
+        gnc_prefs_reset (prefs_group, pref);
     gtk_widget_destroy(widget);
     LEAVE(" ");
 }
@@ -170,25 +170,6 @@ gnc_reset_warnings_apply_changes (RWDialog *rw_dialog)
                           (GtkCallback)gnc_reset_warnings_apply_one,
                           rw_dialog->dialog);
     gnc_reset_warnings_update_widgets(rw_dialog);
-    LEAVE(" ");
-}
-
-
-static void
-gnc_reset_warnings_revert_changes (RWDialog *rw_dialog)
-{
-    GSList *entries, *tmp;
-    GConfEntry *entry;
-
-    ENTER("rw_dialog %p", rw_dialog);
-
-    entries = g_object_get_data(G_OBJECT(rw_dialog->dialog), GCONF_ENTRY_LIST);
-    for (tmp = entries; tmp; tmp = g_slist_next(tmp))
-    {
-        entry = tmp->data;
-        gnc_gconf_set_int (NULL, entry->key,
-                           gconf_value_get_int(entry->value), NULL);
-    }
     LEAVE(" ");
 }
 
@@ -212,8 +193,6 @@ gnc_reset_warnings_response_cb (GtkDialog *dialog,
         break;
 
     case GTK_RESPONSE_OK:
-        gnc_gconf_remove_notification(G_OBJECT(rw_dialog->dialog), GCONF_WARNINGS,
-                                      DIALOG_RESET_WARNINGS_CM_CLASS);
         gnc_reset_warnings_apply_changes(rw_dialog);
         gnc_save_window_size(GNC_PREFS_GROUP, GTK_WINDOW(rw_dialog->dialog));
         gnc_unregister_gui_component_by_data(DIALOG_RESET_WARNINGS_CM_CLASS,
@@ -222,9 +201,6 @@ gnc_reset_warnings_response_cb (GtkDialog *dialog,
         break;
 
     default:
-        gnc_gconf_remove_notification(G_OBJECT(rw_dialog->dialog), GCONF_WARNINGS,
-                                      DIALOG_RESET_WARNINGS_CM_CLASS);
-        gnc_reset_warnings_revert_changes(rw_dialog);
         gnc_unregister_gui_component_by_data(DIALOG_RESET_WARNINGS_CM_CLASS,
                                              rw_dialog);
         gtk_widget_destroy(GTK_WIDGET(rw_dialog->dialog));
@@ -271,44 +247,29 @@ gnc_reset_warnings_unselect_all_cb (GtkButton *button,
 
 
 /***********************************************************************
- *  This call back function adds an entry to the correct dialog box.
+ *  This call back function adds a warning to the correct dialog box.
  *
  *  @internal
  *  @param rw_dialog, the data structure
- *  @param gconf entry.
+ *  @param prefs_group the preference group that holds the warning status.
+ *  @param warning a record with details for one warning.
  *  @param box, the required dialog box to update.
  ***********************************************************************/
 static void
-gnc_reset_warnings_add_one (RWDialog *rw_dialog, GConfEntry *entry, GtkWidget *box)
+gnc_reset_warnings_add_one (RWDialog *rw_dialog, const gchar *prefs_group,
+                            const GncWarningSpec *warning, GtkWidget *box)
 {
-    const gchar *name, *schema_name, *desc, *long_desc = NULL;
     GtkWidget *checkbox;
-    GConfSchema *schema = NULL;
 
-    ENTER("rw_dialog %p, entry %p, box %p", rw_dialog, entry, box);
+    ENTER("rw_dialog %p, warning %p, box %p", rw_dialog, warning, box);
 
-    name = strrchr(entry->key, '/') + 1;
-    schema_name = gconf_entry_get_schema_name(entry);
-    if (schema_name)
-        schema = gnc_gconf_get_schema(NULL, schema_name, NULL);
-    if (schema)
-    {
-        DEBUG("found schema %p", schema);
-        desc = gconf_schema_get_short_desc(schema);
-        DEBUG("description %s", desc);
-        long_desc = gconf_schema_get_long_desc(schema);
-        checkbox = gtk_check_button_new_with_label(desc ? desc : name);
-        if (long_desc)
-            gtk_widget_set_tooltip_text(checkbox, long_desc);
-        gconf_schema_free(schema);
-    }
-    else
-    {
-        DEBUG("no schema");
-        checkbox = gtk_check_button_new_with_label(name);
-    }
+    checkbox = gtk_check_button_new_with_label(warning->warn_desc ? warning->warn_desc : warning->warn_name);
+    if (warning->warn_long_desc)
+        gtk_widget_set_tooltip_text(checkbox, warning->warn_long_desc);
 
-    gtk_widget_set_name(checkbox, entry->key);
+    gtk_widget_set_name(checkbox, warning->warn_name);
+    g_object_set_data_full (G_OBJECT (checkbox), "prefs-group", g_strdup(prefs_group),
+                            (GDestroyNotify) g_free);
     g_signal_connect_swapped(G_OBJECT(checkbox), "toggled",
                              (GCallback)gnc_reset_warnings_update_widgets, rw_dialog);
     gtk_box_pack_start(GTK_BOX(box), checkbox, TRUE, TRUE, 0);
@@ -317,124 +278,30 @@ gnc_reset_warnings_add_one (RWDialog *rw_dialog, GConfEntry *entry, GtkWidget *b
 
 
 /********************************************************************
- *  This call back function adds the gconf section
+ *  Add all warnings found in the given preference group
  *  to the dialog box.
  *
  *  @internal
  *  @param The reset warnings data structure
- *  @param The section in gconf.
+ *  @param The preference group.
  *  @param The required dialog box to update.
  ********************************************************************/
-static GSList *
-gnc_reset_warnings_add_section (RWDialog *rw_dialog, const gchar *section, GtkWidget *box)
+static void
+gnc_reset_warnings_add_section (RWDialog *rw_dialog, const gchar *prefs_group, GtkWidget *box)
 {
-    GSList *entries, *tmp;
-    GConfEntry *entry;
+    const GncWarningSpec *warning = gnc_get_warnings();
+    gint i = 0;
 
-    ENTER("rw_dialog %p, section %s, box %p", rw_dialog, section, box);
+    ENTER("rw_dialog %p, section %s, box %p", rw_dialog, prefs_group, box);
 
-    entries = gnc_gconf_client_all_entries(section);
-    for (tmp = entries; tmp; tmp = g_slist_next(tmp))
+    for (i = 0; warning[i].warn_name; i++)
     {
-        entry = tmp->data;
-        if (gconf_value_get_int(entry->value) != 0)
+        if (gnc_prefs_get_int(prefs_group, warning[i].warn_name) != 0)
         {
-            gnc_reset_warnings_add_one(rw_dialog, entry, box);
+            gnc_reset_warnings_add_one(rw_dialog, prefs_group, &warning[i], box);
         }
     }
 
-    LEAVE(" ");
-    return entries;
-}
-
-
-/****************************************
- * Reset Functions for closure
- ****************************************/
-static void
-gnc_reset_warnings_release_entries (GSList *entries)
-{
-    GSList *tmp;
-
-    ENTER(" ");
-    for (tmp = entries; tmp; tmp = g_slist_next(tmp))
-    {
-        gconf_entry_free(tmp->data);
-    }
-    g_slist_free(entries);
-    LEAVE(" ");
-}
-
-
-static void
-gnc_reset_warnings_find_remove (GtkWidget *widget,
-                                const gchar *name)
-{
-    ENTER("widget %p, name %s", widget, name);
-
-    if (strcmp(gtk_widget_get_name(widget), name) == 0)
-    {
-        DEBUG("destroying widget %s", name);
-        gtk_widget_destroy(widget);
-    }
-    LEAVE(" ");
-}
-
-
-/***********************************************************************
- *  This call back function is triggered when warning gconf entries
- *  are changed.
- *
- *  @internal
- *  @param The gconf client unused.
- *  @param The gconf client connection id.
- *  @param The gconf entry.
- *  @param The user_data points to the dialog.
- ***********************************************************************/
-static void
-gnc_reset_warnings_gconf_changed (GConfClient *client,
-                                  guint cnxn_id,
-                                  GConfEntry *entry,
-                                  gpointer user_data)
-{
-    RWDialog *rw_dialog = g_object_get_data(G_OBJECT(user_data), "dialog-structure");
-
-    GtkWidget *box;
-    GList     *list;
-
-    ENTER("rw_dialog %p, entry %p, user_data %p", rw_dialog, entry, user_data);
-
-    g_return_if_fail(GTK_IS_DIALOG(rw_dialog->dialog));
-
-    DEBUG("entry key '%s', value as %p, value as int %d", entry->key, entry->value, gconf_value_get_int(entry->value));
-
-    /* Which box is affected */
-    if (strstr(entry->key, "permanent") != 0)
-    {
-        box = rw_dialog->perm_vbox;
-    }
-    else
-    {
-        box = rw_dialog->temp_vbox;
-    }
-
-    if (gconf_value_get_int(entry->value) != 0)
-    {
-        gnc_reset_warnings_add_one (rw_dialog, entry, box);
-        DEBUG("added checkbox for %s", entry->key);
-    }
-    else
-    {
-        /* Don't know if we were invoked by the dialog removing the
-         * warning, or if the remove happened somewhere else like
-         * gconf-editor.  Can't hurt to run the widgets and try to remove
-         * it.  Worst case we can't find it because its already been
-         * deleted. */
-        list = gtk_container_get_children(GTK_CONTAINER(box));
-        g_list_foreach(list, (GFunc)gnc_reset_warnings_find_remove, entry->key);
-        g_list_free(list);
-    }
-    gnc_reset_warnings_update_widgets(rw_dialog);
     LEAVE(" ");
 }
 
@@ -498,8 +365,6 @@ gnc_reset_warnings_dialog (GtkWindow *parent)
     GtkWidget  *dialog;
     GtkBuilder *builder;
 
-    GSList *perm_list, *temp_list;
-
     rw_dialog = g_new0 (RWDialog, 1);
 
     ENTER("");
@@ -526,31 +391,23 @@ gnc_reset_warnings_dialog (GtkWindow *parent)
     DEBUG("permanent");
     rw_dialog->perm_vbox_label = GTK_WIDGET(gtk_builder_get_object (builder, "perm_vbox_and_label"));
     rw_dialog->perm_vbox = GTK_WIDGET(gtk_builder_get_object (builder, "perm_vbox"));
-    perm_list = gnc_reset_warnings_add_section(rw_dialog, GCONF_WARNINGS_PERM, rw_dialog->perm_vbox);
+    gnc_reset_warnings_add_section(rw_dialog, GNC_PREFS_GROUP_WARNINGS_PERM, rw_dialog->perm_vbox);
 
     DEBUG("temporary");
     rw_dialog->temp_vbox_label = GTK_WIDGET(gtk_builder_get_object (builder, "temp_vbox_and_label"));
     rw_dialog->temp_vbox = GTK_WIDGET(gtk_builder_get_object (builder, "temp_vbox"));
-    temp_list = gnc_reset_warnings_add_section(rw_dialog, GCONF_WARNINGS_TEMP, rw_dialog->temp_vbox);
+    gnc_reset_warnings_add_section(rw_dialog, GNC_PREFS_GROUP_WARNINGS_TEMP, rw_dialog->temp_vbox);
 
     rw_dialog->buttonbox = GTK_WIDGET(gtk_builder_get_object (builder, "hbuttonbox"));
 
     rw_dialog->nolabel = GTK_WIDGET(gtk_builder_get_object (builder, "no_warnings"));
     rw_dialog->applybutton = GTK_WIDGET(gtk_builder_get_object (builder, "applybutton"));
 
-    g_object_set_data_full(G_OBJECT(rw_dialog->dialog), GCONF_ENTRY_LIST,
-                           g_slist_concat (perm_list, temp_list),
-                           (GDestroyNotify)gnc_reset_warnings_release_entries);
-
-    /* Populate the dialog boxes with the gconf entries */
+    /* Enable the proper response buttons */
     gnc_reset_warnings_update_widgets(rw_dialog);
 
-    /* Record the pointer to the rw data structure and claen up after */
+    /* Record the pointer to the rw data structure and clean up after */
     g_object_set_data_full(G_OBJECT(rw_dialog->dialog), "dialog-structure", rw_dialog, g_free);
-
-    gnc_gconf_add_notification(G_OBJECT(rw_dialog->dialog), GCONF_WARNINGS,
-                               gnc_reset_warnings_gconf_changed,
-                               DIALOG_RESET_WARNINGS_CM_CLASS);
 
     gnc_restore_window_size(GNC_PREFS_GROUP, GTK_WINDOW(rw_dialog->dialog));
 

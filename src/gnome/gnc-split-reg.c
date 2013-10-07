@@ -49,6 +49,7 @@
 #include "gnc-pricedb.h"
 #include "gnc-ui-util.h"
 #include "gnc-ui.h"
+#include "gnome-utils/gnc-warnings.h"
 #include "gnucash-sheet.h"
 #include "table-allgui.h"
 
@@ -967,11 +968,11 @@ gsr_default_reinit_handler( GNCSplitReg *gsr, gpointer data )
     {
         gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
                 "%s", recn_warn);
-        warning = "register_remove_all_splits2";
+        warning = GNC_PREF_WARN_REG_SPLIT_DEL_ALL_RECD;
     }
     else
     {
-        warning = "register_remove_all_splits";
+        warning = GNC_PREF_WARN_REG_SPLIT_DEL_ALL;
     }
 
     gtk_dialog_add_button(GTK_DIALOG(dialog),
@@ -1101,11 +1102,11 @@ gsr_default_delete_handler( GNCSplitReg *gsr, gpointer data )
         {
             gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
                     "%s", recn_warn);
-            warning = "register_delete_split2";
+            warning = GNC_PREF_WARN_REG_SPLIT_DEL_RECD;
         }
         else
         {
-            warning = "register_delete_split";
+            warning = GNC_PREF_WARN_REG_SPLIT_DEL;
         }
 
         gtk_dialog_add_button(GTK_DIALOG(dialog),
@@ -1142,11 +1143,11 @@ gsr_default_delete_handler( GNCSplitReg *gsr, gpointer data )
         {
             gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
                     "%s", recn_warn);
-            warning = "register_delete_trans2";
+            warning = GNC_PREF_WARN_REG_TRANS_DEL_RECD;
         }
         else
         {
-            warning = "register_delete_trans";
+            warning = GNC_PREF_WARN_REG_TRANS_DEL;
         }
         gtk_dialog_add_button(GTK_DIALOG(dialog),
                               GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
@@ -1988,7 +1989,7 @@ gtk_callback_bug_workaround (gpointer argp)
                                     "%s", read_only);
     gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
             "%s", args->string);
-    gnc_dialog_run(GTK_DIALOG(dialog), "register_read_only");
+    gnc_dialog_run(GTK_DIALOG(dialog), GNC_PREF_WARN_REG_IS_READ_ONLY);
     gtk_widget_destroy(dialog);
     g_free(args);
     return FALSE;

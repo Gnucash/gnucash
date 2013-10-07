@@ -39,7 +39,6 @@
 #include "gnc-engine.h"
 #include "gnc-euro.h"
 #include "gnc-ui-util.h"
-#include "gnc-gconf-utils.h"
 #include "gnc-prefs.h"
 #include "guile-util.h"
 #include "gnc-main-window.h"
@@ -510,7 +509,7 @@ gnc_perm_button_cb (GtkButton *perm, gpointer user_data)
 }
 
 gint
-gnc_dialog_run (GtkDialog *dialog, const gchar *gconf_key)
+gnc_dialog_run (GtkDialog *dialog, const gchar *pref_name)
 {
     GtkWidget *perm, *temp;
     gboolean ask = TRUE;
@@ -518,10 +517,10 @@ gnc_dialog_run (GtkDialog *dialog, const gchar *gconf_key)
 
     /* Does the user want to see this question? If not, return the
      * previous answer. */
-    response = gnc_gconf_get_int(GCONF_WARNINGS_PERM, gconf_key, NULL);
+    response = gnc_prefs_get_int(GNC_PREFS_GROUP_WARNINGS_PERM, pref_name);
     if (response != 0)
         return response;
-    response = gnc_gconf_get_int(GCONF_WARNINGS_TEMP, gconf_key, NULL);
+    response = gnc_prefs_get_int(GNC_PREFS_GROUP_WARNINGS_TEMP, pref_name);
     if (response != 0)
         return response;
 
@@ -564,11 +563,11 @@ gnc_dialog_run (GtkDialog *dialog, const gchar *gconf_key)
         /* Save the answer? */
         if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(perm)))
         {
-            gnc_gconf_set_int(GCONF_WARNINGS_PERM, gconf_key, response, NULL);
+            gnc_prefs_set_int(GNC_PREFS_GROUP_WARNINGS_PERM, pref_name, response);
         }
         else if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(temp)))
         {
-            gnc_gconf_set_int(GCONF_WARNINGS_TEMP, gconf_key, response, NULL);
+            gnc_prefs_set_int(GNC_PREFS_GROUP_WARNINGS_TEMP, pref_name, response);
         }
     }
     return response;

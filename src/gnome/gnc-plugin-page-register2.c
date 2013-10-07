@@ -81,6 +81,7 @@
 #include "gnc-window.h"
 #include "gnc-main-window.h"
 #include "gnc-session.h"
+#include "gnome-utils/gnc-warnings.h"
 #include "dialog-lot-viewer.h"
 #include "Scrub.h"
 #include "qof.h"
@@ -2618,7 +2619,8 @@ gnc_plugin_page_register2_cmd_print_check (GtkAction *action,
                             "%s", message);
                     gtk_dialog_add_button (GTK_DIALOG (dialog), _("_Print checks"),
                                           GTK_RESPONSE_YES);
-                    response = gnc_dialog_run (GTK_DIALOG (dialog), "print_multi_acct_checks");
+                    response = gnc_dialog_run (GTK_DIALOG (dialog),
+                                               GNC_PREF_WARN_CHECKPRINTING_MULTI_ACCT);
                     gtk_widget_destroy (dialog);
                     if (response != GTK_RESPONSE_YES)
                     {
