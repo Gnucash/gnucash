@@ -65,14 +65,6 @@ typedef struct
 GType gnc_period_select_get_type (void);
 
 
-/** Tells a GncPeriodSelect object to emit a "changed" signal.
- *
- *  @param period The GncPeriodSelect object that should emit the
- *  signal.
- */
-void gnc_period_select_changed (GncPeriodSelect *period);
-
-
 /** Create a new GncPeriodSelect widget which is used to select a
  *  accounting period like "previous month" or "this year".
  *
