@@ -75,7 +75,7 @@ typedef int ssize_t;
 #include "io-gncxml.h"
 #include "io-gncxml-v2.h"
 #include "gnc-backend-xml.h"
-#include "gnc-core-prefs.h"
+#include "gnc-prefs.h"
 
 #include "gnc-address-xml-v2.h"
 #include "gnc-bill-term-xml-v2.h"
@@ -720,7 +720,7 @@ gnc_xml_be_write_to_file(FileBackend *fbe,
         }
     }
 
-    if (gnc_book_write_to_xml_file_v2(book, tmp_name, gnc_core_prefs_get_file_save_compressed()))
+    if (gnc_book_write_to_xml_file_v2(book, tmp_name, gnc_prefs_get_file_save_compressed()))
     {
         /* Record the file's permissions before g_unlinking it */
         rc = g_stat(datafile, &statbuf);
@@ -945,13 +945,13 @@ gnc_xml_be_remove_old_files(FileBackend *be)
         /* The file is a backup or log file. Check the user's retention preference
          * to determine if we should keep it or not
          */
-        if (gnc_core_prefs_get_file_retention_policy() == XML_RETAIN_NONE)
+        if (gnc_prefs_get_file_retention_policy() == XML_RETAIN_NONE)
         {
             PINFO ("remove stale file: %s  - reason: preference XML_RETAIN_NONE", name);
             g_unlink(name);
         }
-        else if ((gnc_core_prefs_get_file_retention_policy() == XML_RETAIN_DAYS) &&
-                 (gnc_core_prefs_get_file_retention_days() > 0))
+        else if ((gnc_prefs_get_file_retention_policy() == XML_RETAIN_DAYS) &&
+                 (gnc_prefs_get_file_retention_days() > 0))
         {
             int days;
 
@@ -963,8 +963,8 @@ gnc_xml_be_remove_old_files(FileBackend *be)
             }
             days = (int)(difftime(now, statbuf.st_mtime) / 86400);
 
-            PINFO ("file retention = %d days", gnc_core_prefs_get_file_retention_days());
-            if (days >= gnc_core_prefs_get_file_retention_days())
+            PINFO ("file retention = %d days", gnc_prefs_get_file_retention_days());
+            if (days >= gnc_prefs_get_file_retention_days())
             {
                 PINFO ("remove stale file: %s  - reason: more than %d days old", name, days);
                 g_unlink(name);

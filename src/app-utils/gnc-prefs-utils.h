@@ -1,5 +1,6 @@
 /********************************************************************\
- * gnc-prefs.h -- utility functions for preferences management      *
+ * gnc-prefs-utils.h -- utility functions for preferences management*
+ *                                                                  *
  * Copyright (C) 2013 Geert Janssens <geert@kobaltwit.be>           *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
@@ -21,10 +22,32 @@
  *                                                                  *
 \********************************************************************/
 
-#include "gnc-gconf-utils.h"
-#include "gnc-prefs.h"
+/** @addtogroup GLib
+    @{ */
+/** @addtogroup Preferences Generic Preference Utilities
 
-void gnc_prefs_init (void)
-{
-    gnc_gconf_prefs_init ();
-}
+    The only function in this file is meant to initialize the
+    preferences system early in the load process.
+
+    This is done in a way to hide the actual preferences backend from the
+    rest of the engine.
+
+    @{ */
+/** @file gnc-prefs-utils.h
+ *  @brief Preferences initialization function.
+ *  @author Copyright (C) 2013 Geert Janssens <geert@kobaltwit.be>
+ */
+
+#ifndef GNC_PREFS_UTILS_H_
+#define GNC_PREFS_UTILS_H_
+
+
+/** This function is called early in the load process
+ *  to preload a number of preferences from the settings backend
+ */
+void gnc_prefs_init (void);
+
+#endif /* GNC_PREFS_UTILS_H_ */
+/** @} */
+/** @} */
+

@@ -35,6 +35,11 @@
     -# convert gnucash internal schema names into full gsettings schema id's, and
     -# optionally take care of error checking on return values.
 
+    Note that this api should not be called directly. Instead use
+    the gnc_gsettings_load_backend function to configure gsettings
+    as backend for the gnucash preferences api and then use
+    the gnc_prefs_* functions instead to work with preferences.
+
     @{ */
 /** @file gnc-gsettings.h
  *  @brief GSettings helper routines.
@@ -47,35 +52,7 @@
 
 #include <gio/gio.h>
 
-/* Schema ids used across multiple modules */
 #define GSET_SCHEMA_PREFIX            "org.gnucash"
-#define GSET_SCHEMA_GENERAL           "general"
-#define GSET_SCHEMA_GENERAL_REGISTER  "general.register"
-#define GSET_SCHEMA_GENERAL_REPORT    "general.report"
-#define GSET_SCHEMA_WARNINGS          "general.warnings"
-#define GSET_SCHEMA_WARNINGS_TEMP     "general.warnings.temporary"
-#define GSET_SCHEMA_WARNINGS_PERM     "general.warnings.permanent"
-
-/* Keys used across multiple modules */
-/* Currently the first one conflicts with same definition in gnc-gconf-utils.h
- * Only load it if gnc-gconf-utils.h isn't loaded yet.
- */
-#ifndef GNC_GCONF_UTILS_H
-#define DESKTOP_GNOME_INTERFACE "/desktop/gnome/interface"
-#endif /* GNC_GCONF_UTILS_H */
-#define GSET_KEY_TOOLBAR_STYLE       "toolbar_style"
-#define GSET_KEY_SAVE_GEOMETRY       "save_window_geometry"
-#define GSET_KEY_LAST_PATH           "last_path"
-#define GSET_KEY_USE_NEW             "use_new_window"
-#define GSET_KEY_ACCOUNTING_LABELS   "use_accounting_labels"
-#define GSET_KEY_ACCOUNT_SEPARATOR   "account_separator"
-#define GSET_KEY_NEGATIVE_IN_RED     "negative_in_red"
-#define GSET_KEY_NUM_SOURCE          "num_source"
-#define GSET_KEY_ENABLE_EURO         "enable_euro"
-#define GSET_KEY_DATE_FORMAT         "date_format"
-#define GSET_KEY_DATE_COMPLETION     "date_completion"
-#define GSET_KEY_DATE_BACKMONTHS     "date_backmonths"
-#define GSET_KEY_SHOW_LEAF_ACCT_NAMES "show_leaf_account_names"
 
 /** Convert a partial schema name into a complete gsettings schema name.
  *
@@ -135,7 +112,7 @@ const gchar *gnc_gsettings_get_prefix (void);
  */
 gulong gnc_gsettings_register_cb (const char *schema,
                                   const gchar *key,
-                                  GCallback func,
+                                  gpointer func,
                                   gpointer user_data);
 
 
@@ -158,7 +135,7 @@ gulong gnc_gsettings_register_cb (const char *schema,
  */
 void gnc_gsettings_remove_cb_by_func (const gchar *schema,
                                       const gchar *key,
-                                      GCallback func,
+                                      gpointer func,
                                       gpointer user_data);
 
 
@@ -192,7 +169,7 @@ void gnc_gsettings_remove_cb_by_id (const gchar *schema,
  *  function.
  */
 guint gnc_gsettings_register_any_cb (const gchar *schema,
-                                     GCallback func,
+                                     gpointer func,
                                      gpointer user_data);
 
 
@@ -217,7 +194,7 @@ guint gnc_gsettings_register_any_cb (const gchar *schema,
  *  by its handler id.
  */
 void gnc_gsettings_remove_any_cb_by_func (const gchar *schema,
-                                          GCallback func,
+                                          gpointer func,
                                           gpointer user_data);
 
 
@@ -613,6 +590,10 @@ void gnc_gsettings_reset_schema (const gchar *schema);
 
 /** @} */
 
+
+/** Configure gsettings as the backend for the gnucash preferences api.
+ */
+void gnc_gsettings_load_backend (void);
 
 #endif /* GNC_GSETTINGS_H */
 /** @} */

@@ -1,7 +1,7 @@
 %module sw_core_utils
 %{
 #include <gnc-glib-utils.h>
-#include <gnc-core-prefs.h>
+#include <gnc-prefs.h>
 #include <gnc-path.h>
 #include <gnc-filepath-utils.h>
 #include <gnc-locale-utils.h>
@@ -25,7 +25,7 @@ void
 #endif
 %import "base-typemaps.i"
 
-%include <gnc-core-prefs.h>
+%include <gnc-prefs.h>
 
 %newobject gnc_path_get_bindir;
 gchar * gnc_path_get_bindir(void);

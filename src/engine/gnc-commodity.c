@@ -35,7 +35,7 @@
 #include <regex.h>
 
 #include "gnc-commodity.h"
-#include "gnc-core-prefs.h"
+#include "gnc-prefs.h"
 
 static QofLogModule log_module = GNC_MOD_COMMODITY;
 
@@ -2028,7 +2028,7 @@ gnc_commodity_table_get_quotable_commodities(const gnc_commodity_table * table)
     GList * nslist, * tmp;
     GList * l = NULL;
     regex_t pattern;
-    const char *expression = gnc_core_prefs_get_namespace_regexp();
+    const char *expression = gnc_prefs_get_namespace_regexp();
 
     ENTER("table=%p, expression=%s", table, expression);
     if (!table)

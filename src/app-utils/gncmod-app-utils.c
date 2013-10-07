@@ -14,7 +14,6 @@
 
 #include "gnc-component-manager.h"
 #include "gnc-hooks.h"
-#include "gnc-prefs.h"
 #include "gnc-exp-parser.h"
 
 GNC_MODULE_API_DECL(libgncmod_app_utils)
@@ -76,7 +75,6 @@ libgncmod_app_utils_gnc_module_init(int refcount)
     if (refcount == 0)
     {
         gnc_component_manager_init ();
-        gnc_prefs_init ();
         gnc_hook_add_dangler(HOOK_STARTUP, (GFunc)gnc_exp_parser_init, NULL);
         gnc_hook_add_dangler(HOOK_SHUTDOWN, (GFunc)app_utils_shutdown, NULL);
     }

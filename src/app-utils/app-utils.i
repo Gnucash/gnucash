@@ -8,7 +8,7 @@
 #include <gnc-exp-parser.h>
 #include <gnc-ui-util.h>
 #include <gnc-gettext-util.h>
-#include <gnc-prefs.h>
+#include <gnc-prefs-utils.h>
 #include <gnc-helpers.h>
 #include <gnc-accounting-period.h>
 #include <gnc-session.h>

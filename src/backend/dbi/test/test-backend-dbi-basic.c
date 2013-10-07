@@ -29,7 +29,7 @@
 /* For test_conn_index_functions */
 #include "../gnc-backend-dbi-priv.h"
 /* For version_control */
-#include <gnc-core-prefs.h>
+#include <gnc-prefs.h>
 #include <qofsession-p.h>
 
 static const gchar* suitename = "/backend/dbi";
@@ -463,7 +463,7 @@ test_dbi_version_control (Fixture *fixture, gconstpointer pData)
     QofBook *book;
     QofBackend *qbe;
     QofBackendError err;
-    gint ourversion = gnc_core_prefs_get_long_version();
+    gint ourversion = gnc_prefs_get_long_version();
 
     // Load the session data
     if (fixture->filename)

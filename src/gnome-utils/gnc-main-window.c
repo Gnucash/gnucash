@@ -62,7 +62,7 @@
 #include "gnc-uri-utils.h"
 #include "core-utils/gnc-version.h"
 #include "gnc-window.h"
-#include "gnc-core-prefs.h"
+#include "gnc-prefs.h"
 #include "gnc-gconf-utils.h"
 #include "option-util.h"
 // +JSLED
@@ -3593,7 +3593,7 @@ gnc_main_window_setup_window (GncMainWindow *window)
 
     /* Testing */
     /* Now update the "eXtensions" menu */
-    if (!gnc_core_prefs_is_extra_enabled())
+    if (!gnc_prefs_is_extra_enabled())
     {
         GtkAction*  action;
 

@@ -28,6 +28,7 @@
 #include <string.h>
 #include "gnc-gsettings.h"
 #include "libqof/qof/qof.h"
+#include "gnc-prefs-p.h"
 
 #define CLIENT_TAG  "%s-%s-client"
 #define NOTIFY_TAG  "%s-%s-notify_id"
@@ -134,7 +135,7 @@ gnc_gsettings_normalize_schema_name (const gchar *name)
 gulong
 gnc_gsettings_register_cb (const gchar *schema,
                            const gchar *key,
-                           GCallback func,
+                           gpointer func,
                            gpointer user_data)
 {
     gulong retval = 0;
@@ -142,6 +143,7 @@ gnc_gsettings_register_cb (const gchar *schema,
 
     GSettings *schema_ptr = gnc_gsettings_get_schema_ptr (schema);
     g_return_val_if_fail (G_IS_SETTINGS (schema_ptr), retval);
+    g_return_val_if_fail (func, retval);
 
     if ((!key) || (*key == '\0'))
         signal = g_strdup ("changed");
@@ -151,7 +153,7 @@ gnc_gsettings_register_cb (const gchar *schema,
             signal = g_strconcat ("changed::", key, NULL);
     }
 
-    retval = g_signal_connect (schema_ptr, signal, func, user_data);
+    retval = g_signal_connect (schema_ptr, signal, G_CALLBACK (func), user_data);
 
     g_free (signal);
 
@@ -162,7 +164,7 @@ gnc_gsettings_register_cb (const gchar *schema,
 void
 gnc_gsettings_remove_cb_by_func (const gchar *schema,
                                  const gchar *key,
-                                 GCallback func,
+                                 gpointer func,
                                  gpointer user_data)
 {
     gint matched = 0;
@@ -170,6 +172,7 @@ gnc_gsettings_remove_cb_by_func (const gchar *schema,
 
     GSettings *schema_ptr = gnc_gsettings_get_schema_ptr (schema);
     g_return_if_fail (G_IS_SETTINGS (schema_ptr));
+    g_return_if_fail (func);
 
     if ((!key) || (*key == '\0'))
         signal = g_strdup ("changed");
@@ -185,7 +188,7 @@ gnc_gsettings_remove_cb_by_func (const gchar *schema,
             0, /* signal_id */
             g_quark_from_string (signal),   /* signal_detail */
             NULL, /* closure */
-            func, /* callback function */
+            G_CALLBACK (func), /* callback function */
             user_data);
     DEBUG ("Removed %d handlers for signal '%s' from schema '%s'", matched, signal, schema);
 
@@ -206,7 +209,7 @@ gnc_gsettings_remove_cb_by_id (const gchar *schema,
 
 guint
 gnc_gsettings_register_any_cb (const gchar *schema,
-                               GCallback func,
+                               gpointer func,
                                gpointer user_data)
 {
     return gnc_gsettings_register_cb (schema, NULL, func, user_data);
@@ -215,7 +218,7 @@ gnc_gsettings_register_any_cb (const gchar *schema,
 
 void
 gnc_gsettings_remove_any_cb_by_func (const gchar *schema,
-                                     GCallback func,
+                                     gpointer func,
                                      gpointer user_data)
 {
     gnc_gsettings_remove_cb_by_func (schema, NULL, func, user_data);
@@ -495,4 +498,28 @@ gnc_gsettings_reset_schema (const gchar *schema)
     }
 
     g_strfreev (keys);
+}
+
+void gnc_gsettings_load_backend (void)
+{
+    prefsbackend.register_cb = gnc_gsettings_register_cb;
+    prefsbackend.remove_cb_by_func = gnc_gsettings_remove_cb_by_func;
+    prefsbackend.remove_cb_by_id = gnc_gsettings_remove_cb_by_id;
+    prefsbackend.register_group_cb = gnc_gsettings_register_any_cb;
+    prefsbackend.remove_group_cb_by_func = gnc_gsettings_remove_any_cb_by_func;
+    prefsbackend.bind = gnc_gsettings_bind;
+    prefsbackend.get_bool = gnc_gsettings_get_bool;
+    prefsbackend.get_int = gnc_gsettings_get_int;
+    prefsbackend.get_float = gnc_gsettings_get_float;
+    prefsbackend.get_string = gnc_gsettings_get_string;
+    prefsbackend.get_enum = gnc_gsettings_get_enum;
+    prefsbackend.get_value = gnc_gsettings_get_value;
+    prefsbackend.set_bool = gnc_gsettings_set_bool;
+    prefsbackend.set_int = gnc_gsettings_set_int;
+    prefsbackend.set_float = gnc_gsettings_set_float;
+    prefsbackend.set_string = gnc_gsettings_set_string;
+    prefsbackend.set_enum = gnc_gsettings_set_enum;
+    prefsbackend.set_value = gnc_gsettings_set_value;
+    prefsbackend.reset = gnc_gsettings_reset;
+    prefsbackend.reset_group = gnc_gsettings_reset_schema;
 }

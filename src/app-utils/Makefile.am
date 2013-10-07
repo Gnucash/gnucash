@@ -56,7 +56,7 @@ libgncmod_app_utils_la_SOURCES = \
   gnc-gettext-util.c \
   gnc-gsettings.c \
   gnc-helpers.c \
-  gnc-prefs.c \
+  gnc-prefs-utils.c \
   gnc-sx-instance-model.c \
   gncmod-app-utils.c \
   gnc-ui-balances.c \
@@ -84,7 +84,7 @@ gncinclude_HEADERS = \
   gnc-gsettings.h \
   gnc-help-utils.h \
   gnc-helpers.h \
-  gnc-prefs.h \
+  gnc-prefs-utils.h \
   gnc-sx-instance-model.h \
   gnc-ui-balances.h \
   gnc-ui-util.h \

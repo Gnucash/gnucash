@@ -48,7 +48,7 @@
 #include "gnc-session.h"
 #include "gnome-utils/gnc-icons.h" /* for GNC_STOCK_INVOICE_NEW */
 
-#include "gnc-core-prefs.h" /* for GCONF_PATH */
+#include "gnc-prefs.h" /* for GCONF_PATH */
 #include "gnc-gconf-utils.h"
 #include "gnome-utils/gnc-main-window.h"
 

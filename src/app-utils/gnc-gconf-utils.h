@@ -83,11 +83,6 @@ typedef void (*GncGconfGeneralAnyCb) (gpointer user_data);
  @{
 */
 
-/** This function is called early in the load process
- *  to preload a number of preferences from gconf
- */
-void gnc_gconf_prefs_init (void);
-
 /** This function takes an enum value and returns its nickname.
  *
  *  @param type The value defining the enum class.  For example,

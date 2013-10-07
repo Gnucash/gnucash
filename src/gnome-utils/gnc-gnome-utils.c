@@ -32,6 +32,7 @@
 
 #include "assistant-gconf-setup.h"
 #include "gnc-gconf-utils.h"
+#include "gnc-prefs-utils.h"
 #include "gnc-gnome-utils.h"
 //#include "gnc-html.h"
 #include "gnc-engine.h"
@@ -633,6 +634,7 @@ gnc_gui_init(void)
 
     g_set_application_name(PACKAGE_NAME);
 
+    gnc_prefs_init();
     gnc_show_splash_screen();
     assistant_gconf_install_check_schemas();
 

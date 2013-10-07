@@ -77,7 +77,7 @@
 #include "gncTaxTable.h"
 #include "gncIDSearch.h"
 #include "engine/gnc-pricedb.h"
-#include "app-utils/gnc-prefs.h"
+#include "app-utils/gnc-prefs-utils.h"
 %}
 
 %include <timespec.i>

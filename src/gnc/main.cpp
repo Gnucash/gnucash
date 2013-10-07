@@ -39,7 +39,7 @@ extern "C"
 #include "core-utils/gnc-filepath-utils.h"
 #include "engine/gnc-hooks.h"
 #include "engine/gnc-commodity.h"
-#include "core-utils/gnc-core-prefs.h"
+#include "core-utils/gnc-prefs.h"
 #include "engine/gnc-session.h"
 #include "engine/engine-helpers.h"
 #include "engine/gnc-engine.h"
@@ -103,7 +103,7 @@ gnc_log_init()
 
     gnc_log_default();
 
-    if (gnc_core_prefs_is_debugging_enabled())
+    if (gnc_prefs_is_debugging_enabled())
     {
         qof_log_set_level("", QOF_LOG_INFO);
         qof_log_set_level("qof", QOF_LOG_INFO);

@@ -1,11 +1,11 @@
 import sys
 import _sw_app_utils
 from gnucash import *
-from _sw_core_utils import gnc_core_prefs_is_extra_enabled
+from _sw_core_utils import gnc_prefs_is_extra_enabled
 import gtk
 import os
 sys.path.append(os.path.dirname(__file__))
-noisy = gnc_core_prefs_is_extra_enabled()
+noisy = gnc_prefs_is_extra_enabled()
 if noisy:
     print "woop", os.path.dirname(__file__)
 import pycons.console as cons
