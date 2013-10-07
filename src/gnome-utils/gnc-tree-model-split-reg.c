@@ -342,51 +342,26 @@ gnc_tree_model_split_reg_class_init (GncTreeModelSplitRegClass *klass)
 
 
 static void
-gnc_tree_model_split_reg_gconf_changed (GConfEntry *entry, gpointer user_data)
+gnc_tree_model_split_reg_prefs_changed (gpointer prefs, gchar *pref, gpointer user_data)
 {
     GncTreeModelSplitReg *model = user_data;
 
-    g_return_if_fail (entry && entry->key);
+    g_return_if_fail (pref);
 
     if (model == NULL)
         return;
 
-    if (g_str_has_suffix (entry->key, KEY_ACCOUNTING_LABELS))
-    {
-        model->use_accounting_labels = gnc_gconf_get_bool (GCONF_GENERAL, KEY_ACCOUNTING_LABELS, NULL);
-    }
-    else if (g_str_has_suffix (entry->key, KEY_ACCOUNT_SEPARATOR))
-    {
-        model->separator_changed = TRUE;
-    }
-    else
-    {
-        g_warning("gnc_tree_model_split_reg_gconf_changed: Unknown gconf key %s", entry->key);
-    }
-}
-
-
-static void
-gnc_tree_model_split_reg_prefs_changed (gpointer gsettings, gchar *key, gpointer user_data)
-{
-    GncTreeModelSplitReg *model = user_data;
-
-    g_return_if_fail (key);
-
-    if (model == NULL)
-        return;
-
-    if (g_str_has_suffix (key, GNC_PREF_ACCOUNTING_LABELS))
+    if (g_str_has_suffix (pref, GNC_PREF_ACCOUNTING_LABELS))
     {
         model->use_accounting_labels = gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_ACCOUNTING_LABELS);
     }
-    else if (g_str_has_suffix (key, GNC_PREF_ACCOUNT_SEPARATOR))
+    else if (g_str_has_suffix (pref, GNC_PREF_ACCOUNT_SEPARATOR))
     {
         model->separator_changed = TRUE;
     }
     else
     {
-        g_warning("gnc_tree_model_split_reg_prefs_changed: Unknown gsettings key %s", key);
+        g_warning("gnc_tree_model_split_reg_prefs_changed: Unknown preference %s", pref);
     }
 }
 
@@ -408,9 +383,10 @@ gnc_tree_model_split_reg_init (GncTreeModelSplitReg *model)
                            GNC_PREF_ACCOUNTING_LABELS,
                            gnc_tree_model_split_reg_prefs_changed,
                            model);
-    gnc_gconf_general_register_cb (KEY_ACCOUNT_SEPARATOR,
-                                  gnc_tree_model_split_reg_gconf_changed,
-                                  model);
+    gnc_prefs_register_cb (GNC_PREFS_GROUP_GENERAL,
+                           GNC_PREF_ACCOUNT_SEPARATOR,
+                           gnc_tree_model_split_reg_prefs_changed,
+                           model);
     LEAVE(" ");
 }
 
@@ -978,9 +954,10 @@ gnc_tree_model_split_reg_destroy (GncTreeModelSplitReg *model)
                                  GNC_PREF_ACCOUNTING_LABELS,
                                  gnc_tree_model_split_reg_prefs_changed,
                                  model);
-    gnc_gconf_general_remove_cb (KEY_ACCOUNT_SEPARATOR,
-                                gnc_tree_model_split_reg_gconf_changed,
-                                model);
+    gnc_prefs_remove_cb_by_func (GNC_PREFS_GROUP_GENERAL,
+                                 GNC_PREF_ACCOUNT_SEPARATOR,
+                                 gnc_tree_model_split_reg_prefs_changed,
+                                 model);
     LEAVE(" ");
 }
 

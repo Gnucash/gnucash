@@ -76,6 +76,25 @@ static gboolean reverse_type[NUM_ACCOUNT_TYPES];
 static gchar *user_default_currency = NULL;
 static gchar *user_report_currency = NULL;
 
+gchar *gnc_normalize_account_separator (const gchar* separator)
+{
+    gchar *new_sep=NULL;
+
+    if (!separator || !*separator || g_strcmp0(separator, "colon") == 0)
+            new_sep = g_strdup (":");
+        else if (g_strcmp0(separator, "slash") == 0)
+            new_sep = g_strdup ("/");
+        else if (g_strcmp0(separator, "backslash") == 0)
+            new_sep = g_strdup ("\\");
+        else if (g_strcmp0(separator, "dash") == 0)
+            new_sep = g_strdup ("-");
+        else if (g_strcmp0(separator, "period") == 0)
+            new_sep = g_strdup (".");
+        else
+            new_sep = g_strdup (separator);
+
+    return new_sep;
+}
 /********************************************************************\
  * gnc_configure_account_separator                                  *
  *   updates the current account separator character                *
@@ -85,28 +104,16 @@ static gchar *user_report_currency = NULL;
 static void
 gnc_configure_account_separator (void)
 {
-    const gchar *separator;
+    gchar *separator;
     char *string;
 
     string = gnc_prefs_get_string(GNC_PREFS_GROUP_GENERAL, GNC_PREF_ACCOUNT_SEPARATOR);
-
-    if (!string || !*string || g_strcmp0(string, "colon") == 0)
-        separator = ":";
-    else if (g_strcmp0(string, "slash") == 0)
-        separator = "/";
-    else if (g_strcmp0(string, "backslash") == 0)
-        separator = "\\";
-    else if (g_strcmp0(string, "dash") == 0)
-        separator = "-";
-    else if (g_strcmp0(string, "period") == 0)
-        separator = ".";
-    else
-        separator = string;
+    separator = gnc_normalize_account_separator (string);
 
     gnc_set_account_separator(separator);
 
-    if (string != NULL)
-        free(string);
+    g_free(string);
+    g_free(separator);
 }
 
 

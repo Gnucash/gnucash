@@ -33,9 +33,9 @@
 #include "datecell.h"
 #include "dialog-utils.h"
 #include "gnc-component-manager.h"
-#include "gnc-gconf-utils.h"
 #include "split-register-p.h"
 #include "gnc-ledger-display.h"
+#include "gnc-prefs.h"
 #include "gnc-ui.h"
 #include "guile-util.h"
 #include "numcell.h"
@@ -2526,12 +2526,12 @@ gnc_split_register_config_cells (SplitRegister *reg)
 }
 
 static void
-split_register_gconf_changed (GConfEntry *entry, gpointer user_data)
+split_register_pref_changed (gpointer prefs, gchar *pref, gpointer user_data)
 {
     SplitRegister * reg = user_data;
     SRInfo *info;
 
-    g_return_if_fail(entry && entry->key);
+    g_return_if_fail(pref);
     if (reg == NULL)
         return;
 
@@ -2539,7 +2539,7 @@ split_register_gconf_changed (GConfEntry *entry, gpointer user_data)
     if (!info)
         return;
 
-    if (g_str_has_suffix(entry->key, KEY_ACCOUNTING_LABELS))
+    if (g_str_has_suffix(pref, GNC_PREF_ACCOUNTING_LABELS))
     {
         /* Release current strings. Will be reloaded at next reference. */
         g_free (info->debit_str);
@@ -2553,13 +2553,13 @@ split_register_gconf_changed (GConfEntry *entry, gpointer user_data)
         info->tcredit_str = NULL;
 
     }
-    else if (g_str_has_suffix(entry->key, KEY_ACCOUNT_SEPARATOR))
+    else if (g_str_has_suffix(pref, GNC_PREF_ACCOUNT_SEPARATOR))
     {
         info->separator_changed = TRUE;
     }
     else
     {
-        g_warning("split_register_gconf_changed: Unknown gconf key %s", entry->key);
+        g_warning("split_register_pref_changed: Unknown preference %s", pref);
     }
 }
 
@@ -2588,12 +2588,14 @@ gnc_split_register_init (SplitRegister *reg,
     TableControl *control;
 
     /* Register 'destroy' callback */
-    gnc_gconf_general_register_cb(KEY_ACCOUNTING_LABELS,
-                                  split_register_gconf_changed,
-                                  reg);
-    gnc_gconf_general_register_cb(KEY_ACCOUNT_SEPARATOR,
-                                  split_register_gconf_changed,
-                                  reg);
+    gnc_prefs_register_cb (GNC_PREFS_GROUP_GENERAL,
+                           GNC_PREF_ACCOUNTING_LABELS,
+                           split_register_pref_changed,
+                           reg);
+    gnc_prefs_register_cb (GNC_PREFS_GROUP_GENERAL,
+                           GNC_PREF_ACCOUNT_SEPARATOR,
+                           split_register_pref_changed,
+                           reg);
     gnc_book_option_register_cb(OPTION_NAME_NUM_FIELD_SOURCE,
                                 split_register_book_option_changed,
                                 reg);
@@ -2849,12 +2851,14 @@ gnc_split_register_destroy (SplitRegister *reg)
 
     ENTER("reg=%p", reg);
 
-    gnc_gconf_general_remove_cb(KEY_ACCOUNTING_LABELS,
-                                split_register_gconf_changed,
-                                reg);
-    gnc_gconf_general_remove_cb(KEY_ACCOUNT_SEPARATOR,
-                                split_register_gconf_changed,
-                                reg);
+    gnc_prefs_remove_cb_by_func (GNC_PREFS_GROUP_GENERAL,
+                                 GNC_PREF_ACCOUNTING_LABELS,
+                                 split_register_pref_changed,
+                                 reg);
+    gnc_prefs_remove_cb_by_func (GNC_PREFS_GROUP_GENERAL,
+                                 GNC_PREF_ACCOUNT_SEPARATOR,
+                                 split_register_pref_changed,
+                                 reg);
     gnc_book_option_remove_cb(OPTION_NAME_NUM_FIELD_SOURCE,
                                 split_register_book_option_changed,
                                 reg);

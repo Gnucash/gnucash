@@ -728,9 +728,10 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkEntry" id="gconf/general/account_separator">
+                  <object class="GtkEntry" id="pref/general/account_separator">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="events">GDK_FOCUS_CHANGE_MASK | GDK_STRUCTURE_MASK</property>
                     <property name="has_tooltip">True</property>
                     <property name="tooltip_markup">The character that will be used between components of an account name. A legal value is any single character except letters and numbers, or any of the following strings: &amp;quot;colon&amp;quot; &amp;quot;slash&amp;quot;, &amp;quot;backslash&amp;quot;, &amp;quot;dash&amp;quot; and &amp;quot;period&amp;quot;.</property>
                     <property name="tooltip_text" translatable="yes">The character that will be used between components of an account name. A legal value is any single character except letters and numbers, or any of the following strings: "colon" "slash", "backslash", "dash" and "period".</property>
@@ -740,6 +741,8 @@
                     <property name="secondary_icon_activatable">False</property>
                     <property name="primary_icon_sensitive">True</property>
                     <property name="secondary_icon_sensitive">True</property>
+                    <signal name="changed" handler="gnc_account_separator_pref_changed_cb" swapped="no"/>
+                    <signal name="focus-out-event" handler="gnc_account_separator_validate_cb" swapped="no"/>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -1661,7 +1664,7 @@ many months before the current month:</property>
                     <property name="xalign">0</property>
                     <property name="label" translatable="yes">_Retain log files:</property>
                     <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">gconf/general/retain_days</property>
+                    <property name="mnemonic_widget">pref/general/retain_days</property>
                   </object>
                   <packing>
                     <property name="right_attach">4</property>

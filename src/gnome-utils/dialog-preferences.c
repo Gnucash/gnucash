@@ -88,7 +88,8 @@
 static QofLogModule log_module = GNC_MOD_PREFS;
 
 void gnc_preferences_response_cb(GtkDialog *dialog, gint response, GtkDialog *unused);
-
+void gnc_account_separator_pref_changed_cb (GtkEntry *entry, GtkWidget *dialog);
+gboolean gnc_account_separator_validate_cb (GtkEntry *entry, GdkEvent *event, GtkWidget *dialog);
 
 /** This data structure holds the information for a single addition to
  *  the preferences dialog. */
@@ -114,24 +115,42 @@ typedef struct addition_t
  *  structures. */
 GSList *add_ins = NULL;
 
+static gchar *gnc_account_separator_is_valid (const gchar *separator,
+                                              gchar **normalized_separator)
+{
+    QofBook *book = gnc_get_current_book();
+    GList *conflict_accts = NULL;
+    gchar *message = NULL;
+
+    *normalized_separator = gnc_normalize_account_separator (separator);
+    conflict_accts = gnc_account_list_name_violations (book, *normalized_separator);
+    if (conflict_accts)
+        message = gnc_account_name_violations_errmsg (*normalized_separator,
+                                                      conflict_accts);
+
+    g_list_free (conflict_accts);
+
+    return message;
+}
 
 /** This function is called whenever the account separator is changed
- *  in gconf.  It updates the example label in the "Account" page of the
- *  preferences dialog.
+ *  in the preferences dialog.  It updates the example label in the
+ *  "Account" page of the preferences dialog.
  *
  *  @internal
  *
- *  @param unused A pointer to the changed gconf entry.
+ *  @param entry The text entry field for the account separator
  *
  *  @param dialog A pointer to the preferences dialog.
  */
-static void
-gnc_account_separator_prefs_cb (GConfEntry *unused, GtkWidget *dialog)
+void
+gnc_account_separator_pref_changed_cb (GtkEntry *entry, GtkWidget *dialog)
 {
     GtkWidget *label, *image;
     gchar *sample;
-    GList *invalid_account_names;
-    QofBook *book;
+    gchar *separator;
+
+    gchar *conflict_msg = gnc_account_separator_is_valid (gtk_entry_get_text (entry), &separator);
 
     label = g_object_get_data(G_OBJECT(dialog), "sample_account");
     DEBUG("Sample Account pointer is %p", label );
@@ -142,8 +161,7 @@ gnc_account_separator_prefs_cb (GConfEntry *unused, GtkWidget *dialog)
        language - just keep in mind to have exactly two %s in your
        translation. */
     sample = g_strdup_printf(_("Income%sSalary%sTaxable"),
-                             gnc_get_account_separator_string(),
-                             gnc_get_account_separator_string());
+                             separator, separator);
     PINFO(" Label set to '%s'", sample);
     gtk_label_set_text(GTK_LABEL(label), sample);
     g_free(sample);
@@ -151,22 +169,35 @@ gnc_account_separator_prefs_cb (GConfEntry *unused, GtkWidget *dialog)
     /* Check if the new separator clashes with existing account names */
     image = g_object_get_data(G_OBJECT(dialog), "separator_error");
     DEBUG("Separator Error Image pointer is %p", image );
-    book = gnc_get_current_book();
-    invalid_account_names = gnc_account_list_name_violations ( book,
-                            gnc_get_account_separator_string() );
-    if ( invalid_account_names )
+
+    if (conflict_msg)
     {
-        gchar *message = gnc_account_name_violations_errmsg ( gnc_get_account_separator_string(),
-                         invalid_account_names );
-        gnc_warning_dialog(dialog, "%s", message);
-        gtk_widget_set_tooltip_text(GTK_WIDGET(image), message);
+        gtk_widget_set_tooltip_text(GTK_WIDGET(image), conflict_msg);
         gtk_widget_show (GTK_WIDGET(image));
-        g_free ( message );
+        g_free ( conflict_msg );
     }
     else
         gtk_widget_hide (GTK_WIDGET(image));
 
-    g_list_free ( invalid_account_names );
+    g_free (separator);
+}
+
+
+gboolean
+gnc_account_separator_validate_cb (GtkEntry *entry, GdkEvent *event, GtkWidget *dialog)
+{
+    gchar *separator;
+    gchar *conflict_msg = gnc_account_separator_is_valid (gtk_entry_get_text (entry), &separator);
+
+    /* Check if the new separator clashes with existing account names */
+
+    if (conflict_msg)
+    {
+        gnc_warning_dialog(dialog, "%s", conflict_msg);
+        g_free ( conflict_msg );
+    }
+    g_free (separator);
+    return FALSE;
 }
 
 
@@ -864,74 +895,6 @@ gnc_prefs_connect_currency_edit_gconf (GNCCurrencyEdit *gce, const gchar *boxnam
 
 /****************************************************************************/
 
-/** The user changed a gtk entry.  Update gconf.
- *
- *  @internal
- *
- *  @param entry A pointer to the entry that was changed.
- *
- *  @param user_data Unused.
- */
-static void
-gnc_prefs_entry_user_cb_gconf (GtkEntry *entry,
-                         gpointer user_data)
-{
-    const gchar *name, *text;
-
-    g_return_if_fail(GTK_IS_ENTRY(entry));
-    name = gtk_buildable_get_name(GTK_BUILDABLE(entry)) + PREFIX_LEN;
-    text = gtk_entry_get_text(entry);
-    DEBUG("entry %s set to '%s'", name, text);
-    gnc_gconf_set_string(name, NULL, text, NULL);
-}
-
-
-/** A gtk entry was updated in gconf.  Update the user visible dialog.
- *
- *  @internal
- *
- *  @param entry A pointer to the gtk entry that changed.
- *
- *  @param value The new value of the combo box.
- */
-static void
-gnc_prefs_entry_gconf_cb_gconf (GtkEntry *entry,
-                          const gchar *value)
-{
-    g_return_if_fail(GTK_IS_ENTRY(entry));
-    ENTER("entry %p, value '%s'", entry, value);
-    g_signal_handlers_block_by_func(G_OBJECT(entry),
-                                    G_CALLBACK(gnc_prefs_entry_user_cb_gconf), NULL);
-    gtk_entry_set_text(entry, value);
-    g_signal_handlers_unblock_by_func(G_OBJECT(entry),
-                                      G_CALLBACK(gnc_prefs_entry_user_cb_gconf), NULL);
-    LEAVE(" ");
-}
-
-
-/** Connect a entry widget to the user callback function.  Set the
- *  starting state of the entry from its value in gconf.
- *
- *  @internal
- *
- *  @param entry A pointer to the entry that should be connected.
- */
-static void
-gnc_prefs_connect_entry_gconf (GtkEntry *entry)
-{
-    const gchar *name;
-    gchar *text;
-
-    g_return_if_fail(GTK_IS_ENTRY(entry));
-    name = gtk_buildable_get_name(GTK_BUILDABLE(entry)) + PREFIX_LEN;
-    text = gnc_gconf_get_string(name, NULL, NULL);
-    gtk_entry_set_text(GTK_ENTRY(entry), text ? text : "");
-    DEBUG(" Entry %s set to '%s'", name ? name : "(null)", text ? text : "(null)");
-    g_free(text);
-    g_signal_connect(G_OBJECT(entry), "changed",
-                     G_CALLBACK(gnc_prefs_entry_user_cb_gconf), NULL);
-}
-
 /****************************************************************************/
 
 /** The user changed a GncPeriodSelect widget.  Update gconf.
@@ -1221,6 +1184,35 @@ gnc_prefs_connect_combo_box (GtkComboBox *box)
     g_free (pref);
 }
 
+/****************************************************************************/
+
+/** Connect a GtkEntry widget to its stored value in the preferences database.
+ *
+ *  @internal
+ *
+ *  @param entry A pointer to the entry that should be connected.
+ */
+static void
+gnc_prefs_connect_entry (GtkEntry *entry)
+{
+    gchar *group, *pref;
+    gchar *text;
+
+    g_return_if_fail(GTK_IS_ENTRY(entry));
+
+    gnc_prefs_split_widget_name (gtk_buildable_get_name(GTK_BUILDABLE(entry)), &group, &pref);
+
+//    text = gnc_prefs_get_string(group, pref);
+//    gtk_entry_set_text(GTK_ENTRY(entry), text ? text : "");
+//    DEBUG(" Entry %s/%s set to '%s'", group, pref, text ? text : "(null)");
+//    g_free(text);
+
+    gnc_prefs_bind (group, pref, G_OBJECT (entry), "text");
+
+    g_free (group);
+    g_free (pref);
+}
+
 
 
 /****************************************************************************/
@@ -1255,10 +1247,6 @@ gnc_preferences_response_cb(GtkDialog *dialog, gint response, GtkDialog *unused)
         gnc_save_window_size(GNC_PREFS_GROUP, GTK_WINDOW(dialog));
         gnc_unregister_gui_component_by_data(DIALOG_PREFERENCES_CM_CLASS,
                                              dialog);
-        gnc_gconf_general_remove_cb(
-            KEY_ACCOUNT_SEPARATOR,
-            (GncGconfGeneralCb)gnc_account_separator_prefs_cb,
-            dialog);
         gnc_gconf_remove_notification(G_OBJECT(dialog), NULL,
                                       DIALOG_PREFERENCES_CM_CLASS);
         gtk_widget_destroy(GTK_WIDGET(dialog));
@@ -1295,11 +1283,6 @@ gnc_prefs_connect_one_gconf (const gchar *name,
     {
         DEBUG("  %s - radio button", name);
         gnc_prefs_connect_radio_button_gconf(GTK_RADIO_BUTTON(widget));
-    }
-    else if (GTK_IS_ENTRY(widget))
-    {
-        DEBUG("  %s - entry", name);
-        gnc_prefs_connect_entry_gconf(GTK_ENTRY(widget));
     }
     else if (GTK_IS_HBOX(widget))
     {
@@ -1374,6 +1357,11 @@ gnc_prefs_connect_one (const gchar *name,
         DEBUG("  %s - combo box", name);
         gnc_prefs_connect_combo_box(GTK_COMBO_BOX(widget));
     }
+    else if (GTK_IS_ENTRY(widget))
+    {
+        DEBUG("  %s - entry", name);
+        gnc_prefs_connect_entry(GTK_ENTRY(widget));
+    }
     else
     {
         DEBUG("  %s - unsupported %s", name,
@@ -1420,6 +1408,12 @@ gnc_preferences_dialog_create(void)
     gnc_builder_add_from_file (builder, "dialog-preferences.glade", "tab_width_adj");
     gnc_builder_add_from_file (builder, "dialog-preferences.glade", "GnuCash Preferences");
     dialog = GTK_WIDGET(gtk_builder_get_object (builder, "GnuCash Preferences"));
+
+    label = GTK_WIDGET(gtk_builder_get_object (builder, "sample_account"));
+    g_object_set_data(G_OBJECT(dialog), "sample_account", label);
+
+    image = GTK_WIDGET(gtk_builder_get_object (builder, "separator_error"));
+    g_object_set_data(G_OBJECT(dialog), "separator_error", image);
 
     DEBUG("autoconnect");
     gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, dialog);
@@ -1495,14 +1489,6 @@ gnc_preferences_dialog_create(void)
     gtk_label_set_label(GTK_LABEL(label), currency_name);
     label = GTK_WIDGET(gtk_builder_get_object (builder, "locale_currency2"));
     gtk_label_set_label(GTK_LABEL(label), currency_name);
-
-    label = GTK_WIDGET(gtk_builder_get_object (builder, "sample_account"));
-    g_object_set_data(G_OBJECT(dialog), "sample_account", label);
-
-    image = GTK_WIDGET(gtk_builder_get_object (builder, "separator_error"));
-    g_object_set_data(G_OBJECT(dialog), "separator_error", image);
-
-    gnc_account_separator_prefs_cb(NULL, dialog);
 
     g_object_unref(G_OBJECT(builder));
 
@@ -1627,12 +1613,6 @@ gnc_preferences_gconf_changed (GConfClient *client,
             DEBUG("widget %p - radio button", widget);
             gnc_prefs_radio_button_gconf_cb_gconf(GTK_RADIO_BUTTON(widget));
         }
-        else if (GTK_IS_ENTRY(widget))
-        {
-            DEBUG("widget %p - entry", widget);
-            gnc_prefs_entry_gconf_cb_gconf(GTK_ENTRY(widget),
-                                     gconf_value_get_string(entry->value));
-        }
         else if (GTK_IS_HBOX(widget))
         {
             /* Test custom widgets are all children of a hbox */
@@ -1744,9 +1724,6 @@ gnc_preferences_dialog (void)
     gnc_gconf_add_notification(G_OBJECT(dialog), NULL,
                                gnc_preferences_gconf_changed,
                                DIALOG_PREFERENCES_CM_CLASS);
-    gnc_gconf_general_register_cb(KEY_ACCOUNT_SEPARATOR,
-                                  (GncGconfGeneralCb)gnc_account_separator_prefs_cb,
-                                  dialog);
     gnc_register_gui_component(DIALOG_PREFERENCES_CM_CLASS,
                                NULL, close_handler, dialog);
 

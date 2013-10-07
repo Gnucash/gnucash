@@ -23,7 +23,6 @@
 
 #include "config.h"
 #include "account-quickfill.h"
-#include "gnc-gconf-utils.h"
 #include "gnc-engine.h"
 #include "gnc-prefs.h"
 #include "gnc-ui-util.h"
@@ -31,9 +30,6 @@
 /* This static indicates the debugging module that this .o belongs to. */
 static QofLogModule log_module = GNC_MOD_REGISTER;
 
-/* FIXME to delete when gconf conversion is complete */
-static void shared_quickfill_gconf_changed (GConfEntry *entry, gpointer qfb);
-/* FIXME delete until here */
 static void shared_quickfill_pref_changed (gpointer prefs, gchar *pref, gpointer qfb);
 static void listen_for_account_events  (QofInstance *entity,  QofEventId event_type,
                                         gpointer user_data, gpointer event_data);
@@ -69,9 +65,10 @@ static void
 shared_quickfill_destroy (QofBook *book, gpointer key, gpointer user_data)
 {
     QFB *qfb = user_data;
-    gnc_gconf_general_remove_cb(KEY_ACCOUNT_SEPARATOR,
-                                shared_quickfill_gconf_changed,
-                                qfb);
+    gnc_prefs_remove_cb_by_func (GNC_PREFS_GROUP_GENERAL_REGISTER,
+                                 GNC_PREF_ACCOUNT_SEPARATOR,
+                                 shared_quickfill_pref_changed,
+                                 qfb);
     gnc_prefs_remove_cb_by_func (GNC_PREFS_GROUP_GENERAL_REGISTER,
                                  GNC_PREF_SHOW_LEAF_ACCT_NAMES,
                                  shared_quickfill_pref_changed,
@@ -144,21 +141,6 @@ load_shared_qf_cb (Account *account, gpointer data)
     g_free(name);
 }
 
-/* FIXME to delete when gconf conversion is complete */
-static void
-shared_quickfill_gconf_changed (GConfEntry *entry, gpointer user_data)
-{
-    QFB *qfb = user_data;
-
-    /* Reload the quickfill */
-    gnc_quickfill_purge(qfb->qf);
-    gtk_list_store_clear(qfb->list_store);
-    qfb->load_list_store = TRUE;
-    gnc_account_foreach_descendant(qfb->root, load_shared_qf_cb, qfb);
-    qfb->load_list_store = FALSE;
-}
-/* FIXME delete until here */
-
 
 static void
 shared_quickfill_pref_changed (gpointer prefs, gchar *pref, gpointer user_data)
@@ -194,14 +176,15 @@ build_shared_quickfill (QofBook *book, Account *root, const char * key,
     qfb->list_store =
         gtk_list_store_new (NUM_ACCOUNT_COLUMNS, G_TYPE_STRING, G_TYPE_POINTER);
 
-    gnc_gconf_general_register_cb(KEY_ACCOUNT_SEPARATOR,
-                                  shared_quickfill_gconf_changed,
-                                  qfb);
+    gnc_prefs_register_cb (GNC_PREFS_GROUP_GENERAL,
+                           GNC_PREF_ACCOUNT_SEPARATOR,
+                           shared_quickfill_pref_changed,
+                           qfb);
 
-    gnc_prefs_register_cb(GNC_PREFS_GROUP_GENERAL_REGISTER,
-                          GNC_PREF_SHOW_LEAF_ACCT_NAMES,
-                          shared_quickfill_pref_changed,
-                          qfb);
+    gnc_prefs_register_cb (GNC_PREFS_GROUP_GENERAL_REGISTER,
+                           GNC_PREF_SHOW_LEAF_ACCT_NAMES,
+                           shared_quickfill_pref_changed,
+                           qfb);
 
     gnc_account_foreach_descendant(root, load_shared_qf_cb, qfb);
     qfb->load_list_store = FALSE;

@@ -43,6 +43,7 @@
 typedef QofSession * (*QofSessionCB) (void);
 
 
+gchar *gnc_normalize_account_separator (const gchar* separator);
 gboolean gnc_reverse_balance(const Account *account);
 
 /* Default directory sections ***************************************/
