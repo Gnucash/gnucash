@@ -222,6 +222,22 @@ gnc_gsettings_remove_any_cb_by_func (const gchar *schema,
 }
 
 
+void gnc_gsettings_bind (const gchar *schema,
+                         /*@ null @*/ const gchar *key,
+                         gpointer object,
+                         const gchar *property)
+{
+    GSettings *schema_ptr = gnc_gsettings_get_schema_ptr (schema);
+    g_return_if_fail (G_IS_SETTINGS (schema_ptr));
+
+    if (gnc_gsettings_is_valid_key (schema_ptr, key))
+        g_settings_bind (schema_ptr, key, object, property, 0);
+    else
+    {
+        PERR ("Invalid key %s for schema %s", key, schema);
+    }
+}
+
 /************************************************************/
 /*                      Getters/Setters                     */
 /************************************************************/

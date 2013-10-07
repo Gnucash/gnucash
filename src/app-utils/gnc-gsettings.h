@@ -221,6 +221,30 @@ void gnc_gsettings_remove_any_cb_by_func (const gchar *schema,
                                           gpointer user_data);
 
 
+/** Bind a setting to a g_object property. When this succeeds a change
+ *  of the setting will automatically update the bound object property
+ *  and vice versa.
+ *
+ *  @param schema This string provides a grouping of keys within the
+ *  GnuCash schema of the gsettings database.  It can be a simple string
+ *  as in "history" for settings that are common to many areas of
+ *  gnucash, or it can be a partial path name as in
+ *  "dialogs.business.invoice" for setting that only apply to one
+ *  specific area of the program.
+ *
+ *  @param key This string is the name of the particular key within
+ *  the named schema of gsettings.
+ *
+ *  @param object The object to be bound.
+ *
+ *  @param property The property of the object to bind to.
+ */
+void gnc_gsettings_bind (const gchar *schema,
+                         /*@ null @*/ const gchar *key,
+                         gpointer object,
+                         const gchar *property);
+
+
 /** @name GSettings Get Functions
  @{
 */
