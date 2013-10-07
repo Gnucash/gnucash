@@ -264,8 +264,6 @@ set_default LIBTIFF_URL             "$GNOME_WIN32_DEPS_URL/libtiff_3.9.2-1_win32
 set_default LIBTIFF_DEV_URL         "$GNOME_WIN32_DEPS_URL/libtiff-dev_3.9.2-1_win32.zip"
 set_default LIBXML2_URL             "$GNOME_WIN32_DEPS_URL/libxml2_2.7.7-1_win32.zip"
 set_default LIBXML2_DEV_URL         "$GNOME_WIN32_DEPS_URL/libxml2-dev_2.7.7-1_win32.zip"
-set_default ORBIT2_URL              "$GNOME_WIN32_URL/ORBit2/2.14/ORBit2_2.14.16-1_win32.zip"
-set_default ORBIT2_DEV_URL          "$GNOME_WIN32_URL/ORBit2/2.14/ORBit2-dev_2.14.16-1_win32.zip"
 set_default PANGO_URL               "$GNOME_WIN32_URL/pango/1.29/pango_1.29.4-1_win32.zip"
 set_default PANGO_DEV_URL           "$GNOME_WIN32_URL/pango/1.29/pango-dev_1.29.4-1_win32.zip"
 set_default PKG_CONFIG_URL          "$GNOME_WIN32_DEPS_URL/pkg-config_0.25-1_win32.zip"

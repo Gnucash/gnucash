@@ -98,7 +98,6 @@ function dist_gnome() {
     wget_unpacked $LIBPNG_URL $DOWNLOAD_DIR $DIST_DIR
     wget_unpacked $LIBTIFF_URL $DOWNLOAD_DIR $DIST_DIR
     #wget_unpacked $LIBXML2_URL $DOWNLOAD_DIR $DIST_DIR
-    wget_unpacked $ORBIT2_URL $DOWNLOAD_DIR $DIST_DIR
     wget_unpacked $PANGO_URL $DOWNLOAD_DIR $DIST_DIR
     wget_unpacked $ZLIB_URL $DOWNLOAD_DIR $DIST_DIR
     echo 'gtk-theme-name = "Nimbus"' > $DIST_DIR/etc/gtk-2.0/gtkrc
@@ -234,7 +233,7 @@ function dist_gnucash() {
     cp -a $_INSTALL_UDIR/etc/gnucash/* $DIST_UDIR/etc/gnucash
     cp -a $_INSTALL_UDIR/lib/lib*.la $DIST_UDIR/bin
     mkdir -p $DIST_UDIR/share
-    cp -a $_INSTALL_UDIR/share/{doc,gnucash,locale} $DIST_UDIR/share
+    cp -a $_INSTALL_UDIR/share/{doc,gnucash,locale,glib-2.0} $DIST_UDIR/share
     cp -a $_REPOS_UDIR/packaging/win32/{getperl.vbs,gnc-path-check,install-fq-mods.cmd} $DIST_UDIR/bin
 
     _QTDIR_WIN=$(unix_path $QTDIR | sed 's,^/\([A-Za-z]\)/,\1:/,g' )

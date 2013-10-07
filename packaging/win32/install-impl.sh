@@ -545,8 +545,6 @@ function inst_gnome() {
         wget_unpacked $LIBTIFF_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
 #        wget_unpacked $LIBXML2_URL $DOWNLOAD_DIR $GNOME_DIR
 #        wget_unpacked $LIBXML2_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $ORBIT2_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $ORBIT2_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $PANGO_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $PANGO_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $PKG_CONFIG_URL $DOWNLOAD_DIR $GNOME_DIR
