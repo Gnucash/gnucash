@@ -882,16 +882,6 @@ void gnc_gconf_remove_anon_notification (const gchar *section,
  */
 GSList *gnc_gconf_client_all_entries (const gchar *section);
 
-
-/** Check gconf to see if the schema for one of the gnucash keys can
- *  be found.  This function is called to determine whether or not to
- *  launch an assistant to help the user properly set up GConf for Gnucash.
- *
- *  @return This function returns TRUE if it was able to find a
- *  schema.
- */
-gboolean gnc_gconf_schemas_found (void);
-
 /** @} */
 
 /** @name GConf One Liners
@@ -919,6 +909,11 @@ gnc_gconf_toolbar_detachable (void)
 {
     return gnc_gconf_get_bool(DESTKOP_TOOLBAR_DETACHABLE, NULL, NULL);
 }
+
+void gnc_gconf_general_changed (GConfClient *client,
+                                guint cnxn_id,
+                                GConfEntry *entry,
+                                gpointer data);
 
 /** @} */
 

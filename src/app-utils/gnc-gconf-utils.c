@@ -33,7 +33,6 @@
 #define NOTIFY_TAG  "%s-%s-notify_id"
 
 static GConfClient *our_client = NULL;
-static guint gconf_general_cb_id = 0;
 
 
 
@@ -146,7 +145,7 @@ gcb_call_hook (GHook *hook, gpointer data)
     ((GFunc)hook->func)(data, hook->data);
 }
 
-static void
+void
 gnc_gconf_general_changed (GConfClient *client,
                            guint cnxn_id,
                            GConfEntry *entry,
@@ -959,33 +958,4 @@ gnc_gconf_remove_anon_notification (const gchar *section,
         g_object_unref(client);
     }
     g_free(path);
-}
-
-/* ============================================================== */
-
-gboolean
-gnc_gconf_schemas_found (void)
-{
-    GConfSchema* schema;
-    GError *err = NULL;
-    gchar *key;
-
-    if (our_client == NULL)
-        our_client = gconf_client_get_default();
-
-    key = gnc_gconf_make_schema_key(GCONF_GENERAL_REGISTER, "use_theme_colors");
-    schema = gconf_client_get_schema(our_client, key, &err);
-    g_free(key);
-    if (schema == NULL)
-    {
-        return FALSE;
-    }
-    gconf_schema_free(schema);
-
-    /* Set up convenience callback for general section */
-
-    gconf_general_cb_id =
-        gnc_gconf_add_anon_notification(GCONF_GENERAL, gnc_gconf_general_changed,
-                                        NULL);
-    return TRUE;
 }

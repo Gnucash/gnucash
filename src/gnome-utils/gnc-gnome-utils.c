@@ -30,7 +30,6 @@
 #endif
 #include <libxml/xmlIO.h>
 
-#include "assistant-gconf-setup.h"
 #include "gnc-gconf-utils.h"
 #include "gnc-prefs-utils.h"
 #include "gnc-gnome-utils.h"
@@ -636,7 +635,7 @@ gnc_gui_init(void)
 
     gnc_prefs_init();
     gnc_show_splash_screen();
-    assistant_gconf_install_check_schemas();
+    gnc_gconf_add_anon_notification(GCONF_GENERAL, gnc_gconf_general_changed, NULL);
 
     gnome_is_initialized = TRUE;
 

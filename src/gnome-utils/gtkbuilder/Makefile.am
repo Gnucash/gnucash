@@ -1,6 +1,5 @@
 gtkbuilderdir = $(GNC_GTKBUILDER_DIR)
 gtkbuilder_DATA = \
-  assistant-gconf-setup.glade \
   assistant-xml-encoding.glade \
   dialog-account.glade \
   dialog-book-close.glade \

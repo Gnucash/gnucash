@@ -26,7 +26,6 @@ AM_CPPFLAGS = \
 
 libgncmod_gnome_utils_la_SOURCES = \
   account-quickfill.c \
-  assistant-gconf-setup.c \
   assistant-utils.c \
   assistant-xml-encoding.c \
   cursors.c \
@@ -111,7 +110,6 @@ libgncmod_gnome_utils_la_SOURCES = \
 gncincludedir = ${GNC_INCLUDE_DIR}
 gncinclude_HEADERS = \
   account-quickfill.h \
-  assistant-gconf-setup.h \
   assistant-utils.h \
   assistant-xml-encoding.h \
   dialog-account.h \
