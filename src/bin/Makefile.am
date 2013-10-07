@@ -120,6 +120,14 @@ environment: environment.in ${top_builddir}/config.status Makefile
 if CUSTOM_GNC_DBD_DIR
 	echo 'GNC_DBD_DIR=@GNC_DBD_DIR@' >> $@.tmp
 endif
+	if [ "a$(prefix)" != "a/usr" ] && [ "a$(prefix)" != "a/usr/local" ]; \
+	then \
+		echo >> $@.tmp; \
+		echo "# GnuCash was not installed in the default location" >> $@.tmp; \
+		echo "# XDG_DATA_DIRS will be set so that our documentation" >> $@.tmp; \
+		echo "# and gsettings schemas are found." >> $@.tmp; \
+		echo "XDG_DATA_DIRS=$(prefix)/share:{XDG_DATA_DIRS}:/usr/local/share/:/usr/share/" >> $@.tmp; \
+	fi
 	mv $@.tmp $@
 
 CLEANFILES = $(BUILT_SOURCES) ${config_DATA} ${PLATFORM_FILES}
