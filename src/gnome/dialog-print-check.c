@@ -39,7 +39,6 @@
 #include <gnc-gdate-utils.h>
 #include "qof.h"
 #include "gnc-date.h"
-#include "gnc-gconf-utils.h"
 #include "gnc-prefs.h"
 #include "gnc-numeric.h"
 #include "gnc-plugin-page-register.h"
@@ -65,12 +64,11 @@
  */
 G_GNUC_UNUSED static QofLogModule log_module = "gnc.printing.checks";
 
-#define GCONF_SECTION          "dialogs/print_checks"
 #define GNC_PREFS_GROUP             "dialogs.checkprinting"
-#define KEY_CHECK_FORMAT_GUID  "check_format_guid"
+#define GNC_PREF_CHECK_FORMAT_GUID  "check_format_guid"
 #define GNC_PREF_CHECK_POSITION     "check_position"
 #define GNC_PREF_FIRST_PAGE_COUNT   "first_page_count"
-#define KEY_DATE_FORMAT_USER   "date_format_custom"
+#define GNC_PREF_DATE_FORMAT_USER   "date_format_custom"
 #define GNC_PREF_CUSTOM_PAYEE       "custom_payee"
 #define GNC_PREF_CUSTOM_DATE        "custom_date"
 #define GNC_PREF_CUSTOM_WORDS       "custom_amount_words"
@@ -564,8 +562,8 @@ gnc_ui_print_save_dialog(PrintCheckDialog *pcd)
     {
         model = gtk_combo_box_get_model(GTK_COMBO_BOX(pcd->format_combobox));
         gtk_tree_model_get(model, &iter, COL_DATA, &check, -1);
-        gnc_gconf_set_string(GCONF_SECTION, KEY_CHECK_FORMAT_GUID,
-                             check ? check->guid : "custom", NULL);
+        gnc_prefs_set_string (GNC_PREFS_GROUP, GNC_PREF_CHECK_FORMAT_GUID,
+                              check ? check->guid : "custom");
     }
     active = gtk_combo_box_get_active(GTK_COMBO_BOX(pcd->position_combobox));
     gnc_prefs_set_int(GNC_PREFS_GROUP, GNC_PREF_CHECK_POSITION, active);
@@ -576,11 +574,11 @@ gnc_ui_print_save_dialog(PrintCheckDialog *pcd)
     if (active == QOF_DATE_FORMAT_CUSTOM)
     {
         format = gnc_date_format_get_custom (GNC_DATE_FORMAT(pcd->date_format));
-        gnc_gconf_set_string(GCONF_SECTION, KEY_DATE_FORMAT_USER, format, NULL);
+        gnc_prefs_set_string (GNC_PREFS_GROUP, GNC_PREF_DATE_FORMAT_USER, format);
     }
     else
     {
-        gnc_gconf_unset (GCONF_SECTION, KEY_DATE_FORMAT_USER, NULL);
+        gnc_prefs_reset (GNC_PREFS_GROUP, GNC_PREF_DATE_FORMAT_USER);
     }
 
     /* Custom format page */
@@ -634,7 +632,7 @@ gnc_ui_print_restore_dialog(PrintCheckDialog *pcd)
     gint active;
 
     /* Options page */
-    guid = gnc_gconf_get_string(GCONF_SECTION, KEY_CHECK_FORMAT_GUID, NULL);
+    guid = gnc_prefs_get_string (GNC_PREFS_GROUP, GNC_PREF_CHECK_FORMAT_GUID);
     if (guid == NULL)
         gtk_combo_box_set_active(GTK_COMBO_BOX(pcd->format_combobox), 0);
     else if (strcmp(guid, "custom") == 0)
@@ -665,7 +663,7 @@ gnc_ui_print_restore_dialog(PrintCheckDialog *pcd)
     gnc_date_format_set_format(GNC_DATE_FORMAT(pcd->date_format), active);
     if (active == QOF_DATE_FORMAT_CUSTOM)
     {
-        format = gnc_gconf_get_string(GCONF_SECTION, KEY_DATE_FORMAT_USER, NULL);
+        format = gnc_prefs_get_string (GNC_PREFS_GROUP, GNC_PREF_DATE_FORMAT_USER);
         if (format)
         {
             gnc_date_format_set_custom(GNC_DATE_FORMAT(pcd->date_format), format);
@@ -2022,7 +2020,7 @@ draw_picture(GtkPrintContext *context, check_item_t *data)
  * date.
  *
  * Note: This code only prints a date if the user has explicitly requested it
- * via a preference (gconf) setting.  This is because gnucash has no way of
+ * via a preference setting.  This is because gnucash has no way of
  * knowing if the user's checks already have a date format printed on them.
  */
 static void
