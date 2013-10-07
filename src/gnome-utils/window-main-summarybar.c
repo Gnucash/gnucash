@@ -33,7 +33,6 @@
 #include "gnc-component-manager.h"
 #include "gnc-euro.h"
 #include "gnc-event.h"
-#include "gnc-gconf-utils.h"
 #include "gnc-prefs.h"
 #include "gnc-locale-utils.h"
 #include "gnc-ui-util.h"
@@ -49,9 +48,6 @@ typedef struct
 } GNCMainSummary;
 
 #define WINDOW_SUMMARYBAR_CM_CLASS "summary-bar"
-
-#define GCONF_SECTION    "window/pages/account_tree/summary"
-#define KEY_NON_CURRENCY "non_currency"
 
 #define GNC_PREFS_GROUP       "window.pages.account_tree.summary"
 #define GNC_PREF_GRAND_TOTAL  "grand_total"
@@ -448,7 +444,7 @@ gnc_main_window_summary_refresh (GNCMainSummary * summary)
 static void
 gnc_main_window_summary_destroy_cb(GNCMainSummary *summary, gpointer data)
 {
-    gnc_gconf_remove_anon_notification(GCONF_SECTION, summary->cnxn_id);
+    gnc_prefs_remove_cb_by_id (GNC_PREFS_GROUP, summary->cnxn_id);
     gnc_unregister_gui_component(summary->component_id);
     g_free(summary);
 }
@@ -461,10 +457,7 @@ summarybar_refresh_handler(GHashTable * changes, gpointer user_data)
 }
 
 static void
-gconf_client_notify_cb (GConfClient *client,
-                        guint cnxn_id,
-                        GConfEntry *entry,
-                        gpointer user_data)
+prefs_changed_cb (gpointer prefs, gchar *pref, gpointer user_data)
 {
     GNCMainSummary * summary = user_data;
     gnc_main_window_summary_refresh(summary);
@@ -518,9 +511,8 @@ gnc_main_window_summary_new (void)
 
     gnc_main_window_summary_refresh(retval);
 
-    retval->cnxn_id =  gnc_gconf_add_anon_notification(GCONF_SECTION,
-                       gconf_client_notify_cb,
-                       retval);
+    retval->cnxn_id =  gnc_prefs_register_cb (GNC_PREFS_GROUP, NULL,
+                                              prefs_changed_cb, retval);
 
     return retval->hbox;
 }
