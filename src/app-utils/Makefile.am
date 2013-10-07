@@ -33,7 +33,6 @@ AM_CPPFLAGS = \
   ${GUILE_INCS} \
   ${PYTHON_CPPFLAGS} \
   ${GLIB_CFLAGS} \
-  ${GCONF_CFLAGS} \
   ${GTK_CFLAGS}
 
 libgncmod_app_utils_la_SOURCES = \
@@ -52,7 +51,6 @@ libgncmod_app_utils_la_SOURCES = \
   gnc-entry-quickfill.c \
   gnc-euro.c \
   gnc-exp-parser.c \
-  gnc-gconf-utils.c \
   gnc-gettext-util.c \
   gnc-gsettings.c \
   gnc-helpers.c \
@@ -79,7 +77,6 @@ gncinclude_HEADERS = \
   gnc-entry-quickfill.h \
   gnc-euro.h \
   gnc-exp-parser.h \
-  gnc-gconf-utils.h \
   gnc-gettext-util.h \
   gnc-gsettings.h \
   gnc-help-utils.h \
@@ -98,7 +95,6 @@ libgncmod_app_utils_la_LIBADD = \
   ${top_builddir}/src/engine/libgncmod-engine.la \
   ${top_builddir}/src/core-utils/libgnc-core-utils.la \
   ${top_builddir}/src/libqof/qof/libgnc-qof.la \
-  ${GCONF_LIBS} \
   ${GTK_LIBS} \
   ${GUILE_LIBS} \
   ${GLIB_LIBS}

@@ -99,15 +99,6 @@ gchar *gnc_path_get_reportdir(void);
  * @returns A newly allocated string. */
 gchar *gnc_path_get_stdreportsdir(void);
 
-/** Returns the gconf schema config source path, usually
- * "$prefix/etc/gconf/gconf.xml.defaults".
- *
- * @param force_slashes Use slashes as separator of the elements
- * of the path.
- *
- * @returns A newly allocated string. */
-gchar *gnc_path_get_gconfdir(gboolean force_slashes);
-
 
 
 #endif /* GNC_PATH_H */

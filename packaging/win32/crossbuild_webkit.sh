@@ -191,8 +191,7 @@ function inst_libxslt_gnome() {
     else
         add_to_env pkg-config PKG_CONFIG
     fi
-    if quiet gconftool-2 --version &&
-        quiet ${PKG_CONFIG} --exists libxslt &&
+    if quiet ${PKG_CONFIG} --exists libxslt &&
         [ -f $_GNOME_UDIR/lib/pkgconfig/libxslt.pc ] &&
         quiet intltoolize --version
     then
@@ -245,8 +244,7 @@ function check_gnome() {
     else
         add_to_env pkg-config PKG_CONFIG
     fi
-    if quiet gconftool-2 --version &&
-        quiet ${PKG_CONFIG} --exists gconf-2.0 gtk+-2.0 cairo libxml-2.0 &&
+    if quiet ${PKG_CONFIG} --exists gtk+-2.0 cairo libxml-2.0 &&
         quiet intltoolize --version
     then
         echo "gnome packages installed."
@@ -282,8 +280,7 @@ function inst_enchant () {
     else
         add_to_env pkg-config PKG_CONFIG
     fi
-    if quiet gconftool-2 --version &&
-        quiet ${PKG_CONFIG} --exists enchant &&
+    if quiet ${PKG_CONFIG} --exists enchant &&
         [ -f $_GNOME_UDIR/lib/pkgconfig/enchant.pc ] &&
         quiet intltoolize --version
     then
@@ -307,8 +304,7 @@ function inst_libsoup () {
     else
         add_to_env pkg-config PKG_CONFIG
     fi
-    if quiet gconftool-2 --version &&
-        quiet ${PKG_CONFIG} --exists libsoup-2.4 &&
+    if quiet ${PKG_CONFIG} --exists libsoup-2.4 &&
         [ -f $_GNOME_UDIR/lib/pkgconfig/libsoup-2.4.pc ] &&
         quiet intltoolize --version
     then
@@ -357,8 +353,7 @@ function inst_webkit() {
     else
         add_to_env pkg-config PKG_CONFIG
     fi
-    if quiet gconftool-2 --version &&
-        quiet ${PKG_CONFIG} --exists webkit-1.0 &&
+    if quiet ${PKG_CONFIG} --exists webkit-1.0 &&
         [ -f $_GNOME_UDIR/lib/pkgconfig/webkit-1.0.pc ] &&
         quiet intltoolize --version
     then

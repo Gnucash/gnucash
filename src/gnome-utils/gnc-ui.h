@@ -60,7 +60,6 @@
 #define HL_PRINTCHECK        "print-check"
 #define HL_RECNWIN           "acct-reconcile"
 #define HL_SXEDITOR          "tool-sched"
-#define HL_GCONF             "gconf"
 #define HL_BOOK_OPTIONS      "book-options"
 #define HL_CLOSE_BOOK        "tool-close-book"
 

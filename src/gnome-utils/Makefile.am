@@ -1,4 +1,4 @@
-SUBDIRS = gtkbuilder schemas gschemas . test ui
+SUBDIRS = gtkbuilder gschemas . test ui
 
 pkglib_LTLIBRARIES = libgncmod-gnome-utils.la
 

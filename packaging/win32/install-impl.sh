@@ -502,9 +502,7 @@ function inst_gnome() {
     else
         add_to_env pkg-config PKG_CONFIG
     fi
-    if quiet gconftool-2 --version &&
-        quiet ${PKG_CONFIG} --atleast-version=${GCONF_VERSION} gconf-2.0 &&
-        quiet ${PKG_CONFIG} --atleast-version=${GTK_VERSION} gtk+-2.0 &&
+    if quiet ${PKG_CONFIG} --atleast-version=${GTK_VERSION} gtk+-2.0 &&
         quiet ${PKG_CONFIG} --atleast-version=${CAIRO_VERSION} cairo &&
         quiet ${PKG_CONFIG} --exact-version=${LIBXML2_VERSION} libxml-2.0 &&
         quiet intltoolize --version
@@ -524,8 +522,6 @@ function inst_gnome() {
         wget_unpacked $FREETYPE_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $GAIL_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $GAIL_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $GCONF_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $GCONF_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $GDK_PIXBUF_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $GDK_PIXBUF_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $GETTEXT_RUNTIME_URL $DOWNLOAD_DIR $GNOME_DIR
@@ -574,10 +570,6 @@ function inst_gnome() {
         qpushd $_GNOME_UDIR
             assert_one_dir $TMP_UDIR/gtk-doc-*
             mv $TMP_UDIR/gtk-doc-*/gtk-doc.m4 $_GNOME_UDIR/share/aclocal
-            if [ ! -f libexec/gconfd-2.console.exe ]; then
-                cp libexec/gconfd-2.exe libexec/gconfd-2.console.exe
-            fi
-            exetype libexec/gconfd-2.exe windows
             for file in bin/intltool-*; do
                 sed '1s,!.*perl,!'"$INTLTOOL_PERL"',;s,/opt/gnu/bin/iconv,iconv,' $file > tmp
                 mv tmp $file
@@ -620,8 +612,6 @@ EOF
             #perl -pi.bak -e's!^Libs: !Libs: -L\${prefix}/bin !' *.pc
         qpopd
 
-        quiet gconftool-2 --version || die "gnome not installed correctly"
-        quiet ${PKG_CONFIG} --atleast-version=${GCONF_VERSION} gconf-2.0 || die "gnome not installed correctly: no gconf-2.0 with atleast-version=${GCONF_VERSION}"
         quiet ${PKG_CONFIG} --atleast-version=${GTK_VERSION} gtk+-2.0 || die "gnome not installed correctly: no gtk+-2.0 with atleast-version=${GTK_VERSION}"
         quiet ${PKG_CONFIG} --atleast-version=${CAIRO_VERSION} cairo || die "gnome not installed correctly: no cairo with atleast-version=${CAIRO_VERSION}"
         quiet ${PKG_CONFIG} --exact-version=${LIBXML2_VERSION} libxml-2.0 || die "gnome not installed correctly: no libxml-2.0 with exact-version=${LIBXML2_VERSION}"
@@ -1458,7 +1448,7 @@ function inst_gnucash() {
 
 # This function will be called by make_install.sh as well,
 # so do not regard variables from inst_* functions as set
-# Parameters allowed: skip_scripts, skip_schemas
+# Parameters allowed: skip_scripts
 function make_install() {
     _BUILD_UDIR=`unix_path $BUILD_DIR`
     _INSTALL_UDIR=`unix_path $INSTALL_DIR`
@@ -1483,7 +1473,6 @@ function make_install() {
 
     for param in "$@"; do
         [ "$param" = "skip_scripts" ] && _skip_scripts=1
-        [ "$param" = "skip_schemas" ] && _skip_schemas=1
     done
 
     make install
@@ -1510,17 +1499,6 @@ function make_install() {
             sed '/dependency_libs/d' $A > tmp ; mv tmp $A
         done
     qpopd
-
-    if [ -z $_skip_schemas ]; then
-        qpushd $_INSTALL_UDIR/etc/gconf/schemas
-            for file in *.schemas; do
-                gconftool-2 \
-                    --config-source=xml:merged:${_INSTALL_WFSDIR}/etc/gconf/gconf.xml.defaults \
-                    --install-schema-file $file >/dev/null
-            done
-            gconftool-2 --shutdown
-        qpopd
-    fi
 
     if [ -z $_skip_scripts ]; then
         # Create a startup script that works without the msys shell

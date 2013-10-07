@@ -61,16 +61,6 @@ AM_PROG_CC_C_O
 AC_GNU_SOURCE
 AC_PROG_INTLTOOL
 
-AM_GCONF_SOURCE_2
-
-# Override gconf default install locations.  The default is to always
-# put them into /etc.  This change puts them into $(prefix)/etc.
-if test "x$GCONF_SCHEMA_INSTALL_SOURCE" = "x"; then
-  GCONF_SCHEMA_CONFIG_SOURCE="xml::${sysconfdir}/gconf/gconf.xml.defaults"
-fi
-GCONF_SCHEMA_CONFIG_SOURCE_DIRONLY=`echo $GCONF_SCHEMA_CONFIG_SOURCE | cut -d ':' -f 3`
-AC_SUBST(GCONF_SCHEMA_CONFIG_SOURCE_DIRONLY)
-
 
 AC_SUBST(GNUCASH_MAJOR_VERSION)
 AC_SUBST(GNUCASH_MINOR_VERSION)
@@ -475,16 +465,6 @@ AC_MSG_CHECKING([if guile needs our copy of (guile www)])
 GUILE_MODULE_AVAILABLE(gnc_have_guile_www,[(www main)])
 
 AM_CONDITIONAL(GNC_HAVE_GUILE_WWW, test "${gnc_have_guile_www}" = yes)
-
-### --------------------------------------------------------------------------
-### look for gconf
-
-PKG_CHECK_MODULES(GCONF, gconf-2.0 >= 2.31.1)
-# Look up gconftool-2
-AC_PATH_PROG(GCONFTOOL, gconftool-2)
-AC_SUBST(GCONFTOOL)
-AC_SUBST(GCONF_CFLAGS)
-AC_SUBST(GCONF_LIBS)
 
 ### --------------------------------------------------------------------------
 ### LIBXML -- GNOME_XML_LIB is defined by GNOME_XML_CHECK
@@ -1319,12 +1299,10 @@ AC_CONFIG_FILES(
   src/gnome/Makefile
   src/gnome/gtkbuilder/Makefile
   src/gnome/gschemas/Makefile
-  src/gnome/schemas/Makefile
   src/gnome/ui/Makefile
   src/gnome-utils/Makefile
   src/gnome-utils/gtkbuilder/Makefile
   src/gnome-utils/gschemas/Makefile
-  src/gnome-utils/schemas/Makefile
   src/gnome-utils/test/Makefile
   src/gnome-utils/ui/Makefile
   src/gnome-search/Makefile

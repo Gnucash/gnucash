@@ -52,7 +52,6 @@ Please set AQBANKING_WITH_QT to yes and rerun install.sh first."
     _ISOCODES_UDIR=`unix_path $ISOCODES_DIR`
     _MINGW_WFSDIR=`win_fs_path $MINGW_DIR`
     add_to_env $_UNZIP_UDIR/bin PATH # unzip
-    add_to_env $_GNOME_UDIR/bin PATH # gconftool-2
     add_to_env $_EXETYPE_UDIR/bin PATH # exetype
 
     _PID=$$
@@ -87,7 +86,6 @@ function dist_gnome() {
     wget_unpacked $FONTCONFIG_URL $DOWNLOAD_DIR $DIST_DIR
     wget_unpacked $FREETYPE_URL $DOWNLOAD_DIR $DIST_DIR
     wget_unpacked $GAIL_URL $DOWNLOAD_DIR $DIST_DIR
-    wget_unpacked $GCONF_URL $DOWNLOAD_DIR $DIST_DIR
     wget_unpacked $GDK_PIXBUF_URL $DOWNLOAD_DIR $DIST_DIR
     wget_unpacked $GETTEXT_RUNTIME_URL $DOWNLOAD_DIR $DIST_DIR
     wget_unpacked $GLIB_URL $DOWNLOAD_DIR $DIST_DIR
@@ -118,7 +116,6 @@ function dist_gnome() {
 
     cp -a $_GNOME_UDIR/bin/libxml*.dll $DIST_DIR/bin
 
-    rm -rf $DIST_UDIR/etc/gconf/gconf.xml.defaults/{desktop,schemas}
     if [ -d $DIST_UDIR/lib/locale ] ; then
         # Huh, is this removed in newer gtk?
         cp -a $DIST_UDIR/lib/locale $DIST_UDIR/share
@@ -233,8 +230,6 @@ function dist_gnucash() {
     mkdir -p $DIST_UDIR/bin
     cp $_MINGW_UDIR/bin/pthreadGC2.dll $DIST_UDIR/bin
     cp -a $_INSTALL_UDIR/bin/* $DIST_UDIR/bin
-    mkdir -p $DIST_UDIR/etc/gconf/schemas
-    cp -a $_INSTALL_UDIR/etc/gconf/schemas/* $DIST_UDIR/etc/gconf/schemas
     mkdir -p $DIST_UDIR/etc/gnucash
     cp -a $_INSTALL_UDIR/etc/gnucash/* $DIST_UDIR/etc/gnucash
     cp -a $_INSTALL_UDIR/lib/lib*.la $DIST_UDIR/bin
@@ -263,19 +258,6 @@ function dist_gnucash() {
 }
 
 function dist_finish() {
-    for file in $DIST_UDIR/etc/gconf/schemas/*.schemas; do
-        echo -n "Installing $file ... "
-        gconftool-2 \
-            --config-source=xml:merged:${DIST_WFSDIR}/etc/gconf/gconf.xml.defaults \
-            --install-schema-file $file >/dev/null
-        echo "done"
-    done
-    gconftool-2 --shutdown
-
-    mv $DIST_UDIR/libexec/gconfd-2.exe $DIST_UDIR/bin
-    exetype $DIST_UDIR/bin/gconfd-2.exe windows
-    cp $_INSTALL_UDIR/bin/redirect.exe $DIST_UDIR/libexec/gconfd-2.exe
-
     if [ "$AQBANKING_WITH_QT" = "yes" ]; then
         assert_one_dir ${DIST_UDIR}/lib/aqbanking/plugins/*/wizards
         _qt3_wizard_path=`ls ${DIST_UDIR}/lib/aqbanking/plugins/*/wizards/qt3-wizard.exe` 

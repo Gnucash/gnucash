@@ -236,9 +236,6 @@ set_default FREETYPE_URL            "$GNOME_WIN32_DEPS_URL/freetype_2.4.4-1_win3
 set_default FREETYPE_DEV_URL        "$GNOME_WIN32_DEPS_URL/freetype-dev_2.4.4-1_win32.zip"
 set_default GAIL_URL                "$GNOME_WIN32_URL/gail/1.22/gail-1.22.0.zip"
 set_default GAIL_DEV_URL            "$GNOME_WIN32_URL/gail/1.22/gail-dev-1.22.0.zip"
-GCONF_VERSION="2.22.0"
-set_default GCONF_URL               "$GNOME_WIN32_URL/GConf/2.22/GConf_${GCONF_VERSION}-3_win32.zip"
-set_default GCONF_DEV_URL           "$GNOME_WIN32_URL/GConf/2.22/GConf-dev_${GCONF_VERSION}-3_win32.zip"
 GDK_PIXBUF_VERSION=2.24.0
 set_default GDK_PIXBUF_URL          "$GNOME_WIN32_URL/gdk-pixbuf/2.24/gdk-pixbuf_${GDK_PIXBUF_VERSION}-1_win32.zip"
 set_default GDK_PIXBUF_DEV_URL      "$GNOME_WIN32_URL/gdk-pixbuf/2.24/gdk-pixbuf-dev_${GDK_PIXBUF_VERSION}-1_win32.zip"
