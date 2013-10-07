@@ -15,5 +15,45 @@
       <summary>Next most recently opened file</summary>
       <description>This field contains the full path of the next most recently opened file.</description>
     </key>
+    <key name="file2" type="s">
+      <default>''</default>
+      <summary>Next most recently opened file</summary>
+      <description>This field contains the full path of the next most recently opened file.</description>
+    </key>
+    <key name="file3" type="s">
+      <default>''</default>
+      <summary>Next most recently opened file</summary>
+      <description>This field contains the full path of the next most recently opened file.</description>
+    </key>
+    <key name="file4" type="s">
+      <default>''</default>
+      <summary>Next most recently opened file</summary>
+      <description>This field contains the full path of the next most recently opened file.</description>
+    </key>
+    <key name="file5" type="s">
+      <default>''</default>
+      <summary>Next most recently opened file</summary>
+      <description>This field contains the full path of the next most recently opened file.</description>
+    </key>
+    <key name="file6" type="s">
+      <default>''</default>
+      <summary>Next most recently opened file</summary>
+      <description>This field contains the full path of the next most recently opened file.</description>
+    </key>
+    <key name="file7" type="s">
+      <default>''</default>
+      <summary>Next most recently opened file</summary>
+      <description>This field contains the full path of the next most recently opened file.</description>
+    </key>
+    <key name="file8" type="s">
+      <default>''</default>
+      <summary>Next most recently opened file</summary>
+      <description>This field contains the full path of the next most recently opened file.</description>
+    </key>
+    <key name="file9" type="s">
+      <default>''</default>
+      <summary>Next most recently opened file</summary>
+      <description>This field contains the full path of the next most recently opened file.</description>
+    </key>
   </schema>
 </schemalist>

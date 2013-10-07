@@ -48,10 +48,6 @@ G_BEGIN_DECLS
 #define GNC_PLUGIN_FILE_HISTORY_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GNC_TYPE_PLUGIN_FILE_HISTORY, GncPluginFileHistoryClass))
 
 #define GNC_PLUGIN_FILE_HISTORY_NAME "gnc-plugin-file-history"
-#define MAX_HISTORY_FILES 10	/* May be any number up to 10 */
-#define HISTORY_STRING_SECTION  "history"
-#define HISTORY_STRING_MAXFILES "maxfiles"
-#define HISTORY_STRING_FILE_N   "file%d"
 
 /* typedefs & structures */
 
@@ -88,8 +84,7 @@ GncPlugin *gnc_plugin_file_history_new (void);
 
 /** Add a file name to the front of the file "history list".  If the
  *  name already exist on the list, then it is moved from its current
- *  location to the front of the list.  The "list" is actually a
- *  sequence of up to ten gconf keys.
+ *  location to the front of the list.
  *
  *  @param filename The name of the file to add to the list.
  */
@@ -104,8 +99,7 @@ void gnc_history_remove_file (const char *oldfile);
 
 
 /** Retrieve the name of the file most recently accessed.  This is the
- *  name at the front of the list.  Since the "list" is actually a
- *  sequence of up to ten gconf keys, this is the value of key zero.
+ *  name at the front of the list.
  *
  *  @return This function returns an allocated string containing the
  *  name of the most recently accessed file.  The caller is
