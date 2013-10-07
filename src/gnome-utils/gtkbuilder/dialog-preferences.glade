@@ -1286,7 +1286,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkCheckButton" id="gconf/general/24hour_clock">
+                  <object class="GtkCheckButton" id="pref/general/clock-24h">
                     <property name="label" translatable="yes">U_se 24-hour clock</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>

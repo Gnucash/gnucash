@@ -99,7 +99,7 @@
       <summary>Default currency for new accounts</summary>
       <description>This setting specifies the default currency used for new accounts if the currency_choice setting is set to "other". This field must contain the three letter ISO 4217 code for a currency (e.g. USD, GBP, RUB).</description>
     </key>
-    <key name="24hour_clock" type="b">
+    <key name="clock-24h" type="b">
       <default>false</default>
       <summary>Use 24 hour time format</summary>
       <description>If active, use a 24 hour time format. Otherwise use a 12 hour time format.</description>

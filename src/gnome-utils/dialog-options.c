@@ -45,7 +45,7 @@
 #include "gnc-currency-edit.h"
 #include "gnc-date-edit.h"
 #include "gnc-engine.h"
-#include "gnc-gconf-utils.h"
+#include "gnc-prefs.h"
 #include "gnc-gui-query.h"
 #include "gnc-session.h"
 #include "gnc-ui.h"
@@ -55,6 +55,8 @@
 #include "guile-mappings.h"
 #include "gnc-date-format.h"
 #include "misc-gnome-utils.h"
+
+#define GNC_PREF_CLOCK_24H "clock-24h"
 
 #define FUNC_NAME G_STRFUNC
 /* TODO: clean up "register-stocks" junk
@@ -461,7 +463,7 @@ gnc_option_create_date_widget (GNCOption *option)
 
     type = gnc_option_date_option_get_subtype(option);
     show_time = gnc_option_show_time(option);
-    use24 = gnc_gconf_get_bool(GCONF_GENERAL, "24hour_time", FALSE);
+    use24 = gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL, GNC_PREF_CLOCK_24H);
 
     if (g_strcmp0(type, "relative") != 0)
     {
