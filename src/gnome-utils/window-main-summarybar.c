@@ -84,7 +84,6 @@ typedef struct
 typedef struct
 {
     gnc_commodity *default_currency;
-    gboolean euro;
     gboolean grand_total;
     gboolean non_currency;
     time64 start_date;
@@ -134,9 +133,7 @@ gnc_ui_accounts_recurse (Account *parent, GList **currency_list,
     gnc_numeric end_amount_default_currency;
     GNCAccountType account_type;
     gnc_commodity * account_currency;
-    gnc_commodity * euro_commodity;
     GNCCurrencyAcc *currency_accum = NULL;
-    GNCCurrencyAcc *euro_accum = NULL;
     GNCCurrencyAcc *grand_total_accum = NULL;
     GNCCurrencyAcc *non_curr_accum = NULL;
     GList *children, *node;
@@ -158,16 +155,6 @@ gnc_ui_accounts_recurse (Account *parent, GList **currency_list,
             grand_total_accum = gnc_ui_get_currency_accumulator(currency_list,
                                 options.default_currency,
                                 TOTAL_GRAND_TOTAL);
-
-        if (options.euro)
-        {
-            euro_commodity = gnc_get_euro ();
-            euro_accum = gnc_ui_get_currency_accumulator(currency_list,
-                         euro_commodity,
-                         TOTAL_CURR_TOTAL);
-        }
-        else
-            euro_commodity = NULL;
 
         if (!gnc_commodity_is_currency(account_currency))
         {
@@ -226,15 +213,6 @@ gnc_ui_accounts_recurse (Account *parent, GList **currency_list,
                                      GNC_HOW_RND_ROUND_HALF_UP);
             }
 
-            if (options.euro && (currency_accum != euro_accum))
-            {
-                euro_accum->assets =
-                    gnc_numeric_add (euro_accum->assets,
-                                     gnc_convert_to_euro(account_currency, end_amount),
-                                     gnc_commodity_get_fraction (euro_commodity),
-                                     GNC_HOW_RND_ROUND_HALF_UP);
-            }
-
             gnc_ui_accounts_recurse(account, currency_list, options);
             break;
         case ACCT_TYPE_INCOME:
@@ -287,20 +265,6 @@ gnc_ui_accounts_recurse (Account *parent, GList **currency_list,
                     gnc_numeric_sub (grand_total_accum->profits,
                                      end_amount_default_currency,
                                      gnc_commodity_get_fraction (options.default_currency),
-                                     GNC_HOW_RND_ROUND_HALF_UP);
-            }
-
-            if (options.euro && (currency_accum != euro_accum))
-            {
-                euro_accum->profits =
-                    gnc_numeric_add (euro_accum->profits,
-                                     gnc_convert_to_euro(account_currency, start_amount),
-                                     gnc_commodity_get_fraction (euro_commodity),
-                                     GNC_HOW_RND_ROUND_HALF_UP);
-                euro_accum->profits =
-                    gnc_numeric_sub (euro_accum->profits,
-                                     gnc_convert_to_euro(account_currency, end_amount),
-                                     gnc_commodity_get_fraction (euro_commodity),
                                      GNC_HOW_RND_ROUND_HALF_UP);
             }
 
@@ -393,7 +357,6 @@ gnc_main_window_summary_refresh (GNCMainSummary * summary)
         options.default_currency = gnc_default_currency ();
     }
 
-    options.euro = gnc_gconf_get_bool(GCONF_GENERAL, KEY_ENABLE_EURO, NULL);
     options.grand_total =
         gnc_gconf_get_bool(GCONF_SECTION, KEY_GRAND_TOTAL, NULL);
     options.non_currency =
