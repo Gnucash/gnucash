@@ -33,7 +33,6 @@
 #include "gnc-tree-model-split-reg.h"
 #include "gnc-component-manager.h"
 #include "gnc-commodity.h"
-#include "gnc-gconf-utils.h"
 #include "gnc-prefs.h"
 #include "gnc-engine.h"
 #include "gnc-event.h"
@@ -1020,22 +1019,25 @@ gnc_tree_model_split_reg_default_query (GncTreeModelSplitReg *model, Account *de
         state_key = g_strconcat (STATE_SECTION_PREFIX, (gchar*)guid_to_string (guid), NULL);
  
 
-    /* Restore the sort column from gconf */
-    col = gnc_gconf_get_int (state_key, "sort_col", NULL);
+    /* Restore the sort column from saved state */
+    // FIXME currently not implemented
+    col = 0;
     if (col == 0)    
         model->sort_col = 1;
     else
         model->sort_col = col;
 
-    /* Restore the sort depth from gconf */
-    depth = gnc_gconf_get_int (state_key, "sort_depth", NULL);
+    /* Restore the sort depth from saved state */
+    // FIXME currently not implemented
+    depth = 0;
     if (depth == 0)
         model->sort_depth = 1;
     else
         model->sort_depth = depth;
 
-    /* Restore the sort order from gconf */
-    sort_string = gnc_gconf_get_string (state_key, "sort_order", NULL);
+    /* Restore the sort order from saved state */
+    // FIXME currently not implemented
+    sort_string = NULL;
     if (g_strcmp0 ("descending", sort_string) == 0)
         model->sort_direction = -1;
     else

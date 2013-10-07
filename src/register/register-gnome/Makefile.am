@@ -13,7 +13,6 @@ libgncmod_register_gnome_la_LIBADD = \
   ${top_builddir}/src/gnome-utils/libgncmod-gnome-utils.la \
   ${top_builddir}/src/libqof/qof/libgnc-qof.la \
   ${GLIB_LIBS} \
-  ${GCONF_LIBS} \
   ${GNOMECANVAS_LIBS}
 
 libgncmod_register_gnome_la_SOURCES = \
@@ -63,7 +62,6 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/src/register/register-core \
   -I${top_srcdir}/src/libqof/qof \
   ${GLIB_CFLAGS} \
-  ${GCONF_CFLAGS} \
   ${GTK_XIM_FLAGS} \
   ${GNOMECANVAS_CFLAGS}
 

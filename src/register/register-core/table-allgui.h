@@ -166,7 +166,7 @@ Table *     gnc_table_new (TableLayout *layout,
                            TableControl *control);
 void        gnc_virtual_location_init (VirtualLocation *vloc);
 
-void        gnc_table_save_state (Table *table, gchar *gconf_key);
+void        gnc_table_save_state (Table *table, gchar *state_key);
 void        gnc_table_destroy (Table *table);
 
 
@@ -303,7 +303,7 @@ gboolean    gnc_table_find_close_valid_cell (Table *table,
 /** UI-specific functions *******************************/
 
 /* Initialize the GUI from a table */
-void        gnc_table_init_gui (GtkWidget *widget, gchar * gconf_key);
+void        gnc_table_init_gui (GtkWidget *widget, gchar * state_key);
 
 void        gnc_table_realize_gui (Table *table);
 

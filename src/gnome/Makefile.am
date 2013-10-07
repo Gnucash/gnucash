@@ -19,7 +19,6 @@ libgnc_gnome_la_LIBADD = \
   ${LIBXML2_LIBS} \
   ${GUILE_LIBS} \
   ${GTK_LIBS} \
-  ${GCONF_LIBS} \
   ${GLIB_LIBS} \
   ${QOF_LIBS}
 
@@ -144,7 +143,6 @@ AM_CPPFLAGS = \
   ${LIBXML2_CFLAGS} \
   ${GUILE_INCS} \
   ${GTK_CFLAGS} \
-  ${GCONF_CFLAGS} \
   $(GLIB_CFLAGS) \
   ${GTK_MAC_CFLAGS}
 

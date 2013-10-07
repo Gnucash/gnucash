@@ -37,7 +37,6 @@
 #include "gnc-ledger-display2.h"
 
 #include "gnc-euro.h"
-#include "gnc-gconf-utils.h"
 #include "gnome-utils/gnc-warnings.h"
 #include "dialog-utils.h"
 
@@ -291,11 +290,11 @@ gsr2_create_table (GNCSplitReg2 *gsr)
 
     gnc_ledger_display2_set_split_view_register (gsr->ledger, view);
 
-    /* Restore the sort depth from gconf */
-    view->sort_depth = gnc_gconf_get_int (state_key, "sort_depth", NULL);
+    /* Restore the sort depth from saved state */
+    /* Restore the sort order from saved state */
+    // FIXME currently not implemented
 
-    /* Restore the sort order from gconf */
-    sort_string = gnc_gconf_get_string (state_key, "sort_order", NULL);
+    sort_string = NULL;
     if (g_strcmp0 ("descending", sort_string) == 0)
         view->sort_direction = -1;
     else
@@ -820,10 +819,9 @@ gnc_split_reg2_sort_changed_cb (GtkTreeSortable *sortable, gpointer user_data)
         model->sort_direction = 1;
     }
 
-    /* Save the sort depth to gconf */
+    /* Save the sort depth state */
     state_section = gnc_tree_view_get_state_section (GNC_TREE_VIEW (view));
-    gnc_gconf_set_int (state_section, "sort_depth", view->sort_depth, NULL);
-    gnc_gconf_set_int (state_section, "sort_col", view->sort_col, NULL);
+    // FIXME currently not implemented
 
     LEAVE("v_sort_col %d, v_sort_direction is %d  v_sort_depth is %d", view->sort_col, view->sort_direction, view->sort_depth);
 

@@ -686,13 +686,13 @@ gnc_split_reg_ld_destroy( GNCLedgerDisplay *ledger )
 {
     GNCSplitReg *gsr = gnc_ledger_display_get_user_data( ledger );
     
-    gchar *prefs_key;
+    gchar *state_key;
     const GncGUID * guid;
     Account * account;
     
     account = gnc_ledger_display_leader(ledger);
     guid = xaccAccountGetGUID(account);
-    prefs_key = (gchar*)guid_to_string (guid);
+    state_key = (gchar*)guid_to_string (guid);
     
     
     if (gsr)
@@ -702,7 +702,7 @@ gnc_split_reg_ld_destroy( GNCLedgerDisplay *ledger )
         reg = gnc_ledger_display_get_split_register (ledger);
 
         if (reg && reg->table)
-            gnc_table_save_state (reg->table, prefs_key);
+            gnc_table_save_state (reg->table, state_key);
 
         /*
          * Don't destroy the window here any more.  The register no longer
