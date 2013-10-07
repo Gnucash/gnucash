@@ -20,7 +20,7 @@
       <summary>Use absolute profit/loss starting date</summary>
       <description>This setting controls the type of starting date used in profit/loss calculations.  If set to "absolute" then GnuCash will retrieve the starting date specified by the start_date key.  If set to anything else, GnuCash will retrieve the starting date specified by the start_period key.</description>
     </key>
-    <key name="start_date" type="i">
+    <key name="start_date" type="x">
       <default>0</default>
       <summary>Starting date (in seconds from Jan 1, 1970)</summary>
       <description>This setting controls the starting date set in profit/loss calculations if the start_choice setting is set to "absolute". This field should contain a date as represented in seconds from January 1st, 1970.</description>
@@ -40,7 +40,7 @@
       <summary>Use absolute profit/loss ending date</summary>
       <description>This setting controls the type of ending date used in profit/loss calculations.  If set to "absolute" then GnuCash will retrieve the ending date specified by the end_date key.  If set to anything else, GnuCash will retrieve the ending date specified by the end_period key.</description>
     </key>
-    <key name="end_date" type="i">
+    <key name="end_date" type="x">
       <default>0</default>
       <summary>Ending date (in seconds from Jan 1, 1970)</summary>
       <description>This setting controls the ending date set in profit/loss calculations if the end_choice setting is set to "absolute". This field should contain a date as represented in seconds from January 1st, 1970.</description>

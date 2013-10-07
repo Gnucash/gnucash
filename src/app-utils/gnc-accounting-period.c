@@ -78,7 +78,9 @@ lookup_start_date_option(GDate *fy_end)
 
     if (gnc_prefs_get_bool (GNC_PREFS_GROUP, GNC_PREF_START_CHOICE_ABS))
     {
-        time = gnc_prefs_get_int(GNC_PREFS_GROUP, GNC_PREF_START_DATE);
+        GVariant *var = gnc_prefs_get_value(GNC_PREFS_GROUP, GNC_PREF_START_DATE);
+        time = g_variant_get_int64 (var);
+        g_variant_unref (var);
     }
     else
     {
@@ -100,8 +102,10 @@ lookup_end_date_option(GDate *fy_end)
 
     if (gnc_prefs_get_bool (GNC_PREFS_GROUP, GNC_PREF_END_CHOICE_ABS))
     {
-        time = gnc_prefs_get_int(GNC_PREFS_GROUP, GNC_PREF_END_DATE);
+        GVariant *var = gnc_prefs_get_value(GNC_PREFS_GROUP, GNC_PREF_END_DATE);
+        time = g_variant_get_int64 (var);
         time = gnc_time64_get_day_end(time);
+        g_variant_unref (var);
     }
     else
     {

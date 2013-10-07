@@ -676,95 +676,6 @@ gnc_prefs_split_widget_name (const gchar *name, gchar **group, gchar **pref)
     g_strfreev (splits);
 }
 
-/* FIXME to remove when gconf conversion of preferences is complete */
-/****************************************************************************/
-
-/** The user changed a date_edit.  Update gconf.  Date_edit
- *  choices are stored as an int.
- *
- *  @internal
- *
- *  @param gde A pointer to the date_edit that was changed.
- *
- *  @param user_data Unused.
- */
-static void
-gnc_prefs_date_edit_user_cb_gconf (GNCDateEdit *gde,
-                             gpointer user_data)
-{
-    const gchar *name;
-    time64 time;
-
-    g_return_if_fail(GNC_IS_DATE_EDIT(gde));
-    name  = g_object_get_data(G_OBJECT(gde), "name");
-    time = gnc_date_edit_get_date(gde);
-
-    DEBUG("date_edit %s set", name);
-    gnc_gconf_set_int(name, NULL, time, NULL);
-}
-
-
-/** A date_edit choice was updated in gconf.  Update the user
- *  visible dialog.
- *
- *  @internal
- *
- *  @param gde A pointer to the date_edit that changed.
- *
- *  @param value The new value of the date_edit.
- */
-static void
-gnc_prefs_date_edit_gconf_cb_gconf (GNCDateEdit *gde,
-                              GConfEntry *entry)
-{
-    time64 time;
-
-    g_return_if_fail(GNC_IS_DATE_EDIT(gde));
-    ENTER("date_edit %p, entry %p", gde, entry);
-
-    time = gconf_value_get_int(entry->value);
-
-    g_signal_handlers_block_by_func(G_OBJECT(gde),
-                                    G_CALLBACK(gnc_prefs_date_edit_user_cb_gconf), NULL);
-    gnc_date_edit_set_time(GNC_DATE_EDIT(gde), time);
-    g_signal_handlers_unblock_by_func(G_OBJECT(gde),
-                                      G_CALLBACK(gnc_prefs_date_edit_user_cb_gconf), NULL);
-    LEAVE(" ");
-}
-
-
-/** Connect a date_edit widget to the user callback function.  Set
- *  the starting state of the gde from its value in gconf.
- *
- *  @internal
- *
- *  @param gde A pointer to the date_edit that should be connected.
- */
-static void
-gnc_prefs_connect_date_edit_gconf (GNCDateEdit *gde , const gchar *boxname )
-{
-    const gchar *name;
-    time64 time;
-
-    g_return_if_fail(GNC_IS_DATE_EDIT(gde));
-
-    /* Lookup the date based upon gconf setting */
-    name = boxname + PREFIX_LEN;
-
-    g_object_set_data(G_OBJECT(gde), "name", g_strdup(name) );
-
-    time = gnc_gconf_get_int(name, NULL, NULL);
-
-    gnc_date_edit_set_time(GNC_DATE_EDIT(gde), time);
-    DEBUG(" date_edit %s set", name);
-
-    g_signal_connect(G_OBJECT(gde), "date_changed",
-                     G_CALLBACK(gnc_prefs_date_edit_user_cb_gconf), NULL);
-
-    gtk_widget_show_all(GTK_WIDGET(gde));
-}
-/* FIXME end of section to remove */
-
 /****************************************************************************/
 
 /** Connect a GtkFontButton widget to its stored value in the preferences database.
@@ -985,6 +896,29 @@ gnc_prefs_connect_period_select (GncPeriodSelect *period, const gchar *boxname )
     g_free (pref);
 }
 
+/****************************************************************************/
+
+/** Connect a GncDateEdit widget to its stored value in the preferences database.
+ *
+ *  @internal
+ *
+ *  @param gde A pointer to the date_edit that should be connected.
+ */
+static void
+gnc_prefs_connect_date_edit (GNCDateEdit *gde , const gchar *boxname )
+{
+    gchar *group, *pref;
+    gchar *mnemonic;
+
+    g_return_if_fail(GNC_IS_DATE_EDIT(gde));
+
+    gnc_prefs_split_widget_name (boxname, &group, &pref);
+
+    gnc_prefs_bind (group, pref, G_OBJECT (gde), "time");
+
+    g_free (group);
+    g_free (pref);
+}
 
 
 /****************************************************************************/
@@ -1050,28 +984,6 @@ gnc_prefs_connect_one_gconf (const gchar *name,
 {
     /* These tests must be ordered from more specific widget to less
      * specific widget. */
-
-    if (GTK_IS_HBOX(widget))
-    {
-        /* Test custom widgets are all children of a hbox */
-        GtkWidget *widget_child;
-        GList* child = gtk_container_get_children(GTK_CONTAINER(widget));
-        widget_child = child->data;
-        g_list_free(child);
-        DEBUG("  %s - hbox", name);
-        DEBUG("Hbox widget type is %s and name is %s", gtk_widget_get_name(GTK_WIDGET(widget_child)), name);
-
-        if (GNC_IS_DATE_EDIT(widget_child))
-        {
-            DEBUG("  %s - date_edit", name);
-            gnc_prefs_connect_date_edit_gconf(GNC_DATE_EDIT(widget_child), name );
-        }
-    }
-    else
-    {
-        DEBUG("  %s - unsupported %s", name,
-              G_OBJECT_TYPE_NAME(G_OBJECT(widget)));
-    }
 }
 /* FIXME end of section to be removed */
 
@@ -1143,6 +1055,11 @@ gnc_prefs_connect_one (const gchar *name,
         {
             DEBUG("  %s - period_Select", name);
             gnc_prefs_connect_period_select(GNC_PERIOD_SELECT(widget_child), name );
+        }
+        else if (GNC_IS_DATE_EDIT(widget_child))
+        {
+            DEBUG("  %s - date_edit", name);
+            gnc_prefs_connect_date_edit(GNC_DATE_EDIT(widget_child), name );
         }
     }
     else
@@ -1247,12 +1164,12 @@ gnc_preferences_dialog_create(void)
     if (date_is_valid)
         gnc_period_select_set_fy_end(GNC_PERIOD_SELECT (period), &fy_end);
 
-    box = GTK_WIDGET(gtk_builder_get_object (builder, "gconf/window/pages/account_tree/summary/start_date"));
+    box = GTK_WIDGET(gtk_builder_get_object (builder, "pref/window.pages.account_tree.summary/start_date"));
     date = gnc_date_edit_new(gnc_time (NULL), FALSE, FALSE);
     gtk_widget_show (date);
     gtk_box_pack_start (GTK_BOX (box), date, TRUE, TRUE, 0);
 
-    box = GTK_WIDGET(gtk_builder_get_object (builder, "gconf/window/pages/account_tree/summary/end_date"));
+    box = GTK_WIDGET(gtk_builder_get_object (builder, "pref/window.pages.account_tree.summary/end_date"));
     date = gnc_date_edit_new(gnc_time (NULL), FALSE, FALSE);
     gtk_widget_show (date);
     gtk_box_pack_start (GTK_BOX (box), date, TRUE, TRUE, 0);
@@ -1417,29 +1334,6 @@ gnc_preferences_gconf_changed (GConfClient *client,
     {
         /* These tests must be ordered from more specific widget to less
          * specific widget. */
-
-        if (GTK_IS_HBOX(widget))
-        {
-            /* Test custom widgets are all children of a hbox */
-            GtkWidget *widget_child;
-            GList* child = gtk_container_get_children(GTK_CONTAINER(widget));
-            widget_child = child->data;
-            g_list_free(child);
-
-            DEBUG("  %s - hbox", name);
-            DEBUG("Hbox gconf name is %s and widget get name is %s", name, gtk_widget_get_name(GTK_WIDGET(widget_child)));
-
-            if (GNC_IS_DATE_EDIT(widget_child))
-            {
-                DEBUG("widget %p - date_edit", widget_child);
-                gnc_prefs_date_edit_gconf_cb_gconf(GNC_DATE_EDIT(widget_child), entry);
-            }
-        }
-        else
-        {
-            DEBUG("widget %p - unsupported %s", widget,
-                  G_OBJECT_TYPE_NAME(G_OBJECT(widget)));
-        }
     }
     g_free(name);
     LEAVE(" ");
