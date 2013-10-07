@@ -155,44 +155,19 @@ gnc_configure_date_format (void)
 static void
 gnc_configure_date_completion (void)
 {
-    char *date_completion = gnc_gconf_get_string(GCONF_GENERAL,
-                            KEY_DATE_COMPLETION, NULL);
+    QofDateCompletion dc = QOF_DATE_COMPLETION_THISYEAR;
     int backmonths = gnc_prefs_get_float(GNC_PREFS_GROUP_GENERAL,
                                          GNC_PREF_DATE_BACKMONTHS);
-    QofDateCompletion dc;
 
     if (backmonths < 0)
-    {
         backmonths = 0;
-    }
     else if (backmonths > 11)
-    {
         backmonths = 11;
-    }
 
-    if (date_completion && strcmp(date_completion, "sliding") == 0)
-    {
+    if (gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_DATE_COMPL_SLIDING))
         dc = QOF_DATE_COMPLETION_SLIDING;
-    }
-    else if (date_completion && strcmp(date_completion, "thisyear") == 0)
-    {
-        dc = QOF_DATE_COMPLETION_THISYEAR;
-    }
-    else
-    {
-        /* No preference has been set yet */
-        PINFO("Incorrect date completion code, using defaults");
-        dc = QOF_DATE_COMPLETION_THISYEAR;
-        backmonths = 6;
-        gnc_gconf_set_string (GCONF_GENERAL, KEY_DATE_COMPLETION, "thisyear", NULL);
-        gnc_prefs_set_float (GNC_PREFS_GROUP_GENERAL, GNC_PREF_DATE_BACKMONTHS, 6.0);
-    }
-    qof_date_completion_set(dc, backmonths);
 
-    if (date_completion != NULL)
-    {
-        free(date_completion);
-    }
+    qof_date_completion_set(dc, backmonths);
 }
 
 void
@@ -636,8 +611,14 @@ gnc_gui_init(void)
                            GNC_PREF_DATE_FORMAT,
                            gnc_configure_date_format,
                            NULL);
-    gnc_gconf_general_register_cb(
-        KEY_DATE_COMPLETION, (GncGconfGeneralCb)gnc_configure_date_completion, NULL);
+    gnc_prefs_register_cb (GNC_PREFS_GROUP_GENERAL,
+                           GNC_PREF_DATE_COMPL_THISYEAR,
+                           gnc_configure_date_completion,
+                           NULL);
+    gnc_prefs_register_cb (GNC_PREFS_GROUP_GENERAL,
+                           GNC_PREF_DATE_COMPL_SLIDING,
+                           gnc_configure_date_completion,
+                           NULL);
     gnc_prefs_register_cb (GNC_PREFS_GROUP_GENERAL,
                            GNC_PREF_DATE_BACKMONTHS,
                            gnc_configure_date_completion,

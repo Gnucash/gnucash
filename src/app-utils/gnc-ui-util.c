@@ -58,9 +58,12 @@
 #include "gnc-features.h"
 #include "gnc-guile-utils.h"
 
-#define GNC_PREF_CURRENCY_CHOICE   "currency_choice"
-#define GNC_PREF_CURRENCY_OTHER    "currency_other"
-#define GNC_PREF_REVERSED_ACCOUNTS "reversed_accounts"
+#define GNC_PREF_CURRENCY_CHOICE_LOCALE "currency_choice-locale"
+#define GNC_PREF_CURRENCY_CHOICE_OTHER  "currency_choice-other"
+#define GNC_PREF_CURRENCY_OTHER         "currency_other"
+#define GNC_PREF_REVERSED_ACCTS_NONE    "reversed_accounts-none"
+#define GNC_PREF_REVERSED_ACCTS_CREDIT  "reversed_accounts-credit"
+#define GNC_PREF_REVERSED_ACCTS_INC_EXP "reversed_accounts-incomeexpense"
 
 static QofLogModule log_module = GNC_MOD_GUI;
 
@@ -120,35 +123,27 @@ gnc_configure_account_separator (void)
 static void
 gnc_configure_reverse_balance (void)
 {
-    gchar *choice;
     gint i;
 
     for (i = 0; i < NUM_ACCOUNT_TYPES; i++)
         reverse_type[i] = FALSE;
 
-    choice = gnc_prefs_get_string(GNC_PREFS_GROUP_GENERAL, GNC_PREF_REVERSED_ACCOUNTS);
-
-    if (g_strcmp0 (choice, "none") == 0)
-    {
-    }
-    else if (g_strcmp0 (choice, "income_expense") == 0)
+    if (gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_REVERSED_ACCTS_INC_EXP))
     {
         reverse_type[ACCT_TYPE_INCOME]  = TRUE;
         reverse_type[ACCT_TYPE_EXPENSE] = TRUE;
     }
-    else
+    else if (gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_REVERSED_ACCTS_CREDIT))
     {
-        if (g_strcmp0 (choice, "credit") != 0)
-            PERR("bad value '%s'", choice ? choice : "(null)");
         reverse_type[ACCT_TYPE_LIABILITY] = TRUE;
         reverse_type[ACCT_TYPE_PAYABLE]   = TRUE;
         reverse_type[ACCT_TYPE_EQUITY]    = TRUE;
         reverse_type[ACCT_TYPE_INCOME]    = TRUE;
         reverse_type[ACCT_TYPE_CREDIT]    = TRUE;
     }
+    else if (!gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_REVERSED_ACCTS_NONE))
+        PWARN("no reversed account preference set, using none");
 
-    if (choice != NULL)
-        free (choice);
 }
 
 static void
@@ -912,15 +907,14 @@ gnc_default_currency_common (gchar *requested_currency,
                              const gchar *section)
 {
     gnc_commodity *currency = NULL;
-    gchar *choice, *mnemonic;
+    gchar  *mnemonic;
 
     if (requested_currency)
         return gnc_commodity_table_lookup(gnc_get_current_commodities(),
                                           GNC_COMMODITY_NS_CURRENCY,
                                           requested_currency);
 
-    choice = gnc_prefs_get_string(section, GNC_PREF_CURRENCY_CHOICE);
-    if (g_strcmp0(choice, "other") == 0)
+    if (gnc_prefs_get_bool (section, GNC_PREF_CURRENCY_CHOICE_OTHER))
     {
         mnemonic = gnc_prefs_get_string(section, GNC_PREF_CURRENCY_OTHER);
         currency = gnc_commodity_table_lookup(gnc_get_current_commodities(),
@@ -928,7 +922,6 @@ gnc_default_currency_common (gchar *requested_currency,
         DEBUG("mnemonic %s, result %p", mnemonic ? mnemonic : "(null)", currency);
         g_free(mnemonic);
     }
-    g_free(choice);
 
     if (!currency)
         currency = gnc_locale_default_currency ();
@@ -2317,11 +2310,23 @@ gnc_ui_util_init (void)
 
     gnc_prefs_register_cb(GNC_PREFS_GROUP_GENERAL, GNC_PREF_ACCOUNT_SEPARATOR,
                           gnc_configure_account_separator, NULL);
-    gnc_prefs_register_cb(GNC_PREFS_GROUP_GENERAL, GNC_PREF_REVERSED_ACCOUNTS,
+    gnc_prefs_register_cb(GNC_PREFS_GROUP_GENERAL, GNC_PREF_REVERSED_ACCTS_NONE,
                           gnc_configure_reverse_balance, NULL);
-    gnc_prefs_register_cb(GNC_PREFS_GROUP_GENERAL, GNC_PREF_CURRENCY_CHOICE,
+    gnc_prefs_register_cb(GNC_PREFS_GROUP_GENERAL, GNC_PREF_REVERSED_ACCTS_CREDIT,
+                          gnc_configure_reverse_balance, NULL);
+    gnc_prefs_register_cb(GNC_PREFS_GROUP_GENERAL, GNC_PREF_REVERSED_ACCTS_INC_EXP,
+                          gnc_configure_reverse_balance, NULL);
+    gnc_prefs_register_cb(GNC_PREFS_GROUP_GENERAL, GNC_PREF_CURRENCY_CHOICE_LOCALE,
+                          gnc_currency_changed_cb, NULL);
+    gnc_prefs_register_cb(GNC_PREFS_GROUP_GENERAL, GNC_PREF_CURRENCY_CHOICE_OTHER,
                           gnc_currency_changed_cb, NULL);
     gnc_prefs_register_cb(GNC_PREFS_GROUP_GENERAL, GNC_PREF_CURRENCY_OTHER,
+                          gnc_currency_changed_cb, NULL);
+    gnc_prefs_register_cb(GNC_PREFS_GROUP_GENERAL_REPORT, GNC_PREF_CURRENCY_CHOICE_LOCALE,
+                          gnc_currency_changed_cb, NULL);
+    gnc_prefs_register_cb(GNC_PREFS_GROUP_GENERAL_REPORT, GNC_PREF_CURRENCY_CHOICE_OTHER,
+                          gnc_currency_changed_cb, NULL);
+    gnc_prefs_register_cb(GNC_PREFS_GROUP_GENERAL_REPORT, GNC_PREF_CURRENCY_OTHER,
                           gnc_currency_changed_cb, NULL);
     gnc_prefs_register_cb(GNC_PREFS_GROUP_GENERAL, GNC_PREF_AUTO_DECIMAL_POINT,
                           gnc_set_auto_decimal_enabled, NULL);

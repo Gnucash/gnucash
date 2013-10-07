@@ -34,7 +34,6 @@
 #include "gnc-date.h"
 #include "gnc-engine.h"
 #include "gnc-event.h"
-#include "gnc-gconf-utils.h"
 #include "gnc-ledger-display.h"
 #include "gnc-prefs.h"
 #include "gnc-ui-util.h"
@@ -47,8 +46,11 @@
 #define REGISTER_GL_CM_CLASS         "register-gl"
 #define REGISTER_TEMPLATE_CM_CLASS   "register-template"
 
-#define GNC_PREF_DOUBLE_LINE_MODE "double_line_mode"
-#define GNC_PREF_MAX_TRANS        "max_transactions"
+#define GNC_PREF_DOUBLE_LINE_MODE         "double_line_mode"
+#define GNC_PREF_MAX_TRANS                "max_transactions"
+#define GNC_PREF_DEFAULT_STYLE_LEDGER     "default_style-ledger"
+#define GNC_PREF_DEFAULT_STYLE_AUTOLEDGER "default_style-autoledger"
+#define GNC_PREF_DEFAULT_STYLE_JOURNAL    "default_style-journal"
 
 
 struct gnc_ledger_display
@@ -197,32 +199,13 @@ static SplitRegisterStyle
 gnc_get_default_register_style (GNCAccountType type)
 {
     SplitRegisterStyle new_style = REG_STYLE_LEDGER;
-    gchar *style_string;
 
-    switch (type)
-    {
-#if 0
-    case ACCT_TYPE_PAYABLE:
-    case ACCT_TYPE_RECEIVABLE:
-        new_style = REG_STYLE_LEDGER;
-        break;
-#endif
-
-    default:
-        style_string = gnc_gconf_get_string(GCONF_GENERAL_REGISTER,
-                                            "default_style", NULL);
-        if (g_strcmp0(style_string, "journal") == 0)
-            new_style = REG_STYLE_JOURNAL;
-        else if (g_strcmp0(style_string, "auto_ledger") == 0)
-            new_style = REG_STYLE_AUTO_LEDGER;
-        else
-            new_style = REG_STYLE_LEDGER;
-
-        if (style_string != NULL)
-            g_free(style_string);
-
-        break;
-    }
+    if (gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL_REGISTER,
+                            GNC_PREF_DEFAULT_STYLE_JOURNAL))
+        new_style = REG_STYLE_JOURNAL;
+    else if (gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL_REGISTER,
+                                 GNC_PREF_DEFAULT_STYLE_AUTOLEDGER))
+        new_style = REG_STYLE_AUTO_LEDGER;
 
     return new_style;
 }

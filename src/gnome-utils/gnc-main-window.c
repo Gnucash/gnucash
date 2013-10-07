@@ -94,7 +94,10 @@ enum
 
 #define GNC_PREF_SHOW_CLOSE_BUTTON    "tab_close_buttons"
 #define GNC_PREF_TAB_NEXT_RECENT      "tab_next_recent"
-#define KEY_TAB_POSITION         "tab_position"
+#define GNC_PREF_TAB_POSITION_TOP     "tab_position-top"
+#define GNC_PREF_TAB_POSITION_BOTTOM  "tab_position-bottom"
+#define GNC_PREF_TAB_POSITION_LEFT    "tab_position-left"
+#define GNC_PREF_TAB_POSITION_RIGHT   "tab_position-right"
 #define GNC_PREF_TAB_WIDTH            "tab_width"
 #define GNC_PREF_TAB_COLOR            "show_account_color_tabs"
 
@@ -3182,21 +3185,21 @@ gnc_main_window_get_action_group (GncMainWindow *window,
 }
 
 static void
-gnc_main_window_update_tab_position (GncMainWindow *window)
+gnc_main_window_update_tab_position (gpointer prefs, gchar *pref, gpointer user_data)
 {
+    GncMainWindow *window;
     GtkPositionType position = GTK_POS_TOP;
-    gchar *conf_string;
     GncMainWindowPrivate *priv;
 
+    window = GNC_MAIN_WINDOW(user_data);
+
     ENTER ("window %p", window);
-    conf_string = gnc_gconf_get_string (GCONF_GENERAL,
-                                        KEY_TAB_POSITION, NULL);
-    if (conf_string)
-    {
-        position = gnc_enum_from_nick (GTK_TYPE_POSITION_TYPE,
-                                       conf_string, GTK_POS_TOP);
-        g_free (conf_string);
-    }
+    if (gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_TAB_POSITION_BOTTOM))
+        position = GTK_POS_BOTTOM;
+    else if (gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_TAB_POSITION_LEFT))
+        position = GTK_POS_LEFT;
+    else if (gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_TAB_POSITION_RIGHT))
+        position = GTK_POS_RIGHT;
 
     priv = GNC_MAIN_WINDOW_GET_PRIVATE (window);
     gtk_notebook_set_tab_pos (GTK_NOTEBOOK (priv->notebook), position);
@@ -3314,32 +3317,6 @@ gnc_main_window_init_menu_updaters (GncMainWindow *window)
                       G_CALLBACK (gnc_main_window_edit_menu_show_cb), window);
     g_signal_connect (edit_menu, "hide",
                       G_CALLBACK (gnc_main_window_edit_menu_hide_cb), window);
-}
-
-static void
-gnc_main_window_gconf_changed (GConfClient *client,
-                               guint cnxn_id,
-                               GConfEntry *entry,
-                               gpointer user_data)
-{
-    GncMainWindow *window;
-    GConfValue *value;
-    const gchar *key, *key_tail;
-
-    window = GNC_MAIN_WINDOW(user_data);
-
-    key = gconf_entry_get_key(entry);
-    value = gconf_entry_get_value(entry);
-    if (!key || !value)
-        return;
-
-    key_tail = strrchr(key, '/');
-    if (key_tail != NULL)
-        key_tail++;
-    if (strcmp(key_tail, KEY_TAB_POSITION) == 0)
-    {
-        gnc_main_window_update_tab_position(window);
-    }
 }
 
 /* CS: This callback functions will set the statusbar text to the
@@ -3565,10 +3542,23 @@ gnc_main_window_setup_window (GncMainWindow *window)
     }
     g_free(filename);
     gnc_main_window_window_menu(window);
-    gnc_gconf_add_notification(G_OBJECT(window), GCONF_GENERAL,
-                               gnc_main_window_gconf_changed,
-                               GNC_MAIN_WINDOW_NAME);
-    gnc_main_window_update_tab_position(window);
+    gnc_prefs_register_cb (GNC_PREFS_GROUP_GENERAL,
+                           GNC_PREF_TAB_POSITION_TOP,
+                           gnc_main_window_update_tab_position,
+                           window);
+    gnc_prefs_register_cb (GNC_PREFS_GROUP_GENERAL,
+                           GNC_PREF_TAB_POSITION_BOTTOM,
+                           gnc_main_window_update_tab_position,
+                           window);
+    gnc_prefs_register_cb (GNC_PREFS_GROUP_GENERAL,
+                           GNC_PREF_TAB_POSITION_LEFT,
+                           gnc_main_window_update_tab_position,
+                           window);
+    gnc_prefs_register_cb (GNC_PREFS_GROUP_GENERAL,
+                           GNC_PREF_TAB_POSITION_RIGHT,
+                           gnc_main_window_update_tab_position,
+                           window);
+    //gnc_main_window_update_tab_position(NULL, NULL, window);
 
     gnc_main_window_init_menu_updaters(window);
 

@@ -32,9 +32,11 @@
 static QofLogModule log_module = G_LOG_DOMAIN;
 
 /* Keys used for core preferences */
-#define GNC_PREF_FILE_COMPRESSION  "file_compression"
-#define GNC_PREF_RETAIN_TYPE       "retain_type"
-#define GNC_PREF_RETAIN_DAYS       "retain_days"
+#define GNC_PREF_FILE_COMPRESSION    "file_compression"
+#define GNC_PREF_RETAIN_TYPE_NEVER   "retain_type-never"
+#define GNC_PREF_RETAIN_TYPE_DAYS    "retain_type-days"
+#define GNC_PREF_RETAIN_TYPE_FOREVER "retain_type-forever"
+#define GNC_PREF_RETAIN_DAYS         "retain_days"
 
 /***************************************************************
  * Initialization                                              *
@@ -47,26 +49,18 @@ file_retain_changed_cb(gpointer gsettings, gchar *key, gpointer user_data)
 }
 
 static void
-file_retain_type_changed_cb(GConfEntry *entry, gpointer user_data)
+file_retain_type_changed_cb(gpointer gsettings, gchar *key, gpointer user_data)
 {
-    XMLFileRetentionType type;
-    gchar *choice = gnc_gconf_get_string(GCONF_GENERAL, KEY_RETAIN_TYPE, NULL);
-    if (!choice)
-        choice = g_strdup("days");
+    XMLFileRetentionType type = XML_RETAIN_ALL;
 
-    if (g_strcmp0 (choice, "never") == 0)
+    if (gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_RETAIN_TYPE_NEVER))
         type = XML_RETAIN_NONE;
-    else if (g_strcmp0 (choice, "forever") == 0)
-        type = XML_RETAIN_ALL;
-    else
-    {
-        if (g_strcmp0 (choice, "days") != 0)
-            PERR("bad value '%s'", choice ? choice : "(null)");
+    else if (gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_RETAIN_TYPE_DAYS))
         type = XML_RETAIN_DAYS;
-    }
-    gnc_prefs_set_file_retention_policy (type);
+    else if (!gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_RETAIN_TYPE_FOREVER))
+            PWARN("no file retention policy was set, assuming conservative policy 'forever'");
 
-    g_free (choice);
+    gnc_prefs_set_file_retention_policy (type);
 }
 
 static void
@@ -81,27 +75,39 @@ void gnc_prefs_init (void)
 {
     gnc_gsettings_load_backend();
 
-    /* Add hooks to update core preferences whenever the associated gconf key changes */
-    gnc_prefs_register_cb(GNC_PREFS_GROUP_GENERAL, GNC_PREF_RETAIN_DAYS,
-                          (GCallback) file_retain_changed_cb, NULL);
-    gnc_gconf_general_register_cb(KEY_RETAIN_TYPE, file_retain_type_changed_cb, NULL);
-    gnc_prefs_register_cb(GNC_PREFS_GROUP_GENERAL, GNC_PREF_FILE_COMPRESSION,
-                          (GCallback) file_compression_changed_cb, NULL);
-
-    /* Call the hooks once manually to initialize the core preferences */
-    file_retain_changed_cb (NULL, NULL, NULL);
-    file_retain_type_changed_cb (NULL, NULL);
-    file_compression_changed_cb (NULL, NULL, NULL);
-
-    /* Backwards compatibility code. Pre 2.3.15, 0 retain_days meant
+    /* Check for invalid retain_type (days)/retain_days (0) combo.
+     * This can happen either because a user changed the preferences
+     * manually outside of GnuCash, or because the user upgraded from
+     * gnucash version 2.3.15 or older. Back then, 0 retain_days meant
      * "keep forever". From 2.3.15 on this is controlled via a multiple
-     * choice ("retain_type"). So if we find a 0 retain_days value with
-     * a "days" retain_type, we should interpret it as if we got a
-     * "forever" retain_type.
+     * choice ("retain_type").
+     * So if we find a 0 retain_days value with a "days" retain_type,
+     * we will silently and conservatively interpret is as meaning
+     * retain forever ("forever" retain_type).
      */
     if ( (gnc_prefs_get_file_retention_policy () == XML_RETAIN_DAYS) &&
             (gnc_prefs_get_file_retention_days () == 0 ) )
     {
-        gnc_gconf_set_string (GCONF_GENERAL, KEY_RETAIN_TYPE, "forever", NULL);
+        gnc_prefs_set_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_RETAIN_TYPE_FOREVER, TRUE);
+        gnc_prefs_set_float (GNC_PREFS_GROUP_GENERAL, GNC_PREF_RETAIN_DAYS, 30);
+        PWARN("retain 0 days policy was set, but this is probably not what the user wanted,\n"
+              "assuming conservative policy 'forever'");
     }
+
+    /* Add hooks to update core preferences whenever the associated preference changes */
+    gnc_prefs_register_cb (GNC_PREFS_GROUP_GENERAL, GNC_PREF_RETAIN_DAYS,
+                           file_retain_changed_cb, NULL);
+    gnc_prefs_register_cb (GNC_PREFS_GROUP_GENERAL, GNC_PREF_RETAIN_TYPE_NEVER,
+                           file_retain_type_changed_cb, NULL);
+    gnc_prefs_register_cb (GNC_PREFS_GROUP_GENERAL, GNC_PREF_RETAIN_TYPE_DAYS,
+                           file_retain_type_changed_cb, NULL);
+    gnc_prefs_register_cb (GNC_PREFS_GROUP_GENERAL, GNC_PREF_RETAIN_TYPE_FOREVER,
+                           file_retain_type_changed_cb, NULL);
+    gnc_prefs_register_cb (GNC_PREFS_GROUP_GENERAL, GNC_PREF_FILE_COMPRESSION,
+                           file_compression_changed_cb, NULL);
+
+    /* Call the hooks once manually to initialize the core preferences */
+    file_retain_changed_cb (NULL, NULL, NULL);
+    file_retain_type_changed_cb (NULL, NULL, NULL);
+    file_compression_changed_cb (NULL, NULL, NULL);
 }

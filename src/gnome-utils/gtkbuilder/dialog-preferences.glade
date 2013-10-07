@@ -225,7 +225,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkRadioButton" id="gconf/window/pages/account_tree/summary/start_choice/relative">
+                  <object class="GtkRadioButton" id="pref/window.pages.account_tree.summary/start_choice-relative">
                     <property name="label" translatable="yes">_Relative:</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -246,7 +246,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkRadioButton" id="gconf/window/pages/account_tree/summary/start_choice/absolute">
+                  <object class="GtkRadioButton" id="pref/window.pages.account_tree.summary/start_choice-absolute">
                     <property name="label" translatable="yes">_Absolute:</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -256,7 +256,7 @@
                     <property name="tooltip_text" translatable="yes">Use the specified absolute starting date for profit/loss calculations.</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
-                    <property name="group">gconf/window/pages/account_tree/summary/start_choice/relative</property>
+                    <property name="group">pref/window.pages.account_tree.summary/start_choice-relative</property>
                   </object>
                   <packing>
                     <property name="top_attach">2</property>
@@ -267,7 +267,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkRadioButton" id="gconf/window/pages/account_tree/summary/end_choice/relative">
+                  <object class="GtkRadioButton" id="pref/window.pages.account_tree.summary/end_choice-relative">
                     <property name="label" translatable="yes">Re_lative:</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -288,7 +288,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkRadioButton" id="gconf/window/pages/account_tree/summary/end_choice/absolute">
+                  <object class="GtkRadioButton" id="pref/window.pages.account_tree.summary/end_choice-absolute">
                     <property name="label" translatable="yes">Ab_solute:</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -298,7 +298,7 @@
                     <property name="tooltip_text" translatable="yes">Use the specified absolute ending date for profit/loss calculations. Also use this date for net assets calculations.</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
-                    <property name="group">gconf/window/pages/account_tree/summary/end_choice/relative</property>
+                    <property name="group">pref/window.pages.account_tree.summary/end_choice-relative</property>
                   </object>
                   <packing>
                     <property name="top_attach">6</property>
@@ -565,7 +565,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkRadioButton" id="gconf/general/reversed_accounts/none">
+                  <object class="GtkRadioButton" id="pref/general/reversed_accounts-none">
                     <property name="label" translatable="yes">_None</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -587,7 +587,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkRadioButton" id="gconf/general/reversed_accounts/credit">
+                  <object class="GtkRadioButton" id="pref/general/reversed_accounts-credit">
                     <property name="label" translatable="yes">C_redit accounts</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -597,7 +597,7 @@
                     <property name="tooltip_text" translatable="yes">Sign reverse balances on the following: Credit Card, Payable, Liability, Equity, and Income.</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
-                    <property name="group">gconf/general/reversed_accounts/none</property>
+                    <property name="group">pref/general/reversed_accounts-none</property>
                   </object>
                   <packing>
                     <property name="right_attach">2</property>
@@ -609,7 +609,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkRadioButton" id="gconf/general/reversed_accounts/income_expense">
+                  <object class="GtkRadioButton" id="pref/general/reversed_accounts-incomeexpense">
                     <property name="label" translatable="yes">_Income &amp; expense</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -619,7 +619,7 @@
                     <property name="tooltip_text" translatable="yes">Sign reverse balances on income and expense accounts.</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
-                    <property name="group">gconf/general/reversed_accounts/none</property>
+                    <property name="group">pref/general/reversed_accounts-none</property>
                   </object>
                   <packing>
                     <property name="right_attach">2</property>
@@ -709,7 +709,7 @@
                     <property name="can_focus">False</property>
                     <property name="left_padding">12</property>
                     <child>
-                      <object class="GtkRadioButton" id="gconf/general/currency_choice/locale">
+                      <object class="GtkRadioButton" id="pref/general/currency_choice-locale">
                         <property name="label" translatable="yes">Loc_ale:</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
@@ -736,7 +736,7 @@
                     <property name="can_focus">False</property>
                     <property name="left_padding">12</property>
                     <child>
-                      <object class="GtkRadioButton" id="gconf/general/currency_choice/other">
+                      <object class="GtkRadioButton" id="pref/general/currency_choice-other">
                         <property name="label" translatable="yes">Ch_oose:</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
@@ -746,7 +746,7 @@
                         <property name="tooltip_text" translatable="yes">Use the specified currency for all newly created accounts.</property>
                         <property name="use_underline">True</property>
                         <property name="draw_indicator">True</property>
-                        <property name="group">gconf/general/currency_choice/locale</property>
+                        <property name="group">pref/general/currency_choice-locale</property>
                       </object>
                     </child>
                   </object>
@@ -1181,7 +1181,7 @@
                   <placeholder/>
                 </child>
                 <child>
-                  <object class="GtkRadioButton" id="gconf/general/date_completion/thisyear">
+                  <object class="GtkRadioButton" id="pref/general/date_completion-thisyear">
                     <property name="label" translatable="yes">In the current calendar year</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -1203,7 +1203,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkRadioButton" id="gconf/general/date_completion/sliding">
+                  <object class="GtkRadioButton" id="pref/general/date_completion-sliding">
                     <property name="label" translatable="yes">In a sliding 12-month window starting this 
 many months before the current month:</property>
                     <property name="visible">True</property>
@@ -1214,7 +1214,7 @@ many months before the current month:</property>
                     <property name="tooltip_text" translatable="yes">Dates will be completed so that they are close to the current date. Enter the maximum number of months to go backwards in time when completing dates.</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
-                    <property name="group">gconf/general/date_completion/thisyear</property>
+                    <property name="group">pref/general/date_completion-thisyear</property>
                   </object>
                   <packing>
                     <property name="right_attach">2</property>
@@ -1887,7 +1887,7 @@ many months before the current month:</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkRadioButton" id="gconf/general/retain_type/never">
+                  <object class="GtkRadioButton" id="pref/general/retain_type-never">
                     <property name="label" translatable="yes">Never</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -1896,7 +1896,7 @@ many months before the current month:</property>
                     <property name="tooltip_markup">Do not create log/backup files.</property>
                     <property name="tooltip_text" translatable="yes">Do not create log/backup files.</property>
                     <property name="draw_indicator">True</property>
-                    <property name="group">gconf/general/retain_type/days</property>
+                    <property name="group">pref/general/retain_type-days</property>
                   </object>
                   <packing>
                     <property name="top_attach">16</property>
@@ -1905,7 +1905,7 @@ many months before the current month:</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkRadioButton" id="gconf/general/retain_type/days">
+                  <object class="GtkRadioButton" id="pref/general/retain_type-days">
                     <property name="label" translatable="yes">For:</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -1923,7 +1923,7 @@ many months before the current month:</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkRadioButton" id="gconf/general/retain_type/forever">
+                  <object class="GtkRadioButton" id="pref/general/retain_type-forever">
                     <property name="label" translatable="yes">Forever</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -1932,7 +1932,7 @@ many months before the current month:</property>
                     <property name="tooltip_markup">Do not delete log/backup files.</property>
                     <property name="tooltip_text" translatable="yes">Do not delete log/backup files.</property>
                     <property name="draw_indicator">True</property>
-                    <property name="group">gconf/general/retain_type/days</property>
+                    <property name="group">pref/general/retain_type-days</property>
                   </object>
                   <packing>
                     <property name="top_attach">18</property>
@@ -2592,7 +2592,7 @@ many months before the current month:</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkRadioButton" id="gconf/general/register/default_style/ledger">
+                  <object class="GtkRadioButton" id="pref/general.register/default_style-ledger">
                     <property name="label" translatable="yes">_Basic ledger</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -2614,7 +2614,7 @@ many months before the current month:</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkRadioButton" id="gconf/general/register/default_style/auto_ledger">
+                  <object class="GtkRadioButton" id="pref/general.register/default_style-autoledger">
                     <property name="label" translatable="yes">_Auto-split ledger</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -2624,7 +2624,7 @@ many months before the current month:</property>
                     <property name="tooltip_text" translatable="yes">Automatically expand the current transaction to show all splits. All other transactions are shown on one line. (Two in double line mode.)</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
-                    <property name="group">gconf/general/register/default_style/ledger</property>
+                    <property name="group">pref/general.register/default_style-ledger</property>
                   </object>
                   <packing>
                     <property name="right_attach">4</property>
@@ -2636,7 +2636,7 @@ many months before the current month:</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkRadioButton" id="gconf/general/register/default_style/journal">
+                  <object class="GtkRadioButton" id="pref/general.register/default_style-journal">
                     <property name="label" translatable="yes">Transaction _Journal</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -2646,7 +2646,7 @@ many months before the current month:</property>
                     <property name="tooltip_text" translatable="yes">All transactions are expanded to show all splits.</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
-                    <property name="group">gconf/general/register/default_style/ledger</property>
+                    <property name="group">pref/general.register/default_style-ledger</property>
                   </object>
                   <packing>
                     <property name="right_attach">4</property>
@@ -2957,7 +2957,7 @@ many months before the current month:</property>
                     <property name="can_focus">False</property>
                     <property name="left_padding">12</property>
                     <child>
-                      <object class="GtkRadioButton" id="gconf/general/report/currency_choice/other">
+                      <object class="GtkRadioButton" id="pref/general.report/currency_choice-other">
                         <property name="label" translatable="yes">Ch_oose:</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
@@ -2984,7 +2984,7 @@ many months before the current month:</property>
                     <property name="can_focus">False</property>
                     <property name="left_padding">12</property>
                     <child>
-                      <object class="GtkRadioButton" id="gconf/general/report/currency_choice/locale">
+                      <object class="GtkRadioButton" id="pref/general.report/currency_choice-locale">
                         <property name="label" translatable="yes">Loc_ale:</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
@@ -2994,7 +2994,7 @@ many months before the current month:</property>
                         <property name="tooltip_text" translatable="yes">Use the system locale currency for all newly created reports.</property>
                         <property name="use_underline">True</property>
                         <property name="draw_indicator">True</property>
-                        <property name="group">gconf/general/report/currency_choice/other</property>
+                        <property name="group">pref/general.report/currency_choice-other</property>
                       </object>
                     </child>
                   </object>
@@ -3222,7 +3222,7 @@ many months before the current month:</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkRadioButton" id="gconf/general/tab_position/top">
+                  <object class="GtkRadioButton" id="pref/general/tab_position-top">
                     <property name="label" translatable="yes">To_p</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -3244,7 +3244,7 @@ many months before the current month:</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkRadioButton" id="gconf/general/tab_position/bottom">
+                  <object class="GtkRadioButton" id="pref/general/tab_position-bottom">
                     <property name="label" translatable="yes">B_ottom</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -3254,7 +3254,7 @@ many months before the current month:</property>
                     <property name="tooltip_text" translatable="yes">Display the notebook tabs at the bottom of the window.</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
-                    <property name="group">gconf/general/tab_position/top</property>
+                    <property name="group">pref/general/tab_position-top</property>
                   </object>
                   <packing>
                     <property name="right_attach">2</property>
@@ -3266,7 +3266,7 @@ many months before the current month:</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkRadioButton" id="gconf/general/tab_position/left">
+                  <object class="GtkRadioButton" id="pref/general/tab_position-left">
                     <property name="label" translatable="yes">_Left</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -3276,7 +3276,7 @@ many months before the current month:</property>
                     <property name="tooltip_text" translatable="yes">Display the notebook tabs at the left of the window.</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
-                    <property name="group">gconf/general/tab_position/top</property>
+                    <property name="group">pref/general/tab_position-top</property>
                   </object>
                   <packing>
                     <property name="right_attach">2</property>
@@ -3288,7 +3288,7 @@ many months before the current month:</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkRadioButton" id="gconf/general/tab_position/right">
+                  <object class="GtkRadioButton" id="pref/general/tab_position-right">
                     <property name="label" translatable="yes">_Right</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -3298,7 +3298,7 @@ many months before the current month:</property>
                     <property name="tooltip_text" translatable="yes">Display the notebook tabs at the right of the window.</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
-                    <property name="group">gconf/general/tab_position/top</property>
+                    <property name="group">pref/general/tab_position-top</property>
                   </object>
                   <packing>
                     <property name="right_attach">2</property>
@@ -3327,7 +3327,7 @@ many months before the current month:</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkRadioButton" id="gconf/general/summarybar_position/top">
+                  <object class="GtkRadioButton" id="pref/general/summarybar_position-top">
                     <property name="label" translatable="yes">Top</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -3350,7 +3350,7 @@ many months before the current month:</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkRadioButton" id="gconf/general/summarybar_position/bottom">
+                  <object class="GtkRadioButton" id="pref/general/summarybar_position-bottom">
                     <property name="label" translatable="yes">Bottom</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -3360,7 +3360,7 @@ many months before the current month:</property>
                     <property name="tooltip_text" translatable="yes">Display the summary bar at the bottom of the page.</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
-                    <property name="group">gconf/general/summarybar_position/top</property>
+                    <property name="group">pref/general/summarybar_position-top</property>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>

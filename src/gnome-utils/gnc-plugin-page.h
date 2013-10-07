@@ -41,7 +41,8 @@
 
 G_BEGIN_DECLS
 
-#define KEY_SUMMARYBAR_POSITION "summarybar_position"
+#define GNC_PREF_SUMMARYBAR_POSITION_TOP    "summarybar_position-top"
+#define GNC_PREF_SUMMARYBAR_POSITION_BOTTOM "summarybar_position-bottom"
 
 /* type macros */
 #define GNC_TYPE_PLUGIN_PAGE            (gnc_plugin_page_get_type ())

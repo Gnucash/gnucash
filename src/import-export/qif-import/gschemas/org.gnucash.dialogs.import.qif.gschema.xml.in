@@ -1,8 +1,18 @@
 <schemalist gettext-domain="GETTEXT_PACKAGE">
   <schema id="org.gnucash.dialogs.import.qif" path="/apps/gnucash/dialogs/import/qif/">
-    <key name="default_status" type="s">
-      <default>'not_cleared'</default>
+    <key name="default_status-notcleared" type="b">
+      <default>true</default>
       <summary>Default QIF transaction status</summary>
+      <description>Default status for QIF transaction when not specified in QIF file.</description>
+    </key>
+    <key name="default_status-cleared" type="b">
+      <default>false</default>
+      <summary>Default QIF transaction status</summary>
+      <description>Default status for QIF transaction when not specified in QIF file.</description>
+    </key>
+    <key name="default_status-reconciled" type="b">
+      <default>false</default>
+      <summary>When the status is not specified in a QIF file, the transactions are marked as reconciled.</summary>
       <description>Default status for QIF transaction when not specified in QIF file.</description>
     </key>
     <key name="last-geometry" type="(iiii)">

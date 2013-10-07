@@ -66,13 +66,11 @@
 /*################## Added for Reg2 #################*/
 #include "dialog-sx-from-trans.h"
 #include "assistant-stock-split.h"
-#include "gnc-gconf-utils.h"
 #include "gnc-component-manager.h"
 #include "gnc-date.h"
 #include "gnc-date-edit.h"
 #include "gnc-engine.h"
 #include "gnc-event.h"
-#include "gnc-gconf-utils.h"
 #include "gnc-gnome-utils.h"
 #include "gnc-gobject-utils.h"
 #include "gnc-gui-query.h"
@@ -113,7 +111,7 @@ static gchar *gnc_plugin_page_register2_get_tab_name (GncPluginPage *plugin_page
 static gchar *gnc_plugin_page_register2_get_tab_color (GncPluginPage *plugin_page);
 static gchar *gnc_plugin_page_register2_get_long_name (GncPluginPage *plugin_page);
 
-static void gnc_plugin_page_register2_summarybar_position_changed (GConfEntry *entry, gpointer user_data);
+static void gnc_plugin_page_register2_summarybar_position_changed (gpointer prefs, gchar* pref, gpointer user_data);
 
 /* Callbacks for the "Filter By" dialog */
 void gnc_plugin_page_register2_filter_select_range_cb (GtkRadioButton *button, GncPluginPageRegister2 *page);
@@ -1176,9 +1174,15 @@ gnc_plugin_page_register2_create_widget (GncPluginPage *plugin_page)
         gtk_widget_show_all (plugin_page->summarybar);
         gtk_box_pack_start (GTK_BOX (priv->widget), plugin_page->summarybar,
                            FALSE, FALSE, 0);
-        gnc_plugin_page_register2_summarybar_position_changed (NULL, page);
-        gnc_gconf_general_register_cb (KEY_SUMMARYBAR_POSITION,
-                                      gnc_plugin_page_register2_summarybar_position_changed, page);
+        gnc_plugin_page_register2_summarybar_position_changed (NULL, NULL, page);
+        gnc_prefs_register_cb (GNC_PREFS_GROUP_GENERAL,
+                               GNC_PREF_SUMMARYBAR_POSITION_TOP,
+                               gnc_plugin_page_register2_summarybar_position_changed,
+                               page);
+        gnc_prefs_register_cb (GNC_PREFS_GROUP_GENERAL,
+                               GNC_PREF_SUMMARYBAR_POSITION_BOTTOM,
+                               gnc_plugin_page_register2_summarybar_position_changed,
+                               page);
     }
 
     priv->event_handler_id = qof_event_register_handler
@@ -1242,8 +1246,14 @@ gnc_plugin_page_register2_destroy_widget (GncPluginPage *plugin_page)
     page = GNC_PLUGIN_PAGE_REGISTER2 (plugin_page);
     priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE(plugin_page);
 
-    gnc_gconf_general_remove_cb (KEY_SUMMARYBAR_POSITION,
-                                gnc_plugin_page_register2_summarybar_position_changed, page);
+    gnc_prefs_remove_cb_by_func (GNC_PREFS_GROUP_GENERAL,
+                                 GNC_PREF_SUMMARYBAR_POSITION_TOP,
+                                 gnc_plugin_page_register2_summarybar_position_changed,
+                                 page);
+    gnc_prefs_remove_cb_by_func (GNC_PREFS_GROUP_GENERAL,
+                                 GNC_PREF_SUMMARYBAR_POSITION_BOTTOM,
+                                 gnc_plugin_page_register2_summarybar_position_changed,
+                                 page);
 
     if (priv->widget == NULL)
     {
@@ -1787,14 +1797,12 @@ gnc_plugin_page_register2_get_long_name (GncPluginPage *plugin_page)
 }
 
 static void
-gnc_plugin_page_register2_summarybar_position_changed (GConfEntry *entry,
-        gpointer user_data)
+gnc_plugin_page_register2_summarybar_position_changed (gpointer prefs, gchar* pref, gpointer user_data)
 {
     GncPluginPage *plugin_page;
     GncPluginPageRegister2 *page;
     GncPluginPageRegister2Private *priv;
     GtkPositionType position = GTK_POS_BOTTOM;
-    gchar *conf_string;
 
     g_return_if_fail(user_data != NULL);
 
@@ -1802,16 +1810,10 @@ gnc_plugin_page_register2_summarybar_position_changed (GConfEntry *entry,
     page = GNC_PLUGIN_PAGE_REGISTER2 (user_data);
     priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE (page);
 
-    conf_string = gnc_gconf_get_string (GCONF_GENERAL,
-                                        KEY_SUMMARYBAR_POSITION, NULL);
-    if (conf_string)
-    {
-        position = gnc_enum_from_nick (GTK_TYPE_POSITION_TYPE,
-                                       conf_string, GTK_POS_BOTTOM);
-        g_free (conf_string);
-    }
+    if (gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_SUMMARYBAR_POSITION_TOP))
+        position = GTK_POS_TOP;
 
-    gtk_box_reorder_child (GTK_BOX (priv->widget),
+    gtk_box_reorder_child(GTK_BOX(priv->widget),
                           plugin_page->summarybar,
                           (position == GTK_POS_TOP ? 0 : -1) );
 }

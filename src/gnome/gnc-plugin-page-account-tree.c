@@ -55,6 +55,7 @@
 #include "gnc-gobject-utils.h"
 #include "gnc-icons.h"
 #include "gnc-plugin-account-tree.h"
+#include "gnc-prefs.h"
 #include "gnc-session.h"
 #include "gnc-split-reg.h"
 #include "gnc-tree-view-account.h"
@@ -114,8 +115,7 @@ static void gnc_plugin_page_account_tree_save_page (GncPluginPage *plugin_page, 
 static GncPluginPage *gnc_plugin_page_account_tree_recreate_page (GtkWidget *window, GKeyFile *file, const gchar *group);
 
 /* Callbacks */
-static void gnc_plugin_page_account_tree_summarybar_position_changed(GConfEntry *entry,
-        gpointer user_data);
+static void gnc_plugin_page_account_tree_summarybar_position_changed(gpointer prefs, gchar* pref, gpointer user_data);
 static gboolean gnc_plugin_page_account_tree_button_press_cb (GtkWidget *widget,
         GdkEventButton *event,
         GncPluginPage *page);
@@ -579,10 +579,15 @@ gnc_plugin_page_account_tree_create_widget (GncPluginPage *plugin_page)
     gtk_box_pack_start (GTK_BOX (priv->widget), plugin_page->summarybar,
                         FALSE, FALSE, 0);
     gtk_widget_show(plugin_page->summarybar);
-    gnc_plugin_page_account_tree_summarybar_position_changed(NULL, page);
-    gnc_gconf_general_register_cb(KEY_SUMMARYBAR_POSITION,
-                                  gnc_plugin_page_account_tree_summarybar_position_changed,
-                                  page);
+    gnc_plugin_page_account_tree_summarybar_position_changed(NULL, NULL, page);
+    gnc_prefs_register_cb (GNC_PREFS_GROUP_GENERAL,
+                           GNC_PREF_SUMMARYBAR_POSITION_TOP,
+                           gnc_plugin_page_account_tree_summarybar_position_changed,
+                           page);
+    gnc_prefs_register_cb (GNC_PREFS_GROUP_GENERAL,
+                           GNC_PREF_SUMMARYBAR_POSITION_BOTTOM,
+                           gnc_plugin_page_account_tree_summarybar_position_changed,
+                           page);
 
     LEAVE("widget = %p", priv->widget);
     return priv->widget;
@@ -598,9 +603,14 @@ gnc_plugin_page_account_tree_destroy_widget (GncPluginPage *plugin_page)
     page = GNC_PLUGIN_PAGE_ACCOUNT_TREE (plugin_page);
     priv = GNC_PLUGIN_PAGE_ACCOUNT_TREE_GET_PRIVATE(page);
 
-    gnc_gconf_general_remove_cb(KEY_SUMMARYBAR_POSITION,
-                                gnc_plugin_page_account_tree_summarybar_position_changed,
-                                page);
+    gnc_prefs_remove_cb_by_func (GNC_PREFS_GROUP_GENERAL,
+                                 GNC_PREF_SUMMARYBAR_POSITION_TOP,
+                                 gnc_plugin_page_account_tree_summarybar_position_changed,
+                                 page);
+    gnc_prefs_remove_cb_by_func (GNC_PREFS_GROUP_GENERAL,
+                                 GNC_PREF_SUMMARYBAR_POSITION_BOTTOM,
+                                 gnc_plugin_page_account_tree_summarybar_position_changed,
+                                 page);
 
     if (priv->widget)
     {
@@ -720,14 +730,12 @@ gnc_plugin_page_account_tree_recreate_page (GtkWidget *window,
 /* Callbacks */
 
 static void
-gnc_plugin_page_account_tree_summarybar_position_changed(GConfEntry *entry,
-        gpointer user_data)
+gnc_plugin_page_account_tree_summarybar_position_changed(gpointer prefs, gchar* pref, gpointer user_data)
 {
     GncPluginPage *plugin_page;
     GncPluginPageAccountTree *page;
     GncPluginPageAccountTreePrivate *priv;
     GtkPositionType position = GTK_POS_BOTTOM;
-    gchar *conf_string;
 
     g_return_if_fail(user_data != NULL);
 
@@ -735,14 +743,8 @@ gnc_plugin_page_account_tree_summarybar_position_changed(GConfEntry *entry,
     page = GNC_PLUGIN_PAGE_ACCOUNT_TREE (user_data);
     priv = GNC_PLUGIN_PAGE_ACCOUNT_TREE_GET_PRIVATE(page);
 
-    conf_string = gnc_gconf_get_string (GCONF_GENERAL,
-                                        KEY_SUMMARYBAR_POSITION, NULL);
-    if (conf_string)
-    {
-        position = gnc_enum_from_nick (GTK_TYPE_POSITION_TYPE,
-                                       conf_string, GTK_POS_BOTTOM);
-        g_free (conf_string);
-    }
+    if (gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_SUMMARYBAR_POSITION_TOP))
+        position = GTK_POS_TOP;
 
     gtk_box_reorder_child(GTK_BOX(priv->widget),
                           plugin_page->summarybar,

@@ -679,112 +679,6 @@ gnc_prefs_split_widget_name (const gchar *name, gchar **group, gchar **pref)
 /* FIXME to remove when gconf conversion of preferences is complete */
 /****************************************************************************/
 
-/** The user clicked on a radio button.  Update gconf.  Radio button
- *  group choices are stored as a string.  The last component of the
- *  widget name is the string that will be stored.  I.E. The widget name
- *  must be in this form "gconf/<some-key-name>/value".
- *
- *  @internal
- *
- *  @param button A pointer to the radio button that was clicked.
- *
- *  @param user_data Unused.
- */
-static void
-gnc_prefs_radio_button_user_cb_gconf (GtkRadioButton *button,
-                                gpointer user_data)
-{
-    gchar *key, *button_name;
-    gboolean active;
-
-    g_return_if_fail(GTK_IS_RADIO_BUTTON(button));
-    active = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(button));
-    if (!active)
-        return;
-
-    /* Copy the widget name and split into gconf key and button value parts */
-    key = g_strdup(gtk_buildable_get_name(GTK_BUILDABLE(button)) + PREFIX_LEN);
-    button_name = strrchr(key, '/');
-    *button_name++ = '\0';
-
-    DEBUG("Radio button group %s now set to %s", key, button_name);
-    gnc_gconf_set_string(key, NULL, button_name, NULL);
-    g_free(key);
-}
-
-
-/** A radio button group choice was updated in gconf.  Update the user
- *  visible dialog.
- *
- *  @internal
- *
- *  @param button A pointer to the radio button that should be shown
- *  as selected.
- */
-static void
-gnc_prefs_radio_button_gconf_cb_gconf (GtkRadioButton *button)
-{
-    g_return_if_fail(GTK_IS_RADIO_BUTTON(button));
-    ENTER("button %p", button);
-    g_signal_handlers_block_by_func(G_OBJECT(button),
-                                    G_CALLBACK(gnc_prefs_radio_button_user_cb_gconf), NULL);
-    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), TRUE);
-    g_signal_handlers_unblock_by_func(G_OBJECT(button),
-                                      G_CALLBACK(gnc_prefs_radio_button_user_cb_gconf), NULL);
-    LEAVE(" ");
-}
-
-
-/** Connect a radio button widget to the user callback function.  Set
- *  the starting state of the radio button group from its value in
- *  gconf.
- *
- *  @internal
- *
- *  @param button A pointer to the radio button that should be
- *  connected.
- */
-static void
-gnc_prefs_connect_radio_button_gconf (GtkRadioButton *button)
-{
-    gchar *key, *button_name, *value;
-    gboolean active;
-    GSList *group;
-
-    g_return_if_fail(GTK_IS_RADIO_BUTTON(button));
-
-    /* Copy the widget name and split into gconf key and button name parts */
-    key = g_strdup(gtk_buildable_get_name(GTK_BUILDABLE(button)) + PREFIX_LEN);
-    button_name = strrchr(key, '/');
-    *button_name++ = '\0';
-
-    /* Get the current value. */
-    value = gnc_gconf_get_string(key, NULL, NULL);
-    if (value)
-    {
-        active = (g_utf8_collate(value, button_name) == 0);
-    }
-    else
-    {
-        /* Sigh. There's no gconf default for this key. Use the first
-         * button in the dialog, which is the last button in the list. */
-        group =  gtk_radio_button_get_group(button);
-        active = (button != g_slist_nth_data(group, g_slist_length(group)));
-    }
-    DEBUG(" Radio set %s, button %s initially set to %d", key, button_name, active);
-
-    /* Wire up the button */
-    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), active);
-    g_signal_connect(G_OBJECT(button), "toggled",
-                     G_CALLBACK(gnc_prefs_radio_button_user_cb_gconf), NULL);
-    g_free(value);
-    g_free(key);
-}
-
-/****************************************************************************/
-
-/****************************************************************************/
-
 /** The user changed a currency_edit.  Update gconf.  Currency_edit
  *  choices are stored as an int.
  *
@@ -1100,6 +994,35 @@ gnc_prefs_connect_font_button (GtkFontButton *fb)
 
 /****************************************************************************/
 
+/** Connect a GtkRadioButton widget to its stored value in the preferences database.
+ *
+ *  @internal
+ *
+ *  @param button A pointer to the radio button that should be
+ *  connected.
+ */
+static void
+gnc_prefs_connect_radio_button (GtkRadioButton *button)
+{
+    gchar *group, *pref;
+    gboolean active;
+
+    g_return_if_fail(GTK_IS_RADIO_BUTTON(button));
+
+    gnc_prefs_split_widget_name (gtk_buildable_get_name(GTK_BUILDABLE(button)), &group, &pref);
+
+//    active = gnc_prefs_get_bool (group, pref);
+//    DEBUG(" Checkbox %s/%s initially %sactive", group, pref, active ? "" : "in");
+//    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), active);
+
+    gnc_prefs_bind (group, pref, G_OBJECT (button), "active");
+
+    g_free(group);
+    g_free(pref);
+}
+
+/****************************************************************************/
+
 /** Connect a GtkCheckButton widget to its stored value in the preferences database.
  *
  *  @internal
@@ -1279,12 +1202,7 @@ gnc_prefs_connect_one_gconf (const gchar *name,
     /* These tests must be ordered from more specific widget to less
      * specific widget. */
 
-    if (GTK_IS_RADIO_BUTTON(widget))
-    {
-        DEBUG("  %s - radio button", name);
-        gnc_prefs_connect_radio_button_gconf(GTK_RADIO_BUTTON(widget));
-    }
-    else if (GTK_IS_HBOX(widget))
+    if (GTK_IS_HBOX(widget))
     {
         /* Test custom widgets are all children of a hbox */
         GtkWidget *widget_child;
@@ -1341,6 +1259,11 @@ gnc_prefs_connect_one (const gchar *name,
     {
         DEBUG("  %s - entry", name);
         gnc_prefs_connect_font_button(GTK_FONT_BUTTON(widget));
+    }
+    else if (GTK_IS_RADIO_BUTTON(widget))
+    {
+        DEBUG("  %s - radio button", name);
+        gnc_prefs_connect_radio_button(GTK_RADIO_BUTTON(widget));
     }
     else if (GTK_IS_CHECK_BUTTON(widget))
     {
@@ -1614,12 +1537,7 @@ gnc_preferences_gconf_changed (GConfClient *client,
         /* These tests must be ordered from more specific widget to less
          * specific widget. */
 
-        if (GTK_IS_RADIO_BUTTON(widget))
-        {
-            DEBUG("widget %p - radio button", widget);
-            gnc_prefs_radio_button_gconf_cb_gconf(GTK_RADIO_BUTTON(widget));
-        }
-        else if (GTK_IS_HBOX(widget))
+        if (GTK_IS_HBOX(widget))
         {
             /* Test custom widgets are all children of a hbox */
             GtkWidget *widget_child;

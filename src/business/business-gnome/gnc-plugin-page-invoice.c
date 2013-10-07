@@ -33,7 +33,6 @@
 
 #include "dialog-account.h"
 #include "gnc-component-manager.h"
-#include "gnc-gconf-utils.h"
 #include "gnc-gobject-utils.h"
 #include "gnc-gnome-utils.h"
 #include "gnc-icons.h"
@@ -55,7 +54,7 @@ static void gnc_plugin_page_invoice_save_page (GncPluginPage *plugin_page, GKeyF
 static GncPluginPage *gnc_plugin_page_invoice_recreate_page (GtkWidget *window, GKeyFile *file, const gchar *group);
 static void gnc_plugin_page_invoice_window_changed (GncPluginPage *plugin_page, GtkWidget *window);
 
-static void gnc_plugin_page_invoice_summarybar_position_changed(GConfEntry *entry, gpointer user_data);
+static void gnc_plugin_page_invoice_summarybar_position_changed(gpointer prefs, gchar* pref, gpointer user_data);
 
 /* Command callbacks */
 static void gnc_plugin_page_invoice_cmd_new_invoice (GtkAction *action, GncPluginPageInvoice *plugin_page);
@@ -469,9 +468,15 @@ gnc_plugin_page_invoice_create_widget (GncPluginPage *plugin_page)
 
     plugin_page->summarybar = gnc_invoice_window_create_summary_bar(priv->iw);
     gtk_box_pack_start(GTK_BOX (priv->widget), plugin_page->summarybar, FALSE, FALSE, 0);
-    gnc_plugin_page_invoice_summarybar_position_changed(NULL, page);
-    gnc_gconf_general_register_cb(KEY_SUMMARYBAR_POSITION,
-                                  gnc_plugin_page_invoice_summarybar_position_changed, page);
+    gnc_plugin_page_invoice_summarybar_position_changed(NULL, NULL, page);
+    gnc_prefs_register_cb (GNC_PREFS_GROUP_GENERAL,
+                           GNC_PREF_SUMMARYBAR_POSITION_TOP,
+                           gnc_plugin_page_invoice_summarybar_position_changed,
+                           page);
+    gnc_prefs_register_cb (GNC_PREFS_GROUP_GENERAL,
+                           GNC_PREF_SUMMARYBAR_POSITION_BOTTOM,
+                           gnc_plugin_page_invoice_summarybar_position_changed,
+                           page);
 
     regWidget = gnc_invoice_get_register(priv->iw);
     if (regWidget)
@@ -499,8 +504,14 @@ gnc_plugin_page_invoice_destroy_widget (GncPluginPage *plugin_page)
     page = GNC_PLUGIN_PAGE_INVOICE (plugin_page);
     priv = GNC_PLUGIN_PAGE_INVOICE_GET_PRIVATE(page);
 
-    gnc_gconf_general_remove_cb(KEY_SUMMARYBAR_POSITION,
-                                gnc_plugin_page_invoice_summarybar_position_changed, page);
+    gnc_prefs_remove_cb_by_func (GNC_PREFS_GROUP_GENERAL,
+                                 GNC_PREF_SUMMARYBAR_POSITION_TOP,
+                                 gnc_plugin_page_invoice_summarybar_position_changed,
+                                 page);
+    gnc_prefs_remove_cb_by_func (GNC_PREFS_GROUP_GENERAL,
+                                 GNC_PREF_SUMMARYBAR_POSITION_BOTTOM,
+                                 gnc_plugin_page_invoice_summarybar_position_changed,
+                                 page);
 
     if (priv->widget == NULL)
     {
@@ -599,14 +610,12 @@ gnc_plugin_page_invoice_window_changed (GncPluginPage *plugin_page,
 
 
 static void
-gnc_plugin_page_invoice_summarybar_position_changed(GConfEntry *entry,
-        gpointer user_data)
+gnc_plugin_page_invoice_summarybar_position_changed(gpointer prefs, gchar *pref, gpointer user_data)
 {
     GncPluginPage *plugin_page;
     GncPluginPageInvoice *page;
     GncPluginPageInvoicePrivate *priv;
     GtkPositionType position = GTK_POS_BOTTOM;
-    gchar *conf_string;
 
     g_return_if_fail(user_data != NULL);
 
@@ -614,14 +623,8 @@ gnc_plugin_page_invoice_summarybar_position_changed(GConfEntry *entry,
     page = GNC_PLUGIN_PAGE_INVOICE (user_data);
     priv = GNC_PLUGIN_PAGE_INVOICE_GET_PRIVATE(page);
 
-    conf_string = gnc_gconf_get_string (GCONF_GENERAL,
-                                        KEY_SUMMARYBAR_POSITION, NULL);
-    if (conf_string)
-    {
-        position = gnc_enum_from_nick (GTK_TYPE_POSITION_TYPE,
-                                       conf_string, GTK_POS_BOTTOM);
-        g_free (conf_string);
-    }
+    if (gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_SUMMARYBAR_POSITION_TOP))
+        position = GTK_POS_TOP;
 
     gtk_box_reorder_child(GTK_BOX(priv->widget),
                           plugin_page->summarybar,
