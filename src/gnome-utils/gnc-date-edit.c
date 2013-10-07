@@ -56,6 +56,12 @@ enum
     LAST_SIGNAL
 };
 
+enum
+{
+    PROP_0,
+    PROP_TIME,
+};
+
 static QofLogModule log_module = GNC_MOD_GUI;
 static guint date_edit_signals [LAST_SIGNAL] = { 0 };
 
@@ -495,12 +501,105 @@ fill_time_combo (GtkWidget *widget, GNCDateEdit *gde)
 }
 
 static void
+gnc_date_edit_set_time_internal (GNCDateEdit *gde, time64 the_time)
+{
+    char buffer [40];
+    struct tm *mytm = gnc_localtime (&the_time);
+
+    g_return_if_fail(mytm != NULL);
+
+    /* Update the date text. */
+    qof_print_date_dmy_buff(buffer, 40,
+                            mytm->tm_mday,
+                            mytm->tm_mon + 1,
+                            1900 + mytm->tm_year);
+    gtk_entry_set_text(GTK_ENTRY(gde->date_entry), buffer);
+
+    /* Update the calendar. */
+    gtk_calendar_select_day(GTK_CALENDAR (gde->calendar), 1);
+    gtk_calendar_select_month(GTK_CALENDAR (gde->calendar),
+                              mytm->tm_mon, 1900 + mytm->tm_year);
+    gtk_calendar_select_day(GTK_CALENDAR (gde->calendar), mytm->tm_mday);
+
+    /* Set the time of day. */
+    if (gde->flags & GNC_DATE_EDIT_24_HR)
+        qof_strftime (buffer, sizeof (buffer), "%H:%M", mytm);
+    else
+        qof_strftime (buffer, sizeof (buffer), "%I:%M %p", mytm);
+    gtk_entry_set_text(GTK_ENTRY(gde->time_entry), buffer);
+
+    gnc_tm_free (mytm);
+
+    g_signal_emit (gde, date_edit_signals [DATE_CHANGED], 0);
+    g_signal_emit (gde, date_edit_signals [TIME_CHANGED], 0);
+}
+
+
+/** Retrieve a property specific to this GncPeriodSelect object.  This is
+ *  nothing more than a dispatch function for routines that can be
+ *  called directly.  It has the nice feature of allowing a single
+ *  function call to retrieve multiple properties.
+ *
+ *  @internal
+ */
+static void
+gnc_date_edit_get_property (GObject     *object,
+                            guint        prop_id,
+                            GValue      *value,
+                            GParamSpec  *pspec)
+{
+    GNCDateEdit *date_edit = GNC_DATE_EDIT (object);
+
+    switch (prop_id)
+    {
+    case PROP_TIME:
+        g_value_set_int64 (value, gnc_date_edit_get_date (date_edit));
+        break;
+    default:
+        G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
+        break;
+    }
+}
+
+
+/** Set a property specific to this GncDateEdit object.  This is
+ *  nothing more than a dispatch function for routines that can be
+ *  called directly.  It has the nice feature of allowing a new widget
+ *  to be created with a varargs list specifying the properties,
+ *  instead of having to explicitly call each property function.
+ *
+ *  @internal
+ */
+static void
+gnc_date_edit_set_property (GObject      *object,
+                            guint         prop_id,
+                            const GValue *value,
+                            GParamSpec   *pspec)
+{
+    GNCDateEdit *date_edit = GNC_DATE_EDIT (object);
+
+    switch (prop_id)
+    {
+    case PROP_TIME:
+        gnc_date_edit_set_time_internal (date_edit, g_value_get_int64(value));
+        break;
+    default:
+        G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
+        break;
+    }
+}
+
+static void
 gnc_date_edit_class_init (GNCDateEditClass *klass)
 {
     GtkContainerClass *container_class = (GtkContainerClass *) klass;
     GObjectClass *object_class = (GObjectClass *) klass;
 
-    object_class = (GObjectClass*) klass;
+    container_class->forall = gnc_date_edit_forall;
+    object_class->set_property = gnc_date_edit_set_property;
+    object_class->get_property = gnc_date_edit_get_property;
+    object_class->dispose = gnc_date_edit_dispose;
+    object_class->finalize = gnc_date_edit_finalize;
 
     parent_class = g_type_class_ref(GTK_TYPE_HBOX);
 
@@ -522,10 +621,15 @@ gnc_date_edit_class_init (GNCDateEditClass *klass)
                       g_cclosure_marshal_VOID__VOID,
                       G_TYPE_NONE, 0);
 
-    container_class->forall = gnc_date_edit_forall;
-
-    object_class->dispose = gnc_date_edit_dispose;
-    object_class->finalize = gnc_date_edit_finalize;
+    g_object_class_install_property(object_class,
+                                    PROP_TIME,
+                                    g_param_spec_int64("time",
+                                            "Date/time (seconds)",
+                                            "Date/time represented in seconds since Januari 31st, 1970",
+                                            G_MININT64,
+                                            G_MAXINT64,
+                                            0,
+                                            G_PARAM_READWRITE));
 
     klass->date_changed = NULL;
     klass->time_changed = NULL;
@@ -607,34 +711,6 @@ gnc_date_edit_forall (GtkContainer *container, gboolean include_internals,
             callback_data);
 }
 
-static void
-gnc_date_edit_set_time_tm (GNCDateEdit *gde, struct tm *mytm)
-{
-    char buffer [40];
-
-    g_return_if_fail(mytm != NULL);
-
-    /* Update the date text. */
-    qof_print_date_dmy_buff(buffer, 40,
-                            mytm->tm_mday,
-                            mytm->tm_mon + 1,
-                            1900 + mytm->tm_year);
-    gtk_entry_set_text(GTK_ENTRY(gde->date_entry), buffer);
-
-    /* Update the calendar. */
-    gtk_calendar_select_day(GTK_CALENDAR (gde->calendar), 1);
-    gtk_calendar_select_month(GTK_CALENDAR (gde->calendar),
-                              mytm->tm_mon, 1900 + mytm->tm_year);
-    gtk_calendar_select_day(GTK_CALENDAR (gde->calendar), mytm->tm_mday);
-
-    /* Set the time of day. */
-    if (gde->flags & GNC_DATE_EDIT_24_HR)
-        qof_strftime (buffer, sizeof (buffer), "%H:%M", mytm);
-    else
-        qof_strftime (buffer, sizeof (buffer), "%I:%M %p", mytm);
-    gtk_entry_set_text(GTK_ENTRY(gde->time_entry), buffer);
-}
-
 /**
  * gnc_date_edit_set_time:
  * @gde: the GNCDateEdit widget
@@ -646,9 +722,6 @@ gnc_date_edit_set_time_tm (GNCDateEdit *gde, struct tm *mytm)
 void
 gnc_date_edit_set_time (GNCDateEdit *gde, time64 the_time)
 {
-    struct tm *tm_returned;
-    struct tm tm_to_set;
-
     g_return_if_fail (gde != NULL);
     g_return_if_fail (GNC_IS_DATE_EDIT (gde));
 
@@ -656,11 +729,7 @@ gnc_date_edit_set_time (GNCDateEdit *gde, time64 the_time)
      * seen (or as a last resort, the current date). */
     gde->initial_time = the_time;
 
-    /* Convert time64 to tm. */
-    tm_returned = gnc_localtime_r (&the_time, &tm_to_set);
-    g_return_if_fail(tm_returned != NULL);
-
-    gnc_date_edit_set_time_tm(gde, &tm_to_set);
+    g_object_set (G_OBJECT (gde), "time", the_time, NULL);
 }
 
 void
