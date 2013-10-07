@@ -61,10 +61,6 @@ G_GNUC_UNUSED static QofLogModule log_module = G_LOG_DOMAIN;
 static void gnc_plugin_business_class_init (GncPluginBusinessClass *klass);
 static void gnc_plugin_business_init (GncPluginBusiness *plugin);
 static void gnc_plugin_business_finalize (GObject *object);
-static void gnc_plugin_business_gconf_changed (GConfClient *client,
-        guint cnxn_id,
-        GConfEntry *entry,
-        gpointer user_data);
 static void gnc_plugin_business_add_to_window (GncPlugin *plugin,
         GncMainWindow *window,
         GQuark type);
@@ -136,6 +132,8 @@ static void update_inactive_actions(GncPluginPage *page);
 
 #define PLUGIN_ACTIONS_NAME "gnc-plugin-business-actions"
 #define PLUGIN_UI_FILENAME  "gnc-plugin-business-ui.xml"
+
+#define GNC_PREF_EXTRA_TOOLBUTTONS "enable_toolbuttons"
 
 /** This variable maintains a pointer to the last window where a
  *  Business command was executed.  It is used to determine where new
@@ -399,8 +397,8 @@ gnc_plugin_business_class_init (GncPluginBusinessClass *klass)
     plugin_class->n_actions    = gnc_plugin_n_actions;
     plugin_class->ui_filename  = PLUGIN_UI_FILENAME;
 
-    plugin_class->gconf_notifications = gnc_plugin_business_gconf_changed;
-    plugin_class->gconf_section = GCONF_SECTION_INVOICE;
+    plugin_class->gconf_notifications = NULL;
+    plugin_class->gconf_section = NULL;
 
     g_type_class_add_private(klass, sizeof(GncPluginBusinessPrivate));
 }
@@ -897,7 +895,6 @@ static void gnc_plugin_business_main_window_page_changed(GncMainWindow *window,
         GncPluginPage *page,
         gpointer user_data)
 {
-//    g_message("gnc_plugin_business_main_window_page_changed, page=%p", page);
     gnc_plugin_business_update_menus(page);
     update_inactive_actions(page);
 }
@@ -1025,15 +1022,12 @@ static const char* extra_toolbar_actions[] =
     NULL
 };
 
-/* The code below will set the visibility of some extra toolbar
- * buttons based on a gconf key setting. */
-static void set_toolbuttons_visibility(GncMainWindow *mainwindow,
-                                       gboolean visible)
+/* Bind the visibility of the extra toolbar buttons to the
+ * enable_toolbuttons preference. */
+static void bind_toolbuttons_visibility (GncMainWindow *mainwindow)
 {
     GtkActionGroup *action_group;
     const char **iter;
-
-    /*g_warning("about to set button visibility %d", visible);*/
 
     g_return_if_fail(mainwindow);
     g_return_if_fail(GNC_IS_MAIN_WINDOW(mainwindow));
@@ -1047,37 +1041,7 @@ static void set_toolbuttons_visibility(GncMainWindow *mainwindow,
     {
         /* Set the action's visibility */
         GtkAction *action = gtk_action_group_get_action (action_group, *iter);
-        gtk_action_set_visible(action, visible);
-    }
-}
-
-static void update_extra_toolbuttons(GncMainWindow *mainwindow)
-{
-    gboolean value = gnc_gconf_get_bool(GCONF_SECTION_INVOICE,
-                                        "enable_toolbuttons", NULL);
-    set_toolbuttons_visibility(mainwindow, value);
-}
-
-/** This function is called whenever an entry in the business invoice
- *  section of gconf is changed. If the modified gconf entry concerns
- *  our toolbar buttons, we update their visibility status. */
-static void
-gnc_plugin_business_gconf_changed (GConfClient *client,
-                                   guint cnxn_id,
-                                   GConfEntry *entry,
-                                   gpointer user_data)
-{
-    GncMainWindow *mainwindow = GNC_MAIN_WINDOW(user_data);
-    const char* full_gconf_path =
-        GCONF_PATH "/" GCONF_SECTION_INVOICE "/enable_toolbuttons";
-    const char* entry_key = gconf_entry_get_key(entry);
-
-    if (!entry_key)
-        return;
-
-    if (g_strcmp0(entry_key, full_gconf_path) == 0)
-    {
-        update_extra_toolbuttons(mainwindow);
+        gnc_prefs_bind (GNC_PREFS_GROUP_INVOICE, GNC_PREF_EXTRA_TOOLBUTTONS, G_OBJECT (action), "visible");
     }
 }
 
@@ -1091,8 +1055,7 @@ static void gnc_plugin_business_add_to_window (GncPlugin *plugin,
         GncMainWindow *mainwindow,
         GQuark type)
 {
-//     g_message("gnc_plugin_business_add_to_window");
-    update_extra_toolbuttons(mainwindow);
+    bind_toolbuttons_visibility (mainwindow);
 
     g_signal_connect(mainwindow, "page_changed",
                      G_CALLBACK(gnc_plugin_business_main_window_page_changed),

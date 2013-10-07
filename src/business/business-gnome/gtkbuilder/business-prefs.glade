@@ -240,7 +240,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkCheckButton" id="gconf/dialogs/business/invoice/enable_toolbuttons">
+          <object class="GtkCheckButton" id="pref/dialogs.business.invoice/enable_toolbuttons">
             <property name="label" translatable="yes">Enable extra _buttons</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
