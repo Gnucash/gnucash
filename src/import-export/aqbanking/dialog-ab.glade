@@ -815,7 +815,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkCheckButton" id="gconf/dialogs/import/hbci/close_on_finish">
+          <object class="GtkCheckButton" id="pref/dialogs.import.hbci/close_on_finish">
             <property name="label" translatable="yes">_Close log window when finished</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
@@ -834,7 +834,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkCheckButton" id="gconf/dialogs/import/hbci/remember_pin">
+          <object class="GtkCheckButton" id="pref/dialogs.import.hbci/remember_pin">
             <property name="label" translatable="yes">Remember _PIN</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>

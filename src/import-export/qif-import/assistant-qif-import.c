@@ -52,6 +52,7 @@
 #include "gnc-gtk-utils.h"
 #include "gnc-main-window.h"
 #include "gnc-plugin-page-account-tree.h"
+#include "gnc-prefs.h"
 #include "gnc-ui.h"
 #include "guile-mappings.h"
 
@@ -59,8 +60,8 @@
 
 #define ASSISTANT_QIF_IMPORT_CM_CLASS "assistant-qif-import"
 #define GCONF_SECTION "dialogs/import/qif"
-#define GNC_PREFS_GROUP "dialogs.import.qif"
-#define GCONF_NAME_SHOW_DOC "show_doc"
+#define GNC_PREFS_GROUP   "dialogs.import.qif"
+#define GNC_PREF_SHOW_DOC "show_doc"
 #define GCONF_NAME_DEFAULT_TRANSACTION_STATUS "default_status"
 
 #define PREV_ROW "prev_row"
@@ -1379,18 +1380,7 @@ get_preferences(QIFImportWindow *wind)
 
     /* Get the user's preference for showing documentation pages. */
     wind->show_doc_pages =
-        gnc_gconf_get_bool(GCONF_SECTION, GCONF_NAME_SHOW_DOC, &err);
-    if (err != NULL)
-    {
-        g_warning("QIF import: gnc_gconf_get_bool error: %s", err->message);
-        g_error_free(err);
-
-        /* Show documentation pages by default. */
-        g_warning("QIF import: Couldn't get %s setting from gconf.",
-                  GCONF_NAME_SHOW_DOC);
-        g_warning("QIF import: Documentation pages will be shown by default.");
-        wind->show_doc_pages = TRUE;
-    }
+        gnc_prefs_get_bool (GNC_PREFS_GROUP, GNC_PREF_SHOW_DOC);
 
     /* Clear / Reconcile transaction if not specified in QIF file. */
     status_pref = gnc_gconf_get_string(

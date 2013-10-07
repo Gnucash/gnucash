@@ -28,14 +28,13 @@
 #ifndef GNC_GEN_SETTINGS_H
 #define GNC_GEN_SETTINGS_H
 
+#include "import-utilities.h"
+
 typedef struct _genimportsettings GNCImportSettings;
 
 /************************************************************************
  *   Getter/Setter Functions for the Data Types.
  ************************************************************************/
-
-/** The GConf section of the importer */
-#define GCONF_IMPORT_SECTION "dialogs/import/generic_matcher"
 
 
 /** Allocates a new GNCImportSettings object, and initialize it with

@@ -49,6 +49,7 @@
 #include "table-allgui.h"
 #include "table-gnome.h"
 #include "gnc-gconf-utils.h"
+#include "gnc-prefs.h"
 #include "gnc-engine.h"
 
 #include "gnc-ledger-display.h"
@@ -82,7 +83,7 @@ gnc_table_save_state (Table *table, gchar * gconf_key)
     if (table->ui_data == NULL)
         return;
 
-    if (!gnc_gconf_get_bool(GCONF_GENERAL, KEY_SAVE_GEOMETRY, NULL))
+    if (gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL, GNC_PREF_SAVE_GEOMETRY))
         return;
 
     sheet = GNUCASH_SHEET (table->ui_data);
@@ -193,7 +194,7 @@ gnc_table_init_gui (GtkWidget *widget, gchar * gconf_key)
 
     widths = gnc_header_widths_new ();
 
-    if (gnc_gconf_get_bool(GCONF_GENERAL, KEY_SAVE_GEOMETRY, NULL))
+    if (gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL, GNC_PREF_SAVE_GEOMETRY))
     {
         node = gnc_table_layout_get_cells (table->layout);
         for (; node; node = node->next)

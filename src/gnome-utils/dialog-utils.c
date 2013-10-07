@@ -161,7 +161,7 @@ gnc_restore_window_size(const char *group, GtkWindow *window)
     g_return_if_fail(group != NULL);
     g_return_if_fail(window != NULL);
 
-    if (!gnc_gconf_get_bool(GCONF_GENERAL, KEY_SAVE_GEOMETRY, NULL))
+    if (gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL, GNC_PREF_SAVE_GEOMETRY))
         return;
 
     geometry = gnc_prefs_get_value (group, GNC_PREF_LAST_GEOMETRY);
@@ -219,7 +219,7 @@ gnc_save_window_size(const char *group, GtkWindow *window)
     g_return_if_fail(group != NULL);
     g_return_if_fail(window != NULL);
 
-    if (!gnc_gconf_get_bool(GCONF_GENERAL, KEY_SAVE_GEOMETRY, NULL))
+    if (gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL, GNC_PREF_SAVE_GEOMETRY))
         return;
 
     gtk_window_get_position(GTK_WINDOW(window), &wpos[0], &wpos[1]);

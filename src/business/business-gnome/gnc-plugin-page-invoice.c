@@ -38,6 +38,7 @@
 #include "gnc-gnome-utils.h"
 #include "gnc-icons.h"
 #include "gnucash-sheet.h"
+#include "gnc-prefs.h"
 #include "gnc-ui-util.h"
 #include "gnc-window.h"
 
@@ -377,7 +378,7 @@ gnc_plugin_page_invoice_init (GncPluginPageInvoice *plugin_page)
 
     /* Init parent declared variables */
     parent = GNC_PLUGIN_PAGE(plugin_page);
-    use_new = gnc_gconf_get_bool(GCONF_SECTION_INVOICE, KEY_USE_NEW, NULL);
+    use_new = gnc_prefs_get_bool (GNC_PREFS_GROUP_INVOICE, GNC_PREF_USE_NEW);
     g_object_set(G_OBJECT(plugin_page),
                  "page-name",      _("Invoice"),
                  "page-uri",       "default:",

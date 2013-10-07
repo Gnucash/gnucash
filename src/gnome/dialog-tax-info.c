@@ -37,6 +37,7 @@
 #include "gnc-ui-util.h"
 #include "dialog-utils.h"
 #include "gnc-gconf-utils.h"
+#include "gnc-prefs.h"
 #include "gnc-tree-view-account.h"
 #include "gnc-component-manager.h"
 #include "gnc-session.h"
@@ -1462,7 +1463,7 @@ gnc_tax_info_dialog_create (GtkWidget * parent, TaxInfoDialog *ti_dialog)
 
     ti_dialog->paned = GTK_WIDGET(gtk_builder_get_object (builder, "paned"));
 
-    if (gnc_gconf_get_bool(GCONF_GENERAL, KEY_SAVE_GEOMETRY, NULL))
+    if (gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL, GNC_PREF_SAVE_GEOMETRY))
     {
         gint position = gnc_gconf_get_int(GCONF_SECTION, PANED_POSITION, NULL);
         gtk_paned_set_position(GTK_PANED(ti_dialog->paned), position);
@@ -1475,7 +1476,7 @@ close_handler (gpointer user_data)
 {
     TaxInfoDialog *ti_dialog = user_data;
 
-    if (gnc_gconf_get_bool(GCONF_GENERAL, KEY_SAVE_GEOMETRY, NULL))
+    if (gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL, GNC_PREF_SAVE_GEOMETRY))
     {
         gnc_gconf_set_int(GCONF_SECTION, PANED_POSITION,
                           gtk_paned_get_position(GTK_PANED(ti_dialog->paned)), NULL);

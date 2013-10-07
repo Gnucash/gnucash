@@ -93,8 +93,8 @@ enum
 #define PLUGIN_PAGE_CLOSE_BUTTON "close-button"
 #define PLUGIN_PAGE_TAB_LABEL    "label"
 
-#define KEY_SHOW_CLOSE_BUTTON    "tab_close_buttons"
-#define KEY_TAB_NEXT_RECENT      "tab_next_recent"
+#define GNC_PREF_SHOW_CLOSE_BUTTON    "tab_close_buttons"
+#define GNC_PREF_TAB_NEXT_RECENT      "tab_next_recent"
 #define KEY_TAB_POSITION         "tab_position"
 #define KEY_TAB_WIDTH            "tab_width"
 #define GNC_PREF_TAB_COLOR            "show_account_color_tabs"
@@ -1889,12 +1889,12 @@ gnc_main_window_update_tab_close_one_page (GncPluginPage *page,
  *  @param user_data Unused.
  */
 static void
-gnc_main_window_update_tab_close (GConfEntry *entry, gpointer user_data)
+gnc_main_window_update_tab_close (gpointer prefs, gchar *pref, gpointer user_data)
 {
     gboolean new_value;
 
     ENTER(" ");
-    new_value = gconf_value_get_bool(entry->value);
+    new_value = gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_SHOW_CLOSE_BUTTON);
     gnc_main_window_foreach_page(
         gnc_main_window_update_tab_close_one_page,
         &new_value);
@@ -2431,9 +2431,10 @@ gnc_main_window_class_init (GncMainWindowClass *klass)
                       G_TYPE_NONE, 1,
                       G_TYPE_OBJECT);
 
-    gnc_gconf_general_register_cb (KEY_SHOW_CLOSE_BUTTON,
-                                   gnc_main_window_update_tab_close,
-                                   NULL);
+    gnc_prefs_register_cb (GNC_PREFS_GROUP_GENERAL,
+                           GNC_PREF_SHOW_CLOSE_BUTTON,
+                           gnc_main_window_update_tab_close,
+                           NULL);
     gnc_gconf_general_register_cb (KEY_TAB_WIDTH,
                                    gnc_main_window_update_tab_width,
                                    NULL);
@@ -2712,7 +2713,7 @@ gnc_main_window_disconnect (GncMainWindow *window,
 
     /* Switch to the last recently used page */
     notebook = GTK_NOTEBOOK (priv->notebook);
-    if (gnc_gconf_get_bool(GCONF_GENERAL, KEY_TAB_NEXT_RECENT, NULL))
+    if (gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL, GNC_PREF_TAB_NEXT_RECENT))
     {
         new_page = g_list_nth_data (priv->usage_order, 0);
         if (new_page)
@@ -2904,7 +2905,7 @@ gnc_main_window_open_page (GncMainWindow *window,
                                     requisition.height + 2);
         gtk_button_set_alignment(GTK_BUTTON(close_button), 0.5, 0.5);
         gtk_container_add(GTK_CONTAINER(close_button), close_image);
-        if (gnc_gconf_get_bool(GCONF_GENERAL, KEY_SHOW_CLOSE_BUTTON, NULL))
+        if (gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL, GNC_PREF_SHOW_CLOSE_BUTTON))
             gtk_widget_show (close_button);
         else
             gtk_widget_hide (close_button);

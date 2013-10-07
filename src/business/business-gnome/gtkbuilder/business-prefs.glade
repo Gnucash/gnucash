@@ -44,7 +44,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkCheckButton" id="gconf/dialogs/business/bill/tax_included">
+          <object class="GtkCheckButton" id="pref/dialogs.business.bill/tax_included">
             <property name="label" translatable="yes">Ta_x included</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
@@ -109,7 +109,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkCheckButton" id="gconf/dialogs/business/bill/notify_when_due">
+          <object class="GtkCheckButton" id="pref/dialogs.business.bill/notify_when_due">
             <property name="label" translatable="yes">_Notify when due</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
@@ -160,7 +160,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkCheckButton" id="gconf/dialogs/business/invoice/tax_included">
+          <object class="GtkCheckButton" id="pref/dialogs.business.invoice/tax_included">
             <property name="label" translatable="yes">_Tax included</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
@@ -182,7 +182,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkCheckButton" id="gconf/dialogs/business/invoice/accumulate_splits">
+          <object class="GtkCheckButton" id="pref/dialogs.business.invoice/accumulate_splits">
             <property name="label" translatable="yes">_Accumulate splits on post</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
@@ -204,7 +204,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkCheckButton" id="gconf/dialogs/business/invoice/use_new_window">
+          <object class="GtkCheckButton" id="pref/dialogs.business.invoice/use_new_window">
             <property name="label" translatable="yes">_Open in new window</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>

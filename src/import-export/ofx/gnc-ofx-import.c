@@ -46,7 +46,7 @@
 #include "gnc-engine.h"
 #include "gnc-ui-util.h"
 #include "gnc-glib-utils.h"
-#include "gnc-gconf-utils.h"
+#include "gnc-prefs.h"
 #include "gnome-utils/gnc-ui.h"
 #include "gnome-utils/dialog-account.h"
 #include "dialog-utils.h"
@@ -54,6 +54,7 @@
 #include "gnc-ofx-kvp.h"
 
 #define GNC_PREFS_GROUP "dialogs.import.ofx"
+#define GNC_PREF_AUTO_COMMODITY "auto_create_commodity"
 
 static QofLogModule log_module = GNC_MOD_IMPORT;
 
@@ -953,9 +954,9 @@ void gnc_file_ofx_import (void)
         /* Create the Generic transaction importer GUI. */
         gnc_ofx_importer_gui = gnc_gen_trans_list_new(NULL, NULL, FALSE, 42);
 
-        /* Look up the needed gconf options */
+        /* Look up the needed preferences */
         auto_create_commodity =
-            gnc_gconf_get_bool(GCONF_IMPORT_SECTION, "auto_create_commodity", NULL);
+            gnc_prefs_get_bool (GNC_PREFS_GROUP_IMPORT, GNC_PREF_AUTO_COMMODITY);
 
         /* Initialize libofx */
 

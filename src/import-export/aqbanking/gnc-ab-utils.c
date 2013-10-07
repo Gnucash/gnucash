@@ -38,9 +38,9 @@
 #include "dialog-ab-trans.h"
 #include "gnc-ab-kvp.h"
 #include "gnc-ab-utils.h"
-#include "gnc-gconf-utils.h"
 #include "gnc-glib-utils.h"
 #include "gnc-gwen-gui.h"
+#include "gnc-prefs.h"
 #include "gnc-ui.h"
 #include "import-account-matcher.h"
 #include "import-main-matcher.h"
@@ -93,7 +93,7 @@ gnc_GWEN_Init(void)
     GWEN_Init();
 
     /* Initialize gwen logging */
-    if (gnc_gconf_get_bool(GCONF_SECTION_AQBANKING, KEY_VERBOSE_DEBUG, NULL))
+    if (gnc_prefs_get_bool(GNC_PREFS_GROUP_AQBANKING, GNC_PREF_VERBOSE_DEBUG))
     {
         if (!gwen_logging)
         {

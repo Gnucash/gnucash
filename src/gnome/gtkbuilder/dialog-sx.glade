@@ -150,7 +150,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkCheckButton" id="gconf/dialogs/scheduled_trans/since_last_run/show_at_file_open">
+          <object class="GtkCheckButton" id="pref/dialogs.sxs.since_last_run/show_at_file_open">
             <property name="label" translatable="yes">_Run when data file opened</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
@@ -170,7 +170,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkCheckButton" id="gconf/dialogs/scheduled_trans/transaction_editor/create_auto">
+          <object class="GtkCheckButton" id="pref/dialogs.sxs.transaction_editor/create_auto">
             <property name="label" translatable="yes">_Auto-create new transactions</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
@@ -328,7 +328,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkCheckButton" id="gconf/dialogs/scheduled_trans/transaction_editor/notify">
+          <object class="GtkCheckButton" id="pref/dialogs.sxs.transaction_editor/notify">
             <property name="label" translatable="yes">_Notify before transactions are created </property>
             <property name="visible">True</property>
             <property name="sensitive">False</property>
@@ -338,7 +338,6 @@
             <property name="use_action_appearance">False</property>
             <property name="use_underline">True</property>
             <property name="draw_indicator">True</property>
-            <signal name="toggled" handler="on_sx_check_toggled_cb" swapped="no"/>
           </object>
           <packing>
             <property name="right_attach">4</property>

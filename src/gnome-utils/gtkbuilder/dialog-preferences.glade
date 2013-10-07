@@ -3278,7 +3278,7 @@ many months before the current month:</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkCheckButton" id="gconf/general/report/use_new_window">
+                  <object class="GtkCheckButton" id="pref/general.report/use_new_window">
                     <property name="label" translatable="yes">Report opens in a new _window</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -3539,7 +3539,7 @@ many months before the current month:</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkCheckButton" id="gconf/general/save_window_geometry">
+                  <object class="GtkCheckButton" id="pref/general/save_window_geometry">
                     <property name="label" translatable="yes">_Save window size and position</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -3560,7 +3560,7 @@ many months before the current month:</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkCheckButton" id="gconf/general/tab_next_recent">
+                  <object class="GtkCheckButton" id="pref/general/tab_next_recent">
                     <property name="label" translatable="yes">Bring the most _recent tab to the front</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -3790,7 +3790,7 @@ many months before the current month:</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkCheckButton" id="gconf/general/tab_close_buttons">
+                  <object class="GtkCheckButton" id="pref/general/tab_close_buttons">
                     <property name="label" translatable="yes">Show close button on _notebook tabs</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>

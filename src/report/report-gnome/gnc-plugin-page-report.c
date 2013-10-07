@@ -60,6 +60,7 @@
 #include "gnc-plugin.h"
 #include "gnc-plugin-page-report.h"
 #include "gnc-plugin-file-history.h"
+#include "gnc-prefs.h"
 #include "gnc-report.h"
 #include "gnc-session.h"
 #include "gnc-ui-util.h"
@@ -1137,7 +1138,7 @@ gnc_plugin_page_report_constr_init(GncPluginPageReport *plugin_page, gint report
 
     /* Init parent declared variables */
     parent = GNC_PLUGIN_PAGE(plugin_page);
-    use_new = gnc_gconf_get_bool(GCONF_GENERAL_REPORT, KEY_USE_NEW, NULL);
+    use_new = gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL_REPORT, GNC_PREF_USE_NEW);
     name = gnc_report_name( priv->initial_report );
     g_object_set(G_OBJECT(plugin_page),
                  "page-name",      name,

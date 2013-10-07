@@ -25,6 +25,15 @@
 #ifndef IMPORT_UTILITIES_H
 #define IMPORT_UTILITIES_H
 
+
+/** The GConf section of the importer */
+#define GCONF_IMPORT_SECTION "dialogs/import/generic_matcher"
+#define GNC_PREFS_GROUP_IMPORT "dialogs.import.generic"
+#define GNC_PREF_ENABLE_SKIP   "enable_skip"
+#define GNC_PREF_ENABLE_UPDATE "enable_update"
+#define GNC_PREF_USE_BAYES     "use_bayes"
+
+
 #include "Account.h"
 
 /** @name Setter-getters

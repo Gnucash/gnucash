@@ -35,6 +35,7 @@
 #include "gnc-component-manager.h"
 #include "gnc-date-edit.h"
 #include "gnc-gconf-utils.h"
+#include "gnc-prefs.h"
 #include "gnc-tree-view-account.h"
 #include "dialog-utils.h"
 #include "Query.h"
@@ -747,8 +748,11 @@ csv_export_assistant_summary_page_prepare (GtkAssistant *assistant,
     gchar *text, *mtext;
 
     /* Save the Window size, paned position and directory */
-    gnc_gconf_set_int(GCONF_SECTION, PANED_POSITION,
-                      gtk_paned_get_position(GTK_PANED(info->csva.paned)), NULL);
+    if (gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL, GNC_PREF_SAVE_GEOMETRY))
+    {
+        gnc_gconf_set_int(GCONF_SECTION, PANED_POSITION,
+                          gtk_paned_get_position(GTK_PANED(info->csva.paned)), NULL);
+    }
     gnc_set_default_directory(GNC_PREFS_GROUP, info->starting_dir);
 
     if (info->failed)
@@ -1008,7 +1012,7 @@ csv_export_assistant_create (CsvExportInfo *info)
 
     info->csva.paned = GTK_WIDGET(gtk_builder_get_object (builder, "paned"));
 
-    if (gnc_gconf_get_bool(GCONF_SECTION, KEY_SAVE_GEOMETRY, NULL))
+    if (gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL, GNC_PREF_SAVE_GEOMETRY))
     {
         gint position = gnc_gconf_get_int(GCONF_SECTION, PANED_POSITION, NULL);
         gtk_paned_set_position(GTK_PANED(info->csva.paned), position);

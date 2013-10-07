@@ -35,17 +35,15 @@
 
 #include <errno.h>
 
-#include "gnc-gconf-utils.h"
 #include "import-backend.h"
 #include "import-utilities.h"
 #include "Account.h"
 #include "Query.h"
 #include "gnc-engine.h"
 #include "engine-helpers.h"
+#include "gnc-prefs.h"
 #include "gnc-ui-util.h"
 
-#define GCONF_SECTION "dialogs/import/generic_matcher"
-#define BAYES_OPTION  "use_bayes"
 
 /********************************************************************\
  *   Constants                                                      *
@@ -477,7 +475,7 @@ matchmap_find_destination (GncImportMatchMap *matchmap, GNCImportTransInfo *info
                (xaccSplitGetAccount
                 (gnc_import_TransInfo_get_fsplit (info))));
 
-    useBayes = gnc_gconf_get_bool(GCONF_SECTION, BAYES_OPTION, NULL);
+    useBayes = gnc_prefs_get_bool (GNC_PREFS_GROUP_IMPORT, GNC_PREF_USE_BAYES);
     if (useBayes)
     {
         /* get the tokens for this transaction* */
@@ -548,7 +546,7 @@ matchmap_store_destination (GncImportMatchMap *matchmap,
                      (gnc_import_TransInfo_get_fsplit (trans_info))));
 
     /* see what matching system we are currently using */
-    useBayes = gnc_gconf_get_bool(GCONF_SECTION, BAYES_OPTION, NULL);
+    useBayes = gnc_prefs_get_bool (GNC_PREFS_GROUP_IMPORT, GNC_PREF_USE_BAYES);
     if (useBayes)
     {
         /* tokenize this transaction */

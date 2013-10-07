@@ -289,7 +289,7 @@ GncEntryLedger * gnc_entry_ledger_new (QofBook *book, GncEntryLedgerType type)
     ledger->type = type;
     ledger->book = book;
     ledger->traverse_to_new = TRUE;
-    ledger->gconf_section = NULL;
+    ledger->prefs_group = NULL;
 
     /* Orders and Invoices are "invoices" for lookups */
     switch (type)
@@ -956,12 +956,12 @@ gnc_entry_ledger_get_query (GncEntryLedger *ledger)
 }
 
 void
-gnc_entry_ledger_set_gconf_section (GncEntryLedger *ledger, const gchar *string)
+gnc_entry_ledger_set_prefs_group (GncEntryLedger *ledger, const gchar *string)
 {
     if (!ledger)
         return;
 
-    ledger->gconf_section = string;
+    ledger->prefs_group = string;
 }
 
 void gnc_entry_ledger_move_current_entry_updown (GncEntryLedger *ledger,

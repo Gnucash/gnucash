@@ -60,6 +60,7 @@
 #include "gnc-ledger-display.h"
 #include "gnc-plugin-page.h"
 #include "gnc-plugin-page-register2.h"
+#include "gnc-prefs.h"
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"
 #include "gnc-tree-model-split-reg.h"
@@ -144,7 +145,6 @@ struct _GncSxEditorDialog2
 static void schedXact_editor_create_freq_sel (GncSxEditorDialog2 *sxed);
 static void schedXact_editor_create_ledger (GncSxEditorDialog2 *sxed);
 static void schedXact_editor_populate (GncSxEditorDialog2 *);
-static void gnc_sxed_record_size (GncSxEditorDialog2 *sxed);
 static void endgroup_rb_toggled_cb (GtkButton *b, gpointer d);
 static void set_endgroup_toggle_states (GncSxEditorDialog2 *sxed, EndType t);
 static void advance_toggled_cb (GtkButton *b, GncSxEditorDialog2 *sxed);
@@ -179,7 +179,7 @@ sxed_close_handler(gpointer user_data)
     GncSxEditorDialog2 *sxed = user_data;
 
     gnc_sxed_reg_check_close(sxed);
-    gnc_sxed_record_size(sxed);
+    gnc_save_window_size( GNC_PREFS_GROUP_SXED, GTK_WINDOW(sxed->dialog) );
     gtk_widget_destroy(sxed->dialog);
     /* The data will be cleaned up in the destroy handler. */
 }
@@ -1229,7 +1229,7 @@ gnc_ui_scheduled_xaction_editor_dialog_create2 (SchedXaction *sx,
 
     /* Allow resize */
     gtk_window_set_resizable (GTK_WINDOW (sxed->dialog), TRUE);
-    gnc_restore_window_size (SXED_GCONF_SECTION, GTK_WINDOW (sxed->dialog));
+    gnc_restore_window_size (GNC_PREFS_GROUP_SXED, GTK_WINDOW (sxed->dialog));
 
     /* create the frequency-selection widget and example [dense-]calendar. */
     schedXact_editor_create_freq_sel (sxed);
@@ -1256,14 +1256,6 @@ gnc_ui_scheduled_xaction_editor_dialog_create2 (SchedXaction *sx,
     g_object_unref (G_OBJECT (builder));
 
     return sxed;
-}
-
-
-static
-void
-gnc_sxed_record_size (GncSxEditorDialog2 *sxed)
-{
-    gnc_save_window_size (SXED_GCONF_SECTION, GTK_WINDOW (sxed->dialog));
 }
 
 
@@ -1408,9 +1400,9 @@ schedXact_editor_populate (GncSxEditorDialog2 *sxed)
     if (sxed->newsxP)
     {
         autoCreateState =
-            gnc_gconf_get_bool (SXED_GCONF_SECTION, KEY_CREATE_AUTO, NULL);
+            gnc_prefs_get_bool (GNC_PREFS_GROUP_SXED, GNC_PREF_CREATE_AUTO);
         notifyState =
-            gnc_gconf_get_bool (SXED_GCONF_SECTION, KEY_NOTIFY, NULL);
+            gnc_prefs_get_bool (GNC_PREFS_GROUP_SXED, GNC_PREF_NOTIFY);
     }
     else
     {
@@ -1661,23 +1653,19 @@ sxed_excal_update_adapt_cb (GtkObject *o, gpointer ud)
 
 
 static void
-on_sx_check_toggled_cb (GtkWidget *togglebutton,
-                        gpointer user_data)
+on_sx_check_toggled_cb (GtkWidget *togglebutton, gpointer user_data)
 {
-    GtkWidget *widget_create, *widget_notify;
-    gboolean active; // , notify;
+    GtkWidget *widget_notify;
     GHashTable *table;
 
     PINFO("Togglebutton is %p and user_data is %p", togglebutton, user_data);
     PINFO("Togglebutton builder name is %s", gtk_buildable_get_name (GTK_BUILDABLE (togglebutton)));
 
     /* We need to use the hash table to find the required widget to activate. */
-    table = g_object_get_data (G_OBJECT (user_data), "widget_hash");
-    widget_create = g_hash_table_lookup (table, "gconf/dialogs/scheduled_trans/transaction_editor/create_auto");
-    widget_notify = g_hash_table_lookup (table, "gconf/dialogs/scheduled_trans/transaction_editor/notify");
+    table = g_object_get_data(G_OBJECT(user_data), "prefs_widget_hash");
+    widget_notify = g_hash_table_lookup(table, "pref/" GNC_PREFS_GROUP_SXED "/" GNC_PREF_NOTIFY);
 
-    active = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget_create));
-    if (active)
+    if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(togglebutton)))
         gtk_widget_set_sensitive (widget_notify, TRUE);
     else
         gtk_widget_set_sensitive (widget_notify, FALSE);

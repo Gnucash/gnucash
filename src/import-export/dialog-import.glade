@@ -13,7 +13,7 @@
         <property name="n_rows">10</property>
         <property name="n_columns">4</property>
         <child>
-          <object class="GtkCheckButton" id="gconf/dialogs/import/generic_matcher/enable_skip">
+          <object class="GtkCheckButton" id="pref/dialogs.import.generic/enable_skip">
             <property name="label" translatable="yes">Enable skip transaction action</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
@@ -35,7 +35,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkCheckButton" id="gconf/dialogs/import/generic_matcher/enable_update">
+          <object class="GtkCheckButton" id="pref/dialogs.import.generic/enable_update">
             <property name="label" translatable="yes">Enable update match action</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
@@ -248,7 +248,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkCheckButton" id="gconf/dialogs/import/generic_matcher/use_bayes">
+          <object class="GtkCheckButton" id="pref/dialogs.import.generic/use_bayes">
             <property name="label" translatable="yes">Use _bayesian matching</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
@@ -270,7 +270,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkCheckButton" id="gconf/dialogs/import/generic_matcher/auto_create_commodity">
+          <object class="GtkCheckButton" id="pref/dialogs.import.generic/auto_create_commodity">
             <property name="label" translatable="yes">Automatically create new commodities</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>

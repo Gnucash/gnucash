@@ -38,6 +38,7 @@
 #include "gnc-ui.h"
 #include "gnc-gconf-utils.h"
 #include "gnc-gui-query.h"
+#include "gnc-prefs.h"
 #include "gnc-ui-util.h"
 #include "gnc-date-edit.h"
 #include "gnc-amount-edit.h"
@@ -85,7 +86,9 @@
 #define DIALOG_NEW_INVOICE_CM_CLASS "dialog-new-invoice"
 #define DIALOG_VIEW_INVOICE_CM_CLASS "dialog-view-invoice"
 
-#define GNC_PREFS_GROUP_SEARCH  "dialogs.business.invoice_search"
+#define GNC_PREFS_GROUP_SEARCH   "dialogs.business.invoice_search"
+#define GNC_PREF_NOTIFY_WHEN_DUE "notify_when_due"
+#define GNC_PREF_ACCUM_SPLITS    "accumulate_splits"
 
 #define LAST_POSTED_TO_ACCT "last-posted-to-acct"
 
@@ -726,7 +729,7 @@ gnc_dialog_post_invoice(InvoiceWindow *iw, char *message,
                              iw->book);
 
     /* Get the default for the accumulate option */
-    *accumulate = gnc_gconf_get_bool(GCONF_SECTION_INVOICE, "accumulate_splits", NULL);
+    *accumulate = gnc_prefs_get_bool(GNC_PREFS_GROUP_INVOICE, GNC_PREF_ACCUM_SPLITS);
 
     if (!gnc_dialog_dates_acct_question_parented (iw_get_window(iw), message, ddue_label,
             post_label, acct_label, question_label, TRUE, TRUE,
@@ -2185,7 +2188,7 @@ gnc_invoice_create_page (InvoiceWindow *iw, gpointer page)
     GncEntryLedger *entry_ledger = NULL;
     GncOwnerType owner_type;
     GncEntryLedgerType ledger_type;
-    const gchar *gconf_section = NULL;
+    const gchar *prefs_group = NULL;
     gboolean is_credit_note = FALSE;
 
     invoice = gncInvoiceLookup (iw->book, &iw->invoice_guid);
@@ -2292,17 +2295,17 @@ gnc_invoice_create_page (InvoiceWindow *iw, gpointer page)
         case GNC_OWNER_CUSTOMER:
             ledger_type = is_credit_note ? GNCENTRY_CUST_CREDIT_NOTE_VIEWER
                           : GNCENTRY_INVOICE_VIEWER;
-            gconf_section = GCONF_SECTION_INVOICE;
+            prefs_group   = GNC_PREFS_GROUP_INVOICE;
             break;
         case GNC_OWNER_VENDOR:
             ledger_type = is_credit_note ? GNCENTRY_VEND_CREDIT_NOTE_VIEWER
                           : GNCENTRY_BILL_VIEWER;
-            gconf_section = GCONF_SECTION_BILL;
+            prefs_group   = GNC_PREFS_GROUP_BILL;
             break;
         case GNC_OWNER_EMPLOYEE:
             ledger_type = is_credit_note ? GNCENTRY_EMPL_CREDIT_NOTE_VIEWER
                           : GNCENTRY_EXPVOUCHER_VIEWER;
-            gconf_section = GCONF_SECTION_BILL;
+            prefs_group   = GNC_PREFS_GROUP_BILL;
             break;
         default:
             g_warning ("Invalid owner type");
@@ -2319,8 +2322,8 @@ gnc_invoice_create_page (InvoiceWindow *iw, gpointer page)
     /* Set the entry_ledger's invoice */
     gnc_entry_ledger_set_default_invoice (entry_ledger, invoice);
 
-    /* Set the gconf section */
-    gnc_entry_ledger_set_gconf_section (entry_ledger, gconf_section);
+    /* Set the preferences group */
+    gnc_entry_ledger_set_prefs_group (entry_ledger, prefs_group);
 
     /* Setup initial values */
     iw->component_id =
@@ -3222,7 +3225,7 @@ gnc_invoice_remind_bills_due (void)
 void
 gnc_invoice_remind_bills_due_cb (void)
 {
-    if (!gnc_gconf_get_bool(GCONF_SECTION_BILL, "notify_when_due", NULL))
+    if (!gnc_prefs_get_bool(GNC_PREFS_GROUP_BILL, GNC_PREF_NOTIFY_WHEN_DUE))
         return;
 
     gnc_invoice_remind_bills_due();

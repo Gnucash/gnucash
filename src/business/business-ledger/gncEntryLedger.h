@@ -156,6 +156,6 @@ void gnc_entry_ledger_move_current_entry_updown (GncEntryLedger *ledger,
 
 QofQuery * gnc_entry_ledger_get_query (GncEntryLedger *ledger);
 
-void gnc_entry_ledger_set_gconf_section (GncEntryLedger *ledger, const gchar *string);
+void gnc_entry_ledger_set_prefs_group (GncEntryLedger *ledger, const gchar *string);
 
 #endif /* GNC_ENTRY_LEDGER_H */

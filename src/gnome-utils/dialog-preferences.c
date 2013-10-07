@@ -752,78 +752,6 @@ gnc_prefs_connect_radio_button_gconf (GtkRadioButton *button)
 
 /****************************************************************************/
 
-/** The user clicked on a check button.  Update gconf.  Check button
- *  choices are stored as a boolean
- *
- *  @internal
- *
- *  @param button A pointer to the check button that was clicked.
- *
- *  @param user_data Unused.
- */
-static void
-gnc_prefs_check_button_user_cb_gconf (GtkCheckButton *button,
-                                gpointer user_data)
-{
-    const gchar *name;
-    gboolean active;
-
-    g_return_if_fail(GTK_IS_CHECK_BUTTON(button));
-    name = gtk_buildable_get_name(GTK_BUILDABLE(button)) + PREFIX_LEN;
-    active = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(button));
-    DEBUG("Checkbox %s now %sactive", name, active ? "" : "in");
-    gnc_gconf_set_bool(name, NULL, active, NULL);
-}
-
-
-/** A check button choice was updated in gconf.  Update the user
- *  visible dialog.
- *
- *  @internal
- *
- *  @param button A pointer to the check button that changed.
- *
- *  @param active The new state of the check button.
- */
-static void
-gnc_prefs_check_button_gconf_cb_gconf (GtkCheckButton *button,
-                                 gboolean active)
-{
-    g_return_if_fail(GTK_IS_CHECK_BUTTON(button));
-    ENTER("button %p, active %d", button, active);
-    g_signal_handlers_block_by_func(G_OBJECT(button),
-                                    G_CALLBACK(gnc_prefs_check_button_user_cb_gconf), NULL);
-    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), active);
-    g_signal_handlers_unblock_by_func(G_OBJECT(button),
-                                      G_CALLBACK(gnc_prefs_check_button_user_cb_gconf), NULL);
-    LEAVE(" ");
-}
-
-
-/** Connect a check button widget to the user callback function.  Set
- *  the starting state of the button from its value in gconf.
- *
- *  @internal
- *
- *  @param button A pointer to the check button that should be
- *  connected.
- */
-static void
-gnc_prefs_connect_check_button_gconf (GtkCheckButton *button)
-{
-    const gchar *name;
-    gboolean active;
-
-    name = gtk_buildable_get_name(GTK_BUILDABLE(button)) + PREFIX_LEN;
-    active = gnc_gconf_get_bool(name, NULL, NULL);
-    DEBUG(" Checkbox %s initially %sactive", name, active ? "" : "in");
-    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), active);
-    g_signal_connect(G_OBJECT(button), "toggled",
-                     G_CALLBACK(gnc_prefs_check_button_user_cb_gconf), NULL);
-}
-
-/****************************************************************************/
-
 /** The user updated a spin button.  Update gconf.  Spin button
  *  choices are stored as a float.
  *
@@ -1454,11 +1382,6 @@ gnc_prefs_connect_one_gconf (const gchar *name,
         DEBUG("  %s - radio button", name);
         gnc_prefs_connect_radio_button_gconf(GTK_RADIO_BUTTON(widget));
     }
-    else if (GTK_IS_CHECK_BUTTON(widget))
-    {
-        DEBUG("  %s - check button", name);
-        gnc_prefs_connect_check_button_gconf(GTK_CHECK_BUTTON(widget));
-    }
     else if (GTK_IS_SPIN_BUTTON(widget))
     {
         DEBUG("  %s - spin button", name);
@@ -1789,12 +1712,6 @@ gnc_preferences_gconf_changed (GConfClient *client,
         {
             DEBUG("widget %p - radio button", widget);
             gnc_prefs_radio_button_gconf_cb_gconf(GTK_RADIO_BUTTON(widget));
-        }
-        else if (GTK_IS_CHECK_BUTTON(widget))
-        {
-            DEBUG("widget %p - check button", widget);
-            gnc_prefs_check_button_gconf_cb_gconf(GTK_CHECK_BUTTON(widget),
-                                            gconf_value_get_bool(entry->value));
         }
         else if (GTK_IS_SPIN_BUTTON(widget))
         {

@@ -37,6 +37,7 @@
 #include "gnc-engine.h"
 #include "engine-helpers.h"
 #include "gnc-gconf-utils.h"
+#include "gnc-prefs.h"
 #include "gnc-ui-util.h"
 #include "gnc-ui.h"
 #include "qof.h"
@@ -498,9 +499,9 @@ sxftd_compute_sx(SXFromTransInfo *sxfti)
         gint daysInAdvance;
 
         autoCreateState =
-            gnc_gconf_get_bool( SXED_GCONF_SECTION, KEY_CREATE_AUTO, NULL );
+            gnc_prefs_get_bool (GNC_PREFS_GROUP_SXED, GNC_PREF_CREATE_AUTO);
         notifyState =
-            gnc_gconf_get_bool( SXED_GCONF_SECTION, KEY_NOTIFY, NULL );
+            gnc_prefs_get_bool (GNC_PREFS_GROUP_SXED, GNC_PREF_NOTIFY);
         xaccSchedXactionSetAutoCreate( sx,
                                        autoCreateState,
                                        (autoCreateState & notifyState) );

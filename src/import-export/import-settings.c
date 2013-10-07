@@ -30,6 +30,7 @@
 
 #include "import-settings.h"
 #include "gnc-gconf-utils.h"
+#include "gnc-prefs.h"
 
 /********************************************************************\
  * Default values for user prefs (or values for unimplemented prefs.*
@@ -83,9 +84,9 @@ gnc_import_Settings_new (void)
 
 
     settings->action_skip_enabled =
-        gnc_gconf_get_bool(GCONF_IMPORT_SECTION, "enable_skip", NULL);
+        gnc_prefs_get_bool (GNC_PREFS_GROUP_IMPORT, GNC_PREF_ENABLE_SKIP);
     settings->action_update_enabled =
-        gnc_gconf_get_bool(GCONF_IMPORT_SECTION, "enable_update", NULL);
+        gnc_prefs_get_bool (GNC_PREFS_GROUP_IMPORT, GNC_PREF_ENABLE_UPDATE);
     settings->action_add_enabled = DEFAULT_ACTION_ADD_ENABLED;
     settings->action_clear_enabled = DEFAULT_ACTION_CLEAR_ENABLED;
     settings->clear_threshold =

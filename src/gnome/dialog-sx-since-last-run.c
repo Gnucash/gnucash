@@ -41,6 +41,7 @@
 #include "gnc-sx-instance-model.h"
 #include "dialog-sx-since-last-run.h"
 
+#include "gnc-prefs.h"
 #include "gnc-ui-util.h"
 #include "Query.h"
 #include "qof.h"
@@ -50,7 +51,6 @@
 /*################## Added for Reg2 #################*/
 #include "gnc-main-window.h"
 #include "gnc-component-manager.h"
-#include "gnc-gconf-utils.h"
 #include "gnc-gui-query.h"
 #include "gnc-session.h"
 
@@ -60,8 +60,9 @@
 G_GNUC_UNUSED static QofLogModule log_module = GNC_MOD_GUI_SX;
 
 #define DIALOG_SX_SINCE_LAST_RUN_CM_CLASS "dialog-sx-since-last-run"
-#define GCONF_SECTION "dialogs/scheduled_trans/since_last_run"
-#define GNC_PREFS_GROUP "dialogs.sxs.since_last_run"
+
+#define GNC_PREFS_GROUP        "dialogs.sxs.since_last_run"
+#define GNC_PREF_SHOW_AT_FOPEN "show_at_file_open"
 
 struct _GncSxSinceLastRunDialog
 {
@@ -799,7 +800,7 @@ gnc_sx_sxsincelast_book_opened(void)
     GncSxInstanceModel *inst_model;
     GncSxSummary summary;
 
-    if (!gnc_gconf_get_bool(GCONF_SECTION, "show_at_file_open", NULL))
+    if (!gnc_prefs_get_bool (GNC_PREFS_GROUP, GNC_PREF_SHOW_AT_FOPEN))
         return;
 
     inst_model = gnc_sx_get_current_instances();
