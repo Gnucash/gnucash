@@ -679,118 +679,6 @@ gnc_prefs_split_widget_name (const gchar *name, gchar **group, gchar **pref)
 /* FIXME to remove when gconf conversion of preferences is complete */
 /****************************************************************************/
 
-/** The user changed a currency_edit.  Update gconf.  Currency_edit
- *  choices are stored as an int.
- *
- *  @internal
- *
- *  @param gce A pointer to the currency_edit that was changed.
- *
- *  @param user_data Unused.
- */
-static void
-gnc_prefs_currency_edit_user_cb_gconf (GNCCurrencyEdit *gce,
-                                 gpointer user_data)
-{
-    const gchar *name, *mnemonic;
-    gnc_commodity *currency;
-
-    g_return_if_fail(GNC_IS_CURRENCY_EDIT(gce));
-    name  = g_object_get_data(G_OBJECT(gce), "name");
-    currency = gnc_currency_edit_get_currency(gce);
-    mnemonic = gnc_commodity_get_mnemonic(currency);
-
-    DEBUG("Currency edit %s set to %s", name, mnemonic);
-    gnc_gconf_set_string(name, NULL, mnemonic, NULL);
-}
-
-
-/** A currency_edit choice was updated in gconf.  Update the user
- *  visible dialog.
- *
- *  @internal
- *
- *  @param gce A pointer to the currency_edit that changed.
- *
- *  @param value The new value of the currency_edit.
- */
-static void
-gnc_prefs_currency_edit_gconf_cb_gconf (GNCCurrencyEdit *gce,
-                                  GConfEntry *entry)
-{
-    const gchar *mnemonic;
-    gnc_commodity *currency;
-
-    g_return_if_fail(GNC_IS_CURRENCY_EDIT(gce));
-    ENTER("gce %p, entry %p", gce, entry);
-
-    mnemonic = gconf_value_get_string(entry->value);
-    DEBUG("gce %p, mnemonic %s", gce, mnemonic);
-    currency = gnc_commodity_table_lookup(gnc_get_current_commodities(),
-                                          GNC_COMMODITY_NS_CURRENCY, mnemonic);
-
-    /* If there isn't any such commodity, get the default */
-    if (!currency)
-    {
-        currency = gnc_locale_default_currency();
-        DEBUG("gce %p, default currency mnemonic %s",
-              gce, gnc_commodity_get_mnemonic(currency));
-    }
-
-    g_signal_handlers_block_by_func(G_OBJECT(gce),
-                                    G_CALLBACK(gnc_prefs_currency_edit_user_cb_gconf), NULL);
-    gnc_currency_edit_set_currency(GNC_CURRENCY_EDIT(gce), currency);
-    g_signal_handlers_unblock_by_func(G_OBJECT(gce),
-                                      G_CALLBACK(gnc_prefs_currency_edit_user_cb_gconf), NULL);
-    LEAVE(" ");
-}
-
-
-/** Connect a currency_edit widget to the user callback function.  Set
- *  the starting state of the gce from its value in gconf.
- *
- *  @internal
- *
- *  @param gce A pointer to the currency_edit that should be connected.
- */
-static void
-gnc_prefs_connect_currency_edit_gconf (GNCCurrencyEdit *gce, const gchar *boxname )
-{
-    gnc_commodity *currency;
-    const gchar *name;
-    gchar *mnemonic;
-
-    g_return_if_fail(GNC_IS_CURRENCY_EDIT(gce));
-
-    /* Lookup commodity based upon gconf setting */
-    name = boxname + PREFIX_LEN;
-
-    g_object_set_data(G_OBJECT(gce), "name", g_strdup(name) );
-
-    mnemonic = gnc_gconf_get_string(name, NULL, NULL);
-    currency = gnc_commodity_table_lookup(gnc_get_current_commodities(),
-                                          GNC_COMMODITY_NS_CURRENCY, mnemonic);
-    if (mnemonic)
-        g_free(mnemonic);
-
-    /* If there isn't any such commodity, get the default */
-    if (!currency)
-        currency = gnc_locale_default_currency();
-
-    gnc_currency_edit_set_currency(GNC_CURRENCY_EDIT(gce), currency);
-    DEBUG(" Currency edit %s set to %s", name,
-          gnc_commodity_get_mnemonic(currency));
-
-    g_signal_connect(G_OBJECT(gce), "changed",
-                     G_CALLBACK(gnc_prefs_currency_edit_user_cb_gconf), NULL);
-
-    gtk_widget_show_all(GTK_WIDGET(gce));
-}
-
-/****************************************************************************/
-
-/****************************************************************************/
-
 /** The user changed a GncPeriodSelect widget.  Update gconf.
  *  GncPeriodSelect choices are stored as an int.
  *
@@ -1109,6 +997,33 @@ gnc_prefs_connect_combo_box (GtkComboBox *box)
 
 /****************************************************************************/
 
+/** Connect a GncCurrencyEdit widget to its stored value in the preferences database.
+ *
+ *  @internal
+ *
+ *  @param gce A pointer to the currency_edit that should be connected.
+ */
+static void
+gnc_prefs_connect_currency_edit (GNCCurrencyEdit *gce, const gchar *boxname )
+{
+    gnc_commodity *currency;
+    gchar *group, *pref;
+    gchar *mnemonic;
+
+    g_return_if_fail(GNC_IS_CURRENCY_EDIT(gce));
+
+    gnc_prefs_split_widget_name (boxname, &group, &pref);
+
+    gnc_prefs_bind (group, pref, G_OBJECT (gce), "mnemonic");
+
+    g_free (group);
+    g_free (pref);
+
+    gtk_widget_show_all(GTK_WIDGET(gce));
+}
+
+/****************************************************************************/
+
 /** Connect a GtkEntry widget to its stored value in the preferences database.
  *
  *  @internal
@@ -1212,12 +1127,7 @@ gnc_prefs_connect_one_gconf (const gchar *name,
         DEBUG("  %s - hbox", name);
         DEBUG("Hbox widget type is %s and name is %s", gtk_widget_get_name(GTK_WIDGET(widget_child)), name);
 
-        if (GNC_IS_CURRENCY_EDIT(widget_child))
-        {
-            DEBUG("  %s - currency_edit", name);
-            gnc_prefs_connect_currency_edit_gconf(GNC_CURRENCY_EDIT(widget_child), name );
-        }
-        else if (GNC_IS_PERIOD_SELECT(widget_child))
+        if (GNC_IS_PERIOD_SELECT(widget_child))
         {
             DEBUG("  %s - period_Select", name);
             gnc_prefs_connect_period_select_gconf(GNC_PERIOD_SELECT(widget_child), name );
@@ -1284,6 +1194,22 @@ gnc_prefs_connect_one (const gchar *name,
     {
         DEBUG("  %s - entry", name);
         gnc_prefs_connect_entry(GTK_ENTRY(widget));
+    }
+    else if (GTK_IS_HBOX(widget))
+    {
+        /* Test custom widgets are all children of a hbox */
+        GtkWidget *widget_child;
+        GList* child = gtk_container_get_children(GTK_CONTAINER(widget));
+        widget_child = child->data;
+        g_list_free(child);
+        DEBUG("  %s - hbox", name);
+        DEBUG("Hbox widget type is %s and name is %s", gtk_widget_get_name(GTK_WIDGET(widget_child)), name);
+
+        if (GNC_IS_CURRENCY_EDIT(widget_child))
+        {
+            DEBUG("  %s - currency_edit", name);
+            gnc_prefs_connect_currency_edit(GNC_CURRENCY_EDIT(widget_child), name );
+        }
     }
     else
     {
@@ -1356,7 +1282,7 @@ gnc_preferences_dialog_create(void)
     g_object_set_data_full(G_OBJECT(dialog), PREFS_WIDGET_HASH,
                            prefs_table, (GDestroyNotify)g_hash_table_destroy);
 
-    box = GTK_WIDGET(gtk_builder_get_object (builder, "gconf/window/pages/account_tree/summary/start_period"));
+    box = GTK_WIDGET(gtk_builder_get_object (builder, "pref/window.pages.account_tree.summary/start_period"));
     period = gnc_period_select_new(TRUE);
     gtk_widget_show (period);
     gtk_box_pack_start (GTK_BOX (box), period, TRUE, TRUE, 0);
@@ -1366,7 +1292,7 @@ gnc_preferences_dialog_create(void)
     gtk_widget_show (date);
     gtk_box_pack_start (GTK_BOX (box), date, TRUE, TRUE, 0);
 
-    box = GTK_WIDGET(gtk_builder_get_object (builder, "gconf/window/pages/account_tree/summary/end_period"));
+    box = GTK_WIDGET(gtk_builder_get_object (builder, "pref/window.pages.account_tree.summary/end_period"));
     period = gnc_period_select_new(FALSE);
     gtk_widget_show (period);
     gtk_box_pack_start (GTK_BOX (box), period, TRUE, TRUE, 0);
@@ -1376,13 +1302,13 @@ gnc_preferences_dialog_create(void)
     gtk_widget_show (date);
     gtk_box_pack_start (GTK_BOX (box), date, TRUE, TRUE, 0);
 
-    box = GTK_WIDGET(gtk_builder_get_object (builder, "gconf/general/currency_other"));
+    box = GTK_WIDGET(gtk_builder_get_object (builder, "pref/general/currency_other"));
     currency = gnc_currency_edit_new();
     gnc_currency_edit_set_currency (GNC_CURRENCY_EDIT(currency), gnc_default_currency());
     gtk_widget_show (currency);
     gtk_box_pack_start(GTK_BOX (box), currency, TRUE, TRUE, 0);
 
-    box = GTK_WIDGET(gtk_builder_get_object (builder, "gconf/general/report/currency_other"));
+    box = GTK_WIDGET(gtk_builder_get_object (builder, "pref/general.report/currency_other"));
     currency = gnc_currency_edit_new();
     gnc_currency_edit_set_currency (GNC_CURRENCY_EDIT(currency), gnc_default_currency());
     gtk_widget_show (currency);
@@ -1548,12 +1474,7 @@ gnc_preferences_gconf_changed (GConfClient *client,
             DEBUG("  %s - hbox", name);
             DEBUG("Hbox gconf name is %s and widget get name is %s", name, gtk_widget_get_name(GTK_WIDGET(widget_child)));
 
-            if (GNC_IS_CURRENCY_EDIT(widget_child))
-            {
-                DEBUG("widget %p - currency_edit", widget_child);
-                gnc_prefs_currency_edit_gconf_cb_gconf(GNC_CURRENCY_EDIT(widget_child), entry);
-            }
-            else if (GNC_IS_PERIOD_SELECT(widget_child))
+            if (GNC_IS_PERIOD_SELECT(widget_child))
             {
                 DEBUG("widget %p - period_select", widget_child);
                 gnc_prefs_period_select_gconf_cb_gconf(GNC_PERIOD_SELECT(widget_child),

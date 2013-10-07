@@ -828,7 +828,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkHBox" id="gconf/general/currency_other">
+                  <object class="GtkHBox" id="pref/general/currency_other">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <child>
@@ -3070,7 +3070,7 @@ many months before the current month:</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkHBox" id="gconf/general/report/currency_other">
+                  <object class="GtkHBox" id="pref/general.report/currency_other">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <child>
