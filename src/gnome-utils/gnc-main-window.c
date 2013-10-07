@@ -92,11 +92,11 @@ enum
 #define PLUGIN_PAGE_CLOSE_BUTTON "close-button"
 #define PLUGIN_PAGE_TAB_LABEL    "label"
 
-#define KEY_SHOW_CLOSE_BUTTON	"tab_close_buttons"
-#define KEY_TAB_NEXT_RECENT	"tab_next_recent"
-#define KEY_TAB_POSITION	"tab_position"
-#define KEY_TAB_WIDTH           "tab_width"
-#define KEY_TAB_COLOR           "show_account_color_tabs"
+#define KEY_SHOW_CLOSE_BUTTON    "tab_close_buttons"
+#define KEY_TAB_NEXT_RECENT      "tab_next_recent"
+#define KEY_TAB_POSITION         "tab_position"
+#define KEY_TAB_WIDTH            "tab_width"
+#define KEY_TAB_COLOR            "show_account_color_tabs"
 
 #define GNC_MAIN_WINDOW_NAME "GncMainWindow"
 

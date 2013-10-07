@@ -331,7 +331,7 @@ enum
  * equities.
  *
  * The EURO gets special treatment. There can be one line with
- * EUR amounts and a EUR (total) line which summs up all EURO
+ * EUR amounts and a EUR (total) line which sums up all EURO
  * member currencies.
  *
  * There can be a 'grand total', too, which sums up all accounts

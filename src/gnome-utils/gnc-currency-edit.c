@@ -37,7 +37,7 @@
  *  names.  All data is maintained within the widget itself, which
  *  makes the name/item lookup functions somewhat complicated.  The
  *  alternative coding would be to keep an auxiliary list of strings
- *  attacked to the widget for lookup purposes, but that would be 100%
+ *  attached to the widget for lookup purposes, but that would be 100%
  *  redundant information.
  *
  *  This function currently builds a new GtkListStore for each widget

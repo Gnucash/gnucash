@@ -301,7 +301,7 @@ gnc_localtime (const time64 *secs)
 
 /* Linux, Darwin, and MSWindows implementations of this function set the
  * globals timezone and daylight; BSD doesn't have those globals, and
- * Gnucash never uses them, so they're ommitted from this
+ * Gnucash never uses them, so they're omitted from this
  * implementation. Bug 704185.
  */
 struct tm*

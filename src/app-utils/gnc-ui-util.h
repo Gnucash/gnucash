@@ -90,7 +90,7 @@ gnc_commodity_table * gnc_get_current_commodities (void);
 gchar *gnc_get_account_name_for_register(const Account *account);
 
 /**
- * Retrieve the account matching the given name starting from the descandants of
+ * Retrieve the account matching the given name starting from the descendants of
  * base_account.
  * @a name is either considered to be the name of the leaf in the account tree
  * or to be the full account path, depending on the configuration parameter

@@ -554,7 +554,7 @@ gnc_tree_view_split_reg_finalize (GObject *object)
 }
 
 
-/* Update some settings from gconf */
+/* Update internal settings based on preferences */
 void
 gnc_tree_view_split_reg_refresh_from_gconf (GncTreeViewSplitReg *view)
 {
@@ -1804,7 +1804,7 @@ gtv_sr_cdf0 (GtkTreeViewColumn *col, GtkCellRenderer *cell, GtkTreeModel *s_mode
 
         editable = (read_only == TRUE) ? FALSE : editable;
 
-        // Display negative numbers in red by gconf
+        // Display negative numbers in red if requested in preferences
         if (gnc_numeric_negative_p (num) && negative_in_red)
             g_object_set (cell, "foreground", "red", (gchar*)NULL);
         else
@@ -1881,7 +1881,7 @@ gtv_sr_cdf0 (GtkTreeViewColumn *col, GtkCellRenderer *cell, GtkTreeModel *s_mode
 
         editable = (read_only == TRUE) ? FALSE : editable;
 
-        // Display negative numbers in red by gconf
+        // Display negative numbers in red if requested in preferences
         if (gnc_numeric_negative_p (num) && negative_in_red)
             g_object_set (cell, "foreground", "red", (gchar*)NULL);
         else
@@ -1956,7 +1956,7 @@ gtv_sr_cdf0 (GtkTreeViewColumn *col, GtkCellRenderer *cell, GtkTreeModel *s_mode
 
         editable = (read_only == TRUE) ? FALSE : editable;
 
-        // Display negative numbers in red by gconf
+        // Display negative numbers in red if requested in preferences
         if (gnc_numeric_negative_p (num) && negative_in_red)
             g_object_set (cell, "foreground", "red", (gchar*)NULL);
         else
@@ -2139,7 +2139,7 @@ gtv_sr_cdf0 (GtkTreeViewColumn *col, GtkCellRenderer *cell, GtkTreeModel *s_mode
                 num = gnc_numeric_neg (num);
             s = xaccPrintAmount (num, gnc_account_print_info(anchor, FALSE));
 
-            // Display negative numbers in red by gconf
+            // Display negative numbers in red if requested in preferences
             if (gnc_numeric_negative_p (num) && negative_in_red)
                 g_object_set (cell, "foreground", "red", (gchar*)NULL);
             else

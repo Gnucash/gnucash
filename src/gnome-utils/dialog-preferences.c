@@ -75,11 +75,11 @@
 #include "gnc-component-manager.h"
 #include "dialog-preferences.h"
 
-#define DIALOG_PREFERENCES_CM_CLASS	"dialog-newpreferences"
-#define GCONF_SECTION			"dialogs/preferences"
-#define PREFIX_LEN			sizeof("gconf/") - 1
-#define WIDGET_HASH			"widget_hash"
-#define NOTEBOOK			"notebook"
+#define DIALOG_PREFERENCES_CM_CLASS "dialog-newpreferences"
+#define GCONF_SECTION               "dialogs/preferences"
+#define PREFIX_LEN                   sizeof("gconf/") - 1
+#define WIDGET_HASH                 "widget_hash"
+#define NOTEBOOK                    "notebook"
 
 /** The debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_PREFS;
@@ -189,7 +189,7 @@ gnc_prefs_compare_addins (addition *a,
 /** This is the common function that adds any set of preferences to
  *  the preferences dialog.  It allocates a data structure to remember
  *  the passed in data and queues it for later when the dialog is
- *  actually built.  This code does check to insure there aren't any
+ *  actually built.  This code does check to ensure there aren't any
  *  conflicts, like multiple additions of the same tab name when the
  *  two pages being added aren't compatible.
  *
@@ -317,7 +317,7 @@ gnc_preferences_add_to_page (const gchar *filename,
 /** This function builds a hash table of "interesting" widgets,
  *  i.e. widgets whose name starts with "gconf/".  This table is
  *  needed to perform name->widget lookups in the gconf callback
- *  functions as they are comming from multiple glade files.
+ *  functions as they are coming from multiple glade files.
  *
  *  @internal
  *

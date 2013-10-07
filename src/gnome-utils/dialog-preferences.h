@@ -37,7 +37,7 @@
     file.  If a partial page is added, the widget name provided must
     be that of a GtkTable containing four columns. If a full page is
     added, the widget name provided to this code can be any kind of
-    widget, but for consistence it should probably be the same.
+    widget, but for consistency it should probably be the same.
 
     If a widget names is in the form gconf/xxx/yyy... and it is a type
     of widget this code knows how to handle, then the callback signals
@@ -99,7 +99,7 @@ void gnc_preferences_add_to_page (const gchar *filename,
 
 
 /** This function creates the preferences dialog and presents it to
- *  the user.  The preferences dialog is a singletone, so if a
+ *  the user.  The preferences dialog is a singleton, so if a
  *  preferences dialog already exists it will be raised to the top of
  *  the window stack instead of creating a new dialog. */
 void gnc_preferences_dialog (void);

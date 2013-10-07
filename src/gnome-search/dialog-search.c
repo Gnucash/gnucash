@@ -75,7 +75,7 @@ struct _GNCSearchWindow
 
     /* The "results" sub-window widgets */
     GtkWidget               *result_view;
-    gpointer	             selected_item;
+    gpointer                 selected_item;
     GList                   *selected_item_list;
 
     /* The search_type radio-buttons */
@@ -90,50 +90,50 @@ struct _GNCSearchWindow
     GList                   *button_list;
 
     /* The close/cancel buttons */
-    GtkWidget 		    *close_button;
+    GtkWidget               *close_button;
     GtkWidget               *cancel_button;
 
     /* Callbacks */
     GNCSearchResultCB        result_cb;
     GNCSearchNewItemCB       new_item_cb;
     GNCSearchCallbackButton *buttons;
-    GNCSearchFree	     free_cb;
-    gpointer		     user_data;
+    GNCSearchFree            free_cb;
+    gpointer                 user_data;
 
-    GNCSearchSelectedCB	     selected_cb;
-    gpointer		     select_arg;
-    gboolean		     allow_clear;
+    GNCSearchSelectedCB      selected_cb;
+    gpointer                 select_arg;
+    gboolean                 allow_clear;
 
     /* What we're searching for, and how */
     const gchar              *type_label;
     QofIdTypeConst            search_for;
-    GNCSearchType             grouping;		/* Match Any, Match All */
-    const QofParam           *get_guid;		/* Function to GetGUID from the object */
-    int		              search_type;	/* New, Narrow, Add, Delete */
+    GNCSearchType             grouping;     /* Match Any, Match All */
+    const QofParam           *get_guid;     /* Function to GetGUID from the object */
+    int                       search_type;  /* New, Narrow, Add, Delete */
 
     /* Our query status */
     QofQuery                 *q;
-    QofQuery                 *start_q;		/* The query to start from, if any */
+    QofQuery                 *start_q;      /* The query to start from, if any */
 
     /* The list of criteria */
     GNCSearchParam           *last_param;
-    GList                    *params_list;	/* List of GNCSearchParams */
-    GList                    *display_list;	/* List of GNCSearchParams for Display */
-    gint	              num_cols;		/* Number of Display Columns */
-    GList                    *crit_list;	/* List of crit_data */
+    GList                    *params_list;  /* List of GNCSearchParams */
+    GList                    *display_list; /* List of GNCSearchParams for Display */
+    gint                      num_cols;     /* Number of Display Columns */
+    GList                    *crit_list;    /* List of crit_data */
 
-    gint	             component_id;
-    const gchar             *gconf_section;
+    gint                      component_id;
+    const gchar              *gconf_section;
 };
 
 struct _crit_data
 {
-    GNCSearchParam *	param;
-    GNCSearchCoreType *	element;
-    GtkWidget *		elemwidget;
-    GtkWidget *		container;
-    GtkWidget *		button;
-    GtkDialog *		dialog;
+    GNCSearchParam    *param;
+    GNCSearchCoreType *element;
+    GtkWidget         *elemwidget;
+    GtkWidget         *container;
+    GtkWidget         *button;
+    GtkDialog         *dialog;
 };
 
 static void search_clear_criteria (GNCSearchWindow *sw);
