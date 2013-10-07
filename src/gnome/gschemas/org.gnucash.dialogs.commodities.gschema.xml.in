@@ -1,0 +1,74 @@
+<schemalist gettext-domain="GETTEXT_PACKAGE">
+  <schema id="org.gnucash.dialogs.commodities" path="/apps/gnucash/dialogs/edit_commodities/">
+    <key name="column_order" type="as">
+      <default>[ 'namespace', 'symbol', 'name', 'printname', 'uniquename', 'cusip_code', 'fraction', 'quote_flag', 'quote_source', 'quote_timezone' ]</default>
+      <summary>Order of columns in the dialog</summary>
+      <description>This setting contains a list of names which controls the order in which the columns are listed in the dialog.  Names may be reordered or removed from this list to control which columns appear in the dialog and in what order.</description>
+    </key>
+    <key name="namespace_visible" type="b">
+      <default>true</default>
+      <summary>Show the Namespace column</summary>
+      <description>Show the Namespace column</description>
+    </key>
+    <key name="symbol_visible" type="b">
+      <default>true</default>
+      <summary>Show the symbol column</summary>
+      <description>Show the symbol column</description>
+    </key>
+    <key name="name_visible" type="b">
+      <default>true</default>
+      <summary>Show the name column</summary>
+      <description>Show the name column</description>
+    </key>
+    <key name="fullname_visible" type="b">
+      <default>false</default>
+      <summary>Show the Full Name column</summary>
+      <description>Show the Full Name column</description>
+    </key>
+    <key name="printname_visible" type="b">
+      <default>false</default>
+      <summary>Show the Print Name column</summary>
+      <description>Show the Print Name column</description>
+    </key>
+    <key name="uniquename_visible" type="b">
+      <default>false</default>
+      <summary>Show the Unique Name column</summary>
+      <description>Show the Unique Name column</description>
+    </key>
+    <key name="cusip_code_visible" type="b">
+      <default>true</default>
+      <summary>Show the ISIN/CUSIP Code (Exchange Specific Data) column</summary>
+      <description>Show the ISIN/CUSIP Code (Exchange Specific Data) column</description>
+    </key>
+    <key name="fraction_visible" type="b">
+      <default>true</default>
+      <summary>Show the fraction column</summary>
+      <description>Show the fraction column</description>
+    </key>
+    <key name="quote_flag_visible" type="b">
+      <default>false</default>
+      <summary>Show the Quote Flag column</summary>
+      <description>Show the Quote Flag column</description>
+    </key>
+    <key name="quote_source_visible" type="b">
+      <default>false</default>
+      <summary>Show the Quote Source column</summary>
+      <description>Show the Quote Source column</description>
+    </key>
+    <key name="quote_timezone_visible" type="b">
+      <default>false</default>
+      <summary>Show the Quote Timezone column</summary>
+      <description>Show the Quote Timezone column</description>
+    </key>
+    <key name="cusip_code_width" type="i">
+      <default>0</default>
+      <summary>Width of this column</summary>
+      <description>This setting stores the width of the given column in pixels.</description>
+    </key>
+    <key name="include_iso" type="b">
+      <default>false</default>
+      <summary>Show currencies in this dialog</summary>
+      <description>Show currencies in this dialog</description>
+    </key>
+  </schema>
+</schemalist>

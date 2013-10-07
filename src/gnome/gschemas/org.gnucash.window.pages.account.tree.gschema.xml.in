@@ -1,0 +1,44 @@
+<schemalist gettext-domain="GETTEXT_PACKAGE">
+  <schema id="org.gnucash.window.pages.account.tree" path="/apps/gnucash/window/pages/account_tree/summary/">
+    <key name="grand_total" type="b">
+      <default>true</default>
+      <summary>Show a grand total of all accounts converted to the default report currency</summary>
+      <description>Show a grand total of all accounts converted to the default report currency</description>
+    </key>
+    <key name="non_currency" type="b">
+      <default>true</default>
+      <summary>Show non currency commodities</summary>
+      <description>If active, non currency commodities (stocks) will be shown. Otherwise they will be hidden.</description>
+    </key>
+    <key name="start_choice" type="s">
+      <default>'relative'</default>
+      <summary>Profit/loss starting date type</summary>
+      <description>This setting controls the type of starting date used in profit/loss calculations.  If set to "absolute" then GnuCash will retrieve the starting date specified by the start_date key.  If set to anything else, GnuCash will retrieve the starting date specified by the start_period key.</description>
+    </key>
+    <key name="start_date" type="i">
+      <default>0</default>
+      <summary>Starting date (in seconds from Jan 1, 1970)</summary>
+      <description>This setting controls the starting date set in profit/loss calculations if the start_choice setting is set to "absolute". This field should contain a date as represented in seconds from January 1st, 1970.</description>
+    </key>
+    <key name="start_period" type="i">
+      <default>5</default>
+      <summary>Starting time period identifier</summary>
+      <description>This setting controls the starting date set in profit/loss calculations if the start_choice setting is set to anything other than "absolute".  This field should contain a value between 0 and 8.</description>
+    </key>
+    <key name="end_choice" type="s">
+      <default>'relative'</default>
+      <summary>Profit/loss ending date type</summary>
+      <description>This setting controls the type of ending date used in profit/loss calculations.  If set to "absolute" then GnuCash will retrieve the ending date specified by the end_date key.  If set to anything else, GnuCash will retrieve the ending date specified by the end_period key.</description>
+    </key>
+    <key name="end_date" type="i">
+      <default>0</default>
+      <summary>Ending date (in seconds from Jan 1, 1970)</summary>
+      <description>This setting controls the ending date set in profit/loss calculations if the end_choice setting is set to "absolute". This field should contain a date as represented in seconds from January 1st, 1970.</description>
+    </key>
+    <key name="end_period" type="i">
+      <default>5</default>
+      <summary>Ending time period identifier</summary>
+      <description>This setting controls the ending date set in profit/loss calculations if the end_choice setting is set to anything other than "absolute".  This field should contain a value between 0 and 8.</description>
+    </key>
+  </schema>
+</schemalist>

@@ -1,0 +1,89 @@
+<schemalist gettext-domain="GETTEXT_PACKAGE">
+  <schema id="org.gnucash.warnings" path="/apps/gnucash/general/warnings/permanent/">
+    <key name="change_reconciled_split" type="i">
+      <default>0</default>
+      <summary>Change contents of reconciled split</summary>
+      <description>This dialog is presented before allowing you to change the contents of a reconciled split.  Allowing these changes can make it hard to perform future reconciliations.</description>
+    </key>
+    <key name="mark_split_unreconciled" type="i">
+      <default>0</default>
+      <summary>Mark transaction split as unreconciled</summary>
+      <description>This dialog is presented before allowing you to mark a transaction split as unreconciled.  Doing so will throw off the reconciled value of the register and can make it hard to perform future reconciliations.</description>
+    </key>
+    <key name="register_read_only" type="i">
+      <default>0</default>
+      <summary>Read only register</summary>
+      <description>This dialog is presented when a read-only register is opened.</description>
+    </key>
+    <key name="register_delete_trans" type="i">
+      <default>0</default>
+      <summary>Delete a transaction</summary>
+      <description>This dialog is presented before allowing you to delete a transaction.</description>
+    </key>
+    <key name="register_delete_trans2" type="i">
+      <default>0</default>
+      <summary>Delete a transaction</summary>
+      <description>This dialog is presented before allowing you to delete a transaction that contains reconciled splits.  Doing so will throw off the reconciled value of the register and can make it hard to perform future reconciliations.</description>
+    </key>
+    <key name="register_delete_split" type="i">
+      <default>0</default>
+      <summary>Remove a split from a transaction</summary>
+      <description>This dialog is presented before allowing you to remove a split from a transaction.</description>
+    </key>
+    <key name="register_delete_split2" type="i">
+      <default>0</default>
+      <summary>Remove a reconciled split from a transaction</summary>
+      <description>This dialog is presented before allowing you to remove a reconciled split from a transaction.  Doing so will throw off the reconciled value of the register and can make it hard to perform future reconciliations.</description>
+    </key>
+    <key name="register_remove_all_splits" type="i">
+      <default>0</default>
+      <summary>Remove all the splits from a transaction</summary>
+      <description>This dialog is presented before allowing you to remove all splits from a transaction.</description>
+    </key>
+    <key name="register_remove_all_splits2" type="i">
+      <default>0</default>
+      <summary>Remove all the splits from a transaction</summary>
+      <description>This dialog is presented before allowing you to remove all splits (including some reconciled splits) from a transaction.  Doing so will throw off the reconciled value of the register and can make it hard to perform future reconciliations.</description>
+    </key>
+    <key name="transaction_changed" type="i">
+      <default>0</default>
+      <summary>Commit changes to a transaction</summary>
+      <description>This dialog is presented when you attempt to move out of a modified transaction.  The changed data must be either saved or discarded.</description>
+    </key>
+    <key name="transaction_duplicated" type="i">
+      <default>0</default>
+      <summary>Duplicating a changed transaction</summary>
+      <description>This dialog is presented when you attempt to duplicate a modified transaction.  The changed data must be saved or the duplication canceled.</description>
+    </key>
+    <key name="invoice_entry_changed" type="i">
+      <default>0</default>
+      <summary>Commit changes to a invoice_entry</summary>
+      <description>This dialog is presented when you attempt to move out of a modified invoice entry.  The changed data must be either saved or discarded.</description>
+    </key>
+    <key name="invoice_entry_duplicated" type="i">
+      <default>0</default>
+      <summary>Duplicating a changed invoice_entry</summary>
+      <description>This dialog is presented when you attempt to duplicate a modified invoice entry.  The changed data must be saved or the duplication canceled.</description>
+    </key>
+    <key name="delete_commodity" type="i">
+      <default>0</default>
+      <summary>Delete a commodity</summary>
+      <description>This dialog is presented before allowing you to delete a commodity.</description>
+    </key>
+    <key name="delete_commodity2" type="i">
+      <default>0</default>
+      <summary>Delete a commodity and prices</summary>
+      <description>This dialog is presented before allowing you to delete a commodity that has price quotes attached.  Deleting the commodity will delete the quotes as well.</description>
+    </key>
+    <key name="pricedb_remove_multiple" type="i">
+      <default>0</default>
+      <summary>Delete multiple price quotes</summary>
+      <description>This dialog is presented before allowing you to delete multiple price quotes at one time.</description>
+    </key>
+    <key name="print_multi_acct_checks" type="i">
+      <default>0</default>
+      <summary>Print checks from multiple accounts</summary>
+      <description>This dialog is presented if you try to print checks from multiple accounts at the same time.</description>
+    </key>
+  </schema>
+</schemalist>

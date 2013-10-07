@@ -1,4 +1,4 @@
-SUBDIRS = . test schemas
+SUBDIRS = . test schemas gschemas
 
 pkglib_LTLIBRARIES=libgncmod-qif-import.la
 

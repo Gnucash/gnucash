@@ -1,0 +1,19 @@
+<schemalist gettext-domain="GETTEXT_PACKAGE">
+  <schema id="org.gnucash.history" path="/apps/gnucash/history/">
+    <key name="maxfiles" type="i">
+      <default>4</default>
+      <summary>Number of files in history</summary>
+      <description>This setting contains the number of files to keep in the Recently Opened Files menu. This value may be set to zero to disable the file history.  This number has a maximum value of 10.</description>
+    </key>
+    <key name="file0" type="s">
+      <default>''</default>
+      <summary>Most recently opened file</summary>
+      <description>This field contains the full path of the most recently opened file.</description>
+    </key>
+    <key name="file1" type="s">
+      <default>''</default>
+      <summary>Next most recently opened file</summary>
+      <description>This field contains the full path of the next most recently opened file.</description>
+    </key>
+  </schema>
+</schemalist>

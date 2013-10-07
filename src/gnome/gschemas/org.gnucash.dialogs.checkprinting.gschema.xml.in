@@ -1,0 +1,69 @@
+<schemalist gettext-domain="GETTEXT_PACKAGE">
+  <schema id="org.gnucash.dialogs.checkprinting" path="/apps/gnucash/dialogs/print_checks/">
+    <key name="check_format" type="i">
+      <default>0</default>
+      <summary>Index of predefined check format to use</summary>
+      <description>This value specifies the predefined check format to use.  The number is the 0-based index into the list of known check formats.</description>
+    </key>
+    <key name="check_position" type="i">
+      <default>0</default>
+      <summary>Which check position to print</summary>
+      <description>On preprinted checks containing multiple checks per page, this setting specifies which check position to print.  The possible values are 0, 1 and 2, corresponding to the top, middle and bottom checks on the page.</description>
+    </key>
+    <key name="date_format" type="i">
+      <default>0</default>
+      <summary>Date format to use</summary>
+      <description>This is the numerical identifier of the predefined date format to use.</description>
+    </key>
+    <key name="date_format_user" type="s">
+      <default>'0'</default>
+      <summary>Custom date format</summary>
+      <description>If the 'date_format' is set to indicate a custom date format, this value is used as an argument to strftime to produce the date to be printed.  It may be any valid strftime string; for more information about this format, read the manual page of strftime by "man 3 strftime".</description>
+    </key>
+    <key name="custom_payee" type="ai">
+      <default>[]</default>
+      <summary>Position of payee name</summary>
+      <description>This value contains the X,Y coordinates for the start of the payee line on the check.</description>
+    </key>
+    <key name="custom_date" type="ai">
+      <default>[]</default>
+      <summary>Position of date line</summary>
+      <description>This value contains the X,Y coordinates for the start of the date line on the check.  Coordinates are from the lower left corner of the specified check position.</description>
+    </key>
+    <key name="custom_amount_words" type="ai">
+      <default>[]</default>
+      <summary>Position of check amount in words</summary>
+      <description>This value contains the X,Y coordinates for the start of the written amount line on the check.  Coordinates are from the lower left corner of the specified check position.</description>
+    </key>
+    <key name="custom_amount_number" type="ai">
+      <default>[]</default>
+      <summary>Position of check amount in numbers</summary>
+      <description>This value contains the X,Y coordinates for the start of the numerical amount line on the check.  Coordinates are from the lower left corner of the specified check position.</description>
+    </key>
+    <key name="custom_memo" type="ai">
+      <default>[]</default>
+      <summary>Position of memo line</summary>
+      <description>This value contains the X,Y coordinates for the start of the memo line on the check.  Coordinates are from the lower left corner of the specified check position.</description>
+    </key>
+    <key name="custom_position" type="ai">
+      <default>[]</default>
+      <summary>Position of check on page</summary>
+      <description>This value contains the Y coordinate for the bottom edge of the check.  This coordinate is from the bottom edge of the sheet of paper.</description>
+    </key>
+    <key name="print_date_format" type="b">
+      <default>false</default>
+      <summary>Print the date format below the date.</summary>
+      <description>Each time the date is printed, print the date format immediately below in 8 point type using the characters Y, M, and D.</description>
+    </key>
+    <key name="default_font" type="s">
+      <default>'sans 10'</default>
+      <summary>The default check printing font</summary>
+      <description>The default font to use when printing checks.  This value will be overridden by any font specified in a check description file.</description>
+    </key>
+    <key name="blocking_chars" type="b">
+      <default>false</default>
+      <summary>Print '***' before and after text.</summary>
+      <description>Print '***' before and after text.</description>
+    </key>
+  </schema>
+</schemalist>

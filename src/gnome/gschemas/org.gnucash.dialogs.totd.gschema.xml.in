@@ -1,0 +1,14 @@
+<schemalist gettext-domain="GETTEXT_PACKAGE">
+  <schema id="org.gnucash.dialogs.totd" path="/apps/gnucash/dialogs/tip_of_the_day/">
+    <key name="show_at_startup" type="b">
+      <default>true</default>
+      <summary>Show "Tip Of The Day" at GnuCash start</summary>
+      <description>Enables the "Tip Of The Day" when GnuCash starts up.  If active, the dialog will be shown. Otherwise it will not be shown.</description>
+    </key>
+    <key name="current_tip" type="i">
+      <default>0</default>
+      <summary>The next tip to show.</summary>
+      <description>The next tip to show.</description>
+    </key>
+  </schema>
+</schemalist>

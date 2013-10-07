@@ -1,0 +1,39 @@
+<schemalist gettext-domain="GETTEXT_PACKAGE">
+  <schema id="org.gnucash.dialogs.import.hbci" path="/apps/gnucash/dialogs/import/hbci/">
+    <key name="close_on_finish" type="b">
+      <default>true</default>
+      <summary>Close window when finished</summary>
+      <description>If active, the window will be closed automatically when you finish the HBCI/AqBanking import process. Otherwise it will stay open.</description>
+    </key>
+    <key name="remember_pin" type="b">
+      <default>false</default>
+      <summary>Remember the PIN in memory</summary>
+      <description>If active, the PIN for HBCI/AqBanking actions will be remembered in memory during a session. Otherwise it will have to be entered again each time during a session when it is needed.</description>
+    </key>
+    <key name="verbose_debug" type="b">
+      <default>false</default>
+      <summary>Verbose HBCI debug messages</summary>
+      <description>Enables verbose debug messages for HBCI/AqBanking Online Banking.</description>
+    </key>
+    <key name="format_dtaus" type="s">
+      <default>'default'</default>
+      <summary>DTAUS import data format</summary>
+      <description>This setting specifies the data format when importing DTAUS files.  The AqBanking library offers various import formats (called "profiles") of which you can choose one here.</description>
+    </key>
+    <key name="format_csv" type="s">
+      <default>'default'</default>
+      <summary>CSV import data format</summary>
+      <description>This setting specifies the data format when importing CSV files.  The AqBanking library offers various import formats (called "profiles") of which you can choose one here.</description>
+    </key>
+    <key name="format_swift_mt940" type="s">
+      <default>'swift-mt940'</default>
+      <summary>SWIFT MT940 import data format</summary>
+      <description>This setting specifies the data format when importing SWIFT MT940 files.  The AqBanking library offers various import formats (called "profiles") of which you can choose one here.</description>
+    </key>
+    <key name="format_swift_mt942" type="s">
+      <default>'swift-mt942'</default>
+      <summary>SWIFT MT942 import data format</summary>
+      <description>This setting specifies the data format when importing SWIFT MT942 files.  The AqBanking library offers various import formats (called "profiles") of which you can choose one here.</description>
+    </key>
+  </schema>
+</schemalist>

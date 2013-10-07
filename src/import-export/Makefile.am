@@ -4,7 +4,7 @@ endif
 if WITH_AQBANKING
     AQBANKING_DIR=aqbanking
 endif
-SUBDIRS = . schemas qif qif-import \
+SUBDIRS = . schemas gschemas qif qif-import \
 	${OFX_DIR} ${AQBANKING_DIR} log-replay test csv-import csv-export
 
 pkglib_LTLIBRARIES=libgncmod-generic-import.la

@@ -1,4 +1,4 @@
-SUBDIRS = . gtkbuilder schemas ui
+SUBDIRS = . gtkbuilder schemas gschemas ui
 
 pkglib_LTLIBRARIES = libgncmod-business-gnome.la
 

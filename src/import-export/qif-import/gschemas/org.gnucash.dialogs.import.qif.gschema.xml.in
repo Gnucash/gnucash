@@ -1,0 +1,14 @@
+<schemalist gettext-domain="GETTEXT_PACKAGE">
+  <schema id="org.gnucash.dialogs.import.qif" path="/apps/gnucash/dialogs/import/qif/">
+    <key name="show_doc" type="b">
+      <default>true</default>
+      <summary>Show documentation</summary>
+      <description>Show some documentation-only pages in QIF Import assistant.</description>
+    </key>
+    <key name="default_status" type="s">
+      <default>'not_cleared'</default>
+      <summary>Default QIF transaction status</summary>
+      <description>Default status for QIF transaction when not specified in QIF file.</description>
+    </key>
+  </schema>
+</schemalist>

@@ -1,4 +1,4 @@
-SUBDIRS = . schemas
+SUBDIRS = . schemas gschemas
 
 pkglib_LTLIBRARIES = libgncmod-aqbanking.la
 

@@ -1,0 +1,9 @@
+<schemalist gettext-domain="GETTEXT_PACKAGE">
+  <schema id="org.gnucash.window.pages.register" path="/apps/gnucash/window/pages/register/">
+    <key name="balance_width" type="i">
+      <default>0</default>
+      <summary>Width of a column in the dialog</summary>
+      <description>This setting contains the width of the named column in the most recently closed register window.  Changing these values will change the sizes of the columns in the next opened register</description>
+    </key>
+  </schema>
+</schemalist>

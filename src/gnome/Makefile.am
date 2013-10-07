@@ -1,4 +1,4 @@
-SUBDIRS = gtkbuilder schemas ui
+SUBDIRS = gtkbuilder schemas gschemas ui
 
 lib_LTLIBRARIES = libgnc-gnome.la
 

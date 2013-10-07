@@ -282,6 +282,8 @@ PKG_CHECK_MODULES(GLIB, glib-2.0 >= 2.38 gio-2.0 >= 2.25 gthread-2.0 gobject-2.0
 ])
 AC_CHECK_HEADERS(dirent.h dlfcn.h dl.h utmp.h locale.h mcheck.h unistd.h wctype.h)
 
+GLIB_GSETTINGS
+
 # I'm sure we (used to?) require this in various places, so don't remove
 # this test unless you've done sufficient code review/testing.
 AC_MSG_CHECKING(if unsigned long is at least as big as guint32)
@@ -1316,10 +1318,12 @@ AC_CONFIG_FILES(
   src/gnc-module/test/misc-mods/Makefile
   src/gnome/Makefile
   src/gnome/gtkbuilder/Makefile
+  src/gnome/gschemas/Makefile
   src/gnome/schemas/Makefile
   src/gnome/ui/Makefile
   src/gnome-utils/Makefile
   src/gnome-utils/gtkbuilder/Makefile
+  src/gnome-utils/gschemas/Makefile
   src/gnome-utils/schemas/Makefile
   src/gnome-utils/test/Makefile
   src/gnome-utils/ui/Makefile
@@ -1330,17 +1334,21 @@ AC_CONFIG_FILES(
   src/import-export/qif-import/Makefile
   src/import-export/qif/Makefile
   src/import-export/qif/test/Makefile
+  src/import-export/qif-import/gschemas/Makefile
   src/import-export/qif-import/schemas/Makefile
   src/import-export/qif-import/test/Makefile
+  src/import-export/gschemas/Makefile
   src/import-export/schemas/Makefile
   src/import-export/ofx/Makefile
   src/import-export/ofx/test/Makefile
   src/import-export/csv-import/Makefile
   src/import-export/csv-import/schemas/Makefile
   src/import-export/csv-export/Makefile
+  src/import-export/csv-export/gschemas/Makefile
   src/import-export/csv-export/schemas/Makefile
   src/import-export/log-replay/Makefile
   src/import-export/aqbanking/Makefile
+  src/import-export/aqbanking/gschemas/Makefile
   src/import-export/aqbanking/schemas/Makefile
   src/libqof/Makefile
   src/libqof/qof/Makefile
@@ -1386,6 +1394,7 @@ AC_CONFIG_FILES(
   src/business/Makefile
   src/business/business-gnome/Makefile
   src/business/business-gnome/gtkbuilder/Makefile
+  src/business/business-gnome/gschemas/Makefile
   src/business/business-gnome/schemas/Makefile
   src/business/business-gnome/ui/Makefile
   src/business/business-ledger/Makefile
