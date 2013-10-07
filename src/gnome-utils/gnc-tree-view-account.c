@@ -40,7 +40,7 @@
 #include "gnc-engine.h"
 #include "gnc-glib-utils.h"
 #include "gnc-gobject-utils.h"
-#include "gnc-gconf-utils.h"
+#include "gnc-prefs.h"
 #include "gnc-hooks.h"
 #include "gnc-session.h"
 #include "gnc-icons.h"
@@ -48,7 +48,8 @@
 #include "dialog-utils.h"
 #include "window-main-summarybar.h"
 
-#define SAMPLE_ACCOUNT_VALUE "$1,000,000.00"
+#define SAMPLE_ACCOUNT_VALUE   "$1,000,000.00"
+#define GNC_PREF_ACCOUNT_COLOR "show_account_color"
 
 /** Static Globals *******************************************************/
 
@@ -84,7 +85,7 @@ static void acc_color_data_func (GtkTreeViewColumn *col,
                                 GtkTreeIter       *iter,
                                 gpointer           view);
 
-static void gnc_tree_view_account_color_update (GConfEntry *entry, gpointer user_data);
+static void gnc_tree_view_account_color_update (gpointer gsettings, gchar *key, gpointer user_data);
 
 
 typedef struct GncTreeViewAccountPrivate
@@ -189,9 +190,10 @@ gnc_tree_view_account_init (GncTreeViewAccount *view)
 
     priv = GNC_TREE_VIEW_ACCOUNT_GET_PRIVATE(view);
 
-    gnc_gconf_general_register_cb("show_account_color",
-                                  gnc_tree_view_account_color_update,
-                                  view);
+    gnc_prefs_register_cb (GNC_PREFS_GROUP_GENERAL,
+                           GNC_PREF_ACCOUNT_COLOR,
+                           gnc_tree_view_account_color_update,
+                           view);
 
     gnc_init_account_view_info(&priv->avi);
 }
@@ -210,9 +212,10 @@ gnc_tree_view_account_finalize (GObject *object)
 
     priv = GNC_TREE_VIEW_ACCOUNT_GET_PRIVATE(account_view);
 
-    gnc_gconf_general_remove_cb("show_account_color",
-                                gnc_tree_view_account_color_update,
-                                account_view);
+    gnc_prefs_remove_cb_by_func (GNC_PREFS_GROUP_GENERAL,
+                                 GNC_PREF_ACCOUNT_COLOR,
+                                 gnc_tree_view_account_color_update,
+                                 account_view);
     if (priv->filter_destroy)
     {
         priv->filter_destroy(priv->filter_data);
@@ -643,17 +646,16 @@ acc_color_data_func (GtkTreeViewColumn *col,
  *  @internal
  */
 static void
-gnc_tree_view_account_color_update (GConfEntry *entry, gpointer user_data)
+gnc_tree_view_account_color_update (gpointer gsettings, gchar *key, gpointer user_data)
 {
     GncTreeViewAccountPrivate *priv;
     GncTreeViewAccount *view;
-    GConfValue *value;
 
     g_return_if_fail(GNC_IS_TREE_VIEW_ACCOUNT(user_data));
     view = user_data;
     priv = GNC_TREE_VIEW_ACCOUNT_GET_PRIVATE(view);
-    value = gconf_entry_get_value(entry);
-    priv->show_account_color = gconf_value_get_bool(value);
+    if (g_strcmp0 (key, GNC_PREF_ACCOUNT_COLOR) == 0)
+        priv->show_account_color = gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL, key);
 }
 
 /************************************************************/
@@ -684,8 +686,8 @@ gnc_tree_view_account_new_with_root (Account *root, gboolean show_root)
 
     priv = GNC_TREE_VIEW_ACCOUNT_GET_PRIVATE(GNC_TREE_VIEW_ACCOUNT (view));
 
-    /* Get the show_account_color value from gconf */
-    priv->show_account_color = gnc_gconf_get_bool(GCONF_GENERAL, "show_account_color", NULL);
+    /* Get the show_account_color value from gsettings */
+    priv->show_account_color = gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL, GNC_PREF_ACCOUNT_COLOR);
 
     /* Create/get a pointer to the existing model for this set of books. */
     model = gnc_tree_model_account_new (root);

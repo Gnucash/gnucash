@@ -64,6 +64,7 @@
 #include "gnc-window.h"
 #include "gnc-prefs.h"
 #include "gnc-gconf-utils.h"
+#include "gnc-prefs.h"
 #include "option-util.h"
 // +JSLED
 //#include "gnc-html.h"
@@ -96,7 +97,7 @@ enum
 #define KEY_TAB_NEXT_RECENT      "tab_next_recent"
 #define KEY_TAB_POSITION         "tab_position"
 #define KEY_TAB_WIDTH            "tab_width"
-#define KEY_TAB_COLOR            "show_account_color_tabs"
+#define GNC_PREF_TAB_COLOR            "show_account_color_tabs"
 
 #define GNC_MAIN_WINDOW_NAME "GncMainWindow"
 
@@ -1952,18 +1953,17 @@ gnc_main_window_update_tab_color_one_page (GncPluginPage *page,
  *  @param user_data GncMainWindow.
  */
 static void
-gnc_main_window_update_tab_color (GConfEntry *entry, gpointer user_data)
+gnc_main_window_update_tab_color (gpointer gsettings, gchar *key, gpointer user_data)
 {
     GncMainWindowPrivate *priv;
     GncMainWindow        *window;
-    gboolean              new_value;
 
     ENTER(" ");
     g_return_if_fail(GNC_IS_MAIN_WINDOW(user_data));
     window = user_data;
     priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
-    new_value = gconf_value_get_bool(entry->value);
-    priv->show_color_tabs = new_value;
+    if (g_strcmp0 (GNC_PREF_TAB_COLOR, key) == 0)
+        priv->show_color_tabs = gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_TAB_COLOR);
     gnc_main_window_foreach_page (gnc_main_window_update_tab_color_one_page, window);
     LEAVE(" ");
 }
@@ -2468,11 +2468,12 @@ gnc_main_window_init (GncMainWindow *window,
         qof_event_register_handler(gnc_main_window_event_handler, window);
 
     /* Get the show_color_tabs value from gconf */
-    priv->show_color_tabs = gnc_gconf_get_bool(GCONF_GENERAL, KEY_TAB_COLOR, NULL);
+    priv->show_color_tabs = gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL, GNC_PREF_TAB_COLOR);
 
-    gnc_gconf_general_register_cb (KEY_TAB_COLOR,
-                                   gnc_main_window_update_tab_color,
-                                   window);
+    gnc_prefs_register_cb (GNC_PREFS_GROUP_GENERAL,
+                           GNC_PREF_TAB_COLOR,
+                           gnc_main_window_update_tab_color,
+                           window);
 
     gnc_main_window_setup_window (window);
     gnc_gobject_tracking_remember(G_OBJECT(window),
@@ -2541,6 +2542,10 @@ gnc_main_window_destroy (GtkObject *object)
                                       GNC_MAIN_WINDOW_NAME);
         gnc_gconf_remove_notification(G_OBJECT(window), GCONF_GENERAL,
                                       GNC_MAIN_WINDOW_NAME);
+        gnc_prefs_remove_cb_by_func (GNC_PREFS_GROUP_GENERAL,
+                                     GNC_PREF_TAB_COLOR,
+                                     gnc_main_window_update_tab_color,
+                                     window);
 
         qof_event_unregister_handler(priv->event_handler_id);
         priv->event_handler_id = 0;

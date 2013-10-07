@@ -32,13 +32,14 @@
 #include "gnc-component-manager.h"
 #include "gnc-filepath-utils.h"
 #include "gnc-gconf-utils.h"
+#include "gnc-prefs.h"
 #include "gnc-gnome-utils.h"
 #include "gnc-engine.h"
 
 #define GCONF_SECTION   "dialogs/tip_of_the_day"
 #define GNC_PREFS_GROUP      "dialogs.totd"
 #define KEY_CURRENT_TIP "current_tip"
-#define KEY_SHOW_TIPS   "show_at_startup"
+#define GNC_PREF_SHOW_TIPS   "show_at_startup"
 #define DIALOG_TOTD_CM_CLASS "dialog-totd"
 
 #define GNC_RESPONSE_FORWARD 1
@@ -165,7 +166,7 @@ gnc_totd_dialog_startup_toggled_cb (GtkToggleButton *button,
     gboolean active;
 
     active = gtk_toggle_button_get_active(button);
-    gnc_gconf_set_bool(GCONF_SECTION, KEY_SHOW_TIPS, active, NULL);
+    gnc_prefs_set_bool(GNC_PREFS_GROUP, GNC_PREF_SHOW_TIPS, active);
 }
 
 
@@ -313,7 +314,7 @@ gnc_totd_dialog (GtkWindow *parent, gboolean startup)
 
     totd_dialog = g_new0 (TotdDialog, 1);
 
-    show_tips = gnc_gconf_get_bool(GCONF_SECTION, KEY_SHOW_TIPS, NULL);
+    show_tips = gnc_prefs_get_bool(GNC_PREFS_GROUP, GNC_PREF_SHOW_TIPS);
     if (startup && !show_tips)
         return;
 

@@ -34,6 +34,7 @@
 #include "gnc-euro.h"
 #include "gnc-event.h"
 #include "gnc-gconf-utils.h"
+#include "gnc-prefs.h"
 #include "gnc-locale-utils.h"
 #include "gnc-ui-util.h"
 #include "window-main-summarybar.h"
@@ -50,8 +51,11 @@ typedef struct
 #define WINDOW_SUMMARYBAR_CM_CLASS "summary-bar"
 
 #define GCONF_SECTION    "window/pages/account_tree/summary"
-#define KEY_GRAND_TOTAL  "grand_total"
 #define KEY_NON_CURRENCY "non_currency"
+
+#define GNC_PREFS_GROUP       "window.pages.account_tree.summary"
+#define GNC_PREF_GRAND_TOTAL  "grand_total"
+#define GNC_PREF_NON_CURRENCY "non_currency"
 
 /**
  * An accumulator for a given currency.
@@ -358,9 +362,9 @@ gnc_main_window_summary_refresh (GNCMainSummary * summary)
     }
 
     options.grand_total =
-        gnc_gconf_get_bool(GCONF_SECTION, KEY_GRAND_TOTAL, NULL);
+        gnc_prefs_get_bool(GNC_PREFS_GROUP, GNC_PREF_GRAND_TOTAL);
     options.non_currency =
-        gnc_gconf_get_bool(GCONF_SECTION, KEY_NON_CURRENCY, NULL);
+        gnc_prefs_get_bool(GNC_PREFS_GROUP, GNC_PREF_NON_CURRENCY);
     options.start_date = gnc_accounting_period_fiscal_start();
     options.end_date = gnc_accounting_period_fiscal_end();
 

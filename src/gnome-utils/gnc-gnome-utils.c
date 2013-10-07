@@ -32,6 +32,7 @@
 
 #include "gnc-gconf-utils.h"
 #include "gnc-prefs-utils.h"
+#include "gnc-prefs.h"
 #include "gnc-gnome-utils.h"
 //#include "gnc-html.h"
 #include "gnc-engine.h"
@@ -96,9 +97,8 @@ gnc_options_dialog_set_new_book_option_values (GNCOptionDB *odb)
     gboolean num_source_is_split_action;
 
     if (!odb) return;
-    num_source_is_split_action = gnc_gconf_get_bool(GCONF_GENERAL,
-                                                    KEY_NUM_SOURCE,
-                                                    NULL);
+    num_source_is_split_action = gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL,
+                                                    GNC_PREF_NUM_SOURCE);
     if (num_source_is_split_action)
     {
         num_source_option = gnc_option_db_get_option_by_name(odb,

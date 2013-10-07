@@ -41,7 +41,7 @@
 #include "gnc-currency-edit.h"
 #include "gnc-exp-parser.h"
 #include "gnc-general-select.h"
-#include "gnc-gconf-utils.h"
+#include "gnc-prefs.h"
 #include "gnc-hooks.h"
 #include "gnc-component-manager.h"
 #include "gnc-path.h"
@@ -1172,7 +1172,7 @@ create_account_page(void)
 static void
 gnc_ui_hierarchy_assistant_hook (void)
 {
-    if (gnc_gconf_get_bool(GCONF_SECTION, "show_on_new_file", NULL))
+    if (gnc_prefs_get_bool(GNC_PREFS_GROUP, GNC_PREF_SHOW_ON_NEW_FILE))
     {
         gnc_ui_hierarchy_assistant_with_callback(TRUE, create_account_page);
     }

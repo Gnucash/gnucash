@@ -31,6 +31,11 @@
 
 static QofLogModule log_module = G_LOG_DOMAIN;
 
+/* Keys used for core preferences */
+#define GNC_PREF_FILE_COMPRESSION  "file_compression"
+#define GNC_PREF_RETAIN_TYPE       "retain_type"
+#define GNC_PREF_RETAIN_DAYS       "retain_days"
+
 /***************************************************************
  * Initialization                                              *
  ***************************************************************/
@@ -65,9 +70,9 @@ file_retain_type_changed_cb(GConfEntry *entry, gpointer user_data)
 }
 
 static void
-file_compression_changed_cb(GConfEntry *entry, gpointer user_data)
+file_compression_changed_cb(gpointer gsettings, gchar *key, gpointer user_data)
 {
-    gboolean file_compression = gnc_gconf_get_bool(GCONF_GENERAL, KEY_FILE_COMPRESSION, NULL);
+    gboolean file_compression = gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL, GNC_PREF_FILE_COMPRESSION);
     gnc_prefs_set_file_save_compressed (file_compression);
 }
 
@@ -79,12 +84,13 @@ void gnc_prefs_init (void)
     /* Add hooks to update core preferences whenever the associated gconf key changes */
     gnc_gconf_general_register_cb(KEY_RETAIN_DAYS, file_retain_changed_cb, NULL);
     gnc_gconf_general_register_cb(KEY_RETAIN_TYPE, file_retain_type_changed_cb, NULL);
-    gnc_gconf_general_register_cb(KEY_FILE_COMPRESSION, file_compression_changed_cb, NULL);
+    gnc_prefs_register_cb(GNC_PREFS_GROUP_GENERAL, GNC_PREF_FILE_COMPRESSION,
+                              (GCallback) file_compression_changed_cb, NULL);
 
     /* Call the hooks once manually to initialize the core preferences */
     file_retain_changed_cb (NULL, NULL);
     file_retain_type_changed_cb (NULL, NULL);
-    file_compression_changed_cb (NULL, NULL);
+    file_compression_changed_cb (NULL, NULL, NULL);
 
     /* Backwards compatibility code. Pre 2.3.15, 0 retain_days meant
      * "keep forever". From 2.3.15 on this is controlled via a multiple

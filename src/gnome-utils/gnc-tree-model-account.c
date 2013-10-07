@@ -34,7 +34,7 @@
 #include "Account.h"
 #include "gnc-accounting-period.h"
 #include "gnc-commodity.h"
-#include "gnc-gconf-utils.h"
+#include "gnc-prefs.h"
 #include "gnc-engine.h"
 #include "gnc-event.h"
 #include "gnc-gobject-utils.h"
@@ -109,23 +109,21 @@ typedef struct GncTreeModelAccountPrivate
 
 /** Tell the GncTreeModelAccount code to update the color that it will
  *  use for negative numbers.  This function will iterate over all
- *  existing models and update their setting from gconf.
+ *  existing models and update their setting.
  *
  *  @internal
  */
 static void
-gnc_tree_model_account_update_color (GConfEntry *entry, gpointer user_data)
+gnc_tree_model_account_update_color (gpointer gsettings, gchar *key, gpointer user_data)
 {
     GncTreeModelAccountPrivate *priv;
     GncTreeModelAccount *model;
-    GConfValue *value;
     gboolean use_red;
 
     g_return_if_fail(GNC_IS_TREE_MODEL_ACCOUNT(user_data));
     model = user_data;
     priv = GNC_TREE_MODEL_ACCOUNT_GET_PRIVATE(model);
-    value = gconf_entry_get_value(entry);
-    use_red = gconf_value_get_bool(value);
+    use_red = gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_NEGATIVE_IN_RED);
     priv->negative_color = use_red ? "red" : "black";
 }
 /************************************************************/
@@ -202,16 +200,16 @@ gnc_tree_model_account_init (GncTreeModelAccount *model)
         model->stamp = g_random_int ();
     }
 
-    red = gnc_gconf_get_bool(GCONF_GENERAL, KEY_NEGATIVE_IN_RED, NULL);
+    red = gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL, GNC_PREF_NEGATIVE_IN_RED);
 
     priv = GNC_TREE_MODEL_ACCOUNT_GET_PRIVATE(model);
     priv->book = NULL;
     priv->root = NULL;
     priv->negative_color = red ? "red" : "black";
 
-    gnc_gconf_general_register_cb(KEY_NEGATIVE_IN_RED,
-                                  gnc_tree_model_account_update_color,
-                                  model);
+    gnc_prefs_register_cb(GNC_PREFS_GROUP_GENERAL, GNC_PREF_NEGATIVE_IN_RED,
+                          gnc_tree_model_account_update_color,
+                          model);
 
     LEAVE(" ");
 }
@@ -229,10 +227,6 @@ gnc_tree_model_account_finalize (GObject *object)
 
     model = GNC_TREE_MODEL_ACCOUNT (object);
     priv = GNC_TREE_MODEL_ACCOUNT_GET_PRIVATE(model);
-
-    gnc_gconf_general_remove_cb(KEY_NEGATIVE_IN_RED,
-                                gnc_tree_model_account_update_color,
-                                model);
 
     priv->book = NULL;
 
@@ -261,7 +255,7 @@ gnc_tree_model_account_dispose (GObject *object)
         priv->event_handler_id = 0;
     }
 
-    gnc_gconf_general_remove_cb(KEY_NEGATIVE_IN_RED,
+    gnc_prefs_remove_cb_by_func(GNC_PREFS_GROUP_GENERAL, GNC_PREF_NEGATIVE_IN_RED,
                                 gnc_tree_model_account_update_color,
                                 model);
 

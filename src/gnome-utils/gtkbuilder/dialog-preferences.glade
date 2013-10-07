@@ -123,7 +123,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkCheckButton" id="gconf/window/pages/account_tree/summary/grand_total">
+                  <object class="GtkCheckButton" id="pref/window.pages.account_tree.summary/grand_total">
                     <property name="label" translatable="yes">Include _grand total</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -144,7 +144,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkCheckButton" id="gconf/window/pages/account_tree/summary/non_currency">
+                  <object class="GtkCheckButton" id="pref/window.pages.account_tree.summary/non_currency">
                     <property name="label" translatable="yes">Include _non-currency totals</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -486,7 +486,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkCheckButton" id="gconf/general/use_accounting_labels">
+                  <object class="GtkCheckButton" id="pref/general/use_accounting_labels">
                     <property name="label" translatable="yes">Use _formal accounting labels</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -859,7 +859,7 @@
                   <placeholder/>
                 </child>
                 <child>
-                  <object class="GtkCheckButton" id="gconf/general/show_account_color">
+                  <object class="GtkCheckButton" id="pref/general/show_account_color">
                     <property name="label" translatable="yes">Show the Account Color as background</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -893,7 +893,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkCheckButton" id="gconf/general/show_account_color_tabs">
+                  <object class="GtkCheckButton" id="pref/general/show_account_color_tabs">
                     <property name="label" translatable="yes">Show the Account Color on tabs</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -1542,7 +1542,7 @@ many months before the current month:</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkCheckButton" id="gconf/dialogs/new_hierarchy/show_on_new_file">
+                  <object class="GtkCheckButton" id="pref/dialogs.new_hierarchy/show_on_new_file">
                     <property name="label" translatable="yes">Perform account list _setup on new file</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -1563,7 +1563,7 @@ many months before the current month:</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkCheckButton" id="gconf/general/num_source">
+                  <object class="GtkCheckButton" id="pref/general/num_source">
                     <property name="label" translatable="yes">Set book option on new files to use split "action" field for "Num" field on registers/reports</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -1584,7 +1584,7 @@ many months before the current month:</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkCheckButton" id="gconf/dialogs/tip_of_the_day/show_at_startup">
+                  <object class="GtkCheckButton" id="pref/dialogs.totd/show_at_startup">
                     <property name="label" translatable="yes">Display "_tip of the day" dialog</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -1673,7 +1673,7 @@ many months before the current month:</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkCheckButton" id="gconf/general/file_compression">
+                  <object class="GtkCheckButton" id="pref/general/file_compression">
                     <property name="label" translatable="yes">Com_press files</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -1764,7 +1764,7 @@ many months before the current month:</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkCheckButton" id="gconf/general/auto_decimal_point">
+                  <object class="GtkCheckButton" id="pref/general/auto_decimal_point">
                     <property name="label" translatable="yes">_Automatic decimal point</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -1785,7 +1785,7 @@ many months before the current month:</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkCheckButton" id="gconf/general/negative_in_red">
+                  <object class="GtkCheckButton" id="pref/general/negative_in_red">
                     <property name="label" translatable="yes">Display ne_gative amounts in red</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>

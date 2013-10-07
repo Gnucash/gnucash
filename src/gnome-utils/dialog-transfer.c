@@ -36,7 +36,7 @@
 #include "gnc-engine.h"
 #include "gnc-euro.h"
 #include "gnc-exp-parser.h"
-#include "gnc-gconf-utils.h"
+#include "gnc-prefs.h"
 #include "gnc-gui-query.h"
 #include "gnc-pricedb.h"
 #include "gnc-tree-view-account.h"
@@ -535,8 +535,8 @@ gnc_xfer_dialog_fill_tree_view(XferDialog *xferData,
     AccountTreeFilterInfo *info;
     GtkBuilder *builder = g_object_get_data (G_OBJECT (xferData->dialog), "builder");
 
-    use_accounting_labels = gnc_gconf_get_bool(GCONF_GENERAL,
-                            KEY_ACCOUNTING_LABELS, NULL);
+    use_accounting_labels = gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL,
+                                               GNC_PREF_ACCOUNTING_LABELS);
 
     /* In "normal" mode (non accounting terms) the account where the
      * money comes from is displayed on the left side and the account
@@ -1766,8 +1766,8 @@ gnc_xfer_dialog_create(GtkWidget *parent, XferDialog *xferData)
     GtkBuilder *builder;
     gboolean  use_accounting_labels;
 
-    use_accounting_labels = gnc_gconf_get_bool(GCONF_GENERAL,
-                            KEY_ACCOUNTING_LABELS, NULL);
+    use_accounting_labels = gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL,
+                                               GNC_PREF_ACCOUNTING_LABELS);
 
     ENTER(" ");
     builder = gtk_builder_new();

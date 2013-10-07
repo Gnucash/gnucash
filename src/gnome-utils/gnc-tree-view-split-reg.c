@@ -40,6 +40,7 @@
 #include "gnc-ui.h"
 #include "dialog-utils.h"
 #include "gnc-gconf-utils.h"
+#include "gnc-prefs.h"
 #include "Transaction.h"
 #include "engine-helpers.h"
 #include "Scrub.h"
@@ -474,7 +475,7 @@ gnc_tree_view_split_reg_init (GncTreeViewSplitReg *view)
     view->priv->key_length = gnc_gconf_get_float(GCONF_GENERAL_REGISTER, "key_length", NULL);
 
     view->priv->acct_short_names = gnc_gconf_get_bool (GCONF_GENERAL_REGISTER, "show_leaf_account_names", NULL);
-    view->priv->negative_in_red = gnc_gconf_get_bool (GCONF_GENERAL, KEY_NEGATIVE_IN_RED, NULL);
+    view->priv->negative_in_red = gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_NEGATIVE_IN_RED);
     view->priv->use_horizontal_lines = gnc_gconf_get_bool (GCONF_GENERAL_REGISTER,
                                   "draw_horizontal_lines", NULL);
 
@@ -564,14 +565,14 @@ gnc_tree_view_split_reg_refresh_from_gconf (GncTreeViewSplitReg *view)
 
     model->use_theme_colors = gnc_gconf_get_bool(GCONF_GENERAL_REGISTER,
                               "use_theme_colors", NULL);
-    model->use_accounting_labels = gnc_gconf_get_bool (GCONF_GENERAL,
-                               KEY_ACCOUNTING_LABELS, NULL);
+    model->use_accounting_labels = gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL,
+                                                       GNC_PREF_ACCOUNTING_LABELS);
 
     model->alt_colors_by_txn = gnc_gconf_get_bool (GCONF_GENERAL_REGISTER,
                                "alternate_color_by_transaction", NULL);
 
-    view->priv->negative_in_red = gnc_gconf_get_bool (GCONF_GENERAL,
-                               KEY_NEGATIVE_IN_RED, NULL);
+    view->priv->negative_in_red = gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL,
+                                                      GNC_PREF_NEGATIVE_IN_RED);
 }
 
 

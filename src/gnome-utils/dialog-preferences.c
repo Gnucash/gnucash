@@ -1350,6 +1350,35 @@ gnc_prefs_connect_font_button (GtkFontButton *fb)
     gtk_widget_show_all(GTK_WIDGET(fb));
 }
 
+/****************************************************************************/
+
+/** Connect a GtkCheckButton widget to its stored value in the preferences database.
+ *
+ *  @internal
+ *
+ *  @param button A pointer to the check button that should be
+ *  connected.
+ */
+static void
+gnc_prefs_connect_check_button (GtkCheckButton *button)
+{
+    gchar *group, *pref;
+    gboolean active;
+
+    g_return_if_fail(GTK_IS_CHECK_BUTTON(button));
+
+    gnc_prefs_split_widget_name (gtk_buildable_get_name(GTK_BUILDABLE(button)), &group, &pref);
+
+//    active = gnc_prefs_get_bool (group, pref);
+//    DEBUG(" Checkbox %s/%s initially %sactive", group, pref, active ? "" : "in");
+//    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), active);
+
+    gnc_prefs_bind (group, pref, G_OBJECT (button), "active");
+
+    g_free (group);
+    g_free (pref);
+}
+
 
 
 /****************************************************************************/
@@ -1502,6 +1531,11 @@ gnc_prefs_connect_one (const gchar *name,
     {
         DEBUG("  %s - entry", name);
         gnc_prefs_connect_font_button(GTK_FONT_BUTTON(widget));
+    }
+    else if (GTK_IS_CHECK_BUTTON(widget))
+    {
+        DEBUG("  %s - check button", name);
+        gnc_prefs_connect_check_button(GTK_CHECK_BUTTON(widget));
     }
     else
     {

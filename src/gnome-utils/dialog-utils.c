@@ -114,7 +114,7 @@ gnc_set_label_color(GtkWidget *label, gnc_numeric value)
     GdkColormap *cm;
     GtkStyle *style;
 
-    if (!gnc_gconf_get_bool(GCONF_GENERAL, "red_for_negative", NULL))
+    if (!gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL, GNC_PREF_NEGATIVE_IN_RED))
         return;
 
     cm = gtk_widget_get_colormap(GTK_WIDGET(label));

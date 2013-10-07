@@ -34,6 +34,7 @@
 #include "gnc-component-manager.h"
 #include "gnc-commodity.h"
 #include "gnc-gconf-utils.h"
+#include "gnc-prefs.h"
 #include "gnc-engine.h"
 #include "gnc-event.h"
 #include "gnc-gobject-utils.h"
@@ -366,6 +367,31 @@ gnc_tree_model_split_reg_gconf_changed (GConfEntry *entry, gpointer user_data)
 
 
 static void
+gnc_tree_model_split_reg_prefs_changed (gpointer gsettings, gchar *key, gpointer user_data)
+{
+    GncTreeModelSplitReg *model = user_data;
+
+    g_return_if_fail (key);
+
+    if (model == NULL)
+        return;
+
+    if (g_str_has_suffix (key, GNC_PREF_ACCOUNTING_LABELS))
+    {
+        model->use_accounting_labels = gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_ACCOUNTING_LABELS);
+    }
+    else if (g_str_has_suffix (key, GNC_PREF_ACCOUNT_SEPARATOR))
+    {
+        model->separator_changed = TRUE;
+    }
+    else
+    {
+        g_warning("gnc_tree_model_split_reg_prefs_changed: Unknown gsettings key %s", key);
+    }
+}
+
+
+static void
 gnc_tree_model_split_reg_init (GncTreeModelSplitReg *model)
 {
     GncTreeModelSplitRegPrivate *priv;
@@ -378,9 +404,10 @@ gnc_tree_model_split_reg_init (GncTreeModelSplitReg *model)
 
     model->priv = g_new0 (GncTreeModelSplitRegPrivate, 1);
 
-    gnc_gconf_general_register_cb (KEY_ACCOUNTING_LABELS,
-                                  gnc_tree_model_split_reg_gconf_changed,
-                                  model);
+    gnc_prefs_register_cb (GNC_PREFS_GROUP_GENERAL,
+                           GNC_PREF_ACCOUNTING_LABELS,
+                           gnc_tree_model_split_reg_prefs_changed,
+                           model);
     gnc_gconf_general_register_cb (KEY_ACCOUNT_SEPARATOR,
                                   gnc_tree_model_split_reg_gconf_changed,
                                   model);
@@ -491,7 +518,7 @@ gnc_tree_model_split_reg_new (SplitRegisterType2 reg_type, SplitRegisterStyle2 s
     priv->bsplit_node = g_list_append (priv->bsplit_node, priv->bsplit);
 
     /* Setup some config entries */
-    model->use_accounting_labels = gnc_gconf_get_bool (GCONF_GENERAL, KEY_ACCOUNTING_LABELS, NULL);
+    model->use_accounting_labels = gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_ACCOUNTING_LABELS);
     model->use_theme_colors = gnc_gconf_get_bool (GCONF_GENERAL_REGISTER, "use_theme_colors", NULL);
     model->alt_colors_by_txn = gnc_gconf_get_bool (GCONF_GENERAL_REGISTER, "alternate_color_by_transaction", NULL);
     model->read_only = FALSE;
@@ -947,9 +974,10 @@ gnc_tree_model_split_reg_destroy (GncTreeModelSplitReg *model)
     g_object_unref (priv->action_list);
     g_object_unref (priv->account_list);
 
-    gnc_gconf_general_remove_cb (KEY_ACCOUNTING_LABELS,
-                                gnc_tree_model_split_reg_gconf_changed,
-                                model);
+    gnc_prefs_remove_cb_by_func (GNC_PREFS_GROUP_GENERAL,
+                                 GNC_PREF_ACCOUNTING_LABELS,
+                                 gnc_tree_model_split_reg_prefs_changed,
+                                 model);
     gnc_gconf_general_remove_cb (KEY_ACCOUNT_SEPARATOR,
                                 gnc_tree_model_split_reg_gconf_changed,
                                 model);

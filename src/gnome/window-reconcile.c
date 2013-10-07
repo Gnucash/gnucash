@@ -1064,7 +1064,7 @@ gnc_reconcile_window_set_titles(RecnWindow *recnData)
     gboolean formal;
     gchar *title;
 
-    formal = gnc_gconf_get_bool(GCONF_GENERAL, KEY_ACCOUNTING_LABELS, NULL);
+    formal = gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL, GNC_PREF_ACCOUNTING_LABELS);
 
     if (formal)
         title = _("Debits");
