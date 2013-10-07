@@ -17,7 +17,6 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/src/libqof/qof \
   ${GLIB_CFLAGS} \
   ${GUILE_INCS} \
-  ${GCONF_CFLAGS} \
   ${WARN_CFLAGS}
 
 libgnc_backend_sql_la_SOURCES = \
@@ -73,7 +72,6 @@ noinst_HEADERS = \
 libgnc_backend_sql_la_LIBADD = \
    ${GLIB_LIBS} \
    ${GUILE_LIBS} \
-   ${GCONF_LIBS} \
    ${top_builddir}/src/engine/libgncmod-engine.la \
    ${top_builddir}/src/libqof/qof/libgnc-qof.la
 

@@ -80,7 +80,7 @@ test_load_file(const char *filename)
     QofBook *book;
     Account *root;
     gboolean ignore_lock;
-    gchar *logdomain = "GConf";
+    gchar *logdomain = "backend.xml";
     guint loglevel = G_LOG_LEVEL_WARNING;
     TestErrorStruct check = { loglevel, logdomain, NULL };
     g_log_set_handler (logdomain, loglevel,

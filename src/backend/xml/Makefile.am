@@ -15,8 +15,7 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/src/libqof/qof \
   -I$(top_srcdir)/src \
   ${LIBXML2_CFLAGS} \
-  ${GLIB_CFLAGS} \
-  ${GCONF_CFLAGS}
+  ${GLIB_CFLAGS}
 
 libgnc_backend_xml_utils_la_SOURCES = \
   gnc-account-xml-v2.c \
@@ -85,7 +84,6 @@ noinst_HEADERS = \
 
 libgnc_backend_xml_utils_la_LIBADD = \
    ${GLIB_LIBS} \
-   ${GCONF_LIBS} \
    ${LIBXML2_LIBS} \
    ${ZLIB_LIBS} \
    ${top_builddir}/src/engine/libgncmod-engine.la \
@@ -95,7 +93,6 @@ libgnc_backend_xml_utils_la_LIBADD = \
 libgncmod_backend_xml_la_LDFLAGS = -module -avoid-version
 libgncmod_backend_xml_la_LIBADD = \
    ${GLIB_LIBS} \
-   ${GCONF_LIBS} \
    ${LIBXML2_LIBS} \
    ${ZLIB_LIBS} \
    ${top_builddir}/src/engine/libgncmod-engine.la \
