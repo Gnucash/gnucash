@@ -1,6 +1,578 @@
+2013-10-07 jralls 
+
+	* Fix EXTRA_DIST typo (HEAD, origin/trunk, origin/HEAD, trunk)
+
+2013-10-07 gjanssens 
+
+	* Prefs migrate: skip preferences that don't have a value set
+
+2013-10-07 gjanssens 
+
+	* Move prefs migration call from app-utils module load to inner_main
+
+2013-10-07 Geert Janssens 
+
+	* Fix make distcheck
+
+2013-10-07 Geert Janssens 
+
+	* Gnc-Prefs: add code to migrate settings from gconf to gsettings at runtime
+
+2013-10-07 Geert Janssens 
+
+	* Gsettings schema corrections
+
+2013-10-07 Geert Janssens 
+
+	* Gnc-Prefs: add convenience functions for int64 and coords typed preferences
+
+2013-10-07 Geert Janssens 
+
+	* Gnc-Prefs: update the windows build system to handle gsettings properly
+
+2013-10-07 Geert Janssens 
+
+	* Test for empty filename in addition to no filename
+
+2013-10-07 Geert Janssens 
+
+	* Add some debugging code to gnc-gsettings
+
+2013-10-07 Geert Janssens 
+
+	* Gnc-Prefs: stop using gconf as gsettings backend
+
+2013-10-07 Geert Janssens 
+
+	* Gnc-Prefs: rename preferences to be compliant with gsettings syntax rules
+
+2013-10-07 Geert Janssens 
+
+	* Properly share a variable between two source files
+
+2013-10-07 Geert Janssens 
+
+	* Remove remaining gconf code bits
+
+2013-10-07 Geert Janssens 
+
+	* Gnc-Prefs: call gnc_gui_refresh_all on changes in the general prefs group
+
+2013-10-07 Geert Janssens 
+
+	* Remove state saving/restoring code from new and old register code
+
+2013-10-07 Geert Janssens 
+
+	* Remove state saving/restoring code from gnc-tree-view
+
+2013-10-07 Geert Janssens 
+
+	* Gnc-Prefs: Convert gnc user warnings
+
+2013-10-07 Geert Janssens 
+
+	* Remove unused gconf includes, cflags and libs so far
+
+2013-10-07 Geert Janssens 
+
+	* Refactor gnc-tree-view based widgets such that only gnc-tree-view itself deals with gconf
+
+2013-10-07 Geert Janssens 
+
+	* Gnc-Prefs: cleanup gconf wiring in main summarybar
+
+2013-10-07 Geert Janssens 
+
+	* Gnc-Prefs: cleanup gconf wiring in report system
+
+2013-10-07 Geert Janssens 
+
+	* Gnc-Prefs: cleanup (most) gconf wiring in import-export
+
+2013-10-07 Geert Janssens 
+
+	* Gnc-Prefs: migrate remaining gconf calls in check printing
+
+2013-10-07 Geert Janssens 
+
+	* Drop option to customize gconf_path via command line or environment variable
+
+2013-10-07 Geert Janssens 
+
+	* Gnc-Prefs: cleanup some remaining bits from the preferences dialog
+
+2013-10-07 Geert Janssens 
+
+	* Gnc-Prefs: migrate GncDateEdit widgets (and associated preferences)
+
+2013-10-07 Geert Janssens 
+
+	* Gnc-Prefs: migrate GncPeriodSelect widgets (and associated preferences)
+
+2013-10-07 Geert Janssens 
+
+	* Gnc-Prefs: migrate GncCurrencyEdit widgets (and associated preferences)
+
+2013-10-07 Geert Janssens 
+
+	* Gnc-Prefs: migrate gnc-plugin gconf machinery
+
+2013-10-07 Geert Janssens 
+
+	* Gnc-Prefs: migrate GtkRadiobutton widgets (and associated preferences)
+
+2013-10-07 Geert Janssens 
+
+	* Gnc-Prefs: remove toolbar_style preference
+
+2013-10-07 Geert Janssens 
+
+	* Gnc-Prefs: migrate date_format preference
+
+2013-10-07 Geert Janssens 
+
+	* Resave preferences dialog with a recent glade-3 version
+
+2013-10-07 Geert Janssens 
+
+	* Gnc-Prefs: migrate account_separator preference (and associated GtkEntry widget)
+
+2013-10-07 Geert Janssens 
+
+	* Gnc-Prefs: migrate file history plugin
+
+2013-10-07 Geert Janssens 
+
+	* Gnc-Prefs: migrate int-typed preferences (and GtkCombobox widgets linked to them)
+
+2013-10-07 Geert Janssens 
+
+	* Gnc-Prefs: migrate GtkSpinbutton widgets (and associated preferences)
+
+2013-10-07 Geert Janssens 
+
+	* Gnc-Prefs: migrate GtkCheckbutton widgets (and associated preferences) - last batch
+
+2013-10-07 Geert Janssens 
+
+	* Gnc-Prefs: migrate GtkCheckbutton widgets (and associated preferences) - second batch
+
+2013-10-07 Geert Janssens 
+
+	* Gnc-Prefs: migrate extra_toolbuttons preference (business option)
+
+2013-10-07 Geert Janssens 
+
+	* Gnc-Prefs: migrate 24hour_clock preference and fix the code so it actually works. (It's not actively used though in GnuCash)
+
+2013-10-07 Geert Janssens 
+
+	* Gnc-Prefs: migrate GtkCheckbutton widgets (and associated preferences) - first batch
+
+2013-10-07 Geert Janssens 
+
+	* Gnc-Prefs: migrate all GtkFontButton widgets (default_font property)
+
+2013-10-07 Geert Janssens 
+
+	* Prepare preferences dialog to work with gnc-prefs instead of gconf. The actual migration will be gradually done in future commits.
+
+2013-10-07 Geert Janssens 
+
+	* GncDateEdit: add gobject property "time"
+
+2013-10-07 Geert Janssens 
+
+	* GncPeriodSelect: add gobject property active
+
+2013-10-07 Geert Janssens 
+
+	* GncCurrencyEdit: add gobject property mnemonic
+
+2013-10-07 Geert Janssens 
+
+	* Gnc-Prefs: migrate search dialog and saved window geometry preferences
+
+2013-10-07 Geert Janssens 
+
+	* Gnc-Prefs: migrate most preferences found in app-utils
+
+2013-10-07 Geert Janssens 
+
+	* Gnc-Prefs: migrate first preference option (first_user) to new preference system
+
+2013-10-07 Geert Janssens 
+
+	* Temporarily use gconf as gsettings backend
+
+2013-10-07 Geert Janssens 
+
+	* Amend XDG_DATA_DIRS if not installed in default prefix
+
+2013-10-07 Geert Janssens 
+
+	* Create gsettings schema entries for all gconf keys currently in use
+
+2013-10-07 Geert Janssens 
+
+	* Remove obsolete gconf setup assistant.
+
+2013-10-07 Geert Janssens 
+
+	* Refactor preferences
+
+2013-10-07 Geert Janssens 
+
+	* GSettings: add function to bind a gsettings key to a gobject property
+
+2013-10-07 Geert Janssens 
+
+	* GSettings: add functions to unset a key or complete schema
+
+2013-10-07 Geert Janssens 
+
+	* GSettings: add functions to get/set most common data types
+
+2013-10-07 Geert Janssens 
+
+	* GSettings: add functions to listen for changes
+
+2013-10-07 Geert Janssens 
+
+	* Add some initialization code for GSettings
+
+2013-10-07 Geert Janssens 
+
+	* Add GSettings schemas and build rules
+
+2013-10-07 Geert Janssens 
+
+	* Prepare for GSettings conversion
+
+2013-10-07 Geert Janssens 
+
+	* Use more generic parameter name to cut association with gconf
+
+2013-10-07 Geert Janssens 
+
+	* Whitespace cleanup, comment improvements and spelling fixes
+
+2013-10-07 Geert Janssens 
+
+	* Cleanup after file backend settings refactoring
+
+2013-10-07 Geert Janssens 
+
+	* Remove obsolete enable_euro key from gconf
+
+2013-10-07 Geert Janssens 
+
+	* Remove redundant call
+
+2013-10-06 John Ralls 
+
+	* Fix pre-glib-2.38 definition of _Q in tests
+
+2013-10-03 John Ralls 
+
+	* Remove ancient #if-0'd code from Engine
+
+2013-10-03 John Ralls 
+
+	* Work around quote change in assertion messages
+
+2013-10-03 John Ralls 
+
+	* Remove ancient if-0'd code from backends
+
+2013-10-03 John Ralls 
+
+	* Remove ancient if-0'd code from libqof
+
+2013-10-03 John Ralls 
+
+	* Convert - in filenames to _ for function names
+
+2013-10-03 John Ralls 
+
+	* Fix test broken by r23192
+
+2013-10-01 Mike Evans 
+
+	* Bug #699450
+
+2013-09-30 Christian Stimming 
+
+	* Fix typo in string (punctuation)
+
+2013-09-28 Christian Stimming 
+
+	* Minor improvement in message about last modification time upon opening a file.
+
+2013-09-28 Christian Stimming 
+
+	* Win32: Update aqbanking/gwenhywfar package versions for windows build.
+
+2013-09-26 John Ralls 
+
+	* Fix undeclared identifier from r23191
+
+2013-09-24 John Ralls 
+
+	* Bug 708700 - "make check" fails (missing glib bits)
+
+2013-09-24 John Ralls 
+
+	* Bug 654196 - "make check" fails when built with --enable-dbi
+
+2013-09-24 John Ralls 
+
+	* Bug 632362 - Unable to create "reversing transaction" again after it is removed
+
+2013-09-24 John Ralls 
+
+	* Fix leaking Gtkosxapplication objects.
+
+2013-09-22 John Ralls 
+
+	* Bug 654196 - "make check" fails when built with --enable-dbi
+
+2013-09-21 Geert Janssens 
+
+	* Revert r23187 "Revert dbi check"
+
+2013-09-21 Geert Janssens 
+
+	* Improve tab behaviour in Stock split assistant
+
+2013-09-21 Geert Janssens 
+
+	* Revert dbi check
+
+2013-09-20 John Ralls 
+
+	* Bug 654196 - "make check" fails when built with --enable-dbi
+
+2013-09-20 Christian Stimming 
+
+	* After opening a file, display a statusbar message with the last modification date and time.
+
+2013-09-20 Christian Stimming 
+
+	* Make gnc_g_date_time_new_from_unix_local() function known in header.
+
+2013-09-20 Christian Stimming 
+
+	* Fix memory leak due to missing free after gnc_ctime().
+
+2013-09-20 Christian Stimming 
+
+	* Fix erroneous memset() parameter ordering, as notified by gcc-4.6.3
+
+2013-09-19 John Ralls 
+
+	* Fix win32 build errors
+
+2013-09-19 John Ralls 
+
+	* Bug #654196 make check fails without sqlite DBD installed
+
+2013-09-19 John Ralls 
+
+	* Bug #704039 time zone is not respected in Windows
+
+2013-09-18 Mike Evans 
+
+	* Remove commented out code.
+
+2013-09-18 Mike Evans 
+
+	* Fix bug 699450
+
+2013-09-17 John Ralls 
+
+	* Bug 674862 - 2038 bug in libdbi
+
+2013-09-17 John Ralls 
+
+	* Modify xaccAccountChildrenEqual to not depend upon the order
+
+2013-09-17 John Ralls 
+
+	* Work around differing pgsql protocol and dbi name
+
+2013-09-17 John Ralls 
+
+	* Convert stray g_printf into PINFO
+
+2013-09-17 John Ralls 
+
+	* Add core-utils to backend-sql test LDADD
+
+2013-09-15 John Ralls 
+
+	* Re-enable dbi backend basic tests with g_tester
+
+2013-09-14 Cristian Marchi 
+
+	* Update Dutch translation from the translation project.
+
+2013-09-13 John Ralls 
+
+	* Fix up state-changing business functions
+
+2013-09-13 John Ralls 
+
+	* Bug #682280 - bill/invoice importer fails to save imported bills/invoices
+
+2013-09-12 John Ralls 
+
+	* Bug 684670 - Interest amount calculation is wrong in Sqllite3 format
+
+2013-09-09 John Ralls 
+
+	* Prepare 2.5.5 release
+
+2013-09-09 John Ralls 
+
+	* Bug 704056 - Online Banking (Online Actions) does not appear in Action menu
+
+2013-09-04 Geert Janssens 
+
+	* Prevent 2.4 from crashing when loading a book that was opened with 2.6 before.
+
+2013-09-03 Geert Janssens 
+
+	* Bug 603183 - Equity statement shows incorrect changes
+
+2013-09-03 Geert Janssens 
+
+	* Bug 603183 - Equity statement shows incorrect changes
+
+2013-09-03 Geert Janssens 
+
+	* Bug 603183 - Equity statement shows incorrect changes
+
+2013-09-03 Geert Janssens 
+
+	* Bug #704039 time zone is not respected on windows Author: Kuang-che Wu <kcwu@csie.org>
+
+2013-09-03 Geert Janssens 
+
+	* Add appdata description file to be used in Gnome's App store BP
+
+2013-08-26 John Ralls 
+
+	* Handle exception in set_mac_locale()
+
+2013-08-22 Cristian Marchi 
+
+	* Revert Persian translation update while Persion translators coordinates the translation effort.
+
+2013-08-20 Cristian Marchi 
+
+	* Update traditional Chinese translation thanks to Kuang-che Wu.
+
+2013-08-20 Geert Janssens 
+
+	* Bug 334939 - Account Report and Account Transaction Report are apparently the same, but different
+
+2013-08-18 John Ralls 
+
+	* Fix pointer conversion warnings on 64-bit builds
+
+2013-08-18 Geert Janssens 
+
+	* Add comment to document the hack for multicolumn multi-chart reports
+
+2013-08-18 Geert Janssens 
+
+	* Bug 704525 - When you have a mix of chart types (bar charts and pie charts)
+
+2013-08-18 Geert Janssens 
+
+	* Bug 704525 - When you have a mix of chart types (bar charts and pie charts)
+
+2013-08-18 John Ralls 
+
+	* Add Lithuanian translators to AUTHORS
+
+2013-08-17 John Ralls 
+
+	* Set mime-type property on AUTHORS and DOCUMENTERS
+
+2013-08-16 John Ralls 
+
+	* Testing: Split.c: Filter out expected error message.
+
+2013-08-16 John Ralls 
+
+	* Unit test Transaction.c
+
+2013-08-16 John Ralls 
+
+	* [Testing] Create log handlers in one step, clean up in teardown
+
+2013-08-16 John Ralls 
+
+	* Protect split-iterator from NULL split
+
+2013-08-16 John Ralls 
+
+	* Protect xaccTransIsBalanced against crashing if passed a NULL Transaction
+
+2013-08-16 John Ralls 
+
+	* Transaction.c: Note a bug discovered in testing.
+
+2013-08-16 John Ralls 
+
+	* Guard xaccTransGetRateForCommodity against NULL arguments
+
+2013-08-16 John Ralls 
+
+	* Split: Ignore fatal message
+
+2013-08-15 Christian Stimming 
+
+	* Bug #629136: Move the code that updates the sensitivity of immutable page actions from gnc_main_window_switch_page to gnc_main_window_generate_title.
+
+2013-08-15 Christian Stimming 
+
+	* Bug #696492: Change report name in menu or in report output to be consistent
+
+2013-08-12 Cristian Marchi 
+
+	* Update Persian translation, copied from the translation project.
+
+2013-08-04 Cristian Marchi 
+
+	* Update Lithuanian translation thanks to Aurimas Fišeras.
+
+2013-08-04 Cristian Marchi 
+
+	* Improve a tooltip. Patch thanks to Aurimas Fišeras.
+
+2013-08-04 Cristian Marchi 
+
+	* Change po files for previous patch removing double spaces. Patch thanks to Aurimas Fišeras.
+
+2013-08-04 Cristian Marchi 
+
+	* Remove double spaces from translatable strings. Patch submitted by Aurimas Fišeras.
+
+2013-08-03 John Ralls 
+
+	* Fix some uninitialized variable warnings
+
+2013-08-03 John Ralls 
+
+	* Bump for 2.5.4 release
+
 2013-08-02 Cristian Marchi 
 
-	* More consistency for UI strings. Patch by Aurimas Fišeras. (HEAD, trunk, origin/trunk, trunk)
+	* More consistency for UI strings. Patch by Aurimas Fišeras.
 
 2013-08-02 John Ralls 
 

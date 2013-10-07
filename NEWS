@@ -1,5 +1,48 @@
 Version history:
 ------- -------
+ 2.5.6 - 7 October 2013
+       	 This is the seventh release in the UNSTABLE 2.5 series.
+
+	 Geert Janssens has rewritten the preferences system to use
+	 GSettings from GIO (GLib) instead of GConf. This is a simpler
+	 and more robust backend which writes to the OS's native prefs
+	 -- defaults on OS X and the Registry on MSWindows -- and
+	 allows us to remove several troublesome dependencies
+	 including GConf, ORBit, and DBus. The change includes a
+	 migration script that will run at Gnucash startup.
+
+	 WARNING: the saved settings in gconf are not (yet) migrated
+         to gsettings !  running gnucash as of this commit will start
+         you with default values for all preferences !  You can of
+         course change your preferences, your changes will be saved
+         properly in gsettings and restored when you restart
+         gnucash. But what has been set in GConf before will basically
+         be ignored.
+
+	 Bug Fixes:
+
+	 Bug 632362 - Unable to create "reversing transaction" again
+	 after it is removed
+
+	 Bug 654196 - "make check" fails when built with --enable-dbi
+
+	 Bug 674862 - 2038 bug in libdbi
+
+	 Bug 682280 - bill/invoice importer fails to save imported bills/invoice
+
+	 Bug 684670 - Interest amount calculation is wrong in Sqlite3 format
+
+	 Bug 699450- New budgets cause Account Name column to expand
+	 until display bigger than screen. -- Robert Ratliff
+	 <ratliff.bobby@gmail.com>
+
+	 Bug 708700 - "make check" fails (missing glib bits)--
+	 Frédéric Perrin <fred+gnome@resel.fr>
+
+Bug 704039 - time zone is not respected in Windows -- Thanks to Kuang-che Wu <kcwu@csie.org>
+
+
+      	 Translations Updated: Dutch
  2.5.5 - 10 September 2013
        	 This is the sixth release in the UNSTABLE 2.5 series.
 
@@ -21,16 +64,16 @@ Version history:
 	 function gnc:account-get-total-flow for the "Withdrawal" calculation.
 	 Author: Carsten Rinke
 
-	 629136: Move the code that updates the sensitivity
+	 629136 - Move the code that updates the sensitivity
 	 of immutable page actions from gnc_main_window_switch_page to
 	 gnc_main_window_generate_title. Patch by Guilherme Salgado.
 
-	 696492: Change report name in menu or in report output to be
+	 696492 - Change report name in menu or in report output to be
 	 consistent Change the register name to "Accout Transaction Report"
 	 when the register type is GENERAL_LEDGER, INCOME_LEDGER, or default
 	 in function gnc_reg_get_name().  Patch by Carsten Rinke.
 
-	 704039 time zone is not respected on windows Author: Kuang-che Wu
+	 704039 - time zone is not respected on windows Author: Kuang-che Wu
 
 	 704056 - Online Banking (Online Actions) does not appear in Action menu
 	 Ensure that all functions are exported to the dll.
