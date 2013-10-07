@@ -282,6 +282,21 @@ gboolean gnc_prefs_get_bool (const gchar *group,
 gint gnc_prefs_get_int (const gchar *group,
                         const gchar *pref_name);
 
+/** Get an 64 bit integer value from the preferences backend.
+ *
+ *  @param group This string specifies the group to which the preference belongs
+ *
+ *  @param preference This string is the name of the particular preference within
+ *  the named group of the preferences backend.
+ *
+ *  @return This function returns the 64 bit integer value stored at the
+ *  requested preference in the preferences backend.  If the preference has never been
+ *  set, this function passes on the default value returned by the preferences backend.
+ *  If there is an error in processing, zero will be returned.
+ */
+gint64 gnc_prefs_get_int64 (const gchar *group,
+                            const gchar *pref_name);
+
 /** Get an float value from the preferences backend.
  *
  *  @param group This string specifies the group to which the preference belongs
@@ -326,6 +341,23 @@ gchar *gnc_prefs_get_string (const gchar *group,
  */
 gint gnc_prefs_get_enum (const gchar *group,
                          const gchar *pref_name);
+
+/** Get a pair of coordinates from the preferences backend.
+ *
+ *  @param group This string specifies the group to which the preference belongs
+ *
+ *  @param preference This string is the name of the particular preference within
+ *  the named group of the preferences backend.
+ *
+ *  @param x The x coordinate to retrieve.
+ *
+ *  @param y The y coordinate to retrieve.
+ *
+ *  If there is an error in processing, both coordinates will be set to zero.
+ */
+void gnc_prefs_get_coords (const gchar *group,
+                           const gchar *pref_name,
+                           gdouble *x, gdouble *y);
 
 /** Get an arbitrary combination of values from the preferences backend.  This
  *  combination of values can be anything that can be encapsulated
@@ -386,6 +418,22 @@ gboolean gnc_prefs_set_int (const gchar *group,
                             const gchar *pref_name,
                             gint value);
 
+/** Store a 64 bit integer value into the preferences backend.
+ *
+ *  @param group This string specifies the group to which the preference belongs
+ *
+ *  @param preference This string is the name of the particular preference within
+ *  the named group of the preferences backend.
+ *
+ *  @param value The 64 bit integer number to be stored.
+ *
+ *  @return This function returns true if the value was set successfully
+ *  on the preference or false if not.
+ */
+gboolean gnc_prefs_set_int64 (const gchar *group,
+                              const gchar *pref_name,
+                              gint64 value);
+
 /** Store a float value into the preferences backend.
  *
  *  @param group This string specifies the group to which the preference belongs
@@ -436,6 +484,25 @@ gboolean gnc_prefs_set_string (const gchar *group,
 gboolean gnc_prefs_set_enum (const gchar *group,
                              const gchar *pref_name,
                              gint value);
+
+/** Store coordinates into the preferences backend. Coordinates consist of
+ *  a pair of floating point values (x and y).
+ *
+ *  @param group This string specifies the group to which the preference belongs
+ *
+ *  @param preference This string is the name of the particular preference within
+ *  the named group of the preferences backend.
+ *
+ *  @param x The x coordinate to be stored.
+ *
+ *  @param y The y coordinate to be stored.
+ *
+ *  @return This function returns true if the value was set successfully
+ *  on the preference or false if not.
+ */
+gboolean gnc_prefs_set_coords (const gchar *group,
+                               const gchar *pref_name,
+                               gdouble x, gdouble y);
 
 /** Store an arbitrary combination of values into the preferences backend.
  *

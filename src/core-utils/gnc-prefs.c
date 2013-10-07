@@ -212,6 +212,17 @@ gint gnc_prefs_get_int (const gchar *group,
 }
 
 
+gint64 gnc_prefs_get_int64 (const gchar *group,
+                            const gchar *pref_name)
+{
+    gint64 result = 0;
+    GVariant *var = gnc_prefs_get_value(group, pref_name);
+    result = g_variant_get_int64 (var);
+    g_variant_unref (var);
+    return result;
+}
+
+
 gdouble gnc_prefs_get_float (const gchar *group,
                              const gchar *pref_name)
 {
@@ -239,6 +250,21 @@ gint gnc_prefs_get_enum (const gchar *group,
         return (prefsbackend.get_enum) (group, pref_name);
     else
         return 0;
+}
+
+void
+gnc_prefs_get_coords (const gchar *group,
+                      const gchar *pref_name,
+                      gdouble *x, gdouble *y)
+{
+    GVariant *coords = gnc_prefs_get_value (group, pref_name);
+
+    *x = 0;
+    *y = 0;
+
+    if (g_variant_is_of_type (coords, (const GVariantType *) "(dd)") )
+        g_variant_get (coords, "(dd)", x, y);
+    g_variant_unref (coords);
 }
 
 
@@ -274,6 +300,15 @@ gboolean gnc_prefs_set_int (const gchar *group,
 }
 
 
+gboolean gnc_prefs_set_int64 (const gchar *group,
+                              const gchar *pref_name,
+                              gint64 value)
+{
+    GVariant *var = g_variant_new ("x",value);
+    return gnc_prefs_set_value (group, pref_name, var);
+}
+
+
 gboolean gnc_prefs_set_float (const gchar *group,
                               const gchar *pref_name,
                               gdouble value)
@@ -304,6 +339,15 @@ gboolean gnc_prefs_set_enum (const gchar *group,
         return (prefsbackend.set_enum) (group, pref_name, value);
     else
         return FALSE;
+}
+
+
+gboolean gnc_prefs_set_coords (const gchar *group,
+                               const gchar *pref_name,
+                               gdouble x, gdouble y)
+{
+    GVariant *var = g_variant_new ("(dd)",x, y);
+    return gnc_prefs_set_value (group, pref_name, var);
 }
 
 

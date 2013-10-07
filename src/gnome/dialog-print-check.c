@@ -353,34 +353,6 @@ find_existing_format (GtkListStore *store, gchar *guid, GtkTreeIter *iter_out)
 }
 
 
-/* This function is used by the custom format dialog to save position values
- * in the preferences database.
- */
-static void
-save_float_pair (const char *group, const char *pref, double a, double b)
-{
-    GVariant *coords = g_variant_new ("(dd)", a, b);
-    gnc_prefs_set_value (group, pref, coords);
-}
-
-
-/* This function is used by the custom format dialog to restore position
- * values from the preferences database.
- */
-static void
-get_float_pair (const char *group, const char *pref, double *a, double *b)
-{
-    GVariant *coords = gnc_prefs_get_value (group, pref);
-
-    *a = 0;
-    *b = 0;
-
-    if (g_variant_is_of_type (coords, (const GVariantType *) "(dd)") )
-        g_variant_get (coords, "(dd)", a, b);
-    g_variant_unref (coords);
-}
-
-
 /* This function returns a string containing the check address in a five-line
  * format.
  *
@@ -582,37 +554,37 @@ gnc_ui_print_save_dialog(PrintCheckDialog *pcd)
     }
 
     /* Custom format page */
-    save_float_pair(GNC_PREFS_GROUP, GNC_PREF_CUSTOM_PAYEE,
+    gnc_prefs_set_coords(GNC_PREFS_GROUP, GNC_PREF_CUSTOM_PAYEE,
                     gtk_spin_button_get_value(pcd->payee_x),
                     gtk_spin_button_get_value(pcd->payee_y));
-    save_float_pair(GNC_PREFS_GROUP, GNC_PREF_CUSTOM_DATE,
+    gnc_prefs_set_coords(GNC_PREFS_GROUP, GNC_PREF_CUSTOM_DATE,
                     gtk_spin_button_get_value(pcd->date_x),
                     gtk_spin_button_get_value(pcd->date_y));
-    save_float_pair(GNC_PREFS_GROUP, GNC_PREF_CUSTOM_WORDS,
+    gnc_prefs_set_coords(GNC_PREFS_GROUP, GNC_PREF_CUSTOM_WORDS,
                     gtk_spin_button_get_value(pcd->words_x),
                     gtk_spin_button_get_value(pcd->words_y));
-    save_float_pair(GNC_PREFS_GROUP, GNC_PREF_CUSTOM_NUMBER,
+    gnc_prefs_set_coords(GNC_PREFS_GROUP, GNC_PREF_CUSTOM_NUMBER,
                     gtk_spin_button_get_value(pcd->number_x),
                     gtk_spin_button_get_value(pcd->number_y));
-    save_float_pair(GNC_PREFS_GROUP, GNC_PREF_CUSTOM_NOTES,
+    gnc_prefs_set_coords(GNC_PREFS_GROUP, GNC_PREF_CUSTOM_NOTES,
                     gtk_spin_button_get_value(pcd->notes_x),
                     gtk_spin_button_get_value(pcd->notes_y));
-    save_float_pair(GNC_PREFS_GROUP, GNC_PREF_CUSTOM_MEMO,
+    gnc_prefs_set_coords(GNC_PREFS_GROUP, GNC_PREF_CUSTOM_MEMO,
                     gtk_spin_button_get_value(pcd->memo_x),
                     gtk_spin_button_get_value(pcd->memo_y));
-    save_float_pair(GNC_PREFS_GROUP, GNC_PREF_CUSTOM_ADDRESS,
+    gnc_prefs_set_coords(GNC_PREFS_GROUP, GNC_PREF_CUSTOM_ADDRESS,
                     gtk_spin_button_get_value(pcd->address_x),
                     gtk_spin_button_get_value(pcd->address_y));
-    save_float_pair(GNC_PREFS_GROUP, GNC_PREF_SPLITS_AMOUNT,
+    gnc_prefs_set_coords(GNC_PREFS_GROUP, GNC_PREF_SPLITS_AMOUNT,
                     gtk_spin_button_get_value(pcd->splits_amount_x),
                     gtk_spin_button_get_value(pcd->splits_amount_y));
-    save_float_pair(GNC_PREFS_GROUP, GNC_PREF_SPLITS_MEMO,
+    gnc_prefs_set_coords(GNC_PREFS_GROUP, GNC_PREF_SPLITS_MEMO,
                     gtk_spin_button_get_value(pcd->splits_memo_x),
                     gtk_spin_button_get_value(pcd->splits_memo_y));
-    save_float_pair(GNC_PREFS_GROUP, GNC_PREF_SPLITS_ACCOUNT,
+    gnc_prefs_set_coords(GNC_PREFS_GROUP, GNC_PREF_SPLITS_ACCOUNT,
                     gtk_spin_button_get_value(pcd->splits_account_x),
                     gtk_spin_button_get_value(pcd->splits_account_y));
-    save_float_pair(GNC_PREFS_GROUP, GNC_PREF_CUSTOM_TRANSLATION,
+    gnc_prefs_set_coords(GNC_PREFS_GROUP, GNC_PREF_CUSTOM_TRANSLATION,
                     gtk_spin_button_get_value(pcd->translation_x),
                     gtk_spin_button_get_value(pcd->translation_y));
     gnc_prefs_set_float(GNC_PREFS_GROUP, GNC_PREF_CUSTOM_ROTATION,
@@ -672,38 +644,38 @@ gnc_ui_print_restore_dialog(PrintCheckDialog *pcd)
     }
 
     /* Custom format page */
-    get_float_pair(GNC_PREFS_GROUP, GNC_PREF_CUSTOM_PAYEE, &x, &y);
+    gnc_prefs_get_coords(GNC_PREFS_GROUP, GNC_PREF_CUSTOM_PAYEE, &x, &y);
     gtk_spin_button_set_value(pcd->payee_x, x);
     gtk_spin_button_set_value(pcd->payee_y, y);
 
-    get_float_pair(GNC_PREFS_GROUP, GNC_PREF_CUSTOM_DATE, &x, &y);
+    gnc_prefs_get_coords(GNC_PREFS_GROUP, GNC_PREF_CUSTOM_DATE, &x, &y);
     gtk_spin_button_set_value(pcd->date_x, x);
     gtk_spin_button_set_value(pcd->date_y, y);
-    get_float_pair(GNC_PREFS_GROUP, GNC_PREF_CUSTOM_WORDS, &x, &y);
+    gnc_prefs_get_coords(GNC_PREFS_GROUP, GNC_PREF_CUSTOM_WORDS, &x, &y);
     gtk_spin_button_set_value(pcd->words_x, x);
     gtk_spin_button_set_value(pcd->words_y, y);
-    get_float_pair(GNC_PREFS_GROUP, GNC_PREF_CUSTOM_NUMBER, &x, &y);
+    gnc_prefs_get_coords(GNC_PREFS_GROUP, GNC_PREF_CUSTOM_NUMBER, &x, &y);
     gtk_spin_button_set_value(pcd->number_x, x);
     gtk_spin_button_set_value(pcd->number_y, y);
-    get_float_pair(GNC_PREFS_GROUP, GNC_PREF_CUSTOM_ADDRESS, &x, &y);
+    gnc_prefs_get_coords(GNC_PREFS_GROUP, GNC_PREF_CUSTOM_ADDRESS, &x, &y);
     gtk_spin_button_set_value(pcd->address_x, x);
     gtk_spin_button_set_value(pcd->address_y, y);
-    get_float_pair(GNC_PREFS_GROUP, GNC_PREF_CUSTOM_NOTES, &x, &y);
+    gnc_prefs_get_coords(GNC_PREFS_GROUP, GNC_PREF_CUSTOM_NOTES, &x, &y);
     gtk_spin_button_set_value(pcd->notes_x, x);
     gtk_spin_button_set_value(pcd->notes_y, y);
-    get_float_pair(GNC_PREFS_GROUP, GNC_PREF_CUSTOM_MEMO, &x, &y);
+    gnc_prefs_get_coords(GNC_PREFS_GROUP, GNC_PREF_CUSTOM_MEMO, &x, &y);
     gtk_spin_button_set_value(pcd->memo_x, x);
     gtk_spin_button_set_value(pcd->memo_y, y);
-    get_float_pair(GNC_PREFS_GROUP, GNC_PREF_SPLITS_AMOUNT, &x, &y);
+    gnc_prefs_get_coords(GNC_PREFS_GROUP, GNC_PREF_SPLITS_AMOUNT, &x, &y);
     gtk_spin_button_set_value(pcd->splits_amount_x, x);
     gtk_spin_button_set_value(pcd->splits_amount_y, y);
-    get_float_pair(GNC_PREFS_GROUP, GNC_PREF_SPLITS_MEMO, &x, &y);
+    gnc_prefs_get_coords(GNC_PREFS_GROUP, GNC_PREF_SPLITS_MEMO, &x, &y);
     gtk_spin_button_set_value(pcd->splits_memo_x, x);
     gtk_spin_button_set_value(pcd->splits_memo_y, y);
-    get_float_pair(GNC_PREFS_GROUP, GNC_PREF_SPLITS_ACCOUNT, &x, &y);
+    gnc_prefs_get_coords(GNC_PREFS_GROUP, GNC_PREF_SPLITS_ACCOUNT, &x, &y);
     gtk_spin_button_set_value(pcd->splits_account_x, x);
     gtk_spin_button_set_value(pcd->splits_account_y, y);
-    get_float_pair(GNC_PREFS_GROUP, GNC_PREF_CUSTOM_TRANSLATION, &x, &y);
+    gnc_prefs_get_coords(GNC_PREFS_GROUP, GNC_PREF_CUSTOM_TRANSLATION, &x, &y);
     gtk_spin_button_set_value(pcd->translation_x, x);
     gtk_spin_button_set_value(pcd->translation_y, y);
     x = gnc_prefs_get_float(GNC_PREFS_GROUP, GNC_PREF_CUSTOM_ROTATION);
