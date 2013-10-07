@@ -24,13 +24,11 @@
 #include "config.h"
 
 #include <glib/gi18n.h>
-#include <gconf/gconf.h>
 #ifdef HAVE_X11_XLIB_H
 # include <X11/Xlib.h>
 #endif
 #include <libxml/xmlIO.h>
 
-#include "gnc-gconf-utils.h"
 #include "gnc-prefs-utils.h"
 #include "gnc-prefs.h"
 #include "gnc-gnome-utils.h"
@@ -127,7 +125,7 @@ gnc_commodity_help_cb (void)
 static void
 gnc_configure_date_format (void)
 {
-    QofDateFormat df = gnc_prefs_get_int(GCONF_GENERAL,
+    QofDateFormat df = gnc_prefs_get_int(GNC_PREFS_GROUP_GENERAL,
                                          GNC_PREF_DATE_FORMAT);
 
     /* Only a subset of the qof date formats is currently
@@ -599,7 +597,6 @@ gnc_gui_init(void)
 
     gnc_prefs_init();
     gnc_show_splash_screen();
-    gnc_gconf_add_anon_notification(GCONF_GENERAL, gnc_gconf_general_changed, NULL);
 
     gnome_is_initialized = TRUE;
 
@@ -623,8 +620,9 @@ gnc_gui_init(void)
                            GNC_PREF_DATE_BACKMONTHS,
                            gnc_configure_date_completion,
                            NULL);
-    gnc_gconf_general_register_any_cb(
-        (GncGconfGeneralAnyCb)gnc_gui_refresh_all, NULL);
+    gnc_prefs_register_group_cb (GNC_PREFS_GROUP_GENERAL,
+                                gnc_gui_refresh_all,
+                                NULL);
 
     gnc_ui_commodity_set_help_callback (gnc_commodity_help_cb);
     gnc_file_set_shutdown_callback (gnc_shutdown);
