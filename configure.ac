@@ -255,7 +255,7 @@ fi
 # We first check for other versions due to deprecations.
 # 2.36 deprecated g_type_init
 # 2.32 deprecated some gthread functions
-PKG_CHECK_MODULES(GLIB, glib-2.0 >= 2.38 gthread-2.0 gobject-2.0 gmodule-2.0,
+PKG_CHECK_MODULES(GLIB, glib-2.0 >= 2.38 gio-2.0 >= 2.25 gthread-2.0 gobject-2.0 gmodule-2.0,
 [
   AC_DEFINE([HAVE_GLIB_2_38], [1], [Configure leading quote around assertions])
   AC_DEFINE([HAVE_GLIB_2_36], [1], [Configure g_type_init deprecation])
@@ -263,20 +263,20 @@ PKG_CHECK_MODULES(GLIB, glib-2.0 >= 2.38 gthread-2.0 gobject-2.0 gmodule-2.0,
 ],
 [
   PKG_CHECK_MODULES(GLIB,
-                        glib-2.0 >= 2.36 gthread-2.0 gobject-2.0 gmodule-2.0,
+                        glib-2.0 >= 2.36 gio-2.0 >= 2.25 gthread-2.0 gobject-2.0 gmodule-2.0,
   [
     AC_DEFINE([HAVE_GLIB_2_36], [1], [Configure g_type_init deprecation])
     AC_DEFINE([HAVE_GLIB_2_32], [1], [Configure gthread deprecations])
   ],
   [
     PKG_CHECK_MODULES(GLIB,
-                        glib-2.0 >= 2.32 gthread-2.0 gobject-2.0 gmodule-2.0,
+                        glib-2.0 >= 2.32 gio-2.0 >= 2.25 gthread-2.0 gobject-2.0 gmodule-2.0,
     [
         AC_DEFINE([HAVE_GLIB_2_32], [1], [Configure gthread deprecations])
     ],
     [
 	PKG_CHECK_MODULES(GLIB,
-                        glib-2.0 >= 2.28 gthread-2.0 gobject-2.0 gmodule-2.0)
+                        glib-2.0 >= 2.28 gio-2.0 >= 2.25 gthread-2.0 gobject-2.0 gmodule-2.0)
     ])
   ])
 ])
@@ -477,7 +477,7 @@ AM_CONDITIONAL(GNC_HAVE_GUILE_WWW, test "${gnc_have_guile_www}" = yes)
 ### --------------------------------------------------------------------------
 ### look for gconf
 
-PKG_CHECK_MODULES(GCONF, gconf-2.0 >= 2.22)
+PKG_CHECK_MODULES(GCONF, gconf-2.0 >= 2.31.1)
 # Look up gconftool-2
 AC_PATH_PROG(GCONFTOOL, gconftool-2)
 AC_SUBST(GCONFTOOL)
