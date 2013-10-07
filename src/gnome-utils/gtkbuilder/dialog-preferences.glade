@@ -335,7 +335,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkHBox" id="gconf/window/pages/account_tree/summary/start_period">
+                  <object class="GtkHBox" id="pref/window.pages.account_tree.summary/start_period">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <child>
@@ -369,7 +369,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkHBox" id="gconf/window/pages/account_tree/summary/end_period">
+		  <object class="GtkHBox" id="pref/window.pages.account_tree.summary/end_period">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <child>

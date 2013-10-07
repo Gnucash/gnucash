@@ -679,96 +679,6 @@ gnc_prefs_split_widget_name (const gchar *name, gchar **group, gchar **pref)
 /* FIXME to remove when gconf conversion of preferences is complete */
 /****************************************************************************/
 
-/** The user changed a GncPeriodSelect widget.  Update gconf.
- *  GncPeriodSelect choices are stored as an int.
- *
- *  @internal
- *
- *  @param period A pointer to the GncPeriodSelect that was changed.
- *
- *  @param user_data Unused.
- */
-static void
-gnc_prefs_period_select_user_cb_gconf (GncPeriodSelect *period,
-                                 gpointer user_data)
-{
-    const gchar *name;
-    gint active;
-
-    g_return_if_fail(GNC_IS_PERIOD_SELECT(period));
-    name  = g_object_get_data(G_OBJECT(period), "name");
-    active = gnc_period_select_get_active(period);
-    DEBUG("period select %s set to item %d", name, active);
-    gnc_gconf_set_int(name, NULL, active, NULL);
-}
-
-
-/** A GncPeriodSelect choice was updated in gconf.  Update the user
- *  visible dialog.
- *
- *  @internal
- *
- *  @param period A pointer to the GncPeriodSelect that needs updating.
- *
- *  @param value The new value of the GncPeriodSelect.
- */
-static void
-gnc_prefs_period_select_gconf_cb_gconf (GncPeriodSelect *period,
-                                  gint value)
-{
-    g_return_if_fail(GNC_IS_PERIOD_SELECT(period));
-    ENTER("period %p, value %d", period, value);
-    g_signal_handlers_block_by_func(G_OBJECT(period),
-                                    G_CALLBACK(gnc_prefs_period_select_user_cb_gconf), NULL);
-    gnc_period_select_set_active(period, value);
-    g_signal_handlers_unblock_by_func(G_OBJECT(period),
-                                      G_CALLBACK(gnc_prefs_period_select_user_cb_gconf), NULL);
-    LEAVE(" ");
-}
-
-
-/** Connect a GncPeriodSelect widget to the user callback function.  Set
- *  the starting state of the period from its value in gconf.
- *
- *  @internal
- *
- *  @param period A pointer to the GncPeriodSelect that should be connected.
- */
-static void
-gnc_prefs_connect_period_select_gconf (GncPeriodSelect *period, const gchar *boxname )
-{
-    const gchar *name;
-    gint active;
-    QofBook *book;
-    KvpFrame *book_frame;
-    gint64 month, day;
-    GDate fy_end;
-
-    g_return_if_fail(GNC_IS_PERIOD_SELECT(period));
-    book = gnc_get_current_book();
-    book_frame = qof_book_get_slots(book);
-    month = kvp_frame_get_gint64(book_frame, "/book/fyear_end/month");
-    day = kvp_frame_get_gint64(book_frame, "/book/fyear_end/day");
-    if (g_date_valid_dmy(day, month, 2005 /* not leap year */))
-    {
-        g_date_clear(&fy_end, 1);
-        g_date_set_dmy(&fy_end, day, month, G_DATE_BAD_YEAR);
-        gnc_period_select_set_fy_end(period, &fy_end);
-    }
-
-    name = boxname + PREFIX_LEN;
-
-    g_object_set_data(G_OBJECT(period), "name", g_strdup(name) );
-
-    active = gnc_gconf_get_int(name, NULL, NULL);
-    gnc_period_select_set_active(period, active);
-    DEBUG(" Period select %s set to item %d", name, active);
-    g_signal_connect(G_OBJECT(period), "changed",
-                     G_CALLBACK(gnc_prefs_period_select_user_cb_gconf), NULL);
-}
-
-/****************************************************************************/
-
 /** The user changed a date_edit.  Update gconf.  Date_edit
  *  choices are stored as an int.
  *
@@ -1051,6 +961,30 @@ gnc_prefs_connect_entry (GtkEntry *entry)
     g_free (pref);
 }
 
+/****************************************************************************/
+
+/** Connect a GncPeriodSelect widget to its stored value in the preferences database.
+ *
+ *  @internal
+ *
+ *  @param period A pointer to the GncPeriodSelect that should be connected.
+ */
+static void
+gnc_prefs_connect_period_select (GncPeriodSelect *period, const gchar *boxname )
+{
+    gchar *group, *pref;
+    gchar *mnemonic;
+
+    g_return_if_fail(GNC_IS_PERIOD_SELECT(period));
+
+    gnc_prefs_split_widget_name (boxname, &group, &pref);
+
+    gnc_prefs_bind (group, pref, G_OBJECT (period), "active");
+
+    g_free (group);
+    g_free (pref);
+}
+
 
 
 /****************************************************************************/
@@ -1127,12 +1061,7 @@ gnc_prefs_connect_one_gconf (const gchar *name,
         DEBUG("  %s - hbox", name);
         DEBUG("Hbox widget type is %s and name is %s", gtk_widget_get_name(GTK_WIDGET(widget_child)), name);
 
-        if (GNC_IS_PERIOD_SELECT(widget_child))
-        {
-            DEBUG("  %s - period_Select", name);
-            gnc_prefs_connect_period_select_gconf(GNC_PERIOD_SELECT(widget_child), name );
-        }
-        else if (GNC_IS_DATE_EDIT(widget_child))
+        if (GNC_IS_DATE_EDIT(widget_child))
         {
             DEBUG("  %s - date_edit", name);
             gnc_prefs_connect_date_edit_gconf(GNC_DATE_EDIT(widget_child), name );
@@ -1210,6 +1139,11 @@ gnc_prefs_connect_one (const gchar *name,
             DEBUG("  %s - currency_edit", name);
             gnc_prefs_connect_currency_edit(GNC_CURRENCY_EDIT(widget_child), name );
         }
+        else if (GNC_IS_PERIOD_SELECT(widget_child))
+        {
+            DEBUG("  %s - period_Select", name);
+            gnc_prefs_connect_period_select(GNC_PERIOD_SELECT(widget_child), name );
+        }
     }
     else
     {
@@ -1245,6 +1179,11 @@ gnc_preferences_dialog_create(void)
     GtkTreeIter iter;
     gnc_commodity *locale_currency;
     const gchar *currency_name;
+    QofBook *book;
+    KvpFrame *book_frame;
+    gint64 month, day;
+    GDate fy_end;
+    gboolean date_is_valid = FALSE;
 
     ENTER("");
     DEBUG("Opening dialog-preferences.glade:");
@@ -1282,20 +1221,36 @@ gnc_preferences_dialog_create(void)
     g_object_set_data_full(G_OBJECT(dialog), PREFS_WIDGET_HASH,
                            prefs_table, (GDestroyNotify)g_hash_table_destroy);
 
+
+    book = gnc_get_current_book();
+    book_frame = qof_book_get_slots(book);
+    month = kvp_frame_get_gint64(book_frame, "/book/fyear_end/month");
+    day = kvp_frame_get_gint64(book_frame, "/book/fyear_end/day");
+    date_is_valid = g_date_valid_dmy(day, month, 2005 /* not leap year */);
+    if (date_is_valid)
+    {
+        g_date_clear(&fy_end, 1);
+        g_date_set_dmy(&fy_end, day, month, G_DATE_BAD_YEAR);
+    }
+
     box = GTK_WIDGET(gtk_builder_get_object (builder, "pref/window.pages.account_tree.summary/start_period"));
     period = gnc_period_select_new(TRUE);
     gtk_widget_show (period);
     gtk_box_pack_start (GTK_BOX (box), period, TRUE, TRUE, 0);
-
-    box = GTK_WIDGET(gtk_builder_get_object (builder, "gconf/window/pages/account_tree/summary/start_date"));
-    date = gnc_date_edit_new(gnc_time (NULL), FALSE, FALSE);
-    gtk_widget_show (date);
-    gtk_box_pack_start (GTK_BOX (box), date, TRUE, TRUE, 0);
+    if (date_is_valid)
+        gnc_period_select_set_fy_end(GNC_PERIOD_SELECT (period), &fy_end);
 
     box = GTK_WIDGET(gtk_builder_get_object (builder, "pref/window.pages.account_tree.summary/end_period"));
     period = gnc_period_select_new(FALSE);
     gtk_widget_show (period);
     gtk_box_pack_start (GTK_BOX (box), period, TRUE, TRUE, 0);
+    if (date_is_valid)
+        gnc_period_select_set_fy_end(GNC_PERIOD_SELECT (period), &fy_end);
+
+    box = GTK_WIDGET(gtk_builder_get_object (builder, "gconf/window/pages/account_tree/summary/start_date"));
+    date = gnc_date_edit_new(gnc_time (NULL), FALSE, FALSE);
+    gtk_widget_show (date);
+    gtk_box_pack_start (GTK_BOX (box), date, TRUE, TRUE, 0);
 
     box = GTK_WIDGET(gtk_builder_get_object (builder, "gconf/window/pages/account_tree/summary/end_date"));
     date = gnc_date_edit_new(gnc_time (NULL), FALSE, FALSE);
@@ -1474,13 +1429,7 @@ gnc_preferences_gconf_changed (GConfClient *client,
             DEBUG("  %s - hbox", name);
             DEBUG("Hbox gconf name is %s and widget get name is %s", name, gtk_widget_get_name(GTK_WIDGET(widget_child)));
 
-            if (GNC_IS_PERIOD_SELECT(widget_child))
-            {
-                DEBUG("widget %p - period_select", widget_child);
-                gnc_prefs_period_select_gconf_cb_gconf(GNC_PERIOD_SELECT(widget_child),
-                                                 gconf_value_get_int(entry->value));
-            }
-            else if (GNC_IS_DATE_EDIT(widget_child))
+            if (GNC_IS_DATE_EDIT(widget_child))
             {
                 DEBUG("widget %p - date_edit", widget_child);
                 gnc_prefs_date_edit_gconf_cb_gconf(GNC_DATE_EDIT(widget_child), entry);
