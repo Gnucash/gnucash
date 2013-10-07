@@ -646,9 +646,9 @@ gnc_post_file_open (const char * filename, gboolean is_readonly)
     gint32 port = 0;
 
 
-    ENTER(" ");
+    ENTER("filename %s", filename);
 RESTART:
-    if (!filename) return FALSE;
+    if (!filename || (*filename == '\0')) return FALSE;
 
     /* Convert user input into a normalized uri
      * Note that the normalized uri for internal use can have a password */
