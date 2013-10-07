@@ -1336,7 +1336,6 @@ AC_CONFIG_FILES(
   src/import-export/qif/Makefile
   src/import-export/qif/test/Makefile
   src/import-export/qif-import/gschemas/Makefile
-  src/import-export/qif-import/schemas/Makefile
   src/import-export/qif-import/test/Makefile
   src/import-export/gschemas/Makefile
   src/import-export/schemas/Makefile
@@ -1346,11 +1345,9 @@ AC_CONFIG_FILES(
   src/import-export/csv-import/gschemas/Makefile
   src/import-export/csv-export/Makefile
   src/import-export/csv-export/gschemas/Makefile
-  src/import-export/csv-export/schemas/Makefile
   src/import-export/log-replay/Makefile
   src/import-export/aqbanking/Makefile
   src/import-export/aqbanking/gschemas/Makefile
-  src/import-export/aqbanking/schemas/Makefile
   src/libqof/Makefile
   src/libqof/qof/Makefile
   src/libqof/qof/test/Makefile

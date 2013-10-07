@@ -42,13 +42,13 @@
 #include "gnc-ab-kvp.h"
 #include "gnc-gwen-gui.h"
 #include "gnc-file-aqb-import.h"
-#include "gnc-gconf-utils.h"
 #include "gnc-plugin-aqbanking.h"
 #include "gnc-plugin-manager.h"
 #include "gnc-plugin-page-account-tree.h"
 #include "gnc-plugin-page-register.h"
 #include "gnc-plugin-page-register2.h"
 #include "gnc-main-window.h"
+#include "gnc-prefs.h"
 #include "gnc-ui-util.h" // for gnc_get_current_book
 
 /* This static indicates the debugging module that this .o belongs to.  */
@@ -661,8 +661,8 @@ gnc_plugin_ab_cmd_view_logwindow(GtkToggleAction *action, GncMainWindow *window)
 static void
 gnc_plugin_ab_cmd_mt940_import(GtkAction *action, GncMainWindowActionData *data)
 {
-    gchar *format = gnc_gconf_get_string(GCONF_SECTION_AQBANKING,
-                                         KEY_FORMAT_SWIFT940, NULL);
+    gchar *format = gnc_prefs_get_string(GNC_PREFS_GROUP_AQBANKING,
+                                         GNC_PREF_FORMAT_SWIFT940);
     gnc_main_window = data->window;
     gnc_file_aqbanking_import("swift", format ? format : "swift-mt940", FALSE);
     g_free(format);
@@ -671,8 +671,8 @@ gnc_plugin_ab_cmd_mt940_import(GtkAction *action, GncMainWindowActionData *data)
 static void
 gnc_plugin_ab_cmd_mt942_import(GtkAction *action, GncMainWindowActionData *data)
 {
-    gchar *format = gnc_gconf_get_string(GCONF_SECTION_AQBANKING,
-                                         KEY_FORMAT_SWIFT942, NULL);
+    gchar *format = gnc_prefs_get_string(GNC_PREFS_GROUP_AQBANKING,
+                                         GNC_PREF_FORMAT_SWIFT942);
     gnc_main_window = data->window;
     gnc_file_aqbanking_import("swift", format ? format : "swift-mt942", FALSE);
     g_free(format);
@@ -681,8 +681,8 @@ gnc_plugin_ab_cmd_mt942_import(GtkAction *action, GncMainWindowActionData *data)
 static void
 gnc_plugin_ab_cmd_dtaus_import(GtkAction *action, GncMainWindowActionData *data)
 {
-    gchar *format = gnc_gconf_get_string(GCONF_SECTION_AQBANKING,
-                                         KEY_FORMAT_DTAUS, NULL);
+    gchar *format = gnc_prefs_get_string(GNC_PREFS_GROUP_AQBANKING,
+                                         GNC_PREF_FORMAT_DTAUS);
     gnc_main_window = data->window;
     gnc_file_aqbanking_import("dtaus", format ? format : "default", FALSE);
     g_free(format);
@@ -692,8 +692,8 @@ static void
 gnc_plugin_ab_cmd_dtaus_importsend(GtkAction *action,
                                    GncMainWindowActionData *data)
 {
-    gchar *format = gnc_gconf_get_string(GCONF_SECTION_AQBANKING,
-                                         KEY_FORMAT_DTAUS, NULL);
+    gchar *format = gnc_prefs_get_string(GNC_PREFS_GROUP_AQBANKING,
+                                         GNC_PREF_FORMAT_DTAUS);
     gnc_main_window = data->window;
     gnc_file_aqbanking_import("dtaus", format ? format : "default", TRUE);
     g_free(format);
