@@ -77,6 +77,7 @@
 #include "gnc-gobject-utils.h"
 #include "gnc-gui-query.h"
 #include "gnc-icons.h"
+#include "gnc-prefs.h"
 #include "gnc-split-reg2.h"
 #include "gnc-ui-util.h"
 #include "gnc-window.h"
@@ -747,7 +748,7 @@ gnc_plugin_page_register2_init (GncPluginPageRegister2 *plugin_page)
 
     /* Init parent declared variables */
     parent = GNC_PLUGIN_PAGE(plugin_page);
-    use_new = gnc_gconf_get_bool(GCONF_GENERAL_REGISTER, KEY_USE_NEW, NULL);
+    use_new = gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL_REGISTER, GNC_PREF_USE_NEW);
     g_object_set(G_OBJECT(plugin_page),
                  "page-name",      _("General Ledger2"),
                  "page-uri",       "default:",

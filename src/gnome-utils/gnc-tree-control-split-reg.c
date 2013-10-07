@@ -38,6 +38,7 @@
 #include "gnc-component-manager.h"
 #include "gnc-ui.h"
 #include "gnc-gconf-utils.h"
+#include "gnc-prefs.h"
 #include "gnc-gdate-utils.h"
 #include "dialog-utils.h"
 #include "dialog-dup-trans.h"
@@ -796,8 +797,8 @@ gnc_tree_control_split_reg_enter (GncTreeViewSplitReg *view)
 
     model = gnc_tree_view_split_reg_get_model_from_view (view);
 
-    goto_blank = gnc_gconf_get_bool (GCONF_GENERAL_REGISTER,
-                                    "enter_moves_to_end", NULL);
+    goto_blank = gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL_REGISTER,
+                                     GNC_PREF_ENTER_MOVES_TO_END);
 
     ENTER("view=%p, goto_blank = %s", view, goto_blank ? "TRUE" : "FALSE");
 
@@ -1960,7 +1961,7 @@ gnc_tree_control_split_reg_get_account_by_name (GncTreeViewSplitReg *view, const
         return NULL;
 
     /* Find the account */
-    if (gnc_gconf_get_bool (GCONF_GENERAL_REGISTER, "show_leaf_account_names", NULL))
+    if (gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL_REGISTER, GNC_PREF_SHOW_LEAF_ACCT_NAMES))
         account = gnc_account_lookup_by_name (gnc_get_current_root_account(), name);
     else
         account = gnc_account_lookup_by_full_name (gnc_get_current_root_account(), name);

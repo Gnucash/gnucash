@@ -60,6 +60,9 @@
 #include "window-reconcile2.h"
 
 #define WINDOW_RECONCILE_CM_CLASS "window-reconcile"
+#define GNC_PREF_AUTO_INTEREST_TRANSFER "auto_interest_transfer"
+#define GNC_PREF_AUTO_CC_PAYMENT        "auto_cc_payment"
+#define GNC_PREF_ALWAYS_REC_TO_TODAY    "always_reconcile_to_today"
 
 
 /** STRUCTS *********************************************************/
@@ -378,8 +381,7 @@ gnc_recn_interest_xfer_get_auto_interest_xfer_allowed (Account *account)
 {
     gboolean auto_xfer;
 
-    auto_xfer = gnc_gconf_get_bool (GCONF_RECONCILE_SECTION,
-                                   "auto_interest_transfer", NULL);
+    auto_xfer = gnc_prefs_get_bool (GNC_PREFS_GROUP_RECONCILE, GNC_PREF_AUTO_INTEREST_TRANSFER);
     return xaccAccountGetAutoInterestXfer (account, auto_xfer);
 }
 
@@ -1445,8 +1447,7 @@ gnc_get_reconcile_info (Account *account,
 
     g_date_clear(&date, 1);
 
-    always_today = gnc_gconf_get_bool (GCONF_RECONCILE_SECTION,
-                                      "always_reconcile_to_today", NULL);
+    always_today = gnc_prefs_get_bool (GNC_PREFS_GROUP_RECONCILE, GNC_PREF_ALWAYS_REC_TO_TODAY);
 
     if (!always_today &&
             xaccAccountGetReconcileLastDate (account, statement_date))
@@ -2117,8 +2118,7 @@ recnFinishCB (GtkAction *action, RecnWindow2 *recnData)
     gnc_reconcile_view_commit (GNC_RECONCILE_VIEW (recnData->credit), date);
     gnc_reconcile_view_commit (GNC_RECONCILE_VIEW (recnData->debit), date);
 
-    auto_payment = gnc_gconf_get_bool (GCONF_RECONCILE_SECTION,
-                                      "auto_cc_payment", NULL);
+    auto_payment = gnc_prefs_get_bool (GNC_PREFS_GROUP_RECONCILE, GNC_PREF_AUTO_CC_PAYMENT);
 
     account = recn_get_account (recnData);
 

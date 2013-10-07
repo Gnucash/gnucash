@@ -1891,7 +1891,7 @@ many months before the current month:</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkCheckButton" id="gconf/general/show_splash_screen">
+                  <object class="GtkCheckButton" id="pref/general/show_splash_screen">
                     <property name="label" translatable="yes">Show splash scree_n</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -1979,7 +1979,7 @@ many months before the current month:</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkCheckButton" id="gconf/general/autosave_show_explanation">
+                  <object class="GtkCheckButton" id="pref/general/autosave_show_explanation">
                     <property name="label" translatable="yes">Show auto-save confirmation _question</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -2255,7 +2255,7 @@ many months before the current month:</property>
                     <property name="can_focus">False</property>
                     <property name="left_padding">12</property>
                     <child>
-                      <object class="GtkCheckButton" id="gconf/dialogs/print_checks/print_date_format">
+                      <object class="GtkCheckButton" id="pref/dialogs.checkprinting/print_date_format">
                         <property name="label" translatable="yes">Print _date format</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
@@ -2323,7 +2323,7 @@ many months before the current month:</property>
                     <property name="can_focus">False</property>
                     <property name="left_padding">12</property>
                     <child>
-                      <object class="GtkCheckButton" id="gconf/dialogs/print_checks/blocking_chars">
+                      <object class="GtkCheckButton" id="pref/dialogs.checkprinting/blocking_chars">
                         <property name="label" translatable="yes">Print _blocking chars</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
@@ -2417,7 +2417,7 @@ many months before the current month:</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkCheckButton" id="gconf/general/register/enter_moves_to_end">
+                  <object class="GtkCheckButton" id="pref/general.register/enter_moves_to_end">
                     <property name="label" translatable="yes">'_Enter' moves to blank transaction</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -2451,7 +2451,7 @@ many months before the current month:</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkCheckButton" id="gconf/general/register/auto_raise_lists">
+                  <object class="GtkCheckButton" id="pref/general.register/auto_raise_lists">
                     <property name="label" translatable="yes">_Auto-raise lists</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -2501,7 +2501,7 @@ many months before the current month:</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkCheckButton" id="gconf/dialogs/reconcile/check_cleared">
+                  <object class="GtkCheckButton" id="pref/dialogs.reconcile/check_cleared">
                     <property name="label" translatable="yes">Check cleared _transactions</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -2522,7 +2522,7 @@ many months before the current month:</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkCheckButton" id="gconf/dialogs/reconcile/auto_interest_transfer">
+                  <object class="GtkCheckButton" id="pref/dialogs.reconcile/auto_interest_transfer">
                     <property name="label" translatable="yes">Automatic _interest transfer</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -2543,7 +2543,7 @@ many months before the current month:</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkCheckButton" id="gconf/dialogs/reconcile/auto_cc_payment">
+                  <object class="GtkCheckButton" id="pref/dialogs.reconcile/auto_cc_payment">
                     <property name="label" translatable="yes">Automatic credit card _payment</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -2564,7 +2564,7 @@ many months before the current month:</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkCheckButton" id="gconf/dialogs/reconcile/always_reconcile_to_today">
+                  <object class="GtkCheckButton" id="pref/dialogs.reconcile/always_reconcile_to_today">
                     <property name="label" translatable="yes">Always reconcile to t_oday</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -2585,7 +2585,7 @@ many months before the current month:</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkCheckButton" id="gconf/general/register/draw_vertical_lines">
+                  <object class="GtkCheckButton" id="pref/general.register/draw_vertical_lines">
                     <property name="label" translatable="yes">Draw _vertical lines between columns</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -2606,7 +2606,7 @@ many months before the current month:</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkCheckButton" id="gconf/general/register/draw_horizontal_lines">
+                  <object class="GtkCheckButton" id="pref/general.register/draw_horizontal_lines">
                     <property name="label" translatable="yes">Draw hori_zontal lines between rows</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -2627,7 +2627,7 @@ many months before the current month:</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkCheckButton" id="gconf/general/register/alternate_color_by_transaction">
+                  <object class="GtkCheckButton" id="pref/general.register/alternate_color_by_transaction">
                     <property name="label" translatable="yes">Double _mode colors alternate with transactions</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -2648,7 +2648,7 @@ many months before the current month:</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkCheckButton" id="gconf/general/register/use_theme_colors">
+                  <object class="GtkCheckButton" id="pref/general.register/use_theme_colors">
                     <property name="label" translatable="yes">_Use system theme colors</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -2685,7 +2685,7 @@ many months before the current month:</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkCheckButton" id="gconf/general/register/tab_includes_transfer_on_memorised">
+                  <object class="GtkCheckButton" id="pref/general.register/tab_includes_transfer_on_memorised">
                     <property name="label" translatable="yes">Tab order in_cludes Transfer on Memorised Transactions</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -2932,7 +2932,7 @@ many months before the current month:</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkCheckButton" id="gconf/general/register/double_line_mode">
+                  <object class="GtkCheckButton" id="pref/general.register/double_line_mode">
                     <property name="label" translatable="yes">_Double line mode</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -2953,7 +2953,7 @@ many months before the current month:</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkCheckButton" id="gconf/general/register/use_new_window">
+                  <object class="GtkCheckButton" id="pref/general.register/use_new_window">
                     <property name="label" translatable="yes">Register opens in a new _window</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -2974,7 +2974,7 @@ many months before the current month:</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkCheckButton" id="gconf/general/register/show_leaf_account_names">
+                  <object class="GtkCheckButton" id="pref/general.register/show_leaf_account_names">
                     <property name="label" translatable="yes">_Only display leaf account names</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -3040,7 +3040,7 @@ many months before the current month:</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkCheckButton" id="gconf/general/register/show_extra_dates">
+                  <object class="GtkCheckButton" id="pref/general.register/show_extra_dates">
                     <property name="label" translatable="yes">Show the _entered and reconcile dates</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -3060,7 +3060,7 @@ many months before the current month:</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkCheckButton" id="gconf/general/register/show_calendar_buttons">
+                  <object class="GtkCheckButton" id="pref/general.register/show_calendar_buttons">
                     <property name="label" translatable="yes">Show the calendar b_uttons</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -3080,7 +3080,7 @@ many months before the current month:</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkCheckButton" id="gconf/general/register/selection_to_blank_on_expand">
+                  <object class="GtkCheckButton" id="pref/general.register/selection_to_blank_on_expand">
                     <property name="label" translatable="yes">_Move the selection to the blank split on expand</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -3100,7 +3100,7 @@ many months before the current month:</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkCheckButton" id="gconf/general/register/show_extra_dates_on_selection">
+                  <object class="GtkCheckButton" id="pref/general.register/show_extra_dates_on_selection">
                     <property name="label" translatable="yes">_Show entered and reconciled dates on selection</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>

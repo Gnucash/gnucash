@@ -76,7 +76,7 @@ static void gnc_tree_view_split_reg_finalize (GObject *object);
 
 static guint gnc_tree_view_split_reg_signals[LAST_SIGNAL] = {0};
 
-static void gnc_tree_view_split_reg_gconf_changed (GConfEntry *entry, gpointer user_data);
+static void gnc_tree_view_split_reg_pref_changed (gpointer prefs, gchar *pref, gpointer user_data);
 
 static void gtv_sr_cdf0 (GtkTreeViewColumn *col, GtkCellRenderer *renderer, GtkTreeModel *s_model,
 				GtkTreeIter *s_iter, gpointer user_data);
@@ -290,6 +290,12 @@ struct GncTreeViewSplitRegPrivate
 #define YELLOWCELL "#FFEF98"
 #define ORANGECELL "#F39536"
 
+
+#define GNC_PREF_SHOW_EXTRA_DATES        "show_extra_dates"
+#define GNC_PREF_SHOW_EXTRA_DATES_ON_SEL "show_extra_dates_on_selection"
+#define GNC_PREF_SHOW_CAL_BUTTONS        "show_calendar_buttons"
+#define GNC_PREF_SEL_TO_BLANK_ON_EXPAND  "selection_to_blank_on_expand"
+
 /* This could be a preference setting, show currency / commodity symbols */
 #define SHOW_SYMBOL FALSE
 
@@ -468,26 +474,28 @@ gnc_tree_view_split_reg_init (GncTreeViewSplitReg *view)
     view->priv->transfer_string = g_strdup ("Dummy");
     view->priv->stop_cell_move = FALSE;
 
-    view->priv->show_calendar_buttons = gnc_gconf_get_bool (GCONF_GENERAL_REGISTER, "show_calendar_buttons", NULL);
-    view->show_extra_dates = gnc_gconf_get_bool (GCONF_GENERAL_REGISTER, "show_extra_dates", NULL);
-    view->priv->show_extra_dates_on_selection = gnc_gconf_get_bool (GCONF_GENERAL_REGISTER, "show_extra_dates_on_selection", NULL);
-    view->priv->selection_to_blank_on_expand = gnc_gconf_get_bool (GCONF_GENERAL_REGISTER, "selection_to_blank_on_expand", NULL);
+    view->priv->show_calendar_buttons = gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL_REGISTER, GNC_PREF_SHOW_CAL_BUTTONS);
+    view->show_extra_dates = gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL_REGISTER, GNC_PREF_SHOW_EXTRA_DATES);
+    view->priv->show_extra_dates_on_selection = gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL_REGISTER, GNC_PREF_SHOW_EXTRA_DATES_ON_SEL);
+    view->priv->selection_to_blank_on_expand = gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL_REGISTER, GNC_PREF_SEL_TO_BLANK_ON_EXPAND);
     view->priv->key_length = gnc_gconf_get_float(GCONF_GENERAL_REGISTER, "key_length", NULL);
 
-    view->priv->acct_short_names = gnc_gconf_get_bool (GCONF_GENERAL_REGISTER, "show_leaf_account_names", NULL);
+    view->priv->acct_short_names = gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL_REGISTER, GNC_PREF_SHOW_LEAF_ACCT_NAMES);
     view->priv->negative_in_red = gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_NEGATIVE_IN_RED);
-    view->priv->use_horizontal_lines = gnc_gconf_get_bool (GCONF_GENERAL_REGISTER,
-                                  "draw_horizontal_lines", NULL);
+    view->priv->use_horizontal_lines = gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL_REGISTER,
+                                                           GNC_PREF_DRAW_HOR_LINES);
 
-    view->priv->use_vertical_lines = gnc_gconf_get_bool (GCONF_GENERAL_REGISTER,
-                                "draw_vertical_lines", NULL);
+    view->priv->use_vertical_lines = gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL_REGISTER,
+                                                         GNC_PREF_DRAW_VERT_LINES);
 
-    gnc_gconf_general_register_cb ("draw_horizontal_lines",
-                                  gnc_tree_view_split_reg_gconf_changed,
-                                  view);
-    gnc_gconf_general_register_cb ("draw_vertical_lines",
-                                  gnc_tree_view_split_reg_gconf_changed,
-                                  view);
+    gnc_prefs_register_cb (GNC_PREFS_GROUP_GENERAL_REGISTER,
+                           GNC_PREF_DRAW_HOR_LINES,
+                           gnc_tree_view_split_reg_pref_changed,
+                           view);
+    gnc_prefs_register_cb (GNC_PREFS_GROUP_GENERAL_REGISTER,
+                           GNC_PREF_DRAW_VERT_LINES,
+                           gnc_tree_view_split_reg_pref_changed,
+                           view);
 }
 
 
@@ -522,12 +530,14 @@ gnc_tree_view_split_reg_dispose (GObject *object)
     if (view->priv->transfer_string)
         g_free (view->priv->transfer_string);
 
-    gnc_gconf_general_remove_cb ("draw_horizontal_lines",
-                                gnc_tree_view_split_reg_gconf_changed,
-                                view);
-    gnc_gconf_general_remove_cb ("draw_vertical_lines",
-                                gnc_tree_view_split_reg_gconf_changed,
-                                view);
+    gnc_prefs_remove_cb_by_func (GNC_PREFS_GROUP_GENERAL_REGISTER,
+                                 GNC_PREF_DRAW_HOR_LINES,
+                                 gnc_tree_view_split_reg_pref_changed,
+                                 view);
+    gnc_prefs_remove_cb_by_func (GNC_PREFS_GROUP_GENERAL_REGISTER,
+                                 GNC_PREF_DRAW_VERT_LINES,
+                                 gnc_tree_view_split_reg_pref_changed,
+                                 view);
 
     if (G_OBJECT_CLASS (parent_class)->dispose)
         (* G_OBJECT_CLASS (parent_class)->dispose) (object);
@@ -563,13 +573,13 @@ gnc_tree_view_split_reg_refresh_from_gconf (GncTreeViewSplitReg *view)
 
     model = gnc_tree_view_split_reg_get_model_from_view (view);
 
-    model->use_theme_colors = gnc_gconf_get_bool(GCONF_GENERAL_REGISTER,
-                              "use_theme_colors", NULL);
+    model->use_theme_colors = gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL_REGISTER,
+                                                 GNC_PREF_USE_THEME_COLORS);
     model->use_accounting_labels = gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL,
                                                        GNC_PREF_ACCOUNTING_LABELS);
 
-    model->alt_colors_by_txn = gnc_gconf_get_bool (GCONF_GENERAL_REGISTER,
-                               "alternate_color_by_transaction", NULL);
+    model->alt_colors_by_txn = gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL_REGISTER,
+                                                   GNC_PREF_ALT_COLOR_BY_TRANS);
 
     view->priv->negative_in_red = gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL,
                                                       GNC_PREF_NEGATIVE_IN_RED);
@@ -577,22 +587,22 @@ gnc_tree_view_split_reg_refresh_from_gconf (GncTreeViewSplitReg *view)
 
 
 static void
-gnc_tree_view_split_reg_gconf_changed (GConfEntry *entry, gpointer user_data)
+gnc_tree_view_split_reg_pref_changed (gpointer prefs, gchar *pref, gpointer user_data)
 {
     GncTreeViewSplitReg *view = user_data;
 
-    g_return_if_fail (entry && entry->key);
+    g_return_if_fail (pref);
 
     if (view == NULL)
         return;
 
-    if (g_str_has_suffix (entry->key, "draw_horizontal_lines") || g_str_has_suffix (entry->key, "draw_vertical_lines"))
+    if (g_str_has_suffix (pref, GNC_PREF_DRAW_HOR_LINES) || g_str_has_suffix (pref, GNC_PREF_DRAW_VERT_LINES))
     {
-        view->priv->use_horizontal_lines = gnc_gconf_get_bool (GCONF_GENERAL_REGISTER,
-                                  "draw_horizontal_lines", NULL);
+        view->priv->use_horizontal_lines = gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL_REGISTER,
+                                                               GNC_PREF_DRAW_HOR_LINES);
 
-        view->priv->use_vertical_lines = gnc_gconf_get_bool (GCONF_GENERAL_REGISTER,
-                                "draw_vertical_lines", NULL);
+        view->priv->use_vertical_lines = gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL_REGISTER,
+                                                             GNC_PREF_DRAW_VERT_LINES);
 
         if (view->priv->use_horizontal_lines)
         {
@@ -608,7 +618,7 @@ gnc_tree_view_split_reg_gconf_changed (GConfEntry *entry, gpointer user_data)
     }
     else
     {
-        g_warning("gnc_tree_view_split_reg_gconf_changed: Unknown gconf key %s", entry->key);
+        g_warning("gnc_tree_view_split_reg_pref_changed: Unknown preference %s", pref);
     }
 }
 
@@ -4007,8 +4017,8 @@ gtv_sr_key_press_cb (GtkWidget *widget, GdkEventKey *event, gpointer user_data)
         if (!spath)
             return TRUE;
 
-        goto_blank = gnc_gconf_get_bool (GCONF_GENERAL_REGISTER,
-                                    "enter_moves_to_end", NULL);
+        goto_blank = gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL_REGISTER,
+                                         GNC_PREF_ENTER_MOVES_TO_END);
 
         model = gnc_tree_view_split_reg_get_model_from_view (view);
         btrans = gnc_tree_model_split_get_blank_trans (model);
@@ -5536,8 +5546,8 @@ gtv_sr_ed_key_press_cb (GtkWidget *widget, GdkEventKey *event, gpointer user_dat
             return TRUE;
         }
 
-        goto_blank = gnc_gconf_get_bool (GCONF_GENERAL_REGISTER,
-                                    "enter_moves_to_end", NULL);
+        goto_blank = gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL_REGISTER,
+                                         GNC_PREF_ENTER_MOVES_TO_END);
 
         model = gnc_tree_view_split_reg_get_model_from_view (view);
         btrans = gnc_tree_model_split_get_blank_trans (model);

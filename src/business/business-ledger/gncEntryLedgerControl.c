@@ -33,13 +33,13 @@
 #include "dialog-account.h"
 #include "dialog-utils.h"
 #include "gnc-component-manager.h"
+#include "gnc-prefs.h"
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"
 #include "gnc-gui-query.h"
 #include "table-allgui.h"
 #include "pricecell.h"
 #include "dialog-tax-table.h"
-#include "gnc-gconf-utils.h"
 #include "register/register-core/checkboxcell.h"
 
 #include "gncEntryLedgerP.h"
@@ -620,8 +620,8 @@ gnc_entry_ledger_auto_completion (GncEntryLedger *ledger,
     gnc_resume_gui_refresh ();
 
     /* now move to the non-empty amount column unless config setting says not */
-    if ( !gnc_gconf_get_bool(GCONF_GENERAL_REGISTER,
-                             "tab_includes_transfer_on_memorised", NULL) )
+    if ( !gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL_REGISTER,
+                             GNC_PREF_TAB_TRANS_MEMORISED) )
     {
         VirtualLocation new_virt_loc;
         const char *cell_name = ENTRY_QTY_CELL;

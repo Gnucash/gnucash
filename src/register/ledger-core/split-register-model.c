@@ -28,7 +28,6 @@
 #include "datecell.h"
 #include "dialog-utils.h"
 #include "gnc-engine.h"
-#include "gnc-gconf-utils.h"
 #include "gnc-prefs.h"
 #include "gnc-ui.h"
 #include "pricecell.h"
@@ -596,9 +595,8 @@ gnc_split_register_get_bg_color (VirtualLocation virt_loc,
             g_strcmp0 (cursor_name, CURSOR_DOUBLE_LEDGER) == 0 ||
             g_strcmp0 (cursor_name, CURSOR_DOUBLE_LEDGER_NUM_ACTN) == 0)
     {
-        double_alternate_virt = gnc_gconf_get_bool(GCONF_GENERAL_REGISTER,
-                                "alternate_color_by_transaction",
-                                NULL);
+        double_alternate_virt = gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL_REGISTER,
+                                                    GNC_PREF_ALT_COLOR_BY_TRANS);
         if (is_current)
         {
             if (double_alternate_virt)
@@ -681,9 +679,8 @@ gnc_split_register_get_gtkrc_bg_color (VirtualLocation virt_loc,
             g_strcmp0 (cursor_name, CURSOR_DOUBLE_LEDGER) == 0 ||
             g_strcmp0 (cursor_name, CURSOR_DOUBLE_LEDGER_NUM_ACTN) == 0)
     {
-        double_alternate_virt = gnc_gconf_get_bool(GCONF_GENERAL_REGISTER,
-                                "alternate_color_by_transaction",
-                                NULL);
+        double_alternate_virt = gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL_REGISTER,
+                                                    GNC_PREF_ALT_COLOR_BY_TRANS);
         if (is_current)
         {
             if (double_alternate_virt)

@@ -38,7 +38,7 @@
 #include "gnucash-sheetP.h"
 
 #include "dialog-utils.h"
-#include "gnc-gconf-utils.h"
+#include "gnc-prefs.h"
 #include "gnucash-color.h"
 #include "gnucash-grid.h"
 #include "gnucash-cursor.h"
@@ -1557,21 +1557,21 @@ gnucash_register_paste_clipboard (GnucashRegister *reg)
 }
 
 static void
-gnucash_sheet_refresh_from_gconf (GnucashSheet *sheet)
+gnucash_sheet_refresh_from_prefs (GnucashSheet *sheet)
 {
     g_return_if_fail(sheet != NULL);
     g_return_if_fail(GNUCASH_IS_SHEET(sheet));
 
-    sheet->use_theme_colors = gnc_gconf_get_bool(GCONF_GENERAL_REGISTER,
-                              "use_theme_colors", NULL);
-    sheet->use_horizontal_lines = gnc_gconf_get_bool(GCONF_GENERAL_REGISTER,
-                                  "draw_horizontal_lines", NULL);
-    sheet->use_vertical_lines = gnc_gconf_get_bool(GCONF_GENERAL_REGISTER,
-                                "draw_vertical_lines", NULL);
+    sheet->use_theme_colors = gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL_REGISTER,
+                                                 GNC_PREF_USE_THEME_COLORS);
+    sheet->use_horizontal_lines = gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL_REGISTER,
+                                                     GNC_PREF_DRAW_HOR_LINES);
+    sheet->use_vertical_lines = gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL_REGISTER,
+                                                   GNC_PREF_DRAW_VERT_LINES);
 }
 
 void
-gnucash_register_refresh_from_gconf (GnucashRegister *reg)
+gnucash_register_refresh_from_prefs (GnucashRegister *reg)
 {
     GnucashSheet *sheet;
 
@@ -1579,7 +1579,7 @@ gnucash_register_refresh_from_gconf (GnucashRegister *reg)
     g_return_if_fail(GNUCASH_IS_REGISTER(reg));
 
     sheet = GNUCASH_SHEET(reg->sheet);
-    gnucash_sheet_refresh_from_gconf(sheet);
+    gnucash_sheet_refresh_from_prefs(sheet);
 }
 
 static gboolean
@@ -2857,7 +2857,7 @@ gnucash_sheet_new (Table *table)
                            G_CALLBACK(gnucash_sheet_realize_entry),
                            sheet->entry);
 
-    gnucash_sheet_refresh_from_gconf(sheet);
+    gnucash_sheet_refresh_from_prefs(sheet);
     gnucash_sheet_create_color_hack(sheet);
 
     return GTK_WIDGET(sheet);

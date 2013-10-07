@@ -43,7 +43,7 @@
 #include "gnc-date-edit.h"
 #include "gnc-engine.h"
 #include "gnc-euro.h"
-#include "gnc-gconf-utils.h"
+#include "gnc-prefs.h"
 #include "gnc-gui-query.h"
 #include "gnc-ledger-display.h"
 #include "gnc-pricedb.h"
@@ -1800,8 +1800,8 @@ gnc_split_reg_enter( GNCSplitReg *gsr, gboolean next_transaction )
 
     ENTER("gsr=%p, next_transaction=%s", gsr, next_transaction ? "TRUE" : "FALSE");
 
-    goto_blank = gnc_gconf_get_bool(GCONF_GENERAL_REGISTER,
-                                    "enter_moves_to_end", NULL);
+    goto_blank = gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL_REGISTER,
+                                    GNC_PREF_ENTER_MOVES_TO_END);
 
     /* If we are in single or double line mode and we hit enter
      * on the blank split, go to the blank split instead of the

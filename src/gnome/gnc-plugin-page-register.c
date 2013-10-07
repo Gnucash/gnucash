@@ -67,6 +67,7 @@
 #include "gnc-gui-query.h"
 #include "gnc-icons.h"
 #include "gnc-split-reg.h"
+#include "gnc-prefs.h"
 #include "gnc-ui-util.h"
 #include "gnc-window.h"
 #include "gnc-main-window.h"
@@ -725,7 +726,7 @@ gnc_plugin_page_register_init (GncPluginPageRegister *plugin_page)
 
     /* Init parent declared variables */
     parent = GNC_PLUGIN_PAGE(plugin_page);
-    use_new = gnc_gconf_get_bool(GCONF_GENERAL_REGISTER, KEY_USE_NEW, NULL);
+    use_new = gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL_REGISTER, GNC_PREF_USE_NEW);
     g_object_set(G_OBJECT(plugin_page),
                  "page-name",      _("General Ledger"),
                  "page-uri",       "default:",
@@ -3784,7 +3785,7 @@ gnc_plugin_page_register_refresh_cb (GHashTable *changes, gpointer user_data)
     else
     {
         /* forced updates */
-        gnucash_register_refresh_from_gconf(priv->gsr->reg);
+        gnucash_register_refresh_from_prefs(priv->gsr->reg);
         gtk_widget_queue_draw(priv->widget);
     }
 

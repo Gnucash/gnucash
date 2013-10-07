@@ -975,6 +975,6 @@ gnc_plugin_page_invoice_refresh_cb (GHashTable *changes, gpointer user_data)
 
     priv = GNC_PLUGIN_PAGE_INVOICE_GET_PRIVATE(page);
     reg = gnc_invoice_get_register(priv->iw);
-    gnucash_register_refresh_from_gconf(GNUCASH_REGISTER(reg));
+    gnucash_register_refresh_from_prefs(GNUCASH_REGISTER(reg));
     gtk_widget_queue_draw(priv->widget);
 }

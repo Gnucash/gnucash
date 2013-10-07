@@ -33,10 +33,12 @@
 #include "qof.h"
 #include "Transaction.h"
 #include "gnc-ui-util.h"
-#include "gnc-gconf-utils.h"
+#include "gnc-prefs.h"
 #include "reconcile-view.h"
 #include "search-param.h"
 #include "gnc-component-manager.h"
+
+#define GNC_PREF_CHECK_CLEARED "check_cleared"
 
 /* Signal codes */
 enum
@@ -194,8 +196,7 @@ gnc_reconcile_view_new (Account *account, GNCReconcileViewType type,
     gnc_reconcile_view_construct (view, query);
 
     /* find the list of splits to auto-reconcile */
-    auto_check = gnc_gconf_get_bool (GCONF_RECONCILE_SECTION,
-                                    "check_cleared", NULL);
+    auto_check = gnc_prefs_get_bool (GNC_PREFS_GROUP_RECONCILE, GNC_PREF_CHECK_CLEARED);
 
     if (auto_check)
     {

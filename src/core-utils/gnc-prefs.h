@@ -76,6 +76,13 @@
 #define GNC_PREF_DATE_COMPLETION     "date_completion"
 #define GNC_PREF_DATE_BACKMONTHS     "date_backmonths"
 #define GNC_PREF_SHOW_LEAF_ACCT_NAMES "show_leaf_account_names"
+#define GNC_PREF_ENTER_MOVES_TO_END  "enter_moves_to_end"
+/* Register preferences */
+#define GNC_PREF_DRAW_HOR_LINES      "draw_horizontal_lines"
+#define GNC_PREF_DRAW_VERT_LINES     "draw_vertical_lines"
+#define GNC_PREF_ALT_COLOR_BY_TRANS  "alternate_color_by_transaction"
+#define GNC_PREF_USE_THEME_COLORS    "use_theme_colors"
+#define GNC_PREF_TAB_TRANS_MEMORISED "tab_includes_transfer_on_memorised"
 
 /** @name Early bird functions, needed before any backend has been set up
  @{

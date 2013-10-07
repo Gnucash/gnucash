@@ -96,7 +96,7 @@ gchar *gnc_get_account_name_for_register(const Account *account);
  * base_account.
  * @a name is either considered to be the name of the leaf in the account tree
  * or to be the full account path, depending on the configuration parameter
- * general/register/show_leaf_account_names.
+ * general.register/show_leaf_account_names.
  *
  * @param base_account The account to start the search at.
  * @param name The name to search for.

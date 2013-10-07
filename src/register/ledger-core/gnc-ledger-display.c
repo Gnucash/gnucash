@@ -36,6 +36,7 @@
 #include "gnc-event.h"
 #include "gnc-gconf-utils.h"
 #include "gnc-ledger-display.h"
+#include "gnc-prefs.h"
 #include "gnc-ui-util.h"
 #include "split-register-control.h"
 #include "split-register-model.h"
@@ -45,6 +46,8 @@
 #define REGISTER_SUBACCOUNT_CM_CLASS "register-subaccount"
 #define REGISTER_GL_CM_CLASS         "register-gl"
 #define REGISTER_TEMPLATE_CM_CLASS   "register-template"
+
+#define GNC_PREF_DOUBLE_LINE_MODE "double_line_mode"
 
 
 struct gnc_ledger_display
@@ -348,7 +351,7 @@ gboolean
 gnc_ledger_display_default_double_line (GNCLedgerDisplay *gld)
 {
     return (gld->use_double_line_default ||
-            gnc_gconf_get_bool(GCONF_GENERAL_REGISTER, "double_line_mode", NULL));
+            gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL_REGISTER, GNC_PREF_DOUBLE_LINE_MODE));
 }
 
 /* Opens up a register window to display a single account */

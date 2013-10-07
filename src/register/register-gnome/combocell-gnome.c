@@ -40,14 +40,14 @@
 
 #include "QuickFill.h"
 #include "combocell.h"
-#include "gnc-gconf-utils.h"
+#include "gnc-prefs.h"
 #include "gnucash-item-edit.h"
 #include "gnucash-item-list.h"
 #include "gnucash-sheet.h"
 #include "gnucash-sheetP.h"
 #include "table-allgui.h"
 
-#define KEY_AUTO_RAISE_LISTS	"auto_raise_lists"
+#define GNC_PREF_AUTO_RAISE_LISTS "auto_raise_lists"
 
 typedef struct _PopBox
 {
@@ -90,24 +90,22 @@ static gboolean auto_pop_combos = FALSE;
 
 
 static void
-gnc_combo_cell_set_autopop (GConfEntry *entry, gpointer user_data)
+gnc_combo_cell_set_autopop (gpointer prefs, gchar *pref, gpointer user_data)
 {
-    GConfValue *value;
-
-    value = gconf_entry_get_value(entry);
-    auto_pop_combos = gconf_value_get_bool(value);
+    auto_pop_combos = gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL_REGISTER,
+                                          GNC_PREF_AUTO_RAISE_LISTS);
 }
 
 static gpointer
 gnc_combo_cell_autopop_init (gpointer unused)
 {
-    auto_pop_combos = gnc_gconf_get_bool (GCONF_GENERAL_REGISTER,
-                                          KEY_AUTO_RAISE_LISTS,
-                                          NULL);
+    auto_pop_combos = gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL_REGISTER,
+                                          GNC_PREF_AUTO_RAISE_LISTS);
 
-    gnc_gconf_general_register_cb(KEY_AUTO_RAISE_LISTS,
-                                  gnc_combo_cell_set_autopop,
-                                  NULL);
+    gnc_prefs_register_cb (GNC_PREFS_GROUP_GENERAL_REGISTER,
+                           GNC_PREF_AUTO_RAISE_LISTS,
+                           gnc_combo_cell_set_autopop,
+                           NULL);
     return NULL;
 }
 

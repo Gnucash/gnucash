@@ -82,9 +82,9 @@ G_GNUC_UNUSED static QofLogModule log_module = "gnc.printing.checks";
 #define KEY_CUSTOM_TRANSLATION "custom_translation"
 #define KEY_CUSTOM_ROTATION    "custom_rotation"
 #define KEY_CUSTOM_UNITS       "custom_units"
-#define KEY_PRINT_DATE_FMT     "print_date_format"
+#define GNC_PREF_PRINT_DATE_FMT     "print_date_format"
 #define GNC_PREF_DEFAULT_FONT       "default_font"
-#define KEY_BLOCKING_CHARS     "blocking_chars"
+#define GNC_PREF_BLOCKING_CHARS     "blocking_chars"
 #define KEY_SPLITS_AMOUNT      "splits_amount"
 #define KEY_SPLITS_MEMO        "splits_memo"
 #define KEY_SPLITS_ACCOUNT     "splits_account"
@@ -848,7 +848,7 @@ pcd_save_custom_data(PrintCheckDialog *pcd, const gchar *title)
 
     if (gnc_key_file_save_to_file(pathname, key_file, &error))
     {
-        if (!gnc_gconf_get_bool(GCONF_SECTION, KEY_PRINT_DATE_FMT, NULL))
+        if (!gnc_prefs_get_bool(GNC_PREFS_GROUP, GNC_PREF_PRINT_DATE_FMT))
             /* Reload the format combo box and reselect the "custom" entry */
             initialize_format_combobox(pcd);
 
@@ -1143,7 +1143,6 @@ format_read_item_placement(const gchar *file,
                         && (error->code == G_KEY_FILE_ERROR_KEY_NOT_FOUND)))
                     g_warning("Check file %s, group %s, key %s, error: %s",
                               file, KF_GROUP_ITEMS, key, error->message);
-                //data->print_date_format = gnc_gconf_get_bool(GCONF_SECTION, KEY_PRINT_DATE_FMT, NULL);
                 data->print_date_format = format->print_date_format;
                 g_clear_error(&error);
             }
@@ -1315,7 +1314,7 @@ format_read_general_info(const gchar *file,
                 && (error->code == G_KEY_FILE_ERROR_KEY_NOT_FOUND)))
             g_warning("Check file %s, group %s, key %s, error: %s",
                       file, KF_GROUP_TOP, KF_KEY_BLOCKING, error->message);
-        if ( gnc_gconf_get_bool(GCONF_SECTION, KEY_BLOCKING_CHARS, NULL) )
+        if ( gnc_prefs_get_bool(GNC_PREFS_GROUP, GNC_PREF_BLOCKING_CHARS) )
         {
             format->blocking = TRUE;
         }
@@ -1340,7 +1339,7 @@ format_read_general_info(const gchar *file,
                 && (error->code == G_KEY_FILE_ERROR_KEY_NOT_FOUND)))
             g_warning("Check file %s, group %s, key %s, error: %s",
                       file, KF_GROUP_TOP, KF_KEY_DATE_FORMAT, error->message);
-        if ( gnc_gconf_get_bool(GCONF_SECTION, KEY_PRINT_DATE_FMT, NULL) )
+        if ( gnc_prefs_get_bool(GNC_PREFS_GROUP, GNC_PREF_PRINT_DATE_FMT) )
         {
             format->print_date_format = TRUE;
         }

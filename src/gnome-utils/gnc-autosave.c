@@ -32,10 +32,11 @@
 #include "gnc-file.h"
 #include "gnc-window.h"
 #include "gnc-gconf-utils.h"
+#include "gnc-prefs.h"
 #include "gnc-main-window.h"
 #include "gnc-gui-query.h"
 
-#define KEY_AUTOSAVE_SHOW_EXPLANATION "autosave_show_explanation"
+#define GNC_PREF_AUTOSAVE_SHOW_EXPLANATION "autosave_show_explanation"
 #define KEY_AUTOSAVE_INTERVAL "autosave_interval_minutes"
 #define AUTOSAVE_SOURCE_ID "autosave_source_id"
 
@@ -150,7 +151,7 @@ static gboolean autosave_confirm(GtkWidget *toplevel)
     };
 
     /* Should we show this explanation again? */
-    gnc_gconf_set_bool(GCONF_GENERAL, KEY_AUTOSAVE_SHOW_EXPLANATION, show_expl_again, NULL);
+    gnc_prefs_set_bool(GNC_PREFS_GROUP_GENERAL, GNC_PREF_AUTOSAVE_SHOW_EXPLANATION, show_expl_again);
     g_debug("autosave_timeout_cb: Show explanation again=%s\n",
             (show_expl_again ? "TRUE" : "FALSE"));
 
@@ -184,9 +185,9 @@ static gboolean autosave_timeout_cb(gpointer user_data)
     /* Store the current toplevel window for later use. */
     toplevel = gnc_ui_get_toplevel();
 
-    /* Lookup gconf key to show an explanatory dialog, if wanted. */
+    /* Lookup preference to show an explanatory dialog, if wanted. */
     show_explanation =
-        gnc_gconf_get_bool(GCONF_GENERAL, KEY_AUTOSAVE_SHOW_EXPLANATION, NULL);
+        gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL, GNC_PREF_AUTOSAVE_SHOW_EXPLANATION);
     if (show_explanation)
     {
         save_now = autosave_confirm(toplevel);

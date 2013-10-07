@@ -519,8 +519,8 @@ gnc_tree_model_split_reg_new (SplitRegisterType2 reg_type, SplitRegisterStyle2 s
 
     /* Setup some config entries */
     model->use_accounting_labels = gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_ACCOUNTING_LABELS);
-    model->use_theme_colors = gnc_gconf_get_bool (GCONF_GENERAL_REGISTER, "use_theme_colors", NULL);
-    model->alt_colors_by_txn = gnc_gconf_get_bool (GCONF_GENERAL_REGISTER, "alternate_color_by_transaction", NULL);
+    model->use_theme_colors = gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL_REGISTER, GNC_PREF_USE_THEME_COLORS);
+    model->alt_colors_by_txn = gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL_REGISTER, GNC_PREF_ALT_COLOR_BY_TRANS);
     model->read_only = FALSE;
 
     /* Create the ListStores for the auto completion / combo's */
@@ -3124,7 +3124,7 @@ gnc_tree_model_split_reg_update_account_list (GncTreeModelSplitReg *model)
     // Copy the accts, put it in full name order. 
     accts_cpy = g_list_copy (accts);
 
-    if (gnc_gconf_get_bool (GCONF_GENERAL_REGISTER, "show_leaf_account_names", NULL))
+    if (gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL_REGISTER, GNC_PREF_SHOW_LEAF_ACCT_NAMES))
         accts_cpy = g_list_sort (accts_cpy, (GCompareFunc)gtm_sr_account_order_by_name);
     else
         accts_cpy = g_list_sort (accts_cpy, (GCompareFunc)gtm_sr_account_order_by_full_name);

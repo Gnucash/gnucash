@@ -28,7 +28,7 @@
 #include "Scrub.h"
 #include "combocell.h"
 #include "gnc-component-manager.h"
-#include "gnc-gconf-utils.h"
+#include "gnc-prefs.h"
 #include "gnc-ui.h"
 #include "pricecell.h"
 #include "datecell.h"
@@ -923,8 +923,8 @@ gnc_split_register_auto_completion (SplitRegister *reg,
         gnc_resume_gui_refresh ();
 
         /* now move to the non-empty amount column unless config setting says not */
-        if ( !gnc_gconf_get_bool(GCONF_GENERAL_REGISTER,
-                                 "tab_includes_transfer_on_memorised", NULL) )
+        if ( !gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL_REGISTER,
+                                 GNC_PREF_TAB_TRANS_MEMORISED) )
         {
             amount = xaccSplitGetAmount (blank_split);
             cell_name = (gnc_numeric_negative_p (amount)) ? CRED_CELL : DEBT_CELL;

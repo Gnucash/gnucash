@@ -133,7 +133,7 @@ gboolean gnucash_register_has_selection (GnucashRegister *reg);
 void gnucash_register_cut_clipboard (GnucashRegister *reg);
 void gnucash_register_copy_clipboard (GnucashRegister *reg);
 void gnucash_register_paste_clipboard (GnucashRegister *reg);
-void gnucash_register_refresh_from_gconf (GnucashRegister *reg);
+void gnucash_register_refresh_from_prefs (GnucashRegister *reg);
 void gnucash_register_set_moved_cb (GnucashRegister *reg,
                                     GFunc cb, gpointer cb_data);
 
