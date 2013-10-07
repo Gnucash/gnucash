@@ -830,14 +830,10 @@
            document
            (gnc:make-html-text
             (gnc:html-markup-br)
-            ;;(gnc:option-value
-            ;; (gnc:gconf-get-string "user_info" "name"))
-	    "User Name"
+            "User Name"
             (gnc:html-markup-br)
             (string-expand
-             ;;(gnc:option-value
-	     ;; (gnc:gconf-get-string "user_info" "address"))
-	     "User Address"
+             "User Address"
              #\newline
              "<br>")
             (gnc:html-markup-br)))

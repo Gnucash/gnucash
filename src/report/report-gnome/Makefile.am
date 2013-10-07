@@ -15,7 +15,6 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/src/report/report-system \
   -I${top_srcdir}/src/libqof/qof \
   ${GUILE_INCS} \
-  ${GCONF_CFLAGS} \
   ${GTK_CFLAGS} \
   ${GLIB_CFLAGS}
 
@@ -48,7 +47,6 @@ libgncmod_report_gnome_la_LIBADD = \
   ${top_builddir}/src/report/report-system/libgncmod-report-system.la \
   ${top_builddir}/src/libqof/qof/libgnc-qof.la \
   ${GUILE_LIBS} \
-  ${GCONF_LIBS} \
   ${GLIB_LIBS}
 
 if BUILDING_FROM_SCM
