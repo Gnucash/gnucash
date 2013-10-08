@@ -10,9 +10,9 @@
 
 (define-module (migrate-prefs))
 
-(define gconf-dir (string-append (getenv "HOME") "/.gconf/apps/gnucash"))
-(define prefix-length (+ (string-length gconf-dir) 1))
-(define migration-dir (string-append (getenv "HOME") "/.gnc-migration-tmp"))
+(define gconf-dir "")
+(define prefix-length 0)
+(define migration-dir "")
 
 (define (copy-one-file filename)
 (let ((stats (stat filename))
@@ -74,7 +74,10 @@
   (apply find copy-one-file (list gconf-dir))
 )
 
-(define (migration-prepare)
+(define (migration-prepare base-dir)
+  (set! gconf-dir (string-append base-dir "/.gconf/apps/gnucash"))
+  (set! prefix-length (+ (string-length gconf-dir) 1))
+  (set! migration-dir (string-append base-dir "/.gnc-migration-tmp"))
   (if (access? gconf-dir R_OK)
     (begin
       (display "*** GnuCash switched to a new preferences system ***\n")
@@ -98,7 +101,8 @@
   (rmtree (list migration-dir))
   (rmdir migration-dir))
 
-(define (migration-cleanup)
+(define (migration-cleanup base-dir)
+  (set! migration-dir (string-append base-dir "/.gnc-migration-tmp"))
   (if (access? migration-dir (logior R_OK W_OK X_OK))
     (begin
       (format #t "Delete tmp dir ~A\n" migration-dir)

@@ -618,10 +618,9 @@ xsltprocExternalEntityLoader(const char *URL, const char *ID,
 
 void gnc_gsettings_migrate_from_gconf (void)
 {
-    gchar *pkgdatadir, *stylesheet, *input, *output;
-    gchar *migr_dir;
-    SCM migr_script;
-    SCM result;
+    gchar *pkgdatadir, *stylesheet, *input, *output, *command;
+    gchar *base_dir, *iter;
+    SCM migr_script, result;
     xsltStylesheetPtr stylesheetptr = NULL;
     xmlDocPtr inputxml, transformedxml;
     FILE *outfile;
@@ -632,16 +631,27 @@ void gnc_gsettings_migrate_from_gconf (void)
 
     if ((!g_file_test (stylesheet, G_FILE_TEST_IS_REGULAR)) ||
         (!g_file_test (input, G_FILE_TEST_IS_REGULAR)))
-   {
+    {
         /* Critical files not found, abort migration */
         g_free (stylesheet);
         g_free (input);
         return;
-   }
-    result = scm_c_eval_string ("(use-modules (migrate-prefs))(migration-prepare)");
+    }
 
-    migr_dir   = g_build_filename(g_getenv ("HOME"), ".gnc-migration-tmp", NULL);
-    output     = g_build_filename(migr_dir, "migrate-prefs-user.scm", NULL);
+    base_dir = g_strdup (g_get_home_dir ());
+    for (iter = base_dir; *iter != 0; iter++)
+    {
+        if ( *iter == '\\')
+            *iter = '/';
+    }
+
+    command = g_strconcat ("(use-modules (migrate-prefs))(migration-prepare \"",
+                             base_dir, "\")", NULL);
+    DEBUG ("command = %s", command);
+    result = scm_c_eval_string (command);
+    g_free (command);
+
+    output     = g_build_filename(base_dir, ".gnc-migration-tmp", "migrate-prefs-user.scm", NULL);
     xmlSubstituteEntitiesDefault(1);
     xmlLoadExtDtdDefaultValue = 1;
     defaultEntityLoader = xmlGetExternalEntityLoader();
@@ -665,12 +675,16 @@ void gnc_gsettings_migrate_from_gconf (void)
     xsltCleanupGlobals();
     xmlCleanupParser();
 
-    result = scm_c_eval_string ("(use-modules (migrate-prefs))(migration-cleanup)");
+    command = g_strconcat ("(use-modules (migrate-prefs))(migration-cleanup \"",
+                             base_dir, "\")", NULL);
+    DEBUG ("command = %s", command);
+    result = scm_c_eval_string (command);
+    g_free (command);
 
     g_free (pkgdatadir);
     g_free (stylesheet);
     g_free (input);
     g_free (output);
-    g_free (migr_dir);
+    g_free (base_dir);
 
 }

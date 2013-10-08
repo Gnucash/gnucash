@@ -157,7 +157,7 @@
     ; preference name
     "<xsl:value-of select="$curr-pref/gschemaname"/>"
     ; preference value
-    "<xsl:value-of select="./stringvalue"/>"
+    "<xsl:value-of select="translate(./stringvalue, $win, $mingw)"/>"
 )
    </xsl:if></xsl:when>
 
@@ -180,6 +180,9 @@
  <xsl:param name="curr-entry"/>
  <xsl:value-of select="key('datefmt-lookup', $curr-entry/stringvalue)/df:index"/>
 </xsl:template>
+
+<xsl:variable name="win" select="'\'" />
+<xsl:variable name="mingw" select="'/'" />
 
 
 <df:dateformats>
