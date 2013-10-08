@@ -565,7 +565,7 @@ xsltprocExternalEntityLoader(const char *URL, const char *ID,
     xmlParserInputPtr ret;
     warningSAXFunc warning = NULL;
         xmlChar *newURL;
-    gchar *tmpdir = g_build_filename (g_getenv ("HOME"), ".gnc-migration-tmp", NULL);
+    gchar *tmpdir = g_build_filename (g_get_home_dir (), ".gnc-migration-tmp", NULL);
 
     int i;
     const char *lastsegment = URL;
