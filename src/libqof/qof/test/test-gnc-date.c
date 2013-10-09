@@ -69,7 +69,13 @@ test_gnc_localtime (void)
                                   // difference between g_date_time and tm->tm_wday)
                      };
     guint ind;
-    gchar *msg = "gnc_localtime_r: assertion " _Q "gdt != NULL' failed";
+#ifdef __clang__
+#define _func "struct tm *gnc_localtime_r(const time64 *, struct tm *)"
+#else
+#define _func "gnc_localtime_r"
+#endif
+    gchar *msg = _func ": assertion " _Q "gdt != NULL' failed";
+#undef _func
     gint loglevel = G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL;
     gchar *logdomain = "qof";
     TestErrorStruct check = {loglevel, logdomain, msg, 0};
@@ -132,7 +138,13 @@ test_gnc_gmtime (void)
 #endif
     };
     guint ind;
-    gchar *msg = "gnc_gmtime: assertion " _Q "gdt != NULL' failed";
+#ifdef __clang__
+#define _func "struct tm *gnc_gmtime(const time64 *)"
+#else
+#define _func "gnc_gmtime"
+#endif
+    gchar *msg = _func ": assertion " _Q "gdt != NULL' failed";
+#undef _func
     gint loglevel = G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL;
     gchar *logdomain = "qof";
     TestErrorStruct check = {loglevel, logdomain, msg, 0};
@@ -1695,7 +1707,13 @@ test_gnc_timespec_to_iso8601_buff (void)
     gchar *end;
     gchar *logdomain = "qof";
     guint loglevel = G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL;
-    gchar *msg = "gnc_timespec_to_iso8601_buff: assertion " _Q "buff != NULL' failed";
+#ifdef __clang__
+#define _func "gchar *gnc_timespec_to_iso8601_buff(Timespec, char *)"
+#else
+#define _func "gnc_timespec_to_iso8601_buff"
+#endif
+    gchar *msg = _func ": assertion " _Q "buff != NULL' failed";
+#undef _func
     TestErrorStruct check = { loglevel, logdomain, msg, 0 };
     GLogFunc oldlogger = g_log_set_default_handler ((GLogFunc)test_null_handler,
 						    &check);

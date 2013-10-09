@@ -486,7 +486,13 @@ test_xaccMallocTransaction (Fixture *fixture, gconstpointer pData)
     QofBook *book = qof_book_new ();
     TestSignal sig1 = test_signal_new (NULL, QOF_EVENT_CREATE,NULL);
     Transaction *txn;
-    gchar *msg = "xaccMallocTransaction: assertion " _Q "book' failed";
+#ifdef __clang__
+#define _func "Transaction *xaccMallocTransaction(QofBook *)"
+#else
+#define _func "xaccMallocTransaction"
+#endif
+    gchar *msg = _func ": assertion " _Q "book' failed";
+#undef _func
     gchar *logdomain = "gnc.engine";
     guint loglevel = G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL;
     TestErrorStruct *check = test_error_struct_new ("gnc.engine", loglevel,
@@ -1265,7 +1271,13 @@ xaccTransGetAccountBalance (const Transaction *trans,// C: 1  Local: 0:0:0
 static void
 test_xaccTransGetAccountBalance (Fixture *fixture, gconstpointer pData)
 {
-    gchar *msg1 = "xaccTransGetAccountBalance: assertion " _Q "account && trans' failed";
+#ifdef __clang__
+#define _func "gnc_numeric xaccTransGetAccountBalance(const Transaction *, const Account *)"
+#else
+#define _func "xaccTransGetAccountBalance"
+#endif
+    gchar *msg1 = _func ": assertion " _Q "account && trans' failed";
+#undef _func
     guint loglevel = G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL;
     TestErrorStruct *check = test_error_struct_new ("gnc.engine", loglevel,
 						    msg1);

@@ -610,8 +610,15 @@ test_book_foreach_collection( Fixture *fixture, gconstpointer pData )
     G_GNUC_UNUSED QofCollection *m_col, *m_col2;
     QofIdType my_type = "my_type", my_type2 = "my_type2";
     guint param = (guint) g_test_rand_int();
-    gchar *msg1 = "qof_book_foreach_collection: assertion " _Q "book' failed";
-    gchar *msg2 = "qof_book_foreach_collection: assertion " _Q "cb' failed";
+/* GLib assertion messages which aren't filtered to make clang's output like gcc's */
+#ifdef __clang__
+#define _func "void qof_book_foreach_collection(const QofBook *, QofCollectionForeachCB, gpointer)"
+#else
+#define _func "qof_book_foreach_collection"
+#endif
+    gchar *msg1 = _func ": assertion " _Q "book' failed";
+    gchar *msg2 = _func ": assertion " _Q "cb' failed";
+#undef _func
     gchar *log_domain = "qof";
     guint loglevel = G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL, hdlr;
     TestErrorStruct check1 = { loglevel, log_domain, msg1 };
@@ -634,7 +641,7 @@ test_book_foreach_collection( Fixture *fixture, gconstpointer pData )
     qof_book_foreach_collection( NULL, mock_foreach_collection, (gpointer)(&param) );
     g_assert( !col_struct.col1_called );
     g_assert( !col_struct.col2_called );
-    g_assert_cmpstr( test_struct.msg, == , "qof_book_foreach_collection: assertion " _Q "book' failed" );
+    g_assert_cmpstr( test_struct.msg, == , msg1);
     g_free( test_struct.msg );
 
     g_test_message( "Testing when cb is null" );
@@ -642,7 +649,7 @@ test_book_foreach_collection( Fixture *fixture, gconstpointer pData )
     qof_book_foreach_collection( fixture->book, NULL, (gpointer)(&param) );
     g_assert( !col_struct.col1_called );
     g_assert( !col_struct.col2_called );
-    g_assert_cmpstr( test_struct.msg, == , "qof_book_foreach_collection: assertion " _Q "cb' failed" );
+    g_assert_cmpstr( test_struct.msg, == , msg2);
     g_free( test_struct.msg );
     g_log_remove_handler (log_domain, hdlr);
     test_clear_error_list ();

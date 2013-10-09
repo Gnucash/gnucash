@@ -194,7 +194,7 @@ void
 qof_book_print_dirty (const QofBook *book)
 {
     if (qof_book_session_not_saved(book))
-        printf("book is dirty.\n");
+        PINFO("book is dirty.");
     qof_book_foreach_collection
     (book, (QofCollectionForeachCB)qof_collection_print_dirty, NULL);
 }
@@ -209,7 +209,7 @@ void
 qof_book_set_dirty_cb(QofBook *book, QofBookDirtyCB cb, gpointer user_data)
 {
     if (book->dirty_cb)
-        g_warning("qof_book_set_dirty_cb: Already existing callback %p, will be overwritten by %p\n",
+        PWARN("Already existing callback %p, will be overwritten by %p\n",
                   book->dirty_cb, cb);
     book->dirty_data = user_data;
     book->dirty_cb = cb;
@@ -692,7 +692,7 @@ gint qof_book_get_num_days_autoreadonly (const QofBook *book)
 
     if (kvp_val == NULL)
     {
-        //g_warning("kvp_val for slot '%s' is NULL", OPTION_NAME_AUTO_READONLY_DAYS);
+        //PWARN("kvp_val for slot '%s' is NULL", OPTION_NAME_AUTO_READONLY_DAYS);
         return 0;
     }
 

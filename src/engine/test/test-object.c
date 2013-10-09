@@ -40,27 +40,16 @@ static void test_foreach (QofBook *, const char *);
 
 static QofObject bus_obj =
 {
-interface_version:
     QOF_OBJECT_VERSION,
-e_type:
     TEST_MODULE_NAME,
-type_label:
     TEST_MODULE_DESC,
-create:
     NULL,
-book_begin:
     NULL,
-book_end:
     NULL,
-is_dirty:
     NULL,
-mark_clean:
     NULL,
-foreach:
     obj_foreach,
-printable:
     printable,
-version_cmp:
     NULL,
 };
 

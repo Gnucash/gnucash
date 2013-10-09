@@ -1268,7 +1268,13 @@ test_get_corr_account_split (Fixture *fixture, gconstpointer pData)
     Account *acc1 = xaccMallocAccount (book);
     Account *acc2 = xaccMallocAccount (book);
     Account *acc3 = xaccMallocAccount (book);
-    gchar *msg = "get_corr_account_split: assertion " _Q "sa' failed";
+#ifdef __clang__
+#define _func "gboolean get_corr_account_split(const Split *, const Split **)"
+#else
+#define _func "get_corr_account_split"
+#endif
+    gchar *msg = _func ": assertion " _Q "sa' failed";
+#undef _func
     guint loglevel = G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL;
     TestErrorStruct *check = test_error_struct_new ("gnc.engine",
 						    loglevel, msg);
