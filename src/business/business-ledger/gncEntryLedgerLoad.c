@@ -44,6 +44,8 @@
 
 #define GNC_PREF_TAX_INCL "tax-included"
 
+static const QofLogModule log_module = "Business Entry Ledger";
+
 /* XXX: This should go elsewhere */
 const char * gnc_entry_ledger_type_string_getter (char flag)
 {
@@ -231,6 +233,9 @@ load_xfer_type_cells (GncEntryLedger *ledger)
         store = gnc_get_shared_account_name_list_store (root, EKEY,
                 skip_income_acct_cb, NULL);
         break;
+    default:
+	PWARN ("Bad GncEntryLedgerType");
+	break;
     }
 
     cell = (ComboCell *)

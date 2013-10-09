@@ -1217,13 +1217,8 @@ rnd (double x, unsigned places)
     double r;
     char buf[50];			/* make buffer large enough */
 
-    if (places >= 0)
-    {
-        sprintf (buf, "%.*f", (int) places, x);
-        r = strtod(buf, NULL);
-    }
-    else
-        r = x;
+    sprintf (buf, "%.*f", (int) places, x);
+    r = strtod(buf, NULL);
 
     return r;
 }				/* rnd */

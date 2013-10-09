@@ -711,7 +711,8 @@ gnc_tree_view_split_reg_get_colummn_list (GncTreeModelSplitReg *model)
     default:
         {
         static ViewCol col_list[] = {
-        COL_DATE, COL_NUMACT, COL_DESCNOTES, COL_TRANSFERVOID, COL_RECN, COL_STATUS,
+        COL_DATE, COL_NUMACT, COL_DESCNOTES, COL_TRANSFERVOID, COL_RECN,
+	COL_STATUS,
         COL_VALUE, COL_AMOUNT, COL_RATE, COL_PRICE, COL_DEBIT, COL_CREDIT,
         COL_BALANCE, -1};
         return col_list;
@@ -722,8 +723,9 @@ gnc_tree_view_split_reg_get_colummn_list (GncTreeModelSplitReg *model)
 
 /* Creates a treeview with the list of fields */
 static GncTreeViewSplitReg *
-gnc_tree_view_split_reg_set_cols (GncTreeViewSplitReg *view, GncTreeModelSplitReg *model,
-                                    const ViewCol col_list[])
+gnc_tree_view_split_reg_set_cols (GncTreeViewSplitReg *view,
+				  GncTreeModelSplitReg *model,
+				  ViewCol col_list[])
 {
     int i = 0;
 

@@ -612,7 +612,7 @@ account_to_gui (TaxInfoDialog *ti_dialog, Account *account)
     const char *str;
     TXFInfo *info;
     GList *infos;
-    guint index;
+    gint index = 0;
 
     if (!account)
     {
@@ -630,10 +630,9 @@ account_to_gui (TaxInfoDialog *ti_dialog, Account *account)
     info = txf_infos_find_code (infos, str);
     if (info)
         index = g_list_index (infos, info);
-    else
-        index = 0;
+
     if (index < 0)
-        index = 0;
+	index = 0;
 
     view = GTK_TREE_VIEW(ti_dialog->txf_category_view);
     selection = gtk_tree_view_get_selection(view);

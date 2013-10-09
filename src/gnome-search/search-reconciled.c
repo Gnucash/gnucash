@@ -145,7 +145,7 @@ gnc_search_reconciled_set_value (GNCSearchReconciled *fi, cleared_match_t value)
 }
 
 void
-gnc_search_reconciled_set_how (GNCSearchReconciled *fi, QofCharMatch how)
+gnc_search_reconciled_set_how (GNCSearchReconciled *fi, QofQueryCompare how)
 {
     g_return_if_fail (fi);
     g_return_if_fail (IS_GNCSEARCH_RECONCILED (fi));
@@ -195,7 +195,7 @@ make_menu (GNCSearchCoreType *fe)
 }
 
 static GtkWidget *
-make_toggle (GNCSearchReconciled *fi, char *label, QofCharMatch option)
+make_toggle (GNCSearchReconciled *fi, char *label, cleared_match_t option)
 {
     GtkWidget *toggle;
 
@@ -248,6 +248,7 @@ static QofQueryPredData* gncs_get_predicate (GNCSearchCoreType *fe)
     char chars[6];
     cleared_match_t value;
     int i;
+    QofCharMatch cmatch_how = QOF_CHAR_MATCH_NONE;
 
     g_return_val_if_fail (fi, NULL);
     g_return_val_if_fail (IS_GNCSEARCH_RECONCILED (fi), NULL);
@@ -269,7 +270,9 @@ static QofQueryPredData* gncs_get_predicate (GNCSearchCoreType *fe)
         chars[i++] = VREC;
     chars[i] = '\0';
 
-    return qof_query_char_predicate (fi->how, chars);
+    if (fi->how == QOF_COMPARE_EQUAL)
+	cmatch_how = QOF_CHAR_MATCH_ANY;
+    return qof_query_char_predicate (cmatch_how, chars);
 }
 
 static GNCSearchCoreType *gncs_clone(GNCSearchCoreType *fe)

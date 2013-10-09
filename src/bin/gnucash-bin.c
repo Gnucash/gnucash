@@ -408,9 +408,9 @@ set_mac_locale()
 	    if ([elements count] > 1) {
 		if ([[elements objectAtIndex: 0] isEqualToString: @"zh"]) {
 		    if ([[elements objectAtIndex: 1] isEqualToString: @"Hans"])
-			this_lang = [NSString stringWithString: @"zh_CN"];
+			this_lang = @"zh_CN";
 		    else
-			this_lang = [NSString stringWithString: @"zh_TW"];
+			this_lang = @"zh_TW";
 		}
 		else
 		  this_lang = [elements componentsJoinedByString: @"_"];

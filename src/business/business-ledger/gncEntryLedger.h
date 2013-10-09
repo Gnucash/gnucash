@@ -31,6 +31,7 @@
 
 typedef enum
 {
+    GNC_ENTRY_ORDER_NONE = -1, //Force clang to use int representation of enum.
     GNCENTRY_ORDER_ENTRY,
     GNCENTRY_ORDER_VIEWER,
     GNCENTRY_INVOICE_ENTRY,

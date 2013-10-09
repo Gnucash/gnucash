@@ -1756,7 +1756,7 @@ draw_grid(GtkPrintContext *context, gint width, gint height, const gchar *font)
     cr = gtk_print_context_get_cairo_context(context);
     cairo_save(cr);
     cairo_set_line_width(cr, 1.0);
-    cairo_set_line_cap(cr, CAIRO_LINE_JOIN_ROUND);
+    cairo_set_line_cap(cr, CAIRO_LINE_CAP_ROUND);
     cairo_set_dash(cr, dash_pattern, 2, 0);
 
     /* Draw horizontal lines */

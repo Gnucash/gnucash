@@ -50,7 +50,7 @@ gnc_ui_set_cursor (GdkWindow *win, GNCCursorType type, gboolean update_now)
         return;
 
     if (type != GNC_CURSOR_NORMAL)
-        cursor = gdk_cursor_new (type);
+        cursor = gdk_cursor_new ((GdkCursorType)type);
 
     gdk_window_set_cursor (win, cursor);
 

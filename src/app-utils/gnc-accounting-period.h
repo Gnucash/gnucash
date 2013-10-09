@@ -52,6 +52,7 @@
  */
 typedef enum
 {
+    GNC_ACCOUNTING_PERIOD_INVALID = -1, //Force Clang to use a signed enum
     GNC_ACCOUNTING_PERIOD_TODAY,
     GNC_ACCOUNTING_PERIOD_MONTH,
     GNC_ACCOUNTING_PERIOD_MONTH_PREV,

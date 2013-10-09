@@ -88,6 +88,7 @@ typedef enum {
 }RowDepth;
 
 typedef enum {
+    COL_END_OF_LIST = -1,
     COL_CONTROL,      //0 TreeView Control columns
     COL_DATE,         //1
     COL_DUEDATE,      //2

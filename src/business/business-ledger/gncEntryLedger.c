@@ -46,6 +46,7 @@
 #include "gncEntryLedgerModel.h"
 #include "gncEntryLedgerControl.h"
 
+static QofLogModule log_module = "Business Entry Ledger";
 
 /** Static Functions ***************************************************/
 
@@ -323,6 +324,11 @@ GncEntryLedger * gnc_entry_ledger_new (QofBook *book, GncEntryLedgerType type)
         ledger->is_cust_doc = FALSE;
         ledger->is_credit_note = TRUE;
         break;
+    default:
+	PWARN ("Bad GncEntryLedgerType");
+	g_free (ledger);
+	return NULL;
+	break;
     }
 
     ledger->blank_entry_guid = *guid_null();

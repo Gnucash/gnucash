@@ -37,8 +37,8 @@ struct _GNCSearchReconciled
 {
     GNCSearchCoreType parent;
 
-    QofCharMatch		how;
-    cleared_match_t	value;
+    QofQueryCompare   how;
+    cleared_match_t   value;
 };
 
 struct _GNCSearchReconciledClass
@@ -55,6 +55,6 @@ GNCSearchReconciled	*gnc_search_reconciled_new	(void);
 
 /* methods */
 void	gnc_search_reconciled_set_value(GNCSearchReconciled *fi, cleared_match_t value);
-void	gnc_search_reconciled_set_how (GNCSearchReconciled *fi, QofCharMatch how);
+void	gnc_search_reconciled_set_how (GNCSearchReconciled *fi, QofQueryCompare how);
 
 #endif /* ! _GNCSEARCH_RECONCILED_H */

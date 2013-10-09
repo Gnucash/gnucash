@@ -809,10 +809,6 @@ void qof_instance_set_idata(gpointer inst, guint32 idata)
     {
         return;
     }
-    if (idata < 0)
-    {
-        return;
-    }
     g_return_if_fail(QOF_IS_INSTANCE(inst));
     GET_PRIVATE(inst)->idata = idata;
 }

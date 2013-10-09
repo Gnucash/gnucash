@@ -777,7 +777,7 @@ gnc_query_view_fill (GNCQueryView *qview)
     for (item = entries; item; item = item->next)
     {
         GList *node;
-        gint row;
+        gint row = 0;
         const QofParam *gup;
         QofParam *qp = NULL;
 
