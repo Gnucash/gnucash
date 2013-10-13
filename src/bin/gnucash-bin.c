@@ -157,7 +157,6 @@ gnc_print_unstable_message(void)
             _("To find the last stable version, please refer to http://www.gnucash.org"));
 }
 
-#ifndef MAC_INTEGRATION
 static gchar  *environment_expand(gchar *param)
 {
     gchar *search_start;
@@ -333,7 +332,7 @@ environment_override()
     g_key_file_free(keyfile);
 }
 
-#else /* MAC_INTEGRATION */
+#ifdef MAC_INTEGRATION
 static void
 set_mac_locale()
 {
@@ -858,9 +857,8 @@ main(int argc, char ** argv)
      */
 #ifdef MAC_INTEGRATION
     set_mac_locale();
-#else
-    environment_override();
 #endif
+    environment_override();
 #ifdef HAVE_GETTEXT
     {
         gchar *localedir = gnc_path_get_localedir();
