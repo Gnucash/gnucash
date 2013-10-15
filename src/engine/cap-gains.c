@@ -264,57 +264,6 @@ GetOrMakeLotOrphanAccount (Account *root, gnc_commodity * currency)
 }
 
 /* ============================================================== */
-
-void
-xaccAccountSetDefaultGainAccount (Account *acc, const Account *gain_acct)
-{
-    KvpFrame *cwd;
-    KvpValue *vvv;
-    const char * cur_name;
-    gnc_commodity *acc_comm;
-
-    if (!acc || !gain_acct) return;
-
-    cwd = xaccAccountGetSlots (acc);
-    cwd = kvp_frame_get_frame_slash (cwd, "/lot-mgmt/gains-act/");
-
-    /* Accounts are indexed by thier unique currency name */
-    acc_comm = xaccAccountGetCommodity(acc);
-    cur_name = gnc_commodity_get_unique_name (acc_comm);
-
-    xaccAccountBeginEdit (acc);
-    vvv = kvp_value_new_guid (xaccAccountGetGUID (gain_acct));
-    kvp_frame_set_slot_nc (cwd, cur_name, vvv);
-    qof_instance_set_slots(QOF_INSTANCE(acc), acc->inst.kvp_data);
-    xaccAccountCommitEdit (acc);
-}
-
-/* ============================================================== */
-
-Account *
-xaccAccountGetDefaultGainAccount (const Account *acc, const gnc_commodity * currency)
-{
-    Account *gain_acct = NULL;
-    KvpFrame *cwd;
-    KvpValue *vvv;
-    GncGUID * gain_acct_guid;
-    const char * cur_name;
-
-    if (!acc || !currency) return NULL;
-
-    cwd = xaccAccountGetSlots (acc);
-    cwd = kvp_frame_get_frame_slash (cwd, "/lot-mgmt/gains-act/");
-
-    /* Accounts are indexed by thier unique currency name */
-    cur_name = gnc_commodity_get_unique_name (currency);
-    vvv = kvp_frame_get_slot (cwd, cur_name);
-    gain_acct_guid = kvp_value_get_guid (vvv);
-
-    gain_acct = xaccAccountLookup (gain_acct_guid, qof_instance_get_book(acc));
-    return gain_acct;
-}
-
-/* ============================================================== */
 /* Functionally identical to the following:
  *   if (!xaccAccountGetDefaultGainAccount()) {
  *               xaccAccountSetDefaultGainAccount (); }
