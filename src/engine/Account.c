@@ -38,6 +38,7 @@
 #include "gnc-glib-utils.h"
 #include "gnc-lot.h"
 #include "gnc-pricedb.h"
+#include "qofinstance-p.h"
 
 static QofLogModule log_module = GNC_MOD_ACCOUNT;
 

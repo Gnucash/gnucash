@@ -23,7 +23,7 @@
  *                                                                  *
  *******************************************************************/
 
-#include "config.h"
+#include <config.h>
 
 #include <glib.h>
 #include <glib/gi18n.h>
@@ -33,6 +33,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <regex.h>
+#include <qofinstance-p.h>
 
 #include "gnc-commodity.h"
 #include "gnc-prefs.h"

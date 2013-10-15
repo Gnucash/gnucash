@@ -51,6 +51,7 @@
 #include "gnc-engine.h"
 #include "gnc-lot.h"
 #include "gnc-event.h"
+#include "qofinstance-p.h"
 
 const char *void_former_amt_str = "void-former-amount";
 const char *void_former_val_str = "void-former-value";

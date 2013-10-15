@@ -36,6 +36,7 @@
 #include "Transaction.h"
 #include "gnc-engine.h"
 #include "engine-helpers.h"
+#include "qofinstance-p.h"
 
 #undef G_LOG_DOMAIN
 #define G_LOG_DOMAIN "gnc.engine.sx"

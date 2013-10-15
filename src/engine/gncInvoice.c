@@ -27,10 +27,11 @@
  * Author: Derek Atkins <warlord@MIT.EDU>
  */
 
-#include "config.h"
+#include <config.h>
 
 #include <glib.h>
 #include <glib/gi18n.h>
+#include <qofinstance-p.h>
 
 #include "Transaction.h"
 #include "Account.h"

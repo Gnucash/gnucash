@@ -24,9 +24,11 @@
  *
  *********************************************************************/
 
-#include "config.h"
+#include <config.h>
 #include <glib.h>
-#include "qof.h"
+#include <qof.h>
+#include <qofinstance-p.h>
+
 #include "gncEmployeeP.h"
 #include "gncCustomerP.h"
 #include "gncJobP.h"

@@ -30,6 +30,7 @@
 
 #include <glib.h>
 #include <string.h>
+#include <qofinstance-p.h>
 
 #include "gnc-commodity.h"
 
@@ -866,7 +867,6 @@ gboolean gncCustomerRegister (void)
             (QofSetterFunc)gncCustomerSetTaxTableOverride
         },
         { CUSTOMER_TERMS, GNC_ID_BILLTERM, (QofAccessFunc)gncCustomerGetTerms, (QofSetterFunc)gncCustomerSetTerms },
-        { CUSTOMER_SLOTS, QOF_TYPE_KVP, (QofAccessFunc)qof_instance_get_slots, NULL },
         { QOF_PARAM_ACTIVE, QOF_TYPE_BOOLEAN, (QofAccessFunc)gncCustomerGetActive, (QofSetterFunc)gncCustomerSetActive },
         { QOF_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)qof_instance_get_book, NULL },
         { QOF_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)qof_instance_get_guid, NULL },

@@ -150,6 +150,9 @@ sxtg_is_dirty(const QofCollection *col)
     return dirty;
 }
 
+/* EFFECTIVE FRIEND FUNCTION declared in qofinstance-p.h */
+extern void qof_instance_mark_clean (QofInstance *);
+
 static void
 sxtg_mark_clean(QofCollection *col)
 {

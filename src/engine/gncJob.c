@@ -26,10 +26,11 @@
  * Author: Derek Atkins <warlord@MIT.EDU>
  */
 
-#include "config.h"
+#include <config.h>
 
 #include <glib.h>
 #include <string.h>
+#include <qofinstance-p.h>
 
 #include "gncInvoice.h"
 #include "gncJob.h"

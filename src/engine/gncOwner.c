@@ -29,11 +29,12 @@
  * Author: Derek Atkins <warlord@MIT.EDU>
  */
 
-#include "config.h"
+#include <config.h>
 
 #include <glib.h>
 #include <glib/gi18n.h>
 #include <string.h>		/* for memcpy() */
+#include <qofinstance-p.h>
 
 #include "gncCustomerP.h"
 #include "gncEmployeeP.h"

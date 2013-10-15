@@ -34,6 +34,7 @@
 #include <gnc-lot.h>
 #include <gnc-event.h>
 #include <qofbookslots.h>
+#include <qofinstance-p.h>
 
 #ifdef HAVE_GLIB_2_38
 #define _Q "'"

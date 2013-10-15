@@ -39,10 +39,11 @@
  * Copyright (c) 2002,2003 Linas Vepstas <linas@linas.org>
  */
 
-#include "config.h"
+#include <config.h>
 
 #include <glib.h>
 #include <glib/gi18n.h>
+#include <qofinstance-p.h>
 
 #include "Account.h"
 #include "AccountP.h"

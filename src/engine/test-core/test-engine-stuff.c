@@ -26,6 +26,7 @@
 #include <string.h>
 #include <sys/stat.h>
 #include <unistd.h>
+#include <qofinstance-p.h>
 
 #include "Account.h"
 #include "AccountP.h"
