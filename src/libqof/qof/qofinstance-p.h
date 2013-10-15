@@ -49,4 +49,9 @@ void qof_instance_set_last_update (QofInstance *inst, Timespec ts);
  *  collection flag at all. */
 void qof_instance_set_dirty_flag (gconstpointer inst, gboolean flag);
 
+/* Convenience functions to save some typing in property handlers */
+void qof_instance_set_kvp (QofInstance *inst, const gchar *key, const GValue *value);
+void qof_instance_get_kvp (QofInstance *inst, const gchar *key, GValue *value);
+
+
 #endif /* QOF_INSTANCE_P_H */

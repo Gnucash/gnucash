@@ -1050,5 +1050,25 @@ qof_commit_edit_part2(QofInstance *inst,
     return TRUE;
 }
 
+void
+qof_instance_set_kvp (QofInstance *inst, const gchar *key, const GValue *value)
+{
+    KvpFrame *frame = qof_instance_get_slots (inst);
+    kvp_frame_set_gvalue (frame, key, value);
+}
+
+void
+qof_instance_get_kvp (QofInstance *inst, const gchar *key, GValue *value)
+{
+    KvpFrame *frame = qof_instance_get_slots (inst);
+    GValue *temp = kvp_frame_get_gvalue (frame, key);
+    if (temp)
+    {
+	g_value_copy (temp, value);
+	gnc_gvalue_free (temp);
+    }
+}
+
+
 /* ========================== END OF FILE ======================= */
 
