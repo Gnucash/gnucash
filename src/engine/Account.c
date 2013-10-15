@@ -4280,6 +4280,80 @@ xaccAccountSetLastNum (Account *acc, const char *num)
     xaccAccountCommitEdit (acc);
 }
 
+static Account *
+GetOrMakeOrphanAccount (Account *root, gnc_commodity * currency)
+{
+    char * accname;
+    Account * acc;
+
+    g_return_val_if_fail (root, NULL);
+
+    /* build the account name */
+    if (!currency)
+    {
+        PERR ("No currency specified!");
+        return NULL;
+    }
+
+    accname = g_strconcat (_("Orphaned Gains"), "-",
+                           gnc_commodity_get_mnemonic (currency), NULL);
+
+    /* See if we've got one of these going already ... */
+    acc = gnc_account_lookup_by_name(root, accname);
+
+    if (acc == NULL)
+    {
+        /* Guess not. We'll have to build one. */
+        acc = xaccMallocAccount (gnc_account_get_book(root));
+        xaccAccountBeginEdit (acc);
+        xaccAccountSetName (acc, accname);
+        xaccAccountSetCommodity (acc, currency);
+        xaccAccountSetType (acc, ACCT_TYPE_INCOME);
+        xaccAccountSetDescription (acc, _("Realized Gain/Loss"));
+        xaccAccountSetNotes (acc,
+                             _("Realized Gains or Losses from "
+                               "Commodity or Trading Accounts "
+                               "that haven't been recorded elsewhere."));
+
+        /* Hang the account off the root. */
+        gnc_account_append_child (root, acc);
+        xaccAccountCommitEdit (acc);
+    }
+
+    g_free (accname);
+
+    return acc;
+}
+
+Account *
+xaccAccountGainsAccount (Account *acc, gnc_commodity *curr)
+{
+    KvpFrame *frame = qof_instance_get_slots (QOF_INSTANCE (acc));
+    const gchar *curr_name = gnc_commodity_get_unique_name (curr);
+    GncGUID *guid;
+    Account *gains_account;
+
+    frame = kvp_frame_get_frame_slash (frame, "/lot-mgmt/gains-act/");
+    guid = kvp_frame_get_guid (frame, curr_name);
+    if (guid == NULL) /* No gains account for this currency */
+    {
+	gains_account = GetOrMakeOrphanAccount (gnc_account_get_root (acc),
+						curr);
+	guid = (GncGUID*)qof_instance_get_guid (QOF_INSTANCE (gains_account));
+	xaccAccountBeginEdit (acc);
+	{
+	    kvp_frame_set_guid (frame, curr_name, guid);
+	    qof_instance_set_dirty (QOF_INSTANCE (acc));
+	}
+	xaccAccountCommitEdit (acc);
+    }
+    else
+	gains_account = xaccAccountLookup (guid,
+					   qof_instance_get_book(acc));
+
+    return gains_account;
+}
+
 /********************************************************************\
 \********************************************************************/
 

@@ -216,99 +216,6 @@ xaccAccountFindLatestOpenLot (Account *acc, gnc_numeric sign,
 }
 
 /* ============================================================== */
-/* Similar to GetOrMakeAccount, but different in important ways */
-
-static Account *
-GetOrMakeLotOrphanAccount (Account *root, gnc_commodity * currency)
-{
-    char * accname;
-    Account * acc;
-
-    g_return_val_if_fail (root, NULL);
-
-    /* build the account name */
-    if (!currency)
-    {
-        PERR ("No currency specified!");
-        return NULL;
-    }
-
-    accname = g_strconcat (_("Orphaned Gains"), "-",
-                           gnc_commodity_get_mnemonic (currency), NULL);
-
-    /* See if we've got one of these going already ... */
-    acc = gnc_account_lookup_by_name(root, accname);
-
-    if (acc == NULL)
-    {
-        /* Guess not. We'll have to build one. */
-        acc = xaccMallocAccount (gnc_account_get_book(root));
-        xaccAccountBeginEdit (acc);
-        xaccAccountSetName (acc, accname);
-        xaccAccountSetCommodity (acc, currency);
-        xaccAccountSetType (acc, ACCT_TYPE_INCOME);
-        xaccAccountSetDescription (acc, _("Realized Gain/Loss"));
-        xaccAccountSetNotes (acc,
-                             _("Realized Gains or Losses from "
-                               "Commodity or Trading Accounts "
-                               "that haven't been recorded elsewhere."));
-
-        /* Hang the account off the root. */
-        gnc_account_append_child (root, acc);
-        xaccAccountCommitEdit (acc);
-    }
-
-    g_free (accname);
-
-    return acc;
-}
-
-/* ============================================================== */
-/* Functionally identical to the following:
- *   if (!xaccAccountGetDefaultGainAccount()) {
- *               xaccAccountSetDefaultGainAccount (); }
- * except that it saves a few cycles.
- */
-
-static Account *
-GetOrMakeGainAcct (Account *acc, gnc_commodity * currency)
-{
-    Account *gain_acct = NULL;
-    KvpFrame *cwd;
-    KvpValue *vvv;
-    GncGUID * gain_acct_guid;
-    const char * cur_name;
-
-    cwd = xaccAccountGetSlots (acc);
-    cwd = kvp_frame_get_frame_slash (cwd, "/lot-mgmt/gains-act/");
-
-    /* Accounts are indexed by thier unique currency name */
-    cur_name = gnc_commodity_get_unique_name (currency);
-    vvv = kvp_frame_get_slot (cwd, cur_name);
-    gain_acct_guid = kvp_value_get_guid (vvv);
-
-    gain_acct = xaccAccountLookup (gain_acct_guid, qof_instance_get_book(acc));
-
-    /* If there is no default place to put gains/losses
-     * for this account, then create such a place */
-    if (NULL == gain_acct)
-    {
-        Account *root;
-
-        xaccAccountBeginEdit (acc);
-        root = gnc_account_get_root(acc);
-        gain_acct = GetOrMakeLotOrphanAccount (root, currency);
-
-        vvv = kvp_value_new_guid (xaccAccountGetGUID (gain_acct));
-        kvp_frame_set_slot_nc (cwd, cur_name, vvv);
-        qof_instance_set_slots(QOF_INSTANCE(acc), acc->inst.kvp_data);
-        xaccAccountCommitEdit (acc);
-
-    }
-    return gain_acct;
-}
-
-/* ============================================================== */
 
 Split *
 xaccSplitAssignToLot (Split *split, GNCLot *lot)
@@ -890,7 +797,7 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
                     (FALSE == gnc_commodity_equiv (currency,
                                                    xaccAccountGetCommodity(gain_acc))))
             {
-                gain_acc = GetOrMakeGainAcct (lot_acc, currency);
+                gain_acc = xaccAccountGainsAccount (lot_acc, currency);
             }
 
             xaccAccountBeginEdit (gain_acc);
