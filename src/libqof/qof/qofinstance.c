@@ -946,6 +946,31 @@ gboolean qof_instance_refers_to_object(const QofInstance* inst, const QofInstanc
     }
 }
 
+/* g_object_set/get wrappers */
+void
+qof_instance_get (const QofInstance *inst, const gchar *first_prop, ...)
+{
+    va_list ap;
+    g_return_if_fail (QOF_IS_INSTANCE (inst));
+
+    va_start (ap, first_prop);
+    g_object_get_valist (G_OBJECT (inst), first_prop, ap);
+    va_end (ap);
+}
+
+void
+qof_instance_set (QofInstance *inst, const gchar *first_prop, ...)
+{
+    va_list ap;
+    g_return_if_fail (QOF_IS_INSTANCE (inst));
+
+    qof_instance_set_dirty (inst);
+    va_start (ap, first_prop);
+    g_object_set_valist (G_OBJECT (inst), first_prop, ap);
+    va_end (ap);
+}
+
+
 /* =================================================================== */
 /* Entity edit and commit utilities */
 /* =================================================================== */

@@ -167,7 +167,16 @@ gboolean qof_instance_get_dirty (QofInstance *);
 
 gboolean qof_instance_get_infant(const QofInstance *inst);
 
+/**
+ * \brief Wrapper for g_object_get
+ */
+void qof_instance_get (const QofInstance *inst, const gchar *first_param, ...);
 
+/**
+ * \brief Wrapper for g_object_set
+ * Group setting multiple parameters in a single begin/commit/rollback
+ */
+void qof_instance_set (QofInstance *inst, const gchar *first_param, ...);
 
 /** get the instance tag number
     used for kvp management in sql backends. */
