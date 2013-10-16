@@ -34,7 +34,7 @@
 ;    (load-extension "libgnc-core-utils" "scm_init_sw_core_utils_module")))
 ;(use-modules (sw_core_utils))
 
-(define (run-migration)
+(define (run-migration-internal)
  <xsl:for-each select="//prefsgroup">
   <xsl:if test="document(gconfpath)//entry">
 ;; Processing preferences in group <xsl:value-of select="gschemaid"/>
@@ -45,6 +45,17 @@
  </xsl:for-each>
  
 (display "Preference migration has finished")(newline)
+)
+
+(define (run-migration)
+  (catch #t
+    run-migration-internal
+    (lambda args 
+        (display (string-append
+                   "An error occurred while migrating preferences."
+                   (newline) "The error is: "
+                   (symbol->string key) " - "  (car (caddr args))  "."))
+        #f))
 )
 
 (export run-migration)

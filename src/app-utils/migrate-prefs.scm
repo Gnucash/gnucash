@@ -66,27 +66,33 @@
 ; cleanup first if a previous migration attempt failed to do so
   (if (access? migration-dir (logior R_OK W_OK X_OK))
       (begin
-        (format #t "Clear previous tmp dir ~A\n" migration-dir)
+        (format #t "Clear previous migration tmp dir ~A\n" migration-dir)
         (migration-cleanup-internal)))
+  (display "*** GnuCash switched to a new preferences system ***\n")
+  (display "Attempt to migrate your preferences from the old to the new system\n")
   (mkdir migration-dir)
   (format #t "Copy all gconf files to tmp dir ~A\n" migration-dir)
   (display "Note: you can ignore the failed to load extnral entity warnings below. They are harmless.\n")
   (apply find copy-one-file (list gconf-dir))
+  ; Indicate successful preparation
+  #t
 )
 
 (define (migration-prepare base-dir)
   (set! gconf-dir (string-append base-dir "/.gconf/apps/gnucash"))
+  ; Note: calling script should already have checked whether 
+  ;       gconf-dir and its parent directories exist
   (set! prefix-length (+ (string-length gconf-dir) 1))
   (set! migration-dir (string-append base-dir "/.gnc-migration-tmp"))
-  (if (access? gconf-dir R_OK)
-    (begin
-      (display "*** GnuCash switched to a new preferences system ***\n")
-      (display "Attempt to migrate your preferences from the old to the new system\n")
-        (catch #t
-          migration-prepare-internal
-          (lambda args 
-                  (display "An error occurred when trying to migrate preferences")))
-    )))
+  (catch #t
+    migration-prepare-internal
+    (lambda args 
+            (display (string-append
+                       "An error occurred while preparing to migrate preferences."
+                       (newline) "The error is: "
+                       (symbol->string key) " - "  (car (caddr args))  "."))
+            #f))
+)
 
 (define (rmtree args)
   (define (zap f)
@@ -99,13 +105,23 @@
 
 (define (migration-cleanup-internal)
   (rmtree (list migration-dir))
-  (rmdir migration-dir))
+  (rmdir migration-dir)
+  ; Indicate successful cleanup
+  #t)
 
 (define (migration-cleanup base-dir)
   (set! migration-dir (string-append base-dir "/.gnc-migration-tmp"))
   (if (access? migration-dir (logior R_OK W_OK X_OK))
     (begin
       (format #t "Delete tmp dir ~A\n" migration-dir)
-      (migration-cleanup-internal))))
+      (catch #t
+        migration-cleanup-internal
+        (lambda args 
+            (display (string-append
+                       "An error occurred while cleaning up after preferences migration."
+                       (newline) "The error is: "
+                       (symbol->string key) " - "  (car (caddr args))  "."))
+            #f))))
+)
 
 (export migration-prepare migration-cleanup)

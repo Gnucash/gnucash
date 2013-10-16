@@ -47,12 +47,14 @@
 #define CLIENT_TAG  "%s-%s-client"
 #define NOTIFY_TAG  "%s-%s-notify_id"
 
+#define GNC_PREF_MIGRATE_PREFS_DONE "migrate-prefs-done"
+
 static GHashTable *schema_hash = NULL;
 static const gchar *gsettings_prefix;
 static xmlExternalEntityLoader defaultEntityLoader = NULL;
 
 /* This static indicates the debugging module that this .o belongs to.  */
-static QofLogModule log_module = G_LOG_DOMAIN;
+static QofLogModule log_module = "gnc.app-utils.gsettings";
 
 /************************************************************/
 /*               Internal helper functions                  */
@@ -615,26 +617,43 @@ xsltprocExternalEntityLoader(const char *URL, const char *ID,
     return(NULL);
 }
 
-
+/* Tool to migrate existing user settings from GConf to GSettings
+ *
+ * This tool will first run some sanity checks to see if migration
+ * is necessary/possible. The actual migration works directly from
+ * the GConf .xml files. Using an xsl transform it will convert them
+ * in a guile script to set most settings found.
+ *
+ * Notes:
+ * - due to some limitations in the xslt code, all the gconf xml files are
+ *   first copied into a temporary directory. After the migration has finished,
+ *   that temporary directory and its contents are removed.
+ * - not all settings can be migrated. All the important ones are though.
+ *   The ones that are missing are mostly with respect to window position
+ *   and size.
+ * - column widths/visibilities, sorting orders,... are no longer stored
+ *   in gsettings, so these will obviously not be migrated either.
+ * - upon a successful run, a flag will be set to prevent the migration
+ *   from running again. So in normal circumstances the migration will
+ *   be executed only once.
+ */
 void gnc_gsettings_migrate_from_gconf (void)
 {
     gchar *pkgdatadir, *stylesheet, *input, *output, *command;
+    gchar *gconf_root, *gconf_apps, *gconf_gnucash;
     gchar *base_dir, *iter;
     SCM migr_script, result;
     xsltStylesheetPtr stylesheetptr = NULL;
     xmlDocPtr inputxml, transformedxml;
     FILE *outfile;
+    gboolean migration_ok = FALSE;
 
-    pkgdatadir = gnc_path_get_pkgdatadir();
-    stylesheet = g_build_filename(pkgdatadir, "make-prefs-migration-script.xsl", NULL);
-    input      = g_build_filename(pkgdatadir, "migratable-prefs.xml", NULL);
+    ENTER ();
 
-    if ((!g_file_test (stylesheet, G_FILE_TEST_IS_REGULAR)) ||
-        (!g_file_test (input, G_FILE_TEST_IS_REGULAR)))
+    /* Only attempt to migrate if no successful migration has been done before */
+    if (gnc_gsettings_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_MIGRATE_PREFS_DONE))
     {
-        /* Critical files not found, abort migration */
-        g_free (stylesheet);
-        g_free (input);
+        LEAVE ("Preferences migration ran successfully before. Skipping.");
         return;
     }
 
@@ -645,13 +664,59 @@ void gnc_gsettings_migrate_from_gconf (void)
             *iter = '/';
     }
 
+    /* Only attempt to migrate if there is something to migrate */
+    gconf_root    = g_build_filename(base_dir, ".gconf", NULL);
+    gconf_apps    = g_build_filename(gconf_root, "apps", NULL);
+    gconf_gnucash = g_build_filename(gconf_apps, "gnucash", NULL);
+    migration_ok = (g_file_test (gconf_root, G_FILE_TEST_IS_DIR) &&
+                    g_file_test (gconf_apps, G_FILE_TEST_IS_DIR) &&
+                    g_file_test (gconf_gnucash, G_FILE_TEST_IS_DIR));
+    g_free (gconf_root);
+    g_free (gconf_apps);
+    g_free (gconf_gnucash);
+    if (!migration_ok)
+    {
+        g_free (base_dir);
+        gnc_gsettings_set_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_MIGRATE_PREFS_DONE, TRUE);
+        LEAVE ("No pre-existing GConf gnucash section found.\n"
+               "Most likely this system never ran GnuCash before.\n"
+               "Assume migration is not needed.");
+        return;
+    }
+
+    pkgdatadir = gnc_path_get_pkgdatadir();
+    stylesheet = g_build_filename(pkgdatadir, "make-prefs-migration-script.xsl", NULL);
+    input      = g_build_filename(pkgdatadir, "migratable-prefs.xml", NULL);
+    g_free (pkgdatadir);
+
+    migration_ok = (g_file_test (stylesheet, G_FILE_TEST_IS_REGULAR) &&
+                    g_file_test (input, G_FILE_TEST_IS_REGULAR));
+    if (!migration_ok)
+    {
+        /* Critical files not found, abort migration */
+        g_free (base_dir);
+        g_free (stylesheet);
+        g_free (input);
+        LEAVE ("Migration input file and stylesheet missing. Skip migration.");
+        return;
+    }
+
     command = g_strconcat ("(use-modules (migrate-prefs))(migration-prepare \"",
                              base_dir, "\")", NULL);
     DEBUG ("command = %s", command);
-    result = scm_c_eval_string (command);
+    migration_ok = scm_is_true (scm_c_eval_string (command));
     g_free (command);
+    if (!migration_ok)
+    {
+        /* Preparation step failed */
+        g_free (base_dir);
+        g_free (stylesheet);
+        g_free (input);
+        LEAVE ("Migration preparation step failed. Skip migration.");
+        return;
+    }
 
-    output     = g_build_filename(base_dir, ".gnc-migration-tmp", "migrate-prefs-user.scm", NULL);
+    output  = g_build_filename(base_dir, ".gnc-migration-tmp", "migrate-prefs-user.scm", NULL);
     xmlSubstituteEntitiesDefault(1);
     xmlLoadExtDtdDefaultValue = 1;
     defaultEntityLoader = xmlGetExternalEntityLoader();
@@ -664,27 +729,46 @@ void gnc_gsettings_migrate_from_gconf (void)
     xsltSaveResultToFile(outfile, transformedxml, stylesheetptr);
     fclose(outfile);
 
-    migr_script = scm_from_locale_string (output);
-    scm_primitive_load (migr_script);
-    result = scm_c_eval_string ("(use-modules (migrate-prefs-user))(run-migration)");
-
     xsltFreeStylesheet(stylesheetptr);
     xmlFreeDoc(inputxml);
     xmlFreeDoc(transformedxml);
 
     xsltCleanupGlobals();
     xmlCleanupParser();
+    g_free (stylesheet);
+    g_free (input);
 
+    migr_script = scm_from_locale_string (output);
+    scm_primitive_load (migr_script);
+    g_free (output);
+
+    migration_ok = scm_is_true (scm_c_eval_string ("(use-modules (migrate-prefs-user))(run-migration)"));
+    if (!migration_ok)
+    {
+        /* Actual migration step failed */
+        g_free (base_dir);
+        LEAVE ("Actual migration step failed. Skip migration.");
+        return;
+    }
+
+    /* If we got here, the preferences were migrated successfully
+     * Mark this success in gsettings, so we won't run the migration again.
+     */
+    gnc_gsettings_set_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_MIGRATE_PREFS_DONE, TRUE);
+
+    /* All that is left now is to cleanup... */
     command = g_strconcat ("(use-modules (migrate-prefs))(migration-cleanup \"",
                              base_dir, "\")", NULL);
     DEBUG ("command = %s", command);
-    result = scm_c_eval_string (command);
+    migration_ok = scm_is_true (scm_c_eval_string (command));
     g_free (command);
+    if (!migration_ok)
+    {
+        /* Actual migration step failed */
+        DEBUG ("Cleanup step failed. You may need to delete %s/.gnc-migration-tmp manually.", base_dir);
+    }
 
-    g_free (pkgdatadir);
-    g_free (stylesheet);
-    g_free (input);
-    g_free (output);
+    LEAVE ("");
     g_free (base_dir);
 
 }
