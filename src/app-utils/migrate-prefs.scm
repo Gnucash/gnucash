@@ -10,6 +10,8 @@
 
 (define-module (migrate-prefs))
 
+(use-modules (gnucash main))
+
 (define gconf-dir "")
 (define prefix-length 0)
 (define migration-dir "")
@@ -19,18 +21,17 @@
       (base-name "")
       (slash-index 0)
       (dest-name ""))
-     ;(display "processing file... ")(display filename)(newline)
+     (gnc:debug "Processing file... " filename)
      (if (eq? (stat:type stats) 'regular)
        (begin
          (set! base-name (string-drop filename prefix-length))
-         ;(display base-name)(newline)
          (set! slash-index (- (string-rindex base-name #\%) 1))
          (if (> slash-index 0)
            (begin
              (set! dest-name (string-take base-name (- (string-rindex base-name #\%) 1))) 
              (set! dest-name (string-join (string-split dest-name #\/) "-"))
              (set! dest-name (string-append migration-dir "/" dest-name ".xml"))
-             ;(format #t "~A -> ~A\n" base-name dest-name)
+             (gnc:debug "Copying " base-name " -> " dest-name)
              (copy-file filename dest-name)
          ))))
      (if (eq? (stat:type stats) 'directory)
@@ -66,13 +67,12 @@
 ; cleanup first if a previous migration attempt failed to do so
   (if (access? migration-dir (logior R_OK W_OK X_OK))
       (begin
-        (format #t "Clear previous migration tmp dir ~A\n" migration-dir)
+        (gnc:msg "Clear previous migration tmp dir " migration-dir)
         (migration-cleanup-internal)))
-  (display "*** GnuCash switched to a new preferences system ***\n")
-  (display "Attempt to migrate your preferences from the old to the new system\n")
+  (gnc:warn "*** GnuCash switched to a new preferences system ***")
+  (gnc:warn "Attempt to migrate your preferences from the old to the new system")
   (mkdir migration-dir)
-  (format #t "Copy all gconf files to tmp dir ~A\n" migration-dir)
-  (display "Note: you can ignore the failed to load extnral entity warnings below. They are harmless.\n")
+  (gnc:msg "Copy all gconf files to tmp dir " migration-dir)
   (apply find copy-one-file (list gconf-dir))
   ; Indicate successful preparation
   #t
@@ -86,18 +86,17 @@
   (set! migration-dir (string-append base-dir "/.gnc-migration-tmp"))
   (catch #t
     migration-prepare-internal
-    (lambda args 
-            (display (string-append
-                       "An error occurred while preparing to migrate preferences."
-                       (newline) "The error is: "
-                       (symbol->string key) " - "  (car (caddr args))  "."))
+    (lambda (key . args) 
+            (gnc:error "An error occurred while preparing to migrate preferences.")
+            (gnc:error "The error is: "
+                       (symbol->string key) " - "  (car (caddr args))  ".")
             #f))
 )
 
 (define (rmtree args)
   (define (zap f)
     (let ((rm (if (eq? (stat:type (stat f)) 'directory) rmdir delete-file)))
-      ;(format #t "deleting ~A\n" f)
+      (gnc:debug "deleting " f)
       (catch #t
         (lambda () (rm f))
         (lambda args (format #t "couldn't delete ~A\n" f)))))
@@ -113,14 +112,13 @@
   (set! migration-dir (string-append base-dir "/.gnc-migration-tmp"))
   (if (access? migration-dir (logior R_OK W_OK X_OK))
     (begin
-      (format #t "Delete tmp dir ~A\n" migration-dir)
+      (gnc:msg "Delete tmp dir " migration-dir)
       (catch #t
         migration-cleanup-internal
-        (lambda args 
-            (display (string-append
-                       "An error occurred while cleaning up after preferences migration."
-                       (newline) "The error is: "
-                       (symbol->string key) " - "  (car (caddr args))  "."))
+        (lambda (key . args) 
+            (gnc:error "An error occurred while cleaning up after preferences migration.")
+            (gnc:error "The error is: "
+                       (symbol->string key) " - "  (car (caddr args))  ".")
             #f))))
 )
 

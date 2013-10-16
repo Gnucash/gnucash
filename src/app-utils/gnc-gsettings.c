@@ -610,9 +610,9 @@ xsltprocExternalEntityLoader(const char *URL, const char *ID,
     if (warning != NULL) {
         ctxt->sax->warning = warning;
         if (URL != NULL)
-            warning(ctxt, "failed to load external entity \"%s\"\n", URL);
+            DEBUG ("External entity \"%s\" not loaded", URL);
         else if (ID != NULL)
-            warning(ctxt, "failed to load external entity \"%s\"\n", ID);
+            DEBUG ("External entity \"%s\" not loaded", ID);
     }
     return(NULL);
 }
@@ -678,9 +678,10 @@ void gnc_gsettings_migrate_from_gconf (void)
     {
         g_free (base_dir);
         gnc_gsettings_set_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_MIGRATE_PREFS_DONE, TRUE);
-        LEAVE ("No pre-existing GConf gnucash section found.\n"
+        PINFO ("No pre-existing GConf gnucash section found.\n"
                "Most likely this system never ran GnuCash before.\n"
                "Assume migration is not needed.");
+        LEAVE ();
         return;
     }
 
@@ -697,7 +698,7 @@ void gnc_gsettings_migrate_from_gconf (void)
         g_free (base_dir);
         g_free (stylesheet);
         g_free (input);
-        LEAVE ("Migration input file and stylesheet missing. Skip migration.");
+        PWARN ("Migration input file and stylesheet missing. Skip migration.");
         return;
     }
 
@@ -712,7 +713,8 @@ void gnc_gsettings_migrate_from_gconf (void)
         g_free (base_dir);
         g_free (stylesheet);
         g_free (input);
-        LEAVE ("Migration preparation step failed. Skip migration.");
+        PWARN ("Migration preparation step failed. Skip migration.");
+        LEAVE ();
         return;
     }
 
@@ -747,7 +749,8 @@ void gnc_gsettings_migrate_from_gconf (void)
     {
         /* Actual migration step failed */
         g_free (base_dir);
-        LEAVE ("Actual migration step failed. Skip migration.");
+        PWARN ("Actual migration step failed. Skip migration.");
+        LEAVE ();
         return;
     }
 
@@ -762,11 +765,10 @@ void gnc_gsettings_migrate_from_gconf (void)
     DEBUG ("command = %s", command);
     migration_ok = scm_is_true (scm_c_eval_string (command));
     g_free (command);
-    if (!migration_ok)
-    {
-        /* Actual migration step failed */
-        DEBUG ("Cleanup step failed. You may need to delete %s/.gnc-migration-tmp manually.", base_dir);
-    }
+    if (!migration_ok) /* Cleanup step failed, not critical */
+        PWARN ("Cleanup step failed. You may need to delete %s/.gnc-migration-tmp manually.", base_dir);
+    else
+        PINFO ("Preferences migration completed successfully");
 
     LEAVE ("");
     g_free (base_dir);
