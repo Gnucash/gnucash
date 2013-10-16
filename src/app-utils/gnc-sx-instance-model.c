@@ -1035,7 +1035,7 @@ create_each_transaction_helper(Transaction *template_txn, void *user_data)
        as not finding the approrpiate Accounts and not being able to
        parse the formula|credit/debit strings. */
 
-    new_txn = xaccTransClone(template_txn);
+    new_txn = xaccTransCloneNoKvp(template_txn);
     xaccTransBeginEdit(new_txn);
 
     g_debug("creating template txn desc [%s] for sx [%s]",
@@ -1043,9 +1043,6 @@ create_each_transaction_helper(Transaction *template_txn, void *user_data)
             xaccSchedXactionGetName(creation_data->instance->parent->sx));
 
     g_debug("template txn currency is %s", gnc_commodity_get_mnemonic(xaccTransGetCurrency (template_txn)));
-
-    /* clear any copied KVP data */
-    qof_instance_set_slots(QOF_INSTANCE(new_txn), kvp_frame_new());
 
     /* Bug#500427: copy the notes, if any */
     if (xaccTransGetNotes(template_txn) != NULL)

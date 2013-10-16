@@ -569,12 +569,12 @@ test_xaccTransSortSplits (Fixture *fixture, gconstpointer pData)
 
     xaccTransCommitEdit (txn);
 }
-/* xaccDupeTransaction
-Transaction *
-xaccDupeTransaction (const Transaction *from)// Local: 1:0:0
+/* dupe_trans
+static Transaction *
+dupe_trans (const Transaction *from)// Local: 1:0:0
 */
 static void
-test_xaccDupeTransaction (Fixture *fixture, gconstpointer pData)
+test_dupe_trans (Fixture *fixture, gconstpointer pData)
 {
     Timespec posted = gnc_dmy2timespec (12, 7, 2011);
     Timespec entered = gnc_dmy2timespec (14, 7, 2011);
@@ -587,7 +587,7 @@ test_xaccDupeTransaction (Fixture *fixture, gconstpointer pData)
     kvp_frame_set_string (old->inst.kvp_data, "/foo/bar/baz",
                           "The Great Waldo Pepper");
 
-    new = xaccDupeTransaction (old);
+    new = fixture->func->dupe_trans (old);
 
     g_assert_cmpstr (new->num, ==, old->num);
     g_assert_cmpstr (new->description, ==, old->description);
@@ -1398,29 +1398,27 @@ void
 xaccTransDestroy (Transaction *trans)// C: 26 in 15 SCM: 4 in 4 Local: 3:0:0
 */
 static void
-test_xaccTransDestroy ()
+test_xaccTransDestroy (Fixture *fixture, gconstpointer pData)
 {
-    QofBook *book = qof_book_new ();
-    Transaction *txn = xaccMallocTransaction (book);
-    Transaction *dupe = xaccDupeTransaction (txn);
+    Transaction *txn = fixture->txn;
+    QofBook *book = qof_instance_get_book (QOF_INSTANCE (txn));
+    Transaction *dupe = xaccTransClone (txn);
 
     xaccTransBeginEdit (txn);
     g_assert (!qof_instance_get_destroying (QOF_INSTANCE (txn)));
-    g_assert (xaccTransEqual (txn, dupe, FALSE, TRUE, TRUE, TRUE));
+    g_assert (xaccTransEqual (txn, dupe, FALSE, TRUE, FALSE, TRUE));
     xaccTransDestroy (txn);
     g_assert (qof_instance_get_destroying (QOF_INSTANCE (txn)));
-    g_assert (xaccTransEqual (txn, dupe, FALSE, TRUE, TRUE, TRUE));
+    g_assert (xaccTransEqual (txn, dupe, FALSE, TRUE, FALSE, TRUE));
     xaccTransRollbackEdit (txn);
     qof_book_mark_readonly (book);
     xaccTransBeginEdit (txn);
     xaccTransDestroy (txn);
     g_assert (qof_instance_get_destroying (QOF_INSTANCE (txn)));
-    g_assert (xaccTransEqual (txn, dupe, FALSE, TRUE, TRUE, TRUE));
+    g_assert (xaccTransEqual (txn, dupe, FALSE, TRUE, FALSE, TRUE));
     xaccTransRollbackEdit (txn);
 
-    test_destroy (txn);
     test_destroy (dupe);
-    test_destroy (book);
 }
 /* destroy_gains
 static void
@@ -1790,7 +1788,7 @@ static void
 test_xaccTransOrder_num_action (Fixture *fixture, gconstpointer pData)
 {
     Transaction *txnA = fixture->txn;
-    Transaction *txnB = xaccDupeTransaction (txnA);
+    Transaction *txnB = fixture->func->dupe_trans (txnA);
 
     g_assert_cmpint (xaccTransOrder_num_action (txnA, NULL, NULL, NULL), ==, -1);
     g_assert_cmpint (xaccTransOrder_num_action (NULL, NULL, txnA, NULL), ==, 1);
@@ -2042,7 +2040,7 @@ test_suite_transaction (void)
     GNC_TEST_ADD (suitename, "gnc transaction set/get property", Fixture, NULL, setup, test_gnc_transaction_set_get_property, teardown);
     GNC_TEST_ADD (suitename, "xaccMallocTransaction", Fixture, NULL, setup, test_xaccMallocTransaction, teardown);
     GNC_TEST_ADD (suitename, "xaccTransSortSplits", Fixture, NULL, setup, test_xaccTransSortSplits, teardown);
-    GNC_TEST_ADD (suitename, "xaccDupeTransaction", Fixture, NULL, setup, test_xaccDupeTransaction, teardown);
+    GNC_TEST_ADD (suitename, "dupe_trans", Fixture, NULL, setup, test_dupe_trans, teardown);
     GNC_TEST_ADD (suitename, "xaccTransClone", Fixture, NULL, setup, test_xaccTransClone, teardown);
     GNC_TEST_ADD (suitename, "xaccTransCopyFromClipBoard", Fixture, NULL, setup, test_xaccTransCopyFromClipBoard, teardown);
     GNC_TEST_ADD (suitename, "xaccTransCopyFromClipBoard No-Start", Fixture, NULL, setup, test_xaccTransCopyFromClipBoard_no_start, teardown);
@@ -2063,7 +2061,7 @@ test_suite_transaction (void)
 
     GNC_TEST_ADD (suitename, "xaccTransSetCurrency", Fixture, NULL, setup, test_xaccTransSetCurrency, teardown);
     GNC_TEST_ADD_FUNC (suitename, "xaccTransBeginEdit", test_xaccTransBeginEdit);
-    GNC_TEST_ADD_FUNC (suitename, "xaccTransDestroy", test_xaccTransDestroy);
+    GNC_TEST_ADD (suitename, "xaccTransDestroy", Fixture, NULL, setup, test_xaccTransDestroy, teardown);
     GNC_TEST_ADD (suitename, "destroy gains", GainsFixture, NULL, setup_with_gains, test_destroy_gains, teardown_with_gains);
     GNC_TEST_ADD (suitename, "do destroy", GainsFixture, NULL, setup_with_gains, test_do_destroy, teardown_with_gains);
     GNC_TEST_ADD (suitename, "was trans emptied", Fixture, NULL, setup, test_was_trans_emptied, teardown);

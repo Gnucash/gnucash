@@ -554,9 +554,8 @@ xaccTransSortSplits (Transaction *trans)
  * This routine is prone to programmer snafu if not used correctly.
  * It is used only by the edit-rollback code.
  */
-/* Actually, it *is* public, and used by Period.c */
-Transaction *
-xaccDupeTransaction (const Transaction *from)
+static Transaction *
+dupe_trans (const Transaction *from)
 {
     Transaction *to;
     GList *node;
@@ -593,10 +592,11 @@ xaccDupeTransaction (const Transaction *from)
 
 /********************************************************************\
  * Use this routine to externally duplicate a transaction.  It creates
- * a full fledged transaction with unique guid, splits, etc.
+ * a full fledged transaction with unique guid, splits, etc. and
+ * writes it to the database.
 \********************************************************************/
 Transaction *
-xaccTransClone (const Transaction *from)
+xaccTransCloneNoKvp (const Transaction *from)
 {
     Transaction *to;
     Split *split;
@@ -615,9 +615,8 @@ xaccTransClone (const Transaction *from)
 
     to->orig            = NULL;
 
-    qof_instance_init_data (&to->inst, GNC_ID_TRANS, qof_instance_get_book(from));
-    kvp_frame_delete (to->inst.kvp_data);
-    to->inst.kvp_data    = kvp_frame_copy (from->inst.kvp_data);
+    qof_instance_init_data (&to->inst, GNC_ID_TRANS,
+			    qof_instance_get_book(from));
 
     xaccTransBeginEdit(to);
     for (node = from->splits; node; node = node->next)
@@ -633,11 +632,21 @@ xaccTransClone (const Transaction *from)
     return to;
 }
 
+Transaction *
+xaccTransClone (const Transaction *from)
+{
+    Transaction *to = xaccTransCloneNoKvp (from);
+    xaccTransBeginEdit (to);
+    to->inst.kvp_data = kvp_frame_copy (from->inst.kvp_data);
+    xaccTransCommitEdit (to);
+    return to;
+}
+
 /*################## Added for Reg2 #################*/
 
 /********************************************************************\
  * Copy a transaction to the 'clipboard' transaction using
- *  xaccDupeTransaction. The 'clipboard' transaction must never
+ *  dupe_trans. The 'clipboard' transaction must never
  *  be dereferenced.
 \********************************************************************/
 Transaction * xaccTransCopyToClipBoard(const Transaction *from_trans)
@@ -647,7 +656,7 @@ Transaction * xaccTransCopyToClipBoard(const Transaction *from_trans)
     if (!from_trans)
         return NULL;
 
-    to_trans = xaccDupeTransaction(from_trans);
+    to_trans = dupe_trans(from_trans);
     return to_trans;
 }
 
@@ -664,7 +673,7 @@ xaccTransCopyOnto(const Transaction *from_trans, Transaction *to_trans)
 /********************************************************************\
  * This function explicitly must robustly handle some unusual input.
  *
- *  'from_trans' may be a duped trans (see xaccDupeTransaction), so its
+ *  'from_trans' may be a duped trans (see dupe_trans), so its
  *   splits may not really belong to the accounts that they say they do.
  *
  *  'from_acc' need not be a valid account. It may be an already freed
@@ -1330,7 +1339,7 @@ xaccTransBeginEdit (Transaction *trans)
 
     /* Make a clone of the transaction; we will use this
      * in case we need to roll-back the edit. */
-    trans->orig = xaccDupeTransaction (trans);
+    trans->orig = dupe_trans (trans);
 }
 
 /********************************************************************\
@@ -2774,6 +2783,7 @@ _utest_trans_fill_functions (void)
     func->trans_on_error = trans_on_error;
     func->trans_cleanup_commit = trans_cleanup_commit;
     func->xaccTransScrubGainsDate = xaccTransScrubGainsDate;
+    func->dupe_trans = dupe_trans;
     return func;
 }
 
