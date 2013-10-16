@@ -156,7 +156,7 @@
          ; preference name
          "<xsl:value-of select="$curr-pref/gschemaname"/>"
          ; preference value
-         (string-suffix? suffix "<xsl:value-of select="$curr-pref/gschemaname"/>")))
+         (string-suffix? (string-append "-" suffix) "<xsl:value-of select="$curr-pref/gschemaname"/>")))
    </xsl:if></xsl:when>
 
 
