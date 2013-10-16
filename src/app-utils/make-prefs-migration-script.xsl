@@ -116,8 +116,21 @@
 
 
    <xsl:when test="$curr-pref/gschematype = '(dd)'">
-;; Type: pair of decimals (stored in Gconf as [d,d])
-; guile command to write pair of decimals value
+;; Type: pair of decimals (stored in Gconf as list of floats)
+(let ((coords '()))
+     <xsl:for-each select="./li">
+     (set! coords (append coords '(<xsl:value-of select="./@value"/>)))
+     </xsl:for-each>
+     (if (> (length coords) 1)
+         (gnc-prefs-set-coords
+             ; preference group
+             "<xsl:value-of select="$curr-pref/../gschemaid"/>"
+             ; preference name
+             "<xsl:value-of select="$curr-pref/gschemaname"/>"
+             ; x coord
+             (car coords)
+             ; y coord
+             (cadr coords))))
    </xsl:when>
 
 
