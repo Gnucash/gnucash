@@ -85,6 +85,8 @@ enum
     PROP_PLACEHOLDER,
     PROP_FILTER,
     PROP_SORT_ORDER,
+
+    PROP_LOT_NEXT_ID,
 };
 
 #define GET_PRIVATE(o)  \
@@ -283,6 +285,8 @@ gnc_account_get_property (GObject         *object,
 {
     Account *account;
     AccountPrivate *priv;
+    const gchar *key;
+    GValue *temp;
 
     g_return_if_fail(GNC_IS_ACCOUNT(object));
 
@@ -378,6 +382,12 @@ gnc_account_get_property (GObject         *object,
     case PROP_SORT_ORDER:
         g_value_set_string(value, xaccAccountGetSortOrder(account));
         break;
+    case PROP_LOT_NEXT_ID:
+	key = "lot-mgmt/next-id";
+        /* Pre-set the value in case the frame is empty */
+	g_value_set_int64 (value, 0);
+	qof_instance_get_kvp (QOF_INSTANCE (account), key, value);
+	break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
         break;
@@ -392,6 +402,7 @@ gnc_account_set_property (GObject         *object,
 {
     Account *account;
     gnc_numeric *number;
+    gchar *key = NULL;
 
     g_return_if_fail(GNC_IS_ACCOUNT(object));
 
@@ -477,6 +488,10 @@ gnc_account_set_property (GObject         *object,
     case PROP_SORT_ORDER:
         xaccAccountSetSortOrder(account, g_value_get_string(value));
         break;
+    case PROP_LOT_NEXT_ID:
+	key = "lot-mgmt/next-id";
+	qof_instance_set_kvp (QOF_INSTANCE (account), key, value);
+	break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
         break;
@@ -834,6 +849,17 @@ gnc_account_class_init (AccountClass *klass)
                           "the sort order to be recalled.",
                           NULL,
                           G_PARAM_READWRITE));
+
+    g_object_class_install_property
+    (gobject_class,
+     PROP_LOT_NEXT_ID,
+     g_param_spec_int64 ("lot-next-id",
+                         "Lot Next ID",
+                         "Tracks the next id to use in gnc_lot_make_default.",
+                         (gint64)1,
+                         G_MAXINT64,
+                         (gint64)1,
+                         G_PARAM_READWRITE));
 }
 
 static void
