@@ -553,8 +553,7 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
     currency = split->parent->common_currency;
 
     ENTER ("(split=%p gains=%p status=0x%x lot=%s)", split,
-           split->gains_split, split->gains,
-           kvp_frame_get_string (gnc_lot_get_slots (lot), "/title"));
+           split->gains_split, split->gains, gnc_lot_get_title(lot));
 
     /* Make sure the status flags and pointers are initialized */
     xaccSplitDetermineGainStatus(split);

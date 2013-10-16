@@ -45,6 +45,9 @@
 
 #define GNC_PREFS_GROUP "dialogs.log-replay"
 
+/* EFFECTIVE FRIEND FUNCTION */
+void qof_instance_set_guid (gpointer inst, const GncGUID *guid);
+
 /* NW: If you want a new log_module, just define
 a unique string either in gnc-engine.h or
 locally.*/
@@ -435,7 +438,8 @@ static void  process_trans_record(  FILE *log_file)
                             xaccTransBeginEdit(trans);
                         }
 
-                        xaccTransSetGUID (trans, &(record.trans_guid));
+                        qof_instance_set_guid (QOF_INSTANCE (trans),
+					       &(record.trans_guid));
                         /*Fill the transaction info*/
                         if (record.date_entered_present)
                         {

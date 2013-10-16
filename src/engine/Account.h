@@ -874,8 +874,6 @@ gboolean xaccAccountGetReconcileChildrenStatus(const Account *account);
  */
 gboolean xaccAccountHasAncestor(const Account *acc, const Account *ancestor);
 
-#define xaccAccountGetSlots(X) qof_instance_get_slots(QOF_INSTANCE(X))
-
 /** @} */
 
 /** @name Lookup Accounts and Subaccounts by name or code

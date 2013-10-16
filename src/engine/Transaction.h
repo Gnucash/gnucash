@@ -743,8 +743,6 @@ void xaccTransDump (const Transaction *trans, const char *tag);
 #define xaccTransGetGUID(X)      qof_entity_get_guid(QOF_INSTANCE(X))
 /** \deprecated */
 #define xaccTransReturnGUID(X) (X ? *(qof_entity_get_guid(QOF_INSTANCE(X))) : *(guid_null()))
-/** \deprecated */
-#define xaccTransGetSlots(X)     qof_instance_get_slots (QOF_INSTANCE(X))
 
 #endif /* XACC_TRANSACTION_H */
 /** @} */

@@ -641,23 +641,6 @@ gboolean gncOwnerIsValid (const GncOwner *owner)
     return (owner->owner.undefined != NULL);
 }
 
-KvpFrame* gncOwnerGetSlots(GncOwner* owner)
-{
-    if (!owner) return NULL;
-
-    switch (gncOwnerGetType(owner))
-    {
-    case GNC_OWNER_CUSTOMER:
-    case GNC_OWNER_VENDOR:
-    case GNC_OWNER_EMPLOYEE:
-        return qof_instance_get_slots(QOF_INSTANCE(owner->owner.undefined));
-    case GNC_OWNER_JOB:
-        return gncOwnerGetSlots(gncJobGetOwner(gncOwnerGetJob(owner)));
-    default:
-        return NULL;
-    }
-}
-
 gboolean
 gncOwnerLotMatchOwnerFunc (GNCLot *lot, gpointer user_data)
 {

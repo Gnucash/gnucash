@@ -168,6 +168,9 @@ compare_sxs( QofBook* book_1, QofBook* book_2 )
                 compare_single_sx, "Scheduled transaction lists match" );
 }
 
+/* EFFECTIVE FRIEND FUNCTION */
+extern KvpFrame *qof_instance_get_slots (const QofInstance *);
+
 static void
 compare_single_lot( QofInstance* inst, gpointer user_data )
 {
@@ -181,8 +184,8 @@ compare_single_lot( QofInstance* inst, gpointer user_data )
                                 gnc_lot_get_account (lot_2), FALSE ));
     g_assert_cmpint (gnc_lot_is_closed (lot_1), ==, gnc_lot_is_closed (lot_2));
 
-    g_assert (kvp_frame_compare (gnc_lot_get_slots (lot_1),
-                                 gnc_lot_get_slots (lot_2)) == 0);
+    g_assert (kvp_frame_compare (qof_instance_get_slots (QOF_INSTANCE (lot_1)),
+                                 qof_instance_get_slots (QOF_INSTANCE (lot_2))) == 0);
     splits1 = gnc_lot_get_split_list (lot_1);
     splits2 = gnc_lot_get_split_list (lot_2);
     g_assert_cmpint (g_list_length (splits1), ==, g_list_length (splits2));

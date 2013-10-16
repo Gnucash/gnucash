@@ -952,26 +952,6 @@ get_commodity_denom(const Split * s)
     }
 }
 
-/********************************************************************
- * xaccSplitGetSlots
- ********************************************************************/
-
-KvpFrame *
-xaccSplitGetSlots (const Split * s)
-{
-    return qof_instance_get_slots(QOF_INSTANCE(s));
-}
-/* Used for testing only: _get_random_split in test-engine-stuff.c */
-void
-xaccSplitSetSlots_nc(Split *s, KvpFrame *frm)
-{
-    if (!s || !frm) return;
-    xaccTransBeginEdit(s->parent);
-    qof_instance_set_slots(QOF_INSTANCE(s), frm);
-    xaccTransCommitEdit(s->parent);
-
-}
-
 /********************************************************************\
 \********************************************************************/
 
@@ -2112,7 +2092,7 @@ gboolean xaccSplitRegister (void)
         { SPLIT_ACCT_FULLNAME, SPLIT_ACCT_FULLNAME, no_op, NULL },
         { SPLIT_CORR_ACCT_NAME, SPLIT_CORR_ACCT_NAME, no_op, NULL },
         { SPLIT_CORR_ACCT_CODE, SPLIT_CORR_ACCT_CODE, no_op, NULL },
-        { SPLIT_KVP, QOF_TYPE_KVP, (QofAccessFunc)xaccSplitGetSlots, NULL },
+        { SPLIT_KVP, QOF_TYPE_KVP, (QofAccessFunc)qof_instance_get_slots, NULL },
         { QOF_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)xaccSplitGetBook, NULL },
         {
             QOF_PARAM_GUID, QOF_TYPE_GUID,

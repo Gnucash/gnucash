@@ -306,7 +306,7 @@ node_and_transaction_equal(xmlNodePtr node, Transaction *trn)
         }
         else if (g_strcmp0((char*)mark->name, "trn:slots") == 0)
         {
-            if (!equals_node_val_vs_kvp_frame(mark, xaccTransGetSlots(trn)))
+            if (!equals_node_val_vs_kvp_frame(mark, qof_instance_get_slots (QOF_INSTANCE (trn))))
             {
                 return "slots differ";
             }
