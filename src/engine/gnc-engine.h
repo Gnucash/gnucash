@@ -251,5 +251,10 @@ void gnc_engine_add_commit_error_callback( EngineCommitErrorCallback cb, gpointe
 
 void gnc_engine_signal_commit_error( QofBackendError errcode );
 
+/** STRING CONSTANTS **********************************************
+ * Used to declare constant KVP keys used in more than one class
+ */
+#define GNC_INVOICE_ID    "gncInvoice"
+#define GNC_INVOICE_GUID  "invoice-guid"
 #endif
 /** @} */

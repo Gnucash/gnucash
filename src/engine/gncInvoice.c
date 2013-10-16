@@ -1141,10 +1141,8 @@ gncInvoiceAttachToTxn (GncInvoice *invoice, Transaction *txn)
     if (invoice->posted_txn) return;	/* Cannot reset invoice's txn */
 
     xaccTransBeginEdit (txn);
-    kvp = xaccTransGetSlots (txn);
-    value = kvp_value_new_guid (qof_instance_get_guid(QOF_INSTANCE(invoice)));
-    kvp_frame_set_slot_path (kvp, value, GNC_INVOICE_ID, GNC_INVOICE_GUID, NULL);
-    kvp_value_delete (value);
+    qof_instance_set (QOF_INSTANCE (txn), "invoice",
+		      qof_instance_get_guid (QOF_INSTANCE (invoice)), NULL);
     xaccTransSetTxnType (txn, TXN_TYPE_INVOICE);
     xaccTransCommitEdit (txn);
     gncInvoiceSetPostedTxn (invoice, txn);
@@ -1153,19 +1151,13 @@ gncInvoiceAttachToTxn (GncInvoice *invoice, Transaction *txn)
 GncInvoice *
 gncInvoiceGetInvoiceFromTxn (const Transaction *txn)
 {
-    KvpFrame *kvp;
-    KvpValue *value;
     GncGUID *guid;
     QofBook *book;
 
     if (!txn) return NULL;
 
     book = xaccTransGetBook (txn);
-    kvp = xaccTransGetSlots (txn);
-    value = kvp_frame_get_slot_path (kvp, GNC_INVOICE_ID, GNC_INVOICE_GUID, NULL);
-    if (!value) return NULL;
-
-    guid = kvp_value_get_guid (value);
+    qof_instance_get (QOF_INSTANCE (txn), "invoice", &guid, NULL);
     return gncInvoiceLookup(book, guid);
 }
 

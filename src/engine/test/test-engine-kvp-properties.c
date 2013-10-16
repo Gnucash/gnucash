@@ -71,6 +71,13 @@ setup_account (Fixture *fixture, gconstpointer pData)
 }
 
 static void
+setup_trans (Fixture *fixture, gconstpointer pData)
+{
+    QofBook *book = qof_book_new ();
+    fixture->trans = xaccMallocTransaction (book);
+}
+
+static void
 teardown (Fixture *fixture, gconstpointer pData)
 {
 /* It doesn't actually matter which union member we use here, they're
@@ -101,7 +108,30 @@ test_account_kvp_properties (Fixture *fixture, gconstpointer pData)
     g_assert (!qof_instance_is_dirty (QOF_INSTANCE (fixture->acct)));
 }
 
+static void
+test_trans_kvp_properties (Fixture *fixture, gconstpointer pData)
+{
+    GncGUID *guid = guid_malloc ();
+    GncGUID *guid_r;
+
+    qof_instance_set (QOF_INSTANCE (fixture->trans),
+		      "invoice", guid,
+		      NULL);
+
+    g_assert (qof_instance_is_dirty (QOF_INSTANCE (fixture->trans)));
+    qof_instance_mark_clean (QOF_INSTANCE (fixture->trans));
+
+    qof_instance_get (QOF_INSTANCE (fixture->trans),
+		      "invoice", &guid_r,
+		      NULL);
+    g_assert (guid_equal (guid, guid_r));
+    g_assert (!qof_instance_is_dirty (QOF_INSTANCE (fixture->trans)));
+    guid_free (guid);
+    guid_free (guid_r);
+}
+
 void test_suite_engine_kvp_properties (void)
 {
     GNC_TEST_ADD (suitename, "Account", Fixture, NULL, setup_account, test_account_kvp_properties, teardown);
+    GNC_TEST_ADD (suitename, "Transaction", Fixture, NULL, setup_trans, test_trans_kvp_properties, teardown);
 }

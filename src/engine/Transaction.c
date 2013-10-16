@@ -196,7 +196,8 @@ enum
     PROP_DESCRIPTION,
     PROP_CURRENCY,
     PROP_POST_DATE,
-    PROP_ENTER_DATE
+    PROP_ENTER_DATE,
+    PROP_INVOICE,
 };
 
 void
@@ -302,6 +303,9 @@ gnc_transaction_get_property(GObject* object,
                              GParamSpec* pspec)
 {
     Transaction* tx;
+    KvpFrame *frame;
+    gchar *key;
+    GValue *temp;
 
     g_return_if_fail(GNC_IS_TRANSACTION(object));
 
@@ -323,6 +327,10 @@ gnc_transaction_get_property(GObject* object,
     case PROP_ENTER_DATE:
         g_value_set_boxed(value, &tx->date_entered);
         break;
+    case PROP_INVOICE:
+	key = GNC_INVOICE_ID "/" GNC_INVOICE_GUID;
+	qof_instance_get_kvp (QOF_INSTANCE (tx), key, value);
+	break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
         break;
@@ -336,6 +344,8 @@ gnc_transaction_set_property(GObject* object,
                              GParamSpec* pspec)
 {
     Transaction* tx;
+    KvpFrame *frame;
+    gchar *key;
 
     g_return_if_fail(GNC_IS_TRANSACTION(object));
 
@@ -357,6 +367,10 @@ gnc_transaction_set_property(GObject* object,
     case PROP_ENTER_DATE:
         xaccTransSetDateEnteredTS(tx, g_value_get_boxed(value));
         break;
+    case PROP_INVOICE:
+	key = GNC_INVOICE_ID "/" GNC_INVOICE_GUID;
+	qof_instance_set_kvp (QOF_INSTANCE (tx), key, value);
+	break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
         break;
@@ -425,6 +439,15 @@ gnc_transaction_class_init(TransactionClass* klass)
                         "The date the transaction was entered.",
                         GNC_TYPE_TIMESPEC,
                         G_PARAM_READWRITE));
+
+     g_object_class_install_property(
+       gobject_class,
+        PROP_INVOICE,
+        g_param_spec_boxed("invoice",
+			   "Invoice attached to lot",
+			   "Used by GncInvoice",
+			   GNC_TYPE_GUID,
+			   G_PARAM_READWRITE));
 }
 
 /********************************************************************\
@@ -2593,6 +2616,7 @@ xaccTransFindSplitByAccount(const Transaction *trans, const Account *acc)
     FOR_EACH_SPLIT(trans, if (xaccSplitGetAccount(s) == acc) return s);
     return NULL;
 }
+
 
 /********************************************************************\
 \********************************************************************/
