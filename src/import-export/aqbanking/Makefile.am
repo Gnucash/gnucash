@@ -75,6 +75,6 @@ gtkbuilder_DATA = \
   assistant-ab-initial.glade \
   dialog-ab.glade
 
-EXTRA_DIST = ${ui_DATA} ${gtkbuilder_DATA}
+EXTRA_DIST = ${ui_DATA} ${gtkbuilder_DATA} migratable-prefs-aqbanking.xml
 
 AM_CPPFLAGS += -DG_LOG_DOMAIN=\"gnc.import.aqbanking\"

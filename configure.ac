@@ -659,11 +659,15 @@ case "${want_ofx}" in
   no)   AC_MSG_RESULT(no) ;;
   auto) AC_MSG_RESULT(yes -- automatic test) ;;
 esac
+
+MIGRATABLE_PREFS_OFX="/dev/null"
 if test x${want_ofx} != xno ; then
   PKG_CHECK_MODULES(LIBOFX, libofx, [want_ofx="yes"], [want_ofx="no"])
   _COMPONENTS="$_COMPONENTS ofx"
+  MIGRATABLE_PREFS_OFX="$srcdir/src/import-export/ofx/migratable-prefs-ofx.xml"
 fi
 AM_CONDITIONAL([WITH_OFX], [test "x${want_ofx}" != xno])
+AC_SUBST_FILE([MIGRATABLE_PREFS_OFX])
 ### --------------------------------------------------------------------------
 ### MT940
 AC_ARG_ENABLE( mt940,
@@ -685,6 +689,8 @@ AC_ARG_ENABLE( hbci,
   if test "x$enableval" != "xno" ; then
     AC_MSG_ERROR([--enable-hbci is obsolete -- the option has been renamed into --enable-aqbanking])
   fi)
+
+MIGRATABLE_PREFS_AQBANKING="/dev/null"
 if test x${want_aqbanking} = xyes ;
 then
   # Check for Aqbanking library
@@ -707,8 +713,10 @@ then
   AC_SUBST(AQBANKING_LIBS)
   AC_SUBST(AQBANKING_CFLAGS)
   _COMPONENTS="$_COMPONENTS aqbanking"
+  MIGRATABLE_PREFS_AQBANKING="$srcdir/src/import-export/aqbanking/migratable-prefs-aqbanking.xml"
 fi
 AM_CONDITIONAL([WITH_AQBANKING], [test x${want_aqbanking} = xyes])
+AC_SUBST_FILE([MIGRATABLE_PREFS_AQBANKING])
 
 AC_ARG_WITH(qt3_wizard_package,
                  [AS_HELP_STRING([--with-qt3-wizard-package=name],[name of package containing qt3-wizard (aqbanking)])],
@@ -1392,6 +1400,7 @@ AC_CONFIG_FILES(
   dnl # non-makefiles
   packaging/win32/gnucash.iss
   src/bin/gnucash.rc
+  src/app-utils/migratable-prefs.xml
   src/gnome/gnucash.desktop.in
 
   dnl # Please read doc/build-system before adding *anything* here
