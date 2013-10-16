@@ -47,6 +47,7 @@ typedef struct
     {
 	Account      *acct;
 	Transaction  *trans;
+	GNCLot       *lot;
 	GncCustomer  *cust;
 	GncEmployee  *emp;
 	GncJob       *job;
@@ -75,6 +76,13 @@ setup_trans (Fixture *fixture, gconstpointer pData)
 {
     QofBook *book = qof_book_new ();
     fixture->trans = xaccMallocTransaction (book);
+}
+
+static void
+setup_lot (Fixture *fixture, gconstpointer pData)
+{
+    QofBook *book = qof_book_new ();
+    fixture->lot = gnc_lot_new (book);
 }
 
 static void
@@ -130,8 +138,43 @@ test_trans_kvp_properties (Fixture *fixture, gconstpointer pData)
     guid_free (guid_r);
 }
 
+static void
+test_lot_kvp_properties (Fixture *fixture, gconstpointer pData)
+{
+    GncGUID *invoice = guid_malloc ();
+    GncGUID *invoice_r;
+    gint64 owner_type = 47;
+    gint64 owner_type_r;
+    GncGUID *owner = guid_malloc ();
+    GncGUID *owner_r;
+
+    qof_instance_set (QOF_INSTANCE (fixture->lot),
+		      "invoice", invoice,
+		      "owner-type", owner_type,
+		      "owner-guid", owner,
+		      NULL);
+
+    g_assert (qof_instance_is_dirty (QOF_INSTANCE (fixture->lot)));
+    qof_instance_mark_clean (QOF_INSTANCE (fixture->lot));
+
+    qof_instance_get (QOF_INSTANCE (fixture->lot),
+		      "invoice", &invoice_r,
+		      "owner-type", &owner_type_r,
+		      "owner-guid", &owner_r,
+		      NULL);
+    g_assert (guid_equal (invoice, invoice_r));
+    g_assert_cmpint (owner_type, ==, owner_type_r);
+    g_assert (guid_equal (owner, owner_r));
+    g_assert (!qof_instance_is_dirty (QOF_INSTANCE (fixture->lot)));
+    guid_free (invoice);
+    guid_free (invoice_r);
+    guid_free (owner);
+    guid_free (owner_r);
+}
+
 void test_suite_engine_kvp_properties (void)
 {
     GNC_TEST_ADD (suitename, "Account", Fixture, NULL, setup_account, test_account_kvp_properties, teardown);
     GNC_TEST_ADD (suitename, "Transaction", Fixture, NULL, setup_trans, test_trans_kvp_properties, teardown);
+    GNC_TEST_ADD (suitename, "Lot", Fixture, NULL, setup_lot, test_lot_kvp_properties, teardown);
 }

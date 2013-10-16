@@ -82,8 +82,6 @@ static QofLogModule log_module = GNC_MOD_BUSINESS;
 
 #define _GNC_MOD_NAME     GNC_ID_INVOICE
 
-#define GNC_INVOICE_ID    "gncInvoice"
-#define GNC_INVOICE_GUID  "invoice-guid"
 #define GNC_INVOICE_IS_CN "credit-note"
 
 #define SET_STR(obj, member, str) { \
@@ -1080,52 +1078,37 @@ qofInvoiceSetJob (GncInvoice *invoice, GncJob *job)
 static void
 gncInvoiceDetachFromLot (GNCLot *lot)
 {
-    KvpFrame *kvp;
-
     if (!lot) return;
+
     gnc_lot_begin_edit (lot);
-    kvp = gnc_lot_get_slots (lot);
-    kvp_frame_set_slot_path (kvp, NULL, GNC_INVOICE_ID, GNC_INVOICE_GUID, NULL);
-    qof_instance_set_dirty (QOF_INSTANCE (lot));
+    qof_instance_set (QOF_INSTANCE (lot), "invoice", NULL, NULL);
     gnc_lot_commit_edit (lot);
 }
 
 static void
 gncInvoiceAttachToLot (GncInvoice *invoice, GNCLot *lot)
 {
-    KvpFrame *kvp;
-    KvpValue *value;
-
+    GncGUID *guid;
     if (!invoice || !lot)
         return;
 
     if (invoice->posted_lot) return;	/* Cannot reset invoice's lot */
-
+    guid  = (GncGUID*)qof_instance_get_guid (QOF_INSTANCE (invoice));
     gnc_lot_begin_edit (lot);
-    kvp = gnc_lot_get_slots (lot);
-    value = kvp_value_new_guid (qof_instance_get_guid (QOF_INSTANCE(invoice)));
-    kvp_frame_set_slot_path (kvp, value, GNC_INVOICE_ID, GNC_INVOICE_GUID, NULL);
-    qof_instance_set_dirty (QOF_INSTANCE (lot));
+    qof_instance_set (QOF_INSTANCE (lot), "invoice", guid, NULL);
     gnc_lot_commit_edit (lot);
-    kvp_value_delete (value);
     gncInvoiceSetPostedLot (invoice, lot);
 }
 
 GncInvoice * gncInvoiceGetInvoiceFromLot (GNCLot *lot)
 {
-    KvpFrame *kvp;
-    KvpValue *value;
     GncGUID *guid;
     QofBook *book;
 
     if (!lot) return NULL;
 
     book = gnc_lot_get_book (lot);
-    kvp = gnc_lot_get_slots (lot);
-    value = kvp_frame_get_slot_path (kvp, GNC_INVOICE_ID, GNC_INVOICE_GUID, NULL);
-    if (!value) return NULL;
-
-    guid = kvp_value_get_guid (value);
+    qof_instance_get (QOF_INSTANCE (lot), "invoice", &guid, NULL);
     return gncInvoiceLookup(book, guid);
 }
 

@@ -256,5 +256,10 @@ void gnc_engine_signal_commit_error( QofBackendError errcode );
  */
 #define GNC_INVOICE_ID    "gncInvoice"
 #define GNC_INVOICE_GUID  "invoice-guid"
+#define GNC_OWNER_ID    "gncOwner"
+#define GNC_OWNER_TYPE  "owner-type"
+#define GNC_OWNER_GUID  "owner-guid"
+
+
 #endif
 /** @} */

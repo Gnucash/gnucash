@@ -65,7 +65,11 @@ enum
 {
     PROP_0,
     PROP_IS_CLOSED,
-    PROP_MARKER
+    PROP_MARKER,
+
+    PROP_INVOICE,
+    PROP_OWNER_TYPE,
+    PROP_OWNER_GUID,
 };
 
 typedef struct LotPrivate
@@ -91,6 +95,11 @@ typedef struct LotPrivate
     (G_TYPE_INSTANCE_GET_PRIVATE((o), GNC_TYPE_LOT, LotPrivate))
 
 #define gnc_lot_set_guid(L,G)  qof_instance_set_guid(QOF_INSTANCE(L),&(G))
+
+/* ============================================================= */
+
+static void gnc_lot_set_invoice (GNCLot* lot, GncGUID *guid);
+static GncGUID *gnc_lot_get_invoice (GNCLot* lot);
 
 /* ============================================================= */
 
@@ -126,6 +135,9 @@ gnc_lot_get_property(GObject* object, guint prop_id, GValue* value, GParamSpec* 
 {
     GNCLot* lot;
     LotPrivate* priv;
+    KvpFrame *frame;
+    gchar *key;
+    GValue *temp;
 
     g_return_if_fail(GNC_IS_LOT(object));
 
@@ -139,6 +151,21 @@ gnc_lot_get_property(GObject* object, guint prop_id, GValue* value, GParamSpec* 
     case PROP_MARKER:
         g_value_set_int(value, priv->marker);
         break;
+    case PROP_INVOICE:
+	key = GNC_INVOICE_ID "/" GNC_INVOICE_GUID;
+	qof_instance_get_kvp (QOF_INSTANCE (lot), key, value);
+	break;
+    case PROP_OWNER_TYPE:
+	key = GNC_OWNER_ID"/" GNC_OWNER_TYPE;
+	qof_instance_get_kvp (QOF_INSTANCE (lot), key, value);
+	break;
+    case PROP_OWNER_GUID:
+	key = GNC_OWNER_ID "/" GNC_OWNER_GUID;
+	qof_instance_get_kvp (QOF_INSTANCE (lot), key, value);
+	break;
+    default:
+        G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
+        break;
     }
 }
 
@@ -147,6 +174,8 @@ gnc_lot_set_property(GObject* object, guint prop_id, const GValue* value, GParam
 {
     GNCLot* lot;
     LotPrivate* priv;
+    KvpFrame *frame;
+    gchar *key = NULL;
 
     g_return_if_fail(GNC_IS_LOT(object));
 
@@ -160,7 +189,22 @@ gnc_lot_set_property(GObject* object, guint prop_id, const GValue* value, GParam
     case PROP_MARKER:
         priv->marker = g_value_get_int(value);
         break;
-    }
+    case PROP_INVOICE:
+	key = GNC_INVOICE_ID"/" GNC_INVOICE_GUID;
+	qof_instance_set_kvp (QOF_INSTANCE (lot), key, value);
+	break;
+    case PROP_OWNER_TYPE:
+	key = GNC_OWNER_ID "/" GNC_OWNER_TYPE;
+	qof_instance_set_kvp (QOF_INSTANCE (lot), key, value);
+	break;
+    case PROP_OWNER_GUID:
+	key = GNC_OWNER_ID "/" GNC_OWNER_GUID;
+	qof_instance_set_kvp (QOF_INSTANCE (lot), key, value);
+	break;
+    default:
+        G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
+        break;
+     }
 }
 
 static void
@@ -194,8 +238,32 @@ gnc_lot_class_init(GNCLotClass* klass)
                          0, G_MAXINT8, 0,
                          G_PARAM_READWRITE));
 
+     g_object_class_install_property(
+       gobject_class,
+        PROP_INVOICE,
+        g_param_spec_boxed("invoice",
+			   "Invoice attached to lot",
+			   "Used by GncInvoice",
+			   GNC_TYPE_GUID,
+			   G_PARAM_READWRITE));
 
+     g_object_class_install_property(
+       gobject_class,
+        PROP_OWNER_TYPE,
+        g_param_spec_int64("owner-type",
+			   "Owning Entity Type of  lot",
+			   "Used by GncOwner",
+			   0, G_MAXINT64, 0,
+			   G_PARAM_READWRITE));
 
+     g_object_class_install_property(
+       gobject_class,
+        PROP_OWNER_GUID,
+        g_param_spec_boxed("owner-guid",
+			   "Owner attached to lot",
+			   "Used by GncOwner",
+			   GNC_TYPE_GUID,
+			   G_PARAM_READWRITE));
 }
 
 GNCLot *
