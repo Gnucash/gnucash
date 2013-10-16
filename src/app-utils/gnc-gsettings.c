@@ -207,7 +207,7 @@ gnc_gsettings_remove_cb_by_func (const gchar *schema,
 
     matched = g_signal_handlers_disconnect_matched (
             schema_ptr,
-            G_SIGNAL_MATCH_DETAIL ||G_SIGNAL_MATCH_FUNC || G_SIGNAL_MATCH_DATA,
+            G_SIGNAL_MATCH_DETAIL | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA,
             0, /* signal_id */
             g_quark_from_string (signal),   /* signal_detail */
             NULL, /* closure */
