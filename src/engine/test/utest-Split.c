@@ -310,15 +310,15 @@ test_xaccDupeSplit (Fixture *fixture, gconstpointer pData)
     g_assert (split->gains_split != f_split->gains_split);
 
 }
-/* xaccSplitClone
+/* xaccSplitCloneNoKvp
 Split *
-xaccSplitClone (const Split *s)// C: 1
+xaccSplitCloneNoKvp (const Split *s)// C: 1 
 */
 static void
-test_xaccSplitClone (Fixture *fixture, gconstpointer pData)
+test_xaccSplitCloneNoKvp (Fixture *fixture, gconstpointer pData)
 {
     Split *f_split = fixture->split;
-    Split *split = xaccSplitClone (f_split);
+    Split *split = xaccSplitCloneNoKvp (f_split);
 
     g_assert (split != fixture->split);
     g_assert (qof_instance_get_guid (split) != qof_instance_get_guid (f_split));
@@ -331,7 +331,7 @@ test_xaccSplitClone (Fixture *fixture, gconstpointer pData)
     g_assert (split->lot == f_split->lot);
     g_assert_cmpstr (split->memo, ==, f_split->memo);
     g_assert_cmpstr (split->action, ==, f_split->action);
-    g_assert (kvp_frame_compare (split->inst.kvp_data, f_split->inst.kvp_data) == 0);
+    g_assert (kvp_frame_is_empty (split->inst.kvp_data));
     g_assert_cmpint (split->reconciled, ==, f_split->reconciled);
     g_assert (timespec_equal (&(split->date_reconciled), &(f_split->date_reconciled)));
     g_assert (gnc_numeric_equal (split->value, f_split->value));
@@ -408,7 +408,7 @@ xaccSplitEqual(const Split *sa, const Split *sb,// C: 2 in 2 SCM: 1
 static void
 test_xaccSplitEqual (Fixture *fixture, gconstpointer pData)
 {
-    Split *split1 = xaccSplitClone (fixture->split);
+    Split *split1 = xaccSplitCloneNoKvp (fixture->split);
     Split *split2 = xaccDupeSplit (fixture->split);
     gchar *msg01 = "[xaccSplitEqual] one is NULL";
     gchar *msg02 = "[xaccSplitEqual] GUIDs differ";
@@ -771,16 +771,6 @@ test_get_commodity_denom (Fixture *fixture, gconstpointer pData)
     fixture->split->acc = acc;
     g_assert_cmpint (fixture->func->get_commodity_denom (fixture->split), ==, denom);
 }
-/* xaccSplitGetSlots
-KvpFrame *
-xaccSplitGetSlots (const Split * s)// C: 17 in 8
-Simple passthrough, no test.
-*/
-// Not Used
-/* xaccSplitSetSlots_nc
-void
-xaccSplitSetSlots_nc(Split *s, KvpFrame *frm)//
-*/
 /* xaccSplitSetSharePriceAndAmount
 void
 xaccSplitSetSharePriceAndAmount (Split *s, gnc_numeric price, gnc_numeric amt)// C: 1
@@ -1873,7 +1863,7 @@ test_suite_split (void)
     GNC_TEST_ADD_FUNC (suitename, "gnc split set & get property", test_gnc_split_set_get_property);
     GNC_TEST_ADD (suitename, "xaccMallocSplit", Fixture, NULL, setup, test_xaccMallocSplit, teardown);
     GNC_TEST_ADD (suitename, "xaccDupeSplit", Fixture, NULL, setup, test_xaccDupeSplit, teardown);
-    GNC_TEST_ADD (suitename, "xaccSplitClone", Fixture, NULL, setup, test_xaccSplitClone, teardown);
+    GNC_TEST_ADD (suitename, "xaccSplitCloneNoKvp", Fixture, NULL, setup, test_xaccSplitCloneNoKvp, teardown);
     GNC_TEST_ADD (suitename, "mark split", Fixture, NULL, setup, test_mark_split, teardown);
     GNC_TEST_ADD (suitename, "xaccSplitEqualCheckBal", Fixture, NULL, setup, test_xaccSplitEqualCheckBal, teardown);
     GNC_TEST_ADD (suitename, "xaccSplitEqual", Fixture, NULL, setup, test_xaccSplitEqual, teardown);

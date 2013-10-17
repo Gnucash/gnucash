@@ -621,7 +621,7 @@ xaccTransCloneNoKvp (const Transaction *from)
     xaccTransBeginEdit(to);
     for (node = from->splits; node; node = node->next)
     {
-        split = xaccSplitClone(node->data);
+        split = xaccSplitCloneNoKvp(node->data);
         split->parent = to;
         to->splits = g_list_append (to->splits, split);
     }
@@ -636,8 +636,15 @@ Transaction *
 xaccTransClone (const Transaction *from)
 {
     Transaction *to = xaccTransCloneNoKvp (from);
+    int i = 0;
+    int length = g_list_length (from->splits);
+
     xaccTransBeginEdit (to);
     to->inst.kvp_data = kvp_frame_copy (from->inst.kvp_data);
+    g_assert (g_list_length (to->splits) == length);
+    for (i = 0; i < length; ++i)
+	xaccSplitCopyKvp (g_list_nth_data (from->splits, i),
+			    g_list_nth_data (to->splits, i));
     xaccTransCommitEdit (to);
     return to;
 }

@@ -407,7 +407,7 @@ xaccDupeSplit (const Split *s)
 }
 
 Split *
-xaccSplitClone (const Split *s)
+xaccSplitCloneNoKvp (const Split *s)
 {
     Split *split = g_object_new (GNC_TYPE_SPLIT, NULL);
 
@@ -425,10 +425,8 @@ xaccSplitClone (const Split *s)
     split->gains = GAINS_STATUS_UNKNOWN;
     split->gains_split = NULL;
 
-    qof_instance_init_data(&split->inst, GNC_ID_SPLIT, qof_instance_get_book(s));
-    kvp_frame_delete(split->inst.kvp_data);
-    split->inst.kvp_data = kvp_frame_copy(s->inst.kvp_data);
-
+    qof_instance_init_data(&split->inst, GNC_ID_SPLIT,
+                           qof_instance_get_book(s));
     xaccAccountInsertSplit(s->acc, split);
     if (s->lot)
     {
@@ -438,6 +436,11 @@ xaccSplitClone (const Split *s)
     return split;
 }
 
+void
+xaccSplitCopyKvp (const Split *from, Split *to)
+{
+    to->inst.kvp_data = kvp_frame_copy(from->inst.kvp_data);
+}
 
 /*################## Added for Reg2 #################*/
 
