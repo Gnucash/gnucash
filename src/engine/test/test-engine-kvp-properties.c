@@ -47,13 +47,14 @@ typedef struct
     {
 	Account      *acct;
 	Transaction  *trans;
+	Split        *split;
 	GNCLot       *lot;
 	GncCustomer  *cust;
 	GncEmployee  *emp;
 	GncJob       *job;
 	GncVendor    *vend;
     };
-    GSList *split;
+    GSList *hdlrs;
 } Fixture;
 
 /* Prototype to shut clang up */
@@ -76,6 +77,13 @@ setup_trans (Fixture *fixture, gconstpointer pData)
 {
     QofBook *book = qof_book_new ();
     fixture->trans = xaccMallocTransaction (book);
+}
+
+static void
+setup_split (Fixture *fixture, gconstpointer pData)
+{
+    QofBook *book = qof_book_new ();
+    fixture->split = xaccMallocSplit (book);
 }
 
 static void
@@ -139,6 +147,39 @@ test_trans_kvp_properties (Fixture *fixture, gconstpointer pData)
 }
 
 static void
+test_split_kvp_properties (Fixture *fixture, gconstpointer pData)
+{
+    gchar *debit_formula = "e^xdydx";
+    gchar *credit_formula = "seccostansin";
+    gchar *debit_formula_r, *credit_formula_r;
+    GncGUID *sx_account = guid_malloc ();
+    GncGUID *sx_account_r;
+
+    qof_instance_set (QOF_INSTANCE (fixture->split),
+		      "sx-debit-formula", debit_formula,
+		      "sx-credit-formula", credit_formula,
+		      "sx-account", sx_account,
+		      NULL);
+
+    g_assert (qof_instance_is_dirty (QOF_INSTANCE (fixture->split)));
+    qof_instance_mark_clean (QOF_INSTANCE (fixture->split));
+
+    qof_instance_get (QOF_INSTANCE (fixture->split),
+		      "sx-debit-formula", &debit_formula_r,
+		      "sx-credit-formula", &credit_formula_r,
+		      "sx-account", &sx_account_r,
+		      NULL);
+    g_assert_cmpstr (debit_formula, ==, debit_formula_r);
+    g_assert_cmpstr (credit_formula, ==, credit_formula_r);
+    g_assert (guid_equal (sx_account, sx_account_r));
+    g_assert (!qof_instance_is_dirty (QOF_INSTANCE (fixture->split)));
+    g_free (debit_formula_r);
+    g_free (credit_formula_r);
+    guid_free (sx_account);
+    guid_free (sx_account_r);
+}
+
+static void
 test_lot_kvp_properties (Fixture *fixture, gconstpointer pData)
 {
     GncGUID *invoice = guid_malloc ();
@@ -176,5 +217,6 @@ void test_suite_engine_kvp_properties (void)
 {
     GNC_TEST_ADD (suitename, "Account", Fixture, NULL, setup_account, test_account_kvp_properties, teardown);
     GNC_TEST_ADD (suitename, "Transaction", Fixture, NULL, setup_trans, test_trans_kvp_properties, teardown);
+    GNC_TEST_ADD (suitename, "Split", Fixture, NULL, setup_split, test_split_kvp_properties, teardown);
     GNC_TEST_ADD (suitename, "Lot", Fixture, NULL, setup_lot, test_lot_kvp_properties, teardown);
 }

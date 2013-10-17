@@ -1041,8 +1041,8 @@ pack_split_info (TTSplitInfo *s_info, Account *parent_acct,
                  Transaction *parent_trans, QofBook *book)
 {
     Split *split;
-    KvpFrame *split_frame;
-    KvpValue *tmp_value;
+    const gchar *credit_formula;
+    const gchar *debit_formula;
     const GncGUID *acc_guid;
 
     split = xaccMallocSplit(book);
@@ -1058,40 +1058,14 @@ pack_split_info (TTSplitInfo *s_info, Account *parent_acct,
     xaccAccountInsertSplit(parent_acct,
                            split);
 
-    split_frame = xaccSplitGetSlots(split);
-
-    tmp_value
-    = kvp_value_new_string(gnc_ttsplitinfo_get_credit_formula(s_info));
-
-    kvp_frame_set_slot_path(split_frame,
-                            tmp_value,
-                            GNC_SX_ID,
-                            GNC_SX_CREDIT_FORMULA,
-                            NULL);
-    kvp_value_delete(tmp_value);
-
-    tmp_value
-    = kvp_value_new_string(gnc_ttsplitinfo_get_debit_formula(s_info));
-
-    kvp_frame_set_slot_path(split_frame,
-                            tmp_value,
-                            GNC_SX_ID,
-                            GNC_SX_DEBIT_FORMULA,
-                            NULL);
-
-    kvp_value_delete(tmp_value);
-
+    credit_formula = gnc_ttsplitinfo_get_credit_formula(s_info);
+    debit_formula = gnc_ttsplitinfo_get_debit_formula(s_info);
     acc_guid = qof_entity_get_guid(QOF_INSTANCE(gnc_ttsplitinfo_get_account(s_info)));
-
-    tmp_value = kvp_value_new_guid(acc_guid);
-
-    kvp_frame_set_slot_path(split_frame,
-                            tmp_value,
-                            GNC_SX_ID,
-                            GNC_SX_ACCOUNT,
-                            NULL);
-
-    kvp_value_delete(tmp_value);
+    qof_instance_set (QOF_INSTANCE (split),
+		      "sx-credit-formula", credit_formula,
+		      "sx-debit-formula", debit_formula,
+		      "sx-account", acc_guid,
+		      NULL);
 
     return split;
 }

@@ -375,9 +375,9 @@ gnc_sx_get_sxes_referencing_account(QofBook *book, Account *acct)
         for (; splits != NULL; splits = splits->next)
         {
             Split *s = (Split*)splits->data;
-            KvpFrame *frame = kvp_frame_get_frame(xaccSplitGetSlots(s), GNC_SX_ID);
-            GncGUID *sx_split_acct_guid = kvp_frame_get_guid(frame, GNC_SX_ACCOUNT);
-            if (guid_equal(acct_guid, sx_split_acct_guid))
+            GncGUID *guid;
+            qof_instance_get (QOF_INSTANCE (s), "sx-account", &guid, NULL);
+            if (guid_equal(acct_guid, guid))
             {
                 rtn = g_list_append(rtn, sx);
             }

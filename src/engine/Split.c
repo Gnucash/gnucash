@@ -61,6 +61,12 @@ const char *void_former_val_str = "void-former-value";
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_ENGINE;
 
+/* KVP key values used for SX info stored Split's slots. */
+#define GNC_SX_ID                    "sched-xaction"
+#define GNC_SX_ACCOUNT               "account"
+#define GNC_SX_CREDIT_FORMULA        "credit-formula"
+#define GNC_SX_DEBIT_FORMULA         "debit-formula"
+
 enum
 {
     PROP_0,
@@ -71,7 +77,10 @@ enum
     PROP_RECONCILE_DATE,
     PROP_TX,
     PROP_ACCOUNT,
-    PROP_LOT
+    PROP_SX_CREDIT_FORMULA,
+    PROP_SX_DEBIT_FORMULA,
+    PROP_SX_ACCOUNT,
+    PROP_LOT,
 };
 
 /* GObject Initialization */
@@ -127,6 +136,7 @@ gnc_split_get_property(GObject         *object,
                        GParamSpec      *pspec)
 {
     Split *split;
+    gchar *key;
 
     g_return_if_fail(GNC_IS_SPLIT(object));
 
@@ -157,6 +167,18 @@ gnc_split_get_property(GObject         *object,
     case PROP_LOT:
         g_value_take_object(value, split->lot);
         break;
+    case PROP_SX_CREDIT_FORMULA:
+	key = GNC_SX_ID "/" GNC_SX_CREDIT_FORMULA;
+	qof_instance_get_kvp (QOF_INSTANCE (split), key, value);
+	break;
+    case PROP_SX_DEBIT_FORMULA:
+	key = GNC_SX_ID "/" GNC_SX_DEBIT_FORMULA;
+	qof_instance_get_kvp (QOF_INSTANCE (split), key, value);
+	break;
+    case PROP_SX_ACCOUNT:
+	key = GNC_SX_ID "/" GNC_SX_ACCOUNT;
+	qof_instance_get_kvp (QOF_INSTANCE (split), key, value);
+	break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
         break;
@@ -171,6 +193,7 @@ gnc_split_set_property(GObject         *object,
 {
     Split *split;
     gnc_numeric* number;
+    gchar *key;
 
     g_return_if_fail(GNC_IS_SPLIT(object));
 
@@ -203,7 +226,19 @@ gnc_split_set_property(GObject         *object,
     case PROP_LOT:
         xaccSplitSetLot(split, g_value_get_object(value));
         break;
-    default:
+    case PROP_SX_CREDIT_FORMULA:
+	key = GNC_SX_ID "/" GNC_SX_CREDIT_FORMULA;
+	qof_instance_set_kvp (QOF_INSTANCE (split), key, value);
+	break;
+    case PROP_SX_DEBIT_FORMULA:
+	key = GNC_SX_ID "/" GNC_SX_DEBIT_FORMULA;
+	qof_instance_set_kvp (QOF_INSTANCE (split), key, value);
+	break;
+    case PROP_SX_ACCOUNT:
+	key = GNC_SX_ID "/" GNC_SX_ACCOUNT;
+	qof_instance_set_kvp (QOF_INSTANCE (split), key, value);
+	break;
+     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
         break;
     }
@@ -300,6 +335,37 @@ gnc_split_class_init(SplitClass* klass)
                           "The lot that this split belongs to.",
                           GNC_TYPE_LOT,
                           G_PARAM_READWRITE));
+
+    g_object_class_install_property
+    (gobject_class,
+     PROP_MEMO,
+     g_param_spec_string("sx-debit-formula",
+                         "Schedule Transaction Debit Formula",
+			 "The formula used to calculate the actual debit "
+			 "amount when a real split is generated from this "
+			 "SX split.",
+                         NULL,
+                         G_PARAM_READWRITE));
+
+    g_object_class_install_property
+    (gobject_class,
+     PROP_MEMO,
+     g_param_spec_string("sx-credit-formula",
+                         "Schedule Transaction Credit Formula",
+			 "The formula used to calculate the actual credit "
+			 "amount when a real split is generated from this "
+			 "SX split.",
+                         NULL,
+                         G_PARAM_READWRITE));
+
+    g_object_class_install_property
+    (gobject_class,
+     PROP_SX_ACCOUNT,
+     g_param_spec_boxed("sx-account",
+                        "Scheduled Transaction Account",
+                        "The target account for a scheduled transaction split.",
+                        GNC_TYPE_GUID,
+                        G_PARAM_READWRITE));
 }
 
 /********************************************************************\
