@@ -268,37 +268,6 @@ gnc_budget_view_get_selected_accounts(GncBudgetView* view)
     return gnc_tree_view_account_get_selected_accounts(GNC_TREE_VIEW_ACCOUNT(priv->tree_view));
 }
 
-#if 0
-static void
-gnc_plugin_page_budget_refresh_cb(GHashTable *changes, gpointer user_data)
-{
-    GncBudgetView *view;
-    GncBudgetViewPrivate *priv;
-    const EventInfo* ei;
-
-    view = GNC_BUDGET_VIEW(user_data);
-    priv = GNC_BUDGET_VIEW_GET_PRIVATE(view);
-    if (changes)
-    {
-        ei = gnc_gui_get_entity_events(changes, &priv->key);
-        if (ei)
-        {
-            if (ei->event_mask & QOF_EVENT_DESTROY)
-            {
-                gnc_plugin_page_budget_close_cb(user_data);
-                return;
-            }
-            if (ei->event_mask & QOF_EVENT_MODIFY)
-            {
-                DEBUG("refreshing budget view because budget was modified");
-                gnc_budget_view_refresh(view);
-            }
-        }
-    }
-}
-#endif
-
-
 /****************************
  * GncPluginPage Functions  *
  ***************************/
@@ -1047,6 +1016,19 @@ gnc_budget_view_refresh(GncBudgetView *view)
     }
 
     gnc_tree_view_configure_columns(GNC_TREE_VIEW(priv->tree_view));
+
+    /* If we're creating new columns to be appended to already existing
+     * columns, first delete the total column. (Then regenerate after
+     * new columns have been appended */
+    if (num_periods_visible != 0 && num_periods > num_periods_visible)
+    {
+        /* Delete the totals column */
+        col = priv->total_col;
+        gtk_tree_view_remove_column(GTK_TREE_VIEW(priv->tree_view), col);
+        priv->total_col = NULL;
+        col = gtk_tree_view_get_column(GTK_TREE_VIEW(priv->totals_tree_view), num_periods_visible+1);
+        gtk_tree_view_remove_column(GTK_TREE_VIEW(priv->totals_tree_view), col);
+    }
 
     /* Create any needed columns */
     while (num_periods_visible < num_periods)
