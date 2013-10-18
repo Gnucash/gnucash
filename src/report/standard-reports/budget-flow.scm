@@ -61,7 +61,14 @@
       options
       (gnc:make-number-range-option
         gnc:pagename-general optname-periods
-        "b" (N_ "Period number.") 1 1 12 0 1))
+        ;; FIXME: It would be nice if the max number of budget periods (60) was
+        ;; defined globally somewhere so we could reference it here.  However, it
+        ;; only appears to be defined currently in
+        ;; src/gnome/gtkbuilder/gnc-plugin-page-budget.glade.
+        ;; FIXME: It would be even nicer if the max number of budget
+        ;; periods was determined by the number of periods in the
+        ;; currently selected budget
+        "b" (N_ "Period number.") 1 1 60 0 1))
 
     ;; Option to select the currency the report will be shown in
     (gnc:options-add-currency!
