@@ -83,7 +83,7 @@ endif
 		echo "# GnuCash was not installed in the default location" >> $@.tmp; \
 		echo "# XDG_DATA_DIRS will be set so that our documentation" >> $@.tmp; \
 		echo "# and gsettings schemas are found." >> $@.tmp; \
-		echo "XDG_DATA_DIRS=$(prefix)/share:{XDG_DATA_DIRS}:$(XDG_DATA_DIRS):/usr/local/share/:/usr/share/" >> $@.tmp; \
+		echo "XDG_DATA_DIRS=$(prefix)/share;{XDG_DATA_DIRS};$(XDG_DATA_DIRS);/usr/local/share/;/usr/share/" >> $@.tmp; \
 	fi
 	mv $@.tmp $@
 
