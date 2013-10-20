@@ -309,10 +309,13 @@ environment_override()
             for ( j = 0; j < val_count; j++ )
             {
                 gchar *expanded = environment_expand (val_list[j]);
-                new_val = g_build_path (G_SEARCHPATH_SEPARATOR_S, tmp_val, expanded, NULL);
-                g_free (tmp_val);
-                g_free(expanded);
-                tmp_val = new_val;
+                if (expanded && strlen(expanded))
+                {
+                    new_val = g_build_path (G_SEARCHPATH_SEPARATOR_S, tmp_val, expanded, NULL);
+                    g_free (tmp_val);
+                    g_free(expanded);
+                    tmp_val = new_val;
+                }
             }
             g_strfreev (val_list);
 
