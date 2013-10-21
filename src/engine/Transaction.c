@@ -183,6 +183,7 @@ const char *trans_is_closing_str = "book_closing";
 #define TRANS_TXN_TYPE_KVP       "trans-txn-type"
 #define TRANS_READ_ONLY_REASON   "trans-read-only"
 #define TRANS_REVERSED_BY        "reversed-by"
+#define GNC_SX_FROM              "from-sched-xaction"
 
 #define ISO_DATELENGTH 32 /* length of an iso 8601 date string. */
 
@@ -198,6 +199,8 @@ enum
     PROP_POST_DATE,
     PROP_ENTER_DATE,
     PROP_INVOICE,
+    PROP_SX_TXN,
+    PROP_ONLINE_ACCOUNT,
 };
 
 void
@@ -331,6 +334,14 @@ gnc_transaction_get_property(GObject* object,
 	key = GNC_INVOICE_ID "/" GNC_INVOICE_GUID;
 	qof_instance_get_kvp (QOF_INSTANCE (tx), key, value);
 	break;
+    case PROP_SX_TXN:
+	key = GNC_SX_FROM;
+	qof_instance_get_kvp (QOF_INSTANCE (tx), key, value);
+	break;
+    case PROP_ONLINE_ACCOUNT:
+	key = "online_id";
+	qof_instance_get_kvp (QOF_INSTANCE (tx), key, value);
+	break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
         break;
@@ -369,6 +380,14 @@ gnc_transaction_set_property(GObject* object,
         break;
     case PROP_INVOICE:
 	key = GNC_INVOICE_ID "/" GNC_INVOICE_GUID;
+	qof_instance_set_kvp (QOF_INSTANCE (tx), key, value);
+	break;
+    case PROP_SX_TXN:
+	key = GNC_SX_FROM;
+	qof_instance_set_kvp (QOF_INSTANCE (tx), key, value);
+	break;
+    case PROP_ONLINE_ACCOUNT:
+	key = "online_id";
 	qof_instance_set_kvp (QOF_INSTANCE (tx), key, value);
 	break;
     default:
@@ -448,6 +467,27 @@ gnc_transaction_class_init(TransactionClass* klass)
 			   "Used by GncInvoice",
 			   GNC_TYPE_GUID,
 			   G_PARAM_READWRITE));
+
+     g_object_class_install_property(
+       gobject_class,
+        PROP_SX_TXN,
+        g_param_spec_boxed("from-sched-xaction",
+			   "From Scheduled Transaction",
+			   "Used by Scheduled Transastions to record the "
+			   "originating template transaction for created "
+			   "transactions",
+			   GNC_TYPE_GUID,
+			   G_PARAM_READWRITE));
+
+    g_object_class_install_property
+    (gobject_class,
+     PROP_ONLINE_ACCOUNT,
+     g_param_spec_string ("online-id",
+                          "Online Account ID",
+                          "The online account which corresponds to this "
+			  "account for OFX/HCBI import",
+                          NULL,
+                          G_PARAM_READWRITE));
 }
 
 /********************************************************************\

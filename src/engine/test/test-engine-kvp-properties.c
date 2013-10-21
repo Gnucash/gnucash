@@ -155,23 +155,35 @@ test_account_kvp_properties (Fixture *fixture, gconstpointer pData)
 static void
 test_trans_kvp_properties (Fixture *fixture, gconstpointer pData)
 {
-    GncGUID *guid = guid_malloc ();
-    GncGUID *guid_r;
+    GncGUID *invoice = guid_malloc ();
+    GncGUID *from_sx = guid_malloc ();
+    GncGUID *invoice_r, *from_sx_r;
+    gchar *online_id = "my online id";
+    gchar *online_id_r;
 
     qof_instance_set (QOF_INSTANCE (fixture->trans),
-		      "invoice", guid,
+		      "invoice", invoice,
+		      "from-sched-xaction", from_sx,
+		      "online-id", online_id,
 		      NULL);
 
     g_assert (qof_instance_is_dirty (QOF_INSTANCE (fixture->trans)));
     qof_instance_mark_clean (QOF_INSTANCE (fixture->trans));
 
     qof_instance_get (QOF_INSTANCE (fixture->trans),
-		      "invoice", &guid_r,
+		      "invoice", &invoice_r,
+		      "from-sched-xaction", &from_sx_r,
+		      "online-id", &online_id_r,
 		      NULL);
-    g_assert (guid_equal (guid, guid_r));
+    g_assert (guid_equal (invoice, invoice_r));
+    g_assert (guid_equal (from_sx, from_sx_r));
+    g_assert_cmpstr (online_id, ==, online_id_r);
     g_assert (!qof_instance_is_dirty (QOF_INSTANCE (fixture->trans)));
-    guid_free (guid);
-    guid_free (guid_r);
+    guid_free (invoice);
+    guid_free (invoice_r);
+    guid_free (from_sx);
+    guid_free (from_sx_r);
+    g_free (online_id_r);
 }
 
 static void
