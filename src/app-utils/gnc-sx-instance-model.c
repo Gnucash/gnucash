@@ -176,10 +176,9 @@ _get_vars_helper(Transaction *txn, void *var_hash_data)
 {
     GHashTable *var_hash = (GHashTable*)var_hash_data;
     GList *split_list;
-    kvp_frame *kvpf;
-    kvp_value *kvp_val;
     Split *s;
-    char *str;
+    gchar *credit_formula;
+    gchar *debit_formula;
     gnc_commodity *first_cmdty = NULL;
 
     split_list = xaccTransGetSplitList(txn);
@@ -195,12 +194,12 @@ _get_vars_helper(Transaction *txn, void *var_hash_data)
         Account *acct;
 
         s = (Split*)split_list->data;
-        kvpf = xaccSplitGetSlots(s);
-        kvp_val = kvp_frame_get_slot_path(kvpf,
-                                          GNC_SX_ID,
-                                          GNC_SX_ACCOUNT,
-                                          NULL);
-        acct_guid = kvp_value_get_guid(kvp_val);
+
+        qof_instance_get (QOF_INSTANCE (s),
+			  "sx-account", &acct_guid,
+			  "sx-credit-formula", &credit_formula,
+			  "sx-debit-formula", &debit_formula,
+			  NULL);
         acct = xaccAccountLookup(acct_guid, gnc_get_current_book());
         split_cmdty = xaccAccountGetCommodity(acct);
         if (first_cmdty == NULL)
@@ -226,31 +225,16 @@ _get_vars_helper(Transaction *txn, void *var_hash_data)
         }
 
         // existing... ------------------------------------------
-        kvp_val = kvp_frame_get_slot_path(kvpf,
-                                          GNC_SX_ID,
-                                          GNC_SX_CREDIT_FORMULA,
-                                          NULL);
-        if (kvp_val != NULL)
-        {
-            str = kvp_value_get_string(kvp_val);
-            if (str && strlen(str) != 0)
-            {
-                gnc_sx_parse_vars_from_formula(str, var_hash, NULL);
-            }
-        }
-
-        kvp_val = kvp_frame_get_slot_path(kvpf,
-                                          GNC_SX_ID,
-                                          GNC_SX_DEBIT_FORMULA,
-                                          NULL);
-        if (kvp_val != NULL)
-        {
-            str = kvp_value_get_string(kvp_val);
-            if (str && strlen(str) != 0)
-            {
-                gnc_sx_parse_vars_from_formula(str, var_hash, NULL);
-            }
-        }
+	if (credit_formula && strlen(credit_formula) != 0)
+	{
+	    gnc_sx_parse_vars_from_formula(credit_formula, var_hash, NULL);
+	}
+	if (debit_formula && strlen(debit_formula) != 0)
+	{
+	    gnc_sx_parse_vars_from_formula(debit_formula, var_hash, NULL);
+	}
+	g_free (credit_formula);
+	g_free (debit_formula);
     }
 
     return 0;
@@ -903,28 +887,9 @@ static gboolean
 _get_template_split_account(const SchedXaction* sx, const Split *template_split, Account **split_acct, GList **creation_errors)
 {
     GncGUID *acct_guid;
-    kvp_frame *split_kvpf;
-    kvp_value *kvp_val;
-
-    split_kvpf = xaccSplitGetSlots(template_split);
-    /* contains the guid of the split's actual account. */
-    kvp_val = kvp_frame_get_slot_path(split_kvpf,
-                                      GNC_SX_ID,
-                                      GNC_SX_ACCOUNT,
-                                      NULL);
-    if (kvp_val == NULL)
-    {
-        GString *err = g_string_new("");
-        g_string_printf(err, "Null account kvp value for SX [%s], cancelling creation.",
-                        xaccSchedXactionGetName(sx));
-        g_critical("%s", err->str);
-        if (creation_errors != NULL)
-            *creation_errors = g_list_append(*creation_errors, err);
-        else
-            g_string_free(err, TRUE);
-        return FALSE;
-    }
-    acct_guid = kvp_value_get_guid( kvp_val );
+    qof_instance_get (QOF_INSTANCE (template_split),
+		      "sx-account", &acct_guid,
+		      NULL);
     *split_acct = xaccAccountLookup(acct_guid, gnc_get_current_book());
     if (*split_acct == NULL)
     {
@@ -948,18 +913,13 @@ _get_template_split_account(const SchedXaction* sx, const Split *template_split,
 static void
 _get_sx_formula_value(const SchedXaction* sx, const Split *template_split, gnc_numeric *numeric, GList **creation_errors, const char *formula_key, const char* numeric_key, GHashTable *variable_bindings)
 {
-    kvp_frame *split_kvpf;
-    kvp_value *kvp_val;
+
     char *formula_str, *parseErrorLoc;
+    qof_instance_get (QOF_INSTANCE (template_split),
+		      formula_key, &formula_str,
+		      numeric_key, &numeric,
+		      NULL);
 
-    split_kvpf = xaccSplitGetSlots(template_split);
-
-    /* First look up the gnc_numeric value in the template split */
-    kvp_val = kvp_frame_get_slot_path(split_kvpf,
-                                      GNC_SX_ID,
-                                      numeric_key,
-                                      NULL);
-    *numeric = kvp_value_get_numeric(kvp_val);
     if ((gnc_numeric_check(*numeric) == GNC_ERROR_OK)
             && !gnc_numeric_zero_p(*numeric))
     {
@@ -969,11 +929,6 @@ _get_sx_formula_value(const SchedXaction* sx, const Split *template_split, gnc_n
         return;
     }
 
-    kvp_val = kvp_frame_get_slot_path(split_kvpf,
-                                      GNC_SX_ID,
-                                      formula_key,
-                                      NULL);
-    formula_str = kvp_value_get_string(kvp_val);
     if (formula_str != NULL && strlen(formula_str) != 0)
     {
         GHashTable *parser_vars = NULL;
@@ -1010,13 +965,17 @@ _get_sx_formula_value(const SchedXaction* sx, const Split *template_split, gnc_n
 static void
 _get_credit_formula_value(GncSxInstance *instance, const Split *template_split, gnc_numeric *credit_num, GList **creation_errors)
 {
-    _get_sx_formula_value(instance->parent->sx, template_split, credit_num, creation_errors, GNC_SX_CREDIT_FORMULA, GNC_SX_CREDIT_NUMERIC, instance->variable_bindings);
+    _get_sx_formula_value(instance->parent->sx, template_split, credit_num,
+			  creation_errors, "sx-credit-formula",
+			  "sx-credit-numeric", instance->variable_bindings);
 }
 
 static void
 _get_debit_formula_value(GncSxInstance *instance, const Split *template_split, gnc_numeric *debit_num, GList **creation_errors)
 {
-    _get_sx_formula_value(instance->parent->sx, template_split, debit_num, creation_errors, GNC_SX_DEBIT_FORMULA, GNC_SX_DEBIT_NUMERIC, instance->variable_bindings);
+    _get_sx_formula_value(instance->parent->sx, template_split, debit_num,
+			  creation_errors, "sx-debit-formula",
+			  "sx-debit-numeric", instance->variable_bindings);
 }
 
 static gboolean
@@ -1086,9 +1045,6 @@ create_each_transaction_helper(Transaction *template_txn, void *user_data)
             err_flag = TRUE;
             break;
         }
-
-        /* clear out any copied Split frame data. */
-        qof_instance_set_slots(QOF_INSTANCE(copying_split), kvp_frame_new());
 
         split_cmdty = xaccAccountGetCommodity(split_acct);
         if (first_cmdty == NULL)
@@ -1212,9 +1168,10 @@ create_each_transaction_helper(Transaction *template_txn, void *user_data)
     }
 
     {
-        kvp_frame *txn_frame;
-        txn_frame = xaccTransGetSlots(new_txn);
-        kvp_frame_set_guid(txn_frame, "from-sched-xaction", xaccSchedXactionGetGUID(creation_data->instance->parent->sx));
+	qof_instance_set (QOF_INSTANCE (new_txn),
+			  "from-sched-xaction",
+			  xaccSchedXactionGetGUID(creation_data->instance->parent->sx),
+			  NULL);
     }
 
     xaccTransCommitEdit(new_txn);
@@ -1617,9 +1574,14 @@ create_cashflow_helper(Transaction *template_txn, void *user_data)
             gint gncn_error;
 
             /* Credit value */
-            _get_sx_formula_value(creation_data->sx, template_split, &credit_num, creation_data->creation_errors, GNC_SX_CREDIT_FORMULA, GNC_SX_CREDIT_NUMERIC, NULL);
+            _get_sx_formula_value(creation_data->sx, template_split,
+				  &credit_num, creation_data->creation_errors,
+				  "sx-credit-formula", "sx-credit-numeric",
+				  NULL);
             /* Debit value */
-            _get_sx_formula_value(creation_data->sx, template_split, &debit_num, creation_data->creation_errors, GNC_SX_DEBIT_FORMULA, GNC_SX_DEBIT_NUMERIC, NULL);
+            _get_sx_formula_value(creation_data->sx, template_split,
+				  &debit_num, creation_data->creation_errors,
+				  "sx-debit-formula", "sx-debit-numeric", NULL);
 
             /* The resulting cash flow number: debit minus credit,
              * multiplied with the count factor. */

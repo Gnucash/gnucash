@@ -263,6 +263,13 @@ test_split_kvp_properties (Fixture *fixture, gconstpointer pData)
     g_free (debit_numeric_r);
     g_free (credit_formula_r);
     g_free (credit_numeric_r);
+    qof_instance_set (QOF_INSTANCE (fixture->split),
+		      "sx-credit-formula", NULL,
+		      NULL);
+    qof_instance_get (QOF_INSTANCE (fixture->split),
+		      "sx-credit-formula", &credit_numeric_r,
+		      NULL);
+    g_assert (credit_numeric_r == NULL);
     g_free (sx_shares_r);
     g_free (online_id_r);
     guid_free (sx_account);
