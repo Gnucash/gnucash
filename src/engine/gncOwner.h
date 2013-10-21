@@ -304,6 +304,7 @@ void gncOwnerFree (GncOwner *owner);
  * without knowing its type.
  */
 void gncOwnerBeginEdit (GncOwner *owner);
+void gncOwnerCommitEdit (GncOwner *owner);
 void gncOwnerDestroy (GncOwner *owner);
 
 #endif /* GNC_OWNER_H_ */

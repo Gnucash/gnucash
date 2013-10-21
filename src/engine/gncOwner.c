@@ -98,6 +98,36 @@ void gncOwnerBeginEdit (GncOwner *owner)
     }
 }
 
+void gncOwnerCommitEdit (GncOwner *owner)
+{
+    if (!owner) return;
+    switch (owner->type)
+    {
+    case GNC_OWNER_NONE :
+    case GNC_OWNER_UNDEFINED :
+        break;
+    case GNC_OWNER_CUSTOMER :
+    {
+        gncCustomerCommitEdit(owner->owner.customer);
+        break;
+    }
+    case GNC_OWNER_JOB :
+    {
+        gncJobCommitEdit(owner->owner.job);
+        break;
+    }
+    case GNC_OWNER_VENDOR :
+    {
+        gncVendorCommitEdit(owner->owner.vendor);
+        break;
+    }
+    case GNC_OWNER_EMPLOYEE :
+    {
+        gncEmployeeCommitEdit(owner->owner.employee);
+        break;
+    }
+    }
+}
 
 void gncOwnerDestroy (GncOwner *owner)
 {
