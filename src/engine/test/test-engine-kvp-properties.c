@@ -108,10 +108,26 @@ static void
 test_account_kvp_properties (Fixture *fixture, gconstpointer pData)
 {
     gint64 next_id = 12345678909876;
-    gint64 next_id_r;
+    gint64 ab_acct_uid = 67890987654321;
+    gint64 next_id_r, ab_acct_uid_r;
+    gchar *online_id = "my online id";
+    gchar *ab_acct_id = "1234-5678-9087";
+    gchar *ab_bank_code = "0032340";
+    gchar *online_id_r, *ab_acct_id_r, *ab_bank_code_r;
+    GncGUID *ofx_income_acct = guid_malloc ();
+    GncGUID *ofx_income_acct_r;
+    Timespec trans_retr = timespec_now ();
+    Timespec *trans_retr_r;
+
 
     qof_instance_set (QOF_INSTANCE (fixture->acct),
 		      "lot-next-id", next_id,
+		      "online-id", online_id,
+		      "ofx-income-account", ofx_income_acct,
+		      "ab-account-id", ab_acct_id,
+		      "ab-bank-code", ab_bank_code,
+		      "ab-account-uid", ab_acct_uid,
+		      "ab-trans-retrieval", &trans_retr,
 		      NULL);
 
     g_assert (qof_instance_is_dirty (QOF_INSTANCE (fixture->acct)));
@@ -119,8 +135,20 @@ test_account_kvp_properties (Fixture *fixture, gconstpointer pData)
 
     qof_instance_get (QOF_INSTANCE (fixture->acct),
 		      "lot-next-id", &next_id_r,
+		      "online-id", &online_id_r,
+		      "ofx-income-account", &ofx_income_acct_r,
+		      "ab-account-id", &ab_acct_id_r,
+		      "ab-bank-code", &ab_bank_code_r,
+		      "ab-account-uid", &ab_acct_uid_r,
+		      "ab-trans-retrieval", &trans_retr_r,
 		      NULL);
     g_assert_cmpint (next_id, ==, next_id_r);
+    g_assert_cmpstr (online_id, ==, online_id_r);
+    g_assert (guid_equal (ofx_income_acct, ofx_income_acct_r));
+    g_assert_cmpstr (ab_acct_id, ==, ab_acct_id_r);
+    g_assert_cmpstr (ab_bank_code, ==, ab_bank_code_r);
+    g_assert_cmpint (ab_acct_uid, ==, ab_acct_uid_r);
+    g_assert (timespec_equal (&trans_retr, trans_retr_r));
     g_assert (!qof_instance_is_dirty (QOF_INSTANCE (fixture->acct)));
 }
 

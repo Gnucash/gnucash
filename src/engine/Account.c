@@ -45,6 +45,13 @@ static QofLogModule log_module = GNC_MOD_ACCOUNT;
 /* The Canonical Account Separator.  Pre-Initialized. */
 static gchar account_separator[8] = ".";
 static gunichar account_uc_separator = ':';
+/* Predefined KVP paths */
+static const char *KEY_ASSOC_INCOME_ACCOUNT = "ofx/associated-income-account";
+#define AB_KEY "hbci"
+#define AB_ACCOUNT_ID "account-id"
+#define AB_ACCOUNT_UID "account-uid"
+#define AB_BANK_CODE "bank-code"
+#define AB_TRANS_RETRIEVAL "trans-retrieval"
 
 enum
 {
@@ -87,6 +94,12 @@ enum
     PROP_SORT_ORDER,
 
     PROP_LOT_NEXT_ID,
+    PROP_ONLINE_ACCOUNT,
+    PROP_OFX_INCOME_ACCOUNT,
+    PROP_AB_ACCOUNT_ID,
+    PROP_AB_ACCOUNT_UID,
+    PROP_AB_BANK_CODE,
+    PROP_AB_TRANS_RETRIEVAL,
 };
 
 #define GET_PRIVATE(o)  \
@@ -388,6 +401,30 @@ gnc_account_get_property (GObject         *object,
 	g_value_set_int64 (value, 0);
 	qof_instance_get_kvp (QOF_INSTANCE (account), key, value);
 	break;
+    case PROP_ONLINE_ACCOUNT:
+	key = "online_id";
+	qof_instance_get_kvp (QOF_INSTANCE (account), key, value);
+	break;
+    case PROP_OFX_INCOME_ACCOUNT:
+	key = KEY_ASSOC_INCOME_ACCOUNT;
+	qof_instance_get_kvp (QOF_INSTANCE (account), key, value);
+	break;
+    case PROP_AB_ACCOUNT_ID:
+	key = AB_KEY "/" AB_ACCOUNT_ID;
+	qof_instance_get_kvp (QOF_INSTANCE (account), key, value);
+	break;
+    case PROP_AB_ACCOUNT_UID:
+	key = AB_KEY "/" AB_ACCOUNT_UID;
+	qof_instance_get_kvp (QOF_INSTANCE (account), key, value);
+	break;
+    case PROP_AB_BANK_CODE:
+	key = AB_KEY "/" AB_BANK_CODE;
+	qof_instance_get_kvp (QOF_INSTANCE (account), key, value);
+	break;
+    case PROP_AB_TRANS_RETRIEVAL:
+	key = AB_KEY "/" AB_TRANS_RETRIEVAL;
+	qof_instance_get_kvp (QOF_INSTANCE (account), key, value);
+	break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
         break;
@@ -402,7 +439,7 @@ gnc_account_set_property (GObject         *object,
 {
     Account *account;
     gnc_numeric *number;
-    gchar *key = NULL;
+    const gchar *key = NULL;
 
     g_return_if_fail(GNC_IS_ACCOUNT(object));
 
@@ -490,6 +527,30 @@ gnc_account_set_property (GObject         *object,
         break;
     case PROP_LOT_NEXT_ID:
 	key = "lot-mgmt/next-id";
+	qof_instance_set_kvp (QOF_INSTANCE (account), key, value);
+	break;
+    case PROP_ONLINE_ACCOUNT:
+	key = "online_id";
+	qof_instance_set_kvp (QOF_INSTANCE (account), key, value);
+	break;
+    case PROP_OFX_INCOME_ACCOUNT:
+	key = KEY_ASSOC_INCOME_ACCOUNT;
+	qof_instance_set_kvp (QOF_INSTANCE (account), key, value);
+	break;
+    case PROP_AB_ACCOUNT_ID:
+	key = AB_KEY "/" AB_ACCOUNT_ID;
+	qof_instance_set_kvp (QOF_INSTANCE (account), key, value);
+	break;
+    case PROP_AB_ACCOUNT_UID:
+	key = AB_KEY "/" AB_ACCOUNT_UID;
+	qof_instance_set_kvp (QOF_INSTANCE (account), key, value);
+	break;
+    case PROP_AB_BANK_CODE:
+	key = AB_KEY "/" AB_BANK_CODE;
+	qof_instance_set_kvp (QOF_INSTANCE (account), key, value);
+	break;
+    case PROP_AB_TRANS_RETRIEVAL:
+	key = AB_KEY "/" AB_TRANS_RETRIEVAL;
 	qof_instance_set_kvp (QOF_INSTANCE (account), key, value);
 	break;
     default:
@@ -860,6 +921,66 @@ gnc_account_class_init (AccountClass *klass)
                          G_MAXINT64,
                          (gint64)1,
                          G_PARAM_READWRITE));
+
+    g_object_class_install_property
+    (gobject_class,
+     PROP_ONLINE_ACCOUNT,
+     g_param_spec_string ("online-id",
+                          "Online Account ID",
+                          "The online account which corresponds to this "
+			  "account for OFX import",
+                          NULL,
+                          G_PARAM_READWRITE));
+
+     g_object_class_install_property(
+       gobject_class,
+       PROP_OFX_INCOME_ACCOUNT,
+        g_param_spec_boxed("ofx-income-account",
+			   "Associated income account",
+			   "Used by the OFX importer.",
+			   GNC_TYPE_GUID,
+			   G_PARAM_READWRITE));
+
+    g_object_class_install_property
+    (gobject_class,
+     PROP_AB_ACCOUNT_ID,
+     g_param_spec_string ("ab-account-id",
+                          "AQBanking Account ID",
+                          "The AqBanking account which corresponds to this "
+			  "account for AQBanking import",
+                          NULL,
+                          G_PARAM_READWRITE));
+    g_object_class_install_property
+    (gobject_class,
+     PROP_AB_BANK_CODE,
+     g_param_spec_string ("ab-bank-code",
+                          "AQBanking Bank Code",
+                          "The online account which corresponds to this "
+			  "account for AQBanking import",
+                          NULL,
+                          G_PARAM_READWRITE));
+
+    g_object_class_install_property
+    (gobject_class,
+     PROP_AB_ACCOUNT_UID,
+     g_param_spec_int64 ("ab-account-uid",
+                         "AQBanking Account UID",
+                         "Tracks the next id to use in gnc_lot_make_default.",
+                         (gint64)1,
+                         G_MAXINT64,
+                         (gint64)1,
+                         G_PARAM_READWRITE));
+
+    g_object_class_install_property
+    (gobject_class,
+     PROP_AB_TRANS_RETRIEVAL,
+     g_param_spec_boxed("ab-trans-retrieval",
+                        "AQBanking Last Transaction Retrieval",
+                        "The time of the last transaction retrieval for this "
+			"account.",
+                        GNC_TYPE_TIMESPEC,
+                        G_PARAM_READWRITE));
+
 }
 
 static void
