@@ -151,14 +151,24 @@ test_split_kvp_properties (Fixture *fixture, gconstpointer pData)
 {
     gchar *debit_formula = "e^xdydx";
     gchar *credit_formula = "seccostansin";
-    gchar *debit_formula_r, *credit_formula_r;
+    gchar *sx_shares = "43";
+    gchar *online_id = "my_online_id";
+    gchar *debit_formula_r, *credit_formula_r, *sx_shares_r;
+    gchar *online_id_r;
     GncGUID *sx_account = guid_malloc ();
     GncGUID *sx_account_r;
+    gnc_numeric debit_numeric = gnc_numeric_create (123, 456);
+    gnc_numeric credit_numeric = gnc_numeric_create (789, 456);
+    gnc_numeric *debit_numeric_r, *credit_numeric_r;
 
     qof_instance_set (QOF_INSTANCE (fixture->split),
 		      "sx-debit-formula", debit_formula,
+		      "sx-debit-numeric", &debit_numeric,
 		      "sx-credit-formula", credit_formula,
+		      "sx-credit-numeric", &credit_numeric,
 		      "sx-account", sx_account,
+		      "sx-shares", sx_shares,
+		      "online-id", online_id,
 		      NULL);
 
     g_assert (qof_instance_is_dirty (QOF_INSTANCE (fixture->split)));
@@ -166,15 +176,27 @@ test_split_kvp_properties (Fixture *fixture, gconstpointer pData)
 
     qof_instance_get (QOF_INSTANCE (fixture->split),
 		      "sx-debit-formula", &debit_formula_r,
+		      "sx-debit-numeric", &debit_numeric_r,
 		      "sx-credit-formula", &credit_formula_r,
+		      "sx-credit-numeric", &credit_numeric_r,
 		      "sx-account", &sx_account_r,
+		      "sx-shares", &sx_shares_r,
+		      "online-id", &online_id_r,
 		      NULL);
     g_assert_cmpstr (debit_formula, ==, debit_formula_r);
+    g_assert (gnc_numeric_equal (debit_numeric, *debit_numeric_r));
     g_assert_cmpstr (credit_formula, ==, credit_formula_r);
+    g_assert (gnc_numeric_equal (credit_numeric, *credit_numeric_r));
     g_assert (guid_equal (sx_account, sx_account_r));
+    g_assert_cmpstr (sx_shares, ==, sx_shares_r);
+    g_assert_cmpstr (online_id, ==, online_id_r);
     g_assert (!qof_instance_is_dirty (QOF_INSTANCE (fixture->split)));
     g_free (debit_formula_r);
+    g_free (debit_numeric_r);
     g_free (credit_formula_r);
+    g_free (credit_numeric_r);
+    g_free (sx_shares_r);
+    g_free (online_id_r);
     guid_free (sx_account);
     guid_free (sx_account_r);
 }

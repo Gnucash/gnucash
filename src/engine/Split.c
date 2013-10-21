@@ -66,6 +66,9 @@ static QofLogModule log_module = GNC_MOD_ENGINE;
 #define GNC_SX_ACCOUNT               "account"
 #define GNC_SX_CREDIT_FORMULA        "credit-formula"
 #define GNC_SX_DEBIT_FORMULA         "debit-formula"
+#define GNC_SX_CREDIT_NUMERIC        "credit-numeric"
+#define GNC_SX_DEBIT_NUMERIC         "debit-numeric"
+#define GNC_SX_SHARES                "shares"
 
 enum
 {
@@ -77,10 +80,14 @@ enum
     PROP_RECONCILE_DATE,
     PROP_TX,
     PROP_ACCOUNT,
-    PROP_SX_CREDIT_FORMULA,
-    PROP_SX_DEBIT_FORMULA,
     PROP_SX_ACCOUNT,
+    PROP_SX_CREDIT_FORMULA,
+    PROP_SX_CREDIT_NUMERIC,
+    PROP_SX_DEBIT_FORMULA,
+    PROP_SX_DEBIT_NUMERIC,
+    PROP_SX_SHARES,
     PROP_LOT,
+    PROP_ONLINE_ACCOUNT,
 };
 
 /* GObject Initialization */
@@ -171,12 +178,28 @@ gnc_split_get_property(GObject         *object,
 	key = GNC_SX_ID "/" GNC_SX_CREDIT_FORMULA;
 	qof_instance_get_kvp (QOF_INSTANCE (split), key, value);
 	break;
+    case PROP_SX_CREDIT_NUMERIC:
+	key = GNC_SX_ID "/" GNC_SX_CREDIT_NUMERIC;
+	qof_instance_get_kvp (QOF_INSTANCE (split), key, value);
+	break;
     case PROP_SX_DEBIT_FORMULA:
 	key = GNC_SX_ID "/" GNC_SX_DEBIT_FORMULA;
 	qof_instance_get_kvp (QOF_INSTANCE (split), key, value);
 	break;
+    case PROP_SX_DEBIT_NUMERIC:
+	key = GNC_SX_ID "/" GNC_SX_DEBIT_NUMERIC;
+	qof_instance_get_kvp (QOF_INSTANCE (split), key, value);
+	break;
     case PROP_SX_ACCOUNT:
 	key = GNC_SX_ID "/" GNC_SX_ACCOUNT;
+	qof_instance_get_kvp (QOF_INSTANCE (split), key, value);
+	break;
+    case PROP_SX_SHARES:
+	key = GNC_SX_ID "/" GNC_SX_SHARES;
+	qof_instance_get_kvp (QOF_INSTANCE (split), key, value);
+	break;
+    case PROP_ONLINE_ACCOUNT:
+	key = "online_id";
 	qof_instance_get_kvp (QOF_INSTANCE (split), key, value);
 	break;
     default:
@@ -230,12 +253,28 @@ gnc_split_set_property(GObject         *object,
 	key = GNC_SX_ID "/" GNC_SX_CREDIT_FORMULA;
 	qof_instance_set_kvp (QOF_INSTANCE (split), key, value);
 	break;
+    case PROP_SX_CREDIT_NUMERIC:
+	key = GNC_SX_ID "/" GNC_SX_CREDIT_NUMERIC;
+	qof_instance_set_kvp (QOF_INSTANCE (split), key, value);
+	break;
     case PROP_SX_DEBIT_FORMULA:
 	key = GNC_SX_ID "/" GNC_SX_DEBIT_FORMULA;
 	qof_instance_set_kvp (QOF_INSTANCE (split), key, value);
 	break;
+    case PROP_SX_DEBIT_NUMERIC:
+	key = GNC_SX_ID "/" GNC_SX_DEBIT_NUMERIC;
+	qof_instance_set_kvp (QOF_INSTANCE (split), key, value);
+	break;
     case PROP_SX_ACCOUNT:
 	key = GNC_SX_ID "/" GNC_SX_ACCOUNT;
+	qof_instance_set_kvp (QOF_INSTANCE (split), key, value);
+	break;
+    case PROP_SX_SHARES:
+	key = GNC_SX_ID "/" GNC_SX_SHARES;
+	qof_instance_set_kvp (QOF_INSTANCE (split), key, value);
+	break;
+    case PROP_ONLINE_ACCOUNT:
+	key = "online_id";
 	qof_instance_set_kvp (QOF_INSTANCE (split), key, value);
 	break;
      default:
@@ -338,7 +377,7 @@ gnc_split_class_init(SplitClass* klass)
 
     g_object_class_install_property
     (gobject_class,
-     PROP_MEMO,
+     PROP_SX_DEBIT_FORMULA,
      g_param_spec_string("sx-debit-formula",
                          "Schedule Transaction Debit Formula",
 			 "The formula used to calculate the actual debit "
@@ -349,7 +388,17 @@ gnc_split_class_init(SplitClass* klass)
 
     g_object_class_install_property
     (gobject_class,
-     PROP_MEMO,
+     PROP_SX_DEBIT_NUMERIC,
+     g_param_spec_boxed("sx-debit-numeric",
+                        "Scheduled Transaction Debit Numeric",
+                        "Numeric value to plug into the Debit Formula when a "
+			"real split is generated from this SX split.",
+                        GNC_TYPE_NUMERIC,
+                        G_PARAM_READWRITE));
+
+     g_object_class_install_property
+    (gobject_class,
+     PROP_SX_CREDIT_FORMULA,
      g_param_spec_string("sx-credit-formula",
                          "Schedule Transaction Credit Formula",
 			 "The formula used to calculate the actual credit "
@@ -360,12 +409,46 @@ gnc_split_class_init(SplitClass* klass)
 
     g_object_class_install_property
     (gobject_class,
+     PROP_SX_CREDIT_NUMERIC,
+     g_param_spec_boxed("sx-credit-numeric",
+                        "Scheduled Transaction Credit Numeric",
+                        "Numeric value to plug into the Credit Formula when a "
+			"real split is generated from this SX split.",
+                        GNC_TYPE_NUMERIC,
+                        G_PARAM_READWRITE));
+/* FIXME: PROP_SX_SHARES should be stored as a gnc_numeric, but the function
+ * which uses it, gnc_template_register_save_shares_cell, stores a
+ * phony string. This is maintained until backwards compatibility can
+ * be established.
+ */
+    g_object_class_install_property
+    (gobject_class,
+     PROP_SX_SHARES,
+     g_param_spec_string("sx-shares",
+                        "Scheduled Transaction Shares",
+                        "Numeric value of shares to insert in a new split when "
+			"it's generated from this SX split.",
+                        NULL,
+                        G_PARAM_READWRITE));
+
+     g_object_class_install_property
+    (gobject_class,
      PROP_SX_ACCOUNT,
      g_param_spec_boxed("sx-account",
                         "Scheduled Transaction Account",
                         "The target account for a scheduled transaction split.",
                         GNC_TYPE_GUID,
                         G_PARAM_READWRITE));
+
+    g_object_class_install_property
+    (gobject_class,
+     PROP_ONLINE_ACCOUNT,
+     g_param_spec_string ("online-id",
+                          "Online Account ID",
+                          "The online account which corresponds to this "
+			  "account for OFX/HCBI import",
+                          NULL,
+                          G_PARAM_READWRITE));
 }
 
 /********************************************************************\
