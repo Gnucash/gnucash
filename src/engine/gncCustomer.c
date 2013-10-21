@@ -97,7 +97,10 @@ void mark_customer (GncCustomer *customer)
 enum
 {
     PROP_0,
-    PROP_NAME
+    PROP_NAME,
+    PROP_PDF_DIRNAME,
+    PROP_LAST_POSTED,
+    PROP_PAYMENT_LAST_ACCT,
 };
 
 /* GObject Initialization */
@@ -127,7 +130,7 @@ gnc_customer_get_property (GObject         *object,
                            GParamSpec      *pspec)
 {
     GncCustomer *cust;
-
+    gchar *key;
     g_return_if_fail(GNC_IS_CUSTOMER(object));
 
     cust = GNC_CUSTOMER(object);
@@ -136,6 +139,18 @@ gnc_customer_get_property (GObject         *object,
     case PROP_NAME:
         g_value_set_string(value, cust->name);
         break;
+    case PROP_PDF_DIRNAME:
+	key = OWNER_EXPORT_PDF_DIRNAME;
+	qof_instance_get_kvp (QOF_INSTANCE (cust), key, value);
+	break;
+    case PROP_LAST_POSTED:
+	key = LAST_POSTED_TO_ACCT;
+	qof_instance_get_kvp (QOF_INSTANCE (cust), key, value);
+	break;
+    case PROP_PAYMENT_LAST_ACCT:
+	key = GNC_PAYMENT "/" GNC_LAST_ACCOUNT;
+	qof_instance_get_kvp (QOF_INSTANCE (cust), key, value);
+	break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
         break;
@@ -145,10 +160,11 @@ gnc_customer_get_property (GObject         *object,
 static void
 gnc_customer_set_property (GObject         *object,
                            guint            prop_id,
-                           const GValue          *value,
+                           const GValue    *value,
                            GParamSpec      *pspec)
 {
     GncCustomer *cust;
+    gchar *key;
 
     g_return_if_fail(GNC_IS_CUSTOMER(object));
 
@@ -158,6 +174,18 @@ gnc_customer_set_property (GObject         *object,
     case PROP_NAME:
         gncCustomerSetName(cust, g_value_get_string(value));
         break;
+    case PROP_PDF_DIRNAME:
+	key = OWNER_EXPORT_PDF_DIRNAME;
+	qof_instance_set_kvp (QOF_INSTANCE (cust), key, value);
+	break;
+    case PROP_LAST_POSTED:
+	key = LAST_POSTED_TO_ACCT;
+	qof_instance_set_kvp (QOF_INSTANCE (cust), key, value);
+	break;
+    case PROP_PAYMENT_LAST_ACCT:
+	key = GNC_PAYMENT "/" GNC_LAST_ACCOUNT;
+	qof_instance_set_kvp (QOF_INSTANCE (cust), key, value);
+	break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
         break;
@@ -243,6 +271,39 @@ gnc_customer_class_init (GncCustomerClass *klass)
                           "customer name.",
                           NULL,
                           G_PARAM_READWRITE));
+
+    g_object_class_install_property
+    (gobject_class,
+     PROP_PDF_DIRNAME,
+     g_param_spec_string ("export-pdf-dir",
+                          "Export PDF Directory Name",
+                          "A subdirectory for exporting PDF reports which is "
+			  "appended to the target directory when writing them "
+			  "out. It is retrieved from preferences and stored on "
+			  "each 'Owner' object which prints items after "
+			  "printing.",
+                          NULL,
+                          G_PARAM_READWRITE));
+
+    g_object_class_install_property(
+       gobject_class,
+       PROP_LAST_POSTED,
+       g_param_spec_boxed("invoice-last-posted-account",
+			  "Invoice Last Posted Account",
+			  "The last account to which an invoice belonging to "
+			  "this owner was posted.",
+			  GNC_TYPE_GUID,
+			  G_PARAM_READWRITE));
+
+    g_object_class_install_property(
+       gobject_class,
+       PROP_PAYMENT_LAST_ACCT,
+       g_param_spec_boxed("payment-last-account",
+			  "Payment Last Account",
+			  "The last account to which an payment belonging to "
+			  "this owner was posted.",
+			  GNC_TYPE_GUID,
+			  G_PARAM_READWRITE));
 }
 
 /* Create/Destroy Functions */

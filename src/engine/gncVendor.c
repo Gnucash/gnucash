@@ -99,7 +99,10 @@ enum
     PROP_TAXTABLE,
     PROP_ADDRESS,
     PROP_TAX_INCLUDED,
-    PROP_TAX_INCLUDED_STR
+    PROP_TAX_INCLUDED_STR,
+    PROP_PDF_DIRNAME,
+    PROP_LAST_POSTED,
+    PROP_PAYMENT_LAST_ACCT,
 };
 
 /* GObject Initialization */
@@ -135,6 +138,7 @@ gnc_vendor_get_property (GObject         *object,
                          GParamSpec      *pspec)
 {
     GncVendor *vendor;
+    gchar *key;
 
     g_return_if_fail(GNC_IS_VENDOR(object));
 
@@ -174,6 +178,18 @@ gnc_vendor_get_property (GObject         *object,
     case PROP_TAX_INCLUDED_STR:
         g_value_set_string(value, qofVendorGetTaxIncluded(vendor));
         break;
+    case PROP_PDF_DIRNAME:
+	key = OWNER_EXPORT_PDF_DIRNAME;
+	qof_instance_get_kvp (QOF_INSTANCE (vendor), key, value);
+	break;
+    case PROP_LAST_POSTED:
+	key = LAST_POSTED_TO_ACCT;
+	qof_instance_get_kvp (QOF_INSTANCE (vendor), key, value);
+	break;
+    case PROP_PAYMENT_LAST_ACCT:
+	key = GNC_PAYMENT "/" GNC_LAST_ACCOUNT;
+	qof_instance_get_kvp (QOF_INSTANCE (vendor), key, value);
+	break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
         break;
@@ -187,6 +203,7 @@ gnc_vendor_set_property (GObject         *object,
                          GParamSpec      *pspec)
 {
     GncVendor *vendor;
+    gchar *key;
 
     g_return_if_fail(GNC_IS_VENDOR(object));
 
@@ -226,6 +243,18 @@ gnc_vendor_set_property (GObject         *object,
     case PROP_TAX_INCLUDED_STR:
         qofVendorSetTaxIncluded(vendor, g_value_get_string(value));
         break;
+    case PROP_PDF_DIRNAME:
+	key = OWNER_EXPORT_PDF_DIRNAME;
+	qof_instance_set_kvp (QOF_INSTANCE (vendor), key, value);
+	break;
+    case PROP_LAST_POSTED:
+	key = LAST_POSTED_TO_ACCT;
+	qof_instance_set_kvp (QOF_INSTANCE (vendor), key, value);
+	break;
+    case PROP_PAYMENT_LAST_ACCT:
+	key = GNC_PAYMENT "/" GNC_LAST_ACCOUNT;
+	qof_instance_set_kvp (QOF_INSTANCE (vendor), key, value);
+	break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
         break;
@@ -391,6 +420,38 @@ gnc_vendor_class_init (GncVendorClass *klass)
                          "The tax-included-string property contains a character version of tax-included.",
                          FALSE,
                          G_PARAM_READWRITE));
+    g_object_class_install_property
+    (gobject_class,
+     PROP_PDF_DIRNAME,
+     g_param_spec_string ("export-pdf-dir",
+                          "Export PDF Directory Name",
+                          "A subdirectory for exporting PDF reports which is "
+			  "appended to the target directory when writing them "
+			  "out. It is retrieved from preferences and stored on "
+			  "each 'Owner' object which prints items after "
+			  "printing.",
+                          NULL,
+                          G_PARAM_READWRITE));
+
+    g_object_class_install_property(
+       gobject_class,
+       PROP_LAST_POSTED,
+       g_param_spec_boxed("invoice-last-posted-account",
+			  "Invoice Last Posted Account",
+			  "The last account to which an invoice belonging to "
+			  "this owner was posted.",
+			  GNC_TYPE_GUID,
+			  G_PARAM_READWRITE));
+
+    g_object_class_install_property(
+       gobject_class,
+       PROP_PAYMENT_LAST_ACCT,
+       g_param_spec_boxed("payment-last-account",
+			  "Payment Last Account",
+			  "The last account to which an payment belonging to "
+			  "this owner was posted.",
+			  GNC_TYPE_GUID,
+			  G_PARAM_READWRITE));
 }
 
 /* Create/Destroy Functions */

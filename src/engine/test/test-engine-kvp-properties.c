@@ -94,6 +94,34 @@ setup_lot (Fixture *fixture, gconstpointer pData)
 }
 
 static void
+setup_customer (Fixture *fixture, gconstpointer pData)
+{
+    QofBook *book = qof_book_new ();
+    fixture->cust = gncCustomerCreate (book);
+}
+
+static void
+setup_employee (Fixture *fixture, gconstpointer pData)
+{
+    QofBook *book = qof_book_new ();
+    fixture->emp = gncEmployeeCreate (book);
+}
+
+static void
+setup_job (Fixture *fixture, gconstpointer pData)
+{
+    QofBook *book = qof_book_new ();
+    fixture->job = gncJobCreate (book);
+}
+
+static void
+setup_vendor (Fixture *fixture, gconstpointer pData)
+{
+    QofBook *book = qof_book_new ();
+    fixture->vend = gncVendorCreate (book);
+}
+
+static void
 teardown (Fixture *fixture, gconstpointer pData)
 {
 /* It doesn't actually matter which union member we use here, they're
@@ -275,10 +303,141 @@ test_lot_kvp_properties (Fixture *fixture, gconstpointer pData)
     guid_free (owner_r);
 }
 
+static void
+test_customer_kvp_properties (Fixture *fixture, gconstpointer pData)
+{
+    gchar *pdf_dir = "/foo/bar/baz";
+    gchar *pdf_dir_r;
+    GncGUID *inv_acct = guid_malloc ();
+    GncGUID *pmt_acct = guid_malloc ();
+    GncGUID *inv_acct_r, *pmt_acct_r;
+
+    qof_instance_set (QOF_INSTANCE (fixture->cust),
+		      "export-pdf-dir", pdf_dir,
+		      "invoice-last-posted-account", inv_acct,
+		      "payment-last-account", pmt_acct,
+		      NULL);
+
+    g_assert (qof_instance_is_dirty (QOF_INSTANCE (fixture->cust)));
+    qof_instance_mark_clean (QOF_INSTANCE (fixture->cust));
+
+    qof_instance_get (QOF_INSTANCE (fixture->cust),
+		      "export-pdf-dir", &pdf_dir_r,
+		      "invoice-last-posted-account", &inv_acct_r,
+		      "payment-last-account", &pmt_acct_r,
+		      NULL);
+
+    g_assert_cmpstr (pdf_dir, ==, pdf_dir_r);
+    g_assert (guid_equal (inv_acct, inv_acct_r));
+    g_assert (guid_equal (pmt_acct, pmt_acct_r));
+    guid_free (inv_acct);
+    guid_free (inv_acct_r);
+    guid_free (pmt_acct);
+    guid_free (pmt_acct_r);
+    g_free (pdf_dir_r);
+
+}
+
+static void
+test_employee_kvp_properties (Fixture *fixture, gconstpointer pData)
+{
+    gchar *pdf_dir = "/foo/bar/baz";
+    gchar *pdf_dir_r;
+    GncGUID *inv_acct = guid_malloc ();
+    GncGUID *pmt_acct = guid_malloc ();
+    GncGUID *inv_acct_r, *pmt_acct_r;
+
+    qof_instance_set (QOF_INSTANCE (fixture->emp),
+		      "export-pdf-dir", pdf_dir,
+		      "invoice-last-posted-account", inv_acct,
+		      "payment-last-account", pmt_acct,
+		      NULL);
+
+    g_assert (qof_instance_is_dirty (QOF_INSTANCE (fixture->emp)));
+    qof_instance_mark_clean (QOF_INSTANCE (fixture->emp));
+
+    qof_instance_get (QOF_INSTANCE (fixture->emp),
+		      "export-pdf-dir", &pdf_dir_r,
+		      "invoice-last-posted-account", &inv_acct_r,
+		      "payment-last-account", &pmt_acct_r,
+		      NULL);
+
+    g_assert_cmpstr (pdf_dir, ==, pdf_dir_r);
+    g_assert (guid_equal (inv_acct, inv_acct_r));
+    g_assert (guid_equal (pmt_acct, pmt_acct_r));
+    guid_free (inv_acct);
+    guid_free (inv_acct_r);
+    guid_free (pmt_acct);
+    guid_free (pmt_acct_r);
+    g_free (pdf_dir_r);
+
+}
+
+static void
+test_job_kvp_properties (Fixture *fixture, gconstpointer pData)
+{
+    gchar *pdf_dir = "/foo/bar/baz";
+    gchar *pdf_dir_r;
+
+    qof_instance_set (QOF_INSTANCE (fixture->job),
+		      "export-pdf-dir", pdf_dir,
+		      NULL);
+
+    g_assert (qof_instance_is_dirty (QOF_INSTANCE (fixture->job)));
+    qof_instance_mark_clean (QOF_INSTANCE (fixture->job));
+
+    qof_instance_get (QOF_INSTANCE (fixture->job),
+		      "export-pdf-dir", &pdf_dir_r,
+		      NULL);
+
+    g_assert_cmpstr (pdf_dir, ==, pdf_dir_r);
+    g_free (pdf_dir_r);
+
+}
+
+static void
+test_vendor_kvp_properties (Fixture *fixture, gconstpointer pData)
+{
+    gchar *pdf_dir = "/foo/bar/baz";
+    gchar *pdf_dir_r;
+    GncGUID *inv_acct = guid_malloc ();
+    GncGUID *pmt_acct = guid_malloc ();
+    GncGUID *inv_acct_r, *pmt_acct_r;
+
+    qof_instance_set (QOF_INSTANCE (fixture->vend),
+		      "export-pdf-dir", pdf_dir,
+		      "invoice-last-posted-account", inv_acct,
+		      "payment-last-account", pmt_acct,
+		      NULL);
+
+    g_assert (qof_instance_is_dirty (QOF_INSTANCE (fixture->vend)));
+    qof_instance_mark_clean (QOF_INSTANCE (fixture->vend));
+
+    qof_instance_get (QOF_INSTANCE (fixture->vend),
+		      "export-pdf-dir", &pdf_dir_r,
+		      "invoice-last-posted-account", &inv_acct_r,
+		      "payment-last-account", &pmt_acct_r,
+		      NULL);
+
+    g_assert_cmpstr (pdf_dir, ==, pdf_dir_r);
+    g_assert (guid_equal (inv_acct, inv_acct_r));
+    g_assert (guid_equal (pmt_acct, pmt_acct_r));
+    guid_free (inv_acct);
+    guid_free (inv_acct_r);
+    guid_free (pmt_acct);
+    guid_free (pmt_acct_r);
+    g_free (pdf_dir_r);
+
+}
+
 void test_suite_engine_kvp_properties (void)
 {
     GNC_TEST_ADD (suitename, "Account", Fixture, NULL, setup_account, test_account_kvp_properties, teardown);
     GNC_TEST_ADD (suitename, "Transaction", Fixture, NULL, setup_trans, test_trans_kvp_properties, teardown);
     GNC_TEST_ADD (suitename, "Split", Fixture, NULL, setup_split, test_split_kvp_properties, teardown);
     GNC_TEST_ADD (suitename, "Lot", Fixture, NULL, setup_lot, test_lot_kvp_properties, teardown);
+    GNC_TEST_ADD (suitename, "Customer", Fixture, NULL, setup_customer, test_customer_kvp_properties, teardown);
+    GNC_TEST_ADD (suitename, "Employee", Fixture, NULL, setup_employee, test_employee_kvp_properties, teardown);
+    GNC_TEST_ADD (suitename, "Job", Fixture, NULL, setup_job, test_job_kvp_properties, teardown);
+    GNC_TEST_ADD (suitename, "Vendor", Fixture, NULL, setup_vendor, test_vendor_kvp_properties, teardown);
 }
