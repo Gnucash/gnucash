@@ -262,15 +262,8 @@ static void gnc_autosave_add_timer(QofBook *book)
         /* Add a new timer (timeout) that runs until the next autosave
            timeout. */
         guint autosave_source_id =
-#if GLIB_CHECK_VERSION(2, 14, 0)
-            /* g_timeout_add_seconds is much more suitable here, but is new in
-            	 glib-2.14. */
             g_timeout_add_seconds(interval_mins * 60,
                                   autosave_timeout_cb, book);
-#else
-            g_timeout_add(interval_mins * 60 * 1000,
-                          autosave_timeout_cb, book);
-#endif
         g_debug("Adding new auto-save timer with id %d\n", autosave_source_id);
 
         /* Save the event source id for a potential removal, and also
