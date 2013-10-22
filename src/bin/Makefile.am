@@ -76,7 +76,10 @@ if CUSTOM_GNC_DBD_DIR
 	echo 'GNC_DBD_DIR=@GNC_DBD_DIR@' >> $@.tmp
 endif
     # Set XDG_DATA_DIRS if necessary.  This is done in such a way that the value at
-    # run time overrieds the value at compile time which overrides the default value
+    # run time overrides the value at compile time which overrides the default value
+    # The compile time value is added because GnuCash on X11 builds on MacPorts, which
+    # uses /opt/local/share as default instead of the Free Desktop defined standard paths
+    # /usr/local/share and /usr/share
 	if [ "a$(prefix)" != "a/usr" ] && [ "a$(prefix)" != "a/usr/local" ]; \
 	then \
 		echo >> $@.tmp; \
