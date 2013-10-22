@@ -43,6 +43,7 @@
 #include "dialog-file-access.h"
 #include "dialog-fincalc.h"
 #include "dialog-find-transactions.h"
+#include "dialog-find-transactions2.h"
 #include "dialog-sx-since-last-run.h"
 #include "dialog-totd.h"
 #include "assistant-acct-period.h"
@@ -623,7 +624,10 @@ gnc_main_window_cmd_tools_close_book (GtkAction *action, GncMainWindowActionData
 static void
 gnc_main_window_cmd_tools_find_transactions (GtkAction *action, GncMainWindowActionData *data)
 {
-    gnc_ui_find_transactions_dialog_create (NULL);
+//    gnc_ui_find_transactions_dialog_create (NULL);
+/*################## Added for Reg2 #################*/
+    gnc_ui_find_transactions_dialog_create2 (NULL);
+/*################## Added for Reg2 #################*/
 }
 
 static void

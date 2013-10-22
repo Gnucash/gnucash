@@ -275,10 +275,35 @@
       <summary>Only display leaf account names.</summary>
       <description>Show only the names of the leaf accounts in the register and in the account selection popup. The default behaviour is to display the full name, including the path in the account tree. Activating this option implies that you use unique leaf names.</description>
     </key>
+    <key name="show-extra-dates" type="b">
+      <default>false</default>
+      <summary>Show the entered and reconcile dates</summary>
+      <description>Show the date when the transaction was entered below the posted date and reconciled date on split row.</description>
+    </key>
+    <key name="show-extra-dates-on-selection" type="b">
+      <default>false</default>
+      <summary>Show entered and reconciled dates on selection</summary>
+      <description>Show the entered date and reconciled date on transaction selection.</description>
+    </key>
+    <key name="show-calendar-buttons" type="b">
+      <default>false</default>
+      <summary>Show the calendar buttons</summary>
+      <description>Show the calendar buttons Cancel, Today and Select.</description>
+    </key>
+    <key name="selection-to-blank-on-expand" type="b">
+      <default>false</default>
+      <summary>Move the selection to the blank split on expand</summary>
+      <description>This will move the selection to the blank split when the transaction is expanded.</description>
+    </key>
     <key name="max-transactions" type="d">
       <default>0.0</default>
       <summary>Number of transactions to show in a register.</summary>
       <description>Show this many transactions in a register. A value of zero means show all transactions.</description>
+    </key>
+    <key name="key-length" type="d">
+      <default>2.0</default>
+      <summary>Number of characters for auto complete.</summary>
+      <description>This sets the number of characters before auto complete starts for description, notes and memo fields.</description>
     </key>
   </schema>
   

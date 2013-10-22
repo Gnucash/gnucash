@@ -81,6 +81,7 @@ libgncmod_gnome_utils_la_SOURCES = \
   gnc-splash.c \
   gnc-sx-instance-dense-cal-adapter.c \
   gnc-sx-list-tree-model-adapter.c \
+  gnc-tree-control-split-reg.c \
   gnc-tree-model.c \
   gnc-tree-model-account-types.c \
   gnc-tree-model-account.c \
@@ -88,10 +89,13 @@ libgncmod_gnome_utils_la_SOURCES = \
   gnc-tree-model-owner.c \
   gnc-tree-model-commodity.c \
   gnc-tree-model-price.c \
+  gnc-tree-model-split-reg.c \
+  gnc-tree-util-split-reg.c \
   gnc-tree-view-account.c \
   gnc-tree-view-commodity.c \
   gnc-tree-view-owner.c \
   gnc-tree-view-price.c \
+  gnc-tree-view-split-reg.c \
   gnc-tree-view-sx-list.c \
   gnc-tree-view.c \
   gnc-warnings.c \
@@ -156,6 +160,7 @@ gncinclude_HEADERS = \
   gnc-splash.h \
   gnc-sx-instance-dense-cal-adapter.h \
   gnc-sx-list-tree-model-adapter.h \
+  gnc-tree-control-split-reg.h \
   gnc-tree-model.h \
   gnc-tree-model-account-types.h \
   gnc-tree-model-account.h \
@@ -163,10 +168,13 @@ gncinclude_HEADERS = \
   gnc-tree-model-owner.h \
   gnc-tree-model-commodity.h \
   gnc-tree-model-price.h \
+  gnc-tree-model-split-reg.h \
+  gnc-tree-util-split-reg.h \
   gnc-tree-view-account.h \
   gnc-tree-view-commodity.h \
   gnc-tree-view-owner.h \
   gnc-tree-view-price.h \
+  gnc-tree-view-split-reg.h \
   gnc-tree-view-sx-list.h \
   gnc-tree-view.h \
   gnc-ui.h \
