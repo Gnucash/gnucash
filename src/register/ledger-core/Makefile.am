@@ -4,7 +4,6 @@ pkglib_LTLIBRARIES = libgncmod-ledger-core.la
 
 libgncmod_ledger_core_la_SOURCES = \
   gnc-ledger-display.c \
-  gnc-ledger-display2.c \
   gncmod-ledger-core.c \
   split-register.c \
   split-register-control.c \
@@ -16,7 +15,6 @@ libgncmod_ledger_core_la_SOURCES = \
 
 noinst_HEADERS = \
   gnc-ledger-display.h \
-  gnc-ledger-display2.h \
   split-register.h \
   split-register-control.h \
   split-register-layout.h \

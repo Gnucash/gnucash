@@ -42,9 +42,6 @@
 #include "swig-runtime.h"
 
 #include "gnc-plugin-page-register.h"
-/*################## Added for Reg2 #################*/
-#include "gnc-plugin-page-register2.h"
-/*################## Added for Reg2 #################*/
 #include "gnc-plugin-register.h"
 #include "gnc-plugin-menu-additions.h"
 #include "gnc-plugin-page-report.h"
@@ -634,31 +631,8 @@ gnc_plugin_page_register_new (Account *account, gboolean subaccounts)
     GncPluginPage *page;
     GncPluginPageRegisterPrivate *priv;
 
-/*################## Added for Reg2 #################*/
-    const GList *item;
-    GncPluginPageRegister2  *new_register_page;
-/*################## Added for Reg2 #################*/
-
     ENTER("account=%p, subaccounts=%s", account,
           subaccounts ? "TRUE" : "FALSE");
-
-/*################## Added for Reg2 #################*/
-    // We test for the new register being open here, ie matching account guids
-    item = gnc_gobject_tracking_get_list (GNC_PLUGIN_PAGE_REGISTER2_NAME);
-    for ( ; item; item = g_list_next (item))
-    {
-        Account *new_account;
-        new_register_page = (GncPluginPageRegister2 *)item->data;
-        new_account = gnc_plugin_page_register2_get_account (new_register_page);
-
-        if (guid_equal (xaccAccountGetGUID (account), xaccAccountGetGUID (new_account)))
-        {
-            gnc_error_dialog (NULL, "%s",
-                         _("You have tried to open an account in the old register while it is open in the new register."));
-            return NULL;
-        }
-    }
-/*################## Added for Reg2 #################*/
 
     if (subaccounts)
         ledger = gnc_ledger_display_subaccounts (account);

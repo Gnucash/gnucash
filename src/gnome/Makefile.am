@@ -31,16 +31,13 @@ libgnc_gnome_la_SOURCES = \
   dialog-commodities.c \
   dialog-fincalc.c \
   dialog-find-transactions.c \
-  dialog-find-transactions2.c \
   dialog-lot-viewer.c \
   dialog-new-user.c \
   dialog-price-editor.c \
   dialog-price-edit-db.c \
   dialog-print-check.c \
-  dialog-print-check2.c \
   dialog-progress.c \
   dialog-sx-editor.c \
-  dialog-sx-editor2.c \
   dialog-sx-from-trans.c \
   dialog-sx-since-last-run.c \
   dialog-tax-info.c \
@@ -49,18 +46,14 @@ libgnc_gnome_la_SOURCES = \
   gnc-plugin-basic-commands.c \
   gnc-plugin-budget.c \
   gnc-plugin-register.c \
-  gnc-plugin-register2.c \
   gnc-plugin-page-account-tree.c \
   gnc-plugin-page-budget.c \
   gnc-plugin-page-sx-list.c \
   gnc-plugin-page-register.c \
-  gnc-plugin-page-register2.c \
   gnc-split-reg.c \
-  gnc-split-reg2.c \
   reconcile-view.c \
   top-level.c \
   window-reconcile.c \
-  window-reconcile2.c \
   window-autoclear.c
 
 gnomeappdir = ${datadir}/applications
@@ -82,14 +75,11 @@ noinst_HEADERS = \
   assistant-stock-split.h \
   dialog-fincalc.h \
   dialog-find-transactions.h \
-  dialog-find-transactions2.h \
   dialog-lot-viewer.h \
   dialog-new-user.h \
   dialog-print-check.h \
-  dialog-print-check2.h \
   dialog-progress.h \
   dialog-sx-editor.h \
-  dialog-sx-editor2.h \
   dialog-sx-from-trans.h \
   dialog-sx-since-last-run.h \
   gnc-budget-view.h \
@@ -97,18 +87,14 @@ noinst_HEADERS = \
   gnc-plugin-basic-commands.h \
   gnc-plugin-budget.h \
   gnc-plugin-register.h \
-  gnc-plugin-register2.h \
   gnc-plugin-page-account-tree.h \
   gnc-plugin-page-budget.h \
   gnc-plugin-page-sx-list.h \
   gnc-plugin-page-register.h \
-  gnc-plugin-page-register2.h \
   gnc-split-reg.h \
-  gnc-split-reg2.h \
   reconcile-view.h \
   top-level.h \
   window-reconcile.h \
-  window-reconcile2.h \
   window-autoclear.h
 
 if BUILDING_FROM_SCM

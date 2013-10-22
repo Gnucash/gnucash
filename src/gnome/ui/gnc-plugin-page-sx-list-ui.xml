@@ -3,9 +3,7 @@
     <placeholder name="AdditionalMenusPlaceholder">
       <menu action="SxListAction">
         <menuitem name="SxListNew" action="SxListNewAction"/>
-        <menuitem name="SxListNew2" action="SxListNewAction2"/>
         <menuitem name="SxListEdit" action="SxListEditAction"/>
-        <menuitem name="SxListEdit2" action="SxListEditAction2"/>
         <menuitem name="SxListDelete" action="SxListDeleteAction"/>
       </menu>
     </placeholder>

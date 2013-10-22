@@ -50,8 +50,8 @@ static void gnc_plugin_register_cmd_general_ledger (GtkAction *action, GncMainWi
 static GtkActionEntry gnc_plugin_actions [] =
 {
     {
-        "ToolsGeneralLedgerAction", NULL, N_("Old St_yle General Ledger"), NULL,
-        N_("Open an old style general ledger window"),
+        "ToolsGeneralLedgerAction", NULL, N_("_General Ledger"), NULL,
+        N_("Open general ledger window"),
         G_CALLBACK (gnc_plugin_register_cmd_general_ledger)
     },
 };
