@@ -3558,7 +3558,7 @@ gnc_main_window_setup_window (GncMainWindow *window)
                            GNC_PREF_TAB_POSITION_RIGHT,
                            gnc_main_window_update_tab_position,
                            window);
-    //gnc_main_window_update_tab_position(NULL, NULL, window);
+    gnc_main_window_update_tab_position(NULL, NULL, window);
 
     gnc_main_window_init_menu_updaters(window);
 
