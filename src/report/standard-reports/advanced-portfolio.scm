@@ -514,7 +514,7 @@
 					 ((and (same-account? current (xaccSplitGetAccount x))
 					       (gnc-numeric-zero-p (xaccSplitGetAmount x))
 					       (not (gnc-numeric-zero-p (xaccSplitGetValue x))))
-					  (dividendcoll 'add commod-currency (xaccSplitGetValue x)))
+					  (dividendcoll 'add commod-currency (gnc-numeric-neg (xaccSplitGetValue x))))
 
 					 ((split-account-type? x ACCT-TYPE-EXPENSE)
 					  (begin
