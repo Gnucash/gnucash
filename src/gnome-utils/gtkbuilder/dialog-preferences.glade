@@ -2,55 +2,6 @@
 <interface>
   <requires lib="gtk+" version="2.24"/>
   <!-- interface-naming-policy project-wide -->
-  <object class="GtkAdjustment" id="auto_decimal_places_adj">
-    <property name="lower">1</property>
-    <property name="upper">8</property>
-    <property name="value">2</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">4</property>
-  </object>
-  <object class="GtkAdjustment" id="autosave_interval_minutes_adj">
-    <property name="upper">99999</property>
-    <property name="value">3</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
-  </object>
-  <object class="GtkAdjustment" id="date_backmonth_adj">
-    <property name="upper">11</property>
-    <property name="value">6</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">4</property>
-  </object>
-  <object class="GtkListStore" id="date_formats">
-    <columns>
-      <!-- column-name name -->
-      <column type="gchararray"/>
-      <!-- column-name example -->
-      <column type="gchararray"/>
-    </columns>
-    <data>
-      <row>
-        <col id="0" translatable="yes">US</col>
-        <col id="1" translatable="yes">07/31/2013</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">UK</col>
-        <col id="1" translatable="yes">31/07/2013</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Europe</col>
-        <col id="1" translatable="yes">31.07.2013</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">ISO</col>
-        <col id="1" translatable="yes">2013-07-31</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Locale</col>
-        <col id="1" translatable="yes">(dummy)</col>
-      </row>
-    </data>
-  </object>
   <object class="GtkDialog" id="GnuCash Preferences">
     <property name="can_focus">False</property>
     <property name="title" translatable="yes">GnuCash Preferences</property>
@@ -369,7 +320,7 @@
                   </packing>
                 </child>
                 <child>
-		  <object class="GtkHBox" id="pref/window.pages.account-tree.summary/end-period">
+                  <object class="GtkHBox" id="pref/window.pages.account-tree.summary/end-period">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <child>
@@ -1181,6 +1132,9 @@
                   <placeholder/>
                 </child>
                 <child>
+                  <placeholder/>
+                </child>
+                <child>
                   <object class="GtkRadioButton" id="pref/general/date-completion-thisyear">
                     <property name="label" translatable="yes">In the current calendar year</property>
                     <property name="visible">True</property>
@@ -1301,44 +1255,8 @@ many months before the current month:</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="border_width">6</property>
-                <property name="n_rows">22</property>
+                <property name="n_rows">25</property>
                 <property name="n_columns">4</property>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
                 <child>
                   <placeholder/>
                 </child>
@@ -1513,8 +1431,8 @@ many months before the current month:</property>
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="right_attach">3</property>
-                    <property name="top_attach">17</property>
-                    <property name="bottom_attach">18</property>
+                    <property name="top_attach">20</property>
+                    <property name="bottom_attach">21</property>
                     <property name="x_options">GTK_FILL</property>
                     <property name="y_options">GTK_FILL</property>
                   </packing>
@@ -1530,8 +1448,8 @@ many months before the current month:</property>
                   </object>
                   <packing>
                     <property name="right_attach">4</property>
-                    <property name="top_attach">15</property>
-                    <property name="bottom_attach">16</property>
+                    <property name="top_attach">18</property>
+                    <property name="bottom_attach">19</property>
                     <property name="x_options">GTK_FILL</property>
                     <property name="y_options"/>
                     <property name="x_padding">12</property>
@@ -1707,8 +1625,8 @@ many months before the current month:</property>
                     <property name="use_markup">True</property>
                   </object>
                   <packing>
-                    <property name="top_attach">20</property>
-                    <property name="bottom_attach">21</property>
+                    <property name="top_attach">23</property>
+                    <property name="bottom_attach">24</property>
                     <property name="x_options">GTK_FILL</property>
                     <property name="y_options"/>
                   </packing>
@@ -1723,8 +1641,8 @@ many months before the current month:</property>
                     <property name="mnemonic_widget">pref/dialogs.search/new-search-limit</property>
                   </object>
                   <packing>
-                    <property name="top_attach">21</property>
-                    <property name="bottom_attach">22</property>
+                    <property name="top_attach">24</property>
+                    <property name="bottom_attach">25</property>
                     <property name="x_options">GTK_FILL</property>
                     <property name="y_options"/>
                     <property name="x_padding">12</property>
@@ -1749,8 +1667,8 @@ many months before the current month:</property>
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="right_attach">2</property>
-                    <property name="top_attach">21</property>
-                    <property name="bottom_attach">22</property>
+                    <property name="top_attach">24</property>
+                    <property name="bottom_attach">25</property>
                     <property name="x_options">GTK_FILL</property>
                     <property name="y_options"/>
                   </packing>
@@ -1880,8 +1798,8 @@ many months before the current month:</property>
                     <property name="xalign">0</property>
                   </object>
                   <packing>
-                    <property name="top_attach">19</property>
-                    <property name="bottom_attach">20</property>
+                    <property name="top_attach">17</property>
+                    <property name="bottom_attach">18</property>
                     <property name="x_options">GTK_FILL</property>
                     <property name="y_options"/>
                   </packing>
@@ -1899,8 +1817,8 @@ many months before the current month:</property>
                     <property name="group">pref/general/retain-type-days</property>
                   </object>
                   <packing>
-                    <property name="top_attach">16</property>
-                    <property name="bottom_attach">17</property>
+                    <property name="top_attach">19</property>
+                    <property name="bottom_attach">20</property>
                     <property name="x_padding">12</property>
                   </packing>
                 </child>
@@ -1917,8 +1835,8 @@ many months before the current month:</property>
                     <property name="draw_indicator">True</property>
                   </object>
                   <packing>
-                    <property name="top_attach">17</property>
-                    <property name="bottom_attach">18</property>
+                    <property name="top_attach">20</property>
+                    <property name="bottom_attach">21</property>
                     <property name="x_padding">12</property>
                   </packing>
                 </child>
@@ -1935,9 +1853,157 @@ many months before the current month:</property>
                     <property name="group">pref/general/retain-type-days</property>
                   </object>
                   <packing>
-                    <property name="top_attach">18</property>
-                    <property name="bottom_attach">19</property>
+                    <property name="top_attach">21</property>
+                    <property name="bottom_attach">22</property>
                     <property name="x_padding">12</property>
+                  </packing>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <object class="GtkCheckButton" id="pref/general/save-on-close-expires">
+                    <property name="label" translatable="yes">Enable timeout on "Save changes on closing" question</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="tooltip_text" translatable="yes">If enabeled, the "Save changes on closing" question will only wait a limited number of seconds for an answer. If the user didn't answer within that time, the changes will be saved automatically and the question window closed.</property>
+                    <property name="use_underline">True</property>
+                    <property name="draw_indicator">True</property>
+                  </object>
+                  <packing>
+                    <property name="right_attach">4</property>
+                    <property name="top_attach">15</property>
+                    <property name="bottom_attach">16</property>
+                    <property name="x_options">GTK_FILL</property>
+                    <property name="y_options"/>
+                    <property name="x_padding">12</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label15">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="xalign">0</property>
+                    <property name="label" translatable="yes">Time to wait for answer:</property>
+                    <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">pref/general/autosave-interval-minutes</property>
+                  </object>
+                  <packing>
+                    <property name="top_attach">16</property>
+                    <property name="bottom_attach">17</property>
+                    <property name="x_options">GTK_FILL</property>
+                    <property name="y_options"/>
+                    <property name="x_padding">12</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkHBox" id="hbox1">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="spacing">6</property>
+                    <child>
+                      <object class="GtkSpinButton" id="pref/general/save-on-close-wait-time">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="tooltip_text" translatable="yes">The number of seconds to wait before the question window will be closed and the changes saved automatically.</property>
+                        <property name="invisible_char">●</property>
+                        <property name="invisible_char_set">True</property>
+                        <property name="primary_icon_activatable">False</property>
+                        <property name="secondary_icon_activatable">False</property>
+                        <property name="primary_icon_sensitive">True</property>
+                        <property name="secondary_icon_sensitive">True</property>
+                        <property name="adjustment">save_on_close_adj</property>
+                        <property name="climb_rate">1</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="label16">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
+                        <property name="label" translatable="yes">seconds</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">False</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="right_attach">2</property>
+                    <property name="top_attach">16</property>
+                    <property name="bottom_attach">17</property>
+                    <property name="x_options">GTK_FILL</property>
+                    <property name="y_options">GTK_FILL</property>
+                  </packing>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label19">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="xalign">0</property>
+                  </object>
+                  <packing>
+                    <property name="top_attach">22</property>
+                    <property name="bottom_attach">23</property>
+                    <property name="x_options">GTK_FILL</property>
+                    <property name="y_options"/>
                   </packing>
                 </child>
               </object>
@@ -2084,27 +2150,6 @@ many months before the current month:</property>
                     <property name="x_options">GTK_FILL</property>
                     <property name="y_options">GTK_FILL</property>
                   </packing>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
                 </child>
                 <child>
                   <placeholder/>
@@ -3124,6 +3169,30 @@ many months before the current month:</property>
                   <placeholder/>
                 </child>
                 <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
                   <object class="GtkLabel" id="label72">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
@@ -3493,30 +3562,6 @@ many months before the current month:</property>
                     <property name="y_options">GTK_FILL</property>
                   </packing>
                 </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
               </object>
               <packing>
                 <property name="position">8</property>
@@ -3548,6 +3593,55 @@ many months before the current month:</property>
       <action-widget response="-7">closebutton2</action-widget>
     </action-widgets>
   </object>
+  <object class="GtkAdjustment" id="auto_decimal_places_adj">
+    <property name="lower">1</property>
+    <property name="upper">8</property>
+    <property name="value">2</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">4</property>
+  </object>
+  <object class="GtkAdjustment" id="autosave_interval_minutes_adj">
+    <property name="upper">99999</property>
+    <property name="value">3</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="date_backmonth_adj">
+    <property name="upper">11</property>
+    <property name="value">6</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">4</property>
+  </object>
+  <object class="GtkListStore" id="date_formats">
+    <columns>
+      <!-- column-name name -->
+      <column type="gchararray"/>
+      <!-- column-name example -->
+      <column type="gchararray"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0" translatable="yes">US</col>
+        <col id="1" translatable="yes">07/31/2013</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">UK</col>
+        <col id="1" translatable="yes">31/07/2013</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Europe</col>
+        <col id="1" translatable="yes">31.07.2013</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">ISO</col>
+        <col id="1" translatable="yes">2013-07-31</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Locale</col>
+        <col id="1" translatable="yes">(dummy)</col>
+      </row>
+    </data>
+  </object>
   <object class="GtkAdjustment" id="key_length_adj">
     <property name="lower">1</property>
     <property name="upper">999</property>
@@ -3571,6 +3665,12 @@ many months before the current month:</property>
     <property name="lower">1</property>
     <property name="upper">99999</property>
     <property name="value">30</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="save_on_close_adj">
+    <property name="upper">300</property>
+    <property name="value">20</property>
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
   </object>

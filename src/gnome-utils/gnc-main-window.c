@@ -63,7 +63,6 @@
 #include "core-utils/gnc-version.h"
 #include "gnc-window.h"
 #include "gnc-prefs.h"
-#include "gnc-prefs.h"
 #include "option-util.h"
 // +JSLED
 //#include "gnc-html.h"
@@ -100,6 +99,8 @@ enum
 #define GNC_PREF_TAB_POSITION_RIGHT   "tab-position-right"
 #define GNC_PREF_TAB_WIDTH            "tab-width"
 #define GNC_PREF_TAB_COLOR            "show-account-color-tabs"
+#define GNC_PREF_SAVE_CLOSE_EXPIRES   "save-on-close-expires"
+#define GNC_PREF_SAVE_CLOSE_WAIT_TIME "save-on-close-wait-time"
 
 #define GNC_MAIN_WINDOW_NAME "GncMainWindow"
 
@@ -115,6 +116,11 @@ static GQuark window_type = 0;
 /** A list of all extant main windows. This is for convenience as the
  *  same information can be obtained from the object tracking code. */
 static GList *active_windows = NULL;
+/** Count down timer for the save changes dialog. If the timer reaches zero
+ *  any changes will be saved and the save dialog closed automatically */
+static uint secs_to_save = 0;
+
+#define MSG_AUTO_SAVE _("Changes will be saved automatically in %d seconds")
 
 /* Declarations *********************************************************/
 static void gnc_main_window_class_init (GncMainWindowClass *klass);
@@ -1121,6 +1127,45 @@ gnc_main_window_page_exists (GncPluginPage *page)
     return FALSE;
 }
 
+static gboolean auto_save_countdown (GtkWidget *dialog)
+{
+    GtkWidget *label;
+    gchar *timeoutstr = NULL;
+
+    if (secs_to_save < 0)
+    {
+        PWARN ("Count down aborted - timer reached a negative value.\n"
+               "This is probably because the timer was improperly initialized.");
+        return G_SOURCE_REMOVE;
+    }
+
+   /* Stop count down if user closed the dialog since the last time we were called */
+    if (!GTK_IS_DIALOG (dialog))
+        return G_SOURCE_REMOVE;
+
+    /* Stop count down if count down text can't be updated */
+    label = GTK_WIDGET (g_object_get_data (G_OBJECT (dialog), "count-down-label"));
+    if (!GTK_IS_LABEL (label))
+        return G_SOURCE_REMOVE;
+
+    secs_to_save--;
+    DEBUG ("Counting down: %d seconds", secs_to_save);
+
+    timeoutstr = g_strdup_printf (MSG_AUTO_SAVE, secs_to_save);
+    gtk_label_set_text (GTK_LABEL (label), timeoutstr);
+    g_free (timeoutstr);
+
+    /* Count down reached 0. Save and close dialog */
+    if (!secs_to_save)
+    {
+        gtk_dialog_response (GTK_DIALOG(dialog), GTK_RESPONSE_APPLY);
+        return G_SOURCE_REMOVE;
+    }
+
+    /* Run another cycle */
+    return G_SOURCE_CONTINUE;
+}
+
 
 /** This function prompts the user to save the file with a dialog that
  *  follows the HIG guidelines.
@@ -1136,7 +1181,7 @@ gnc_main_window_prompt_for_save (GtkWidget *window)
 {
     QofSession *session;
     QofBook *book;
-    GtkWidget *dialog;
+    GtkWidget *dialog, *msg_area, *label;
     gint response;
     const gchar *filename, *tmp;
     const gchar *title = _("Save changes to file %s before closing?");
@@ -1194,6 +1239,28 @@ gnc_main_window_prompt_for_save (GtkWidget *window)
                            GTK_STOCK_SAVE, GTK_RESPONSE_APPLY,
                            NULL);
     gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_APPLY);
+
+    /* If requested by the user, add a timeout to the question to save automatically
+     * if the user doesn't answer after a chosen number of seconds.
+     */
+    if (gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_SAVE_CLOSE_EXPIRES))
+    {
+        gchar *timeoutstr = NULL;
+
+        secs_to_save = gnc_prefs_get_int (GNC_PREFS_GROUP_GENERAL, GNC_PREF_SAVE_CLOSE_WAIT_TIME);
+        timeoutstr = g_strdup_printf (MSG_AUTO_SAVE, secs_to_save);
+        label = GTK_WIDGET(gtk_label_new (timeoutstr));
+        g_free (timeoutstr);
+        gtk_widget_show (label);
+
+        msg_area = gtk_message_dialog_get_message_area (GTK_MESSAGE_DIALOG(dialog));
+        gtk_box_pack_end (GTK_BOX(msg_area), label, TRUE, TRUE, 0);
+        g_object_set (G_OBJECT (label), "xalign", 0.0, NULL);
+
+        g_object_set_data (G_OBJECT (dialog), "count-down-label", label);
+        g_timeout_add_seconds (1, (GSourceFunc)auto_save_countdown, dialog);
+    }
+
     response = gtk_dialog_run (GTK_DIALOG (dialog));
     gtk_widget_destroy(dialog);
 
