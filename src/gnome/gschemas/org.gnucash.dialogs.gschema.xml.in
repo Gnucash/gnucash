@@ -1,7 +1,6 @@
 <schemalist gettext-domain="GETTEXT_PACKAGE">
   <schema id="org.gnucash.dialogs" path="/org/gnucash/dialogs/">
     <child name="account" schema="org.gnucash.dialogs.account"/>
-    <child name="edit-prices" schema="org.gnucash.dialogs.edit-prices"/>
     <child name="preferences" schema="org.gnucash.dialogs.preferences"/>
     <child name="price-editor" schema="org.gnucash.dialogs.price-editor"/>
     <child name="reset-warnings" schema="org.gnucash.dialogs.reset-warnings"/>
