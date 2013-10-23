@@ -646,6 +646,7 @@ AC_ARG_ENABLE( profile,
 ### --------------------------------------------------------------------------
 ### OFX
 want_ofx=auto
+have_ofx=no
 AC_ARG_ENABLE( ofx,
   [AS_HELP_STRING([--enable-ofx],[compile with ofx support (needs LibOFX)])],
   [ case "$enableval" in
@@ -660,13 +661,27 @@ case "${want_ofx}" in
   auto) AC_MSG_RESULT(yes -- automatic test) ;;
 esac
 
-MIGRATABLE_PREFS_OFX="/dev/null"
 if test x${want_ofx} != xno ; then
-  PKG_CHECK_MODULES(LIBOFX, libofx, [want_ofx="yes"], [want_ofx="no"])
+  PKG_CHECK_MODULES(LIBOFX, libofx, [have_ofx="yes"], [ have_ofx="no" ])
+  _COMPONENTS="$_COMPONENTS ofx"
+fi
+
+if test x${want_ofx} = xyes && test x${have_ofx} = xno; then
+  AC_MSG_ERROR([
+
+ OFX support wanted, but libofx development libraries not found.
+ Either install the libofx development package (such as libofx-dev or
+ libofx-devel), or drop ofx support. You can do tis by removing
+ --enable-dbi from the configure parameters.])
+fi
+
+MIGRATABLE_PREFS_OFX="/dev/null"
+if test x${have_ofx} = xyes ; then
   _COMPONENTS="$_COMPONENTS ofx"
   MIGRATABLE_PREFS_OFX="$srcdir/src/import-export/ofx/migratable-prefs-ofx.xml"
 fi
-AM_CONDITIONAL([WITH_OFX], [test "x${want_ofx}" != xno])
+
+AM_CONDITIONAL([WITH_OFX], [test "x${have_ofx}" = xyes])
 AC_SUBST_FILE([MIGRATABLE_PREFS_OFX])
 ### --------------------------------------------------------------------------
 ### MT940
