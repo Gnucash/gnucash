@@ -41,6 +41,12 @@
   <cmdty:get_quotes/>
   <cmdty:quote_source>currency</cmdty:quote_source>
   <cmdty:quote_tz/>
+  <cmdty:slots>
+    <slot>
+      <slot:key>user_symbol</slot:key>
+      <slot:value type="string">€uro</slot:value>
+    </slot>
+  </cmdty:slots>
 </gnc:commodity>
 <gnc:commodity version="2.0.0">
   <cmdty:space>template</cmdty:space>

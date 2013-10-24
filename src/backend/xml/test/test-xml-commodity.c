@@ -110,6 +110,12 @@ node_and_commodity_equal(xmlNodePtr node, const gnc_commodity *com)
                 g_free(txt);
             }
         }
+	else if (g_strcmp0((char*)mark->name, "cmdty:slots") == 0)
+	{
+            if (!equals_node_val_vs_kvp_frame(mark,
+					      gnc_commodity_get_kvp_frame(com)))
+                return "slots differ";
+	}
         /* Legitimate tags which we don't yet have tests */
         else if (g_strcmp0((char*)mark->name, "cmdty:get_quotes") == 0 ||
                  g_strcmp0((char*)mark->name, "cmdty:quote_source") == 0 ||

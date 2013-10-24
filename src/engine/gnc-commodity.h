@@ -948,6 +948,12 @@ gboolean gnc_commodity_table_register (void);
 void gnc_commodity_begin_edit (gnc_commodity *cm);
 void gnc_commodity_commit_edit (gnc_commodity *cm);
 
+/** Get the internal KVP from of the currency.
+ * You should rather use the individual accessors for individual properties
+ */
+#define gnc_commodity_get_kvp_frame(cm) \
+	qof_instance_get_slots(QOF_INSTANCE(cm))
+
 /** @} */
 
 /** @name Monetary value, commodity identity and numeric value
