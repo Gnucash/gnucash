@@ -187,7 +187,6 @@ intl-scm/guile-strings.c:
 
 GIT_CMD = @GIT_CMD@
 SVN = svn
-XSLTPROC = xsltproc
 SCM_TYPE = @SCM_TYPE@
 
 if BUILDING_FROM_SCM

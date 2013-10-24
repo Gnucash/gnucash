@@ -492,6 +492,14 @@ AS_SCRUB_INCLUDE(LIBXLT_CFLAGS)
 AC_SUBST(LIBXSLT_CFLAGS)
 AC_SUBST(LIBXSLT_LIBS)
 
+# xsltproc is not included in libxslt on all distributions
+# so check for it separately
+AC_PATH_PROG(XSLTPROC, xsltproc, [""])
+
+if test -z "$XSLTPROC"; then
+  AC_MSG_ERROR([xsltproc is required to build GnuCash])
+fi
+
 ### --------------------------------------------------------------------------
 ### Zlib
 
