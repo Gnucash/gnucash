@@ -158,6 +158,9 @@ gnc_ui_select_commodity_modal(gnc_commodity * orig_sel,
  *  @param mnemonic If present, this will be the default mnemonic for
  *  the new commodity.
  *
+ *  @param user_symbol If present, this will be the default user symbol
+ *  for the new commodity.
+ *
  *  @param fraction If present, this will be the default fraction for
  *  the new commodity.  If absent, a default of 1000 will be used.
  *
@@ -169,6 +172,7 @@ gnc_ui_new_commodity_modal_full(const char * namespace,
                                 const char * cusip,
                                 const char * fullname,
                                 const char * mnemonic,
+                                const char * user_symbol,
                                 int fraction);
 
 /** Ask the user to provide the information necessary to create a new

@@ -425,6 +425,7 @@ gnc_tree_model_commodity_get_column_type (GtkTreeModel *tree_model,
     case GNC_TREE_MODEL_COMMODITY_COL_UNIQUE_NAME:
     case GNC_TREE_MODEL_COMMODITY_COL_QUOTE_SOURCE:
     case GNC_TREE_MODEL_COMMODITY_COL_QUOTE_TZ:
+    case GNC_TREE_MODEL_COMMODITY_COL_USER_SYMBOL:
         return G_TYPE_STRING;
     case GNC_TREE_MODEL_COMMODITY_COL_FRACTION:
         return G_TYPE_INT;
@@ -685,6 +686,11 @@ gnc_tree_model_commodity_get_value (GtkTreeModel *tree_model,
         {
             g_value_set_static_string (value, "");
         }
+        break;
+    case GNC_TREE_MODEL_COMMODITY_COL_USER_SYMBOL:
+        g_value_init (value, G_TYPE_STRING);
+
+        g_value_set_string (value, gnc_commodity_get_user_symbol (commodity));
         break;
     case GNC_TREE_MODEL_COMMODITY_COL_VISIBILITY:
         g_value_init (value, G_TYPE_BOOLEAN);

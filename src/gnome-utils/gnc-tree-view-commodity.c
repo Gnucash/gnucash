@@ -405,6 +405,12 @@ gnc_tree_view_commodity_new (QofBook *book,
               GNC_TREE_MODEL_COMMODITY_COL_VISIBILITY,
               sort_by_commodity_string);
     col = gnc_tree_view_add_text_column (
+              view, _("Display symbol"), "user_symbol", NULL, "ACME",
+              GNC_TREE_MODEL_COMMODITY_COL_USER_SYMBOL,
+              GNC_TREE_MODEL_COMMODITY_COL_VISIBILITY,
+              sort_by_commodity_string);
+    g_object_set_data(G_OBJECT(col), DEFAULT_VISIBLE, GINT_TO_POINTER(1));
+    col = gnc_tree_view_add_text_column (
               view, _("Unique Name"), "uniquename", NULL,
               "NASDAQ::ACMEACME", GNC_TREE_MODEL_COMMODITY_COL_UNIQUE_NAME,
               GNC_TREE_MODEL_COMMODITY_COL_VISIBILITY,

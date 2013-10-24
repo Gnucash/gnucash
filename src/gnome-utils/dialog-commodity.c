@@ -71,6 +71,7 @@ struct select_commodity_window
     const char * default_cusip;
     const char * default_fullname;
     const char * default_mnemonic;
+    const char * default_user_symbol;
     int          default_fraction;
 };
 
@@ -80,6 +81,7 @@ struct commodity_window
     GtkWidget * table;
     GtkWidget * fullname_entry;
     GtkWidget * mnemonic_entry;
+    GtkWidget * user_symbol_entry;
     GtkWidget * namespace_combo;
     GtkWidget * code_entry;
     GtkWidget * fraction_spinbutton;
@@ -93,6 +95,7 @@ struct commodity_window
 
     guint comm_section_top;
     guint comm_section_bottom;
+    guint comm_symbol_line;
     guint fq_section_top;
     guint fq_section_bottom;
 
@@ -160,6 +163,7 @@ gnc_ui_select_commodity_modal_full(gnc_commodity * orig_sel,
     win->default_cusip = cusip;
     win->default_fullname = fullname;
     win->default_mnemonic = mnemonic;
+    win->default_user_symbol = "";
 
     if (parent)
         gtk_window_set_transient_for (GTK_WINDOW (win->dialog), GTK_WINDOW (parent));
@@ -338,6 +342,7 @@ gnc_ui_select_commodity_new_cb(GtkButton * button,
                                         w->default_cusip,
                                         w->default_fullname,
                                         w->default_mnemonic,
+                                        w->default_user_symbol,
                                         w->default_fraction);
     if (new_commodity)
     {
@@ -592,10 +597,10 @@ gnc_set_commodity_section_sensitivity (GtkWidget *widget, gpointer user_data)
                             NULL);
 
     if ((offset < cw->comm_section_top) || (offset >= cw->comm_section_bottom))
-        return;
-    gtk_widget_set_sensitive(widget, !cw->is_currency);
+	return;
+    if (cw->is_currency)
+	gtk_widget_set_sensitive(widget, offset == cw->comm_symbol_line);
 }
-
 
 static void
 gnc_ui_update_commodity_info (CommodityWindow *cw)
@@ -924,6 +929,7 @@ gnc_ui_build_commodity_dialog(const char * selected_namespace,
                               GtkWidget  *parent,
                               const char * fullname,
                               const char * mnemonic,
+                              const char * user_symbol,
                               const char * cusip,
                               int          fraction,
                               gboolean     edit)
@@ -957,18 +963,10 @@ gnc_ui_build_commodity_dialog(const char * selected_namespace,
     if (!help_callback)
         gtk_widget_hide (help_button);
 
-    /* Determine the commodity section of the dialog */
-    retval->table = GTK_WIDGET(gtk_builder_get_object (builder, "edit_table"));
-    sec_label = GTK_WIDGET(gtk_builder_get_object (builder, "security_label"));
-    gtk_container_child_get(GTK_CONTAINER(retval->table), sec_label,
-                            "bottom-attach", &retval->comm_section_top, NULL);
-    widget = GTK_WIDGET(gtk_builder_get_object (builder, "quote_label"));
-    gtk_container_child_get(GTK_CONTAINER(retval->table), widget,
-                            "top-attach", &retval->comm_section_bottom, NULL);
-
     /* Get widget pointers */
     retval->fullname_entry = GTK_WIDGET(gtk_builder_get_object (builder, "fullname_entry"));
     retval->mnemonic_entry = GTK_WIDGET(gtk_builder_get_object (builder, "mnemonic_entry"));
+    retval->user_symbol_entry = GTK_WIDGET(gtk_builder_get_object (builder, "user_symbol_entry"));
     retval->namespace_combo = GTK_WIDGET(gtk_builder_get_object (builder, "namespace_cbwe"));
     retval->code_entry = GTK_WIDGET(gtk_builder_get_object (builder, "code_entry"));
     retval->fraction_spinbutton = GTK_WIDGET(gtk_builder_get_object (builder, "fraction_spinbutton"));
@@ -978,6 +976,18 @@ gnc_ui_build_commodity_dialog(const char * selected_namespace,
     retval->source_button[SOURCE_SINGLE] = GTK_WIDGET(gtk_builder_get_object (builder, "single_source_button"));
     retval->source_button[SOURCE_MULTI] = GTK_WIDGET(gtk_builder_get_object (builder, "multi_source_button"));
     retval->quote_tz_label = GTK_WIDGET(gtk_builder_get_object (builder, "quote_tz_label"));
+
+    /* Determine the commodity section of the dialog */
+    retval->table = GTK_WIDGET(gtk_builder_get_object (builder, "edit_table"));
+    sec_label = GTK_WIDGET(gtk_builder_get_object (builder, "security_label"));
+    gtk_container_child_get(GTK_CONTAINER(retval->table), sec_label,
+                            "bottom-attach", &retval->comm_section_top, NULL);
+    widget = GTK_WIDGET(gtk_builder_get_object (builder, "quote_label"));
+    gtk_container_child_get(GTK_CONTAINER(retval->table), widget,
+                            "top-attach", &retval->comm_section_bottom, NULL);
+    gtk_container_child_get(GTK_CONTAINER(retval->table),
+                            retval->user_symbol_entry, "top-attach",
+                            &retval->comm_symbol_line, NULL);
 
     /* Build custom widgets */
     box = GTK_WIDGET(gtk_builder_get_object (builder, "single_source_box"));
@@ -1066,6 +1076,7 @@ gnc_ui_build_commodity_dialog(const char * selected_namespace,
     /* Fill in any data, top to bottom */
     gtk_entry_set_text (GTK_ENTRY (retval->fullname_entry), fullname ? fullname : "");
     gtk_entry_set_text (GTK_ENTRY (retval->mnemonic_entry), mnemonic ? mnemonic : "");
+    gtk_entry_set_text (GTK_ENTRY (retval->user_symbol_entry), user_symbol ? user_symbol : "");
     gnc_cbwe_add_completion(GTK_COMBO_BOX(retval->namespace_combo));
     gnc_ui_update_namespace_picker(retval->namespace_combo,
                                    selected_namespace,
@@ -1130,6 +1141,7 @@ gnc_ui_common_commodity_modal(gnc_commodity *commodity,
                               const char * cusip,
                               const char * fullname,
                               const char * mnemonic,
+                              const char * user_symbol,
                               int fraction)
 {
     CommodityWindow * win;
@@ -1145,6 +1157,7 @@ gnc_ui_common_commodity_modal(gnc_commodity *commodity,
         namespace = gnc_commodity_get_namespace (commodity);
         fullname = gnc_commodity_get_fullname (commodity);
         mnemonic = gnc_commodity_get_mnemonic (commodity);
+        user_symbol = gnc_commodity_get_user_symbol (commodity);
         cusip = gnc_commodity_get_cusip (commodity);
         fraction = gnc_commodity_get_fraction (commodity);
     }
@@ -1158,8 +1171,8 @@ gnc_ui_common_commodity_modal(gnc_commodity *commodity,
     }
 
     win = gnc_ui_build_commodity_dialog(namespace, parent, fullname,
-                                        mnemonic, cusip, fraction,
-                                        (commodity != NULL));
+                                        mnemonic, user_symbol, cusip,
+                                        fraction, (commodity != NULL));
 
     /* Update stock quote info based on existing commodity */
     gnc_ui_commodity_update_quote_info(win, commodity);
@@ -1209,13 +1222,15 @@ gnc_ui_new_commodity_modal_full(const char * namespace,
                                 const char * cusip,
                                 const char * fullname,
                                 const char * mnemonic,
+                                const char * user_symbol,
                                 int fraction)
 {
     gnc_commodity *result;
 
     ENTER(" ");
     result = gnc_ui_common_commodity_modal(NULL, parent, namespace, cusip,
-                                           fullname, mnemonic, 10000);
+                                           fullname, mnemonic, user_symbol,
+                                           10000);
     LEAVE(" ");
     return result;
 }
@@ -1232,7 +1247,7 @@ gnc_ui_new_commodity_modal(const char * default_namespace,
 
     ENTER(" ");
     result = gnc_ui_common_commodity_modal(NULL, parent, default_namespace, NULL,
-                                           NULL, NULL, 0);
+                                           NULL, NULL, NULL, 0);
     LEAVE(" ");
     return result;
 }
@@ -1254,7 +1269,7 @@ gnc_ui_edit_commodity_modal(gnc_commodity *commodity,
 
     ENTER(" ");
     result = gnc_ui_common_commodity_modal(commodity, parent, NULL, NULL,
-                                           NULL, NULL, 0);
+                                           NULL, NULL, NULL, 0);
     LEAVE(" ");
     return result != NULL;
 }
@@ -1271,6 +1286,7 @@ gnc_ui_commodity_dialog_to_object(CommodityWindow * w)
     const char * fullname  = gtk_entry_get_text(GTK_ENTRY(w->fullname_entry));
     gchar *namespace = gnc_ui_namespace_picker_ns (w->namespace_combo);
     const char * mnemonic  = gtk_entry_get_text(GTK_ENTRY(w->mnemonic_entry));
+    const char * user_symbol = gtk_entry_get_text(GTK_ENTRY(w->user_symbol_entry));
     const char * code      = gtk_entry_get_text(GTK_ENTRY(w->code_entry));
     QofBook * book = gnc_get_current_book ();
     int fraction = gtk_spin_button_get_value_as_int
@@ -1285,13 +1301,25 @@ gnc_ui_commodity_dialog_to_object(CommodityWindow * w)
     {
         if (w->edit_commodity)
         {
+            gboolean quote_set;
+            quote_set = gtk_toggle_button_get_active
+                (GTK_TOGGLE_BUTTON (w->get_quote_check));
             c = w->edit_commodity;
             gnc_commodity_begin_edit(c);
-            gnc_commodity_user_set_quote_flag (c, gtk_toggle_button_get_active
-                                               (GTK_TOGGLE_BUTTON (w->get_quote_check)));
-            selection = gtk_combo_box_get_active(GTK_COMBO_BOX(w->quote_tz_menu));
-            string = gnc_timezone_menu_position_to_string(selection);
-            gnc_commodity_set_quote_tz(c, string);
+            gnc_commodity_user_set_quote_flag (c, quote_set);
+            if (quote_set)
+            {
+                selection = gtk_combo_box_get_active(GTK_COMBO_BOX(w->quote_tz_menu));
+                string = gnc_timezone_menu_position_to_string(selection);
+                gnc_commodity_set_quote_tz(c, string);
+            } else
+                gnc_commodity_set_quote_tz(c, NULL);
+
+	    if (user_symbol && *user_symbol)
+                gnc_commodity_set_user_symbol(c, user_symbol);
+	    else
+                gnc_commodity_set_user_symbol(c, NULL);
+
             gnc_commodity_commit_edit(c);
             return TRUE;
         }
