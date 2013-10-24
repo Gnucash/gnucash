@@ -1128,6 +1128,18 @@ gnc_commodity_get_quote_tz(const gnc_commodity *cm)
 }
 
 /********************************************************************
+ * gnc_commodity_get_user_symbol
+ ********************************************************************/
+
+const char*
+gnc_commodity_get_user_symbol(const gnc_commodity *cm)
+{
+    const char *str;
+    if (!cm) return NULL;
+    return kvp_frame_get_string(cm->inst.kvp_data, "user_symbol");
+}
+
+/********************************************************************
  * gnc_commodity_set_mnemonic
  ********************************************************************/
 
@@ -1358,6 +1370,25 @@ gnc_commodity_set_quote_tz(gnc_commodity *cm, const char *tz)
     priv->quote_tz = CACHE_INSERT (tz);
     mark_commodity_dirty(cm);
     gnc_commodity_commit_edit(cm);
+    LEAVE(" ");
+}
+
+/********************************************************************
+ * gnc_commodity_set_user_symbol
+ ********************************************************************/
+
+void
+gnc_commodity_set_user_symbol(gnc_commodity * cm, const char * user_symbol)
+{
+    if (!cm) return;
+
+    ENTER ("(cm=%p, symbol=%s)", cm, user_symbol ? user_symbol : "(null)");
+
+    gnc_commodity_begin_edit(cm);
+    kvp_frame_set_string(cm->inst.kvp_data, "user_symbol", user_symbol);
+    mark_commodity_dirty(cm);
+    gnc_commodity_commit_edit(cm);
+
     LEAVE(" ");
 }
 

@@ -458,9 +458,19 @@ gnc_quote_source* gnc_commodity_get_default_quote_source(const gnc_commodity *cm
  *  caller.
  */
 const char* gnc_commodity_get_quote_tz(const gnc_commodity *cm);
+
+/** Retrieve the user-defined symbol for the specified commodity. This
+ *  will be a pointer to a nul terminated string like "£", "US$", etc.
+ *
+ *  @param cm A pointer to a commodity data structure.
+ *
+ *  @return A pointer to the user-defined symbol for this commodity.
+ *  NULL means that the user didn't define any symbol, and that fallback to
+ *  e.g. the mnemonic is in order. This string is owned by the engine and
+ *  should not be freed by the caller.
+ */
+const char* gnc_commodity_get_user_symbol(const gnc_commodity *cm);
 /** @} */
-
-
 
 /** @name Commodity Accessor Routines - Set
 @{
@@ -581,8 +591,17 @@ void  gnc_commodity_set_quote_source(gnc_commodity *cm, gnc_quote_source *src);
  *  engine.
  */
 void  gnc_commodity_set_quote_tz(gnc_commodity *cm, const char *tz);
-/** @} */
 
+/** Set a user-defined symbol for the specified commodity. This should
+ *  be a pointer to a nul terminated string like "£", "US$", etc.
+ *
+ *  @param cm A pointer to a commodity data structure.
+ *
+ *  @param tz A pointer to the symbol for this commodity. This string
+ *  belongs to the caller and will be duplicated by the engine.
+ */
+void  gnc_commodity_set_user_symbol(gnc_commodity *cm, const char *user_symbol);
+/** @} */
 
 /** @name Commodity Usage Count Adjustment Routines
 @{
