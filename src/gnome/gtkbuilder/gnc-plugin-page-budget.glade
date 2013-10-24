@@ -395,10 +395,13 @@
                   <object class="GtkScrolledWindow" id="scrolledwindow16">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="hscrollbar_policy">automatic</property>
+                    <property name="vscrollbar_policy">automatic</property>
                     <child>
                       <object class="GtkTextView" id="BudgetDescription">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="wrap_mode">GTK_WRAP_WORD</property>
                       </object>
                     </child>
                   </object>
