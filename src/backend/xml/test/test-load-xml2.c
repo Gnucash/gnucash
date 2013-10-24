@@ -113,6 +113,7 @@ int
 main (int argc, char ** argv)
 {
     const char *location = g_getenv("GNC_TEST_FILES");
+    int files_tested = 0;
     GDir *xml2_dir;
 
     qof_init();
@@ -143,6 +144,7 @@ main (int argc, char ** argv)
                 if (!g_file_test(to_open, G_FILE_TEST_IS_DIR))
                 {
                     test_load_file(to_open);
+                    files_tested++;
                 }
                 g_free(to_open);
             }
@@ -150,6 +152,11 @@ main (int argc, char ** argv)
     }
 
     g_dir_close(xml2_dir);
+
+    if (files_tested == 0)
+    {
+        failure("handled 0 files in test-load-xml2");
+    }
 
     print_test_results();
     qof_close();

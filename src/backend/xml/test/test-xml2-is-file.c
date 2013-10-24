@@ -18,7 +18,7 @@ main(int argc, char **argv)
 
     if (!directory)
     {
-        directory = "../../../../accounts/C";
+        directory = "test-files/xml2";
     }
 
     filename = malloc(strlen(directory) + 1 + strlen(FILENAME) + 1);

@@ -195,7 +195,7 @@ GNC_TEST_DEPS = \
 TESTS_ENVIRONMENT = \
   GUILE_WARN_DEPRECATED=no \
   GNC_ACCOUNT_PATH=${top_srcdir}/accounts/C \
-  GNC_TEST_FILES=${srcdir}/test-files/xml2 \
+  GNC_TEST_FILES=test-files/xml2 \
   SRCDIR=${srcdir} \
   GNC_BUILDDIR=`\cd ${top_builddir} && pwd` \
   $(shell ${top_srcdir}/src/gnc-test-env --no-exports ${GNC_TEST_DEPS})
