@@ -1454,37 +1454,7 @@ xaccSPrintAmount (char * bufp, gnc_numeric val, GNCPrintAmountInfo info)
         return 0;
 
     lc = gnc_localeconv();
-
-    if (info.use_symbol)
-    {
-        /* There was a bug here: don't use gnc_locale_default_currency */
-        if (gnc_commodity_equiv (info.commodity,
-                                 gnc_locale_default_currency_nodefault ()))
-        {
-            currency_symbol = lc->currency_symbol;
-        }
-        else
-        {
-            if (info.commodity && !gnc_commodity_is_iso (info.commodity))
-                is_shares = TRUE;
-
-            currency_symbol = gnc_commodity_get_mnemonic (info.commodity);
-            info.use_locale = 0;
-        }
-
-        if (currency_symbol == NULL)
-            currency_symbol = "";
-    }
-    else
-        currency_symbol = NULL;
-
-    if (!info.use_locale)
-    {
-        cs_precedes = is_shares ? 0 : 1;
-        sep_by_space = 1;
-    }
-    else
-    {
+    if (info.use_locale)
         if (gnc_numeric_negative_p (val))
         {
             cs_precedes  = lc->n_cs_precedes;
@@ -1495,7 +1465,25 @@ xaccSPrintAmount (char * bufp, gnc_numeric val, GNCPrintAmountInfo info)
             cs_precedes  = lc->p_cs_precedes;
             sep_by_space = lc->p_sep_by_space;
         }
+    else
+    {
+        cs_precedes = TRUE;
+        sep_by_space = TRUE;
     }
+
+    if (info.commodity && info.use_symbol)
+    {
+        if (gnc_commodity_is_iso (info.commodity))
+	    currency_symbol = gnc_commodity_get_nice_symbol (info.commodity);
+        else
+        {
+            currency_symbol = gnc_commodity_get_mnemonic (info.commodity);
+            cs_precedes  = FALSE;
+            sep_by_space = TRUE;
+        }
+    }
+    else /* !info.use_symbol || !info.commodity */
+        currency_symbol = "";
 
     if (gnc_numeric_negative_p (val))
     {
@@ -1759,6 +1747,22 @@ printable_value (gdouble val, gint denom)
     return xaccPrintAmount (num, info);
 }
 
+const char*
+gnc_commodity_get_nice_symbol(const gnc_commodity *cm)
+{
+    const char *nice_symbol;
+    if (!cm) return NULL;
+
+    nice_symbol = gnc_commodity_get_user_symbol(cm);
+    if (nice_symbol)
+	return nice_symbol;
+    else if (gnc_commodity_equiv (cm, gnc_locale_default_currency_nodefault ()))
+	return gnc_localeconv()->currency_symbol;
+    else if ((nice_symbol = gnc_commodity_get_mnemonic(cm)))
+	return nice_symbol;
+    else
+	return "";
+}
 
 /********************************************************************\
  * xaccParseAmount                                                  *
