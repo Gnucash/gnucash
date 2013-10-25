@@ -681,7 +681,6 @@ esac
 
 if test x${want_ofx} != xno ; then
   PKG_CHECK_MODULES(LIBOFX, libofx, [have_ofx="yes"], [ have_ofx="no" ])
-  _COMPONENTS="$_COMPONENTS ofx"
 fi
 
 if test x${want_ofx} = xyes && test x${have_ofx} = xno; then
