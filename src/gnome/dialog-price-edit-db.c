@@ -53,7 +53,7 @@
 
 #define DIALOG_PRICE_DB_CM_CLASS "dialog-price-edit-db"
 #define STATE_SECTION "dialogs/edit_prices"
-#define GNC_PREFS_GROUP "dialogs.edit-prices"
+#define GNC_PREFS_GROUP "dialogs.pricedb-editor"
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_GUI;

@@ -49,7 +49,7 @@
 
 
 #define DIALOG_PRICE_EDIT_CM_CLASS "dialog-price-edit"
-#define GNC_PREFS_GROUP "dialogs.prices"
+#define GNC_PREFS_GROUP "dialogs.price-editor"
 #define DIALOG_PRICE_EDIT_SOURCE "user:price-editor"
 
 

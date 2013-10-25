@@ -3,7 +3,6 @@
 gschema_in_files = \
   org.gnucash.dialogs.gschema.xml.in \
   org.gnucash.dialogs.commodities.gschema.xml.in \
-  org.gnucash.dialogs.prices.gschema.xml.in \
   org.gnucash.dialogs.checkprinting.gschema.xml.in \
   org.gnucash.dialogs.reconcile.gschema.xml.in \
   org.gnucash.dialogs.sxs.gschema.xml.in \
