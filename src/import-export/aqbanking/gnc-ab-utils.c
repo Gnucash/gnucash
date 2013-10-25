@@ -423,13 +423,22 @@ gnc_ab_memo_to_gnc(const AB_TRANSACTION *ab_trans)
     const gchar *ab_remote_bankcode =
         AB_Transaction_GetRemoteBankCode(ab_trans);
 
-    gchar *ab_other_accountid = g_strdup(ab_remote_accountnumber ? ab_remote_accountnumber : "");
-    gchar *ab_other_bankcode = g_strdup(ab_remote_bankcode ? ab_remote_bankcode : "");
+    gchar *ab_other_accountid;
+    gchar *ab_other_bankcode;
 
     gboolean have_accountid;
     gboolean have_bankcode;
 
     gchar *retval;
+
+    // For SEPA transactions, we need to ask for something different here
+    if (!ab_remote_accountnumber)
+        ab_remote_accountnumber = AB_Transaction_GetRemoteIban(ab_trans);
+    if (!ab_remote_bankcode)
+        ab_remote_bankcode = AB_Transaction_GetRemoteBic(ab_trans);
+
+    ab_other_accountid = g_strdup(ab_remote_accountnumber ? ab_remote_accountnumber : "");
+    ab_other_bankcode = g_strdup(ab_remote_bankcode ? ab_remote_bankcode : "");
 
     /* Ensure string is in utf8 */
     gnc_utf8_strip_invalid(ab_other_accountid);
