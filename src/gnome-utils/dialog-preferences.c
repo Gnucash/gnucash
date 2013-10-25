@@ -1071,17 +1071,31 @@ gnc_preferences_dialog_create(void)
     DEBUG("Opening dialog-preferences.glade:");
     builder = gtk_builder_new();
 
+#ifdef REGISTER2_ENABLED
+    gnc_builder_add_from_file (builder, "dialog-preferences2.glade", "auto_decimal_places_adj");
+    gnc_builder_add_from_file (builder, "dialog-preferences2.glade", "autosave_interval_minutes_adj");
+    gnc_builder_add_from_file (builder, "dialog-preferences2.glade", "save_on_close_adj");
+    gnc_builder_add_from_file (builder, "dialog-preferences2.glade", "date_backmonth_adj");
+    gnc_builder_add_from_file (builder, "dialog-preferences2.glade", "max_transactions_adj");
+    gnc_builder_add_from_file (builder, "dialog-preferences2.glade", "key_length_adj");
+    gnc_builder_add_from_file (builder, "dialog-preferences2.glade", "new_search_limit_adj");
+    gnc_builder_add_from_file (builder, "dialog-preferences2.glade", "retain_days_adj");
+    gnc_builder_add_from_file (builder, "dialog-preferences2.glade", "tab_width_adj");
+    gnc_builder_add_from_file (builder, "dialog-preferences2.glade", "date_formats");
+    gnc_builder_add_from_file (builder, "dialog-preferences2.glade", "GnuCash Preferences");
+#else
     gnc_builder_add_from_file (builder, "dialog-preferences.glade", "auto_decimal_places_adj");
     gnc_builder_add_from_file (builder, "dialog-preferences.glade", "autosave_interval_minutes_adj");
     gnc_builder_add_from_file (builder, "dialog-preferences.glade", "save_on_close_adj");
     gnc_builder_add_from_file (builder, "dialog-preferences.glade", "date_backmonth_adj");
     gnc_builder_add_from_file (builder, "dialog-preferences.glade", "max_transactions_adj");
-    gnc_builder_add_from_file (builder, "dialog-preferences.glade", "key_length_adj");
     gnc_builder_add_from_file (builder, "dialog-preferences.glade", "new_search_limit_adj");
     gnc_builder_add_from_file (builder, "dialog-preferences.glade", "retain_days_adj");
     gnc_builder_add_from_file (builder, "dialog-preferences.glade", "tab_width_adj");
     gnc_builder_add_from_file (builder, "dialog-preferences.glade", "date_formats");
     gnc_builder_add_from_file (builder, "dialog-preferences.glade", "GnuCash Preferences");
+#endif
+
     dialog = GTK_WIDGET(gtk_builder_get_object (builder, "GnuCash Preferences"));
 
     label = GTK_WIDGET(gtk_builder_get_object (builder, "sample_account"));

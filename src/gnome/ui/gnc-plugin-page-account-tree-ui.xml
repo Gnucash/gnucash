@@ -29,6 +29,14 @@
 	</menu>
       </placeholder>
     </menu>
+    <menu name="Extensions" action="ExtensionsAction">
+      <placeholder name="ExtensionsPlaceholder">
+	<menu name="Register2Test" action="Register2TestAction">
+	  <menuitem name="Register2TestAccount" action="Register2TestAccountAction"/>
+	  <menuitem name="Register2TestSubAccount" action="Register2TestSubAccountAction"/>
+	</menu>
+      </placeholder>
+    </menu>
   </menubar>
 
   <popup name="MainPopup" action="FakeToplevel">

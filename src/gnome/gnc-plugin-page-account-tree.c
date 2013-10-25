@@ -169,6 +169,7 @@ static GtkActionEntry gnc_plugin_page_account_tree_actions [] =
         N_("Extend the current book by merging with new account type categories"),
         G_CALLBACK (gnc_plugin_page_account_tree_cmd_file_new_hierarchy)
     },
+#ifdef REGISTER2_ENABLED
     {
         "FileOpenAccount2Action", GNC_STOCK_OPEN_ACCOUNT, N_("Open _Account"), NULL,
         N_("Open the selected account"),
@@ -179,6 +180,15 @@ static GtkActionEntry gnc_plugin_page_account_tree_actions [] =
         N_("Open the old style register selected account"),
         G_CALLBACK (gnc_plugin_page_account_tree_cmd_open_account)
     },
+#else
+    {
+        "FileOpenAccountAction", GNC_STOCK_OPEN_ACCOUNT, N_("Open _Account"), NULL,
+        N_("Open the selected account"),
+        G_CALLBACK (gnc_plugin_page_account_tree_cmd_open_account)
+    },
+#endif
+
+#ifdef REGISTER2_ENABLED
     {
         "FileOpenSubaccounts2Action", GNC_STOCK_OPEN_ACCOUNT, N_("Open _SubAccounts"), NULL,
         N_("Open the selected account and all its subaccounts"),
@@ -189,6 +199,13 @@ static GtkActionEntry gnc_plugin_page_account_tree_actions [] =
         N_("Open the old style register selected account and all its subaccounts"),
         G_CALLBACK (gnc_plugin_page_account_tree_cmd_open_subaccounts)
     },
+#else
+    {
+        "FileOpenSubaccountsAction", GNC_STOCK_OPEN_ACCOUNT, N_("Open _SubAccounts"), NULL,
+        N_("Open the selected account and all its subaccounts"),
+        G_CALLBACK (gnc_plugin_page_account_tree_cmd_open_subaccounts)
+    },
+#endif
 
     /* Edit menu */
     {
@@ -255,6 +272,18 @@ static GtkActionEntry gnc_plugin_page_account_tree_actions [] =
         N_("Check for and repair unbalanced transactions and orphan splits " "in all accounts"),
         G_CALLBACK (gnc_plugin_page_account_tree_cmd_scrub_all)
     },
+    /* Extensions Menu */
+    { "Register2TestAction", NULL, N_("_Register2"), NULL, NULL, NULL },
+    {
+        "Register2TestAccountAction", GNC_STOCK_OPEN_ACCOUNT, N_("Open _Account"), NULL,
+        N_("Open the selected account"),
+        G_CALLBACK (gnc_plugin_page_account_tree_cmd_open2_account)
+    },
+    {
+        "Register2TestSubAccountAction", GNC_STOCK_OPEN_ACCOUNT, N_("Open _SubAccounts"), NULL,
+        N_("Open the selected account and all its subaccounts"),
+        G_CALLBACK (gnc_plugin_page_account_tree_cmd_open2_subaccounts)
+    },
 };
 /** The number of actions provided by this plugin. */
 static guint gnc_plugin_page_account_tree_n_actions = G_N_ELEMENTS (gnc_plugin_page_account_tree_actions);
@@ -276,7 +305,9 @@ static const gchar *actions_requiring_account_rw[] =
 static const gchar *actions_requiring_account_always[] =
 {
     "FileOpenAccountAction",
+#ifdef REGISTER2_ENABLED
     "FileOpenAccount2Action",
+#endif
     "FileOpenSubaccountsAction",
     "ActionsLotsAction",
     NULL
@@ -304,7 +335,9 @@ static const gchar* readonly_inactive_actions[] =
 static action_toolbar_labels toolbar_labels[] =
 {
     { "FileOpenAccountAction", 	            N_("Open") },
+#ifdef REGISTER2_ENABLED
     { "FileOpenAccount2Action", 	    N_("Open2") },
+#endif
     { "EditEditAccountAction", 	            N_("Edit") },
     { "FileNewAccountAction",    	    N_("New") },
     { "EditDeleteAccountAction", 	    N_("Delete") },
@@ -396,11 +429,19 @@ gnc_plugin_page_account_tree_init (GncPluginPageAccountTree *plugin_page)
 
     /* Init parent declared variables */
     parent = GNC_PLUGIN_PAGE(plugin_page);
+#ifdef REGISTER2_ENABLED
     g_object_set(G_OBJECT(plugin_page),
                  "page-name",      _("Accounts"),
                  "page-uri",       "default:",
                  "ui-description", "gnc-plugin-page-account-tree2-ui.xml",
                  NULL);
+#else
+    g_object_set(G_OBJECT(plugin_page),
+                 "page-name",      _("Accounts"),
+                 "page-uri",       "default:",
+                 "ui-description", "gnc-plugin-page-account-tree-ui.xml",
+                 NULL);
+#endif
     g_signal_connect (G_OBJECT (plugin_page), "selected",
                       G_CALLBACK (gnc_plugin_page_account_tree_selected), plugin_page);
 
@@ -839,7 +880,11 @@ gnc_plugin_page_account_tree_double_click_cb (GtkTreeView *treeview,
         {
             /* It's an account without any children, so open its register */
             Account *account = gnc_tree_view_account_get_account_from_path (GNC_TREE_VIEW_ACCOUNT(treeview), path);
+#ifdef REGISTER2_ENABLED
             gppat_open2_account_common (page, account, FALSE);
+#else
+            gppat_open_account_common (page, account, FALSE);
+#endif
         }
     }
 }

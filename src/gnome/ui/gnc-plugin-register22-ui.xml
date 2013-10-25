@@ -1,11 +1,5 @@
 <ui>
   <menubar>
-    <menu name="Tools" action="ToolsAction">
-      <placeholder name="ToolsPlaceholder">
-        <menuitem name="ToolsGeneralLedger2" action="ToolsGeneralLedger2Action"/>
-      </placeholder>
-    </menu>
-
     <menu name="Extensions" action="ExtensionsAction">
       <placeholder name="ExtensionsPlaceholder">
 	<menu name="Register2Test" action="Register2TestAction">

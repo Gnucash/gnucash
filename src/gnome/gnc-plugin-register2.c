@@ -44,13 +44,27 @@ static void gnc_plugin_register2_remove_from_window (GncPlugin *plugin, GncMainW
 static void gnc_plugin_register2_cmd_general_ledger (GtkAction *action, GncMainWindowActionData *data);
 
 #define PLUGIN_ACTIONS_NAME "gnc-plugin-register2-actions"
-#define PLUGIN_UI_FILENAME  "gnc-plugin-register2-ui.xml"
 
+#ifdef REGISTER2_ENABLED
+#define PLUGIN_UI_FILENAME  "gnc-plugin-register2-ui.xml"
+#else
+#define PLUGIN_UI_FILENAME  "gnc-plugin-register22-ui.xml"
+#endif
 static GtkActionEntry gnc_plugin_actions [] =
 {
+#ifdef REGISTER2_ENABLED
     {
         "ToolsGeneralLedger2Action", NULL, N_("_General Ledger"), NULL,
         N_("Open a general ledger window"),
+        G_CALLBACK (gnc_plugin_register2_cmd_general_ledger)
+    },
+#endif
+
+    /* Extensions Menu */
+    { "Register2TestAction", NULL, N_("_Register2"), NULL, NULL, NULL },
+    {
+        "Register2TestGLAction", NULL, N_("Register2 Open GL Account"), NULL,
+        N_("Register2 Open GL Account"),
         G_CALLBACK (gnc_plugin_register2_cmd_general_ledger)
     },
 };

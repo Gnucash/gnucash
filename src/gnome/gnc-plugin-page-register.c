@@ -1018,6 +1018,7 @@ gnc_plugin_page_register_create_widget (GncPluginPage *plugin_page)
     ENTER("page %p", plugin_page);
     page = GNC_PLUGIN_PAGE_REGISTER (plugin_page);
     priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(page);
+
     if (priv->widget != NULL)
     {
         LEAVE("existing widget %p", priv->widget);
@@ -1116,7 +1117,8 @@ gnc_plugin_page_register_create_widget (GncPluginPage *plugin_page)
         gtk_widget_show_all(plugin_page->summarybar);
         gtk_box_pack_start(GTK_BOX (priv->widget), plugin_page->summarybar,
                            FALSE, FALSE, 0);
-        gnc_plugin_page_register_summarybar_position_changed(NULL, NULL, page);
+
+        gnc_plugin_page_register_summarybar_position_changed (NULL, NULL, page);
         gnc_prefs_register_cb (GNC_PREFS_GROUP_GENERAL,
                                GNC_PREF_SUMMARYBAR_POSITION_TOP,
                                gnc_plugin_page_register_summarybar_position_changed,
@@ -1168,7 +1170,6 @@ gnc_plugin_page_register_destroy_widget (GncPluginPage *plugin_page)
                                  GNC_PREF_SUMMARYBAR_POSITION_BOTTOM,
                                  gnc_plugin_page_register_summarybar_position_changed,
                                  page);
-
     if (priv->widget == NULL)
         return;
 
@@ -1732,23 +1733,29 @@ gnc_plugin_page_register_get_long_name (GncPluginPage *plugin_page)
 }
 
 static void
-gnc_plugin_page_register_summarybar_position_changed(gpointer prefs, gchar* pref, gpointer user_data)
+gnc_plugin_page_register_summarybar_position_changed (gpointer prefs, gchar* pref, gpointer user_data)
 {
     GncPluginPage *plugin_page;
     GncPluginPageRegister *page;
     GncPluginPageRegisterPrivate *priv;
     GtkPositionType position = GTK_POS_BOTTOM;
 
-    g_return_if_fail(user_data != NULL);
+    g_return_if_fail (user_data != NULL);
 
-    plugin_page = GNC_PLUGIN_PAGE(user_data);
+    if (!GNC_IS_PLUGIN_PAGE (user_data))
+        return;
+
+    plugin_page = GNC_PLUGIN_PAGE (user_data);
     page = GNC_PLUGIN_PAGE_REGISTER (user_data);
-    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(page);
+    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (page);
+
+    if (priv == NULL)
+       return;
 
     if (gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_SUMMARYBAR_POSITION_TOP))
         position = GTK_POS_TOP;
 
-    gtk_box_reorder_child(GTK_BOX(priv->widget),
+    gtk_box_reorder_child (GTK_BOX (priv->widget),
                           plugin_page->summarybar,
                           (position == GTK_POS_TOP ? 0 : -1) );
 }

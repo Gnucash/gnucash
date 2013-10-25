@@ -70,7 +70,7 @@ static QofLogModule log_module = GNC_MOD_GUI;
 static int is_development_version = TRUE;
 #else
 static int is_development_version = FALSE;
-#define GNUCASH_SCM 0
+#define GNUCASH_SCM ""
 #endif
 
 /* Command-line option variables */

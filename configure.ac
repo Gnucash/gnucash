@@ -652,6 +652,16 @@ AC_ARG_ENABLE( profile,
   LDFLAGS="${LDFLAGS} -pg")
 
 ### --------------------------------------------------------------------------
+### Register2
+AC_ARG_ENABLE( register2,
+  [AS_HELP_STRING([--enable-register2],[compile with register2 enabled])],
+  if test x$enableval = xyes; then
+    AC_DEFINE(REGISTER2_ENABLED,1,We are using Register2)
+  else
+    AC_DEFINE(REGISTER2_ENABLED,0,We are not using Register2)
+  fi)
+
+### --------------------------------------------------------------------------
 ### OFX
 want_ofx=auto
 have_ofx=no

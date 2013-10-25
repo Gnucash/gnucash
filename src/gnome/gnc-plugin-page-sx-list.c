@@ -133,22 +133,26 @@ static GtkActionEntry gnc_plugin_page_sx_list_actions [] =
         "SxListNewAction", GNC_STOCK_NEW_ACCOUNT, N_("_New"), NULL,
         N_("Create a new scheduled transaction"), G_CALLBACK(gnc_plugin_page_sx_list_cmd_new)
     },
+#ifdef REGISTER2_ENABLED
 /*################## Added for Reg2 #################*/
     {
         "SxListNewAction2", GNC_STOCK_NEW_ACCOUNT, N_("_New 2"), NULL,
         N_("Create a new scheduled transaction 2"), G_CALLBACK(gnc_plugin_page_sx_list_cmd_new2)
     },
 /*################## Added for Reg2 #################*/
+#endif
     {
         "SxListEditAction", GNC_STOCK_EDIT_ACCOUNT, N_("_Edit"), NULL,
         N_("Edit the selected scheduled transaction"), G_CALLBACK(gnc_plugin_page_sx_list_cmd_edit)
     },
+#ifdef REGISTER2_ENABLED
 /*################## Added for Reg2 #################*/
     {
         "SxListEditAction2", GNC_STOCK_EDIT_ACCOUNT, N_("_Edit 2"), NULL,
         N_("Edit the selected scheduled transaction 2"), G_CALLBACK(gnc_plugin_page_sx_list_cmd_edit2)
     },
 /*################## Added for Reg2 #################*/
+#endif
     {
         "SxListDeleteAction", GNC_STOCK_DELETE_ACCOUNT, N_("_Delete"), NULL,
         N_("Delete the selected scheduled transaction"), G_CALLBACK(gnc_plugin_page_sx_list_cmd_delete)
@@ -226,11 +230,19 @@ gnc_plugin_page_sx_list_init (GncPluginPageSxList *plugin_page)
 
     /* Init parent declared variables */
     parent = GNC_PLUGIN_PAGE(plugin_page);
+#ifdef REGISTER2_ENABLED
+    g_object_set(G_OBJECT(plugin_page),
+                 "page-name",      _("Scheduled Transactions"),
+                 "page-uri",       "default:",
+                 "ui-description", "gnc-plugin-page-sx-list2-ui.xml",
+                 NULL);
+#else
     g_object_set(G_OBJECT(plugin_page),
                  "page-name",      _("Scheduled Transactions"),
                  "page-uri",       "default:",
                  "ui-description", "gnc-plugin-page-sx-list-ui.xml",
                  NULL);
+#endif
 
     gnc_plugin_page_add_book(parent, gnc_get_current_book());
     action_group =

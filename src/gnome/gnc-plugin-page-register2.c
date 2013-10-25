@@ -1805,16 +1805,22 @@ gnc_plugin_page_register2_summarybar_position_changed (gpointer prefs, gchar* pr
     GncPluginPageRegister2Private *priv;
     GtkPositionType position = GTK_POS_BOTTOM;
 
-    g_return_if_fail(user_data != NULL);
+    g_return_if_fail (user_data != NULL);
+
+    if (!GNC_IS_PLUGIN_PAGE (user_data))
+        return;
 
     plugin_page = GNC_PLUGIN_PAGE (user_data);
     page = GNC_PLUGIN_PAGE_REGISTER2 (user_data);
     priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE (page);
 
+    if (priv == NULL)
+       return;
+
     if (gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_SUMMARYBAR_POSITION_TOP))
         position = GTK_POS_TOP;
 
-    gtk_box_reorder_child(GTK_BOX(priv->widget),
+    gtk_box_reorder_child (GTK_BOX (priv->widget),
                           plugin_page->summarybar,
                           (position == GTK_POS_TOP ? 0 : -1) );
 }
