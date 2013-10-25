@@ -118,7 +118,7 @@ static GQuark window_type = 0;
 static GList *active_windows = NULL;
 /** Count down timer for the save changes dialog. If the timer reaches zero
  *  any changes will be saved and the save dialog closed automatically */
-static uint secs_to_save = 0;
+static guint secs_to_save = 0;
 
 #define MSG_AUTO_SAVE _("Changes will be saved automatically in %d seconds")
 
@@ -1136,17 +1136,17 @@ static gboolean auto_save_countdown (GtkWidget *dialog)
     {
         PWARN ("Count down aborted - timer reached a negative value.\n"
                "This is probably because the timer was improperly initialized.");
-        return G_SOURCE_REMOVE;
+        return FALSE; /* remove timer */
     }
 
    /* Stop count down if user closed the dialog since the last time we were called */
     if (!GTK_IS_DIALOG (dialog))
-        return G_SOURCE_REMOVE;
+        return FALSE; /* remove timer */
 
     /* Stop count down if count down text can't be updated */
     label = GTK_WIDGET (g_object_get_data (G_OBJECT (dialog), "count-down-label"));
     if (!GTK_IS_LABEL (label))
-        return G_SOURCE_REMOVE;
+        return FALSE; /* remove timer */
 
     secs_to_save--;
     DEBUG ("Counting down: %d seconds", secs_to_save);
@@ -1159,11 +1159,11 @@ static gboolean auto_save_countdown (GtkWidget *dialog)
     if (!secs_to_save)
     {
         gtk_dialog_response (GTK_DIALOG(dialog), GTK_RESPONSE_APPLY);
-        return G_SOURCE_REMOVE;
+        return FALSE; /* remove timer */
     }
 
     /* Run another cycle */
-    return G_SOURCE_CONTINUE;
+    return TRUE;
 }
 
 
