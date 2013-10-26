@@ -507,6 +507,8 @@ gnc_budget_set_account_period_value(GncBudget *budget, const Account *account,
     gchar path[BUF_SIZE];
     gchar *bufend;
 
+    /* Watch out for an off-by-one error here:
+     * period_num starts from 0 while num_periods starts from 1 */
     if (period_num >= GET_PRIVATE(budget)->num_periods) {
         PWARN("Period %i does not exist", period_num);
         return;
