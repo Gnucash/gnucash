@@ -2545,6 +2545,42 @@ test_gnc_set_budget_recurrence()
     gnc_budget_destroy(budget);
 }
 
+static void
+test_gnc_set_budget_account_period_value()
+{
+    QofBook *book = qof_book_new();
+    GncBudget* budget = gnc_budget_new(book);
+    Account *acc;
+    gnc_numeric val;
+
+    guint log_level = G_LOG_LEVEL_WARNING | G_LOG_FLAG_FATAL;
+    gchar *log_domain = "gnc.engine";
+    gchar *msg = "[gnc_budget_set_account_period_value()] Period 12 does not exist";
+    guint hdlr;
+    TestErrorStruct check = { log_level, log_domain, msg, 0 };
+    GLogFunc oldlogger;
+
+    acc = gnc_account_create_root(book);
+
+    g_assert(!gnc_budget_is_account_period_value_set(budget, acc, 0));
+    gnc_budget_set_account_period_value(budget, acc, 0, gnc_numeric_create(100,1));
+    g_assert(gnc_budget_is_account_period_value_set(budget, acc, 0));
+    val = gnc_budget_get_account_period_value(budget, acc, 0);
+    g_assert (gnc_numeric_equal (val, gnc_numeric_create (100, 1)));
+
+    /* Budget has 12 periods by default, numbered from 0 to 11. Setting
+     * period 12 should throw an error. */
+    oldlogger = g_log_set_default_handler ((GLogFunc)test_null_handler, &check);
+    g_test_log_set_fatal_handler ((GTestLogFatalFunc)test_checked_handler, &check);
+    gnc_budget_set_account_period_value(budget, acc, 12, gnc_numeric_create(100,1));
+    g_assert_cmpint (check.hits, ==, 1);
+    g_log_set_default_handler (oldlogger, NULL);
+
+    g_object_unref(book);
+    g_object_unref(acc);
+    gnc_budget_destroy(budget);
+}
+
 void
 test_suite_budget(void)
 {
@@ -2553,6 +2589,7 @@ test_suite_budget(void)
     GNC_TEST_ADD_FUNC(suitename, "gnc_budget_set_description()", test_gnc_set_budget_description);
     GNC_TEST_ADD_FUNC(suitename, "gnc_budget_set_num_periods()", test_gnc_set_budget_num_periods);
     GNC_TEST_ADD_FUNC(suitename, "gnc_budget_set_recurrence()", test_gnc_set_budget_recurrence);
+    GNC_TEST_ADD_FUNC(suitename, "gnc_budget_set_account_period_value()", test_gnc_set_budget_account_period_value);
 
 #if 0
     GNC_TEST_ADD_FUNC (suitename, "gnc set account separator", test_gnc_set_account_separator);
