@@ -1,5 +1,5 @@
 /********************************************************************
- * utest-Transaction.c: GLib g_test test suite for Transaction.c.		    *
+ * utest-Transaction.c: GLib g_test test suite for Transaction.c.   *
  * Copyright 2012 John Ralls <jralls@ceridwen.us>		    *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
@@ -33,7 +33,6 @@
 #include "../gnc-lot.h"
 #include "../gnc-event.h"
 #include <qof.h>
-#include <qofbookslots.h>
 #include <qofbackend-p.h>
 
 #ifdef HAVE_GLIB_2_38
@@ -1048,14 +1047,13 @@ test_xaccTransGetImbalance_trading (Fixture *fixture,
     Account *acc1 = xaccMallocAccount (book);
     Account *acc2 = xaccMallocAccount (book);
     gnc_numeric value;
-    gchar *trading_account_path = g_strdup_printf("%s/%s/%s", KVP_OPTION_PATH,
-                                  OPTION_SECTION_ACCOUNTS,
-                                  OPTION_NAME_TRADING_ACCOUNTS);
     MonetaryList *mlist;
 
-    qof_book_set_string_option( book, trading_account_path, "t" );
-    g_free (trading_account_path);
-    /* Without trading splits, the list is unbalanced */
+    qof_instance_set (QOF_INSTANCE (book),
+		      "trading-accts", "t",
+		      NULL);
+
+ /* Without trading splits, the list is unbalanced */
     mlist = xaccTransGetImbalance (fixture->txn);
     g_assert_cmpint (g_list_length (mlist), ==, 2);
     gnc_monetary_list_free (mlist);
@@ -1135,12 +1133,10 @@ test_xaccTransIsBalanced_trading (Fixture *fixture, gconstpointer pData)
     Split *split2 = xaccMallocSplit (book);
     Account *acc1 = xaccMallocAccount (book);
     Account *acc2 = xaccMallocAccount (book);
-    gchar *trading_account_path = g_strdup_printf("%s/%s/%s", KVP_OPTION_PATH,
-                                  OPTION_SECTION_ACCOUNTS,
-                                  OPTION_NAME_TRADING_ACCOUNTS);
 
-    qof_book_set_string_option( book, trading_account_path, "t" );
-    g_free (trading_account_path);
+    qof_instance_set (QOF_INSTANCE (book),
+		      "trading-accts", "t",
+		      NULL);
     xaccAccountSetCommodity (acc1, fixture->curr);
     xaccAccountSetCommodity (acc2, fixture->comm);
     xaccAccountSetType (acc1, ACCT_TYPE_TRADING);

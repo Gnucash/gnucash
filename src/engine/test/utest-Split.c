@@ -33,7 +33,6 @@
 #include <TransactionP.h>
 #include <gnc-lot.h>
 #include <gnc-event.h>
-#include <qofbookslots.h>
 #include <qofinstance-p.h>
 
 #ifdef HAVE_GLIB_2_38
@@ -1096,8 +1095,9 @@ test_xaccSplitOrder (Fixture *fixture, gconstpointer pData)
 {
     const char *slot_path;
     Split *split = fixture->split;
-    Split *o_split = xaccMallocSplit (xaccSplitGetBook (split));
-    Transaction *o_txn = xaccMallocTransaction (xaccSplitGetBook (split));
+    QofBook *book = xaccSplitGetBook (split);
+    Split *o_split = xaccMallocSplit (book);
+    Transaction *o_txn = xaccMallocTransaction (book);
     Transaction *txn = split->parent;
 
     g_assert_cmpint (xaccSplitOrder (split, split), ==, 0);
@@ -1136,11 +1136,10 @@ test_xaccSplitOrder (Fixture *fixture, gconstpointer pData)
      */
 
     /* create correct slot path */
-    slot_path = (const char *) g_strconcat( KVP_OPTION_PATH, "/",
-                                            OPTION_SECTION_ACCOUNTS, "/", OPTION_NAME_NUM_FIELD_SOURCE, NULL );
-    g_assert( slot_path != NULL );
     g_test_message( "Testing with use-split-action-for-num set to true - t" );
-    qof_book_set_string_option( xaccSplitGetBook (split), slot_path, "t" );
+    qof_instance_set (QOF_INSTANCE (book),
+		      "split-action-num-field", "t",
+		      NULL);
     g_assert(qof_book_use_split_action_for_num_field(xaccSplitGetBook(split)) == TRUE);
 
     g_assert_cmpint (xaccSplitOrder (split, o_split), ==, -1);
@@ -1152,7 +1151,9 @@ test_xaccSplitOrder (Fixture *fixture, gconstpointer pData)
     o_split->action = NULL;
     split->action = "foo";
     o_split->parent = NULL;
-    qof_book_set_string_option( xaccSplitGetBook (split), slot_path, "f" );
+    qof_instance_set (QOF_INSTANCE (book),
+		      "split-action-num-field", "f",
+		      NULL);
     g_assert(qof_book_use_split_action_for_num_field(xaccSplitGetBook(split)) == FALSE);
     split->parent = NULL;
     /* This should return > 0 because o_split has no memo string */
@@ -1753,7 +1754,6 @@ test_xaccSplitGetOtherSplit (Fixture *fixture, gconstpointer pData)
     Split *split2 = xaccMallocSplit (book);
     Account *acc2 = xaccMallocAccount (book);
     KvpValue *kvptrue = kvp_value_new_string ("t");
-    KvpFrame *book_slots = qof_book_get_slots (book);
 
     g_assert (xaccSplitGetOtherSplit (NULL) == NULL);
     g_assert (xaccSplitGetOtherSplit (split1) == NULL);
@@ -1782,9 +1782,9 @@ test_xaccSplitGetOtherSplit (Fixture *fixture, gconstpointer pData)
     g_assert (kvp_frame_get_slot (split->inst.kvp_data, "lot-split") == NULL);
     kvp_frame_set_slot (split1->inst.kvp_data, "lot-split", NULL);
     g_assert (kvp_frame_get_slot (split1->inst.kvp_data, "lot-split") == NULL);
-    kvp_frame_set_slot_path (book_slots, kvptrue, KVP_OPTION_PATH,
-                             OPTION_SECTION_ACCOUNTS,
-                             OPTION_NAME_TRADING_ACCOUNTS, NULL);
+    qof_instance_set (QOF_INSTANCE (book),
+		      "trading-accts", "t",
+		      NULL);
     g_assert (xaccTransUseTradingAccounts (txn));
     g_assert (xaccSplitGetOtherSplit (split) == NULL);
     split2->acc = acc2;
