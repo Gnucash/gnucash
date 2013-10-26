@@ -375,7 +375,7 @@ begin
       if (Pos('GNC_DBD_DIR', EnvStrList[iLineCounter]) > 0) then
         EnvStrList[iLineCounter] := 'GNC_DBD_DIR={GNC_HOME}/lib/dbd';
       { Adapt XDG_DATA_DIRS parameter }
-      if (Pos('XDG_DATA_DIRS', EnvStrList[iLineCounter]) > 0) then
+      if (Pos('XDG_DATA_DIRS=', EnvStrList[iLineCounter]) > 0) then
         EnvStrList[iLineCounter] := 'XDG_DATA_DIRS={GNC_HOME}/share;{XDG_DATA_DIRS};/usr/local/share;/usr/share';
     end;
 

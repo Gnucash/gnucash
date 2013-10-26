@@ -80,13 +80,13 @@ endif
     # The compile time value is added because GnuCash on X11 builds on MacPorts, which
     # uses /opt/local/share as default instead of the Free Desktop defined standard paths
     # /usr/local/share and /usr/share
-	if [ "a$(prefix)" != "a/usr" ] && [ "a$(prefix)" != "a/usr/local" ]; \
+	if [ "a$(datadir)" != "a/usr/share" ] && [ "a$(datadir)" != "a/usr/local/share" ]; \
 	then \
 		echo >> $@.tmp; \
 		echo "# GnuCash was not installed in the default location" >> $@.tmp; \
 		echo "# XDG_DATA_DIRS will be set so that our documentation" >> $@.tmp; \
 		echo "# and gsettings schemas are found." >> $@.tmp; \
-		echo "XDG_DATA_DIRS=$(prefix)/share;{XDG_DATA_DIRS};$(XDG_DATA_DIRS);/usr/local/share/;/usr/share/" >> $@.tmp; \
+		echo "XDG_DATA_DIRS=$(datadir);{XDG_DATA_DIRS};$(XDG_DATA_DIRS);/usr/local/share/;/usr/share/" >> $@.tmp; \
 	fi
 	mv $@.tmp $@
 
