@@ -43,9 +43,6 @@ PATH={GNC_BIN};{PATH}
 # Tell GnuCash where to look for GnuCash modules
 GNC_MODULE_PATH={GNC_LIB};{GNC_MODULE_PATH}
 
-# Tell GnuCash where to look for local python site-packages.
-PYTHONPATH={SYS_LIB}/python2.7/site-packages;{PYTHONPATH}
-
 # Prevent embedded guile from issuing deprecation warnings
 GUILE_WARN_DEPRECATED=no
 
