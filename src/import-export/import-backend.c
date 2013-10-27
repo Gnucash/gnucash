@@ -44,6 +44,40 @@
 #include "gnc-prefs.h"
 #include "gnc-ui-util.h"
 
+/* Private interface to Account GncImportMatchMap functions */
+
+/** @{
+Obtain an ImportMatchMap object from an Account */
+extern GncImportMatchMap * gnc_account_create_imap (Account *acc);
+/*@}*/
+
+/* Look up an Account in the map */
+extern Account* gnc_imap_find_account(GncImportMatchMap *imap,
+				      const char* category,
+				      const char *key);
+
+/* Store an Account in the map. This mapping is immediatly stored in
+  the underlying kvp frame, regardless of whether the MatchMap is
+  destroyed later or not. */
+extern void gnc_imap_add_account (GncImportMatchMap *imap,
+				  const char *category,
+				  const char *key, Account *acc);
+
+/* Look up an Account in the map from a GList* of pointers to strings(tokens)
+  from the current transaction */
+extern Account* gnc_imap_find_account_bayes (GncImportMatchMap *imap,
+					     GList* tokens);
+
+/* Store an Account in the map. This mapping is immediatly stored in
+  the underlying kvp frame, regardless of whether the MatchMap is
+  destroyed later or not. */
+extern void gnc_imap_add_account_bayes (GncImportMatchMap *imap,
+					GList* tokens,
+					Account *acc);
+
+#define GNCIMPORT_DESC    "desc"
+#define GNCIMPORT_MEMO    "memo"
+#define GNCIMPORT_PAYEE    "payee"
 
 /********************************************************************\
  *   Constants                                                      *
@@ -457,6 +491,15 @@ TransactionGetTokens(GNCImportTransInfo *info)
     /* return the pointer to the GList */
     return tokens;
 }
+/* Destroy an import map. But all stored entries will still continue
+ * to exist in the underlying kvp frame of the account.
+ */
+static void
+gnc_imap_destroy (GncImportMatchMap *imap)
+{
+    if (!imap) return;
+    g_free (imap);
+}
 
 /* searches using the GNCImportTransInfo through all existing transactions
  * if there is an exact match of the description and memo
@@ -471,7 +514,7 @@ matchmap_find_destination (GncImportMatchMap *matchmap, GNCImportTransInfo *info
 
     g_assert (info);
     tmp_map = ((matchmap != NULL) ? matchmap :
-               gnc_imap_create_from_account
+               gnc_account_create_imap
                (xaccSplitGetAccount
                 (gnc_import_TransInfo_get_fsplit (info))));
 
@@ -541,7 +584,7 @@ matchmap_store_destination (GncImportMatchMap *matchmap,
 
     tmp_matchmap = ((matchmap != NULL) ?
                     matchmap :
-                    gnc_imap_create_from_account
+                    gnc_account_create_imap
                     (xaccSplitGetAccount
                      (gnc_import_TransInfo_get_fsplit (trans_info))));
 
