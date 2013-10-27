@@ -64,6 +64,11 @@ typedef struct _QofBookClass  QofBookClass;
 
 typedef void (*QofBookDirtyCB) (QofBook *, gboolean dirty, gpointer user_data);
 
+typedef struct gnc_option_db GNCOptionDB;
+
+typedef void (*GNCOptionSave) (GNCOptionDB*, KvpFrame*, gboolean);
+typedef void (*GNCOptionLoad) (GNCOptionDB*, KvpFrame*);
+
 /* Book structure */
 struct _QofBook
 {
@@ -327,6 +332,14 @@ void qof_book_set_feature (QofBook *book, const gchar *key, const gchar *descr);
 
 void qof_book_begin_edit(QofBook *book);
 void qof_book_commit_edit(QofBook *book);
+
+/* Access functions for loading and saving the file options */
+void qof_book_load_options (QofBook *book, GNCOptionLoad load_cb,
+			    GNCOptionDB *odb);
+void
+qof_book_save_options (QofBook *book, GNCOptionSave save_cb,
+		       GNCOptionDB* odb, gboolean clear);
+
 
 /** deprecated */
 #define qof_book_get_guid(X) qof_entity_get_guid (QOF_INSTANCE(X))

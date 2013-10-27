@@ -932,6 +932,22 @@ qof_book_set_feature (QofBook *book, const gchar *key, const gchar *descr)
     qof_book_commit_edit (book);
 }
 
+void
+qof_book_load_options (QofBook *book, GNCOptionLoad load_cb, GNCOptionDB *odb)
+{
+    KvpFrame *slots = qof_instance_get_slots (QOF_INSTANCE (book));
+    load_cb (odb, slots);
+}
+
+void
+qof_book_save_options (QofBook *book, GNCOptionSave save_cb,
+		       GNCOptionDB* odb, gboolean clear)
+{
+    KvpFrame *slots = qof_instance_get_slots (QOF_INSTANCE (book));
+    save_cb (odb, slots, clear);
+    qof_instance_set_dirty (QOF_INSTANCE (book));
+}
+
 static void noop (QofInstance *inst) {}
 
 void
