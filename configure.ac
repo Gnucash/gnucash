@@ -750,7 +750,7 @@ fi
 AM_CONDITIONAL([WITH_AQBANKING], [test x${want_aqbanking} = xyes])
 AC_SUBST_FILE([MIGRATABLE_PREFS_AQBANKING])
 
-AC_ARG_WITH(qt3_wizard_package,
+AC_ARG_WITH(qt3-wizard-package,
                  [AS_HELP_STRING([--with-qt3-wizard-package=name],[name of package containing qt3-wizard (aqbanking)])],
     [QT3_WIZARD_PACKAGE=$withval], [QT3_WIZARD_PACKAGE=aqbanking])
 AC_DEFINE_UNQUOTED([QT3_WIZARD_PACKAGE],["$QT3_WIZARD_PACKAGE"],[Name of package containing qt3-wizard.])
