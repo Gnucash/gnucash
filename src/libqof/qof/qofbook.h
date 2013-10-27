@@ -337,6 +337,11 @@ gchar *qof_book_get_counter_format (const QofBook *book, const char *counter_nam
 const char* qof_book_get_string_option(const QofBook* book, const char* opt_name);
 void qof_book_set_string_option(QofBook* book, const char* opt_name, const char* opt_val);
 
+/** Access functions for reading and setting the used-features on this book.
+ */
+GHashTable *qof_book_get_features (QofBook *book);
+void qof_book_set_feature (QofBook *book, const gchar *key, const gchar *descr);
+
 void qof_book_begin_edit(QofBook *book);
 void qof_book_commit_edit(QofBook *book);
 

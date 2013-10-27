@@ -742,6 +742,36 @@ static void commit_err (QofInstance *inst, QofBackendError errcode)
 //  gnc_engine_signal_commit_error( errcode );
 }
 
+#define GNC_FEATURES "/features/"
+static void
+add_feature_to_hash (const gchar *key, KvpValue *value, gpointer user_data)
+{
+    gchar *descr = kvp_value_get_string (value);
+    g_hash_table_insert (*(GHashTable**)user_data, (gchar*)key, descr);
+}
+
+GHashTable *
+qof_book_get_features (QofBook *book)
+{
+    KvpFrame *frame = qof_instance_get_slots (QOF_INSTANCE (book));
+    GHashTable *features = g_hash_table_new (g_str_hash, g_str_equal);
+
+    frame = kvp_frame_get_frame (frame, GNC_FEATURES);
+    kvp_frame_for_each_slot (frame, &add_feature_to_hash, &features);
+    return features;
+}
+
+void
+qof_book_set_feature (QofBook *book, const gchar *key, const gchar *descr)
+{
+    KvpFrame *frame = qof_instance_get_slots (QOF_INSTANCE (book));
+    gchar *path = g_strconcat (GNC_FEATURES, key, NULL);
+    qof_book_begin_edit (book);
+    kvp_frame_set_string (frame, path, descr);
+    qof_instance_set_dirty (QOF_INSTANCE (book));
+    qof_book_commit_edit (book);
+}
+
 static void noop (QofInstance *inst) {}
 
 void
