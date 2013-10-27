@@ -112,7 +112,7 @@ find_program "$AUTOCONF" autoconf 2.59
 AUTOCONF="$program"
 find_program "$AUTOHEADER" autoheader 2.59
 AUTOHEADER="$program"
-find_program "$AUTOMAKE" automake 1.9
+find_program "$AUTOMAKE" automake 1.11
 AUTOMAKE="$program"
 find_program "$ACLOCAL" aclocal 1.9
 ACLOCAL="$program"
