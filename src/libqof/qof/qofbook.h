@@ -206,24 +206,11 @@ QofCollection  * qof_book_get_collection (const QofBook *, QofIdType);
 typedef void (*QofCollectionForeachCB) (QofCollection *, gpointer user_data);
 void qof_book_foreach_collection (const QofBook *, QofCollectionForeachCB, gpointer);
 
-/** Return The kvp data for the book.
- *  Note that the book KVP data is persistent, and is stored/retrieved
- *  from the file/database.  Thus, the book KVP is the correct place to
- *  store data that needs to be persistent accross sessions (or shared
- *  between multiple users).  To store application runtime data, use
- *  qof_book_set_data() instead.
- */
-KvpFrame *qof_book_get_slots(const QofBook *book);
-
 /** The qof_book_set_data() allows arbitrary pointers to structs
  *    to be stored in QofBook. This is the "preferred" method for
  *    extending QofBook to hold new data types.  This is also
  *    the ideal location to store other arbitrary runtime data
  *    that the application may need.
- *
- *    The book data differs from the book KVP in that the contents
- *    of the book KVP are persistent (are saved and restored to file
- *    or database), whereas the data pointers exist only at runtime.
  */
 void qof_book_set_data (QofBook *book, const gchar *key, gpointer data);
 
@@ -306,10 +293,6 @@ time64 qof_book_get_session_dirty_time(const QofBook *book);
  *    dirty, or vice versa.
  */
 void qof_book_set_dirty_cb(QofBook *book, QofBookDirtyCB cb, gpointer user_data);
-
-/** Call this function when you change the book kvp, to make sure the book
- * is marked 'dirty'. */
-void qof_book_kvp_changed (QofBook *book);
 
 /** This will get the named counter for this book. The return value is
  *    -1 on error or the current value of the counter.

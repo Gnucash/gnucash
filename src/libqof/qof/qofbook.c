@@ -244,20 +244,7 @@ qof_book_set_backend (QofBook *book, QofBackend *be)
     LEAVE (" ");
 }
 
-void qof_book_kvp_changed (QofBook *book)
-{
-    qof_book_begin_edit(book);
-    qof_instance_set_dirty (QOF_INSTANCE (book));
-    qof_book_commit_edit(book);
-}
-
 /* ====================================================================== */
-
-KvpFrame *qof_book_get_slots(const QofBook *book)
-{
-    return qof_instance_get_slots(QOF_INSTANCE(book));
-}
-
 /* Store arbitrary pointers in the QofBook for data storage extensibility */
 /* XXX if data is NULL, we should remove the key from the hash table!
  */
@@ -379,7 +366,7 @@ qof_book_get_counter (QofBook *book, const char *counter_name)
     }
 
     /* Use the KVP in the book */
-    kvp = qof_book_get_slots (book);
+    kvp = qof_instance_get_slots (QOF_INSTANCE (book));
 
     if (!kvp)
     {
@@ -431,7 +418,7 @@ qof_book_increment_and_format_counter (QofBook *book, const char *counter_name)
     counter++;
 
     /* Get the KVP from the current book */
-    kvp = qof_book_get_slots (book);
+    kvp = qof_instance_get_slots (QOF_INSTANCE (book));
 
     if (!kvp)
     {
@@ -480,7 +467,7 @@ qof_book_get_counter_format(const QofBook *book, const char *counter_name)
     }
 
     /* Get the KVP from the current book */
-    kvp = qof_book_get_slots (book);
+    kvp = qof_instance_get_slots (QOF_INSTANCE (book));
 
     if (!kvp)
     {
@@ -633,8 +620,9 @@ qof_book_use_trading_accounts (const QofBook *book)
 {
     const char *opt;
     kvp_value *kvp_val;
+    KvpFrame *frame = qof_instance_get_slots (QOF_INSTANCE (book));
 
-    kvp_val = kvp_frame_get_slot_path (qof_book_get_slots (book),
+    kvp_val = kvp_frame_get_slot_path (frame,
                                        KVP_OPTION_PATH,
                                        OPTION_SECTION_ACCOUNTS,
                                        OPTION_NAME_TRADING_ACCOUNTS,
@@ -656,9 +644,10 @@ qof_book_use_split_action_for_num_field (const QofBook *book)
 {
     const char *opt;
     kvp_value *kvp_val;
+    KvpFrame *frame = qof_instance_get_slots (QOF_INSTANCE (book));
 
     g_assert(book);
-    kvp_val = kvp_frame_get_slot_path (qof_book_get_slots (book),
+    kvp_val = kvp_frame_get_slot_path (frame,
                                        KVP_OPTION_PATH,
                                        OPTION_SECTION_ACCOUNTS,
                                        OPTION_NAME_NUM_FIELD_SOURCE,
@@ -683,8 +672,10 @@ gint qof_book_get_num_days_autoreadonly (const QofBook *book)
 {
     kvp_value *kvp_val;
     double tmp;
+    KvpFrame *frame = qof_instance_get_slots (QOF_INSTANCE (book));
+
     g_assert(book);
-    kvp_val = kvp_frame_get_slot_path (qof_book_get_slots (book),
+    kvp_val = kvp_frame_get_slot_path (frame,
                                        KVP_OPTION_PATH,
                                        OPTION_SECTION_ACCOUNTS,
                                        OPTION_NAME_AUTO_READONLY_DAYS,
@@ -718,14 +709,16 @@ GDate* qof_book_get_autoreadonly_gdate (const QofBook *book)
 const char*
 qof_book_get_string_option(const QofBook* book, const char* opt_name)
 {
-    return kvp_frame_get_string(qof_book_get_slots(book), opt_name);
+    return kvp_frame_get_string(qof_instance_get_slots(QOF_INSTANCE (book)),
+				opt_name);
 }
 
 void
 qof_book_set_string_option(QofBook* book, const char* opt_name, const char* opt_val)
 {
     qof_book_begin_edit(book);
-    kvp_frame_set_string(qof_book_get_slots(book), opt_name, opt_val);
+    kvp_frame_set_string(qof_instance_get_slots(QOF_INSTANCE (book)),
+						opt_name, opt_val);
     qof_instance_set_dirty (QOF_INSTANCE (book));
     qof_book_commit_edit(book);
 }
