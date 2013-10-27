@@ -750,6 +750,13 @@ fi
 AM_CONDITIONAL([WITH_AQBANKING], [test x${want_aqbanking} = xyes])
 AC_SUBST_FILE([MIGRATABLE_PREFS_AQBANKING])
 
+AC_ARG_WITH(xdg-data-dirs,
+                 [AS_HELP_STRING([--with-xdg-data-dirs],
+                 [search path for system XDG data directories [default /usr/local/share/;/usr/share/]])],
+                 [GNC_SYSTEM_XDG_DATA_DIRS=$withval],
+                 [GNC_SYSTEM_XDG_DATA_DIRS="/usr/local/share;/usr/share"])
+AC_SUBST(GNC_SYSTEM_XDG_DATA_DIRS)
+
 AC_ARG_WITH(qt3-wizard-package,
                  [AS_HELP_STRING([--with-qt3-wizard-package=name],[name of package containing qt3-wizard (aqbanking)])],
     [QT3_WIZARD_PACKAGE=$withval], [QT3_WIZARD_PACKAGE=aqbanking])

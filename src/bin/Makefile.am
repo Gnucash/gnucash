@@ -75,18 +75,16 @@ environment: environment.in ${top_builddir}/config.status Makefile
 if CUSTOM_GNC_DBD_DIR
 	echo 'GNC_DBD_DIR=@GNC_DBD_DIR@' >> $@.tmp
 endif
-    # Set XDG_DATA_DIRS if necessary.  This is done in such a way that the value at
-    # run time overrides the value at compile time which overrides the default value
-    # The compile time value is added because GnuCash on X11 builds on MacPorts, which
-    # uses /opt/local/share as default instead of the Free Desktop defined standard paths
-    # /usr/local/share and /usr/share
+    # Set XDG_DATA_DIRS if necessary.  The three components of the search path are the
+    # directory used by GnuCash, whatever was specified in the environment at run time, and
+    # the default value specified via configure.
 	if [ "a$(datadir)" != "a/usr/share" ] && [ "a$(datadir)" != "a/usr/local/share" ]; \
 	then \
 		echo >> $@.tmp; \
 		echo "# GnuCash was not installed in the default location" >> $@.tmp; \
 		echo "# XDG_DATA_DIRS will be set so that our documentation" >> $@.tmp; \
 		echo "# and gsettings schemas are found." >> $@.tmp; \
-		echo "XDG_DATA_DIRS=$(datadir);{XDG_DATA_DIRS};$(XDG_DATA_DIRS);/usr/local/share/;/usr/share/" >> $@.tmp; \
+		echo "XDG_DATA_DIRS=$(datadir);{XDG_DATA_DIRS};${GNC_SYSTEM_XDG_DATA_DIRS}" >> $@.tmp; \
 	fi
 	mv $@.tmp $@
 
