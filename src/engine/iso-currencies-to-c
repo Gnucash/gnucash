@@ -54,12 +54,14 @@ exec guile -s $0 "$@"
         PWARN(\"failed to insert %s into commodity table\", fullname);
       }
     }
+    gnc_commodity_set_user_symbol(c, ~S);
   }\n"
 	     fullname
 	     namespace
 	     mnemonic
 	     exchange-code
-	     smallest-fraction)
+	     smallest-fraction
+	     local-symbol)
 
 	    ;; Sorry, code doubling of the error message, but whatever.
 	    (begin

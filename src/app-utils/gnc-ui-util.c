@@ -1754,14 +1754,10 @@ gnc_commodity_get_nice_symbol(const gnc_commodity *cm)
     if (!cm) return NULL;
 
     nice_symbol = gnc_commodity_get_user_symbol(cm);
-    if (nice_symbol)
-	return nice_symbol;
-    else if (gnc_commodity_equiv (cm, gnc_locale_default_currency_nodefault ()))
-	return gnc_localeconv()->currency_symbol;
-    else if ((nice_symbol = gnc_commodity_get_mnemonic(cm)))
-	return nice_symbol;
+    if (nice_symbol && *nice_symbol)
+        return nice_symbol;
     else
-	return "";
+        return gnc_commodity_get_mnemonic(cm);
 }
 
 /********************************************************************\
