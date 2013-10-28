@@ -621,6 +621,7 @@ gnc_plugin_page_invoice_summarybar_position_changed(gpointer prefs, gchar *pref,
 
     plugin_page = GNC_PLUGIN_PAGE(user_data);
     page = GNC_PLUGIN_PAGE_INVOICE (user_data);
+    g_return_if_fail(page != NULL);
     priv = GNC_PLUGIN_PAGE_INVOICE_GET_PRIVATE(page);
 
     if (gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_SUMMARYBAR_POSITION_TOP))
