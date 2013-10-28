@@ -1,17 +1,17 @@
 
-info_TEXINFOS = gnucash-design.texinfo
+info_TEXINFOS = gnucash-design.texi
 gnucash_design_TEXINFOS = \
-  component-manager.texinfo \
-  concept-index.texinfo \
-  engine.texinfo \
-  fdl.texinfo \
-  function-index.texinfo \
-  intro.texinfo \
-  register.texinfo \
-  reports.texinfo \
-  top-level.texinfo \
-  type-index.texinfo \
-  user-preferences.texinfo
+  component-manager.texi \
+  concept-index.texi \
+  engine.texi \
+  fdl.texi \
+  function-index.texi \
+  intro.texi \
+  register.texi \
+  reports.texi \
+  top-level.texi \
+  type-index.texi \
+  user-preferences.texi
 
 # These should included as part of the automake rule set.  Perhaps I
 # have a version skew between automake and texinfo.

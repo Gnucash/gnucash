@@ -221,17 +221,17 @@ User Preferences
 @end detailmenu
 @end menu
 
-@include fdl.texinfo
-@include intro.texinfo
-@include top-level.texinfo
-@include engine.texinfo
-@include component-manager.texinfo
-@include register.texinfo
-@include reports.texinfo
-@include user-preferences.texinfo
-@include function-index.texinfo
-@include type-index.texinfo
-@include concept-index.texinfo
+@include fdl.texi
+@include intro.texi
+@include top-level.texi
+@include engine.texi
+@include component-manager.texi
+@include register.texi
+@include reports.texi
+@include user-preferences.texi
+@include function-index.texi
+@include type-index.texi
+@include concept-index.texi
 
 @summarycontents
 @contents
