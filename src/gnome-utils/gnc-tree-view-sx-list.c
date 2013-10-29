@@ -158,7 +158,7 @@ gnc_tree_view_sx_list_new(GncSxInstanceModel *sx_instances)
     priv = GNC_TREE_VIEW_SX_LIST_GET_PRIVATE(view);
 
     priv->tree_model = GTK_TREE_MODEL(gnc_sx_list_tree_model_adapter_new(sx_instances));
-    gnc_tree_view_set_model(view, GTK_TREE_MODEL(priv->tree_model));
+    gtk_tree_view_set_model (GTK_TREE_VIEW (view), GTK_TREE_MODEL(priv->tree_model));
 
     col = gnc_tree_view_add_text_column(view, _("Name"), "name", NULL,
                                         "Semi-Monthly Paycheck",

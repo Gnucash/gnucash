@@ -303,18 +303,6 @@ gint gnc_tree_view_append_column (GncTreeView *view,
 /** @name Tree View Properties */
 /** @{ */
 
-/** Attach a data model to a visible GncTreeView widget.  Users of
- *  this view object must use this function instead of directly
- *  calling the gtk_tree_view_set_model function.  This function takes
- *  the additional step of attaching a callback function to the model
- *  to catch any changes to the sorting of the model.
- *
- *  @param view The visible tree widget.
- *
- *  @param model The data model to attach.
- */
-void gnc_tree_view_set_model(GncTreeView *view, GtkTreeModel *model);
-
 /** Make all the correct columns visible, respecting their default
  *  visibility setting, their "always" visibility setting, and the
  *  last saved state if available.

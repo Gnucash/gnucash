@@ -412,7 +412,7 @@ gnc_tree_view_price_new (QofBook *book,
     /* Create our view */
     view = g_object_new (GNC_TYPE_TREE_VIEW_PRICE,
                          "name", "price_tree", NULL);
-    gnc_tree_view_set_model (view, s_model);
+    gtk_tree_view_set_model (GTK_TREE_VIEW (view), s_model);
     g_object_unref(G_OBJECT(s_model));
 
     DEBUG("model ref count is %d",   G_OBJECT(model)->ref_count);

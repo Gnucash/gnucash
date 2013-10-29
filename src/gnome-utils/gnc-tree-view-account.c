@@ -705,7 +705,7 @@ gnc_tree_view_account_new_with_root (Account *root, gboolean show_root)
     /* Set up the view private sort layer on the common model. */
     s_model = gtk_tree_model_sort_new_with_model(f_model);
     g_object_unref(G_OBJECT(f_model));
-    gnc_tree_view_set_model (view, s_model);
+    gtk_tree_view_set_model (GTK_TREE_VIEW (view), s_model);
     g_object_unref(G_OBJECT(s_model));
 
     /* Set default visibilities */

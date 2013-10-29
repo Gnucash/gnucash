@@ -1076,7 +1076,7 @@ gnc_tree_view_split_reg_new_with_model (GncTreeModelSplitReg *model)
     PINFO("#### Before View connected to Model ####");
 
     // Connect model to tree view
-    gnc_tree_view_set_model (GNC_TREE_VIEW (view), s_model);
+    gtk_tree_view_set_model (GTK_TREE_VIEW (view), s_model);
     g_object_unref (G_OBJECT (s_model));
 
     PINFO("#### After View connected to Model ####");

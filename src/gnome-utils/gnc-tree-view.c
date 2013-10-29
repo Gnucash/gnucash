@@ -1497,27 +1497,6 @@ gnc_tree_view_get_show_column_menu (GncTreeView *view)
 /*                    Tree View Creation                    */
 /************************************************************/
 
-/** Attach a data model to a visible GncTreeView widget.  Users of
- *  this view object must use this function instead of directly
- *  calling the gtk_tree_view_set_model function.
- *
- *  FIXME Investigate if it still makes sense once saving/restoring
- *        state is reimplemented.
- *
- *  Parameters are defined in gnc-tree-view.h
- */
-void
-gnc_tree_view_set_model(GncTreeView *view, GtkTreeModel *model)
-{
-    GncTreeViewPrivate *priv;
-    GtkTreeModel *old_model;
-
-    /* Remove existing callback */
-    priv = GNC_TREE_VIEW_GET_PRIVATE(view);
-
-    gtk_tree_view_set_model (GTK_TREE_VIEW(view), model);
-}
-
 static gint
 gnc_tree_view_count_visible_columns(GncTreeView *view)
 {
