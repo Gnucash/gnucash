@@ -57,6 +57,7 @@
 #include "gnc-gui-query.h"
 #include "gnc-hooks.h"
 #include "gnc-session.h"
+#include "gnc-state.h"
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"
 #include "gnc-uri-utils.h"

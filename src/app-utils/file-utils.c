@@ -44,7 +44,7 @@
 #include "gnc-uri-utils.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */
-static QofLogModule log_module = GNC_MOD_GUILE;
+static QofLogModule log_module = G_LOG_DOMAIN;
 
 /********************************************************************\
 \********************************************************************/
