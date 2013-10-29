@@ -82,7 +82,6 @@ functions. */
 
 %newobject xaccSplitGetCorrAccountFullName;
 %newobject gnc_numeric_to_string;
-%newobject gnc_build_book_path;
 
 /* Parse the header file to generate wrappers */
 %inline {
@@ -181,8 +180,6 @@ KvpFrame* qof_book_get_slots(QofBook* book);
 %include <gnc-numeric.h>
 
 Timespec timespecCanonicalDayTime(Timespec t);
-
-gchar * gnc_build_book_path (const gchar *filename);
 
 %include <gnc-budget.h>
 
