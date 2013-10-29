@@ -347,7 +347,7 @@ gnc_save_all_state (gpointer session, gpointer unused)
 #endif
 
     /* Write it all out to disk */
-    gnc_state_save (session);
+    //gnc_state_save (session);
     LEAVE("");
 }
 

@@ -71,7 +71,7 @@
 static QofLogModule log_module = GNC_MOD_GUI;
 
 #define PLUGIN_PAGE_ACCT_TREE_CM_CLASS "plugin-page-acct-tree"
-#define STATE_SECTION "window/pages/account_tree"
+#define STATE_SECTION "Account Hierarchy"
 
 #define DELETE_DIALOG_FILTER       "filter"
 #define DELETE_DIALOG_ACCOUNT      "account"

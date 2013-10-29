@@ -66,7 +66,6 @@
 static QofLogModule log_module = GNC_MOD_GUI;
 
 #define PLUGIN_PAGE_ACCT_TREE_CM_CLASS "plugin-page-owner-tree"
-#define STATE_SECTION_PREFIX "window/pages/"
 
 #define DELETE_DIALOG_FILTER  "filter"
 #define DELETE_DIALOG_OWNER "owner"
@@ -559,7 +558,7 @@ gnc_plugin_page_owner_tree_create_widget (GncPluginPage *plugin_page)
     GtkTreeView *tree_view;
     GtkWidget *scrolled_window;
     GtkTreeViewColumn *col;
-    gchar *state_section = NULL;
+    const gchar *state_section = NULL;
     gchar* label = "";
 
     ENTER("page %p", plugin_page);
@@ -607,26 +606,25 @@ gnc_plugin_page_owner_tree_create_widget (GncPluginPage *plugin_page)
         break;
     case GNC_OWNER_CUSTOMER :
         label = N_("Customers");
-        state_section = g_strconcat(STATE_SECTION_PREFIX, "customer_tree", NULL);
+        state_section = "Customers Overview";
         break;
     case GNC_OWNER_JOB :
         label = N_("Jobs");
-        state_section = g_strconcat(STATE_SECTION_PREFIX, "job_tree", NULL);
+        state_section = "Jobs Overview";
         break;
     case GNC_OWNER_VENDOR :
         label = N_("Vendors");
-        state_section = g_strconcat(STATE_SECTION_PREFIX, "vendor_tree", NULL);
+        state_section = "Vendors Overview";
         break;
     case GNC_OWNER_EMPLOYEE :
         label = N_("Employees");
-        state_section = g_strconcat(STATE_SECTION_PREFIX, "job_tree", NULL);
+        state_section = "Employees Overview";
         break;
     }
 
     g_object_set(G_OBJECT(tree_view), "state-section", state_section,
                                       "show-column-menu", TRUE,
                                       NULL);
-    g_free (state_section);
 
     g_object_set(G_OBJECT(plugin_page), "page-name", label, NULL);
 

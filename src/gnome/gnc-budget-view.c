@@ -68,7 +68,7 @@
 static QofLogModule log_module = GNC_MOD_BUDGET;
 
 #define PLUGIN_PAGE_BUDGET_CM_CLASS "budget-view"
-#define STATE_SECTION_PREFIX "window/pages/budget"
+#define STATE_SECTION_PREFIX "Budget"
 
 typedef struct GncBudgetViewPrivate GncBudgetViewPrivate;
 
@@ -313,7 +313,7 @@ gbv_create_widget(GncBudgetView *view)
     tree_view = gnc_tree_view_account_new(FALSE);
     gtk_container_add(GTK_CONTAINER(inner_scrolled_window), GTK_WIDGET(tree_view));
 
-    state_section = g_strjoin("/", STATE_SECTION_PREFIX, guid_to_string(&priv->key), NULL);
+    state_section = g_strjoin(" ", STATE_SECTION_PREFIX, guid_to_string(&priv->key), NULL);
     g_object_set(G_OBJECT(tree_view), "state-section", state_section, NULL);
     g_free (state_section);
 
