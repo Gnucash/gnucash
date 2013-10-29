@@ -701,11 +701,14 @@ RESTART:
 
     /* -------------- BEGIN CORE SESSION CODE ------------- */
     /* -- this code is almost identical in FileOpen and FileSaveAs -- */
-    current_session = gnc_get_current_session();
-    qof_session_call_close_hooks(current_session);
-    gnc_hook_run(HOOK_BOOK_CLOSED, current_session);
-    gnc_close_gui_component_by_session (current_session);
-    gnc_clear_current_session();
+    if (gnc_current_session_exist())
+    {
+        current_session = gnc_get_current_session();
+        qof_session_call_close_hooks(current_session);
+        gnc_hook_run(HOOK_BOOK_CLOSED, current_session);
+        gnc_close_gui_component_by_session (current_session);
+        gnc_clear_current_session();
+    }
 
     /* load the accounts from the users datafile */
     /* but first, check to make sure we've got a session going. */
