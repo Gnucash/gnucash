@@ -345,9 +345,6 @@ gnc_save_all_state (gpointer session, gpointer unused)
         g_free(file_data);
     }
 #endif
-
-    /* Write it all out to disk */
-    //gnc_state_save (session);
     LEAVE("");
 }
 
