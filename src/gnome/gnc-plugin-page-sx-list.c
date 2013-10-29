@@ -61,7 +61,6 @@
 #include "gnc-dense-cal.h"
 #include "gnc-engine.h"
 #include "gnc-event.h"
-#include "gnc-exp-parser.h"
 #include "gnc-glib-utils.h"
 #include "gnc-icons.h"
 #include "gnc-main-window.h"

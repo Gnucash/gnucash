@@ -37,7 +37,6 @@
 #include <gtk/gtk.h>
 
 #include "dialog-utils.h"
-#include "gnc-exp-parser.h"
 #include "gnc-sx-instance-model.h"
 #include "dialog-sx-since-last-run.h"
 

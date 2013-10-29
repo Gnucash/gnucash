@@ -32,7 +32,6 @@
 
 #include "gnc-ui-util.h"
 #include <regex.h>
-#include "gnc-exp-parser.h"
 #include "Account.h"
 #include "gnc-component-manager.h"
 #include "csv-account-import.h"
