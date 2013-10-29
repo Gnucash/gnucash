@@ -489,7 +489,8 @@ gnc_budget_view_delete_budget(GncBudgetView *view)
 
     ENTER("view %p", view);
 
-    gnc_tree_view_remove_state_information (GNC_TREE_VIEW (view));
+    priv = GNC_BUDGET_VIEW_GET_PRIVATE (view);
+    gnc_tree_view_remove_state_information (GNC_TREE_VIEW (priv->tree_view));
 
     LEAVE(" ");
 }
