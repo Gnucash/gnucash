@@ -29,21 +29,21 @@
 
 typedef gchar* URLType;
 
-#define URL_TYPE_FILE	"file"
-#define URL_TYPE_JUMP	"jump"
-#define URL_TYPE_HTTP	"http"
-#define URL_TYPE_FTP	"ftp"
-#define URL_TYPE_SECURE	"secure"
-#define URL_TYPE_REGISTER	"register"   /* for gnucash register popups */
-#define URL_TYPE_ACCTTREE	"accttree"   /* for account tree windows */
-#define URL_TYPE_REPORT	"report"     /* for gnucash report popups */
-#define URL_TYPE_OPTIONS	"options"    /* for editing report options */
-#define URL_TYPE_SCHEME	"scheme"     /* for scheme code evaluation */
-#define URL_TYPE_HELP	"help"       /* for a gnucash help window */
-#define URL_TYPE_XMLDATA	"xmldata"    /* links to gnucash XML data files */
-#define URL_TYPE_PRICE	"price"      /* for price editor popups */
-#define URL_TYPE_OTHER	"other"
-#define URL_TYPE_BUDGET "budget"
+#define URL_TYPE_FILE       "file"
+#define URL_TYPE_JUMP       "jump"
+#define URL_TYPE_HTTP       "http"
+#define URL_TYPE_FTP        "ftp"
+#define URL_TYPE_SECURE     "secure"
+#define URL_TYPE_REGISTER   "register"   /* for gnucash register popups */
+#define URL_TYPE_ACCTTREE   "accttree"   /* for account tree windows */
+#define URL_TYPE_REPORT     "report"     /* for gnucash report popups */
+#define URL_TYPE_OPTIONS    "options"    /* for editing report options */
+#define URL_TYPE_SCHEME     "scheme"     /* for scheme code evaluation */
+#define URL_TYPE_HELP       "help"       /* for a gnucash help window */
+#define URL_TYPE_XMLDATA    "xmldata"    /* links to gnucash XML data files */
+#define URL_TYPE_PRICE      "price"      /* for price editor popups */
+#define URL_TYPE_OTHER      "other"
+#define URL_TYPE_BUDGET     "budget"
 
 gchar* gnc_build_url( URLType type, const gchar* location, const gchar* label );
 

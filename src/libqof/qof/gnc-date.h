@@ -588,7 +588,7 @@ void gnc_tm_set_day_start (struct tm *tm)
     tm->tm_isdst = -1;
 }
 
-/** The gnc_tm_set_day_start() inline routine will set the appropriate
+/** The gnc_tm_set_day_middle() inline routine will set the appropriate
  *  fields in the struct tm to indicate noon of that day.  This
  *  routine assumes that the contents of the data structure is already
  *  in normalized form.*/
@@ -603,7 +603,7 @@ void gnc_tm_set_day_middle (struct tm *tm)
     tm->tm_isdst = -1;
 }
 
-/** The gnc_tm_set_day_start() inline routine will set the appropriate
+/** The gnc_tm_set_day_end() inline routine will set the appropriate
  *  fields in the struct tm to indicate the last second of that day.
  *  This routine assumes that the contents of the data structure is
  *  already in normalized form.*/

@@ -40,14 +40,14 @@ gncscmreportmod_DATA = \
    equity-statement.scm \
    general-journal.scm \
    general-ledger.scm \
-	 income-statement.scm \
-	 net-barchart.scm \
+   income-statement.scm \
+   net-barchart.scm \
    net-linechart.scm \
-	 portfolio.scm \
+   portfolio.scm \
    price-scatter.scm \
    register.scm \
    sx-summary.scm \
-	 trial-balance.scm \
+   trial-balance.scm \
    transaction.scm
 
 
