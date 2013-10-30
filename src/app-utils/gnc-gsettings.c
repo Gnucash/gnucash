@@ -192,30 +192,26 @@ gnc_gsettings_remove_cb_by_func (const gchar *schema,
 {
     gint matched = 0;
     gchar *signal = NULL;
+    GQuark quark = 0;
 
     GSettings *schema_ptr = gnc_gsettings_get_schema_ptr (schema);
     g_return_if_fail (G_IS_SETTINGS (schema_ptr));
     g_return_if_fail (func);
 
-    if ((!key) || (*key == '\0'))
-        signal = g_strdup ("changed");
-    else
-    {
-        if (gnc_gsettings_is_valid_key(schema_ptr, key))
-            signal = g_strconcat ("changed::", key, NULL);
-    }
+    ENTER ();
+
+    if ((key) && (gnc_gsettings_is_valid_key(schema_ptr, key)))
+        quark = g_quark_from_string (key);
 
     matched = g_signal_handlers_disconnect_matched (
             schema_ptr,
             G_SIGNAL_MATCH_DETAIL | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA,
-            0, /* signal_id */
-            g_quark_from_string (signal),   /* signal_detail */
+            g_signal_lookup ("changed", G_TYPE_SETTINGS), /* signal_id */
+            quark,   /* signal_detail */
             NULL, /* closure */
             G_CALLBACK (func), /* callback function */
             user_data);
-    DEBUG ("Removed %d handlers for signal '%s' from schema '%s'", matched, signal, schema);
-
-    g_free (signal);
+    LEAVE ("Schema: %s, key: %s - removed %d handlers for 'changed' signal", schema, key, matched);
 }
 
 
