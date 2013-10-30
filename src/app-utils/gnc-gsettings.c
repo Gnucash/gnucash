@@ -191,7 +191,6 @@ gnc_gsettings_remove_cb_by_func (const gchar *schema,
                                  gpointer user_data)
 {
     gint matched = 0;
-    gchar *signal = NULL;
     GQuark quark = 0;
 
     GSettings *schema_ptr = gnc_gsettings_get_schema_ptr (schema);
