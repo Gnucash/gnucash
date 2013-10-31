@@ -317,7 +317,7 @@ gnc_save_all_state (gpointer session, gpointer unused)
         for (curr=0; curr < num_groups; curr++)
         {
             if (g_str_has_prefix (groups[curr], "Window ") ||
-                g_str_has_prefix (groups[curr], "Page "))
+                    g_str_has_prefix (groups[curr], "Page "))
             {
                 DEBUG ("Removing state group %s", groups[curr]);
                 g_key_file_remove_group (keyfile, groups[curr], NULL);

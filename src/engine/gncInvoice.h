@@ -219,9 +219,9 @@ gncInvoiceAutoApplyPayments (GncInvoice *invoice);
  */
 void
 gncInvoiceApplyPayment (const GncInvoice *invoice, Transaction *txn,
-                      Account *xfer_acc, gnc_numeric amount,
-                      gnc_numeric exch, Timespec date,
-                      const char *memo, const char *num);
+                        Account *xfer_acc, gnc_numeric amount,
+                        gnc_numeric exch, Timespec date,
+                        const char *memo, const char *num);
 
 
 /** Given a transaction, find and return the Invoice */

@@ -213,10 +213,10 @@ GKeyFile *gnc_state_load (const QofSession *session)
 
     if (state_file_name_pre_241)
         state_file = gnc_key_file_load_from_file (state_file_name_pre_241,
-                                                  TRUE, TRUE, NULL);
+                     TRUE, TRUE, NULL);
     else if (state_file_name)
         state_file = gnc_key_file_load_from_file (state_file_name,
-                                                  TRUE, TRUE, NULL);
+                     TRUE, TRUE, NULL);
 
     return gnc_state_get_current ();
 
@@ -237,7 +237,7 @@ void gnc_state_save (const QofSession *session)
     if (error)
     {
         PERR ("Error: Failure saving state file.\n  %s",
-                   error->message);
+              error->message);
         g_error_free (error);
     }
 }

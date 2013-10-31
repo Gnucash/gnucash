@@ -242,9 +242,9 @@ void gnc_prefs_remove_group_cb_by_func (const gchar *group,
  *  @param property The property of the object to bind to.
  */
 void gnc_prefs_bind (const gchar *group,
-                         /*@ null @*/ const gchar *pref_name,
-                         gpointer object,
-                         const gchar *property);
+                     /*@ null @*/ const gchar *pref_name,
+                     gpointer object,
+                     const gchar *property);
 
 /** @} */
 

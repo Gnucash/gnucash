@@ -180,7 +180,7 @@ gnc_style_sheet_new (StyleSheetDialog * ssd)
     SCM              new_ss = SCM_BOOL_F;
     GtkWidget        * template_combo;
     GtkTreeModel     * template_model;
-    GtkTreeIter      iter; 
+    GtkTreeIter      iter;
     GtkWidget        * name_entry;
     gint             dialog_retval;
     GList *template_names = NULL;

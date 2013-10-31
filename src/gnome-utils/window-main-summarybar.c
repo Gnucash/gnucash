@@ -395,7 +395,7 @@ gnc_main_window_summary_refresh (GNCMainSummary * summary)
 
             currency_accum = current->data;
 
-	    mnemonic = gnc_commodity_get_nice_symbol (currency_accum->currency);
+            mnemonic = gnc_commodity_get_nice_symbol (currency_accum->currency);
             if (mnemonic == NULL)
                 mnemonic = "";
 
@@ -508,7 +508,7 @@ gnc_main_window_summary_new (void)
     gnc_main_window_summary_refresh(retval);
 
     retval->cnxn_id =  gnc_prefs_register_cb (GNC_PREFS_GROUP, NULL,
-                                              prefs_changed_cb, retval);
+                       prefs_changed_cb, retval);
 
     return retval->hbox;
 }

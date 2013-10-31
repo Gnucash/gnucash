@@ -82,7 +82,8 @@ struct _GncBudgetViewClass
     GtkVBoxClass w;
 };
 
-enum {
+enum
+{
     TOTALS_TYPE_INCOME,
     TOTALS_TYPE_EXPENSES,
     TOTALS_TYPE_TRANSFERS,
@@ -112,7 +113,7 @@ static void gbv_selection_changed_cb(
 #endif
 static void gbv_treeview_resized_cb(GtkWidget* widget, GtkAllocation* allocation, GncBudgetView* view);
 static gnc_numeric gbv_get_accumulated_budget_amount(GncBudget* budget,
-                                       Account* account, guint period_num);
+        Account* account, guint period_num);
 
 struct GncBudgetViewPrivate
 {
@@ -509,7 +510,7 @@ gnc_budget_view_delete_budget(GncBudgetView *view)
  **********************************************************************/
 static gboolean
 gbv_button_press_cb(GtkWidget *widget, GdkEventButton *event,
-                     GncBudgetView *view)
+                    GncBudgetView *view)
 {
     gboolean result;
 
@@ -744,7 +745,7 @@ bgv_get_total_for_account(Account* account, GncBudget* budget)
             if (gnc_account_n_children(account) != 0)
             {
                 numeric = gbv_get_accumulated_budget_amount(budget, account, period_num);
-		total = gnc_numeric_add(total, numeric, GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
+                total = gnc_numeric_add(total, numeric, GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
             }
         }
         else
@@ -752,7 +753,7 @@ bgv_get_total_for_account(Account* account, GncBudget* budget)
             numeric = gnc_budget_get_account_period_value(budget, account, period_num);
             if (!gnc_numeric_check(numeric))
             {
-		total = gnc_numeric_add(total, numeric, GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
+                total = gnc_numeric_add(total, numeric, GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
             }
         }
     }
@@ -865,7 +866,7 @@ totals_col_source(GtkTreeViewColumn *col, GtkCellRenderer *cell,
             assets = bgv_get_total_for_account(priv->assets, budget);
             liabilities = bgv_get_total_for_account(priv->liabilities, budget);
         }
-	value = gnc_numeric_sub(assets, liabilities, GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
+        value = gnc_numeric_sub(assets, liabilities, GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
         xaccSPrintAmount(amtbuff, value,
                          gnc_account_print_info(priv->assets, FALSE));
         g_object_set(cell, "foreground", "black", NULL);
@@ -891,9 +892,9 @@ totals_col_source(GtkTreeViewColumn *col, GtkCellRenderer *cell,
             assets = bgv_get_total_for_account(priv->assets, budget);
             liabilities = bgv_get_total_for_account(priv->liabilities, budget);
         }
-	value = gnc_numeric_sub(income, expenses, GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
-	value = gnc_numeric_sub(value, assets, GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
-	value = gnc_numeric_add(value, liabilities, GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
+        value = gnc_numeric_sub(income, expenses, GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
+        value = gnc_numeric_sub(value, assets, GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
+        value = gnc_numeric_add(value, liabilities, GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
         xaccSPrintAmount(amtbuff, value,
                          gnc_account_print_info(priv->assets, FALSE));
         if (gnc_numeric_negative_p(value))
@@ -1075,7 +1076,7 @@ gnc_budget_view_refresh(GncBudgetView *view)
         col = gbv_create_totals_column(view, -1);
         if (col != NULL)
         {
-           gtk_tree_view_append_column(priv->totals_tree_view, col);
+            gtk_tree_view_append_column(priv->totals_tree_view, col);
         }
     }
 

@@ -1140,7 +1140,7 @@ static gboolean auto_save_countdown (GtkWidget *dialog)
         return FALSE; /* remove timer */
     }
 
-   /* Stop count down if user closed the dialog since the last time we were called */
+    /* Stop count down if user closed the dialog since the last time we were called */
     if (!GTK_IS_DIALOG (dialog))
         return FALSE; /* remove timer */
 
@@ -1515,7 +1515,7 @@ gnc_main_window_generate_title (GncMainWindow *window)
     }
     /* Update the menus based upon whether this is an "immutable" page. */
     immutable = page &&
-        g_object_get_data (G_OBJECT (page), PLUGIN_PAGE_IMMUTABLE);
+                g_object_get_data (G_OBJECT (page), PLUGIN_PAGE_IMMUTABLE);
     gnc_plugin_update_actions(priv->action_group,
                               immutable_page_actions,
                               "sensitive", !immutable);
@@ -1597,7 +1597,9 @@ static gboolean statusbar_notification_off(gpointer user_data_unused)
         GtkWidget *statusbar = gnc_main_window_get_statusbar(GNC_WINDOW(mainwindow));
         gtk_statusbar_remove(GTK_STATUSBAR(statusbar), 0, gnc_statusbar_notification_messageid);
         gnc_statusbar_notification_messageid = 0;
-    } else {
+    }
+    else
+    {
         g_warning("oops, no GncMainWindow obtained\n");
     }
     return FALSE; // should not be called again
@@ -1644,9 +1646,9 @@ static gchar *generate_statusbar_lastmodified_message()
                     that has the a.m. or p.m. string in its locale, second
                     string is for locales that do not have that string. */
                     gchar *time_string =
-                            g_date_time_format (gdt, (strlen(dummy_strftime_has_ampm) > 0)
-                                                ? _("Last modified on %a, %b %e, %Y at %I:%M%P")
-                                                : _("Last modified on %a, %b %e, %Y at %H:%M"));
+                        g_date_time_format (gdt, (strlen(dummy_strftime_has_ampm) > 0)
+                                            ? _("Last modified on %a, %b %e, %Y at %I:%M%P")
+                                            : _("Last modified on %a, %b %e, %Y at %H:%M"));
 
                     g_date_time_unref (gdt);
 
@@ -1682,7 +1684,7 @@ statusbar_notification_lastmodified()
     GList *iter;
     GtkWidget *widget = NULL;
     for (iter = active_windows; iter && !(widget && GNC_IS_MAIN_WINDOW(widget));
-         iter = g_list_next(iter))
+            iter = g_list_next(iter))
     {
         widget = iter->data;
     }
@@ -1704,7 +1706,9 @@ statusbar_notification_lastmodified()
         // notification again after 10 seconds
         g_timeout_add(10 * 1000, statusbar_notification_off, NULL); // maybe not needed anyway?
 #endif
-    } else {
+    }
+    else
+    {
         g_warning("uh oh, no GNC_IS_MAIN_WINDOW\n");
     }
 }
@@ -3936,7 +3940,7 @@ gnc_main_window_cmd_page_setup (GtkAction *action,
 
 static void
 gnc_book_options_dialog_apply_cb(GNCOptionWin * optionwin,
-                            gpointer user_data)
+                                 gpointer user_data)
 {
     GNCOptionDB * options = user_data;
     kvp_frame *slots = qof_book_get_slots (gnc_get_current_book ());
@@ -3957,7 +3961,7 @@ gnc_book_options_dialog_apply_cb(GNCOptionWin * optionwin,
 
 static void
 gnc_book_options_dialog_close_cb(GNCOptionWin * optionwin,
-                            gpointer user_data)
+                                 gpointer user_data)
 {
     GNCOptionDB * options = user_data;
 
@@ -3977,7 +3981,7 @@ gnc_book_options_dialog_cb (gboolean modal, gchar *title)
     gnc_option_db_clean (options);
 
     optionwin = gnc_options_dialog_new_modal (modal,
-                                                (title ? title : _( "Book Options")));
+                (title ? title : _( "Book Options")));
     gnc_options_dialog_build_contents (optionwin, options);
 
     gnc_options_dialog_set_book_options_help_cb (optionwin);

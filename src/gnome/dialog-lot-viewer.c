@@ -513,7 +513,7 @@ gnc_split_viewer_fill (GNCLotViewer *lv, GtkListStore *store, SplitList *split_l
 
         /* Num  - retrieve number based on book option */
         gtk_list_store_set (store, &iter, SPLIT_COL_NUM,
-                                        gnc_get_num_action (trans, split), -1);
+                            gnc_get_num_action (trans, split), -1);
 
         /* Description */
         gtk_list_store_set (store, &iter, SPLIT_COL_DESCRIPTION, xaccTransGetDescription (trans), -1);

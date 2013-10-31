@@ -555,38 +555,38 @@ gnc_ui_print_save_dialog(PrintCheckDialog *pcd)
 
     /* Custom format page */
     gnc_prefs_set_coords(GNC_PREFS_GROUP, GNC_PREF_CUSTOM_PAYEE,
-                    gtk_spin_button_get_value(pcd->payee_x),
-                    gtk_spin_button_get_value(pcd->payee_y));
+                         gtk_spin_button_get_value(pcd->payee_x),
+                         gtk_spin_button_get_value(pcd->payee_y));
     gnc_prefs_set_coords(GNC_PREFS_GROUP, GNC_PREF_CUSTOM_DATE,
-                    gtk_spin_button_get_value(pcd->date_x),
-                    gtk_spin_button_get_value(pcd->date_y));
+                         gtk_spin_button_get_value(pcd->date_x),
+                         gtk_spin_button_get_value(pcd->date_y));
     gnc_prefs_set_coords(GNC_PREFS_GROUP, GNC_PREF_CUSTOM_WORDS,
-                    gtk_spin_button_get_value(pcd->words_x),
-                    gtk_spin_button_get_value(pcd->words_y));
+                         gtk_spin_button_get_value(pcd->words_x),
+                         gtk_spin_button_get_value(pcd->words_y));
     gnc_prefs_set_coords(GNC_PREFS_GROUP, GNC_PREF_CUSTOM_NUMBER,
-                    gtk_spin_button_get_value(pcd->number_x),
-                    gtk_spin_button_get_value(pcd->number_y));
+                         gtk_spin_button_get_value(pcd->number_x),
+                         gtk_spin_button_get_value(pcd->number_y));
     gnc_prefs_set_coords(GNC_PREFS_GROUP, GNC_PREF_CUSTOM_NOTES,
-                    gtk_spin_button_get_value(pcd->notes_x),
-                    gtk_spin_button_get_value(pcd->notes_y));
+                         gtk_spin_button_get_value(pcd->notes_x),
+                         gtk_spin_button_get_value(pcd->notes_y));
     gnc_prefs_set_coords(GNC_PREFS_GROUP, GNC_PREF_CUSTOM_MEMO,
-                    gtk_spin_button_get_value(pcd->memo_x),
-                    gtk_spin_button_get_value(pcd->memo_y));
+                         gtk_spin_button_get_value(pcd->memo_x),
+                         gtk_spin_button_get_value(pcd->memo_y));
     gnc_prefs_set_coords(GNC_PREFS_GROUP, GNC_PREF_CUSTOM_ADDRESS,
-                    gtk_spin_button_get_value(pcd->address_x),
-                    gtk_spin_button_get_value(pcd->address_y));
+                         gtk_spin_button_get_value(pcd->address_x),
+                         gtk_spin_button_get_value(pcd->address_y));
     gnc_prefs_set_coords(GNC_PREFS_GROUP, GNC_PREF_SPLITS_AMOUNT,
-                    gtk_spin_button_get_value(pcd->splits_amount_x),
-                    gtk_spin_button_get_value(pcd->splits_amount_y));
+                         gtk_spin_button_get_value(pcd->splits_amount_x),
+                         gtk_spin_button_get_value(pcd->splits_amount_y));
     gnc_prefs_set_coords(GNC_PREFS_GROUP, GNC_PREF_SPLITS_MEMO,
-                    gtk_spin_button_get_value(pcd->splits_memo_x),
-                    gtk_spin_button_get_value(pcd->splits_memo_y));
+                         gtk_spin_button_get_value(pcd->splits_memo_x),
+                         gtk_spin_button_get_value(pcd->splits_memo_y));
     gnc_prefs_set_coords(GNC_PREFS_GROUP, GNC_PREF_SPLITS_ACCOUNT,
-                    gtk_spin_button_get_value(pcd->splits_account_x),
-                    gtk_spin_button_get_value(pcd->splits_account_y));
+                         gtk_spin_button_get_value(pcd->splits_account_x),
+                         gtk_spin_button_get_value(pcd->splits_account_y));
     gnc_prefs_set_coords(GNC_PREFS_GROUP, GNC_PREF_CUSTOM_TRANSLATION,
-                    gtk_spin_button_get_value(pcd->translation_x),
-                    gtk_spin_button_get_value(pcd->translation_y));
+                         gtk_spin_button_get_value(pcd->translation_x),
+                         gtk_spin_button_get_value(pcd->translation_y));
     gnc_prefs_set_float(GNC_PREFS_GROUP, GNC_PREF_CUSTOM_ROTATION,
                         gtk_spin_button_get_value(pcd->check_rotation));
     active = gtk_combo_box_get_active(GTK_COMBO_BOX(pcd->units_combobox));
@@ -1599,7 +1599,7 @@ initialize_format_combobox (PrintCheckDialog *pcd)
  *****************************************************/
 void
 gnc_ui_print_check_dialog_create2(GncPluginPageRegister2 *plugin_page,
-                                 GList *splits)
+                                  GList *splits)
 {
     PrintCheckDialog *pcd;
     GtkBuilder *builder;
@@ -2102,9 +2102,9 @@ draw_page_items(GtkPrintContext *context,
         switch (item->type)
         {
         case DATE:
-	{
-	    GDate date;
-	    g_date_clear (&date, 1);
+        {
+            GDate date;
+            g_date_clear (&date, 1);
             gnc_gdate_set_time64 (&date, xaccTransGetDate(trans));
             date_format =
                 gnc_date_format_get_custom(GNC_DATE_FORMAT
@@ -2113,7 +2113,7 @@ draw_page_items(GtkPrintContext *context,
             width = draw_text(context, buf, item, default_desc);
             draw_date_format(context, date_format, item, default_desc, width);
             break;
-	}
+        }
 
         case PAYEE:
             draw_text(context, xaccTransGetDescription(trans), item, default_desc);
@@ -2129,12 +2129,12 @@ draw_page_items(GtkPrintContext *context,
 
         case ACTION:
             draw_text(context, gnc_get_action_num(trans, pcd->split), item,
-                                                                default_desc);
+                      default_desc);
             break;
 
         case CHECK_NUMBER:
             draw_text(context, gnc_get_num_action(trans, pcd->split), item,
-                                                                default_desc);
+                      default_desc);
             break;
 
         case AMOUNT_NUMBER:
@@ -2507,7 +2507,7 @@ gnc_print_check_set_sensitive (GtkWidget *widget, gpointer data)
 
 void
 gnc_print_check_format_changed2 (GtkComboBox *widget,
-                                PrintCheckDialog *pcd)
+                                 PrintCheckDialog *pcd)
 {
     GtkListStore *p_store;
     GtkTreeModel *f_model;
@@ -2587,7 +2587,7 @@ gnc_print_check_format_changed2 (GtkComboBox *widget,
 
 void
 gnc_print_check_position_changed2 (GtkComboBox *widget,
-                                  PrintCheckDialog *pcd)
+                                   PrintCheckDialog *pcd)
 {
     gboolean sensitive;
     gint pnum;
@@ -2618,8 +2618,8 @@ gnc_print_check_position_changed2 (GtkComboBox *widget,
 
 void
 gnc_ui_print_check_response_cb2(GtkDialog *dialog,
-                               gint response,
-                               PrintCheckDialog *pcd)
+                                gint response,
+                                PrintCheckDialog *pcd)
 {
     switch (response)
     {

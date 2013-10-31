@@ -341,16 +341,16 @@ void csv_transactions_export (CsvExportInfo *info)
 
         /* Header string */
         header = g_strconcat ( end_sep, _("Date"), mid_sep, _("Account Name"), mid_sep,
-                                (num_action ? _("Transaction Number") : _("Number")),
-                                mid_sep, _("Description"), mid_sep, _("Notes"),
-                                mid_sep, _("Memo"), mid_sep, _("Category"), mid_sep,
-                                _("Type"), mid_sep,
-                                (num_action ? _("Number/Action") : _("Action")),
-                                mid_sep, _("Reconcile"), mid_sep,
-                                _("To With Sym"), mid_sep, _("From With Sym"), mid_sep,
-                                _("To Num."), mid_sep, _("From Num."), mid_sep,
-                                _("To Rate/Price"), mid_sep, _("From Rate/Price"),
-                                end_sep, "\n", NULL);
+                               (num_action ? _("Transaction Number") : _("Number")),
+                               mid_sep, _("Description"), mid_sep, _("Notes"),
+                               mid_sep, _("Memo"), mid_sep, _("Category"), mid_sep,
+                               _("Type"), mid_sep,
+                               (num_action ? _("Number/Action") : _("Action")),
+                               mid_sep, _("Reconcile"), mid_sep,
+                               _("To With Sym"), mid_sep, _("From With Sym"), mid_sep,
+                               _("To Num."), mid_sep, _("From Num."), mid_sep,
+                               _("To Rate/Price"), mid_sep, _("From Rate/Price"),
+                               end_sep, "\n", NULL);
         DEBUG("Header String: %s", header);
 
         /* Write header line */

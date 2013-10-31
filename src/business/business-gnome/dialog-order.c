@@ -473,7 +473,7 @@ gnc_order_update_window (OrderWindow *ow)
         if (timespec_equal (&ts, &ts_zero))
         {
             gnc_date_edit_set_time (GNC_DATE_EDIT (ow->opened_date),
-				    gnc_time (NULL));
+                                    gnc_time (NULL));
         }
         else
         {
@@ -488,7 +488,7 @@ gnc_order_update_window (OrderWindow *ow)
         if (timespec_equal (&ts, &ts_zero))
         {
             gnc_date_edit_set_time (GNC_DATE_EDIT (ow->closed_date),
-				    gnc_time (NULL));
+                                    gnc_time (NULL));
             hide_cd = TRUE;
         }
         else

@@ -149,7 +149,7 @@ update_display_lists(gnc_column_view_edit * view)
             if (scm_is_equal (SCM_CAR(rpt_guids), selection))
                 row = i;
             name = gnc_scm_to_locale_string (scm_call_2(template_menu_name, SCM_CAR(rpt_guids),
-                                                   SCM_BOOL_F));
+                                             SCM_BOOL_F));
 
             gtk_list_store_append(store, &iter);
             gtk_list_store_set(store, &iter,
@@ -607,9 +607,9 @@ gnc_column_view_edit_size_cb(GtkButton * button, gpointer user_data)
         {
             current = SCM_LIST4(SCM_CAR(current),
                                 scm_from_int (gtk_spin_button_get_value_as_int
-                                            (GTK_SPIN_BUTTON(colspin))),
+                                              (GTK_SPIN_BUTTON(colspin))),
                                 scm_from_int (gtk_spin_button_get_value_as_int
-                                            (GTK_SPIN_BUTTON(rowspin))),
+                                              (GTK_SPIN_BUTTON(rowspin))),
                                 SCM_BOOL_F);
             scm_gc_unprotect_object(r->contents_list);
             r->contents_list = scm_list_set_x(r->contents_list,

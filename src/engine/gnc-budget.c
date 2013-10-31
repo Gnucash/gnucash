@@ -509,7 +509,8 @@ gnc_budget_set_account_period_value(GncBudget *budget, const Account *account,
 
     /* Watch out for an off-by-one error here:
      * period_num starts from 0 while num_periods starts from 1 */
-    if (period_num >= GET_PRIVATE(budget)->num_periods) {
+    if (period_num >= GET_PRIVATE(budget)->num_periods)
+    {
         PWARN("Period %i does not exist", period_num);
         return;
     }
@@ -580,7 +581,7 @@ gnc_budget_get_period_start_date(const GncBudget *budget, guint period_num)
     Timespec ts;
     timespecFromTime64(
         &ts, recurrenceGetPeriodTime(&GET_PRIVATE(budget)->recurrence,
-				     period_num, FALSE));
+                                     period_num, FALSE));
     return ts;
 }
 

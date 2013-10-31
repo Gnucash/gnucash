@@ -1027,12 +1027,12 @@ _show_created_transactions(GncSxSinceLastRunDialog *app_dialog, GList *created_t
     }
     query = qof_query_merge(book_query, guid_query, QOF_QUERY_AND);
 #ifdef REGISTER2_ENABLED
-/*################## Added for Reg2 #################*/
+    /*################## Added for Reg2 #################*/
     // inspired by dialog-find-transactions:do_find_cb:
     ledger = gnc_ledger_display2_query(query, SEARCH_LEDGER2, REG2_STYLE_JOURNAL);
     gnc_ledger_display2_refresh(ledger);
     page = gnc_plugin_page_register2_new_ledger(ledger);
-/*################## Added for Reg2 #################*/
+    /*################## Added for Reg2 #################*/
 #else
     // inspired by dialog-find-transactions:do_find_cb:
     ledger = gnc_ledger_display_query(query, SEARCH_LEDGER, REG_STYLE_JOURNAL);

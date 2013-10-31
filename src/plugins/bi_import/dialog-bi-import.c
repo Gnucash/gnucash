@@ -72,7 +72,7 @@
             temp = g_match_info_fetch_named (match_info, match_name); \
             if (temp) \
             { \
-		g_strstrip( temp ); \
+                g_strstrip( temp ); \
                 gtk_list_store_set (store, &iter, column, temp, -1); \
                 g_free (temp); \
             }
@@ -329,8 +329,8 @@ gnc_bi_import_fix_bis (GtkListStore * store, guint * fixed, guint * deleted,
                     // fix this by using the current date
                     gchar temp[20];
                     GDate date;
-		    g_date_clear (&date, 1);
-		    gnc_gdate_set_today (&date);
+                    g_date_clear (&date, 1);
+                    gnc_gdate_set_today (&date);
                     g_date_strftime (temp, 20, "%x", &date);	// create a locale specific date string
                     g_string_assign (prev_date_opened, temp);
                 }
@@ -525,11 +525,14 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
     while (valid)
     {
         // Walk through the list, reading each row
-        gtk_tree_model_get (GTK_TREE_MODEL (store), &iter, ID, &id, DATE_OPENED, &date_opened, DATE_POSTED, &date_posted,	// if autoposting requested
-                            DUE_DATE, &due_date,	// if autoposting requested
-                            ACCOUNT_POSTED, &account_posted,	// if autoposting requested
-                            MEMO_POSTED, &memo_posted,	// if autoposting requested
-                            ACCU_SPLITS, &accumulatesplits,	// if autoposting requested
+        gtk_tree_model_get (GTK_TREE_MODEL (store), &iter,
+                            ID, &id,
+                            DATE_OPENED, &date_opened,
+                            DATE_POSTED, &date_posted,       // if autoposting requested
+                            DUE_DATE, &due_date,             // if autoposting requested
+                            ACCOUNT_POSTED, &account_posted, // if autoposting requested
+                            MEMO_POSTED, &memo_posted,       // if autoposting requested
+                            ACCU_SPLITS, &accumulatesplits,  // if autoposting requested
                             OWNER_ID, &owner_id,
                             BILLING_ID, &billing_id,
                             NOTES, &notes,
@@ -548,7 +551,7 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
 
         // TODO:  Assign a new invoice number if one is absent.  BUT we don't want to assign a new invoice for every line!!
         // so we'd have to flag this up somehow or add an option in the import GUI.  The former implies that we make
-        // an assumption about what the importer (person) wants to do.  It seems resonable that a CSV file full of items with
+        // an assumption about what the importer (person) wants to do.  It seems reasonable that a CSV file full of items with
         // If an invoice exists then we add to it in this current schema.
         // no predefined invoice number is a new invoice that's in need of a new number.
         // This was  not designed to satisfy the need for repeat invoices however, so maybe we need a another method for this, after all
@@ -562,9 +565,9 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
         {
             // new invoice
             invoice = gncInvoiceCreate (book);
-/* Protect against thrashing the DB and trying to write the invoice
- * record prematurely */
-	    gncInvoiceBeginEdit (invoice);
+            /* Protect against thrashing the DB and trying to write the invoice
+             * record prematurely */
+            gncInvoiceBeginEdit (invoice);
             gncInvoiceSetID (invoice, id);
             owner = gncOwnerNew ();
             if (g_ascii_strcasecmp (type, "BILL") == 0)
@@ -604,7 +607,7 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
                 iw =  gnc_ui_invoice_edit (invoice);
                 gnc_plugin_page_invoice_new (iw);
             }
-	    gncInvoiceCommitEdit (invoice);
+            gncInvoiceCommitEdit (invoice);
         }
 // I want to warn the user that an existing billvoice exists, but not every
 // time.
@@ -732,8 +735,8 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
                     acc = gnc_account_lookup_for_register
                           (gnc_get_current_root_account (), account_posted);
                     gncInvoicePostToAccount (invoice, acc, &d1, &d2,
-					     memo_posted,
-					     text2bool (accumulatesplits));
+                                             memo_posted,
+                                             text2bool (accumulatesplits));
                 }
             }
             g_free (new_id);

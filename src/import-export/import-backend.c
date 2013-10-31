@@ -945,8 +945,8 @@ gnc_import_process_trans_item (GncImportMatchMap *matchmap,
             xaccTransBeginEdit(selected_match->trans);
 
             xaccTransSetDatePostedSecsNormalized(selected_match->trans,
-                                       xaccTransGetDate(xaccSplitGetParent(
-                                                   gnc_import_TransInfo_get_fsplit(trans_info))));
+                                                 xaccTransGetDate(xaccSplitGetParent(
+                                                         gnc_import_TransInfo_get_fsplit(trans_info))));
 
             xaccSplitSetAmount(selected_match->split,
                                xaccSplitGetAmount(

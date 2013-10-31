@@ -632,7 +632,7 @@ account_to_gui (TaxInfoDialog *ti_dialog, Account *account)
         index = g_list_index (infos, info);
 
     if (index < 0)
-	index = 0;
+        index = 0;
 
     view = GTK_TREE_VIEW(ti_dialog->txf_category_view);
     selection = gtk_tree_view_get_selection(view);

@@ -203,13 +203,13 @@ gnc_gsettings_remove_cb_by_func (const gchar *schema,
         quark = g_quark_from_string (key);
 
     matched = g_signal_handlers_disconnect_matched (
-            schema_ptr,
-            G_SIGNAL_MATCH_DETAIL | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA,
-            g_signal_lookup ("changed", G_TYPE_SETTINGS), /* signal_id */
-            quark,   /* signal_detail */
-            NULL, /* closure */
-            G_CALLBACK (func), /* callback function */
-            user_data);
+                  schema_ptr,
+                  G_SIGNAL_MATCH_DETAIL | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA,
+                  g_signal_lookup ("changed", G_TYPE_SETTINGS), /* signal_id */
+                  quark,   /* signal_detail */
+                  NULL, /* closure */
+                  G_CALLBACK (func), /* callback function */
+                  user_data);
     LEAVE ("Schema: %s, key: %s - removed %d handlers for 'changed' signal", schema, key, matched);
 }
 
@@ -558,30 +558,35 @@ void gnc_gsettings_load_backend (void)
  */
 static xmlParserInputPtr
 xsltprocExternalEntityLoader(const char *URL, const char *ID,
-                             xmlParserCtxtPtr ctxt) {
+                             xmlParserCtxtPtr ctxt)
+{
     xmlParserInputPtr ret;
     warningSAXFunc warning = NULL;
-        xmlChar *newURL;
+    xmlChar *newURL;
     gchar *tmpdir = g_build_filename (g_get_home_dir (), ".gnc-migration-tmp", NULL);
 
     int i;
     const char *lastsegment = URL;
     const char *iter = URL;
 
-    while (*iter != 0) {
+    while (*iter != 0)
+    {
         if (*iter == '/')
             lastsegment = iter + 1;
         iter++;
     }
 
-    if ((ctxt != NULL) && (ctxt->sax != NULL)) {
+    if ((ctxt != NULL) && (ctxt->sax != NULL))
+    {
         warning = ctxt->sax->warning;
         ctxt->sax->warning = NULL;
     }
 
-    if (defaultEntityLoader != NULL) {
+    if (defaultEntityLoader != NULL)
+    {
         ret = defaultEntityLoader(URL, ID, ctxt);
-        if (ret != NULL) {
+        if (ret != NULL)
+        {
             if (warning != NULL)
                 ctxt->sax->warning = warning;
             return(ret);
@@ -592,9 +597,11 @@ xsltprocExternalEntityLoader(const char *URL, const char *ID,
     newURL = xmlStrcat(newURL, (const xmlChar *) "/");
     newURL = xmlStrcat(newURL, (const xmlChar *) lastsegment);
     g_free (tmpdir);
-    if (newURL != NULL) {
+    if (newURL != NULL)
+    {
         ret = defaultEntityLoader((const char *)newURL, ID, ctxt);
-        if (ret != NULL) {
+        if (ret != NULL)
+        {
             if (warning != NULL)
                 ctxt->sax->warning = warning;
             xmlFree(newURL);
@@ -602,7 +609,8 @@ xsltprocExternalEntityLoader(const char *URL, const char *ID,
         }
         xmlFree(newURL);
     }
-    if (warning != NULL) {
+    if (warning != NULL)
+    {
         ctxt->sax->warning = warning;
         if (URL != NULL)
             DEBUG ("External entity \"%s\" not loaded", URL);
@@ -698,7 +706,7 @@ void gnc_gsettings_migrate_from_gconf (void)
     }
 
     command = g_strconcat ("(use-modules (migrate-prefs))(migration-prepare \"",
-                             base_dir, "\")", NULL);
+                           base_dir, "\")", NULL);
     DEBUG ("command = %s", command);
     migration_ok = scm_is_true (scm_c_eval_string (command));
     g_free (command);
@@ -756,7 +764,7 @@ void gnc_gsettings_migrate_from_gconf (void)
 
     /* All that is left now is to cleanup... */
     command = g_strconcat ("(use-modules (migrate-prefs))(migration-cleanup \"",
-                             base_dir, "\")", NULL);
+                           base_dir, "\")", NULL);
     DEBUG ("command = %s", command);
     migration_ok = scm_is_true (scm_c_eval_string (command));
     g_free (command);

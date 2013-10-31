@@ -213,13 +213,13 @@ static void
 fill_units_combo(GNCDateDelta *gdd)
 {
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(gdd->units_combo),
-                              _("Days"));
+                                   _("Days"));
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(gdd->units_combo),
-                              _("Weeks"));
+                                   _("Weeks"));
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(gdd->units_combo),
-                              _("Months"));
+                                   _("Months"));
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(gdd->units_combo),
-                              _("Years"));
+                                   _("Years"));
 
     g_signal_connect (gdd->units_combo, "changed",
                       G_CALLBACK (set_units), gdd);
@@ -243,9 +243,9 @@ static void
 fill_polarity_combo(GNCDateDelta *gdd)
 {
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(gdd->polarity_combo),
-                              _("Ago"));
+                                   _("Ago"));
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(gdd->polarity_combo),
-                              _("From Now"));
+                                   _("From Now"));
 
     g_signal_connect (gdd->polarity_combo, "changed",
                       G_CALLBACK(set_polarity), gdd);

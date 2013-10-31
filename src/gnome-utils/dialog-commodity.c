@@ -597,9 +597,9 @@ gnc_set_commodity_section_sensitivity (GtkWidget *widget, gpointer user_data)
                             NULL);
 
     if ((offset < cw->comm_section_top) || (offset >= cw->comm_section_bottom))
-	return;
+        return;
     if (cw->is_currency)
-	gtk_widget_set_sensitive(widget, offset == cw->comm_symbol_line);
+        gtk_widget_set_sensitive(widget, offset == cw->comm_symbol_line);
 }
 
 static void
@@ -1303,7 +1303,7 @@ gnc_ui_commodity_dialog_to_object(CommodityWindow * w)
         {
             gboolean quote_set;
             quote_set = gtk_toggle_button_get_active
-                (GTK_TOGGLE_BUTTON (w->get_quote_check));
+                        (GTK_TOGGLE_BUTTON (w->get_quote_check));
             c = w->edit_commodity;
             gnc_commodity_begin_edit(c);
             gnc_commodity_user_set_quote_flag (c, quote_set);
@@ -1312,12 +1312,13 @@ gnc_ui_commodity_dialog_to_object(CommodityWindow * w)
                 selection = gtk_combo_box_get_active(GTK_COMBO_BOX(w->quote_tz_menu));
                 string = gnc_timezone_menu_position_to_string(selection);
                 gnc_commodity_set_quote_tz(c, string);
-            } else
+            }
+            else
                 gnc_commodity_set_quote_tz(c, NULL);
 
-	    if (user_symbol && *user_symbol)
+            if (user_symbol && *user_symbol)
                 gnc_commodity_set_user_symbol(c, user_symbol);
-	    else
+            else
                 gnc_commodity_set_user_symbol(c, NULL);
 
             gnc_commodity_commit_edit(c);

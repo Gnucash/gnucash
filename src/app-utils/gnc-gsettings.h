@@ -194,8 +194,8 @@ guint gnc_gsettings_register_any_cb (const gchar *schema,
  *  by its handler id.
  */
 void gnc_gsettings_remove_any_cb_by_func (const gchar *schema,
-                                          gpointer func,
-                                          gpointer user_data);
+        gpointer func,
+        gpointer user_data);
 
 
 /** Bind a setting to a g_object property. When this succeeds a change
@@ -327,7 +327,7 @@ gdouble gnc_gsettings_get_float (const gchar *schema,
  *  returned by this function.
  */
 gchar *gnc_gsettings_get_string (const gchar *schema,
-                                const gchar *key);
+                                 const gchar *key);
 
 /** Get an enum value from GSettings.
  *

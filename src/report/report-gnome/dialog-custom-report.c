@@ -197,31 +197,31 @@ set_reports_view_and_model(CustomReportDialog *crd)
     g_signal_connect (G_OBJECT (crd->namerenderer), "edited",
                       G_CALLBACK (custom_report_name_edited_cb), crd);
     gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (crd->reportview), -1,
-                                                 "Report Name", crd->namerenderer,
-                                                 "text", COL_NAME,
-                                                 NULL);
+            "Report Name", crd->namerenderer,
+            "text", COL_NAME,
+            NULL);
     crd->namecol = gtk_tree_view_get_column (GTK_TREE_VIEW (crd->reportview), VIEW_COL_NAME);
     gtk_tree_view_column_set_expand (crd->namecol, TRUE);
 
     renderer = gtk_cell_renderer_pixbuf_new();
     g_object_set (G_OBJECT (renderer), "stock-id", GTK_STOCK_EXECUTE, NULL);
     gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (crd->reportview), -1,
-                                                 "R", renderer,
-                                                 NULL);
+            "R", renderer,
+            NULL);
     crd->runcol = gtk_tree_view_get_column (GTK_TREE_VIEW (crd->reportview), VIEW_COL_RUN);
 
     renderer = gtk_cell_renderer_pixbuf_new();
     g_object_set (G_OBJECT (renderer), "stock-id", GTK_STOCK_EDIT, NULL);
     gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (crd->reportview), -1,
-                                                 "E", renderer,
-                                                 NULL);
+            "E", renderer,
+            NULL);
     crd->editcol = gtk_tree_view_get_column (GTK_TREE_VIEW (crd->reportview), VIEW_COL_EDIT);
 
     renderer = gtk_cell_renderer_pixbuf_new();
     g_object_set (G_OBJECT (renderer), "stock-id", GTK_STOCK_DELETE, NULL);
     colnum = gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (crd->reportview), -1,
-                                                 "D", renderer,
-                                                 NULL);
+             "D", renderer,
+             NULL);
     crd->delcol = gtk_tree_view_get_column (GTK_TREE_VIEW (crd->reportview), VIEW_COL_DELETE);
 
     model = create_and_fill_report_list(crd);
@@ -404,8 +404,8 @@ custom_report_list_view_clicked_cb(GtkTreeView *view, GdkEventButton *event, gpo
     g_return_if_fail ( view != NULL );
 
     if (gtk_tree_view_get_path_at_pos (view, event->x, event->y,
-                                            &path, &column,
-                                            &cellx, &celly))
+                                       &path, &column,
+                                       &cellx, &celly))
     {
         if (column == crd->runcol)
         {
@@ -441,16 +441,16 @@ void custom_report_name_edited_cb(GtkCellRendererText *renderer, gchar *path, gc
         custom_report_edit_report_name (guid, crd, new_text);
     else
         gnc_error_dialog(crd->dialog, "%s",
-                _("A custom report with this name already exists, please choose another name.") );
+                         _("A custom report with this name already exists, please choose another name.") );
 
 
 }
 void custom_report_query_tooltip_cb (GtkTreeView  *view,
-        gint        x,
-        gint        y,
-        gboolean    keyboard_mode,
-        GtkTooltip *tooltip,
-        gpointer    data)
+                                     gint        x,
+                                     gint        y,
+                                     gboolean    keyboard_mode,
+                                     GtkTooltip *tooltip,
+                                     gpointer    data)
 {
     CustomReportDialog *crd = data;
     GtkTreePath *path = NULL;

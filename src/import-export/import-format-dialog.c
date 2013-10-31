@@ -119,7 +119,7 @@ add_menu_and_run_dialog(GtkWidget *dialog, GtkWidget *menu_box, GncImportFormat 
     gtk_cell_layout_set_attributes( GTK_CELL_LAYOUT( combo ), cell, "text", 0, NULL );
 
     g_signal_connect(G_OBJECT(combo), "changed",
-                         G_CALLBACK(option_changed_cb), index_p);
+                     G_CALLBACK(option_changed_cb), index_p);
 
     gtk_box_pack_start(GTK_BOX(menu_box), GTK_WIDGET(combo), TRUE, TRUE, 0);
 

@@ -574,11 +574,11 @@ gnc_price_equal (const GNCPrice *p1, const GNCPrice *p2)
         return FALSE;
 
     if (g_strcmp0 (gnc_price_get_source (p1),
-                     gnc_price_get_source (p2)) != 0)
+                   gnc_price_get_source (p2)) != 0)
         return FALSE;
 
     if (g_strcmp0 (gnc_price_get_typestr (p1),
-                     gnc_price_get_typestr (p2)) != 0)
+                   gnc_price_get_typestr (p2)) != 0)
         return FALSE;
 
     if (!gnc_numeric_eq (gnc_price_get_value (p1),
@@ -2274,12 +2274,12 @@ compare_kvpairs_by_commodity_key(gconstpointer a, gconstpointer b)
     cb = (gnc_commodity *) kvpb->key;
 
     cmp_result = g_strcmp0(gnc_commodity_get_namespace(ca),
-                             gnc_commodity_get_namespace(cb));
+                           gnc_commodity_get_namespace(cb));
 
     if (cmp_result != 0) return cmp_result;
 
     return g_strcmp0(gnc_commodity_get_mnemonic(ca),
-                       gnc_commodity_get_mnemonic(cb));
+                     gnc_commodity_get_mnemonic(cb));
 }
 
 static gboolean

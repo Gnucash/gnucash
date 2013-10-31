@@ -45,18 +45,18 @@ typedef struct _GncPopupEntryClass GncPopupEntryClass;
 
 struct _GncPopupEntry
 {
-	GtkEventBox  parent;
+    GtkEventBox  parent;
 
-	GtkWidget   *hbox;
-	GtkWidget   *button;
-	GtkWidget   *entry;
+    GtkWidget   *hbox;
+    GtkWidget   *button;
+    GtkWidget   *entry;
 
-	gboolean     editing_canceled;
+    gboolean     editing_canceled;
 };
 
 struct _GncPopupEntryClass
 {
-	GtkEventBoxClass parent_class;
+    GtkEventBoxClass parent_class;
 };
 
 GtkType      gnc_popup_entry_get_type   (void) G_GNUC_CONST;
@@ -64,7 +64,7 @@ GtkType      gnc_popup_entry_get_type   (void) G_GNUC_CONST;
 GtkWidget   *gnc_popup_entry_new        (void);
 
 void         gnc_popup_entry_set_text   (GncPopupEntry *popup,
-					const gchar  *text);
+        const gchar  *text);
 
 const gchar *gnc_popup_entry_get_text   (GncPopupEntry *popup);
 

@@ -213,18 +213,18 @@ gnc_xfer_dialog_update_price (XferDialog *xferData)
 
     /* grab the price on the same day or nearest to the DATE out of the pricedb */
     date = gnc_date_edit_get_date_ts (GNC_DATE_EDIT (xferData->date_entry));
-    
+
     /* Look for a price on the same day or, failing that, closest in time. */
     prc = gnc_pricedb_lookup_day (xferData->pricedb, from, to, date);
     reverse = FALSE;
-    
-    if (!prc) 
+
+    if (!prc)
     {
         /* Look for reverse price on same day */
         prc = gnc_pricedb_lookup_day (xferData->pricedb, to, from, date);
         reverse = TRUE;
     }
-    
+
     if (!prc)
     {
         /* Didn't find one on the same day, look for nearest in time */
@@ -232,7 +232,7 @@ gnc_xfer_dialog_update_price (XferDialog *xferData)
                 to, date);
         reverse = FALSE;
     }
-    
+
     if (!prc)
     {
         prc = gnc_pricedb_lookup_nearest_in_time (xferData->pricedb, to,
@@ -242,7 +242,7 @@ gnc_xfer_dialog_update_price (XferDialog *xferData)
 
     if (!prc)
         return;
-        
+
     /* grab the price from the pricedb */
     price = gnc_price_get_value (prc);
     if (reverse)
@@ -536,7 +536,7 @@ gnc_xfer_dialog_fill_tree_view(XferDialog *xferData,
     GtkBuilder *builder = g_object_get_data (G_OBJECT (xferData->dialog), "builder");
 
     use_accounting_labels = gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL,
-                                               GNC_PREF_ACCOUNTING_LABELS);
+                            GNC_PREF_ACCOUNTING_LABELS);
 
     /* In "normal" mode (non accounting terms) the account where the
      * money comes from is displayed on the left side and the account
@@ -1310,7 +1310,7 @@ gnc_xfer_dialog_set_date(XferDialog *xferData, time64 set_date)
     gnc_date_edit_set_time( GNC_DATE_EDIT(xferData->date_entry), set_date );
 }
 void gnc_xfer_dialog_set_date_sensitive(XferDialog *xferData,
-        gboolean is_sensitive)
+                                        gboolean is_sensitive)
 {
     g_assert(xferData);
     gtk_widget_set_sensitive (xferData->date_entry, is_sensitive);
@@ -1561,7 +1561,7 @@ gnc_xfer_dialog_response_cb (GtkDialog *dialog, gint response, gpointer data)
 
             from_amt = gnc_amount_edit_get_amount(GNC_AMOUNT_EDIT(xferData->amount_edit));
             to_amt = gnc_amount_edit_get_amount(GNC_AMOUNT_EDIT(xferData->to_amount_edit));
-        
+
             /* compute the price -- maybe we need to swap? */
 
             value = gnc_numeric_div(to_amt, from_amt, GNC_DENOM_AUTO, GNC_HOW_DENOM_REDUCE);
@@ -1569,7 +1569,7 @@ gnc_xfer_dialog_response_cb (GtkDialog *dialog, gint response, gpointer data)
 
             /* Try to be consistent about how quotes are installed. */
             if (from == gnc_default_currency() ||
-                ((to != gnc_default_currency()) &&
+                    ((to != gnc_default_currency()) &&
                      (strcmp (gnc_commodity_get_mnemonic(from),
                               gnc_commodity_get_mnemonic(to)) < 0)))
             {
@@ -1582,7 +1582,7 @@ gnc_xfer_dialog_response_cb (GtkDialog *dialog, gint response, gpointer data)
                 value = gnc_numeric_div (gnc_numeric_create(1, 1), value,
                                          GNC_DENOM_AUTO, GNC_HOW_DENOM_REDUCE);
             }
-            
+
             /* First see if the closest entry on the same day has an equivalent rate */
             price = gnc_pricedb_lookup_day (xferData->pricedb, from, to, ts);
             if (price)
@@ -1599,13 +1599,13 @@ gnc_xfer_dialog_response_cb (GtkDialog *dialog, gint response, gpointer data)
                                                    GNC_DENOM_AUTO, GNC_HOW_DENOM_REDUCE);
                 }
             }
-            
+
             /* See if we found a good enough price */
             if (price)
             {
                 int scu = gnc_commodity_get_fraction (to);
                 if (!gnc_numeric_equal (gnc_numeric_mul (from_amt, price_value,
-                                            scu, GNC_HOW_RND_ROUND_HALF_UP),
+                                        scu, GNC_HOW_RND_ROUND_HALF_UP),
                                         to_amt))
                 {
                     gnc_price_unref (price);
@@ -1748,7 +1748,7 @@ gnc_xfer_dialog_fetch (GtkButton *button, XferDialog *xferData)
         if (prc)
         {
             rate = gnc_numeric_div (gnc_numeric_create (1, 1), gnc_price_get_value (prc),
-                                 GNC_DENOM_AUTO, GNC_HOW_DENOM_REDUCE);
+                                    GNC_DENOM_AUTO, GNC_HOW_DENOM_REDUCE);
 
             gnc_amount_edit_set_amount(GNC_AMOUNT_EDIT(xferData->price_edit), rate);
             gnc_price_unref (prc);
@@ -1767,7 +1767,7 @@ gnc_xfer_dialog_create(GtkWidget *parent, XferDialog *xferData)
     gboolean  use_accounting_labels;
 
     use_accounting_labels = gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL,
-                                               GNC_PREF_ACCOUNTING_LABELS);
+                            GNC_PREF_ACCOUNTING_LABELS);
 
     ENTER(" ");
     builder = gtk_builder_new();
@@ -2311,8 +2311,8 @@ gboolean gnc_xfer_dialog_run_exchange_dialog(
     if (xaccTransUseTradingAccounts (txn))
     {
         /* If we're using commodity trading accounts then "amount" is
-           really the split's amount and it's in xfer_com commodity.  
-           We need an exchange rate that will convert this amount 
+           really the split's amount and it's in xfer_com commodity.
+           We need an exchange rate that will convert this amount
            into a value in the transaction currency.  */
         if (gnc_commodity_equal(xfer_com, txn_cur))
         {

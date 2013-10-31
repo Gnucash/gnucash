@@ -807,7 +807,7 @@ gncOwnerCreatePaymentLot (const GncOwner *owner, Transaction *txn,
         {
             /* Need to value the payment in terms of the owner commodity */
             gnc_numeric payment_value = gnc_numeric_mul(amount,
-                    exch, GNC_DENOM_AUTO, GNC_HOW_RND_ROUND_HALF_UP);
+                                        exch, GNC_DENOM_AUTO, GNC_HOW_RND_ROUND_HALF_UP);
 
             xaccSplitSetAmount(split, amount);
             xaccSplitSetValue(split, payment_value);
@@ -1041,7 +1041,7 @@ gncOwnerApplyPayment (const GncOwner *owner, Transaction *txn, GList *lots,
         selected_lots = lots;
     else
         selected_lots = xaccAccountFindOpenLots (posted_acc, gncOwnerLotMatchOwnerFunc,
-                                                 (gpointer)owner, NULL);
+                        (gpointer)owner, NULL);
 
     /* And link the selected lots and the payment lot together as well as possible.
      * If the payment was bigger than the selected documents/overpayments, only

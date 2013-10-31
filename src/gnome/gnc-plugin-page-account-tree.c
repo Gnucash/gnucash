@@ -837,8 +837,8 @@ gppat_open_account_common (GncPluginPageAccountTree *page,
 /*        New Register Common                        */
 static void
 gppat_open2_account_common (GncPluginPageAccountTree *page,
-                           Account *account,
-                           gboolean include_subs)
+                            Account *account,
+                            gboolean include_subs)
 {
     GtkWidget *window;
     GncPluginPage *new_page;
@@ -854,9 +854,9 @@ gppat_open2_account_common (GncPluginPageAccountTree *page,
 
 static void
 gnc_plugin_page_account_tree_double_click_cb (GtkTreeView *treeview,
-                                              GtkTreePath        *path,
-                                              GtkTreeViewColumn  *col,
-                                              GncPluginPageAccountTree *page)
+        GtkTreePath        *path,
+        GtkTreeViewColumn  *col,
+        GncPluginPageAccountTree *page)
 {
     GtkTreeModel *model;
     GtkTreeIter iter;

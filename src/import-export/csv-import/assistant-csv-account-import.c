@@ -95,19 +95,19 @@ static gchar *mnemonic_escape (const gchar *source)
     q = dest = g_malloc (strlen (source) * 2 + 1);
 
     while (*p)
-      {
+    {
         switch (*p)
-          {
-          case '_':
+        {
+        case '_':
             *q++ = '_';
             *q++ = '_';
             break;
-          default:
+        default:
             *q++ = *p;
             break;
-          }
+        }
         p++;
-      }
+    }
     *q = 0;
     return dest;
 }
@@ -672,8 +672,8 @@ gnc_file_csv_account_import(void)
     csv_import_assistant_create (info);
 
     gnc_register_gui_component (ASSISTANT_CSV_IMPORT_CM_CLASS,
-				NULL, csv_import_close_handler,
-				info);
+                                NULL, csv_import_close_handler,
+                                info);
 
     gtk_widget_show_all (info->window);
 

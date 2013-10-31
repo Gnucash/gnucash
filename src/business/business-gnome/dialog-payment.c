@@ -145,7 +145,7 @@ void gnc_payment_window_destroy_cb (GtkWidget *widget, gpointer data);
 void gnc_payment_acct_tree_row_activated_cb (GtkWidget *widget, GtkTreePath *path,
         GtkTreeViewColumn *column, PaymentWindow *pw);
 void gnc_payment_leave_amount_cb (GtkWidget *widget, GdkEventFocus *event,
-        PaymentWindow *pw);
+                                  PaymentWindow *pw);
 
 
 static void
@@ -548,8 +548,8 @@ gnc_payment_ok_cb (GtkWidget *widget, gpointer data)
     amount_deb  = gnc_amount_edit_get_amount (GNC_AMOUNT_EDIT (pw->amount_debit_edit));
     amount_cred = gnc_amount_edit_get_amount (GNC_AMOUNT_EDIT (pw->amount_credit_edit));
     amount_tot = gnc_numeric_sub (amount_cred, amount_deb,
-            gnc_commodity_get_fraction (xaccAccountGetCommodity (pw->post_acct)),
-            GNC_HOW_RND_ROUND_HALF_UP);
+                                  gnc_commodity_get_fraction (xaccAccountGetCommodity (pw->post_acct)),
+                                  GNC_HOW_RND_ROUND_HALF_UP);
 
     if (gnc_numeric_check (amount_tot) || gnc_numeric_zero_p (amount_tot))
     {
@@ -693,7 +693,7 @@ gnc_payment_acct_tree_row_activated_cb (GtkWidget *widget, GtkTreePath *path,
 
 void
 gnc_payment_leave_amount_cb (GtkWidget *widget, GdkEventFocus *event,
-        PaymentWindow *pw)
+                             PaymentWindow *pw)
 {
     gnc_numeric amount_deb, amount_cred, amount_tot;
 
@@ -704,8 +704,8 @@ gnc_payment_leave_amount_cb (GtkWidget *widget, GdkEventFocus *event,
     amount_deb  = gnc_amount_edit_get_amount (GNC_AMOUNT_EDIT (pw->amount_debit_edit));
     amount_cred = gnc_amount_edit_get_amount (GNC_AMOUNT_EDIT (pw->amount_credit_edit));
     amount_tot = gnc_numeric_sub (amount_cred, amount_deb,
-            gnc_commodity_get_fraction (xaccAccountGetCommodity (pw->post_acct)),
-            GNC_HOW_RND_ROUND_HALF_UP);
+                                  gnc_commodity_get_fraction (xaccAccountGetCommodity (pw->post_acct)),
+                                  GNC_HOW_RND_ROUND_HALF_UP);
 
     gnc_ui_payment_window_set_amount (pw, amount_tot);
 }

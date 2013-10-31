@@ -395,22 +395,22 @@ gnc_tree_view_owner_new (GncOwnerType owner_type)
     sample_currency = gnc_commodity_get_fullname(gnc_default_currency());
 
     priv->name_column
-    = gnc_tree_view_add_text_column(view, _("Owner Name"), GNC_OWNER_TREE_NAME_COL,
-                                    NULL, "GnuCash Inc.",
-                                    GNC_TREE_MODEL_OWNER_COL_NAME,
-                                    GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
-                                    sort_by_string);
+        = gnc_tree_view_add_text_column(view, _("Owner Name"), GNC_OWNER_TREE_NAME_COL,
+                                        NULL, "GnuCash Inc.",
+                                        GNC_TREE_MODEL_OWNER_COL_NAME,
+                                        GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
+                                        sort_by_string);
     gnc_tree_view_add_text_column(view, _("Type"), GNC_OWNER_TREE_TYPE_COL,
                                   NULL, sample_type,
                                   GNC_TREE_MODEL_OWNER_COL_TYPE,
                                   GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
                                   sort_by_string);
     priv->id_column
-    = gnc_tree_view_add_text_column(view, _("Owner ID"), GNC_OWNER_TREE_ID_COL,
-                                    NULL, "1-123-1234",
-                                    GNC_TREE_MODEL_OWNER_COL_ID,
-                                    GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
-                                    sort_by_string);
+        = gnc_tree_view_add_text_column(view, _("Owner ID"), GNC_OWNER_TREE_ID_COL,
+                                        NULL, "1-123-1234",
+                                        GNC_TREE_MODEL_OWNER_COL_ID,
+                                        GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
+                                        sort_by_string);
     gnc_tree_view_add_text_column(view, _("Currency"), GNC_OWNER_TREE_CURRENCY_COL,
                                   NULL, sample_currency,
                                   GNC_TREE_MODEL_OWNER_COL_CURRENCY,
@@ -464,19 +464,19 @@ gnc_tree_view_owner_new (GncOwnerType owner_type)
                                      sort_by_balance_value);
 
     priv->balance_report_column
-    = gnc_tree_view_add_numeric_column(view, _("Balance"), GNC_OWNER_TREE_BALANCE_REPORT_COL,
-                                       SAMPLE_OWNER_VALUE,
-                                       GNC_TREE_MODEL_OWNER_COL_BALANCE_REPORT,
-                                       GNC_TREE_MODEL_OWNER_COL_COLOR_BALANCE,
-                                       GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
-                                       sort_by_balance_value);
+        = gnc_tree_view_add_numeric_column(view, _("Balance"), GNC_OWNER_TREE_BALANCE_REPORT_COL,
+                                           SAMPLE_OWNER_VALUE,
+                                           GNC_TREE_MODEL_OWNER_COL_BALANCE_REPORT,
+                                           GNC_TREE_MODEL_OWNER_COL_COLOR_BALANCE,
+                                           GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
+                                           sort_by_balance_value);
 
     priv->notes_column
-    = gnc_tree_view_add_text_column(view, _("Notes"), GNC_OWNER_TREE_NOTES_COL, NULL,
-                                    "Sample owner notes.",
-                                    GNC_TREE_MODEL_OWNER_COL_NOTES,
-                                    GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
-                                    sort_by_string);
+        = gnc_tree_view_add_text_column(view, _("Notes"), GNC_OWNER_TREE_NOTES_COL, NULL,
+                                        "Sample owner notes.",
+                                        GNC_TREE_MODEL_OWNER_COL_NOTES,
+                                        GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
+                                        sort_by_string);
     gnc_tree_view_add_toggle_column (view, _("Active"),
                                      /* Translators: This string has a context prefix; the translation
                                         must only contain the part after the | character. */

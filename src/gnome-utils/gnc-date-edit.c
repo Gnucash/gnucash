@@ -276,7 +276,7 @@ gnc_date_edit_popup (GNCDateEdit *gde)
 
     /* This code is pretty much just copied from gtk_date_edit_get_date */
     date_was_valid = qof_scan_date (gtk_entry_get_text (GTK_ENTRY (gde->date_entry)),
-                   &mtm.tm_mday, &mtm.tm_mon, &mtm.tm_year);
+                                    &mtm.tm_mday, &mtm.tm_mon, &mtm.tm_year);
     if (!date_was_valid)
     {
         /* No valid date. Hacky workaround: Instead of crashing we randomly choose today's date. */
@@ -885,7 +885,7 @@ create_children (GNCDateEdit *gde)
     gtk_cell_layout_set_attributes( GTK_CELL_LAYOUT( gde->time_combo ), cell, "text", 0, NULL );
 
     g_signal_connect (G_OBJECT (gde->time_combo), "changed",
-                              G_CALLBACK  (set_time), gde);
+                      G_CALLBACK  (set_time), gde);
 
     gtk_box_pack_start (GTK_BOX (gde), gde->time_combo, FALSE, FALSE, 0);
 
@@ -1031,7 +1031,7 @@ gnc_date_edit_get_date_internal (GNCDateEdit *gde)
     g_assert(GNC_IS_DATE_EDIT(gde));
 
     date_was_valid = qof_scan_date (gtk_entry_get_text (GTK_ENTRY (gde->date_entry)),
-                   &tm.tm_mday, &tm.tm_mon, &tm.tm_year);
+                                    &tm.tm_mday, &tm.tm_mon, &tm.tm_year);
 
     if (!date_was_valid)
     {

@@ -138,10 +138,10 @@ gnc_restore_window_size(const char *group, GtkWindow *window)
         gint screen_height = gdk_screen_height();
 
         g_variant_get (geometry, "(iiii)",
-                                 &wpos[0],  &wpos[1],
-                                 &wsize[0], &wsize[1]);
+                       &wpos[0],  &wpos[1],
+                       &wsize[0], &wsize[1]);
         DEBUG("geometry from preferences - wpos[0]: %d, wpos[1]: %d, wsize[0]: %d, wsize[1]: %d",
-                wpos[0],  wpos[1], wsize[0], wsize[1]);
+              wpos[0],  wpos[1], wsize[0], wsize[1]);
 
         /* (-1, -1) means no geometry was saved (default preferences value) */
         if ((wpos[0] != -1) && (wpos[1] != -1))
@@ -152,7 +152,7 @@ gnc_restore_window_size(const char *group, GtkWindow *window)
             if (screen_height != 0)
                 wpos[1] = wpos[1] % screen_height;
             DEBUG("geometry after screen adaption - wpos[0]: %d, wpos[1]: %d, wsize[0]: %d, wsize[1]: %d",
-                    wpos[0],  wpos[1], wsize[0], wsize[1]);
+                  wpos[0],  wpos[1], wsize[0], wsize[1]);
 
             gtk_window_move(window, wpos[0], wpos[1]);
         }
@@ -192,7 +192,7 @@ gnc_save_window_size(const char *group, GtkWindow *window)
     gtk_window_get_position(GTK_WINDOW(window), &wpos[0], &wpos[1]);
     gtk_window_get_size(GTK_WINDOW(window), &wsize[0], &wsize[1]);
     geometry = g_variant_new ("(iiii)", wpos[0],  wpos[1],
-                                        wsize[0], wsize[1]);
+                              wsize[0], wsize[1]);
     gnc_prefs_set_value (group, GNC_PREF_LAST_GEOMETRY, geometry);
     /* Don't unref geometry here, it is consumed by gnc_prefs_set_value */
 }
@@ -477,7 +477,7 @@ gnc_builder_connect_full_func(GtkBuilder *builder,
                               user_data, NULL , flags);
 }
 /*--------------------------------------------------------------------------
- * End of GtkBuilder utilities 
+ * End of GtkBuilder utilities
  *-------------------------------------------------------------------------*/
 
 

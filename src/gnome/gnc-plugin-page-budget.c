@@ -388,7 +388,7 @@ gnc_plugin_page_budget_refresh_cb(GHashTable *changes, gpointer user_data)
             if (ei->event_mask & QOF_EVENT_MODIFY)
             {
                 DEBUG("refreshing budget view because budget was modified");
-		gnc_budget_view_refresh(priv->budget_view);
+                gnc_budget_view_refresh(priv->budget_view);
             }
         }
     }

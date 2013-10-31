@@ -1028,8 +1028,8 @@ gnc_file_csv_export (CsvExportType export_type)
     info->export_type = export_type;
     csv_export_assistant_create (info);
     gnc_register_gui_component (ASSISTANT_CSV_EXPORT_CM_CLASS,
-				NULL, csv_export_close_handler,
-				info);
+                                NULL, csv_export_close_handler,
+                                info);
     gtk_widget_show_all (info->window);
     gnc_window_adjust_for_screen (GTK_WINDOW(info->window));
 }

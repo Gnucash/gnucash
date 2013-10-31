@@ -104,8 +104,8 @@ void
 gnc_GWEN_Gui_set_close_flag(gboolean close_when_finished)
 {
     gnc_prefs_set_bool(
-            GNC_PREFS_GROUP_AQBANKING, GNC_PREF_CLOSE_ON_FINISH,
-            close_when_finished);
+        GNC_PREFS_GROUP_AQBANKING, GNC_PREF_CLOSE_ON_FINISH,
+        close_when_finished);
 }
 gboolean
 gnc_GWEN_Gui_get_close_flag()
@@ -295,7 +295,7 @@ gnc_GWEN_Gui_log_init(void)
 #ifdef USING_GWENHYWFAR_GTK2_GUI
             Gtk2_Gui_new()
 #else
-        GWEN_Gui_new()
+            GWEN_Gui_new()
 #endif
             ;
 
@@ -392,8 +392,8 @@ void
 gnc_GWEN_Gui_set_close_flag(gboolean close_when_finished)
 {
     gnc_prefs_set_bool(
-            GNC_PREFS_GROUP_AQBANKING, GNC_PREF_CLOSE_ON_FINISH,
-            close_when_finished);
+        GNC_PREFS_GROUP_AQBANKING, GNC_PREF_CLOSE_ON_FINISH,
+        close_when_finished);
 
     if (full_gui)
     {
@@ -718,8 +718,8 @@ hide_dialog(GncGWENGui *gui)
 
     /* Remember whether the dialog is to be closed when finished */
     gnc_prefs_set_bool(
-            GNC_PREFS_GROUP_AQBANKING, GNC_PREF_CLOSE_ON_FINISH,
-            gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(gui->close_checkbutton)));
+        GNC_PREFS_GROUP_AQBANKING, GNC_PREF_CLOSE_ON_FINISH,
+        gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(gui->close_checkbutton)));
 
     /* Remember size and position of the dialog */
     gnc_save_window_size(GNC_PREFS_GROUP_CONNECTION, GTK_WINDOW(gui->dialog));
@@ -1616,8 +1616,8 @@ ggg_close_toggled_cb(GtkToggleButton *button, gpointer user_data)
     ENTER("gui=%p", gui);
 
     gnc_prefs_set_bool(
-            GNC_PREFS_GROUP_AQBANKING, GNC_PREF_CLOSE_ON_FINISH,
-            gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(button)));
+        GNC_PREFS_GROUP_AQBANKING, GNC_PREF_CLOSE_ON_FINISH,
+        gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(button)));
 
     LEAVE(" ");
 }

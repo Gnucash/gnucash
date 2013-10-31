@@ -42,14 +42,14 @@ const gchar* currency_format_user[] = {N_("Locale"),
 
 /* This array contains all of the different strings for different column types. */
 gchar* gnc_csv_column_type_strs[GNC_CSV_NUM_COL_TYPES] = {N_("None"),
-        N_("Date"),
-        N_("Num"),
-        N_("Description"),
-        N_("Notes"),
-        N_("Account"),
-        N_("Deposit"),
-        N_("Withdrawal"),
-        N_("Balance")
+                                                          N_("Date"),
+                                                          N_("Num"),
+                                                          N_("Description"),
+                                                          N_("Notes"),
+                                                          N_("Account"),
+                                                          N_("Deposit"),
+                                                          N_("Withdrawal"),
+                                                          N_("Balance")
                                                          };
 
 /** A set of sensible defaults for parsing CSV files.
@@ -193,8 +193,8 @@ static time64 parse_date_with_year(const char* date_str, int format)
     retvalue.tm_isdst = test_retvalue.tm_isdst;
     rawtime = gnc_mktime (&retvalue);
     if (retvalue.tm_mday == orig_day &&
-    retvalue.tm_mon == orig_month &&
-    retvalue.tm_year == orig_year)
+            retvalue.tm_mon == orig_month &&
+            retvalue.tm_year == orig_year)
     {
         return rawtime;
     }
@@ -291,8 +291,8 @@ static time64 parse_date_without_year(const char* date_str, int format)
     retvalue.tm_isdst = test_retvalue.tm_isdst;
     rawtime = gnc_mktime (&retvalue);
     if (retvalue.tm_mday == orig_day &&
-    retvalue.tm_mon == orig_month &&
-    retvalue.tm_year == orig_year)
+            retvalue.tm_mon == orig_month &&
+            retvalue.tm_year == orig_year)
     {
         return rawtime;
     }
@@ -329,7 +329,7 @@ GncCsvParseData* gnc_csv_new_parse_data(void)
      * gnc_csv_parse_data_free is called before all of the data is
      * initialized, only the data that needs to be freed is freed. */
     parse_data->raw_str.begin = parse_data->raw_str.end
-    = parse_data->file_str.begin = parse_data->file_str.end = NULL;
+                                = parse_data->file_str.begin = parse_data->file_str.end = NULL;
     parse_data->orig_lines = NULL;
     parse_data->orig_row_lengths = NULL;
     parse_data->column_types = NULL;
@@ -400,7 +400,7 @@ void gnc_csv_parse_data_free(GncCsvParseData* parse_data)
  * @return 0 on success, 1 on failure
  */
 int gnc_csv_convert_encoding(GncCsvParseData* parse_data, const char* encoding,
-GError** error)
+                             GError** error)
 {
     gsize bytes_read, bytes_written;
 
@@ -413,9 +413,9 @@ GError** error)
 
     /* Do the actual translation to UTF-8. */
     parse_data->file_str.begin = g_convert(parse_data->raw_str.begin,
-    parse_data->raw_str.end - parse_data->raw_str.begin,
-    "UTF-8", encoding, &bytes_read, &bytes_written,
-    error);
+                                           parse_data->raw_str.end - parse_data->raw_str.begin,
+                                           "UTF-8", encoding, &bytes_read, &bytes_written,
+                                           error);
     /* Handle errors that occur. */
     if (parse_data->file_str.begin == NULL)
         return 1;
@@ -440,7 +440,7 @@ GError** error)
  * @return 0 on success, 1 on failure
  */
 int gnc_csv_load_file(GncCsvParseData* parse_data, const char* filename,
-GError** error)
+                      GError** error)
 {
     const char* guess_enc = NULL;
 
@@ -463,8 +463,8 @@ GError** error)
     /* Make a guess at the encoding of the data. */
     if (!g_mapped_file_get_length(parse_data->raw_mapping) == 0)
         guess_enc = go_guess_encoding((const char*)(parse_data->raw_str.begin),
-        (size_t)(parse_data->raw_str.end - parse_data->raw_str.begin),
-        "UTF-8", NULL);
+                                      (size_t)(parse_data->raw_str.end - parse_data->raw_str.begin),
+                                      "UTF-8", NULL);
     if (guess_enc == NULL)
     {
         g_set_error(error, 0, GNC_CSV_ENCODING_ERR, "%s", _("Unknown encoding."));
@@ -509,8 +509,8 @@ int gnc_csv_parse(GncCsvParseData* parse_data, gboolean guessColTypes, GError** 
     {
         /* Do the actual parsing. */
         parse_data->orig_lines = stf_parse_general(parse_data->options, parse_data->chunk,
-        parse_data->file_str.begin,
-        parse_data->file_str.end);
+                                 parse_data->file_str.begin,
+                                 parse_data->file_str.end);
     }
     /* If we couldn't get the encoding right, we just want an empty array. */
     else
@@ -523,7 +523,7 @@ int gnc_csv_parse(GncCsvParseData* parse_data, gboolean guessColTypes, GError** 
         g_array_free(parse_data->orig_row_lengths, FALSE);
 
     parse_data->orig_row_lengths =
-    g_array_sized_new(FALSE, FALSE, sizeof(int), parse_data->orig_lines->len);
+        g_array_sized_new(FALSE, FALSE, sizeof(int), parse_data->orig_lines->len);
 
     g_array_set_size(parse_data->orig_row_lengths, parse_data->orig_lines->len);
     parse_data->orig_max_row = 0;
@@ -558,7 +558,7 @@ int gnc_csv_parse(GncCsvParseData* parse_data, gboolean guessColTypes, GError** 
         /* Create parse_data->column_types and fill it with guesses based
          * on the contents of each column. */
         parse_data->column_types = g_array_sized_new(FALSE, FALSE, sizeof(int),
-        max_cols);
+                                   max_cols);
         g_array_set_size(parse_data->column_types, max_cols);
         /* TODO Make it actually guess. */
         for (i = 0; i < parse_data->column_types->len; i++)
@@ -666,7 +666,7 @@ static gboolean trans_property_set(TransProperty* prop, char* str)
 
         /* Go through str_dupe looking for currency symbols. */
         for (possible_currency_symbol = str_dupe; *possible_currency_symbol;
-        possible_currency_symbol = g_utf8_next_char(possible_currency_symbol))
+                possible_currency_symbol = g_utf8_next_char(possible_currency_symbol))
         {
             if (g_unichar_type(g_utf8_get_char(possible_currency_symbol)) == G_UNICODE_CURRENCY_SYMBOL)
             {
@@ -772,7 +772,7 @@ static void trans_property_list_add(TransProperty* property)
  * @param amount The amount of the split
  */
 static void trans_add_split(Transaction* trans, Account* account, QofBook* book,
-gnc_numeric amount, const char *num)
+                            gnc_numeric amount, const char *num)
 {
     Split* split = xaccMallocSplit(book);
     xaccSplitSetAccount(split, account);
@@ -935,7 +935,7 @@ static GncCsvTransLine* trans_property_list_to_trans(TransPropertyList* list, gc
             break;
 
         case GNC_CSV_NUM:
-            /* the 'num' is saved and passed to 'trans_add_split' below where 
+            /* the 'num' is saved and passed to 'trans_add_split' below where
              * 'gnc_set_num_action' is used to set tran-num and/or split-action
              * per book option */
             num = g_strdup ((char*)(prop->value));
@@ -1232,7 +1232,7 @@ int gnc_csv_parse_to_trans(GncCsvParseData* parse_data, Account* account,
                 }
 
                 trans_add_split(trans_line->trans, account,
-                        gnc_account_get_book(account), amount, trans_line->num);
+                                gnc_account_get_book(account), amount, trans_line->num);
                 if (trans_line->num)
                     g_free(trans_line->num);
 

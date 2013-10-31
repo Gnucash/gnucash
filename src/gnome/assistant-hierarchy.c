@@ -907,7 +907,7 @@ on_final_account_prepare (hierarchy_data  *data)
 
     /* Now build a new account tree */
     data->final_account_tree
-    = GNC_TREE_VIEW_ACCOUNT(gnc_tree_view_account_new_with_root (data->our_account_tree, FALSE));
+        = GNC_TREE_VIEW_ACCOUNT(gnc_tree_view_account_new_with_root (data->our_account_tree, FALSE));
     tree_view = GTK_TREE_VIEW(data->final_account_tree);
     gnc_tree_view_account_set_name_edited(data->final_account_tree,
                                           gnc_tree_view_account_name_edited_cb);

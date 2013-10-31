@@ -1632,7 +1632,7 @@ static gchar *report_create_jobname(GncPluginPageReportPrivate *priv)
         QofDateFormat date_format_here;
         QofDateFormat date_format_old = qof_date_format_get();
         char *format_code = gnc_prefs_get_string(GNC_PREFS_GROUP_REPORT_PDFEXPORT,
-                                                 GNC_PREF_FILENAME_DATE_FMT);
+                            GNC_PREF_FILENAME_DATE_FMT);
         if (*format_code == '\0')
         {
             g_free(format_code);

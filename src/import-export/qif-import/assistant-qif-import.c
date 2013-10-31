@@ -2491,14 +2491,14 @@ gnc_ui_qif_import_currency_prepare(GtkAssistant *assistant,
     if (wind->new_book)
     {
         gtk_assistant_set_page_title (assistant, page,
-            _("Choose the QIF file currency and select Book Options"));
+                                      _("Choose the QIF file currency and select Book Options"));
         gtk_widget_show (wind->book_option_label);
         gtk_widget_show (wind->book_option_message);
     }
     else
     {
         gtk_assistant_set_page_title (assistant, page,
-            _("Choose the QIF file currency"));
+                                      _("Choose the QIF file currency"));
         gtk_widget_hide (wind->book_option_label);
         gtk_widget_hide (wind->book_option_message);
     }

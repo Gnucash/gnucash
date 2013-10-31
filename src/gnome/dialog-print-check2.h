@@ -29,6 +29,6 @@
 typedef struct _print_check_dialog PrintCheckDialog;
 
 void gnc_ui_print_check_dialog_create2 (GncPluginPageRegister2 *plugin_page,
-                                      GList *splits);
+                                        GList *splits);
 
 #endif

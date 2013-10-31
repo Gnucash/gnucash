@@ -852,7 +852,7 @@ gnc_reconcile_window_set_sensitivity(RecnWindow *recnData)
 
 static void
 gnc_reconcile_window_toggled_cb(GNCReconcileView *view, Split *split,
-                             gpointer data)
+                                gpointer data)
 {
     RecnWindow *recnData = data;
     gnc_reconcile_window_set_sensitivity(recnData);
@@ -862,7 +862,7 @@ gnc_reconcile_window_toggled_cb(GNCReconcileView *view, Split *split,
 
 static void
 gnc_reconcile_window_row_cb(GNCReconcileView *view, gpointer item,
-                             gpointer data)
+                            gpointer data)
 {
     RecnWindow *recnData = data;
     gnc_reconcile_window_set_sensitivity(recnData);
@@ -951,9 +951,9 @@ gnc_reconcile_window_button_press_cb (GtkWidget *widget,
 
         /* Get tree path for row that was clicked */
         gtk_tree_view_get_path_at_pos(GTK_TREE_VIEW(qview),
-                                             (gint) event->x, 
-                                             (gint) event->y,
-                                             &path, NULL, NULL, NULL);
+                                      (gint) event->x,
+                                      (gint) event->y,
+                                      &path, NULL, NULL, NULL);
 
         selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(qview));
         gtk_tree_selection_select_path(selection, path);
@@ -1423,7 +1423,7 @@ gnc_get_reconcile_info (Account *account,
             if (was_last_day_of_month)
             {
                 g_date_set_day (&date, g_date_get_days_in_month(g_date_get_month(&date),
-                               g_date_get_year( &date)));
+                                g_date_get_year( &date)));
             }
         }
         else
@@ -1431,7 +1431,7 @@ gnc_get_reconcile_info (Account *account,
             g_date_add_days (&date, days);
         }
 
-	*statement_date = gnc_time64_get_day_end_gdate (&date);
+        *statement_date = gnc_time64_get_day_end_gdate (&date);
 
         today = gnc_time64_get_day_end (gnc_time (NULL));
         if (*statement_date > today)

@@ -1719,7 +1719,7 @@ csv_import_trans_assistant_create (CsvImportTrans *info)
         for (i = 0; i < SEP_NUM_OF_TYPES; i++)
         {
             info->sep_buttons[i]
-            = (GtkCheckButton*)GTK_WIDGET(gtk_builder_get_object (builder, sep_button_names[i]));
+                = (GtkCheckButton*)GTK_WIDGET(gtk_builder_get_object (builder, sep_button_names[i]));
             /* Connect them to the sep_button_clicked event handler. */
             g_signal_connect(G_OBJECT(info->sep_buttons[i]), "toggled",
                              G_CALLBACK(sep_button_clicked), (gpointer)info);
@@ -1728,7 +1728,7 @@ csv_import_trans_assistant_create (CsvImportTrans *info)
         /* Load and connect the custom separator checkbutton in the same way
          * as the other separator buttons. */
         info->custom_cbutton
-        = (GtkCheckButton*)GTK_WIDGET(gtk_builder_get_object (builder, "custom_cbutton"));
+            = (GtkCheckButton*)GTK_WIDGET(gtk_builder_get_object (builder, "custom_cbutton"));
         g_signal_connect(G_OBJECT(info->custom_cbutton), "clicked",
                          G_CALLBACK(sep_button_clicked), (gpointer)info);
 
@@ -1844,8 +1844,8 @@ gnc_file_csv_trans_import(void)
     csv_import_trans_assistant_create (info);
 
     gnc_register_gui_component (ASSISTANT_CSV_IMPORT_TRANS_CM_CLASS,
-				NULL, csv_import_trans_close_handler,
-				info);
+                                NULL, csv_import_trans_close_handler,
+                                info);
 
     gtk_widget_show_all (info->window);
 

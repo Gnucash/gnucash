@@ -49,19 +49,19 @@ typedef struct _GncCellRendererDateClass GncCellRendererDateClass;
 
 struct _GncCellRendererDate
 {
-	GncCellRendererPopup      parent;
-	GtkWidget                *calendar;
-	GtkWidget                *today_button;
+    GncCellRendererPopup      parent;
+    GtkWidget                *calendar;
+    GtkWidget                *today_button;
 
-	time64                    time;
-        gboolean                  use_buttons;
-	GtkWidget                *button_box;
+    time64                    time;
+    gboolean                  use_buttons;
+    GtkWidget                *button_box;
 
 };
 
 struct _GncCellRendererDateClass
 {
-	GncCellRendererPopupClass parent_class;
+    GncCellRendererPopupClass parent_class;
 };
 
 GType            gnc_cell_renderer_date_get_type (void) G_GNUC_CONST;

@@ -249,11 +249,11 @@ gnc_taxtable_get_property (GObject         *object,
         g_value_set_string(value, tt->name);
         break;
     case PROP_INVISIBLE:
-    	g_value_set_boolean(value, tt->invisible);
-    	break;
+        g_value_set_boolean(value, tt->invisible);
+        break;
     case PROP_REFCOUNT:
-    	g_value_set_uint64(value, tt->refcount);
-    	break;
+        g_value_set_uint64(value, tt->refcount);
+        break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
         break;
@@ -277,14 +277,14 @@ gnc_taxtable_set_property (GObject         *object,
         gncTaxTableSetName(tt, g_value_get_string(value));
         break;
     case PROP_INVISIBLE:
-    	if (g_value_get_boolean(value))
-    	{
+        if (g_value_get_boolean(value))
+        {
             gncTaxTableMakeInvisible(tt);
-    	}
-    	break;
+        }
+        break;
     case PROP_REFCOUNT:
-    	gncTaxTableSetRefcount(tt, g_value_get_uint64(value));
-    	break;
+        gncTaxTableSetRefcount(tt, g_value_get_uint64(value));
+        break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
         break;

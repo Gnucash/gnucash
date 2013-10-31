@@ -626,9 +626,9 @@ gnc_main_window_cmd_tools_find_transactions (GtkAction *action, GncMainWindowAct
 {
 
 #ifdef REGISTER2_ENABLED
-/*################## Added for Reg2 #################*/
+    /*################## Added for Reg2 #################*/
     gnc_ui_find_transactions_dialog_create2 (NULL);
-/*################## Added for Reg2 #################*/
+    /*################## Added for Reg2 #################*/
 #else
     gnc_ui_find_transactions_dialog_create (NULL);
 #endif

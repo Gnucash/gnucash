@@ -32,17 +32,19 @@
 #include <strings.h>
 #include <string.h>
 
-enum {
-  CHANGED,
-  LAST_SIGNAL
+enum
+{
+    CHANGED,
+    LAST_SIGNAL
 };
 
-enum {
-	PROP_0,
-        PROP_MODEL,
-        PROP_ACTIVE,
-        PROP_TEXT_COL,
-        PROP_TIP_COL,
+enum
+{
+    PROP_0,
+    PROP_MODEL,
+    PROP_ACTIVE,
+    PROP_TEXT_COL,
+    PROP_TIP_COL,
 };
 
 #define GNC_COMBOTT_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_COMBOTT, GncCombottPrivate))
@@ -69,7 +71,7 @@ typedef struct GncCombottPrivate
     gint           width;
     gint           height;
 
-}GncCombottPrivate;
+} GncCombottPrivate;
 
 /** Declarations *********************************************************/
 static void gctt_init (GncCombott *combott);
@@ -77,14 +79,14 @@ static void gctt_init (GncCombott *combott);
 static void gctt_class_init (GncCombottClass *class);
 
 static void gctt_set_property (GObject *object,
-			       guint param_id,
-			       const GValue *value,
-			       GParamSpec *pspec);
+                               guint param_id,
+                               const GValue *value,
+                               GParamSpec *pspec);
 
 static void gctt_get_property (GObject *object,
-			       guint param_id,
-			       GValue *value,
-			       GParamSpec *pspec);
+                               guint param_id,
+                               GValue *value,
+                               GParamSpec *pspec);
 
 static void gctt_finalize (GObject *object);
 
@@ -100,7 +102,7 @@ static void gctt_refresh_menu (GncCombott *combott, GtkTreeModel *model);
 static void gctt_rebuild_menu (GncCombott *combott, GtkTreeModel *model);
 
 static gboolean which_tooltip_cb (GtkWidget  *widget, gint x, gint y,
-				 gboolean keyboard_mode, GtkTooltip *tooltip, gpointer user_data);
+                                  gboolean keyboard_mode, GtkTooltip *tooltip, gpointer user_data);
 static gboolean button_press_cb (GtkWidget *widget, GdkEvent *event, gpointer *user_data );
 static void button_getsize_cb (GtkWidget *widget, GtkAllocation *allocation, gpointer *user_data);
 static void menu_getsize_cb (GtkWidget *widget, GtkAllocation *allocation, gpointer *user_data);
@@ -117,22 +119,24 @@ gnc_combott_get_type (void)
 {
     static GType combott_type = 0;
 
-    if (!combott_type) {
-	static const GTypeInfo combott_info = {
-		sizeof (GncCombottClass),
-		NULL,		/* base_init */
-		NULL,		/* base_finalize */
-		(GClassInitFunc) gctt_class_init,
-		NULL,		/* class_finalize */
-		NULL,		/* class_data */
-		sizeof (GncCombott),
-		0,              /* n_preallocs */
-		(GInstanceInitFunc) gctt_init,
-	};
+    if (!combott_type)
+    {
+        static const GTypeInfo combott_info =
+        {
+            sizeof (GncCombottClass),
+            NULL,		/* base_init */
+            NULL,		/* base_finalize */
+            (GClassInitFunc) gctt_class_init,
+            NULL,		/* class_finalize */
+            NULL,		/* class_data */
+            sizeof (GncCombott),
+            0,              /* n_preallocs */
+            (GInstanceInitFunc) gctt_init,
+        };
 
-	combott_type = g_type_register_static (GTK_TYPE_HBOX,
-						 "GncCombott",
-						 &combott_info, 0);
+        combott_type = g_type_register_static (GTK_TYPE_HBOX,
+                                               "GncCombott",
+                                               &combott_info, 0);
     }
     return combott_type;
 }
@@ -153,44 +157,44 @@ gctt_class_init (GncCombottClass *class)
     class->changed = gctt_changed;
 
     combott_signals[CHANGED] =
-    g_signal_new ("changed",
-                  G_OBJECT_CLASS_TYPE (class),
-                  G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET (GncCombottClass, changed),
-                  NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
-                  G_TYPE_NONE, 0);
+        g_signal_new ("changed",
+                      G_OBJECT_CLASS_TYPE (class),
+                      G_SIGNAL_RUN_LAST,
+                      G_STRUCT_OFFSET (GncCombottClass, changed),
+                      NULL, NULL,
+                      g_cclosure_marshal_VOID__VOID,
+                      G_TYPE_NONE, 0);
 
     g_object_class_install_property (
-	 	 gobject_class,
-                 PROP_MODEL,
-                 g_param_spec_object ("model",
-				       "Combott model",
-				       "The model for the combo tooltip",
-				       GTK_TYPE_TREE_MODEL,
-				       G_PARAM_READWRITE));
+        gobject_class,
+        PROP_MODEL,
+        g_param_spec_object ("model",
+                             "Combott model",
+                             "The model for the combo tooltip",
+                             GTK_TYPE_TREE_MODEL,
+                             G_PARAM_READWRITE));
 
     g_object_class_install_property (
-	 	 gobject_class,
-                 PROP_TEXT_COL,
-                 g_param_spec_int ("text-col",
-				       "text column",
-				       "Column for the text",
-                                       0,
-                                       G_MAXINT,
-                                       0,
-                                       G_PARAM_READWRITE));
+        gobject_class,
+        PROP_TEXT_COL,
+        g_param_spec_int ("text-col",
+                          "text column",
+                          "Column for the text",
+                          0,
+                          G_MAXINT,
+                          0,
+                          G_PARAM_READWRITE));
 
     g_object_class_install_property (
-	 	 gobject_class,
-                 PROP_TIP_COL,
-                 g_param_spec_int ("tip-col",
-				       "tip column",
-				       "Column for the tip",
-                                       0,
-                                       G_MAXINT,
-                                       1,
-                                       G_PARAM_READWRITE));
+        gobject_class,
+        PROP_TIP_COL,
+        g_param_spec_int ("tip-col",
+                          "tip column",
+                          "Column for the tip",
+                          0,
+                          G_MAXINT,
+                          1,
+                          G_PARAM_READWRITE));
 
     g_type_class_add_private(class, sizeof(GncCombottPrivate));
 }
@@ -230,15 +234,15 @@ gctt_init (GncCombott *combott)
     gtk_container_add(GTK_CONTAINER(combott), GTK_WIDGET(button));
 
     g_signal_connect (button, "event",
-	                 G_CALLBACK (button_press_cb), combott);
+                      G_CALLBACK (button_press_cb), combott);
 
     gtk_widget_set_has_tooltip (GTK_WIDGET(combott), TRUE);
 
     g_signal_connect(G_OBJECT(combott), "query-tooltip",
-                         G_CALLBACK(which_tooltip_cb), combott);
+                     G_CALLBACK(which_tooltip_cb), combott);
 
     g_signal_connect(G_OBJECT(combott), "size-allocate",
-			 G_CALLBACK(button_getsize_cb), combott);
+                     G_CALLBACK(button_getsize_cb), combott);
 
     gtk_widget_show(GTK_WIDGET(priv->button));
 }
@@ -246,34 +250,35 @@ gctt_init (GncCombott *combott)
 
 static void
 gctt_set_property (GObject      *object,
-		   guint         param_id,
-		   const GValue *value,
-		   GParamSpec   *pspec)
+                   guint         param_id,
+                   const GValue *value,
+                   GParamSpec   *pspec)
 {
     GncCombott *combott = GNC_COMBOTT (object);
     GncCombottPrivate *priv = GNC_COMBOTT_GET_PRIVATE (combott);
-	
-    switch (param_id) {
+
+    switch (param_id)
+    {
     case PROP_MODEL:
-         gctt_set_model (combott, g_value_get_object (value));
-	 break;
+        gctt_set_model (combott, g_value_get_object (value));
+        break;
 
     case PROP_ACTIVE:
-         gnc_combott_set_active (combott, g_value_get_int (value));
-         break;
+        gnc_combott_set_active (combott, g_value_get_int (value));
+        break;
 
     case PROP_TEXT_COL:
-         priv->text_col = g_value_get_int (value);
-         break;
+        priv->text_col = g_value_get_int (value);
+        break;
 
     case PROP_TIP_COL:
-         priv->tip_col = g_value_get_int (value);
-         gctt_refresh_menu(combott, priv->model);
-         break;
+        priv->tip_col = g_value_get_int (value);
+        gctt_refresh_menu(combott, priv->model);
+        break;
 
     default:
-	 G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
-	 break;
+        G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
+        break;
     }
 }
 
@@ -285,33 +290,34 @@ gctt_set_property (GObject      *object,
  */
 static void
 gctt_get_property (GObject    *object,
-		   guint       param_id,
-		   GValue     *value,
-		   GParamSpec *pspec)
+                   guint       param_id,
+                   GValue     *value,
+                   GParamSpec *pspec)
 {
     GncCombott *combott = GNC_COMBOTT (object);
     GncCombottPrivate *priv = GNC_COMBOTT_GET_PRIVATE (combott);
-	
-    switch (param_id) {
+
+    switch (param_id)
+    {
     case PROP_MODEL:
-	 g_value_take_object (value, priv->model);
-	 break;
+        g_value_take_object (value, priv->model);
+        break;
 
     case PROP_ACTIVE:
-         g_value_set_int (value, gnc_combott_get_active (combott));
-         break;
+        g_value_set_int (value, gnc_combott_get_active (combott));
+        break;
 
     case PROP_TEXT_COL:
-         g_value_set_int (value, priv->text_col);
-         break;
+        g_value_set_int (value, priv->text_col);
+        break;
 
     case PROP_TIP_COL:
-         g_value_set_int (value, priv->tip_col);
-         break;
+        g_value_set_int (value, priv->tip_col);
+        break;
 
     default:
-	 G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
-	 break;
+        G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
+        break;
     }
 }
 
@@ -387,9 +393,9 @@ gctt_rebuild_menu (GncCombott *combott, GtkTreeModel *model)
         gchar *str_data;
         gchar *tip_data;
         gtk_tree_model_get (model, &iter,
-                          priv->text_col, &str_data,
-                          priv->tip_col, &tip_data,
-                         -1);
+                            priv->text_col, &str_data,
+                            priv->tip_col, &tip_data,
+                            -1);
 
         /* Create a new menu-item with a name... */
         menu_items = gtk_menu_item_new_with_label (str_data);
@@ -406,8 +412,8 @@ gctt_rebuild_menu (GncCombott *combott, GtkTreeModel *model)
         /* ...and add it to the menu. */
         gtk_menu_shell_append (GTK_MENU_SHELL (priv->menu), menu_items);
         g_signal_connect (menu_items, "activate",
-		                      G_CALLBACK (menuitem_response_cb),
-                                      combott);
+                          G_CALLBACK (menuitem_response_cb),
+                          combott);
 
         /* Show the widget */
         gtk_widget_show (menu_items);
@@ -416,7 +422,7 @@ gctt_rebuild_menu (GncCombott *combott, GtkTreeModel *model)
         g_free (tip_data);
         items++;
         valid = gtk_tree_model_iter_next (model, &iter);
-        }
+    }
 
     g_signal_connect(G_OBJECT(priv->menu), "size-allocate", G_CALLBACK(menu_getsize_cb), combott);
 
@@ -445,25 +451,25 @@ gctt_refresh_menu (GncCombott *combott, GtkTreeModel *model)
 static void
 gctt_changed(GncCombott *combott)
 {
-/*
-g_print("Changed Signal\n");
-*/
+    /*
+    g_print("Changed Signal\n");
+    */
 }
 
 
 static void
 gctt_combott_menu_position (GtkMenu  *menu,
-			   gint     *x,
-			   gint     *y,
-			   gint     *push_in,
-			   gpointer  user_data)
+                            gint     *x,
+                            gint     *y,
+                            gint     *push_in,
+                            gpointer  user_data)
 {
     GncCombott *combott = GNC_COMBOTT (user_data);
     GncCombottPrivate *priv = GNC_COMBOTT_GET_PRIVATE (combott);
     gint sx, sy;
     GtkWidget *child;
     GtkRequisition req;
- 
+
     child = GTK_BIN (priv->button)->child;
 
     sx = sy = 0;
@@ -490,7 +496,7 @@ gctt_combott_menu_position (GtkMenu  *menu,
     else
         *y = sy - ((req.height / priv->num_items) * (priv->active - 1));
 
-   *push_in = FALSE;
+    *push_in = FALSE;
 }
 
 
@@ -519,7 +525,7 @@ menu_getsize_cb (GtkWidget *widget, GtkAllocation *allocation, gpointer *user_da
 
 
 static gboolean
-which_tooltip_cb (GtkWidget  *widget, gint x, gint y, gboolean keyboard_mode, GtkTooltip *tooltip, gpointer user_data) 
+which_tooltip_cb (GtkWidget  *widget, gint x, gint y, gboolean keyboard_mode, GtkTooltip *tooltip, gpointer user_data)
 {
     gchar *text = "";
 
@@ -542,7 +548,7 @@ which_tooltip_cb (GtkWidget  *widget, gint x, gint y, gboolean keyboard_mode, Gt
             return FALSE;
         }
     }
-   return FALSE;
+    return FALSE;
 }
 
 
@@ -554,13 +560,14 @@ button_press_cb (GtkWidget *widget, GdkEvent *event, gpointer *user_data )
 
     if(priv->model != NULL)
     {
-        if (event->type == GDK_BUTTON_PRESS) {
+        if (event->type == GDK_BUTTON_PRESS)
+        {
             GdkEventButton *bevent = (GdkEventButton *) event;
 
             gtk_menu_popup (GTK_MENU (priv->menu),
-		  NULL, NULL,
-		  gctt_combott_menu_position, combott,
-		  bevent->button, bevent->time);
+                            NULL, NULL,
+                            gctt_combott_menu_position, combott,
+                            bevent->button, bevent->time);
 
             /* Tell calling code that we have handled this event; the buck
              * stops here. */
@@ -598,9 +605,9 @@ menuitem_response_cb (GtkMenuItem *item, gpointer *user_data )
         gchar *str_data;
         gchar *tip_data;
         gtk_tree_model_get (priv->model, &iter,
-                          priv->text_col, &str_data,
-                          priv->tip_col, &tip_data,
-                         -1);
+                            priv->text_col, &str_data,
+                            priv->tip_col, &tip_data,
+                            -1);
         if(!g_strcmp0(str_data, label_text))
         {
             active_now = active;
@@ -688,9 +695,9 @@ gnc_combott_set_active (GncCombott *combott, gint index)
                     /* Make sure you terminate calls to gtk_tree_model_get()
                      * with a '-1' value */
                     gtk_tree_model_get (priv->model, &iter,
-                                  priv->text_col, &str_data,
-                                  priv->tip_col, &tip_data,
-                                 -1);
+                                        priv->text_col, &str_data,
+                                        priv->tip_col, &tip_data,
+                                        -1);
 
                     if(index + 1 == active)
                     {

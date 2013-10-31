@@ -369,7 +369,8 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void * transaction_u
     {
         /* The hopeful case: We have a posted_date */
         xaccTransSetDatePostedSecsNormalized(transaction, data.date_posted);
-    } else if (data.date_initiated_valid && (data.date_initiated != 0))
+    }
+    else if (data.date_initiated_valid && (data.date_initiated != 0))
     {
         /* No posted date? Maybe we have an initiated_date */
         xaccTransSetDatePostedSecsNormalized(transaction, data.date_initiated);
@@ -535,13 +536,13 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void * transaction_u
 
                 investment_account_onlineid = g_strdup_printf( "%s%s", data.account_id, data.unique_id);
                 investment_account = gnc_import_select_account(NULL,
-                                                               investment_account_onlineid,
-                                                               1,
-                                                               investment_account_text,
-                                                               investment_commodity,
-                                                               ACCT_TYPE_STOCK,
-                                                               NULL,
-                                                               NULL);
+                                     investment_account_onlineid,
+                                     1,
+                                     investment_account_text,
+                                     investment_commodity,
+                                     ACCT_TYPE_STOCK,
+                                     NULL,
+                                     NULL);
 
                 // but use it only if that's really the right commodity
                 if (investment_account
@@ -654,7 +655,7 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void * transaction_u
                     else if (data.reference_number_valid)
                     {
                         gnc_set_num_action(transaction, split,
-                                                data.reference_number, NULL);
+                                           data.reference_number, NULL);
                     }
                     if (data.security_data_ptr->memo_valid)
                     {

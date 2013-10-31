@@ -97,7 +97,7 @@ static void gnc_tree_view_select_column_cb (GtkTreeViewColumn *column,
 static gchar *gnc_tree_view_get_sort_order (GncTreeView *view);
 static gchar *gnc_tree_view_get_sort_column (GncTreeView *view);
 static gchar **gnc_tree_view_get_column_order (GncTreeView *view,
-                                                     gsize *length);
+        gsize *length);
 
 /** Private Data Structure ***********************************************/
 
@@ -385,7 +385,7 @@ gnc_tree_view_destroy (GtkObject *object)
 
             key = g_strjoin ("_", name, STATE_KEY_SUFF_WIDTH, NULL);
             if (gtk_tree_view_column_get_fixed_width (column)
-                   != gtk_tree_view_column_get_width (column))
+                    != gtk_tree_view_column_get_width (column))
             {
                 g_key_file_set_integer (state_file, priv->state_section, key,
                                         gtk_tree_view_column_get_width (column));
@@ -1051,68 +1051,68 @@ gnc_tree_view_set_state_section (GncTreeView *view,
     {
         gsize num_keys, idx;
         gchar **keys = g_key_file_get_keys (state_file, priv->state_section, &num_keys, NULL);
-            for (idx = 0; idx < num_keys; idx++)
+        for (idx = 0; idx < num_keys; idx++)
+        {
+            gchar *key = keys[idx];
+            if (g_strcmp0 (key, STATE_KEY_SORT_COLUMN) == 0)
             {
-                gchar *key = keys[idx];
-                if (g_strcmp0 (key, STATE_KEY_SORT_COLUMN) == 0)
-                {
-                    gnc_tree_view_set_sort_column (view,
-                            g_key_file_get_string (state_file, priv->state_section, key, NULL));
-                }
-                else if (g_strcmp0 (key, STATE_KEY_SORT_ORDER) == 0)
-                {
-                    gnc_tree_view_set_sort_order (view,
-                            g_key_file_get_string (state_file, priv->state_section, key, NULL));
-                }
-                else if (g_strcmp0 (key, STATE_KEY_COLUMN_ORDER) == 0)
-                {
-                    gsize length;
-                    gchar **columns = g_key_file_get_string_list (state_file, priv->state_section,
-                                                                  key, &length, NULL);
-                    gnc_tree_view_set_column_order (view, columns, length);
-                    g_strfreev (columns);
-                }
-                else
-                {
-                    /* Make a copy of the local part of the key so it can be split
-                     * into column name and key type */
-                    gboolean known = FALSE;
-                    gchar *column_name = g_strdup (key);
-                    gchar *type_name = g_strrstr (column_name, "_");
-                    *type_name++ = '\0';
-
-                    if (g_strcmp0 (type_name, STATE_KEY_SUFF_VISIBLE) == 0)
-                    {
-                        GtkTreeViewColumn *column = gnc_tree_view_find_column_by_name (view, column_name);
-                        if (column)
-                        {
-                            known = TRUE;
-                            if (!g_object_get_data (G_OBJECT (column), ALWAYS_VISIBLE))
-                            {
-                                gtk_tree_view_column_set_visible (column,
-                                        g_key_file_get_boolean (state_file, priv->state_section, key, NULL));
-                            }
-                        }
-                    }
-                    else if (g_strcmp0 (type_name, STATE_KEY_SUFF_WIDTH) == 0)
-                    {
-                        gint width = g_key_file_get_integer (state_file, priv->state_section, key, NULL);
-                        GtkTreeViewColumn *column = gnc_tree_view_find_column_by_name (view, column_name);
-                        if (column)
-                        {
-                            known = TRUE;
-                            if (width && (width != gtk_tree_view_column_get_width (column)))
-                            {
-                                gtk_tree_view_column_set_fixed_width (column, width);
-                            }
-                        }
-                    }
-                    if (!known)
-                        DEBUG ("Ignored key %s", key);
-
-                    g_free (column_name);
-                }
+                gnc_tree_view_set_sort_column (view,
+                                               g_key_file_get_string (state_file, priv->state_section, key, NULL));
             }
+            else if (g_strcmp0 (key, STATE_KEY_SORT_ORDER) == 0)
+            {
+                gnc_tree_view_set_sort_order (view,
+                                              g_key_file_get_string (state_file, priv->state_section, key, NULL));
+            }
+            else if (g_strcmp0 (key, STATE_KEY_COLUMN_ORDER) == 0)
+            {
+                gsize length;
+                gchar **columns = g_key_file_get_string_list (state_file, priv->state_section,
+                                  key, &length, NULL);
+                gnc_tree_view_set_column_order (view, columns, length);
+                g_strfreev (columns);
+            }
+            else
+            {
+                /* Make a copy of the local part of the key so it can be split
+                 * into column name and key type */
+                gboolean known = FALSE;
+                gchar *column_name = g_strdup (key);
+                gchar *type_name = g_strrstr (column_name, "_");
+                *type_name++ = '\0';
+
+                if (g_strcmp0 (type_name, STATE_KEY_SUFF_VISIBLE) == 0)
+                {
+                    GtkTreeViewColumn *column = gnc_tree_view_find_column_by_name (view, column_name);
+                    if (column)
+                    {
+                        known = TRUE;
+                        if (!g_object_get_data (G_OBJECT (column), ALWAYS_VISIBLE))
+                        {
+                            gtk_tree_view_column_set_visible (column,
+                                                              g_key_file_get_boolean (state_file, priv->state_section, key, NULL));
+                        }
+                    }
+                }
+                else if (g_strcmp0 (type_name, STATE_KEY_SUFF_WIDTH) == 0)
+                {
+                    gint width = g_key_file_get_integer (state_file, priv->state_section, key, NULL);
+                    GtkTreeViewColumn *column = gnc_tree_view_find_column_by_name (view, column_name);
+                    if (column)
+                    {
+                        known = TRUE;
+                        if (width && (width != gtk_tree_view_column_get_width (column)))
+                        {
+                            gtk_tree_view_column_set_fixed_width (column, width);
+                        }
+                    }
+                }
+                if (!known)
+                    DEBUG ("Ignored key %s", key);
+
+                g_free (column_name);
+            }
+        }
     }
 
     /* Rebuild the column visibility menu */
@@ -1645,9 +1645,9 @@ gnc_tree_view_column_properties (GncTreeView *view,
         if (column_sort_fn)
         {
             gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE(s_model),
-                                         data_column, column_sort_fn,
-                                         GINT_TO_POINTER(data_column),
-                                         NULL /* destroy fn */);
+                                             data_column, column_sort_fn,
+                                             GINT_TO_POINTER(data_column),
+                                             NULL /* destroy fn */);
         }
     }
 
@@ -1659,9 +1659,9 @@ gnc_tree_view_column_properties (GncTreeView *view,
         if (column_sort_fn)
         {
             gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE(priv->sort_model),
-                                         data_column, column_sort_fn,
-                                         view,
-                                         NULL /* destroy fn */);
+                                             data_column, column_sort_fn,
+                                             view,
+                                             NULL /* destroy fn */);
         }
     }
 
@@ -1804,58 +1804,59 @@ gnc_tree_view_add_text_column (GncTreeView *view,
  */
 GtkTreeViewColumn *
 gnc_tree_view_add_date_column (GncTreeView *view,
-                                   const gchar *column_title,
-                                   const gchar *pref_name,
-                                   const gchar *stock_icon_name,
-                                   const gchar *sizing_text,
-                                   gint model_data_column,
-                                   gint model_visibility_column,
-                                   GtkTreeIterCompareFunc column_sort_fn)
+                               const gchar *column_title,
+                               const gchar *pref_name,
+                               const gchar *stock_icon_name,
+                               const gchar *sizing_text,
+                               gint model_data_column,
+                               gint model_visibility_column,
+                               GtkTreeIterCompareFunc column_sort_fn)
 {
-  GtkTreeViewColumn *column;
-  GtkCellRenderer *renderer;
-  PangoLayout* layout;
-  int default_width, title_width;
+    GtkTreeViewColumn *column;
+    GtkCellRenderer *renderer;
+    PangoLayout* layout;
+    int default_width, title_width;
 
-  g_return_val_if_fail (GNC_IS_TREE_VIEW(view), NULL);
+    g_return_val_if_fail (GNC_IS_TREE_VIEW(view), NULL);
 
-  column = gtk_tree_view_column_new ();
-  gtk_tree_view_column_set_title (column, column_title);
+    column = gtk_tree_view_column_new ();
+    gtk_tree_view_column_set_title (column, column_title);
 
-  /* Set up an icon renderer if requested */
-  if (stock_icon_name) {
-    renderer = gtk_cell_renderer_pixbuf_new ();
-    g_object_set (renderer, "stock-id", stock_icon_name, NULL);
-    gtk_tree_view_column_pack_start (column, renderer, FALSE);
-  }
+    /* Set up an icon renderer if requested */
+    if (stock_icon_name)
+    {
+        renderer = gtk_cell_renderer_pixbuf_new ();
+        g_object_set (renderer, "stock-id", stock_icon_name, NULL);
+        gtk_tree_view_column_pack_start (column, renderer, FALSE);
+    }
 
-  /* Set up a text renderer and attributes */
-  renderer = gnc_cell_renderer_date_new(TRUE);
-  gtk_tree_view_column_pack_start (column, renderer, TRUE);
+    /* Set up a text renderer and attributes */
+    renderer = gnc_cell_renderer_date_new(TRUE);
+    gtk_tree_view_column_pack_start (column, renderer, TRUE);
 
-  /* Set renderer attributes controlled by the model */
-  if (model_data_column != GNC_TREE_VIEW_COLUMN_DATA_NONE)
-    gtk_tree_view_column_add_attribute (column, renderer,
-					"text", model_data_column);
-  if (model_visibility_column != GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS)
-    gtk_tree_view_column_add_attribute (column, renderer,
-					"visible", model_visibility_column);
+    /* Set renderer attributes controlled by the model */
+    if (model_data_column != GNC_TREE_VIEW_COLUMN_DATA_NONE)
+        gtk_tree_view_column_add_attribute (column, renderer,
+                                            "text", model_data_column);
+    if (model_visibility_column != GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS)
+        gtk_tree_view_column_add_attribute (column, renderer,
+                                            "visible", model_visibility_column);
 
-  /* Default size is the larger of the column title and the sizing text */
-  layout = gtk_widget_create_pango_layout (GTK_WIDGET(view), column_title);
-  pango_layout_get_pixel_size(layout, &title_width, NULL);
-  g_object_unref(layout);
-  layout = gtk_widget_create_pango_layout (GTK_WIDGET(view), sizing_text);
-  pango_layout_get_pixel_size(layout, &default_width, NULL);
-  g_object_unref(layout);
-  default_width = MAX(default_width, title_width);
-  if (default_width)
-    default_width += 10; /* padding on either side */
-  gnc_tree_view_column_properties (view, column, pref_name, model_data_column,
-				   default_width, TRUE, column_sort_fn);
+    /* Default size is the larger of the column title and the sizing text */
+    layout = gtk_widget_create_pango_layout (GTK_WIDGET(view), column_title);
+    pango_layout_get_pixel_size(layout, &title_width, NULL);
+    g_object_unref(layout);
+    layout = gtk_widget_create_pango_layout (GTK_WIDGET(view), sizing_text);
+    pango_layout_get_pixel_size(layout, &default_width, NULL);
+    g_object_unref(layout);
+    default_width = MAX(default_width, title_width);
+    if (default_width)
+        default_width += 10; /* padding on either side */
+    gnc_tree_view_column_properties (view, column, pref_name, model_data_column,
+                                     default_width, TRUE, column_sort_fn);
 
-  gnc_tree_view_append_column (view, column);
-  return column;
+    gnc_tree_view_append_column (view, column);
+    return column;
 }
 
 
