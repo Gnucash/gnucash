@@ -19,6 +19,7 @@ src/app-utils/gnc-helpers.c
 src/app-utils/gnc-help-utils.c
 src/app-utils/gncmod-app-utils.c
 src/app-utils/gnc-prefs-utils.c
+src/app-utils/gnc-state.c
 src/app-utils/gnc-sx-instance-model.c
 src/app-utils/gnc-ui-balances.c
 src/app-utils/gnc-ui-util.c
@@ -339,6 +340,7 @@ src/gnome-utils/gtkbuilder/gnc-tree-view-owner.glade
 src/gnome-utils/misc-gnome-utils.c
 src/gnome-utils/print-session.c
 src/gnome-utils/search-param.c
+src/gnome-utils/tree-view-utils.c
 src/gnome-utils/window-main-summarybar.c
 src/gnome/window-autoclear.c
 src/gnome/window-reconcile2.c
