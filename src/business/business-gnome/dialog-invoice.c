@@ -3143,6 +3143,8 @@ gnc_invoice_show_bills_due (QofBook *book, double days_in_advance)
     /* Create the param list (in reverse order) */
     if (param_list == NULL)
     {
+        param_list = gnc_search_param_prepend (param_list, _("CN?"), NULL, type,
+                                               INVOICE_IS_CN, NULL);
         param_list = gnc_search_param_prepend (param_list, _("Amount"), NULL, type,
                                                INVOICE_POST_LOT, LOT_BALANCE, NULL);
         param_list = gnc_search_param_prepend (param_list, _("Company"), NULL, type,
@@ -3161,7 +3163,7 @@ gnc_invoice_show_bills_due (QofBook *book, double days_in_advance)
      * AND  invoice -> lot -> is_closed? == FALSE
      * AND  invoice -> type != customer invoice
      * AND  invoice -> type != customer credit note
-     * AND  invoice -> due >= (today - days_in_advance)
+     * AND  invoice -> due <= (today + days_in_advance)
      */
 
     qof_query_add_boolean_match (q, g_slist_prepend(NULL, INVOICE_IS_POSTED), TRUE,
