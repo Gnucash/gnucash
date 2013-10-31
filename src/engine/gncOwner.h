@@ -264,7 +264,7 @@ void
 gncOwnerApplyPayment (const GncOwner *owner, Transaction *txn, GList *lots,
                       Account *posted_acc, Account *xfer_acc,
                       gnc_numeric amount, gnc_numeric exch, Timespec date,
-                      const char *memo, const char *num);
+                      const char *memo, const char *num, gboolean auto_pay);
 
 /** Returns a GList of account-types based on the owner type */
 GList * gncOwnerGetAccountTypesList (const GncOwner *owner);

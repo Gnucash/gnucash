@@ -36,6 +36,7 @@
 #include "gnc-date-edit.h"
 #include "gnc-amount-edit.h"
 #include "gnc-gtk-utils.h"
+#include "gnc-prefs.h"
 #include "gnc-tree-view-account.h"
 #include "Transaction.h"
 #include "Account.h"
@@ -595,6 +596,7 @@ gnc_payment_ok_cb (GtkWidget *widget, gpointer data)
         gnc_numeric exch = gnc_numeric_create(1, 1); //default to "one to one" rate
         GList *selected_lots = NULL;
         GtkTreeSelection *selection;
+        gboolean auto_pay;
 
         /* Obtain all our ancillary information */
         memo = gtk_entry_get_text (GTK_ENTRY (pw->memo_entry));
@@ -630,8 +632,13 @@ gnc_payment_ok_cb (GtkWidget *widget, gpointer data)
         }
 
         /* Perform the payment */
+        if (gncOwnerGetType (&(pw->owner)) == GNC_OWNER_CUSTOMER)
+            auto_pay = gnc_prefs_get_bool (GNC_PREFS_GROUP_INVOICE, GNC_PREF_AUTO_PAY);
+        else
+            auto_pay = gnc_prefs_get_bool (GNC_PREFS_GROUP_BILL, GNC_PREF_AUTO_PAY);
+
         gncOwnerApplyPayment (&pw->owner, pw->pre_existing_txn, selected_lots,
-                              post, acc, amount_tot, exch, date, memo, num);
+                              post, acc, amount_tot, exch, date, memo, num, auto_pay);
     }
     gnc_resume_gui_refresh ();
 

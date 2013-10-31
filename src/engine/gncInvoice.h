@@ -177,11 +177,24 @@ gboolean gncInvoiceAmountPositive (const GncInvoice *invoice);
  * that is tied to this invoice.   The transaction is set with
  * the supplied posted date, due date, and memo.  The Transaction
  * description is set to the name of the company.
+ *
+ * If accumulate splits is TRUE, entries in the same account
+ * will be merged into one single split in that account.
+ * Otherwise each entry will be posted as a separate split,
+ * possibly resulting in multiple splits in one account.
+ *
+ * If autopay is TRUE, the code will try to find pre-payments,
+ * invoices or credit notes that can reduce the amount due for this
+ * invoice, marking the invoice as fully or partially paid, depending
+ * on the amounts on all documents involved. If autopay is FALSE,
+ * it's the user's responsibility to explicitly pay the invoice.
+ *
  */
 Transaction *
 gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
                          Timespec *posted_date, Timespec *due_date,
-                         const char *memo, gboolean accumulatesplits);
+                         const char *memo, gboolean accumulatesplits,
+                         gboolean autopay);
 
 /**
  * Unpost this invoice.  This will destroy the posted transaction and

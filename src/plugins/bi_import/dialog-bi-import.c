@@ -46,6 +46,7 @@
 #include "gncVendorP.h"
 #include "gncVendor.h"
 #include "gncEntry.h"
+#include "gnc-prefs.h"
 
 #include "gnc-exp-parser.h"
 
@@ -61,6 +62,7 @@
 // To open the invoices for editing
 #include "business/business-gnome/gnc-plugin-page-invoice.h"
 #include "business/business-gnome/dialog-invoice.h"
+#include "business/business-gnome/business-gnome-utils.h"
 
 
 //#ifdef HAVE_GLIB_2_14
@@ -509,6 +511,9 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
 
     // these arguments are needed
     g_return_if_fail (store && book);
+    // logic of this function only works for bills or invoices
+    g_return_if_fail ((g_ascii_strcasecmp (type, "INVOICE") == 0) ||
+            (g_ascii_strcasecmp (type, "BILL") == 0));
 
     // allow to call this function without statistics
     if (!n_invoices_created)
@@ -727,7 +732,14 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
                 if (qof_scan_date (date_posted, &day, &month, &year))
                 {
                     // autopost this invoice
+                    gboolean auto_pay;
                     Timespec d1, d2;
+
+                    if (g_ascii_strcasecmp (type, "INVOICE") == 0)
+                        auto_pay = gnc_prefs_get_bool (GNC_PREFS_GROUP_INVOICE, GNC_PREF_AUTO_PAY);
+                    else
+                        auto_pay = gnc_prefs_get_bool (GNC_PREFS_GROUP_BILL, GNC_PREF_AUTO_PAY);
+
                     d1 = gnc_dmy2timespec (day, month, year);
                     // FIXME: Must check for the return value of qof_scan_date!
                     qof_scan_date (due_date, &day, &month, &year);	// obtains the due date, or leaves it at date_posted
@@ -736,7 +748,8 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
                           (gnc_get_current_root_account (), account_posted);
                     gncInvoicePostToAccount (invoice, acc, &d1, &d2,
                                              memo_posted,
-                                             text2bool (accumulatesplits));
+                                             text2bool (accumulatesplits),
+                                             auto_pay);
                 }
             }
             g_free (new_id);

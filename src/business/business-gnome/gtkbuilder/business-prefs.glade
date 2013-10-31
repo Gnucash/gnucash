@@ -2,6 +2,26 @@
 <interface>
   <requires lib="gtk+" version="2.16"/>
   <!-- interface-naming-policy project-wide -->
+  <object class="GtkListStore" id="liststore_printinvoice">
+    <columns>
+      <!-- column-name item -->
+      <column type="gchararray"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0" translatable="yes">Printable Invoice</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Tax Invoice</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Easy Invoice</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Fancy Invoice</col>
+      </row>
+    </data>
+  </object>
   <object class="GtkWindow" id="Preferences">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -11,9 +31,42 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="border_width">6</property>
-        <property name="n_rows">10</property>
+        <property name="n_rows">14</property>
         <property name="n_columns">4</property>
         <property name="column_spacing">12</property>
+        <child>
+          <placeholder/>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
         <child>
           <object class="GtkLabel" id="label53">
             <property name="visible">True</property>
@@ -21,10 +74,11 @@
             <property name="xalign">0</property>
           </object>
           <packing>
-            <property name="top_attach">2</property>
-            <property name="bottom_attach">3</property>
+            <property name="right_attach">4</property>
+            <property name="top_attach">4</property>
+            <property name="bottom_attach">5</property>
             <property name="x_options">GTK_FILL</property>
-            <property name="y_options"></property>
+            <property name="y_options"/>
           </packing>
         </child>
         <child>
@@ -37,10 +91,10 @@
           </object>
           <packing>
             <property name="right_attach">2</property>
-            <property name="top_attach">4</property>
-            <property name="bottom_attach">5</property>
+            <property name="top_attach">5</property>
+            <property name="bottom_attach">6</property>
             <property name="x_options">GTK_FILL</property>
-            <property name="y_options"></property>
+            <property name="y_options"/>
           </packing>
         </child>
         <child>
@@ -52,15 +106,14 @@
             <property name="has_tooltip">True</property>
             <property name="tooltip_markup">Whether tax is included by default in entries on Bills. This setting is inherited by new customers and vendors.</property>
             <property name="tooltip_text" translatable="yes">Whether tax is included by default in entries on Bills. This setting is inherited by new customers and vendors.</property>
-            <property name="use_action_appearance">False</property>
             <property name="use_underline">True</property>
             <property name="draw_indicator">True</property>
           </object>
           <packing>
-            <property name="top_attach">9</property>
-            <property name="bottom_attach">10</property>
+            <property name="top_attach">12</property>
+            <property name="bottom_attach">13</property>
             <property name="x_options">GTK_FILL</property>
-            <property name="y_options"></property>
+            <property name="y_options"/>
             <property name="x_padding">12</property>
           </packing>
         </child>
@@ -71,7 +124,7 @@
             <property name="has_tooltip">True</property>
             <property name="tooltip_markup">How many days in the future to warn about Bills coming due.</property>
             <property name="tooltip_text" translatable="yes">How many days in the future to warn about Bills coming due.</property>
-            <property name="invisible_char">&#x25CF;</property>
+            <property name="invisible_char">●</property>
             <property name="invisible_char_set">True</property>
             <property name="primary_icon_activatable">False</property>
             <property name="secondary_icon_activatable">False</property>
@@ -84,11 +137,14 @@
           <packing>
             <property name="left_attach">3</property>
             <property name="right_attach">4</property>
-            <property name="top_attach">8</property>
-            <property name="bottom_attach">9</property>
-            <property name="x_options"></property>
-            <property name="y_options"></property>
+            <property name="top_attach">11</property>
+            <property name="bottom_attach">12</property>
+            <property name="x_options"/>
+            <property name="y_options"/>
           </packing>
+        </child>
+        <child>
+          <placeholder/>
         </child>
         <child>
           <object class="GtkLabel" id="label15">
@@ -102,10 +158,10 @@
           <packing>
             <property name="left_attach">2</property>
             <property name="right_attach">3</property>
-            <property name="top_attach">8</property>
-            <property name="bottom_attach">9</property>
+            <property name="top_attach">11</property>
+            <property name="bottom_attach">12</property>
             <property name="x_options">GTK_FILL</property>
-            <property name="y_options"></property>
+            <property name="y_options"/>
           </packing>
         </child>
         <child>
@@ -117,16 +173,15 @@
             <property name="has_tooltip">True</property>
             <property name="tooltip_markup">Whether to display the list of Bills Due at startup.</property>
             <property name="tooltip_text" translatable="yes">Whether to display the list of Bills Due at startup.</property>
-            <property name="use_action_appearance">False</property>
             <property name="use_underline">True</property>
             <property name="draw_indicator">True</property>
           </object>
           <packing>
             <property name="right_attach">2</property>
-            <property name="top_attach">8</property>
-            <property name="bottom_attach">9</property>
+            <property name="top_attach">11</property>
+            <property name="bottom_attach">12</property>
             <property name="x_options">GTK_FILL</property>
-            <property name="y_options"></property>
+            <property name="y_options"/>
             <property name="x_padding">12</property>
           </packing>
         </child>
@@ -140,10 +195,10 @@
           </object>
           <packing>
             <property name="right_attach">2</property>
-            <property name="top_attach">7</property>
-            <property name="bottom_attach">8</property>
+            <property name="top_attach">10</property>
+            <property name="bottom_attach">11</property>
             <property name="x_options">GTK_FILL</property>
-            <property name="y_options"></property>
+            <property name="y_options"/>
           </packing>
         </child>
         <child>
@@ -153,10 +208,11 @@
             <property name="xalign">0</property>
           </object>
           <packing>
-            <property name="top_attach">5</property>
-            <property name="bottom_attach">6</property>
+            <property name="right_attach">4</property>
+            <property name="top_attach">9</property>
+            <property name="bottom_attach">10</property>
             <property name="x_options">GTK_FILL</property>
-            <property name="y_options"></property>
+            <property name="y_options"/>
           </packing>
         </child>
         <child>
@@ -168,16 +224,15 @@
             <property name="has_tooltip">True</property>
             <property name="tooltip_markup">Whether tax is included by default in entries on Invoices. This setting is inherited by new customers and vendors.</property>
             <property name="tooltip_text" translatable="yes">Whether tax is included by default in entries on Invoices. This setting is inherited by new customers and vendors.</property>
-            <property name="use_action_appearance">False</property>
             <property name="use_underline">True</property>
             <property name="draw_indicator">True</property>
           </object>
           <packing>
             <property name="right_attach">2</property>
-            <property name="top_attach">5</property>
-            <property name="bottom_attach">6</property>
+            <property name="top_attach">7</property>
+            <property name="bottom_attach">8</property>
             <property name="x_options">GTK_FILL</property>
-            <property name="y_options"></property>
+            <property name="y_options"/>
             <property name="x_padding">12</property>
           </packing>
         </child>
@@ -190,7 +245,6 @@
             <property name="has_tooltip">True</property>
             <property name="tooltip_markup">Whether multiple entries in an invoice which transfer to the same account should be accumulated into a single split by default. This setting can be changed in the Post dialog.</property>
             <property name="tooltip_text" translatable="yes">Whether multiple entries in an invoice which transfer to the same account should be accumulated into a single split by default. This setting can be changed in the Post dialog.</property>
-            <property name="use_action_appearance">False</property>
             <property name="use_underline">True</property>
             <property name="draw_indicator">True</property>
           </object>
@@ -199,7 +253,7 @@
             <property name="top_attach">3</property>
             <property name="bottom_attach">4</property>
             <property name="x_options">GTK_FILL</property>
-            <property name="y_options"></property>
+            <property name="y_options"/>
             <property name="x_padding">12</property>
           </packing>
         </child>
@@ -212,7 +266,6 @@
             <property name="has_tooltip">True</property>
             <property name="tooltip_markup">If checked, each invoice will be opened in its own top level window. If clear, the invoice will be opened in the current window.</property>
             <property name="tooltip_text" translatable="yes">If checked, each invoice will be opened in its own top level window. If clear, the invoice will be opened in the current window.</property>
-            <property name="use_action_appearance">False</property>
             <property name="use_underline">True</property>
             <property name="draw_indicator">True</property>
           </object>
@@ -221,7 +274,7 @@
             <property name="top_attach">2</property>
             <property name="bottom_attach">3</property>
             <property name="x_options">GTK_FILL</property>
-            <property name="y_options"></property>
+            <property name="y_options"/>
             <property name="x_padding">12</property>
           </packing>
         </child>
@@ -236,7 +289,7 @@
           </object>
           <packing>
             <property name="x_options">GTK_FILL</property>
-            <property name="y_options"></property>
+            <property name="y_options"/>
           </packing>
         </child>
         <child>
@@ -248,7 +301,6 @@
             <property name="has_tooltip">True</property>
             <property name="tooltip_markup">If active, extra toolbar buttons for common business functions are shown as well. Otherwise they are not shown.</property>
             <property name="tooltip_text" translatable="yes">If active, extra toolbar buttons for common business functions are shown as well. Otherwise they are not shown.</property>
-            <property name="use_action_appearance">False</property>
             <property name="use_underline">True</property>
             <property name="draw_indicator">True</property>
           </object>
@@ -257,7 +309,7 @@
             <property name="top_attach">1</property>
             <property name="bottom_attach">2</property>
             <property name="x_options">GTK_FILL</property>
-            <property name="y_options"></property>
+            <property name="y_options"/>
             <property name="x_padding">12</property>
           </packing>
         </child>
@@ -282,13 +334,20 @@
             <property name="top_attach">6</property>
             <property name="bottom_attach">7</property>
             <property name="x_options">GTK_FILL</property>
-            <property name="y_options"></property>
+            <property name="y_options"/>
           </packing>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+        <child>
+          <placeholder/>
         </child>
         <child>
           <object class="GtkLabel" id="label2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="xalign">0</property>
             <property name="xpad">10</property>
             <property name="label" translatable="yes">Report for printing:</property>
           </object>
@@ -296,7 +355,7 @@
             <property name="top_attach">6</property>
             <property name="bottom_attach">7</property>
             <property name="x_options">GTK_FILL</property>
-            <property name="y_options"></property>
+            <property name="y_options"/>
           </packing>
         </child>
         <child>
@@ -324,7 +383,22 @@
           <placeholder/>
         </child>
         <child>
-          <placeholder/>
+          <object class="GtkCheckButton" id="pref/dialogs.business.invoice/auto-pay">
+            <property name="label" translatable="yes">Auto pay on post_ing</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">False</property>
+            <property name="tooltip_text" translatable="yes">At post time, automatically attempt to pay customer documents with oustanding pre-payments and counter documents. The pre-payments and documents obviously have to be against the same customer. Counder documents are documents with opposite sign. For example for an invoice, customer credit notes and negative invoices are considered counter documents.</property>
+            <property name="use_underline">True</property>
+            <property name="draw_indicator">True</property>
+          </object>
+          <packing>
+            <property name="top_attach">8</property>
+            <property name="bottom_attach">9</property>
+            <property name="x_options">GTK_FILL</property>
+            <property name="y_options"/>
+            <property name="x_padding">12</property>
+          </packing>
         </child>
         <child>
           <placeholder/>
@@ -336,25 +410,22 @@
           <placeholder/>
         </child>
         <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
+          <object class="GtkCheckButton" id="pref/dialogs.business.bill/auto-pay">
+            <property name="label" translatable="yes">Auto _pay on posting</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">False</property>
+            <property name="tooltip_text" translatable="yes">At post time, automatically attempt to pay vendor documents with oustanding pre-payments and counter documents. The pre-payments and documents obviously have to be against the same vendor. Counder documents are documents with opposite sign. For example for a bill, vendor credit notes and negative bills are considered counter documents.</property>
+            <property name="use_underline">True</property>
+            <property name="draw_indicator">True</property>
+          </object>
+          <packing>
+            <property name="top_attach">13</property>
+            <property name="bottom_attach">14</property>
+            <property name="x_options">GTK_FILL</property>
+            <property name="y_options"/>
+            <property name="x_padding">12</property>
+          </packing>
         </child>
       </object>
     </child>
@@ -365,25 +436,5 @@
     <property name="value">7</property>
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
-  </object>
-  <object class="GtkListStore" id="liststore_printinvoice">
-    <columns>
-      <!-- column-name item -->
-      <column type="gchararray"/>
-    </columns>
-    <data>
-      <row>
-        <col id="0" translatable="yes">Printable Invoice</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Tax Invoice</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Easy Invoice</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Fancy Invoice</col>
-      </row>
-    </data>
   </object>
 </interface>

@@ -37,6 +37,7 @@
 #include "dialog-payment.h"
 #include "dialog-tax-table.h"
 #include "dialog-vendor.h"
+#include "business-gnome-utils.h"
 #include "gnc-plugin-business.h"
 #include "gnc-plugin-page-invoice.h"
 #include "gnc-plugin-page-owner-tree.h"

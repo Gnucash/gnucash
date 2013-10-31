@@ -1260,7 +1260,8 @@ static gboolean gncInvoicePostAddSplit (QofBook *book,
 
 Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
                                        Timespec *post_date, Timespec *due_date,
-                                       const char * memo, gboolean accumulatesplits)
+                                       const char * memo, gboolean accumulatesplits,
+                                       gboolean autopay)
 {
     Transaction *txn;
     QofBook *book;
@@ -1274,7 +1275,6 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
     char *lot_title;
     Account *ccard_acct = NULL;
     const GncOwner *owner;
-    gboolean autopay = TRUE; /* FIXME this will have to become a user selectable option at some point */
 
     if (!invoice || !acc) return NULL;
 

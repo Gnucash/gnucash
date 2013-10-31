@@ -107,6 +107,11 @@
       <summary>Is tax included in this type of business entry?</summary>
       <description>If set to active then tax is included by default in entries of this type.  This setting is inherited by new customers and vendors.</description>
     </key>
+    <key name="auto-pay" type="b">
+      <default>false</default>
+      <summary>Auto pay when posting.</summary>
+      <description>At post time, automatically attempt to pay customer documents with oustanding pre-payments and counter documents. The pre-payments and documents obviously have to be against the same customer. Counder documents are documents with opposite sign. For example for an invoice, customer credit notes and negative invoices are considered counter documents.</description>
+    </key>
     <key name="enable-toolbuttons" type="b">
       <default>false</default>
       <summary>Enable extra toolbar buttons for business</summary>
@@ -133,6 +138,11 @@
       <default>true</default>
       <summary>Is tax included in this type of business entry?</summary>
       <description>If set to active then tax is included by default in entries of this type.  This setting is inherited by new customers and vendors.</description>
+    </key>
+    <key name="auto-pay" type="b">
+      <default>false</default>
+      <summary>Auto pay when posting.</summary>
+      <description>At post time, automatically attempt to pay vendor documents with oustanding pre-payments and counter documents. The pre-payments and documents obviously have to be against the same vendor. Counder documents are documents with opposite sign. For example for a bill, vendor credit notes and negative bills are considered counter documents.</description>
     </key>
     <key name="notify-when-due" type="b">
       <default>true</default>

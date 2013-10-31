@@ -81,7 +81,7 @@ test_invoice_post ( Fixture *fixture, gconstpointer pData )
 
     g_test_message( "Will now post the invoice" );
     g_assert(!gncInvoiceIsPosted(invoice));
-    gncInvoicePostToAccount(invoice, fixture->account, &ts1, &ts2, "memo", TRUE);
+    gncInvoicePostToAccount(invoice, fixture->account, &ts1, &ts2, "memo", TRUE, FALSE);
     g_assert(gncInvoiceIsPosted(invoice));
 
     gncInvoiceUnpost(invoice, TRUE);

@@ -763,8 +763,7 @@ gnc_invoice_post(InvoiceWindow *iw, struct post_invoice_params *post_params)
     const char *text;
     EntryList *entries, *entries_iter;
     GncEntry* entry;
-    gboolean is_cust_doc;
-    gboolean is_cn;
+    gboolean is_cust_doc, is_cn, auto_pay;
     gboolean show_dialog = TRUE;
     gboolean post_ok = TRUE;
 
@@ -931,7 +930,12 @@ gnc_invoice_post(InvoiceWindow *iw, struct post_invoice_params *post_params)
     qof_commit_edit (owner_inst);
 
     /* ... post it ... */
-    gncInvoicePostToAccount (invoice, acc, &postdate, &ddue, memo, accumulate);
+    if (is_cust_doc)
+        auto_pay = gnc_prefs_get_bool (GNC_PREFS_GROUP_INVOICE, GNC_PREF_AUTO_PAY);
+    else
+        auto_pay = gnc_prefs_get_bool (GNC_PREFS_GROUP_BILL, GNC_PREF_AUTO_PAY);
+
+    gncInvoicePostToAccount (invoice, acc, &postdate, &ddue, memo, accumulate, auto_pay);
 
 cleanup:
     gncInvoiceCommitEdit (invoice);

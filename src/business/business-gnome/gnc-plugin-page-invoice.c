@@ -27,6 +27,7 @@
 #include <glib/gi18n.h>
 
 #include "gnc-plugin.h"
+#include "business-gnome-utils.h"
 #include "dialog-invoice.h"
 #include "gnc-ledger-display.h"
 #include "gnc-plugin-page-invoice.h"

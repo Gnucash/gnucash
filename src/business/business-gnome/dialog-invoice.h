@@ -46,11 +46,6 @@ typedef enum
 } invoice_sort_type_t;
 
 
-#define GNC_PREFS_GROUP_INVOICE "dialogs.business.invoice"
-#define GNC_PREFS_GROUP_BILL    "dialogs.business.bill"
-#define GNC_PREFS_GROUP_VOUCHER "dialogs.business.voucher"
-
-
 /* Create and edit an invoice */
 InvoiceWindow * gnc_ui_invoice_edit (GncInvoice *invoice);
 InvoiceWindow * gnc_ui_invoice_new (GncOwner *owner, QofBook *book);
