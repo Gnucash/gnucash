@@ -918,11 +918,9 @@ const char * gncInvoiceGetTypeString (const GncInvoice *invoice)
     case GNC_INVOICE_EMPL_INVOICE:
         return _("Expense");
     case GNC_INVOICE_CUST_CREDIT_NOTE:
-        return _("Customer Credit Note");
     case GNC_INVOICE_VEND_CREDIT_NOTE:
-        return _("Vendor Credit Note");
     case GNC_INVOICE_EMPL_CREDIT_NOTE:
-        return _("Employee Credit Note");
+        return _("Credit Note");
     default:
         PWARN("Unknown invoice type");
         return NULL;

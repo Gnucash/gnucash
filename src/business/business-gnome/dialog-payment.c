@@ -33,11 +33,13 @@
 #include "gnc-gui-query.h"
 #include "gnc-ui-util.h"
 #include "qof.h"
+#include "gnc-date.h"
 #include "gnc-date-edit.h"
 #include "gnc-amount-edit.h"
 #include "gnc-gtk-utils.h"
 #include "gnc-prefs.h"
 #include "gnc-tree-view-account.h"
+#include "tree-view-utils.h"
 #include "Transaction.h"
 #include "Account.h"
 #include "gncOwner.h"
@@ -287,7 +289,7 @@ gnc_payment_window_fill_docs_list (PaymentWindow *pw)
     for (node = list; node; node = node->next)
     {
         GNCLot *lot = node->data;
-        const gchar *doc_date_str = NULL;
+        time64 doc_date_time = 0;
         const gchar *doc_type_str = NULL;
         const gchar *doc_id_str   = NULL;
         const gchar *doc_deb_str  = NULL;
@@ -315,7 +317,7 @@ gnc_payment_window_fill_docs_list (PaymentWindow *pw)
             else
                 continue; /* No valid split in this lot, skip it */
         }
-        doc_date_str = gnc_print_date (doc_date);
+        doc_date_time = timespecToTime64 (doc_date);
 
         /* Find the document type. No type means pre-payment in this case */
         if (document)
@@ -351,7 +353,7 @@ gnc_payment_window_fill_docs_list (PaymentWindow *pw)
 
         gtk_list_store_append (store, &iter);
         gtk_list_store_set (store, &iter,
-                            0, doc_date_str,
+                            0, doc_date_time,
                             1, doc_id_str,
                             2, doc_type_str,
                             3, doc_deb_str,
@@ -752,6 +754,27 @@ find_handler (gpointer find_data, gpointer user_data)
     return (pw != NULL);
 }
 
+static void print_date (GtkTreeViewColumn *tree_column,
+                        GtkCellRenderer *cell,
+                        GtkTreeModel *tree_model,
+                        GtkTreeIter *iter,
+                        gpointer data)
+{
+    GValue value = { 0 };
+    time64 doc_date_time;
+    gchar *doc_date_str;
+
+    g_return_if_fail (cell && iter && tree_model);
+
+
+    gtk_tree_model_get_value (tree_model, iter, 0, &value);
+    doc_date_time = (time64) g_value_get_int64 (&value);
+    g_value_unset (&value);
+    doc_date_str = qof_print_date (doc_date_time);
+    g_object_set (G_OBJECT (cell), "text", doc_date_str, NULL);
+    g_free (doc_date_str);
+}
+
 static PaymentWindow *
 new_payment_window (GncOwner *owner, QofBook *book, GncInvoice *invoice)
 {
@@ -759,6 +782,8 @@ new_payment_window (GncOwner *owner, QofBook *book, GncInvoice *invoice)
     GtkBuilder *builder;
     GtkWidget *box, *label, *credit_box, *debit_box;
     GtkTreeSelection *selection;
+    GtkTreeViewColumn *column;
+    GtkCellRenderer *renderer;
     char * cm_class = (gncOwnerGetType (owner) == GNC_OWNER_CUSTOMER ?
                        DIALOG_PAYMENT_CUSTOMER_CM_CLASS :
                        DIALOG_PAYMENT_VENDOR_CM_CLASS);
@@ -861,6 +886,41 @@ new_payment_window (GncOwner *owner, QofBook *book, GncInvoice *invoice)
     pw->docs_list_tree_view = GTK_WIDGET (gtk_builder_get_object (builder, "docs_list_tree_view"));
     selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(pw->docs_list_tree_view));
     gtk_tree_selection_set_mode (selection, GTK_SELECTION_MULTIPLE);
+
+    /* Configure date column */
+    renderer = gtk_cell_renderer_text_new ();
+    column = gtk_tree_view_get_column (GTK_TREE_VIEW (pw->docs_list_tree_view), 0);
+    gtk_tree_view_column_pack_start (column, renderer, TRUE);
+    tree_view_column_set_default_width (GTK_TREE_VIEW (pw->docs_list_tree_view),
+                                        column, "31-12-2013");
+    gtk_tree_view_column_set_cell_data_func (column, renderer,
+                                             (GtkTreeCellDataFunc) print_date,
+                                             NULL, NULL);
+
+    /* Configure document number column */
+    column = gtk_tree_view_get_column (GTK_TREE_VIEW (pw->docs_list_tree_view), 1);
+    tree_view_column_set_default_width (GTK_TREE_VIEW (pw->docs_list_tree_view),
+                                        column, "INV2013-016");
+
+    /* Configure document type column */
+    column = gtk_tree_view_get_column (GTK_TREE_VIEW (pw->docs_list_tree_view), 2);
+    tree_view_column_set_default_width (GTK_TREE_VIEW (pw->docs_list_tree_view),
+                                        column, _("Credit Note"));
+
+    /* Configure debit column */
+    column = gtk_tree_view_get_column (GTK_TREE_VIEW (pw->docs_list_tree_view), 3);
+    tree_view_column_set_default_width (GTK_TREE_VIEW (pw->docs_list_tree_view),
+                                        column, "11,999.00");
+
+    /* Configure credit column */
+    column = gtk_tree_view_get_column (GTK_TREE_VIEW (pw->docs_list_tree_view), 4);
+    tree_view_column_set_default_width (GTK_TREE_VIEW (pw->docs_list_tree_view),
+                                        column, "11,999.00");
+
+    gtk_tree_sortable_set_sort_column_id (
+        GTK_TREE_SORTABLE (gtk_tree_view_get_model (GTK_TREE_VIEW (pw->docs_list_tree_view))),
+        0, GTK_SORT_ASCENDING);
+
 
     box = GTK_WIDGET (gtk_builder_get_object (builder, "acct_window"));
     pw->acct_tree = GTK_WIDGET(gnc_tree_view_account_new (FALSE));

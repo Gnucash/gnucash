@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <requires lib="gtk+" version="2.24"/>
+  <!-- interface-naming-policy toplevel-contextual -->
   <object class="GtkDialog" id="Payment Dialog">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="title" translatable="yes">Process Payment</property>
-    <property name="default_height">380</property>
+    <property name="default_height">560</property>
     <property name="type_hint">dialog</property>
     <signal name="destroy" handler="gnc_payment_window_destroy_cb" swapped="no"/>
     <child internal-child="vbox">
-      <object class="GtkBox" id="dialog-vbox1">
+      <object class="GtkVBox" id="dialog-vbox1">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="orientation">vertical</property>
         <property name="spacing">8</property>
         <child>
           <object class="GtkTable" id="table1">
@@ -38,7 +38,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="has_tooltip">True</property>
-                        <property name="tooltip_markup" translatable="yes">The company associated with this payment.</property>
+                        <property name="tooltip_markup">The company associated with this payment.</property>
                         <property name="tooltip_text" translatable="yes">The company associated with this payment.</property>
                         <property name="border_width">3</property>
                         <child>
@@ -53,7 +53,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="has_tooltip">True</property>
-                    <property name="tooltip_markup" translatable="yes">The company associated with this payment.</property>
+                    <property name="tooltip_markup">The company associated with this payment.</property>
                     <property name="tooltip_text" translatable="yes">The company associated with this payment.</property>
                     <property name="label" translatable="yes">(owner)</property>
                     <attributes>
@@ -154,12 +154,6 @@
                                 <property name="clickable">True</property>
                                 <property name="sort_indicator">True</property>
                                 <property name="sort_column_id">0</property>
-                                <child>
-                                  <object class="GtkCellRendererText" id="docs_list_date_renderer"/>
-                                  <attributes>
-                                    <attribute name="text">0</attribute>
-                                  </attributes>
-                                </child>
                               </object>
                             </child>
                             <child>
@@ -303,7 +297,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="has_tooltip">True</property>
-                                <property name="tooltip_markup" translatable="yes">The amount to pay for this invoice.
+                                <property name="tooltip_markup">The amount to pay for this invoice.
 
 If you have selected an invoice, GnuCash will propose the amount still due for it. You can change this amount to create a partial payment or an over-payment.
 
@@ -330,7 +324,7 @@ In case of an over-payment or if no invoice was selected, GnuCash will automatic
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="has_tooltip">True</property>
-                                <property name="tooltip_markup" translatable="yes">The amount to pay for this invoice.
+                                <property name="tooltip_markup">The amount to pay for this invoice.
 
 If you have selected an invoice, GnuCash will propose the amount still due for it. You can change this amount to create a partial payment or an over-payment.
 
@@ -356,7 +350,7 @@ In case of an over-payment or if no invoice was selected, GnuCash will automatic
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="has_tooltip">True</property>
-                                <property name="tooltip_markup" translatable="yes">The amount to pay for this invoice.
+                                <property name="tooltip_markup">The amount to pay for this invoice.
 
 If you have selected an invoice, GnuCash will propose the amount still due for it. You can change this amount to create a partial payment or an over-payment.
 
@@ -412,7 +406,7 @@ In case of an over-payment or if no invoice was selected, GnuCash will automatic
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="has_tooltip">True</property>
-                                <property name="tooltip_markup" translatable="yes">The amount to pay for this invoice.
+                                <property name="tooltip_markup">The amount to pay for this invoice.
 
 If you have selected an invoice, GnuCash will propose the amount still due for it. You can change this amount to create a partial payment or an over-payment.
 
@@ -438,7 +432,7 @@ In case of an over-payment or if no invoice was selected, GnuCash will automatic
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="has_tooltip">True</property>
-                                <property name="tooltip_markup" translatable="yes">The amount to pay for this invoice.
+                                <property name="tooltip_markup">The amount to pay for this invoice.
 
 If you have selected an invoice, GnuCash will propose the amount still due for it. You can change this amount to create a partial payment or an over-payment.
 
@@ -492,7 +486,7 @@ In case of an over-payment or if no invoice was selected, GnuCash will automatic
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="has_tooltip">True</property>
-                                <property name="tooltip_markup" translatable="yes">The amount to pay for this invoice.
+                                <property name="tooltip_markup">The amount to pay for this invoice.
 
 If you have selected an invoice, GnuCash will propose the amount still due for it. You can change this amount to create a partial payment or an over-payment.
 
@@ -509,8 +503,8 @@ In case of an over-payment or if no invoice was selected, GnuCash will automatic
                               <packing>
                                 <property name="top_attach">1</property>
                                 <property name="bottom_attach">2</property>
-                                <property name="x_options"></property>
-                                <property name="y_options"></property>
+                                <property name="x_options"/>
+                                <property name="y_options"/>
                                 <property name="y_padding">3</property>
                               </packing>
                             </child>
@@ -519,7 +513,7 @@ In case of an over-payment or if no invoice was selected, GnuCash will automatic
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="has_tooltip">True</property>
-                                <property name="tooltip_markup" translatable="yes">The amount to pay for this invoice.
+                                <property name="tooltip_markup">The amount to pay for this invoice.
 
 If you have selected an invoice, GnuCash will propose the amount still due for it. You can change this amount to create a partial payment or an over-payment.
 
@@ -536,19 +530,10 @@ In case of an over-payment or if no invoice was selected, GnuCash will automatic
                               <packing>
                                 <property name="top_attach">5</property>
                                 <property name="bottom_attach">6</property>
-                                <property name="x_options"></property>
-                                <property name="y_options"></property>
+                                <property name="x_options"/>
+                                <property name="y_options"/>
                                 <property name="y_padding">3</property>
                               </packing>
-                            </child>
-                            <child>
-                              <placeholder/>
-                            </child>
-                            <child>
-                              <placeholder/>
-                            </child>
-                            <child>
-                              <placeholder/>
                             </child>
                           </object>
                           <packing>
@@ -629,7 +614,7 @@ In case of an over-payment or if no invoice was selected, GnuCash will automatic
           </packing>
         </child>
         <child internal-child="action_area">
-          <object class="GtkButtonBox" id="dialog-action_area1">
+          <object class="GtkHButtonBox" id="dialog-action_area1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="layout_style">end</property>
@@ -640,7 +625,6 @@ In case of an over-payment or if no invoice was selected, GnuCash will automatic
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
                 <property name="receives_default">False</property>
-                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
                 <signal name="clicked" handler="gnc_payment_cancel_cb" swapped="no"/>
               </object>
@@ -657,7 +641,6 @@ In case of an over-payment or if no invoice was selected, GnuCash will automatic
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
                 <property name="receives_default">False</property>
-                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
                 <signal name="clicked" handler="gnc_payment_ok_cb" swapped="no"/>
               </object>
@@ -690,7 +673,7 @@ In case of an over-payment or if no invoice was selected, GnuCash will automatic
   <object class="GtkListStore" id="docs_list_model">
     <columns>
       <!-- column-name doc_date -->
-      <column type="gchararray"/>
+      <column type="gint64"/>
       <!-- column-name doc_id -->
       <column type="gchararray"/>
       <!-- column-name doc_type -->

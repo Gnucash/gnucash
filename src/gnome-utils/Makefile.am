@@ -102,6 +102,7 @@ libgncmod_gnome_utils_la_SOURCES = \
   gnc-window.c \
   gncmod-gnome-utils.c \
   misc-gnome-utils.c \
+  tree-view-utils.c \
   search-param.c \
   print-session.c \
   swig-gnome-utils.c \
@@ -180,6 +181,7 @@ gncinclude_HEADERS = \
   gnc-ui.h \
   gnc-window.h \
   misc-gnome-utils.h \
+  tree-view-utils.h \
   print-session.h \
   window-main-summarybar.h
 
