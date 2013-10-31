@@ -48,6 +48,7 @@
 #include "gnc-prefs.h"
 #include "gnc-ui-util.h"
 #include "misc-gnome-utils.h"
+#include "tree-view-utils.h"
 
 #define LOT_VIEWER_CM_CLASS "dialog-lot-viewer"
 
@@ -349,8 +350,6 @@ gnc_lot_viewer_fill (GNCLotViewer *lv)
     for (node = lot_list; node; node = node->next)
     {
         char type_buff[200];
-        char obuff[MAX_DATE_LENGTH];
-        char cbuff[MAX_DATE_LENGTH];
         char baln_buff[200];
         char gain_buff[200];
         GNCLot *lot = node->data;
@@ -379,8 +378,7 @@ gnc_lot_viewer_fill (GNCLotViewer *lv)
         gtk_list_store_set(store, &iter, LOT_COL_TYPE, type_buff, -1);
 
         /* Opening date */
-        qof_print_date_buff (obuff, MAX_DATE_LENGTH, open_date);
-        gtk_list_store_set(store, &iter, LOT_COL_OPEN, obuff, -1);
+        gtk_list_store_set(store, &iter, LOT_COL_OPEN, open_date, -1);
 
         /* Closing date */
         if (gnc_lot_is_closed (lot))
@@ -389,12 +387,11 @@ gnc_lot_viewer_fill (GNCLotViewer *lv)
             Transaction *ftrans = xaccSplitGetParent (fsplit);
             time64 close_date = xaccTransGetDate (ftrans);
 
-            qof_print_date_buff (cbuff, MAX_DATE_LENGTH, close_date);
-            gtk_list_store_set(store, &iter, LOT_COL_CLOSE, cbuff, -1);
+            gtk_list_store_set(store, &iter, LOT_COL_CLOSE, close_date, -1);
         }
         else
         {
-            gtk_list_store_set(store, &iter, LOT_COL_CLOSE, _("Open"), -1);
+            gtk_list_store_set(store, &iter, LOT_COL_CLOSE, 0, -1);
         }
 
         /* Title */
@@ -492,7 +489,6 @@ gnc_split_viewer_fill (GNCLotViewer *lv, GtkListStore *store, SplitList *split_l
     for (node = split_list; node; node = node->next)
     {
         Split *split = node->data;
-        char dbuff[MAX_DATE_LENGTH];
         char amtbuff[200];
         char valbuff[200];
         char gainbuff[200];
@@ -508,8 +504,7 @@ gnc_split_viewer_fill (GNCLotViewer *lv, GtkListStore *store, SplitList *split_l
         gtk_list_store_append(store, &iter);
 
         /* Date */
-        qof_print_date_buff (dbuff, MAX_DATE_LENGTH, date);
-        gtk_list_store_set (store, &iter, SPLIT_COL_DATE, dbuff, -1);
+        gtk_list_store_set (store, &iter, SPLIT_COL_DATE, date, -1);
 
         /* Num  - retrieve number based on book option */
         gtk_list_store_set (store, &iter, SPLIT_COL_NUM,
@@ -779,6 +774,32 @@ lv_response_cb (GtkDialog *dialog, gint response, gpointer data)
 
 /* ======================================================================== */
 
+static void print_date (GtkTreeViewColumn *tree_column,
+                        GtkCellRenderer *cell,
+                        GtkTreeModel *tree_model,
+                        GtkTreeIter *iter,
+                        gpointer data)
+{
+    GValue value = { 0 };
+    time64 doc_date_time;
+    gchar *doc_date_str = g_strdup (_("Open"));
+    gint col = GPOINTER_TO_INT(data);
+
+    g_return_if_fail (cell && iter && tree_model);
+
+    gtk_tree_model_get_value (tree_model, iter, col, &value);
+    doc_date_time = (time64) g_value_get_int64 (&value);
+    g_value_unset (&value);
+
+    if (doc_date_time) /* assumes 0 represents an invalid date/time */
+    {
+        g_free (doc_date_str);
+        doc_date_str = qof_print_date (doc_date_time);
+    }
+    g_object_set (G_OBJECT (cell), "text", doc_date_str, NULL);
+    g_free (doc_date_str);
+}
+
 static void
 lv_init_lot_view (GNCLotViewer *lv)
 {
@@ -791,8 +812,8 @@ lv_init_lot_view (GNCLotViewer *lv)
     g_return_if_fail(GTK_IS_TREE_VIEW(lv->lot_view));
 
     view = lv->lot_view;
-    store = gtk_list_store_new(NUM_LOT_COLS, G_TYPE_STRING, G_TYPE_STRING,
-                               G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING,
+    store = gtk_list_store_new(NUM_LOT_COLS, G_TYPE_STRING, G_TYPE_INT64,
+                               G_TYPE_INT64, G_TYPE_STRING, G_TYPE_STRING,
                                G_TYPE_STRING, G_TYPE_POINTER);
     gtk_tree_view_set_model(view, GTK_TREE_MODEL(store));
     g_object_unref(store);
@@ -809,12 +830,20 @@ lv_init_lot_view (GNCLotViewer *lv)
     column = gtk_tree_view_column_new_with_attributes(_("Opened"), renderer,
              "text", LOT_COL_OPEN, NULL);
     gtk_tree_view_column_set_sort_column_id(column, LOT_COL_OPEN);
+    tree_view_column_set_default_width (view, column, "31-12-2013");
+    gtk_tree_view_column_set_cell_data_func (column, renderer,
+                                             (GtkTreeCellDataFunc) print_date,
+                                             GINT_TO_POINTER (LOT_COL_OPEN), NULL);
     gtk_tree_view_append_column(view, column);
 
     renderer = gtk_cell_renderer_text_new();
     column = gtk_tree_view_column_new_with_attributes(_("Closed"), renderer,
              "text", LOT_COL_CLOSE, NULL);
     gtk_tree_view_column_set_sort_column_id(column, LOT_COL_CLOSE);
+    tree_view_column_set_default_width (view, column, "31-12-2013");
+    gtk_tree_view_column_set_cell_data_func (column, renderer,
+                                             (GtkTreeCellDataFunc) print_date,
+                                             GINT_TO_POINTER (LOT_COL_CLOSE), NULL);
     gtk_tree_view_append_column(view, column);
 
     renderer = gtk_cell_renderer_text_new();
@@ -856,7 +885,7 @@ lv_init_split_view (GNCLotViewer *lv, GtkTreeView *view)
 
     g_return_val_if_fail(GTK_IS_TREE_VIEW(view), NULL);
 
-    store = gtk_list_store_new(NUM_SPLIT_COLS, G_TYPE_STRING, G_TYPE_STRING,
+    store = gtk_list_store_new(NUM_SPLIT_COLS, G_TYPE_INT64, G_TYPE_STRING,
                                G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING,
                                G_TYPE_STRING, G_TYPE_STRING,
                                G_TYPE_POINTER);
@@ -868,6 +897,10 @@ lv_init_split_view (GNCLotViewer *lv, GtkTreeView *view)
     column = gtk_tree_view_column_new_with_attributes(_("Date"), renderer,
              "text", SPLIT_COL_DATE, NULL);
     gtk_tree_view_column_set_sort_column_id(column, SPLIT_COL_DATE);
+    tree_view_column_set_default_width (view, column, "31-12-2013");
+    gtk_tree_view_column_set_cell_data_func (column, renderer,
+                                             (GtkTreeCellDataFunc) print_date,
+                                             GINT_TO_POINTER (SPLIT_COL_DATE), NULL);
     gtk_tree_view_append_column(view, column);
 
     renderer = gtk_cell_renderer_text_new();
