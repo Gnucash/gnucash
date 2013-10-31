@@ -59,8 +59,8 @@ const char* dates_xxy[] = { "1/3/99", "12-10'1999", "03062001", NULL };
 
 static void
 run_check(GncImportFormat (*check_fcn)(const char*, GncImportFormat),
-const char *numbers[], GncImportFormat formats,
-const char* msg, GncImportFormat expected)
+          const char *numbers[], GncImportFormat formats,
+          const char* msg, GncImportFormat expected)
 {
     while (*numbers)
     {
@@ -77,14 +77,14 @@ test_check_numeric(void)
     fmts = GNCIF_NUM_PERIOD | GNCIF_NUM_COMMA | GNCIF_DATE_MDY;
 
     run_check(gnc_import_test_numeric, period_numbers, fmts,
-    "Period numbers", GNCIF_NUM_PERIOD);
+              "Period numbers", GNCIF_NUM_PERIOD);
     run_check(gnc_import_test_numeric, comma_numbers, fmts,
-    "Comma numbers", GNCIF_NUM_COMMA);
+              "Comma numbers", GNCIF_NUM_COMMA);
 
     run_check(gnc_import_test_numeric, period_numbers_ambig, fmts,
-    "Ambiguous Period numbers", GNCIF_NUM_PERIOD | GNCIF_NUM_COMMA);
+              "Ambiguous Period numbers", GNCIF_NUM_PERIOD | GNCIF_NUM_COMMA);
     run_check(gnc_import_test_numeric, comma_numbers_ambig, fmts,
-    "Ambiguous Comma numbers", GNCIF_NUM_PERIOD | GNCIF_NUM_COMMA);
+              "Ambiguous Comma numbers", GNCIF_NUM_PERIOD | GNCIF_NUM_COMMA);
 }
 
 static void
@@ -100,9 +100,9 @@ test_check_date(void)
     run_check(gnc_import_test_date, dates_dmy, fmts, "d/m/y dates", GNCIF_DATE_DMY);
 
     run_check(gnc_import_test_date, dates_yxx, fmts, "y/x/x dates",
-    GNCIF_DATE_YMD | GNCIF_DATE_YDM);
+              GNCIF_DATE_YMD | GNCIF_DATE_YDM);
     run_check(gnc_import_test_date, dates_xxy, fmts, "x/x/y dates",
-    GNCIF_DATE_DMY | GNCIF_DATE_MDY);
+              GNCIF_DATE_DMY | GNCIF_DATE_MDY);
 }
 
 static void

@@ -47,7 +47,7 @@ static void do_test (G_GNUC_UNUSED gboolean foo, G_GNUC_UNUSED gchar* bar)
 
 void
 do_compare( QofBook* book_1, QofBook* book_2, const gchar* id,
-	    QofInstanceForeachCB cb, const gchar* msg )
+            QofInstanceForeachCB cb, const gchar* msg )
 {
     QofCollection* coll;
     CompareInfoStruct info;
@@ -75,7 +75,7 @@ compare_single_tx( QofInstance* inst, gpointer user_data )
     CompareInfoStruct* info = (CompareInfoStruct*)user_data;
     Transaction* tx_1 = GNC_TRANS(inst);
     Transaction* tx_2 = xaccTransLookup( qof_instance_get_guid(inst),
-					 info->book_2 );
+                                         info->book_2 );
 
     g_assert (xaccTransEqual (tx_1, tx_2, TRUE, TRUE, TRUE, FALSE));
 }
@@ -84,7 +84,7 @@ static void
 compare_txs( QofBook* book_1, QofBook* book_2 )
 {
     do_compare( book_1, book_2, GNC_ID_TRANS,
-		compare_single_tx, "Transaction lists match" );
+                compare_single_tx, "Transaction lists match" );
 }
 
 static SchedXaction*
@@ -124,7 +124,7 @@ compare_recurrences (GList *rl_1, GList *rl_2)
     g_assert (rl_2 != NULL);
     g_assert_cmpint (g_list_length (rl_1), ==, g_list_length (rl_2));
     for (ritem1 = rl_1, ritem2 = rl_2; ritem1 != NULL && ritem2 != NULL;
-         ritem1 = g_list_next (ritem1), ritem2 = g_list_next (ritem2))
+            ritem1 = g_list_next (ritem1), ritem2 = g_list_next (ritem2))
     {
         Recurrence *r1 = ritem1->data, *r2 = ritem2->data;
 
@@ -165,7 +165,7 @@ static void
 compare_sxs( QofBook* book_1, QofBook* book_2 )
 {
     do_compare( book_1, book_2, GNC_ID_SCHEDXACTION,
-		compare_single_sx, "Scheduled transaction lists match" );
+                compare_single_sx, "Scheduled transaction lists match" );
 }
 
 static void
@@ -174,7 +174,7 @@ compare_single_lot( QofInstance* inst, gpointer user_data )
     CompareInfoStruct* info = (CompareInfoStruct*)user_data;
     GNCLot *lot_1 = GNC_LOT(inst);
     GNCLot *lot_2 = gnc_lot_lookup (qof_instance_get_guid(inst),
-					 info->book_2 );
+                                    info->book_2 );
     GList *split1, *splits1, *splits2;
 
     g_assert (xaccAccountEqual( gnc_lot_get_account (lot_1),
@@ -230,7 +230,7 @@ static void
 compare_pricedbs( QofBook* book_1, QofBook* book_2 )
 {
     do_compare( book_1, book_2, GNC_ID_TRANS,
-		compare_single_tx, "Transaction lists match" );
+                compare_single_tx, "Transaction lists match" );
 }
 
 void

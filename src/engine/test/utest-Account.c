@@ -677,7 +677,7 @@ test_gnc_book_set_get_root_account (Fixture *fixture, gconstpointer pData)
      */
     oldlogger = g_log_set_default_handler ((GLogFunc)test_null_handler, &check);
     g_test_log_set_fatal_handler ((GTestLogFatalFunc)test_checked_handler,
-				  &check);
+                                  &check);
     gnc_book_set_root_account (book1, fixture->acct);
     g_assert (gnc_book_get_root_account (book1) == acc1);
     g_assert_cmpint (check.hits, ==, 1);
@@ -1172,7 +1172,7 @@ test_gnc_account_insert_remove_split (Fixture *fixture, gconstpointer pData)
     g_assert (!priv->balance_dirty);
     test_signal_assert_hits (sig1, 4);
     test_signal_assert_hits (sig3, 1);
-   /* And do it again to make sure that it fails when the split has
+    /* And do it again to make sure that it fails when the split has
      * already been removed */
     g_assert (!gnc_account_remove_split (fixture->acct, split3));
     g_assert_cmpuint (g_list_length (priv->splits), == , 2);
@@ -1930,7 +1930,7 @@ test_xaccAccountGetBalanceAsOfDate (Fixture *fixture, gconstpointer pData)
     dbal = gnc_numeric_to_double (bal);
     xaccAccountRecomputeBalance (fixture->acct);
     val = xaccAccountGetBalanceAsOfDate (fixture->acct,
-					 (gnc_time (NULL) - offset));
+                                         (gnc_time (NULL) - offset));
     dval = gnc_numeric_to_double (val);
     g_assert_cmpfloat (dval, == , dbal);
 }
@@ -2237,7 +2237,7 @@ test_xaccAccountType_Compatibility (void)
             compat = xaccParentAccountTypesCompatibleWith (type);
             g_log_remove_handler (logdomain, loghandler);
             g_assert_cmpint (compat, == , 0);
-	    g_assert_cmpint (check1.hits, ==, 1);
+            g_assert_cmpint (check1.hits, ==, 1);
             g_free (msg1);
             continue;
         }

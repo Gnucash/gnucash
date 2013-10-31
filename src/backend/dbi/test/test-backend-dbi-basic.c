@@ -228,9 +228,9 @@ destroy_database (gchar* url)
     gnc_uri_get_components  (url, &protocol, &host, &portnum,
                              &username, &password, &dbname);
     if (g_strcmp0 (protocol, "postgres") == 0)
-	conn = dbi_conn_new (pgsql);
+        conn = dbi_conn_new (pgsql);
     else
-	conn = dbi_conn_new (protocol);
+        conn = dbi_conn_new (protocol);
     port = g_strdup_printf ("%d", portnum);
     if (conn == NULL)
     {
@@ -285,7 +285,7 @@ teardown (Fixture *fixture, gconstpointer pData)
     guint loglevel = G_LOG_LEVEL_WARNING | G_LOG_FLAG_FATAL;
     TestErrorStruct *check = test_error_struct_new (logdomain, loglevel, msg);
     fixture->hdlrs = test_log_set_fatal_handler (fixture->hdlrs, check,
-                                           (GLogFunc)test_checked_handler);
+                     (GLogFunc)test_checked_handler);
     qof_session_end (fixture->session);
     qof_session_destroy (fixture->session);
     if (fixture->filename)
@@ -338,7 +338,7 @@ test_dbi_store_and_reload (Fixture *fixture, gconstpointer pData)
     guint loglevel = G_LOG_LEVEL_WARNING | G_LOG_FLAG_FATAL;
     TestErrorStruct *check = test_error_struct_new (log_domain, loglevel, msg);
     fixture->hdlrs = test_log_set_fatal_handler (fixture->hdlrs, check,
-                                                 (GLogFunc)test_checked_handler);
+                     (GLogFunc)test_checked_handler);
     if (fixture->filename)
         url = fixture->filename;
 
@@ -364,7 +364,7 @@ test_dbi_store_and_reload (Fixture *fixture, gconstpointer pData)
     // Compare with the original data
     compare_books (qof_session_get_book (session_2),
                    qof_session_get_book (session_3));
-/* fixture->session belongs to the fixture and teardown() will clean it up */
+    /* fixture->session belongs to the fixture and teardown() will clean it up */
     qof_session_end (session_2);
     qof_session_destroy (session_2);
     qof_session_end (session_3);
@@ -397,7 +397,7 @@ test_dbi_safe_save (Fixture *fixture, gconstpointer pData)
     session_1 = qof_session_new ();
     qof_session_begin (session_1, url, FALSE, TRUE, TRUE);
     if (session_1 &&
-        qof_session_get_error (session_1) != ERR_BACKEND_NO_ERR)
+            qof_session_get_error (session_1) != ERR_BACKEND_NO_ERR)
     {
         g_warning ("Session Error: %d, %s", qof_session_get_error (session_1),
                    qof_session_get_error_message (session_1));
@@ -422,7 +422,7 @@ test_dbi_safe_save (Fixture *fixture, gconstpointer pData)
     session_2 = qof_session_new ();
     qof_session_begin (session_2, url, TRUE, FALSE, FALSE);
     if (session_2 &&
-        qof_session_get_error (session_2) != ERR_BACKEND_NO_ERR)
+            qof_session_get_error (session_2) != ERR_BACKEND_NO_ERR)
     {
         g_warning ("Session Error: %d, %s", qof_session_get_error(session_2),
                    qof_session_get_error_message(session_2));
@@ -438,7 +438,7 @@ test_dbi_safe_save (Fixture *fixture, gconstpointer pData)
 
 cleanup:
     fixture->hdlrs = test_log_set_fatal_handler (fixture->hdlrs, check,
-                                                 (GLogFunc)test_checked_handler);
+                     (GLogFunc)test_checked_handler);
     if (session_2 != NULL)
     {
         qof_session_end (session_2);
@@ -473,9 +473,9 @@ test_dbi_version_control (Fixture *fixture, gconstpointer pData)
     if (sess && qof_session_get_error(sess) != ERR_BACKEND_NO_ERR)
     {
         g_warning ("Session Error: %d, %s", qof_session_get_error(sess),
-                  qof_session_get_error_message(sess));
+                   qof_session_get_error_message(sess));
         g_test_message ("DB Session Creation Failed");
-	g_assert (FALSE);
+        g_assert (FALSE);
         goto cleanup;
     }
     qof_session_swap_data (fixture->session, sess);
@@ -550,7 +550,7 @@ test_dbi_business_store_and_reload (Fixture *fixture, gconstpointer pData)
     qof_session_destroy (session_2);
 
     fixture->hdlrs = test_log_set_fatal_handler (fixture->hdlrs, check,
-                                                 (GLogFunc)test_checked_handler);
+                     (GLogFunc)test_checked_handler);
     qof_session_end (session_3);
     qof_session_destroy (session_3);
 }
@@ -566,8 +566,8 @@ create_dbi_test_suite (gchar *dbm_name, gchar *url)
     GNC_TEST_ADD (subsuite, "version_control", Fixture, url, setup_memory,
                   test_dbi_version_control, teardown);
     GNC_TEST_ADD (subsuite, "business_store_and_reload", Fixture, url,
-		  setup_business, test_dbi_version_control, teardown);
-g_free (subsuite);
+                  setup_business, test_dbi_version_control, teardown);
+    g_free (subsuite);
 
 }
 
@@ -578,18 +578,18 @@ test_suite_gnc_backend_dbi (void)
     GList *drivers = NULL;
     while ((driver = dbi_driver_list (driver)))
     {
-	drivers = g_list_prepend (drivers,
-				  (gchar*)dbi_driver_get_name (driver));
+        drivers = g_list_prepend (drivers,
+                                  (gchar*)dbi_driver_get_name (driver));
     }
     if (g_list_find_custom (drivers, "sqlite3", (GCompareFunc)g_strcmp0))
-	create_dbi_test_suite ("sqlite3", "sqlite3");
+        create_dbi_test_suite ("sqlite3", "sqlite3");
     if (strlen (TEST_MYSQL_URL) > 0 &&
-	g_list_find_custom (drivers, "mysql", (GCompareFunc)g_strcmp0))
+            g_list_find_custom (drivers, "mysql", (GCompareFunc)g_strcmp0))
         create_dbi_test_suite ("mysql", TEST_MYSQL_URL);
     if (strlen (TEST_PGSQL_URL) > 0 &&
-	g_list_find_custom (drivers, "pgsql", (GCompareFunc)g_strcmp0))
+            g_list_find_custom (drivers, "pgsql", (GCompareFunc)g_strcmp0))
     {
-	g_setenv ("PGOPTIONS", "-c client_min_messages=WARNING", FALSE);
+        g_setenv ("PGOPTIONS", "-c client_min_messages=WARNING", FALSE);
         create_dbi_test_suite ("postgres", TEST_PGSQL_URL);
     }
 

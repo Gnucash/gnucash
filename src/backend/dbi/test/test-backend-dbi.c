@@ -41,7 +41,7 @@ main (int   argc,
     cashobjects_register();
     g_assert (qof_load_backend_library ("../.libs/", GNC_LIB_NAME));
     g_assert (qof_load_backend_library ("../../xml/.libs",
-					"gncmod-backend-xml"));
+                                        "gncmod-backend-xml"));
 
     test_suite_gnc_backend_dbi ();
 

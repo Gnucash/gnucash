@@ -82,8 +82,8 @@ static void test_class (void)
              "qof_class_get_parameter_getter");
 
     do_test (g_strcmp0 (qof_class_get_parameter_type (TEST_MODULE_NAME,
-                          TEST_PARAM),
-                          TEST_CORE) == 0, "qof_class_get_parameter_type");
+                        TEST_PARAM),
+                        TEST_CORE) == 0, "qof_class_get_parameter_type");
 
     /*  do_test (qof_class_get_default_sort (TEST_MODULE_NAME) == test_sort,
     	   "qof_class_get_default_sort");

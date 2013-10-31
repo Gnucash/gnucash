@@ -71,7 +71,7 @@ test_object (void)
                  "lookup non-existant object object");
 
         do_test (!g_strcmp0 (qof_object_get_type_label (TEST_MODULE_NAME),
-                               _(TEST_MODULE_DESC)),
+                             _(TEST_MODULE_DESC)),
                  "test description return");
     }
 

@@ -66,7 +66,7 @@ static void test_business (void)
                  "lookup non-existant business object");
 
         do_test (!g_strcmp0 (gncBusinessGetTypeLabel (TEST_MODULE_NAME),
-                               _(TEST_MODULE_DESC)),
+                             _(TEST_MODULE_DESC)),
                  "test description return");
     }
 

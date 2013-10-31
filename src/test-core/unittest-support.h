@@ -106,8 +106,8 @@ typedef struct
  * @return: A TestErrorStruct *
  */
 TestErrorStruct* test_error_struct_new (gchar *log_domain,
-					GLogLevelFlags log_level,
-					gchar *msg);
+                                        GLogLevelFlags log_level,
+                                        gchar *msg);
 
 /**
  * Free a TestErrorStruct created with test_error_struct_new
@@ -137,7 +137,7 @@ typedef struct
  * @return: The new GSList pointer.
  */
 GSList *test_log_set_handler (GSList *list, TestErrorStruct *error,
-			      GLogFunc handler);
+                              GLogFunc handler);
 
 /**
  * Set a log handler and add it to a GList for removal at teardown;
@@ -156,7 +156,7 @@ GSList *test_log_set_handler (GSList *list, TestErrorStruct *error,
  * @return: The new GSList pointer.
  */
 GSList *test_log_set_fatal_handler (GSList *list, TestErrorStruct *error,
-			      GLogFunc handler);
+                                    GLogFunc handler);
 
 /* Clears all the log handlers. Pass this to g_slist_free() in teardown */
 void test_free_log_handler (gpointer item);
@@ -177,7 +177,7 @@ gboolean test_checked_handler (const char *log_domain, GLogLevelFlags log_level,
  * g_return_if_fail() error messages make it to the surface.
  */
 gboolean test_log_handler (const char *log_domain, GLogLevelFlags log_level,
-			   const gchar *msg, gpointer user_data);
+                           const gchar *msg, gpointer user_data);
 /**
  * Just returns FALSE or suppresses the message regardless of what the
  * error is. Use this only as a last resort.

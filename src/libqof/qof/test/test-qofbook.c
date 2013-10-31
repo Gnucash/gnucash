@@ -432,7 +432,7 @@ test_book_use_split_action_for_num_field( Fixture *fixture, gconstpointer pData 
 
     /* create correct slot path */
     slot_path = (const char *) g_strconcat( KVP_OPTION_PATH, "/",
-            OPTION_SECTION_ACCOUNTS, "/", OPTION_NAME_NUM_FIELD_SOURCE, NULL );
+                                            OPTION_SECTION_ACCOUNTS, "/", OPTION_NAME_NUM_FIELD_SOURCE, NULL );
     g_assert( slot_path != NULL );
 
     g_test_message( "Testing default: No selection has been specified" );
@@ -610,7 +610,7 @@ test_book_foreach_collection( Fixture *fixture, gconstpointer pData )
     G_GNUC_UNUSED QofCollection *m_col, *m_col2;
     QofIdType my_type = "my_type", my_type2 = "my_type2";
     guint param = (guint) g_test_rand_int();
-/* GLib assertion messages which aren't filtered to make clang's output like gcc's */
+    /* GLib assertion messages which aren't filtered to make clang's output like gcc's */
 #ifdef __clang__
 #define _func "void qof_book_foreach_collection(const QofBook *, QofCollectionForeachCB, gpointer)"
 #else
