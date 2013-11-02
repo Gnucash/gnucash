@@ -3719,11 +3719,6 @@ gnc_quartz_set_menu(GncMainWindow* window)
         gtk_widget_hide (GTK_WIDGET (item));
 
     item = gtk_ui_manager_get_widget (window->ui_merge,
-                                      "/menubar/Edit/EditPreferences");
-    if (GTK_IS_MENU_ITEM (item))
-        gtkosx_application_insert_app_menu_item (theApp, GTK_WIDGET (item), 0);
-
-    item = gtk_ui_manager_get_widget (window->ui_merge,
                                       "/menubar/Help/HelpAbout");
     if (GTK_IS_MENU_ITEM (item))
     {
@@ -3732,6 +3727,11 @@ gnc_quartz_set_menu(GncMainWindow* window)
                 0);
         gtkosx_application_insert_app_menu_item (theApp, GTK_WIDGET (item), 0);
     }
+
+    item = gtk_ui_manager_get_widget (window->ui_merge,
+                                      "/menubar/Edit/EditPreferences");
+    if (GTK_IS_MENU_ITEM (item))
+        gtkosx_application_insert_app_menu_item (theApp, GTK_WIDGET (item), 0);
 
     item = gtk_ui_manager_get_widget (window->ui_merge,
                                       "/menubar/Help");
