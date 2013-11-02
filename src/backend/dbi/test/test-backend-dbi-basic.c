@@ -7,6 +7,8 @@
 
 #include "config.h"
 
+#include <sys/types.h>
+#include <unistd.h>
 #include <glib/gstdio.h>
 
 #include <qof.h>
@@ -58,7 +60,7 @@ setup (Fixture *fixture, gconstpointer pData)
     qof_session_load (fixture->session, NULL);
 
     if (g_strcmp0 (url, "sqlite3") == 0)
-        fixture->filename = "/tmp/test-sqlite3-test";
+        fixture->filename = g_strdup_printf ("/tmp/test-sqlite-%d", getpid());
     else
         fixture->filename = NULL;
 }
@@ -115,7 +117,7 @@ setup_memory (Fixture *fixture, gconstpointer pData)
 
     fixture->session = session;
     if (g_strcmp0 (url, "sqlite3") == 0)
-        fixture->filename = "/tmp/test-sqlite3-test";
+        fixture->filename = g_strdup_printf ("/tmp/test-sqlite-%d", getpid());
     else
         fixture->filename = NULL;
 }
@@ -192,7 +194,7 @@ setup_business (Fixture *fixture, gconstpointer pData)
 
     fixture->session = session;
     if (g_strcmp0 (url, "sqlite3") == 0)
-        fixture->filename = "/tmp/test-sqlite3-test";
+        fixture->filename = g_strdup_printf ("/tmp/test-sqlite-%d", getpid());
     else
         fixture->filename = NULL;
 }
@@ -289,7 +291,10 @@ teardown (Fixture *fixture, gconstpointer pData)
     qof_session_end (fixture->session);
     qof_session_destroy (fixture->session);
     if (fixture->filename)
+    {
         g_unlink (fixture->filename);
+	g_free (fixture->filename);
+    }
     else
         destroy_database ((gchar*)pData);
 
