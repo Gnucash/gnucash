@@ -1133,13 +1133,6 @@ static gboolean auto_save_countdown (GtkWidget *dialog)
     GtkWidget *label;
     gchar *timeoutstr = NULL;
 
-    if (secs_to_save < 0)
-    {
-        PWARN ("Count down aborted - timer reached a negative value.\n"
-               "This is probably because the timer was improperly initialized.");
-        return FALSE; /* remove timer */
-    }
-
     /* Stop count down if user closed the dialog since the last time we were called */
     if (!GTK_IS_DIALOG (dialog))
         return FALSE; /* remove timer */
