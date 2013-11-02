@@ -58,7 +58,7 @@ setup (Fixture *fixture, gconstpointer pData)
     qof_session_load (fixture->session, NULL);
 
     if (g_strcmp0 (url, "sqlite3") == 0)
-        fixture->filename = tempnam ("/tmp", "test-sqlite3-");
+        fixture->filename = "/tmp/test-sqlite3-test";
     else
         fixture->filename = NULL;
 }
@@ -115,7 +115,7 @@ setup_memory (Fixture *fixture, gconstpointer pData)
 
     fixture->session = session;
     if (g_strcmp0 (url, "sqlite3") == 0)
-        fixture->filename = tempnam ("/tmp", "test-sqlite3-");
+        fixture->filename = "/tmp/test-sqlite3-test";
     else
         fixture->filename = NULL;
 }
@@ -192,7 +192,7 @@ setup_business (Fixture *fixture, gconstpointer pData)
 
     fixture->session = session;
     if (g_strcmp0 (url, "sqlite3") == 0)
-        fixture->filename = tempnam ("/tmp", "test-sqlite3-");
+        fixture->filename = "/tmp/test-sqlite3-test";
     else
         fixture->filename = NULL;
 }
