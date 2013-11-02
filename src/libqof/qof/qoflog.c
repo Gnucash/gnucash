@@ -372,11 +372,12 @@ qof_log_check(QofLogModule log_domain, QofLogLevel log_level)
 
     {
         gpointer match_level;
-        if ((match_level = g_hash_table_lookup(log_levels, "")) != NULL)
+        if (log_levels &&
+	    (match_level = g_hash_table_lookup(log_levels, "")) != NULL)
             longest_match_level = (QofLogLevel)GPOINTER_TO_INT(match_level);
     }
 
-    _QLC_DBG( { printf("trying [%s] (%d):", log_domain, g_hash_table_size(log_levels)); });
+_QLC_DBG( { printf("trying [%s] (%d):", log_domain, log_levels != NULL ? g_hash_table_size(log_levels) : 0); });
     if (G_LIKELY(log_levels))
     {
         // e.g., "a.b.c\0" -> "a\0b.c\0" -> "a.b\0c\0", "a.b.c\0"
