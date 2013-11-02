@@ -204,10 +204,10 @@ find_by_reg (gpointer find_data, gpointer user_data)
     return ld->model == model;
 }
 
-static SplitRegisterStyle
+static SplitRegisterStyle2
 gnc_get_default_register_style (GNCAccountType type)
 {
-    SplitRegisterStyle new_style = REG2_STYLE_LEDGER;
+    SplitRegisterStyle2 new_style = REG2_STYLE_LEDGER;
 
     if (gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL_REGISTER,
                             GNC_PREF_DEFAULT_STYLE_JOURNAL))
