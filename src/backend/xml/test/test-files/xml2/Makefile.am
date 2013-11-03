@@ -21,3 +21,6 @@ check:
 		test $(srcdir)/$$file -ef $(builddir)/$$file ||	\
 		cp $(srcdir)/$$file $(builddir)/$$file;		\
 	done;
+
+clean-local:
+	rm -f *.gnucash
