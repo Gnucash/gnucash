@@ -826,7 +826,7 @@ gnc_tree_view_get_column_order (GncTreeView *view,
 {
     const GList *tmp;
     GList *columns;
-    gsize num_cols = 0;
+    gulong num_cols = 0;
     gchar *col_names = NULL;
     gchar **col_str_list;
 
