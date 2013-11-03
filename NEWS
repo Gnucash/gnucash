@@ -1,5 +1,51 @@
 Version history:
 ------- -------
+ 2.5.7 - 3 November 2013
+       	 This is the eighth release in the UNSTABLE 2.5 series.
+
+	 Register2 is now a configure option. Default builds,
+	 including the Windows and Mac All-in-one packages, will use
+	 only the old register. We've decided that it isn't ready for
+	 general use and the principal author doesn't have time to
+	 make it ready in time for a 2.6 release.
+
+	  Frédéric Perrin has contributed a change to display currency
+	  symbols whenever they are known and unambiguous.
+
+	  Geert Janssens has cleaned up most of the issues from the
+	  initial GSettings preference changes. There's a new
+	  configure option, --with-xdg-data-dirs to overide the
+	  environment and defaults if necessary.
+
+	  Building Gnucash now requires Automake version 1.11 or later.
+
+	  Configure will abort if --enable-ofx is set but no libofx
+	  configuration files are found.  Budget periods may no longer
+	  set to values greater than the budget's num_periods, and the
+	  budget options descriptions will wrap. Contributed by Robert
+	  Ratliff.
+
+Bug Fixes:
+
+	668530 - In budget flow report options, change the maximum
+	       value for period to 60 (Note the FIXMEs) Author: Robert
+	       Ratliff <ratliff.bobby@gmail.com>
+	687478 - Bills due reminder doesn't work well with credit notes
+	687479 - Automatic invoice/payment matching on posting an
+	       invoice should be an optional feature
+	693244 - View Lots window enhancements
+ 	708659 - Totals column moves to right hand side when periods are added
+	       Remove unneeded gnc_plugin_page_budget_refresh_cb
+	       Author: R Ratliff <ratliff.bobby@gmail.com>
+ 	710055 - advanced portfolio report counts capital gains split
+ 	       as dividend. Author: Jason McCarty <jmccarty@sent.com>
+	710311 - Missing ChangeLogs
+	710739 - Fill in field for remote bank account information
+	       also for SEPA transfers.
+	710871 - Fix for Python site-packages not found when not
+	       installed to default location
+	710979 - Crash in gnc_plugin_page_invoice_summarybar_position_changed
+
  2.5.6 - 7 October 2013
        	 This is the seventh release in the UNSTABLE 2.5 series.
 
