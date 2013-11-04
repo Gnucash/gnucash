@@ -27,7 +27,6 @@
 #include "gnc-ofx-kvp.h"
 
 static const char *KEY_ASSOC_INCOME_ACCOUNT = "ofx/associated-income-account";
-static void force_account_dirty(Account *acct);
 
 
 Account *gnc_ofx_kvp_get_assoc_account(const Account* investment_account)
@@ -65,20 +64,6 @@ void gnc_ofx_kvp_set_assoc_account(Account* investment_account,
     xaccAccountBeginEdit(investment_account);
     kvp_frame_set_slot_nc(acc_frame, KEY_ASSOC_INCOME_ACCOUNT,
                           kvp_val);
-    force_account_dirty(investment_account);
+    qof_instance_set_dirty(QOF_INSTANCE (investment_account));
     xaccAccountCommitEdit(investment_account);
-}
-
-// copied from gnc-ab-kvp.c
-static void
-force_account_dirty(Account *acct)
-{
-    gchar *name = g_strdup(xaccAccountGetName(acct));
-
-    /* This is necessary because modifying the KvpFrames doesn't mark
-     * accounts dirty, which means the changes wont be propagated to the
-     * backend.
-     */
-    xaccAccountSetName(acct, name);
-    g_free(name);
 }
