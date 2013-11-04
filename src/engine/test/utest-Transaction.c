@@ -1048,10 +1048,11 @@ test_xaccTransGetImbalance_trading (Fixture *fixture,
     Account *acc2 = xaccMallocAccount (book);
     gnc_numeric value;
     MonetaryList *mlist;
-
+    qof_book_begin_edit (book);
     qof_instance_set (QOF_INSTANCE (book),
 		      "trading-accts", "t",
 		      NULL);
+    qof_book_commit_edit (book);
 
  /* Without trading splits, the list is unbalanced */
     mlist = xaccTransGetImbalance (fixture->txn);
@@ -1134,9 +1135,12 @@ test_xaccTransIsBalanced_trading (Fixture *fixture, gconstpointer pData)
     Account *acc1 = xaccMallocAccount (book);
     Account *acc2 = xaccMallocAccount (book);
 
+    qof_book_begin_edit (book);
     qof_instance_set (QOF_INSTANCE (book),
 		      "trading-accts", "t",
 		      NULL);
+    qof_book_commit_edit (book);
+
     xaccAccountSetCommodity (acc1, fixture->curr);
     xaccAccountSetCommodity (acc2, fixture->comm);
     xaccAccountSetType (acc1, ACCT_TYPE_TRADING);
@@ -1639,10 +1643,6 @@ test_xaccTransCommitEdit (void)
         xaccTransSetCurrency (txn, curr);
         xaccSplitSetParent (split1, txn);
         xaccSplitSetParent (split2, txn);
-        /* xaccTransCommitEdit doesn't do anything with kvp
-        kvp_frame_set_double (frame, "/qux/quux/corge", 123.456);
-         qof_instance_set_slots (QOF_INSTANCE (txn), frame);
-         */
     }
     /* Setup's done, now test: */
     xaccTransCommitEdit (txn);

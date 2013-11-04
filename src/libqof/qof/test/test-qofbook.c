@@ -361,6 +361,7 @@ test_book_use_trading_accounts( Fixture *fixture, gconstpointer pData )
     g_assert( qof_book_use_trading_accounts( fixture-> book ) == FALSE );
 
     g_test_message( "Testing with existing trading accounts set to true - t" );
+    qof_book_begin_edit (fixture->book);
     qof_instance_set (QOF_INSTANCE (fixture->book),
 		      "trading-accts", "t",
 		      NULL);
@@ -371,6 +372,7 @@ test_book_use_trading_accounts( Fixture *fixture, gconstpointer pData )
 		      "trading-accts", "tt",
 		      NULL);
     g_assert( qof_book_use_trading_accounts( fixture-> book ) == FALSE );
+    qof_book_commit_edit (fixture->book);
 
 }
 
@@ -384,6 +386,7 @@ test_book_get_num_days_autofreeze( Fixture *fixture, gconstpointer pData )
     g_assert( qof_book_uses_autoreadonly( fixture-> book ) == FALSE );
     g_assert( qof_book_get_num_days_autoreadonly( fixture-> book ) == 0 );
 
+    qof_book_begin_edit (fixture->book);
     qof_instance_set (QOF_INSTANCE (fixture->book),
 		      "autoreadonly-days", (gdouble)17,
 		      NULL);
@@ -404,6 +407,7 @@ test_book_get_num_days_autofreeze( Fixture *fixture, gconstpointer pData )
     g_assert( qof_book_uses_autoreadonly( fixture-> book ) == TRUE );
     g_assert( qof_book_get_num_days_autoreadonly( fixture-> book ) == 32 );
 
+    qof_book_commit_edit (fixture->book);
 }
 
 static void
@@ -414,6 +418,7 @@ test_book_use_split_action_for_num_field( Fixture *fixture, gconstpointer pData 
 
     g_test_message( "Testing with existing use split action for num set to true - t" );
 
+    qof_book_begin_edit (fixture->book);
     qof_instance_set (QOF_INSTANCE (fixture->book),
 		      "split-action-num-field", "t",
 		      NULL);
@@ -424,6 +429,7 @@ test_book_use_split_action_for_num_field( Fixture *fixture, gconstpointer pData 
 		      "split-action-num-field", "tt",
 		      NULL);
     g_assert( qof_book_use_split_action_for_num_field( fixture-> book ) == FALSE );
+    qof_book_commit_edit (fixture->book);
 }
 
 static void

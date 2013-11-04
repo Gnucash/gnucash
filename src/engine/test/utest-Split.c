@@ -1137,9 +1137,11 @@ test_xaccSplitOrder (Fixture *fixture, gconstpointer pData)
 
     /* create correct slot path */
     g_test_message( "Testing with use-split-action-for-num set to true - t" );
+    qof_book_begin_edit (book);
     qof_instance_set (QOF_INSTANCE (book),
 		      "split-action-num-field", "t",
 		      NULL);
+    qof_book_commit_edit (book);
     g_assert(qof_book_use_split_action_for_num_field(xaccSplitGetBook(split)) == TRUE);
 
     g_assert_cmpint (xaccSplitOrder (split, o_split), ==, -1);
@@ -1151,9 +1153,11 @@ test_xaccSplitOrder (Fixture *fixture, gconstpointer pData)
     o_split->action = NULL;
     split->action = "foo";
     o_split->parent = NULL;
+    qof_book_begin_edit (book);
     qof_instance_set (QOF_INSTANCE (book),
 		      "split-action-num-field", "f",
 		      NULL);
+    qof_book_commit_edit (book);
     g_assert(qof_book_use_split_action_for_num_field(xaccSplitGetBook(split)) == FALSE);
     split->parent = NULL;
     /* This should return > 0 because o_split has no memo string */
@@ -1782,9 +1786,11 @@ test_xaccSplitGetOtherSplit (Fixture *fixture, gconstpointer pData)
     g_assert (kvp_frame_get_slot (split->inst.kvp_data, "lot-split") == NULL);
     kvp_frame_set_slot (split1->inst.kvp_data, "lot-split", NULL);
     g_assert (kvp_frame_get_slot (split1->inst.kvp_data, "lot-split") == NULL);
+    qof_book_begin_edit (book);
     qof_instance_set (QOF_INSTANCE (book),
 		      "trading-accts", "t",
 		      NULL);
+    qof_book_commit_edit (book);
     g_assert (xaccTransUseTradingAccounts (txn));
     g_assert (xaccSplitGetOtherSplit (split) == NULL);
     split2->acc = acc2;

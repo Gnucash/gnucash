@@ -60,7 +60,7 @@ typedef struct
 /* Prototype to shut clang up */
 void test_suite_engine_kvp_properties (void);
 
-/* Private QofInstance function needed for testing */
+/* Private QofInstance functions needed for testing */
 extern void qof_instance_mark_clean (QofInstance*);
 
 const gchar *suitename = "/engine/kvp-properties";
@@ -147,7 +147,7 @@ test_account_kvp_properties (Fixture *fixture, gconstpointer pData)
     Timespec trans_retr = timespec_now ();
     Timespec *trans_retr_r;
 
-
+    xaccAccountBeginEdit (fixture->acct);
     qof_instance_set (QOF_INSTANCE (fixture->acct),
 		      "lot-next-id", next_id,
 		      "online-id", online_id,
@@ -189,6 +189,7 @@ test_trans_kvp_properties (Fixture *fixture, gconstpointer pData)
     gchar *online_id = "my online id";
     gchar *online_id_r;
 
+    xaccTransBeginEdit (fixture->trans);
     qof_instance_set (QOF_INSTANCE (fixture->trans),
 		      "invoice", invoice,
 		      "from-sched-xaction", from_sx,
@@ -229,6 +230,7 @@ test_split_kvp_properties (Fixture *fixture, gconstpointer pData)
     gnc_numeric credit_numeric = gnc_numeric_create (789, 456);
     gnc_numeric *debit_numeric_r, *credit_numeric_r;
 
+    qof_begin_edit (QOF_INSTANCE (fixture->split));
     qof_instance_set (QOF_INSTANCE (fixture->split),
 		      "sx-debit-formula", debit_formula,
 		      "sx-debit-numeric", &debit_numeric,
@@ -263,6 +265,7 @@ test_split_kvp_properties (Fixture *fixture, gconstpointer pData)
     g_free (debit_numeric_r);
     g_free (credit_formula_r);
     g_free (credit_numeric_r);
+    qof_begin_edit (QOF_INSTANCE (fixture->split));
     qof_instance_set (QOF_INSTANCE (fixture->split),
 		      "sx-credit-formula", NULL,
 		      NULL);
@@ -286,6 +289,7 @@ test_lot_kvp_properties (Fixture *fixture, gconstpointer pData)
     GncGUID *owner = guid_malloc ();
     GncGUID *owner_r;
 
+    qof_begin_edit (QOF_INSTANCE (fixture->lot));
     qof_instance_set (QOF_INSTANCE (fixture->lot),
 		      "invoice", invoice,
 		      "owner-type", owner_type,
@@ -319,6 +323,7 @@ test_customer_kvp_properties (Fixture *fixture, gconstpointer pData)
     GncGUID *pmt_acct = guid_malloc ();
     GncGUID *inv_acct_r, *pmt_acct_r;
 
+    qof_begin_edit (QOF_INSTANCE (fixture->cust));
     qof_instance_set (QOF_INSTANCE (fixture->cust),
 		      "export-pdf-dir", pdf_dir,
 		      "invoice-last-posted-account", inv_acct,
@@ -354,6 +359,7 @@ test_employee_kvp_properties (Fixture *fixture, gconstpointer pData)
     GncGUID *pmt_acct = guid_malloc ();
     GncGUID *inv_acct_r, *pmt_acct_r;
 
+    qof_begin_edit (QOF_INSTANCE (fixture->emp));
     qof_instance_set (QOF_INSTANCE (fixture->emp),
 		      "export-pdf-dir", pdf_dir,
 		      "invoice-last-posted-account", inv_acct,
@@ -386,6 +392,7 @@ test_job_kvp_properties (Fixture *fixture, gconstpointer pData)
     gchar *pdf_dir = "/foo/bar/baz";
     gchar *pdf_dir_r;
 
+    qof_begin_edit (QOF_INSTANCE (fixture->job));
     qof_instance_set (QOF_INSTANCE (fixture->job),
 		      "export-pdf-dir", pdf_dir,
 		      NULL);
@@ -411,6 +418,7 @@ test_vendor_kvp_properties (Fixture *fixture, gconstpointer pData)
     GncGUID *pmt_acct = guid_malloc ();
     GncGUID *inv_acct_r, *pmt_acct_r;
 
+    qof_begin_edit (QOF_INSTANCE (fixture->vend));
     qof_instance_set (QOF_INSTANCE (fixture->vend),
 		      "export-pdf-dir", pdf_dir,
 		      "invoice-last-posted-account", inv_acct,
