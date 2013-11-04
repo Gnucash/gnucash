@@ -121,7 +121,7 @@ static GList *active_windows = NULL;
  *  any changes will be saved and the save dialog closed automatically */
 static guint secs_to_save = 0;
 
-#define MSG_AUTO_SAVE _("Changes will be saved automatically in %d seconds")
+#define MSG_AUTO_SAVE _("Changes will be saved automatically in %u seconds")
 
 /* Declarations *********************************************************/
 static void gnc_main_window_class_init (GncMainWindowClass *klass);
