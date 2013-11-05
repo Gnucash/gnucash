@@ -102,7 +102,7 @@ get_fy_end(void)
 {
     QofBook *book;
     KvpFrame *book_frame;
-    GDate *date;
+    GDate *date = NULL;
 
     book = gnc_get_current_book();
     qof_instance_get (QOF_INSTANCE (book),

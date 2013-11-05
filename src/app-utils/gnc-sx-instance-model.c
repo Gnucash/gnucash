@@ -177,8 +177,8 @@ _get_vars_helper(Transaction *txn, void *var_hash_data)
     GHashTable *var_hash = (GHashTable*)var_hash_data;
     GList *split_list;
     Split *s;
-    gchar *credit_formula;
-    gchar *debit_formula;
+    gchar *credit_formula = NULL;
+    gchar *debit_formula = NULL;
     gnc_commodity *first_cmdty = NULL;
 
     split_list = xaccTransGetSplitList(txn);
@@ -190,7 +190,7 @@ _get_vars_helper(Transaction *txn, void *var_hash_data)
     for ( ; split_list; split_list = split_list->next)
     {
         gnc_commodity *split_cmdty = NULL;
-        GncGUID *acct_guid;
+        GncGUID *acct_guid = NULL;
         Account *acct;
 
         s = (Split*)split_list->data;
@@ -884,9 +884,12 @@ typedef struct _SxTxnCreationData
 } SxTxnCreationData;
 
 static gboolean
-_get_template_split_account(const SchedXaction* sx, const Split *template_split, Account **split_acct, GList **creation_errors)
+_get_template_split_account(const SchedXaction* sx,
+			    const Split *template_split,
+			    Account **split_acct,
+			    GList **creation_errors)
 {
-    GncGUID *acct_guid;
+    GncGUID *acct_guid = NULL;
     qof_instance_get (QOF_INSTANCE (template_split),
 		      "sx-account", &acct_guid,
 		      NULL);
@@ -911,10 +914,16 @@ _get_template_split_account(const SchedXaction* sx, const Split *template_split,
 }
 
 static void
-_get_sx_formula_value(const SchedXaction* sx, const Split *template_split, gnc_numeric *numeric, GList **creation_errors, const char *formula_key, const char* numeric_key, GHashTable *variable_bindings)
+_get_sx_formula_value(const SchedXaction* sx,
+		      const Split *template_split,
+		      gnc_numeric *numeric,
+		      GList **creation_errors,
+		      const char *formula_key,
+		      const char* numeric_key,
+		      GHashTable *variable_bindings)
 {
 
-    char *formula_str, *parseErrorLoc;
+    char *formula_str = NULL, *parseErrorLoc = NULL;
     qof_instance_get (QOF_INSTANCE (template_split),
 		      formula_key, &formula_str,
 		      numeric_key, &numeric,

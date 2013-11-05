@@ -1102,7 +1102,7 @@ gncInvoiceAttachToLot (GncInvoice *invoice, GNCLot *lot)
 
 GncInvoice * gncInvoiceGetInvoiceFromLot (GNCLot *lot)
 {
-    GncGUID *guid;
+    GncGUID *guid = NULL;
     QofBook *book;
 
     if (!lot) return NULL;
@@ -1134,7 +1134,7 @@ gncInvoiceAttachToTxn (GncInvoice *invoice, Transaction *txn)
 GncInvoice *
 gncInvoiceGetInvoiceFromTxn (const Transaction *txn)
 {
-    GncGUID *guid;
+    GncGUID *guid = NULL;
     QofBook *book;
 
     if (!txn) return NULL;

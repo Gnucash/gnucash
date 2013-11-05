@@ -40,7 +40,7 @@ static kvp_frame *gnc_ab_get_book_kvp(QofBook *b, gboolean create);
 const gchar *
 gnc_ab_get_account_accountid(const Account *a)
 {
-    gchar *id;
+    gchar *id = NULL;
     qof_instance_get (QOF_INSTANCE (a),
 		      "ab-account-id", &id,
 		      NULL);
@@ -60,7 +60,7 @@ gnc_ab_set_account_accountid(Account *a, const gchar *id)
 const gchar *
 gnc_ab_get_account_bankcode(const Account *a)
 {
-    gchar *code;
+    gchar *code = NULL;
     qof_instance_get (QOF_INSTANCE (a),
 		      "ab-bank-code", &code,
 		      NULL);
@@ -80,7 +80,7 @@ gnc_ab_set_account_bankcode(Account *a, const gchar *code)
 guint32
 gnc_ab_get_account_uid(const Account *a)
 {
-    guint64 uid;
+    guint64 uid = 0LL;
     qof_instance_get (QOF_INSTANCE (a),
 		      "ab-account-uid", &uid,
 		      NULL);
@@ -100,7 +100,7 @@ gnc_ab_set_account_uid(Account *a, guint32 uid)
 Timespec
 gnc_ab_get_account_trans_retrieval(const Account *a)
 {
-    Timespec t;
+    Timespec t = {0LL, 0LL};
     qof_instance_get (QOF_INSTANCE (a),
 		      "ab-trans-retrieval", &t,
 		      NULL);
@@ -120,7 +120,7 @@ gnc_ab_set_account_trans_retrieval(Account *a, Timespec time)
 GList *
 gnc_ab_get_book_template_list(QofBook *b)
 {
-    GList *template_list;
+    GList *template_list = NULL;
     qof_instance_get (QOF_INSTANCE (b),
 		      "ab-templates", &template_list,
 		      NULL);

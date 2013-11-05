@@ -1054,7 +1054,7 @@ gnc_preferences_dialog_create(void)
     GtkWidget *dialog, *notebook, *label, *image;
     GtkWidget *box, *date, *period, *currency;
     GHashTable *prefs_table;
-    GDate* gdate;
+    GDate* gdate = NULL;
     gchar buf[128];
     GtkListStore *store;
     GtkTreePath *path;
@@ -1120,6 +1120,7 @@ gnc_preferences_dialog_create(void)
 
 
     book = gnc_get_current_book();
+    g_date_clear (&fy_end, 1);
     qof_instance_get (QOF_INSTANCE (book),
 		      "fy-end", &fy_end,
 		      NULL);

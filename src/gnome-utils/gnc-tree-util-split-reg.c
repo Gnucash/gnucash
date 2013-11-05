@@ -398,7 +398,7 @@ gnc_tree_util_split_reg_template_get_transfer_entry (Split *split)
 {
     static char *name = NULL;
     Account *account;
-    GncGUID *guid;
+    GncGUID *guid = NULL;
 
     /* Callers either g_strdup the return or use it as a temp for comparison,
        so we keep our static ref and free it on every call. */
@@ -419,7 +419,7 @@ gnc_tree_util_split_reg_template_get_transfer_entry (Split *split)
 const char *
 gnc_tree_util_split_reg_template_get_fdebt_entry (Split *split)
 {
-    gchar *formula;
+    gchar *formula = NULL;
 
     g_return_val_if_fail (split != NULL, NULL);
     qof_instance_get (QOF_INSTANCE (split),
@@ -432,7 +432,7 @@ gnc_tree_util_split_reg_template_get_fdebt_entry (Split *split)
 const char *
 gnc_tree_util_split_reg_template_get_fcred_entry (Split *split)
 {
-    gchar *formula;
+    gchar *formula = NULL;
 
     g_return_val_if_fail (split != NULL, NULL);
     qof_instance_get (QOF_INSTANCE (split),

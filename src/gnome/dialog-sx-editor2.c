@@ -546,7 +546,7 @@ gnc_sxed_check_consistent (GncSxEditorDialog2 *sxed)
         int numIters, i;
         GHashTable *vars, *txns;
         GList *splitList = NULL;
-        char *credit_formula, *debit_formula;
+        char *credit_formula = NULL, *debit_formula = NULL;
         Split *s;
         Transaction *t;
         gnc_numeric tmp;
@@ -595,7 +595,7 @@ gnc_sxed_check_consistent (GncSxEditorDialog2 *sxed)
 
             for (; splitList; splitList = splitList->next)
             {
-                GncGUID *acct_guid;
+                GncGUID *acct_guid = NULL;
                 Account *acct;
                 gnc_commodity *split_cmdty;
                 txnCreditDebitSums *tcds;

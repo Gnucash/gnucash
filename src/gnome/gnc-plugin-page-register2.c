@@ -3629,7 +3629,7 @@ gnc_plugin_page_register2_cmd_schedule (GtkAction *action,
     /* If the transaction has a sched-xact KVP frame, then go to the editor
      * for the existing SX; otherwise, do the sx-from-trans dialog. */
     {
-	GncGUID *fromSXId;
+	GncGUID *fromSXId = NULL;
 	SchedXaction *theSX = NULL;
 	GList *sxElts;
 	qof_instance_get (QOF_INSTANCE (trans),

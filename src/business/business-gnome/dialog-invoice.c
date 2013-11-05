@@ -720,7 +720,7 @@ gnc_dialog_post_invoice(InvoiceWindow *iw, char *message,
     *ddue = *postdate;
     *memo = NULL;
     {
-	GncGUID *guid;
+	GncGUID *guid = NULL;
 	owner_inst = qofOwnerGetOwner (gncOwnerGetEndOwner (&(iw->owner)));
 	qof_instance_get (owner_inst,
 			  "invoice-last-posted-account", &guid,

@@ -742,7 +742,7 @@ gboolean gnc_lot_register (void)
 GNCLot * gnc_lot_make_default (Account *acc)
 {
     GNCLot * lot;
-    gint64 id;
+    gint64 id = 0;
     gchar *buff;
 
     lot = gnc_lot_new (qof_instance_get_book(acc));

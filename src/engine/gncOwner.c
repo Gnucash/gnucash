@@ -610,9 +610,9 @@ void gncOwnerAttachToLot (const GncOwner *owner, GNCLot *lot)
 
 gboolean gncOwnerGetOwnerFromLot (GNCLot *lot, GncOwner *owner)
 {
-    GncGUID *guid;
+    GncGUID *guid = NULL;
     QofBook *book;
-    GncOwnerType type;
+    GncOwnerType type = GNC_OWNER_NONE;
 
     if (!lot || !owner) return FALSE;
 

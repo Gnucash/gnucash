@@ -2097,7 +2097,7 @@ gnc_template_register_get_xfrm_entry (VirtualLocation virt_loc,
     SplitRegister *reg = user_data;
     Split *split;
     Account *account;
-    GncGUID *guid;
+    GncGUID *guid = NULL;
 
     split = gnc_split_register_get_split (reg, virt_loc.vcell_loc);
     if (!split)
@@ -2124,7 +2124,7 @@ gnc_template_register_get_fdebt_entry (VirtualLocation virt_loc,
 {
     SplitRegister *reg = user_data;
     Split *split = gnc_split_register_get_split(reg, virt_loc.vcell_loc);
-    char *formula;
+    char *formula = NULL;
 
     qof_instance_get (QOF_INSTANCE (split),
 		      "sx-debit-formula", &formula,
@@ -2155,7 +2155,7 @@ gnc_template_register_get_fcred_entry (VirtualLocation virt_loc,
 {
     SplitRegister *reg = user_data;
     Split *split = gnc_split_register_get_split(reg, virt_loc.vcell_loc);
-    char *formula;
+    char *formula = NULL;
 
     qof_instance_get (QOF_INSTANCE (split),
 		      "sx-credit-formula", &formula,

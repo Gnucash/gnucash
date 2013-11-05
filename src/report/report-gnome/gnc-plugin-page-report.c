@@ -1788,7 +1788,7 @@ gnc_plugin_page_report_exportpdf_cb( GtkAction *action, GncPluginPageReport *rep
         if (owner)
         {
 	    QofInstance *inst = qofOwnerGetOwner (owner);
-	    gchar *dirname;
+	    gchar *dirname = NULL;
 	    qof_instance_get (inst, "export-pdf-dir", &dirname, NULL);
             // Yes. In the kvp, look up the key for the Export-PDF output
             // directory. If it exists, prepend this to the job name so that

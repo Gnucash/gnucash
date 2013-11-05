@@ -42,7 +42,7 @@
 
 const gchar * gnc_import_get_acc_online_id (Account * account)
 {
-    gchar *id;
+    gchar *id = NULL;
     qof_instance_get (QOF_INSTANCE (account), "online-id", &id, NULL);
     return id;
 }
@@ -59,7 +59,7 @@ void gnc_import_set_acc_online_id (Account *account, const gchar *id)
 
 const gchar * gnc_import_get_trans_online_id (Transaction * transaction)
 {
-    gchar *id;
+    gchar *id = NULL;
     qof_instance_get (QOF_INSTANCE (transaction), "online-id", &id, NULL);
     return id;
 }
@@ -82,7 +82,7 @@ gboolean gnc_import_trans_has_online_id(Transaction * transaction)
 
 const gchar * gnc_import_get_split_online_id (Split * split)
 {
-    gchar *id;
+    gchar *id = NULL;
     qof_instance_get (QOF_INSTANCE (split), "online-id", &id, NULL);
     return id;
 }

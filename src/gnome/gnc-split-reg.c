@@ -1204,7 +1204,7 @@ gsr_default_schedule_handler( GNCSplitReg *gsr, gpointer data )
     /* If the transaction has a sched-xact KVP frame, then go to the editor
      * for the existing SX; otherwise, do the sx-from-trans dialog. */
     {
-	GncGUID *fromSXId;
+	GncGUID *fromSXId = NULL;
 	SchedXaction *theSX = NULL;
 	GList *sxElts;
 	qof_instance_get (QOF_INSTANCE (pending_trans),

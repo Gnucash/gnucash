@@ -1732,7 +1732,7 @@ account_cell_property_data_func (GtkTreeViewColumn *tree_column,
 				 gpointer key)
 {
     Account *account;
-    gchar *string;
+    gchar *string = NULL;
 
     g_return_if_fail (GTK_IS_TREE_MODEL_SORT (s_model));
     account = gnc_tree_view_account_get_account_from_iter(s_model, s_iter);

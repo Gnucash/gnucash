@@ -815,7 +815,7 @@ qof_book_validate_counter_format_internal(const gchar *p,
 gboolean
 qof_book_use_trading_accounts (const QofBook *book)
 {
-    const char *opt;
+    const char *opt = NULL;
     qof_instance_get (QOF_INSTANCE (book),
 		      "trading-accts", &opt,
 		      NULL);
@@ -829,7 +829,7 @@ qof_book_use_trading_accounts (const QofBook *book)
 gboolean
 qof_book_use_split_action_for_num_field (const QofBook *book)
 {
-    const char *opt;
+    const char *opt = NULL;
     qof_instance_get (QOF_INSTANCE (book),
 		      "split-action-num-field", &opt,
 		      NULL);
@@ -848,7 +848,7 @@ gboolean qof_book_uses_autoreadonly (const QofBook *book)
 gint qof_book_get_num_days_autoreadonly (const QofBook *book)
 {
     kvp_value *kvp_val;
-    double tmp;
+    double tmp = 0;
     KvpFrame *frame = qof_instance_get_slots (QOF_INSTANCE (book));
 
     g_assert(book);

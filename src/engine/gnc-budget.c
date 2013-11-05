@@ -627,7 +627,7 @@ gnc_budget_get_default (QofBook *book)
 {
     QofCollection *col;
     GncBudget *bgt = NULL;
-    const GncGUID *default_budget_guid;
+    const GncGUID *default_budget_guid = NULL;
 
     g_return_val_if_fail(book, NULL);
 
