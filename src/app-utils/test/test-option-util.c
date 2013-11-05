@@ -42,6 +42,7 @@ typedef struct
  * the Book.
  */
 extern KvpFrame *qof_instance_get_slots (QofInstance*);
+
 static void
 setup (Fixture *fixture, gconstpointer pData)
 {
@@ -57,6 +58,7 @@ setup_kvp (Fixture *fixture, gconstpointer pData)
     setup (fixture, pData);
     book = fixture->book;
     slots = qof_instance_get_slots (QOF_INSTANCE (book));
+    qof_begin_edit (QOF_INSTANCE (book));
     qof_instance_set (QOF_INSTANCE (book),
 		      "trading-accts", "t",
 		      "split-action-num-field", "t",
@@ -65,6 +67,7 @@ setup_kvp (Fixture *fixture, gconstpointer pData)
 
     kvp_frame_set_string (slots, "options/Business/Company Name",
 			  "Bogus Company");
+    qof_commit_edit (QOF_INSTANCE (book));
 }
 
 static void
