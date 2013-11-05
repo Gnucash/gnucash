@@ -1,16 +1,16 @@
-<schemalist gettext-domain="GETTEXT_PACKAGE">
-  <schema id="org.gnucash.dialogs.import.csv" path="/org/gnucash/dialogs/import/csv/">
+<schemalist gettext-domain="@GETTEXT_PACKAGE@">
+  <schema id="org.gnucash.dialogs.commodities" path="/org/gnucash/dialogs/commodities/">
+    <key name="include-iso" type="b">
+      <default>false</default>
+      <summary>Show currencies in this dialog</summary>
+      <description>Show currencies in this dialog</description>
+    </key>
     <key name="last-geometry" type="(iiii)">
       <default>(-1,-1,-1,-1)</default>
       <summary>Last window position and size</summary>
       <description>This setting describes the size and position of the window when it was last closed.
         The numbers are the X and Y coordinates of the top left corner of the window
         followed by the width and height of the window.</description>
-    </key>
-    <key name="last-path" type="s">
-      <default>''</default>
-      <summary>Last pathname used</summary>
-      <description>This field contains the last pathname used by this window. It will be used as the initial filename/pathname the next time this window is opened.</description>
     </key>
   </schema>
 </schemalist>

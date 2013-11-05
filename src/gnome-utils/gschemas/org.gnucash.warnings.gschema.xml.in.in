@@ -1,4 +1,4 @@
-<schemalist gettext-domain="GETTEXT_PACKAGE">
+<schemalist gettext-domain="@GETTEXT_PACKAGE@">
   <schema id="org.gnucash.warnings" path="/org/gnucash/warnings/">
     <child name="permanent" schema="org.gnucash.warnings.permanent"/>
     <child name="temporary" schema="org.gnucash.warnings.temporary"/>

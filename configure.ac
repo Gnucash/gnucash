@@ -1441,6 +1441,25 @@ AC_CONFIG_FILES(
   src/bin/gnucash.rc
   src/app-utils/migratable-prefs.xml
   src/gnome/gnucash.desktop.in
+  dnl # GSettings schema files
+  src/business/business-gnome/gschemas/org.gnucash.dialogs.business.gschema.xml.in
+  src/gnome/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in
+  src/gnome/gschemas/org.gnucash.dialogs.commodities.gschema.xml.in
+  src/gnome/gschemas/org.gnucash.dialogs.gschema.xml.in
+  src/gnome/gschemas/org.gnucash.dialogs.reconcile.gschema.xml.in
+  src/gnome/gschemas/org.gnucash.dialogs.sxs.gschema.xml.in
+  src/gnome/gschemas/org.gnucash.dialogs.totd.gschema.xml.in
+  src/gnome/gschemas/org.gnucash.gschema.xml.in
+  src/gnome/gschemas/org.gnucash.window.pages.account.tree.gschema.xml.in
+  src/gnome/gschemas/org.gnucash.window.pages.gschema.xml.in
+  src/gnome-utils/gschemas/org.gnucash.history.gschema.xml.in
+  src/gnome-utils/gschemas/org.gnucash.warnings.gschema.xml.in
+  src/import-export/aqbanking/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in
+  src/import-export/csv-export/gschemas/org.gnucash.dialogs.export.csv.gschema.xml.in
+  src/import-export/csv-import/gschemas/org.gnucash.dialogs.import.csv.gschema.xml.in
+  src/import-export/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in
+  src/import-export/ofx/gschemas/org.gnucash.dialogs.import.ofx.gschema.xml.in
+  src/import-export/qif-import/gschemas/org.gnucash.dialogs.import.qif.gschema.xml.in
 
   dnl # Please read doc/build-system before adding *anything* here
   ,

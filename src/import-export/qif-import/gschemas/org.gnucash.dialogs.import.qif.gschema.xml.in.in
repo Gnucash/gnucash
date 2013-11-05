@@ -1,4 +1,4 @@
-<schemalist gettext-domain="GETTEXT_PACKAGE">
+<schemalist gettext-domain="@GETTEXT_PACKAGE@">
   <schema id="org.gnucash.dialogs.import.qif" path="/org/gnucash/dialogs/import/qif/">
     <key name="default-status-notcleared" type="b">
       <default>true</default>

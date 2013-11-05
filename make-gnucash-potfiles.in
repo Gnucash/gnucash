@@ -20,7 +20,7 @@ my @ignored_files = `grep -v \# @-SRCDIR-@/po/POTFILES.ignore`;
 
 my @possible_files = `cd @-SRCDIR-@ && find src -name '*.c' -o -name '*.glade' \\
                       -o -name '*.desktop.in' -o -name '*.keys.in' \\
-                      -o -name '*.schemas.in' |sort`;
+                      -o -name '*.gschema.xml.in.in' |sort`;
 ## For perl files add the following:
 # -o -name '*.pl'
 
@@ -45,8 +45,14 @@ foreach my $file (@possible_files) {
     
     # Ignore unreadable files, e.g. dangling symlinks
     next unless (-r "@-SRCDIR-@/" . $path . $name);
+
+    # Force parse type for gsettings files
+    my $type = "";
+    if ($file =~ m/.gschema.xml.in.in/ ){
+        $type = "[type: gettext/gsettings]";
+    }
     
-    print $path . $name . "\n";
+    print $type . $path . $name . "\n";
 }
 
 # These are also added, even though they are outside of src/
