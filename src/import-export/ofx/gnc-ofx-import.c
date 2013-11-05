@@ -704,9 +704,12 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void * transaction_u
                                              ACCT_TYPE_INCOME,
                                              NULL,
                                              NULL);
-                        gnc_ofx_kvp_set_assoc_account(investment_account,
-                                                      income_account);
-                        DEBUG("KVP written");
+                        if (income_account != NULL)
+                        {
+                            gnc_ofx_kvp_set_assoc_account(investment_account,
+                                                          income_account);
+                            DEBUG("KVP written");
+                        }
 
                     }
                     else
