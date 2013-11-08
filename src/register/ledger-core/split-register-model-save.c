@@ -425,7 +425,7 @@ gnc_split_register_save_amount_values (SRSaveData *sd, SplitRegister *reg)
       * amount.
       */
     amtconv = convrate = gnc_split_register_get_rate_cell (reg, RATE_CELL);
-    if (gnc_split_register_needs_conv_rate (reg, sd->trans, acc))
+    if (acc && gnc_split_register_needs_conv_rate (reg, sd->trans, acc))
     {
 
         /* If we are in an expanded register and the xfer_acc->comm !=
