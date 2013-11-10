@@ -458,9 +458,11 @@ test_xaccSplitEqual (Fixture *fixture, gconstpointer pData)
     split1->parent = fixture->split->parent;
     g_assert (xaccSplitEqual (fixture->split, split1, FALSE, TRUE, TRUE) == TRUE);
     /* Now set the GUIDs equal and see that the comparison passes */
+    qof_instance_increase_editlevel (split1->parent);
     g_object_set (G_OBJECT (split1),
                   "guid", qof_instance_get_guid (QOF_INSTANCE(fixture->split)),
                   NULL);
+    qof_instance_increase_editlevel (split1->parent);
     g_assert (xaccSplitEqual (fixture->split, split1, TRUE, TRUE, TRUE) == TRUE);
     g_assert_cmpint (checkA.hits, ==, 3);
     g_assert_cmpint (checkB.hits, ==, 1);
@@ -597,10 +599,12 @@ test_xaccSplitCommitEdit (Fixture *fixture, gconstpointer pData)
     g_assert_cmpint (checkB.hits, ==, 2);
 
     qof_instance_mark_clean (QOF_INSTANCE (fixture->split->parent));
+    qof_instance_increase_editlevel (fixture->split->acc);
     g_object_set (fixture->split->acc,
                   "sort-dirty", FALSE,
                   "balance-dirty", FALSE,
                   NULL);
+    qof_instance_decrease_editlevel (fixture->split->acc);
 
     qof_instance_set_dirty (QOF_INSTANCE (fixture->split));
     xaccSplitCommitEdit (fixture->split);

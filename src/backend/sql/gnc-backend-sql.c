@@ -1206,7 +1206,11 @@ const GncSqlColumnTableEntry* table_row )
     s = g_value_get_string( val );
     if ( table_row->gobj_param_name != NULL )
     {
+	if (QOF_IS_INSTANCE (pObject))
+	    qof_instance_increase_editlevel (QOF_INSTANCE (pObject));
         g_object_set( pObject, table_row->gobj_param_name, s, NULL );
+	if (QOF_IS_INSTANCE (pObject))
+	    qof_instance_decrease_editlevel (QOF_INSTANCE (pObject));
     }
     else
     {
@@ -1310,7 +1314,11 @@ load_int( const GncSqlBackend* be, GncSqlRow* row,
     }
     if ( table_row->gobj_param_name != NULL )
     {
+	if (QOF_IS_INSTANCE (pObject))
+	    qof_instance_increase_editlevel (QOF_INSTANCE (pObject));
         g_object_set( pObject, table_row->gobj_param_name, int_value, NULL );
+	if (QOF_IS_INSTANCE (pObject))
+	    qof_instance_decrease_editlevel (QOF_INSTANCE (pObject));
     }
     else
     {
@@ -1408,7 +1416,11 @@ load_boolean( const GncSqlBackend* be, GncSqlRow* row,
     }
     if ( table_row->gobj_param_name != NULL )
     {
+	if (QOF_IS_INSTANCE (pObject))
+	    qof_instance_increase_editlevel (QOF_INSTANCE (pObject));
         g_object_set( pObject, table_row->gobj_param_name, int_value, NULL );
+	if (QOF_IS_INSTANCE (pObject))
+	    qof_instance_decrease_editlevel (QOF_INSTANCE (pObject));
     }
     else
     {
@@ -1501,7 +1513,11 @@ load_int64( const GncSqlBackend* be, GncSqlRow* row,
     }
     if ( table_row->gobj_param_name != NULL )
     {
+	if (QOF_IS_INSTANCE (pObject))
+	    qof_instance_increase_editlevel (QOF_INSTANCE (pObject));
         g_object_set( pObject, table_row->gobj_param_name, i64_value, NULL );
+	if (QOF_IS_INSTANCE (pObject))
+	    qof_instance_decrease_editlevel (QOF_INSTANCE (pObject));
     }
     else
     {
@@ -1608,7 +1624,11 @@ load_double( const GncSqlBackend* be, GncSqlRow* row,
         }
         if ( table_row->gobj_param_name != NULL )
         {
+	if (QOF_IS_INSTANCE (pObject))
+	    qof_instance_increase_editlevel (QOF_INSTANCE (pObject));
             g_object_set( pObject, table_row->gobj_param_name, d_value, NULL );
+	    if (QOF_IS_INSTANCE (pObject))
+	    qof_instance_decrease_editlevel (QOF_INSTANCE (pObject));
         }
         else
         {
@@ -1707,7 +1727,11 @@ load_guid( const GncSqlBackend* be, GncSqlRow* row,
     {
         if ( table_row->gobj_param_name != NULL )
         {
+	if (QOF_IS_INSTANCE (pObject))
+	    qof_instance_increase_editlevel (QOF_INSTANCE (pObject));
             g_object_set( pObject, table_row->gobj_param_name, pGuid, NULL );
+	    if (QOF_IS_INSTANCE (pObject))
+	    qof_instance_decrease_editlevel (QOF_INSTANCE (pObject));
         }
         else
         {
@@ -1914,7 +1938,11 @@ load_timespec( const GncSqlBackend* be, GncSqlRow* row,
     {
         if (table_row->gobj_param_name != NULL)
         {
+	if (QOF_IS_INSTANCE (pObject))
+	    qof_instance_increase_editlevel (QOF_INSTANCE (pObject));
             g_object_set( pObject, table_row->gobj_param_name, &ts, NULL );
+	    if (QOF_IS_INSTANCE (pObject))
+	    qof_instance_decrease_editlevel (QOF_INSTANCE (pObject));
         }
         else
         {
@@ -2016,7 +2044,11 @@ load_date( const GncSqlBackend* be, GncSqlRow* row,
 	    g_date_time_unref (gdt);
 	    if ( table_row->gobj_param_name != NULL )
 	    {
+		if (QOF_IS_INSTANCE (pObject))
+		    qof_instance_increase_editlevel (QOF_INSTANCE (pObject));
 		g_object_set( pObject, table_row->gobj_param_name, date, NULL );
+		if (QOF_IS_INSTANCE (pObject))
+		    qof_instance_increase_editlevel (QOF_INSTANCE (pObject));
 	    }
 	    else
 	    {
@@ -2050,7 +2082,12 @@ load_date( const GncSqlBackend* be, GncSqlRow* row,
                     date = g_date_new_dmy( day, month, year );
                     if ( table_row->gobj_param_name != NULL )
                     {
-                        g_object_set( pObject, table_row->gobj_param_name, date, NULL );
+			if (QOF_IS_INSTANCE (pObject))
+			    qof_instance_increase_editlevel (QOF_INSTANCE (pObject));
+                        g_object_set (pObject, table_row->gobj_param_name,
+				      date, NULL);
+			if (QOF_IS_INSTANCE (pObject))
+			    qof_instance_increase_editlevel (QOF_INSTANCE (pObject));
                     }
                     else
                     {
@@ -2189,7 +2226,11 @@ load_numeric( const GncSqlBackend* be, GncSqlRow* row,
     {
         if ( table_row->gobj_param_name != NULL )
         {
+	    if (QOF_IS_INSTANCE (pObject))
+		qof_instance_increase_editlevel (QOF_INSTANCE (pObject));
             g_object_set( pObject, table_row->gobj_param_name, &n, NULL );
+	    if (QOF_IS_INSTANCE (pObject))
+		qof_instance_increase_editlevel (QOF_INSTANCE (pObject));
         }
         else
         {

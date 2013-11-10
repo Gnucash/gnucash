@@ -393,6 +393,7 @@ query_transactions( GncSqlBackend* be, GncSqlStatement* stmt )
                           "end-reconciled-balance", &pnew_end_r_bal,
                           NULL );
 
+	    qof_instance_increase_editlevel (balns-acc);
             if ( !gnc_numeric_eq( *pnew_end_bal, balns->end_bal ) )
             {
                 adj = gnc_numeric_sub( balns->end_bal, *pnew_end_bal,
@@ -400,6 +401,7 @@ query_transactions( GncSqlBackend* be, GncSqlStatement* stmt )
                 balns->start_bal = gnc_numeric_add( balns->start_bal, adj,
                                                     GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD );
                 g_object_set( balns->acc, "start-balance", &balns->start_bal, NULL );
+		qof_instance_decrease_editlevel (balns-acc);
             }
             if ( !gnc_numeric_eq( *pnew_end_c_bal, balns->end_cleared_bal ) )
             {
@@ -417,6 +419,7 @@ query_transactions( GncSqlBackend* be, GncSqlStatement* stmt )
                                               GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD );
                 g_object_set( balns->acc, "start-reconciled-balance", &balns->start_reconciled_bal, NULL );
             }
+	    qof_instance_decrease_editlevel (balns-acc);
             xaccAccountRecomputeBalance( balns->acc );
             g_free( pnew_end_bal );
             g_free( pnew_end_c_bal );
@@ -1429,7 +1432,9 @@ load_tx_guid( const GncSqlBackend* be, GncSqlRow* row,
         {
             if ( table_row->gobj_param_name != NULL )
             {
+		qof_instance_increase_editlevel (pObject);
                 g_object_set( pObject, table_row->gobj_param_name, tx, NULL );
+		qof_instance_decrease_editlevel (pObject);
             }
             else
             {
