@@ -924,17 +924,21 @@ _get_sx_formula_value(const SchedXaction* sx,
 {
 
     char *formula_str = NULL, *parseErrorLoc = NULL;
+    gnc_numeric *numeric_val = NULL;
     qof_instance_get (QOF_INSTANCE (template_split),
 		      formula_key, &formula_str,
-		      numeric_key, &numeric,
+		      numeric_key, &numeric_val,
 		      NULL);
 
-    if ((gnc_numeric_check(*numeric) == GNC_ERROR_OK)
-            && !gnc_numeric_zero_p(*numeric))
+    if (numeric_val != NULL &&
+	gnc_numeric_check(*numeric_val) == GNC_ERROR_OK &&
+	!gnc_numeric_zero_p(*numeric_val))
     {
         /* Already a valid non-zero result? Then return and don't
          * parse the string. Luckily we avoid any locale problems with
          * decimal points here! Phew. */
+	numeric->num = numeric_val->num;
+	numeric->denom = numeric_val->denom;
         return;
     }
 
