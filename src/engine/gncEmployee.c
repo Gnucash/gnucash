@@ -80,19 +80,19 @@ void mark_employee (GncEmployee *employee)
 enum
 {
     PROP_0,
-    PROP_USERNAME,
-    PROP_ID,
-    PROP_ACTIVE,
-    PROP_LANGUAGE,
-    PROP_CURRENCY,
-    PROP_ACL,
-    PROP_ADDRESS,
-    PROP_WORKDAY,
-    PROP_RATE,
-    PROP_CCARD,
-    PROP_PDF_DIRNAME,
-    PROP_LAST_POSTED,
-    PROP_PAYMENT_LAST_ACCT,
+    PROP_USERNAME,		/* Table */
+    PROP_ID,			/* Table */
+    PROP_LANGUAGE,		/* Table */
+    PROP_ACL,			/* Table */
+    PROP_ACTIVE,		/* Table */
+    PROP_CURRENCY,		/* Table */
+    PROP_CCARD,			/* Table */
+    PROP_WORKDAY,		/* Table (numeric) */
+    PROP_RATE,			/* Table (numeric) */
+    PROP_ADDRESS,		/* Table, 8 fields */
+    PROP_PDF_DIRNAME,		/* KVP */
+    PROP_LAST_POSTED,		/* KVP */
+    PROP_PAYMENT_LAST_ACCT,	/* KVP */
 };
 
 /* GObject Initialization */
@@ -195,6 +195,8 @@ gnc_employee_set_property (GObject         *object,
     g_return_if_fail(GNC_IS_EMPLOYEE(object));
 
     emp = GNC_EMPLOYEE(object);
+    g_assert (qof_instance_get_editlevel(emp));
+
     switch (prop_id)
     {
     case PROP_USERNAME:

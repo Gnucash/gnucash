@@ -208,9 +208,10 @@ gncTaxTableRemoveChild (GncTaxTable *table, const GncTaxTable *child)
 enum
 {
     PROP_0,
-    PROP_NAME,
-    PROP_INVISIBLE,
-    PROP_REFCOUNT
+    PROP_NAME,		/* Table */
+    PROP_INVISIBLE,	/* Table */
+    PROP_REFCOUNT,	/* Table */
+//  PROP_PARENT,	/* Table */
 };
 
 /* GObject Initialization */
@@ -272,6 +273,8 @@ gnc_taxtable_set_property (GObject         *object,
     g_return_if_fail(GNC_IS_TAXTABLE(object));
 
     tt = GNC_TAXTABLE(object);
+    g_assert (qof_instance_get_editlevel(tt));
+
     switch (prop_id)
     {
     case PROP_NAME:

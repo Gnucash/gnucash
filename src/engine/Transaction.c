@@ -193,14 +193,14 @@ static QofLogModule log_module = GNC_MOD_ENGINE;
 enum
 {
     PROP_0,
-    PROP_NUM,
-    PROP_DESCRIPTION,
-    PROP_CURRENCY,
-    PROP_POST_DATE,
-    PROP_ENTER_DATE,
-    PROP_INVOICE,
-    PROP_SX_TXN,
-    PROP_ONLINE_ACCOUNT,
+    PROP_CURRENCY,	/* Table */
+    PROP_NUM,		/* Table */
+    PROP_POST_DATE,	/* Table */
+    PROP_ENTER_DATE,	/* Table */
+    PROP_DESCRIPTION,	/* Table */
+    PROP_INVOICE,	/* KVP */
+    PROP_SX_TXN,	/* KVP */
+    PROP_ONLINE_ACCOUNT,/* KVP */
 };
 
 void
@@ -361,6 +361,8 @@ gnc_transaction_set_property(GObject* object,
     g_return_if_fail(GNC_IS_TRANSACTION(object));
 
     tx = GNC_TRANSACTION(object);
+    g_assert (qof_instance_get_editlevel(tx));
+
     switch (prop_id)
     {
     case PROP_NUM:

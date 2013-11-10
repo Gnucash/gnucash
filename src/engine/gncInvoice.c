@@ -112,7 +112,22 @@ QofBook * gncInvoiceGetBook(GncInvoice *x)
 enum
 {
     PROP_0,
-    PROP_NOTES
+//  PROP_ID,		/* Table */
+//  PROP_DATE_OPENED,	/* Table */
+//  PROP_DATE_POSTED,	/* Table */
+    PROP_NOTES,		/* Table */
+//  PROP_ACTIVE,	/* Table */
+//  PROP_CURRENCY,	/* Table */
+//  PROP_OWNER_TYPE,	/* Table */
+//  PROP_OWNER,		/* Table */
+//  PROP_TERMS,		/* Table */
+//  PROP_BILLING_ID,	/* Table */
+//  PROP_POST_TXN,	/* Table */
+//  PROP_POST_LOT,	/* Table */
+//  PROP_POST_ACCOUNT,	/* Table */
+//  PROP_BILLTO_TYPE,	/* Table */
+//  PROP_BILLTO,	/* Table */
+//  PROP_CHARGE_AMOUNT, /* Table, (numeric) */
 };
 
 /* GObject Initialization */
@@ -168,6 +183,8 @@ gnc_invoice_set_property (GObject         *object,
     g_return_if_fail(GNC_IS_INVOICE(object));
 
     inv = GNC_INVOICE(object);
+    g_assert (qof_instance_get_editlevel(inv));
+
     switch (prop_id)
     {
     case PROP_NOTES:

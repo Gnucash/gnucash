@@ -89,20 +89,20 @@ void mark_vendor (GncVendor *vendor)
 enum
 {
     PROP_0,
-    PROP_NAME,
-    PROP_ID,
-    PROP_NOTES,
-    PROP_CURRENCY,
-    PROP_ACTIVE,
-    PROP_TAXTABLE_OVERRIDE,
-    PROP_BILLTERMS,
-    PROP_TAXTABLE,
-    PROP_ADDRESS,
-    PROP_TAX_INCLUDED,
-    PROP_TAX_INCLUDED_STR,
-    PROP_PDF_DIRNAME,
-    PROP_LAST_POSTED,
-    PROP_PAYMENT_LAST_ACCT,
+    PROP_NAME,			/* Table */
+    PROP_ID,			/* Table */
+    PROP_NOTES,			/* Table */
+    PROP_CURRENCY,		/* Table */
+    PROP_ACTIVE,		/* Table */
+    PROP_TAXTABLE_OVERRIDE,	/* Table */
+    PROP_BILLTERMS,		/* Table */
+    PROP_TAXTABLE,		/* Table */
+    PROP_ADDRESS,		/* Table, 8 fields */
+    PROP_TAX_INCLUDED,		/* Table */
+    PROP_TAX_INCLUDED_STR,	/* Alternate setter for PROP_TAX_INCLUDED */
+    PROP_PDF_DIRNAME,		/* KVP */
+    PROP_LAST_POSTED,		/* KVP */
+    PROP_PAYMENT_LAST_ACCT,	/* KVP */
 };
 
 /* GObject Initialization */
@@ -208,6 +208,8 @@ gnc_vendor_set_property (GObject         *object,
     g_return_if_fail(GNC_IS_VENDOR(object));
 
     vendor = GNC_VENDOR(object);
+    g_assert (qof_instance_get_editlevel(vendor));
+
     switch (prop_id)
     {
     case PROP_NAME:

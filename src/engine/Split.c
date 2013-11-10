@@ -73,21 +73,24 @@ static QofLogModule log_module = GNC_MOD_ENGINE;
 enum
 {
     PROP_0,
-    PROP_ACTION,
-    PROP_MEMO,
-    PROP_VALUE,
-    PROP_AMOUNT,
-    PROP_RECONCILE_DATE,
-    PROP_TX,
-    PROP_ACCOUNT,
-    PROP_SX_ACCOUNT,
-    PROP_SX_CREDIT_FORMULA,
-    PROP_SX_CREDIT_NUMERIC,
-    PROP_SX_DEBIT_FORMULA,
-    PROP_SX_DEBIT_NUMERIC,
-    PROP_SX_SHARES,
-    PROP_LOT,
-    PROP_ONLINE_ACCOUNT,
+    PROP_TX,			/* Table */
+    PROP_ACCOUNT,		/* Table */
+    PROP_MEMO,			/* Table */
+    PROP_ACTION,		/* Table */
+//    PROP_RECONCILE_STATE,	/* Table */
+    PROP_RECONCILE_DATE,	/* Table */
+    PROP_VALUE,			/* Table, in 2 fields */
+    PROP_SX_ACCOUNT,		/* KVP */
+    PROP_SX_CREDIT_FORMULA,	/* KVP */
+    PROP_SX_CREDIT_NUMERIC,	/* KVP */
+    PROP_SX_DEBIT_FORMULA,	/* KVP */
+    PROP_SX_DEBIT_NUMERIC,	/* KVP */
+    PROP_SX_SHARES,		/* KVP */
+    PROP_LOT,			/* KVP */
+    PROP_ONLINE_ACCOUNT,	/* KVP */
+    PROP_RUNTIME_0,
+    PROP_AMOUNT,		/* Runtime */
+
 };
 
 /* GObject Initialization */
@@ -221,6 +224,9 @@ gnc_split_set_property(GObject         *object,
     g_return_if_fail(GNC_IS_SPLIT(object));
 
     split = GNC_SPLIT(object);
+    if (prop_id < PROP_RUNTIME_0 && split->parent != NULL)
+	g_assert (qof_instance_get_editlevel(split->parent));
+
     switch (prop_id)
     {
     case PROP_ACTION:

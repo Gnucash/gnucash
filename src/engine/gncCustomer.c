@@ -169,6 +169,8 @@ gnc_customer_set_property (GObject         *object,
     g_return_if_fail(GNC_IS_CUSTOMER(object));
 
     cust = GNC_CUSTOMER(object);
+    g_assert (qof_instance_get_editlevel(cust));
+
     switch (prop_id)
     {
     case PROP_NAME:

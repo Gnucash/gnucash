@@ -55,13 +55,15 @@ static QofLogModule log_module = QOF_MOD_ENGINE;
 enum
 {
     PROP_0,
-    PROP_OPT_TRADING_ACCOUNTS,
-    PROP_OPT_AUTO_READONLY_DAYS,
-    PROP_OPT_NUM_FIELD_SOURCE,
-    PROP_OPT_DEFAULT_BUDGET,
-    PROP_OPT_FY_END,
-    PROP_AB_TEMPLATES,
-    N_PROPERTIES
+//  PROP_ROOT_ACCOUNT,		/* Table */
+//  PROP_ROOT_TEMPLATE,		/* Table */
+    PROP_OPT_TRADING_ACCOUNTS,	/* KVP */
+    PROP_OPT_AUTO_READONLY_DAYS,/* KVP */
+    PROP_OPT_NUM_FIELD_SOURCE,	/* KVP */
+    PROP_OPT_DEFAULT_BUDGET,	/* KVP */
+    PROP_OPT_FY_END,		/* KVP */
+    PROP_AB_TEMPLATES,		/* KVP */
+    N_PROPERTIES		/* Just a counter */
 };
 
 QOF_GOBJECT_GET_TYPE(QofBook, qof_book, QOF_TYPE_INSTANCE, {});
@@ -164,6 +166,8 @@ qof_book_set_property (GObject      *object,
 
     g_return_if_fail (QOF_IS_BOOK (object));
     book = QOF_BOOK (object);
+    g_assert (qof_instance_get_editlevel(book));
+
     switch (prop_id)
     {
     case PROP_OPT_TRADING_ACCOUNTS:

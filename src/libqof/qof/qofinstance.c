@@ -943,7 +943,6 @@ qof_instance_set (QofInstance *inst, const gchar *first_prop, ...)
     QofInstancePrivate *priv = GET_PRIVATE(inst);
     g_return_if_fail (QOF_IS_INSTANCE (inst));
 
-    g_assert (priv->editlevel > 0);
     qof_instance_set_dirty (inst);
     va_start (ap, first_prop);
     g_object_set_valist (G_OBJECT (inst), first_prop, ap);

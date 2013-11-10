@@ -64,12 +64,15 @@ struct gnc_lot_s
 enum
 {
     PROP_0,
-    PROP_IS_CLOSED,
-    PROP_MARKER,
+//  PROP_ACCOUNT, 	/* Table */
+    PROP_IS_CLOSED,	/* Table */
 
-    PROP_INVOICE,
-    PROP_OWNER_TYPE,
-    PROP_OWNER_GUID,
+    PROP_INVOICE,	/* KVP */
+    PROP_OWNER_TYPE,	/* KVP */
+    PROP_OWNER_GUID,	/* KVP */
+
+    PROP_RUNTIME_0,
+    PROP_MARKER,	/* Runtime */
 };
 
 typedef struct LotPrivate
@@ -170,7 +173,10 @@ gnc_lot_get_property(GObject* object, guint prop_id, GValue* value, GParamSpec* 
 }
 
 static void
-gnc_lot_set_property(GObject* object, guint prop_id, const GValue* value, GParamSpec* pspec)
+gnc_lot_set_property (GObject* object,
+		      guint prop_id,
+		      const GValue* value,
+		      GParamSpec* pspec)
 {
     GNCLot* lot;
     LotPrivate* priv;
@@ -180,6 +186,9 @@ gnc_lot_set_property(GObject* object, guint prop_id, const GValue* value, GParam
     g_return_if_fail(GNC_IS_LOT(object));
 
     lot = GNC_LOT(object);
+    if (prop_id < PROP_RUNTIME_0)
+	g_assert (qof_instance_get_editlevel(lot));
+
     priv = GET_PRIVATE(lot);
     switch (prop_id)
     {

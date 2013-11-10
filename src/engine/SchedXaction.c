@@ -44,19 +44,19 @@
 enum
 {
     PROP_0,
-    PROP_NAME,
-    PROP_ENABLED,
-    PROP_NUM_OCCURANCE,
-    PROP_REM_OCCURANCE,
-    PROP_AUTO_CREATE,
-    PROP_AUTO_CREATE_NOTIFY,
-    PROP_ADVANCE_CREATION_DAYS,
-    PROP_ADVANCE_REMINDER_DAYS,
-    PROP_START_DATE,
-    PROP_END_DATE,
-    PROP_LAST_OCCURANCE_DATE,
-    PROP_INSTANCE_COUNT,
-    PROP_TEMPLATE_ACCOUNT
+    PROP_NAME,				/* Table */
+    PROP_ENABLED,			/* Table */
+    PROP_START_DATE,			/* Table */
+    PROP_END_DATE,			/* Table */
+    PROP_LAST_OCCURANCE_DATE,		/* Table */
+    PROP_NUM_OCCURANCE,			/* Table */
+    PROP_REM_OCCURANCE,			/* Table */
+    PROP_AUTO_CREATE,			/* Table */
+    PROP_AUTO_CREATE_NOTIFY,		/* Table */
+    PROP_ADVANCE_CREATION_DAYS,		/* Table */
+    PROP_ADVANCE_REMINDER_DAYS,		/* Table */
+    PROP_INSTANCE_COUNT,		/* Table */
+    PROP_TEMPLATE_ACCOUNT		/* Table */
 };
 
 /* GObject initialization */
@@ -174,6 +174,8 @@ gnc_schedxaction_set_property (GObject         *object,
     g_return_if_fail(GNC_IS_SCHEDXACTION(object));
 
     sx = GNC_SCHEDXACTION(object);
+    g_assert (qof_instance_get_editlevel(sx));
+
     switch (prop_id)
     {
     case PROP_NAME:

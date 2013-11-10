@@ -193,6 +193,8 @@ gnc_billterm_set_property (GObject         *object,
     g_return_if_fail(GNC_IS_BILLTERM(object));
 
     bt = GNC_BILLTERM(object);
+    g_assert (qof_instance_get_editlevel(bt));
+
     switch (prop_id)
     {
     case PROP_NAME:

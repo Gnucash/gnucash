@@ -71,8 +71,13 @@ void mark_job (GncJob *job)
 enum
 {
     PROP_0,
-    PROP_NAME,
-    PROP_PDF_DIRNAME,
+//  PROP_ID,		/* Table */
+    PROP_NAME,		/* Table */
+//  PROP_REFERENCE,	/* Table */
+//  PROP_ACTIVE,	/* Table */
+//  PROP_OWNER_TYPE,	/* Table */
+//  PROP_OWNER,		/* Table */
+    PROP_PDF_DIRNAME,	/* KVP */
 };
 
 /* GObject Initialization */
@@ -134,6 +139,8 @@ gnc_job_set_property (GObject         *object,
     g_return_if_fail(GNC_IS_JOB(object));
 
     job = GNC_JOB(object);
+    g_assert (qof_instance_get_editlevel(job));
+
     switch (prop_id)
     {
     case PROP_NAME:

@@ -61,45 +61,48 @@ enum
 enum
 {
     PROP_0,
-    PROP_NAME,
-    PROP_FULL_NAME,
-    PROP_CODE,
-    PROP_DESCRIPTION,
-    PROP_COLOR,
-    PROP_NOTES,
-    PROP_TYPE,
+    PROP_NAME,				/* Table */
+    PROP_FULL_NAME,			/* Constructed */
+    PROP_CODE,				/* Table */
+    PROP_DESCRIPTION,			/* Table */
+    PROP_COLOR,				/* KVP */
+    PROP_NOTES,				/* KVP */
+    PROP_TYPE,				/* Table */
 
-    PROP_COMMODITY,
-    PROP_COMMODITY_SCU,
-    PROP_NON_STD_SCU,
-    PROP_SORT_DIRTY,
-    PROP_BALANCE_DIRTY,
-    PROP_START_BALANCE,
-    PROP_START_CLEARED_BALANCE,
-    PROP_START_RECONCILED_BALANCE,
-    PROP_END_BALANCE,
-    PROP_END_CLEARED_BALANCE,
-    PROP_END_RECONCILED_BALANCE,
+//    PROP_PARENT,			/* Table, Not a property */
+    PROP_COMMODITY,			/* Table */
+    PROP_COMMODITY_SCU,			/* Table */
+    PROP_NON_STD_SCU,			/* Table */
+    PROP_END_BALANCE,			/* Constructed */
+    PROP_END_CLEARED_BALANCE,		/* Constructed */
+    PROP_END_RECONCILED_BALANCE,	/* Constructed */
 
-    PROP_POLICY,
-    PROP_MARK,
-    PROP_TAX_RELATED,
-    PROP_TAX_CODE,
-    PROP_TAX_SOURCE,
-    PROP_TAX_COPY_NUMBER,
+    PROP_TAX_RELATED,			/* KVP */
+    PROP_TAX_CODE,			/* KVP */
+    PROP_TAX_SOURCE,			/* KVP */
+    PROP_TAX_COPY_NUMBER,		/* KVP */
 
-    PROP_HIDDEN,
-    PROP_PLACEHOLDER,
-    PROP_FILTER,
-    PROP_SORT_ORDER,
+    PROP_HIDDEN,			/* Table slot exists, but in KVP in memory & xml */
+    PROP_PLACEHOLDER,			/* Table slot exists, but in KVP in memory & xml */
+    PROP_FILTER,			/* KVP */
+    PROP_SORT_ORDER,			/* KVP */
 
-    PROP_LOT_NEXT_ID,
-    PROP_ONLINE_ACCOUNT,
-    PROP_OFX_INCOME_ACCOUNT,
-    PROP_AB_ACCOUNT_ID,
-    PROP_AB_ACCOUNT_UID,
-    PROP_AB_BANK_CODE,
-    PROP_AB_TRANS_RETRIEVAL,
+    PROP_LOT_NEXT_ID,			/* KVP */
+    PROP_ONLINE_ACCOUNT,		/* KVP */
+    PROP_OFX_INCOME_ACCOUNT,		/* KVP */
+    PROP_AB_ACCOUNT_ID,			/* KVP */
+    PROP_AB_ACCOUNT_UID,		/* KVP */
+    PROP_AB_BANK_CODE,			/* KVP */
+    PROP_AB_TRANS_RETRIEVAL,		/* KVP */
+
+    PROP_RUNTIME_0,
+    PROP_POLICY,			/* Cached Value */
+    PROP_MARK,				/* Runtime Value */
+    PROP_SORT_DIRTY,			/* Runtime Value */
+    PROP_BALANCE_DIRTY,			/* Runtime Value */
+    PROP_START_BALANCE,			/* Runtime Value */
+    PROP_START_CLEARED_BALANCE,		/* Runtime Value */
+    PROP_START_RECONCILED_BALANCE,	/* Runtime Value */
 };
 
 #define GET_PRIVATE(o)  \
@@ -444,6 +447,8 @@ gnc_account_set_property (GObject         *object,
     g_return_if_fail(GNC_IS_ACCOUNT(object));
 
     account = GNC_ACCOUNT(object);
+    if (prop_id < PROP_RUNTIME_0)
+	g_assert (qof_instance_get_editlevel(account));
 
     switch (prop_id)
     {

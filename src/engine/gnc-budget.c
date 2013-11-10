@@ -42,10 +42,11 @@ static QofLogModule log_module = GNC_MOD_ENGINE;
 enum
 {
     PROP_0,
-    PROP_NAME,
-    PROP_DESCRIPTION,
-    PROP_NUM_PERIODS,
-    PROP_RECURRENCE,
+    PROP_NAME,			/* Table */
+    PROP_DESCRIPTION,		/* Table */
+    PROP_NUM_PERIODS,		/* Table */
+    PROP_RUNTIME_0,
+    PROP_RECURRENCE,		/* Cached pointer; Recurrence table holds budget guid */
 };
 
 struct budget_s
@@ -157,6 +158,9 @@ gnc_budget_set_property( GObject* object,
     g_return_if_fail(GNC_IS_BUDGET(object));
 
     budget = GNC_BUDGET(object);
+    if (prop_id < PROP_RUNTIME_0)
+	g_assert (qof_instance_get_editlevel(budget));
+
     switch ( prop_id )
     {
     case PROP_NAME:
