@@ -349,13 +349,13 @@ gbv_create_widget(GncBudgetView *view)
 
     totals_tree_model = gtk_list_store_new(2, G_TYPE_STRING, G_TYPE_INT);
     gtk_list_store_append(totals_tree_model, &iter);
-    gtk_list_store_set(totals_tree_model, &iter, 0, "Income", 1, TOTALS_TYPE_INCOME, -1);
+    gtk_list_store_set(totals_tree_model, &iter, 0, _("Income"), 1, TOTALS_TYPE_INCOME, -1);
     gtk_list_store_append(totals_tree_model, &iter);
-    gtk_list_store_set(totals_tree_model, &iter, 0, "Expenses", 1, TOTALS_TYPE_EXPENSES, -1);
+    gtk_list_store_set(totals_tree_model, &iter, 0, _("Expenses"), 1, TOTALS_TYPE_EXPENSES, -1);
     gtk_list_store_append(totals_tree_model, &iter);
-    gtk_list_store_set(totals_tree_model, &iter, 0, "Transfers", 1, TOTALS_TYPE_TRANSFERS, -1);
+    gtk_list_store_set(totals_tree_model, &iter, 0, _("Transfers"), 1, TOTALS_TYPE_TRANSFERS, -1);
     gtk_list_store_append(totals_tree_model, &iter);
-    gtk_list_store_set(totals_tree_model, &iter, 0, "Total", 1, TOTALS_TYPE_TOTAL, -1);
+    gtk_list_store_set(totals_tree_model, &iter, 0, _("Total"), 1, TOTALS_TYPE_TOTAL, -1);
 
     totals_tree_view = GTK_TREE_VIEW(gtk_tree_view_new());
     priv->totals_tree_view = totals_tree_view;
@@ -1069,7 +1069,7 @@ gnc_budget_view_refresh(GncBudgetView *view)
     if (priv->total_col == NULL)
     {
         priv->total_col = gnc_tree_view_account_add_custom_column(
-                              GNC_TREE_VIEW_ACCOUNT(priv->tree_view), "Total",
+                              GNC_TREE_VIEW_ACCOUNT(priv->tree_view), _("Total"),
                               budget_total_col_source, NULL);
         g_object_set_data(G_OBJECT(priv->total_col), "budget", priv->budget);
 
