@@ -3715,16 +3715,17 @@ gnc_quartz_set_menu(GncMainWindow* window)
                                       "/menubar/Help/HelpAbout");
     if (GTK_IS_MENU_ITEM (item))
     {
-        gtkosx_application_insert_app_menu_item (theApp,
-                gtk_separator_menu_item_new (),
-                0);
         gtkosx_application_insert_app_menu_item (theApp, GTK_WIDGET (item), 0);
     }
 
     item = gtk_ui_manager_get_widget (window->ui_merge,
                                       "/menubar/Edit/EditPreferences");
     if (GTK_IS_MENU_ITEM (item))
-        gtkosx_application_insert_app_menu_item (theApp, GTK_WIDGET (item), 0);
+    {
+        gtkosx_application_insert_app_menu_item (theApp,
+                gtk_separator_menu_item_new (), 1);
+        gtkosx_application_insert_app_menu_item (theApp, GTK_WIDGET (item), 2);
+    }
 
     item = gtk_ui_manager_get_widget (window->ui_merge,
                                       "/menubar/Help");
