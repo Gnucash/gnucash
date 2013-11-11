@@ -528,7 +528,7 @@ static void  process_trans_record(  FILE *log_file)
             DEBUG("process_trans_record(): Record ended\n");
             if (trans != NULL) /*If we played with a transaction, commit it here*/
             {
-                xaccTransScrubCurrencyFromSplits(trans);
+                xaccTransScrubCurrency(trans);
                 xaccTransSetReadOnly(trans, trans_ro);
                 xaccTransCommitEdit(trans);
                 g_free(trans_ro);

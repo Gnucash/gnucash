@@ -112,18 +112,11 @@ void xaccAccountScrubImbalance (Account *acc);
 void xaccAccountTreeScrubImbalance (Account *acc);
 
 /** The xaccTransScrubCurrency method fixes transactions without a
- * common_currency by using the old account currency and security
+ * common_currency by looking for the most commonly used currency
+ * among all the splits in the transaction.  If this fails it falls
+ * back to using the old account currency and security
  * fields of the parent accounts of the transaction's splits. */
 void xaccTransScrubCurrency (Transaction *trans);
-
-/** The xaccTransScrubCurrencyFromSplits method fixes transactions
- * where the currency doesn't match the currency used in the splits
- * in the transaction.  If all splits where the amount equals the
- * value and where the commodity is a currency have the same
- * currency, it sets the transaction's currency to that if it is
- * anything else.  If the splits don't match that description the
- * transaction currency is not changed. */
-void xaccTransScrubCurrencyFromSplits(Transaction *trans);
 
 /** The xaccAccountScrubCommodity method fixed accounts without
  * a commodity by using the old account currency and security. */
