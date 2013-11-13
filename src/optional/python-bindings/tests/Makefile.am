@@ -18,6 +18,7 @@ TESTS_ENVIRONMENT = \
   PYTHON=${PYTHON} \
   PYTHONPATH=$(PYTHONPATH):$(top_builddir)/src/optional/python-bindings \
   PYTHONPATH=$$PYTHONPATH:$(top_builddir)/src/optional/python-bindings/.libs \
+  PYTHONPATH=$(PYTHONPATH):$(top_srcdir)/src/optional/python-bindings/tests \
   PYTHONPATH=$$PYTHONPATH:$(top_builddir)/src/test-core/ \
   PYTHONPATH=$$PYTHONPATH:$(top_srcdir)/src/test-core/ \
   PYTHONPATH=$$PYTHONPATH:$(top_builddir)/src/test-core/.libs \
