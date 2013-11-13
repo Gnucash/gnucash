@@ -14,7 +14,7 @@ libgncmod_tax_us_la_LIBADD = \
 AM_CPPFLAGS = \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/gnc-module \
-  ${GLIB_CFLAGS} ${GUILE_INCS}
+  ${GLIB_CFLAGS} ${GUILE_CFLAGS}
 
 gncscmmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash/tax
 gncscmmod_DATA = us.scm de_DE.scm

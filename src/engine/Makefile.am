@@ -10,7 +10,7 @@ AM_CPPFLAGS = \
 	-I${top_srcdir}/src/gnc-module \
 	-I${top_srcdir}/src/libqof/qof \
 	${GLIB_CFLAGS} \
-	${GUILE_INCS}
+	${GUILE_CFLAGS}
 
 libgncmod_engine_la_SOURCES = \
   Account.c \

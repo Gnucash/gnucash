@@ -7,7 +7,7 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/src/import-export \
   -I${top_srcdir}/src/import-export/qif \
   -I${top_srcdir}/src/libqof/qof \
-  ${GUILE_INCS} \
+  ${GUILE_CFLAGS} \
   ${GLIB_CFLAGS}
 
 LDADD = \

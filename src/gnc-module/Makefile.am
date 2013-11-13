@@ -6,7 +6,7 @@ AM_CPPFLAGS = \
    -I${top_srcdir}/src/core-utils \
   -I${top_srcdir}/src/libqof/qof \
    ${GLIB_CFLAGS} \
-   ${GUILE_INCS}
+   ${GUILE_CFLAGS}
 
 lib_LTLIBRARIES = libgnc-module.la
 

@@ -14,7 +14,7 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/lib/libc \
   ${QOF_CFLAGS} \
   ${GLIB_CFLAGS} \
-  ${GUILE_INCS} \
+  ${GUILE_CFLAGS} \
   ${GTK_CFLAGS} \
   ${GNOME_CFLAGS} \
   ${WEBKIT_CFLAGS}

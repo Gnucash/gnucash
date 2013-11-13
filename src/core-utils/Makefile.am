@@ -50,7 +50,7 @@ swig-core-utils-python.c: core-utils.i ${top_srcdir}/src/base-typemaps.i
 endif
 
 AM_CPPFLAGS = \
-  ${GUILE_INCS} \
+  ${GUILE_CFLAGS} \
   ${GLIB_CFLAGS} \
   ${GTK_MAC_CFLAGS} \
   ${QOF_CFLAGS} \

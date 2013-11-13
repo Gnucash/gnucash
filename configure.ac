@@ -420,19 +420,8 @@ AC_CHECK_FUNCS(gethostid link)
 
 
 ### --------------------------------------------------------------------------
-### Guile version checks (should this be something other than the Gnome check?)
+### Guile version checks
 
-# If the user has given these values, cache them to override the
-# detected values.
-if test "x$GUILE_LIBS" != x; then
-  saved_GUILE_LIBS="$GUILE_LIBS"
-fi
-if test "x$GUILE_INCS" != x; then
-  saved_GUILE_INCS="$GUILE_INCS"
-fi
-GUILE_LIBS=""
-
-# Guile checks:
 # - check minimum version
 # - determine GUILE_CFLAGS and GUILE_LIBS
 # - test if guile module (www main) is present on the system
@@ -465,18 +454,6 @@ PKG_CHECK_MODULES(GUILE,
     development packages?  Gnucash requires at least version 1.8.5 to build.
   ])])
 ])
-
-# Restore user defined guile settings if necessary
-GUILE_INCS="${GUILE_CFLAGS}"
-if test "x$saved_GUILE_LIBS" != x; then
-  GUILE_LIBS="$saved_GUILE_LIBS"
-fi
-if test "x$saved_GUILE_INCS" != x; then
-  GUILE_INCS="$saved_GUILE_INCS"
-fi
-
-AS_SCRUB_INCLUDE(GUILE_INCS)
-AC_SUBST(GUILE_INCS)
 
 AM_CONDITIONAL(GNC_HAVE_GUILE_WWW, test "${gnc_have_guile_www}" = yes)
 

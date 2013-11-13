@@ -21,7 +21,7 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/src/libqof/qof \
   ${GTK_CFLAGS} \
   ${GLIB_CFLAGS} \
-  ${GUILE_INCS}
+  ${GUILE_CFLAGS}
 
 libgncmod_business_gnome_la_SOURCES = \
   business-options-gnome.c \

@@ -14,7 +14,7 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/src/html \
   -I${top_srcdir}/src/report/report-system \
   -I${top_srcdir}/src/libqof/qof \
-  ${GUILE_INCS} \
+  ${GUILE_CFLAGS} \
   ${GTK_CFLAGS} \
   ${GLIB_CFLAGS}
 

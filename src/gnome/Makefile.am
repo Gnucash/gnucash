@@ -141,7 +141,7 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/lib/libc \
   -I${top_srcdir}/src/libqof/qof \
   ${LIBXML2_CFLAGS} \
-  ${GUILE_INCS} \
+  ${GUILE_CFLAGS} \
   ${GTK_CFLAGS} \
   $(GLIB_CFLAGS) \
   ${GTK_MAC_CFLAGS}

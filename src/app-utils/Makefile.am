@@ -30,7 +30,7 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/libqof/qof \
   -I${top_srcdir}/src/backend/xml \
-  ${GUILE_INCS} \
+  ${GUILE_CFLAGS} \
   ${PYTHON_CPPFLAGS} \
   ${GLIB_CFLAGS} \
   ${GTK_CFLAGS} \

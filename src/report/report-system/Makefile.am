@@ -34,7 +34,7 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/src/app-utils \
   ${GLIB_CFLAGS} \
   ${GTK_CFLAGS} \
-  ${GUILE_INCS}
+  ${GUILE_CFLAGS}
 
 gncscmdir = ${GNC_SHAREDIR}/scm
 gncscm_DATA = \

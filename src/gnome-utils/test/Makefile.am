@@ -46,7 +46,7 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/src/libqof/qof \
   ${GLIB_CFLAGS} \
   ${GTK_CFLAGS} \
-  ${GUILE_INCS}
+  ${GUILE_CFLAGS}
 
 LDADD = \
   ${GNOME_LIBS} \

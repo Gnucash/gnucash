@@ -3,7 +3,7 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/src/gnc-module \
   -I${top_srcdir}/src/gnc-module/test/mod-foo \
   ${GLIB_CFLAGS} \
-  ${GUILE_INCS}
+  ${GUILE_CFLAGS}
 
 PWD := $(shell pwd)
 check_LTLIBRARIES = libbaz.la libgncmodbaz.la

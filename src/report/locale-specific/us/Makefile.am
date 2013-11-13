@@ -18,7 +18,7 @@ libgncmod_locale_reports_us_la_LIBADD = \
 AM_CPPFLAGS = \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/gnc-module \
-  ${GUILE_INCS} ${GLIB_CFLAGS}
+  ${GUILE_CFLAGS} ${GLIB_CFLAGS}
 
 ## This is unused and therefore no longer installed and/or loaded
 gncscmmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash/report/locale-specific

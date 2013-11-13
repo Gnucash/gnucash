@@ -14,7 +14,7 @@ libgncmod_utility_reports_la_LDFLAGS = -module -avoid-version
 AM_CPPFLAGS = \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/gnc-module \
-  ${GUILE_INCS} ${GLIB_CFLAGS}
+  ${GUILE_CFLAGS} ${GLIB_CFLAGS}
 
 gncscmmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash/report/
 gncscmmod_DATA = \

@@ -42,7 +42,7 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/src/libqof/qof \
   -I${top_srcdir}/lib/libc \
   -I${top_srcdir}/lib \
-  ${GUILE_INCS} \
+  ${GUILE_CFLAGS} \
   ${GLIB_CFLAGS} \
   $(GOFFICE_CFLAGS)
 

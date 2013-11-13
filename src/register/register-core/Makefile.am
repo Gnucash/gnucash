@@ -61,7 +61,7 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/src/gnc-module \
   -I${top_srcdir}/src/gnome-utils \
   -I${top_srcdir}/src/libqof/qof \
-  ${GUILE_INCS} \
+  ${GUILE_CFLAGS} \
   ${GTK_CFLAGS} \
   ${GLIB_CFLAGS}
 
