@@ -432,17 +432,41 @@ if test "x$GUILE_INCS" != x; then
 fi
 GUILE_LIBS=""
 
-# Look up GUILE_CFLAGS and GUILE_LIBS, and version check
-PKG_CHECK_MODULES(GUILE, [guile-1.8 >= 1.8.5], , [
-  PKG_CHECK_MODULES(GUILE, [guile-2.0 >= 2.0.0], , [AC_MSG_ERROR([
+# Guile checks:
+# - check minimum version
+# - determine GUILE_CFLAGS and GUILE_LIBS
+# - test if guile module (www main) is present on the system
+# Note: systems that install both guile 1.8 and guile 2 use different
+#       names for the 1.8 and 2.0 autoconf macros to avoid conflicts.
+#       So the tests below will check for known macro names in the order
+#       that we assume will always result in the proper macros being called
+#       for the guile version that has been detected.
+gnc_have_guile_www=no
+PKG_CHECK_MODULES(GUILE,
+                  [guile-1.8 >= 1.8.5],
+                  [m4_ifdef([GUILE1_8_PROGS],
+                            [ GUILE1_8_PROGS
+                              GUILE1_8_MODULE_AVAILABLE(gnc_have_guile_www,[(www main)]) ],
+                            [ GUILE_PROGS
+                              GUILE_MODULE_AVAILABLE(gnc_have_guile_www,[(www main)]) ])
+                  ], [
+  PKG_CHECK_MODULES(GUILE,
+                  [guile-2.0 >= 2.0.0],
+                  [m4_ifdef([GUILE_PROGS],
+                            [ GUILE_PROGS
+                              GUILE_MODULE_AVAILABLE(gnc_have_guile_www,[(www main)]) ],
+                            [ AC_MSG_ERROR([ guile 2 is found on your system, but appears
+    to export different autoconf macros than what we expected. Please report this as a bug
+    in GnuCash, so we can fix this for your platform.]) ])
+                  ],
+                  [AC_MSG_ERROR([
     guile does not appear to be installed correctly, or is not in the
     correct version range.  Perhaps you have not installed the guile
     development packages?  Gnucash requires at least version 1.8.5 to build.
   ])])
 ])
-# Look up GUILE executable
-AC_PATH_PROG(GUILE, guile)
 
+# Restore user defined guile settings if necessary
 GUILE_INCS="${GUILE_CFLAGS}"
 if test "x$saved_GUILE_LIBS" != x; then
   GUILE_LIBS="$saved_GUILE_LIBS"
@@ -453,16 +477,6 @@ fi
 
 AS_SCRUB_INCLUDE(GUILE_INCS)
 AC_SUBST(GUILE_INCS)
-AC_SUBST(GUILE_LIBS)
-AC_SUBST(GUILE)
-
-### --------------------------------------------------------------------------
-### See if we need guile-www
-
-gnc_have_guile_www=no
-
-AC_MSG_CHECKING([if guile needs our copy of (guile www)])
-GUILE_MODULE_AVAILABLE(gnc_have_guile_www,[(www main)])
 
 AM_CONDITIONAL(GNC_HAVE_GUILE_WWW, test "${gnc_have_guile_www}" = yes)
 
