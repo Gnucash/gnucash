@@ -119,7 +119,7 @@
     </key>
     <key name="invoice-printreport" type="i">
       <default>0</default>
-      <summary>The invoice report to be used for printing</summary>
+      <summary>The invoice report to be used for printing.</summary>
       <description>The name of the report to be used for invoice printing.</description>
     </key>
     <key name="use-new-window" type="b">

@@ -3143,6 +3143,8 @@ gnc_invoice_show_bills_due (QofBook *book, double days_in_advance)
     /* Create the param list (in reverse order) */
     if (param_list == NULL)
     {
+        /* Translators: This abbreviation is the column heading for
+	   the condition "Is this invoice a Credit Note?" */
         param_list = gnc_search_param_prepend (param_list, _("CN?"), NULL, type,
                                                INVOICE_IS_CN, NULL);
         param_list = gnc_search_param_prepend (param_list, _("Amount"), NULL, type,

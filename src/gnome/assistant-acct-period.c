@@ -400,12 +400,12 @@ void
 ap_assistant_apply_prepare (GtkAssistant *assistant, gpointer user_data)
 {
     AcctPeriodInfo *info = user_data;
-    const char *apply_text;
     const char *btitle;
     char *str;
-    apply_text =
-        _("The book will be created with the title %s when you\n\n"
-          "Click on 'Apply', Click on 'Back' to adjust or 'Cancel'.");
+    const char *apply_text =
+        _("The book will be created with the title %s when you "
+          "click on 'Apply'. Click on 'Back' to adjust, "
+	  "or 'Cancel' to not create any book.");
 
     btitle = gtk_entry_get_text (GTK_ENTRY(info->book_title));
     str = g_strdup_printf (apply_text, btitle);

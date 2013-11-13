@@ -3,7 +3,7 @@
     <key name="account-code-visible" type="b">
       <default>false</default>
       <summary>Display this column</summary>
-      <description>This setting controls wether the given column will be visible in the view. TRUE means visible, FALSE means hidden.</description>
+      <description>This setting controls whether the given column will be visible in the view. TRUE means visible, FALSE means hidden.</description>
     </key>
     <key name="account-code-width" type="i">
       <default>0</default>
