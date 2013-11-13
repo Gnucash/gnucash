@@ -1,5 +1,5 @@
 #!/bin/sh
-exec guile -s $0 "$@"
+exec @GUILE@ -s $0 "$@"
 !#
 
 ;; Spit out the environment variable settings needed based on

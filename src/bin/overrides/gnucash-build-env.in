@@ -29,7 +29,8 @@ then
   export GNC_DOC_PATH
 fi
 
-eval `@-GNC_SRCDIR-@/src/gnc-test-env \
+set +x
+eval `${top_builddir}/src/gnc-test-env \
   --gnc-module-dir ${top_builddir}/src/engine \
   --gnc-module-dir ${top_builddir}/src/backend/xml \
   --gnc-module-dir ${top_builddir}/src/network-utils \

@@ -198,7 +198,7 @@ TESTS_ENVIRONMENT = \
   GNC_TEST_FILES=test-files/xml2 \
   SRCDIR=${srcdir} \
   GNC_BUILDDIR=`\cd ${top_builddir} && pwd` \
-  $(shell ${top_srcdir}/src/gnc-test-env --no-exports ${GNC_TEST_DEPS})
+  $(shell ${top_builddir}/src/gnc-test-env --no-exports ${GNC_TEST_DEPS})
 
 check_LTLIBRARIES = libgnc-test-file-stuff.la
 

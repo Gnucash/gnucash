@@ -14,7 +14,9 @@ GNC_TEST_DEPS = --gnc-module-dir ${top_builddir}/src/engine \
   --library-dir    ${top_builddir}/src/app-utils
 
 TESTS_ENVIRONMENT = \
-  $(shell ${top_srcdir}/src/gnc-test-env --no-exports ${GNC_TEST_DEPS})
+  GUILE_WARN_DEPRECATED=no \
+  GUILE="${GUILE}" \
+  $(shell ${top_builddir}/src/gnc-test-env --no-exports ${GNC_TEST_DEPS})
 
 check_PROGRAMS = test-link-module
 

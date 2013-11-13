@@ -51,13 +51,14 @@ GNC_TEST_DEPS = --gnc-module-dir ${top_builddir}/src/engine \
   --library-dir    ${top_builddir}/src/gnc-module
 
 $(SCM_TESTS): %: $(srcdir)/%.scm Makefile .scm-links
-	echo 'guile --debug -l $(srcdir)/$*.scm -c "(exit (run-test))"' > $@
+	echo '${GUILE} --debug -l $(srcdir)/$*.scm -c "(exit (run-test))"' > $@
 	chmod a+x $@
 
 TESTS_ENVIRONMENT = \
   GUILE_WARN_DEPRECATED=no \
+  GUILE="${GUILE}" \
   GNC_BUILDDIR=`\cd ${top_builddir} && pwd` \
-  $(shell ${top_srcdir}/src/gnc-test-env --no-exports ${GNC_TEST_DEPS})
+  $(shell ${top_builddir}/src/gnc-test-env --no-exports ${GNC_TEST_DEPS})
 
 
 check_PROGRAMS = test-link-module

@@ -1,5 +1,5 @@
 #! /bin/sh
-guile -c "(use-modules (gnucash unittest-support))
+${GUILE} -c "(use-modules (gnucash unittest-support))
           (define log-domain \"gnc.module\")
           (define check (new-TestErrorStruct))
           (define log-level (G-LOG-LEVEL-WARNING))

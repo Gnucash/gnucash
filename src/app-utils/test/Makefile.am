@@ -29,8 +29,10 @@ GNC_TEST_DEPS = --gnc-module-dir ${top_builddir}/src/engine \
 
 TESTS_ENVIRONMENT = \
   GUILE_WARN_DEPRECATED=no \
+  GUILE="${GUILE}" \
+  SRCDIR=${srcdir} \
   GNC_BUILDDIR=`\cd ${top_builddir} && pwd` \
-  $(shell ${top_srcdir}/src/gnc-test-env --no-exports ${GNC_TEST_DEPS})
+  $(shell ${top_builddir}/src/gnc-test-env --no-exports ${GNC_TEST_DEPS})
 
 LDADD = \
    ${top_builddir}/src/libqof/qof/libgnc-qof.la \

@@ -1,6 +1,6 @@
 #! /bin/sh
 echo "  test-scm-init: testing Scheme-only module system init. ";
-exec guile -s $0 "$@"
+exec ${GUILE} -s $0 "$@"
 !#
 
 (use-modules (gnucash unittest-support))

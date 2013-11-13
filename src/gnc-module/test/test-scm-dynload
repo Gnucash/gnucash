@@ -1,6 +1,6 @@
 #! /bin/sh
 echo "  test-scm-dynload: testing dynamic-link of libgnc-module from Scheme.";
-exec guile -s $0 "$@"
+exec ${GUILE} -s $0 "$@"
 !#
 
 (if (or (string=? (version) "1.3")

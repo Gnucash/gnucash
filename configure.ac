@@ -1253,9 +1253,7 @@ AC_MSG_RESULT($warnFLAGS)
 ### makefiles, so that we don't have an opportunity to adjust them
 ### there.
 
-chmod u+x ${srcdir}/src/gnc-test-env
 chmod u+x ${srcdir}/src/bin/generate-gnc-script
-chmod u+x ${srcdir}/src/bin/overrides/gnucash-make-guids
 
 ### --------------------------------------------------------------------------
 ### Makefile creation
@@ -1431,6 +1429,7 @@ AC_CONFIG_FILES(
   packaging/win32/gnucash.iss
   src/bin/gnucash.rc
   src/app-utils/migratable-prefs.xml
+  src/engine/iso-currencies-to-c
   src/gnome/gnucash.desktop.in
   dnl # GSettings schema files
   src/business/business-gnome/gschemas/org.gnucash.dialogs.business.gschema.xml.in
@@ -1451,11 +1450,14 @@ AC_CONFIG_FILES(
   src/import-export/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in
   src/import-export/ofx/gschemas/org.gnucash.dialogs.import.ofx.gschema.xml.in
   src/import-export/qif-import/gschemas/org.gnucash.dialogs.import.qif.gschema.xml.in
-
   dnl # Please read doc/build-system before adding *anything* here
   ,
-  dnl # commands go here, but we don't have any right now
+  dnl # init-commands go here
 )
+# A few files need extra actions at creation time
+AC_CONFIG_FILES([src/gnc-test-env], [chmod u+x src/gnc-test-env])
+AC_CONFIG_FILES([src/bin/overrides/gnucash-make-guids], [chmod u+x src/bin/overrides/gnucash-make-guids])
+
 AC_OUTPUT
 
 

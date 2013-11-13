@@ -1,5 +1,5 @@
 #! /bin/sh
-exec guile -s $0 "$@"
+exec ${GUILE} -s $0 "$@"
 !#
 ;; test-load-deps.scm : load gnc-mod-baz, which depends on gnc-mod-foo
 
