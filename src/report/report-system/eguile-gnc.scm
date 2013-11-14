@@ -85,6 +85,12 @@
 
 (use-modules (ice-9 regex))       ; for regular expressions
 (use-modules (ice-9 rdelim))      ; for read-line
+(cond-expand
+  (guile-2
+    (eval-when
+      (compile load eval) 
+      (use-modules (ice-9 local-eval))))  ; for the-environment
+  (else ))
 (use-modules (gnucash printf))
 (use-modules (gnucash app-utils)) ; for _
 
@@ -217,11 +223,10 @@
 	      (display-backtrace error-stack (current-output-port) (- (- error-length remove-top) 1) (- (- error-length remove-top) remove-bottom)))
     (display "</pre><br>"))
 
-  ; This handler will be called by lazy-catch before unwinding the
+  ; This handler will be called by catch before unwinding the
   ; stack, so we can capture it. The above handler will then be called
-  ; to handle the exception we rethrow. This technique was based on the
-  ; example in the guile manual, but adapted to use lazy-catch to make
-  ; it work on guile 1.6 as well. See:
+  ; to actually handle the exception. This technique is based on the
+  ; example in the guile manual. See:
   ; http://www.gnu.org/software/guile/manual/html_node/Debug-on-Error.html
   (define (pre-unwind-handler key . rest)
     ; Save the current stack. Note that this will include a couple of
@@ -235,7 +240,7 @@
   ; Use two nested catches. The inner one is lazy and does not unwind,
   ; so it can catch th stack. The outer one does the real error
   ; handling.
-  (catch #t (lambda () (lazy-catch #t eval-input pre-unwind-handler)) error-handler))
+  (catch #t eval-input error-handler pre-unwind-handler))
 
 ; end of (script->output)
 
