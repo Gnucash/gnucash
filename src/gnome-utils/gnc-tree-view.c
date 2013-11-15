@@ -848,7 +848,7 @@ gnc_tree_view_get_column_order (GncTreeView *view,
         }
         num_cols++;
     }
-    DEBUG ("got %lu columns: %s", num_cols, col_names);
+    //DEBUG ("got %lu columns: %s", num_cols, col_names);
     col_str_list = g_strsplit (col_names, ";", 0);
 
     /* Clean up */

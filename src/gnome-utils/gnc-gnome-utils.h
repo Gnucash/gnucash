@@ -56,6 +56,9 @@ void gnc_gtk_add_rc_file (void);
  */
 void gnc_gnome_help (const char *file_name,
                      const char *anchor);
+/** Launch the default gnome browser and open the provided URI.
+ */
+void gnc_launch_assoc (const char *uri);
 
 /** Set the help callback to 'gnc_book_options_help_cb' to open a help browser
  *  and point it to the Book Options link in the Help file.

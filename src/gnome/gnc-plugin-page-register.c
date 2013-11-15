@@ -169,6 +169,9 @@ static void gnc_plugin_page_register_cmd_scrub_all (GtkAction *action, GncPlugin
 static void gnc_plugin_page_register_cmd_scrub_current (GtkAction *action, GncPluginPageRegister *plugin_page);
 static void gnc_plugin_page_register_cmd_account_report (GtkAction *action, GncPluginPageRegister *plugin_page);
 static void gnc_plugin_page_register_cmd_transaction_report (GtkAction *action, GncPluginPageRegister *plugin_page);
+static void gnc_plugin_page_register_cmd_associate_file_transaction (GtkAction *action, GncPluginPageRegister *plugin_page);
+static void gnc_plugin_page_register_cmd_associate_location_transaction (GtkAction *action, GncPluginPageRegister *plugin_page);
+static void gnc_plugin_page_register_cmd_execassociated_transaction (GtkAction *action, GncPluginPageRegister *plugin_page);
 
 static void gnc_plugin_page_help_changed_cb( GNCSplitReg *gsr, GncPluginPageRegister *register_page );
 static void gnc_plugin_page_register_refresh_cb (GHashTable *changes, gpointer user_data);
@@ -185,26 +188,32 @@ static void gnc_plugin_page_register_event_handler (QofInstance *entity,
 /*                          Actions                         */
 /************************************************************/
 
-#define CUT_TRANSACTION_LABEL         N_("Cu_t Transaction")
-#define COPY_TRANSACTION_LABEL        N_("_Copy Transaction")
-#define PASTE_TRANSACTION_LABEL       N_("_Paste Transaction")
-#define DUPLICATE_TRANSACTION_LABEL   N_("Dup_licate Transaction")
-#define DELETE_TRANSACTION_LABEL      N_("_Delete Transaction")
-#define CUT_SPLIT_LABEL               N_("Cu_t Split")
-#define COPY_SPLIT_LABEL              N_("_Copy Split")
-#define PASTE_SPLIT_LABEL             N_("_Paste Split")
-#define DUPLICATE_SPLIT_LABEL         N_("Dup_licate Split")
-#define DELETE_SPLIT_LABEL            N_("_Delete Split")
-#define CUT_TRANSACTION_TIP           N_("Cut the selected transaction into clipboard")
-#define COPY_TRANSACTION_TIP          N_("Copy the selected transaction into clipboard")
-#define PASTE_TRANSACTION_TIP         N_("Paste the transaction from the clipboard")
-#define DUPLICATE_TRANSACTION_TIP     N_("Make a copy of the current transaction")
-#define DELETE_TRANSACTION_TIP        N_("Delete the current transaction")
-#define CUT_SPLIT_TIP                 N_("Cut the selected split into clipboard")
-#define COPY_SPLIT_TIP                N_("Copy the selected split into clipboard")
-#define PASTE_SPLIT_TIP               N_("Paste the split from the clipboard")
-#define DUPLICATE_SPLIT_TIP           N_("Make a copy of the current split")
-#define DELETE_SPLIT_TIP              N_("Delete the current split")
+#define CUT_TRANSACTION_LABEL            N_("Cu_t Transaction")
+#define COPY_TRANSACTION_LABEL           N_("_Copy Transaction")
+#define PASTE_TRANSACTION_LABEL          N_("_Paste Transaction")
+#define DUPLICATE_TRANSACTION_LABEL      N_("Dup_licate Transaction")
+#define DELETE_TRANSACTION_LABEL         N_("_Delete Transaction")
+#define ASSOCIATE_TRANSACTION_FILE_LABEL      N_("_Associate File with Transaction")
+#define ASSOCIATE_TRANSACTION_LOCATION_LABEL  N_("_Associate Location with Transaction")
+#define EXECASSOCIATED_TRANSACTION_LABEL N_("_Open Associated File/Location")
+#define CUT_SPLIT_LABEL                  N_("Cu_t Split")
+#define COPY_SPLIT_LABEL                 N_("_Copy Split")
+#define PASTE_SPLIT_LABEL                N_("_Paste Split")
+#define DUPLICATE_SPLIT_LABEL            N_("Dup_licate Split")
+#define DELETE_SPLIT_LABEL               N_("_Delete Split")
+#define CUT_TRANSACTION_TIP              N_("Cut the selected transaction into clipboard")
+#define COPY_TRANSACTION_TIP             N_("Copy the selected transaction into clipboard")
+#define PASTE_TRANSACTION_TIP            N_("Paste the transaction from the clipboard")
+#define DUPLICATE_TRANSACTION_TIP        N_("Make a copy of the current transaction")
+#define DELETE_TRANSACTION_TIP           N_("Delete the current transaction")
+#define ASSOCIATE_TRANSACTION_FILE_TIP   N_("Associate a file with the current transaction")
+#define ASSOCIATE_TRANSACTION_LOCATION_TIP    N_("Associate a location with the current transaction")
+#define EXECASSOCIATED_TRANSACTION_TIP   N_("Open the associated file or location with the current transaction")
+#define CUT_SPLIT_TIP                    N_("Cut the selected split into clipboard")
+#define COPY_SPLIT_TIP                   N_("Copy the selected split into clipboard")
+#define PASTE_SPLIT_TIP                  N_("Paste the split from the clipboard")
+#define DUPLICATE_SPLIT_TIP              N_("Make a copy of the current split")
+#define DELETE_SPLIT_TIP                 N_("Delete the current split")
 
 static GtkActionEntry gnc_plugin_page_register_actions [] =
 {
@@ -296,6 +305,21 @@ static GtkActionEntry gnc_plugin_page_register_actions [] =
     {
         "ReverseTransactionAction", NULL, N_("Add _Reversing Transaction"), NULL, NULL,
         G_CALLBACK (gnc_plugin_page_register_cmd_reverse_transaction)
+    },
+    {
+        "AssociateTransactionFileAction", NULL, ASSOCIATE_TRANSACTION_FILE_LABEL, NULL,
+        ASSOCIATE_TRANSACTION_FILE_TIP,
+        G_CALLBACK (gnc_plugin_page_register_cmd_associate_file_transaction)
+    },
+    {
+        "AssociateTransactionLocationAction", NULL, ASSOCIATE_TRANSACTION_LOCATION_LABEL, NULL,
+        ASSOCIATE_TRANSACTION_LOCATION_TIP,
+        G_CALLBACK (gnc_plugin_page_register_cmd_associate_location_transaction)
+    },
+    {
+        "ExecAssociatedTransactionAction", NULL, EXECASSOCIATED_TRANSACTION_LABEL, NULL,
+        EXECASSOCIATED_TRANSACTION_TIP,
+        G_CALLBACK (gnc_plugin_page_register_cmd_execassociated_transaction)
     },
 
     /* View menu */
@@ -451,16 +475,19 @@ static const gchar *view_style_actions[] =
 /** Short labels for use on the toolbar buttons. */
 static action_toolbar_labels toolbar_labels[] =
 {
-    { "ActionsTransferAction", 	  N_("Transfer") },
-    { "RecordTransactionAction", 	  N_("Enter") },
-    { "CancelTransactionAction", 	  N_("Cancel") },
-    { "DeleteTransactionAction", 	  N_("Delete") },
-    { "DuplicateTransactionAction", N_("Duplicate") },
-    { "SplitTransactionAction",     N_("Split") },
-    { "ScheduleTransactionAction",  N_("Schedule") },
-    { "BlankTransactionAction",     N_("Blank") },
-    { "ActionsReconcileAction",     N_("Reconcile") },
-    { "ActionsAutoClearAction",     N_("Auto-clear") },
+    { "ActionsTransferAction", 	            N_("Transfer") },
+    { "RecordTransactionAction", 	        N_("Enter") },
+    { "CancelTransactionAction", 	        N_("Cancel") },
+    { "DeleteTransactionAction", 	        N_("Delete") },
+	{ "DuplicateTransactionAction",         N_("Duplicate") },
+    { "SplitTransactionAction",             N_("Split") },
+    { "ScheduleTransactionAction",          N_("Schedule") },
+    { "BlankTransactionAction",             N_("Blank") },
+    { "ActionsReconcileAction",             N_("Reconcile") },
+    { "ActionsAutoClearAction",             N_("Auto-clear") },
+    { "AssociateTransactionFileAction",     N_("Associate File") },
+    { "AssociateTransactionLocationAction", N_("Associate Location") },
+    { "ExecAssociatedTransactionAction",    N_("Open File/Location") },
     { NULL, NULL },
 };
 
@@ -804,6 +831,8 @@ static const char* readonly_inactive_actions[] =
     "ScheduleTransactionAction",
     "ScrubAllAction",
     "ScrubCurrentAction",
+    "AssociateTransactionFileAction",
+    "AssociateTransactionLocationAction",
     NULL
 };
 
@@ -827,6 +856,9 @@ static const char* tran_action_labels[] =
     PASTE_TRANSACTION_LABEL,
     DUPLICATE_TRANSACTION_LABEL,
     DELETE_TRANSACTION_LABEL,
+    ASSOCIATE_TRANSACTION_FILE_LABEL,
+    ASSOCIATE_TRANSACTION_LOCATION_LABEL,
+    EXECASSOCIATED_TRANSACTION_LABEL,
     NULL
 };
 
@@ -838,6 +870,9 @@ static const char* tran_action_tips[] =
     PASTE_TRANSACTION_TIP,
     DUPLICATE_TRANSACTION_TIP,
     DELETE_TRANSACTION_TIP,
+    ASSOCIATE_TRANSACTION_FILE_TIP,
+    ASSOCIATE_TRANSACTION_LOCATION_TIP,
+    EXECASSOCIATED_TRANSACTION_TIP,
     NULL
 };
 
@@ -3388,6 +3423,54 @@ gnc_plugin_page_register_cmd_delete_transaction (GtkAction *action,
 
     priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(plugin_page);
     gsr_default_delete_handler(priv->gsr, NULL);
+    LEAVE(" ");
+
+}
+
+static void
+gnc_plugin_page_register_cmd_associate_file_transaction (GtkAction *action,
+        GncPluginPageRegister *plugin_page)
+{
+    GncPluginPageRegisterPrivate *priv;
+
+    ENTER("(action %p, plugin_page %p)", action, plugin_page);
+
+    g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER(plugin_page));
+
+    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(plugin_page);
+    gsr_default_associate_handler_file(priv->gsr, NULL);
+    LEAVE(" ");
+
+}
+
+static void
+gnc_plugin_page_register_cmd_associate_location_transaction (GtkAction *action,
+        GncPluginPageRegister *plugin_page)
+{
+    GncPluginPageRegisterPrivate *priv;
+
+    ENTER("(action %p, plugin_page %p)", action, plugin_page);
+
+    g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER(plugin_page));
+
+    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(plugin_page);
+    gsr_default_associate_handler_location(priv->gsr, NULL);
+    LEAVE(" ");
+
+}
+
+static void
+gnc_plugin_page_register_cmd_execassociated_transaction (GtkAction *action,
+        GncPluginPageRegister *plugin_page)
+{
+    GncPluginPageRegisterPrivate *priv;
+
+    ENTER("(action %p, plugin_page %p)", action, plugin_page);
+
+    g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER(plugin_page));
+
+    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(plugin_page);
+    gsr_default_execassociated_handler(priv->gsr, NULL);
     LEAVE(" ");
 
 }

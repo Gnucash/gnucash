@@ -45,6 +45,7 @@
 #include "gnc-euro.h"
 #include "gnc-prefs.h"
 #include "gnc-gui-query.h"
+#include "gnc-gnome-utils.h"
 #include "gnc-ledger-display.h"
 #include "gnc-pricedb.h"
 #include "gnc-ui-util.h"
@@ -106,6 +107,9 @@ void gsr_default_paste_txn_handler( GNCSplitReg *w, gpointer ud );
 void gsr_default_void_txn_handler ( GNCSplitReg *w, gpointer ud );
 void gsr_default_unvoid_txn_handler  ( GNCSplitReg *w, gpointer ud );
 void gsr_default_reverse_txn_handler ( GNCSplitReg *w, gpointer ud );
+void gsr_default_associate_handler_file   ( GNCSplitReg *w, gpointer ud );
+void gsr_default_associate_handler_location   ( GNCSplitReg *w, gpointer ud );
+void gsr_default_execassociated_handler   ( GNCSplitReg *w, gpointer ud );
 
 static void gsr_emit_simple_signal( GNCSplitReg *gsr, const char *sigName );
 static void gsr_emit_help_changed( GnucashRegister *reg, gpointer user_data );
@@ -1004,6 +1008,181 @@ gnc_split_reg_reinitialize_trans_cb(GtkWidget *widget, gpointer data)
 {
     GNCSplitReg *gsr = data;
     gsr_emit_simple_signal( gsr, "reinit_ent" );
+}
+
+/**
+ * Associates a file URI with the current transaction.
+ **/
+void
+gsr_default_associate_handler_file( GNCSplitReg *gsr, gpointer data )
+{
+    CursorClass cursor_class;
+    SplitRegister *reg;
+    Transaction *trans;
+    Split *split;
+    GtkWidget *dialog;
+
+    reg = gnc_ledger_display_get_split_register( gsr->ledger );
+
+    /* get the current split based on cursor position */
+    split = gnc_split_register_get_current_split(reg);
+    if (split == NULL)
+    {
+        gnc_split_register_cancel_cursor_split_changes (reg);
+        return;
+    }
+
+    trans = xaccSplitGetParent(split);
+    cursor_class = gnc_split_register_get_current_cursor_class (reg);
+
+    if (cursor_class == CURSOR_CLASS_NONE)
+        return;
+
+    if (is_trans_readonly_and_warn(trans))
+        return;
+
+	dialog = gtk_file_chooser_dialog_new ("Associate File with Transaction",
+                                     GTK_WINDOW(gsr->window),
+                                     GTK_FILE_CHOOSER_ACTION_OPEN,
+                                     GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+                                     GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
+                                     NULL);
+
+	gtk_file_chooser_set_local_only (GTK_FILE_CHOOSER(dialog), 0);
+	if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT)
+ 	{
+		char *uri;
+
+	    uri = gtk_file_chooser_get_uri (GTK_FILE_CHOOSER (dialog));
+        DEBUG("File URI: %s\n", uri);
+	    xaccTransSetAssociation(trans, uri);
+    }
+
+	gtk_widget_destroy (dialog);
+
+}
+
+/**
+ * Associates a location URI with the current transaction.
+ **/
+void
+gsr_default_associate_handler_location( GNCSplitReg *gsr, gpointer data )
+{
+    CursorClass cursor_class;
+    SplitRegister *reg;
+    Transaction *trans;
+    Split *split;
+    GtkWidget *dialog, *entry, *label, *content_area;
+
+    reg = gnc_ledger_display_get_split_register( gsr->ledger );
+
+    /* get the current split based on cursor position */
+    split = gnc_split_register_get_current_split(reg);
+    if (split == NULL)
+    {
+        gnc_split_register_cancel_cursor_split_changes (reg);
+        return;
+    }
+
+    trans = xaccSplitGetParent(split);
+    cursor_class = gnc_split_register_get_current_cursor_class (reg);
+
+    if (cursor_class == CURSOR_CLASS_NONE)
+        return;
+
+    if (is_trans_readonly_and_warn(trans))
+        return;
+
+    dialog = gtk_file_chooser_dialog_new ("Associate Location with Transaction",
+                                     GTK_WINDOW(gsr->window),
+                                     GTK_FILE_CHOOSER_ACTION_OPEN,
+                                     GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+                                     GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
+                                     NULL);
+
+    content_area = GTK_DIALOG (dialog)->vbox;
+
+    // add a label
+    label = gtk_label_new ("Please enter URL:");
+    gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.0);
+    gtk_container_add (GTK_CONTAINER (content_area), label);
+
+    // add the entry text
+    entry = gtk_entry_new ();
+    gtk_entry_set_width_chars(GTK_ENTRY (entry), 80);
+    gtk_entry_set_activates_default(GTK_ENTRY (entry), TRUE);
+    gtk_container_add (GTK_CONTAINER (content_area), entry);
+
+    // set spacings
+    gtk_container_set_border_width (GTK_CONTAINER (dialog), 12);
+    gtk_container_set_border_width (GTK_CONTAINER (label), 5);
+    gtk_container_set_border_width (GTK_CONTAINER (content_area), 5);
+
+    // set the default response
+    gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_ACCEPT);
+
+    // run the dialog
+    gtk_widget_show_all (dialog);
+
+    if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT)
+    {
+		const char *uri;
+
+        uri = gtk_entry_get_text (GTK_ENTRY (entry));
+        DEBUG("Location URI: %s\n", uri);
+        xaccTransSetAssociation(trans, uri);
+    }
+
+     gtk_widget_destroy (dialog);
+
+}
+/**
+ * Executes the associated link with the current transaction.
+ **/
+void
+gsr_default_execassociated_handler( GNCSplitReg *gsr, gpointer data )
+{
+    CursorClass cursor_class;
+    SplitRegister *reg;
+    Transaction *trans;
+    Split *split;
+    GtkWidget *dialog;
+    const char *uri;
+
+    reg = gnc_ledger_display_get_split_register( gsr->ledger );
+
+    /* get the current split based on cursor position */
+    split = gnc_split_register_get_current_split(reg);
+    if (split == NULL)
+    {
+        gnc_split_register_cancel_cursor_split_changes (reg);
+        return;
+    }
+
+    trans = xaccSplitGetParent(split);
+    cursor_class = gnc_split_register_get_current_cursor_class (reg);
+
+    if (cursor_class == CURSOR_CLASS_NONE)
+        return;
+
+#ifdef DUMP_FUNCTIONS
+   xaccTransDump (trans, "ExecAssociated")
+#endif
+
+    uri = xaccTransGetAssociation(trans);
+    if (!uri)
+    {
+        const gchar *message =
+            _("This transaction is not associated with a URI.");
+        gnc_error_dialog(NULL, "%s", message);
+        return;
+    }
+    else
+    {
+        gnc_launch_assoc(uri);
+    }
+
+    return;
 }
 
 void

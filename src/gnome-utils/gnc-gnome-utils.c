@@ -398,6 +398,78 @@ gnc_gnome_help (const char *file_name, const char *anchor)
 
 #endif
 
+#ifdef MAC_INTEGRATION
+
+/* Don't be alarmed if this function looks strange to you: It's
+ * written in Objective-C, the native language of the OSX Cocoa
+ * toolkit.
+ */
+void
+gnc_launch_assoc (const char *uri)
+{
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+    NSString *uri_str = [NSString stringWithUTF8String: uri];
+    NSURL *url = [[[NSURL alloc] initWithString: uri_str] autorelease];
+    const gchar *message =
+        _("GnuCash could not find the associated file.");
+
+    if (url)
+    {
+        [[NSWorkspace sharedWorkspace] openURL: url];
+        [pool release];
+        return;
+    }
+
+    gnc_error_dialog(NULL, "%s", message);
+
+    [pool release];
+    return;
+}
+#elif defined G_OS_WIN32 /* G_OS_WIN32 */
+void
+gnc_launch_assoc (const char *uri)
+{
+    wchar_t *winuri = (wchar_t *)g_utf8_to_utf16(uri, -1, NULL, NULL, NULL);
+
+    if (winuri)
+    {
+        if ((INT_PTR)ShellExecuteW(NULL, "open", winuri, NULL, NULL, SW_SHOWNORMAL) <= 32)
+        {
+            const gchar *message =
+                _("GnuCash could not find the associated file.");
+            gnc_error_dialog(NULL, "%s", message);
+        }
+        free(winuri);
+    }
+}
+
+#else
+void
+gnc_launch_assoc (const char *uri)
+{
+    GError *error = NULL;
+    gboolean success;
+
+    if (!uri)
+        return;
+
+    DEBUG ("Attempting to open uri %s", uri);
+    success = gtk_show_uri (NULL, uri, gtk_get_current_event_time (), &error);
+    if (success)
+        return;
+
+    g_assert(error != NULL);
+    {
+        const gchar *message =
+            _("GnuCash could not open the associated URI:");
+        gnc_error_dialog(NULL, "%s\n%s", message, uri);
+    }
+    PERR ("%s", error->message);
+    g_error_free(error);
+}
+
+#endif
+
 /********************************************************************\
  * gnc_gnome_get_pixmap                                             *
  *   returns a GtkWidget given a pixmap filename                    *

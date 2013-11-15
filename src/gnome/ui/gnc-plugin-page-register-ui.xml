@@ -20,6 +20,10 @@
       <menuitem name="VoidTransaction"    	action="VoidTransactionAction"/>
       <menuitem name="UnvoidTransaction"  	action="UnvoidTransactionAction"/>
       <menuitem name="ReverseTransaction" 	action="ReverseTransactionAction"/>
+      <separator name="TransactionSep3"/>
+      <menuitem name="AssociateTransactionFile" action="AssociateTransactionFileAction"/>
+      <menuitem name="AssociateTransactionLocation" action="AssociateTransactionLocationAction"/>
+      <menuitem name="ExecAssociateTransaction" action="ExecAssociatedTransactionAction"/>
     </menu>
 
     <menu name="View" action="ViewAction">
@@ -92,6 +96,10 @@
       <menuitem name="RecordTransaction"       action="RecordTransactionAction"/>
       <menuitem name="CancelTransaction"       action="CancelTransactionAction"/>
       <separator name="PopupSep3"/>
+      <menuitem name="AssociateTransactionFile" action="AssociateTransactionFileAction"/>
+      <menuitem name="AssociateTransactionLocation" action="AssociateTransactionLocationAction"/>
+      <menuitem name="ExecAssociateTransaction" action="ExecAssociatedTransactionAction"/>
+      <separator name="PopupSep4"/>
       <menuitem name="BlankTransaction"        action="BlankTransactionAction"/>
       <menuitem name="SplitTransaction"        action="SplitTransactionAction"/>
       <menuitem name="EditExchangeRate"        action="EditExchangeRateAction"/>
