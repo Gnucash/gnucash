@@ -127,6 +127,11 @@ void gncBillRemoveEntry (GncInvoice *bill, GncEntry *entry);
 */
 void gncInvoiceSortEntries (GncInvoice *invoice);
 
+/** Remove all entries from an invoice. To be called before
+ *  destroying an invoice.
+*/
+void gncInvoiceRemoveEntries (GncInvoice *invoice);
+
 /** @name Get Functions
  @{ */
 const char * gncInvoiceGetID (const GncInvoice *invoice);

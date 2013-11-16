@@ -691,6 +691,43 @@ void gncInvoiceSortEntries (GncInvoice *invoice)
     gncInvoiceCommitEdit (invoice);
 }
 
+void gncInvoiceRemoveEntries (GncInvoice *invoice)
+{
+    GList *node;
+
+    if (!invoice) return;
+
+    for (node = invoice->entries; node; node = node->next)
+    {
+        GncEntry *entry = node->data;
+
+        switch (gncInvoiceGetOwnerType (invoice))
+        {
+        case GNC_OWNER_VENDOR:
+        case GNC_OWNER_EMPLOYEE:
+            // this is a vendor bill, or an expense voucher
+            gncBillRemoveEntry (invoice, entry);
+            break;
+        case GNC_OWNER_CUSTOMER:
+        default:
+            // this is an invoice
+            gncInvoiceRemoveEntry (invoice, entry);
+            break;
+        }
+
+        /* If the entry is no longer referenced by any document,
+         * remove it.
+         */
+        if (!(gncEntryGetInvoice (entry) ||
+              gncEntryGetBill (entry) ||
+              gncEntryGetOrder (entry)))
+        {
+            gncEntryBeginEdit (entry);
+            gncEntryDestroy (entry);
+        }
+    }
+}
+
 /* ================================================================== */
 /* Get Functions */
 

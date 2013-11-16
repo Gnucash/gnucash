@@ -463,8 +463,10 @@ gnc_invoice_window_destroy_cb (GtkWidget *widget, gpointer data)
 
     gnc_suspend_gui_refresh ();
 
-    if (iw->dialog_type == NEW_INVOICE && invoice != NULL)
+    if ((iw->dialog_type == NEW_INVOICE || iw->dialog_type == DUP_INVOICE)
+         && invoice != NULL)
     {
+        gncInvoiceRemoveEntries (invoice);
         gncInvoiceBeginEdit (invoice);
         gncInvoiceDestroy (invoice);
         iw->invoice_guid = *guid_null ();
