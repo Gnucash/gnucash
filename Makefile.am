@@ -185,9 +185,7 @@ intl-scm/guile-strings.c:
 
 .potfiles:
 
-GIT_CMD = @GIT_CMD@
 SVN = svn
-SCM_TYPE = @SCM_TYPE@
 
 if BUILDING_FROM_SCM
 # This rule will generate a ChangeLog of gnucash/trunk commits, plus
