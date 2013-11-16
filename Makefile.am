@@ -146,7 +146,7 @@ distuninstallcheck_listfiles = \
 
 distcheck-hook:
 	@e=''; \
-	for X in `grep -v \# ${distdir}/po/POTFILES.in` ; do \
+	for X in `grep -v \# ${distdir}/po/POTFILES.in | sed 's/\[type:.*\]//'` ; do \
 		if [ ! -f ${distdir}/$$X ] ; then \
 			echo $$X " is in POTFILES.in but not in the dist."; \
 			e='yes'; \
