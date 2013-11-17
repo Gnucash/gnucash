@@ -51,7 +51,8 @@
 #include "gnc-session.h"
 #include "qofbookslots.h"
 #ifdef G_OS_WIN32
-#    include "gnc-help-utils.h"
+#include <windows.h>
+#include "gnc-help-utils.h"
 #endif
 #ifdef MAC_INTEGRATION
 #import <Cocoa/Cocoa.h>
@@ -430,17 +431,18 @@ void
 gnc_launch_assoc (const char *uri)
 {
     wchar_t *winuri = (wchar_t *)g_utf8_to_utf16(uri, -1, NULL, NULL, NULL);
-
+    wchar_t *wincmd = (wchar_t *)g_utf8_to_utf16("open", -1, NULL, NULL, NULL);
     if (winuri)
     {
-        if ((INT_PTR)ShellExecuteW(NULL, "open", winuri, NULL, NULL, SW_SHOWNORMAL) <= 32)
+        if ((INT_PTR)ShellExecuteW(NULL, wincmd, winuri, NULL, NULL, SW_SHOWNORMAL) <= 32)
         {
             const gchar *message =
                 _("GnuCash could not find the associated file.");
             gnc_error_dialog(NULL, "%s", message);
         }
-        free(winuri);
+        g_free (winuri);
     }
+    g_free (wincmd);
 }
 
 #else
