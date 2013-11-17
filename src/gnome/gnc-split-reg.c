@@ -1166,7 +1166,8 @@ gsr_default_execassociated_handler( GNCSplitReg *gsr, gpointer data )
         return;
 
 #ifdef DUMP_FUNCTIONS
-   xaccTransDump (trans, "ExecAssociated")
+    if (qof_log_check (log_module, QOF_LOG_DEBUG))
+        xaccTransDump (trans, "ExecAssociated");
 #endif
 
     uri = xaccTransGetAssociation(trans);
