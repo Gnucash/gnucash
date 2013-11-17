@@ -1,5 +1,38 @@
 Version history:
 ------- -------
+ 2.5.8 - 17 November 2013
+
+         This is the ninth release in the UNSTABLE 2.5 series. This
+         release is the last alpha release.
+
+	 String and feature freeze are now in effect: Only bug fixes
+	 which have no effect on UI, API, or translatable strings
+	 should be committed to trunk until after the release of
+	 GnuCash 2.6, currently scheduled for 29 December 2013.
+
+	 Translators: Please use the tarballs from this release to
+	 prepare your translations.
+
+	 New contributor Patrick has provided a beginning
+	 implementation of linking attachments to transactions. This
+	 is accessed through the Transaction menu and the transaction
+	 context menu. In this initial version, linked files are
+	 displayed in the default viewer for the file type. E.g., html
+	 files will open in a browser and jpegs will open in the
+	 default picture viewer.
+
+	 Bug Fixes:
+	 707311 - Tax Invoice fails to open when using guile 2
+	 709589 - make check fails with guile 2
+	 711289 - Time Zone Handling is Inconsistent between 2.4 and 2.5
+	 	 Partial fix that may also correct 699997
+	 711294 - Gnucash repeatedly ask associated income account
+	  	 when import qfx file. Patch by Kuang-che Wu <kcwu@csie.org>
+
+	 711493 - Fix unselected account that is NULL
+
+	 Translations Updated: German
+
  2.5.7 - 3 November 2013
        	 This is the eighth release in the UNSTABLE 2.5 series.
 
@@ -9,42 +42,44 @@ Version history:
 	 general use and the principal author doesn't have time to
 	 make it ready in time for a 2.6 release.
 
-	  Frédéric Perrin has contributed a change to display currency
-	  symbols whenever they are known and unambiguous.
+	 Frédéric Perrin has contributed a change to display currency
+	 symbols whenever they are known and unambiguous.
 
-	  Geert Janssens has cleaned up most of the issues from the
-	  initial GSettings preference changes. There's a new
-	  configure option, --with-xdg-data-dirs to overide the
-	  environment and defaults if necessary.
+	 Geert Janssens has cleaned up most of the issues from the
+	 initial GSettings preference changes. There's a new
+	 configure option, --with-xdg-data-dirs to overide the
+	 environment and defaults if necessary.
 
-	  Building Gnucash now requires Automake version 1.11 or later.
+	 Building Gnucash now requires Automake version 1.11 or later.
 
-	  Configure will abort if --enable-ofx is set but no libofx
-	  configuration files are found.  Budget periods may no longer
-	  set to values greater than the budget's num_periods, and the
-	  budget options descriptions will wrap. Contributed by Robert
-	  Ratliff.
+	 Configure will abort if --enable-ofx is set but no libofx
+	 configuration files are found.  Budget periods may no longer
+	 set to values greater than the budget's num_periods, and the
+	 budget options descriptions will wrap. Contributed by Robert
+	 Ratliff.
 
-Bug Fixes:
+	 Bug Fixes:
 
-	668530 - In budget flow report options, change the maximum
+	 668530 - In budget flow report options, change the maximum
 	       value for period to 60 (Note the FIXMEs) Author: Robert
-	       Ratliff <ratliff.bobby@gmail.com>
-	687478 - Bills due reminder doesn't work well with credit notes
-	687479 - Automatic invoice/payment matching on posting an
+	       Ratliff
+	 687478 - Bills due reminder doesn't work well with credit notes
+	 687479 - Automatic invoice/payment matching on posting an
 	       invoice should be an optional feature
-	693244 - View Lots window enhancements
- 	708659 - Totals column moves to right hand side when periods are added
+	 693244 - View Lots window enhancements
+ 	 708659 - Totals column moves to right hand side when periods are added
 	       Remove unneeded gnc_plugin_page_budget_refresh_cb
-	       Author: R Ratliff <ratliff.bobby@gmail.com>
- 	710055 - advanced portfolio report counts capital gains split
+	       Author: R Ratliff
+ 	 710055 - advanced portfolio report counts capital gains split
  	       as dividend. Author: Jason McCarty <jmccarty@sent.com>
-	710311 - Missing ChangeLogs
-	710739 - Fill in field for remote bank account information
+	 710311 - Missing ChangeLogs
+	 710739 - Fill in field for remote bank account information
 	       also for SEPA transfers.
-	710871 - Fix for Python site-packages not found when not
+	 710871 - Fix for Python site-packages not found when not
 	       installed to default location
-	710979 - Crash in gnc_plugin_page_invoice_summarybar_position_changed
+	 710979 - Crash in gnc_plugin_page_invoice_summarybar_position_changed
+
+      	 Translations Updated: None
 
  2.5.6 - 7 October 2013
        	 This is the seventh release in the UNSTABLE 2.5 series.
@@ -85,10 +120,12 @@ Bug Fixes:
 	 Bug 708700 - "make check" fails (missing glib bits)--
 	 Frédéric Perrin <fred+gnome@resel.fr>
 
-Bug 704039 - time zone is not respected in Windows -- Thanks to Kuang-che Wu <kcwu@csie.org>
+	 Bug 704039 - time zone is not respected in Windows -- Thanks
+	 to Kuang-che Wu <kcwu@csie.org>
 
 
       	 Translations Updated: Dutch
+
  2.5.5 - 10 September 2013
        	 This is the sixth release in the UNSTABLE 2.5 series.
 
