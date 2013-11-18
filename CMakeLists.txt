@@ -56,7 +56,7 @@ ENDIF (MSVC)
 
 ## Libxml2
 #FIND_PACKAGE (LibXml2 REQUIRED)
-#FIND_PACKAGE (ZLIB REQUIRED)
+FIND_PACKAGE (ZLIB REQUIRED)
 
 IF (NOT GLIB2_FOUND)
    MESSAGE (SEND_ERROR "Glib2 not found, but is required")
@@ -123,6 +123,7 @@ ENDIF (WITH_AQBANKING)
 # Compiler flags
 IF (UNIX)
   SET( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Werror -Wdeclaration-after-statement -Wno-pointer-sign -D_FORTIFY_SOURCE=2 -Wall -Wunused -Wmissing-prototypes -Wmissing-declarations  -Wno-unused")
+  SET( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-error=deprecated-declarations")
 ENDIF (UNIX)
 IF (MINGW)
   SET( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Werror -Wdeclaration-after-statement -Wall -Wunused -Wmissing-prototypes -Wmissing-declarations  -Wno-unused")
