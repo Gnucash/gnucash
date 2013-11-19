@@ -45,4 +45,9 @@ gnc_xml_parse_file(sixtp *top_parser, const char *filename,
                    gxpf_callback callback, gpointer parsedata,
                    gpointer bookdata);
 
+gboolean
+gnc_xml_parse_fd(sixtp *top_parser, FILE *fd,
+                 gxpf_callback callback, gpointer parsedata,
+                 gpointer bookdata);
+
 #endif /* IO_GNCXML_GEN_H */

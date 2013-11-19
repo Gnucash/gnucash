@@ -41,3 +41,19 @@ gnc_xml_parse_file(sixtp *top_parser, const char *filename,
     return sixtp_parse_file(top_parser, filename,
                             NULL, &gpdata, &parse_result);
 }
+
+gboolean
+gnc_xml_parse_fd(sixtp *top_parser, FILE *fd,
+                 gxpf_callback callback, gpointer parsedata,
+                 gpointer bookdata)
+{
+    gpointer parse_result = NULL;
+    gxpf_data gpdata;
+
+    gpdata.cb = callback;
+    gpdata.parsedata = parsedata;
+    gpdata.bookdata = bookdata;
+
+    return sixtp_parse_fd(top_parser, fd,
+                          NULL, &gpdata, &parse_result);
+}
