@@ -786,7 +786,7 @@ qof_session_load_from_xml_file_v2_full(
            See https://bugzilla.gnome.org/show_bug.cgi?id=712528 for more info */
         gchar *filename = fbe->fullpath;
 #ifdef G_OS_WIN32
-        filename = g_win32_locale_filename_from_utf8(fbe->fulpath);
+        filename = g_win32_locale_filename_from_utf8(fbe->fullpath);
         if (filename)
         {
 #endif
@@ -808,9 +808,9 @@ qof_session_load_from_xml_file_v2_full(
             }
 #ifdef G_OS_WIN32
             g_free(filename);
+        }
         else
             retval = FALSE;
-        }
 #endif
     }
 
