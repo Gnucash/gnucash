@@ -29,17 +29,15 @@
 void
 gnc_gdate_set_today (GDate* gd)
 {
-    GDateTime *gdt = g_date_time_new_now_local ();
-    gint y, m, d;
-    g_date_time_get_ymd (gdt, &y, &m, &d);
-    g_date_set_dmy (gd, d, m, y);
-    g_date_time_unref (gdt);
+    GDate *today = gnc_g_date_new_today ();
+    g_date_set_julian (gd, g_date_get_julian (today));
+    g_date_free (today);
 }
 
 void
 gnc_gdate_set_time64 (GDate* gd, time64 time)
 {
-    GDateTime *gdt = g_date_time_new_from_unix_local (time);
+    GDateTime *gdt = gnc_g_date_time_new_from_unix_local (time);
     gint y, m, d;
     g_date_time_get_ymd (gdt, &y, &m, &d);
     g_date_set_dmy (gd, d, m, y);
