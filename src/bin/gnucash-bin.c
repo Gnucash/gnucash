@@ -615,6 +615,8 @@ load_gnucash_modules()
         { "gnucash/business-gnome", 0, TRUE },
         { "gnucash/gtkmm", 0, TRUE },
         { "gnucash/python", 0, TRUE },
+        { "gnucash/plugins/bi_import", 0, TRUE},
+        { "gnucash/plugins/customer_import", 0, TRUE},
     };
 
     /* module initializations go here */
