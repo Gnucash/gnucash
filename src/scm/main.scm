@@ -72,6 +72,10 @@
     (debug-set! maxdepth 100000))
 (debug-set! stack    200000)
 
+;; Initalialize localization, otherwise reports may output
+;; invalid characters
+(setlocale LC_ALL "")
+
 ;;(use-modules (ice-9 statprof))
 
 
