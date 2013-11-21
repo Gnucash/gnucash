@@ -24,7 +24,7 @@
  * @{
  * @addtogroup AqBanking
  * @{
- * @file aqbanking/dialog-daterange.h
+ * @file aqbanking/dialog-ab-daterange.h
  * @brief Dialog for date range entry
  * @author Copyright (C) 2002 Christian Stimming <stimming@tuhh.de>
  * @author Copyright (C) 2008 Andreas Koehler <andi5.py@gmx.net>

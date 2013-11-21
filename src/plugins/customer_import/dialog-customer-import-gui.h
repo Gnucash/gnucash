@@ -1,5 +1,5 @@
 /*
- * gui.h --
+ * dialog-customer-import-gui.h --
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -22,7 +22,7 @@
 /**
  * @addtogroup Tools
  * @{
- * @file gui.h
+ * @file
  * @brief GUI handling for customer import plugin
  * @author Copyright (C) 2009 Sebastian Held <sebastian.held@gmx.de>
  */

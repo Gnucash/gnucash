@@ -1,5 +1,5 @@
 /*
- * customer_import.h --
+ * dialog-customer_import.h --
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -22,7 +22,7 @@
 /**
  * @addtogroup Tools
  * @{
- * @file customer_import.h
+ * @file
  * @brief core import functions for customer import plugin
  * @author Copyright (C) 2009 Sebastian Held <sebastian.held@gmx.de>
  */

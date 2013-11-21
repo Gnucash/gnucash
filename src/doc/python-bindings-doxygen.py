@@ -17,10 +17,10 @@
 # @ingroup python_bindings
 
 
-## @defgroup python_bindings
+## @defgroup python_bindings Python Bindings Module
 #  Also have a look at the page @ref python_bindings_page.
 
-## @defgroup python_bindings_examples
+## @defgroup python_bindings_examples Python Bindings Examples Module
 #  @ingroup python_bindings
 #  The python-bindings come with quite a lot of example scripts.
 

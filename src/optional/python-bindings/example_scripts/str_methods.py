@@ -1,5 +1,6 @@
 #!/usr/bin/env python
-## @file @brief Add __str__ and __unicode__ methods to financial objects so that @code print object @endcode leads to human readable results
+## @file 
+#  @brief Add __str__ and __unicode__ methods to financial objects so that @code print object @endcode leads to human readable results
 """ @package str_methods.py -- Add __str__ and __unicode__ methods to financial objects
 
    Import this module and str(Object) and unicode(Object) where Object is Transaction, Split,Invoice
