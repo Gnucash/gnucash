@@ -388,7 +388,7 @@
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
-            <property name="tooltip_text" translatable="yes">At post time, automatically attempt to pay customer documents with oustanding pre-payments and counter documents. The pre-payments and documents obviously have to be against the same customer. Counder documents are documents with opposite sign. For example for an invoice, customer credit notes and negative invoices are considered counter documents.</property>
+            <property name="tooltip_text" translatable="yes">At post time, automatically attempt to pay customer documents with outstanding pre-payments and counter documents. The pre-payments and documents obviously have to be against the same customer. Counter documents are documents with opposite sign. For example for an invoice, customer credit notes and negative invoices are considered counter documents.</property>
             <property name="use_underline">True</property>
             <property name="draw_indicator">True</property>
           </object>
@@ -415,7 +415,7 @@
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
-            <property name="tooltip_text" translatable="yes">At post time, automatically attempt to pay vendor documents with oustanding pre-payments and counter documents. The pre-payments and documents obviously have to be against the same vendor. Counder documents are documents with opposite sign. For example for a bill, vendor credit notes and negative bills are considered counter documents.</property>
+            <property name="tooltip_text" translatable="yes">At post time, automatically attempt to pay vendor documents with outstanding pre-payments and counter documents. The pre-payments and documents obviously have to be against the same vendor. Counter documents are documents with opposite sign. For example for a bill, vendor credit notes and negative bills are considered counter documents.</property>
             <property name="use_underline">True</property>
             <property name="draw_indicator">True</property>
           </object>

@@ -110,7 +110,7 @@
     <key name="auto-pay" type="b">
       <default>false</default>
       <summary>Auto pay when posting.</summary>
-      <description>At post time, automatically attempt to pay customer documents with oustanding pre-payments and counter documents. The pre-payments and documents obviously have to be against the same customer. Counder documents are documents with opposite sign. For example for an invoice, customer credit notes and negative invoices are considered counter documents.</description>
+      <description>At post time, automatically attempt to pay customer documents with outstanding pre-payments and counter documents. The pre-payments and documents obviously have to be against the same customer. Counter documents are documents with opposite sign. For example for an invoice, customer credit notes and negative invoices are considered counter documents.</description>
     </key>
     <key name="enable-toolbuttons" type="b">
       <default>false</default>
@@ -142,7 +142,7 @@
     <key name="auto-pay" type="b">
       <default>false</default>
       <summary>Auto pay when posting.</summary>
-      <description>At post time, automatically attempt to pay vendor documents with oustanding pre-payments and counter documents. The pre-payments and documents obviously have to be against the same vendor. Counder documents are documents with opposite sign. For example for a bill, vendor credit notes and negative bills are considered counter documents.</description>
+      <description>At post time, automatically attempt to pay vendor documents with outstanding pre-payments and counter documents. The pre-payments and documents obviously have to be against the same vendor. Counter documents are documents with opposite sign. For example for a bill, vendor credit notes and negative bills are considered counter documents.</description>
     </key>
     <key name="notify-when-due" type="b">
       <default>true</default>

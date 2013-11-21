@@ -33,7 +33,7 @@
     <key name="save-on-close-expires" type="b">
       <default>false</default>
       <summary>Enable timeout on "Save changes on closing" question</summary>
-      <description>If enabeled, the "Save changes on closing" question will only wait a limited number of seconds for an answer. If the user didn't answer within that time, the changes will be saved automatically and the question window closed.</description>
+      <description>If enabled, the "Save changes on closing" question will only wait a limited number of seconds for an answer. If the user didn't answer within that time, the changes will be saved automatically and the question window closed.</description>
     </key>
     <key name="save-on-close-wait-time" type="i">
       <default>20</default>

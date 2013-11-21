@@ -1906,7 +1906,7 @@ many months before the current month:</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="tooltip_text" translatable="yes">If enabeled, the "Save changes on closing" question will only wait a limited number of seconds for an answer. If the user didn't answer within that time, the changes will be saved automatically and the question window closed.</property>
+                    <property name="tooltip_text" translatable="yes">If enabled, the "Save changes on closing" question will only wait a limited number of seconds for an answer. If the user didn't answer within that time, the changes will be saved automatically and the question window closed.</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
                   </object>
