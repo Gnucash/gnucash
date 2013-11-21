@@ -70,7 +70,7 @@
     help-string
     default-depth
     (list (list->vector
-	   (list 'all (N_ "All") (N_ "All accounts.")))
+	   (list 'all (N_ "All") (N_ "All accounts")))
 	  (list->vector
 	   (list 1 "1" (N_ "Top-level.")))
 	  (list->vector
@@ -217,15 +217,15 @@
     (N_ "Choose the marker for each data point.")
     default
     (list
-     (vector 'diamond (N_ "Diamond") (N_ "Hollow diamond."))
-     (vector 'circle (N_ "Circle") (N_ "Hollow circle."))
-     (vector 'square (N_ "Square") (N_ "Hollow square."))
-     (vector 'cross (N_ "Cross") (N_ "Cross."))
-     (vector 'plus (N_ "Plus") (N_ "Plus."))
-     (vector 'dash (N_ "Dash") (N_ "Dash."))
-     (vector 'filleddiamond (N_ "Filled diamond") (N_ "Diamond filled with color."))
-     (vector 'filledcircle (N_ "Filled circle") (N_ "Circle filled with color."))
-     (vector 'filledsquare (N_ "Filled square") (N_ "Square filled with color."))))))
+     (vector 'diamond (N_ "Diamond") (N_ "Hollow diamond"))
+     (vector 'circle (N_ "Circle") (N_ "Hollow circle"))
+     (vector 'square (N_ "Square") (N_ "Hollow square"))
+     (vector 'cross (N_ "Cross") (N_ "Cross"))
+     (vector 'plus (N_ "Plus") (N_ "Plus"))
+     (vector 'dash (N_ "Dash") (N_ "Dash"))
+     (vector 'filleddiamond (N_ "Filled diamond") (N_ "Diamond filled with color"))
+     (vector 'filledcircle (N_ "Filled circle") (N_ "Circle filled with color"))
+     (vector 'filledsquare (N_ "Filled square") (N_ "Square filled with color"))))))
 
 
 (define (gnc:options-add-sort-method!
