@@ -54,7 +54,7 @@ exec @GUILE@ -s $0 "$@"
         PWARN(\"failed to insert %s into commodity table\", fullname);
       }
     }
-    gnc_commodity_set_user_symbol(c, ~S);
+    gnc_commodity_set_default_symbol(c, ~S);
   }\n"
 	     fullname
 	     namespace

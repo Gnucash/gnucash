@@ -82,6 +82,9 @@ typedef struct CommodityPrivate
     /* the number of accounts using this commodity - this field is not
      * persisted */
     int       usage_count;
+
+    /* the default display_symbol, set in iso-4217-currencies at start-up */
+    const char * default_symbol;
 } CommodityPrivate;
 
 #define GET_PRIVATE(o) \
@@ -93,6 +96,7 @@ struct _GncCommodityClass
 };
 
 static void commodity_free(gnc_commodity * cm);
+static void gnc_commodity_set_default_symbol(gnc_commodity *, const char *);
 
 struct gnc_commodity_namespace_s
 {
@@ -1136,7 +1140,10 @@ gnc_commodity_get_user_symbol(const gnc_commodity *cm)
 {
     const char *str;
     if (!cm) return NULL;
-    return kvp_frame_get_string(cm->inst.kvp_data, "user_symbol");
+    str = kvp_frame_get_string(cm->inst.kvp_data, "user_symbol");
+    if (str && *str)
+	return str;
+    return GET_PRIVATE(cm)->default_symbol;
 }
 
 /********************************************************************
@@ -1390,6 +1397,18 @@ gnc_commodity_set_user_symbol(gnc_commodity * cm, const char * user_symbol)
     gnc_commodity_commit_edit(cm);
 
     LEAVE(" ");
+}
+
+/********************************************************************
+ * gnc_commodity_set_default_symbol
+ * Not made visible in gnc-commodity.h, it is only called from
+ * iso-4217-currencies.c at startup.
+ ********************************************************************/
+void
+gnc_commodity_set_default_symbol(gnc_commodity * cm,
+				 const char * default_symbol)
+{
+    GET_PRIVATE(cm)->default_symbol = default_symbol;
 }
 
 /********************************************************************
