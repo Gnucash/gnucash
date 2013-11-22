@@ -226,6 +226,12 @@ void gnc_state_save (const QofSession *session)
 {
     GError *error = NULL;
 
+    if (!qof_session_get_url(session))
+    {
+        DEBUG("No file associated with session - skip state saving");
+        return;
+    }
+
     gnc_state_set_base (session);
 
     /* Write it all out to disk */
@@ -246,7 +252,7 @@ GKeyFile *gnc_state_get_current (void)
 {
     if (!state_file)
     {
-        PWARN ("No pre-existing state found, creating new one");
+        PINFO ("No pre-existing state found, creating new one");
         state_file = g_key_file_new ();
     }
 
