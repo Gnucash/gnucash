@@ -41,18 +41,18 @@ Name: desktopicon; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm
 Name: menuicon; Description: "{cm:CreateMenuLink}"; GroupDescription: "{cm:AdditionalIcons}"
 
 [Icons]
-Name: "{group}\GnuCash"; Filename: "{app}\bin\gnucash.exe"; WorkingDir: "{app}\bin"; Comment: "{cm:IconComment_GnuCash}"; IconFilename: "{app}\share\gnucash\pixmaps\gnucash-icon.ico"; Tasks: menuicon
-Name: "{group}\{cm:IconName_README}"; Filename: "{app}\doc\gnucash\{cm:IconFilename_README}"; Comment: "{cm:IconComment_README}"; Tasks: menuicon
+Name: "{group}\GnuCash"; Filename: "{app}\bin\@PACKAGE@.exe"; WorkingDir: "{app}\bin"; Comment: "{cm:IconComment_GnuCash}"; IconFilename: "{app}\share\@PACKAGE@\pixmaps\gnucash-icon.ico"; Tasks: menuicon
+Name: "{group}\{cm:IconName_README}"; Filename: "{app}\doc\@PACKAGE@\{cm:IconFilename_README}"; Comment: "{cm:IconComment_README}"; Tasks: menuicon
 Name: "{group}\{cm:IconName_FAQ}"; Filename: "http://wiki.gnucash.org/wiki/FAQ"; Tasks: menuicon
 Name: "{group}\{cm:IconName_Bugzilla}"; Filename: "http://bugzilla.gnome.org/enter_bug.cgi?product=GnuCash"; Tasks: menuicon
 Name: "{group}\{cm:IconName_InstallFQ}"; Filename: "{app}\bin\install-fq-mods.cmd"; WorkingDir: "{app}\bin"; Comment: "{cm:IconComment_InstallFQ}"; Tasks: menuicon
 Name: "{group}\{cm:IconName_Theme}"; Filename: "{app}\bin\gtk2_prefs.exe"; WorkingDir: "{app}\bin"; Tasks: menuicon
 Name: "{group}\{cm:IconName_Uninstall}"; Filename: "{uninstallexe}"; Comment: "{cm:IconComment_Uninstall}"; Tasks: menuicon
 
-Name: "{commondesktop}\GnuCash"; Filename: "{app}\bin\gnucash.exe"; WorkingDir: "{app}\bin"; Comment: "{cm:IconComment_GnuCash}"; IconFilename: "{app}\share\gnucash\pixmaps\gnucash-icon.ico"; Tasks: desktopicon
+Name: "{commondesktop}\GnuCash"; Filename: "{app}\bin\@PACKAGE@.exe"; WorkingDir: "{app}\bin"; Comment: "{cm:IconComment_GnuCash}"; IconFilename: "{app}\share\@PACKAGE@\pixmaps\gnucash-icon.ico"; Tasks: desktopicon
 
 [Run]
-Filename: "{app}\bin\gnucash.exe"; Description: "{cm:RunPrg}"; WorkingDir: "{app}\bin"; OnlyBelowVersion: 0,6; Flags: postinstall skipifsilent
+Filename: "{app}\bin\@PACKAGE@.exe"; Description: "{cm:RunPrg}"; WorkingDir: "{app}\bin"; OnlyBelowVersion: 0,6; Flags: postinstall skipifsilent
 Filename: "{app}\bin\guile.cmd"; Flags: runhidden
 
 ; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -109,8 +109,8 @@ Source: "@prefix@\..\dist\share\doc\@PACKAGE@\ChangeLog"; DestDir: "{app}\doc\@P
 Root: HKCR; Subkey: ".gnucash"; ValueType: string; ValueName: ""; ValueData: "GnuCash.Financial.Data"; Flags: uninsdeletevalue
 Root: HKCR; Subkey: ".gnucash"; ValueType: string; ValueName: "Content Type"; ValueData: "application/x-gnucash"; Flags: uninsdeletevalue
 Root: HKCR; Subkey: "GnuCash.Financial.Data"; ValueType: string; ValueName: ""; ValueData: "GnuCash Financial Data"; Flags: uninsdeletevalue
-Root: HKCR; Subkey: "GnuCash.Financial.Data\DefaultIcon"; ValueType: string; ValueName: ""; ValueData: "{app}\share\gnucash\pixmaps\gnucash-icon.ico,0" 
-Root: HKCR; Subkey: "GnuCash.Financial.Data\shell\open\command"; ValueType: string; ValueName: ""; ValueData: """{app}\bin\gnucash.exe"" ""%1""" 
+Root: HKCR; Subkey: "GnuCash.Financial.Data\DefaultIcon"; ValueType: string; ValueName: ""; ValueData: "{app}\share\@PACKAGE@\pixmaps\gnucash-icon.ico,0" 
+Root: HKCR; Subkey: "GnuCash.Financial.Data\shell\open\command"; ValueType: string; ValueName: ""; ValueData: """{app}\bin\@PACKAGE@.exe"" ""%1""" 
 
 Root: HKLM; Subkey: "Software\GnuCash"; ValueType: none; Flags: uninsdeletekeyifempty
 Root: HKLM; Subkey: "Software\GnuCash\Paths"; ValueType: none; Flags: uninsdeletekeyifempty
@@ -156,9 +156,9 @@ Root: HKLM; Subkey: "Software\AqBanking\Paths"; ValueType: string; ValueName: "c
 ; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 [UninstallDelete]
 Type: files; Name: "{app}\bin\guile.cmd"
-Type: files; Name: "{app}\etc\gnucash\environment"
+Type: files; Name: "{app}\etc\@PACKAGE@\environment"
 Type: filesandordirs; Name: "{app}\share\guile"
-Type: dirifempty; Name: "{app}\etc\gnucash"
+Type: dirifempty; Name: "{app}\etc\@PACKAGE@"
 Type: dirifempty; Name: "{app}\etc"
 
 ; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -307,7 +307,7 @@ begin
 
   { Get the installation-specific paths }
   appdir := ExpandConstant('{app}');
-  pkgdatadir := appdir + '\share\gnucash';
+  pkgdatadir := appdir + '\share\@PACKAGE@';
 
   { Create the guile.cmd file; #10 is the linefeed character and #13 CR }
 
