@@ -54,14 +54,6 @@ Name: "{commondesktop}\GnuCash"; Filename: "{app}\bin\gnucash.exe"; WorkingDir: 
 [Run]
 Filename: "{app}\bin\gnucash.exe"; Description: "{cm:RunPrg}"; WorkingDir: "{app}\bin"; OnlyBelowVersion: 0,6; Flags: postinstall skipifsilent
 Filename: "{app}\bin\guile.cmd"; Flags: runhidden
-;; The Windows firewall exceptions, see http://www.vincenzo.net/isxkb/index.php?title=Adding_a_rule_to_the_Windows_firewall
-Filename: "{sys}\netsh.exe"; Parameters: "firewall add allowedprogram ""{app}\bin\gnucash.exe"" ""GnuCash Free Finance Manager"" ENABLE ALL"; StatusMsg: "{cm:StatusMsgFirewall}"; Flags: runhidden; MinVersion: 0,5.01.2600sp2;
-Filename: "{sys}\netsh.exe"; Parameters: "firewall add allowedprogram ""{app}\bin\gconfd-2.exe"" ""GConf Settings Manager"" ENABLE ALL"; StatusMsg: "{cm:StatusMsgFirewall}"; Flags: runhidden; MinVersion: 0,5.01.2600sp2;
-
-[UninstallRun]
-Filename: "{app}\bin\gconftool-2.exe"; Parameters: "--shutdown"; Flags: runhidden
-Filename: "{sys}\netsh.exe"; Parameters: "firewall delete allowedprogram program=""{app}\bin\@PACKAGE@.exe"""; Flags: runhidden; MinVersion: 0,5.01.2600sp2
-Filename: "{sys}\netsh.exe"; Parameters: "firewall delete allowedprogram program=""{app}\bin\gconfd-2.exe"""; Flags: runhidden; MinVersion: 0,5.01.2600sp2
 
 ; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Here we configure the included files and the place of their
@@ -166,7 +158,6 @@ Root: HKLM; Subkey: "Software\AqBanking\Paths"; ValueType: string; ValueName: "c
 Type: files; Name: "{app}\bin\guile.cmd"
 Type: files; Name: "{app}\etc\gnucash\environment"
 Type: filesandordirs; Name: "{app}\share\guile"
-Type: filesandordirs; Name: "{app}\etc\gconf"
 Type: dirifempty; Name: "{app}\etc\gnucash"
 Type: dirifempty; Name: "{app}\etc"
 
