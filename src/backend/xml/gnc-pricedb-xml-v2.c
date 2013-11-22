@@ -32,6 +32,7 @@
 #include "sixtp-dom-parsers.h"
 #include "sixtp-dom-generators.h"
 #include "io-gncxml-gen.h"
+#include "io-gncxml-v2.h"
 
 #include "gnc-pricedb.h"
 #include "gnc-pricedb-p.h"
@@ -282,6 +283,8 @@ pricedb_after_child_handler(gpointer data_for_children,
                             const gchar *child_tag,
                             sixtp_child_result *child_result)
 {
+    gxpf_data *gdata = global_data;
+    sixtp_gdv2 *gd = gdata->parsedata;
     GNCPriceDB *db = (GNCPriceDB *) * result;
 
     g_return_val_if_fail(db, FALSE);
@@ -296,9 +299,8 @@ pricedb_after_child_handler(gpointer data_for_children,
 
         g_return_val_if_fail(p, FALSE);
         gnc_pricedb_add_price(db, p);
-        /* can't do this because the v1 parser doesn't use this data
-           structure as global data */
-        /* ((sixtp_gdv2*)global_data)->counter.prices_loaded++; */
+        gd->counter.prices_loaded++;
+        run_callback(gd, "prices");
         return TRUE;
     }
     else

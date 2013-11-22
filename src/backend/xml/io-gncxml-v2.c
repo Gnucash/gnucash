@@ -424,6 +424,10 @@ gnc_counter_end_handler(gpointer data_for_children,
     {
         sixdata->counter.budgets_total = val;
     }
+    else if (g_strcmp0(type, "price") == 0)
+    {
+        sixdata->counter.prices_total = val;
+    }
     else
     {
         struct file_backend be_data;
@@ -488,10 +492,12 @@ file_rw_feedback (sixtp_gdv2 *gd, const char *type)
     counter = &gd->counter;
     loaded = counter->transactions_loaded + counter->accounts_loaded +
              counter->books_loaded + counter->commodities_loaded +
-             counter->schedXactions_loaded + counter->budgets_loaded;
+             counter->schedXactions_loaded + counter->budgets_loaded +
+             counter->prices_loaded;
     total = counter->transactions_total + counter->accounts_total +
             counter->books_total + counter->commodities_total +
-            counter->schedXactions_total + counter->budgets_total;
+            counter->schedXactions_total + counter->budgets_total +
+            counter->prices_total;
     if (total == 0)
         total = 1;
 
@@ -1035,6 +1041,7 @@ write_book(FILE *out, QofBook *book, sixtp_gdv2 *gd)
                       g_list_length(gnc_book_get_schedxactions(book)->sx_list),
                       "budget", qof_collection_count(
                           qof_book_get_collection(book, GNC_ID_BUDGET)),
+                      "price", gnc_pricedb_get_num_prices(gnc_pricedb_get_db(book)), 
                       NULL))
         return FALSE;
 
@@ -1318,6 +1325,7 @@ gnc_book_write_to_xml_filehandle_v2(QofBook *book, FILE *out)
         g_list_length(gnc_book_get_schedxactions(book)->sx_list);
     gd->counter.budgets_total = qof_collection_count(
                                     qof_book_get_collection(book, GNC_ID_BUDGET));
+    gd->counter.prices_total = gnc_pricedb_get_num_prices(gnc_pricedb_get_db(book));
 
     if (!write_book(out, book, gd)
             || fprintf(out, "</" GNC_V2_STRING ">\n\n") < 0)
