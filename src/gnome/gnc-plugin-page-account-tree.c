@@ -57,6 +57,7 @@
 #include "gnc-prefs.h"
 #include "gnc-session.h"
 #include "gnc-split-reg.h"
+#include "gnc-state.h"
 #include "gnc-tree-view-account.h"
 #include "gnc-tree-model-account-types.h"
 #include "gnc-ui.h"
@@ -1388,12 +1389,17 @@ gnc_plugin_page_account_tree_cmd_delete_account (GtkAction *action, GncPluginPag
 
         if (GTK_RESPONSE_ACCEPT == response)
         {
+            GList *acct_list, *ptr;
+            const GncGUID *guid;
+            const gchar *guid_str;
+
             gnc_set_busy_cursor(NULL, TRUE);
             gnc_suspend_gui_refresh ();
+
+            /* Move subaccounts and transactions if this was requested */
             xaccAccountBeginEdit (account);
             if (NULL != saa)
             {
-                GList *acct_list, *ptr;
 
                 xaccAccountBeginEdit (saa);
                 acct_list = gnc_account_get_children(account);
@@ -1414,10 +1420,31 @@ gnc_plugin_page_account_tree_cmd_delete_account (GtkAction *action, GncPluginPag
                 /* Move the splits of the account to be deleted. */
                 xaccAccountMoveAllSplits (account, ta);
             }
+            xaccAccountCommitEdit (account);
+
+            /* Drop all references from the state file for
+             * any subaccount the account still has
+             */
+            acct_list = gnc_account_get_children(account);
+            for (ptr = acct_list; ptr; ptr = g_list_next(ptr))
+            {
+                guid = xaccAccountGetGUID (ptr->data);
+                guid_str = guid_to_string (guid);
+                gnc_state_drop_sections_for (guid_str);
+            }
+            g_list_free(acct_list);
+
+            /* Drop all references from the state file for this account
+             */
+            guid = xaccAccountGetGUID (account);
+            guid_str = guid_to_string (guid);
+            gnc_state_drop_sections_for (guid_str);
+
             /*
              * Finally, delete the account, any subaccounts it may still
              * have, and any splits it or its subaccounts may still have.
              */
+            xaccAccountBeginEdit (account);
             xaccAccountDestroy (account);
             gnc_resume_gui_refresh ();
             gnc_unset_busy_cursor(NULL);

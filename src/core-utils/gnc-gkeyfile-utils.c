@@ -56,7 +56,10 @@
 #endif
 
 #include "gnc-gkeyfile-utils.h"
+#include "qof.h"
 
+/* This static indicates the debugging module that this .o belongs to.  */
+static QofLogModule log_module = G_LOG_DOMAIN;
 
 GKeyFile *
 gnc_key_file_load_from_file (const gchar *filename,
@@ -111,6 +114,7 @@ gnc_key_file_save_to_file (const gchar *filename,
         g_return_val_if_fail(*error == NULL, FALSE);
 
     contents = g_key_file_to_data(key_file, NULL, NULL);
+    DEBUG("Keyfile data:\n%s", contents);
     length = strlen(contents);
     fd = g_open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0666);
     if (fd == -1)

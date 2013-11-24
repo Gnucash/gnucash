@@ -382,6 +382,12 @@ gnc_plugin_page_budget_refresh_cb(GHashTable *changes, gpointer user_data)
         {
             if (ei->event_mask & QOF_EVENT_DESTROY)
             {
+                /* Budget has been deleted, close plugin page
+                 * but prevent that action from writing state information
+                 * for this budget account
+                 */
+                priv->delete_budget = TRUE;
+                gnc_budget_view_delete_budget (priv->budget_view);
                 gnc_plugin_page_budget_close_cb(user_data);
                 return;
             }

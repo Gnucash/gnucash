@@ -3899,6 +3899,11 @@ gnc_plugin_page_register2_refresh_cb (GHashTable *changes, gpointer user_data) /
         {
             if (ei->event_mask & QOF_EVENT_DESTROY)
             {
+                /* Account has been deleted, close plugin page
+                 * but prevent that action from writing state information
+                 * for this deleted account
+                 */
+                g_object_set (G_OBJECT (view), "state-section", NULL, NULL);
                 gnc_main_window_close_page (GNC_PLUGIN_PAGE (page));
                 return;
             }

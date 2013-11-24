@@ -85,6 +85,23 @@ void      gnc_state_save (const QofSession *session);
  */
 GKeyFile *gnc_state_get_current (void);
 
+/** Drop all sections from the state file whose name contains
+ *  partial_name.
+ *
+ *  This function is meant to be called when an object is deleted
+ *  for which state is kept. For example, when an account is
+ *  deleted from GnuCash, all state sections that refer to it
+ *  should get removed. In that case you can call this function
+ *  with the account's guid as parameter.
+ *
+ *  @param partial_name a string to match in the section names
+ *                      for most objects in GnuCash that maintain
+ *                      state, this will be the object's guid
+ *
+ * @return The number of successfully dropped sections.
+ */
+gint gnc_state_drop_sections_for (const gchar *partial_name);
+
 #endif /* GNC_STATE_H */
 /** @} */
 /** @} */

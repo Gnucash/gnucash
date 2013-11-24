@@ -56,6 +56,7 @@
 #include "option-util.h"
 #include "gnc-main-window.h"
 #include "gnc-component-manager.h"
+#include "gnc-state.h"
 
 #include "qof.h"
 
@@ -491,7 +492,8 @@ gnc_budget_view_delete_budget(GncBudgetView *view)
     ENTER("view %p", view);
 
     priv = GNC_BUDGET_VIEW_GET_PRIVATE (view);
-    gnc_tree_view_remove_state_information (GNC_TREE_VIEW (priv->tree_view));
+    gnc_state_drop_sections_for (guid_to_string (&priv->key));
+    g_object_set (G_OBJECT (priv->tree_view), "state-section", NULL, NULL);
 
     LEAVE(" ");
 }
