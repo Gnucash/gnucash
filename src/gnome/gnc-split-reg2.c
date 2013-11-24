@@ -29,6 +29,7 @@
 #include "config.h"
 
 #include <gtk/gtk.h>
+#include <glib.h>
 #include <glib/gi18n.h>
 
 #include "gnc-split-reg2.h"
@@ -37,10 +38,12 @@
 #include "gnc-ledger-display2.h"
 
 #include "gnc-euro.h"
+#include "gnc-state.h"
 #include "gnome-utils/gnc-warnings.h"
 #include "dialog-utils.h"
 
-#define STATE_SECTION_PREFIX "window/pages/register2/"
+#define STATE_SECTION_REG_PREFIX "Register"
+#define STATE_SECTION_GEN_LEDGER "General Ledger"
 
 static QofLogModule log_module = GNC_MOD_GUI;
 
@@ -234,7 +237,8 @@ gsr2_create_table (GNCSplitReg2 *gsr)
     GtkWidget *hbox;
     gdouble num_of_trans;
 
-    gchar *state_key;
+    gchar *state_section;
+    GKeyFile *state_file = gnc_state_get_current();
     const GncGUID * guid;
     Account * account;
     const gchar *sort_string;
@@ -249,21 +253,20 @@ gsr2_create_table (GNCSplitReg2 *gsr)
                                      gnc_split_reg2_ld_destroy,
                                      gnc_split_reg2_get_parent);
 
-    ledger_type = gnc_ledger_display2_type (gsr->ledger);
     model = gnc_ledger_display2_get_split_model_register (gsr->ledger);
-
-    /* Used for saving different register column widths under separate keys */
-    // We need to give the General Ledger a Key other than all zeros which the search register gets.
-    if (ledger_type == LD2_GL && model->type == GENERAL_LEDGER2)
-        state_key = g_strconcat (STATE_SECTION_PREFIX, "00000000000000000000000000000001", NULL);
-    else if (ledger_type == LD2_SUBACCOUNT)
-        state_key = g_strconcat (STATE_SECTION_PREFIX, (gchar*)guid_to_string (guid), "_sub", NULL);
-    else
-        state_key = g_strconcat (STATE_SECTION_PREFIX, (gchar*)guid_to_string (guid), NULL);
-
-    gnc_tree_model_split_reg_set_display (model, ((ledger_type == LD2_SUBACCOUNT)?TRUE:FALSE), ((ledger_type == LD2_GL)?TRUE:FALSE));
     view = gnc_tree_view_split_reg_new_with_model (model);
     g_object_unref (G_OBJECT (model));
+
+    /* State_section is used to store per register state: column widths, sort order,... */
+    ledger_type = gnc_ledger_display2_type (gsr->ledger);
+    if (ledger_type == LD2_GL && model->type == GENERAL_LEDGER2)
+        state_section = g_strdup (STATE_SECTION_GEN_LEDGER);
+    else if (ledger_type == LD2_SUBACCOUNT)
+        state_section = g_strconcat (STATE_SECTION_REG_PREFIX, " ", (gchar*)guid_to_string (guid), " w/subaccounts", NULL);
+    else
+        state_section = g_strconcat (STATE_SECTION_REG_PREFIX, " ", (gchar*)guid_to_string (guid), NULL);
+    g_object_set (G_OBJECT (view), "state-section", state_section,
+                 "show-column-menu", FALSE, NULL);
 
     // Create a hbox for treeview and scrollbar.
     hbox = gtk_hbox_new (FALSE, 0);
@@ -290,21 +293,30 @@ gsr2_create_table (GNCSplitReg2 *gsr)
 
     gnc_ledger_display2_set_split_view_register (gsr->ledger, view);
 
-    /* Restore the sort depth from saved state */
-    /* Restore the sort order from saved state */
-    // FIXME currently not implemented
+    /* Setting the view's state-section above already restores most
+     * of the saved state automatically. There are a few register specific
+     * settings though that will be restored here. */
 
-    sort_string = NULL;
+    /* Restore the sort depth from saved state */
+    view->sort_depth = g_key_file_get_integer (state_file, state_section, "sort_depth", NULL);
+
+    /* Restore the sort order from saved state */
+    sort_string = g_key_file_get_string (state_file, state_section, "sort_order", NULL);
     if (g_strcmp0 ("descending", sort_string) == 0)
         view->sort_direction = -1;
     else
         view->sort_direction = 1;
 
     /* Restore the sort column from saved state */
-    view->sort_col = model->sort_col;
+    view->sort_col = g_key_file_get_integer (state_file, state_section, "sort_col", NULL);
+    if (view->sort_col == 0)
+        view->sort_col = 1;
 
-    g_object_set (G_OBJECT (view), "state-section", state_key,
-                 "show-column-menu", FALSE, NULL);
+    /* Synchronize model state with view state
+     * (needed to properly set up the internal query) */
+    model->sort_col = view->sort_col;
+    model->sort_depth = view->sort_depth;
+    model->sort_direction = view->sort_direction;
 
     gnc_tree_view_configure_columns (GNC_TREE_VIEW (view));
 
@@ -792,6 +804,7 @@ gnc_split_reg2_sort_changed_cb (GtkTreeSortable *sortable, gpointer user_data)
     gint          sortcol;
     gint          sort_depth;
     const gchar  *state_section;
+    GKeyFile *state_file = gnc_state_get_current();
 
     gtk_tree_sortable_get_sort_column_id (sortable, &sortcol, &type);
     ENTER("sortcol is %d", sortcol);
@@ -821,7 +834,9 @@ gnc_split_reg2_sort_changed_cb (GtkTreeSortable *sortable, gpointer user_data)
 
     /* Save the sort depth state */
     state_section = gnc_tree_view_get_state_section (GNC_TREE_VIEW (view));
-    // FIXME currently not implemented
+    g_key_file_set_integer (state_file, state_section, "sort_depth", view->sort_depth);
+    g_key_file_set_integer (state_file, state_section, "sort_col", view->sort_col);
+    /* NOTE sort_column is handled directly by the treeview */
 
     LEAVE("v_sort_col %d, v_sort_direction is %d  v_sort_depth is %d", view->sort_col, view->sort_direction, view->sort_depth);
 

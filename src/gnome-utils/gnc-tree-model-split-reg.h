@@ -217,9 +217,6 @@ void gnc_tree_model_split_reg_destroy (GncTreeModelSplitReg *model);
 void gnc_tree_model_split_reg_set_data (GncTreeModelSplitReg *model, gpointer user_data,
                                   SRGetParentCallback2 get_parent);
 
-/** Sets the default query for the register. */
-void gnc_tree_model_split_reg_default_query (GncTreeModelSplitReg *model, Account *default_account, Query *query);
-
 /** Update the query for the register. */
 void gnc_tree_model_split_reg_update_query (GncTreeModelSplitReg *model, Query *query);
 

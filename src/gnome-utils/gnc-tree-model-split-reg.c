@@ -46,8 +46,6 @@
 
 #define TREE_MODEL_SPLIT_REG_CM_CLASS "tree-model-split-reg"
 
-#define STATE_SECTION_PREFIX "window/pages/register2/"
-
 /* Signal codes */
 enum
 {
@@ -996,54 +994,6 @@ gboolean
 gnc_tree_model_split_reg_get_sub_account (GncTreeModelSplitReg *model)
 {
     return model->priv->display_subacc;
-}
-
-
-void
-gnc_tree_model_split_reg_default_query (GncTreeModelSplitReg *model, Account *default_account, Query *query)
-{
-    gchar *state_key;
-    const GncGUID * guid;
-    const gchar *sort_string;
-    gint  depth, col;
-    
-    guid = xaccAccountGetGUID (default_account);
-
-    /* Used for saving different register column widths under seperate keys */
-    // We need to give the General Ledger a Key other than all zeros which the search register gets.
-    if (model->priv->display_gl == TRUE && model->type == GENERAL_LEDGER2)
-        state_key = g_strconcat (STATE_SECTION_PREFIX, "00000000000000000000000000000001", NULL);
-    else if (model->priv->display_subacc == TRUE)
-        state_key = g_strconcat (STATE_SECTION_PREFIX, (gchar*)guid_to_string (guid), "_sub", NULL);
-    else
-        state_key = g_strconcat (STATE_SECTION_PREFIX, (gchar*)guid_to_string (guid), NULL);
- 
-
-    /* Restore the sort column from saved state */
-    // FIXME currently not implemented
-    col = 0;
-    if (col == 0)    
-        model->sort_col = 1;
-    else
-        model->sort_col = col;
-
-    /* Restore the sort depth from saved state */
-    // FIXME currently not implemented
-    depth = 0;
-    if (depth == 0)
-        model->sort_depth = 1;
-    else
-        model->sort_depth = depth;
-
-    /* Restore the sort order from saved state */
-    // FIXME currently not implemented
-    sort_string = NULL;
-    if (g_strcmp0 ("descending", sort_string) == 0)
-        model->sort_direction = -1;
-    else
-        model->sort_direction = 1;
-
-    gnc_tree_model_split_reg_update_query (model, query);
 }
 
 

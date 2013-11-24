@@ -700,6 +700,8 @@ gnc_ledger_display2_internal (Account *lead_account, Query *q,
     gint limit;
     const char *class;
     GList *splits;
+    gboolean display_subaccounts = FALSE;
+    gboolean is_gl = FALSE;
 
     switch (ld_type)
     {
@@ -749,6 +751,7 @@ gnc_ledger_display2_internal (Account *lead_account, Query *q,
         if (ld)
             return ld;
 
+        display_subaccounts = TRUE;
         break;
 
     case LD2_GL:
@@ -759,6 +762,7 @@ gnc_ledger_display2_internal (Account *lead_account, Query *q,
             PWARN ("general ledger with no query");
         }
 
+        is_gl = TRUE;
         break;
 
     default:
@@ -799,23 +803,18 @@ gnc_ledger_display2_internal (Account *lead_account, Query *q,
     ld->model = gnc_tree_model_split_reg_new (reg_type, style, use_double_line, is_template);
 
     gnc_tree_model_split_reg_set_data (ld->model, ld, gnc_ledger_display2_parent);
-
-//FIXME We should get the load filter and sort here so we run query once on load....
-
-    gnc_tree_model_split_reg_set_display (ld->model, ((ld_type == LD2_SUBACCOUNT)?TRUE:FALSE), ((ld_type == LD2_GL)?TRUE:FALSE));
-
-    gnc_tree_model_split_reg_default_query (ld->model, lead_account, ld->query);
+    gnc_tree_model_split_reg_set_display (ld->model, display_subaccounts, is_gl);
 
     // This sets up a call back to reload after changes
     g_signal_connect (G_OBJECT (ld->model), "refresh_trans",
                       G_CALLBACK (gnc_ledger_display2_refresh_cb), ld );
 
-    splits = qof_query_run (ld->query);
-
 //FIXME Not Needed ?    gnc_ledger_display2_set_watches (ld, splits);
 //    gnc_ledger_display2_set_watches (ld, splits);
 
-    gnc_ledger_display2_refresh_internal (ld, splits);
+    // Populate the model with an empty split
+    // An empty model could cause our gui callbacks to crash
+    gnc_ledger_display2_refresh_internal (ld, NULL);
 
     return ld;
 }

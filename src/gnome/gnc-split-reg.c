@@ -59,6 +59,8 @@
 // static QofLogModule log_module = GNC_MOD_SX;
 static QofLogModule log_module = GNC_MOD_GUI;
 
+#define STATE_SECTION_REG_PREFIX "Register"
+
 /***** PROTOTYPES ***************************************************/
 void gnc_split_reg_raise( GNCSplitReg *gsr );
 
@@ -386,13 +388,13 @@ gsr_create_table( GNCSplitReg *gsr )
     GtkWidget *register_widget;
     SplitRegister *sr;
 
-    gchar *prefs_key;
+    gchar *state_section;
     const GncGUID * guid;
     Account * account;
     
     account = gnc_ledger_display_leader(gsr->ledger);
     guid = xaccAccountGetGUID(account);
-    prefs_key = (gchar*)guid_to_string (guid);
+    state_section = g_strconcat (STATE_SECTION_REG_PREFIX, " ", (gchar*)guid_to_string (guid), NULL);
 
     ENTER("gsr=%p", gsr);
 
@@ -405,7 +407,8 @@ gsr_create_table( GNCSplitReg *gsr )
     sr = gnc_ledger_display_get_split_register( gsr->ledger );
     register_widget = gnucash_register_new( sr->table );
     gsr->reg = GNUCASH_REGISTER( register_widget );
-    gnc_table_init_gui( GTK_WIDGET(gsr->reg), prefs_key );
+    gnc_table_init_gui( GTK_WIDGET(gsr->reg), state_section);
+    g_free (state_section);
     gtk_box_pack_start (GTK_BOX (gsr), GTK_WIDGET(gsr->reg), TRUE, TRUE, 0);
     gnucash_sheet_set_window (gnucash_register_get_sheet (gsr->reg), gsr->window);
     gtk_widget_show ( GTK_WIDGET(gsr->reg) );
@@ -689,16 +692,15 @@ static void
 gnc_split_reg_ld_destroy( GNCLedgerDisplay *ledger )
 {
     GNCSplitReg *gsr = gnc_ledger_display_get_user_data( ledger );
-    
-    gchar *state_key;
+
+    gchar *state_section;
     const GncGUID * guid;
     Account * account;
-    
+
     account = gnc_ledger_display_leader(ledger);
     guid = xaccAccountGetGUID(account);
-    state_key = (gchar*)guid_to_string (guid);
-    
-    
+    state_section = g_strconcat (STATE_SECTION_REG_PREFIX, " ",(gchar*)guid_to_string (guid), NULL);
+
     if (gsr)
     {
         SplitRegister *reg;
@@ -706,13 +708,14 @@ gnc_split_reg_ld_destroy( GNCLedgerDisplay *ledger )
         reg = gnc_ledger_display_get_split_register (ledger);
 
         if (reg && reg->table)
-            gnc_table_save_state (reg->table, state_key);
+            gnc_table_save_state (reg->table, state_section);
 
         /*
          * Don't destroy the window here any more.  The register no longer
          * owns it.
          */
     }
+    g_free (state_section);
     gnc_ledger_display_set_user_data (ledger, NULL);
 }
 
