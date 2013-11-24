@@ -57,9 +57,6 @@ typedef struct
     gpointer                    uiupdate_cb_data;            // Used for page gui update
 
     gchar                      *help_text;                // This is the help text to be displayed.
-    gint                        sort_depth;               // This is the row the sort direction is based on.
-    gint                        sort_col;                 // This is the column the sort direction is based on.
-    gint                        sort_direction;           // This is the direction of sort, 1 for ascending or -1 rest
     gboolean                    reg_closing;              // This is set when closing the register.
     gboolean                    change_allowed;           // This is set when we allow the reconciled split to change.
     gboolean                    editing_now;              // This is set while editing of a cell.

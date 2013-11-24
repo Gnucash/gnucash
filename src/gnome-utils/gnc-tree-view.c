@@ -340,7 +340,7 @@ gnc_tree_view_destroy (GtkObject *object)
 
     if (priv->state_section)
     {
-        /* Save state */
+        /* Save state. Only store non-default values when possible. */
         GList *column_list, *tmp;
         GKeyFile *state_file = gnc_state_get_current();
         gsize num_cols = 0;
@@ -348,15 +348,22 @@ gnc_tree_view_destroy (GtkObject *object)
         gchar *sort_order = gnc_tree_view_get_sort_order (view);
         gchar **col_order = gnc_tree_view_get_column_order (view, &num_cols);
 
-        if (sort_column)
+        /* Default sort column is the first column */
+        if (sort_column &&
+                (gnc_tree_view_find_column_by_name (view, sort_column) !=
+                        gtk_tree_view_get_column (GTK_TREE_VIEW (view), 0)))
             g_key_file_set_string (state_file, priv->state_section, STATE_KEY_SORT_COLUMN, sort_column);
         else if (g_key_file_has_key (state_file, priv->state_section, STATE_KEY_SORT_COLUMN, NULL))
             g_key_file_remove_key (state_file, priv->state_section, STATE_KEY_SORT_COLUMN, NULL);
+        g_free (sort_column);
 
-        if (sort_order)
+
+        /* Default sort order is "ascending" */
+        if (g_strcmp0 (sort_order, "descending") == 0)
             g_key_file_set_string (state_file, priv->state_section, STATE_KEY_SORT_ORDER, sort_order);
         else if (g_key_file_has_key (state_file, priv->state_section, STATE_KEY_SORT_ORDER, NULL))
             g_key_file_remove_key (state_file, priv->state_section, STATE_KEY_SORT_ORDER, NULL);
+        g_free (sort_order);
 
         if (col_order && (num_cols > 0))
             g_key_file_set_string_list (state_file, priv->state_section, STATE_KEY_COLUMN_ORDER,

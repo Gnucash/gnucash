@@ -478,7 +478,7 @@ gnc_tree_model_split_reg_new (SplitRegisterType2 reg_type, SplitRegisterStyle2 s
 
     model->sort_col = 1;
     model->sort_depth = 1;
-    model->sort_direction = 1;
+    model->sort_direction = GTK_SORT_ASCENDING;
 
     model->current_trans = NULL;
     model->current_row = -1;
@@ -631,7 +631,7 @@ gnc_tree_model_split_reg_load (GncTreeModelSplitReg *model, GList *slist, Accoun
     if (model->current_trans == NULL)
         model->current_trans = priv->btrans;
 
-    if (model->sort_direction == 1) // ascending
+    if (model->sort_direction == GTK_SORT_ASCENDING)
     {
         /* Get a list of Unique Transactions from an slist */
         priv->full_tlist = xaccSplitListGetUniqueTransactions (slist);
@@ -2276,7 +2276,7 @@ gnc_tree_model_split_reg_sort_iter_compare_func (GtkTreeModel *tm,
 
     /* This is really a dummy sort function, it leaves the list as is. */
 
-    if (model->sort_direction == 1) // Ascending
+    if (model->sort_direction == GTK_SORT_ASCENDING)
         return gtk_tree_path_compare (gnc_tree_model_split_reg_get_path (tm, a),
                                       gnc_tree_model_split_reg_get_path (tm, b));
     else

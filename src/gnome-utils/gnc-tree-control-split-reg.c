@@ -737,7 +737,7 @@ gnc_tree_control_split_reg_goto_rel_trans_row (GncTreeViewSplitReg *view, gint r
     GncTreeModelSplitReg *model;
     GtkTreePath *mpath, *spath;
     GtkTreePath  *new_mpath, *new_spath;
-    gint *indices;
+    gint *indices, sort_direction;
     gchar *sstring;
 
     ENTER("Move relative, view is %p, relative is %d", view, relative);
@@ -752,7 +752,12 @@ gnc_tree_control_split_reg_goto_rel_trans_row (GncTreeViewSplitReg *view, gint r
 
     indices = gtk_tree_path_get_indices (spath);
 
-    new_spath = gtk_tree_path_new_from_indices (indices[0] + (relative * view->sort_direction), -1);
+    if (model->sort_direction == GTK_SORT_DESCENDING)
+        sort_direction = -1;
+    else
+        sort_direction = 1;
+
+    new_spath = gtk_tree_path_new_from_indices (indices[0] + (relative * sort_direction), -1);
 
     // if relative == 0 we block all selection changes
     gnc_tree_view_split_reg_block_selection (view, TRUE);
@@ -1427,17 +1432,17 @@ static gboolean gtcsr_move_current_entry_updown(GncTreeViewSplitReg *view,
 
     ENTER("");
 
-    if (view->sort_col != COL_DATE)
-    {
-        LEAVE("Not sorted by date - no up/down move available");
-        return FALSE;
-    }
-
     // The allocated memory references will all be cleaned up in the
     // updown_finish: label.
 
     model = gnc_tree_view_split_reg_get_model_from_view (view);
     g_return_val_if_fail(model, FALSE);
+
+    if (model->sort_col != COL_DATE)
+    {
+        LEAVE("Not sorted by date - no up/down move available");
+        return FALSE;
+    }
 
     mpath = gnc_tree_view_split_reg_get_current_path (view);
     if (!mpath)

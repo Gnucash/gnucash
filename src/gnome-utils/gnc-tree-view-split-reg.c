@@ -466,8 +466,6 @@ gnc_tree_view_split_reg_init (GncTreeViewSplitReg *view)
     view->priv->current_depth = 0;
     view->reg_closing = FALSE;
     view->priv->fo_handler_id = 0;
-    view->sort_depth = 1;
-    view->sort_direction = 1;
     view->priv->auto_complete = FALSE;
     view->priv->trans_confirm = RESET;
     view->priv->single_button_press = 0;
@@ -2783,9 +2781,9 @@ gtv_sr_titles (GncTreeViewSplitReg *view, RowDepth depth)
     RowDepth temp_depth;
     gboolean is_template;
 
-    ENTER("title depth is %d and sort_depth %d, sort_col is %d", depth, view->sort_depth, view->sort_col);
-
     model = gnc_tree_view_split_reg_get_model_from_view (view);
+    ENTER("title depth is %d and sort_depth %d, sort_col is %d", depth, model->sort_depth, model->sort_col);
+
     columns = gtk_tree_view_get_columns (GTK_TREE_VIEW (view));
 
     is_template = gnc_tree_model_split_reg_get_template (model);
@@ -2813,7 +2811,7 @@ gtv_sr_titles (GncTreeViewSplitReg *view, RowDepth depth)
             {
             default: //FIXME These if statements may not be required
                 /* Display arrows if we are sorting on this row */
-                if (view->sort_depth == depth && view->sort_col == viewcol)
+                if (model->sort_depth == depth && model->sort_col == viewcol)
                     gtk_tree_view_column_set_sort_indicator (tvc, TRUE);
                 else
                     gtk_tree_view_column_set_sort_indicator (tvc, FALSE);
@@ -2858,7 +2856,7 @@ gtv_sr_titles (GncTreeViewSplitReg *view, RowDepth depth)
 
             default:
                 /* Display arrows if we are sorting on this row */
-                if (view->sort_depth == depth && view->sort_col == viewcol)
+                if (model->sort_depth == depth && model->sort_col == viewcol)
                     gtk_tree_view_column_set_sort_indicator (tvc, TRUE);
                 else
                     gtk_tree_view_column_set_sort_indicator (tvc, FALSE);
@@ -2905,7 +2903,7 @@ gtv_sr_titles (GncTreeViewSplitReg *view, RowDepth depth)
 
             default:
                 /* Display arrows if we are sorting on this row */
-                if (view->sort_depth == depth && view->sort_col == viewcol)
+                if (model->sort_depth == depth && model->sort_col == viewcol)
                     gtk_tree_view_column_set_sort_indicator (tvc, TRUE);
                 else
                     gtk_tree_view_column_set_sort_indicator (tvc, FALSE);
@@ -2939,7 +2937,7 @@ gtv_sr_titles (GncTreeViewSplitReg *view, RowDepth depth)
 
             default:
                 /* Display arrows if we are sorting on this row */
-                if (view->sort_depth == depth && view->sort_col == viewcol)
+                if (model->sort_depth == depth && model->sort_col == viewcol)
                     gtk_tree_view_column_set_sort_indicator (tvc, TRUE);
                 else
                     gtk_tree_view_column_set_sort_indicator (tvc, FALSE);
@@ -5939,7 +5937,7 @@ gnc_tree_view_split_reg_scroll_to_cell (GncTreeViewSplitReg *view)
     mpath = gnc_tree_view_split_reg_get_current_path (view);
     spath = gnc_tree_view_split_reg_get_sort_path_from_model_path (view, mpath);
 
-    if (view->sort_direction == -1)
+    if (model->sort_direction == GTK_SORT_DESCENDING)
     {
         gtk_tree_view_scroll_to_cell (GTK_TREE_VIEW (view), spath, NULL, TRUE, 0.5, 0.0); //0.0
     }

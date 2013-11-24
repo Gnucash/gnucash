@@ -293,30 +293,24 @@ gsr2_create_table (GNCSplitReg2 *gsr)
 
     gnc_ledger_display2_set_split_view_register (gsr->ledger, view);
 
-    /* Setting the view's state-section above already restores most
-     * of the saved state automatically. There are a few register specific
-     * settings though that will be restored here. */
-
-    /* Restore the sort depth from saved state */
-    view->sort_depth = g_key_file_get_integer (state_file, state_section, "sort_depth", NULL);
-
-    /* Restore the sort order from saved state */
-    sort_string = g_key_file_get_string (state_file, state_section, "sort_order", NULL);
-    if (g_strcmp0 ("descending", sort_string) == 0)
-        view->sort_direction = -1;
-    else
-        view->sort_direction = 1;
-
-    /* Restore the sort column from saved state */
-    view->sort_col = g_key_file_get_integer (state_file, state_section, "sort_col", NULL);
-    if (view->sort_col == 0)
-        view->sort_col = 1;
-
     /* Synchronize model state with view state
      * (needed to properly set up the internal query) */
-    model->sort_col = view->sort_col;
-    model->sort_depth = view->sort_depth;
-    model->sort_direction = view->sort_direction;
+
+    /* Restore the sort depth from saved state */
+    model->sort_depth = g_key_file_get_integer (state_file, state_section, "sort_depth", NULL);
+
+    s_model = gtk_tree_view_get_model(GTK_TREE_VIEW(view));
+    if (s_model)
+    {
+        gint sort_col;
+        GtkSortType   type;
+
+        if (gtk_tree_sortable_get_sort_column_id (GTK_TREE_SORTABLE (s_model), &sort_col, &type))
+        {
+            model->sort_col = sort_col;
+            model->sort_direction = type;
+        }
+    }
 
     gnc_tree_view_configure_columns (GNC_TREE_VIEW (view));
 
@@ -370,8 +364,6 @@ gsr2_create_table (GNCSplitReg2 *gsr)
     /* This triggers the model update when mouse button released */
     g_signal_connect (gsr->scroll_bar, "button-release-event",
                       G_CALLBACK (gsr2_scroll_button_event_cb), gsr);
-
-    s_model = gtk_tree_view_get_model (GTK_TREE_VIEW (view));
 
     // Connect a call back to update the sort settings.
     g_signal_connect (GTK_TREE_SORTABLE (s_model), "sort-column-changed",
@@ -816,29 +808,16 @@ gnc_split_reg2_sort_changed_cb (GtkTreeSortable *sortable, gpointer user_data)
 
     sort_depth = gnc_tree_view_reg_get_selected_row_depth (view);
     if (sort_depth != 0)
-        view->sort_depth = sort_depth;
+        model->sort_depth = sort_depth;
 
-    view->sort_col = sortcol;
     model->sort_col = sortcol;
-
-    if (type == GTK_SORT_DESCENDING)
-    {
-        view->sort_direction = -1;
-        model->sort_direction = -1;
-    }
-    else
-    {
-        view->sort_direction = 1;
-        model->sort_direction = 1;
-    }
+    model->sort_direction = type;
 
     /* Save the sort depth state */
     state_section = gnc_tree_view_get_state_section (GNC_TREE_VIEW (view));
-    g_key_file_set_integer (state_file, state_section, "sort_depth", view->sort_depth);
-    g_key_file_set_integer (state_file, state_section, "sort_col", view->sort_col);
-    /* NOTE sort_column is handled directly by the treeview */
+    g_key_file_set_integer (state_file, state_section, "sort_depth", model->sort_depth);
 
-    LEAVE("v_sort_col %d, v_sort_direction is %d  v_sort_depth is %d", view->sort_col, view->sort_direction, view->sort_depth);
+    LEAVE("m_sort_col %d, m_sort_direction is %d  m_sort_depth is %d", model->sort_col, model->sort_direction, model->sort_depth);
 
     if (sortcol != -1)
         gnc_ledger_display2_refresh (gsr->ledger);
