@@ -44,9 +44,6 @@
 #include "Account.h"
 #include "Scrub.h"
 
-#define GNC_V2_STRING "gnc-v2"
-const gchar *gnc_v2_xml_version_string = GNC_V2_STRING;
-
 static QofBook *sixbook;
 
 static gchar*

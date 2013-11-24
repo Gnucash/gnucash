@@ -23,9 +23,6 @@
 
 #include "Account.h"
 
-#define GNC_V2_STRING "gnc-v2"
-const gchar *gnc_v2_xml_version_string = GNC_V2_STRING;
-
 static QofBook *book;
 
 static gchar*
