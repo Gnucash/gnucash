@@ -130,6 +130,7 @@ noinst_HEADERS = \
 noinst_SCRIPTS = iso-currencies-to-c
 
 libgncmod_engine_la_LDFLAGS = -avoid-version
+libgncmod_engine_la_CFLAGS = -Wno-invalid-source-encoding
 
 libgncmod_engine_la_LIBADD = \
   ../gnc-module/libgnc-module.la \
