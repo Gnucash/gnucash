@@ -930,6 +930,7 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
         {
             Account *lot_acc = gnc_lot_get_account(lot);
             QofBook *book = qof_instance_get_book(lot_acc);
+            Transaction *base_txn = xaccSplitGetParent (split);
 
             new_gain_split = TRUE;
 
@@ -968,8 +969,11 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
              * that this is the gains transaction that corresponds
              * to the gains source.
              */
+            xaccTransBeginEdit (base_txn);
             kvp_frame_set_guid (split->inst.kvp_data, "gains-split",
                                 xaccSplitGetGUID (lot_split));
+            qof_instance_set_dirty (QOF_INSTANCE (split));
+            xaccTransCommitEdit (base_txn);
             kvp_frame_set_guid (lot_split->inst.kvp_data, "gains-source",
                                 xaccSplitGetGUID (split));
 
