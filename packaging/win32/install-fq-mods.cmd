@@ -17,6 +17,7 @@ perl -v > NUL 2>&1
 if %errorlevel% equ 0 goto chkver
 echo. 
 echo   No Perl executable found, attempt to install Strawberry Perl
+echo   This may take a while depending on your network speed
 
 REM ----------------------------------------------------------------------------
 echo.

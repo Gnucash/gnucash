@@ -11,7 +11,7 @@ Dim tempFolder: tempFolder = fso.GetSpecialFolder(TemporaryFolder)
 strHDLocation = Wscript.Arguments.Item(0)
 
 ' Set your settings
-    strFileURL    = "http://strawberry-perl.googlecode.com/files/strawberry-perl-5.12.3.0.msi"
+    strFileURL    = "https://strawberry-perl.googlecode.com/files/strawberry-perl-5.18.1.1-win32.msi"
 
     Wscript.Echo "   copying " & strFileURL
     Wscript.Echo "   to "  & strHDLocation

@@ -28,7 +28,7 @@ if ($( != 0) {
   print "\n";
   print "You probably need to be root before running gnc-fq-update.";
   print "\n\n";
-  print "Are you shure, you want to update parts of your Perl library? (y/n) ";
+  print "Are you sure, you want to update parts of your Perl library? (y/n) ";
 
   my $input = <STDIN>;
   chomp ($input);
