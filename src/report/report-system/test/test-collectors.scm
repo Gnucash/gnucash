@@ -51,8 +51,9 @@
        (equal? 4 (length (collector-end c)))))
 
 (define (empty-collector)
-  (define ((equal-predicate a) x)
-    (equal? a x))
+  (define (equal-predicate a)
+    (lambda (x)
+      (equal? a x)))
   (collector-per-property '(1 2 3 4)
 			  make-equal-filter
 			  (lambda (value) (collector-accumulate-from 0))))
