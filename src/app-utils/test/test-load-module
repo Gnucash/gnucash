@@ -7,7 +7,19 @@ exec ${GUILE} -s "$0"
 (use-modules (gnucash gnc-module))
 (gnc:module-system-init)
 
-(if (gnc:module-load "gnucash/app-utils" 0)
+;; Guile 2 needs to load external modules at compile time
+;; otherwise the N_ syntax-rule won't be found at compile time
+;; causing the test to fail
+;; That's what the wrapper below is meant for:
+(cond-expand
+   (guile-2
+    (define-syntax-rule (begin-for-syntax form ...)
+      (eval-when (load compile eval) (begin form ...))))
+   (else
+    (define begin-for-syntax begin)))
+
+(begin-for-syntax (define loaded-module (gnc:module-load "gnucash/app-utils" 0)))
+(if loaded-module
     (display "Module gnucash/app-utils loaded successfully\n")
     (begin
       (display "Failed - module gnucash/app-utils not loaded successfully\n")
