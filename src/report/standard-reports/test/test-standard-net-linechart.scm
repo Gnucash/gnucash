@@ -11,6 +11,9 @@
 (use-modules (gnucash report standard-reports test test-generic-net-linechart))
 (use-modules (gnucash report standard-reports net-linechart))
 
+;; Explicitly set locale to make the report output predictable
+(setlocale LC_ALL "C")
+
 (define (run-test)
   (run-net-asset-test net-worth-linechart-uuid))
 

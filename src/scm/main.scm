@@ -74,7 +74,7 @@
 
 ;; Initalialize localization, otherwise reports may output
 ;; invalid characters
-;;(setlocale LC_ALL "")
+(setlocale LC_ALL "")
 
 ;;(use-modules (ice-9 statprof))
 

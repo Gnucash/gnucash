@@ -11,6 +11,9 @@
 (use-modules (gnucash report standard-reports test test-generic-net-barchart))
 (use-modules (gnucash report standard-reports net-barchart))
 
+;; Explicitly set locale to make the report output predictable
+(setlocale LC_ALL "C")
+
 (define (run-test)
   (run-net-asset-income-test net-worth-barchart-uuid income-expense-barchart-uuid))
 

@@ -19,6 +19,9 @@
 (use-modules (gnucash report standard-reports test test-generic-category-report))
 (use-modules (gnucash report standard-reports category-barchart))
 
+;; Explicitly set locale to make the report output predictable
+(setlocale LC_ALL "C")
+
 (define (run-test)
   (run-category-income-expense-test category-barchart-income-uuid category-barchart-expense-uuid)
   (run-category-asset-liability-test category-barchart-asset-uuid category-barchart-liability-uuid))
