@@ -179,6 +179,7 @@ extract_machine_name( const gchar* path )
             machine = g_strndup( path + match[1].rm_so, match[1].rm_eo - match[1].rm_so );
         }
     }
+    regfree(&compiled_m);
     return machine;
 }
 
