@@ -74,6 +74,11 @@ void gnc_prefs_init (void)
 {
     gnc_gsettings_load_backend();
 
+    /* Initialize the core preferences by reading their values from the loaded backend */
+    file_retain_changed_cb (NULL, NULL, NULL);
+    file_retain_type_changed_cb (NULL, NULL, NULL);
+    file_compression_changed_cb (NULL, NULL, NULL);
+
     /* Check for invalid retain_type (days)/retain_days (0) combo.
      * This can happen either because a user changed the preferences
      * manually outside of GnuCash, or because the user upgraded from
@@ -105,8 +110,4 @@ void gnc_prefs_init (void)
     gnc_prefs_register_cb (GNC_PREFS_GROUP_GENERAL, GNC_PREF_FILE_COMPRESSION,
                            file_compression_changed_cb, NULL);
 
-    /* Call the hooks once manually to initialize the core preferences */
-    file_retain_changed_cb (NULL, NULL, NULL);
-    file_retain_type_changed_cb (NULL, NULL, NULL);
-    file_compression_changed_cb (NULL, NULL, NULL);
 }

@@ -567,15 +567,8 @@ gnc_parse_command_line(int *argc, char ***argv)
     gnc_prefs_set_debugging(debugging);
     gnc_prefs_set_extra(extra);
 
-    if (!gsettings_prefix)
-    {
-        const char *prefix = g_getenv("GNC_GSETTINGS_PREFIX");
-        if (prefix)
-            gsettings_prefix = prefix;
-        else
-            gsettings_prefix = GSET_SCHEMA_PREFIX;
-    }
-    gnc_gsettings_set_prefix(g_strdup(gsettings_prefix));
+    if (gsettings_prefix)
+        gnc_gsettings_set_prefix(g_strdup(gsettings_prefix));
 
     if (namespace_regexp)
         gnc_prefs_set_namespace_regexp(namespace_regexp);

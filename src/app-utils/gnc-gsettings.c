@@ -127,6 +127,14 @@ gnc_gsettings_set_prefix (const gchar *prefix)
 const gchar *
 gnc_gsettings_get_prefix (void)
 {
+    if (!gsettings_prefix)
+    {
+        const char *prefix = g_getenv("GNC_GSETTINGS_PREFIX");
+        if (prefix)
+            gsettings_prefix = prefix;
+        else
+            gsettings_prefix = GSET_SCHEMA_PREFIX;
+    }
     return gsettings_prefix;
 }
 
