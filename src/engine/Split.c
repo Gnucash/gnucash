@@ -530,6 +530,9 @@ xaccFreeSplit (Split *split)
 
     split->date_reconciled.tv_sec = 0;
     split->date_reconciled.tv_nsec = 0;
+    if (split->inst.kvp_data)
+        kvp_frame_delete(split->inst.kvp_data);
+    split->inst.kvp_data = NULL;
 
     // Is this right?
     if (split->gains_split) split->gains_split->gains_split = NULL;

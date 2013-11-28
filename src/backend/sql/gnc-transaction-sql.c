@@ -588,7 +588,7 @@ commit_split( GncSqlBackend* be, QofInstance* inst )
         op = OP_DB_UPDATE;
     }
     is_ok = gnc_sql_do_db_operation( be, op, SPLIT_TABLE, GNC_ID_SPLIT, inst, split_col_table );
-    if ( is_ok )
+    if ( is_ok && !qof_instance_get_destroying (inst))
     {
         is_ok = gnc_sql_slots_save( be,
                                     qof_instance_get_guid( inst ),
