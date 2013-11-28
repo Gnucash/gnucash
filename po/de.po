@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-11-24 20:27+0100\n"
-"PO-Revision-Date: 2013-11-24 20:50+0100\n"
+"POT-Creation-Date: 2013-11-28 11:23+0100\n"
+"PO-Revision-Date: 2013-11-28 12:34+0100\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: GnuCash-de <gnucash-de@gnucash.org>\n"
 "Language: German\n"
@@ -328,7 +328,7 @@ msgstr ""
 msgid "- GnuCash personal and small business finance management"
 msgstr ""
 
-#: ../src/bin/gnucash-bin.c:529 ../src/bin/gnucash-bin.c:895
+#: ../src/bin/gnucash-bin.c:529 ../src/bin/gnucash-bin.c:888
 #, c-format
 msgid ""
 "%s\n"
@@ -349,7 +349,7 @@ msgstr "GnuCash Entwicklungsversion %s"
 #. 2nd %s is the scm type (svn/svk/git/bzr);
 #. 3rd %s is the scm revision number;
 #. 4th %s is the build date
-#: ../src/bin/gnucash-bin.c:548 ../src/gnome-utils/gnc-main-window.c:4363
+#: ../src/bin/gnucash-bin.c:548 ../src/gnome-utils/gnc-main-window.c:4369
 #, c-format
 msgid ""
 "%s\n"
@@ -366,7 +366,7 @@ msgstr "GnuCash %s"
 #. Translators: 1st %s is a fixed message, which is translated independently;
 #. 2nd %s is the scm (svn/svk/git/bzr) revision number;
 #. 3rd %s is the build date
-#: ../src/bin/gnucash-bin.c:559 ../src/gnome-utils/gnc-main-window.c:4370
+#: ../src/bin/gnucash-bin.c:559 ../src/gnome-utils/gnc-main-window.c:4376
 #, c-format
 msgid ""
 "%s\n"
@@ -375,21 +375,21 @@ msgstr ""
 "%s\n"
 "Dieses Programm wurde aus Version %s am %s erstellt."
 
-#: ../src/bin/gnucash-bin.c:667
+#: ../src/bin/gnucash-bin.c:660
 msgid "No quotes retrieved. Finance::Quote isn't installed properly.\n"
 msgstr ""
 "Keine Kurse abgerufen. Modul Finance::Quote ist nicht korrekt installiert.\n"
 
 #. Install Price Quote Sources
-#: ../src/bin/gnucash-bin.c:750
+#: ../src/bin/gnucash-bin.c:743
 msgid "Checking Finance::Quote..."
 msgstr "Modul Finance::Quote prüfen..."
 
-#: ../src/bin/gnucash-bin.c:758
+#: ../src/bin/gnucash-bin.c:751
 msgid "Loading data..."
 msgstr "Daten laden..."
 
-#: ../src/bin/gnucash-bin.c:896
+#: ../src/bin/gnucash-bin.c:889
 msgid ""
 "Error: could not initialize graphical user interface and option add-price-"
 "quotes was not set."
@@ -3857,8 +3857,8 @@ msgstr "Devisenhandel"
 msgid "Orphaned Gains"
 msgstr "Unverknüpfte Gewinne"
 
-#: ../src/engine/cap-gains.c:250 ../src/engine/cap-gains.c:959
-#: ../src/engine/cap-gains.c:964 ../src/engine/cap-gains.c:965
+#: ../src/engine/cap-gains.c:250 ../src/engine/cap-gains.c:960
+#: ../src/engine/cap-gains.c:965 ../src/engine/cap-gains.c:966
 msgid "Realized Gain/Loss"
 msgstr "Realisierter Gewinn/Verlust"
 
@@ -4026,14 +4026,14 @@ msgstr "Ausgleichskonto"
 
 #. src/report/standard-reports/register.scm
 #. src/report/standard-reports/transaction.scm
-#: ../src/engine/Split.c:1430 ../src/engine/Split.c:1447
+#: ../src/engine/Split.c:1433 ../src/engine/Split.c:1450
 #: ../src/gnome-utils/gnc-tree-util-split-reg.c:45
 #: ../intl-scm/guile-strings.c:4090 ../intl-scm/guile-strings.c:4826
 msgid "-- Split Transaction --"
 msgstr "-- Mehrteilige Buchung --"
 
 #. Translators: This string has a disambiguation prefix
-#: ../src/engine/Split.c:1464
+#: ../src/engine/Split.c:1467
 msgid ""
 "Displayed account code of the other account in a multi-split transaction|"
 "Split"
@@ -6895,7 +6895,6 @@ msgstr ""
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:12
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:96
-#, fuzzy
 msgid ""
 "If enabled, the \"Save changes on closing\" question will only wait a "
 "limited number of seconds for an answer. If the user didn't answer within "
@@ -7534,16 +7533,15 @@ msgstr ""
 "bedeutet alle Buchungen."
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:103
-#, fuzzy
 msgid "Number of characters for auto complete."
-msgstr "Zahlenüberschrift"
+msgstr "Anzahl Buchstaben für Auto-Vervollständigen."
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:104
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:152
 msgid ""
 "This sets the number of characters before auto complete starts for "
 "description, notes and memo fields."
-msgstr ""
+msgstr "Setzt die Anzahl der Buchstaben, bis das Auto-Vervollständigen Vorschläge machen wird. Dies gilt für die Felder Beschreibung, Buchungstext und Notizen."
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:105
 msgid "Create a new window for each new report"
@@ -7889,9 +7887,13 @@ msgid ""
 "second time when you go forward. You can access it directly from the menu "
 "via File->Properties."
 msgstr ""
-"Da gerade eine neue Datei erstellt werden soll, wird als nächstes ein Fenster für die »Buch-Eigenschaften« geöffnet. Die Einstellungen dieser Eigenschaften sind wichtig für die Eröffnungsbuchungen, die mit den neuen Konten im darauf folgenden Schritt erzeugt werden.\n"
+"Da gerade eine neue Datei erstellt werden soll, wird als nächstes ein "
+"Fenster für die »Buch-Eigenschaften« geöffnet. Die Einstellungen dieser "
+"Eigenschaften sind wichtig für die Eröffnungsbuchungen, die mit den neuen "
+"Konten im darauf folgenden Schritt erzeugt werden.\n"
 "\n"
-"Die Buch-Eigenschaften können später jederzeit geändert werden über den Menüeintrag Datei->Eigenschaften."
+"Die Buch-Eigenschaften können später jederzeit geändert werden über den "
+"Menüeintrag Datei->Eigenschaften."
 
 #: ../src/gnome/gtkbuilder/assistant-hierarchy.glade.h:9
 msgid "Choose Currency"
@@ -10503,9 +10505,8 @@ msgid "Don't tell me again this _session."
 msgstr "In dieser _Sitzung nicht wieder anzeigen."
 
 #: ../src/gnome-utils/dialog-utils.c:586
-#, fuzzy
 msgid "New Book Options"
-msgstr "Buch-Optionen"
+msgstr "Buch-Optionen für neues Buch"
 
 #. create the button.
 #: ../src/gnome-utils/gnc-account-sel.c:457
@@ -10517,7 +10518,7 @@ msgid "Save file automatically?"
 msgstr "Datei automatisch speichern?"
 
 #: ../src/gnome-utils/gnc-autosave.c:101
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Your data file needs to be saved to your hard disk to save your changes. "
 "GnuCash has a feature to save the file automatically every %d minute, just "
@@ -10537,23 +10538,15 @@ msgid_plural ""
 "\n"
 "Should your file be saved automatically?"
 msgstr[0] ""
-"Ihre Datei muss auf der Festplatte gespeichert werden, um Ihre Änderungen zu "
-"sichern. GnuCash kann das Speichern automatisch alle %d Minute auslösen, so "
-"als ob Sie jedesmal den Knopf »Speichern« klicken würden.\n"
+"Ihre Datei muss auf der Festplatte gespeichert werden, um Ihre Änderungen zu sichern. GnuCash kann das Speichern automatisch jede Minute auslösen, so als ob Sie jedesmal den Knopf »Speichern« klicken würden.\n"
 "\n"
-"Wenn Sie das Zeitintervall ändern möchten, können Sie dies tun unter "
-"Bearbeiten -> Einstellungen -> Allgemein -> Zeitintervall automatisch "
-"Speichern, oder dieses Feature dort auch abschalten.\n"
+"Wenn Sie das Zeitintervall ändern möchten, können Sie dies tun unter Bearbeiten -> Einstellungen -> Allgemein -> Zeitintervall automatisch Speichern, oder diese Automatik dort auch abschalten.\n"
 "\n"
 "Soll Ihre Datei automatisch gespeichert werden?"
 msgstr[1] ""
-"Ihre Datei muss auf der Festplatte gespeichert werden, um Ihre Änderungen zu "
-"sichern. GnuCash kann das Speichern automatisch alle %d Minuten auslösen, so "
-"als ob Sie jedesmal den Knopf »Speichern« klicken würden.\n"
+"Ihre Datei muss auf der Festplatte gespeichert werden, um Ihre Änderungen zu sichern. GnuCash kann das Speichern automatisch alle %d Minuten auslösen, so als ob Sie jedesmal den Knopf »Speichern« klicken würden.\n"
 "\n"
-"Wenn Sie das Zeitintervall ändern möchten, können Sie dies tun unter "
-"Bearbeiten -> Einstellungen -> Allgemein -> Zeitintervall automatisch "
-"Speichern, oder dieses Feature dort auch abschalten.\n"
+"Wenn Sie das Zeitintervall ändern möchten, können Sie dies tun unter Bearbeiten -> Einstellungen -> Allgemein -> Zeitintervall automatisch Speichern, oder diese Automatik dort auch abschalten.\n"
 "\n"
 "Soll Ihre Datei automatisch gespeichert werden?"
 
@@ -10924,7 +10917,12 @@ msgid ""
 "\"libdbi\" library. This may be caused by a permissions misconfiguration of "
 "your SQL database. Please see https://bugzilla.gnome.org/show_bug.cgi?"
 "id=645216 for more information."
-msgstr "GnuCash konnte eine wichtige Überprüfung der Hilfsbibliothek »libdbi« nicht durchführen. Dies könnte durch fehlerhafte Benutzerrechte in Ihrer SQL-Datenbank verursacht sein. Bitte lesen Sie den Fehlerbericht auf <https//bugzilla.gnome.org/show_bug.cgi?id=645216 und prüfen, ob Sie dort die passende Korrektur nachlesen können."
+msgstr ""
+"GnuCash konnte eine wichtige Überprüfung der Hilfsbibliothek »libdbi« nicht "
+"durchführen. Dies könnte durch fehlerhafte Benutzerrechte in Ihrer SQL-"
+"Datenbank verursacht sein. Bitte lesen Sie den Fehlerbericht auf <https//"
+"bugzilla.gnome.org/show_bug.cgi?id=645216 und prüfen, ob Sie dort die "
+"passende Korrektur nachlesen können."
 
 #: ../src/gnome-utils/gnc-file.c:466
 msgid ""
@@ -10932,7 +10930,13 @@ msgid ""
 "saved by this version. You will not be able to read the saved file from the "
 "older version of Gnucash (it will report an \"error parsing the file\"). If "
 "you wish to preserve the old version, exit without saving."
-msgstr "Diese Datei stammt von einer älteren Version von GnuCash und wird beim Speichern auf ein neues Dateiformat aktualisiert. Die neue Datei können Sie dann nicht mehr mit der älteren GnuCash-Version lesen (die ältere GnuCash-Version wird mit der Fehlermeldung »Fehler beim Laden« abbrechen). Wenn Sie das alte Dateiformat behalten möchten, beenden Sie das aktuelle GnuCash, ohne zu speichern."
+msgstr ""
+"Diese Datei stammt von einer älteren Version von GnuCash und wird beim "
+"Speichern auf ein neues Dateiformat aktualisiert. Die neue Datei können Sie "
+"dann nicht mehr mit der älteren GnuCash-Version lesen (die ältere GnuCash-"
+"Version wird mit der Fehlermeldung »Fehler beim Laden« abbrechen). Wenn Sie "
+"das alte Dateiformat behalten möchten, beenden Sie das aktuelle GnuCash, "
+"ohne zu speichern."
 
 #: ../src/gnome-utils/gnc-file.c:477
 #, c-format
@@ -10944,7 +10948,7 @@ msgid "Save changes to the file?"
 msgstr "Änderungen in Datei speichern?"
 
 #: ../src/gnome-utils/gnc-file.c:586 ../src/gnome-utils/gnc-main-window.c:1226
-#, fuzzy, c-format
+#, c-format
 msgid "If you don't save, changes from the past %d minute will be discarded."
 msgid_plural ""
 "If you don't save, changes from the past %d minutes will be discarded."
@@ -11043,7 +11047,9 @@ msgstr ""
 msgid ""
 "The database was opened read-only. Do you want to save it to a different "
 "place?"
-msgstr "Diese Datenbank wurde schreibgeschützt geöffnet. Wollen Sie die Daten an eine andere Stelle speichern?"
+msgstr ""
+"Diese Datenbank wurde schreibgeschützt geöffnet. Wollen Sie die Daten an "
+"eine andere Stelle speichern?"
 
 #: ../src/gnome-utils/gnc-general-select.c:218
 msgid "View..."
@@ -11396,20 +11402,20 @@ msgid "Unable to save to database: Book is marked read-only."
 msgstr ""
 "Datenbank konnte nicht gespeichert werden: Dieses Buch ist schreibgeschützt."
 
-#: ../src/gnome-utils/gnc-main-window.c:3978
+#: ../src/gnome-utils/gnc-main-window.c:3984
 msgid "Book Options"
 msgstr "Buch-Optionen"
 
-#: ../src/gnome-utils/gnc-main-window.c:4346
+#: ../src/gnome-utils/gnc-main-window.c:4352
 msgid "The GnuCash personal finance manager. The GNU way to manage your money!"
 msgstr ""
 "GnuCash: Ihr privater Finanzmanager. Die freie Lösung zur Finanzverwaltung."
 
-#: ../src/gnome-utils/gnc-main-window.c:4348
+#: ../src/gnome-utils/gnc-main-window.c:4354
 msgid "© 1997-2013 Contributors"
 msgstr "© 1997-2013 Mitarbeiter"
 
-#: ../src/gnome-utils/gnc-main-window.c:4382
+#: ../src/gnome-utils/gnc-main-window.c:4388
 msgid "translator_credits"
 msgstr "Christian Stimming <christian@cstimming.de> et. al."
 
@@ -11520,7 +11526,9 @@ msgstr "Niemals"
 msgid ""
 "You can not change this transaction, the Book or Register is set to Read "
 "Only."
-msgstr "Sie können diese Buchung nicht ändern. Das Buch oder dieses Kontofenster sind schreibgeschützt."
+msgstr ""
+"Sie können diese Buchung nicht ändern. Das Buch oder dieses Kontofenster "
+"sind schreibgeschützt."
 
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:131
 msgid "Save Transaction before proceeding?"
@@ -11603,9 +11611,8 @@ msgstr "Die beiden betroffenen Währungen sind identisch."
 
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:1256
 #: ../src/register/ledger-core/split-register.c:507
-#, fuzzy
 msgid "New Split Information"
-msgstr "<b>Buchungsinformationen</b>"
+msgstr "Neuer Buchungsteil - Information"
 
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:1306
 msgid ""
@@ -11617,9 +11624,8 @@ msgstr ""
 #: ../src/gnome-utils/gnc-tree-util-split-reg.c:501
 #: ../src/register/ledger-core/split-register.c:609
 #: ../src/register/register-gnome/datecell-gnome.c:127
-#, fuzzy
 msgid "Cannot store a transaction at this date"
-msgstr "Grund für Buchungsstornierung"
+msgstr "Buchung kann nicht mit diesem Datum gespeichert werden"
 
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:1361
 #: ../src/register/ledger-core/split-register.c:611
@@ -11960,13 +11966,13 @@ msgid ""
 "The entered date of the new transaction is older than the \"Read-Only "
 "Threshold\" set for this book. This setting can be changed in File -> "
 "Properties -> Accounts."
-msgstr ""
+msgstr "Das Datum der neuen Buchung liegt vor der »Nur-Lesen Schwelle«, die für dieses Buch eingestellt ist. Diese Einstellung kann geändert werden unter Datei -> Eigenschaften -> Konten."
 
 #: ../src/gnome-utils/gnc-tree-util-split-reg.c:886
 msgid ""
 "Exchange Rate Canceled, using existing rate or default 1 to 1 rate if this "
 "is a new transaction."
-msgstr ""
+msgstr "Wechselkurs-Eingabe abgebrochen. Es wird der vorhandene Kurs oder die Voreinstellung 1,00 bei neuen Buchungen verwendet."
 
 #: ../src/gnome-utils/gnc-tree-util-split-reg.c:1148
 #: ../src/register/ledger-core/split-register.c:2049
@@ -12281,57 +12287,48 @@ msgid "_Record Changes"
 msgstr "Änderungen _speichern"
 
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:2822
-#, fuzzy
 msgid "Date Entered"
-msgstr "Buchungsdatum"
+msgstr "Datum Eingabe"
 
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:2824
-#, fuzzy
 msgid "Date Reconciled"
-msgstr "Abgeglichen"
+msgstr "Datum Abgeglichen"
 
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:2826
 msgid "Date Posted / Entered / Reconciled"
-msgstr ""
+msgstr "Datum Buchung / Eingegeben / Abgeglichen"
 
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:2853
-#, fuzzy
 msgid "Reference / Action"
-msgstr "Referenz"
+msgstr "Referenz / Aktion"
 
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:2867
-#, fuzzy
 msgid "T-Number"
-msgstr "Nummer"
+msgstr "Buchungsnummer"
 
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:2873
-#, fuzzy
 msgid "Number / Action"
-msgstr "Zahlenoptionen"
+msgstr "Nummer / Aktion"
 
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:2889
-#, fuzzy
 msgid "Customer / Memo"
-msgstr "Kundenbericht"
+msgstr "Kunde / Buchungstext"
 
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:2900
-#, fuzzy
 msgid "Vendor / Memo"
-msgstr "Lieferantenbericht"
+msgstr "Lieferant / Buchungstext"
 
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:2918
 msgid "Description / Notes / Memo"
-msgstr ""
+msgstr "Beschreibung / Notizen / Buchungstext"
 
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:2948
-#, fuzzy
 msgid "Void Reason"
-msgstr "Nur stornierte"
+msgstr "Stornierungsbegründung"
 
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:2952
-#, fuzzy
 msgid "Accounts / Void Reason"
-msgstr "Kontonummer"
+msgstr "Konten / Stornierungsbegründung"
 
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:2962
 #: ../src/import-export/import-main-matcher.c:492
@@ -12339,14 +12336,12 @@ msgid "R"
 msgstr "Abgl"
 
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:3006
-#, fuzzy
 msgid "Amount / Value"
-msgstr "Noch zu zahlen"
+msgstr "Betrag / Wert"
 
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:3026
-#, fuzzy
 msgid "Rate"
-msgstr "Steuersatz"
+msgstr "Kurs"
 
 #. src/app-utils/prefs.scm
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:3048
@@ -12487,9 +12482,8 @@ msgid "* Indicates the transaction Commodity."
 msgstr "Anzeigen des Buchungsbetrags?"
 
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:3401
-#, fuzzy
 msgid "Enter the rate"
-msgstr "Zinssatz"
+msgstr "Geben Sie den Wechselkurs an"
 
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:3411
 #: ../src/register/ledger-core/split-register-model.c:1322
@@ -12796,12 +12790,11 @@ msgstr "<b>Gewählte _Zeichenkodierungen</b>"
 
 #: ../src/gnome-utils/gtkbuilder/assistant-xml-encoding.glade.h:5
 msgid "Introduction placeholder"
-msgstr ""
+msgstr "Introduction placeholder"
 
 #: ../src/gnome-utils/gtkbuilder/assistant-xml-encoding.glade.h:6
-#, fuzzy
 msgid "Title placeholder"
-msgstr "Platzhalter"
+msgstr "Title placeholder"
 
 #: ../src/gnome-utils/gtkbuilder/assistant-xml-encoding.glade.h:7
 msgid "_Edit list of encodings"
@@ -12816,9 +12809,8 @@ msgid "Convert the file"
 msgstr "Datei umwandeln"
 
 #: ../src/gnome-utils/gtkbuilder/assistant-xml-encoding.glade.h:10
-#, fuzzy
 msgid "finish placeholder"
-msgstr "Platzhalter"
+msgstr "finish placeholder"
 
 #: ../src/gnome-utils/gtkbuilder/assistant-xml-encoding.glade.h:11
 msgid "Finish GnuCash Datafile Import"
@@ -13271,12 +13263,11 @@ msgstr "_Zeitzone"
 msgid ""
 "Enter a display symbol. This can safely be left blank, in which case the "
 "ticker symbol or the currency ISO code will be used."
-msgstr ""
+msgstr "Geben Sie ein Anzeigesymbol ein, falls gewünscht. Diese Angabe kann problemlos weggelassen werden. In diesem Fall wird das systemweite Währungssymbol oder das ISO-Kürzel der Währung verwendet."
 
 #: ../src/gnome-utils/gtkbuilder/dialog-commodity.glade.h:25
-#, fuzzy
 msgid "_Display symbol"
-msgstr "Das Tickersymbol anzeigen"
+msgstr "_Anzeigesymbol"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-file-access.glade.h:1
 msgid "<b>Data Format:</b>"
@@ -13284,7 +13275,7 @@ msgstr "<b>Dateiformat:</b>"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-file-access.glade.h:2
 msgid "Open _Read-Only"
-msgstr ""
+msgstr "Schreib_geschützt öffnen"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-file-access.glade.h:3
 msgid "<b>File</b>"
@@ -13671,11 +13662,11 @@ msgstr ""
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:97
 msgid "Time to wait for answer:"
-msgstr ""
+msgstr "Wartezeit für Antwort:"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:99
 msgid "seconds"
-msgstr ""
+msgstr "Sekunden"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:101
 msgid "<b>Checks</b>"
@@ -13895,25 +13886,23 @@ msgstr ""
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:151
 msgid "Number of _characters for auto complete:"
-msgstr ""
+msgstr "Anzahl Buchstaben für Auto-Vervollständigen:"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:153
-#, fuzzy
 msgid "Show the _entered and reconcile dates"
-msgstr "Aktuelle Wechselkurse anzeigen"
+msgstr "Datum der _Eingabe und Abgleichen anzeigen"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:155
-#, fuzzy
 msgid "Show the calendar b_uttons"
-msgstr "Namensspalte anzeigen"
+msgstr "Kalender-Knöpfe anzeigen"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:157
 msgid "_Move the selection to the blank split on expand"
-msgstr ""
+msgstr "Mit dem Cursor zum neuen Buchungsteil springen, wenn eine Buchung ausgeklappt wird"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:159
 msgid "_Show entered and reconciled dates on selection"
-msgstr ""
+msgstr "Datum der Eingabe und des Abgleichens bei ausgewählter Buchung anzeigen"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:161
 msgid "Register Defaults"
@@ -14005,7 +13994,6 @@ msgid "_Width:"
 msgstr "_Breite:"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:192
-#, fuzzy
 msgid ""
 "If the text in the tab is longer than this value (the test is approximate) "
 "then the tab label will have the middle cut and replaced with an ellipsis."
@@ -14023,54 +14011,46 @@ msgid "Windows"
 msgstr "Fenster"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:195
-#, fuzzy
 msgid "US"
-msgstr "_USA:"
+msgstr "USA"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:196
-#, fuzzy
 msgid "07/31/2013"
-msgstr "07/31/2005"
+msgstr "07/31/2013"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:197
-#, fuzzy
 msgid "UK"
-msgstr "U_K:"
+msgstr "Großbritannien"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:198
-#, fuzzy
 msgid "31/07/2013"
-msgstr "31/07/2005"
+msgstr "31/07/2013"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:199
-#, fuzzy
 msgid "Europe"
 msgstr "Europäisch"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:200
-#, fuzzy
 msgid "31.07.2013"
-msgstr "31.07.2005"
+msgstr "31.07.2013"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:201
-#, fuzzy
 msgid "ISO"
-msgstr "_ISO:"
+msgstr "ISO"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:202
-#, fuzzy
 msgid "2013-07-31"
-msgstr "2005-07-31"
+msgstr "2013-07-31"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:203
 #: ../src/gnome-utils/gtkbuilder/gnc-date-format.glade.h:19
 #: ../src/import-export/csv-import/gnc-csv-model.c:38
 msgid "Locale"
-msgstr ""
+msgstr "Systemsprache"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:204
 msgid "(dummy)"
-msgstr ""
+msgstr "(dummy)"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-reset-warnings.glade.h:1
 msgid "Reset Warnings"
@@ -14270,23 +14250,23 @@ msgstr "Datumsformat:"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-date-format.glade.h:14
 msgid "US (12/31/2001)"
-msgstr ""
+msgstr "USA (12/31/2001)"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-date-format.glade.h:15
 msgid "UK (31/12/2001)"
-msgstr ""
+msgstr "UK (31/12/2001)"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-date-format.glade.h:16
 msgid "Europe (31.12.2001)"
-msgstr ""
+msgstr "Europäisch (31.12.2001)"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-date-format.glade.h:17
 msgid "ISO (2001-12-31)"
-msgstr ""
+msgstr "ISO (2001-12-31)"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-date-format.glade.h:18
 msgid "UTC"
-msgstr ""
+msgstr "UTC"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:3
 msgid "Not scheduled"
@@ -14376,277 +14356,267 @@ msgstr "Am"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:31
 msgid "5th"
-msgstr ""
+msgstr "5."
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:32
 msgid "6th"
-msgstr ""
+msgstr "6."
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:33
 msgid "7th"
-msgstr ""
+msgstr "7."
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:34
 msgid "8th"
-msgstr ""
+msgstr "8."
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:35
 msgid "9th"
-msgstr ""
+msgstr "9."
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:36
 msgid "10th"
-msgstr ""
+msgstr "10."
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:37
 msgid "11th"
-msgstr ""
+msgstr "11."
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:38
 msgid "12th"
-msgstr ""
+msgstr "12."
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:39
 msgid "13th"
-msgstr ""
+msgstr "13."
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:40
 msgid "14th"
-msgstr ""
+msgstr "14."
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:41
 msgid "15th"
-msgstr ""
+msgstr "15."
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:42
 msgid "16th"
-msgstr ""
+msgstr "16."
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:43
 msgid "17th"
-msgstr ""
+msgstr "17."
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:44
 msgid "18th"
-msgstr ""
+msgstr "18."
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:45
 msgid "19th"
-msgstr ""
+msgstr "19."
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:46
 msgid "20th"
-msgstr ""
+msgstr "20."
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:47
 msgid "21st"
-msgstr ""
+msgstr "21."
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:48
 msgid "22nd"
-msgstr ""
+msgstr "22."
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:49
 msgid "23rd"
-msgstr ""
+msgstr "23."
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:50
 msgid "24th"
-msgstr ""
+msgstr "24."
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:51
 msgid "25th"
-msgstr ""
+msgstr "25."
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:52
 msgid "26th"
-msgstr ""
+msgstr "26."
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:53
 msgid "27th"
-msgstr ""
+msgstr "27."
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:54
 msgid "28th"
-msgstr ""
+msgstr "28."
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:55
 msgid "29th"
-msgstr ""
+msgstr "29."
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:56
 msgid "30th"
-msgstr ""
+msgstr "30."
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:57
 msgid "31st"
-msgstr ""
+msgstr "31."
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:58
 msgid "Last day of month"
 msgstr "Der letzte Tag des Monats"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:59
-#, fuzzy
 msgid "Last Monday"
-msgstr "Montag"
+msgstr "Letzter Montag"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:60
-#, fuzzy
 msgid "Last Tuesday"
-msgstr "Dienstag"
+msgstr "Letzter Dienstag"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:61
-#, fuzzy
 msgid "Last Wednesday"
-msgstr "Mittwoch"
+msgstr "Letzter Mittwoch"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:62
-#, fuzzy
 msgid "Last Thursday"
-msgstr "Donnerstag"
+msgstr "Letzter Donnerstag"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:63
-#, fuzzy
 msgid "Last Friday"
-msgstr "Freitag"
+msgstr "Letzter Freitag"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:64
-#, fuzzy
 msgid "Last Saturday"
-msgstr "Samstag"
+msgstr "Letzter Samstag"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:65
-#, fuzzy
 msgid "Last Sunday"
-msgstr "Sonntag"
+msgstr "Letzter Sonntag"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:66
-#, fuzzy
 msgid "No change"
-msgstr "Gesamt Änderung"
+msgstr "Keine Änderung"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:67
-#, fuzzy
 msgid "Use previous weekday"
-msgstr "Ende des vorherigen Jahres"
+msgstr "Vorheriger Werktag"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:68
-#, fuzzy
 msgid "Use next weekday"
-msgstr "Gleiche Woche und Tag"
+msgstr "Nächster Werktag"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:69
 msgid "1st Mon"
-msgstr ""
+msgstr "Erster Montag"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:70
 msgid "1st Tue"
-msgstr ""
+msgstr "Erster Dienstag"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:71
 msgid "1st Wed"
-msgstr ""
+msgstr "Erster Mittwoch"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:72
 msgid "1st Thu"
-msgstr ""
+msgstr "Erster Donnerstag"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:73
 msgid "1st Fri"
-msgstr ""
+msgstr "Erster Freitag"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:74
 msgid "1st Sat"
-msgstr ""
+msgstr "Erster Samstag"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:75
 msgid "1st Sun"
-msgstr ""
+msgstr "Erster Sonntag"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:76
 msgid "2nd Mon"
-msgstr ""
+msgstr "Zweiter Montag"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:77
 msgid "2nd Tue"
-msgstr ""
+msgstr "Zweiter Dienstag"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:78
 msgid "2nd Wed"
-msgstr ""
+msgstr "Zweiter Mittwoch"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:79
 msgid "2nd Thu"
-msgstr ""
+msgstr "Zweiter Donnerstag"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:80
 msgid "2nd Fri"
-msgstr ""
+msgstr "Zweiter Freitag"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:81
 msgid "2nd Sat"
-msgstr ""
+msgstr "Zweiter Samstag"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:82
 msgid "2nd Sun"
-msgstr ""
+msgstr "Zweiter Sonntag"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:83
 msgid "3rd Mon"
-msgstr ""
+msgstr "Dritter Montag"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:84
 msgid "3rd Tue"
-msgstr ""
+msgstr "Dritter Dienstag"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:85
 msgid "3rd Wed"
-msgstr ""
+msgstr "Dritter Mittwoch"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:86
 msgid "3rd Thu"
-msgstr ""
+msgstr "Dritter Donnerstag"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:87
 msgid "3rd Fri"
-msgstr ""
+msgstr "Dritter Freitag"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:88
 msgid "3rd Sat"
-msgstr ""
+msgstr "Dritter Samstag"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:89
 msgid "3rd Sun"
-msgstr ""
+msgstr "Dritter Sonntag"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:90
 msgid "4th Mon"
-msgstr ""
+msgstr "Vierter Montag"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:91
 msgid "4th Tue"
-msgstr ""
+msgstr "Vierter Dienstag"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:92
 msgid "4th Wed"
-msgstr ""
+msgstr "Vierter Mittwoch"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:93
 msgid "4th Thu"
-msgstr ""
+msgstr "Vierter Donnerstag"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:94
 msgid "4th Fri"
-msgstr ""
+msgstr "Vierter Freitag"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:95
 msgid "4th Sat"
-msgstr ""
+msgstr "Vierter Samstag"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:96
 msgid "4th Sun"
-msgstr ""
+msgstr "Vierter Sonntag"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-recurrence.glade.h:1
 msgid "day(s)"
@@ -14739,18 +14709,16 @@ msgid "Profits:"
 msgstr "Gewinn:"
 
 #: ../src/gnome/window-autoclear.c:139
-#, fuzzy
 msgid "Searching for splits to clear ..."
-msgstr "Nach Einträgen suchen, für die gilt:"
+msgstr "Buchungsteile zum abgleichen werden gesucht..."
 
 #: ../src/gnome/window-autoclear.c:241
 msgid "Cannot uniquely clear splits. Found multiple possibilities."
-msgstr ""
+msgstr "Automatisches Abgleichen kann nicht die Buchungsteile nicht eindeutig bestimmen."
 
 #: ../src/gnome/window-autoclear.c:248
-#, fuzzy
 msgid "The selected amount cannot be cleared."
-msgstr "Der Zinssatz kann nicht Null sein."
+msgstr "Der gewählte Betrag kann nicht automatisch abgeglichen werden."
 
 #: ../src/gnome/window-reconcile2.c:455 ../src/gnome/window-reconcile.c:455
 msgid "Interest Payment"
@@ -14907,14 +14875,12 @@ msgid "Delete the selected transaction"
 msgstr "Ausgewählten Buchungssatz löschen"
 
 #: ../src/gnome/window-reconcile2.c:2213 ../src/gnome/window-reconcile.c:2213
-#, fuzzy
 msgid "_Reconcile Selection"
-msgstr "Konto abgleichen"
+msgstr "Auswahl _abgleichen"
 
 #: ../src/gnome/window-reconcile2.c:2214 ../src/gnome/window-reconcile.c:2214
-#, fuzzy
 msgid "Reconcile the selected transactions"
-msgstr "Ausgewählten Buchungssatz löschen"
+msgstr "Ausgewählte Buchungen abgleichen löschen"
 
 #: ../src/gnome/window-reconcile2.c:2218 ../src/gnome/window-reconcile.c:2218
 #, fuzzy
@@ -15126,18 +15092,13 @@ msgid "Start Online Banking Wizard"
 msgstr "Onlinebanking Einrichtungs-Assistenten starten"
 
 #: ../src/import-export/aqbanking/assistant-ab-initial.glade.h:22
-#, fuzzy
 msgid ""
 "Double Click on the line of an Online Banking account name if you want to "
 "match it to a GnuCash account. Click \"Forward\" when all desired accounts "
 "are matching."
-msgstr ""
-"Klicken Sie auf die Zeile eines Online-Banking-Kontos, um diesem HBCI-Konto "
-"ein GnuCash-Konto zuzuordnen. Klicken Sie »Vor«, wenn alle gewünschten "
-"Konten zugeordnet sind."
+msgstr "Doppel-Klicken Sie auf die Zeile eines Online-Banking-Kontos, um diesem HBCI-Konto ein GnuCash-Konto zuzuordnen. Klicken Sie »Vor«, wenn alle gewünschten Konten zugeordnet sind."
 
 #: ../src/import-export/aqbanking/assistant-ab-initial.glade.h:23
-#, fuzzy
 msgid "Match Online accounts with GnuCash accounts"
 msgstr "Online-Banking Konten mit GnuCash Konten zuordnen"
 
@@ -15350,9 +15311,8 @@ msgid "Delete the currently selected transaction template"
 msgstr "Ausgewählte Überweisungsvorlage löschen"
 
 #: ../src/import-export/aqbanking/dialog-ab.glade.h:48
-#, fuzzy
 msgid "Templates"
-msgstr "_Vorlage:"
+msgstr "Vorlagen"
 
 #: ../src/import-export/aqbanking/dialog-ab.glade.h:49
 msgid "Execute later (unimpl.)"
@@ -15413,36 +15373,28 @@ msgid "Credited Account Bank Code"
 msgstr "BLZ des Auftraggebers"
 
 #: ../src/import-export/aqbanking/dialog-ab-trans.c:387
-#, fuzzy
 msgid "Recipient IBAN (International Account Number)"
-msgstr "Konto-Nr. des Empfängers"
+msgstr "IBAN des Empfängers"
 
 #: ../src/import-export/aqbanking/dialog-ab-trans.c:389
-#, fuzzy
 msgid "Recipient BIC (Bank Code)"
-msgstr "Bankleitzahl"
+msgstr "BIC des Empfängers"
 
 #: ../src/import-export/aqbanking/dialog-ab-trans.c:393
-#, fuzzy
 msgid "Debited IBAN (International Account Number)"
-msgstr "Konto-Nr. des Zahlungspflichtigen"
+msgstr "IBAN des Zahlungspflichtigen"
 
 #: ../src/import-export/aqbanking/dialog-ab-trans.c:395
-#, fuzzy
 msgid "Debited BIC (Bank Code)"
-msgstr "BLZ des Zahlungspflichtigen"
+msgstr "BIC des Zahlungspflichtigen"
 
 #: ../src/import-export/aqbanking/dialog-ab-trans.c:477
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The internal check of the destination account number '%s' at the specified "
 "bank with bank code '%s' failed. This means the account number might contain "
 "an error."
-msgstr ""
-"Die interne Überprüfung der angegebenen Kontonummer »%s« bei der Bank mit "
-"der Bankleitzahl »%s« ergab, dass die Kontonummer wahrscheinlich einen "
-"Fehler enthält. Wollen Sie den Auftrag trotzdem mit dieser Kontonummer "
-"abschicken?"
+msgstr "Die interne Überprüfung der angegebenen Kontonummer »%s« bei der Bank mit der Bankleitzahl »%s« ergab, dass die Kontonummer wahrscheinlich einen Fehler enthält."
 
 #: ../src/import-export/aqbanking/dialog-ab-trans.c:549
 #, c-format
@@ -15455,63 +15407,35 @@ msgid ""
 msgstr ""
 
 #: ../src/import-export/aqbanking/dialog-ab-trans.c:564
-#, fuzzy
 msgid ""
 "You did not enter a recipient name. A recipient name is required for an "
 "online transfer.\n"
-msgstr ""
-"Sie haben keinen Empfängernamen eingegeben. Für einen Überweisungsauftrag "
-"ist die Eingabe eines Empfängernamens erforderlich.\n"
-"\n"
-"Wollen Sie den Auftrag erneut eingeben?"
+msgstr "Sie haben keinen Empfängernamen eingegeben. Für einen Überweisungsauftrag ist die Eingabe eines Empfängernamens erforderlich.\n"
 
 #: ../src/import-export/aqbanking/dialog-ab-trans.c:584
-#, fuzzy
 msgid ""
 "You did not enter a recipient account. A recipient account is required for "
 "an online transfer.\n"
-msgstr ""
-"Sie haben keinen Empfängernamen eingegeben. Für einen Überweisungsauftrag "
-"ist die Eingabe eines Empfängernamens erforderlich.\n"
-"\n"
-"Wollen Sie den Auftrag erneut eingeben?"
+msgstr "Sie haben kein Empfängerkonto eingegeben. Für einen Überweisungsauftrag ist die Eingabe eines Empfängerkontos erforderlich.\n"
 
 #: ../src/import-export/aqbanking/dialog-ab-trans.c:600
-#, fuzzy
 msgid ""
 "You did not enter a recipient bank. A recipient bank is required for an "
 "online transfer.\n"
-msgstr ""
-"Sie haben keinen Empfängernamen eingegeben. Für einen Überweisungsauftrag "
-"ist die Eingabe eines Empfängernamens erforderlich.\n"
-"\n"
-"Wollen Sie den Auftrag erneut eingeben?"
+msgstr "Sie haben keine Bank des Empfängers eingegeben. Für einen Überweisungsauftrag ist die Eingabe einer Bank erforderlich.\n"
 
 #: ../src/import-export/aqbanking/dialog-ab-trans.c:618
-#, fuzzy
 msgid ""
 "The amount is zero or the amount field could not be interpreted correctly. "
 "You might have mixed up decimal point and comma, compared to your locale "
 "settings. This does not result in a valid online transfer job."
-msgstr ""
-"Der Betrag ist Null oder der eingegebene Betrag konnte nicht korrekt "
-"interpretiert werden. Eventuell haben Sie Komma und Dezimalpunkt "
-"verwechselt. In der länderspezifischen Einstellung Deutschland (locale de, "
-"LANG=de_DE) müssen Sie ein Komma eingeben, andernfalls einen Punkt.\n"
-"\n"
-"Dies ergibt keinen zulässigen Zahlungsauftrag. Wollen Sie den Auftrag erneut "
-"eingeben?"
+msgstr "Der Betrag ist Null oder der eingegebene Betrag konnte nicht korrekt interpretiert werden. Eventuell haben Sie Komma und Dezimalpunkt verwechselt. Wenn die länderspezifischen Einstellung auf »Deutschland« (locale de, LANG=de_DE) gestellt sind, müssen Sie ein Komma eingeben, andernfalls einen Punkt. Dies ergibt keinen zulässigen Zahlungsauftrag."
 
 #: ../src/import-export/aqbanking/dialog-ab-trans.c:635
-#, fuzzy
 msgid ""
 "You did not enter any transaction purpose. A purpose is required for an "
 "online transfer.\n"
-msgstr ""
-"Sie haben keinen Verwendungszweck eingegeben. Für einen Überweisungsauftrag "
-"ist die Eingabe eines Verwendungszweck erforderlich.\n"
-"\n"
-"Wollen Sie den Auftrag erneut eingeben?"
+msgstr "Sie haben keinen Verwendungszweck eingegeben. Für einen Überweisungsauftrag ist die Eingabe eines Verwendungszweck erforderlich.\n"
 
 #: ../src/import-export/aqbanking/dialog-ab-trans.c:935
 #, c-format
@@ -15606,14 +15530,12 @@ msgid "Online Banking Bank-Internal Transfer"
 msgstr "Online-Auftrag Einzelumbuchung"
 
 #: ../src/import-export/aqbanking/gnc-ab-transfer.c:218
-#, fuzzy
 msgid "Online Banking European (SEPA) Transfer"
-msgstr "Online-Auftrag Einzelumbuchung"
+msgstr "Online-Auftrag SEPA-Überweisung"
 
 #: ../src/import-export/aqbanking/gnc-ab-transfer.c:223
-#, fuzzy
 msgid "Online Banking European (SEPA) Debit Note"
-msgstr "Online-Auftrag Einzellastschrift"
+msgstr "Online-Auftrag SEPA-Einzellastschrift"
 
 #: ../src/import-export/aqbanking/gnc-ab-transfer.c:229
 msgid "Online Banking Transaction"
@@ -15638,7 +15560,6 @@ msgid "Unspecified"
 msgstr "Nicht spezifiziert"
 
 #: ../src/import-export/aqbanking/gnc-ab-utils.c:662
-#, fuzzy
 msgid ""
 "The backend found an error during the preparation of the job. It is not "
 "possible to execute this job. \n"
@@ -15649,12 +15570,9 @@ msgid ""
 "\n"
 "Do you want to enter the job again?"
 msgstr ""
-"Das AqBanking-Modul hat einen Fehler während der Vorbereitung des Auftrags "
-"gefunden. Es ist nicht möglich, den Auftrag auszuführen.\n"
+"Das AqBanking-Modul hat einen Fehler während der Vorbereitung des Auftrags gefunden. Es ist nicht möglich, den Auftrag auszuführen.\n"
 "\n"
-"Wahrscheinlich wird dieser Geschäftsvorfall von Ihrer Bank leider nicht "
-"unterstützt oder ist für Ihren HBCI-Zugang nicht freigeschaltet. Weitere "
-"Fehlermeldungen könnten auf dem Console-Log sichtbar sein.\n"
+"Wahrscheinlich wird dieser Geschäftsvorfall von Ihrer Bank leider nicht unterstützt oder ist für Ihren FinTS/HBCI-Zugang nicht freigeschaltet. Weitere Fehlermeldungen könnten im Log-Fenster sichtbar sein.\n"
 "\n"
 "Wollen Sie den Auftrag erneut eingeben?"
 
@@ -15848,17 +15766,14 @@ msgid "Issue a new transaction online through Online Banking"
 msgstr "Neue Einzelüberweisung mit HBCI online absenden"
 
 #: ../src/import-export/aqbanking/gnc-plugin-aqbanking.c:118
-#, fuzzy
 msgid "_Issue SEPA Transaction..."
-msgstr "_Einzelüberweisung..."
+msgstr "_SEPA Einzelüberweisung..."
 
 #: ../src/import-export/aqbanking/gnc-plugin-aqbanking.c:119
-#, fuzzy
 msgid ""
 "Issue a new international European (SEPA) transaction online through Online "
 "Banking"
-msgstr ""
-"Neue bankinterne Einzelumbuchung mit HBCI/Onlinebanking online absenden"
+msgstr "Neue SEPA-Überweisung mit HBCI/Onlinebanking online absenden"
 
 #: ../src/import-export/aqbanking/gnc-plugin-aqbanking.c:123
 msgid "I_nternal Transaction..."
@@ -15871,23 +15786,21 @@ msgstr ""
 
 #: ../src/import-export/aqbanking/gnc-plugin-aqbanking.c:128
 msgid "_Direct Debit..."
-msgstr "Einzel_lastschrift..."
+msgstr "Einzellastschrift..."
 
 #: ../src/import-export/aqbanking/gnc-plugin-aqbanking.c:129
 msgid "Issue a new direct debit note online through Online Banking"
 msgstr "Neue Einzellastschrift online mit HBCI/Onlinebanking absenden"
 
 #: ../src/import-export/aqbanking/gnc-plugin-aqbanking.c:133
-#, fuzzy
 msgid "_Issue SEPA Direct Debit..."
-msgstr "Einzel_lastschrift..."
+msgstr "SEPA Einzel_lastschrift..."
 
 #: ../src/import-export/aqbanking/gnc-plugin-aqbanking.c:134
-#, fuzzy
 msgid ""
 "Issue a new international European (SEPA) direct debit note online through "
 "Online Banking"
-msgstr "Neue Einzellastschrift online mit HBCI/Onlinebanking absenden"
+msgstr "Neue SEPA-Einzellastschrift online mit HBCI/Onlinebanking absenden"
 
 #: ../src/import-export/aqbanking/gnc-plugin-aqbanking.c:140
 msgid "Import _MT940"
@@ -16078,9 +15991,8 @@ msgid "File exported successfully!\n"
 msgstr ""
 
 #: ../src/import-export/csv-export/assistant-csv-export.glade.h:1
-#, fuzzy
 msgid "CSV Export Assistant"
-msgstr "Hypothek/Darlehen Assistent"
+msgstr "CSV-Export Assistent"
 
 #: ../src/import-export/csv-export/assistant-csv-export.glade.h:2
 msgid ""
@@ -16089,14 +16001,12 @@ msgid ""
 msgstr ""
 
 #: ../src/import-export/csv-export/assistant-csv-export.glade.h:5
-#, fuzzy
 msgid "Quotes"
-msgstr "Kurse abrufen"
+msgstr "Kurse"
 
 #: ../src/import-export/csv-export/assistant-csv-export.glade.h:6
-#, fuzzy
 msgid "Use Quotes"
-msgstr "Kurse abrufen"
+msgstr "Kurse benutzen"
 
 #: ../src/import-export/csv-export/assistant-csv-export.glade.h:7
 #: ../src/import-export/csv-import/assistant-csv-trans-import.glade.h:24
@@ -16195,13 +16105,12 @@ msgstr "Von jetzt"
 
 # strange, had fuzzy translation Saldo (Periodenbezogen)
 #: ../src/import-export/csv-export/csv-transactions-export.c:352
-#, fuzzy
 msgid "To Rate/Price"
-msgstr "Gesamtbetrag"
+msgstr "Zu Kurs/Preis"
 
 #: ../src/import-export/csv-export/csv-transactions-export.c:352
 msgid "From Rate/Price"
-msgstr ""
+msgstr "Von Kurs/Preis"
 
 #. Header string
 #: ../src/import-export/csv-export/csv-tree-export.c:112
@@ -16603,9 +16512,8 @@ msgid "Preview Settings"
 msgstr ""
 
 #: ../src/import-export/csv-import/assistant-csv-trans-import.glade.h:33
-#, fuzzy
 msgid "Error text."
-msgstr "Fehler"
+msgstr "Fehlertext"
 
 #: ../src/import-export/csv-import/assistant-csv-trans-import.glade.h:35
 msgid ""
@@ -16627,29 +16535,27 @@ msgid ""
 msgstr ""
 
 #: ../src/import-export/csv-import/assistant-csv-trans-import.glade.h:44
-#, fuzzy
 msgid "Transaction Information"
-msgstr "<b>Neue Buchung</b>"
+msgstr "Buchungsinformationen"
 
 #: ../src/import-export/csv-import/assistant-csv-trans-import.glade.h:46
-#, fuzzy
 msgid "Match Transactions"
-msgstr "Buchung einfügen"
+msgstr "Buchungen zuordnen"
 
 #: ../src/import-export/csv-import/csv-account-import.c:239
 #, c-format
 msgid "Row %u, path to account %s not found, added as top level\n"
-msgstr ""
+msgstr "Zeile %u, Pfad zu Konto %s nicht gefunden, als Oberkonto hinzugefügt\n"
 
 #: ../src/import-export/csv-import/csv-account-import.c:289
 #, c-format
 msgid "Row %u, commodity %s / %s not found\n"
-msgstr ""
+msgstr "Zeile %u, Währung %s / %s nicht gefunden\n"
 
 #: ../src/import-export/csv-import/csv-account-import.c:298
-#, fuzzy, c-format
+#, c-format
 msgid "Row %u, account %s not in %s\n"
-msgstr "Kontennotizen anzeigen"
+msgstr "Zeile %u, Konto %s nicht in %s\n"
 
 #: ../src/import-export/csv-import/gnc-csv-model.c:30
 msgid "y-m-d"
@@ -27484,7 +27390,12 @@ msgid ""
 "There is another theory that this has already happened.\n"
 "\n"
 "Douglas Adams, \"The Restaurant at the End of the Universe\""
-msgstr "GnuCash unterstützt auch Online-Banking mit dem deutschen Standard FinTS/HBCI. Im Menü Werkzeuge finden Sie den Menüpunkt zur Einrichtung des Online-Banking-Zugangs. Nachdem ein Online-Banking-Zugang eingerichtet wurde, können die Menüpunkte im Kontofenster unter Aktionen -> Online Aktionen verwendet werden."
+msgstr ""
+"GnuCash unterstützt auch Online-Banking mit dem deutschen Standard FinTS/"
+"HBCI. Im Menü Werkzeuge finden Sie den Menüpunkt zur Einrichtung des Online-"
+"Banking-Zugangs. Nachdem ein Online-Banking-Zugang eingerichtet wurde, "
+"können die Menüpunkte im Kontofenster unter Aktionen -> Online Aktionen "
+"verwendet werden."
 
 #: ../doc/tip_of_the_day.list.in:101
 msgid ""
