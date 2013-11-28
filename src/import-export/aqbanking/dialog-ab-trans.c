@@ -922,26 +922,6 @@ gnc_ab_trans_dialog_templ_list_row_activated_cb(GtkTreeView *view,
     if (!new_purpose) new_purpose = "";
     if (!new_purpose_cont) new_purpose_cont = "";
 
-    /* Check for differences to avoid overwriting entered text */
-    if ((*old_name && strcmp(old_name, new_name))
-            || (*old_account && strcmp(old_account, new_account))
-            || (*old_bankcode && strcmp(old_bankcode, new_bankcode))
-            || (*old_purpose && strcmp(old_purpose, new_purpose))
-            || (*old_purpose_cont && strcmp(old_purpose_cont, new_purpose_cont))
-            || (*old_amount_text && !gnc_numeric_equal(old_amount, new_amount)))
-    {
-        if (!gnc_verify_dialog(
-                    td->parent, FALSE,
-                    _("Do you really want to overwrite your changes with the "
-                      "contents of the template \"%s\"?"),
-                    gnc_ab_trans_templ_get_name(templ)))
-        {
-
-            LEAVE("aborted");
-            return;
-        }
-    }
-
     /* Fill in */
     gtk_entry_set_text(GTK_ENTRY(td->recp_name_entry), new_name);
     gtk_entry_set_text(GTK_ENTRY(td->recp_account_entry), new_account);
