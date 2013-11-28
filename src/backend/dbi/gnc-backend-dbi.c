@@ -416,6 +416,7 @@ mysql_error_fn( dbi_conn conn, void* user_data )
     GncDbiSqlConnection *dbi_conn = (GncDbiSqlConnection*)be->sql_be.conn;
     const gchar* msg;
     gint err_num;
+    const guint backoff_usecs = 1000;
 
     err_num = dbi_conn_error( conn, &msg );
 
@@ -464,6 +465,7 @@ mysql_error_fn( dbi_conn conn, void* user_data )
         }
         else
         {
+	    usleep (backoff_usecs * 2 << dbi_conn->error_repeat);
             PINFO( "DBI error: %s - Reconnecting...\n", msg );
             if (dbi_conn)
                 gnc_dbi_set_error( dbi_conn, ERR_BACKEND_CANT_CONNECT, 1, TRUE );
@@ -1032,6 +1034,7 @@ pgsql_error_fn( dbi_conn conn, void* user_data )
     GncDbiBackend *be = (GncDbiBackend*)user_data;
     GncDbiSqlConnection *dbi_conn = (GncDbiSqlConnection*)be->sql_be.conn;
     const gchar* msg;
+    const guint backoff_usecs = 1000;
 
     (void)dbi_conn_error( conn, &msg );
     if ( g_str_has_prefix( msg, "FATAL:  database" ) &&
@@ -1065,6 +1068,7 @@ pgsql_error_fn( dbi_conn conn, void* user_data )
         }
         else
         {
+	    usleep (backoff_usecs * 2 << dbi_conn->error_repeat);
             PINFO( "DBI error: %s - Reconnecting...\n", msg );
             gnc_dbi_set_error( dbi_conn, ERR_BACKEND_CANT_CONNECT, 1, TRUE );
             dbi_conn->conn_ok = TRUE;
