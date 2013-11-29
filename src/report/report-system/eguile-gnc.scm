@@ -156,7 +156,7 @@
 
   ;; recursively process input stream
   (define (loop inp needle other code? line)
-    (if (eq? line "")
+    (if (equal? line "")
       (set! line (read-line inp 'concat)))
     (if (not (eof-object? line)) 
       (let ((match (regexp-exec needle line)))
