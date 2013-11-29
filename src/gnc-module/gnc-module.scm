@@ -12,7 +12,7 @@
 (cond-expand
   (guile-2
     (eval-when
-      (compile load eval) 
+      (compile load eval expand)
       (load-extension "libgnc-module" "scm_init_sw_gnc_module_module")))
   (else
     (load-extension "libgnc-module" "scm_init_sw_gnc_module_module")))

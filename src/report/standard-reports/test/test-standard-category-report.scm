@@ -11,7 +11,7 @@
 (cond-expand
    (guile-2
     (define-syntax-rule (begin-for-syntax form ...)
-      (eval-when (load compile eval) (begin form ...))))
+      (eval-when (load compile eval expand) (begin form ...))))
    (else
     (define begin-for-syntax begin)))
 

@@ -35,7 +35,7 @@
 (cond-expand
   (guile-2
     (eval-when
-      (compile load eval) 
+      (compile load eval expand)
       (define gnc:menuname-business-reports (N_ "_Business"))))
   (else
     (define gnc:menuname-business-reports (N_ "_Business"))))

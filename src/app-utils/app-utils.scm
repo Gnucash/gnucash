@@ -26,7 +26,7 @@
 (cond-expand
   (guile-2
     (eval-when
-      (compile load eval) 
+      (compile load eval expand)
       (gnc:module-load "gnucash/engine" 0)))
   (else
     (gnc:module-load "gnucash/engine" 0)))

@@ -11,7 +11,7 @@
 (cond-expand
   (guile-2
     (eval-when
-      (compile load eval) 
+      (compile load eval expand)
       (load-extension "libgnc-core-utils" "scm_init_sw_core_utils_module")))
   (else
     (load-extension "libgnc-core-utils" "scm_init_sw_core_utils_module")))
