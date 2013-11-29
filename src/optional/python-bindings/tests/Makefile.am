@@ -11,17 +11,19 @@ GNC_TEST_DEPS = --gnc-module-dir ${top_builddir}/src/engine \
   --library-dir    ${top_builddir}/src/engine \
   --library-dir    ${top_builddir}/src/backend/xml \
   --library-dir    ${top_builddir}/src/backend/sql \
-  --library-dir    ${top_builddir}/src/app-utils
+  --library-dir    ${top_builddir}/src/app-utils \
+  --library-dir    ${top_builddir}/src/test-core
   
 TESTS_ENVIRONMENT = \
   GNC_BUILDDIR=`\cd ${top_builddir} && pwd` \
   PYTHON=${PYTHON} \
-  PYTHONPATH=$(PYTHONPATH):$(top_builddir)/src/optional/python-bindings \
+  PYTHONPATH=$$PYTHONPATH:$(top_builddir)/src/optional/python-bindings \
   PYTHONPATH=$$PYTHONPATH:$(top_builddir)/src/optional/python-bindings/.libs \
-  PYTHONPATH=$(PYTHONPATH):$(top_srcdir)/src/optional/python-bindings/tests \
+  PYTHONPATH=$$PYTHONPATH:$(top_srcdir)/src/optional/python-bindings/tests \
   PYTHONPATH=$$PYTHONPATH:$(top_builddir)/src/test-core/ \
   PYTHONPATH=$$PYTHONPATH:$(top_srcdir)/src/test-core/ \
   PYTHONPATH=$$PYTHONPATH:$(top_builddir)/src/test-core/.libs \
+  XDG_DATA_DIRS=${datadir}:$$XDG_DATA_DIRS:${GNC_SYSTEM_XDG_DATA_DIRS} \
   $(shell $(top_builddir)/src/gnc-test-env --no-exports ${GNC_TEST_DEPS})
   
 ## We borrow guile's convention and use @-...-@ as the substitution

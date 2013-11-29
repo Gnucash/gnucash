@@ -41,7 +41,7 @@ class BusinessSession( BookSession ):
         self.invoice.AddEntry(entry)
 
         self.invoice.PostToAccount(self.receivable,
-            self.today, self.today, "", True)
+            self.today, self.today, "", True, False)
 
 class TestBusiness( BusinessSession ):
     def test_equal(self):
