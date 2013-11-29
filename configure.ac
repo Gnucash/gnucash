@@ -331,6 +331,7 @@ update to latest  darwin])
     ;;
   darwin*)
     platform=darwin
+    AC_DEFINE(PLATFORM_OSX,1,[Running on OSX, either X11 or Quartz])
     AC_MSG_RESULT($platform)
     AC_MSG_CHECKING(For GDK-Quartz)
     platform=osx
