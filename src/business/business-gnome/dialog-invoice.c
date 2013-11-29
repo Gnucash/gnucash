@@ -142,6 +142,8 @@ struct _invoice_window
     GtkWidget  * total_tax_label;
 
     /* Data Widgets */
+    GtkWidget  * info_label; /*Default in glade is "Invoice Information"*/
+    GtkWidget  * id_label; /* Default in glade is Invoice ID */
     GtkWidget  * type_label;
     GtkWidget  * type_hbox;
     GtkWidget  * type_choice;
@@ -1704,7 +1706,8 @@ gnc_invoice_update_window (InvoiceWindow *iw, GtkWidget *widget)
     }
 
     /* Set the type label */
-    gtk_label_set_text (GTK_LABEL(iw->type_label), iw->is_credit_note ? _("Credit Note") : _("Invoice"));
+    gtk_label_set_text (GTK_LABEL(iw->type_label), iw->is_credit_note ? _("Credit Note") 
+                        : gtk_label_get_text (GTK_LABEL(iw->type_label)));
 
     if (iw->owner_choice)
         gtk_widget_show_all (iw->owner_choice);
@@ -2190,6 +2193,7 @@ gnc_invoice_create_page (InvoiceWindow *iw, gpointer page)
 {
     GncInvoice *invoice;
     GtkBuilder *builder;
+    GtkWidget *id_label;
     GtkWidget *dialog, *hbox;
     GncEntryLedger *entry_ledger = NULL;
     GncOwnerType owner_type;
@@ -2212,7 +2216,9 @@ gnc_invoice_create_page (InvoiceWindow *iw, gpointer page)
     gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, iw);
 
     /* Grab the widgets */
+    iw->id_label = GTK_WIDGET (gtk_builder_get_object (builder, "label3"));
     iw->type_label = GTK_WIDGET (gtk_builder_get_object (builder, "page_type_label"));
+    iw->info_label = GTK_WIDGET (gtk_builder_get_object (builder, "label25"));
     iw->id_entry = GTK_WIDGET (gtk_builder_get_object (builder, "page_id_entry"));
     iw->billing_id_entry = GTK_WIDGET (gtk_builder_get_object (builder, "page_billing_id_entry"));
     iw->terms_menu = GTK_WIDGET (gtk_builder_get_object (builder, "page_terms_menu"));
@@ -2319,6 +2325,22 @@ gnc_invoice_create_page (InvoiceWindow *iw, gpointer page)
         }
         break;
     }
+    /* Default labels are for invoices, change them if they are anything else. */
+    switch (owner_type)
+        {
+        case GNC_OWNER_VENDOR:
+            gtk_label_set_text (GTK_LABEL(iw->info_label),  _("Bill Information"));
+            gtk_label_set_text (GTK_LABEL(iw->type_label),  _("Bill")); 
+            gtk_label_set_text (GTK_LABEL(iw->id_label),  _("Bill ID")); 
+            break;
+        case GNC_OWNER_EMPLOYEE:
+            gtk_label_set_text (GTK_LABEL(iw->info_label),  _("Voucher Information"));
+            gtk_label_set_text (GTK_LABEL(iw->type_label),  _("Voucher"));
+            gtk_label_set_text (GTK_LABEL(iw->id_label),  _("Voucher ID")); 
+        default:
+            break;
+        }
+    
     entry_ledger = gnc_entry_ledger_new (iw->book, ledger_type);
 
     /* Save the ledger... */
@@ -2386,10 +2408,12 @@ gnc_invoice_window_new_invoice (InvoiceDialogType dialog_type, QofBook *bookp,
     InvoiceWindow *iw;
     GtkBuilder *builder;
     GtkWidget *hbox;
+    GtkWidget *invoice_radio;
     GncOwner *billto;
     const GncOwner *start_owner;
     GncBillTerm *owner_terms = NULL;
-
+    GncOwnerType owner_type;
+    
     g_assert (dialog_type == NEW_INVOICE || dialog_type == MOD_INVOICE || dialog_type == DUP_INVOICE);
 
     if (invoice)
@@ -2469,8 +2493,33 @@ gnc_invoice_window_new_invoice (InvoiceDialogType dialog_type, QofBook *bookp,
 
     /* Grab the widgets */
     iw->type_label = GTK_WIDGET (gtk_builder_get_object (builder, "dialog_type_label"));
+    iw->id_label = GTK_WIDGET (gtk_builder_get_object (builder, "label14"));
+    iw->info_label = GTK_WIDGET (gtk_builder_get_object (builder, "label1"));
+    invoice_radio = GTK_WIDGET (gtk_builder_get_object (builder, "dialog_invoice_type"));
+     
     iw->type_hbox = GTK_WIDGET (gtk_builder_get_object (builder, "dialog_type_choice_hbox"));
     iw->type_choice = GTK_WIDGET (gtk_builder_get_object (builder, "dialog_type_invoice"));
+    
+    /* The default GUI lables are for invoices, so change them if it isn't. */
+    owner_type = gncOwnerGetType (&iw->owner);
+    switch(owner_type)
+    {
+        case GNC_OWNER_VENDOR:
+            gtk_label_set_text (GTK_LABEL(iw->info_label),  _("Bill Information"));
+            gtk_label_set_text (GTK_LABEL(iw->type_label),  _("Bill")); 
+            gtk_button_set_label (GTK_BUTTON(invoice_radio),  _("Bill"));
+            gtk_label_set_text (GTK_LABEL(iw->id_label),  _("Bill ID"));
+             
+            break;
+        case GNC_OWNER_EMPLOYEE:
+            gtk_label_set_text (GTK_LABEL(iw->info_label),  _("Voucher Information"));
+            gtk_label_set_text (GTK_LABEL(iw->type_label),  _("Voucher"));
+            gtk_button_set_label (GTK_BUTTON(invoice_radio),  _("Voucher"));
+            gtk_label_set_text (GTK_LABEL(iw->id_label),  _("Voucher ID"));
+        default:
+        break;
+    }
+    
     /* configure the type related widgets based on dialog type and invoice type */
     switch (dialog_type)
     {

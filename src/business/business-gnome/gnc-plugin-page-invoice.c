@@ -90,7 +90,7 @@ static void gnc_plugin_page_invoice_cmd_entryDown (GtkAction *action, GncPluginP
 /************************************************************
  *                          Actions                         *
  ************************************************************/
-
+// FIXME:  The texts are wrong if we have a Bill or Expence Voucher.
 static GtkActionEntry gnc_plugin_page_invoice_actions [] =
 {
     /* Toplevel */
