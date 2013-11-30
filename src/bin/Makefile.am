@@ -86,6 +86,14 @@ endif
 		echo "# and gsettings schemas are found." >> $@.tmp; \
 		echo "XDG_DATA_DIRS=$(datadir);{XDG_DATA_DIRS};${GNC_SYSTEM_XDG_DATA_DIRS}" >> $@.tmp; \
 	fi
+if WITH_PYTHON
+	if [ "${PYTHON_SITE_PKG}" != "${pyexecdir}" ]; \
+	then \
+		echo  >> $@.tmp; \
+		echo "# Define PYTHONPATH for non default installation path." >> $@.tmp; \
+		echo "PYTHONPATH=${pyexecdir};{PYTHONPATH}" >> $@.tmp; \
+	fi
+endif
 	mv $@.tmp $@
 
 CLEANFILES = $(BUILT_SOURCES) ${config_DATA} ${PLATFORM_FILES}
