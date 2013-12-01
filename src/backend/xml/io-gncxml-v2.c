@@ -1126,20 +1126,55 @@ static gboolean
 write_pricedb(FILE *out, QofBook *book, sixtp_gdv2 *gd)
 {
     xmlNodePtr node;
+    xmlNodePtr parent;
+    xmlOutputBufferPtr outbuf;
 
-    node = gnc_pricedb_dom_tree_create(gnc_pricedb_get_db(book));
+    parent = gnc_pricedb_dom_tree_create(gnc_pricedb_get_db(book));
 
-    if (!node)
+    if (!parent)
     {
         return TRUE;
     }
 
-    xmlElemDump(out, NULL, node);
-    xmlFreeNode(node);
-
-    if (ferror(out) || fprintf(out, "\n") < 0)
+    /* Write out the parent pricedb tag then loop to write out each price.
+       We do it this way instead of just calling xmlElemDump so that we can
+       increment the progress bar as we go. */
+       
+    if (fprintf( out, "<%s version=\"%s\">\n", parent->name, 
+                 xmlGetProp(parent, (xmlChar*) "version")) < 0)
         return FALSE;
+        
+    /* We create our own output buffer so we can call xmlNodeDumpOutput to get
+       the indendation correct. */
+    outbuf = xmlOutputBufferCreateFile(out, NULL);
+    if (outbuf == NULL)
+    {
+        xmlFreeNode(parent);
+        return FALSE;
+    }
+       
+    for (node = parent->children; node; node = node->next)
+    {
+        /* Write two spaces since xmlNodeDumpOutput doesn't indent the first line */
+        xmlOutputBufferWrite(outbuf, 2, "  ");
+        xmlNodeDumpOutput(outbuf, NULL, node, 1, 1, NULL);
+        /* It also doesn't terminate the last line */
+        xmlOutputBufferWrite(outbuf, 1, "\n");
+        if (ferror(out)) 
+            break;
+        gd->counter.prices_loaded += 1;
+        run_callback(gd, "prices");
+    }
+    
+    xmlOutputBufferClose(outbuf);
+    
+    if (ferror(out) || fprintf(out, "</%s>\n", parent->name) < 0)
+    {
+        xmlFreeNode(parent);
+        return FALSE;
+    }
 
+    xmlFreeNode(parent);
     return TRUE;
 }
 
