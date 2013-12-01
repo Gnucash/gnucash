@@ -1857,6 +1857,7 @@ xaccTransSetDatePostedGDate (Transaction *trans, GDate date)
         kvp_value_delete(kvp_value);
     }
 
+    /* mark dirty and commit handled by SetDateInternal */
     xaccTransSetDateInternal(trans, &trans->date_posted,
                              gdate_to_timespec(date));
     set_gains_date_dirty (trans);
@@ -2480,13 +2481,13 @@ xaccTransReverse (Transaction *orig)
         xaccSplitSetAmount(s, gnc_numeric_neg(xaccSplitGetAmount(s)));
         xaccSplitSetValue(s, gnc_numeric_neg(xaccSplitGetValue(s)));
         xaccSplitSetReconcile(s, NREC);
-        qof_instance_set_dirty(QOF_INSTANCE(trans));
     });
 
     /* Now update the original with a pointer to the new one */
     kvp_val = kvp_value_new_guid(xaccTransGetGUID(trans));
     kvp_frame_set_slot_nc(orig->inst.kvp_data, TRANS_REVERSED_BY, kvp_val);
 
+    qof_instance_set_dirty(QOF_INSTANCE(trans));
     xaccTransCommitEdit(trans);
     return trans;
 }

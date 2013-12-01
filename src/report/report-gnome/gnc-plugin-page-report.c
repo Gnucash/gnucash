@@ -1816,7 +1816,9 @@ gnc_plugin_page_report_exportpdf_cb( GtkAction *action, GncPluginPageReport *rep
         // As this is an invoice report with some owner, we will try to look up the
         // chosen output directory from the print settings and store it again in the owner kvp.
         GtkPrintSettings *print_settings = gnc_print_get_settings();
-        if (print_settings && gtk_print_settings_has_key(print_settings, GNC_GTK_PRINT_SETTINGS_EXPORT_DIR))
+        if (print_settings &&
+	    gtk_print_settings_has_key(print_settings,
+				       GNC_GTK_PRINT_SETTINGS_EXPORT_DIR))
         {
             const char* dirname = gtk_print_settings_get(print_settings,
                                   GNC_GTK_PRINT_SETTINGS_EXPORT_DIR);
@@ -1824,11 +1826,14 @@ gnc_plugin_page_report_exportpdf_cb( GtkAction *action, GncPluginPageReport *rep
             if (g_file_test(dirname, G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR))
             {
                 QofInstance *qofinstance = qofOwnerGetOwner(owner);
-                //gncOwnerBeginEdit(owner);
-                kvp_frame_set_string(kvp, KVP_OWNER_EXPORT_PDF_DIRNAME, dirname);
                 if (qofinstance)
+		{
+		    gncOwnerBeginEdit(owner);
+		    kvp_frame_set_string(kvp, KVP_OWNER_EXPORT_PDF_DIRNAME,
+					 dirname);
                     qof_instance_set_dirty(qofinstance);
-                // shoot... there is no such thing as: gncOwnerCommitEdit(owner);
+		    qof_commit_edit (qofinstance);
+		}
             }
         }
     }
