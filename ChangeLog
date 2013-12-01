@@ -1,14 +1,218 @@
-2013-11-16 John Ralls 
+2013-11-30 John Ralls 
 
-	* Release 2.5.8 (HEAD, trunk)
+	* Ensure that all KVP changes are properly marked dirty and committed. (HEAD, origin/trunk, origin/HEAD, trunk)
 
-2013-11-16 John Ralls 
+2013-11-30 Mike Evans 
+
+	* Bug 710871 - Python site-packages not found when not installed to default location using --prefix
+
+2013-11-30 John Ralls 
+
+	* Fix windows build for r23452
+
+2013-11-29 Geert Janssens 
+
+	* Improve cond-expand/eval-when usage based on feedback from the guile developers
+
+2013-11-29 Geert Janssens 
+
+	* Bug 707311 - Tax Invoice fails to open when using guile 2 - addendum
+
+2013-11-29 Mike Evans 
+
+	* Bug 715184 - Bill or Invoice; a new Bill gives a new Invoice
+
+2013-11-29 Mike Alexander 
+
+	* Try to make the python bindings tests work with an out of source tree build. This is almost ok, but it uses the schemas from the install tree.
+
+2013-11-29 Mike Alexander 
+
+	* Make the test-dynload test work in the X11 version on MacOSX.
+
+2013-11-28 Christian Stimming 
+
+	* Remove annoying extra question before overwriting transfer fields by template.
+
+2013-11-28 Christian Stimming 
+
+	* Update German translation. Still 790 to go, sigh.
+
+2013-11-28 Christian Stimming 
+
+	* Win32: Update aqbanking versions
+
+2013-11-28 John Ralls 
+
+	* Bug 704506 - Connection loss to mysql after resume from hibernation
+
+2013-11-28 John Ralls 
+
+	* test_gnc_setlocale: Print diagnostic message, replacing comment.
+
+2013-11-28 John Ralls 
+
+	* Stop leaking and re-inserting Split slots
+
+2013-11-26 Geert Janssens 
+
+	* Fix price quotes installation on Windows
+
+2013-11-26 Geert Janssens 
+
+	* Fix line-ending styles on a few windows scripts
+
+2013-11-26 Geert Janssens 
+
+	* Set proper EOL style for windows vbs script
+
+2013-11-26 Geert Janssens 
+
+	* Report the proper minimum version for libgoffice when not found at configure time
+
+2013-11-26 Geert Janssens 
+
+	* Fix several test failures under guile 2 with auto compile enabled
+
+2013-11-26 Geert Janssens 
+
+	* Bug 712299 - Tax Invoice with guile 2 doesn't display currency symbols (second attempt)
+
+2013-11-26 Geert Janssens 
+
+	* Preferences fixes
+
+2013-11-26 Geert Janssens 
+
+	* Guile2: fix two tests in report system
+
+2013-11-26 Mike Alexander 
+
+	* Work around WebKit bug 119003 by flushing events when removing a page from a window. See <https://bugs.webkit.org/show_bug.cgi?id=119003>
+
+2013-11-25 John Ralls 
+
+	* Fix sometime crash in test-xml-pricedb
+
+2013-11-25 John Ralls 
+
+	* Bug 644044 - Lots: SQL backend loses link to Gain/Loss Txn
+
+2013-11-25 John Ralls 
+
+	* TEMPORARY -- REBASE THIS OUT
+
+2013-11-24 John Ralls 
+
+	* Fix make check after r23429 broke it.
+
+2013-11-24 John Ralls 
+
+	* Work around Clang whining about UTF-8
+
+2013-11-24 Christian Stimming 
+
+	* More German translation update. Still approx. 900 strings to go...
+
+2013-11-24 Geert Janssens 
+
+	* When an account or budget is deleted, drop any associated saved state
+
+2013-11-24 Geert Janssens 
+
+	* Register2: improve sort functionality
+
+2013-11-24 Geert Janssens 
+
+	* Bug 710905 - Column withs, visibility, order and sort order not saved and restored
+
+2013-11-22 Mike Alexander 
+
+	* Update the progress bar while loading the price DB from an XML file.
+
+2013-11-22 Cristian Marchi 
+
+	* Update Italian translation.
+
+2013-11-22 Geert Janssens 
+
+	* Suppress a few harmless state file related warnings at startup
+
+2013-11-22 Geert Janssens 
+
+	* Win32: more consistent use of @PACKAGE@ for gnucash package name in installer script
+
+2013-11-22 Geert Janssens 
+
+	* Win32: remove gconf related settings from the installer script
+
+2013-11-21 Christian Stimming 
+
+	* i18n update: Remove some almost-duplicate strings by removing unneeded punctuation.
+
+2013-11-21 Christian Stimming 
+
+	* Update German translation. Slightly more translated now.
+
+2013-11-21 Frank H. Ellenberger 
+
+	* Fix a few doxygen errors and wanrnings.
+
+2013-11-21 Geert Janssens 
+
+	* Fix typos in translatable strings
+
+2013-11-21 Mike Alexander 
+
+	* Don't write the default currency symbol to the output file. Patch by Frédéric Perrin.
+
+2013-11-20 Mike Evans 
+
+	* Make bill & invoice importer and customer importer modules load by default.
+
+2013-11-20 Geert Janssens 
+
+	* Bug 712299 - Tax Invoice with guile 2 doesn't display currency symbols
+
+2013-11-20 Geert Janssens 
+
+	* Small fixes to make the Windows build work again after r23412
+
+2013-11-20 John Ralls 
+
+	* Bug 711289 - time zone handling is inconsistent between 2.4 and 2.5
+
+2013-11-19 Mike Alexander 
+
+	* Decompress zipped XML files ourself instead of letting libxml2 do it. As of version 2.9.1 it has a bug that causes it to fail to decompress certain files. See https://bugzilla.gnome.org/show_bug.cgi?id=712528 for more info.
+
+2013-11-18 Christian Stimming 
+
+	* Cutecash: Adapt to compiler/linker flags that are needed on Ubuntu 13.10
+
+2013-11-18 Christian Stimming 
+
+	* Cutecash: Adapt to recent gconf file changes.
+
+2013-11-17 John Ralls 
+
+	* Bug 336843: Correct Win32 Display function.
+
+2013-11-17 Mike Alexander 
+
+	* Add missing semicolon and only dump transaction when debugging.
+
+2013-11-17 John Ralls 
+
+	* Release 1.5.8
+
+2013-11-17 John Ralls 
 
 	* Adjust Makefile.am for new runTests.py.in
 
 2013-11-16 Mike Alexander 
 
-	* Turn off the scheme compiler's "possibly unbound variable" warnings. In guile 2.0 we get nearly 7500 of them loading the scheme files. (origin/trunk, origin/HEAD)
+	* Turn off the scheme compiler's "possibly unbound variable" warnings. In guile 2.0 we get nearly 7500 of them loading the scheme files.
 
 2013-11-16 Geert Janssens 
 

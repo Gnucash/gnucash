@@ -1,5 +1,39 @@
 Version history:
 ------- -------
+2.5.90 - 1 December 2013
+         This is the tenth release in the UNSTABLE 2.5 series.
+	 It is the first beta release.
+
+	 Barring any surprises, there will be one more beta release in
+	 two weeks, followed by the release of 2.6.0 on 29 December.
+
+	 Changes since the last release have principally been code
+	 cleanup, including KVP storage in the SQL Backend, Python
+	 testing in out-of-source builds, test failures when using
+	 Guile-2, ensure that saved state (especially KVP) is deleted
+	 along with the primary object, use the progress bar when
+	 loading the PriceDB.
+
+	 Translator note: We found it advisable to correct some typos
+	 and to add two translatable strings "Bill Information" and
+	 "Voucher Information".
+
+	 Bug Fixes:
+	 644044 - Lots: SQL backend loses link to Gain/Loss Txn
+ 	 704506 - Connection loss to mysql after resume from hibernation
+	 707311 - Tax Invoice fails to open when using guile 2
+ 	 710871 - Python site-packages not found when not installed to
+	 	 default location using --prefix
+ 	 710905 - Column withs, visibility, order and sort order not saved
+	 	 and restored
+ 	 711289 - time zone handling is inconsistent between 2.4 and 2.5
+	 712299 - Tax Invoice with guile 2 doesn't display currency symbols
+	 715041 - Crash opening a file when a file is already open.
+ 	 715184 - Bill or Invoice; a new Bill gives a new Invoice
+	 719471 - Unused commodities saved to XML file
+
+	 Translations updated: German, Italian
+
  2.5.8 - 17 November 2013
 
          This is the ninth release in the UNSTABLE 2.5 series. This
