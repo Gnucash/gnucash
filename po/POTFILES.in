@@ -327,7 +327,6 @@ src/gnome-utils/gnc-tree-view-owner.c
 src/gnome-utils/gnc-tree-view-price.c
 src/gnome-utils/gnc-tree-view-split-reg.c
 src/gnome-utils/gnc-tree-view-sx-list.c
-src/gnome-utils/gnc-warnings.c
 src/gnome-utils/gnc-window.c
 [type: gettext/gsettings]src/gnome-utils/gschemas/org.gnucash.history.gschema.xml.in.in
 [type: gettext/gsettings]src/gnome-utils/gschemas/org.gnucash.warnings.gschema.xml.in.in
