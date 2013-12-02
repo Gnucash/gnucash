@@ -35,7 +35,7 @@ static gboolean use_compression   = TRUE; // This is also the default in the pre
 static gint file_retention_policy = 1;    // 1 = "days", the default in the prefs backend
 static gint file_retention_days   = 30;   // This is also the default in the prefs backend
 
-PrefsBackend prefsbackend;
+PrefsBackend *prefsbackend = NULL;
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = G_LOG_DOMAIN;
@@ -130,15 +130,16 @@ gulong gnc_prefs_register_cb (const char *group,
                               gpointer func,
                               gpointer user_data)
 {
-    ENTER("group %s; pref_name %s, prefsbackend.register_cb %p", group, pref_name, prefsbackend.register_cb);
-    if (prefsbackend.register_cb)
+    ENTER("group %s; pref_name %s, prefsbackend->register_cb %p", group, pref_name,
+            prefsbackend ? prefsbackend->register_cb : NULL);
+    if (prefsbackend && prefsbackend->register_cb)
     {
         LEAVE("");
-        return (prefsbackend.register_cb) (group, pref_name, func, user_data);
+        return (prefsbackend->register_cb) (group, pref_name, func, user_data);
     }
     else
     {
-        LEAVE("");
+        LEAVE("no backend loaded, or the backend doesn't define register_cb, returning 0");
         return 0;
     }
 }
@@ -149,16 +150,16 @@ void gnc_prefs_remove_cb_by_func (const gchar *group,
                                   gpointer func,
                                   gpointer user_data)
 {
-    if (prefsbackend.remove_cb_by_func)
-        (prefsbackend.remove_cb_by_func) (group, pref_name, func, user_data);
+    if (prefsbackend && prefsbackend->remove_cb_by_func)
+        (prefsbackend->remove_cb_by_func) (group, pref_name, func, user_data);
 }
 
 
 void gnc_prefs_remove_cb_by_id (const gchar *group,
                                 guint id)
 {
-    if (prefsbackend.remove_cb_by_id)
-        (prefsbackend.remove_cb_by_id) (group, id);
+    if (prefsbackend && prefsbackend->remove_cb_by_id)
+        (prefsbackend->remove_cb_by_id) (group, id);
 }
 
 
@@ -166,8 +167,8 @@ guint gnc_prefs_register_group_cb (const gchar *group,
                                    gpointer func,
                                    gpointer user_data)
 {
-    if (prefsbackend.register_group_cb)
-        return (prefsbackend.register_group_cb) (group, func, user_data);
+    if (prefsbackend && prefsbackend->register_group_cb)
+        return (prefsbackend->register_group_cb) (group, func, user_data);
     else
         return 0;
 }
@@ -177,8 +178,8 @@ void gnc_prefs_remove_group_cb_by_func (const gchar *group,
                                         gpointer func,
                                         gpointer user_data)
 {
-    if (prefsbackend.remove_group_cb_by_func)
-        (prefsbackend.remove_group_cb_by_func) (group, func, user_data);
+    if (prefsbackend && prefsbackend->remove_group_cb_by_func)
+        (prefsbackend->remove_group_cb_by_func) (group, func, user_data);
 }
 
 
@@ -187,16 +188,16 @@ void gnc_prefs_bind (const gchar *group,
                      gpointer object,
                      const gchar *property)
 {
-    if (prefsbackend.bind)
-        (prefsbackend.bind) (group, pref_name, object, property);
+    if (prefsbackend && prefsbackend->bind)
+        (prefsbackend->bind) (group, pref_name, object, property);
 }
 
 
 gboolean gnc_prefs_get_bool (const gchar *group,
                              /*@ null @*/ const gchar *pref_name)
 {
-    if (prefsbackend.get_bool)
-        return (prefsbackend.get_bool) (group, pref_name);
+    if (prefsbackend && prefsbackend->get_bool)
+        return (prefsbackend->get_bool) (group, pref_name);
     else
         return FALSE;
 }
@@ -205,8 +206,8 @@ gboolean gnc_prefs_get_bool (const gchar *group,
 gint gnc_prefs_get_int (const gchar *group,
                         const gchar *pref_name)
 {
-    if (prefsbackend.get_int)
-        return (prefsbackend.get_int) (group, pref_name);
+    if (prefsbackend && prefsbackend->get_int)
+        return (prefsbackend->get_int) (group, pref_name);
     else
         return 0;
 }
@@ -226,8 +227,8 @@ gint64 gnc_prefs_get_int64 (const gchar *group,
 gdouble gnc_prefs_get_float (const gchar *group,
                              const gchar *pref_name)
 {
-    if (prefsbackend.get_float)
-        return (prefsbackend.get_float) (group, pref_name);
+    if (prefsbackend && prefsbackend->get_float)
+        return (prefsbackend->get_float) (group, pref_name);
     else
         return 0.0;
 }
@@ -236,8 +237,8 @@ gdouble gnc_prefs_get_float (const gchar *group,
 gchar *gnc_prefs_get_string (const gchar *group,
                              const gchar *pref_name)
 {
-    if (prefsbackend.get_string)
-        return (prefsbackend.get_string) (group, pref_name);
+    if (prefsbackend && prefsbackend->get_string)
+        return (prefsbackend->get_string) (group, pref_name);
     else
         return NULL;
 }
@@ -246,8 +247,8 @@ gchar *gnc_prefs_get_string (const gchar *group,
 gint gnc_prefs_get_enum (const gchar *group,
                          const gchar *pref_name)
 {
-    if (prefsbackend.get_enum)
-        return (prefsbackend.get_enum) (group, pref_name);
+    if (prefsbackend && prefsbackend->get_enum)
+        return (prefsbackend->get_enum) (group, pref_name);
     else
         return 0;
 }
@@ -271,8 +272,8 @@ gnc_prefs_get_coords (const gchar *group,
 GVariant *gnc_prefs_get_value (const gchar *group,
                                const gchar *pref_name)
 {
-    if (prefsbackend.get_value)
-        return (prefsbackend.get_value) (group,pref_name);
+    if (prefsbackend && prefsbackend->get_value)
+        return (prefsbackend->get_value) (group,pref_name);
     else
         return NULL;
 }
@@ -282,8 +283,8 @@ gboolean gnc_prefs_set_bool (const gchar *group,
                              const gchar *pref_name,
                              gboolean value)
 {
-    if (prefsbackend.set_bool)
-        return (prefsbackend.set_bool) (group, pref_name, value);
+    if (prefsbackend && prefsbackend->set_bool)
+        return (prefsbackend->set_bool) (group, pref_name, value);
     else
         return FALSE;
 }
@@ -293,8 +294,8 @@ gboolean gnc_prefs_set_int (const gchar *group,
                             const gchar *pref_name,
                             gint value)
 {
-    if (prefsbackend.set_int)
-        return (prefsbackend.set_int) (group, pref_name, value);
+    if (prefsbackend && prefsbackend->set_int)
+        return (prefsbackend->set_int) (group, pref_name, value);
     else
         return FALSE;
 }
@@ -313,8 +314,8 @@ gboolean gnc_prefs_set_float (const gchar *group,
                               const gchar *pref_name,
                               gdouble value)
 {
-    if (prefsbackend.set_float)
-        return (prefsbackend.set_float) (group, pref_name, value);
+    if (prefsbackend && prefsbackend->set_float)
+        return (prefsbackend->set_float) (group, pref_name, value);
     else
         return FALSE;
 }
@@ -324,8 +325,8 @@ gboolean gnc_prefs_set_string (const gchar *group,
                                const gchar *pref_name,
                                const gchar *value)
 {
-    if (prefsbackend.set_string)
-        return (prefsbackend.set_string) (group, pref_name, value);
+    if (prefsbackend && prefsbackend->set_string)
+        return (prefsbackend->set_string) (group, pref_name, value);
     else
         return FALSE;
 }
@@ -335,8 +336,8 @@ gboolean gnc_prefs_set_enum (const gchar *group,
                              const gchar *pref_name,
                              gint value)
 {
-    if (prefsbackend.set_enum)
-        return (prefsbackend.set_enum) (group, pref_name, value);
+    if (prefsbackend && prefsbackend->set_enum)
+        return (prefsbackend->set_enum) (group, pref_name, value);
     else
         return FALSE;
 }
@@ -355,8 +356,8 @@ gboolean gnc_prefs_set_value (const gchar *group,
                               const gchar *pref_name,
                               GVariant *value)
 {
-    if (prefsbackend.set_value)
-        return (prefsbackend.set_value) (group, pref_name, value);
+    if (prefsbackend && prefsbackend->set_value)
+        return (prefsbackend->set_value) (group, pref_name, value);
     else
         return FALSE;
 }
@@ -365,13 +366,18 @@ gboolean gnc_prefs_set_value (const gchar *group,
 void gnc_prefs_reset (const gchar *group,
                       const gchar *pref_name)
 {
-    if (prefsbackend.reset)
-        (prefsbackend.reset) (group, pref_name);
+    if (prefsbackend && prefsbackend->reset)
+        (prefsbackend->reset) (group, pref_name);
 }
 
 void gnc_prefs_reset_group (const gchar *group)
 {
-    if (prefsbackend.reset_group)
-        (prefsbackend.reset_group) (group);
+    if (prefsbackend && prefsbackend->reset_group)
+        (prefsbackend->reset_group) (group);
+}
+
+gboolean gnc_prefs_is_set_up (void)
+{
+    return (prefsbackend !=NULL);
 }
 

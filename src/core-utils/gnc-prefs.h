@@ -116,6 +116,11 @@ guint gnc_prefs_get_long_version( void );
 
 /** @} */
 
+
+/** Test if preferences backend is set up
+*/
+gboolean gnc_prefs_is_set_up (void);
+
 /** @name Listening for changes
  @{
 */

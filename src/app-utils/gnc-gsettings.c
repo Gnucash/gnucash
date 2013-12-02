@@ -533,28 +533,39 @@ gnc_gsettings_reset_schema (const gchar *schema)
 void gnc_gsettings_load_backend (void)
 {
     ENTER("");
-    prefsbackend.register_cb = gnc_gsettings_register_cb;
-    prefsbackend.remove_cb_by_func = gnc_gsettings_remove_cb_by_func;
-    prefsbackend.remove_cb_by_id = gnc_gsettings_remove_cb_by_id;
-    prefsbackend.register_group_cb = gnc_gsettings_register_any_cb;
-    prefsbackend.remove_group_cb_by_func = gnc_gsettings_remove_any_cb_by_func;
-    prefsbackend.bind = gnc_gsettings_bind;
-    prefsbackend.get_bool = gnc_gsettings_get_bool;
-    prefsbackend.get_int = gnc_gsettings_get_int;
-    prefsbackend.get_float = gnc_gsettings_get_float;
-    prefsbackend.get_string = gnc_gsettings_get_string;
-    prefsbackend.get_enum = gnc_gsettings_get_enum;
-    prefsbackend.get_value = gnc_gsettings_get_value;
-    prefsbackend.set_bool = gnc_gsettings_set_bool;
-    prefsbackend.set_int = gnc_gsettings_set_int;
-    prefsbackend.set_float = gnc_gsettings_set_float;
-    prefsbackend.set_string = gnc_gsettings_set_string;
-    prefsbackend.set_enum = gnc_gsettings_set_enum;
-    prefsbackend.set_value = gnc_gsettings_set_value;
-    prefsbackend.reset = gnc_gsettings_reset;
-    prefsbackend.reset_group = gnc_gsettings_reset_schema;
 
-    LEAVE("Prefsbackend bind = %p", prefsbackend.bind);
+    /* The gsettings backend only works in an installed environment.
+     * When called from the source environment (for testing purposes)
+     * simply return.
+     */
+    if (g_strcmp0 (g_getenv ("GNC_UNINSTALLED"), "1") == 0)
+        return;
+
+    if (!prefsbackend)
+        prefsbackend = g_new0 (PrefsBackend, 1);
+
+    prefsbackend->register_cb = gnc_gsettings_register_cb;
+    prefsbackend->remove_cb_by_func = gnc_gsettings_remove_cb_by_func;
+    prefsbackend->remove_cb_by_id = gnc_gsettings_remove_cb_by_id;
+    prefsbackend->register_group_cb = gnc_gsettings_register_any_cb;
+    prefsbackend->remove_group_cb_by_func = gnc_gsettings_remove_any_cb_by_func;
+    prefsbackend->bind = gnc_gsettings_bind;
+    prefsbackend->get_bool = gnc_gsettings_get_bool;
+    prefsbackend->get_int = gnc_gsettings_get_int;
+    prefsbackend->get_float = gnc_gsettings_get_float;
+    prefsbackend->get_string = gnc_gsettings_get_string;
+    prefsbackend->get_enum = gnc_gsettings_get_enum;
+    prefsbackend->get_value = gnc_gsettings_get_value;
+    prefsbackend->set_bool = gnc_gsettings_set_bool;
+    prefsbackend->set_int = gnc_gsettings_set_int;
+    prefsbackend->set_float = gnc_gsettings_set_float;
+    prefsbackend->set_string = gnc_gsettings_set_string;
+    prefsbackend->set_enum = gnc_gsettings_set_enum;
+    prefsbackend->set_value = gnc_gsettings_set_value;
+    prefsbackend->reset = gnc_gsettings_reset;
+    prefsbackend->reset_group = gnc_gsettings_reset_schema;
+
+    LEAVE("Prefsbackend bind = %p", prefsbackend->bind);
 }
 
 /* Attempt to migrate preferences from gconf files

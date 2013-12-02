@@ -43,8 +43,11 @@ static QofLogModule log_module = G_LOG_DOMAIN;
 static void
 file_retain_changed_cb(gpointer gsettings, gchar *key, gpointer user_data)
 {
-    gint days = (int)gnc_prefs_get_float(GNC_PREFS_GROUP_GENERAL, GNC_PREF_RETAIN_DAYS);
-    gnc_prefs_set_file_retention_days (days);
+    if (gnc_prefs_is_set_up())
+    {
+        gint days = (int)gnc_prefs_get_float(GNC_PREFS_GROUP_GENERAL, GNC_PREF_RETAIN_DAYS);
+        gnc_prefs_set_file_retention_days (days);
+    }
 }
 
 static void
@@ -52,21 +55,27 @@ file_retain_type_changed_cb(gpointer gsettings, gchar *key, gpointer user_data)
 {
     XMLFileRetentionType type = XML_RETAIN_ALL;
 
-    if (gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_RETAIN_TYPE_NEVER))
-        type = XML_RETAIN_NONE;
-    else if (gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_RETAIN_TYPE_DAYS))
-        type = XML_RETAIN_DAYS;
-    else if (!gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_RETAIN_TYPE_FOREVER))
-        PWARN("no file retention policy was set, assuming conservative policy 'forever'");
+    if (gnc_prefs_is_set_up())
+    {
+        if (gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_RETAIN_TYPE_NEVER))
+            type = XML_RETAIN_NONE;
+        else if (gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_RETAIN_TYPE_DAYS))
+            type = XML_RETAIN_DAYS;
+        else if (!gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_RETAIN_TYPE_FOREVER))
+            PWARN("no file retention policy was set, assuming conservative policy 'forever'");
 
-    gnc_prefs_set_file_retention_policy (type);
+        gnc_prefs_set_file_retention_policy (type);
+    }
 }
 
 static void
 file_compression_changed_cb(gpointer gsettings, gchar *key, gpointer user_data)
 {
-    gboolean file_compression = gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL, GNC_PREF_FILE_COMPRESSION);
-    gnc_prefs_set_file_save_compressed (file_compression);
+    if (gnc_prefs_is_set_up())
+    {
+        gboolean file_compression = gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL, GNC_PREF_FILE_COMPRESSION);
+        gnc_prefs_set_file_save_compressed (file_compression);
+    }
 }
 
 
@@ -74,7 +83,9 @@ void gnc_prefs_init (void)
 {
     gnc_gsettings_load_backend();
 
-    /* Initialize the core preferences by reading their values from the loaded backend */
+    /* Initialize the core preferences by reading their values from the loaded backend.
+     * Note: of no backend was loaded, these functions will return sane default values.
+     */
     file_retain_changed_cb (NULL, NULL, NULL);
     file_retain_type_changed_cb (NULL, NULL, NULL);
     file_compression_changed_cb (NULL, NULL, NULL);
@@ -92,6 +103,8 @@ void gnc_prefs_init (void)
     if ( (gnc_prefs_get_file_retention_policy () == XML_RETAIN_DAYS) &&
             (gnc_prefs_get_file_retention_days () == 0 ) )
     {
+        gnc_prefs_set_file_retention_policy (XML_RETAIN_ALL);
+        gnc_prefs_set_file_retention_days (30);
         gnc_prefs_set_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_RETAIN_TYPE_FOREVER, TRUE);
         gnc_prefs_set_float (GNC_PREFS_GROUP_GENERAL, GNC_PREF_RETAIN_DAYS, 30);
         PWARN("retain 0 days policy was set, but this is probably not what the user wanted,\n"
