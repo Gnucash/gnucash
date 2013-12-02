@@ -98,7 +98,7 @@ void gnc_uri_get_components (const gchar *uri,
     *password = NULL;
     *path     = NULL;
 
-    g_return_if_fail( uri != NULL );
+    g_return_if_fail( uri != NULL && strlen (uri) > 0);
 
     splituri = g_strsplit ( uri, "://", 2 );
     if ( splituri[1] == NULL )
