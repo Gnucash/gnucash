@@ -23,7 +23,6 @@ TESTS_ENVIRONMENT = \
   PYTHONPATH=$$PYTHONPATH:$(top_builddir)/src/test-core/ \
   PYTHONPATH=$$PYTHONPATH:$(top_srcdir)/src/test-core/ \
   PYTHONPATH=$$PYTHONPATH:$(top_builddir)/src/test-core/.libs \
-  XDG_DATA_DIRS=${datadir}:$$XDG_DATA_DIRS:${GNC_SYSTEM_XDG_DATA_DIRS} \
   $(shell $(top_builddir)/src/gnc-test-env --no-exports ${GNC_TEST_DEPS})
   
 ## We borrow guile's convention and use @-...-@ as the substitution
