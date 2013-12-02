@@ -366,6 +366,7 @@ gnc_embedded_window_new (const gchar *action_group_name,
 
     /* Determine the full pathname of the ui file */
     ui_fullname = gnc_filepath_locate_ui_file (ui_filename);
+    g_return_val_if_fail (ui_fullname != NULL, NULL);
 
     priv->parent_window = enclosing_win;
 

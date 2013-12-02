@@ -555,7 +555,7 @@ gnc_filepath_locate_file (const gchar *default_path, const gchar *name)
 
     if (!g_file_test (fullname, G_FILE_TEST_IS_REGULAR))
     {
-        g_error ("Could not locate file %s", name);
+        g_warning ("Could not locate file %s", name);
         g_free (fullname);
         return NULL;
     }

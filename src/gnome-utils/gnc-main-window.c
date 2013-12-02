@@ -4300,18 +4300,19 @@ static gchar *
 get_file (const gchar *partial)
 {
     gchar *filename, *text = NULL;
+    gsize length;
 
     filename = gnc_filepath_locate_doc_file(partial);
-    g_file_get_contents(filename, &text, NULL, NULL);
-    g_free(filename);
-
-    /* Anything there? */
-    if (text && *text)
-        return text;
-
-    /* Just a empty string or no string at all. */
-    if (text)
+    if (filename && g_file_get_contents(filename, &text, &length, NULL))
+    {
+	if (length)
+	{
+	    g_free(filename);
+	    return text;
+	}
         g_free(text);
+    }
+    g_free (filename);
     return NULL;
 }
 
