@@ -100,6 +100,23 @@ AM_GLIB_GNU_GETTEXT
 AC_PROG_INSTALL
 PKG_PROG_PKG_CONFIG
 
+dnl clang wants to check file encodings, and we need to tell it not to
+dnl becuase of the unicode currency symbols. But older versions of GCC
+dnl don't like the warning suppression option, so we need to set it only
+dnl with clang.
+
+AC_MSG_CHECKING([if compiling with clang])
+
+AC_COMPILE_IFELSE(
+[AC_LANG_PROGRAM([], [[
+#ifndef __clang__
+       not clang
+#endif
+]])],
+[ac_cv_CLANG=yes], [ac_cv_CLANG=no])
+
+AC_MSG_RESULT([$ac_cv_CLANG])
+AM_CONDITIONAL([CLANG], [test "x$ac_cv_CLANG" = "xyes"])
 
 ###--------------------------------------------------------
 ### Optionally enable gtkmm plugin (requires c++ compiler)
