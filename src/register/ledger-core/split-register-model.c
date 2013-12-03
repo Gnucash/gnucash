@@ -1015,7 +1015,7 @@ gnc_split_register_get_tran_num_help (VirtualLocation virt_loc,
                     "or check number, common to all entry lines (splits)");
             break;
         default:
-            help = _("Enter a transaction reference, "
+            help = _("Enter a transaction reference "
                     "that will be common to all entry lines (splits)");
             break;
         }
