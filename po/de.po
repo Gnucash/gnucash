@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-11-28 11:23+0100\n"
-"PO-Revision-Date: 2013-11-28 12:34+0100\n"
+"POT-Creation-Date: 2013-12-03 11:48+0100\n"
+"PO-Revision-Date: 2013-12-03 12:31+0100\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: GnuCash-de <gnucash-de@gnucash.org>\n"
 "Language: German\n"
@@ -275,7 +275,7 @@ msgstr ""
 #. http://developer.gnome.org/doc/API/2.0/glib/glib-Commandline-option-parser.html
 #: ../src/bin/gnucash-bin.c:127
 msgid "GSETTINGSPREFIX"
-msgstr ""
+msgstr "GSETTINGSPREFIX"
 
 #: ../src/bin/gnucash-bin.c:131
 msgid "Add price quotes to given GnuCash datafile"
@@ -302,7 +302,7 @@ msgstr "REGEXP"
 
 #: ../src/bin/gnucash-bin.c:144
 msgid "[datafile]"
-msgstr ""
+msgstr "[Datei]"
 
 #: ../src/bin/gnucash-bin.c:154
 msgid "This is a development version. It may or may not work."
@@ -349,7 +349,7 @@ msgstr "GnuCash Entwicklungsversion %s"
 #. 2nd %s is the scm type (svn/svk/git/bzr);
 #. 3rd %s is the scm revision number;
 #. 4th %s is the build date
-#: ../src/bin/gnucash-bin.c:548 ../src/gnome-utils/gnc-main-window.c:4369
+#: ../src/bin/gnucash-bin.c:548 ../src/gnome-utils/gnc-main-window.c:4370
 #, c-format
 msgid ""
 "%s\n"
@@ -366,7 +366,7 @@ msgstr "GnuCash %s"
 #. Translators: 1st %s is a fixed message, which is translated independently;
 #. 2nd %s is the scm (svn/svk/git/bzr) revision number;
 #. 3rd %s is the build date
-#: ../src/bin/gnucash-bin.c:559 ../src/gnome-utils/gnc-main-window.c:4376
+#: ../src/bin/gnucash-bin.c:559 ../src/gnome-utils/gnc-main-window.c:4377
 #, c-format
 msgid ""
 "%s\n"
@@ -397,8 +397,8 @@ msgstr ""
 
 #: ../src/business/business-gnome/business-gnome-utils.c:73
 #: ../src/business/business-gnome/business-gnome-utils.c:260
-#: ../src/business/business-gnome/dialog-invoice.c:1316
-#: ../src/business/business-gnome/dialog-invoice.c:1394
+#: ../src/business/business-gnome/dialog-invoice.c:1318
+#: ../src/business/business-gnome/dialog-invoice.c:1396
 #: ../src/gnome-utils/gnc-general-select.c:214
 msgid "Select..."
 msgstr "Auswählen..."
@@ -416,7 +416,10 @@ msgstr "Bearbeiten..."
 #. src/report/business-reports/job-report.scm
 #. src/report/business-reports/owner-report.scm
 #: ../src/business/business-gnome/business-gnome-utils.c:219
-#: ../src/business/business-gnome/dialog-invoice.c:3102
+#: ../src/business/business-gnome/dialog-invoice.c:2333
+#: ../src/business/business-gnome/dialog-invoice.c:2509
+#: ../src/business/business-gnome/dialog-invoice.c:2510
+#: ../src/business/business-gnome/dialog-invoice.c:3151
 #: ../src/engine/gncInvoice.c:954
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:3098
 #: ../src/plugins/bi_import/gtkbuilder/dialog-bi-import-gui.glade.h:3
@@ -428,6 +431,9 @@ msgid "Bill"
 msgstr "Lieferantenrechnung"
 
 #: ../src/business/business-gnome/business-gnome-utils.c:222
+#: ../src/business/business-gnome/dialog-invoice.c:2338
+#: ../src/business/business-gnome/dialog-invoice.c:2516
+#: ../src/business/business-gnome/dialog-invoice.c:2517
 msgid "Voucher"
 msgstr "Auslagenerstattung"
 
@@ -442,8 +448,7 @@ msgstr "Auslagenerstattung"
 #. src/report/business-reports/taxinvoice.scm
 #. src/report/standard-reports/register.scm
 #: ../src/business/business-gnome/business-gnome-utils.c:225
-#: ../src/business/business-gnome/dialog-invoice.c:1707
-#: ../src/business/business-gnome/dialog-invoice.c:3114
+#: ../src/business/business-gnome/dialog-invoice.c:3163
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:383
 #: ../src/business/business-gnome/gtkbuilder/dialog-invoice.glade.h:1
 #: ../src/engine/gncInvoice.c:952
@@ -658,10 +663,10 @@ msgstr "Rechnungen des Kunden"
 
 #: ../src/business/business-gnome/dialog-customer.c:907
 #: ../src/business/business-gnome/dialog-employee.c:712
-#: ../src/business/business-gnome/dialog-invoice.c:2868
-#: ../src/business/business-gnome/dialog-invoice.c:2877
-#: ../src/business/business-gnome/dialog-invoice.c:2888
-#: ../src/business/business-gnome/dialog-invoice.c:3141
+#: ../src/business/business-gnome/dialog-invoice.c:2917
+#: ../src/business/business-gnome/dialog-invoice.c:2926
+#: ../src/business/business-gnome/dialog-invoice.c:2937
+#: ../src/business/business-gnome/dialog-invoice.c:3190
 #: ../src/business/business-gnome/dialog-job.c:549
 #: ../src/business/business-gnome/gtkbuilder/dialog-payment.glade.h:1
 msgid "Process Payment"
@@ -696,8 +701,8 @@ msgstr "Kontaktadresse"
 #. src/report/business-reports/aging.scm
 #. src/report/business-reports/owner-report.scm
 #: ../src/business/business-gnome/dialog-customer.c:932
-#: ../src/business/business-gnome/dialog-invoice.c:3013
-#: ../src/business/business-gnome/dialog-invoice.c:3154
+#: ../src/business/business-gnome/dialog-invoice.c:3062
+#: ../src/business/business-gnome/dialog-invoice.c:3203
 #: ../src/business/business-gnome/dialog-job.c:575
 #: ../src/business/business-gnome/dialog-order.c:885
 #: ../src/business/business-gnome/dialog-vendor.c:735
@@ -765,7 +770,7 @@ msgid "Employee Username"
 msgstr "Mitarbeiter Benutzername"
 
 #: ../src/business/business-gnome/dialog-employee.c:725
-#: ../src/business/business-gnome/dialog-invoice.c:2993
+#: ../src/business/business-gnome/dialog-invoice.c:3042
 msgid "Employee Name"
 msgstr "Mitarbeitername"
 
@@ -795,16 +800,16 @@ msgstr "Mitarbeiter suchen"
 #. * label in the frame and means
 #. * e.g. customer i.e. the company being
 #. * invoiced.
-#: ../src/business/business-gnome/dialog-invoice.c:384
+#: ../src/business/business-gnome/dialog-invoice.c:386
 #: ../src/business/business-gnome/dialog-order.c:181
 msgid "You need to supply Billing Information."
 msgstr "Sie müssen Rechnungsdaten eingeben."
 
-#: ../src/business/business-gnome/dialog-invoice.c:577
+#: ../src/business/business-gnome/dialog-invoice.c:579
 msgid "Are you sure you want to delete the selected entry?"
 msgstr "Sind Sie sicher, dass Sie den gewählten Posten löschen möchten?"
 
-#: ../src/business/business-gnome/dialog-invoice.c:579
+#: ../src/business/business-gnome/dialog-invoice.c:581
 msgid ""
 "This entry is attached to an order and will be deleted from that as well!"
 msgstr ""
@@ -818,10 +823,10 @@ msgstr ""
 #. src/report/business-reports/job-report.scm
 #. src/report/business-reports/owner-report.scm
 #. src/report/business-reports/taxinvoice.eguile.scm
-#: ../src/business/business-gnome/dialog-invoice.c:689
-#: ../src/business/business-gnome/dialog-invoice.c:2922
-#: ../src/business/business-gnome/dialog-invoice.c:2956
-#: ../src/business/business-gnome/dialog-invoice.c:2990
+#: ../src/business/business-gnome/dialog-invoice.c:691
+#: ../src/business/business-gnome/dialog-invoice.c:2971
+#: ../src/business/business-gnome/dialog-invoice.c:3005
+#: ../src/business/business-gnome/dialog-invoice.c:3039
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:2836
 #: ../src/register/ledger-core/split-register-model.c:203
 #: ../intl-scm/guile-strings.c:488 ../intl-scm/guile-strings.c:848
@@ -833,29 +838,29 @@ msgstr "Fälligkeitsdatum"
 
 #. src/report/business-reports/aging.scm
 #. src/report/business-reports/owner-report.scm
-#: ../src/business/business-gnome/dialog-invoice.c:690
+#: ../src/business/business-gnome/dialog-invoice.c:692
 #: ../intl-scm/guile-strings.c:492 ../intl-scm/guile-strings.c:1584
 msgid "Post Date"
 msgstr "Buchungsdatum"
 
-#: ../src/business/business-gnome/dialog-invoice.c:691
+#: ../src/business/business-gnome/dialog-invoice.c:693
 msgid "Post to Account"
 msgstr "Buchen nach Konto"
 
-#: ../src/business/business-gnome/dialog-invoice.c:692
+#: ../src/business/business-gnome/dialog-invoice.c:694
 msgid "Accumulate Splits?"
 msgstr "Buchungen kumulieren?"
 
-#: ../src/business/business-gnome/dialog-invoice.c:784
+#: ../src/business/business-gnome/dialog-invoice.c:786
 msgid "The Invoice must have at least one Entry."
 msgstr "Die Rechnung muss mindestens einen Posten enthalten."
 
-#: ../src/business/business-gnome/dialog-invoice.c:805
+#: ../src/business/business-gnome/dialog-invoice.c:807
 msgid "Do you really want to post the invoice?"
 msgstr "Wollen Sie diese Rechnung wirklich buchen?"
 
 #. Fill in the conversion prices with feedback from the user
-#: ../src/business/business-gnome/dialog-invoice.c:820
+#: ../src/business/business-gnome/dialog-invoice.c:822
 msgid ""
 "One or more of the entries are for accounts different from the invoice/bill "
 "currency. You will be asked a conversion rate for each."
@@ -864,30 +869,30 @@ msgstr ""
 "als die Rechnungswährung. Für jeden der Einträge wird daher nach einem "
 "Umrechnungskurs gefragt."
 
-#: ../src/business/business-gnome/dialog-invoice.c:957
+#: ../src/business/business-gnome/dialog-invoice.c:959
 msgid "The post action was canceled because not all exchange rates were given."
 msgstr ""
 "Diese Buchung wurde abgebrochen, da nicht alle benötigten Wechselkurse "
 "vorliegen."
 
-#: ../src/business/business-gnome/dialog-invoice.c:1226
+#: ../src/business/business-gnome/dialog-invoice.c:1228
 #: ../src/gnome/window-reconcile2.c:1142 ../src/gnome/window-reconcile.c:1142
 msgid "Total:"
 msgstr "Summe:"
 
-#: ../src/business/business-gnome/dialog-invoice.c:1232
+#: ../src/business/business-gnome/dialog-invoice.c:1234
 msgid "Subtotal:"
 msgstr "Zwischensumme:"
 
-#: ../src/business/business-gnome/dialog-invoice.c:1233
+#: ../src/business/business-gnome/dialog-invoice.c:1235
 msgid "Tax:"
 msgstr "Steuern:"
 
-#: ../src/business/business-gnome/dialog-invoice.c:1237
+#: ../src/business/business-gnome/dialog-invoice.c:1239
 msgid "Total Cash:"
 msgstr "Betrag Bar:"
 
-#: ../src/business/business-gnome/dialog-invoice.c:1238
+#: ../src/business/business-gnome/dialog-invoice.c:1240
 msgid "Total Charge:"
 msgstr "Gesamt Belastung:"
 
@@ -895,7 +900,7 @@ msgstr "Gesamt Belastung:"
 #. src/report/business-reports/easy-invoice.scm
 #. src/report/business-reports/fancy-invoice.scm
 #. src/report/business-reports/invoice.scm
-#: ../src/business/business-gnome/dialog-invoice.c:1707
+#: ../src/business/business-gnome/dialog-invoice.c:1709
 #: ../src/business/business-gnome/dialog-payment.c:908
 #: ../src/business/business-gnome/gtkbuilder/dialog-invoice.glade.h:22
 #: ../src/engine/gncInvoice.c:960 ../intl-scm/guile-strings.c:938
@@ -906,120 +911,144 @@ msgstr "Gesamt Belastung:"
 msgid "Credit Note"
 msgstr "Gutschrift"
 
-#: ../src/business/business-gnome/dialog-invoice.c:1894
-#: ../src/business/business-gnome/dialog-invoice.c:1913
-#: ../src/business/business-gnome/dialog-invoice.c:1932
+#: ../src/business/business-gnome/dialog-invoice.c:1897
+#: ../src/business/business-gnome/dialog-invoice.c:1916
+#: ../src/business/business-gnome/dialog-invoice.c:1935
 msgid "New Credit Note"
 msgstr "Neue Gutschrift"
 
-#: ../src/business/business-gnome/dialog-invoice.c:1895
+#: ../src/business/business-gnome/dialog-invoice.c:1898
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:275
 #: ../src/business/business-gnome/gtkbuilder/dialog-invoice.glade.h:21
 #: ../src/gnome-search/dialog-search.c:1037
 msgid "New Invoice"
 msgstr "Neue Rechnung"
 
-#: ../src/business/business-gnome/dialog-invoice.c:1900
-#: ../src/business/business-gnome/dialog-invoice.c:1919
-#: ../src/business/business-gnome/dialog-invoice.c:1938
+#: ../src/business/business-gnome/dialog-invoice.c:1903
+#: ../src/business/business-gnome/dialog-invoice.c:1922
+#: ../src/business/business-gnome/dialog-invoice.c:1941
 msgid "Edit Credit Note"
 msgstr "Gutschrift bearbeiten"
 
-#: ../src/business/business-gnome/dialog-invoice.c:1901
+#: ../src/business/business-gnome/dialog-invoice.c:1904
 msgid "Edit Invoice"
 msgstr "Rechnung bearbeiten"
 
-#: ../src/business/business-gnome/dialog-invoice.c:1904
-#: ../src/business/business-gnome/dialog-invoice.c:1923
-#: ../src/business/business-gnome/dialog-invoice.c:1942
+#: ../src/business/business-gnome/dialog-invoice.c:1907
+#: ../src/business/business-gnome/dialog-invoice.c:1926
+#: ../src/business/business-gnome/dialog-invoice.c:1945
 msgid "View Credit Note"
 msgstr "Gutschrift anzeigen"
 
-#: ../src/business/business-gnome/dialog-invoice.c:1905
+#: ../src/business/business-gnome/dialog-invoice.c:1908
 msgid "View Invoice"
 msgstr "Rechnung anzeigen"
 
-#: ../src/business/business-gnome/dialog-invoice.c:1914
+#: ../src/business/business-gnome/dialog-invoice.c:1917
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:274
 #: ../src/gnome-search/dialog-search.c:1021
 msgid "New Bill"
 msgstr "Neue Lieferantenrechnung"
 
-#: ../src/business/business-gnome/dialog-invoice.c:1920
+#: ../src/business/business-gnome/dialog-invoice.c:1923
 msgid "Edit Bill"
 msgstr "Lieferantenrechnung bearbeiten"
 
-#: ../src/business/business-gnome/dialog-invoice.c:1924
+#: ../src/business/business-gnome/dialog-invoice.c:1927
 msgid "View Bill"
 msgstr "Lieferantenrechnung anzeigen"
 
-#: ../src/business/business-gnome/dialog-invoice.c:1933
+#: ../src/business/business-gnome/dialog-invoice.c:1936
 #: ../src/gnome-search/dialog-search.c:1033
 msgid "New Expense Voucher"
 msgstr "Neue Auslagenerstattung"
 
-#: ../src/business/business-gnome/dialog-invoice.c:1939
+#: ../src/business/business-gnome/dialog-invoice.c:1942
 msgid "Edit Expense Voucher"
 msgstr "Auslagenerstattung bearbeiten"
 
-#: ../src/business/business-gnome/dialog-invoice.c:1943
+#: ../src/business/business-gnome/dialog-invoice.c:1946
 msgid "View Expense Voucher"
 msgstr "Auslagenerstattung anzeigen"
 
-#: ../src/business/business-gnome/dialog-invoice.c:2766
+#: ../src/business/business-gnome/dialog-invoice.c:2332
+#: ../src/business/business-gnome/dialog-invoice.c:2508
+#, fuzzy
+msgid "Bill Information"
+msgstr "Rechnungs-Informationen"
+
+#: ../src/business/business-gnome/dialog-invoice.c:2334
+#: ../src/business/business-gnome/dialog-invoice.c:2511
+#: ../src/business/business-gnome/dialog-invoice.c:3012
+msgid "Bill ID"
+msgstr "Rechnungsnummer des Lieferanten"
+
+#: ../src/business/business-gnome/dialog-invoice.c:2337
+#: ../src/business/business-gnome/dialog-invoice.c:2515
+#, fuzzy
+msgid "Voucher Information"
+msgstr "Rechnungs-Informationen"
+
+#: ../src/business/business-gnome/dialog-invoice.c:2339
+#: ../src/business/business-gnome/dialog-invoice.c:2518
+#: ../src/business/business-gnome/dialog-invoice.c:3046
+msgid "Voucher ID"
+msgstr "Nummer Auslagenerstattung"
+
+#: ../src/business/business-gnome/dialog-invoice.c:2815
 msgid "Date of duplicated entries"
 msgstr "Datum der kopierten Einträge"
 
-#: ../src/business/business-gnome/dialog-invoice.c:2801
+#: ../src/business/business-gnome/dialog-invoice.c:2850
 #, fuzzy
 msgid "Do you really want to post these invoices?"
 msgstr "Wollen Sie diese Rechnung wirklich buchen?"
 
-#: ../src/business/business-gnome/dialog-invoice.c:2867
+#: ../src/business/business-gnome/dialog-invoice.c:2916
 msgid "View/Edit Invoice"
 msgstr "Rechnung anzeigen/bearbeiten"
 
-#: ../src/business/business-gnome/dialog-invoice.c:2869
-#: ../src/business/business-gnome/dialog-invoice.c:2878
-#: ../src/business/business-gnome/dialog-invoice.c:2889
+#: ../src/business/business-gnome/dialog-invoice.c:2918
+#: ../src/business/business-gnome/dialog-invoice.c:2927
+#: ../src/business/business-gnome/dialog-invoice.c:2938
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:261
 #: ../src/gnome/gnc-plugin-page-register2.c:480
 #: ../src/gnome/gnc-plugin-page-register.c:482
 msgid "Duplicate"
 msgstr "Duplizieren"
 
-#: ../src/business/business-gnome/dialog-invoice.c:2870
-#: ../src/business/business-gnome/dialog-invoice.c:2879
-#: ../src/business/business-gnome/dialog-invoice.c:2890
+#: ../src/business/business-gnome/dialog-invoice.c:2919
+#: ../src/business/business-gnome/dialog-invoice.c:2928
+#: ../src/business/business-gnome/dialog-invoice.c:2939
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:265
 msgid "Post"
 msgstr "Buchen"
 
-#: ../src/business/business-gnome/dialog-invoice.c:2871
-#: ../src/business/business-gnome/dialog-invoice.c:2880
-#: ../src/business/business-gnome/dialog-invoice.c:2891
+#: ../src/business/business-gnome/dialog-invoice.c:2920
+#: ../src/business/business-gnome/dialog-invoice.c:2929
+#: ../src/business/business-gnome/dialog-invoice.c:2940
 msgid "Printable Report"
 msgstr "Druckbarer Bericht"
 
-#: ../src/business/business-gnome/dialog-invoice.c:2876
-#: ../src/business/business-gnome/dialog-invoice.c:3140
+#: ../src/business/business-gnome/dialog-invoice.c:2925
+#: ../src/business/business-gnome/dialog-invoice.c:3189
 msgid "View/Edit Bill"
 msgstr "Rechnung anzeigen/bearbeiten"
 
 #. Translators: The terms 'Voucher' and 'Expense Voucher' are used
 #. interchangeably in gnucash and mean the same thing.
-#: ../src/business/business-gnome/dialog-invoice.c:2887
+#: ../src/business/business-gnome/dialog-invoice.c:2936
 msgid "View/Edit Voucher"
 msgstr "Auslagenerstattung anzeigen/bearbeiten"
 
-#: ../src/business/business-gnome/dialog-invoice.c:2901
+#: ../src/business/business-gnome/dialog-invoice.c:2950
 msgid "Invoice Owner"
 msgstr "Rechnungsmandant"
 
 #. src/report/business-reports/easy-invoice.scm
 #. src/report/business-reports/fancy-invoice.scm
 #. src/report/business-reports/invoice.scm
-#: ../src/business/business-gnome/dialog-invoice.c:2904
+#: ../src/business/business-gnome/dialog-invoice.c:2953
 #: ../intl-scm/guile-strings.c:890 ../intl-scm/guile-strings.c:1072
 #: ../intl-scm/guile-strings.c:1282
 msgid "Invoice Notes"
@@ -1028,10 +1057,10 @@ msgstr "Bemerkungen Rechnung"
 #. src/report/business-reports/easy-invoice.scm
 #. src/report/business-reports/fancy-invoice.scm
 #. src/report/business-reports/invoice.scm
-#: ../src/business/business-gnome/dialog-invoice.c:2907
-#: ../src/business/business-gnome/dialog-invoice.c:2941
-#: ../src/business/business-gnome/dialog-invoice.c:2975
-#: ../src/business/business-gnome/dialog-invoice.c:3004
+#: ../src/business/business-gnome/dialog-invoice.c:2956
+#: ../src/business/business-gnome/dialog-invoice.c:2990
+#: ../src/business/business-gnome/dialog-invoice.c:3024
+#: ../src/business/business-gnome/dialog-invoice.c:3053
 #: ../src/business/business-gnome/dialog-job.c:562
 #: ../src/business/business-gnome/dialog-job.c:573
 #: ../src/business/business-gnome/dialog-order.c:883
@@ -1042,15 +1071,15 @@ msgstr "Bemerkungen Rechnung"
 msgid "Billing ID"
 msgstr "Auftragsnummer"
 
-#: ../src/business/business-gnome/dialog-invoice.c:2910
-#: ../src/business/business-gnome/dialog-invoice.c:2944
-#: ../src/business/business-gnome/dialog-invoice.c:2978
+#: ../src/business/business-gnome/dialog-invoice.c:2959
+#: ../src/business/business-gnome/dialog-invoice.c:2993
+#: ../src/business/business-gnome/dialog-invoice.c:3027
 msgid "Is Paid?"
 msgstr "Bezahlt?"
 
-#: ../src/business/business-gnome/dialog-invoice.c:2913
-#: ../src/business/business-gnome/dialog-invoice.c:2947
-#: ../src/business/business-gnome/dialog-invoice.c:2981
+#: ../src/business/business-gnome/dialog-invoice.c:2962
+#: ../src/business/business-gnome/dialog-invoice.c:2996
+#: ../src/business/business-gnome/dialog-invoice.c:3030
 #: ../src/business/business-gnome/gtkbuilder/dialog-invoice.glade.h:5
 #: ../src/gnome/dialog-find-transactions2.c:122
 #: ../src/gnome/dialog-find-transactions.c:121
@@ -1058,61 +1087,53 @@ msgstr "Bezahlt?"
 msgid "Date Posted"
 msgstr "Buchungsdatum"
 
-#: ../src/business/business-gnome/dialog-invoice.c:2916
-#: ../src/business/business-gnome/dialog-invoice.c:2950
-#: ../src/business/business-gnome/dialog-invoice.c:2984
+#: ../src/business/business-gnome/dialog-invoice.c:2965
+#: ../src/business/business-gnome/dialog-invoice.c:2999
+#: ../src/business/business-gnome/dialog-invoice.c:3033
 msgid "Is Posted?"
 msgstr "Ist Gebucht?"
 
-#: ../src/business/business-gnome/dialog-invoice.c:2919
-#: ../src/business/business-gnome/dialog-invoice.c:2953
-#: ../src/business/business-gnome/dialog-invoice.c:2987
+#: ../src/business/business-gnome/dialog-invoice.c:2968
+#: ../src/business/business-gnome/dialog-invoice.c:3002
+#: ../src/business/business-gnome/dialog-invoice.c:3036
 #: ../src/business/business-gnome/dialog-order.c:872
 #: ../src/business/business-gnome/gtkbuilder/dialog-invoice.glade.h:4
 #: ../src/business/business-gnome/gtkbuilder/dialog-order.glade.h:3
 msgid "Date Opened"
 msgstr "Eröffnungsdatum"
 
-#: ../src/business/business-gnome/dialog-invoice.c:2925
-#: ../src/business/business-gnome/dialog-invoice.c:2959
+#: ../src/business/business-gnome/dialog-invoice.c:2974
+#: ../src/business/business-gnome/dialog-invoice.c:3008
 msgid "Company Name "
 msgstr "Firmenname "
 
-#: ../src/business/business-gnome/dialog-invoice.c:2929
+#: ../src/business/business-gnome/dialog-invoice.c:2978
 #: ../src/business/business-gnome/gtkbuilder/dialog-invoice.glade.h:3
 msgid "Invoice ID"
 msgstr "Rechnungsnummer"
 
-#: ../src/business/business-gnome/dialog-invoice.c:2935
+#: ../src/business/business-gnome/dialog-invoice.c:2984
 msgid "Bill Owner"
 msgstr "Rechnungsmandant"
 
-#: ../src/business/business-gnome/dialog-invoice.c:2938
+#: ../src/business/business-gnome/dialog-invoice.c:2987
 msgid "Bill Notes"
 msgstr "Bemerkungen Rechnung"
 
-#: ../src/business/business-gnome/dialog-invoice.c:2963
-msgid "Bill ID"
-msgstr "Rechnungsnummer des Lieferanten"
-
-#: ../src/business/business-gnome/dialog-invoice.c:2969
+#: ../src/business/business-gnome/dialog-invoice.c:3018
 msgid "Voucher Owner"
 msgstr "Auslagenerstattung Mandant"
 
-#: ../src/business/business-gnome/dialog-invoice.c:2972
+#: ../src/business/business-gnome/dialog-invoice.c:3021
 msgid "Voucher Notes"
 msgstr "Bemerkungen Auslagenerstattung"
-
-#: ../src/business/business-gnome/dialog-invoice.c:2997
-msgid "Voucher ID"
-msgstr "Nummer Auslagenerstattung"
 
 #. src/report/business-reports/customer-summary.scm
 #. src/report/business-reports/job-report.scm
 #. src/report/business-reports/owner-report.scm
 #. src/report/standard-reports/account-summary.scm
 #. src/report/standard-reports/sx-summary.scm
-#: ../src/business/business-gnome/dialog-invoice.c:3006
+#: ../src/business/business-gnome/dialog-invoice.c:3055
 #: ../src/business/business-gnome/gtkbuilder/dialog-invoice.glade.h:2
 #: ../src/business/business-gnome/gtkbuilder/dialog-payment.glade.h:7
 #: ../src/gnome/dialog-lot-viewer.c:824 ../src/gnome/dialog-tax-info.c:1189
@@ -1128,23 +1149,23 @@ msgstr "Nummer Auslagenerstattung"
 msgid "Type"
 msgstr "Art"
 
-#: ../src/business/business-gnome/dialog-invoice.c:3008
+#: ../src/business/business-gnome/dialog-invoice.c:3057
 #: ../src/register/ledger-core/split-register-model.c:272
 msgid "Paid"
 msgstr "Bezahlt"
 
-#: ../src/business/business-gnome/dialog-invoice.c:3011
+#: ../src/business/business-gnome/dialog-invoice.c:3060
 msgid "Posted"
 msgstr "Gebucht"
 
 #. src/report/business-reports/easy-invoice.scm
-#: ../src/business/business-gnome/dialog-invoice.c:3016
-#: ../src/business/business-gnome/dialog-invoice.c:3156
+#: ../src/business/business-gnome/dialog-invoice.c:3065
+#: ../src/business/business-gnome/dialog-invoice.c:3205
 #: ../intl-scm/guile-strings.c:948
 msgid "Due"
 msgstr "Fällig"
 
-#: ../src/business/business-gnome/dialog-invoice.c:3018
+#: ../src/business/business-gnome/dialog-invoice.c:3067
 #: ../src/business/business-gnome/dialog-order.c:890
 #: ../src/gnome/dialog-lot-viewer.c:830
 msgid "Opened"
@@ -1154,7 +1175,7 @@ msgstr "Geöffnet"
 #. src/report/standard-reports/general-ledger.scm
 #. src/report/standard-reports/register.scm
 #. src/report/standard-reports/transaction.scm
-#: ../src/business/business-gnome/dialog-invoice.c:3020
+#: ../src/business/business-gnome/dialog-invoice.c:3069
 #: ../src/business/business-gnome/dialog-order.c:892
 #: ../src/business/business-gnome/gtkbuilder/dialog-payment.glade.h:19
 #: ../src/gnome/dialog-lot-viewer.c:907 ../src/gnome/reconcile-view.c:250
@@ -1168,30 +1189,30 @@ msgstr "Geöffnet"
 msgid "Num"
 msgstr "Nr"
 
-#: ../src/business/business-gnome/dialog-invoice.c:3101
+#: ../src/business/business-gnome/dialog-invoice.c:3150
 msgid "Find Bill"
 msgstr "Lieferantenrechnung suchen"
 
-#: ../src/business/business-gnome/dialog-invoice.c:3107
+#: ../src/business/business-gnome/dialog-invoice.c:3156
 msgid "Find Expense Voucher"
 msgstr "Auslagenerstattung suchen"
 
 #. src/report/business-reports/easy-invoice.scm
 #. src/report/business-reports/fancy-invoice.scm
 #. src/report/business-reports/invoice.scm
-#: ../src/business/business-gnome/dialog-invoice.c:3108
+#: ../src/business/business-gnome/dialog-invoice.c:3157
 #: ../intl-scm/guile-strings.c:936 ../intl-scm/guile-strings.c:1146
 #: ../intl-scm/guile-strings.c:1328
 msgid "Expense Voucher"
 msgstr "Auslagenerstattung"
 
-#: ../src/business/business-gnome/dialog-invoice.c:3113
+#: ../src/business/business-gnome/dialog-invoice.c:3162
 msgid "Find Invoice"
 msgstr "Rechnung suchen"
 
 #. Translators: This abbreviation is the column heading for
 #. the condition "Is this invoice a Credit Note?"
-#: ../src/business/business-gnome/dialog-invoice.c:3150
+#: ../src/business/business-gnome/dialog-invoice.c:3199
 msgid "CN?"
 msgstr "G?"
 
@@ -1203,7 +1224,7 @@ msgstr "G?"
 #. src/report/standard-reports/general-ledger.scm
 #. src/report/standard-reports/register.scm
 #. src/report/standard-reports/transaction.scm
-#: ../src/business/business-gnome/dialog-invoice.c:3152
+#: ../src/business/business-gnome/dialog-invoice.c:3201
 #: ../src/gnome/dialog-lot-viewer.c:919 ../src/gnome/reconcile-view.c:243
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:2992
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:3004
@@ -1225,14 +1246,14 @@ msgstr "Betrag"
 
 #. Translators: %d is the number of bills due. This is a
 #. ngettext(3) message.
-#: ../src/business/business-gnome/dialog-invoice.c:3206
+#: ../src/business/business-gnome/dialog-invoice.c:3255
 #, c-format
 msgid "The following bill is due:"
 msgid_plural "The following %d bills are due:"
 msgstr[0] "Die folgende Rechnung ist fällig:"
 msgstr[1] "Die folgenden %d Rechnungen sind fällig:"
 
-#: ../src/business/business-gnome/dialog-invoice.c:3211
+#: ../src/business/business-gnome/dialog-invoice.c:3260
 msgid "Due Bills Reminder"
 msgstr "Erinnerung an fällige Rechnungen"
 
@@ -4039,12 +4060,12 @@ msgid ""
 "Split"
 msgstr "Mehrteilig"
 
-#: ../src/engine/Transaction.c:2399
+#: ../src/engine/Transaction.c:2400
 msgid "Voided transaction"
 msgstr "Ungültige Buchung"
 
 #. Dirtying taken care of by SetReadOnly
-#: ../src/engine/Transaction.c:2410
+#: ../src/engine/Transaction.c:2411
 msgid "Transaction Voided"
 msgstr "Buchung ungültig gemacht"
 
@@ -5654,7 +5675,7 @@ msgstr "Buchung nach _oben"
 msgid ""
 "Move the current transaction one row upwards. Only available if the date and "
 "number of both rows are identical and the register window is sorted by date."
-msgstr ""
+msgstr "Gewählte Buchung eine Zeile nach oben verschieben. Nur möglich, wenn das Datum und die Buchungsnummer beider Zeilen identisch sind und das Kontofenster nach Datum sortiert ist."
 
 #: ../src/gnome/gnc-plugin-page-register2.c:311
 msgid "Move Transaction Do_wn"
@@ -5665,7 +5686,7 @@ msgid ""
 "Move the current transaction one row downwards. Only available if the date "
 "and number of both rows are identical and the register window is sorted by "
 "date."
-msgstr ""
+msgstr "Gewählte Buchung eine Zeile nach unten verschieben. Nur möglich, wenn das Datum und die Buchungsnummer beider Zeilen identisch sind und das Kontofenster nach Datum sortiert ist."
 
 #: ../src/gnome/gnc-plugin-page-register2.c:323
 #: ../src/gnome-utils/gnc-main-window.c:333
@@ -5775,14 +5796,12 @@ msgstr ""
 "anzeigen"
 
 #: ../src/gnome/gnc-plugin-page-register2.c:409
-#, fuzzy
 msgid "Show _Extra Dates"
-msgstr "Wechselkurse anzeigen"
+msgstr "Zusätzliches _Datum anzeigen"
 
 #: ../src/gnome/gnc-plugin-page-register2.c:410
-#, fuzzy
 msgid "Show entered and reconciled dates"
-msgstr "Sortiere nach Abgleich-Datum"
+msgstr "Eingabedatum und Abgleichen-Datum anzeigen"
 
 #: ../src/gnome/gnc-plugin-page-register2.c:415
 #: ../src/gnome/gnc-plugin-page-register.c:417
@@ -6014,33 +6033,28 @@ msgid "Filter %s by..."
 msgstr "%s filtern nach..."
 
 #: ../src/gnome/gnc-plugin-page-register.c:196
-#, fuzzy
 msgid "_Associate File with Transaction"
-msgstr "Neue Buchungen _automatisch erstellen"
+msgstr "_Datei zuordnen"
 
 #: ../src/gnome/gnc-plugin-page-register.c:197
-#, fuzzy
 msgid "_Associate Location with Transaction"
-msgstr "Neue Buchungen _automatisch erstellen"
+msgstr "_Internetadresse zuordnen"
 
 #: ../src/gnome/gnc-plugin-page-register.c:198
 msgid "_Open Associated File/Location"
-msgstr ""
+msgstr "Zugeordnete Datei/Internetadresse _öffnen"
 
 #: ../src/gnome/gnc-plugin-page-register.c:209
-#, fuzzy
 msgid "Associate a file with the current transaction"
-msgstr "Aktuellen Buchungssatz löschen"
+msgstr "Eine Datei zur aktuellen Buchung zuordnen"
 
 #: ../src/gnome/gnc-plugin-page-register.c:210
-#, fuzzy
 msgid "Associate a location with the current transaction"
-msgstr "Eine Kopie des aktuellen Buchungssatzes erstellen"
+msgstr "Eine Internetadresse zur aktuellen Buchung zuordnen"
 
 #: ../src/gnome/gnc-plugin-page-register.c:211
-#, fuzzy
 msgid "Open the associated file or location with the current transaction"
-msgstr "Terminierte Buchung erstellen mit aktuellem Buchungssatz als Vorlage"
+msgstr "Zugeordnete Datei oder Internetadresse öffnen, die zur aktuellen Buchung zugeordnet ist"
 
 #: ../src/gnome/gnc-plugin-page-register.c:283
 msgid "Remo_ve Other Splits"
@@ -6053,15 +6067,15 @@ msgstr "_Sortieren nach..."
 
 #: ../src/gnome/gnc-plugin-page-register.c:488
 msgid "Associate File"
-msgstr ""
+msgstr "Datei zuordnen"
 
 #: ../src/gnome/gnc-plugin-page-register.c:489
 msgid "Associate Location"
-msgstr ""
+msgstr "Internetadresse zuordnen"
 
 #: ../src/gnome/gnc-plugin-page-register.c:490
 msgid "Open File/Location"
-msgstr ""
+msgstr "Datei/Adresse öffnen"
 
 #: ../src/gnome/gnc-plugin-page-register.c:684
 msgid ""
@@ -6103,12 +6117,10 @@ msgid "Create a new scheduled transaction"
 msgstr "Neue terminierte Buchung erstellen"
 
 #: ../src/gnome/gnc-plugin-page-sx-list.c:138
-#, fuzzy
 msgid "_New 2"
 msgstr "_Neu"
 
 #: ../src/gnome/gnc-plugin-page-sx-list.c:139
-#, fuzzy
 msgid "Create a new scheduled transaction 2"
 msgstr "Neue terminierte Buchung erstellen"
 
@@ -6222,16 +6234,15 @@ msgid "Current Value:"
 msgstr "Aktueller Wert:"
 
 #: ../src/gnome/gnc-split-reg2.c:1019
-#, fuzzy
 msgid "Account Payable / Receivable Register"
-msgstr "Forderungen Konten"
+msgstr "Kontofenster Offene Forderungen / Verbindlichkeiten"
 
 #: ../src/gnome/gnc-split-reg2.c:1021
 msgid ""
 "The register displayed is for Account Payable or Account Receivable. "
 "Changing the entries may cause harm, please use the business options to "
 "change the entries."
-msgstr ""
+msgstr "Dieses Kontofenster ist für die Kontoart Offene Forderungen / Verbindlichkeiten. Die Einträge sollten nicht von Hand geändert werden, sondern nur über die Menüpunkte im »Geschäftlich«-Menü."
 
 #: ../src/gnome/gnc-split-reg2.c:1068 ../src/gnome/gnc-split-reg.c:2165
 msgid "This account register is read-only."
@@ -6423,11 +6434,11 @@ msgstr ""
 
 #: ../src/gnome/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in.in.h:10
 msgid "Units in which the custom coordinates are expressed"
-msgstr ""
+msgstr "Maßeinheiten für die benutzerdefinierten Koordinaten"
 
 #: ../src/gnome/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in.in.h:11
 msgid "Units in which the custom coordinates are expressed (inches, mm, ...)."
-msgstr ""
+msgstr "Maßeinheiten für die benutzerdefinierten Koordinaten (Inch, Millimeter etc.)"
 
 #: ../src/gnome/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in.in.h:12
 msgid "Position of payee name"
@@ -7541,7 +7552,9 @@ msgstr "Anzahl Buchstaben für Auto-Vervollständigen."
 msgid ""
 "This sets the number of characters before auto complete starts for "
 "description, notes and memo fields."
-msgstr "Setzt die Anzahl der Buchstaben, bis das Auto-Vervollständigen Vorschläge machen wird. Dies gilt für die Felder Beschreibung, Buchungstext und Notizen."
+msgstr ""
+"Setzt die Anzahl der Buchstaben, bis das Auto-Vervollständigen Vorschläge "
+"machen wird. Dies gilt für die Felder Beschreibung, Buchungstext und Notizen."
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:105
 msgid "Create a new window for each new report"
@@ -7836,7 +7849,7 @@ msgstr "Buch abschließen"
 
 #: ../src/gnome/gtkbuilder/assistant-acct-period.glade.h:14
 msgid "Account Period Finish"
-msgstr ""
+msgstr "Abschluss der Buchführungsperiode"
 
 #: ../src/gnome/gtkbuilder/assistant-acct-period.glade.h:15
 msgid "Press 'Close' to Exit."
@@ -8071,7 +8084,7 @@ msgstr "Darlehensdetails"
 msgid ""
 "\n"
 "Do you utilise an escrow account, if so an account must be specified..."
-msgstr ""
+msgstr "\nNutzen Sie ein Treuhandkonto? Wenn ja, muss ein Konto gewählt werden..."
 
 #: ../src/gnome/gtkbuilder/assistant-loan.glade.h:20
 msgid "... utilize an escrow account for payments?"
@@ -8090,7 +8103,7 @@ msgstr "Darlehensrechner"
 msgid ""
 "\n"
 "All accounts must have valid entries to continue.\n"
-msgstr ""
+msgstr "\nAlle Konten müssen gültige Werte haben, um fortzufahren.\n"
 
 #: ../src/gnome/gtkbuilder/assistant-loan.glade.h:26
 msgid "Payment From:"
@@ -8123,7 +8136,7 @@ msgstr "Tilgung"
 msgid ""
 "\n"
 "All enabled option pages must contain valid entries to continue.\n"
-msgstr ""
+msgstr "\nAlle aktivierten Seiten müssen gültige Angaben enthalten, um fortzufahren.\n"
 
 #: ../src/gnome/gtkbuilder/assistant-loan.glade.h:35
 msgid "Payment To (Escrow):"
@@ -8180,7 +8193,7 @@ msgstr "Steuern"
 msgid ""
 "\n"
 "Review the details below and if correct press Apply to create the schedule."
-msgstr ""
+msgstr "\nPrüfen Sie die Details unten und klicken Sie »Anwenden«, um die Terminierten Buchungen zu erstellen."
 
 #: ../src/gnome/gtkbuilder/assistant-loan.glade.h:48
 msgid "Range: "
@@ -9293,7 +9306,7 @@ msgstr "Budget Perioden:"
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register2.glade.h:1
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:1
 msgid "Duplicate Transaction"
-msgstr "Doppelte Buchung"
+msgstr "Buchung duplizieren"
 
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register2.glade.h:2
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:2
@@ -10538,15 +10551,23 @@ msgid_plural ""
 "\n"
 "Should your file be saved automatically?"
 msgstr[0] ""
-"Ihre Datei muss auf der Festplatte gespeichert werden, um Ihre Änderungen zu sichern. GnuCash kann das Speichern automatisch jede Minute auslösen, so als ob Sie jedesmal den Knopf »Speichern« klicken würden.\n"
+"Ihre Datei muss auf der Festplatte gespeichert werden, um Ihre Änderungen zu "
+"sichern. GnuCash kann das Speichern automatisch jede Minute auslösen, so als "
+"ob Sie jedesmal den Knopf »Speichern« klicken würden.\n"
 "\n"
-"Wenn Sie das Zeitintervall ändern möchten, können Sie dies tun unter Bearbeiten -> Einstellungen -> Allgemein -> Zeitintervall automatisch Speichern, oder diese Automatik dort auch abschalten.\n"
+"Wenn Sie das Zeitintervall ändern möchten, können Sie dies tun unter "
+"Bearbeiten -> Einstellungen -> Allgemein -> Zeitintervall automatisch "
+"Speichern, oder diese Automatik dort auch abschalten.\n"
 "\n"
 "Soll Ihre Datei automatisch gespeichert werden?"
 msgstr[1] ""
-"Ihre Datei muss auf der Festplatte gespeichert werden, um Ihre Änderungen zu sichern. GnuCash kann das Speichern automatisch alle %d Minuten auslösen, so als ob Sie jedesmal den Knopf »Speichern« klicken würden.\n"
+"Ihre Datei muss auf der Festplatte gespeichert werden, um Ihre Änderungen zu "
+"sichern. GnuCash kann das Speichern automatisch alle %d Minuten auslösen, so "
+"als ob Sie jedesmal den Knopf »Speichern« klicken würden.\n"
 "\n"
-"Wenn Sie das Zeitintervall ändern möchten, können Sie dies tun unter Bearbeiten -> Einstellungen -> Allgemein -> Zeitintervall automatisch Speichern, oder diese Automatik dort auch abschalten.\n"
+"Wenn Sie das Zeitintervall ändern möchten, können Sie dies tun unter "
+"Bearbeiten -> Einstellungen -> Allgemein -> Zeitintervall automatisch "
+"Speichern, oder diese Automatik dort auch abschalten.\n"
 "\n"
 "Soll Ihre Datei automatisch gespeichert werden?"
 
@@ -11406,16 +11427,16 @@ msgstr ""
 msgid "Book Options"
 msgstr "Buch-Optionen"
 
-#: ../src/gnome-utils/gnc-main-window.c:4352
+#: ../src/gnome-utils/gnc-main-window.c:4353
 msgid "The GnuCash personal finance manager. The GNU way to manage your money!"
 msgstr ""
 "GnuCash: Ihr privater Finanzmanager. Die freie Lösung zur Finanzverwaltung."
 
-#: ../src/gnome-utils/gnc-main-window.c:4354
+#: ../src/gnome-utils/gnc-main-window.c:4355
 msgid "© 1997-2013 Contributors"
 msgstr "© 1997-2013 Mitarbeiter"
 
-#: ../src/gnome-utils/gnc-main-window.c:4388
+#: ../src/gnome-utils/gnc-main-window.c:4389
 msgid "translator_credits"
 msgstr "Christian Stimming <christian@cstimming.de> et. al."
 
@@ -11618,7 +11639,7 @@ msgstr "Neuer Buchungsteil - Information"
 msgid ""
 "This is the split anchoring this transaction to the register. You can not "
 "duplicate it from this register window."
-msgstr ""
+msgstr "Dieser Buchungsteil ist die Zuordnung dieser Buchung in dieses Kontofenster. Die Buchung kann daher nicht aus diesem Kontofenster dupliziert werden."
 
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:1359
 #: ../src/gnome-utils/gnc-tree-util-split-reg.c:501
@@ -11966,13 +11987,18 @@ msgid ""
 "The entered date of the new transaction is older than the \"Read-Only "
 "Threshold\" set for this book. This setting can be changed in File -> "
 "Properties -> Accounts."
-msgstr "Das Datum der neuen Buchung liegt vor der »Nur-Lesen Schwelle«, die für dieses Buch eingestellt ist. Diese Einstellung kann geändert werden unter Datei -> Eigenschaften -> Konten."
+msgstr ""
+"Das Datum der neuen Buchung liegt vor der »Nur-Lesen Schwelle«, die für "
+"dieses Buch eingestellt ist. Diese Einstellung kann geändert werden unter "
+"Datei -> Eigenschaften -> Konten."
 
 #: ../src/gnome-utils/gnc-tree-util-split-reg.c:886
 msgid ""
 "Exchange Rate Canceled, using existing rate or default 1 to 1 rate if this "
 "is a new transaction."
-msgstr "Wechselkurs-Eingabe abgebrochen. Es wird der vorhandene Kurs oder die Voreinstellung 1,00 bei neuen Buchungen verwendet."
+msgstr ""
+"Wechselkurs-Eingabe abgebrochen. Es wird der vorhandene Kurs oder die "
+"Voreinstellung 1,00 bei neuen Buchungen verwendet."
 
 #: ../src/gnome-utils/gnc-tree-util-split-reg.c:1148
 #: ../src/register/ledger-core/split-register.c:2049
@@ -13263,7 +13289,10 @@ msgstr "_Zeitzone"
 msgid ""
 "Enter a display symbol. This can safely be left blank, in which case the "
 "ticker symbol or the currency ISO code will be used."
-msgstr "Geben Sie ein Anzeigesymbol ein, falls gewünscht. Diese Angabe kann problemlos weggelassen werden. In diesem Fall wird das systemweite Währungssymbol oder das ISO-Kürzel der Währung verwendet."
+msgstr ""
+"Geben Sie ein Anzeigesymbol ein, falls gewünscht. Diese Angabe kann "
+"problemlos weggelassen werden. In diesem Fall wird das systemweite "
+"Währungssymbol oder das ISO-Kürzel der Währung verwendet."
 
 #: ../src/gnome-utils/gtkbuilder/dialog-commodity.glade.h:25
 msgid "_Display symbol"
@@ -13898,11 +13927,14 @@ msgstr "Kalender-Knöpfe anzeigen"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:157
 msgid "_Move the selection to the blank split on expand"
-msgstr "Mit dem Cursor zum neuen Buchungsteil springen, wenn eine Buchung ausgeklappt wird"
+msgstr ""
+"Mit dem Cursor zum neuen Buchungsteil springen, wenn eine Buchung "
+"ausgeklappt wird"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:159
 msgid "_Show entered and reconciled dates on selection"
-msgstr "Datum der Eingabe und des Abgleichens bei ausgewählter Buchung anzeigen"
+msgstr ""
+"Datum der Eingabe und des Abgleichens bei ausgewählter Buchung anzeigen"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:161
 msgid "Register Defaults"
@@ -14714,7 +14746,9 @@ msgstr "Buchungsteile zum abgleichen werden gesucht..."
 
 #: ../src/gnome/window-autoclear.c:241
 msgid "Cannot uniquely clear splits. Found multiple possibilities."
-msgstr "Automatisches Abgleichen kann nicht die Buchungsteile nicht eindeutig bestimmen."
+msgstr ""
+"Automatisches Abgleichen kann nicht die Buchungsteile nicht eindeutig "
+"bestimmen."
 
 #: ../src/gnome/window-autoclear.c:248
 msgid "The selected amount cannot be cleared."
@@ -15096,7 +15130,10 @@ msgid ""
 "Double Click on the line of an Online Banking account name if you want to "
 "match it to a GnuCash account. Click \"Forward\" when all desired accounts "
 "are matching."
-msgstr "Doppel-Klicken Sie auf die Zeile eines Online-Banking-Kontos, um diesem HBCI-Konto ein GnuCash-Konto zuzuordnen. Klicken Sie »Vor«, wenn alle gewünschten Konten zugeordnet sind."
+msgstr ""
+"Doppel-Klicken Sie auf die Zeile eines Online-Banking-Kontos, um diesem HBCI-"
+"Konto ein GnuCash-Konto zuzuordnen. Klicken Sie »Vor«, wenn alle gewünschten "
+"Konten zugeordnet sind."
 
 #: ../src/import-export/aqbanking/assistant-ab-initial.glade.h:23
 msgid "Match Online accounts with GnuCash accounts"
@@ -15328,9 +15365,9 @@ msgstr "Jetzt ausführen"
 
 #. Conversion was erroneous, so don't use the string
 #: ../src/import-export/aqbanking/dialog-ab-trans.c:280
-#: ../src/import-export/aqbanking/dialog-ab-trans.c:999
-#: ../src/import-export/aqbanking/dialog-ab-trans.c:1002
-#: ../src/import-export/aqbanking/dialog-ab-trans.c:1008
+#: ../src/import-export/aqbanking/dialog-ab-trans.c:979
+#: ../src/import-export/aqbanking/dialog-ab-trans.c:982
+#: ../src/import-export/aqbanking/dialog-ab-trans.c:988
 msgid "(unknown)"
 msgstr "(unbekannt)"
 
@@ -15394,7 +15431,10 @@ msgid ""
 "The internal check of the destination account number '%s' at the specified "
 "bank with bank code '%s' failed. This means the account number might contain "
 "an error."
-msgstr "Die interne Überprüfung der angegebenen Kontonummer »%s« bei der Bank mit der Bankleitzahl »%s« ergab, dass die Kontonummer wahrscheinlich einen Fehler enthält."
+msgstr ""
+"Die interne Überprüfung der angegebenen Kontonummer »%s« bei der Bank mit "
+"der Bankleitzahl »%s« ergab, dass die Kontonummer wahrscheinlich einen "
+"Fehler enthält."
 
 #: ../src/import-export/aqbanking/dialog-ab-trans.c:549
 #, c-format
@@ -15410,50 +15450,55 @@ msgstr ""
 msgid ""
 "You did not enter a recipient name. A recipient name is required for an "
 "online transfer.\n"
-msgstr "Sie haben keinen Empfängernamen eingegeben. Für einen Überweisungsauftrag ist die Eingabe eines Empfängernamens erforderlich.\n"
+msgstr ""
+"Sie haben keinen Empfängernamen eingegeben. Für einen Überweisungsauftrag "
+"ist die Eingabe eines Empfängernamens erforderlich.\n"
 
 #: ../src/import-export/aqbanking/dialog-ab-trans.c:584
 msgid ""
 "You did not enter a recipient account. A recipient account is required for "
 "an online transfer.\n"
-msgstr "Sie haben kein Empfängerkonto eingegeben. Für einen Überweisungsauftrag ist die Eingabe eines Empfängerkontos erforderlich.\n"
+msgstr ""
+"Sie haben kein Empfängerkonto eingegeben. Für einen Überweisungsauftrag ist "
+"die Eingabe eines Empfängerkontos erforderlich.\n"
 
 #: ../src/import-export/aqbanking/dialog-ab-trans.c:600
 msgid ""
 "You did not enter a recipient bank. A recipient bank is required for an "
 "online transfer.\n"
-msgstr "Sie haben keine Bank des Empfängers eingegeben. Für einen Überweisungsauftrag ist die Eingabe einer Bank erforderlich.\n"
+msgstr ""
+"Sie haben keine Bank des Empfängers eingegeben. Für einen "
+"Überweisungsauftrag ist die Eingabe einer Bank erforderlich.\n"
 
 #: ../src/import-export/aqbanking/dialog-ab-trans.c:618
 msgid ""
 "The amount is zero or the amount field could not be interpreted correctly. "
 "You might have mixed up decimal point and comma, compared to your locale "
 "settings. This does not result in a valid online transfer job."
-msgstr "Der Betrag ist Null oder der eingegebene Betrag konnte nicht korrekt interpretiert werden. Eventuell haben Sie Komma und Dezimalpunkt verwechselt. Wenn die länderspezifischen Einstellung auf »Deutschland« (locale de, LANG=de_DE) gestellt sind, müssen Sie ein Komma eingeben, andernfalls einen Punkt. Dies ergibt keinen zulässigen Zahlungsauftrag."
+msgstr ""
+"Der Betrag ist Null oder der eingegebene Betrag konnte nicht korrekt "
+"interpretiert werden. Eventuell haben Sie Komma und Dezimalpunkt "
+"verwechselt. Wenn die länderspezifischen Einstellung auf "
+"»Deutschland« (locale de, LANG=de_DE) gestellt sind, müssen Sie ein Komma "
+"eingeben, andernfalls einen Punkt. Dies ergibt keinen zulässigen "
+"Zahlungsauftrag."
 
 #: ../src/import-export/aqbanking/dialog-ab-trans.c:635
 msgid ""
 "You did not enter any transaction purpose. A purpose is required for an "
 "online transfer.\n"
-msgstr "Sie haben keinen Verwendungszweck eingegeben. Für einen Überweisungsauftrag ist die Eingabe eines Verwendungszweck erforderlich.\n"
-
-#: ../src/import-export/aqbanking/dialog-ab-trans.c:935
-#, c-format
-msgid ""
-"Do you really want to overwrite your changes with the contents of the "
-"template \"%s\"?"
 msgstr ""
-"Wollen Sie wirklich Ihre Änderungen verwerfen und durch den Inhalt der "
-"Vorlage »%s« überschreiben?"
+"Sie haben keinen Verwendungszweck eingegeben. Für einen Überweisungsauftrag "
+"ist die Eingabe eines Verwendungszweck erforderlich.\n"
 
-#: ../src/import-export/aqbanking/dialog-ab-trans.c:1098
+#: ../src/import-export/aqbanking/dialog-ab-trans.c:1078
 msgid ""
 "A template with the given name already exists. Please enter another name."
 msgstr ""
 "Eine Vorlage mit diesem Namen existiert bereits. Bitte geben Sie einen "
 "anderen Namen ein."
 
-#: ../src/import-export/aqbanking/dialog-ab-trans.c:1233
+#: ../src/import-export/aqbanking/dialog-ab-trans.c:1213
 #, c-format
 msgid "Do you really want to delete the template with the name \"%s\"?"
 msgstr ""
@@ -15570,9 +15615,12 @@ msgid ""
 "\n"
 "Do you want to enter the job again?"
 msgstr ""
-"Das AqBanking-Modul hat einen Fehler während der Vorbereitung des Auftrags gefunden. Es ist nicht möglich, den Auftrag auszuführen.\n"
+"Das AqBanking-Modul hat einen Fehler während der Vorbereitung des Auftrags "
+"gefunden. Es ist nicht möglich, den Auftrag auszuführen.\n"
 "\n"
-"Wahrscheinlich wird dieser Geschäftsvorfall von Ihrer Bank leider nicht unterstützt oder ist für Ihren FinTS/HBCI-Zugang nicht freigeschaltet. Weitere Fehlermeldungen könnten im Log-Fenster sichtbar sein.\n"
+"Wahrscheinlich wird dieser Geschäftsvorfall von Ihrer Bank leider nicht "
+"unterstützt oder ist für Ihren FinTS/HBCI-Zugang nicht freigeschaltet. "
+"Weitere Fehlermeldungen könnten im Log-Fenster sichtbar sein.\n"
 "\n"
 "Wollen Sie den Auftrag erneut eingeben?"
 
@@ -15950,6 +15998,9 @@ msgid ""
 "You can also go back and verify your selections by clicking on 'Back' or "
 "'Cancel' to Abort Export.\n"
 msgstr ""
+"Der Kontenrahmen wird in die Datei »%s« exportiert, wenn Sie »Anwenden« klicken.\n"
+"\n"
+"Sie können auch zurückgehen und Ihre Auswahl überprüfen, indem Sie »Zurück« klicken. Mit »Abbrechen« können Sie den Export abbrechen.\n"
 
 #. Translators: %s is the file name string and %u the number of accounts.
 #: ../src/import-export/csv-export/assistant-csv-export.c:86
@@ -15961,6 +16012,9 @@ msgid ""
 "You can also go back and verify your selections by clicking on 'Back' or "
 "'Cancel' to Abort Export.\n"
 msgstr ""
+"Wenn Sie »Anwenden« klicken, werden die Buchungen in die Datei »%s« exportiert. Es sind %u Konten zum Export ausgewählt.\n"
+"\n"
+"Sie können auch zurückgehen und Ihre Auswahl überprüfen, indem Sie »Zurück« klicken. Mit »Abbrechen« können Sie den Export abbrechen.\n"
 
 #: ../src/import-export/csv-export/assistant-csv-export.c:92
 msgid ""
@@ -15969,6 +16023,9 @@ msgid ""
 "Select the settings you require for the file and then click 'Forward' to "
 "proceed or 'Cancel' to Abort Export.\n"
 msgstr ""
+"Mit diesem Assistent können Sie Ihren Kontenrahmen (d.h. die Kontenstruktur) in eine Datei exportieren.\n"
+"\n"
+"Wählen Sie die Einstellungen für die Datei und klicken Sie »Weiter«. Mit »Abbrechen« können Sie den Export abbrechen.\n"
 
 #: ../src/import-export/csv-export/assistant-csv-export.c:97
 msgid ""
@@ -15977,6 +16034,9 @@ msgid ""
 "Select the settings you require for the file and then click 'Forward' to "
 "proceed or 'Cancel' to Abort Export.\n"
 msgstr ""
+"Mit diesem Assistent können Sie Ihre Buchungen in eine Datei exportieren.\n"
+"\n"
+"Wählen Sie die Einstellungen für die Datei und klicken Sie »Weiter«. Mit »Abbrechen« können Sie den Export abbrechen.\n"
 
 #: ../src/import-export/csv-export/assistant-csv-export.c:750
 msgid ""
@@ -15984,11 +16044,11 @@ msgid ""
 "permissions or unable to access folder. Check the trace file for further "
 "logging!\n"
 "You may need to enable debugging.\n"
-msgstr ""
+msgstr "Der Export konnte nicht durchgeführt werden. Dies könnte daran liegen, dass bei der gewählten Ausgabeidatei kein Platz mehr auf dem Laufwerk verfügbar war oder keine Schreibrechte bestehen. Bitte schauen Sie in die Log-Datei, wenn Sie weitere Angaben überprüfen möchten.\n"
 
 #: ../src/import-export/csv-export/assistant-csv-export.c:754
 msgid "File exported successfully!\n"
-msgstr ""
+msgstr "Datei erfolgreich exportiert.\n"
 
 #: ../src/import-export/csv-export/assistant-csv-export.glade.h:1
 msgid "CSV Export Assistant"
@@ -15998,7 +16058,7 @@ msgstr "CSV-Export Assistent"
 msgid ""
 "\n"
 "Select the type of Export required and the separator that will be used.\n"
-msgstr ""
+msgstr "\nWählen Sie die Art des Exports und das Trennzeichen.\n"
 
 #: ../src/import-export/csv-export/assistant-csv-export.glade.h:5
 msgid "Quotes"
@@ -16029,9 +16089,8 @@ msgid "Separators"
 msgstr "Trennzeichen"
 
 #: ../src/import-export/csv-export/assistant-csv-export.glade.h:12
-#, fuzzy
 msgid "Choose Export Settings"
-msgstr "Wählen Sie das Export-Format"
+msgstr "Export-Einstellungen"
 
 #: ../src/import-export/csv-export/assistant-csv-export.glade.h:13
 msgid "Select the accounts to be exported and date range if required."
@@ -18348,18 +18407,14 @@ msgid ""
 msgstr ""
 
 #: ../src/register/ledger-core/split-register-model.c:1221
-#, fuzzy
 msgid "Enter an action type, or choose one from the list"
-msgstr "Geben Sie den Buchungstyp ein, oder wählen Sie einen aus der Liste"
+msgstr "Geben Sie die Aktion ein, oder wählen Sie eine aus der Liste"
 
 #: ../src/register/ledger-core/split-register-model.c:1222
-#, fuzzy
 msgid ""
 "Enter a reference number, such as the next check number, or choose an action "
 "type from the list"
 msgstr ""
-"Geben Sie das Einnahmen-/Ausgaben-Konto für den Posten ein oder wählen Sie "
-"aus der Liste"
 
 #: ../src/register/ledger-core/split-register-model.c:1485
 msgid ""
@@ -18401,37 +18456,29 @@ msgid "You must select a report to delete."
 msgstr "Sie müssen einen Bericht auswählen, den Sie löschen wollen."
 
 #: ../src/report/report-gnome/dialog-custom-report.c:432
-#, fuzzy
 msgid "Unable to change report name."
-msgstr "Datenbank konnte nicht gespeichert werden."
+msgstr "Berichtsname konnte nicht geändert werden."
 
 #: ../src/report/report-gnome/dialog-custom-report.c:444
-#, fuzzy
 msgid ""
 "A custom report with this name already exists, please choose another name."
-msgstr ""
-"Eine Vorlage mit diesem Namen existiert bereits. Bitte geben Sie einen "
-"anderen Namen ein."
+msgstr "Ein konfigurierter Bericht mit diesem Namen existiert bereits. Bitte geben Sie einen anderen Namen ein."
 
 #: ../src/report/report-gnome/dialog-custom-report.c:468
-#, fuzzy
 msgid "Run preconfigured report"
-msgstr "Abgeglichen (als Bericht)"
+msgstr "Konfigurierten Bericht öffnen"
 
 #: ../src/report/report-gnome/dialog-custom-report.c:470
-#, fuzzy
 msgid "Edit configuration name"
-msgstr "GnuCash Konfigurationsdaten aktualisieren"
+msgstr "Name der Konfiguration ändern"
 
 #: ../src/report/report-gnome/dialog-custom-report.c:472
-#, fuzzy
 msgid "Delete preconfigured report"
-msgstr "Ausgewählten Bericht löschen"
+msgstr "Konfigurierten Bericht löschen"
 
 #: ../src/report/report-gnome/dialog-custom-report.glade.h:1
-#, fuzzy
 msgid "Preconfigured reports"
-msgstr "Abgeglichen (als Bericht)"
+msgstr "Konfigurierte Berichte"
 
 #: ../src/report/report-gnome/dialog-custom-report.glade.h:2
 msgid "Exit the custom report dialog"
@@ -18726,9 +18773,8 @@ msgid "St_yle Sheets"
 msgstr "Stil_vorlagen"
 
 #: ../src/report/stylesheets/gnc-plugin-stylesheets.c:52
-#, fuzzy
 msgid "Edit report style sheets"
-msgstr "Stilvorlagen für Berichte bearbeiten."
+msgstr "Stilvorlagen für Berichte bearbeiten"
 
 #: ../src/gnome/gnucash.desktop.in.in.h:1
 msgid "GnuCash"
@@ -19029,52 +19075,43 @@ msgstr ""
 
 #. src/app-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:86
-#, fuzzy
 msgid "The name of your business."
-msgstr "Der Name Ihres Geschäfts"
+msgstr "Der Name Ihres Geschäfts."
 
 #. src/app-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:88
-#, fuzzy
 msgid "The address of your business."
-msgstr "Die Anschrift Ihres Geschäfts"
+msgstr "Die Postanschrift Ihres Geschäfts."
 
 #. src/app-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:90
-#, fuzzy
 msgid "The contact person to print on invoices."
-msgstr ""
-"Die/der Ansprechpartner/in, die auf Ihren Rechnungen angegeben werden soll"
+msgstr "Die/der Ansprechpartner/in, die auf Ihren Rechnungen angegeben werden soll."
 
 #. src/app-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:92
-#, fuzzy
 msgid "The phone number of your business."
-msgstr "Die Telefonnummer Ihrer Firma"
+msgstr "Die Telefonnummer Ihres Geschäfts."
 
 #. src/app-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:94
-#, fuzzy
 msgid "The fax number of your business."
-msgstr "Die Faxnummer Ihrer Firma"
+msgstr "Die Faxnummer Ihres Geschäfts."
 
 #. src/app-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:96
-#, fuzzy
 msgid "The email address of your business."
-msgstr "Die E-Mail-Adresse Ihrer Firma"
+msgstr "Die E-Mail-Adresse Ihres Geschäfts."
 
 #. src/app-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:98
-#, fuzzy
 msgid "The URL address of your website."
-msgstr "Die Adresse (URL) Ihrer Webseite"
+msgstr "Die Adresse (URL) Ihrer Webseite."
 
 #. src/app-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:100
-#, fuzzy
 msgid "The ID for your company (eg 'Tax-ID: 00-000000)."
-msgstr "Eine Identifikationsnummer ihrer Firma (z.B. USt-IdNr.: DE123456789)"
+msgstr "Eine Identifikationsnummer ihres Geschäfts (z.B. USt-IdNr.: DE123456789)."
 
 #. src/app-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:102
@@ -19106,9 +19143,8 @@ msgstr "Ausführliches Datumsformat"
 
 #. src/app-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:112
-#, fuzzy
 msgid "The default date format used for fancy printed dates."
-msgstr "Voreinstellung für Datumsformat im ausführlichen Datumsdruck"
+msgstr "Voreinstellung für Datumsformat im ausführlichen Datumsdruck."
 
 #. src/app-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:114
@@ -20198,11 +20234,10 @@ msgstr "Anzeigeformat für negative Beträge"
 
 #. src/report/business-reports/balsheet-eg.scm
 #: ../intl-scm/guile-strings.c:564
-#, fuzzy
 msgid ""
 "The formatting to use for negative amounts: with a leading sign, or "
 "enclosing brackets."
-msgstr "Format für negative Beträge: mit Vorzeichen oder eingeklammert"
+msgstr "Format für negative Beträge: mit Vorzeichen oder eingeklammert."
 
 #. src/report/business-reports/balsheet-eg.scm
 #: ../intl-scm/guile-strings.c:566
@@ -20211,7 +20246,6 @@ msgstr "Schrifttypenfamilie"
 
 #. src/report/business-reports/balsheet-eg.scm
 #: ../intl-scm/guile-strings.c:568
-#, fuzzy
 msgid "Font definition in CSS font-family format."
 msgstr "Schrifttypendefinition im CSS-font-family-Format"
 
@@ -20222,7 +20256,6 @@ msgstr "Schriftgröße"
 
 #. src/report/business-reports/balsheet-eg.scm
 #: ../intl-scm/guile-strings.c:572
-#, fuzzy
 msgid "Font size in CSS font-size format (e.g. \"medium\" or \"10pt\")."
 msgstr "Schriftgröße im CSS-font-size-Format, z.B. \"medium\" oder \"10pt\""
 
@@ -21373,9 +21406,8 @@ msgstr "Forderungen Konto"
 
 #. src/report/business-reports/receivables.scm
 #: ../intl-scm/guile-strings.c:1616
-#, fuzzy
 msgid "The receivables account you wish to examine."
-msgstr "Folgendes Forderungen-Konto wollen Sie untersuchen"
+msgstr "Das Forderungen-Konto, welches Sie untersuchen wollen."
 
 #. src/report/business-reports/receivables.scm
 #: ../intl-scm/guile-strings.c:1618
@@ -21432,122 +21464,108 @@ msgstr "Überschriften 2"
 
 #. src/report/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:1660
-#, fuzzy
 msgid "Elements"
-msgstr "Investments"
+msgstr "Elemente"
 
 #. src/report/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:1662
-#, fuzzy
 msgid "column: Date"
-msgstr "Fälligkeitsdatum"
+msgstr "Spalte: Datum"
 
 #. src/report/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:1664
-#, fuzzy
 msgid "column: Tax Rate"
-msgstr "Steuersatz"
+msgstr "Spalte: Steuersatz"
 
 #. src/report/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:1666
 msgid "column: Units"
-msgstr ""
+msgstr "Spalte: Einheiten"
 
 #. src/report/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:1668
-#, fuzzy
 msgid "row: Address"
-msgstr "_Adresse"
+msgstr "Zeile: Adresse"
 
 #. src/report/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:1670
-#, fuzzy
 msgid "row: Contact"
-msgstr "Kontaktadresse"
+msgstr "Zeile: Kontaktadresse"
 
 #. src/report/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:1672
-#, fuzzy
 msgid "row: Invoice Number"
-msgstr "Rechnungsnummer"
+msgstr "Zeile: Rechnungsnummer"
 
 #. src/report/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:1674
-#, fuzzy
 msgid "row: Company Name"
-msgstr "Firmenname"
+msgstr "Zeile: Firmenname"
 
 #. src/report/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:1676
-#, fuzzy
 msgid "Report Currency"
-msgstr "Währung des Berichts"
+msgstr "Berichtswährung"
 
 #. src/report/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:1678
-#, fuzzy
 msgid "Invoice number text"
-msgstr "Rechnungsnummer"
+msgstr "Text Rechnungsnummer"
 
 #. src/report/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:1680
 msgid "To text"
-msgstr ""
+msgstr "Text »An«"
 
 #. src/report/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:1682
 msgid "Ref text"
-msgstr ""
+msgstr "Text Referenz"
 
 #. src/report/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:1684
-#, fuzzy
 msgid "Job Name text"
-msgstr "Auftragsname"
+msgstr "Text Auftragsname"
 
 #. src/report/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:1686
-#, fuzzy
 msgid "Job Number text"
-msgstr "Auftragsnummer"
+msgstr "Text Auftragsnummer"
 
 #. src/report/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:1688
-#, fuzzy
 msgid "Show Job name"
-msgstr "Auftragsname"
+msgstr "Auftragsname zeigen?"
 
 #. src/report/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:1690
-#, fuzzy
 msgid "Show Job number"
-msgstr "Auftragsnummer"
+msgstr "Auftragsnummer zeigen?"
 
 #. src/report/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:1692
-#, fuzzy
 msgid "Invoice number next to title"
-msgstr "Format Rechnungsnummer"
+msgstr "Rechnungsnummer neben Titel?"
 
 #. src/report/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:1694
 msgid "table-border-collapse"
-msgstr ""
+msgstr "table-border-collapse"
 
 #. src/report/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:1696
 msgid "table-header-border-color"
-msgstr ""
+msgstr "table-header-border-color"
 
 #. src/report/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:1698
 msgid "table-cell-border-color"
-msgstr ""
+msgstr "table-cell-border-color"
 
 #. src/report/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:1700
 msgid "Embedded CSS"
-msgstr ""
+msgstr "Embedded CSS"
 
 #. src/report/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:1702
@@ -21727,32 +21745,28 @@ msgstr ""
 #. src/report/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:1776
 msgid "Border-collapse?"
-msgstr ""
+msgstr "Border-collapse?"
 
 #. src/report/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:1778 ../intl-scm/guile-strings.c:1780
-#, fuzzy
 msgid "CSS color."
-msgstr "Farben"
+msgstr "CSS-Farbe."
 
 #. src/report/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:1794
-#, fuzzy
 msgid "Net Price"
 msgstr "Nettobetrag"
 
 # strange, had fuzzy translation Saldo (Periodenbezogen)
 #. src/report/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:1800
-#, fuzzy
 msgid "Total Price"
 msgstr "Gesamtbetrag"
 
 #. src/report/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:1804
-#, fuzzy
 msgid "Amount Due"
-msgstr "Noch zu zahlen"
+msgstr "Fälliger_Betrag"
 
 #. src/report/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:1806
@@ -21761,35 +21775,33 @@ msgstr "Vielen Dank für Ihre Zahlung."
 
 #. src/report/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:1808
-#, fuzzy
 msgid "Invoice number: "
-msgstr "Rechnungsnummer"
+msgstr "Rechnungsnummer: "
 
 #. src/report/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:1810
 msgid "To: "
-msgstr ""
+msgstr "An: "
 
 #. src/report/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:1812
 msgid "Your ref: "
-msgstr ""
+msgstr "Ihr_Zeichen: "
 
 #. src/report/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:1814
-#, fuzzy
 msgid "Job number: "
-msgstr "Auftragsnummer"
+msgstr "Auftragsnummer: "
 
 #. src/report/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:1816
 msgid "Job name: "
-msgstr ""
+msgstr "Auftragsname: "
 
 #. src/report/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:1820
 msgid "Embedded CSS."
-msgstr ""
+msgstr "Embedded CSS."
 
 #. src/report/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:1826
@@ -21810,7 +21822,6 @@ msgstr "Abwechselnde Perioden"
 #. src/report/locale-specific/us/taxtxf-de_DE.scm
 #. src/report/locale-specific/us/taxtxf.scm
 #: ../intl-scm/guile-strings.c:1836 ../intl-scm/guile-strings.c:1920
-#, fuzzy
 msgid "Override or modify From: & To:."
 msgstr "Überschreiben oder modifizieren des Von: & An:"
 
@@ -21823,7 +21834,6 @@ msgstr "Benutzen Sie Von - Bis"
 #. src/report/locale-specific/us/taxtxf-de_DE.scm
 #. src/report/locale-specific/us/taxtxf.scm
 #: ../intl-scm/guile-strings.c:1840 ../intl-scm/guile-strings.c:1924
-#, fuzzy
 msgid "Use From - To period."
 msgstr "Benutzen Sie den Von-Bis Zeitraum"
 
@@ -21836,7 +21846,6 @@ msgstr "Steuerschätzung des ersten Quartals"
 #. src/report/locale-specific/us/taxtxf-de_DE.scm
 #. src/report/locale-specific/us/taxtxf.scm
 #: ../intl-scm/guile-strings.c:1844 ../intl-scm/guile-strings.c:1928
-#, fuzzy
 msgid "Jan 1 - Mar 31."
 msgstr "1. Jan. - 31. März"
 
@@ -21849,7 +21858,6 @@ msgstr "Steuerschätzung 2. Quartal"
 #. src/report/locale-specific/us/taxtxf-de_DE.scm
 #. src/report/locale-specific/us/taxtxf.scm
 #: ../intl-scm/guile-strings.c:1848 ../intl-scm/guile-strings.c:1932
-#, fuzzy
 msgid "Apr 1 - May 31."
 msgstr "1. Apr. - 31. Mai"
 
@@ -21862,7 +21870,6 @@ msgstr "Steurschätzung des dritten Quartals"
 #. src/report/locale-specific/us/taxtxf-de_DE.scm
 #. src/report/locale-specific/us/taxtxf.scm
 #: ../intl-scm/guile-strings.c:1852 ../intl-scm/guile-strings.c:1936
-#, fuzzy
 msgid "Jun 1 - Aug 31."
 msgstr "1. Juni -31. Aug."
 
@@ -21875,7 +21882,6 @@ msgstr "Steuerschätzung des 4. Quartals"
 #. src/report/locale-specific/us/taxtxf-de_DE.scm
 #. src/report/locale-specific/us/taxtxf.scm
 #: ../intl-scm/guile-strings.c:1856 ../intl-scm/guile-strings.c:1940
-#, fuzzy
 msgid "Sep 1 - Dec 31."
 msgstr "1. Sept - 31. Dez."
 
@@ -21888,7 +21894,6 @@ msgstr "Letztes Jahr"
 #. src/report/locale-specific/us/taxtxf-de_DE.scm
 #. src/report/locale-specific/us/taxtxf.scm
 #: ../intl-scm/guile-strings.c:1860 ../intl-scm/guile-strings.c:1944
-#, fuzzy
 msgid "Last Year."
 msgstr "Letztes Jahr"
 
@@ -21901,7 +21906,6 @@ msgstr "Steuerschätzung erstes Quartal des vergangenen Jahres"
 #. src/report/locale-specific/us/taxtxf-de_DE.scm
 #. src/report/locale-specific/us/taxtxf.scm
 #: ../intl-scm/guile-strings.c:1864 ../intl-scm/guile-strings.c:1948
-#, fuzzy
 msgid "Jan 1 - Mar 31, Last year."
 msgstr "1. Januar - 31. März letzten Jahres"
 
@@ -21914,7 +21918,6 @@ msgstr "Steuerschätzung des 2. Quartals des letzten Jahres"
 #. src/report/locale-specific/us/taxtxf-de_DE.scm
 #. src/report/locale-specific/us/taxtxf.scm
 #: ../intl-scm/guile-strings.c:1868 ../intl-scm/guile-strings.c:1952
-#, fuzzy
 msgid "Apr 1 - May 31, Last year."
 msgstr "1. April- 31. August letzten Jahres"
 
@@ -21927,7 +21930,6 @@ msgstr "Steuerschätzung des 3. Quartals des letzten Jahres"
 #. src/report/locale-specific/us/taxtxf-de_DE.scm
 #. src/report/locale-specific/us/taxtxf.scm
 #: ../intl-scm/guile-strings.c:1872 ../intl-scm/guile-strings.c:1956
-#, fuzzy
 msgid "Jun 1 - Aug 31, Last year."
 msgstr "1. Juni - 31. August letzten Jahres"
 
@@ -21940,7 +21942,6 @@ msgstr "Steuer-Schätzung des vierten Quartals des letzten Jahres"
 #. src/report/locale-specific/us/taxtxf-de_DE.scm
 #. src/report/locale-specific/us/taxtxf.scm
 #: ../intl-scm/guile-strings.c:1876 ../intl-scm/guile-strings.c:1960
-#, fuzzy
 msgid "Sep 1 - Dec 31, Last year."
 msgstr "1. September - 31. Dezember letzten Jahres"
 
@@ -21953,7 +21954,6 @@ msgstr "Konten auswählen (keine = alle)"
 #. src/report/locale-specific/us/taxtxf-de_DE.scm
 #. src/report/locale-specific/us/taxtxf.scm
 #: ../intl-scm/guile-strings.c:1880 ../intl-scm/guile-strings.c:1964
-#, fuzzy
 msgid "Select accounts."
 msgstr "Konten auswählen"
 
@@ -21975,9 +21975,8 @@ msgstr "Vollen Kontonamen anzeigen"
 
 #. src/report/locale-specific/us/taxtxf-de_DE.scm
 #: ../intl-scm/guile-strings.c:1888
-#, fuzzy
 msgid "Print all Parent account names."
-msgstr "Drucke alle Haupt-Kontenbezeichnungen"
+msgstr "Alle Hauptkonten-Namen anzeigen."
 
 #. src/report/locale-specific/us/taxtxf-de_DE.scm
 #: ../intl-scm/guile-strings.c:1890
@@ -22045,9 +22044,8 @@ msgstr "Vollen Kontonamen nicht anzeigen"
 
 #. src/report/locale-specific/us/taxtxf.scm
 #: ../intl-scm/guile-strings.c:1972
-#, fuzzy
 msgid "Do not print all Parent account names."
-msgstr "Drucke nicht alle Haupt-Kontenbezeichnungen"
+msgstr "Nicht alle Hauptkonten-Namen anzeigen."
 
 #. src/report/locale-specific/us/taxtxf.scm
 #: ../intl-scm/guile-strings.c:1974
@@ -22056,7 +22054,6 @@ msgstr "Alle Gegenkonten ausgeben"
 
 #. src/report/locale-specific/us/taxtxf.scm
 #: ../intl-scm/guile-strings.c:1976
-#, fuzzy
 msgid "Print all split details for multi-split transactions."
 msgstr "Alle Buchungsteile bei mehrteiligen Buchungen ausgeben"
 
@@ -22686,7 +22683,7 @@ msgstr "Raute"
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2224
 msgid "Hollow diamond"
-msgstr ""
+msgstr "Leere Raute"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2226
