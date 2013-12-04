@@ -1,12 +1,13 @@
 # Glossary of terms in GnuCash
 # Copyright (C) 2001 Free Software Foundation, Inc.
-# Christian Stimming <stimming@tuhh.de>, 2001 
+# Christian Stimming <stimming@tuhh.de>, 2001 - 2013
+# Frank H. Ellenberger <frank.h.ellenberger@gmail.com>, 2013.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gnucash 1.7\n"
+"Project-Id-Version: gnucash 2.5\n"
 "POT-Creation-Date: 2013-05-08 22:16+0200\n"
-"PO-Revision-Date: 2013-05-08 22:12+0200\n"
+"PO-Revision-Date: 2013-12-04 01:00+0000\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: DE\n"
 "Language: German\n"
@@ -79,9 +80,8 @@ msgid "account type: Stock"
 msgstr "Aktienkonto (früher: Depot)"
 
 #. "This account type (new in gnucash-2.4.0) is used when exchanging or trading amounts from one currency into another"
-#, fuzzy
 msgid "account type: trading"
-msgstr "Sparkonto"
+msgstr "Devisenhandel"
 
 #. "-"
 msgid "account: parent account"
@@ -200,9 +200,8 @@ msgid "bill"
 msgstr "Lieferantenrechnung (Rechnung, Rechnungseingang, Empfangene Rechnung)"
 
 #. "see invoice owner"
-#, fuzzy
 msgid "bill owner"
-msgstr "Zahlungsbedingungen"
+msgstr "Lieferant"
 
 #. "Conditions on paying a bill. Both an invoice and a bill have billing terms. For example, you can have 'terms' of 'Net-30', where the bill is due in full in 30 days."
 msgid "billing terms"
@@ -255,7 +254,7 @@ msgstr "Schliessen"
 
 #. "An article that is bought and sold. The most general term of what an account keeps track of, e.g. a currency or a stock."
 msgid "commodity"
-msgstr "Devise/Wertpapier (auch: Währung, Aktie)"
+msgstr "Handelsgut, Devise/Wertpapier (auch: Währung, Aktie, Option)"
 
 #. "e.g. NASDAQ"
 msgid "commodity listing"
@@ -270,9 +269,8 @@ msgid "commodity option: Symbol"
 msgstr "Symbol"
 
 #. "interest which is earned on both the initial deposit and on any interest that has already been earned but left on deposit."
-#, fuzzy
 msgid "compound interests"
-msgstr "Zinsen"
+msgstr "Zinseszins"
 
 #. "(a) A sum of money paid into an account. (b) A record of such a payment. (c) The state of having money in one's bank account."
 msgid "Credit (column in register)"
@@ -301,7 +299,7 @@ msgstr "Benutzerdefiniert"
 
 #. "The backend where the data is stored."
 msgid "database"
-msgstr "Datei "
+msgstr "Datei"
 
 #. "A specific numbered day of the month"
 msgid "Date"
@@ -410,9 +408,8 @@ msgid "invoice"
 msgstr "Rechnung (Rechnungsausgang, Versandte Rechnung)"
 
 #. "The customer (or vendor) to which this invoice is sent to."
-#, fuzzy
 msgid "invoice owner"
-msgstr "Rechnung (Rechnungsausgang, Versandte Rechnung)"
+msgstr "Kunde, Rechnungsempfänger"
 
 #. "In business accounting: Jobs are a mechanism by which you can group multiple invoices or bills that belong to the same customer or vendor. The job describes a (larger) piece of work or a task undertaken on order, for which one or many invoices or bills will be issued."
 msgid "job"
@@ -451,9 +448,8 @@ msgid "marker"
 msgstr "Markierung"
 
 #. "1. Some text annotation, but this meaning isn't used inside gnucash. 2. In the Customer summary report: The ratio of profit vs. sales, i.e. the profit amount divided by the sales amount, shown in percent."
-#, fuzzy
 msgid "markup"
-msgstr "Markierung"
+msgstr "Marge"
 
 #. "The way how more than one window is displayed in GnuCash at the same time. MDI = Multiple Document Interface."
 msgid "MDI modus"
@@ -554,9 +550,8 @@ msgid "preferences"
 msgstr "Einstellungen"
 
 #. "Loan repayment calculator: your payments are split in interests payment and principal payment"
-#, fuzzy
 msgid "principal payment"
-msgstr "Zahlung"
+msgstr "Tilgung"
 
 #. "An amount of money for which sth may be bought or sold"
 msgid "price (in a split)"
@@ -633,7 +628,7 @@ msgstr "Erneut laden"
 
 #. "name of an equity account (?); to be distinguished from the opening balance."
 msgid "Retained Earnings"
-msgstr "Gewinnrücklagen"
+msgstr "Einbehaltener Gewinn, Gewinnvortrag (<=2.6: -rücklagen); TODO: ist das wirklich, was das balance sheet ausgibt?"
 
 #. "Create a new transaction that is the inverse of the old one.  When you add the two together they completely cancel out.  Accounts use this instead of voiding transactions, usually because the prior month has been closed and can no longer be changed, or the entire accounting system is 'write only'."
 msgid "reverse transaction, to (Action in the register)"
@@ -684,9 +679,8 @@ msgid "subtotal"
 msgstr "Zwischensumme"
 
 #. "On the goverment's tax forms, the tax code identifies the given line or place on the form where certain amounts must be specified according to the current country's legislation"
-#, fuzzy
 msgid "tax code"
-msgstr "Steuerrelevante Informationen"
+msgstr "Steuerschlüssel, Steuerformularfeldnummer"
 
 #. "field of an account"
 msgid "tax info"
