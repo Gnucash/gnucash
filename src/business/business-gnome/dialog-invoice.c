@@ -765,9 +765,10 @@ gnc_invoice_post(InvoiceWindow *iw, struct post_invoice_params *post_params)
     KvpFrame *kvpf;
     KvpValue *kvp_val;
     const char *text;
-    EntryList *entries, *entries_iter;
-    GncEntry* entry;
-    gboolean is_cust_doc, is_cn, auto_pay;
+    GHashTable *foreign_currs;
+    GHashTableIter foreign_currs_iter;
+    gpointer key,value;
+    gboolean is_cust_doc, auto_pay;
     gboolean show_dialog = TRUE;
     gboolean post_ok = TRUE;
 
@@ -788,7 +789,6 @@ gnc_invoice_post(InvoiceWindow *iw, struct post_invoice_params *post_params)
     }
 
     is_cust_doc = (gncInvoiceGetOwnerType (invoice) == GNC_OWNER_CUSTOMER);
-    is_cn = gncInvoiceGetIsCreditNote (invoice);
 
     /* Ok, we can post this invoice.  Ask for verification, set the due date,
      * post date, and posted account
@@ -821,104 +821,87 @@ gnc_invoice_post(InvoiceWindow *iw, struct post_invoice_params *post_params)
     /* Fill in the conversion prices with feedback from the user */
     text = _("One or more of the entries are for accounts different from the invoice/bill currency. You will be asked a conversion rate for each.");
 
-    /* Get the invoice entries */
-    entries = gncInvoiceGetEntries (invoice);
-
-    for (entries_iter = entries; entries_iter != NULL; entries_iter = g_list_next(entries_iter))
+    /* Ask the user for conversion rates for all foreign currencies
+     * (relative to the invoice currency) */
+    foreign_currs = gncInvoiceGetForeignCurrencies (invoice);
+    g_hash_table_iter_init (&foreign_currs_iter, foreign_currs);
+    while (g_hash_table_iter_next (&foreign_currs_iter, &key, &value))
     {
-        Account *this_acc;
-        gnc_commodity *account_currency;
+        GNCPrice *convprice;
+        gnc_commodity *account_currency = (gnc_commodity*)key;
+        gnc_numeric *amount = (gnc_numeric*)value;
 
-        entry = (GncEntry*)entries_iter->data;
-        this_acc = (is_cust_doc ? gncEntryGetInvAccount (entry) :
-                    gncEntryGetBillAccount (entry));
-        account_currency = xaccAccountGetCommodity (this_acc);
-
-        if (this_acc &&
-                !gnc_commodity_equal (gncInvoiceGetCurrency (invoice), account_currency))
+        if (show_dialog)
         {
-            GNCPrice *convprice;
+            gnc_info_dialog(iw_get_window(iw), "%s", text);
+            show_dialog = FALSE;
+        }
 
-            if (show_dialog)
+        convprice = gncInvoiceGetPrice(invoice, account_currency);
+        if (convprice == NULL)
+        {
+            XferDialog *xfer;
+            gnc_numeric exch_rate;
+            Timespec date;
+
+            /* Note some twisted logic here:
+             * We ask the exchange rate
+             *  FROM invoice currency
+             *  TO other account currency
+             *  Because that's what happens logically.
+             *  But the internal posting logic works backwards:
+             *  It searches for an exchange rate
+             *  FROM other account currency
+             *  TO invoice currency
+             *  So we will store the inverted exchange rate
+             */
+
+            /* create the exchange-rate dialog */
+            xfer = gnc_xfer_dialog (iw_get_window(iw), acc);
+            gnc_xfer_dialog_is_exchange_dialog(xfer, &exch_rate);
+            gnc_xfer_dialog_select_to_currency(xfer, account_currency);
+            /* Even if amount is 0 ask for an exchange rate. It's required
+             * for the transaction generating code. Use an amount of 1 in
+             * that case as the dialog won't allow to specify an exchange
+             * rate for 0. */
+            gnc_xfer_dialog_set_amount(xfer, gnc_numeric_zero_p (*amount) ?
+                                             (gnc_numeric){1, 1} : *amount);
+
+            /* All we want is the exchange rate so prevent the user from thinking
+               it makes sense to mess with other stuff */
+            gnc_xfer_dialog_set_from_show_button_active(xfer, FALSE);
+            gnc_xfer_dialog_set_to_show_button_active(xfer, FALSE);
+            gnc_xfer_dialog_hide_from_account_tree(xfer);
+            gnc_xfer_dialog_hide_to_account_tree(xfer);
+            if (gnc_xfer_dialog_run_until_done(xfer))
             {
-                gnc_info_dialog(iw_get_window(iw), "%s", text);
-                show_dialog = FALSE;
+                /* User finished the transfer dialog successfully */
+
+                /* Invert the exchange rate as explained above */
+                if (!gnc_numeric_zero_p (exch_rate))
+                    exch_rate = gnc_numeric_div ((gnc_numeric){1, 1}, exch_rate,
+                GNC_DENOM_AUTO, GNC_HOW_RND_ROUND_HALF_UP);
+                convprice = gnc_price_create(iw->book);
+                gnc_price_begin_edit (convprice);
+                gnc_price_set_commodity (convprice, account_currency);
+                gnc_price_set_currency (convprice, gncInvoiceGetCurrency (invoice));
+                date.tv_sec = gnc_time (NULL);
+                date.tv_nsec = 0;
+                gnc_price_set_time (convprice, date);
+                gnc_price_set_source (convprice, "user:invoice-post");
+
+                /* Yes, magic strings are evil but I can't find any defined constants
+                   for this..*/
+                gnc_price_set_typestr (convprice, "last");
+                gnc_price_set_value (convprice, exch_rate);
+                gncInvoiceAddPrice(invoice, convprice);
+                gnc_price_commit_edit (convprice);
             }
-
-            convprice = gncInvoiceGetPrice(invoice, account_currency);
-            if (convprice == NULL)
+            else
             {
-                XferDialog *xfer;
-                gnc_numeric exch_rate;
-                Timespec date;
-                gnc_numeric amount = gnc_numeric_create(1, 1);
-                gnc_numeric value;
-                gnc_numeric tax;
-
-                /* Note some twisted logic here:
-                 * We ask the exchange rate
-                 *  FROM invoice currency
-                 *  TO other account currency
-                 *  Because that's what happens logically.
-                 *  But the internal posting logic works backwards:
-                 *  It searches for an exchange rate
-                 *  FROM other account currency
-                 *  TO invoice currency
-                 *  So we will store the inverted exchange rate
-                 */
-
-                /* Obtain the Entry's total value (net + tax) */
-                value = gncEntryGetDocValue (entry, FALSE, is_cust_doc, is_cn);
-                tax   = gncEntryGetDocTaxValue (entry, FALSE, is_cust_doc, is_cn);
-                amount = gnc_numeric_add (value, tax,
-                                          gnc_commodity_get_fraction (account_currency),
-                                          GNC_HOW_RND_ROUND_HALF_UP );
-
-                /* create the exchange-rate dialog */
-                xfer = gnc_xfer_dialog (iw_get_window(iw), acc);
-                gnc_xfer_dialog_select_to_account(xfer, this_acc);
-                gnc_xfer_dialog_set_amount(xfer, amount);
-
-                /* All we want is the exchange rate so prevent the user from thinking
-                   it makes sense to mess with other stuff */
-                gnc_xfer_dialog_set_from_show_button_active(xfer, FALSE);
-                gnc_xfer_dialog_set_to_show_button_active(xfer, FALSE);
-                gnc_xfer_dialog_hide_from_account_tree(xfer);
-                gnc_xfer_dialog_hide_to_account_tree(xfer);
-                gnc_xfer_dialog_is_exchange_dialog(xfer, &exch_rate);
-                if (gnc_xfer_dialog_run_until_done(xfer))
-                {
-                    /* User finished the transfer dialog successfully */
-
-                    /* Invert the exchange rate as explained above */
-                    if (!gnc_numeric_zero_p (exch_rate))
-                        exch_rate = gnc_numeric_div ((gnc_numeric)
-                    {
-                        1, 1
-                    }, exch_rate,
-                    GNC_DENOM_AUTO, GNC_HOW_RND_ROUND_HALF_UP);
-                    convprice = gnc_price_create(iw->book);
-                    gnc_price_begin_edit (convprice);
-                    gnc_price_set_commodity (convprice, account_currency);
-                    gnc_price_set_currency (convprice, gncInvoiceGetCurrency (invoice));
-                    date.tv_sec = gnc_time (NULL);
-                    date.tv_nsec = 0;
-                    gnc_price_set_time (convprice, date);
-                    gnc_price_set_source (convprice, "user:invoice-post");
-
-                    /* Yes, magic strings are evil but I can't find any defined constants
-                       for this..*/
-                    gnc_price_set_typestr (convprice, "last");
-                    gnc_price_set_value (convprice, exch_rate);
-                    gncInvoiceAddPrice(invoice, convprice);
-                    gnc_price_commit_edit (convprice);
-                }
-                else
-                {
-                    /* User canceled the transfer dialog, abort posting */
-                    post_ok = FALSE;
-                    goto cleanup;
-                }
+                /* User canceled the transfer dialog, abort posting */
+                post_ok = FALSE;
+                goto cleanup;
             }
         }
     }
@@ -943,6 +926,7 @@ gnc_invoice_post(InvoiceWindow *iw, struct post_invoice_params *post_params)
 
 cleanup:
     gncInvoiceCommitEdit (invoice);
+    g_hash_table_unref (foreign_currs);
     gnc_resume_gui_refresh ();
 
     if (memo)

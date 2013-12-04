@@ -41,6 +41,7 @@ typedef struct _gncInvoice GncInvoice;
 typedef struct _gncInvoiceClass GncInvoiceClass;
 typedef GList GncInvoiceList;
 
+#include <glib.h>
 #include "gncBillTerm.h"
 #include "gncEntry.h"
 #include "gncOwner.h"
@@ -177,6 +178,17 @@ GNCPrice * gncInvoiceGetPrice(GncInvoice *invoice, gnc_commodity* commodity);
  *  otherwise.
  */
 gboolean gncInvoiceAmountPositive (const GncInvoice *invoice);
+
+/** Return an overview of amounts on this invoice that will be posted to
+ *  accounts in currencies that are different from the invoice currency.
+ *  These accounts can be the accounts referred to in invoice entries
+ *  or tax tables. This information is returned in the from of a hash
+ *  table. The keys in the hash table are the foreign currencies, the
+ *  values are the accumulated amounts in that currency.
+ *  Drop the reference to the hash table with g_hash_table_unref when
+ *  no longer needed.
+ */
+GHashTable *gncInvoiceGetForeignCurrencies (const GncInvoice *invoice);
 
 /** Post this invoice to an account.  Returns the new Transaction
  * that is tied to this invoice.   The transaction is set with

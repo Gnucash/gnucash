@@ -1226,6 +1226,66 @@ gboolean gncInvoiceAmountPositive (const GncInvoice *invoice)
     }
 }
 
+GHashTable *gncInvoiceGetForeignCurrencies (const GncInvoice *invoice)
+{
+    EntryList *entries_iter;
+    gboolean is_cust_doc = (gncInvoiceGetOwnerType (invoice) == GNC_OWNER_CUSTOMER);
+    gboolean is_cn = gncInvoiceGetIsCreditNote (invoice);
+    GHashTable *amt_hash = g_hash_table_new_full (g_direct_hash, g_direct_equal,
+                                                  NULL, g_free);
+
+    for (entries_iter = invoice->entries; entries_iter != NULL; entries_iter = g_list_next(entries_iter))
+    {
+        GncEntry *entry = (GncEntry*)entries_iter->data;
+        Account *this_acc;
+        gnc_commodity *account_currency;
+        AccountValueList *tt_amts = NULL, *tt_iter;
+
+        /* Check entry's account currency */
+        this_acc = (is_cust_doc ? gncEntryGetInvAccount (entry) :
+                    gncEntryGetBillAccount (entry));
+        account_currency = xaccAccountGetCommodity (this_acc);
+
+        if (this_acc &&
+                !gnc_commodity_equal (gncInvoiceGetCurrency (invoice), account_currency))
+        {
+            gnc_numeric *curr_amt = (gnc_numeric*) g_hash_table_lookup (amt_hash, account_currency);
+            gnc_numeric *entry_amt = (gnc_numeric*) g_new0 (gnc_numeric, 1);
+            *entry_amt = gncEntryGetDocValue (entry, FALSE, is_cust_doc, is_cn);
+            if (curr_amt)
+                *entry_amt = gnc_numeric_add (*entry_amt, *curr_amt, GNC_DENOM_AUTO, GNC_HOW_RND_ROUND_HALF_UP);
+            g_hash_table_insert (amt_hash, account_currency, entry_amt);
+        }
+
+        /* Check currencies of each account in the tax table linked
+         * to the current entry */
+        tt_amts = gncEntryGetDocTaxValues (entry, is_cust_doc, is_cn);
+
+        if (!tt_amts)
+            continue;
+
+        for (tt_iter = tt_amts; tt_iter != NULL; tt_iter = g_list_next(tt_iter))
+        {
+            GncAccountValue *tt_amt_val = (GncAccountValue*)tt_iter->data;
+            Account *tt_acc = tt_amt_val->account;
+            gnc_commodity *tt_acc_currency = xaccAccountGetCommodity (tt_acc);
+
+            if (tt_acc &&
+                    !gnc_commodity_equal (gncInvoiceGetCurrency (invoice), tt_acc_currency))
+            {
+                gnc_numeric *curr_amt = (gnc_numeric*) g_hash_table_lookup (amt_hash, tt_acc_currency);
+                gnc_numeric *tt_acc_amt = (gnc_numeric*) g_new0 (gnc_numeric, 1);
+                *tt_acc_amt = tt_amt_val->value;
+                if (curr_amt)
+                    *tt_acc_amt = gnc_numeric_add (*tt_acc_amt, *curr_amt, GNC_DENOM_AUTO, GNC_HOW_RND_ROUND_HALF_UP);
+                g_hash_table_insert (amt_hash, tt_acc_currency, tt_acc_amt);
+            }
+        }
+        gncAccountValueDestroy (tt_amts);
+    }
+    return amt_hash;
+}
+
 static gboolean gncInvoicePostAddSplit (QofBook *book,
                                         Account *acc,
                                         Transaction *txn,
