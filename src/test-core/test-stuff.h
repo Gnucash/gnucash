@@ -124,6 +124,7 @@ gchar get_random_character(void);
 gchar* get_random_string(void);
 gchar * get_random_string_length_in_range(int minlen, int maxlen);
 gchar* get_random_string_without(const char *exclude_chars);
+gint32 get_random_gint32 (void);
 gint64 get_random_gint64(void);
 double get_random_double(void);
 const char* get_random_string_in_array(const char* str_list[]);

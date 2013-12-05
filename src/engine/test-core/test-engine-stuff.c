@@ -467,15 +467,21 @@ get_random_gnc_numeric(void)
      * The loop is to "make sure" we get there.  We might
      * want to make this dependent on "deno" in the future.
      */
-    do
-    {
-        numer = get_random_gint64() / 1000000;
-    }
-    while ((numer >> 31) > 0x1FFFF);
+    numer = get_random_gint64 () % (2ULL << 48);
     if (0 == numer) numer = 1;
     /* Make sure we have a non-zero denominator */
     if (0 == deno) deno = 1;
     return gnc_numeric_create(numer, deno);
+}
+
+static gnc_numeric
+get_random_rate (void)
+{
+    /* Large rates blow up xaccSplitAssignToLot, so we clamp the rate
+     * at a smallish value */
+    gint64 numer = get_random_gint64 () % (2ULL << 24);
+    gint64 denom = 100LL;
+    return gnc_numeric_create (numer, denom);
 }
 
 /* ================================================================= */
@@ -1315,7 +1321,8 @@ get_random_split(QofBook *book, Account *acct, Transaction *trn)
                                                xaccSplitGetAccount(ret)));
         do
         {
-            rate = gnc_numeric_abs(get_random_gnc_numeric());
+            /* Large rates blow up xaccSplitAssignLot */
+            rate = get_random_rate ();
             amt = gnc_numeric_mul(val, rate,
                                   GNC_DENOM_AUTO, GNC_HOW_DENOM_REDUCE);
             amt = gnc_numeric_convert(amt, denom, GNC_HOW_RND_ROUND_HALF_UP);

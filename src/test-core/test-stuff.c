@@ -313,14 +313,40 @@ get_random_string(void)
     return get_random_string_without (NULL);
 }
 
+gint32
+get_random_gint32 (void)
+{
+    gint32 ret = 0;
+
+    if (RAND_MAX > (1 << 15))
+	return rand ();
+
+    if (RAND_MAX > (1 << 7))
+    {
+	ret = rand ();
+	ret <<= 16;
+	ret += rand ();
+	return ret;
+    }
+
+    ret = rand ();
+    ret <<= 8;
+    ret += rand ();
+    ret <<= 8;
+    ret += rand ();
+    ret <<= 8;
+    ret += rand ();
+    return ret;
+}
+
 gint64
 get_random_gint64(void)
 {
     gint64 ret = 0;
 
-    ret = rand();
+    ret = get_random_gint32 ();
     ret <<= 32;
-    ret += rand();
+    ret += get_random_gint32 ();
 
     return ret;
 }
