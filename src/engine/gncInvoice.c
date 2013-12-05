@@ -642,9 +642,26 @@ void gncInvoiceRemoveEntry (GncInvoice *invoice, GncEntry *entry)
 
 void gncInvoiceAddPrice (GncInvoice *invoice, GNCPrice *price)
 {
+    GList *node;
+    gnc_commodity *commodity;
+
     if (!invoice || !price) return;
 
+    /* Keep only one price per commodity per invoice
+     * So if a price was set previously remove it first */
+    node = g_list_first(invoice->prices);
+    commodity = gnc_price_get_commodity (price);
+    while (node != NULL)
+    {
+        GNCPrice *curr = (GNCPrice*)node->data;
+        if (gnc_commodity_equal (commodity, gnc_price_get_commodity (curr)))
+            break;
+        node = g_list_next (node);
+    }
+
     gncInvoiceBeginEdit (invoice);
+    if (node)
+        invoice->prices = g_list_delete_link (invoice->prices, node);
     invoice->prices = g_list_prepend(invoice->prices, price);
     mark_invoice (invoice);
     gncInvoiceCommitEdit (invoice);

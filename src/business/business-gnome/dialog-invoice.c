@@ -830,18 +830,24 @@ gnc_invoice_post(InvoiceWindow *iw, struct post_invoice_params *post_params)
         GNCPrice *convprice;
         gnc_commodity *account_currency = (gnc_commodity*)key;
         gnc_numeric *amount = (gnc_numeric*)value;
+        Timespec pricedate;
 
-        if (show_dialog)
-        {
-            gnc_info_dialog(iw_get_window(iw), "%s", text);
-            show_dialog = FALSE;
-        }
-
-        convprice = gncInvoiceGetPrice(invoice, account_currency);
-        if (convprice == NULL)
+        convprice = gncInvoiceGetPrice (invoice, account_currency);
+        if (convprice)
+            pricedate = gnc_price_get_time (convprice);
+        if (!convprice || !timespec_equal (&postdate, &pricedate))
         {
             XferDialog *xfer;
             gnc_numeric exch_rate;
+
+            /* Explain to the user we're about to ask for an exchange rate.
+             * Only show this dialog once, right before the first xfer dialog pops up.
+             */
+            if (show_dialog)
+            {
+                gnc_info_dialog(iw_get_window(iw), "%s", text);
+                show_dialog = FALSE;
+            }
 
             /* Note some twisted logic here:
              * We ask the exchange rate
