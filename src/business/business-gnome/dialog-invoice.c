@@ -842,7 +842,6 @@ gnc_invoice_post(InvoiceWindow *iw, struct post_invoice_params *post_params)
         {
             XferDialog *xfer;
             gnc_numeric exch_rate;
-            Timespec date;
 
             /* Note some twisted logic here:
              * We ask the exchange rate
@@ -860,6 +859,7 @@ gnc_invoice_post(InvoiceWindow *iw, struct post_invoice_params *post_params)
             xfer = gnc_xfer_dialog (iw_get_window(iw), acc);
             gnc_xfer_dialog_is_exchange_dialog(xfer, &exch_rate);
             gnc_xfer_dialog_select_to_currency(xfer, account_currency);
+            gnc_xfer_dialog_set_date (xfer, timespecToTime64 (postdate));
             /* Even if amount is 0 ask for an exchange rate. It's required
              * for the transaction generating code. Use an amount of 1 in
              * that case as the dialog won't allow to specify an exchange
@@ -885,9 +885,7 @@ gnc_invoice_post(InvoiceWindow *iw, struct post_invoice_params *post_params)
                 gnc_price_begin_edit (convprice);
                 gnc_price_set_commodity (convprice, account_currency);
                 gnc_price_set_currency (convprice, gncInvoiceGetCurrency (invoice));
-                date.tv_sec = gnc_time (NULL);
-                date.tv_nsec = 0;
-                gnc_price_set_time (convprice, date);
+                gnc_price_set_time (convprice, postdate);
                 gnc_price_set_source (convprice, "user:invoice-post");
 
                 /* Yes, magic strings are evil but I can't find any defined constants
