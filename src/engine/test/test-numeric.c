@@ -546,7 +546,112 @@ check_add_subtract (void)
     }
 }
 
+extern gint64 pwr64 (gint64 op, int exp);
+
+static void
+check_add_subtract_overflow (void)
+{
+    int i;
+
+    for (i = 0; i < NREPS; i++)
+    {
+	/* Div to avoid addition overflows; we're looking for lcd conversion overflows here. */
+
+	int exp_a = rand () % 1000;
+	int exp_b = rand () % 1000;
+        gint64 bin_deno_a = (exp_a == 0 ? 1 : exp_a);
+	gint64 bin_deno_b = (exp_b == 0 ? 1 : exp_b);
+/*
+	int exp_a = rand () % 11;
+	int exp_b = rand () % 11;
+	gint64 bin_deno_a = (1 << exp_a);
+	gint64 bin_deno_b = (1 << exp_a);
+*/
+	gint64 dec_deno_a = pwr64 (10, exp_a % 7);
+	gint64 dec_deno_b = pwr64 (10, exp_b % 7);
+        gint64 na = get_random_gint64 () % (1000000 * dec_deno_a);
+        gint64 nb = get_random_gint64 () % (1000000 * dec_deno_b);
+	gnc_numeric result;
+	GNCNumericErrorCode err;
+	gchar *errmsg;
+
+        gnc_numeric ba = gnc_numeric_create(na, bin_deno_a);
+        gnc_numeric bb = gnc_numeric_create(nb, bin_deno_b);
+        gnc_numeric da = gnc_numeric_create(na, dec_deno_a);
+        gnc_numeric db = gnc_numeric_create(nb, dec_deno_b);
+	gchar *ba_str = gnc_numeric_to_string (ba);
+	gchar *bb_str = gnc_numeric_to_string (bb);
+	gchar *da_str = gnc_numeric_to_string (da);
+	gchar *db_str = gnc_numeric_to_string (db);
+
+
+        /* Add */
+
+	result = gnc_numeric_add(ba, bb, GNC_DENOM_AUTO, GNC_HOW_DENOM_EXACT);
+	err = gnc_numeric_check (result);
+	errmsg = g_strdup_printf ("%s + %s raised %s", ba_str, bb_str,
+				  gnc_numeric_errorCode_to_string (err));
+	do_test (err == 0, errmsg);
+	g_free (errmsg);
+
+	result = gnc_numeric_add(da, bb, GNC_DENOM_AUTO, GNC_HOW_DENOM_EXACT);
+	err = gnc_numeric_check (result);
+	errmsg = g_strdup_printf ("%s + %s raised %s", da_str, bb_str,
+				  gnc_numeric_errorCode_to_string (err));
+	do_test (err == 0, errmsg);
+	g_free (errmsg);
+	result = gnc_numeric_add(ba, db, GNC_DENOM_AUTO, GNC_HOW_DENOM_EXACT);
+	err = gnc_numeric_check (result);
+	errmsg = g_strdup_printf ("%s + %s raised %s", ba_str, db_str,
+				  gnc_numeric_errorCode_to_string (err));
+	do_test (err == 0, errmsg);
+	g_free (errmsg);
+
+	result = gnc_numeric_add(da, db, GNC_DENOM_AUTO, GNC_HOW_DENOM_EXACT);
+	err = gnc_numeric_check (result);
+	errmsg = g_strdup_printf ("%s + %s raised %s", da_str, db_str,
+				  gnc_numeric_errorCode_to_string (err));
+	do_test (err == 0, errmsg);
+	g_free (errmsg);
+        /* Subtract */
+
+	result = gnc_numeric_sub(ba, bb, GNC_DENOM_AUTO, GNC_HOW_DENOM_EXACT);
+	err = gnc_numeric_check (result);
+	errmsg = g_strdup_printf ("%s + %s raised %s", ba_str, bb_str,
+				  gnc_numeric_errorCode_to_string (err));
+	do_test (err == 0, errmsg);
+	g_free (errmsg);
+
+	result = gnc_numeric_sub(da, bb, GNC_DENOM_AUTO, GNC_HOW_DENOM_EXACT);
+	err = gnc_numeric_check (result);
+	errmsg = g_strdup_printf ("%s + %s raised %s", da_str, bb_str,
+				  gnc_numeric_errorCode_to_string (err));
+	do_test (err == 0, errmsg);
+	g_free (errmsg);
+	result = gnc_numeric_sub(ba, db, GNC_DENOM_AUTO, GNC_HOW_DENOM_EXACT);
+	err = gnc_numeric_check (result);
+	errmsg = g_strdup_printf ("%s + %s raised %s", ba_str, db_str,
+				  gnc_numeric_errorCode_to_string (err));
+	do_test (err == 0, errmsg);
+	g_free (errmsg);
+
+	result = gnc_numeric_sub(da, db, GNC_DENOM_AUTO, GNC_HOW_DENOM_EXACT);
+	err = gnc_numeric_check (result);
+	errmsg = g_strdup_printf ("%s + %s raised %s", da_str, db_str,
+				  gnc_numeric_errorCode_to_string (err));
+	do_test (err == 0, errmsg);
+	g_free (errmsg);
+
+	g_free (ba_str);
+	g_free (bb_str);
+	g_free (da_str);
+	g_free (db_str);
+    }
+
+}
+
 /* ======================================================= */
+
 
 static void
 check_mult_div (void)
@@ -871,6 +976,7 @@ run_test (void)
     check_double();
     check_neg();
     check_add_subtract();
+    check_add_subtract_overflow ();
     check_mult_div ();
     check_reciprocal();
 }

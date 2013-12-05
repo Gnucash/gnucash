@@ -45,6 +45,23 @@
 
 /* static short module = MOD_ENGINE; */
 
+gint64
+pwr64 (gint64 op, int exp)
+{
+    qofint128 tmp;
+    if (exp == 0) return 1;
+    if (exp % 2)
+    {
+	tmp = mult128 (op, pwr64 (op, exp - 1));
+	if (tmp.isbig) return 0;
+	return tmp.lo;
+    }
+    tmp.lo = pwr64 (op, exp / 2);
+    tmp = mult128 (tmp.lo, tmp.lo);
+    if (tmp.isbig) return 0;
+    return tmp.lo;
+}
+
 /* =============================================================== */
 /* This function is small, simple, and used everywhere below,
  * lets try to inline it.
