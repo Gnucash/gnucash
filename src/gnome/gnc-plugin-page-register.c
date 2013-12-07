@@ -2696,6 +2696,7 @@ gnc_plugin_page_register_cmd_print_check (GtkAction *action,
     Transaction   * trans;
     GList         * splits = NULL, *item;
     GNCLedgerDisplayType ledger_type;
+    Account       * account;
 
     ENTER("(action %p, plugin_page %p)", action, plugin_page);
 
@@ -2706,14 +2707,30 @@ gnc_plugin_page_register_cmd_print_check (GtkAction *action,
     ledger_type = gnc_ledger_display_type(priv->ledger);
     if (ledger_type == LD_SINGLE || ledger_type == LD_SUBACCOUNT)
     {
+        account  = gnc_plugin_page_register_get_account (plugin_page);
         split    = gnc_split_register_get_current_split(reg);
         trans    = xaccSplitGetParent(split);
 
         if (split && trans)
         {
-            splits = g_list_append(splits, split);
-            gnc_ui_print_check_dialog_create(plugin_page, splits);
-            g_list_free(splits);
+            if (xaccSplitGetAccount(split) == account)
+            {
+                splits = g_list_append(splits, split);
+                gnc_ui_print_check_dialog_create(plugin_page, splits);
+                g_list_free(splits);
+            }
+            else
+            {
+                /* This split is not for the account shown in this register.  Get the
+                   split that anchors the transaction to the registor */
+                split = gnc_split_register_get_current_trans_split(reg, NULL);
+                if (split)
+                {
+                    splits = g_list_append(splits, split);
+                    gnc_ui_print_check_dialog_create(plugin_page, splits);
+                    g_list_free(splits);
+                }
+            }           
         }
     }
     else if (ledger_type == LD_GL && reg->type == SEARCH_LEDGER)

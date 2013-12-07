@@ -381,31 +381,29 @@ gchar *
 get_check_splits_amount2(PrintCheckDialog *pcd)
 {
     gchar* amount = NULL;
-    gchar* amt_temp;
-    int cnt;
-    const gchar* split_amount;
-    int nSplits;
     Transaction *trans;
-    Split *split;
     GList *node;
     SplitList* s_list;
 
     trans = xaccSplitGetParent(pcd->split);
-    nSplits = xaccTransCountSplits(trans);
     s_list = xaccTransGetSplitList(trans);
     if ( !s_list ) return NULL;
 
     amount = g_strconcat("", NULL);
     node = s_list;
-    cnt = 1;
-    while ( cnt < nSplits )
+    while ( node )
     {
-        cnt++;
-        split = node->data;
-        split_amount = xaccPrintAmount(xaccSplitGetAmount(split), gnc_split_amount_print_info(split, TRUE));
-        amt_temp = amount;
-        amount = g_strconcat(amt_temp, "\n", split_amount, NULL);
-        g_free(amt_temp);
+        Split *split = node->data;
+        /* Include all splits except the main split for the check */
+        if (split != pcd->split)
+        {
+            const gchar* split_amount;
+            gchar* amt_temp;
+            split_amount = xaccPrintAmount(xaccSplitGetAmount(split), gnc_split_amount_print_info(split, TRUE));
+            amt_temp = amount;
+            amount = g_strconcat(amt_temp, "\n", split_amount, NULL);
+            g_free(amt_temp);
+        }
         node = node->next;
     }
     return amount;
@@ -418,31 +416,29 @@ gchar *
 get_check_splits_memo2(PrintCheckDialog *pcd)
 {
     gchar* memo = NULL;
-    gchar* memo_temp;
-    int cnt;
     const gchar* split_memo;
-    int nSplits;
     Transaction *trans;
-    Split *split;
     GList *node;
     SplitList* s_list;
 
     trans = xaccSplitGetParent(pcd->split);
-    nSplits = xaccTransCountSplits(trans);
     s_list = xaccTransGetSplitList(trans);
     if ( !s_list ) return NULL;
 
     memo = g_strconcat("", NULL);
     node = s_list;
-    cnt = 1;
-    while ( cnt < nSplits )
+    while ( node )
     {
-        cnt++;
-        split = node->data;
-        split_memo = xaccSplitGetMemo(split);
-        memo_temp = memo;
-        memo = g_strconcat(memo_temp, "\n", split_memo, NULL);
-        g_free(memo_temp);
+        Split *split = node->data;
+        /* Include all splits except the main split for the check */
+        if (split != pcd->split)
+        {
+            gchar* memo_temp;
+            split_memo = xaccSplitGetMemo(split);
+            memo_temp = memo;
+            memo = g_strconcat(memo_temp, "\n", split_memo, NULL);
+            g_free(memo_temp);
+        }
         node = node->next;
     }
     return memo;
@@ -455,33 +451,31 @@ gchar *
 get_check_splits_account2(PrintCheckDialog *pcd)
 {
     gchar* account = NULL;
-    gchar* account_temp;
-    int cnt;
-    const gchar* aName = NULL;
-    int nSplits;
-    Account *pAccount;
     Transaction *trans;
-    Split *split;
     GList *node;
     SplitList* s_list;
 
     trans = xaccSplitGetParent(pcd->split);
-    nSplits = xaccTransCountSplits(trans);
     s_list = xaccTransGetSplitList(trans);
     if ( !s_list ) return NULL;
 
     account = g_strconcat("", NULL);
     node = s_list;
-    cnt = 1;
-    while ( cnt < nSplits )
+    while ( node )
     {
-        cnt++;
-        split = node->data;
-        pAccount = xaccSplitGetAccount(split);
-        aName = gnc_get_account_name_for_register(pAccount);
-        account_temp = account;
-        account = g_strconcat(account_temp, "\n", aName, NULL);
-        g_free(account_temp);
+        Split *split = node->data;
+        /* Include all splits except the main split for the check */
+        if (split != pcd->split)
+        {
+            gchar* account_temp;
+            const gchar* aName = NULL;
+            Account *pAccount;
+            pAccount = xaccSplitGetAccount(split);
+            aName = gnc_get_account_name_for_register(pAccount);
+            account_temp = account;
+            account = g_strconcat(account_temp, "\n", aName, NULL);
+            g_free(account_temp);
+        }
         node = node->next;
     }
     return account;

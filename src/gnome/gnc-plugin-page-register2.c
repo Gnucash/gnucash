@@ -2543,6 +2543,7 @@ gnc_plugin_page_register2_cmd_print_check (GtkAction *action,
     Transaction   * trans;
     GList         * splits = NULL, *item;
     GNCLedgerDisplay2Type ledger_type;
+    Account       * account;
 
     ENTER("(action %p, plugin_page %p)", action, plugin_page);
 
@@ -2555,6 +2556,7 @@ gnc_plugin_page_register2_cmd_print_check (GtkAction *action,
 
     if (ledger_type == LD2_SINGLE || ledger_type == LD2_SUBACCOUNT)
     {
+        account  = gnc_plugin_page_register2_get_account (plugin_page);
         split = gnc_tree_view_split_reg_get_current_split (view);
         trans = xaccSplitGetParent (split);
 
@@ -2587,9 +2589,24 @@ gnc_plugin_page_register2_cmd_print_check (GtkAction *action,
 
         if (split && trans)
         {
-            splits = g_list_append (splits, split);
-            gnc_ui_print_check_dialog_create2 (plugin_page, splits);
-            g_list_free (splits);
+            if (xaccSplitGetAccount(split) == account)
+            {
+                splits = g_list_append(splits, split);
+                gnc_ui_print_check_dialog_create2 (plugin_page, splits);
+                g_list_free(splits);
+            }
+            else
+            {
+                /* This split is not for the account shown in this register.  Get the
+                   split for that account and use it. */
+                split = gnc_tree_model_split_reg_trans_get_split_equal_to_ancestor(trans, account);
+                if (split)
+                {
+                    splits = g_list_append(splits, split);
+                    gnc_ui_print_check_dialog_create2 (plugin_page, splits);
+                    g_list_free(splits);
+                }
+            }           
         }
     }
     else if (ledger_type == LD2_GL && model->type == SEARCH_LEDGER2)
