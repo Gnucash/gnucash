@@ -15,7 +15,7 @@
 ;; If there are no coins for subunits, subunits might still be in use on the paper
 ;;
 ;; Format:
-;; (fullname, unitname*, partname*, namespace, mnemonic, exchange-code, parts-per-unit*, smallest-fraction,  local-symbol)
+;; (fullname, unitname*, partname*, namespace, mnemonic, exchange-code, parts-per-unit*, smallest-fraction, local-symbol)
 ;; planed extensions: replace-date, by-ISO, frozen-rate [x old : 1 new]
 ;;
 ;; where * means currently unused;
@@ -115,7 +115,7 @@
 ( "Rupiah" "rupiah" "sen" "ISO4217" "IDR" "360" 1 100 "Rp" )
 ( "Irish Pound" "punt" "pingin" "ISO4217" "IEP" "372" 100 100 "£" ) ;; 2002-01-01 "EUR" 0.787564
 ( "New Israeli Sheqel" "new shekel" "agora"  "ISO4217" "ILS" "376" 100 100 "₪" )
-( "Indian Rupee" "rupee" "paisa" "ISO4217" "INR" "356" 100 100 "रू" )
+( "Indian Rupee" "rupee" "paisa" "ISO4217" "INR" "356" 100 100 "₹" )
 ( "Iraqi Dinar" "dinar" "fil"  "ISO4217" "IQD" "368" 1000 1000 "ع.د" )
 ( "Iranian Rial" "rial" "dinar" "ISO4217" "IRR" "364" 1 1 "﷼﷼" )
 ( "Iceland Krona" "krona" "aur" "ISO4217" "ISK" "352" 1 100 "kr" )
