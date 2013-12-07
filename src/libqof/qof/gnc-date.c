@@ -399,6 +399,11 @@ gnc_mktime (struct tm* time)
      gdt = gnc_g_date_time_new_local (time->tm_year + 1900, time->tm_mon,
 				      time->tm_mday, time->tm_hour,
 				      time->tm_min, (gdouble)(time->tm_sec));
+     if (gdt == NULL)
+     {
+         g_warning("Invalid time passed to gnc_mktime");
+         return -1;
+     }
      time->tm_mon = time->tm_mon > 0 ? time->tm_mon - 1 : 11;
      // Watch out: struct tm has wday=0..6 with Sunday=0, but GDateTime has wday=1..7 with Sunday=7.
      time->tm_wday = g_date_time_get_day_of_week (gdt) % 7;
