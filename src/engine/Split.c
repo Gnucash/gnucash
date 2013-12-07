@@ -2010,10 +2010,10 @@ xaccSplitVoid(Split *split)
     kvp_frame_set_gnc_numeric(frame, void_former_val_str,
                               xaccSplitGetValue(split));
 
+    /* Marking dirty handled by SetAmount etc. */
     xaccSplitSetAmount (split, zero);
     xaccSplitSetValue (split, zero);
     xaccSplitSetReconcile(split, VREC);
-
 }
 
 void
@@ -2026,6 +2026,7 @@ xaccSplitUnvoid(Split *split)
     xaccSplitSetReconcile(split, NREC);
     kvp_frame_set_slot(frame, void_former_amt_str, NULL);
     kvp_frame_set_slot(frame, void_former_val_str, NULL);
+    qof_instance_set_dirty (QOF_INSTANCE (split));
 }
 
 /********************************************************************\

@@ -1178,7 +1178,7 @@ create_each_transaction_helper(Transaction *template_txn, void *user_data)
                 g_string_free(exchange_rate_var_name, TRUE);
 
                 amt = gnc_numeric_mul(final, exchange_rate, 1000, GNC_HOW_RND_ROUND_HALF_UP);
-                xaccSplitSetAmount(copying_split, amt);
+                xaccSplitSetAmount(copying_split, amt); /* marks split dirty */
             }
 
             xaccSplitScrub(copying_split);
@@ -1197,7 +1197,11 @@ create_each_transaction_helper(Transaction *template_txn, void *user_data)
     {
         kvp_frame *txn_frame;
         txn_frame = xaccTransGetSlots(new_txn);
-        kvp_frame_set_guid(txn_frame, "from-sched-xaction", xaccSchedXactionGetGUID(creation_data->instance->parent->sx));
+        kvp_frame_set_guid(txn_frame, "from-sched-xaction",
+		  xaccSchedXactionGetGUID(creation_data->instance->parent->sx));
+/* The transaction was probably marked dirty by xaccTransSetCurrency,
+ * but just in case: */
+	qof_instance_set_dirty (QOF_INSTANCE (new_txn));
     }
 
     xaccTransCommitEdit(new_txn);

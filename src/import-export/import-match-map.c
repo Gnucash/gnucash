@@ -107,14 +107,14 @@ void gnc_imap_destroy (GncImportMatchMap *imap)
 void gnc_imap_clear (GncImportMatchMap *imap)
 {
     if (!imap) return;
-
+    xaccAccountBeginEdit (imap->acc);
     /* Clear the IMAP_FRAME kvp */
     kvp_frame_set_slot_path (imap->frame, NULL, IMAP_FRAME);
 
     /* Clear the bayes kvp, IMAP_FRAME_BAYES */
     kvp_frame_set_slot_path (imap->frame, NULL, IMAP_FRAME_BAYES);
-
-    /* XXX: mark the account (or book) as dirty! */
+    qof_instance_set_dirty (QOF_INSTANCE (imap->acc));
+    xaccAccountCommitEdit (imap->acc);
 }
 
 /** Look up an Account in the map */

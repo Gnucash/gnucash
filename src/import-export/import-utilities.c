@@ -72,8 +72,11 @@ void gnc_import_set_trans_online_id(Transaction * transaction,
                                     const gchar * string_value)
 {
     kvp_frame * frame;
+    xaccTransBeginEdit (transaction);
     frame = xaccTransGetSlots(transaction);
     kvp_frame_set_str (frame, "online_id", string_value);
+    qof_instance_set_dirty (QOF_INSTANCE (transaction));
+    xaccTransCommitEdit (transaction);
 }
 
 gboolean gnc_import_trans_has_online_id(Transaction * transaction)
@@ -96,8 +99,10 @@ void gnc_import_set_split_online_id(Split * split,
                                     const gchar * string_value)
 {
     kvp_frame * frame;
+    xaccTransBeginEdit (xaccSplitGetParent (split));
     frame = xaccSplitGetSlots(split);
     kvp_frame_set_str (frame, "online_id", string_value);
+    qof_instance_set_dirty (QOF_INSTANCE (split));
 }
 
 gboolean gnc_import_split_has_online_id(Split * split)
