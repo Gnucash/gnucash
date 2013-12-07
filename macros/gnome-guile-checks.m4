@@ -23,11 +23,15 @@ AC_DEFUN([GNOME_CHECK_GUILE],
 	AC_SUBST(TERMCAP_LIB)
 	AC_SUBST(READLINE_LIB)
 
-	if test "x$cross_compiling" = "xyes" ; then
-	  name_build_guile="$target_alias-guile-config"
-	else
-	  name_build_guile="guile-config"
-	fi
+    if test "x$GUILE_CONFIG" != "x"; then
+      name_build_guile="$GUILE_CONFIG"
+    else
+      if test "x$cross_compiling" = "xyes" ; then
+        name_build_guile="$target_alias-guile-config"
+      else
+        name_build_guile="guile-config"
+      fi
+    fi
 
 	AC_CHECK_PROG(BUILD_GUILE, $name_build_guile, yes, no)
 

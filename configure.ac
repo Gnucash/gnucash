@@ -419,11 +419,18 @@ fi
 AS_SCRUB_INCLUDE(GUILE_INCS)
 AC_SUBST(GUILE_LIBS)
 
-AM_GUILE_VERSION_CHECK(1.6.7, , , [AC_MSG_ERROR([
+AM_GUILE_VERSION_CHECK(1.6.7, 1.8.99, , [AC_MSG_ERROR([
 
   guile does not appear to be installed correctly, or is not in the
   correct version range.  Perhaps you have not installed the guile
-  development packages?  Gnucash requires at least version 1.6.7 to build.
+  development packages?
+  Gnucash requires a version between 1.6.7 and 1.8.99 to build.
+  
+  Note: if you have installed guile 2 on your system as well, you
+  may want to set environment variables GUILE and GUILE_CONFIG to
+  point explicitly at the proper binaries for guile 1.8 before
+  running configure. Eg:
+  configure --enable-compile-warnings ... GUILE=guile1.8 GUILE_CONFIG=guile1.8-config
 ])])
 
 AC_SUBST(GUILE)
@@ -434,8 +441,8 @@ AC_DEFINE_UNQUOTED(GNC_GUILE_MINOR_VERSION, ${guile_minor_version},
 AC_DEFINE_UNQUOTED(GNC_GUILE_MICRO_VERSION, ${guile_micro_version},
     [Guile Micro version number])
 
-AM_GUILE_VERSION_CHECK(1.8.0, , [
-  AC_DEFINE(HAVE_GUILE18,1,[System has guile 1.8 or better])
+AM_GUILE_VERSION_CHECK(1.8.0, 1.8.99, [
+  AC_DEFINE(HAVE_GUILE18,1,[System has guile 1.8])
 ], )
 
 AS_SCRUB_INCLUDE(CFLAGS)
