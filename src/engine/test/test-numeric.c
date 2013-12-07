@@ -546,8 +546,6 @@ check_add_subtract (void)
     }
 }
 
-extern gint64 pwr64 (gint64 op, int exp);
-
 static void
 check_add_subtract_overflow (void)
 {
