@@ -27,7 +27,7 @@ GNC_TEST_DEPS = \
 
 TESTS_ENVIRONMENT = \
   SRCDIR=${srcdir} \
-  $(shell ${top_srcdir}/src/gnc-test-env --no-exports ${GNC_TEST_DEPS})
+  $(shell ${top_builddir}/src/gnc-test-env --no-exports ${GNC_TEST_DEPS})
 
 check_PROGRAMS = \
   test-gnc-uri-utils \

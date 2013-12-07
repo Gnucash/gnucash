@@ -1,5 +1,5 @@
 #!/bin/sh
-exec gnucash-env guile -s "$0" "$@"
+exec gnucash-env @GUILE@ -s "$0" "$@"
 !#
 
 (define (usage)

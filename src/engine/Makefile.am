@@ -213,8 +213,8 @@ swig-business-core.c: business-core.i ${noinst_HEADERS} \
 endif
 
 iso-4217-currencies.c: iso-4217-currencies.scm iso-currencies-to-c
-	-chmod u+x ${srcdir}/iso-currencies-to-c
-	${srcdir}/iso-currencies-to-c "${srcdir}"
+	-chmod u+x ./iso-currencies-to-c
+	./iso-currencies-to-c "${srcdir}"
 
 BUILT_SOURCES = iso-4217-currencies.c
 

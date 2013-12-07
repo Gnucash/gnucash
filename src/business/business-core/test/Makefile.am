@@ -41,7 +41,7 @@ GNC_TEST_DEPS = \
   --library-dir    ${top_builddir}/src/backend/xml
 
 TESTS_ENVIRONMENT = \
-  $(shell ${top_srcdir}/src/gnc-test-env --no-exports ${GNC_TEST_DEPS})
+  $(shell ${top_builddir}/src/gnc-test-env --no-exports ${GNC_TEST_DEPS})
 
 check_PROGRAMS = \
   test-load-module \

@@ -1,4 +1,2 @@
 #!/bin/sh
-guile -l $SRCDIR/test-scm-query-import.scm -c "(exit (run-test))"
-#echo "run -l $SRCDIR/test-scm-query-import.scm -c \"(exit (run-test))\""
-#gdb /afs/sipb/project/guile/bin/guile
+${GUILE} -l $SRCDIR/test-scm-query-import.scm -c "(exit (run-test))"

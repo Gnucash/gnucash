@@ -1,5 +1,5 @@
 #! /bin/sh 
-exec guile -s "$0"
+exec ${GUILE} -s "$0"
 !#
 
 (setenv "GNC_UNINSTALLED" "1")
