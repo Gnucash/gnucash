@@ -185,6 +185,9 @@ xmlEntityPtr sixtp_sax_get_entity_handler(void *user_data, const xmlChar *name);
 gboolean sixtp_parse_file(sixtp *sixtp, const char *filename,
                           gpointer data_for_top_level, gpointer global_data,
                           gpointer *parse_result);
+gboolean sixtp_parse_fd(sixtp *sixtp, FILE *fd,
+                        gpointer data_for_top_level, gpointer global_data,
+                        gpointer *parse_result);
 gboolean sixtp_parse_buffer(sixtp *sixtp, char *bufp, int bufsz,
                             gpointer data_for_top_level, gpointer global_data,
                             gpointer *parse_result);

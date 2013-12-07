@@ -28,6 +28,7 @@
 #include <string.h>
 #include <ctype.h>
 #include <stdarg.h>
+#include <stdio.h>
 #include <sys/types.h>
 #ifdef _MSC_VER
 typedef int ssize_t;
@@ -754,6 +755,34 @@ sixtp_parse_file(sixtp *sixtp,
 #else
     context = xmlCreateFileParserCtxt(filename);
 #endif
+    ret = sixtp_parse_file_common(sixtp, context, data_for_top_level,
+                                  global_data, parse_result);
+    return ret;
+}
+
+/* Call back function for libxml2 to read from compressed or uncompressed stream */
+static int
+sixtp_parser_read(void *context, char *buffer, int len)
+{
+    int ret;
+    
+    ret = fread(&buffer[0], sizeof(char), len, (FILE *) context);
+    if (ret < 0)
+        g_warning("Error reading XML file");
+    return ret;
+}
+
+gboolean
+sixtp_parse_fd(sixtp *sixtp,
+               FILE *fd,
+               gpointer data_for_top_level,
+               gpointer global_data,
+               gpointer *parse_result)
+{
+    gboolean ret;
+    xmlParserCtxtPtr context = xmlCreateIOParserCtxt( NULL, NULL, 
+                                                     sixtp_parser_read, NULL /*no close */, fd, 
+                                                     XML_CHAR_ENCODING_NONE);
     ret = sixtp_parse_file_common(sixtp, context, data_for_top_level,
                                   global_data, parse_result);
     return ret;
