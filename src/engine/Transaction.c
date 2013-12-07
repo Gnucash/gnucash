@@ -1054,7 +1054,8 @@ xaccTransIsBalanced (const Transaction *trans)
            the other. */
         FOR_EACH_SPLIT(trans, 
         {
-            if (xaccAccountGetType(xaccSplitGetAccount(s)) != ACCT_TYPE_TRADING)
+            Account *acc = xaccSplitGetAccount(s);
+            if (!acc || xaccAccountGetType(acc) != ACCT_TYPE_TRADING)
             {
                 imbal = gnc_numeric_add(imbal, xaccSplitGetValue(s),
                                         GNC_DENOM_AUTO, GNC_HOW_DENOM_EXACT);

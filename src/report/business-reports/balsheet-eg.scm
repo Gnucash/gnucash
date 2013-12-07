@@ -536,7 +536,8 @@
                         (depth   (flattened-acc-depth account))
                         (treedepth 1)
                         ; Next account only qualifies as 'deeper' if we're not flattening
-                        (next-acc-deeper (> (flattened-acc-depth (safe-cadr account-list)) depth))
+                        (next-acc-deeper (and (not (null? (safe-cadr account-list)))
+                                              (> (flattened-acc-depth (safe-cadr account-list)) depth)))
                         (newacc (newaccrec-clean)))
                    (accrec-set-account!      newacc account)
                    (accrec-set-code!         newacc (xaccAccountGetCode account))
