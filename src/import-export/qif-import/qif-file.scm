@@ -10,11 +10,7 @@
 (use-modules (gnucash printf))
 (use-modules (ice-9 regex))
 (use-modules (srfi srfi-13))
-
-(cond
- ((or (string=? "1.3.4" (version))
-      (string=? "1.4" (substring (version) 0 3))) #f)
- (else (use-modules (ice-9 rdelim))))
+(use-modules (ice-9 rdelim))
 
 (define qif-bad-numeric-rexp
   (make-regexp "^\\.\\.\\."))
