@@ -115,7 +115,7 @@
          (not (string=? bgpixmap "")))
     (gnc:html-document-set-style!
      ssdoc "body"
-     'attribute (list "background" (make-file-url bgpixmap))))
+     'attribute (list "background" bgpixmap)))
 
     (gnc:html-document-set-style!
        ssdoc "table"
