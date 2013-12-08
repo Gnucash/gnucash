@@ -1,15 +1,16 @@
 # Glossary of terms in GnuCash
-# Copyright (C) 2006 Free Software Foundation, Inc.
+# Copyright (C) 2006,2013 Free Software Foundation, Inc.
 # Jonathan Ernst <jonathan@ernstfamily.ch>, 2006
+# Sébastien Villemot <sebastien@debian.org>, 2013
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 2.0\n"
 "POT-Creation-Date: 2013-05-08 22:16+0200\n"
-"PO-Revision-Date: 2011-10-31 14:59+0100\n"
-"Last-Translator: Jérôme Rapinat <romjerome@yahoo.fr>\n"
+"PO-Revision-Date: 2013-12-07 20:14+0100\n"
+"Last-Translator: Sébastien Villemot <sebastien@debian.org>\n"
 "Language-Team: FR\n"
-"Language: \n"
+"Language: French\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -66,7 +67,7 @@ msgstr "type de compte : passif"
 
 #. "-"
 msgid "account type: money-market"
-msgstr "type de compte : marché financier"
+msgstr "type de compte : marché monétaire"
 
 #. "-"
 msgid "account type: Mutual fund"
@@ -81,9 +82,8 @@ msgid "account type: Stock"
 msgstr "type de compte : action"
 
 #. "This account type (new in gnucash-2.4.0) is used when exchanging or trading amounts from one currency into another"
-#, fuzzy
 msgid "account type: trading"
-msgstr "type de compte : épargne"
+msgstr "type de compte : mouvements"
 
 #. "-"
 msgid "account: parent account"
@@ -115,14 +115,13 @@ msgstr "action : achat"
 
 #. "-"
 msgid "action: deposit"
-msgstr "action : couverture"
+msgstr "action : dépôt"
 
 #. "When people can automatically deduct money straight from your account. The reverse of Direct Deposit."
 msgid "action: direct debit"
 msgstr "action : débit direct"
 
 #. "transaction is a distribution (???)"
-#, fuzzy
 msgid "action: dist"
 msgstr "action : dist"
 
@@ -135,7 +134,6 @@ msgid "action: fee"
 msgstr "action : rémunération"
 
 #. "transaction comes from interest"
-#, fuzzy
 msgid "action: int"
 msgstr "action : int"
 
@@ -148,7 +146,6 @@ msgid "action: payment"
 msgstr "action : paiement"
 
 #. "-"
-#, fuzzy
 msgid "action: POS"
 msgstr "action : POS"
 
@@ -205,9 +202,8 @@ msgid "bill"
 msgstr "facture"
 
 #. "see invoice owner"
-#, fuzzy
 msgid "bill owner"
-msgstr "conditions de facturation"
+msgstr "émetteur de la facture"
 
 #. "Conditions on paying a bill. Both an invoice and a bill have billing terms. For example, you can have 'terms' of 'Net-30', where the bill is due in full in 30 days."
 msgid "billing terms"
@@ -274,9 +270,8 @@ msgid "commodity option: Symbol"
 msgstr "option du produit, bien : symbole"
 
 #. "interest which is earned on both the initial deposit and on any interest that has already been earned but left on deposit."
-#, fuzzy
 msgid "compound interests"
-msgstr "intérêt"
+msgstr "intérêts composés"
 
 #. "(a) A sum of money paid into an account. (b) A record of such a payment. (c) The state of having money in one's bank account."
 msgid "Credit (column in register)"
@@ -291,9 +286,8 @@ msgid "credit transfer"
 msgstr "transfert de crédit"
 
 #. "A document that you give to a client that says you owe money to the client, i.e. the opposite of an invoice"
-#, fuzzy
 msgid "credit note"
-msgstr "transfert de crédit"
+msgstr "avoir"
 
 #. "The system of money used in a country"
 msgid "currency"
@@ -329,7 +323,7 @@ msgstr "par défaut"
 
 #. "see credit"
 msgid "deposit (in the reconcile dialog)"
-msgstr "couverture (dans le dialogue de rapprochement)"
+msgstr "dépôt (dans le dialogue de rapprochement)"
 
 #. "The process of something becoming less valuable"
 msgid "depreciation"
@@ -361,7 +355,7 @@ msgstr "relevé des capitaux propres"
 
 #. "A trusted third party that holds a payment or deposit until a transaction is completed. In the US, many mortgage companies set up an escrow account when you get a mortgage.  You pay into the account every month and they disburse amounts out of the escrow to pay for hazard insurance and property taxes. So they are holding funds 'in escrow' to complete the transactions (paying insurance and taxes)."
 msgid "escrow (account)"
-msgstr "fiducie"
+msgstr "séquestre (compte en)"
 
 #. "The relation in value between the money used in different countries"
 msgid "exchange rate"
@@ -412,9 +406,8 @@ msgid "invoice"
 msgstr "facture"
 
 #. "The customer (or vendor) to which this invoice is sent to."
-#, fuzzy
 msgid "invoice owner"
-msgstr "facture"
+msgstr "destinataire de la facture"
 
 #. "In business accounting: Jobs are a mechanism by which you can group multiple invoices or bills that belong to the same customer or vendor. The job describes a (larger) piece of work or a task undertaken on order, for which one or many invoices or bills will be issued."
 msgid "job"
@@ -453,9 +446,8 @@ msgid "marker"
 msgstr "marqueur"
 
 #. "1. Some text annotation, but this meaning isn't used inside gnucash. 2. In the Customer summary report: The ratio of profit vs. sales, i.e. the profit amount divided by the sales amount, shown in percent."
-#, fuzzy
 msgid "markup"
-msgstr "marqueur"
+msgstr "marge"
 
 #. "The way how more than one window is displayed in GnuCash at the same time. MDI = Multiple Document Interface."
 msgid "MDI modus"
@@ -539,25 +531,23 @@ msgstr "paiement"
 
 #. "An account where no transactions may be posted to; transactions can only be posted to subaccounts of this account, so this account serves as a placeholder in the hierarchy"
 msgid "placeholder"
-msgstr "emplacement"
+msgstr "virtuel"
 
 #. "A set of investments owned by a person"
 msgid "portfolio"
 msgstr "portefeuille"
 
 #. "Register invoice, voucher in account register"
-#, fuzzy
 msgid "post, to"
-msgstr "fermer, pour"
+msgstr "publier, dans"
 
 #. "A menu choice in many graphical user interface applications that allows the user to specify how the application will act each time it is used. "
 msgid "preferences"
 msgstr "préférences"
 
 #. "Loan repayment calculator: your payments are split in interests payment and principal payment"
-#, fuzzy
 msgid "principal payment"
-msgstr "action : paiement"
+msgstr "remboursement du principal"
 
 #. "An amount of money for which sth may be bought or sold"
 msgid "price (in a split)"
@@ -641,7 +631,7 @@ msgstr "transaction inversée, pour (action du registre)"
 
 #. "(In the customer summary report) The total amount of money received because something was sold."
 msgid "sales"
-msgstr ""
+msgstr "ventes"
 
 #. "To write data (typically a file) to a storage medium, such as a disk or tape."
 msgid "save, to (to a file)"
@@ -684,9 +674,8 @@ msgid "subtotal"
 msgstr "sous-total"
 
 #. "On the goverment's tax forms, the tax code identifies the given line or place on the form where certain amounts must be specified according to the current country's legislation"
-#, fuzzy
 msgid "tax code"
-msgstr "détails de la taxation"
+msgstr "code de taxe"
 
 #. "field of an account"
 msgid "tax info"
