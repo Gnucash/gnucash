@@ -412,8 +412,8 @@
                   (list
                    (gnc:make-report-anchor
                     (if inc-exp?
-                        "Income Over Time"
-                        "Assets Over Time")
+                        category-barchart-income-uuid
+                        category-barchart-asset-uuid)
                     report-obj
                     (list
                      (list gnc:pagename-display
@@ -425,8 +425,8 @@
                                (_ "Asset Chart")))))
                    (gnc:make-report-anchor
                     (if inc-exp?
-                        "Expense Over Time"
-                        "Liabilities Over Time")
+                        category-barchart-expense-uuid
+                        category-barchart-liability-uuid)
                     report-obj
                     (list
                      (list gnc:pagename-display
