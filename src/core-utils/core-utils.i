@@ -1,11 +1,13 @@
 %module sw_core_utils
 %{
+#include <config.h>
 #include <gnc-glib-utils.h>
 #include <gnc-prefs.h>
 #include <gnc-path.h>
 #include <gnc-filepath-utils.h>
 #include <gnc-locale-utils.h>
 #include <glib.h>
+const gchar *gnc_version(void);
 %}
 #if defined(SWIGGUILE)
 %{
@@ -26,6 +28,10 @@ void
 %import "base-typemaps.i"
 
 %include <gnc-prefs.h>
+%inline %{
+const gchar *gnc_version(void)
+{ return VERSION; }
+%}
 
 %newobject gnc_path_get_bindir;
 gchar * gnc_path_get_bindir(void);

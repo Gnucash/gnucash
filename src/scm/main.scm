@@ -49,7 +49,6 @@
 ;; Exports
 
 ;; from main.scm
-(export gnc:version)
 (export gnc:warn)
 (export gnc:error)
 (export gnc:msg)
@@ -77,7 +76,6 @@
 (setlocale LC_ALL "")
 
 ;;(use-modules (ice-9 statprof))
-
 
 ;; various utilities
 

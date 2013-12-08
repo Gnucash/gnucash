@@ -79,6 +79,7 @@
 (use-modules (sw_gnome_utils)) ;; to get to gnc-error-dialog
 
 (use-modules (gnucash printf))
+(use-modules (gnucash core-utils)) ; for gnc:version
 
 (gnc:module-load "gnucash/html" 0)   ; added for 'gnc-html-engine-supports-css'
 (gnc:module-load "gnucash/tax/us" 0)

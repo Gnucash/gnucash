@@ -24,6 +24,7 @@
 (export gnc:make-welcome-report)
 
 (use-modules (gnucash main)) ;; FIXME: delete after we finish modularizing.
+(use-modules (gnucash core-utils)) ; for gnc:version
 (use-modules (gnucash gnc-module))
 (use-modules (sw_report_system))
 
@@ -86,9 +87,9 @@
     (gnc:html-document-add-object! 
      doc
      (gnc:make-html-text 
-      (gnc:html-markup-h2 (_ "Welcome to GnuCash 2.4!"))
-      (gnc:html-markup-p
-       (_ "GnuCash 2.4 has lots of nice features. Here are a few."))))
+      (gnc:html-markup-h2 (format (_ "Welcome to GnuCash ~a !") gnc:version))
+      (gnc:html-markup-p (format
+       (_ "GnuCash ~a has lots of nice features. Here are a few.") gnc:version))))
     doc))
 
 (gnc:define-report 
