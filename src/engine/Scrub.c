@@ -1018,7 +1018,7 @@ xaccTransScrubCurrency (Transaction *trans)
             SplitList *node;
             char guid_str[GUID_ENCODING_LENGTH + 1];
             guid_to_string_buff(xaccTransGetGUID(trans), guid_str);
-            PWARN ("no common transaction currency found for trans=\"%s\" (%s)",
+            PWARN ("no common transaction currency found for trans=\"%s\" (%s);",
                    trans->description, guid_str);
 
             for (node = trans->splits; node; node = node->next)
@@ -1030,9 +1030,15 @@ xaccTransScrubCurrency (Transaction *trans)
                 }
                 else
                 {
-                    PWARN (" split=\"%s\" account=\"%s\" commodity=\"%s\"",
+		    gnc_commodity *currency = xaccAccountGetCommodity(split->acc);
+                    PWARN ("setting to split=\"%s\" account=\"%s\" commodity=\"%s\"",
                            split->memo, xaccAccountGetName(split->acc),
-                           gnc_commodity_get_mnemonic(xaccAccountGetCommodity(split->acc)));
+                           gnc_commodity_get_mnemonic(currency));
+
+		    xaccTransBeginEdit (trans);
+		    xaccTransSetCurrency (trans, currency);
+		    xaccTransCommitEdit (trans);
+		    return;
                 }
             }
         }
