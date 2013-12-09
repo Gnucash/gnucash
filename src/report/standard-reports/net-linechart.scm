@@ -34,7 +34,7 @@
 (use-modules (gnucash printf))
 (use-modules (gnucash report report-system report-collectors))
 (use-modules (gnucash report report-system collectors))
-
+(use-modules (gnucash report standard-reports category-barchart)) ; for guids of called reports
 (gnc:module-load "gnucash/report/report-system" 0)
 
 (define reportname (N_ "Income/Expense Chart"))
