@@ -263,7 +263,7 @@ gnc_restore_all_state (gpointer session, gpointer unused)
                                       STATE_FILE_BOOK_GUID, &error);
     if (error)
     {
-        gnc_main_window_restore_default_state();
+        gnc_main_window_restore_default_state(NULL);
         g_warning("error reading group %s key %s: %s",
                   STATE_FILE_TOP, STATE_FILE_BOOK_GUID, error->message);
         LEAVE("no guid in state file");

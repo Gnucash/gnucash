@@ -657,6 +657,29 @@ gnc_main_window_restore_window (GncMainWindow *window, GncMainWindowSaveData *da
           window, data, data->key_file, data->window_num);
     window_group = g_strdup_printf(WINDOW_STRING, data->window_num + 1);
 
+    /* Deal with the uncommon case that the state file defines a window
+     * but no pages. An example to get in such a situation can be found
+     * here: https://bugzilla.gnome.org/show_bug.cgi?id=436479#c3
+     * If this happens on the first window, we will open an account hierarchy
+     * to avoid confusing the user by presenting a completely empty window.
+     * If it happens on a later window, we'll just skip restoring that window.
+     */
+    if (!g_key_file_has_group (data->key_file, window_group) ||
+        !g_key_file_has_key (data->key_file, window_group, WINDOW_PAGECOUNT, &error))
+    {
+        if (window)
+        {
+            gnc_main_window_restore_default_state (window);
+            PINFO ("saved state had an empty first main window\n"
+                   "an account hierarchy page was added automatically to avoid confusion");
+        }
+        else
+            PINFO ("saved state had an empty main window, skipping restore");
+
+        goto cleanup;
+    }
+
+
     /* Get this window's notebook info */
     page_count = g_key_file_get_integer(data->key_file,
                                         window_group, WINDOW_PAGECOUNT, &error);
@@ -668,7 +691,7 @@ gnc_main_window_restore_window (GncMainWindow *window, GncMainWindowSaveData *da
     }
     if (page_count == 0)
     {
-        /* Shound never happen, but has during alpha testing. Having this
+        /* Should never happen, but has during alpha testing. Having this
          * check doesn't hurt anything. */
         goto cleanup;
     }
@@ -911,15 +934,15 @@ gnc_main_window_restore_all_windows(const GKeyFile *keyfile)
 }
 
 void
-gnc_main_window_restore_default_state(void)
+gnc_main_window_restore_default_state(GncMainWindow *window)
 {
     GtkAction *action;
-    GncMainWindow *window;
 
     /* The default state should be to have an Account Tree page open
      * in the window. */
     DEBUG("no saved state file");
-    window = g_list_nth_data(active_windows, 0);
+    if (!window)
+        window = g_list_nth_data(active_windows, 0);
     action = gnc_main_window_find_action(window, "ViewAccountTreeAction");
     gtk_action_activate(action);
 }

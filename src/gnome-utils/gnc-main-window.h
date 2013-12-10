@@ -336,7 +336,7 @@ void gnc_main_window_save_all_windows(GKeyFile *keyfile);
 
 /** Restore the persistent state of one window to a sane default.
  */
-void gnc_main_window_restore_default_state(void);
+void gnc_main_window_restore_default_state(GncMainWindow *window);
 
 /**
  * gnc_gtk_action_group_set_translation_domain:
