@@ -890,7 +890,13 @@
   )
 
 ;; Return the splits that match an account list, date range, and (optionally) type
-;; where type is defined as an alist '((str "match me") (cased #f) (regexp #f))
+;; where type is defined as an alist like:
+;; '((str "match me") (cased #f) (regexp #f) (closing #f))
+;; where str, cased, and regexp define a pattern match on transaction deseriptions 
+;; and "closing" matches transactions created by the book close command.  If "closing"
+;; is given as #t then only closing transactions will be returned, if it is #f then
+;; only non-closing transactions will be returned, and if it is omitted then both
+;; kinds of transactions will be returned.
 (define (gnc:account-get-trans-type-splits-interval
          account-list type start-date-tp end-date-tp)
   (if (null? account-list)
@@ -898,6 +904,7 @@
       '()
       ;; The normal case: There are accounts given.
   (let* ((query (qof-query-create-for-splits))
+         (query2 #f)
 	 (splits #f)
 	 (get-val (lambda (alist key)
 		    (let ((lst (assoc-ref alist key)))
@@ -905,6 +912,7 @@
 	 (matchstr (get-val type 'str))
 	 (case-sens (if (get-val type 'cased) #t #f))
 	 (regexp (if (get-val type 'regexp) #t #f))
+	 (closing (if (get-val type 'closing) #t #f))
 	 )
     (qof-query-set-book query (gnc-get-current-book))
     (gnc:query-set-match-non-voids-only! query (gnc-get-current-book))
@@ -913,9 +921,16 @@
      query
      (and start-date-tp #t) start-date-tp
      (and end-date-tp #t) end-date-tp QOF-QUERY-AND)
-    (if type (xaccQueryAddDescriptionMatch
-              query matchstr case-sens regexp QOF-QUERY-AND))
-    
+    (if (or matchstr closing) 
+         (begin
+           (set! query2 (qof-query-create-for-splits))
+           (if matchstr (xaccQueryAddDescriptionMatch
+                         query2 matchstr case-sens regexp QOF-QUERY-OR))
+           (if closing (xaccQueryAddClosingTransMatch query2 1 QOF-QUERY-OR))
+           (qof-query-merge-in-place query query2 QOF-QUERY-AND)
+           (qof-query-destroy query2)
+    ))
+
     (set! splits (qof-query-run query))
     (qof-query-destroy query)
     splits

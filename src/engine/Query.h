@@ -166,6 +166,8 @@ void xaccQueryGetDateMatchTT (QofQuery * q,
                               time64 * stt,
                               time64 * ett);
 
+void xaccQueryAddClosingTransMatch(QofQuery *q, gboolean value, QofQueryOp op);
+
 typedef enum
 {
     CLEARED_NONE       = 0x0000,

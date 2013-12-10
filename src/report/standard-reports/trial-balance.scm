@@ -702,20 +702,22 @@
 			  (group (list acct))
 			  (curr-bal (get-val env 'account-bal))
 			  (closing
-			   (gnc:account-get-trans-type-balance-interval
+			   (gnc:account-get-trans-type-balance-interval-with-closing
 			    group
 			    (list (list 'str closing-str)
 				  (list 'cased closing-cased)
 				  (list 'regexp closing-regexp)
+				  (list 'closing #t)
 				  )
 			    start-date-tp end-date-tp
 			    ))
 			  (adjusting
-			   (gnc:account-get-trans-type-balance-interval
+			   (gnc:account-get-trans-type-balance-interval-with-closing
 			    group
 			    (list (list 'str adjusting-str)
 				  (list 'cased adjusting-cased)
 				  (list 'regexp adjusting-regexp)
+				  (list 'closing #t)
 				  )
 			    start-date-tp end-date-tp
 			    ))

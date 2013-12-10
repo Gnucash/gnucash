@@ -261,6 +261,7 @@
 		(list 'cased closing-cased)
 		(list 'regexp closing-regexp)
 		(list 'positive #f)
+		(list 'closing #t)
 		)
 	  )
 	 

@@ -587,6 +587,20 @@ xaccQueryAddKVPMatch(QofQuery *q, GSList *path, const KvpValue *value,
     qof_query_add_term (q, param_list, pred_data, op);
 }
 
+/********************************************************************
+ * xaccQueryAddClosingTransMatch
+ * Add a filter that matches book closing entries to an existing query.
+ ********************************************************************/
+
+void
+xaccQueryAddClosingTransMatch(QofQuery *q, gboolean value, QofQueryOp op)
+{
+    GSList *param_list; 
+    
+    param_list = qof_query_build_param_list(SPLIT_TRANS, TRANS_IS_CLOSING, NULL);
+    qof_query_add_boolean_match(q, param_list, value, op);
+}
+
 /*******************************************************************
  *  xaccQueryGetEarliestDateFound
  *******************************************************************/

@@ -364,6 +364,7 @@
 	  (list (list 'str closing-str)
 		(list 'cased closing-cased)
 		(list 'regexp closing-regexp)
+		(list 'closing #t)
 		)
 	  )
 	 (indent 0)
