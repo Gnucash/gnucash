@@ -1547,7 +1547,7 @@ gnc_ui_qif_import_load_file_prepare (GtkAssistant  *assistant, gpointer user_dat
     gint num = gtk_assistant_get_current_page (assistant);
     GtkWidget *page = gtk_assistant_get_nth_page (assistant, num);
 
-    /* Enable the Assistant Buttons */
+    /* Disable the Assistant Forward Button */
     gtk_assistant_set_page_complete (assistant, page, FALSE);
 }
 
@@ -1885,7 +1885,7 @@ gnc_ui_qif_import_load_progress_start_cb(GtkButton * button,
         }
     }
 
-    /* Enable the assistant buttons */
+    /* Enable the assistant Forward button */
     gtk_assistant_set_page_complete (GTK_ASSISTANT(wind->window), page, TRUE);
 
     /* Set Pause and Start buttons */
@@ -1935,7 +1935,7 @@ gnc_ui_qif_import_load_progress_prepare (GtkAssistant  *assistant, gpointer user
     gtk_widget_set_sensitive(wind->load_pause, FALSE);
     gtk_widget_set_sensitive(wind->load_start, TRUE);
 
-    /* Enable the assistant buttons */
+    /* Disable the assistant Forward button */
     gtk_assistant_set_page_complete (assistant, page, FALSE);
 }
 
@@ -2062,12 +2062,12 @@ gnc_ui_qif_import_acct_valid_cb(GtkWidget * widget,
 
     if (!acct_name || acct_name[0] == 0)
     {
-        /* Disable the assistant Buttons */
+        /* Disable the assistant Forward Button */
         gtk_assistant_set_page_complete (assistant, page, FALSE);
     }
     else
     {
-        /* Enable the assistant Buttons */
+        /* Enable the assistant Forward Button */
         gtk_assistant_set_page_complete (assistant, page, TRUE);
     }
 }
@@ -2098,7 +2098,7 @@ gnc_ui_qif_import_loaded_files_prepare (GtkAssistant *assistant,
     scm_name = scm_from_locale_string(acct_name ? acct_name : "");
     scm_call_2(fix_default, wind->selected_file, scm_name);
 
-    /* Enable the assistant Buttons */
+    /* Enable the assistant Forward Button */
     gtk_assistant_set_page_complete (assistant, page, TRUE);
 
     update_file_page(wind);
@@ -2233,7 +2233,7 @@ gnc_ui_qif_import_account_doc_prepare (GtkAssistant *assistant,
 
     PINFO("Total Number of Assistant Pages is %d", gtk_assistant_get_n_pages (assistant));
 
-    /* Enable the Assistant Buttons */
+    /* Enable the Assistant Forward Button */
     gtk_assistant_set_page_complete (assistant, page, TRUE);
 
     /* Jump to Summary page if load_stop TRUE */
@@ -2270,7 +2270,7 @@ gnc_ui_qif_import_account_match_prepare(GtkAssistant *assistant,
     update_memo_page(wind);
     gnc_unset_busy_cursor(NULL);
 
-    /* Enable the Assistant Buttons */
+    /* Enable the Assistant Forward Button */
     gtk_assistant_set_page_complete (assistant, page, TRUE);
 }
 
@@ -2316,7 +2316,7 @@ gnc_ui_qif_import_catagory_doc_prepare (GtkAssistant *assistant,
 
     PINFO("Total Number of Assistant Pages is %d", gtk_assistant_get_n_pages (assistant));
 
-    /* Enable the Assistant Buttons */
+    /* Enable the Assistant Forward Button */
     gtk_assistant_set_page_complete (assistant, page, TRUE);
 
     /* Jump to Summary page if load_stop TRUE */
@@ -2351,7 +2351,7 @@ gnc_ui_qif_import_catagory_match_prepare(GtkAssistant *assistant,
     gint num = gtk_assistant_get_current_page (assistant);
     GtkWidget *page = gtk_assistant_get_nth_page (assistant, num);
 
-    /* Enable the Assistant Buttons */
+    /* Enable the Assistant Forward Button */
     gtk_assistant_set_page_complete (assistant, page, TRUE);
 
     /* If there are no category mappings, jump this step. */
@@ -2401,7 +2401,7 @@ gnc_ui_qif_import_memo_doc_prepare (GtkAssistant *assistant,
 
     PINFO("Total Number of Assistant Pages is %d", gtk_assistant_get_n_pages (assistant));
 
-    /* Enable the Assistant Buttons */
+    /* Enable the Assistant Forward Button */
     gtk_assistant_set_page_complete (assistant, page, TRUE);
 
     /* Jump to Summary page if load_stop TRUE */
@@ -2436,7 +2436,7 @@ gnc_ui_qif_import_memo_match_prepare (GtkAssistant *assistant,
     gint num = gtk_assistant_get_current_page (assistant);
     GtkWidget *page = gtk_assistant_get_nth_page (assistant, num);
 
-    /* Enable the Assistant Buttons */
+    /* Enable the Assistant Forward Button */
     gtk_assistant_set_page_complete (assistant, page, TRUE);
 
     /* If there are no memo mappings, jump this step. */
@@ -2503,7 +2503,7 @@ gnc_ui_qif_import_currency_prepare(GtkAssistant *assistant,
         gtk_widget_hide (wind->book_option_message);
     }
 
-    /* Enable the Assistant Buttons */
+    /* Enable the Assistant Forward Button */
     gtk_assistant_set_page_complete (assistant, page, TRUE);
 }
 
@@ -2569,7 +2569,7 @@ gnc_ui_qif_import_commodity_doc_prepare (GtkAssistant *assistant,
 
     PINFO("Total Number of Assistant Pages is %d", gtk_assistant_get_n_pages (assistant));
 
-    /* Enable the Assistant Buttons */
+    /* Enable the Assistant Forward Button */
     gtk_assistant_set_page_complete (assistant, page, TRUE);
 
     /* Jump to Summary page if load_stop TRUE */
@@ -2605,6 +2605,8 @@ gnc_ui_qif_import_commodity_new_prepare (GtkAssistant *assistant,
 
     QIFAssistantPage    *qpage = g_object_get_data(G_OBJECT(page), "page_struct");
     const gchar         *ns;
+
+    g_return_if_fail (qpage != NULL);
 
     /* Get any entered namespace. */
     ns = gtk_entry_get_text( GTK_ENTRY( gtk_bin_get_child( GTK_BIN( GTK_COMBO_BOX(qpage->namespace_combo)))));
@@ -2936,7 +2938,7 @@ gnc_ui_qif_import_convert_progress_start_cb(GtkButton * button,
         wind->load_stop = TRUE;
     }
 
-    /* Enable the Assistant Buttons */
+    /* Enable the Assistant Forward Button */
     gtk_assistant_set_page_complete (GTK_ASSISTANT(wind->window), page, TRUE);
 
     /* Set Pause and Start buttons */
@@ -2988,7 +2990,7 @@ gnc_ui_qif_import_convert_progress_prepare(GtkAssistant *assistant,
     gtk_widget_set_sensitive(wind->convert_pause, FALSE);
     gtk_widget_set_sensitive(wind->convert_start, TRUE);
 
-    /* Enable the assistant buttons */
+    /* Disable the assistant Forward button */
     gtk_assistant_set_page_complete (assistant, page, FALSE);
 
     /* Before creating transactions, if this is a new book, let user specify
@@ -3017,7 +3019,7 @@ gnc_ui_qif_import_duplicates_doc_prepare (GtkAssistant *assistant,
 
     PINFO("Total Number of Assistant Pages is %d", gtk_assistant_get_n_pages (assistant));
 
-    /* Enable the Assistant Buttons */
+    /* Enable the Assistant Forward Button */
     gtk_assistant_set_page_complete (assistant, page, TRUE);
 
     /* Jump to Summary page if load_stop TRUE */
@@ -3109,7 +3111,7 @@ gnc_ui_qif_import_duplicates_match_prepare (GtkAssistant *assistant,
     else
         gtk_assistant_set_current_page (assistant, num + 1 );
 
-    /* Enable the Assistant Buttons */
+    /* Enable the Assistant Forward Button */
     gtk_assistant_set_page_complete (assistant, page, TRUE);
 }
 
@@ -3128,7 +3130,7 @@ gnc_ui_qif_import_end_page_prepare (GtkAssistant *assistant,
     gint num = gtk_assistant_get_current_page (assistant);
     GtkWidget *page = gtk_assistant_get_nth_page (assistant, num);
 
-    /* Enable the Assistant Buttons */
+    /* Enable the Assistant Forward Button */
     gtk_assistant_set_page_complete (assistant, page, TRUE);
 }
 
@@ -3216,7 +3218,7 @@ gnc_ui_qif_import_summary_page_prepare (GtkAssistant *assistant,
 
     g_free(text);
 
-    /* Enable the Assistant Buttons */
+    /* Enable the Assistant Forward Button */
     gtk_assistant_set_page_complete (assistant, page, TRUE);
 }
 
