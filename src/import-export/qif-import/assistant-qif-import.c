@@ -1548,7 +1548,7 @@ gnc_ui_qif_import_load_file_prepare (GtkAssistant  *assistant, gpointer user_dat
     GtkWidget *page = gtk_assistant_get_nth_page (assistant, num);
 
     /* Enable the Assistant Buttons */
-    gtk_assistant_set_page_complete (assistant, page, TRUE);
+    gtk_assistant_set_page_complete (assistant, page, FALSE);
 }
 
 

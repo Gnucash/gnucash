@@ -99,7 +99,7 @@ You will have the opportunity to load as many files as you wish, so don't worry 
         </child>
       </object>
       <packing>
-        <property name="page_type">progress</property>
+        <property name="page_type">content</property>
         <property name="title" translatable="yes">Select a QIF file to load</property>
       </packing>
     </child>
@@ -246,7 +246,7 @@ You will have the opportunity to load as many files as you wish, so don't worry 
         </child>
       </object>
       <packing>
-        <property name="page_type">progress</property>
+        <property name="page_type">content</property>
         <property name="title" translatable="yes">Load QIF files</property>
       </packing>
     </child>
@@ -307,7 +307,7 @@ Please select a date format for the file. QIF files created by European software
         </child>
       </object>
       <packing>
-        <property name="page_type">progress</property>
+        <property name="page_type">content</property>
         <property name="title" translatable="yes">Set a date format for this QIF file</property>
       </packing>
     </child>
@@ -393,7 +393,7 @@ Please enter a name for the account. If the file was exported from another accou
         </child>
       </object>
       <packing>
-        <property name="page_type">progress</property>
+        <property name="page_type">content</property>
         <property name="title" translatable="yes">Set the default QIF account name</property>
         <property name="complete">True</property>
       </packing>
@@ -515,7 +515,7 @@ Note that GnuCash will be creating many accounts that did not exist on your othe
         </child>
       </object>
       <packing>
-        <property name="page_type">progress</property>
+        <property name="page_type">content</property>
         <property name="title" translatable="yes">Accounts and stock holdings</property>
       </packing>
     </child>
@@ -621,7 +621,7 @@ Note that GnuCash will be creating many accounts that did not exist on your othe
         </child>
       </object>
       <packing>
-        <property name="page_type">progress</property>
+        <property name="page_type">content</property>
         <property name="title" translatable="yes">Match QIF accounts with GnuCash accounts</property>
       </packing>
     </child>
@@ -649,7 +649,7 @@ If you change your mind later, you can reorganize the account structure safely w
         </child>
       </object>
       <packing>
-        <property name="page_type">progress</property>
+        <property name="page_type">content</property>
         <property name="title" translatable="yes">Income and Expense categories</property>
       </packing>
     </child>
@@ -755,7 +755,7 @@ If you change your mind later, you can reorganize the account structure safely w
         </child>
       </object>
       <packing>
-        <property name="page_type">progress</property>
+        <property name="page_type">content</property>
         <property name="title" translatable="yes">Match QIF categories with GnuCash accounts</property>
       </packing>
     </child>
@@ -781,7 +781,7 @@ In the following page, you will see the text that appears in the Payee and Memo 
         </child>
       </object>
       <packing>
-        <property name="page_type">progress</property>
+        <property name="page_type">content</property>
         <property name="title" translatable="yes">Payees and memos</property>
       </packing>
     </child>
@@ -887,7 +887,7 @@ In the following page, you will see the text that appears in the Payee and Memo 
         </child>
       </object>
       <packing>
-        <property name="page_type">progress</property>
+        <property name="page_type">content</property>
         <property name="title" translatable="yes">Match payees/memos to GnuCash accounts</property>
       </packing>
     </child>
@@ -998,12 +998,12 @@ If you don't see your exchange listed, or none of the available choices are appr
         </child>
       </object>
       <packing>
-        <property name="page_type">progress</property>
+        <property name="page_type">content</property>
         <property name="title" translatable="yes">Tradable commodities</property>
       </packing>
     </child>
     <child>
-      <object class="GtkVBox" id="convert_progress_page">
+      <object class="GtkVBox" id="convert_content_page">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="border_width">12</property>
@@ -1173,7 +1173,7 @@ Click "Forward" to review the possible matches.</property>
         </child>
       </object>
       <packing>
-        <property name="page_type">progress</property>
+        <property name="page_type">content</property>
         <property name="title" translatable="yes">Match existing transactions</property>
       </packing>
     </child>
@@ -1272,7 +1272,7 @@ Click "Forward" to review the possible matches.</property>
         </child>
       </object>
       <packing>
-        <property name="page_type">progress</property>
+        <property name="page_type">content</property>
         <property name="title" translatable="yes">Select possible duplicates</property>
       </packing>
     </child>
