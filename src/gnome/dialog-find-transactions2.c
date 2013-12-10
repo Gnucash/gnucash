@@ -111,6 +111,9 @@ gnc_ui_find_transactions_dialog_create2 (GNCLedgerDisplay2 * orig_ledg)
         params = gnc_search_param_prepend (params, N_("Balanced"), NULL,
                                            type, SPLIT_TRANS, TRANS_IS_BALANCED,
                                            NULL);
+        params = gnc_search_param_prepend (params, N_("Closing Entries"), NULL,
+                                           type, SPLIT_TRANS, TRANS_IS_CLOSING,
+                                           NULL);
         params = gnc_search_param_prepend (params, N_("Reconcile"), RECONCILED_MATCH_TYPE,
                                            type, SPLIT_RECONCILE, NULL);
         params = gnc_search_param_prepend (params, N_("Share Price"), NULL,
