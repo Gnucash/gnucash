@@ -630,6 +630,7 @@
 			       (list 'str (_ "Closing Entries"))
 			       (list 'cased #f)
 			       (list 'regexp #f)
+			       (list 'closing #t)
 			       )
 			      ))
 	 (adjusting-pattern (or (get-val env 'adjusting-pattern)

@@ -717,7 +717,6 @@
 			    (list (list 'str adjusting-str)
 				  (list 'cased adjusting-cased)
 				  (list 'regexp adjusting-regexp)
-				  (list 'closing #t)
 				  )
 			    start-date-tp end-date-tp
 			    ))
