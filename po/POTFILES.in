@@ -122,6 +122,7 @@ src/business/business-ledger/gncEntryLedgerLayout.c
 src/business/business-ledger/gncEntryLedgerLoad.c
 src/business/business-ledger/gncEntryLedgerModel.c
 src/core-utils/binreloc.c
+src/core-utils/gnc-environment.c
 src/core-utils/gnc-features.c
 src/core-utils/gnc-filepath-utils.c
 src/core-utils/gnc-gdate-utils.c
