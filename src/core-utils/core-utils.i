@@ -1,6 +1,7 @@
 %module sw_core_utils
 %{
 #include <config.h>
+#include <gnc-environment.h>
 #include <gnc-glib-utils.h>
 #include <gnc-prefs.h>
 #include <gnc-path.h>
@@ -27,6 +28,7 @@ void
 #endif
 %import "base-typemaps.i"
 
+%include <gnc-environment.h>
 %include <gnc-prefs.h>
 %inline %{
 const gchar *gnc_version(void)

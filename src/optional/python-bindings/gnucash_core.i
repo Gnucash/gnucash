@@ -206,6 +206,7 @@
 %include <gnc-pricedb.h>
 
 %init %{
+gnc_environment_setup();
 qof_log_init();
 qof_init();
 qof_query_init();
