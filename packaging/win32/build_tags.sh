@@ -95,6 +95,10 @@ for tag_rev in $tags ; do
   # to name the log file
   echo -n "REPOS_URL=" >> ${w32pkg}/custom.sh
   echo "${TAG_URL}/${tag}" >> ${w32pkg}/custom.sh
+  
+  # Use the proper branch for the documentation
+  echo -n "DOCS_URL=" >> ${w32pkg}/custom.sh
+  echo "http://svn.gnucash.org/repo/gnucash-docs/${tag_major}.${tag_minor}" >> ${w32pkg}/custom.sh
 
   # BUILD_FROM_TARBALL is special:
   # in install.sh place we check !=yes, in defaults.sh =yes, in dist.sh =no
