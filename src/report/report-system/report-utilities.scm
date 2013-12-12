@@ -73,7 +73,7 @@
 ;; one of the type identifiers in typelist.
 (define (gnc:filter-accountlist-type typelist accounts)
   (filter (lambda (a) 
-	    (member (xaccAccountGetType a) typelist))
+	    (and (not (null? a)) (member (xaccAccountGetType a) typelist)))
 	  accounts))
 
 ;; Decompose a given list of accounts 'accounts' into an alist
