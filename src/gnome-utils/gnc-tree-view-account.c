@@ -1498,6 +1498,15 @@ gnc_tree_view_account_set_selected_accounts (GncTreeViewAccount *view,
         account = element->data;
         element = g_list_next(element);
 
+        if (account == NULL)
+        {
+            /*
+             * Oops.  Someone must have deleted this account and not cleaned
+             * up all references to it.
+             */
+            continue;
+        }
+        
         path = gnc_tree_model_account_get_path_from_account (GNC_TREE_MODEL_ACCOUNT(model), account);
         if (path == NULL)
         {
