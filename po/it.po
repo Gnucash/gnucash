@@ -54,7 +54,7 @@ msgstr ""
 "Project-Id-Version: Gnucash 2.3.12\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-08-01 22:12+0200\n"
-"PO-Revision-Date: 2013-11-22 20:56+0100\n"
+"PO-Revision-Date: 2013-12-13 22:45+0100\n"
 "Last-Translator: Cristian Marchi <cri.penta@gmail.com>\n"
 "Language-Team: Italian <gnucash-it@gnucash.org>\n"
 "Language: it\n"
@@ -1143,9 +1143,8 @@ msgid "Date of duplicated entries"
 msgstr "Data degli elementi duplicati"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2792
-#, fuzzy
 msgid "Do you really want to post these invoices?"
-msgstr "Si è sicuri di voler emettere la fattura?"
+msgstr "Emettere la fattura?"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2858
 msgid "View/Edit Invoice"
@@ -2239,7 +2238,6 @@ msgid "_Filter By..."
 msgstr "_Filtra per..."
 
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:191
-#, fuzzy
 msgid "Create a new bill"
 msgstr "Crea una nuova ricevuta"
 
@@ -7292,9 +7290,8 @@ msgstr "Rimuove la commodity selezionata"
 
 # Tooltip
 #: ../src/gnome/gtkbuilder/dialog-commodities.glade.h:6
-#, fuzzy
 msgid "Edit the current commodity."
-msgstr "Rimuove la commodity selezionata"
+msgstr "Modifica la commodity corrente"
 
 #: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:1
 msgid "Loan Repayment Calculator"
@@ -7578,7 +7575,6 @@ msgstr "Aggiunge un nuovo prezzo"
 
 # Tooltip
 #: ../src/gnome/gtkbuilder/dialog-price.glade.h:15
-#, fuzzy
 msgid "Remove the current price."
 msgstr "Rimuove il prezzo selezionato"
 
@@ -7589,7 +7585,6 @@ msgstr "Modifica il prezzo corrente"
 
 # Tooltip
 #: ../src/gnome/gtkbuilder/dialog-price.glade.h:18
-#, fuzzy
 msgid "Remove prices older than a user-entered date."
 msgstr "Rimuove i prezzi più vecchi della data inserita"
 
@@ -8256,7 +8251,6 @@ msgid "_Standard Order"
 msgstr "Ordine _standard"
 
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:28
-#, fuzzy
 msgid "Keep normal account order."
 msgstr "Mantieni l'ordine normale dei conti"
 
@@ -8267,12 +8261,10 @@ msgstr "Mantieni l'ordine normale dei conti"
 #: ../intl-scm/guile-strings.c:7606
 #: ../intl-scm/guile-strings.c:8884
 #: ../intl-scm/guile-strings.c:8940
-#, fuzzy
 msgid "Sort by date."
 msgstr "Ordina per data"
 
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:32
-#, fuzzy
 msgid "Sort by the date of entry."
 msgstr "Ordina per data di registrazione"
 
@@ -8281,7 +8273,6 @@ msgid "S_tatement Date"
 msgstr "Data estratto _conto"
 
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:34
-#, fuzzy
 msgid "Sort by the statement date (unreconciled items last)."
 msgstr "Ordina per data di estratto conto (elementi non riconciliati per ultimi)"
 
@@ -8290,7 +8281,6 @@ msgid "Num_ber"
 msgstr "Num_ero"
 
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:36
-#, fuzzy
 msgid "Sort by number."
 msgstr "Ordina per numero"
 
@@ -8305,7 +8295,6 @@ msgstr "I_mporto"
 #: ../intl-scm/guile-strings.c:7630
 #: ../intl-scm/guile-strings.c:8908
 #: ../intl-scm/guile-strings.c:8964
-#, fuzzy
 msgid "Sort by amount."
 msgstr "Ordina per importo"
 
@@ -8320,7 +8309,6 @@ msgstr "_Promemoria"
 #: ../intl-scm/guile-strings.c:7642
 #: ../intl-scm/guile-strings.c:8924
 #: ../intl-scm/guile-strings.c:8976
-#, fuzzy
 msgid "Sort by memo."
 msgstr "Ordina per promemoria"
 
@@ -8331,7 +8319,6 @@ msgstr "Ordina per promemoria"
 #: ../intl-scm/guile-strings.c:7634
 #: ../intl-scm/guile-strings.c:8912
 #: ../intl-scm/guile-strings.c:8968
-#, fuzzy
 msgid "Sort by description."
 msgstr "Ordina per descrizione"
 
@@ -8340,7 +8327,6 @@ msgid "_Action"
 msgstr "Ope_razione"
 
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:44
-#, fuzzy
 msgid "Sort by action field."
 msgstr "Ordina per operazione"
 
@@ -8349,7 +8335,6 @@ msgid "_Notes"
 msgstr "No_te"
 
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:46
-#, fuzzy
 msgid "Sort by notes field."
 msgstr "Ordina per campo delle note"
 
@@ -8358,18 +8343,16 @@ msgid "Sa_ve Sort Order"
 msgstr "Sal_va criterio di ordinamento"
 
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:48
-#, fuzzy
 msgid "Save the sort order for this register."
-msgstr "Modifica il conto principale per questo registro"
+msgstr "Salva il criterio di ordinamento per questo registro"
 
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:49
 msgid "Reverse Order"
 msgstr "Ordine inverso"
 
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:50
-#, fuzzy
 msgid "Sort in descending order."
-msgstr "Ordina le colonne ascendenti o discendenti"
+msgstr "Ordina in modo decrescente"
 
 #: ../src/gnome/gtkbuilder/window-autoclear.glade.h:1
 msgid "<b>Auto-Clear Information</b>"
@@ -11168,12 +11151,10 @@ msgid "You can not change this transaction, the Book or Register is set to Read 
 msgstr "Non è possibile modificare questa transazione: il libro o il registro è impostato in sola lettura"
 
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:130
-#, fuzzy
 msgid "Save Transaction before proceeding?"
 msgstr "Salvare la transazione prima di procedere?"
 
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:132
-#, fuzzy
 msgid "The current transaction has been changed. Would you like to record the changes before proceeding, or cancel?"
 msgstr "La transazione corrente è stata modificata. Salvare i cambiamenti?"
 
@@ -12196,7 +12177,7 @@ msgstr "Aggiungi una nuova commodity."
 
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:3445
 msgid "Enter the rate"
-msgstr ""
+msgstr "Inserire il tasso"
 
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:3455
 #: ../src/register/ledger-core/split-register-model.c:1323
@@ -12708,7 +12689,6 @@ msgstr "Visualizza i conti na_scosti"
 
 # tooltip
 #: ../src/gnome-utils/gtkbuilder/dialog-account.glade.h:55
-#, fuzzy
 msgid "Show accounts which have the option \"Hidden\" checked."
 msgstr "Mostra i conti che sono stati marcati come nascosti"
 
@@ -12718,9 +12698,8 @@ msgstr "Visualizza i conti con totale n_ullo"
 
 # Tooltip
 #: ../src/gnome-utils/gtkbuilder/dialog-account.glade.h:57
-#, fuzzy
 msgid "Show accounts which have a zero total value."
-msgstr "Non visualizzare i conti che hanno un valore totale nullo"
+msgstr "Visualizza i conti che hanno un valore totale nullo"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-account.glade.h:59
 msgid "Renumber sub-accounts"
@@ -12974,7 +12953,6 @@ msgstr "Utilizza la dicitura _formale della contabilità (Dare, Avere)"
 
 # Tooltip
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:20
-#, fuzzy
 msgid "Use only 'debit' and 'credit' instead of informal synonyms."
 msgstr "Utilizza le diciture «Dare» e «Avere» in luogo di sinonimi informali"
 
@@ -13063,7 +13041,6 @@ msgstr "Mostra il colore del conto come sfondo"
 
 # Tooltip
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:40
-#, fuzzy
 msgid "Show the Account Color as Account Name Background."
 msgstr "Mostra il colore del conto come sfondo del nome"
 
@@ -13073,7 +13050,6 @@ msgstr "Mostra il colore del conto nelle schede"
 
 # Tooltip
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:42
-#, fuzzy
 msgid "Show the Account Color as tab background."
 msgstr "Mostra il colore del conto come sfondo della scheda"
 
@@ -13211,7 +13187,6 @@ msgstr "Visualizza la finestra del «suggerimen_to del giorno»"
 
 # Tooltip
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:77
-#, fuzzy
 msgid "Display hints for using GnuCash at startup."
 msgstr "Visualizza i consigli per l'utilizzo di GnuCash all'avvio"
 
@@ -13260,7 +13235,6 @@ msgid "Display ne_gative amounts in red"
 msgstr "Visualizza importi ne_gativi in rosso"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:89
-#, fuzzy
 msgid "Display negative amounts in red."
 msgstr "Visualizza gli importi negativi in rosso"
 
@@ -13308,9 +13282,8 @@ msgstr "Se attivata, GnuCash mostrerà una finestra di conferma ogni volta che v
 
 # tooltip
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:102
-#, fuzzy
 msgid "Do not create log/backup files."
-msgstr "Per quanti giorni conservare i vecchi file di log e backup"
+msgstr "Non creare i file di log e backup"
 
 # Tooltip
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:104
@@ -13319,9 +13292,8 @@ msgstr "Cancella i file di log/backup trascorsi questi giorni (0 = mai)"
 
 # tooltip
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:106
-#, fuzzy
 msgid "Do not delete log/backup files."
-msgstr "Per quanti giorni conservare i vecchi file di log e backup"
+msgstr "Non eliminare i file di log e backup"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:108
 msgid "<b>Checks</b>"
@@ -13341,7 +13313,6 @@ msgid "Default _font:"
 msgstr "Carattere prede_finito"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:112
-#, fuzzy
 msgid "The default check printing font."
 msgstr "Lo stile di carattere predefinito per la stampa dell'assegno"
 
@@ -13660,9 +13631,8 @@ msgid "_Save window size and position"
 msgstr "_Salva la posizione e la dimensione della finestra"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:187
-#, fuzzy
 msgid "Save window size and location when it is closed."
-msgstr "Salva posizione e dimensione della finestra"
+msgstr "Salva posizione e dimensione della finestra alla chiusura"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:188
 msgid "Bring the most _recent tab to the front"
@@ -15595,12 +15565,11 @@ msgstr ""
 "Selezionare le impostazioni richieste per il file e premere «Avanti» per proseguire o «Annulla» per interrompere l'esportazione.\n"
 
 #: ../src/import-export/csv-export/assistant-csv-export.c:754
-#, fuzzy
 msgid ""
 "There was a problem with the export, this could be due to lack of space, permissions or unable to access folder. Check the trace file for further logging!\n"
 "You may need to enable debugging.\n"
 msgstr ""
-"Si è verificato un errore con l'esportazione: potrebbe essere un problema di spazio, di permessi o di impossibilità di accedere alla  cartella. Controllare il file di tracciamento per maggiori informazioni.\n"
+"Si è verificato un errore con l'esportazione: potrebbe essere un problema di spazio, di permessi o di impossibilità di accedere alla cartella. Controllare il file di tracciamento per maggiori informazioni.\n"
 "Potrebbe essere necessario abilitare il debugging.\n"
 
 #: ../src/import-export/csv-export/assistant-csv-export.c:758
@@ -16139,9 +16108,8 @@ msgid "Transaction Information"
 msgstr "Informazioni sulla transazione"
 
 #: ../src/import-export/csv-import/assistant-csv-trans-import.glade.h:46
-#, fuzzy
 msgid "Match Transactions"
-msgstr "Confronta le transazioni esistenti"
+msgstr "Confronta le transazioni"
 
 #: ../src/import-export/csv-import/csv-account-import.c:240
 #, c-format
@@ -17639,34 +17607,28 @@ msgid "You must select a report to delete."
 msgstr "È necessario selezionare un resoconto da cancellare."
 
 #: ../src/report/report-gnome/dialog-custom-report.c:432
-#, fuzzy
 msgid "Unable to change report name."
-msgstr "Impossibile salvare nel database"
+msgstr "Impossibile cambaire il nome del resoconto"
 
 #: ../src/report/report-gnome/dialog-custom-report.c:444
-#, fuzzy
 msgid "A custom report with this name already exists, please choose another name."
-msgstr "Un modello con il nome assegnato esiste già. Immettere un altro nome."
+msgstr "Un resoconto personalizzato con questo nome esiste già; inserirne un altro."
 
 #: ../src/report/report-gnome/dialog-custom-report.c:468
-#, fuzzy
 msgid "Run preconfigured report"
-msgstr "Riconciliato (resoconto)"
+msgstr "Avvia un resoconto preconfigurato"
 
 #: ../src/report/report-gnome/dialog-custom-report.c:470
-#, fuzzy
 msgid "Edit configuration name"
-msgstr "Imposta la directory di configurazione"
+msgstr "Modifica il nome della configurazione"
 
 #: ../src/report/report-gnome/dialog-custom-report.c:472
-#, fuzzy
 msgid "Delete preconfigured report"
-msgstr "Elimina il resoconto selezionato"
+msgstr "Elimina resoconto preconfigurato"
 
 #: ../src/report/report-gnome/dialog-custom-report.glade.h:1
-#, fuzzy
 msgid "Preconfigured reports"
-msgstr "Riconciliato (resoconto)"
+msgstr "Resoconti preconfigurati"
 
 #: ../src/report/report-gnome/dialog-custom-report.glade.h:2
 msgid "Exit the custom report dialog"
@@ -17809,18 +17771,16 @@ msgid "Export the current report as a PDF document"
 msgstr "Esporta il resoconto corrente come documento PDF"
 
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1031
-#, fuzzy
 msgid "Save _Report"
-msgstr "Resoconto singolo"
+msgstr "Salva _resoconto"
 
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1032
 msgid "Update the current report's saved configuration. The report will be saved in the file ~/.gnucash/saved-reports-2.4. "
 msgstr ""
 
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1037
-#, fuzzy
 msgid "Save Report As..."
-msgstr "Salva come..."
+msgstr "Salva resoconto come..."
 
 # Tooltip
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1038
@@ -17972,7 +17932,6 @@ msgid "St_yle Sheets"
 msgstr "_Fogli di stile"
 
 #: ../src/report/stylesheets/gnc-plugin-stylesheets.c:52
-#, fuzzy
 msgid "Edit report style sheets"
 msgstr "Modifica i fogli di stile del resoconto"
 
@@ -18246,56 +18205,48 @@ msgstr "ll numero generato del venditore precedente. Questo numero verrà increm
 # Tooltip
 #. src/app-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:86
-#, fuzzy
 msgid "The name of your business."
 msgstr "Il nome della propria attività"
 
 # Tooltip
 #. src/app-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:88
-#, fuzzy
 msgid "The address of your business."
 msgstr "L'indirizzo della propria attività"
 
 # Tooltip
 #. src/app-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:90
-#, fuzzy
 msgid "The contact person to print on invoices."
 msgstr "L'intermediario da stampare sulle fatture"
 
 # Tooltip
 #. src/app-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:92
-#, fuzzy
 msgid "The phone number of your business."
 msgstr "Numero di telefono della propria attività"
 
 # Tooltip
 #. src/app-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:94
-#, fuzzy
 msgid "The fax number of your business."
 msgstr "Il numero di fax della propria attività"
 
 # Tooltip
 #. src/app-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:96
-#, fuzzy
 msgid "The email address of your business."
 msgstr "L'indirizzo email della propria attività"
 
 # Tooltip
 #. src/app-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:98
-#, fuzzy
 msgid "The URL address of your website."
 msgstr "L'indirizzo internet del proprio sito"
 
 # Tooltip
 #. src/app-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:100
-#, fuzzy
 msgid "The ID for your company (eg 'Tax-ID: 00-000000)."
 msgstr "L'ID della propria impresa (es. Tax ID:00-000000)"
 
@@ -18329,7 +18280,6 @@ msgstr "Formato data per le stampe: "
 # Tooltip
 #. src/app-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:112
-#, fuzzy
 msgid "The default date format used for fancy printed dates."
 msgstr "Il formato predefinito di data utilizzato nelle stampe"
 
@@ -18352,7 +18302,6 @@ msgstr ""
 # tooltip
 #. src/app-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:120
-#, fuzzy
 msgid "Budget to be used when none has been otherwise specified."
 msgstr "Bilancio da utilizzare quando non ne è stato specificato nessun altro"
 
@@ -18574,7 +18523,6 @@ msgstr "L'ultimo giorno del prossimo trimestre contabile"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:206
-#, fuzzy
 msgid "The current date."
 msgstr "La data attuale"
 
@@ -18585,7 +18533,6 @@ msgstr "Un mese fa"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:210
-#, fuzzy
 msgid "One Month Ago."
 msgstr "Un mese fa"
 
@@ -18596,7 +18543,6 @@ msgstr "Una settimana fa"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:214
-#, fuzzy
 msgid "One Week Ago."
 msgstr "Una settimana fa"
 
@@ -18607,7 +18553,6 @@ msgstr "Tre mesi fa"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:218
-#, fuzzy
 msgid "Three Months Ago."
 msgstr "Tre mesi fa"
 
@@ -18618,7 +18563,6 @@ msgstr "Sei mesi fa"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:222
-#, fuzzy
 msgid "Six Months Ago."
 msgstr "Sei mesi fa"
 
@@ -18629,7 +18573,6 @@ msgstr "Un anno fa"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:226
-#, fuzzy
 msgid "One Year Ago."
 msgstr "Un anno fa"
 
@@ -18640,7 +18583,6 @@ msgstr "Tra un mese"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:230
-#, fuzzy
 msgid "One Month Ahead."
 msgstr "Tra un mese"
 
@@ -18651,7 +18593,6 @@ msgstr "Tra una settimana"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:234
-#, fuzzy
 msgid "One Week Ahead."
 msgstr "Tra una settimana"
 
@@ -18662,7 +18603,6 @@ msgstr "Fra tre mesi"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:238
-#, fuzzy
 msgid "Three Months Ahead."
 msgstr "Fra tre mesi"
 
@@ -18673,7 +18613,6 @@ msgstr "Tra sei mesi"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:242
-#, fuzzy
 msgid "Six Months Ahead."
 msgstr "Tra sei mesi"
 
@@ -18684,7 +18623,6 @@ msgstr "Tra un anno"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:246
-#, fuzzy
 msgid "One Year Ahead."
 msgstr "Tra un anno"
 
@@ -19341,7 +19279,6 @@ msgstr "Ordine di visualizzazione delle imprese"
 #. src/report/business-reports/gnucash/report/aging.scm
 #: ../intl-scm/guile-strings.c:612
 #: ../intl-scm/guile-strings.c:1342
-#, fuzzy
 msgid "Name of the company."
 msgstr "Nome dell'impresa"
 
@@ -19357,7 +19294,6 @@ msgstr "Totale dovuto"
 #. src/report/business-reports/gnucash/report/aging.scm
 #: ../intl-scm/guile-strings.c:616
 #: ../intl-scm/guile-strings.c:1346
-#, fuzzy
 msgid "Total amount owed to/from Company."
 msgstr "Importo totale dovuto alla/dalla società"
 
@@ -19381,7 +19317,6 @@ msgstr ""
 #. src/report/business-reports/gnucash/report/aging.scm
 #: ../intl-scm/guile-strings.c:622
 #: ../intl-scm/guile-strings.c:1352
-#, fuzzy
 msgid "Sort order."
 msgstr "Criterio di ordinamento"
 
@@ -19397,7 +19332,6 @@ msgstr "Crescente"
 #. src/report/business-reports/gnucash/report/aging.scm
 #: ../intl-scm/guile-strings.c:626
 #: ../intl-scm/guile-strings.c:1356
-#, fuzzy
 msgid "0 -> $999,999.99, A->Z."
 msgstr "0 -> €999,999.99, A->Z"
 
@@ -19413,7 +19347,6 @@ msgstr "Descrescente"
 #. src/report/business-reports/gnucash/report/aging.scm
 #: ../intl-scm/guile-strings.c:630
 #: ../intl-scm/guile-strings.c:1360
-#, fuzzy
 msgid "$999,999.99 -> $0, Z->A."
 msgstr "€999,999.99 -> €0, Z->A"
 
@@ -19422,7 +19355,6 @@ msgstr "€999,999.99 -> €0, Z->A"
 #. src/report/business-reports/gnucash/report/aging.scm
 #: ../intl-scm/guile-strings.c:632
 #: ../intl-scm/guile-strings.c:1362
-#, fuzzy
 msgid "Show multi-currency totals. If not selected, convert all totals to report currency."
 msgstr "Visualizza i totali con valute multiple; se disattivata, converte tutte le valute in quella del resoconto"
 
@@ -19442,7 +19374,6 @@ msgstr "Visualizza tutti i venditori/compratori anche se hanno un saldo nullo"
 #: ../intl-scm/guile-strings.c:1366
 #: ../intl-scm/guile-strings.c:2458
 #: ../intl-scm/guile-strings.c:3116
-#, fuzzy
 msgid "Leading date."
 msgstr "Data principale"
 
@@ -19454,9 +19385,8 @@ msgstr "Data principale"
 #: ../intl-scm/guile-strings.c:1370
 #: ../intl-scm/guile-strings.c:2462
 #: ../intl-scm/guile-strings.c:3120
-#, fuzzy
 msgid "Due date is leading."
-msgstr "La data di scadenza è quella che comanda"
+msgstr "La data di scadenza è quella principale"
 
 #. src/report/business-reports/aging.scm
 #. src/report/business-reports/gnucash/report/aging.scm
@@ -19466,7 +19396,6 @@ msgstr "La data di scadenza è quella che comanda"
 #: ../intl-scm/guile-strings.c:1374
 #: ../intl-scm/guile-strings.c:2466
 #: ../intl-scm/guile-strings.c:3124
-#, fuzzy
 msgid "Post date is leading."
 msgstr "La data di emissione è quella principale"
 
@@ -19696,7 +19625,6 @@ msgstr "Titolo del resoconto"
 #: ../intl-scm/guile-strings.c:7976
 #: ../intl-scm/guile-strings.c:8560
 #: ../intl-scm/guile-strings.c:9178
-#, fuzzy
 msgid "Title for this report."
 msgstr "Titolo per questo resoconto"
 
@@ -19793,7 +19721,6 @@ msgstr "Livello di profondità dei sottoconti"
 #: ../intl-scm/guile-strings.c:7992
 #: ../intl-scm/guile-strings.c:8576
 #: ../intl-scm/guile-strings.c:9198
-#, fuzzy
 msgid "Maximum number of levels in the account tree displayed."
 msgstr "Numero massimo di livelli da visualizzare nell'albero dei conti"
 
@@ -19849,7 +19776,6 @@ msgstr "Comprimi l'elenco al limite di profondità"
 #: ../intl-scm/guile-strings.c:6240
 #: ../intl-scm/guile-strings.c:6662
 #: ../intl-scm/guile-strings.c:7996
-#, fuzzy
 msgid "Displays accounts which exceed the depth limit at the depth limit."
 msgstr "Visualizza i conti che eccedono il limite di profondità, al limite di profondità"
 
@@ -19936,7 +19862,6 @@ msgstr "Visualizza i conti come collegamenti ipertestuali"
 #: ../intl-scm/guile-strings.c:8016
 #: ../intl-scm/guile-strings.c:8600
 #: ../intl-scm/guile-strings.c:9242
-#, fuzzy
 msgid "Shows each account in the table as a hyperlink to its register window."
 msgstr "Visualizza il nome di ogni conto nella tabella come un collegamento ipertestuale alla finestra del registro"
 
@@ -19952,7 +19877,6 @@ msgstr "Formato dell'importo negativo"
 #. src/report/business-reports/gnucash/report/balsheet-eg.scm
 #: ../intl-scm/guile-strings.c:714
 #: ../intl-scm/guile-strings.c:1444
-#, fuzzy
 msgid "The formatting to use for negative amounts: with a leading sign, or enclosing brackets."
 msgstr "Il formato da utilizzare per gli importi negativi: con segno, o tra parentesi"
 
@@ -19968,7 +19892,6 @@ msgstr "Famiglia di carattere"
 #. src/report/business-reports/gnucash/report/balsheet-eg.scm
 #: ../intl-scm/guile-strings.c:718
 #: ../intl-scm/guile-strings.c:1448
-#, fuzzy
 msgid "Font definition in CSS font-family format."
 msgstr "Definizione della famiglia del carattere nel formato CSS"
 
@@ -19984,7 +19907,6 @@ msgstr "Dimensione carattere"
 #. src/report/business-reports/gnucash/report/balsheet-eg.scm
 #: ../intl-scm/guile-strings.c:722
 #: ../intl-scm/guile-strings.c:1452
-#, fuzzy
 msgid "Font size in CSS font-size format (e.g. \"medium\" or \"10pt\")."
 msgstr "Dimensione del carattere nel formato CSS (per esempio \"medium\" o \"10pt\")"
 
@@ -20053,7 +19975,6 @@ msgstr "Note aggiuntive"
 #: ../intl-scm/guile-strings.c:1464
 #: ../intl-scm/guile-strings.c:2698
 #: ../intl-scm/guile-strings.c:3356
-#, fuzzy
 msgid "Notes added at end of invoice -- may contain HTML markup."
 msgstr "Note aggiunte alla fine della fattura; può contenere dei markup HTML"
 
@@ -20133,7 +20054,6 @@ msgstr "Visualizza le valute estere"
 #: ../intl-scm/guile-strings.c:8050
 #: ../intl-scm/guile-strings.c:8630
 #: ../intl-scm/guile-strings.c:9252
-#, fuzzy
 msgid "Display any foreign currency amount in an account."
 msgstr "Visualizza qualunque valore in valuta estera presente in un conto"
 
@@ -20188,9 +20108,8 @@ msgstr "Auto"
 #. src/report/business-reports/gnucash/report/balsheet-eg.scm
 #: ../intl-scm/guile-strings.c:750
 #: ../intl-scm/guile-strings.c:1480
-#, fuzzy
 msgid "Adjust the layout to fit the width of the screen or page."
-msgstr "La disposizione verrà scelta automaticamente in modo da adattarsi alla larghezza della pagina"
+msgstr "Correggi la disposizione per adattarla alla larghezza dello schermo o della pagina"
 
 #. src/report/business-reports/balsheet-eg.scm
 #. src/report/business-reports/gnucash/report/balsheet-eg.scm
@@ -20204,7 +20123,6 @@ msgstr "Una"
 #. src/report/business-reports/gnucash/report/balsheet-eg.scm
 #: ../intl-scm/guile-strings.c:754
 #: ../intl-scm/guile-strings.c:1484
-#, fuzzy
 msgid "Display liabilities and equity below assets."
 msgstr "Visualizza le passività e il capitale al di sotto delle attività"
 
@@ -20220,7 +20138,6 @@ msgstr "Due"
 #. src/report/business-reports/gnucash/report/balsheet-eg.scm
 #: ../intl-scm/guile-strings.c:758
 #: ../intl-scm/guile-strings.c:1488
-#, fuzzy
 msgid "Display assets on the left, liabilities and equity on the right."
 msgstr "Visualizza a sinistra le attività mentre a destra passività e capitali"
 
@@ -20236,7 +20153,6 @@ msgstr "Segno"
 #. src/report/business-reports/gnucash/report/balsheet-eg.scm
 #: ../intl-scm/guile-strings.c:762
 #: ../intl-scm/guile-strings.c:1492
-#, fuzzy
 msgid "Prefix negative amounts with a minus sign, e.g. -$10.00."
 msgstr "Aggiunge agli importi negativi un segno meno, per esempio -10,00€"
 
@@ -20252,7 +20168,6 @@ msgstr "Parentesi"
 #. src/report/business-reports/gnucash/report/balsheet-eg.scm
 #: ../intl-scm/guile-strings.c:766
 #: ../intl-scm/guile-strings.c:1496
-#, fuzzy
 msgid "Surround negative amounts with brackets, e.g. ($100.00)."
 msgstr "Mette tra parentesi gli importi negativi, per esempio (100,00€)"
 
@@ -20362,7 +20277,6 @@ msgstr "Visualizza la colonna delle uscite"
 #. src/report/business-reports/gnucash/report/customer-summary.scm
 #: ../intl-scm/guile-strings.c:802
 #: ../intl-scm/guile-strings.c:1532
-#, fuzzy
 msgid "Show the column with the expenses per customer."
 msgstr "Mostra la colonna delle uscite per cliente"
 
@@ -20378,7 +20292,6 @@ msgstr "Mostra l'indirizzo dell'impresa"
 #. src/report/business-reports/gnucash/report/customer-summary.scm
 #: ../intl-scm/guile-strings.c:806
 #: ../intl-scm/guile-strings.c:1536
-#, fuzzy
 msgid "Show your own company's address and the date of printing."
 msgstr "Mostra l'indirizzo della propria compagnia e la data di stampa"
 
@@ -20506,7 +20419,6 @@ msgstr "Ordina colonna"
 #. src/report/business-reports/gnucash/report/customer-summary.scm
 #: ../intl-scm/guile-strings.c:826
 #: ../intl-scm/guile-strings.c:1556
-#, fuzzy
 msgid "Choose the column by which the result table is sorted."
 msgstr "Selezionare la colonna in base alla quale la tabella dei risultati è ordinata"
 
@@ -20514,7 +20426,6 @@ msgstr "Selezionare la colonna in base alla quale la tabella dei risultati è or
 #. src/report/business-reports/gnucash/report/customer-summary.scm
 #: ../intl-scm/guile-strings.c:830
 #: ../intl-scm/guile-strings.c:1560
-#, fuzzy
 msgid "Choose the ordering of the column sort: Either ascending or descending."
 msgstr "Selezionare l'ordinamento delle colonne: crescente o decrescente"
 
@@ -21973,7 +21884,6 @@ msgstr "Conto debitore"
 #. src/report/business-reports/payables.scm
 #: ../intl-scm/guile-strings.c:2490
 #: ../intl-scm/guile-strings.c:3148
-#, fuzzy
 msgid "The payable account you wish to examine."
 msgstr "Il conto debitore da esaminare"
 
@@ -22218,9 +22128,8 @@ msgstr "Colore alternativo delle celle"
 #. src/report/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:2580
 #: ../intl-scm/guile-strings.c:3238
-#, fuzzy
 msgid "Embedded CSS"
-msgstr "Video integrato"
+msgstr "CSS embedded"
 
 #. src/report/business-reports/gnucash/report/taxinvoice.scm
 #. src/report/business-reports/taxinvoice.scm
@@ -22423,7 +22332,6 @@ msgstr "Il nome del file del foglio di stile CSS da utilizzare con questo resoco
 #. src/report/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:2648
 #: ../intl-scm/guile-strings.c:3306
-#, fuzzy
 msgid "Font to use for the main heading."
 msgstr "Carattere da utilizzare per l'intestazione principale"
 
@@ -22431,7 +22339,6 @@ msgstr "Carattere da utilizzare per l'intestazione principale"
 #. src/report/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:2650
 #: ../intl-scm/guile-strings.c:3308
-#, fuzzy
 msgid "Font to use for everything else."
 msgstr "Carattere da utilizzare per il resto"
 
@@ -22440,7 +22347,6 @@ msgstr "Carattere da utilizzare per il resto"
 #. src/report/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:2652
 #: ../intl-scm/guile-strings.c:3310
-#, fuzzy
 msgid "Name of a file containing a logo to be used on the report."
 msgstr "Nome del file che contiene il logo da utilizzare nel resoconto"
 
@@ -22832,7 +22738,6 @@ msgstr "Scegliere conti (nessuno=tutti)"
 #: ../intl-scm/guile-strings.c:3502
 #: ../intl-scm/guile-strings.c:3616
 #: ../intl-scm/guile-strings.c:3700
-#, fuzzy
 msgid "Select accounts."
 msgstr "Scegliere i conti"
 
@@ -22865,7 +22770,6 @@ msgstr "Stampa il nome completo del conto"
 #. src/report/locale-specific/us/taxtxf-de_DE.scm
 #: ../intl-scm/guile-strings.c:3426
 #: ../intl-scm/guile-strings.c:3624
-#, fuzzy
 msgid "Print all Parent account names."
 msgstr "Stampa tutti i nomi dei conti padre"
 
@@ -22955,7 +22859,6 @@ msgstr "Non stampare i nomi completi dei conti"
 #. src/report/locale-specific/us/taxtxf.scm
 #: ../intl-scm/guile-strings.c:3510
 #: ../intl-scm/guile-strings.c:3708
-#, fuzzy
 msgid "Do not print all Parent account names."
 msgstr "Non stampa tutti i nomi dei conti padre"
 
@@ -23656,7 +23559,6 @@ msgstr "Più recente"
 #: ../intl-scm/guile-strings.c:3964
 #: ../intl-scm/guile-strings.c:4360
 #: ../intl-scm/guile-strings.c:5614
-#, fuzzy
 msgid "The most recent recorded price."
 msgstr "Il prezzo registrato più di recente"
 
@@ -23705,9 +23607,8 @@ msgstr "Rombo"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:3978
-#, fuzzy
 msgid "Hollow diamond."
-msgstr "Rombo pieno"
+msgstr "Rombo vuoto"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:3980
@@ -23716,9 +23617,8 @@ msgstr "Cerchio"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:3982
-#, fuzzy
 msgid "Hollow circle."
-msgstr "Cerchio pieno"
+msgstr "Cerchio vuoto"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:3984
@@ -23727,9 +23627,8 @@ msgstr "Quadrato"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:3986
-#, fuzzy
 msgid "Hollow square."
-msgstr "Quadrato pieno"
+msgstr "Quadrato vuoto"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:3988
@@ -23949,7 +23848,6 @@ msgstr "Il sistema dei resoconti di GnuCash è stato aggiornato. I precedenti re
 # Tooltip
 #. src/report/report-system/report.scm
 #: ../intl-scm/guile-strings.c:4080
-#, fuzzy
 msgid "Enter a descriptive name for this report."
 msgstr "Immettere un nome descrittivo per questo resoconto"
 
@@ -23962,7 +23860,6 @@ msgstr "Scegliere un foglio di stile per il resoconto"
 # Tooltip
 #. src/report/report-system/report.scm
 #: ../intl-scm/guile-strings.c:4086
-#, fuzzy
 msgid "stylesheet."
 msgstr "Foglio di stile"
 
@@ -24952,7 +24849,6 @@ msgstr "Usa le righe sotto alle colonne dei numeri sommati com'è uso dei contab
 #: ../intl-scm/guile-strings.c:5528
 #: ../intl-scm/guile-strings.c:7270
 #: ../intl-scm/guile-strings.c:8604
-#, fuzzy
 msgid "Show an account's balance."
 msgstr "Visualizza il saldo del conto"
 
@@ -24964,7 +24860,6 @@ msgstr "Visualizza il saldo del conto"
 #: ../intl-scm/guile-strings.c:5532
 #: ../intl-scm/guile-strings.c:7274
 #: ../intl-scm/guile-strings.c:8608
-#, fuzzy
 msgid "Show an account's account code."
 msgstr "Visualizza il codice del conto"
 
@@ -24976,7 +24871,6 @@ msgstr "Visualizza il codice del conto"
 #: ../intl-scm/guile-strings.c:5536
 #: ../intl-scm/guile-strings.c:7278
 #: ../intl-scm/guile-strings.c:8612
-#, fuzzy
 msgid "Show an account's account type."
 msgstr "Visualizza la tipologia del conto"
 
@@ -24999,7 +24893,6 @@ msgstr "Descrizione del conto"
 #: ../intl-scm/guile-strings.c:5540
 #: ../intl-scm/guile-strings.c:7282
 #: ../intl-scm/guile-strings.c:8616
-#, fuzzy
 msgid "Show an account's description."
 msgstr "Visualizza una descrizione del conto"
 
@@ -25022,7 +24915,6 @@ msgstr "Note sul conto"
 #: ../intl-scm/guile-strings.c:5544
 #: ../intl-scm/guile-strings.c:7286
 #: ../intl-scm/guile-strings.c:8620
-#, fuzzy
 msgid "Show an account's notes."
 msgstr "Visualizza le note del conto"
 
@@ -25106,7 +24998,6 @@ msgstr "Visualizza i tassi di cambio"
 #: ../intl-scm/guile-strings.c:8054
 #: ../intl-scm/guile-strings.c:8634
 #: ../intl-scm/guile-strings.c:9256
-#, fuzzy
 msgid "Show the exchange rates used."
 msgstr "Visualizza il tasso di cambio utilizzato"
 
@@ -25290,7 +25181,6 @@ msgstr "Il prezzo registrato più di recente prima della data del resoconto"
 #. src/report/standard-reports/gnucash/report/standard-reports/advanced-portfolio.scm
 #: ../intl-scm/guile-strings.c:4370
 #: ../intl-scm/guile-strings.c:5624
-#, fuzzy
 msgid "Basis calculation method."
 msgstr "Metodo di calcolo base"
 
@@ -26229,9 +26119,8 @@ msgstr "Calcolare il saldo come somma progressiva?"
 #: ../intl-scm/guile-strings.c:7860
 #: ../intl-scm/guile-strings.c:8834
 #: ../intl-scm/guile-strings.c:9194
-#, fuzzy
 msgid "Report on these accounts."
-msgstr "Genera il resoconto su questi conti"
+msgstr "Genera il resoconto per questi conti"
 
 #. src/report/standard-reports/budget-barchart.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/budget-barchart.scm
@@ -26335,7 +26224,6 @@ msgstr "Etichetta la sezione del reddito"
 #: ../intl-scm/guile-strings.c:6132
 #: ../intl-scm/guile-strings.c:6686
 #: ../intl-scm/guile-strings.c:8020
-#, fuzzy
 msgid "Whether or not to include a label for the revenue section."
 msgstr "Se includere un'etichetta per la sezione del reddito"
 
@@ -26359,7 +26247,6 @@ msgstr "Includi il reddito totale"
 #: ../intl-scm/guile-strings.c:6136
 #: ../intl-scm/guile-strings.c:6690
 #: ../intl-scm/guile-strings.c:8024
-#, fuzzy
 msgid "Whether or not to include a line indicating total revenue."
 msgstr "Se includere una linea contenente il reddito totale"
 
@@ -26383,7 +26270,6 @@ msgstr "Etichetta la sezione uscite"
 #: ../intl-scm/guile-strings.c:6140
 #: ../intl-scm/guile-strings.c:6702
 #: ../intl-scm/guile-strings.c:8036
-#, fuzzy
 msgid "Whether or not to include a label for the expense section."
 msgstr "Se includere un'etichetta per la sezione uscite"
 
@@ -26407,7 +26293,6 @@ msgstr "Includi la spesa totale"
 #: ../intl-scm/guile-strings.c:6144
 #: ../intl-scm/guile-strings.c:6706
 #: ../intl-scm/guile-strings.c:8040
-#, fuzzy
 msgid "Whether or not to include a line indicating total expense."
 msgstr "Se includere una riga che indica le uscite totali"
 
@@ -26450,7 +26335,6 @@ msgstr "Visualizza come un resoconto a due colonne"
 #: ../intl-scm/guile-strings.c:6164
 #: ../intl-scm/guile-strings.c:6738
 #: ../intl-scm/guile-strings.c:8072
-#, fuzzy
 msgid "Divides the report into an income column and an expense column."
 msgstr "Divide il resoconto in due colonne: una per le entrate e una per le uscite"
 
@@ -26474,7 +26358,6 @@ msgstr "Visualizza nell'ordine standard: entrate per prime"
 #: ../intl-scm/guile-strings.c:6168
 #: ../intl-scm/guile-strings.c:6742
 #: ../intl-scm/guile-strings.c:8076
-#, fuzzy
 msgid "Causes the report to display in the standard order, placing income before expenses."
 msgstr "Visualizza il resoconto con l'ordine standard, posizionando le entrate prima delle uscite"
 
@@ -26645,7 +26528,6 @@ msgstr "Mostra bilancio (Bil)"
 #. src/report/standard-reports/gnucash/report/standard-reports/budget.scm
 #: ../intl-scm/guile-strings.c:4958
 #: ../intl-scm/guile-strings.c:6212
-#, fuzzy
 msgid "Display a column for the budget values."
 msgstr "Visualizza una colonna per i valori di bilancio"
 
@@ -26661,7 +26543,6 @@ msgstr "Mostra effettivo (Eff)"
 #. src/report/standard-reports/gnucash/report/standard-reports/budget.scm
 #: ../intl-scm/guile-strings.c:4962
 #: ../intl-scm/guile-strings.c:6216
-#, fuzzy
 msgid "Display a column for the actual values."
 msgstr "Visualizza una colonna per i valori effettivi"
 
@@ -26677,7 +26558,6 @@ msgstr "Mostra differenza (Diff)"
 #. src/report/standard-reports/gnucash/report/standard-reports/budget.scm
 #: ../intl-scm/guile-strings.c:4966
 #: ../intl-scm/guile-strings.c:6220
-#, fuzzy
 msgid "Display the difference as budget - actual."
 msgstr "Visualizza la differenza \"bilancio - effettivo\""
 
@@ -26692,7 +26572,6 @@ msgstr "Mostra la colonna con i totali"
 #. src/report/standard-reports/gnucash/report/standard-reports/budget.scm
 #: ../intl-scm/guile-strings.c:4970
 #: ../intl-scm/guile-strings.c:6224
-#, fuzzy
 msgid "Display a column with the row totals."
 msgstr "Visualizza una colonna con i totali della riga"
 
@@ -26752,7 +26631,6 @@ msgstr "Comprime le colonne relative ai periodi precedenti e successivi a quello
 #: ../intl-scm/guile-strings.c:5024
 #: ../intl-scm/guile-strings.c:6246
 #: ../intl-scm/guile-strings.c:6278
-#, fuzzy
 msgid "Show full account names (including parent accounts)."
 msgstr "Visualizza il nome del conto completo (inclusi quelli dei conti padre)"
 
@@ -26931,7 +26809,6 @@ msgstr "Numero massimo di barre"
 #. src/report/standard-reports/gnucash/report/standard-reports/category-barchart.scm
 #: ../intl-scm/guile-strings.c:5112
 #: ../intl-scm/guile-strings.c:6366
-#, fuzzy
 msgid "Show the average daily amount during the reporting period."
 msgstr "Visualizza l'importo medio giornaliero nel periodo del resoconto"
 
@@ -26948,7 +26825,6 @@ msgstr "Mostrare gli istogrammi con le barre sovrapposte?"
 #. src/report/standard-reports/gnucash/report/standard-reports/category-barchart.scm
 #: ../intl-scm/guile-strings.c:5122
 #: ../intl-scm/guile-strings.c:6376
-#, fuzzy
 msgid "Maximum number of bars in the chart."
 msgstr "Numero massimo di barre nel grafico"
 
@@ -27025,9 +26901,8 @@ msgstr "Prospetto dei capitali"
 #. src/report/standard-reports/gnucash/report/standard-reports/equity-statement.scm
 #: ../intl-scm/guile-strings.c:5228
 #: ../intl-scm/guile-strings.c:6482
-#, fuzzy
 msgid "Report only on these accounts."
-msgstr "Genera il resoconto su questi conti"
+msgstr "Genera il resoconto solo relativamente a questi conti"
 
 #. src/report/standard-reports/equity-statement.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/equity-statement.scm
@@ -27493,7 +27368,6 @@ msgstr "Etichetta la sezione dei conti per il trading"
 #. src/report/standard-reports/income-statement.scm
 #: ../intl-scm/guile-strings.c:6694
 #: ../intl-scm/guile-strings.c:8028
-#, fuzzy
 msgid "Whether or not to include a label for the trading accounts section."
 msgstr "Se includere un'etichetta per la sezione dei conti per il trading"
 
@@ -27509,7 +27383,6 @@ msgstr "Includi i totali dei conti per il trading"
 #. src/report/standard-reports/income-statement.scm
 #: ../intl-scm/guile-strings.c:6698
 #: ../intl-scm/guile-strings.c:8032
-#, fuzzy
 msgid "Whether or not to include a line indicating total trading accounts balance."
 msgstr "Se includere una linea contenente il saldo totale dei conti per il trading"
 
@@ -27746,7 +27619,6 @@ msgstr "Larghezza linea"
 #. src/report/standard-reports/net-linechart.scm
 #: ../intl-scm/guile-strings.c:6882
 #: ../intl-scm/guile-strings.c:8216
-#, fuzzy
 msgid "Set line width in pixels."
 msgstr "Imposta la larghezza del tratto in pixel"
 
@@ -27856,7 +27728,6 @@ msgstr "Database dei prezzi"
 #. src/report/standard-reports/price-scatter.scm
 #: ../intl-scm/guile-strings.c:7026
 #: ../intl-scm/guile-strings.c:8360
-#, fuzzy
 msgid "The recorded prices."
 msgstr "I prezzi registrati"
 
@@ -27872,7 +27743,6 @@ msgstr "Visualizza il rapporto valuta/commodity in luogo di commodity/valuta"
 #. src/report/standard-reports/price-scatter.scm
 #: ../intl-scm/guile-strings.c:7030
 #: ../intl-scm/guile-strings.c:8364
-#, fuzzy
 msgid "Color of the marker."
 msgstr "Colore del marcatore"
 
@@ -27994,7 +27864,6 @@ msgstr ""
 #. src/report/standard-reports/register.scm
 #: ../intl-scm/guile-strings.c:7108
 #: ../intl-scm/guile-strings.c:8442
-#, fuzzy
 msgid "The title of the report."
 msgstr "Il titolo del resoconto"
 
@@ -28106,7 +27975,6 @@ msgstr "Singolo"
 #: ../intl-scm/guile-strings.c:7784
 #: ../intl-scm/guile-strings.c:8508
 #: ../intl-scm/guile-strings.c:9118
-#, fuzzy
 msgid "Single Column Display."
 msgstr "Visualizzazione a colonna singola"
 
@@ -28129,7 +27997,6 @@ msgstr "Doppio"
 #: ../intl-scm/guile-strings.c:7788
 #: ../intl-scm/guile-strings.c:8512
 #: ../intl-scm/guile-strings.c:9122
-#, fuzzy
 msgid "Two Column Display."
 msgstr "Visualizzazione a due colonne"
 
@@ -28310,7 +28177,6 @@ msgstr "Visualizza una riga"
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:7494
 #: ../intl-scm/guile-strings.c:8828
-#, fuzzy
 msgid "Convert all transactions into a common currency."
 msgstr "Converti tutte le transazioni in una valuta unica"
 
@@ -28318,7 +28184,6 @@ msgstr "Converti tutte le transazioni in una valuta unica"
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:7496
 #: ../intl-scm/guile-strings.c:8830
-#, fuzzy
 msgid "Formats the table suitable for cut & paste exporting with extra cells."
 msgstr "Formatta la tabella abilitandola all'operazione di esportazione (taglia e incolla) con delle celle aggiuntive"
 
@@ -28379,7 +28244,6 @@ msgstr "Non visualizzare le transazioni in entrata o in uscita dai conti selezio
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:7522
 #: ../intl-scm/guile-strings.c:8856
-#, fuzzy
 msgid "How to handle void transactions."
 msgstr "Come comportarsi con le transazioni invalidate"
 
@@ -28707,7 +28571,6 @@ msgstr "Visualizzare il nome dell'altro conto? (se si tratta di una transazione 
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:7746
 #: ../intl-scm/guile-strings.c:9080
-#, fuzzy
 msgid "Display the other account code?"
 msgstr "Visualizza il codice dell'altro conto"
 
@@ -28975,9 +28838,8 @@ msgstr "Variazione del resoconto"
 #. src/report/standard-reports/trial-balance.scm
 #: ../intl-scm/guile-strings.c:7856
 #: ../intl-scm/guile-strings.c:9190
-#, fuzzy
 msgid "Kind of trial balance to generate."
-msgstr "Tipo di bilancio di verifica da generare"
+msgstr "Tipo di bilancio di previsione da generare"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/trial-balance.scm
 #. src/report/standard-reports/trial-balance.scm
