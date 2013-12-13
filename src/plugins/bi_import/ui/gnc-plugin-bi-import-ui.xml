@@ -1,13 +1,11 @@
 <ui>
-	<menubar>
-		<placeholder name="AdditionalMenusPlaceholder">
-			<menu name="Business" action="BusinessAction">
-				<placeholder name="BusinessPlaceholderBottom">
-					<menu name="ImportMenu" action="ImportMenuAction">
-						<menuitem name="bi_import" action="bi_importAction"/>
-					</menu>
-				</placeholder>
-			</menu>
-		</placeholder>
-	</menubar>
+  <menubar>
+    <menu name="File" action="FileAction">
+      <menu name="FileImport" action="FileImportAction">
+          <placeholder name="FileImportPlaceholder">
+           <menuitem name="bi_import" action="bi_importAction"/>
+      	</placeholder>
+      </menu>
+    </menu>
+  </menubar>
 </ui>
