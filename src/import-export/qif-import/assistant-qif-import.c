@@ -2095,7 +2095,7 @@ gnc_ui_qif_import_loaded_files_prepare (GtkAssistant *assistant,
     SCM    fix_default = scm_c_eval_string("qif-import:fix-from-acct");
     SCM    scm_name;
 
-    scm_name = scm_from_locale_string(acct_name ? acct_name : "");
+    scm_name = scm_from_utf8_string(acct_name ? acct_name : "");
     scm_call_2(fix_default, wind->selected_file, scm_name);
 
     /* Enable the assistant Forward Button */
@@ -2821,7 +2821,7 @@ gnc_ui_qif_import_convert_progress_start_cb(GtkButton * button,
                                  wind->cat_map_info,
                                  wind->memo_map_info,
                                  wind->security_hash,
-                                 scm_from_locale_string(currname ? currname : ""),
+                                 scm_from_utf8_string(currname ? currname : ""),
                                  wind->transaction_status,
                                  progress),
                        SCM_EOL);

@@ -125,11 +125,11 @@ gnc_quoteinfo2scm(gnc_commodity *comm)
                                       SWIG_TypeQuery("_p_gnc_commodity"), 0);
 
     if (tz)
-        info_scm = scm_cons (scm_from_locale_string (tz), info_scm);
+        info_scm = scm_cons (scm_from_utf8_string (tz), info_scm);
     else
         info_scm = scm_cons (SCM_BOOL_F, info_scm);
     info_scm = scm_cons (def_comm_scm, info_scm);
     info_scm = scm_cons (comm_scm, info_scm);
-    info_scm = scm_cons (name ? scm_from_locale_string (name) : SCM_BOOL_F, info_scm);
+    info_scm = scm_cons (name ? scm_from_utf8_string (name) : SCM_BOOL_F, info_scm);
     return info_scm;
 }

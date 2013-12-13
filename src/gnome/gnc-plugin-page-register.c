@@ -2616,15 +2616,15 @@ report_helper (GNCLedgerDisplay *ledger, Split *split, Query *query)
     g_return_val_if_fail (scm_is_procedure (func), -1);
 
     tmp = gnc_split_register_get_credit_string (reg);
-    arg = scm_from_locale_string (tmp ? tmp : _("Credit"));
+    arg = scm_from_utf8_string (tmp ? tmp : _("Credit"));
     args = scm_cons (arg, args);
 
     tmp = gnc_split_register_get_debit_string (reg);
-    arg = scm_from_locale_string (tmp ? tmp : _("Debit"));
+    arg = scm_from_utf8_string (tmp ? tmp : _("Debit"));
     args = scm_cons (arg, args);
 
     str = gnc_reg_get_name (ledger, FALSE);
-    arg = scm_from_locale_string (str ? str : "");
+    arg = scm_from_utf8_string (str ? str : "");
     args = scm_cons (arg, args);
     g_free (str);
 

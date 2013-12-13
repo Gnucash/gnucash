@@ -152,8 +152,8 @@ update_report_list(GtkListStore *store, CustomReportDialog *crd)
         for (i = 0; !scm_is_null(rpt_guids); i++)
         {
             GncGUID *guid = guid_malloc ();
-            gchar *guid_str = scm_to_locale_string (SCM_CAR(rpt_guids));
-            gchar *name = gnc_scm_to_locale_string (scm_call_2(template_menu_name, SCM_CAR(rpt_guids), SCM_BOOL_F));
+            gchar *guid_str = scm_to_utf8_string (SCM_CAR(rpt_guids));
+            gchar *name = gnc_scm_to_utf8_string (scm_call_2(template_menu_name, SCM_CAR(rpt_guids), SCM_BOOL_F));
 
             if (string_to_guid (guid_str, guid))
             {
@@ -273,7 +273,7 @@ custom_report_edit_report_name (SCM guid,
                                 gchar *new_name)
 {
     SCM rename_report = scm_c_eval_string("gnc:rename-report");
-    SCM new_name_scm = scm_from_locale_string(new_name);
+    SCM new_name_scm = scm_from_utf8_string(new_name);
 
     if (scm_is_null(guid) || !new_name || (*new_name == '\0'))
         return;
@@ -300,7 +300,7 @@ custom_report_delete (SCM guid, CustomReportDialog *crd)
     if (scm_is_null (guid))
         return;
 
-    report_name = gnc_scm_to_locale_string(scm_call_2(template_menu_name, guid, SCM_BOOL_F));
+    report_name = gnc_scm_to_utf8_string(scm_call_2(template_menu_name, guid, SCM_BOOL_F));
 
     /* we must confirm the user wants to delete their precious custom report! */
     if (gnc_verify_dialog(crd->dialog, FALSE, "Are you sure you want to delete %s?", report_name))
@@ -350,7 +350,7 @@ get_custom_report_selection(CustomReportDialog *crd,
         return SCM_EOL;
 
     }
-    return scm_from_locale_string (guid_str);
+    return scm_from_utf8_string (guid_str);
 }
 
 
@@ -380,7 +380,7 @@ custom_report_list_view_row_activated_cb(GtkTreeView *view, GtkTreePath *path,
         guid_str = g_new0 (gchar, GUID_ENCODING_LENGTH+1 );
         guid_to_string_buff (guid, guid_str);
 
-        custom_report_run_report(scm_from_locale_string (guid_str), crd);
+        custom_report_run_report(scm_from_utf8_string (guid_str), crd);
     }
 }
 
@@ -431,7 +431,7 @@ void custom_report_name_edited_cb(GtkCellRendererText *renderer, gchar *path, gc
     CustomReportDialog *crd = data;
     SCM guid = get_custom_report_selection(crd, _("Unable to change report name."));
     SCM unique_name_func = scm_c_eval_string("gnc:report-template-has-unique-name?");
-    SCM new_name_scm = scm_from_locale_string(new_text);
+    SCM new_name_scm = scm_from_utf8_string(new_text);
 
     g_object_set(G_OBJECT(crd->namerenderer), "editable", FALSE, NULL);
     if (scm_is_null (guid))
@@ -536,7 +536,7 @@ void gnc_ui_custom_report_edit_name (GncMainWindow * window, SCM scm_guid)
         return;
 
     guid = guid_malloc ();
-    guid_str = scm_to_locale_string (scm_guid);
+    guid_str = scm_to_utf8_string (scm_guid);
     if (!string_to_guid (guid_str, guid))
         goto cleanup;
 

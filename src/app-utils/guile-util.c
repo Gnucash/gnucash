@@ -311,7 +311,7 @@ gnc_split_scm_set_account(SCM split_scm, Account *account)
     if (guid_string == NULL)
         return;
 
-    arg = scm_from_locale_string(guid_string);
+    arg = scm_from_utf8_string(guid_string);
 
     scm_call_2(setters.split_scm_account_guid, split_scm, arg);
 }
@@ -337,7 +337,7 @@ gnc_split_scm_set_memo(SCM split_scm, const char *memo)
     if (memo == NULL)
         return;
 
-    arg = scm_from_locale_string(memo);
+    arg = scm_from_utf8_string(memo);
 
     scm_call_2(setters.split_scm_memo, split_scm, arg);
 }
@@ -363,7 +363,7 @@ gnc_split_scm_set_action(SCM split_scm, const char *action)
     if (action == NULL)
         return;
 
-    arg = scm_from_locale_string(action);
+    arg = scm_from_utf8_string(action);
 
     scm_call_2(setters.split_scm_action, split_scm, arg);
 }
@@ -460,7 +460,7 @@ gnc_split_scm_get_memo(SCM split_scm)
     if (!scm_is_string(result))
         return NULL;
 
-    return gnc_scm_to_locale_string(result);
+    return gnc_scm_to_utf8_string(result);
 }
 
 
@@ -485,7 +485,7 @@ gnc_split_scm_get_action(SCM split_scm)
     if (!scm_is_string(result))
         return NULL;
 
-    return gnc_scm_to_locale_string(result);
+    return gnc_scm_to_utf8_string(result);
 }
 
 
@@ -668,8 +668,8 @@ gnc_copy_trans_scm_onto_trans_swap_accounts(SCM trans_scm,
 
         args = scm_cons(commit, args);
 
-        from = scm_from_locale_string(guid_to_string(guid_1));
-        to = scm_from_locale_string(guid_to_string(guid_2));
+        from = scm_from_utf8_string(guid_to_string(guid_1));
+        to = scm_from_utf8_string(guid_to_string(guid_2));
 
         map = scm_cons(scm_cons(from, to), map);
         map = scm_cons(scm_cons(to, from), map);
@@ -728,7 +728,7 @@ gnc_trans_scm_set_num(SCM trans_scm, const char *num)
     if (num == NULL)
         return;
 
-    arg = scm_from_locale_string(num);
+    arg = scm_from_utf8_string(num);
 
     scm_call_2(setters.trans_scm_num, trans_scm, arg);
 }
@@ -754,7 +754,7 @@ gnc_trans_scm_set_description(SCM trans_scm, const char *description)
     if (description == NULL)
         return;
 
-    arg = scm_from_locale_string(description);
+    arg = scm_from_utf8_string(description);
 
     scm_call_2(setters.trans_scm_description, trans_scm, arg);
 }
@@ -780,7 +780,7 @@ gnc_trans_scm_set_notes(SCM trans_scm, const char *notes)
     if (notes == NULL)
         return;
 
-    arg = scm_from_locale_string(notes);
+    arg = scm_from_utf8_string(notes);
 
     scm_call_2(setters.trans_scm_notes, trans_scm, arg);
 }
@@ -914,7 +914,7 @@ gnc_get_debit_string(GNCAccountType account_type)
     if (!scm_is_string(result))
         return NULL;
 
-    return scm_to_locale_string(result);
+    return scm_to_utf8_string(result);
 }
 
 
@@ -945,7 +945,7 @@ gnc_get_credit_string(GNCAccountType account_type)
     if (!scm_is_string(result))
         return NULL;
 
-    return gnc_scm_to_locale_string(result);
+    return gnc_scm_to_utf8_string(result);
 }
 
 

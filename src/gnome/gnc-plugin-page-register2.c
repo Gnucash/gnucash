@@ -2460,14 +2460,14 @@ report_helper (GNCLedgerDisplay2 *ledger, Split *split, Query *query) //this wor
     g_return_val_if_fail (scm_is_procedure (func), -1);
     tmp = gnc_tree_view_split_reg_get_credit_debit_string (view, TRUE);
 
-    arg = scm_from_locale_string (tmp ? tmp : _("Credit"));
+    arg = scm_from_utf8_string (tmp ? tmp : _("Credit"));
     args = scm_cons (arg, args);
     tmp = gnc_tree_view_split_reg_get_credit_debit_string (view, FALSE);
-    arg = scm_from_locale_string (tmp ? tmp : _("Debit"));
+    arg = scm_from_utf8_string (tmp ? tmp : _("Debit"));
     args = scm_cons (arg, args);
 
     str = gnc_reg_get_name (ledger, FALSE);
-    arg = scm_from_locale_string (str ? str : "");
+    arg = scm_from_utf8_string (str ? str : "");
     args = scm_cons (arg, args);
     g_free (str);
 

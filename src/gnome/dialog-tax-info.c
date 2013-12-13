@@ -242,7 +242,7 @@ load_txf_info (gint acct_category, TaxInfoDialog *ti_dialog)
     }
     else
     {
-        tax_entity_type = scm_from_locale_string (ti_dialog->tax_type);
+        tax_entity_type = scm_from_utf8_string (ti_dialog->tax_type);
     }
 
     switch (acct_category)
@@ -337,19 +337,19 @@ load_txf_info (gint acct_category, TaxInfoDialog *ti_dialog)
 
         scm = scm_call_3 (getters.form, category, code_scm, tax_entity_type);
         if (scm_is_string(scm))
-            txf_info->form = gnc_scm_to_locale_string(scm);
+            txf_info->form = gnc_scm_to_utf8_string(scm);
         else
             txf_info->form = g_strdup ("");
 
         scm = scm_call_3 (getters.description, category, code_scm, tax_entity_type);
         if (scm_is_string(scm))
-            txf_info->description = gnc_scm_to_locale_string(scm);
+            txf_info->description = gnc_scm_to_utf8_string(scm);
         else
             txf_info->description = g_strdup ("");
 
         scm = scm_call_2 (getters.help, category, code_scm);
         if (scm_is_string(scm))
-            help_text = gnc_scm_to_locale_string(scm);
+            help_text = gnc_scm_to_utf8_string(scm);
         else
             help_text = g_strdup ("");
 
@@ -377,7 +377,7 @@ load_txf_info (gint acct_category, TaxInfoDialog *ti_dialog)
                 line_year = scm_is_bool (SCM_CAR (year_scm)) ? 0 :
                             scm_to_int (SCM_CAR (year_scm));
                 if (scm_is_string((SCM_CAR (SCM_CDR (year_scm)))))
-                    line = gnc_scm_to_locale_string((SCM_CAR (SCM_CDR
+                    line = gnc_scm_to_utf8_string((SCM_CAR (SCM_CDR
                                                      (year_scm))));
                 else
                     line = g_strdup ("");
@@ -486,13 +486,13 @@ load_tax_entity_type_list (TaxInfoDialog *ti_dialog)
 
         scm = scm_call_1 (getters.tax_entity_type, type_scm);
         if (scm_is_string(scm))
-            tax_type_info->type = gnc_scm_to_locale_string(scm);
+            tax_type_info->type = gnc_scm_to_utf8_string(scm);
         else
             tax_type_info->type = g_strdup ("");
 
         scm = scm_call_1 (getters.tax_entity_desc, type_scm);
         if (scm_is_string(scm))
-            tax_type_info->description = gnc_scm_to_locale_string(scm);
+            tax_type_info->description = gnc_scm_to_utf8_string(scm);
         else
             tax_type_info->description = g_strdup ("");
 

@@ -315,7 +315,7 @@ func_op(const char *fname, int argc, void **argv)
             break;
         case VST_STRING:
             str = (char*)(vs->value);
-            scmTmp = scm_from_locale_string( str );
+            scmTmp = scm_from_utf8_string( str );
             break;
         default:
             /* FIXME: error */

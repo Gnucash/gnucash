@@ -630,10 +630,9 @@ gnc_split_register_duplicate_current (SplitRegister *reg)
             return NULL;
         }
 
-        new_trans = xaccMallocTransaction (gnc_get_current_book ());
+        new_trans = xaccTransClone (trans);
 
         xaccTransBeginEdit (new_trans);
-        gnc_copy_trans_onto_trans (trans, new_trans, FALSE, FALSE);
         xaccTransSetDatePostedSecsNormalized (new_trans, date);
         /* We also must set a new DateEntered on the new entry
          * because otherwise the ordering is not deterministic */

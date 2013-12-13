@@ -1349,7 +1349,7 @@ gnc_get_export_type_choice (SCM export_types)
             break;
         }
 
-        name = gnc_scm_to_locale_string (scm);
+        name = gnc_scm_to_utf8_string (scm);
         choices = g_list_prepend (choices, name);
     }
 
@@ -1398,7 +1398,7 @@ gnc_get_export_filename (SCM choice)
     if (choice == SCM_BOOL_T)
         type = g_strdup (html_type);
     else
-        type = gnc_scm_to_locale_string(SCM_CAR (choice));
+        type = gnc_scm_to_utf8_string(SCM_CAR (choice));
 
     /* %s is the type of what is about to be saved, e.g. "HTML". */
     title = g_strdup_printf (_("Save %s To File"), type);

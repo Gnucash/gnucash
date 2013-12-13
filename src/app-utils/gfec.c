@@ -27,7 +27,7 @@ static SCM helper_scm_to_string(void *ptr_void)
 {
     helper_data_t* ptr = ptr_void;
     g_assert(ptr);
-    *(ptr->msg) = gnc_scm_to_locale_string(*ptr->scm_string);
+    *(ptr->msg) = gnc_scm_to_utf8_string(*ptr->scm_string);
     return SCM_UNDEFINED;
 }
 
@@ -81,7 +81,7 @@ gfec_catcher(void *data, SCM tag, SCM throw_args)
                                      (void *) &helper_data,
                                      gfec_catcher,
                                      &internal_err_msg);
-            // Previously: msg = gnc_scm_to_locale_string (result);
+            // Previously: msg = gnc_scm_to_utf8_string (result);
 
             // Did we run into an exception? Then the output argument msg is
             // not set (due to the exception), but err_msg is set and contains

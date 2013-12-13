@@ -241,8 +241,8 @@ gnc_style_sheet_new (StyleSheetDialog * ssd)
         if (template_str && name_str)
         {
             new_ss = scm_call_2(make_ss,
-                                scm_from_locale_string(template_str),
-                                scm_from_locale_string(name_str));
+                                scm_from_utf8_string(template_str),
+                                scm_from_utf8_string(name_str));
         }
     }
 

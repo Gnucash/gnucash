@@ -2177,7 +2177,7 @@ gnc_option_set_ui_value_string (GNCOption *option, gboolean use_default,
     {
         const gchar *string;
 
-        string = gnc_scm_to_locale_string (value);
+        string = gnc_scm_to_utf8_string (value);
         gtk_entry_set_text(GTK_ENTRY(widget), string);
         g_free ((gpointer *) string);
         return FALSE;
@@ -2201,7 +2201,7 @@ gnc_option_set_ui_value_text (GNCOption *option, gboolean use_default,
     {
         const gchar *string;
 
-        string = gnc_scm_to_locale_string (value);
+        string = gnc_scm_to_utf8_string (value);
         gtk_text_buffer_set_text (buffer, string, scm_c_string_length(value));
         g_free ((gpointer *) string);
         return FALSE;
@@ -2475,7 +2475,7 @@ gnc_option_set_ui_value_font (GNCOption *option, gboolean use_default,
     {
         const gchar *string;
 
-        string = gnc_scm_to_locale_string (value);
+        string = gnc_scm_to_utf8_string (value);
         if ((string != NULL) && (*string != '\0'))
         {
             GtkFontButton *font_button = GTK_FONT_BUTTON(widget);
@@ -2636,7 +2636,7 @@ gnc_option_get_ui_value_string (GNCOption *option, GtkWidget *widget)
     SCM result;
 
     string = gtk_editable_get_chars(GTK_EDITABLE(widget), 0, -1);
-    result = scm_from_locale_string(string ? string : "");
+    result = scm_from_utf8_string(string ? string : "");
     g_free(string);
     return result;
 }
@@ -2648,7 +2648,7 @@ gnc_option_get_ui_value_text (GNCOption *option, GtkWidget *widget)
     SCM result;
 
     string = xxxgtk_textview_get_text (GTK_TEXT_VIEW(widget));
-    result = scm_from_locale_string(string ? string : "");
+    result = scm_from_utf8_string(string ? string : "");
     g_free(string);
     return result;
 }
@@ -2869,7 +2869,7 @@ gnc_option_get_ui_value_font (GNCOption *option, GtkWidget *widget)
     const gchar * string;
 
     string = gtk_font_button_get_font_name(font_button);
-    return (string ? scm_from_locale_string(string) : SCM_BOOL_F);
+    return (string ? scm_from_utf8_string(string) : SCM_BOOL_F);
 }
 
 static SCM
@@ -2880,7 +2880,7 @@ gnc_option_get_ui_value_pixmap (GNCOption *option, GtkWidget *widget)
 
     string = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(widget));
     DEBUG("filename %s", string ? string : "(null)");
-    result = scm_from_locale_string(string ? string : "");
+    result = scm_from_utf8_string(string ? string : "");
     g_free(string);
     return result;
 }

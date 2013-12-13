@@ -157,7 +157,7 @@ gnc_run_report (gint report_id, char ** data)
     if (scm_text == SCM_UNDEFINED || !scm_is_string (scm_text))
         return FALSE;
 
-    *data = gnc_scm_to_locale_string (scm_text);
+    *data = gnc_scm_to_utf8_string (scm_text);
 
     return TRUE;
 }

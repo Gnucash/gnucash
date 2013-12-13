@@ -473,7 +473,7 @@ gnc_option_db_register_change_callback(GNCOptionDB *odb,
     }
     else
     {
-        arg = scm_from_locale_string(name);
+        arg = scm_from_utf8_string(name);
     }
     args = scm_cons(arg, args);
 
@@ -484,7 +484,7 @@ gnc_option_db_register_change_callback(GNCOptionDB *odb,
     }
     else
     {
-        arg = scm_from_locale_string(section);
+        arg = scm_from_utf8_string(section);
     }
     args = scm_cons(arg, args);
 
@@ -914,7 +914,7 @@ gnc_option_permissible_value_name(GNCOption *option, int index)
     if (!scm_is_string(name))
         return NULL;
 
-    return gnc_scm_to_locale_string (name);
+    return gnc_scm_to_utf8_string (name);
 }
 
 
@@ -945,7 +945,7 @@ gnc_option_permissible_value_description(GNCOption *option, int index)
     if (!scm_is_string(help))
         return NULL;
 
-    return gnc_scm_to_locale_string (help);
+    return gnc_scm_to_utf8_string (help);
 }
 
 
@@ -1693,7 +1693,7 @@ gnc_commit_option(GNCOption *option)
             return;
         }
 
-        message = gnc_scm_to_locale_string (oops);
+        message = gnc_scm_to_utf8_string (oops);
         name = gnc_option_name(option);
         section = gnc_option_section(option);
 
@@ -1896,7 +1896,7 @@ gnc_option_db_get_default_section(GNCOptionDB *odb)
     if (!scm_is_string(value))
         return NULL;
 
-    return gnc_scm_to_locale_string (value);
+    return gnc_scm_to_utf8_string (value);
 }
 
 
@@ -2002,7 +2002,7 @@ gnc_option_db_lookup_string_option(GNCOptionDB *odb,
         {
             value = scm_call_0(getter);
             if (scm_is_string(value))
-                return gnc_scm_to_locale_string (value);
+                return gnc_scm_to_utf8_string (value);
         }
     }
 
@@ -2549,7 +2549,7 @@ gnc_option_db_set_string_option(GNCOptionDB *odb,
         return FALSE;
 
     if (value)
-        scm_value = scm_from_locale_string(value);
+        scm_value = scm_from_utf8_string(value);
     else
         scm_value = SCM_BOOL_F;
 
@@ -2737,7 +2737,7 @@ gboolean gnc_dateformat_option_value_parse(SCM value, QofDateFormat *format,
             break;
 
         if (custom)
-            *custom = gnc_scm_to_locale_string (val);
+            *custom = gnc_scm_to_utf8_string (val);
 
         return FALSE;
 
@@ -2756,7 +2756,7 @@ SCM gnc_dateformat_option_set_value(QofDateFormat format, GNCDateMonthFormat mon
 
     /* build the list in reverse order */
     if (custom)
-        val = scm_from_locale_string(custom);
+        val = scm_from_utf8_string(custom);
     else
         val = SCM_BOOL_F;
     value = scm_cons(val, value);

@@ -148,7 +148,7 @@ update_display_lists(gnc_column_view_edit * view)
         {
             if (scm_is_equal (SCM_CAR(rpt_guids), selection))
                 row = i;
-            name = gnc_scm_to_locale_string (scm_call_2(template_menu_name, SCM_CAR(rpt_guids),
+            name = gnc_scm_to_utf8_string (scm_call_2(template_menu_name, SCM_CAR(rpt_guids),
                                              SCM_BOOL_F));
 
             gtk_list_store_append(store, &iter);
@@ -195,7 +195,7 @@ update_display_lists(gnc_column_view_edit * view)
 
             id = scm_to_int(SCM_CAAR(contents));
             this_report = gnc_report_find(id);
-            name = gnc_scm_to_locale_string (scm_call_1(report_menu_name, this_report));
+            name = gnc_scm_to_utf8_string (scm_call_1(report_menu_name, this_report));
 
             gtk_list_store_append(store, &iter);
             gtk_list_store_set

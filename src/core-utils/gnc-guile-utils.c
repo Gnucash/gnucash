@@ -32,9 +32,41 @@ static QofLogModule log_module = G_LOG_DOMAIN;
 
 
 /********************************************************************\
+ * gnc_scm_to_utf8_string                                           *
+ *   returns the string representation of the scm string in         *
+ *   a newly allocated gchar * or NULL if it can't be retrieved.    *
+ *                                                                  *
+ * Args: symbol_value - the scm symbol                              *
+ * Returns: newly allocated gchar * or NULL, should be freed with   *
+ *          g_free by the caller                                    *
+\********************************************************************/
+gchar *gnc_scm_to_utf8_string(SCM scm_string)
+{
+    if (scm_is_string (scm_string))
+    {
+        gchar* s;
+        char * str;
+
+        str = scm_to_utf8_string(scm_string);
+        s = g_strdup(str);
+        free (str);
+        return s;
+    }
+
+    /* Unable to extract string from the symbol...*/
+    PERR("bad value\n");
+    return NULL;
+}
+
+
+/********************************************************************\
  * gnc_scm_to_locale_string                                         *
  *   returns the string representation of the scm string in         *
  *   a newly allocated gchar * or NULL if it can't be retrieved.    *
+ *   The string will be encoded in the current locale's encoding.   *
+ *   Note: this function should only be use to convert filenames or *
+ *   strings from the environment. Or other strings that are in the *
+ *   system locale.                                                 *
  *                                                                  *
  * Args: symbol_value - the scm symbol                              *
  * Returns: newly allocated gchar * or NULL, should be freed with   *
@@ -77,7 +109,7 @@ gnc_scm_symbol_to_locale_string(SCM symbol_value)
         SCM string_value = scm_symbol_to_string (symbol_value);
         if (scm_is_string (string_value))
         {
-            char  *tmp = scm_to_locale_string (string_value);
+            char  *tmp = scm_to_utf8_string (string_value);
             gchar *str = g_strdup (tmp);
             free (tmp);
             return str;
@@ -110,7 +142,7 @@ gnc_scm_call_1_to_string(SCM func, SCM arg)
 
         if (scm_is_string(value))
         {
-            return gnc_scm_to_locale_string(value);
+            return gnc_scm_to_utf8_string(value);
         }
         else
         {
@@ -265,7 +297,7 @@ gchar *gnc_scm_strip_comments (SCM scm_text)
     gchar *raw_text, *text, **splits;
     gint i, j;
 
-    raw_text = gnc_scm_to_locale_string (scm_text);
+    raw_text = gnc_scm_to_utf8_string (scm_text);
     splits = g_strsplit(raw_text, "\n", -1);
     for (i = j = 0; splits[i]; i++)
     {

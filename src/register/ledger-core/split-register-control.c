@@ -880,7 +880,7 @@ gnc_split_register_auto_completion (SplitRegister *reg,
                                         gnc_get_current_book ());
         g_assert(pending_trans == trans);
 
-        gnc_copy_trans_onto_trans (auto_trans, trans, FALSE, FALSE);
+        xaccTransCopyOnto (auto_trans, trans);
         blank_split = NULL;
 
         if (gnc_split_register_get_default_account (reg) != NULL)

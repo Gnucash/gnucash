@@ -172,7 +172,7 @@ gnc_extension_path (SCM extension, char **fullpath)
         if (scm_is_string(item))
         {
             gchar* s;
-            s = gnc_scm_to_locale_string(item);
+            s = gnc_scm_to_utf8_string(item);
 
             if (i == 1)
                 strings[i] = g_strdup(s);

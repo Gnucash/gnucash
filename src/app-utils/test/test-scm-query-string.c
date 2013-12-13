@@ -27,10 +27,10 @@ test_query (Query *q, SCM val2str)
     args = scm_cons (scm_q, SCM_EOL);
     str_q = scm_apply (val2str, args, SCM_EOL);
 
-    args = scm_cons (scm_from_locale_string ("'"), scm_cons (str_q, SCM_EOL));
+    args = scm_cons (scm_from_utf8_string ("'"), scm_cons (str_q, SCM_EOL));
     str_q = scm_string_append (args);
 
-    str2 = gnc_scm_to_locale_string (str_q);
+    str2 = gnc_scm_to_utf8_string (str_q);
     if (str2)
     {
         res_q = scm_c_eval_string (str2);

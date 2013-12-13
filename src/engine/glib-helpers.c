@@ -102,7 +102,7 @@ gnc_glist_string_to_scm(GList *glist)
     for (node = glist; node; node = node->next)
     {
         if (node->data)
-            list = scm_cons (scm_from_locale_string(node->data), list);
+            list = scm_cons (scm_from_utf8_string(node->data), list);
         else
             list = scm_cons (SCM_BOOL_F, list);
     }
@@ -131,7 +131,7 @@ gnc_scm_to_glist_string(SCM list)
         {
             gchar * str;
 
-            str = gnc_scm_to_locale_string (SCM_CAR(list));
+            str = gnc_scm_to_utf8_string (SCM_CAR(list));
             if (str)
                 glist = g_list_prepend (glist, g_strdup (str));
             g_free (str);
@@ -153,7 +153,7 @@ gnc_scm_to_gslist_string(SCM list)
         {
             gchar * str;
 
-            str = gnc_scm_to_locale_string (SCM_CAR(list));
+            str = gnc_scm_to_utf8_string (SCM_CAR(list));
             if (str)
                 gslist = g_slist_prepend (gslist, g_strdup (str));
             g_free (str);

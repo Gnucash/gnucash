@@ -353,7 +353,7 @@ gnc_ui_account_get_tax_info_string (const Account *account)
             return g_strdup (_("Tax entity type not specified"));
 
         atype = xaccAccountGetType (account);
-        tax_entity_type = scm_from_locale_string (tax_type);
+        tax_entity_type = scm_from_utf8_string (tax_type);
 
         if (get_form == SCM_UNDEFINED)
         {
@@ -455,13 +455,13 @@ gnc_ui_account_get_tax_info_string (const Account *account)
             {
                 gchar *form = NULL;
 
-                /* Note: using scm_to_locale_string directly here instead
-                   of our wrapper gnc_scm_to_locale_string. 'form' should
+                /* Note: using scm_to_utf8_string directly here instead
+                   of our wrapper gnc_scm_to_utf8_string. 'form' should
                    be freed with 'free' instead of 'g_free'. This will
                    be taken care of automatically during scm_dynwind_end,
                    because we inform guile of this memory allocation via
                    scm_dynwind_free a little further. */
-                form = scm_to_locale_string (form_scm);
+                form = scm_to_utf8_string (form_scm);
                 if (!form)
                 {
                     if (tax_related)
@@ -497,7 +497,7 @@ gnc_ui_account_get_tax_info_string (const Account *account)
                     else
                     {
                         gchar *desc = NULL;
-                        desc = gnc_scm_to_locale_string (desc_scm);
+                        desc = gnc_scm_to_utf8_string (desc_scm);
                         if (!desc)
                         {
                             if (tax_related)

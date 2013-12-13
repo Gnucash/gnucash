@@ -93,7 +93,7 @@ acct_tree_add_accts(SCM accts,
         }
 
         if (scm_is_string(SCM_CAR(current)))
-            compname = gnc_scm_to_locale_string (SCM_CAR(current));
+            compname = gnc_scm_to_utf8_string (SCM_CAR(current));
         else
             compname = g_strdup("");
 
@@ -242,7 +242,7 @@ gnc_ui_qif_account_picker_new_cb(GtkButton * w, gpointer user_data)
         /* Save the full name and update the map entry. */
         g_free(wind->selected_name);
         wind->selected_name = fullname;
-        scm_call_2(name_setter, wind->map_entry, scm_from_locale_string(fullname));
+        scm_call_2(name_setter, wind->map_entry, scm_from_utf8_string(fullname));
     }
     gtk_widget_destroy(dlg);
 
@@ -272,7 +272,7 @@ gnc_ui_qif_account_picker_changed_cb(GtkTreeSelection *selection,
                            ACCOUNT_COL_FULLNAME, &wind->selected_name,
                            -1);
         scm_call_2(name_setter, wind->map_entry,
-                   wind->selected_name ? scm_from_locale_string(wind->selected_name) : SCM_BOOL_F);
+                   wind->selected_name ? scm_from_utf8_string(wind->selected_name) : SCM_BOOL_F);
     }
     else
     {
@@ -342,7 +342,7 @@ qif_account_picker_dialog(QIFImportWindow * qif_wind, SCM map_entry)
 
     /* Set the initial account to be selected. */
     if (scm_is_string(orig_acct))
-        wind->selected_name = gnc_scm_to_locale_string (orig_acct);
+        wind->selected_name = gnc_scm_to_utf8_string (orig_acct);
 
     builder = gtk_builder_new();
     gnc_builder_add_from_file (builder, "dialog-account-picker.glade", "QIF Import Account Picker");

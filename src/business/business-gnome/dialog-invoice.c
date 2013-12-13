@@ -651,7 +651,7 @@ gnc_invoice_window_print_invoice(GncInvoice *invoice)
     g_return_if_fail (scm_is_procedure (func));
 
     arg = SWIG_NewPointerObj(invoice, SWIG_TypeQuery("_p__gncInvoice"), 0);
-    arg2 = scm_from_locale_string(reportname);
+    arg2 = scm_from_utf8_string(reportname);
     args = scm_cons2 (arg, arg2, args);
 
     /* scm_gc_protect_object(func); */

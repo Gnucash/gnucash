@@ -31,6 +31,16 @@
  *  a guile string.
  *
  *  Returns a newly allocated string that must be freed with g_free*/
+gchar * gnc_scm_to_utf8_string(SCM scm_string);
+
+/** Helper function to get the string representation of
+ *  a guile string.
+ *   The string will be encoded in the current locale's encoding.
+ *   Note: this function should only be use to convert filenames or
+ *   strings from the environment. Or other strings that are in the
+ *   system locale.
+ *
+ *  Returns a newly allocated string that must be freed with g_free*/
 gchar * gnc_scm_to_locale_string(SCM scm_string);
 
 /** Helper function to get the string representation of

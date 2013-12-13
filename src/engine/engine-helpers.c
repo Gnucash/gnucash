@@ -314,7 +314,7 @@ gnc_guid2scm(GncGUID guid)
     if (!guid_to_string_buff(&guid, string))
         return SCM_BOOL_F;
 
-    return scm_from_locale_string(string);
+    return scm_from_utf8_string(string);
 }
 
 GncGUID
@@ -328,7 +328,7 @@ gnc_scm2guid(SCM guid_scm)
     {
         return *guid_null();
     }
-    str = gnc_scm_to_locale_string (guid_scm);
+    str = gnc_scm_to_utf8_string (guid_scm);
     string_to_guid(str, &guid);
     g_free (str);
     return guid;
@@ -348,7 +348,7 @@ gnc_guid_p(SCM guid_scm)
     {
         return FALSE;
     }
-    str = gnc_scm_to_locale_string (guid_scm);
+    str = gnc_scm_to_utf8_string (guid_scm);
     return_int = string_to_guid(str, &guid);
     g_free (str);
     return return_int;
@@ -677,7 +677,7 @@ gnc_query_path2scm (const GSList *path)
         const char *key = node->data;
 
         if (key)
-            path_scm = scm_cons (scm_from_locale_string (key), path_scm);
+            path_scm = scm_cons (scm_from_utf8_string (key), path_scm);
     }
 
     return scm_reverse (path_scm);
@@ -700,7 +700,7 @@ gnc_query_scm2path (SCM path_scm)
         if (!scm_is_string (key_scm))
             break;
 
-        key = gnc_scm_to_locale_string(key_scm);
+        key = gnc_scm_to_utf8_string(key_scm);
         path = g_slist_prepend (path, key);
         path_scm = SCM_CDR (path_scm);
     }
@@ -753,7 +753,7 @@ gnc_kvp_value2scm (const KvpValue *value)
 
     case KVP_TYPE_STRING:
         string = kvp_value_get_string (value);
-        scm = string ? scm_from_locale_string (string) : SCM_BOOL_F;
+        scm = string ? scm_from_utf8_string (string) : SCM_BOOL_F;
         break;
 
     case KVP_TYPE_GUID:
@@ -813,7 +813,7 @@ kvp_frame_slot2scm (const char *key, KvpValue *value, gpointer data)
     SCM key_scm;
     SCM pair;
 
-    key_scm = key ? scm_from_locale_string (key) : SCM_BOOL_F;
+    key_scm = key ? scm_from_utf8_string (key) : SCM_BOOL_F;
     value_scm = gnc_kvp_value2scm (value);
     pair = scm_cons (key_scm, value_scm);
 
@@ -869,7 +869,7 @@ gnc_scm2KvpValue (SCM value_scm)
     case KVP_TYPE_STRING:
     {
         gchar * str;
-        str = gnc_scm_to_locale_string (val_scm);
+        str = gnc_scm_to_utf8_string (val_scm);
         value = kvp_value_new_string (str);
         g_free (str);
         break;
@@ -983,7 +983,7 @@ gnc_scm2KvpFrame (SCM frame_scm)
         if (!scm_is_string (key_scm))
             continue;
 
-        key = scm_to_locale_string (key_scm); /* key should be freed with free !
+        key = scm_to_utf8_string (key_scm); /* key should be freed with free !
                                                  This is automatically taken care
                                                  of by scm_dynwind_free below. */
         scm_dynwind_begin (0);
@@ -1028,7 +1028,7 @@ gnc_queryterm2scm (const QofQueryTerm *qt)
 
         qt_scm = scm_cons (scm_from_long  (pdata->options), qt_scm);
         qt_scm = scm_cons (SCM_BOOL (pdata->is_regex), qt_scm);
-        qt_scm = scm_cons (pdata->matchstring ? scm_from_locale_string (pdata->matchstring) : SCM_BOOL_F, qt_scm);
+        qt_scm = scm_cons (pdata->matchstring ? scm_from_utf8_string (pdata->matchstring) : SCM_BOOL_F, qt_scm);
 
     }
     else if (!g_strcmp0 (pd->type_name, QOF_TYPE_DATE))
@@ -1081,7 +1081,7 @@ gnc_queryterm2scm (const QofQueryTerm *qt)
         query_char_t pdata = (query_char_t) pd;
 
         qt_scm = scm_cons (scm_from_long  (pdata->options), qt_scm);
-        qt_scm = scm_cons (pdata->char_list ? scm_from_locale_string (pdata->char_list) : SCM_BOOL_F, qt_scm);
+        qt_scm = scm_cons (pdata->char_list ? scm_from_utf8_string (pdata->char_list) : SCM_BOOL_F, qt_scm);
 
     }
     else if (!g_strcmp0 (pd->type_name, QOF_TYPE_KVP))
@@ -1167,7 +1167,7 @@ gnc_scm2query_term_query_v2 (SCM qt_scm)
             qt_scm = SCM_CDR (qt_scm);
             if (!scm_is_string (scm)) break;
 
-            matchstring = gnc_scm_to_locale_string (scm);
+            matchstring = gnc_scm_to_utf8_string (scm);
 
             pd = qof_query_string_predicate (compare_how, matchstring,
                                              options, is_regex);
@@ -1289,7 +1289,7 @@ gnc_scm2query_term_query_v2 (SCM qt_scm)
             qt_scm = SCM_CDR (qt_scm);
             if (!scm_is_string (scm))
                 break;
-            char_list = gnc_scm_to_locale_string (scm);
+            char_list = gnc_scm_to_utf8_string (scm);
 
             pd = qof_query_char_predicate (options, char_list);
             g_free (char_list);
@@ -1560,7 +1560,7 @@ gnc_scm2query_term_query_v1 (SCM query_term_scm)
 
             scm = SCM_CAR (query_term_scm);
             query_term_scm = SCM_CDR (query_term_scm);
-            matchstring = gnc_scm_to_locale_string (scm);
+            matchstring = gnc_scm_to_utf8_string (scm);
 
             if (!g_strcmp0 (pr_type, "pr-action"))
             {
@@ -1646,7 +1646,7 @@ gnc_scm2query_term_query_v1 (SCM query_term_scm)
             /* id type */
             scm = SCM_CAR (query_term_scm);
             query_term_scm = SCM_CDR (query_term_scm);
-            id_type = (QofIdType) gnc_scm_to_locale_string (scm);
+            id_type = (QofIdType) gnc_scm_to_utf8_string (scm);
 
             xaccQueryAddGUIDMatch (q, &guid, id_type, QOF_QUERY_OR);
             g_free ((void *) id_type);

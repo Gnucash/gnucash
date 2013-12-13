@@ -49,7 +49,7 @@ gnc_scm_to_kvp_value_ptr(SCM val)
     {
         gchar *newstr;
         KvpValue *ret;
-        newstr = gnc_scm_to_locale_string (val);
+        newstr = gnc_scm_to_utf8_string (val);
         ret = kvp_value_new_string(newstr);
         g_free (newstr);
         return ret;
@@ -84,7 +84,7 @@ gnc_kvp_value_ptr_to_scm(KvpValue* val)
         break;
     case KVP_TYPE_STRING:
         string = kvp_value_get_string(val);
-        return string ? scm_from_locale_string(string) : SCM_BOOL_F;
+        return string ? scm_from_utf8_string(string) : SCM_BOOL_F;
         break;
     case KVP_TYPE_GUID:
     {
