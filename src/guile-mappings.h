@@ -22,6 +22,8 @@
 /* Give Guile 1.8 a 2.0-like interface */
 #if (SCM_MAJOR_VERSION < 2)
 # define scm_c_string_length scm_i_string_length
+#endif
+#ifndef scm_from_utf8_string
 # define scm_from_utf8_string scm_from_locale_string
 # define scm_to_utf8_string scm_to_locale_string
 #endif

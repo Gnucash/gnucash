@@ -52,7 +52,10 @@ libgncmod_report_gnome_la_LIBADD = \
 if BUILDING_FROM_SCM
 swig-report-gnome.c: report-gnome.i ${top_srcdir}/src/base-typemaps.i
 	$(SWIG) -guile $(SWIG_ARGS) -Linkage module \
-	-I${top_srcdir}/src -o $@ $<
+	-I${top_srcdir}/src -o $@ $<; \
+	if ! `grep "define scm_from_utf8_string" $@ > /dev/null 2>&1`; then \
+	  patch $@ $(top_srcdir)/src/swig-utf8.patch; \
+	fi
 endif
 
 gncmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash/report

@@ -28,7 +28,10 @@ libgncmodbaz_la_LIBADD = \
 
 if BUILDING_FROM_SCM
 swig-baz.c: baz.i
-	$(SWIG) -guile $(SWIG_ARGS) -Linkage module -o $@ $<
+	$(SWIG) -guile $(SWIG_ARGS) -Linkage module -o $@ $<; \
+	if ! `grep "define scm_from_utf8_string" $@ > /dev/null 2>&1`; then \
+	  patch $@ $(top_srcdir)/src/swig-utf8.patch; \
+	fi
 endif
 
 EXTRA_DIST = \
