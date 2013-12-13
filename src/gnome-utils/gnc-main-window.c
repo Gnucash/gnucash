@@ -4411,9 +4411,8 @@ gnc_main_window_cmd_help_about (GtkAction *action, GncMainWindow *window)
      "name", "GnuCash",
      /* Translators: the following string will be shown in Help->About->Credits
       * Enter your name or that of your team and an email contact for feedback.
-      *
       * The string can have multiple rows, so you can also add a list of
-      * contributors. FIXME: Is this desired? */
+      * contributors. */
      "translator-credits", _("translator_credits"),
      "version", VERSION,
      "website", "http://www.gnucash.org",
