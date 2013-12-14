@@ -1029,7 +1029,7 @@ then
       ;;
 
     webkit)
-      PKG_CHECK_MODULES(WEBKIT, webkit-1.0 >= "1.0")
+      PKG_CHECK_MODULES(WEBKIT, webkit-1.0 >= "1.2")
       case "$platform" in
         win32)
           # 1.1.90 has both functions
