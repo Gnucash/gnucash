@@ -12,9 +12,14 @@
 #include <gnc-gnome-utils.h>
 #include <gnc-gui-query.h>
 #include <gnc-html.h>
+%}
+#if defined(SWIGGUILE)
+%{
+#include "guile-mappings.h"
 
 SCM scm_init_sw_gnc_html_module(void);
 %}
+#endif
 
 %import "base-typemaps.i"
 

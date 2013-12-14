@@ -204,10 +204,12 @@ swig-engine.c: engine.i $(top_srcdir)/src/base-typemaps.i \
                $(QOFHEADERS) \
                $(gncinclude_HEADERS) $(noinst_HEADERS)
 	$(SWIG) -guile $(SWIG_ARGS) -Linkage module \
-	-I${top_srcdir}/src/libqof/qof -I${top_srcdir}/src -o $@ $<; \
+	-I${top_srcdir}/src/libqof/qof -I${top_srcdir}/src -o $@ $<
+if GNC_HAVE_GUILE_2
 	if ! `grep "define scm_from_utf8_string" $@ > /dev/null 2>&1`; then \
 	  patch $@ $(top_srcdir)/src/swig-utf8.patch; \
 	fi
+endif
 endif
 
 iso-4217-currencies.c: iso-4217-currencies.scm iso-currencies-to-c

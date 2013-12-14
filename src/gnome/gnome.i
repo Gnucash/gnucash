@@ -4,10 +4,14 @@
 #include <config.h>
 #include <gtk/gtk.h>
 #include <dialog-progress.h>
+%}
+#if defined(SWIGGUILE)
+%{
 #include "guile-mappings.h"
 
 SCM scm_init_sw_gnome_module (void);
 %}
+#endif
 
 %import "base-typemaps.i"
 

@@ -1,9 +1,14 @@
 %module sw_gnc_module
 %{
 #include <gnc-module.h>
+%}
+#if defined(SWIGGUILE)
+%{
+#include "guile-mappings.h"
 
 SCM scm_init_sw_gnc_module_module (void);
 %}
+#endif
 
 %import "base-typemaps.i"
 

@@ -3,10 +3,14 @@
 /* Includes the header in the wrapper code */
 #include <config.h>
 #include <gnc-report.h>
-#include <guile-mappings.h>
+%}
+#if defined(SWIGGUILE)
+%{
+#include "guile-mappings.h"
 
 SCM scm_init_sw_report_system_module (void);
 %}
+#endif
 
 %import "base-typemaps.i"
 

@@ -12,7 +12,8 @@ const gchar *gnc_version(void);
 %}
 #if defined(SWIGGUILE)
 %{
-#include <guile-mappings.h>
+#include "guile-mappings.h"
+
 SCM scm_init_sw_core_utils_module (void);
 %}
 #endif

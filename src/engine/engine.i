@@ -5,7 +5,6 @@
 #include <glib.h>
 #include "qof.h"
 #include "Query.h"
-#include "guile-mappings.h"
 #include "gnc-budget.h"
 #include "gnc-commodity.h"
 #include "gnc-engine.h"
@@ -31,9 +30,14 @@
 #include "gncTaxTable.h"
 #include "gncVendor.h"
 #include "gncBusGuile.h"
+%}
+#if defined(SWIGGUILE)
+%{
+#include "guile-mappings.h"
 
 SCM scm_init_sw_engine_module (void);
 %}
+#endif
 
 %import "base-typemaps.i"
 

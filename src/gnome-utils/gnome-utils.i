@@ -18,9 +18,14 @@
 #include <gnc-ui.h>
 #include <gnc-splash.h>
 #include <dialog-tax-table.h>
+%}
+#if defined(SWIGGUILE)
+%{
+#include "guile-mappings.h"
 
 SCM scm_init_sw_gnome_utils_module (void);
 %}
+#endif
 
 %import "base-typemaps.i"
 

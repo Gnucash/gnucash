@@ -448,6 +448,7 @@ AC_CHECK_FUNCS(gethostid link)
 #       So the tests below will check for known macro names in the order
 #       that we assume will always result in the proper macros being called
 #       for the guile version that has been detected.
+gnc_have_guile_2=no
 gnc_have_guile_www=no
 PKG_CHECK_MODULES(GUILE,
                   [guile-1.8 >= 1.8.5],
@@ -461,6 +462,7 @@ PKG_CHECK_MODULES(GUILE,
                   [guile-2.0 >= 2.0.0],
                   [m4_ifdef([GUILE_PROGS],
                             [ GUILE_PROGS
+                              gnc_have_guile_2=yes
                               GUILE_MODULE_AVAILABLE(gnc_have_guile_www,[(www main)]) ],
                             [ AC_MSG_ERROR([ guile 2 is found on your system, but appears
     to export different autoconf macros than what we expected. Please report this as a bug
@@ -473,6 +475,7 @@ PKG_CHECK_MODULES(GUILE,
   ])])
 ])
 
+AM_CONDITIONAL(GNC_HAVE_GUILE_2, test "${gnc_have_guile_2}" = yes)
 AM_CONDITIONAL(GNC_HAVE_GUILE_WWW, test "${gnc_have_guile_www}" = yes)
 
 ### --------------------------------------------------------------------------

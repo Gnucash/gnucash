@@ -6,6 +6,8 @@
 
 #if defined(SWIGGUILE)
 %{
+#include "guile-mappings.h"
+
 SCM scm_init_unittest_support_module (void);
 %}
 #endif

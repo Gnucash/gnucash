@@ -7,9 +7,14 @@
 #include <gnc-plugin-page-report.h>
 #include <window-report.h>
 #include <dialog-custom-report.h>
+%}
+#if defined(SWIGGUILE)
+%{
+#include "guile-mappings.h"
 
 SCM scm_init_sw_report_gnome_module (void);
 %}
+#endif
 
 %import "base-typemaps.i"
 
