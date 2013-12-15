@@ -1,5 +1,63 @@
 Version history:
 ------- -------
+2.5.10 - 15 December 2013
+         This is the eleventh and final release in the UNSTABLE 2.5 series.
+	 It is the second beta release. Barring any surprises, we will release
+	 a STABLE 2.6.0 on 29 December.
+
+	 Changes since the last release have been entirely bug fixes
+	 and translation updates, though not all bug fixes had
+	 associated bug reports. Note that WebKit 1.2 is now tested
+	 for in configure; it had been 1.0, but GnuCash wouldn't
+	 actually compile with versions earlier than 1.1.5.
+
+	 Bug Fixes:
+
+	 Bug 336843 - Attach images/files/urls to transactions:
+	    Disable the "show attachment" menu item if the transaction
+	    has no attached file.
+
+	 Bug 619478 - Build warning in html/gnc-html-webkit.c
+	 Bug 627575 - Stylesheet names with non-alphanumeric characters
+	     and saved-reports
+	 Bug 630578 - current date instead of posting date in exchange rate,
+	    when posting a bill
+	 Bug 632588 - Scrub doesn't fix missing currency
+	 Bug 639371 - Welcome Sample Report reports wrong version and
+	    has a broken report
+	 Bug 653594 - wrong amount printed on checks
+	 Bug 705714 - QIF Import - File selection pop-up is not on top
+	     during qif import
+	 Bug 708526 - GnuCash Crashes when opening About page:
+	     Downgrade the error to a critical warning.
+	 Bug 711317 - Indian Rupee Symbol appears as "?" marks
+	 Bug 715123 - Post invoice problem, cannot unpost
+	 Bug 719481 - GnuCash report crashes with Guile2
+	 Bug 719521 - Missing radio button in "Edit security" dialog
+	 Bug 719726 - Click on File -> Open seg-faults
+	 Bug 720235 - Python bindings should load environment file just
+	     like gnucash does
+	 Fix Python tests to no longer require gsettings schemas installed.
+	 Fix the CuteCash (Qt GUI based) build
+	 Multi-currency "Post invoice" improvements
+	 Protect gnc_mktime against bad dates.
+	 Protect against null account pointers in a couple of place to
+	     avoid asserts.
+	 Qif Import Assistant: Don't disable the whole dialog, just the
+	     Forward button
+	 QifImport: Fix crash from attempting to import an empty file.
+	 Add the ability to search for transactions that are, or are not,
+	     book closing entries.
+	 Move customer, bill, and invoice importers form the business menu
+	     to the file menu.
+	 Rename some directories in src/import-export so that the
+	     gschema.xml.in.in files within them don't have pathnames that
+	     are too long for tar when the GnuCash version exceeds 5 digits
+	     (e.g., 2.5.10).
+
+	 Translation Updates: Italian, German, French
+	 New Translations: Arabic!
+
 2.5.9 - 1 December 2013
          This is the tenth release in the UNSTABLE 2.5 series.
 	 It is the first beta release.

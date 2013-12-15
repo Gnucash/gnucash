@@ -1,6 +1,266 @@
-2013-11-30 John Ralls 
+2013-12-14 John Ralls 
 
-	* Ensure that all KVP changes are properly marked dirty and committed. (HEAD, origin/trunk, origin/HEAD, trunk)
+	* Rename some directories in src/import-export (HEAD, trunk)
+
+2013-12-14 John Ralls 
+
+	* Move gnc-warnings.c from POTFILES.skip to POTFILES.ignore
+
+2013-12-14 John Ralls 
+
+	* Fix ax_pkg_swig.m4 filename.
+
+2013-12-14 John Ralls 
+
+	* Revert a stray, unrelated change from r23556 (origin/trunk, origin/HEAD)
+
+2013-11-30 Patrick 
+
+	* BUG 336843 (Attach images/files/urls to transactions):
+
+2013-12-14 John Ralls 
+
+	* Fix missing xaccTransCommitEdit() from r23466
+
+2013-12-14 John Ralls 
+
+	* Bug 619478 - Build warning in html/gnc-html-webkit.c
+
+2013-12-14 Geert Janssens 
+
+	* SWIG version updates
+
+2013-12-14 Geert Janssens 
+
+	* Guile 1.8 fixes for r23556 and r23557
+
+2013-12-13 Cristian Marchi 
+
+	* Update Italian translation.
+
+2013-12-13 Geert Janssens 
+
+	* Bug 719481 - GnuCash report crashes with Guile2
+
+2013-12-13 Geert Janssens 
+
+	* Use scm_[to/from]_utf8_string instead of scm_[to/from]_locale_string as per guile recommendation
+
+2013-12-13 Mike Evans 
+
+	* Move customer, bill, and invoice importers form the business menu to the file menu.
+
+2013-12-13 Mike Evans 
+
+	* Remove empty file.
+
+2013-12-13 Frank H. Ellenberger 
+
+	* Fix of [23550]: Translator comments don't like empty comment lines.
+
+2013-12-13 Frank H. Ellenberger 
+
+	* Update translation into Arabic language to 44% completion on trunk by عبدالسلام عبدالعزيز <ashalash@msn.com>
+
+2013-12-12 Frank H. Ellenberger 
+
+	* Tell translators where to adjust their credits.
+
+2013-12-12 Mike Alexander 
+
+	* Ignore missing accounts in gnc:filter-accountlist-type to avoid an assert.
+
+2013-12-12 Mike Alexander 
+
+	* Ignore XCode projects
+
+2013-12-12 Mike Alexander 
+
+	* Check for null account pointers in gnc_tree_view_account_set_selected_accounts.
+
+2013-12-11 Frank H. Ellenberger 
+
+	* Port of "Completion of translation into Arabic language by 55%" by abdulsalam alshilash
+
+2013-12-11 Frank H. Ellenberger 
+
+	* Appendix to [23539] update POTFILES.in
+
+2013-12-11 Geert Janssens 
+
+	* Build svn releases with documentation from a matching branch
+
+2013-12-11 Geert Janssens 
+
+	* Bug 720235 - Python bindings should load environment file just like gnucash does
+
+2013-12-10 Mike Alexander 
+
+	* Fix r23536: got the 'closing keyword wrong in a couple of places
+
+2013-12-10 Mike Alexander 
+
+	* Change various reports to find book closing transactions without pattern matching
+
+2013-12-10 Mike Alexander 
+
+	* Add the ability to search for transactions that are, or are not, book closing entries.
+
+2013-12-10 Geert Janssens 
+
+	* Ensure that opening an existing book never opens an empty main window.
+
+2013-12-10 John Ralls 
+
+	* Bug 705714 - QIF Import - File selection pop-up is not on top during qif import
+
+2013-12-10 John Ralls 
+
+	* QifImport: Fix crash from attempting to import an empty file.
+
+2013-12-10 John Ralls 
+
+	* Qif Import Assistant: Don't disable the whole dialog, just the Forward button
+
+2013-12-09 John Ralls 
+
+	* Bug 632588 - Scrub doesn't fix missing currency
+
+2013-12-09 John Ralls 
+
+	* Fix missing identifier from r23520
+
+2013-12-08 Geert Janssens 
+
+	* Fix (harmless) report warnings as reported in bug 639371
+
+2013-12-08 Geert Janssens 
+
+	* Long term fix for wrong version number part of bug 639371
+
+2013-12-08 Geert Janssens 
+
+	* Remove obsolete conditional that's never triggered anymore
+
+2013-12-08 Cristian Marchi 
+
+	* Updated French translation and glossary, thanks to Sébastien Villemot.
+
+2013-12-08 Geert Janssens 
+
+	* Fix report background image loading on Windows
+
+2013-12-07 Frank H. Ellenberger 
+
+	* Bug 711317 - Indian Rupee Symbol appears as "?" marks
+
+2013-12-07 John Ralls 
+
+	* Fix missing prototype warning from r23494.
+
+2013-12-07 Geert Janssens 
+
+	* Bug 627575 - Stylesheet names with non-alphanumeric characters and saved-reports -- addendum
+
+2013-12-07 Geert Janssens 
+
+	* Bug 627575 - Stylesheet names with non-alphanumeric characters and saved-reports
+
+2013-12-07 Mike Alexander 
+
+	* Don't add a \n to the beginning of the split memo, account, or amount lists. Pango seems to ignore it, but it really shouldn't be there.
+
+2013-12-07 Mike Alexander 
+
+	* Fix bug 653594 related to check printing. This bug has two parts.  The original bug was that the wrong split is sometimes used to print the check.  In the comments a second problem was mentioned: sometimes the wrong split is omitted from the split list in formats that print all the splits.
+
+2013-12-07 Mike Alexander 
+
+	* Protect against null account pointers in a couple of place to avoid asserts.
+
+2013-12-07 Mike Alexander 
+
+	* Protect gnc_mktime against bad dates.
+
+2013-12-05 John Ralls 
+
+	* Test for overflow limits in gnc_numeric_add.
+
+2013-12-05 John Ralls 
+
+	* Handle RAND_MAX < 2^32 in get_random_gint64()
+
+2013-12-05 Geert Janssens 
+
+	* Multi-currency "Post invoice" improvements
+
+2013-12-05 Geert Janssens 
+
+	* Bug 630578 - current date instead of posting date in exchange rate, when posting a bill
+
+2013-12-04 Geert Janssens 
+
+	* Bug 715123 - Post invoice problem, cannot unpost
+
+2013-12-04 Christian Stimming 
+
+	* Fix cutecash build: Calling the iso-currencies-to-c script can directly use the unchanged .in script because we call the GUILE_EXECUTABLE directly from cmake.
+
+2013-12-04 Frank H. Ellenberger 
+
+	* Update german glossary
+
+2013-12-04 Mike Alexander 
+
+	* Fix bug 719521.  The two radio buttons were both there, but one on top of the other.
+
+2013-12-03 Christian Stimming 
+
+	* Fix ugly typo in string.
+
+2013-12-03 Christian Stimming 
+
+	* Update German translation. Still 690 to go.
+
+2013-12-02 John Ralls 
+
+	* Bug 719726 - Click on File -> Open seg-faults
+
+2013-12-02 John Ralls 
+
+	* Bug 708526 - GnuCash Crashes when opening About page
+
+2013-12-02 John Ralls 
+
+	* Remove src/gnome-utils/gnc-warnings.c from POTFILES.in
+
+2013-12-02 John Ralls 
+
+	* Protect older GCCs from -Wno-invalid-source-encoding
+
+2013-12-02 Geert Janssens 
+
+	* Fix python test
+
+2013-12-02 Geert Janssens 
+
+	* GSettings: only load backend when installed
+
+2013-12-01 Mike Alexander 
+
+	* Update progress bar while writing price DB as well as while reading it.
+
+2013-12-01 John Ralls 
+
+	* Make that Release 2.5.9
+
+2013-12-01 John Ralls 
+
+	* Release 2.5.90
+
+2013-12-01 John Ralls 
+
+	* Ensure that all KVP changes are properly marked dirty and committed.
 
 2013-11-30 Mike Evans 
 
