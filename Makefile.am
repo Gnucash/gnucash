@@ -44,7 +44,7 @@ EXTRA_DIST = \
   macros/as-scrub-include.m4 \
   macros/binreloc.m4 \
   macros/compiler-flags.m4 \
-  macros/ac_pkg_swig.m4 \
+  macros/ax_pkg_swig.m4 \
   macros/legacy_macros.m4 \
   po/gnucash.pot \
   po/POTFILES.in \
@@ -219,3 +219,4 @@ indent:
 # a very ugly way.
 #	$(ASTYLE) --indent=spaces=4 --brackets=break --pad-oper -pad-header --suffix=none `find ${srcdir}/src -name '*.[hc]'`
 	@echo "### GnuCash development hint: The above command might have re-indented much more files than what you intended. Please commit only those which you really want to have changed, and revert the changes in the others so that other devevelopers do not have unnecessary merge conflicts. Thanks! ###"
+
