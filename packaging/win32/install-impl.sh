@@ -1631,7 +1631,7 @@ function inst_docs() {
         make_chm guide de
         make_chm guide it
 # Temporarily disabled because it makes hh
-#        make_chm guide ja_JP "--stringparam chunker.output.encoding Shift_JIS --stringparam htmlhelp.encoding Shift_JIS"
+#        make_chm guide ja "--stringparam chunker.output.encoding Shift_JIS --stringparam htmlhelp.encoding Shift_JIS"
         make_chm help C
         make_chm help de
 #        make_chm help it
