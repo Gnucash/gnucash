@@ -1096,9 +1096,9 @@ gsr_default_associate_handler_location( GNCSplitReg *gsr, gpointer data )
     if (is_trans_readonly_and_warn(trans))
         return;
 
-    dialog = gtk_file_chooser_dialog_new ("Associate Location with Transaction",
+    dialog = gtk_dialog_new_with_buttons ("Associate Location with Transaction",
                                      GTK_WINDOW(gsr->window),
-                                     GTK_FILE_CHOOSER_ACTION_OPEN,
+                                     GTK_DIALOG_MODAL,
                                      GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
                                      GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
                                      NULL);
