@@ -1626,15 +1626,15 @@ function inst_docs() {
         fi
         setup docs
         _DOCS_INST_UDIR=`unix_path $INSTALL_DIR`/share/gnucash/help
-        mkdir -p $_DOCS_INST_UDIR/{C,de_DE,it_IT,ja_JP}
+        mkdir -p $_DOCS_INST_UDIR/{C,de,it,ja}
         make_chm guide C
-        make_chm guide de_DE
-        make_chm guide it_IT
+        make_chm guide de
+        make_chm guide it
 # Temporarily disabled because it makes hh
 #        make_chm guide ja_JP "--stringparam chunker.output.encoding Shift_JIS --stringparam htmlhelp.encoding Shift_JIS"
         make_chm help C
-        make_chm help de_DE
-#        make_chm help it_IT
+        make_chm help de
+#        make_chm help it
     qpopd
 }
 
