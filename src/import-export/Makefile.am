@@ -2,10 +2,10 @@ if WITH_OFX
     OFX_DIR=ofx
 endif
 if WITH_AQBANKING
-    AQBANKING_DIR=aqbanking
+    AQBANKING_DIR=aqb
 endif
-SUBDIRS = . gschemas qif qif-import \
-	${OFX_DIR} ${AQBANKING_DIR} log-replay test csv-import csv-export
+SUBDIRS = . gschemas qif qif-imp \
+	${OFX_DIR} ${AQBANKING_DIR} log-replay test csv-imp csv-exp
 
 pkglib_LTLIBRARIES=libgncmod-generic-import.la
 

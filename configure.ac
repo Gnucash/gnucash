@@ -779,7 +779,7 @@ then
   AC_SUBST(AQBANKING_LIBS)
   AC_SUBST(AQBANKING_CFLAGS)
   _COMPONENTS="$_COMPONENTS aqbanking"
-  MIGRATABLE_PREFS_AQBANKING="$srcdir/src/import-export/aqbanking/migratable-prefs-aqbanking.xml"
+  MIGRATABLE_PREFS_AQBANKING="$srcdir/src/import-export/aqb/migratable-prefs-aqbanking.xml"
 fi
 AM_CONDITIONAL([WITH_AQBANKING], [test x${want_aqbanking} = xyes])
 AC_SUBST_FILE([MIGRATABLE_PREFS_AQBANKING])
@@ -1397,21 +1397,21 @@ AC_CONFIG_FILES(
   src/import-export/Makefile
   src/import-export/test/Makefile
   src/import-export/ofx/gschemas/Makefile
-  src/import-export/qif-import/Makefile
+  src/import-export/qif-imp/Makefile
   src/import-export/qif/Makefile
   src/import-export/qif/test/Makefile
-  src/import-export/qif-import/gschemas/Makefile
-  src/import-export/qif-import/test/Makefile
+  src/import-export/qif-imp/gschemas/Makefile
+  src/import-export/qif-imp/test/Makefile
   src/import-export/gschemas/Makefile
   src/import-export/ofx/Makefile
   src/import-export/ofx/test/Makefile
-  src/import-export/csv-import/Makefile
-  src/import-export/csv-import/gschemas/Makefile
-  src/import-export/csv-export/Makefile
-  src/import-export/csv-export/gschemas/Makefile
+  src/import-export/csv-imp/Makefile
+  src/import-export/csv-imp/gschemas/Makefile
+  src/import-export/csv-exp/Makefile
+  src/import-export/csv-exp/gschemas/Makefile
   src/import-export/log-replay/Makefile
-  src/import-export/aqbanking/Makefile
-  src/import-export/aqbanking/gschemas/Makefile
+  src/import-export/aqb/Makefile
+  src/import-export/aqb/gschemas/Makefile
   src/libqof/Makefile
   src/libqof/qof/Makefile
   src/libqof/qof/test/Makefile
@@ -1487,12 +1487,12 @@ AC_CONFIG_FILES(
   src/gnome/gschemas/org.gnucash.window.pages.gschema.xml.in
   src/gnome-utils/gschemas/org.gnucash.history.gschema.xml.in
   src/gnome-utils/gschemas/org.gnucash.warnings.gschema.xml.in
-  src/import-export/aqbanking/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in
-  src/import-export/csv-export/gschemas/org.gnucash.dialogs.export.csv.gschema.xml.in
-  src/import-export/csv-import/gschemas/org.gnucash.dialogs.import.csv.gschema.xml.in
+  src/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in
+  src/import-export/csv-exp/gschemas/org.gnucash.dialogs.export.csv.gschema.xml.in
+  src/import-export/csv-imp/gschemas/org.gnucash.dialogs.import.csv.gschema.xml.in
   src/import-export/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in
   src/import-export/ofx/gschemas/org.gnucash.dialogs.import.ofx.gschema.xml.in
-  src/import-export/qif-import/gschemas/org.gnucash.dialogs.import.qif.gschema.xml.in
+  src/import-export/qif-imp/gschemas/org.gnucash.dialogs.import.qif.gschema.xml.in
   dnl # Please read doc/build-system before adding *anything* here
   ,
   dnl # init-commands go here
