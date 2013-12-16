@@ -45,6 +45,8 @@ EXTRA_DIST = \
   macros/binreloc.m4 \
   macros/compiler-flags.m4 \
   macros/ax_pkg_swig.m4 \
+  macros/ax_python_devel.m4 \
+  macros/ax_swig_python.m4 \
   macros/legacy_macros.m4 \
   po/gnucash.pot \
   po/POTFILES.in \
