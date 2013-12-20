@@ -1043,8 +1043,10 @@ add_price(GNCPriceDB *db, GNCPrice *p)
     return TRUE;
 }
 
-/* the gnc_pricedb_add_price() function will use p, adding a ref, so
-   treat p as read-only if this function succeeds. (Huh ???) */
+/* If gnc_pricedb_add_price() succeeds, it takes ownership of the
+   passed-in GNCPrice and inserts it into the pricedb. Writing to this
+   pointer afterwards will have interesting results, so don't.
+ */
 gboolean
 gnc_pricedb_add_price(GNCPriceDB *db, GNCPrice *p)
 {
