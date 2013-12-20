@@ -488,7 +488,7 @@ gnc_split_register_save_amount_values (SRSaveData *sd, SplitRegister *reg)
     /* Now compute/set the split value.  Amount is in the register
      * currency but we need to convert to the txn currency.
      */
-    if (gnc_split_register_needs_conv_rate (reg, sd->trans, acc))
+    if (acc && gnc_split_register_needs_conv_rate (reg, sd->trans, acc))
     {
 
         /* convert the amount to the Value ... */
