@@ -499,6 +499,13 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
 
         if (pending_trans == trans)
             found_pending = TRUE;
+	/* If the transaction has only one split, and it's not our
+	 * pending_trans, then it's another register's blank split and
+	 * we don't want to see it.
+	 */
+	else if (xaccTransCountSplits (trans) < 2)
+	    continue;
+
 
         /* Do not load splits from the blank transaction. */
         if (trans == blank_trans)
