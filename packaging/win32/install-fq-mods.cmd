@@ -85,7 +85,7 @@ echo.
 echo Found perl version %_perlmajor%.%_perlminor%, but GnuCash requires at least version 5.8.
 echo Please install version 5.8 or above of
 echo * ActivePerl (http://www.activestate.com/store/activeperl) or
-echo * Strawberry Perl (http://strawberry-perl.googlecode.com/files/)
+echo * Strawberry Perl (http://code.google.com/p/strawberry-perl/downloads/)
 echo and add the bin directory to your Path environment variable.
 goto error
 
