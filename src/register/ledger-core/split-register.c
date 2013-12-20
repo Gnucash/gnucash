@@ -2042,6 +2042,37 @@ recalculate_value (Split *split, SplitRegister *reg,
     }
 }
 
+static void
+record_price (SplitRegister *reg, Account *account, gnc_numeric value)
+{
+    Transaction *trans = gnc_split_register_get_current_trans (reg);
+    QofBook *book = qof_instance_get_book (QOF_INSTANCE (account));
+    GNCPriceDB *pricedb = gnc_pricedb_get_db (book);
+    gnc_commodity *comm = xaccAccountGetCommodity (account);
+    gnc_commodity *curr = xaccTransGetCurrency (trans);
+    GNCPrice *price;
+    Timespec ts;
+    BasicCell *cell;
+
+    /* Only record the price for account types that don't have a
+     * "rate" cell. They'll get handled later by
+     * gnc_split_register_handle_exchange.
+     */
+    if (gnc_split_reg_has_rate_cell (reg->type))
+        return;
+    cell = gnc_table_layout_get_cell (reg->table->layout, DATE_CELL);
+    gnc_date_cell_get_date ((DateCell*)cell, &ts);
+    price = gnc_price_create (book);
+    gnc_price_begin_edit (price);
+    gnc_price_set_commodity (price, comm);
+    gnc_price_set_currency (price, curr);
+    gnc_price_set_time (price, ts);
+    gnc_price_set_source (price, "user:split-register");
+    gnc_price_set_value (price, value);
+    gnc_pricedb_add_price (pricedb, price);
+    gnc_price_commit_edit (price);
+}
+
 static gboolean
 gnc_split_register_auto_calc (SplitRegister *reg, Split *split)
 {
@@ -2211,6 +2242,8 @@ gnc_split_register_auto_calc (SplitRegister *reg, Split *split)
     if (recalc_value)
         recalculate_value (split, reg, price, amount, shares_changed);
 
+    if (price_changed)
+        record_price (reg, account, price);
 
     return TRUE;
 }
