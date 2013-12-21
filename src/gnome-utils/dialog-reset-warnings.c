@@ -24,6 +24,7 @@
 
 #include "config.h"
 
+#include <glib/gi18n.h>
 #include <gtk/gtk.h>
 
 #include "dialog-utils.h"
@@ -263,9 +264,9 @@ gnc_reset_warnings_add_one (RWDialog *rw_dialog, const gchar *prefs_group,
 
     ENTER("rw_dialog %p, warning %p, box %p", rw_dialog, warning, box);
 
-    checkbox = gtk_check_button_new_with_label(warning->warn_desc ? warning->warn_desc : warning->warn_name);
+    checkbox = gtk_check_button_new_with_label( _(warning->warn_desc ? warning->warn_desc : warning->warn_name));
     if (warning->warn_long_desc)
-        gtk_widget_set_tooltip_text(checkbox, warning->warn_long_desc);
+        gtk_widget_set_tooltip_text(checkbox, _(warning->warn_long_desc));
 
     gtk_widget_set_name(checkbox, warning->warn_name);
     g_object_set_data_full (G_OBJECT (checkbox), "prefs-group", g_strdup(prefs_group),
