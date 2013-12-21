@@ -3,12 +3,12 @@
     <key name="check-format-guid" type="s">
       <default>''</default>
       <summary>GUID of predefined check format to use</summary>
-      <description>This value specifies the predefined check format to use.  The number is the guid of a known check format.</description>
+      <description>This value specifies the predefined check format to use. The number is the guid of a known check format.</description>
     </key>
     <key name="check-position" type="i">
       <default>0</default>
       <summary>Which check position to print</summary>
-      <description>On preprinted checks containing multiple checks per page, this setting specifies which check position to print.  The possible values are 0, 1 and 2, corresponding to the top, middle and bottom checks on the page.</description>
+      <description>On preprinted checks containing multiple checks per page, this setting specifies which check position to print. The possible values are 0, 1 and 2, corresponding to the top, middle and bottom checks on the page.</description>
     </key>
     <key name="first-page-count" type="i">
       <default>0</default>
@@ -23,7 +23,7 @@
     <key name="date-format-user" type="s">
       <default>'0'</default>
       <summary>Custom date format</summary>
-      <description>If the date format is set to indicate a custom date format, this value is used as an argument to strftime to produce the date to be printed.  It may be any valid strftime string; for more information about this format, read the manual page of strftime by "man 3 strftime".</description>
+      <description>If the date format is set to indicate a custom date format, this value is used as an argument to strftime to produce the date to be printed. It may be any valid strftime string; for more information about this format, read the manual page of strftime by "man 3 strftime".</description>
     </key>
     <key name="custom-units" type="i">
       <default>0</default>
@@ -38,37 +38,37 @@
     <key name="custom-date" type="(dd)">
       <default>(0,0)</default>
       <summary>Position of date line</summary>
-      <description>This value contains the X,Y coordinates for the start of the date line on the check.  Coordinates are from the lower left corner of the specified check position.</description>
+      <description>This value contains the X,Y coordinates for the start of the date line on the check. Coordinates are from the lower left corner of the specified check position.</description>
     </key>
     <key name="custom-amount-words" type="(dd)">
       <default>(0,0)</default>
       <summary>Position of check amount in words</summary>
-      <description>This value contains the X,Y coordinates for the start of the written amount line on the check.  Coordinates are from the lower left corner of the specified check position.</description>
+      <description>This value contains the X,Y coordinates for the start of the written amount line on the check. Coordinates are from the lower left corner of the specified check position.</description>
     </key>
     <key name="custom-amount-number" type="(dd)">
       <default>(0,0)</default>
       <summary>Position of check amount in numbers</summary>
-      <description>This value contains the X,Y coordinates for the start of the numerical amount line on the check.  Coordinates are from the lower left corner of the specified check position.</description>
+      <description>This value contains the X,Y coordinates for the start of the numerical amount line on the check. Coordinates are from the lower left corner of the specified check position.</description>
     </key>
     <key name="custom-address" type="(dd)">
       <default>(0,0)</default>
       <summary>Position of payee address</summary>
-      <description>This value contains the X,Y coordinates for the start of the payee address line on the check.  Coordinates are from the lower left corner of the specified check position.</description>
+      <description>This value contains the X,Y coordinates for the start of the payee address line on the check. Coordinates are from the lower left corner of the specified check position.</description>
     </key>
     <key name="custom-notes" type="(dd)">
       <default>(0,0)</default>
       <summary>Position of notes line</summary>
-      <description>This value contains the X,Y coordinates for the start of the notes line on the check.  Coordinates are from the lower left corner of the specified check position.</description>
+      <description>This value contains the X,Y coordinates for the start of the notes line on the check. Coordinates are from the lower left corner of the specified check position.</description>
     </key>
     <key name="custom-memo" type="(dd)">
       <default>(0,0)</default>
       <summary>Position of memo line</summary>
-      <description>This value contains the X,Y coordinates for the start of the memo line on the check.  Coordinates are from the lower left corner of the specified check position.</description>
+      <description>This value contains the X,Y coordinates for the start of the memo line on the check. Coordinates are from the lower left corner of the specified check position.</description>
     </key>
     <key name="custom-translation" type="(dd)">
       <default>(0,0)</default>
       <summary>Offset for complete check</summary>
-      <description>This value contains the X,Y offset for the complete check.  Coordinates are from the lower left corner of the specified check position.</description>
+      <description>This value contains the X,Y offset for the complete check. Coordinates are from the lower left corner of the specified check position.</description>
     </key>
     <key name="custom-rotation" type="d">
       <default>0.0</default>
@@ -78,17 +78,17 @@
     <key name="splits-amount" type="(dd)">
       <default>(0,0)</default>
       <summary>Position of split's amount in numbers</summary>
-      <description>This value contains the X,Y coordinates for the start of the split's amount line on the check.  Coordinates are from the lower left corner of the specified check position.</description>
+      <description>This value contains the X,Y coordinates for the start of the split's amount line on the check. Coordinates are from the lower left corner of the specified check position.</description>
     </key>
     <key name="splits-memo" type="(dd)">
       <default>(0,0)</default>
       <summary>Position of split's memo line</summary>
-      <description>This value contains the X,Y coordinates for the start of the split's memo line on the check.  Coordinates are from the lower left corner of the specified check position.</description>
+      <description>This value contains the X,Y coordinates for the start of the split's memo line on the check. Coordinates are from the lower left corner of the specified check position.</description>
     </key>
     <key name="splits-account" type="(dd)">
       <default>(0,0)</default>
       <summary>Position of split's account line</summary>
-      <description>This value contains the X,Y coordinates for the start of the split's account line on the check.  Coordinates are from the lower left corner of the specified check position.</description>
+      <description>This value contains the X,Y coordinates for the start of the split's account line on the check. Coordinates are from the lower left corner of the specified check position.</description>
     </key>
     <key name="print-date-format" type="b">
       <default>false</default>
@@ -98,7 +98,7 @@
     <key name="default-font" type="s">
       <default>'sans 10'</default>
       <summary>The default check printing font</summary>
-      <description>The default font to use when printing checks.  This value will be overridden by any font specified in a check description file.</description>
+      <description>The default font to use when printing checks. This value will be overridden by any font specified in a check description file.</description>
     </key>
     <key name="blocking-chars" type="b">
       <default>false</default>

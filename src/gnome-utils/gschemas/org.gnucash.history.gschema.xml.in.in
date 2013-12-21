@@ -3,7 +3,7 @@
     <key name="maxfiles" type="i">
       <default>4</default>
       <summary>Number of files in history</summary>
-      <description>This setting contains the number of files to keep in the Recently Opened Files menu. This value may be set to zero to disable the file history.  This number has a maximum value of 10.</description>
+      <description>This setting contains the number of files to keep in the Recently Opened Files menu. This value may be set to zero to disable the file history. This number has a maximum value of 10.</description>
     </key>
     <key name="file0" type="s">
       <default>''</default>

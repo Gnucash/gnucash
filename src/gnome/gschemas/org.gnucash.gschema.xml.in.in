@@ -8,12 +8,12 @@
     <key name="save-window-geometry" type="b">
       <default>true</default>
       <summary>Save window sizes and locations</summary>
-      <description>If active, the size and location of each dialog window will be saved when it is closed.  The sizes and locations of content windows will be remembered when you quit GnuCash. Otherwise the sizes will not be saved.</description>
+      <description>If active, the size and location of each dialog window will be saved when it is closed. The sizes and locations of content windows will be remembered when you quit GnuCash. Otherwise the sizes will not be saved.</description>
     </key>
     <key name="account-separator" type="s">
       <default>'colon'</default>
       <summary>Character to use as separator between account names</summary>
-      <description>This setting determines the character that will be used between components of an account name.  Possible values are any single non-alphanumeric unicode character, or any of the following strings: "colon" "slash", "backslash", "dash" and "period".</description>
+      <description>This setting determines the character that will be used between components of an account name. Possible values are any single non-alphanumeric unicode character, or any of the following strings: "colon" "slash", "backslash", "dash" and "period".</description>
     </key>
     <key name="file-compression" type="b">
       <default>true</default>
@@ -28,7 +28,7 @@
     <key name="autosave-interval-minutes" type="d">
       <default>5</default>
       <summary>Auto-save time interval</summary>
-      <description>The number of minutes until saving of the data file to harddisk will be started automatically.  If zero, no saving will be started automatically.</description>
+      <description>The number of minutes until saving of the data file to harddisk will be started automatically. If zero, no saving will be started automatically.</description>
     </key>
     <key name="save-on-close-expires" type="b">
       <default>false</default>
@@ -48,7 +48,7 @@
     <key name="auto-decimal-point" type="b">
       <default>false</default>
       <summary>Automatically insert a decimal point</summary>
-      <description>If active, GnuCash will automatically insert a decimal point into values that are entered without one.  Otherwise GnuCash will not modify entered numbers.</description>
+      <description>If active, GnuCash will automatically insert a decimal point into values that are entered without one. Otherwise GnuCash will not modify entered numbers.</description>
     </key>
     <key name="auto-decimal-places" type="i">
       <default>2</default>
@@ -83,17 +83,17 @@
     <key name="reversed-accounts-none" type="b">
       <default>false</default>
       <summary>Don't sign reverse any accounts.</summary>
-      <description>This setting allows certain accounts to have their balances reversed in sign from positive to negative, or vice versa. The setting "income-expense" is for users who like to see negative expenses and positive income.  The setting of "credit" is for users who want to see balances reflect the debit/credit status of the account.  The setting "none" doesn't reverse the sign on any balances.</description>
+      <description>This setting allows certain accounts to have their balances reversed in sign from positive to negative, or vice versa. The setting "income-expense" is for users who like to see negative expenses and positive income. The setting of "credit" is for users who want to see balances reflect the debit/credit status of the account. The setting "none" doesn't reverse the sign on any balances.</description>
     </key>
     <key name="reversed-accounts-credit" type="b">
       <default>true</default>
       <summary>Sign reverse balances on the following: Credit Card, Payable, Liability, Equity, and Income.</summary>
-      <description>This setting allows certain accounts to have their balances reversed in sign from positive to negative, or vice versa. The setting "income-expense" is for users who like to see negative expenses and positive income.  The setting of "credit" is for users who want to see balances reflect the debit/credit status of the account.  The setting "none" doesn't reverse the sign on any balances.</description>
+      <description>This setting allows certain accounts to have their balances reversed in sign from positive to negative, or vice versa. The setting "income-expense" is for users who like to see negative expenses and positive income. The setting of "credit" is for users who want to see balances reflect the debit/credit status of the account. The setting "none" doesn't reverse the sign on any balances.</description>
     </key>
     <key name="reversed-accounts-incomeexpense" type="b">
       <default>false</default>
       <summary>Sign reverse balances on income and expense accounts.</summary>
-      <description>This setting allows certain accounts to have their balances reversed in sign from positive to negative, or vice versa. The setting "income-expense" is for users who like to see negative expenses and positive income.  The setting of "credit" is for users who want to see balances reflect the debit/credit status of the account.  The setting "none" doesn't reverse the sign on any balances.</description>
+      <description>This setting allows certain accounts to have their balances reversed in sign from positive to negative, or vice versa. The setting "income-expense" is for users who like to see negative expenses and positive income. The setting of "credit" is for users who want to see balances reflect the debit/credit status of the account. The setting "none" doesn't reverse the sign on any balances.</description>
     </key>
     <key name="show-account-color" type="b">
       <default>false</default>
@@ -108,12 +108,12 @@
     <key name="use-accounting-labels" type="b">
       <default>false</default>
       <summary>Use formal account labels</summary>
-      <description>If active, formal accounting labels "Credit" and "Debit" will be used when designating fields on screen.  Otherwise, informal labels such as Increase/Decrease, "Funds In"/"Funds Out", etc. will be used.</description>
+      <description>If active, formal accounting labels "Credit" and "Debit" will be used when designating fields on screen. Otherwise, informal labels such as Increase/Decrease, "Funds In"/"Funds Out", etc. will be used.</description>
     </key>
     <key name="tab-close-buttons" type="b">
       <default>true</default>
       <summary>Show close buttons on notebook tabs</summary>
-      <description>If active, a "close" button will be displayed on any notebook tab that may be closed.  Otherwise, no such button will be shown on the tab. Regardless of this setting, pages can always be closed via the "close" menu item or the "close" button on toolbar.</description>
+      <description>If active, a "close" button will be displayed on any notebook tab that may be closed. Otherwise, no such button will be shown on the tab. Regardless of this setting, pages can always be closed via the "close" menu item or the "close" button on toolbar.</description>
     </key>
     <key name="tab-width" type="d">
       <default>30.0</default>
@@ -123,12 +123,12 @@
     <key name="currency-choice-locale" type="b">
       <default>true</default>
       <summary>Use the system locale currency for all newly created accounts.</summary>
-      <description>This setting controls the source of the default currency for new accounts.  If set to "locale" then GnuCash will retrieve the default currency from the user's locale setting.  If set to "other", GnuCash will use the setting specified by the currency-other key.</description>
+      <description>This setting controls the source of the default currency for new accounts. If set to "locale" then GnuCash will retrieve the default currency from the user's locale setting. If set to "other", GnuCash will use the setting specified by the currency-other key.</description>
     </key>
     <key name="currency-choice-other" type="b">
       <default>false</default>
       <summary>Use the specified currency for all newly created accounts.</summary>
-      <description>This setting controls the source of the default currency for new accounts.  If set to "locale" then GnuCash will retrieve the default currency from the user's locale setting.  If set to "other", GnuCash will use the setting specified by the currency-other key.</description>
+      <description>This setting controls the source of the default currency for new accounts. If set to "locale" then GnuCash will retrieve the default currency from the user's locale setting. If set to "other", GnuCash will use the setting specified by the currency-other key.</description>
     </key>
     <key name="currency-other" type="s">
       <default>'USD'</default>
@@ -188,17 +188,17 @@
     <key name="summarybar-position-top" type="b">
       <default>false</default>
       <summary>Display the summary bar at the top of the page.</summary>
-      <description>This setting determines the edge at which the summary bar for various pages is drawn.  Possible values are "top" and "bottom". It defaults to "bottom".</description>
+      <description>This setting determines the edge at which the summary bar for various pages is drawn. Possible values are "top" and "bottom". It defaults to "bottom".</description>
     </key>
     <key name="summarybar-position-bottom" type="b">
       <default>true</default>
       <summary>Display the summary bar at the bottom of the page.</summary>
-      <description>This setting determines the edge at which the summary bar for various pages is drawn.  Possible values are "top" and "bottom". It defaults to "bottom".</description>
+      <description>This setting determines the edge at which the summary bar for various pages is drawn. Possible values are "top" and "bottom". It defaults to "bottom".</description>
     </key>
     <key name="tab-next-recent" type="b">
       <default>false</default>
       <summary>Closing a tab moves to the most recently visited tab.</summary>
-      <description>If active, closing a tab moves to the most recently visited tab.  Otherwise closing a tab moves one tab to the left.</description>
+      <description>If active, closing a tab moves to the most recently visited tab. Otherwise closing a tab moves one tab to the left.</description>
     </key>
     <key name="num-source" type="b">
       <default>false</default>
@@ -213,7 +213,7 @@
     <key name="use-theme-colors" type="b">
       <default>false</default>
       <summary>Color the register as specified by the system theme</summary>
-      <description>If active, the register will be colored as specified by the system theme.  This can be overridden to provide custom colors by editing the gtkrc file in the users home directory.  Otherwise the standard register colors will be used that GnuCash has always used.</description>
+      <description>If active, the register will be colored as specified by the system theme. This can be overridden to provide custom colors by editing the gtkrc file in the users home directory. Otherwise the standard register colors will be used that GnuCash has always used.</description>
     </key>
     <key name="enter-moves-to-end" type="b">
       <default>false</default>
@@ -238,37 +238,37 @@
     <key name="alternate-color-by-transaction" type="b">
       <default>false</default>
       <summary>Color all lines of a transaction the same</summary>
-      <description>If active all lines that make up a single transaction will use the same color for their background.  Otherwise the background colors are alternated on each line.</description>
+      <description>If active all lines that make up a single transaction will use the same color for their background. Otherwise the background colors are alternated on each line.</description>
     </key>
     <key name="draw-horizontal-lines" type="b">
       <default>true</default>
       <summary>Show horizontal borders in a register</summary>
-      <description>Show horizontal borders between rows in a register.  If active the border between cells will be indicated with a heavy line. Otherwise the border between cells will not be marked.</description>
+      <description>Show horizontal borders between rows in a register. If active the border between cells will be indicated with a heavy line. Otherwise the border between cells will not be marked.</description>
     </key>
     <key name="draw-vertical-lines" type="b">
       <default>true</default>
       <summary>Show vertical borders in a register</summary>
-      <description>Show vertical borders between columns in a register.  If active the border between cells will be indicated with a heavy line. Otherwise the border between cells will not be marked.</description>
+      <description>Show vertical borders between columns in a register. If active the border between cells will be indicated with a heavy line. Otherwise the border between cells will not be marked.</description>
     </key>
     <key name="default-style-ledger" type="b">
       <default>true</default>
       <summary>Show all transactions on one line. (Two in double line mode.)</summary>
-      <description>This field specifies the default view style when opening a new register window.  Possible values are "ledger", "auto-ledger" and "journal".  The "ledger" setting says to show each transaction on one or two lines.  The "auto-ledger" setting does the same, but also expands only the current transaction to show all splits.  The "journal" setting shows all transactions in expanded form.</description>
+      <description>This field specifies the default view style when opening a new register window. Possible values are "ledger", "auto-ledger" and "journal". The "ledger" setting says to show each transaction on one or two lines. The "auto-ledger" setting does the same, but also expands only the current transaction to show all splits. The "journal" setting shows all transactions in expanded form.</description>
     </key>
     <key name="default-style-autoledger" type="b">
       <default>false</default>
       <summary>Automatically expand the current transaction to show all splits. All other transactions are shown on one line. (Two in double line mode.)</summary>
-      <description>This field specifies the default view style when opening a new register window.  Possible values are "ledger", "auto-ledger" and "journal".  The "ledger" setting says to show each transaction on one or two lines.  The "auto-ledger" setting does the same, but also expands only the current transaction to show all splits.  The "journal" setting shows all transactions in expanded form.</description>
+      <description>This field specifies the default view style when opening a new register window. Possible values are "ledger", "auto-ledger" and "journal". The "ledger" setting says to show each transaction on one or two lines. The "auto-ledger" setting does the same, but also expands only the current transaction to show all splits. The "journal" setting shows all transactions in expanded form.</description>
     </key>
     <key name="default-style-journal" type="b">
       <default>false</default>
       <summary>All transactions are expanded to show all splits.</summary>
-      <description>This field specifies the default view style when opening a new register window.  Possible values are "ledger", "auto-ledger" and "journal".  The "ledger" setting says to show each transaction on one or two lines.  The "auto-ledger" setting does the same, but also expands only the current transaction to show all splits.  The "journal" setting shows all transactions in expanded form.</description>
+      <description>This field specifies the default view style when opening a new register window. Possible values are "ledger", "auto-ledger" and "journal". The "ledger" setting says to show each transaction on one or two lines. The "auto-ledger" setting does the same, but also expands only the current transaction to show all splits. The "journal" setting shows all transactions in expanded form.</description>
     </key>
     <key name="double-line-mode" type="b">
       <default>false</default>
       <summary>Show two lines of information for each transaction</summary>
-      <description>Show two lines of information for each transaction in a register.  This is the default setting for when a register is first opened.  The setting can be changed at any time via the "View-&gt;Double Line" menu item.</description>
+      <description>Show two lines of information for each transaction in a register. This is the default setting for when a register is first opened. The setting can be changed at any time via the "View-&gt;Double Line" menu item.</description>
     </key>
     <key name="show-leaf-account-names" type="b">
       <default>false</default>
@@ -316,17 +316,17 @@
     <key name="currency-choice-locale" type="b">
       <default>true</default>
       <summary>Use the system locale currency for all newly created reports.</summary>
-      <description>This setting controls the default currency used for reports. If set to "locale" then GnuCash will retrieve the default currency from the user's locale setting.  If set to "other", GnuCash will use the setting specified by the currency-other key.</description>
+      <description>This setting controls the default currency used for reports. If set to "locale" then GnuCash will retrieve the default currency from the user's locale setting. If set to "other", GnuCash will use the setting specified by the currency-other key.</description>
     </key>
     <key name="currency-choice-other" type="b">
       <default>false</default>
       <summary>Use the specified currency for all newly created reports.</summary>
-      <description>This setting controls the source of the default currency for new accounts.  If set to "locale" then GnuCash will retrieve the default currency from the user's locale setting.  If set to "other", GnuCash will use the setting specified by the currency-other key.</description>
+      <description>This setting controls the source of the default currency for new accounts. If set to "locale" then GnuCash will retrieve the default currency from the user's locale setting. If set to "other", GnuCash will use the setting specified by the currency-other key.</description>
     </key>
     <key name="currency-other" type="s">
       <default>'USD'</default>
       <summary>Default currency for new reports</summary>
-      <description>This setting controls the default currency used for reports. If set to "locale" then GnuCash will retrieve the default currency from the user's locale setting.  If set to "other", GnuCash will use the setting specified by the currency-other key.</description>
+      <description>This setting controls the default currency used for reports. If set to "locale" then GnuCash will retrieve the default currency from the user's locale setting. If set to "other", GnuCash will use the setting specified by the currency-other key.</description>
     </key>
     <child name="pdf-export" schema="org.gnucash.general.report.pdf-export"/>
   </schema>

@@ -28,22 +28,22 @@
     <key name="format-dtaus" type="s">
       <default>'default'</default>
       <summary>DTAUS import data format</summary>
-      <description>This setting specifies the data format when importing DTAUS files.  The AqBanking library offers various import formats (called "profiles") of which you can choose one here.</description>
+      <description>This setting specifies the data format when importing DTAUS files. The AqBanking library offers various import formats (called "profiles") of which you can choose one here.</description>
     </key>
     <key name="format-csv" type="s">
       <default>'default'</default>
       <summary>CSV import data format</summary>
-      <description>This setting specifies the data format when importing CSV files.  The AqBanking library offers various import formats (called "profiles") of which you can choose one here.</description>
+      <description>This setting specifies the data format when importing CSV files. The AqBanking library offers various import formats (called "profiles") of which you can choose one here.</description>
     </key>
     <key name="format-swift-mt940" type="s">
       <default>'swift-mt940'</default>
       <summary>SWIFT MT940 import data format</summary>
-      <description>This setting specifies the data format when importing SWIFT MT940 files.  The AqBanking library offers various import formats (called "profiles") of which you can choose one here.</description>
+      <description>This setting specifies the data format when importing SWIFT MT940 files. The AqBanking library offers various import formats (called "profiles") of which you can choose one here.</description>
     </key>
     <key name="format-swift-mt942" type="s">
       <default>'swift-mt942'</default>
       <summary>SWIFT MT942 import data format</summary>
-      <description>This setting specifies the data format when importing SWIFT MT942 files.  The AqBanking library offers various import formats (called "profiles") of which you can choose one here.</description>
+      <description>This setting specifies the data format when importing SWIFT MT942 files. The AqBanking library offers various import formats (called "profiles") of which you can choose one here.</description>
     </key>
     <key name="last-path" type="s">
       <default>''</default>

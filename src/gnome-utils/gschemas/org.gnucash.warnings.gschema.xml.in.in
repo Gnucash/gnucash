@@ -12,12 +12,12 @@
     <key name="inv-entry-mod" type="i">
       <default>0</default>
       <summary>Commit changes to a invoice entry</summary>
-      <description>This dialog is presented when you attempt to move out of a modified invoice entry.  The changed data must be either saved or discarded.</description>
+      <description>This dialog is presented when you attempt to move out of a modified invoice entry. The changed data must be either saved or discarded.</description>
     </key>
     <key name="inv-entry-dup" type="i">
       <default>0</default>
       <summary>Duplicating a changed invoice entry</summary>
-      <description>This dialog is presented when you attempt to duplicate a modified invoice entry.  The changed data must be saved or the duplication canceled.</description>
+      <description>This dialog is presented when you attempt to duplicate a modified invoice entry. The changed data must be saved or the duplication canceled.</description>
     </key>
     <key name="price-comm-del" type="i">
       <default>0</default>
@@ -27,7 +27,7 @@
     <key name="price-comm-del-quotes" type="i">
       <default>0</default>
       <summary>Delete a commodity with price quotes</summary>
-      <description>This dialog is presented before allowing you to delete a commodity that has price quotes attached.  Deleting the commodity will delete the quotes as well.</description>
+      <description>This dialog is presented before allowing you to delete a commodity that has price quotes attached. Deleting the commodity will delete the quotes as well.</description>
     </key>
     <key name="price-quotes-del" type="i">
       <default>0</default>
@@ -47,12 +47,12 @@
     <key name="reg-recd-split-mod" type="i">
       <default>0</default>
       <summary>Change contents of reconciled split</summary>
-      <description>This dialog is presented before allowing you to change the contents of a reconciled split.  Allowing these changes can make it hard to perform future reconciliations.</description>
+      <description>This dialog is presented before allowing you to change the contents of a reconciled split. Allowing these changes can make it hard to perform future reconciliations.</description>
     </key>
     <key name="reg-recd-split-unrec" type="i">
       <default>0</default>
       <summary>Mark transaction split as unreconciled</summary>
-      <description>This dialog is presented before allowing you to mark a transaction split as unreconciled.  Doing so will throw off the reconciled value of the register and can make it hard to perform future reconciliations.</description>
+      <description>This dialog is presented before allowing you to mark a transaction split as unreconciled. Doing so will throw off the reconciled value of the register and can make it hard to perform future reconciliations.</description>
     </key>
     <key name="reg-split-del" type="i">
       <default>0</default>
@@ -62,7 +62,7 @@
     <key name="reg-split-del-recd" type="i">
       <default>0</default>
       <summary>Remove a reconciled split from a transaction</summary>
-      <description>This dialog is presented before allowing you to remove a reconciled split from a transaction.  Doing so will throw off the reconciled value of the register and can make it hard to perform future reconciliations.</description>
+      <description>This dialog is presented before allowing you to remove a reconciled split from a transaction. Doing so will throw off the reconciled value of the register and can make it hard to perform future reconciliations.</description>
     </key>
     <key name="reg-split-del-all" type="i">
       <default>0</default>
@@ -72,7 +72,7 @@
     <key name="reg-split-del-all-recd" type="i">
       <default>0</default>
       <summary>Remove all the splits from a transaction</summary>
-      <description>This dialog is presented before allowing you to remove all splits (including some reconciled splits) from a transaction.  Doing so will throw off the reconciled value of the register and can make it hard to perform future reconciliations.</description>
+      <description>This dialog is presented before allowing you to remove all splits (including some reconciled splits) from a transaction. Doing so will throw off the reconciled value of the register and can make it hard to perform future reconciliations.</description>
     </key>
     <key name="reg-trans-del" type="i">
       <default>0</default>
@@ -82,17 +82,17 @@
     <key name="reg-trans-del-recd" type="i">
       <default>0</default>
       <summary>Delete a transaction with reconciled splits</summary>
-      <description>This dialog is presented before allowing you to delete a transaction that contains reconciled splits.  Doing so will throw off the reconciled value of the register and can make it hard to perform future reconciliations.</description>
+      <description>This dialog is presented before allowing you to delete a transaction that contains reconciled splits. Doing so will throw off the reconciled value of the register and can make it hard to perform future reconciliations.</description>
     </key>
     <key name="reg-trans-dup" type="i">
       <default>0</default>
       <summary>Duplicating a changed transaction</summary>
-      <description>This dialog is presented when you attempt to duplicate a modified transaction.  The changed data must be saved or the duplication canceled.</description>
+      <description>This dialog is presented when you attempt to duplicate a modified transaction. The changed data must be saved or the duplication canceled.</description>
     </key>
     <key name="reg-trans-mod" type="i">
       <default>0</default>
       <summary>Commit changes to a transaction</summary>
-      <description>This dialog is presented when you attempt to move out of a modified transaction.  The changed data must be either saved or discarded.</description>
+      <description>This dialog is presented when you attempt to move out of a modified transaction. The changed data must be either saved or discarded.</description>
     </key>
   </schema>
   
@@ -105,12 +105,12 @@
     <key name="inv-entry-mod" type="i">
       <default>0</default>
       <summary>Commit changes to a invoice entry</summary>
-      <description>This dialog is presented when you attempt to move out of a modified invoice entry.  The changed data must be either saved or discarded.</description>
+      <description>This dialog is presented when you attempt to move out of a modified invoice entry. The changed data must be either saved or discarded.</description>
     </key>
     <key name="inv-entry-dup" type="i">
       <default>0</default>
       <summary>Duplicating a changed invoice entry</summary>
-      <description>This dialog is presented when you attempt to duplicate a modified invoice entry.  The changed data must be saved or the duplication canceled.</description>
+      <description>This dialog is presented when you attempt to duplicate a modified invoice entry. The changed data must be saved or the duplication canceled.</description>
     </key>
     <key name="price-comm-del" type="i">
       <default>0</default>
@@ -120,7 +120,7 @@
     <key name="price-comm-del-quotes" type="i">
       <default>0</default>
       <summary>Delete a commodity with price quotes</summary>
-      <description>This dialog is presented before allowing you to delete a commodity that has price quotes attached.  Deleting the commodity will delete the quotes as well.</description>
+      <description>This dialog is presented before allowing you to delete a commodity that has price quotes attached. Deleting the commodity will delete the quotes as well.</description>
     </key>
     <key name="price-quotes-del" type="i">
       <default>0</default>
@@ -140,12 +140,12 @@
     <key name="reg-recd-split-mod" type="i">
       <default>0</default>
       <summary>Change contents of reconciled split</summary>
-      <description>This dialog is presented before allowing you to change the contents of a reconciled split.  Allowing these changes can make it hard to perform future reconciliations.</description>
+      <description>This dialog is presented before allowing you to change the contents of a reconciled split. Allowing these changes can make it hard to perform future reconciliations.</description>
     </key>
     <key name="reg-recd-split-unrec" type="i">
       <default>0</default>
       <summary>Mark transaction split as unreconciled</summary>
-      <description>This dialog is presented before allowing you to mark a transaction split as unreconciled.  Doing so will throw off the reconciled value of the register and can make it hard to perform future reconciliations.</description>
+      <description>This dialog is presented before allowing you to mark a transaction split as unreconciled. Doing so will throw off the reconciled value of the register and can make it hard to perform future reconciliations.</description>
     </key>
     <key name="reg-split-del" type="i">
       <default>0</default>
@@ -155,7 +155,7 @@
     <key name="reg-split-del-recd" type="i">
       <default>0</default>
       <summary>Remove a reconciled split from a transaction</summary>
-      <description>This dialog is presented before allowing you to remove a reconciled split from a transaction.  Doing so will throw off the reconciled value of the register and can make it hard to perform future reconciliations.</description>
+      <description>This dialog is presented before allowing you to remove a reconciled split from a transaction. Doing so will throw off the reconciled value of the register and can make it hard to perform future reconciliations.</description>
     </key>
     <key name="reg-split-del-all" type="i">
       <default>0</default>
@@ -165,7 +165,7 @@
     <key name="reg-split-del-all-recd" type="i">
       <default>0</default>
       <summary>Remove all the splits from a transaction</summary>
-      <description>This dialog is presented before allowing you to remove all splits (including some reconciled splits) from a transaction.  Doing so will throw off the reconciled value of the register and can make it hard to perform future reconciliations.</description>
+      <description>This dialog is presented before allowing you to remove all splits (including some reconciled splits) from a transaction. Doing so will throw off the reconciled value of the register and can make it hard to perform future reconciliations.</description>
     </key>
     <key name="reg-trans-del" type="i">
       <default>0</default>
@@ -175,17 +175,17 @@
     <key name="reg-trans-del-recd" type="i">
       <default>0</default>
       <summary>Delete a transaction with reconciled splits</summary>
-      <description>This dialog is presented before allowing you to delete a transaction that contains reconciled splits.  Doing so will throw off the reconciled value of the register and can make it hard to perform future reconciliations.</description>
+      <description>This dialog is presented before allowing you to delete a transaction that contains reconciled splits. Doing so will throw off the reconciled value of the register and can make it hard to perform future reconciliations.</description>
     </key>
     <key name="reg-trans-dup" type="i">
       <default>0</default>
       <summary>Duplicating a changed transaction</summary>
-      <description>This dialog is presented when you attempt to duplicate a modified transaction.  The changed data must be saved or the duplication canceled.</description>
+      <description>This dialog is presented when you attempt to duplicate a modified transaction. The changed data must be saved or the duplication canceled.</description>
     </key>
     <key name="reg-trans-mod" type="i">
       <default>0</default>
       <summary>Commit changes to a transaction</summary>
-      <description>This dialog is presented when you attempt to move out of a modified transaction.  The changed data must be either saved or discarded.</description>
+      <description>This dialog is presented when you attempt to move out of a modified transaction. The changed data must be either saved or discarded.</description>
     </key>
   </schema>
 </schemalist>

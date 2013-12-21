@@ -15,7 +15,7 @@
     <key name="show-at-file-open" type="b">
       <default>true</default>
       <summary>Show "since last run" dialog when a file is opened.</summary>
-      <description>This setting controls whether the scheduled transactions "since last run" dialog is shown automatically when a data file is opened.  This includes the initial opening of the data file when GnuCash starts.  If this setting is active, show the dialog, otherwise it is not shown.</description>
+      <description>This setting controls whether the scheduled transactions "since last run" dialog is shown automatically when a data file is opened. This includes the initial opening of the data file when GnuCash starts. If this setting is active, show the dialog, otherwise it is not shown.</description>
     </key>
   </schema>
 
@@ -40,7 +40,7 @@
     <key name="notify" type="b">
       <default>true</default>
       <summary>Set the "notify" flag by default</summary>
-      <description>If active, any newly created scheduled transaction will have its 'notify' flag set by default.  The user can change this flag during transaction creation, or at any later time by editing the scheduled transaction. This setting only has meaning if the create-auto setting is active.</description>
+      <description>If active, any newly created scheduled transaction will have its 'notify' flag set by default. The user can change this flag during transaction creation, or at any later time by editing the scheduled transaction. This setting only has meaning if the create-auto setting is active.</description>
     </key>
     <key name="remind-days" type="d">
       <default>0</default>

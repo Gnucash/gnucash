@@ -13,12 +13,12 @@
     <key name="start-choice-relative" type="b">
       <default>true</default>
       <summary>Use relative profit/loss starting date</summary>
-      <description>This setting controls the type of starting date used in profit/loss calculations.  If set to "absolute" then GnuCash will retrieve the starting date specified by the start-date key.  If set to anything else, GnuCash will retrieve the starting date specified by the start-period key.</description>
+      <description>This setting controls the type of starting date used in profit/loss calculations. If set to "absolute" then GnuCash will retrieve the starting date specified by the start-date key. If set to anything else, GnuCash will retrieve the starting date specified by the start-period key.</description>
     </key>
     <key name="start-choice-absolute" type="b">
       <default>false</default>
       <summary>Use absolute profit/loss starting date</summary>
-      <description>This setting controls the type of starting date used in profit/loss calculations.  If set to "absolute" then GnuCash will retrieve the starting date specified by the start-date key.  If set to anything else, GnuCash will retrieve the starting date specified by the start-period key.</description>
+      <description>This setting controls the type of starting date used in profit/loss calculations. If set to "absolute" then GnuCash will retrieve the starting date specified by the start-date key. If set to anything else, GnuCash will retrieve the starting date specified by the start-period key.</description>
     </key>
     <key name="start-date" type="x">
       <default>0</default>
@@ -28,17 +28,17 @@
     <key name="start-period" type="i">
       <default>5</default>
       <summary>Starting time period identifier</summary>
-      <description>This setting controls the starting date set in profit/loss calculations if the start-choice setting is set to anything other than "absolute".  This field should contain a value between 0 and 8.</description>
+      <description>This setting controls the starting date set in profit/loss calculations if the start-choice setting is set to anything other than "absolute". This field should contain a value between 0 and 8.</description>
     </key>
     <key name="end-choice-relative" type="b">
       <default>true</default>
       <summary>Use relative profit/loss ending date</summary>
-      <description>This setting controls the type of ending date used in profit/loss calculations.  If set to "absolute" then GnuCash will retrieve the ending date specified by the end-date key.  If set to anything else, GnuCash will retrieve the ending date specified by the end-period key.</description>
+      <description>This setting controls the type of ending date used in profit/loss calculations. If set to "absolute" then GnuCash will retrieve the ending date specified by the end-date key. If set to anything else, GnuCash will retrieve the ending date specified by the end-period key.</description>
     </key>
     <key name="end-choice-absolute" type="b">
       <default>false</default>
       <summary>Use absolute profit/loss ending date</summary>
-      <description>This setting controls the type of ending date used in profit/loss calculations.  If set to "absolute" then GnuCash will retrieve the ending date specified by the end-date key.  If set to anything else, GnuCash will retrieve the ending date specified by the end-period key.</description>
+      <description>This setting controls the type of ending date used in profit/loss calculations. If set to "absolute" then GnuCash will retrieve the ending date specified by the end-date key. If set to anything else, GnuCash will retrieve the ending date specified by the end-period key.</description>
     </key>
     <key name="end-date" type="x">
       <default>0</default>
@@ -48,7 +48,7 @@
     <key name="end-period" type="i">
       <default>5</default>
       <summary>Ending time period identifier</summary>
-      <description>This setting controls the ending date set in profit/loss calculations if the end-choice setting is set to anything other than "absolute".  This field should contain a value between 0 and 8.</description>
+      <description>This setting controls the ending date set in profit/loss calculations if the end-choice setting is set to anything other than "absolute". This field should contain a value between 0 and 8.</description>
     </key>
   </schema>
 </schemalist>

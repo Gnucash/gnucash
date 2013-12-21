@@ -105,7 +105,7 @@
     <key name="tax-included" type="b">
       <default>true</default>
       <summary>Is tax included in this type of business entry?</summary>
-      <description>If set to active then tax is included by default in entries of this type.  This setting is inherited by new customers and vendors.</description>
+      <description>If set to active then tax is included by default in entries of this type. This setting is inherited by new customers and vendors.</description>
     </key>
     <key name="auto-pay" type="b">
       <default>false</default>
@@ -130,14 +130,14 @@
     <key name="accumulate-splits" type="b">
       <default>true</default>
       <summary>Accumulate multiple splits into one</summary>
-      <description>If this field is active then multiple entries in an invoice that transfer to the same account will be accumulated into a single split.  This field can be overridden per invoice in the Posting dialog.</description>
+      <description>If this field is active then multiple entries in an invoice that transfer to the same account will be accumulated into a single split. This field can be overridden per invoice in the Posting dialog.</description>
     </key>
   </schema>
   <schema id="org.gnucash.dialogs.business.bill" path="/org/gnucash/dialogs/business/bill/">
     <key name="tax-included" type="b">
       <default>true</default>
       <summary>Is tax included in this type of business entry?</summary>
-      <description>If set to active then tax is included by default in entries of this type.  This setting is inherited by new customers and vendors.</description>
+      <description>If set to active then tax is included by default in entries of this type. This setting is inherited by new customers and vendors.</description>
     </key>
     <key name="auto-pay" type="b">
       <default>false</default>
@@ -147,12 +147,12 @@
     <key name="notify-when-due" type="b">
       <default>true</default>
       <summary>Show bills due reminder at startup</summary>
-      <description>If active, at startup GnuCash will check to see whether any bills will become due soon.  If so, it will present the user with a reminder dialog.  The definition of "soon" is controlled by the "Days in Advance" setting.  Otherwise GnuCash does not check for due bills.</description>
+      <description>If active, at startup GnuCash will check to see whether any bills will become due soon. If so, it will present the user with a reminder dialog. The definition of "soon" is controlled by the "Days in Advance" setting. Otherwise GnuCash does not check for due bills.</description>
     </key>
     <key name="days-in-advance" type="d">
       <default>7.0</default>
       <summary>Show bills due within this many days</summary>
-      <description>This field defines the number of days in advance that GnuCash will check for due bills.  Its value is only used if the "Notify when due" setting is active.</description>
+      <description>This field defines the number of days in advance that GnuCash will check for due bills. Its value is only used if the "Notify when due" setting is active.</description>
     </key>
   </schema>
 

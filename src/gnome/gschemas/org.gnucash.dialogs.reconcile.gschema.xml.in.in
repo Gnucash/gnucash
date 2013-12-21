@@ -3,12 +3,12 @@
     <key name="check-cleared" type="b">
       <default>true</default>
       <summary>Pre-select cleared transactions</summary>
-      <description>If active, all transactions marked as cleared in the register will appear already selected in the reconcile dialog.  Otherwise no transactions will be initially selected.</description>
+      <description>If active, all transactions marked as cleared in the register will appear already selected in the reconcile dialog. Otherwise no transactions will be initially selected.</description>
     </key>
     <key name="auto-interest-transfer" type="b">
       <default>false</default>
       <summary>Prompt for interest charges</summary>
-      <description>Prior to reconciling an account which charges or pays interest, prompt the user to enter a transaction for the interest charge or payment.  Currently only enabled for Bank, Credit, Mutual, Asset, Receivable, Payable, and Liability accounts.</description>
+      <description>Prior to reconciling an account which charges or pays interest, prompt the user to enter a transaction for the interest charge or payment. Currently only enabled for Bank, Credit, Mutual, Asset, Receivable, Payable, and Liability accounts.</description>
     </key>
     <key name="auto-cc-payment" type="b">
       <default>true</default>

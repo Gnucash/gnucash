@@ -15,7 +15,7 @@
     <key name="show-at-startup" type="b">
       <default>true</default>
       <summary>Show "Tip Of The Day" at GnuCash start</summary>
-      <description>Enables the "Tip Of The Day" when GnuCash starts up.  If active, the dialog will be shown. Otherwise it will not be shown.</description>
+      <description>Enables the "Tip Of The Day" when GnuCash starts up. If active, the dialog will be shown. Otherwise it will not be shown.</description>
     </key>
   </schema>
 </schemalist>
