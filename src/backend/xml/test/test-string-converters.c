@@ -103,6 +103,20 @@ test_string_converters(void)
     }
 }
 
+static void
+test_bad_string (void)
+{
+    gchar *badstr = "foo\abar";
+    gchar *sanitized = "foo?bar";
+    gchar *backout;
+    xmlNodePtr test_node = text_to_dom_tree ("test-string", badstr);
+
+    backout = dom_tree_to_text (test_node);
+    do_test_args (g_strcmp0 (backout, sanitized) == 0,
+		  "string sanitizing", __FILE__, __LINE__,
+		  "with string %s", badstr);
+}
+
 int
 main(int argc, char **argv)
 {
@@ -110,6 +124,7 @@ main(int argc, char **argv)
     test_binary();
     fflush(stdout);
     test_string_converters();
+    test_bad_string ();
     fflush(stdout);
     print_test_results();
     exit(get_rv());

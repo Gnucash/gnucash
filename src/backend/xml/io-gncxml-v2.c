@@ -887,7 +887,7 @@ write_counts(FILE* out, ...)
     gboolean success = TRUE;
 
     va_start(ap, out);
-    type = va_arg(ap, char *);
+    type = g_strdup (va_arg(ap, char *));
 
     while (success && type)
     {
@@ -907,9 +907,10 @@ write_counts(FILE* out, ...)
              * This is invalid xml because the namespace isn't
              * declared in the tag itself. This should be changed to
              * 'type' at some point. */
-            xmlSetProp(node, BAD_CAST "cd:type", BAD_CAST type);
-            xmlNodeAddContent(node, BAD_CAST val);
+            xmlSetProp(node, BAD_CAST "cd:type", checked_char_cast (type));
+            xmlNodeAddContent(node, checked_char_cast (val));
             g_free(val);
+	    g_free (type);
 
             xmlElemDump(out, NULL, node);
             xmlFreeNode(node);
@@ -1141,7 +1142,7 @@ write_pricedb(FILE *out, QofBook *book, sixtp_gdv2 *gd)
        increment the progress bar as we go. */
        
     if (fprintf( out, "<%s version=\"%s\">\n", parent->name, 
-                 xmlGetProp(parent, (xmlChar*) "version")) < 0)
+                 xmlGetProp(parent, BAD_CAST "version")) < 0)
         return FALSE;
         
     /* We create our own output buffer so we can call xmlNodeDumpOutput to get

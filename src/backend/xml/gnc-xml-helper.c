@@ -22,26 +22,29 @@
  *                                                                  *
 \********************************************************************/
 
-#ifndef GNC_XML_HELPER_H
-#define GNC_XML_HELPER_H
+#include <glib.h>
+#include "gnc-xml-helper.h"
 
-#include <libxml/xmlversion.h>
+xmlChar*
+checked_char_cast (gchar *val)
+{
+    const int length = -1; /* Assumes val is null-terminated */
+    gchar *end;
+    if (val == NULL) return NULL;
+    /* Replace any invalid UTF-8 characters with a sequence of '?' */
+    while (!g_utf8_validate (val, length, (const gchar**)(&end)))
+        *end = '?';
+    /* Replace any invalid (for XML) control characters (everything < 0x20
+     * except \n, \t, and \r) with '?'. Technically we should replace
+     * these with a numeric entity, but that will blow up the libxml
+     * functions that expect raw text. It seems unlikely that anyone
+     * would use intentionally use one of these characters anyway.
+     */
 
-#  include <libxml/SAX.h>
-#  include <libxml/tree.h>
-#  include <libxml/parser.h>
-#  include <libxml/xmlmemory.h>
-#  include <libxml/parserInternals.h>
-#  ifndef xmlChildrenNode
-#    define xmlChildrenNode children
-#  endif /* ifndef xmlChildrenNode */
-#  ifndef xmlRootNode
-#    define xmlRootNode children
-#  endif /* ifndef xmlRootNode */
-#  ifndef xmlAttrPropertyValue
-#    define xmlAttrPropertyValue children
-#  endif /* ifndef xmlAttrPropertyValue */
+     for (end = val; *end; ++end)
+	if (*end > 0 && *end < 0x20 && *end != 0x09 &&
+	    *end != 0x0a && *end != 0x0d)
+	    *end = '?';
+    return (xmlChar*)(val);
+}
 
-xmlChar* checked_char_cast (gchar *val);
-
-#endif /* _GNC_XML_HELPER_H_ */

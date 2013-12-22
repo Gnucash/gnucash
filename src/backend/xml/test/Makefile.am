@@ -8,6 +8,7 @@ test_date_converting_SOURCES = \
   ${top_srcdir}/src/backend/xml/sixtp.c \
   ${top_srcdir}/src/backend/xml/sixtp-stack.c \
   ${top_srcdir}/src/backend/xml/sixtp-to-dom-parser.c \
+  ${top_srcdir}/src/backend/xml/gnc-xml-helper.c \
   test-date-converting.c
 
 test_dom_converters1_SOURCES = \
@@ -17,6 +18,7 @@ test_dom_converters1_SOURCES = \
   ${top_srcdir}/src/backend/xml/sixtp.c \
   ${top_srcdir}/src/backend/xml/sixtp-stack.c \
   ${top_srcdir}/src/backend/xml/sixtp-to-dom-parser.c \
+  ${top_srcdir}/src/backend/xml/gnc-xml-helper.c \
   test-dom-converters1.c
 
 test_kvp_frames_SOURCES = \
@@ -26,6 +28,7 @@ test_kvp_frames_SOURCES = \
   ${top_srcdir}/src/backend/xml/sixtp.c \
   ${top_srcdir}/src/backend/xml/sixtp-stack.c \
   ${top_srcdir}/src/backend/xml/sixtp-to-dom-parser.c \
+  ${top_srcdir}/src/backend/xml/gnc-xml-helper.c \
   test-kvp-frames.c
 
 # the xml backend is now a GModule - this test does
@@ -53,6 +56,7 @@ test_load_example_account_SOURCES = \
   ${top_srcdir}/src/backend/xml/gnc-commodity-xml-v2.c \
   ${top_srcdir}/src/backend/xml/gnc-book-xml-v2.c \
   ${top_srcdir}/src/backend/xml/gnc-pricedb-xml-v2.c \
+  ${top_srcdir}/src/backend/xml/gnc-xml-helper.c \
   test-load-example-account.c
 
 test_string_converters_SOURCES = \
@@ -62,6 +66,7 @@ test_string_converters_SOURCES = \
   ${top_srcdir}/src/backend/xml/sixtp.c \
   ${top_srcdir}/src/backend/xml/sixtp-stack.c \
   ${top_srcdir}/src/backend/xml/sixtp-to-dom-parser.c \
+  ${top_srcdir}/src/backend/xml/gnc-xml-helper.c \
   test-string-converters.c
 
 test_xml_account_SOURCES = \
@@ -84,6 +89,7 @@ test_xml_account_SOURCES = \
   ${top_srcdir}/src/backend/xml/gnc-budget-xml-v2.c \
   ${top_srcdir}/src/backend/xml/io-gncxml-v2.c \
   ${top_srcdir}/src/backend/xml/io-utils.c \
+  ${top_srcdir}/src/backend/xml/gnc-xml-helper.c \
   test-xml-account.c
 
 test_xml_commodity_SOURCES = \
@@ -106,6 +112,7 @@ test_xml_commodity_SOURCES = \
   ${top_srcdir}/src/backend/xml/gnc-budget-xml-v2.c \
   ${top_srcdir}/src/backend/xml/io-gncxml-v2.c \
   ${top_srcdir}/src/backend/xml/io-utils.c \
+  ${top_srcdir}/src/backend/xml/gnc-xml-helper.c \
   test-xml-commodity.c
 
 test_xml_pricedb_SOURCES = \
@@ -128,6 +135,7 @@ test_xml_pricedb_SOURCES = \
   ${top_srcdir}/src/backend/xml/gnc-budget-xml-v2.c \
   ${top_srcdir}/src/backend/xml/io-gncxml-v2.c \
   ${top_srcdir}/src/backend/xml/io-utils.c \
+  ${top_srcdir}/src/backend/xml/gnc-xml-helper.c \
   test-xml-pricedb.c
 
 test_xml_transaction_SOURCES = \
@@ -150,6 +158,7 @@ test_xml_transaction_SOURCES = \
   ${top_srcdir}/src/backend/xml/gnc-pricedb-xml-v2.c \
   ${top_srcdir}/src/backend/xml/io-gncxml-v2.c \
   ${top_srcdir}/src/backend/xml/io-utils.c \
+  ${top_srcdir}/src/backend/xml/gnc-xml-helper.c \
   test-xml-transaction.c
 
 test_xml2_is_file_SOURCES = \
@@ -172,6 +181,7 @@ test_xml2_is_file_SOURCES = \
   ${top_srcdir}/src/backend/xml/io-gncxml-gen.c \
   ${top_srcdir}/src/backend/xml/io-gncxml-v2.c \
   ${top_srcdir}/src/backend/xml/io-utils.c \
+  ${top_srcdir}/src/backend/xml/gnc-xml-helper.c \
   test-xml2-is-file.c
 
 TESTS = \

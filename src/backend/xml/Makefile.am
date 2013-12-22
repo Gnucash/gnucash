@@ -39,6 +39,7 @@ libgnc_backend_xml_utils_la_SOURCES = \
   gnc-tax-table-xml-v2.c \
   gnc-transaction-xml-v2.c \
   gnc-vendor-xml-v2.c \
+  gnc-xml-helper.c \
   io-example-account.c \
   io-gncxml-gen.c \
   io-gncxml-v1.c \

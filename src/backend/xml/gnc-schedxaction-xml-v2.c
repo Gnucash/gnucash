@@ -85,11 +85,12 @@ gnc_schedXaction_dom_tree_create(SchedXaction *sx)
     gint        instCount;
     const GncGUID        *templ_acc_guid;
     gboolean allow_2_2_incompat = TRUE;
+    gchar *name = g_strdup (xaccSchedXactionGetName(sx));
 
     templ_acc_guid = xaccAccountGetGUID(sx->template_acct);
 
     /* FIXME: this should be the same as the def in io-gncxml-v2.c */
-    ret = xmlNewNode( NULL, BAD_CAST GNC_SCHEDXACTION_TAG );
+    ret = xmlNewNode (NULL, BAD_CAST GNC_SCHEDXACTION_TAG);
 
     if (allow_2_2_incompat)
         xmlSetProp(ret, BAD_CAST "version", BAD_CAST schedxaction_version2_string);
@@ -100,7 +101,8 @@ gnc_schedXaction_dom_tree_create(SchedXaction *sx)
                  guid_to_dom_tree(SX_ID,
                                   xaccSchedXactionGetGUID(sx)) );
 
-    xmlNewTextChild( ret, NULL, BAD_CAST SX_NAME, BAD_CAST xaccSchedXactionGetName(sx) );
+    xmlNewTextChild( ret, NULL, BAD_CAST SX_NAME, checked_char_cast (name));
+    g_free (name);
 
     if (allow_2_2_incompat)
     {

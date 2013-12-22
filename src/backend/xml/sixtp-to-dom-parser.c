@@ -63,7 +63,12 @@ static gboolean dom_start_handler(
     {
         while (*atptr != 0)
         {
-            xmlSetProp(thing, BAD_CAST atptr[0], BAD_CAST atptr[1]);
+	    gchar *attr0 = g_strdup (atptr[0]);
+	    gchar *attr1 = g_strdup (atptr[1]);
+            xmlSetProp(thing, checked_char_cast (attr0),
+		       checked_char_cast (attr1));
+	    g_free (attr0);
+	    g_free (attr1);
             atptr += 2;
         }
     }
@@ -88,7 +93,10 @@ static gboolean dom_chars_handler(
 {
     if (length > 0)
     {
-        xmlNodeAddContentLen((xmlNodePtr)parent_data, BAD_CAST text, length);
+	gchar *newtext = g_strdup (text);
+        xmlNodeAddContentLen((xmlNodePtr)parent_data,
+			     checked_char_cast (newtext), length);
+	g_free (newtext);
     }
     return TRUE;
 }
