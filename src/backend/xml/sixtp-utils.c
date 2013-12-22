@@ -603,7 +603,7 @@ generic_timespec_parser_new(sixtp_end_handler end_handler)
                 top_level, TRUE,
                 "s", timespec_sixtp_new(generic_timespec_secs_end_handler),
                 "ns", timespec_sixtp_new(generic_timespec_nsecs_end_handler),
-                0))
+                NULL, NULL))
     {
         return NULL;
     }

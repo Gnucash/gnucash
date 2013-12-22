@@ -758,7 +758,7 @@ binary_kvp_value_parser_new(void)
                              SIXTP_NO_MORE_HANDLERS),
                TRUE,
                "hex", hex_binary_kvp_value_parser_new(),
-               0);
+               NULL, NULL);
 }
 
 /*********************************/
@@ -1083,7 +1083,7 @@ kvp_frame_parser_new(void)
     if (!(sixtp_add_some_sub_parsers(
                 top_level, TRUE,
                 "s", kvp_frame_slot_parser_new(top_level),
-                0)))
+                NULL, NULL)))
     {
         return NULL;
     }
@@ -1246,7 +1246,7 @@ ledger_data_parser_new(void)
                 "pricedb", gnc_pricedb_parser_new(),
                 "account", gnc_account_parser_new(),
                 "transaction", gnc_transaction_parser_new(),
-                0))
+                NULL, NULL))
     {
         return NULL;
     }
@@ -1795,9 +1795,9 @@ gnc_account_parser_new(void)
                 "parent", sixtp_add_some_sub_parsers(
                     parent_lookup_parser_new(), TRUE,
                     "guid", generic_guid_parser_new(),
-                    0),
+                    NULL, NULL),
                 "slots", kvp_frame_parser_new(),
-                0))
+                NULL, NULL))
     {
         sixtp_destroy(ret);
         return NULL;
@@ -2012,7 +2012,7 @@ commodity_restore_parser_new(void)
                 "name", simple_chars_only_parser_new(NULL),
                 "xcode", simple_chars_only_parser_new(NULL),
                 "fraction", simple_chars_only_parser_new(NULL),
-                0))
+                NULL, NULL))
     {
         return NULL;
     }
@@ -2173,7 +2173,7 @@ generic_gnc_commodity_lookup_parser_new(void)
                 top_level, TRUE,
                 "space", simple_chars_only_parser_new(NULL),
                 "id", simple_chars_only_parser_new(NULL),
-                0))
+                NULL, NULL))
     {
         return NULL;
     }
@@ -2964,7 +2964,7 @@ gnc_txn_restore_split_parser_new(void)
                 "quantity", generic_gnc_numeric_parser_new(),
                 "value", generic_gnc_numeric_parser_new(),
                 "slots", kvp_frame_parser_new(),
-                0))
+                NULL, NULL))
     {
         return NULL;
     }
@@ -3019,7 +3019,7 @@ gnc_transaction_parser_new(void)
                 generic_timespec_parser_new(txn_rest_date_entered_end_handler),
                 "slots", kvp_frame_parser_new(),
                 "split", gnc_txn_restore_split_parser_new(),
-                0)))
+                NULL, NULL)))
     {
         sixtp_destroy(top_level);
         return NULL;
