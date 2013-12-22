@@ -149,7 +149,7 @@ void gnc_totd_dialog_response_cb (GtkDialog *dialog,
         /* fall through */
 
     default:
-        gnc_unregister_gui_component_by_data(DIALOG_TOTD_CM_CLASS, totd_dialog->dialog);
+        gnc_unregister_gui_component_by_data(DIALOG_TOTD_CM_CLASS, totd_dialog);
         gtk_widget_destroy(GTK_WIDGET(totd_dialog->dialog));
         break;
     }
