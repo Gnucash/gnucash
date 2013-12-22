@@ -52,6 +52,7 @@ lib/libqof/backend/file/qsf-dir.h
 lib/libqof/qof/qofla-dir.h
 libtool
 ltmain.sh
+macros/intltool.m4
 macros/libtool.m4
 macros/ltmain.sh
 macros/ltoptions.m4
