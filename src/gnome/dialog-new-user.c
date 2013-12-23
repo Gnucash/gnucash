@@ -63,13 +63,9 @@ gnc_set_first_startup (gboolean first_startup)
 static void
 after_hierarchy_assistant(void)
 {
-    GncPluginPage *page;
-
     gncp_new_user_finish ();
     gnc_set_first_startup (FALSE);
 
-    page = gnc_plugin_page_account_tree_new();
-    gnc_main_window_open_page(NULL, page);
     qof_book_mark_session_dirty(gnc_get_current_book());
     gnc_ui_file_access_for_save_as();
 }

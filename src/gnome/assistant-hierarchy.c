@@ -1160,11 +1160,8 @@ gnc_ui_hierarchy_assistant_with_callback(gboolean use_defaults,
 }
 
 static void
-create_account_page(void)
+after_assistant(void)
 {
-    GncPluginPage *page;
-    page = gnc_plugin_page_account_tree_new();
-    gnc_main_window_open_page(NULL, page);
     qof_book_mark_session_dirty(gnc_get_current_book());
     gnc_ui_file_access_for_save_as();
 }
@@ -1174,7 +1171,7 @@ gnc_ui_hierarchy_assistant_hook (void)
 {
     if (gnc_prefs_get_bool(GNC_PREFS_GROUP, GNC_PREF_SHOW_ON_NEW_FILE))
     {
-        gnc_ui_hierarchy_assistant_with_callback(TRUE, create_account_page);
+        gnc_ui_hierarchy_assistant_with_callback(TRUE, after_assistant);
     }
 }
 
