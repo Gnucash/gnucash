@@ -2522,9 +2522,6 @@ static gboolean gnc_option_set_ui_value_budget(
     GNCOption *option, gboolean use_default, GtkWidget *widget, SCM value)
 {
     GncBudget *bgt;
-    GtkComboBox *cb;
-    GtkTreeModel *tm;
-    GtkTreeIter iter;
 
 //    if (!scm_is_null(value)) {
     if (value != SCM_BOOL_F)
@@ -2534,10 +2531,14 @@ static gboolean gnc_option_set_ui_value_budget(
                            "Option Value not a wcp.", value);
 
         bgt = SWIG_MustGetPtr(value, SWIG_TypeQuery("GncBudget *"), 4, 0);
-        cb = GTK_COMBO_BOX(widget);
-        tm = gtk_combo_box_get_model(cb);
-        if (gnc_tree_model_budget_get_iter_for_budget(tm, &iter, bgt))
-            gtk_combo_box_set_active_iter(cb, &iter);
+        if (bgt)
+        {
+            GtkComboBox *cb = GTK_COMBO_BOX(widget);
+            GtkTreeModel *tm = gtk_combo_box_get_model(cb);
+            GtkTreeIter iter;
+            if (gnc_tree_model_budget_get_iter_for_budget(tm, &iter, bgt))
+                gtk_combo_box_set_active_iter(cb, &iter);
+        }
     }
 
 
