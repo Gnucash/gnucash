@@ -174,24 +174,33 @@ static const gchar *gnc_ofx_invttype_to_str(InvTransactionType t)
 
 }
 
+static gchar*
+sanitize_string (gchar* str)
+{
+    gchar *inval;
+    const int length = -1; /*Assumes str is null-terminated */
+    while (!g_utf8_validate (str, length, (const gchar **)(&inval)))
+	*inval = '@';
+    return str;
+}
 
 int ofx_proc_security_cb(const struct OfxSecurityData data, void * security_user_data)
 {
-    const char* cusip = NULL;
-    const char* default_fullname = NULL;
-    const char* default_mnemonic = NULL;
+    char* cusip = NULL;
+    char* default_fullname = NULL;
+    char* default_mnemonic = NULL;
 
     if (data.unique_id_valid)
     {
-        cusip = data.unique_id;
+        cusip = gnc_utf8_strip_invalid_strdup (data.unique_id);
     }
     if (data.secname_valid)
     {
-        default_fullname = data.secname;
+        default_fullname = gnc_utf8_strip_invalid_strdup (data.secname);
     }
     if (data.ticker_valid)
     {
-        default_mnemonic = data.ticker;
+        default_mnemonic = gnc_utf8_strip_invalid_strdup (data.ticker);
     }
 
     if (auto_create_commodity)
@@ -207,12 +216,12 @@ int ofx_proc_security_cb(const struct OfxSecurityData data, void * security_user
             QofBook *book = gnc_get_current_book();
             gnc_quote_source *source;
             gint source_selection = 0; // FIXME: This is just a wild guess
-            const char *commodity_namespace = NULL;
+            char *commodity_namespace = NULL;
             int fraction = 1;
 
             if (data.unique_id_type_valid)
             {
-                commodity_namespace = data.unique_id_type;
+                commodity_namespace = gnc_utf8_strip_invalid_strdup (data.unique_id_type);
             }
 
             g_warning("Creating a new commodity, cusip=%s", cusip);
@@ -236,6 +245,8 @@ int ofx_proc_security_cb(const struct OfxSecurityData data, void * security_user
 
             /* Remember this new commodity for us as well */
             ofx_created_commodites = g_list_prepend(ofx_created_commodites, commodity);
+	    g_free (commodity_namespace);
+
         }
     }
     else
@@ -245,6 +256,10 @@ int ofx_proc_security_cb(const struct OfxSecurityData data, void * security_user
                                     default_fullname,
                                     default_mnemonic);
     }
+
+    g_free (cusip);
+    g_free (default_mnemonic);
+    g_free (default_fullname);
     return 0;
 }
 
@@ -335,10 +350,13 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void * transaction_u
         PERR("account ID for this transaction is unavailable!");
         return 0;
     }
+    else
+	gnc_utf8_strip_invalid (data.account_id);
 
     account = gnc_import_select_account(gnc_gen_trans_list_widget(gnc_ofx_importer_gui),
-                                        data.account_id, 0, NULL, NULL,
-                                        ACCT_TYPE_NONE, NULL, NULL);
+                                        data.account_id,
+					0, NULL, NULL, ACCT_TYPE_NONE,
+					NULL, NULL);
     if (account == NULL)
     {
         PERR("Unable to find account for id %s", data.account_id);
@@ -423,26 +441,32 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void * transaction_u
         timespecFromTime64(&ts, data.date_funds_available);
         gnc_timespec_to_iso8601_buff (ts, dest_string);
         tmp = notes;
-        notes = g_strdup_printf("%s%s%s", tmp, "|Date funds available:", dest_string);
+        notes = g_strdup_printf("%s%s%s", tmp,
+				"|Date funds available:", dest_string);
         g_free(tmp);
     }
     if (data.server_transaction_id_valid)
     {
         tmp = notes;
-        notes = g_strdup_printf("%s%s%s", tmp, "|Server trans ID (conf. number):", data.server_transaction_id);
+        notes = g_strdup_printf("%s%s%s", tmp,
+				"|Server trans ID (conf. number):",
+				sanitize_string (data.server_transaction_id));
         g_free(tmp);
     }
     if (data.standard_industrial_code_valid)
     {
         tmp = notes;
-        notes = g_strdup_printf("%s%s%ld", tmp, "|Standard Industrial Code:", data.standard_industrial_code);
+        notes = g_strdup_printf("%s%s%ld", tmp,
+				"|Standard Industrial Code:",
+                                data.standard_industrial_code);
         g_free(tmp);
 
     }
     if (data.payee_id_valid)
     {
         tmp = notes;
-        notes = g_strdup_printf("%s%s%s", tmp, "|Payee ID:", data.payee_id);
+        notes = g_strdup_printf("%s%s%s", tmp, "|Payee ID:",
+				sanitize_string (data.payee_id));
         g_free(tmp);
     }
 
@@ -453,7 +477,10 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void * transaction_u
     {
         PERR("WRITEME: GnuCash ofx_proc_transaction(): WARNING: This transaction corrected a previous transaction, but we created a new one instead!\n");
         tmp = notes;
-        notes = g_strdup_printf("%s%s%s%s", tmp, "|This corrects transaction #", data.fi_id_corrected, "but GnuCash didn't process the correction!");
+        notes = g_strdup_printf("%s%s%s%s", tmp,
+				"|This corrects transaction #",
+				sanitize_string (data.fi_id_corrected),
+				"but GnuCash didn't process the correction!");
         g_free(tmp);
     }
     xaccTransSetNotes(transaction, notes);
@@ -503,7 +530,8 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void * transaction_u
             }
             if (data.fi_id_valid)
             {
-                gnc_import_set_split_online_id(split, data.fi_id);
+                gnc_import_set_split_online_id(split,
+					       sanitize_string (data.fi_id));
             }
         }
 
@@ -513,6 +541,7 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void * transaction_u
                  && data.security_data_ptr->secname_valid)
         {
             gboolean choosing_account = TRUE;
+	    gnc_utf8_strip_invalid (data.unique_id);
             /********* Process an investment transaction **********/
             /* Note that the ACCT_TYPE_STOCK account type
                should be replaced with something derived from
@@ -531,10 +560,12 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void * transaction_u
                                                               name. It MUST NOT contain the
                                                               character ':' anywhere in it or
                                                               in any translations.  */
-                                              _("Stock account for security \"%s\""),
-                                              data.security_data_ptr->secname);
+                                         _("Stock account for security \"%s\""),
+                             sanitize_string (data.security_data_ptr->secname));
 
-                investment_account_onlineid = g_strdup_printf( "%s%s", data.account_id, data.unique_id);
+                investment_account_onlineid = g_strdup_printf( "%s%s",
+							       data.account_id,
+							       data.unique_id);
                 investment_account = gnc_import_select_account(NULL,
                                      investment_account_onlineid,
                                      1,
@@ -659,11 +690,13 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void * transaction_u
                     }
                     if (data.security_data_ptr->memo_valid)
                     {
-                        xaccSplitSetMemo(split, data.security_data_ptr->memo);
+                        xaccSplitSetMemo(split,
+                                sanitize_string (data.security_data_ptr->memo));
                     }
                     if (data.fi_id_valid)
                     {
-                        gnc_import_set_split_online_id(split, data.fi_id);
+                        gnc_import_set_split_online_id(split,
+                                                 sanitize_string (data.fi_id));
                     }
                 }
                 else
@@ -694,7 +727,7 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void * transaction_u
                                                                       character ':' anywhere in it or
                                                                       in any translations.  */
                                                       _("Income account for security \"%s\""),
-                                                      data.security_data_ptr->secname);
+                                                      sanitize_string (data.security_data_ptr->secname));
                         income_account = gnc_import_select_account(
                                              gnc_gen_trans_list_widget(gnc_ofx_importer_gui),
                                              NULL,
@@ -871,6 +904,7 @@ int ofx_proc_account_cb(struct OfxAccountData data, void * account_user_data)
             new_book = gnc_new_book_option_display();
 
         gnc_utf8_strip_invalid(data.account_name);
+        gnc_utf8_strip_invalid(data.account_id);
         account_description = g_strdup_printf( /* This string is a default account
                                                   name. It MUST NOT contain the
                                                   character ':' anywhere in it or
