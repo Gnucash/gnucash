@@ -591,7 +591,7 @@ static char * get_date_help (VirtualLocation virt_loc, gpointer user_data)
     gnc_date_cell_get_date ((DateCell *) cell, &ts);
     tt = ts.tv_sec;
     gnc_localtime_r (&tt, &tm);
-    qof_strftime (string, sizeof(string), "%A %d %B %Y", &tm);
+    qof_strftime (string, sizeof(string), _("%A %d %B %Y"), &tm);
 
     return g_strdup (string);
 }

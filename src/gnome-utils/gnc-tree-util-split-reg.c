@@ -457,7 +457,7 @@ gnc_tree_util_split_reg_get_date_help (GDate *date)
         struct tm tm;
         memset (&tm, 0, sizeof (tm));
         g_date_to_struct_tm (date, &tm);
-        qof_strftime (string, sizeof (string), "%A %d %B %Y", &tm);
+        qof_strftime (string, sizeof (string), _("%A %d %B %Y"), &tm);
         return g_strdup (string);
     }
     else
