@@ -1445,7 +1445,7 @@ csv_import_trans_assistant_match_page_prepare (GtkAssistant *assistant,
     /* Before creating transactions, if this is a new book, let user specify
      * book options, since they affect how transactions are created */
     if (info->new_book)
-        info->new_book = gnc_new_book_option_display();
+        info->new_book = gnc_new_book_option_display(info->window);
 
     /* Create transactions from the parsed data, first time with FALSE
        Subsequent times with TRUE */

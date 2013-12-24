@@ -103,6 +103,6 @@ gnc_dialog_run(GtkDialog *dialog, const gchar *pref_key);
  * dialog so user can specify options, before any transactions can be
  * imported/entered, since they can affect how transactions are created
  * Note: This dialog is modal! */
-gboolean gnc_new_book_option_display (void);
+gboolean gnc_new_book_option_display (GtkWidget *parent);
 
 #endif /* DIALOG_UTILS_H */

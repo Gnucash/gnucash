@@ -437,7 +437,7 @@ csv_import_assistant_summary_page_prepare (GtkAssistant *assistant,
     /* Before creating accounts, if this is a new book, let user specify
      * book options, since they affect how transactions are created */
     if (info->new_book)
-        info->new_book = gnc_new_book_option_display();
+        info->new_book = gnc_new_book_option_display(info->window);
 
     if (!g_strcmp0(info->error, "") == 0)
     {

@@ -460,7 +460,7 @@ on_choose_account_categories_prepare (hierarchy_data  *data)
     /* Before creating transactions, if this is a new book, let user specify
      * book options, since they affect how transactions are created */
     if (data->new_book)
-        data->new_book = gnc_new_book_option_display ();
+        data->new_book = gnc_new_book_option_display (data->dialog);
 
     if (!data->account_list_added)
     {
