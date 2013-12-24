@@ -31,7 +31,7 @@
 ;; custom report: like a report-template, but saved with a different set
 ;;      of default options. A better name would probably be "preconfigured
 ;;      report" or something similar. These templates are managed by the
-;;      user via the "Custom Reports" menu item
+;;      user via the "Preconfigured Reports" menu item
 ;; report: an instantiation of a report-template (custom or otherwise). One
 ;;      specific instance of a template, loaded and configured by the user
 ;;      while the program is running.

@@ -4,7 +4,7 @@
   <!-- interface-naming-policy project-wide -->
   <object class="GtkDialog" id="custom_report_dialog">
     <property name="border_width">5</property>
-    <property name="title" translatable="yes">Preconfigured reports</property>
+    <property name="title" translatable="yes">Preconfigured Reports</property>
     <property name="window_position">center-on-parent</property>
     <property name="type_hint">dialog</property>
     <property name="skip_taskbar_hint">True</property>
