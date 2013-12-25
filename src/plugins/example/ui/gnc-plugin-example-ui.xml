@@ -1,0 +1,9 @@
+<ui>
+  <menubar>
+    <menu name="Tools" action="ToolsAction">
+      <placeholder name="ToolsPlaceholder">
+        <menuitem name="example" action="exampleAction"/>
+     </placeholder>
+    </menu>
+  </menubar>
+</ui>
