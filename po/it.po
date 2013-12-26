@@ -53,8 +53,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gnucash 2.3.12\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-12-21 15:11+0100\n"
-"PO-Revision-Date: 2013-12-21 16:08+0100\n"
+"POT-Creation-Date: 2013-12-26 13:07+0100\n"
+"PO-Revision-Date: 2013-12-26 15:01+0100\n"
 "Last-Translator: Cristian Marchi <cri.penta@gmail.com>\n"
 "Language-Team: Italian <gnucash-it@gnucash.org>\n"
 "Language: it\n"
@@ -3935,6 +3935,12 @@ msgstr ""
 msgid "Enter the type of Entry"
 msgstr "Immettere il tipo di elemento"
 
+#: ../src/business/business-ledger/gncEntryLedgerModel.c:594
+#: ../src/gnome-utils/gnc-tree-util-split-reg.c:460
+#: ../src/register/ledger-core/split-register-model.c:922
+msgid "%A %d %B %Y"
+msgstr "%A %d %B %Y"
+
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:606
 msgid "Enter the Entry Description"
 msgstr "Immettere la descrizione per l'elemento"
@@ -4495,11 +4501,13 @@ msgid "Period %s - %s"
 msgstr "Periodo dal %s al %s"
 
 #: ../src/gnome/assistant-acct-period.c:406
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The book will be created with the title %s when you click on 'Apply'. Click "
 "on 'Back' to adjust, or 'Cancel' to not create any book."
-msgstr "Tipo obiettivo"
+msgstr ""
+"Il libro verrà creato con il titolo \"%s\" selezionando «Applica». "
+"Selezionare «Indietro» per modificare, o «Annulla» per non creare il libro."
 
 #. Translation FIXME: Can this %s-containing message please be
 #. replaced by one single message? Either this closing went
@@ -5617,17 +5625,14 @@ msgstr "Apri _conto"
 msgid "Open the selected account"
 msgstr "Apre il conto selezionato"
 
-# Tooltip
 #: ../src/gnome/gnc-plugin-page-account-tree.c:180
-#, fuzzy
 msgid "Open _Old Style Register Account"
-msgstr "Apre il registro delle transazioni per il conto selezionato."
+msgstr "Apri il registro nel _vecchio stile"
 
 # Tooltip
 #: ../src/gnome/gnc-plugin-page-account-tree.c:181
-#, fuzzy
 msgid "Open the old style register selected account"
-msgstr "Apre il conto selezionato"
+msgstr "Apre il registro con il vecchio stile per il conto selezionato"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:194
 #: ../src/gnome/gnc-plugin-page-account-tree.c:205
@@ -5643,14 +5648,14 @@ msgid "Open the selected account and all its subaccounts"
 msgstr "Apre il conto selezionato e tutti i suoi sottoconti"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:199
-#, fuzzy
 msgid "Open Old St_yle Subaccounts"
-msgstr "Apri i _sottoconti"
+msgstr "Apri i sottoconti nel vecc_hio stile"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:200
-#, fuzzy
 msgid "Open the old style register selected account and all its subaccounts"
-msgstr "Apre il conto selezionato e tutti i suoi sottoconti"
+msgstr ""
+"Apre il registro con il vecchio stile per il conto selezionato e per tutti i "
+"suoi sottoconti"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:213
 #: ../src/gnome/gnc-plugin-page-register2.c:241
@@ -6135,9 +6140,8 @@ msgid "Paste the clipboard content at the cursor position"
 msgstr "Incolla il contenuto della memoria nella posizione del cursore"
 
 #: ../src/gnome/gnc-plugin-page-register2.c:279
-#, fuzzy
 msgid "Remo_ve All Splits"
-msgstr "_Rimuovi suddivisioni"
+msgstr "_Rimuovi tutte le suddivisioni"
 
 #: ../src/gnome/gnc-plugin-page-register2.c:280
 #: ../src/gnome/gnc-plugin-page-register.c:284
@@ -6182,20 +6186,21 @@ msgid "Add _Reversing Transaction"
 msgstr "_Aggiungi transazione di inversione"
 
 #: ../src/gnome/gnc-plugin-page-register2.c:306
-#, fuzzy
 msgid "Move Transaction _Up"
-msgstr "_Salva la transazione"
+msgstr "Sposta la transazione verso l'_alto"
 
 #: ../src/gnome/gnc-plugin-page-register2.c:307
 msgid ""
 "Move the current transaction one row upwards. Only available if the date and "
 "number of both rows are identical and the register window is sorted by date."
 msgstr ""
+"Sposta alla riga superiore la transazione corrente; disponibile solo se la "
+"data e il numero di entrambe le righe sono identici e la finestra del "
+"registro è ordinata per data"
 
 #: ../src/gnome/gnc-plugin-page-register2.c:311
-#, fuzzy
 msgid "Move Transaction Do_wn"
-msgstr "_Salva la transazione"
+msgstr "Sposta la transazione verso il _basso"
 
 #: ../src/gnome/gnc-plugin-page-register2.c:312
 msgid ""
@@ -6203,6 +6208,9 @@ msgid ""
 "and number of both rows are identical and the register window is sorted by "
 "date."
 msgstr ""
+"Sposta alla riga inferiore la transazione corrente; disponibile solo se la "
+"data e il numero di entrambe le righe sono identici e la finestra del "
+"registro è ordinata per data"
 
 #: ../src/gnome/gnc-plugin-page-register2.c:323
 #: ../src/gnome-utils/gnc-main-window.c:333
@@ -6304,7 +6312,7 @@ msgstr "Apri un resoconto del registro per la transazione selezionata"
 #: ../src/gnome/gnc-plugin-page-register2.c:403
 #: ../src/gnome/gnc-plugin-page-register.c:411
 msgid "_Double Line"
-msgstr "_Doppia linea"
+msgstr "Riga _doppia"
 
 # tooltip
 #: ../src/gnome/gnc-plugin-page-register2.c:404
@@ -6314,14 +6322,12 @@ msgid "Show two lines of information for each transaction"
 msgstr "Visualizza due linee di informazioni per ogni transazione"
 
 #: ../src/gnome/gnc-plugin-page-register2.c:409
-#, fuzzy
 msgid "Show _Extra Dates"
-msgstr "Visualizza i tassi di cambio"
+msgstr "Mostra date a_ggiuntive"
 
 #: ../src/gnome/gnc-plugin-page-register2.c:410
-#, fuzzy
 msgid "Show entered and reconciled dates"
-msgstr "Inserire il tipo di riconciliazione"
+msgstr "Visualizza le date di inserimento e di riconciliazione"
 
 #: ../src/gnome/gnc-plugin-page-register2.c:415
 #: ../src/gnome/gnc-plugin-page-register.c:417
@@ -6589,9 +6595,8 @@ msgid "Open the associated file or location with the current transaction"
 msgstr "Apre un file o una posizione associati alla transazione corrente"
 
 #: ../src/gnome/gnc-plugin-page-register.c:283
-#, fuzzy
 msgid "Remo_ve Other Splits"
-msgstr "_Rimuovi suddivisioni"
+msgstr "Rimuovi le a_ltre suddivisioni"
 
 #: ../src/gnome/gnc-plugin-page-register.c:328
 #: ../src/gnome-utils/gnc-main-window.c:325
@@ -6708,18 +6713,16 @@ msgid "Register2 Open GL Account"
 msgstr "Apri _conto"
 
 #: ../src/gnome/gnc-plugin-register.c:54
-#, fuzzy
 msgid "Old St_yle General Ledger"
-msgstr "Libro mastro _generale"
+msgstr "Libro mastro g_enerale nel vecchio stile"
 
 #: ../src/gnome/gnc-plugin-register.c:55
 msgid "Open an old style general ledger window"
 msgstr "Apre una finestra per il libro mastro generale nel vecchio stile"
 
 #: ../src/gnome/gnc-plugin-register.c:59
-#, fuzzy
 msgid "Open general ledger window"
-msgstr "Apre una finestra per il libro mastro generale"
+msgstr "Apre la finestra del libro mastro generale"
 
 #: ../src/gnome/gnc-split-reg2.c:625 ../src/gnome/gnc-split-reg.c:636
 msgid "<No information>"
@@ -6814,6 +6817,9 @@ msgid ""
 "The date of this transaction is older than the \"Read-Only Threshold\" set "
 "for this book. This setting can be changed in File -> Properties -> Accounts."
 msgstr ""
+"La data di questa transazione è precedente al \"Limite di sola lettura\" "
+"impostato per questo conto. L'impostazione può essere modificata dal menu "
+"«File -> Proprietà -> Conti»"
 
 #: ../src/gnome/gnc-split-reg.c:959
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:841
@@ -6927,7 +6933,7 @@ msgstr ""
 
 #: ../src/gnome/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in.in.h:5
 msgid "Number of checks to print on the first page."
-msgstr ""
+msgstr "Numero di assegni da stampare nella prima pagina"
 
 #: ../src/gnome/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in.in.h:6
 msgid "Date format to use"
@@ -6970,18 +6976,20 @@ msgstr ""
 msgid "Position of payee name"
 msgstr "Posizione del nome del beneficiario"
 
+# Tooltip
 #: ../src/gnome/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in.in.h:13
 msgid ""
 "This value contains the X,Y coordinates for the start of the payee line on "
 "the check."
 msgstr ""
 "Questo valore indica le coordinate X,Y dell'inizio della riga del "
-"beneficiario sull'assegno."
+"beneficiario sull'assegno"
 
 #: ../src/gnome/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in.in.h:14
 msgid "Position of date line"
 msgstr "Posizione della data"
 
+# Tooltip
 #: ../src/gnome/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in.in.h:15
 msgid ""
 "This value contains the X,Y coordinates for the start of the date line on "
@@ -6989,41 +6997,44 @@ msgid ""
 "position."
 msgstr ""
 "Questo valore contiene le coordinate X,Y dell'inizio della riga della data "
-"sull'assegno. Le coordinate hanno origine nell'angolo in basso a sinistra "
-"della posizione specificata per l'assegno."
+"sull'assegno; le coordinate hanno origine nell'angolo in basso a sinistra "
+"della posizione specificata per l'assegno"
 
 #: ../src/gnome/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in.in.h:16
 msgid "Position of check amount in words"
 msgstr "Posizione dell'importo dell'assegno in lettere"
 
+# Tooltip
 #: ../src/gnome/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in.in.h:17
 msgid ""
 "This value contains the X,Y coordinates for the start of the written amount "
 "line on the check. Coordinates are from the lower left corner of the "
 "specified check position."
 msgstr ""
-"Questo valore identifica le coordinate X,Y dell'inizio della linea "
-"dell'importo in lettere sull'assegno. Le coordinate hanno origine "
-"nell'angolo in basso a sinistra della posizione specificata per l'assegno."
+"Questo valore identifica le coordinate X,Y dell'inizio della riga "
+"dell'importo in lettere sull'assegno; le coordinate hanno origine "
+"nell'angolo in basso a sinistra della posizione specificata per l'assegno"
 
 #: ../src/gnome/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in.in.h:18
 msgid "Position of check amount in numbers"
 msgstr "Posizione dell'importo dell'assegno in numeri"
 
+# Tooltip
 #: ../src/gnome/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in.in.h:19
 msgid ""
 "This value contains the X,Y coordinates for the start of the numerical "
 "amount line on the check. Coordinates are from the lower left corner of the "
 "specified check position."
 msgstr ""
-"Questo valore indica le coordinate X,Y per l'inizio della linea dell'importo "
-"numerico sull'assegno. Le coordinate si riferiscono all'angolo basso destro "
-"della posizione dell'assegno."
+"Questo valore indica le coordinate X,Y per l'inizio della riga dell'importo "
+"numerico sull'assegno; le coordinate si riferiscono all'angolo basso destro "
+"della posizione dell'assegno"
 
 #: ../src/gnome/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in.in.h:20
 msgid "Position of payee address"
 msgstr "Posizione dell'indirizzo del beneficiario"
 
+# Tooltip
 #: ../src/gnome/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in.in.h:21
 msgid ""
 "This value contains the X,Y coordinates for the start of the payee address "
@@ -7031,13 +7042,14 @@ msgid ""
 "specified check position."
 msgstr ""
 "Questo valore contiene le coordinate X,Y dell'inizio della riga "
-"dell'indirizzo del beneficiario. Le coordinate hanno origine nell'angolo in "
-"basso a sinistra della posizione specificata per l'assegno."
+"dell'indirizzo del beneficiario; le coordinate hanno origine nell'angolo in "
+"basso a sinistra della posizione specificata per l'assegno"
 
 #: ../src/gnome/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in.in.h:22
 msgid "Position of notes line"
 msgstr "Posizione della riga delle note"
 
+# Tooltip
 #: ../src/gnome/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in.in.h:23
 msgid ""
 "This value contains the X,Y coordinates for the start of the notes line on "
@@ -7045,117 +7057,119 @@ msgid ""
 "position."
 msgstr ""
 "Questo valore contiene le coordinate X,Y dell'inizio della riga delle note "
-"sull'assegno. Le coordinate hanno origine nell'angolo in basso a sinistra "
-"della posizione specificata per l'assegno."
+"sull'assegno; le coordinate hanno origine nell'angolo in basso a sinistra "
+"della posizione specificata per l'assegno"
 
 #: ../src/gnome/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in.in.h:24
 msgid "Position of memo line"
-msgstr "Posizione della linea del promemoria"
+msgstr "Posizione della riga del promemoria"
 
+# Tooltip
 #: ../src/gnome/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in.in.h:25
 msgid ""
 "This value contains the X,Y coordinates for the start of the memo line on "
 "the check. Coordinates are from the lower left corner of the specified check "
 "position."
 msgstr ""
-"Questo valore contiene le coordinate X,Y dell'inizio della linea del "
-"promemoria sull'assegno.Le coordinate hanno origine nell'angolo in basso a "
-"sinistra della posizione specificata per l'assegno."
+"Questo valore contiene le coordinate X,Y dell'inizio della riga del "
+"promemoria sull'assegno; le coordinate hanno origine nell'angolo in basso a "
+"sinistra della posizione specificata per l'assegno"
 
 #: ../src/gnome/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in.in.h:26
 msgid "Offset for complete check"
 msgstr "Offset per tutto l'assegno"
 
+# Tooltip
 #: ../src/gnome/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in.in.h:27
 msgid ""
 "This value contains the X,Y offset for the complete check. Coordinates are "
 "from the lower left corner of the specified check position."
 msgstr ""
-"Questo valore contiene l'offset lungo X e Y dell'intero assegno.Le "
+"Questo valore contiene l'offset lungo X e Y dell'intero assegno; le "
 "coordinate hanno origine nell'angolo in basso a sinistra della posizione "
-"specificata per l'assegno."
+"specificata per l'assegno"
 
 #: ../src/gnome/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in.in.h:28
 msgid "Rotation angle"
 msgstr "Angolo di rotazione"
 
+# Tooltip
 #: ../src/gnome/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in.in.h:29
 msgid "Number of degrees to rotate the check."
 msgstr "Angolo in gradi di cui ruotare l'assegno"
 
 #: ../src/gnome/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in.in.h:30
-#, fuzzy
 msgid "Position of split's amount in numbers"
-msgstr "Posizione dell'importo dell'assegno in numeri"
+msgstr "Posizione dell'importo della suddivisione in cifre"
 
+# Tooltip
 #: ../src/gnome/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in.in.h:31
-#, fuzzy
 msgid ""
 "This value contains the X,Y coordinates for the start of the split's amount "
 "line on the check. Coordinates are from the lower left corner of the "
 "specified check position."
 msgstr ""
-"Questo valore identifica le coordinate X,Y dell'inizio della linea "
-"dell'importo in lettere sull'assegno. Le coordinate hanno origine "
-"nell'angolo in basso a sinistra della posizione specificata per l'assegno."
+"Questo valore identifica le coordinate X,Y dell'inizio della riga "
+"dell'importo della suddivisione sull'assegno; le coordinate hanno origine "
+"nell'angolo in basso a sinistra della posizione specificata per l'assegno"
 
 #: ../src/gnome/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in.in.h:32
-#, fuzzy
 msgid "Position of split's memo line"
-msgstr "Posizione della linea del promemoria"
+msgstr "Posizione della riga del promemoria della suddivisione"
 
+# Tooltip
 #: ../src/gnome/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in.in.h:33
-#, fuzzy
 msgid ""
 "This value contains the X,Y coordinates for the start of the split's memo "
 "line on the check. Coordinates are from the lower left corner of the "
 "specified check position."
 msgstr ""
-"Questo valore contiene le coordinate X,Y dell'inizio della linea del "
-"promemoria sull'assegno.Le coordinate hanno origine nell'angolo in basso a "
-"sinistra della posizione specificata per l'assegno."
+"Questo valore identifica le coordinate X,Y dell'inizio della riga del "
+"promemoria della suddivisione sull'assegno; le coordinate hanno origine "
+"nell'angolo in basso a sinistra della posizione specificata per l'assegno"
 
 #: ../src/gnome/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in.in.h:34
-#, fuzzy
 msgid "Position of split's account line"
-msgstr "Posizione della data"
+msgstr "Posizione della riga del conto della suddivisione"
 
+# Tooltip
 #: ../src/gnome/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in.in.h:35
-#, fuzzy
 msgid ""
 "This value contains the X,Y coordinates for the start of the split's account "
 "line on the check. Coordinates are from the lower left corner of the "
 "specified check position."
 msgstr ""
-"Questo valore identifica le coordinate X,Y dell'inizio della linea "
-"dell'importo in lettere sull'assegno. Le coordinate hanno origine "
-"nell'angolo in basso a sinistra della posizione specificata per l'assegno."
+"Questo valore identifica le coordinate X,Y dell'inizio della riga del conto "
+"della suddivisione sull'assegno; le coordinate hanno origine nell'angolo in "
+"basso a sinistra della posizione specificata per l'assegno"
 
 # Tooltip
 #: ../src/gnome/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in.in.h:36
 msgid "Print the date format below the date."
 msgstr "Stampa il formato della data sotto alla data"
 
+# Tooltip
 #: ../src/gnome/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in.in.h:37
 msgid ""
 "Each time the date is printed, print the date format immediately below in 8 "
 "point type using the characters Y, M, and D."
 msgstr ""
-"Ogni volta che la data è stampata, stampa il formato di data nel tipo a 8 "
-"punti immediatamente sotto utilizzando i caratteri A,M e G."
+"Ogni volta che viene stampata la data, stampa il formato di data nel tipo a "
+"8 punti immediatamente sotto utilizzando i caratteri A,M e G"
 
 #: ../src/gnome/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in.in.h:38
 msgid "The default check printing font"
 msgstr "Lo stile di carattere predefinito per la stampa dell'assegno"
 
+# Tooltip
 #: ../src/gnome/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in.in.h:39
 msgid ""
 "The default font to use when printing checks. This value will be overridden "
 "by any font specified in a check description file."
 msgstr ""
-"Lo stile di carattere predefinito per la stampa degli assegni. Questo valore "
+"Lo stile di carattere predefinito per la stampa degli assegni; questo valore "
 "avrà la precedenza su qualsiasi stile specificato in un file di descrizione "
-"dell'assegno."
+"dell'assegno"
 
 #: ../src/gnome/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in.in.h:40
 msgid "Print '***' before and after text."
@@ -7169,6 +7183,7 @@ msgstr "Visualizza valute in questa finestra"
 msgid "Position of the horizontal pane divider."
 msgstr "Posizione del separatore orizzontale"
 
+# Tooltip
 #: ../src/gnome/gschemas/org.gnucash.dialogs.gschema.xml.in.in.h:5
 msgid ""
 "This setting indicates whether to search in all items in the current class, "
@@ -7186,6 +7201,7 @@ msgstr ""
 msgid "Last pathname used"
 msgstr "L'ultimo percorso utilizzato"
 
+# Tooltip
 #: ../src/gnome/gschemas/org.gnucash.dialogs.gschema.xml.in.in.h:7
 #: ../src/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in.in.h:18
 #: ../src/import-export/csv-exp/gschemas/org.gnucash.dialogs.export.csv.gschema.xml.in.in.h:4
@@ -7197,8 +7213,8 @@ msgid ""
 "as the initial filename/pathname the next time this window is opened."
 msgstr ""
 "Questo campo contiene l'ultimo nome del percorso utilizzato da questa "
-"finestra. Verrà utilizzato come il nome file o il nome del percorso iniziale "
-"la prossima volta che questa finestra sarà aperta."
+"finestra; verrà usato come il nome file o il nome del percorso iniziale la "
+"prossima volta che questa finestra sarà aperta"
 
 #: ../src/gnome/gschemas/org.gnucash.dialogs.gschema.xml.in.in.h:8
 msgid "Position of the vertical pane divider."
@@ -7213,7 +7229,7 @@ msgstr "Visualizza la procedura guidata per i nuovi utenti."
 msgid ""
 "If active, the new user window will be shown. Otherwise it will not be shown."
 msgstr ""
-"Se attivata, la finestra per i nuovi utenti verrà visualizzata. Diversamente "
+"Se attivata, la finestra per i nuovi utenti verrà visualizzata; diversamente "
 "non verrà aperta"
 
 #: ../src/gnome/gschemas/org.gnucash.dialogs.gschema.xml.in.in.h:11
@@ -7343,7 +7359,6 @@ msgstr "Imposta come predefinita la notifica"
 
 # Tooltip
 #: ../src/gnome/gschemas/org.gnucash.dialogs.sxs.gschema.xml.in.in.h:9
-#, fuzzy
 msgid ""
 "If active, any newly created scheduled transaction will have its 'notify' "
 "flag set by default. The user can change this flag during transaction "
@@ -7353,7 +7368,7 @@ msgstr ""
 "Se attivata, ogni nuova transazione pianificata avrà l'opzione di notifica "
 "attivata. Si potrà cambiare questa impostazione durante la creazione della "
 "transazione o in un momento successivo modificando la transazione "
-"pianificata stessa. Questa impostazione ha un significato solo se è attivata "
+"pianificata stessa. Questa impostazione ha significato solo se è attivata "
 "l'opzione per la creazione automatica"
 
 #: ../src/gnome/gschemas/org.gnucash.dialogs.sxs.gschema.xml.in.in.h:10
@@ -7513,6 +7528,8 @@ msgid ""
 "Tool to migrate preferences from old backend (CGonf) to new one (GSettings) "
 "has run successfully."
 msgstr ""
+"Lo strumento per la migrazione delle preferenze dal precedente backend "
+"(GConf) a quello nuovo (GSettings) è stato eseguito con successo."
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:21
 msgid ""
@@ -7575,8 +7592,8 @@ msgstr ""
 msgid "Don't sign reverse any accounts."
 msgstr "Non cambia di segno nessun conto"
 
+# Tooltip
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:29
-#, fuzzy
 msgid ""
 "This setting allows certain accounts to have their balances reversed in sign "
 "from positive to negative, or vice versa. The setting \"income-expense\" is "
@@ -7590,7 +7607,7 @@ msgstr ""
 "visualizzare le uscite con segno negativo e le entrate con segno positivo. "
 "L'impostazione \"credito\" è per gli utenti che intendono visualizzare il "
 "saldo in funzione dello stato di credito o debito del conto. L'impostazione "
-"\"nessuno\" non cambia segno a nessun saldo."
+"\"nessuno\" non cambia segno a nessun saldo"
 
 # Tooltip
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:30
@@ -7618,6 +7635,9 @@ msgid ""
 "account's custom color if set. This can serve as a visual aid to quickly "
 "identify accounts."
 msgstr ""
+"Se attivata, la struttura dei conti mostrerà i conti colorati con il colore "
+"personalizzato (se definito). Questo può essere utile per identificare i "
+"conti più rapidamente."
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:34
 msgid "Use account colors in the tabs of open account registers"
@@ -7629,6 +7649,9 @@ msgid ""
 "custom color if set. This can serve as a visual aid to quickly identify "
 "accounts."
 msgstr ""
+"Se attivata, le schede dei registri dei conti verranno colorate con il "
+"colore personalizzato del conto (se impostato). Questo può essere utile per "
+"identificare i conti più rapidamente."
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:36
 msgid "Use formal account labels"
@@ -7685,8 +7708,8 @@ msgid "Use the system locale currency for all newly created accounts."
 msgstr ""
 "Utilizza la valuta predefinita del sistema per tutti i nuovi conti creati"
 
+# Tooltip
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:43
-#, fuzzy
 msgid ""
 "This setting controls the source of the default currency for new accounts. "
 "If set to \"locale\" then GnuCash will retrieve the default currency from "
@@ -7694,9 +7717,9 @@ msgid ""
 "specified by the currency-other key."
 msgstr ""
 "Questa impostazione controlla la fonte della valuta predefinita per i nuovi "
-"conti. Se impostata a «Locale» allora GnuCash prenderà la valuta predefinita "
-"dalle impostazioni locali dell'utente. Se impostata su «altri», GnuCash "
-"utilizzerà le impostazioni specificate dalla chiave altre_valute."
+"conti. Se impostata a «Locale» allora GnuCash userà la valuta predefinita "
+"nelle impostazioni locali dell'utente. Se impostata su «altro», GnuCash "
+"utilizzerà le impostazioni specificate dalla chiave altre-valute"
 
 # Tooltip
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:44
@@ -7709,8 +7732,8 @@ msgstr ""
 msgid "Default currency for new accounts"
 msgstr "Valuta predefinita per i nuovi conti"
 
+# Tooltip
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:46
-#, fuzzy
 msgid ""
 "This setting specifies the default currency used for new accounts if the "
 "currency-choice setting is set to \"other\". This field must contain the "
@@ -7719,7 +7742,7 @@ msgstr ""
 "Questa impostazione controlla la valuta predefinita utilizzata per i nuovi "
 "conti se l'impostazione «scelta valuta» è su «altro». Questo campo deve "
 "contenere il codice a tre lettere ISO 4217 per la valuta (ad esempio USD,"
-"GBP, RUB)."
+"GBP, RUB)"
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:47
 msgid "Use 24 hour time format"
@@ -7766,13 +7789,12 @@ msgstr ""
 "una finestra temporale che inizia un certo numero di mesi indietro nel tempo."
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:53
-#, fuzzy
 msgid ""
 "In a sliding 12-month window starting a configurable number of months before "
 "the current month"
 msgstr ""
-"In una finestra temporale di 12 mesi che inizia \n"
-"questo numero di mesi prima di quello corrente:"
+"In una finestra temporale di 12 mesi che inizia un numero di mesi "
+"configurabile prima di quello corrente"
 
 # Tooltip
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:54
@@ -8011,8 +8033,8 @@ msgstr ""
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:138
 msgid "Show all transactions on one line. (Two in double line mode.)"
 msgstr ""
-"Visualizza tutte le transazioni su una linea (due nella modalità a doppia "
-"linea)"
+"Visualizza tutte le transazioni su una riga (due nella modalità a riga "
+"doppia)"
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:86
 msgid ""
@@ -8039,7 +8061,7 @@ msgid ""
 msgstr ""
 "Espande automaticamente la transazione selezionata mostrando tutte le "
 "suddivisioni. Tutte le altre transazioni verranno mostrate su una singola "
-"riga (due nella modalità a doppia linea)"
+"riga (due nella modalità a riga doppia)"
 
 # Tooltip
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:88
@@ -8048,17 +8070,17 @@ msgid "All transactions are expanded to show all splits."
 msgstr ""
 "Tutte le transazioni verranno espanse per mostrare tutte le suddivisioni"
 
+# Tooltip
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:90
-#, fuzzy
 msgid ""
 "Show two lines of information for each transaction in a register. This is "
 "the default setting for when a register is first opened. The setting can be "
 "changed at any time via the \"View-&gt;Double Line\" menu item."
 msgstr ""
-"Visualizza due linee di informazioni per ogni transazione presente nel "
-"registro.Questa è l'impostazione predefinita per ogni nuovo registro. "
-"l'impostazione può essere cambiata in ogni momento attraverso la voce del "
-"menu «vista -> linea doppia» "
+"Visualizza due righe di informazioni per ogni transazione presente nel "
+"registro. Questa è l'impostazione predefinita per ogni nuovo registro. "
+"L'impostazione può essere cambiata in qualsiasi momento attraverso la voce "
+"del menu «vista -> riga doppia» "
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:91
 msgid "Only display leaf account names."
@@ -8078,30 +8100,29 @@ msgstr ""
 "tutti i sottoconti finali della struttura."
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:93
-#, fuzzy
 msgid "Show the entered and reconcile dates"
-msgstr "Mostra la data di inseri_mento"
+msgstr "Mostra le date di inserimento e di riconciliazione"
 
 # Tooltip
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:94
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:154
-#, fuzzy
 msgid ""
 "Show the date when the transaction was entered below the posted date and "
 "reconciled date on split row."
 msgstr ""
-"Mostra la data di inserimento della transazione sotto alla data di emissione"
+"Mostra la data di inserimento della transazione sotto alla data di emissione "
+"e la data di riconciliazione sulla riga della suddivisione"
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:95
 msgid "Show entered and reconciled dates on selection"
-msgstr ""
+msgstr "Mostra le date di immissione e di riconciliazione alla selezione"
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:96
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:160
-#, fuzzy
 msgid "Show the entered date and reconciled date on transaction selection."
 msgstr ""
-"Scegliere «A+R» per aggiornare e riconciliare una transazione corrispondente"
+"Mostra la data di inserimento e di riconciliazione alla selezione della "
+"transazione"
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:97
 msgid "Show the calendar buttons"
@@ -8176,17 +8197,16 @@ msgid "Use the system locale currency for all newly created reports."
 msgstr "Utilizza la valuta predefinita di sistema per tutti i nuovi resoconti"
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:108
-#, fuzzy
 msgid ""
 "This setting controls the default currency used for reports. If set to "
 "\"locale\" then GnuCash will retrieve the default currency from the user's "
 "locale setting. If set to \"other\", GnuCash will use the setting specified "
 "by the currency-other key."
 msgstr ""
-"Questa impostazione controlla la fonte della valuta predefinita per i "
-"resoconti. Se impostata a «Locale» allora GnuCash prenderà la valuta "
-"predefinita dalle impostazioni locali dell'utente. Se impostata su «altri», "
-"GnuCash utilizzerà le impostazioni specificate dalla chiave altre_valute."
+"Questa impostazione controlla la valuta predefinita per i resoconti. Se "
+"impostata a \"Locale\", GnuCash prenderà la valuta predefinita dalle "
+"impostazioni locali dell'utente. Se impostata su «altro», GnuCash utilizzerà "
+"le impostazioni specificate dalla chiave currency-other."
 
 # Tooltip
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:109
@@ -8214,10 +8234,19 @@ msgid ""
 "in filenames, such as '/', will be replaced with underscores '-' in the "
 "resulting file name.)"
 msgstr ""
+"Questa impostazione identifica il nome del file per l'esportazione in "
+"formato PDF. Si tratta di una stringa \"sprintf(3)\" con 3 argomenti:  \"%1$s"
+"\" è il nome del resoconto (ad esempio \"Fattura\").  \"%2$s\" è il numero "
+"del resoconto che ad esempio per una resoconto di fattura è il numero della "
+"fattura stessa.  \"%3$s\" è la data del resoconto, formattata in accordo "
+"all'impostazione di nomefile-data-formato (Nota: qualsiasi carattere non "
+"consentito nei nomi di file, quale ad esempio \"/\", verrà sostituito con un "
+"trattino basso \"_\" nel nome del file). "
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:114
 msgid "PDF export file name date format choice"
 msgstr ""
+"Scelta del formato di data per il nome del file da esportare in formato PDF"
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:115
 msgid ""
@@ -8272,12 +8301,10 @@ msgstr ""
 "Diversamente saranno nascoste"
 
 #: ../src/gnome/gschemas/org.gnucash.window.pages.account.tree.gschema.xml.in.in.h:4
-#, fuzzy
 msgid "Use relative profit/loss starting date"
-msgstr "Tipo di data iniziale per profitto e perdita"
+msgstr "Usa data iniziale relativa per profitto e perdita"
 
 #: ../src/gnome/gschemas/org.gnucash.window.pages.account.tree.gschema.xml.in.in.h:5
-#, fuzzy
 msgid ""
 "This setting controls the type of starting date used in profit/loss "
 "calculations. If set to \"absolute\" then GnuCash will retrieve the starting "
@@ -8285,29 +8312,27 @@ msgid ""
 "retrieve the starting date specified by the start-period key."
 msgstr ""
 "Questa impostazione controlla il tipo di data iniziale utilizzata nei "
-"calcoli di profitto e perdita. Se impostata a «assoluta» allora GnuCash "
-"recupererà la data iniziale specificata dalla chiave start_date. Se "
+"calcoli di profitto e perdita. Se impostata a \"assoluta\", GnuCash "
+"recupererà la data iniziale specificata dalla chiave start-date. Se "
 "impostata a qualsiasi altro valore, GnuCash recupererà la data iniziale "
-"specificata dalla chiave start_period."
+"specificata dalla chiave start-period."
 
 #: ../src/gnome/gschemas/org.gnucash.window.pages.account.tree.gschema.xml.in.in.h:6
-#, fuzzy
 msgid "Use absolute profit/loss starting date"
-msgstr "Tipo di data iniziale per profitto e perdita"
+msgstr "Usa data iniziale assoluta per profitto e perdita"
 
 #: ../src/gnome/gschemas/org.gnucash.window.pages.account.tree.gschema.xml.in.in.h:7
 msgid "Starting date (in seconds from Jan 1, 1970)"
 msgstr "Data d'inizio (in secondi dal 1 Gen 1970)"
 
 #: ../src/gnome/gschemas/org.gnucash.window.pages.account.tree.gschema.xml.in.in.h:8
-#, fuzzy
 msgid ""
 "This setting controls the starting date set in profit/loss calculations if "
 "the start-choice setting is set to \"absolute\". This field should contain a "
 "date as represented in seconds from January 1st, 1970."
 msgstr ""
 "Questa impostazione controlla la data iniziale utilizzata nei calcoli di "
-"profitto e perdita se l'impostazione start_choice è settata su «assoluta». "
+"profitto e perdita se l'impostazione start-choice è settata su \"assoluta\". "
 "Questo campo dovrebbe contenere una data in secondi a partire dal 1° Gennaio "
 "1970."
 
@@ -8316,24 +8341,21 @@ msgid "Starting time period identifier"
 msgstr "Identificatore del periodo di inizio"
 
 #: ../src/gnome/gschemas/org.gnucash.window.pages.account.tree.gschema.xml.in.in.h:10
-#, fuzzy
 msgid ""
 "This setting controls the starting date set in profit/loss calculations if "
 "the start-choice setting is set to anything other than \"absolute\". This "
 "field should contain a value between 0 and 8."
 msgstr ""
 "Questa impostazione controlla la data iniziale utilizzata nei calcoli di "
-"profitto e perdita se l'impostazione start_choice è settata su qualsiasi "
-"altro valore diverso da «assoluta». Questo campo contiene un valore compreso "
-"tra 0 e 8."
+"profitto e perdita se l'impostazione start-choice è settata su qualsiasi "
+"altro valore diverso da \"assoluta\". Questo campo dovrebbe contenere un "
+"valore compreso tra 0 e 8."
 
 #: ../src/gnome/gschemas/org.gnucash.window.pages.account.tree.gschema.xml.in.in.h:11
-#, fuzzy
 msgid "Use relative profit/loss ending date"
-msgstr "Tipo di data finale per profitto e perdita"
+msgstr "Usa data finale relativa per profitto e perdita"
 
 #: ../src/gnome/gschemas/org.gnucash.window.pages.account.tree.gschema.xml.in.in.h:12
-#, fuzzy
 msgid ""
 "This setting controls the type of ending date used in profit/loss "
 "calculations. If set to \"absolute\" then GnuCash will retrieve the ending "
@@ -8341,46 +8363,43 @@ msgid ""
 "retrieve the ending date specified by the end-period key."
 msgstr ""
 "Questa impostazione controlla il tipo di data finale utilizzata nei calcoli "
-"di profitto e perdita. Se impostata a «assoluta» allora GnuCash recupererà "
-"la data finale specificata dalla chiave end_date. Se impostata a qualsiasi "
-"altro valore, GnuCash recupererà la data finale specificata dalla chiave "
-"end_period."
+"di profitto e perdita. Se impostata a \"assoluta\",  GnuCash recupererà la "
+"data finale specificata dalla chiave end-date. Se impostata a qualsiasi "
+"altro valore, GnuCash recupererà la data finale specificata dalla chiave end-"
+"period."
 
 #: ../src/gnome/gschemas/org.gnucash.window.pages.account.tree.gschema.xml.in.in.h:13
-#, fuzzy
 msgid "Use absolute profit/loss ending date"
-msgstr "Tipo di data finale per profitto e perdita"
+msgstr "Usa data finale assoluta per profitto e perdita"
 
 #: ../src/gnome/gschemas/org.gnucash.window.pages.account.tree.gschema.xml.in.in.h:14
 msgid "Ending date (in seconds from Jan 1, 1970)"
 msgstr "Data di termine (in secondi a partire dal 1° gennaio 1970)"
 
 #: ../src/gnome/gschemas/org.gnucash.window.pages.account.tree.gschema.xml.in.in.h:15
-#, fuzzy
 msgid ""
 "This setting controls the ending date set in profit/loss calculations if the "
 "end-choice setting is set to \"absolute\". This field should contain a date "
 "as represented in seconds from January 1st, 1970."
 msgstr ""
 "Questa impostazione controlla il tipo di data finale utilizzata nei calcoli "
-"di profitto e perdita se l'impostazione end_choice è settata su «assoluta». "
-"Questo campo contiene una data in secondi a partire dal 1° Gennaio 1970."
+"di profitto e perdita se l'impostazione end-choice è settata su \"assoluta"
+"\". Questo campo contiene una data in secondi a partire dal 1° Gennaio 1970."
 
 #: ../src/gnome/gschemas/org.gnucash.window.pages.account.tree.gschema.xml.in.in.h:16
 msgid "Ending time period identifier"
 msgstr "Indicatore del periodo di tempo finale"
 
 #: ../src/gnome/gschemas/org.gnucash.window.pages.account.tree.gschema.xml.in.in.h:17
-#, fuzzy
 msgid ""
 "This setting controls the ending date set in profit/loss calculations if the "
 "end-choice setting is set to anything other than \"absolute\". This field "
 "should contain a value between 0 and 8."
 msgstr ""
 "Questa impostazione controlla la data finale utilizzata nei calcoli di "
-"profitto e perdita se l'impostazione start_choice è settata su qualsiasi "
-"altro valore diverso da «assoluta». Questo campo contiene un valore compreso "
-"tra 0 e 8."
+"profitto e perdita se l'impostazione end-choice è settata su qualsiasi altro "
+"valore diverso da \"assoluta\". Questo campo dovrebbe contenere un valore "
+"compreso tra 0 e 8."
 
 # Tooltip
 #: ../src/gnome/gschemas/org.gnucash.window.pages.gschema.xml.in.in.h:1
@@ -8392,15 +8411,16 @@ msgid ""
 "This setting controls whether the given column will be visible in the view. "
 "TRUE means visible, FALSE means hidden."
 msgstr ""
+"Questa impostazione controlla se la colonna sarà visibile nella "
+"visualizzazione. TRUE significa visibile, FALSE significa nascosta."
 
 #: ../src/gnome/gschemas/org.gnucash.window.pages.gschema.xml.in.in.h:3
 msgid "Width of this column"
 msgstr "Larghezza di questa colonna"
 
 #: ../src/gnome/gschemas/org.gnucash.window.pages.gschema.xml.in.in.h:4
-#, fuzzy
 msgid "This setting stores the width of the given column in pixels."
-msgstr "Questa impostazione riguarda la larghezza della colonna in pixel"
+msgstr "Questa impostazione rappresenta la larghezza della colonna in pixel"
 
 #: ../src/gnome/gtkbuilder/assistant-acct-period.glade.h:1
 msgid ""
@@ -8422,7 +8442,6 @@ msgid "Setup Account Period"
 msgstr "Imposta il periodo contabile"
 
 #: ../src/gnome/gtkbuilder/assistant-acct-period.glade.h:5
-#, fuzzy
 msgid ""
 "\n"
 "Select an accounting period and the closing date which must not be in the "
@@ -9071,7 +9090,6 @@ msgid "Payment periods"
 msgstr "Numero di rate"
 
 #: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:4
-#, fuzzy
 msgid "Clear the entry."
 msgstr "Elimina il valore"
 
@@ -10275,7 +10293,6 @@ msgstr "Cerca solo tra i dati selezionati"
 
 # Tooltip
 #: ../src/gnome-search/dialog-search.glade.h:12
-#, fuzzy
 msgid ""
 "Choose whether to search all your data or only that marked as \"active\"."
 msgstr ""
@@ -11726,7 +11743,7 @@ msgstr "Immettere il nome utente e la password per connettersi a «%s»"
 #: ../src/gnome-utils/gnc-main-window.c:124
 #, c-format
 msgid "Changes will be saved automatically in %u seconds"
-msgstr ""
+msgstr "Le modifiche verranno salvate automaticamente in %u secondi"
 
 #. Toplevel
 #: ../src/gnome-utils/gnc-main-window.c:256
@@ -11994,11 +12011,11 @@ msgstr "Libro non salvato"
 
 #: ../src/gnome-utils/gnc-main-window.c:1666
 msgid "Last modified on %a, %b %e, %Y at %I:%M%P"
-msgstr ""
+msgstr "Ultima modifica il %a, %b %e, %Y at %I:%M%P"
 
 #: ../src/gnome-utils/gnc-main-window.c:1667
 msgid "Last modified on %a, %b %e, %Y at %H:%M"
-msgstr ""
+msgstr "Ultima modifica il %a, %b %e, %Y at %H:%M"
 
 #. g_warning("got time %ld, str=%s\n", mtime, time_string);
 #. Translators: This message appears in the status bar after opening the file.
@@ -12257,6 +12274,9 @@ msgid ""
 "Threshold\" set for this book. This setting can be changed in File -> "
 "Properties -> Accounts."
 msgstr ""
+"La data inserita per la copia della transazione è precedente al \"Limite di "
+"sola lettura\" impostato per questo conto. L'impostazione può essere "
+"modificata dal menu «File -> Proprietà -> Conti»"
 
 # tooltip
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:1725
@@ -12519,9 +12539,8 @@ msgid "Fee"
 msgstr "Parcella"
 
 #: ../src/gnome-utils/gnc-tree-model-split-reg.c:2915
-#, fuzzy
 msgid "ATM Withdraw"
-msgstr "operazione: prelievo"
+msgstr "Prelievo ATM"
 
 #. src/app-utils/prefs.scm
 #: ../src/gnome-utils/gnc-tree-model-split-reg.c:2945
@@ -12614,6 +12633,9 @@ msgid ""
 "Threshold\" set for this book. This setting can be changed in File -> "
 "Properties -> Accounts."
 msgstr ""
+"La data inserita per la nuova transazione è precedente al \"Limite di sola "
+"lettura\" impostato per questo conto. L'impostazione può essere modificata "
+"dal menu «File -> Proprietà -> Conti»"
 
 #: ../src/gnome-utils/gnc-tree-util-split-reg.c:886
 msgid ""
@@ -12921,13 +12943,10 @@ msgid "Save the changed transaction?"
 msgstr "Salvare le modifiche alla transazione?"
 
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:2415
-#, fuzzy
 msgid ""
 "The current transaction has changed. Would you like to record the changes, "
 "or discard the changes?"
-msgstr ""
-"La transazione d'esempio corrente è stata modificata.\n"
-"Registrarla?"
+msgstr "La transazione corrente è stata modificata. Salvare le modifiche?"
 
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:2453
 #: ../src/register/ledger-core/split-register-control.c:1546
@@ -12944,13 +12963,12 @@ msgid "Date Entered"
 msgstr "Data di immissione"
 
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:2824
-#, fuzzy
 msgid "Date Reconciled"
-msgstr "Riconciliato"
+msgstr "Data di riconciliazione"
 
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:2826
 msgid "Date Posted / Entered / Reconciled"
-msgstr ""
+msgstr "Data di emissione/inserimento/riconciliazione"
 
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:2853
 #, fuzzy
@@ -13255,9 +13273,8 @@ msgstr ""
 "una commodity."
 
 #: ../src/gnome-utils/gschemas/org.gnucash.warnings.gschema.xml.in.in.h:9
-#, fuzzy
 msgid "Delete a commodity with price quotes"
-msgstr "Eliminazione di una commodity e dei prezzi"
+msgstr "Elimina una commodity con delle quotazioni"
 
 #: ../src/gnome-utils/gschemas/org.gnucash.warnings.gschema.xml.in.in.h:10
 msgid ""
@@ -13393,11 +13410,8 @@ msgstr ""
 "una transazione."
 
 #: ../src/gnome-utils/gschemas/org.gnucash.warnings.gschema.xml.in.in.h:30
-#, fuzzy
 msgid "Delete a transaction with reconciled splits"
-msgstr ""
-"Non è possibile invalidare una transazione con suddivisioni riconciliate o "
-"liquidate."
+msgstr "Elimina una transazione con suddivisioni riconciliate"
 
 #: ../src/gnome-utils/gschemas/org.gnucash.warnings.gschema.xml.in.in.h:31
 msgid ""
@@ -13955,11 +13969,14 @@ msgstr ""
 msgid "Time_zone:"
 msgstr "_Fuso Orario"
 
+# Tooltip
 #: ../src/gnome-utils/gtkbuilder/dialog-commodity.glade.h:24
 msgid ""
 "Enter a display symbol. This can safely be left blank, in which case the "
 "ticker symbol or the currency ISO code will be used."
 msgstr ""
+"Inserire un simbolo da visualizzare; il campo può essere lasciato vuoto nel "
+"qual caso verrà utilizzato il simbolo ticker o il codice ISO della valuta"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-commodity.glade.h:25
 msgid "_Display symbol"
@@ -14230,12 +14247,11 @@ msgstr ""
 "Le date verranno completate in modo che ricadano nell'anno solare corrente"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:53
-#, fuzzy
 msgid ""
 "In a sliding 12-month window starting this\n"
 "many months before the current month:"
 msgstr ""
-"In una finestra temporale di 12 mesi che inizia \n"
+"In una finestra temporale di 12 mesi che inizia\n"
 "questo numero di mesi prima di quello corrente:"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:56
@@ -14256,7 +14272,6 @@ msgid "Perform account list _setup on new file"
 msgstr "_Esegui la procedura guidata per la struttura dei conti"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:61
-#, fuzzy
 msgid "Present the new account list dialog when you choose File -> New File."
 msgstr ""
 "Visualizza la procedura di nuovo conto quando si sceglie «Nuovo file» dal "
@@ -14510,8 +14525,7 @@ msgstr "Visualizza i bordi orizzontali delle celle"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:127
 msgid "Double _mode colors alternate with transactions"
-msgstr ""
-"I colori della _modalità a doppia linea si alternano tra le transazioni"
+msgstr "I colori della _modalità a riga doppia si alternano tra le transazioni"
 
 # Tooltip
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:128
@@ -14575,7 +14589,7 @@ msgstr "Numero di _transazioni:"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:145
 msgid "_Double line mode"
-msgstr "Modalità a _doppia linea"
+msgstr "Modalità a riga _doppia"
 
 # Tooltip
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:146
@@ -14622,9 +14636,8 @@ msgid "Number of _characters for auto complete:"
 msgstr "N_umero di caratteri per l'autocompletamento"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:153
-#, fuzzy
 msgid "Show the _entered and reconcile dates"
-msgstr "Mostra la data di inseri_mento"
+msgstr "Mostra le date di inseri_mento e di riconciliazione"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:155
 msgid "Show the calendar b_uttons"
@@ -14637,6 +14650,7 @@ msgstr "Sposta la selezione alla suddivisione _vuota all'espansione"
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:159
 msgid "_Show entered and reconciled dates on selection"
 msgstr ""
+"Mostra le date di i_mmissione di riconciliazione al momento della selezione"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:161
 msgid "Register Defaults"
@@ -14729,14 +14743,13 @@ msgid "_Width:"
 msgstr "_Larghezza:"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:192
-#, fuzzy
 msgid ""
 "If the text in the tab is longer than this value (the test is approximate) "
 "then the tab label will have the middle cut and replaced with an ellipsis."
 msgstr ""
-"Questa chiave specifica la larghezza massima di una scheda. Se il testo "
-"nella scheda è più lungo di questo valore (la prova è approssimativa) allora "
-"la scheda avrà un taglio in mezzo e sarà rimpiazzato da un'ellisse."
+"Se il testo nella scheda è più lungo di questo valore (la prova è "
+"approssimativa) allora l'etichetta della scheda avrà un taglio in mezzo e "
+"sarà rimpiazzata da un'ellisse."
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:193
 msgid "characters"
@@ -15458,13 +15471,14 @@ msgid "Profits:"
 msgstr "Profitti:"
 
 #: ../src/gnome/window-autoclear.c:139
-#, fuzzy
 msgid "Searching for splits to clear ..."
-msgstr "Restituisci risultati quando"
+msgstr "Ricerca delle suddivisioni da eliminare..."
 
 #: ../src/gnome/window-autoclear.c:241
 msgid "Cannot uniquely clear splits. Found multiple possibilities."
 msgstr ""
+"Impossibile eliminare in modo univoco le suddivisioni; sono state "
+"individuate diverse possibilità."
 
 #: ../src/gnome/window-autoclear.c:248
 msgid "The selected amount cannot be cleared."
@@ -15640,15 +15654,13 @@ msgid "Reconcile the selected transactions"
 msgstr "Riconcilia la transazione selezionata"
 
 #: ../src/gnome/window-reconcile2.c:2218 ../src/gnome/window-reconcile.c:2218
-#, fuzzy
 msgid "_Unreconcile Selection"
-msgstr "Modalità selezione"
+msgstr "_Dereconcilia selezione"
 
 # Tooltip
 #: ../src/gnome/window-reconcile2.c:2219 ../src/gnome/window-reconcile.c:2219
-#, fuzzy
 msgid "Unreconcile the selected transactions"
-msgstr "Escludi le transazioni tra i conti selezionati"
+msgstr "Dereconcilia la transazione selezionata"
 
 #: ../src/gnome/window-reconcile2.c:2227 ../src/gnome/window-reconcile.c:2227
 msgid "Open the GnuCash help window"
@@ -16299,15 +16311,12 @@ msgid "Online Banking Bank-Internal Transfer"
 msgstr ""
 
 #: ../src/import-export/aqb/gnc-ab-transfer.c:218
-#, fuzzy
 msgid "Online Banking European (SEPA) Transfer"
-msgstr "Impostazione dell'Online Banking terminata."
+msgstr "Trasferimento Online Banking European (SEPA)"
 
 #: ../src/import-export/aqb/gnc-ab-transfer.c:223
-#, fuzzy
 msgid "Online Banking European (SEPA) Debit Note"
-msgstr ""
-"Emettere una nuova nota di addebito diretto attraverso l'Online Banking"
+msgstr "Nota di debito Online Banking European (SEPA)"
 
 #: ../src/import-export/aqb/gnc-ab-transfer.c:229
 msgid "Online Banking Transaction"
@@ -16333,7 +16342,6 @@ msgid "Unspecified"
 msgstr "Non specificato"
 
 #: ../src/import-export/aqb/gnc-ab-utils.c:662
-#, fuzzy
 msgid ""
 "The backend found an error during the preparation of the job. It is not "
 "possible to execute this job. \n"
@@ -16345,14 +16353,14 @@ msgid ""
 "Do you want to enter the job again?"
 msgstr ""
 "Il servizio ha riscontrato un errore durante la preparazione del lavoro. Non "
-"è quindi possibile eseguire il lavoro. \n"
+"è quindi possibile eseguire questo lavoro. \n"
 "\n"
 "Molto probabilmente la banca non supporta il lavoro scelto o il proprio "
-"conto per l'Online Banking non ha i permessi necessari per eseguire il "
-"lavoro. Messaggi di errore più dettagliati sono consultabile nella console "
+"conto per l'Online Banking non ha i permessi necessari per eseguire questo "
+"lavoro. Messaggi di errore più dettagliati sono consultabili nella console "
 "di log.\n"
 "\n"
-"Si vuole ripetere il lavoro?"
+"Ripetere il lavoro?"
 
 #: ../src/import-export/aqb/gnc-ab-utils.c:754
 msgid ""
@@ -18017,7 +18025,7 @@ msgstr ""
 #. name. It MUST NOT contain the
 #. character ':' anywhere in it or
 #. in any translations.
-#: ../src/import-export/ofx/gnc-ofx-import.c:534
+#: ../src/import-export/ofx/gnc-ofx-import.c:563
 #, c-format
 msgid "Stock account for security \"%s\""
 msgstr "Conto azioni per il titolo «%s»"
@@ -18026,45 +18034,45 @@ msgstr "Conto azioni per il titolo «%s»"
 #. name. It MUST NOT contain the
 #. character ':' anywhere in it or
 #. in any translations.
-#: ../src/import-export/ofx/gnc-ofx-import.c:696
+#: ../src/import-export/ofx/gnc-ofx-import.c:729
 #, c-format
 msgid "Income account for security \"%s\""
 msgstr "Conto entrate per il titolo «%s»"
 
-#: ../src/import-export/ofx/gnc-ofx-import.c:809
+#: ../src/import-export/ofx/gnc-ofx-import.c:842
 msgid "Unknown OFX account"
 msgstr "Conto OFX sconosciuto"
 
-#: ../src/import-export/ofx/gnc-ofx-import.c:832
+#: ../src/import-export/ofx/gnc-ofx-import.c:865
 msgid "Unknown OFX checking account"
 msgstr "Conto corrente OFX sconosciuto"
 
-#: ../src/import-export/ofx/gnc-ofx-import.c:836
+#: ../src/import-export/ofx/gnc-ofx-import.c:869
 msgid "Unknown OFX savings account"
 msgstr "Conto risparmi OFX sconosciuto"
 
-#: ../src/import-export/ofx/gnc-ofx-import.c:840
+#: ../src/import-export/ofx/gnc-ofx-import.c:873
 msgid "Unknown OFX money market account"
 msgstr "Conto di mercato monetario OFX sconosciuto"
 
-#: ../src/import-export/ofx/gnc-ofx-import.c:844
+#: ../src/import-export/ofx/gnc-ofx-import.c:877
 #, fuzzy
 msgid "Unknown OFX credit line account"
 msgstr "Conto carta di credito OFX sconosciuto"
 
-#: ../src/import-export/ofx/gnc-ofx-import.c:848
+#: ../src/import-export/ofx/gnc-ofx-import.c:881
 msgid "Unknown OFX CMA account"
 msgstr "Conto OFX CMA sconosciuto"
 
-#: ../src/import-export/ofx/gnc-ofx-import.c:852
+#: ../src/import-export/ofx/gnc-ofx-import.c:885
 msgid "Unknown OFX credit card account"
 msgstr "Conto carta di credito OFX sconosciuto"
 
-#: ../src/import-export/ofx/gnc-ofx-import.c:856
+#: ../src/import-export/ofx/gnc-ofx-import.c:889
 msgid "Unknown OFX investment account"
 msgstr "Conto investimento OFX sconosciuto"
 
-#: ../src/import-export/ofx/gnc-ofx-import.c:938
+#: ../src/import-export/ofx/gnc-ofx-import.c:972
 msgid "Select an OFX/QFX file to process"
 msgstr "Selezionare un file QFX/QFX da processare"
 
@@ -19314,7 +19322,7 @@ msgid "Delete preconfigured report"
 msgstr "Elimina resoconto preconfigurato"
 
 #: ../src/report/report-gnome/dialog-custom-report.glade.h:1
-msgid "Preconfigured reports"
+msgid "Preconfigured Reports"
 msgstr "Resoconti preconfigurati"
 
 #: ../src/report/report-gnome/dialog-custom-report.glade.h:2
@@ -19464,6 +19472,8 @@ msgid ""
 "Update the current report's saved configuration. The report will be saved in "
 "the file ~/.gnucash/saved-reports-2.4. "
 msgstr ""
+"Aggiorna la configurazione salvata del resoconto corrente. Il resoconto "
+"verrà salvato nel file «~/.gnucash/saved-reports-2.4». "
 
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1037
 msgid "Save Report As..."
@@ -19471,14 +19481,13 @@ msgstr "Salva resoconto come..."
 
 # Tooltip
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1038
-#, fuzzy
 msgid ""
-"Add the current report's configuration to the `Custom Reports' menu. The "
-"report will be saved in the file ~/.gnucash/saved-reports-2.4. "
+"Add the current report's configuration to the `Preconfigured Reports' menu. "
+"The report will be saved in the file ~/.gnucash/saved-reports-2.4. "
 msgstr ""
-"Aggiunge il resoconto corrente al menu «personalizzati» per un utilizzo "
-"futuro. Il resoconto sarà salvato nel file ~/.GnuCash/saved-reports-2.4. "
-"Sarà accessibile come voce del menu resoconto al prossimo avvio di GnuCash"
+"Aggiunge la configurazione del resoconto corrente al menu «Resoconti "
+"preconfigurati». Il resoconto sarà salvato nel file ~/.gnucash/saved-"
+"reports-2.4"
 
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1043
 msgid "Export _Report"
@@ -20029,15 +20038,15 @@ msgstr "Formato data per le stampe: "
 msgid "The default date format used for fancy printed dates."
 msgstr "Il formato predefinito di data utilizzato nelle stampe"
 
+# Tooltip
 #. src/app-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:114
-#, fuzzy
 msgid ""
 "Check to have trading accounts used for transactions involving more than one "
 "currency or commodity."
 msgstr ""
 "Abilitare per fare in modo che i conti per il trading siano usati per le "
-"transazioni che coinvolgono più di una commodity"
+"transazioni che coinvolgono più di una commodity o di una valuta"
 
 #. src/app-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:116
@@ -20047,6 +20056,10 @@ msgid ""
 "account register windows. If zero, all transactions can be edited and none "
 "are read-only."
 msgstr ""
+"Selezionare il numero di giorno dopo il quale le transazioni non potranno "
+"più essere modificate. Questo limite è identificato tramite una linea rossa "
+"nelle finestre del registro del conto. Se impostata a zero, le transazioni "
+"potranno essere sempre modificate."
 
 #. src/app-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:118
@@ -20879,9 +20892,8 @@ msgstr ""
 #. src/report/business-reports/aging.scm
 #. src/report/business-reports/gnucash/report/aging.scm
 #: ../intl-scm/guile-strings.c:608 ../intl-scm/guile-strings.c:1338
-#, fuzzy
 msgid "Sort companies by."
-msgstr "Ordine di visualizzazione delle imprese"
+msgstr "Ordina le imprese per."
 
 # tooltip
 #. src/report/business-reports/aging.scm
@@ -23592,9 +23604,8 @@ msgstr "stima imposte 1° trimestre anno scorso"
 #. src/report/locale-specific/us/taxtxf.scm
 #: ../intl-scm/guile-strings.c:3382 ../intl-scm/guile-strings.c:3466
 #: ../intl-scm/guile-strings.c:3580 ../intl-scm/guile-strings.c:3664
-#, fuzzy
 msgid "Jan 1 - Mar 31."
-msgstr "Gen 1 - Mar 31"
+msgstr "1 Gen. - 31 Mar."
 
 #. src/report/locale-specific/us/gnucash/report/taxtxf-de_DE.scm
 #. src/report/locale-specific/us/gnucash/report/taxtxf.scm
@@ -23612,9 +23623,8 @@ msgstr "stima imposte 2° trimestre anno scorso"
 #. src/report/locale-specific/us/taxtxf.scm
 #: ../intl-scm/guile-strings.c:3386 ../intl-scm/guile-strings.c:3470
 #: ../intl-scm/guile-strings.c:3584 ../intl-scm/guile-strings.c:3668
-#, fuzzy
 msgid "Apr 1 - May 31."
-msgstr "Apr 1 - Mag 31"
+msgstr "1 Apr. - 31 Mag."
 
 #. src/report/locale-specific/us/gnucash/report/taxtxf-de_DE.scm
 #. src/report/locale-specific/us/gnucash/report/taxtxf.scm
@@ -23632,9 +23642,8 @@ msgstr "stima imposte 3° trimestre anno scorso"
 #. src/report/locale-specific/us/taxtxf.scm
 #: ../intl-scm/guile-strings.c:3390 ../intl-scm/guile-strings.c:3474
 #: ../intl-scm/guile-strings.c:3588 ../intl-scm/guile-strings.c:3672
-#, fuzzy
 msgid "Jun 1 - Aug 31."
-msgstr "Gen 1 - Ago 31"
+msgstr "1 Giu. - 31 Ago."
 
 #. src/report/locale-specific/us/gnucash/report/taxtxf-de_DE.scm
 #. src/report/locale-specific/us/gnucash/report/taxtxf.scm
@@ -23652,9 +23661,8 @@ msgstr "stima imposte 4° trimestre anno scorso"
 #. src/report/locale-specific/us/taxtxf.scm
 #: ../intl-scm/guile-strings.c:3394 ../intl-scm/guile-strings.c:3478
 #: ../intl-scm/guile-strings.c:3592 ../intl-scm/guile-strings.c:3676
-#, fuzzy
 msgid "Sep 1 - Dec 31."
-msgstr "Set 1 - Dic 31"
+msgstr "1 Set. - 31 Dic."
 
 #. src/report/locale-specific/us/gnucash/report/taxtxf-de_DE.scm
 #. src/report/locale-specific/us/gnucash/report/taxtxf.scm
@@ -23689,9 +23697,8 @@ msgstr "Stima imposte 1° trimestre anno scorso"
 #. src/report/locale-specific/us/taxtxf.scm
 #: ../intl-scm/guile-strings.c:3402 ../intl-scm/guile-strings.c:3486
 #: ../intl-scm/guile-strings.c:3600 ../intl-scm/guile-strings.c:3684
-#, fuzzy
 msgid "Jan 1 - Mar 31, Last year."
-msgstr "Gen 1 - Mar 31, scorso anno"
+msgstr "1 Gen. - 31 Mar., anno scorso"
 
 #. src/report/locale-specific/us/gnucash/report/taxtxf-de_DE.scm
 #. src/report/locale-specific/us/gnucash/report/taxtxf.scm
@@ -23708,9 +23715,8 @@ msgstr "Stima imposte 2° trimestre anno scorso"
 #. src/report/locale-specific/us/taxtxf.scm
 #: ../intl-scm/guile-strings.c:3406 ../intl-scm/guile-strings.c:3490
 #: ../intl-scm/guile-strings.c:3604 ../intl-scm/guile-strings.c:3688
-#, fuzzy
 msgid "Apr 1 - May 31, Last year."
-msgstr "Apr 1 - Mag 31, scorso anno"
+msgstr "1 Apr. - 31 Mag., anno scorso"
 
 #. src/report/locale-specific/us/gnucash/report/taxtxf-de_DE.scm
 #. src/report/locale-specific/us/gnucash/report/taxtxf.scm
@@ -23727,9 +23733,8 @@ msgstr "Stima imposte 3° trimestre anno scorso"
 #. src/report/locale-specific/us/taxtxf.scm
 #: ../intl-scm/guile-strings.c:3410 ../intl-scm/guile-strings.c:3494
 #: ../intl-scm/guile-strings.c:3608 ../intl-scm/guile-strings.c:3692
-#, fuzzy
 msgid "Jun 1 - Aug 31, Last year."
-msgstr "Giu 1 - Ago 31, scorso anno"
+msgstr "1 Giu - 31 Ago., anno scorso"
 
 #. src/report/locale-specific/us/gnucash/report/taxtxf-de_DE.scm
 #. src/report/locale-specific/us/gnucash/report/taxtxf.scm
@@ -23746,9 +23751,8 @@ msgstr "Stima imposte 4° trimestre anno scorso"
 #. src/report/locale-specific/us/taxtxf.scm
 #: ../intl-scm/guile-strings.c:3414 ../intl-scm/guile-strings.c:3498
 #: ../intl-scm/guile-strings.c:3612 ../intl-scm/guile-strings.c:3696
-#, fuzzy
 msgid "Sep 1 - Dec 31, Last year."
-msgstr "Set 1 - Dic 31, scorso anno"
+msgstr "1 Set. - 31 Dic., anno scorso"
 
 #. src/report/locale-specific/us/gnucash/report/taxtxf-de_DE.scm
 #. src/report/locale-specific/us/gnucash/report/taxtxf.scm
@@ -23884,9 +23888,9 @@ msgstr "Stampa tutti i trasferimenti da/a"
 #. src/report/locale-specific/us/gnucash/report/taxtxf.scm
 #. src/report/locale-specific/us/taxtxf.scm
 #: ../intl-scm/guile-strings.c:3514 ../intl-scm/guile-strings.c:3712
-#, fuzzy
 msgid "Print all split details for multi-split transactions."
-msgstr "Stampa tutti i dettagli di suddivisione per le transazioni suddivise"
+msgstr ""
+"Stampa tutti i dettagli della suddivisione per le transazioni suddivise"
 
 #. src/report/locale-specific/us/gnucash/report/taxtxf.scm
 #. src/report/locale-specific/us/taxtxf.scm
@@ -24651,9 +24655,8 @@ msgstr "Per importo, dal maggiore al minore"
 # Tooltip
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:4026
-#, fuzzy
 msgid "How to show the balances of parent accounts."
-msgstr "Visualizza i saldi per i conti padre"
+msgstr "Come visualizzare i saldi dei conti padre"
 
 #. src/report/report-system/options-utilities.scm
 #. src/report/standard-reports/account-summary.scm
@@ -24669,7 +24672,6 @@ msgstr "Saldo del conto"
 # tooltip
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:4030
-#, fuzzy
 msgid "Show only the balance in the parent account, excluding any subaccounts."
 msgstr ""
 "Mostra il saldo esclusivamente nei conti padre, escludendo ogni sottoconto"
@@ -24677,7 +24679,6 @@ msgstr ""
 # tooltip
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:4034
-#, fuzzy
 msgid ""
 "Calculate the subtotal for this parent account and all of its subaccounts, "
 "and show this as the parent account balance."
@@ -24699,9 +24700,8 @@ msgstr "Non visualizza alcun saldo per i conti padre"
 # Tooltip
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:4040
-#, fuzzy
 msgid "How to show account subtotals for parent accounts."
-msgstr "Come devono essere visualizzati i subtotali per i conti padre"
+msgstr "Come visualizzare i subtotali per i conti padre"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:4042
@@ -24710,16 +24710,14 @@ msgstr "Visualizza i subtotali"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:4044
-#, fuzzy
 msgid "Show subtotals for selected parent accounts which have subaccounts."
 msgstr ""
 "Visualizza i subtotali per i conti padre selezionati che hanno dei sottoconti"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:4048
-#, fuzzy
 msgid "Do not show any subtotals for parent accounts."
-msgstr "Non mostrare il subtotale per i conti padre"
+msgstr "Non mostrare i subtotali per i conti padre"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:4050
@@ -24729,12 +24727,11 @@ msgstr "Stile libro di testo (sperimentale)"
 # tooltip
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:4052
-#, fuzzy
 msgid ""
 "Show parent account subtotals, indented per accounting text book practice "
 "(experimental)."
 msgstr ""
-"Mostra i subtotali dei conti padre, indentati come è prassi nei libri di "
+"Mostra i subtotali del conto padre, indentato come è prassi nei libri di "
 "testo (sperimentale)"
 
 #. src/report/report-system/report.scm
@@ -24820,6 +24817,9 @@ msgid ""
 "Some reports stored in a legacy format were found. This format is not "
 "supported anymore so these reports may not have been restored properly."
 msgstr ""
+"Sono stati trovati dei resoconti salvati in un vecchio formato. Questo "
+"formato non è più supportato e quindi i resoconti potrebbero non essere "
+"stati recuperati correttamente."
 
 #. src/report/report-system/report-utilities.scm
 #. src/report/standard-reports/account-piecharts.scm
@@ -25191,12 +25191,11 @@ msgstr "Mostra media"
 #. src/report/standard-reports/gnucash/report/standard-reports/category-barchart.scm
 #: ../intl-scm/guile-strings.c:4184 ../intl-scm/guile-strings.c:5096
 #: ../intl-scm/guile-strings.c:5438 ../intl-scm/guile-strings.c:6350
-#, fuzzy
 msgid ""
 "Select whether the amounts should be shown over the full time period or "
 "rather as the average e.g. per month."
 msgstr ""
-"Selezionare se gli importo devono essere visualizzati su tutto il periodo o "
+"Selezionare se gli importi devono essere visualizzati su tutto il periodo o "
 "come medie ad esempio mensili"
 
 #. src/report/standard-reports/account-piecharts.scm
@@ -25214,14 +25213,12 @@ msgstr "Non mediare"
 #. src/report/standard-reports/gnucash/report/standard-reports/category-barchart.scm
 #: ../intl-scm/guile-strings.c:4188 ../intl-scm/guile-strings.c:5100
 #: ../intl-scm/guile-strings.c:5442 ../intl-scm/guile-strings.c:6354
-#, fuzzy
 msgid "Just show the amounts, without any averaging."
-msgstr "Visualizza gli importi senza alcuna mediazione"
+msgstr "Visualizza solo gli importi senza alcuna mediazione"
 
 #. src/report/standard-reports/account-piecharts.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/account-piecharts.scm
 #: ../intl-scm/guile-strings.c:4192 ../intl-scm/guile-strings.c:5446
-#, fuzzy
 msgid "Show the average yearly amount during the reporting period."
 msgstr "Visualizza la media annuale dell'importo nel periodo del resoconto"
 
@@ -25231,7 +25228,6 @@ msgstr "Visualizza la media annuale dell'importo nel periodo del resoconto"
 #. src/report/standard-reports/gnucash/report/standard-reports/category-barchart.scm
 #: ../intl-scm/guile-strings.c:4196 ../intl-scm/guile-strings.c:5104
 #: ../intl-scm/guile-strings.c:5450 ../intl-scm/guile-strings.c:6358
-#, fuzzy
 msgid "Show the average monthly amount during the reporting period."
 msgstr "Visualizza la media mensile dell'importo nel periodo del resoconto"
 
@@ -25241,7 +25237,6 @@ msgstr "Visualizza la media mensile dell'importo nel periodo del resoconto"
 #. src/report/standard-reports/gnucash/report/standard-reports/category-barchart.scm
 #: ../intl-scm/guile-strings.c:4200 ../intl-scm/guile-strings.c:5108
 #: ../intl-scm/guile-strings.c:5454 ../intl-scm/guile-strings.c:6362
-#, fuzzy
 msgid "Show the average weekly amount during the reporting period."
 msgstr "Visualizza la media settimanale dell'importo nel periodo del resoconto"
 
@@ -25568,9 +25563,8 @@ msgstr "Non scrivere gli zeri dei saldi nulli"
 #: ../intl-scm/guile-strings.c:5930 ../intl-scm/guile-strings.c:6120
 #: ../intl-scm/guile-strings.c:6674 ../intl-scm/guile-strings.c:7258
 #: ../intl-scm/guile-strings.c:8008 ../intl-scm/guile-strings.c:8592
-#, fuzzy
 msgid "Show blank space in place of any zero balances which would be shown."
-msgstr "Lascia uno spazio bianco invece di una serie di zeri per i saldi nulli"
+msgstr "Mostra uno spazio vuoto al posto degli importi nulli"
 
 #. src/report/standard-reports/account-summary.scm
 #. src/report/standard-reports/balance-sheet.scm
@@ -25618,7 +25612,6 @@ msgstr "Mostra le righe in stile contabile"
 #: ../intl-scm/guile-strings.c:6124 ../intl-scm/guile-strings.c:6486
 #: ../intl-scm/guile-strings.c:6678 ../intl-scm/guile-strings.c:7262
 #: ../intl-scm/guile-strings.c:8012 ../intl-scm/guile-strings.c:8596
-#, fuzzy
 msgid "Use rules beneath columns of added numbers like accountants do."
 msgstr ""
 "Usa le righe sotto alle colonne dei numeri sommati com'è uso dei contabili"
@@ -25922,7 +25915,6 @@ msgstr "Media"
 #. src/report/standard-reports/advanced-portfolio.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/advanced-portfolio.scm
 #: ../intl-scm/guile-strings.c:4374 ../intl-scm/guile-strings.c:5628
-#, fuzzy
 msgid "Use average cost of all shares for basis."
 msgstr "Utilizza il costo medio di tutte le quote come base"
 
@@ -25936,9 +25928,8 @@ msgstr "FIFO"
 #. src/report/standard-reports/advanced-portfolio.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/advanced-portfolio.scm
 #: ../intl-scm/guile-strings.c:4378 ../intl-scm/guile-strings.c:5632
-#, fuzzy
 msgid "Use first-in first-out method for basis."
-msgstr "Usa il metodo first-in first-out per le basi"
+msgstr "Usa il metodo first-in first-out come base"
 
 #. src/report/standard-reports/advanced-portfolio.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/advanced-portfolio.scm
@@ -25950,9 +25941,8 @@ msgstr "FILO"
 #. src/report/standard-reports/advanced-portfolio.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/advanced-portfolio.scm
 #: ../intl-scm/guile-strings.c:4382 ../intl-scm/guile-strings.c:5636
-#, fuzzy
 msgid "Use first-in last-out method for basis."
-msgstr "Usa il metodo first-in last-out per le basi"
+msgstr "Usa il metodo first-in last-out come base"
 
 # tooltip
 #. src/report/standard-reports/advanced-portfolio.scm
@@ -25966,14 +25956,12 @@ msgstr ""
 #. src/report/standard-reports/advanced-portfolio.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/advanced-portfolio.scm
 #: ../intl-scm/guile-strings.c:4386 ../intl-scm/guile-strings.c:5640
-#, fuzzy
 msgid "Ignore brokerage fees when calculating returns."
-msgstr "Ignora i costi di brockeraggio nel calcolo dei guadagni"
+msgstr "Ignora i costi di brokeraggio nel calcolo dei guadagni"
 
 #. src/report/standard-reports/advanced-portfolio.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/advanced-portfolio.scm
 #: ../intl-scm/guile-strings.c:4388 ../intl-scm/guile-strings.c:5642
-#, fuzzy
 msgid "Display the ticker symbols."
 msgstr "Visualizzare i simboli ticker"
 
@@ -26003,7 +25991,6 @@ msgstr "Il numero di cifre decimali da utilizzare per i numeri delle quote"
 #. src/report/standard-reports/advanced-portfolio.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/advanced-portfolio.scm
 #: ../intl-scm/guile-strings.c:4396 ../intl-scm/guile-strings.c:5650
-#, fuzzy
 msgid "Display share prices."
 msgstr "Visualizza le quotazioni"
 
@@ -26383,6 +26370,7 @@ msgstr "Se includere una riga con il totale delle attività"
 msgid "Use standard US layout"
 msgstr "Usa la disposizione predefinita per gli stati uniti"
 
+# Tooltip
 #. src/report/standard-reports/balance-sheet.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/balance-sheet.scm
 #: ../intl-scm/guile-strings.c:4582 ../intl-scm/guile-strings.c:5836
@@ -26390,6 +26378,8 @@ msgid ""
 "Report section order is assets/liabilities/equity (rather than assets/equity/"
 "liabilities)."
 msgstr ""
+"L'ordine delle sezioni del resoconto sarà attività/passività/capitali invece "
+"di attività/capitali/passività"
 
 #. src/report/standard-reports/balance-sheet.scm
 #. src/report/standard-reports/budget-balance-sheet.scm
@@ -27097,12 +27087,11 @@ msgstr "Raccogli gli importi del bilancio al conto padre"
 #. src/report/standard-reports/budget.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/budget.scm
 #: ../intl-scm/guile-strings.c:4974 ../intl-scm/guile-strings.c:6228
-#, fuzzy
 msgid ""
 "If parent account does not have its own budget value, use the sum of the "
 "child account budget values."
 msgstr ""
-"Se il conto padre non ha un valore di balancio, gli verrà assegnata la somma "
+"Se il conto padre non ha un valore di bilancio, gli verrà assegnata la somma "
 "dei valori di bilancio dei conti figli"
 
 #. src/report/standard-reports/budget.scm
@@ -27115,7 +27104,6 @@ msgstr "Includi i conti con saldo nullo e i valori del bilancio"
 #. src/report/standard-reports/budget.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/budget.scm
 #: ../intl-scm/guile-strings.c:4978 ../intl-scm/guile-strings.c:6232
-#, fuzzy
 msgid ""
 "Include accounts with zero total (recursive) balances and budget values in "
 "this report."
@@ -27951,7 +27939,6 @@ msgstr "Visualizza attività e passività"
 #. src/report/standard-reports/gnucash/report/standard-reports/net-linechart.scm
 #. src/report/standard-reports/net-linechart.scm
 #: ../intl-scm/guile-strings.c:6874 ../intl-scm/guile-strings.c:8208
-#, fuzzy
 msgid "Show Net Worth"
 msgstr "Visualizza patrimonio netto"
 
@@ -30588,14 +30575,13 @@ msgstr ""
 "transazioni»."
 
 #: ../doc/tip_of_the_day.list.in:29
-#, fuzzy
 msgid ""
 "As you enter amounts in the register, you can use the GnuCash calculator to "
 "add, subtract, multiply and divide. Simply type the first value, then select "
 "'+', '-','*', or '/'. Type the second value and press Enter to record the "
 "calculated amount."
 msgstr ""
-"Durante l'immissione di importi nel registro, è possibile usare la "
+"Durante l'immissione degli importi nel registro, è possibile usare la "
 "calcolatrice di GnuCash per aggiungere, sottrarre, moltiplicare e dividere. "
 "Basta digitare il primo valore, quindi scegliere «+», «-», «*» o «/», infine "
 "digitare il secondo valore e premere «invio» per registrare l'importo "
@@ -30721,6 +30707,15 @@ msgid ""
 "To schedule a transaction every year you can choose the monthly basic "
 "frequency and then set 'Every 12 months'."
 msgstr ""
+"L'editor delle transazioni pianificate fornisce un configuratore della "
+"frequenza estremamente flessibile. Le frequenze più comuni per una "
+"transazione pianificata comprendono le scelte: giornaliera, settimanale e "
+"mensile. Possono però essere impostate delle ricorrenze più complesse:\n"
+"- per pianificare una transazione ogni tre settimane è possibile selezionare "
+"la frequenza settimanale di abse e poi impostare \"Ogni 3 settimane\";\n"
+"\n"
+"- per pianificare una transazione ogni anno è possibile selezionare la "
+"frequenza annuale e impostare \"Ogni 12 mesi\"."
 
 #: ../doc/tip_of_the_day.list.in:86
 msgid ""
