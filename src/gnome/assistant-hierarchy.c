@@ -999,7 +999,6 @@ on_cancel (GtkAssistant      *gtkassistant,
     gnc_suspend_gui_refresh ();
     delete_hierarchy_dialog (data);
     delete_our_account_tree (data);
-    gncp_new_user_finish ();
     g_free(data);
     gnc_resume_gui_refresh ();
 }
