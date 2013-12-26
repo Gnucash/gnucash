@@ -2996,7 +2996,7 @@ gnc_ui_qif_import_convert_progress_prepare(GtkAssistant *assistant,
     /* Before creating transactions, if this is a new book, let user specify
      * book options, since they affect how transactions are created */
     if (wind->new_book)
-        wind->new_book = gnc_new_book_option_display();
+        wind->new_book = gnc_new_book_option_display(wind->window);
 }
 
 
