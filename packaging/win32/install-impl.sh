@@ -1552,7 +1552,9 @@ function make_chm() {
         echo "[MAP]" >> htmlhelp.hhp
         cat mymaps >> htmlhelp.hhp
         rm mymaps
+        echo "Will now call hhc.exe for $_CHM_TYPE ($_CHM_LANG)..." 
         hhc htmlhelp.hhp  >/dev/null  || true
+        echo "... hhc.exe completed successfully." 
         cp -fv htmlhelp.chm $_DOCS_INST_UDIR/$_CHM_LANG/gnucash-$_CHM_TYPE.chm
         cp -fv htmlhelp.hhmap $_DOCS_INST_UDIR/$_CHM_LANG/gnucash-$_CHM_TYPE.hhmap
     qpopd
