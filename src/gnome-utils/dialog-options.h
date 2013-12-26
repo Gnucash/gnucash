@@ -66,6 +66,10 @@ void gnc_options_dialog_set_global_help_cb(GNCOptionWinCallback thunk,
 void gnc_options_dialog_build_contents(GNCOptionWin *win,
                                        GNCOptionDB  *odb);
 
+void gnc_options_dialog_build_contents_full(GNCOptionWin *win,
+                                            GNCOptionDB  *odb,
+                                            gboolean show_dialog);
+
 /* Both apply_cb and close_cb should be scheme functions with 0 arguments.
  * References to these functions will be held until the close_cb is called
  */

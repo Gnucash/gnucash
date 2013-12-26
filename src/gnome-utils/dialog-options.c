@@ -1176,15 +1176,33 @@ gnc_options_dialog_append_page(GNCOptionWin * propertybox,
 /********************************************************************\
  * gnc_options_dialog_build_contents                                *
  *   builds an options dialog given a property box and an options   *
- *   database                                                       *
+ *   database and make the dialog visible                           *
  *                                                                  *
  * Args: propertybox - gnome property box to use                    *
  *       odb         - option database to use                       *
  * Return: nothing                                                  *
 \********************************************************************/
 void
-gnc_options_dialog_build_contents(GNCOptionWin *propertybox,
-                                  GNCOptionDB  *odb)
+gnc_options_dialog_build_contents (GNCOptionWin *propertybox,
+                                   GNCOptionDB  *odb)
+{
+    gnc_options_dialog_build_contents_full (propertybox, odb, TRUE);
+}
+
+/********************************************************************\
+ * gnc_options_dialog_build_contents                                *
+ *   builds an options dialog given a property box and an options   *
+ *   database and make the dialog visible depending on the          *
+ *   show_dialog flag                                               *
+ *                                                                  *
+ * Args: propertybox - gnome property box to use                    *
+ *       odb         - option database to use                       *
+ *       show_dialog - should dialog be made visible or not         *
+ * Return: nothing                                                  *
+\********************************************************************/
+void
+gnc_options_dialog_build_contents_full (GNCOptionWin *propertybox,
+                                        GNCOptionDB  *odb, gboolean show_dialog)
 {
     GNCOptionSection *section;
     gchar *default_section_name;
@@ -1252,7 +1270,8 @@ gnc_options_dialog_build_contents(GNCOptionWin *propertybox,
         gtk_notebook_set_current_page(GTK_NOTEBOOK(propertybox->notebook), default_page);
     }
     gnc_options_dialog_changed_internal(propertybox->dialog, FALSE);
-    gtk_widget_show(propertybox->dialog);
+    if (show_dialog)
+        gtk_widget_show(propertybox->dialog);
 }
 
 GtkWidget *

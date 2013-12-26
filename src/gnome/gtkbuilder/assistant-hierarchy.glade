@@ -93,32 +93,6 @@ Please choose the currency to use for new accounts.</property>
           </packing>
         </child>
         <child>
-          <object class="GtkLabel" id="book_option_label">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="label" translatable="yes">&lt;b&gt;Book Options&lt;/b&gt;</property>
-            <property name="use_markup">True</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-            <property name="position">2</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel" id="book_option_message_label">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Since you are creating a new file, you will next see a dialog for setting book options. These can affect how GnuCash transactions are handled later, during account setup. If you come back to this page without cancelling and starting over, the dialog for setting book options will not be shown a second time when you go forward. You can access it directly from the menu via File->Properties.</property>
-            <property name="wrap">True</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-            <property name="position">3</property>
-          </packing>
-        </child>
-        <child>
           <placeholder/>
         </child>
       </object>
