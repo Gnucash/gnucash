@@ -196,7 +196,7 @@
   ;; sum up the contents of the b-list built by basis-builder below
   (define (sum-basis b-list)
     (if (not (eqv? b-list '()))
-	(gnc-numeric-add (gnc-numeric-mul (caar b-list) (cdar b-list) GNC-DENOM-AUTO GNC-RND-ROUND)
+	(gnc-numeric-add (gnc-numeric-mul (caar b-list) (cdar b-list) GNC-DENOM-AUTO (logior GNC-DENOM-REDUCE GNC-RND-ROUND))
 			 (sum-basis (cdr b-list)) 100 GNC-RND-ROUND)
 	(gnc-numeric-zero)
 	)
