@@ -241,7 +241,7 @@ static void
 gnc_restore_all_state (gpointer session, gpointer unused)
 {
     GKeyFile *keyfile = NULL;
-    gchar *file_guid;
+    gchar *file_guid = NULL;
     GError *error = NULL;
 
     keyfile = gnc_state_load (session);
