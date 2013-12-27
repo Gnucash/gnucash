@@ -10,26 +10,24 @@
    Designed to be easy to use, yet powerful and flexible, GnuCash allows you
    to track bank accounts, stocks, income and expenses. As quick
    and intuitive to use as a checkbook register, it is based on professional
-   accounting principles to ensure balanced books and accurate reports. 
+   accounting principles like double-entry accounting to ensure balanced books
+   and accurate reports. 
   </p>
-  <p>Some feature highlights:</p>
+  <p>With GnuCash you can (but are not limited to):</p>
   <ul>
-   <li>Double-Entry Accounting</li>
-   <li>Stock/Bond/Mutual Fund Accounts</li>
-   <li>Small-Business Accounting</li>
-   <li>Reports, Graphs</li>
+   <li>Keep track of your day to day personal income and expenses</li>
+   <li>Manage your stock, bond and mutual fund accounts with ease</li>
+   <li>Keep your small business' accounting up to date</li>
+   <li>Create accurate reports and graphs from your financial data</li>
+   <li>Set up scheduled transactions to avoid repeated data entry</li>
    <li>QIF/OFX/HBCI Import, Transaction Matching</li>
-   <li>Scheduled Transactions</li>
-   <li>Financial Calculations</li>
-
-   <li>First item</li>
-   <li>Second item</li>
+   <li>Perform financial calculations, such as a loan repayment</li>
   </ul>
  </description>
  <screenshots>
-  <screenshot type="default" width="416" height="255">http://www.gnucash.org/images/gnucash-perspective.png</screenshot>
-  <screenshot width="400" height="309">http://www.gnucash.org/images/features/feature_register.png</screenshot>
-  <screenshot width="400" height="362">http://www.gnucash.org/images/features/feature_graph-report.png</screenshot>
+  <screenshot type="default" width="1049" height="590">http://www.gnucash.org/images/features/feature_accounts_lg.png</screenshot>
+  <screenshot width="1049" height="590">http://www.gnucash.org/images/features/feature_register_lg.png</screenshot>
+  <screenshot width="1049" height="590">http://www.gnucash.org/images/features/feature_bar_chart_lg.png</screenshot>
  </screenshots>
  <url type="homepage">http://www.gnucash.org/</url>
  <updatecontact>gnucash-devel@gnucash.org</updatecontact>
