@@ -436,6 +436,7 @@ src/libqof/qof/qofquery.c
 src/libqof/qof/qofquerycore.c
 src/libqof/qof/qofreference.c
 src/libqof/qof/qofsession.c
+src/libqof/qof/qof-string-cache.c
 src/libqof/qof/qofutil.c
 src/libqof/qof/qof-win32.c
 src/plugins/bi_import/bi_import.c
