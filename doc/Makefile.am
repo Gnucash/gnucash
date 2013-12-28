@@ -61,4 +61,4 @@ else
 	perl -pi.bak -e 's/" *$$/\n/' $@
 endif
 
-DISTCLEANFILES = gnc-prices.1 gnucash.1 tip_of_the_day.list
+DISTCLEANFILES = gnc-prices.1 gnucash.1 tip_of_the_day.list *.bak

@@ -5,7 +5,7 @@ clean-local:
 	rm -f translog.*
 
 EXTRA_DIST = \
-  runTests.py \
+  runTests.py.in \
   test_account.py \
   test_book.py \
   test_split.py \
