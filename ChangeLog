@@ -1,24 +1,188 @@
-2013-12-14 John Ralls 
+2013-12-28 John Ralls 
 
-	* Rename some directories in src/import-export (HEAD, trunk)
+	* Add new files to POTFILES.in and POTFILES.skip (HEAD, trunk)
 
-2013-12-14 John Ralls 
+2013-12-28 Mike Evans 
+
+	* A couple more edits. (origin/trunk, origin/HEAD)
+
+2013-12-28 Mike Evans 
+
+	* Update Last Translator and removed cruft.
+
+2013-12-28 Mike Evans 
+
+	* Update Amercan -> British translations.
+
+2013-12-27 Geert Janssens 
+
+	* Update gnome appdata file to pass validity check
+
+2013-12-27 Cristian Marchi 
+
+	* Update French translations thanks to Sébastien Villemot.
+
+2013-12-27 Cristian Marchi 
+
+	* Update Lithuanian translation. Thanks to Aurimas Fišeras.
+
+2013-12-26 Geert Janssens 
+
+	* Prevent gnc-numeric overflow in advanced portfolio report
+
+2013-12-26 Cristian Marchi 
+
+	* Update Italian translation.
+
+2013-12-26 Geert Janssens 
+
+	* Fix compile warning introduced in r23602
+
+2013-12-26 Geert Janssens 
+
+	* Bug 720646 - New Book Tabs on Windows
+
+2013-12-26 Geert Janssens 
+
+	* Don't create a second account hierarchy page when cancelling the Hierarchy Assistant
+
+2013-12-26 Geert Janssens 
+
+	* Make "New Book Options" dialog transient for its caller where possible
+
+2013-12-25 John Ralls 
+
+	* Add plugin example to plugins
+
+2013-12-24 Geert Janssens 
+
+	* Use same name for dialog and menu related to preconfigured reports
+
+2013-12-24 Geert Janssens 
+
+	* Revert "Bug 720646 - New Book Tabs on Windows"
+
+2013-12-24 Geert Janssens 
+
+	* Bug 720646 - New Book Tabs on Windows
+
+2013-12-24 John Ralls 
+
+	* Make the date help string translatable
+
+2013-12-23 Geert Janssens 
+
+	* Fix some warnings while creating a new book
+
+2013-12-23 Geert Janssens 
+
+	* Prevent account hierarchy assistant from opening a second account hierarchy upon completion
+
+2013-12-23 John Ralls 
+
+	* Bug 710823 - libofx can supply broken UTF-8 for account id
+
+2013-12-22 John Ralls 
+
+	* Bug 710824 - GnuCash should sanitise UTF-8 before serialising files
+
+2013-12-22 Mike Alexander 
+
+	* Update .gitignore to include recently added config macros.
+
+2013-12-22 Mike Alexander 
+
+	* Load old version 1 XML files without crashing.
+
+2013-12-22 Geert Janssens 
+
+	* Bug 720556 - The Tip of the Day preference isn't getting saved
+
+2013-12-21 Cristian Marchi 
+
+	* More update to Italian translation.
+
+2013-12-21 Geert Janssens 
+
+	* Drop double blanks from gschema strings.
+
+2013-12-21 Geert Janssens 
+
+	* Reset Warnings dialog: show translated warnings
+
+2013-12-20 John Ralls 
+
+	* Fix up and update strawberry perl URIs
+
+2013-12-20 Cristian Marchi 
+
+	* Another update to Italian Translation.
+
+2013-12-20 John Ralls 
+
+	* Suppress other register's blank transactions from General Ledger
+
+2013-12-20 John Ralls 
+
+	* Bug 720555 - General Ledger - Can't Enter Transaction Amounts
+
+2013-12-20 John Ralls 
+
+	* Bug 157247 - Asset account's "total" value should use most recent transaction prices
+
+2013-12-20 John Ralls 
+
+	* Extract-method on gnc_split_register_auto_calc
+
+2013-12-20 John Ralls 
+
+	* Rewrite apparently confusing comment.
+
+2013-12-18 Cristian Marchi 
+
+	* Update Dutch translation, copied from the Translation Project.
+
+2013-12-18 Cristian Marchi 
+
+	* Updated Lithuanian translation provided by Aurimas Fišeras.
+
+2013-12-16 Geert Janssens 
+
+	* Add missing macros to distribution and silence libtool warning
+
+2013-12-15 Frank H. Ellenberger 
+
+	* [23570] there was still one "_JP" although currently commented out
+
+2013-12-15 John Ralls 
+
+	* Change guide and help translation directories
+
+2013-12-15 John Ralls 
+
+	* Release 2.5.10
+
+2013-12-15 John Ralls 
+
+	* Rename some directories in src/import-export
+
+2013-12-15 John Ralls 
 
 	* Move gnc-warnings.c from POTFILES.skip to POTFILES.ignore
 
-2013-12-14 John Ralls 
+2013-12-15 John Ralls 
 
 	* Fix ax_pkg_swig.m4 filename.
 
-2013-12-14 John Ralls 
+2013-12-15 John Ralls 
 
-	* Revert a stray, unrelated change from r23556 (origin/trunk, origin/HEAD)
+	* Revert a stray, unrelated change from r23556
 
-2013-11-30 Patrick 
+2013-12-15 John Ralls 
 
 	* BUG 336843 (Attach images/files/urls to transactions):
 
-2013-12-14 John Ralls 
+2013-12-15 John Ralls 
 
 	* Fix missing xaccTransCommitEdit() from r23466
 

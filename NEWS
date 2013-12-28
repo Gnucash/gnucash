@@ -1,5 +1,90 @@
 Version history:
 ------- -------
+2.6.0 - 29 Dec 2013
+
+       The GnuCash development team proudly announces GnuCash 2.6.0,
+       the latest stable release of the GnuCash Free Accounting
+       Software. GnuCash Users can experience the following new features:
+
+       * Preferences have been migrated from GConf to GSettings. This
+	 is a simpler and more robust backend which writes to the OS's
+	 native prefs -- defaults on OS X and the Registry on
+	 MSWindows -- and allows us to remove several troublesome
+	 dependencies including GConf, ORBit, and DBus. The change
+	 includes a migration script that will run at Gnucash startup.
+
+       * New date handling which allows GnuCash to use dates after March 2038.
+
+       * Guile-2 compatibility: GnuCash now requires either Guile-1.8
+         or Guile-2.0
+
+       * Documents outside of GnuCash, images of receipts for example,
+         can now be linked to transactions, with the facility of
+         opening them in the default application for the document
+         type.
+
+       * Cutsom Reports can now be saved without renaming the report,
+         and modifications can overwrite an existing report.
+
+       * The import assistant now finishes much more quickly after
+         assigning contra-accounts.
+
+       * GnuCash now requires Gtk+-2.24.0 and GLib-2.26.0. Most of the
+         dependencies on obsolete libraries have been removed; only
+         libgnomecanvas remains. Unfortunately the effort to rewrite
+         the register code to use GtkTreeModel wasn't completed in
+         time, so GnuCash is not on the cusp of converting to Gtk3.
+
+       * The Business Module has been substantially revamped,
+         including support for Credit Notes and import of customers
+         and vendors from a CSV file.
+
+       * The Num field in the register display is now optionally
+         per-split, so for example a check number can be entered for
+         the checking account split and an invoice number for the
+         expense account split.
+
+       * GnuCash can now open locked books read-only so that more than
+         one user can view a file. GnuCash still does not support
+         multiple simultaneous writers.
+
+       * By agreement of all authors, GnuCash is now licensed under
+         the GNU General Public License Version 2 or later rather than
+         simply Version 2. This allows derivative works to be licensed
+         under the GPL Version 3 if the author of such a work so
+         desires.
+
+       * Fixed more than 500 bugs.
+
+       For those keeping score, the following changes have occurred
+       since 2.5.10:
+
+       Bug Fixes:
+
+       Bug 157247 - Asset account's "total" value should use most
+                    recent transaction prices
+       Bug 710823 - libofx can supply broken UTF-8 for account id
+       Bug 710824 - GnuCash should sanitise UTF-8 before serialising files
+                    to avoid writing broken unparseable XML.
+       Bug 720555 - General Ledger - Can't Enter Transaction Amounts
+       Bug 720556 - The Tip of the Day preference isn't getting saved
+       Bug 720646 - New Book Tabs on Windows
+
+       Other Changes:
+
+       * Don't create a second account hierarchy page when cancelling
+         the Hierarchy Assistant or when using Actions->New Account
+         Hierarchy on an already open book.
+
+       * Reset Warnings dialog: show translated warnings
+
+       * The locale-names for Help and the Tutorial and Concepts Guide
+         have been renamed to language-only so that, for example,
+         someone using the Swiss-German locale will be shown help in
+         German instead of English.
+
+      Translations Updated: British, Dutch, French, Italian, Lithuanian.
+
 2.5.10 - 15 December 2013
          This is the eleventh and final release in the UNSTABLE 2.5 series.
 	 It is the second beta release. Barring any surprises, we will release
