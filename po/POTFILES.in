@@ -72,6 +72,7 @@ src/backend/xml/gnc-schedxaction-xml-v2.c
 src/backend/xml/gnc-tax-table-xml-v2.c
 src/backend/xml/gnc-transaction-xml-v2.c
 src/backend/xml/gnc-vendor-xml-v2.c
+src/backend/xml/gnc-xml-helper.c
 src/backend/xml/io-example-account.c
 src/backend/xml/io-gncxml-gen.c
 src/backend/xml/io-gncxml-v1.c
@@ -460,6 +461,8 @@ src/plugins/customer_import/dialog-customer-import-gui.c
 src/plugins/customer_import/gnc-plugin-customer_import.c
 src/plugins/customer_import/gtkbuilder/dialog-customer-import-gui.glade
 src/plugins/customer_import/libgncmod-customer_import.c
+src/plugins/example/gncmod-example.c
+src/plugins/example/gnc-plugin.example.c
 src/python/gncmod-python.c
 src/register/ledger-core/gnc-ledger-display2.c
 src/register/ledger-core/gnc-ledger-display.c
