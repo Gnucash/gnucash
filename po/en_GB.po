@@ -4,21 +4,21 @@
 #
 # Nigel Titley <nigel@titley.com>, 2002, 2003, 2004, 2006, 2007.
 # Neil Williams <linux@codehelp.co.uk>, 2006.
-# Mike Evans <mikee@saxicola.idps.co.uk>, 2010.
+# Mike Evans <mikee@saxicola.idps.co.uk>, 2010, 2013.
 msgid ""
 msgstr ""
 "Project-Id-Version: en_GB\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-07 12:19+0200\n"
-"PO-Revision-Date: 2013-05-05 21:51+0200\n"
-"Last-Translator: Mike Evans <mikee@saxicola.idps.co.uk>\n"
+"PO-Revision-Date: 2013-12-28 14:17+0000\n"
+"Last-Translator: \n"
 "Language-Team: British English <kde-i18n-doc@kde.org>\n"
-"Language: \n"
+"Language: en_GB\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms:  nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 1.0\n"
+"X-Generator: Lokalize 1.5\n"
 
 #: ../src/app-utils/gnc-exp-parser.c:601
 msgid "Illegal variable in expression."
@@ -380,6 +380,8 @@ msgid ""
 "Error: could not initialize graphical user interface and option add-price-"
 "quotes was not set."
 msgstr ""
+"Error: could not initialise graphical user interface and option add-price-"
+"quotes was not set."
 
 #: ../src/business/business-gnome/business-gnome-utils.c:73
 #: ../src/business/business-gnome/business-gnome-utils.c:260
@@ -2010,7 +2012,7 @@ msgstr "Listing"
 
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:206
 msgid "Show vendor aging overview for all vendors"
-msgstr ""
+msgstr "Show vendor ageing overview for all vendors"
 
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:210
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:281
@@ -2021,7 +2023,7 @@ msgstr "Customer: "
 
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:211
 msgid "Show customer aging overview for all customers"
-msgstr ""
+msgstr "Show customer ageing overview for all customers"
 
 #. src/report/business-reports/owner-report.scm
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:215
@@ -7079,9 +7081,8 @@ msgid "Bottom"
 msgstr ""
 
 #: ../src/gnome/gtkbuilder/dialog-print-check.glade.h:4
-#, fuzzy
 msgid "Centimeters"
-msgstr "Centre"
+msgstr "Centimetres"
 
 #: ../src/gnome/gtkbuilder/dialog-print-check.glade.h:5
 msgid "Check _format:"
@@ -7137,7 +7138,7 @@ msgstr ""
 
 #: ../src/gnome/gtkbuilder/dialog-print-check.glade.h:18
 msgid "Millimeters"
-msgstr ""
+msgstr "Millimetres"
 
 #: ../src/gnome/gtkbuilder/dialog-print-check.glade.h:20
 msgid "Pa_yee:"
@@ -8522,12 +8523,16 @@ msgid ""
 "If active, the background color of the Account Name column on the Accounts "
 "page is displayed as the account color."
 msgstr ""
+"If active, the background color of the Account Name column on the Accounts "
+"page is displayed as the account colour."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:39
 msgid ""
 "If active, the background color of the register tabs will be displayed in "
 "the account color."
 msgstr ""
+"If active, the background colour of the register tabs will be displayed in "
+"the account colour."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:40
 msgid ""
@@ -8917,11 +8922,11 @@ msgstr "Use formal account labels"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:94
 msgid "Use the account color as background"
-msgstr ""
+msgstr "Use the account colour as background"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:95
 msgid "Use the account color as background on tabs"
-msgstr ""
+msgstr "Use the account colour as background on tabs"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:96
 msgid ""
@@ -11534,7 +11539,7 @@ msgstr "Rebate"
 #: ../src/gnome-utils/gnc-tree-model-split-reg.c:2616
 #: ../src/register/ledger-core/split-register.c:2415
 msgid "Paycheck"
-msgstr ""
+msgstr "Paycheque"
 
 #. src/report/business-reports/easy-invoice.scm
 #. src/report/business-reports/fancy-invoice.scm
@@ -12456,7 +12461,7 @@ msgstr "Account Type"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-account.glade.h:17
 msgid "Account _Color:"
-msgstr ""
+msgstr "Account _Colour:"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-account.glade.h:18
 msgid "Account _name:"
@@ -16023,6 +16028,16 @@ msgid ""
 "\n"
 "Click on 'Forward' to proceed or 'Cancel' to Abort Import.\n"
 msgstr ""
+"\n"
+"This assistant will help you import Accounts from a file.\n"
+"\n"
+"The file must be in the same format as that exported as this is a fixed "
+"format import. If the account is missing, based on the full account name, it "
+"will be added as long as the security / currency specified exists. If the "
+"account exists, then four fields will be updated. These are code, "
+"description, notes and colour.\n"
+"\n"
+"Click on 'Forward' to proceed or 'Cancel' to Abort Import.\n"
 
 #: ../src/import-export/csv-import/assistant-csv-account-import.glade.h:11
 #, fuzzy
@@ -16219,6 +16234,21 @@ msgid ""
 "\n"
 "More infomation can be displayed by using the help button."
 msgstr ""
+"On the following page you will be able to associate each transaction to a "
+"category.\n"
+"\n"
+"If this is the first time importing, you will find that all lines may need "
+"to be associated. On subsequent imports, the importer will try to associate "
+"the transactions based on previous imports.\n"
+"\n"
+"If this is your initial import into a new file, you will first see a dialog "
+"for setting book options, since these can affect how imported data are "
+"converted to GnuCash transactions. If this is an existing file, the dialog "
+"will not be shown.\n"
+"\n"
+"The confidence of a correct association is displayed as a coloured bar.\n"
+"\n"
+"More infomation can be displayed by using the help button."
 
 #: ../src/import-export/csv-import/assistant-csv-trans-import.glade.h:28
 msgid "Preview Settings"
@@ -17997,11 +18027,14 @@ msgid ""
 "Enter a reference, such as a check number , common to all entry lines "
 "(splits)"
 msgstr ""
+"Enter a reference, such as a cheque number , common to all entry lines "
+"(splits)"
 
 #: ../src/register/ledger-core/split-register-model.c:994
 msgid ""
 "Enter a reference, such as a check number , unique to each entry line (split)"
 msgstr ""
+"Enter a reference, such as a cheque number , unique to each entry line (split)"
 
 #: ../src/register/ledger-core/split-register-model.c:1015
 #, fuzzy
@@ -19176,7 +19209,7 @@ msgstr ""
 #. src/import-export/qif-import/qif-file.scm
 #: ../intl-scm/guile-strings.c:410
 msgid "Unrecognized or inconsistent format."
-msgstr ""
+msgstr "Unrecognised or inconsistent format."
 
 #. src/import-export/qif-import/qif-file.scm
 #: ../intl-scm/guile-strings.c:412
@@ -19203,7 +19236,7 @@ msgstr "Finding duplicate transactions..."
 #: ../intl-scm/guile-strings.c:420
 #, c-format
 msgid "Unrecognized account type '%s'. Defaulting to Bank."
-msgstr ""
+msgstr "Unrecognised account type '%s'. Defaulting to Bank."
 
 #. src/import-export/qif-import/qif-parse.scm
 #: ../intl-scm/guile-strings.c:422
@@ -19215,7 +19248,7 @@ msgstr "Unrecognised action '%s'."
 #: ../intl-scm/guile-strings.c:424
 #, c-format
 msgid "Unrecognized status '%s'. Defaulting to uncleared."
-msgstr ""
+msgstr "Unrecognised status '%s'. Defaulting to uncleared."
 
 #. src/import-export/qif-import/qif-to-gnc.scm
 #: ../intl-scm/guile-strings.c:426
@@ -20126,8 +20159,7 @@ msgstr "Period from %s to %s"
 #: ../intl-scm/guile-strings.c:750 ../intl-scm/guile-strings.c:1458
 #, c-format
 msgid "No valid %s selected. Click on the Options button to select a company."
-msgstr ""
-"No valid %s selected. Click on the Options button to select a company."
+msgstr "No valid %s selected. Click on the Options button to select a company."
 
 #. src/report/business-reports/customer-summary.scm
 #: ../intl-scm/guile-strings.c:752
@@ -20999,12 +21031,12 @@ msgstr ""
 #. src/report/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:1694
 msgid "table-header-border-color"
-msgstr ""
+msgstr "table-header-border-colour"
 
 #. src/report/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:1696
 msgid "table-cell-border-color"
-msgstr ""
+msgstr "table-cell-border-colour"
 
 #. src/report/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:1698 ../intl-scm/guile-strings.c:1818
@@ -21741,12 +21773,12 @@ msgstr ""
 #. src/report/report-system/html-fonts.scm
 #: ../intl-scm/guile-strings.c:2098
 msgid "Centered label cell"
-msgstr ""
+msgstr "Centered label cell"
 
 #. src/report/report-system/html-fonts.scm
 #: ../intl-scm/guile-strings.c:2100
 msgid "Font info for centered label cells"
-msgstr ""
+msgstr "Font info for centred label cells"
 
 #. src/report/report-system/html-style-sheet.scm
 #: ../intl-scm/guile-strings.c:2102
@@ -24887,9 +24919,8 @@ msgstr "Sort by account transferred from/to's code"
 
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:4572
-#, fuzzy
 msgid "Sort by check number/action"
-msgstr "Sort by number"
+msgstr "Sort by cheque number/action"
 
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:4576
@@ -25737,7 +25768,7 @@ msgstr "Enable hyperlinks in reports."
 #. src/report/stylesheets/stylesheet-plain.scm
 #: ../intl-scm/guile-strings.c:5632
 msgid "Background color for alternate lines."
-msgstr ""
+msgstr "Background colour for alternate lines."
 
 #. src/report/stylesheets/stylesheet-plain.scm
 #: ../intl-scm/guile-strings.c:5652
