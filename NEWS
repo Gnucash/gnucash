@@ -1,5 +1,46 @@
 Version history:
 ------- -------
+ 2.4.14  29 December 2013
+       The GnuCash Development team is pleased to announce GnuCash 2.4.14, the final bug-fix release of the STABLE 2.4 series.
+
+       The following changes have occurred since the last release.
+       Bug Fixes:
+
+       * Ensure that all KVP changes are properly marked dirty and committed.
+       * Prevent gnc-numeric overflow in advanced portfolio report
+       * Work around a bug in guile 1.8. It escapes spaces in symbols
+         when printed to a string, but can't convert that string back
+         properly in a symbol
+       Bug 584869 - net change line in general journal report broken
+       Bug 589865 - In the report "Budget flow" period it doesn't work
+           ok change the report head line to show the period date for
+           (- period 1). Author : Carsten Rinke
+       Bug 627575 - Stylesheet names with non-alphanumeric characters
+       	   and saved-reports -- addendum
+       Bug 632362 - Unable to create "reversing transaction" again
+       	   after it is removed
+       Bug 632588 - Scrub doesn't fix missing currency
+       Bug 644044 - Lots: SQL backend loses link to Gain/Loss Txn
+       Bug 653594 related to check printing.
+       Bug 674862 - 2038 bug in libdbi
+       Bug 684670 - Interest amount calculation is wrong in Sqlite3 format
+       Bug 699686 - Startup dialog windows should be top level windows
+           Author: Simon Arlott
+       Bug 701670 - Command-V in reconcile window pastes data in register
+       Bug 704183 - ofx file import tries to match online_id against
+       	   ACCTID[space]ACCTKEY even when ACCTKEY is empty
+       Bug 705123 - qofbookmerge.c: bad if statement
+       Bug 710055 - advanced portfolio report counts capital gains
+       	   split as dividend
+       Bug 710311 - Missing ChangeLogs
+       Bug 711317 - Indian Rupee Symbol appears as "?" marks
+       Bug 712528 - whichDecompress zipped XML files ourself instead
+       	   of letting libxml2 do it. As of version 2.9.1 it has a bug that
+       	   causes it to fail to decompress certain files.
+
+       Translation Updates: Danish
+       New Translation: Arabic
+
  2.4.13  19 Apr 2013
        2.4.13 is a bugfix release. Please see the Changelog for details
  2.4.12  30 Mar 2013

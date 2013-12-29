@@ -1,3 +1,388 @@
+2013-12-28 20:50  jralls
+
+	* [r23645] configure.ac, po/POTFILES.in: Add
+	  src/libqof/qof/qof-string-cache.c to POTFILES.in
+
+2013-12-28 20:48  jralls
+
+	* [r23644] doc/Makefile.am,
+	  src/optional/python-bindings/tests/Makefile.am: Fix some minor
+	  distcheck breaks
+
+2013-12-27 18:59  gjanssens
+
+	* [r23635] src/gnome/gnucash.appdata.xml: [23634]Update gnome
+	  appdata file to pass validity check Not a literal backport: one
+	  screenshot has been changed because the new charts are not
+	  available on 2.4
+
+2013-12-26 18:00  fell
+
+	* [r23626] packaging/win32/install-impl.sh: fix of [23625]: BP of
+	  [22838] was incomplete
+
+2013-12-26 17:31  fell
+
+	* [r23625] packaging/win32/install-impl.sh: [22838], [23570],
+	  [23573]: Bug 635240 RFE: Rename translations in gnucash-docs
+	  from <LANG>_<region> to <LANG> Backport changes to windows build
+	  script 22838: Temporarly disable ja guide html help ... 23570:
+	  Change guide and help translation directories To match
+	  gnucash-docs … 23573: there was still one "_JP" although
+	  currently commented out
+
+2013-12-26 15:51  gjanssens
+
+	* [r23624] src/report/standard-reports/advanced-portfolio.scm:
+	  [23623]Prevent gnc-numeric overflow in advanced portfolio report
+	  Patch by zz-bugzilla-9297@qwerty.co.il
+
+2013-12-12 20:54  fell
+
+	* [r23551] po/ar.po: 2.4: fill translator_credits with autor in
+	  ar.po on request by the author
+
+2013-12-11 22:38  fell
+
+	* [r23546] configure.ac, po/ar.po, po/glossary, po/glossary/ar.po:
+	  [23545] "Completion of translation into Arabic language by 55%"
+	  by abdulsalam alshilash
+
+2013-12-10 18:46  jralls
+
+	* [r23531] src/engine/Scrub.c: [r23522]Bug 632588 - Scrub doesn't
+	  fix missing currency So assign the currency from the first split
+	  (that belongs to an account.)
+
+2013-12-08 14:02  gjanssens
+
+	* [r23516] src/report/stylesheets/stylesheet-easy.scm,
+	  src/report/stylesheets/stylesheet-fancy.scm,
+	  src/report/stylesheets/stylesheet-footer.scm,
+	  src/report/stylesheets/stylesheet-plain.scm: [23513]Fix report
+	  background image loading on Windows
+	* [r23515] src/report/stylesheets/stylesheet-easy.scm,
+	  src/report/stylesheets/stylesheet-fancy.scm,
+	  src/report/stylesheets/stylesheet-footer.scm,
+	  src/report/stylesheets/stylesheet-plain.scm: Revert "Fix report
+	  background image loading on Windows" Forgot the proper backport
+	  markup... This reverts commit
+	  b55fc8cd4caf363b16c586dc346965a3b615be62.
+
+2013-12-08 13:58  gjanssens
+
+	* [r23514] src/report/stylesheets/stylesheet-easy.scm,
+	  src/report/stylesheets/stylesheet-fancy.scm,
+	  src/report/stylesheets/stylesheet-footer.scm,
+	  src/report/stylesheets/stylesheet-plain.scm: Fix report
+	  background image loading on Windows BP
+
+2013-12-07 23:30  mta
+
+	* [r23512] src/gnome/dialog-print-check.c,
+	  src/gnome/gnc-plugin-page-register.c: [23497] Fix bug 653594
+	  related to check printing. This bug has two parts. The original
+	  bug was that the wrong split is sometimes used to print the
+	  check. In the comments a second problem was mentioned: sometimes
+	  the wrong split is omitted from the split list in formats that
+	  print all the splits.
+
+2013-12-07 23:14  fell
+
+	* [r23511] src/engine/iso-4217-currencies.scm: [23510] Bug 711317
+	  - Indian Rupee Symbol appears as "?" marks update outdated INR
+	  locale symbol
+
+2013-12-07 16:10  gjanssens
+
+	* [r23508] src/app-utils/guile-util.c: [23501]Bug 627575 -
+	  Stylesheet names with non-alphanumeric characters and
+	  saved-reports -- addendum Work around a bug in guile 1.8. It
+	  escapes spaces in symbols when printed to a string, but can't
+	  convert that string back properly in a symbol
+
+2013-12-07 16:09  gjanssens
+
+	* [r23507] configure.ac, macros/gnome-guile-checks.m4: Make
+	  gnucash 2.4 buildable on a system that has both guile 1.x and
+	  guile 2 - 2.4.x won't run with guile 2, so bail out when that
+	  version is found - allow the user to manually override the guile
+	  version to use by setting environment variables GUILE and
+	  GUILE_CONFIG
+	* [r23506] configure.ac, src/app-utils/test/Makefile.am,
+	  src/app-utils/test/test-load-module,
+	  src/backend/dbi/test/Makefile.am,
+	  src/backend/sql/test/Makefile.am,
+	  src/backend/xml/test/Makefile.am,
+	  src/bin/overrides/gnucash-build-env.in,
+	  src/bin/overrides/gnucash-make-guids,
+	  src/bin/overrides/gnucash-make-guids.in,
+	  src/business/business-core/test/Makefile.am,
+	  src/core-utils/test/Makefile.am, src/engine/Makefile.am,
+	  src/engine/iso-currencies-to-c,
+	  src/engine/iso-currencies-to-c.in, src/engine/test/Makefile.am,
+	  src/engine/test/test-create-account,
+	  src/engine/test/test-scm-query-import,
+	  src/gnc-module/test/Makefile.am,
+	  src/gnc-module/test/test-gwrapped-c,
+	  src/gnc-module/test/test-load-deps,
+	  src/gnc-module/test/test-load-scm,
+	  src/gnc-module/test/test-scm-dynload,
+	  src/gnc-module/test/test-scm-init,
+	  src/gnc-module/test/test-scm-module,
+	  src/gnc-module/test/test-scm-multi, src/gnc-test-env,
+	  src/gnc-test-env.in, src/gnome-utils/test/Makefile.am,
+	  src/gnome-utils/test/test-load-module,
+	  src/import-export/qif/test/Makefile.am,
+	  src/import-export/test/Makefile.am,
+	  src/optional/python-bindings/tests/runTests.py,
+	  src/optional/python-bindings/tests/runTests.py.in,
+	  src/register/register-core/test/Makefile.am,
+	  src/register/register-gnome/test/Makefile.am,
+	  src/report/locale-specific/us/test/Makefile.am,
+	  src/report/locale-specific/us/test/test-load-module,
+	  src/report/report-gnome/test/Makefile.am,
+	  src/report/report-gnome/test/test-load-module,
+	  src/report/report-system/test/Makefile.am,
+	  src/report/report-system/test/test-load-module,
+	  src/report/standard-reports/test/Makefile.am,
+	  src/report/standard-reports/test/test-load-module,
+	  src/report/stylesheets/test/Makefile.am,
+	  src/report/stylesheets/test/test-load-module,
+	  src/report/utility-reports/test/Makefile.am,
+	  src/report/utility-reports/test/test-load-module,
+	  src/tax/us/test/Makefile.am, src/tax/us/test/test-load-module:
+	  [23392]Use guile executable as found during configure for tests
+	  and some support scripts
+
+2013-12-07 16:08  gjanssens
+
+	* [r23505] src/app-utils/gnc-sx-instance-model.c,
+	  src/engine/Split.c, src/engine/Transaction.c,
+	  src/import-export/import-match-map.c,
+	  src/import-export/import-utilities.c,
+	  src/register/ledger-core/split-register-model-save.c:
+	  [23466]Ensure that all KVP changes are properly marked dirty and
+	  committed.
+	* [r23504] src/engine/cap-gains.c: [23438]Bug 644044 - Lots: SQL
+	  backend loses link to Gain/Loss Txn Gotta edit/commit the source
+	  transaction as well as the gains txn.
+	* [r23503] src/backend/xml/io-gncxml-v2.c: [23415]Small fixes to
+	  make the Windows build work again after r23412
+
+2013-12-07 16:07  gjanssens
+
+	* [r23502] src/backend/xml/io-gncxml-gen.c,
+	  src/backend/xml/io-gncxml-gen.h, src/backend/xml/io-gncxml-v2.c,
+	  src/backend/xml/sixtp.c, src/backend/xml/sixtp.h:
+	  [23412]Decompress zipped XML files ourself instead of letting
+	  libxml2 do it. As of version 2.9.1 it has a bug that causes it
+	  to fail to decompress certain files. See
+	  https://bugzilla.gnome.org/show_bug.cgi?id=712528 for more info.
+
+2013-12-07 10:27  gjanssens
+
+	* [r23500] src/report/report-gnome/gnc-plugin-page-report.c:
+	  [23499] Bug 627575 - Stylesheet names with non-alphanumeric
+	  characters and saved-reports g_key_file_[gs]et_string parses the
+	  string to escape newlines and comments This erroneously does
+	  some escaping in the #{symbol name}# guile extended format for
+	  symbols. Since we already strip newlines and comments ourselves,
+	  we can save and store the string without any additional parsing
+	  using g_key_file_[gs]et_value.
+
+2013-11-26 16:55  gjanssens
+
+	* [r23446] src/backend/xml/gnc-backend-xml.c, src/html/gnc-html.c:
+	  [22070] Fix memory leak: Missing regfree() after regcomp(). This
+	  fix is backported because it solves this bug: Bug 681907 - Save
+	  operation is leaking seriously, eventually GnuCash uses 6.4 GB
+	  RAM
+
+2013-10-22 10:42  gjanssens
+
+	* [r23310] src/report/standard-reports/advanced-portfolio.scm:
+	  [23309] 710055 - advanced portfolio report counts capital gains
+	  split as dividend Author: Jason McCarty <jmccarty@sent.com>
+
+2013-10-16 19:33  jralls
+
+	* [r23297] Makefile.am: [23296] Bug 710311 - Missing ChangeLogs
+
+2013-09-26 02:53  jralls
+
+	* [r23198] src/gnome-utils/gnc-main-window.c: [r23197]Fix
+	  undeclared identifier from r23193
+
+2013-09-24 20:32  jralls
+
+	* [r23194] src/engine/Account.c, src/engine/SchedXaction.c,
+	  src/engine/Split.c, src/engine/Transaction.c,
+	  src/engine/gnc-commodity.c, src/engine/gnc-pricedb.c,
+	  src/engine/gncEmployee.c, src/engine/gncVendor.c,
+	  src/gnome-utils/gnc-plugin-page.c, src/libqof/qof/qofinstance.c,
+	  src/register/register-gnome/gnucash-cursor.c,
+	  src/register/register-gnome/gnucash-grid.c,
+	  src/register/register-gnome/gnucash-header.c,
+	  src/register/register-gnome/gnucash-item-edit.c: [r23192]Bug
+	  632362 - Unable to create "reversing transaction" again after it
+	  is removed From leaking references in g_object_get because both
+	  g_object_get and g_value_set_object ref the object, which is
+	  only unreffed once. Using g_value_take_object() instead prevents
+	  the double-ref.
+	* [r23193] src/gnome-utils/gnc-main-window.c: [r23191]Fix leaking
+	  Gtkosxapplication objects.
+
+2013-09-19 16:32  jralls
+
+	* [r23178] src/app-utils/test/test-sx.c,
+	  src/backend/xml/test/test-load-xml2.c,
+	  src/gnome-utils/test/test-gnc-dialog.c: Don't call g_type_init
+	  in tests if Glib is v 2.36 or later.
+	* [r23177] src/backend/dbi/gnc-backend-dbi.c,
+	  src/backend/sql/gnc-backend-sql.c: [r23174]Bug #674862 - 2038
+	  bug in libdbi Retrieve the numerical value directly from the
+	  dbi_result and use it to create the Timespec or GDate. NB: In
+	  Gnucash 2.4 there are plenty of other 2038 bugs due to reliance
+	  on the libc time functions. This has been corrected in trunk.
+
+2013-09-12 23:31  jralls
+
+	* [r23165] src/engine/SchedXaction.c: [r23164]Bug #684670 -
+	  Interest amount calculation is wrong in Sqllite3 format Yet
+	  another corner where forgetting to run a edit-commit cycle when
+	  changing state breaks database save.
+
+2013-09-09 21:58  jralls
+
+	* [r23163] src/engine/gnc-commodity.c: Revert "[22988] Support for
+	  querying Bitcoin/Litecoin prices via F::Q's MtGox module" This
+	  reverts commit r22989. See
+	  https://bugzilla.gnome.org/show_bug.cgi?id=698769#c8
+
+2013-09-03 11:06  gjanssens
+
+	* [r23154] src/gnome/Makefile.am, src/gnome/gnucash.appdata.xml:
+	  [23153] Add appdata description file to be used in Gnome's App
+	  store See http://people.freedesktop.org/~hughsient/appdata/ for
+	  more details.
+
+2013-08-27 18:46  jralls
+
+	* [r23152] configure.ac, src/libqof/qof/qofutil.c,
+	  src/libqof/qof/test/test-qof.c: Don't call g_type_init if GLib
+	  is 2.36 or later
+
+2013-08-26 17:11  jralls
+
+	* [r23151] src/bin/gnucash-bin.c: [r23150]Handle exception in
+	  set_mac_locale() When [locale objectForKey: NSLocaleCountryCode]
+	  returns nil
+
+2013-08-02 17:57  jralls
+
+	* [r23115] src/import-export/import-account-matcher.c: [r23114]Bug
+	  704183 - ofx file import tries to match online_id against
+	  ACCTID[space]ACCTKEY even when ACCTKEY is empty Alters the
+	  gnucash account matching code to search a second time if the
+	  original search fails and the account ID has a trailing space.
+	  The second search tries with the trailing space removed.
+
+2013-08-01 17:48  jralls
+
+	* [r23107] po/POTFILES.in, src/engine/test/Makefile.am,
+	  src/engine/test/test-book-merge.c, src/libqof/qof/Makefile.am,
+	  src/libqof/qof/qof.h, src/libqof/qof/qofbookmerge.c,
+	  src/libqof/qof/qofbookmerge.h: Bug #705123: qofbookmerge.c: bad
+	  if statement Remove qofbookmerge, which isn't used anywhere and
+	  which has already been removed from trunk.
+
+2013-07-03 08:16  gjanssens
+
+	* [r23089] src/gnome-utils/gnc-file.c,
+	  src/gnome-utils/gnc-gui-query.c: [23088] Bug #699686 - Startup
+	  dialog windows should be top level windows Author: Simon Arlott
+	  <bugzilla.gnome.simon@arlott.org>
+
+2013-07-02 20:25  jralls
+
+	* [r23086] src/gnome-utils/gnc-main-window.c: [r23085]Bug 701670:
+	  Command-V in reconcile window pastes data in register Disable
+	  quartz accelerators: They grab menu accelerators without regard
+	  to focus GtkWindows, breaking bindings.
+
+2013-05-20 18:40  cstim
+
+	* [r22995] po/da.po: Update Danish translation from the
+	  Translation Project (as an exception still in 2.4 branch) Note:
+	  This is hopefully the very last translation work that goes into
+	  the 2.4 branch. All translation work should now go into 2.5 i.e.
+	  trunk. See http://wiki.gnucash.org/wiki/Translation_Status
+
+2013-05-18 14:01  gjanssens
+
+	* [r22990] src/engine/gnc-commodity.c: [22988] Support for
+	  querying Bitcoin/Litecoin prices via F::Q's MtGox module Author:
+	  Sam Morris <sam@robots.org.uk>
+
+2013-05-10 19:19  gjanssens
+
+	* [r22975] src/report/standard-reports/register.scm: [22968] Bug
+	  #584869 net change line in general journal report broken Do not
+	  show any totals in the General Journal report. According to
+	  http://www.accountingtools.com/general-journal and
+	  http://accountophobia.blogspot.de/2012/06/general-journal.html
+	  it is not the idea of the General Journal to show totals but
+	  only list transactions. This patch makes use of the ledger-type?
+	  flag and suppresses the output of the Net Changes accordingly.
+	  By that, the General Journal will not show Totals, but the
+	  Account Report still does. Author: Carsten Rinke
+	  <carsten.rinke@gmx.de>
+	* [r22974] src/report/standard-reports/budget-flow.scm: [22967]
+	  Bug #589865 In the report "Budget flow" period it doesn't work
+	  ok change the report head line to show the period date for (-
+	  period 1). Author : Carsten Rinke <carsten.rinke@gmx.de>
+	* [r22973] src/report/standard-reports/budget-flow.scm: [22966]
+	  Bug #589865 In the report "Budget flow" period it doesn't work
+	  ok Author: Mikhail TSaplin <tsmisher@gmail.com>
+
+2013-05-05 19:52  cstim
+
+	* [r22951] po/en_GB.po: Minor update of en_GB translation has
+	  pointed out in bug#699687
+
+2013-04-24 09:10  cstim
+
+	* [r22930] src/import-export/import-main-matcher.c: [22929]
+	  Finally fix the maddening long waiting times after clicking "Ok"
+	  in the import matcher window. Turns out we were simply missing a
+	  suspend_gui_refresh call before actually processing the results.
+	  Sigh. (Can go into 2.4 because the bugfix is so surprisingly
+	  simple.)
+
+2013-04-20 21:04  cstim
+
+	* [r22924] packaging/win32/defaults.sh: Win32 build: Update
+	  ActivePerl binary version to 5.14.4.1405 because the old version
+	  is no longer online.
+
+2013-04-20 21:01  cstim
+
+	* [r22923] doc/README-nl.win32-bin.txt,
+	  packaging/win32/gnucash.iss.in: Bug #698238: Updated dutch
+	  translation of Windows Installer
+	* [r22922] po/nl.po: Updated Dutch translation, copied from the
+	  Translation Project.
+
+2013-04-19 20:18  cstim
+
+	* [r22918] NEWS, configure.ac: Bump version to 2.4.13 for bugfix
+	  release with fixed libofx on Windows.
+	* [r22917] ChangeLog, ChangeLog.2011, ChangeLog.2012, Makefile.am:
+	  Fix ChangeLog generation in 2.4 branch and re-generate
+	  2011/12/13 ChangeLog. Previously in r22845, trunk's ChangeLog
+	  was generated.
+
 2013-04-18 07:20  cstim
 
 	* [r22913] po/de.po: Updated German translation. For plural forms,
@@ -153,4 +538,3 @@
 	  in the `Close Book' dialog box (Tools > Close Book) to
 	  newly-written help section on book closing. Signed-off-by: Yawar
 	  Amin <yawar.amin@gmail.com>
-
