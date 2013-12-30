@@ -197,7 +197,7 @@ set_default GUILE_URL "http://ftp.gnu.org/pub/gnu/guile/guile-${GUILE_VERSION}.t
 set_default GUILE_DIR $GLOBAL_DIR\\guile
 set_default GUILE_PATCH `pwd`/guile-1.8.8.patch
 #set_default GUILE_URL "http://ftp.gnu.org/pub/gnu/guile/guile-1.6.8.tar.gz"
-set_default SLIB_URL "http://swiss.csail.mit.edu/ftpdir/scm/slib-3b3.zip"
+set_default SLIB_URL "http://swiss.csail.mit.edu/ftpdir/scm/slib-3b4.zip"
 #set_default GUILE_DIR $GLOBAL_DIR\\guile
 
 set_default OPENSSL_URL "http://www.openssl.org/source/openssl-0.9.8j.tar.gz"
