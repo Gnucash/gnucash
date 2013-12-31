@@ -187,7 +187,32 @@ set_mac_locale()
     if ([locale_str isEqualToString: @"_"])
 	locale_str = @"en_US";
 
-    setlocale(LC_ALL, [locale_str UTF8String]);
+    if (!setlocale(LC_ALL, [locale_str UTF8String]))
+    {
+	NSArray *all_locales = [NSLocale availableLocaleIdentifiers];
+	NSEnumerator *locale_iter = [all_locales objectEnumerator];
+	NSString *this_locale, *new_locale = nil;
+	NSString *lang = [locale objectForKey: NSLocaleLanguageCode];
+	PWARN("Apple Locale is set to a value %s not supported"
+	      " by the C runtime", [locale_str UTF8String]);
+	while ((this_locale = (NSString*)[locale_iter nextObject]))
+	    if ([[[NSLocale componentsFromLocaleIdentifier: this_locale]
+		  objectForKey: NSLocaleLanguageCode]
+		 isEqualToString: lang] &&
+		setlocale (LC_ALL, [this_locale UTF8String]))
+	    {
+		new_locale = this_locale;
+		break;
+	    }
+	if (new_locale)
+	    locale_str = new_locale;
+	else
+	{
+	    locale_str = @"en_US";
+	    setlocale(LC_ALL, [locale_str UTF8String]);
+	}
+	PWARN("Using %s instead.", [locale_str UTF8String]);
+    }
     if (g_getenv("LANG") == NULL)
 	g_setenv("LANG", [locale_str UTF8String], TRUE);
 /* If the currency doesn't match the base locale, we need to find a locale that does match, because setlocale won't know what to do with just a currency identifier. */
@@ -199,12 +224,18 @@ set_mac_locale()
 	NSString *currency = [locale objectForKey: NSLocaleCurrencyCode];
 	NSString *money_locale = nil;
 	while ((this_locale = (NSString*)[locale_iter nextObject]))
-	    if ([[[[NSLocale alloc] initWithLocaleIdentifier: this_locale]
-		   objectForKey: NSLocaleCurrencyCode]
-		 isEqualToString: currency]) {
+	{
+	    NSLocale *templocale = [[NSLocale alloc]
+				    initWithLocaleIdentifier: this_locale];
+	    if ([[templocale objectForKey: NSLocaleCurrencyCode]
+		 isEqualToString: currency])
+	    {
 		money_locale = this_locale;
+		[templocale release];
 		break;
 	    }
+	    [templocale release];
+	}
 	if (money_locale)
 	    setlocale(LC_MONETARY, [money_locale UTF8String]);
     }
