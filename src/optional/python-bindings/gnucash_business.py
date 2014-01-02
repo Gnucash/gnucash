@@ -351,12 +351,10 @@ entry_dict = {
                  'GetBillPrice': GncNumeric,
                  'GetBillTaxTable': TaxTable,
                  'Copy': Entry,
-                 'ReturnValue': GncNumeric,
-                 'ReturnDiscountValue': GncNumeric,
-                 'ReturnTaxValue': GncNumeric,
                  'GetInvoice': Invoice,
                  'GetBill': Invoice
              }
+methods_return_instance(Entry, entry_dict)             
 Entry.decorate_functions(
     decorate_to_return_instance_instead_of_owner,
     'GetBillTo' )
