@@ -200,7 +200,7 @@ set_default GUILE_PATCH `pwd`/guile-1.8.8.patch
 set_default OPENSSL_URL "http://www.openssl.org/source/openssl-0.9.8j.tar.gz"
 set_default OPENSSL_DIR $GLOBAL_DIR\\openssl
 
-GNUTLS_VERSION="2.8.6"
+GNUTLS_VERSION="2.10.1"
 set_default GNUTLS_URL "http://josefsson.org/gnutls4win/gnutls-${GNUTLS_VERSION}.zip"
 set_default GNUTLS_DIR $GLOBAL_DIR\\gnutls
 
@@ -349,8 +349,8 @@ set_default AQBANKING5 yes
 # needed.
 
 if [ "$AQBANKING5" = "yes" ]; then
-    GWENHYWFAR_VERSION="4.8.0beta"
-    set_default GWENHYWFAR_URL "http://www2.aquamaniac.de/sites/download/download.php?package=01&release=71&file=01&dummy=gwenhywfar-${GWENHYWFAR_VERSION}.tar.gz"
+    GWENHYWFAR_VERSION="4.9.0beta"
+    set_default GWENHYWFAR_URL "http://www2.aquamaniac.de/sites/download/download.php?package=01&release=72&file=01&dummy=gwenhywfar-${GWENHYWFAR_VERSION}.tar.gz"
 else
     GWENHYWFAR_VERSION="3.11.3"
     set_default GWENHYWFAR_URL "http://www2.aquamaniac.de/sites/download/download.php?package=01&release=31&file=01&dummy=gwenhywfar-${GWENHYWFAR_VERSION}.tar.gz"
@@ -358,13 +358,13 @@ else
 fi
 set_default GWENHYWFAR_DIR $GLOBAL_DIR\\gwenhywfar
 
-KTOBLZCHECK_VERSION="1.43"
+KTOBLZCHECK_VERSION="1.44"
 set_default KTOBLZCHECK_URL "$SF_MIRROR/ktoblzcheck/ktoblzcheck-${KTOBLZCHECK_VERSION}.tar.gz"
 # ktoblzcheck is being installed into GWENHYWFAR_DIR
 
 if [ "$AQBANKING5" = "yes" ]; then
-    AQBANKING_VERSION="5.1.0beta"
-    set_default AQBANKING_URL "http://www2.aquamaniac.de/sites/download/download.php?package=03&release=103&file=01&dummy=aqbanking-${AQBANKING_VERSION}.tar.gz"
+    AQBANKING_VERSION="5.2.0beta"
+    set_default AQBANKING_URL "http://www2.aquamaniac.de/sites/download/download.php?package=03&release=104&file=01&dummy=aqbanking-${AQBANKING_VERSION}.tar.gz"
     set_default AQBANKING_WITH_QT no
 else
     AQBANKING_VERSION="4.2.4"
