@@ -671,6 +671,19 @@ gnc_ab_trans_dialog_run_until_ok(GncABTransDialog *td)
     gtk_widget_set_sensitive(td->purpose_cont_entry, max_purpose_lines > 1);
     gtk_widget_set_sensitive(td->purpose_cont2_entry, max_purpose_lines > 2);
     gtk_widget_set_sensitive(td->purpose_cont3_entry, max_purpose_lines > 3);
+    if (joblimits)
+    {
+        gtk_entry_set_max_length(GTK_ENTRY(td->purpose_entry),
+                                 AB_TransactionLimits_GetMaxLenPurpose(joblimits));
+        gtk_entry_set_max_length(GTK_ENTRY(td->purpose_cont_entry),
+                                 AB_TransactionLimits_GetMaxLenPurpose(joblimits));
+        gtk_entry_set_max_length(GTK_ENTRY(td->purpose_cont2_entry),
+                                 AB_TransactionLimits_GetMaxLenPurpose(joblimits));
+        gtk_entry_set_max_length(GTK_ENTRY(td->purpose_cont3_entry),
+                                 AB_TransactionLimits_GetMaxLenPurpose(joblimits));
+        gtk_entry_set_max_length(GTK_ENTRY(td->recp_name_entry),
+                                 AB_TransactionLimits_GetMaxLenRemoteName(joblimits));
+    }
 
     /* Show the dialog */
     gtk_widget_show(td->dialog);
