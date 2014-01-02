@@ -49,6 +49,11 @@
 #include "gnc-amount-edit.h"
 #include "gnc-ui.h"
 
+#if AQBANKING_VERSION_INT >= 50200 && (AQBANKING_VERSION_BUILD > 0)
+/** Defined for aqbanking > 5.2.0 */
+# define AQBANKING_VERSION_GREATER_5_2_0
+#endif
+
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = G_LOG_DOMAIN;
 
@@ -665,7 +670,13 @@ gnc_ab_trans_dialog_run_until_ok(GncABTransDialog *td)
     }
 
     /* Activate as many purpose entries as available for the job */
-    joblimits = AB_JobSingleTransfer_GetFieldLimits(job);
+    joblimits =
+#ifdef AQBANKING_VERSION_GREATER_5_2_0
+            AB_Job_GetFieldLimits
+#else
+            AB_JobSingleTransfer_GetFieldLimits
+#endif
+            (job);
     max_purpose_lines = joblimits ?
                         AB_TransactionLimits_GetMaxLinesPurpose(joblimits) : 2;
     gtk_widget_set_sensitive(td->purpose_cont_entry, max_purpose_lines > 1);
@@ -859,6 +870,9 @@ gnc_ab_get_trans_job(AB_ACCOUNT *ab_acc, const AB_TRANSACTION *ab_trans,
     job = gnc_ab_trans_dialog_get_available_empty_job(ab_acc, trans_type);
     if (job)
     {
+#ifdef AQBANKING_VERSION_GREATER_5_2_0
+        AB_Job_SetTransaction(job, ab_trans);
+#else
         switch (trans_type)
         {
         case SINGLE_DEBITNOTE:
@@ -878,6 +892,7 @@ gnc_ab_get_trans_job(AB_ACCOUNT *ab_acc, const AB_TRANSACTION *ab_trans,
             AB_JobSingleTransfer_SetTransaction(job, ab_trans);
             break;
         };
+#endif
     }
     return job;
 }
