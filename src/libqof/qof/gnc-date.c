@@ -118,27 +118,53 @@ gnc_g_time_zone_new_local (void)
 #endif
 }
 
+#ifdef G_OS_WIN32
+static gboolean
+win32_in_dst (GDateTime *date, TIME_ZONE_INFORMATION *tzinfo)
+{
+    guint year, month, day;
+    SYSTEMTIME *std, *dlt;
+
+    if (tzinfo == NULL || tzinfo->StandardDate.wMonth == 0)
+      return FALSE;
+
+    year = g_date_time_get_year (date);
+    month = g_date_time_get_month (date);
+    day = g_date_time_get_day_of_month (date);
+
+    std = &(tzinfo->StandardDate);
+    dlt = &(tzinfo->DaylightDate);
+
+    if (std->wMonth < dlt->wMonth)
+    {
+         if ((month > dlt->wMonth || month < std->wMonth) ||
+	     (month == dlt->wMonth && day > dlt->wDay) ||
+	     (month == std->wMonth && day < std->wDay))
+	     return TRUE;
+    }
+    else
+    {
+         if ((month > dlt->wMonth && month < std->wMonth) ||
+	     (month == dlt->wMonth && day > dlt->wDay) ||
+	     (month == std->wMonth && day < std->wDay))
+	     return TRUE;
+    }
+    return FALSE;
+}
+#endif
+
 static GTimeZone*
 gnc_g_time_zone_adjust_for_dst (GTimeZone* tz, GDateTime *date)
 {
 #ifdef G_OS_WIN32
     TIME_ZONE_INFORMATION tzinfo;
     gint64 dst = GetTimeZoneInformation (&tzinfo);
-    guint year = g_date_time_get_year (date);
-    guint month = g_date_time_get_month (date);
-    guint day = g_date_time_get_day_of_month (date);
     gint bias, hours, minutes;
     gchar *tzstr;
     g_return_val_if_fail (date != NULL, NULL);
-    if (dst > 0 && tzinfo.StandardDate.wMonth > 0
-	&& ((month > tzinfo.DaylightDate.wMonth
-	     && month < tzinfo.StandardDate.wMonth)
-	    || (month == tzinfo.DaylightDate.wMonth
-		&& day >= tzinfo.DaylightDate.wDay)
-	    || (month == tzinfo.StandardDate.wMonth
-		&& day < tzinfo.StandardDate.wDay)))
+    if (dst > 0 && win32_in_dst (date, &tzinfo))
     {
-	g_time_zone_unref (tz);
+        g_time_zone_unref (tz);
 	bias = tzinfo.Bias + tzinfo.DaylightBias;
 	hours = -bias / 60; // 60 minutes per hour
 	minutes = (bias < 0 ? -bias : bias) % 60;
