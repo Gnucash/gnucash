@@ -550,10 +550,8 @@
                                   debit-value "grand-total" #t)
                 (add-subtotal-row (_ "Total Value Credits") leader table used-columns
                                   credit-value "grand-total" #t)))
-          (if ledger-type?
-            (add-subtotal-row (_ "Net Change") leader table used-columns
+          (add-subtotal-row (_ "Net Change") leader table used-columns
 			    total-collector "grand-total" #f)
-          )
           (add-subtotal-row (_ "Value Change") leader table used-columns
                             total-value "grand-total" #t))
 
