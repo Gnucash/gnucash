@@ -1,7 +1,7 @@
 ############################################################
-          GnuCash 2.4.x README file.
+          GnuCash 2.6.x README file.
 
-The last known stable series is the 2.4.0 series.
+The last known stable series is the 2.6.0 series.
 ------------------------------------------------------------
 
 ##################
@@ -123,10 +123,7 @@ Home Page:
 http://www.gnucash.org/
 
 Precompiled binaries:
-http://www.gnucash.org/pub/gnucash/
-
-Development versions:
-http://www.gnucash.org/en/hacking.phtml
+http://www.gnucash.org/download
 
 
 
@@ -166,7 +163,7 @@ You can also run gnucash --help for the command line options.
 You can start GnuCash at the command-line, with "gnucash" or "gnucash
 <filename>", where <filename> is a GnuCash account file.  Sample
 accounts can be found in the "doc/examples" subdirectory.  *.gnucash
-files are GnuCash accounts that can opened with the "Open File" menu entry.
+files are GnuCash accounts that can be opened with the "Open File" menu entry.
 *.qif files are Quicken Import Format files that can be opened with the
 "Import QIF" menu entry.
 
@@ -299,7 +296,7 @@ details.
 Supported Platforms
 -------------------
 
-GnuCash 2.0.x is known to work with the following operating systems:
+GnuCash 2.x, is known to work with the following operating systems:
 
 GNU/Linux             -- x86, Sparc, PPC
 Solaris		      -- Sparc
@@ -326,16 +323,9 @@ provided the libraries and toolchain are available.
 Additional Download Sites
 -------------------------
 
-You can also download GnuCash from:
-
-  - http://download.sourceforge.net/gnucash
-
-You can download GnuCash Solaris packages from:
-
-  - http://www.unixrealm.com/downloads/
+You can also download GnuCash from http://download.sourceforge.net/gnucash
 
 You can get GnuCash Mandrake packages on Mandriva Cooker sites.
-
 
 Precompiled binaries & pre-requisite packages can be found at the
 following sites. The GnuCash versions here are all *extremely*
@@ -366,7 +356,7 @@ Getting Source with Subversion
 ------------------------------
 A read-only version of the svn tree is available on the net at:
 
-  http://svn.gnucash.org/repo/gnucash/
+  http://svn.gnucash.org/trac/browser/
 
 To get what used to be CVS HEAD (and now includes what used to be 
 gnucash-gnome2-dev), you will need to get the svn TRUNK:
@@ -378,10 +368,10 @@ directory to be called, and is optional. If you leave it out,
 you'll have a directory called "trunk" created containing all the
 source code.
 
-If you want the latest 2.0.x code, you'd need to pull from the 
-2.0 branch, as follows:
+If you want the latest 2.6.x code, you'd need to pull from the 
+2.6 branch, as follows:
 
-  svn checkout http://svn.gnucash.org/repo/gnucash/branches/2.0 gnucash-2.0
+  svn checkout http://svn.gnucash.org/repo/gnucash/branches/2.6 gnucash-2.6
 
 
 ##################
