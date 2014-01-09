@@ -31,93 +31,94 @@ balanced books.
 
 Features include:
 
-  - An easy-to-use interface.  If you can use the
-    register in the back of your checkbook, you 
-    can use GnuCash.  Type directly into the register,
-    tab between fields, and use quick-fill to
-    automatically complete the transaction.
-    The interface is customizable from within the 
-    application itself (no editing config files :) )
-  - Scheduled Transactions: GnuCash now has the ability to 
-    automatically create and enter transactions, remind when
-    a transaction is due, give a choice of entering a transaction
-    or postponing it and remove an automated transaction after a
-    certain period.
-  - Mortgage & Loan Repayment Druid: Used to setup a variable
+  - An easy-to-use interface.  If you can use the register in the back
+    of your checkbook, you can use GnuCash.  Type directly into the
+    register, tab between fields, and use quick-fill to automatically
+    complete the transaction.
+
+  - Scheduled Transactions: GnuCash has the ability to automatically
+    create and enter transactions, remind when a transaction is due,
+    give a choice of entering a transaction or postponing it and
+    remove an automated transaction after a certain period.
+
+  - Mortgage & Loan Repayment Assistant: Used to setup a variable
     payment loan scheduled transaction.
-  - Small Business Accounting Features: GnuCash now can be used
+
+  - Small Business Accounting Features: GnuCash can be used
     for Customer and Vendor tracking, Invoicing and Bill Payment,
     and using different Tax and Billing	Terms in a small business.
-  - OFX Import: GnuCash is the first free software application 
-    to support the Open Financial Exchange protocol that many 
-    banks and financial services are moving to use. The 
-    development of OFX and HBCI support has also resulted in
-    an improved transaction matching system that more accurately
-    picks duplicate transactions.
-  - HBCI Support: GnuCash is the first free software application
-    to support the German Home Banking Computer Interface protocol
-    which includes statement download, initiate bank transfers 
-    and direct debits.
-  - Quicken File Import: Import Quicken QIF style files.
-    QIF files are automatically merged to eliminate 
-    duplicate transactions.
-  - Reconcile window  with running reconciled 
-    and cleared balances makes reconciliation easy.
-  - Stock/Mutual Fund Portfolios:  Track stocks
-    individually (one per account) or in portfolio
-    of accounts (a group of accounts that can be 
-    displayed together).  
-  - Get Stock & Mutual Fund quotes from various web sites, 
-    update portfolio automatically (more funds being added 
-    regularly).
-  - Reports: Display Balance Sheet, Profit&Loss, Portfolio 
-    Valuation, Transaction Reports, or account balance tracking,
-    or export them as HTML.  You can write your own custom
-    report if you know a little Scheme.  Reports can now be performed
-    over an accounting period!
-  - Multiple Currencies & Currency Trading: Multiple 
-    currencies are supported and can be bought and
-    sold (traded).  Currency movements between accounts
-    are fully balanced when double-entry is enabled.
+
+  - OFX Import: GnuCash can import downloaded OFX/QFX files and
+    retrieve account info and transactions via OFXDirect. The results
+    are passed through a transaction matching system that accurately
+    picks duplicate transactions and assigns contra accounts based on
+    similar previously-imported transactions.
+
+  - HBCI Support: GnuCash also supports the German Home Banking
+    Computer Interface protocol which includes statement download,
+    initiate bank transfers and direct debits.
+
+  - Quicken File Import: Import Quicken QIF style files.  QIF files
+    are automatically merged to eliminate duplicate transactions.
+
+  - Reconcile window with running reconciled and cleared balances
+    makes reconciliation easy.
+
+  - Stock/Mutual Fund Portfolios: Track stocks individually (one per
+    account) or in portfolio of accounts (a group of accounts that can
+    be displayed together).
+
+  - Get Stock & Mutual Fund quotes from various web sites, update
+    portfolio automatically (more funds being added regularly).
+
+  - Reports: Display Balance Sheet, Profit&Loss, Portfolio Valuation,
+    Transaction Reports, or account balance tracking, or export them
+    as HTML.  You can write your own custom report if you know a
+    little Scheme.  Reports can be run over any arbitrary period.
+
+  - Multiple Currencies & Currency Trading: Multiple currencies are
+    supported and can be bought and sold (traded).  Currency movements
+    between accounts are fully balanced when double-entry is enabled.
+
   - New Multi-Currency Transaction Handling: GnuCash no longer
-    requires separate currency exchange accounts to handle 
-    multiple currency transfers.
-  - Chart of Accounts: A master account can have a hierarchy
-    of detail accounts underneath it.  This allows similar
-    account types (e.g. Cash, Bank, Stock) to be grouped 
-    into one master account (e.g. Assets).
-  - Split Transactions: A single transaction can be split
-    into several pieces to record taxes, fees, and
-    other compound entries.
-  - Double Entry: When enabled, every transaction must 
-    debit one account and credit another by an equal amount.
-    This ensures that the "books balance": that the 
-    difference between income and outflow exactly equals
-    the sum of all assets, be they bank, cash, stock or other.
-  - Income/Expense Account Types (Categories):  
-    These serve not only to categorize your cash flow, 
-    but when used properly with the double-entry feature,
-    these can provide an accurate Profit&Loss statement.
-  - General Ledger: Multiple accounts can be displayed 
-    in one register window at the same time.  This can
-    ease the trouble of tracking down typing/entry errors.
-    It also provides a convenient way of viewing a
-    portfolio of many stocks, by showing all transactions
-    in that portfolio.
+    requires separate currency exchange accounts to handle multiple
+    currency transfers.
+
+  - Chart of Accounts: A master account can have a hierarchy of detail
+    accounts underneath it.  This allows similar account types
+    (e.g. Cash, Bank, Stock) to be grouped into one master account
+    (e.g. Assets).
+
+  - Split Transactions: A single transaction can be split into several
+    pieces to record taxes, fees, and other compound entries.
+
+  - Double Entry: Every transaction must debit one account and credit
+    another by an equal amount.  This ensures that the "books
+    balance": that the difference between income and outflow exactly
+    equals the sum of all assets, be they bank, cash, stock or other.
+
+  - Income/Expense Account Types (Categories): These serve not only to
+    categorize your cash flow, but when used properly with the
+    double-entry feature, these can provide an accurate Profit&Loss
+    statement.
+
+  - General Ledger: Multiple accounts can be displayed in one register
+    window at the same time.  This can ease the trouble of tracking
+    down typing/entry errors.  It also provides a convenient way of
+    viewing a portfolio of many stocks, by showing all transactions in
+    that portfolio.
+
   - Written in C with embedded scheme support via Guile.
+
   - File access is locked in a network-safe fashion, preventing
-    accidental damage if several users attempt to access the 
-    same file, even if the file is NFS-mounted.
-  - Provides a byte-stream format, which allows accounts and
-    account groups to be transmitted to other processes
-    via pipes or sockets.
-  - International date handling, many different translations.
-  - New User Manual and Help: A brand new user help has been 
-    written which focuses on how to do tasks in conjunction 
-    with a Tutorial and Concepts guide that gives the user 
-    background information on using GnuCash.
-  - Redesigned Menu's: The GnuCash menu's have been redesigned
-    to conform more with the new GNOME Human Interface Guidelines.
+    accidental damage if several users attempt to access the same
+    file, even if the file is NFS-mounted.
+
+  - SQL storage is supported using MySQL, Postgresql, and
+    SQLite3. Note that this does not support multiple concurrent
+    access.
+
+
 
 Home Page:
 http://www.gnucash.org/
@@ -135,23 +136,31 @@ The following packages are required to be installed to run GnuCash:
 
 [see README.dependencies]
 
-To be able to use certain features of GnuCash, such as reports and
-network stock price downloads, you must have the following packages
-below installed (in addition to those listed above).
+The optional online stock and currency price retrieval feature requires Perl. This is generally already installed on Gnu/Linux and *BSD, and MacOSX.
 
-  perl: Almost any version of perl5 should work.  I run perl-5.004 
+In addition, some perl modules need to be installed. You can run the
+script 'update-finance-quote' as root to obtain the latest versions of
+required packages. This program requires an C compiler, which is
+generally already installed in Gnu/Linux and *BSD, but must be
+installed separately on MacOSX; on versions 10.6 and earlier, install
+Xcode from the distribution DVD or by downloading from
+http://developer.apple.com (you'll need to log in with your Apple ID);
+for 10.7 and 10.8, you can get Xcode for free from the App store. 10.9
+has a cool feature that detects an attempt to compile and offers to
+install the command-line build tools for you.
 
-In addition, some perl modules need to be installed. You can run
-the script 'update-finance-quote' as root to obtain the latest
-versions of required packages.
+Microsoft Windows users can use the "Install Online Quotes" program in the Start menu's Gnucash group.
 
-To use the new import features (OFX and HBCI) you need to obtain
+To use the OFX and HBCI import features you need to obtain
 the following;
   libofx: This library provide support for OFX file imports. 
     GnuCash-2.0.0 and newer needs at least the version libofx-0.7.0
     or newer. Sources can be found at
     http://sourceforge.net/projects/libofx/
-  aqbanking: This library provide support for HBCI online actions.
+  aqbanking: This library provide support for HBCI and openOFX online actions.
+    Three libraries, Ktoblzcheck, Gwenhywfar, and AQBanking, are required.
+    All may be obtained from
+    http://www2.aquamaniac.de/sites/download/packages.php
 
 #######
 Running
@@ -187,18 +196,12 @@ GnuCash responds to the following environment variables:
 ####################
 Internationalization
 --------------------
-Message catalogs exist for many different languages. These are
-enabled with environment variables. For example, 
 
-Francais, in bash:
-    export LANG=fr_FR
-
-Francais, in tcsh:
-    setenv LANG fr_FR
-
-German version:
-    export LANG=de_DE
-
+Message catalogs exist for many different languages. In general
+GnuCash will use the locale configured in the desktop environment if
+we have a translation for it, but this may be overridden if one
+likes. Instructions for overriding the locale settings may be found at
+http://wiki.gnucash.org/wiki/Locale_Settings
 
 #####################
 Building & Installing
@@ -215,20 +218,15 @@ Prior to building GnuCash, you will have to obtain and install the
 following packages:
 
 
-  libtool: Available at ftp://ftp.gnu.org/gnu.
+  autoconf, automake, and libtool: Available at ftp://ftp.gnu.org/gnu.
     RPM's and debs are widely available with most distributions.
 
   gnome development system: headers, libraries, etc.
 
-  libxml: available from ftp.gnome.org
+  libxml2: available from ftp.gnome.org
 
-  SWIG: 1.3.28 or later is needed. See http://www.swig.org or
-    http://sourceforge.net/project/showfiles.php?group_id=1645
-    (Note: g-wrap has been dropped completely in gnucash 2.2.0 and
-    is no longer needed.)
-
-  texinfo: If you are building from SVN, you need the GNU texinfo
-           package, version 4.0 or later.
+  SWIG: 2.0.10 or later is needed. See http://www.swig.org or
+    http://sourceforge.net/projects/swig/
 
 What you'll need to get and install in order to make sure you have all
 of these pieces properly installed for your particular operating
@@ -296,83 +294,37 @@ details.
 Supported Platforms
 -------------------
 
-GnuCash 2.x, is known to work with the following operating systems:
+GnuCash 2.x is known to work with the following operating systems:
 
 GNU/Linux             -- x86, Sparc, PPC
-Solaris		      -- Sparc
 FreeBSD               -- x86
 OpenBSD               -- x86
-MacOS X		      -- PPC
+MacOS X		      -- PPC and Intel, Versions 10.5 and later
 
-Previous versions have been known to work on the following platforms, but
-their current status is unknown:
 
-SGI IRIX              -- MIPS 
-IBM AIX 4.1.5         -- RS/6000   http://www-frec.bull.com/
-Unixware 7            -- Intel
-SCO OpenServer 5.0.4  -- Intel
-
-See http://www.gnucash.org/pub/gnucash (high-bandwidth)
-or  http://linas.org/linux/gnucash (slow-www ) 
-for precompiled (but *very old*) binaries for these platforms
-
-GnuCash can probably be made to work with most POSIX-ish platforms, 
-provided the libraries and toolchain are available.
+GnuCash can probably be made to work on any platform for which Gtk+ can,
+given sufficient effort. If you try and encounter difficulty, please join
+the developer's mailing list, gnucash-devel@gnucash.org.
 
 #########################
-Additional Download Sites
+Downloads
 -------------------------
 
-You can also download GnuCash from http://download.sourceforge.net/gnucash
-
-You can get GnuCash Mandrake packages on Mandriva Cooker sites.
-
-Precompiled binaries & pre-requisite packages can be found at the
-following sites. The GnuCash versions here are all *extremely*
-old, and were indeed from GnuCash's ancestor "x-accountant".
-
-IBM AIX 4.1.5 
-      -- SMIT-installable images 
-      -- warning, this is from the 1.0 series of xacc
-      http://www.bull.de/pub/
-      see also http://www-frec.bull.com/
-      
-SCO OpenServer 5.0.4 
-      http://www.sco.com/skunkware/osr5/x11/apps/xacc/VOLS.tar
-      -- this is from the 1.0 series of xacc
-
-Unixware 7
-      -- use pkgadd to install
-      http://www.sco.com/skunkware/uw7/x11/apps/xacc/xacc.pkg.gz
-
-SGI Irix
-      -- in SGI install format
-      -- warning, this is a very down-level version
-      http://linas.org/linux/xacc/xacc-1.0b7-sgi-irix.inst.tar
-
+GnuCash sources and Mac and Windows binaries are hosted at
+SourceForge. Links for the current version are provided at
+http://www.gnucash.org. We depend upon distribution packagers for
+GNU/Linux and *BSD binaries, so if you want a more recent version than
+your distribution provides you'll have to build from source.
 
 ##############################
-Getting Source with Subversion
+Getting Source with Git
 ------------------------------
-A read-only version of the svn tree is available on the net at:
 
-  http://svn.gnucash.org/trac/browser/
-
-To get what used to be CVS HEAD (and now includes what used to be 
-gnucash-gnome2-dev), you will need to get the svn TRUNK:
-
-  svn checkout http://svn.gnucash.org/repo/gnucash/trunk gnucash
-
-The argument "gnucash" above can be whatever you want your local 
-directory to be called, and is optional. If you leave it out,
-you'll have a directory called "trunk" created containing all the
-source code.
-
-If you want the latest 2.6.x code, you'd need to pull from the 
-2.6 branch, as follows:
-
-  svn checkout http://svn.gnucash.org/repo/gnucash/branches/2.6 gnucash-2.6
-
+We maintain a mirror of our master repository on Github. You can
+browse the code at https://github.com/Gnucash/gnucash. Clone URIs are
+on that page, or if you have a Github account you can fork it
+there. Note, however, that we do *not* accept Github pull requests:
+All patches should be submitted via Bugzilla, see below.
 
 ##################
 Developing GnuCash
@@ -381,8 +333,8 @@ Before you start developing GnuCash, you should do the following:
 
 1. Read http://wiki.gnucash.org/wiki/Development
 
-2. Several of the directories under src contain files called design.txt
-   which explain many aspects of GnuCash's design. Read those.
+2. Look over the doxygen-generated documentation at
+    http://code.gnucash.org/docs/HEAD/
 
 3. Go to the GnuCash website and skim the archives of the GnuCash
    development mailing list.
@@ -393,21 +345,15 @@ Before you start developing GnuCash, you should do the following:
 
 Submitting a Patch:
 
-  Once you have done some work that you would like to submit, you need
-  to send a patch.  There are two ways to submit a patch.  First, if
-  you're using SVN and only made changes to existing SVN files you
-  can generate the patch using:
+  Patches should be created from a git clone using the appropriate
+  branch HEAD. For those unfamiliar with git, instructions on making a
+  patch may be found at http://wiki.gnucash.org/wiki/Git#Patches
 
-      svn diff > /tmp/mypatch
+  Please attach patches to the appropriate bug or enhancement request
+  in Bugzilla (https://bugzilla.gnome.org, Project GnuCash). Create a
+  new bug if you don't find one that's applicable. Please don't submit
+  patches to either of the mailing lists, as they tend to be
+  forgotten.
 
-  and attach it to the appropriate bug or enhancement request in
-  Bugzilla (https://bugzilla.gnome.org). Create a new bug if you don't
-  find one that's applicable. Please don't submit patches to either of
-  the mailing lists, as they tend to be forgotten.
-
-  If your patch adds new files, use the `-N' flag to diff between a
-  clean directory and your development directory.  E.g.
-
-  $ diff -urN {gnucash-pristine} {gnucash-mydevel} > /tmp/mypatch
 
 Thank you.
