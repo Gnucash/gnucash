@@ -669,7 +669,9 @@ gnc_ui_update_namespace_picker (GtkWidget *cbe,
     {
         if (g_utf8_collate(node->data, GNC_COMMODITY_NS_LEGACY) == 0)
             continue;
-        gtk_combo_box_append_text(combo_box, node->data);
+	/* Hide the 'template' namespace */
+	if (g_utf8_collate(node->data, "template") != 0)
+	    gtk_combo_box_append_text(combo_box, node->data);
         if (init_string && (g_utf8_collate(node->data, init_string) == 0))
             match = current;
         current++;
