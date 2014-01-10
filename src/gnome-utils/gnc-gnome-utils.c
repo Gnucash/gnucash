@@ -748,11 +748,11 @@ gnc_gui_shutdown (void)
     if (gnome_is_running && !gnome_is_terminating)
     {
         gnome_is_terminating = TRUE;
-
+#ifndef MAC_INTEGRATION
         map = gnc_build_dotgnucash_path(ACCEL_MAP_NAME);
         gtk_accel_map_save(map);
         g_free(map);
-
+#endif /* MAC_INTEGRATION */
         gtk_main_quit();
     }
 }
