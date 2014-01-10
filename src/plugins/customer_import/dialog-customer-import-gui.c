@@ -278,7 +278,7 @@ void gnc_customer_import_gui_option1_cb (GtkWidget *widget, gpointer data)
     CustomerImportGui *gui = data;
     if (!gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(widget) ))
         return;
-    g_string_assign (gui->regexp, "^(?<id>[^;]*);(?<company>[^;]*);(?<name>[^;]*);(?<addr1>[^;]*);?(?<addr2>[^;]*);?(?<addr3>[^;]*);?(?<addr4>[^;]*);?(?<phone>[^;]*);?(?<fax>[^;]*);?(?<email>[^;]*);?(?<notes>[^;]*);?(?<shipname>[^;]*);?(?<shipaddr1>[^;]*);?(?<shipaddr2>[^;]*);?(?<shipaddr3>[^;]*);?(?<shipadddr4>[^;]*);?(?<shipphone>[^;]*);(?<shipfax>[^;]*);(?<shipemail>[^;]*)"); //;(?<account_posted>[^;]*);(?<memo_posted>[^;]*);(?<accu_splits>[^;]*)$");
+    g_string_assign (gui->regexp, "^(?<id>[^;]*);(?<company>[^;]*);(?<name>[^;]*);(?<addr1>[^;]*);?(?<addr2>[^;]*);?(?<addr3>[^;]*);?(?<addr4>[^;]*);?(?<phone>[^;]*);?(?<fax>[^;]*);?(?<email>[^;]*);?(?<notes>[^;]*);?(?<shipname>[^;]*);?(?<shipaddr1>[^;]*);?(?<shipaddr2>[^;]*);?(?<shipaddr3>[^;]*);?(?<shipaddr4>[^;]*);?(?<shipphone>[^;]*);(?<shipfax>[^;]*);(?<shipemail>[^;]*)"); //;(?<account_posted>[^;]*);(?<memo_posted>[^;]*);(?<accu_splits>[^;]*)$");
     gnc_customer_import_gui_filenameChanged_cb (gui->entryFilename, gui);
 }
 // Comma separated.
@@ -287,7 +287,7 @@ void gnc_customer_import_gui_option2_cb (GtkWidget *widget, gpointer data)
     CustomerImportGui *gui = data;
     if (!gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(widget) ))
         return;
-    g_string_assign (gui->regexp, "^(?<id>[^,]*),(?<company>[^,]*),(?<name>[^,]*),(?<addr1>[^,]*),?(?<addr2>[^,]*),?(?<addr3>[^,]*),?(?<addr4>[^,]*),?(?<phone>[^,]*),?(?<fax>[^,]*),?(?<email>[^,]*),?(?<notes>[^,]*),?(?<shipname>[^,]*),?(?<shipaddr1>[^,]*),?(?<shipaddr2>[^,]*),?(?<shipaddr3>[^,]*),?(?<shipadddr4>[^,]*),?(?<shipphone>[^,]*),(?<shipfax>[^,]*),(?<shipemail>[^,]*)"); //,(?<account_posted>[^,]*),(?<memo_posted>[^,]*),(?<accu_splits>[^,]*)$");
+    g_string_assign (gui->regexp, "^(?<id>[^,]*),(?<company>[^,]*),(?<name>[^,]*),(?<addr1>[^,]*),?(?<addr2>[^,]*),?(?<addr3>[^,]*),?(?<addr4>[^,]*),?(?<phone>[^,]*),?(?<fax>[^,]*),?(?<email>[^,]*),?(?<notes>[^,]*),?(?<shipname>[^,]*),?(?<shipaddr1>[^,]*),?(?<shipaddr2>[^,]*),?(?<shipaddr3>[^,]*),?(?<shipaddr4>[^,]*),?(?<shipphone>[^,]*),(?<shipfax>[^,]*),(?<shipemail>[^,]*)"); //,(?<account_posted>[^,]*),(?<memo_posted>[^,]*),(?<accu_splits>[^,]*)$");
     gnc_customer_import_gui_filenameChanged_cb (gui->entryFilename, gui);
 }
 // Semicolon separated with quoted strings.
@@ -306,7 +306,7 @@ void gnc_customer_import_gui_option4_cb (GtkWidget *widget, gpointer data)
     CustomerImportGui *gui = data;
     if (!gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(widget) ))
         return;
-    //g_string_assign (gui->regexp, "^(?<id>[^,]*),(?<company>[^,]*),(?<name>[^,]*),(?<addr1>[^,]*),?(?<addr2>[^,]*),?(?<addr3>[^,]*),?(?<addr4>[^,]*),?(?<phone>[^,]*),?(?<fax>[^,]*),?(?<email>[^,]*),?(?<notes>[^,]*),?(?<shipname>[^,]*),?(?<shipaddr1>[^,]*),?(?<shipaddr2>[^,]*),?(?<shipaddr3>[^,]*),?(?<shipadddr4>[^,]*),?(?<shipphone>[^,]*),(?<shipfax>[^,]*),(?<shipemail>[^,]*)"); //,(?<account_posted>[^,]*),(?<memo_posted>[^,]*),(?<accu_splits>[^,]*)$");
+    //g_string_assign (gui->regexp, "^(?<id>[^,]*),(?<company>[^,]*),(?<name>[^,]*),(?<addr1>[^,]*),?(?<addr2>[^,]*),?(?<addr3>[^,]*),?(?<addr4>[^,]*),?(?<phone>[^,]*),?(?<fax>[^,]*),?(?<email>[^,]*),?(?<notes>[^,]*),?(?<shipname>[^,]*),?(?<shipaddr1>[^,]*),?(?<shipaddr2>[^,]*),?(?<shipaddr3>[^,]*),?(?<shipaddr4>[^,]*),?(?<shipphone>[^,]*),(?<shipfax>[^,]*),(?<shipemail>[^,]*)"); //,(?<account_posted>[^,]*),(?<memo_posted>[^,]*),(?<accu_splits>[^,]*)$");
     g_string_assign (gui->regexp, "^((?<id>[^\",]*)|\"(?<id>[^\"]*)\"),((?<company>[^\",]*)|\"(?<company>[^\"]*)\"),((?<name>[^\",]*)|\"(?<name>[^\"]*)\"),((?<addr1>[^\",]*)|\"(?<addr1>[^\"]*)\"),((?<addr2>[^\",]*)|\"(?<addr2>[^\"]*)\"),((?<addr3>[^\",]*)|\"(?<addr3>[^\"]*)\"),((?<addr4>[^\",]*)|\"(?<addr4>[^\"]*)\"),((?<phone>[^\",]*)|\"(?<phone>[^\"]*)\"),((?<fax>[^\",]*)|\"(?<fax>[^\"]*)\"),((?<email>[^\",]*)|\"(?<email>[^\"]*)\"),((?<notes>[^\",]*)|\"(?<notes>[^\"]*)\"),((?<shipname>[^\",]*)|\"(?<shipname>[^\"]*)\"),((?<shipaddr1>[^\",]*)|\"(?<shipaddr1>[^\"]*)\"),((?<shipaddr2>[^\",]*)|\"(?<shipaddr2>[^\"]*)\"),((?<shipaddr3>[^\",]*)|\"(?<shipaddr3>[^\"]*)\"),((?<shipaddr4>[^\",]*)|\"(?<shipaddr4>[^\"]*)\"),((?<shipphone>[^\",]*)|\"(?<shipphone>[^\"]*)\"),((?<shipfax>[^\",]*)|\"(?<shipfax>[^\"]*)\"),((?<shipemail>[^\",]*)|\"(?<shipemail>[^\"]*)\")$");
     gnc_customer_import_gui_filenameChanged_cb (gui->entryFilename, gui);
 }

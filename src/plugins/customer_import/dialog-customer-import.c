@@ -158,6 +158,7 @@ gnc_customer_import_read_file (const gchar *filename, const gchar *parser_regexp
             FILL_IN_HELPER ("phone", CI_PHONE);
             FILL_IN_HELPER ("fax", CI_FAX);
             FILL_IN_HELPER ("email", CI_EMAIL);
+            FILL_IN_HELPER ("notes", CI_NOTES);
             FILL_IN_HELPER ("shipname", CI_SHIPNAME);
             FILL_IN_HELPER ("shipaddr1", CI_SHIPADDR1);
             FILL_IN_HELPER ("shipaddr2", CI_SHIPADDR2);
@@ -198,15 +199,14 @@ gnc_customer_import_read_file (const gchar *filename, const gchar *parser_regexp
 
 
 
-
-
-
 void
 gnc_customer_import_fix_customers (GtkListStore *store, guint *fixed, guint *deleted, gchar * type)
 {
     GtkTreeIter iter;
     gboolean valid;
-    gchar *company, *name, *addr1, *addr2, *addr3, *addr4;
+    gchar *company, *name, *addr1, *addr2, *addr3, *addr4, *phone, *fax, *email,
+            *notes, *shipname, *shipaddr1, *shipaddr2, *shipaddr3, *shipaddr4, 
+            *shipphone, *shipfax, *shipemail;
     guint dummy;
 
     // allow the call to this function with only GtkListeStore* specified
@@ -229,6 +229,18 @@ gnc_customer_import_fix_customers (GtkListStore *store, guint *fixed, guint *del
                             CI_ADDR2, &addr2,
                             CI_ADDR3, &addr3,
                             CI_ADDR4, &addr4,
+                            CI_PHONE, &phone,
+                            CI_FAX, &fax,
+                            CI_EMAIL, &email,
+                            CI_NOTES, &notes,
+                            CI_SHIPNAME, &shipname,
+                            CI_SHIPADDR1, &shipaddr1,
+                            CI_SHIPADDR2, &shipaddr2,
+                            CI_SHIPADDR3, &shipaddr3,
+                            CI_SHIPADDR4, &shipaddr4,
+                            CI_SHIPPHONE, &shipphone,
+                            CI_SHIPFAX, &shipfax,
+                            CI_SHIPEMAIL, &shipemail,
                             -1);
 
         if (strlen(company) == 0)
@@ -238,12 +250,6 @@ gnc_customer_import_fix_customers (GtkListStore *store, guint *fixed, guint *del
                 // no fix possible -> delete row
                 gtk_list_store_remove (store, &iter);
                 (*deleted)++;
-                g_free (company);
-                g_free (name);
-                g_free (addr1);
-                g_free (addr2);
-                g_free (addr3);
-                g_free (addr4);
                 continue;
             }
             else
@@ -253,30 +259,26 @@ gnc_customer_import_fix_customers (GtkListStore *store, guint *fixed, guint *del
                 (*fixed)++;
             }
         }
-        if ((strlen(addr1) == 0) && (strlen(addr2) == 0) &&
-                (strlen(addr3) == 0) && (strlen(addr4) == 0))
-        {
-            // no address given, no fix possible -> delete row
-            gtk_list_store_remove (store, &iter);
-            (*deleted)++;
-            if (strlen(company) == 0)
-                // the company cell was fixed -> decrement "fixed" counter
-                (*fixed)--;
-            g_free (company);
-            g_free (name);
-            g_free (addr1);
-            g_free (addr2);
-            g_free (addr3);
-            g_free (addr4);
-            continue;
-        }
-
+        
         g_free (company);
         g_free (name);
         g_free (addr1);
         g_free (addr2);
         g_free (addr3);
         g_free (addr4);
+        g_free (phone);
+        g_free (fax);
+        g_free (email);
+        g_free (notes);
+        g_free (shipname);
+        g_free (shipaddr1);
+        g_free (shipaddr2);
+        g_free (shipaddr3);
+        g_free (shipaddr4);
+        g_free (shipphone);
+        g_free (shipfax);
+        g_free (shipemail);
+
         valid = gtk_tree_model_iter_next (GTK_TREE_MODEL(store), &iter);
     }
 }
