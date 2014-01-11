@@ -6,7 +6,7 @@
 ;;
 ;; See also http://www.turbotax.com/txf/
 ;;
-;; Updated Feb 2013. J. Alex Aycinena
+;; Updated Feb 2013 & Jan 2014. J. Alex Aycinena
 ;; Added updated tax line info
 ;; Updated Oct 2009. J. Alex Aycinena
 ;; Added 'txf-tax-entity-types' and related getter functions
@@ -193,7 +193,7 @@
     (cons 'N387 #(none "F2106" "Emp. expense reimb." 1 #t "" ((2009 "7") (1990 "7,A"))))
     (cons 'N388 #(none "F2106" "Emp. meal exp reimb" 1 #t "" ((2009 "7") (1990 "7,B"))))
 
-    (cons 'N392 #(not-impl "HomeWks" "Home Sale Worksheets" 1 #t ""))
+    (cons 'N392 #(not-impl "HomeWks" "Home Sale Worksheets, Pub 523" 1 #t ""))
     (cons 'N525 #(not-impl "HomeWks" "Spouse" 0 #t "" ((2000 "")) 2000))
     (cons 'N398 #(not-impl "HomeWks" "Date old home sold" 2 #t "" ((2002 ""))))
     (cons 'N399 #(not-impl "HomeWks" "Date moved into new home" 2 #t "" ((2000 "11a")) 2000))
@@ -306,8 +306,8 @@
 
     (cons 'N657 #(not-impl "F1099-OID" "1099 OID" 1 #f ""))
     (cons 'N658 #(current "F1099-OID" "Other periodic int,OID" 3 #t "" ((1990 "2"))))
-    (cons 'N661 #(not-impl "F1099-OID" "Description" 2 #t "" ((1990 "5"))))
-    (cons 'N662 #(current "F1099-OID" "OID, US treas obligl" 3 #t "" ((1999 "6"))))
+    (cons 'N661 #(not-impl "F1099-OID" "Description" 2 #t "" ((2013 "7") (1990 "5"))))
+    (cons 'N662 #(current "F1099-OID" "OID, US treas obligl" 3 #t "" ((2013 "8") (1999 "6"))))
 
     (cons 'N473 #(not-impl "F1099-R" "1099R" 1 #t ""))
     (cons 'N474 #(not-impl "F1099-R" "Spouse" 0 #t "" ((1990 ""))))
@@ -642,7 +642,7 @@
     (cons 'N565 #(not-impl "Sched H" "Schedule H" 1 #t ""))
     (cons 'N566 #(not-impl "Sched H" "Spouse" 0 #t "" ((1995 "")) 1995))
     (cons 'N567 #(parent "Sched H" "Cash wages paid" 1 #t "" ((1995 "1"))))
-    (cons 'N568 #(parent "Sched H" "Federal tax withheld" 1 #t "" ((1995 "5"))))
+    (cons 'N568 #(parent "Sched H" "Federal tax withheld" 1 #t "" ((2013 "7") (1995 "5"))))
 
     (cons 'N380 #(not-impl "F2106" "Form 2106" 1 #t ""))
     (cons 'N382 #(none "F2106" "Automobile expenses" 1 #t "" ((1990 "1"))))
@@ -655,7 +655,7 @@
     (cons 'N391 #(none "F2106" "Employee home office expenses" 1 #t "" ((1990 "4"))))
     (cons 'N386 #(none "F2106" "Meal/entertainment expenses" 1 #t "" ((1990 "5"))))
 
-    (cons 'N392 #(not-impl "HomeWks" "Home Sale Worksheets" 1 #t ""))
+    (cons 'N392 #(not-impl "HomeWks" "Home Sale Worksheets, Pub 523" 1 #t ""))
     (cons 'N394 #(none "HomeWks" "Expense of sale" 1 #t "" ((2002 "2"))))
     (cons 'N395 #(none "HomeWks" "Basis of home sold" 1 #t "" ((2002 "4"))))
     (cons 'N396 #(none "HomeWks" "Fixing-up expenses" 1 #t "" ((2000 "8")) 2000))
@@ -766,8 +766,8 @@
     (cons 'N509 #(parent "W-2" "Local tax withheld, spouse" 1 #t "" ((2001 "19") (1993 "21") (1990 "27"))))
 
     (cons 'N547 #(not-impl "W-2G" "W-2G" 1 #t ""))
-    (cons 'N550 #(parent "W-2G" "Federal tax withheld" 1 #t "" ((1990 "2"))))
-    (cons 'N551 #(parent "W-2G" "State tax withheld" 1 #t "" ((1990 "14"))))
+    (cons 'N550 #(parent "W-2G" "Federal tax withheld" 1 #t "" ((2013 "4") (1990 "2"))))
+    (cons 'N551 #(parent "W-2G" "State tax withheld" 1 #t "" ((2013 "15") (1990 "14"))))
 
     (cons 'N643 #(not-impl "F1099-DIV" "1099 Div" 1 #f ""))
     (cons 'N648 #(current "F1099-DIV" "Investment Expense, div" 3 #t "" ((1998 "5") (1990 "1e"))))
@@ -791,7 +791,7 @@
     (cons 'N657 #(not-impl "F1099-OID" "1099 OID" 1 #f ""))
     (cons 'N659 #(current "F1099-OID" "Early wdrawal pen, OID" 3 #t "" ((1990 "3"))))
     (cons 'N660 #(current "F1099-OID" "Fed tax wheld, OID" 3 #t "" ((1990 "4"))))
-    (cons 'N663 #(current "F1099-OID" "Investment Expense, OID" 3 #t "" ((1999 "7"))))
+    (cons 'N663 #(current "F1099-OID" "Investment Expense, OID" 3 #t "" ((2013 "9") (1999 "7"))))
 
     (cons 'N473 #(not-impl "F1099-R" "1099R" 1 #t ""))
     (cons 'N665 #(not-impl "F1099-R" "Taxable not determined" 2 #t "" ((1991 "2b"))))
