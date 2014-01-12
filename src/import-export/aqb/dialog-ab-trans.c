@@ -49,7 +49,7 @@
 #include "gnc-amount-edit.h"
 #include "gnc-ui.h"
 
-#if AQBANKING_VERSION_INT >= 50200 && (AQBANKING_VERSION_BUILD > 0)
+#if AQBANKING_VERSION_INT > 50200 || ((AQBANKING_VERSION_INT == 50200) && (AQBANKING_VERSION_BUILD > 0))
 /** Defined for aqbanking > 5.2.0 */
 # define AQBANKING_VERSION_GREATER_5_2_0
 #endif
