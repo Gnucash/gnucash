@@ -1,34 +1,3 @@
-2014-01-11 08:07  alex.aycinena
-
-	* [r23681] src/tax/us/txf.scm: Update txf.scm for 2013 US Income
-	  Tax form/schedule changes
-
-2014-01-10 23:13  jralls
-
-	* [r23678] src/gnome-utils/dialog-commodity.c: Hide 'template'
-	  commodity type from the Security Editor Type combo list.
-
-2014-01-08 05:24  jralls
-
-	* [r23673] src/report/standard-reports/register.scm: Revert
-	  "[22968] Bug #584869 net change line in general journal report
-	  broken" This reverts commit 87bc498e (r22975). Bug 721436 -
-	  Account Report fails in release 2.4.14 Unfortunately that change
-	  in trunk relies upon the rather massive r22681, which wasn't
-	  backported. Without that previous revision it crashes.
-	* [r23672] src/import-export/import-utilities.c: [r23562]Fix
-	  missing xaccTransCommitEdit() from r23505 Bug #721434 - OFX
-	  Import broken in release 2.4.14
-
-2013-12-30 14:39  jralls
-
-	* [r23657] packaging/win32/defaults.sh: Replace slib URI with
-	  currently-available version.
-
-2013-12-29 00:59  jralls
-
-	* [r23649] ChangeLog, NEWS: Release 2.4.13
-
 2013-12-28 20:50  jralls
 
 	* [r23645] configure.ac, po/POTFILES.in: Add

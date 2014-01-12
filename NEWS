@@ -1,5 +1,19 @@
 Version history:
 ------- -------
+ 2.4.15  12 January 2014
+      The GnuCash Development team sheepishly announces GnuCash
+      2.4.15, the real final bug-fix release of the STABLE 2.4
+      series. We had our noses rubbed in two serious regressions
+      within a couple of days of releasing 2.4.14, and having now
+      fixed them present this release with our apologies.
+
+      The following changes have occurred since the last release:
+      * Update txf.scm for 2013 US Income Tax form/schedule changes
+
+      Bug Fixes:
+      Bug 721434 - OFX import broken in release 2.4.14
+      Bug 721436 - Account Report fails in release 2.4.14
+
  2.4.14  29 December 2013
        The GnuCash Development team is pleased to announce GnuCash 2.4.14, the final bug-fix release of the STABLE 2.4 series.
 
