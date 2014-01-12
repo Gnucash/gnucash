@@ -7,10 +7,11 @@ endif
 lib_LTLIBRARIES = libgnc-qof.la
 
 libgnc_qof_la_LDFLAGS= -version-info $(LIBQOF_LIBRARY_VERSION)
-libgnc_qof_la_LIBADD= \
+libgnc_qof_common_libs =  \
   $(GLIB_LIBS) \
   $(REGEX_LIBS) \
   $(top_builddir)/lib/libc/libc-missing.la
+libgnc_qof_la_LIBADD = $(libgnc_qof_common_libs)
 
 AM_CPPFLAGS = \
   -I$(top_srcdir)/lib/libc \
@@ -23,7 +24,6 @@ libgnc_qof_la_SOURCES =  \
    guid.c            \
    kvp_frame.c       \
    kvp-util.c        \
-   md5.c             \
    qof-string-cache.c  \
    qofbackend.c      \
    qofclass.c        \
@@ -86,6 +86,13 @@ noinst_HEADERS = \
    qofobject-p.h  \
    qofquerycore-p.h \
    qofsession-p.h
+   
+# Must compile md5.c without strict aliasing, otherwise function md5_finish_ctx
+# gets "dereferencing type-punned pointer will break strict-aliasing rules"
+noinst_LTLIBRARIES = libmd5.la
+libmd5_la_SOURCES = md5.c
+libmd5_la_CFLAGS=-fno-strict-aliasing
+libgnc_qof_la_LIBADD += libmd5.la
 
 EXTRA_DIST = \
   qofmath128.c
@@ -102,6 +109,6 @@ check_PROGRAMS = test-qofmath
 test_qofmath_SOURCES=gnc-numeric.c
 test_qofmath_CPPFLAGS=$(AM_CPPFLAGS) -DTEST_128_BIT_MULT
 test_qofmath_LDFLAGS=$(libgnc_qof_la_LDFLAGS)
-test_qofmath_LDADD=$(libgnc_qof_la_LIBADD)
+test_qofmath_LDADD=$(libgnc_qof_common_libs)
 
 AM_CPPFLAGS += -DG_LOG_DOMAIN=\"qof\"
