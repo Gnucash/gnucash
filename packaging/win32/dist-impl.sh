@@ -12,12 +12,6 @@ function dist_prepare() {
     if [ -x $DIST_DIR ]; then
         die "Please remove ${DIST_DIR} first"
     fi
-    if [ "$AQBANKING5" != "yes" ] ; then
-        if [ x$AQBANKING_WITH_QT != xyes ]; then
-            die "The aqbanking wizard is required to create the Windows installer.
-Please set AQBANKING_WITH_QT to yes and rerun install.sh first."
-        fi
-    fi
     _UNZIP_UDIR=`unix_path $UNZIP_DIR`
     _AUTOTOOLS_UDIR=`unix_path $AUTOTOOLS_DIR`
     _GUILE_UDIR=`unix_path $GUILE_DIR`
@@ -237,15 +231,9 @@ function dist_gnucash() {
     cp -a $_REPOS_UDIR/packaging/win32/{getperl.vbs,gnc-path-check,install-fq-mods.cmd} $DIST_UDIR/bin
 
     _QTDIR_WIN=$(unix_path $QTDIR | sed 's,^/\([A-Za-z]\)/,\1:/,g' )
-    if [ "$AQBANKING5" != "yes" ] ; then
-        # aqbanking < 5
-        AQBANKING_VERSION_H=${_AQBANKING_UDIR}/include/aqbanking/version.h
-        GWENHYWFAR_VERSION_H=${_GWENHYWFAR_UDIR}/include/gwenhywfar3/gwenhywfar/version.h
-    else
-        # aqbanking >= 5.0.0
-        AQBANKING_VERSION_H=${_AQBANKING_UDIR}/include/aqbanking5/aqbanking/version.h
-        GWENHYWFAR_VERSION_H=${_GWENHYWFAR_UDIR}/include/gwenhywfar4/gwenhywfar/version.h
-    fi
+    # aqbanking >= 5.0.0
+    AQBANKING_VERSION_H=${_AQBANKING_UDIR}/include/aqbanking5/aqbanking/version.h
+    GWENHYWFAR_VERSION_H=${_GWENHYWFAR_UDIR}/include/gwenhywfar4/gwenhywfar/version.h
 
     _AQBANKING_SO_EFFECTIVE=$(awk '/AQBANKING_SO_EFFECTIVE / { print $3 }' ${AQBANKING_VERSION_H} )
     _GWENHYWFAR_SO_EFFECTIVE=$(awk '/GWENHYWFAR_SO_EFFECTIVE / { print $3 }' ${GWENHYWFAR_VERSION_H} )
@@ -257,13 +245,6 @@ function dist_gnucash() {
 }
 
 function dist_finish() {
-    if [ "$AQBANKING_WITH_QT" = "yes" ]; then
-        assert_one_dir ${DIST_UDIR}/lib/aqbanking/plugins/*/wizards
-        _qt3_wizard_path=`ls ${DIST_UDIR}/lib/aqbanking/plugins/*/wizards/qt3-wizard.exe` 
-        mv ${_qt3_wizard_path} $DIST_UDIR/bin
-        cp $_INSTALL_UDIR/bin/redirect.exe ${_qt3_wizard_path}
-    fi
-
     # Strip redirections in distributed libtool .la files
     for file in $DIST_UDIR/bin/*.la; do
         cat $file | sed 's,^libdir=,#libdir=,' > $file.new

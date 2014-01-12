@@ -7,7 +7,6 @@
 # REPOS_URL="svn+ssh://<dev>@svn.gnucash.org/repo/gnucash/trunk"
 # SF_MIRROR="http://switch.dl.sourceforge.net/sourceforge"
 # DISABLE_OPTIMIZATIONS=yes
-# AQBANKING_WITH_QT=no
 # GLOBAL_DIR=Z:\\mydir  # all directories will use this
 # WGET_RATE=50k         #limit download bandwith to 50KB/s
 # NO_SAVE_PROFILE=yes   # don't save env settings to /etc/profile.d

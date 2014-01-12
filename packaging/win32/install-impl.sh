@@ -317,60 +317,28 @@ function inst_aqbanking() {
             else
                 XMLMERGE="${_GWENHYWFAR_UDIR}/bin/xmlmerge"
             fi
-            if [ "$AQBANKING5" != "yes" ] ; then
-                _AQ_BACKENDS="aqhbci aqofxconnect"
-            else
-                # FIXME: Maybe also aqpaypal?
-                _AQ_BACKENDS="aqhbci aqofxconnect"
+            _AQ_BACKENDS="aqhbci aqofxconnect"
+            if [ -n "$AQBANKING_PATCH" -a -f "$AQBANKING_PATCH" ] ; then
+                patch -p1 < $AQBANKING_PATCH
+                #automake
+                #aclocal -I m4 ${ACLOCAL_FLAGS}
+                #autoconf
             fi
-            if test x$AQBANKING_WITH_QT = xyes; then
-                inst_qt4
-                if [ -n "$AQBANKING_PATCH" -a -f "$AQBANKING_PATCH" ] ; then
-                    patch -p1 < $AQBANKING_PATCH
-                    #automake
-                    #aclocal -I m4 ${ACLOCAL_FLAGS}
-                    #autoconf
-                fi
-                ./configure ${HOST_XCOMPILE} \
-                    --with-gwen-dir=${_GWENHYWFAR_UDIR} \
-                    --with-xmlmerge=${XMLMERGE} \
-                    --with-frontends="cbanking qbanking" \
-                    --with-backends="${_AQ_BACKENDS}" \
-                    CPPFLAGS="${_AQ_CPPFLAGS} ${GMP_CPPFLAGS}" \
-                    LDFLAGS="${_AQ_LDFLAGS} ${GMP_LDFLAGS}" \
-                    qt3_libs="-L${_QTDIR}/lib -L${_QTDIR}/bin -lQtCore4 -lQtGui4 -lQt3Support4" \
-                    qt3_includes="-I${_QTDIR}/include -I${_QTDIR}/include/Qt -I${_QTDIR}/include/QtCore -I${_QTDIR}/include/QtGui -I${_QTDIR}/include/Qt3Support" \
-                    --prefix=${_AQBANKING_UDIR}
-                make qt4-port
-                make clean
-            else
-                if [ -n "$AQBANKING_PATCH" -a -f "$AQBANKING_PATCH" ] ; then
-                    patch -p1 < $AQBANKING_PATCH
-                    #automake
-                    #aclocal -I m4 ${ACLOCAL_FLAGS}
-                    #autoconf
-                fi
-                ./configure ${HOST_XCOMPILE} \
-                    --with-gwen-dir=${_GWENHYWFAR_UDIR} \
-                    --with-xmlmerge=${XMLMERGE} \
-                    --with-frontends="cbanking" \
-                    --with-backends="${_AQ_BACKENDS}" \
-                    CPPFLAGS="${_AQ_CPPFLAGS} ${GMP_CPPFLAGS}" \
-                    LDFLAGS="${_AQ_LDFLAGS} ${GMP_LDFLAGS}" \
-                    --prefix=${_AQBANKING_UDIR}
-            fi
+            ./configure ${HOST_XCOMPILE} \
+                --with-gwen-dir=${_GWENHYWFAR_UDIR} \
+                --with-xmlmerge=${XMLMERGE} \
+                --with-frontends="cbanking" \
+                --with-backends="${_AQ_BACKENDS}" \
+                CPPFLAGS="${_AQ_CPPFLAGS} ${GMP_CPPFLAGS}" \
+                LDFLAGS="${_AQ_LDFLAGS} ${GMP_LDFLAGS}" \
+                --prefix=${_AQBANKING_UDIR}
             make
             rm -rf ${_AQBANKING_UDIR}
             make install
         qpopd
         qpushd ${_AQBANKING_UDIR}/bin
-            if [ "$AQBANKING5" = "yes" ]; then
-                exetype aqbanking-cli.exe console
-                exetype aqhbci-tool4.exe console
-            else
-                exetype aqbanking-cli.exe console
-                exetype aqhbci-tool4.exe console
-            fi
+            exetype aqbanking-cli.exe console
+            exetype aqhbci-tool4.exe console
         qpopd
         ${PKG_CONFIG} --exists aqbanking || die "AqBanking not installed correctly"
         rm -rf ${TMP_UDIR}/aqbanking-*
@@ -765,32 +733,15 @@ function inst_gwenhywfar() {
         assert_one_dir $TMP_UDIR/gwenhywfar-*
         qpushd $TMP_UDIR/gwenhywfar-*
             # circumvent binreloc bug, http://trac.autopackage.org/ticket/28
-            if [ "$AQBANKING5" = "yes" ]; then
-                # Note: gwenhywfar-3.x and higher don't use openssl anymore.
-                ./configure ${HOST_XCOMPILE} \
-                    --with-libgcrypt-prefix=$_GNUTLS_UDIR \
-                    --disable-binreloc \
-                    --disable-ssl \
-                    --prefix=$_GWENHYWFAR_UDIR \
-                    --with-guis=gtk2 \
-                    CPPFLAGS="${REGEX_CPPFLAGS} ${GNOME_CPPFLAGS} ${GNUTLS_CPPFLAGS} `pkg-config --cflags gtk+-2.0`" \
-                    LDFLAGS="${REGEX_LDFLAGS} ${GNOME_LDFLAGS} ${GNUTLS_LDFLAGS} -lintl"
-            else
-                if [ -n "$GWENHYWFAR_PATCH" -a -f "$GWENHYWFAR_PATCH" ] ; then
-                    patch -p1 < $GWENHYWFAR_PATCH
-                    #aclocal -I m4 ${ACLOCAL_FLAGS}
-                    #automake
-                    #autoconf
-                fi
-                # Note: gwenhywfar-3.x and higher don't use openssl anymore.
-                ./configure ${HOST_XCOMPILE} \
-                    --with-libgcrypt-prefix=$_GNUTLS_UDIR \
-                    --disable-binreloc \
-                    --disable-ssl \
-                    --prefix=$_GWENHYWFAR_UDIR \
-                    CPPFLAGS="${REGEX_CPPFLAGS} ${GNOME_CPPFLAGS} ${GNUTLS_CPPFLAGS}" \
-                    LDFLAGS="${REGEX_LDFLAGS} ${GNOME_LDFLAGS} ${GNUTLS_LDFLAGS} -lintl"
-            fi
+            # Note: gwenhywfar-3.x and higher don't use openssl anymore.
+            ./configure ${HOST_XCOMPILE} \
+                --with-libgcrypt-prefix=$_GNUTLS_UDIR \
+                --disable-binreloc \
+                --disable-ssl \
+                --prefix=$_GWENHYWFAR_UDIR \
+                --with-guis=gtk2 \
+                CPPFLAGS="${REGEX_CPPFLAGS} ${GNOME_CPPFLAGS} ${GNUTLS_CPPFLAGS} `pkg-config --cflags gtk+-2.0`" \
+                LDFLAGS="${REGEX_LDFLAGS} ${GNOME_LDFLAGS} ${GNUTLS_LDFLAGS} -lintl"
             make
 #            [ "$CROSS_COMPILE" != "yes" ] && make check
             rm -rf ${_GWENHYWFAR_UDIR}
@@ -1203,34 +1154,6 @@ function inst_pcre() {
         wget_unpacked $PCRE_LIB_URL $DOWNLOAD_DIR $PCRE_DIR
     fi
     quiet ${LD} $PCRE_LDFLAGS -lpcre -o $TMP_UDIR/ofile || die "pcre not installed correctly"
-}
-
-function inst_qt4() {
-    # This section is not a full install, but the .la creation is
-    # already useful in itself and that's why it has already been
-    # added.
-
-    [ "$QTDIR" ] || die "QTDIR is not set.  Please install Qt and set that variable in custom.sh, or deactivate AQBANKING_WITH_QT"
-    export QTDIR=`unix_path ${QTDIR}`  # help configure of aqbanking
-    _QTDIR=$QTDIR
-    # This section creates .la files for the Qt-4 DLLs so that
-    # libtool correctly links to the DLLs.
-    if test ! -f ${_QTDIR}/lib/libQtCore4.la ; then
-        qpushd ${_QTDIR}/lib
-            for A in lib*.a; do
-                LIBBASENAME=`basename ${A} .a`
-                OUTFILE="${LIBBASENAME}.la"
-                BASENAME=`echo ${LIBBASENAME} | sed -e"s/lib//" `
-                DLLNAME="${BASENAME}.dll"
-
-                # Create la file
-                echo "# Generated by foo bar libtool" > $OUTFILE
-                echo "dlname='../bin/${DLLNAME}'" >> $OUTFILE
-                echo "library_names='${DLLNAME}'" >> $OUTFILE
-                echo "libdir='${_QTDIR}/bin'" >> $OUTFILE
-            done
-        qpopd
-    fi
 }
 
 function inst_readline() {

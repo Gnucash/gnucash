@@ -71,9 +71,9 @@ Note: when installing software as asked below, avoid using paths
     you can specify the path to git's installation location via GIT_DIR
   - If you want verbose output of any script step, add "set -x" to that file.
 
-* Either, download Qt from http://www.trolltech.com/developer/downloads/qt/windows,
-  install it and set QTDIR in custom.sh, like "QTDIR=/c/Qt/4.2.3"; or skip building
-  the AqBanking Setup Wizard by specifying "AQBANKING_WITH_QT=no".
+* (No Qt is needed. In earlier versions of libaqbanking, qt was needed
+  for the aqbanking setup wizard, but in aqbanking-5.x this is no
+  longer the case.)
 
 Start/Enter any MSYS shell window. Let the automated build begin by:
 
