@@ -239,6 +239,52 @@ static void add_quickfill_completions(TableLayout *layout, Transaction *trans,
     }
 }
 
+static Split*
+create_blank_split (Account *default_account, SRInfo *info)
+{
+    Transaction *new_trans;
+    gboolean currency_from_account = TRUE;
+    Split *blank_split = NULL;
+    /* Determine the proper currency to use for this transaction.
+     * if default_account != NULL and default_account->commodity is
+     * a currency, then use that.  Otherwise use the default currency.
+     */
+    gnc_commodity * currency = gnc_account_or_default_currency(default_account, &currency_from_account);
+
+    if (default_account != NULL && !currency_from_account)
+    {
+	/* If we don't have a currency then pop up a warning dialog */
+	gnc_info_dialog(NULL, "%s",
+			_("Could not determine the account currency. "
+			  "Using the default currency provided by your system."));
+    }
+
+    gnc_suspend_gui_refresh ();
+
+    new_trans = xaccMallocTransaction (gnc_get_current_book ());
+
+    xaccTransBeginEdit (new_trans);
+    xaccTransSetCurrency (new_trans, currency);
+    xaccTransSetDatePostedSecsNormalized(new_trans, info->last_date_entered);
+    blank_split = xaccMallocSplit (gnc_get_current_book ());
+    xaccSplitSetParent(blank_split, new_trans);
+    /* We don't want to commit this transaction yet, because the split
+       doesn't even belong to an account yet.  But, we don't want to
+       set this transaction as the pending transaction either, because
+       we want to pretend that it hasn't been changed.  We depend on
+       some other code (somewhere) to commit this transaction if we
+       really edit it, even though it's not marked as the pending
+       transaction. */
+
+    info->blank_split_guid = *xaccSplitGetGUID (blank_split);
+    info->blank_split_edited = FALSE;
+    info->auto_complete = FALSE;
+    DEBUG("created new blank_split=%p", blank_split);
+
+    gnc_resume_gui_refresh ();
+    return blank_split;
+}
+
 void
 gnc_split_register_load (SplitRegister *reg, GList * slist,
                          Account *default_account)
@@ -297,52 +343,12 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
     /* make sure we have a blank split */
     if (blank_split == NULL)
     {
-        Transaction *new_trans;
-        gboolean currency_from_account = TRUE;
-
-        /* Determine the proper currency to use for this transaction.
-         * if default_account != NULL and default_account->commodity is
-         * a currency, then use that.  Otherwise use the default currency.
-         */
-        gnc_commodity * currency = gnc_account_or_default_currency(default_account, &currency_from_account);
-
-        if (default_account != NULL && !currency_from_account)
-        {
-            /* If we don't have a currency then pop up a warning dialog */
-            gnc_info_dialog(NULL, "%s",
-                            _("Could not determine the account currency. "
-                              "Using the default currency provided by your system."));
-        }
-
-        gnc_suspend_gui_refresh ();
-
-        new_trans = xaccMallocTransaction (gnc_get_current_book ());
-
-        xaccTransBeginEdit (new_trans);
-        xaccTransSetCurrency (new_trans, currency);
-        xaccTransSetDatePostedSecsNormalized(new_trans, info->last_date_entered);
-        blank_split = xaccMallocSplit (gnc_get_current_book ());
-        xaccSplitSetParent(blank_split, new_trans);
-        /* We don't want to commit this transaction yet, because the split
-           doesn't even belong to an account yet.  But, we don't want to
-           set this transaction as the pending transaction either, because
-           we want to pretend that it hasn't been changed.  We depend on
-           some other code (somewhere) to commit this transaction if we
-           really edit it, even though it's not marked as the pending
-           transaction. */
-
-        /* Wouldn't it be a bug to open this transaction if there was already a
-           pending transaction? */
-        g_assert(pending_trans == NULL);
-
-        info->blank_split_guid = *xaccSplitGetGUID (blank_split);
-        info->blank_split_edited = FALSE;
-        info->auto_complete = FALSE;
-        DEBUG("created new blank_split=%p", blank_split);
-
-        gnc_resume_gui_refresh ();
+	/* Wouldn't it be a bug to open the new transaction if there was
+	 * already a pending transaction?
+	*/
+	g_assert(pending_trans == NULL);
+	blank_split = create_blank_split (default_account, info);
     }
-
     blank_trans = xaccSplitGetParent (blank_split);
 
     DEBUG("blank_split=%p, blank_trans=%p, pending_trans=%p",
