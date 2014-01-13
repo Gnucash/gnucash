@@ -1329,6 +1329,17 @@ gnc_ui_commodity_dialog_to_object(CommodityWindow * w)
         return FALSE;
     }
 
+    /* Don't allow user to create commodities in namespace
+     * "template". That's reserved for scheduled transaction use.
+     */
+    if (g_utf8_collate(namespace, "template") == 0)
+    {
+	gnc_warning_dialog (w->dialog,
+			    _("%s is a reserved commodity type."
+			      " Please use something else."), "template");
+	return FALSE;
+    }
+
     if (fullname && fullname[0] &&
             namespace && namespace[0] &&
             mnemonic && mnemonic[0])
