@@ -305,6 +305,22 @@ change_account_separator (SRInfo *info, Table *table, SplitRegister *reg)
 	gnc_split_register_recn_cell_confirm, reg);
 }
 
+static void
+update_info (SRInfo *info, SplitRegister *reg)
+{
+    /* Set up the hint transaction, split, transaction split, and column. */
+    info->cursor_hint_trans = gnc_split_register_get_current_trans (reg);
+    info->cursor_hint_split = gnc_split_register_get_current_split (reg);
+    info->cursor_hint_trans_split =
+        gnc_split_register_get_current_trans_split (reg, NULL);
+    info->cursor_hint_cursor_class =
+        gnc_split_register_get_current_cursor_class (reg);
+    info->hint_set_by_traverse = FALSE;
+    info->traverse_to_new = FALSE;
+    info->exact_traversal = FALSE;
+    info->first_pass = FALSE;
+    info->reg_loaded = TRUE;
+}
 
 void
 gnc_split_register_load (SplitRegister *reg, GList * slist,
@@ -679,18 +695,7 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
         cursor_buffer = NULL;
     }
 
-    /* Set up the hint transaction, split, transaction split, and column. */
-    info->cursor_hint_trans = gnc_split_register_get_current_trans (reg);
-    info->cursor_hint_split = gnc_split_register_get_current_split (reg);
-    info->cursor_hint_trans_split =
-        gnc_split_register_get_current_trans_split (reg, NULL);
-    info->cursor_hint_cursor_class =
-        gnc_split_register_get_current_cursor_class (reg);
-    info->hint_set_by_traverse = FALSE;
-    info->traverse_to_new = FALSE;
-    info->exact_traversal = FALSE;
-    info->first_pass = FALSE;
-    info->reg_loaded = TRUE;
+    update_info (info, reg);
 
     gnc_split_register_set_cell_fractions(
         reg, gnc_split_register_get_current_split (reg));
