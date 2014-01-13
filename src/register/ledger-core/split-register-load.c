@@ -530,7 +530,8 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
 	 * pending_trans, then it's another register's blank split and
 	 * we don't want to see it.
 	 */
-	else if (xaccTransCountSplits (trans) < 2)
+	else if (xaccTransCountSplits (trans) == 1 &&
+		 xaccSplitGetAccount (split) == NULL)
 	    continue;
 
 
@@ -690,10 +691,9 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
             if (find_split == gnc_split_register_get_current_split (reg))
                 gnc_table_restore_current_cursor (table, cursor_buffer);
         }
-
-        gnc_cursor_buffer_destroy (cursor_buffer);
-        cursor_buffer = NULL;
     }
+    gnc_cursor_buffer_destroy (cursor_buffer);
+    cursor_buffer = NULL;
 
     update_info (info, reg);
 
