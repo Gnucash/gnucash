@@ -834,6 +834,14 @@ gnc_commodity_new(QofBook *book, const char * fullname,
 
     if ( namespace != NULL )
     {
+	/* Prevent setting anything except template in namespace template. */
+	if (g_strcmp0 (namespace, "template") == 0 &&
+	    g_strcmp0 (mnemonic, "template") != 0)
+	{
+	    PWARN("Converting commodity %s from namespace template to "
+		  "namespace User", mnemonic);
+	    namespace = "User";
+	}
         gnc_commodity_set_namespace(retval, namespace);
         if (gnc_commodity_namespace_is_iso(namespace))
         {
@@ -1855,11 +1863,20 @@ gnc_commodity_table_insert(gnc_commodity_table * table,
                 }
             }
         }
-
         gnc_commodity_copy (c, comm);
         gnc_commodity_destroy (comm);
         LEAVE("found at %p", c);
         return c;
+    }
+
+    /* Prevent setting anything except template in namespace template. */
+    if (g_strcmp0 (ns_name, "template") == 0 &&
+	g_strcmp0 (priv->mnemonic, "template") != 0)
+    {
+	PWARN("Converting commodity %s from namespace template to "
+	      "namespace User", priv->mnemonic);
+	gnc_commodity_set_namespace (comm, "User");
+	ns_name = "User";
     }
 
     book = qof_instance_get_book (&comm->inst);
