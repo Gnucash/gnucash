@@ -786,38 +786,29 @@ qof_session_load_from_xml_file_v2_full(
     }
     else
     {
-        /* Even though libxml2 knows how to decompress zipped files, we do it 
-           ourself since as of version 2.9.1 it has a bug that causes it to fail
-           to decompress certain files.  
-           See https://bugzilla.gnome.org/show_bug.cgi?id=712528 for more info */
-        gchar *filename = fbe->fullpath;
-#ifdef G_OS_WIN32
-        filename = g_win32_locale_filename_from_utf8(fbe->fullpath);
-        if (filename)
-        {
-#endif
-            FILE *file;
-            gboolean is_compressed = is_gzipped_file(filename);
-            file = try_gz_open(filename, "r", is_compressed, FALSE);
-            if (file == NULL)
-            {
-                PWARN("Unable to open file %s", filename);
-                retval = FALSE;
-            }
-            else
-            {
-                retval = gnc_xml_parse_fd(top_parser, file,
-                                          generic_callback, gd, book);
-                fclose(file);
-                if (is_compressed)
-                    wait_for_gzip(file);
-            }
-#ifdef G_OS_WIN32
-            g_free(filename);
-        }
-        else
-            retval = FALSE;
-#endif
+	/* Even though libxml2 knows how to decompress zipped files, we
+	 * do it ourself since as of version 2.9.1 it has a bug that
+	 * causes it to fail to decompress certain files. See
+	 * https://bugzilla.gnome.org/show_bug.cgi?id=712528 for more
+	 * info.
+	 */
+	gchar *filename = fbe->fullpath;
+	FILE *file;
+	gboolean is_compressed = is_gzipped_file(filename);
+	file = try_gz_open(filename, "r", is_compressed, FALSE);
+	if (file == NULL)
+	{
+	    PWARN("Unable to open file %s", filename);
+	    retval = FALSE;
+	}
+	else
+	{
+	    retval = gnc_xml_parse_fd(top_parser, file,
+				      generic_callback, gd, book);
+	    fclose(file);
+	    if (is_compressed)
+		wait_for_gzip(file);
+	}
     }
 
     if (!retval)
