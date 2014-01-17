@@ -25131,7 +25131,7 @@ msgstr "División de transacción"
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:4344
 msgid "Total For "
-msgstr "Total para"
+msgstr "Total para "
 
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:4432 ../intl-scm/guile-strings.c:4434
