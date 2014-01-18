@@ -104,6 +104,8 @@ gnc_parse_date (struct tm *parsed, const char * datestr)
     {
         // Couldn't parse date, use today
         struct tm tm_today;
+
+	memset (&tm_today, 0, sizeof (struct tm));
         gnc_tm_get_today_start (&tm_today);
         day = tm_today.tm_mday;
         month = tm_today.tm_mon + 1;
