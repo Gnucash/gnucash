@@ -261,7 +261,7 @@ gnc_vendor_window_cancel_cb (GtkWidget *widget, gpointer data)
 void
 gnc_vendor_window_help_cb (GtkWidget *widget, gpointer data)
 {
-    gnc_gnome_help(HF_HELP, HL_USAGE);
+    gnc_gnome_help(HF_HELP, HL_USAGE_VENDOR);
 }
 
 void

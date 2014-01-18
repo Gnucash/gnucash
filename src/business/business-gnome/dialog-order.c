@@ -232,7 +232,7 @@ gnc_order_window_cancel_cb (GtkWidget *widget, gpointer data)
 void
 gnc_order_window_help_cb (GtkWidget *widget, gpointer data)
 {
-    gnc_gnome_help(HF_HELP, HL_USAGE);
+    gnc_gnome_help(HF_HELP, HL_USAGE_BILL);
 }
 
 void
