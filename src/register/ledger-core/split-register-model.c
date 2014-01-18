@@ -906,20 +906,16 @@ gnc_split_register_get_date_help (VirtualLocation virt_loc,
     SplitRegister *reg = user_data;
     BasicCell *cell;
     char string[1024];
-    struct tm tm;
-    Timespec ts;
-    time64 tt;
+    GDate date;
 
     cell = gnc_table_get_cell (reg->table, virt_loc);
     if (!cell || !cell->value || *cell->value == '\0')
         return NULL;
 
-    gnc_date_cell_get_date ((DateCell *) cell, &ts);
-    tt = ts.tv_sec;
+    g_date_clear (&date, 1);
+    gnc_date_cell_get_date_gdate ((DateCell *) cell, &date);
 
-    gnc_localtime_r (&tt, &tm);
-
-    qof_strftime (string, sizeof (string), _("%A %d %B %Y"), &tm);
+    g_date_strftime (string, sizeof (string), _("%A %d %B %Y"), &date);
 
     return g_strdup (string);
 }
