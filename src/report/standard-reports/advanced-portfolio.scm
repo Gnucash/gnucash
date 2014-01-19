@@ -389,12 +389,12 @@
 		 ;; the report's currency.
                  (value (exchange-fn (gnc:make-gnc-monetary commodity units) currency))
 
-		 (txn-value (gnc-numeric-zero))
 		 (txn-date to-date)
 		 (pricing-txn #f)
+		 (pricing-txn-date #f)
+		 (pricing-txn-split #f)
 		 (use-txn #f)
 		 (basis-list '())
-		 (txn-units (gnc-numeric-zero))
 		 ;; setup an alist for the splits we've already seen.
 		 (seen_split '())
 		 )
@@ -423,17 +423,9 @@
 					  (split-account-type? s ACCT-TYPE-ROOT)))
 				 (not (same-account? current (xaccSplitGetAccount s))))
 			    (begin
-			      ;; we're using a transaction to get the price, so we have to set some stuff
 			      (set! commod-currency (xaccAccountGetCommodity (xaccSplitGetAccount s)))
 			      (set! commod-currency-frac (gnc-commodity-get-fraction commod-currency))
-			      ;; FIX-ME this doesn't set a pricing-txn
-			      ;; if there is a price list which leads
-			      ;; to a swigification crash if the user
-			      ;; unchecks "prefer price list" option.
-			      (set! pricing-txn (xaccSplitGetParent s))
-			      (gnc:debug "pricing txn is " pricing-txn)
-			      )
-			    )
+			    ))
 			) 
 		      (xaccTransGetSplitList parent)) 
 			  )
@@ -462,6 +454,20 @@
 				(gnc:debug "split units " (gnc-numeric-to-string split-units) " split-value " 
 				           (gnc-numeric-to-string split-value) " commod-currency " 
 				           (gnc-commodity-get-printname commod-currency))
+			        
+                                (if (and (not (or (split-account-type? s ACCT-TYPE-EXPENSE)
+                                                  (split-account-type? s ACCT-TYPE-INCOME)
+                                                  (split-account-type? s ACCT-TYPE-TRADING)
+                                                  (split-account-type? s ACCT-TYPE-ROOT)))
+                                         (not (same-account? current (xaccSplitGetAccount s))))
+                                  (begin
+                                    ;; This is a possible pricing transaction.  We want the most recent
+                                    ;; one which will be the last one we see
+                                    (set! pricing-txn (xaccSplitGetParent s))
+                                    (set! pricing-txn-date txn-date)
+                                    (set! pricing-txn-split split)
+                                  )  
+                                )  
 				
 				;; now we look at what type of split this is and process accordingly
 			  (cond
@@ -533,13 +539,12 @@
 
 					 ((split-account-type? x ACCT-TYPE-EXPENSE)
 					  (begin
-					    (set! adjusted-dividend (gnc-numeric-sub dividend-income (xaccSplitGetValue x) 
-										     commod-currency-frac GNC-RND-ROUND))
-					    (gnc:debug "adjusting adjusted-dividend by " (gnc-numeric-to-string dividend-income))
+					    (gnc-numeric-sub adjusted-dividend (xaccSplitGetValue x) commod-currency-frac GNC-RND-ROUND)
+					    (gnc:debug "adjusting adjusted-dividend by " (gnc-numeric-to-string (xaccSplitGetValue x)))
 					    ;; grab the brokerage that
 					    ;; may be associated so we
 					    ;; can split it too
-					    (set! split-brokerage (xaccSplitGetValue x))
+					    (gnc-numeric-add split-brokerage (xaccSplitGetValue x) commod-currency-frac GNC-RND-ROUND)
 					    )
 					  )
 					 )
@@ -551,14 +556,18 @@
 									adjusted-dividend 
 									GNC-DENOM-AUTO GNC-RND-ROUND))
 
-				     ;; take the brokerage back out and apply the ratio
-				     (gnc:debug "Reducing brockerage " (gnc-numeric-to-string split-brokerage) 
-				                " by ratio " (gnc-numeric-to-string split-ratio))
-				     (brokeragecoll 'add commod-currency (gnc-numeric-neg split-brokerage))
-				     (brokeragecoll 'add commod-currency 
-						    (gnc-numeric-mul split-brokerage 
-								     split-ratio
-								     commod-currency-frac GNC-RND-ROUND))
+                                     (if (not (gnc-numeric-zero-p split-brokerage))
+                                       (begin
+                                          ;; take the brokerage back out and apply the ratio
+                                          (gnc:debug "Reducing brockerage " (gnc-numeric-to-string split-brokerage) 
+                                                     " by ratio " (gnc-numeric-to-string split-ratio))
+                                          (brokeragecoll 'add commod-currency (gnc-numeric-neg split-brokerage))
+                                          (brokeragecoll 'add commod-currency 
+                                                         (gnc-numeric-mul split-brokerage 
+                                                                          split-ratio
+                                                                          commod-currency-frac GNC-RND-ROUND))
+				       )
+				     )  
 
 				     (if (gnc-numeric-zero-p dividend-rein)
 				         (begin
@@ -617,19 +626,21 @@
 
 				 ;; here is where we handle a spin-off txn. This will be a no-units
 				 ;; transaction with only one other split. xaccSplitGetOtherSplit only
-				 ;; returns on a two-split txn :) 
-				 ((and (gnc-numeric-zero-p txn-units) (not (null? (xaccSplitGetOtherSplit s))))
-				  (if (same-account? current (xaccSplitGetAccount s))
-				    (begin
-				      (gnc:debug "before spin-off basis list " basis-list)
-				      (set! basis-list (basis-builder basis-list split-units (gnc:gnc-monetary-amount 
-											      (exchange-fn (gnc:make-gnc-monetary 
-													    commod-currency split-value) 
-													   currency)) basis-method
-													   commod-currency-frac))
-				      (gnc:debug "after spin-off basis list "  basis-list)
-				    )
-				   )
+				 ;; returns on a two-split txn.  It's not a spinoff is the other split is
+				 ;; in an income or expense account.
+				 ((and (gnc-numeric-zero-p split-units) 
+				       (not (null? (xaccSplitGetOtherSplit s)))
+				       (same-account? current (xaccSplitGetAccount s))
+				       (not (split-account-type? (xaccSplitGetOtherSplit s) ACCT-TYPE-EXPENSE))
+				       (not (split-account-type? (xaccSplitGetOtherSplit s) ACCT-TYPE-INCOME)))
+				    (gnc:debug "before spin-off basis list " basis-list)
+				    (set! basis-list (basis-builder basis-list split-units (gnc:gnc-monetary-amount 
+                                                                                            (exchange-fn (gnc:make-gnc-monetary 
+                                                                                                          commod-currency split-value) 
+                                                                                                         currency)) 
+                                                                                                         basis-method
+                                                                                                         commod-currency-frac))
+				    (gnc:debug "after spin-off basis list "  basis-list)
 				  )
 				 )
 				)
@@ -648,7 +659,7 @@
 	    ;; and if we have a choice, use whichever is newest.
 	    (set! use-txn (if (not price) #t 
 			      (if (or prefer-pricelist (not pricing-txn)) #f
-				  (if (not (gnc:timepair-le txn-date (gnc-price-get-time price)))
+				  (if (not (gnc:timepair-le pricing-txn-date (gnc-price-get-time price)))
 				      #t #f))))
 	    (gnc:debug "pricing txn is " pricing-txn)
 	    (gnc:debug "use txn is " use-txn)
@@ -658,12 +669,9 @@
 	    ;; okay we're using the txn, so make a new price, value etc. and warn the user
 	    (if use-txn
 		(begin
-		  (set! price (if (not (gnc-numeric-zero-p txn-units))
-				  (gnc:make-gnc-monetary commod-currency
-							 (gnc-numeric-div txn-value
-									  (gnc-numeric-abs txn-units)
-									  commod-currency-frac GNC-RND-ROUND))
-				  (gnc:make-gnc-monetary commod-currency (gnc-numeric-zero))))
+		  (set! price (if pricing-txn-split 
+		                 (gnc:make-gnc-monetary commod-currency (xaccSplitGetSharePrice pricing-txn-split))
+		                 #f))
 		  
 		  (set! value (if price (gnc:make-gnc-monetary commod-currency 
 						     (gnc-numeric-mul units
