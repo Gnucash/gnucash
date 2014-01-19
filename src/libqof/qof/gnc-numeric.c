@@ -26,11 +26,6 @@
 
 #include <glib.h>
 #include <math.h>
-#if defined(G_OS_WIN32) && !defined(_MSC_VER)
-# ifdef HAVE_POW_H
-#   include <pow.h>
-# endif
-#endif
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -44,6 +39,19 @@
 #include "qofmath128.c"
 
 /* static short module = MOD_ENGINE; */
+static const gint64 pten[] = { 1, 10, 100, 1000, 10000, 100000, 1000000,
+			       10000000, 100000000, 1000000000, 10000000000,
+			       100000000000, 1000000000000, 10000000000000,
+			       100000000000000, 10000000000000000};
+#define POWTEN_OVERFLOW -5
+
+static inline gint64
+powten (int exp)
+{
+    if (exp > 16 || exp < -16)
+	return POWTEN_OVERFLOW;
+    return exp < 0 ? -pten[-exp] : pten[exp];
+}
 
 gint64
 pwr64 (gint64 op, int exp)
@@ -819,17 +827,8 @@ gnc_numeric_convert(gnc_numeric in, gint64 denom, gint how)
             }
             sigfigs  = GNC_HOW_GET_SIGFIGS(how);
 
-            if (fabs(sigfigs - logratio) > 18)
+            if ((denom = powten (sigfigs - logratio)) == POWTEN_OVERFLOW)
                 return gnc_numeric_error(GNC_ERROR_OVERFLOW);
-
-            if (sigfigs - logratio >= 0)
-            {
-                denom    = (gint64)(pow(10, sigfigs - logratio));
-            }
-            else
-            {
-                denom    = -((gint64)(pow(10, logratio - sigfigs)));
-            }
 
             how = how & ~GNC_HOW_DENOM_SIGFIG & ~GNC_NUMERIC_SIGFIGS_MASK;
             break;
@@ -1153,7 +1152,6 @@ gnc_numeric_to_decimal(gnc_numeric *a, guint8 *max_decimal_places)
 #ifdef _MSC_VER
 # define rint /* */
 #endif
-
 gnc_numeric
 double_to_gnc_numeric(double in, gint64 denom, gint how)
 {
@@ -1177,14 +1175,8 @@ double_to_gnc_numeric(double in, gint64 denom, gint how)
                         (floor(logval) + 1.0) : (ceil(logval)));
         }
         sigfigs  = GNC_HOW_GET_SIGFIGS(how);
-        if (sigfigs - logval >= 0)
-        {
-            denom    = (gint64)(pow(10, sigfigs - logval));
-        }
-        else
-        {
-            denom    = -((gint64)(pow(10, logval - sigfigs)));
-        }
+	if ((denom = powten (sigfigs - logval)) == POWTEN_OVERFLOW)
+            return gnc_numeric_error(GNC_ERROR_OVERFLOW);
 
         how =  how & ~GNC_HOW_DENOM_SIGFIG & ~GNC_NUMERIC_SIGFIGS_MASK;
     }
