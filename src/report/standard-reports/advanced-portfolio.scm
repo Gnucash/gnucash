@@ -443,9 +443,9 @@
                   (let ((split-list (reverse (gnc:get-match-commodity-splits-sorted 
                                                  (list current) 
                                                  (case price-source 
-                                                   ((pricedb-latest) (timespec-now))
+                                                   ((pricedb-latest) (gnc:get-today))
                                                    ((pricedb-nearest) to-date)
-                                                   (else (timespec-now)))  ;; error, but don't crash
+                                                   (else (gnc:get-today)))  ;; error, but don't crash
                                                  #f))))  ;; Any currency
                         ;; Find the first (most recent) one that can be converted to report currency
                         (while (and (not use-txn) (not (eqv? split-list '())))
