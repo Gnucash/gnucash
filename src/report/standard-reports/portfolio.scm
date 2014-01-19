@@ -157,8 +157,10 @@
 			       "number-cell" value)))
 		       ;;(display (sprintf #f "Shares: %6.6d  " (gnc-numeric-to-double units)))
 		       ;;(display units) (newline)
+		       (if price (gnc-price-unref price))
 		       (table-add-stock-rows-internal rest (not odd-row?)))
-		(table-add-stock-rows-internal rest odd-row?)))))
+		(begin (if price (gnc-price-unref price))
+		       (table-add-stock-rows-internal rest odd-row?))))))
 
     (set! work-to-do (length accounts))
     (table-add-stock-rows-internal accounts #t)))
@@ -209,22 +211,28 @@
 				 pricealist foreign date)))))
                   ((pricedb-latest) 
                    (lambda (foreign date) 
-                     (let ((price
-                            (gnc-pricedb-lookup-latest-any-currency
-                             pricedb foreign)))
-                       (if (and price (> (length price) 0))
-                           (let ((v (gnc-price-get-value (car price))))
-                             (cons (car price) v))
-                           (cons #f (gnc-numeric-zero))))))
+                     (let* ((price
+                             (gnc-pricedb-lookup-latest-any-currency
+                              pricedb foreign))
+                            (fn (if (and price (> (length price) 0))
+                                        (let ((v (gnc-price-get-value (car price))))
+                                          (gnc-price-ref (car price))
+                                          (cons (car price) v))
+                                        (cons #f (gnc-numeric-zero)))))
+                       (if price (gnc-price-list-destroy price))
+                       fn)))
                   ((pricedb-nearest) 
                    (lambda (foreign date) 
-                     (let ((price
-                            (gnc-pricedb-lookup-nearest-in-time-any-currency
-                             pricedb foreign (timespecCanonicalDayTime date))))
-                       (if (and price (> (length price) 0))
-                           (let ((v (gnc-price-get-value (car price))))
-                             (cons (car price) v))
-                           (cons #f (gnc-numeric-zero)))))))))
+                     (let*  ((price
+                             (gnc-pricedb-lookup-nearest-in-time-any-currency
+                              pricedb foreign (timespecCanonicalDayTime date)))
+                            (fn (if (and price (> (length price) 0))
+                                         (let ((v (gnc-price-get-value (car price))))
+                                           (gnc-price-ref (car price))
+                                           (cons (car price) v))
+                                         (cons #f (gnc-numeric-zero)))))
+                       (if price (gnc-price-list-destroy price))
+                       fn))))))
           
           (gnc:html-table-set-col-headers!
            table
