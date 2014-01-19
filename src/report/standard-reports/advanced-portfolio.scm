@@ -607,36 +607,43 @@
 
 				 ;; we have units, handle all cases of that
 				 ((not (gnc-numeric-zero-p split-units))
-				  (begin
-				    
-
 				    ;; are we dealing with the actual stock/fund?
 				    (if (same-account? current (xaccSplitGetAccount s))
-					(begin
+					(let ((split-value-currency (gnc:gnc-monetary-amount 
+									(exchange-fn (gnc:make-gnc-monetary 
+									   commod-currency split-value) currency)))
+			                      (orig-basis (sum-basis basis-list currency-frac)))
                                           (gnc:debug "going in to basis list " basis-list " " (gnc-numeric-to-string split-units) " "
                                                      (gnc-numeric-to-string split-value))
 
 					  ;; adjust the basis
-					  (set! basis-list (basis-builder basis-list split-units (gnc:gnc-monetary-amount 
-												  (exchange-fn (gnc:make-gnc-monetary 
-														commod-currency split-value) 
-													       currency)) 
-													       basis-method 
-													       currency-frac))
+					  (set! basis-list (basis-builder basis-list split-units split-value-currency 
+									  basis-method currency-frac))
                                           (gnc:debug  "coming out of basis list " basis-list)
                                           
-					  ;; adjust moneyin/out
+					  ;; adjust moneyin/out and calculate the gain
 					  (if (gnc-numeric-positive-p split-value)
 					      ;; but only adjust moneyin if it's not a spinoff
 					      (if (or (null? (xaccSplitGetOtherSplit s))
 						      (not (gnc-numeric-zero-p (xaccSplitGetAmount (xaccSplitGetOtherSplit s)))))
 					       (begin (gnc:debug "Money in 2 " (gnc-numeric-to-string split-value))
 					              (moneyincoll 'add commod-currency split-value)))
-					      (begin (gnc:debug "Money out 2 " (gnc-numeric-to-string (gnc-numeric-neg split-value)))
-					             (moneyoutcoll 'add commod-currency (gnc-numeric-neg split-value))))
+					      (if (gnc-numeric-negative-p split-value)
+                                                ;; Split value is negative, money is going out of stock account
+                                                (let* ((new-basis (sum-basis basis-list currency-frac))
+                                                        ;; Capital gain is money out minus change in basis
+                                                        (gain (gnc-numeric-sub (gnc-numeric-abs split-value-currency)
+                                                                          (gnc-numeric-sub orig-basis new-basis
+                                                                                           currency-frac GNC-RND-ROUND)
+                                                                          currency-frac GNC-RND-ROUND)))
+                                                       (gnc:debug "Old basis=" (gnc-numeric-to-string orig-basis)
+                                                                  " New basis=" (gnc-numeric-to-string new-basis)
+                                                                  " Gain=" (gnc-numeric-to-string gain))
+                                                       (gaincoll 'add currency gain)
+                                                       (gnc:debug "Money out 2 " (gnc-numeric-to-string (gnc-numeric-neg split-value)))
+                                                       (moneyoutcoll 'add commod-currency (gnc-numeric-neg split-value)))))
 					  )
 					)
-				    )
 				  )
 
 				 ;; here is where we handle a spin-off txn. This will be a no-units
@@ -697,21 +704,15 @@
 		  )  
 		)
 
-	    ;; what this means is gain = moneyout - moneyin + basis-of-current-shares, and
-	    ;; adjust for brokers and dividends.
-	    (gaincoll 'add currency (sum-basis basis-list currency-frac))
 	    (gnc:debug "basis we're using to build rows is " (gnc-numeric-to-string (sum-basis basis-list 
 	                                                            currency-frac)))
 	    (gnc:debug "but the actual basis list is " basis-list)
-
-	    (gaincoll 'merge moneyoutcoll #f)
-	    (gaincoll 'minusmerge moneyincoll #f)
 
             ;; This removes the already-counted reinvested dividends from moneyin.
 	    (moneyincoll 'minusmerge dividend-reincoll #f)
 
             (if (not ignore-brokerage-fees)
-	      (moneyincoll 'merge brokeragecoll #f))
+	      (gaincoll 'minusmerge brokeragecoll #f))
 
 	  (if (or include-empty (not (gnc-numeric-zero-p units)))
 	    (let* ((moneyin (gnc:sum-collector-commodity moneyincoll currency exchange-fn))
@@ -728,11 +729,7 @@
 									      (gnc:gnc-monetary-amount ugain)
 									      currency-frac GNC-RND-ROUND)))
 		  (totalreturn (gnc:make-gnc-monetary currency (gnc-numeric-add (gnc:gnc-monetary-amount bothgain)
-										(if ignore-brokerage-fees
 										    (gnc:gnc-monetary-amount income)
-										    (gnc-numeric-sub (gnc:gnc-monetary-amount income)
-												     (gnc:gnc-monetary-amount brokerage)
-												     currency-frac GNC-RND-ROUND))
 										currency-frac GNC-RND-ROUND)))
 
 		  (activecols (list (gnc:html-account-anchor current)))
@@ -948,11 +945,7 @@
 										      (gnc-commodity-get-fraction currency) GNC-RND-ROUND)))
 	  (set! sum-total-brokerage (gnc:sum-collector-commodity total-brokerage currency exchange-fn))
 	  (set! sum-total-totalreturn (gnc:make-gnc-monetary currency (gnc-numeric-add (gnc:gnc-monetary-amount sum-total-both-gains)
-										       (if ignore-brokerage-fees
 										           (gnc:gnc-monetary-amount sum-total-income)
-											   (gnc-numeric-sub (gnc:gnc-monetary-amount sum-total-income)
-													    (gnc:gnc-monetary-amount sum-total-brokerage)
-													    (gnc-commodity-get-fraction currency) GNC-RND-ROUND))
 										       (gnc-commodity-get-fraction currency) GNC-RND-ROUND)))
 
           (gnc:html-table-append-row/markup!
