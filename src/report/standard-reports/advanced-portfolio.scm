@@ -79,9 +79,6 @@
 	    (vector 'pricedb-nearest
 		    (N_ "Nearest in time")
 		    (N_ "The price recorded nearest in time to the report date."))
-	    (vector 'pricedb-latest-before
-		    (N_ "Most recent to report")
-		    (N_ "The most recent recorded price before report date."))
 	    )))
     
     (add-option
@@ -902,11 +899,7 @@
                   ((pricedb-nearest) 
                    (lambda (foreign domestic date) 
                     (find-price (gnc-pricedb-lookup-nearest-in-time-any-currency
-		     pricedb foreign (timespecCanonicalDayTime date)) domestic)))
-		  ((pricedb-latest-before)
-		   (lambda (foreign domestic date)
-		     (gnc-pricedb-lookup-latest-before
-		      pricedb foreign domestic (timespecCanonicalDayTime date))))))
+		     pricedb foreign (timespecCanonicalDayTime date)) domestic)))))
 	       (headercols (list (_ "Account")))
 	       (totalscols (list (gnc:make-html-table-cell/markup "total-label-cell" (_ "Total"))))
 	       (sum-total-moneyin (gnc-numeric-zero))
