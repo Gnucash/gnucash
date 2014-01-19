@@ -95,8 +95,8 @@
 		    (N_ "FIFO")
 		    (N_ "Use first-in first-out method for basis."))
 	    (vector 'filo-basis
-		    (N_ "FILO")
-		    (N_ "Use first-in last-out method for basis."))
+		    (N_ "LIFO")
+		    (N_ "Use last-in first-out method for basis."))
 	    )))
 
     (add-option
@@ -226,7 +226,7 @@
 	)    
     )
   
-  ;; this builds a list for basis calculation and handles average, fifo and filo methods
+  ;; this builds a list for basis calculation and handles average, fifo and lifo methods
   ;; the list is cons cells of (units-of-stock . price-per-unit)... average method produces only one
   ;; cell that mutates to the new average. Need to add a date checker so that we allow for prices
   ;; coming in out of order, such as a transfer with a price adjusted to carryover the basis.
