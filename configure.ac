@@ -184,12 +184,10 @@ fi
 
 # test whether we are building directly from svn/svk/git/bzr
 AC_MSG_CHECKING(if building from an scm managed directory)
-savedir="$PWD"
-cd "${srcdir}"
-./util/gnc-scm-info -r . >/dev/null 2>&1
+"$srcdir/util/gnc-scm-info" -r "$srcdir" >/dev/null 2>&1
 if test $? = 0 -o "x${BUILDING_FROM_SCM}" = "xyes" ; then
   BUILDING_FROM_SCM=yes
-  SCM_TYPE=$(./util/gnc-scm-info -t .)
+  SCM_TYPE=$("$srcdir/util/gnc-scm-info" -t "$srcdir")
   AC_MSG_RESULT($SCM_TYPE)
 
   if test "x${SCM_TYPE}" = "xgit"; then
@@ -229,7 +227,6 @@ the tarball you downloaded is broken.
 
     ])])
 fi
-cd "${savedir}"
 AM_CONDITIONAL(BUILDING_FROM_SCM, test "x$BUILDING_FROM_SCM" = "xyes")
 AC_SUBST(SCM_TYPE)
 AC_SUBST(GIT_CMD)
