@@ -272,7 +272,7 @@ set_default ZLIB_URL                "$GNOME_WIN32_DEPS_URL/zlib_1.2.5-2_win32.zi
 set_default ZLIB_DEV_URL            "$GNOME_WIN32_DEPS_URL/zlib-dev_1.2.5-2_win32.zip"
 set_default GNOME_DIR $GLOBAL_DIR\\gnome
 
-set_default SWIG_URL "$SF_MIRROR/swig/swigwin-1.3.36.zip"
+set_default SWIG_URL "$SF_MIRROR/swig/swigwin-2.0.11.zip"
 set_default SWIG_DIR $GLOBAL_DIR\\swig
 
 set_default PCRE_BIN_URL "$SF_MIRROR/gnuwin32/pcre-7.0-bin.zip"
