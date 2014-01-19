@@ -828,11 +828,14 @@
 	       row-style
 	       activecols)
 	        
+              (if (and (not use-txn) price) (gnc-price-unref price))
 	      (table-add-stock-rows-internal rest (not odd-row?))
 	      )
-	    (table-add-stock-rows-internal rest odd-row?)
+	    (begin
+	      (if (and (not use-txn) price) (gnc-price-unref price))
+	      (table-add-stock-rows-internal rest odd-row?)
+	      )
             )
-            (if (and (not use-txn) price) (gnc-price-unref price))
 	    )))
 
     (set! work-to-do (gnc:accounts-count-splits accounts))
