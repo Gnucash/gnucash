@@ -228,7 +228,8 @@
   ;; coming in out of order, such as a transfer with a price adjusted to carryover the basis.
   (define (basis-builder b-list b-units b-value b-method)
     (gnc:debug "actually in basis-builder")
-    (gnc:debug "b-list is " b-list " b-units is " b-units " b-value is " b-value " b-method is " b-method)
+    (gnc:debug "b-list is " b-list " b-units is " (gnc-numeric-to-string b-units) 
+               " b-value is " (gnc-numeric-to-string b-value) " b-method is " b-method)
 
     ;; if there is no b-value, then this is a split/merger and needs special handling
     (cond 
@@ -302,7 +303,10 @@
 					     current-units GNC-DENOM-AUTO GNC-RND-ROUND))
 	       (value-ratio (gnc-numeric-div (gnc:make-gnc-numeric 1 1) units-ratio GNC-DENOM-AUTO GNC-RND-ROUND)))
 	  
-	  (gnc:debug "blist is " b-list " current units is " current-units " units ratio is " units-ratio)
+	  (gnc:debug "blist is " b-list " current units is " 
+	             (gnc-numeric-to-string current-units) 
+	             " value ratio is " (gnc-numeric-to-string value-ratio)
+	             " units ratio is " (gnc-numeric-to-string units-ratio))
 	  (apply-basis-ratio b-list units-ratio value-ratio) 
 	  ))
 
@@ -316,7 +320,7 @@
 					   current-value GNC-DENOM-AUTO GNC-RND-ROUND)))
 	  
 	(gnc:debug "this is a spinoff")
-	(gnc:debug "blist is " b-list " value ratio is " value-ratio)
+	(gnc:debug "blist is " b-list " value ratio is " (gnc-numeric-to-string value-ratio))
 	(apply-basis-ratio b-list (gnc:make-gnc-numeric 1 1) value-ratio))
       )
 
@@ -430,6 +434,7 @@
 
 		 (if (gnc:timepair-le txn-date to-date)
 		     (begin
+		       (gnc:debug "Transaction " (xaccTransGetDescription parent))
 		       ;; here's where we have problems. we are now going to look at each
 		       ;; split of the the parent txn of the current split (above) that we
 		       ;; are on. This means we might hit each split more than once as the
@@ -448,7 +453,9 @@
 				;; first add this split to the seen_split list so we only look at it once.
 				(set! seen_split (acons (gncSplitGetGUID s) #t seen_split))
 
-				(gnc:debug "split units " split-units " split-value " split-value " commod-currency " commod-currency)
+				(gnc:debug "split units " (gnc-numeric-to-string split-units) " split-value " 
+				           (gnc-numeric-to-string split-value) " commod-currency " 
+				           (gnc-commodity-get-printname commod-currency))
 				
 				;; now we look at what type of split this is and process accordingly
 			  (cond
@@ -465,9 +472,11 @@
 				 ((split-account-type? s ACCT-TYPE-EXPENSE)
 				  (if (equal? current (xaccSplitGetAccount (xaccSplitGetOtherSplit s)))
 				      ;; "donated shares"
-				      (moneyoutcoll 'add commod-currency split-value)
+				      (begin (gnc:debug "Money out 1 " (gnc-numeric-to-string split-value))
+				             (moneyoutcoll 'add commod-currency split-value))
 				      ;; brokerage fees
-				      (brokeragecoll 'add commod-currency split-value)))
+				      (begin (gnc:debug "Brockerage 1 " (gnc-numeric-to-string split-value))
+				             (brokeragecoll 'add commod-currency split-value))))
 
 				 ;; in theory, income is a dividend of
 				 ;; some kind. it could also be
@@ -477,7 +486,6 @@
 				 ;; a retirement account. basically,
 				 ;; there is nothing that can be done
 				 ;; with these to differentiate them
-				 ;; :(
 				 ((split-account-type? s ACCT-TYPE-INCOME)
 				  (dividendcoll 
 				   'add commod-currency 
@@ -501,7 +509,7 @@
 					  (begin
 					    (set! dividend-rein (xaccSplitGetValue x))
 					    (dividend-reincoll 'add commod-currency dividend-rein)
-					    (gnc:debug "setting the dividend-rein to" (xaccSplitGetValue x))))
+					    (gnc:debug "setting the dividend-rein to " (gnc-numeric-to-string (xaccSplitGetValue x)))))
 					 ;; very special case: we have
 					 ;; a split that points to the
 					 ;; current account with no
@@ -514,13 +522,14 @@
 					 ((and (same-account? current (xaccSplitGetAccount x))
 					       (gnc-numeric-zero-p (xaccSplitGetAmount x))
 					       (not (gnc-numeric-zero-p (xaccSplitGetValue x))))
-					  (dividendcoll 'add commod-currency (gnc-numeric-neg (xaccSplitGetValue x))))
+					  (begin (gnc:debug "dividend 2 " (gnc-numeric-to-string (xaccSplitGetValue x)))
+					         (dividendcoll 'add commod-currency (gnc-numeric-neg (xaccSplitGetValue x)))))
 
 					 ((split-account-type? x ACCT-TYPE-EXPENSE)
 					  (begin
 					    (set! adjusted-dividend (gnc-numeric-sub dividend-income (xaccSplitGetValue x) 
 										     GNC-DENOM-AUTO GNC-RND-ROUND))
-					    (gnc:debug "setting adjusted-dividend to" dividend-income)
+					    (gnc:debug "adjusting adjusted-dividend by " (gnc-numeric-to-string dividend-income))
 					    ;; grab the brokerage that
 					    ;; may be associated so we
 					    ;; can split it too
@@ -537,6 +546,8 @@
 									GNC-DENOM-AUTO GNC-RND-ROUND))
 
 				     ;; take the brokerage back out and apply the ratio
+				     (gnc:debug "Reducing brockerage " (gnc-numeric-to-string split-brokerage) 
+				                " by ratio " (gnc-numeric-to-string split-ratio))
 				     (brokeragecoll 'add commod-currency (gnc-numeric-neg split-brokerage))
 				     (brokeragecoll 'add commod-currency 
 						    (gnc-numeric-mul split-brokerage 
@@ -544,16 +555,22 @@
 								     100 GNC-RND-ROUND))
 
 				     (if (gnc-numeric-zero-p dividend-rein)
+				         (begin
 					 ;; no reinvested dividend, return just the income split
+				         (gnc:debug "Dividend 1 " (gnc-numeric-to-string dividend-income))
 					 dividend-income
+				         )	
+				        
 					 ;; dividend reinvested so
 					 ;; apply the ratio to the
 					 ;; dividend and return it for
 					 ;; use in the dividend
 					 ;; collector
-					 (gnc-numeric-mul dividend-income 
-							  split-ratio
-							  100 GNC-RND-ROUND)
+					 (let ((div (gnc-numeric-mul dividend-income 
+						                     split-ratio
+						                     100 GNC-RND-ROUND)))
+					    (gnc:debug "Adjusted dividend " (gnc-numeric-to-string div))
+					    div)
 					 )
 				     )
 				   ))
@@ -562,27 +579,31 @@
 				 ((not (gnc-numeric-zero-p split-units))
 				  (begin
 				    
-				    (gnc:debug "going in to basis list " basis-list split-units split-value)
 
 				    ;; are we dealing with the actual stock/fund?
 				    (if (same-account? current (xaccSplitGetAccount s))
 					(begin
+                                          (gnc:debug "going in to basis list " basis-list " " (gnc-numeric-to-string split-units) " "
+                                                     (gnc-numeric-to-string split-value))
 
 					  ;; adjust the basis
 					  (set! basis-list (basis-builder basis-list split-units (gnc:gnc-monetary-amount 
 												  (exchange-fn (gnc:make-gnc-monetary 
 														commod-currency split-value) 
 													       currency)) basis-method))
+                                          (gnc:debug  "coming out of basis list " basis-list)
+                                          
 					  ;; adjust moneyin/out
 					  (if (gnc-numeric-positive-p split-value)
 					      ;; but only adjust moneyin if it's not a spinoff
 					      (if (or (null? (xaccSplitGetOtherSplit s))
 						      (not (gnc-numeric-zero-p (xaccSplitGetAmount (xaccSplitGetOtherSplit s)))))
-					       (moneyincoll 'add commod-currency split-value))
-					      (moneyoutcoll 'add commod-currency (gnc-numeric-neg split-value)))
+					       (begin (gnc:debug "Money in 2 " (gnc-numeric-to-string split-value))
+					              (moneyincoll 'add commod-currency split-value)))
+					      (begin (gnc:debug "Money out 2 " (gnc-numeric-to-string (gnc-numeric-neg split-value)))
+					             (moneyoutcoll 'add commod-currency (gnc-numeric-neg split-value))))
 					  )
 					)
-				    (gnc:debug  "coming out of basis list " basis-list)
 				    )
 				  )
 
@@ -591,11 +612,15 @@
 				 ;; returns on a two-split txn :) 
 				 ((and (gnc-numeric-zero-p txn-units) (not (null? (xaccSplitGetOtherSplit s))))
 				  (if (same-account? current (xaccSplitGetAccount s))
+				    (begin
+				      (gnc:debug "before spin-off basis list " basis-list)
 				      (set! basis-list (basis-builder basis-list split-units (gnc:gnc-monetary-amount 
 											      (exchange-fn (gnc:make-gnc-monetary 
 													    commod-currency split-value) 
 													   currency)) basis-method))
-				      )
+				      (gnc:debug "after spin-off basis list "  basis-list)
+				    )
+				   )
 				  )
 				 )
 				)
@@ -616,6 +641,7 @@
 			      (if (or prefer-pricelist (not pricing-txn)) #f
 				  (if (not (gnc:timepair-le txn-date (gnc-price-get-time price)))
 				      #t #f))))
+	    (gnc:debug "pricing txn is " pricing-txn)
 	    (gnc:debug "use txn is " use-txn)
 	    (gnc:debug "prefer-pricelist is " prefer-pricelist)
 	    (gnc:debug "price is " price)
@@ -642,7 +668,7 @@
 	    ;; what this means is gain = moneyout - moneyin + basis-of-current-shares, and
 	    ;; adjust for brokers and dividends.
 	    (gaincoll 'add currency (sum-basis basis-list))
-	    (gnc:debug "basis we're using to build rows is " (sum-basis basis-list))
+	    (gnc:debug "basis we're using to build rows is " (gnc-numeric-to-string (sum-basis basis-list)))
 	    (gnc:debug "but the actual basis list is " basis-list)
 
 	    (gaincoll 'merge moneyoutcoll #f)
