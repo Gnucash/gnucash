@@ -964,6 +964,12 @@
 	 source-option report-currency commodity-list to-date-tp
 	 start-percent delta-percent)
   (case source-option
+    ;; Make this the same as gnc:case-exchange-fn
+    ((average-cost) (let* ((exchange-fn (gnc:make-exchange-function
+                                         (gnc:make-exchange-cost-alist
+                                          report-currency to-date-tp)))) 
+                      (lambda (foreign domestic date)
+                       (exchange-fn foreign domestic))))
     ((weighted-average) (let ((pricealist
 			      (gnc:get-commoditylist-totalavg-prices
 			       commodity-list report-currency to-date-tp
