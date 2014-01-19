@@ -889,12 +889,10 @@ static void
 gnc_plugin_page_report_name_changed (GncPluginPage *page, const gchar *name)
 {
     GncPluginPageReportPrivate *priv;
-    static gint count = 1, max_count = 10;
     const gchar *old_name;
 
     g_return_if_fail(GNC_IS_PLUGIN_PAGE_REPORT(page));
     g_return_if_fail(name != NULL);
-    g_return_if_fail(count++ <= max_count);
 
     ENTER("page %p, name %s", page, name);
     priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(page);
