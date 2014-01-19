@@ -48,6 +48,10 @@
 (define optname-prefer-pricelist (N_ "Set preference for price list data"))
 (define optname-ignore-brokerage-fees (N_ "Ignore brokerage fees when calculating returns"))
 
+;; To avoid overflows in our calculations, define a denominator for prices and unit values
+(define price-denom 100000)
+(define units-denom 100000)
+
 (define (options-generator)
   (let* ((options (gnc:new-options)) 
          ;; This is just a helper function for making options.
@@ -194,10 +198,10 @@
     (equal? (gncAccountGetGUID a1) (gncAccountGetGUID a2)))
 
   ;; sum up the contents of the b-list built by basis-builder below
-  (define (sum-basis b-list)
+  (define (sum-basis b-list currency-frac)
     (if (not (eqv? b-list '()))
-	(gnc-numeric-add (gnc-numeric-mul (caar b-list) (cdar b-list) GNC-DENOM-AUTO (logior GNC-DENOM-REDUCE GNC-RND-ROUND))
-			 (sum-basis (cdr b-list)) 100 GNC-RND-ROUND)
+	(gnc-numeric-add (gnc-numeric-mul (caar b-list) (cdar b-list) currency-frac GNC-RND-ROUND)
+			 (sum-basis (cdr b-list) currency-frac) currency-frac GNC-RND-ROUND)
 	(gnc-numeric-zero)
 	)
     )
@@ -206,7 +210,7 @@
   (define (units-basis b-list)
     (if (not (eqv? b-list '()))
 	(gnc-numeric-add (caar b-list) (units-basis (cdr b-list)) 
-			 100 GNC-RND-ROUND)
+			 units-denom GNC-RND-ROUND)
 	(gnc-numeric-zero)
 	)
     )
@@ -215,8 +219,8 @@
   ;; I need to get a brain and use (map) for this.
   (define (apply-basis-ratio b-list units-ratio value-ratio)
     (if (not (eqv? b-list '()))
-	(cons (cons (gnc-numeric-mul units-ratio (caar b-list) GNC-DENOM-AUTO GNC-RND-ROUND) 
-		    (gnc-numeric-mul value-ratio (cdar b-list) GNC-DENOM-AUTO GNC-RND-ROUND)) 
+	(cons (cons (gnc-numeric-mul units-ratio (caar b-list) units-denom GNC-RND-ROUND)
+		    (gnc-numeric-mul value-ratio (cdar b-list) price-denom GNC-RND-ROUND))
 	      (apply-basis-ratio (cdr b-list) units-ratio value-ratio))
 	'()
 	)    
@@ -226,7 +230,7 @@
   ;; the list is cons cells of (units-of-stock . price-per-unit)... average method produces only one
   ;; cell that mutates to the new average. Need to add a date checker so that we allow for prices
   ;; coming in out of order, such as a transfer with a price adjusted to carryover the basis.
-  (define (basis-builder b-list b-units b-value b-method)
+  (define (basis-builder b-list b-units b-value b-method currency-frac)
     (gnc:debug "actually in basis-builder")
     (gnc:debug "b-list is " b-list " b-units is " (gnc-numeric-to-string b-units) 
                " b-value is " (gnc-numeric-to-string b-value) " b-method is " b-method)
@@ -241,22 +245,22 @@
 	((average-basis) 
 	 (if (not (eqv? b-list '()))
 	     (list (cons (gnc-numeric-add b-units
-					  (caar b-list) GNC-DENOM-AUTO GNC-RND-ROUND) 
+					  (caar b-list) units-denom GNC-RND-ROUND) 
 			 (gnc-numeric-div
 			  (gnc-numeric-add b-value
 					   (gnc-numeric-mul (caar b-list)
 							    (cdar b-list) 
-							    GNC-DENOM-AUTO GNC-RND-ROUND)
-					   GNC-DENOM-AUTO GNC-RND-ROUND)
+							    price-denom GNC-RND-ROUND)
+					   price-denom GNC-RND-ROUND)
 			  (gnc-numeric-add b-units
-					   (caar b-list) GNC-DENOM-AUTO GNC-RND-ROUND)
-			  GNC-DENOM-AUTO GNC-RND-ROUND)))
+					   (caar b-list) price-denom GNC-RND-ROUND)
+			  price-denom GNC-RND-ROUND)))
 	     (append b-list 
 		     (list (cons b-units (gnc-numeric-div
-					  b-value b-units GNC-DENOM-AUTO GNC-RND-ROUND))))))
+					  b-value b-units price-denom GNC-RND-ROUND))))))
 	(else (append b-list 
 		      (list (cons b-units (gnc-numeric-div
-					   b-value b-units GNC-DENOM-AUTO GNC-RND-ROUND)))))))
+					   b-value b-units price-denom GNC-RND-ROUND)))))))
 
      ;; we have value and negative units, remove units from basis
      ((and (not (gnc-numeric-zero-p b-value))
@@ -268,11 +272,11 @@
 			     (gnc-numeric-abs b-units) (caar b-list))))
 		 (basis-builder (cdr b-list) (gnc-numeric-add
 					      b-units 
-					      (caar b-list) GNC-DENOM-AUTO GNC-RND-ROUND) 
-				b-value b-method)
+					      (caar b-list) units-denom GNC-RND-ROUND) 
+				b-value b-method currency-frac)
 		 (append (list (cons (gnc-numeric-add
 				      b-units 
-				      (caar b-list) GNC-DENOM-AUTO GNC-RND-ROUND) 
+				      (caar b-list) units-denom GNC-RND-ROUND) 
 				     (cdar b-list))) (cdr b-list))))
 	    ((filo-basis) 
 	     (if (not (= -1 (gnc-numeric-compare
@@ -281,16 +285,16 @@
 				(gnc-numeric-add
 				 b-units 
 				 (caar (reverse b-list)) 
-				 GNC-DENOM-AUTO GNC-RND-ROUND) 
-				b-value b-method)
+				 units-denom GNC-RND-ROUND) 
+				b-value b-method currency-frac)
 		 (append (cdr (reverse b-list)) 
 			 (list (cons (gnc-numeric-add
 				      b-units 
-				      (caar (reverse b-list)) GNC-DENOM-AUTO GNC-RND-ROUND) 
+				      (caar (reverse b-list)) units-denom GNC-RND-ROUND) 
 				     (cdar (reverse b-list)))))))
 	    ((average-basis) 
 	     (list (cons (gnc-numeric-add
-			  (caar b-list) b-units GNC-DENOM-AUTO GNC-RND-ROUND) 
+			  (caar b-list) b-units units-denom GNC-RND-ROUND) 
 			 (cdar b-list)))))
 	  '()
 	  ))
@@ -315,7 +319,7 @@
 	;; with a ratio of 1
      ((and (gnc-numeric-zero-p b-units)
 	   (not (gnc-numeric-zero-p b-value)))
-      (let* ((current-value (sum-basis b-list))
+      (let* ((current-value (sum-basis b-list GNC-DENOM-AUTO))
 	     (value-ratio (gnc-numeric-div (gnc-numeric-add b-value current-value GNC-DENOM-AUTO GNC-RND-ROUND) 
 					   current-value GNC-DENOM-AUTO GNC-RND-ROUND)))
 	  
@@ -380,6 +384,7 @@
 		 ;; arbitrarily set the commod-currency to the same as
 		 ;; that of the report's currency
 		 (commod-currency (if price (gnc-price-get-currency price) currency))
+		 (commod-currency-frac (gnc-commodity-get-fraction commod-currency))
 		 ;; the value of the commodity, expressed in terms of
 		 ;; the report's currency.
                  (value (exchange-fn (gnc:make-gnc-monetary commodity units) currency))
@@ -420,6 +425,7 @@
 			    (begin
 			      ;; we're using a transaction to get the price, so we have to set some stuff
 			      (set! commod-currency (xaccAccountGetCommodity (xaccSplitGetAccount s)))
+			      (set! commod-currency-frac (gnc-commodity-get-fraction commod-currency))
 			      ;; FIX-ME this doesn't set a pricing-txn
 			      ;; if there is a price list which leads
 			      ;; to a swigification crash if the user
@@ -528,7 +534,7 @@
 					 ((split-account-type? x ACCT-TYPE-EXPENSE)
 					  (begin
 					    (set! adjusted-dividend (gnc-numeric-sub dividend-income (xaccSplitGetValue x) 
-										     GNC-DENOM-AUTO GNC-RND-ROUND))
+										     commod-currency-frac GNC-RND-ROUND))
 					    (gnc:debug "adjusting adjusted-dividend by " (gnc-numeric-to-string dividend-income))
 					    ;; grab the brokerage that
 					    ;; may be associated so we
@@ -552,7 +558,7 @@
 				     (brokeragecoll 'add commod-currency 
 						    (gnc-numeric-mul split-brokerage 
 								     split-ratio
-								     100 GNC-RND-ROUND))
+								     commod-currency-frac GNC-RND-ROUND))
 
 				     (if (gnc-numeric-zero-p dividend-rein)
 				         (begin
@@ -568,7 +574,7 @@
 					 ;; collector
 					 (let ((div (gnc-numeric-mul dividend-income 
 						                     split-ratio
-						                     100 GNC-RND-ROUND)))
+						                     commod-currency-frac GNC-RND-ROUND)))
 					    (gnc:debug "Adjusted dividend " (gnc-numeric-to-string div))
 					    div)
 					 )
@@ -590,7 +596,9 @@
 					  (set! basis-list (basis-builder basis-list split-units (gnc:gnc-monetary-amount 
 												  (exchange-fn (gnc:make-gnc-monetary 
 														commod-currency split-value) 
-													       currency)) basis-method))
+													       currency)) 
+													       basis-method 
+													       commod-currency-frac))
                                           (gnc:debug  "coming out of basis list " basis-list)
                                           
 					  ;; adjust moneyin/out
@@ -617,7 +625,8 @@
 				      (set! basis-list (basis-builder basis-list split-units (gnc:gnc-monetary-amount 
 											      (exchange-fn (gnc:make-gnc-monetary 
 													    commod-currency split-value) 
-													   currency)) basis-method))
+													   currency)) basis-method
+													   commod-currency-frac))
 				      (gnc:debug "after spin-off basis list "  basis-list)
 				    )
 				   )
@@ -653,13 +662,13 @@
 				  (gnc:make-gnc-monetary commod-currency
 							 (gnc-numeric-div txn-value
 									  (gnc-numeric-abs txn-units)
-									  100 GNC-RND-ROUND))
+									  commod-currency-frac GNC-RND-ROUND))
 				  (gnc:make-gnc-monetary commod-currency (gnc-numeric-zero))))
 		  
 		  (set! value (if price (gnc:make-gnc-monetary commod-currency 
 						     (gnc-numeric-mul units
 								      (gnc:gnc-monetary-amount price)
-										100 GNC-RND-ROUND))
+										commod-currency-frac GNC-RND-ROUND))
 				  (gnc:make-gnc-monetary commod-currency (gnc-numeric-zero))))
 		  (set! warn-price-dirty #t)
 		  )  
@@ -667,8 +676,9 @@
 
 	    ;; what this means is gain = moneyout - moneyin + basis-of-current-shares, and
 	    ;; adjust for brokers and dividends.
-	    (gaincoll 'add currency (sum-basis basis-list))
-	    (gnc:debug "basis we're using to build rows is " (gnc-numeric-to-string (sum-basis basis-list)))
+	    (gaincoll 'add currency (sum-basis basis-list (gnc-commodity-get-fraction currency)))
+	    (gnc:debug "basis we're using to build rows is " (gnc-numeric-to-string (sum-basis basis-list 
+	                                                            (gnc-commodity-get-fraction currency))))
 	    (gnc:debug "but the actual basis list is " basis-list)
 
 	    (gaincoll 'merge moneyoutcoll #f)
@@ -689,18 +699,18 @@
 		  (gain (gnc:sum-collector-commodity gaincoll currency exchange-fn))
 		  (ugain (gnc:make-gnc-monetary currency 
 						(gnc-numeric-sub (gnc:gnc-monetary-amount (exchange-fn value currency))
-								 (sum-basis basis-list) 
-								 100 GNC-RND-ROUND)))
+								 (sum-basis basis-list (gnc-commodity-get-fraction currency)) 
+								 (gnc-commodity-get-fraction currency) GNC-RND-ROUND)))
 		  (bothgain (gnc:make-gnc-monetary currency  (gnc-numeric-add (gnc:gnc-monetary-amount gain)
 									      (gnc:gnc-monetary-amount ugain)
-									      100 GNC-RND-ROUND)))
+									      (gnc-commodity-get-fraction currency) GNC-RND-ROUND)))
 		  (totalreturn (gnc:make-gnc-monetary currency (gnc-numeric-add (gnc:gnc-monetary-amount bothgain)
 										(if ignore-brokerage-fees
 										    (gnc:gnc-monetary-amount income)
 										    (gnc-numeric-sub (gnc:gnc-monetary-amount income)
 												     (gnc:gnc-monetary-amount brokerage)
-												     100 GNC-RND-ROUND))
-										100 GNC-RND-ROUND)))
+												     (gnc-commodity-get-fraction currency) GNC-RND-ROUND))
+										(gnc-commodity-get-fraction currency) GNC-RND-ROUND)))
 
 		  (activecols (list (gnc:html-account-anchor current)))
 		  )
@@ -712,7 +722,7 @@
 	      (total-income 'merge dividendcoll #f)
 	      (total-gain 'merge gaincoll #f)
 	      (total-ugain 'add (gnc:gnc-monetary-commodity ugain) (gnc:gnc-monetary-amount ugain))
-	      (total-basis 'add currency (sum-basis basis-list))
+	      (total-basis 'add currency (sum-basis basis-list (gnc-commodity-get-fraction currency)))
 
 	      ;; build a list for the row  based on user selections
 	      (if show-symbol (append! activecols (list (gnc:make-html-table-header-cell/markup "text-cell" ticker-symbol))))
@@ -734,7 +744,8 @@
 		    )))))
  	      (append! activecols (list (if use-txn "*" " ")
 					(gnc:make-html-table-header-cell/markup 
-					 "number-cell" (gnc:make-gnc-monetary currency (sum-basis basis-list)))
+					 "number-cell" (gnc:make-gnc-monetary currency (sum-basis basis-list
+					                         (gnc-commodity-get-fraction currency))))
 					(gnc:make-html-table-header-cell/markup "number-cell" value)
 					(gnc:make-html-table-header-cell/markup "number-cell" moneyin)
 					(gnc:make-html-table-header-cell/markup "number-cell" moneyout)
@@ -911,15 +922,15 @@
 	  (set! sum-total-ugain (gnc:sum-collector-commodity total-ugain currency exchange-fn))
 	  (set! sum-total-both-gains (gnc:make-gnc-monetary currency (gnc-numeric-add (gnc:gnc-monetary-amount sum-total-gain)
 										      (gnc:gnc-monetary-amount sum-total-ugain)
-										      100 GNC-RND-ROUND)))
+										      (gnc-commodity-get-fraction currency) GNC-RND-ROUND)))
 	  (set! sum-total-brokerage (gnc:sum-collector-commodity total-brokerage currency exchange-fn))
 	  (set! sum-total-totalreturn (gnc:make-gnc-monetary currency (gnc-numeric-add (gnc:gnc-monetary-amount sum-total-both-gains)
 										       (if ignore-brokerage-fees
 										           (gnc:gnc-monetary-amount sum-total-income)
 											   (gnc-numeric-sub (gnc:gnc-monetary-amount sum-total-income)
 													    (gnc:gnc-monetary-amount sum-total-brokerage)
-													    100 GNC-RND-ROUND))
-										       100 GNC-RND-ROUND)))
+													    (gnc-commodity-get-fraction currency) GNC-RND-ROUND))
+										       (gnc-commodity-get-fraction currency) GNC-RND-ROUND)))
 
           (gnc:html-table-append-row/markup!
            table
