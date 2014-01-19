@@ -719,13 +719,6 @@
 	    (gnc:debug "prefer-pricelist is " prefer-pricelist)
 	    (gnc:debug "price is " price)
 
-	    ;; okay we're using the txn, so warn the user
-	    (if use-txn
-	        (if pricing-txn
-		    (set! warn-price-dirty #t)
-		    (set! warn-no-price #t)
-		))
-
 	    (gnc:debug "basis we're using to build rows is " (gnc-numeric-to-string (sum-basis basis-list 
 	                                                            currency-frac)))
 	    (gnc:debug "but the actual basis list is " basis-list)
@@ -756,6 +749,13 @@
 
 		  (activecols (list (gnc:html-account-anchor current)))
 		  )
+
+              ;; If we're using the txn, warn the user
+              (if use-txn
+                  (if pricing-txn
+                      (set! warn-price-dirty #t)
+                      (set! warn-no-price #t)
+                  ))
 
 	      (total-value 'add (gnc:gnc-monetary-commodity value) (gnc:gnc-monetary-amount value))
 	      (total-moneyin 'merge moneyincoll #f)
