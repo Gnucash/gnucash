@@ -273,6 +273,8 @@ gnc_commodity_end_handler(gpointer data_for_children,
     g_return_val_if_fail(tree, FALSE);
 
     com = gnc_commodity_new(book, NULL, NULL, NULL, NULL, 0);
+    gnc_commodity_begin_edit (com);
+
     old_com = gnc_commodity_find_currency(book, tree);
     if (old_com)
         gnc_commodity_copy(com, old_com);
@@ -281,6 +283,11 @@ gnc_commodity_end_handler(gpointer data_for_children,
     {
         set_commodity_value(achild, com);
     }
+    /* We're loading from the file. It can't be dirty, even though the
+     * commodity set functions have marked it so.
+     */
+    qof_instance_mark_clean (QOF_INSTANCE (com));
+    gnc_commodity_commit_edit (com);
 
     if (!valid_commodity(com))
     {
