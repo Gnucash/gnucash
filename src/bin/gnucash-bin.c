@@ -44,6 +44,7 @@
 #include "gfec.h"
 #include "gnc-commodity.h"
 #include "gnc-prefs.h"
+#include "gnc-prefs-utils.h"
 #include "gnc-gsettings.h"
 #include "gnc-main-window.h"
 #include "gnc-splash.h"
@@ -505,7 +506,7 @@ inner_main_add_price_quotes(void *closure, int argc, char **argv)
 #ifdef PRICE_QUOTES_NEED_MODULES
     load_gnucash_modules();
 #endif
-
+    gnc_prefs_init ();
     qof_event_suspend();
     scm_c_eval_string("(gnc:price-quotes-install-sources)");
 
@@ -589,6 +590,7 @@ inner_main (void *closure, int argc, char **argv)
 
     /* TODO: After some more guile-extraction, this should happen even
        before booting guile.  */
+    gnc_prefs_init ();
     gnc_main_gui_init();
 
     gnc_hook_add_dangler(HOOK_UI_SHUTDOWN, (GFunc)gnc_file_quit, NULL);

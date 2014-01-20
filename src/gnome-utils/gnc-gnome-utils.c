@@ -669,7 +669,6 @@ gnc_gui_init(void)
 
     g_set_application_name(PACKAGE_NAME);
 
-    gnc_prefs_init();
     gnc_show_splash_screen();
 
     gnome_is_initialized = TRUE;
