@@ -49,6 +49,7 @@
 #include "engine-helpers.h"
 #include "engine-helpers-guile.h"
 #include "app-utils/QuickFill.h"
+#include <gnc-commodity.h>
 
 
 #define DIALOG_TRANSFER_CM_CLASS "dialog-transfer"
@@ -1238,6 +1239,19 @@ void gnc_xfer_dialog_set_amount_sensitive(XferDialog *xferData,
     gtk_widget_set_sensitive(gnc_amount_edit_gtk_entry(GNC_AMOUNT_EDIT (xferData->amount_edit)), is_sensitive);
 }
 
+static void
+gnc_xfer_dialog_set_fetch_sensitive (GtkWidget *fetch)
+{
+    if (gnc_quote_source_fq_installed ())
+    {
+	gtk_widget_set_sensitive (fetch, TRUE);
+	gtk_widget_set_tooltip_text (fetch, _("Retrieve the current online quote"));
+	return;
+    }
+    gtk_widget_set_sensitive (fetch, FALSE);
+    gtk_widget_set_tooltip_text (fetch, _("Finance::Quote must be installed to enable this button."));
+    return;
+}
 
 /********************************************************************\
  * gnc_xfer_dialog_set_description                                  *
@@ -1786,6 +1800,7 @@ gnc_xfer_dialog_create(GtkWidget *parent, XferDialog *xferData)
     xferData->transferinfo_label = GTK_WIDGET(gtk_builder_get_object (builder, "transferinfo-label"));
 
     xferData->fetch_button = GTK_WIDGET(gtk_builder_get_object (builder, "fetch"));
+    gnc_xfer_dialog_set_fetch_sensitive (xferData->fetch_button);
 
     /* amount & date widgets */
     {
