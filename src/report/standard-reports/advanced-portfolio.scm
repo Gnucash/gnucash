@@ -49,8 +49,8 @@
 (define optname-ignore-brokerage-fees (N_ "Ignore brokerage fees when calculating returns"))
 
 ;; To avoid overflows in our calculations, define a denominator for prices and unit values
-(define price-denom 10000000)
-(define units-denom 100000)
+(define price-denom 100000000)
+(define units-denom 100000000)
 
 (define (options-generator)
   (let* ((options (gnc:new-options)) 
@@ -248,10 +248,10 @@
 			  (gnc-numeric-add b-value
 					   (gnc-numeric-mul (caar b-list)
 							    (cdar b-list) 
-							    price-denom GNC-RND-ROUND)
-					   price-denom GNC-RND-ROUND)
+							    GNC-DENOM-AUTO GNC-RND-ROUND)
+					   GNC-DENOM-AUTO GNC-RND-ROUND)
 			  (gnc-numeric-add b-units
-					   (caar b-list) price-denom GNC-RND-ROUND)
+					   (caar b-list) GNC-DENOM-AUTO GNC-RND-ROUND)
 			  price-denom GNC-RND-ROUND)))
 	     (append b-list 
 		     (list (cons b-units (gnc-numeric-div
@@ -482,6 +482,8 @@
 
             ;; Now that we have a pricing transaction if needed, set the value of the asset
             (set! value (my-exchange-fn (gnc:make-gnc-monetary commodity units) currency))
+            (gnc:debug "Value " (gnc:monetary->string value) 
+                       " from " (gnc-commodity-numeric->string commodity units))
                       
 	    (for-each
 	     ;; we're looking at each split we find in the account. these splits
@@ -539,7 +541,7 @@
 				      (begin (gnc:debug "Money out 1 " (gnc-numeric-to-string split-value))
 				             (moneyoutcoll 'add commod-currency split-value))
 				      ;; brokerage fees
-				      (begin (gnc:debug "Brockerage 1 " (gnc-numeric-to-string split-value))
+				      (begin (gnc:debug "Brokerage 1 " (gnc-numeric-to-string split-value))
 				             (brokeragecoll 'add commod-currency split-value))))
 
 				 ;; in theory, income is a dividend of
@@ -611,7 +613,7 @@
                                      (if (not (gnc-numeric-zero-p split-brokerage))
                                        (begin
                                           ;; take the brokerage back out and apply the ratio
-                                          (gnc:debug "Reducing brockerage " (gnc-numeric-to-string split-brokerage) 
+                                          (gnc:debug "Reducing brokerage " (gnc-numeric-to-string split-brokerage) 
                                                      " by ratio " (gnc-numeric-to-string split-ratio))
                                           (brokeragecoll 'add commod-currency (gnc-numeric-neg split-brokerage))
                                           (brokeragecoll 'add commod-currency 
