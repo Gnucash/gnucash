@@ -301,6 +301,7 @@ gnc_tm_free (struct tm* time)
 static void
 gnc_g_date_time_fill_struct_tm (GDateTime *gdt, struct tm* time)
 {
+     memset (time, 0, sizeof (struct tm));
      g_date_time_get_ymd (gdt, &(time->tm_year), &(time->tm_mon), &(time->tm_mday));
      time->tm_sec = g_date_time_get_second (gdt);
      time->tm_min = g_date_time_get_minute (gdt);
@@ -394,6 +395,11 @@ normalize_struct_tm (struct tm* time)
      time64 secs;
 
      ++time->tm_mon;
+     /* GDateTime doesn't protect itself against out-of range years,
+      * so clamp year into GDateTime's range.
+      */
+     if (year < 0) year = -year;
+     if (year > 9999) year % 10000;
 
      normalize_time_component (&(time->tm_sec), &(time->tm_min), 60, 0);
      normalize_time_component (&(time->tm_min), &(time->tm_hour), 60, 0);
