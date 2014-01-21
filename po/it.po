@@ -54,7 +54,7 @@ msgstr ""
 "Project-Id-Version: Gnucash 2.3.12\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-12-26 13:07+0100\n"
-"PO-Revision-Date: 2014-01-18 17:42+0100\n"
+"PO-Revision-Date: 2014-01-20 21:41+0100\n"
 "Last-Translator: Cristian Marchi <cri.penta@gmail.com>\n"
 "Language-Team: Italian <gnucash-it@gnucash.org>\n"
 "Language: it\n"
@@ -15560,7 +15560,7 @@ msgstr "Debiti"
 #: ../intl-scm/guile-strings.c:2362 ../intl-scm/guile-strings.c:3020
 #: ../intl-scm/guile-strings.c:4096
 msgid "Credits"
-msgstr "Ringraziamenti"
+msgstr "Crediti"
 
 #: ../src/gnome/window-reconcile2.c:1270 ../src/gnome/window-reconcile.c:1270
 msgid "Are you sure you want to delete the selected transaction?"
@@ -17382,7 +17382,7 @@ msgstr "Selezionare qui sotto il tipo di ogni colonna."
 
 #: ../src/import-export/csv-imp/assistant-csv-trans-import.glade.h:31
 msgid "Step over Account Page if Setup"
-msgstr ""
+msgstr "Salta la pagina dei conti se impostata"
 
 #: ../src/import-export/csv-imp/assistant-csv-trans-import.glade.h:32
 msgid "Preview Settings"
@@ -23019,17 +23019,15 @@ msgstr "L'impresa per questo resoconto"
 #. src/report/business-reports/gnucash/report/owner-report.scm
 #. src/report/business-reports/owner-report.scm
 #: ../intl-scm/guile-strings.c:2444 ../intl-scm/guile-strings.c:3102
-#, fuzzy
 msgid "Display the period credits column?"
-msgstr "Visualizza come un resoconto a due colonne"
+msgstr "Visualizzare la colonna dei crediti del periodo?"
 
 # tooltip
 #. src/report/business-reports/gnucash/report/owner-report.scm
 #. src/report/business-reports/owner-report.scm
 #: ../intl-scm/guile-strings.c:2448 ../intl-scm/guile-strings.c:3106
-#, fuzzy
 msgid "Display a period debits column?"
-msgstr "Visualizza come un resoconto a due colonne"
+msgstr "Visualizzare la colonna dei debiti del periodo?"
 
 #. src/report/business-reports/gnucash/report/owner-report.scm
 #. src/report/business-reports/owner-report.scm
@@ -30554,7 +30552,7 @@ msgid ""
 msgstr ""
 "Fare clic con il tasto destro del mouse nella finestra principale per aprire "
 "il menu delle opzioni sui conti. All'interno di ogni registro, fare clic con "
-"il tasto destro del mouse per aprire il menu delle opzioni sui transazioni."
+"il tasto destro del mouse per aprire il menu delle opzioni delle transazioni."
 
 #: ../doc/tip_of_the_day.list.in:24
 msgid ""
