@@ -7,6 +7,7 @@
 # Herbert Thoma <tma@iis.fhg.de>, 2001.
 # Frank H. Ellenberger <f.ellenberger@online.de>, 2007, 2009-2010.
 # Rolf Leggewie 2008
+# Mechtilde Stehmann <ooo@mechtilde.de>
 #
 msgid ""
 msgstr ""
@@ -1569,9 +1570,8 @@ msgid "Open the Process Payment dialog"
 msgstr "Den Dialog für das Eingeben von Zahlungen öffnen"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:197
-#, fuzzy
 msgid "Vendors Overview"
-msgstr "Übersicht"
+msgstr "Lieferantenübersicht"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:198
 #, fuzzy
@@ -1619,9 +1619,8 @@ msgid "Open the Find Bill dialog"
 msgstr "Den Dialog für die Suche nach Rechnungen öffnen"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:240
-#, fuzzy
 msgid "Employees Overview"
-msgstr "Mitarbeiter Benutzername"
+msgstr "Mitarbeiterübersicht"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:241
 #, fuzzy
@@ -7860,7 +7859,6 @@ msgid "Summary Page"
 msgstr "Zusammenfassung"
 
 #: ../src/gnome/gtkbuilder/assistant-hierarchy.glade.h:1
-#, fuzzy
 msgid ""
 "This assistant will help you create a set of GnuCash accounts for your "
 "assets (such as investments, checking or savings accounts), liabilities "
@@ -7879,11 +7877,11 @@ msgid "New Account Hierarchy Setup"
 msgstr "Neuen Kontenplan erstellen"
 
 #: ../src/gnome/gtkbuilder/assistant-hierarchy.glade.h:5
-#, fuzzy
 msgid ""
 "\n"
 "Please choose the currency to use for new accounts."
-msgstr "Wählen Sie eine Währung für neue Konten."
+msgstr ""
+"\n" "Wählen Sie eine Währung für die neuen Konten."
 
 #: ../src/gnome/gtkbuilder/assistant-hierarchy.glade.h:7
 #: ../src/import-export/qif-import/assistant-qif-import.glade.h:58
@@ -7913,7 +7911,6 @@ msgid "Choose Currency"
 msgstr "Währung wählen"
 
 #: ../src/gnome/gtkbuilder/assistant-hierarchy.glade.h:10
-#, fuzzy
 msgid ""
 "\n"
 "Select categories that correspond to the ways that you will use GnuCash. "
@@ -7921,9 +7918,10 @@ msgid ""
 "the categories that are relevant to you. You can always create additional "
 "accounts by hand later."
 msgstr ""
-"Wählen Sie die Kategorien, in denen Sie GnuCash benutzen möchten. Jede "
-"gewählte Kategorie wird einige Konten erzeugen. Sie können jederzeit auch "
-"später Konten anlegen. "
+"\n"
+"Wählen Sie die Kategorien aus, für die Sie GnuCash benutzen möchten. Die Auswahl der "
+"gewählten Kategorie wird zur Erstellung entsprechender Konten führen. Sie können jederzeit "
+"manuell noch neue Konten anlegen. "
 
 #: ../src/gnome/gtkbuilder/assistant-hierarchy.glade.h:12
 msgid "<b>Categories</b>"
@@ -7949,7 +7947,6 @@ msgid "Choose accounts to create"
 msgstr "Zu erstellende Konten wählen"
 
 #: ../src/gnome/gtkbuilder/assistant-hierarchy.glade.h:17
-#, fuzzy
 msgid ""
 "\n"
 "If you would like to change an account's name, click on the row containing "
@@ -7967,6 +7964,7 @@ msgid ""
 "Note: all accounts except Equity and placeholder accounts may have an "
 "opening balance.\n"
 msgstr ""
+"\n"
 "Um den Namen eines Kontos zu ändern, klicken Sie zunächst auf die Zeile, "
 "welche das Konto enthält, dann auf den Kontenname und ändern Sie ihn.\n"
 "\n"
@@ -7975,7 +7973,7 @@ msgstr ""
 "keine Buchungen - auch keinen Anfangsbestand. Um ein Konto als Platzhalter "
 "zu kennzeichnen, klicken in das entsprechende Kästchen des Kontos.\n"
 "\n"
-"Falls Sie einem Konto einen Anfangsbestand zuweisen möchten, Klicken Sie "
+"Falls Sie einem Konto einen Anfangsbestand zuweisen möchten, klicken Sie "
 "zunächst auf die Zeile, welche das Konto enthält, dann auf das Feld für die "
 "Eröffnungsbilanz und geben den Wert ein.\n"
 "\n"
@@ -12843,11 +12841,9 @@ msgid "Finish GnuCash Datafile Import"
 msgstr "GnuCash-Datei Import abschließen"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-account.glade.h:1
-#, fuzzy
 msgid "Use Commodity Value"
 msgstr ""
-"\n"
-"Devise/Wertpapier: "
+"Nutze gewöhnlichen Wert "
 
 #: ../src/gnome-utils/gtkbuilder/dialog-account.glade.h:3
 msgid "1/10"
@@ -15053,7 +15049,6 @@ msgid "AqBanking Initial Assistant"
 msgstr "Online-Banking (AqBanking) Einrichtungsassistent"
 
 #: ../src/import-export/aqbanking/assistant-ab-initial.glade.h:2
-#, fuzzy
 msgid ""
 "\n"
 "This assistant helps you setting up your Online Banking connection with your "
@@ -15079,16 +15074,17 @@ msgid ""
 "Press \"Cancel\" if you do not wish to setup any Online Banking connection "
 "now.\n"
 msgstr ""
+"\n"
 "Dieser Assistent hilft Ihnen, die Online-Verbindung (HBCI) mit Ihrer Bank "
 "einzurichten.\n"
 "\n"
 "Zunächst müssen Sie bei Ihrer Bank die Freischaltung des HBCI-Zugangs "
-"beantragt haben. Ihre Bank müsste Ihnen dann einen Brief zugesandt haben, "
+"beantragen. Ihre Bank sollte Ihnen dann einen Brief zugesandt haben, "
 "der u.a. folgende Angaben enthält:\n"
 "\n"
 "* Die Bankleitzahl Ihrer Bank\n"
 "* Die Benutzerkennung, die Sie gegenüber Ihrer Bank identifiziert\n"
-"* Die Internetadresse des Bank-Servers \n"
+"* Die Internetadresse des Bank-Servers für das Online Banking\n"
 "* Informationen über die öffentlichen kryptographischen Schlüssel Ihrer Bank "
 "(»Ini-Brief«)\n"
 "\n"
@@ -15101,7 +15097,7 @@ msgstr ""
 "zeitkritischen Aufträgen nicht auf HBCI allein verlassen.\n"
 "\n"
 "Klicken Sie »Abbrechen«, wenn Sie jetzt keine HBCI Verbindung einrichten "
-"möchten."
+"möchten.\n"
 
 #: ../src/import-export/aqbanking/assistant-ab-initial.glade.h:18
 msgid "Initial Online Banking Setup"
@@ -16097,7 +16093,6 @@ msgid "Select the accounts to be exported and date range if required."
 msgstr ""
 
 #: ../src/import-export/csv-export/assistant-csv-export.glade.h:22
-#, fuzzy
 msgid "<b>_Dates</b>"
 msgstr "<b>Be_schreibung</b>"
 
@@ -18477,7 +18472,7 @@ msgid "Delete preconfigured report"
 msgstr "Konfigurierten Bericht löschen"
 
 #: ../src/report/report-gnome/dialog-custom-report.glade.h:1
-msgid "Preconfigured reports"
+msgid "Preconfigured Reports"
 msgstr "Konfigurierte Berichte"
 
 #: ../src/report/report-gnome/dialog-custom-report.glade.h:2
