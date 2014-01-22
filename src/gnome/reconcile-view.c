@@ -347,6 +347,11 @@ gnc_reconcile_view_toggle_children (Account *account, GNCReconcileView *view, Sp
         Account *other_account;
         GNCReconcileView *current_view;
 
+        GtkTreeModel *model;
+        GtkTreeIter   iter;
+        gboolean      valid;
+        gpointer      pointer;
+
         other_split = node->data;
         other_account = xaccSplitGetAccount (other_split);
         if (other_split == split)
@@ -366,6 +371,28 @@ gnc_reconcile_view_toggle_children (Account *account, GNCReconcileView *view, Sp
                 /* We can't find it, nothing more I can do about it */
                 continue;
         }
+
+        /* Found the other split. Toggle the reconciled check mark in the view... */
+        model = gtk_tree_view_get_model (GTK_TREE_VIEW (current_view));
+        valid = gtk_tree_model_get_iter_first (model, &iter);
+
+        while (valid)
+        {
+            // Walk through the list, reading each row
+            gtk_tree_model_get (model, &iter, 0, &pointer, -1);
+
+            if(pointer == other_split)
+            {
+                gboolean toggled;
+                gtk_tree_model_get (model, &iter, 5, &toggled, -1);
+                gtk_list_store_set (GTK_LIST_STORE (model), &iter, 5, !toggled, -1);
+                break;
+            }
+
+            valid = gtk_tree_model_iter_next (model, &iter);
+        }
+
+        /* ...and toggle its reconciled state in the internal hash */
         gnc_reconcile_view_toggle_split (current_view, other_split);
     }
     g_list_free (child_accounts);
