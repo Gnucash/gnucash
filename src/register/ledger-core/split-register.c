@@ -2243,8 +2243,10 @@ gnc_split_register_auto_calc (SplitRegister *reg, Split *split)
         recalculate_value (split, reg, price, amount, shares_changed);
 
     if (price_changed)
+    {
+        price = gnc_price_cell_get_value (cell);
         record_price (reg, account, price);
-
+    }
     return TRUE;
 }
 
