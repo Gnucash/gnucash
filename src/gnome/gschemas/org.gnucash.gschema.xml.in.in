@@ -334,7 +334,7 @@
     <key name="filename-format" type="s">
       <default>'%1$s-%2$s-%3$s'</default>
       <summary>PDF export file name format</summary>
-      <description>This setting chooses the file name for PDF export. This is a sprintf(3) string with three arguments: "%1$s" is the report name such as "Invoice". "%2$s" is the number of the report, which for an invoice report is the invoice number. "%3$s" is the date of the report, formatted according to the filename-date-format setting. (Note: Any characters that are not allowed in filenames, such as '/', will be replaced with underscores '-' in the resulting file name.)</description>
+      <description>This setting chooses the file name for PDF export. This is a sprintf(3) string with three arguments: "%1$s" is the report name such as "Invoice". "%2$s" is the number of the report, which for an invoice report is the invoice number. "%3$s" is the date of the report, formatted according to the filename-date-format setting. (Note: Any characters that are not allowed in filenames, such as '/', will be replaced with underscores '_' in the resulting file name.)</description>
     </key>
     <key name="filename-date-format" type="s">
       <default>'locale'</default>
