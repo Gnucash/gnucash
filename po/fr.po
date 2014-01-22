@@ -18,8 +18,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-12-26 21:32+0100\n"
-"PO-Revision-Date: 2013-12-26 21:29+0100\n"
+"POT-Creation-Date: 2013-12-26 22:10+0100\n"
+"PO-Revision-Date: 2014-01-18 16:04-0600\n"
 "Last-Translator: Sébastien Villemot <sebastien@debian.org>\n"
 "Language-Team: \n"
 "Language: French\n"
@@ -17554,17 +17554,15 @@ msgstr "Sélection de compte"
 
 # messages-i18n.c:124
 #: ../src/import-export/csv-exp/assistant-csv-export.glade.h:34
-#, fuzzy
 msgid ""
 "\n"
 "Enter file name and location for the Export...\n"
-msgstr "Il n'y a pas d'options pour ce rapport."
+msgstr "\nSaisir le nom de fichier et l’emplacement pour l’exportation...\n"
 
 # src/gnome/glade-gnc-dialogs.c:1178
 #: ../src/import-export/csv-exp/assistant-csv-export.glade.h:37
-#, fuzzy
 msgid "Choose File Name for Export"
-msgstr "Sélectionner un fichier à importer"
+msgstr "Choisissez un nom de fichier pour l’exportation"
 
 #: ../src/import-export/csv-exp/assistant-csv-export.glade.h:38
 #: ../src/import-export/csv-imp/assistant-csv-account-import.glade.h:23
@@ -17575,20 +17573,17 @@ msgstr ""
 
 # Exportation n'est pas français
 #: ../src/import-export/csv-exp/assistant-csv-export.glade.h:40
-#, fuzzy
 msgid "Export Now..."
-msgstr "Export du fichier..."
+msgstr "Exporter maintenant..."
 
 #: ../src/import-export/csv-exp/assistant-csv-export.glade.h:41
-#, fuzzy
 msgid "Summary"
-msgstr "Barre de _synthèse"
+msgstr "Récapitulatif"
 
 # po/guile_strings.txt:9
 #: ../src/import-export/csv-exp/assistant-csv-export.glade.h:42
-#, fuzzy
 msgid "Export Summary"
-msgstr "Récapitulatif des comptes"
+msgstr "Récapitulatif de l’exportation"
 
 #: ../src/import-export/csv-exp/csv-transactions-export.c:346
 msgid "Category"
@@ -17629,67 +17624,56 @@ msgstr ""
 
 # src/gnome/glade-gnc-dialogs.c:155
 #: ../src/import-export/csv-exp/csv-tree-export.c:112
-#, fuzzy
 msgid "full_name"
-msgstr "Nom _complet :"
+msgstr "nom_complet"
 
 #: ../src/import-export/csv-exp/csv-tree-export.c:113
-#, fuzzy
 msgid "name"
-msgstr "Nom de code"
+msgstr "nom"
 
 # messages-i18n.c:294 po/guile_strings.txt:205
 # src/gnome/glade-gnc-dialogs.c:644
 #: ../src/import-export/csv-exp/csv-tree-export.c:113
-#, fuzzy
 msgid "code"
-msgstr "Unicode"
+msgstr "code"
 
 # messages-i18n.c:275 po/guile_strings.txt:129
 #: ../src/import-export/csv-exp/csv-tree-export.c:114
-#, fuzzy
 msgid "description"
-msgstr "Description"
+msgstr "description"
 
 # messages-i18n.c:261
 #: ../src/import-export/csv-exp/csv-tree-export.c:114
-#, fuzzy
 msgid "color"
-msgstr "Couleurs"
+msgstr "couleur"
 
 # messages-i18n.c:306 po/guile_strings.txt:176
 #: ../src/import-export/csv-exp/csv-tree-export.c:114
-#, fuzzy
 msgid "notes"
-msgstr "Notes"
+msgstr "notes"
 
 # messages-i18n.c:262
 #: ../src/import-export/csv-exp/csv-tree-export.c:115
-#, fuzzy
 msgid "commoditym"
-msgstr "Produit"
+msgstr "mnemo_produit"
 
 # messages-i18n.c:262
 #: ../src/import-export/csv-exp/csv-tree-export.c:115
-#, fuzzy
 msgid "commodityn"
-msgstr "Produit"
+msgstr "domaine_produit"
 
 #: ../src/import-export/csv-exp/csv-tree-export.c:116
-#, fuzzy
 msgid "hidden"
-msgstr "C_aché"
+msgstr "cache"
 
 # po/guile_strings.txt:264
 #: ../src/import-export/csv-exp/csv-tree-export.c:116
-#, fuzzy
 msgid "tax"
-msgstr "Taxe"
+msgstr "taxe"
 
 #: ../src/import-export/csv-exp/csv-tree-export.c:116
-#, fuzzy
 msgid "place_holder"
-msgstr "Seulement les sous-comptes"
+msgstr "virtuel"
 
 # messages-i18n.c:186
 #: ../src/import-export/csv-exp/gnc-plugin-csv-export.c:47
@@ -17784,9 +17768,8 @@ msgid ""
 msgstr ""
 
 #: ../src/import-export/csv-imp/assistant-csv-account-import.glade.h:1
-#, fuzzy
 msgid "CSV Import Assistant"
-msgstr "Assistant GnuCash d'import de fichiers"
+msgstr "Assistant d’importation CSV"
 
 #: ../src/import-export/csv-imp/assistant-csv-account-import.glade.h:2
 msgid ""
@@ -17804,68 +17787,57 @@ msgstr ""
 
 # messages-i18n.c:186
 #: ../src/import-export/csv-imp/assistant-csv-account-import.glade.h:9
-#, fuzzy
 msgid "Import Account Assistant"
-msgstr "Exporter les _comptes..."
+msgstr "Assistant d’importation de compte"
 
 # messages-i18n.c:124
 #: ../src/import-export/csv-imp/assistant-csv-account-import.glade.h:10
-#, fuzzy
 msgid ""
 "\n"
 "Enter file name and location for the Import...\n"
-msgstr "Il n'y a pas d'options pour ce rapport."
+msgstr "\nSaisir le nom de fichier et l’emplacement pour l’importation...\n"
 
 # src/gnome/glade-gnc-dialogs.c:1178
 #: ../src/import-export/csv-imp/assistant-csv-account-import.glade.h:13
-#, fuzzy
 msgid "Choose File to Import"
-msgstr "Sélectionner un fichier à importer"
+msgstr "Choisissez un fichier à importer"
 
 # po/guile_strings.txt:173
 #: ../src/import-export/csv-imp/assistant-csv-account-import.glade.h:14
-#, fuzzy
 msgid "Number of rows for the Header"
-msgstr "En-tête du nombre"
+msgstr "Nombre de lignes de l’en-tête"
 
 # messages-i18n.c:227
 #: ../src/import-export/csv-imp/assistant-csv-account-import.glade.h:15
-#, fuzzy
 msgid "Semicolon Separated"
-msgstr "Séparé par une demie-colonne"
+msgstr "Utilisant le point-virgule comme séparateur"
 
 #: ../src/import-export/csv-imp/assistant-csv-account-import.glade.h:16
-#, fuzzy
 msgid "Semicolon Separated with Quotes"
-msgstr "Demie-colonne séparée par des guillemets"
+msgstr "Utilisant des guillemets et le point-virgule comme séparateur"
 
 # messages-i18n.c:227
 #: ../src/import-export/csv-imp/assistant-csv-account-import.glade.h:17
-#, fuzzy
 msgid "Comma Separated"
-msgstr "séparé par une virgule"
+msgstr "Utilisant la virgule comme séparateur"
 
 #: ../src/import-export/csv-imp/assistant-csv-account-import.glade.h:18
-#, fuzzy
 msgid "Comma Separated with Quotes"
-msgstr "Vigule séparée par des guillemets"
+msgstr "Utilisant des guillemets et la virgule comme séparateur"
 
 #: ../src/import-export/csv-imp/assistant-csv-account-import.glade.h:19
-#, fuzzy
 msgid "Custom regular Expression"
 msgstr "Expression régulière personnalisée"
 
 # src/gnome/glade-gnc-dialogs.c:506
 #: ../src/import-export/csv-imp/assistant-csv-account-import.glade.h:20
-#, fuzzy
 msgid "Select Separator Type"
-msgstr "2. Sélectionner le type d'importation"
+msgstr "Sélectionner le type de séparateur"
 
 # src/gnome/glade-gnc-dialogs.c:979
 #: ../src/import-export/csv-imp/assistant-csv-account-import.glade.h:21
-#, fuzzy
 msgid "Preview"
-msgstr "4. Aperçu"
+msgstr "Aperçu"
 
 #: ../src/import-export/csv-imp/assistant-csv-account-import.glade.h:22
 msgid "Import Account Preview, first 10 rows only"
@@ -17873,16 +17845,14 @@ msgstr ""
 
 # messages-i18n.c:186
 #: ../src/import-export/csv-imp/assistant-csv-account-import.glade.h:25
-#, fuzzy
 msgid "Import Accounts Now"
-msgstr "Exporter les _comptes..."
+msgstr "Importer les comptes maintenant"
 
 # po/guile_strings.txt:9
 #: ../src/import-export/csv-imp/assistant-csv-account-import.glade.h:27
 #: ../src/import-export/csv-imp/assistant-csv-trans-import.glade.h:47
-#, fuzzy
 msgid "Import Summary"
-msgstr "Récapitulatif des comptes"
+msgstr "Récapitulatif de l’importation"
 
 #. If it fails, change back to the old encoding.
 #: ../src/import-export/csv-imp/assistant-csv-trans-import.c:502
@@ -17910,19 +17880,15 @@ msgid "_Narrow this column"
 msgstr "_Compresser cette colonne"
 
 #: ../src/import-export/csv-imp/assistant-csv-trans-import.c:1336
-#, fuzzy
 msgid ""
 "The rows displayed below had errors which are in the last column. You can "
 "attempt to correct them by changing the configuration."
-msgstr ""
-"Les lignes affichées ont des erreurs. Vous pouvez essayer de corriger ces "
-"erreurs en modifiant la configuration."
+msgstr "Les lignes affichées ci-dessous ont des erreurs dans leur dernière colonne. Vous pouvez essayer de les corriger en modifiant la configuration."
 
 #. Set check button label
 #: ../src/import-export/csv-imp/assistant-csv-trans-import.c:1345
-#, fuzzy
 msgid "Skip Errors"
-msgstr "Erreurs"
+msgstr "Ignorer les erreurs"
 
 #: ../src/import-export/csv-imp/assistant-csv-trans-import.c:1377
 #, c-format
@@ -17945,15 +17911,14 @@ msgstr ""
 
 # messages-i18n.c:34
 #: ../src/import-export/csv-imp/assistant-csv-trans-import.c:1519
-#, fuzzy, c-format
+#, c-format
 msgid "The transactions were imported from the file '%s'."
-msgstr "Une erreur est survenue à la lecture du fichier %s."
+msgstr "Les transactions ont été importées à partir du fichier « %s »."
 
 # messages-i18n.c:346
 #: ../src/import-export/csv-imp/assistant-csv-trans-import.glade.h:1
-#, fuzzy
 msgid "CSV Transaction Import"
-msgstr "Rapport de transaction"
+msgstr "Importation de transactions CSV"
 
 #: ../src/import-export/csv-imp/assistant-csv-trans-import.glade.h:2
 msgid ""
@@ -17973,9 +17938,8 @@ msgid ""
 msgstr ""
 
 #: ../src/import-export/csv-imp/assistant-csv-trans-import.glade.h:9
-#, fuzzy
 msgid "Transaction Import Assistant"
-msgstr "Assistant GnuCash d'import de fichiers"
+msgstr "Assistant d’importation de transaction"
 
 #: ../src/import-export/csv-imp/assistant-csv-trans-import.glade.h:10
 msgid ""
@@ -17985,19 +17949,17 @@ msgstr ""
 
 # src/gnome/glade-gnc-dialogs.c:1178
 #: ../src/import-export/csv-imp/assistant-csv-trans-import.glade.h:13
-#, fuzzy
 msgid "Select File for Import"
-msgstr "Sélectionner un fichier à importer"
+msgstr "Sélectionner un fichier pour l’importation"
 
 # po/guile_strings.txt:107
 #: ../src/import-export/csv-imp/assistant-csv-trans-import.glade.h:14
-#, fuzzy
 msgid "Start import on row "
-msgstr "Début de la période du rapport"
+msgstr "Débuter l’importation à la ligne "
 
 #: ../src/import-export/csv-imp/assistant-csv-trans-import.glade.h:15
 msgid " and stop on row "
-msgstr ""
+msgstr " et arrêter à la ligne "
 
 # src/gnome/glade-gnc-dialogs.c:1324
 #: ../src/import-export/csv-imp/assistant-csv-trans-import.glade.h:16
@@ -18015,9 +17977,8 @@ msgstr "Largeur fixe"
 
 # messages-i18n.c:231
 #: ../src/import-export/csv-imp/assistant-csv-trans-import.glade.h:20
-#, fuzzy
 msgid "Currency format"
-msgstr "Informations de devise"
+msgstr "Format de devise"
 
 #: ../src/import-export/csv-imp/assistant-csv-trans-import.glade.h:21
 msgid "Encoding: "
@@ -18050,9 +18011,8 @@ msgid "Preview Settings"
 msgstr ""
 
 #: ../src/import-export/csv-imp/assistant-csv-trans-import.glade.h:33
-#, fuzzy
 msgid "Error text."
-msgstr "Erreur"
+msgstr "Texte d’erreur."
 
 #: ../src/import-export/csv-imp/assistant-csv-trans-import.glade.h:35
 msgid ""
@@ -18075,15 +18035,13 @@ msgstr ""
 
 # messages-i18n.c:231
 #: ../src/import-export/csv-imp/assistant-csv-trans-import.glade.h:44
-#, fuzzy
 msgid "Transaction Information"
-msgstr "<b>Définition de la nouvelle transaction</b>"
+msgstr "Information de transaction"
 
 # messages-i18n.c:176
 #: ../src/import-export/csv-imp/assistant-csv-trans-import.glade.h:46
-#, fuzzy
 msgid "Match Transactions"
-msgstr "Coller la transaction"
+msgstr "Faire correspondre les transactions"
 
 #: ../src/import-export/csv-imp/csv-account-import.c:239
 #, c-format
@@ -18795,9 +18753,8 @@ msgid ""
 msgstr ""
 
 #: ../src/import-export/qif-imp/assistant-qif-import.c:864
-#, fuzzy
 msgid "Enter information about"
-msgstr "Saisir une information à propos de \"%s\""
+msgstr "Saisir les informations au sujet de"
 
 # messages-i18n.c:275 po/guile_strings.txt:129
 #: ../src/import-export/qif-imp/assistant-qif-import.c:880
@@ -18911,9 +18868,8 @@ msgstr ""
 
 # messages-i18n.c:126
 #: ../src/import-export/qif-imp/assistant-qif-import.c:2501
-#, fuzzy
 msgid "Choose the QIF file currency"
-msgstr "Entrer un fichier QIF de devise"
+msgstr "Choisissez la devise du fichier QIF"
 
 #: ../src/import-export/qif-imp/assistant-qif-import.c:2683
 msgid "You must enter an existing national currency or enter a different type."
@@ -18950,17 +18906,15 @@ msgid "GnuCash was unable to save your mapping preferences."
 msgstr "GnuCash n'a pas pu enregistrer vos préférences globales."
 
 #: ../src/import-export/qif-imp/assistant-qif-import.c:3213
-#, fuzzy, c-format
+#, c-format
 msgid "There was a problem with the import."
-msgstr ""
-"Problème avec l'option %s:%s :\n"
-"%s"
+msgstr "Il y a eu un problème avec l’importation."
 
 # messages-i18n.c:293
 #: ../src/import-export/qif-imp/assistant-qif-import.c:3215
-#, fuzzy, c-format
+#, c-format
 msgid "QIF Import Completed."
-msgstr "Importer QIF"
+msgstr "Importation QIF terminée."
 
 # src/gnome/glade-gnc-dialogs.c:333
 #. Set up the QIF account to GnuCash account matcher.
@@ -18985,9 +18939,8 @@ msgstr "Correspond ?"
 
 # messages-i18n.c:293
 #: ../src/import-export/qif-imp/assistant-qif-import.glade.h:1
-#, fuzzy
 msgid "QIF Import Assistant"
-msgstr "Importer QIF"
+msgstr "Assistant d’importation QIF"
 
 #: ../src/import-export/qif-imp/assistant-qif-import.glade.h:2
 msgid ""
@@ -19018,7 +18971,6 @@ msgid "Import QIF files"
 msgstr "Importer fichiers QIF"
 
 #: ../src/import-export/qif-imp/assistant-qif-import.glade.h:8
-#, fuzzy
 msgid ""
 "Please select a file to load. When you click \"Forward\", the file will be "
 "loaded and analyzed. You may need to answer some questions about the "
@@ -19027,13 +18979,9 @@ msgid ""
 "You will have the opportunity to load as many files as you wish, so don't "
 "worry if your data is in multiple files. \n"
 msgstr ""
-"Sélectionnez, s'il vous plaît, un fichier QIF à charger. Quand vous "
-"cliquerez sur \"Suivant\", le fichier sera chargé et analysé. Vous aurez "
-"besoin de répondre à quelques questions sur le(s) compte(s) dans le "
-"fichier.\n"
+"Sélectionnez, s'il vous plaît, un fichier à charger. Quand vous cliquerez sur \"Suivant\", le fichier sera chargé et analysé. Vous aurez besoin de répondre à quelques questions sur le(s) compte(s) dans le fichier.\n"
 "\n"
-"Vous aurez la possibilité de charger autant de fichiers que vous voulez, "
-"donc ne vous inquiétez pas si vos données sont dans plusieurs fichiers.\n"
+"Vous aurez la possibilité de charger autant de fichiers que vous voulez, donc ne vous inquiétez pas si vos données sont dans plusieurs fichiers.\n"
 
 # src/gnome/glade-gnc-dialogs.c:936 src/gnome/glade-gnc-dialogs.c:943
 #: ../src/import-export/qif-imp/assistant-qif-import.glade.h:12
@@ -19047,9 +18995,8 @@ msgstr "Sélectionner un fichier QIF à charger"
 
 # messages-i18n.c:267 po/guile_strings.txt:6
 #: ../src/import-export/qif-imp/assistant-qif-import.glade.h:14
-#, fuzzy
 msgid "_Start"
-msgstr "Début :"
+msgstr "_Démarrer"
 
 # messages-i18n.c:151
 #: ../src/import-export/qif-imp/assistant-qif-import.glade.h:15
@@ -19057,7 +19004,6 @@ msgid "Load QIF files"
 msgstr "Importer des fichiers QIF..."
 
 #: ../src/import-export/qif-imp/assistant-qif-import.glade.h:16
-#, fuzzy
 msgid ""
 "The QIF file format does not specify which order the day, month, and year "
 "components of a date are printed. In most cases, it is possible to "
@@ -19069,16 +19015,9 @@ msgid ""
 "software are likely  to be in \"d-m-y\" or day-month-year format, where US "
 "QIF files are likely to be \"m-d-y\" or month-day-year. \n"
 msgstr ""
-"Le fichier au format QIF n'indique pas dans quel ordre les éléments du jour, "
-"du mois, et de l'année d'une date sont stockés. Dans la plupart des cas, il "
-"est possible de déterminer automatiquement quel format est utilisé dans un "
-"fichier en particulier. Cependant, dans ce fichier que vous venez juste "
-"d'importer, il existe plus d'un format possible qui correspond aux données.\n"
+"Le format de fichier QIF n'indique pas dans quel ordre les éléments du jour, du mois, et de l'année d'une date sont stockés. Dans la plupart des cas, il est possible de déterminer automatiquement quel format est utilisé dans un fichier en particulier. Cependant, dans ce fichier que vous venez juste d'importer, il existe plus d'un format possible qui correspond aux données.\n"
 "\n"
-"Sélectionnez un format de date pour le fichier. Les fichiers QIF créés par "
-"les logiciels européens sont probablement comme cela \"j-m-a\" ou format "
-"jour-mois-année, et les fichiers QIF US sont habituellement \"m-j-a\" ou "
-"mois-jour-année.\n"
+"Sélectionnez un format de date pour le fichier. Les fichiers QIF créés par les logiciels européens utilisent habituellement \"j-m-a\" ou format jour-mois-année, et les fichiers QIF américains utilisent habituellement \"m-j-a\" ou mois-jour-année.\n"
 
 #: ../src/import-export/qif-imp/assistant-qif-import.glade.h:20
 msgid "Click \"Back\" to cancel the loading of this file and choose another."
@@ -19092,7 +19031,6 @@ msgid "Set a date format for this QIF file"
 msgstr "Mettre un format de date pour ce fichier QIF"
 
 #: ../src/import-export/qif-imp/assistant-qif-import.glade.h:22
-#, fuzzy
 msgid ""
 "The QIF file that you just loaded appears to contain transactions for just "
 "one account, but the file does not specify a name for that account. \n"
@@ -19101,13 +19039,9 @@ msgid ""
 "accounting program, you should use the same account name that was used in "
 "that program.\n"
 msgstr ""
-"Le fichier QIF que vous venez juste de charger semble contenir des "
-"transactions pour juste un compte, mais le fichier ne spécifie pas de nom "
-"pour ce compte.\n"
+"Le fichier QIF que vous venez juste de charger semble contenir des transactions pour un seul compte, mais le fichier ne spécifie pas le nom de ce compte.\n"
 "\n"
-"Donnez, s'il vous plaît, un nom pour le compte. Si le fichier est exporté "
-"d'un autre programme de comptabilité, vous devrez utiliser le même nom de "
-"compte que celui utilisé dans ce programme.\n"
+"Veuillez saisir un nom pour le compte. Si le fichier a été exporté depuis un autre logiciel de comptabilité, vous devriez utiliser le même nom de compte que celui utilisé dans ce programme.\n"
 
 # messages-i18n.c:165 po/guile_strings.txt:7
 #: ../src/import-export/qif-imp/assistant-qif-import.glade.h:26
@@ -19364,7 +19298,6 @@ msgid "Select possible duplicates"
 msgstr "Sélection des doublons possibles"
 
 #: ../src/import-export/qif-imp/assistant-qif-import.glade.h:79
-#, fuzzy
 msgid ""
 "Click \"Apply\" to import data from the staging area and update your GnuCash "
 "accounts. The account and category matching information you have entered "
@@ -19377,32 +19310,24 @@ msgid ""
 "\n"
 "Click \"Cancel\" to abort the QIF import process."
 msgstr ""
-"Cliquez sur \"Appliquer\" pour importer les données depuis la zone "
-"temporaire et mettre à jour les comptes GnuCash. Les informations trouvées "
-"sur les catégories et le compte et que vous avez entrées seront sauvegardées "
-"et utilisées par défaut la prochaine fois que vous utiliserez la fonction "
-"d'import de fichiers QIF.\n"
+"Cliquez sur \"Appliquer\" pour importer les données depuis la zone temporaire et mettre à jour les comptes GnuCash. Les informations que vous avez saisies concernant les correspondances de comptes et de catégories seront sauvegardées et utilisées par défaut la prochaine fois que vous utiliserez la fonction d'import de fichiers QIF.\n"
 "\n"
-"Cliquez sur \"Précédent\" pour revoir votre compte et les catégories "
-"trouvées, et changer les paramètres de devise et titre pour les nouveaux "
-"comptes, ou ajouter plus de fichiers dans le zone temporaire.\n"
+"Cliquez sur \"Précédent\" pour revoir les correspondances de comptes et de catégories, et changer les paramètres de devise et titres pour les nouveaux comptes, ou ajouter plus de fichiers dans la zone temporaire.\n"
 "\n"
-"Cliquez sur \"Annuler\" pour annuler le processus d'import QIF."
+"Cliquez sur \"Annuler\" pour annuler le processus d’importation QIF."
 
 #: ../src/import-export/qif-imp/assistant-qif-import.glade.h:84
 msgid "Update your GnuCash accounts"
 msgstr "Mettre à jour vos comptes GnuCash"
 
 #: ../src/import-export/qif-imp/assistant-qif-import.glade.h:85
-#, fuzzy
 msgid "Summary Text"
-msgstr "Barre de _synthèse"
+msgstr "Texte récapitulatif"
 
 # po/guile_strings.txt:9
 #: ../src/import-export/qif-imp/assistant-qif-import.glade.h:86
-#, fuzzy
 msgid "Qif Import Summary"
-msgstr "Récapitulatif des comptes"
+msgstr "Récapitulatif de l’importation Qif"
 
 #: ../src/import-export/qif-imp/assistant-qif-import.glade.h:87
 #: ../src/report/report-gnome/dialog-report.glade.h:21
@@ -19509,34 +19434,34 @@ msgid "%B %e, %Y"
 msgstr "%B %e, %Y"
 
 #: ../src/plugins/bi_import/dialog-bi-import.c:279
-#, fuzzy, c-format
+#, c-format
 msgid "ROW %d DELETED, PRICE_NOT_SET: id=%s\n"
-msgstr "LIGNE SUPPRIMÉE, PRIX NON DÉFINI : id=%s\n"
+msgstr "LIGNE %d SUPPRIMÉE, PRIX NON DÉFINI : id=%s\n"
 
 #: ../src/plugins/bi_import/dialog-bi-import.c:288
-#, fuzzy, c-format
+#, c-format
 msgid "ROW %d DELETED, QTY_NOT_SET: id=%s\n"
-msgstr "LIGNE SUPPRIMÉE, QTÉ NON DÉFINIE : id=%s\n"
+msgstr "LIGNE %d SUPPRIMÉE, QTÉ NON DÉFINIE : id=%s\n"
 
 #: ../src/plugins/bi_import/dialog-bi-import.c:302
-#, fuzzy, c-format
+#, c-format
 msgid "ROW %d DELETED, ID_NOT_SET\n"
-msgstr "LIGNE SUPPRIMÉE, N° NON DÉFINI\n"
+msgstr "LIGNE %d SUPPRIMÉE, ID NON DÉFINI\n"
 
 #: ../src/plugins/bi_import/dialog-bi-import.c:391
-#, fuzzy, c-format
+#, c-format
 msgid "ROW %d DELETED, OWNER_NOT_SET: id=%s\n"
-msgstr "LIGNE SUPPRIMÉE, FOURNISSEUR NON DÉFINI : id=%s\n"
+msgstr "LIGNE %d SUPPRIMÉE, ÉMETTEUR/DESTINATAIRE NON DÉFINI : id=%s\n"
 
 #: ../src/plugins/bi_import/dialog-bi-import.c:416
-#, fuzzy, c-format
+#, c-format
 msgid "ROW %d DELETED, VENDOR_DOES_NOT_EXIST: id=%s\n"
-msgstr "LIGNE SUPPRIMÉE, FOURNISSEUR INEXISTANT : id=%s\n"
+msgstr "LIGNE %d SUPPRIMÉE, FOURNISSEUR INEXISTANT : id=%s\n"
 
 #: ../src/plugins/bi_import/dialog-bi-import.c:430
-#, fuzzy, c-format
+#, c-format
 msgid "ROW %d DELETED, CUSTOMER_DOES_NOT_EXIST: id=%s\n"
-msgstr "LIGNE SUPPRIMÉE, FOURNISSEUR INEXISTANT : id=%s\n"
+msgstr "LIGNE %d SUPPRIMÉE, CLIENT INEXISTANT : id=%s\n"
 
 #: ../src/plugins/bi_import/dialog-bi-import.c:474
 msgid "These rows were deleted:"
@@ -19662,25 +19587,22 @@ msgid "5. Afterwards"
 msgstr ""
 
 #: ../src/plugins/customer_import/dialog-customer-import-gui.c:169
-#, fuzzy
 msgid "Import Customers from csv"
-msgstr "Importer les factures depuis un fichier CSV"
+msgstr "Importer les clients depuis un CSV"
 
 # src/gnome/glade-gnc-dialogs.c:1219 src/gnome/glade-gnc-dialogs.c:1240
 # src/gnome/glade-gnc-dialogs.c:1276
 #. import
 #: ../src/plugins/customer_import/dialog-customer-import-gui.c:185
-#, fuzzy
 msgid "customers"
-msgstr "Client"
+msgstr "clients"
 
 #: ../src/plugins/customer_import/dialog-customer-import-gui.c:186
-#, fuzzy
 msgid "vendors"
-msgstr "Fournisseur"
+msgstr "fournisseurs"
 
 #: ../src/plugins/customer_import/dialog-customer-import-gui.c:194
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Import results:\n"
 "%i lines were ignored\n"
@@ -19694,11 +19616,11 @@ msgstr ""
 "Résiltats de l'importation :\n"
 "%i lignes ont été ignorées\n"
 "%i lignes importées :\n"
-"   %u corrigées\n"
-"   %u ignorées (non corrigeable)\n"
+"   %u %s corrigées\n"
+"   %u %s ignorées (non corrigeables)\n"
 "\n"
-"   %u créées\n"
-"   %u mises à jour (basé sur le n°)"
+"   %u %s créées\n"
+"   %u %s mises à jour (sur la base de l’ID)"
 
 # messages-i18n.c:293
 #. Menu Items
@@ -19715,15 +19637,13 @@ msgid "customer_import tooltip"
 msgstr ""
 
 #: ../src/plugins/customer_import/gtkbuilder/dialog-customer-import-gui.glade.h:1
-#, fuzzy
 msgid "Import customers or vendors from text file"
-msgstr "Importer des transactions depuis un fichier texte"
+msgstr "Importer des fournisseurs ou des vendeurs depuis un fichier texte"
 
 # src/gnome/glade-gnc-dialogs.c:1178
 #: ../src/plugins/customer_import/gtkbuilder/dialog-customer-import-gui.glade.h:2
-#, fuzzy
 msgid "<b>1. Choose the file to import</b>"
-msgstr "1. Sélectionner le fichier à importer"
+msgstr "<b>1. Choisir le fichier à importer</b>"
 
 #: ../src/plugins/customer_import/gtkbuilder/dialog-customer-import-gui.glade.h:4
 msgid "For importing customer lists."
@@ -19735,28 +19655,24 @@ msgstr ""
 
 # src/gnome/glade-gnc-dialogs.c:506
 #: ../src/plugins/customer_import/gtkbuilder/dialog-customer-import-gui.glade.h:7
-#, fuzzy
 msgid "<b>2. Select Import Type</b>"
-msgstr "2. Sélectionner le type d'importation"
+msgstr "<b>2. Seléctionner le type d’importation</b>"
 
 # po/guile_strings.txt:152
 #: ../src/plugins/customer_import/gtkbuilder/dialog-customer-import-gui.glade.h:13
-#, fuzzy
 msgid "<b>3. Select import options</b>"
-msgstr "3. Sélectionner les options d'importation"
+msgstr "<b>3. Sélectionner les options d'importation</b>"
 
 # src/gnome/glade-gnc-dialogs.c:979
 #: ../src/plugins/customer_import/gtkbuilder/dialog-customer-import-gui.glade.h:14
-#, fuzzy
 msgid "<b>3. Preview</b>"
-msgstr "4. Aperçu"
+msgstr "<b>3. Aperçu</b>"
 
 # messages-i18n.c:275 po/guile_strings.txt:129
 #. Menu Items
 #: ../src/plugins/example/gnc-plugin.example.c:50
-#, fuzzy
 msgid "example description..."
-msgstr "Nom de la description :"
+msgstr "Exemple de description..."
 
 #: ../src/plugins/example/gnc-plugin.example.c:51
 msgid "example tooltip"
@@ -19930,69 +19846,54 @@ msgstr "Planifié"
 
 # messages-i18n.c:125
 #: ../src/register/ledger-core/split-register-model.c:984
-#, fuzzy
 msgid ""
 "Enter a reference, such as an invoice or check number, common to all entry "
 "lines (splits)"
-msgstr ""
-"Saisir le numéro de transaction, tel que le numéro de facture ou de chèque"
+msgstr "Saisir une référence, comme un numéro de facture ou de chèque, commun à toutes les lignes (répartitions) de l’entrée"
 
 # messages-i18n.c:125
 #: ../src/register/ledger-core/split-register-model.c:986
-#, fuzzy
 msgid ""
 "Enter a reference, such as an invoice or check number, unique to each entry "
 "line (split)"
-msgstr ""
-"Saisir le numéro de transaction, tel que le numéro de facture ou de chèque"
+msgstr "Saisir une référence, comme un numéro de facture ou de chèque, unique à chaque ligne (répartition) de l’entrée"
 
 # messages-i18n.c:125
 #: ../src/register/ledger-core/split-register-model.c:991
-#, fuzzy
 msgid ""
 "Enter a reference, such as a check number, common to all entry lines (splits)"
-msgstr ""
-"Saisir le numéro de transaction, tel que le numéro de facture ou de chèque"
+msgstr "Saisir une référence, comme un numéro de chèque, commun à toutes les lignes (répartitions) de l’entrée"
 
 # messages-i18n.c:125
 #: ../src/register/ledger-core/split-register-model.c:993
-#, fuzzy
 msgid ""
 "Enter a reference, such as a check number, unique to each entry line (split)"
-msgstr ""
-"Saisir le numéro de transaction, tel que le numéro de facture ou de chèque"
+msgstr "Saisir une référence, comme un numéro de chèque, unique à chaque ligne (répartition) de l’entrée"
 
 # messages-i18n.c:125
 #: ../src/register/ledger-core/split-register-model.c:1014
-#, fuzzy
 msgid ""
 "Enter a transaction reference, such as an invoice or check number, common to "
 "all entry lines (splits)"
-msgstr ""
-"Saisir le numéro de transaction, tel que le numéro de facture ou de chèque"
+msgstr "Saisir une référence de transaction, comme un numéro de facture ou de chèque, commun à toutes les lignes (répartitions) de l’entrée"
 
 # messages-i18n.c:125
 #: ../src/register/ledger-core/split-register-model.c:1018
-#, fuzzy
 msgid ""
 "Enter a transaction reference that will be common to all entry lines (splits)"
-msgstr ""
-"Saisir le numéro de transaction, tel que le numéro de facture ou de chèque"
+msgstr "Saisir une référence de transaction qui sera commune à toutes les lignes (répartitions) de l’entrée"
 
 # messages-i18n.c:122
 #: ../src/register/ledger-core/split-register-model.c:1221
-#, fuzzy
 msgid "Enter an action type, or choose one from the list"
-msgstr "Saisir le type de transaction, ou choisissez-en une dans la liste"
+msgstr "Saisir le type d’action, ou choisissez-en un dans la liste"
 
 # messages-i18n.c:129
 #: ../src/register/ledger-core/split-register-model.c:1222
-#, fuzzy
 msgid ""
 "Enter a reference number, such as the next check number, or choose an action "
 "type from the list"
-msgstr ""
-"Saisir le compte de revenu/dépense pour la ligne, ou le choisir dans la liste"
+msgstr "Saisir un numéro de référence, comme le numéro du prochain chèque, ou choisissez un type d’action dans la liste"
 
 # messages-i18n.c:91
 #: ../src/register/ledger-core/split-register-model.c:1485
@@ -20039,41 +19940,34 @@ msgid "You must select a report to delete."
 msgstr "Vous devez sélectionne un rapport à supprimer."
 
 #: ../src/report/report-gnome/dialog-custom-report.c:432
-#, fuzzy
 msgid "Unable to change report name."
-msgstr "Impossible d'enregistrer la base de données"
+msgstr "Impossible de changer le nom du rapport."
 
 #: ../src/report/report-gnome/dialog-custom-report.c:444
-#, fuzzy
 msgid ""
 "A custom report with this name already exists, please choose another name."
-msgstr ""
-"Un modèle avec ce nom existe déja. S'il vous plaît, entrez un autre nom."
+msgstr "Un rapport personnalisé avec ce nom existe déja. Veuillez choisir un autre nom."
 
 # messages-i18n.c:322
 #: ../src/report/report-gnome/dialog-custom-report.c:468
-#, fuzzy
 msgid "Run preconfigured report"
-msgstr "Rapproché (rapport)"
+msgstr "Exécuter le rapport pré-configuré"
 
 #: ../src/report/report-gnome/dialog-custom-report.c:470
-#, fuzzy
 msgid "Edit configuration name"
-msgstr "Mettre à jour les préférences de GnuCash"
+msgstr "Modifier le nom de la configuration"
 
 # messages-i18n.c:80
 #: ../src/report/report-gnome/dialog-custom-report.c:472
-#, fuzzy
 msgid "Delete preconfigured report"
-msgstr "Supprimer le rapport actuellement sélectionné"
+msgstr "Supprimer le rapport pré-configuré"
 
 # messages-i18n.c:322
 #. src/report/report-gnome/report-gnome.scm
 #: ../src/report/report-gnome/dialog-custom-report.glade.h:1
 #: ../intl-scm/guile-strings.c:2032
-#, fuzzy
 msgid "Preconfigured Reports"
-msgstr "Rapproché (rapport)"
+msgstr "Rapports pré-configurés"
 
 # messages-i18n.c:85
 #: ../src/report/report-gnome/dialog-custom-report.glade.h:2
@@ -20216,21 +20110,18 @@ msgstr "Imprime le rapport en cours"
 
 # messages-i18n.c:185
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1006
-#, fuzzy
 msgid "Export as P_DF..."
-msgstr "Importer Q_IF..."
+msgstr "Exporter en P_DF..."
 
 # messages-i18n.c:105
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1007
-#, fuzzy
 msgid "Export the current report as a PDF document"
-msgstr "Imprime le rapport en cours"
+msgstr "Exporte le rapport courant dans un document PDF"
 
 # messages-i18n.c:324 po/guile_strings.txt:181
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1031
-#, fuzzy
 msgid "Save _Report"
-msgstr "Rapport simple"
+msgstr "Enregistrer le _rapport"
 
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1032
 msgid ""
@@ -20239,19 +20130,14 @@ msgid ""
 msgstr ""
 
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1037
-#, fuzzy
 msgid "Save Report As..."
-msgstr "Enregistrer sous..."
+msgstr "Enregistrer le rapport sous..."
 
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1038
-#, fuzzy
 msgid ""
 "Add the current report's configuration to the `Preconfigured Reports' menu. "
 "The report will be saved in the file ~/.gnucash/saved-reports-2.4. "
-msgstr ""
-"Ajoute le rapport actuel au menu \"Personnalisé\" pour une utilisation "
-"ultérieure. Le rapport sera enregistré dans le fichier ~/.gnucash/saved-"
-"reports-2.4. L'opération prendra effet au prochain démarrage de GnuCash."
+msgstr "Ajoute la configuration du rapport courant dans le menu « Rapports pré-configurés ». Le rapport sera enregistré dans le fichier ~/.gnucash/saved-reports-2.4. "
 
 # messages-i18n.c:284 po/guile_strings.txt:274
 # src/gnome/glade-gnc-dialogs.c:647
@@ -20865,27 +20751,23 @@ msgstr "du %s au %s"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:126
-#, fuzzy
 msgid "First day of the current calendar year."
-msgstr "Premier jour de l'année calendaire actuelle"
+msgstr "Premier jour de l'année calendaire actuelle."
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:130
-#, fuzzy
 msgid "Last day of the current calendar year."
-msgstr "Dernier jour de l'année calendaire actuelle"
+msgstr "Dernier jour de l'année calendaire actuelle."
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:134
-#, fuzzy
 msgid "First day of the previous calendar year."
-msgstr "Premier jour de la précédente année calendaire"
+msgstr "Premier jour de la précédente année calendaire."
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:138
-#, fuzzy
 msgid "Last day of the previous calendar year."
-msgstr "Dernier jour de la précédente année calendaire"
+msgstr "Dernier jour de la précédente année calendaire."
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:140
@@ -20894,9 +20776,8 @@ msgstr "Début de l'année prochaine"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:142
-#, fuzzy
 msgid "First day of the next calendar year."
-msgstr "Premier jour de la prochaine année calendaire"
+msgstr "Premier jour de la prochaine année calendaire."
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:144
@@ -20905,9 +20786,8 @@ msgstr "Fin de l'année dernière"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:146
-#, fuzzy
 msgid "Last day of the next calendar year."
-msgstr "Dernier jour de la prochaine année calendaire"
+msgstr "Dernier jour de la prochaine année calendaire."
 
 # po/guile_strings.txt:107
 #. src/app-utils/date-utilities.scm
@@ -20917,10 +20797,8 @@ msgstr "Début de la période comptable"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:150
-#, fuzzy
 msgid "First day of the accounting period, as set in the global preferences."
-msgstr ""
-"Premier jour de la période comptable, telle que définie dans les Préférences"
+msgstr "Premier jour de la période comptable, telle que définie dans les Préférences globales."
 
 # po/guile_strings.txt:166
 #. src/app-utils/date-utilities.scm
@@ -20930,34 +20808,28 @@ msgstr "Fin de la période comptable"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:154
-#, fuzzy
 msgid "Last day of the accounting period, as set in the global preferences."
-msgstr ""
-"Dernier jour de la période comptable, telle que définie dans les Préférences"
+msgstr "Dernier jour de la période comptable, telle que définie dans les Préférences globales."
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:158
-#, fuzzy
 msgid "First day of the current month."
-msgstr "Premier du mois actuel"
+msgstr "Premier jour du mois actuel."
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:162
-#, fuzzy
 msgid "Last day of the current month."
-msgstr "Dernier du mois actuel"
+msgstr "Dernier jour du mois actuel."
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:166
-#, fuzzy
 msgid "First day of the previous month."
-msgstr "Premier jour du mois précédent"
+msgstr "Premier jour du mois précédent."
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:170
-#, fuzzy
 msgid "Last day of previous month."
-msgstr "Dernier jour du mois précédent"
+msgstr "Dernier jour du mois précédent."
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:172
@@ -20966,9 +20838,8 @@ msgstr "Début du mois prochain"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:174
-#, fuzzy
 msgid "First day of the next month."
-msgstr "Premier jour du moi prochain"
+msgstr "Premier jour du mois prochain."
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:176
@@ -20977,9 +20848,8 @@ msgstr "Fin du mois prochain"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:178
-#, fuzzy
 msgid "Last day of next month."
-msgstr "Dernier jour du moi prochain"
+msgstr "Dernier jour du mois prochain."
 
 # po/guile_strings.txt:107
 #. src/app-utils/date-utilities.scm
@@ -20989,9 +20859,8 @@ msgstr "Début du trimestre actuel"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:182
-#, fuzzy
 msgid "First day of the current quarterly accounting period."
-msgstr "Premier jour de la période comptable trimestrielle"
+msgstr "Premier jour de la période comptable trimestrielle actuelle."
 
 # po/guile_strings.txt:107
 #. src/app-utils/date-utilities.scm
@@ -21001,22 +20870,19 @@ msgstr "Fin du trimestre actuel"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:186
-#, fuzzy
 msgid "Last day of the current quarterly accounting period."
-msgstr "Dernier jour de la période comptable trimestrielle"
+msgstr "Dernier jour de la période comptable trimestrielle actuelle."
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:190
-#, fuzzy
 msgid "First day of the previous quarterly accounting period."
-msgstr "Premier jour de la période comptable trimestrielle précédente"
+msgstr "Premier jour de la période comptable trimestrielle précédente."
 
 # po/guile_strings.txt:166
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:194
-#, fuzzy
 msgid "Last day of previous quarterly accounting period."
-msgstr "Dernier jour de la période comptable trimestrielle précédente"
+msgstr "Dernier jour de la période comptable trimestrielle précédente."
 
 # po/guile_strings.txt:107
 #. src/app-utils/date-utilities.scm
@@ -21026,9 +20892,8 @@ msgstr "Début du prochain trimestre"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:198
-#, fuzzy
 msgid "First day of the next quarterly accounting period."
-msgstr "Premier jour de la prochaine période comptable trimestrielle"
+msgstr "Premier jour de la prochaine période comptable trimestrielle."
 
 # po/guile_strings.txt:166
 #. src/app-utils/date-utilities.scm
@@ -21039,16 +20904,14 @@ msgstr "Fin du trimestre prochain"
 # po/guile_strings.txt:166
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:202
-#, fuzzy
 msgid "Last day of next quarterly accounting period."
-msgstr "Premier jour de la prochaine période comptable trimestrielle"
+msgstr "Dernier jour de la prochaine période comptable trimestrielle."
 
 # po/guile_strings.txt:18
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:206
-#, fuzzy
 msgid "The current date."
-msgstr "La date actuelle"
+msgstr "La date actuelle."
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:208
@@ -21057,9 +20920,8 @@ msgstr "Il y a un mois"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:210
-#, fuzzy
 msgid "One Month Ago."
-msgstr "Il y a un mois"
+msgstr "Il y a un mois."
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:212
@@ -21068,9 +20930,8 @@ msgstr "Il y a une semaine"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:214
-#, fuzzy
 msgid "One Week Ago."
-msgstr "Il y a une semaine"
+msgstr "Il y a une semaine."
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:216
@@ -21079,9 +20940,8 @@ msgstr "Il y a trois mois"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:218
-#, fuzzy
 msgid "Three Months Ago."
-msgstr "Il y a trois mois"
+msgstr "Il y a trois mois."
 
 # po/guile_strings.txt:184
 #. src/app-utils/date-utilities.scm
@@ -21092,9 +20952,8 @@ msgstr "Il y a six mois"
 # po/guile_strings.txt:184
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:222
-#, fuzzy
 msgid "Six Months Ago."
-msgstr "Il y a six mois"
+msgstr "Il y a six mois."
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:224
@@ -21103,66 +20962,60 @@ msgstr "Il y a un an"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:226
-#, fuzzy
 msgid "One Year Ago."
-msgstr "Il y a un an"
+msgstr "Il y a un an."
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:228
 msgid "One Month Ahead"
-msgstr "Il y a un mois"
+msgstr "Dans un mois"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:230
-#, fuzzy
 msgid "One Month Ahead."
-msgstr "Il y a un mois"
+msgstr "Dans un mois."
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:232
 msgid "One Week Ahead"
-msgstr "Il y a une semaine"
+msgstr "Dans une semaine"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:234
-#, fuzzy
 msgid "One Week Ahead."
-msgstr "Il y a une semaine"
+msgstr "Dans une semaine."
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:236
 msgid "Three Months Ahead"
-msgstr "Il y a trois mois"
+msgstr "Dans trois mois"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:238
-#, fuzzy
 msgid "Three Months Ahead."
-msgstr "Il y a trois mois"
+msgstr "Dans trois mois."
 
 # po/guile_strings.txt:184
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:240
 msgid "Six Months Ahead"
-msgstr "Il y a six mois"
+msgstr "Dans six mois."
 
 # po/guile_strings.txt:184
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:242
-#, fuzzy
 msgid "Six Months Ahead."
-msgstr "Il y a six mois"
+msgstr "Dans six mois."
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:244
 msgid "One Year Ahead"
-msgstr "Il y a un an"
+msgstr "Dans un an"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:246
-#, fuzzy
 msgid "One Year Ahead."
-msgstr "Il y a un an"
+msgstr "Dans un an."
 
 #. src/import-export/qif-imp/qif-dialog-utils.scm
 #: ../intl-scm/guile-strings.c:310
@@ -21573,15 +21426,13 @@ msgstr ""
 
 #. src/report/business-reports/aging.scm
 #: ../intl-scm/guile-strings.c:458
-#, fuzzy
 msgid "Sort companies by."
-msgstr "Tri les société par"
+msgstr "Trier les société par."
 
 #. src/report/business-reports/aging.scm
 #: ../intl-scm/guile-strings.c:462
-#, fuzzy
 msgid "Name of the company."
-msgstr "Nom de l'organisation ou de l'entreprise"
+msgstr "Nom de la société."
 
 # messages-i18n.c:344
 #. src/report/business-reports/aging.scm
@@ -21591,9 +21442,8 @@ msgstr "Total dû"
 
 #. src/report/business-reports/aging.scm
 #: ../intl-scm/guile-strings.c:466
-#, fuzzy
 msgid "Total amount owed to/from Company."
-msgstr "Montant brut total dû à/de la société"
+msgstr "Montant total dû à/de la société."
 
 #. src/report/business-reports/aging.scm
 #: ../intl-scm/guile-strings.c:468
@@ -21602,18 +21452,14 @@ msgstr "Plage de total dû"
 
 #. src/report/business-reports/aging.scm
 #: ../intl-scm/guile-strings.c:470
-#, fuzzy
 msgid "Amount owed in oldest bracket - if same go to next oldest."
-msgstr ""
-"Montant brut dû dans la plus vieille plage - si identique, passer à la moins "
-"vieille"
+msgstr "Montant dû dans la plus vieille plage - si identique, passer à la suivante par ordre d’ancienneté."
 
 # messages-i18n.c:160
 #. src/report/business-reports/aging.scm
 #: ../intl-scm/guile-strings.c:472
-#, fuzzy
 msgid "Sort order."
-msgstr "Ordre de tri"
+msgstr "Ordre de tri."
 
 # messages-i18n.c:295
 #. src/report/business-reports/aging.scm
@@ -21623,9 +21469,8 @@ msgstr "Croissant"
 
 #. src/report/business-reports/aging.scm
 #: ../intl-scm/guile-strings.c:476
-#, fuzzy
 msgid "0 -> $999,999.99, A->Z."
-msgstr "0 -> $999 999,99, A->Z"
+msgstr "0 -> $999 999,99, A->Z."
 
 # messages-i18n.c:270
 #. src/report/business-reports/aging.scm
@@ -21635,9 +21480,8 @@ msgstr "Décroissant"
 
 #. src/report/business-reports/aging.scm
 #: ../intl-scm/guile-strings.c:480
-#, fuzzy
 msgid "$999,999.99 -> $0, Z->A."
-msgstr "$999 999.99 -> $0, Z->A"
+msgstr "$999 999,99 -> $0, Z->A."
 
 #. src/report/business-reports/aging.scm
 #: ../intl-scm/guile-strings.c:482
@@ -23628,9 +23472,8 @@ msgstr "Prix total"
 # messages-i18n.c:242 po/guile_strings.txt:50
 #. src/report/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:1804
-#, fuzzy
-msgid "Amount\rue"
-msgstr "Montant brut dû"
+msgid "Amount Due"
+msgstr "Montant dû"
 
 # messages-i18n.c:312
 #. src/report/business-reports/taxinvoice.scm
@@ -29782,6 +29625,11 @@ msgid ""
 "account, start the search from that account's register."
 msgstr ""
 
+# messages-i18n.c:242 po/guile_strings.txt:50
+#, fuzzy
+#~ msgid "Amount\rue"
+#~ msgstr "Montant brut dû"
+
 #~ msgid ""
 #~ "Since you are creating a new file, you will next see a dialog for setting "
 #~ "book options. These can affect how GnuCash transactions are handled "
@@ -29812,11 +29660,6 @@ msgstr ""
 #~ msgstr ""
 #~ "Souhaitez-vous vraiment écraser vos changements avec le contenu du modèle "
 #~ "\"%s\" ?"
-
-# messages-i18n.c:242 po/guile_strings.txt:50
-#, fuzzy
-#~ msgid "Amount Due"
-#~ msgstr "Montant brut dû"
 
 # po/guile_strings.txt:88
 #, fuzzy
