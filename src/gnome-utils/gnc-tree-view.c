@@ -391,8 +391,9 @@ gnc_tree_view_destroy (GtkObject *object)
             }
 
             key = g_strjoin ("_", name, STATE_KEY_SUFF_WIDTH, NULL);
-            if (gtk_tree_view_column_get_fixed_width (column)
-                    != gtk_tree_view_column_get_width (column))
+            if (g_object_get_data (G_OBJECT(column), "default-width") &&
+                (GPOINTER_TO_INT((g_object_get_data (G_OBJECT(column), "default-width")))
+                    != gtk_tree_view_column_get_width (column)))
             {
                 g_key_file_set_integer (state_file, priv->state_section, key,
                                         gtk_tree_view_column_get_width (column));
@@ -1643,6 +1644,13 @@ gnc_tree_view_column_properties (GncTreeView *view,
                      "sizing",      GTK_TREE_VIEW_COLUMN_FIXED,
                      "fixed-width", width,
                      NULL);
+        /* Save the initially calculated preferred width for later
+         * comparison to the actual width when saving state. Can't
+         * use the "fixed-width" property for that because it changes
+         * when the user resizes the column.
+         */
+        g_object_set_data (G_OBJECT(column),
+                     "default-width", GINT_TO_POINTER (width));
     }
 
     s_model = gtk_tree_view_get_model(GTK_TREE_VIEW(view));
