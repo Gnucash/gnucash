@@ -2076,7 +2076,7 @@ record_price (SplitRegister *reg, Account *account, gnc_numeric value)
 static gboolean
 gnc_split_register_auto_calc (SplitRegister *reg, Split *split)
 {
-    PriceCell *cell;
+    PriceCell *cell = NULL;
     gboolean recalc_shares = FALSE;
     gboolean recalc_price = FALSE;
     gboolean recalc_value = FALSE;
