@@ -47,9 +47,11 @@ swig-core-utils-guile.c: core-utils.i ${top_srcdir}/src/base-typemaps.i
 	$(SWIG) -guile $(SWIG_ARGS) -Linkage module \
 	-I${top_srcdir}/src -o $@ $<
 if ! OS_WIN32
+if ! SWIG_DIST_FAIL
 	if ! `grep "define scm_from_utf8_string" $@ > /dev/null 2>&1`; then \
 	  patch $@ $(top_srcdir)/src/swig-utf8.patch; \
 	fi
+endif
 endif
 swig-core-utils-python.c: core-utils.i ${top_srcdir}/src/base-typemaps.i
 	$(SWIG) -python -Wall -Werror $(SWIG_ARGS) \

@@ -40,6 +40,7 @@ dist_doc_DATA = \
 # CVS dirs.
 
 EXTRA_DIST = \
+  $(SWIG_DIST_FAIL) \
   make-gnucash-potfiles.in \
   macros/as-scrub-include.m4 \
   macros/binreloc.m4 \
@@ -145,6 +146,14 @@ distuninstallcheck_listfiles = \
   find . -type f -print | grep -v ./share/icons/hicolor/icon-theme.cache | grep -v ./share/info/dir
 
 #dist-hook: po/POTFILES.in
+
+# Make "make dist" fail if we have the wrong version of swig
+if SWIG_DIST_FAIL
+SWIG_DIST_FAIL = swig-dist-fail
+swig-dist-fail:
+	@echo "You cannot build the dist with your version of swig"
+	@exit 1
+endif
 
 distcheck-hook:
 	@e=''; \
