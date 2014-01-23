@@ -3,7 +3,7 @@
 # ############################################################
 
 IF (WITH_AQBANKING)
-  ADD_SUBDIRECTORY (aqbanking)
+  ADD_SUBDIRECTORY (aqb)
 ENDIF (WITH_AQBANKING)
 
 ADD_DEFINITIONS (-DG_LOG_DOMAIN=\"gnc.import\")
