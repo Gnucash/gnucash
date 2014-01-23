@@ -712,6 +712,15 @@ main(int argc, char ** argv)
     set_mac_locale();
 #endif
     gnc_environment_setup();
+#ifndef MAC_INTEGRATION /* setlocale already done */
+    if (!setlocale (LC_ALL, ""))
+      {
+	g_print ("The locale defined in the environment isn't supported. "
+		 "Falling back to the 'C' (US English) locale\n");
+	g_setenv ("LC_ALL", "C", TRUE);
+	setlocale (LC_ALL, "C");
+      }
+#endif
 #ifdef HAVE_GETTEXT
     {
         gchar *localedir = gnc_path_get_localedir();
