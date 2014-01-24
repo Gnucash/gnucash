@@ -444,17 +444,15 @@ account_categories_tree_view_prepare (hierarchy_data  *data)
 void on_prepare (GtkAssistant  *assistant, GtkWidget *page,
                  hierarchy_data  *data)
 {
-    switch (gtk_assistant_get_current_page(assistant))
-    {
-    case 2:
-        /* Current page is account selection */
+    const int selection_page = data->new_book ? 3 : 2;
+    const int final_page = data->new_book ? 4 : 3;
+    const int current_page = gtk_assistant_get_current_page (assistant);
+
+    if (current_page == selection_page)
         on_choose_account_categories_prepare(data);
-        break;
-    case 3:
-        /* Current page is final account page */
+
+    if (current_page == final_page)
         on_final_account_prepare (data);
-        break;
-    }
 }
 
 void
