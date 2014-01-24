@@ -517,9 +517,12 @@ then
     then
         AC_MSG_WARN([You don't have SWIG 2.0.10 so you will not be able to "make dist"])
     fi
+    AM_CONDITIONAL([SWIG_DIST_FAIL], test "${gnc_have_swig_2_0_10}" != yes)
+else
+    # When building from tarball, all the prerequisites to build dist are already
+    # met so make sure it's allowed
+    AM_CONDITIONAL([SWIG_DIST_FAIL], test yes != yes)
 fi
-
-AM_CONDITIONAL([SWIG_DIST_FAIL], test "${gnc_have_swig_2_0_10}" != yes)
 
 ### --------------------------------------------------------------------------
 ### LIBXML -- GNOME_XML_LIB is defined by GNOME_XML_CHECK
