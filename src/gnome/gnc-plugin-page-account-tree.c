@@ -868,19 +868,25 @@ gnc_plugin_page_account_tree_double_click_cb (GtkTreeView *treeview,
     model = gtk_tree_view_get_model(treeview);
     if (gtk_tree_model_get_iter(model, &iter, path))
     {
-        if (gtk_tree_model_iter_has_child(model, &iter))
+        Account *account = gnc_tree_view_account_get_account_from_path (GNC_TREE_VIEW_ACCOUNT(treeview), path);
+        if (xaccAccountGetPlaceholder (account))
         {
-            /* There are children,
-             * just expand or collapse the row. */
-            if (gtk_tree_view_row_expanded(treeview, path))
-                gtk_tree_view_collapse_row(treeview, path);
-            else
-                gtk_tree_view_expand_row(treeview, path, FALSE);
+            /* This is a placeholder account. Only only show/hide
+             * subaccount list if there is one.
+             */
+            if (gtk_tree_model_iter_has_child(model, &iter))
+            {
+                /* There are children,
+                 * just expand or collapse the row. */
+                if (gtk_tree_view_row_expanded(treeview, path))
+                    gtk_tree_view_collapse_row(treeview, path);
+                else
+                    gtk_tree_view_expand_row(treeview, path, FALSE);
+            }
         }
         else
         {
-            /* It's an account without any children, so open its register */
-            Account *account = gnc_tree_view_account_get_account_from_path (GNC_TREE_VIEW_ACCOUNT(treeview), path);
+            /* No placeholder account, so open its register */
 #ifdef REGISTER2_ENABLED
             gppat_open2_account_common (page, account, FALSE);
 #else
