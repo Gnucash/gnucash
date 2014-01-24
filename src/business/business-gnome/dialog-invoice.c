@@ -1804,7 +1804,7 @@ gnc_invoice_update_window (InvoiceWindow *iw, GtkWidget *widget)
     /* Hide/show the appropriate widgets based on our posted/paid state */
 
     {
-        GtkWidget *hide;
+        GtkWidget *hide, *show;
 
         if (is_posted == TRUE)
         {
@@ -1812,7 +1812,18 @@ gnc_invoice_update_window (InvoiceWindow *iw, GtkWidget *widget)
             gtk_widget_hide (hide);
             hide = GTK_WIDGET (gtk_builder_get_object (iw->builder, "hide4"));
             gtk_widget_hide (hide);
-
+            
+            show = GTK_WIDGET (gtk_builder_get_object (iw->builder, "posted_label"));
+            gtk_widget_show (show);
+            gtk_widget_show (iw->posted_date_hbox);
+            show = GTK_WIDGET (gtk_builder_get_object (iw->builder, "acct_label"));
+            gtk_widget_show (show);
+            gtk_widget_show (acct_entry);
+            
+            show = GTK_WIDGET (gtk_builder_get_object (iw->builder, "hide1"));
+            gtk_widget_show (show);
+            show = GTK_WIDGET (gtk_builder_get_object (iw->builder, "hide2"));
+            gtk_widget_show (show);
         }
         else           /* ! posted */
         {
