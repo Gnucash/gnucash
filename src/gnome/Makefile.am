@@ -72,8 +72,9 @@ gnomeapp_DATA = $(gnomeapp_in_files:.desktop.in=.desktop)
 appicondir = $(datadir)/pixmaps
 
 appdatadir = $(datadir)/appdata
-appdata_files = gnucash.appdata.xml
-appdata_DATA = $(appdata_files)
+appdata_in_files = gnucash.appdata.xml.in
+appdata_DATA = $(appdata_in_files:.xml.in=.xml)
+@INTLTOOL_XML_RULE@
 
 noinst_HEADERS = \
   assistant-acct-period.h \

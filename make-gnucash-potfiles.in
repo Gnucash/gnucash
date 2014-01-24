@@ -56,6 +56,7 @@ foreach my $file (@possible_files) {
 }
 
 # These are also added, even though they are outside of src/
+print "src/gnome/gnucash.appdata.xml.in\n";
 print "src/gnome/gnucash.desktop.in.in\n";
 print "src/libqof/qof/gnc-date.c\n";
 print "src/libqof/qof/qofbookslots.h\n";
