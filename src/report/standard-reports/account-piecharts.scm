@@ -488,13 +488,11 @@ balance at a given time"))
                       (map 
                        (lambda (pair)
                          (string-append
-			  (regexp-substitute/global #f "&"
                            (if (string? (cadr pair))
 			       (cadr pair)
 			       ((if show-fullname?
 				    gnc-account-get-full-name
 				    xaccAccountGetName) (cadr pair)))
-			       'pre " " (_ "and") " " 'post)
 			   (if show-total?
 			       (string-append 
 				" - "

@@ -512,13 +512,11 @@ developing over time"))
 	     (gnc:report-percent-done 94)
              (gnc:html-barchart-set-col-labels!
               chart (map (lambda (pair)
-			  (regexp-substitute/global #f "&"
                            (if (string? (car pair))
                                (car pair)
                                ((if show-fullname?
                                     gnc-account-get-full-name
-                                    xaccAccountGetName) (car pair)))
-			   'pre " " (_ "and") " " 'post))
+                                    xaccAccountGetName) (car pair))))
                          all-data))
              (gnc:html-barchart-set-col-colors! 
               chart
@@ -589,13 +587,11 @@ developing over time"))
                     (append
                      (list (_ "Date"))
                      (map (lambda (pair)
-                            (regexp-substitute/global #f "&"
-                                                      (if (string? (car pair))
-                                                          (car pair)
-                                                          ((if show-fullname?
-                                                               gnc-account-get-full-name
-                                                               xaccAccountGetName) (car pair)))
-                                                      'pre " " (_ "and") " " 'post))
+                           (if (string? (car pair))
+                               (car pair)
+                               ((if show-fullname?
+                                    gnc-account-get-full-name
+                                    xaccAccountGetName) (car pair))))
                           all-data)
                      (if (> (gnc:html-table-num-columns table) 2)
                          (list (_ "Grand Total"))
