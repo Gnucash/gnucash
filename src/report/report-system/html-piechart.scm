@@ -229,7 +229,7 @@
                 (for-each 
                  (lambda (datum label)
                    (push "  data.push(['")
-                   (push label)
+                   (push (jqplot-escape-string label))
                    (push "',")
                    (push datum)
                    (push "]);\n"))
@@ -247,11 +247,13 @@
             (if title
               (begin 
                 (push "  options.title = \"")
-                (push title) (push "\";\n")))
+                (push (jqplot-escape-string title))
+                (push "\";\n")))
             (if subtitle
               (begin 
                 (push "  options.title += \" (")
-                (push subtitle) (push ")\";\n")))
+                (push (jqplot-escape-string subtitle))
+                (push ")\";\n")))
 
             (push "$.jqplot.config.enablePlugins = true;\n")
             (push "var plot = $.jqplot('")(push chart-id)(push "', [data], options);\n")

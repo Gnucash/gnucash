@@ -355,7 +355,7 @@
                          (push series-index)
                          (push ");\n")
                          (push "series.push({ label: \"")
-                         (push label)
+                         (push (jqplot-escape-string label))
                          (push "\"});\n\n")))
          ; Use a unique chart-id for each chart. This prevents chart
          ; clashed on multi-column reports
@@ -447,12 +447,14 @@
             (if title
               (begin 
                 (push "  options.title = \"")
-                (push title) (push "\";\n")))
+                (push (jqplot-escape-string title))
+                (push "\";\n")))
 
             (if subtitle
               (begin 
                 (push "  options.title += \" (")
-                (push subtitle) (push ")\";\n")))
+                (push (jqplot-escape-string subtitle))
+                (push ")\";\n")))
 
             (if (and (string? x-label) (> (string-length x-label) 0))
               (begin 

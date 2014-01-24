@@ -14,3 +14,12 @@
         "\" />\n"
     ))
 
+(define (jqplot-escape-string s1)
+    ;; Escape single and double quotes and backslashes
+    (set! s1 (regexp-substitute/global #f "\\\\" s1 'pre "\\\\" 'post))
+    (set! s1 (regexp-substitute/global #f "'" s1 'pre "\\'" 'post))
+    (set! s1 (regexp-substitute/global #f "\"" s1 'pre "\\\"" 'post))
+    ;; Escape HTML special characters
+    (set! s1 (regexp-substitute/global #f "&" s1 'pre "&amp;" 'post))
+    (set! s1 (regexp-substitute/global #f "<" s1 'pre "&lt;" 'post))
+    (regexp-substitute/global #f ">" s1 'pre "&gt;" 'post))
