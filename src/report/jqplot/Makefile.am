@@ -31,5 +31,6 @@ gncjqplot_DATA = \
   plugins/jqplot.pointLabels.js \
   plugins/jqplot.trendline.js
 
-
-EXTRA_DIST = ${gncjqplot_DATA}
+# Also ship jquery.js since it is the source for jquery.min.js
+EXTRA_DIST = ${gncjqplot_DATA} \
+	jquery.js
