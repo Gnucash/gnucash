@@ -317,7 +317,10 @@
 	(let* ((current-units (units-basis b-list))
 	       (units-ratio (gnc-numeric-div (gnc-numeric-add b-units current-units GNC-DENOM-AUTO GNC-RND-ROUND) 
 					     current-units GNC-DENOM-AUTO GNC-RND-ROUND))
-	       (value-ratio (gnc-numeric-div (gnc:make-gnc-numeric 1 1) units-ratio GNC-DENOM-AUTO GNC-RND-ROUND)))
+               ;; If the units ratio is zero the stock is worthless and the value should be zero too 
+	       (value-ratio (if (gnc-numeric-zero-p units-ratio)
+	                        (gnc-numeric-zero)
+                                (gnc-numeric-div (gnc:make-gnc-numeric 1 1) units-ratio GNC-DENOM-AUTO GNC-RND-ROUND))))
 	  
 	  (gnc:debug "blist is " b-list " current units is " 
 	             (gnc-numeric-to-string current-units) 
@@ -667,20 +670,24 @@
 						      (not (gnc-numeric-zero-p (xaccSplitGetAmount (xaccSplitGetOtherSplit s)))))
 					       (begin (gnc:debug "Money in 2 " (gnc-numeric-to-string split-value))
 					              (moneyincoll 'add commod-currency split-value)))
-					      (if (gnc-numeric-negative-p split-value)
-                                                ;; Split value is negative, money is going out of stock account
-                                                (let* ((new-basis (sum-basis basis-list currency-frac))
-                                                        ;; Capital gain is money out minus change in basis
-                                                        (gain (gnc-numeric-sub (gnc-numeric-abs split-value-currency)
-                                                                          (gnc-numeric-sub orig-basis new-basis
-                                                                                           currency-frac GNC-RND-ROUND)
-                                                                          currency-frac GNC-RND-ROUND)))
-                                                       (gnc:debug "Old basis=" (gnc-numeric-to-string orig-basis)
-                                                                  " New basis=" (gnc-numeric-to-string new-basis)
-                                                                  " Gain=" (gnc-numeric-to-string gain))
-                                                       (gaincoll 'add currency gain)
-                                                       (gnc:debug "Money out 2 " (gnc-numeric-to-string (gnc-numeric-neg split-value)))
-                                                       (moneyoutcoll 'add commod-currency (gnc-numeric-neg split-value)))))
+					      ;; Split value is zero or negative.  If it's zero it's either a stock split/merge
+					      ;; or the stock has become worthless (which looks like a merge where the number
+					      ;; of shares goes to zero).  If the value is negative then it's a disposal of some sort.
+					      (let ((new-basis (sum-basis basis-list currency-frac)))
+                                                     (if (or (gnc-numeric-zero-p new-basis)
+                                                             (gnc-numeric-negative-p split-value))
+                                                       ;; Split value is negative or new basis is zero (stock is worthless), 
+                                                       ;; Capital gain is money out minus change in basis
+                                                       (let ((gain (gnc-numeric-sub (gnc-numeric-abs split-value-currency)
+                                                                                 (gnc-numeric-sub orig-basis new-basis
+                                                                                                  currency-frac GNC-RND-ROUND)
+                                                                                 currency-frac GNC-RND-ROUND)))
+                                                              (gnc:debug "Old basis=" (gnc-numeric-to-string orig-basis)
+                                                                         " New basis=" (gnc-numeric-to-string new-basis)
+                                                                         " Gain=" (gnc-numeric-to-string gain))
+                                                              (gaincoll 'add currency gain)
+                                                              (gnc:debug "Money out 2 " (gnc-numeric-to-string (gnc-numeric-neg split-value)))
+                                                              (moneyoutcoll 'add commod-currency (gnc-numeric-neg split-value))))))
 					  )
 					)
 				  )
