@@ -48,6 +48,7 @@
 #include <glib/gi18n.h>
 
 #include <gnc-gdate-utils.h>
+#include <gnc-gobject-utils.h>
 #include "SX-book.h"
 #include "Split.h"
 #include "Transaction.h"
@@ -194,7 +195,13 @@ GncPluginPage *
 gnc_plugin_page_sx_list_new (void)
 {
     GncPluginPageSxList *plugin_page;
-    plugin_page = g_object_new(GNC_TYPE_PLUGIN_PAGE_SX_LIST, NULL);
+    const GList *object = gnc_gobject_tracking_get_list (GNC_PLUGIN_PAGE_SX_LIST_NAME);
+    if (object && GNC_IS_PLUGIN_PAGE_SX_LIST (object->data))
+	plugin_page = GNC_PLUGIN_PAGE_SX_LIST (object->data);
+    else
+    {
+	plugin_page = g_object_new (GNC_TYPE_PLUGIN_PAGE_SX_LIST, NULL);
+    }
     return GNC_PLUGIN_PAGE(plugin_page);
 }
 
@@ -226,6 +233,7 @@ gnc_plugin_page_sx_list_init (GncPluginPageSxList *plugin_page)
 {
     GtkActionGroup *action_group;
     GncPluginPage *parent;
+    GncPluginPageSxListClass *klass = GNC_PLUGIN_PAGE_SX_LIST_GET_CLASS (plugin_page);
 
     /* Init parent declared variables */
     parent = GNC_PLUGIN_PAGE(plugin_page);
@@ -252,6 +260,8 @@ gnc_plugin_page_sx_list_init (GncPluginPageSxList *plugin_page)
                                  gnc_plugin_page_sx_list_n_actions,
                                  plugin_page);
     /* gnc_plugin_init_short_names (action_group, toolbar_labels); */
+	gnc_gobject_tracking_remember (G_OBJECT (plugin_page),
+				       G_OBJECT_CLASS (klass));
 }
 
 
@@ -290,6 +300,7 @@ gnc_plugin_page_sx_list_finalize (GObject *object)
     g_return_if_fail(GNC_IS_PLUGIN_PAGE_SX_LIST (page));
     priv = GNC_PLUGIN_PAGE_SX_LIST_GET_PRIVATE(page);
     g_return_if_fail(priv != NULL);
+    gnc_gobject_tracking_forget (G_OBJECT (page));
 
     G_OBJECT_CLASS (parent_class)->finalize (object);
 }
