@@ -687,6 +687,7 @@ gnc_log_init()
 int
 main(int argc, char ** argv)
 {
+    gchar *sys_locale = NULL;
 #if !defined(G_THREADS_ENABLED) || defined(G_THREADS_IMPL_NONE)
 #    error "No GLib thread implementation available!"
 #endif
@@ -713,12 +714,13 @@ main(int argc, char ** argv)
 #endif
     gnc_environment_setup();
 #ifndef MAC_INTEGRATION /* setlocale already done */
-    if (!setlocale (LC_ALL, ""))
+    sys_locale = g_strdup (setlocale (LC_ALL, ""));
+    if (!sys_locale)
       {
-	g_print ("The locale defined in the environment isn't supported. "
-		 "Falling back to the 'C' (US English) locale\n");
-	g_setenv ("LC_ALL", "C", TRUE);
-	setlocale (LC_ALL, "C");
+        g_print ("The locale defined in the environment isn't supported. "
+                 "Falling back to the 'C' (US English) locale\n");
+        g_setenv ("LC_ALL", "C", TRUE);
+        setlocale (LC_ALL, "C");
       }
 #endif
 #ifdef HAVE_GETTEXT
@@ -735,6 +737,15 @@ main(int argc, char ** argv)
     gnc_print_unstable_message();
 
     gnc_log_init();
+
+#ifndef MAC_INTEGRATION
+    /* Write some locale details to the log to simplify debugging
+     * To be on the safe side, only do this if not on OS X,
+     * to avoid unintentionally messing up the locale settings */
+    PINFO ("System locale returned %s", sys_locale ? sys_locale : "(null)");
+    PINFO ("Effective locale set to %s.", setlocale (LC_ALL, ""));
+    g_free (sys_locale);
+#endif
 
     /* If asked via a command line parameter, fetch quotes only */
     if (add_quotes_file)
