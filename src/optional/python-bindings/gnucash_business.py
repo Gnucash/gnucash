@@ -159,12 +159,14 @@ class Invoice(GnuCashCoreClass):
                     "with either a book, id, currency and owner, or an existing"
                     "low level swig proxy in the argument instance")
             GnuCashCoreClass.__init__(self, book)
+            self.BeginEdit()
             self.SetID(id)
             self.SetCurrency(currency)
             self.SetOwner(owner)
             if date_opened == None:
                 date_opened = datetime.date.today()
             self.SetDateOpened(date_opened)
+            self.CommitEdit()
         else:
             GnuCashCoreClass.__init__(self, instance=instance)
 
