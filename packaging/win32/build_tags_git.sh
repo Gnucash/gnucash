@@ -85,10 +85,6 @@ for tag_rev in $tags ; do
   rm -fr $tagbasedir
   mkdir -p ${tagdir}
 
-  # Copy the downloads to save time
-  mkdir -p ${tagbasedir}/downloads
-  cp -p $(unix_path ${DOWNLOAD_DIR})/* ${tagbasedir}/downloads
-
   # Check out the tag and setup custom.sh
   qpushd ${tagdir}
   $GIT_CMD clone ${REPOS_URL} repos
@@ -102,6 +98,11 @@ for tag_rev in $tags ; do
   # Set the global directory to the tag build
   echo -n 'GLOBAL_DIR=c:\\soft\\gnucash-' >> ${w32pkg}/custom.sh
   echo "${tag}" >> ${w32pkg}/custom.sh
+
+  # Point DOWNLOAD_DIR at the global installation so we can reuse
+  # most of the already downloaded packages
+  echo -n "DOWNLOAD_DIR=" >> ${w32pkg}/custom.sh
+  echo "${DOWNLOAD_DIR}" | sed -e 's/\\/\\\\/g' >> ${w32pkg}/custom.sh
 
   # UPDATE_SOURCES is obsolete, but preserved here to allow the
   # current script to also build older tags, that may still
