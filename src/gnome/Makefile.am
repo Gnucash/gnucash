@@ -128,7 +128,7 @@ endif
 EXTRA_DIST = \
   gnome.i \
   $(gnomeapp_in_files) \
-  $(appdata_files)
+  $(appdata_in_files)
 
 AM_CPPFLAGS = \
   -I${top_srcdir}/src \
@@ -159,7 +159,7 @@ AM_CPPFLAGS = \
 # The line below breaks automake 1.5.  
 ##OMIT_DEPENDENCIES = gnc-dir.h
 
-CLEANFILES = gnucash.desktop
+CLEANFILES = gnucash.desktop gnucash.appdata.xml
 MAINTAINERCLEANFILES = swig-gnome.c
 
 AM_CPPFLAGS += -DG_LOG_DOMAIN=\"gnc.gui\"
