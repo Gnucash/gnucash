@@ -79,7 +79,7 @@ libgncmod_python_gnc_module_init(int refcount)
     pkgdatadir = gnc_path_get_pkgdatadir();
     init_filename = g_build_filename(pkgdatadir, "python/init.py", (char*)NULL);
     g_debug("Looking for python init script at %s", (init_filename ? init_filename : "<null>"));
-    fp = fopen(init_filename, "r+");
+    fp = fopen(init_filename, "r");
     if (fp)
     {
         PyRun_SimpleFile(fp, init_filename);
