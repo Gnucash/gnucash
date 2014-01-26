@@ -1,5 +1,49 @@
 Version history:
 ------- -------
+2.6.1 - 1 January 2014
+       The GnuCash development team proudly announces GnuCash 2.6.1,
+       the latest stable release of the GnuCash Free Accounting
+       Software. 
+       
+       This is a maintenance release; there are no new features, but
+       Mike Alexander has extensively reworked the Advanced Portfolio
+       Report.
+
+       Bugs Fixed:
+
+       454827 - Reports: Incorrect share value of stocks in foreign currency
+       553020 - Reports: Incorrect share value of stocks in foreign currency
+       555182 - Security Type template hidden
+       605991 - Help button on New and Edit Job dialogs brings up wrong
+       	        help page.
+       677489 - Critical error reported when initializing an Invoice
+       721211 - Reconciliation checkboxes fail to sync for split
+       	        transactions across sub-accounts
+       721251 - Incorrect Transaction Dates
+       721260 - Crash on startup: gnucash cannot handle default locale
+       721290 - SX Editor: Pressing "Enter" too soon hides transaction
+       721306 - Account hierarchy column widths are reset when restarting
+       	        a second time without changing the widths
+       721447 - Entries with values of ,50 are imported as ,51
+       721464 - Program won’t open the website link
+       721576 - Gnucash can not work with files, that have russian symbols
+       	        in path.
+       721600 - Segmentation fault on startup if report Income/Expense Chart
+       	        was opened since last running
+       721607 - fix GnuCash version numbers and remove/update links.
+       721667 - Accelerator key map loaded from one file and saved
+       721770 - "Choose accounts to create" has no effect
+       721791 - Segmentation fault when correcting invalid date
+       721825 - Online prices displayed as unreadable fractions in 2.6.0
+       721913 - Fetch Rate crashes application
+       721929 - Importing a customer list causes a crash.
+       721954 - Multiple Scheduled Transaction Editors
+       721966 - --add-price-quotes ignoring compress files preference
+       722035 - Missing space in the Spanish translation of msgid "Total For "
+       722123 - Zero price entry added to price database on stock purchase
+  
+       Translations updated: Catalan, Danish, German, Italian
+
 2.6.0 - 29 Dec 2013
 
        The GnuCash development team proudly announces GnuCash 2.6.0,

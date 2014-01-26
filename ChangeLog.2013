@@ -1,0 +1,2788 @@
+2013-12-31 John Ralls 
+
+	* Bug 721260 - Crash on startup: gnucash cannot handle default locale
+
+2013-12-31 John Ralls 
+
+	* Fix another broken build
+
+2013-12-28 John Ralls 
+
+	* Release 2.6.0
+
+2013-12-28 John Ralls 
+
+	* Add new files to POTFILES.in and POTFILES.skip (HEAD, trunk)
+
+2013-12-28 Mike Evans 
+
+	* A couple more edits. (origin/trunk, origin/HEAD)
+
+2013-12-28 Mike Evans 
+
+	* Update Last Translator and removed cruft.
+
+2013-12-28 Mike Evans 
+
+	* Update Amercan -> British translations.
+
+2013-12-27 Geert Janssens 
+
+	* Update gnome appdata file to pass validity check
+
+2013-12-27 Cristian Marchi 
+
+	* Update French translations thanks to Sébastien Villemot.
+
+2013-12-27 Cristian Marchi 
+
+	* Update Lithuanian translation. Thanks to Aurimas Fišeras.
+
+2013-12-26 Geert Janssens 
+
+	* Prevent gnc-numeric overflow in advanced portfolio report
+
+2013-12-26 Cristian Marchi 
+
+	* Update Italian translation.
+
+2013-12-26 Geert Janssens 
+
+	* Fix compile warning introduced in r23602
+
+2013-12-26 Geert Janssens 
+
+	* Bug 720646 - New Book Tabs on Windows
+
+2013-12-26 Geert Janssens 
+
+	* Don't create a second account hierarchy page when cancelling the Hierarchy Assistant
+
+2013-12-26 Geert Janssens 
+
+	* Make "New Book Options" dialog transient for its caller where possible
+
+2013-12-25 John Ralls 
+
+	* Add plugin example to plugins
+
+2013-12-24 Geert Janssens 
+
+	* Use same name for dialog and menu related to preconfigured reports
+
+2013-12-24 Geert Janssens 
+
+	* Revert "Bug 720646 - New Book Tabs on Windows"
+
+2013-12-24 Geert Janssens 
+
+	* Bug 720646 - New Book Tabs on Windows
+
+2013-12-24 John Ralls 
+
+	* Make the date help string translatable
+
+2013-12-23 Geert Janssens 
+
+	* Fix some warnings while creating a new book
+
+2013-12-23 Geert Janssens 
+
+	* Prevent account hierarchy assistant from opening a second account hierarchy upon completion
+
+2013-12-23 John Ralls 
+
+	* Bug 710823 - libofx can supply broken UTF-8 for account id
+
+2013-12-22 John Ralls 
+
+	* Bug 710824 - GnuCash should sanitise UTF-8 before serialising files
+
+2013-12-22 Mike Alexander 
+
+	* Update .gitignore to include recently added config macros.
+
+2013-12-22 Mike Alexander 
+
+	* Load old version 1 XML files without crashing.
+
+2013-12-22 Geert Janssens 
+
+	* Bug 720556 - The Tip of the Day preference isn't getting saved
+
+2013-12-21 Cristian Marchi 
+
+	* More update to Italian translation.
+
+2013-12-21 Geert Janssens 
+
+	* Drop double blanks from gschema strings.
+
+2013-12-21 Geert Janssens 
+
+	* Reset Warnings dialog: show translated warnings
+
+2013-12-20 John Ralls 
+
+	* Fix up and update strawberry perl URIs
+
+2013-12-20 Cristian Marchi 
+
+	* Another update to Italian Translation.
+
+2013-12-20 John Ralls 
+
+	* Suppress other register's blank transactions from General Ledger
+
+2013-12-20 John Ralls 
+
+	* Bug 720555 - General Ledger - Can't Enter Transaction Amounts
+
+2013-12-20 John Ralls 
+
+	* Bug 157247 - Asset account's "total" value should use most recent transaction prices
+
+2013-12-20 John Ralls 
+
+	* Extract-method on gnc_split_register_auto_calc
+
+2013-12-20 John Ralls 
+
+	* Rewrite apparently confusing comment.
+
+2013-12-18 Cristian Marchi 
+
+	* Update Dutch translation, copied from the Translation Project.
+
+2013-12-18 Cristian Marchi 
+
+	* Updated Lithuanian translation provided by Aurimas Fišeras.
+
+2013-12-16 Geert Janssens 
+
+	* Add missing macros to distribution and silence libtool warning
+
+2013-12-15 Frank H. Ellenberger 
+
+	* [23570] there was still one "_JP" although currently commented out
+
+2013-12-15 John Ralls 
+
+	* Change guide and help translation directories
+
+2013-12-15 John Ralls 
+
+	* Release 2.5.10
+
+2013-12-15 John Ralls 
+
+	* Rename some directories in src/import-export
+
+2013-12-15 John Ralls 
+
+	* Move gnc-warnings.c from POTFILES.skip to POTFILES.ignore
+
+2013-12-15 John Ralls 
+
+	* Fix ax_pkg_swig.m4 filename.
+
+2013-12-15 John Ralls 
+
+	* Revert a stray, unrelated change from r23556
+
+2013-12-15 John Ralls 
+
+	* BUG 336843 (Attach images/files/urls to transactions):
+
+2013-12-15 John Ralls 
+
+	* Fix missing xaccTransCommitEdit() from r23466
+
+2013-12-14 John Ralls 
+
+	* Bug 619478 - Build warning in html/gnc-html-webkit.c
+
+2013-12-14 Geert Janssens 
+
+	* SWIG version updates
+
+2013-12-14 Geert Janssens 
+
+	* Guile 1.8 fixes for r23556 and r23557
+
+2013-12-13 Cristian Marchi 
+
+	* Update Italian translation.
+
+2013-12-13 Geert Janssens 
+
+	* Bug 719481 - GnuCash report crashes with Guile2
+
+2013-12-13 Geert Janssens 
+
+	* Use scm_[to/from]_utf8_string instead of scm_[to/from]_locale_string as per guile recommendation
+
+2013-12-13 Mike Evans 
+
+	* Move customer, bill, and invoice importers form the business menu to the file menu.
+
+2013-12-13 Mike Evans 
+
+	* Remove empty file.
+
+2013-12-13 Frank H. Ellenberger 
+
+	* Fix of [23550]: Translator comments don't like empty comment lines.
+
+2013-12-13 Frank H. Ellenberger 
+
+	* Update translation into Arabic language to 44% completion on trunk by عبدالسلام عبدالعزيز <ashalash@msn.com>
+
+2013-12-12 Frank H. Ellenberger 
+
+	* Tell translators where to adjust their credits.
+
+2013-12-12 Mike Alexander 
+
+	* Ignore missing accounts in gnc:filter-accountlist-type to avoid an assert.
+
+2013-12-12 Mike Alexander 
+
+	* Ignore XCode projects
+
+2013-12-12 Mike Alexander 
+
+	* Check for null account pointers in gnc_tree_view_account_set_selected_accounts.
+
+2013-12-11 Frank H. Ellenberger 
+
+	* Port of "Completion of translation into Arabic language by 55%" by abdulsalam alshilash
+
+2013-12-11 Frank H. Ellenberger 
+
+	* Appendix to [23539] update POTFILES.in
+
+2013-12-11 Geert Janssens 
+
+	* Build svn releases with documentation from a matching branch
+
+2013-12-11 Geert Janssens 
+
+	* Bug 720235 - Python bindings should load environment file just like gnucash does
+
+2013-12-10 Mike Alexander 
+
+	* Fix r23536: got the 'closing keyword wrong in a couple of places
+
+2013-12-10 Mike Alexander 
+
+	* Change various reports to find book closing transactions without pattern matching
+
+2013-12-10 Mike Alexander 
+
+	* Add the ability to search for transactions that are, or are not, book closing entries.
+
+2013-12-10 Geert Janssens 
+
+	* Ensure that opening an existing book never opens an empty main window.
+
+2013-12-10 John Ralls 
+
+	* Bug 705714 - QIF Import - File selection pop-up is not on top during qif import
+
+2013-12-10 John Ralls 
+
+	* QifImport: Fix crash from attempting to import an empty file.
+
+2013-12-10 John Ralls 
+
+	* Qif Import Assistant: Don't disable the whole dialog, just the Forward button
+
+2013-12-09 John Ralls 
+
+	* Bug 632588 - Scrub doesn't fix missing currency
+
+2013-12-09 John Ralls 
+
+	* Fix missing identifier from r23520
+
+2013-12-08 Geert Janssens 
+
+	* Fix (harmless) report warnings as reported in bug 639371
+
+2013-12-08 Geert Janssens 
+
+	* Long term fix for wrong version number part of bug 639371
+
+2013-12-08 Geert Janssens 
+
+	* Remove obsolete conditional that's never triggered anymore
+
+2013-12-08 Cristian Marchi 
+
+	* Updated French translation and glossary, thanks to Sébastien Villemot.
+
+2013-12-08 Geert Janssens 
+
+	* Fix report background image loading on Windows
+
+2013-12-07 Frank H. Ellenberger 
+
+	* Bug 711317 - Indian Rupee Symbol appears as "?" marks
+
+2013-12-07 John Ralls 
+
+	* Fix missing prototype warning from r23494.
+
+2013-12-07 Geert Janssens 
+
+	* Bug 627575 - Stylesheet names with non-alphanumeric characters and saved-reports -- addendum
+
+2013-12-07 Geert Janssens 
+
+	* Bug 627575 - Stylesheet names with non-alphanumeric characters and saved-reports
+
+2013-12-07 Mike Alexander 
+
+	* Don't add a \n to the beginning of the split memo, account, or amount lists. Pango seems to ignore it, but it really shouldn't be there.
+
+2013-12-07 Mike Alexander 
+
+	* Fix bug 653594 related to check printing. This bug has two parts.  The original bug was that the wrong split is sometimes used to print the check.  In the comments a second problem was mentioned: sometimes the wrong split is omitted from the split list in formats that print all the splits.
+
+2013-12-07 Mike Alexander 
+
+	* Protect against null account pointers in a couple of place to avoid asserts.
+
+2013-12-07 Mike Alexander 
+
+	* Protect gnc_mktime against bad dates.
+
+2013-12-05 John Ralls 
+
+	* Test for overflow limits in gnc_numeric_add.
+
+2013-12-05 John Ralls 
+
+	* Handle RAND_MAX < 2^32 in get_random_gint64()
+
+2013-12-05 Geert Janssens 
+
+	* Multi-currency "Post invoice" improvements
+
+2013-12-05 Geert Janssens 
+
+	* Bug 630578 - current date instead of posting date in exchange rate, when posting a bill
+
+2013-12-04 Geert Janssens 
+
+	* Bug 715123 - Post invoice problem, cannot unpost
+
+2013-12-04 Christian Stimming 
+
+	* Fix cutecash build: Calling the iso-currencies-to-c script can directly use the unchanged .in script because we call the GUILE_EXECUTABLE directly from cmake.
+
+2013-12-04 Frank H. Ellenberger 
+
+	* Update german glossary
+
+2013-12-04 Mike Alexander 
+
+	* Fix bug 719521.  The two radio buttons were both there, but one on top of the other.
+
+2013-12-03 Christian Stimming 
+
+	* Fix ugly typo in string.
+
+2013-12-03 Christian Stimming 
+
+	* Update German translation. Still 690 to go.
+
+2013-12-02 John Ralls 
+
+	* Bug 719726 - Click on File -> Open seg-faults
+
+2013-12-02 John Ralls 
+
+	* Bug 708526 - GnuCash Crashes when opening About page
+
+2013-12-02 John Ralls 
+
+	* Remove src/gnome-utils/gnc-warnings.c from POTFILES.in
+
+2013-12-02 John Ralls 
+
+	* Protect older GCCs from -Wno-invalid-source-encoding
+
+2013-12-02 Geert Janssens 
+
+	* Fix python test
+
+2013-12-02 Geert Janssens 
+
+	* GSettings: only load backend when installed
+
+2013-12-01 Mike Alexander 
+
+	* Update progress bar while writing price DB as well as while reading it.
+
+2013-12-01 John Ralls 
+
+	* Make that Release 2.5.9
+
+2013-12-01 John Ralls 
+
+	* Release 2.5.90
+
+2013-12-01 John Ralls 
+
+	* Ensure that all KVP changes are properly marked dirty and committed.
+
+2013-11-30 Mike Evans 
+
+	* Bug 710871 - Python site-packages not found when not installed to default location using --prefix
+
+2013-11-30 John Ralls 
+
+	* Fix windows build for r23452
+
+2013-11-29 Geert Janssens 
+
+	* Improve cond-expand/eval-when usage based on feedback from the guile developers
+
+2013-11-29 Geert Janssens 
+
+	* Bug 707311 - Tax Invoice fails to open when using guile 2 - addendum
+
+2013-11-29 Mike Evans 
+
+	* Bug 715184 - Bill or Invoice; a new Bill gives a new Invoice
+
+2013-11-29 Mike Alexander 
+
+	* Try to make the python bindings tests work with an out of source tree build. This is almost ok, but it uses the schemas from the install tree.
+
+2013-11-29 Mike Alexander 
+
+	* Make the test-dynload test work in the X11 version on MacOSX.
+
+2013-11-28 Christian Stimming 
+
+	* Remove annoying extra question before overwriting transfer fields by template.
+
+2013-11-28 Christian Stimming 
+
+	* Update German translation. Still 790 to go, sigh.
+
+2013-11-28 Christian Stimming 
+
+	* Win32: Update aqbanking versions
+
+2013-11-28 John Ralls 
+
+	* Bug 704506 - Connection loss to mysql after resume from hibernation
+
+2013-11-28 John Ralls 
+
+	* test_gnc_setlocale: Print diagnostic message, replacing comment.
+
+2013-11-28 John Ralls 
+
+	* Stop leaking and re-inserting Split slots
+
+2013-11-26 Geert Janssens 
+
+	* Fix price quotes installation on Windows
+
+2013-11-26 Geert Janssens 
+
+	* Fix line-ending styles on a few windows scripts
+
+2013-11-26 Geert Janssens 
+
+	* Set proper EOL style for windows vbs script
+
+2013-11-26 Geert Janssens 
+
+	* Report the proper minimum version for libgoffice when not found at configure time
+
+2013-11-26 Geert Janssens 
+
+	* Fix several test failures under guile 2 with auto compile enabled
+
+2013-11-26 Geert Janssens 
+
+	* Bug 712299 - Tax Invoice with guile 2 doesn't display currency symbols (second attempt)
+
+2013-11-26 Geert Janssens 
+
+	* Preferences fixes
+
+2013-11-26 Geert Janssens 
+
+	* Guile2: fix two tests in report system
+
+2013-11-26 Mike Alexander 
+
+	* Work around WebKit bug 119003 by flushing events when removing a page from a window. See <https://bugs.webkit.org/show_bug.cgi?id=119003>
+
+2013-11-25 John Ralls 
+
+	* Fix sometime crash in test-xml-pricedb
+
+2013-11-25 John Ralls 
+
+	* Bug 644044 - Lots: SQL backend loses link to Gain/Loss Txn
+
+2013-11-25 John Ralls 
+
+	* TEMPORARY -- REBASE THIS OUT
+
+2013-11-24 John Ralls 
+
+	* Fix make check after r23429 broke it.
+
+2013-11-24 John Ralls 
+
+	* Work around Clang whining about UTF-8
+
+2013-11-24 Christian Stimming 
+
+	* More German translation update. Still approx. 900 strings to go...
+
+2013-11-24 Geert Janssens 
+
+	* When an account or budget is deleted, drop any associated saved state
+
+2013-11-24 Geert Janssens 
+
+	* Register2: improve sort functionality
+
+2013-11-24 Geert Janssens 
+
+	* Bug 710905 - Column withs, visibility, order and sort order not saved and restored
+
+2013-11-22 Mike Alexander 
+
+	* Update the progress bar while loading the price DB from an XML file.
+
+2013-11-22 Cristian Marchi 
+
+	* Update Italian translation.
+
+2013-11-22 Geert Janssens 
+
+	* Suppress a few harmless state file related warnings at startup
+
+2013-11-22 Geert Janssens 
+
+	* Win32: more consistent use of @PACKAGE@ for gnucash package name in installer script
+
+2013-11-22 Geert Janssens 
+
+	* Win32: remove gconf related settings from the installer script
+
+2013-11-21 Christian Stimming 
+
+	* i18n update: Remove some almost-duplicate strings by removing unneeded punctuation.
+
+2013-11-21 Christian Stimming 
+
+	* Update German translation. Slightly more translated now.
+
+2013-11-21 Frank H. Ellenberger 
+
+	* Fix a few doxygen errors and wanrnings.
+
+2013-11-21 Geert Janssens 
+
+	* Fix typos in translatable strings
+
+2013-11-21 Mike Alexander 
+
+	* Don't write the default currency symbol to the output file. Patch by Frédéric Perrin.
+
+2013-11-20 Mike Evans 
+
+	* Make bill & invoice importer and customer importer modules load by default.
+
+2013-11-20 Geert Janssens 
+
+	* Bug 712299 - Tax Invoice with guile 2 doesn't display currency symbols
+
+2013-11-20 Geert Janssens 
+
+	* Small fixes to make the Windows build work again after r23412
+
+2013-11-20 John Ralls 
+
+	* Bug 711289 - time zone handling is inconsistent between 2.4 and 2.5
+
+2013-11-19 Mike Alexander 
+
+	* Decompress zipped XML files ourself instead of letting libxml2 do it. As of version 2.9.1 it has a bug that causes it to fail to decompress certain files. See https://bugzilla.gnome.org/show_bug.cgi?id=712528 for more info.
+
+2013-11-18 Christian Stimming 
+
+	* Cutecash: Adapt to compiler/linker flags that are needed on Ubuntu 13.10
+
+2013-11-18 Christian Stimming 
+
+	* Cutecash: Adapt to recent gconf file changes.
+
+2013-11-17 John Ralls 
+
+	* Bug 336843: Correct Win32 Display function.
+
+2013-11-17 Mike Alexander 
+
+	* Add missing semicolon and only dump transaction when debugging.
+
+2013-11-17 John Ralls 
+
+	* Release 1.5.8
+
+2013-11-17 John Ralls 
+
+	* Adjust Makefile.am for new runTests.py.in
+
+2013-11-16 Mike Alexander 
+
+	* Turn off the scheme compiler's "possibly unbound variable" warnings. In guile 2.0 we get nearly 7500 of them loading the scheme files.
+
+2013-11-16 Geert Janssens 
+
+	* Remove some redundant variable definitions in Makefile.am
+
+2013-11-16 Geert Janssens 
+
+	* Don't distribute files generated by configure
+
+2013-11-16 Geert Janssens 
+
+	* Fix distcheck-hook to handle [type: ] prefixes in POTFILES.in properly
+
+2013-11-16 Geert Janssens 
+
+	* Don't create invoice when Duplicate invoice dialog is cancelled
+
+2013-11-15 John Ralls 
+
+	* Bug 336843: Attach images/files/urls to transactions.
+
+2013-11-15 John Ralls 
+
+	* Bug 711289: Time Zone Handling is Inconsistent between 2.4 and 2.5
+
+2013-11-14 Geert Janssens 
+
+	* Bug 707311 - Tax Invoice fails to open when using guile 2
+
+2013-11-13 Geert Janssens 
+
+	* Bug 709589 - make check fails with guile 2
+
+2013-11-13 Geert Janssens 
+
+	* Make python test find its test files for out of tree builds
+
+2013-11-13 Geert Janssens 
+
+	* Use guile/python executable as found during configure for tests and some support scripts
+
+2013-11-13 Geert Janssens 
+
+	* Replace all uses of GUILE_INCS with GUILE_CFLAGS
+
+2013-11-13 Geert Janssens 
+
+	* Improve guile testing in configure.ac
+
+2013-11-13 Christian Stimming 
+
+	* First update of German translation.
+
+2013-11-13 Christian Stimming 
+
+	* I18n message improvements: Fix typos; unify strings.
+
+2013-11-11 Mike Alexander 
+
+	* Collapse the two transaction currency scrubbing functions into one and fix some bugs. The most serious bug was that it would, in some cases, set the transaction's currency to a non-currency commodity.  It also sometimes set the currency directly without calling xaccTransSetCurrency which skipped a number of side effects.
+
+2013-11-10 John Ralls 
+
+	* Wrap budget UI strings in the translation function
+
+2013-11-10 John Ralls 
+
+	* Fix Application Menu Preferences Item
+
+2013-11-08 Mike Alexander 
+
+	* Handle multi-currency transactions in registers without a default currency. Editing a multi-currency transaction in a serach results register sometimes sets the exchange rate to 1 instead of the value you want.
+
+2013-11-05 Christian Stimming 
+
+	* Bug #711493: Fix unselected account that is NULL.
+
+2013-11-05 John Ralls 
+
+	* Update dependencies and versions
+
+2013-11-05 Geert Janssens 
+
+	* Enable translations on gsettings schemas
+
+2013-11-04 Geert Janssens 
+
+	* Bug 711294 - Gnucash repeatedly ask associated income account when import qfx file
+
+2013-11-04 Geert Janssens 
+
+	* Use proper conversion modifier for unsigned int
+
+2013-11-03 John Ralls 
+
+	* Fix broken win32 build
+
+2013-11-03 John Ralls 
+
+	* Release 2.5.7
+
+2013-11-03 John Ralls 
+
+	* Clean out log files from testing the xml backend.
+
+2013-11-02 John Ralls 
+
+	* Remove dialog-preferences2.c from POTFILES.in
+
+2013-11-02 John Ralls 
+
+	* Skip this test when building with clang
+
+2013-11-02 John Ralls 
+
+	* replace static string filename with generated one
+
+2013-11-02 John Ralls 
+
+	* Remove dead code.
+
+2013-11-02 John Ralls 
+
+	* Replace deprecated tempnam with a constant.
+
+2013-11-02 John Ralls 
+
+	* Mac: Don't append 'Gnucash' to the 'Preferences' menu item title.
+
+2013-11-02 John Ralls 
+
+	* Avoid critical error from trying to access an uninitialized GHash.
+
+2013-11-02 John Ralls 
+
+	* Fix incorrect Enum type specifier
+
+2013-10-31 Geert Janssens 
+
+	* Update POTFILES.in after my recent work
+
+2013-10-31 Geert Janssens 
+
+	* Bug 693244 - View Lots window enhancements
+
+2013-10-31 Geert Janssens 
+
+	* Improve visual appearance and sorting of Invoice payment dialog
+
+2013-10-31 Geert Janssens 
+
+	* Bug 687478 - Bills due reminder doesn't work well with credit notes
+
+2013-10-31 Geert Janssens 
+
+	* Bug 687479 - Automatic invoice/payment matching on posting an invoice should be an optional feature
+
+2013-10-31 Geert Janssens 
+
+	* Code reindentation in tests
+
+2013-10-31 Geert Janssens 
+
+	* Code reindentation
+
+2013-10-30 Geert Janssens 
+
+	* Remove now unused parameter
+
+2013-10-30 Geert Janssens 
+
+	* Bug 710979 - Crash in gnc_plugin_page_invoice_summarybar_position_changed
+
+2013-10-29 Geert Janssens 
+
+	* Some white space and comment improvements
+
+2013-10-29 Geert Janssens 
+
+	* Cleanup leftover from state save/restore re-implementation
+
+2013-10-29 Geert Janssens 
+
+	* Fix crash when deleting budget
+
+2013-10-29 Geert Janssens 
+
+	* Remove function that no longer adds value
+
+2013-10-29 Geert Janssens 
+
+	* Re-implement state save/restore functionality in gnc_tree_view
+
+2013-10-29 Geert Janssens 
+
+	* Move state handling code to separate file and improve on it
+
+2013-10-29 Geert Janssens 
+
+	* On file open, only destroy a previous session if really exists
+
+2013-10-29 Geert Janssens 
+
+	* Remove gnc_build_book_path from swig interface file
+
+2013-10-29 Geert Janssens 
+
+	* Remove some unused includes
+
+2013-10-28 Mike Alexander 
+
+	* Guard against bad parameter to gnc_plugin_page_invoice_summarybar_position_changed.
+
+2013-10-28 Geert Janssens 
+
+	* Use the symbol in iso-4217-currencies by default
+
+2013-10-28 Frank H. Ellenberger 
+
+	* Rename .texinfo files to .texi to get rid of the autogen.sh warning.
+
+2013-10-27 Mike Alexander 
+
+	* Add --with-xdg-data-dirs to specify default search path for XDG data directories.
+
+2013-10-27 Mike Alexander 
+
+	* Fix a typo in --with-qt3-wizard-package.
+
+2013-10-27 Frank H. Ellenberger 
+
+	* Bump required automake version to 1.11
+
+2013-10-27 Mike Evans 
+
+	* Bug 710871 - Undo my last two commits.
+
+2013-10-26 Mike Evans 
+
+	* Bug 710871 - Remove errant $.
+
+2013-10-26 Geert Janssens 
+
+	* Small XDG_DATA_DIRS improvements
+
+2013-10-26 Geert Janssens 
+
+	* Add off-by-one warning in comment
+
+2013-10-26 Geert Janssens 
+
+	* Prohibit setting budget values greater than num_periods
+
+2013-10-25 Geert Janssens 
+
+	* Fix save count down timer on Windows
+
+2013-10-25 Geert Janssens 
+
+	* Clean up preferences for pricedb-editor and price-editor
+
+2013-10-25 Geert Janssens 
+
+	* Configure: don't list ofx twice in selected components
+
+2013-10-25 Geert Janssens 
+
+	* Avoid the need for a duplicate dialog-preferences.glade
+
+2013-10-25 Geert Janssens 
+
+	* Register rewrite Update, revised removal update for next release. This update adds a configure option --enable-register2 which will enable the register2 changes at compile time, there are also some changes to use the Gnucash --extra parameter that displays some of the new register2 functionality for testing. Author: Robert Fewell
+
+2013-10-25 Christian Stimming 
+
+	* Bug #710739: Fill in field for remote bank account information also for SEPA transfers.
+
+2013-10-25 Mike Evans 
+
+	* Bug-710871 Fix for Python site-packages not found when not installed to default location
+
+2013-10-25 Geert Janssens 
+
+	* Fix window position/size saving
+
+2013-10-24 Geert Janssens 
+
+	* Ignore autogenerated Makefile[.in] for gschemas directories
+
+2013-10-24 Geert Janssens 
+
+	* Add a field to the commodity editor allowing setting the user symbol.
+
+2013-10-24 Geert Janssens 
+
+	* Add a user_symbol to one UT
+
+2013-10-24 Geert Janssens 
+
+	* Copy the test-files to the builddir, and use that in GNC_TEST_FILES
+
+2013-10-24 Geert Janssens 
+
+	* Use the new user_symbol property where relevant
+
+2013-10-24 Geert Janssens 
+
+	* Add a new user_symbol property to the Commodity class
+
+2013-10-24 Geert Janssens 
+
+	* Check for availability of xsltproc at configure time
+
+2013-10-24 Geert Janssens 
+
+	* Fix gsettings schema for commodities editor
+
+2013-10-24 Geert Janssens 
+
+	* Fix budget options descriptions field
+
+2013-10-23 Geert Janssens 
+
+	* Abort configure if --enable-ofx specified but no libofx development files found
+
+2013-10-23 Geert Janssens 
+
+	* Remove reference to schema that was deleted earlier
+
+2013-10-22 Geert Janssens 
+
+	* Revert "[PATCH] Register rewrite Update, remove update for next release."
+
+2013-10-22 Geert Janssens 
+
+	* [PATCH] Register rewrite Update, remove update for next release.
+
+2013-10-22 Geert Janssens 
+
+	* Win32: set XDG_DATA_DIRS when running the Windows installer
+
+2013-10-22 Geert Janssens 
+
+	* Add default-to-save timeout on save-on-changes dialog
+
+2013-10-22 Geert Janssens 
+
+	* Drop check for glib >= 2.14, glib >= 2.28 is already required
+
+2013-10-22 Geert Janssens 
+
+	* Bug 710055 - advanced portfolio report counts capital gains split as dividend
+
+2013-10-22 Geert Janssens 
+
+	* Set tab position when opening a new window
+
+2013-10-22 Geert Janssens 
+
+	* Elaborate a bit on why compile time XDG_DATA_DIRS is added to the mix
+
+2013-10-20 Mike Alexander 
+
+	* Use ";" as seperator characer since that's what g_key_file_get_keys wants.
+
+2013-10-20 Mike Alexander 
+
+	* Eliminate null entries in path lists in environment_override.
+
+2013-10-20 Mike Alexander 
+
+	* Use the compile time value of XDG_DATA_DIRS to set the default run time value.
+
+2013-10-19 Geert Janssens 
+
+	* Do not remove gnucash_core.c in clean rule
+
+2013-10-18 Geert Janssens 
+
+	* Fix bug 708659
+
+2013-10-18 Geert Janssens 
+
+	* Fix bug 668530
+
+2013-10-17 Geert Janssens 
+
+	* Prevent crash due to accessing a non-existent gsettings schema
+
+2013-10-16 Geert Janssens 
+
+	* Fix build error with clang
+
+2013-10-16 John Ralls 
+
+	* Bug 710311 - Missing ChangeLogs
+
+2013-10-16 Geert Janssens 
+
+	* Prefs migration: improve messaging
+
+2013-10-16 Geert Janssens 
+
+	* Prefs migration: migrate ofx and aqbanking prefs if these options were enabled at build time
+
+2013-10-16 Geert Janssens 
+
+	* Prefs migration: write xsl transform to migrate a pair of coordinates
+
+2013-10-16 Geert Janssens 
+
+	* Prefs migration: fix radiobutton prefs migration
+
+2013-10-16 Geert Janssens 
+
+	* Prefs migration improvements
+
+2013-10-13 John Ralls 
+
+	* Remove gnucash-launcher and related scripting files.
+
+2013-10-09 John Ralls 
+
+	* Adjust error-message tests to pass with Clang
+
+2013-10-09 John Ralls 
+
+	* Clean up a bunch of clang errors
+
+2013-10-08 Geert Janssens 
+
+	* Gnc-Prefs: make the prefs migration actually do something on Windows
+
+2013-10-08 Geert Janssens 
+
+	* Gnc-Prefs: fix crash in migration script on Win32
+
+2013-10-07 Geert Janssens 
+
+	* Gnc-Prefs: disable migration of aqbanking prefs for now
+
+2013-10-07 Geert Janssens 
+
+	* Gnc-Prefs: windows limits preference names to 32 characters
+
+2013-10-07 John Ralls 
+
+	* Release 2.5.6
+
+2013-10-07 John Ralls 
+
+	* Fix EXTRA_DIST typo
+
+2013-10-07 Geert Janssens 
+
+	* Prefs migrate: skip preferences that don't have a value set
+
+2013-10-07 Geert Janssens 
+
+	* Move prefs migration call from app-utils module load to inner_main
+
+2013-10-07 Geert Janssens 
+
+	* Fix make distcheck
+
+2013-10-07 Geert Janssens 
+
+	* Gnc-Prefs: add code to migrate settings from gconf to gsettings at runtime
+
+2013-10-07 Geert Janssens 
+
+	* Gsettings schema corrections
+
+2013-10-07 Geert Janssens 
+
+	* Gnc-Prefs: add convenience functions for int64 and coords typed preferences
+
+2013-10-07 Geert Janssens 
+
+	* Gnc-Prefs: update the windows build system to handle gsettings properly
+
+2013-10-07 Geert Janssens 
+
+	* Test for empty filename in addition to no filename
+
+2013-10-07 Geert Janssens 
+
+	* Add some debugging code to gnc-gsettings
+
+2013-10-07 Geert Janssens 
+
+	* Gnc-Prefs: stop using gconf as gsettings backend
+
+2013-10-07 Geert Janssens 
+
+	* Gnc-Prefs: rename preferences to be compliant with gsettings syntax rules
+
+2013-10-07 Geert Janssens 
+
+	* Properly share a variable between two source files
+
+2013-10-07 Geert Janssens 
+
+	* Remove remaining gconf code bits
+
+2013-10-07 Geert Janssens 
+
+	* Gnc-Prefs: call gnc_gui_refresh_all on changes in the general prefs group
+
+2013-10-07 Geert Janssens 
+
+	* Remove state saving/restoring code from new and old register code
+
+2013-10-07 Geert Janssens 
+
+	* Remove state saving/restoring code from gnc-tree-view
+
+2013-10-07 Geert Janssens 
+
+	* Gnc-Prefs: Convert gnc user warnings
+
+2013-10-07 Geert Janssens 
+
+	* Remove unused gconf includes, cflags and libs so far
+
+2013-10-07 Geert Janssens 
+
+	* Refactor gnc-tree-view based widgets such that only gnc-tree-view itself deals with gconf
+
+2013-10-07 Geert Janssens 
+
+	* Gnc-Prefs: cleanup gconf wiring in main summarybar
+
+2013-10-07 Geert Janssens 
+
+	* Gnc-Prefs: cleanup gconf wiring in report system
+
+2013-10-07 Geert Janssens 
+
+	* Gnc-Prefs: cleanup (most) gconf wiring in import-export
+
+2013-10-07 Geert Janssens 
+
+	* Gnc-Prefs: migrate remaining gconf calls in check printing
+
+2013-10-07 Geert Janssens 
+
+	* Drop option to customize gconf_path via command line or environment variable
+
+2013-10-07 Geert Janssens 
+
+	* Gnc-Prefs: cleanup some remaining bits from the preferences dialog
+
+2013-10-07 Geert Janssens 
+
+	* Gnc-Prefs: migrate GncDateEdit widgets (and associated preferences)
+
+2013-10-07 Geert Janssens 
+
+	* Gnc-Prefs: migrate GncPeriodSelect widgets (and associated preferences)
+
+2013-10-07 Geert Janssens 
+
+	* Gnc-Prefs: migrate GncCurrencyEdit widgets (and associated preferences)
+
+2013-10-07 Geert Janssens 
+
+	* Gnc-Prefs: migrate gnc-plugin gconf machinery
+
+2013-10-07 Geert Janssens 
+
+	* Gnc-Prefs: migrate GtkRadiobutton widgets (and associated preferences)
+
+2013-10-07 Geert Janssens 
+
+	* Gnc-Prefs: remove toolbar_style preference
+
+2013-10-07 Geert Janssens 
+
+	* Gnc-Prefs: migrate date_format preference
+
+2013-10-07 Geert Janssens 
+
+	* Resave preferences dialog with a recent glade-3 version
+
+2013-10-07 Geert Janssens 
+
+	* Gnc-Prefs: migrate account_separator preference (and associated GtkEntry widget)
+
+2013-10-07 Geert Janssens 
+
+	* Gnc-Prefs: migrate file history plugin
+
+2013-10-07 Geert Janssens 
+
+	* Gnc-Prefs: migrate int-typed preferences (and GtkCombobox widgets linked to them)
+
+2013-10-07 Geert Janssens 
+
+	* Gnc-Prefs: migrate GtkSpinbutton widgets (and associated preferences)
+
+2013-10-07 Geert Janssens 
+
+	* Gnc-Prefs: migrate GtkCheckbutton widgets (and associated preferences) - last batch
+
+2013-10-07 Geert Janssens 
+
+	* Gnc-Prefs: migrate GtkCheckbutton widgets (and associated preferences) - second batch
+
+2013-10-07 Geert Janssens 
+
+	* Gnc-Prefs: migrate extra_toolbuttons preference (business option)
+
+2013-10-07 Geert Janssens 
+
+	* Gnc-Prefs: migrate 24hour_clock preference and fix the code so it actually works. (It's not actively used though in GnuCash)
+
+2013-10-07 Geert Janssens 
+
+	* Gnc-Prefs: migrate GtkCheckbutton widgets (and associated preferences) - first batch
+
+2013-10-07 Geert Janssens 
+
+	* Gnc-Prefs: migrate all GtkFontButton widgets (default_font property)
+
+2013-10-07 Geert Janssens 
+
+	* Prepare preferences dialog to work with gnc-prefs instead of gconf. The actual migration will be gradually done in future commits.
+
+2013-10-07 Geert Janssens 
+
+	* GncDateEdit: add gobject property "time"
+
+2013-10-07 Geert Janssens 
+
+	* GncPeriodSelect: add gobject property active
+
+2013-10-07 Geert Janssens 
+
+	* GncCurrencyEdit: add gobject property mnemonic
+
+2013-10-07 Geert Janssens 
+
+	* Gnc-Prefs: migrate search dialog and saved window geometry preferences
+
+2013-10-07 Geert Janssens 
+
+	* Gnc-Prefs: migrate most preferences found in app-utils
+
+2013-10-07 Geert Janssens 
+
+	* Gnc-Prefs: migrate first preference option (first_user) to new preference system
+
+2013-10-07 Geert Janssens 
+
+	* Temporarily use gconf as gsettings backend
+
+2013-10-07 Geert Janssens 
+
+	* Amend XDG_DATA_DIRS if not installed in default prefix
+
+2013-10-07 Geert Janssens 
+
+	* Create gsettings schema entries for all gconf keys currently in use
+
+2013-10-07 Geert Janssens 
+
+	* Remove obsolete gconf setup assistant.
+
+2013-10-07 Geert Janssens 
+
+	* Refactor preferences
+
+2013-10-07 Geert Janssens 
+
+	* GSettings: add function to bind a gsettings key to a gobject property
+
+2013-10-07 Geert Janssens 
+
+	* GSettings: add functions to unset a key or complete schema
+
+2013-10-07 Geert Janssens 
+
+	* GSettings: add functions to get/set most common data types
+
+2013-10-07 Geert Janssens 
+
+	* GSettings: add functions to listen for changes
+
+2013-10-07 Geert Janssens 
+
+	* Add some initialization code for GSettings
+
+2013-10-07 Geert Janssens 
+
+	* Add GSettings schemas and build rules
+
+2013-10-07 Geert Janssens 
+
+	* Prepare for GSettings conversion
+
+2013-10-07 Geert Janssens 
+
+	* Use more generic parameter name to cut association with gconf
+
+2013-10-07 Geert Janssens 
+
+	* Whitespace cleanup, comment improvements and spelling fixes
+
+2013-10-07 Geert Janssens 
+
+	* Cleanup after file backend settings refactoring
+
+2013-10-07 Geert Janssens 
+
+	* Remove obsolete enable_euro key from gconf
+
+2013-10-07 Geert Janssens 
+
+	* Remove redundant call
+
+2013-10-06 John Ralls 
+
+	* Fix pre-glib-2.38 definition of _Q in tests
+
+2013-10-03 John Ralls 
+
+	* Remove ancient #if-0'd code from Engine
+
+2013-10-03 John Ralls 
+
+	* Work around quote change in assertion messages
+
+2013-10-03 John Ralls 
+
+	* Remove ancient if-0'd code from backends
+
+2013-10-03 John Ralls 
+
+	* Remove ancient if-0'd code from libqof
+
+2013-10-03 John Ralls 
+
+	* Convert - in filenames to _ for function names
+
+2013-10-03 John Ralls 
+
+	* Fix test broken by r23192
+
+2013-10-01 Mike Evans 
+
+	* Bug #699450
+
+2013-09-30 Christian Stimming 
+
+	* Fix typo in string (punctuation)
+
+2013-09-28 Christian Stimming 
+
+	* Minor improvement in message about last modification time upon opening a file.
+
+2013-09-28 Christian Stimming 
+
+	* Win32: Update aqbanking/gwenhywfar package versions for windows build.
+
+2013-09-26 John Ralls 
+
+	* Fix undeclared identifier from r23191
+
+2013-09-24 John Ralls 
+
+	* Bug 708700 - "make check" fails (missing glib bits)
+
+2013-09-24 John Ralls 
+
+	* Bug 654196 - "make check" fails when built with --enable-dbi
+
+2013-09-24 John Ralls 
+
+	* Bug 632362 - Unable to create "reversing transaction" again after it is removed
+
+2013-09-24 John Ralls 
+
+	* Fix leaking Gtkosxapplication objects.
+
+2013-09-22 John Ralls 
+
+	* Bug 654196 - "make check" fails when built with --enable-dbi
+
+2013-09-21 Geert Janssens 
+
+	* Revert r23187 "Revert dbi check"
+
+2013-09-21 Geert Janssens 
+
+	* Improve tab behaviour in Stock split assistant
+
+2013-09-21 Geert Janssens 
+
+	* Revert dbi check
+
+2013-09-20 John Ralls 
+
+	* Bug 654196 - "make check" fails when built with --enable-dbi
+
+2013-09-20 Christian Stimming 
+
+	* After opening a file, display a statusbar message with the last modification date and time.
+
+2013-09-20 Christian Stimming 
+
+	* Make gnc_g_date_time_new_from_unix_local() function known in header.
+
+2013-09-20 Christian Stimming 
+
+	* Fix memory leak due to missing free after gnc_ctime().
+
+2013-09-20 Christian Stimming 
+
+	* Fix erroneous memset() parameter ordering, as notified by gcc-4.6.3
+
+2013-09-19 John Ralls 
+
+	* Fix win32 build errors
+
+2013-09-19 John Ralls 
+
+	* Bug #654196 make check fails without sqlite DBD installed
+
+2013-09-19 John Ralls 
+
+	* Bug #704039 time zone is not respected in Windows
+
+2013-09-18 Mike Evans 
+
+	* Remove commented out code.
+
+2013-09-18 Mike Evans 
+
+	* Fix bug 699450
+
+2013-09-17 John Ralls 
+
+	* Bug 674862 - 2038 bug in libdbi
+
+2013-09-17 John Ralls 
+
+	* Modify xaccAccountChildrenEqual to not depend upon the order
+
+2013-09-17 John Ralls 
+
+	* Work around differing pgsql protocol and dbi name
+
+2013-09-17 John Ralls 
+
+	* Convert stray g_printf into PINFO
+
+2013-09-17 John Ralls 
+
+	* Add core-utils to backend-sql test LDADD
+
+2013-09-15 John Ralls 
+
+	* Re-enable dbi backend basic tests with g_tester
+
+2013-09-14 Cristian Marchi 
+
+	* Update Dutch translation from the translation project.
+
+2013-09-13 John Ralls 
+
+	* Fix up state-changing business functions
+
+2013-09-13 John Ralls 
+
+	* Bug #682280 - bill/invoice importer fails to save imported bills/invoices
+
+2013-09-12 John Ralls 
+
+	* Bug 684670 - Interest amount calculation is wrong in Sqllite3 format
+
+2013-09-09 John Ralls 
+
+	* Prepare 2.5.5 release
+
+2013-09-09 John Ralls 
+
+	* Bug 704056 - Online Banking (Online Actions) does not appear in Action menu
+
+2013-09-04 Geert Janssens 
+
+	* Prevent 2.4 from crashing when loading a book that was opened with 2.6 before.
+
+2013-09-03 Geert Janssens 
+
+	* Bug 603183 - Equity statement shows incorrect changes
+
+2013-09-03 Geert Janssens 
+
+	* Bug 603183 - Equity statement shows incorrect changes
+
+2013-09-03 Geert Janssens 
+
+	* Bug 603183 - Equity statement shows incorrect changes
+
+2013-09-03 Geert Janssens 
+
+	* Bug #704039 time zone is not respected on windows Author: Kuang-che Wu <kcwu@csie.org>
+
+2013-09-03 Geert Janssens 
+
+	* Add appdata description file to be used in Gnome's App store BP
+
+2013-08-26 John Ralls 
+
+	* Handle exception in set_mac_locale()
+
+2013-08-22 Cristian Marchi 
+
+	* Revert Persian translation update while Persion translators coordinates the translation effort.
+
+2013-08-20 Cristian Marchi 
+
+	* Update traditional Chinese translation thanks to Kuang-che Wu.
+
+2013-08-20 Geert Janssens 
+
+	* Bug 334939 - Account Report and Account Transaction Report are apparently the same, but different
+
+2013-08-18 John Ralls 
+
+	* Fix pointer conversion warnings on 64-bit builds
+
+2013-08-18 Geert Janssens 
+
+	* Add comment to document the hack for multicolumn multi-chart reports
+
+2013-08-18 Geert Janssens 
+
+	* Bug 704525 - When you have a mix of chart types (bar charts and pie charts)
+
+2013-08-18 Geert Janssens 
+
+	* Bug 704525 - When you have a mix of chart types (bar charts and pie charts)
+
+2013-08-18 John Ralls 
+
+	* Add Lithuanian translators to AUTHORS
+
+2013-08-17 John Ralls 
+
+	* Set mime-type property on AUTHORS and DOCUMENTERS
+
+2013-08-16 John Ralls 
+
+	* Testing: Split.c: Filter out expected error message.
+
+2013-08-16 John Ralls 
+
+	* Unit test Transaction.c
+
+2013-08-16 John Ralls 
+
+	* [Testing] Create log handlers in one step, clean up in teardown
+
+2013-08-16 John Ralls 
+
+	* Protect split-iterator from NULL split
+
+2013-08-16 John Ralls 
+
+	* Protect xaccTransIsBalanced against crashing if passed a NULL Transaction
+
+2013-08-16 John Ralls 
+
+	* Transaction.c: Note a bug discovered in testing.
+
+2013-08-16 John Ralls 
+
+	* Guard xaccTransGetRateForCommodity against NULL arguments
+
+2013-08-16 John Ralls 
+
+	* Split: Ignore fatal message
+
+2013-08-15 Christian Stimming 
+
+	* Bug #629136: Move the code that updates the sensitivity of immutable page actions from gnc_main_window_switch_page to gnc_main_window_generate_title.
+
+2013-08-15 Christian Stimming 
+
+	* Bug #696492: Change report name in menu or in report output to be consistent
+
+2013-08-12 Cristian Marchi 
+
+	* Update Persian translation, copied from the translation project.
+
+2013-08-04 Cristian Marchi 
+
+	* Update Lithuanian translation thanks to Aurimas Fišeras.
+
+2013-08-04 Cristian Marchi 
+
+	* Improve a tooltip. Patch thanks to Aurimas Fišeras.
+
+2013-08-04 Cristian Marchi 
+
+	* Change po files for previous patch removing double spaces. Patch thanks to Aurimas Fišeras.
+
+2013-08-04 Cristian Marchi 
+
+	* Remove double spaces from translatable strings. Patch submitted by Aurimas Fišeras.
+
+2013-08-03 John Ralls 
+
+	* Fix some uninitialized variable warnings
+
+2013-08-03 John Ralls 
+
+	* Bump for 2.5.4 release
+
+2013-08-02 Cristian Marchi 
+
+	* More consistency for UI strings. Patch by Aurimas Fišeras.
+
+2013-08-02 John Ralls 
+
+	* Revert "Support for querying Bitcoin/Litecoin prices via F::Q's MtGox module"
+
+2013-08-02 Cristian Marchi 
+
+	* Update Italian translation.
+
+2013-08-02 John Ralls 
+
+	* - Functions which can return null always return a Python object
+
+2013-08-02 John Ralls 
+
+	* Bug 704183 - ofx file import tries to match online_id against ACCTID[space]ACCTKEY even when ACCTKEY is empty
+
+2013-08-02 John Ralls 
+
+	* Register rewrite Update, add delete transaction up/down function. This update corrects a mistake in the removal of previous gui update. Author: Robert Fewell
+
+2013-08-02 John Ralls 
+
+	* Register rewrite Update, change to using original query. This update changes the model to drop the filter and sort models to use the qof query to do these parts. This is in response to the slowness of large transaction lists with the intention to load only a subset of them. This is the start and this update should result in the same out put as using the filter and sort model. Author: Robert Fewell
+
+2013-08-02 John Ralls 
+
+	* Register rewrite Update, added extra dates and cursor changes. This update fixes the following, allow the cursor to move between cells and make active, changed the preference for showing date entered to include reconcile date and added another option to show when transaction selected. Also added menu option to show these extra dates. Author: Robert Fewell
+
+2013-08-01 Cristian Marchi 
+
+	* Make CSV account import table header translatable. Patch by Aurimas Fišeras.
+
+2013-08-01 Cristian Marchi 
+
+	* Update Catalan translation copied from the Translation Project.
+
+2013-08-01 John Ralls 
+
+	* Fix report tests which fail in OSX
+
+2013-07-14 John Ralls 
+
+	* Bug #704185: GnuCash 2.5 doesn't build on FreeBSD
+
+2013-07-10 Cristian Marchi 
+
+	* Update Danish TRanslation, copied from the Translation Project.
+
+2013-07-08 Cristian Marchi 
+
+	* Update Lithuanian translation thanks to Aurimas Fišeras.
+
+2013-07-08 Cristian Marchi 
+
+	* Fix some translation issues. Author: Aurimas Fišeras.
+
+2013-07-08 Cristian Marchi 
+
+	* Fix translation of table headers. Author: Aurimas Fišeras.
+
+2013-07-08 Cristian Marchi 
+
+	* Fix typo preventing dash marker usage. Author: Aurimas Fišeras.
+
+2013-07-07 John Ralls 
+
+	* Bump version for 2.5.3 release
+
+2013-07-06 John Ralls 
+
+	* Bug 703272 - list of windows in Windows menu outdated
+
+2013-07-06 Geert Janssens 
+
+	* Implement Save and Save As for custom report templates
+
+2013-07-06 Geert Janssens 
+
+	* New function to open custom reports dialog with one report name in edit mode
+
+2013-07-06 Cristian Marchi 
+
+	* Better wording for Italian translation.
+
+2013-07-06 Geert Janssens 
+
+	* Fix windows compilation error since r23083
+
+2013-07-05 Geert Janssens 
+
+	* Add back translation support in combo boxes that was accidentally removed in 1286a896a66a3002e98913b9016f1dc56f7137d7
+
+2013-07-05 Geert Janssens 
+
+	* Fix crash when saved-reports file doesn't exist
+
+2013-07-05 Geert Janssens 
+
+	* A whitespace cleanup, no functional changes
+
+2013-07-04 Cristian Marchi 
+
+	* Update Lithuanian translation thanks to Aurimas Fišeras.
+
+2013-07-03 Geert Janssens 
+
+	* Bug #699686 - Startup dialog windows should be top level windows
+
+2013-07-02 Derek Atkins 
+
+	* Fix typo Patch from Aurimas Fišeras <aurimas@members.fsf.org>
+
+2013-07-02 John Ralls 
+
+	* Bug 701670: Command-V in reconcile window pastes data in register
+
+2013-07-02 Christian Stimming 
+
+	* Cutecash: Fix linker flags for guile so that it links again.
+
+2013-07-02 Geert Janssens 
+
+	* Custom reports dialog - track template guids directly in model instead of separate list
+
+2013-07-02 Geert Janssens 
+
+	* Require custom report template names to be unique (among other custom report templates)
+
+2013-07-02 Geert Janssens 
+
+	* Rework custom reports dialog
+
+2013-07-02 Geert Janssens 
+
+	* New function to rename a saved report
+
+2013-07-02 Geert Janssens 
+
+	* New functions to check for custom templates - whether a report template is a custom one - whether a report is based on a custom report
+
+2013-07-02 Geert Janssens 
+
+	* Define 'custom-template' property on report instances (not used yet)
+
+2013-07-02 Geert Janssens 
+
+	* Return guid of newly-created report template to calling function
+
+2013-07-02 Geert Janssens 
+
+	* Return success or failure when writing report templates to save file
+
+2013-07-02 Geert Janssens 
+
+	* Delete report function: use less ambiguous variable name
+
+2013-06-30 Christian Stimming 
+
+	* Bug #702899: Fix crash in scrubbing code
+
+2013-06-30 Christian Stimming 
+
+	* Bug #703305: Fix crash on entering a non-valid date.
+
+2013-06-29 Mike Alexander 
+
+	* Add back, and bring up to date, the debugging function qof_book_print_dirty.
+
+2013-06-29 Mike Alexander 
+
+	* Make it possible to post multiple invoices from the find dialog. GnuCash was crashing if you searched for all unposted invoices, selected two or more of them, and posted them.  This was because the list of invoices to be posted changed while it was being processed.  As part of fixing this the prompt for post date, due date, etc. will only be given once, not once per invoice.
+
+2013-06-29 Mike Alexander 
+
+	* Fix the crash that occurs when duplicating multiple invoices from Find results. The biggest problem was that it was adding an invoice's entries to both the old and the new invoice when duplicating the invoice.
+
+2013-06-27 Geert Janssens 
+
+	* Report system - emit warning when trying to restore named-based saved reports
+
+2013-06-27 Geert Janssens 
+
+	* Report system: regroup legacy functions
+
+2013-06-27 Geert Janssens 
+
+	* Report system legacy code cleanup
+
+2013-06-27 Geert Janssens 
+
+	* Lookup business reports by id instead of by name
+
+2013-06-25 Christian Stimming 
+
+	* Remove the unused code for feature "shift txn forward", disabled already in r18450.
+
+2013-06-25 John Ralls 
+
+	* Really Redo r23043 Don't print "warning" output in comparison functions.
+
+2013-06-25 John Ralls 
+
+	* Revert "Redo r23043 Don't print "warning" output in comparison functions."
+
+2013-06-25 John Ralls 
+
+	* Redo r23043 Don't print "warning" output in comparison functions.
+
+2013-06-23 Christian Stimming 
+
+	* Bug #700804: Add up/down buttons for ordering of transactions in register2.
+
+2013-06-20 Christian Stimming 
+
+	* Register2: Minor code cleanup: Rename moved_cb to uiupdate_cb. Refactor common sanity check into extra function.
+
+2013-06-19 Christian Stimming 
+
+	* Bug #691587: Catch scheme exceptions when converting error messages to a C string.
+
+2013-06-19 Christian Stimming 
+
+	* Bug #669964: Fix txn creation that forgot to set a txn currency.
+
+2013-06-19 Christian Stimming 
+
+	* Register2: Improve commodity/currency handling: Try to always use account_or_default_currency lookup instead of code duplication.
+
+2013-06-19 Christian Stimming 
+
+	* Improve transaction currency lookup by using the new account_or_default currency getter.
+
+2013-06-19 Christian Stimming 
+
+	* Refactor lookup of a commodity that is a currency for a specific account into general function gnc_account_or_default_currency().
+
+2013-06-19 Christian Stimming 
+
+	* Cutecash: Adapt cmake files to recent file moves.
+
+2013-06-16 Christian Stimming 
+
+	* Bug #672595: After creation of a new book, make sure to set it to dirty so that a cancelled save_as dialog leaves the book dirty.
+
+2013-06-14 Christian Stimming 
+
+	* Bug #700582: Enable online actions in Register2
+
+2013-06-13 Christian Stimming 
+
+	* Minor code cleanup (again from r23043): Don't print a warning in a comparison.
+
+2013-06-13 Christian Stimming 
+
+	* Minor code cleanup: Decrease verbosity of register2 that makes the debugging output unreadable.
+
+2013-06-13 Christian Stimming 
+
+	* Register2: Add more sanity checks when converting TreePaths from one to another.
+
+2013-06-13 Christian Stimming 
+
+	* Revert r23043 "Minor code cleanup: Don't print "warning" output in comparison function."
+
+2013-06-13 Christian Stimming 
+
+	* Had to partly revert r23045 when it comes to the PostedDate of book-closing txns.
+
+2013-06-09 Christian Stimming 
+
+	* Register (old+new): Duplicated transactions need a DateEntered as well.
+
+2013-06-09 Christian Stimming 
+
+	* Change all usage of xaccTransSetDatePostedSecs to xaccTransSetDatePostedSecsNormalized.
+
+2013-06-09 Christian Stimming 
+
+	* Introduce transaction setter xaccTransSetDatePostedSecsNormalized() that ignores the time-of-day part.
+
+2013-06-09 Christian Stimming 
+
+	* Minor code cleanup: Don't print "warning" output in comparison function.
+
+2013-06-08 Christian Stimming 
+
+	* Minor code cleanup: Don't use "class" as identifier.
+
+2013-06-07 Cristian Marchi 
+
+	* Update Catalan translation, copied from the Translation Project.
+
+2013-06-07 Cristian Marchi 
+
+	* Update Lithuanian translation thanks to Aurimas Fišeras.
+
+2013-06-07 Cristian Marchi 
+
+	* Update Italian translation
+
+2013-06-05 Geert Janssens 
+
+	* Report test makefiles: avoid extra softlinks for out-of-tree building
+
+2013-06-04 Geert Janssens 
+
+	* Update .gitignore
+
+2013-06-04 Geert Janssens 
+
+	* Use SCM_FILE_LINKS properly and some cleanups of report test makefiles
+
+2013-06-04 Derek Atkins 
+
+	* Set SCM_FILE_LINKS even if not in a separate build directory, otherwise tests fail
+
+2013-06-03 Geert Janssens 
+
+	* Fix distcheck and automake 1.13 build failure
+
+2013-06-03 Geert Janssens 
+
+	* Reports: Reduce test verbosity
+
+2013-06-02 Geert Janssens 
+
+	* Win32: add VERSIONINFO block to RC file and convert in into a template to be completed during configure
+
+2013-06-02 Geert Janssens 
+
+	* Win32: make sure RC file is actually considered for linking
+
+2013-06-02 Geert Janssens 
+
+	* Refactor so that we don't have to call gnc:progress functions while creating a report
+
+2013-06-02 Geert Janssens 
+
+	* reports: cleaned up a few methods in report-collectors
+
+2013-06-02 Geert Janssens 
+
+	* Reports: Deal with closing transactions.
+
+2013-06-02 Geert Janssens 
+
+	* reports: faster versions of category, net-barchart and net-linechart reports
+
+2013-06-02 Geert Janssens 
+
+	* Add test suite for standard tests
+
+2013-06-02 Geert Janssens 
+
+	* Log a warning if a test shows more than 100% progress.
+
+2013-06-02 Geert Janssens 
+
+	* Utils: Add "gnc:timepair?" function; useful for ensuring functions are called in a type-safe way. Add gnc:timepair-next-day
+
+2013-06-02 Geert Janssens 
+
+	* Reports: Add collector functionality for side effects.. function-state->collector; turn a function/initial state into a collector collector-do: Like collector-map, but only return the result of the first collector. 	It's assumed the other collectors are invoked for their side effects.
+
+2013-06-02 Geert Janssens 
+
+	* Reports: Add collector-into-list function.. turns the idea of adding stuff to a list into a collector.
+
+2013-06-02 Geert Janssens 
+
+	* Add some plumbing for report changes - test framework plus some utility methods
+
+2013-06-02 Geert Janssens 
+
+	* Add exported ids to reports.. useful for testing
+
+2013-05-31 Geert Janssens 
+
+	* Bug 383928 - Bad command name: Remove transaction splits
+
+2013-05-28 Geert Janssens 
+
+	* Update gitignore
+
+2013-05-28 Geert Janssens 
+
+	* Update copyright year and make it translatable
+
+2013-05-27 John Ralls 
+
+	* Update Changelog for 2.5.2
+
+2013-05-27 John Ralls 
+
+	* Update NEWS for 2.5.2 release
+
+2013-05-26 Christian Stimming 
+
+	* Win32 build: Update versions of gwenhywfar, aqbanking
+
+2013-05-25 John Ralls 
+
+	* [Bug 640962] Make check failure: test_backend_dbi
+
+2013-05-25 John Ralls 
+
+	* Bump version for release
+
+2013-05-21 Geert Janssens 
+
+	* Fix windows build after it got broken by r22982
+
+2013-05-20 Christian Stimming 
+
+	* Merge latest pot template from trunk into updated da.po file.
+
+2013-05-20 Christian Stimming 
+
+	* Copy recently updated Danish translation from 2.4 branch to trunk.
+
+2013-05-19 Geert Janssens 
+
+	* Register rewrite Update, bug fixes and transaction commit changes.
+
+2013-05-18 Christian Stimming 
+
+	* I18n: Change composed strings (report title) into fully translated string.
+
+2013-05-18 Geert Janssens 
+
+	* Register rewrite Update, bug fixes and allow mouse to change reconcile flag.
+
+2013-05-18 Geert Janssens 
+
+	* Register rewrite Update, bug fixes and allow mouse to change reconcile flag.
+
+2013-05-18 Geert Janssens 
+
+	* Cleanup non-relevant comments introduced with r22825
+
+2013-05-18 Geert Janssens 
+
+	* Support for querying Bitcoin/Litecoin prices via F::Q's MtGox module Author:    Sam Morris <sam@robots.org.uk> BP
+
+2013-05-18 Cristian Marchi 
+
+	* Fix a typo in both source and po files.
+
+2013-05-18 Cristian Marchi 
+
+	* Update Italian translation.
+
+2013-05-17 Geert Janssens 
+
+	* Add script to generate a list of changes in html format between two revisions based on git log
+
+2013-05-17 Geert Janssens 
+
+	* Add code to generate ChangeLog from git
+
+2013-05-15 Geert Janssens 
+
+	* Win32 git: fetch potentially new tags before running the tags build
+
+2013-05-15 Geert Janssens 
+
+	* Win32 fix path to git build script for tags
+
+2013-05-15 Geert Janssens 
+
+	* Win32: build 2.5 tagged releases from git instead of svn
+
+2013-05-15 Geert Janssens 
+
+	* Fix charts on Windows
+
+2013-05-13 Mike Evans 
+
+	* Bug #700197 - Critical SQL backend errors when creating customers via python bindings
+
+2013-05-12 Mike Alexander 
+
+	* Round properly when computing fraction of the transaction's value due to a given split. Also use GNC-DENOM-AUTO instead of a constant zero when appropriate.
+
+2013-05-10 Geert Janssens 
+
+	* Bug #682800 Generated balances on Report different than calculated balances on Ledger when using "open subaccounts"
+
+2013-05-10 Geert Janssens 
+
+	* Bug #622778 Miscalculation in cashflow reports - Step 03
+
+2013-05-10 Geert Janssens 
+
+	* Bug #622778 Miscalculation in cashflow reports - Step 02
+
+2013-05-10 Geert Janssens 
+
+	* Bug #622778 Miscalculation in cashflow reports - Step 01
+
+2013-05-10 Geert Janssens 
+
+	* Bug #584869 net change line in general journal report broken
+
+2013-05-10 Geert Janssens 
+
+	* Bug #589865 In the report "Budget flow" period it doesn't work ok
+
+2013-05-10 Geert Janssens 
+
+	* Bug #589865 In the report "Budget flow" period it doesn't work ok
+
+2013-05-08 Christian Stimming 
+
+	* Add ZMW currency
+
+2013-05-08 Christian Stimming 
+
+	* Update German translation a bit.
+
+2013-05-08 Christian Stimming 
+
+	* Minor user message fixes: Spelling fix, Capitalization fix.
+
+2013-05-08 Christian Stimming 
+
+	* Update German glossary (a bit).
+
+2013-05-08 Christian Stimming 
+
+	* Fix glossary table that was mistakently using spaces instead of tabs. Update all glossary po files with the new terms.
+
+2013-05-08 Cristian Marchi 
+
+	* Fix some typos.
+
+2013-05-08 Cristian Marchi 
+
+	* Update Italian Translation.
+
+2013-05-07 Christian Stimming 
+
+	* Merge latest pot template from trunk into po files.
+
+2013-05-07 Christian Stimming 
+
+	* Copy program translations from 2.4 branch to trunk.
+
+2013-05-07 Christian Stimming 
+
+	* Copy glossary translations from 2.4 branch to trunk.
+
+2013-05-05 Mike Alexander 
+
+	* Quote the python path in case it has blanks in it.
+
+2013-05-04 John Ralls 
+
+	* Update ChangeLog and NEWS for 2.5.1 Release
+
+2013-05-04 John Ralls 
+
+	* Allow svnlog2ul.sh to run on the current working copy
+
+2013-05-04 John Ralls 
+
+	* Bump version to 2.5.1 for release
+
+2013-05-04 Mike Alexander 
+
+	* Fix test for Python to avoid error message
+
+2013-05-04 Geert Janssens 
+
+	* Register rewrite Update, change the default for the new register and rename old one.
+
+2013-05-03 Geert Janssens 
+
+	* Bug #698781 can't build with glib 2.36: error: 'g_type_init' is deprecated
+
+2013-05-03 Geert Janssens 
+
+	* Tests: harmonize test initialization
+
+2013-05-03 Geert Janssens 
+
+	* Refactor file backend settings to no longer depend on gconf
+
+2013-05-03 Geert Janssens 
+
+	* Move gnc-gconf-utils to app-utils
+
+2013-05-03 Geert Janssens 
+
+	* Add new core prefs
+
+2013-05-03 Geert Janssens 
+
+	* Rename gnc-main to gnc-core-prefs
+
+2013-05-02 John Ralls 
+
+	* Mac: Add -framework Cocoa to GTK_MAC_LIBS
+
+2013-05-02 Geert Janssens 
+
+	* make distcheck altered POTFILES.in
+
+2013-05-02 Geert Janssens 
+
+	* REST API Example for Python Bindings
+
+2013-05-02 Geert Janssens 
+
+	* Fix chart positioning on multi-column report
+
+2013-05-02 Geert Janssens 
+
+	* Register rewrite Update, this adds some preference options and fixes a tab issue.
+
+2013-05-02 Geert Janssens 
+
+	* Register rewrite Update, this fixes some leaks and renames some functions.
+
+2013-05-02 Geert Janssens 
+
+	* This update fixes the schedule of share purchase.
+
+2013-05-02 Geert Janssens 
+
+	* Register rewrite Update, this adds the schedule option with some other changes.
+
+2013-04-24 Christian Stimming 
+
+	* Finally fix the maddening long waiting times after clicking "Ok" in the import matcher window.
+
+2013-04-22 Geert Janssens 
+
+	* Fix compiler warning
+
+2013-04-20 Geert Janssens 
+
+	* Register rewrite Update, this adds the trading accounts option with some other changes.
+
+2013-04-18 Christian Stimming 
+
+	* String improvements: For singular form of ngettest, the %d conversion specifier can be skipped.
+
+2013-04-17 Christian Stimming 
+
+	* Win32 build: Update libofx to version 0.9.8
+
+2013-04-15 Geert Janssens 
+
+	* Fix indirect libguile dependency in bi_import plugin
+
+2013-04-15 Geert Janssens 
+
+	* Fix indirect libguile dependency in customer import
+
+2013-04-15 Geert Janssens 
+
+	* Fix indirect libguile dependency in business ledger
+
+2013-04-14 Christian Stimming 
+
+	* Adapt to latest split of engine-helpers.h, r22902.
+
+2013-04-14 Christian Stimming 
+
+	* Adapt to latest split of engine-helpers.h, r22902.
+
+2013-04-13 Geert Janssens 
+
+	* Commit nex file (missed it in previous commit)
+
+2013-04-13 Geert Janssens 
+
+	* Prevent engine's guile dependency from leaking to modules not directly using guile
+
+2013-04-13 Geert Janssens 
+
+	* Remove unused guile-mappings.h include instead of adding GUILE_INCS
+
+2013-04-12 Christian Stimming 
+
+	* Add probably missing GUILE_INCS to CPPFLAGS because table-gnome.c includes "guile-mappings.h" that includes <libguile.h>.
+
+2013-04-12 Christian Stimming 
+
+	* Add missing GLIB_LIBS to LDFLAGS as needed by newer gcc/libtool.
+
+2013-04-11 Christian Stimming 
+
+	* Win32 build: Upgrade libofx to 0.9.7 due to bug #697133 with long lines
+
+2013-04-09 John Ralls 
+
+	* [Bug #697402] configure doesn't find python on Debian
+
+2013-04-08 Christian Stimming 
+
+	* Win32 build: Disable debug output of r22877 again as it does not seem necessary anymore.
+
+2013-04-07 John Ralls 
+
+	* Register rewrite Update, fixes a problem with resizing columns. This update fixes a problem with resizing columns and also a missing tree free. Author: Robert Fewell
+
+2013-04-07 John Ralls 
+
+	* Register rewrite Update, changes the way the transaction changed dialog pops up. This update changes the way the transaction changed dialog pops up and also when you navigate to a cell it automaticly changes to allow input. Author: Robert Fewell
+
+2013-04-07 John Ralls 
+
+	* Register rewrite Update, adds test for old and new account register open at the same time. This update adds a test to stop opening old and new account registers at the same time. Author: Robert Fewell
+
+2013-04-07 John Ralls 
+
+	* Register rewrite Update, adds date accelerator and fixes duplicate transaction. This update adds the date accelerator keys to the date column and fixes the duplicate transaction option. Author: Robert Fewell
+
+2013-04-07 John Ralls 
+
+	* Register rewrite Update, adds print check, find, schedule and reconcile. This update changes adds the print check, find transactions, schedule transactions and reconcile options to the new register. This was done by copying the existing files and changing them to work with the new register so both new and old could work at the same time. The new find option on the accounts page has been commented out so the old one would work but has been proved to work the same as on the new registers. Also have the refresh option working which involves reloading the register by re-running the query which is also used for the search register updates. Author: Robert Fewell
+
+2013-04-07 John Ralls 
+
+	* Register rewrite Update, fixes for number / action column This update changes the Number / Action column from a single combo renderer to two, text renderer and combo renderer both with entry. We use the model to decide which one will be visible for each row. Also set up is the number accelerator key. Author: Robert Fewell
+
+2013-04-07 John Ralls 
+
+	* Register rewrite Update, fixes for duplicate and reversing transaction. This update fixes duplicate transaction and reversing transaction. Also included is a minor change to the model, added the test for unbalanced transaction along with some other dialogs. Tab key navigation has been revised but still further work. Account key seperator works along with new account creation. Author: Robert Fewell
+
+2013-04-07 Christian Stimming 
+
+	* Win32 build: Copy an initial logfile to the webserver when the build is started
+
+2013-04-06 Christian Stimming 
+
+	* Update start SVN revision of this year's ChangeLog generation
+
+2013-04-06 Christian Stimming 
+
+	* Update ActivePerl URL to a currently active (no pun intended) one.
+
+2013-04-06 Christian Stimming 
+
+	* Win32 build: Add debug output where xsltproc currently fails
+
+2013-04-05 Christian Stimming 
+
+	* Win32 build: Version update for libxslt, libxml2, goffice.
+
+2013-04-04 Christian Stimming 
+
+	* Win32 build: Switch to another libgsf version 1.4.21 that has a .tar.bz2 available
+
+2013-04-03 Christian Stimming 
+
+	* Win32 build: Can we get along without libgsf-gnome?
+
+2013-04-03 Christian Stimming 
+
+	* Win32 build: Add probably missing libgsf configure argument
+
+2013-04-02 Christian Stimming 
+
+	* Win32 build: Remove check for pixman lib, because that one was removed in r22813.
+
+2013-04-02 Christian Stimming 
+
+	* Win32 build: Increase verbosity on check for installed gnome.
+
+2013-04-02 J. Alex Aycinena 
+
+	* Vary some menu labels and tooltips based on cursor class: transaction or split.
+
+2013-04-01 Christian Stimming 
+
+	* Win32 build: Add more output for debugging.
+
+2013-03-31 Christian Stimming 
+
+	* Win32 build: Add some more output into log on error conditions.
+
+2013-03-31 John Ralls 
+
+	* Update NEWS and ChangeLogs for 2.5.0 release
+
+2013-03-31 John Ralls 
+
+	* Set Version to 2.5.0 for unstable release
+
+2013-03-31 John Ralls 
+
+	* Add libgncmod-ledger-core to satsify dependency in libgncmod-gnome.
+
+2013-03-31 John Ralls 
+
+	* Remove deleted calculation files from POTFILES.in
+
+2013-03-30 John Ralls 
+
+	* More Makefile changes to get distcheck to pass
+
+2013-03-30 Christian Stimming 
+
+	* Update libofx version to 0.9.6, released today
+
+2013-03-29 John Ralls 
+
+	* Some cleanup to get make-dist to build in the tarball
+
+2013-03-29 John Ralls 
+
+	* Clean out unused financial calculation stand-alone programs
+
+2013-03-29 Christian Stimming 
+
+	* Win32 build: Update libofx version... there was a 0.9.5 release last year.
+
+2013-03-29 Christian Stimming 
+
+	* Fix spell error in Russian translation, by enikulenkov.
+
+2013-03-29 Christian Stimming 
+
+	* Win32 build: Temporarily disable ja_JP guide htmlhelp because the hhc compiler seems to crash on this every time.
+
+2013-03-29 John Ralls 
+
+	* Modify the distcheck of POTFILES.skip to ignore scheme files
+
+2013-03-26 Geert Janssens 
+
+	* Bug #696469 - renumbering subaccounts does not preserve original order
+
+2013-03-24 Mike Evans 
+
+	* Prevent line break in date column on hyphen.
+
+2013-03-24 Mike Alexander 
+
+	* Compile md5.c with "-fno-strict-aliasing". The function md5_finish_ctx dereferences type-punned pointers which breaks strict aliasing rules.
+
+2013-03-23 Mike Alexander 
+
+	* One more try to get initialization right. This doesn't change things unless --add-price-quotes is given.  If it is then it must be handled before gtk is initialized since DISPLAY might not be set which will cause gtk initialization to fail.  This happens when running the X version of GnuCash from launchd on a Mac to get price quotes updated.
+
+2013-03-22 Christian Stimming 
+
+	* Fix erroneous conversion from time64 to struct tm because the Sunday weekday has a different number in GDateTime vs. struct tm.
+
+2013-03-22 Christian Stimming 
+
+	* Fix memory leaks due to localtime -> gnc_localtime replacement in r22618, r22626, r22627
+
+2013-03-22 Christian Stimming 
+
+	* Again reorder the initialization in gnucash-bin: gtk_init_check must be called before gnc_module_system_init.
+
+2013-03-11 Geert Janssens 
+
+	* Register rewrite Update
+
+2013-03-09 Christian Stimming 
+
+	* Bug #695423: Fix OFX Commodity Account handling.
+
+2013-03-06 Christian Stimming 
+
+	* Adding statement about GPLv2 and v3 license as discussed on gnucash-devel yesterday.
+
+2013-03-03 John Ralls 
+
+	* Mac: Adjust document path for new location
+
+2013-03-02 Christian Stimming 
+
+	* Win32 installer: Update version numbers for gwenhywfar, aqbanking, ktoblzcheck.
+
+2013-03-02 Christian Stimming 
+
+	* Minor bugfix: Guard against NULL pointer in sprintf argument.
+
+2013-03-02 John Ralls 
+
+	* [Bug #661832]MySQL database error after wireless reconnect
+
+2013-03-01 Christian Stimming 
+
+	* Fix erroneous widget lookup after a widget in the glade file has been renamed
+
+2013-03-01 Christian Stimming 
+
+	* Aqbanking SEPA transfer: Really test and finish the implementation.
+
+2013-02-28 Geert Janssens 
+
+	* Register rewrite Update.
+
+2013-02-27 J. Alex Aycinena 
+
+	* Replace GtkLabel with a GtkTextView within a GtkScrolledWindow for error summary for csv account import so that window doesn't get larger than screen with large error messages.
+
+2013-02-25 Geert Janssens 
+
+	* Winbuild: remove obsolete pixman dependency
+
+2013-02-23 Geert Janssens 
+
+	* Fix make check failure pointed out by Alex Aycinena
+
+2013-02-23 Christian Stimming 
+
+	* Aqbanking online transfer: Disable SEPA direct debit menu item again because no bank supports it.
+
+2013-02-23 Christian Stimming 
+
+	* Set svn:eol-style property to LF on .h and .c that did not yet have it so far.
+
+2013-02-23 Christian Stimming 
+
+	* Also set svn:eol-style property LF on .js files so that the files will surely have LF line endings in SVN in all cases.
+
+2013-02-23 Mike Evans 
+
+	* Normalise line endings of min.js files.
+
+2013-02-22 Geert Janssens 
+
+	* Add child functions to Account in python bindings.
+
+2013-02-22 Geert Janssens 
+
+	* Add tax tables lookup to python bindings.
+
+2013-02-22 Geert Janssens 
+
+	* Fix compile error after r22799 due to missing CFLAGS
+
+2013-02-21 Geert Janssens 
+
+	* jqplot line chart: make markers and grid optional again
+
+2013-02-21 Geert Janssens 
+
+	* Charts: improve tooltips on line and bar charts
+
+2013-02-21 Geert Janssens 
+
+	* Charts: source formatting
+
+2013-02-21 Geert Janssens 
+
+	* Drop goffice dependency from our html engine
+
+2013-02-21 Geert Janssens 
+
+	* Improve linechart
+
+2013-02-21 Phil Longstaff 
+
+	* Initial changes to budget view. 1) Splits gnc-budget-view.c/.h out from gnc-plugin-page-budget.c.  gnc-plugin-page-budget.c now creates a GncBudgetView and provides the overall UI and integration for it. 2) GncBudgetView changes:     a) If an account has children but does not have a specific budget value for a period, the sum of the children's budget values will be displayed in gray     b) Totals column on the right provides total for a budget row (account)     c) At the bottom, totals lines with total income, total expenses, total transfers (assets+liabilities) and grand total (income - expenses - transfers)
+
+2013-02-20 Geert Janssens 
+
+	* Improve scatterplot chart
+
+2013-02-20 Geert Janssens 
+
+	* Improve piechart
+
+2013-02-20 Geert Janssens 
+
+	* Improve jqplot's barchart renderer's barWidth and barPadding calculation
+
+2013-02-20 Geert Janssens 
+
+	* Define EOL style for javascript files
+
+2013-02-20 Geert Janssens 
+
+	* Improve barchart
+
+2013-02-20 Geert Janssens 
+
+	* Update to jqplot 1.0.6
+
+2013-02-20 Geert Janssens 
+
+	* jqplot: fix paths to js and css files
+
+2013-02-20 Geert Janssens 
+
+	* Fix code to find html files
+
+2013-02-20 Geert Janssens 
+
+	* Enable jqplot for barchart, piechart and scatterchart
+
+2013-02-19 Christian Stimming 
+
+	* Aqbanking online transfer: Disable the non-SEPA verification rules for SEPA transactions.
+
+2013-02-18 Christian Stimming 
+
+	* Aqbanking online transfer: Set the date in the gnucash txn dialog to non-sensitive.
+
+2013-02-18 Christian Stimming 
+
+	* Minor update for SEPA (European) online transfers (after r22445)
+
+2013-02-16 J. Alex Aycinena 
+
+	* Update taxtxf.scm to fix beginning balance sign and signs for Transfer From/To amounts for
+
+2013-02-12 John Ralls 
+
+	* Fix gnc-cdate format to match that of POSIX cdate
+
+2013-02-08 Christian Stimming 
+
+	* Get cutecash/C++ to compile again.
+
+2013-02-08 Mike Evans 
+
+	* Bug 683881 Partial implementation.
+
+2013-02-06 Mike Alexander 
+
+	* Avoid a crash when entering invalid dates (e.g., enter "111" for a transaction date). gnc_parse_date is ignoring the return code from qof_scan_date which causes it to send uninitialized values to gnc_mktime which crashes if the date is too ridiculous. Presumably this worked before because mktime took anything without crashing.
+
+2013-02-05 J. Alex Aycinena 
+
+	* Update txf.scm to reflect changes to US Income Tax Forms and Schedules for 2012.
+
+2013-02-04 Mike Alexander 
+
+	* Use gnc-commodity-equiv to compare commodites, not equal?
+
+2013-02-04 Mike Alexander 
+
+	* Allow the price quotes perl script to return multiple quotes on a single call. This makes it easier to add historical prices using a different perl script.
+
+2013-02-04 Mike Alexander 
+
+	* Improve HTML account table generator
+
+2013-01-30 Mike Alexander 
+
+	* Do a better job of calculating debit and credit fractions. Make gnc_split_register_set_cell_fractions agree with gnc_split_register_get_debcred_entry. If the account for a split changes recalculate the fractions.
+
+2013-01-30 Mike Alexander 
+
+	* Do a better job of prompting for an exchange rate only when needed. If the debit or credit value of a split changes, prompt for an exchange rate. Don't prompt for an exchange rate in a register that doesn't have a rate cell (and fix a bug so that it knows that portfolio registers don't have one). If the transaction has been autofilled and edited start with a nearby rate from the prices DB.  If it is an existing transaction start with the exchange rate it already has.
+
+2013-01-22 Mike Alexander 
+
+	* Don't store a negative reconcile interval.
+
+2013-01-22 Geert Janssens 
+
+	* Bug #680086 - Each Tip of the Day has an n shown at the end
+
+2013-01-22 Geert Janssens 
+
+	* Win32 build: add attribution for a code snippet in bootstrap
+
+2013-01-19 J. Alex Aycinena 
+
+	* Remove circular dependency introduced in r22681
+
+2013-01-19 Geert Janssens 
+
+	* Fix another eol issue
+
+2013-01-19 Geert Janssens 
+
+	* Win32 build: some more patchfile cleanups
+
+2013-01-19 Geert Janssens 
+
+	* Win32 build: rename patch files to consistently end in .patch
+
+2013-01-19 Geert Janssens 
+
+	* Win32 build: remove obsolete patches
+
+2013-01-19 Geert Janssens 
+
+	* Define line ending style for different file types
+
+2013-01-19 Geert Janssens 
+
+	* Bug #604520 Explain scope of find transaction tool.
+
+2013-01-18 Geert Janssens 
+
+	* Win32 build system: Experimental bootstrap script
+
+2013-01-15 Geert Janssens 
+
+	* Bug #672364 - does not properly handle XML parse errors, leading to possible data loss
+
+2013-01-14 John Ralls 
+
+	* Fix #638955
+
+2013-01-13 John Ralls 
+
+	* Fix string leak in gnc_gnome_help()
+
