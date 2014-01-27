@@ -241,9 +241,9 @@ class Book(GnuCashCoreClass):
       return gncInvoiceNextID(self.get_instance(),vendor.GetEndOwner().get_instance()[1])
 
     def CustomerNextID(self):
-      ''' Return the next Bill ID. '''
+      ''' Return the next Customer ID. '''
       from gnucash.gnucash_core_c import gncCustomerNextID
-      return gncCustomerNextID(self.get_instance())    
+      return gncCustomerNextID(self.get_instance())
 
 class GncNumeric(GnuCashCoreClass):
     """Object used by GnuCash to store all numbers. Always consists of a
