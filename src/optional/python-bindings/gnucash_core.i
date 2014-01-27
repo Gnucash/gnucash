@@ -65,6 +65,7 @@
 #include "gnc-lot.h"
 #include "gnc-numeric.h"
 #include "gncCustomer.h"
+#include "gncCustomerP.h"
 #include "gncEmployee.h"
 #include "gncVendor.h"
 #include "gncAddress.h"
@@ -191,6 +192,7 @@
 //core business includes
 %include <gncOwner.h>
 %include <gncCustomer.h>
+%include <gncCustomerP.h>
 %include <gncEmployee.h>
 %include <gncVendor.h>
 %include <gncAddress.h>
