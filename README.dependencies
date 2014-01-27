@@ -87,6 +87,18 @@ libofx			0.9.0			 OFX/QFX import
 python			2.4.0			 python bindings; headers
 						 required, not just binaries.
 
+  at runtime, required
+  ---------------------
+a gsettings backend to store the gnucash global preferences in
+This backend is platform dependent.
+- linux:        dconf
+- windows:      registry
+- osx/quarz:    plists
+
+Note that the osx and windows backends are built-in in gio for their
+respective platforms. On linux and similar systems, the dconf package
+should be installed.
+
   at runtime, suggested
   ---------------------
 isocodes: translation of currency names
