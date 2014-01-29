@@ -30,7 +30,6 @@
 
 #include "gnc-commodity.h"
 #include "qof.h"
-#include "GNCId.h"
 
 typedef struct gnc_option GNCOption;
 typedef struct gnc_option_section GNCOptionSection;

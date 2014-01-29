@@ -43,7 +43,6 @@
 // query
 #include "Query.h"
 #include "qof.h"
-#include "GNCId.h"
 #include "gncIDSearch.h"
 
 #include "dialog-customer-import.h"

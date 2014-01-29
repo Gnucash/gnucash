@@ -22,7 +22,6 @@
 
 #include <glib.h>
 
-#include "GNCId.h"
 #include "qof.h"
 
 

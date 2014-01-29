@@ -24,7 +24,6 @@
 #ifndef GNC_DIALOG_SEARCH_H
 #define GNC_DIALOG_SEARCH_H
 
-#include "GNCId.h"
 #include "qof.h"
 
 typedef struct _GNCSearchWindow GNCSearchWindow;
