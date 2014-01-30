@@ -50,7 +50,7 @@
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">8b3e42f98f52f948584d9548c018561e</act:parent>
+  <act:parent type="new">8b3e42f98f52f948584d9548c018561e</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Sonstige</act:name>
@@ -62,7 +62,7 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Sonstige Sachanlagen</act:description>
-  <act:parent type="guid">608d0af96cd92e82623b3b3082d17d69</act:parent>
+  <act:parent type="new">608d0af96cd92e82623b3b3082d17d69</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Barvermögen</act:name>
@@ -80,7 +80,7 @@
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">8b3e42f98f52f948584d9548c018561e</act:parent>
+  <act:parent type="new">8b3e42f98f52f948584d9548c018561e</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Girokonto</act:name>
@@ -92,7 +92,7 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Girokonto</act:description>
-  <act:parent type="guid">19c8f99cd26ad2e5a5b4d34447e1fdc1</act:parent>
+  <act:parent type="new">19c8f99cd26ad2e5a5b4d34447e1fdc1</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Bargeld</act:name>
@@ -104,7 +104,7 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Bargeld</act:description>
-  <act:parent type="guid">19c8f99cd26ad2e5a5b4d34447e1fdc1</act:parent>
+  <act:parent type="new">19c8f99cd26ad2e5a5b4d34447e1fdc1</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Forderungen</act:name>
@@ -116,7 +116,7 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Forderungen</act:description>
-  <act:parent type="guid">8b3e42f98f52f948584d9548c018561e</act:parent>
+  <act:parent type="new">8b3e42f98f52f948584d9548c018561e</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Vorsteuer</act:name>
@@ -128,7 +128,7 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Vorsteuer</act:description>
-  <act:parent type="guid">8b3e42f98f52f948584d9548c018561e</act:parent>
+  <act:parent type="new">8b3e42f98f52f948584d9548c018561e</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Aufwendungen</act:name>
@@ -158,7 +158,7 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Abschreibungen</act:description>
-  <act:parent type="guid">5f4c8d58a67f0d5b2c909810bc45b5bf</act:parent>
+  <act:parent type="new">5f4c8d58a67f0d5b2c909810bc45b5bf</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Büromaterialien</act:name>
@@ -170,7 +170,7 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Büromaterialien</act:description>
-  <act:parent type="guid">5f4c8d58a67f0d5b2c909810bc45b5bf</act:parent>
+  <act:parent type="new">5f4c8d58a67f0d5b2c909810bc45b5bf</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>EDV</act:name>
@@ -188,7 +188,7 @@
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">5f4c8d58a67f0d5b2c909810bc45b5bf</act:parent>
+  <act:parent type="new">5f4c8d58a67f0d5b2c909810bc45b5bf</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Hardware</act:name>
@@ -200,7 +200,7 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Hardware</act:description>
-  <act:parent type="guid">c9fc6cd43d2a445816be54adef5ba2e9</act:parent>
+  <act:parent type="new">c9fc6cd43d2a445816be54adef5ba2e9</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Software</act:name>
@@ -212,7 +212,7 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Software</act:description>
-  <act:parent type="guid">c9fc6cd43d2a445816be54adef5ba2e9</act:parent>
+  <act:parent type="new">c9fc6cd43d2a445816be54adef5ba2e9</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Fahrtkosten</act:name>
@@ -230,7 +230,7 @@
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">5f4c8d58a67f0d5b2c909810bc45b5bf</act:parent>
+  <act:parent type="new">5f4c8d58a67f0d5b2c909810bc45b5bf</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Netzkarten</act:name>
@@ -242,7 +242,7 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Netzkarten öffentlicher Verkehr</act:description>
-  <act:parent type="guid">7df840fb61aa8c5b2ca7b3fef3af6028</act:parent>
+  <act:parent type="new">7df840fb61aa8c5b2ca7b3fef3af6028</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Fahrkarten</act:name>
@@ -254,7 +254,7 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Fahrkarten Bus, Bahn, Flugzeug</act:description>
-  <act:parent type="guid">7df840fb61aa8c5b2ca7b3fef3af6028</act:parent>
+  <act:parent type="new">7df840fb61aa8c5b2ca7b3fef3af6028</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Auto</act:name>
@@ -272,7 +272,7 @@
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">7df840fb61aa8c5b2ca7b3fef3af6028</act:parent>
+  <act:parent type="new">7df840fb61aa8c5b2ca7b3fef3af6028</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Abgaben</act:name>
@@ -284,7 +284,7 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Abgaben</act:description>
-  <act:parent type="guid">9e2ece27b19217be246f543247d05955</act:parent>
+  <act:parent type="new">9e2ece27b19217be246f543247d05955</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Treibstoff</act:name>
@@ -296,7 +296,7 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Treibstoff</act:description>
-  <act:parent type="guid">9e2ece27b19217be246f543247d05955</act:parent>
+  <act:parent type="new">9e2ece27b19217be246f543247d05955</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Parkgebühren</act:name>
@@ -308,7 +308,7 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Parkgebühren</act:description>
-  <act:parent type="guid">9e2ece27b19217be246f543247d05955</act:parent>
+  <act:parent type="new">9e2ece27b19217be246f543247d05955</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Wartung und Reparaturen</act:name>
@@ -320,7 +320,7 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Wartung und Reparaturen</act:description>
-  <act:parent type="guid">9e2ece27b19217be246f543247d05955</act:parent>
+  <act:parent type="new">9e2ece27b19217be246f543247d05955</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Steuern</act:name>
@@ -338,7 +338,7 @@
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">5f4c8d58a67f0d5b2c909810bc45b5bf</act:parent>
+  <act:parent type="new">5f4c8d58a67f0d5b2c909810bc45b5bf</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Sonstige</act:name>
@@ -350,7 +350,7 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Sonstige Steuern</act:description>
-  <act:parent type="guid">92e8778ae32b3fb473352cf90345b154</act:parent>
+  <act:parent type="new">92e8778ae32b3fb473352cf90345b154</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Umsatzsteuer Zahllast</act:name>
@@ -362,7 +362,7 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Saldo Umsatzsteuer - Vorsteuer</act:description>
-  <act:parent type="guid">92e8778ae32b3fb473352cf90345b154</act:parent>
+  <act:parent type="new">92e8778ae32b3fb473352cf90345b154</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Körperschaftssteuer</act:name>
@@ -374,7 +374,7 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Körperschaftssteuer</act:description>
-  <act:parent type="guid">92e8778ae32b3fb473352cf90345b154</act:parent>
+  <act:parent type="new">92e8778ae32b3fb473352cf90345b154</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Einkommenssteuer</act:name>
@@ -386,7 +386,7 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Einkommenssteuer</act:description>
-  <act:parent type="guid">92e8778ae32b3fb473352cf90345b154</act:parent>
+  <act:parent type="new">92e8778ae32b3fb473352cf90345b154</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Telekommunikation</act:name>
@@ -404,7 +404,7 @@
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">5f4c8d58a67f0d5b2c909810bc45b5bf</act:parent>
+  <act:parent type="new">5f4c8d58a67f0d5b2c909810bc45b5bf</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Online-Dienste</act:name>
@@ -416,7 +416,7 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Online-Dienste</act:description>
-  <act:parent type="guid">15251905000c6b2d56e25b841db49846</act:parent>
+  <act:parent type="new">15251905000c6b2d56e25b841db49846</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Telefon</act:name>
@@ -428,7 +428,7 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Telefon</act:description>
-  <act:parent type="guid">15251905000c6b2d56e25b841db49846</act:parent>
+  <act:parent type="new">15251905000c6b2d56e25b841db49846</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Versicherungen</act:name>
@@ -446,7 +446,7 @@
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">5f4c8d58a67f0d5b2c909810bc45b5bf</act:parent>
+  <act:parent type="new">5f4c8d58a67f0d5b2c909810bc45b5bf</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Haftpflichtversicherung</act:name>
@@ -458,7 +458,7 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Haftpflichtversicherung</act:description>
-  <act:parent type="guid">4b1ce4fadd17146cbf908943434b7815</act:parent>
+  <act:parent type="new">4b1ce4fadd17146cbf908943434b7815</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Sozialversicherung</act:name>
@@ -470,7 +470,7 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Sozialversicherung</act:description>
-  <act:parent type="guid">4b1ce4fadd17146cbf908943434b7815</act:parent>
+  <act:parent type="new">4b1ce4fadd17146cbf908943434b7815</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Sonstiges</act:name>
@@ -482,7 +482,7 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Sonstige Aufwendungen</act:description>
-  <act:parent type="guid">5f4c8d58a67f0d5b2c909810bc45b5bf</act:parent>
+  <act:parent type="new">5f4c8d58a67f0d5b2c909810bc45b5bf</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Fachliteratur</act:name>
@@ -494,7 +494,7 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Fachliteratur</act:description>
-  <act:parent type="guid">5f4c8d58a67f0d5b2c909810bc45b5bf</act:parent>
+  <act:parent type="new">5f4c8d58a67f0d5b2c909810bc45b5bf</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Büro</act:name>
@@ -512,7 +512,7 @@
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">5f4c8d58a67f0d5b2c909810bc45b5bf</act:parent>
+  <act:parent type="new">5f4c8d58a67f0d5b2c909810bc45b5bf</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Nebenkosten</act:name>
@@ -530,7 +530,7 @@
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">f7910309412e6230f9b89e2ba892baeb</act:parent>
+  <act:parent type="new">f7910309412e6230f9b89e2ba892baeb</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Gas</act:name>
@@ -542,7 +542,7 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Gas</act:description>
-  <act:parent type="guid">23894434db5e874a2b4e316f8296b73c</act:parent>
+  <act:parent type="new">23894434db5e874a2b4e316f8296b73c</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Hausverwaltung</act:name>
@@ -560,7 +560,7 @@
       <slot:value type="string">inklusive Wasser, Abwasser, Abfall</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">23894434db5e874a2b4e316f8296b73c</act:parent>
+  <act:parent type="new">23894434db5e874a2b4e316f8296b73c</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Strom</act:name>
@@ -572,7 +572,7 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Strom</act:description>
-  <act:parent type="guid">23894434db5e874a2b4e316f8296b73c</act:parent>
+  <act:parent type="new">23894434db5e874a2b4e316f8296b73c</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Rundfunkgebühren</act:name>
@@ -584,7 +584,7 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Rundfunkgebühren</act:description>
-  <act:parent type="guid">23894434db5e874a2b4e316f8296b73c</act:parent>
+  <act:parent type="new">23894434db5e874a2b4e316f8296b73c</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Abfall</act:name>
@@ -596,7 +596,7 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Abfall</act:description>
-  <act:parent type="guid">23894434db5e874a2b4e316f8296b73c</act:parent>
+  <act:parent type="new">23894434db5e874a2b4e316f8296b73c</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Wasser</act:name>
@@ -608,7 +608,7 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Wasser</act:description>
-  <act:parent type="guid">23894434db5e874a2b4e316f8296b73c</act:parent>
+  <act:parent type="new">23894434db5e874a2b4e316f8296b73c</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Miete</act:name>
@@ -620,7 +620,7 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Miete</act:description>
-  <act:parent type="guid">f7910309412e6230f9b89e2ba892baeb</act:parent>
+  <act:parent type="new">f7910309412e6230f9b89e2ba892baeb</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Möbel</act:name>
@@ -632,7 +632,7 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Möbel</act:description>
-  <act:parent type="guid">f7910309412e6230f9b89e2ba892baeb</act:parent>
+  <act:parent type="new">f7910309412e6230f9b89e2ba892baeb</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Spenden</act:name>
@@ -644,7 +644,7 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Spenden</act:description>
-  <act:parent type="guid">5f4c8d58a67f0d5b2c909810bc45b5bf</act:parent>
+  <act:parent type="new">5f4c8d58a67f0d5b2c909810bc45b5bf</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Restaurant</act:name>
@@ -656,7 +656,7 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Restaurant</act:description>
-  <act:parent type="guid">5f4c8d58a67f0d5b2c909810bc45b5bf</act:parent>
+  <act:parent type="new">5f4c8d58a67f0d5b2c909810bc45b5bf</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Beratungskosten</act:name>
@@ -674,7 +674,7 @@
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">5f4c8d58a67f0d5b2c909810bc45b5bf</act:parent>
+  <act:parent type="new">5f4c8d58a67f0d5b2c909810bc45b5bf</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Buchhaltung</act:name>
@@ -686,7 +686,7 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Buchhaltung</act:description>
-  <act:parent type="guid">8aa2d0cd1b8157751fd07b502628a6f8</act:parent>
+  <act:parent type="new">8aa2d0cd1b8157751fd07b502628a6f8</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Steuerberatung</act:name>
@@ -698,7 +698,7 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Steuerberatung</act:description>
-  <act:parent type="guid">8aa2d0cd1b8157751fd07b502628a6f8</act:parent>
+  <act:parent type="new">8aa2d0cd1b8157751fd07b502628a6f8</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Rechtskosten</act:name>
@@ -710,7 +710,7 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Rechtsanwalt, Gericht</act:description>
-  <act:parent type="guid">8aa2d0cd1b8157751fd07b502628a6f8</act:parent>
+  <act:parent type="new">8aa2d0cd1b8157751fd07b502628a6f8</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Postgebühren</act:name>
@@ -722,7 +722,7 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Postgebühren</act:description>
-  <act:parent type="guid">5f4c8d58a67f0d5b2c909810bc45b5bf</act:parent>
+  <act:parent type="new">5f4c8d58a67f0d5b2c909810bc45b5bf</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Druck- und Kopierkosten</act:name>
@@ -734,7 +734,7 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Druck- und Kopierkosten</act:description>
-  <act:parent type="guid">5f4c8d58a67f0d5b2c909810bc45b5bf</act:parent>
+  <act:parent type="new">5f4c8d58a67f0d5b2c909810bc45b5bf</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Lohnkosten</act:name>
@@ -752,7 +752,7 @@
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">5f4c8d58a67f0d5b2c909810bc45b5bf</act:parent>
+  <act:parent type="new">5f4c8d58a67f0d5b2c909810bc45b5bf</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Interessensvertretung</act:name>
@@ -764,7 +764,7 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Kammern etc</act:description>
-  <act:parent type="guid">5f4c8d58a67f0d5b2c909810bc45b5bf</act:parent>
+  <act:parent type="new">5f4c8d58a67f0d5b2c909810bc45b5bf</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Fremdkapital</act:name>
@@ -800,7 +800,7 @@
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">043969ee2463beed15c59e8d85e9501c</act:parent>
+  <act:parent type="new">043969ee2463beed15c59e8d85e9501c</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Kreditkarte</act:name>
@@ -812,7 +812,7 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Kreditkarte</act:description>
-  <act:parent type="guid">4650fa62cf6420ece9b293447f82576b</act:parent>
+  <act:parent type="new">4650fa62cf6420ece9b293447f82576b</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Verbindlichkeiten</act:name>
@@ -824,7 +824,7 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Verbindlichkeiten</act:description>
-  <act:parent type="guid">043969ee2463beed15c59e8d85e9501c</act:parent>
+  <act:parent type="new">043969ee2463beed15c59e8d85e9501c</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Umsatzsteuer</act:name>
@@ -836,7 +836,7 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Umsatzsteuer</act:description>
-  <act:parent type="guid">043969ee2463beed15c59e8d85e9501c</act:parent>
+  <act:parent type="new">043969ee2463beed15c59e8d85e9501c</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Erträge</act:name>
@@ -866,7 +866,7 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Sonstige Erträge</act:description>
-  <act:parent type="guid">2aab8a58e98f47823a5bbe0c7a180e08</act:parent>
+  <act:parent type="new">2aab8a58e98f47823a5bbe0c7a180e08</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Zinsen</act:name>
@@ -884,7 +884,7 @@
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">2aab8a58e98f47823a5bbe0c7a180e08</act:parent>
+  <act:parent type="new">2aab8a58e98f47823a5bbe0c7a180e08</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Girokonto</act:name>
@@ -896,7 +896,7 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Girokonto Zinsen</act:description>
-  <act:parent type="guid">42b2b69e8cd7e94ff077194062f826d8</act:parent>
+  <act:parent type="new">42b2b69e8cd7e94ff077194062f826d8</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Sonstige</act:name>
@@ -908,7 +908,7 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Sonstige Zinsen</act:description>
-  <act:parent type="guid">42b2b69e8cd7e94ff077194062f826d8</act:parent>
+  <act:parent type="new">42b2b69e8cd7e94ff077194062f826d8</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Zurückerstattete Aufwendungen</act:name>
@@ -920,7 +920,7 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Zurückerstattete Aufwendungen</act:description>
-  <act:parent type="guid">2aab8a58e98f47823a5bbe0c7a180e08</act:parent>
+  <act:parent type="new">2aab8a58e98f47823a5bbe0c7a180e08</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Anfangsbestand</act:name>

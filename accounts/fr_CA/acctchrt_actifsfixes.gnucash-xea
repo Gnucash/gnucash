@@ -17,7 +17,7 @@
   </gnc:account>
   <gnc:account version="2.0.0">
 	  <act:name>Actif</act:name>
-	  <act:id type="guid">b14f810bdb0b57b77acf1a5db700068c</act:id>
+	  <act:id type="new">b14f810bdb0b57b77acf1a5db700068c</act:id>
 	  <act:type>ASSET</act:type>
 	  <act:commodity>
 		  <cmdty:space>ISO4217</cmdty:space>
@@ -25,7 +25,7 @@
 	  </act:commodity>
 	  <act:commodity-scu>100</act:commodity-scu>
 	  <act:description>Actif</act:description>
-	  <act:parent type="guid">1972cce2e2364f95b2b0bc014502661d</act:parent>
+	  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 	  <act:slots>
 		  <slot>
 			  <slot:key>placeholder</slot:key>
@@ -35,7 +35,7 @@
   </gnc:account>
   <gnc:account version="2.0.0">
 		  <act:name>Actifs fixes</act:name>
-		  <act:id type="guid">c888710a53770a065aceae44d8abd0dd</act:id>
+		  <act:id type="new">c888710a53770a065aceae44d8abd0dd</act:id>
 		  <act:type>ASSET</act:type>
 		  <act:commodity>
 			  <cmdty:space>ISO4217</cmdty:space>
@@ -49,11 +49,11 @@
 				  <slot:value type="string">true</slot:value>
 			  </slot>
 		  </act:slots>
-		  <act:parent type="guid">b14f810bdb0b57b77acf1a5db700068c</act:parent>
+		  <act:parent type="new">b14f810bdb0b57b77acf1a5db700068c</act:parent>
 	  </gnc:account>
 	  <gnc:account version="2.0.0">
 		  <act:name>Résidence</act:name>
-		  <act:id type="guid">b86ae426ae1fd7705d49ef6ae16d614a</act:id>
+		  <act:id type="new">b86ae426ae1fd7705d49ef6ae16d614a</act:id>
 		  <act:type>ASSET</act:type>
 		  <act:commodity>
 			  <cmdty:space>ISO4217</cmdty:space>
@@ -61,11 +61,11 @@
 		  </act:commodity>
 		  <act:commodity-scu>100</act:commodity-scu>
 		  <act:description>Résidence</act:description>
-		  <act:parent type="guid">c888710a53770a065aceae44d8abd0dd</act:parent>
+		  <act:parent type="new">c888710a53770a065aceae44d8abd0dd</act:parent>
 	  </gnc:account>
 	  <gnc:account version="2.0.0">
 		  <act:name>Véhicule</act:name>
-		  <act:id type="guid">66c6a566a0abd30a95e10e2a1b68bc81</act:id>
+		  <act:id type="new">66c6a566a0abd30a95e10e2a1b68bc81</act:id>
 		  <act:type>ASSET</act:type>
 		  <act:commodity>
 			  <cmdty:space>ISO4217</cmdty:space>
@@ -73,11 +73,11 @@
 		  </act:commodity>
 		  <act:commodity-scu>100</act:commodity-scu>
 		  <act:description>Véhicule</act:description>
-		  <act:parent type="guid">c888710a53770a065aceae44d8abd0dd</act:parent>
+		  <act:parent type="new">c888710a53770a065aceae44d8abd0dd</act:parent>
 	  </gnc:account>
 	  <gnc:account version="2.0.0">
 		  <act:name>Autres biens immobilisés</act:name>
-		  <act:id type="guid">420fd6fd4be88b92d648611bdcf808da</act:id>
+		  <act:id type="new">420fd6fd4be88b92d648611bdcf808da</act:id>
 		  <act:type>ASSET</act:type>
 		  <act:commodity>
 			  <cmdty:space>ISO4217</cmdty:space>
@@ -85,7 +85,7 @@
 		  </act:commodity>
 		  <act:commodity-scu>100</act:commodity-scu>
 		  <act:description>Autres biens immobilisés de valeur</act:description>
-		  <act:parent type="guid">c888710a53770a065aceae44d8abd0dd</act:parent>
+		  <act:parent type="new">c888710a53770a065aceae44d8abd0dd</act:parent>
 	  </gnc:account>
 </gnc-account-example>
 

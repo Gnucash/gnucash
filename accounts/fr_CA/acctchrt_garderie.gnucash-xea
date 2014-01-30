@@ -17,7 +17,7 @@
   </gnc:account>
   <gnc:account version="2.0.0">
 	  <act:name>Dépenses</act:name>
-	  <act:id type="guid">5882be9c31d58cc589c53f94d86f82da</act:id>
+	  <act:id type="new">5882be9c31d58cc589c53f94d86f82da</act:id>
 	  <act:type>EXPENSE</act:type>
 	  <act:commodity>
 		  <cmdty:space>ISO4217</cmdty:space>
@@ -25,7 +25,7 @@
 	  </act:commodity>
 	  <act:commodity-scu>100</act:commodity-scu>
 	  <act:description>Dépenses</act:description>
-	  <act:parent type="guid">1972cce2e2364f95b2b0bc014502661d</act:parent>
+	  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 	  <act:slots>
 		  <slot>
 			  <slot:key>placeholder</slot:key>
@@ -35,7 +35,7 @@
   </gnc:account>
   <gnc:account version="2.0.0">
 	  <act:name>Garderie</act:name>
-	  <act:id type="guid">31c9cce0195ce43fd8a4b8fe305cb292</act:id>
+	  <act:id type="new">31c9cce0195ce43fd8a4b8fe305cb292</act:id>
 	  <act:type>EXPENSE</act:type>
 	  <act:commodity>
 		  <cmdty:space>ISO4217</cmdty:space>
@@ -43,7 +43,7 @@
 	  </act:commodity>
 	  <act:commodity-scu>100</act:commodity-scu>
 	  <act:description>Garderie</act:description>
-	  <act:parent type="guid">5882be9c31d58cc589c53f94d86f82da</act:parent>
+	  <act:parent type="new">5882be9c31d58cc589c53f94d86f82da</act:parent>
   </gnc:account>
 </gnc-account-example>
 

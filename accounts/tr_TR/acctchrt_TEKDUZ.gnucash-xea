@@ -43,12 +43,12 @@
 <gnc-act:exclude-from-select-all>1</gnc-act:exclude-from-select-all>
 <gnc:account version="2.0.0">
   <act:name>Root Account</act:name>
-  <act:id type="guid">f03b8164819b8e8a525102a3f30ac51a</act:id>
+  <act:id type="new">f03b8164819b8e8a525102a3f30ac51a</act:id>
   <act:type>ROOT</act:type>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Dönen Varlıklar</act:name>
-  <act:id type="guid">35321669180472655a9037f4eb1d1909</act:id>
+  <act:id type="new">35321669180472655a9037f4eb1d1909</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -67,11 +67,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">f03b8164819b8e8a525102a3f30ac51a</act:parent>
+  <act:parent type="new">f03b8164819b8e8a525102a3f30ac51a</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Hazır Değerler</act:name>
-  <act:id type="guid">d77260a05a95f13ddc839fa5857e039e</act:id>
+  <act:id type="new">d77260a05a95f13ddc839fa5857e039e</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -89,11 +89,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">35321669180472655a9037f4eb1d1909</act:parent>
+  <act:parent type="new">35321669180472655a9037f4eb1d1909</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Alınan Çekler</act:name>
-  <act:id type="guid">aacb2673b0f268aed2b66d0f7ce349cf</act:id>
+  <act:id type="new">aacb2673b0f268aed2b66d0f7ce349cf</act:id>
   <act:type>BANK</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -107,11 +107,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">d77260a05a95f13ddc839fa5857e039e</act:parent>
+  <act:parent type="new">d77260a05a95f13ddc839fa5857e039e</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Bankalar</act:name>
-  <act:id type="guid">0dfb386f2c1290504c88a60ab15316b4</act:id>
+  <act:id type="new">0dfb386f2c1290504c88a60ab15316b4</act:id>
   <act:type>BANK</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -125,11 +125,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">d77260a05a95f13ddc839fa5857e039e</act:parent>
+  <act:parent type="new">d77260a05a95f13ddc839fa5857e039e</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Kasa</act:name>
-  <act:id type="guid">6d2eabc961b7089ad968e88749e87dfb</act:id>
+  <act:id type="new">6d2eabc961b7089ad968e88749e87dfb</act:id>
   <act:type>CASH</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -144,11 +144,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">d77260a05a95f13ddc839fa5857e039e</act:parent>
+  <act:parent type="new">d77260a05a95f13ddc839fa5857e039e</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Verilen Çekler Ve Ödeme Emirleri(-)</act:name>
-  <act:id type="guid">14ddf4ff37486a0baec1be69ebd69c8b</act:id>
+  <act:id type="new">14ddf4ff37486a0baec1be69ebd69c8b</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -162,11 +162,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">d77260a05a95f13ddc839fa5857e039e</act:parent>
+  <act:parent type="new">d77260a05a95f13ddc839fa5857e039e</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Diğer Hazır Değerler</act:name>
-  <act:id type="guid">0b53f53ed71ca374da2892587a3da86e</act:id>
+  <act:id type="new">0b53f53ed71ca374da2892587a3da86e</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -180,11 +180,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">d77260a05a95f13ddc839fa5857e039e</act:parent>
+  <act:parent type="new">d77260a05a95f13ddc839fa5857e039e</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Menkul Kıymetler</act:name>
-  <act:id type="guid">3bc0e6444cac583298b3aaa654b6326b</act:id>
+  <act:id type="new">3bc0e6444cac583298b3aaa654b6326b</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -202,11 +202,11 @@
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">35321669180472655a9037f4eb1d1909</act:parent>
+  <act:parent type="new">35321669180472655a9037f4eb1d1909</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Hisse Senetleri</act:name>
-  <act:id type="guid">b4ae1b0ea16e08b7009d572cbd30ef89</act:id>
+  <act:id type="new">b4ae1b0ea16e08b7009d572cbd30ef89</act:id>
   <act:type>STOCK</act:type>
   <act:commodity>
     <cmdty:space>template</cmdty:space>
@@ -220,11 +220,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">3bc0e6444cac583298b3aaa654b6326b</act:parent>
+  <act:parent type="new">3bc0e6444cac583298b3aaa654b6326b</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Özel Kesim Tahvil Senet Ve Bonoları</act:name>
-  <act:id type="guid">787d0cb2bb04832a939d66a6e2afc487</act:id>
+  <act:id type="new">787d0cb2bb04832a939d66a6e2afc487</act:id>
   <act:type>STOCK</act:type>
   <act:commodity>
     <cmdty:space>template</cmdty:space>
@@ -238,11 +238,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">3bc0e6444cac583298b3aaa654b6326b</act:parent>
+  <act:parent type="new">3bc0e6444cac583298b3aaa654b6326b</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Kamu Kesimi Tahvil, Senet Ve Bonoları</act:name>
-  <act:id type="guid">77e761e0d025515e56317fd6994fa82c</act:id>
+  <act:id type="new">77e761e0d025515e56317fd6994fa82c</act:id>
   <act:type>MUTUAL</act:type>
   <act:commodity>
     <cmdty:space>template</cmdty:space>
@@ -256,11 +256,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">3bc0e6444cac583298b3aaa654b6326b</act:parent>
+  <act:parent type="new">3bc0e6444cac583298b3aaa654b6326b</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Diğer Menkul Kıymetler</act:name>
-  <act:id type="guid">395c445060fa0e8cdd23dc65ecbb86bc</act:id>
+  <act:id type="new">395c445060fa0e8cdd23dc65ecbb86bc</act:id>
   <act:type>MUTUAL</act:type>
   <act:commodity>
     <cmdty:space>template</cmdty:space>
@@ -274,11 +274,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">3bc0e6444cac583298b3aaa654b6326b</act:parent>
+  <act:parent type="new">3bc0e6444cac583298b3aaa654b6326b</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Menkul Kıymetler Değer Düşüklüğü Karşılığı(-)</act:name>
-  <act:id type="guid">54a586a90050949d653c57ace5af0272</act:id>
+  <act:id type="new">54a586a90050949d653c57ace5af0272</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -292,11 +292,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">3bc0e6444cac583298b3aaa654b6326b</act:parent>
+  <act:parent type="new">3bc0e6444cac583298b3aaa654b6326b</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Ticari Alacaklar</act:name>
-  <act:id type="guid">66c881c08f59104d6fed7d68d73cfbbe</act:id>
+  <act:id type="new">66c881c08f59104d6fed7d68d73cfbbe</act:id>
   <act:type>RECEIVABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -314,11 +314,11 @@
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">35321669180472655a9037f4eb1d1909</act:parent>
+  <act:parent type="new">35321669180472655a9037f4eb1d1909</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Alıcılar</act:name>
-  <act:id type="guid">9de8c3ee61d764894fa1503b4c747495</act:id>
+  <act:id type="new">9de8c3ee61d764894fa1503b4c747495</act:id>
   <act:type>RECEIVABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -332,11 +332,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">66c881c08f59104d6fed7d68d73cfbbe</act:parent>
+  <act:parent type="new">66c881c08f59104d6fed7d68d73cfbbe</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Alacak Senetleri</act:name>
-  <act:id type="guid">c39965d8ded7032565bcd6c6a43ec69c</act:id>
+  <act:id type="new">c39965d8ded7032565bcd6c6a43ec69c</act:id>
   <act:type>RECEIVABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -350,11 +350,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">66c881c08f59104d6fed7d68d73cfbbe</act:parent>
+  <act:parent type="new">66c881c08f59104d6fed7d68d73cfbbe</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Alacak Senetleri Reeskontu(-)</act:name>
-  <act:id type="guid">0b608b897abce2e8175f3fd6b6812eb8</act:id>
+  <act:id type="new">0b608b897abce2e8175f3fd6b6812eb8</act:id>
   <act:type>RECEIVABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -368,11 +368,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">66c881c08f59104d6fed7d68d73cfbbe</act:parent>
+  <act:parent type="new">66c881c08f59104d6fed7d68d73cfbbe</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Verilen Depozito Ve Teminatlar</act:name>
-  <act:id type="guid">cbbcefc691284a359d9b6709b675db56</act:id>
+  <act:id type="new">cbbcefc691284a359d9b6709b675db56</act:id>
   <act:type>RECEIVABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -386,11 +386,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">66c881c08f59104d6fed7d68d73cfbbe</act:parent>
+  <act:parent type="new">66c881c08f59104d6fed7d68d73cfbbe</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Diğer Ticari Alacaklar</act:name>
-  <act:id type="guid">091d2f42dc2dffd172713dbf6612bfd0</act:id>
+  <act:id type="new">091d2f42dc2dffd172713dbf6612bfd0</act:id>
   <act:type>RECEIVABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -404,11 +404,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">66c881c08f59104d6fed7d68d73cfbbe</act:parent>
+  <act:parent type="new">66c881c08f59104d6fed7d68d73cfbbe</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Şüpheli Ticari Alacaklar</act:name>
-  <act:id type="guid">5faabf87098f8ca4b76ad8f928136ce6</act:id>
+  <act:id type="new">5faabf87098f8ca4b76ad8f928136ce6</act:id>
   <act:type>RECEIVABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -422,11 +422,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">66c881c08f59104d6fed7d68d73cfbbe</act:parent>
+  <act:parent type="new">66c881c08f59104d6fed7d68d73cfbbe</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Şüpheli Ticari Alacaklar Karşılığı(-)</act:name>
-  <act:id type="guid">49af61b4451111a2e9e063f167ffdf36</act:id>
+  <act:id type="new">49af61b4451111a2e9e063f167ffdf36</act:id>
   <act:type>RECEIVABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -440,11 +440,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">66c881c08f59104d6fed7d68d73cfbbe</act:parent>
+  <act:parent type="new">66c881c08f59104d6fed7d68d73cfbbe</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Diğer Alacaklar</act:name>
-  <act:id type="guid">e892126aab740ebf830a7aabcc5e8778</act:id>
+  <act:id type="new">e892126aab740ebf830a7aabcc5e8778</act:id>
   <act:type>RECEIVABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -462,11 +462,11 @@
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">35321669180472655a9037f4eb1d1909</act:parent>
+  <act:parent type="new">35321669180472655a9037f4eb1d1909</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Ortaklardan Alacaklar</act:name>
-  <act:id type="guid">a9ff2d1c57ce38f074b8e966f6d1875c</act:id>
+  <act:id type="new">a9ff2d1c57ce38f074b8e966f6d1875c</act:id>
   <act:type>RECEIVABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -480,11 +480,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">e892126aab740ebf830a7aabcc5e8778</act:parent>
+  <act:parent type="new">e892126aab740ebf830a7aabcc5e8778</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>İştiraklerden Alacaklar</act:name>
-  <act:id type="guid">c249ec8b9baf7827a1e782a304ce432d</act:id>
+  <act:id type="new">c249ec8b9baf7827a1e782a304ce432d</act:id>
   <act:type>RECEIVABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -498,11 +498,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">e892126aab740ebf830a7aabcc5e8778</act:parent>
+  <act:parent type="new">e892126aab740ebf830a7aabcc5e8778</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Bağlı Ortaklıklardan Alacaklar</act:name>
-  <act:id type="guid">7f42c935fb847eb73fdefeee0711f4e7</act:id>
+  <act:id type="new">7f42c935fb847eb73fdefeee0711f4e7</act:id>
   <act:type>RECEIVABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -516,11 +516,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">e892126aab740ebf830a7aabcc5e8778</act:parent>
+  <act:parent type="new">e892126aab740ebf830a7aabcc5e8778</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Personelden Alacaklar</act:name>
-  <act:id type="guid">8be3303dfca1bb170d9a255ca3712fb8</act:id>
+  <act:id type="new">8be3303dfca1bb170d9a255ca3712fb8</act:id>
   <act:type>RECEIVABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -534,11 +534,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">e892126aab740ebf830a7aabcc5e8778</act:parent>
+  <act:parent type="new">e892126aab740ebf830a7aabcc5e8778</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Diğer Çeşitli Alacaklar</act:name>
-  <act:id type="guid">c69f3ef0f5bb4656a8f75806ac8fb3b5</act:id>
+  <act:id type="new">c69f3ef0f5bb4656a8f75806ac8fb3b5</act:id>
   <act:type>RECEIVABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -552,11 +552,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">e892126aab740ebf830a7aabcc5e8778</act:parent>
+  <act:parent type="new">e892126aab740ebf830a7aabcc5e8778</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Diğer Alacak Senetleri Reeskontu(-)</act:name>
-  <act:id type="guid">ad209e003be7ec176ef08ab8eb8aa5ba</act:id>
+  <act:id type="new">ad209e003be7ec176ef08ab8eb8aa5ba</act:id>
   <act:type>RECEIVABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -570,11 +570,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">e892126aab740ebf830a7aabcc5e8778</act:parent>
+  <act:parent type="new">e892126aab740ebf830a7aabcc5e8778</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Şüpheli Diğer Alacaklar</act:name>
-  <act:id type="guid">e80c89174ebc5a3e562dc4a0839b00fc</act:id>
+  <act:id type="new">e80c89174ebc5a3e562dc4a0839b00fc</act:id>
   <act:type>RECEIVABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -588,11 +588,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">e892126aab740ebf830a7aabcc5e8778</act:parent>
+  <act:parent type="new">e892126aab740ebf830a7aabcc5e8778</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Şüpheli Diğer Alacaklar Karşılığı(-)</act:name>
-  <act:id type="guid">b80829f4f0a5085347043251469e90b4</act:id>
+  <act:id type="new">b80829f4f0a5085347043251469e90b4</act:id>
   <act:type>RECEIVABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -606,11 +606,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">e892126aab740ebf830a7aabcc5e8778</act:parent>
+  <act:parent type="new">e892126aab740ebf830a7aabcc5e8778</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Stoklar</act:name>
-  <act:id type="guid">2644143c4517a118640144fe4b44eb0d</act:id>
+  <act:id type="new">2644143c4517a118640144fe4b44eb0d</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -628,11 +628,11 @@
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">35321669180472655a9037f4eb1d1909</act:parent>
+  <act:parent type="new">35321669180472655a9037f4eb1d1909</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>İlk Madde Malzeme</act:name>
-  <act:id type="guid">626b16aecb4a61d7a3962ef6936b0e98</act:id>
+  <act:id type="new">626b16aecb4a61d7a3962ef6936b0e98</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -646,11 +646,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">2644143c4517a118640144fe4b44eb0d</act:parent>
+  <act:parent type="new">2644143c4517a118640144fe4b44eb0d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Yarı Mamuller</act:name>
-  <act:id type="guid">82995ebfb2ab3f337e5bc34e8b4a1def</act:id>
+  <act:id type="new">82995ebfb2ab3f337e5bc34e8b4a1def</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -664,11 +664,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">2644143c4517a118640144fe4b44eb0d</act:parent>
+  <act:parent type="new">2644143c4517a118640144fe4b44eb0d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Mamuller</act:name>
-  <act:id type="guid">9b30ea4dcb7810d1b09f86709a7de2c8</act:id>
+  <act:id type="new">9b30ea4dcb7810d1b09f86709a7de2c8</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -682,11 +682,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">2644143c4517a118640144fe4b44eb0d</act:parent>
+  <act:parent type="new">2644143c4517a118640144fe4b44eb0d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Ticari Mallar</act:name>
-  <act:id type="guid">8ed1ff874c488bed56f75ae07268127c</act:id>
+  <act:id type="new">8ed1ff874c488bed56f75ae07268127c</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -700,11 +700,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">2644143c4517a118640144fe4b44eb0d</act:parent>
+  <act:parent type="new">2644143c4517a118640144fe4b44eb0d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Diğer Stoklar</act:name>
-  <act:id type="guid">804bf7a1c825630234ba4b6f047060a4</act:id>
+  <act:id type="new">804bf7a1c825630234ba4b6f047060a4</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -718,11 +718,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">2644143c4517a118640144fe4b44eb0d</act:parent>
+  <act:parent type="new">2644143c4517a118640144fe4b44eb0d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Stok Değer Düşüklüğü Karşılığı(-)</act:name>
-  <act:id type="guid">b183ed5ef9e009eea4abf8cd3e050107</act:id>
+  <act:id type="new">b183ed5ef9e009eea4abf8cd3e050107</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -736,11 +736,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">2644143c4517a118640144fe4b44eb0d</act:parent>
+  <act:parent type="new">2644143c4517a118640144fe4b44eb0d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Verilen Sipariş Avansları</act:name>
-  <act:id type="guid">1e12b9ed01ca12d7e3eb16f9a8e7e670</act:id>
+  <act:id type="new">1e12b9ed01ca12d7e3eb16f9a8e7e670</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -754,11 +754,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">2644143c4517a118640144fe4b44eb0d</act:parent>
+  <act:parent type="new">2644143c4517a118640144fe4b44eb0d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Yıllara Yaygın İnşaat Ve Onarım Maliyetleri</act:name>
-  <act:id type="guid">134cfa66aa84bec437b1d6fc1fe7b8ce</act:id>
+  <act:id type="new">134cfa66aa84bec437b1d6fc1fe7b8ce</act:id>
   <act:type>RECEIVABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -776,11 +776,11 @@
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">35321669180472655a9037f4eb1d1909</act:parent>
+  <act:parent type="new">35321669180472655a9037f4eb1d1909</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Yıllara Yaygın İnşaat Ve Onarım Maliyetleri</act:name>
-  <act:id type="guid">58463bbbefe28492975ead01134e3e1d</act:id>
+  <act:id type="new">58463bbbefe28492975ead01134e3e1d</act:id>
   <act:type>RECEIVABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -794,11 +794,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">134cfa66aa84bec437b1d6fc1fe7b8ce</act:parent>
+  <act:parent type="new">134cfa66aa84bec437b1d6fc1fe7b8ce</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Taşeronlara Verilen Avanslar</act:name>
-  <act:id type="guid">50a7aad228b84d24e8ad5e1e68ff11c8</act:id>
+  <act:id type="new">50a7aad228b84d24e8ad5e1e68ff11c8</act:id>
   <act:type>RECEIVABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -812,11 +812,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">134cfa66aa84bec437b1d6fc1fe7b8ce</act:parent>
+  <act:parent type="new">134cfa66aa84bec437b1d6fc1fe7b8ce</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Gelecek Aylara Ait Giderler Ve Gelir Tahakkukları</act:name>
-  <act:id type="guid">9c87132660502f902740310e405c081c</act:id>
+  <act:id type="new">9c87132660502f902740310e405c081c</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -834,11 +834,11 @@
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">35321669180472655a9037f4eb1d1909</act:parent>
+  <act:parent type="new">35321669180472655a9037f4eb1d1909</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Gelecek Aylara Ait Giderler</act:name>
-  <act:id type="guid">7fbcb86938c2c058248eae55458f4800</act:id>
+  <act:id type="new">7fbcb86938c2c058248eae55458f4800</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -852,11 +852,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">9c87132660502f902740310e405c081c</act:parent>
+  <act:parent type="new">9c87132660502f902740310e405c081c</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Gelir Tahakkukları</act:name>
-  <act:id type="guid">4c85e184f56596c4eb6e470eb4a2be5d</act:id>
+  <act:id type="new">4c85e184f56596c4eb6e470eb4a2be5d</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -870,11 +870,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">9c87132660502f902740310e405c081c</act:parent>
+  <act:parent type="new">9c87132660502f902740310e405c081c</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Diğer Dönen Varlıklar</act:name>
-  <act:id type="guid">b640f2330c3516845d78e565de0a0b5b</act:id>
+  <act:id type="new">b640f2330c3516845d78e565de0a0b5b</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -892,11 +892,11 @@
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">35321669180472655a9037f4eb1d1909</act:parent>
+  <act:parent type="new">35321669180472655a9037f4eb1d1909</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Devreden Kdv</act:name>
-  <act:id type="guid">3e18abf24546428b0de35580668a8351</act:id>
+  <act:id type="new">3e18abf24546428b0de35580668a8351</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -910,11 +910,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">b640f2330c3516845d78e565de0a0b5b</act:parent>
+  <act:parent type="new">b640f2330c3516845d78e565de0a0b5b</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>İndirilecek Kdv</act:name>
-  <act:id type="guid">020bd23cbefefb01b0a17d74a03833b6</act:id>
+  <act:id type="new">020bd23cbefefb01b0a17d74a03833b6</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -928,11 +928,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">b640f2330c3516845d78e565de0a0b5b</act:parent>
+  <act:parent type="new">b640f2330c3516845d78e565de0a0b5b</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Diğer Kdv</act:name>
-  <act:id type="guid">af1cd3741d7b1cc1ec24bee4407aee8e</act:id>
+  <act:id type="new">af1cd3741d7b1cc1ec24bee4407aee8e</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -946,11 +946,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">b640f2330c3516845d78e565de0a0b5b</act:parent>
+  <act:parent type="new">b640f2330c3516845d78e565de0a0b5b</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Peşin Ödenen Vergiler Ve Fonlar</act:name>
-  <act:id type="guid">4e3277d9f8505bfaf9d35f74a6faf2bd</act:id>
+  <act:id type="new">4e3277d9f8505bfaf9d35f74a6faf2bd</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -964,11 +964,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">b640f2330c3516845d78e565de0a0b5b</act:parent>
+  <act:parent type="new">b640f2330c3516845d78e565de0a0b5b</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>İş Avansları</act:name>
-  <act:id type="guid">485bfa403470b280ff0a8d5469f8aa7f</act:id>
+  <act:id type="new">485bfa403470b280ff0a8d5469f8aa7f</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -982,11 +982,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">b640f2330c3516845d78e565de0a0b5b</act:parent>
+  <act:parent type="new">b640f2330c3516845d78e565de0a0b5b</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Personel Avansları</act:name>
-  <act:id type="guid">e7feaed34cbbebb9c7489619ca6805ee</act:id>
+  <act:id type="new">e7feaed34cbbebb9c7489619ca6805ee</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1000,11 +1000,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">b640f2330c3516845d78e565de0a0b5b</act:parent>
+  <act:parent type="new">b640f2330c3516845d78e565de0a0b5b</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Sayım Ve Tesellüm Noksanları</act:name>
-  <act:id type="guid">352937958fea391aecfc5cedef7d971e</act:id>
+  <act:id type="new">352937958fea391aecfc5cedef7d971e</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1018,11 +1018,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">b640f2330c3516845d78e565de0a0b5b</act:parent>
+  <act:parent type="new">b640f2330c3516845d78e565de0a0b5b</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Diğer Çeşitli Dönen Varlıklar</act:name>
-  <act:id type="guid">f1187628d9cf5802a88ed84cd8f19976</act:id>
+  <act:id type="new">f1187628d9cf5802a88ed84cd8f19976</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1036,11 +1036,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">b640f2330c3516845d78e565de0a0b5b</act:parent>
+  <act:parent type="new">b640f2330c3516845d78e565de0a0b5b</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Diğer Dönen Varlıklar Karşılığı(-)</act:name>
-  <act:id type="guid">ccb822ae9c806673f45d2c8b7daadb89</act:id>
+  <act:id type="new">ccb822ae9c806673f45d2c8b7daadb89</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1054,11 +1054,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">b640f2330c3516845d78e565de0a0b5b</act:parent>
+  <act:parent type="new">b640f2330c3516845d78e565de0a0b5b</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Duran Varlıklar</act:name>
-  <act:id type="guid">d78c0c0e414677bad10c19f2bf7511c0</act:id>
+  <act:id type="new">d78c0c0e414677bad10c19f2bf7511c0</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1076,11 +1076,11 @@
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">f03b8164819b8e8a525102a3f30ac51a</act:parent>
+  <act:parent type="new">f03b8164819b8e8a525102a3f30ac51a</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Ticari Alacaklar</act:name>
-  <act:id type="guid">564bd9345853fe23e625bff5d43f7b87</act:id>
+  <act:id type="new">564bd9345853fe23e625bff5d43f7b87</act:id>
   <act:type>RECEIVABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1098,11 +1098,11 @@
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">d78c0c0e414677bad10c19f2bf7511c0</act:parent>
+  <act:parent type="new">d78c0c0e414677bad10c19f2bf7511c0</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Alıcılar</act:name>
-  <act:id type="guid">2672f4c8021a7ef1ec89d8e559ec8b95</act:id>
+  <act:id type="new">2672f4c8021a7ef1ec89d8e559ec8b95</act:id>
   <act:type>RECEIVABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1116,11 +1116,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">564bd9345853fe23e625bff5d43f7b87</act:parent>
+  <act:parent type="new">564bd9345853fe23e625bff5d43f7b87</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Alacak Senetleri</act:name>
-  <act:id type="guid">9a8612ba325eb1dcbf8772e2042125e8</act:id>
+  <act:id type="new">9a8612ba325eb1dcbf8772e2042125e8</act:id>
   <act:type>RECEIVABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1134,11 +1134,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">564bd9345853fe23e625bff5d43f7b87</act:parent>
+  <act:parent type="new">564bd9345853fe23e625bff5d43f7b87</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Alacak Senetleri Reeskontu(-)</act:name>
-  <act:id type="guid">467332ee24b3a4b72a45418dfe290a2f</act:id>
+  <act:id type="new">467332ee24b3a4b72a45418dfe290a2f</act:id>
   <act:type>RECEIVABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1152,11 +1152,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">564bd9345853fe23e625bff5d43f7b87</act:parent>
+  <act:parent type="new">564bd9345853fe23e625bff5d43f7b87</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Verilen Depozito Ve Teminatlar</act:name>
-  <act:id type="guid">47d2118a32d09c0064c9b790837a458e</act:id>
+  <act:id type="new">47d2118a32d09c0064c9b790837a458e</act:id>
   <act:type>RECEIVABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1170,11 +1170,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">564bd9345853fe23e625bff5d43f7b87</act:parent>
+  <act:parent type="new">564bd9345853fe23e625bff5d43f7b87</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Şüpheli Ticari Alacaklar Karşılığı(-)</act:name>
-  <act:id type="guid">4dd56b2f60bb0c724441cc2783900794</act:id>
+  <act:id type="new">4dd56b2f60bb0c724441cc2783900794</act:id>
   <act:type>RECEIVABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1188,11 +1188,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">564bd9345853fe23e625bff5d43f7b87</act:parent>
+  <act:parent type="new">564bd9345853fe23e625bff5d43f7b87</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Diğer Alacaklar</act:name>
-  <act:id type="guid">5b568eae5647c63bdd95ec0f32b04505</act:id>
+  <act:id type="new">5b568eae5647c63bdd95ec0f32b04505</act:id>
   <act:type>RECEIVABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1210,11 +1210,11 @@
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">d78c0c0e414677bad10c19f2bf7511c0</act:parent>
+  <act:parent type="new">d78c0c0e414677bad10c19f2bf7511c0</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Ortaklardan Alacaklar</act:name>
-  <act:id type="guid">7fe5b01d62146a1642989c65a610edc0</act:id>
+  <act:id type="new">7fe5b01d62146a1642989c65a610edc0</act:id>
   <act:type>RECEIVABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1228,11 +1228,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">5b568eae5647c63bdd95ec0f32b04505</act:parent>
+  <act:parent type="new">5b568eae5647c63bdd95ec0f32b04505</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>İştiraklerden Alacaklar</act:name>
-  <act:id type="guid">fceac538cc804489c175a6cb9b52463a</act:id>
+  <act:id type="new">fceac538cc804489c175a6cb9b52463a</act:id>
   <act:type>RECEIVABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1246,11 +1246,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">5b568eae5647c63bdd95ec0f32b04505</act:parent>
+  <act:parent type="new">5b568eae5647c63bdd95ec0f32b04505</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Bağlı Ortaklıklardan Alacaklar</act:name>
-  <act:id type="guid">66a650db51a1841f5c9ad0944d82c845</act:id>
+  <act:id type="new">66a650db51a1841f5c9ad0944d82c845</act:id>
   <act:type>RECEIVABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1264,11 +1264,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">5b568eae5647c63bdd95ec0f32b04505</act:parent>
+  <act:parent type="new">5b568eae5647c63bdd95ec0f32b04505</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Personelden Alacaklar</act:name>
-  <act:id type="guid">11cd62ed2aec4cd74db28244faf18c58</act:id>
+  <act:id type="new">11cd62ed2aec4cd74db28244faf18c58</act:id>
   <act:type>RECEIVABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1282,11 +1282,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">5b568eae5647c63bdd95ec0f32b04505</act:parent>
+  <act:parent type="new">5b568eae5647c63bdd95ec0f32b04505</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Diğer Çeşitli Alacaklar</act:name>
-  <act:id type="guid">053de85e47cc5cadb752d23ff3eb6a2d</act:id>
+  <act:id type="new">053de85e47cc5cadb752d23ff3eb6a2d</act:id>
   <act:type>RECEIVABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1300,11 +1300,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">5b568eae5647c63bdd95ec0f32b04505</act:parent>
+  <act:parent type="new">5b568eae5647c63bdd95ec0f32b04505</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Diğer Alacak Senetleri Reeskontu(-)</act:name>
-  <act:id type="guid">4632cf7f51e2103cd02422371d79996d</act:id>
+  <act:id type="new">4632cf7f51e2103cd02422371d79996d</act:id>
   <act:type>RECEIVABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1318,11 +1318,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">5b568eae5647c63bdd95ec0f32b04505</act:parent>
+  <act:parent type="new">5b568eae5647c63bdd95ec0f32b04505</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Şüpheli Diğer Alacaklar Karşılığı(-)</act:name>
-  <act:id type="guid">b47840c42b7fcdc938e1a0d4220e815c</act:id>
+  <act:id type="new">b47840c42b7fcdc938e1a0d4220e815c</act:id>
   <act:type>RECEIVABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1336,11 +1336,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">5b568eae5647c63bdd95ec0f32b04505</act:parent>
+  <act:parent type="new">5b568eae5647c63bdd95ec0f32b04505</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Mali Duran Varlıklar</act:name>
-  <act:id type="guid">8f06e4decc3d89f32ea93a41d73cebc4</act:id>
+  <act:id type="new">8f06e4decc3d89f32ea93a41d73cebc4</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1358,11 +1358,11 @@
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">d78c0c0e414677bad10c19f2bf7511c0</act:parent>
+  <act:parent type="new">d78c0c0e414677bad10c19f2bf7511c0</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Bağlı Menkul Kıymetler</act:name>
-  <act:id type="guid">dfecbb6442819b1f777828d205845e5b</act:id>
+  <act:id type="new">dfecbb6442819b1f777828d205845e5b</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1376,11 +1376,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">8f06e4decc3d89f32ea93a41d73cebc4</act:parent>
+  <act:parent type="new">8f06e4decc3d89f32ea93a41d73cebc4</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Bağlı Menkul Kıymetler Değer Düşüklüğü Karşılığı(-)</act:name>
-  <act:id type="guid">6f4baabfa6a45f74b5e30432599e3361</act:id>
+  <act:id type="new">6f4baabfa6a45f74b5e30432599e3361</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1394,11 +1394,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">8f06e4decc3d89f32ea93a41d73cebc4</act:parent>
+  <act:parent type="new">8f06e4decc3d89f32ea93a41d73cebc4</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>İştirakler</act:name>
-  <act:id type="guid">43eb5f88b4fe8cbd6f628cd13e50806a</act:id>
+  <act:id type="new">43eb5f88b4fe8cbd6f628cd13e50806a</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1412,11 +1412,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">8f06e4decc3d89f32ea93a41d73cebc4</act:parent>
+  <act:parent type="new">8f06e4decc3d89f32ea93a41d73cebc4</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>İştiraklere Sermaye Taahhütleri(-)</act:name>
-  <act:id type="guid">a5f16f6f0a3fe1a44b85eaec2ff15b15</act:id>
+  <act:id type="new">a5f16f6f0a3fe1a44b85eaec2ff15b15</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1430,11 +1430,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">8f06e4decc3d89f32ea93a41d73cebc4</act:parent>
+  <act:parent type="new">8f06e4decc3d89f32ea93a41d73cebc4</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>İştirakler Sermaye Payları Değer Düşüklüğü Karşılığı(-)</act:name>
-  <act:id type="guid">11eabe5f507fe96568e857c8918dd897</act:id>
+  <act:id type="new">11eabe5f507fe96568e857c8918dd897</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1448,11 +1448,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">8f06e4decc3d89f32ea93a41d73cebc4</act:parent>
+  <act:parent type="new">8f06e4decc3d89f32ea93a41d73cebc4</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Bağlı Ortaklıklar</act:name>
-  <act:id type="guid">85a1f8febc486f198e1a26674d466f59</act:id>
+  <act:id type="new">85a1f8febc486f198e1a26674d466f59</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1466,11 +1466,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">8f06e4decc3d89f32ea93a41d73cebc4</act:parent>
+  <act:parent type="new">8f06e4decc3d89f32ea93a41d73cebc4</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Bağlı Ortaklıklara Sermaye Taahhütleri(-)</act:name>
-  <act:id type="guid">c4269a4f793c2c436439dfaffa39364b</act:id>
+  <act:id type="new">c4269a4f793c2c436439dfaffa39364b</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1484,11 +1484,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">8f06e4decc3d89f32ea93a41d73cebc4</act:parent>
+  <act:parent type="new">8f06e4decc3d89f32ea93a41d73cebc4</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Bağlı Ortaklıklar Sermaye Payları Değer Düşüklüğü Karşılığı(-)</act:name>
-  <act:id type="guid">060b522fa691a0395abafa068bdb515f</act:id>
+  <act:id type="new">060b522fa691a0395abafa068bdb515f</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1502,11 +1502,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">8f06e4decc3d89f32ea93a41d73cebc4</act:parent>
+  <act:parent type="new">8f06e4decc3d89f32ea93a41d73cebc4</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Diğer Mali Duran Varlıklar</act:name>
-  <act:id type="guid">7ca231b019fcf0d5759687d2dd10fcee</act:id>
+  <act:id type="new">7ca231b019fcf0d5759687d2dd10fcee</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1520,11 +1520,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">8f06e4decc3d89f32ea93a41d73cebc4</act:parent>
+  <act:parent type="new">8f06e4decc3d89f32ea93a41d73cebc4</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Diğer Mali Duran Varlıklar Karşılığı(-)</act:name>
-  <act:id type="guid">90f17496d0d2d924abdadc6de5204f77</act:id>
+  <act:id type="new">90f17496d0d2d924abdadc6de5204f77</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1538,11 +1538,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">8f06e4decc3d89f32ea93a41d73cebc4</act:parent>
+  <act:parent type="new">8f06e4decc3d89f32ea93a41d73cebc4</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Maddi Duran Varlıklar</act:name>
-  <act:id type="guid">0d9ec0b9bad25b99e3de615fa5c29320</act:id>
+  <act:id type="new">0d9ec0b9bad25b99e3de615fa5c29320</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1560,11 +1560,11 @@
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">d78c0c0e414677bad10c19f2bf7511c0</act:parent>
+  <act:parent type="new">d78c0c0e414677bad10c19f2bf7511c0</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Arazi Ve Arsalar</act:name>
-  <act:id type="guid">dca6d4ab437b4e1c028bbaa61e2e9d69</act:id>
+  <act:id type="new">dca6d4ab437b4e1c028bbaa61e2e9d69</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1578,11 +1578,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">0d9ec0b9bad25b99e3de615fa5c29320</act:parent>
+  <act:parent type="new">0d9ec0b9bad25b99e3de615fa5c29320</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Yer Altı Ve Yer Üstü Düzenleri</act:name>
-  <act:id type="guid">c0ff7e666fc0b294f4bae40a9ac46165</act:id>
+  <act:id type="new">c0ff7e666fc0b294f4bae40a9ac46165</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1596,11 +1596,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">0d9ec0b9bad25b99e3de615fa5c29320</act:parent>
+  <act:parent type="new">0d9ec0b9bad25b99e3de615fa5c29320</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Binalar</act:name>
-  <act:id type="guid">a7d7e999980e0111a8c5a4e5bd10a00e</act:id>
+  <act:id type="new">a7d7e999980e0111a8c5a4e5bd10a00e</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1614,11 +1614,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">0d9ec0b9bad25b99e3de615fa5c29320</act:parent>
+  <act:parent type="new">0d9ec0b9bad25b99e3de615fa5c29320</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Tesis, Makine Ve Cihazlar</act:name>
-  <act:id type="guid">3df92757c5c70f993752ab55549cda4a</act:id>
+  <act:id type="new">3df92757c5c70f993752ab55549cda4a</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1632,11 +1632,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">0d9ec0b9bad25b99e3de615fa5c29320</act:parent>
+  <act:parent type="new">0d9ec0b9bad25b99e3de615fa5c29320</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Taşıtlar</act:name>
-  <act:id type="guid">21a43c12acea17325fe16d971cc84e18</act:id>
+  <act:id type="new">21a43c12acea17325fe16d971cc84e18</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1650,11 +1650,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">0d9ec0b9bad25b99e3de615fa5c29320</act:parent>
+  <act:parent type="new">0d9ec0b9bad25b99e3de615fa5c29320</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Demirbaşlar</act:name>
-  <act:id type="guid">108a5530bb5b2b3bb46a28463bf07998</act:id>
+  <act:id type="new">108a5530bb5b2b3bb46a28463bf07998</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1668,11 +1668,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">0d9ec0b9bad25b99e3de615fa5c29320</act:parent>
+  <act:parent type="new">0d9ec0b9bad25b99e3de615fa5c29320</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Diğer Maddi Duran Varlıklar</act:name>
-  <act:id type="guid">438653299d623d673292813bea053ad0</act:id>
+  <act:id type="new">438653299d623d673292813bea053ad0</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1686,11 +1686,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">0d9ec0b9bad25b99e3de615fa5c29320</act:parent>
+  <act:parent type="new">0d9ec0b9bad25b99e3de615fa5c29320</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Birikmiş Amortismanlar(-)</act:name>
-  <act:id type="guid">dee5e7fa89f9a6dc57fbc5d627bf26d9</act:id>
+  <act:id type="new">dee5e7fa89f9a6dc57fbc5d627bf26d9</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1704,11 +1704,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">0d9ec0b9bad25b99e3de615fa5c29320</act:parent>
+  <act:parent type="new">0d9ec0b9bad25b99e3de615fa5c29320</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Yapılmakta Olan Yatırımlar</act:name>
-  <act:id type="guid">d786544858b8f46673fcd61517b8523f</act:id>
+  <act:id type="new">d786544858b8f46673fcd61517b8523f</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1722,11 +1722,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">0d9ec0b9bad25b99e3de615fa5c29320</act:parent>
+  <act:parent type="new">0d9ec0b9bad25b99e3de615fa5c29320</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Verilen Avanslar</act:name>
-  <act:id type="guid">0437719dc1d7380b8ec971c0d60f59dd</act:id>
+  <act:id type="new">0437719dc1d7380b8ec971c0d60f59dd</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1740,11 +1740,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">0d9ec0b9bad25b99e3de615fa5c29320</act:parent>
+  <act:parent type="new">0d9ec0b9bad25b99e3de615fa5c29320</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Maddi Olmayan Duran Varlıklar</act:name>
-  <act:id type="guid">d4fcabb4fa7720344bd3724c74b3fbde</act:id>
+  <act:id type="new">d4fcabb4fa7720344bd3724c74b3fbde</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1762,11 +1762,11 @@
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">d78c0c0e414677bad10c19f2bf7511c0</act:parent>
+  <act:parent type="new">d78c0c0e414677bad10c19f2bf7511c0</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Haklar</act:name>
-  <act:id type="guid">501ead3f1f96076ba04a41c9d0b0b60e</act:id>
+  <act:id type="new">501ead3f1f96076ba04a41c9d0b0b60e</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1780,11 +1780,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">d4fcabb4fa7720344bd3724c74b3fbde</act:parent>
+  <act:parent type="new">d4fcabb4fa7720344bd3724c74b3fbde</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Şerefiye</act:name>
-  <act:id type="guid">5032810708bbfdef622060cf9e4a90b6</act:id>
+  <act:id type="new">5032810708bbfdef622060cf9e4a90b6</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1798,11 +1798,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">d4fcabb4fa7720344bd3724c74b3fbde</act:parent>
+  <act:parent type="new">d4fcabb4fa7720344bd3724c74b3fbde</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Kuruluş Ve Örgütlenme Giderleri</act:name>
-  <act:id type="guid">327f60468ddde2cf6342ebcbe922dd88</act:id>
+  <act:id type="new">327f60468ddde2cf6342ebcbe922dd88</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1816,11 +1816,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">d4fcabb4fa7720344bd3724c74b3fbde</act:parent>
+  <act:parent type="new">d4fcabb4fa7720344bd3724c74b3fbde</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Araştırma Ve Geliştirme Giderleri</act:name>
-  <act:id type="guid">cca50439a5964e91d8cd248d94d0c402</act:id>
+  <act:id type="new">cca50439a5964e91d8cd248d94d0c402</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1834,11 +1834,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">d4fcabb4fa7720344bd3724c74b3fbde</act:parent>
+  <act:parent type="new">d4fcabb4fa7720344bd3724c74b3fbde</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Özel Maliyetler</act:name>
-  <act:id type="guid">e7d3d2c82ded5c9304a341969a1c65d9</act:id>
+  <act:id type="new">e7d3d2c82ded5c9304a341969a1c65d9</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1852,11 +1852,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">d4fcabb4fa7720344bd3724c74b3fbde</act:parent>
+  <act:parent type="new">d4fcabb4fa7720344bd3724c74b3fbde</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Diğer Maddi Olmayan Duran Varlıklar</act:name>
-  <act:id type="guid">88fbaa51b23449ed69c2baa0bf48bc65</act:id>
+  <act:id type="new">88fbaa51b23449ed69c2baa0bf48bc65</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1870,11 +1870,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">d4fcabb4fa7720344bd3724c74b3fbde</act:parent>
+  <act:parent type="new">d4fcabb4fa7720344bd3724c74b3fbde</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Birikmiş Amortismanlar(-)</act:name>
-  <act:id type="guid">308c276693e437152376bbecaae65705</act:id>
+  <act:id type="new">308c276693e437152376bbecaae65705</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1888,11 +1888,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">d4fcabb4fa7720344bd3724c74b3fbde</act:parent>
+  <act:parent type="new">d4fcabb4fa7720344bd3724c74b3fbde</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Verilen Avanslar</act:name>
-  <act:id type="guid">dc157f936fe94048af731cd7dbca826a</act:id>
+  <act:id type="new">dc157f936fe94048af731cd7dbca826a</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1906,11 +1906,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">d4fcabb4fa7720344bd3724c74b3fbde</act:parent>
+  <act:parent type="new">d4fcabb4fa7720344bd3724c74b3fbde</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Özel Tükenmeye Tabi Varlıklar</act:name>
-  <act:id type="guid">5029d3f1f1f44d65b399fe9688070c8f</act:id>
+  <act:id type="new">5029d3f1f1f44d65b399fe9688070c8f</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1928,11 +1928,11 @@
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">d78c0c0e414677bad10c19f2bf7511c0</act:parent>
+  <act:parent type="new">d78c0c0e414677bad10c19f2bf7511c0</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Arama Giderleri</act:name>
-  <act:id type="guid">4532f55b1d3dbea0e92ba889de519919</act:id>
+  <act:id type="new">4532f55b1d3dbea0e92ba889de519919</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1946,11 +1946,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">5029d3f1f1f44d65b399fe9688070c8f</act:parent>
+  <act:parent type="new">5029d3f1f1f44d65b399fe9688070c8f</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Hazırlık Ve Geliştirme Giderleri</act:name>
-  <act:id type="guid">9e497fe70cd6ddfc74a129b6e5350870</act:id>
+  <act:id type="new">9e497fe70cd6ddfc74a129b6e5350870</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1964,11 +1964,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">5029d3f1f1f44d65b399fe9688070c8f</act:parent>
+  <act:parent type="new">5029d3f1f1f44d65b399fe9688070c8f</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Diğer Özel Tükenmeye Tabi Varlıklar</act:name>
-  <act:id type="guid">a5b96693a04cbd8130e9eb79d792f3bf</act:id>
+  <act:id type="new">a5b96693a04cbd8130e9eb79d792f3bf</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1982,11 +1982,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">5029d3f1f1f44d65b399fe9688070c8f</act:parent>
+  <act:parent type="new">5029d3f1f1f44d65b399fe9688070c8f</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Birikmiş Tükenme Payları(-)</act:name>
-  <act:id type="guid">d299eba2fe1d4f52fed464bb8bbad718</act:id>
+  <act:id type="new">d299eba2fe1d4f52fed464bb8bbad718</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2000,11 +2000,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">5029d3f1f1f44d65b399fe9688070c8f</act:parent>
+  <act:parent type="new">5029d3f1f1f44d65b399fe9688070c8f</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Verilen Avanslar</act:name>
-  <act:id type="guid">b5621b34d634863df41780fa6239b1db</act:id>
+  <act:id type="new">b5621b34d634863df41780fa6239b1db</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2018,11 +2018,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">5029d3f1f1f44d65b399fe9688070c8f</act:parent>
+  <act:parent type="new">5029d3f1f1f44d65b399fe9688070c8f</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Gelecek Yıllara Ait Giderler Ve Gelir Tahakkukları</act:name>
-  <act:id type="guid">27ce8eddc74ad43ec8ff16295662009c</act:id>
+  <act:id type="new">27ce8eddc74ad43ec8ff16295662009c</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2040,11 +2040,11 @@
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">d78c0c0e414677bad10c19f2bf7511c0</act:parent>
+  <act:parent type="new">d78c0c0e414677bad10c19f2bf7511c0</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Gelecek Yıllara Ait Giderler</act:name>
-  <act:id type="guid">c07434a706aa79875588c3309c98f2c3</act:id>
+  <act:id type="new">c07434a706aa79875588c3309c98f2c3</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2058,11 +2058,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">27ce8eddc74ad43ec8ff16295662009c</act:parent>
+  <act:parent type="new">27ce8eddc74ad43ec8ff16295662009c</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Gelir Tahakkukları</act:name>
-  <act:id type="guid">1b6fd65f635423f87de5abee6e85a545</act:id>
+  <act:id type="new">1b6fd65f635423f87de5abee6e85a545</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2076,11 +2076,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">27ce8eddc74ad43ec8ff16295662009c</act:parent>
+  <act:parent type="new">27ce8eddc74ad43ec8ff16295662009c</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Diğer Duran Varlıklar</act:name>
-  <act:id type="guid">96579361fbb41ad5434460f11033f8c9</act:id>
+  <act:id type="new">96579361fbb41ad5434460f11033f8c9</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2098,11 +2098,11 @@
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">d78c0c0e414677bad10c19f2bf7511c0</act:parent>
+  <act:parent type="new">d78c0c0e414677bad10c19f2bf7511c0</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Gelecek Yıllarda İndirilecek Kdv</act:name>
-  <act:id type="guid">7cea35536bea0678b617e39666e034e1</act:id>
+  <act:id type="new">7cea35536bea0678b617e39666e034e1</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2116,11 +2116,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">96579361fbb41ad5434460f11033f8c9</act:parent>
+  <act:parent type="new">96579361fbb41ad5434460f11033f8c9</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Diğer Kdv</act:name>
-  <act:id type="guid">9c29da924d35ee301db275ebd60b2553</act:id>
+  <act:id type="new">9c29da924d35ee301db275ebd60b2553</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2134,11 +2134,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">96579361fbb41ad5434460f11033f8c9</act:parent>
+  <act:parent type="new">96579361fbb41ad5434460f11033f8c9</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Gelecek Yıllar İhtiyacı Stoklar</act:name>
-  <act:id type="guid">a656c8f0b68eae902b1b552f66a5bd59</act:id>
+  <act:id type="new">a656c8f0b68eae902b1b552f66a5bd59</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2152,11 +2152,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">96579361fbb41ad5434460f11033f8c9</act:parent>
+  <act:parent type="new">96579361fbb41ad5434460f11033f8c9</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Elden Çıkarılacak Stoklar Ve Maddi Duran Varlıklar</act:name>
-  <act:id type="guid">546a7580fd411e34c19691161719fe7f</act:id>
+  <act:id type="new">546a7580fd411e34c19691161719fe7f</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2170,11 +2170,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">96579361fbb41ad5434460f11033f8c9</act:parent>
+  <act:parent type="new">96579361fbb41ad5434460f11033f8c9</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Peşin Ödenen Vergi Ve Fonlar</act:name>
-  <act:id type="guid">33b0bb0935f8e59a82e231078e21b87b</act:id>
+  <act:id type="new">33b0bb0935f8e59a82e231078e21b87b</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2188,11 +2188,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">96579361fbb41ad5434460f11033f8c9</act:parent>
+  <act:parent type="new">96579361fbb41ad5434460f11033f8c9</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Diğer Çeşitli Duran Varlıklar</act:name>
-  <act:id type="guid">a0b27a74d96d6bce3372cff3a5a8e75d</act:id>
+  <act:id type="new">a0b27a74d96d6bce3372cff3a5a8e75d</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2206,11 +2206,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">96579361fbb41ad5434460f11033f8c9</act:parent>
+  <act:parent type="new">96579361fbb41ad5434460f11033f8c9</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Stok Değer Düşüklüğü Karşılığı(-)</act:name>
-  <act:id type="guid">473dca513db7b9eae0b56ef4b40e7b47</act:id>
+  <act:id type="new">473dca513db7b9eae0b56ef4b40e7b47</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2224,11 +2224,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">96579361fbb41ad5434460f11033f8c9</act:parent>
+  <act:parent type="new">96579361fbb41ad5434460f11033f8c9</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Birikmiş Amortismanlar(-)</act:name>
-  <act:id type="guid">12810cf081d5cecd2744952ced5be0a1</act:id>
+  <act:id type="new">12810cf081d5cecd2744952ced5be0a1</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2242,11 +2242,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">96579361fbb41ad5434460f11033f8c9</act:parent>
+  <act:parent type="new">96579361fbb41ad5434460f11033f8c9</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Kısa Vadeli Yabancı Kaynaklar</act:name>
-  <act:id type="guid">42b82e96f3d45975bceb61629c3e0d1d</act:id>
+  <act:id type="new">42b82e96f3d45975bceb61629c3e0d1d</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2264,11 +2264,11 @@
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">f03b8164819b8e8a525102a3f30ac51a</act:parent>
+  <act:parent type="new">f03b8164819b8e8a525102a3f30ac51a</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Mali Borçlar</act:name>
-  <act:id type="guid">1758d7f3c2e8185a10f63731b24e07fe</act:id>
+  <act:id type="new">1758d7f3c2e8185a10f63731b24e07fe</act:id>
   <act:type>PAYABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2286,11 +2286,11 @@
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">42b82e96f3d45975bceb61629c3e0d1d</act:parent>
+  <act:parent type="new">42b82e96f3d45975bceb61629c3e0d1d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Banka Kredileri</act:name>
-  <act:id type="guid">22e5181ba5c3b11ba38a32e974ed3e0b</act:id>
+  <act:id type="new">22e5181ba5c3b11ba38a32e974ed3e0b</act:id>
   <act:type>PAYABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2304,11 +2304,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">1758d7f3c2e8185a10f63731b24e07fe</act:parent>
+  <act:parent type="new">1758d7f3c2e8185a10f63731b24e07fe</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Uzun Vadeli Kredilerin Anapara Taksitleri Ve Faizleri</act:name>
-  <act:id type="guid">87fa5ada43834fbb1268dd43d99e1db4</act:id>
+  <act:id type="new">87fa5ada43834fbb1268dd43d99e1db4</act:id>
   <act:type>PAYABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2322,11 +2322,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">1758d7f3c2e8185a10f63731b24e07fe</act:parent>
+  <act:parent type="new">1758d7f3c2e8185a10f63731b24e07fe</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Tahvil Anapara Borç, Taksit Ve Faizleri</act:name>
-  <act:id type="guid">f1a9a0a91d3cb8d7c8c1c30dfc31e40d</act:id>
+  <act:id type="new">f1a9a0a91d3cb8d7c8c1c30dfc31e40d</act:id>
   <act:type>PAYABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2340,11 +2340,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">1758d7f3c2e8185a10f63731b24e07fe</act:parent>
+  <act:parent type="new">1758d7f3c2e8185a10f63731b24e07fe</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Çıkarılan Bonolar Ve Senetler</act:name>
-  <act:id type="guid">48260adc1194b04ff6b8a4bceb054856</act:id>
+  <act:id type="new">48260adc1194b04ff6b8a4bceb054856</act:id>
   <act:type>PAYABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2358,11 +2358,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">1758d7f3c2e8185a10f63731b24e07fe</act:parent>
+  <act:parent type="new">1758d7f3c2e8185a10f63731b24e07fe</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Çıkarılmış Diğer Menkul Kıymetler</act:name>
-  <act:id type="guid">3eec01fe783204839d080bcc1a04dede</act:id>
+  <act:id type="new">3eec01fe783204839d080bcc1a04dede</act:id>
   <act:type>PAYABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2376,11 +2376,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">1758d7f3c2e8185a10f63731b24e07fe</act:parent>
+  <act:parent type="new">1758d7f3c2e8185a10f63731b24e07fe</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Menkul Kıymetler İhraç Farkı(-)</act:name>
-  <act:id type="guid">f6bcd167a306cc5f4b344875fdf2d77a</act:id>
+  <act:id type="new">f6bcd167a306cc5f4b344875fdf2d77a</act:id>
   <act:type>PAYABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2394,11 +2394,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">1758d7f3c2e8185a10f63731b24e07fe</act:parent>
+  <act:parent type="new">1758d7f3c2e8185a10f63731b24e07fe</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Diğer Mali Borçlar</act:name>
-  <act:id type="guid">4afb8e00efb13d846ea57c3ad9bebb57</act:id>
+  <act:id type="new">4afb8e00efb13d846ea57c3ad9bebb57</act:id>
   <act:type>PAYABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2412,11 +2412,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">1758d7f3c2e8185a10f63731b24e07fe</act:parent>
+  <act:parent type="new">1758d7f3c2e8185a10f63731b24e07fe</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Ticari Borçlar</act:name>
-  <act:id type="guid">0cdeebe485559884632dd8482d5cd904</act:id>
+  <act:id type="new">0cdeebe485559884632dd8482d5cd904</act:id>
   <act:type>PAYABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2434,11 +2434,11 @@
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">42b82e96f3d45975bceb61629c3e0d1d</act:parent>
+  <act:parent type="new">42b82e96f3d45975bceb61629c3e0d1d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Satıcılar</act:name>
-  <act:id type="guid">e80aae26332b8f94259a39a876d17155</act:id>
+  <act:id type="new">e80aae26332b8f94259a39a876d17155</act:id>
   <act:type>PAYABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2452,11 +2452,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">0cdeebe485559884632dd8482d5cd904</act:parent>
+  <act:parent type="new">0cdeebe485559884632dd8482d5cd904</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Borç Senetleri</act:name>
-  <act:id type="guid">8c5db96bca8884340bb8d55b241455d7</act:id>
+  <act:id type="new">8c5db96bca8884340bb8d55b241455d7</act:id>
   <act:type>PAYABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2470,11 +2470,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">0cdeebe485559884632dd8482d5cd904</act:parent>
+  <act:parent type="new">0cdeebe485559884632dd8482d5cd904</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Borç Senetleri Reeskontu(-)</act:name>
-  <act:id type="guid">dd91dd7bddc9478441fde8d2afc548cf</act:id>
+  <act:id type="new">dd91dd7bddc9478441fde8d2afc548cf</act:id>
   <act:type>PAYABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2488,11 +2488,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">0cdeebe485559884632dd8482d5cd904</act:parent>
+  <act:parent type="new">0cdeebe485559884632dd8482d5cd904</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Alınan Depozito Ve Teminatlar</act:name>
-  <act:id type="guid">843c940c18c12400a4fbbed97c4f70d6</act:id>
+  <act:id type="new">843c940c18c12400a4fbbed97c4f70d6</act:id>
   <act:type>PAYABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2506,11 +2506,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">0cdeebe485559884632dd8482d5cd904</act:parent>
+  <act:parent type="new">0cdeebe485559884632dd8482d5cd904</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Diğer Ticari Borçlar</act:name>
-  <act:id type="guid">be997fbd94c309e4784fd6d6f6163e8f</act:id>
+  <act:id type="new">be997fbd94c309e4784fd6d6f6163e8f</act:id>
   <act:type>PAYABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2524,11 +2524,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">0cdeebe485559884632dd8482d5cd904</act:parent>
+  <act:parent type="new">0cdeebe485559884632dd8482d5cd904</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Diğer Borçlar</act:name>
-  <act:id type="guid">b2562eb44257574baf7d12d97a8c9d23</act:id>
+  <act:id type="new">b2562eb44257574baf7d12d97a8c9d23</act:id>
   <act:type>PAYABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2546,11 +2546,11 @@
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">42b82e96f3d45975bceb61629c3e0d1d</act:parent>
+  <act:parent type="new">42b82e96f3d45975bceb61629c3e0d1d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Ortaklara Borçlar</act:name>
-  <act:id type="guid">44d06f4738ec22e32325ee2134f90854</act:id>
+  <act:id type="new">44d06f4738ec22e32325ee2134f90854</act:id>
   <act:type>PAYABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2564,11 +2564,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">b2562eb44257574baf7d12d97a8c9d23</act:parent>
+  <act:parent type="new">b2562eb44257574baf7d12d97a8c9d23</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>İştiraklere Borçlar</act:name>
-  <act:id type="guid">3b21cc768f0a81d12f898e51cc9d3e3c</act:id>
+  <act:id type="new">3b21cc768f0a81d12f898e51cc9d3e3c</act:id>
   <act:type>PAYABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2582,11 +2582,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">b2562eb44257574baf7d12d97a8c9d23</act:parent>
+  <act:parent type="new">b2562eb44257574baf7d12d97a8c9d23</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Bağlı Ortaklıklara Borçlar</act:name>
-  <act:id type="guid">5175e8afe4574aecb294912b06c95e67</act:id>
+  <act:id type="new">5175e8afe4574aecb294912b06c95e67</act:id>
   <act:type>PAYABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2600,11 +2600,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">b2562eb44257574baf7d12d97a8c9d23</act:parent>
+  <act:parent type="new">b2562eb44257574baf7d12d97a8c9d23</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Personele Borçlar</act:name>
-  <act:id type="guid">2fa0f511e852e6f0b4de0ce532438c03</act:id>
+  <act:id type="new">2fa0f511e852e6f0b4de0ce532438c03</act:id>
   <act:type>PAYABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2618,11 +2618,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">b2562eb44257574baf7d12d97a8c9d23</act:parent>
+  <act:parent type="new">b2562eb44257574baf7d12d97a8c9d23</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Diğer Çeşitli Borçlar</act:name>
-  <act:id type="guid">9ef359faaa97dc39380eb97770e98aa0</act:id>
+  <act:id type="new">9ef359faaa97dc39380eb97770e98aa0</act:id>
   <act:type>PAYABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2636,11 +2636,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">b2562eb44257574baf7d12d97a8c9d23</act:parent>
+  <act:parent type="new">b2562eb44257574baf7d12d97a8c9d23</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Diğer Borç Senetleri Reeskontu(-)</act:name>
-  <act:id type="guid">46db02e10e67c6a9fa83e3cafa98b597</act:id>
+  <act:id type="new">46db02e10e67c6a9fa83e3cafa98b597</act:id>
   <act:type>PAYABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2654,11 +2654,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">b2562eb44257574baf7d12d97a8c9d23</act:parent>
+  <act:parent type="new">b2562eb44257574baf7d12d97a8c9d23</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Alınan Avanslar</act:name>
-  <act:id type="guid">5155a53e41c159b2c633c9ecb10af6dd</act:id>
+  <act:id type="new">5155a53e41c159b2c633c9ecb10af6dd</act:id>
   <act:type>PAYABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2676,11 +2676,11 @@
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">42b82e96f3d45975bceb61629c3e0d1d</act:parent>
+  <act:parent type="new">42b82e96f3d45975bceb61629c3e0d1d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Alınan Sipariş Avansları</act:name>
-  <act:id type="guid">d27047486e5bf64650d0832dac3c3bda</act:id>
+  <act:id type="new">d27047486e5bf64650d0832dac3c3bda</act:id>
   <act:type>PAYABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2694,11 +2694,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">5155a53e41c159b2c633c9ecb10af6dd</act:parent>
+  <act:parent type="new">5155a53e41c159b2c633c9ecb10af6dd</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Alınan Diğer Avanslar</act:name>
-  <act:id type="guid">00a78cd4914f025b6d0e59c9e209d56c</act:id>
+  <act:id type="new">00a78cd4914f025b6d0e59c9e209d56c</act:id>
   <act:type>PAYABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2712,11 +2712,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">5155a53e41c159b2c633c9ecb10af6dd</act:parent>
+  <act:parent type="new">5155a53e41c159b2c633c9ecb10af6dd</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Yıllara Yaygın İnşaat Ve Onarım Hakedişleri</act:name>
-  <act:id type="guid">9543860aea9c25b1517fbaef97b2b0c5</act:id>
+  <act:id type="new">9543860aea9c25b1517fbaef97b2b0c5</act:id>
   <act:type>PAYABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2734,11 +2734,11 @@
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">42b82e96f3d45975bceb61629c3e0d1d</act:parent>
+  <act:parent type="new">42b82e96f3d45975bceb61629c3e0d1d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Yıllara Yaygın İnşaat Ve Onarım Hakediş Bedelleri</act:name>
-  <act:id type="guid">ae2077fdcf9ee3c36a1227ea2356f417</act:id>
+  <act:id type="new">ae2077fdcf9ee3c36a1227ea2356f417</act:id>
   <act:type>PAYABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2752,11 +2752,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">9543860aea9c25b1517fbaef97b2b0c5</act:parent>
+  <act:parent type="new">9543860aea9c25b1517fbaef97b2b0c5</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Yıllara Yaygın İnşaat Enflasyon Düzeltme Hesabı</act:name>
-  <act:id type="guid">6ad17421b6d87617c963c3fac758aee0</act:id>
+  <act:id type="new">6ad17421b6d87617c963c3fac758aee0</act:id>
   <act:type>PAYABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2770,11 +2770,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">9543860aea9c25b1517fbaef97b2b0c5</act:parent>
+  <act:parent type="new">9543860aea9c25b1517fbaef97b2b0c5</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Ödenecek Vergi Ve Diğer Yükümlülükler</act:name>
-  <act:id type="guid">976f5085be45892ddba739553d6febb2</act:id>
+  <act:id type="new">976f5085be45892ddba739553d6febb2</act:id>
   <act:type>PAYABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2792,11 +2792,11 @@
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">42b82e96f3d45975bceb61629c3e0d1d</act:parent>
+  <act:parent type="new">42b82e96f3d45975bceb61629c3e0d1d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Ödenecek Vergi Ve Fonlar</act:name>
-  <act:id type="guid">bafe83a858cbd425b2452a56b28accea</act:id>
+  <act:id type="new">bafe83a858cbd425b2452a56b28accea</act:id>
   <act:type>PAYABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2810,11 +2810,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">976f5085be45892ddba739553d6febb2</act:parent>
+  <act:parent type="new">976f5085be45892ddba739553d6febb2</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Ödenecek Sosyal Güvenlik Kesintileri</act:name>
-  <act:id type="guid">ddc69c6e1587250f557f7932c25aaf93</act:id>
+  <act:id type="new">ddc69c6e1587250f557f7932c25aaf93</act:id>
   <act:type>PAYABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2828,11 +2828,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">976f5085be45892ddba739553d6febb2</act:parent>
+  <act:parent type="new">976f5085be45892ddba739553d6febb2</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Vadesi Geçmiş, Ertelenmiş Veya Taksitlendirilmiş Vergi Ve Diğer Yükümlülükler</act:name>
-  <act:id type="guid">b7d05c33772ef3cdb4919ffbde24c6f5</act:id>
+  <act:id type="new">b7d05c33772ef3cdb4919ffbde24c6f5</act:id>
   <act:type>PAYABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2846,11 +2846,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">976f5085be45892ddba739553d6febb2</act:parent>
+  <act:parent type="new">976f5085be45892ddba739553d6febb2</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Ödenecek Diğer Yükümlülükler</act:name>
-  <act:id type="guid">6b0657106ed8c4a19940c4ab1fa006d4</act:id>
+  <act:id type="new">6b0657106ed8c4a19940c4ab1fa006d4</act:id>
   <act:type>PAYABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2864,11 +2864,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">976f5085be45892ddba739553d6febb2</act:parent>
+  <act:parent type="new">976f5085be45892ddba739553d6febb2</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Borç Ve Gider Karşılıkları</act:name>
-  <act:id type="guid">753b7f954b87aafe8de7679d534c160d</act:id>
+  <act:id type="new">753b7f954b87aafe8de7679d534c160d</act:id>
   <act:type>PAYABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2886,11 +2886,11 @@
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">42b82e96f3d45975bceb61629c3e0d1d</act:parent>
+  <act:parent type="new">42b82e96f3d45975bceb61629c3e0d1d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Dönem Kârı Vergi Ve Diğer Yasal Yükümlülük Karşılıkları</act:name>
-  <act:id type="guid">55f6470771a89fe854360fa2d8ffa7b0</act:id>
+  <act:id type="new">55f6470771a89fe854360fa2d8ffa7b0</act:id>
   <act:type>PAYABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2904,11 +2904,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">753b7f954b87aafe8de7679d534c160d</act:parent>
+  <act:parent type="new">753b7f954b87aafe8de7679d534c160d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Dönem Kârının Peşin Ödenen Vergi Ve Diğer Yükümlülükleri(-)</act:name>
-  <act:id type="guid">ed9b9eaf6905a4040dfd0611fc090371</act:id>
+  <act:id type="new">ed9b9eaf6905a4040dfd0611fc090371</act:id>
   <act:type>PAYABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2922,11 +2922,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">753b7f954b87aafe8de7679d534c160d</act:parent>
+  <act:parent type="new">753b7f954b87aafe8de7679d534c160d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Kıdem Tazminatı Karşılığı</act:name>
-  <act:id type="guid">ec3b042afaaec5108f53f5ee1b2d24d7</act:id>
+  <act:id type="new">ec3b042afaaec5108f53f5ee1b2d24d7</act:id>
   <act:type>PAYABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2940,11 +2940,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">753b7f954b87aafe8de7679d534c160d</act:parent>
+  <act:parent type="new">753b7f954b87aafe8de7679d534c160d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Maliyet Giderleri Karşılığı</act:name>
-  <act:id type="guid">401e44ccf0d2f39f10911915975eab42</act:id>
+  <act:id type="new">401e44ccf0d2f39f10911915975eab42</act:id>
   <act:type>PAYABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2958,11 +2958,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">753b7f954b87aafe8de7679d534c160d</act:parent>
+  <act:parent type="new">753b7f954b87aafe8de7679d534c160d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Diğer Borç Ve Gider Karşılıkları</act:name>
-  <act:id type="guid">0b6aefdea06830a45e41bd745d900988</act:id>
+  <act:id type="new">0b6aefdea06830a45e41bd745d900988</act:id>
   <act:type>PAYABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2976,11 +2976,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">753b7f954b87aafe8de7679d534c160d</act:parent>
+  <act:parent type="new">753b7f954b87aafe8de7679d534c160d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Gelecek Aylara Ait Gelirler Ve Gider Tahakkukları</act:name>
-  <act:id type="guid">03011f64b8e419eaac10ab38b2f4df38</act:id>
+  <act:id type="new">03011f64b8e419eaac10ab38b2f4df38</act:id>
   <act:type>PAYABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2998,11 +2998,11 @@
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">42b82e96f3d45975bceb61629c3e0d1d</act:parent>
+  <act:parent type="new">42b82e96f3d45975bceb61629c3e0d1d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Gelecek Aylara Ait Gelirler</act:name>
-  <act:id type="guid">ecbce2d2ab33f7b041da1aa50ac0cfc4</act:id>
+  <act:id type="new">ecbce2d2ab33f7b041da1aa50ac0cfc4</act:id>
   <act:type>PAYABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3016,11 +3016,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">03011f64b8e419eaac10ab38b2f4df38</act:parent>
+  <act:parent type="new">03011f64b8e419eaac10ab38b2f4df38</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Gider Tahakkukları</act:name>
-  <act:id type="guid">16b3d61a82dff4e4b8461093ba77fc13</act:id>
+  <act:id type="new">16b3d61a82dff4e4b8461093ba77fc13</act:id>
   <act:type>PAYABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3034,11 +3034,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">03011f64b8e419eaac10ab38b2f4df38</act:parent>
+  <act:parent type="new">03011f64b8e419eaac10ab38b2f4df38</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Diğer Kısa Vadeli Yabancı Kaynaklar</act:name>
-  <act:id type="guid">40ba2f66151e9828f23b56ca43c62b65</act:id>
+  <act:id type="new">40ba2f66151e9828f23b56ca43c62b65</act:id>
   <act:type>PAYABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3056,11 +3056,11 @@
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">42b82e96f3d45975bceb61629c3e0d1d</act:parent>
+  <act:parent type="new">42b82e96f3d45975bceb61629c3e0d1d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Hesaplanan Kdv</act:name>
-  <act:id type="guid">1fd2a870ce259544242e429e559ee7fc</act:id>
+  <act:id type="new">1fd2a870ce259544242e429e559ee7fc</act:id>
   <act:type>PAYABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3074,11 +3074,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">40ba2f66151e9828f23b56ca43c62b65</act:parent>
+  <act:parent type="new">40ba2f66151e9828f23b56ca43c62b65</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Diğer Kdv</act:name>
-  <act:id type="guid">8f07df66b8702bb29a5829b23cf603bc</act:id>
+  <act:id type="new">8f07df66b8702bb29a5829b23cf603bc</act:id>
   <act:type>PAYABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3092,11 +3092,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">40ba2f66151e9828f23b56ca43c62b65</act:parent>
+  <act:parent type="new">40ba2f66151e9828f23b56ca43c62b65</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Merkez Ve Şubeler Cari Hesabı</act:name>
-  <act:id type="guid">d03c4701035bd9e84d14dcef944db080</act:id>
+  <act:id type="new">d03c4701035bd9e84d14dcef944db080</act:id>
   <act:type>PAYABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3110,11 +3110,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">40ba2f66151e9828f23b56ca43c62b65</act:parent>
+  <act:parent type="new">40ba2f66151e9828f23b56ca43c62b65</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Sayım Ve Tesellüm Fazlaları</act:name>
-  <act:id type="guid">346211664e077bd9bb9e307cf6917240</act:id>
+  <act:id type="new">346211664e077bd9bb9e307cf6917240</act:id>
   <act:type>PAYABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3128,11 +3128,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">40ba2f66151e9828f23b56ca43c62b65</act:parent>
+  <act:parent type="new">40ba2f66151e9828f23b56ca43c62b65</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Diğer Çeşitli Yabancı Kaynaklar</act:name>
-  <act:id type="guid">1fe10b93ce4741e89e278a5e7da8edc4</act:id>
+  <act:id type="new">1fe10b93ce4741e89e278a5e7da8edc4</act:id>
   <act:type>PAYABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3146,11 +3146,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">40ba2f66151e9828f23b56ca43c62b65</act:parent>
+  <act:parent type="new">40ba2f66151e9828f23b56ca43c62b65</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Uzun Vadeli Yabancı Kaynaklar</act:name>
-  <act:id type="guid">3678ca7fa9748e5027dc541a6d88434f</act:id>
+  <act:id type="new">3678ca7fa9748e5027dc541a6d88434f</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3168,11 +3168,11 @@
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">f03b8164819b8e8a525102a3f30ac51a</act:parent>
+  <act:parent type="new">f03b8164819b8e8a525102a3f30ac51a</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Mali Borçlar</act:name>
-  <act:id type="guid">5dfff37c65fdb5cac31ea7030b25ea78</act:id>
+  <act:id type="new">5dfff37c65fdb5cac31ea7030b25ea78</act:id>
   <act:type>PAYABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3190,11 +3190,11 @@
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">3678ca7fa9748e5027dc541a6d88434f</act:parent>
+  <act:parent type="new">3678ca7fa9748e5027dc541a6d88434f</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Banka Kredileri</act:name>
-  <act:id type="guid">26f7632446efec58754d97eb7dd61f9c</act:id>
+  <act:id type="new">26f7632446efec58754d97eb7dd61f9c</act:id>
   <act:type>PAYABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3208,11 +3208,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">5dfff37c65fdb5cac31ea7030b25ea78</act:parent>
+  <act:parent type="new">5dfff37c65fdb5cac31ea7030b25ea78</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Çıkarılmış Tahviller</act:name>
-  <act:id type="guid">a76114d000a8d84421a25601ba5714d0</act:id>
+  <act:id type="new">a76114d000a8d84421a25601ba5714d0</act:id>
   <act:type>PAYABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3226,11 +3226,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">5dfff37c65fdb5cac31ea7030b25ea78</act:parent>
+  <act:parent type="new">5dfff37c65fdb5cac31ea7030b25ea78</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Çıkarılmış Diğer Menkul Kıymetler</act:name>
-  <act:id type="guid">bfe2ddd7ee4a34a42cecf1d65eb238e5</act:id>
+  <act:id type="new">bfe2ddd7ee4a34a42cecf1d65eb238e5</act:id>
   <act:type>PAYABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3244,11 +3244,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">5dfff37c65fdb5cac31ea7030b25ea78</act:parent>
+  <act:parent type="new">5dfff37c65fdb5cac31ea7030b25ea78</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Menkul Kıymetler İhraç Farkı(-)</act:name>
-  <act:id type="guid">e49182082ce788c9252525a7d28e18ba</act:id>
+  <act:id type="new">e49182082ce788c9252525a7d28e18ba</act:id>
   <act:type>PAYABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3262,11 +3262,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">5dfff37c65fdb5cac31ea7030b25ea78</act:parent>
+  <act:parent type="new">5dfff37c65fdb5cac31ea7030b25ea78</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Diğer Mali Borçlar</act:name>
-  <act:id type="guid">afcdab45496f12b033cad8109beba941</act:id>
+  <act:id type="new">afcdab45496f12b033cad8109beba941</act:id>
   <act:type>PAYABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3280,11 +3280,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">5dfff37c65fdb5cac31ea7030b25ea78</act:parent>
+  <act:parent type="new">5dfff37c65fdb5cac31ea7030b25ea78</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Ticari Borçlar</act:name>
-  <act:id type="guid">05d2e6e3e413164d5fc7249fe287d17a</act:id>
+  <act:id type="new">05d2e6e3e413164d5fc7249fe287d17a</act:id>
   <act:type>PAYABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3302,11 +3302,11 @@
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">3678ca7fa9748e5027dc541a6d88434f</act:parent>
+  <act:parent type="new">3678ca7fa9748e5027dc541a6d88434f</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Satıcılar</act:name>
-  <act:id type="guid">cf60e433f46a5bc65ce479ee48a486ad</act:id>
+  <act:id type="new">cf60e433f46a5bc65ce479ee48a486ad</act:id>
   <act:type>PAYABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3320,11 +3320,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">05d2e6e3e413164d5fc7249fe287d17a</act:parent>
+  <act:parent type="new">05d2e6e3e413164d5fc7249fe287d17a</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Borç Senetleri</act:name>
-  <act:id type="guid">3f25cf0678545d9b02d4d07366dbc940</act:id>
+  <act:id type="new">3f25cf0678545d9b02d4d07366dbc940</act:id>
   <act:type>PAYABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3338,11 +3338,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">05d2e6e3e413164d5fc7249fe287d17a</act:parent>
+  <act:parent type="new">05d2e6e3e413164d5fc7249fe287d17a</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Borç Senetleri Reeskontu(-)</act:name>
-  <act:id type="guid">50d4e8e4df46de11655d1e173c0712f7</act:id>
+  <act:id type="new">50d4e8e4df46de11655d1e173c0712f7</act:id>
   <act:type>PAYABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3356,11 +3356,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">05d2e6e3e413164d5fc7249fe287d17a</act:parent>
+  <act:parent type="new">05d2e6e3e413164d5fc7249fe287d17a</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Alınan Depozito Ve Teminatlar</act:name>
-  <act:id type="guid">3855d313a6cd4c6516820f85fc33df1d</act:id>
+  <act:id type="new">3855d313a6cd4c6516820f85fc33df1d</act:id>
   <act:type>PAYABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3374,11 +3374,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">05d2e6e3e413164d5fc7249fe287d17a</act:parent>
+  <act:parent type="new">05d2e6e3e413164d5fc7249fe287d17a</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Diğer Ticari Borçlar</act:name>
-  <act:id type="guid">aab69e8436b84ba3e011a66299b271d9</act:id>
+  <act:id type="new">aab69e8436b84ba3e011a66299b271d9</act:id>
   <act:type>PAYABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3392,11 +3392,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">05d2e6e3e413164d5fc7249fe287d17a</act:parent>
+  <act:parent type="new">05d2e6e3e413164d5fc7249fe287d17a</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Diğer Borçlar</act:name>
-  <act:id type="guid">30c12913463f2c0550ea0789ab4604ec</act:id>
+  <act:id type="new">30c12913463f2c0550ea0789ab4604ec</act:id>
   <act:type>PAYABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3414,11 +3414,11 @@
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">3678ca7fa9748e5027dc541a6d88434f</act:parent>
+  <act:parent type="new">3678ca7fa9748e5027dc541a6d88434f</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Ortaklara Borçlar</act:name>
-  <act:id type="guid">7b8b3152f0043cc434d850d09f61bac4</act:id>
+  <act:id type="new">7b8b3152f0043cc434d850d09f61bac4</act:id>
   <act:type>PAYABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3432,11 +3432,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">30c12913463f2c0550ea0789ab4604ec</act:parent>
+  <act:parent type="new">30c12913463f2c0550ea0789ab4604ec</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>İştiraklere Borçlar</act:name>
-  <act:id type="guid">536b73c44e2aacfc9c61ead688063adb</act:id>
+  <act:id type="new">536b73c44e2aacfc9c61ead688063adb</act:id>
   <act:type>PAYABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3450,11 +3450,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">30c12913463f2c0550ea0789ab4604ec</act:parent>
+  <act:parent type="new">30c12913463f2c0550ea0789ab4604ec</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Bağlı Ortaklıklara Borçlar</act:name>
-  <act:id type="guid">2c697ebb66a6ef2cea8551fbbad2bc7f</act:id>
+  <act:id type="new">2c697ebb66a6ef2cea8551fbbad2bc7f</act:id>
   <act:type>PAYABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3468,11 +3468,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">30c12913463f2c0550ea0789ab4604ec</act:parent>
+  <act:parent type="new">30c12913463f2c0550ea0789ab4604ec</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Diğer Çeşitli Borçlar</act:name>
-  <act:id type="guid">de9e598f1a9ab213da9e395f00c5a7a7</act:id>
+  <act:id type="new">de9e598f1a9ab213da9e395f00c5a7a7</act:id>
   <act:type>PAYABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3486,11 +3486,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">30c12913463f2c0550ea0789ab4604ec</act:parent>
+  <act:parent type="new">30c12913463f2c0550ea0789ab4604ec</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Diğer Borç Senetleri Reeskontu(-)</act:name>
-  <act:id type="guid">dab7826536d560e5be80a8cc47ca15ce</act:id>
+  <act:id type="new">dab7826536d560e5be80a8cc47ca15ce</act:id>
   <act:type>PAYABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3504,11 +3504,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">30c12913463f2c0550ea0789ab4604ec</act:parent>
+  <act:parent type="new">30c12913463f2c0550ea0789ab4604ec</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Kamuya Olan Ertelenmiş Veya Taksitlendirilmiş Borçlar</act:name>
-  <act:id type="guid">0f6d9bc9b444b7822755b20acc889662</act:id>
+  <act:id type="new">0f6d9bc9b444b7822755b20acc889662</act:id>
   <act:type>PAYABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3522,11 +3522,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">30c12913463f2c0550ea0789ab4604ec</act:parent>
+  <act:parent type="new">30c12913463f2c0550ea0789ab4604ec</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Alınan Avanslar</act:name>
-  <act:id type="guid">b2cce2cbb402e5be6076bcfbaa57462b</act:id>
+  <act:id type="new">b2cce2cbb402e5be6076bcfbaa57462b</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3544,11 +3544,11 @@
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">3678ca7fa9748e5027dc541a6d88434f</act:parent>
+  <act:parent type="new">3678ca7fa9748e5027dc541a6d88434f</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Alınan Sipariş Avansları</act:name>
-  <act:id type="guid">454d816ec10ff8599a0f796ef20acc36</act:id>
+  <act:id type="new">454d816ec10ff8599a0f796ef20acc36</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3562,11 +3562,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">b2cce2cbb402e5be6076bcfbaa57462b</act:parent>
+  <act:parent type="new">b2cce2cbb402e5be6076bcfbaa57462b</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Alınan Diğer Avanslar</act:name>
-  <act:id type="guid">acec24893aea963e6cb59bcebecebbbb</act:id>
+  <act:id type="new">acec24893aea963e6cb59bcebecebbbb</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3580,11 +3580,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">b2cce2cbb402e5be6076bcfbaa57462b</act:parent>
+  <act:parent type="new">b2cce2cbb402e5be6076bcfbaa57462b</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Borç Ve Gider Karşılıkları</act:name>
-  <act:id type="guid">82483e547004c70d7a5237ef8cbdb89d</act:id>
+  <act:id type="new">82483e547004c70d7a5237ef8cbdb89d</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3602,11 +3602,11 @@
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">3678ca7fa9748e5027dc541a6d88434f</act:parent>
+  <act:parent type="new">3678ca7fa9748e5027dc541a6d88434f</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Kıdem Tazminatı Karşılığı</act:name>
-  <act:id type="guid">89cecd73e40c1f2bf500a699b94eefd7</act:id>
+  <act:id type="new">89cecd73e40c1f2bf500a699b94eefd7</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3620,11 +3620,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">82483e547004c70d7a5237ef8cbdb89d</act:parent>
+  <act:parent type="new">82483e547004c70d7a5237ef8cbdb89d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Diğer Borç Ve Gider Karşılıkları</act:name>
-  <act:id type="guid">7805dfa5226c4fcee6406364c7694433</act:id>
+  <act:id type="new">7805dfa5226c4fcee6406364c7694433</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3638,11 +3638,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">82483e547004c70d7a5237ef8cbdb89d</act:parent>
+  <act:parent type="new">82483e547004c70d7a5237ef8cbdb89d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Gelecek Yıllara Ait Gelirler Ve Gider Tahakkukları</act:name>
-  <act:id type="guid">d335d7c147cd5bb0b750765bd66fd17b</act:id>
+  <act:id type="new">d335d7c147cd5bb0b750765bd66fd17b</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3660,11 +3660,11 @@
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">3678ca7fa9748e5027dc541a6d88434f</act:parent>
+  <act:parent type="new">3678ca7fa9748e5027dc541a6d88434f</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Gelecek Yıllara Ait Gelirler</act:name>
-  <act:id type="guid">c155668a80e1135202c101cc4763a062</act:id>
+  <act:id type="new">c155668a80e1135202c101cc4763a062</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3678,11 +3678,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">d335d7c147cd5bb0b750765bd66fd17b</act:parent>
+  <act:parent type="new">d335d7c147cd5bb0b750765bd66fd17b</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Gider Tahakkukları</act:name>
-  <act:id type="guid">45ceb1e4c6caf38a4e2176e32713d735</act:id>
+  <act:id type="new">45ceb1e4c6caf38a4e2176e32713d735</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3696,11 +3696,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">d335d7c147cd5bb0b750765bd66fd17b</act:parent>
+  <act:parent type="new">d335d7c147cd5bb0b750765bd66fd17b</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Diğer Uzun Vadeli Yabancı Kaynaklar</act:name>
-  <act:id type="guid">5bde8f238b195b4c3ed72ce2bfeb9870</act:id>
+  <act:id type="new">5bde8f238b195b4c3ed72ce2bfeb9870</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3718,11 +3718,11 @@
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">3678ca7fa9748e5027dc541a6d88434f</act:parent>
+  <act:parent type="new">3678ca7fa9748e5027dc541a6d88434f</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Gelecek Yıllara Ertelenmiş Veya Terkin Edilecek Kdv</act:name>
-  <act:id type="guid">b3b8c3af1d5034913cd8d7aa26cebcf2</act:id>
+  <act:id type="new">b3b8c3af1d5034913cd8d7aa26cebcf2</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3736,11 +3736,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">5bde8f238b195b4c3ed72ce2bfeb9870</act:parent>
+  <act:parent type="new">5bde8f238b195b4c3ed72ce2bfeb9870</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Tesise Katılma Payları</act:name>
-  <act:id type="guid">971ffb05a810c70051203c2e54ed6b65</act:id>
+  <act:id type="new">971ffb05a810c70051203c2e54ed6b65</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3754,11 +3754,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">5bde8f238b195b4c3ed72ce2bfeb9870</act:parent>
+  <act:parent type="new">5bde8f238b195b4c3ed72ce2bfeb9870</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Diğer Çeşitli Uzun Vadeli Yabancı Kaynaklar</act:name>
-  <act:id type="guid">adda44ae4b461a8c3c0fc43375f3a9ba</act:id>
+  <act:id type="new">adda44ae4b461a8c3c0fc43375f3a9ba</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3772,11 +3772,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">5bde8f238b195b4c3ed72ce2bfeb9870</act:parent>
+  <act:parent type="new">5bde8f238b195b4c3ed72ce2bfeb9870</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Öz Kaynaklar</act:name>
-  <act:id type="guid">9ef9d6f502d6f2015b1fbc851d7d00ba</act:id>
+  <act:id type="new">9ef9d6f502d6f2015b1fbc851d7d00ba</act:id>
   <act:type>EQUITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3794,11 +3794,11 @@
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">f03b8164819b8e8a525102a3f30ac51a</act:parent>
+  <act:parent type="new">f03b8164819b8e8a525102a3f30ac51a</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Ödenmiş Sermaye</act:name>
-  <act:id type="guid">cfd3ff3dffa577973d3c1c5def43e568</act:id>
+  <act:id type="new">cfd3ff3dffa577973d3c1c5def43e568</act:id>
   <act:type>EQUITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3816,11 +3816,11 @@
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">9ef9d6f502d6f2015b1fbc851d7d00ba</act:parent>
+  <act:parent type="new">9ef9d6f502d6f2015b1fbc851d7d00ba</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Sermaye</act:name>
-  <act:id type="guid">0f25dd4772d0f7b3170facfe31f99c28</act:id>
+  <act:id type="new">0f25dd4772d0f7b3170facfe31f99c28</act:id>
   <act:type>EQUITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3834,11 +3834,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">cfd3ff3dffa577973d3c1c5def43e568</act:parent>
+  <act:parent type="new">cfd3ff3dffa577973d3c1c5def43e568</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Ödenmemiş Sermaye(-)</act:name>
-  <act:id type="guid">45ebbd200509a934d6811fa7c13ca87e</act:id>
+  <act:id type="new">45ebbd200509a934d6811fa7c13ca87e</act:id>
   <act:type>EQUITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3852,11 +3852,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">cfd3ff3dffa577973d3c1c5def43e568</act:parent>
+  <act:parent type="new">cfd3ff3dffa577973d3c1c5def43e568</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Sermaye Düzeltmesi Olumlu Farkları</act:name>
-  <act:id type="guid">1fae57635aded25540febe80d1eb7eb0</act:id>
+  <act:id type="new">1fae57635aded25540febe80d1eb7eb0</act:id>
   <act:type>EQUITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3870,11 +3870,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">cfd3ff3dffa577973d3c1c5def43e568</act:parent>
+  <act:parent type="new">cfd3ff3dffa577973d3c1c5def43e568</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Sermaye Düzeltmesi Olumsuz Farkları(-)</act:name>
-  <act:id type="guid">e54b3c0bd1e01fe8d37e1b44800819d2</act:id>
+  <act:id type="new">e54b3c0bd1e01fe8d37e1b44800819d2</act:id>
   <act:type>EQUITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3888,11 +3888,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">cfd3ff3dffa577973d3c1c5def43e568</act:parent>
+  <act:parent type="new">cfd3ff3dffa577973d3c1c5def43e568</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Sermaye Yedekleri</act:name>
-  <act:id type="guid">19a6fcb159c0723f7b8548f42dfa7c81</act:id>
+  <act:id type="new">19a6fcb159c0723f7b8548f42dfa7c81</act:id>
   <act:type>EQUITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3910,11 +3910,11 @@
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">9ef9d6f502d6f2015b1fbc851d7d00ba</act:parent>
+  <act:parent type="new">9ef9d6f502d6f2015b1fbc851d7d00ba</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Hisse Senetleri İhraç Primleri</act:name>
-  <act:id type="guid">8b77d24c0b708dcd5bcd0c2bc13de2d4</act:id>
+  <act:id type="new">8b77d24c0b708dcd5bcd0c2bc13de2d4</act:id>
   <act:type>EQUITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3928,11 +3928,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">19a6fcb159c0723f7b8548f42dfa7c81</act:parent>
+  <act:parent type="new">19a6fcb159c0723f7b8548f42dfa7c81</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Hisse Senedi İptal Kârları</act:name>
-  <act:id type="guid">31e37b05c57197760324a67f39181de8</act:id>
+  <act:id type="new">31e37b05c57197760324a67f39181de8</act:id>
   <act:type>EQUITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3946,11 +3946,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">19a6fcb159c0723f7b8548f42dfa7c81</act:parent>
+  <act:parent type="new">19a6fcb159c0723f7b8548f42dfa7c81</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>İştirakler Yeniden Değerleme Artışları</act:name>
-  <act:id type="guid">d0af04d799a293736657675b1da7acf5</act:id>
+  <act:id type="new">d0af04d799a293736657675b1da7acf5</act:id>
   <act:type>EQUITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3964,11 +3964,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">19a6fcb159c0723f7b8548f42dfa7c81</act:parent>
+  <act:parent type="new">19a6fcb159c0723f7b8548f42dfa7c81</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Maliyet Artışları Fonu</act:name>
-  <act:id type="guid">39ed17604f18ecc9c8fce48d45a0997d</act:id>
+  <act:id type="new">39ed17604f18ecc9c8fce48d45a0997d</act:id>
   <act:type>EQUITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3982,11 +3982,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">19a6fcb159c0723f7b8548f42dfa7c81</act:parent>
+  <act:parent type="new">19a6fcb159c0723f7b8548f42dfa7c81</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Diğer Sermaye Yedekleri</act:name>
-  <act:id type="guid">18decbcc8b8cb244185e03f56f4592f5</act:id>
+  <act:id type="new">18decbcc8b8cb244185e03f56f4592f5</act:id>
   <act:type>EQUITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4000,11 +4000,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">19a6fcb159c0723f7b8548f42dfa7c81</act:parent>
+  <act:parent type="new">19a6fcb159c0723f7b8548f42dfa7c81</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Kâr Yedekleri</act:name>
-  <act:id type="guid">0b7651c4c285284ac73a31203bcc23d5</act:id>
+  <act:id type="new">0b7651c4c285284ac73a31203bcc23d5</act:id>
   <act:type>EQUITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4022,11 +4022,11 @@
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">9ef9d6f502d6f2015b1fbc851d7d00ba</act:parent>
+  <act:parent type="new">9ef9d6f502d6f2015b1fbc851d7d00ba</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Yasal Yedekler</act:name>
-  <act:id type="guid">b2cf9a8a2efcb1fff05043f7ebda2f8f</act:id>
+  <act:id type="new">b2cf9a8a2efcb1fff05043f7ebda2f8f</act:id>
   <act:type>EQUITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4040,11 +4040,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">0b7651c4c285284ac73a31203bcc23d5</act:parent>
+  <act:parent type="new">0b7651c4c285284ac73a31203bcc23d5</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Statü Yedekleri</act:name>
-  <act:id type="guid">308707ff848e84c7c3058ea12aa00019</act:id>
+  <act:id type="new">308707ff848e84c7c3058ea12aa00019</act:id>
   <act:type>EQUITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4058,11 +4058,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">0b7651c4c285284ac73a31203bcc23d5</act:parent>
+  <act:parent type="new">0b7651c4c285284ac73a31203bcc23d5</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Olağanüstü Yedekler</act:name>
-  <act:id type="guid">275dda42a3775d82aa5a8e4a2cebf499</act:id>
+  <act:id type="new">275dda42a3775d82aa5a8e4a2cebf499</act:id>
   <act:type>EQUITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4076,11 +4076,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">0b7651c4c285284ac73a31203bcc23d5</act:parent>
+  <act:parent type="new">0b7651c4c285284ac73a31203bcc23d5</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Diğer Kâr Yedekleri</act:name>
-  <act:id type="guid">eaf5542090723e6908ed6acefec13f7b</act:id>
+  <act:id type="new">eaf5542090723e6908ed6acefec13f7b</act:id>
   <act:type>EQUITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4094,11 +4094,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">0b7651c4c285284ac73a31203bcc23d5</act:parent>
+  <act:parent type="new">0b7651c4c285284ac73a31203bcc23d5</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Özel Fonlar</act:name>
-  <act:id type="guid">71c0311cc12da14bd0b76a50d9ec71b3</act:id>
+  <act:id type="new">71c0311cc12da14bd0b76a50d9ec71b3</act:id>
   <act:type>EQUITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4112,11 +4112,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">0b7651c4c285284ac73a31203bcc23d5</act:parent>
+  <act:parent type="new">0b7651c4c285284ac73a31203bcc23d5</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Geçmiş Yıllar Kârları</act:name>
-  <act:id type="guid">4e93fd3fa5479d4cc8cda2beddfe0725</act:id>
+  <act:id type="new">4e93fd3fa5479d4cc8cda2beddfe0725</act:id>
   <act:type>EQUITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4134,11 +4134,11 @@
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">9ef9d6f502d6f2015b1fbc851d7d00ba</act:parent>
+  <act:parent type="new">9ef9d6f502d6f2015b1fbc851d7d00ba</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Geçmiş Yıllar Kârları</act:name>
-  <act:id type="guid">b6ec2794737df13caad9d37a1bbc8605</act:id>
+  <act:id type="new">b6ec2794737df13caad9d37a1bbc8605</act:id>
   <act:type>EQUITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4152,11 +4152,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">4e93fd3fa5479d4cc8cda2beddfe0725</act:parent>
+  <act:parent type="new">4e93fd3fa5479d4cc8cda2beddfe0725</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Geçmiş Yıllar Zararları(-)</act:name>
-  <act:id type="guid">fc1f3a00c0d2874db968385f4f51d16e</act:id>
+  <act:id type="new">fc1f3a00c0d2874db968385f4f51d16e</act:id>
   <act:type>EQUITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4174,11 +4174,11 @@
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">9ef9d6f502d6f2015b1fbc851d7d00ba</act:parent>
+  <act:parent type="new">9ef9d6f502d6f2015b1fbc851d7d00ba</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Geçmiş Yıllar Zararları(-)</act:name>
-  <act:id type="guid">de79d2b644d7d4c7f5ff05c656d9632b</act:id>
+  <act:id type="new">de79d2b644d7d4c7f5ff05c656d9632b</act:id>
   <act:type>EQUITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4192,11 +4192,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">fc1f3a00c0d2874db968385f4f51d16e</act:parent>
+  <act:parent type="new">fc1f3a00c0d2874db968385f4f51d16e</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Dönem Net Kârı (Zararı)</act:name>
-  <act:id type="guid">2bd4f8f6fcb803e1a98cce1bcf80fa6d</act:id>
+  <act:id type="new">2bd4f8f6fcb803e1a98cce1bcf80fa6d</act:id>
   <act:type>EQUITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4214,11 +4214,11 @@
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">9ef9d6f502d6f2015b1fbc851d7d00ba</act:parent>
+  <act:parent type="new">9ef9d6f502d6f2015b1fbc851d7d00ba</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Dönem Net Kârı</act:name>
-  <act:id type="guid">058821643bdb8f3d71cd0f2df74e3667</act:id>
+  <act:id type="new">058821643bdb8f3d71cd0f2df74e3667</act:id>
   <act:type>EQUITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4232,11 +4232,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">2bd4f8f6fcb803e1a98cce1bcf80fa6d</act:parent>
+  <act:parent type="new">2bd4f8f6fcb803e1a98cce1bcf80fa6d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Dönem Net Zararı(-)</act:name>
-  <act:id type="guid">95071144af14aaa426b2225edb5bb3c2</act:id>
+  <act:id type="new">95071144af14aaa426b2225edb5bb3c2</act:id>
   <act:type>EQUITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4250,11 +4250,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">2bd4f8f6fcb803e1a98cce1bcf80fa6d</act:parent>
+  <act:parent type="new">2bd4f8f6fcb803e1a98cce1bcf80fa6d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Gelir Tablosu Hesapları</act:name>
-  <act:id type="guid">11c7a82538428a38397779e16dc399f9</act:id>
+  <act:id type="new">11c7a82538428a38397779e16dc399f9</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4272,11 +4272,11 @@
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">f03b8164819b8e8a525102a3f30ac51a</act:parent>
+  <act:parent type="new">f03b8164819b8e8a525102a3f30ac51a</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Brüt Satışlar</act:name>
-  <act:id type="guid">233d183ae4040ccc143cf1176dcba261</act:id>
+  <act:id type="new">233d183ae4040ccc143cf1176dcba261</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4294,11 +4294,11 @@
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">11c7a82538428a38397779e16dc399f9</act:parent>
+  <act:parent type="new">11c7a82538428a38397779e16dc399f9</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Yurt İçi Satışlar</act:name>
-  <act:id type="guid">d4a128fd8f23a6f1826700ae7169b178</act:id>
+  <act:id type="new">d4a128fd8f23a6f1826700ae7169b178</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4312,11 +4312,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">233d183ae4040ccc143cf1176dcba261</act:parent>
+  <act:parent type="new">233d183ae4040ccc143cf1176dcba261</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Yurt Dışı Satışlar</act:name>
-  <act:id type="guid">6437515bbed01ae199bfc26815dfa9ee</act:id>
+  <act:id type="new">6437515bbed01ae199bfc26815dfa9ee</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4330,11 +4330,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">233d183ae4040ccc143cf1176dcba261</act:parent>
+  <act:parent type="new">233d183ae4040ccc143cf1176dcba261</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Diğer Gelirler</act:name>
-  <act:id type="guid">8d8a09c10cdd8002ea77a143dce8b427</act:id>
+  <act:id type="new">8d8a09c10cdd8002ea77a143dce8b427</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4348,11 +4348,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">233d183ae4040ccc143cf1176dcba261</act:parent>
+  <act:parent type="new">233d183ae4040ccc143cf1176dcba261</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Satış İndirimleri(-)</act:name>
-  <act:id type="guid">aeb353732d45a284e0396370fc2c6532</act:id>
+  <act:id type="new">aeb353732d45a284e0396370fc2c6532</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4370,11 +4370,11 @@
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">11c7a82538428a38397779e16dc399f9</act:parent>
+  <act:parent type="new">11c7a82538428a38397779e16dc399f9</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Satıştan İadeler(-)</act:name>
-  <act:id type="guid">1e0858ebeff505aa9fa3c61bcc037d26</act:id>
+  <act:id type="new">1e0858ebeff505aa9fa3c61bcc037d26</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4388,11 +4388,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">aeb353732d45a284e0396370fc2c6532</act:parent>
+  <act:parent type="new">aeb353732d45a284e0396370fc2c6532</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Satış İndirimleri(-)</act:name>
-  <act:id type="guid">94fb90d6f3e2cb549e72a08d40b9a288</act:id>
+  <act:id type="new">94fb90d6f3e2cb549e72a08d40b9a288</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4406,11 +4406,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">aeb353732d45a284e0396370fc2c6532</act:parent>
+  <act:parent type="new">aeb353732d45a284e0396370fc2c6532</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Diğer İndirimler(-)</act:name>
-  <act:id type="guid">ee399b5f5d12973d78ae33ba487098f1</act:id>
+  <act:id type="new">ee399b5f5d12973d78ae33ba487098f1</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4424,11 +4424,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">aeb353732d45a284e0396370fc2c6532</act:parent>
+  <act:parent type="new">aeb353732d45a284e0396370fc2c6532</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Satışların Maliyeti(-)</act:name>
-  <act:id type="guid">8300b9399948c99f3c8461cde3d1b23c</act:id>
+  <act:id type="new">8300b9399948c99f3c8461cde3d1b23c</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4446,11 +4446,11 @@
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">11c7a82538428a38397779e16dc399f9</act:parent>
+  <act:parent type="new">11c7a82538428a38397779e16dc399f9</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Satılan Mamuller Maliyeti(-)</act:name>
-  <act:id type="guid">4b7658842318b69a815c53e060de961a</act:id>
+  <act:id type="new">4b7658842318b69a815c53e060de961a</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4464,11 +4464,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">8300b9399948c99f3c8461cde3d1b23c</act:parent>
+  <act:parent type="new">8300b9399948c99f3c8461cde3d1b23c</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Satılan Ticari Mallar Maliyeti(-)</act:name>
-  <act:id type="guid">8d222d353d45ba2110f5b8396ccdee46</act:id>
+  <act:id type="new">8d222d353d45ba2110f5b8396ccdee46</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4482,11 +4482,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">8300b9399948c99f3c8461cde3d1b23c</act:parent>
+  <act:parent type="new">8300b9399948c99f3c8461cde3d1b23c</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Satılan Hizmet Maliyeti(-)</act:name>
-  <act:id type="guid">7f3108f47e0259f4f1819f2eed9b98cc</act:id>
+  <act:id type="new">7f3108f47e0259f4f1819f2eed9b98cc</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4500,11 +4500,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">8300b9399948c99f3c8461cde3d1b23c</act:parent>
+  <act:parent type="new">8300b9399948c99f3c8461cde3d1b23c</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Diğer Satışların Maliyeti(-)</act:name>
-  <act:id type="guid">54e5749d4e3cfcda4564ed8eb1ebcf06</act:id>
+  <act:id type="new">54e5749d4e3cfcda4564ed8eb1ebcf06</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4518,11 +4518,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">8300b9399948c99f3c8461cde3d1b23c</act:parent>
+  <act:parent type="new">8300b9399948c99f3c8461cde3d1b23c</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Faaliyet Giderleri(-)</act:name>
-  <act:id type="guid">112e814c37b517b9134df7f57cd9beee</act:id>
+  <act:id type="new">112e814c37b517b9134df7f57cd9beee</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4540,11 +4540,11 @@
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">11c7a82538428a38397779e16dc399f9</act:parent>
+  <act:parent type="new">11c7a82538428a38397779e16dc399f9</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Araştırma Ve Geliştirme Giderleri(-)</act:name>
-  <act:id type="guid">e193db62c2d8ea74bfea76a191e67880</act:id>
+  <act:id type="new">e193db62c2d8ea74bfea76a191e67880</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4558,11 +4558,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">112e814c37b517b9134df7f57cd9beee</act:parent>
+  <act:parent type="new">112e814c37b517b9134df7f57cd9beee</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Pazarlama Satış Ve Dağıtım Giderleri(-)</act:name>
-  <act:id type="guid">c653d295d93feaf52d9cc30811610e0b</act:id>
+  <act:id type="new">c653d295d93feaf52d9cc30811610e0b</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4576,11 +4576,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">112e814c37b517b9134df7f57cd9beee</act:parent>
+  <act:parent type="new">112e814c37b517b9134df7f57cd9beee</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Genel Yönetim Giderleri(-)</act:name>
-  <act:id type="guid">78f5f7e84a6ccf137727a180c3f42f75</act:id>
+  <act:id type="new">78f5f7e84a6ccf137727a180c3f42f75</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4594,11 +4594,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">112e814c37b517b9134df7f57cd9beee</act:parent>
+  <act:parent type="new">112e814c37b517b9134df7f57cd9beee</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Diğer Faaliyetlerden Olağan Gelir ve Kârlar</act:name>
-  <act:id type="guid">5e68206f3baaf62f5bc467efc728d4b8</act:id>
+  <act:id type="new">5e68206f3baaf62f5bc467efc728d4b8</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4616,11 +4616,11 @@
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">11c7a82538428a38397779e16dc399f9</act:parent>
+  <act:parent type="new">11c7a82538428a38397779e16dc399f9</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>İştiraklerden Temettü Gelirleri</act:name>
-  <act:id type="guid">aa1e481c277851c620a856c6e453f1a9</act:id>
+  <act:id type="new">aa1e481c277851c620a856c6e453f1a9</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4634,11 +4634,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">5e68206f3baaf62f5bc467efc728d4b8</act:parent>
+  <act:parent type="new">5e68206f3baaf62f5bc467efc728d4b8</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Bağlı Ortaklıklardan Temettü Gelirleri</act:name>
-  <act:id type="guid">97222dc7369741dd4018fe9907b4bb99</act:id>
+  <act:id type="new">97222dc7369741dd4018fe9907b4bb99</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4652,11 +4652,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">5e68206f3baaf62f5bc467efc728d4b8</act:parent>
+  <act:parent type="new">5e68206f3baaf62f5bc467efc728d4b8</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Faiz Gelirleri</act:name>
-  <act:id type="guid">0fbd3129e3b579f091ad4098e077c7be</act:id>
+  <act:id type="new">0fbd3129e3b579f091ad4098e077c7be</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4670,11 +4670,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">5e68206f3baaf62f5bc467efc728d4b8</act:parent>
+  <act:parent type="new">5e68206f3baaf62f5bc467efc728d4b8</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Komisyon Gelirleri</act:name>
-  <act:id type="guid">82ce4284281ed6225524ef932394e9af</act:id>
+  <act:id type="new">82ce4284281ed6225524ef932394e9af</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4688,11 +4688,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">5e68206f3baaf62f5bc467efc728d4b8</act:parent>
+  <act:parent type="new">5e68206f3baaf62f5bc467efc728d4b8</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Konusu Kalmayan Karşılıklar</act:name>
-  <act:id type="guid">34ea002eeab9d0ed2800db893e791929</act:id>
+  <act:id type="new">34ea002eeab9d0ed2800db893e791929</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4706,11 +4706,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">5e68206f3baaf62f5bc467efc728d4b8</act:parent>
+  <act:parent type="new">5e68206f3baaf62f5bc467efc728d4b8</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Menkul Kıymet Satış Kârları</act:name>
-  <act:id type="guid">36bed952d79061d9294aba7974ef3719</act:id>
+  <act:id type="new">36bed952d79061d9294aba7974ef3719</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4724,11 +4724,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">5e68206f3baaf62f5bc467efc728d4b8</act:parent>
+  <act:parent type="new">5e68206f3baaf62f5bc467efc728d4b8</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Kambiyo Kârları</act:name>
-  <act:id type="guid">910e5929b3d168b8b218606d344f573d</act:id>
+  <act:id type="new">910e5929b3d168b8b218606d344f573d</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4742,11 +4742,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">5e68206f3baaf62f5bc467efc728d4b8</act:parent>
+  <act:parent type="new">5e68206f3baaf62f5bc467efc728d4b8</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Reeskont Faiz Gelirleri</act:name>
-  <act:id type="guid">33be8a9a8c982a0dbc27a2ba39e808a2</act:id>
+  <act:id type="new">33be8a9a8c982a0dbc27a2ba39e808a2</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4760,11 +4760,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">5e68206f3baaf62f5bc467efc728d4b8</act:parent>
+  <act:parent type="new">5e68206f3baaf62f5bc467efc728d4b8</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Enflasyon Düzeltme Kârları</act:name>
-  <act:id type="guid">ae5539063c01f3aa8406364275b61c5c</act:id>
+  <act:id type="new">ae5539063c01f3aa8406364275b61c5c</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4778,11 +4778,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">5e68206f3baaf62f5bc467efc728d4b8</act:parent>
+  <act:parent type="new">5e68206f3baaf62f5bc467efc728d4b8</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Diğer Olağan Gelir Ve Kârlar</act:name>
-  <act:id type="guid">f73328a9d53eb30e32ed6cf69b80d2c4</act:id>
+  <act:id type="new">f73328a9d53eb30e32ed6cf69b80d2c4</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4796,11 +4796,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">5e68206f3baaf62f5bc467efc728d4b8</act:parent>
+  <act:parent type="new">5e68206f3baaf62f5bc467efc728d4b8</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Diğer Faaliyetlerden Olağan Gider ve Zararlar(-)</act:name>
-  <act:id type="guid">08140925d75a898fcdadec2ca079bcfe</act:id>
+  <act:id type="new">08140925d75a898fcdadec2ca079bcfe</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4818,11 +4818,11 @@
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">11c7a82538428a38397779e16dc399f9</act:parent>
+  <act:parent type="new">11c7a82538428a38397779e16dc399f9</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Komisyon Giderleri(-)</act:name>
-  <act:id type="guid">70efda56567a7d398fb1d6e9b367a8c5</act:id>
+  <act:id type="new">70efda56567a7d398fb1d6e9b367a8c5</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4836,11 +4836,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">08140925d75a898fcdadec2ca079bcfe</act:parent>
+  <act:parent type="new">08140925d75a898fcdadec2ca079bcfe</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Karşılık Giderleri(-)</act:name>
-  <act:id type="guid">773148a4225fb86b739a1c607edd9870</act:id>
+  <act:id type="new">773148a4225fb86b739a1c607edd9870</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4854,11 +4854,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">08140925d75a898fcdadec2ca079bcfe</act:parent>
+  <act:parent type="new">08140925d75a898fcdadec2ca079bcfe</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Menkul Kıymet Satış Zararları(-)</act:name>
-  <act:id type="guid">b902b052b962d85750218e6f9cd6d507</act:id>
+  <act:id type="new">b902b052b962d85750218e6f9cd6d507</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4872,11 +4872,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">08140925d75a898fcdadec2ca079bcfe</act:parent>
+  <act:parent type="new">08140925d75a898fcdadec2ca079bcfe</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Kambiyo Zararları(-)</act:name>
-  <act:id type="guid">7dfda1903fd6ee9ebad3c5e223c6f79d</act:id>
+  <act:id type="new">7dfda1903fd6ee9ebad3c5e223c6f79d</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4890,11 +4890,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">08140925d75a898fcdadec2ca079bcfe</act:parent>
+  <act:parent type="new">08140925d75a898fcdadec2ca079bcfe</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Reeskont Faiz Giderleri(-)</act:name>
-  <act:id type="guid">7dff0216084a6a45c83960e0a8681499</act:id>
+  <act:id type="new">7dff0216084a6a45c83960e0a8681499</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4908,11 +4908,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">08140925d75a898fcdadec2ca079bcfe</act:parent>
+  <act:parent type="new">08140925d75a898fcdadec2ca079bcfe</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Enflasyon Düzeltmesi Zararları(-)</act:name>
-  <act:id type="guid">24c08e7bd123f7c33eaf90c2d3771f0c</act:id>
+  <act:id type="new">24c08e7bd123f7c33eaf90c2d3771f0c</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4926,11 +4926,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">08140925d75a898fcdadec2ca079bcfe</act:parent>
+  <act:parent type="new">08140925d75a898fcdadec2ca079bcfe</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Diğer Olağan Gider Ve Zararlar(-)</act:name>
-  <act:id type="guid">d3f05171ef8da765545503e9bb096e6b</act:id>
+  <act:id type="new">d3f05171ef8da765545503e9bb096e6b</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4944,11 +4944,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">08140925d75a898fcdadec2ca079bcfe</act:parent>
+  <act:parent type="new">08140925d75a898fcdadec2ca079bcfe</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Finansman Giderleri(-)</act:name>
-  <act:id type="guid">ac52c2378f7c7553785dae204ecbe5e6</act:id>
+  <act:id type="new">ac52c2378f7c7553785dae204ecbe5e6</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4966,11 +4966,11 @@
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">11c7a82538428a38397779e16dc399f9</act:parent>
+  <act:parent type="new">11c7a82538428a38397779e16dc399f9</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Kısa Vadeli Borçlanma Giderleri(-)</act:name>
-  <act:id type="guid">7a17c093a804fc7697699825a76574b5</act:id>
+  <act:id type="new">7a17c093a804fc7697699825a76574b5</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4984,11 +4984,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">ac52c2378f7c7553785dae204ecbe5e6</act:parent>
+  <act:parent type="new">ac52c2378f7c7553785dae204ecbe5e6</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Uzun Vadeli Borçlanma Giderleri(-)</act:name>
-  <act:id type="guid">e779c2073dcf11082fdb9da2d1bb597f</act:id>
+  <act:id type="new">e779c2073dcf11082fdb9da2d1bb597f</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5002,11 +5002,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">ac52c2378f7c7553785dae204ecbe5e6</act:parent>
+  <act:parent type="new">ac52c2378f7c7553785dae204ecbe5e6</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Olağan Dışı Gelir ve Kârlar</act:name>
-  <act:id type="guid">a2715c7714dbd0f796fe2f42ed487c7f</act:id>
+  <act:id type="new">a2715c7714dbd0f796fe2f42ed487c7f</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5024,11 +5024,11 @@
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">11c7a82538428a38397779e16dc399f9</act:parent>
+  <act:parent type="new">11c7a82538428a38397779e16dc399f9</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Önceki Dönem Gelir Ve Kârları</act:name>
-  <act:id type="guid">227f809f30f5cd01cfc766d0112b13b2</act:id>
+  <act:id type="new">227f809f30f5cd01cfc766d0112b13b2</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5042,11 +5042,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">a2715c7714dbd0f796fe2f42ed487c7f</act:parent>
+  <act:parent type="new">a2715c7714dbd0f796fe2f42ed487c7f</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Diğer Olağan Dışı Gelir Ve Kârlar</act:name>
-  <act:id type="guid">0e45b81bf764074599761da8c903546d</act:id>
+  <act:id type="new">0e45b81bf764074599761da8c903546d</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5060,11 +5060,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">a2715c7714dbd0f796fe2f42ed487c7f</act:parent>
+  <act:parent type="new">a2715c7714dbd0f796fe2f42ed487c7f</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Olağan Dışı Gider ve Zararlar(-)</act:name>
-  <act:id type="guid">0bfad43b62b2781891a62fb36948369e</act:id>
+  <act:id type="new">0bfad43b62b2781891a62fb36948369e</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5082,11 +5082,11 @@
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">11c7a82538428a38397779e16dc399f9</act:parent>
+  <act:parent type="new">11c7a82538428a38397779e16dc399f9</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Önceki Dönem Gider Ve Zararları(-)</act:name>
-  <act:id type="guid">c19fefbed18d3790488abbb40caaba10</act:id>
+  <act:id type="new">c19fefbed18d3790488abbb40caaba10</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5100,11 +5100,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">0bfad43b62b2781891a62fb36948369e</act:parent>
+  <act:parent type="new">0bfad43b62b2781891a62fb36948369e</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Diğer Olağan Dışı Gider Ve Zararlar(-)</act:name>
-  <act:id type="guid">211d6ef8e7900da41bd130042a42d160</act:id>
+  <act:id type="new">211d6ef8e7900da41bd130042a42d160</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5118,11 +5118,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">0bfad43b62b2781891a62fb36948369e</act:parent>
+  <act:parent type="new">0bfad43b62b2781891a62fb36948369e</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Dönem Net Kârı veya Zararı</act:name>
-  <act:id type="guid">f331d75a6cf1bb078280030c23e1b7a0</act:id>
+  <act:id type="new">f331d75a6cf1bb078280030c23e1b7a0</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5140,11 +5140,11 @@
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">11c7a82538428a38397779e16dc399f9</act:parent>
+  <act:parent type="new">11c7a82538428a38397779e16dc399f9</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Dönem Kârı Veya Zararı</act:name>
-  <act:id type="guid">4f6ce0bdbf8bb36d59da2722045668ae</act:id>
+  <act:id type="new">4f6ce0bdbf8bb36d59da2722045668ae</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5158,11 +5158,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">f331d75a6cf1bb078280030c23e1b7a0</act:parent>
+  <act:parent type="new">f331d75a6cf1bb078280030c23e1b7a0</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Dönem Kârı Vergi Ve Diğer Yasal Yükümlülük Karşılıkları(-)</act:name>
-  <act:id type="guid">770038bffa0194e7d0e6fd1ac05bc751</act:id>
+  <act:id type="new">770038bffa0194e7d0e6fd1ac05bc751</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5176,11 +5176,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">f331d75a6cf1bb078280030c23e1b7a0</act:parent>
+  <act:parent type="new">f331d75a6cf1bb078280030c23e1b7a0</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Dönem Net Kârı Veya Zararı</act:name>
-  <act:id type="guid">73aeaaba70d793e86f1b0b871591abd6</act:id>
+  <act:id type="new">73aeaaba70d793e86f1b0b871591abd6</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5194,11 +5194,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">f331d75a6cf1bb078280030c23e1b7a0</act:parent>
+  <act:parent type="new">f331d75a6cf1bb078280030c23e1b7a0</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Yıllara Yaygın İnşaat Ve Enflasyon Düzeltme Hesabı</act:name>
-  <act:id type="guid">eec2b99d63835181cf3c5139c5057b32</act:id>
+  <act:id type="new">eec2b99d63835181cf3c5139c5057b32</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5212,11 +5212,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">f331d75a6cf1bb078280030c23e1b7a0</act:parent>
+  <act:parent type="new">f331d75a6cf1bb078280030c23e1b7a0</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Enflasyon Düzeltme Hesabı</act:name>
-  <act:id type="guid">5d192e6e8608a5f74dd4457c7c361cd4</act:id>
+  <act:id type="new">5d192e6e8608a5f74dd4457c7c361cd4</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5230,11 +5230,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">f331d75a6cf1bb078280030c23e1b7a0</act:parent>
+  <act:parent type="new">f331d75a6cf1bb078280030c23e1b7a0</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Maliyet Hesapları (7/A seçeneği)</act:name>
-  <act:id type="guid">49b3c456b2cd504f95e3ddb3312376a0</act:id>
+  <act:id type="new">49b3c456b2cd504f95e3ddb3312376a0</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5252,11 +5252,11 @@
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">f03b8164819b8e8a525102a3f30ac51a</act:parent>
+  <act:parent type="new">f03b8164819b8e8a525102a3f30ac51a</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Maliyet Muhasebesi Bağlantı Hesapları</act:name>
-  <act:id type="guid">42a8adf88c6ba653cc80d30d98538d6a</act:id>
+  <act:id type="new">42a8adf88c6ba653cc80d30d98538d6a</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5274,11 +5274,11 @@
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">49b3c456b2cd504f95e3ddb3312376a0</act:parent>
+  <act:parent type="new">49b3c456b2cd504f95e3ddb3312376a0</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Maliyet Muhasebesi Bağlantı Hesabı</act:name>
-  <act:id type="guid">298fb59133417f04f930fa826e326cb3</act:id>
+  <act:id type="new">298fb59133417f04f930fa826e326cb3</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5292,11 +5292,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">42a8adf88c6ba653cc80d30d98538d6a</act:parent>
+  <act:parent type="new">42a8adf88c6ba653cc80d30d98538d6a</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Maliyet Muhasebesi Yansıtma Hesabı</act:name>
-  <act:id type="guid">1c33932875f136c6eb9f0e7cd49a8c4b</act:id>
+  <act:id type="new">1c33932875f136c6eb9f0e7cd49a8c4b</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5310,11 +5310,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">42a8adf88c6ba653cc80d30d98538d6a</act:parent>
+  <act:parent type="new">42a8adf88c6ba653cc80d30d98538d6a</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Direkt İlk Madde ve Malzeme Giderleri</act:name>
-  <act:id type="guid">0ba970aa41ad17242b026a5c3234c2dc</act:id>
+  <act:id type="new">0ba970aa41ad17242b026a5c3234c2dc</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5332,11 +5332,11 @@
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">49b3c456b2cd504f95e3ddb3312376a0</act:parent>
+  <act:parent type="new">49b3c456b2cd504f95e3ddb3312376a0</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Direkt İlk Madde Ve Malzeme Giderleri Hesabı</act:name>
-  <act:id type="guid">27a32ca0f7d218d2afbe588a49522cf7</act:id>
+  <act:id type="new">27a32ca0f7d218d2afbe588a49522cf7</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5350,11 +5350,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">0ba970aa41ad17242b026a5c3234c2dc</act:parent>
+  <act:parent type="new">0ba970aa41ad17242b026a5c3234c2dc</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Direkt İlk Madde Ve Malzeme Yansıtma Hesabı</act:name>
-  <act:id type="guid">b993090754157bb1c483975a731c352e</act:id>
+  <act:id type="new">b993090754157bb1c483975a731c352e</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5368,11 +5368,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">0ba970aa41ad17242b026a5c3234c2dc</act:parent>
+  <act:parent type="new">0ba970aa41ad17242b026a5c3234c2dc</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Direkt İlk Madde Ve Malzeme Fiyat Farkı</act:name>
-  <act:id type="guid">1cf306f949b473c202c80b87bf8e2b07</act:id>
+  <act:id type="new">1cf306f949b473c202c80b87bf8e2b07</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5386,11 +5386,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">0ba970aa41ad17242b026a5c3234c2dc</act:parent>
+  <act:parent type="new">0ba970aa41ad17242b026a5c3234c2dc</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Direkt İlk Madde Ve Malzeme Miktar Farkı</act:name>
-  <act:id type="guid">fa95ff3055ea551a297eb0d5b2334de2</act:id>
+  <act:id type="new">fa95ff3055ea551a297eb0d5b2334de2</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5404,11 +5404,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">0ba970aa41ad17242b026a5c3234c2dc</act:parent>
+  <act:parent type="new">0ba970aa41ad17242b026a5c3234c2dc</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Direkt İşçilik Giderleri</act:name>
-  <act:id type="guid">5b6836214574c8dbf99eb13c344c7e61</act:id>
+  <act:id type="new">5b6836214574c8dbf99eb13c344c7e61</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5426,11 +5426,11 @@
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">49b3c456b2cd504f95e3ddb3312376a0</act:parent>
+  <act:parent type="new">49b3c456b2cd504f95e3ddb3312376a0</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Direkt İşçilik Giderleri</act:name>
-  <act:id type="guid">1ae8de7086c103b656b4eff01ba17750</act:id>
+  <act:id type="new">1ae8de7086c103b656b4eff01ba17750</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5444,11 +5444,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">5b6836214574c8dbf99eb13c344c7e61</act:parent>
+  <act:parent type="new">5b6836214574c8dbf99eb13c344c7e61</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Direkt İşçilik Giderleri Yansıtma Hesabı</act:name>
-  <act:id type="guid">9dd4a3c4cdfca8cee2aac995ed0d0df8</act:id>
+  <act:id type="new">9dd4a3c4cdfca8cee2aac995ed0d0df8</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5462,11 +5462,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">5b6836214574c8dbf99eb13c344c7e61</act:parent>
+  <act:parent type="new">5b6836214574c8dbf99eb13c344c7e61</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Direkt İşçilik Ücret Farkları</act:name>
-  <act:id type="guid">61ca42504e3a0ffbb3e6b4412615b049</act:id>
+  <act:id type="new">61ca42504e3a0ffbb3e6b4412615b049</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5480,11 +5480,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">5b6836214574c8dbf99eb13c344c7e61</act:parent>
+  <act:parent type="new">5b6836214574c8dbf99eb13c344c7e61</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Direkt İşçilik Süre Farkları</act:name>
-  <act:id type="guid">0f19470a3e67fdb0853f7d250db1d58d</act:id>
+  <act:id type="new">0f19470a3e67fdb0853f7d250db1d58d</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5498,11 +5498,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">5b6836214574c8dbf99eb13c344c7e61</act:parent>
+  <act:parent type="new">5b6836214574c8dbf99eb13c344c7e61</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Genel Üretim Giderleri</act:name>
-  <act:id type="guid">60aba85221c1516002c8a66884264f84</act:id>
+  <act:id type="new">60aba85221c1516002c8a66884264f84</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5520,11 +5520,11 @@
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">49b3c456b2cd504f95e3ddb3312376a0</act:parent>
+  <act:parent type="new">49b3c456b2cd504f95e3ddb3312376a0</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Genel Üretim Giderleri</act:name>
-  <act:id type="guid">cfcb2a05a9db1b875aa80a541c1a0d44</act:id>
+  <act:id type="new">cfcb2a05a9db1b875aa80a541c1a0d44</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5538,11 +5538,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">60aba85221c1516002c8a66884264f84</act:parent>
+  <act:parent type="new">60aba85221c1516002c8a66884264f84</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Genel Üretim Giderleri Yansıtma Hesabı</act:name>
-  <act:id type="guid">bb0e40000fb730fdd54e26d824ae7707</act:id>
+  <act:id type="new">bb0e40000fb730fdd54e26d824ae7707</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5556,11 +5556,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">60aba85221c1516002c8a66884264f84</act:parent>
+  <act:parent type="new">60aba85221c1516002c8a66884264f84</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Genel Üretim Giderleri Bütçe Farkları</act:name>
-  <act:id type="guid">e9ab837fb92239f9517bae24c172d52a</act:id>
+  <act:id type="new">e9ab837fb92239f9517bae24c172d52a</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5574,11 +5574,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">60aba85221c1516002c8a66884264f84</act:parent>
+  <act:parent type="new">60aba85221c1516002c8a66884264f84</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Genel Üretim Giderleri Verimlilik Giderleri</act:name>
-  <act:id type="guid">eccefa49c9cfcb6877f43514a92a129f</act:id>
+  <act:id type="new">eccefa49c9cfcb6877f43514a92a129f</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5592,11 +5592,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">60aba85221c1516002c8a66884264f84</act:parent>
+  <act:parent type="new">60aba85221c1516002c8a66884264f84</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Genel Üretim Giderleri Kapasite Farkları</act:name>
-  <act:id type="guid">11447d785a6dc5d796cddb5d2fdaaeee</act:id>
+  <act:id type="new">11447d785a6dc5d796cddb5d2fdaaeee</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5610,11 +5610,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">60aba85221c1516002c8a66884264f84</act:parent>
+  <act:parent type="new">60aba85221c1516002c8a66884264f84</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Hizmet Üretim Maliyeti</act:name>
-  <act:id type="guid">338d061123c09181a8b0afa1f6fc5424</act:id>
+  <act:id type="new">338d061123c09181a8b0afa1f6fc5424</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5632,11 +5632,11 @@
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">49b3c456b2cd504f95e3ddb3312376a0</act:parent>
+  <act:parent type="new">49b3c456b2cd504f95e3ddb3312376a0</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Hizmet Üretim Maliyeti</act:name>
-  <act:id type="guid">8fa9f709061665506ae65e4e4953a983</act:id>
+  <act:id type="new">8fa9f709061665506ae65e4e4953a983</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5650,11 +5650,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">338d061123c09181a8b0afa1f6fc5424</act:parent>
+  <act:parent type="new">338d061123c09181a8b0afa1f6fc5424</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Hizmet Üretim Maliyeti Yansıtma Hesabı</act:name>
-  <act:id type="guid">7ce5b8e1afaeeab602289ddcc47980f4</act:id>
+  <act:id type="new">7ce5b8e1afaeeab602289ddcc47980f4</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5668,11 +5668,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">338d061123c09181a8b0afa1f6fc5424</act:parent>
+  <act:parent type="new">338d061123c09181a8b0afa1f6fc5424</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Hizmet Üretim Maliyeti Fark Hesapları</act:name>
-  <act:id type="guid">a20a399fadaa7fe84ad25bc3772b47e8</act:id>
+  <act:id type="new">a20a399fadaa7fe84ad25bc3772b47e8</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5686,11 +5686,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">338d061123c09181a8b0afa1f6fc5424</act:parent>
+  <act:parent type="new">338d061123c09181a8b0afa1f6fc5424</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Araştırma ve Geliştirme Giderleri</act:name>
-  <act:id type="guid">7cd9d2ab1c8c6885e0488464b949662a</act:id>
+  <act:id type="new">7cd9d2ab1c8c6885e0488464b949662a</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5708,11 +5708,11 @@
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">49b3c456b2cd504f95e3ddb3312376a0</act:parent>
+  <act:parent type="new">49b3c456b2cd504f95e3ddb3312376a0</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Araştırma Ve Geliştirme Giderleri</act:name>
-  <act:id type="guid">0090a9830876a815c1a9e56db94357c7</act:id>
+  <act:id type="new">0090a9830876a815c1a9e56db94357c7</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5726,11 +5726,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">7cd9d2ab1c8c6885e0488464b949662a</act:parent>
+  <act:parent type="new">7cd9d2ab1c8c6885e0488464b949662a</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Araştırma Ve Geliştirme Giderleri Yansıtma Hesabı</act:name>
-  <act:id type="guid">f14dbff3a02dd408f69ba8f9250ff137</act:id>
+  <act:id type="new">f14dbff3a02dd408f69ba8f9250ff137</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5744,11 +5744,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">7cd9d2ab1c8c6885e0488464b949662a</act:parent>
+  <act:parent type="new">7cd9d2ab1c8c6885e0488464b949662a</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Araştırma Ve Geliştirme Gider Farkları</act:name>
-  <act:id type="guid">ba24afb7dba26b11038049aa7af7f1a6</act:id>
+  <act:id type="new">ba24afb7dba26b11038049aa7af7f1a6</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5762,11 +5762,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">7cd9d2ab1c8c6885e0488464b949662a</act:parent>
+  <act:parent type="new">7cd9d2ab1c8c6885e0488464b949662a</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Pazarlama, Satış ve Dağıtım Giderleri</act:name>
-  <act:id type="guid">3ac96496af2892507fb0a78124fd9bc5</act:id>
+  <act:id type="new">3ac96496af2892507fb0a78124fd9bc5</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5784,11 +5784,11 @@
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">49b3c456b2cd504f95e3ddb3312376a0</act:parent>
+  <act:parent type="new">49b3c456b2cd504f95e3ddb3312376a0</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Pazarlama Satış Ve Dağıtım Giderleri</act:name>
-  <act:id type="guid">1398a653fa5a1db180fb1e2dc48d9385</act:id>
+  <act:id type="new">1398a653fa5a1db180fb1e2dc48d9385</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5802,11 +5802,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">3ac96496af2892507fb0a78124fd9bc5</act:parent>
+  <act:parent type="new">3ac96496af2892507fb0a78124fd9bc5</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Pazarlama Satış Ve Dağıtım Giderleri Yansıtma Hesabı</act:name>
-  <act:id type="guid">762e5343f57b248f6942ec6f9ad828f5</act:id>
+  <act:id type="new">762e5343f57b248f6942ec6f9ad828f5</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5820,11 +5820,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">3ac96496af2892507fb0a78124fd9bc5</act:parent>
+  <act:parent type="new">3ac96496af2892507fb0a78124fd9bc5</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Pazarlama Satış Ve Dağıtım Giderleri Fark Hesabı</act:name>
-  <act:id type="guid">e2cec3c8f2fba2c73b6b9c655871a42b</act:id>
+  <act:id type="new">e2cec3c8f2fba2c73b6b9c655871a42b</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5838,11 +5838,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">3ac96496af2892507fb0a78124fd9bc5</act:parent>
+  <act:parent type="new">3ac96496af2892507fb0a78124fd9bc5</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Genel Yönetim Giderleri</act:name>
-  <act:id type="guid">6805ca86041d411140f24330269b93f2</act:id>
+  <act:id type="new">6805ca86041d411140f24330269b93f2</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5860,11 +5860,11 @@
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">49b3c456b2cd504f95e3ddb3312376a0</act:parent>
+  <act:parent type="new">49b3c456b2cd504f95e3ddb3312376a0</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Genel Yönetim Giderleri</act:name>
-  <act:id type="guid">ade99c8ec724078363e0c53611297212</act:id>
+  <act:id type="new">ade99c8ec724078363e0c53611297212</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5878,11 +5878,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">6805ca86041d411140f24330269b93f2</act:parent>
+  <act:parent type="new">6805ca86041d411140f24330269b93f2</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Genel Yönetim Giderleri Yansıtma Hesabı</act:name>
-  <act:id type="guid">adcc80d973c4d365a33fbe55bb58383a</act:id>
+  <act:id type="new">adcc80d973c4d365a33fbe55bb58383a</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5896,11 +5896,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">6805ca86041d411140f24330269b93f2</act:parent>
+  <act:parent type="new">6805ca86041d411140f24330269b93f2</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Genel Yönetim Gider Farkları Hesabı</act:name>
-  <act:id type="guid">f5ba439bc3d4301a5f2fc0f31183eb7d</act:id>
+  <act:id type="new">f5ba439bc3d4301a5f2fc0f31183eb7d</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5914,11 +5914,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">6805ca86041d411140f24330269b93f2</act:parent>
+  <act:parent type="new">6805ca86041d411140f24330269b93f2</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Finansman Giderleri</act:name>
-  <act:id type="guid">8b2efe7250fdd2ccbbfe9a2f06ddc269</act:id>
+  <act:id type="new">8b2efe7250fdd2ccbbfe9a2f06ddc269</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5936,11 +5936,11 @@
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">49b3c456b2cd504f95e3ddb3312376a0</act:parent>
+  <act:parent type="new">49b3c456b2cd504f95e3ddb3312376a0</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Finansman Giderleri</act:name>
-  <act:id type="guid">a8751020b363957973f99537982c2d31</act:id>
+  <act:id type="new">a8751020b363957973f99537982c2d31</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5954,11 +5954,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">8b2efe7250fdd2ccbbfe9a2f06ddc269</act:parent>
+  <act:parent type="new">8b2efe7250fdd2ccbbfe9a2f06ddc269</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Finansman Giderleri Yansıtma Hesabı</act:name>
-  <act:id type="guid">62dbcc66eab0ae7b22502a3e42d445ad</act:id>
+  <act:id type="new">62dbcc66eab0ae7b22502a3e42d445ad</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5972,11 +5972,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">8b2efe7250fdd2ccbbfe9a2f06ddc269</act:parent>
+  <act:parent type="new">8b2efe7250fdd2ccbbfe9a2f06ddc269</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Finansman Giderleri Fark Hesabı</act:name>
-  <act:id type="guid">e2af12061b4d8d0b03804d0812525e6f</act:id>
+  <act:id type="new">e2af12061b4d8d0b03804d0812525e6f</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5990,11 +5990,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">8b2efe7250fdd2ccbbfe9a2f06ddc269</act:parent>
+  <act:parent type="new">8b2efe7250fdd2ccbbfe9a2f06ddc269</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Yönetim Muhasebesi Hesapları</act:name>
-  <act:id type="guid">f36bbe36bd41bbf1abff845da381474f</act:id>
+  <act:id type="new">f36bbe36bd41bbf1abff845da381474f</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -6012,11 +6012,11 @@
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">f03b8164819b8e8a525102a3f30ac51a</act:parent>
+  <act:parent type="new">f03b8164819b8e8a525102a3f30ac51a</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Nazım Hesaplar</act:name>
-  <act:id type="guid">62fe8e9d99fcad3af990663b1d012424</act:id>
+  <act:id type="new">62fe8e9d99fcad3af990663b1d012424</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -6034,11 +6034,11 @@
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">f03b8164819b8e8a525102a3f30ac51a</act:parent>
+  <act:parent type="new">f03b8164819b8e8a525102a3f30ac51a</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Maliyet Hesapları (7/B Seçeneği)</act:name>
-  <act:id type="guid">829458fce1c661f3ea8e2bed802e23e7</act:id>
+  <act:id type="new">829458fce1c661f3ea8e2bed802e23e7</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -6056,11 +6056,11 @@
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">f03b8164819b8e8a525102a3f30ac51a</act:parent>
+  <act:parent type="new">f03b8164819b8e8a525102a3f30ac51a</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Gider Çeşitleri</act:name>
-  <act:id type="guid">68ed78ebc81c897e31897325861d6ae7</act:id>
+  <act:id type="new">68ed78ebc81c897e31897325861d6ae7</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -6078,11 +6078,11 @@
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">829458fce1c661f3ea8e2bed802e23e7</act:parent>
+  <act:parent type="new">829458fce1c661f3ea8e2bed802e23e7</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>İlk Madde Ve Malzeme Giderleri</act:name>
-  <act:id type="guid">1960089aee1ef60a82b4fa097954e66c</act:id>
+  <act:id type="new">1960089aee1ef60a82b4fa097954e66c</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -6096,11 +6096,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">68ed78ebc81c897e31897325861d6ae7</act:parent>
+  <act:parent type="new">68ed78ebc81c897e31897325861d6ae7</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>İşçi Ücret Ve Giderleri</act:name>
-  <act:id type="guid">9f0192f0afc44838eed39a3d4c4644d4</act:id>
+  <act:id type="new">9f0192f0afc44838eed39a3d4c4644d4</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -6114,11 +6114,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">68ed78ebc81c897e31897325861d6ae7</act:parent>
+  <act:parent type="new">68ed78ebc81c897e31897325861d6ae7</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Memur Ücret Ve Giderleri</act:name>
-  <act:id type="guid">76f29ec958a0e53dfae6ac729b651138</act:id>
+  <act:id type="new">76f29ec958a0e53dfae6ac729b651138</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -6132,11 +6132,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">68ed78ebc81c897e31897325861d6ae7</act:parent>
+  <act:parent type="new">68ed78ebc81c897e31897325861d6ae7</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Dışarıdan Sağlanan Fayda Ve Hizmetler</act:name>
-  <act:id type="guid">6f84a7c3da1bf70e0a79569b5bb33c4b</act:id>
+  <act:id type="new">6f84a7c3da1bf70e0a79569b5bb33c4b</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -6150,11 +6150,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">68ed78ebc81c897e31897325861d6ae7</act:parent>
+  <act:parent type="new">68ed78ebc81c897e31897325861d6ae7</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Çeşitli Giderler</act:name>
-  <act:id type="guid">506692766fd09da87731cf9f3aedf2bf</act:id>
+  <act:id type="new">506692766fd09da87731cf9f3aedf2bf</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -6168,11 +6168,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">68ed78ebc81c897e31897325861d6ae7</act:parent>
+  <act:parent type="new">68ed78ebc81c897e31897325861d6ae7</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Vergi, Resim Ve Harçlar</act:name>
-  <act:id type="guid">c89c5dfa6cb3445cfbedc24ea34a5a7c</act:id>
+  <act:id type="new">c89c5dfa6cb3445cfbedc24ea34a5a7c</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -6186,11 +6186,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">68ed78ebc81c897e31897325861d6ae7</act:parent>
+  <act:parent type="new">68ed78ebc81c897e31897325861d6ae7</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Amortisman Ve Tükenme Payları</act:name>
-  <act:id type="guid">084e94c69e25de0982646f0b66ee82f5</act:id>
+  <act:id type="new">084e94c69e25de0982646f0b66ee82f5</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -6204,11 +6204,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">68ed78ebc81c897e31897325861d6ae7</act:parent>
+  <act:parent type="new">68ed78ebc81c897e31897325861d6ae7</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Finansman Giderleri</act:name>
-  <act:id type="guid">485e1ed46e29cdc0fd94ce8badc608db</act:id>
+  <act:id type="new">485e1ed46e29cdc0fd94ce8badc608db</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -6222,11 +6222,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">68ed78ebc81c897e31897325861d6ae7</act:parent>
+  <act:parent type="new">68ed78ebc81c897e31897325861d6ae7</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Gider Çeşitleri Yansıtma Hesabı</act:name>
-  <act:id type="guid">d656e998c5a83cf01fec482ff85834a1</act:id>
+  <act:id type="new">d656e998c5a83cf01fec482ff85834a1</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -6240,11 +6240,11 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">68ed78ebc81c897e31897325861d6ae7</act:parent>
+  <act:parent type="new">68ed78ebc81c897e31897325861d6ae7</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Üretim Maliyet Hesabı</act:name>
-  <act:id type="guid">fe39c38cd28f3833490bcaba9318c8a8</act:id>
+  <act:id type="new">fe39c38cd28f3833490bcaba9318c8a8</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -6258,7 +6258,7 @@
       <slot:value type="string">Not Set</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">68ed78ebc81c897e31897325861d6ae7</act:parent>
+  <act:parent type="new">68ed78ebc81c897e31897325861d6ae7</act:parent>
 </gnc:account>
 </gnc-account-example>
 
