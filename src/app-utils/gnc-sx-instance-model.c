@@ -1259,6 +1259,13 @@ gnc_sx_instance_model_effect_change(GncSxInstanceModel *model,
                                     GList **creation_errors)
 {
     GList *iter;
+
+    if (qof_book_is_readonly(gnc_get_current_book()))
+    {
+        /* Is the book read-only? Then don't change anything here. */
+        return;
+    }
+
     for (iter = model->sx_instance_list; iter != NULL; iter = iter->next)
     {
         GList *instance_iter;

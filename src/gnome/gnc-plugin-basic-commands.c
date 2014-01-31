@@ -549,6 +549,12 @@ gnc_main_window_cmd_actions_since_last_run (GtkAction *action, GncMainWindowActi
 
     window = data->window;
 
+    if (qof_book_is_readonly(gnc_get_current_book()))
+    {
+        /* Is the book read-only? Then don't change anything here. */
+        return;
+    }
+
     sx_instances = gnc_sx_get_current_instances();
     gnc_sx_instance_model_summarize(sx_instances, &summary);
     gnc_sx_instance_model_effect_change(sx_instances, TRUE, &auto_created_txns, NULL);

@@ -804,6 +804,12 @@ gnc_sx_sxsincelast_book_opened(void)
     if (!gnc_prefs_get_bool (GNC_PREFS_GROUP, GNC_PREF_SHOW_AT_FOPEN))
         return;
 
+    if (qof_book_is_readonly(gnc_get_current_book()))
+    {
+        /* Is the book read-only? Then don't change anything here. */
+        return;
+    }
+
     inst_model = gnc_sx_get_current_instances();
     gnc_sx_instance_model_summarize(inst_model, &summary);
     gnc_sx_summary_print(&summary);
@@ -1132,6 +1138,12 @@ gnc_sx_slr_model_effect_change(GncSxSlrTreeModelAdapter *model,
                                GList **created_transaction_guids,
                                GList **creation_errors)
 {
+    if (qof_book_is_readonly(gnc_get_current_book()))
+    {
+        /* Is the book read-only? Then don't change anything here. */
+        return;
+    }
+
     g_signal_handler_block(model->instances, model->updated_cb_id);
     gnc_sx_instance_model_effect_change(model->instances, auto_create_only, created_transaction_guids, creation_errors);
     g_signal_handler_unblock(model->instances, model->updated_cb_id);
