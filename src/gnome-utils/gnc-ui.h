@@ -57,6 +57,7 @@
 #define HL_USAGE_BILL        "busnss-ap-bills1"
 #define HL_USAGE_CUSTOMER    "busnss-ar-customers1"
 #define HL_USAGE_VENDOR      "busnss-ap-vendors1"
+#define HL_USAGE_EMPLOYEE    "busnss-emply"
 #define HL_ACC               "acct-create"
 #define HL_ACCEDIT           "acct-edit"
 #define HL_COMMODITY         "tool-commodity"
