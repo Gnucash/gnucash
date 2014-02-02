@@ -649,6 +649,22 @@ gnc_ab_trans_dialog_verify_values(GncABTransDialog *td)
         g_free(purpose);
     }
 
+#if AQBANKING_VERSION_INT >= 50300
+    if (gnc_ab_trans_isSEPA(td->trans_type) &&
+            (AB_Transaction_CheckForSepaConformity(td->ab_trans) != 0))
+    {
+        gnc_ab_trans_dialog_entry_set (td->recp_name_entry,
+                                       _("The text you entered contained at least one character that is invalid for a SEPA transaction. "
+                                         "In SEPA, unfortunately only exactly the following characters are allowed: "
+                                         "a...z, A...Z, 0...9, and the following punctuations: ' : ? , - ( + . ) / "
+                                         "\n\n"
+                                         "In particular, neither Umlauts nor an ampersand (&) is allowed, "
+                                         "neither in the recipient or sender name nor in any purpose line."),
+                                       GTK_STOCK_CANCEL);
+        values_ok = FALSE;
+    }
+#endif
+
     gtk_widget_set_sensitive(td->exec_button, values_ok);
     gnc_ab_trans_dialog_clear_transaction(td);
 }
