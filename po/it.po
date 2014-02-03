@@ -51,7 +51,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Gnucash 2.3.12\n"
+"Project-Id-Version: Gnucash 2.6.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-12-26 13:07+0100\n"
 "PO-Revision-Date: 2014-01-20 21:41+0100\n"
