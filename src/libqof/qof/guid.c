@@ -54,7 +54,14 @@
 /* Constants *******************************************************/
 #define DEBUG_GUID 0
 #define BLOCKSIZE 4096
-#define THRESHOLD (2 * BLOCKSIZE)
+#ifdef G_PLATFORM_WIN32
+/* Win32 has a smaller pool of random bits, but the displayed warning confuses
+ * really a lot of people. Hence, I think we'd better switch off this warning
+ * for this particular known case. */
+# define THRESHOLD 1500
+#else
+# define THRESHOLD (2 * BLOCKSIZE)
+#endif
 
 
 /* Static global variables *****************************************/
