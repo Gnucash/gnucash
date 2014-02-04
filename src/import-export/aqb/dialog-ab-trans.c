@@ -649,9 +649,14 @@ gnc_ab_trans_dialog_verify_values(GncABTransDialog *td)
         g_free(purpose);
     }
 
-#if AQBANKING_VERSION_INT >= 50300
-    if (gnc_ab_trans_isSEPA(td->trans_type) &&
-            (AB_Transaction_CheckForSepaConformity(td->ab_trans) != 0))
+#if 0
+//    // AQBANKING_VERSION_INT >= 50307
+//    if (gnc_ab_trans_isSEPA(td->trans_type))
+//    {
+//        AB_USER *u = AH_Job_GetUser(j);
+//        uint32_t uflags;
+//            (AB_Transaction_CheckForSepaConformity(td->ab_trans, 0) != 0))
+    // need to check how to do this for aqbanking >= 5.3.7 when I have time
     {
         gnc_ab_trans_dialog_entry_set (td->recp_name_entry,
                                        _("The text you entered contained at least one character that is invalid for a SEPA transaction. "
