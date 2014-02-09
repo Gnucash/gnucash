@@ -604,7 +604,7 @@ then
       [[GNC_DBD_DIR="$with_dbi_dbd_dir"
        EXTRA_SEARCH_LIBS=$GNC_DBD_DIR]],
       [[GNC_DBD_DIR=""
-       EXTRA_SEARCH_LIBS="/usr/lib/dbd:/usr/lib64/dbd:${libdir}/dbd"]]
+       EXTRA_SEARCH_LIBS="/usr/lib/dbd:/usr/lib64/dbd:${libdir}/dbd:$(pkg-config --variable=libdir dbi)/dbd"]]
        )
     case $host_os in
        win32*|mingw*)
