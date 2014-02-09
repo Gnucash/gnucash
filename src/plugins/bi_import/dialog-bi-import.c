@@ -78,6 +78,7 @@
                 g_free (temp); \
             }
 
+static QofLogModule log_module = G_LOG_DOMAIN; //G_LOG_BUSINESS;
 
 bi_import_result
 gnc_bi_import_read_file (const gchar * filename, const gchar * parser_regexp,
@@ -564,9 +565,12 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
             invoice = gnc_search_bill_on_id (book, id);
         else if (g_ascii_strcasecmp (type, "INVOICE") == 0)
             invoice = gnc_search_invoice_on_id (book, id);
+        PINFO( "Existing %s ID: %s\n", type, gncInvoiceGetID(invoice));
 
-        if (!invoice)
+        // If the search is empty then there is no existing invoice so make a new one
+        if (invoice == NULL)
         {
+             PINFO( "Creating a new : %s\n", type );
             // new invoice
             invoice = gncInvoiceCreate (book);
             /* Protect against thrashing the DB and trying to write the invoice
@@ -686,6 +690,7 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
         gncEntrySetQuantity (entry, n);
         acc = gnc_account_lookup_for_register (gnc_get_current_root_account (),
                                                account);
+        
         if (g_ascii_strcasecmp (type, "BILL") == 0)
         {
             gncEntrySetBillAccount (entry, acc);

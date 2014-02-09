@@ -354,7 +354,7 @@ void gnc_bi_import_gui_open_mode_cb (GtkWidget *widget, gpointer data)
 
 
 /*****************************************************************
- * Set whether we are importing a bi, invoice, Customer or Vendor
+ * Set whether we are importing a bill, invoice, Customer or Vendor
  * ****************************************************************/
 void gnc_import_gui_type_cb (GtkWidget *widget, gpointer data)
 {
