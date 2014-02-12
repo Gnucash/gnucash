@@ -100,36 +100,36 @@ typedef enum
 
     ACCT_TYPE_BANK = 0,	/**< The bank account type denotes a savings
 			 *   or checking account held at a bank.
-			 *   Often * interest * bearing. */
+			 *   Often interest bearing. */
     ACCT_TYPE_CASH = 1,	/**< The cash account type is used to denote a
 			 *   shoe-box or pillowcase stuffed with *
 			 *   cash. */
     ACCT_TYPE_CREDIT = 3,	/**< The Credit card account is used to denote
 			 *   credit (e.g. amex) and debit (e.g. visa,
-			 *   mastercard) * card accounts */
+			 *   mastercard) card accounts */
     ACCT_TYPE_ASSET = 2,	/**< asset (and liability) accounts indicate
 			 *   generic, generalized accounts that are
-			 *   none of the * above. */
+			 *   none of the above. */
     ACCT_TYPE_LIABILITY = 4,/**< liability (and asset) accounts indicate
 			   *   generic, generalized accounts that are
-			   *   none of the * above. */
+			   *   none of the above. */
     ACCT_TYPE_STOCK = 5,	/**< Stock accounts will typically be shown in
 			 *   registers which show three columns:
-			 *   price, number of * shares, and value. */
+			 *   price, number of shares, and value. */
     ACCT_TYPE_MUTUAL = 6,	/**< Mutual Fund accounts will typically be
 			 *   shown in registers which show three
-			 *   columns: price, * number of shares, and
+			 *   columns: price, number of shares, and
 			 *   value. */
     ACCT_TYPE_CURRENCY = 7,/**< The currency account type indicates that
 			  *   the account is a currency trading
-			  *   account.  In many * ways, a currency
+			  *   account.  In many ways, a currency
 			  *   trading account is like a stock *
 			  *   trading account. It is shown in the
-			  *   register with * three columns: price,
-			  *   number of shares, and * value. Note:
+			  *   register with three columns: price,
+			  *   number of shares, and value. Note:
 			  *   Since version 1.7.0, this account is *
 			  *   no longer needed to exchange currencies
-			  *   between * accounts, so this type is
+			  *   between accounts, so this type is
 			  *   DEPRECATED. */
     ACCT_TYPE_INCOME = 8,	/**< Income accounts are used to denote
 			 *   income */
@@ -586,10 +586,7 @@ gnc_numeric xaccAccountGetBalanceChangeForPeriod (
 
  * The set of accounts is represented as a doubly-linked tree, so that given
  * any account, both its parent and its children can be easily found.
- * To make the management of sets of accounts easier, an account does not
- * directly point at its children, but rather at an 'Account Group' that
- * stores the children.  At the top of the tree hierarchy lies a single
- * root node, the root account group.
+ * At the top of the tree hierarchy lies a single root node, the root account.
  *
  * The account tree hierarchy is unique, in that a given account can
  * have only one parent account.
