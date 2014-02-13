@@ -46,7 +46,8 @@
 (define optname-show-shares (N_ "Show number of shares"))
 (define optname-basis-method (N_ "Basis calculation method"))
 (define optname-prefer-pricelist (N_ "Set preference for price list data"))
-(define optname-ignore-brokerage-fees (N_ "Ignore brokerage fees when calculating returns"))
+(define optname-brokerage-fees (N_ "How to report brokerage fees"))
+(define optname-ignore-parent-and-sibling-transfers (N_ "Ignore money moved to parent and sibling accounts"))
 
 ;; To avoid overflows in our calculations, define a denominator for prices and unit values
 (define price-denom 100000000)
@@ -103,9 +104,24 @@
       #t))
 
     (add-option
+     (gnc:make-multichoice-option
+      gnc:pagename-general optname-brokerage-fees
+      "g" (N_ "How to report commissions and other brokerage fees.") 'include-in-basis
+      (list (vector 'include-in-basis
+                    (N_ "Include in basis")
+                    (N_ "Include brokerage fees in the basis for the asset."))
+            (vector 'include-in-gain
+                    (N_ "Include in gain")
+                    (N_  "Include brokerage fees in the gain and loss but not in the basis."))
+            (vector 'ignore-brokerage
+                    (N_ "Ignore")
+                    (N_ "Ignore brokerage fees entirely."))
+            )))
+      
+    (add-option
      (gnc:make-simple-boolean-option
-      gnc:pagename-general optname-ignore-brokerage-fees "g"
-      (N_ "Ignore brokerage fees when calculating returns.")
+      gnc:pagename-general optname-ignore-parent-and-sibling-transfers "h"
+      (N_ "Money moved from or to a parent or sibling account is not counted as money in or out")
       #f))
 
     (gnc:register-option
@@ -363,13 +379,39 @@
         (gnc-price-ref price)
         (gnc-price-list-destroy price-list)
         price)))
+        
+  ;; Return true if acct is in the list of accounts
+  (define (account-in-list acct acct-list)
+    (cond ((eqv? acct-list '()) #f)
+          ((same-account? acct (car acct-list)) #t)
+          (else (account-in-list acct (cdr acct-list)))))
+          
+  ;; Return true if account a1 is the parent or a sibling of account a2
+  (define (parent-or-sibling? a1 a2)
+    (let ((parent (gnc-account-get-parent a2)))
+          (or (same-account? parent a1)
+              (account-in-list a1 (gnc-account-get-children parent)))))
+              
+  ;; Test whether the given split is the source of a spin off transaction
+  ;; This will be a no-units split with only one other split.
+  ;; xaccSplitGetOtherSplit only returns on a two-split txn.  It's not a spinoff
+  ;; is the other split is in an income or expense account.
+  (define (spin-off? split current)
+     (let ((other-split (xaccSplitGetOtherSplit split)))
+          (and (gnc-numeric-zero-p (xaccSplitGetAmount split))
+               (same-account? current (xaccSplitGetAccount split))
+               (not (null? other-split))
+               (not (split-account-type? other-split ACCT-TYPE-EXPENSE))
+               (not (split-account-type? other-split ACCT-TYPE-INCOME)))))
+  
   
 (define (table-add-stock-rows table accounts to-date
                                 currency price-fn exchange-fn price-source
 				include-empty show-symbol show-listing show-shares show-price
-                                basis-method prefer-pricelist ignore-brokerage-fees
-                                total-basis total-value total-moneyin total-moneyout
-                                total-income total-gain total-ugain total-brokerage)
+                                basis-method prefer-pricelist handle-brokerage-fees 
+                                ignore-parent-and-siblings total-basis total-value
+                                total-moneyin total-moneyout total-income total-gain 
+                                total-ugain total-brokerage)
 
    (let ((share-print-info
 	  (gnc-share-print-info-places
@@ -390,10 +432,8 @@
                  (units (cadr (unit-collector 'getpair commodity #f)))
 
                  ;; Counter to keep track of stuff
-                 (unitscoll     (gnc:make-commodity-collector))
                  (brokeragecoll (gnc:make-commodity-collector))
                  (dividendcoll  (gnc:make-commodity-collector))
-		 (dividend-reincoll (gnc:make-commodity-collector))
                  (moneyincoll   (gnc:make-commodity-collector))
                  (moneyoutcoll  (gnc:make-commodity-collector))
                  (gaincoll      (gnc:make-commodity-collector))
@@ -410,7 +450,7 @@
 		 (use-txn #f)
 		 (basis-list '())
 		 ;; setup an alist for the splits we've already seen.
-		 (seen_split '())
+		 (seen_trans '())
 		 )
 
             (define (my-exchange-fn fromunits tocurrency)
@@ -501,223 +541,208 @@
 		      (commod-currency (xaccTransGetCurrency parent))
 		      (commod-currency-frac (gnc-commodity-get-fraction commod-currency)))
 		 
-		 (if (gnc:timepair-le txn-date to-date)
-		     (begin
+		 (if (and (gnc:timepair-le txn-date to-date)
+		          (not (assoc-ref seen_trans (gncTransGetGUID parent))))
+		     (let ((trans-income (gnc-numeric-zero))
+		           (trans-brokerage (gnc-numeric-zero))
+		           (trans-shares (gnc-numeric-zero))
+		           (trans-sold (gnc-numeric-zero))
+		           (trans-bought (gnc-numeric-zero))
+		           (trans-moneyin (gnc-numeric-zero))
+		           (trans-moneyout (gnc-numeric-zero)))
+
 		       (gnc:debug "Transaction " (xaccTransGetDescription parent))
-		       ;; here's where we have problems. we are now going to look at each
-		       ;; split of the the parent txn of the current split (above) that we
-		       ;; are on. This means we might hit each split more than once as the
-		       ;; parent transaction might touch the current account more than once.
+		       ;; Add this transaction to the list of processed transactions so we don't
+		       ;; do it again if there is another split in it for this account
+		       (set! seen_trans (acons (gncTransGetGUID parent) #t seen_trans))
+		       
+		       ;; Go through all the splits in the transaction to get an overall idea of 
+		       ;; what it does in terms of income, money in or out, shares bought or sold, etc.
 		       (for-each
-			(lambda (s)
+		         (lambda (s)
+                           (let ((split-units (xaccSplitGetAmount s))
+                                 (split-value (xaccSplitGetValue s)))
 
-			  ;; have we seen this split?
-			  (if (not (assoc-ref seen_split (gncSplitGetGUID s)))
-
-			      (let
-				  ;; get the split's units and value
-				  ((split-units (xaccSplitGetAmount s))
-				   (split-value (xaccSplitGetValue s)))
-
-				;; first add this split to the seen_split list so we only look at it once.
-				(set! seen_split (acons (gncSplitGetGUID s) #t seen_split))
-
-				(gnc:debug "split units " (gnc-numeric-to-string split-units) " split-value " 
-				           (gnc-numeric-to-string split-value) " commod-currency " 
-				           (gnc-commodity-get-printname commod-currency))
-			        
-				;; now we look at what type of split this is and process accordingly
-			  (cond
-
-				 ;; in theory, the only expenses are
-				 ;; brokerage fees. Not true, you can
-				 ;; have expenses for "donating"
-				 ;; shares to a charity, for
-				 ;; example. In this case, there will
-				 ;; be *only* two
-				 ;; splits. xaccSplitGetOtherSplit
-				 ;; returns null for a
-				 ;; more-than-two-splits txn
-				 ((split-account-type? s ACCT-TYPE-EXPENSE)
-				  (if (equal? current (xaccSplitGetAccount (xaccSplitGetOtherSplit s)))
-				      ;; "donated shares"
-				      (begin (gnc:debug "Money out 1 " (gnc-numeric-to-string split-value))
-				             (moneyoutcoll 'add commod-currency split-value))
-				      ;; brokerage fees
-				      (begin (gnc:debug "Brokerage 1 " (gnc-numeric-to-string split-value))
-				             (brokeragecoll 'add commod-currency split-value))))
-
-				 ;; in theory, income is a dividend of
-				 ;; some kind. it could also be
-				 ;; gains. that gets handled later. it
-				 ;; could also be direct income into
-				 ;; shares, say from an employer into
-				 ;; a retirement account. basically,
-				 ;; there is nothing that can be done
-				 ;; with these to differentiate them
-				 ((split-account-type? s ACCT-TYPE-INCOME)
-				  (dividendcoll 
-				   'add commod-currency 
-				   ;; dig through the txn looking for
-				   ;; the stock itself and base the
-				   ;; dividend on that. This allows
-				   ;; dividends to be split between
-				   ;; multiple stocks based on the
-				   ;; value of each stock purchased
-				   (let* ((txn (xaccSplitGetParent s))
-					 (dividend-rein (gnc-numeric-zero))
-					 (dividend-income (gnc-numeric-neg (xaccSplitGetValue s)))
-					 (adjusted-dividend dividend-income)
-					 (split-brokerage (gnc-numeric-zero))
-					 (split-ratio (gnc-numeric-zero)))
-				     (for-each
-				      (lambda (x) 
-					(cond 
-					 ((and (same-account? current (xaccSplitGetAccount x))
-					      (gnc-numeric-positive-p (xaccSplitGetAmount x)))
-					  (begin
-					    (set! dividend-rein (xaccSplitGetValue x))
-					    (dividend-reincoll 'add commod-currency dividend-rein)
-					    (gnc:debug "setting the dividend-rein to " (gnc-numeric-to-string (xaccSplitGetValue x)))))
-					 ;; very special case: we have
-					 ;; a split that points to the
-					 ;; current account with no
-					 ;; shares (amount) but a
-					 ;; value == gains/loss split,
-					 ;; adjust this back out of
-					 ;; dividends because we'll
-					 ;; erroneously pick it up
-					 ;; later.
-					 ((and (same-account? current (xaccSplitGetAccount x))
-					       (gnc-numeric-zero-p (xaccSplitGetAmount x))
-					       (not (gnc-numeric-zero-p (xaccSplitGetValue x))))
-					  (begin (gnc:debug "dividend 2 " (gnc-numeric-to-string (xaccSplitGetValue x)))
-					         (dividendcoll 'add commod-currency (gnc-numeric-neg (xaccSplitGetValue x)))))
-
-					 ((split-account-type? x ACCT-TYPE-EXPENSE)
-					  (begin
-					    (gnc-numeric-sub adjusted-dividend (xaccSplitGetValue x) commod-currency-frac GNC-RND-ROUND)
-					    (gnc:debug "adjusting adjusted-dividend by " (gnc-numeric-to-string (xaccSplitGetValue x)))
-					    ;; grab the brokerage that
-					    ;; may be associated so we
-					    ;; can split it too
-					    (gnc-numeric-add split-brokerage (xaccSplitGetValue x) commod-currency-frac GNC-RND-ROUND)
-					    )
-					  )
-					 )
-					)
-				      (xaccTransGetSplitList txn))
-				     
-				     ;; make a ratio out of the reinvest and adjusted dividends
-				     (set! split-ratio (gnc-numeric-div dividend-rein 
-									adjusted-dividend 
-									GNC-DENOM-AUTO GNC-RND-ROUND))
-
-                                     (if (not (gnc-numeric-zero-p split-brokerage))
-                                       (begin
-                                          ;; take the brokerage back out and apply the ratio
-                                          (gnc:debug "Reducing brokerage " (gnc-numeric-to-string split-brokerage) 
-                                                     " by ratio " (gnc-numeric-to-string split-ratio))
-                                          (brokeragecoll 'add commod-currency (gnc-numeric-neg split-brokerage))
-                                          (brokeragecoll 'add commod-currency 
-                                                         (gnc-numeric-mul split-brokerage 
-                                                                          split-ratio
-                                                                          commod-currency-frac GNC-RND-ROUND))
-				       )
-				     )  
-
-				     (if (gnc-numeric-zero-p dividend-rein)
-				         (begin
-					 ;; no reinvested dividend, return just the income split
-				         (gnc:debug "Dividend 1 " (gnc-numeric-to-string dividend-income))
-					 dividend-income
-				         )	
-				        
-					 ;; dividend reinvested so
-					 ;; apply the ratio to the
-					 ;; dividend and return it for
-					 ;; use in the dividend
-					 ;; collector
-					 (let ((div (gnc-numeric-mul dividend-income 
-						                     split-ratio
-						                     commod-currency-frac GNC-RND-ROUND)))
-					    (gnc:debug "Adjusted dividend " (gnc-numeric-to-string div))
-					    div)
-					 )
-				     )
-				   ))
-
-				 ;; we have units, handle all cases of that
-				 ((not (gnc-numeric-zero-p split-units))
-				    ;; are we dealing with the actual stock/fund?
-				    (if (same-account? current (xaccSplitGetAccount s))
-					(let ((split-value-currency (gnc:gnc-monetary-amount 
-									(my-exchange-fn (gnc:make-gnc-monetary 
-									   commod-currency split-value) currency)))
-			                      (orig-basis (sum-basis basis-list currency-frac)))
-                                          (gnc:debug "going in to basis list " basis-list " " (gnc-numeric-to-string split-units) " "
-                                                     (gnc-numeric-to-string split-value))
-
-					  ;; adjust the basis
-					  (set! basis-list (basis-builder basis-list split-units split-value-currency 
-									  basis-method currency-frac))
-                                          (gnc:debug  "coming out of basis list " basis-list)
-                                          
-					  ;; adjust moneyin/out and calculate the gain
-					  (if (gnc-numeric-positive-p split-value)
-					      ;; but only adjust moneyin if it's not a spinoff
-					      (if (or (null? (xaccSplitGetOtherSplit s))
-						      (not (gnc-numeric-zero-p (xaccSplitGetAmount (xaccSplitGetOtherSplit s)))))
-					       (begin (gnc:debug "Money in 2 " (gnc-numeric-to-string split-value))
-					              (moneyincoll 'add commod-currency split-value)))
-					      ;; Split value is zero or negative.  If it's zero it's either a stock split/merge
-					      ;; or the stock has become worthless (which looks like a merge where the number
-					      ;; of shares goes to zero).  If the value is negative then it's a disposal of some sort.
-					      (let ((new-basis (sum-basis basis-list currency-frac)))
-                                                     (if (or (gnc-numeric-zero-p new-basis)
-                                                             (gnc-numeric-negative-p split-value))
-                                                       ;; Split value is negative or new basis is zero (stock is worthless), 
-                                                       ;; Capital gain is money out minus change in basis
-                                                       (let ((gain (gnc-numeric-sub (gnc-numeric-abs split-value-currency)
-                                                                                 (gnc-numeric-sub orig-basis new-basis
-                                                                                                  currency-frac GNC-RND-ROUND)
-                                                                                 currency-frac GNC-RND-ROUND)))
-                                                              (gnc:debug "Old basis=" (gnc-numeric-to-string orig-basis)
-                                                                         " New basis=" (gnc-numeric-to-string new-basis)
-                                                                         " Gain=" (gnc-numeric-to-string gain))
-                                                              (gaincoll 'add currency gain)
-                                                              (gnc:debug "Money out 2 " (gnc-numeric-to-string (gnc-numeric-neg split-value)))
-                                                              (moneyoutcoll 'add commod-currency (gnc-numeric-neg split-value))))))
-					  )
-					)
-				  )
-
-				 ;; here is where we handle a spin-off txn. This will be a no-units
-				 ;; transaction with only one other split. xaccSplitGetOtherSplit only
-				 ;; returns on a two-split txn.  It's not a spinoff is the other split is
-				 ;; in an income or expense account.
-				 ((and (gnc-numeric-zero-p split-units) 
-				       (not (null? (xaccSplitGetOtherSplit s)))
-				       (same-account? current (xaccSplitGetAccount s))
-				       (not (split-account-type? (xaccSplitGetOtherSplit s) ACCT-TYPE-EXPENSE))
-				       (not (split-account-type? (xaccSplitGetOtherSplit s) ACCT-TYPE-INCOME)))
-				    (gnc:debug "before spin-off basis list " basis-list)
-				    (set! basis-list (basis-builder basis-list split-units (gnc:gnc-monetary-amount 
-                                                                                            (my-exchange-fn (gnc:make-gnc-monetary 
-                                                                                                          commod-currency split-value) 
-                                                                                                         currency)) 
-                                                                                                         basis-method
-                                                                                                         currency-frac))
-				    (gnc:debug "after spin-off basis list "  basis-list)
-				  )
-				 )
-				)
-			      )
-			  )
-			(xaccTransGetSplitList parent)
-			)
+                             (gnc:debug "Pass 1: split units " (gnc-numeric-to-string split-units) " split-value " 
+                                        (gnc-numeric-to-string split-value) " commod-currency " 
+                                        (gnc-commodity-get-printname commod-currency))
+                             
+                             (cond 
+                                ((split-account-type? s ACCT-TYPE-EXPENSE)
+                                 ;; Brokerage expense unless a two split transaction with other split
+                                 ;; in the stock account in which case it's a stock donation to charity.
+                                 (if (not (same-account? current (xaccSplitGetAccount (xaccSplitGetOtherSplit s)))) 
+                                   (set! trans-brokerage 
+                                         (gnc-numeric-add trans-brokerage split-value commod-currency-frac GNC-RND-ROUND))
+                                   (set! trans-moneyout
+                                         (gnc-numeric-add trans-moneyout split-value commod-currency-frac GNC-RND-ROUND))))
+                                   
+                                ((split-account-type? s ACCT-TYPE-INCOME)
+                                 (set! trans-income (gnc-numeric-sub trans-income split-value
+                                                             commod-currency-frac GNC-RND-ROUND)))
+                                                  
+                                ((same-account? current (xaccSplitGetAccount s))
+                                 (set! trans-shares (gnc-numeric-add trans-shares (gnc-numeric-abs split-units)
+                                                  units-denom GNC-RND-ROUND))
+                                 (if (gnc-numeric-zero-p split-units)
+                                     (if (and (not (gnc-numeric-zero-p split-value))
+                                              (not (spin-off? s current)))
+                                          ;; Gain/loss split (amount zero and value non-zero).  There will be
+                                          ;; a corresponding income split that will incorrectly be added to trans-income
+                                          ;; Fix that by subtracting it here
+                                          (set! trans-income (gnc-numeric-sub trans-income split-value commod-currency-frac GNC-RND-ROUND)))
+                                     ;; Non-zero amount, add the value to the sale or purchase total.
+                                     (if (gnc-numeric-positive-p split-value)
+                                          (set! trans-bought
+                                               (gnc-numeric-add trans-bought split-value commod-currency-frac GNC-RND-ROUND))
+                                          (set! trans-sold
+                                               (gnc-numeric-sub trans-sold split-value commod-currency-frac GNC-RND-ROUND)))))
+                                                  
+                                ((or (split-account-type? s ACCT-TYPE-BANK)
+                                     (split-account-type? s ACCT-TYPE-CASH)
+                                     (split-account-type? s ACCT-TYPE-ASSET)
+                                     (split-account-type? s ACCT-TYPE-STOCK)
+                                     (split-account-type? s ACCT-TYPE-MUTUAL))
+                                 (if (gnc-numeric-positive-p split-value)
+                                      (if (or (not ignore-parent-and-siblings)
+                                              (not (parent-or-sibling? (xaccSplitGetAccount s) current))) 
+                                       (set! trans-moneyout 
+                                             (gnc-numeric-add trans-moneyout split-value commod-currency-frac GNC-RND-ROUND)))
+                                      (if (or (not ignore-parent-and-siblings)
+                                              (not (parent-or-sibling? (xaccSplitGetAccount s) current))) 
+                                       (set! trans-moneyin 
+                                             (gnc-numeric-sub trans-moneyin split-value commod-currency-frac GNC-RND-ROUND))))))
+		         ))
+		         (xaccTransGetSplitList parent)
 		       )
-		     )
+		       
+		       (gnc:debug "Income: " (gnc-numeric-to-string trans-income)
+		                  " Brokerage: " (gnc-numeric-to-string trans-brokerage)
+		                  " Shares traded: " (gnc-numeric-to-string trans-shares)
+		                  " Value sold: " (gnc-numeric-to-string trans-sold)
+		                  " Value purchased: " (gnc-numeric-to-string trans-bought))
+		       (gnc:debug "     Money in: " (gnc-numeric-to-string trans-moneyin)
+		                  " Money out: " (gnc-numeric-to-string trans-moneyout))
+		                  
+		       ;; Income not reinvested
+		       (if (gnc-numeric-positive-p trans-income)
+		           (begin
+                             (set! trans-income (gnc-numeric-sub trans-income trans-bought commod-currency-frac GNC-RND-ROUND))
+                             (set! trans-income (gnc-numeric-sub trans-income trans-brokerage commod-currency-frac GNC-RND-ROUND))
+                             (if (gnc-numeric-positive-p trans-income)
+                               (begin
+                                 (gnc:debug "Adjusted income " (gnc-numeric-to-string trans-income))
+                                 (dividendcoll 'add commod-currency trans-income)))))
+
+                       ;; Brokerage fees.  May be either ignored or part of basis, but that
+                       ;; will be dealt with elsewhere.
+                       (brokeragecoll 'add commod-currency trans-brokerage)
+                           
+                       ;; Money in and out
+                       ;; Don't count non reinvested dividends as money out
+                       (if (gnc-numeric-positive-p trans-income)
+                           (set! trans-moneyout (gnc-numeric-sub trans-moneyout trans-income 
+                                                                 commod-currency-frac GNC-RND-ROUND)))
+                       ;; Exclude brokerage fees if asked to
+                       (if (and (eq? handle-brokerage-fees 'ignore-brokerage)
+                                (gnc-numeric-positive-p trans-brokerage))
+                           (if (gnc-numeric-positive-p trans-moneyin)
+                               (set! trans-moneyin (gnc-numeric-sub trans-moneyin trans-brokerage 
+                                                                    commod-currency-frac GNC-RND-ROUND))
+                               (if (gnc-numeric-positive-p trans-moneyout)
+                                   (set! trans-moneyout (gnc-numeric-add trans-moneyout trans-brokerage
+                                                                         commod-currency-frac GNC-RND-ROUND)))))
+                       ;; Don't let either of them go negative after that adjustment
+                       (if (gnc-numeric-negative-p trans-moneyin)
+                           (set! trans-moneyin (gnc-numeric-zero)))
+                       (if (gnc-numeric-negative-p trans-moneyout)
+                           (set! trans-moneyout (gnc-numeric-zero)))
+                       (gnc:debug "Adjusted moneyin " (gnc-numeric-to-string trans-moneyin)
+                                  " Adjusted moneyout " (gnc-numeric-to-string trans-moneyout))
+                       (moneyincoll 'add commod-currency trans-moneyin)
+                       (moneyoutcoll 'add commod-currency trans-moneyout)
+                           
+                       ;; Look at splits again to handle changes in basis and realized gains 
+		       (for-each
+		         (lambda (s)
+                           (let
+                              ;; get the split's units and value
+                              ((split-units (xaccSplitGetAmount s))
+                               (split-value (xaccSplitGetValue s)))
+
+                             (gnc:debug "Pass 2: split units " (gnc-numeric-to-string split-units) " split-value " 
+                                        (gnc-numeric-to-string split-value) " commod-currency " 
+                                        (gnc-commodity-get-printname commod-currency))
+                             
+                             (cond 
+                               ((and (not (gnc-numeric-zero-p split-units))
+                                     (same-account? current (xaccSplitGetAccount s)))
+                                ;; Split into subject account with non-zero amount.  This is a purchase
+                                ;; or a sale, adjust the basis
+				(let* ((split-value-currency (gnc:gnc-monetary-amount 
+								(my-exchange-fn (gnc:make-gnc-monetary 
+								   commod-currency split-value) currency)))
+			               (orig-basis (sum-basis basis-list currency-frac))
+			               ;; proportion of the fees attributable to this split
+			               (fee-ratio (gnc-numeric-div (gnc-numeric-abs split-units) trans-shares
+			                                           GNC-DENOM-AUTO GNC-RND-ROUND))
+			               ;; Fees for this split in report currency 
+			               (fees-currency (gnc:gnc-monetary-amount (my-exchange-fn 
+			                               (gnc:make-gnc-monetary commod-currency
+			                                 (gnc-numeric-mul fee-ratio trans-brokerage
+			                                                commod-currency-frac GNC-RND-ROUND))
+			                                currency)))
+			               (split-value-with-fees (if (eq? handle-brokerage-fees 'include-in-basis) 
+			                                          ;; Include brokerage fees in basis 
+			                                          (gnc-numeric-add split-value-currency fees-currency
+			                                                        currency-frac GNC-RND-ROUND)
+			                                          split-value-currency)))
+                                  (gnc:debug "going in to basis list " basis-list " " (gnc-numeric-to-string split-units) " "
+                                             (gnc-numeric-to-string split-value-with-fees))
+
+				  ;; adjust the basis
+				  (set! basis-list (basis-builder basis-list split-units split-value-with-fees 
+								  basis-method currency-frac))
+                                  (gnc:debug  "coming out of basis list " basis-list)
+                                  
+                                  ;; If it's a sale or the stock is worthless, calculate the gain
+                                  (if (not (gnc-numeric-positive-p split-value))
+                                       ;; Split value is zero or negative.  If it's zero it's either a stock split/merge
+                                       ;; or the stock has become worthless (which looks like a merge where the number
+                                       ;; of shares goes to zero).  If the value is negative then it's a disposal of some sort.
+                                       (let ((new-basis (sum-basis basis-list currency-frac)))
+                                              (if (or (gnc-numeric-zero-p new-basis)
+                                                      (gnc-numeric-negative-p split-value))
+                                                ;; Split value is negative or new basis is zero (stock is worthless), 
+                                                ;; Capital gain is money out minus change in basis
+                                                (let ((gain (gnc-numeric-sub (gnc-numeric-abs split-value-with-fees)
+                                                                          (gnc-numeric-sub orig-basis new-basis
+                                                                                           currency-frac GNC-RND-ROUND)
+                                                                          currency-frac GNC-RND-ROUND)))
+                                                       (gnc:debug "Old basis=" (gnc-numeric-to-string orig-basis)
+                                                                  " New basis=" (gnc-numeric-to-string new-basis)
+                                                                  " Gain=" (gnc-numeric-to-string gain))
+                                                       (gaincoll 'add currency gain)))))))
+
+                               ;; here is where we handle a spin-off txn. This will be a no-units
+                               ;; split with only one other split. xaccSplitGetOtherSplit only
+                               ;; returns on a two-split txn.  It's not a spinoff is the other split is
+                               ;; in an income or expense account.
+                               ((spin-off? s current)
+                                  (gnc:debug "before spin-off basis list " basis-list)
+                                  (set! basis-list (basis-builder basis-list split-units (gnc:gnc-monetary-amount 
+                                                                                          (my-exchange-fn (gnc:make-gnc-monetary 
+                                                                                                        commod-currency split-value) 
+                                                                                                       currency)) 
+                                                                                                       basis-method
+                                                                                                       currency-frac))
+                                  (gnc:debug "after spin-off basis list "  basis-list))
+                             )
+		         ))
+		         (xaccTransGetSplitList parent)
+		       )  
+		      )
+		   )
 		 )
 	       )
 	     (xaccAccountGetSplitList current)
@@ -732,10 +757,7 @@
 	                                                            currency-frac)))
 	    (gnc:debug "but the actual basis list is " basis-list)
 
-            ;; This removes the already-counted reinvested dividends from moneyin.
-	    (moneyincoll 'minusmerge dividend-reincoll #f)
-
-            (if (not ignore-brokerage-fees)
+            (if (eq? handle-brokerage-fees 'include-in-gain)
 	      (gaincoll 'minusmerge brokeragecoll #f))
 
 	  (if (or include-empty (not (gnc-numeric-zero-p units)))
@@ -817,7 +839,7 @@
 						  (sprintf #f "%.2f%%" (* 100 (/ bothgainvalue moneyinvalue)))))
 					)
 					(gnc:make-html-table-header-cell/markup "number-cell" income)))
-	      (if (not ignore-brokerage-fees)
+	      (if (not (eq? handle-brokerage-fees 'ignore-brokerage))
 		  (append! activecols (list (gnc:make-html-table-header-cell/markup "number-cell" brokerage))))
 	      (append! activecols (list (gnc:make-html-table-header-cell/markup "number-cell" totalreturn)
 					(gnc:make-html-table-header-cell/markup "number-cell" 
@@ -878,8 +900,10 @@
 				  optname-basis-method))
 	(prefer-pricelist (get-option gnc:pagename-general
 				      optname-prefer-pricelist))
-	(ignore-brokerage-fees (get-option gnc:pagename-general
-				  optname-ignore-brokerage-fees))
+	(handle-brokerage-fees (get-option gnc:pagename-general
+				  optname-brokerage-fees))
+	(ignore-parent-and-siblings (get-option gnc:pagename-general
+	                               optname-ignore-parent-and-sibling-transfers))
 
 	(total-basis (gnc:make-commodity-collector))
         (total-value    (gnc:make-commodity-collector))
@@ -950,7 +974,7 @@
 				    (_ "Rate of Gain")
 				    (_ "Income")))
 
-	  (if (not ignore-brokerage-fees)
+	  (if (not (eq? handle-brokerage-fees 'ignore-brokerage))
 	      (append! headercols (list (_ "Brokerage Fees"))))
 
 	  (append! headercols (list (_ "Total Return")
@@ -964,8 +988,8 @@
           
           (table-add-stock-rows
            table accounts to-date currency price-fn exchange-fn price-source
-           include-empty show-symbol show-listing show-shares show-price
-	   basis-method prefer-pricelist ignore-brokerage-fees
+           include-empty show-symbol show-listing show-shares show-price basis-method
+	   prefer-pricelist handle-brokerage-fees ignore-parent-and-siblings
            total-basis total-value total-moneyin total-moneyout
            total-income total-gain total-ugain total-brokerage)
 	  
@@ -1017,7 +1041,7 @@
 				      (sprintf #f "%.2f%%" (* 100 (/ totalgainvalue totalinvalue))))))
 			       (gnc:make-html-table-cell/markup
 				"total-number-cell" sum-total-income)))
-	  (if (not ignore-brokerage-fees)
+	  (if (not (eq? handle-brokerage-fees 'ignore-brokerage))
 	      (append! totalscols (list
 			       (gnc:make-html-table-cell/markup
                                 "total-number-cell" sum-total-brokerage))))
