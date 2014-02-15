@@ -82,6 +82,8 @@
 
 (define optname-show-zero-lines (N_ "Show Lines with All Zeros"))
 (define opthelp-show-zero-lines (N_ "Show the table lines with customers which did not have any transactions in the reporting period, hence would show all zeros in the columns."))
+(define optname-show-inactive (N_ "Show Inactive Customers"))
+(define opthelp-show-inactive (N_ "Include customers that have been marked inactive."))
 
 (define optname-sortkey (N_ "Sort Column"))
 (define opthelp-sortkey (N_ "Choose the column by which the result table is sorted."))
@@ -486,13 +488,18 @@
 
   (add-option
    (gnc:make-simple-boolean-option
+    gnc:pagename-display optname-show-inactive
+    "f" opthelp-show-inactive #f))
+
+  (add-option
+   (gnc:make-simple-boolean-option
     gnc:pagename-display optname-show-column-expense
-    "f" opthelp-show-column-expense #t))
+    "g" opthelp-show-column-expense #t))
 
 ;  (add-option
 ;   (gnc:make-simple-boolean-option
 ;    gnc:pagename-display optname-show-txn-table
-;    "f" opthelp-show-txn-table #f))
+;    "h" opthelp-show-txn-table #f))
 
   (gnc:options-set-default-section options gnc:pagename-general)
 
@@ -703,7 +710,10 @@
          (book (gnc-get-current-book)) ;XXX Grab this from elsewhere
          (type (opt-val "__reg" "owner-type"))
          (reverse? (opt-val "__reg" "reverse?"))
-         (ownerlist (gncBusinessGetOwnerList book (gncOwnerTypeToQofIdType type) #f))
+         (ownerlist (gncBusinessGetOwnerList
+                        book
+                        (gncOwnerTypeToQofIdType type)
+                        (opt-val gnc:pagename-display optname-show-inactive)))
          (toplevel-income-query (qof-query-create-for-splits))
          (toplevel-expense-query (qof-query-create-for-splits))
          (toplevel-total-income #f)
