@@ -118,11 +118,11 @@
                     (N_ "Ignore brokerage fees entirely."))
             )))
       
-    (add-option
-     (gnc:make-simple-boolean-option
-      gnc:pagename-general optname-ignore-parent-and-sibling-transfers "h"
-      (N_ "Money moved from or to a parent or sibling account is not counted as money in or out")
-      #f))
+;;     (add-option
+;;      (gnc:make-simple-boolean-option
+;;       gnc:pagename-general optname-ignore-parent-and-sibling-transfers "h"
+;;       (N_ "Money moved from or to a parent or sibling account is not counted as money in or out")
+;;       #f))
 
     (gnc:register-option
       options
@@ -546,6 +546,7 @@
 		     (let ((trans-income (gnc-numeric-zero))
 		           (trans-brokerage (gnc-numeric-zero))
 		           (trans-shares (gnc-numeric-zero))
+		           (shares-bought (gnc-numeric-zero))
 		           (trans-sold (gnc-numeric-zero))
 		           (trans-bought (gnc-numeric-zero))
 		           (trans-moneyin (gnc-numeric-zero))
@@ -593,8 +594,11 @@
                                           (set! trans-income (gnc-numeric-sub trans-income split-value commod-currency-frac GNC-RND-ROUND)))
                                      ;; Non-zero amount, add the value to the sale or purchase total.
                                      (if (gnc-numeric-positive-p split-value)
-                                          (set! trans-bought
-                                               (gnc-numeric-add trans-bought split-value commod-currency-frac GNC-RND-ROUND))
+                                          (begin
+                                             (set! trans-bought
+                                                  (gnc-numeric-add trans-bought split-value commod-currency-frac GNC-RND-ROUND))
+                                             (set! shares-bought
+                                                  (gnc-numeric-add shares-bought split-units units-denom GNC-RND-ROUND)))
                                           (set! trans-sold
                                                (gnc-numeric-sub trans-sold split-value commod-currency-frac GNC-RND-ROUND)))))
                                                   
@@ -619,48 +623,59 @@
 		       (gnc:debug "Income: " (gnc-numeric-to-string trans-income)
 		                  " Brokerage: " (gnc-numeric-to-string trans-brokerage)
 		                  " Shares traded: " (gnc-numeric-to-string trans-shares)
-		                  " Value sold: " (gnc-numeric-to-string trans-sold)
-		                  " Value purchased: " (gnc-numeric-to-string trans-bought))
-		       (gnc:debug "     Money in: " (gnc-numeric-to-string trans-moneyin)
+		                  " Shares bought: " (gnc-numeric-to-string shares-bought))
+		       (gnc:debug " Value sold: " (gnc-numeric-to-string trans-sold)
+		                  " Value purchased: " (gnc-numeric-to-string trans-bought)
+		                  " Money in: " (gnc-numeric-to-string trans-moneyin)
 		                  " Money out: " (gnc-numeric-to-string trans-moneyout))
 		                  
-		       ;; Income not reinvested
-		       (if (gnc-numeric-positive-p trans-income)
-		           (begin
-                             (set! trans-income (gnc-numeric-sub trans-income trans-bought commod-currency-frac GNC-RND-ROUND))
-                             (set! trans-income (gnc-numeric-sub trans-income trans-brokerage commod-currency-frac GNC-RND-ROUND))
-                             (if (gnc-numeric-positive-p trans-income)
-                               (begin
-                                 (gnc:debug "Adjusted income " (gnc-numeric-to-string trans-income))
-                                 (dividendcoll 'add commod-currency trans-income)))))
-
+		       ;; We need to calculate several things for this transaction:
+		       ;; 1. Total income: this is already in trans-income
+		       ;; 2. Change in basis: calculated by loop below that looks at every 
+		       ;;    that acquires or disposes of shares
+		       ;; 3. Realized gain: also calculated below while calculating basis
+		       ;; 4. Money in to the account: this is the value of shares bought
+		       ;;    except those purchased with reinvested income
+		       ;; 5. Money out: the money received by disposing of shares.   This
+		       ;;    is in trans-sold
+		       ;; 6. Brokerage fees: this is in trans-brokerage
+		       
+		       ;; Income
+		       (dividendcoll 'add commod-currency trans-income)
+		       
                        ;; Brokerage fees.  May be either ignored or part of basis, but that
                        ;; will be dealt with elsewhere.
                        (brokeragecoll 'add commod-currency trans-brokerage)
                            
-                       ;; Money in and out
-                       ;; Don't count non reinvested dividends as money out
+                       ;; Add brokerage fees to trans-bought if not ignoring them and there are any
+                       (if (and (not (eq? handle-brokerage-fees 'ignore-brokerage))
+                                (gnc-numeric-positive-p trans-brokerage)
+                                (gnc-numeric-positive-p trans-shares))
+                           (let* ((fee-frac (gnc-numeric-div shares-bought trans-shares GNC-DENOM-AUTO GNC-RND-ROUND))
+                                  (fees (gnc-numeric-mul trans-brokerage fee-frac commod-currency-frac GNC-RND-ROUND)))
+                                 (set! trans-bought (gnc-numeric-add trans-bought fees commod-currency-frac GNC-RND-ROUND)))) 
+                           
+                       ;; Calculate income that might have been reinvested.  If there is no income
+                       ;; then none of it was reinvested
                        (if (gnc-numeric-positive-p trans-income)
-                           (set! trans-moneyout (gnc-numeric-sub trans-moneyout trans-income 
-                                                                 commod-currency-frac GNC-RND-ROUND)))
-                       ;; Exclude brokerage fees if asked to
-                       (if (and (eq? handle-brokerage-fees 'ignore-brokerage)
-                                (gnc-numeric-positive-p trans-brokerage))
-                           (if (gnc-numeric-positive-p trans-moneyin)
-                               (set! trans-moneyin (gnc-numeric-sub trans-moneyin trans-brokerage 
-                                                                    commod-currency-frac GNC-RND-ROUND))
-                               (if (gnc-numeric-positive-p trans-moneyout)
-                                   (set! trans-moneyout (gnc-numeric-add trans-moneyout trans-brokerage
-                                                                         commod-currency-frac GNC-RND-ROUND)))))
-                       ;; Don't let either of them go negative after that adjustment
-                       (if (gnc-numeric-negative-p trans-moneyin)
-                           (set! trans-moneyin (gnc-numeric-zero)))
-                       (if (gnc-numeric-negative-p trans-moneyout)
-                           (set! trans-moneyout (gnc-numeric-zero)))
-                       (gnc:debug "Adjusted moneyin " (gnc-numeric-to-string trans-moneyin)
-                                  " Adjusted moneyout " (gnc-numeric-to-string trans-moneyout))
-                       (moneyincoll 'add commod-currency trans-moneyin)
-                       (moneyoutcoll 'add commod-currency trans-moneyout)
+                           (let* ((income-reinvested (gnc-numeric-sub trans-moneyin trans-moneyout 
+                                                                commod-currency-frac GNC-RND-ROUND)))
+                                 (if (gnc-numeric-negative-p income-reinvested)
+                                     ;; More went out than in, some may not have been reinvested
+                                     (set! income-reinvested (gnc-numeric-add trans-income income-reinvested 
+                                                                commod-currency-frac GNC-RND-ROUND))
+                                     ;; It was all potentially reinvested
+                                     (set! income-reinvested trans-income))
+                                 ;; Adjust trans-bought to not include reinvested income
+                                 (set! trans-bought (gnc-numeric-sub trans-bought income-reinvested commod-currency-frac GNC-RND-ROUND))
+                                 ;; You can't reinvest more than you purchases.
+                                 (if (gnc-numeric-negative-p trans-bought)
+                                     (set! trans-bought (gnc-numeric-zero)))))
+
+                       (gnc:debug "Adjusted trans-bought " (gnc-numeric-to-string trans-bought)
+                                  " income-reinvested " (gnc-numeric-to-string income-reinvested))
+                       (moneyincoll 'add commod-currency trans-bought)
+                       (moneyoutcoll 'add commod-currency trans-sold)
                            
                        ;; Look at splits again to handle changes in basis and realized gains 
 		       (for-each
@@ -902,8 +917,9 @@
 				      optname-prefer-pricelist))
 	(handle-brokerage-fees (get-option gnc:pagename-general
 				  optname-brokerage-fees))
-	(ignore-parent-and-siblings (get-option gnc:pagename-general
-	                               optname-ignore-parent-and-sibling-transfers))
+;; 	(ignore-parent-and-siblings (get-option gnc:pagename-general
+;; 	                               optname-ignore-parent-and-sibling-transfers))
+        (ignore-parent-and-siblings #f)
 
 	(total-basis (gnc:make-commodity-collector))
         (total-value    (gnc:make-commodity-collector))
