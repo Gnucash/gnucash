@@ -670,10 +670,10 @@
                                  (set! trans-bought (gnc-numeric-sub trans-bought income-reinvested commod-currency-frac GNC-RND-ROUND))
                                  ;; You can't reinvest more than you purchases.
                                  (if (gnc-numeric-negative-p trans-bought)
-                                     (set! trans-bought (gnc-numeric-zero)))))
+                                     (set! trans-bought (gnc-numeric-zero)))
+                                 (gnc:debug "Adjusted trans-bought " (gnc-numeric-to-string trans-bought)
+                                            " income-reinvested " (gnc-numeric-to-string income-reinvested))))
 
-                       (gnc:debug "Adjusted trans-bought " (gnc-numeric-to-string trans-bought)
-                                  " income-reinvested " (gnc-numeric-to-string income-reinvested))
                        (moneyincoll 'add commod-currency trans-bought)
                        (moneyoutcoll 'add commod-currency trans-sold)
                            
