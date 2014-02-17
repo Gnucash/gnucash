@@ -60,6 +60,8 @@ struct _payment_window
 {
     GtkWidget   * dialog;
 
+    GtkWidget   * payment_warning;
+    GtkWidget   * ok_button;
     GtkWidget   * num_entry;
     GtkWidget   * memo_entry;
     GtkWidget   * post_combo;
@@ -75,6 +77,8 @@ struct _payment_window
     GncOwner      owner;
     GncInvoice  * invoice;
     Account     * post_acct;
+    Account     * xfer_acct;
+    gnc_numeric   amount_tot;
     GList       * acct_types;
     GList       * acct_commodities;
 
@@ -142,6 +146,7 @@ static gboolean gnc_payment_dialog_has_pre_existing_txn(const PaymentWindow* pw)
 }
 int  gnc_payment_dialog_post_to_changed_cb (GtkWidget *widget, gpointer data);
 void gnc_payment_dialog_document_selection_changed_cb (GtkWidget *widget, gpointer data);
+void gnc_payment_dialog_xfer_acct_changed_cb (GtkWidget *widget, gpointer data);
 void gnc_payment_ok_cb (GtkWidget *widget, gpointer data);
 void gnc_payment_cancel_cb (GtkWidget *widget, gpointer data);
 void gnc_payment_window_destroy_cb (GtkWidget *widget, gpointer data);
@@ -157,6 +162,80 @@ gnc_payment_window_refresh_handler (GHashTable *changes, gpointer data)
     PaymentWindow *pw = data;
 
     pw->post_acct = gnc_account_select_combo_fill (pw->post_combo, pw->book, pw->acct_types, pw->acct_commodities);
+}
+
+static gboolean
+gnc_payment_window_check_payment (PaymentWindow *pw)
+{
+    const char *conflict_msg = NULL;
+    Account *post, *acc;
+    gnc_numeric amount_deb, amount_cred;
+    gboolean enable_xfer_acct = TRUE;
+    GtkTreeSelection *selection;
+
+    if (!pw)
+        return FALSE;
+
+    /* Verify the "post" account */
+    if (!pw->post_acct)
+    {
+        conflict_msg = _("You must enter a valid account name for posting.");
+        goto update_cleanup;
+    }
+
+    /* Verify the user has selected an owner */
+    gnc_owner_get_owner (pw->owner_choice, &(pw->owner));
+    if (!gncOwnerIsValid(&pw->owner))
+    {
+        conflict_msg = _("You must select a company for payment processing.");
+        goto update_cleanup;
+    }
+
+    /* Verify at least one document is selected */
+    selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(pw->docs_list_tree_view));
+    if (!gtk_tree_selection_count_selected_rows (selection))
+    {
+        conflict_msg = _("You must select at least one document or pre-payment to process.");
+        goto update_cleanup;
+    }
+
+    /* Test the total amount */
+    amount_deb  = gnc_amount_edit_get_amount (GNC_AMOUNT_EDIT (pw->amount_debit_edit));
+    amount_cred = gnc_amount_edit_get_amount (GNC_AMOUNT_EDIT (pw->amount_credit_edit));
+    pw->amount_tot = gnc_numeric_sub (amount_cred, amount_deb,
+                                      gnc_commodity_get_fraction (xaccAccountGetCommodity (pw->post_acct)),
+                                      GNC_HOW_RND_ROUND_HALF_UP);
+
+    if (gnc_numeric_check (pw->amount_tot) || gnc_numeric_zero_p (pw->amount_tot))
+        enable_xfer_acct = FALSE;
+    else
+    {
+        /* Verify the user has selected a transfer account */
+        pw->xfer_acct = gnc_tree_view_account_get_selected_account (GNC_TREE_VIEW_ACCOUNT(pw->acct_tree));
+        if (!pw->xfer_acct)
+        {
+            conflict_msg = _("You must select a transfer account from the account tree.");
+        }
+    }
+
+update_cleanup:
+    gtk_widget_set_sensitive (pw->acct_tree, enable_xfer_acct);
+
+    /* Check if there are issues preventing a successful payment */
+    gtk_widget_set_tooltip_text (pw->payment_warning, conflict_msg);
+    if (conflict_msg)
+    {
+        gtk_widget_show (pw->payment_warning);
+        gtk_widget_set_sensitive (pw->ok_button, FALSE);
+        return FALSE;
+    }
+    else
+    {
+        gtk_widget_hide (pw->payment_warning);
+        gtk_widget_set_sensitive (pw->ok_button, TRUE);
+    }
+
+    return TRUE;
 }
 
 static void
@@ -237,6 +316,7 @@ gnc_payment_dialog_highlight_document (PaymentWindow *pw)
         GtkTreeIter iter;
         GtkTreeModel *model = gtk_tree_view_get_model(GTK_TREE_VIEW(pw->docs_list_tree_view));
         GtkTreeSelection *selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(pw->docs_list_tree_view));
+        gtk_tree_selection_unselect_all (selection);
 
         if (gtk_tree_model_get_iter_first (model, &iter))
         {
@@ -260,8 +340,6 @@ gnc_payment_dialog_highlight_document (PaymentWindow *pw)
                     gtk_tree_selection_select_iter (selection, &iter);
                     gnc_payment_dialog_document_selection_changed (pw);
                 }
-                else
-                    gtk_tree_selection_unselect_iter (selection, &iter);
             }
             while (gtk_tree_model_iter_next (model, &iter));
         }
@@ -478,6 +556,9 @@ gnc_payment_dialog_owner_changed_cb (GtkWidget *widget, gpointer data)
         gnc_payment_dialog_owner_changed(pw);
     }
 
+    /* Reflect if the payment could complete now */
+    gnc_payment_window_check_payment (pw);
+
     return FALSE;
 }
 
@@ -489,6 +570,20 @@ gnc_payment_dialog_document_selection_changed_cb (GtkWidget *widget, gpointer da
     if (!pw) return;
 
     gnc_payment_dialog_document_selection_changed (pw);
+
+    /* Reflect if the payment could complete now */
+    gnc_payment_window_check_payment (pw);
+}
+
+void
+gnc_payment_dialog_xfer_acct_changed_cb (GtkWidget *widget, gpointer data)
+{
+    PaymentWindow *pw = data;
+
+    if (!pw) return;
+
+    /* Reflect if the payment could complete now */
+    gnc_payment_window_check_payment (pw);
 }
 
 int
@@ -509,6 +604,9 @@ gnc_payment_dialog_post_to_changed_cb (GtkWidget *widget, gpointer data)
     }
     else
         gnc_payment_dialog_highlight_document (pw);
+
+    /* Reflect if the payment could complete now */
+    gnc_payment_window_check_payment (pw);
 
     return FALSE;
 }
@@ -541,56 +639,15 @@ gnc_payment_ok_cb (GtkWidget *widget, gpointer data)
 {
     PaymentWindow *pw = data;
     const char *text = NULL;
-    Account *post, *acc;
-    gnc_numeric amount_deb, amount_cred, amount_tot;
 
     if (!pw)
         return;
 
-    /* Verify the total amount is non-zero */
-    amount_deb  = gnc_amount_edit_get_amount (GNC_AMOUNT_EDIT (pw->amount_debit_edit));
-    amount_cred = gnc_amount_edit_get_amount (GNC_AMOUNT_EDIT (pw->amount_credit_edit));
-    amount_tot = gnc_numeric_sub (amount_cred, amount_deb,
-                                  gnc_commodity_get_fraction (xaccAccountGetCommodity (pw->post_acct)),
-                                  GNC_HOW_RND_ROUND_HALF_UP);
-
-    if (gnc_numeric_check (amount_tot) || gnc_numeric_zero_p (amount_tot))
-    {
-        text = _("You must enter the amount of the payment. "
-                 "The payment amount must not be zero.");
-        gnc_error_dialog (pw->dialog, "%s", text);
-        return;
-    }
-
-    /* Verify the user has selected an owner */
-    gnc_owner_get_owner (pw->owner_choice, &(pw->owner));
-    if (!gncOwnerIsValid(&pw->owner))
-    {
-        text = _("You must select a company for payment processing.");
-        gnc_error_dialog (pw->dialog, "%s", text);
-        return;
-    }
-
-    /* Verify the user has selected a transfer account */
-    acc = gnc_tree_view_account_get_selected_account (GNC_TREE_VIEW_ACCOUNT(pw->acct_tree));
-    if (!acc)
-    {
-        text = _("You must select a transfer account from the account tree.");
-        gnc_error_dialog (pw->dialog, "%s", text);
-        return;
-    }
-
-    /* Verify the "post" account */
-
-    post = gnc_account_select_combo_get_active (pw->post_combo);
-    if (!post)
-    {
-        text = _("You must enter a valid account name for posting.");
-        gnc_error_dialog (pw->dialog, "%s", text);
-        return;
-    }
-
-    /* Ok, now execute the payment */
+    /* The gnc_payment_window_check_payment function
+     * ensures we have valid owner, post account, transfer account
+     * and amount so we can proceed with the payment.
+     * Note: make sure it's called before all entry points to this function !
+     */
     gnc_suspend_gui_refresh ();
     {
         const char *memo, *num;
@@ -609,19 +666,19 @@ gnc_payment_ok_cb (GtkWidget *widget, gpointer data)
         selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(pw->docs_list_tree_view));
         gtk_tree_selection_selected_foreach (selection, get_selected_lots, &selected_lots);
 
-        /* If the 'acc' account and the post account don't have the same
+        /* If the 'xfer_acct' account and the post account don't have the same
            currency, we need to get the user to specify the exchange rate */
-        if (!gnc_commodity_equal(xaccAccountGetCommodity(acc), xaccAccountGetCommodity(post)))
+        if (!gnc_commodity_equal(xaccAccountGetCommodity(pw->xfer_acct), xaccAccountGetCommodity(pw->post_acct)))
         {
             XferDialog* xfer;
 
             text = _("The transfer and post accounts are associated with different currencies. Please specify the conversion rate.");
 
-            xfer = gnc_xfer_dialog(pw->dialog, acc);
+            xfer = gnc_xfer_dialog(pw->dialog, pw->xfer_acct);
             gnc_info_dialog(pw->dialog, "%s", text);
 
-            gnc_xfer_dialog_select_to_account(xfer, post);
-            gnc_xfer_dialog_set_amount(xfer, amount_tot);
+            gnc_xfer_dialog_select_to_account(xfer, pw->post_acct);
+            gnc_xfer_dialog_set_amount(xfer, pw->amount_tot);
 
             /* All we want is the exchange rate so prevent the user from thinking
                it makes sense to mess with other stuff */
@@ -640,12 +697,13 @@ gnc_payment_ok_cb (GtkWidget *widget, gpointer data)
             auto_pay = gnc_prefs_get_bool (GNC_PREFS_GROUP_BILL, GNC_PREF_AUTO_PAY);
 
         gncOwnerApplyPayment (&pw->owner, pw->pre_existing_txn, selected_lots,
-                              post, acc, amount_tot, exch, date, memo, num, auto_pay);
+                              pw->post_acct, pw->xfer_acct, pw->amount_tot,
+                              exch, date, memo, num, auto_pay);
     }
     gnc_resume_gui_refresh ();
 
-    /* Save the transfer account, acc */
-    gnc_payment_dialog_remember_account(pw, acc);
+    /* Save the transfer account, xfer_acct */
+    gnc_payment_dialog_remember_account(pw, pw->xfer_acct);
 
     gnc_ui_payment_window_destroy (pw);
 }
@@ -694,8 +752,9 @@ gnc_payment_acct_tree_row_activated_cb (GtkWidget *widget, GtkTreePath *path,
             else
                 gtk_tree_view_expand_row(view, path, FALSE);
         }
-        else
-            /* It's an account without any children, so click the Ok button. */
+        else if (gnc_payment_window_check_payment (pw))
+            /* It's an account without any children
+             * If all conditions for a valid payment are met click the Ok button. */
             gnc_payment_ok_cb(widget, pw);
     }
 }
@@ -717,6 +776,9 @@ gnc_payment_leave_amount_cb (GtkWidget *widget, GdkEventFocus *event,
                                   GNC_HOW_RND_ROUND_HALF_UP);
 
     gnc_ui_payment_window_set_amount (pw, amount_tot);
+
+    /* Reflect if the payment could complete now */
+    gnc_payment_window_check_payment (pw);
 }
 
 /* Select the list of accounts to show in the tree */
@@ -829,6 +891,8 @@ new_payment_window (GncOwner *owner, QofBook *book, GncInvoice *invoice)
     pw->dialog = GTK_WIDGET (gtk_builder_get_object (builder, "Payment Dialog"));
 
     /* Grab the widgets and build the dialog */
+    pw->payment_warning = GTK_WIDGET (gtk_builder_get_object (builder, "payment_warning"));
+    pw->ok_button = GTK_WIDGET (gtk_builder_get_object (builder, "okbutton"));
     pw->num_entry = GTK_WIDGET (gtk_builder_get_object (builder, "num_entry"));
     pw->memo_entry = GTK_WIDGET (gtk_builder_get_object (builder, "memo_entry"));
     pw->post_combo = GTK_WIDGET (gtk_builder_get_object (builder, "post_combo"));
@@ -957,6 +1021,11 @@ new_payment_window (GncOwner *owner, QofBook *book, GncInvoice *invoice)
     g_signal_connect (G_OBJECT (pw->acct_tree), "row-activated",
                       G_CALLBACK (gnc_payment_acct_tree_row_activated_cb), pw);
 
+    selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(pw->acct_tree));
+    g_signal_connect (G_OBJECT (selection), "changed",
+                      G_CALLBACK (gnc_payment_dialog_xfer_acct_changed_cb), pw);
+
+
     /* Register with the component manager */
     pw->component_id =
         gnc_register_gui_component (cm_class,
@@ -979,6 +1048,9 @@ new_payment_window (GncOwner *owner, QofBook *book, GncInvoice *invoice)
     {
         gnc_general_search_grab_focus(GNC_GENERAL_SEARCH(pw->owner_choice));
     }
+
+    /* Reflect if the payment could complete now */
+    gnc_payment_window_check_payment (pw);
 
     /* Warn the user if they have no valid post-to accounts */
     {
