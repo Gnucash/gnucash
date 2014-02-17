@@ -103,8 +103,12 @@ static QofLogModule log_module = QOF_MOD_ENGINE;
 static GTimeZone*
 gnc_g_time_zone_new_local (void)
 {
+    static GTimeZone* tz = NULL;
+    if (tz)
+	return tz;
 #ifndef G_OS_WIN32
-    return g_time_zone_new_local();
+    tz = g_time_zone_new_local();
+    return tz;
 #else
     TIME_ZONE_INFORMATION tzinfo;
     gint64 dst = GetTimeZoneInformation (&tzinfo);
@@ -112,9 +116,8 @@ gnc_g_time_zone_new_local (void)
     gint hours = -bias / 60; // 60 minutes per hour
     gint minutes = (bias < 0 ? -bias : bias) % 60;
     gchar *tzstr = g_strdup_printf ("%+03d:%02d", hours, minutes);
-    GTimeZone *tz = g_time_zone_new(tzstr);
-    g_free (tzstr);
-    return tz;
+    tz = g_time_zone_new(tzstr);
+    g_free (tzstr);    return tz;
 #endif
 }
 
@@ -178,9 +181,6 @@ gnc_g_time_zone_adjust_for_dst (GTimeZone* tz, GDateTime *date)
 static GDateTime*
 gnc_g_date_time_new_local (gint year, gint month, gint day, gint hour, gint minute, gdouble seconds)
 {
-#ifndef G_OS_WIN32
-    return g_date_time_new_local (year, month, day, hour, minute, seconds);
-#else
     GTimeZone *tz = gnc_g_time_zone_new_local();
     GDateTime *gdt = g_date_time_new (tz, year, month, day,
 				      hour, minute, seconds);
@@ -196,9 +196,7 @@ gnc_g_date_time_new_local (gint year, gint month, gint day, gint hour, gint minu
  */
     seconds += 5e-10;
     gdt =  g_date_time_new (tz, year, month, day, hour, minute, seconds);
-    g_time_zone_unref (tz);
     return gdt;
-#endif
 }
 
 static GDateTime*
@@ -211,61 +209,50 @@ gnc_g_date_time_adjust_for_dst (GDateTime *gdt, GTimeZone *tz)
     tz = gnc_g_time_zone_adjust_for_dst (tz, ngdt);
     gdt = g_date_time_to_timezone (ngdt, tz);
     g_date_time_unref (ngdt);
-    g_time_zone_unref (tz);
     return gdt;
 }
 
 GDateTime*
 gnc_g_date_time_new_from_unix_local (time64 time)
 {
-#ifndef G_OS_WIN32
-    return g_date_time_new_from_unix_local (time);
-#else
     GTimeZone *tz = gnc_g_time_zone_new_local ();
     GDateTime *gdt = g_date_time_new_from_unix_utc (time);
-    if (!gdt)
-      return gdt;
-    return gnc_g_date_time_adjust_for_dst (gdt, tz);
-#endif
+    if (gdt)
+	gdt = gnc_g_date_time_adjust_for_dst (gdt, tz);
+    return gdt;
 }
 
 static GDateTime*
 gnc_g_date_time_new_from_timeval_local (const GTimeVal* tv)
 {
-#ifndef G_OS_WIN32
-    return g_date_time_new_from_timeval_local (tv);
-#else
     GTimeZone *tz = gnc_g_time_zone_new_local ();
     GDateTime *gdt = g_date_time_new_from_timeval_utc (tv);
-    if (!gdt)
-	return gdt;
-    return gnc_g_date_time_adjust_for_dst (gdt, tz);
-#endif
+    if (gdt)
+	gdt = gnc_g_date_time_adjust_for_dst (gdt, tz);
+    return gdt;
 }
 
 static GDateTime*
 gnc_g_date_time_new_now_local (void)
 {
-#ifndef G_OS_WIN32
-    return g_date_time_new_now_local ();
-#else
     GTimeZone *tz = gnc_g_time_zone_new_local ();
-    GDateTime *gdt = g_date_time_new_now_local ();
-    if (!gdt)
-	return gdt;
-    return gnc_g_date_time_adjust_for_dst (gdt, tz);
-#endif
+    GDateTime *gdt = g_date_time_new_now_utc ();
+    if (gdt)
+	gdt = gnc_g_date_time_adjust_for_dst (gdt, tz);
+    return gdt;
+
 }
 
 static GDateTime*
 gnc_g_date_time_to_local (GDateTime* gdt)
 {
-#ifndef G_OS_WIN32
-    return g_date_time_to_local (gdt);
-#else
-    GTimeZone *tz = gnc_g_time_zone_new_local ();
-    return gnc_g_date_time_adjust_for_dst (g_date_time_to_utc (gdt), tz);
-#endif
+    GTimeZone *tz = NULL;
+    if (gdt)
+    {
+	tz = gnc_g_time_zone_new_local ();
+	gdt = gnc_g_date_time_adjust_for_dst (g_date_time_to_utc (gdt), tz);
+    }
+    return gdt;
 }
 
 typedef struct
@@ -1488,7 +1475,6 @@ gnc_iso8601_to_timespec_gmt(const char *str)
 	second += 5e-10;
 	gdt = g_date_time_new (tz, year, month, day, hour, minute, second);
         secs = g_date_time_to_unix (gdt);
-	g_time_zone_unref (tz);
     }
     else /* No zone info, assume UTC */
     {
