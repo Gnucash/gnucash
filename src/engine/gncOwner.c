@@ -759,6 +759,7 @@ gncOwnerCreatePaymentLot (const GncOwner *owner, Transaction *txn,
                 Split *split = xaccTransGetSplit (txn, i);
                 if (split == xfer_split)
                 {
+                    gnc_set_num_action (NULL, split, num, _("Payment"));
                     ++i;
                 }
                 else
@@ -766,27 +767,27 @@ gncOwnerCreatePaymentLot (const GncOwner *owner, Transaction *txn,
                     xaccSplitDestroy(split);
                 }
             }
-            xaccTransCommitEdit (txn);
+            /* Note: don't commit transaction now - that would insert an imbalance split.*/
         }
     }
 
     /* Create the transaction if we don't have one yet */
     if (!txn)
+    {
         txn = xaccMallocTransaction (book);
+        xaccTransBeginEdit (txn);
+    }
 
     /* Insert a split for the transfer account if we don't have one yet */
     if (!xfer_split)
     {
-        xaccTransBeginEdit (txn);
 
         /* Set up the transaction */
         xaccTransSetDescription (txn, name ? name : "");
         /* set per book option */
-        gnc_set_num_action (txn, NULL, num, _("Payment"));
         xaccTransSetCurrency (txn, commodity);
         xaccTransSetDateEnteredSecs (txn, gnc_time (NULL));
         xaccTransSetDatePostedTS (txn, &date);
-        xaccTransSetTxnType (txn, TXN_TYPE_PAYMENT);
 
 
         /* The split for the transfer account */
@@ -830,6 +831,9 @@ gncOwnerCreatePaymentLot (const GncOwner *owner, Transaction *txn,
     gncOwnerAttachToLot (owner, payment_lot);
     gnc_lot_add_split (payment_lot, split);
 
+    /* Mark the transaction as a payment */
+    gnc_set_num_action (txn, NULL, num, _("Payment"));
+    xaccTransSetTxnType (txn, TXN_TYPE_PAYMENT);
 
     /* Commit this new transaction */
     xaccTransCommitEdit (txn);
