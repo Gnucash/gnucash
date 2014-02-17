@@ -6,7 +6,6 @@
     <child name="pricedb-editor" schema="org.gnucash.dialogs.pricedb-editor"/>
     <child name="reset-warnings" schema="org.gnucash.dialogs.reset-warnings"/>
     <child name="tax-info" schema="org.gnucash.dialogs.tax-info"/>
-    <child name="tip-of-the-day" schema="org.gnucash.dialogs.tip-of-the-day"/>
     <child name="fincalc" schema="org.gnucash.dialogs.fincalc"/>
     <child name="find" schema="org.gnucash.dialogs.find"/>
     <child name="export-accounts" schema="org.gnucash.dialogs.export-accounts"/>
@@ -76,16 +75,6 @@
       <summary>Position of the horizontal pane divider.</summary>
       <description>Position of the horizontal pane divider.</description>
     </key>
-    <key name="last-geometry" type="(iiii)">
-      <default>(-1,-1,-1,-1)</default>
-      <summary>Last window position and size</summary>
-      <description>This setting describes the size and position of the window when it was last closed.
-        The numbers are the X and Y coordinates of the top left corner of the window
-        followed by the width and height of the window.</description>
-    </key>
-  </schema>
-
-  <schema id="org.gnucash.dialogs.tip-of-the-day" path="/org/gnucash/dialogs/tip-of-the-day/">
     <key name="last-geometry" type="(iiii)">
       <default>(-1,-1,-1,-1)</default>
       <summary>Last window position and size</summary>
