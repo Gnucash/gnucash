@@ -105,19 +105,22 @@ gnc_g_time_zone_new_local (void)
 {
     static GTimeZone* tz = NULL;
     if (tz)
-	return tz;
+        return tz;
 #ifndef G_OS_WIN32
     tz = g_time_zone_new_local();
     return tz;
 #else
-    TIME_ZONE_INFORMATION tzinfo;
-    gint64 dst = GetTimeZoneInformation (&tzinfo);
-    gint bias = tzinfo.Bias + tzinfo.StandardBias;
-    gint hours = -bias / 60; // 60 minutes per hour
-    gint minutes = (bias < 0 ? -bias : bias) % 60;
-    gchar *tzstr = g_strdup_printf ("%+03d:%02d", hours, minutes);
-    tz = g_time_zone_new(tzstr);
-    g_free (tzstr);    return tz;
+    {
+        TIME_ZONE_INFORMATION tzinfo;
+        gint64 dst = GetTimeZoneInformation (&tzinfo);
+        gint bias = tzinfo.Bias + tzinfo.StandardBias;
+        gint hours = -bias / 60; // 60 minutes per hour
+        gint minutes = (bias < 0 ? -bias : bias) % 60;
+        gchar *tzstr = g_strdup_printf ("%+03d:%02d", hours, minutes);
+        tz = g_time_zone_new(tzstr);
+        g_free (tzstr);
+    }
+    return tz;
 #endif
 }
 
