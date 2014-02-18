@@ -666,9 +666,14 @@ gnc_payment_ok_cb (GtkWidget *widget, gpointer data)
         selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(pw->docs_list_tree_view));
         gtk_tree_selection_selected_foreach (selection, get_selected_lots, &selected_lots);
 
-        /* If the 'xfer_acct' account and the post account don't have the same
-           currency, we need to get the user to specify the exchange rate */
-        if (!gnc_commodity_equal(xaccAccountGetCommodity(pw->xfer_acct), xaccAccountGetCommodity(pw->post_acct)))
+        /* When the payment amount is 0, the selected documents cancel each other out
+         * so no money is actually transferred.
+         * For non-zero payments money will be transferred between the post account
+         * and the transfer account. In that case if these two accounts don't have
+         * the same currency the user is asked to enter the exchange rate.
+         */
+        if (!gnc_numeric_zero_p (pw->amount_tot) &&
+            !gnc_commodity_equal(xaccAccountGetCommodity(pw->xfer_acct), xaccAccountGetCommodity(pw->post_acct)))
         {
             XferDialog* xfer;
 

@@ -1034,12 +1034,14 @@ gncOwnerApplyPayment (const GncOwner *owner, Transaction *txn, GList *lots,
     GList *selected_lots = NULL;
 
     /* Verify our arguments */
-    if (!owner || !posted_acc || !xfer_acc) return;
+    if (!owner || !posted_acc
+               || (!xfer_acc && !gnc_numeric_zero_p (amount)) ) return;
     g_return_if_fail (owner->owner.undefined);
 
-    /* Create a lot for this payment */
-    payment_lot = gncOwnerCreatePaymentLot (owner, txn, posted_acc, xfer_acc,
-                                            amount, exch, date, memo, num);
+    /* If there's a real amount to transfer create a lot for this payment */
+    if (!gnc_numeric_zero_p (amount))
+        payment_lot = gncOwnerCreatePaymentLot (owner, txn, posted_acc, xfer_acc,
+                                                amount, exch, date, memo, num);
 
     if (lots)
         selected_lots = lots;
