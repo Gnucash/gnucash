@@ -604,7 +604,14 @@ then
       [[GNC_DBD_DIR="$with_dbi_dbd_dir"
        EXTRA_SEARCH_LIBS=$GNC_DBD_DIR]],
       [[GNC_DBD_DIR=""
-       EXTRA_SEARCH_LIBS="/usr/lib/dbd:/usr/lib64/dbd:${libdir}/dbd:$(pkg-config --variable=libdir dbi)/dbd"]]
+        # pkg-config is new in libdbi 0.9. Use it if avaiable
+        # Otherwise fall back to our previous hard coded values
+        pkg-config --exists dbi
+        if test $? -eq 0; then
+          EXTRA_SEARCH_LIBS="$(pkg-config --variable=libdir dbi)/dbd"
+        else
+          EXTRA_SEARCH_LIBS="/usr/lib/dbd:/usr/lib64/dbd:${libdir}/dbd"
+        fi]]
        )
     case $host_os in
        win32*|mingw*)
