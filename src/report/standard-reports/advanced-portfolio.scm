@@ -47,7 +47,6 @@
 (define optname-basis-method (N_ "Basis calculation method"))
 (define optname-prefer-pricelist (N_ "Set preference for price list data"))
 (define optname-brokerage-fees (N_ "How to report brokerage fees"))
-(define optname-ignore-parent-and-sibling-transfers (N_ "Ignore money moved to parent and sibling accounts"))
 
 ;; To avoid overflows in our calculations, define a denominator for prices and unit values
 (define price-denom 100000000)
@@ -118,12 +117,6 @@
                     (N_ "Ignore brokerage fees entirely."))
             )))
       
-;;     (add-option
-;;      (gnc:make-simple-boolean-option
-;;       gnc:pagename-general optname-ignore-parent-and-sibling-transfers "h"
-;;       (N_ "Money moved from or to a parent or sibling account is not counted as money in or out")
-;;       #f))
-
     (gnc:register-option
       options
       (gnc:make-simple-boolean-option
@@ -409,7 +402,7 @@
                                 currency price-fn exchange-fn price-source
 				include-empty show-symbol show-listing show-shares show-price
                                 basis-method prefer-pricelist handle-brokerage-fees 
-                                ignore-parent-and-siblings total-basis total-value
+                                total-basis total-value
                                 total-moneyin total-moneyout total-income total-gain 
                                 total-ugain total-brokerage)
 
@@ -608,14 +601,10 @@
                                      (split-account-type? s ACCT-TYPE-STOCK)
                                      (split-account-type? s ACCT-TYPE-MUTUAL))
                                  (if (gnc-numeric-positive-p split-value)
-                                      (if (or (not ignore-parent-and-siblings)
-                                              (not (parent-or-sibling? (xaccSplitGetAccount s) current))) 
-                                       (set! trans-moneyout 
-                                             (gnc-numeric-add trans-moneyout split-value commod-currency-frac GNC-RND-ROUND)))
-                                      (if (or (not ignore-parent-and-siblings)
-                                              (not (parent-or-sibling? (xaccSplitGetAccount s) current))) 
-                                       (set! trans-moneyin 
-                                             (gnc-numeric-sub trans-moneyin split-value commod-currency-frac GNC-RND-ROUND))))))
+                                      (set! trans-moneyout 
+                                            (gnc-numeric-add trans-moneyout split-value commod-currency-frac GNC-RND-ROUND))
+                                      (set! trans-moneyin 
+                                            (gnc-numeric-sub trans-moneyin split-value commod-currency-frac GNC-RND-ROUND)))))
 		         ))
 		         (xaccTransGetSplitList parent)
 		       )
@@ -917,9 +906,6 @@
 				      optname-prefer-pricelist))
 	(handle-brokerage-fees (get-option gnc:pagename-general
 				  optname-brokerage-fees))
-;; 	(ignore-parent-and-siblings (get-option gnc:pagename-general
-;; 	                               optname-ignore-parent-and-sibling-transfers))
-        (ignore-parent-and-siblings #f)
 
 	(total-basis (gnc:make-commodity-collector))
         (total-value    (gnc:make-commodity-collector))
@@ -1005,7 +991,7 @@
           (table-add-stock-rows
            table accounts to-date currency price-fn exchange-fn price-source
            include-empty show-symbol show-listing show-shares show-price basis-method
-	   prefer-pricelist handle-brokerage-fees ignore-parent-and-siblings
+	   prefer-pricelist handle-brokerage-fees
            total-basis total-value total-moneyin total-moneyout
            total-income total-gain total-ugain total-brokerage)
 	  
