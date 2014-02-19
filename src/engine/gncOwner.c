@@ -1030,7 +1030,7 @@ gncOwnerApplyPayment (const GncOwner *owner, Transaction *txn, GList *lots,
                       gnc_numeric amount, gnc_numeric exch, Timespec date,
                       const char *memo, const char *num, gboolean auto_pay)
 {
-    GNCLot *payment_lot;
+    GNCLot *payment_lot = NULL;
     GList *selected_lots = NULL;
 
     /* Verify our arguments */
