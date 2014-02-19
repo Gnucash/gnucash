@@ -444,6 +444,10 @@
 		 (basis-list '())
 		 ;; setup an alist for the splits we've already seen.
 		 (seen_trans '())
+		 ;; Account used to hold remainders from income reinvestments and
+		 ;; running total of amount moved there
+		 (drp-holding-account #f)
+		 (drp-holding-amount (gnc-numeric-zero))
 		 )
 
             (define (my-exchange-fn fromunits tocurrency)
@@ -542,8 +546,8 @@
 		           (shares-bought (gnc-numeric-zero))
 		           (trans-sold (gnc-numeric-zero))
 		           (trans-bought (gnc-numeric-zero))
-		           (trans-moneyin (gnc-numeric-zero))
-		           (trans-moneyout (gnc-numeric-zero)))
+		           (trans-drp-residual (gnc-numeric-zero))
+		           (trans-drp-account #f))
 
 		       (gnc:debug "Transaction " (xaccTransGetDescription parent))
 		       ;; Add this transaction to the list of processed transactions so we don't
@@ -567,9 +571,7 @@
                                  ;; in the stock account in which case it's a stock donation to charity.
                                  (if (not (same-account? current (xaccSplitGetAccount (xaccSplitGetOtherSplit s)))) 
                                    (set! trans-brokerage 
-                                         (gnc-numeric-add trans-brokerage split-value commod-currency-frac GNC-RND-ROUND))
-                                   (set! trans-moneyout
-                                         (gnc-numeric-add trans-moneyout split-value commod-currency-frac GNC-RND-ROUND))))
+                                         (gnc-numeric-add trans-brokerage split-value commod-currency-frac GNC-RND-ROUND))))
                                    
                                 ((split-account-type? s ACCT-TYPE-INCOME)
                                  (set! trans-income (gnc-numeric-sub trans-income split-value
@@ -595,16 +597,21 @@
                                           (set! trans-sold
                                                (gnc-numeric-sub trans-sold split-value commod-currency-frac GNC-RND-ROUND)))))
                                                   
-                                ((or (split-account-type? s ACCT-TYPE-BANK)
-                                     (split-account-type? s ACCT-TYPE-CASH)
-                                     (split-account-type? s ACCT-TYPE-ASSET)
-                                     (split-account-type? s ACCT-TYPE-STOCK)
-                                     (split-account-type? s ACCT-TYPE-MUTUAL))
-                                 (if (gnc-numeric-positive-p split-value)
-                                      (set! trans-moneyout 
-                                            (gnc-numeric-add trans-moneyout split-value commod-currency-frac GNC-RND-ROUND))
-                                      (set! trans-moneyin 
-                                            (gnc-numeric-sub trans-moneyin split-value commod-currency-frac GNC-RND-ROUND)))))
+                                ((split-account-type? s ACCT-TYPE-ASSET)
+                                 ;; If all the asset accounts mentioned in the transaction are siblings of each other 
+                                 ;; keep track of the money transfered to them if it is in the correct currency
+                                 (if (not trans-drp-account)
+                                     (begin
+                                       (set! trans-drp-account (xaccSplitGetAccount s))
+                                         (if (gnc-commodity-equiv commod-currency (xaccAccountGetCommodity trans-drp-account))
+                                             (set! trans-drp-residual split-value)
+                                             (set! trans-drp-account 'none)))
+                                     (if (not (eq? trans-drp-account 'none))
+                                       (if (or (parent-or-sibling? trans-drp-account (xaccSplitGetAccount s))
+                                               (parent-or-sibling? (xaccSplitGetAccount s) trans-drp-account))
+                                           (set! trans-drp-residual (gnc-numeric-add trans-drp-residual split-value
+                                                                                     commod-currency-frac GNC-RND-ROUND))
+                                           (set! trans-drp-account 'none))))))
 		         ))
 		         (xaccTransGetSplitList parent)
 		       )
@@ -615,8 +622,7 @@
 		                  " Shares bought: " (gnc-numeric-to-string shares-bought))
 		       (gnc:debug " Value sold: " (gnc-numeric-to-string trans-sold)
 		                  " Value purchased: " (gnc-numeric-to-string trans-bought)
-		                  " Money in: " (gnc-numeric-to-string trans-moneyin)
-		                  " Money out: " (gnc-numeric-to-string trans-moneyout))
+		                  " Trans DRP residual: " (gnc-numeric-to-string trans-drp-residual))
 		                  
 		       ;; We need to calculate several things for this transaction:
 		       ;; 1. Total income: this is already in trans-income
@@ -643,25 +649,53 @@
                            (let* ((fee-frac (gnc-numeric-div shares-bought trans-shares GNC-DENOM-AUTO GNC-RND-ROUND))
                                   (fees (gnc-numeric-mul trans-brokerage fee-frac commod-currency-frac GNC-RND-ROUND)))
                                  (set! trans-bought (gnc-numeric-add trans-bought fees commod-currency-frac GNC-RND-ROUND)))) 
-                           
-                       ;; Calculate income that might have been reinvested.  If there is no income
-                       ;; then none of it was reinvested
-                       (if (gnc-numeric-positive-p trans-income)
-                           (let* ((income-reinvested (gnc-numeric-sub trans-moneyin trans-moneyout 
-                                                                commod-currency-frac GNC-RND-ROUND)))
-                                 (if (gnc-numeric-negative-p income-reinvested)
-                                     ;; More went out than in, some may not have been reinvested
-                                     (set! income-reinvested (gnc-numeric-add trans-income income-reinvested 
-                                                                commod-currency-frac GNC-RND-ROUND))
-                                     ;; It was all potentially reinvested
-                                     (set! income-reinvested trans-income))
-                                 ;; Adjust trans-bought to not include reinvested income
-                                 (set! trans-bought (gnc-numeric-sub trans-bought income-reinvested commod-currency-frac GNC-RND-ROUND))
-                                 ;; You can't reinvest more than you purchases.
-                                 (if (gnc-numeric-negative-p trans-bought)
-                                     (set! trans-bought (gnc-numeric-zero)))
-                                 (gnc:debug "Adjusted trans-bought " (gnc-numeric-to-string trans-bought)
-                                            " income-reinvested " (gnc-numeric-to-string income-reinvested))))
+                       
+                       ;; Update the running total of the money in the DRP residual account.  This is relevant
+                       ;; if this is a reinvestment transaction (both income and purchase) and there seems to
+                       ;; asset accounts used to hold excess income.
+                       (if (and trans-drp-account
+                                (not (eq? trans-drp-account 'none))
+                                (gnc-numeric-positive-p trans-income)
+                                (gnc-numeric-positive-p trans-bought))
+                           (if (not drp-holding-account)
+                               (begin
+                                 (set! drp-holding-account trans-drp-account)
+                                 (set! drp-holding-amount trans-drp-residual))
+                               (if (and (not (eq? drp-holding-account 'none))
+                                        (or (parent-or-sibling? trans-drp-account drp-holding-account)
+                                            (parent-or-sibling? drp-holding-account trans-drp-account)))
+                                   (set! drp-holding-amount (gnc-numeric-add drp-holding-amount trans-drp-residual
+                                                                              commod-currency-frac GNC-RND-ROUND))
+                                   (begin 
+                                     ;; Wrong account (or no account), assume there isn't a DRP holding account 
+                                     (set! drp-holding-account 'none)
+                                     (set trans-drp-residual (gnc-numeric-zero))
+                                     (set! drp-holding-amount (gnc-numeric-zero))))))
+                                   
+                       ;; Set trans-bought to the amount of money moved in to the account which was used to
+                       ;; purchase more shares.  If this is not a DRP transaction then all money used to purchase
+                       ;; shares is money in.
+                       (if (and (gnc-numeric-positive-p trans-income)
+                                (gnc-numeric-positive-p trans-bought))
+                           (begin
+                             (set! trans-bought (gnc-numeric-sub trans-bought trans-income
+                                                                 commod-currency-frac GNC-RND-ROUND))
+                             (set! trans-bought (gnc-numeric-add trans-bought trans-drp-residual
+                                                                 commod-currency-frac GNC-RND-ROUND))
+                             (set! trans-bought (gnc-numeric-sub trans-bought drp-holding-amount
+                                                                 commod-currency-frac GNC-RND-ROUND))
+                             ;; If the DRP holding account balance is negative, adjust it by the amount
+                             ;; used in this transaction
+                             (if (and (gnc-numeric-negative-p drp-holding-amount)
+                                      (gnc-numeric-positive-p trans-bought)) 
+                                 (set! drp-holding-amount (gnc-numeric-add drp-holding-amount trans-bought
+                                                                           commod-currency-frac GNC-RND-ROUND)))
+                             ;; Money in is never more than amount spent to purchase shares
+                             (if (gnc-numeric-negative-p trans-bought)
+                                 (set! trans-bought (gnc-numeric-zero)))))
+                                 
+                       (gnc:debug "Adjusted trans-bought " (gnc-numeric-to-string trans-bought)
+                                  " DRP holding account " (gnc-numeric-to-string drp-holding-amount))
 
                        (moneyincoll 'add commod-currency trans-bought)
                        (moneyoutcoll 'add commod-currency trans-sold)
