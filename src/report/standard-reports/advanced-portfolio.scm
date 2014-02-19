@@ -546,6 +546,7 @@
 		           (shares-bought (gnc-numeric-zero))
 		           (trans-sold (gnc-numeric-zero))
 		           (trans-bought (gnc-numeric-zero))
+		           (trans-spinoff (gnc-numeric-zero))
 		           (trans-drp-residual (gnc-numeric-zero))
 		           (trans-drp-account #f))
 
@@ -581,12 +582,17 @@
                                  (set! trans-shares (gnc-numeric-add trans-shares (gnc-numeric-abs split-units)
                                                   units-denom GNC-RND-ROUND))
                                  (if (gnc-numeric-zero-p split-units)
-                                     (if (and (not (gnc-numeric-zero-p split-value))
-                                              (not (spin-off? s current)))
-                                          ;; Gain/loss split (amount zero and value non-zero).  There will be
-                                          ;; a corresponding income split that will incorrectly be added to trans-income
-                                          ;; Fix that by subtracting it here
-                                          (set! trans-income (gnc-numeric-sub trans-income split-value commod-currency-frac GNC-RND-ROUND)))
+                                     (if (spin-off? s current)
+                                         ;; Count money used in a spin off as money out
+                                         (if (gnc-numeric-negative-p split-value)
+                                             (set! trans-spinoff (gnc-numeric-sub trans-spinoff split-value
+                                                                                  commod-currency-frac GNC-RND-ROUND)))
+                                         (if (not (gnc-numeric-zero-p split-value))
+                                              ;; Gain/loss split (amount zero, value non-zero, and not spinoff).  There will be
+                                              ;; a corresponding income split that will incorrectly be added to trans-income
+                                              ;; Fix that by subtracting it here
+                                              (set! trans-income (gnc-numeric-sub trans-income split-value 
+                                                                                  commod-currency-frac GNC-RND-ROUND))))
                                      ;; Non-zero amount, add the value to the sale or purchase total.
                                      (if (gnc-numeric-positive-p split-value)
                                           (begin
@@ -622,6 +628,7 @@
 		                  " Shares bought: " (gnc-numeric-to-string shares-bought))
 		       (gnc:debug " Value sold: " (gnc-numeric-to-string trans-sold)
 		                  " Value purchased: " (gnc-numeric-to-string trans-bought)
+		                  " Spinoff value " (gnc-numeric-to-string trans-spinoff)
 		                  " Trans DRP residual: " (gnc-numeric-to-string trans-drp-residual))
 		                  
 		       ;; We need to calculate several things for this transaction:
@@ -632,7 +639,7 @@
 		       ;; 4. Money in to the account: this is the value of shares bought
 		       ;;    except those purchased with reinvested income
 		       ;; 5. Money out: the money received by disposing of shares.   This
-		       ;;    is in trans-sold
+		       ;;    is in trans-sold plus trans-spinoff
 		       ;; 6. Brokerage fees: this is in trans-brokerage
 		       
 		       ;; Income
@@ -699,6 +706,7 @@
 
                        (moneyincoll 'add commod-currency trans-bought)
                        (moneyoutcoll 'add commod-currency trans-sold)
+                       (moneyoutcoll 'add commod-currency trans-spinoff)
                            
                        ;; Look at splits again to handle changes in basis and realized gains 
 		       (for-each
