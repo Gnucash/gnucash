@@ -21,7 +21,7 @@ Makefile.in
 TAGS
 aclocal.m4
 autom4te.cache
-build*
+build*/
 compile
 config.guess
 config.h
@@ -249,4 +249,10 @@ gnucash.creator
 gnucash.creator.user
 gnucash.files
 gnucash.includes
-*.xcodeproj
+
+DerivedData/
+*.pbxuser
+*.mode1v3
+*.mode2v3
+*.perspectivev3
+xcuserdata/

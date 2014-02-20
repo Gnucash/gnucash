@@ -188,3 +188,49 @@ for A in `find src/business/business-core -name '*.so'`; do \
   sed 's/^.* \([^ ]*\)$/\1/' | grep -wFf- exportedsymbols | \
   cut -d: -f1 | sort | uniq; done
 
+XCode project
+-------------
+
+There is an XCode project available in gnucash.xcodeproj at the root of the
+source tree.  This project can be used with XCode on a Macintosh to debug
+GnuCash.  It is not set up to build GnuCash, but only to debug it. Building must
+be done using the normal command line tools.
+
+This project is designed to be used with the X Window version of GnuCash, not
+the native Quartz version.  To use it you must build and install GnuCash into
+directories "build" and "install" parallel to the source directory.  Furthermore
+the architecture dependent parts of the install are put in a subdirectory
+"install/darwin".
+
+To build, then, if the source directory is somewhere/gnucash you must create the
+directories somewhere/build/darwin and somewhere/install/darwin/bin, cd into
+somewhere/build/darwin and execute
+
+    ../../gnucash/configure --prefix=../../install \
+                            --exec-prefix=../../install/bin \
+                            --enable-debug \
+                            ...other options...
+    make
+    make install
+
+This will build and install a copy of GnuCash that can be debugged using the
+XCode project.
+
+The debug target in the project is set with a build tool of /usr/bin/true so
+building in XCode won't hurt anything, it just won't do much.  It is also set to
+not launch GnuCash automatically, but rather to wait for it to be launched
+manually. This lets you run it from a command prompt and see the console output
+which can often be useful.  Hence to initiate a debugging session in XCode, tell
+XCode to run GnuCash then go to a terminal window and launch install/darwin/bin/gnucash
+with whatever options you want.  XCode will notice that it has been launched and
+attach to the process.
+
+Since there seems to be no way to make the path to the executable a relative
+path, you must make one change to the debug scheme before you can run gnucash
+under XCode.  In XCode 5 (other versions may be different) go to
+Product->Scheme->Edit Scheme and select the "info" tab of the "Run gnucash"
+pane. Select "Other..." in the "Executable" menu and select the installed binary
+for gnucash in the resulting file open dialog.  This should be
+install/darwin/bin/gnucash as described above.  This, and the act of opening the
+project in XCode, will change some of the files in the XCode project directory.
+You can, or course, commit these locally, but please don't push them upstream.
