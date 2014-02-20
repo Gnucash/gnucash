@@ -373,17 +373,13 @@
         (gnc-price-list-destroy price-list)
         price)))
         
-  ;; Return true if acct is in the list of accounts
-  (define (account-in-list acct acct-list)
-    (cond ((eqv? acct-list '()) #f)
-          ((same-account? acct (car acct-list)) #t)
-          (else (account-in-list acct (cdr acct-list)))))
-          
-  ;; Return true if account a1 is the parent or a sibling of account a2
+  ;; Return true if either account is the parent of the other or they are siblings
   (define (parent-or-sibling? a1 a2)
-    (let ((parent (gnc-account-get-parent a2)))
-          (or (same-account? parent a1)
-              (account-in-list a1 (gnc-account-get-children parent)))))
+    (let ((a2parent (gnc-account-get-parent a2))
+          (a1parent (gnc-account-get-parent a1)))
+          (or (same-account? a2parent a1)
+              (same-account? a1parent a2) 
+              (same-account? a1parent a2parent))))
               
   ;; Test whether the given split is the source of a spin off transaction
   ;; This will be a no-units split with only one other split.
@@ -613,8 +609,7 @@
                                              (set! trans-drp-residual split-value)
                                              (set! trans-drp-account 'none)))
                                      (if (not (eq? trans-drp-account 'none))
-                                       (if (or (parent-or-sibling? trans-drp-account (xaccSplitGetAccount s))
-                                               (parent-or-sibling? (xaccSplitGetAccount s) trans-drp-account))
+                                       (if (parent-or-sibling? trans-drp-account (xaccSplitGetAccount s))
                                            (set! trans-drp-residual (gnc-numeric-add trans-drp-residual split-value
                                                                                      commod-currency-frac GNC-RND-ROUND))
                                            (set! trans-drp-account 'none))))))
@@ -669,8 +664,7 @@
                                  (set! drp-holding-account trans-drp-account)
                                  (set! drp-holding-amount trans-drp-residual))
                                (if (and (not (eq? drp-holding-account 'none))
-                                        (or (parent-or-sibling? trans-drp-account drp-holding-account)
-                                            (parent-or-sibling? drp-holding-account trans-drp-account)))
+                                        (parent-or-sibling? trans-drp-account drp-holding-account))
                                    (set! drp-holding-amount (gnc-numeric-add drp-holding-amount trans-drp-residual
                                                                               commod-currency-frac GNC-RND-ROUND))
                                    (begin 
