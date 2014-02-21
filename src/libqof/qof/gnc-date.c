@@ -170,7 +170,6 @@ gnc_g_time_zone_adjust_for_dst (GTimeZone* tz, GDateTime *date)
     g_return_val_if_fail (date != NULL, NULL);
     if (dst > 0 && win32_in_dst (date, &tzinfo))
     {
-        g_time_zone_unref (tz);
 	bias = tzinfo.Bias + tzinfo.DaylightBias;
 	hours = -bias / 60; // 60 minutes per hour
 	minutes = (bias < 0 ? -bias : bias) % 60;
