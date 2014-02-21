@@ -125,36 +125,69 @@ gnc_g_time_zone_new_local (void)
 }
 
 #ifdef G_OS_WIN32
+/* Obtain the actual date of a transition in the specified year. The
+   SYSTEMTIME is overloaded for this purpose, so that wMonth contains
+   the month of the transition, wDayOfWeek contains the weekday (0-6,
+   Sunday to Saturday) of the transition, and wDay contains the
+   occurrence of that day in the month: e.g. wMonth = 3, wDayOfWeek =
+   0, and wDay = 5 means the fifth (or the last, if there are only 4
+   that year) Sunday of March. wHour has the time in the previous
+   state that the shift takes place.
+   See TIME_ZONE_INFORMATION at http://msdn.microsoft.com for more detail.
+ */
+static void
+dst_systemtime_to_gdate (SYSTEMTIME stime, GDate *gdate, gint year)
+{
+  guint32 wkday, days;
+  /* We must convert between GDate's weekdays, where 0 is a bad day
+     and 7 is Sunday and SYSTEMTIME's, where 0 is a Sunday.
+   */
+  static const int gdate_sunday = 7;
+  static const int week_length = 7;
+
+  g_date_clear (gdate, 1);
+  g_date_set_dmy (gdate, 1, stime.wMonth, year);
+  wkday = g_date_get_weekday (gdate) % gdate_sunday;
+
+  days = week_length * stime.wDay + stime.wDayOfWeek - wkday;
+  while (days > g_date_get_days_in_month (stime.wMonth, year))
+    days -= week_length;
+  g_date_add_days (gdate, days);
+  wkday = g_date_get_weekday (gdate) % gdate_sunday;
+  if (wkday < stime.wDayOfWeek)
+    g_date_add_days (gdate, stime.wDayOfWeek - wkday);
+  else
+    g_date_subtract_days (gdate, wkday - stime.wDayOfWeek);
+  return;
+}
+
 static gboolean
 win32_in_dst (GDateTime *date, TIME_ZONE_INFORMATION *tzinfo)
 {
-    guint year, month, day;
-    SYSTEMTIME *std, *dlt;
+    gint year, month, day;
+    GDate std, dlt, gdate;
+
 
     if (tzinfo == NULL || tzinfo->StandardDate.wMonth == 0)
       return FALSE;
-
-    year = g_date_time_get_year (date);
-    month = g_date_time_get_month (date);
-    day = g_date_time_get_day_of_month (date);
-
-    std = &(tzinfo->StandardDate);
-    dlt = &(tzinfo->DaylightDate);
-
-    if (std->wMonth < dlt->wMonth)
-    {
-         if ((month > dlt->wMonth || month < std->wMonth) ||
-	     (month == dlt->wMonth && day > dlt->wDay) ||
-	     (month == std->wMonth && day < std->wDay))
-	     return TRUE;
-    }
-    else
-    {
-         if ((month > dlt->wMonth && month < std->wMonth) ||
-	     (month == dlt->wMonth && day > dlt->wDay) ||
-	     (month == std->wMonth && day < std->wDay))
-	     return TRUE;
-    }
+    g_date_time_get_ymd (date, &year, &month, &day);
+    g_date_clear (&gdate, 1);
+    g_date_set_dmy (&gdate, day, month, year);
+    dst_systemtime_to_gdate (tzinfo->StandardDate, &std, year);
+    dst_systemtime_to_gdate (tzinfo->DaylightDate, &dlt, year);
+    /* In the southern hemisphere, where DST ends in spring and begins in fall, we look for the date being before std or after dlt; in the northern hemisphere we look for them to be between dlt and std.
+     */
+    if ((g_date_compare (&std, &dlt) < 0 &&
+	 (g_date_compare (&gdate, &std) < 0 ||
+	  g_date_compare (&gdate, &dlt) > 0)) ||
+	 (g_date_compare (&std, &dlt) > 0 &&
+	 g_date_compare (&gdate, &std) < 0 &&
+	 g_date_compare (&gdate, &dlt) > 0) ||
+	(g_date_compare (&gdate, &std) == 0 &&
+	 g_date_time_get_hour (date) < tzinfo->StandardDate.wHour) ||
+	(g_date_compare (&gdate, &dlt) == 0 &&
+	 g_date_time_get_hour (date) >= tzinfo->DaylightDate.wHour))
+      return TRUE;
     return FALSE;
 }
 #endif
