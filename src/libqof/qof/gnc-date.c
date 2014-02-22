@@ -1121,10 +1121,30 @@ qof_scan_date_internal (const char *buff, int *day, int *month, int *year,
         if (buff[0] != '\0')
         {
             struct tm thetime;
+            gchar *format = g_strdup (GNC_D_FMT);
+            gchar *stripped_format = g_strdup (GNC_D_FMT);
+            gint counter = 0, stripped_counter = 0;
+
+            /* strptime can't handle the - format modifier
+             * let's strip it out of the format before using it
+             */
+            while (format[counter] != '\0')
+            {
+                stripped_format[stripped_counter] = format[counter];
+                if ((format[counter] == '%') && (format[counter+1] == '-'))
+                    counter++;  // skip - format modifier
+
+                counter++;
+                stripped_counter++;
+            }
+            stripped_format[stripped_counter] = '\0';
+            g_free (format);
+
 
             /* Parse time string. */
             memset(&thetime, -1, sizeof(struct tm));
-            strptime (buff, GNC_D_FMT, &thetime);
+            strptime (buff, stripped_format, &thetime);
+            g_free (stripped_format);
 
             if (third_field)
             {
