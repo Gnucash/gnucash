@@ -56,7 +56,7 @@
 #define UTF8_ACCEPT 0
 #define UTF8_REJECT 1
 
-static const uint8_t utf8d[] = {
+static const guint8 utf8d[] = {
   0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, // 00..1f
   0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, // 20..3f
   0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, // 40..5f
@@ -73,9 +73,9 @@ static const uint8_t utf8d[] = {
   1,3,1,1,1,1,1,3,1,3,1,1,1,1,1,1,1,3,1,1,1,1,1,1,1,1,1,1,1,1,1,1, // s7..s8 18f
 };
 
-static uint32_t inline
-decode(uint32_t* state, uint32_t* codep, uint32_t byte) {
-  uint32_t type = utf8d[byte];
+static guint32 inline
+decode(guint32* state, guint32* codep, guint32 byte) {
+  guint32 type = utf8d[(guint8)byte];
 
   *codep = (*state != UTF8_ACCEPT) ?
     (byte & 0x3fu) | (*codep << 6) :
@@ -90,19 +90,19 @@ xmlChar*
 checked_char_cast (gchar *val)
 {
     gchar *p = val;
-    uint32_t prev, curr;
-    uint8_t count;
+    guint32 prev, curr;
+    guint8 count;
 
     for (prev = 0, curr = 0; *p; prev = curr, ++p)
     {
-	uint32_t codep; /* We don't care, it's a throwaway */
+	guint32 codep; /* We don't care, it's a throwaway */
 	if (*p && *p < 0x20 && *p != 0x09 &&
 	    *p != 0x0a && *p != 0x0d)
 	{
 	    *p = '?';
 	    continue;
 	}
-	if (*(uint8_t*)p < 0x80)
+	if (*(guint8*)p < 0x80)
 	    continue;
 	switch (decode(&curr, &codep, *p))
 	{

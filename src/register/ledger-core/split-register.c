@@ -2247,7 +2247,7 @@ gnc_split_register_auto_calc (SplitRegister *reg, Split *split)
         cell = (PriceCell *) gnc_table_layout_get_cell (reg->table->layout,
                 PRIC_CELL);
         price = gnc_price_cell_get_value (cell);
-	if (price > 0)
+	if (gnc_numeric_positive_p(price))
 	    record_price (reg, account, price);
     }
     return TRUE;
