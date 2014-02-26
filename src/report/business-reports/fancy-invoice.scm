@@ -454,7 +454,8 @@
 		    (if reverse-payments?
 			(gnc-numeric-neg(xaccSplitGetValue split))
 			(xaccSplitGetValue split))))
-	     (row '()))
+             (payment-style "grand-total")
+             (row '()))
 
 	(total-collector 'add
 	    (gnc:gnc-monetary-commodity amt)
