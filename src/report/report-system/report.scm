@@ -529,7 +529,7 @@
    ;; Temporary check to make the new report saving code more or less backwards
    ;; compatible with older gnucash versions. This can be removed again in 2.8.
    "(if (defined? 'gnc:restore-report-by-guid-with-custom-template)\n"
-    ;; end of 2.6->2.4 compatibility code prefix.
+   ;; end of 2.6->2.4 compatibility code prefix.
    (format 
     #f "  (gnc:restore-report-by-guid-with-custom-template ~S ~S ~S ~S options)\n"
     (gnc:report-id report) (gnc:report-type report)
@@ -566,7 +566,7 @@
   (let ((result (string-append 
    ";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;\n"
    (format #f ";; Options for saved report ~S, based on template ~S\n"
-		  name type)
+           name type)
    (format
     #f "(let ()\n (define (options-gen)\n  (let ((options (gnc:report-template-new-options/report-guid ~S ~S)))\n"
     type templ-name)
@@ -579,8 +579,8 @@
     #f " (gnc:define-report \n  'version 1\n  'name ~S\n  'report-guid ~S\n  'parent-type ~S\n  'options-generator options-gen\n  'menu-path (list gnc:menuname-custom)\n  'renderer (gnc:report-template-renderer/report-guid ~S ~S)))\n\n"
     name
     (if guid
-	guid
-	(guid-new-return)) ;; when saving a report, we need to create a guid for it for later reloading
+        guid
+        (guid-new-return)) ;; when saving a report, we need to create a guid for it for later reloading
     type
     type
     templ-name))))
@@ -614,12 +614,11 @@
 ;;       in the saved reports file...
 (define (gnc:report-template-generate-saved-forms report-template)
   (let* ((name (gnc:report-template-name report-template))
-	 (type (gnc:report-template-parent-type report-template))
-	 (templ-name (gnc:report-template-name (hash-ref *gnc:_report-templates_* type)))
-	 (options (gnc:report-template-new-options report-template))
-	 (embedded-options (gnc:report-generate-options-embedded options))
-	 (guid (gnc:report-template-report-guid report-template))
-	 )
+         (type (gnc:report-template-parent-type report-template))
+         (templ-name (gnc:report-template-name (hash-ref *gnc:_report-templates_* type)))
+         (options (gnc:report-template-new-options report-template))
+         (embedded-options (gnc:report-generate-options-embedded options))
+         (guid (gnc:report-template-report-guid report-template)))
     (gnc:report-generate-saved-forms-string name type templ-name options embedded-options guid)))
 
 (define gnc:current-saved-reports
