@@ -724,6 +724,7 @@ gnc_plugin_page_report_save_page (GncPluginPage *plugin_page,
     GncPluginPageReportPrivate *priv;
     SCM gen_save_text, scm_text;
     SCM get_embedded_list, embedded, item, tmp_report;
+    SCM  get_options;
     gint count, id;
     gchar *text, *key_name;
 
@@ -746,7 +747,8 @@ gnc_plugin_page_report_save_page (GncPluginPage *plugin_page,
 
     gen_save_text = scm_c_eval_string("gnc:report-generate-restore-forms");
     get_embedded_list = scm_c_eval_string("gnc:report-embedded-list");
-    embedded = scm_call_1(get_embedded_list, priv->cur_report);
+    get_options    = scm_c_eval_string("gnc:report-options");
+    embedded = scm_call_1(get_embedded_list, scm_call_1(get_options, priv->cur_report));
     count = scm_ilength(embedded);
     while (count-- > 0)
     {

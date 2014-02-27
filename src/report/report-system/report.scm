@@ -545,9 +545,9 @@
   ))
 
 ;; Loop over embedded reports and concat result of each gnc:report-generate-restore-forms
-(define (gnc:report-generate-options-embedded report)
+(define (gnc:report-generate-options-embedded options)
   (let*
-      ((embedded-reports (gnc:report-embedded-list report))
+      ((embedded-reports (gnc:report-embedded-list options))
        (result-string ""))
     (if embedded-reports
         (for-each
@@ -587,6 +587,8 @@
     (gnc:debug result)
     result))
 
+;; Convert an instantiated report into a report template
+;; and generate the guile code required to recreate this template
 (define (gnc:report-generate-saved-forms report)
   ;; clean up the options if necessary.  this is only needed 
   ;; in special cases.  
@@ -598,19 +600,24 @@
         (thunk report)))
   
   ;; save them
-  (let ((name (gnc:report-template-make-unique-name (gnc:report-name report)))
-	(type (gnc:report-type report))
-	(templ-name (gnc:report-template-name (hash-ref *gnc:_report-templates_* (gnc:report-type report))))
-	(options (gnc:report-options report))
-	(embedded-options (gnc:report-generate-options-embedded report)))
+  (let* ((name (gnc:report-template-make-unique-name (gnc:report-name report)))
+         (type (gnc:report-type report))
+         (templ-name (gnc:report-template-name (hash-ref *gnc:_report-templates_* (gnc:report-type report))))
+         (options (gnc:report-options report))
+         (embedded-options (gnc:report-generate-options-embedded options)))
     (gnc:report-generate-saved-forms-string name type templ-name options embedded-options #f)))
 
+;; Generate guile code required to recreate a report template
+;; Note: multi column report templates encapsulate instantiated reports, not other report templates
+;;       this means that the template recreation code must also contain the code to instantiate
+;;       these embedded report instances. This results in a mix of template and instatiated reports
+;;       in the saved reports file...
 (define (gnc:report-template-generate-saved-forms report-template)
   (let* ((name (gnc:report-template-name report-template))
 	 (type (gnc:report-template-parent-type report-template))
 	 (templ-name (gnc:report-template-name (hash-ref *gnc:_report-templates_* type)))
 	 (options (gnc:report-template-new-options report-template))
-	 (embedded-options #f)
+	 (embedded-options (gnc:report-generate-options-embedded options))
 	 (guid (gnc:report-template-report-guid report-template))
 	 )
     (gnc:report-generate-saved-forms-string name type templ-name options embedded-options guid)))
@@ -781,9 +788,8 @@
                  *gnc:_report-templates_*))
 
 ;; return the list of reports embedded in the specified report
-(define (gnc:report-embedded-list report)
-  (let* ((options (gnc:report-options report))
-	 (option (gnc:lookup-option options "__general" "report-list")))
+(define (gnc:report-embedded-list options)
+  (let* ((option (gnc:lookup-option options "__general" "report-list")))
     (if option
 	(let ((opt-value (gnc:option-value option)))
 	  (map (lambda (x) (car x)) opt-value))
