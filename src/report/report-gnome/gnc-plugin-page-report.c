@@ -745,7 +745,7 @@ gnc_plugin_page_report_save_page (GncPluginPage *plugin_page,
         return;
     }
 
-    gen_save_text = scm_c_eval_string("gnc:report-generate-restore-forms");
+    gen_save_text = scm_c_eval_string("gnc:report-serialize");
     get_embedded_list = scm_c_eval_string("gnc:report-embedded-list");
     get_options    = scm_c_eval_string("gnc:report-options");
     embedded = scm_call_1(get_embedded_list, scm_call_1(get_options, priv->cur_report));
