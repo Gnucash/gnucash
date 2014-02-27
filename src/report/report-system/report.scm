@@ -547,10 +547,8 @@
   ))
 
 ;; Generate guile code required to recreate embedded report instances
-(define (gnc:report-serialize-embedded options)
-  (let*
-      ((embedded-reports (gnc:report-embedded-list options))
-       (result-string ""))
+(define (gnc:report-serialize-embedded embedded-reports)
+  (let* ((result-string ""))
     (if embedded-reports
         (for-each
          (lambda (subreport-id)
@@ -564,8 +562,9 @@
          embedded-reports))
     result-string))
 
-(define (gnc:report-template-serialize-internal name type templ-name options embedded-serialized guid)
-  (let ((result (string-append 
+(define (gnc:report-template-serialize-internal name type templ-name options guid)
+  (let* ((embedded-serialized (gnc:report-serialize-embedded (gnc:report-embedded-list options)))
+         (result (string-append 
    ";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;\n"
    (format #f ";; Options for saved report ~S, based on template ~S\n"
            name type)
@@ -605,9 +604,8 @@
   (let* ((name (gnc:report-template-make-unique-name (gnc:report-name report)))
          (type (gnc:report-type report))
          (templ-name (gnc:report-template-name (hash-ref *gnc:_report-templates_* (gnc:report-type report))))
-         (options (gnc:report-options report))
-         (embedded-serialized (gnc:report-serialize-embedded options)))
-    (gnc:report-template-serialize-internal name type templ-name options embedded-serialized #f)))
+         (options (gnc:report-options report)))
+    (gnc:report-template-serialize-internal name type templ-name options #f)))
 
 ;; Generate guile code required to recreate a report template
 ;; Note: multi column report templates encapsulate instantiated reports, not other report templates
@@ -619,9 +617,8 @@
          (type (gnc:report-template-parent-type report-template))
          (templ-name (gnc:report-template-name (hash-ref *gnc:_report-templates_* type)))
          (options (gnc:report-template-new-options report-template))
-         (embedded-serialized (gnc:report-serialize-embedded options))
          (guid (gnc:report-template-report-guid report-template)))
-    (gnc:report-template-serialize-internal name type templ-name options embedded-serialized guid)))
+    (gnc:report-template-serialize-internal name type templ-name options guid)))
 
 (define gnc:current-saved-reports
   (gnc-build-dotgnucash-path "saved-reports-2.4"))
