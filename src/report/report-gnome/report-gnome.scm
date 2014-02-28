@@ -111,9 +111,9 @@
 
   (gnc-add-scm-extension 
    (gnc:make-menu-item
-   (N_ "Preconfigured Reports")
+   (N_ "Saved Reports")
    "4d3dcdc8890b11df99dd94cddfd72085"
-   (N_ "Manage and run preconfigured reports")
+   (N_ "Manage and run saved reports")
    (list gnc:menuname-reports)
    (lambda (window)
      (gnc:spawn-custom-report-dialog window))))
