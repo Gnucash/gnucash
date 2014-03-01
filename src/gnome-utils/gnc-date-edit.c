@@ -165,14 +165,14 @@ gnc_date_edit_popdown(GNCDateEdit *gde)
 static void
 day_selected (GtkCalendar *calendar, GNCDateEdit *gde)
 {
-    char buffer [40];
+    Timespec t;
     guint year, month, day;
-
+    gde->in_selected_handler = TRUE;
     gtk_calendar_get_date (calendar, &year, &month, &day);
-
-    qof_print_date_dmy_buff (buffer, 40, day, month + 1, year);
-    gtk_entry_set_text (GTK_ENTRY (gde->date_entry), buffer);
-    g_signal_emit (G_OBJECT (gde), date_edit_signals [DATE_CHANGED], 0);
+    /* GtkCalendar returns a 0-based month */
+    t = gnc_dmy2timespec (day, month + 1, year);
+    gnc_date_edit_set_time_ts (gde, t);
+    gde->in_selected_handler = FALSE;
 }
 
 static void
@@ -516,10 +516,13 @@ gnc_date_edit_set_time_internal (GNCDateEdit *gde, time64 the_time)
     gtk_entry_set_text(GTK_ENTRY(gde->date_entry), buffer);
 
     /* Update the calendar. */
-    gtk_calendar_select_day(GTK_CALENDAR (gde->calendar), 1);
-    gtk_calendar_select_month(GTK_CALENDAR (gde->calendar),
-                              mytm->tm_mon, 1900 + mytm->tm_year);
-    gtk_calendar_select_day(GTK_CALENDAR (gde->calendar), mytm->tm_mday);
+    if (!gde->in_selected_handler)
+    {
+	gtk_calendar_select_day(GTK_CALENDAR (gde->calendar), 1);
+	gtk_calendar_select_month(GTK_CALENDAR (gde->calendar),
+				  mytm->tm_mon, 1900 + mytm->tm_year);
+	gtk_calendar_select_day(GTK_CALENDAR (gde->calendar), mytm->tm_mday);
+    }
 
     /* Set the time of day. */
     if (gde->flags & GNC_DATE_EDIT_24_HR)
@@ -643,6 +646,7 @@ gnc_date_edit_init (GNCDateEdit *gde)
     gde->lower_hour = 7;
     gde->upper_hour = 19;
     gde->flags = GNC_DATE_EDIT_SHOW_TIME;
+    gde->in_selected_handler = FALSE;
 }
 
 static void
@@ -939,7 +943,7 @@ create_children (GNCDateEdit *gde)
     g_signal_connect (gde->calendar, "button-release-event",
                       G_CALLBACK(gnc_date_edit_button_released), gde);
     g_signal_connect (G_OBJECT (gde->calendar), "day-selected",
-                      G_CALLBACK  (day_selected), gde);
+		      G_CALLBACK (day_selected), gde);
     g_signal_connect (G_OBJECT (gde->calendar),
                       "day-selected-double-click",
                       G_CALLBACK  (day_selected_double_click), gde);
