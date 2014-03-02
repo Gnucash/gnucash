@@ -1,5 +1,38 @@
 Version history:
 ------- -------
+2.6.2 - 2 March 2014
+       The GnuCash development team proudly announces GnuCash 2.6.1,
+       the latest stable release of the GnuCash Free Accounting
+       Software. 
+       
+       This is a maintenance release; there are no new features, but
+       Mike Alexander has extensively reworked the Advanced Portfolio
+       Report.
+
+       Mike Alexander has completed his extensive reworking of the
+       Advanced Portfolio Report.
+
+       Bugs Fixed:
+       497831 - Can't change the date of a transaction with certain locales
+       721472 - Fix Reconcile description column.
+       721677 - Customer Summary does not include inactive customers
+       722123 - Zero price entry added to price database on stock purchase
+       722903 - Poor performance of account hierarchy, budgets, reconcile
+                window,...
+       723051 Implement gncCustomerNextID in Python bindings.
+       723373 -  Don't create any sx in the since-last-run dialog if this is
+       	         a read-only file
+       723644 - Make sure that gnc_search_invoice_on_id() returns the
+       	        correct type of object.
+       724211 - Can't select march 6 date on register
+       724426 - Errors in account plan
+       724427 - New account plan for Sweden
+       724578 - Problems clearing incompletely paid invoices
+       724753 - Saved Multicolumn Report Error
+       725131 - Adding Payments to Fancy Invoice
+
+      Translations Updated: Catalan, Italian
+
 2.6.1 - 1 January 2014
        The GnuCash development team proudly announces GnuCash 2.6.1,
        the latest stable release of the GnuCash Free Accounting
