@@ -128,6 +128,9 @@ struct _GncABTransDialog
     /* Recipient's bank name (may be filled in automatically sometime later) */
     GtkWidget *recp_bankname_label;
 
+    /* Originator's name (might have to be edited by the user) */
+    GtkWidget *orig_name_entry;
+
     /* The template choosing GtkTreeView/GtkListStore */
     GtkTreeView *template_gtktreeview;
     GtkListStore *template_list_store;
@@ -200,6 +203,8 @@ gnc_ab_trans_dialog_fill_values(GncABTransDialog *td)
                     trans, gtk_entry_get_text(GTK_ENTRY(td->recp_bankcode_entry)));
         AB_Transaction_SetRemoteIban(
                     trans, gtk_entry_get_text(GTK_ENTRY(td->recp_account_entry)));
+        AB_Transaction_SetLocalName(
+                    trans, gtk_entry_get_text(GTK_ENTRY(td->orig_name_entry)));
     }
     else
     {
@@ -263,7 +268,6 @@ gnc_ab_trans_dialog_new(GtkWidget *parent, AB_ACCOUNT *ab_acc,
     GtkWidget *recp_bankcode_heading;
     GtkWidget *amount_hbox;
     GtkWidget *orig_name_heading;
-    GtkWidget *orig_name_label;
     GtkWidget *orig_account_heading;
     GtkWidget *orig_account_label;
     G_GNUC_UNUSED GtkWidget *orig_bankname_heading;
@@ -317,7 +321,7 @@ gnc_ab_trans_dialog_new(GtkWidget *parent, AB_ACCOUNT *ab_acc,
     td->purpose_cont3_entry = GTK_WIDGET(gtk_builder_get_object (builder, "purpose_cont3_entry"));
     td->exec_button = GTK_WIDGET(gtk_builder_get_object(builder, "exec_now_button"));
     orig_name_heading = GTK_WIDGET(gtk_builder_get_object (builder, "orig_name_heading"));
-    orig_name_label = GTK_WIDGET(gtk_builder_get_object (builder, "orig_name_label"));
+    td->orig_name_entry = GTK_WIDGET(gtk_builder_get_object (builder, "orig_name_label"));
     orig_account_heading = GTK_WIDGET(gtk_builder_get_object (builder, "orig_account_heading"));
     orig_account_label = GTK_WIDGET(gtk_builder_get_object (builder, "orig_account_label"));
     orig_bankname_heading = GTK_WIDGET(gtk_builder_get_object (builder, "orig_bankname_heading"));
@@ -345,11 +349,9 @@ gnc_ab_trans_dialog_new(GtkWidget *parent, AB_ACCOUNT *ab_acc,
     {
     case SINGLE_TRANSFER:
     case SINGLE_INTERNAL_TRANSFER:
-    case SEPA_TRANSFER:
         /* all labels are already set */
         break;
-    case SINGLE_DEBITNOTE:
-    case SEPA_DEBITNOTE:
+    case SEPA_TRANSFER:
         gtk_label_set_text(GTK_LABEL (heading_label),
                            /* Translators: Strings from this file are
                              * needed only in countries that have one of
@@ -361,6 +363,20 @@ gnc_ab_trans_dialog_new(GtkWidget *parent, AB_ACCOUNT *ab_acc,
                              * country, you may safely ignore strings
                              * from the import-export/hbci
                              * subdirectory. */
+                           _("Enter a SEPA Online Transfer"));
+        gtk_label_set_text(GTK_LABEL(recp_account_heading),
+                           _("Recipient IBAN (International Account Number)"));
+        gtk_label_set_text(GTK_LABEL(recp_bankcode_heading),
+                           _("Recipient BIC (Bank Code)"));
+
+        gtk_label_set_text(GTK_LABEL(orig_account_heading),
+                           _("Originator IBAN (International Account Number)"));
+        gtk_label_set_text(GTK_LABEL(orig_bankcode_heading),
+                           _("Originator BIC (Bank Code)"));
+        break;
+
+    case SINGLE_DEBITNOTE:
+        gtk_label_set_text(GTK_LABEL (heading_label),
                            _("Enter an Online Direct Debit Note"));
 
         gtk_label_set_text(GTK_LABEL(recp_name_heading),
@@ -378,6 +394,25 @@ gnc_ab_trans_dialog_new(GtkWidget *parent, AB_ACCOUNT *ab_acc,
                            _("Credited Account Bank Code"));
         break;
 
+    case SEPA_DEBITNOTE:
+        gtk_label_set_text(GTK_LABEL (heading_label),
+                           _("Enter a SEPA Online Direct Debit Note"));
+
+        gtk_label_set_text(GTK_LABEL(recp_name_heading),
+                           _("Debited Account Owner"));
+        gtk_label_set_text(GTK_LABEL(recp_account_heading),
+                           _("Debited IBAN (International Account Number)"));
+        gtk_label_set_text(GTK_LABEL(recp_bankcode_heading),
+                           _("Debited BIC (Bank Code)"));
+
+        gtk_label_set_text(GTK_LABEL(orig_name_heading),
+                           _("Credited Account Owner"));
+        gtk_label_set_text(GTK_LABEL(orig_account_heading),
+                           _("Credited IBAN (International Account Number)"));
+        gtk_label_set_text(GTK_LABEL(orig_bankcode_heading),
+                           _("Credited BIC (Bank Code)"));
+        break;
+
     default:
         g_critical("gnc_ab_trans_dialog_new: Oops, unknown GncABTransType %d",
                    trans_type);
@@ -385,24 +420,6 @@ gnc_ab_trans_dialog_new(GtkWidget *parent, AB_ACCOUNT *ab_acc,
     }
 
     /* Additionally change the labels for the European (SEPA) transactions */
-    switch (trans_type)
-    {
-    case SEPA_TRANSFER:
-        gtk_label_set_text(GTK_LABEL(recp_account_heading),
-                           _("Recipient IBAN (International Account Number)"));
-        gtk_label_set_text(GTK_LABEL(recp_bankcode_heading),
-                           _("Recipient BIC (Bank Code)"));
-        break;
-    case SEPA_DEBITNOTE:
-        gtk_label_set_text(GTK_LABEL(recp_account_heading),
-                           _("Debited IBAN (International Account Number)"));
-        gtk_label_set_text(GTK_LABEL(recp_bankcode_heading),
-                           _("Debited BIC (Bank Code)"));
-        break;
-    default:
-        // do nothing
-        break;
-    }
     if (gnc_ab_trans_isSEPA(trans_type))
     {
         // Also, SEPA might have much longer IBAN (up to 34 chars) and BIC (11)
@@ -410,10 +427,22 @@ gnc_ab_trans_dialog_new(GtkWidget *parent, AB_ACCOUNT *ab_acc,
         gtk_entry_set_max_length(GTK_ENTRY(td->recp_account_entry), 34);
     }
 
-    gtk_label_set_text(GTK_LABEL(orig_name_label), ab_ownername);
-    gtk_label_set_text(GTK_LABEL(orig_account_label), ab_accountnumber);
+    gtk_entry_set_text(GTK_ENTRY(td->orig_name_entry), ab_ownername);
     gtk_label_set_text(GTK_LABEL(orig_bankname_label), ab_bankname);
-    gtk_label_set_text (GTK_LABEL (orig_bankcode_label), ab_bankcode);
+    if (gnc_ab_trans_isSEPA(trans_type))
+    {
+        gtk_widget_set_sensitive(GTK_WIDGET(td->orig_name_entry), TRUE);
+        ab_accountnumber = AB_Account_GetIBAN(ab_acc);
+        ab_bankcode = AB_Account_GetBIC(ab_acc);
+        gtk_label_set_text(GTK_LABEL(orig_account_label), ab_accountnumber);
+        gtk_label_set_text (GTK_LABEL (orig_bankcode_label), ab_bankcode);
+    }
+    else
+    {
+        gtk_widget_set_sensitive(GTK_WIDGET(td->orig_name_entry), FALSE);
+        gtk_label_set_text(GTK_LABEL(orig_account_label), ab_accountnumber);
+        gtk_label_set_text (GTK_LABEL (orig_bankcode_label), ab_bankcode);
+    }
 
     /* Fill list for choosing a transaction template */
     td->template_list_store = gtk_list_store_new(TEMPLATE_NUM_COLUMNS,
