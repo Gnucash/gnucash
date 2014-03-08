@@ -340,69 +340,7 @@ gnc_tree_view_destroy (GtkObject *object)
 
     if (priv->state_section)
     {
-        /* Save state. Only store non-default values when possible. */
-        GList *column_list, *tmp;
-        GKeyFile *state_file = gnc_state_get_current();
-        gsize num_cols = 0;
-        gchar *sort_column = gnc_tree_view_get_sort_column (view);
-        gchar *sort_order = gnc_tree_view_get_sort_order (view);
-        gchar **col_order = gnc_tree_view_get_column_order (view, &num_cols);
-
-        /* Default sort column is the first column */
-        if (sort_column &&
-                (gnc_tree_view_find_column_by_name (view, sort_column) !=
-                        gtk_tree_view_get_column (GTK_TREE_VIEW (view), 0)))
-            g_key_file_set_string (state_file, priv->state_section, STATE_KEY_SORT_COLUMN, sort_column);
-        else if (g_key_file_has_key (state_file, priv->state_section, STATE_KEY_SORT_COLUMN, NULL))
-            g_key_file_remove_key (state_file, priv->state_section, STATE_KEY_SORT_COLUMN, NULL);
-        g_free (sort_column);
-
-
-        /* Default sort order is "ascending" */
-        if (g_strcmp0 (sort_order, "descending") == 0)
-            g_key_file_set_string (state_file, priv->state_section, STATE_KEY_SORT_ORDER, sort_order);
-        else if (g_key_file_has_key (state_file, priv->state_section, STATE_KEY_SORT_ORDER, NULL))
-            g_key_file_remove_key (state_file, priv->state_section, STATE_KEY_SORT_ORDER, NULL);
-        g_free (sort_order);
-
-        if (col_order && (num_cols > 0))
-            g_key_file_set_string_list (state_file, priv->state_section, STATE_KEY_COLUMN_ORDER,
-                                        (const gchar**) col_order, num_cols);
-        else if (g_key_file_has_key (state_file, priv->state_section, STATE_KEY_COLUMN_ORDER, NULL))
-            g_key_file_remove_key (state_file, priv->state_section, STATE_KEY_COLUMN_ORDER, NULL);
-
-
-        // ENTER("view %p, wanted %s", view, wanted);
-        column_list = gtk_tree_view_get_columns (GTK_TREE_VIEW (view));
-        for (tmp = column_list; tmp; tmp = g_list_next (tmp))
-        {
-            GtkTreeViewColumn *column = tmp->data;
-            gchar *key=NULL;
-            const gchar *name = g_object_get_data (G_OBJECT (column), PREF_NAME);
-            if (!name)
-                continue;
-
-            if (!g_object_get_data (G_OBJECT (column), ALWAYS_VISIBLE))
-            {
-                key = g_strjoin ("_", name, STATE_KEY_SUFF_VISIBLE, NULL);
-                g_key_file_set_boolean (state_file, priv->state_section, key,
-                                        gtk_tree_view_column_get_visible (column));
-                g_free (key);
-            }
-
-            key = g_strjoin ("_", name, STATE_KEY_SUFF_WIDTH, NULL);
-            if (g_object_get_data (G_OBJECT(column), "default-width") &&
-                (GPOINTER_TO_INT((g_object_get_data (G_OBJECT(column), "default-width")))
-                    != gtk_tree_view_column_get_width (column)))
-            {
-                g_key_file_set_integer (state_file, priv->state_section, key,
-                                        gtk_tree_view_column_get_width (column));
-            }
-            else if (g_key_file_has_key (state_file, priv->state_section, key, NULL))
-                g_key_file_remove_key (state_file, priv->state_section, key, NULL);
-            g_free (key);
-        }
-        g_list_free(column_list);
+        gnc_tree_view_save_state (view);
     }
     g_free(priv->state_section);
     priv->state_section = NULL;
@@ -1143,6 +1081,86 @@ gnc_tree_view_get_state_section (GncTreeView *view)
 
     priv = GNC_TREE_VIEW_GET_PRIVATE (view);
     return priv->state_section;
+}
+
+void gnc_tree_view_save_state (GncTreeView *view)
+{
+    GncTreeViewPrivate *priv;
+
+    ENTER("view %p", view);
+    g_return_if_fail (view != NULL);
+    g_return_if_fail (GNC_IS_TREE_VIEW (view));
+
+    priv = GNC_TREE_VIEW_GET_PRIVATE(view);
+
+    if (priv->state_section)
+    {
+        /* Save state. Only store non-default values when possible. */
+        GList *column_list, *tmp;
+        GKeyFile *state_file = gnc_state_get_current();
+        gsize num_cols = 0;
+        gchar *sort_column = gnc_tree_view_get_sort_column (view);
+        gchar *sort_order = gnc_tree_view_get_sort_order (view);
+        gchar **col_order = gnc_tree_view_get_column_order (view, &num_cols);
+
+        /* Default sort column is the first column */
+        if (sort_column &&
+                (gnc_tree_view_find_column_by_name (view, sort_column) !=
+                        gtk_tree_view_get_column (GTK_TREE_VIEW (view), 0)))
+            g_key_file_set_string (state_file, priv->state_section, STATE_KEY_SORT_COLUMN, sort_column);
+        else if (g_key_file_has_key (state_file, priv->state_section, STATE_KEY_SORT_COLUMN, NULL))
+            g_key_file_remove_key (state_file, priv->state_section, STATE_KEY_SORT_COLUMN, NULL);
+        g_free (sort_column);
+
+
+        /* Default sort order is "ascending" */
+        if (g_strcmp0 (sort_order, "descending") == 0)
+            g_key_file_set_string (state_file, priv->state_section, STATE_KEY_SORT_ORDER, sort_order);
+        else if (g_key_file_has_key (state_file, priv->state_section, STATE_KEY_SORT_ORDER, NULL))
+            g_key_file_remove_key (state_file, priv->state_section, STATE_KEY_SORT_ORDER, NULL);
+        g_free (sort_order);
+
+        if (col_order && (num_cols > 0))
+            g_key_file_set_string_list (state_file, priv->state_section, STATE_KEY_COLUMN_ORDER,
+                                        (const gchar**) col_order, num_cols);
+        else if (g_key_file_has_key (state_file, priv->state_section, STATE_KEY_COLUMN_ORDER, NULL))
+            g_key_file_remove_key (state_file, priv->state_section, STATE_KEY_COLUMN_ORDER, NULL);
+
+
+        // ENTER("view %p, wanted %s", view, wanted);
+        column_list = gtk_tree_view_get_columns (GTK_TREE_VIEW (view));
+        for (tmp = column_list; tmp; tmp = g_list_next (tmp))
+        {
+            GtkTreeViewColumn *column = tmp->data;
+            gchar *key=NULL;
+            const gchar *name = g_object_get_data (G_OBJECT (column), PREF_NAME);
+            if (!name)
+                continue;
+
+            if (!g_object_get_data (G_OBJECT (column), ALWAYS_VISIBLE))
+            {
+                key = g_strjoin ("_", name, STATE_KEY_SUFF_VISIBLE, NULL);
+                g_key_file_set_boolean (state_file, priv->state_section, key,
+                                        gtk_tree_view_column_get_visible (column));
+                g_free (key);
+            }
+
+            key = g_strjoin ("_", name, STATE_KEY_SUFF_WIDTH, NULL);
+            if (g_object_get_data (G_OBJECT(column), "default-width") &&
+                (GPOINTER_TO_INT((g_object_get_data (G_OBJECT(column), "default-width")))
+                    != gtk_tree_view_column_get_width (column)))
+            {
+                g_key_file_set_integer (state_file, priv->state_section, key,
+                                        gtk_tree_view_column_get_width (column));
+            }
+            else if (g_key_file_has_key (state_file, priv->state_section, key, NULL))
+                g_key_file_remove_key (state_file, priv->state_section, key, NULL);
+            g_free (key);
+        }
+        g_list_free(column_list);
+    }
+
+    LEAVE(" ");
 }
 
 
