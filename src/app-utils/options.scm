@@ -16,6 +16,7 @@
 ;; Free Software Foundation           Voice:  +1-617-542-5942
 ;; 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
+(use-modules (ice-9 regex))
 
 (define (gnc:make-option
          ;; The category of this option
@@ -185,8 +186,16 @@
               ")))")))
 
 (define (gnc:value->string value)
-  (call-with-output-string
-   (lambda (port) (write value port))))
+  (let ((result (call-with-output-string
+                 (lambda (port) (write value port)))))
+       ;; Guile 1.8 has a bug that it serializes a space in a symbol to "\ "
+       ;; but can't deserialize this back to a symbol afterwards. Stripping the
+       ;; "\" appears to work around this (see gnucash bug  721654 which lead to this issue)
+       (cond-expand
+         (guile-2 )
+         (else (set! result (regexp-substitute/global #f "\\\\ " result 'pre " " 'post))))
+
+       result))
 
 (define (gnc:make-string-option
          section
