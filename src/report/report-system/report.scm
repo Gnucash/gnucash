@@ -464,7 +464,7 @@
   (hash-ref *gnc:_report-templates_* report-type))
 
 (define (gnc:report-template-is-custom/template-guid? guid)
-  (let* ((custom-template (if (string-null? guid) #f (hash-ref *gnc:_report-templates_* guid)))
+  (let* ((custom-template (if (string? guid) (if (string-null? guid) #f (hash-ref *gnc:_report-templates_* guid)) #f))
          (parent-type (if custom-template (gnc:report-template-parent-type custom-template) #f)))
 
         (if parent-type
