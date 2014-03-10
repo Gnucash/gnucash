@@ -5,7 +5,7 @@
   <object class="GtkDialog" id="custom_report_dialog">
     <property name="can_focus">False</property>
     <property name="border_width">5</property>
-    <property name="title" translatable="yes">Saved Reports</property>
+    <property name="title" translatable="yes">Saved Report Configurations</property>
     <property name="window_position">center-on-parent</property>
     <property name="type_hint">dialog</property>
     <property name="skip_taskbar_hint">True</property>
@@ -28,8 +28,8 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="has_tooltip">True</property>
-                <property name="tooltip_markup">Exit the custom report dialog</property>
-                <property name="tooltip_text" translatable="yes">Exit the custom report dialog</property>
+                <property name="tooltip_markup">Exit the saved report configurations dialog</property>
+                <property name="tooltip_text" translatable="yes">Exit the saved report configurations dialog</property>
                 <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
                 <signal name="clicked" handler="close_custom_report_clicked_cb" swapped="no"/>
@@ -91,9 +91,9 @@ Currently you have no saved reports.
           <object class="GtkLabel" id="label1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Saved reports are created by first opening a report from the Reports menu,
-altering the report's options to your taste and then choosing "Save Report" from
-the File menu or tool bar.</property>
+            <property name="label" translatable="yes">Saved report configurations are created by first opening a report from the Reports menu,
+altering the report's options to your taste and then choosing "Save Report Configuration" from
+the Reports menu or tool bar.</property>
           </object>
           <packing>
             <property name="expand">True</property>

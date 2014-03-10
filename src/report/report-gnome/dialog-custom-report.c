@@ -409,7 +409,7 @@ custom_report_list_view_clicked_cb(GtkTreeView *view, GdkEventButton *event, gpo
     {
         if (column == crd->runcol)
         {
-            SCM guid = get_custom_report_selection(crd, _("You must select a report to run."));
+            SCM guid = get_custom_report_selection(crd, _("You must select a report configuration to load."));
             custom_report_run_report (guid, crd);
         }
         else if (column == crd->editcol)
@@ -420,7 +420,7 @@ custom_report_list_view_clicked_cb(GtkTreeView *view, GdkEventButton *event, gpo
         }
         else if (column == crd->delcol)
         {
-            SCM guid = get_custom_report_selection(crd, _("You must select a report to delete."));
+            SCM guid = get_custom_report_selection(crd, _("You must select a report configuration to delete."));
             custom_report_delete (guid, crd);
         }
     }
@@ -429,7 +429,7 @@ custom_report_list_view_clicked_cb(GtkTreeView *view, GdkEventButton *event, gpo
 void custom_report_name_edited_cb(GtkCellRendererText *renderer, gchar *path, gchar *new_text, gpointer data)
 {
     CustomReportDialog *crd = data;
-    SCM guid = get_custom_report_selection(crd, _("Unable to change report name."));
+    SCM guid = get_custom_report_selection(crd, _("Unable to change report configuration name."));
     SCM unique_name_func = scm_c_eval_string("gnc:report-template-has-unique-name?");
     SCM new_name_scm = scm_from_utf8_string(new_text);
 
@@ -441,7 +441,7 @@ void custom_report_name_edited_cb(GtkCellRendererText *renderer, gchar *path, gc
         custom_report_edit_report_name (guid, crd, new_text);
     else
         gnc_error_dialog(crd->dialog, "%s",
-                         _("A custom report with this name already exists, please choose another name.") );
+                         _("A saved report configuration with this name already exists, please choose another name.") );
 
 
 }
@@ -465,11 +465,11 @@ void custom_report_query_tooltip_cb (GtkTreeView  *view,
     {
         gtk_tree_view_set_tooltip_cell (view, tooltip, path, column, NULL);
         if (column == crd->runcol)
-            gtk_tooltip_set_text (tooltip, _("Run saved report"));
+            gtk_tooltip_set_text (tooltip, _("Load report configuration"));
         else if (column == crd->editcol)
-            gtk_tooltip_set_text (tooltip, _("Edit configuration name"));
+            gtk_tooltip_set_text (tooltip, _("Edit report configuration name"));
         else if (column == crd->delcol)
-            gtk_tooltip_set_text (tooltip, _("Delete saved report"));
+            gtk_tooltip_set_text (tooltip, _("Delete report configuration"));
         else
             gtk_tooltip_set_text (tooltip, NULL);
     }
