@@ -102,8 +102,7 @@ class Session(GnuCashCoreClass):
         if book_uri is not None:
             try:
                 self.begin(book_uri, ignore_lock, is_new, force_new)
-                if not is_new:
-                    self.load()
+                self.load()
             except GnuCashBackendException, backend_exception:
                 self.end()
                 self.destroy()
