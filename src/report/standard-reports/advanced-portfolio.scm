@@ -278,12 +278,8 @@
              (case (gnc-numeric-compare (gnc-numeric-abs b-units) (caar b-list))
                ((-1)
                  ;; Sold less than the first lot, create a new first lot from the remainder
-                 (let* ((new-units (gnc-numeric-add b-units (caar b-list) units-denom GNC-RND-ROUND))
-                        (old-val (gnc-numeric-mul (caar b-list) (cdar b-list) currency-frac GNC-RND-ROUND))
-                        (new-val (gnc-numeric-mul old-val 
-                                                  (gnc-numeric-div new-units (caar b-list) GNC-DENOM-AUTO GNC-DENOM-REDUCE)
-                                                  currency-frac GNC-RND-ROUND)))
-                    (basis-builder (cdr b-list) new-units new-val b-method currency-frac))) 
+                 (let ((new-units (gnc-numeric-add b-units (caar b-list) units-denom GNC-RND-ROUND)))
+                        (cons (cons new-units (cdar b-list)) (cdr b-list))))
                ((0)
                  ;; Sold all of the first lot
                  (cdr b-list))
@@ -297,13 +293,8 @@
                (case (gnc-numeric-compare (gnc-numeric-abs b-units) (caar rev-b-list))
                  ((-1)
                    ;; Sold less than the last lot
-                 (let* ((new-units (gnc-numeric-add b-units (caar rev-b-list) units-denom GNC-RND-ROUND))
-                        (old-val (gnc-numeric-mul (caar rev-b-list) (cdar rev-b-list) currency-frac GNC-RND-ROUND))
-                        (new-val (gnc-numeric-mul old-val 
-                                                  (gnc-numeric-div new-units (caar rev-b-list) GNC-DENOM-AUTO GNC-DENOM-REDUCE)
-                                                  currency-frac GNC-RND-ROUND)))
-                    (basis-builder (reverse (cdr rev-b-list)) new-units new-val b-method currency-frac)
-                 ))
+                 (let ((new-units (gnc-numeric-add b-units (caar rev-b-list) units-denom GNC-RND-ROUND)))
+                        (reverse (cons (cons new-units (cdar rev-b-list)) (cdr rev-b-list)))))
                  ((0)
                    ;; Sold all of the last lot
                    (reverse (cdr rev-b-list))
