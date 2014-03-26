@@ -1747,19 +1747,6 @@ printable_value (gdouble val, gint denom)
     return xaccPrintAmount (num, info);
 }
 
-const char*
-gnc_commodity_get_nice_symbol(const gnc_commodity *cm)
-{
-    const char *nice_symbol;
-    if (!cm) return NULL;
-
-    nice_symbol = gnc_commodity_get_user_symbol(cm);
-    if (nice_symbol && *nice_symbol)
-        return nice_symbol;
-    else
-        return gnc_commodity_get_mnemonic(cm);
-}
-
 /********************************************************************\
  * xaccParseAmount                                                  *
  *   parses amount strings using locale data                        *

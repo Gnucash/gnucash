@@ -690,7 +690,7 @@ gnc_tree_model_commodity_get_value (GtkTreeModel *tree_model,
     case GNC_TREE_MODEL_COMMODITY_COL_USER_SYMBOL:
         g_value_init (value, G_TYPE_STRING);
 
-        g_value_set_string (value, gnc_commodity_get_user_symbol (commodity));
+        g_value_set_string (value, gnc_commodity_get_nice_symbol (commodity));
         break;
     case GNC_TREE_MODEL_COMMODITY_COL_VISIBILITY:
         g_value_init (value, G_TYPE_BOOLEAN);
