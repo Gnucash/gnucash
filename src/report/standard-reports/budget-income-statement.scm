@@ -570,11 +570,32 @@
           ;; Total expenses.
           (set! expense-total
             (gnc:get-assoc-account-balances-total expense-account-balances))
+          (if (gnc-reverse-balance (car expense-accounts))
+             (set! expense-total
+               (gnc:commodity-collector-get-negated expense-total)
+             )
+          )
 
           ;; Function to get individual expense account total.
           (set! expense-get-balance-fn
             (lambda (account start-date end-date)
-              (gnc:select-assoc-account-balance expense-account-balances account)))
+              (let
+                (
+                  (individual-balance
+                    (gnc:select-assoc-account-balance
+                      expense-account-balances
+                      account
+                    )
+                  )
+                )
+                (if (gnc-reverse-balance account)
+                  (gnc:commodity-collector-get-negated individual-balance)
+                  ;; else
+                  individual-balance
+                )
+              )
+            )
+          )
 
 
 	  (gnc:report-percent-done 10)
@@ -592,13 +613,33 @@
           ;; Total revenue.
           (set! revenue-total
             (gnc:get-assoc-account-balances-total revenue-account-balances))
+          (if (not (gnc-reverse-balance (car revenue-accounts)))
+             (set! revenue-total
+               (gnc:commodity-collector-get-negated revenue-total)
+             )
+          )
 
           ;; Function to get individual revenue account total.
           ;; Budget revenue is always positive, so this must be negated.
           (set! revenue-get-balance-fn
             (lambda (account start-date end-date)
-              (gnc:commodity-collector-get-negated
-                (gnc:select-assoc-account-balance revenue-account-balances account))))
+              (let
+                (
+                  (individual-balance
+                    (gnc:select-assoc-account-balance
+                      revenue-account-balances
+                      account
+                    )
+                  )
+                )
+                (if (gnc-reverse-balance account)
+                  (gnc:commodity-collector-get-negated individual-balance)
+                  ;; else
+                  individual-balance
+                )
+              )
+            )
+          )
 
 
 	  (gnc:report-percent-done 20)

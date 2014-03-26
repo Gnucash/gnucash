@@ -869,10 +869,6 @@ estimate_budget_helper(GtkTreeModel *model, GtkTreePath *path,
         num = recurrenceGetAccountPeriodValue(&priv->r, acct, i);
         if (!gnc_numeric_check(num))
         {
-            if (gnc_reverse_balance (acct))
-                num = gnc_numeric_neg (num);
-
-
             num = gnc_numeric_convert(num, GNC_DENOM_AUTO,
                                       GNC_HOW_DENOM_SIGFIGS(priv->sigFigs) | GNC_HOW_RND_ROUND_HALF_UP);
             gnc_budget_set_account_period_value(

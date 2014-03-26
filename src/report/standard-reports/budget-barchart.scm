@@ -120,36 +120,51 @@
 
       ;; Loop though periods
       (while (< period num-periods)
+        (let
+          (
+            (budget-period-value
+              (gnc-budget-get-account-period-value budget acct period)
+            )
+            (actual-period-value
+              (gnc-budget-get-account-period-actual-value budget acct period)
+            )
+          )
 
-        ;; Add calc new running sum and add to list
-	(if running-sum 
-          (set! bgt-sum (+ bgt-sum 
-            (gnc-numeric-to-double
-              (gnc-budget-get-account-period-value budget acct period))))
-          
-	  (set! bgt-sum 
-            (gnc-numeric-to-double
-              (gnc-budget-get-account-period-value budget acct period)))
-        )
-        (set! bgt-vals (append bgt-vals (list bgt-sum)))
+          ;; take care of the reverse account preference
+          ;; only needed for the actual value
+          ;; for the budget value this is already included
+          (if (gnc-reverse-balance acct)
+            (set! actual-period-value
+              (gnc-numeric-neg actual-period-value)
+            )
+          )
 
-	(if running-sum
-	  (set! act-sum (+ act-sum
-            (gnc-numeric-to-double
-              (gnc-budget-get-account-period-actual-value budget acct period))))
-	  
-	  (set! act-sum
-            (gnc-numeric-to-double
-              (gnc-budget-get-account-period-actual-value budget acct period)))
-	)
-        (set! act-vals (append act-vals (list act-sum)))
+          ;; do the conversion
+          (set! budget-period-value (gnc-numeric-to-double budget-period-value))
+          (set! actual-period-value (gnc-numeric-to-double actual-period-value))
 
-	;; Add period to date list
-        (set! date (gnc-budget-get-period-start-date budget period))
-        (set! date-list (append date-list (list (gnc-print-date date))))
+          ;; Add calc new running sum and add to list
+          (if running-sum
+            (set! bgt-sum (+ bgt-sum budget-period-value))
+            ;; else
+            (set! bgt-sum budget-period-value)
+          )
+          (set! bgt-vals (append bgt-vals (list bgt-sum)))
 
-	(set! period (+ period 1))
-      )
+          (if running-sum
+	    (set! act-sum (+ act-sum actual-period-value))
+	    ;; else
+	    (set! act-sum actual-period-value)
+	  )
+          (set! act-vals (append act-vals (list act-sum)))
+
+	  ;; Add period to date list
+          (set! date (gnc-budget-get-period-start-date budget period))
+          (set! date-list (append date-list (list (gnc-print-date date))))
+
+	  (set! period (+ period 1))
+        );; end of let
+      );; end of while
 
       ;; Add data to chart
       (gnc:html-barchart-append-column! chart bgt-vals)
