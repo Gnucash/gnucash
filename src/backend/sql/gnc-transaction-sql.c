@@ -191,19 +191,29 @@ load_single_split( GncSqlBackend* be, GncSqlRow* row )
 {
     const GncGUID* guid;
     GncGUID split_guid;
-    Split* pSplit;
+    Split* pSplit = NULL;
+    gboolean bad_guid = FALSE;
 
     g_return_val_if_fail( be != NULL, NULL );
     g_return_val_if_fail( row != NULL, NULL );
 
     guid = gnc_sql_load_guid( be, row );
     if ( guid == NULL ) return NULL;
-    split_guid = *guid;
+    if (guid_equal(guid, guid_null()))
+    {
+	PWARN("Bad GUID, creating new");
+	bad_guid = TRUE;
+	split_guid = guid_new_return();
+    }
+    else
+    {
+	split_guid = *guid;
+	pSplit = xaccSplitLookup( &split_guid, be->book );
+    }
 
-    pSplit = xaccSplitLookup( &split_guid, be->book );
     if ( pSplit == NULL )
     {
-        pSplit = xaccMallocSplit( be->book );
+	pSplit = xaccMallocSplit( be->book );
     }
 
     /* If the split is dirty, don't overwrite it */
@@ -212,8 +222,14 @@ load_single_split( GncSqlBackend* be, GncSqlRow* row )
         gnc_sql_load_object( be, row, GNC_ID_SPLIT, pSplit, split_col_table );
     }
 
-    /*# -ifempty */g_assert( pSplit == xaccSplitLookup( &split_guid, be->book ) );
-
+    /*# -ifempty */
+    if (pSplit != xaccSplitLookup( &split_guid, be->book ))
+    {
+	PERR("A malformed split with id %s was found in the dataset.",
+	     guid_to_string(qof_instance_get_guid(pSplit)));
+	qof_backend_set_error( &be->be, ERR_BACKEND_DATA_CORRUPT);
+	pSplit = NULL;
+    }
     return pSplit;
 }
 
@@ -287,7 +303,13 @@ load_single_tx( GncSqlBackend* be, GncSqlRow* row )
     xaccTransBeginEdit( pTx );
     gnc_sql_load_object( be, row, GNC_ID_TRANS, pTx, tx_col_table );
 
-    g_assert( pTx == xaccTransLookup( &tx_guid, be->book ) );
+    if (pTx != xaccTransLookup( &tx_guid, be->book ))
+    {
+	PERR("A malformed transaction with id %s was found in the dataset.",
+	     guid_to_string(qof_instance_get_guid(pTx)));
+	qof_backend_set_error( &be->be, ERR_BACKEND_DATA_CORRUPT);
+	pTx = NULL;
+    }
 
     return pTx;
 }
@@ -570,6 +592,7 @@ commit_split( GncSqlBackend* be, QofInstance* inst )
     gint op;
     gboolean is_infant;
     gboolean is_ok;
+    GncGUID *guid = (GncGUID*)qof_instance_get_guid(inst);
 
     g_return_val_if_fail( inst != NULL, FALSE );
     g_return_val_if_fail( be != NULL, FALSE );
@@ -587,11 +610,20 @@ commit_split( GncSqlBackend* be, QofInstance* inst )
     {
         op = OP_DB_UPDATE;
     }
-    is_ok = gnc_sql_do_db_operation( be, op, SPLIT_TABLE, GNC_ID_SPLIT, inst, split_col_table );
+
+    if (guid_equal (guid, guid_null ()))
+    {
+	*guid = guid_new_return ();
+	qof_instance_set_guid (inst, guid);
+    }
+
+    is_ok = gnc_sql_do_db_operation( be, op, SPLIT_TABLE, GNC_ID_SPLIT,
+				     inst, split_col_table );
+
     if ( is_ok && !qof_instance_get_destroying (inst))
     {
         is_ok = gnc_sql_slots_save( be,
-                                    qof_instance_get_guid( inst ),
+                                    guid,
                                     is_infant,
                                     qof_instance_get_slots( inst ) );
     }
