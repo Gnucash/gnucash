@@ -1412,10 +1412,6 @@ gnc_dbi_load( QofBackend* qbe, /*@ dependent @*/ QofBook *book, QofBackendLoadTy
 
         // Set up table version information
         gnc_sql_init_version_info (&be->sql_be);
-	gnc_sql_set_table_version (&be->sql_be, "Gnucash",
-				   gnc_prefs_get_long_version());
-	gnc_sql_set_table_version (&be->sql_be, "Gnucash-Resave",
-				   GNUCASH_RESAVE_VERSION);
 
         // Call all object backends to create any required tables
         qof_object_foreach_backend( GNC_SQL_BACKEND, create_tables_cb, be );
