@@ -1087,7 +1087,7 @@ xaccSplitSetValue (Split *s, gnc_numeric amt)
                                   GNC_HOW_RND_ROUND_HALF_UP);
     if (gnc_numeric_check(new_val) == GNC_ERROR_OK)
         s->value = new_val;
-    else PERR("numeric error in converting the split value's denominator");
+    else PERR("numeric error %s in converting the split value's denominator with amount %s and denom  %d", gnc_numeric_errorCode_to_string(gnc_numeric_check(new_val)), gnc_numeric_to_string(amt), get_currency_denom(s));
 
     SET_GAINS_VDIRTY(s);
     mark_split (s);
