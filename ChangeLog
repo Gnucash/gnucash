@@ -1,6 +1,122 @@
+2014-03-29 John Ralls 
+
+	* Work around some test issues. (HEAD, master)
+
+2014-03-29 John Ralls 
+
+	* Better error message for split value conversion
+
+2014-03-28 John Ralls 
+
+	* Win32: Roll back Gwenhywfar to 4.9.0 to resolve broken build. (origin/trunk, origin/master, origin/HEAD)
+
+2014-03-28 John Ralls 
+
+	* Ensure that the autoconf and automake checked are the ones we install
+
+2014-03-28 John Ralls 
+
+	* Update Active Perl version to the one current "community edition".
+
+2014-03-28 John Ralls 
+
+	* Bug 724995 - Gnucash crashes due to assertion failed when opening sqlite file
+
+2014-03-28 John Ralls 
+
+	* Set Gnucash version and GNUCASH_RESAVE_VERSION in init_version_info
+
+2014-03-26 Geert Janssens 
+
+	* Improve preference name
+
+2014-03-25 Geert Janssens 
+
+	* Fix guile 2 stack overflow errors for large reports
+
+2014-03-24 Mike Alexander 
+
+	* Fix basis calculation for FIFO or LIFO when less than one lot is sold.
+
+2014-03-24 John Ralls 
+
+	* Bug 726891 - segmentation fault on session.end()
+
+2014-03-24 John Ralls 
+
+	* Fix dumb typo detected by a new Clang warning.
+
+2014-03-19 Geert Janssens 
+
+	* Bug 726430 - Python: account.getName() raises TypeError
+
+2014-03-16 Mike Evans 
+
+	* Bug 721196 - Cannot import lines with empty fields for deposit or withdrawal in bank transaction download.
+
+2014-03-14 Cristian Marchi 
+
+	* Update Italian translation.
+
+2014-03-14 Cristian Marchi 
+
+	* Updated Danish translation from the translation project.
+
+2014-03-14 Cristian Marchi 
+
+	* Updated Catalan translation from the translation project.
+
+2014-03-12 Derek Atkins 
+
+	* Don't hardcode 'swig' in the Makefile (based on suggested patch by "Erik Johansson" <erik@ejohansson.se>
+
+2014-03-10 Geert Janssens 
+
+	* Bug 723975 - Dialog box displayed during QIF import has placeholder text
+
+2014-03-09 Erik Johansson 
+
+	* Fix resizing of columns in budget view
+
+2014-03-10 Geert Janssens 
+
+	* Saved report configuration ui tuning
+
+2014-02-28 Carsten Rinke 
+
+	* Update Window and Menu item from "Preconfigured-" to "Saved-" Report and add lables to the dialog with help texts
+
+2014-03-10 Geert Janssens 
+
+	* Fix crash as reported in bug 711567
+
+2014-03-09 Geert Janssens 
+
+	* Bug 721654 - Style sheet preference is not saved for a Preconfigured Report
+
+2014-03-08 Geert Janssens 
+
+	* Bug 725534 - Scheduled transactions columns widths not retrieved
+
+2014-03-08 Geert Janssens 
+
+	* Refactor state saving function out of widget destruction
+
+2014-03-06 Christian Stimming 
+
+	* Aqbanking: SEPA transfer improvements - fix origin labels and add possibility to edit sender's name. (trunk, master)
+
+2014-03-06 Christian Stimming 
+
+	* Win32 build: Update aqbanking version numbers
+
 2014-03-01 John Ralls 
 
-	* Bug 723216 - Cannot change the accounting period using the pop-up calendar (HEAD, origin/trunk, origin/master, origin/HEAD, master)
+	* Release GnuCash 2.6.2 (2.6.2)
+
+2014-03-01 John Ralls 
+
+	* Bug 723216 - Cannot change the accounting period using the pop-up calendar
 
 2014-02-28 John Ralls 
 

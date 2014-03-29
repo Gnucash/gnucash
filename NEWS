@@ -1,16 +1,40 @@
 Version history:
 ------- -------
+2.6.3 - 30 March 2014
+       The GnuCash development team proudly announces GnuCash 2.6.1,
+       the latest stable release of the GnuCash Free Accounting
+       Software.
+
+       Bugs Fixed:
+       721196 - Cannot import lines with empty fields for deposit or withdrawal
+       	       in bank transaction download.
+       721654 - Style sheet preference is not saved for a Preconfigured Report
+       723975 - Dialog box displayed during QIF import has placeholder text
+       724995 - Gnucash crashes due to assertion failed when opening sqlite file
+       711567 - Cannot save a custom report if a path contain diacritic chars
+       726430 - Python: account.getName() raises TypeError
+       726891 - segmentation fault on session.end()
+
+       Other Changes:
+       Fix resizing of columns in budget view
+       Fix guile 2 stack overflow errors for large reports
+       Fix basis calculation for FIFO or LIFO when less than one lot is sold.
+       Update Window and Menu item from "Preconfigured-" to "Saved-" Report
+       	      and add lables to the dialog with help texts
+       Aqbanking: SEPA transfer improvements - fix origin labels and add
+       	      possibility to edit sender's name.
+       Prevent crash reported in Bug 711567.
+
+       Translations Updated: Catalan, Danish, Italian
+
 2.6.2 - 2 March 2014
        The GnuCash development team proudly announces GnuCash 2.6.1,
        the latest stable release of the GnuCash Free Accounting
-       Software. 
-       
+       Software.
+
        This is a maintenance release; there are no new features, but
        Mike Alexander has extensively reworked the Advanced Portfolio
        Report.
-
-       Mike Alexander has completed his extensive reworking of the
-       Advanced Portfolio Report.
 
        Bugs Fixed:
        497831 - Can't change the date of a transaction with certain locales
@@ -36,8 +60,8 @@ Version history:
 2.6.1 - 1 January 2014
        The GnuCash development team proudly announces GnuCash 2.6.1,
        the latest stable release of the GnuCash Free Accounting
-       Software. 
-       
+       Software.
+
        This is a maintenance release; there are no new features, but
        Mike Alexander has extensively reworked the Advanced Portfolio
        Report.
@@ -74,7 +98,7 @@ Version history:
        721966 - --add-price-quotes ignoring compress files preference
        722035 - Missing space in the Spanish translation of msgid "Total For "
        722123 - Zero price entry added to price database on stock purchase
-  
+
        Translations updated: Catalan, Danish, German, Italian
 
 2.6.0 - 29 Dec 2013
