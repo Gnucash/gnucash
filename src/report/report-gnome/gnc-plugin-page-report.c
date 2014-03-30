@@ -587,6 +587,7 @@ gnc_plugin_page_report_option_change_cb(gpointer data)
     SCM dirty_report = scm_c_eval_string("gnc:report-set-dirty?!");
     const gchar *old_name;
     gchar *new_name;
+    gchar *new_name_escaped;
 
     g_return_if_fail(GNC_IS_PLUGIN_PAGE_REPORT(data));
     report = GNC_PLUGIN_PAGE_REPORT(data);
@@ -602,7 +603,13 @@ gnc_plugin_page_report_option_change_cb(gpointer data)
     new_name = gnc_option_db_lookup_string_option(priv->cur_odb, "General",
                "Report name", NULL);
     if (strcmp(old_name, new_name) != 0)
-        main_window_update_page_name(GNC_PLUGIN_PAGE(report), new_name);
+    {
+        /* Bug 727130 - escape the non-printable characters from the name */
+        new_name_escaped = g_strescape(new_name,NULL);
+        ENTER("Escaped new report name: %s", new_name_escaped);
+        main_window_update_page_name(GNC_PLUGIN_PAGE(report), new_name_escaped);
+        g_free(new_name_escaped);
+	}
     g_free(new_name);
 
     /* it's probably already dirty, but make sure */
