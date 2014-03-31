@@ -343,7 +343,7 @@ set_default LIBOFX_DIR $GLOBAL_DIR\\libofx
 #set_default LIBOFX_PATCH `pwd`/libofx-x.x.x.patch
 
 ## online banking: gwenhywfar+aqbanking
-GWENHYWFAR_VERSION="4.9.0beta"
+GWENHYWFAR_VERSION="4.11.0beta"
 set_default GWENHYWFAR_URL "http://www2.aquamaniac.de/sites/download/download.php?package=01&release=74&file=01&dummy=gwenhywfar-${GWENHYWFAR_VERSION}.tar.gz"
 set_default GWENHYWFAR_DIR $GLOBAL_DIR\\gwenhywfar
 
