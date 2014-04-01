@@ -10,10 +10,12 @@
 set -o pipefail
 set -e
 LOG_DIR=build-logs
+BUILD_HOST="gnucash-win32"
+LOG_HOST=upload@code.gnucash.org:public_html/win32
 
 function on_error() {
-  if [ `hostname` = "gnucash-win32" ]; then
-    scp -p ${LOGFILE} upload@code.gnucash.org:public_html/win32/$LOG_DIR
+  if [ `hostname` = ${BUILD_HOST} ]; then
+    scp -p ${LOGFILE} ${LOG_HOST}/$LOG_DIR
   fi
   exit
 }
@@ -45,10 +47,18 @@ LOGFILE=${_OUTPUT_DIR}/${LOGFILENAME}
 mkdir -p ${_OUTPUT_DIR}
 
 # Small hack to create $LOG_DIR on the webserver if it doesn't exist yet
-if [ `hostname` = "gnucash-win32" ]; then
+if [ `hostname` = ${BUILD_HOST} ]; then
   mkdir -p "$_OUTPUT_DIR/$LOG_DIR"
-  scp -r "$_OUTPUT_DIR/$LOG_DIR" upload@code.gnucash.org:public_html/win32
+  scp -r "$_OUTPUT_DIR/$LOG_DIR" ${LOG_HOST}
   rmdir "$_OUTPUT_DIR/$LOG_DIR"
+fi
+
+# If we're running on the build server, copy a temporary logfile
+# content to the webserver to signal that the build is in progress
+if [ `hostname` = ${BUILD_HOST} ]; then
+    _PWD=`pwd`
+    echo "Build for tag \"${tag}\" is in progress (current working directory: ${_PWD}) ..." > ${LOGFILE}
+    scp -p ${LOGFILE} ${LOG_HOST}/${LOG_DIR}
 fi
 
 set +e
@@ -97,12 +107,12 @@ if [ -n "${tag}" ] ; then
 fi
 
 # If we're running on the build server then upload the files
-if [ `hostname` = "gnucash-win32" ]; then
+if [ `hostname` = ${BUILD_HOST} ]; then
   # Small hack to create the $TARGET_DIR on the webserver if it doesn't exist yet
   mkdir -p "$_OUTPUT_DIR/$TARGET_DIR"
-  scp -r "$_OUTPUT_DIR/$TARGET_DIR" upload@code.gnucash.org:public_html/win32
+  scp -r "$_OUTPUT_DIR/$TARGET_DIR" ${LOG_HOST}
   rmdir "$_OUTPUT_DIR/$TARGET_DIR"
   # Copy the files to the chosen target directory
-  scp -p ${LOGFILE} upload@code.gnucash.org:public_html/win32/$LOG_DIR
-  scp -p ${_OUTPUT_DIR}/${SETUP_FILENAME} upload@code.gnucash.org:public_html/win32/$TARGET_DIR
+  scp -p ${LOGFILE} ${LOG_HOST}/$LOG_DIR
+  scp -p ${_OUTPUT_DIR}/${SETUP_FILENAME} ${LOG_HOST}/$TARGET_DIR
 fi
