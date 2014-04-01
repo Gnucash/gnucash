@@ -14,6 +14,9 @@
 
 set -e
 
+## Only run this script on Monday night (first day of the week)
+if [ `date +%u` != 1 ] ; then exit ; fi
+
 function qpushd() { pushd "$@" >/dev/null; }
 function qpopd() { popd >/dev/null; }
 function unix_path() { echo "$*" | sed 's,^\([A-Za-z]\):,/\1,;s,\\,/,g'; }
@@ -25,7 +28,7 @@ qpushd "$(dirname $(unix_path "$0"))"
 # Variables
 _GIT_UDIR=`unix_path $GIT_DIR`
 set_env "$_GIT_UDIR/bin/git" GIT_CMD
-export GIT_CMD
+export $GIT_CMD
 
 $GIT_CMD pull
 
@@ -34,7 +37,7 @@ $GIT_CMD pull
 #
 
 # If we don't have a rev file then start from 'now' and force a build
-revfile=last_rev_daily
+revfile=last_rev_weekly
 if [ ! -f ${revfile} ] ; then
   echo $($GIT_CMD rev-parse HEAD) > ${revfile}
   oldrev=a   # definitely an invalid, so non-existing git rev
@@ -44,7 +47,7 @@ fi
 
 newrev=$($GIT_CMD rev-parse HEAD)
 if [[ "${oldrev}" != "${newrev}" ]]; then
-  ./build_package_git.sh
+  ./build_package.sh
 fi
 
 # move the new file into place, will only happen if the build was successful
