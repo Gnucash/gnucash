@@ -53,8 +53,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gnucash 2.6.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-03-14 20:31+0100\n"
-"PO-Revision-Date: 2014-03-14 20:41+0100\n"
+"POT-Creation-Date: 2014-04-05 14:09+0200\n"
+"PO-Revision-Date: 2014-04-05 14:15+0100\n"
 "Last-Translator: Cristian Marchi <cri.penta@gmail.com>\n"
 "Language-Team: Italian <gnucash-it@gnucash.org>\n"
 "Language: it\n"
@@ -551,7 +551,7 @@ msgstr "Nota"
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:3173
 #: ../src/plugins/bi_import/gtkbuilder/dialog-bi-import-gui.glade.h:5
 #: ../src/register/ledger-core/split-register.c:2470
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:1691
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:1698
 #: ../intl-scm/guile-strings.c:290 ../intl-scm/guile-strings.c:874
 #: ../intl-scm/guile-strings.c:1086 ../intl-scm/guile-strings.c:1296
 #: ../intl-scm/guile-strings.c:1608 ../intl-scm/guile-strings.c:1820
@@ -1377,8 +1377,9 @@ msgstr "Trova fattura"
 #. Translators: This abbreviation is the column heading for
 #. the condition "Is this invoice a Credit Note?"
 #: ../src/business/business-gnome/dialog-invoice.c:3198
+#, fuzzy
 msgid "CN?"
-msgstr ""
+msgstr "Cina (zh_CN)"
 
 #. src/report/business-reports/customer-summary.scm
 #. src/report/business-reports/gnucash/report/customer-summary.scm
@@ -1554,9 +1555,8 @@ msgid "You must select a company for payment processing."
 msgstr "È necessario scegliere un'impresa per elaborare il pagamento."
 
 #: ../src/business/business-gnome/dialog-payment.c:198
-#, fuzzy
 msgid "You must select at least one document or pre-payment to process."
-msgstr "Selezionare almeno un conto da stimare."
+msgstr "Selezionare almeno un documento o un pre-pagamento da processare."
 
 #: ../src/business/business-gnome/dialog-payment.c:217
 msgid "You must select a transfer account from the account tree."
@@ -1925,7 +1925,7 @@ msgstr "Copia"
 #: ../src/gnome/gnc-plugin-page-register2.c:236
 #: ../src/gnome/gnc-plugin-page-register.c:240
 #: ../src/gnome-utils/gnc-main-window.c:316
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:1021
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:1028
 msgid "_Paste"
 msgstr "_Incolla"
 
@@ -2509,7 +2509,7 @@ msgstr ""
 #. src/report/business-reports/gnucash/report/invoice.scm
 #. src/report/business-reports/invoice.scm
 #: ../src/business/business-gnome/gtkbuilder/business-prefs.glade.h:1
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:1683
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:1690
 #: ../intl-scm/guile-strings.c:2242 ../intl-scm/guile-strings.c:2900
 msgid "Printable Invoice"
 msgstr "Fattura stampabile"
@@ -2519,7 +2519,7 @@ msgstr "Fattura stampabile"
 #. src/report/business-reports/taxinvoice.eguile.scm
 #. src/report/business-reports/taxinvoice.scm
 #: ../src/business/business-gnome/gtkbuilder/business-prefs.glade.h:2
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:1684
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:1691
 #: ../intl-scm/guile-strings.c:2530 ../intl-scm/guile-strings.c:2534
 #: ../intl-scm/guile-strings.c:2710 ../intl-scm/guile-strings.c:2712
 #: ../intl-scm/guile-strings.c:3188 ../intl-scm/guile-strings.c:3192
@@ -2530,7 +2530,7 @@ msgstr "Fattura con imposte"
 #. src/report/business-reports/easy-invoice.scm
 #. src/report/business-reports/gnucash/report/easy-invoice.scm
 #: ../src/business/business-gnome/gtkbuilder/business-prefs.glade.h:3
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:1685
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:1692
 #: ../intl-scm/guile-strings.c:1112 ../intl-scm/guile-strings.c:1846
 msgid "Easy Invoice"
 msgstr "Fattura semplice"
@@ -2538,7 +2538,7 @@ msgstr "Fattura semplice"
 #. src/report/business-reports/fancy-invoice.scm
 #. src/report/business-reports/gnucash/report/fancy-invoice.scm
 #: ../src/business/business-gnome/gtkbuilder/business-prefs.glade.h:4
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:1686
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:1693
 #: ../intl-scm/guile-strings.c:1322 ../intl-scm/guile-strings.c:2056
 msgid "Fancy Invoice"
 msgstr "Fattura elaborata"
@@ -2649,8 +2649,9 @@ msgid "Auto pay on post_ing"
 msgstr ""
 
 #: ../src/business/business-gnome/gtkbuilder/business-prefs.glade.h:27
+#, fuzzy
 msgid "Auto _pay on posting"
-msgstr ""
+msgstr "Paga automaticamente all'emissione."
 
 #: ../src/business/business-gnome/gtkbuilder/dialog-billterms.glade.h:1
 msgid "Cancel your changes"
@@ -4002,7 +4003,7 @@ msgstr "L'imposta è già compresa nel prezzo di questo elemento?"
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:751
 #, fuzzy
 msgid "Is this entry invoiced?"
-msgstr "Questo elemento è fatturabile?"
+msgstr "L'elemento è fatturabile?"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:757
 #, fuzzy
@@ -5951,7 +5952,7 @@ msgstr ""
 
 #: ../src/gnome/gnc-plugin-page-budget.c:178
 #: ../src/gnome/gtkbuilder/dialog-print-check.glade.h:12
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:1081
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:1088
 msgid "Options"
 msgstr "Opzioni"
 
@@ -6106,7 +6107,7 @@ msgstr "Stampa asseg_ni..."
 #: ../src/gnome/gnc-plugin-page-register2.c:226
 #: ../src/gnome/gnc-plugin-page-register.c:230
 #: ../src/gnome-utils/gnc-main-window.c:306
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:1011
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:1018
 msgid "Cu_t"
 msgstr "_Taglia"
 
@@ -6114,28 +6115,28 @@ msgstr "_Taglia"
 #: ../src/gnome/gnc-plugin-page-register2.c:227
 #: ../src/gnome/gnc-plugin-page-register.c:231
 #: ../src/gnome-utils/gnc-main-window.c:307
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:1012
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:1019
 msgid "Cut the current selection and copy it to clipboard"
 msgstr "Taglia la transazione selezionata e la copia in memoria"
 
 #: ../src/gnome/gnc-plugin-page-register2.c:231
 #: ../src/gnome/gnc-plugin-page-register.c:235
 #: ../src/gnome-utils/gnc-main-window.c:311
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:1016
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:1023
 msgid "_Copy"
 msgstr "_Copia"
 
 #: ../src/gnome/gnc-plugin-page-register2.c:232
 #: ../src/gnome/gnc-plugin-page-register.c:236
 #: ../src/gnome-utils/gnc-main-window.c:312
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:1017
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:1024
 msgid "Copy the current selection to clipboard"
 msgstr "Copia la selezione corrente nella memoria"
 
 #: ../src/gnome/gnc-plugin-page-register2.c:237
 #: ../src/gnome/gnc-plugin-page-register.c:241
 #: ../src/gnome-utils/gnc-main-window.c:317
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:1022
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:1029
 msgid "Paste the clipboard content at the cursor position"
 msgstr "Incolla il contenuto della memoria nella posizione del cursore"
 
@@ -6214,13 +6215,13 @@ msgstr ""
 
 #: ../src/gnome/gnc-plugin-page-register2.c:323
 #: ../src/gnome-utils/gnc-main-window.c:337
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:1026
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:1033
 msgid "_Refresh"
 msgstr "_Aggiorna"
 
 #: ../src/gnome/gnc-plugin-page-register2.c:324
 #: ../src/gnome-utils/gnc-main-window.c:338
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:1027
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:1034
 msgid "Refresh this window"
 msgstr "Aggiorna questa finestra"
 
@@ -6710,7 +6711,7 @@ msgstr "Apre una finestra per il libro mastro generale"
 #: ../src/gnome/gnc-plugin-register2.c:67
 #, fuzzy
 msgid "Register2 Open GL Account"
-msgstr "Apri _conto"
+msgstr "Apre il registro del conto contenente la transazione."
 
 #: ../src/gnome/gnc-plugin-register.c:54
 msgid "Old St_yle General Ledger"
@@ -10938,7 +10939,7 @@ msgstr "Salva come..."
 
 #: ../src/gnome-utils/dialog-file-access.c:311
 #: ../src/gnome-utils/gnc-file.c:119 ../src/gnome-utils/gnc-file.c:289
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:1080
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:1087
 msgid "Export"
 msgstr "Esporta"
 
@@ -11672,7 +11673,7 @@ msgstr "Nuovo salvataggio dei dati utente in corso..."
 
 #: ../src/gnome-utils/gnc-file.c:1183 ../src/gnome-utils/gnc-file.c:1424
 #: ../src/import-export/csv-exp/assistant-csv-export.c:124
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:1449
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:1456
 #, c-format
 msgid "The file %s already exists. Are you sure you want to overwrite it?"
 msgstr "Il file «%s» esiste già. Si è sicuri di volerlo sovrascrivere?"
@@ -12065,8 +12066,8 @@ msgstr ""
 "Il gestore di finanze GnuCash. Il GNUovo modo di gestire il proprio denaro!"
 
 #: ../src/gnome-utils/gnc-main-window.c:4402
-msgid "© 1997-2013 Contributors"
-msgstr "© 1997-2013 Contributori"
+msgid "© 1997-2014 Contributors"
+msgstr "© 1997-2014 Contributori"
 
 #. Translators: the following string will be shown in Help->About->Credits
 #. * Enter your name or that of your team and an email contact for feedback.
@@ -12076,7 +12077,7 @@ msgstr "© 1997-2013 Contributori"
 msgid "translator_credits"
 msgstr ""
 " \n"
-" Traduzione di Cristian Marchi (2013)\n"
+" Traduzione di Cristian Marchi (2014)\n"
 "\n"
 "------------------\n"
 "\n"
@@ -14308,8 +14309,8 @@ msgid "How many days to keep old log/backup files."
 msgstr "Per quanti giorni conservare i vecchi file di log e backup"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:68
-msgid "_Retain log files:"
-msgstr "Conserva i file di _log per:"
+msgid "_Retain log/backup files:"
+msgstr "_Mantenere i file di log/backup:"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:69
 msgid "Com_press files"
@@ -16131,7 +16132,7 @@ msgstr "(sconosciuto)"
 #: ../src/import-export/aqb/dialog-ab-trans.c:366
 #, fuzzy
 msgid "Enter a SEPA Online Transfer"
-msgstr "Inserire una transazione Online"
+msgstr "Trasferimento Online Banking European (SEPA)"
 
 #: ../src/import-export/aqb/dialog-ab-trans.c:368
 msgid "Recipient IBAN (International Account Number)"
@@ -16184,7 +16185,7 @@ msgstr "Codice della banca accreditata"
 #: ../src/import-export/aqb/dialog-ab-trans.c:399
 #, fuzzy
 msgid "Enter a SEPA Online Direct Debit Note"
-msgstr "Immettere una nota per l'addebito diretto online"
+msgstr "Nota di debito Online Banking European (SEPA)"
 
 #: ../src/import-export/aqb/dialog-ab-trans.c:404
 msgid "Debited IBAN (International Account Number)"
@@ -16197,12 +16198,12 @@ msgstr "BIC addebitato (codice banca)"
 #: ../src/import-export/aqb/dialog-ab-trans.c:411
 #, fuzzy
 msgid "Credited IBAN (International Account Number)"
-msgstr "IBAN addebitato (numero di conto internazionale)"
+msgstr "IBAN accreditato (numero di conto internazionale)"
 
 #: ../src/import-export/aqb/dialog-ab-trans.c:413
 #, fuzzy
 msgid "Credited BIC (Bank Code)"
-msgstr "BIC addebitato (codice banca)"
+msgstr "BIC accreditato (codice banca)"
 
 #: ../src/import-export/aqb/dialog-ab-trans.c:511
 #, c-format
@@ -16362,8 +16363,9 @@ msgid "Online Banking Direct Debit Note"
 msgstr "Nota di addebito diretto con l'Online Banking"
 
 #: ../src/import-export/aqb/gnc-ab-transfer.c:213
+#, fuzzy
 msgid "Online Banking Bank-Internal Transfer"
-msgstr ""
+msgstr "Trasferimento Online Banking European (SEPA)"
 
 #: ../src/import-export/aqb/gnc-ab-transfer.c:218
 msgid "Online Banking European (SEPA) Transfer"
@@ -17510,15 +17512,15 @@ msgstr "Apertura del file non riuscita."
 msgid "Unknown encoding."
 msgstr "Codifica sconosciuta."
 
-#: ../src/import-export/csv-imp/gnc-csv-model.c:800
+#: ../src/import-export/csv-imp/gnc-csv-model.c:805
 msgid "No date column."
 msgstr "Nessuna colonna per la data."
 
-#: ../src/import-export/csv-imp/gnc-csv-model.c:801
+#: ../src/import-export/csv-imp/gnc-csv-model.c:806
 msgid "No balance, deposit, or withdrawal column."
 msgstr "Nesuna colonna di saldo, deposito o prelievo."
 
-#: ../src/import-export/csv-imp/gnc-csv-model.c:1095
+#: ../src/import-export/csv-imp/gnc-csv-model.c:1100
 #, c-format
 msgid "%s column could not be understood."
 msgstr "La colonna %s è incomprensibile."
@@ -19392,6 +19394,8 @@ msgid ""
 "\n"
 "Currently you have no saved reports.\n"
 msgstr ""
+"\n"
+"Attualmente non ci sono resoconti salvati.\n"
 
 #: ../src/report/report-gnome/dialog-custom-report.glade.h:6
 msgid ""
@@ -19401,6 +19405,11 @@ msgid ""
 "Configuration\" from\n"
 "the Reports menu or tool bar."
 msgstr ""
+"Le configurazioni per i resoconti salvati possono essere create aprendo un "
+"resoconto dal relativo menu,\n"
+"modificandone le opzioni, e selezionando l'opzione «Salva la configurazione "
+"del resoconto» dal menu\n"
+"«Resoconti» o dalla barra strumenti."
 
 #: ../src/report/report-gnome/dialog-report-column-view.c:321
 msgid "Contents"
@@ -19520,27 +19529,27 @@ msgstr "Nome del foglio di stile"
 msgid "The numeric ID of the report."
 msgstr "L'ID numerico del resoconto."
 
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:1001
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:1008
 msgid "_Print Report..."
 msgstr "_Stampa resoconto"
 
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:1002
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:1009
 msgid "Print the current report"
 msgstr "Stampa il resoconto"
 
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:1006
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:1013
 msgid "Export as P_DF..."
 msgstr "Esporta come P_DF..."
 
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:1007
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:1014
 msgid "Export the current report as a PDF document"
 msgstr "Esporta il resoconto corrente come documento PDF"
 
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:1031
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:1038
 msgid "Save _Report Configuration"
-msgstr "Salva configurazione _resoconto"
+msgstr "Salva la configurazione del _resoconto"
 
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:1032
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:1039
 msgid ""
 "Update the current report's saved configuration. The report will be saved in "
 "the file ~/.gnucash/saved-reports-2.4. "
@@ -19548,99 +19557,99 @@ msgstr ""
 "Aggiorna la configurazione salvata del resoconto corrente. Il resoconto "
 "verrà salvato nel file «~/.gnucash/saved-reports-2.4». "
 
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:1037
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:1044
 msgid "Save Report Configuration As..."
 msgstr "Salva la configurazione del resoconto con un nome"
 
 # Tooltip
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:1038
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:1045
 msgid ""
 "Add the current report's configuration to the `Saved Report Configurations' "
 "menu. The report will be saved in the file ~/.gnucash/saved-reports-2.4. "
 msgstr ""
-"Aggiunge la configurazione del resoconto corrente al menu «Resoconti "
-"preconfigurati». Il resoconto sarà salvato nel file ~/.gnucash/saved-"
+"Aggiunge la configurazione del resoconto corrente al menu «Configurazione di "
+"resoconto salvate». Il resoconto verrà salvato nel file ~/.gnucash/saved-"
 "reports-2.4"
 
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:1043
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:1050
 msgid "Export _Report"
 msgstr "Esporta _resoconto"
 
 # Tooltip
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:1044
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:1051
 msgid "Export HTML-formatted report to file"
 msgstr "Esporta il resoconto in formato HTML"
 
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:1048
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:1055
 msgid "_Report Options"
 msgstr "Opzioni del _resoconto"
 
 # Tooltip
 #. src/report/report-system/html-utilities.scm
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:1049
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:1056
 #: ../intl-scm/guile-strings.c:3882
 msgid "Edit report options"
 msgstr "Modifica le opzioni del resoconto"
 
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:1054
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:1061
 msgid "Back"
 msgstr "Indietro"
 
 # Tooltip
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:1055
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:1062
 msgid "Move back one step in the history"
 msgstr "Sposta un passo indietro nella cronologia"
 
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:1059
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:1066
 msgid "Forward"
 msgstr "Successivo"
 
 # Tooltip
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:1060
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:1067
 msgid "Move forward one step in the history"
 msgstr "Sposta un passo avanti nella cronologia"
 
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:1064
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:1071
 msgid "Reload"
 msgstr "Ricarica"
 
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:1065
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:1072
 msgid "Reload the current page"
 msgstr "Ricarica la pagina corrente"
 
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:1069
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:1076
 msgid "Stop"
 msgstr "Stop"
 
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:1070
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:1077
 msgid "Cancel outstanding HTML requests"
 msgstr "Annulla i processi HTML in esecuzione"
 
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:1079
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:1086
 msgid "Print"
 msgstr "Stampa"
 
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:1360
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:1393
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:1367
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:1400
 msgid "HTML"
 msgstr "HTML"
 
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:1363
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:1370
 msgid "Choose export format"
 msgstr "Scegliere formato di esportazione"
 
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:1364
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:1371
 msgid "Choose the export format for this report:"
 msgstr "Scegliere il formato di esportazione per questo resoconto:"
 
 #. %s is the type of what is about to be saved, e.g. "HTML".
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:1404
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:1411
 #, c-format
 msgid "Save %s To File"
 msgstr "Salva %s nel file"
 
 #. %s is the strerror(3) string of the error that occurred.
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:1430
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:1437
 #, c-format
 msgid ""
 "You cannot save to that filename.\n"
@@ -19651,22 +19660,22 @@ msgstr ""
 "\n"
 "%s"
 
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:1440
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:1447
 msgid "You cannot save to that file."
 msgstr "Non è possibile salvare in quel file."
 
 #. src/report/report-system/report.scm
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:1569
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:1576
 #: ../intl-scm/guile-strings.c:4096
 #, c-format
 msgid "Could not open the file %s. The error is: %s"
 msgstr "Non è possibile aprire il file «%s». L'errore è: %s"
 
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:1601
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:1608
 msgid "There are no options for this report."
 msgstr "Non ci sono opzioni per questo resoconto."
 
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:1626
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:1633
 msgid "GnuCash-Report"
 msgstr "resoconto-GnuCash"
 
@@ -22757,7 +22766,8 @@ msgstr "Pagato, grazie"
 #: ../intl-scm/guile-strings.c:1076 ../intl-scm/guile-strings.c:1280
 #: ../intl-scm/guile-strings.c:1810 ../intl-scm/guile-strings.c:2014
 #: ../intl-scm/guile-strings.c:2202 ../intl-scm/guile-strings.c:2614
-#: ../intl-scm/guile-strings.c:2860 ../intl-scm/guile-strings.c:3272
+#: ../intl-scm/guile-strings.c:2682 ../intl-scm/guile-strings.c:2860
+#: ../intl-scm/guile-strings.c:3272 ../intl-scm/guile-strings.c:3340
 msgid "Net Price"
 msgstr "Prezzo netto"
 
@@ -22772,7 +22782,8 @@ msgstr "Prezzo netto"
 #: ../intl-scm/guile-strings.c:1080 ../intl-scm/guile-strings.c:1284
 #: ../intl-scm/guile-strings.c:1814 ../intl-scm/guile-strings.c:2018
 #: ../intl-scm/guile-strings.c:2206 ../intl-scm/guile-strings.c:2620
-#: ../intl-scm/guile-strings.c:2864 ../intl-scm/guile-strings.c:3278
+#: ../intl-scm/guile-strings.c:2688 ../intl-scm/guile-strings.c:2864
+#: ../intl-scm/guile-strings.c:3278 ../intl-scm/guile-strings.c:3346
 msgid "Total Price"
 msgstr "Prezzo totale"
 
@@ -22787,7 +22798,8 @@ msgstr "Prezzo totale"
 #: ../intl-scm/guile-strings.c:1082 ../intl-scm/guile-strings.c:1286
 #: ../intl-scm/guile-strings.c:1816 ../intl-scm/guile-strings.c:2020
 #: ../intl-scm/guile-strings.c:2208 ../intl-scm/guile-strings.c:2624
-#: ../intl-scm/guile-strings.c:2866 ../intl-scm/guile-strings.c:3282
+#: ../intl-scm/guile-strings.c:2692 ../intl-scm/guile-strings.c:2866
+#: ../intl-scm/guile-strings.c:3282 ../intl-scm/guile-strings.c:3350
 msgid "Amount Due"
 msgstr "Importo dovuto"
 
@@ -23344,7 +23356,7 @@ msgstr "Solo _testo"
 #: ../intl-scm/guile-strings.c:2572 ../intl-scm/guile-strings.c:3230
 #, fuzzy
 msgid "Job Name text"
-msgstr "Vecchio nome - Testo - Numero"
+msgstr "Mostra il nome del lavoro"
 
 #. src/report/business-reports/gnucash/report/taxinvoice.scm
 #. src/report/business-reports/taxinvoice.scm
@@ -23613,7 +23625,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:2664 ../intl-scm/guile-strings.c:3322
 #, fuzzy
 msgid "Border-collapse?"
-msgstr "Comprimere i bordi"
+msgstr "Comprimi tutto"
 
 #. src/report/business-reports/gnucash/report/taxinvoice.scm
 #. src/report/business-reports/taxinvoice.scm
@@ -23624,25 +23636,6 @@ msgstr "colore CSS"
 
 #. src/report/business-reports/gnucash/report/taxinvoice.scm
 #. src/report/business-reports/taxinvoice.scm
-#: ../intl-scm/guile-strings.c:2682 ../intl-scm/guile-strings.c:3340
-msgid "Net Price"
-msgstr "Prezzo netto"
-
-#. src/report/business-reports/gnucash/report/taxinvoice.scm
-#. src/report/business-reports/taxinvoice.scm
-#: ../intl-scm/guile-strings.c:2688 ../intl-scm/guile-strings.c:3346
-msgid "Total Price"
-msgstr "Prezzo totale"
-
-#. src/report/business-reports/gnucash/report/taxinvoice.scm
-#. src/report/business-reports/taxinvoice.scm
-#: ../intl-scm/guile-strings.c:2692 ../intl-scm/guile-strings.c:3350
-#, fuzzy
-msgid "Amount\rue"
-msgstr "Importo dovuto"
-
-#. src/report/business-reports/gnucash/report/taxinvoice.scm
-#. src/report/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:2694 ../intl-scm/guile-strings.c:3352
 msgid "Payment received, thank you"
 msgstr "Pagamento ricevuto, grazie"
@@ -23650,8 +23643,8 @@ msgstr "Pagamento ricevuto, grazie"
 #. src/report/business-reports/gnucash/report/taxinvoice.scm
 #. src/report/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:2696 ../intl-scm/guile-strings.c:3354
-msgid "Invoice number: "
-msgstr "Numero fattura: "
+msgid "Invoice number: "
+msgstr "Numero della fattura:"
 
 #. src/report/business-reports/gnucash/report/taxinvoice.scm
 #. src/report/business-reports/taxinvoice.scm
@@ -23662,20 +23655,21 @@ msgstr "A: "
 #. src/report/business-reports/gnucash/report/taxinvoice.scm
 #. src/report/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:2700 ../intl-scm/guile-strings.c:3358
-msgid "Your ref: "
-msgstr ""
+#, fuzzy
+msgid "Your ref: "
+msgstr "Sp_ecchiatura:"
 
 #. src/report/business-reports/gnucash/report/taxinvoice.scm
 #. src/report/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:2702 ../intl-scm/guile-strings.c:3360
-msgid "Job number: "
-msgstr "Numero lavoro: "
+msgid "Job number: "
+msgstr "Numero del lavoro:"
 
 #. src/report/business-reports/gnucash/report/taxinvoice.scm
 #. src/report/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:2704 ../intl-scm/guile-strings.c:3362
-msgid "Job name: "
-msgstr "Nome del lavoro: "
+msgid "Job name: "
+msgstr "Nome del lavoro:"
 
 #. src/report/business-reports/gnucash/report/taxinvoice.scm
 #. src/report/business-reports/taxinvoice.scm
@@ -26079,7 +26073,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:4390 ../intl-scm/guile-strings.c:5648
 #, fuzzy
 msgid "Include in basis"
-msgstr "Includi i _sottoconti"
+msgstr "Metodo di calcolo base"
 
 #. src/report/standard-reports/advanced-portfolio.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/advanced-portfolio.scm
@@ -26092,7 +26086,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:4394 ../intl-scm/guile-strings.c:5652
 #, fuzzy
 msgid "Include in gain"
-msgstr "Includi la s_omma complessiva"
+msgstr "Guadagni e perdite realizzati"
 
 #. src/report/standard-reports/advanced-portfolio.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/advanced-portfolio.scm
@@ -26870,9 +26864,8 @@ msgstr "Periodo"
 #. src/report/standard-reports/budget-flow.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/budget-flow.scm
 #: ../intl-scm/guile-strings.c:4826 ../intl-scm/guile-strings.c:6084
-#, fuzzy
 msgid "Period number."
-msgstr "Numero d'ordine"
+msgstr "Numero del periodo"
 
 #. src/report/standard-reports/budget-flow.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/budget-flow.scm
@@ -30903,6 +30896,21 @@ msgstr ""
 "(Modifica > Trova...) dalla pagina della struttura principale dei conti. Per "
 "limitare la ricerca a un singolo conto, avviare la ricerca dal registro del "
 "conto."
+
+#~ msgid "Net Price"
+#~ msgstr "Prezzo netto"
+
+#~ msgid "Total Price"
+#~ msgstr "Prezzo totale"
+
+#~ msgid "Invoice number: "
+#~ msgstr "Numero fattura: "
+
+#~ msgid "Job number: "
+#~ msgstr "Numero lavoro: "
+
+#~ msgid "Job name: "
+#~ msgstr "Nome del lavoro: "
 
 #~ msgid ""
 #~ "You must enter the amount of the payment. The payment amount must not be "
