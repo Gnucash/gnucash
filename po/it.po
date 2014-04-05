@@ -54,7 +54,7 @@ msgstr ""
 "Project-Id-Version: Gnucash 2.6.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-04-05 14:09+0200\n"
-"PO-Revision-Date: 2014-04-05 14:15+0100\n"
+"PO-Revision-Date: 2014-04-05 14:28+0100\n"
 "Last-Translator: Cristian Marchi <cri.penta@gmail.com>\n"
 "Language-Team: Italian <gnucash-it@gnucash.org>\n"
 "Language: it\n"
@@ -14310,7 +14310,7 @@ msgstr "Per quanti giorni conservare i vecchi file di log e backup"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:68
 msgid "_Retain log/backup files:"
-msgstr "_Mantenere i file di log/backup:"
+msgstr "Conserva i file di _log/backup per:"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:69
 msgid "Com_press files"
