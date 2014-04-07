@@ -37,6 +37,10 @@
 
 (gnc:module-load "gnucash/report/report-system" 0)
 
+;; included since Bug726449
+(use-modules (ice-9 regex)) ;; for regexp-substitute/global, used by jpqplot
+(load-from-path "html-jqplot.scm") ;; for jqplot-escape-string
+
 (define reportname (N_ "Income/Expense Chart"))
 
 (define optname-from-date (N_ "Start Date"))
@@ -313,8 +317,8 @@
        (gnc:html-barchart-set-subtitle!
         chart (sprintf #f
                        (_ "%s to %s")
-                       (gnc-print-date from-date-tp)
-                       (gnc-print-date to-date-tp)))
+                       (jqplot-escape-string (gnc-print-date from-date-tp))
+                       (jqplot-escape-string (gnc-print-date to-date-tp))))
        (gnc:html-barchart-set-width! chart width)
        (gnc:html-barchart-set-height! chart height)
        (gnc:html-barchart-set-row-labels! chart date-string-list)

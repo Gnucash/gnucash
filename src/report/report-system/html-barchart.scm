@@ -135,6 +135,24 @@
 (define gnc:html-barchart-subtitle
   (record-accessor <html-barchart> 'subtitle))
 
+;; Note: Due to Bug726449 the input string's non-printable control
+;;       characters must translated to HTML format tags BEFORE
+;;       or WHEN calling this function.
+;;       AND:
+;;       To ensure that the generated subtitle doesn't contain any
+;;       unescaped quotes or backslashes, all strings must be freed
+;;       from those by calling jqplot-escape-string.
+;;       Otherwise we're opening the gates again for bug 721768.
+;;
+;;       Example: "\n" must be translated to "<br /> to introduce
+;;                a line break into the chart subtitle.
+;;
+;;       Example call:
+;;         (gnc:html-barchart-set-subtitle! chart
+;;           (string-append "Bgt:"
+;;                          (jqplot-escape-string (number->string bgt-sum))
+;;                          "<br /> Act:" ;; line break in the chart sub-title
+;;                          (jqplot-escape-string (number->string act-sum))))
 (define gnc:html-barchart-set-subtitle!
   (record-modifier <html-barchart> 'subtitle))
 
@@ -452,9 +470,9 @@
 
             (if subtitle
               (begin 
-                (push "  options.title += \" (")
-                (push (jqplot-escape-string subtitle))
-                (push ")\";\n")))
+                (push "  options.title += \" <br />")
+                (push subtitle)
+                (push "\";\n")))
 
             (if (and (string? x-label) (> (string-length x-label) 0))
               (begin 
