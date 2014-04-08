@@ -354,8 +354,12 @@ doMoveCursor (Table *table, int new_phys_row, int new_phys_col, int do_move_gui)
             table->bg_colors[i+r_origin][j+c_origin] = curs->passive_bg_color;
             cell = curs->cells[i][j];
             if (cell) {
-               table->bg_colors[i+r_origin][j+c_origin] = cell->bg_color;
-               table->fg_colors[i+r_origin][j+c_origin] = cell->fg_color;
+               if (cell->use_bg_color) {
+                  table->bg_colors[i+r_origin][j+c_origin] = cell->bg_color;
+               }
+               if (cell->use_fg_color) {
+                  table->fg_colors[i+r_origin][j+c_origin] = cell->fg_color;
+               }
             }
          }
       }
@@ -469,12 +473,12 @@ doMoveCursor (Table *table, int new_phys_row, int new_phys_col, int do_move_gui)
                cell->changed = 0;
             }
 
-            /* umm, a right now, we'll let the active cursor color override the
-             * individual cell defaults, but for now this is an experiment.
-             *
-             * table->bg_colors[i+phys_row_origin][j+phys_col_origin] = cell->bg_color;
-             * table->fg_colors[i+phys_row_origin][j+phys_col_origin] = cell->fg_color;
-             */
+            if (cell->use_bg_color) {
+               table->bg_colors[i+phys_row_origin][j+phys_col_origin] = cell->bg_color;
+            }
+            if (cell->use_fg_color) {
+               table->fg_colors[i+phys_row_origin][j+phys_col_origin] = cell->fg_color;
+            }
          }
       }
    }
