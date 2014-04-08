@@ -35,13 +35,14 @@
 #include <Xbae/Matrix.h>
 
 #include "Account.h"
-#include "ActionBox.h"
+#include "Action.h"
 #include "AdjBWindow.h"
 #include "BuildMenu.h"
 #include "Data.h"
 #include "date.h"
 #include "main.h"
 #include "MainWindow.h"
+#include "PopBox.h"
 #include "QuickFill.h"
 #include "RecnWindow.h"
 #include "Transaction.h"
@@ -62,7 +63,8 @@ typedef struct _RegWindow {
   QuickFill      *qf;         /* keeps track of current quickfill node.  *
                                * Reset to Account->qfRoot when entering  *
                                * a new transaction                       */
-  ActionBox      *ab;
+  PopBox         *actbox;     /* ComboBox for actions                    */
+  PopBox         *xferbox;    /* ComboBox for transfers                  */
 } RegWindow;
 
 
@@ -106,8 +108,9 @@ extern Pixel negPixel;
 #define MOD_PRIC  0x40
 #define MOD_MEMO  0x80
 #define MOD_ACTN  0x100
-#define MOD_NEW   0x200
-#define MOD_ALL   0x3ff
+#define MOD_XFER  0x200
+#define MOD_NEW   0x400
+#define MOD_ALL   0x7ff
 
 /* These defines are indexes into the column location array */
 #define DATE_COL_ID  0
@@ -141,10 +144,14 @@ extern Pixel negPixel;
 #define SHRS_CELL_C   (acc->columnLocation[SHRS_COL_ID])
 #define ACTN_CELL_C   (acc->columnLocation[ACTN_COL_ID])
 
+#define YEAR_CELL_R  1
+#define YEAR_CELL_C  DATE_CELL_C  /* same column as the date */
+#define XFER_CELL_R  1
+#define XFER_CELL_C  NUM_CELL_C   /* same column as the transaction number */
 #define MEMO_CELL_R  1
-#define MEMO_CELL_C  DESC_CELL_C  /* same cilumn as the description */
+#define MEMO_CELL_C  DESC_CELL_C  /* same column as the description */
 
-/** COOL MACROS *****************************************************/
+/** CELL MACROS *****************************************************/
 #define IN_DATE_CELL(R,C) (((R-1)%2==0) && (C==DATE_CELL_C))  /* Date cell        */
 #define IN_NUM_CELL(R,C)  (((R-1)%2==0) && (C==NUM_CELL_C))   /* Number cell      */
 #define IN_DESC_CELL(R,C) (((R-1)%2==0) && (C==DESC_CELL_C))  /* Description cell */
@@ -156,6 +163,7 @@ extern Pixel negPixel;
 #define IN_ACTN_CELL(R,C) (((R-1)%2==0) && (C==ACTN_CELL_C))  /* Action cell      */
 
 #define IN_YEAR_CELL(R,C) (((R-1)%2==1) && (C==DATE_CELL_C))  /* Year cell        */
+#define IN_XFER_CELL(R,C) (((R-1)%2==1) && (C==XFER_CELL_C))  /* Transfer cell    */
 #define IN_MEMO_CELL(R,C) (((R-1)%2==1) && (C==MEMO_CELL_C))  /* Memo cell        */
 #define IN_BAD_CELL(R,C)  (((R-1)%2==1) && (C!=MEMO_CELL_C))  /* Not the memo cell*/
 
@@ -181,7 +189,7 @@ regRefresh( RegWindow *regData )
     char   buf[BUFSIZE];
     String **data = NULL;
     String **newData;
-    Account *acc;
+    Account *acc, *xfer_acc;
     double themount;  /* amount */
     
     XtVaGetValues( regData->reg, XmNrows, &nrows, NULL );
@@ -214,7 +222,7 @@ regRefresh( RegWindow *regData )
     
     /* and fill in the data for the matrix: */
     i=-1;
-    while( (trans=getTransaction(regData->acc,++i)) != NULL )
+    while( (trans = getTransaction (acc,++i)) != NULL )
       {
       int  row = i*2+1;
       
@@ -222,25 +230,29 @@ regRefresh( RegWindow *regData )
                trans->date.month,
                trans->date.day );
       newData[row][DATE_CELL_C]   = XtNewString(buf);
-      
       sprintf( buf, "%4d", trans->date.year );
-      newData[row+1][DATE_CELL_C] = XtNewString(buf);
+      newData[row+1][DATE_CELL_C] = XtNewString(buf);  /* YEAR_CELL_C */
       
       sprintf( buf, "%s", trans->num );
       newData[row][NUM_CELL_C]   = XtNewString(buf);
-      
-      newData[row+1][NUM_CELL_C] = XtNewString("");
+
+      /* XFER_CELL_C is same as NUM_CELL_C */
+      xfer_acc = xaccGetOtherAccount (acc, trans);
+      if (xfer_acc) {
+        sprintf( buf, "%s", xfer_acc->accountName );
+        newData[row+1][NUM_CELL_C] = XtNewString(buf);
+      } else {
+        newData[row+1][NUM_CELL_C] = XtNewString("");
+      }
       
       
       sprintf( buf, "%s", trans->description );
       newData[row][DESC_CELL_C]   = XtNewString(buf);
-      
       sprintf( buf, "%s", trans->memo );
       newData[row+1][DESC_CELL_C] = XtNewString(buf);
       
       sprintf( buf, "%c", trans->reconciled );
       newData[row][RECN_CELL_C]   = XtNewString(buf);
-
       newData[row+1][RECN_CELL_C] = XtNewString("");
       
       /* ----------------------------------- */
@@ -463,50 +475,112 @@ regRecalculateBalance( RegWindow *regData )
  * Global: data - the data for open datafile                        *
 \********************************************************************/
 
-#define RECALC_BALANCE(sacc) {				\
-  Account * xfer_acc;					\
-  RegWindow * xfer_reg;					\
-  xfer_acc = (Account *) (sacc);			\
-  if (xfer_acc) {					\
-    xfer_reg = (RegWindow *) (xfer_acc->regData);	\
-    if (xfer_reg) {					\
-      regRecalculateBalance (xfer_reg);			\
-    }							\
-  }							\
+/* RECALC_BALANCE recomputes the balance shown in 
+ * the register window, if its is visible 
+ */
+
+#define RECALC_BALANCE(sacc) {					\
+  Account * xfer_acc;						\
+  RegWindow * xfer_reg;						\
+  xfer_acc = (Account *) (sacc);				\
+  if (xfer_acc) {						\
+    xfer_reg = (RegWindow *) (xfer_acc->regData);		\
+    if (xfer_reg) {						\
+      regRecalculateBalance (xfer_reg);				\
+    }								\
+  }								\
+}
+
+/* REFRESH_REGISTER redisplays the register window,
+ * if it is visible 
+ */
+#define REFRESH_REGISTER(sacc) {				\
+  Account * xfer_acc;						\
+  RegWindow * xfer_reg;						\
+  xfer_acc = (Account *) (sacc);				\
+  if (xfer_acc) {						\
+    xfer_reg = (RegWindow *) (xfer_acc->regData);		\
+    if (xfer_reg) {						\
+      regRefresh (xfer_reg);					\
+    }								\
+  }								\
+}
+
+
+/* DATE_REORDER needs to null out lastTrans, because 
+ * during date reordering we removed and re-inserted
+ * the transaction... reset lastTrans to zero to prevent it from
+ * indicating a row that doesn't exist.  (That shouldn't happen
+ * anyways!) 
+ */
+#define DATE_REORDER(sacc) {					\
+  Account * xfer_acc;						\
+  RegWindow * xfer_reg;						\
+  xfer_acc = (Account *) (sacc);				\
+  if (xfer_acc) {						\
+    xfer_reg = (RegWindow *) (xfer_acc->regData);		\
+    if (xfer_reg) {						\
+      xfer_reg->lastTrans = 0;					\
+    }								\
+  }								\
+}
+
+/* REMOVE_TRANS will not only remove a transaction from an account,
+ * but it will also delete the appropriate rows from the register 
+ * window, if the register window is visible
+ */
+#define REMOVE_TRANS(sacc,trans) {				\
+  Account   *otherAcc = (Account *) (sacc); 			\
+  if (otherAcc) {						\
+    RegWindow *otherRegData = otherAcc -> regData;		\
+    int n = getNumOfTransaction (otherAcc, trans);		\
+								\
+    /* remove the transaction */				\
+    xaccRemoveTransaction( otherAcc, trans );			\
+								\
+    /* remove the rows from the matrix */			\
+    if (otherRegData) {						\
+      int otherrow = 2*n + 1;					\
+      XbaeMatrixDeleteRows( otherRegData->reg, otherrow, 2 );	\
+      XbaeMatrixRefresh( otherRegData->reg);			\
+    }								\
+  }								\
 }
 
 void
 regSaveTransaction( RegWindow *regData, int position )
-  {
+{
   /* save transaction structure... in order to speed this up, 
    * regData->changed is a bitfield that keeps track of things
    * that might have changed, so we only have to save the stuff
    * that has changed */
   char buf[BUFSIZE];
-  int  newPosition;
   int  row = (position * 2) + 1;
-  Account *acc;
+  Account *acc = regData->acc;
   Transaction *trans;
 
-  acc = regData->acc;
+  /* If nothing has changed, we have nothing to do */
+  if (MOD_NONE == regData->changed) return;
+
+  /* Be sure to prompt the user to save to disk after changes are made! */
+  acc->data->saved = False;
+
   trans = getTransaction( acc, position );
-  
-  /* If anything changes, we have to set this flag, so we
-   * remember to prompt the user to save! */
-  if( MOD_NONE != regData->changed )
-    data->saved = False;
   
   if( trans == NULL )
     {
     /* This must be a new transaction */
     DEBUG("New Transaction");
     
-    /* If nothing has changed, we don't want to save this */
-    if( !(regData->changed & MOD_ALL) )
-      return;
-    
     trans = mallocTransaction();
     trans->credit = (struct _account *) acc;
+
+    /* insert the transaction now.  If we later discover that 
+     * the user hs not made any entries, we will remove it again.
+     * However, for some of the itntermediate processing, we must 
+     * have a valid transaction present in the account.
+     */
+    insertTransaction (acc, trans);
     regData->changed = MOD_ALL;
     }
   if( regData->changed & MOD_NUM )
@@ -515,6 +589,34 @@ regSaveTransaction( RegWindow *regData, int position )
     /* ...the transaction number (String)... */
     XtFree( trans->num );
     trans->num = XtNewString( XbaeMatrixGetCell(regData->reg,row,NUM_CELL_C) );    
+    }
+  
+  if( regData->changed & MOD_XFER )
+    {
+    /* ... the transfer ... */
+    char * name;
+    Account *xfer_acct = xaccGetOtherAccount (acc, trans);
+    DEBUG("MOD_XFER");
+
+    if (xfer_acct) {
+      /* remove the transaction from wherever it used to be */
+      REMOVE_TRANS (xfer_acct, trans);
+  
+      /* recalculate the balance and redisplay the window for the old acct */
+      RECALC_BALANCE (xfer_acct);
+      REFRESH_REGISTER (xfer_acct);
+      }
+       
+    /* get the new account name */
+    name = XbaeMatrixGetCell(regData->reg,row+XFER_CELL_R, XFER_CELL_C);
+  
+    /* get the new account from the name */
+    xfer_acct = xaccGetPeerAccountFromName (acc, name);
+  
+    if (xfer_acct) {
+      /* insert the transaction into the new account */
+      insertTransaction (xfer_acct, trans);
+      }
     }
   
   if( regData->changed & MOD_DESC )
@@ -533,34 +635,13 @@ regSaveTransaction( RegWindow *regData, int position )
     DEBUG("MOD_MEMO");
     /* ... the memo ... */
     XtFree( trans->memo );
-
-    tmp = XbaeMatrixGetCell(regData->reg,row+1,MEMO_CELL_C);
-
-    /* if its a transfer, indicate where its from ... */
-    /* hack alert -- this algorithm is fundamentally broken if
-     * memo field is repeatedly edited ... */
-    if ((NULL != trans->debit) && (NULL != trans->credit)) {
-      Account *fromAccount = NULL;
-      if (acc == ((Account *) trans->debit) ) {
-          fromAccount = (Account *) trans->credit;
-        } else {
-          fromAccount = (Account *) trans->debit;
-        }
-        /* Get the memo, and add the "from" account name to it */
-        memo = (String)malloc (strlen(tmp)+
-                               strlen(fromAccount->accountName)+
-                               strlen("[From: ] ") );
-
-        sprintf( memo, "[From: %s] %s\0", fromAccount->accountName, tmp);
-
-        XbaeMatrixSetCell( regData->reg, row+1, MEMO_CELL_C, memo );
-        trans->memo = memo;
-      } else {
-        trans->memo = XtNewString( tmp );
-      }
+    tmp = XbaeMatrixGetCell(regData->reg,row+MEMO_CELL_R,MEMO_CELL_C);
+    trans->memo = XtNewString( tmp );
     }
   
-  if( regData->changed & MOD_ACTN )
+  /* ignore MOD_ACTN for non-stock accounts */
+  if( (regData->changed & MOD_ACTN) &&
+      ((MUTUAL == acc->type) || (PORTFOLIO==acc->type)) )
     {
     String  actn = NULL;
     DEBUG("MOD_ACTN");
@@ -575,10 +656,6 @@ regSaveTransaction( RegWindow *regData, int position )
     DEBUG("MOD_RECN");
     /* ...the reconciled flag (char)... */
     trans->reconciled = (XbaeMatrixGetCell(regData->reg,row,RECN_CELL_C))[0];
-    
-    /* Remember, we need to recalculate the reconciled balance now! */
-    RECALC_BALANCE ((trans->credit));
-    RECALC_BALANCE ((trans->debit));
     }
   
   if( regData->changed & MOD_AMNT )
@@ -603,7 +680,7 @@ regSaveTransaction( RegWindow *regData, int position )
     /* Reset so there is only one field filled */
     if( 0.0 > themount )
       {
-/* hack alert -- keep 3 digits for share amounts */
+      /* hack alert -- should keep 3 digits for share amounts */
       sprintf( buf, "%.2f ", -themount );
       XbaeMatrixSetCell( regData->reg, row, PAY_CELL_C, buf );
       XbaeMatrixSetCell( regData->reg, row, DEP_CELL_C, "" );
@@ -614,12 +691,9 @@ regSaveTransaction( RegWindow *regData, int position )
       XbaeMatrixSetCell( regData->reg, row, PAY_CELL_C, "" );
       XbaeMatrixSetCell( regData->reg, row, DEP_CELL_C, buf );
       }
-    
-    RECALC_BALANCE ((trans->credit));
-    RECALC_BALANCE ((trans->debit));
     }
 
-  /* ignore MOD_PRIC if for non-stock accounts */
+  /* ignore MOD_PRIC for non-stock accounts */
   if( (regData->changed & MOD_PRIC) &&
       ((MUTUAL == acc->type) || (PORTFOLIO==acc->type)) )
     {
@@ -635,91 +709,70 @@ regSaveTransaction( RegWindow *regData, int position )
     
     sprintf( buf, "%.2f ", trans->share_price );
     XbaeMatrixSetCell( regData->reg, row, PRIC_CELL_C, buf );
-    
-    /* Remember, we need to recalculate the reconciled balance now! */
-    RECALC_BALANCE ((trans->credit));
-    RECALC_BALANCE ((trans->debit));
     }
   
-  /* Before we check the date, and possibly insert the new
-   * transaction, we need to make sure that, if this is a
-   * new transaction, that the user actually entered some
-   * data!  Otherwise, it would be lame to add this. */
-  if( regData->changed & MOD_NEW )
+  if( regData->changed & MOD_DATE )
     {
+    Boolean outOfOrder = False;
+
+    DEBUG("MOD_DATE");
+    /* read in the date stuff... */
+    sscanf( XbaeMatrixGetCell(regData->reg,row+DATE_CELL_R,DATE_CELL_C),"%d/%d",
+            &(trans->date.month),
+            &(trans->date.day) );
+    
+    trans->date.year = atoi(XbaeMatrixGetCell(regData->reg,row+YEAR_CELL_R,YEAR_CELL_C));
+    
+    /* take care of re-ordering implications on the register.
+     * If the date changed on a double-entry (transfer) transaction,
+     * then make sure that both register windows are updated .. */
+    outOfOrder = xaccCheckDateOrderDE (trans);
+    if( outOfOrder )
+      {
+      int pos;
+
+      DATE_REORDER ((trans->credit));
+      DATE_REORDER ((trans->debit));
+    
+      /* Scroll to the new location of the reordered transaction;
+       * but do this only for this register, not any other register 
+       * windows. */  
+      pos = getNumOfTransaction (acc, trans);
+      XbaeMatrixMakeCellVisible( regData->reg, 2*pos+1, DESC_CELL_C );
+      }
+    }
+    
+  /* 
+   * If this is a new transaction, and the user did not 
+   * actually enter any data, then we should not really
+   * consider this to be a new transaction! */
+  if (regData->changed & MOD_NEW) {
     if( (strcmp("",trans->num) == 0)         &&
         (strcmp("",trans->description) == 0) &&
         (strcmp("",trans->memo) == 0)        &&
         (strcmp("",trans->action) == 0)      &&
         (0 == trans->catagory)               &&
+        (NULL == xaccGetOtherAccount (acc, trans)) &&
+        (NULL == trans->debit)               &&
         (1.0 == trans->share_price)          &&
-        (0.0 == trans->damount) )
+        (0.0 == trans->damount) ) 
       {
-      _free(trans);
+      xaccRemoveTransaction (acc, trans);
+      freeTransaction (trans);
       return;
       }
     }
   
-  if( regData->changed & MOD_DATE )
-    {
-    Transaction *prevTrans;
-    Transaction *nextTrans;
-    Boolean outOfOrder = False;
-    prevTrans = getTransaction( acc, position-1 );
-    nextTrans = getTransaction( acc, position+1 );
-
-    DEBUG("MOD_DATE");
-    /* read in the date stuff... */
-    sscanf( XbaeMatrixGetCell(regData->reg,row,DATE_CELL_C),"%d/%d",
-            &(trans->date.month),
-            &(trans->date.day) );
-    
-    trans->date.year = atoi(XbaeMatrixGetCell(regData->reg,row+1,DATE_CELL_C));
-    
-    /* figure out if the transactions are out of order */
-    outOfOrder = xaccCheckDateOrderDE (trans);
-    
-    /* take care of re-ordering implications on the register, if necessary */
-    if( outOfOrder )
-      {
-
-  /* REFRESH_REGISTER needs to null out lastTrans, because 
-   * during date reordering we removed and re-inserted
-   * the transaction... reset lastTrans to zero to prevent it from
-   * indicating a row that doesn't exist.  (That shouldn't happen
-   * anyways!) */
-#define REFRESH_REGISTER(sacc) {			\
-  Account * xfer_acc;					\
-  RegWindow * xfer_reg;					\
-  xfer_acc = (Account *) (sacc);			\
-  if (xfer_acc) {					\
-    xfer_reg = (RegWindow *) (xfer_acc->regData);	\
-    if (xfer_reg) {					\
-      xfer_reg->lastTrans = 0;				\
-      regRefresh (xfer_reg);				\
-    }							\
-  }							\
-}
-
-      /* if the date changed on a double-entry (transfer) transaction,
-       * then make sure that both register windows are updated .. */
-
-      REFRESH_REGISTER ((trans->credit));
-      REFRESH_REGISTER ((trans->debit));
-      }
-    
-    /* Scroll to the last row, if it is a new transaction */
-    if( !(regData->changed & MOD_NEW) )
-      {
-      int lastRow = (2 * newPosition) + 1 + DESC_CELL_C;
-      XbaeMatrixMakeCellVisible( regData->reg, lastRow, DESC_CELL_C );
-      }
-    
-    /* recalculate the balances, but only after re-ordering cells */
+  /* For many, but not all changes, we need to 
+   * recalculate the balances */
+  if( regData->changed & (MOD_XFER | MOD_RECN | MOD_AMNT | MOD_PRIC | MOD_NEW)) {
     RECALC_BALANCE ((trans->credit));
     RECALC_BALANCE ((trans->debit));
-    }
-  
+  }
+
+  REFRESH_REGISTER ((trans->credit));
+  REFRESH_REGISTER ((trans->debit));
+
   /* reset the "changed" bitfield */
   regData->changed   = 0;
 
@@ -738,7 +791,7 @@ regSaveTransaction( RegWindow *regData, int position )
   REFRESH_RECONCILE_WIN ((trans->debit));
   
   return;
-  }
+}
 
 /********************************************************************\
  * regWindow                                                        *
@@ -812,7 +865,7 @@ regWindow( Widget parent, Account *acc )
                            XmNmarginWidth,   1,
                            XmNallowResize,   True,
                            XmNpaneMaximum,   200,
-                           XmNpaneMinimum,   200,
+                           XmNpaneMinimum,   800,
                            NULL );
   
   /* Setup the menubar at the top of the window */
@@ -867,7 +920,7 @@ regWindow( Widget parent, Account *acc )
   activityMenu[2].callback_data=(XtPointer)regData;
   activityMenu[3].callback_data=(XtPointer)regData;
   activityMenu[6].callback_data=(XtPointer)regData;
-  activityMenu[8].callback_data=(XtPointer)(regData->dialog);
+  activityMenu[8].callback_data=(XtPointer)(regData->dialog);  /* destroy callback */
 
   menubar = XmCreateMenuBar( pane, "menubar", NULL, 0 );  
   
@@ -932,13 +985,13 @@ regWindow( Widget parent, Account *acc )
     /* ----------------------------------- */
     /* set up column widths */
 
-    acc -> colWidths[DATE_CELL_C] = 5;   /* the widths of columns */
-    acc -> colWidths[NUM_CELL_C]  = 4;   /* the widths of columns */
-    acc -> colWidths[DESC_CELL_C] = 35;  /* the widths of columns */
+    acc -> colWidths[DATE_CELL_C] = 5;   /* also YEAR_CELL_C */
+    acc -> colWidths[NUM_CELL_C]  = 8;   /* also XFER_CELL_C */
+    acc -> colWidths[DESC_CELL_C] = 35;  /* also MEMO_CELL_C */
     acc -> colWidths[RECN_CELL_C] = 1;   /* the widths of columns */
-    acc -> colWidths[PAY_CELL_C]  = 8;   /* the widths of columns */
-    acc -> colWidths[DEP_CELL_C]  = 8;   /* the widths of columns */
-    acc -> colWidths[BALN_CELL_C] = 8;   /* $ balance */
+    acc -> colWidths[PAY_CELL_C]  = 12;  /* the widths of columns */
+    acc -> colWidths[DEP_CELL_C]  = 12;  /* the widths of columns */
+    acc -> colWidths[BALN_CELL_C] = 12;  /* dollar balance */
 
     switch(acc->type)
       {
@@ -960,7 +1013,7 @@ regWindow( Widget parent, Account *acc )
     /* set up column alignments */
 
     acc -> alignments[DATE_CELL_C] = XmALIGNMENT_END;
-    acc -> alignments[NUM_CELL_C]  = XmALIGNMENT_END;
+    acc -> alignments[NUM_CELL_C]  = XmALIGNMENT_BEGINNING;  /* need XFER to be visible */
     acc -> alignments[DESC_CELL_C] = XmALIGNMENT_BEGINNING;
     acc -> alignments[RECN_CELL_C] = XmALIGNMENT_CENTER;
     acc -> alignments[PAY_CELL_C]  = XmALIGNMENT_END;
@@ -1078,8 +1131,11 @@ regWindow( Widget parent, Account *acc )
   
 
   /* create action box for the first time */
-  regData->ab = actionBox (reg);
- 
+  regData->actbox = actionBox (reg);
+
+  /* create the xfer account box for the first time */
+  regData->xferbox = xferBox (reg, data);
+
 
   /******************************************************************\
    * The button area... also contains balance fields                *
@@ -1197,8 +1253,9 @@ regWindow( Widget parent, Account *acc )
   
   XtPopup( regData->dialog, XtGrabNone );
   
-  /* unmanage the action box, until it is needed */
-  SetActionBox (regData->ab, -1, -1);
+  /* unmanage the ComboBoxes, until they are needed */
+  SetPopBox (regData->actbox, -1, -1);
+  SetPopBox (regData->xferbox, -1, -1);
 
   unsetBusyCursor( parent );
   
@@ -1219,12 +1276,16 @@ void
 closeRegWindow( Widget mw, XtPointer cd, XtPointer cb )
   {
   RegWindow *regData = (RegWindow *)cd;
-  Account   *acc = regData->acc;
+  Account   *acc;
+
+  acc = regData->acc;
   
   /* Save any unsaved changes */
   XbaeMatrixCommitEdit( regData->reg, False );
   regSaveTransaction( regData, regData->lastTrans );
   
+  /* hack alert -- free the ComboBox popup boxes data structures too */
+
   _free(regData);
   acc->regData = NULL;
   
@@ -1291,24 +1352,6 @@ recordCB( Widget mw, XtPointer cd, XtPointer cb )
  * Return: none                                                     *
 \********************************************************************/
 
-#define REMOVE_TRANS(sacc,trans) {				\
-  Account   *otherAcc = (Account *) (sacc); 			\
-  if (otherAcc) {						\
-    RegWindow *otherRegData = otherAcc -> regData;		\
-    int n = getNumOfTransaction (otherAcc, trans);		\
-								\
-    /* remove the transaction */				\
-    trans = removeTransaction( otherAcc, n );			\
-								\
-    /* remove the rows from the matrix */			\
-    if (otherRegData) {						\
-      int otherrow = 2*n + 1;					\
-      XbaeMatrixDeleteRows( otherRegData->reg, otherrow, 2 );	\
-      XbaeMatrixRefresh( otherRegData->reg);			\
-    }								\
-  }								\
-}
-
 void
 deleteCB( Widget mw, XtPointer cd, XtPointer cb )
   {
@@ -1362,7 +1405,7 @@ cancelCB( Widget mw, XtPointer cd, XtPointer cb )
  *        add an undo/cancel modifications feature                  *
  *                                                                  *
  * Args:   mw - the widget that called us                           *
- *         cd - regData - the data struct for this register          *
+ *         cd - regData - the data struct for this register         *
  *         cb -                                                     *
  * Return: none                                                     *
 \********************************************************************/
@@ -1409,6 +1452,7 @@ regCB( Widget mw, XtPointer cd, XtPointer cb )
       if( !IN_DATE_CELL(row,col) && !IN_NUM_CELL(row,col) &&
           !IN_DESC_CELL(row,col) && !IN_PAY_CELL(row,col) &&
           !IN_RECN_CELL(row,col) && !IN_DEP_CELL(row,col) &&
+          !IN_XFER_CELL(row,col) && 
           !((PORTFOLIO == acc->type) && IN_PRIC_CELL(row,col)) &&
           !((MUTUAL    == acc->type) && IN_PRIC_CELL(row,col)) &&
           !((PORTFOLIO == acc->type) && IN_ACTN_CELL(row,col)) &&
@@ -1444,8 +1488,15 @@ regCB( Widget mw, XtPointer cd, XtPointer cb )
       else if( ((PORTFOLIO == acc->type) && IN_ACTN_CELL(row,col)) ||
                ((MUTUAL    == acc->type) && IN_ACTN_CELL(row,col)) ) 
         {
-           SetActionBox (regData->ab, row, col);
+           SetPopBox (regData->actbox, row, col);
            regData->changed |= MOD_ACTN;
+        }
+
+      /* otherwise, move the XFER widget */
+      else if( IN_XFER_CELL(row,col) )
+        {
+           SetPopBox (regData->xferbox, row, col);
+           regData->changed |= MOD_XFER;
         }
       break;
     }
@@ -1618,7 +1669,15 @@ regCB( Widget mw, XtPointer cd, XtPointer cb )
           ((MUTUAL    == acc->type) && IN_ACTN_CELL(row,col)) ) {
         regData->changed |= MOD_ACTN;
       }
+      /* Note: for cell widgets, this callback will never
+       * indicate a row,col with a cell widget in it.  
+       * Thus, the following if statment will never be true
+       */
+      if( IN_XFER_CELL(row,col) ) 
+        regData->changed |= MOD_XFER;
+
       break;
+
     case XbaeTraverseCellReason:
       DEBUG("XbaeTraverseCellReason");
       /* This ensure that whenever the user hits TAB, they go to the
@@ -1863,11 +1922,11 @@ dateCellFormat( Widget mw, XbaeMatrixModifyVerifyCallbackStruct *mvcbs, int do_y
   
   if( changed )
     {
-    sprintf( buf,"%2d/%2d\0\0", date.month, date.day );
+    sprintf( buf,"%2d/%2d", date.month, date.day );
     XbaeMatrixSetCell( mw, row, col, buf );
     XbaeMatrixRefreshCell( mw, row, col );
     
-    sprintf( buf,"%4d\0", date.year );
+    sprintf( buf,"%4d", date.year );
     XbaeMatrixSetCell( mw, row+1, col, buf );
     XbaeMatrixRefreshCell( mw, row+1, col );
     }

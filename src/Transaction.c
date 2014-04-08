@@ -46,10 +46,10 @@ initTransaction( Transaction * trans )
   trans->debit = 0x0;
   trans->credit = 0x0;
   
-  trans->num         = NULL;
-  trans->description = NULL;
-  trans->memo        = NULL;
-  trans->action      = NULL;
+  trans->num         = XtNewString("");
+  trans->description = XtNewString("");
+  trans->memo        = XtNewString("");
+  trans->action      = XtNewString("");
   trans->catagory    = 0;
   trans->reconciled  = NREC;
   trans->damount     = 0.0;
@@ -88,6 +88,7 @@ freeTransaction( Transaction *trans )
     XtFree(trans->num);
     XtFree(trans->description);
     XtFree(trans->memo);
+    XtFree(trans->action);
 
     initTransaction (trans);   /* just in case someone looks up freed memory ... */
     _free(trans);

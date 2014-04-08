@@ -1,5 +1,5 @@
 /********************************************************************\
- * Action.c -- account actions for xacc (X-Accountant)              *
+ * XferBox.c -- account transfers for xacc (X-Accountant)           *
  * Copyright (C) 1997 Linas Vepstas                                 *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
@@ -20,34 +20,35 @@
 
 #include <Xm/Xm.h>
 
-#include "Action.h"
+#include "Data.h"
 #include "PopBox.h"
 #include "util.h"
 
 /********************************************************************\
- * actionBox                                                        *
- *   creates the action widget                                      *
+ * xferBox                                                          *
+ *   creates the xfer widget                                        *
  *                                                                  *
  * Args:   parent  - the parent of this window                      *
- * Return: PopBox  - the action GUI structure                       *
+ * Return: PopBox  - the xfer GUI structure                         *
 \********************************************************************/
 
 PopBox *
-actionBox (Widget parent)
+xferBox (Widget parent, Data *dayta)
 {
    PopBox *popGUI;
+   Account * acc;
+   int n;
 
    popGUI = popBox (parent);
 
-   /* build the action menu */
-   AddPopBoxMenuItem (popGUI, "Buy");
-   AddPopBoxMenuItem (popGUI, "Sell");
-   AddPopBoxMenuItem (popGUI, "Price");
-   AddPopBoxMenuItem (popGUI, "Div");
-   AddPopBoxMenuItem (popGUI, "LTCG");
-   AddPopBoxMenuItem (popGUI, "STCG");
-   AddPopBoxMenuItem (popGUI, "Dist");
-   AddPopBoxMenuItem (popGUI, "Split");
+   /* build the xfer menu out of account names */
+   n = 0;
+   acc = getAccount (dayta, n);
+   while (acc) {
+      AddPopBoxMenuItem (popGUI, acc->accountName);
+      n++;
+      acc = getAccount (dayta, n);
+   }
 
    return popGUI;
 }

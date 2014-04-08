@@ -415,7 +415,7 @@ mainWindow( Widget parent )
 
 /********************************************************************\
  * closeMainWindow                                                  *
- *   frees memory allocated for an regWindow, and other cleanup     * 
+ *   frees memory allocated for an mainWindow, and other cleanup    * 
  *   stuff                                                          * 
  *                                                                  * 
  * Args:   mw - the widget that called us                           * 
