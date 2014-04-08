@@ -33,11 +33,11 @@
 \********************************************************************/
 
 PopBox *
-actionBox (Widget parent)
+actionBox (Widget parent, int width, int drop_down_width)
 {
    PopBox *popGUI;
 
-   popGUI = popBox (parent);
+   popGUI = popBox (parent, width, drop_down_width);
 
    /* build the action menu */
    AddPopBoxMenuItem (popGUI, "Buy");
@@ -49,6 +49,8 @@ actionBox (Widget parent)
    AddPopBoxMenuItem (popGUI, "STCG");
    AddPopBoxMenuItem (popGUI, "Dist");
    AddPopBoxMenuItem (popGUI, "Split");
+   AddPopBoxMenuItem (popGUI, "Deposit");
+   AddPopBoxMenuItem (popGUI, "Withdraw");
 
    return popGUI;
 }

@@ -103,6 +103,10 @@ String fbRes[] = {
   "*recn*cellMarginHeight:    0",
   /* combobox -- don't want the cell to be outlined */
   "*reg*popbox*shadowThickness:     0",
+  "*reg*popbox*list*shadowThickness:     1",  /* we *do* want the combobox scroll bar to show, thoguh */
+  "*reg*popbox*list*thickness:     24",  /* slider width ignored ... why ??? */
+  "*reg*popbox*list*VertScrollBar*width:     24",  /* slider width ignored ... why ??? */
+  "*reg*popbox*list*troughColor:    #9999aa",  /* ignored -- why ???*/
   NULL,
   };
 
@@ -141,11 +145,10 @@ main( int argc, char *argv[] )
   if( argc > 1 )
     datafile = argv[1];
   else
-    datafile = fileBox( toplevel, OPEN );
+    datafile = fileBox( toplevel, OPEN, "*.dat" );
   
   if( datafile != NULL )
     topgroup = readData(datafile);     /* load the accounts data from datafile*/
-    /* topgroup = xaccReadQIFData(datafile);     /* load the accounts data from datafile*/
   
   if( NULL == topgroup )
     {

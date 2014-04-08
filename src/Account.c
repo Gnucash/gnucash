@@ -105,6 +105,7 @@ freeAccount( Account *acc )
     Transaction *trans = acc->transaction[i];
     struct _account * _acc = (struct _account *) acc; 
 
+    if (!trans) continue;
     /* free the transaction only if its not 
      * a part of a double entry */
     if (_acc == trans->credit) trans->credit = NULL;
@@ -242,7 +243,12 @@ removeTransaction( Account *acc, int num )
 void
 xaccRemoveTransaction( Account *acc, Transaction *trans)
 {
-  int i = getNumOfTransaction (acc, trans);
+  int i;
+
+  if (!acc) return;
+  if (!trans) return;
+
+  i = getNumOfTransaction (acc, trans);
   if (0 <= i) {
     removeTransaction (acc, i);
   }
@@ -395,6 +401,7 @@ double xaccGetShareAmount (Account *acc, Transaction *trans)
    } else {
       printf ("Internal Error: xaccGetShareAmount: missing double entry \n");
       printf ("this error should not occur. Please report the problem. \n");
+      printf ("acc=0x%x deb=0x%x cred=0x%x\n", acc, trans->debit, trans->credit);
       themount = 0.0;  /* punt */
    }
    return themount;
@@ -412,7 +419,7 @@ void xaccSetShareAmount (Account *acc, Transaction *trans, double themount)
    if ( trans->debit == ((struct _account *) acc) ) {
       trans->damount = - themount;
    } else {
-      printf ("Internal Error: xaccSetAmount: missing double entry \n");
+      printf ("Internal Error: xaccSetShareAmount: missing double entry \n");
       printf ("this error should not occur. Please report the problem. \n");
       trans->damount = 0.0; /* punt */
    }
@@ -581,8 +588,13 @@ xaccRecomputeBalance( Account * acc )
   }
 
   if ( (STOCK == acc->type) || ( MUTUAL == acc->type) ) {
-    acc -> balance = share_balance * (last_trans->share_price);
-    acc -> cleared_balance = share_cleared_balance * (last_trans->share_price);
+    if (last_trans) {
+       acc -> balance = share_balance * (last_trans->share_price);
+       acc -> cleared_balance = share_cleared_balance * (last_trans->share_price);
+    } else {
+       acc -> balance = 0.0;
+       acc -> cleared_balance = 0.0;
+    }
   } else {
     acc -> balance = dbalance;
     acc -> cleared_balance = dcleared_balance;
@@ -722,6 +734,62 @@ xaccZeroRunningBalances( Account **list )
       acc -> running_cleared_balance = 0.0;
       nacc++;
       acc = list[nacc];
+   }
+}
+
+/********************************************************************\
+\********************************************************************/
+
+void
+xaccConsolidateTransactions (Account * acc)
+{
+   Transaction *ta, *tb;
+   int i,j,k;
+
+   if (!acc) return;
+
+   for (i=0; i<acc->numTrans; i++) {
+      ta = acc->transaction[i];
+      for (j=i+1; j<acc->numTrans; j++) {
+         tb = acc->transaction[j];
+
+         /* if no match, then continue on in the loop.
+          * we really must match everything to get a duplicate */
+         if (ta->credit != tb->credit) continue;
+         if (ta->debit != tb->debit) continue;
+         if (ta->reconciled != tb->reconciled) continue;
+         if (ta->date.year != tb->date.year) continue;
+         if (ta->date.month != tb->date.month) continue;
+         if (ta->date.day != tb->date.day) continue;
+         if (strcmp (ta->num, tb->num)) continue;
+         if (strcmp (ta->description, tb->description)) continue;
+         if (strcmp (ta->memo, tb->memo)) continue;
+         if (strcmp (ta->action, tb->action)) continue;
+         if (0 == DEQ(ta->damount, tb->damount)) continue;
+         if (0 == DEQ(ta->share_price, tb->share_price)) continue;
+
+         /* if we got to here, then there must be a duplicate. */
+         /* before deleting it, remove it from the other 
+          * double-entry account */
+         if (acc == (Account *) tb->credit) {
+            xaccRemoveTransaction ((Account *) tb->debit, tb);
+         }
+         if (acc == (Account *) tb->debit) {
+            xaccRemoveTransaction ((Account *) tb->credit, tb);
+         }
+         tb->credit = NULL;
+         tb->debit = NULL;
+
+         /* Free the transaction, and shuffle down by one.
+          * Need to shuffle in order to preserve date ordering. */
+         freeTransaction (tb);
+         
+         for (k=j+1; k<acc->numTrans; k++) {
+            acc->transaction[k-1] = acc->transaction[k];
+         }
+         acc->transaction[acc->numTrans -1] = NULL;
+         acc->numTrans --;
+      }
    }
 }
 

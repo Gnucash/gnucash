@@ -44,7 +44,7 @@ static void selectCB (Widget w, XtPointer cd, XtPointer cb );
 \********************************************************************/
 
 PopBox *
-popBox (Widget parent)
+popBox (Widget parent, int width, int drop_width)
 {
    Widget combobox;
    XmString str;
@@ -66,13 +66,12 @@ popBox (Widget parent)
                        XmNmarginWidth, 0,
                        XmNselectionPolicy, XmSINGLE_SELECT,
                        XmNvalue, "",
-
-/* hack alert -- the width of the combobox should be relative to the font, should
- * be relative to the size of the cell in which it will fit. Basically, these
- * values should not be hard-coded, but should be conmputed somehow */
-                       XmNwidth, 53,
-                       XmNdropDownWidth, 103,
+                       XmNwidth, width,
                        NULL);
+
+   if (10 < drop_width) {
+      XtVaSetValues (combobox, XmNdropDownWidth, drop_width, NULL);
+   }
 
    popData -> combobox = combobox;
 
@@ -189,10 +188,15 @@ static void selectCB (Widget w, XtPointer cd, XtPointer cb )
     PopBox *ab = (PopBox *) cd;
     XmComboBoxSelectionCallbackStruct *selection = 
                (XmComboBoxSelectionCallbackStruct *) cb;
-    char * choice;
+    char * choice = 0x0;
 
-    choice = XmCvtXmStringToCT (selection->value);
-    if (0x0 == choice) choice = "";
+    /* check the reason, because the unslect callback 
+     * doesn't even have a value field! */
+    if ( (XmCR_SINGLE_SELECT == selection->reason) ||
+         (XmCR_SINGLE_SELECT == selection->reason) ) {
+       choice = XmCvtXmStringToCT (selection->value);
+    }
+    if (!choice) choice = "";
 
     XbaeMatrixSetCell (ab->reg, ab->currow, ab->curcol, choice); 
 

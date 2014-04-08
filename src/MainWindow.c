@@ -84,11 +84,11 @@ Pixel   posPixel, negPixel;
 Boolean havePixels = False;
 #endif
 
-#define XACC_MAIN_NUM_COLS 4
 #define XACC_MAIN_ACC_ARRW 0
 #define XACC_MAIN_ACC_NAME 1
 #define XACC_MAIN_ACC_TYPE 2
 #define XACC_MAIN_ACC_BALN 3
+#define XACC_MAIN_NUM_COLS 4
 
 /********************************************************************\
  * xaccMainWindowAddAcct                                            *
@@ -224,14 +224,56 @@ refreshMainWindow( void )
   {
 
   int   nrows;
+  int   row_from_top;
   AccountGroup *grp = topgroup;    /* hack -- should pass as argument ... */
   
+  /* During refresh, we remove and re-add all displayed accounts.
+   * We need to do this because the refresh may be due to an account 
+   * having been added, or due to an expansion of sub-accounts.
+   * However, doing this will cause the window to be scrolled
+   * to the top row, which is visually quite annoying.  Thus, we
+   * will save the current selected, visible row, and rescroll
+   * the redrawn window to put this row back to its original location.
+   * So -- first, figure out whats visible, and then restore.
+   */
+  if (selected_acc) {
+    int i, toprow;
+    XtVaGetValues( accountlist, XmNrows, &nrows, NULL );
+
+    for (i=0; i<nrows; i++) {
+      Account * racc;
+      racc = (Account *) XbaeMatrixGetRowUserData (accountlist, i);
+      if (racc == selected_acc) break;
+    }
+    XtVaGetValues( accountlist, XmNtopRow, &toprow, NULL );
+    row_from_top = i - toprow;
+    if (0 > row_from_top) row_from_top = 0;  /* this should neve happen !? */
+  }
+
   XtVaGetValues( accountlist, XmNrows, &nrows, NULL );
   XbaeMatrixDeleteRows( accountlist, 0, nrows );
   
   xaccRecomputeGroupBalance (grp);  
   xaccMainWindowAddAcct (accountlist, grp, 0);
   xaccMainWindowRedisplayBalance ();
+
+  /* find the selected account in the new window, 
+   * and scroll to it. */
+  if (selected_acc) {
+    int i, toprow;
+    XtVaGetValues( accountlist, XmNrows, &nrows, NULL );
+
+    for (i=0; i<nrows; i++) {
+      Account * racc;
+      racc = (Account *) XbaeMatrixGetRowUserData (accountlist, i);
+      if (racc == selected_acc) break;
+    }
+    toprow = i - row_from_top;
+    
+    /* set this row to be the top visible row */
+    XtVaSetValues( accountlist, XmNtopRow, toprow, NULL );
+    XbaeMatrixSelectRow( accountlist, i );
+  }
 }
 
 /********************************************************************\
@@ -300,6 +342,7 @@ expandListCB( Widget mw, XtPointer pClientData, XtPointer cb)
 {
   XmAnyCallbackStruct *info = (XmAnyCallbackStruct *) cb;
   Account *acc = (Account *)pClientData;
+  int i, nrows;
 
   /* a "fix" to avoid double invocation */
   switch ( info->reason ) {
@@ -330,7 +373,8 @@ expandListCB( Widget mw, XtPointer pClientData, XtPointer cb)
                     NULL);
   }
 
-  /* finally, redraw the main window */
+  /* redraw the main window */
+  selected_acc = acc;
   refreshMainWindow ();
 }
 
@@ -360,6 +404,8 @@ mainWindow( Widget parent )
       fileMenubarCB, (XtPointer)FMB_NEW,   (MenuItem *)NULL },
     { "Open File...  ",&xmPushButtonWidgetClass, 'O', NULL, NULL, True,
       fileMenubarCB, (XtPointer)FMB_OPEN,  (MenuItem *)NULL },
+    { "Import QIF...  ",&xmPushButtonWidgetClass, 'O', NULL, NULL, True,
+      fileMenubarCB, (XtPointer)FMB_IMPORT,  (MenuItem *)NULL },
     { "",              &xmSeparatorWidgetClass,    0, NULL, NULL, True,
       NULL,         NULL,                  (MenuItem *)NULL },
     { "Save",          &xmPushButtonWidgetClass, 'S', NULL, NULL, True,
@@ -388,7 +434,7 @@ mainWindow( Widget parent )
       NULL,         NULL,                    (MenuItem *)NULL },
     { "Transfer",           &xmPushButtonWidgetClass, 'C', NULL, NULL, True,
       accountMenubarCB, (XtPointer)AMB_TRNS,  (MenuItem *)NULL },
-    { "Report",             &xmPushButtonWidgetClass, 'R', NULL, NULL, True,
+    { "Report",             &xmPushButtonWidgetClass, 'R', NULL, NULL, False,
       accountMenubarCB, (XtPointer)AMB_RPRT,  (MenuItem *)NULL },
 #if 0
     { "Edit Categories...", &xmPushButtonWidgetClass, 'C', NULL, NULL, True,
@@ -793,6 +839,7 @@ fileMenubarCB( Widget mw, XtPointer cd, XtPointer cb )
    * which of the file menubar options was chosen
    *   FMB_NEW    -  New datafile
    *   FMB_OPEN   -  Open datfile
+   *   FMB_IMPORT -  Open & merge in Quicken QIF File
    *   FMB_SAVE   -  Save datafile
    *   FMB_SAVEAS -  Save datafile As
    *   FMB_QUIT   -  Quit
@@ -823,7 +870,7 @@ fileMenubarCB( Widget mw, XtPointer cd, XtPointer cb )
           fileMenubarCB( mw, (XtPointer)FMB_SAVE, cb );
           }
         }
-      newfile = fileBox(toplevel,OPEN);
+      newfile = fileBox(toplevel,OPEN, "*.dat");
       if (newfile) {
         datafile = newfile;
         freeAccountGroup (grp);
@@ -839,6 +886,36 @@ fileMenubarCB( Widget mw, XtPointer cd, XtPointer cb )
       }
       break;
     }
+
+    case FMB_IMPORT: {
+      char * newfile;
+      char buf[BUFSIZE];
+
+      DEBUG("FMB_IMPORT\n");
+
+      newfile = fileBox(toplevel,OPEN, "*.qif");
+      if (newfile) {
+        strcpy (buf, newfile);
+        strcat (buf, ".dat");
+        datafile = XtNewString (buf);
+      
+        /* load the accounts from the users datafile */
+        grp = xaccReadQIFData (newfile);
+      
+        if( NULL == topgroup ) {
+          /* no topgroup exists */
+          topgroup = mallocAccountGroup();
+        }
+
+        /* since quicken will not export all accounts 
+         * into one file, we must merge them in one by one */
+        xaccConcatGroups (topgroup, grp);
+        xaccMergeAccounts (topgroup);
+        xaccConsolidateGrpTransactions (topgroup);
+      }
+      break;
+    }
+
     case FMB_SAVE:
       DEBUG("FMB_SAVE\n");
       /* hack alert -- Somehow make sure all in-progress edits get committed! */
@@ -855,13 +932,14 @@ fileMenubarCB( Widget mw, XtPointer cd, XtPointer cb )
       char * newfile;
       DEBUG("FMB_SAVEAS\n");
 
-      newfile = fileBox(toplevel,OPEN);
+      newfile = fileBox(toplevel,OPEN, "*.dat");
       if ( newfile ) {
          datafile = newfile;
          fileMenubarCB( mw, (XtPointer)FMB_SAVE, cb );
       }
       break;
     }
+
     case FMB_QUIT:
       DEBUG("FMB_QUIT\n");
       {
@@ -894,6 +972,7 @@ fileMenubarCB( Widget mw, XtPointer cd, XtPointer cb )
       return;                      /* to avoid the refreshMainWindow */
       }
       break;
+
     default:
       PERR("fileMenubarCB(): We shouldn't be here!");
     }
