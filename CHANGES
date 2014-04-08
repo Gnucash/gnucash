@@ -1,5 +1,18 @@
 Version history:
 ------- -------
+ 1.0b1 - 29 Nov 97
+         o  Many, many changes by Linas Vepstas to give double entry
+            bookkeeping, sub-accounts, income/expense account types, and
+            the beginnings of support for the QIF data format.
+         o  All "non-standard" libraries needed for xacc (xbae, libhtmlw,
+            and libComboBox) are now part of the xacc distribution, to
+            make it easier to build xacc.
+         o  Applied XbaeMatrixSetCursorPosition patch (needed for quickfill)
+            to Linas's modified xbae src.  (So quickfill works again.)
+         o  configure script to make it easier to build xacc.
+         o  The environment variable XACC_HELP will tell xacc where to
+            find the files for the hypertext help.  If XACC_HELP isn't
+            set, xacc will default to "./Docs" as the help path.
  0.9 - 08 Sep 97
          o  Lots of code-cleanup.
          o  Adjust Balance window.

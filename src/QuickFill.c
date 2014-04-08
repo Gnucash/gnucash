@@ -23,6 +23,9 @@
 \********************************************************************/
 
 #include <string.h>
+
+#include "config.h"
+
 #include "util.h"
 #include "main.h"
 #include "Account.h"

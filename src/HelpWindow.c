@@ -33,7 +33,12 @@
 #include <Xm/Frame.h>
 #include <Xm/Form.h>
 #include <Xm/PushB.h>
-#include <X11/xpm.h>
+
+#include "config.h"
+
+#if HAVE_XPM
+#  include <X11/xpm.h>
+#endif
 
 #include "main.h"
 #include "util.h"
@@ -170,7 +175,10 @@ static void   helpFwdCB( Widget mw, XtPointer cd, XtPointer cb );
 static void   helpAnchorCB( Widget mw, XtPointer cd, XtPointer cb );
 
 char      *htmlRead( char *file );
+
+#if HAVE_XPM
 ImageInfo *htmlResolveImage( Widget wm, char *file, int nl );
+#endif
 
 /********************************************************************\
  * helpWindow                                                       * 
@@ -234,7 +242,9 @@ helpWindow( Widget parent, char *title, char *htmlfile )
     helpwidget =
       XtVaCreateManagedWidget( "help",
 			       htmlWidgetClass,         controlform,
+#if HAVE_XPM
 			       WbNresolveImageFunction, htmlResolveImage,
+#endif
 			       WbNdelayImageLoads,      False,
 			       XmNtopAttachment,        XmATTACH_FORM,
 			       XmNbottomAttachment,     XmATTACH_FORM,
@@ -417,6 +427,7 @@ helpAnchorCB( Widget mw, XtPointer cd, XtPointer cb )
  *                                                                  * 
  * Args:   file - the name of the html file to read                 * 
  * Return: none                                                     * 
+ * Global: helpPath - the path to the help files                    * 
 \********************************************************************/
 char *
 htmlRead( char *file )
@@ -426,7 +437,7 @@ htmlRead( char *file )
   int   size=0;
   int   fd;
 
-  sprintf( (char *)&filename, "%s/%s", HELP_ROOT, file );
+  sprintf( (char *)&filename, "%s/%s", helpPath, file );
   /* Open file: */
   fd = open( filename, O_RDONLY );
   if( fd == -1 )
@@ -454,6 +465,8 @@ htmlRead( char *file )
   return buf;
   }
 
+
+#if HAVE_XPM
 /********************************************************************\
  * htmlResolveImage                                                 * 
  *                                                                  * 
@@ -461,6 +474,7 @@ htmlRead( char *file )
  *         file - the name of the html file to read                 * 
  *         nl   - ???                                               * 
  * Return: none                                                     * 
+ * Global: helpPath - the path to the help files                    * 
 \********************************************************************/
 extern Widget toplevel;
 
@@ -473,7 +487,7 @@ htmlResolveImage( Widget mw, char *file, int nl )
   int err,i;
   char filename[BUFSIZE];
   
-  sprintf( (char *)&filename, "%s/%s", HELP_ROOT, file );
+  sprintf( (char *)&filename, "%s/%s", helpPath, file );
   
   /* initialize stuff: */
   memset( img, 0, sizeof(ImageInfo) );
@@ -493,3 +507,5 @@ htmlResolveImage( Widget mw, char *file, int nl )
   
   return img;
   }
+
+#endif

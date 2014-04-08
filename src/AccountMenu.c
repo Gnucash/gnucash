@@ -27,6 +27,8 @@
 #include <Xm/Xm.h>
 #include <Xm/RowColumn.h>
 
+#include "config.h"
+
 #include "Account.h"
 #include "BuildMenu.h"
 #include "Data.h"

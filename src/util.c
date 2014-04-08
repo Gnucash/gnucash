@@ -36,6 +36,8 @@
 #include <Xm/MessageB.h>
 #include <Xbae/Matrix.h>
 
+#include "config.h"
+
 #include "util.h"
 
 /** GLOBALS *********************************************************/
@@ -47,7 +49,7 @@ extern int realized;
 /********************************************************************\
  * DEBUGGING MEMORY ALLOCATION STUFF                                * 
 \********************************************************************/
-#ifdef DEBUGMEMORY
+#if DEBUG_MEMORY
 size_t core=0;
 void
 dfree( void *ptr )

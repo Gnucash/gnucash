@@ -62,6 +62,8 @@
 #include <Xm/TextF.h>
 #include <Xm/SeparatoG.h>
 
+#include "config.h"
+
 #include "BuildMenu.h"
 
 /* Build popup, option and pulldown menus, depending on the menu_type.

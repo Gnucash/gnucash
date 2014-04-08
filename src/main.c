@@ -23,6 +23,9 @@
 \********************************************************************/
 
 #include <Xm/Xm.h>
+#include <stdlib.h>
+
+#include "config.h"
 
 #include "BuildMenu.h"
 #include "Data.h"
@@ -36,6 +39,7 @@
 
 /** GLOBALS *********************************************************/
 char    *datafile = NULL;
+char    *helpPath = NULL;
 Widget   toplevel = 0;
 Boolean  realized = False;   /* Has the toplevel been realized? */
 XtAppContext app;
@@ -127,7 +131,7 @@ String fbRes[] = {
 int 
 main( int argc, char *argv[] )
   {
-#ifdef DEBUGMEMORY
+#if DEBUG_MEMORY
   char *blk;
   DEBUG("Initializing memory");
   blk = (char *)_malloc(8192);
@@ -139,6 +143,10 @@ main( int argc, char *argv[] )
   toplevel = XtVaAppInitialize( &app, "Xacc", NULL, 0,
 				&argc, argv, fbRes,
 				NULL );
+  
+  /* get environment var stuff... TODO let cmd-line opts override this stuff */
+  if( (helpPath = getenv(HELP_VAR)) == NULL )
+    helpPath = HELP_ROOT;
   
   /* read in the filename (should be the first arg after all
    * the X11 stuff */

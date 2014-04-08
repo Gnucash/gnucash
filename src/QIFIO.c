@@ -37,6 +37,8 @@
 #include <string.h>
 #include <Xm/Xm.h>
 
+#include "config.h"
+
 #include "Account.h"
 #include "Data.h"
 #include "main.h"

@@ -28,6 +28,9 @@
 \********************************************************************/
 
 #include <time.h>
+
+#include "config.h"
+
 #include "date.h"
 #include "util.h"
 

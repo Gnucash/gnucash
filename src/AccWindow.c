@@ -36,6 +36,9 @@
 #include <Xm/PushB.h>
 #include <Xm/Text.h>
 
+
+#include "config.h"
+
 #include "Account.h"
 #include "AccountMenu.h"
 #include "Data.h"
