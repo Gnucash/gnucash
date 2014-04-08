@@ -1,10 +1,22 @@
-X-Accountant
-------------
 
-xacc is a program to keep track of your finances.  It is similar in
-concept to Quicken(TM).  Although xacc still lacks the advanced
-features of quicken, it does have the basic functionality.  Some
-of the features of xacc are:
+############## WARNING ######################
+********** ALPHA DEVELOPMENT RELEASE ********
+
+THIS IS VERSION 1.1, WHICH IS AN ALPHA RELEASE,
+AND VERY, VERY BROKEN.  IT IS FOR DEVELOPERS ONLY!!
+IT IS GAURENTEED TO CORRUPT DATA!!
+
+IF YOU WANT TO USE XACC, USE VERSION 1.0.17 INSTEAD!!
+##############################################
+
+
+GnuCash
+-------
+
+gnucash is a program to keep track of your finances.  It is similar in
+concept to Quicken(TM).  Although GnuCash still lacks the advanced
+features of Quicken, it does have the basic functionality.  Some
+of the features of GnuCash are:
 
   - Multiple Accounts
   - Each account keeps a running balance and
@@ -12,24 +24,116 @@ of the features of xacc are:
     of the checks that have clear your account.
   - A simple interface.  If you can use the
     register in the back of your checkbook,
-    you can use xacc.
+    you can use GnuCash.
   - QuickFill... if you begin typing a description
     in the description fields, and it matches an
     previous transaction, hitting <TAB> will copy
     the previous transaction.  Handy if you have
     similar transactions on a regular basis.
     (such as depositing your paycheck every week :)
+  - Stock/Mutual Fund Portfolios.  Track stocks
+    individually (one per account) or in portfolio
+    of accounts (a group of accounts that can be 
+    displayed together).  
+  - Quicken File Import. Import Quicken QIF files.
 
-To install:
------------
+Advanced Features
+-----------------
+GnuCash offers some features not usually found
+in simpler accounting programs.
+  - Sub-accounts: A master account can have a hierarchy
+    of detail accounts underneath it.  This allows similar
+    account types (e.g. Cash, Bank, Stock) to be grouped 
+    into one master account (e.g. Assets).
+  - Double Entry: 
+    Every transaction can appear in two
+    accounts; one account is debited and the other is 
+    credited with exactly the same amount.  With 
+    double-entry, a transaction edited in one window 
+    will be automatically updated in all other windows 
+    showing that transaction, and in both of the 
+    accounts.
+  - Income/Expense Account Types (Categories).   
+    When used properly 
+    with the double-entry feature, these can be used 
+    to create both Balance Sheet and Profits &amp; Losses
+    reports.  For example, savings account interest,
+    stock dividends, or paychecks can be marked as 
+    both a deposit in a bank account, and as income in 
+    an Income account type, using the double-entry 
+    (transfer) feature.  Similarly, credit card charges
+    can be noted in the credit card account, as well 
+    as in a corresponding expense account.
+  - General Ledger: Multiple accounts can be displayed 
+    in one register window at the same time.  This can
+    ease the trouble of tracking down typing/entry errors.
+    It also provides a convenient way of viewing a
+    portfolio of many stocks, by showing all transactions
+    in that portfolio.
 
-Normally, to build and install xacc, all you have to do is:
+Home Page:
+----------
+http://gnucash.ml.org/
+http://gnucash.org/
+
+Origianl X-Accountant home page:
+http://www.cs.hmc.edu/~rclark/xacc
+
+Important Note:
+---------------
+Numerous core dumps have been reported that occur with lesstif
+version 0.82.  These core dumps do not occur with lesstif v 0.81,
+nor with RedHat Motif.  If it's crashing, please try using the
+statically-linked Motif version, as described below.
+
+
+Running:
+--------
+The binary-only distribution includes two binary files: 'xacc.bin'
+and 'xacc-static.bin'. The former requires a Motif shared library;
+the latter has Motif statically linked in.  If you have Motif,
+then just run xacc.  If you do not have Motif, then copy 
+'xacc-static.bin' to 'xacc.bin'.
+
+Access to the on-line help documentation requires the that
+the environment variable XACC_HELP be set to the 'Docs'
+directory.  The 'xacc' shell script sets this variable to
+the configured directory before running the main program,
+so you don't have to set this by hand.
+
+If you want to override the path to the Docs directory:
+
+For csh/tcsh
+
+% setenv XACC_HELP /usr/local/share/xacc/Docs
+
+or, for bash/bsh/ksh/sh
+
+% set XACC_HELP=/usr/local/share/xacc/Docs
+% export XACC_HELP
+
+You can then start GnuCash at the command-line, with
+"xacc" or "xacc <filename>", where <filename> is a
+GnuCash account file.  Sample accounts can be found in 
+"data" subdirectory.  *.dat files are GnuCash accounts that can 
+opened with the "Open File" menu entry.  *.qif files are
+Quicken Import Format files that can be opened with the 
+"Import QIF" menu entry.
+
+
+Building & Installing:
+----------------------
+These steps does not apply to binary distributions; only to
+source distributions.
+
+Normally, to build and install GnuCash, all you have to do is:
 
   # ./configure
+  # make depend
   # make
   # make install
 
-You can also build xacc in a seperate directory, which is
+You can also build GnuCash in a seperate directory, which is
 useful if you are compiling for several platforms from a
 single copy of the source tree:
 
@@ -37,91 +141,109 @@ single copy of the source tree:
   # mkdir BUILD/debug
   # cd BUILD/debug
   # ../../configure --enable-debug
+  # make depend
   # make
   # make install
 
-Post-install instructions:
-
-   You have to set the environment variable XACC_HELP to point
-   to the xacc help files.  For example:
-
-      % setenv XACC_HELP /usr/local/share/xacc
-
-   for the tcsh shell, or:
-
-      % set XACC_HELP=/usr/local/share/xacc
-
-   for csh.
-
-
 sorry, no "make install" yet.
 
-
+The current version requires glibc2.0 (libc.so.6) to link.  
+It uses the open_memstream() call, which first shows up 
+in glibc-6.0. 
 
 Status:
 -------
-As of version 0.9t:
-Bugs:
+As of version 1.0.18:
 
--- tabbing between fields for mutual funds does not work correctly. 
--- should add "number of shares" to transfer popup when transferring
-   from bank account to portfolio.
--- should do something for automatic interest computations,
-   also mortgages, bonds, etc.
+GnuCash is known to work in the following configs:
+Linux 2.x.x           -- Intel  w/ RedHat Motif
+Slackware 3.4         -- Intel  w/ Mootif (OSF Motif 2.0.1)
+Linux 2.x.x           -- Intel  w/ Lesstif v0.81
+SGI IRIX              -- MIPS 
+IBM AIX 4.1.5         -- RS/6000   http://www-frec.bull.com/
+Unixware 7            -- Intel
+SCO OpenServer 5.0.4  -- Intel
 
-Fixed:
--- nasty bug relating to save/restore of double-entry to file
-   was fixed!
--- Nasty core dump in motif when two register windows are opened,
-   and then closed.  Beats the heck out of me. Bug with 
-   vendorShellWidgetClass
-   
+See http://linas.org/linux/xacc for precompiled binaries for these platforms
+
+GnuCash seems to be having problems with:
+Solaris -- Sparc  -- won't compile due to va-args in XmHTML
+Linux 2.x.x -- Intel w/ Lesstif v0.82
+
+Download Sites:
 ---------------
-Bare-bones general ledger capabilities added.
-Working Features:
--- accounts can have sub-accounts
--- Income and Expense account types added.
--- General Ledger windows for sub-accounts
+All of the precompiled binaries & the latest source versions can be found
+at http://linas.org/linux/xacc  However, it is recommended that the master
+sites for each particular binary be used instead, for two reasons:
+1) bandwidth
+2) OS-specific info & support
 
----------------
-Bare-bones Mutual Fund and Stock Portfolio handling
-is implemented. 
-Working Features:
--- transfers between bank account & fund work correctly
--- save to disk, restore from disk.
--- Type of transaction (Buy, Cap Gain, Dividend Reinvest, etc.) now 
-   supported for portfolio/mutual fund accounts.  This field can be set 
-   and cleared, but is not currently used anywhere.  It will become 
-   useful when reports and graphs are generated.
+IBM AIX 4.1.5 
+      -- SMIT-installable images 
+      http://www.bull.de/pub/
+      see also http://www-frec.bull.com/
 
----------------
-An alpha version of import from Quicken files is also present,
-but it is very broken, and many/most quicken formats are not
-supported.  It is not currently enabled in the code ... adventurous
-coders are encouraged to hack on this ...
+SCO OpenServer 5.0.4 
+      http://www.sco.com/skunkware/osr5/x11/apps/xacc/VOLS.tar
 
----------------
-An beta-level double-entry system has been created.
-"Double-entry" is a form of accounting where all transactions
-show up in two accounts (for example, a transfer from
-a credit card(Diners Club) to a cash account(Entertainment Expense)
-will show up in both accounts.  Modifying/deleting a transaction 
-in one account window automatically modifies/deletes it in the 
-other too.  
+Unixware 7
+      -- use pkgadd to install
+      http://www.sco.com/skunkware/uw7/x11/apps/xacc/xacc.pkg.gz
 
-The system does not force the use of double-entry: in fact,
-double entries are made ONLY when the "transfer" menu item is 
-used.
+SGI Irix
+      -- in SGI install format
+      -- warning, this is a very down-level version
+      http://linas.org/linux/xacc/xacc-1.0b7-sgi-irix.inst.tar
 
-A future extension to force the use of double-entry for an account
-is planned, as well as the ability to make transfers directly
-from the register(ledger) window.  However, this function will
-be tricky, since it requires hacks on the Xbae widget used to
-display the register.
-
--------------
-The "reports" menu item is unimplemented.
--------------
+Linux Debian
+      -- use debian tools to install
+      http://linas.org/linux/xacc/xacc_1.0.15-1_i386.deb
 
 That's all folks!
+
+Getting Source with CVS
+-----------------------
+A read-only version of the cvs tree is available on the net.
+To access it, first, login, as so:
+
+cvs -d :pserver:cvs@linas.org:/home/cvs/cvsroot login
+The password is "guest"
+
+To get a copy of the source, do a 
+
+cvs -d :pserver:cvs@linas.org:/home/cvs/cvsroot checkout xacc
+
+
+Main Developers:
+----------------
+Rob Browning <rlb@cs.utexas.edu> for perl, scheme & GTK port 
+Robin Clark <rclark@hmc.edu> for original X-Accountant
+Jeremy Collins <linux@cyberramp.net> for GnuCash web site & main-window GTK code
+Linas Vepstas <linas@linas.org> for managing it all
+
+Fixes & Patches:
+----------------
+Fred Baube <fred@moremagic.com> for Java port
+Christopher B. Browne <cbbrowne@hex.net> for perl stock scripts
+George Chen <georgec@sco.com> for MS-Money QIF's & fixes
+Jeremey Collins <linux@cyberramp.net> for GnoMoney & GTK port
+Ciaran Deignan <Ciaran.Deignan@bull.net> for AIX binary version
+Koen D'Hondt <ripley@xs4all.nl> for Solaris patches to XmHTML
+Bob Drzyzgula <bob@mostly.com> for budgeting design notes
+Dave Freese <DFreese@osc.uscg.mil> for leap-year fix
+Otto Hammersmith <otto@bug.redhat.com> for RedHat RPM version
+Tom Kludy <tkludy@csd.sgi.com> for SGI Irix port
+Ted Lemon <mellon@andare.fugue.com> for NetBSD port
+G. Allen Morris III  <gam3@ann.softgams.com> for QIF core dump 
+Peter Norton <spacey@inch.com> for a valiant attempt at a GTK port
+Gavin Porter <maufk@csv.warwick.ac.uk> for euro style dates
+Ron Record <rr@sco.com> for SCO Unixware & OpenServer binaries
+Dirk Schoenberger <schoenberger@signsoft.com> for Qt/KDE port
+Christopher Seawood <cls@seawood.org> for XbaeMatrix core dump
+Richard Skelton <rich@brake.demon.co.uk> for Solaris cleanup
+Henning Spruth <spruth@bigfoot.com> for German text & euro date rework
+Ken Yamaguchi <gooch@ic.EECS.Berkeley.EDU>  QIF import fixes
+OmNiBuS <webmaster@obsidian.uia.net> web site graphics & content
+
+... and I am sure that I have missed many others ...
 

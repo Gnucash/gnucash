@@ -1,0 +1,114 @@
+This package was debianized by Tyson Dowd <trd@cs.mu.oz.au>
+Wed, 7 Jan 1998 11:17:45 +1100.
+
+It was downloaded from
+http://www.cs.hmc.edu/~rclark/xacc/download/xacc-1.0b11-linux-i386-bin.tar.gz
+
+Copyright:
+
+	Copyright (C) 1997 Robin D. Clark
+	Copyright (C) 1997 Linas Vepstas
+
+	This program is free software; you can redistribute it and/or 
+	modify it under the terms of the GNU General Public License as
+	published by the Free Software Foundation; either version 2 of
+	the License, or (at your option) any later version.
+
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of 
+        MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public
+	License along with this program; if not, write to the Free
+	Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  
+
+See /usr/doc/copyright for a copy of the GNU GPL license.
+
+The source package includes the Motif widget ComboBox-1.33, which is GPL:
+
+	(c) 1993, 1994 Harald Albrecht
+	This software is Free Software. Please refer to the file
+	COPYING, which you should have received together this file and the
+	source code of the combo box widget.  However if you find this
+	widget to be usefull, you are encouraged to donate a reasonable
+	amount to a charitable institution -- there are enough people
+	out there who need help! Sometimes I got the strong impression
+	that programmers tend to get lost in their own "virtual reality"
+	- sitting in front of their screen, hacking new algorithms and
+	forget about everything around them.  So please don't forget
+	about people who need help.
+
+The source package includes a modified version of the Motif widget
+XbaeMatrix, which is available under a BSD-like license:
+
+	Copyright (c) 1991, 1992 Bell Communications Research, Inc.  (Bellcore)
+	Copyright (c) 1995-97 Andrew Lister
+	All Rights Reserved.
+
+	Permission  to use, copy, modify  and distribute this material for any
+	purpose and  without  fee is  hereby granted,  provided that the above
+	copyright notices and this permission notice appear in all copies, and
+	that the name  of any author  not be used  in advertising or publicity
+	pertaining  to  this material   without  the specific,  prior  written
+	permission of an  authorized  representative of Bellcore  and  current
+	maintainer.
+
+	BELLCORE AND OTHER CONTRIBUTORS MAKE  NO REPRESENTATIONS AND EXTEND NO
+	WARRANTIES, EXPRESS   OR  IMPLIED, WITH  RESPECT  TO  THE INFORMATION,
+	INCLUDING, BUT    NOT    LIMITED  TO,  THE   IMPLIED   WARRANTIES   OF
+	MERCHANTABILITY  AND FITNESS FOR  ANY   PARTICULAR  PURPOSE, AND   THE
+	WARRANTY     AGAINST INFRINGEMENT OF    PATENTS  OR OTHER INTELLECTUAL
+	PROPERTY RIGHTS. THE  SOFTWARE IS PROVIDED  "AS  IS", AND IN NO  EVENT
+	SHALL ANY AUTHOR OR ANY OF THEIR AFFILIATES BE LIABLE FOR ANY DAMAGES,
+	INCLUDING ANY  LOST   PROFITS OR  OTHER INCIDENTAL   OR  CONSEQUENTIAL
+	DAMAGES RELATING TO THE INFORMATION.
+
+The source package includes a modified version of the Motif widget
+XmHTML, which is available under the GNU GPL:
+
+	This is a public BETA release of XmHTML, a Motif Widget capable of
+	rendering HTML3.2 conforming documents.
+
+	(C) Copyright 1993-1997 Ripley Software Development
+
+	This library is free software; you can redistribute it and/or
+	modify it under the terms of the GNU Library General Public
+	License as published by the Free Software Foundation; either
+	version 2 of the License, or (at your option) any later version.
+
+	This library is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+	Library General Public License for more details.
+
+	You should have received a copy of the GNU Library General Public
+	License along with this library; if not, write to the Free
+	Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
+The source package includes a modified version of the Motif widget
+ComboBox, which is available under the GNU GPL:
+
+	(c) 1993, 1994, 1995 Harald Albrecht
+	Institut fuer Geometrie und Praktische Mathematik
+	RWTH Aachen, Germany
+	albrecht@igpm.rwth-aachen.de
+
+	(c) 1997 Linas Vepstas
+	linas@linas.org
+
+	This program is free software; you can redistribute it and/or
+	modify it under the terms of the GNU General Public License as
+	published by the Free Software Foundation; either version 2 of the
+	License, or (at your option) any later version.
+
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with this program (see the file COPYING for more details);
+	if not, write to the Free Software Foundation, Inc., 675 Mass Ave, 
+	Cambridge, MA 02139, USA.
+

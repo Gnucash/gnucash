@@ -1,0 +1,7 @@
+xacc for DEBIAN
+----------------------
+
+The documentation is installed in /usr/doc/xacc.
+The sample data files are in /usr/doc/xacc/samples.
+
+Tyson Dowd <trd@cs.mu.oz.au>, Wed, 7 Jan 1998 11:16:55 +1100

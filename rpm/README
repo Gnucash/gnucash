@@ -1,0 +1,23 @@
+This directory contains spec files for building an RPM
+
+Short instructions:
+
+> I've never built an rpm; given a spec file, how do I do this?
+> I understand the theory, just not clear on what to type up.
+
+You'll need to be root.  (It is possible to avoid this requirement,
+but I haven't done the work to the RPM.)
+
+cd /usr/src/redhat/SOURCES
+tar -zxvf xacc-1.x.tar.gz
+cp xacc-1.x/rpm/xacc.spec ../SPECS
+cp xacc-1.x/rpm/xacc.wmconfig .
+
+cd /usr/src/redhat/SPECS
+rpm -ba xacc.spec
+
+wait a bit, and a new binary rpm will be in
+/usr/src/redhat/RPMS/<arch> and a new src.rpm will be in
+/usr/src/redhat/SRPMS.
+
+

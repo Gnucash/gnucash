@@ -1,0 +1,6 @@
+#!/bin/sh
+
+CC="gcc -melf -L/usr/local/lib -I/usr/local/include"
+INSTALL="/usr/local/bin/install -c"
+export CC INSTALL
+./configure

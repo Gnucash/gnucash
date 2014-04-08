@@ -1,72 +1,68 @@
-#
-######################################################################
-#********************************************************************
-#* Makefile -- makefile for xacc/src                                *
-#* Copyright (C) 1997 Robin Clark                                   *
-#*                                                                  *
-#* This program is free software; you can redistribute it and/or    *
-#* modify it under the terms of the GNU General Public License as   *
-#* published by the Free Software Foundation; either version 2 of   *
-#* the License, or (at your option) any later version.              *
-#*                                                                  *
-#* This program is distributed in the hope that it will be useful,  *
-#* but WITHOUT ANY WARRANTY; without even the implied warranty of   *
-#* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    *
-#* GNU General Public License for more details.                     *
-#*                                                                  *
-#* You should have received a copy of the GNU General Public License*
-#* along with this program; if not, write to the Free Software      *
-#* Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
-#*                                                                  *
-#*   Author: Robin Clark                                            *
-#* Internet: rclark@rush.aero.org                                   *
-#*  Address: 609 8th Street                                         *
-#*           Huntington Beach, CA 92648-4632                        *
-#********************************************************************
+# Makefile -- makefile for xacc/src                                
+# Copyright (C) 1997 Robin Clark                                   
+# Copyright (C) 1998 Rob Browning <rlb@cs.utexas.edu>              
+#                                                                  
+# This program is free software; you can redistribute it and/or    
+# modify it under the terms of the GNU General Public License as   
+# published by the Free Software Foundation; either version 2 of   
+# the License, or (at your option) any later version.              
+#                                                                  
+# This program is distributed in the hope that it will be useful,  
+# but WITHOUT ANY WARRANTY; without even the implied warranty of   
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    
+# GNU General Public License for more details.                     
+#                                                                  
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software      
+# Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        
+#                                                                  
+#   Author: Robin Clark                                            
+# Internet: rclark@rush.aero.org                                   
+#  Address: 609 8th Street                                         
+#           Huntington Beach, CA 92648-4632                        
 
+# These three lines are suggested defs for autoconf (see the info pages).
+@SET_MAKE@
 srcdir   = @srcdir@
 VPATH    = @srcdir@
+
 CC       = @CC@
-INCLPATH = -I.. \
-           -I@x_includes@ \
-           -I@srcdir@/../include \
-           -I@srcdir@/../lib/libhtmlw \
-           -I@srcdir@/../lib/ComboBox-1.33
-CFLAGS   = @cflags@
-LFLAGS   = @lflags@
-LIBS     = @LIBS@
-LIBPATH  = -L@x_libraries@
-TARGET   = ../xacc
+INCLPATH = -I.. -I./engine -I./register -I@srcdir@/../include -I@prefix@/include
+CFLAGS   = @CFLAGS@ @X_CFLAGS@ ${INCLPATH}
 
-LIBHTMLW = ../lib/libhtmlw/libhtmlw.a
-LIBXBAE  = ../lib/Xbae-4.6.2-linas/libXbae.a
-LIBCOMBO = ../lib/ComboBox-1.33/libComboBox.a
+
 ######################################################################
-SRCS = AccWindow.c Account.c AccountMenu.c Action.c AdjBWindow.c    \
-       BuildMenu.c Data.c Destroy.c FileBox.c FileIO.c HelpWindow.c \
-       LedgerUtils.c MainWindow.c PopBox.c QIFIO.c QuickFill.c      \
-       RecnWindow.c RegWindow.c Reports.c TextBox.c Transaction.c   \
-       XferBox.c XferWindow.c date.c main.c util.c
-OBJS = ${SRCS:.c=.o} $(LIBHTMLW) $(LIBXBAE) $(LIBCOMBO)
+# See Makefile.common for information about these variables.
+COMMON_SRCS   := SplitLedger.c MultiLedger.c
+CLEAN_SUBDIRS := engine gnome motif register guile qt
 ######################################################################
 
-default: $(TARGET)
+all: default
 
-$(TARGET): $(OBJS)
-	@echo "++++++"
-	$(CC) $(LFLAGS) $(OBJS) $(LIBPATH) $(LIBS) -o $@
+# This inclusion must come after the first target, and after the
+# definitions of *_SRCS, etc., but before the usage of *_OBJS.
+include ../Makefile.common
 
-.c.o:
-	@echo "+++"
-	$(CC) -c $(CFLAGS) $(INCLPATH) $<
+default: $(OBJS)
 
-depend:
-	makedepend -- $(INCLPATH) $(DEFN) -- $(SRCS)
+motif: ${MOTIF_OBJS}
+	@cd engine;            $(MAKE) default
+	@cd register;          $(MAKE) motif
+	@cd motif;             $(MAKE) motif
 
-clean:
-	rm -f *.o *~ *.bak
+gnome: ${GNOME_OBJS}
+	@cd engine;            $(MAKE) default
+	@cd register;          $(MAKE) gnome
+	@cd guile;             $(MAKE) default
+	@cd gnome;             $(MAKE) gnome
 
-distclean: clean
-	rm -f $(TARGET) Makefile Makefile.bak config.h
+qt: $(QT_OBJS)
+	@cd engine;	       $(MAKE) default
+	@cd register;	       $(MAKE) qt
+	@cd qt;		       $(MAKE) qt
 
-# DO NOT DELETE THIS LINE -- make depend depends on it.
+.PHONY: default qt gnome motif all
+
+# Local Variables:
+# tab-width: 2
+# End:

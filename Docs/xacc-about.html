@@ -3,8 +3,8 @@
   <head>
     <title>About X-Accountant</title>
   </head>
-  
-  <body bgcolor=#eeeeee>
+    <body bgcolor="#eeeeee"> 
+
     <h1>About X-Accountant</h1>
 
     <hr>
@@ -37,6 +37,8 @@
         individually (one per account) or in portfolio
         of accounts (a group of accounts that can be 
         displayed together).  
+      <li><a href="xacc-quicken.html">Quicken File Import</a>.
+        Import Quicken Version 3.0 QIF files.
     </ul>
 
     <h2>Advanced Features</h2>
@@ -47,16 +49,18 @@
         of detail accounts underneath it.  This allows similar
         account types (e.g. Cash, Bank, Stock) to be grouped 
         into one master account (e.g. Assets).
-      <li>Double Entry:  Every transaction can appear in two
+      <li><a href="xacc-double.html">Double Entry</a>: 
+        Every transaction can appear in two
         accounts; one account is debited and the other is 
         credited with exactly the same amount.  With 
         double-entry, a transaction edited in one window 
         will be automatically updated in all other windows 
         showing that transaction, and in both of the 
         accounts.
-      <li>Income/Expense account types.  When used properly 
+      <li><a href="xacc-expense.html">Income/Expense Account Types
+        (Categories)</a>.   When used properly 
         with the double-entry feature, these can be used 
-        to create both Balance Sheet and Profits&Losses
+        to create both Balance Sheet and Profits &amp; Losses
         reports.  For example, savings account interest,
         stock dividends, or paychecks can be marked as 
         both a deposit in a bank account, and as income in 
@@ -73,13 +77,139 @@
     </ul>
 
     <h2>Version</h2>
-    This version is xacc-0.9u 
+    This version is xacc-1.1.8, a highly nunstable, buggy version.
+    The latest stable release is 1.0.17, you should be using that.
+    <p>
+    Versions 1.0.x are considered to be stable revisions with all
+    currently known bugs fixed.  Versions 1.1.x are considered to be
+    development versions, which may have many bugs.  The next stable 
+    series will be 1.2.x
+
+    <h2>Credits</h2>
+    <br>Fred Baube &lt;fred@moremagic.com&gt; for Java port
+    <br>Christopher B. Browne &lt;cbbrowne@hex.net&gt; for perl stock scripts
+    <br>Rob Browning &lt;rlb@cs.utexas.edu&gt; for perl, scheme &amp; GTK graphing
+    <br>George Chen &lt;georgec@sco.com&gt; for MS-Money QIF's &amp; fixes
+    <br>Robin Clark &lt;rclark@hmc.edu&gt; for original xacc
+    <br>Jeremey Collins &lt;linux@cyberramp.net&gt; for GnoMoney &amp; GTK port
+    <br>Bob Drzyzgula &lt;bob@mostly.com&gt; for budgeting design notes
+    <br>Koen D'Hondt &lt;ripley@xs4all.nl&gt; for Solaris patches to XmHTML
+    <br>Ciaran Deignan &lt;Ciaran.Deignan@bull.net&gt; for AIX binary version
+    <br>Dave Freese &lt;DFreese@osc.uscg.mil&gt; for leap-year fix
+    <br>Otto Hammersmith &lt;otto@bug.redhat.com&gt; for RedHat RPM version
+    <br>Tom Kludy &lt;tkludy@csd.sgi.com&gt; for SGI Irix port
+    <br>Peter Norton &lt;spacey@inch.com&gt; for a valiant attempt at a GTK port
+    <br>Gavin Porter &lt;maufk@csv.warwick.ac.uk&gt; for euro style dates
+    <br>Ron Record &lt;rr@sco.com&gt; for SCO Unixware &amp; OpenServer binaries
+    <br>Richard Skelton &lt;rich@brake.demon.co.uk&gt; for Solaris cleanup
+    <br>Henning Spruth &lt;spruth@bigfoot.com&gt; for German text &amp; euro date fixes
+    <br>Linas Vepstas &lt;linas@linas.org&gt; for leading the project
+    <br>... and I am sure that I have missed many others ...
+    <br>
+
+
+    <h2>Supported Operating Systems</h2>
+    xacc is known to work in the following configs:
+    <br>Linux 2.0.x           -- Intel  w/ RedHat Motif
+    <br>Linux 2.0.x           -- Intel  w/ Lesstif v0.81
+    <br>Linux Debian          -- Intel  w/ Lesstif v0.81
+    <br>SGI IRIX              -- MIPS
+    <br>IBM AIX 4.1.5         -- RS/6000  
+    <br>SCO Unixware 7        -- Intel
+    <br>SCO OpenServer 5.0.4  -- Intel
+    <br>NetBSD                -- Intel
     <p>
 
-    This is a beta development version with known
-    minor user interface bugs and no known major bugs.
-    It has been tested only lightly but seems to work. 
-    It is not believed to corrupt data.
-     
+    <a href="http://www.cs.hmc.edu/~rclark/xacc">
+    <img src="logos/linux.gif"></a>
+
+    <a href="http://www.sco.com/skunkware">
+    <img src="logos/skunkware.gif"></a>
+
+    <a href="http://www.bull.de/pub/">
+    <img src="logos/bullogogross.gif">
+    <img src="logos/ibm.gif">
+    </a>
+    <a href="http://www.sgi.com/">
+    <img src="logos/sgi.gif">
+    </a>
+
+    <a href="http://www.debian.org/">
+    <img src="logos/debian.jpg">
+    </a>
+
+    <img src = "logos/NetBSD-banner.gif">
+
+    <h2>History</h2>
+    Format: number of files (*.c and *.h), KLOCS in *.c + KLOCS in *.h
+    where KLOC== kilo-lines-of-code, as reported by wc.
+    other misc dirs not counted.
+    <table>
+    <th>
+    <td>Version
+    <td>engine 
+    <td>register 
+    <td>ledger
+    <td>motif 
+    <td>gnome 
+    <td>qt 
+    <td>prefs (scm)
+    <td>docs (html)
+    <td>misc
+    <td>Total
+
+    <tr>
+    <td>0.9 -- Sept 97
+    <td> - 
+    <td> - 
+    <td> - 
+    <td>34; 7.5+0.9
+    <td> - 
+    <td> - 
+    <td> - 
+    <td>5; 0.4
+    <td> - 
+    <td>39; 8.8 
+
+    <tr>
+    <td>0.9w -- Dec 97
+    <td> - 
+    <td> - 
+    <td> - 
+    <td>51; 13.8+1.5
+    <td> - 
+    <td> - 
+    <td> - 
+    <td>9; 0.8
+    <td> - 
+    <td>60; 16.1
+
+    <tr>
+    <td>1.0.17 -- Feb 98
+    <td> - 
+    <td> - 
+    <td> - 
+    <td>52; 14.8+1.8
+    <td> - 
+    <td> - 
+    <td> - 
+    <td>12; 1.4
+    <td> - 
+    <td>64; 18.0
+
+    <tr>
+    <td>1.1.15 -- Aug 98
+    <td>24; 6.2+1.5
+    <td>31; 6.1+1.7
+    <td>5;  1.4+0.4
+    <td>30; 7.4+0.7
+    <td>17; 3.4+0.5
+    <td>16; 1.2+0.2
+    <td>3; 0.3
+    <td>16; 1.9
+    <td>(not counted, >1.0)
+    <td>142; 32.9
+    </table>
+
   </body>
 </html>

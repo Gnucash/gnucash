@@ -1,0 +1,14 @@
+Source: xacc
+Section: utils
+Priority: extra
+Maintainer: Tyson Dowd <trd@cs.mu.oz.au>
+Standards-Version: 2.3.0.1
+
+Package: xacc
+Architecture: any
+Depends: ${shlibs:Depends}
+Description: A personal finance tracking program.
+ X-Accountant can track finances in multiple accounts, keeping running
+ and reconciled balances. It has an X based graphical user interface,
+ double entry, a hierarchy of accounts, expense accounts (categories),
+ and can import Quicken QIF files.
