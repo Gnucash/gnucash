@@ -33,7 +33,7 @@ typedef struct _PopBox {
 
 /** PROTOTYPES ******************************************************/
 
-void selectCB (Widget w, XtPointer cd, XtPointer cb );
+static void selectCB (Widget w, XtPointer cd, XtPointer cb );
 
 /********************************************************************\
  * popBox                                                           *
@@ -68,8 +68,10 @@ popBox (Widget parent)
                        XmNvalue, "",
 
 /* hack alert -- the width of the combobox should be relative to the font, should
-   be relative to the size of the cell in which it will fit. */
+ * be relative to the size of the cell in which it will fit. Basically, these
+ * values should not be hard-coded, but should be conmputed somehow */
                        XmNwidth, 53,
+                       XmNdropDownWidth, 103,
                        NULL);
 
    popData -> combobox = combobox;
@@ -133,11 +135,15 @@ void SetPopBox (PopBox *ab, int row, int col)
       choice = XbaeMatrixGetCell (ab->reg, ab->currow, ab->curcol);
 
       /* do a menu selection only if the cell ain't empty. */
-      if (0x0 != choice[0]) {
-         /* convert String to XmString ... arghhh */
-         choosen = XmCvtCTToXmString (choice);
-         XmComboBoxSelectItem (ab->combobox, choosen, False);
-         XmStringFree (choosen);
+      if (choice) {
+         if (0x0 != choice[0]) {
+            /* convert String to XmString ... arghhh */
+            choosen = XmCvtCTToXmString (choice);
+            XmComboBoxSelectItem (ab->combobox, choosen, False);
+            XmStringFree (choosen);
+         } else {
+            XmComboBoxClearItemSelection (ab->combobox);
+         } 
       } else {
          XmComboBoxClearItemSelection (ab->combobox);
       }
@@ -157,6 +163,17 @@ void SetPopBox (PopBox *ab, int row, int col)
 }
 
 /********************************************************************\
+\********************************************************************/
+
+void freePopBox (PopBox *ab)
+{
+  if (!ab) return;
+  SetPopBox (ab, -1, -1);
+  XtDestroyWidget (ab->combobox);
+  _free (ab);
+}
+
+/********************************************************************\
  * selectCB -- get the user's selection, put the string into the    *
  *             cell.                                                *
  *                                                                  *
@@ -166,7 +183,7 @@ void SetPopBox (PopBox *ab, int row, int col)
  * Return: none                                                     *
 \********************************************************************/
 
-void selectCB (Widget w, XtPointer cd, XtPointer cb )
+static void selectCB (Widget w, XtPointer cd, XtPointer cb )
 
 {
     PopBox *ab = (PopBox *) cd;
@@ -182,4 +199,5 @@ void selectCB (Widget w, XtPointer cd, XtPointer cb )
     /* a diffeent way of getting the user's selection ... */
     /* text = XmComboBoxGetString (ab->combobox); */
 }
+
 /************************* END OF FILE ******************************/

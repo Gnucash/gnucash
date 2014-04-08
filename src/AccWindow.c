@@ -40,12 +40,10 @@
 #include "AccountMenu.h"
 #include "Data.h"
 #include "main.h"
+#include "TextBox.h"
 #include "util.h"
 
-/* NOTE: notes has to be at the beginning of the struct!  Order is 
- *       important -- hack alert -- why is order important ?? */
 typedef struct _accwindow {
-  String notes;          /* The text from the "Notes" window        */
                          /* The account type buttons:               */
   Widget dialog;
 
@@ -56,29 +54,41 @@ typedef struct _accwindow {
   Widget desc;           /* Account description text field          */
 
   AccountMenu *accMenu;
+
+  Account *newacc;       /* tmp account for editing */
+
 } AccWindow;
 
-/* NOTE: notes has to be at the beginning of the struct!  Order is 
- *       important -- hack alert -- why is order important ?? */
 typedef struct _editaccwindow {
-  String notes;          /* The text from the "Notes" window        */
+  Widget dialog;
                          /* The text fields:                        */
   Widget  name;          /* The account name text field             */
   Widget  desc;          /* Account description text field          */
   
   Account *account;      /* The account to edit                     */
+
 } EditAccWindow;
+
+typedef struct _editnoteswindow {
+  TextBox *tb;
+  Account *account;      /* The account to edit                     */
+
+} EditNotesWindow;
 
 /** GLOBALS *********************************************************/
 extern Widget toplevel;
 
 /** PROTOTYPES ******************************************************/
-void closeAccWindow         ( Widget mw, XtPointer cd, XtPointer cb );
-void closeEditAccWindow     ( Widget mw, XtPointer cd, XtPointer cb );
-static void notesCB         ( Widget mw, XtPointer cd, XtPointer cb );
-static void createCB        ( Widget mw, XtPointer cd, XtPointer cb );
-static void editCB          ( Widget mw, XtPointer cd, XtPointer cb );
-static void selectAccountCB ( Widget mw, XtPointer cd, XtPointer cb );
+static void closeAccWindow      ( Widget mw, XtPointer cd, XtPointer cb );
+static void closeEditAccWindow  ( Widget mw, XtPointer cd, XtPointer cb );
+static void notesCB             ( Widget mw, XtPointer cd, XtPointer cb );
+static void editNotesCB         ( Widget mw, XtPointer cd, XtPointer cb );
+static void createCB            ( Widget mw, XtPointer cd, XtPointer cb );
+static void finishEditCB        ( Widget mw, XtPointer cd, XtPointer cb );
+static void selectAccountCB     ( Widget mw, XtPointer cd, XtPointer cb );
+static void closeEditNotesWindow( Widget mw, XtPointer cd, XtPointer cb );
+
+EditNotesWindow * editNotesWindow (Account *acc);
 
 /********************************************************************\
  * accWindow                                                        *
@@ -88,7 +98,7 @@ static void selectAccountCB ( Widget mw, XtPointer cd, XtPointer cb );
  * Args:   parent   - the parent of the window to be created        * 
  * Return: none                                                     *
 \********************************************************************/
-void 
+AccWindow *
 accWindow( Widget parent )
   {
   int i;
@@ -100,7 +110,8 @@ accWindow( Widget parent )
   setBusyCursor( parent );
   
   accData = (AccWindow *)_malloc(sizeof(AccWindow));
-  accData->notes = XtNewString("");
+
+  accData->newacc = mallocAccount();
   
   /* force the size of the dialog so it is not resizable */
   dialog = XtVaCreatePopupShell( "dialog", 
@@ -329,6 +340,8 @@ accWindow( Widget parent )
   XtPopup( dialog, XtGrabNone );
   
   unsetBusyCursor( parent );
+
+  return accData;
   }
 
 /********************************************************************\
@@ -342,15 +355,26 @@ accWindow( Widget parent )
  *         cb -                                                     * 
  * Return: none                                                     *
 \********************************************************************/
-void 
+static void 
 closeAccWindow( Widget mw, XtPointer cd, XtPointer cb )
   {
   AccWindow *accData = (AccWindow *)cd;
-  
+
+  if(accData->newacc) freeAccount (accData->newacc);  
+
   xaccFreeAccountMenu (accData->accMenu);
   _free(accData);
   DEBUG("close AccWindow");
   }
+
+/********************************************************************\
+\********************************************************************/
+
+void xaccDestroyEditAccWindow (EditAccWindow *editAccData)
+{
+   if (!editAccData) return;
+   XtDestroyWidget (editAccData->dialog);
+}
 
 /********************************************************************\
  * editAccWindow                                                    *
@@ -360,22 +384,20 @@ closeAccWindow( Widget mw, XtPointer cd, XtPointer cb )
  *         account  - the account to edit                           * 
  * Return: none                                                     *
 \********************************************************************/
-void 
+EditAccWindow *
 editAccWindow( Widget parent, Account *account )
   {
+
   Widget dialog, form, widget, label, buttonform;
   EditAccWindow *editAccData;
   
-  /* hack alert -- if no account selected for editing,
-   * put up a popup and tell the user to pick something.
-   * for the moment, we just no-op. */
-  if (0x0 == account) return;
+  if (0x0 == account) return 0x0;  /* internal error, really */
 
   setBusyCursor( parent );
   
   editAccData = (EditAccWindow *)_malloc(sizeof(EditAccWindow));
-  editAccData->notes   = account->notes;
   editAccData->account = account;
+  account->editAccData = editAccData;
   
   /* force the size of the dialog so it is not resizable */
   dialog = XtVaCreatePopupShell( "dialog", 
@@ -392,6 +414,7 @@ editAccWindow( Widget parent, Account *account )
                                  XmNallowShellResize, FALSE,
                                  XmNtransient, FALSE,  /* allow window to be repositioned */
 				 NULL );
+  editAccData->dialog = dialog;
   
   XtAddCallback( dialog, XmNdestroyCallback, 
 		 closeEditAccWindow, (XtPointer)editAccData );
@@ -481,7 +504,7 @@ editAccWindow( Widget parent, Account *account )
 			     NULL );
   
   XtAddCallback( widget, XmNactivateCallback, 
-		 notesCB, (XtPointer)editAccData );  
+		 editNotesCB, (XtPointer)editAccData );  
   
   /* The "Cancel" button */
   widget = 
@@ -513,7 +536,7 @@ editAccWindow( Widget parent, Account *account )
 			     NULL );
   
   XtAddCallback( widget, XmNactivateCallback, 
-		 editCB, (XtPointer)editAccData );
+		 finishEditCB, (XtPointer)editAccData );
   /* We need to do something to clean up memory too! */
   XtAddCallback( widget, XmNactivateCallback, 
 		 destroyShellCB, (XtPointer)dialog );  
@@ -526,6 +549,8 @@ editAccWindow( Widget parent, Account *account )
   XtPopup( dialog, XtGrabNone );
   
   unsetBusyCursor( parent );
+
+  return editAccData;
   }
 
 /********************************************************************\
@@ -539,14 +564,12 @@ editAccWindow( Widget parent, Account *account )
  *         cb -                                                     * 
  * Return: none                                                     *
 \********************************************************************/
-void 
+static void 
 closeEditAccWindow( Widget mw, XtPointer cd, XtPointer cb )
   {
   EditAccWindow *editAccData = (EditAccWindow *)cd;
 
-printf ("close edit acc window %x %s \n", editAccData,
-editAccData->notes);
-  
+  editAccData->account->editAccData = NULL;
   _free(editAccData);
   DEBUG("close EditAccWindow");
   }
@@ -562,14 +585,35 @@ editAccData->notes);
 \********************************************************************/
 static void
 notesCB( Widget mw, XtPointer cd, XtPointer cb )
-  {
+{
   AccWindow *accData = (AccWindow *)cd;
-  
-  /* hack alert -- isn't this a memory leak ????? */
-printf ("orig notes are %x %s \n", accData, accData->notes);
-  accData->notes = textBox( toplevel, "Notes", accData->notes, True );
-printf ("new notes are %s \n", accData->notes);
+  Account *acc = accData -> newacc;
+  if (NULL == acc->editNotesData) {
+     editNotesWindow (acc);
   }
+  /* hack alert -- else, should raise window to the top */
+}
+
+/********************************************************************\
+ * editNotesCB -- called when the user presses the "Notes" Button   * 
+ *                                                                  * 
+ * Args:   mw - the widget that called us                           * 
+ *         cd - accData - the struct that has the notes text in it  * 
+ *         cb -                                                     * 
+ * Return: none                                                     * 
+ * Global: toplevel    - the toplevel widget                        *
+\********************************************************************/
+static void
+editNotesCB( Widget mw, XtPointer cd, XtPointer cb )
+{
+  EditAccWindow *editAccData = (EditAccWindow *)cd;
+  Account *acc = editAccData -> account;
+
+  if (NULL == acc->editNotesData) {
+     editNotesWindow (acc);
+  }
+  /* hack alert -- else, should raise window to the top */
+}
 
 /********************************************************************\
  * createCB -- creates the new account from data in the newaccount  * 
@@ -597,15 +641,16 @@ createCB( Widget mw, XtPointer cd, XtPointer cb )
   
   /* The account has to have a name! */
   if( strcmp( name, "" ) == 0 ) {
-    errorBox (toplevel, "The account must be given a name! \n");
+    errorBox (toplevel, ACC_NO_NAME_MSG);
     return;
   }
   
-  acc = mallocAccount();
+  acc = accData->newacc;
+  accData->newacc = NULL;
+
   acc->flags     = 0;
   acc->accountName = name;
   acc->description = desc;
-  acc->notes       = accData->notes;
   
   /* figure out account type */
   for (i=0; i<NUM_ACCOUNT_TYPES; i++) {
@@ -638,14 +683,14 @@ createCB( Widget mw, XtPointer cd, XtPointer cb )
   refreshMainWindow();
 
   /* open up the account window for the user */
-  regWindow( toplevel, acc );
+  regWindowSimple ( toplevel, acc );
 
   /* if we got to here, tear down the dialog window */
   XtDestroyWidget (accData->dialog);
   }
 
 /********************************************************************\
- * editCB -- records the edits made in the editAccWindow            * 
+ * finishEditCB -- records the edits made in the editAccWindow      * 
  *                                                                  * 
  * Args:   mw - the widget that called us                           * 
  *         cd - editAccData - the struct of data associated with    *
@@ -655,7 +700,7 @@ createCB( Widget mw, XtPointer cd, XtPointer cb )
  * Global: data        - the data from the datafile                 *
 \********************************************************************/
 static void
-editCB( Widget mw, XtPointer cd, XtPointer cb )
+finishEditCB( Widget mw, XtPointer cd, XtPointer cb )
   {
   EditAccWindow *editAccData = (EditAccWindow *)cd;
   String name = XmTextGetString(editAccData->name);
@@ -709,12 +754,12 @@ selectAccountCB( Widget mw, XtPointer cd, XtPointer cb )
        case BANK:
        case CASH:
        case ASSET:
-       case PORTFOLIO:
+       case STOCK:
        case MUTUAL:
           XtSetSensitive (menu->type_widgets[BANK],      True);
           XtSetSensitive (menu->type_widgets[CASH],      True);
           XtSetSensitive (menu->type_widgets[ASSET],     True);
-          XtSetSensitive (menu->type_widgets[PORTFOLIO], True);
+          XtSetSensitive (menu->type_widgets[STOCK],     True);
           XtSetSensitive (menu->type_widgets[MUTUAL],    True);
           XtSetSensitive (menu->type_widgets[LIABILITY], False);
           XtSetSensitive (menu->type_widgets[CREDIT],    False);
@@ -731,7 +776,7 @@ selectAccountCB( Widget mw, XtPointer cd, XtPointer cb )
 
           /* set a default, if an inapporpriate button is pushed */
           if ((BANK   != but) && (CASH      != but) &&
-              (ASSET  != but) && (PORTFOLIO != but) &&
+              (ASSET  != but) && (STOCK != but) &&
               (MUTUAL != but) ) {
              XtVaSetValues (menu->type_widgets[acc->type], XmNset, True, NULL);
           }
@@ -742,7 +787,7 @@ selectAccountCB( Widget mw, XtPointer cd, XtPointer cb )
           XtSetSensitive (menu->type_widgets[BANK],      False);
           XtSetSensitive (menu->type_widgets[CASH],      False);
           XtSetSensitive (menu->type_widgets[ASSET],     False);
-          XtSetSensitive (menu->type_widgets[PORTFOLIO], False);
+          XtSetSensitive (menu->type_widgets[STOCK],     False);
           XtSetSensitive (menu->type_widgets[MUTUAL],    False);
           XtSetSensitive (menu->type_widgets[LIABILITY], True);
           XtSetSensitive (menu->type_widgets[CREDIT],    True);
@@ -754,7 +799,7 @@ selectAccountCB( Widget mw, XtPointer cd, XtPointer cb )
           XtVaSetValues (menu->type_widgets[BANK],      XmNset, False, NULL);
           XtVaSetValues (menu->type_widgets[CASH],      XmNset, False, NULL);
           XtVaSetValues (menu->type_widgets[ASSET],     XmNset, False, NULL);
-          XtVaSetValues (menu->type_widgets[PORTFOLIO], XmNset, False, NULL);
+          XtVaSetValues (menu->type_widgets[STOCK],     XmNset, False, NULL);
           XtVaSetValues (menu->type_widgets[MUTUAL],    XmNset, False, NULL);
           XtVaSetValues (menu->type_widgets[INCOME],    XmNset, False, NULL);
           XtVaSetValues (menu->type_widgets[EXPENSE],   XmNset, False, NULL);
@@ -770,7 +815,7 @@ selectAccountCB( Widget mw, XtPointer cd, XtPointer cb )
           XtSetSensitive (menu->type_widgets[BANK],      False);
           XtSetSensitive (menu->type_widgets[CASH],      False);
           XtSetSensitive (menu->type_widgets[ASSET],     False);
-          XtSetSensitive (menu->type_widgets[PORTFOLIO], False);
+          XtSetSensitive (menu->type_widgets[STOCK],     False);
           XtSetSensitive (menu->type_widgets[MUTUAL],    False);
           XtSetSensitive (menu->type_widgets[LIABILITY], False);
           XtSetSensitive (menu->type_widgets[CREDIT],    False);
@@ -791,7 +836,7 @@ selectAccountCB( Widget mw, XtPointer cd, XtPointer cb )
           XtSetSensitive (menu->type_widgets[BANK],      False);
           XtSetSensitive (menu->type_widgets[CASH],      False);
           XtSetSensitive (menu->type_widgets[ASSET],     False);
-          XtSetSensitive (menu->type_widgets[PORTFOLIO], False);
+          XtSetSensitive (menu->type_widgets[STOCK],     False);
           XtSetSensitive (menu->type_widgets[MUTUAL],    False);
           XtSetSensitive (menu->type_widgets[LIABILITY], False);
           XtSetSensitive (menu->type_widgets[CREDIT],    False);
@@ -812,7 +857,7 @@ selectAccountCB( Widget mw, XtPointer cd, XtPointer cb )
           XtSetSensitive (menu->type_widgets[BANK],      False);
           XtSetSensitive (menu->type_widgets[CASH],      False);
           XtSetSensitive (menu->type_widgets[ASSET],     False);
-          XtSetSensitive (menu->type_widgets[PORTFOLIO], False);
+          XtSetSensitive (menu->type_widgets[STOCK],     False);
           XtSetSensitive (menu->type_widgets[MUTUAL],    False);
           XtSetSensitive (menu->type_widgets[LIABILITY], False);
           XtSetSensitive (menu->type_widgets[CREDIT],    False);
@@ -836,13 +881,64 @@ selectAccountCB( Widget mw, XtPointer cd, XtPointer cb )
      XtSetSensitive (menu->type_widgets[ASSET],     True);
      XtSetSensitive (menu->type_widgets[CREDIT],    True);
      XtSetSensitive (menu->type_widgets[LIABILITY], True);
-     XtSetSensitive (menu->type_widgets[PORTFOLIO], True);
+     XtSetSensitive (menu->type_widgets[STOCK],     True);
      XtSetSensitive (menu->type_widgets[MUTUAL],    True);
      XtSetSensitive (menu->type_widgets[INCOME],    True);
      XtSetSensitive (menu->type_widgets[EXPENSE],   True);
      XtSetSensitive (menu->type_widgets[EQUITY],    True);
   }
 }
+
+/********************************************************************\
+ *                                                                  * 
+\********************************************************************/
+
+EditNotesWindow *
+editNotesWindow (Account *acc)
+{
+  EditNotesWindow *editNotesData;
+
+  if (!acc) return 0x0;
+
+  editNotesData = (EditNotesWindow *) malloc (sizeof (EditNotesWindow));
+  editNotesData->account = acc;
+  acc -> editNotesData = editNotesData;
+ 
+  editNotesData->tb = textBox( toplevel, "Notes", 
+                              &(acc->notes),
+                              closeEditNotesWindow, editNotesData);
+
+  return editNotesData;
+}
+
+/********************************************************************\
+\********************************************************************/
+
+void 
+xaccDestroyEditNotesWindow (EditNotesWindow *editNotesData)
+{
+  if (!editNotesData) return;
+
+  editNotesData->account->editNotesData = NULL;
+  xaccDestroyTextBox (editNotesData->tb);
+  _free(editNotesData);
+}
+
+/********************************************************************\
+\********************************************************************/
+
+static void 
+closeEditNotesWindow( Widget mw, XtPointer cd, XtPointer cb )
+  {
+  EditNotesWindow *editNotesData = (EditNotesWindow *) cd;
+
+  editNotesData->account->editNotesData = NULL;
+
+  xaccDestroyTextBox (editNotesData->tb);
+
+  _free(editNotesData);
+  DEBUG("close EditNotesWindow");
+  }
 
 /********************** END OF FILE *********************************\
 \********************************************************************/

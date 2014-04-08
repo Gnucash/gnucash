@@ -43,6 +43,7 @@ actionBox (Widget parent)
    AddPopBoxMenuItem (popGUI, "Buy");
    AddPopBoxMenuItem (popGUI, "Sell");
    AddPopBoxMenuItem (popGUI, "Price");
+   AddPopBoxMenuItem (popGUI, "Int");
    AddPopBoxMenuItem (popGUI, "Div");
    AddPopBoxMenuItem (popGUI, "LTCG");
    AddPopBoxMenuItem (popGUI, "STCG");

@@ -187,7 +187,7 @@ helpWindow( Widget parent, char *title, char *htmlfile )
   Widget dialog,
          pane,
          controlform,
-         actionform,
+         buttonform,
          widget;
   int position=0;
   
@@ -208,10 +208,8 @@ helpWindow( Widget parent, char *title, char *htmlfile )
 				   XmNheight,       400,
                                    XmNtransient,    FALSE,  /* allow window to be repositioned */
 
-/*
 				   XmNminWidth,     500,
-				   XmNminHeight,    400,
-*/
+				   XmNminHeight,    200,
 				   NULL );
     
     XtAddCallback( dialog, XmNdestroyCallback, closeHelpWin, NULL );
@@ -242,19 +240,16 @@ helpWindow( Widget parent, char *title, char *htmlfile )
 			       XmNbottomAttachment,     XmATTACH_FORM,
 			       XmNleftAttachment,       XmATTACH_FORM,
 			       XmNrightAttachment,      XmATTACH_FORM,
+			       XmNwidth,                500,
+			       XmNheight,               400,
 			       NULL );
     
     XtAddCallback( helpwidget, WbNanchorCallback, helpAnchorCB, NULL );
     
-    XtManageChild( controlform );
-    
-    /* we have to load the page after the widget is realized, so
-     * the pictures can be drawn */
-    XtVaSetValues( helpwidget, WbNtext, htmlRead(htmlfile), NULL );
     
     /** ACTIONFORM ********************************************
-     * Create a Form actionform for action area of dialog box */
-    actionform = XtVaCreateWidget( "actionform", 
+     * Create a Form buttonform for action area of dialog box */
+    buttonform = XtVaCreateWidget( "buttonform", 
 				   xmFormWidgetClass, pane,
 				   XmNfractionBase,   7,
 				   NULL );
@@ -262,7 +257,7 @@ helpWindow( Widget parent, char *title, char *htmlfile )
     
     /* The "Back" button */
     widget = XtVaCreateManagedWidget( "Back",
-				      xmPushButtonWidgetClass, actionform,
+				      xmPushButtonWidgetClass, buttonform,
 				      XmNtopAttachment,      XmATTACH_FORM,
 				      XmNbottomAttachment,   XmATTACH_FORM,
 				      XmNleftAttachment,     XmATTACH_POSITION,
@@ -277,7 +272,7 @@ helpWindow( Widget parent, char *title, char *htmlfile )
     /* The "Forward" button */
     position +=2;
     widget = XtVaCreateManagedWidget( "Forward",
-				      xmPushButtonWidgetClass, actionform,
+				      xmPushButtonWidgetClass, buttonform,
 				      XmNtopAttachment,      XmATTACH_FORM,
 				      XmNbottomAttachment,   XmATTACH_FORM,
 				      XmNleftAttachment,     XmATTACH_POSITION,
@@ -292,7 +287,7 @@ helpWindow( Widget parent, char *title, char *htmlfile )
     /* The "Close" button */
     position +=2;
     widget = XtVaCreateManagedWidget( "Close",
-				      xmPushButtonWidgetClass, actionform,
+				      xmPushButtonWidgetClass, buttonform,
 				      XmNtopAttachment,      XmATTACH_FORM,
 				      XmNbottomAttachment,   XmATTACH_FORM,
 				      XmNleftAttachment,     XmATTACH_POSITION,
@@ -304,16 +299,23 @@ helpWindow( Widget parent, char *title, char *htmlfile )
     
     XtAddCallback( widget, XmNactivateCallback, destroyShellCB, dialog );
     
+    XtManageChild( helpwidget );
+    
+    /* we have to load the page after the widget is realized, so
+     * the pictures can be drawn  ?? but its not realized yet! */
+    XtVaSetValues( helpwidget, WbNtext, htmlRead(htmlfile), NULL );
+
     /* Fix action area of the pane to its current size, and not let it
      *  resize. */
-    XtManageChild( actionform );
+    XtManageChild( buttonform );
     
     {
     Dimension h;
     XtVaGetValues( widget, XmNheight, &h, NULL );
-    XtVaSetValues( actionform, XmNpaneMaximum, h, XmNpaneMinimum, h, NULL );
+    XtVaSetValues( buttonform, XmNpaneMaximum, h, XmNpaneMinimum, h, NULL );
     }
     
+    XtManageChild( controlform );
     XtManageChild( pane );
     XtPopup( dialog, XtGrabNone );
     }

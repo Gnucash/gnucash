@@ -39,26 +39,33 @@ sorry, no "make install" yet.
 
 Status:
 -------
-As of version 0.9n:
+As of version 0.9p:
 Bugs:
 -- Cash distributions & cash dividends on stock are confusing
    without sub-accounts.  They should appear as transfers from
    an income account to the brokerage account, and should be 
-   visible in a gneral ledger that shows both the brokerage 
-   account, and the stock.  However, sub-accounts are not
-   yet implemented fully, and the general-ledger regsiter 
-   window is not implemented.  Getting close, though.
+   visible in a general ledger that shows both the brokerage 
+   account, and the stock.  However, the general-ledger regsiter 
+   window is not implemented.  Soon ...
 
 -- tabbing between fields for mutual funds does not work correctly. 
 -- should add "number of shares" to transfer popup when transferring
    from bank account to portfolio.
 -- Nasty core dump in motif when two register windows are opened,
    and then closed.  Beats the heck out of me. 
-   
+-- should do something for automatic interest computations,
+   also mortgages, bonds, etc.
+-- need to expose transfer type for bank acounts ass well as stocks.
 
+Fixed:
+-- nasty bug relating to save/restore of double-entry to file
+   was fixed!
+   
 ---------------
-Started implementation of sub-accounts.
-This is needed for general ledger capabilites.
+Bare-bones general ledger capabilities added.
+Working Features:
+-- accounts can have sub-accounts
+-- Income and Expense account types added.
 
 ---------------
 Bare-bones Mutual Fund and Stock Portfolio handling
@@ -95,9 +102,6 @@ is planned, as well as the ability to make transfers directly
 from the register(ledger) window.  However, this function will
 be tricky, since it requires hacks on the Xbae widget used to
 display the register.
-
-Double-entries should be correctly saved-to-file & restored 
-from file.
 
 -------------
 The "reports" menu item is unimplemented and will result in a core dump.

@@ -156,7 +156,7 @@ char * xaccReadQIFAccount (int fd, Account * acc)
            acc -> type = BANK;
         } else
         if (!strcmp (&qifline[1], "Invst\r\n")) {
-           acc -> type = PORTFOLIO;
+           acc -> type = STOCK;
         } else {
            DEBUG ("Unsupported account type\n");
            DEBUG (&qifline[1]);

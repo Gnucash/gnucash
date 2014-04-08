@@ -66,6 +66,16 @@ extern XtAppContext app;
 /********************************************************************/
 
 /********************************************************************\
+\********************************************************************/
+
+void 
+xaccDestroyRecnWindow (RecnWindow *recnData)
+{
+   if (!recnData) return;
+   XtDestroyWidget (recnData->dialog);
+}
+
+/********************************************************************\
  * recnRefresh                                                      *
  *   refreshes the transactions in the reconcile window             *
  *                                                                  *

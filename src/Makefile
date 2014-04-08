@@ -27,10 +27,10 @@
 # DO NOT EDIT THE STUFF BELOW THIS LINE!                             #
 
 OBJS = Account.o AccountMenu.o AccWindow.o Action.o AdjBWindow.o \
-       BuildMenu.o Data.o date.o \
-       FileBox.o FileIO.o HelpWindow.o main.o MainWindow.o PopBox.o \
+       BuildMenu.o Data.o date.o Destroy.o \
+       FileBox.o FileIO.o HelpWindow.o LedgerUtils.o main.o MainWindow.o PopBox.o \
        QIFIO.o QuickFill.o RecnWindow.o RegWindow.o Reports.o \
-       Transaction.o util.o XferBox.o XferWindow.o
+       TextBox.o Transaction.o util.o XferBox.o XferWindow.o
 
 SRCS = ${OBJS:.o=.c}
 
