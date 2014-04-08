@@ -124,7 +124,13 @@ struct _Table {
 
   /* callback that is called when the cursor is moved */
   /* hack alert -- this should be a callback list, actually */
-  void (*move_cursor) (Table *, int new_phys_row, int new_phys_col, void *client_data);
+  void (*move_cursor) (Table *, int *p_new_phys_row, 
+                                int *p_new_phys_col, 
+                                void *client_data);
+  /* callback that is called to determine traversal */
+  void  (*traverse)  (Table *,  int *p_new_phys_row, 
+                                int *p_new_phys_col, 
+                                void *client_data);
   void * client_data;
 
   /* string values for each cell, 
@@ -159,6 +165,9 @@ struct _Table {
    */
   int prev_phys_traverse_row;
   int prev_phys_traverse_col;
+
+  int reverify_phys_row;
+  int reverify_phys_col;
    
   /* Since we are using C not C++, but we need inheritance, 
    * cock it up with a #defined thingy that the "derived class" 
@@ -179,6 +188,11 @@ void        xaccDestroyTable (Table *);
  */
 void        xaccSetTableSize (Table * table, int phys_rows, int phys_cols,
                                              int virt_rows, int virt_cols);
+
+/* The xaccCreateCursor() method can be called whenever a reconfig
+ *    of the cursor may require new gui elements to be initialized.
+ */
+void        xaccCreateCursor (Table *, CellBlock *);
 
 /* indicate what handler should be used for a given virtual block */
 void 

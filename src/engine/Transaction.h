@@ -210,7 +210,7 @@ double xaccSplitGetClearedBalance (Split *);
 double xaccSplitGetReconciledBalance (Split *);
 double xaccSplitGetShareBalance (Split *);
 
-/* return teh parent transaction of the split */
+/* return the parent transaction of the split */
 Transaction * xaccSplitGetParent (Split *);
 
 /* return the memo, action strings */
@@ -257,9 +257,15 @@ Account * xaccGetAccountByName (Transaction *, const char *);
 
 /* 
  * The GetOtherSplit() is a convenience routine that returns
- * the other of a pair of splits.  If there are more than two 
- * splits, it returns NULL.
+ *    the other of a pair of splits.  If there are more than two 
+ *    splits, it returns NULL.
  */
 Split * xaccGetOtherSplit (Split *);
+
+/* The IsPeerSplit() is a convenience routine that returns
+ *    a non-zero value if the two splits share a common 
+ *    parent transaction, else it returns zero.
+ */
+int xaccIsPeerSplit (Split *, Split *);
 
 #endif /* __XACC_TRANSACTION_H__ */

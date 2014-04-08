@@ -359,7 +359,6 @@ regWindowLedger( xaccLedgerDisplay *ledger)
     if (!grp) grp = xaccGetAccountRoot (ledger->displayed_accounts[0]);
     xaccLoadXferCell (ledger->ledger->xfrmCell, grp);
     /* xaccLoadXferCell (ledger->ledger->xtoCell, grp);  */
-    xaccLoadXferCell (ledger->ledger->xfrmTransCell, grp);
   }
 
 #if 0
@@ -712,6 +711,7 @@ recordCB( GtkWidget *w, gpointer data)
   RegWindow *regData = (RegWindow *) data;
   
   xaccSRSaveRegEntry (regData->ledger->ledger);
+  xaccSRRedrawRegEntry (regData->ledger->ledger);
 }
 
 /********************************************************************\

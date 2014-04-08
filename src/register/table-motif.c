@@ -27,6 +27,7 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
 \********************************************************************/
 
+#include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -59,6 +60,23 @@ xaccNextTabGroup (Table *table, Widget w)
 }
 
 /* ==================================================== */
+
+static void 
+wrapVerifyCursorPosition (Table *table, int row, int col)
+{
+   CellBlock *save_curs = table->current_cursor;
+   int save_phys_row = table->current_cursor_phys_row;
+   int save_phys_col = table->current_cursor_phys_col;
+
+   /* VerifyCursor will do all sorts of gui-independent machinations */
+   xaccVerifyCursorPosition (table, row, col);
+
+   /* make sure *both* the old and the new cursor rows get redrawn */
+   xaccRefreshCursorGUI (table);  
+   doRefreshCursorGUI (table, save_curs, save_phys_row, save_phys_col);
+}
+
+/* ==================================================== */
 /* this routine calls the individual cell callbacks */
 
 static void
@@ -77,23 +95,25 @@ cellCB (Widget mw, XtPointer cd, XtPointer cb)
    row = cbs->row;
    col = cbs->column;
 
-   /* if we are entering this cell, make sure that we've
+   /* If we are entering this cell, make sure that we've
     * moved the cursor, and that any subsidiary GUI elements
     * properly positioned.  Do this *before* we examine the 
-    * value of the "current cursor".
+    * value of the "current cursor".  Note that this check
+    * could suck up massive cpu, as potentially it may trigger
+    * a redraw of the entire register.
+    *
+    * Hmmm ... actually, theoretically, this is not neeeded.
+    * Before we get to here, we *should* have gone through
+    * a traverse callback the determine which cell to enter,
+    * and then, after the leavecell, the cursor should
+    * have been automagically repositioned.  This, the
+    * call below should always no-op out.  However, if/when
+    * things go berzerk, the call below does at least a partial
+    * butt-save for us, so lets leave it in for now.
     */
    if (XbaeEnterCellReason == cbs->reason) 
    {
-      CellBlock *save_curs = table->current_cursor;
-      int save_phys_row = table->current_cursor_phys_row;
-      int save_phys_col = table->current_cursor_phys_col;
-
-      /* VerifyCursor will do all sorts of gui-independent machinations */
-      xaccVerifyCursorPosition (table, row, col);
-
-      /* make sure *both* the old and the new cursor rows get redrawn */
-      xaccRefreshCursorGUI (table);  
-      doRefreshCursorGUI (table, save_curs, save_phys_row, save_phys_col);
+      wrapVerifyCursorPosition (table, row, col);
    }
 
    /* can't edit outside of the physical space */
@@ -179,6 +199,8 @@ cellCB (Widget mw, XtPointer cd, XtPointer cb)
       }
       case XbaeLeaveCellReason: {
          leaveCB (mw, cd, cb);
+         wrapVerifyCursorPosition (table, table->reverify_phys_row,
+                                          table->reverify_phys_col);
          break;
       }
       default:
@@ -453,32 +475,33 @@ traverseCB (Widget mw, XtPointer cd, XtPointer cb)
       }
    }
 
-   /* Don't do a thing unless we verify that the row and column
-    * are in bounds. Ordinarily, they are always in bounds, except 
-    * in an unusual, arguably buggy situation: If the table has 
-    * been recently resized smaller, then the Xbae code might report
-    * a traverse out of a cell that was in the larger array, but not
-    * in the smaller array.  This is probably an Xbae bug. It 
-    * will core dump array access.
-    */
-   if ((row >= table->num_phys_rows) || 
-       (col >= table->num_phys_cols)) {
-
-      table->prev_phys_traverse_row = cbs->next_row;
-      table->prev_phys_traverse_col = cbs->next_column;
-      return;
-   }
-
-   xaccVerifyCursorPosition (table, row, col);
-
-   /* compute the cell location */
-   rel_row = table->locators[row][col]->phys_row_offset;
-   rel_col = table->locators[row][col]->phys_col_offset;
-
    /* process right-moving traversals */
    if (QRight == cbs->qparam) {
-      int next_row = arr->right_traverse_r[rel_row][rel_col];
-      int next_col = arr->right_traverse_c[rel_row][rel_col];
+      int next_row, next_col;
+
+      /* Don't do a thing unless we verify that the row and column
+       * are in bounds. Ordinarily, they are always in bounds, except 
+       * in an unusual, arguably buggy situation: If the table has 
+       * been recently resized smaller, then the Xbae code might report
+       * a traverse out of a cell that was in the larger array, but not
+       * in the smaller array.  This is probably an Xbae bug. It 
+       * will core dump array access.
+       */
+      if ((row >= table->num_phys_rows) || 
+          (col >= table->num_phys_cols)) {
+
+assert (0);
+         table->prev_phys_traverse_row = cbs->next_row;
+         table->prev_phys_traverse_col = cbs->next_column;
+         return;
+      }
+
+      /* compute the cell location */
+      rel_row = table->locators[row][col]->phys_row_offset;
+      rel_col = table->locators[row][col]->phys_col_offset;
+
+      next_row = arr->right_traverse_r[rel_row][rel_col];
+      next_col = arr->right_traverse_c[rel_row][rel_col];
 
       /* if we are at the end of the traversal chain,
        * hop out of this tab group, and into the next.
@@ -497,6 +520,21 @@ traverseCB (Widget mw, XtPointer cd, XtPointer cb)
          cbs->next_column = col - rel_col + next_col;
       }
    } 
+
+   /* 
+xxxxxxxxxxx 
+hack alert -- 
+this may work,. but document it ...
+*/
+   if (table->traverse) {
+      int nr = cbs->next_row;
+      int nc = cbs->next_column;
+      table->reverify_phys_row = nr;
+      table->reverify_phys_col = nc;
+      (table->traverse) (table, &nr, &nc, table->client_data);
+      cbs->next_row = nr;
+      cbs->next_column = nc;
+   }
 
    table->prev_phys_traverse_row = cbs->next_row;
    table->prev_phys_traverse_col = cbs->next_column;
@@ -526,7 +564,7 @@ xaccCreateTable (Table *table, Widget parent, char * name)
       haveQuarks = True;
    }
 
-   /* The 0'th row of the handlers is defeined as the header */
+   /* The 0'th row of the handlers is defined as the header */
    alignments = NULL;
    widths = NULL;
    curs = table->handlers[0][0];
@@ -581,9 +619,12 @@ void
 xaccCreateCursor (Table *table, CellBlock *curs) 
 {
    int i,j;
-   Widget reg = table->table_widget;
+   Widget reg;
+   if (!curs || !table) return;
 
-   if (!curs) return;
+   /* if Xbae itself is not yet created, then we can't go here either */
+   reg = table->table_widget;
+   if (!reg) return;
 
    for (i=0; i<curs->numRows; i++) {
       for (j=0; j<curs->numCols; j++) {
@@ -823,6 +864,7 @@ table->entries[i][5]);
 static void        
 doRefreshCursorGUI (Table * table, CellBlock *curs, int from_row, int from_col)
 {
+   int phys_row, phys_col;
    int to_row, to_col;
    int i,j;
 
@@ -831,6 +873,10 @@ doRefreshCursorGUI (Table * table, CellBlock *curs, int from_row, int from_col)
    if ((0 > from_row) || (0 > from_col)) return;
 
    /* compute the physical bounds of the current cursor */
+   phys_row = from_row;
+   phys_col = from_col;
+   from_row -= table->locators[phys_row][phys_col]->phys_row_offset;
+   from_col -= table->locators[phys_row][phys_col]->phys_col_offset;
    to_row = from_row + curs->numRows;
    to_col = from_col + curs->numCols;
 

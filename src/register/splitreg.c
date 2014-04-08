@@ -30,6 +30,7 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
 \********************************************************************/
 
+#include <stdio.h>
 #include <stdlib.h>
 
 #include "messages.h"
@@ -41,118 +42,159 @@
 /* utility defines for cell configuration data */
 #define DATE_CELL      0
 #define NUM_CELL       1
-#define TXFRM_CELL     2
-#define DESC_CELL      3
-#define RECN_CELL      4    /* transaction recn */
-#define TCRED_CELL     5
-#define TDEBT_CELL     6 
-#define TPRIC_CELL     7
-#define TVALU_CELL     8
-#define SHRS_CELL      9
-#define BALN_CELL      10
+#define DESC_CELL      2
+#define RECN_CELL      3   
+#define SHRS_CELL      4
+#define BALN_CELL      5
 
-#define ACTN_CELL      11
-#define XFRM_CELL      12
-#define XTO_CELL       13
-#define MEMO_CELL      14
-#define RECS_CELL      15    /* split recn */
-#define CRED_CELL      16
-#define DEBT_CELL      17
-#define PRIC_CELL      18
-#define VALU_CELL      19
+#define ACTN_CELL      6
+#define XFRM_CELL      7
+#define XTO_CELL       8
+#define MEMO_CELL      9
+#define CRED_CELL      10
+#define DEBT_CELL      11
+#define PRIC_CELL      12
+#define VALU_CELL      13
+
+/* NCRED & NDEBT handle minus the usual quantities */
+#define NCRED_CELL     14
+#define NDEBT_CELL     15
 
 
-/* utility defines for setting of cell values */
-#define DATE_CELL_C   (reg->cols[DATE_CELL])
-#define DATE_CELL_R   (reg->rows[DATE_CELL])
-#define DATE_CELL_W   (reg->wids[DATE_CELL])
-
-#define NUM_CELL_C   (reg->cols[NUM_CELL])
-#define NUM_CELL_R   (reg->rows[NUM_CELL])
-#define NUM_CELL_W   (reg->wids[NUM_CELL])
-
-#define TXFRM_CELL_C   (reg->cols[TXFRM_CELL])
-#define TXFRM_CELL_R   (reg->rows[TXFRM_CELL])
-#define TXFRM_CELL_W   (reg->wids[TXFRM_CELL])
-
-#define DESC_CELL_C   (reg->cols[DESC_CELL])
-#define DESC_CELL_R   (reg->rows[DESC_CELL])
-#define DESC_CELL_W   (reg->wids[DESC_CELL])
-
-#define RECN_CELL_C   (reg->cols[RECN_CELL])
-#define RECN_CELL_R   (reg->rows[RECN_CELL])
-#define RECN_CELL_W   (reg->wids[RECN_CELL])
-
-#define TCRED_CELL_C   (reg->cols[TCRED_CELL])
-#define TCRED_CELL_R   (reg->rows[TCRED_CELL])
-#define TCRED_CELL_W   (reg->wids[TCRED_CELL])
-
-#define TDEBT_CELL_C   (reg->cols[TDEBT_CELL])
-#define TDEBT_CELL_R   (reg->rows[TDEBT_CELL])
-#define TDEBT_CELL_W   (reg->wids[TDEBT_CELL])
-
-#define TPRIC_CELL_C   (reg->cols[TPRIC_CELL])
-#define TPRIC_CELL_R   (reg->rows[TPRIC_CELL])
-#define TPRIC_CELL_W   (reg->wids[TPRIC_CELL])
-
-#define TVALU_CELL_C   (reg->cols[TVALU_CELL])
-#define TVALU_CELL_R   (reg->rows[TVALU_CELL])
-#define TVALU_CELL_W   (reg->wids[TVALU_CELL])
-
-#define SHRS_CELL_C   (reg->cols[SHRS_CELL])
-#define SHRS_CELL_R   (reg->rows[SHRS_CELL])
-#define SHRS_CELL_W   (reg->wids[SHRS_CELL])
-
-#define BALN_CELL_C   (reg->cols[BALN_CELL])
-#define BALN_CELL_R   (reg->rows[BALN_CELL])
-#define BALN_CELL_W   (reg->wids[BALN_CELL])
-
-/* -- */
-
-#define ACTN_CELL_C   (reg->cols[ACTN_CELL])
-#define ACTN_CELL_R   (reg->rows[ACTN_CELL])
-#define ACTN_CELL_W   (reg->wids[ACTN_CELL])
-
-#define XFRM_CELL_C   (reg->cols[XFRM_CELL])
-#define XFRM_CELL_R   (reg->rows[XFRM_CELL])
-#define XFRM_CELL_W   (reg->wids[XFRM_CELL])
-
-#define XTO_CELL_C   (reg->cols[XTO_CELL])
-#define XTO_CELL_R   (reg->rows[XTO_CELL])
-#define XTO_CELL_W   (reg->wids[XTO_CELL])
-
-#define MEMO_CELL_C   (reg->cols[MEMO_CELL])
-#define MEMO_CELL_R   (reg->rows[MEMO_CELL])
-#define MEMO_CELL_W   (reg->wids[MEMO_CELL])
-
-#define RECS_CELL_C   (reg->cols[RECS_CELL])
-#define RECS_CELL_R   (reg->rows[RECS_CELL])
-#define RECS_CELL_W   (reg->wids[RECS_CELL])
-
-#define CRED_CELL_C   (reg->cols[CRED_CELL])
-#define CRED_CELL_R   (reg->rows[CRED_CELL])
-#define CRED_CELL_W   (reg->wids[CRED_CELL])
-
-#define DEBT_CELL_C   (reg->cols[DEBT_CELL])
-#define DEBT_CELL_R   (reg->rows[DEBT_CELL])
-#define DEBT_CELL_W   (reg->wids[DEBT_CELL])
-
-#define PRIC_CELL_C   (reg->cols[PRIC_CELL])
-#define PRIC_CELL_R   (reg->rows[PRIC_CELL])
-#define PRIC_CELL_W   (reg->wids[PRIC_CELL])
-
-#define VALU_CELL_C   (reg->cols[VALU_CELL])
-#define VALU_CELL_R   (reg->rows[VALU_CELL])
-#define VALU_CELL_W   (reg->wids[VALU_CELL])
+#define DATE_CELL_WIDTH    11
+#define NUM_CELL_WIDTH      7
+#define ACTN_CELL_WIDTH     7
+#define XFRM_CELL_WIDTH    14
+#define XTO_CELL_WIDTH     14
+#define DESC_CELL_WIDTH    29
+#define MEMO_CELL_WIDTH    29
+#define RECN_CELL_WIDTH     1
+#define DEBT_CELL_WIDTH    12
+#define CRED_CELL_WIDTH    12
+#define NDEBT_CELL_WIDTH   12
+#define NCRED_CELL_WIDTH   12
+#define PRIC_CELL_WIDTH     9
+#define VALU_CELL_WIDTH    10
+#define SHRS_CELL_WIDTH    10
+#define BALN_CELL_WIDTH    12
 
 
 /* ============================================== */
 
-#define SET(cell,col,row,width,label) {		\
-   reg->cols[cell] = col;			\
-   reg->rows[cell] = row;			\
-   reg->wids[cell] = width;			\
-   reg->labels[cell] = label;			\
+#define LABEL(NAME,label)					\
+{								\
+   BasicCell *hcell;						\
+   hcell = reg->header_label_cells[NAME##_CELL];		\
+   xaccSetBasicCellValue (hcell, label);			\
+}
+   
+/* ============================================== */
+/* configLabels merely puts strings into the label cells 
+ * it does *not* copy them to the header cursor */
+
+static void
+configLabels (SplitRegister *reg)
+{
+   BasicCell *hc;
+   int type = (reg->type) & REG_TYPE_MASK;
+
+   LABEL (DATE,  DATE_STR);
+   LABEL (NUM,   NUM_STR);
+   LABEL (ACTN,  NUM_STR);
+   LABEL (XFRM,  XFRM_STR);
+   LABEL (XTO,   XFTO_STR);
+   LABEL (DESC,  DESC_STR);
+   LABEL (MEMO,  DESC_STR);
+   LABEL (RECN,  "R");
+   LABEL (DEBT,  DEBIT_STR);
+   LABEL (CRED,  CREDIT_STR);
+
+   LABEL (PRIC,  PRICE_STR);
+   LABEL (VALU,  VALUE_STR);
+   LABEL (SHRS,  TOT_SHRS_STR);
+   LABEL (BALN,  BALN_STR);
+
+
+   /* setup custom labels for the debit/credit columns */
+   switch (type) {
+      case BANK_REGISTER:
+         LABEL (DEBT,  PAYMENT_STR);
+         LABEL (CRED,  DEPOSIT_STR);
+         break;
+      case CASH_REGISTER:
+         LABEL (DEBT,  SPEND_STR);
+         LABEL (CRED,  RECEIVE_STR);
+         break;
+      case ASSET_REGISTER:
+         LABEL (DEBT,  DEPR_STR);
+         LABEL (CRED,  APPR_STR);
+         break;
+      case CREDIT_REGISTER:
+         LABEL (DEBT,  CHARGE_STR);
+         LABEL (CRED,  PAYMENT_STR);
+         break;
+      case LIABILITY_REGISTER:
+         LABEL (DEBT,  INCREASE_STR);
+         LABEL (CRED,  DECREASE_STR);
+         break;
+      case INCOME_LEDGER:  
+      case INCOME_REGISTER:
+         LABEL (DEBT,  INCOME_STR);
+         LABEL (CRED,  CHARGE_STR);
+         break;
+      case EXPENSE_REGISTER:
+         LABEL (DEBT,  REBATE_STR);
+         LABEL (CRED,  EXPENSE_STR);
+         break;
+      case GENERAL_LEDGER:  
+      case EQUITY_REGISTER:
+         LABEL (DEBT,  SURPLUS_STR);
+         LABEL (CRED,  DEFICIT_STR);
+         break;
+      case STOCK_REGISTER:
+      case PORTFOLIO:
+         LABEL (DEBT,  SOLD_STR);
+         LABEL (CRED,  BOUGHT_STR);
+         break;
+      default:
+         break;
+   }
+
+   /* copy debit, dredit strings to ndebit, ncredit cells */
+   hc = reg->header_label_cells[DEBT_CELL];
+   LABEL (NDEBT,  hc->value);
+   hc = reg->header_label_cells[CRED_CELL];
+   LABEL (NCRED,  hc->value);
+}
+
+/* ============================================== */
+
+#define SET(NAME,col,row,handler)				\
+{								\
+   BasicCell *hcell;						\
+   hcell = reg->header_label_cells[NAME##_CELL];		\
+								\
+   if ((0<=row) && (0<=col)) {					\
+      curs->cells [row][col] = (handler);			\
+      header->widths[col] = NAME##_CELL_WIDTH;			\
+      if (hcell) {						\
+         if (1 == reg->num_header_rows) {			\
+            header->cells[0][col] = hcell;			\
+         } else {						\
+            header->cells[row][col] = hcell;			\
+         }							\
+      }								\
+   }								\
+}
+   
+/* BASIC & FANCY macros initialize cells in the register */
+
+#define BASIC(NAME,CN,col,row) {			\
+   SET (NAME, col, row, reg->CN##Cell);			\
+}
+
+#define FANCY(NAME,CN,col,row) {			\
+   SET (NAME, col, row, &(reg->CN##Cell->cell));	\
 }
 
 /* ============================================== */
@@ -160,47 +202,22 @@
 static void
 configLayout (SplitRegister *reg)
 {
+   CellBlock *curs, *header;
    int type = (reg->type) & REG_TYPE_MASK;
-   int show_recs = (reg->type) & REG_SHOW_RECS;
-   int show_tamount = (reg->type) & REG_SHOW_TAMOUNT;
-   int show_samount = (reg->type) & REG_SHOW_SAMOUNT;
-   int show_txfrm = (reg->type) & REG_SHOW_TXFRM;
+   // int style = (reg->type) & REG_STYLE_MASK;
+   int i;
 
-   /* perform a bsic layout that's valid for most
-    * of the ledgers; then customize with case 
-    * statements. */
-   reg->num_cols = 8;
-   reg->num_header_rows = 1;
-   SET (DATE_CELL,   0,  0, 11,  DATE_STR);
-   SET (NUM_CELL,    1,  0,  7,  NUM_STR);
-   SET (TXFRM_CELL, -1, -1, 14,  XFRM_STR);
-   SET (DESC_CELL,   3,  0, 29,  DESC_STR);
-   SET (RECN_CELL,   4,  0,  1,  "R");
-   SET (TDEBT_CELL, -1, -1, 12,  DEBIT_STR);
-   SET (TCRED_CELL, -1, -1, 12,  CREDIT_STR);
-   SET (TPRIC_CELL, -1, -1,  9,  PRICE_STR);
-   SET (TVALU_CELL, -1, -1, 10,  VALUE_STR);
-   SET (SHRS_CELL,  -1, -1, 10,  TOT_SHRS_STR);
-   SET (BALN_CELL,   7,  0, 12,  BALN_STR);
+   /* define header for macros */
+   header = reg->header;
 
-   SET (ACTN_CELL,  1,  0,  7,  NUM_STR);
-   SET (XFRM_CELL,  2,  0, 14,  XFRM_STR);
-   SET (XTO_CELL,   2,  0, 14,  XFTO_STR);
-   SET (MEMO_CELL,  3,  0, 29,  DESC_STR);
-   SET (RECS_CELL, -1, -1,  1,  "R");     
-   SET (DEBT_CELL, -1, -1, 12,  DEBIT_STR);
-   SET (CRED_CELL, -1, -1, 12,  CREDIT_STR);
-   SET (PRIC_CELL, -1, -1,  9,  PRICE_STR);
-   SET (VALU_CELL, -1, -1, 10,  VALUE_STR);
-
-   /* hide or show the split-reconcile cell */
-   if (show_recs) {
-      SET (RECS_CELL,  4,  0,  1,  "R");    
-   }
-
-   /* show or hide the transaction transfer-from field */
-   if (show_txfrm) {
-      SET (TXFRM_CELL,  2,  0, 14,  XFRM_STR);
+   /* fill things up with null cells */
+   for (i=0; i<reg->num_cols; i++) {
+      header->cells[0][i] = reg->nullCell;
+      reg->split_cursor->cells[0][i] = reg->nullCell;
+      reg->trans_cursor->cells[0][i] = reg->nullCell;
+      reg->single_cursor->cells[0][i] = reg->nullCell;
+      reg->double_cursor->cells[0][i] = reg->nullCell;
+      reg->double_cursor->cells[1][i] = reg->nullCell;
    }
 
    switch (type) {
@@ -213,94 +230,112 @@ configLayout (SplitRegister *reg)
       case EXPENSE_REGISTER:
       case EQUITY_REGISTER:
 
-      case INCOME_LEDGER:    /* hack alert do xto cell too */
+      case INCOME_LEDGER:     /* hack alert do xto cell too */
       case GENERAL_LEDGER:    /* hack alert do xto cell too */
-         reg->num_cols = 8;
-         reg->num_header_rows = 1;
-         SET (XTO_CELL,  -1, -1, 14,  XFTO_STR);
-         SET (PRIC_CELL, -1, -1,  9,  PRICE_STR);
-         SET (VALU_CELL, -1, -1, 10,  VALUE_STR);
-         SET (SHRS_CELL, -1, -1, 10,  TOT_SHRS_STR);
+      {
 
-         if (show_samount) {
-            SET (DEBT_CELL,  5,  0, 12,  DEBIT_STR);
-            SET (CRED_CELL,  6,  0, 12,  CREDIT_STR);
-         }
-         if (show_tamount) {
-            SET (TDEBT_CELL,  5,  0, 12,  DEBIT_STR);
-            SET (TCRED_CELL,  6,  0, 12,  CREDIT_STR);
-         }
+         /* basic common 8 column config */
+         curs = reg->single_cursor;
+         FANCY (DATE,   date,     0,  0);
+         BASIC (NUM,    num,      1,  0);
+         FANCY (XFRM,   xfrm,     2,  0);
+         FANCY (DESC,   desc,     3,  0);
+         BASIC (RECN,   recn,     4,  0);
+         FANCY (DEBT,   debit,    5,  0);
+         FANCY (CRED,   credit,   6,  0);
+         FANCY (BALN,   balance,  7,  0);
+
+         curs = reg->double_cursor;
+         FANCY (DATE,   date,     0,  0);
+         BASIC (NUM,    num,      1,  0);
+         FANCY (DESC,   desc,     3,  0);
+         BASIC (RECN,   recn,     4,  0);
+         FANCY (DEBT,   debit,    5,  0);
+         FANCY (CRED,   credit,   6,  0);
+         FANCY (BALN,   balance,  7,  0);
+  
+         FANCY (ACTN,   action,   1,  1);
+         FANCY (XFRM,   xfrm,     2,  1);
+         BASIC (MEMO,   memo,     3,  1);
+
+         curs = reg->trans_cursor;
+         FANCY (DATE,   date,     0,  0);
+         BASIC (NUM,    num,      1,  0);
+         FANCY (DESC,   desc,     3,  0);
+         BASIC (RECN,   recn,     4,  0);
+         FANCY (BALN,   balance,  7,  0);
+     
+         curs = reg->split_cursor;
+         FANCY (ACTN,   action,   1,  0);
+         FANCY (XFRM,   xfrm,     2,  0);
+         BASIC (MEMO,   memo,     3,  0);
+         FANCY (NDEBT,  ndebit,   5,  0);
+         FANCY (NCRED,  ncredit,  6,  0);
          break;
+      }
 
+      /* --------------------------------------------------------- */
       case STOCK_REGISTER:
       case PORTFOLIO:
-         reg->num_cols = 11;
-         SET (XTO_CELL,  -1, -1, 14,  XFTO_STR);
-         if (show_samount) {
-            SET (DEBT_CELL,  5,  0, 12,  DEBIT_STR);
-            SET (CRED_CELL,  6,  0, 12,  CREDIT_STR);
-            SET (PRIC_CELL,  7,  0,  9,  PRICE_STR);
-            SET (VALU_CELL,  8,  0, 10,  VALUE_STR);
-         }
-         if (show_tamount) {
-            SET (TDEBT_CELL,  5,  0, 12,  DEBIT_STR);
-            SET (TCRED_CELL,  6,  0, 12,  CREDIT_STR);
-            SET (TPRIC_CELL,  7,  0,  9,  PRICE_STR);
-            SET (TVALU_CELL,  8,  0, 10,  VALUE_STR);
-         }
-         SET (SHRS_CELL,  9,  0, 10,  TOT_SHRS_STR);
-         SET (BALN_CELL, 10,  0, 12,  BALN_STR);
-         break;
+      {
+         /* 11 column config */
+         curs = reg->single_cursor;
+         FANCY (DATE,   date,     0,  0);
+         BASIC (NUM,    num,      1,  0);
+         FANCY (XFRM,   xfrm,     2,  0);
+         FANCY (DESC,   desc,     3,  0);
+         BASIC (RECN,   recn,     4,  0);
+         FANCY (DEBT,   debit,    5,  0);
+         FANCY (CRED,   credit,   6,  0);
+         FANCY (PRIC,   price,    7,  0);
+         FANCY (VALU,   value,    8,  0);
+         FANCY (SHRS,   shrs,     9,  0);
+         FANCY (BALN,   balance,  10, 0);
 
+         /* prep the second row of the double style */
+         curs = reg->double_cursor;
+         FANCY (DATE,   date,     0,  0);
+         BASIC (NUM,    num,      1,  0);
+         FANCY (DESC,   desc,     3,  0);
+         BASIC (RECN,   recn,     4,  0);
+         FANCY (DEBT,   debit,    5,  0);
+         FANCY (CRED,   credit,   6,  0);
+         FANCY (PRIC,   price,    7,  0);
+         FANCY (VALU,   value,    8,  0);
+         FANCY (SHRS,   shrs,     9,  0);
+         FANCY (BALN,   balance,  10, 0);
+
+         FANCY (ACTN,   action,   1,  1);
+         FANCY (XFRM,   xfrm,     2,  1);
+         BASIC (MEMO,   memo,     3,  1);
+
+         /* only the transaction cursor gets used */
+         curs = reg->trans_cursor;
+         FANCY (DATE,   date,     0,  0);
+         BASIC (NUM,    num,      1,  0);
+         FANCY (DESC,   desc,     3,  0);
+         BASIC (RECN,   recn,     4,  0);
+         FANCY (DEBT,   debit,    5,  0);
+         FANCY (CRED,   credit,   6,  0);
+         FANCY (PRIC,   price,    7,  0);
+         FANCY (VALU,   value,    8,  0);
+         FANCY (SHRS,   shrs,     9,  0);
+         FANCY (BALN,   balance,  10, 0);
+    
+         curs = reg->split_cursor;
+         FANCY (ACTN,   action,   1,  0);
+         FANCY (XFRM,   xfrm,     2,  0);
+         BASIC (MEMO,   memo,     3,  0);
+         FANCY (NDEBT,  ndebit,   5,  0);
+         FANCY (NCRED,  ncredit,  6,  0);
+         break;
+      }
+      /* --------------------------------------------------------- */
       default:
+         printf ("Internal Error: configLayout(): "
+           "unknown register type %d \n", type);
          break;
    }
-
-   /* setup custom labels for the debit/credit columns */
-   switch (type) {
-      case BANK_REGISTER:
-         reg->labels [DEBT_CELL] = PAYMENT_STR;
-         reg->labels [CRED_CELL] = DEPOSIT_STR;
-         break;
-      case CASH_REGISTER:
-         reg->labels [DEBT_CELL] = SPEND_STR;
-         reg->labels [CRED_CELL] = RECEIVE_STR;
-         break;
-      case ASSET_REGISTER:
-         reg->labels [DEBT_CELL] = DEPR_STR;
-         reg->labels [CRED_CELL] = APPR_STR;
-         break;
-      case CREDIT_REGISTER:
-         reg->labels [DEBT_CELL] = CHARGE_STR;
-         reg->labels [CRED_CELL] = PAYMENT_STR;
-         break;
-      case LIABILITY_REGISTER:
-         reg->labels [DEBT_CELL] = INCREASE_STR;
-         reg->labels [CRED_CELL] = DECREASE_STR;
-         break;
-      case INCOME_LEDGER:  
-      case INCOME_REGISTER:
-         reg->labels [DEBT_CELL] = INCOME_STR;
-         reg->labels [CRED_CELL] = CHARGE_STR;
-         break;
-      case EXPENSE_REGISTER:
-         reg->labels [DEBT_CELL] = REBATE_STR;
-         reg->labels [CRED_CELL] = EXPENSE_STR;
-         break;
-      case GENERAL_LEDGER:  
-      case EQUITY_REGISTER:
-         reg->labels [DEBT_CELL] = SURPLUS_STR;
-         reg->labels [CRED_CELL] = DEFICIT_STR;
-         break;
-      case STOCK_REGISTER:
-      case PORTFOLIO:
-         reg->labels [DEBT_CELL] = SOLD_STR;
-         reg->labels [CRED_CELL] = BOUGHT_STR;
-         break;
-      default:
-         break;
-   }
-
 }
 
 /* ============================================== */
@@ -322,8 +357,25 @@ configLayout (SplitRegister *reg)
 static void
 configTraverse (SplitRegister *reg)
 {
+   int i,j;
    int prev_r, prev_c;
    CellBlock *curs = NULL;
+
+   curs = reg->single_cursor;
+   FIRST_RIGHT (0, 0);  /* a bit of a hack ... */
+   for (i=0; i<curs->numRows; i++) {
+      for (j=0; j<curs->numCols; j++) {
+         if ((reg->nullCell != curs->cells[i][j]) &&
+             (reg->recnCell != curs->cells[i][j]) &&
+             (XACC_CELL_ALLOW_INPUT & curs->cells[i][j]->input_output)) 
+         {
+            NEXT_RIGHT  (i, j);
+         }
+      }
+   }
+
+
+#ifdef FUTURE 
    int type = (reg->type) & REG_TYPE_MASK;
    int show_tamount = (reg->type) & REG_SHOW_TAMOUNT;
    int show_samount = (reg->type) & REG_SHOW_SAMOUNT;
@@ -333,15 +385,6 @@ configTraverse (SplitRegister *reg)
 
    switch (type) {
       case BANK_REGISTER:
-      case CASH_REGISTER:
-      case ASSET_REGISTER:
-      case CREDIT_REGISTER:
-      case LIABILITY_REGISTER:
-      case INCOME_REGISTER:
-      case EXPENSE_REGISTER:
-      case EQUITY_REGISTER:
-      case INCOME_LEDGER:    /* hack alert do xto cell too */
-      case GENERAL_LEDGER:    /* hack alert do xto cell too */
          curs = reg->trans_cursor;
          FIRST_RIGHT (DATE_CELL_R, DATE_CELL_C);
          NEXT_RIGHT  (NUM_CELL_R,  NUM_CELL_C);
@@ -380,55 +423,8 @@ configTraverse (SplitRegister *reg)
             NEXT_RIGHT (-1-ACTN_CELL_R, -1-ACTN_CELL_C);
          }
          break;
-
-      case STOCK_REGISTER:
-      case PORTFOLIO:
-         curs = reg->trans_cursor;
-         FIRST_RIGHT (DATE_CELL_R, DATE_CELL_C);
-         NEXT_RIGHT (NUM_CELL_R,  NUM_CELL_C);
-         if (show_txfrm) {
-            NEXT_RIGHT (TXFRM_CELL_R, TXFRM_CELL_C);
-         }
-         NEXT_RIGHT (DESC_CELL_R, DESC_CELL_C);
-         if (show_tamount) {
-            NEXT_RIGHT (TDEBT_CELL_R, TDEBT_CELL_C);
-            NEXT_RIGHT (TCRED_CELL_R, TCRED_CELL_C);
-            NEXT_RIGHT (TPRIC_CELL_R, TPRIC_CELL_C);
-            NEXT_RIGHT (TVALU_CELL_R, TVALU_CELL_C);
-         }
-         /* if a multi-line display, hop down one line to the split cursor */
-         if (!double_line && !multi_line) {
-            NEXT_RIGHT (-1-DATE_CELL_R, -1-DATE_CELL_C);
-         } else {
-            NEXT_RIGHT (ACTN_CELL_R + curs->numRows, ACTN_CELL_C);
-         }
-
-         curs = reg->split_cursor;
-         FIRST_RIGHT (ACTN_CELL_R, ACTN_CELL_C);
-         NEXT_RIGHT (XFRM_CELL_R, XFRM_CELL_C);
-         NEXT_RIGHT (MEMO_CELL_R, MEMO_CELL_C);
-         if (show_samount) {
-            NEXT_RIGHT (DEBT_CELL_R, DEBT_CELL_C);
-            NEXT_RIGHT (CRED_CELL_R, CRED_CELL_C);
-            NEXT_RIGHT (PRIC_CELL_R, PRIC_CELL_C);
-            NEXT_RIGHT (VALU_CELL_R, VALU_CELL_C);
-         }
-         if (multi_line) {
-            NEXT_RIGHT (ACTN_CELL_R + curs->numRows, ACTN_CELL_C);
-         } else
-         if (double_line) {
-            /* if double-line, hop back one row */
-            NEXT_RIGHT (-1-DATE_CELL_R + curs->numRows, -1-DATE_CELL_C);
-         } else {
-            NEXT_RIGHT (-1-ACTN_CELL_R, -1-ACTN_CELL_C);
-         }
-         break;
-
-      default:
-         FIRST_RIGHT (DATE_CELL_R, DATE_CELL_C);
-         NEXT_RIGHT  (-1-DATE_CELL_R, -1-DATE_CELL_C);
-
    }
+#endif
 }
 
 /* ============================================== */
@@ -443,124 +439,81 @@ SplitRegister * xaccMallocSplitRegister (int type)
 
 /* ============================================== */
 
-/* HDR is a utility to set up the header row */
+static void
+configCursors (SplitRegister *reg)
+{
+   /* --------------------------- */
+   /* set the color of the cells in the cursors */
+   /* hack alert -- the actual color should depend on the 
+    * type of register. */
+   reg->single_cursor->active_bg_color = 0xffdddd; /* pale red */
+   reg->single_cursor->passive_bg_color = 0xccccff; /* pale blue */
+
+   reg->double_cursor->active_bg_color = 0xffdddd; /* pale red */
+   reg->double_cursor->passive_bg_color = 0xccccff; /* pale blue */
+
+   reg->trans_cursor->active_bg_color = 0xffdddd; /* pale red */
+   reg->trans_cursor->passive_bg_color = 0xccccff; /* pale blue */
+
+   reg->split_cursor->active_bg_color = 0xffffdd; /* pale yellow */
+   reg->split_cursor->passive_bg_color = 0xffffff; /* white */
+
+}
+
+/* ============================================== */
+
+static void
+mallocCursors (SplitRegister *reg)
+{
+   int type = (reg->type) & REG_TYPE_MASK;
+
+   switch (type) {
+      case BANK_REGISTER:
+      case CASH_REGISTER:
+      case ASSET_REGISTER:
+      case CREDIT_REGISTER:
+      case LIABILITY_REGISTER:
+      case INCOME_REGISTER:
+      case EXPENSE_REGISTER:
+      case EQUITY_REGISTER:
+
+      case INCOME_LEDGER:     /* hack alert do xto cell too */
+      case GENERAL_LEDGER:    /* hack alert do xto cell too */
+         reg->num_cols = 8;
+         break;
+
+      case STOCK_REGISTER:
+      case PORTFOLIO:
+         reg->num_cols = 11;
+         break;
+      default:
+         break;
+   }
+
+   reg->num_header_rows = 1;
+   reg->header = xaccMallocCellBlock (reg->num_header_rows, reg->num_cols);
+
+   /* cursors used in the single & double line displays */
+   reg->single_cursor = xaccMallocCellBlock (1, reg->num_cols);
+   reg->double_cursor = xaccMallocCellBlock (2, reg->num_cols);
+
+   /* the two cursors used for multi-line and dynamic displays */
+   reg->trans_cursor = xaccMallocCellBlock (1, reg->num_cols);
+   reg->split_cursor = xaccMallocCellBlock (1, reg->num_cols);
+
+}
+
+/* ============================================== */
+
 #define HDR(NAME)						\
 {								\
    BasicCell *hcell;						\
    hcell = xaccMallocTextCell();				\
-   xaccSetBasicCellValue (hcell, reg->labels[NAME##_CELL]);	\
-								\
-   if ((0<=NAME##_CELL_R) && (0<=NAME##_CELL_C)) {		\
-      header->widths[NAME##_CELL_C] = NAME##_CELL_W;		\
-      if (1 == reg->num_header_rows) {				\
-         header->cells[0][NAME##_CELL_C] = hcell;		\
-      } else {							\
-         header->cells[NAME##_CELL_R][NAME##_CELL_C] = hcell;	\
-      }								\
-   }								\
-}
-   
-/* BASIC & FANCY macros initialize cells in the register */
-/* CN == Cell Name
- * CT == Cell Type
- * CL == Cell location
- */
-
-
-#define FANCY(CN,CT,CL) {					\
-   if ((0<=CL##_CELL_R) && (0<=CL##_CELL_C)) {			\
-      curs->widths[CL##_CELL_C] = CL##_CELL_W;			\
-      curs->cells [CL##_CELL_R][CL##_CELL_C] = &(reg->CN##Cell->cell);\
-   }								\
+   reg->header_label_cells[NAME##_CELL] = hcell;		\
 }
 
-#define BASIC(CN,CT,CL) {					\
-   if ((0<=CL##_CELL_R) && (0<=CL##_CELL_C)) {			\
-      curs->widths[CL##_CELL_C] = CL##_CELL_W;			\
-      curs->cells [CL##_CELL_R][CL##_CELL_C] = reg->CN##Cell;	\
-   }								\
-}
-   
-/* ============================================== */
-
-static void
-configCursors (SplitRegister *reg)
-{
-   CellBlock *curs;
-   int i;
-
-   /* --------------------------- */
-   /* define the ledger cursor that handles transactions */
-   /* the cursor is 1 row tall */
-   curs = reg->trans_cursor;
-   
-  /* 
-   * The Null Cell is used to make sure that "empty"
-   * cells stay empty.  This solves the problem of 
-   * having the table be reformatted, the result of
-   * which is that an empty cell has landed on a cell
-   * that was previously non-empty.  We want to make 
-   * sure that we erase those cell contents. The null
-   * cells handles this for us.
-   */
-
-   reg -> nullTransCell -> input_output = XACC_CELL_ALLOW_NONE;
-   xaccSetBasicCellValue (reg->nullTransCell, "");
-   for (i=0; i<reg->num_cols; i++) {
-      curs->cells[0][i] = reg->nullTransCell;
-   }
-
-   FANCY (date,    Date,      DATE);
-   BASIC (num,     Text,      NUM);
-   FANCY (xfrmTrans,   Combo,     TXFRM);
-   FANCY (desc,    QuickFill, DESC);
-   BASIC (recn,    Recn,      RECN);
-   FANCY (creditTrans,  Price,     TCRED);
-   FANCY (debitTrans,   Price,     TDEBT);
-   FANCY (priceTrans,   Price,     TPRIC);
-   FANCY (valueTrans,   Price,     TVALU);
-   FANCY (shrs,    Price,     SHRS);
-   FANCY (balance, Price,     BALN);
-
-   /* set the color of the cells in the transaction cursor */
-   /* hack alert -- the actual color should depend on the 
-    * type of register. */
-   curs->active_bg_color = 0xffdddd; /* pale red */
-   curs->passive_bg_color = 0xccccff; /* pale blue */
-
-   /* --------------------------- */
-   /* define the ledger cursor that handles splits */
-   /* the cursor is 1 row tall */
-   curs = reg->split_cursor;
-   
-  /* 
-   * The Null Cell is used to make sure that "empty"
-   * cells stay empty.  See above.
-   */
-
-   reg -> nullSplitCell -> input_output = XACC_CELL_ALLOW_NONE;
-   xaccSetBasicCellValue (reg->nullSplitCell, "");
-   for (i=0; i<reg->num_cols; i++) {
-      curs->cells[0][i] = reg->nullSplitCell;
-   }
-
-   FANCY (xfrm,    Combo,     XFRM);
-   FANCY (xto,     Combo,     XTO);
-   FANCY (action,  Combo,     ACTN);
-   BASIC (memo,    Text,      MEMO);
-   BASIC (recs,    Recn,      RECS);
-   FANCY (credit,  Price,     CRED);
-   FANCY (debit,   Price,     DEBT);
-   FANCY (price,   Price,     PRIC);
-   FANCY (value,   Price,     VALU);
-
-   /* set the color of the cells in the split cursor */
-   curs->active_bg_color = 0xffffdd; /* pale yellow */
-   curs->passive_bg_color = 0xffffff; /* white */
-
-}
-
-/* ============================================== */
+#define NEW(CN,TYPE)						\
+   reg->CN##Cell = xaccMalloc##TYPE##Cell();			\
 
 void 
 xaccInitSplitRegister (SplitRegister *reg, int type)
@@ -570,22 +523,25 @@ xaccInitSplitRegister (SplitRegister *reg, int type)
    int phys_r, phys_c;
 
    reg->user_hook = NULL;
+   reg->user_hack = NULL;
    reg->destroy = NULL;
    reg->type = type;
 
    /* --------------------------- */
-   /* define the rows & columns where cells appear */
-   configLayout (reg);
+   /* define the number of columns in the display, malloc the cursors */
+   mallocCursors (reg);
 
    /* --------------------------- */
-   /* define the header */
-   header = xaccMallocCellBlock (reg->num_header_rows, reg->num_cols);
-   reg->header = header;
+   /* malloc the header (label) cells */
+   header = reg->header;
 
    HDR (DATE);
    HDR (NUM);
+   HDR (ACTN);
    HDR (XFRM);
+   HDR (XTO);
    HDR (DESC);
+   HDR (MEMO);
    HDR (RECN);
    HDR (CRED);
    HDR (DEBT);
@@ -594,87 +550,90 @@ xaccInitSplitRegister (SplitRegister *reg, int type)
    HDR (SHRS);
    HDR (BALN);
    
-   HDR (TCRED);
-   HDR (TDEBT);
-   HDR (TPRIC);
-   HDR (TVALU);
+   HDR (NCRED);
+   HDR (NDEBT);
 
    /* --------------------------- */
+   /* malloc the workhorse cells */
 
-   /* cells that handle transaction stuff */
-   reg->nullTransCell = xaccMallocBasicCell();
-   reg->dateCell    = xaccMallocDateCell();
-   reg->numCell     = xaccMallocTextCell();
-   reg->xfrmTransCell    = xaccMallocComboCell();
-   reg->descCell    = xaccMallocQuickFillCell();
-   reg->recnCell    = xaccMallocRecnCell();
-   reg->creditTransCell = xaccMallocPriceCell();  
-   reg->debitTransCell  = xaccMallocPriceCell();  
-   reg->priceTransCell  = xaccMallocPriceCell(); 
-   reg->valueTransCell  = xaccMallocPriceCell();
-   reg->shrsCell    = xaccMallocPriceCell();
-   reg->balanceCell = xaccMallocPriceCell();
+   NEW (null,    Basic);
+   NEW (date,    Date);
+   NEW (num,     Text);
+   NEW (desc,    QuickFill);
+   NEW (recn,    Recn);
+   NEW (shrs,    Price);
+   NEW (balance, Price);
 
-   /* cells that handle split stuff */
-   reg->nullSplitCell = xaccMallocBasicCell();
-   reg->xfrmCell    = xaccMallocComboCell();
-   reg->xtoCell     = xaccMallocComboCell();
-   reg->actionCell  = xaccMallocComboCell();
-   reg->memoCell    = xaccMallocTextCell();  
-   reg->recsCell    = xaccMallocRecnCell(); 
-   reg->creditCell  = xaccMallocPriceCell();
-   reg->debitCell   = xaccMallocPriceCell();
-   reg->priceCell   = xaccMallocPriceCell();
-   reg->valueCell   = xaccMallocPriceCell();
-   
-   /* the two cursors */
-   reg->trans_cursor = xaccMallocCellBlock (1, reg->num_cols);
-   reg->split_cursor = xaccMallocCellBlock (1, reg->num_cols);
+   NEW (xfrm,    Combo);
+   NEW (xto,     Combo);
+   NEW (action,  Combo);
+   NEW (memo,    Text);
+   NEW (credit,  Price);
+   NEW (debit,   Price);
+   NEW (price,   Price);
+   NEW (value,   Price);
 
-   configCursors (reg);
+   NEW (ncredit, Price);
+   NEW (ndebit,  Price);
+
+   /* --------------------------- */
+   /* configLabels merely puts strings into the label cells 
+    * it does *not* copy them to the header cursor */
+   configLabels (reg);
+
+   /* config the layout of the cells in the cursors */
+   configLayout (reg);
+
+   /* -------------------------------- */   
+   /* define how traversal works */
+   configTraverse (reg);
 
    /* --------------------------- */
    /* do some misc cell config */
+   configCursors (reg);
+
+   /* 
+    * The Null Cell is used to make sure that "empty"
+    * cells stay empty.  This solves the problem of 
+    * having the table be reformatted, the result of
+    * which is that an empty cell has landed on a cell
+    * that was previously non-empty.  We want to make 
+    * sure that we erase those cell contents. The null
+    * cells handles this for us.
+    */
+
+   reg -> nullCell -> input_output = XACC_CELL_ALLOW_NONE;
+   xaccSetBasicCellValue (reg->nullCell, "");
 
    /* balance cell does not accept input; its display only.  */
    /* however, we *do* want it to shadow the true cell contents when 
     * the cursor is repositioned.  Othewise, it will just display 
     * whatever previous bogus value it contained.
     */
-   reg->recsCell->input_output = XACC_CELL_ALLOW_SHADOW;
    reg->balanceCell->cell.input_output = XACC_CELL_ALLOW_SHADOW;
    reg->shrsCell->cell.input_output = XACC_CELL_ALLOW_SHADOW;
 
    /* the debit/credit/value cells show blank if value is 0.00 */
-   reg->debitTransCell->blank_zero = 1;
-   reg->creditTransCell->blank_zero = 1;
-   reg->valueTransCell->blank_zero = 1;
-
    reg->debitCell->blank_zero = 1;
    reg->creditCell->blank_zero = 1;
    reg->valueCell->blank_zero = 1;
+   reg->ndebitCell->blank_zero = 1;
+   reg->ncreditCell->blank_zero = 1;
 
    /* ok, now make sure the initail value of 0.0 is blanked.
     * if this is not done, then various oddball situations 
     * will show the non-blanked values. 
     */
-   xaccSetPriceCellValue (reg->debitTransCell, 0.0);
-   xaccSetPriceCellValue (reg->creditTransCell, 0.0);
-   xaccSetPriceCellValue (reg->valueTransCell, 0.0);
-
    xaccSetPriceCellValue (reg->debitCell, 0.0);
    xaccSetPriceCellValue (reg->creditCell, 0.0);
    xaccSetPriceCellValue (reg->valueCell, 0.0);
+   xaccSetPriceCellValue (reg->ndebitCell, 0.0);
+   xaccSetPriceCellValue (reg->ncreditCell, 0.0);
 
    /* use three decimal places to print share-related info.
     * The format is a printf-style format for a double.  */
    xaccSetPriceCellFormat (reg->shrsCell, "%.3f");
    xaccSetPriceCellFormat (reg->priceCell, "%.3f");
-   xaccSetPriceCellFormat (reg->priceTransCell, "%.3f");
-
-   /* -------------------------------- */   
-   /* define how traversal works */
-   configTraverse (reg);
 
    /* -------------------------------- */   
    /* add menu items for the action cell */
@@ -700,16 +659,32 @@ xaccInitSplitRegister (SplitRegister *reg, int type)
    xaccAddComboCellMenuItem ( reg->actionCell, WITHDRAW_STR);
 
    /* -------------------------------- */   
-   table = xaccMallocTable ();
    phys_r = header->numRows;
-   phys_r += reg->trans_cursor->numRows;
-   phys_r += reg->split_cursor->numRows;
+   reg->cursor_phys_row = phys_r;  /* cursor on first line past header */
+   reg->cursor_virt_row = 1;
+
+   phys_r += reg->single_cursor->numRows;
+   reg->num_phys_rows = phys_r;
+   reg->num_virt_rows = 2;  /* one header, one single_cursor */
+
    phys_c = header->numCols;
-   xaccSetTableSize (table, phys_r, phys_c, 3, 1);
+   reg->num_cols = phys_c;
+
+   table = xaccMallocTable ();
+   xaccSetTableSize (table, phys_r, phys_c, reg->num_virt_rows, 1);
    xaccSetCursor (table, header, 0, 0, 0, 0);
 
-   /* hack alert -- document what call does, why we call it here, etc ??? ??? */
-   xaccSetCursor (table, reg->trans_cursor, header->numRows, 0, 1, 0);
+   /* the SetCursor call below is for most practical purposes useless.
+    * It simply installs a cursor (the single-line cursor, but it could 
+    * of been any of them), and moves it to the first editable row.
+    * Whoop-de-doo, since this is promptly over-ridden when real data 
+    * gets loaded.  Its just sort of here as a fail-safe fallback,
+    * in case someone just creates a register but doesn't do anything 
+    * with it.  Don't want to freak out any programmers.
+    */
+   xaccSetCursor (table, reg->single_cursor, 
+                         reg->cursor_phys_row, 0, 
+                         reg->cursor_virt_row, 0);
    xaccMoveCursor (table, header->numRows, 0);
 
    reg->table = table;
@@ -723,9 +698,13 @@ xaccConfigSplitRegister (SplitRegister *reg, int newtype)
    if (!reg) return;
 
    reg->type = newtype;
-   configLayout (reg);
-   configTraverse (reg);
-   configCursors (reg);
+
+   /* Make sure that any GU elemnts associated with this reconfig 
+    * are properly initialized.  */
+   xaccCreateCursor (reg->table, reg->single_cursor);
+   xaccCreateCursor (reg->table, reg->double_cursor);
+   xaccCreateCursor (reg->table, reg->trans_cursor);
+   xaccCreateCursor (reg->table, reg->split_cursor);
 }
 
 /* ============================================== */
@@ -739,26 +718,26 @@ xaccDestroySplitRegister (SplitRegister *reg)
    }
    reg->destroy = NULL;
    reg->user_hook = NULL;
+   reg->user_hack = NULL;
 
    xaccDestroyTable (reg->table);
    reg->table = NULL;
 
    xaccDestroyCellBlock (reg->header);
+   xaccDestroyCellBlock (reg->single_cursor);
+   xaccDestroyCellBlock (reg->double_cursor);
    xaccDestroyCellBlock (reg->trans_cursor);
    xaccDestroyCellBlock (reg->split_cursor);
    reg->header = NULL;
+   reg->single_cursor = NULL;
+   reg->double_cursor = NULL;
    reg->trans_cursor = NULL;
    reg->split_cursor = NULL;
 
    xaccDestroyDateCell      (reg->dateCell);
    xaccDestroyBasicCell     (reg->numCell);
-   xaccDestroyComboCell     (reg->xfrmTransCell);
    xaccDestroyQuickFillCell (reg->descCell);
    xaccDestroyBasicCell     (reg->recnCell);
-   xaccDestroyPriceCell     (reg->creditTransCell);
-   xaccDestroyPriceCell     (reg->debitTransCell);
-   xaccDestroyPriceCell     (reg->priceTransCell);
-   xaccDestroyPriceCell     (reg->valueTransCell);
    xaccDestroyPriceCell     (reg->shrsCell);
    xaccDestroyPriceCell     (reg->balanceCell);
 
@@ -771,15 +750,13 @@ xaccDestroySplitRegister (SplitRegister *reg)
    xaccDestroyPriceCell     (reg->priceCell);
    xaccDestroyPriceCell     (reg->valueCell);
 
+   xaccDestroyPriceCell     (reg->ncreditCell);
+   xaccDestroyPriceCell     (reg->ndebitCell);
+
    reg->dateCell    = NULL;
    reg->numCell     = NULL;
-   reg->xfrmTransCell    = NULL;
    reg->descCell    = NULL;
    reg->recnCell    = NULL;
-   reg->creditTransCell  = NULL;
-   reg->debitTransCell   = NULL;
-   reg->priceTransCell   = NULL;
-   reg->valueTransCell   = NULL;
    reg->shrsCell    = NULL;
    reg->balanceCell = NULL;
 
@@ -791,6 +768,9 @@ xaccDestroySplitRegister (SplitRegister *reg)
    reg->debitCell   = NULL;
    reg->priceCell   = NULL;
    reg->valueCell   = NULL;
+
+   reg->ncreditCell  = NULL;
+   reg->ndebitCell   = NULL;
 
    /* free the memory itself */
    free (reg);
@@ -807,13 +787,8 @@ xaccSplitRegisterGetChangeFlag (SplitRegister *reg)
    /* be careful to use bitwise ands and ors to assemble bit flag */
    changed |= MOD_DATE & reg->dateCell->cell.changed;
    changed |= MOD_NUM  & reg->numCell->changed;
-   changed |= MOD_TXFRM & reg->xfrmTransCell->cell.changed;
    changed |= MOD_DESC & reg->descCell->cell.changed;
    changed |= MOD_RECN & reg->recnCell->changed;
-   changed |= MOD_TAMNT & reg->creditTransCell->cell.changed;
-   changed |= MOD_TAMNT & reg->debitTransCell->cell.changed;
-   changed |= MOD_TPRIC & reg->priceTransCell->cell.changed;
-   changed |= MOD_TVALU & reg->valueTransCell->cell.changed; 
 
    changed |= MOD_ACTN & reg->actionCell->cell.changed;
    changed |= MOD_XFRM & reg->xfrmCell->cell.changed;
@@ -823,6 +798,9 @@ xaccSplitRegisterGetChangeFlag (SplitRegister *reg)
    changed |= MOD_AMNT & reg->debitCell->cell.changed;
    changed |= MOD_PRIC & reg->priceCell->cell.changed;
    changed |= MOD_VALU & reg->valueCell->cell.changed; 
+
+   changed |= MOD_NAMNT & reg->ncreditCell->cell.changed;
+   changed |= MOD_NAMNT & reg->ndebitCell->cell.changed;
 
    return changed;
 }
