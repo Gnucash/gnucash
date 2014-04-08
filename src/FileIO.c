@@ -35,17 +35,22 @@
  *                                                                  *
  * Version 3 of the file format supports actions (Buy, Sell, etc.)  *
  *                                                                  *
+ * Version 4 of the file format adds account groups                 *
+ *                                                                  *
  *                                                                  *
  * the format of the data in the file:                              *
- *   file        ::== token numAccounts (Account)^numAccounts       *
- *   Account     ::== num flags type accountName description notes  * 
- *                    numTran (Transaction)^numTrans                * 
+ *   file        ::== token Group                                   *
+ *   Group       ::== numAccounts (Account)^numAccounts             *
+ *   Account     ::== accID flags type accountName description      * 
+ *                    notes numTran (Transaction)^numTrans          * 
+ *                    numGroups (Group)^numGroups                   *
  *   Transaction ::== num date description memo catagory reconciled *
  *                     amount share_price                           *
  *                     credit_account debit_account                 * 
  *   token       ::== int  [the version of file format == VERSION]  * 
  *   numTrans    ::== int                                           * 
  *   numAccounts ::== int                                           * 
+ *   accID       ::== int                                           * 
  *   flags       ::== char                                          * 
  *   type        ::== char                                          * 
  *   accountName ::== String                                        *  
@@ -71,31 +76,42 @@
  *   year        ::== int                                           * 
 \********************************************************************/
 
-#include <Xm/Xm.h>
 #include <fcntl.h>
-#include "main.h"
-#include "util.h"
+#include <Xm/Xm.h>
+
 #include "Account.h"
 #include "Data.h"
+#include "main.h"
+#include "util.h"
 
 #define PERMS   0666
 #define WFLAGS  (O_WRONLY | O_CREAT | O_TRUNC)
 #define RFLAGS  O_RDONLY
-#define VERSION 3
+#define VERSION 4
 
 /** GLOBALS *********************************************************/
 extern Widget toplevel;
 
-/** PROTOTYPES ******************************************************/
-int          readAccount( int fd, Account *, int token );
-Transaction *readTransaction( int fd, Account *, int token );
-char        *readString( int fd, int token );
-Date        *readDate( int fd, int token );
+static AccountGroup *holder;     /* temporary holder for
+                                  *  unclassified accounts */
+static AccountGroup *maingrp;    /* temporary holder for file
+                                  * being read */
 
-int writeAccount( int fd, Account *account );
-int writeTransaction( int fd, Account *, Transaction *trans );
-int writeString( int fd, char *str );
-int writeDate( int fd, Date *date );
+/** PROTOTYPES ******************************************************/
+static Account     *locateAccount (int acc_id); 
+static Account     *springAccount (int acc_id); 
+
+static AccountGroup *readGroup( int fd, Account *, int token );
+static Account      *readAccount( int fd, AccountGroup *, int token );
+static Transaction  *readTransaction( int fd, Account *, int token );
+static char         *readString( int fd, int token );
+static Date         *readDate( int fd, int token );
+
+static int writeGroup( int fd, AccountGroup *grp );
+static int writeAccount( int fd, Account *account );
+static int writeTransaction( int fd, Transaction *trans );
+static int writeString( int fd, char *str );
+static int writeDate( int fd, Date *date );
 
 /*******************************************************/
 /* some endian stuff */
@@ -158,7 +174,7 @@ double xaccFlipDouble (double val)
  * Args:   datafile - the file to load the data from                * 
  * Return: the struct with the program data in it                   * 
 \********************************************************************/
-Data *
+AccountGroup *
 readData( char *datafile )
   {
   int  fd;
@@ -166,13 +182,15 @@ readData( char *datafile )
   int  err=0;
   int  token=0;
   int  i;
-  Data *data = mallocData();
+  int  num_unclaimed;
+  AccountGroup *grp = 0x0;
+
+  maingrp = 0x0;
   
   fd = open( datafile, RFLAGS, 0 );
   if( fd == -1 )
     {
     ERROR();
-    freeData(data);
     return NULL;
     }
   
@@ -182,66 +200,109 @@ readData( char *datafile )
     {
     ERROR();
     close(fd);
-    freeData(data);
     return NULL;
     }
   XACC_FLIP_INT (token);
   
   /* If this is an old file, ask the user if the file
    * should be updated */
-  if( VERSION > token )
-    {
-    char msg[BUFSIZE];
-    sprintf( (char *)&msg, FILE_TOO_OLD_MSG );
-    if( !verifyBox( toplevel, msg ) )
+  if( VERSION > token ) {
+    if( !verifyBox( toplevel, FILE_TOO_OLD_MSG ) ) {
+      close(fd);
       return NULL;
     }
+  }
   
   /* If this is a newer file than we know how to deal
    * with, warn the user */
-  if( VERSION < token )
-    {
-    char msg[BUFSIZE];
-    sprintf( (char *)&msg, FILE_TOO_NEW_MSG );
-    if( !verifyBox( toplevel, msg ) )
+  if( VERSION < token ) {
+    if( !verifyBox( toplevel, FILE_TOO_NEW_MSG ) ) {
+      close(fd);
       return NULL;
     }
+  }
   
+  holder = mallocAccountGroup();
+  grp = readGroup (fd, NULL, token);
+
+  /* the number of unclaimed accounts should be zero if the 
+   * read succeeded.  But just in case of a very unlikely 
+   * error, try to continue anyway. */
+  num_unclaimed = xaccGetNumAccounts (holder);
+  if (num_unclaimed) {
+    if ( !verifyBox( toplevel, FILE_BAD_READ_MSG ) ) {
+       freeAccountGroup (holder);
+       freeAccountGroup (grp);
+       grp = NULL;
+    } else {
+       /* create a lost account, put the missing accounts there */
+       Account *acc = mallocAccount();
+       acc -> accountName = XtNewString ("Lost Accounts");
+       acc -> children = (struct _account_group *) holder;
+       insertAccount (grp, acc);
+    }
+  } else {
+    freeAccountGroup (holder);
+    holder = NULL;
+  }
+
+  maingrp = NULL;
+
+  close(fd);
+  return grp;
+}
+
+/********************************************************************\
+ * readGroup                                                 * 
+ *   reads in a group of accounts                                   *
+ *                                                                  * 
+ * Args:                                                            * 
+ * Return: the struct with the program data in it                   * 
+\********************************************************************/
+static AccountGroup *
+readGroup (int fd, Account *aparent, int token)
+  {
+  int  numAcc;
+  int  err=0;
+  int  i;
+  AccountGroup *grp = mallocAccountGroup();
+  
+  ENTER ("readGroup");
+
+  if (NULL == aparent) {
+    maingrp = grp;
+  }
+
   /* read numAccs */
   err = read( fd, &numAcc, sizeof(int) );
   if( err == -1 )
     {
-    close(fd);
-    freeData(data);
+    freeAccountGroup (grp);
     return NULL;
     }
   XACC_FLIP_INT (numAcc);
   
-  /* malloc the accounts, in preparation for reading.
-   * Mmalloc all of them; they will be needed for up front
-   * for inserting the double-entry transactions */
-  for( i=0; i<numAcc; i++ )
-    {
-    Account *acc   = mallocAccount();
-    insertAccount( data, acc );
-    }
+  INFO_2 ("readGroup(): expecting %d accounts \n", numAcc);
 
   /* read in the accounts */
   for( i=0; i<numAcc; i++ )
     {
-    Account *acc   = getAccount (data, i);
-    err = readAccount( fd, acc, token );
-    if( -1 == err )
-      {
-      close(fd);
-      printf(" numAcc = %d, i = %d\n",numAcc,i);
-      return data;
+    Account * acc = readAccount( fd, grp, token );
+    if( NULL == acc ) {
+      printf("Error: readGroup(): Short group read: \n");
+      printf("expected %d, got %d accounts\n",numAcc,i);
+      break;
       }
     }
-  
-  close(fd);
-  return data;
+
+  /* if reading an account subgroup, place the subgroup
+   * into the parent account */
+  grp->parent = aparent;
+  if (aparent) {
+    aparent->children = grp;
   }
+  return grp;
+}
 
 /********************************************************************\
  * readAccount                                                      * 
@@ -252,77 +313,48 @@ readData( char *datafile )
  *         token - the datafile version                             * 
  * Return: error value, 0 if OK, else -1                            * 
 \********************************************************************/
-int
-readAccount( int fd, Account *acc, int token )
+static Account *
+readAccount( int fd, AccountGroup *grp, int token )
   {
   int err=0;
   int i;
-  int numTrans, nacc;
+  int numTrans, accID;
+  Account *acc;
 
   ENTER ("readAccount");
   
   /* version 1 does not store the account number */
   if (1 < token) {
-    err = read( fd, &nacc, sizeof(int) );
-    if( err != sizeof(int) )
-      {
-      freeAccount(acc);
-      return -1;
-      }
-    XACC_FLIP_INT (nacc);
-
-    /* normalize the account numbers -- positive-definite.
-     * That is, the unique id must never decrease,
-     * nor must it overalp any existing account id */
-    acc->id = nacc;
-    if (next_free_unique_account_id <= nacc) {
-      next_free_unique_account_id = nacc+1;
-    }
+    err = read( fd, &accID, sizeof(int) );
+    if( err != sizeof(int) ) { return NULL; }
+    XACC_FLIP_INT (accID);
+    acc = locateAccount (accID);
+  } else {
+    acc = mallocAccount();
+    insertAccount (holder, acc);
   }
   
   err = read( fd, &(acc->flags), sizeof(char) );
-  if( err != sizeof(char) )
-    {
-    freeAccount(acc);
-    return -1;
-    }
+  if( err != sizeof(char) ) { return NULL; }
   
   err = read( fd, &(acc->type), sizeof(char) );
-  if( err != sizeof(char) )
-    {
-    freeAccount(acc);
-    return -1;
-    }
+  if( err != sizeof(char) ) { return NULL; }
   
   acc->accountName = readString( fd, token );
-  if( acc->accountName == NULL )
-    {
-    freeAccount(acc);
-    return -1;
-    }
+  if( acc->accountName == NULL ) { return NULL; }
+  INFO_2 ("readAccount(): reading acct %s \n", acc->accountName);
   
   acc->description = readString( fd, token );
-  if( acc->description == NULL )
-    {
-    freeAccount(acc);
-    return -1;
-    }
+  if( acc->description == NULL ) { return NULL; }
   
   acc->notes = readString( fd, token );
-  if( acc->notes == NULL )
-    {
-    freeAccount(acc);
-    return -1;
-    }
+  if( acc->notes == NULL ) { return NULL; }
   
   err = read( fd, &numTrans, sizeof(int) );
-  if( err != sizeof(int) )
-    {
-    freeAccount(acc);
-    return -1;
-    }
+  if( err != sizeof(int) ) { return NULL; }
   XACC_FLIP_INT (numTrans);
   
+  INFO_2 ("Info: readAccount(): expecting %d transactions \n", numTrans);
   /* read the transactions */
   for( i=0; i<numTrans; i++ )
     {
@@ -330,15 +362,103 @@ readAccount( int fd, Account *acc, int token )
     trans = readTransaction( fd, acc, token );
     if( trans == NULL )
       {
-      printf("Error: readAccount: Premature termination: \n");
-      printf (" numTrans = %d i = %d\n",numTrans,i);
-      return 0;
+      PERR ("readAccount(): Short Transaction Read: \n");
+      printf (" expected %d got %d transactions \n",numTrans,i);
+      break;
       }
     }
   
-  return 0;
+  springAccount (acc->id);
+  insertAccount (grp, acc);
+
+  /* version 4 is the first file version that introduces
+   * sub-accounts */
+  if (4 <= token) {
+    int numGrps;
+    err = read( fd, &numGrps, sizeof(int) );
+    if( err != sizeof(int) ) { 
+       return NULL; 
+    }
+    XACC_FLIP_INT (numGrps);
+    if (numGrps) {
+       readGroup (fd, acc, token);
+    }
   }
 
+  return acc;
+}
+
+/********************************************************************\
+ * locateAccount
+ *
+ * With the double-entry system, the file may reference accounts 
+ * that have not yet been read or properly parented.  Thus, we need 
+ * a way of dealing with this, and this routine performs this
+ * work. Basically, accounts are requested by thier id.  If an
+ * account with the indicated ID does not exist, it is created
+ * and placed in a temporary holding cell.  Accounts in the
+ * holding cell can be located, (so that transactions can be
+ * added to them) and sprung (so that they can be properly
+ * parented into a group).
+\********************************************************************/
+
+static Account *
+locateAccount (int acc_id) 
+{
+   Account * acc;
+   /* negative account ids denote no account */
+   if (0 > acc_id) return NULL;   
+
+   /* first, see if we've already created the account */
+   acc = xaccGetAccountFromID (maingrp, acc_id);
+   if (acc) return acc;
+
+   /* next, see if its an unclaimed account */
+   acc = xaccGetAccountFromID (holder, acc_id);
+   if (acc) return acc;
+
+   /* if neither, then it does not yet exist.  Create it.
+    * Put it in the drunk tank. */
+   acc = mallocAccount ();
+   acc->id = acc_id;
+   insertAccount (holder, acc);
+
+   /* normalize the account numbers -- positive-definite.
+    * That is, the unique id must never decrease,
+    * nor must it overalp any existing account id */
+   if (next_free_unique_account_id <= acc_id) {
+      next_free_unique_account_id = acc_id+1;
+   }
+
+   return acc;
+}
+ 
+static Account *
+springAccount (int acc_id) 
+{
+   Account * acc;
+   
+   /* first, see if we're confused about the account */
+   acc = xaccGetAccountFromID (maingrp, acc_id);
+   if (acc) {
+      printf ("Internal Error: springAccount(): \n");
+      printf ("account already parented \n");
+      return NULL;
+   }
+
+   /* next, see if we've got it */
+   acc = xaccGetAccountFromID (holder, acc_id);
+   if (acc) {
+      xaccRemoveAccount (acc);
+      return acc;
+   }
+
+   /* if we got to here, its an error */
+   printf ("Internal Error: springAccount(): \n");
+   printf ("Couldn't find account \n");
+   return NULL;
+}
+ 
 /********************************************************************\
  * readTransaction                                                  * 
  *   reads in the data for a transaction from the datafile          *
@@ -347,7 +467,8 @@ readAccount( int fd, Account *acc, int token )
  *         token - the datafile version                             * 
  * Return: the transaction structure                                * 
 \********************************************************************/
-Transaction *
+
+static Transaction *
 readTransaction( int fd, Account *acc, int token )
   {
   int err=0;
@@ -360,17 +481,16 @@ readTransaction( int fd, Account *acc, int token )
   trans->num = readString( fd, token );
   if( trans->num == NULL )
     {
-    DEBUG ("Error: Premature end of Transaction at num");
-    _free(trans);
+    PERR ("Premature end of Transaction at num");
+    freeTransaction(trans);
     return NULL;
     }
   
   date = readDate( fd, token );
   if( date == NULL )
     {
-    DEBUG ("Error: Premature end of Transaction at date");
-    XtFree(trans->num);
-    _free(trans);
+    PERR ("Premature end of Transaction at date");
+    freeTransaction(trans);
     return NULL;
     }
   trans->date = *date;
@@ -379,32 +499,26 @@ readTransaction( int fd, Account *acc, int token )
   trans->description = readString( fd, token );
   if( trans->description == NULL )
     {
-    DEBUG ("Error: Premature end of Transaction at description");
-    XtFree(trans->num);
-    _free(trans);
+    PERR ("Premature end of Transaction at description");
+    freeTransaction(trans);
     return NULL;
     }
   
   trans->memo = readString( fd, token );
   if( trans->memo == NULL )
     {
-    DEBUG ("Error: Premature end of Transaction at memo");
-    XtFree(trans->description);
-    XtFree(trans->num);
-    _free(trans);
+    PERR ("Premature end of Transaction at memo");
+    freeTransaction(trans);
     return NULL;
     }
   
-  /* actin first introduced in version 3 of the file format */
+  /* action first introduced in version 3 of the file format */
   if (3 <= token) {
      trans->action = readString( fd, token );
      if( trans->action == NULL )
        {
-       DEBUG ("Error: Premature end of Transaction at memo");
-       XtFree(trans->description);
-       XtFree(trans->num);
-       XtFree(trans->memo);
-       _free(trans);
+       PERR ("Premature end of Transaction at memo");
+       freeTransaction(trans);
        return NULL;
        }
     }
@@ -412,12 +526,8 @@ readTransaction( int fd, Account *acc, int token )
   err = read( fd, &(trans->catagory), sizeof(int) );
   if( err != sizeof(int) )
     {
-    DEBUG ("Error: Premature end of Transaction at catagory");
-    XtFree(trans->description);
-    XtFree(trans->num);
-    XtFree(trans->memo);
-    XtFree(trans->action);
-    _free(trans);
+    PERR ("Premature end of Transaction at catagory");
+    freeTransaction(trans);
     return NULL;
     }
   XACC_FLIP_INT (trans->catagory);
@@ -425,11 +535,8 @@ readTransaction( int fd, Account *acc, int token )
   err = read( fd, &(trans->reconciled), sizeof(char) );
   if( err != sizeof(char) )
     {
-    DEBUG ("Error: Premature end of Transaction at reconciled");
-    XtFree(trans->memo);
-    XtFree(trans->description);
-    XtFree(trans->num);
-    _free(trans);
+    PERR ("Premature end of Transaction at reconciled");
+    freeTransaction(trans);
     return NULL;
     }
   
@@ -457,11 +564,8 @@ readTransaction( int fd, Account *acc, int token )
     err = read( fd, &amount, sizeof(int) );
     if( err != sizeof(int) )
       {
-      DEBUG ("Error: Premature end of Transaction at V1 amount");
-      XtFree(trans->memo);
-      XtFree(trans->description);
-      XtFree(trans->num);
-      _free(trans);
+      PERR ("Premature end of Transaction at V1 amount");
+      freeTransaction(trans);
       return NULL;
       }
     XACC_FLIP_INT (amount);
@@ -473,11 +577,8 @@ readTransaction( int fd, Account *acc, int token )
     err = read( fd, &damount, sizeof(double) );
     if( err != sizeof(double) )
       {
-      DEBUG ("Error: Premature end of Transaction at amount");
-      XtFree(trans->memo);
-      XtFree(trans->description);
-      XtFree(trans->num);
-      _free(trans);
+      PERR ("Premature end of Transaction at amount");
+      freeTransaction(trans);
       return NULL;
       }
     XACC_FLIP_DOUBLE (damount);
@@ -487,17 +588,14 @@ readTransaction( int fd, Account *acc, int token )
     err = read( fd, &damount, sizeof(double) );
     if( err != sizeof(double) )
       {
-      DEBUG ("Error: Premature end of Transaction at share_price");
-      XtFree(trans->memo);
-      XtFree(trans->description);
-      XtFree(trans->num);
-      _free(trans);
+      PERR ("Premature end of Transaction at share_price");
+      freeTransaction(trans);
       return NULL;
       }
     XACC_FLIP_DOUBLE (damount);
     trans->share_price = damount;
   }  
-  DEBUGCMD(printf ("Info: readTransaction(): amount %f \n", trans->damount));
+  INFO_2 ("readTransaction(): amount %f \n", trans->damount);
 
   /* Read the account numbers for double-entry */
   /* These are first used in Version 2 of the file format */
@@ -507,15 +605,13 @@ readTransaction( int fd, Account *acc, int token )
     err = read( fd, &acc_id, sizeof(int) );
     if( err != sizeof(int) )
       {
-      DEBUG ("Error: Premature end of Transaction at credit");
-      XtFree(trans->memo);
-      XtFree(trans->description);
-      XtFree(trans->num);
+      PERR ("Premature end of Transaction at credit");
+      freeTransaction(trans);
       return NULL;
       }
     XACC_FLIP_INT (acc_id);
-    DEBUGCMD (printf ("Info: readTransaction(): credit %d\n", acc_id));
-    peer_acc = xaccGetPeerAccountFromID (acc, acc_id);
+    INFO_2 ("readTransaction(): credit %d\n", acc_id);
+    peer_acc = locateAccount (acc_id);
     trans -> credit = (struct _account *) peer_acc;
 
     /* insert the transaction into both the debit and 
@@ -526,15 +622,13 @@ readTransaction( int fd, Account *acc, int token )
     err = read( fd, &acc_id, sizeof(int) );
     if( err != sizeof(int) )
       {
-      DEBUG ("Error: Premature end of Transaction at debit");
-      XtFree(trans->memo);
-      XtFree(trans->description);
-      XtFree(trans->num);
+      PERR ("Premature end of Transaction at debit");
+      freeTransaction(trans);
       return NULL;
       }
     XACC_FLIP_INT (acc_id);
-    DEBUGCMD (printf ("Info: readTransaction(): debit %d\n", acc_id));
-    peer_acc = xaccGetPeerAccountFromID (acc, acc_id);
+    INFO_2 ("readTransaction(): debit %d\n", acc_id);
+    peer_acc = locateAccount (acc_id);
     trans -> debit = (struct _account *) peer_acc;
 
     /* insert the transaction into both the debit and 
@@ -547,7 +641,7 @@ readTransaction( int fd, Account *acc, int token )
   }
   
   return trans;
-  }
+}
 
 /********************************************************************\
  * readString                                                       * 
@@ -557,7 +651,7 @@ readTransaction( int fd, Account *acc, int token )
  *         token - the datafile version                             * 
  * Return: the string                                               * 
 \********************************************************************/
-char *
+static char *
 readString( int fd, int token )
   {
   int  err=0;
@@ -589,7 +683,7 @@ readString( int fd, int token )
  *         token - the datafile version                             * 
  * Return: the Date struct                                          * 
 \********************************************************************/
-Date *
+static Date *
 readDate( int fd, int token )
   {
   int  err=0;
@@ -626,6 +720,43 @@ readDate( int fd, int token )
  ********************** SAVE DATA ***********************************
 \********************************************************************/
 
+static void
+xaccResetWriteFlags (AccountGroup *grp) 
+{
+   int i, numAcc;
+   if (!grp) return;
+
+  /* Zero out the write flag on all of the 
+   * transactions.  The write_flag is used to determine
+   * if a given transaction has already been written 
+   * out to the file.  This flag is necessary, since 
+   * double-entry transactions appear in two accounts,
+   * while they should be written only once to the file.
+   * The write_flag is used ONLY by the routines in this
+   * module.
+   */
+  numAcc = grp ->numAcc;
+  for( i=0; i<numAcc; i++ ) {
+    int n=0;
+    Account *acc;
+    Transaction * trans;
+    acc = getAccount (grp,i) ;
+
+    /* recursively do sub-accounts */
+    xaccResetWriteFlags (acc->children);
+    
+    /* zip over all accounts */
+    trans = getTransaction (acc, 0); 
+    n++;
+    while (trans) {
+      trans->write_flag = 0;
+      trans = getTransaction (acc, n); 
+      n++;
+    }
+  }
+
+}
+
 /********************************************************************\
  * writeData                                                        * 
  *   flattens the program data and saves it in a file               * 
@@ -634,31 +765,24 @@ readDate( int fd, int token )
  * Return: -1 on failure                                            * 
 \********************************************************************/
 int 
-writeData( char *datafile, Data *data )
+writeData( char *datafile, AccountGroup *grp )
   {
-  int i,numAcc;
   int err = 0;
   int token = VERSION;    /* The file format version */
   int fd;
   
-  if (NULL == data) return -1;
+  if (NULL == grp) return -1;
 
   /* first, zero out the write flag on all of the 
-   * transactions */
-  numAcc = data ->numAcc;
-  for( i=0; i<numAcc; i++ ) {
-    int n=0;
-    Account *acc;
-    Transaction * trans;
-    acc = getAccount (data,i) ;
-    trans = getTransaction (acc, n); 
-    n++;
-    while (trans) {
-      trans->write_flag = 0;
-      trans = getTransaction (acc, n); 
-      n++;
-    }
-  }
+   * transactions.  The write_flag is used to determine
+   * if a given transaction has already been written 
+   * out to the file.  This flag is necessary, since 
+   * double-entry transactions appear in two accounts,
+   * while they should be written only once to the file.
+   * The write_flag is used ONLY by the routines in this
+   * module.
+   */
+  xaccResetWriteFlags (grp);
 
   /* now, open the file and start writing */
   fd = open( datafile, WFLAGS, PERMS );
@@ -677,20 +801,44 @@ writeData( char *datafile, Data *data )
     return -1;
     }
 
-  numAcc = data->numAcc;
+  err = writeGroup (fd, grp);
+
+  close(fd);
+  return err;
+  }
+
+/********************************************************************\
+ * writeGroup                                                * 
+ *   writes out a group of accounts to a file                       * 
+ *                                                                  * 
+ * Args:   fd -- file descriptor                                    *
+ *         grp -- account group                                     *
+ *                                                                  *
+ * Return: -1 on failure                                            * 
+\********************************************************************/
+static int 
+writeGroup (int fd, AccountGroup *grp )
+  {
+  int i,numAcc;
+  int err = 0;
+
+  ENTER ("writeGroup");
+  
+  if (NULL == grp) return 0;
+
+  numAcc = grp->numAcc;
   XACC_FLIP_INT (numAcc);
   err = write( fd, &numAcc, sizeof(int) );
   if( err != sizeof(int) )
     return -1;
   
-  for( i=0; i<data->numAcc; i++ )
+  for( i=0; i<grp->numAcc; i++ )
     {
-    err = writeAccount( fd, getAccount(data,i) );
+    err = writeAccount( fd, getAccount(grp,i) );
     if( err == -1 )
       return err;
     }
   
-  close(fd);
   return err;
   }
 
@@ -702,16 +850,18 @@ writeData( char *datafile, Data *data )
  *         acc  - the account data to save                          * 
  * Return: -1 on failure                                            * 
 \********************************************************************/
-int
+static int
 writeAccount( int fd, Account *acc )
   {
   Transaction *trans;
   int err=0;
-  int i,numTrans, ntrans;
+  int i, numUnwrittenTrans, ntrans;
   int acc_id;
+  int numChildren = 0;
   
+  INFO_2 ("writeAccount(): writing acct %s \n", acc->accountName);
+
   acc_id = acc->id;
-  DEBUGCMD (printf ("Info: writeAccount: writing acct id %d %x \n", acc_id, acc));
   XACC_FLIP_INT (acc_id);
   err = write( fd, &acc_id, sizeof(int) );
   if( err != sizeof(int) )
@@ -741,24 +891,40 @@ writeAccount( int fd, Account *acc )
    * number of transactions in this account, because some 
    * of the double entry transactions will already have been 
    * written. */
-  numTrans = 0;
-  i = 0;
-  trans = getTransaction (acc, i);
-  while (trans) {
-    i++;
-    if (0 == trans->write_flag) numTrans ++;
-    trans = getTransaction (acc, i);
+  numUnwrittenTrans = 0;
+  for( i=0; i<acc->numTrans; i++ ) {
+    trans = getTransaction(acc,i);
+    if (0 == trans->write_flag) numUnwrittenTrans ++;
   }
 
-  ntrans = numTrans;
+  ntrans = numUnwrittenTrans;
   XACC_FLIP_INT (ntrans);
   err = write( fd, &ntrans, sizeof(int) );
   if( err != sizeof(int) )
     return -1;
   
-  for( i=0; i<numTrans; i++ ) {
-    err = writeTransaction( fd, acc, getTransaction(acc,i) );
+  INFO_2 ("writeAccount(): will write %d trans\n", numUnwrittenTrans);
+  for( i=0; i<acc->numTrans; i++ ) {
+    trans = getTransaction(acc,i);
+    if (0 == trans->write_flag) {
+       err = writeTransaction( fd, trans );
+    }
     if( err == -1 ) return err;
+  }
+
+  if (acc->children) {
+    numChildren = 1;
+  } else {
+    numChildren = 0;
+  }
+
+  XACC_FLIP_INT (numChildren);
+  err = write( fd, &numChildren, sizeof(int) );
+  if( err != sizeof(int) )
+    return -1;
+
+  if (acc->children) {
+    err = writeGroup (fd, acc->children);
   }
   
   return err;
@@ -773,8 +939,8 @@ writeAccount( int fd, Account *acc )
  *         trans    - the transaction data to save                  * 
  * Return: -1 on failure                                            * 
 \********************************************************************/
-int
-writeTransaction( int fd, Account * acc, Transaction *trans )
+static int
+writeTransaction( int fd, Transaction *trans )
   {
   int err=0;
   int tmp, acc_id;
@@ -782,8 +948,10 @@ writeTransaction( int fd, Account * acc, Transaction *trans )
   Account *xfer_acc;
 
   ENTER ("writeTransaction");
-  /* if we've already written this transaction, don't write it again */
-  /* that is, prevent double-entry transactions from being written twice */
+  /* If we've already written this transaction, don't write 
+   * it again.  That is, prevent double-entry transactions 
+   * from being written twice 
+   */
   if (trans->write_flag) return 4;
   trans->write_flag = 1;
   
@@ -818,7 +986,7 @@ writeTransaction( int fd, Account * acc, Transaction *trans )
     return -1;
   
   damount = trans->damount;
-  DEBUGCMD (printf ("Info: writeTransaction: amount=%f \n", damount));
+  INFO_2 ("writeTransaction: amount=%f \n", damount);
   XACC_FLIP_DOUBLE (damount);
   err = write( fd, &damount, sizeof(double) );
   if( err != sizeof(double) )
@@ -834,7 +1002,7 @@ writeTransaction( int fd, Account * acc, Transaction *trans )
   xfer_acc = (Account *) (trans->credit);
   acc_id = -1;
   if (xfer_acc) acc_id = xfer_acc -> id;
-  DEBUGCMD (printf ("Info: writeTransaction: credit %d \n", acc_id));
+  INFO_2 ("writeTransaction: credit %d \n", acc_id);
   XACC_FLIP_INT (acc_id);
   err = write( fd, &acc_id, sizeof(int) );
   if( err != sizeof(int) )
@@ -843,7 +1011,7 @@ writeTransaction( int fd, Account * acc, Transaction *trans )
   xfer_acc = (Account *) (trans->debit);
   acc_id = -1;
   if (xfer_acc) acc_id = xfer_acc -> id;
-  DEBUGCMD (printf ("Info: writeTransaction: debit %d \n", acc_id));
+  INFO_2 (" writeTransaction: debit %d \n", acc_id);
   XACC_FLIP_INT (acc_id);
   err = write( fd, &acc_id, sizeof(int) );
   if( err != sizeof(int) )
@@ -860,7 +1028,7 @@ writeTransaction( int fd, Account * acc, Transaction *trans )
  *         str      - the String to save                            * 
  * Return: -1 on failure                                            * 
 \********************************************************************/
-int
+static int
 writeString( int fd, char *str )
   {
   int err=0;
@@ -895,7 +1063,7 @@ writeString( int fd, char *str )
  *         date     - the Date to save                              * 
  * Return: -1 on failure                                            * 
 \********************************************************************/
-int
+static int
 writeDate( int fd, Date *date )
   {
   int err=0;

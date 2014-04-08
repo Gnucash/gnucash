@@ -11,7 +11,7 @@
 /* Modified by Rob Clark on Nov 26, 1995
  *   Changes made: reorginization of code, and addition choice of initial 
  *   option menu selection
- *                    - moved the creation of cascade buttion for 
+ *                    - moved the creation of cascade button for 
  *                      option and pulldown menu till after the 
  *                      items in the menu are created... this way 
  *                      I can specify a widget (item in menu) to 
@@ -106,11 +106,13 @@ Widget BuildMenu( Widget parent, int menu_type, char *menu_title,
      */
     if( items[i].subitems )
       {
-      if( menu_type == XmMENU_OPTION ) 
-	{
-	XtWarning("You can't have submenus from option menu items.");
-	continue;
-	} else {
+
+      if( menu_type == XmMENU_OPTION )
+ 	{
+ 	XtWarning("You can't have submenus from option menu items.");
+ 	continue;
+ 	} else 
+        {
         widget = BuildMenu( menu, XmMENU_PULLDOWN, items[i].label, 
 			    items[i].mnemonic, tear_off, 0, 
 			    items[i].subitems);
@@ -187,7 +189,7 @@ Widget BuildMenu( Widget parent, int menu_type, char *menu_title,
     {
     str = XmStringCreateLocalized (menu_title);
     cascade = XtVaCreateManagedWidget( menu_title,
-				       xmCascadeButtonGadgetClass, parent,
+				       xmCascadeButtonGadgetClass, parent, 
 				       XmNsubMenuId,   menu,
 				       XmNlabelString, str,
 				       XmNmnemonic,    menu_mnemonic,

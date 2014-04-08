@@ -83,17 +83,40 @@ mallocTransaction( void )
 void
 freeTransaction( Transaction *trans )
   {
-  if( trans != NULL ) {
+  if (!trans) return;
 
-    XtFree(trans->num);
-    XtFree(trans->description);
-    XtFree(trans->memo);
-    XtFree(trans->action);
+  /* free a transaction only if it is not claimed
+   * by any accounts. */
+  if (trans->debit) return;
+  if (trans->credit) return;
 
-    initTransaction (trans);   /* just in case someone looks up freed memory ... */
-    _free(trans);
-    }
-  }
+  XtFree(trans->num);
+  XtFree(trans->description);
+  XtFree(trans->memo);
+  XtFree(trans->action);
+
+  /* just in case someone looks up freed memory ... */
+  trans->num         = 0x0;
+  trans->description = 0x0;
+  trans->memo        = 0x0;
+  trans->action      = 0x0;
+  trans->catagory    = 0;
+  trans->reconciled  = NREC;
+  trans->damount     = 0.0;
+  trans->share_price = 1.0;
+
+  trans->credit_balance = 0.0;
+  trans->credit_cleared_balance = 0.0;
+  trans->debit_balance = 0.0;
+  trans->debit_cleared_balance = 0.0;
+
+  trans->date.year   = 1900;        
+  trans->date.month  = 1;        
+  trans->date.day    = 1;        
+
+  trans->write_flag  = 0;
+  _free(trans);
+}
 
 /************************ END OF ************************************\
 \************************* FILE *************************************/

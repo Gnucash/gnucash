@@ -23,18 +23,18 @@
 \********************************************************************/
 
 #include <Xm/Xm.h>
-#include <Xm/RowColumn.h>
-#include <Xm/Form.h>
-#include <Xm/Text.h>
 #include <Xm/DialogS.h>
-#include <Xm/PanedW.h>
+#include <Xm/Form.h>
 #include <Xm/Frame.h>
-#include <Xm/PushB.h>
 #include <Xm/LabelGP.h>
+#include <Xm/PanedW.h>
+#include <Xm/PushB.h>
+#include <Xm/RowColumn.h>
+#include <Xm/Text.h>
 #include <Xbae/Matrix.h>
 
-#include "Data.h"
 #include "Account.h"
+#include "Data.h"
 #include "RegWindow.h"
 #include "MainWindow.h"
 #include "main.h"
@@ -61,7 +61,6 @@ void recnOkCB( Widget mw, XtPointer cd, XtPointer cb );
 void recnCB( Widget mw, XtPointer cd, XtPointer cb );
 
 /** GLOBALS *********************************************************/
-extern Data *data;
 extern XtAppContext app;
 
 /********************************************************************/
@@ -761,6 +760,7 @@ recnOkCB( Widget mw, XtPointer cd, XtPointer cb )
   int nrows,i;
   Transaction *trans;
   RecnWindow  *recnData = (RecnWindow *)cd;
+  AccountGroup *grp = topgroup;  /* hack alert -- should pass as arg .. */
   
   /* Update the debit transactions: */
   XtVaGetValues( recnData->debit, XmNrows, &nrows, NULL );
@@ -772,7 +772,7 @@ recnOkCB( Widget mw, XtPointer cd, XtPointer cb )
       trans  = (Transaction *)XbaeMatrixGetRowUserData( recnData->debit, i );
       trans->reconciled = YREC;
       /* mark the datafile as needing to be saved: */
-      data->saved = False;
+      grp->saved = False;
       }
     }
   
@@ -786,7 +786,7 @@ recnOkCB( Widget mw, XtPointer cd, XtPointer cb )
       trans  = (Transaction *)XbaeMatrixGetRowUserData( recnData->credit, i );
       trans->reconciled = YREC;
       /* mark the datafile as needing to be saved: */
-      data->saved = False;
+      grp->saved = False;
       }
     }
   
