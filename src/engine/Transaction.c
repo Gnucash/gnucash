@@ -55,12 +55,39 @@
  */
 int force_double_entry = 1;
 
+
+/* bit-field flags for controlling transaction commits */
+#define BEGIN_EDIT 0x1
+#define DEFER_REBALANCE 0x2
+
 /********************************************************************\
  * Because I can't use C++ for this project, doesn't mean that I    *
  * can't pretend too!  These functions perform actions on the       *
  * Transaction data structure, in order to encapsulate the          *
  * knowledge of the internals of the Transaction in one file.       *
 \********************************************************************/
+
+
+#define SAFE_STRCMP(da,db) {		\
+  if ((da) && (db)) {			\
+    int retval = strcmp ((da), (db));	\
+    /* if strings differ, return */	\
+    if (retval) return retval;		\
+  } else 				\
+  if ((!(da)) && (db)) {		\
+    return -1;				\
+  } else 				\
+  if ((da) && (!(db))) {		\
+    return +1;				\
+  }					\
+}
+
+static int 
+safestrcmp (char * da, char * db) {
+   SAFE_STRCMP (da, db);
+   return 0;
+}
+
 
 /********************************************************************\
  * xaccInitSplit
@@ -77,6 +104,7 @@ xaccInitSplit( Split * split )
   
   split->action      = strdup("");
   split->memo        = strdup("");
+  split->docref      = strdup("");
   split->reconciled  = NREC;
   split->damount     = 0.0;
   split->share_price = 1.0;
@@ -111,11 +139,14 @@ xaccFreeSplit( Split *split )
   {
   if (!split) return;
 
-  free(split->memo);
-  free(split->action);
+  if (split->memo) free (split->memo);
+  if (split->action) free (split->action);
+  if (split->docref) free (split->docref);
 
   /* just in case someone looks up freed memory ... */
   split->memo        = 0x0;
+  split->action      = 0x0;
+  split->docref      = 0x0;
   split->reconciled  = NREC;
   split->damount     = 0.0;
   split->share_price = 1.0;
@@ -248,6 +279,7 @@ xaccInitTransaction( Transaction * trans )
   /* fill in some sane defaults */
   trans->num         = strdup("");
   trans->description = strdup("");
+  trans->docref      = strdup("");
 
   trans->splits    = (Split **) _malloc (3* sizeof (Split *));
 
@@ -302,12 +334,14 @@ xaccFreeTransaction( Transaction *trans )
   _free (trans->splits);
 
   /* free up transaction strings */
-  free(trans->num);
-  free(trans->description);
+  if (trans->num) free (trans->num);
+  if (trans->description) free (trans->description);
+  if (trans->docref) free (trans->docref);
 
   /* just in case someone looks up freed memory ... */
   trans->num         = 0x0;
   trans->description = 0x0;
+  trans->docref      = 0x0;
 
   trans->date_entered.tv_sec = 0;
   trans->date_entered.tv_nsec = 0;
@@ -322,6 +356,52 @@ xaccFreeTransaction( Transaction *trans )
 
 /********************************************************************\
 \********************************************************************/
+
+static double
+ComputeValue (Split **sarray, Split * skip_me, char * base_currency)
+{
+   Split *s;
+   int i=0;
+   double value = 0.0;
+
+   s = sarray[0];
+   while (s) {
+      if (s != skip_me) {
+         if (!safestrcmp(s->acc->currency, base_currency)) {
+            value += s->share_price * s->damount;
+         } else 
+         if (!safestrcmp(s->acc->security, base_currency)) {
+            value += s->damount;
+         } else {
+            printf ("Internal Error: ComputeValue(): "
+                    " inconsistent currencies \n");
+            assert (0);
+         }
+      }
+      i++; s = sarray [i];
+   }
+
+   return value;
+}
+
+static void
+xaccSetBaseValue (Split *s, double value, char * base_currency)
+{
+   if (!s) return;
+
+   assert (s->acc);
+
+   if (!safestrcmp(s->acc->currency, base_currency)) {
+      s -> damount = - (value / (s->share_price));   
+   } else 
+   if (!safestrcmp(s->acc->security, base_currency)) {
+      s -> damount = -value;   
+   } else {
+      printf ("Error: xaccSetBaseValue(): "
+              " inappropriate base currency \n");
+      return;
+   }
+}
 
 /* hack alert -- the algorithm used in this rebalance routine
  * is less than intuitive, and could use some write-up.  
@@ -342,6 +422,8 @@ xaccSplitRebalance (Split *split)
   Split *s;
   int i = 0;
   double value = 0.0;
+  short forward=0, backward=0;
+  char *base_currency=0x0, *base_security =0x0;
 
   trans = split->parent;
 
@@ -351,9 +433,46 @@ xaccSplitRebalance (Split *split)
    * quietly return. 
    */
   if (!trans) return;
+  if (!(split->acc)) return;
 
+  if (DEFER_REBALANCE & (trans->open)) return;
+  if (ACC_DEFER_REBALANCE & (split->acc->open)) return;
   assert (trans->splits);
   assert (trans->splits[0]);
+
+  /* lets find out if we are dealing with multiple currencies.  */
+  base_currency = split->acc->currency;
+  base_security = split->acc->security;
+  i=0; s = trans->splits[0];
+  while (s) {
+    assert (s->acc);
+    if (safestrcmp (base_currency, s->acc->currency)) {
+       if (!safestrcmp(base_currency, s->acc->security)) forward = 1;
+       else 
+       if (!safestrcmp(base_security, s->acc->currency)) backward = 1;
+       else {
+          printf ("Internal Error: SplitRebalance(): "
+                  " no common split currencies \n");
+          printf ("\tbase acc=%s cur=%s base_sec=%s\n"
+                  "\tacc=%s scur=%s ssec=%s \n", 
+              split->acc->accountName, base_currency, base_security,
+              s->acc->accountName, s->acc->currency, s->acc->security );
+          assert (0);
+          return;
+       }
+    }
+    i++; s = trans->splits[i];
+  }
+  if (forward && backward) {
+     printf ("Internal Error: SplitRebalance(): "
+             " split currencies all messed up \n");
+     assert (0);
+     return;
+  }
+  /* we need to reverse what will be the basis of out calculations */
+  if (backward) {
+     base_currency = base_security;
+  }
 
   if (split == trans->splits[0]) {
     /* The indicated split is the source split.
@@ -364,25 +483,9 @@ xaccSplitRebalance (Split *split)
 
     s = trans->splits[1];
     if (s) {
-      /* first, add the source split */
-      value = split->share_price * split->damount;
-
-      /* now add in the sum of the destination splits */
-      i = 1;
-      while (s) {
-        value += s->share_price * s->damount;
-        i++;
-        s = trans->splits[i];
-      }
-
-      /* subtract the first destination split */
-      s = trans->splits[1];
-      value -= (s->share_price) * (s->damount);
-
-      /* the new value of the destination split 
-       * will be the result.
-       */
-      s -> damount = - (value / (s->share_price));   
+      /* the new value of the destination split will be the result.  */
+      value = ComputeValue (trans->splits, s, base_currency);
+      xaccSetBaseValue (s, value, base_currency);
       MARK_SPLIT (s);
       xaccAccountRecomputeBalance (s->acc); 
 
@@ -392,6 +495,11 @@ xaccSplitRebalance (Split *split)
        * we just blow it off, or its forbidden,
        * in which case we force a balacing split 
        * to be created.
+       *
+       * Note that its ok to have a single split who's amount is zero ..
+       * this is just a split that is recording a price, and nothing
+       * else.  (i.e. it still obeys the rule that the sum of the 
+       * value of all the splits is zero).
        */
 
        if (force_double_entry) {
@@ -420,17 +528,9 @@ xaccSplitRebalance (Split *split)
      * Compute grand total of all destination splits,
      * and force the source split to blanace.
      */
-    i = 1;
-    s = trans->splits[i];
-    value = 0.0;
-    while (s) {
-      value += s->share_price * s->damount;
-      i++;
-      s = trans->splits[i];
-    }
-
     s = trans->splits[0];
-    s -> damount = - (value / (s->share_price));   
+    value = ComputeValue (trans->splits, s, base_currency);
+    xaccSetBaseValue (s, value, base_currency);
     MARK_SPLIT (s);
     xaccAccountRecomputeBalance (s->acc); 
   }
@@ -457,10 +557,11 @@ xaccSplitRebalance (Split *split)
 }
 
 void
-xaccTransBeginEdit (Transaction *trans)
+xaccTransBeginEdit (Transaction *trans, int defer)
 {
    assert (trans);
-   trans->open = 1;
+   trans->open = BEGIN_EDIT;
+   if (defer) trans->open |= DEFER_REBALANCE;
    xaccOpenLog ();
    xaccTransWriteLog (trans, 'B');
 }
@@ -475,6 +576,7 @@ xaccTransCommitEdit (Transaction *trans)
    if (!trans) return;
    CHECK_OPEN (trans);
 
+   trans->open &= ~DEFER_REBALANCE;
    xaccTransRebalance (trans);
 
    /* um, theoritically, it is impossible for splits
@@ -701,32 +803,12 @@ xaccSplitOrder (Split **sa, Split **sb)
   /* otherwise, sort on memo strings */
   da = (*sa)->memo;
   db = (*sb)->memo;
-  if (da && db) {
-    retval = strcmp (da, db);
-    /* if strings differ, return */
-    if (retval) return retval;
-  } else 
-  if (!da && db) {
-    return -1;
-  } else 
-  if (da && !db) {
-    return +1;
-  }
+  SAFE_STRCMP (da, db);
 
   /* otherwise, sort on action strings */
   da = (*sa)->action;
   db = (*sb)->action;
-  if (da && db) {
-    retval = strcmp (da, db);
-    /* if strings differ, return */
-    if (retval) return retval;
-  } else 
-  if (!da && db) {
-    return -1;
-  } else 
-  if (da && !db) {
-    return +1;
-  }
+  SAFE_STRCMP (da, db);
 
   return 0;
 }
@@ -735,7 +817,6 @@ xaccSplitOrder (Split **sa, Split **sb)
 int
 xaccTransOrder (Transaction **ta, Transaction **tb)
 {
-  int retval;
   char *da, *db;
 
   if ( (*ta) && !(*tb) ) return -1;
@@ -765,32 +846,12 @@ xaccTransOrder (Transaction **ta, Transaction **tb)
   /* otherwise, sort on transaction strings */
   da = (*ta)->num;
   db = (*tb)->num;
-  if (da && db) {
-    retval = strcmp (da, db);
-    /* if strings differ, return */
-    if (retval) return retval;
-  } else 
-  if (!da && db) {
-    return -1;
-  } else 
-  if (da && !db) {
-    return +1;
-  }
+  SAFE_STRCMP (da, db);
 
   /* otherwise, sort on transaction strings */
   da = (*ta)->description;
   db = (*tb)->description;
-  if (da && db) {
-    retval = strcmp (da, db);
-    /* if strings differ, return */
-    if (retval) return retval;
-  } else 
-  if (!da && db) {
-    return -1;
-  } else 
-  if (da && !db) {
-    return +1;
-  }
+  SAFE_STRCMP (da, db);
 
   return 0;
 }

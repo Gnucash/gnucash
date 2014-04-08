@@ -43,8 +43,11 @@ void         xaccFreeAccount( Account * );
  * They are mildly useful for detecting attempted updates outside
  * of thier scope. However, they do not provide any true two-phase-anything
  * in the current implementation.
+ *
+ * The defer flag, if sett, will defer all attempts at rebalancing 
+ * of accounts until the commit.
  */
-void         xaccAccountBeginEdit (Account *);
+void         xaccAccountBeginEdit (Account *, int defer);
 void         xaccAccountCommitEdit (Account *);
 
 int          xaccGetAccountID (Account *);
@@ -52,7 +55,7 @@ int          xaccGetAccountID (Account *);
 /*
  * The xaccAccountInsertSplit() method will insert the indicated
  *    split into the indicated account.  If the split already 
- *    belongs to anothe account, it will be removed from that
+ *    belongs to another account, it will be removed from that
  *    account first. 
  */
 void         xaccAccountInsertSplit (Account *, Split *);
@@ -101,11 +104,15 @@ void xaccAccountSetType (Account *, int);
 void xaccAccountSetName (Account *, char *);
 void xaccAccountSetDescription (Account *, char *);
 void xaccAccountSetNotes (Account *, char *);
+void xaccAccountSetCurrency (Account *, char *);
+void xaccAccountSetSecurity (Account *, char *);
 
 int            xaccAccountGetType (Account *);
 char *         xaccAccountGetName (Account *);
 char *         xaccAccountGetDescription (Account *);
 char *         xaccAccountGetNotes (Account *);
+char *         xaccAccountGetCurrency (Account *);
+char *         xaccAccountGetSecurity (Account *);
 AccountGroup * xaccAccountGetChildren (Account *);
 AccountGroup * xaccAccountGetParent (Account *);
 
@@ -114,6 +121,7 @@ double         xaccAccountGetClearedBalance (Account *);
 double         xaccAccountGetReconciledBalance (Account *);
 Split *        xaccAccountGetSplit (Account *acc, int i);
 Split **       xaccAccountGetSplitList (Account *acc);
+int            xaccAccountGetNumSplits (Account *acc);
 
 
 /** GLOBALS *********************************************************/

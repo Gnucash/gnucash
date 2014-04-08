@@ -353,7 +353,7 @@ main_window_init(AccountGroup *accts)
   GtkWidget 	*clist;
   GtkWidget 	*notebook;
   int nmenu_items;
-  GtkAcceleratorTable *accel;
+  /*GtkAcceleratorTable *accel;*/
 
 
   /* this is the GtkMenuEntry structure used to create new menus.  The
@@ -452,7 +452,7 @@ main_window_init(AccountGroup *accts)
   }
 
   menubar = main_menu_bar->widget;
-  accel = main_menu_bar->table;
+  /*accel = main_menu_bar->table;*/
 
 #if 0
 

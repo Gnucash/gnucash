@@ -7,16 +7,16 @@
 static void
 guile_entry_point(int argc, char *argv[]) {
   char *input;
-  xacc();
+  // gnucash_swig_init();
   
-  input = readline("xacc> ");
+  input = readline("gnucash> ");
   while(input) {
     SCM result = gh_eval_str(input);
     gh_display(result);
     gh_newline();
     add_history(input);
     free(input);
-    input = readline("xacc> ");
+    input = readline("gnucash> ");
   }
 }
 

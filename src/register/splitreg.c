@@ -60,11 +60,15 @@
 #define NCRED_CELL     14
 #define NDEBT_CELL     15
 
+/* MXFRM is the "mirrored" transfer-from account */
+#define MXFRM_CELL     16
+
 
 #define DATE_CELL_WIDTH    11
 #define NUM_CELL_WIDTH      7
 #define ACTN_CELL_WIDTH     7
 #define XFRM_CELL_WIDTH    14
+#define MXFRM_CELL_WIDTH   14
 #define XTO_CELL_WIDTH     14
 #define DESC_CELL_WIDTH    29
 #define MEMO_CELL_WIDTH    29
@@ -102,6 +106,7 @@ configLabels (SplitRegister *reg)
    LABEL (NUM,   NUM_STR);
    LABEL (ACTN,  NUM_STR);
    LABEL (XFRM,  XFRM_STR);
+   LABEL (MXFRM, XFRM_STR);
    LABEL (XTO,   XFTO_STR);
    LABEL (DESC,  DESC_STR);
    LABEL (MEMO,  DESC_STR);
@@ -153,6 +158,7 @@ configLabels (SplitRegister *reg)
          break;
       case STOCK_REGISTER:
       case PORTFOLIO:
+      case CURRENCY_REGISTER:
          LABEL (DEBT,  SOLD_STR);
          LABEL (CRED,  BOUGHT_STR);
          break;
@@ -238,7 +244,7 @@ configLayout (SplitRegister *reg)
          curs = reg->single_cursor;
          FANCY (DATE,   date,     0,  0);
          BASIC (NUM,    num,      1,  0);
-         FANCY (XFRM,   xfrm,     2,  0);
+         FANCY (MXFRM,  mxfrm,    2,  0);
          FANCY (DESC,   desc,     3,  0);
          BASIC (RECN,   recn,     4,  0);
          FANCY (DEBT,   debit,    5,  0);
@@ -255,7 +261,7 @@ configLayout (SplitRegister *reg)
          FANCY (BALN,   balance,  7,  0);
   
          FANCY (ACTN,   action,   1,  1);
-         FANCY (XFRM,   xfrm,     2,  1);
+         FANCY (MXFRM,  mxfrm,    2,  1);
          BASIC (MEMO,   memo,     3,  1);
 
          curs = reg->trans_cursor;
@@ -277,12 +283,13 @@ configLayout (SplitRegister *reg)
       /* --------------------------------------------------------- */
       case STOCK_REGISTER:
       case PORTFOLIO:
+      case CURRENCY_REGISTER:
       {
          /* 11 column config */
          curs = reg->single_cursor;
          FANCY (DATE,   date,     0,  0);
          BASIC (NUM,    num,      1,  0);
-         FANCY (XFRM,   xfrm,     2,  0);
+         FANCY (MXFRM,  mxfrm,    2,  0);
          FANCY (DESC,   desc,     3,  0);
          BASIC (RECN,   recn,     4,  0);
          FANCY (DEBT,   debit,    5,  0);
@@ -306,7 +313,7 @@ configLayout (SplitRegister *reg)
          FANCY (BALN,   balance,  10, 0);
 
          FANCY (ACTN,   action,   1,  1);
-         FANCY (XFRM,   xfrm,     2,  1);
+         FANCY (MXFRM,  mxfrm,    2,  1);
          BASIC (MEMO,   memo,     3,  1);
 
          /* only the transaction cursor gets used */
@@ -354,77 +361,102 @@ configLayout (SplitRegister *reg)
    prev_r = r; prev_c = c;				\
 }
 
+#define TRAVERSE_NON_NULL_CELLS() {			\
+   i = prev_r;						\
+   for (j=prev_c+1; j<curs->numCols; j++) {		\
+      if ((reg->nullCell != curs->cells[i][j]) &&	\
+          (reg->recnCell != curs->cells[i][j]) &&	\
+          (XACC_CELL_ALLOW_INPUT & curs->cells[i][j]->input_output)) \
+      {							\
+         NEXT_RIGHT  (i, j);				\
+      }							\
+   }							\
+   for (i=prev_r+1; i<curs->numRows; i++) {		\
+      for (j=0; j<curs->numCols; j++) {			\
+         if ((reg->nullCell != curs->cells[i][j]) &&	\
+             (reg->recnCell != curs->cells[i][j]) &&	\
+             (XACC_CELL_ALLOW_INPUT & curs->cells[i][j]->input_output)) \
+         {						\
+            NEXT_RIGHT  (i, j);				\
+         }						\
+      }							\
+   }							\
+}
+
+#define FIRST_NON_NULL(r,c) {				\
+   i = r;						\
+   for (j=c; j<curs->numCols; j++) {			\
+      if ((reg->nullCell != curs->cells[i][j]) &&	\
+          (reg->recnCell != curs->cells[i][j]) &&	\
+          (XACC_CELL_ALLOW_INPUT & curs->cells[i][j]->input_output)) \
+      {							\
+         FIRST_RIGHT  (i, j);				\
+         break;						\
+      }							\
+   }							\
+}
+
+#define NEXT_NON_NULL(r,c) {				\
+   i = r;						\
+   for (j=c+1; j<curs->numCols; j++) {			\
+      if ((reg->nullCell != curs->cells[i][j]) &&	\
+          (reg->recnCell != curs->cells[i][j]) &&	\
+          (XACC_CELL_ALLOW_INPUT & curs->cells[i][j]->input_output)) \
+      {							\
+         NEXT_RIGHT  (i, j);				\
+         break;						\
+      }							\
+   }							\
+}
+
+#define NEXT_SPLIT() {					\
+   i = 0;						\
+   for (j=0; j<reg->split_cursor->numCols; j++) {	\
+      if ((reg->nullCell != reg->split_cursor->cells[i][j]) &&	\
+          (reg->recnCell != reg->split_cursor->cells[i][j]) &&	\
+          (XACC_CELL_ALLOW_INPUT & reg->split_cursor->cells[i][j]->input_output)) \
+      {							\
+         NEXT_RIGHT  (i+1, j);				\
+         break;						\
+      }							\
+   }							\
+}
+
 static void
 configTraverse (SplitRegister *reg)
 {
    int i,j;
-   int prev_r, prev_c;
+   int prev_r=0, prev_c=0;
+   int first_r, first_c;
    CellBlock *curs = NULL;
 
    curs = reg->single_cursor;
-   FIRST_RIGHT (0, 0);  /* a bit of a hack ... */
-   for (i=0; i<curs->numRows; i++) {
-      for (j=0; j<curs->numCols; j++) {
-         if ((reg->nullCell != curs->cells[i][j]) &&
-             (reg->recnCell != curs->cells[i][j]) &&
-             (XACC_CELL_ALLOW_INPUT & curs->cells[i][j]->input_output)) 
-         {
-            NEXT_RIGHT  (i, j);
-         }
-      }
-   }
+   /* lead in with the date cell, return to the date cell */
+   FIRST_NON_NULL (0, 0);
+   first_r = prev_r; first_c = prev_c;
+   TRAVERSE_NON_NULL_CELLS ();
+   /* wrap back to start of row after hitting the commit button */
+   NEXT_RIGHT (-1-first_r, -1-first_c);
 
+   curs = reg->double_cursor;
+   /* lead in with the date cell, return to the date cell */
+   FIRST_NON_NULL (0, 0);
+   first_r = prev_r; first_c = prev_c;
+   TRAVERSE_NON_NULL_CELLS ();
+   /* for double-line, hop back one row */
+   NEXT_RIGHT (-1-first_r, -1-first_c);
 
-#ifdef FUTURE 
-   int type = (reg->type) & REG_TYPE_MASK;
-   int show_tamount = (reg->type) & REG_SHOW_TAMOUNT;
-   int show_samount = (reg->type) & REG_SHOW_SAMOUNT;
-   int show_txfrm = (reg->type) & REG_SHOW_TXFRM;
-   int double_line = (reg->type) & REG_DOUBLE_LINE;
-   int multi_line = (reg->type) & REG_MULTI_LINE;
+   curs = reg->trans_cursor;
+   FIRST_NON_NULL (0,0);
+   TRAVERSE_NON_NULL_CELLS ();
+   /* hop to start of next row (the split cursor) */
+   NEXT_SPLIT();
 
-   switch (type) {
-      case BANK_REGISTER:
-         curs = reg->trans_cursor;
-         FIRST_RIGHT (DATE_CELL_R, DATE_CELL_C);
-         NEXT_RIGHT  (NUM_CELL_R,  NUM_CELL_C);
-         if (show_txfrm) {
-            NEXT_RIGHT (TXFRM_CELL_R, TXFRM_CELL_C);
-         }
-         NEXT_RIGHT  (DESC_CELL_R, DESC_CELL_C);
-         if (show_tamount) {
-            NEXT_RIGHT (TDEBT_CELL_R, TDEBT_CELL_C);
-            NEXT_RIGHT (TCRED_CELL_R, TCRED_CELL_C);
-         }
-
-         /* if a multi-line display, hop down one line to the split cursor */
-         if (!double_line && !multi_line) {
-            NEXT_RIGHT (-1-DATE_CELL_R, -1-DATE_CELL_C);
-         } else {
-            NEXT_RIGHT (ACTN_CELL_R + curs->numRows, ACTN_CELL_C);
-         }
-
-         curs = reg->split_cursor;
-         FIRST_RIGHT (ACTN_CELL_R, ACTN_CELL_C);
-         NEXT_RIGHT (XFRM_CELL_R, XFRM_CELL_C);
-         NEXT_RIGHT (MEMO_CELL_R, MEMO_CELL_C);
-         if (show_samount) {
-            NEXT_RIGHT (DEBT_CELL_R, DEBT_CELL_C);
-            NEXT_RIGHT (CRED_CELL_R, CRED_CELL_C);
-         }
-         if (multi_line) {
-            NEXT_RIGHT (ACTN_CELL_R + curs->numRows, ACTN_CELL_C);
-         } else
-         if (double_line) {
-            /* if double-line, hop back one row */
-            NEXT_RIGHT (-1-DATE_CELL_R + curs->numRows, -1-DATE_CELL_C);
-         } else {
-            /* normally, this statement should enver be reached */
-            NEXT_RIGHT (-1-ACTN_CELL_R, -1-ACTN_CELL_C);
-         }
-         break;
-   }
-#endif
+   curs = reg->split_cursor;
+   FIRST_NON_NULL (0,0);
+   TRAVERSE_NON_NULL_CELLS ();
+   /* hop to start of next row (the split cursor) */
+   NEXT_SPLIT();
 }
 
 /* ============================================== */
@@ -446,6 +478,20 @@ configCursors (SplitRegister *reg)
    /* set the color of the cells in the cursors */
    /* hack alert -- the actual color should depend on the 
     * type of register. */
+/* they used top be the following:
+  "*regbank.oddRowBackground:      #aaccff",
+  "*regcash.oddRowBackground:      #ccffcc",
+  "*regasset.oddRowBackground:     #aaffcc",
+  "*regcredit.oddRowBackground:    #ffffaa",
+  "*regliability.oddRowBackground: #ffcccc",
+  "*ledportfolio.oddRowBackground: #ccffff",
+  "*regmutual.oddRowBackground:    #ccffff",
+  "*regincome.oddRowBackground:    #aaccff",
+  "*regexpense.oddRowBackground:   #ffcccc",
+  "*regequity.oddRowBackground:    #ffffaa",
+  "*ledgportfolio.evenRowBackground:grey",
+  "*regmutual.evenRowBackground:   grey",
+*/
    reg->single_cursor->active_bg_color = 0xffdddd; /* pale red */
    reg->single_cursor->passive_bg_color = 0xccccff; /* pale blue */
 
@@ -484,6 +530,7 @@ mallocCursors (SplitRegister *reg)
 
       case STOCK_REGISTER:
       case PORTFOLIO:
+      case CURRENCY_REGISTER:
          reg->num_cols = 11;
          break;
       default:
@@ -539,6 +586,7 @@ xaccInitSplitRegister (SplitRegister *reg, int type)
    HDR (NUM);
    HDR (ACTN);
    HDR (XFRM);
+   HDR (MXFRM);
    HDR (XTO);
    HDR (DESC);
    HDR (MEMO);
@@ -565,6 +613,7 @@ xaccInitSplitRegister (SplitRegister *reg, int type)
    NEW (balance, Price);
 
    NEW (xfrm,    Combo);
+   NEW (mxfrm,   Combo);
    NEW (xto,     Combo);
    NEW (action,  Combo);
    NEW (memo,    Text);
@@ -583,10 +632,6 @@ xaccInitSplitRegister (SplitRegister *reg, int type)
 
    /* config the layout of the cells in the cursors */
    configLayout (reg);
-
-   /* -------------------------------- */   
-   /* define how traversal works */
-   configTraverse (reg);
 
    /* --------------------------- */
    /* do some misc cell config */
@@ -634,6 +679,13 @@ xaccInitSplitRegister (SplitRegister *reg, int type)
     * The format is a printf-style format for a double.  */
    xaccSetPriceCellFormat (reg->shrsCell, "%.3f");
    xaccSetPriceCellFormat (reg->priceCell, "%.3f");
+
+   /* -------------------------------- */   
+   /* define how traversal works. This must be done *after* the balance, etc.
+    * cells have been marked read-only, since otherwise config will try
+    * to pick them up.
+    */
+   configTraverse (reg);
 
    /* -------------------------------- */   
    /* add menu items for the action cell */
@@ -743,6 +795,7 @@ xaccDestroySplitRegister (SplitRegister *reg)
 
    xaccDestroyComboCell     (reg->actionCell);
    xaccDestroyComboCell     (reg->xfrmCell);
+   xaccDestroyComboCell     (reg->mxfrmCell);
    xaccDestroyComboCell     (reg->xtoCell);
    xaccDestroyBasicCell     (reg->memoCell);
    xaccDestroyPriceCell     (reg->creditCell);
@@ -762,6 +815,7 @@ xaccDestroySplitRegister (SplitRegister *reg)
 
    reg->actionCell  = NULL;
    reg->xfrmCell    = NULL;
+   reg->mxfrmCell   = NULL;
    reg->xtoCell     = NULL;
    reg->memoCell    = NULL;
    reg->creditCell  = NULL;
@@ -785,19 +839,20 @@ xaccSplitRegisterGetChangeFlag (SplitRegister *reg)
    unsigned int changed = 0;
 
    /* be careful to use bitwise ands and ors to assemble bit flag */
-   changed |= MOD_DATE & reg->dateCell->cell.changed;
-   changed |= MOD_NUM  & reg->numCell->changed;
-   changed |= MOD_DESC & reg->descCell->cell.changed;
-   changed |= MOD_RECN & reg->recnCell->changed;
+   changed |= MOD_DATE  & reg->dateCell->cell.changed;
+   changed |= MOD_NUM   & reg->numCell->changed;
+   changed |= MOD_DESC  & reg->descCell->cell.changed;
+   changed |= MOD_RECN  & reg->recnCell->changed;
 
-   changed |= MOD_ACTN & reg->actionCell->cell.changed;
-   changed |= MOD_XFRM & reg->xfrmCell->cell.changed;
-   changed |= MOD_XTO  & reg->xtoCell->cell.changed; 
-   changed |= MOD_MEMO & reg->memoCell->changed;
-   changed |= MOD_AMNT & reg->creditCell->cell.changed;
-   changed |= MOD_AMNT & reg->debitCell->cell.changed;
-   changed |= MOD_PRIC & reg->priceCell->cell.changed;
-   changed |= MOD_VALU & reg->valueCell->cell.changed; 
+   changed |= MOD_ACTN  & reg->actionCell->cell.changed;
+   changed |= MOD_XFRM  & reg->xfrmCell->cell.changed;
+   changed |= MOD_MXFRM & reg->mxfrmCell->cell.changed;
+   changed |= MOD_XTO   & reg->xtoCell->cell.changed; 
+   changed |= MOD_MEMO  & reg->memoCell->changed;
+   changed |= MOD_AMNT  & reg->creditCell->cell.changed;
+   changed |= MOD_AMNT  & reg->debitCell->cell.changed;
+   changed |= MOD_PRIC  & reg->priceCell->cell.changed;
+   changed |= MOD_VALU  & reg->valueCell->cell.changed; 
 
    changed |= MOD_NAMNT & reg->ncreditCell->cell.changed;
    changed |= MOD_NAMNT & reg->ndebitCell->cell.changed;

@@ -25,12 +25,18 @@
 
 #include "Account.h"
 #include "Group.h"
-#include "MultiLedger.h"
-#include "SplitLedger.h"
 #include "LedgerUtils.h"
+#include "MultiLedger.h"
+#include "Query.h"
+#include "SplitLedger.h"
 #include "Transaction.h"
 #include "util.h"
 
+/* the MAX_QUERY_SPLITS define determines how many transactions should be shown
+ * in the register.  Its set to a default of 30.  But this should be converted
+ * into a user-configurable value.  So hack-alert on the configuration aspect.
+ */
+#define MAX_QUERY_SPLITS 30
 
 /** GLOBALS *********************************************************/
 /* These are globals because they describe the state of the entire session.
@@ -181,7 +187,13 @@ xaccLedgerDisplaySimple (Account *acc)
     case EQUITY:
       reg_type = EQUITY_REGISTER;
       break;
-    }
+    case CURRENCY:
+      reg_type = CURRENCY_REGISTER;
+      break;
+    default:
+      PERR (" xaccLedgerDisplaySimple(): unknown account type\n");
+      return NULL;
+  }
 
   /* default to single-line display */
   reg_type |= REG_SINGLE_LINE;
@@ -329,14 +341,23 @@ xaccLedgerDisplayGeneral (Account *lead_acc, Account **acclist, int ledger_type)
   regData->displayed_accounts = accListCopy (acclist);
   regData->type = ledger_type;
 
+  /* set up the query filter */
+  regData->query = xaccMallocQuery();
+  xaccQuerySetAccounts (regData->query, regData->displayed_accounts);
+  xaccQueryAddAccount (regData->query, regData->leader);
+
+  /* by default, display only thirty transactions */
+  xaccQuerySetMaxSplits (regData->query, MAX_QUERY_SPLITS);
+
+  /* add this register to the list of registers */
   fullList = ledgerListAdd (fullList, regData);
 
   /******************************************************************\
    * The main register window itself                                *
   \******************************************************************/
 
-  /* MallocBasicRegister will malloc & initialize the
-   * register but doesn't do the gui init */
+  /* MallocBasicRegister will malloc & initialize the register,
+   * but will not do the gui init */
   regData->ledger = xaccMallocSplitRegister (ledger_type);
   
   regData->dirty = 1;
@@ -365,7 +386,7 @@ xaccLedgerDisplayRefresh (xaccLedgerDisplay *regData)
     * new splits and get them into the system.
     */
    xaccSRLoadRegister (regData->ledger, 
-                     xaccAccountGetSplitList (regData->leader),
+                     xaccQueryGetSplits (regData->query),
                      regData->leader);
 
 
@@ -609,6 +630,8 @@ xaccLedgerDisplayClose (xaccLedgerDisplay *regData)
   REMOVE_FROM_LIST (xaccLedgerDisplay, ledgerList, acc, leader);
 
   ledgerListRemove (fullList, regData);
+
+  xaccFreeQuery (regData->query);
 
   free(regData);
 }

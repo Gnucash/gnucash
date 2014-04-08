@@ -68,15 +68,20 @@ xaccInitAccount (Account * acc)
 
   acc->balance  = 0.0;
   acc->cleared_balance = 0.0;
+  acc->reconciled_balance = 0.0;
   acc->running_balance  = 0.0;
   acc->running_cleared_balance = 0.0;
+  acc->running_reconciled_balance = 0.0;
 
   acc->flags = 0;
   acc->type  = -1;
   
   acc->accountName = NULL;
+  acc->accountCode = NULL;
   acc->description = NULL;
   acc->notes       = NULL;
+  acc->currency    = NULL;
+  acc->security    = NULL;
   
   acc->numSplits   = 0;
   acc->splits      = (Split **) _malloc (sizeof (Split *));
@@ -111,9 +116,12 @@ xaccFreeAccount( Account *acc )
   /* recursively free children */
   xaccFreeAccountGroup (acc->children);
 
-  free(acc->accountName);
-  free(acc->description);
-  free(acc->notes);
+  if (acc->accountName) free (acc->accountName);
+  if (acc->accountCode) free (acc->accountCode);
+  if (acc->description) free (acc->description);
+  if (acc->notes) free (acc->notes);
+  if (acc->currency) free (acc->currency);
+  if (acc->security) free (acc->security);
   
   /* any split pointing at this account needs to be unmarked */
   i=0;
@@ -145,6 +153,7 @@ xaccFreeAccount( Account *acc )
 
   acc->balance  = 0.0;
   acc->cleared_balance = 0.0;
+  acc->reconciled_balance = 0.0;
 
   acc->flags = 0;
   acc->type  = -1;
@@ -152,6 +161,8 @@ xaccFreeAccount( Account *acc )
   acc->accountName = NULL;
   acc->description = NULL;
   acc->notes       = NULL;
+  acc->currency    = NULL;
+  acc->security    = NULL;
   
   acc->changed     = 0;
   acc->open        = 0;
@@ -163,10 +174,11 @@ xaccFreeAccount( Account *acc )
 \********************************************************************/
 
 void 
-xaccAccountBeginEdit (Account *acc)
+xaccAccountBeginEdit (Account *acc, int defer)
 {
    if (!acc) return;
-   acc->open = 1;
+   acc->open = ACC_BEGIN_EDIT;
+   if (defer) acc->open |= ACC_DEFER_REBALANCE;
 }
 
 void 
@@ -211,6 +223,24 @@ xaccAccountInsertSplit ( Account *acc, Split *split )
   if (!acc) return;
   if (!split) return;
   CHECK (acc);
+
+  /* if this split belongs to another account, make sure that
+   * the moving it is allowed by the currency denominations of 
+   * the old and new accounts. Basically, both old and new accounts
+   * must be denominated in the same currency.
+   */
+/*
+hack alert -- in fact this logic is wildly incorrect;
+disable for now till we figure out what the right thing is.
+  if (split->acc) {
+    if (acc->currency) {
+       if (!(split->acc->currency)) return;
+       if (strcmp (acc->currency, split->acc->currency)) return;
+    }  else { 
+       if (split->acc->currency) return;
+    }
+  }
+*/
 
   /* mark the account as having changed, and
    * the account group as requiring a save */
@@ -592,10 +622,9 @@ xaccMoveFarEnd (Split *split, Account *new_acc)
       return;
    }
 
-   /* remove the partner split from the old account */
+   /* move the partner split from the old account to the new */ 
    acc = (Account *) (partner_split->acc);
    if (acc != new_acc) {
-      xaccAccountRemoveSplit (acc, partner_split);
       xaccAccountInsertSplit (new_acc, partner_split);
    }
 }
@@ -666,7 +695,16 @@ xaccAccountSetType (Account *acc, int tip)
    if (!acc) return;
    CHECK (acc);
 
-   /* hack alert -- check for a valid type */
+   /* After an account type has been set, it cannot be changed */
+   if (-1 < acc->type) {
+      printf ("Error: xaccAccountSetType(): "
+              "the type of the account cannot be changed "
+              "after its been set! \n"
+             );
+      return;
+   }
+
+   /* hack alert -- check to make sure type is valid ... */
    acc->type = tip;
 }
 
@@ -674,7 +712,7 @@ void
 xaccAccountSetName (Account *acc, char *str)
 {
    char * tmp;
-   if (!acc) return;
+   if ((!acc) || (!str)) return;
    CHECK (acc);
 
    /* make strdup before freeing */
@@ -687,7 +725,7 @@ void
 xaccAccountSetDescription (Account *acc, char *str)
 {
    char * tmp;
-   if (!acc) return;
+   if ((!acc) || (!str)) return;
    CHECK (acc);
 
    /* make strdup before freeing */
@@ -707,6 +745,42 @@ xaccAccountSetNotes (Account *acc, char *str)
    tmp = strdup (str);
    if (acc->notes) free (acc->notes);
    acc->notes = tmp;
+}
+
+void 
+xaccAccountSetCurrency (Account *acc, char *str)
+{
+   if ((!acc) || (!str)) return;
+   CHECK (acc);
+
+   if (acc->currency && (0x0 != acc->currency[0])) {
+      printf ("Error: xacAccountSetCurrency(): "
+              "the currency denomination of an account "
+              "cannot be changed!\n"
+             );
+      return;
+   }
+   /* free the zero-length string */
+   if (acc->currency) free (acc->currency);
+   acc->currency = strdup (str);
+}
+
+void 
+xaccAccountSetSecurity (Account *acc, char *str)
+{
+   if ((!acc) || (!str)) return;
+   CHECK (acc);
+
+   if (acc->security && (0x0 != acc->security[0])) {
+      printf ("Error: xacAccountSetCurrency(): "
+              "the security traded in an account "
+              "cannot be changed!\n"
+             );
+      return;
+   }
+   /* free the zero-length string */
+   if (acc->security) free (acc->security);
+   acc->security = strdup (str);
 }
 
 /********************************************************************\
@@ -754,6 +828,20 @@ xaccAccountGetNotes (Account *acc)
    return (acc->notes);
 }
 
+char * 
+xaccAccountGetCurrency (Account *acc)
+{
+   if (!acc) return NULL;
+   return (acc->currency);
+}
+
+char * 
+xaccAccountGetSecurity (Account *acc)
+{
+   if (!acc) return NULL;
+   return (acc->security);
+}
+
 double
 xaccAccountGetBalance (Account *acc)
 {
@@ -789,6 +877,13 @@ xaccAccountGetSplitList (Account *acc)
 {
    if (!acc) return NULL;
    return (acc->splits);
+}
+
+int
+xaccAccountGetNumSplits (Account *acc)
+{
+   if (!acc) return 0;
+   return (acc->numSplits);
 }
 
 /*************************** END OF FILE **************************** */

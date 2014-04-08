@@ -50,14 +50,64 @@
 struct _account {
   /* public data, describes account */
 
+  /* The accountName is an arbitrary string assinged by the user. 
+   * It is intended to a short, 5 to 30 character long string that
+   * is displayed by the GUI as the account mnomenic. 
+   */
+  char     *accountName;
+
+  /* The accountCode is an arbitary string assigned by the user.
+   * It is intended to be reporting code that is a synonym for the 
+   * accountName. Typically, it will be a numeric value tht follows 
+   * the numbering assignments commonly used by accountants, such 
+   * as 100, 200 or 600 for top-level * accounts, and 101, 102..  etc.
+   * for detail accounts.
+   */
+  char     *accountCode;
+
+  /* The description is an arbitraary string assigned by the user. 
+   * It is intended to be a longer, 1-5 sentance description of what
+   * this account is all about.
+   */
+  char     *description;
+
+  /* The notes field is an arbitrary string assigned by the user.
+   * It is intended to hold long, free-form arbitrary additional 
+   * data about the account. Machine-readable data *must* be 
+   * structured using standard mime-type techniques.  For example,
+   * image data would be Base64 encoded, and lists of key-value
+   * pairs would be URL-encoded.
+   */
+  char     *notes;
+
+  /* The type field is the account type, picked from the enumerated 
+   * list that includes BANK, STOCK, CREDIT, INCOME, etc.  It's
+   * intended use is to be a hint to the GUI as to how to display   
+   * and format the transaction data.
+   */
+  short     type;
+
+  /* The currency field denotes the default currency in which all
+   * splits in this account are denominated.  It's value *MUST*
+   * be a three-letter ISO currency code, or it must be a comma followed
+   * by an arbitrary string (security name).  Currency trading accounts
+   * allow splits between accounts when the currency string matches the
+   * security string.
+   */
+  char    *currency;
+  char    *security;
+
+  /* The parent and children pointers are used to implement an account
+   * heirarchy, of accounts that have sub-accounts ("detail accounts").
+   */
   AccountGroup *parent;    /* back-pointer to parent */
   AccountGroup *children;  /* pointer to sub-accounts */
-  int       id;                     /* unique account id, internally assigned */
+
+  /* The id number is internally assigned by the engine, and is used for 
+   * various housekeeping operations by the engine.
+   */
+  int       id;            /* unique account id, internally assigned */
   char      flags;
-  short     type;
-  char     *accountName;
-  char     *description;
-  char     *notes;
 
   /* protected data, cached parameters */
   double balance;
@@ -79,6 +129,10 @@ struct _account {
    * opened for editing. */
   short open;
 };
+
+/* bitflields for theopen flag */
+#define ACC_BEGIN_EDIT        0x1
+#define ACC_DEFER_REBALANCE   0x2
 
 
 /* The xaccAccountRemoveSplit() routine will remove the indicated split

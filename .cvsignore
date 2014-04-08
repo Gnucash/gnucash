@@ -1,0 +1,13 @@
+Makefile
+config.cache
+config.log
+config.status
+config.h
+*.tar.gz
+*.log
+*.bin
+*.patch
+*.diff
+*.diffs
+xacc
+*.xac.*.xac

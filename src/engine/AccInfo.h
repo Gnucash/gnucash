@@ -33,23 +33,51 @@
 
 #include "config.h"
 
-/* The account types. 
- * Note: the actual values of these are *very* important, 
- * as it is the values, not the enums, that are stored 
- * in the file format! 
+/*
+ * The account types are used to determine how the transaction data
+ * in the account is displayed.   These values can be safely changed
+ * from one release to the next.  Note that if values are added,
+ * the file IO translation routines need to be updated. Note 
+ * also that GUI code depends on these numbers.
  */
 enum 
 {
   BANK = 0,
+  /* The bank account type denotes a savings or checking account
+   * held at a bank.  Often interest bearing.
+   */
+
   CASH = 1,
+  /* The cash account type is used to denote a shoe-box or pillowcase
+   * stuffed with cash.
+   */
+
+  CREDIT = 3,  
+  /* The Credit card account is used to denote credit (e.g. amex) and 
+   * debit (e.g. visa, mastercard) card accounts 
+   */
+
   ASSET = 2,
-  CREDIT = 3,          /* credit card */
   LIABILITY = 4,
+  /* asset and liability accounts indicate generic, generalized accounts
+   * that are none of the above.
+   */
+
   STOCK = 5,
   MUTUAL= 6, 
+  /* Stock and Mutual Fund accounts will typically be shown in registers
+   * which show three columns: price, number of shares, and value.
+   */
+
   INCOME = 7,
   EXPENSE = 8,
+  /* Income and expense accounts are used to denote income and expenses.
+   * Thus, when data in these accountsare displayed, the sign of the
+   * splits (entries) must be reversed.
+   */ 
+
   EQUITY = 9,
+  /* Equity account is used to balance the balance sheet. */
 
   /* bank account types */
   CHECKING = 10,
@@ -57,7 +85,13 @@ enum
   MONEYMRKT = 12,
   CREDITLINE = 13,     /* line of credit */
 
-  NUM_ACCOUNT_TYPES = 14
+  CURRENCY = 14, 
+  /* The currency account type indicates that the account is a currency trading 
+   * account.  In many ways, a currency trading account is like a stock trading
+   * account, where both quantities and prices are set.
+   */
+
+  NUM_ACCOUNT_TYPES = 15
 };
 
 /* hack alert -- we need a better way of dealing with
@@ -68,10 +102,10 @@ extern char *account_type_name [NUM_ACCOUNT_TYPES];
 struct _BankAcct 
 {
   char * bankid;       /* routing and transit number */
-  char * branchid;     /* bank identifier for international banks */  
+  char * branchid;     /* branch office bank identifier */  
   char * acctid;       /* account number */
   char * accttype;     /* account type */
-  char * acctkey;      /* checksum for international banks */
+  char * acctkey;      /* checksum key */
   int acctype;         /* account type.  Must be one of 
                         * CHECKING = 10;
                         * SAVINGS = 11;

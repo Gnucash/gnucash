@@ -187,12 +187,15 @@ LedgerDestroy (SplitRegister *reg)
    /* be sure to destroy the "blank split" */
    if (reg->user_hook) {
       Split *split;
+      Transaction *trans;
 
       split = (Split *) (reg->user_hook);
 
       /* split destroy will automatically remove it
        * from its parent account */
-      xaccSplitDestroy (split);
+      trans = xaccSplitGetParent (split);
+      xaccTransBeginEdit (trans, 1);
+      xaccTransDestroy (trans);
       reg->user_hook = NULL;
    }
 }
@@ -301,7 +304,7 @@ printf ("save split is %p \n", split);
       acc = xaccSplitGetAccount (s);
 
       split = xaccMallocSplit ();
-      xaccTransBeginEdit (trans);
+      xaccTransBeginEdit (trans, 1);
       xaccTransAppendSplit (trans, split);
       xaccAccountInsertSplit (acc, split);
 
@@ -310,7 +313,7 @@ printf ("save split is %p \n", split);
 
    } else {
       trans = xaccSplitGetParent (split);
-      xaccTransBeginEdit (trans);
+      xaccTransBeginEdit (trans, 1);
    }
 
    /* copy the contents from the cursor to the split */
@@ -338,27 +341,43 @@ printf ("save split is %p \n", split);
     * display, we just reparent the indicated split, its it,
     * and that's that.  For a two-line display, we want to reparent
     * the "other" split, but only if there is one ...
+    * XFRM is the straight split, MXFRM is the mirrored split.
     */
    if (MOD_XFRM & changed) {
-      Account *old_acc=NULL, *new_acc=NULL;
       Split *split_to_modify = NULL;
 
-      if ((REG_MULTI_LINE == style) ||
-          (REG_SINGLE_DYNAMIC == style) || 
-          (REG_DOUBLE_DYNAMIC == style))
-      {
-         split_to_modify = split;
-      } else {
-         split_to_modify = xaccGetOtherSplit(split);
-      }
+      split_to_modify = split;
 
       /* split to modify may be null if its a mutli-split transaction,
        * and a single-line or two-line display.  Then do nothing */
       if (split_to_modify) {
+         Account *old_acc=NULL, *new_acc=NULL;
+
          /* do some reparenting. Insertion into new account will automatically
           * delete from the old account */
          old_acc = xaccSplitGetAccount (split_to_modify);
          new_acc = xaccGetAccountByName (trans, reg->xfrmCell->cell.value);
+         xaccAccountInsertSplit (new_acc, split_to_modify);
+   
+         /* make sure any open windows of the old account get redrawn */
+         xaccAccountDisplayRefresh (old_acc);
+      }
+   }
+
+   if (MOD_MXFRM & changed) {
+      Split *split_to_modify = NULL;
+
+      split_to_modify = xaccGetOtherSplit(split);
+
+      /* split to modify may be null if its a mutli-split transaction,
+       * and a single-line or two-line display.  Then do nothing */
+      if (split_to_modify) {
+         Account *old_acc=NULL, *new_acc=NULL;
+
+         /* do some reparenting. Insertion into new account will automatically
+          * delete from the old account */
+         old_acc = xaccSplitGetAccount (split_to_modify);
+         new_acc = xaccGetAccountByName (trans, reg->mxfrmCell->cell.value);
          xaccAccountInsertSplit (new_acc, split_to_modify);
    
          /* make sure any open windows of the old account get redrawn */
@@ -385,9 +404,10 @@ printf ("save split is %p \n", split);
       } else {
          new_amount = (reg->ndebitCell->amount) - (reg->ncreditCell->amount);
       }
-      if ((EQUITY_REGISTER == (reg->type & REG_TYPE_MASK)) ||
-          (STOCK_REGISTER  == (reg->type & REG_TYPE_MASK)) ||
-          (PORTFOLIO       == (reg->type & REG_TYPE_MASK))) 
+      if ((EQUITY_REGISTER   == (reg->type & REG_TYPE_MASK)) ||
+          (STOCK_REGISTER    == (reg->type & REG_TYPE_MASK)) ||
+          (CURRENCY_REGISTER == (reg->type & REG_TYPE_MASK)) ||
+          (PORTFOLIO         == (reg->type & REG_TYPE_MASK))) 
       { 
          xaccSplitSetShareAmount (split, new_amount);
       } else {
@@ -429,7 +449,7 @@ xaccSRLoadTransEntry (SplitRegister *reg, Split *split, int do_commit)
    time_t secs;
    double baln;
    int typo = reg->type & REG_TYPE_MASK;
-   int style = reg->type & REG_STYLE_MASK;
+   /* int style = reg->type & REG_STYLE_MASK; */
 
    /* don't even bother doing a load if there is no current cursor */
    if (!(reg->table->current_cursor)) return;
@@ -446,6 +466,7 @@ xaccSRLoadTransEntry (SplitRegister *reg, Split *split, int do_commit)
       xaccSetComboCellValue (reg->actionCell, "");
       xaccSetBasicCellValue (reg->memoCell, "");
       xaccSetComboCellValue (reg->xfrmCell, "");
+      xaccSetComboCellValue (reg->mxfrmCell, "");
       xaccSetDebCredCellValue (reg->debitCell, 
                                reg->creditCell, 0.0);
       xaccSetDebCredCellValue (reg->ndebitCell, 
@@ -489,21 +510,25 @@ xaccSRLoadTransEntry (SplitRegister *reg, Split *split, int do_commit)
        * For a multi-line display, show the account for each member split.  
        * For a one or two-line display, show the other account, but only    
        * if there are exactly two splits.                                   
+       * xfrm is the "straight" display, "mxfrm" is the "mirrored" display.
        */
-      if ((REG_MULTI_LINE == style) ||
-          (REG_SINGLE_DYNAMIC == style) || 
-          (REG_DOUBLE_DYNAMIC == style))
+      accname = xaccAccountGetName (xaccSplitGetAccount (split));
+      xaccSetComboCellValue (reg->xfrmCell, accname);
       {
-         accname = xaccAccountGetName (xaccSplitGetAccount (split));
-         xaccSetComboCellValue (reg->xfrmCell, accname);
-      } else {
          Split *s = xaccGetOtherSplit (split);
          if (s) {
             accname = xaccAccountGetName (xaccSplitGetAccount (s));
          } else {
-            accname = SPLIT_STR;
+            /* determine whether s is null because threre are three
+             * or more splits, or whether there is only one ... */
+            s = xaccTransGetSplit (xaccSplitGetParent(split), 1);
+            if (s) {
+               accname = SPLIT_STR;    /* three or more .. */
+            } else {
+               accname  = "";          /* none ... */
+            }
          }
-         xaccSetComboCellValue (reg->xfrmCell, accname);
+         xaccSetComboCellValue (reg->mxfrmCell, accname);
       }
    
       xaccSetBasicCellValue (reg->memoCell, xaccSplitGetMemo (split));
@@ -512,9 +537,10 @@ xaccSRLoadTransEntry (SplitRegister *reg, Split *split, int do_commit)
       buff[1] = 0x0;
       xaccSetBasicCellValue (reg->recnCell, buff);
    
-      if ((EQUITY_REGISTER == typo) ||
-          (STOCK_REGISTER  == typo) ||
-          (PORTFOLIO       == typo)) 
+      if ((EQUITY_REGISTER   == typo) ||
+          (STOCK_REGISTER    == typo) ||
+          (CURRENCY_REGISTER == typo) ||
+          (PORTFOLIO         == typo)) 
       { 
          amt = xaccSplitGetShareAmount (split);
       } else {
@@ -621,7 +647,11 @@ xaccSRCountRows (SplitRegister *reg, Split **slist,
    num_virt_rows = 1;
 
    i=0;
-   split = slist[0]; 
+   if (slist) {
+      split = slist[0]; 
+   } else {
+      split = NULL;
+   }
    while (split) {
       /* do not count the blank split */
       if (split != ((Split *) reg->user_hook)) {
@@ -773,6 +803,7 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
    table->move_cursor = NULL;
    xaccMoveCursorGUI (table, -1, -1);
 
+   /* resize the table to the sizes we just counted above */
    /* num_virt_cols is always one. */
    xaccSetTableSize (table, reg->num_phys_rows, reg->num_cols, 
                             reg->num_virt_rows, 1);
@@ -786,7 +817,11 @@ printf ("load register of %d phys rows ----------- \n", reg->num_phys_rows);
    i=0;
    vrow = 1;   /* header is vrow zero */
    phys_row = reg->header->numRows;
-   split = slist[0]; 
+   if (slist) {
+      split = slist[0]; 
+   } else {
+      split = NULL;
+   }
    while (split) {
 
       /* do not load the blank split */
@@ -826,10 +861,10 @@ printf ("load trans %d at phys row %d \n", i, phys_row);
                secondary = xaccTransGetSplit (trans, j);
 
                if (secondary != split) {
-printf ("load split %d at phys row %d \n", j, phys_row);
                   xaccSetCursor (table, reg->split_cursor, phys_row, 0, vrow, 0);
                   xaccMoveCursor (table, phys_row, 0);
                   xaccSRLoadSplitEntry (reg, secondary, 1);
+printf ("load split %d at phys row %d addr=%p \n", j, phys_row, secondary);
                   vrow ++;
                   phys_row += reg->split_cursor->numRows; 
                }
@@ -862,7 +897,7 @@ printf ("load split %d at phys row %d \n", j, phys_row);
       double last_price = 0.0;
 
       trans = xaccMallocTransaction ();
-      xaccTransBeginEdit (trans);
+      xaccTransBeginEdit (trans, 1);
       xaccTransSetDateToday (trans);
       xaccTransCommitEdit (trans);
       split = xaccTransGetSplit (trans, 0);
@@ -918,20 +953,32 @@ printf ("load split %d at phys row %d \n", j, phys_row);
 /* walk account tree recursively, pulling out all the names */
 
 static void 
-LoadXferCell (ComboCell *cell,  AccountGroup *grp)
+LoadXferCell (ComboCell *cell,  
+              AccountGroup *grp,
+              char *base_currency)
 {
    Account * acc;
+   char * curr;
    int n;
 
    if (!grp) return;
 
-   /* build the xfer menu out of account names */
-   /* traverse sub-accounts recursively */
+   /* Build the xfer menu out of account names.
+    * Traverse sub-accounts recursively.
+    * Valid transfers can occur only between accounts
+    * with the same base currency.
+    */
    n = 0;
    acc = xaccGroupGetAccount (grp, n);
    while (acc) {
-      xaccAddComboCellMenuItem (cell, xaccAccountGetName (acc));
-      LoadXferCell (cell, xaccAccountGetChildren (acc));
+      curr = xaccAccountGetCurrency (acc);
+      if ((!curr) && (!base_currency)) {
+         xaccAddComboCellMenuItem (cell, xaccAccountGetName (acc));
+      }
+      if (curr && base_currency && !strcmp (curr, base_currency)) {
+         xaccAddComboCellMenuItem (cell, xaccAccountGetName (acc));
+      }
+      LoadXferCell (cell, xaccAccountGetChildren (acc), base_currency);
       n++;
       acc = xaccGroupGetAccount (grp, n);
    }
@@ -939,10 +986,12 @@ LoadXferCell (ComboCell *cell,  AccountGroup *grp)
 
 /* ======================================================== */
 
-void xaccLoadXferCell (ComboCell *cell,  AccountGroup *grp)
+void xaccLoadXferCell (ComboCell *cell,  
+                       AccountGroup *grp, 
+                       char *base_currency)
 {
    xaccAddComboCellMenuItem (cell, "");
-   LoadXferCell (cell, grp);
+   LoadXferCell (cell, grp, base_currency);
 }
 
 /* =======================  end of file =================== */

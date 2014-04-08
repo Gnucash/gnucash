@@ -152,6 +152,7 @@ DateMV (BasicCell *_cell,
 
    /* if user hit backspace, accept the change */
    if (!change) return newval;
+   if (0x0 == change[0]) return newval;
 
    /* accept any numeric input */
    if (isdigit (change[0])) return newval;

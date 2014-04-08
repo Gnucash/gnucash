@@ -71,9 +71,13 @@ wrapVerifyCursorPosition (Table *table, int row, int col)
    /* VerifyCursor will do all sorts of gui-independent machinations */
    xaccVerifyCursorPosition (table, row, col);
 
-   /* make sure *both* the old and the new cursor rows get redrawn */
-   xaccRefreshCursorGUI (table);  
-   doRefreshCursorGUI (table, save_curs, save_phys_row, save_phys_col);
+   if ((save_phys_row != table->current_cursor_phys_row) ||
+       (save_phys_col != table->current_cursor_phys_col))
+   {
+      /* make sure *both* the old and the new cursor rows get redrawn */
+      xaccRefreshCursorGUI (table);  
+      doRefreshCursorGUI (table, save_curs, save_phys_row, save_phys_col);
+   }
 }
 
 /* ==================================================== */
@@ -198,6 +202,11 @@ cellCB (Widget mw, XtPointer cd, XtPointer cb)
          break;
       }
       case XbaeLeaveCellReason: {
+         /* Do leaveCB first, so that the cell handler can do whatever
+          * it needs to do to commit values into its cell handler. 
+          * Then do the verify, which in general asumes that cell handlers
+          * are up to date (i.e. the leave has been processed.)
+          */
          leaveCB (mw, cd, cb);
          wrapVerifyCursorPosition (table, table->reverify_phys_row,
                                           table->reverify_phys_col);
@@ -522,10 +531,23 @@ assert (0);
    } 
 
    /* 
-xxxxxxxxxxx 
-hack alert -- 
-this may work,. but document it ...
-*/
+    * OK, now we do a fancy trick to get the auto-expanding registers to 
+    * work right.  The trick is that as one transaction is expanded or
+    * collapsed, the rows all get renumbered.  Now, we can't tell the 
+    * code to directly hope to the new renumbered position, because
+    * we haven't completed all of our work yet.  In particular, we
+    * haven't left the current cell, and this means we haven't yet saved 
+    * those cell contents.  Only after saving, can we reconfigure the
+    * table.  And only after we reconfigure the table can we move the 
+    * since only then will we know where & how to move it to.  Sooo ...
+    * here's what we do. We compute where we should have hopped to
+    * in the reconfigured table, and save that off in the "reverify"
+    * fields.  Then we hop to the boring old place we would have hopped 
+    * to if there had been no reconfiguring going on.  Later on, after
+    * we've reconfigured, we will move the cursor to the "reverify"
+    * position, and viola, we'll be in the right place.
+    */
+
    if (table->traverse) {
       int nr = cbs->next_row;
       int nc = cbs->next_column;
@@ -548,7 +570,7 @@ xaccCreateTable (Table *table, Widget parent, char * name)
    CellBlock *curs;
    unsigned char * alignments;
    short * widths;
-   Widget reg;
+   Widget reg, textw;
    int num_header_rows = 0;
 
    if (!table) return 0;
@@ -605,6 +627,10 @@ xaccCreateTable (Table *table, Widget parent, char * name)
    XtAddCallback (reg, XmNtraverseCellCallback, traverseCB, (XtPointer)table);
 
    table->table_widget = reg;
+
+   /* stop it from beeping */
+   XtVaGetValues (reg, XmNtextField, &textw, NULL);
+   XtVaSetValues (textw, XmNverifyBell, False, NULL);
 
    return (reg);
 }

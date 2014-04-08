@@ -67,10 +67,11 @@
 #define EXPENSE_REGISTER    7
 #define EQUITY_REGISTER     8
 #define STOCK_REGISTER      9
+#define CURRENCY_REGISTER   10
 
-#define GENERAL_LEDGER      10
-#define INCOME_LEDGER       11
-#define PORTFOLIO           12
+#define GENERAL_LEDGER      11
+#define INCOME_LEDGER       12
+#define PORTFOLIO           13
 #define REG_TYPE_MASK       0xff
 
 /* 
@@ -96,14 +97,15 @@
 
 #define MOD_ACTN   0x0010
 #define MOD_XFRM   0x0020
-#define MOD_XTO    0x0040
-#define MOD_MEMO   0x0080
-#define MOD_AMNT   0x0100
-#define MOD_NAMNT  0x0200
-#define MOD_PRIC   0x0400
-#define MOD_VALU   0x0800
-#define MOD_NEW    0x1000
-#define MOD_ALL    0x1fff
+#define MOD_MXFRM  0x0040
+#define MOD_XTO    0x0080
+#define MOD_MEMO   0x0100
+#define MOD_AMNT   0x0200
+#define MOD_NAMNT  0x0400
+#define MOD_PRIC   0x0800
+#define MOD_VALU   0x1000
+#define MOD_NEW    0x2000
+#define MOD_ALL    0x3fff
 
 /* The value of NUM_CELLS should be larger than the number of 
  * cells defined in the structure below!
@@ -133,6 +135,7 @@ struct _SplitRegister {
 
    ComboCell     * actionCell;
    ComboCell     * xfrmCell;
+   ComboCell     * mxfrmCell;
    ComboCell     * xtoCell;
    BasicCell     * memoCell;
    PriceCell     * creditCell;

@@ -25,7 +25,6 @@
 
 #include <stdlib.h>
 #include <assert.h>
-#include <guile/gh.h> /* This will go away once "datafile" is handled better. */
 
 #include "config.h"
 #include "main.h"
