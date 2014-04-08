@@ -24,26 +24,28 @@
 \********************************************************************/
 
 #include <Xm/Xm.h>
-#include <Xm/Form.h>
-#include <Xm/Text.h>
 #include <Xm/DialogS.h>
-#include <Xm/PanedW.h>
+#include <Xm/Form.h>
 #include <Xm/Frame.h>
-#include <Xm/RowColumn.h>
-#include <Xm/PushB.h>
 #include <Xm/LabelGP.h>
+#include <Xm/PanedW.h>
+#include <Xm/PushB.h>
+#include <Xm/RowColumn.h>
+#include <Xm/Text.h>
 #include <Xbae/Matrix.h>
-#include "main.h"
-#include "util.h"
-#include "date.h"
-#include "Data.h"
+
 #include "Account.h"
+#include "ActionBox.h"
+#include "AdjBWindow.h"
+#include "BuildMenu.h"
+#include "Data.h"
+#include "date.h"
+#include "main.h"
 #include "MainWindow.h"
 #include "QuickFill.h"
-#include "BuildMenu.h"
 #include "RecnWindow.h"
-#include "AdjBWindow.h"
 #include "Transaction.h"
+#include "util.h"
 
 /** STRUCTS *********************************************************/
 /* The RegWindow struct contains info needed by an instance of an open 
@@ -60,6 +62,7 @@ typedef struct _RegWindow {
   QuickFill      *qf;         /* keeps track of current quickfill node.  *
                                * Reset to Account->qfRoot when entering  *
                                * a new transaction                       */
+  ActionBox      *ab;
 } RegWindow;
 
 
@@ -138,9 +141,8 @@ extern Pixel negPixel;
 #define SHRS_CELL_C   (acc->columnLocation[SHRS_COL_ID])
 #define ACTN_CELL_C   (acc->columnLocation[ACTN_COL_ID])
 
-/* these columns/rows are still hard coded ... should be switched over, I guess */
 #define MEMO_CELL_R  1
-#define MEMO_CELL_C  2
+#define MEMO_CELL_C  DESC_CELL_C  /* same cilumn as the description */
 
 /** COOL MACROS *****************************************************/
 #define IN_DATE_CELL(R,C) (((R-1)%2==0) && (C==DATE_CELL_C))  /* Date cell        */
@@ -151,9 +153,11 @@ extern Pixel negPixel;
 #define IN_DEP_CELL(R,C)  (((R-1)%2==0) && (C==DEP_CELL_C))   /* Deposit cell     */
 #define IN_BALN_CELL(R,C) (((R-1)%2==0) && (C==BALN_CELL_C))  /* Balance cell     */
 #define IN_PRIC_CELL(R,C) (((R-1)%2==0) && (C==PRIC_CELL_C))  /* Price cell       */
+#define IN_ACTN_CELL(R,C) (((R-1)%2==0) && (C==ACTN_CELL_C))  /* Action cell      */
+
 #define IN_YEAR_CELL(R,C) (((R-1)%2==1) && (C==DATE_CELL_C))  /* Year cell        */
-#define IN_MEMO_CELL(R,C) (((R-1)%2==1) && (C==2))  /* Memo cell        */
-#define IN_BAD_CELL(R,C)  (((R-1)%2==1) && (C==3))  /* cell after memo  */
+#define IN_MEMO_CELL(R,C) (((R-1)%2==1) && (C==MEMO_CELL_C))  /* Memo cell        */
+#define IN_BAD_CELL(R,C)  (((R-1)%2==1) && (C!=MEMO_CELL_C))  /* Not the memo cell*/
 
 
 /********************************************************************/
@@ -226,6 +230,7 @@ regRefresh( RegWindow *regData )
       newData[row][NUM_CELL_C]   = XtNewString(buf);
       
       newData[row+1][NUM_CELL_C] = XtNewString("");
+      
       
       sprintf( buf, "%s", trans->description );
       newData[row][DESC_CELL_C]   = XtNewString(buf);
@@ -302,10 +307,16 @@ regRefresh( RegWindow *regData )
           sprintf( buf, "%.2f ", trans->share_price );
           newData[row][PRIC_CELL_C] = XtNewString(buf);
           newData[row+1][PRIC_CELL_C] = XtNewString("");
+
+          /* don't set number of shares here -- this is computed later,
+           * in recomputeBalance. */
           newData[row][SHRS_CELL_C]   = XtNewString("");
           newData[row+1][SHRS_CELL_C] = XtNewString("");
-          /* newData[row][ACTN_CELL_C]   = XtNewString(""); */
-          /* newData[row+1][ACTN_CELL_C] = XtNewString(""); */
+
+          sprintf( buf, "%s", trans->action );
+          newData[row][ACTN_CELL_C]   = XtNewString(buf);
+          newData[row+1][ACTN_CELL_C] = XtNewString("");
+      
           break;
         default:
           fprintf( stderr, "Ineternal Error: Account type: %d is unknown!\n", acc->type);
@@ -549,6 +560,16 @@ regSaveTransaction( RegWindow *regData, int position )
       }
     }
   
+  if( regData->changed & MOD_ACTN )
+    {
+    String  actn = NULL;
+    DEBUG("MOD_ACTN");
+    /* ... the action ... */
+    XtFree( trans->action );
+    actn = XbaeMatrixGetCell(regData->reg,row,ACTN_CELL_C);
+    trans->action = XtNewString( actn );
+    }
+  
   if( regData->changed & MOD_RECN )
     {
     DEBUG("MOD_RECN");
@@ -606,6 +627,7 @@ regSaveTransaction( RegWindow *regData, int position )
     float val=0.0;  /* must be float for sscanf to work */
 
     DEBUG("MOD_PRIC");
+    /* ...the price flag ... */
 
     price = XbaeMatrixGetCell(regData->reg,row,PRIC_CELL_C);
     sscanf( price, "%f", &val );
@@ -628,6 +650,7 @@ regSaveTransaction( RegWindow *regData, int position )
     if( (strcmp("",trans->num) == 0)         &&
         (strcmp("",trans->description) == 0) &&
         (strcmp("",trans->memo) == 0)        &&
+        (strcmp("",trans->action) == 0)      &&
         (0 == trans->catagory)               &&
         (1.0 == trans->share_price)          &&
         (0.0 == trans->damount) )
@@ -892,15 +915,15 @@ regWindow( Widget parent, Account *acc )
       case MUTUAL:
         acc->columnLocation [DATE_COL_ID] = 0;
         acc->columnLocation [NUM_COL_ID]  = 1;
-        /* acc->columnLocation [ACTN_COL_ID] = 2; */
-        acc->columnLocation [DESC_COL_ID] = 2;
-        acc->columnLocation [RECN_COL_ID] = 3;
-        acc->columnLocation [PAY_COL_ID]  = 4;
-        acc->columnLocation [DEP_COL_ID]  = 5;
-        acc->columnLocation [PRIC_COL_ID] = 6;
-        acc->columnLocation [SHRS_COL_ID] = 7;
-        acc->columnLocation [BALN_COL_ID] = 8;
-        acc -> numCols = 9;
+        acc->columnLocation [ACTN_COL_ID] = 2;
+        acc->columnLocation [DESC_COL_ID] = 3;
+        acc->columnLocation [RECN_COL_ID] = 4;
+        acc->columnLocation [PAY_COL_ID]  = 5;
+        acc->columnLocation [DEP_COL_ID]  = 6;
+        acc->columnLocation [PRIC_COL_ID] = 7;
+        acc->columnLocation [SHRS_COL_ID] = 8;
+        acc->columnLocation [BALN_COL_ID] = 9;
+        acc -> numCols = 10;
         break;
       default:
         fprintf( stderr, "Ineternal Error: Account type: %d is unknown!\n", acc->type);
@@ -929,7 +952,7 @@ regWindow( Widget parent, Account *acc )
       case MUTUAL:
         acc -> colWidths[PRIC_CELL_C] = 8;   /* price */
         acc -> colWidths[SHRS_CELL_C] = 8;   /* share balance */
-        /* acc -> colWidths[ACTN_CELL_C] = 6;   /* action (Buy/Sell)*/
+        acc -> colWidths[ACTN_CELL_C] = 6;   /* action (Buy/Sell)*/
         break;
       }
     
@@ -957,7 +980,7 @@ regWindow( Widget parent, Account *acc )
       case MUTUAL:
         acc -> alignments[PRIC_CELL_C] = XmALIGNMENT_END;  /* price */
         acc -> alignments[SHRS_CELL_C] = XmALIGNMENT_END;  /* share balance */
-        /* acc -> alignments[ACTN_CELL_C] = XmALIGNMENT_BEGINNING;  /* action */
+        acc -> alignments[ACTN_CELL_C] = XmALIGNMENT_BEGINNING;  /* action */
         break;
       }
     
@@ -985,7 +1008,7 @@ regWindow( Widget parent, Account *acc )
       case MUTUAL:
         acc -> rows[0][PRIC_CELL_C] = "Price";
         acc -> rows[0][SHRS_CELL_C] = "Tot Shrs";
-        /* acc -> rows[0][ACTN_CELL_C] = "Action";   /* action */
+        acc -> rows[0][ACTN_CELL_C] = "Action";   /* action */
         break;
       }
     
@@ -1018,7 +1041,7 @@ regWindow( Widget parent, Account *acc )
         break;
       }
     
-    data = (String **)XtMalloc(2*sizeof(String *));
+    data = (String **)XtMalloc(3*sizeof(String *));
     data[0] = &(acc -> rows[0][0]);
     data[1] = &(acc -> rows[1][0]);
     data[2] = &(acc -> rows[2][0]);
@@ -1053,6 +1076,11 @@ regWindow( Widget parent, Account *acc )
   XtManageChild(reg);
   XtManageChild(frame);
   
+
+  /* create action box for the first time */
+  regData->ab = actionBox (reg);
+ 
+
   /******************************************************************\
    * The button area... also contains balance fields                *
   \******************************************************************/
@@ -1169,6 +1197,9 @@ regWindow( Widget parent, Account *acc )
   
   XtPopup( regData->dialog, XtGrabNone );
   
+  /* unmanage the action box, until it is needed */
+  SetActionBox (regData->ab, -1, -1);
+
   unsetBusyCursor( parent );
   
   return regData;
@@ -1355,7 +1386,7 @@ regCB( Widget mw, XtPointer cd, XtPointer cb )
   
   switch( cbs->reason )
     {
-    case XbaeEnterCellReason:
+    case XbaeEnterCellReason: {
       DEBUG("XbaeEnterCellReason");
       DEBUGCMD(printf(" row = %d\n col = %d\n",row,col));
       /* figure out if we are editing a different transaction... if we 
@@ -1380,6 +1411,8 @@ regCB( Widget mw, XtPointer cd, XtPointer cb )
           !IN_RECN_CELL(row,col) && !IN_DEP_CELL(row,col) &&
           !((PORTFOLIO == acc->type) && IN_PRIC_CELL(row,col)) &&
           !((MUTUAL    == acc->type) && IN_PRIC_CELL(row,col)) &&
+          !((PORTFOLIO == acc->type) && IN_ACTN_CELL(row,col)) &&
+          !((MUTUAL    == acc->type) && IN_ACTN_CELL(row,col)) &&
           !IN_MEMO_CELL(row,col) && !IN_YEAR_CELL(row,col))
         {
         ((XbaeMatrixEnterCellCallbackStruct *)cbs)->doit = FALSE;
@@ -1406,7 +1439,17 @@ regCB( Widget mw, XtPointer cd, XtPointer cb )
         XtVaSetValues( mw, XmNcells, data, NULL );
         XbaeMatrixRefreshCell( mw, row, RECN_CELL_C);
         }
+
+      /* otherwise, move the ACTN widget */
+      else if( ((PORTFOLIO == acc->type) && IN_ACTN_CELL(row,col)) ||
+               ((MUTUAL    == acc->type) && IN_ACTN_CELL(row,col)) ) 
+        {
+           SetActionBox (regData->ab, row, col);
+           regData->changed |= MOD_ACTN;
+        }
       break;
+    }
+
     case XbaeModifyVerifyReason:
       DEBUG("XbaeModifyVerifyReason");
       {	
@@ -1560,13 +1603,21 @@ regCB( Widget mw, XtPointer cd, XtPointer cb )
       if( IN_PAY_CELL(row,col) || IN_DEP_CELL(row,col) )
         regData->changed |= MOD_AMNT;
       
-      if( ((PORTFOLIO == acc->type) && IN_PRIC_CELL(row,col)) ||
-          ((MUTUAL    == acc->type) && IN_PRIC_CELL(row,col)) )
-        regData->changed |= MOD_PRIC;
-      
       if( IN_MEMO_CELL(row,col) )
         regData->changed |= MOD_MEMO;
       
+      if( ((PORTFOLIO == acc->type) && IN_PRIC_CELL(row,col)) ||
+          ((MUTUAL    == acc->type) && IN_PRIC_CELL(row,col)) )
+        regData->changed |= MOD_PRIC;
+
+      /* Note: for cell widgets, this callback will never
+       * indicate a row,col with a cell widget in it.  
+       * Thus, the following if statment will never be true
+       */
+      if( ((PORTFOLIO == acc->type) && IN_ACTN_CELL(row,col)) ||
+          ((MUTUAL    == acc->type) && IN_ACTN_CELL(row,col)) ) {
+        regData->changed |= MOD_ACTN;
+      }
       break;
     case XbaeTraverseCellReason:
       DEBUG("XbaeTraverseCellReason");
