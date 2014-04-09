@@ -32,6 +32,21 @@
 #include "SplitLedger.h"
 #include "Transaction.h"
 
+/* the MAX_QUERY_SPLITS define determines how many transactions should be shown
+ * in the register.  Its set to a default of 30.  But this should be converted
+ * into a user-configurable value.  So hack-alert on the configuration aspect.
+ */
+#define MAX_QUERY_SPLITS 30
+
+/* the MAX_QUERY_SPLITS_UNCLAMP define determines cap on how many transactions 
+ * should be shown in the register when uiser is browsing with dates.  Its set 
+ * to a default of 1000, which should give user plenty of elbow room to browse,
+ * and is still small enough to keep em out of trouble.  This should be converted
+ * into a user-configurable value.  So hack-alert on the configuration aspect.
+ */
+#define MAX_QUERY_SPLITS_UNCLAMP 1000
+
+
 /** STRUCTS *********************************************************/
 /* The xaccLedgerDisplay struct describes a single register/ledger instance.
  */

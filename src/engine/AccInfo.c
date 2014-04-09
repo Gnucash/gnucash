@@ -22,3 +22,10 @@ char *account_type_name[NUM_ACCOUNT_TYPES] =
 	CREDITLINE_STR
    };
 
+
+char * xaccAccountGetTypeStr (int type)
+{
+   if (0 > type) return "";
+   if (NUM_ACCOUNT_TYPES <= type) return "";
+   return (account_type_name [type]);
+}

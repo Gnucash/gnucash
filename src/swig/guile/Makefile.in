@@ -1,0 +1,101 @@
+# Makefile -- makefile for gnucash/src/swig
+# Copyright (C) 1998 Rob Browning <rlb@cs.utexas.edu>
+#                                                                  
+# This program is free software; you can redistribute it and/or    
+# modify it under the terms of the GNU General Public License as   
+# published by the Free Software Foundation; either version 2 of   
+# the License, or (at your option) any later version.              
+#                                                                  
+# This program is distributed in the hope that it will be useful,  
+# but WITHOUT ANY WARRANTY; without even the implied warranty of   
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    
+# GNU General Public License for more details.                     
+#                                                                  
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software      
+# Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        
+
+# These three lines are suggested defs for autoconf (see the info pages).
+
+@SET_MAKE@
+srcdir   = @top_srcdir@
+prefix   = @prefix@
+VPATH    = @top_srcdir@
+
+CC       = @CC@
+INCLPATH = \
+           -I. \
+           -I@top_srcdir@/src \
+           -I@top_srcdir@/src/swig\
+           -I@top_srcdir@/src/engine \
+           -I@top_srcdir@/src/register \
+           -I@top_srcdir@/src/guile \
+           -I@top_srcdir@/include \
+           -I@top_srcdir@/lib/ComboBox-1.33 \
+           -I@top_srcdir@/@XMHTML_INC@ \
+           -I@top_srcdir@/lib/Xbae-4.6.2-linas \
+           -I$(prefix)/include
+
+CFLAGS   = @CFLAGS@ @X_CFLAGS@ -DCELL_WIDGETS=1 ${INCLPATH}
+
+HAVE_PLOTUTILS=@HAVE_PLOTUTILS@
+
+######################################################################
+# SEE Makefile.common for information about these variables.
+INDEP_SRCS = gnucash-all-guile_wrap.c gnucash-engine-guile_wrap.c
+######################################################################
+
+# This inclusion must come after the first target, and after the
+# definitions of *_SRCS, etc., but before the usage of *_OBJS.
+include @top_srcdir@/Makefile.common
+
+default: ${OBJS}
+.PHONY: default
+
+SWIG_FILTER    := %P.h %/util.h
+SWIG_ENGINE_HDRS := \
+  $(filter-out ${SWIG_FILTER},$(wildcard @top_srcdir@/src/engine/*.h))
+SWIG_ALL_HDRS := \
+  ${SWIG_ENGINE_HDRS} \
+	../helperfuncs.h \
+  $(filter-out ${SWIG_FILTER},$(wildcard @top_srcdir@/src/guile/gnucash.h))
+
+ifeq (${HAVE_PLOTUTILS},1)
+  SWIG_ALL_HDRS += ../plot.preproc.h
+endif
+
+# Because Swig's include mechanism is not too smart.
+SWIG_ENGINE_BASENAMES := $(notdir ${SWIG_ENGINE_HDRS})
+SWIG_ALL_BASENAMES := $(notdir ${SWIG_ALL_HDRS})
+
+# This is .PHONY because it has to be re-generated *every* time.  Who
+# knows when headers are added to the engine dir?
+gnucash.engine.i: ${SWIG_ENGINE_HDRS}
+	@echo "%module gnucash" > $@
+	@echo "%{" >> $@
+	@($(foreach hdr,${SWIG_ENGINE_BASENAMES},echo "#include <${hdr}>"; )) >> $@
+	@echo "%}" >> $@
+	@($(foreach hdr,${SWIG_ENGINE_BASENAMES},echo %include ${hdr}; )) >> $@
+TRASH += gnucash.engine.i gnucash.engine_wrap.doc
+
+gnucash.all.i: ${SWIG_ALL_HDRS}
+	@echo "%module gnucash" > $@
+	@echo "%{" >> $@
+	@($(foreach hdr,${SWIG_ALL_BASENAMES},echo "#include <${hdr}>"; )) >> $@
+	@echo "%}" >> $@
+	@($(foreach hdr,${SWIG_ALL_BASENAMES},echo %include ${hdr}; )) >> $@
+TRASH += gnucash.all.i gnucash.all_wrap.doc
+
+gnucash-engine-guile_wrap.c: gnucash.engine.i
+	swig -I.. -I@top_srcdir@/src/engine -I@top_srcdir@/src/guile -guile -o $@ $< 
+	perl -pi -e 's/^void gnucash\(/void gnucash_swig_init\(/' $@
+TRASH += gnucash-engine-guile_wrap.c
+
+gnucash-all-guile_wrap.c: gnucash.all.i
+	swig -I.. -I@top_srcdir@/src/engine -I@top_srcdir@/src/guile -guile -o $@ $< 
+	perl -pi -e 's/^void gnucash\(/void gnucash_swig_init\(/' $@
+TRASH += gnucash-all-guile_wrap.c
+
+# Local Variables:
+# tab-width: 2
+# End:

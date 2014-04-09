@@ -1,7 +1,7 @@
 /********************************************************************\
  * Group.c -- the main data structure of the program                *
  * Copyright (C) 1997 Robin D. Clark                                *
- * Copyright (C) 1997 Linas Vepstas                                 *
+ * Copyright (C) 1997, 1998 Linas Vepstas                           *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -22,6 +22,8 @@
  *  Address: 609 8th Street                                         *
  *           Huntington Beach, CA 92648-4632                        *
 \********************************************************************/
+
+#include <assert.h>
 
 #include "config.h"
 
@@ -57,7 +59,8 @@ xaccInitializeAccountGroup (AccountGroup *grp)
   
   grp->parent      = NULL;
   grp->numAcc      = 0;
-  grp->account     = NULL;
+  grp->account     = _malloc (sizeof (Account *));
+  grp->account[0]  = NULL;   /* null-terminated array */
   
   grp->balance     = 0.0;
   }
@@ -90,7 +93,10 @@ xaccFreeAccountGroup( AccountGroup *grp )
 
   /* null everything out, just in case somebody 
    * tries to traverse freed memory */
-  xaccInitializeAccountGroup (grp);
+  grp->parent      = NULL;
+  grp->numAcc      = 0;
+  grp->account     = NULL;
+  grp->balance     = 0.0;
 
   _free(grp);
 }
@@ -242,7 +248,7 @@ xaccGetAccountFromName ( AccountGroup *root, const char * name )
   /* first, look for accounts hanging off the root */
   for (i=0; i<root->numAcc; i++) {
     acc = root->account[i];
-    if (!strcmp(acc->accountName, name)) return acc;
+    if (!safe_strcmp(acc->accountName, name)) return acc;
   }
 
   /* if we are still here, then we haven't found the account yet.
@@ -279,41 +285,6 @@ xaccGetPeerAccountFromName ( Account *acc, const char * name )
 
 /********************************************************************\
 \********************************************************************/
-Account *
-removeAccount( AccountGroup *grp, int num )
-  {
-  Account *acc = NULL;
-  
-  if( NULL != grp )
-    {
-    int i,j;
-    Account **oldAcc = grp->account;
-
-    grp->saved = FALSE;
-    
-    grp->numAcc--;
-    grp->account = (Account **)_malloc((grp->numAcc)*sizeof(Account *));
-    
-    acc = oldAcc[grp->numAcc];    /* In case we are deleting last in
-				    * old array */
-    for( i=0,j=0; i<grp->numAcc; i++,j++ )
-      {
-      if( j != num )
-        grp->account[i] = oldAcc[j];
-      else
-        {
-        acc = oldAcc[j];
-        i--;
-        }
-      }
-    
-    _free(oldAcc);
-    }
-  return acc;
-  }
-
-/********************************************************************\
-\********************************************************************/
 
 void
 xaccRemoveGroup (AccountGroup *grp)
@@ -342,9 +313,9 @@ xaccRemoveGroup (AccountGroup *grp)
 void
 xaccRemoveAccount (Account *acc)
 {
-   int i,j;
+   int i,j, nacc;
    AccountGroup *grp;
-   Account **oldAcc;
+   Account **arr;
 
    if (NULL == acc) return;
    grp = acc->parent;
@@ -354,44 +325,35 @@ xaccRemoveAccount (Account *acc)
     * are not yet parented. */
    if (NULL == grp) return;
 
-   oldAcc = grp->account;
+   nacc = grp->numAcc;
+   assert (nacc);
 
+   arr = grp->account;
+
+   for( i=0,j=0; j<nacc; i++,j++ ) {
+      arr[i] = arr[j];
+      if( acc == arr[j] ) { i--; }
+   }
+   nacc --;
+   arr[nacc] = NULL;
+   grp->numAcc = nacc;
    grp->saved = FALSE;
-    
-   grp->numAcc--;
 
-   if (0 < grp->numAcc) {
-      grp->account = (Account **)_malloc((grp->numAcc)*sizeof(Account *));
-       
-      for( i=0,j=0; i<grp->numAcc; i++,j++ ) {
-         if( acc != oldAcc[j] ) {
-            grp->account[i] = oldAcc[j];
-         } else {
-            i--;
-         }
-      }
-   } else {
-      grp->account = NULL;
-
-      /* if this was the last account in a group, delete
-       * the group as well (unless its a root group) */
-      if (grp->parent) {
-         xaccRemoveGroup (grp);
-         xaccFreeAccountGroup (grp);
-       }
-    }
-    
-   _free(oldAcc);
+   /* if this was the last account in a group, delete
+    * the group as well (unless its a root group) */
+   if ((0 == nacc) && (grp->parent)) {
+      xaccRemoveGroup (grp);
+      xaccFreeAccountGroup (grp);
+   }
 }
 
 /********************************************************************\
 \********************************************************************/
-int
+
+void
 xaccInsertSubAccount( Account *adult, Account *child )
 {
-  int retval;
-
-  if (NULL == adult) return -1;
+  if (NULL == adult) return;
 
   /* if a container for the children doesn't yet exist, add it */
   if (NULL == adult->children) {
@@ -402,45 +364,59 @@ xaccInsertSubAccount( Account *adult, Account *child )
   adult->children->parent = adult;
 
   /* allow side-effect of creating a child-less account group */
-  if (NULL == child) return -1;
+  if (NULL == child) return;
 
-  retval = insertAccount (adult->children, child);
-  return retval;
+  xaccGroupInsertAccount (adult->children, child);
 }
 
 /********************************************************************\
 \********************************************************************/
-int
-insertAccount( AccountGroup *grp, Account *acc )
-  {
-  int i=-1;
-  Account **oldAcc;
+
+void
+xaccGroupInsertAccount( AccountGroup *grp, Account *acc )
+{
+  int i,nacc;
+  Account **arr;
+  int ralo = 1;
   
-  if (NULL == grp) return -1;
-  if (NULL == acc) return -1;
+  if (NULL == grp) return;
+  if (NULL == acc) return;
+
+  /* If the account is currently in another group, remove it there first.
+   * Basically, we can't have accounts being in two places at once. 
+   * If old and new parents are the same, reinsertion causes the sort order
+   * to be checked.
+   */
+  if (acc->parent) {
+    if (grp == acc->parent) ralo = 0;
+    xaccRemoveAccount (acc);
+  }
+  grp->saved = FALSE;
 
   /* set back-pointer to the accounts parent */
-  acc->parent = (struct _account_group *) grp;
+  acc->parent = grp;
 
-  oldAcc = grp->account;
-    
-  grp->saved = FALSE;
-  
-  grp->numAcc++;
-  grp->account = (Account **)_malloc((grp->numAcc)*sizeof(Account *));
+  nacc = grp->numAcc;
+  arr = grp->account;
+  if (ralo) {
+     arr = (Account **) realloc (arr, (nacc+2)*sizeof(Account *));
+  }
 
-  if (1 < grp->numAcc) {
-    for( i=0; i<(grp->numAcc-1); i++ ) {
-      grp->account[i] = oldAcc[i];
+  /* insert account in proper sort order */
+  for (i=nacc; i>=0; i--) {
+    if ((0<i) && (0 < xaccAccountOrder (&(arr[i-1]), &acc))) {
+       arr[i] = arr[i-1];
+    } else {
+       arr[i] = acc;
+       break;
     }
-    _free(oldAcc);
-  } else {
-    i = 0;
   }
-  grp->account[i] = acc;
 
-  return i;
-  }
+  nacc++;
+  arr[nacc] = NULL;
+  grp->account = arr;
+  grp->numAcc = nacc;
+}
 
 /********************************************************************\
 \********************************************************************/
@@ -453,8 +429,10 @@ xaccRecomputeGroupBalance (AccountGroup *grp)
    char * default_currency;
 
    if (!grp) return;
+   if (!(grp->account)) return;
 
    acc = grp->account[0];
+   if (!acc) return;
    default_currency = acc->currency;
 
    grp->balance = 0.0;
@@ -480,6 +458,152 @@ xaccRecomputeGroupBalance (AccountGroup *grp)
 
 /********************************************************************\
 \********************************************************************/
+/* account codes will be assigned base-36, with three digits */
+
+#define BASE 36
+
+char *
+xaccGroupGetNextFreeCode (AccountGroup *grp, int digits)
+{
+  Account *acc;
+  int i, maxcode = 0;
+  char * retval;
+
+  if (!grp) return NULL;
+
+  /* count levels to top */
+  acc = grp->parent;
+  while (acc) {
+    digits --;
+    assert (acc->parent);
+    acc = acc->parent->parent;
+  }
+
+  /* if (0>digits)  we could insert a decimal place, but I am too lazy
+   * to write this code.  It doesn't seem important at the moment ... */
+
+  /* find the largest used code */
+  acc = grp->parent;
+  if (acc) {
+     if (acc->accountCode) {
+        maxcode = strtol (acc->accountCode, NULL, BASE);
+     }
+  }
+  for (i=0; i<grp->numAcc; i++) {
+     Account *acnt = grp->account[i];
+     if (acnt->accountCode) {
+        int code = strtol (acnt->accountCode, NULL, BASE);
+        if (code > maxcode) maxcode = code;
+     }
+  }
+
+  /* right-shift */
+  for (i=1; i<digits; i++) {
+     maxcode /= BASE;
+  }
+  maxcode ++;
+
+  /* left-shift */
+  for (i=1; i<digits; i++) {
+     maxcode *= BASE;
+  }
+
+  /* print */
+  retval = ultostr ((unsigned long) maxcode, BASE);
+  return retval;
+}
+
+/********************************************************************\
+\********************************************************************/
+/* almost identical code to above, but altered to deal with 
+ * specified account */
+
+char *
+xaccAccountGetNextChildCode (Account *parent_acc, int digits)
+{
+  Account *acc;
+  int i, maxcode = 0;
+  char * retval;
+  AccountGroup *grp;
+
+  if (!parent_acc) return NULL;
+
+  /* count levels to top */
+  acc = parent_acc;
+  while (acc) {
+    digits --;
+    assert (acc->parent);   /* all acounts must be in a group */
+    acc = acc->parent->parent;
+  }
+
+  /* if (0>digits)  we could insert a decimal place, but I am too lazy
+   * to write this code.  It doesn't seem important at the moment ... */
+
+  /* find the largest used code */
+  acc = parent_acc;
+  if (acc) {
+     if (acc->accountCode) {
+        maxcode = strtol (acc->accountCode, NULL, BASE);
+     }
+  }
+  grp = parent_acc->children;
+  if (grp) {
+     for (i=0; i<grp->numAcc; i++) {
+        Account *acnt = grp->account[i];
+        if (acnt->accountCode) {
+           int code = strtol (acnt->accountCode, NULL, BASE);
+           if (code > maxcode) maxcode = code;
+        }
+     }
+  }
+
+  /* right-shift */
+  for (i=1; i<digits; i++) {
+     maxcode /= BASE;
+  }
+  maxcode ++;
+
+  /* left-shift */
+  for (i=1; i<digits; i++) {
+     maxcode *= BASE;
+  }
+
+  /* print */
+  retval = ultostr ((unsigned long) maxcode, BASE);
+  return retval;
+}
+
+/********************************************************************\
+\********************************************************************/
+
+void
+xaccGroupDepthAutoCode (AccountGroup *grp)
+{
+   int depth;
+   if (!grp) return;
+
+   /* get the depth */
+   depth = xaccGroupGetDepth (grp);
+   if (3>depth) depth = 3;
+
+   xaccGroupAutoCode (grp, depth);
+} 
+
+void
+xaccGroupAutoCode (AccountGroup *grp, int depth)
+{
+   int i;
+   if (!grp || (0>depth)) return;
+
+   for (i=0; i<grp->numAcc; i++) {
+      Account *acc = grp->account[i];
+      xaccAccountAutoCode (acc, depth);
+      xaccGroupAutoCode (acc->children, depth);
+   }
+} 
+
+/********************************************************************\
+\********************************************************************/
 
 void 
 xaccConcatGroups (AccountGroup *togrp, AccountGroup *fromgrp)
@@ -492,11 +616,10 @@ xaccConcatGroups (AccountGroup *togrp, AccountGroup *fromgrp)
    
    for (i=0; i<fromgrp->numAcc; i++) {
       acc = fromgrp->account[i];
-      insertAccount (togrp, acc);
+      xaccGroupInsertAccount (togrp, acc);
       fromgrp->account[i] = NULL;
    }
-   _free (fromgrp->account);
-   fromgrp->account = NULL;
+   fromgrp->account[0] = NULL;
    fromgrp->numAcc = 0;
 }
 
@@ -515,9 +638,12 @@ xaccMergeAccounts (AccountGroup *grp)
       acc_a = grp->account[i];
       for (j=i+1; j<grp->numAcc; j++) {
          acc_b = grp->account[j];
-         if ((0 == strcmp(acc_a->accountName, acc_b->accountName)) &&
-             (0 == strcmp(acc_a->description, acc_b->description)) &&
-             (0 == strcmp(acc_a->notes, acc_b->notes)) &&
+         if ((0 == safe_strcmp(acc_a->accountName, acc_b->accountName)) &&
+             (0 == safe_strcmp(acc_a->accountCode, acc_b->accountCode)) &&
+             (0 == safe_strcmp(acc_a->description, acc_b->description)) &&
+             (0 == safe_strcmp(acc_a->currency, acc_b->currency)) &&
+             (0 == safe_strcmp(acc_a->security, acc_b->security)) &&
+             (0 == safe_strcmp(acc_a->notes, acc_b->notes)) &&
              (acc_a->type == acc_b->type)) {
 
             AccountGroup *ga, *gb;
@@ -527,13 +653,13 @@ xaccMergeAccounts (AccountGroup *grp)
             gb = (AccountGroup *) acc_b->children;
             if (gb) {
                if (!ga) {
-                  acc_a->children = (struct _account_group *) gb;
+                  acc_a->children = gb;
                   gb->parent = acc_a;
                   acc_b->children = NULL;
                } else {
                   xaccConcatGroups (ga, gb);
-                  xaccFreeAccountGroup (gb);
                   acc_b->children = NULL;
+                  xaccFreeAccountGroup (gb);
                }
             }
 
@@ -545,8 +671,7 @@ xaccMergeAccounts (AccountGroup *grp)
                Split *split;
                split = acc_b->splits[k];
                acc_b->splits[k] = NULL;
-               if (acc_b == (Account *) split->acc) 
-                   split->acc = (struct _account *) acc_a;
+               split->acc = NULL;
                xaccAccountInsertSplit (acc_a, split);
             }
 
@@ -556,6 +681,7 @@ xaccMergeAccounts (AccountGroup *grp)
             grp->account[j] = grp->account[grp->numAcc -1];
             grp->account[grp->numAcc -1] = NULL;
             grp->numAcc --;
+            break;
          }
       }
    }
@@ -603,7 +729,26 @@ xaccGroupGetAccount (AccountGroup *grp, int i)
 double
 xaccGroupGetBalance (AccountGroup * grp)
 {
+   if (!grp) return 0.0;
    return (grp->balance);
+}
+
+/********************************************************************\
+\********************************************************************/
+
+int     
+xaccGroupGetDepth (AccountGroup *grp)
+{
+   int i, depth=0, maxdepth=0;
+   if (!grp) return 0;
+
+   for (i=0; i<grp->numAcc; i++) {
+      depth = xaccGroupGetDepth (grp->account[i]->children);
+      if (depth > maxdepth) maxdepth = depth;
+   }
+
+   maxdepth++;
+   return maxdepth;
 }
 
 /****************** END OF FILE *************************************/

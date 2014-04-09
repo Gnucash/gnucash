@@ -70,11 +70,11 @@ clean:
 	rm -rf obj
 	-rm -rf ${TRASH}
 
-distclean:
+distclean: clean
 	$(foreach dir,${CLEAN_SUBDIRS},(cd ${dir} && $(MAKE) distclean);)
-	rm -f *~ *.bak \#* $(TRASH)
-	rm -rf obj
-	rm -f Makefile Makefile.bak config.h
+	rm -f Makefile.bak
+	rm -f $(foreach f,$(wildcard *.in),$(f:.in=))
+	rm -f ${DIST_TRASH}
 
 .PHONY: clean distclean
 

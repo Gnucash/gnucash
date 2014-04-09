@@ -32,12 +32,6 @@
 #include "Transaction.h"
 #include "util.h"
 
-/* the MAX_QUERY_SPLITS define determines how many transactions should be shown
- * in the register.  Its set to a default of 30.  But this should be converted
- * into a user-configurable value.  So hack-alert on the configuration aspect.
- */
-#define MAX_QUERY_SPLITS 30
-
 /** GLOBALS *********************************************************/
 /* These are globals because they describe the state of the entire session.
  * The is, there must be only one instance of these per GUI session.
@@ -431,6 +425,8 @@ xaccRegisterRefresh (SplitRegister *splitreg)
    xaccLedgerDisplay *regData;
    int n;
 
+   if (!fullList) return;
+
    /* find the ledger which contains this register */
    n = 0; regData = fullList[n];
    while (regData) {
@@ -452,6 +448,8 @@ xaccRegisterCountHack (SplitRegister *splitreg)
 {
    xaccLedgerDisplay *regData;
    int n;
+
+   if (!fullList) return;
 
    /* find the ledger which contains this register */
    n = 0; regData = fullList[n];
@@ -476,7 +474,7 @@ MarkDirtyAllRegs (Account *acc)
    xaccLedgerDisplay *regData;
    int n;
 
-   if (!acc) return;
+   if (!acc || !fullList) return;   
 
    /* find all registers which contain this account */
    n = 0; regData = fullList[n];
@@ -498,7 +496,7 @@ RefreshAllRegs (Account *acc)
    xaccLedgerDisplay *regData;
    int n;
 
-   if (!acc) return;
+   if (!acc || !fullList) return;   
 
    /* find all registers which contain this account */
    n = 0; regData = fullList[n];
@@ -588,6 +586,7 @@ xaccDestroyLedgerDisplay (Account *acc)
    } 
 
    /* cruise throught the miscellanous account windows */
+   if (!fullList) return;
    n = 0;
    regData = fullList[n];
    while (regData) {

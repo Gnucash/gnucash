@@ -43,17 +43,19 @@
  *                                                                  *
  * Version 7 of the file format adds currency & security types      *
  *                                                                  *
+ * Version 8 of the file format adds misc fields                    *
+ *                                                                  *
  * the format of the data in the file:                              *
  *   file        ::== token Group                                   *
  *   Group       ::== numAccounts (Account)^numAccounts             *
- *   Account     ::== accID flags type accountName description      * 
- *                    notes currency security                       *
+ *   Account     ::== accID flags type accountName accountCode      *
+ *                    description notes currency security           *
  *                    numTran (Transaction)^numTrans                * 
  *                    numGroups (Group)^numGroups                   *
- *   Transaction ::== num date description                          *
- *                    numSplits (Split)^numSplits                   *
- *   Split       ::== memo action reconciled                        *
- *                     amount share_price account                   *
+ *   Transaction ::== num date_entered date_posted description      *
+ *                    docref numSplits (Split)^numSplits            *
+ *   Split       ::== memo action reconciled  date_recned           *
+ *                    docref amount share_price account             *
  *   token       ::== int  [the version of file format == VERSION]  * 
  *   numTrans    ::== int                                           * 
  *   numAccounts ::== int                                           * 
@@ -61,26 +63,29 @@
  *   flags       ::== char                                          * 
  *   type        ::== char                                          * 
  *   accountName ::== String                                        *  
+ *   accountCode ::== String                                        *  
  *   description ::== String                                        *  
  *   notes       ::== String                                        *  
  *   currency    ::== String                                        *  
  *   security    ::== String                                        *  
  *                                                                  *
  *   num         ::== String                                        * 
- *   date        ::== Date                                          * 
+ *   date_entered::== Date                                          * 
+ *   date_posted ::== Date                                          * 
+ *   date_recned ::== Date                                          * 
  *   description ::== String                                        * 
  *   memo        ::== String                                        * 
  *   action      ::== String                                        * 
+ *   docref      ::== String                                        * 
  *   reconciled  ::== char                                          * 
  *   amount      ::== double                                        * 
  *   share_price ::== double                                        * 
  *   account     ::== int                                           *
  *   String      ::== size (char)^size                              * 
  *   size        ::== int                                           * 
- *   Date        ::== year month day                                * 
- *   month       ::== int                                           * 
- *   day         ::== int                                           * 
- *   year        ::== int                                           * 
+ *   Date        ::== seconds nanoseconds                           * 
+ *   seconds     ::== unsigned 32 bit int                           * 
+ *   nanoseconds ::== unsigned 32 bit int                           * 
 \********************************************************************/
 
 #include <fcntl.h>
@@ -105,7 +110,12 @@
 #define PERMS   0666
 #define WFLAGS  (O_WRONLY | O_CREAT | O_TRUNC)
 #define RFLAGS  O_RDONLY
-#define VERSION 7
+#define VERSION 8
+
+
+/* hack alert the current file format does not support most of the
+ * new/improved account & transaction structures
+ */
 
 /** GLOBALS *********************************************************/
 
@@ -132,7 +142,8 @@ static Account      *readAccount( int fd, AccountGroup *, int token );
 static Transaction  *readTransaction( int fd, Account *, int token );
 static Split        *readSplit( int fd, int token );
 static char         *readString( int fd, int token );
-static time_t        readDate( int fd, int token );
+static time_t        readDMYDate( int fd, int token );
+static int           readTSDate( int fd, struct timespec *, int token );
 
 static int writeAccountGroupToFile( char *datafile, AccountGroup *grp );
 static int writeGroup( int fd, AccountGroup *grp );
@@ -140,7 +151,7 @@ static int writeAccount( int fd, Account *account );
 static int writeTransaction( int fd, Transaction *trans );
 static int writeSplit( int fd, Split *split);
 static int writeString( int fd, char *str );
-static int writeDate( int fd, time_t secs );
+static int writeTSDate( int fd, struct timespec *);
 
 /*******************************************************/
 /* backwards compatibility definitions for numeric value 
@@ -169,9 +180,13 @@ static int writeDate( int fd, time_t secs );
 
 /*******************************************************/
 
-int xaccGetFileIOError (void)
+int 
+xaccGetFileIOError (void)
 {
-   return error_code;
+   /* reset the error code */
+   int rc = error_code;
+   error_code = 0;
+   return rc;
 }
 
 /*******************************************************/
@@ -285,6 +300,14 @@ xaccReadAccountGroup( char *datafile )
   holder = xaccMallocAccountGroup();
   grp = readGroup (fd, NULL, token);
 
+  /* mark the newly read group as saved, since the act of putting 
+   * it together will have caused it to be marked up as not-saved. 
+   */
+  xaccAccountGroupMarkSaved (grp);
+
+  /* auto-number the accounts, if they are not already numbered */
+  xaccGroupDepthAutoCode (grp);
+
   /* the number of unclaimed accounts should be zero if the 
    * read succeeded.  But just in case of a very unlikely 
    * error, try to continue anyway. */
@@ -299,7 +322,7 @@ xaccReadAccountGroup( char *datafile )
     xaccAccountSetName (acc, LOST_ACC_STR);
     acc -> children = holder;
     xaccAccountCommitEdit (acc);
-    insertAccount (grp, acc);
+    xaccGroupInsertAccount (grp, acc);
   } else {
     xaccFreeAccountGroup (holder);
     holder = NULL;
@@ -392,7 +415,7 @@ readAccount( int fd, AccountGroup *grp, int token )
     acc = locateAccount (accID);
   } else {
     acc = xaccMallocAccount();
-    insertAccount (holder, acc);
+    xaccGroupInsertAccount (holder, acc);
   }
   
   xaccAccountBeginEdit (acc, 1);
@@ -431,6 +454,13 @@ readAccount( int fd, AccountGroup *grp, int token )
   INFO_2 ("readAccount(): reading acct %s \n", tmp);
   xaccAccountSetName (acc, tmp);
   free (tmp);
+  
+  if (8 <= token) {
+     tmp = readString( fd, token );
+     if( NULL == tmp)  { free (tmp);  return NULL; }
+     xaccAccountSetCode (acc, tmp);
+     free (tmp);
+  }
   
   tmp = readString( fd, token );
   if( NULL == tmp ) { free (tmp); return NULL; }
@@ -477,7 +507,7 @@ readAccount( int fd, AccountGroup *grp, int token )
       break;
       }
 #ifdef DELINT_BLANK_SPLITS_HACK
-      /* This is a dangerous hack, as it can destroy real data. */
+      /* This is dangerous, as it can destroy real data. */
       {
         int j=0;   
         Split *s = trans->splits[0];
@@ -493,7 +523,7 @@ readAccount( int fd, AccountGroup *grp, int token )
     }
   
   springAccount (acc->id);
-  insertAccount (grp, acc);
+  xaccGroupInsertAccount (grp, acc);
 
   /* version 4 is the first file version that introduces
    * sub-accounts */
@@ -549,7 +579,7 @@ locateAccount (int acc_id)
    acc = xaccMallocAccount ();
    acc->id = acc_id;
    acc->open = ACC_DEFER_REBALANCE;
-   insertAccount (holder, acc);
+   xaccGroupInsertAccount (holder, acc);
 
    /* normalize the account numbers -- positive-definite.
     * That is, the unique id must never decrease,
@@ -609,7 +639,6 @@ readTransaction( int fd, Account *acc, int token )
   char recn;
   double num_shares = 0.0;
   double share_price = 0.0;
-  time_t secs;
 
   ENTER ("readTransaction");
 
@@ -622,30 +651,76 @@ readTransaction( int fd, Account *acc, int token )
     {
     PERR ("Premature end of Transaction at num");
     xaccTransDestroy(trans);
+    xaccTransCommitEdit (trans);
     return NULL;
     }
   xaccTransSetNum (trans, tmp);
   free (tmp);
   
-  secs = readDate( fd, token );
-  if( 0 == secs )
-    {
-    PERR ("Premature end of Transaction at date");
-    xaccTransDestroy(trans);
-    return NULL;
-    }
-  xaccTransSetDateSecs (trans, secs);
+  if (7 >= token) {
+     time_t secs;
+     secs = readDMYDate( fd, token );
+     if( 0 == secs )
+       {
+       PERR ("Premature end of Transaction at date");
+       xaccTransDestroy(trans);
+       xaccTransCommitEdit (trans);
+       return NULL;
+       }
+     xaccTransSetDateSecs (trans, secs);
+     xaccTransSetDateEnteredSecs (trans, secs);
+  } else  {
+     struct timespec ts;
+     int rc;
+
+     /* read posted date first ... */
+     rc = readTSDate( fd, &ts, token );
+     if( -1 == rc )
+       {
+       PERR ("Premature end of Transaction at date");
+       xaccTransDestroy(trans);
+       xaccTransCommitEdit (trans);
+       return NULL;
+       }
+     xaccTransSetDateTS (trans, &ts);
+
+     /* then the entered date ... */
+     rc = readTSDate( fd, &ts, token );
+     if( -1 == rc )
+       {
+       PERR ("Premature end of Transaction at date");
+       xaccTransDestroy(trans);
+       xaccTransCommitEdit (trans);
+       return NULL;
+       }
+     xaccTransSetDateEnteredTS (trans, &ts);
+  }
   
   tmp = readString( fd, token );
   if( NULL == tmp )
     {
     PERR ("Premature end of Transaction at description");
     xaccTransDestroy(trans);
+    xaccTransCommitEdit (trans);
     return NULL;
     }
   xaccTransSetDescription (trans, tmp);
   free (tmp);
   
+  /* docref first makes an appearenece in version 8 */
+  if (8 <= token) {
+     tmp = readString( fd, token );
+     if( NULL == tmp )
+       {
+       PERR ("Premature end of Transaction at docref");
+       xaccTransDestroy(trans);
+       xaccTransCommitEdit (trans);
+       return NULL;
+       }
+     xaccTransSetDocref (trans, tmp);
+     free (tmp);
+  }
+
   /* At version 5, most of the transaction stuff was 
    * moved to splits. Thus, vast majority of stuff below 
    * is skipped 
@@ -665,6 +740,7 @@ readTransaction( int fd, Account *acc, int token )
       {
       PERR ("Premature end of Transaction at memo");
       xaccTransDestroy(trans);
+      xaccTransCommitEdit (trans);
       return NULL;
       }
     xaccTransSetMemo (trans, tmp);
@@ -678,6 +754,7 @@ readTransaction( int fd, Account *acc, int token )
          {
          PERR ("Premature end of Transaction at action");
          xaccTransDestroy (trans);
+         xaccTransCommitEdit (trans);
          return NULL;
          }
        xaccTransSetAction (trans, tmp);
@@ -690,6 +767,7 @@ readTransaction( int fd, Account *acc, int token )
       {
       PERR ("Premature end of Transaction at catagory");
       xaccTransDestroy (trans);
+      xaccTransCommitEdit (trans);
       return NULL;
       }
     
@@ -698,6 +776,7 @@ readTransaction( int fd, Account *acc, int token )
       {
       PERR ("Premature end of Transaction at reconciled");
       xaccTransDestroy(trans);
+      xaccTransCommitEdit (trans);
       return NULL;
       }
     s = xaccTransGetSplit (trans, 0);
@@ -730,6 +809,7 @@ readTransaction( int fd, Account *acc, int token )
         {
         PERR ("Premature end of Transaction at V1 amount");
         xaccTransDestroy(trans);
+        xaccTransCommitEdit (trans);
         return NULL;
         }
       XACC_FLIP_INT (amount);
@@ -745,6 +825,7 @@ readTransaction( int fd, Account *acc, int token )
         {
         PERR ("Premature end of Transaction at amount");
         xaccTransDestroy(trans);
+        xaccTransCommitEdit (trans);
         return NULL;
         }
       XACC_FLIP_DOUBLE (damount);
@@ -756,6 +837,7 @@ readTransaction( int fd, Account *acc, int token )
         {
         PERR ("Premature end of Transaction at share_price");
         xaccTransDestroy(trans);
+        xaccTransCommitEdit (trans);
         return NULL;
         }
       XACC_FLIP_DOUBLE (damount);
@@ -776,6 +858,7 @@ readTransaction( int fd, Account *acc, int token )
         {
         PERR ("Premature end of Transaction at credit");
         xaccTransDestroy (trans);
+        xaccTransCommitEdit (trans);
         return NULL;
         }
       XACC_FLIP_INT (acc_id);
@@ -793,6 +876,7 @@ readTransaction( int fd, Account *acc, int token )
         {
         PERR ("Premature end of Transaction at debit");
         xaccTransDestroy(trans);
+        xaccTransCommitEdit (trans);
         return NULL;
         }
       XACC_FLIP_INT (acc_id);
@@ -839,6 +923,7 @@ readTransaction( int fd, Account *acc, int token )
     {
       PERR ("Premature end of Transaction at num-splits");
       xaccTransDestroy(trans);
+      xaccTransCommitEdit (trans);
       return NULL;
     }
     XACC_FLIP_INT (numSplits);
@@ -923,6 +1008,38 @@ readSplit ( int fd, int token )
   }
   xaccSplitSetReconcile (split, recn);
 
+  /* version 8 and newwer files store date-reconciled */ 
+  if (8 <= token)  {
+     struct timespec ts;
+     int rc;
+
+     rc = readTSDate( fd, &ts, token );
+     if( -1 == rc )
+       {
+       PERR ("Premature end of Split at date");
+       xaccSplitDestroy (split);
+       return NULL;
+       }
+     xaccSplitSetDateReconciledTS (split, &ts);
+  } else {
+     time_t now;
+     now = time (0);
+     xaccSplitSetDateReconciledSecs (split, now);
+  }
+
+  /* docref first makes an appearenece in version 8 */
+  if (8 <= token) {
+     tmp = readString( fd, token );
+     if( NULL == tmp )
+       {
+       PERR ("Premature end of Split at docref");
+       xaccSplitDestroy (split);
+       return NULL;
+       }
+     xaccSplitSetDocref (split, tmp);
+     free (tmp);
+  }
+
   /* first, read number of shares ... */
   err = read( fd, &num_shares, sizeof(double) );
   if( sizeof(double) != err )
@@ -996,7 +1113,41 @@ readString( int fd, int token )
   }
 
 /********************************************************************\
- * readDate                                                         * 
+ * readTSDate                                                       * 
+ *   reads in a Date struct from the datafile                       *
+ *                                                                  * 
+ * Args:   fd    - the filedescriptor of the data file              * 
+ *         token - the datafile version                             * 
+ * Return: the Date struct                                          * 
+\********************************************************************/
+static int
+readTSDate( int fd, struct timespec *ts, int token )
+  {
+  int  err=0;
+  unsigned int secs, nsecs;
+  
+  err = read( fd, &secs, sizeof(unsigned int) );
+  if( err != sizeof(unsigned int) )
+    {
+    return -1;
+    }
+  XACC_FLIP_INT (secs);
+  
+  err = read( fd, &nsecs, sizeof(unsigned int) );
+  if( err != sizeof(unsigned int) )
+    {
+    return -1;
+    }
+  XACC_FLIP_INT (nsecs);
+
+  ts->tv_sec = secs;
+  ts->tv_nsec = nsecs;
+  
+  return 2*err;
+  }
+
+/********************************************************************\
+ * readDMYDate                                                      * 
  *   reads in a Date struct from the datafile                       *
  *                                                                  * 
  * Args:   fd    - the filedescriptor of the data file              * 
@@ -1004,7 +1155,7 @@ readString( int fd, int token )
  * Return: the Date struct                                          * 
 \********************************************************************/
 static time_t
-readDate( int fd, int token )
+readDMYDate( int fd, int token )
   {
   int  err=0;
   int day, month, year;
@@ -1058,7 +1209,7 @@ xaccResetWriteFlags (AccountGroup *grp)
   for( i=0; i<numAcc; i++ ) {
     int n=0;
     Account *acc;
-    Split *s;
+    Split *s = NULL;
     acc = xaccGroupGetAccount (grp,i) ;
 
     /* recursively do sub-accounts */
@@ -1215,15 +1366,15 @@ writeGroup (int fd, AccountGroup *grp )
 static int
 writeAccount( int fd, Account *acc )
   {
-  Transaction *trans;
-  Split *s;
+  Transaction *trans = NULL;
+  Split *s = NULL;
   int err=0;
   int i, numUnwrittenTrans, ntrans;
   int acc_id;
   int numChildren = 0;
   char * tmp;
   
-  INFO_2 ("writeAccount(): writing acct %s \n", acc->accountName);
+  INFO_2 ("writeAccount(): writing acct %s \n", xaccAccountGetName (acc));
 
   acc_id = acc->id;
   XACC_FLIP_INT (acc_id);
@@ -1263,6 +1414,10 @@ writeAccount( int fd, Account *acc )
   }
   
   tmp = xaccAccountGetName (acc);
+  err = writeString( fd, tmp );
+  if( -1 == err ) return err;
+  
+  tmp = xaccAccountGetCode (acc);
   err = writeString( fd, tmp );
   if( -1 == err ) return err;
   
@@ -1353,7 +1508,7 @@ writeTransaction( int fd, Transaction *trans )
   Split *s;
   int err=0;
   int i=0;
-  time_t secs;
+  struct timespec ts;
 
   ENTER ("writeTransaction");
   /* If we've already written this transaction, don't write 
@@ -1363,14 +1518,21 @@ writeTransaction( int fd, Transaction *trans )
   if (2 == trans->write_flag) return 4;
   trans->write_flag = 2;
   
-  err = writeString( fd, trans->num );
+  err = writeString( fd, xaccTransGetNum (trans) );
   if( -1 == err ) return err;
   
-  secs = xaccTransGetDate (trans);
-  err = writeDate( fd, secs );
+  xaccTransGetDateTS (trans, &ts);
+  err = writeTSDate( fd, &ts);
   if( -1 == err ) return err;
   
-  err = writeString( fd, trans->description );
+  xaccTransGetDateEnteredTS (trans, &ts);
+  err = writeTSDate( fd, &ts);
+  if( -1 == err ) return err;
+  
+  err = writeString( fd, xaccTransGetDescription (trans) );
+  if( -1 == err ) return err;
+  
+  err = writeString( fd, xaccTransGetDocref (trans) );
   if( -1 == err ) return err;
   
   /* count the number of splits */
@@ -1405,8 +1567,9 @@ writeSplit ( int fd, Split *split )
   {
   int err=0;
   int acc_id;
+  struct timespec ts;
   double damount;
-  Account *xfer_acc;
+  Account *xfer_acc = NULL;
   char recn;
 
   ENTER ("writeSplit");
@@ -1423,6 +1586,13 @@ writeSplit ( int fd, Split *split )
   err = write( fd, &recn, sizeof(char) );
   if( err != sizeof(char) )
     return -1;
+
+  xaccSplitGetDateReconciledTS (split, &ts);
+  err = writeTSDate( fd, &ts);
+  if( -1 == err ) return err;
+  
+  err = writeString( fd, xaccSplitGetDocref (split) );
+  if( -1 == err ) return err;
   
   damount = xaccSplitGetShareAmount (split);
   INFO_2 ("writeSplit: amount=%f \n", damount);
@@ -1438,7 +1608,7 @@ writeSplit ( int fd, Split *split )
     return -1;
 
   /* write the credited/debted account */
-  xfer_acc = (Account *) (split->acc);
+  xfer_acc = split->acc;
   acc_id = -1;
   if (xfer_acc) acc_id = xfer_acc -> id;
   INFO_2 ("writeSplit: credit %d \n", acc_id);
@@ -1482,7 +1652,7 @@ writeString( int fd, char *str )
   }
 
 /********************************************************************\
- * writeDate                                                        * 
+ * writeTSDate                                                        * 
  *   saves a Date to the datafile                                   *
  *                                                                  * 
  * Args:   fd       - the filedescriptor of the data file           * 
@@ -1490,29 +1660,21 @@ writeString( int fd, char *str )
  * Return: -1 on failure                                            * 
 \********************************************************************/
 static int
-writeDate( int fd, time_t secs )
+writeTSDate( int fd, struct timespec *ts)
   {
   int err=0;
-  int tmp;
-  struct tm *stm;
+  unsigned int tmp;
 
-  stm = localtime (&secs);
-  
-  tmp = stm->tm_year +1900;
+  /* write 32 bits to file format, even if time_t is 64 bits */
+  tmp = ts->tv_sec;
   XACC_FLIP_INT (tmp);
-  err = write( fd, &tmp, sizeof(int) );
+  err = write( fd, &tmp, sizeof(unsigned int) );
   if( err != sizeof(int) )
     return -1;
   
-  tmp = stm->tm_mon+1;
+  tmp = ts->tv_nsec;
   XACC_FLIP_INT (tmp);
-  err = write( fd, &tmp, sizeof(int) );
-  if( err != sizeof(int) )
-    return -1;
-  
-  tmp = stm->tm_mday;
-  XACC_FLIP_INT (tmp);
-  err = write( fd, &tmp, sizeof(int) );
+  err = write( fd, &tmp, sizeof(unsigned int) );
   if( err != sizeof(int) )
     return -1;
   

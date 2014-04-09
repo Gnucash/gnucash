@@ -32,6 +32,7 @@
  * also, check out a stock split tooo
  */
 
+#include <errno.h>
 #include <fcntl.h>
 #include <string.h>
 #include <time.h>
@@ -55,9 +56,13 @@ static int          error_code=0; /* error code, if error occurred */
 
 /*******************************************************/
 
-int xaccGetQIFIOError (void)
+int 
+xaccGetQIFIOError (void)
 {
-   return error_code;
+   /* reset the error code */
+   int  rc = error_code;
+   error_code = 0;
+   return rc;
 }
 
 /********************************************************************\
@@ -360,10 +365,10 @@ char * xaccReadQIFAccList (int fd, AccountGroup *grp, int cat)
             xaccInsertSubAccount( parent, acc );
          } else {
             /* we should never get here if the qif file is OK */
-            insertAccount( grp, acc );  
+            xaccGroupInsertAccount( grp, acc );  
          }
       } else {
-         insertAccount( grp, acc );
+         xaccGroupInsertAccount( grp, acc );
       }
 
    } while (qifline);
@@ -496,7 +501,7 @@ GetSubQIFAccount (AccountGroup *rootgrp, char *qifline, int acc_type)
 
       if (0 > acc_type) acc_type = GuessAccountType (qifline);
       xaccAccountSetType (xfer_acc, acc_type);
-      insertAccount (rootgrp, xfer_acc);
+      xaccGroupInsertAccount (rootgrp, xfer_acc);
    }
 
    /* if this account name had sub-accounts, get those */
@@ -604,7 +609,8 @@ xaccGetSecurityQIFAccount (Account *acc, char *qifline)
    } else
 
 
-char * xaccReadQIFTransaction (int fd, Account *acc)
+char * 
+xaccReadQIFTransaction (int fd, Account *acc, int *name_not_yet_set)
 {
    Transaction *trans;
    Split *source_split;
@@ -667,8 +673,30 @@ char * xaccReadQIFTransaction (int fd, Account *acc)
 
      /* L == name of acount from which transfer occured */
      if ('L' == qifline [0]) {   
-         /* locate the transfer account */
-         xfer_acc = xaccGetXferQIFAccount (acc, qifline);
+        /* MSMoney uses a cute trick to overcome the lack of an account name
+         * in the QIF format.  Basically, if the very very first transaction
+         * has a payee field of "Opening Balance", then the L field is the name
+         * of this account, and not the transfer account.  But this only works
+         * for the very, very first transaction.
+         */
+        if (*name_not_yet_set) {
+            *name_not_yet_set = 0;
+            /* remove square brackets from name, remove carriage return ... */
+            qifline = &qifline[1];
+            if ('[' == qifline[0]) {
+               qifline = &qifline[1];
+               tmp = strchr (qifline, ']');
+               if (tmp) *tmp = 0x0;
+            }
+            tmp = strchr (qifline, '\r');
+            if(tmp) *tmp = 0x0;
+            tmp = strchr (qifline, '\n');
+            if(tmp) *tmp = 0x0;
+            xaccAccountSetName (acc, qifline);
+        } else {
+            /* locate the transfer account */
+            xfer_acc = xaccGetXferQIFAccount (acc, qifline);
+        }
      } else 
 
      /* M == memo field */
@@ -718,6 +746,16 @@ char * xaccReadQIFTransaction (int fd, Account *acc)
      if ('P' == qifline [0]) {   
         XACC_PREP_STRING (tmp);
         xaccTransSetDescription (trans, tmp);
+
+        /* MSMoney uses a cute trick to overcome the lack of an account name
+         * in the QIF format.  Basically, if the very very first transaction
+         * has a payee field of "Opening Balance", then the L field is the name
+         * of this account, and not the transfer account.  But this only works
+         * for the very, very first transaction.
+         */
+        if (*name_not_yet_set) {
+           if (! NSTRNCMP (qifline, "POpening Balance")) *name_not_yet_set = 0;
+        }
      } else
 
      /* Q == number of shares */
@@ -811,8 +849,9 @@ char * xaccReadQIFTransaction (int fd, Account *acc)
    /* at this point, we should see an end-of-transaction marker
     * if we see something else, assume the worst, free the last 
     * transaction, and return */
-   if ('!' == qifline[0]) {
+   if (!qifline || ('!' == qifline[0])) {
       xaccTransDestroy (trans);
+      xaccTransCommitEdit (trans);
       return qifline;
    }
 
@@ -885,15 +924,15 @@ char * xaccReadQIFTransaction (int fd, Account *acc)
  * the indicated account
 \********************************************************************/
 
-char * xaccReadQIFTransList (int fd, Account *acc)
+char * xaccReadQIFTransList (int fd, Account *acc, int *acc_name_not_yet_set)
 {
    char * qifline;
 
    if (!acc) return 0x0;
-   qifline = xaccReadQIFTransaction (fd, acc);
+   qifline = xaccReadQIFTransaction (fd, acc, acc_name_not_yet_set);
    while (qifline) {
       if ('!' == qifline[0]) break;
-      qifline = xaccReadQIFTransaction (fd, acc);
+      qifline = xaccReadQIFTransaction (fd, acc, acc_name_not_yet_set);
    } 
    return qifline;
 }
@@ -939,15 +978,45 @@ xaccReadQIFAccountGroup( char *datafile )
   grp = xaccMallocAccountGroup();
   
   while (qifline) {
-     if (STRSTR (qifline, "Type:Bank")) {
-        Account *acc   = xaccMallocAccount();
-        DEBUG ("got bank\n");
+     int typo = -1;
+     char * name = NULL;
 
-        xaccAccountSetType (acc, BANK);
-        xaccAccountSetName (acc, "Quicken Bank Account");
+     if (STRSTR (qifline, "Type:")) {
+        if (STRSTR (qifline, "Type:Bank")) {
+           typo = BANK;
+           name = "Quicken Bank Account";
+        } else
+        if (STRSTR (qifline, "Type:Cash")) {
+           typo = CASH;
+           name = "Quicken Cash Account";
+        } else
+        if (STRSTR (qifline, "Type:CCard")) {
+           typo = CREDIT;
+           name = "Quicken Credit Card";
+        } else
+        if (STRSTR (qifline, "Type:Invst")) {
+           typo = STOCK;
+           name = "Quicken Investment Account";
+        } else
+        if (STRSTR (qifline, "Type:Oth A")) {
+           typo = ASSET;
+           name = "Quicken Asset";
+        } else
+        if (STRSTR (qifline, "Type:Oth L")) {
+           typo = LIABILITY;
+           name = "Quicken Liability";
+        }
+     } 
+        
+     if (name) {
+        int bogus_acc_name = 1;
+        Account * acc = xaccMallocAccount();
+        xaccAccountSetType (acc, typo);
+        xaccAccountSetName (acc, name);
 
-        insertAccount( grp, acc );
-        qifline = xaccReadQIFTransList (fd, acc);
+        xaccGroupInsertAccount( grp, acc );
+        qifline = xaccReadQIFTransList (fd, acc, &bogus_acc_name);
+        typo = -1; name = NULL;
         continue;
      } else
 
@@ -960,18 +1029,6 @@ xaccReadQIFAccountGroup( char *datafile )
      if (STRSTR (qifline, "Type:Class")) {
         DEBUG ("got class\n");
         qifline = xaccReadQIFDiscard (fd);
-        continue;
-     } else
-
-     if (STRSTR (qifline, "Type:Invst")) {
-        Account *acc   = xaccMallocAccount();
-        DEBUG ("got Invst\n");
-
-        xaccAccountSetType (acc, STOCK);
-        xaccAccountSetName (acc, "Quicken Investment Account");
-
-        insertAccount( grp, acc );
-        qifline = xaccReadQIFTransList (fd, acc);
         continue;
      } else
 
@@ -1009,6 +1066,8 @@ xaccReadQIFAccountGroup( char *datafile )
            char * acc_name;
            Account *preexisting;
            Account *acc   = xaccMallocAccount();
+           int guess_acc_name = 0;
+
            DEBUG ("got account\n");
            qifline = xaccReadQIFAccount (fd, acc);
            if (!qifline) {  /* free up malloced data if the read bombed. */
@@ -1032,7 +1091,7 @@ xaccReadQIFAccountGroup( char *datafile )
            }
            else
            {
-              insertAccount( grp, acc );
+              xaccGroupInsertAccount( grp, acc );
            }
    
            /* spin until start of transaction records */
@@ -1043,7 +1102,8 @@ xaccReadQIFAccountGroup( char *datafile )
            }
    
            /* read transactions */
-           if (qifline) qifline = xaccReadQIFTransList (fd, acc);
+           /* note, we have a real account name, so no need to go guessing it. */
+           if (qifline) qifline = xaccReadQIFTransList (fd, acc, &guess_acc_name);
         }    
         continue;
      } else

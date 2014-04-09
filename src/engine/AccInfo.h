@@ -97,10 +97,7 @@ enum
 
 };
 
-/* hack alert -- we need a better way of dealing with
- * account names!
- */
-extern char *account_type_name [NUM_ACCOUNT_TYPES];
+char * xaccAccountGetTypeStr (int type);
 
 struct _BankAcct 
 {

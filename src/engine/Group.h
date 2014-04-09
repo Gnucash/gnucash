@@ -36,11 +36,11 @@ void    xaccFreeAccountGroup( AccountGroup *account_group );
 
 /*
  * The xaccConcatGroups() subroutine will move all accounts
- * from the "from" group to the "to" group
+ *    from the "from" group to the "to" group
  *
  * The xaccMergeAccounts() subroutine will go through a group,
- * merging all accounts that have the same name and description.
- * This function is useful when importing Quicken(TM) files.
+ *    merging all accounts that have the same name and description.
+ *    This function is useful when importing Quicken(TM) files.
  */
 void    xaccConcatGroups (AccountGroup *to, AccountGroup *from);
 void    xaccMergeAccounts (AccountGroup *grp);
@@ -51,44 +51,46 @@ void    xaccMergeAccounts (AccountGroup *grp);
  *    any subgroup hasn't been saved.
  *
  * The xaccAccountGroupMarkSaved() subroutine will mark
- *    the entire group as having been saved.
+ *    the entire group as having been saved, including 
+ *    all of the child accounts.
  */
 int     xaccAccountGroupNotSaved  (AccountGroup *grp);
 void    xaccAccountGroupMarkSaved (AccountGroup *grp);
 
-Account *removeAccount( AccountGroup *grp, int num );
-int     insertAccount( AccountGroup *grp, Account *acc );
-
 /*
  * The xaccRemoveAccount() subroutine will remove the indicated
- * account from its parent account group. It will NOT free the
- * associated memory or otherwise alter the account: the account
- * can now be reparented to a new location.
- * Note, however, that it will mark the old parents as having 
- * been modified.
+ *    account from its parent account group. It will NOT free the
+ *    associated memory or otherwise alter the account: the account
+ *    can now be reparented to a new location.
+ *    Note, however, that it will mark the old parents as having 
+ *    been modified.
  *
  * The xaccRemoveGroup() subroutine will remove the indicated
- * account group from its parent account. It will NOT free the
- * associated memory or otherwise alter the account group: the 
- * account group can now be reparented to a new location.
- * Note, however, that it will mark the old parents as having 
- * been modified.
+ *    account group from its parent account. It will NOT free the
+ *    associated memory or otherwise alter the account group: the 
+ *    account group can now be reparented to a new location.
+ *    Note, however, that it will mark the old parents as having 
+ *    been modified.
  */
 void    xaccRemoveAccount (Account *);
 void    xaccRemoveGroup (AccountGroup *);
-int     xaccInsertSubAccount( Account *parent, Account *child );
+void    xaccGroupInsertAccount( AccountGroup *grp, Account *acc );
+void    xaccInsertSubAccount( Account *parent, Account *child );
 
 /*
  * The xaccGetNumAccounts() subroutine returns the number
- * of accounts, including subaccounts, in the account group
+ *    of accounts, including subaccounts, in the account group
+ *
+ * The xaccGroupGetNumAccounts() subroutine returns the number
+ *    of accounts in the indicated group only (children not counted).
+ *
+ * The xaccGroupGetDepth() subroutine returns the length of the 
+ *    longest tree branch.  Each link between an account and its
+ *    (non-null) children counts as one unit of length.
  */
 int     xaccGetNumAccounts (AccountGroup *grp);
-
-/*
- * The xaccGroupGetNumAccounts() subroutine returns the number
- * of accounts in the indicated group only (children not counted).
- */
 int     xaccGroupGetNumAccounts (AccountGroup *grp);
+int     xaccGroupGetDepth (AccountGroup *grp);
 
 /* 
  * The xaccGetAccountFromID() subroutine fetches the account
@@ -124,24 +126,46 @@ void xaccRecomputeGroupBalance (AccountGroup *);
 
 /*
  * The xaccGetAccountRoot () subroutine will find the topmost 
- * (root) group to which this account belongs.
+ *    (root) group to which this account belongs.
  */
 
 AccountGroup * xaccGetAccountRoot (Account *);
 
 /* The xaccConsolidateGrpTrans() subroutine scans through
- * all of the transactions in an account, and compares them.
- * if any of them are exact duplicates, the duplicates are removed.
- * duplicates may occur when accounts from multiple sources are 
- * merged.  Note that this can be a dangerous operation to perform 
+ *    all of the transactions in an account, and compares them.
+ *    if any of them are exact duplicates, the duplicates are removed.
+ *    duplicates may occur when accounts from multiple sources are 
+ *    merged.  Note that this can be a dangerous operation to perform 
  *
- * Note that this suborutine merely walks the acount group
- * tree, and calls ConsolidateTransacations on each account
+ *    Note that this suborutine merely walks the acount group
+ *    tree, and calls ConsolidateTransacations on each account
  */
 
 void xaccConsolidateGrpTransactions (AccountGroup *);
 
 Account * xaccGroupGetAccount (AccountGroup *, int);
 double    xaccGroupGetBalance (AccountGroup *);
+
+/*
+ * The xaccGroupGetNextFreeCode() method will try to guess a reasonable 
+ *    candidate for the next unused account code in this group.
+ *
+ * The xaccAccountGetNextChildCode() method does same as above,
+ *    except that it returns a value appropriate for a child account.
+ *
+ * The xaccGroupAutoCode() method will traverse the group, automatically
+ *    inserting account codes into those accounts whose account codes 
+ *    are blank.  It uses the algorithm used in xaccAccountAutoCode()
+ *    to pick an account code.
+ *
+ * The xaccGroupDepthAutoCode() first measures teh depth of the account
+ *    tree, and uses that depth to pck the number of digits in the account
+ *    code.
+ */
+
+char * xaccGroupGetNextFreeCode (AccountGroup *grp, int num_digits);
+char * xaccAccountGetNextChildCode (Account *acc, int num_digits);
+void   xaccGroupAutoCode (AccountGroup *grp, int num_digits);
+void   xaccGroupDepthAutoCode (AccountGroup *grp);
 
 #endif /* __XACC_ACCOUNT_GROUP_H__ */

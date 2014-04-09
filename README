@@ -1,79 +1,70 @@
 
-############## WARNING ######################
-********** ALPHA DEVELOPMENT RELEASE ********
+************ BETA  RELEASE ******************
+The version 1.1.x series of gnucash are considered BETA development code.
+Things mopstly work these days; some things may still be broken. Feel 
+free to try it.  Please report bugs to http://www.gnucash.org/
 
-THIS IS VERSION 1.1, WHICH IS AN ALPHA RELEASE,
-AND IS OFTEN BROKEN.  IT IS FOR DEVELOPERS AND
-A FEW BRAVE, SMART USERS!!
-IT MIGHT CORRUPT DATA!!
+The last stable, production version was xacc-1.0.18
+The next stable, production version will be gnucash-1.2.x
 
-IF YOU WANT TO USE XACC, USE VERSION 1.0.17 INSTEAD!!
 ##############################################
-
 
 GnuCash
 -------
+GnuCash is a personal finance manager.  A check-book like 
+register GUI allows you to enter and track bank accounts,
+stocks, income and even currency trades.  The interface is 
+designed to be simple and easy to use, but is backed with 
+double-entry accounting principles to ensure balanced books.
 
-gnucash is a program to keep track of your finances.  It is similar in
-concept to Quicken(TM).  Although GnuCash still lacks the advanced
-features of Quicken, it does have the basic functionality.  Some
-of the features of GnuCash are:
+Features include:
 
-  - Multiple Accounts
-  - Each account keeps a running balance and
-    a reconciled balance, so you can keep track
-    of the checks that have clear your account.
-  - A simple interface.  If you can use the
-    register in the back of your checkbook,
-    you can use GnuCash.
-  - QuickFill... if you begin typing a description
-    in the description fields, and it matches an
-    previous transaction, hitting <TAB> will copy
-    the previous transaction.  Handy if you have
-    similar transactions on a regular basis.
-    (such as depositing your paycheck every week :)
-  - Stock/Mutual Fund Portfolios.  Track stocks
+  - An easy-to-use interface.  If you can use the
+    register in the back of your checkbook, you 
+    can use GnuCash.  Type directly into the register,
+    tab between fields, and use quickfill to
+    automatically complete the transaction.
+  - Reconcile window  with running reconciled 
+    and cleared balances makes reconciliation easy.
+  - Stock/Mutual Fund Portfolios:  Track stocks
     individually (one per account) or in portfolio
     of accounts (a group of accounts that can be 
     displayed together).  
-  - Multiple Currencies. Multiple currencies are 
-    supported, as well as currency trading accounts.
-    Note this is still broken in many ways...
-  - Quicken File Import. Import Quicken QIF files.
-
-Advanced Features
------------------
-GnuCash offers some features not usually found
-in simpler accounting programs.
-  - Sub-accounts: A master account can have a hierarchy
+  - Multiple Currencies & Currency Trading: Multiple 
+    currencies are supported and can be bought and
+    sold (traded).  Currency movements between accounts
+    are fully balanced when double-entry is enabled.
+    (Some aspects of mutiple currency support are not 
+    fully implemented.)
+  - Quicken File Import: Import Quicken QIF style files.
+    QIF files are automtically merged to eliminate 
+    duplicate transactions.
+  - Reports: Display Balance Sheet, Profit&Loss reports,
+    or print them as HTML.
+  - Chart of Accounts: A master account can have a hierarchy
     of detail accounts underneath it.  This allows similar
     account types (e.g. Cash, Bank, Stock) to be grouped 
     into one master account (e.g. Assets).
-  - Double Entry: 
-    Every transaction can appear in two
-    accounts; one account is debited and the other is 
-    credited with exactly the same amount.  With 
-    double-entry, a transaction edited in one window 
-    will be automatically updated in all other windows 
-    showing that transaction, and in both of the 
-    accounts.
-  - Income/Expense Account Types (Categories).   
-    When used properly 
-    with the double-entry feature, these can be used 
-    to create both Balance Sheet and Profits &amp; Losses
-    reports.  For example, savings account interest,
-    stock dividends, or paychecks can be marked as 
-    both a deposit in a bank account, and as income in 
-    an Income account type, using the double-entry 
-    (transfer) feature.  Similarly, credit card charges
-    can be noted in the credit card account, as well 
-    as in a corresponding expense account.
+  - Split Transactions: A single transaction can be split
+    into several pieces to record taxes, fees, and
+    other compund entries.
+  - Double Entry: When enabled, every transaction must 
+    debit one account and credit another by an equal amount.
+    This ensures that the "books balance": that the 
+    difference between income and outflow exactly equals
+    the sum of all assets, be they bank, cash, stock or other.
+  - Income/Expense Account Types (Categories):  
+    These serve not only to categorize your cash flow, 
+    but when used properly with the double-entry feature,
+    these can provide an accurate Profit&Loss statement.
   - General Ledger: Multiple accounts can be displayed 
     in one register window at the same time.  This can
     ease the trouble of tracking down typing/entry errors.
     It also provides a convenient way of viewing a
     portfolio of many stocks, by showing all transactions
     in that portfolio.
+  - Written in C, with perl, scheme and tcl support for easy
+    configuration and extensibility.
 
 Home Page:
 ----------
@@ -84,40 +75,27 @@ http://www.cs.hmc.edu/~rclark/xacc
 
 Important Note:
 ---------------
-Numerous core dumps have been reported that occur with lesstif
-version 0.82.  These core dumps do not occur with lesstif v 0.81,
-nor with RedHat Motif, and appear to be gone with lesstif 0.83. 
-If it's crashing, please try using a different motif, or the 
-statically-linked Motif version, as described below.
+Numerous core dumps have been reported when using various
+versions of lesstif.  Some versions work, others don't.
+Lesstif 0.81: works
+Lesstif 0.82: broken
+Lesstif 0.81: works
+Lesstif 0.86.0: works
+Lesstif 0.86.5: broken
 
+These core dumps do not occur with RedHat Motif (or other commercial
+versions of Motif).
 
 Running:
 --------
-The binary-only distribution includes two binary files: 'xacc.bin'
-and 'xacc-static.bin'. The former requires a Motif shared library;
+The binary-only distribution includes two binary files: 'gnucash.bin'
+and 'gnucash-static.bin'. The former requires a Motif shared library;
 the latter has Motif statically linked in.  If you have Motif,
 then just run xacc.  If you do not have Motif, then copy 
-'xacc-static.bin' to 'xacc.bin'.
-
-Access to the on-line help documentation requires the that
-the environment variable XACC_HELP be set to the 'Docs'
-directory.  The 'xacc' shell script sets this variable to
-the configured directory before running the main program,
-so you don't have to set this by hand.
-
-If you want to override the path to the Docs directory:
-
-For csh/tcsh
-
-% setenv XACC_HELP /usr/local/share/xacc/Docs
-
-or, for bash/bsh/ksh/sh
-
-% set XACC_HELP=/usr/local/share/xacc/Docs
-% export XACC_HELP
+'gnucash-static.bin' to 'gnucash.bin'.
 
 You can then start GnuCash at the command-line, with
-"xacc" or "xacc <filename>", where <filename> is a
+"gnucash" or "gnucash <filename>", where <filename> is a
 GnuCash account file.  Sample accounts can be found in 
 "data" subdirectory.  *.dat files are GnuCash accounts that can 
 opened with the "Open File" menu entry.  *.qif files are
@@ -129,6 +107,37 @@ Building & Installing:
 ----------------------
 These steps does not apply to binary distributions; only to
 source distributions.
+
+Prior to building GnuCash, you will have to obtain and install the following
+packages:
+
+SWIG    -- available at www.swig.org need 1.1p5 or later ...
+guile   -- need version 1.3 or later ( or build 1998.08.18 or 1998.09.10 or later) ...
+           ftp://ftp.gnucash.org/pub/gnucash/extra_libs/TAR/guile-core-19980818.tar.gz 
+
+Motif or Lesstif  --
+           Lesstif 0.81    works   
+           Lesstif 0.82    broken    
+           Lesstif 0.83    works    
+           Lesstif 0.86.0  is reported to work     
+           Lesstif 0.86.5  crashes.   
+           Commercial Motif seems to work, but beware old libXm's 
+           combined with new glibc's, 
+
+XmHTML  -- version 1.1.4 or later
+           http://www.llp.fu-berlin.de/lsoft/F/5/XMHTML.html
+           http://www.xs4all.nl/~ripley/XmHTML/XmHTML.html
+           ftp://ftp.ultra.net/pub/eugene/RPMS/i386/XmHTML-1.1.5-1.i386.rpm
+           ftp://ftp.ultra.net/pub/eugene/SRPMS/XmHTML-1.1.5-1.src.rpm
+
+libpng  -- portable network graphics library
+libjpeg -- JPEG image handling library
+libz    -- comopression library
+xpm     -- X Pixmap extension
+eperl   -- embeddedPerl needed for reports
+           version eperl-2.2.14 works well with perl 5.00404
+           http://www.engelschall.com/sw/eperl/
+           ftp://ftp.ultra.net/pub/eugene/RPMS/i386/eperl-2.2.14-1.i386.rpm
 
 Normally, to build and install GnuCash, all you have to do is:
 
@@ -173,6 +182,36 @@ So the two most likely sets of build instructions would be as follows:
     ./configure --prefix=/usr/local/opt/gnucash
     make motif
     make install-opt
+
+Examples of other funny configure options:
+    configure --with-motif=/usr/local/opt/mootif \
+              --prefix=/usr/local/opt/gnucash \
+              --with-xmhtml-includes=/home/rlb/XmHTML-1.1.5/include\
+              --with-xmhtml-libraries=/home/rlb/XmHTML-1.1.5/src
+
+
+
+Flag --with-gtk-config.  The way gtk phiolosphy goes,
+you should *only* specify the config program location and
+rely on it to tell you the right CFLAGS and XLIBS values.
+
+Runtime and install destinations are separate.  The --prefix
+you specify to configure determines where the resulting binary
+will look for things at runtime.  The prefix you give to make
+install (i.e. make prefix=foo install) only determines where the
+files are placed.  If this location is different from the
+configure --prefix value, then gnucash won't work until it's moved
+to that location.  This feature is mostly useful for package
+builders, but it shouldn't hurt anyone else.
+
+Only the location of startup.scm is hardcoded into the
+binary, and even that can be overriden with --startup-file on the
+command line.  The other defaults are now in startup.scm.
+path-defaults.h is now gone.  The startup file setting is in
+gnucash.h, generated from gnucash.h.in.
+
+
+
 
 Status:
 -------
@@ -229,12 +268,12 @@ Getting Source with CVS
 A read-only version of the cvs tree is available on the net.
 To access it, first, login, as so:
 
-cvs -d :pserver:cvs@linas.org:/home/cvs/cvsroot login
+cvs -d :pserver:cvs@cvs.gnucash.org:/home/cvs/cvsroot login
 The password is "guest"
 
 To get a copy of the source, do a 
 
-cvs -d :pserver:cvs@linas.org:/home/cvs/cvsroot checkout xacc
+cvs -d :pserver:cvs@cvs.gnucash.org:/home/cvs/cvsroot checkout xacc
 
 
 Main Developers:
@@ -265,27 +304,30 @@ Rob Browning <rlb@cs.utexas.edu> abused everyone for not using perl,
 
 Fixes & Patches:
 ----------------
-Fred Baube <fred@moremagic.com> for Java port
+Fred Baube <fred@moremagic.com> for attempted Java port/MoneyDance
 Christopher B. Browne <cbbrowne@hex.net> for perl stock scripts
 George Chen <georgec@sco.com> for MS-Money QIF's & fixes
 Jeremey Collins <linux@cyberramp.net> for GnoMoney & GTK port
 Ciaran Deignan <Ciaran.Deignan@bull.net> for AIX binary version
+Tyson Dowd   <tyson@tyse.net> for config/make patches & debian maint.
 Koen D'Hondt <ripley@xs4all.nl> for Solaris patches to XmHTML
 Bob Drzyzgula <bob@mostly.com> for budgeting design notes
 Dave Freese <DFreese@osc.uscg.mil> for leap-year fix
 Otto Hammersmith <otto@bug.redhat.com> for RedHat RPM version
+Jon K}re Hellan <jk@isdn-a33.itea.ntnu.no> misc core dump fixes
 Tom Kludy <tkludy@csd.sgi.com> for SGI Irix port
 Ted Lemon <mellon@andare.fugue.com> for NetBSD port
 G. Allen Morris III  <gam3@ann.softgams.com> for QIF core dump 
 Peter Norton <spacey@inch.com> for a valiant attempt at a GTK port
 OmNiBuS <webmaster@obsidian.uia.net> web site graphics & content
+Alain Peyrat <Alain.Peyrat@nmu.alcatel.fr> for configure.in patches
 Gavin Porter <maufk@csv.warwick.ac.uk> for euro style dates
 Ron Record <rr@sco.com> for SCO Unixware & OpenServer binaries
 Dirk Schoenberger <schoenberger@signsoft.com> for Qt/KDE port
 Christopher Seawood <cls@seawood.org> for XbaeMatrix core dump
 Richard Skelton <rich@brake.demon.co.uk> for Solaris cleanup
 Henning Spruth <spruth@bigfoot.com> for German text & euro date rework
-Ken Yamaguchi <gooch@ic.EECS.Berkeley.EDU>  QIF import fixes
+Ken Yamaguchi <gooch@ic.EECS.Berkeley.EDU> QIF import fixes; MYM import
 
 ... and I am sure that I have missed many others ...
 

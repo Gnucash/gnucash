@@ -110,6 +110,7 @@ xaccFreeAccount( Account *acc )
 {
   int i=0;
   Split *s;
+  Transaction *t;
 
   if (NULL == acc) return;
     
@@ -124,26 +125,28 @@ xaccFreeAccount( Account *acc )
   if (acc->security) free (acc->security);
   
   /* any split pointing at this account needs to be unmarked */
-  i=0;
-  s = acc->splits[0];
-  while (s) {
-    s->acc = NULL;
-    i++;
+  for (i=0; i<acc->numSplits; i++) {
     s = acc->splits[i];
+    s->acc = NULL;
   }
 
-  /* search for orphaned transactions, and delete them */
-  i=0;
-  s = acc->splits[0];
-  while (s) {
-    xaccSplitDestroy (s);
-    i++;
+  /* destroy all of the splits. The xaccCommitEdit() call
+   * will automatically clean up orphaned transactions.
+   */
+  acc->open |= ACC_BEING_DESTROYED;
+  acc->open |= ACC_DEFER_REBALANCE;
+  for (i=0; i<acc->numSplits; i++) {
     s = acc->splits[i];
+    t = s->parent;
+    xaccTransBeginEdit (t, 1);
+    xaccSplitDestroy (s);
+    xaccTransCommitEdit (t);
   }
 
   /* free up array of split pointers */
   _free (acc->splits);
   acc->splits = NULL;
+  acc->numSplits = 0;
   
   /* zero out values, just in case stray 
    * pointers are pointing here. */
@@ -204,11 +207,12 @@ xaccGetAccountID (Account *acc)
 
 #define CHECK(acc) {					\
    if (0 == acc->open) {				\
-      /* not today, soem day in the future ... */	\
+      /* not today, some day in the future ... */	\
       /* printf ("Error: Account not open for editing\n"); */	\
       /* assert (0); */					\
       /* return; */					\
    }							\
+  if (NULL != acc->parent) acc->parent->saved = FALSE;	\
 }
 
 /********************************************************************\
@@ -219,6 +223,7 @@ xaccAccountInsertSplit ( Account *acc, Split *split )
 {
   int  i,j;
   Split **oldsplits;
+  Account *oldacc;
 
   if (!acc) return;
   if (!split) return;
@@ -242,48 +247,80 @@ disable for now till we figure out what the right thing is.
   }
 */
 
-  /* mark the account as having changed, and
-   * the account group as requiring a save */
+  /* mark the account as having changed */
   acc -> changed = TRUE;
-  if( acc->parent != NULL ) acc->parent->saved = FALSE;
 
   /* if this split belongs to another acount, remove it from 
    * there first.  We don't want to ever leave the system
    * in an inconsistent state.
    */
+  oldacc = split->acc;
   if (split->acc) xaccAccountRemoveSplit (split->acc, split);
   split->acc = acc;
     
-  oldsplits = acc->splits;
-  acc->numSplits ++;
-  acc->splits = (Split **)_malloc(((acc->numSplits) + 1) * sizeof(Split *));
-  
-  /* Find the insertion point */
-  /* to get realy fancy, could use binary search. */
-  for(i = 0; i < (acc->numSplits - 1);) {
-    if(xaccSplitOrder(&(oldsplits[i]), &split) > 0) {
-      break;
-    } else {
-      acc->splits[i] = oldsplits[i];
-    }
-    i++;  /* Don't put this in the loop guard!  It'll go too far. */
+  /* enlarge the size of the split array to accomadate the new split,
+   * and copy all the splits over to the new array. 
+   * If the old and new accounts are the same account, then we
+   * are just shuffling around the split, resumably due to a 
+   * date reordering.  In this case, most of the malloc/copy/free bit
+   * can be avoided.
+   */
+  if (oldacc != acc) {
+     oldsplits = acc->splits;
+     acc->numSplits ++;
+
+     acc->splits = (Split **)_malloc(((acc->numSplits) + 1) * sizeof(Split *));
+     
+     /* Find the insertion point */
+     /* to get realy fancy, could use binary search. */
+     for(i = 0; i < (acc->numSplits - 1);) {
+       if(xaccSplitDateOrder(&(oldsplits[i]), &split) > 0) {
+         break;
+       } else {
+         acc->splits[i] = oldsplits[i];
+       }
+       i++;  /* Don't put this in the loop guard!  It'll go too far. */
+     }
+     /* Insertion point is now i */
+   
+     //fprintf(stderr, "Insertion position is: %d\n", i);
+   
+     /* Move all the other splits down (this could be done faster with memmove)*/
+     for( j = acc->numSplits; j > i; j--) {
+       acc->splits[j] = oldsplits[j - 1];
+     }
+   
+     /* Now insert the new split */
+     acc->splits[i] = split;
+   
+     /* make sure the array is NULL terminated */
+     acc->splits[acc->numSplits] = NULL;
+   
+     _free(oldsplits);
+  } else {
+     acc->numSplits ++;
+
+     /* Find the insertion point */
+     /* to get realy fancy, could use binary search. */
+     for(i = 0; i < (acc->numSplits - 1);) {
+       if(xaccSplitDateOrder(&(acc->splits[i]), &split) > 0) {
+         break;
+       }
+       i++;  /* Don't put this in the loop guard!  It'll go too far. */
+     }
+     /* Insertion point is now i */
+   
+     /* Move all the other splits down (this could be done faster with memmove)*/
+     for( j = acc->numSplits; j > i; j--) {
+       acc->splits[j] = acc->splits[j - 1];
+     }
+   
+     /* Now insert the new split */
+     acc->splits[i] = split;
+   
+     /* make sure the array is NULL terminated */
+     acc->splits[acc->numSplits] = NULL;
   }
-  /* Insertion point is now i */
-
-  //fprintf(stderr, "Insertion position is: %d\n", i);
-
-  /* Move all the other splits down (this could be done faster with memmove)*/
-  for( j = acc->numSplits; j > i; j--) {
-    acc->splits[j] = oldsplits[j - 1];
-  }
-
-  /* Now insert the new split */
-  acc->splits[i] = split;
-
-  /* make sure the array is NULL terminated */
-  acc->splits[acc->numSplits] = NULL;
-
-  _free(oldsplits);
 
   xaccAccountRecomputeBalance (acc);
 }
@@ -299,12 +336,13 @@ xaccAccountRemoveSplit ( Account *acc, Split *split )
 
   if (!acc) return;
   if (!split) return;
+
+  /* the being-destroyed flag prevents recursive scribbling upon oneself */
+  if (acc->open & ACC_BEING_DESTROYED) return;
   CHECK (acc);
 
-  /* mark the account as having changed, and
-   * the account group as requiring a save */
+  /* mark the account as having changed */
   acc -> changed = TRUE;
-  if( acc->parent != NULL ) acc->parent->saved = FALSE;
   
   for( i=0,j=0; j<acc->numSplits; i++,j++ ) {
     acc->splits[i] = acc->splits[j];
@@ -427,11 +465,11 @@ xaccAccountRecomputeBalance( Account * acc )
 
 /********************************************************************\
  * xaccCheckDateOrder                                               *
- *   check this transaction to see if the date is in correct order  *
+ *   check this split to see if the date is in correct order        *
  *   If it is not, reorder the transactions ...                     *
  *                                                                  *
  * Args:   acc   -- the account to check                            *
- *         trans -- the transaction to check                        *
+ *         split -- the split to check                              *
  *
  * Return: int -- non-zero if out of order                          *
 \********************************************************************/
@@ -479,7 +517,6 @@ xaccCheckDateOrder (Account * acc, Split *split )
 
   /* take care of re-ordering, if necessary */
   if( outOfOrder ) {
-    xaccAccountRemoveSplit( acc, split );
     xaccAccountInsertSplit( acc, split );
     return 1;
   }
@@ -518,6 +555,87 @@ xaccCheckTransDateOrder (Transaction *trans )
 
   if (outOfOrder) return 1;
   return 0;
+}
+
+/********************************************************************\
+\********************************************************************/
+
+/* The sort order is used to implicitly define an 
+ * order for report generation */
+
+static int typeorder[NUM_ACCOUNT_TYPES] = {
+     BANK, STOCK, MUTUAL, CURRENCY, CASH, ASSET, 
+     CREDIT, LIABILITY, INCOME, EXPENSE, EQUITY };
+
+static int revorder[NUM_ACCOUNT_TYPES] = {
+     -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 };
+
+
+int
+xaccAccountOrder (Account **aa, Account **ab)
+{
+  char *da, *db; 
+  int ta, tb;
+
+  if ( (*aa) && !(*ab) ) return -1;
+  if ( !(*aa) && (*ab) ) return +1;
+  if ( !(*aa) && !(*ab) ) return 0;
+
+  /* sort on accountCode strings */
+  da = (*aa)->accountCode;
+  db = (*ab)->accountCode;
+  SAFE_STRCMP (da, db);
+
+  /* if acccount-type-order array not initialized, initialize it */
+  /* this will happen at most once during program invocation */
+  if (-1 == revorder[0]) {
+    int i;
+    for (i=0; i<NUM_ACCOUNT_TYPES; i++) {
+      revorder [typeorder[i]] = i;
+    }
+  }
+
+  /* otherwise, sort on account type */
+  ta = (*aa)->type;
+  tb = (*ab)->type;
+  ta = revorder[ta];
+  tb = revorder[tb];
+  if (ta < tb) return -1;
+  if (ta > tb) return +1;
+
+  /* otherwise, sort on accountName strings */
+  da = (*aa)->accountName;
+  db = (*ab)->accountName;
+  SAFE_STRCMP (da, db);
+
+  /* accountName strings should really, really be unique, and so in theory
+   * we should never ever get here.  But just in case theory is broke ... */
+  da = (*aa)->currency;
+  db = (*ab)->currency;
+  SAFE_STRCMP (da, db);
+
+  da = (*aa)->security;
+  db = (*ab)->security;
+  SAFE_STRCMP (da, db);
+
+  return 0;
+}
+
+/********************************************************************\
+\********************************************************************/
+/* account codes will be assigned base-36, with three digits */
+
+#define BASE 36
+
+void 
+xaccAccountAutoCode (Account *acc, int digits)
+{
+  if (!acc) return;
+  if (acc->accountCode) return;   /* no-op if code already assinged */
+  if (!(acc->parent)) return; 
+
+  acc->accountCode = xaccGroupGetNextFreeCode (acc->parent, digits);
+  acc->parent->saved = FALSE;
 }
 
 /********************************************************************\
@@ -652,36 +770,41 @@ void
 xaccConsolidateTransactions (Account * acc)
 {
    Split *sa, *sb;
+   Transaction *ta, *tb;
    int i,j;
+   int retval;
 
    if (!acc) return;
    CHECK (acc);
 
    for (i=0; i<acc->numSplits; i++) {
       sa = acc->splits[i];
+      ta = sa->parent;
       for (j=i+1; j<acc->numSplits; j++) {
          sb = acc->splits[j];
+         tb = sb->parent;
 
          /* if no match, then continue on in the loop.
           * we really must match everything to get a duplicate */
-         if (sa->parent != sb->parent) continue;
-         if (sa->reconciled != sb->reconciled) continue;
-         if (0 == DEQ(sa->damount, sb->damount)) continue;
-         if (0 == DEQ(sa->share_price, sb->share_price)) continue;
-         if (strcmp (sa->memo, sb->memo)) continue;
+         retval = xaccTransMatch (&ta, &tb);
+         if (retval) continue;
 
-#ifdef STILL_BROKEN
-/* hack alert -- still broken from splits */
-         /* Free the transaction, and shuffle down by one.
-          * Need to shuffle in order to preserve date ordering. */
-         xaccFreeTransaction (tb);
-         
-         for (k=j+1; k<acc->numTrans; k++) {
-            acc->transaction[k-1] = acc->transaction[k];
-         }
-         acc->transaction[acc->numTrans -1] = NULL;
-         acc->numTrans --;
-#endif
+         /* OK, looks like the two splits are a matching pair. 
+          * Blow one of them, and its entie associated transaction, away. 
+          * (We blow away the trasnaction because not only do the splits 
+          * match, but so do all of thier partner-splits. )
+          */
+
+          xaccTransBeginEdit (tb, 1);
+          xaccTransDestroy (tb);
+          xaccTransCommitEdit (tb);
+
+          /* It should be safe to just "break" here, as all splits
+           * wwith index i or less have been checked already and couldn't
+           * have been dupes.  So index i is still valid, although j is 
+           * not.  Note that numSplits changed ...
+           */
+          break;
       }
    }
 }
@@ -704,7 +827,8 @@ xaccAccountSetType (Account *acc, int tip)
       return;
    }
 
-   /* hack alert -- check to make sure type is valid ... */
+   /* refuse invalid account types */
+   if (NUM_ACCOUNT_TYPES <= tip) return;
    acc->type = tip;
 }
 
@@ -719,6 +843,19 @@ xaccAccountSetName (Account *acc, char *str)
    tmp = strdup (str);
    if (acc->accountName) free (acc->accountName);
    acc->accountName = tmp;
+}
+
+void 
+xaccAccountSetCode (Account *acc, char *str)
+{
+   char * tmp;
+   if ((!acc) || (!str)) return;
+   CHECK (acc);
+
+   /* make strdup before freeing */
+   tmp = strdup (str);
+   if (acc->accountCode) free (acc->accountCode);
+   acc->accountCode = tmp;
 }
 
 void 
@@ -812,6 +949,13 @@ xaccAccountGetName (Account *acc)
 {
    if (!acc) return NULL;
    return (acc->accountName);
+}
+
+char *
+xaccAccountGetCode (Account *acc)
+{
+   if (!acc) return NULL;
+   return (acc->accountCode);
 }
 
 char * 

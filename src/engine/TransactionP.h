@@ -123,6 +123,8 @@ struct _split
   double  share_cleared_balance;
   double  share_reconciled_balance;
 
+  /* no tickee no washee */
+  int tickee;
 };
 
 
@@ -157,6 +159,12 @@ struct _transaction
   /* the "open" flag indicates if the transaction has been 
    * opened for editing. */
   char open;
+
+  /* the orig pointer points at a copy of the original transaction,
+   * before editing was started.  This orig copy is used to rollback 
+   * any changes made if/when the edit is abandoned.
+   */
+  Transaction *orig;
 };
 
 

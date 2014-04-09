@@ -87,6 +87,12 @@ xaccInitQuery (Query *q)
    q->earliest.tv_sec = 0; 
    q->earliest.tv_nsec = 0; 
 
+/* hack alert HACK ALERT Y2K problem -- danger danger.
+ * For some stupid reason,  struct Timespec uses long int
+ * instead of time_t for seconds. This means we will have 
+ * overflow in year 2004 which is stupid, and needs to be 
+ * fixed.
+ */
    /* q->latest.tv_sec = ULONG_MAX; */
    q->latest.tv_sec = LONG_MAX;
    q->latest.tv_nsec = 0; 
@@ -189,6 +195,7 @@ void
 xaccQuerySetMaxSplits (Query *q, int max)
 {
    if (!q) return;
+   q->changed = 1; 
    q->max_num_splits = max;
 }
 
@@ -198,11 +205,19 @@ void
 xaccQuerySetDateRange (Query *q, time_t early, time_t late)
 {
    if (!q) return;
+   q->changed = 1; 
    q->earliest.tv_sec = early;
    q->latest.tv_sec = late;
 }
 
 /* ================================================== */
+/* Note that the sort order for a transaction that is
+ * currently being edited is based on its old values, 
+ * not in its current edit values.  This is somewhat
+ * arbitrary, but it does alleviate annoying behaviour 
+ * in the GUI, behaviour that could not be easily
+ * rectified there.
+ */
 
 #define PROLOG 					\
   char *da, *db;				\
@@ -216,6 +231,8 @@ xaccQuerySetDateRange (Query *q, time_t early, time_t late)
 						\
   ta = (*sa)->parent;				\
   tb = (*sb)->parent;				\
+  if (ta->orig) ta = ta->orig;			\
+  if (tb->orig) tb = tb->orig;			\
 						\
   if ( (ta) && !(tb) ) return -1;		\
   if ( !(ta) && (tb) ) return +1;		\
@@ -434,6 +451,7 @@ void
 xaccQuerySetSortOrder (Query *q, int arga, int argb, int argc)
 {
    if (!q) return;
+   q->changed = 1; 
 
    DECIDE (DESC, MEMO, AMOUNT)
    DECIDE (DESC, MEMO, NUM)
@@ -619,6 +637,7 @@ xaccQueryGetSplits (Query *q)
    }
 
    /* gather some data about what we just found */
+   /* serious Y2K hack alert -- this should be ULONG_MAX not LONG_MAX */
    q->earliest_found.tv_sec = LONG_MAX; 
    q->earliest_found.tv_nsec = 0; 
    q->latest_found.tv_sec = 0;

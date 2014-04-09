@@ -22,6 +22,31 @@
  * To implement the above, the register "user_hook" is used
  * to store the blank split with the register window structures.
  *
+ * =====================================================================
+ * Some notes on Commit/Rollback:
+ * 
+ * There's an engine compnenent and a gui componenet to the commit/rollback
+ * scheme.  On the engine side, one must always call BeginEdit()
+ * before starting to edit a transaction.  When you think you're done,
+ * you can call CommitEdit() to commit the changes, or RollbackEdit() to
+ * go back to how things were before you started the edit.  Think of it as
+ * a one-shot mega-undo for that transaction.
+ * 
+ * Note that the query engine uses the original values, not the currently
+ * edited values, when performing a sort.  This allows your to e.g. edit
+ * the date without having the transaction hop around in the gui while you
+ * do it.
+ * 
+ * On the gui side, commits are now performed on a per-transaction basis,
+ * rather than a per-split (per-journal-entry) basis.  This means that
+ * if you have a transaction with a lot of splits in it, you can edit them
+ * all you want without having to commit one before moving to the next.
+ * 
+ * Similarly, the "cancel" button will now undo the changes to all of the
+ * lines in the transaction display, not just to one line (one split) at a
+ * time.
+ * 
+ *
  * HISTORY:
  * Copyright (c) 1998 Linas Vepstas
  */
@@ -53,6 +78,30 @@
 #include "Transaction.h"
 
 #define BUFSIZE 1024
+
+/* ======================================================== */
+/* the force_double_entry_awareness flag controls how the 
+ * register behaves if the user failed to specify a transfer-to
+ * account when creting a new split.  What it does is simple,
+ * although it can lead to some confusion to the user.
+ * If this flag is set, then any new split will be put into
+ * exactly the same account as the split immediately above it.
+ * If the spluit immediately above is the leader, then what
+ * happens visually is that it appears as if there are two 
+ * transactions,  one debiting and one crediting this acdunt
+ * by exactly the same amount.  Thus, the user is forced to
+ * deal with this somewhat nutty situation.
+ *
+ * If this flag is *not* set, then the split just sort of 
+ * hangs out, without beloinging to any account. This will 
+ * of course lead to a lkedger that fails to balance.
+ * Bummer, duude !
+ *
+ * hack alert -- this flag should really be made a configurable 
+ * item in some config script.
+ */
+
+static int force_double_entry_awareness = 0;
 
 /* ======================================================== */
 /* this callback gets called when the user clicks on the gui
@@ -118,6 +167,7 @@ new_phys_row, new_phys_col);
          reg->user_hack = (void *) xaccSplitGetParent (oldsplit);
       }
       xaccRegisterRefresh (reg);
+      refreshMainWindow();
 
       /* indicate what row we *should* have gone to */
       *p_new_phys_row = table->current_cursor_phys_row;
@@ -184,10 +234,11 @@ printf ("leave LedgerTraverse with %d \n", reg->cursor_phys_row);
 static void
 LedgerDestroy (SplitRegister *reg)
 {
+   Transaction *trans;
+
    /* be sure to destroy the "blank split" */
    if (reg->user_hook) {
       Split *split;
-      Transaction *trans;
 
       split = (Split *) (reg->user_hook);
 
@@ -196,7 +247,21 @@ LedgerDestroy (SplitRegister *reg)
       trans = xaccSplitGetParent (split);
       xaccTransBeginEdit (trans, 1);
       xaccTransDestroy (trans);
+      xaccTransCommitEdit (trans);
       reg->user_hook = NULL;
+   }
+
+   /* be sure to take care of any open transactions */
+   if (reg->user_huck) {
+      trans = (Transaction *) (reg->user_huck);   
+  
+      /* I suppose we could also rollback here ... its not clear what
+       * the desirable behaviour should be from the user's point of view 
+       * when they close a window with an uncommitted edit in it ...
+       * Maybe we should prompt them ??
+       */
+      xaccTransCommitEdit (trans);
+      reg->user_huck = NULL;
    }
 }
 
@@ -223,9 +288,7 @@ xaccSRRedrawRegEntry (SplitRegister *reg)
 {
    Split *split;
    Transaction *trans;
-   Account * acc;
    unsigned int changed;
-   int i;
 
    /* use the changed flag to avoid heavy-weight redraws
     * This will help cut down on uneccessary register redraws.  */
@@ -242,14 +305,8 @@ xaccSRRedrawRegEntry (SplitRegister *reg)
     * in this transaction.  So basically, send redraw events to all
     * of the splits.
     */
-   i = 0;
-   split = xaccTransGetSplit (trans, i);
-   while (split) {
-      acc = xaccSplitGetAccount (split);
-      xaccAccountDisplayRefresh (acc);
-      i++;
-      split = xaccTransGetSplit (trans, i);
-   }
+   xaccTransDisplayRefresh (trans);
+   refreshMainWindow();
 }
 
 /* ======================================================== */
@@ -259,7 +316,7 @@ void
 xaccSRSaveRegEntry (SplitRegister *reg)
 {
    Split *split;
-   Transaction *trans;
+   Transaction *trans, *oldtrans;
    Account * acc;
    unsigned int changed;
    int style;
@@ -301,19 +358,36 @@ printf ("save split is %p \n", split);
          return;
       }
       trans = xaccSplitGetParent (s);
-      acc = xaccSplitGetAccount (s);
 
+      /* determine whether we should commit the previous edit */
+      oldtrans = (Transaction *) (reg->user_huck);
+      if (oldtrans != trans) {
+         xaccTransCommitEdit (oldtrans);
+         xaccTransBeginEdit (trans, 0);   
+         reg->user_huck =  (void *) trans;
+      }
+      
       split = xaccMallocSplit ();
-      xaccTransBeginEdit (trans, 0);   
       xaccTransAppendSplit (trans, split);
-      xaccAccountInsertSplit (acc, split);
+
+      if (force_double_entry_awareness) {
+         acc = xaccSplitGetAccount (s);
+         xaccAccountInsertSplit (acc, split);
+      }
 
       assert (reg->table->current_cursor);
       reg->table->current_cursor->user_data = (void *) split;
 
    } else {
       trans = xaccSplitGetParent (split);
-      xaccTransBeginEdit (trans, 0);
+
+      /* determine whether we should commit the previous edit */
+      oldtrans = (Transaction *) (reg->user_huck);
+      if (oldtrans != trans) {
+         xaccTransCommitEdit (oldtrans);
+         xaccTransBeginEdit (trans, 0);   
+         reg->user_huck =  (void *) trans;
+      }
    }
 
    /* copy the contents from the cursor to the split */
@@ -344,44 +418,54 @@ printf ("save split is %p \n", split);
     * XFRM is the straight split, MXFRM is the mirrored split.
     */
    if (MOD_XFRM & changed) {
-      Split *split_to_modify = NULL;
+      Account *old_acc=NULL, *new_acc=NULL;
 
-      split_to_modify = split;
-
-      /* split to modify may be null if its a mutli-split transaction,
-       * and a single-line or two-line display.  Then do nothing */
-      if (split_to_modify) {
-         Account *old_acc=NULL, *new_acc=NULL;
-
-         /* do some reparenting. Insertion into new account will automatically
-          * delete from the old account */
-         old_acc = xaccSplitGetAccount (split_to_modify);
-         new_acc = xaccGetAccountByName (trans, reg->xfrmCell->cell.value);
-         xaccAccountInsertSplit (new_acc, split_to_modify);
+      /* do some reparenting. Insertion into new account will automatically
+       * delete this split from the old account */
+      old_acc = xaccSplitGetAccount (split);
+      new_acc = xaccGetAccountByName (trans, reg->xfrmCell->cell.value);
+      xaccAccountInsertSplit (new_acc, split);
    
-         /* make sure any open windows of the old account get redrawn */
-         xaccAccountDisplayRefresh (old_acc);
-      }
+      /* make sure any open windows of the old account get redrawn */
+      xaccAccountDisplayRefresh (old_acc);
+      refreshMainWindow();
    }
 
    if (MOD_MXFRM & changed) {
-      Split *split_to_modify = NULL;
+      Split *other_split = NULL;
 
-      split_to_modify = xaccGetOtherSplit(split);
+      other_split = xaccGetOtherSplit(split);
 
-      /* split to modify may be null if its a mutli-split transaction,
-       * and a single-line or two-line display.  Then do nothing */
-      if (split_to_modify) {
+      /* other_split may be null for two very different reasons:
+       * (1) the parent transaction has three or more splits in it,
+       *     and so the "other" split is ambiguous, and thus null.
+       * (2) the parent transaction has only this one split as a child.
+       *     and "other" is null because there is no other.
+       *
+       * In the case (2), we want to create the other split, so that 
+       * the user's request to transfer actually woprks out.
+       */
+
+      if (!other_split) {
+         other_split = xaccTransGetSplit (trans, 1);
+         if (!other_split) {
+            other_split = xaccMallocSplit ();
+            xaccTransAppendSplit (trans, other_split);
+         }
+      }
+
+      if (other_split) {
          Account *old_acc=NULL, *new_acc=NULL;
 
          /* do some reparenting. Insertion into new account will automatically
           * delete from the old account */
-         old_acc = xaccSplitGetAccount (split_to_modify);
+         old_acc = xaccSplitGetAccount (other_split);
          new_acc = xaccGetAccountByName (trans, reg->mxfrmCell->cell.value);
-         xaccAccountInsertSplit (new_acc, split_to_modify);
+         xaccAccountInsertSplit (new_acc, other_split);
    
          /* make sure any open windows of the old account get redrawn */
          xaccAccountDisplayRefresh (old_acc);
+         refreshMainWindow();
       }
    }
 
@@ -422,8 +506,6 @@ printf ("save split is %p \n", split);
    if (MOD_VALU & changed) {
       xaccSplitSetValue (split, (reg->valueCell->amount));
    }
-
-   xaccTransCommitEdit (trans);
 
 printf ("finished saving split %s of trans %s \n", 
 xaccSplitGetMemo(split),
@@ -980,11 +1062,12 @@ LoadXferCell (ComboCell *cell,
 
       curr = xaccAccountGetCurrency (acc);
       secu = xaccAccountGetSecurity (acc);
+      if (secu && (0x0 == secu[0])) secu = 0x0;
 
       if ( (!safe_strcmp(curr,base_currency)) ||
-           (!safe_strcmp(secu,base_currency)) ||
            (!safe_strcmp(curr,base_security)) ||
-           (!safe_strcmp(secu,base_security)) )
+           (secu && (!safe_strcmp(secu,base_currency))) ||
+           (secu && (!safe_strcmp(secu,base_security))) )
       {
          xaccAddComboCellMenuItem (cell, xaccAccountGetName (acc));
       }
@@ -1005,6 +1088,7 @@ void xaccLoadXferCell (ComboCell *cell,
 
    curr = xaccAccountGetCurrency (base_account);
    secu = xaccAccountGetSecurity (base_account);
+   if (secu && (0x0 == secu[0])) secu = 0x0;
 
    xaccAddComboCellMenuItem (cell, "");
    LoadXferCell (cell, grp, curr, secu);

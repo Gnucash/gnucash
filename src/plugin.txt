@@ -1,0 +1,197 @@
+Date: Mon, 19 Oct 1998 11:08:53 +0200
+From: Stephan Lichtenauer <s_lichtenauer@muenchen.org>
+To: linas@linas.org
+Subject: [Fwd: ANNOUNCE version 1.1.20]
+
+DESIGN PROPOSAL (ROUGH OUTLINE)
+-----------------------------
+
+I thought that there is only one engine that manages runtime data, but
+to store and read it it uses the i/o-plugins that handle the data in a very
+abstract way, ie they know only as much about it as absolutely necessary so
+changes of data representation only affects the engine and not the plugins (in
+most cases). Nevertheless i would say that they are backend since they do not
+need an ui. Necessary addresses/file names can be obtained in a standardized way
+through the application. It could work with the CORBA persistence framework if I
+remember right and the GNOME VFS.
+
+Engine
+--------
+
+Split the existing engine in the following classes that match the existing data
+structures:
+
+- GcAccountGroup
+- GcAccount
+- GcSplit
+- GcTransaction
+- GcEngine
+
+These five classes first of all simply use the design already used in the
+engine. Additionally I would introduce a class
+
+- GcRegistry
+
+that is used to store some metadata that is used by e.g. plug ins or the user
+interface. Since there is in my eyes need for two different classes of metadata,
+global and account-group related one, I would give GcAccountGroup as well as
+GcEngine a gcGetRegistry method that returns the local and the global registry
+object. The registry can store its data in the account database and (global
+data) in the config file in the user's root directory. An example for global
+metadata of my plugin would be a database of all REUTERS codes of stocks
+available, in the local registry (the account-group related one) the plug in can
+save e.g. what codes have been selected to be updated etc. An ui could store
+general options (e.g. user preferences) in the global registry and e.g. last
+position of windows in the local registry.
+GcEngine could as well be a metaclass since it only has to represent the engine
+as such, with methods like gcReadAccountGroup.
+GcSplit could be an abstract class whose functionality can be implemented
+in derived concrete classes, e.g. for simple money transfers, buy of securities
+(which will be further divided in stocks, futures, bonds) etc. Alternatively
+additional
+data could be stored in an extended comment field with every split in MIME format.
+Infrastructure for that is already partially implemented but is (in my eyes) no
+perfectly
+clear OOP design.
+
+One GcSplit subclass is GcComment that can store general data like company
+statements. Since this could be data that affects more than one account (e.g.
+general economical data), it is stored centralized and the GcComment object in
+the different accounts only point on this data. GcSplit subclasses that
+represent any type of securities will have to have additional fields, e.g. to
+store maturities, volume (for special price quotes) etc.
+
+In the design outline on the webpage a transparent mechanism to read data from
+different sources is proposed. I would realize this completely with plug in
+objects. So I would introduce
+
+- GcPlugIn
+
+to be the base class of all plug ins. How to make plugins independent from ui
+toolkits (GTK, QT/KDE), I do not know since they will need an ui in many cases.
+
+- GcIOPlugIn
+
+is derived from it and will be the base class for all i/o plugins, e.g.
+GcIOXacc, GcIOQif, GcIOSql, GcIOOnlineBanking, GcIOReadWww (yeah, my plugin!)
+etc. Since some of the media is non-persistent, ie it is not sure if you will
+get the data again in the future (e.g. from web pages), GcIOPlugIn has a method
+gcIsPersistentMedia that returns FALSE in such cases. Then the data obtained
+from this source can be copied to a persistent media (e.g. the SQL database).
+An IO plugin has a limited lifespan and is only used to read/write data from/to
+accounts/account groups/splits resp. create these objects as appropriate when
+reading data.
+
+One example:
+You make a bank transfer in your account. The data is written to the
+GcIOOnlineBanking object that uses the WWW-interface of your bank to give the
+data to your bank. Then it reads the state of the transfer (via an online
+request to your bank account balance) what will then appear in your account.
+Possibly the GcIOOnlineBanking plugin is not persistent, i.e. you will not get a
+full track of all of your transactions of the past via online banking, then the
+data is stored locally (e.g. via GcIOPlugInXacc).
+
+One account group so can use many IO plugins at the same to get its data.
+Perhaps the IO plugins could be based on the GNOME VFS (virtual file system), if
+this is not an unwanted dependency.
+
+In this system of course there is one big problem: How to map the data obtained
+from a source to the accounts. If you read it from your account group file of
+course you have account ids and account name, but if you read from www stock
+quotes or MetaStock data or online banking interfaces that is not that simple;
+and it also has to work the other way round. So we need a
+
+- GcDataMapper
+
+class that has at least two methods gcFindAccounts and gcFindSources. Both get a
+
+- GcMapInfo
+
+struct as parameter that contains information on how to find the account or the
+source. Both return a vector of GcMapInfos that contain information about
+the matches. When you call gcFindAccounts you normally fill the fields with data
+like the banking account number, REUTERS codes etc. and the method returns a
+list of accounts that could match. If there is more or less then one account the
+user could be prompted to help; the data obtained from a succesful match will be
+stored in the registry by the GcDataMapper so it can be used in the future and
+to do reverse mapping. Reverse mapping is what gcFindSources is for. There you
+fill the GcMapInfo with the things like accountId, account name, comments etc.
+and the GcDataMapper tries to find (with the help of its registry if there is
+already some data available) some sources (e.g. quotes web pages, online banking
+interfaces, company web pages etc.) and the IO plugins for this account. Again
+user help could be involved the first time or later again if the user wants to
+modify the matches. How to actually do the mapping is job of the GcDataMapper,
+it could use regexp libraries etc. The most simple implementation would to be a
+simple user query where the user has to find the matches.
+
+Example:
+When I have an account called "Silicon Graphics stocks" and I want to obtain
+stock quotes from the web I have to find a web page where to get them from. When
+I have a plug in for that I could deliver it with a database containing some
+addresses for stock quotes for REUTERS-code "SGI" (or in Germany we have the
+very easy-to-remember six-digit numbers, eg 872981 for SGI), this database will
+be appended to the data mapper database. But now we have to find out that "SGI"
+is what we are searching for, this is the mapper doing with eg regexp. He now
+finds "SGI" beside some other sources, now the user could select the one(s) he
+wants. The mapper stores the selection so he can do this automatically in the
+future and also in reverse. If the quotes plugin has a cron-mechanism to update
+some selected quotes every 1.5 seconds, the data mapper knows where the "SGI"
+data goes to now. The same with online banking: map the accountId/-name on the
+bank code/account number etc. if I have a remittance, and get accountId/-name
+when there comes in a bank statement. So the mapper is a kind of "dynamic
+linking" mechnism (with memory, so a little bit static, too, yes) to allow the
+engine to search and parametrize the necessary plugins and to find out what to
+do with the data they deliver.
+
+A second type would be the
+
+- GcReportPlugIn
+
+that is used for report generation/data analyzing. A report interface that
+generates HTML code (that can then be translated to SGML, PS, TeX etc. via an
+additional tool) is proposed on the developers web page. So I would propose an
+ui that is an HTML designer, very much like a wordprocessor or the Mathematica
+frontend, and include automatically generated reports (tables for account
+balances, graphs etc) with a reserved HTML keyword that also allows you to
+specify some layout parameters like size and position. When the document finally
+is generated, a parser calls for every of these keywords the appropriate report
+plugin and replaces it with the output of the plugin (that has to be pure HTML
+code with embedded images etc.). Chaining of report plug ins could be helpful,
+e.g. first filter stock quotes from noise with a plugin before they are used in
+a technical analysis tool.
+
+Finding and linking the plugins to the engine could esaily be done via the CORBA
+repository.
+
+Report plugins first of all have to have a kind of
+string gcMakeReport(string params);
+method that gets the parameters stored in the HTML command (e.g. accoundId, data
+range, graph type etc.), this has to be obtained through dialogs that are
+maintained by the plugin itself, this is why I have said I do not know how to
+make plugins toolkit-independent) and returns the generated HTML-code. They
+have to have a second method to display this dialog and a
+general plug-in mechanism that allows to find and load GnuCash corba plugins;
+this of course is already introduced in the GcPlugIn class.
+If plugins are chainable the gcMakeReport has to be modified/extended that they
+get can get an account(-group) as input and return a new, modified
+account(-group) that could be then input for a second plugin (eg the one that
+finally creates the HTML-code). A usage for that could be a filter that eliminates
+noise in stock quotes and so generates new quotes that are then used as input to a
+Chaikin
+Oscillator plugin.
+
+
+I hope it is in line with all the other proposals (e.g. scripting, budget engine
+etc).
+I did not mention script languages in this document, I think it should be
+possible to access the engine via CORBA bindings for all these languages and to
+even create new classes or derive them, so writing plugins should be easily
+possible with compiled languages as well as with interpreted ones.
+
+
+Stephan Lichtenauer
+Rassosiedlung 25
+82284 Grafrath
+s_lichtenauer@muenchen.org
+
+

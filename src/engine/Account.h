@@ -72,18 +72,40 @@ int          xaccCheckDateOrder   (Account *, Split *);
 int          xaccCheckTransDateOrder (Transaction *);
 
 /* The xaccIsAccountInList() subroutine returns the number of times
- * that an account appears in the account list. */
+ *    that an account appears in the account list. 
+ */
 int          xaccIsAccountInList (Account * acc, Account **list);
 void         xaccZeroRunningBalances (Account **list);
 
+/* The xaccAccountOrder() subroutine defines a sorting order 
+ *    on accounts.  It takes pointers to two accounts, and
+ *    returns -1 if the first account is "less than" the second,
+ *    returns +1 if the first is "greater than" the second, and
+ *    0 if they are equal.  To determine the sort order, first
+ *    the account codes are compared, and if these are equal, then 
+ *    account types, and, if these are queal, the account names.
+ */
+int          xaccAccountOrder (Account**, Account **);
+
+/* The xaccAccountAutoCode() method will assign an automatically
+ *    generated account code to the account, if one does not already 
+ *    exist.  Account codes will have the indicated number of digits
+ *    in them.  The numbering scheme roughly follows generally
+ *    accepted accounting practice, in that top-level accounts
+ *    will be number 100, 200, etc., second level accounts 110, 120,
+ *    .. 210, 220, ...etc. and third level accounts 111, 112, .. etc.
+ */
+void         xaccAccountAutoCode (Account *, int digits);
+
 /* The xaccConsolidateTransactions() subroutine scans through
  *    all of the transactions in an account, and compares them.
- *    if any of them are exact duplicates, the duplicates are removed.
+ *    If any of them are exact duplicates, the duplicates are removed.
  *    duplicates may occur when accounts from multiple sources are 
- *    merged.  Note that this can be a dangerous operation to perform.
+ *    merged.  Note that this can be a dangerous operation to perform,
+ *    as it may remove transactions that were not true duplicatees ...
  */
 
-void        xaccConsolidateTransactions (Account *);
+void         xaccConsolidateTransactions (Account *);
 
 /* The xaccMoveFarEnd() method changes the account to which the 
  *    "far end" of the split belongs.  The "far end" is as follows:
@@ -102,6 +124,7 @@ void xaccMoveFarEndByName (Split *, const char *);
 
 void xaccAccountSetType (Account *, int);
 void xaccAccountSetName (Account *, char *);
+void xaccAccountSetCode (Account *, char *);
 void xaccAccountSetDescription (Account *, char *);
 void xaccAccountSetNotes (Account *, char *);
 void xaccAccountSetCurrency (Account *, char *);
@@ -109,6 +132,7 @@ void xaccAccountSetSecurity (Account *, char *);
 
 int            xaccAccountGetType (Account *);
 char *         xaccAccountGetName (Account *);
+char *         xaccAccountGetCode (Account *);
 char *         xaccAccountGetDescription (Account *);
 char *         xaccAccountGetNotes (Account *);
 char *         xaccAccountGetCurrency (Account *);
