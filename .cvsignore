@@ -1,4 +1,5 @@
 Makefile
+Makefile.init
 config.cache
 config.log
 config.status

@@ -1,0 +1,34 @@
+# -*-makefile-*-
+
+@SET_MAKE@
+
+export SHELL=/bin/bash
+
+srcdir  = @srcdir@
+VPATH   = @srcdir@
+
+prefix=@prefix@
+datadir=@datadir@
+  # i.e. /usr/share
+localstatedir=@localstatedir@
+  # i.e. /var/
+sysconfdir=@sysconfdir@
+  # i.e. /etc/
+includedir=@includedir@
+
+CC           = @CC@
+INSTALL      = @INSTALL@
+RANLIB       = @RANLIB@
+INSTALL_DATA = @INSTALL_DATA@
+
+CPU          = @target_cpu@
+
+OPT_STYLE_INSTALL=@OPT_STYLE_INSTALL@
+
+# These are *only* to be used at *install* time.
+GNC_DOCDIR=@GNC_DOCDIR@
+GNC_BINDIR=@GNC_BINDIR@
+GNC_CONFIGDIR=@GNC_CONFIGDIR@
+GNC_SHAREDIR=@GNC_SHAREDIR@
+
+HAVE_PLOTUTILS=@HAVE_PLOTUTILS@

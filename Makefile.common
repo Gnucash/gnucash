@@ -64,19 +64,21 @@ obj/qt/%.o: %.cpp
 	$(CC) -Wp,-MD,$(basename $@).d.tmp -c $(CFLAGS) ${QT_CFLAGS} -DKDE -o $@ $< 
 	${cleanupdeps}
 
-clean:
-	$(foreach dir,${CLEAN_SUBDIRS},(cd ${dir} && $(MAKE) clean);)
+clean-files:
 	rm -f *~ *.bak \#* $(TRASH)
 	rm -rf obj
 	-rm -rf ${TRASH}
 
-distclean: clean
+clean: clean-files
+	$(foreach dir,${CLEAN_SUBDIRS},(cd ${dir} && $(MAKE) clean);)
+
+distclean: clean-files
 	$(foreach dir,${CLEAN_SUBDIRS},(cd ${dir} && $(MAKE) distclean);)
 	rm -f Makefile.bak
-	rm -f $(foreach f,$(wildcard *.in),$(f:.in=))
-	rm -f ${DIST_TRASH}
+	rm -f $(foreach f,$(wildcard *.in),$(filter-out configure,$(f:.in=)))
+	-rm -rf ${DIST_TRASH}
 
-.PHONY: clean distclean
+.PHONY: clean clean-files distclean
 
 # Get dependencies (if existent).
 

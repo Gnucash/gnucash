@@ -180,7 +180,6 @@ configLabels (SplitRegister *reg)
 static void
 configAction (SplitRegister *reg)
 {
-   BasicCell *hc;
    int type = (reg->type) & REG_TYPE_MASK;
 
    /* setup custom labels for the debit/credit columns */
