@@ -59,11 +59,6 @@ int force_double_entry = 0;
 #define BEGIN_EDIT 0x1
 #define DEFER_REBALANCE 0x2
 
-
-/* bit-field flags for controlling transaction commits */
-#define BEGIN_EDIT 0x1
-#define DEFER_REBALANCE 0x2
-
 /********************************************************************\
  * Because I can't use C++ for this project, doesn't mean that I    *
  * can't pretend too!  These functions perform actions on the       *
