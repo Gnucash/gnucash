@@ -31,14 +31,29 @@
 #include "util.h"
 
 /** GLOBALS *********************************************************/
-int loglevel = 1;
+/* 
+   0 == disable all messages
+   1 == enble only error messages
+   2 == print warnings
+   3 == print info messages
+   4 == print debugging messages
+ */
+int loglevel[MODULE_MAX] =
+{0,      /* DUMMY */
+ 2,      /* ENGINE */
+ 2,      /* IO */
+ 2,      /* REGISTER */
+ 2,      /* LEDGER */
+ 2,      /* GUI */
+ 4,      /* SCRUB */
+};
 
 /********************************************************************\
  * DEBUGGING MEMORY ALLOCATION STUFF                                * 
 \********************************************************************/
 #if DEBUG_MEMORY
 
-#if defined (__NetBSD__)
+#if defined (__NetBSD__) || defined(__FreeBSD__)
 # define malloc_usable_size(ptr) 0
 #endif
 

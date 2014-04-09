@@ -1,0 +1,32 @@
+
+<pre>
+
+
+A double entry system stores both values (and makes teh transaciton balance):
+
+double entry states that value1+value2+value3+ ... = 0
+where each value is recorded in a different account.
+A value is value=exch-rate*amount (for currency accounts)
+           value=price*num-shares (for stocks/mutual-funds)
+
+Thus, buying a widget in japan and using dollars to pay for it would appears
+like so:
+
+SpendAcct: (an oridnary bank/cash acct valued in USD)
+----------
+Date      xfer from       memo                cost
+1/5/99    [YenAcct]       Buy widget          $1.00
+
+
+YenAcct: (a currency trading account valued in yen)
+--------
+Date      xfer from       memo                purchase   rate
+1/5/99    [SpendAcct]     Buy widget          Y150       0.00667
+
+
+The engine links together all three of these values (1.0, 150, 0.00667)
+permanently and makes it imposssible to change one without changing another,
+so that the grand total is always zero.
+
+
+</pre>

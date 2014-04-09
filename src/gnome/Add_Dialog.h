@@ -26,9 +26,8 @@
 #ifndef __ADD_DIALOG_H__
 #define __ADD_DIALOG_H__
 
-#include "Group.h"
 #include "Account.h"
-#include "main.h"
+#include "Group.h"
 #include "MainWindow.h"
 
 struct _add_account_dialog 

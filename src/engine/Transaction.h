@@ -54,8 +54,45 @@ typedef struct _account_group AccountGroup;
 typedef struct _split         Split;
 typedef struct _transaction   Transaction;
 
+/* struct timespec64 is just like timespec except that we use 
+ * a 64-bit signed int to store the seconds.  This should adequetely
+ * cover dates in the distant future as well as the distant past, as long
+ * as they're not more than a couple dozen times the age of the universe.
+ * Note that both gcc and the IBM Toronto xlC compiler (aka CSet,
+ * VisualAge, etc) correctly handle long long as a 64 bit quantity,
+ * even on the 32-bit Intel x86 and PowerPC architectures.  I'm assuming
+ * that all the other modern compilers are clean on this issue too ...
+ */
+#ifndef SWIG   /* swig 1.1p5 can't hack the long long type */
+struct timespec64 {
+   long long int tv_sec;     
+   long int tv_nsec;
+};
+#endif /* SWIG */
+typedef struct timespec64 Timespec;
 
 /** PROTOTYPES ******************************************************/
+
+/*
+ * The xaccConfigSetForceDoubleEntry() and xaccConfigGetForceDoubleEntry()
+ *    set and get the "force_double_entry" flag.  This flag determines how
+ *    the splits in a transaction will be balanced.
+ *
+ *    The following values have significance:
+ *    0 -- anything goes
+ *    1 -- The sum of all splits in a transaction will be
+ *         forced to be zero, even if this requires the
+ *         creation of additional splits.  Note that a split
+ *         whose value is zero (e.g. a stock price) can exist
+ *         by itself. Otherwise, all splits must come in at
+ *         least pairs.
+ *    2 -- splits without parents will be forced into a
+ *         lost & found account.  (Not implemented)
+ */
+
+void   xaccConfigSetForceDoubleEntry (int force);
+int    xaccConfigGetForceDoubleEntry (void);
+
 /*
  * The xaccMallocTransaction() will malloc memory and initilize it.
  *    Once created, it is usually unsafe to merely "free" this memory;
@@ -115,7 +152,7 @@ void          xaccTransRollbackEdit (Transaction *);
  *    xaccTransSetDateSecs(), but takes a convenient day-month-year format.
  *
  * The xaccTransSetDateTS() method does the same thing as 
- *    xaccTransSetDateSecs(), but takes a struct timespec.
+ *    xaccTransSetDateSecs(), but takes a struct timespec64.
  *
  * The xaccTransSetDateToday() method does the same thing as 
  *    xaccTransSetDateSecs(), but sets the date to the current system
@@ -124,10 +161,10 @@ void          xaccTransRollbackEdit (Transaction *);
 void          xaccTransSetDate (Transaction *, int day, int mon, int year);
 void          xaccTransSetDateSecs (Transaction *, time_t);
 void          xaccTransSetDateToday (Transaction *);
-void          xaccTransSetDateTS (Transaction *, struct timespec *);
+void          xaccTransSetDateTS (Transaction *, Timespec *);
 
 void          xaccTransSetDateEnteredSecs (Transaction *, time_t);
-void          xaccTransSetDateEnteredTS (Transaction *, struct timespec *);
+void          xaccTransSetDateEnteredTS (Transaction *, Timespec *);
 
 
 /* set the Num and Description fields ... */
@@ -156,7 +193,7 @@ void          xaccTransAppendSplit (Transaction *, Split *);
 /* 
  * The xaccSplitDestroy() method will update its parent account and 
  *    transaction in a consistent maner, resulting in the complete 
- *    unlinking of the split, and the freeing of it's associated memory.
+ *    unlinking of the split, and the freeing of its associated memory.
  *    The goal of this routine is to perform the removal and destruction
  *    of the split in an atomic fashion, with no chance of accidentally
  *    leaving the accounting structure out-of-balance or otherwise
@@ -188,11 +225,56 @@ char *        xaccTransGetNum (Transaction *);
 char *        xaccTransGetDescription (Transaction *);
 char *        xaccTransGetDocref (Transaction *);
 time_t        xaccTransGetDate (Transaction *);
-void          xaccTransGetDateTS (Transaction *, struct timespec *);
-void          xaccTransGetDateEnteredTS (Transaction *, struct timespec *);
+#ifndef SWIG  /* swig chokes on long long */
+long long     xaccTransGetDateL (Transaction *);
+#endif
+void          xaccTransGetDateTS (Transaction *, Timespec *);
+void          xaccTransGetDateEnteredTS (Transaction *, Timespec *);
 
 /* return the number of splits */
 int           xaccTransCountSplits (Transaction *trans);
+
+/* The xaccTransFindCommonCurrency () method returns a string value 
+ *    indicating a currency denomination that all of the splits in this
+ *    transaction have in common.  This routine is useful in dealing
+ *    with currency trading accounts and/or with "stock boxes", where
+ *    securities of differing types are moved accross accounts.
+ *    It returns NULL if the transaction is internally inconsistent.
+ *    (This should never ??? happen, as it would be an internal error).
+ *
+ *    If all of the splits share both a common security and a common currency,
+ *    then the string name for the currency is returned.
+ */
+char * xaccTransFindCommonCurrency (Transaction *trans);
+
+/* The xaccTransIsCommonCurrency () method compares the input string
+ *    to the currency/security denominations of all splits in the
+ *    transaction, and returns the input string if it is common with
+ *    all the splits, otherwise, it returns NULL.
+ *
+ *    Note that this routine is *not* merely a string compare on the
+ *    value returned by cTransFindCommonCurrency().  This is because
+ *    all of the splits in a transaction may share *both* a common
+ *    currency and a common security.  If the desired match is the
+ *    security, a simple string match won't reveal this fact.
+ *
+ *    This routine is useful in dealing
+ *    with currency trading accounts and/or with "stock boxes", where
+ *    transaction have in common.  This routine is useful in dealing
+ *    securities of differing types are moved accross accounts.
+ */
+char * xaccTransIsCommonCurrency (Transaction *trans, char * currency);
+
+/* The xaccTransGetImbalance() method returns the total value of the
+ *    transaction.  In a pure double-entry system, this imbalance
+ *    should be exactly zero, and if it is not, something is broken.
+ *    However, when double-entry semantics are not enforced, unbalanced
+ *    transactions can sneak in, and this routine can be used to find
+ *    out how much things are off by.  The value returned is denominated
+ *    in the currency that is returned by the xaccTransFindCommonCurrency()
+ *    method.
+ */
+double xaccTransGetImbalance (Transaction * trans);
 
 /* ------------- splits --------------- */
 Split       * xaccMallocSplit (void);
@@ -218,8 +300,8 @@ void          xaccSplitSetDocref (Split *, const char *);
  */
 void          xaccSplitSetReconcile (Split *, char);
 void          xaccSplitSetDateReconciledSecs (Split *, time_t);
-void          xaccSplitSetDateReconciledTS (Split *, struct timespec *);
-void          xaccSplitGetDateReconciledTS (Split *, struct timespec *);
+void          xaccSplitSetDateReconciledTS (Split *, Timespec *);
+void          xaccSplitGetDateReconciledTS (Split *, Timespec *);
 
 
 /* 
@@ -274,6 +356,7 @@ double xaccSplitGetBalance (Split *);
 double xaccSplitGetClearedBalance (Split *);
 double xaccSplitGetReconciledBalance (Split *);
 double xaccSplitGetShareBalance (Split *);
+double xaccSplitGetCostBasis (Split *);
 double xaccSplitGetBaseValue (Split *s, char *base_currency);
 
 
@@ -362,5 +445,13 @@ Split * xaccGetOtherSplit (Split *);
  *    parent transaction, else it returns zero.
  */
 int xaccIsPeerSplit (Split *, Split *);
+
+/* The IthSplit() and IthTransaction() routines merely dereference
+ *    the lists supplied as arguments; i.e. they return list[i].
+ *    These routines are needed by the perl swig wrappers, which
+ *    are unable to dereference on thier own.
+ */
+Transaction * IthTransaction (Transaction **tarray, int i);
+Split       * IthSplit       (Split **sarray,       int i);
 
 #endif /* __XACC_TRANSACTION_H__ */

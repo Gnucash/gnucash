@@ -20,15 +20,14 @@
 
 #include <gnome.h>
 
+#include "Add_Dialog.h"
 #include "MainWindow.h"
 #include "MenuBar.h"
-#include "Add_Dialog.h"
-#include "main.h"
+#include "MenuCommands.h"
 #include "messages.h"
-#include "version.h"
 #include "RegWindow.h"
-
-#include "main.h"
+#include "top-level.h"
+#include "version.h"
 
 /** GLOBALS **********************************************************/
 main_window    *mwindow;

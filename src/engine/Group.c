@@ -156,7 +156,49 @@ xaccGetNumAccounts ( AccountGroup *root )
 }
 
 /********************************************************************\
- * Fetch an account, given only it's ID number                      *
+ * Get all of the accounts, including subaccounts                   *
+\********************************************************************/
+
+int
+xaccFillInAccounts ( AccountGroup *root, Account **arr )
+{
+  int num_acc = 0;
+  int i,j;
+
+  if (!root || !arr) return 0;
+
+  num_acc = root->numAcc;
+  for (i=0, j=0; i<num_acc; i++) {
+    arr[j] = root->account[i];
+    j++;
+    j += xaccFillInAccounts (root->account[i]->children, &arr[j]);
+  }
+
+  arr[j] = NULL;
+  return j;
+}
+
+Account ** 
+xaccGetAccounts ( AccountGroup *root )
+{
+  Account **arr;
+  int num_acc = 0;
+  int num_done;
+
+  if (NULL == root) return NULL;
+
+  num_acc = xaccGetNumAccounts (root);
+  arr = (Account **) malloc ((num_acc+1)*sizeof (Account *));
+
+  num_done = xaccFillInAccounts (root, arr);
+  assert (num_done == num_acc);
+
+  arr[num_acc] = NULL;
+  return arr;
+}
+
+/********************************************************************\
+ * Fetch an account, given only its ID number                      *
 \********************************************************************/
 
 Account *
@@ -211,7 +253,7 @@ xaccGetAccountRoot (Account * acc)
 }
 
 /********************************************************************\
- * Fetch an account, given only it's ID number                      *
+ * Fetch an account, given only its ID number                      *
 \********************************************************************/
 
 Account *
@@ -233,7 +275,7 @@ xaccGetPeerAccountFromID ( Account *acc, int acc_id )
 }
 
 /********************************************************************\
- * Fetch an account, given it's name                                *
+ * Fetch an account, given its name                                *
 \********************************************************************/
 
 Account *
@@ -262,7 +304,7 @@ xaccGetAccountFromName ( AccountGroup *root, const char * name )
 }
 
 /********************************************************************\
- * Fetch an account, given it's name                                *
+ * Fetch an account, given its name                                *
 \********************************************************************/
 
 Account *

@@ -1,8 +1,8 @@
 
-X-Accountant
-------------
+GnuCash
+-------
 
-xacc est un programme de suivis de vos finances personnelles. Il est
+GnuCash est un programme de suivis de vos finances personnelles. Il est
 semblable dans son concept a Quicken(TM).  Bien qu'il manque encore a Xacc
 des fonctionnalites avancees de Quicken, il a les fonctions de base.
 
@@ -11,24 +11,24 @@ Quelques une de ces fonctions sont :
   - Comptes Multiples
   - Chaque compte conserve un solde actuel et 
     un solde de rapprochement, alors vous pouvez suivre 
-    la verification de votre compte assez efficacement.
+    les verifications quiont ete pointes sur votre compte.
   - Une interface simple .  Si vous savez utiliser 
     le talon de votre chequier, vous savez utiliser
     xacc.
-  - QuickFill... si vous commencez a saisir une description
-    dans les champs de description , et il retrouve une 
-    precedente transaction, frappez <TAB> copiera alors
+  - QuickFill (saisie rapide)... lorsque vous commencez une saisie 
+    dans les champs de description , s'il retrouve une 
+    precedente transaction, il vous la propose,frappez <TAB> copiera alors
     la precedente transaction.  Commode si vous avez des 
     transactions semblables assez regulierement .
-  - Portefeuille d'actions/de sociétés d'investissements (n.d.t: FCP et
-    SICAV en France).  Suivis d'actions individuellement (une par compte)
-    ou dans un portefeuille de comptes (un groupe de comptes qui peuvent 
-    etre affiches ensemble ).  
+  - Portefeuille d'actions/de societes d'investissements (n.d.t: pour ces 
+    dernieres FCP et SICAV en France). Suivis d'actions individuellement
+    (une par compte)ou dans un portefeuille de comptes (un groupe de
+    comptes qui peuvent etre affiches ensemble ).  
   - Importation des fichiers QIF de Quicken .
 
 Fonctions Avancees
 ------------------
-X-Accountant possede quelques une des fonctions qui ne se trouve pas
+GnuCash (X-Accountant) possede quelques une des fonctions qui ne se trouve pas
 habituellement dans un simple logiciel de gestion de finances personnelles:
 
   - Sous-comptes: Un compte principal peut avoir un classement de petits 
@@ -66,12 +66,12 @@ habituellement dans un simple logiciel de gestion de finances personnelles:
 
 Home Page:
 ----------
-http://www.cs.hmc.edu/~rclark/xacc
+http://www.gnucash.org/
 
-Important Note:
----------------
-Un nombre de plantages ont ete rapporte qui se produisent avec la 
-version 0.82 de lesstif.  Ces plantages ne se produisent pas avec 
+Note:importante
+----------------
+Un nombre de plantages important ont ete rapporte, ils se produisent avec
+la  version 0.82 de lesstif.  Ces plantages ne se produisent pas avec 
 lesstif v 0.81 et avec RedHat Motif.  Si il y a plantage, essayez
 d'utiliser la version Motif lié statiquement, comme decris ci-dessous. 
 
@@ -79,32 +79,15 @@ d'utiliser la version Motif lié statiquement, comme decris ci-dessous.
 Utilisation:
 ------------
 La distribution d'executables seuls inclue deux fichiers executables :
-'xacc.bin' et 'xacc-static.bin'. Le premier requiert une librairie Motif
+'gnucash' et 'gnucash-static'. Le premier requiert une librairie Motif
 partagee; le second en a une integre statiquement .  Si vous avez Motif,
 alors executer juste xacc.  Si vous n'avez pas Motif, alors utiliser  
-'xacc-static.bin' a la place de 'xacc.bin'.
-
-L'acces a la documentation d'aide en ligne requiert que la
-variable d'environement XACC_HELP soit mise dans le repertoire
-'Docs'.  Le script shell 'xacc' met cette variable dans le
-repertoire configure avant d'executer le programme principal,
-donc vous n'avez pas a la mettre a la main.
-
-Si vous voulez imposez le chemin au repertoire des Docs :
-
-Pour csh/tcsh
-
-% setenv XACC_HELP /usr/local/share/xacc/Docs
-
-ou , pour bash/bsh/ksh/sh
-
-% set XACC_HELP=/usr/local/share/xacc/Docs
-% export XACC_HELP
+'gnucash.motif' a la place de 'gnucash'.
 
 Vous pouvez alors demarrer xacc en ligne de commande , avec
-"xacc" ou "xacc <nom_du_fichier>", ou <nom_du_fichier> est un
+"gnucash" ou "gnucash <nom_du_fichier>", ou <nom_du_fichier> est un
 fichier de compte xacc .  Des echantillons de comptes peuvent
-etre trove dans le sous-repertoire "data" . Les fichiers *.dat
+etre trouve dans le sous-repertoire "data" . Les fichiers *.dat
 sont des comptes xacc qui peuvent etre ouvert avec l'entre du
 menu "Open File" . Les fichiers *.qif sont des fichiers  
 Quicken Import Format qui peuvent etre ouvert avec l'entre du
@@ -116,7 +99,7 @@ Compilation et Installation:
 Ces etapes ne s'appliquent pas aux distributions d'executables;
 seulement aux distributions de source.
 
-Normalement, pour compiler et installer xacc, tout ce que vous avez 
+Normalement, pour compiler et installer gnucash, tout ce que vous avez 
 a faire est :
 
   # ./configure
@@ -124,8 +107,12 @@ a faire est :
   # make
   # make install
 
-Vous pouvez aussi compiler xacc dans un repertoire separe ,
-ce qui est plus profitable si vous compilez pour plusieurs 
+
+Il doit lire le README anglais pour mieux comprendre  autre importants
+informations.
+
+Vous pouvez aussi compiler gnucash dans un repertoire separe ,
+ce qui est plus pratique si vous compilez pour plusieurs 
 plateformes depuis une meme copie du repertoire source :
 
   # mkdir BUILD
@@ -140,8 +127,8 @@ desole, pas encore de "make install".
 
 
 
-Positions:
-----------
+Etat actuel:
+------------
 Depuis la version 1.0.16:
 
 xacc est connus pour fonctionner avec ces differentes configurations:
@@ -194,7 +181,7 @@ That's all folks!
 Developpeurs principaux:
 -----------------------
 Robin Clark <rclark@hmc.edu> pour le xacc original 
-Linas Vepstas <linas@lins.org> pour une ample amelioration et extension
+Linas Vepstas <linas@lins.org> pour des ameliorations et extensions importantes
 
 Stabilisation et corrections:
 -----------------------------

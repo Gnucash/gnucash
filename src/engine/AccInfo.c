@@ -1,7 +1,31 @@
+/********************************************************************\
+ * AccInfo.c -- the Account Info data structures                    *
+ * Copyright (C) 1998, 1999 Linas Vepstas                           *
+ *                                                                  *
+ * This program is free software; you can redistribute it and/or    *
+ * modify it under the terms of the GNU General Public License as   *
+ * published by the Free Software Foundation; either version 2 of   *
+ * the License, or (at your option) any later version.              *
+ *                                                                  *
+ * This program is distributed in the hope that it will be useful,  *
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of   *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    *
+ * GNU General Public License for more details.                     *
+ *                                                                  *
+ * You should have received a copy of the GNU General Public License*
+ * along with this program; if not, write to the Free Software      *
+ * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
+\********************************************************************/
+
+#include <stdlib.h>
+#include <string.h>
 
 #include "AccInfo.h"
+#include "AccInfoP.h"
 #include "messages.h"
-/* whoa! */
+#include "util.h"
+
+/* =========================================================== */
 
 char *account_type_name[NUM_ACCOUNT_TYPES] =
    { 
@@ -16,12 +40,13 @@ char *account_type_name[NUM_ACCOUNT_TYPES] =
 	INCOME_STR, 
 	EXPENSE_STR, 
 	EQUITY_STR,
+/*
 	CHECKING_STR,
 	SAVINGS_STR,
 	MONEYMRKT_STR,
 	CREDITLINE_STR
+*/
    };
-
 
 char * xaccAccountGetTypeStr (int type)
 {
@@ -29,3 +54,97 @@ char * xaccAccountGetTypeStr (int type)
    if (NUM_ACCOUNT_TYPES <= type) return "";
    return (account_type_name [type]);
 }
+
+/* =========================================================== */
+
+AccInfo *
+xaccMallocAccInfo (int typo)
+{
+  AccInfo *u = NULL;
+  if ((STOCK  == typo) || (MUTUAL == typo)) {
+    u = (AccInfo *) xaccMallocInvAcct ();
+    u->inv_acct.type = typo;
+  }
+  return u;
+}
+
+void
+xaccFreeAccInfo (AccInfo *u)
+{
+  if (!u) return;
+  if ((STOCK  == u->type) || (MUTUAL == u->type)) {
+    xaccFreeInvAcct ( &(u->inv_acct));
+  }
+}
+
+InvAcct *
+xaccCastToInvAcct (AccInfo *u)
+{
+  if (!u) return NULL;
+  if ((STOCK  == u->type) || (MUTUAL == u->type)) {
+    return ( &(u->inv_acct));
+  }
+  return NULL;
+}
+
+/* =========================================================== */
+
+InvAcct *
+xaccMallocInvAcct (void) 
+{
+   InvAcct *iacc;
+   iacc = (InvAcct *) malloc (sizeof (InvAcct));
+   xaccInitInvAcct (iacc);
+   return iacc;
+}
+
+void 
+xaccInitInvAcct (InvAcct *iacc)
+{
+   if (!iacc) return;
+   iacc->type = STOCK;
+   iacc->pricesrc = NULL;
+   iacc->brokerid = NULL;
+   iacc->acctid = NULL;
+   iacc->accttype = NULL;
+   iacc->prodtype = NULL; 
+   iacc->secid = NULL;
+   iacc->secidtype = strdup ("CUSIP");
+}
+
+void 
+xaccFreeInvAcct (InvAcct *iacc)
+{
+   if (!iacc) return;
+
+   /* if the wrong type then a miscast. can't free. */
+   assert ((STOCK  == iacc->type) || (MUTUAL == iacc->type));
+
+   if (iacc->pricesrc) { free(iacc->pricesrc); iacc->pricesrc = NULL; }
+   if (iacc->brokerid) { free(iacc->brokerid); iacc->brokerid = NULL; }
+   if (iacc->acctid) { free(iacc->acctid); iacc->acctid = NULL; }
+   if (iacc->accttype) { free(iacc->accttype); iacc->accttype = NULL; }
+   if (iacc->prodtype) { free(iacc->prodtype); iacc->prodtype = NULL; }
+   if (iacc->secid) { free(iacc->secid); iacc->secid = NULL; }
+   if (iacc->secidtype) { free(iacc->secidtype); iacc->secidtype = NULL; }
+   iacc->type = -1;
+}
+
+/* =========================================================== */
+
+void 
+xaccInvAcctSetPriceSrc (InvAcct *iacc, const char *src)
+{
+   if (!iacc || !src) return;
+   if (iacc->pricesrc) { free(iacc->pricesrc); }
+   iacc->pricesrc = strdup (src);
+}
+
+char * 
+xaccInvAcctGetPriceSrc (InvAcct *iacc)
+{
+   if (!iacc) return NULL;
+   return (iacc->pricesrc);
+}
+
+/* ==================== END OF FILE ========================== */

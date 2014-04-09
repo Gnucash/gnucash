@@ -50,5 +50,16 @@
     it will automatically be selected from the old account, and 
     inserted into the new account.
     
+  <h2>Scrubbing Clean</h2>
+    GnuCash can be configured to be strict about double entry,
+    or to be loose.  In loose mode, you can create unbalanced transactions,
+    that is, transactions that don't pair up with a matching entry,
+    and thus don't balance to zero.  To clean up these unbalanced transactions,
+    you can <b>scrub</b> the account clean by choosing "Scrub" from the 
+    window menu.  This will examine each transaction; if the transaction doesn't
+    balance, a split entry will be created and placed into an account
+    named "Unbalanced".  You can then review these splits and move them
+    to thier proper accounts.
+
   </body>
 </html>

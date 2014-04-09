@@ -102,6 +102,14 @@ printDateSecs (char * buff, time_t t)
 }
 
 
+char * 
+xaccPrintDateSecs (time_t t)
+{
+   char buff[100];
+   printDateSecs (buff, t);
+   return strdup (buff);
+}
+
 /**
  * scanDate
  *    Convert a string into  day / month / year integers according to
@@ -175,8 +183,9 @@ scanDate(const char *buff, int *day, int *month, int *year)
 
    /* if the year entered is smaller than 100, assume we mean the current
       century (and are not revising some roman emperor's books) */
-   if(iyear<100)
+   if(iyear<100) {
      iyear += ((int) ((now->tm_year+1900)/100)) * 100;
+   }
 
    if (year) *year=iyear;
    if (month) *month=imonth;
@@ -227,7 +236,7 @@ xaccTransGetDateStr (Transaction *trans)
 
    date = localtime (&secs);
 
-   printDate(buf, date->tm_mday, date->tm_mon+1, (date->tm_year)%100);
+   printDate(buf, date->tm_mday, date->tm_mon+1, date->tm_year +1900);
    return strdup (buf);
 }
 
@@ -262,6 +271,13 @@ xaccDMYToSec (int day, int month, int year)
    return (secs);
 }
 
+time_t
+xaccScanDateS (const char *str)
+{
+   int month,day,year;
+   scanDate (str, &day, &month, &year);
+   return (xaccDMYToSec (day,month,year));
+}
 
 /********************** END OF FILE *********************************\
 \********************************************************************/

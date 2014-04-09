@@ -40,6 +40,7 @@
 
 #include "basiccell.h"
 #include "datecell.h"
+#include "util.h"
 
 static void setDateCellValue (BasicCell *, const char *);
 
@@ -47,6 +48,9 @@ static void setDateCellValue (BasicCell *, const char *);
    if ((cell)->value) free ((cell)->value);	\
    (cell)->value = strdup (str);		\
 }
+
+/* This static indicates the debugging module that this .o belongs to.  */
+static short module = MOD_REGISTER;
 
 /* ================================================ */
 
@@ -281,7 +285,7 @@ DateLeave (BasicCell *_cell, const char * curr)
 
 /* ================================================ */
 /* for most practical purposes, the commit function
- * is identical to the DateLeave function, excpet that
+ * is identical to the DateLeave function, except that
  * it returns no value (and is publically visible)
  */
 
@@ -289,13 +293,17 @@ void
 xaccCommitDateCell (DateCell *cell)
 {
    char buff[30];
+
+   if (!cell) return;
+   ENTER ("xaccCommitDateCell(): value is %s \n", cell->cell.value);
    xaccParseDate (&(cell->date), cell->cell.value);
    printDate (buff, cell->date.tm_mday, 
-                  cell->date.tm_mon+1, 
-                  cell->date.tm_year+1900);
+                    cell->date.tm_mon+1, 
+                    cell->date.tm_year+1900);
 
    if (cell->cell.value) free (cell->cell.value);
    cell->cell.value = strdup (buff);
+   LEAVE ("xaccCommitDateCell(): value is %s \n", cell->cell.value);
 }
 
 /* ================================================ */
@@ -378,6 +386,49 @@ xaccSetDateCellValueSecs (DateCell *cell, time_t secs)
 
    stm = localtime (&secs);
    cell->date = *stm;
+
+   printDate (buff, cell->date.tm_mday, 
+                    cell->date.tm_mon+1, 
+                    cell->date.tm_year+1900);
+
+   if (cell->cell.value) free (cell->cell.value);
+   cell->cell.value = strdup (buff);
+
+}
+
+/* ================================================ */
+
+#define THIRTY_TWO_YEARS 0x3c30fc00LL
+
+void 
+xaccSetDateCellValueSecsL (DateCell *cell, long long secs)
+{
+   char buff[30];
+   struct tm * stm;
+
+   /* try to deal with dates earlier than December 1901 
+    * or later than Jan 2038.  Note that xaccValidateDate
+    * should be handling centential (non-) leap years.
+    * The suffix LL indicates that consts shouold be handled
+    * long long 64-bit consts.
+    */
+   if ((0x80000000LL > secs) || (0x7fffffffLL < secs)) 
+   {
+      int yrs;
+      time_t rem;
+      rem = secs % THIRTY_TWO_YEARS;
+      yrs = secs / THIRTY_TWO_YEARS;
+      stm = localtime (&rem);
+      cell->date = *stm;
+      cell->date.tm_year += 32 * yrs;
+      xaccValidateDate (&(cell->date), 0);
+   } else {
+      /* OK, time value is an unsigned 32-bit int */
+      time_t sicko;
+      sicko = secs;
+      stm = localtime (&sicko);
+      cell->date = *stm;
+   }
 
    printDate (buff, cell->date.tm_mday, 
                     cell->date.tm_mon+1, 

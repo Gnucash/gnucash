@@ -173,7 +173,7 @@ struct _Table {
    * cock it up with a #defined thingy that the "derived class" 
    * can specify.
    */
-  TABLE_PRIVATE_DATA;
+  TABLE_PRIVATE_DATA
 
 };
 

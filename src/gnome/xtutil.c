@@ -259,7 +259,7 @@ verifyBox(GtkWidget *parent, const char *text)
                                 GNOME_STOCK_BUTTON_YES,
                                 GNOME_STOCK_BUTTON_NO,
                                 NULL);
-  gnome_dialog_set_modal(GNOME_DIALOG(verify_box));
+  // gnome_dialog_set_modal(GNOME_DIALOG(verify_box));
   gnome_dialog_set_default(GNOME_DIALOG(verify_box), 1);
   gnome_dialog_set_close(GNOME_DIALOG(verify_box), TRUE);
   gnome_dialog_button_connect(GNOME_DIALOG(verify_box), 0,
@@ -321,7 +321,7 @@ errorBox(GtkWidget *parent, const char *message )
   gnome_dialog_button_connect(GNOME_DIALOG(error_box), 0,
                               GTK_SIGNAL_FUNC(error_cb_ok),
                               (gpointer) &finished);
-  gnome_dialog_set_modal(GNOME_DIALOG(error_box));
+  // gnome_dialog_set_modal(GNOME_DIALOG(error_box));
   gnome_dialog_set_default(GNOME_DIALOG(error_box), 0);
   gnome_dialog_set_close(GNOME_DIALOG(error_box), TRUE);
   

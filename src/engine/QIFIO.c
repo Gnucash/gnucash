@@ -54,6 +54,9 @@
 
 static int          error_code=0; /* error code, if error occurred */
 
+/* This static indicates the debugging module that this .o belongs to.  */
+static short        module = MOD_IO;
+
 /*******************************************************/
 
 int 

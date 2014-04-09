@@ -1,7 +1,7 @@
 /********************************************************************\
  * Account.c -- the Account data structure                          *
  * Copyright (C) 1997 Robin D. Clark                                *
- * Copyright (C) 1997, 1998 Linas Vepstas                           *
+ * Copyright (C) 1997, 1998, 1999 Linas Vepstas                     *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -34,11 +34,21 @@
 #include "GroupP.h"
 #include "date.h"
 #include "messages.h"
+#include "Queue.h"
 #include "Transaction.h"
 #include "TransactionP.h"
 #include "util.h"
 
+/* The unsafe_ops flag allows certain unsafe manipulations to be 
+ * performed on the data structures. Normally, this is disabled,
+ * as it can lead to scrambled data.
+ * hack alert -- this should be a configurable parameter.
+ */
+int unsafe_ops = 1;
+
 int next_free_unique_account_id = 0;
+
+static short module = MOD_ENGINE; 
 
 #ifndef FALSE
 #define FALSE 0
@@ -75,6 +85,7 @@ xaccInitAccount (Account * acc)
 
   acc->flags = 0;
   acc->type  = -1;
+  acc->accInfo = NULL;
   
   acc->accountName = NULL;
   acc->accountCode = NULL;
@@ -114,16 +125,10 @@ xaccFreeAccount( Account *acc )
 
   if (NULL == acc) return;
     
-  /* recursively free children */
+  /* First, recursively free children */
   xaccFreeAccountGroup (acc->children);
-
-  if (acc->accountName) free (acc->accountName);
-  if (acc->accountCode) free (acc->accountCode);
-  if (acc->description) free (acc->description);
-  if (acc->notes) free (acc->notes);
-  if (acc->currency) free (acc->currency);
-  if (acc->security) free (acc->security);
   
+  /* Next, clean up the splits */
   /* any split pointing at this account needs to be unmarked */
   for (i=0; i<acc->numSplits; i++) {
     s = acc->splits[i];
@@ -148,6 +153,17 @@ xaccFreeAccount( Account *acc )
   acc->splits = NULL;
   acc->numSplits = 0;
   
+  /* Finally, clean up the account info */
+  if (acc->accInfo) xaccFreeAccInfo (acc->accInfo); 
+  acc->accInfo = NULL;
+
+  if (acc->accountName) free (acc->accountName);
+  if (acc->accountCode) free (acc->accountCode);
+  if (acc->description) free (acc->description);
+  if (acc->notes) free (acc->notes);
+  if (acc->currency) free (acc->currency);
+  if (acc->security) free (acc->security);
+
   /* zero out values, just in case stray 
    * pointers are pointing here. */
 
@@ -188,7 +204,7 @@ void
 xaccAccountCommitEdit (Account *acc)
 {
    if (!acc) return;
-   acc->changed = 1;
+   acc->changed |= ACC_INVALIDATE_ALL;
    acc->open = 0;
 }
 
@@ -248,7 +264,7 @@ disable for now till we figure out what the right thing is.
 */
 
   /* mark the account as having changed */
-  acc -> changed = TRUE;
+  acc -> changed |= ACC_INVALIDATE_ALL;
 
   /* if this split belongs to another acount, remove it from 
    * there first.  We don't want to ever leave the system
@@ -342,7 +358,7 @@ xaccAccountRemoveSplit ( Account *acc, Split *split )
   CHECK (acc);
 
   /* mark the account as having changed */
-  acc -> changed = TRUE;
+  acc -> changed |= ACC_INVALIDATE_ALL;
   
   for( i=0,j=0; j<acc->numSplits; i++,j++ ) {
     acc->splits[i] = acc->splits[j];
@@ -401,7 +417,8 @@ xaccAccountRecomputeBalance( Account * acc )
   Split *split, *last_split = NULL;
   
   if( NULL == acc ) return;
-  if (FALSE == acc->changed) return;
+  if (0x0 == (ACC_INVALID_BALN & acc->changed)) return;
+  acc->changed &= ~ACC_INVALID_BALN;
 
   split = acc->splits[0];
   while (split) {
@@ -438,6 +455,8 @@ xaccAccountRecomputeBalance( Account * acc )
       split -> cleared_balance = dcleared_balance;
       split -> reconciled_balance = dreconciled_balance;
     }
+    /* invalidate the cost basis; this has to be computed with other routine */
+    split -> cost_basis = 0.0;
 
     last_split = split;
     i++;
@@ -461,6 +480,46 @@ xaccAccountRecomputeBalance( Account * acc )
   }
     
   return;
+}
+
+/********************************************************************\
+\********************************************************************/
+
+void
+xaccAccountRecomputeCostBasis( Account * acc )
+{
+  int  i = 0; 
+  double  amt = 0.0;
+  Split *split = NULL;
+  Queue *q;
+  
+  if( NULL == acc ) return;
+  if (0x0 == (ACC_INVALID_COSTB & acc->changed)) return;
+  acc->changed &= ~ACC_INVALID_COSTB;
+
+  /* create the FIFO queue */
+  q = xaccMallocQueue ();
+
+  /* loop over all splits in this account */
+  split = acc->splits[0];
+  while (split) {
+
+    /* positive amounts are a purchase, negative are a sale. 
+     * Use FIFO accounting: purchase to head, sale from tail. */
+    amt = split->damount;
+    if (0.0 < amt) {
+       xaccQueuePushHead (q, split);
+    } else 
+    if (0.0 > amt) {
+       xaccQueuePopTailShares (q, -amt);
+    }
+    split->cost_basis = xaccQueueGetValue (q);
+
+    i++;
+    split = acc->splits[i];
+  }
+
+  xaccFreeQueue (q);
 }
 
 /********************************************************************\
@@ -820,16 +879,20 @@ xaccAccountSetType (Account *acc, int tip)
 
    /* After an account type has been set, it cannot be changed */
    if (-1 < acc->type) {
-      printf ("Error: xaccAccountSetType(): "
-              "the type of the account cannot be changed "
-              "after its been set! \n"
-             );
+      PERR ("xaccAccountSetType(): "
+            "the type of the account cannot be changed "
+            "after its been set! \n"
+           );
       return;
    }
 
    /* refuse invalid account types */
    if (NUM_ACCOUNT_TYPES <= tip) return;
    acc->type = tip;
+
+   /* initialize the auxilliary account info as well */
+   if (acc->accInfo) xaccFreeAccInfo (acc->accInfo); 
+   acc->accInfo = xaccMallocAccInfo (tip);
 }
 
 void 
@@ -891,11 +954,17 @@ xaccAccountSetCurrency (Account *acc, char *str)
    CHECK (acc);
 
    if (acc->currency && (0x0 != acc->currency[0])) {
-      printf ("Error: xacAccountSetCurrency(): "
-              "the currency denomination of an account "
-              "cannot be changed!\n"
-             );
-      return;
+      if (unsafe_ops) {
+         PWARN ("xaccAccountSetCurrency(): "
+                "it is dangerous to change the currency denomination of an account! \n"
+                "\tAccount=%s old currency=%s new currency=%s \n",
+                acc->accountName, acc->currency, str);
+      } else {
+         PERR ("xaccAccountSetCurrency(): "
+               "the currency denomination of an account cannot be changed!\n"
+                "\tAccount=%s \n", acc->accountName);
+         return;
+      }
    }
    /* free the zero-length string */
    if (acc->currency) free (acc->currency);
@@ -909,11 +978,17 @@ xaccAccountSetSecurity (Account *acc, char *str)
    CHECK (acc);
 
    if (acc->security && (0x0 != acc->security[0])) {
-      printf ("Error: xacAccountSetCurrency(): "
-              "the security traded in an account "
-              "cannot be changed!\n"
-             );
-      return;
+      if (unsafe_ops) {
+         PWARN ("xaccAccountSetSecurity(): "
+                "it is dangerous to change the security denomination of an account! \n"
+                "\tAccount=%s old security=%s new security=%s \n",
+                acc->accountName, acc->security, str);
+      } else {
+         PERR ("xaccAccountSetSecurity(): "
+               "the security denomination of an account cannot be changed!\n"
+                "\tAccount=%s \n", acc->accountName);
+         return;
+      }
    }
    /* free the zero-length string */
    if (acc->security) free (acc->security);
@@ -922,6 +997,13 @@ xaccAccountSetSecurity (Account *acc, char *str)
 
 /********************************************************************\
 \********************************************************************/
+
+AccInfo *
+xaccAccountGetAccInfo (Account *acc)
+{
+   if (!acc) return NULL;
+   return (acc->accInfo);
+}
 
 AccountGroup *
 xaccAccountGetChildren (Account *acc)
@@ -1029,5 +1111,16 @@ xaccAccountGetNumSplits (Account *acc)
    if (!acc) return 0;
    return (acc->numSplits);
 }
+
+/********************************************************************\
+\********************************************************************/
+
+Account * 
+IthAccount (Account **list, int i)
+{
+   if (!list || 0 > i) return NULL;
+   return list[i];
+}
+   
 
 /*************************** END OF FILE **************************** */

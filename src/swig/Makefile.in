@@ -22,7 +22,7 @@ include @top_srcdir@/Makefile.init
 ######################################################################
 # See Makefile.common for information about these variables.
 INDEP_SRCS := helperfuncs.c
-CLEAN_SUBDIRS := guile
+CLEAN_SUBDIRS := guile perl5
 ######################################################################
 
 all: default
@@ -31,7 +31,7 @@ all: default
 # definitions of *_SRCS, etc., but before the usage of *_OBJS.
 include @top_srcdir@/Makefile.common
 
-default: guile
+default: guile perl5
 
 ifeq (${HAVE_PLOTUTILS},1)
 guile: plot.preproc.h ${OBJS}
@@ -46,7 +46,10 @@ plot.preproc.h: /usr/include/plot.h
 	cp /usr/include/plot.h plot.preproc.h
 	echo "#include <plot.h>" | gcc -E - > plot.preproc.h
 
-.PHONY: default guile
+perl5: ${OBJS} ../engine/libengine.a
+	@cd perl5 && $(MAKE) default
+
+.PHONY: default guile perl5
 
 # Local Variables:
 # tab-width: 2

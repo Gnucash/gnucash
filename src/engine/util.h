@@ -31,37 +31,51 @@
 
 #define BUFSIZE   1024
 
-extern int loglevel;
-
 /** DEBUGGING MACROS ************************************************/
+/* The debuging macros enable the setting of trace messages */
 #include <stdio.h>
 
-#define PERR(x) { if (0 <=loglevel) { 			\
-                     fprintf (stderr, "Error: ");  	\
-                     fprintf (stderr, x);  }}
+#if HAVE_NANA_H
+#include <nana.h>
 
-#define WARN(x) { if (1 <=loglevel) { 			\
-                     fprintf (stderr, "Warning: ");  	\
-                     fprintf (stderr, x);  }}
+/* override standard system assert with nana I assertion */
+#ifdef assert 
+#undef assert
+#endif 
+#define assert I
+#else	/* HAVE_NANA_H */
+/* if there is no nana, use he system assert and mush up LG */
+#include <assert.h>
+#define LG(condition,args...)	if (condition) fprintf(stderr, ##args)
+#endif	/* HAVE_NANA_H */
 
-#define INFO(x) { if (2 <=loglevel) { 			\
-                     fprintf (stderr, "Info: ");  	\
-                     fprintf (stderr, x);  }}
+#define MOD_ENGINE     1
+#define MOD_IO         2
+#define MOD_REGISTER   3
+#define MOD_LEDGER     4
+#define MOD_GUI        5
+#define MOD_SCRUB      6
+#define MODULE_MAX     7
 
-#define INFO_2(x,y) { if (2 <=loglevel) { 		\
-                     fprintf (stderr, "Info: ");  	\
-                     fprintf (stderr, x, y);  }}
+extern int loglevel[MODULE_MAX];
 
-#define DEBUG(x) { if (3 <=loglevel) { 			\
-                     fprintf (stderr, "Debug: ");  	\
-                     fprintf (stderr, x);  }}
+#define LERR    (1 <= loglevel[module])
+#define LWARN   (2 <= loglevel[module])
+#define LINFO   (3 <= loglevel[module])
+#define LDEBUG  (4 <= loglevel[module])
+#define LDETAIL (5 <= loglevel[module])
 
-#define ENTER(x) { if (3 <=loglevel) { 		\
-                     fprintf(stderr,"Entering: %s()\n", x);  }}
-#define LEAVE(x) { if (3 <=loglevel) { 		\
-                     fprintf(stderr,"Leaving: %s()\n", x);  }}
-#define DEBUGCMD(x) { if (3 <=loglevel) { x; }}
 
+/* utility macros  */
+#define PERR(x...)     LG(LERR,    "Error: ");   LG(LERR,    ##x);
+#define PWARN(x...)    LG(LWARN,   "Waring: ");  LG(LWARN,   ##x);
+#define PINFO(x...)    LG(LINFO,   "Info: ");    LG(LINFO,   ##x);
+#define DEBUG(x...)    LG(LDEBUG,  "Debug: ");   LG(LDEBUG,  ##x);
+#define ENTER(x...)    LG(LDEBUG,  "Enter: ");   LG(LDEBUG,  ##x);
+#define LEAVE(x...)    LG(LDEBUG,  "Leave: ");   LG(LDEBUG,  ##x);
+#define DETAIL(x...)   LG(LDETAIL, "Detail: ");  LG(LDETAIL, ##x);
+
+#define DEBUGCMD(x) { if (LINFO) { x; }}
 
 #include <errno.h>
 #define ERROR()     fprintf(stderr,"%s: Line %d, error = %s\n", \
@@ -88,7 +102,7 @@ size_t dcoresize();
 #define DMAX(x,y) ((x)>(y)) ? (x) : (y)
 #define isNum(x) (((x)-0x30) < 0) ? 0 : (((x)-0x30) > 9) ? 0 : 1
 
-#define EPS  (1.0e-4)
+#define EPS  (1.0e-6)
 #define DEQ(x,y) (((((x)+EPS)>(y)) ? 1 : 0) && ((((x)-EPS)<(y)) ? 1 : 0))
 
 

@@ -92,6 +92,19 @@ int     xaccGetNumAccounts (AccountGroup *grp);
 int     xaccGroupGetNumAccounts (AccountGroup *grp);
 int     xaccGroupGetDepth (AccountGroup *grp);
 
+/*
+ * The xaccGetAccounts() subroutine returns an array containing 
+ *    all of the accounts, including subaccounts, in the account group.
+ *    The returned array should be freed when no longer needed.
+ *
+ * The xaccFillInAccounts() routine performs the same function as the
+ *    above routine, except that it fills in the array provided by the
+ *    user.  The array provioded by the user *must* be large enough,
+ *    including a terminating NULL pointer.
+ */
+Account ** xaccGetAccounts (AccountGroup *grp);
+int        xaccFillInAccounts ( AccountGroup *root, Account **arr );
+
 /* 
  * The xaccGetAccountFromID() subroutine fetches the account
  *    with the indicated account id from the collection of accounts
@@ -105,11 +118,13 @@ int     xaccGroupGetDepth (AccountGroup *grp);
  *
  * The xaccGetAccountFromName() subroutine fetches the
  *    account by name from the collection of accounts
- *    in the indicated AccountGroup group.
+ *    in the indicated AccountGroup group.  It returns NULL if the
+ *    account was not found.
  *
  * The xaccGetPeerAccountFromName() subroutine fetches the
  *    account by name from the collection of accounts
- *    in the same AccountGroup anchor group.
+ *    in the same AccountGroup anchor group. It returns NULL if the
+ *    account was not found.
  */
 
 Account *xaccGetAccountFromID       (AccountGroup *, int);
@@ -119,10 +134,17 @@ Account *xaccGetPeerAccountFromName (Account *, const char *);
 
 /*
  * The xaccRecomputeGroupBalance() subroutine recursively totals
- * up the balances of all accounts in a group.
+ *    up the balances of all accounts in a group.
  */
 
 void xaccRecomputeGroupBalance (AccountGroup *);
+
+/*
+ * The xaccGroupGetBalance() method returns the total of the balances 
+ *    of all the children in this group.
+ */
+
+double    xaccGroupGetBalance (AccountGroup *);
 
 /*
  * The xaccGetAccountRoot () subroutine will find the topmost 
@@ -144,7 +166,6 @@ AccountGroup * xaccGetAccountRoot (Account *);
 void xaccConsolidateGrpTransactions (AccountGroup *);
 
 Account * xaccGroupGetAccount (AccountGroup *, int);
-double    xaccGroupGetBalance (AccountGroup *);
 
 /*
  * The xaccGroupGetNextFreeCode() method will try to guess a reasonable 

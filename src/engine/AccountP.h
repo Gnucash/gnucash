@@ -18,7 +18,7 @@
 /********************************************************************\
  * Account.h -- the Account data structure                          *
  * Copyright (C) 1997 Robin D. Clark                                *
- * Copyright (C) 1997, 1998 Linas Vepstas                           *
+ * Copyright (C) 1997, 1998, 1999 Linas Vepstas                     *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -44,6 +44,7 @@
 #define __XACC_ACCOUNT_P_H__
 
 #include "config.h"
+#include "AccInfo.h"
 #include "Transaction.h"
 
 /** STRUCTS *********************************************************/
@@ -81,14 +82,21 @@ struct _account {
   char     *notes;
 
   /* The type field is the account type, picked from the enumerated 
-   * list that includes BANK, STOCK, CREDIT, INCOME, etc.  It's
+   * list that includes BANK, STOCK, CREDIT, INCOME, etc.  Its
    * intended use is to be a hint to the GUI as to how to display   
    * and format the transaction data.
    */
   short     type;
 
+  /* The accInfo field provides a hook for storing additional 
+   * account-type specific data.  Thus, it will contain different
+   * structures depending on whether the account is a bank, investment
+   * or other type of account.  Implemented as a union.
+   */
+  AccInfo *accInfo;
+
   /* The currency field denotes the default currency in which all
-   * splits in this account are denominated.  It's value *MUST*
+   * splits in this account are denominated.  Its value *MUST*
    * be a three-letter ISO currency code, or it must be a comma followed
    * by an arbitrary string (security name).  Currency trading accounts
    * allow splits between accounts when the currency string matches the
@@ -121,14 +129,20 @@ struct _account {
   int numSplits;                /* length of splits array below   */
   Split **splits;               /* ptr to array of ptrs to splits */
 
-  /* the "changed" flag helps the gui keep track of 
-   * changes to this account */
+  /* The "changed" flag is used to invalidate cached values in this structure.
+   * currently, the balances and the cost basis are cached.
+   */
   short changed;
 
   /* the "open" flag indicates if the account has been 
    * opened for editing. */
   short open;
 };
+
+/* bitfields for the changed flag */
+#define ACC_INVALID_BALN      0x1
+#define ACC_INVALID_COSTB     0x2
+#define ACC_INVALIDATE_ALL    0x3
 
 /* bitflields for the open flag */
 #define ACC_BEGIN_EDIT        0x1
@@ -152,4 +166,14 @@ void         xaccAccountRemoveSplit (Account *, Split *);
 void         xaccAccountRecomputeBalance (Account *);
 void         xaccAccountRecomputeBalances (Account **);
 
+/*
+ * recomputes the cost basis 
+ */
+void         xaccAccountRecomputeCostBasis (Account *);
+
+
+/** GLOBALS *********************************************************/
+
+extern int next_free_unique_account_id;
+ 
 #endif /* __XACC_ACCOUNT_P_H__ */

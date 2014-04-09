@@ -615,8 +615,8 @@ xaccCreateTable (Table *table, GtkWidget * parent)
       }
       gtk_clist_thaw(GTK_CLIST(reg));
     }
-    gtk_clist_set_policy(GTK_CLIST(reg),
-                         GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
+//    gtk_clist_set_policy(GTK_CLIST(reg),
+//                          GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
     
     gtk_clist_freeze(GTK_CLIST(reg));
     for(i = num_header_rows; i < table->num_phys_rows; i++) {

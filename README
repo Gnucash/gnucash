@@ -39,8 +39,8 @@ Features include:
   - Quicken File Import: Import Quicken QIF style files.
     QIF files are automtically merged to eliminate 
     duplicate transactions.
-  - Reports: Display Balance Sheet, Profit&Loss reports,
-    or print them as HTML.
+  - Reports: Display Balance Sheet, Profit&Loss, Portfolio 
+    Valuation, or print them as HTML.
   - Chart of Accounts: A master account can have a hierarchy
     of detail accounts underneath it.  This allows similar
     account types (e.g. Cash, Bank, Stock) to be grouped 
@@ -65,6 +65,15 @@ Features include:
     in that portfolio.
   - Written in C, with perl, scheme and tcl support for easy
     configuration and extensibility.
+  - File access is locked in a network-safe fashion, preventing
+    accidental damage if several users attempt to access the 
+    same file, even if the file is NFS-mounted.
+  - Provides a byte-stream format, which allows accounts and
+    account groups to be transmitted to other processes
+    via pipes or sockets.
+  - Get Stock & Mutual Fund quotes from various web sites, 
+    update portfolio automatically (more funds being added 
+    regularly).
 
 Home Page:
 ----------
@@ -79,21 +88,40 @@ ftp://ftp.ultra.net/pub/eugene/RPMS/i386/
 Development versions:
 http://linas.org/linux/xacc/
 
-Important Note:
----------------
-Numerous core dumps have been reported when using various
-versions of lesstif.  Some versions work, others don't.
-Lesstif 0.81: works
-Lesstif 0.82: broken
-Lesstif 0.81: works
-Lesstif 0.86.0: works
-Lesstif 0.86.5: broken
-
-These core dumps do not occur with RedHat Motif (or other commercial
-versions of Motif).
-
 Running:
 --------
+Only the Motif version of GnuCash is currently functional.  The Gnome version
+will give you a taste for Gnome, but most functions will not work.   The qt
+version doesn't compile, most functions are missing.  See below for OS's other
+than Linux/*BSD support.
+
+To be able to use certain features of GnuCash, such as reports and network stock
+price downloads, you must have the following packages below installed.
+RPM's for most of these can be found at http://rufus.w3.org/linux/  
+
+perl    -- Almost any version of perl5 should work.  I run perl-5.004 
+eperl   -- Almost any version of eperl should work.  I run eperl-2.2.14
+
+In addition, some perl modules need to be installed:
+
+perl-LWP/libwww-perl-5.36
+perl-HTML/HTML-0.6
+perl-HTML/HTML-Parser-2.20
+        -- these perl modules are used to fetch stock & mutual fund quotes
+           off the net.  You can pick up RPMS at
+           ftp://ftp.gnucash.org/pub/gnucash/binaries/RPMS
+           http://rufus.w3.org/linux/RPM/PByName.html
+           http://linas.org/linux/xacc (last resort)
+           or sources at
+           http://www.cpan.org/CPAN.html
+
+The binary-only distribution of GnuCash comes with several executables: 
+one has Motif statically linked in, and another has Motif linked in dynamically.
+The motif dynamic-link version requires that either motif or lesstif be
+installed.  Motif is a commercial product available form several vendors for
+approx $50.  Lesstif is an open source clone available for free. Note that 
+not all version of lesstif work with Gnucash: thhe the note below.
+
 The binary-only distribution includes two binary files: 'gnucash.bin'
 and 'gnucash-static.bin'. The former requires a Motif shared library;
 the latter has Motif statically linked in.  If you have Motif,
@@ -108,6 +136,19 @@ opened with the "Open File" menu entry.  *.qif files are
 Quicken Import Format files that can be opened with the 
 "Import QIF" menu entry.
 
+Important Note:
+---------------
+Core dumps have been reported when using various
+versions of lesstif.  Some versions work, others don't.
+Lesstif 0.81: works
+Lesstif 0.82: broken
+Lesstif 0.86.0: works
+Lesstif 0.86.5: broken
+Lesstif 0.86.9  works ... but some menus come out 2 pixels high.
+Lesstif 0.87.0: broken (missing symbols for XmeDrawShadows, etc.)
+
+These core dumps do not occur with RedHat Motif (or other commercial
+versions of Motif).
 
 Building & Installing:
 ----------------------
@@ -117,11 +158,23 @@ source distributions.
 Prior to building GnuCash, you will have to obtain and install the following
 packages:
 
-SWIG    -- available at www.swig.org need 1.1p5 or later ...
-guile   -- need version 1.3 or later ( or build 1998.08.18 or 1998.09.10 or later) ...
+nana    -- Used to provide a debugging infrastructure.
+           Any version should work.
+           http://www.fsf.org/software/nana/nana.html
+	   http://www.cs.ntu.edu.au/homepages/pjm/nana-home/
+SWIG    -- Used to autogenerate perl, tcl, guile wrappers.
+           available at www.swig.org need 1.1p5 or later ...
+guile   -- Provides main extension language infrastructure.
+           This is used extensively in gnucash for initialization & startup.
+           need version 1.3 or later ( or build 1998.08.18 or 1998.09.10 or later) ...
            ftp://ftp.gnucash.org/pub/gnucash/extra_libs/TAR/guile-core-19980818.tar.gz 
            guile-core-19980818-1.i386.rpm works
            guile-1.3.1-1 from redhat.com/pub/rawhide works ...
+eperl   -- embeddedPerl needed for Reports.  The menu item "Reports" will not
+           work witout this.
+           version eperl-2.2.14 works well with perl 5.00404
+           http://www.engelschall.com/sw/eperl/
+           ftp://ftp.ultra.net/pub/eugene/RPMS/i386/eperl-2.2.14-1.i386.rpm
 
 Motif or Lesstif  --
            Lesstif 0.81    works   
@@ -130,10 +183,12 @@ Motif or Lesstif  --
            Lesstif 0.86.0  is reported to work     
            Lesstif 0.86.5  crashes.   
            Lesstif 0.86.9  works ... but some menus come out 2 pixels high.
+           Lesstif 0.87.0: broken (missing symbols for XmeDrawShadows, etc.)
            Commercial Motif seems to work, but beware old libXm's 
            combined with new glibc's, 
 
-XmHTML  -- version 1.1.4 or later
+XmHTML  -- Provides HTML display capabilities. Used for Help Dialogues, Reports.
+           version 1.1.4 or later
            http://www.llp.fu-berlin.de/lsoft/F/5/XMHTML.html
            http://www.xs4all.nl/~ripley/XmHTML/XmHTML.html
            ftp://ftp.ultra.net/pub/eugene/RPMS/i386/XmHTML-1.1.5-1.i386.rpm
@@ -141,12 +196,18 @@ XmHTML  -- version 1.1.4 or later
 
 libpng  -- portable network graphics library
 libjpeg -- JPEG image handling library
-libz    -- comopression library
+libz    -- compression library
 xpm     -- X Pixmap extension
-eperl   -- embeddedPerl needed for reports
-           version eperl-2.2.14 works well with perl 5.00404
-           http://www.engelschall.com/sw/eperl/
-           ftp://ftp.ultra.net/pub/eugene/RPMS/i386/eperl-2.2.14-1.i386.rpm
+
+perl-LWP/libwww-perl-5.36 
+perl-HTML/HTML-0.6
+perl-HTML/HTML-Parser-2.20
+        -- these perl modules are used to fetch stock & mutual fund quotes 
+           off the net.  You can pick up RPMS at 
+           http://rufus.w3.org/linux/RPM/PByName.html
+           http://linas.org/linux/xacc (last resort)
+           or sources at 
+           http://www.cpan.org/CPAN.html
 
 Normally, to build and install GnuCash, all you have to do is:
 
@@ -247,14 +308,17 @@ path-defaults.h is now gone.  The startup file setting is in
 gnucash.h, generated from gnucash.h.in.
 
 
+Supported OS's:
+---------------
+GnuCash version 1.1.x is known to work in the following configs:
 
-
-Status:
--------
-As of version 1.0.18:
-
-GnuCash is known to work in the following configs:
 Linux 2.x.x           -- Intel  w/ RedHat Motif
+FreeBSD               -- Intel
+OpenBSD               -- Intel
+
+Xacc-1.0.18, the predecessor to GnuCash, is known to work on the following
+platforms:
+
 Slackware 3.4         -- Intel  w/ Mootif (OSF Motif 2.0.1)
 Linux 2.x.x           -- Intel  w/ Lesstif v0.81
 SGI IRIX              -- MIPS 
@@ -262,14 +326,15 @@ IBM AIX 4.1.5         -- RS/6000   http://www-frec.bull.com/
 Unixware 7            -- Intel
 SCO OpenServer 5.0.4  -- Intel
 
-See http://linas.org/linux/xacc for precompiled binaries for these platforms
+See ftp://ftp.gnucash.org/pub/xacc (high-bandwdith)
+or  http://linas.org/linux/xacc (slowwww ) 
+for precompiled binaries for these platforms
 
 GnuCash seems to be having problems with:
 Solaris -- Sparc  -- won't compile due to va-args in XmHTML
-Linux 2.x.x -- Intel w/ Lesstif v0.82
 
-Download Sites:
----------------
+Additional Download Sites:
+--------------------------
 All of the precompiled binaries & the latest source versions can be found
 at http://linas.org/linux/xacc  However, it is recommended that the master
 sites for each particular binary be used instead, for two reasons:
@@ -292,10 +357,6 @@ SGI Irix
       -- in SGI install format
       -- warning, this is a very down-level version
       http://linas.org/linux/xacc/xacc-1.0b7-sgi-irix.inst.tar
-
-Linux Debian
-      -- use debian tools to install
-      http://linas.org/linux/xacc/xacc_1.0.15-1_i386.deb
 
 That's all folks!
 
@@ -328,7 +389,7 @@ Linas Vepstas <linas@linas.org> liked what he saw: the GUI was slick,
    register window code completely redesigned and made mostly 
    Motif-(and GUI-)independent.  Did some prototype OFX work.
 
-Jeremy Collins <linux@cyberramp.net> publicized the GnoMoney project 
+Jeremy Collins <jcollins@gnucash.org> publicized the GnoMoney project 
    widely and broadly, and then changed its name to GnuCash.  Jeremy
    created the gnucash.org web site, registered the domain, got the 
    initial GTK/gnome code working.
@@ -340,20 +401,24 @@ Rob Browning <rlb@cs.utexas.edu> abused everyone for not using perl,
 
 Fixes & Patches:
 ----------------
+Andrew Arensburger <arensb@cfar.umd.edu> for FreeBSD & other patches
 Fred Baube <fred@moremagic.com> for attempted Java port/MoneyDance
 Christopher B. Browne <cbbrowne@hex.net> for perl stock scripts
 George Chen <georgec@sco.com> for MS-Money QIF's & fixes
-Jeremey Collins <linux@cyberramp.net> for GnoMoney & GTK port
+Jeremey Collins <jcollins@gnucash.org> for GnoMoney & GTK port
+Patrick Condron <pcondon@rackspace.com> for webserver and T1 connection.
 Ciaran Deignan <Ciaran.Deignan@bull.net> for AIX binary version
 Tyson Dowd   <tyson@tyse.net> for config/make patches & debian maint.
 Koen D'Hondt <ripley@xs4all.nl> for Solaris patches to XmHTML
 Bob Drzyzgula <bob@mostly.com> for budgeting design notes
+Ron Forrester <rjf@aracnet.com> for gnome patches
 Dave Freese <DFreese@osc.uscg.mil> for leap-year fix
 Otto Hammersmith <otto@bug.redhat.com> for RedHat RPM version
 Jon K}re Hellan <jk@isdn-a33.itea.ntnu.no> misc core dump fixes
+Prakash Kailasa <PrakashK@bigfoot.com> for gnome build fixes
 Tom Kludy <tkludy@csd.sgi.com> for SGI Irix port
 Ted Lemon <mellon@andare.fugue.com> for NetBSD port
-Yannick Le Ny <y-le-ny@ifrance.com> pour la traduction du readme en francais 
+Yannick Le Ny <y-le-ny@ifrance.com> pour la traduction en francais 
 G. Allen Morris III  <gam3@ann.softgams.com> for QIF core dump 
 Peter Norton <spacey@inch.com> for a valiant attempt at a GTK port
 OmNiBuS <webmaster@obsidian.uia.net> web site graphics & content
@@ -363,6 +428,7 @@ Gavin Porter <maufk@csv.warwick.ac.uk> for euro style dates
 Ron Record <rr@sco.com> for SCO Unixware & OpenServer binaries
 Dirk Schoenberger <schoenberger@signsoft.com> for Qt/KDE port
 Christopher Seawood <cls@seawood.org> for XbaeMatrix core dump
+Mike Simons <msimons@fsimons01.erols.com> misc configure.in patches
 Richard Skelton <rich@brake.demon.co.uk> for Solaris cleanup
 Henning Spruth <spruth@bigfoot.com> for German text & euro date rework
 Ken Yamaguchi <gooch@ic.EECS.Berkeley.EDU> QIF import fixes; MYM import

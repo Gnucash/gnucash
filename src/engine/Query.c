@@ -40,6 +40,11 @@
 #include "TransactionP.h"
 #include "util.h"
 
+/* This static indicates the debugging module that this .o belongs to.  */
+static short module = MOD_ENGINE;
+
+/* ================================================== */
+
 struct _Query {
    Account ** acc_list;
 
@@ -74,6 +79,9 @@ xaccMallocQuery (void)
 
 static int Sort_DATE_NUM_AMOUNT (Split **, Split **);
 
+#define LONG_LONG_MAX 0x7fffffffffffffffLL
+#define LONG_LONG_MIN (- (0x7fffffffffffffffLL) -1)
+
 void 
 xaccInitQuery (Query *q)
 {
@@ -84,23 +92,17 @@ xaccInitQuery (Query *q)
    q->changed = 0; 
    q->max_num_splits = INT_MAX ;
 
-   q->earliest.tv_sec = 0; 
+   q->earliest.tv_sec = LONG_LONG_MIN;
    q->earliest.tv_nsec = 0; 
 
-/* hack alert HACK ALERT Y2K problem -- danger danger.
- * For some stupid reason,  struct Timespec uses long int
- * instead of time_t for seconds. This means we will have 
- * overflow in year 2004 which is stupid, and needs to be 
- * fixed.
- */
-   /* q->latest.tv_sec = ULONG_MAX; */
-   q->latest.tv_sec = LONG_MAX;
+   /* Its a signed, 64-bit int */
+   q->latest.tv_sec = LONG_LONG_MAX;
    q->latest.tv_nsec = 0; 
 
-   q->earliest_found.tv_sec = LONG_MAX; 
+   q->earliest_found.tv_sec = LONG_LONG_MAX;
    q->earliest_found.tv_nsec = 0; 
 
-   q->latest_found.tv_sec = 0;
+   q->latest_found.tv_sec = LONG_LONG_MIN;
    q->latest_found.tv_nsec = 0; 
 
    q->sort_func = (int (*)(const void*, const void *)) Sort_DATE_NUM_AMOUNT;
@@ -203,6 +205,15 @@ xaccQuerySetMaxSplits (Query *q, int max)
 
 void  
 xaccQuerySetDateRange (Query *q, time_t early, time_t late)
+{
+   if (!q) return;
+   q->changed = 1; 
+   q->earliest.tv_sec = early;
+   q->latest.tv_sec = late;
+}
+
+void  
+xaccQuerySetDateRangeL (Query *q, long long early, long long late)
 {
    if (!q) return;
    q->changed = 1; 
@@ -547,6 +558,8 @@ xaccQueryGetSplits (Query *q)
    Split *s, **slist;
    Account *acc;
 
+   ENTER ("xaccQueryGetSplits()\n");
+
    if (!q) return NULL;
 
    /* tmp hack alert */
@@ -606,6 +619,8 @@ xaccQueryGetSplits (Query *q)
    }
    slist[k] = NULL;
 
+   DEBUG ("xaccQueryGetSplits(): will sort %d splits\n", nsplits);
+
    /* sort them ... */
    SortSplits (q, slist);
 
@@ -654,6 +669,7 @@ xaccQueryGetSplits (Query *q)
       }
       i++; s=slist[i];
    }
+   LEAVE ("xaccQueryGetSplits(): returning  %d splits\n", nret);
    
    return q->split_list;
 }

@@ -1,42 +1,42 @@
 
 
-;;;; Preferences...
+;; Preferences...
 
-;; (define gnc:*double-entry-restriction*
-;;   (gnc:make-config-var
-;;    "Determines how the splits in a transaction will be balanced. 
-;;  The following values have significance:
-;; 
-;;    #f        anything goes
-;; 
-;;    'force    The sum of all splits in a transaction will be
-;;              forced to be zero, even if this requires the
-;;              creation of additional splits.  Note that a split
-;;              whose value is zero (e.g. a stock price) can exist
-;;              by itself. Otherwise, all splits must come in at 
-;;              least pairs.
-;; 
-;;    'collect  splits without parents will be forced into a
-;;              lost & found account.  (Not implemented)"
-;;    (lambda (var value)
-;;      (cond
-;;       ((eq? value #f)
-;;        (_gnc_set_force_double_entry_ 0)
-;;        (list value))
-;;       ((eq? value 'force)
-;;        (_gnc_set_force_double_entry_ 1)
-;;        (list value))
-;;       ((eq? value 'collect)
-;;        (gnc:warn
-;;         "gnc:*double-entry-restriction* -- 'collect not supported yet.  "
-;;         "Ignoring.")
-;;        #f)
-;;       (else
-;;        (gnc:warn
-;;         "gnc:*double-entry-restriction* -- " value " not supported.  Ignoring.")
-;;        #f)))
-;;    eq?
-;;    #f))
+(define gnc:*double-entry-restriction*
+  (gnc:make-config-var
+   "Determines how the splits in a transaction will be balanced. 
+ The following values have significance:
+
+   #f        anything goes
+
+   'force    The sum of all splits in a transaction will be
+             forced to be zero, even if this requires the
+             creation of additional splits.  Note that a split
+             whose value is zero (e.g. a stock price) can exist
+             by itself. Otherwise, all splits must come in at 
+             least pairs.
+
+   'collect  splits without parents will be forced into a
+             lost & found account.  (Not implemented)"
+   (lambda (var value)
+     (cond
+      ((eq? value #f)
+       (xaccConfigSetForceDoubleEntry 0)
+       (list value))
+      ((eq? value 'force)
+       (xaccConfigSetForceDoubleEntry 1)
+       (list value))
+      ((eq? value 'collect)
+       (gnc:warn
+        "gnc:*double-entry-restriction* -- 'collect not supported yet.  "
+        "Ignoring.")
+       #f)
+      (else
+       (gnc:warn
+        "gnc:*double-entry-restriction* -- " value " not supported.  Ignoring.")
+       #f)))
+   eq?
+   #f))
 
 (define gnc:*arg-show-usage*
   (gnc:make-config-var

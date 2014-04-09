@@ -102,7 +102,7 @@ extern void        xaccAccListDisplayRefresh (Account **acc);
 
 /* 
  * redisplay/redraw all windows that contain this transaction
- * (opr any of it's member splits).
+ * (or any of its member splits).
  */
 extern void        xaccTransDisplayRefresh (Transaction *trans);
 
@@ -118,6 +118,7 @@ extern void        xaccRegisterRefresh (SplitRegister *);
  * close the window 
  */
 extern void        xaccLedgerDisplayClose (xaccLedgerDisplay *);
+
 #endif /* __MULTI_LEDGER_H__ */
 
 /************************** END OF FILE *************************/
