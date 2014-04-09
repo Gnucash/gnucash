@@ -1,10 +1,13 @@
 The startup process looks like this right now:
 
   1) (at the C level) search args from right to left to see if there's
-     any --startup-file override, use it if there is.
+     any --startup-dir override, use it if there is.
 
-  2) load the desired startup.scm (either the default or the override)
-     -- all the rest of the steps happen from startup.scm
+  2) load the desired <startup-dir>/init.scm (either the default or
+     the override) -- all the rest of the steps happen from init.scm
+     and files loaded from there.  Any files in <startup>/ cannot be
+     overridden by --load-path because they'll be loaded before the
+     load-path mechanism is operational.
 
   3) setup the default config-vars (including the ones that represent
      the command-line options).

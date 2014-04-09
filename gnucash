@@ -1,7 +1,7 @@
 #! /bin/sh
 
 GNC_ARGS="${GNC_ARGS} --debug"
-GNC_ARGS="${GNC_ARGS} --startup-file ./share/scm/startup.scm"
+GNC_ARGS="${GNC_ARGS} --startup-dir ./share/scm/startup"
 GNC_ARGS="${GNC_ARGS} --share-dir ./share"
 GNC_ARGS="${GNC_ARGS} --config-dir ./etc"
 GNC_ARGS="${GNC_ARGS} --load-path (\"(./share/scm)\")"

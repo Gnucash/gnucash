@@ -56,7 +56,7 @@ build-flavor:
 	@cd src;    $(MAKE) ${FLAVOR}
 	ln -sf gnucash.${FLAVOR} gnucash.bin
 	ln -sf gnucash.${FLAVOR} gnucash-shell
-	(cd share && ln -sf ../src/scm scm)
+	(cd share && rm -f scm && ln -sf ../src/scm scm)
 
 motif:
 	${MAKE} FLAVOR=motif build-flavor

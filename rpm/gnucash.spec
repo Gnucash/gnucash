@@ -1,15 +1,13 @@
 Name: gnucash
 Summary: GnuCash is an application to keep track of your finances.
-Version: 1.1.20
-Release: 1
+Version: 1.1.21
+Release: 4
 Copyright: Free Software Foundation
 Group: Applications/Finance
-Source: ftp://ftp.gnucash.org/pub/gnucash/gnucash-1.1.20.tar.gz
-Patch0: configure.in.patch
+Source: ftp://ftp.gnucash.org/pub/gnucash/gnucash-1.1.21.tar.gz
 Packager: Eugene Kanter (eugene@bgs.com)
 
-BuildRoot: /tmp/gnucash-build
-
+BuildRoot: /tmp/gnucash-%version
 
 %description
 GnuCash is a personal finance manager.  A check-book like
@@ -21,18 +19,16 @@ double-entry accounting principles to ensure balanced books.
 
 %prep
 %setup
-%patch -p1
 
 %build
-mkdir -p share
-autoconf
-X_LIBS=-lXp ./configure --prefix=/usr
+X_LIBS=-lXp ./configure --prefix=/usr --sysconfdir=/etc
 make motif
 
 
 %install
-make prefix=$RPM_BUILD_ROOT/usr install
-
+make prefix=$RPM_BUILD_ROOT/usr sysconfdir=$RPM_BUILD_ROOT/etc GNC_CONFIGDIR=$RPM_BUILD_ROOT/etc/gnucash install
+#make prefix=$RPM_BUILD_ROOT/usr sysconfdir=$RPM_BUILD_ROOT/etc GNC_BINDIR=$RPM_BUILD_ROOT/usr/bin GNC_CONFIGDIR=$RPM_BUILD_ROOT/etc/gnucash GNC_DOCDIR=$RPM_BUILD_ROOT/usr/doc/gnucash install
+#rm -rf $RPM_BUILD_ROOT/usr/doc/gnucash
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -43,7 +39,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(555,-,-) /usr/bin/gnucash.motif
 /usr/bin/gnucash
 /usr/doc/gnucash
-/usr/etc
+/etc
 /usr/share/gnucash
 
 %doc README CHANGES TODO

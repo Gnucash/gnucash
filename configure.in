@@ -233,7 +233,7 @@ AC_OUTPUT(Makefile
           src/guile/Makefile
           src/guile/gnucash.h
           src/scm/Makefile
-          src/scm/startup.scm
+          src/scm/startup/init.scm
           src/gnome/Makefile
           src/motif/Makefile
           src/qt/Makefile
