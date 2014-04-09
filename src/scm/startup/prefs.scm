@@ -1,6 +1,42 @@
 
 
-;;;; Preferences
+;;;; Preferences...
+
+;; (define gnc:*double-entry-restriction*
+;;   (gnc:make-config-var
+;;    "Determines how the splits in a transaction will be balanced. 
+;;  The following values have significance:
+;; 
+;;    #f        anything goes
+;; 
+;;    'force    The sum of all splits in a transaction will be
+;;              forced to be zero, even if this requires the
+;;              creation of additional splits.  Note that a split
+;;              whose value is zero (e.g. a stock price) can exist
+;;              by itself. Otherwise, all splits must come in at 
+;;              least pairs.
+;; 
+;;    'collect  splits without parents will be forced into a
+;;              lost & found account.  (Not implemented)"
+;;    (lambda (var value)
+;;      (cond
+;;       ((eq? value #f)
+;;        (_gnc_set_force_double_entry_ 0)
+;;        (list value))
+;;       ((eq? value 'force)
+;;        (_gnc_set_force_double_entry_ 1)
+;;        (list value))
+;;       ((eq? value 'collect)
+;;        (gnc:warn
+;;         "gnc:*double-entry-restriction* -- 'collect not supported yet.  "
+;;         "Ignoring.")
+;;        #f)
+;;       (else
+;;        (gnc:warn
+;;         "gnc:*double-entry-restriction* -- " value " not supported.  Ignoring.")
+;;        #f)))
+;;    eq?
+;;    #f))
 
 (define gnc:*arg-show-usage*
   (gnc:make-config-var
@@ -85,68 +121,3 @@ default directory.  i.e. (gnc:config-var-value-set! gnc:*doc-path*
     (string-append "(" (getenv "HOME") "/.gnucash/doc)")    
     (string-append "(" gnc:_share-dir-default_ "/Docs)")
     (string-append "(" gnc:_share-dir-default_ "/Reports)"))))
-
-(define gnc:*prefs*
-  (list
-   
-   (cons
-    "usage"
-    (cons 'boolean
-          (lambda (val)
-            (gnc:config-var-value-set! gnc:*arg-show-usage* #f val))))
-   (cons
-    "help"
-    (cons 'boolean
-          (lambda (val)
-            (gnc:config-var-value-set! gnc:*arg-show-help* #f val))))
-   (cons
-    "debug"
-    (cons 'boolean
-          (lambda (val)
-            (gnc:config-var-value-set! gnc:*debugging?* #f val))))
-   
-   (cons
-    "startup-dir"
-    (cons 'string
-          (lambda (val)
-            (gnc:config-var-value-set! gnc:*startup-dir* #f val))))
-   
-   (cons
-    "config-dir"
-    (cons 'string
-          (lambda (val)
-            (gnc:config-var-value-set! gnc:*config-dir* #f val))))
-   
-   (cons
-    "share-dir"
-    (cons 'string
-          (lambda (val)
-            (gnc:config-var-value-set! gnc:*share-dir* #f val))))
-   
-
-   (cons
-    "load-path"
-    (cons 'string
-          (lambda (val)
-            (let ((path-list
-                   (call-with-input-string val (lambda (port) (read port)))))
-              (if (list? path-list)
-                  (gnc:config-var-value-set! gnc:*load-path* #f path-list)
-                  (begin
-                    (gnc:error "non-list given for --load-path: " val)
-                    (gnc:shutdown 1)))))))
-   
-   (cons
-    "doc-path"
-    (cons 'string
-          (lambda (val)
-            (let ((path-list
-                   (call-with-input-string val (lambda (port) (read port)))))
-              (if (list? path-list)
-                  (gnc:config-var-value-set! gnc:*doc-path* #f path-list)
-                  (begin
-                    (gnc:error "non-list given for --doc-path: " val)
-                    (gnc:shutdown 1)))))))
-   
-   (cons "load-user-config" (cons 'boolean gnc:load-user-config-if-needed))
-   (cons "load-system-config" (cons 'boolean gnc:load-system-config-if-needed))))

@@ -2,6 +2,7 @@
  * date.c -- utility functions to handle the date (adjusting, get   * 
  *           current date, etc.) for xacc (X-Accountant)            *
  * Copyright (C) 1997 Robin D. Clark                                *
+ * Copyright (C) 1998 Linas Vepstas                                 *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -59,6 +60,7 @@ DateFormat dateFormat = DATE_FORMAT_US;
 void 
 printDate (char * buff, int day, int month, int year)
 {
+  if (!buff) return;
 
   /* Note that when printing year, we use %-4d in format string;
    * this causes a one, two or three-digit year to be left-adjusted
@@ -90,6 +92,7 @@ void
 printDateSecs (char * buff, time_t t)
 {
   struct tm *theTime;
+  if (!buff) return;
   
   theTime = localtime(&t);
   
@@ -121,6 +124,7 @@ scanDate(const char *buff, int *day, int *month, int *year)
    time_t secs;
    struct tm *now;
 
+   if (!buff) return;
    dupe = strdup (buff);
    tmp = dupe;
    first_field = 0x0;
@@ -174,9 +178,9 @@ scanDate(const char *buff, int *day, int *month, int *year)
    if(iyear<100)
      iyear += ((int) ((now->tm_year+1900)/100)) * 100;
 
-   *year=iyear;
-   *month=imonth;
-   *day=iday;
+   if (year) *year=iyear;
+   if (month) *month=imonth;
+   if (day) *day=iday;
 }
 
 /**

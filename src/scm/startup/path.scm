@@ -81,10 +81,10 @@ file in all of the directories specified by gnc:*load-path*."
               (gnc:warn "failure loading " file-name)
               #f)))))
 
-(define (gnc:load-user-config-if-needed)
+(define gnc:load-user-config-if-needed
   (let ((user-config-loaded? #f))
     (lambda ()
-      (if (not user-config-loaded)
+      (if (not user-config-loaded?)
           (begin
             (gnc:debug "loading user configuration")
             
@@ -95,7 +95,7 @@ file in all of the directories specified by gnc:*load-path*."
               
               (if (access? user-file F_OK)
                   (if (false-if-exception (primitive-load user-file))
-                      (set! gnc:user-config-loaded #t)
+                      (set! user-config-loaded? #t)
                       (begin
                         (gnc:warn "failure loading " user-file)
                         #f))
@@ -106,6 +106,10 @@ file in all of the directories specified by gnc:*load-path*."
                             (gnc:warn "failure loading " auto-file)
                             #f))))))))))
 
+;; the system config should probably be loaded from some directory
+;; that wouldn't be a site wide mounted directory, like /usr/share
+;; However, the code below seems to zero in on /usr/share/gnucash/config
+;; ... ahh but that's OK, right ??
 (define gnc:load-system-config-if-needed
   (let ((system-config-loaded? #f))
     (lambda ()

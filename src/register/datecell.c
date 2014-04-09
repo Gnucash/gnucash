@@ -50,22 +50,17 @@ static void setDateCellValue (BasicCell *, const char *);
 
 /* ================================================ */
 
-
 static
 void xaccParseDate (struct tm *parsed, const char * datestr)
 {
-
    int iday, imonth, iyear;
+   if (!parsed) return;
+   if (!datestr) return;
 
    scanDate(datestr, &iday, &imonth, &iyear);
-
-   if (parsed) {
-      parsed->tm_mday = iday;
-      parsed->tm_mon = imonth-1;
-      parsed->tm_year = iyear-1900;
-   }
-
-   return;
+   parsed->tm_mday = iday;
+   parsed->tm_mon = imonth-1;
+   parsed->tm_year = iyear-1900;
 }
 
 /* ================================================ */
@@ -149,18 +144,26 @@ DateMV (BasicCell *_cell,
    char buff[30];
    char *datestr;
    int accel=0;
+   short accept=0;
 
    /* if user hit backspace, accept the change */
-   if (!change) return newval;
-   if (0x0 == change[0]) return newval;
+   if (!change) accept=1;
+   else if (0x0 == change[0]) accept=1;
 
    /* accept any numeric input */
-   if (isdigit (change[0])) return newval;
+   else if (isdigit (change[0])) accept=1;
 
    /* accept the separator character */
    /* Note that the separator of '-' (for DATE_FORMAT_ISO) takes precedence
       over the accelerator below! */
-   if (dateSeparator() == change[0]) return newval;
+   else if (dateSeparator() == change[0]) accept=1;
+
+   /* keep a copy of the new value */
+   if (accept) {
+      if (cell->cell.value) free (cell->cell.value);
+      cell->cell.value = strdup (newval);
+      return newval;
+   }
 
    /* otherwise, maybe its an accelerator key. */
    date = &(cell->date);
@@ -274,6 +277,25 @@ DateLeave (BasicCell *_cell, const char * curr)
 
    retval = strdup (buff);
    return retval;
+}
+
+/* ================================================ */
+/* for most practical purposes, the commit function
+ * is identical to the DateLeave function, excpet that
+ * it returns no value (and is publically visible)
+ */
+
+void
+xaccCommitDateCell (DateCell *cell)
+{
+   char buff[30];
+   xaccParseDate (&(cell->date), cell->cell.value);
+   printDate (buff, cell->date.tm_mday, 
+                  cell->date.tm_mon+1, 
+                  cell->date.tm_year+1900);
+
+   if (cell->cell.value) free (cell->cell.value);
+   cell->cell.value = strdup (buff);
 }
 
 /* ================================================ */

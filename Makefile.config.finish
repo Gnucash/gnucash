@@ -1,0 +1,25 @@
+# -*-makefile-*-
+
+# This file is used at the end of the configure run.  It handles
+# setting up the runtime paths that will be embedded into the gnucash
+# binary.  It can't be done using AC_OUTPUT because we'd need to
+# expand a variable that's defined in terms of ${prefix} before
+# AC_OUTPUT, and prefix isn't guaranteed to be defined until AC_OUTPUT
+# is called.
+
+# We use a makefile because it gives us the proper variable expansions
+# for free.
+
+all:
+	perl -p \
+	  -e "s|\@GNC_RUNTIME_SHAREDIR\@|${GNC_SHAREDIR}|o;" \
+	  -e "s|\@GNC_RUNTIME_CONFIGDIR\@|${GNC_SHAREDIR}|o" \
+	  < src/scm/startup/init.scm.in > src/scm/startup/init.scm
+	perl -p \
+	  -e "s|\@GNC_RUNTIME_SHAREDIR\@|${GNC_SHAREDIR}|o;" \
+	  -e "s|\@GNC_RUNTIME_CONFIGDIR\@|${GNC_SHAREDIR}|o" \
+	  < src/guile/gnucash.h.in > src/guile/gnucash.h
+
+# Local Variables:
+# tab-width: 2
+# End:

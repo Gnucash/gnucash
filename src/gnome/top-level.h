@@ -1,5 +1,5 @@
 /********************************************************************\
- * main.h -- main for xacc (X-Accountant)                           *
+ * top-level.h -- main for xacc (X-Accountant)                      *
  * Copyright (C) 1997 Robin D. Clark                                *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
@@ -22,42 +22,19 @@
  *           Huntington Beach, CA 92648-4632                        *
 \********************************************************************/
 
-#ifndef __MAIN_H__
-#define __MAIN_H__
+#ifndef __TOP_LEVEL_H__
+#define __TOP_LEVEL_H__
 
 #include <gtk/gtk.h>
 
 #include "config.h"
-
-#include "main.h"
-#include "FileIO.h"
 #include "Group.h"
-#include "util.h"
-#include "MainWindow.h" 
-
-/** HELP STUFF: *****************************************************/
-#define HELP_VAR     "XACC_HELP"
-#define HH_ABOUT     "xacc-about.html"
-#define HH_ACC       "xacc-accwin.html"
-#define HH_REGWIN    "xacc-regwin.html"
-#define HH_RECNWIN   "xacc-recnwin.html"
-#define HH_ADJBWIN   "xacc-adjbwin.html"
-#define HH_MAIN      "xacc-main.html"
-#define HH_GPL       "xacc-gpl.html"
 
 /** STRUCTS *********************************************************/
 
 /** PROTOTYPES ******************************************************/
-void gnucash_shutdown (GtkWidget *widget, gpointer *data);
-void file_cmd_open (GtkWidget *widget, gpointer data);
-void file_cmd_import (GtkWidget *widget, gpointer data);
-void file_cmd_quit (GtkWidget *widget, gpointer data);
-void file_cmd_save (GtkWidget *widget, gpointer data);
-void prepare_app ( void );
 
 /** GLOBALS *********************************************************/
-extern char  *helpPath;
-extern GtkWidget   *app;
 extern AccountGroup *topgroup;
 
 #endif

@@ -40,7 +40,7 @@
 #include "Account.h"
 #include "AccountP.h"  /* hack alert -- do not include P.h files !! */
 #include "Group.h"
-#include "Ledger.h"
+#include "MultiLedger.h"
 #include "LedgerUtils.h"
 #include "MainWindow.h"
 #include "main.h"

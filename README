@@ -73,6 +73,12 @@ http://gnucash.org/
 Origianl X-Accountant home page:
 http://www.cs.hmc.edu/~rclark/xacc
 
+Precomipled binaries:
+ftp://ftp.ultra.net/pub/eugene/RPMS/i386/
+
+Development versions:
+http://linas.org/linux/xacc/
+
 Important Note:
 ---------------
 Numerous core dumps have been reported when using various
@@ -106,7 +112,7 @@ Quicken Import Format files that can be opened with the
 Building & Installing:
 ----------------------
 These steps does not apply to binary distributions; only to
-source distributions.
+source distributions.  
 
 Prior to building GnuCash, you will have to obtain and install the following
 packages:
@@ -115,7 +121,7 @@ SWIG    -- available at www.swig.org need 1.1p5 or later ...
 guile   -- need version 1.3 or later ( or build 1998.08.18 or 1998.09.10 or later) ...
            ftp://ftp.gnucash.org/pub/gnucash/extra_libs/TAR/guile-core-19980818.tar.gz 
            guile-core-19980818-1.i386.rpm works
-           guile from redhat.com/pub/rawhide is reported to have problems ...
+           guile-1.3.1-1 from redhat.com/pub/rawhide works ...
 
 Motif or Lesstif  --
            Lesstif 0.81    works   
@@ -123,6 +129,7 @@ Motif or Lesstif  --
            Lesstif 0.83    works    
            Lesstif 0.86.0  is reported to work     
            Lesstif 0.86.5  crashes.   
+           Lesstif 0.86.9  works ... but some menus come out 2 pixels high.
            Commercial Motif seems to work, but beware old libXm's 
            combined with new glibc's, 
 
@@ -144,10 +151,15 @@ eperl   -- embeddedPerl needed for reports
 Normally, to build and install GnuCash, all you have to do is:
 
   # ./configure
-  # make
+  # make 
   # make install
 
-You can build Motif, Gnome, and Qt versions.
+You can build Motif, Gnome, and Qt versions. Currently, the Motif version
+is the most stable, bug-free, correct, and feature rich.  The gtk/gnome
+version compiles and is being actively developed, but will take a while to
+reach the stibility level of the motif version. The Qt version may not 
+compile.
+
 Depending on your make target, you'll produce:
 
   gnucash.motif
@@ -196,6 +208,28 @@ Examples of other funny configure options:
 Flag --with-gtk-config.  The way gtk phiolosphy goes,
 you should *only* specify the config program location and
 rely on it to tell you the right CFLAGS and XLIBS values.
+
+The new --shell option should work properly now too.  There is no
+gnucash-shell anymore.  There's just one binary.  You can invoke
+gnucash with the --shell option now to get a guile shell with all the
+gnucash functions loaded.  You can also get the normal startup
+behavior from that shell like this:
+
+  ./gnucash --shell
+  guile> (load (string-append gnc:_startup-dir-default_ "/init.scm"))
+  guile> (gnc:main)
+
+which is the same thing that happens if you don't use the --shell
+option.
+
+The --shell option can be helpful when trying to write and test new
+.scm files.  I set it up so that I (or someone else) could
+(eventually) work on the graphing stuff...
+
+Anyone who's having the same problem with the added termcap libs that
+I am can look in configure.in and comment out the TERMCAP_TMP line and
+re-run autoconf and configure.  We'll have a better fix later.
+
 
 Runtime and install destinations are separate.  The --prefix
 you specify to configure determines where the resulting binary
@@ -319,9 +353,11 @@ Otto Hammersmith <otto@bug.redhat.com> for RedHat RPM version
 Jon K}re Hellan <jk@isdn-a33.itea.ntnu.no> misc core dump fixes
 Tom Kludy <tkludy@csd.sgi.com> for SGI Irix port
 Ted Lemon <mellon@andare.fugue.com> for NetBSD port
+Yannick Le Ny <y-le-ny@ifrance.com> pour la traduction du readme en francais 
 G. Allen Morris III  <gam3@ann.softgams.com> for QIF core dump 
 Peter Norton <spacey@inch.com> for a valiant attempt at a GTK port
 OmNiBuS <webmaster@obsidian.uia.net> web site graphics & content
+Myroslav Opyr <mopyr@IPM.Lviv.UA> for misc patches
 Alain Peyrat <Alain.Peyrat@nmu.alcatel.fr> for configure.in patches
 Gavin Porter <maufk@csv.warwick.ac.uk> for euro style dates
 Ron Record <rr@sco.com> for SCO Unixware & OpenServer binaries

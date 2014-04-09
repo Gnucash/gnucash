@@ -1,12 +1,17 @@
 
-(define (gnc:debug . items)
-  (if #t
-      (begin
-        (display "gnucash: [D] ")
-        (for-each (lambda (i) (display i)) items)
-        (newline))))
-
 (define gnc:*pi* 3.14159265359)
+
+(define gnc:pie-chart-colors '("DarkGreen"
+                               "FireBrick"
+                               "DarkBlue"
+                               "DarkOliveGreen"
+                               "DarkOrange"
+                               "MediumSeaGreen"
+                               "peru"
+                               "DarkOrchid"
+                               "LimeGreen"))
+(set-cdr! (last-pair gnc:pie-chart-colors) gnc:pie-chart-colors)
+
 
 (define (gnc:_pie-chart-slice_ color width height
                                center-x center-y
@@ -14,14 +19,11 @@
                                start-angle
                                label
                                value)
-
+  
   (let* ((pie-radius (/ width 3))
-          (full-circle (* 2 gnc:*pi*))
-          (arc-sweep (* (/ value total) full-circle)))
-
-     (gnc:debug
-      color width height center-x center-y total start-angle label value)
-
+         (full-circle (* 2 gnc:*pi*))
+         (arc-sweep (* (/ value total) full-circle)))
+    
      (savestate)
      (filltype 1)
      (colorname color)
@@ -37,33 +39,30 @@
      (endpath)
   
      (restorestate)
-  
-     (fmove (/ (* 0.90 width) (* 2 (cos (+ start-angle (/ arc-sweep 2)))))
-            (/ (* 0.90 width) (* 2 (sin (+ start-angle (/ arc-sweep 2)))))) 
-  
+     
+     (let ((label-offset (* 0.90 (/ width 3))))
+       (fmove (/ label-offset (* 2 (cos (+ start-angle (/ arc-sweep 2)))))
+              (/ label-offset (* 2 (sin (+ start-angle (/ arc-sweep 2)))))))
+     
+     (colorname "black")
      (alabel (char->integer #\c) (char->integer #\c) label)
     
      (restorestate)
     
-     (gnc:debug "start: " start-angle " sweep: " arc-sweep "\n")
-
      arc-sweep))
 
-(define gnc:_next-wedge-color_
-  (let ((colors '("DarkGreen"
-                  "FireBrick"
-                  "DarkBlue"
-                  "DarkOliveGreen"
-                  "DarkOrange"
-                  "MediumSeaGreen"
-                  "peru"
-                  "DarkOrchid"
-                  "LimeGreen")))
-    (set-cdr! (last-pair colors) colors)
-    
-    (lambda ()
-      (set! colors (cdr colors))
-      (car colors))))
+(define gnc:_next-wedge-color_ #f)
+(define gnc:_reset-wedge-colors_ #f)
+
+(let ((current-color gnc:pie-chart-colors))
+  (set! gnc:_next-wedge-color_
+        (lambda ()
+          (set! current-color (cdr current-color))
+          (car current-color)))
+  
+  (set! gnc:_reset-wedge-colors_
+        (lambda ()
+          (set! current-color gnc:pie-chart-colors))))
 
 (define (pie-plotutils chart-items)
   ;; ((label value) (label value) (label value))
@@ -74,7 +73,6 @@
 
     ;; get total
     (for-each (lambda (item)
-                (gnc:debug (cadr item))
                 (set! total (+ total (cadr item))))
               chart-items)
 
@@ -151,6 +149,65 @@
                      ("tangibles" 23.32)
                      ("intangibles" 45.44)
                      ("giant fungi" 241.87)))
+
+    (if (< (closepl) 0)          ; close Plotter
+        (display "Couldn't close Plotter\n")
+        (set! result 1))
+    (selectpl 0)                   ; select default Plotter
+    (if (< (deletepl handle) 0)    ; delete Plotter we used
+        (display "Couldn't delete Plotter\n")
+        (set! result 1))))
+
+(define (text-test)
+  (let ((handle #f)
+        (result 0))    
+    ;; create a Postscript Plotter that writes to standard output
+    (set! handle (newpl "X"
+                        (get_fileptr_stdin)
+                        (get_fileptr_stdout)
+                        (get_fileptr_stderr)))
+    (if (< handle 0) 
+        (begin
+          (display "Couldn't create Plotter\n")
+          (set! result 1)))
+    
+    (if (= result 0)
+        (begin
+          (selectpl handle)           ; select the Plotter for use
+          
+          (if (< (openpl) 0)          ; open Plotter
+              (begin
+                (display "Couldn't open Plotter\n")
+                (set! result 1)))))
+
+    (space -200 -200 200 200)
+    (colorname "grey83")
+    (box -180 -180 180 180)
+    
+    (savestate)
+
+    (filltype 1)
+    (colorname "DarkGreen")
+    (move 0 0)
+    
+    ;;(savestate)
+    ;;(frotate (/ (* start-angle 180) gnc:*pi*))
+    ;;(cont (inexact->exact pie-radius) 0) 
+    ;;(farc 0 0 pie-radius 0
+    ;;      (* pie-radius (cos arc-sweep))
+    ;;      (* pie-radius (sin arc-sweep)))
+    ;;(cont 0 0)
+    ;;(endpath)
+    
+    ;;(restorestate)
+    
+    ;;(fmove (/ (* 0.90 width) (* 2 (cos (+ start-angle (/ arc-sweep 2)))))
+    ;;       (/ (* 0.90 width) (* 2 (sin (+ start-angle (/ arc-sweep 2)))))) 
+    
+    (alabel (char->integer #\c) (char->integer #\c) "Rampage!")
+    
+    (restorestate)
+
 
     (if (< (closepl) 0)          ; close Plotter
         (display "Couldn't close Plotter\n")

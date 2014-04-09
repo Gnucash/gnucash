@@ -114,7 +114,7 @@ add_account_dialog_okclicked_cb(GtkWidget * dialog, gpointer data)
   }
   xaccAccountCommitEdit (account);
 
-  refresh_tree();
+  gnc_ui_refresh_tree();
 
   gnome_dialog_close ( GNOME_DIALOG(info->dialog) );
 
