@@ -304,7 +304,7 @@ printf ("save split is %p \n", split);
       acc = xaccSplitGetAccount (s);
 
       split = xaccMallocSplit ();
-      xaccTransBeginEdit (trans, 1);
+      xaccTransBeginEdit (trans, 0);   
       xaccTransAppendSplit (trans, split);
       xaccAccountInsertSplit (acc, split);
 
@@ -313,7 +313,7 @@ printf ("save split is %p \n", split);
 
    } else {
       trans = xaccSplitGetParent (split);
-      xaccTransBeginEdit (trans, 1);
+      xaccTransBeginEdit (trans, 0);
    }
 
    /* copy the contents from the cursor to the split */
@@ -775,11 +775,12 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
    Table *table;
    int phys_row;
    int vrow;
-   int style;
+   int type, style;
    int multi_line, dynamic;
    CellBlock *lead_cursor;
 
    table = reg->table;
+   type  = (reg->type) & REG_TYPE_MASK;
    style = (reg->type) & REG_STYLE_MASK;
    multi_line  = (REG_MULTI_LINE == style);
    dynamic = ((REG_SINGLE_DYNAMIC == style) || (REG_DOUBLE_DYNAMIC == style));
@@ -909,8 +910,12 @@ printf ("load split %d at phys row %d addr=%p \n", j, phys_row, secondary);
        * when doing stock accounts.   This will guess incorrectly for a 
        * ledger showing multiple stocks, but seems cool for a single stock.
        */
-      last_price = xaccSplitGetSharePrice (last_split);
-      xaccSplitSetSharePrice (split, last_price);
+      if ((STOCK_REGISTER == type) ||
+          (PORTFOLIO      == type)) 
+      {
+         last_price = xaccSplitGetSharePrice (last_split);
+         xaccSplitSetSharePrice (split, last_price);
+      }
    }
 
    /* do the split row of the blank split */
@@ -955,7 +960,7 @@ printf ("load split %d at phys row %d addr=%p \n", j, phys_row, secondary);
 static void 
 LoadXferCell (ComboCell *cell,  
               AccountGroup *grp,
-              char *base_currency)
+              char *base_currency, char *base_security)
 {
    Account * acc;
    char * curr;
@@ -971,14 +976,20 @@ LoadXferCell (ComboCell *cell,
    n = 0;
    acc = xaccGroupGetAccount (grp, n);
    while (acc) {
+      char *curr, *secu;
+
       curr = xaccAccountGetCurrency (acc);
-      if ((!curr) && (!base_currency)) {
+      secu = xaccAccountGetSecurity (acc);
+
+      if ( (!safe_strcmp(curr,base_currency)) ||
+           (!safe_strcmp(secu,base_currency)) ||
+           (!safe_strcmp(curr,base_security)) ||
+           (!safe_strcmp(secu,base_security)) )
+      {
          xaccAddComboCellMenuItem (cell, xaccAccountGetName (acc));
       }
-      if (curr && base_currency && !strcmp (curr, base_currency)) {
-         xaccAddComboCellMenuItem (cell, xaccAccountGetName (acc));
-      }
-      LoadXferCell (cell, xaccAccountGetChildren (acc), base_currency);
+      LoadXferCell (cell, xaccAccountGetChildren (acc), 
+                   base_currency, base_security);
       n++;
       acc = xaccGroupGetAccount (grp, n);
    }
@@ -988,10 +999,15 @@ LoadXferCell (ComboCell *cell,
 
 void xaccLoadXferCell (ComboCell *cell,  
                        AccountGroup *grp, 
-                       char *base_currency)
+                       Account *base_account)
 {
+   char *curr, *secu;
+
+   curr = xaccAccountGetCurrency (base_account);
+   secu = xaccAccountGetSecurity (base_account);
+
    xaccAddComboCellMenuItem (cell, "");
-   LoadXferCell (cell, grp, base_currency);
+   LoadXferCell (cell, grp, curr, secu);
 }
 
 /* =======================  end of file =================== */

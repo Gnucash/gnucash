@@ -53,7 +53,11 @@
  * 2 -- splits without oparents will be forced into a
  *      lost & found account.  (Not implemented)
  */
-int force_double_entry = 1;
+int force_double_entry = 0;
+
+/* bit-field flags for controlling transaction commits */
+#define BEGIN_EDIT 0x1
+#define DEFER_REBALANCE 0x2
 
 
 /* bit-field flags for controlling transaction commits */
@@ -66,27 +70,6 @@ int force_double_entry = 1;
  * Transaction data structure, in order to encapsulate the          *
  * knowledge of the internals of the Transaction in one file.       *
 \********************************************************************/
-
-
-#define SAFE_STRCMP(da,db) {		\
-  if ((da) && (db)) {			\
-    int retval = strcmp ((da), (db));	\
-    /* if strings differ, return */	\
-    if (retval) return retval;		\
-  } else 				\
-  if ((!(da)) && (db)) {		\
-    return -1;				\
-  } else 				\
-  if ((da) && (!(db))) {		\
-    return +1;				\
-  }					\
-}
-
-static int 
-safestrcmp (char * da, char * db) {
-   SAFE_STRCMP (da, db);
-   return 0;
-}
 
 
 /********************************************************************\
@@ -357,6 +340,55 @@ xaccFreeTransaction( Transaction *trans )
 /********************************************************************\
 \********************************************************************/
 
+void
+xaccSplitSetBaseValue (Split *s, double value, char * base_currency)
+{
+   if (!s) return;
+
+   assert (s->acc);
+
+   if (!safe_strcmp(s->acc->currency, base_currency)) {
+      s -> damount = - (value / (s->share_price));   
+   } else 
+   if (!safe_strcmp(s->acc->security, base_currency)) {
+      s -> damount = -value;   
+   } else {
+      printf ("Error: xaccSplitSetBaseValue(): "
+              " inappropriate base currency %s "
+              " given split currency=%s and security=%s\n",
+              base_currency, s->acc->currency, s->acc->security);
+      return;
+   }
+}
+
+
+double
+xaccSplitGetBaseValue (Split *s, char * base_currency)
+{
+   double value;
+   if (!s) return 0.0;
+
+   assert (s->acc);
+
+   if (!safe_strcmp(s->acc->currency, base_currency)) {
+      value = s->damount * s->share_price;   
+   } else 
+   if (!safe_strcmp(s->acc->security, base_currency)) {
+      value = s->damount;   
+   } else {
+      printf ("Error: xaccSplitGetBaseValue(): "
+              " inappropriate base currency %s "
+              " given split currency=%s and security=%s\n",
+              base_currency, s->acc->currency, s->acc->security);
+      return 0.0;
+   }
+   return value;
+}
+
+/********************************************************************\
+\********************************************************************/
+
+
 static double
 ComputeValue (Split **sarray, Split * skip_me, char * base_currency)
 {
@@ -367,10 +399,10 @@ ComputeValue (Split **sarray, Split * skip_me, char * base_currency)
    s = sarray[0];
    while (s) {
       if (s != skip_me) {
-         if (!safestrcmp(s->acc->currency, base_currency)) {
+         if (!safe_strcmp(s->acc->currency, base_currency)) {
             value += s->share_price * s->damount;
          } else 
-         if (!safestrcmp(s->acc->security, base_currency)) {
+         if (!safe_strcmp(s->acc->security, base_currency)) {
             value += s->damount;
          } else {
             printf ("Internal Error: ComputeValue(): "
@@ -382,25 +414,6 @@ ComputeValue (Split **sarray, Split * skip_me, char * base_currency)
    }
 
    return value;
-}
-
-static void
-xaccSetBaseValue (Split *s, double value, char * base_currency)
-{
-   if (!s) return;
-
-   assert (s->acc);
-
-   if (!safestrcmp(s->acc->currency, base_currency)) {
-      s -> damount = - (value / (s->share_price));   
-   } else 
-   if (!safestrcmp(s->acc->security, base_currency)) {
-      s -> damount = -value;   
-   } else {
-      printf ("Error: xaccSetBaseValue(): "
-              " inappropriate base currency \n");
-      return;
-   }
 }
 
 /* hack alert -- the algorithm used in this rebalance routine
@@ -422,8 +435,8 @@ xaccSplitRebalance (Split *split)
   Split *s;
   int i = 0;
   double value = 0.0;
-  short forward=0, backward=0;
-  char *base_currency=0x0, *base_security =0x0;
+  char *base_currency=0x0;
+  char *ra=0x0, *rb =0x0;
 
   trans = split->parent;
 
@@ -440,39 +453,58 @@ xaccSplitRebalance (Split *split)
   assert (trans->splits);
   assert (trans->splits[0]);
 
-  /* lets find out if we are dealing with multiple currencies.  */
-  base_currency = split->acc->currency;
-  base_security = split->acc->security;
+  /* lets find out if we are dealing with multiple currencies,
+   * and which one(s) all of the splits have in common.  */
+  ra = split->acc->currency;
+  rb = split->acc->security;
+  if (rb && (0x0==rb[0])) rb = 0x0;
+
   i=0; s = trans->splits[0];
   while (s) {
+    char *sa, *sb;
     assert (s->acc);
-    if (safestrcmp (base_currency, s->acc->currency)) {
-       if (!safestrcmp(base_currency, s->acc->security)) forward = 1;
-       else 
-       if (!safestrcmp(base_security, s->acc->currency)) backward = 1;
-       else {
-          printf ("Internal Error: SplitRebalance(): "
-                  " no common split currencies \n");
-          printf ("\tbase acc=%s cur=%s base_sec=%s\n"
-                  "\tacc=%s scur=%s ssec=%s \n", 
-              split->acc->accountName, base_currency, base_security,
-              s->acc->accountName, s->acc->currency, s->acc->security );
-          assert (0);
-          return;
-       }
+    sa = s->acc->currency;
+    sb = s->acc->security;
+    if (sb && (0x0==sb[0])) sb = 0x0;
+
+    if (ra && rb) {
+       int aa = safe_strcmp (ra,sa);
+       int ab = safe_strcmp (ra,sb);
+       int ba = safe_strcmp (rb,sa);
+       int bb = safe_strcmp (rb,sb);
+       if ( (!aa) && bb) rb = 0x0;
+       else
+       if ( (!ab) && ba) rb = 0x0;
+       else
+       if ( (!ba) && ab) ra = 0x0;
+       else
+       if ( (!bb) && aa) ra = 0x0;
+       else
+       if ( aa && bb && ab && ba ) { ra=0x0; rb=0x0; }
+
+       if (!ra) { ra=rb; rb=0x0; }
+    } 
+    else
+    if (ra && !rb) {
+       int aa = safe_strcmp (ra,sa);
+       int ab = safe_strcmp (ra,sb);
+       if ( aa && ab )  ra= 0x0;
+    }
+
+    if ((!ra) && (!rb)) {
+      printf ("Internal Error: SplitRebalance(): "
+              " no common split currencies \n");
+      printf ("\tbase acc=%s cur=%s base_sec=%s\n"
+              "\tacc=%s scur=%s ssec=%s \n", 
+          split->acc->accountName, split->acc->currency, split->acc->security,
+          s->acc->accountName, s->acc->currency, s->acc->security );
+      assert (0);
+      return;
     }
     i++; s = trans->splits[i];
   }
-  if (forward && backward) {
-     printf ("Internal Error: SplitRebalance(): "
-             " split currencies all messed up \n");
-     assert (0);
-     return;
-  }
-  /* we need to reverse what will be the basis of out calculations */
-  if (backward) {
-     base_currency = base_security;
-  }
+
+  base_currency = ra;
 
   if (split == trans->splits[0]) {
     /* The indicated split is the source split.
@@ -485,7 +517,7 @@ xaccSplitRebalance (Split *split)
     if (s) {
       /* the new value of the destination split will be the result.  */
       value = ComputeValue (trans->splits, s, base_currency);
-      xaccSetBaseValue (s, value, base_currency);
+      xaccSplitSetBaseValue (s, value, base_currency);
       MARK_SPLIT (s);
       xaccAccountRecomputeBalance (s->acc); 
 
@@ -530,7 +562,7 @@ xaccSplitRebalance (Split *split)
      */
     s = trans->splits[0];
     value = ComputeValue (trans->splits, s, base_currency);
-    xaccSetBaseValue (s, value, base_currency);
+    xaccSplitSetBaseValue (s, value, base_currency);
     MARK_SPLIT (s);
     xaccAccountRecomputeBalance (s->acc); 
   }

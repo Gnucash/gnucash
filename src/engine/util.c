@@ -71,6 +71,15 @@ dcoresize(void)
 #endif
 
 /********************************************************************\
+\********************************************************************/
+
+int 
+safe_strcmp (char * da, char * db) {
+   SAFE_STRCMP (da, db);
+   return 0;
+}
+
+/********************************************************************\
  * currency & locale related stuff.
  * first attempt at internationalization i18n of currency amounts
  * In the long run, amounts should be printed with punctuation
