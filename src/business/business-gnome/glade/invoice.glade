@@ -257,7 +257,7 @@
 
 	    <widget>
 	      <class>GtkLabel</class>
-	      <name>label21</name>
+	      <name>job_label</name>
 	      <label>Job</label>
 	      <justify>GTK_JUSTIFY_RIGHT</justify>
 	      <wrap>False</wrap>
@@ -1720,7 +1720,7 @@
 
 	      <widget>
 		<class>GtkLabel</class>
-		<name>label18</name>
+		<name>job_label</name>
 		<label>Job</label>
 		<justify>GTK_JUSTIFY_RIGHT</justify>
 		<wrap>False</wrap>
@@ -2006,6 +2006,59 @@
 
       <widget>
 	<class>GtkFrame</class>
+	<name>to_charge_frame</name>
+	<label>Extra Payments</label>
+	<label_xalign>0</label_xalign>
+	<shadow_type>GTK_SHADOW_ETCHED_IN</shadow_type>
+	<child>
+	  <padding>0</padding>
+	  <expand>True</expand>
+	  <fill>True</fill>
+	</child>
+
+	<widget>
+	  <class>GtkHBox</class>
+	  <name>hbox9</name>
+	  <homogeneous>False</homogeneous>
+	  <spacing>0</spacing>
+
+	  <widget>
+	    <class>GtkLabel</class>
+	    <name>label26</name>
+	    <label>Additional to Card:</label>
+	    <justify>GTK_JUSTIFY_RIGHT</justify>
+	    <wrap>False</wrap>
+	    <xalign>1</xalign>
+	    <yalign>0.5</yalign>
+	    <xpad>0</xpad>
+	    <ypad>0</ypad>
+	    <child>
+	      <padding>0</padding>
+	      <expand>False</expand>
+	      <fill>False</fill>
+	    </child>
+	  </widget>
+
+	  <widget>
+	    <class>GtkHBox</class>
+	    <name>to_charge_box</name>
+	    <homogeneous>False</homogeneous>
+	    <spacing>0</spacing>
+	    <child>
+	      <padding>0</padding>
+	      <expand>False</expand>
+	      <fill>False</fill>
+	    </child>
+
+	    <widget>
+	      <class>Placeholder</class>
+	    </widget>
+	  </widget>
+	</widget>
+      </widget>
+
+      <widget>
+	<class>GtkFrame</class>
 	<name>ledger_frame</name>
 	<label>Invoice Entries</label>
 	<label_xalign>0</label_xalign>
@@ -2110,6 +2163,182 @@
     </signal>
     <label>Blank</label>
     <right_justify>False</right_justify>
+  </widget>
+</widget>
+
+<widget>
+  <class>GnomeDialog</class>
+  <name>Unpost Message Dialog</name>
+  <type>GTK_WINDOW_TOPLEVEL</type>
+  <position>GTK_WIN_POS_NONE</position>
+  <modal>True</modal>
+  <allow_shrink>False</allow_shrink>
+  <allow_grow>False</allow_grow>
+  <auto_shrink>False</auto_shrink>
+  <auto_close>False</auto_close>
+  <hide_on_close>False</hide_on_close>
+
+  <widget>
+    <class>GtkVBox</class>
+    <child_name>GnomeDialog:vbox</child_name>
+    <name>dialog-vbox5</name>
+    <homogeneous>False</homogeneous>
+    <spacing>8</spacing>
+    <child>
+      <padding>4</padding>
+      <expand>True</expand>
+      <fill>True</fill>
+    </child>
+
+    <widget>
+      <class>GtkHButtonBox</class>
+      <child_name>GnomeDialog:action_area</child_name>
+      <name>dialog-action_area5</name>
+      <layout_style>GTK_BUTTONBOX_END</layout_style>
+      <spacing>8</spacing>
+      <child_min_width>85</child_min_width>
+      <child_min_height>27</child_min_height>
+      <child_ipad_x>7</child_ipad_x>
+      <child_ipad_y>0</child_ipad_y>
+      <child>
+	<padding>0</padding>
+	<expand>False</expand>
+	<fill>True</fill>
+	<pack>GTK_PACK_END</pack>
+      </child>
+
+      <widget>
+	<class>GtkButton</class>
+	<name>button11</name>
+	<can_default>True</can_default>
+	<can_focus>True</can_focus>
+	<stock_button>GNOME_STOCK_BUTTON_YES</stock_button>
+      </widget>
+
+      <widget>
+	<class>GtkButton</class>
+	<name>button12</name>
+	<can_default>True</can_default>
+	<has_default>True</has_default>
+	<can_focus>True</can_focus>
+	<stock_button>GNOME_STOCK_BUTTON_NO</stock_button>
+      </widget>
+    </widget>
+
+    <widget>
+      <class>GtkVBox</class>
+      <name>vbox17</name>
+      <homogeneous>True</homogeneous>
+      <spacing>0</spacing>
+      <child>
+	<padding>0</padding>
+	<expand>True</expand>
+	<fill>True</fill>
+      </child>
+
+      <widget>
+	<class>GtkHBox</class>
+	<name>hbox12</name>
+	<homogeneous>False</homogeneous>
+	<spacing>0</spacing>
+	<child>
+	  <padding>0</padding>
+	  <expand>True</expand>
+	  <fill>True</fill>
+	</child>
+
+	<widget>
+	  <class>GnomePixmap</class>
+	  <name>q_pixmap</name>
+	  <child>
+	    <padding>10</padding>
+	    <expand>False</expand>
+	    <fill>False</fill>
+	  </child>
+	</widget>
+
+	<widget>
+	  <class>GtkLabel</class>
+	  <name>label27</name>
+	  <label>Unposting this Invoice will delete the posted transaction.
+Are you sure you want to unpost it?</label>
+	  <justify>GTK_JUSTIFY_LEFT</justify>
+	  <wrap>False</wrap>
+	  <xalign>0.5</xalign>
+	  <yalign>0.5</yalign>
+	  <xpad>0</xpad>
+	  <ypad>0</ypad>
+	  <child>
+	    <padding>5</padding>
+	    <expand>False</expand>
+	    <fill>False</fill>
+	  </child>
+	</widget>
+      </widget>
+
+      <widget>
+	<class>GtkFrame</class>
+	<name>frame8</name>
+	<border_width>3</border_width>
+	<label>Reset Tax Tables to present Values? </label>
+	<label_xalign>0</label_xalign>
+	<shadow_type>GTK_SHADOW_ETCHED_IN</shadow_type>
+	<child>
+	  <padding>6</padding>
+	  <expand>True</expand>
+	  <fill>True</fill>
+	</child>
+
+	<widget>
+	  <class>GtkHBox</class>
+	  <name>hbox11</name>
+	  <homogeneous>True</homogeneous>
+	  <spacing>0</spacing>
+
+	  <widget>
+	    <class>GtkRadioButton</class>
+	    <name>yes_tt_reset</name>
+	    <can_focus>True</can_focus>
+	    <signal>
+	      <name>toggled</name>
+	      <handler>on_yes_tt_reset_toggled</handler>
+	      <data>Invoice Entry Window</data>
+	      <last_modification_time>Tue, 27 May 2003 04:05:35 GMT</last_modification_time>
+	    </signal>
+	    <label>Yes, reset the Tax Tables</label>
+	    <active>False</active>
+	    <draw_indicator>True</draw_indicator>
+	    <group>reset tax tables</group>
+	    <child>
+	      <padding>0</padding>
+	      <expand>False</expand>
+	      <fill>False</fill>
+	    </child>
+	  </widget>
+
+	  <widget>
+	    <class>GtkRadioButton</class>
+	    <name>no_tt_reset</name>
+	    <can_focus>True</can_focus>
+	    <signal>
+	      <name>toggled</name>
+	      <handler>on_no_tt_reset_toggled</handler>
+	      <data>Invoice Entry Window</data>
+	      <last_modification_time>Tue, 27 May 2003 04:05:26 GMT</last_modification_time>
+	    </signal>
+	    <label>No, keep them as they are</label>
+	    <active>True</active>
+	    <draw_indicator>True</draw_indicator>
+	    <group>reset tax tables</group>
+	    <child>
+	      <padding>0</padding>
+	      <expand>False</expand>
+	      <fill>False</fill>
+	    </child>
+	  </widget>
+	</widget>
+      </widget>
+    </widget>
   </widget>
 </widget>
 

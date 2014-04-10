@@ -30,14 +30,13 @@
 
 #include "gnc-xml-helper.h"
 
-#include "date.h"
-#include "gnc-commodity.h"
+#include "FreqSpec.h"
+#include "GNCId.h"
 #include "gnc-book.h"
+#include "gnc-commodity.h"
+#include "gnc-date.h"
 #include "kvp_frame.h"
 
-#include "GNCId.h"
-
-#include "FreqSpec.h"
 
 GUID* dom_tree_to_guid(xmlNodePtr node);
 

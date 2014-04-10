@@ -1,11 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <guile/gh.h>
+#include <libguile.h>
 
 #include "gnc-module.h"
 
 static void
-guile_main(int argc, char ** argv) {
+guile_main(void *closure, int argc, char ** argv)
+{
   GNCModule foo;
 
   printf("  test-agedver.c:  asking for an old but supported interface ...");
@@ -25,7 +26,8 @@ guile_main(int argc, char ** argv) {
 }
 
 int
-main(int argc, char ** argv) {
-  gh_enter(argc, argv, guile_main);
+main(int argc, char ** argv)
+{
+  scm_boot_guile(argc, argv, guile_main, NULL);
   return 0;
 }

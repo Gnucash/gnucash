@@ -22,7 +22,8 @@
 
 #include "config.h"
 
-#include <guile/gh.h>
+#include <libguile.h>
+#include "guile-mappings.h"
 
 #include "tip-of-the-day.h"
 
@@ -40,7 +41,7 @@ char *
 gnc_get_current_tip(void)
 {
   SCM tip_scm;
-  tip_scm = gh_eval_str("(gnc:get-current-tip)");
+  tip_scm = scm_c_eval_string("(gnc:get-current-tip)");
   return gh_scm2newstr(tip_scm, NULL);
 }
 
@@ -54,7 +55,7 @@ gnc_get_current_tip(void)
 void
 gnc_increment_tip(void)
 {
-  gh_eval_str("(gnc:increment-tip-number)");
+  scm_c_eval_string("(gnc:increment-tip-number)");
   return;
 }
 
@@ -68,7 +69,7 @@ gnc_increment_tip(void)
 void
 gnc_decrement_tip(void)
 {
-  gh_eval_str("(gnc:decrement-tip-number)");
+  scm_c_eval_string("(gnc:decrement-tip-number)");
   return;
 }
 

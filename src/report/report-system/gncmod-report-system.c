@@ -5,9 +5,11 @@
  * Copyright (c) 2001 Linux Developers Group, Inc. 
  *********************************************************************/
 
+#include "config.h"
 #include <stdio.h>
-#include <guile/gh.h>
 #include <glib.h>
+#include <libguile.h>
+#include "guile-mappings.h"
 
 #include "gnc-module.h"
 #include "gnc-module-api.h"
@@ -41,7 +43,7 @@ static void
 lmod(char * mn) 
 {
   char * form = g_strdup_printf("(use-modules %s)\n", mn);
-  gh_eval_str(form);
+  scm_c_eval_string(form);
   g_free(form);
 }
 
@@ -61,7 +63,7 @@ libgncmod_report_system_LTX_gnc_module_init(int refcount) {
   /* if this is the first time the module's being loaded, initialize
    * the relative date system */
   if(refcount == 0) {
-    gh_eval_str("(gnc:reldate-initialize)");
+    scm_c_eval_string("(gnc:reldate-initialize)");
   }
 
   return TRUE;

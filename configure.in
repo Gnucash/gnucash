@@ -27,8 +27,13 @@ dnl Process this file with autoconf to produce a configure script.
 ### commands depend on them):
 
 AC_INIT(src/engine/Transaction.h)
+AC_PREREQ(2.53)
 
 AC_PROG_CC
+
+# Comment out for production or semi-production builds.  I.E. Anything
+# that is explicitly tagged in cvs as a version.
+AC_DEFINE(GNUCASH_CVS,1,[Define if built from untagged cvs])
 
 GNUCASH_MAJOR_VERSION=1
 GNUCASH_MINOR_VERSION=9
@@ -45,12 +50,15 @@ AC_PROG_INTLTOOL
 
 AM_CONFIG_HEADER(config.h)
 
-AC_DEFINE_UNQUOTED(GNUCASH_MAJOR_VERSION, $GNUCASH_MAJOR_VERSION)
-AC_DEFINE_UNQUOTED(GNUCASH_MINOR_VERSION, $GNUCASH_MINOR_VERSION)
-AC_DEFINE_UNQUOTED(GNUCASH_MICRO_VERSION, $GNUCASH_MICRO_VERSION)
+AC_DEFINE_UNQUOTED(GNUCASH_MAJOR_VERSION, $GNUCASH_MAJOR_VERSION,
+	[GnuCash Major version number])
+AC_DEFINE_UNQUOTED(GNUCASH_MINOR_VERSION, $GNUCASH_MINOR_VERSION,
+	[GnuCash Minor version number])
+AC_DEFINE_UNQUOTED(GNUCASH_MICRO_VERSION, $GNUCASH_MICRO_VERSION,
+	[GnuCash Micro version number])
 
 dnl Set of available languages.
-ALL_LINGUAS="da de el en_GB es es_NI fr hu it ja nb nl pl pt pt_BR ru sk sv uk zh_CN zh_TW"
+ALL_LINGUAS="da de el en_GB es es_NI fr hu it ja nb nl pl pt pt_BR ru sk sv ta uk zh_CN zh_TW"
 AM_GNU_GETTEXT([use-libtool])
 
 
@@ -158,6 +166,13 @@ AM_GUILE_VERSION_CHECK(1.3.4, , , [AC_MSG_ERROR([
   1.3.4 to build.
 ])])
 
+AC_DEFINE_UNQUOTED(GNC_GUILE_MAJOR_VERSION, ${guile_major_version},
+	[Guile Major version number])
+AC_DEFINE_UNQUOTED(GNC_GUILE_MINOR_VERSION, ${guile_minor_version},
+	[Guile Minor version number])
+AC_DEFINE_UNQUOTED(GNC_GUILE_MICRO_VERSION, ${guile_micro_version},
+	[Guile Micro version number])
+
 AM_PATH_GWRAP(1.3.3, , , [AC_MSG_ERROR([
 
   g-wrap does not appear to be installed correctly, or is not new
@@ -183,7 +198,7 @@ G_WRAP_MODULE_DIR=`${G_WRAP_CONFIG} --guile-module-directory`
 G_WRAP_LIB_DIR=`echo $G_WRAP_MODULE_DIR | sed -e 's|share/guile|lib|'`
 AC_MSG_RESULT($G_WRAP_MODULE_DIR)
 
-AC_GWRAP_CHECK_GUILE
+AC_GWRAP_CHECK_GUILE($G_WRAP_MODULE_DIR)
 
 AC_SUBST(G_WRAP_CONFIG)
 AC_SUBST(G_WRAP_COMPILE_ARGS)
@@ -255,10 +270,13 @@ AC_SUBST(GNC_ADD_ON_SRFIS)
 if test "x${GNC_ADD_ON_SRFIS}" != "x"
 then
  GNC_SRFI_LOAD_PATH="\${top_srcdir}/lib/"
+ GNC_TEST_SRFI_LOAD_CMD="--guile-load-dir \${top_srcdir}/lib/"
 else
  GNC_SRFI_LOAD_PATH=""
+ GNC_TEST_SRFI_LOAD_CMD=""
 fi
 AC_SUBST(GNC_SRFI_LOAD_PATH)
+AC_SUBST(GNC_TEST_SRFI_LOAD_CMD)
 
 ### --------------------------------------------------------------------------
 ### See if we need guile-www
@@ -349,8 +367,8 @@ AC_ARG_ENABLE( debug,
   [  --enable-debug               compile with debugging flags set],
        CFLAGS="${CFLAGS} -g"
        LDFLAGS="${LDFLAGS} -g"
-       AC_DEFINE(DEBUG_MEMORY,1),
-       AC_DEFINE(DEBUG_MEMORY,0) )
+       AC_DEFINE(DEBUG_MEMORY,1,Enable debug memory),
+       AC_DEFINE(DEBUG_MEMORY,0,Enable debug memory) )
 
 AC_ARG_ENABLE( profile,
   [  --enable-profile             compile with profiling set],
@@ -382,6 +400,8 @@ AC_ARG_ENABLE( sql,
 	PGSQL_CFLAGS="-I${PGSQL_CFLAGS}"
       fi
 
+      AS_SCRUB_INCLUDE(PGSQL_CFLAGS)
+
       saved_CPPFLAGS="${CPPFLAGS}"
       CPPFLAGS="${CPPFLAGS} ${PGSQL_CFLAGS}"
       AC_CHECK_HEADERS(pgsql/libpq-fe.h postgresql/libpq-fe.h libpq-fe.h)
@@ -404,9 +424,9 @@ AC_ARG_ENABLE( sql,
               fi
           done
 	fi
-        
-	AS_SCRUB_INCLUDE(PGSQL_CFLAGS)
 
+	AS_SCRUB_INCLUDE(CFLAGS)
+        
         PGSQL_LIBS=`${PG_CONFIG} --libdir`
         if test "x$PGSQL_LIBS" != x; then
 	  PGSQL_LIBS="-L${PGSQL_LIBS}"
@@ -463,7 +483,9 @@ AC_SUBST(RPC_DIR)
 ### OFX
 AC_ARG_ENABLE( ofx,
   [  --enable-ofx                 compile with ofx support (needs LibOFX)],
-       OFX_DIR=ofx)
+  if test "x$enableval" != "xno" ; then
+    OFX_DIR=ofx
+  fi)
 if test x${OFX_DIR} = xofx ;
 then
     AC_ARG_WITH( ofx-prefix, 
@@ -476,6 +498,7 @@ then
     fi
 
     AC_MSG_CHECKING(for libofx/libofx.h)
+    AS_SCRUB_INCLUDE(LIBOFX_CFLAGS)
     save_CPPFLAGS="${CPPFLAGS}"
     CPPFLAGS="${CPPFLAGS} ${LIBOFX_CFLAGS}"
     AC_TRY_CPP( [#include <libofx/libofx.h>], AC_MSG_RESULT(yes), OFXfound=no )
@@ -483,6 +506,7 @@ then
     if test x${OFXPREFIX} = x -a x${OFXfound} = no ; then
     	LIBOFX_LIBS="-L$/usr/local/lib"
 	LIBOFX_CFLAGS="-I$/usr/local/include"
+        AS_SCRUB_INCLUDE(LIBOFX_CFLAGS)
         CPPFLAGS="${CPPFLAGS} ${LIBOFX_CFLAGS}"
 
         AC_TRY_CPP( [#include <libofx/libofx.h>], AC_MSG_RESULT([yes (in /usr/local)]),
@@ -507,7 +531,6 @@ int ofx_proc_statement_cb(const struct OfxStatementData data) { return 0; }
 
     LIBS="${save_LIBS}"
     CPPFLAGS="${save_CPPFLAGS}"
-    AS_SCRUB_INCLUDE(LIBOFX_CFLAGS)
     AC_SUBST(LIBOFX_CFLAGS)
     AC_SUBST(LIBOFX_LIBS)
 fi
@@ -517,12 +540,20 @@ AC_SUBST(OFX_DIR)
 ### HBCI
 AC_ARG_ENABLE( hbci,
   [  --enable-hbci                compile with HBCI support (needs OpenHBCI)],
-       HBCI_DIR=hbci)
+  if test "x$enableval" != "xno" ; then
+    HBCI_DIR=hbci
+  fi)
 if test x${HBCI_DIR} = xhbci ;
 then
-    AM_PATH_OPENHBCI(0.9.4)
+    AM_PATH_OPENHBCI(0.9.11)
     HBCI_LIBS="${OPENHBCI_LIBS}"
-    HBCI_CFLAGS="${OPENHBCI_CXXFLAGS}"
+    HBCI_CFLAGS="${OPENHBCI_CFLAGS}"
+
+    # also check for ktoblzcheck
+    AC_CHECK_HEADERS(ktoblzcheck.h)
+    if test "x$ac_cv_header_ktoblzcheck_h" != xno; then
+	HBCI_LIBS="${HBCI_LIBS} -lktoblzcheck"  
+    fi
 
     AS_SCRUB_INCLUDE(HBCI_CFLAGS)
     AC_SUBST(HBCI_LIBS)
@@ -710,7 +741,7 @@ if test "$prefer_db1" = "yes"; then
 	if test "$ac_cv_header_db_185_h$ac_cv_header_db1_db_h$ac_cv_header_db4_db_185_h" = nonono; then
 	  AC_MSG_ERROR([Berkeley db library required for GnuCash])
 	fi
-	AC_DEFINE(PREFER_DB1)
+	AC_DEFINE(PREFER_DB1,,Prefer DB1)
 else
 	AC_CHECK_HEADERS(db.h db_185.h db1/db.h db4/db_185.h)
 
@@ -738,7 +769,7 @@ AC_CHECK_LIB(popt, poptStrippedArgv,, [AC_MSG_ERROR([
 ### --------------------------------------------------------------------------
 
 AC_ARG_ENABLE(gui, 
-  [  --enable-gui                  build the GNOME GUI components of Gnucash],
+  [  --diable-gui                  build without the GNOME GUI components of Gnucash],
   [case "${enableval}" in
      yes) gnc_build_gui=true ;;
      no)  gnc_build_gui=false ;;
@@ -780,12 +811,13 @@ then
     AC_MSG_CHECKING([for gtkhtml < 1.1])
     GTKHTML_LIBS=`$GNOME_CONFIG --libs gtkhtml`
     GTKHTML_CFLAGS=`$GNOME_CONFIG --cflags gtkhtml`
+    AS_SCRUB_INCLUDE(GTKHTML_CFLAGS)
     if test "x$GTKHTML_LIBS" != x; then
 	# check for gtkhtml and enable it via HAVE_LIBGTKHTML
 	# if found
 	AC_CHECK_LIB(gtkhtml, gtk_html_new,
 		     GNOMEBUILDLIBS="${GNOMEBUILDLIBS}"
-		     AC_DEFINE(HAVE_LIBGTKHTML),
+		     AC_DEFINE(HAVE_LIBGTKHTML,,We Have LIBGTKHTML),
 		     AC_MSG_ERROR([Cannot find gtkhtml. See the README and config.log for more info.]),
 		     $GTKHTML_LIBS)
     else
@@ -799,16 +831,16 @@ then
 	fi
 	GTKHTML_LIBS=`$PKG_CONFIG --libs gtkhtml-1.1`
 	GTKHTML_CFLAGS=`$PKG_CONFIG --cflags gtkhtml-1.1`
+        AS_SCRUB_INCLUDE(GTKHTML_CFLAGS)
 	# check for gtkhtml and enable it via HAVE_LIBGTKHTML
 	# if found
 	AC_MSG_CHECKING([for gtkhtml >= 1.1])
 	AC_CHECK_LIB(gtkhtml-1.1, gtk_html_new,
 		     GNOMEBUILDLIBS="${GNOMEBUILDLIBS} $GTKHTML_TEST_LIB"
-		     AC_DEFINE(HAVE_LIBGTKHTML),
+		     AC_DEFINE(HAVE_LIBGTKHTML,,We Have LIBGTKHTML),
 		     AC_MSG_ERROR([Cannot find gtkhtml-1.1. See the README and config.log for more info.]),
 		     $GTKHTML_LIBS)
     fi
-    AS_SCRUB_INCLUDE(GTKHTML_CFLAGS)
     
     GHTTP_LIBS=`$GNOME_CONFIG --libs ghttp`
     GHTTP_CFLAGS=`$GNOME_CONFIG --cflags ghttp`
@@ -816,7 +848,7 @@ then
     # Note: this doesn't croak if GHTTP_LIBS is empty! (e.g. on RH6.2)
     AC_CHECK_LIB(ghttp, ghttp_request_new,
                  GNOMEBUILDLIBS="${GNOMEBUILDLIBS} ghttp"
-                 AC_DEFINE(HAVE_LIBGHTTP)
+                 AC_DEFINE(HAVE_LIBGHTTP,,We Have GHTTP)
     	     if test "x$GHTTP_LIBS" = "x" ; then
     		GHTTP_LIBS=-lghttp
     	     fi,
@@ -824,7 +856,7 @@ then
                  $GHTTP_LIBS)
     
     AC_CHECK_LIB(ghttp, ghttp_enable_ssl,
-                 AC_DEFINE(HAVE_OPENSSL),
+                 AC_DEFINE(HAVE_OPENSSL,,We Have OpenSSL),
     	     AC_MSG_WARN([****** ghttp does not have SSL support.]),
     	     $GHTTP_LIBS)
     
@@ -850,7 +882,7 @@ then
     if test ${USE_GUPPI} = 0; then
       AC_MSG_WARN([Compiling without guppi support])
     else
-      AC_DEFINE(USE_GUPPI)
+      AC_DEFINE(USE_GUPPI,,We are using guppi)
     
     
     AC_ARG_ENABLE( efence,
@@ -858,7 +890,7 @@ then
       if test $enableval = yes; then
          EFENCE_LIBS="-lefence"
          USE_EFENCE=1
-	 AC_DEFINE(USE_EFENCE)
+	 AC_DEFINE(USE_EFENCE,,We are using EFence)
       fi,
       USE_EFENCE=0
       EFENCE_LIBS="")
@@ -911,7 +943,7 @@ then
     ## some point, if it's deemed worthwhile, they can be resurrected...
     
     GNOME=1
-    AC_DEFINE(GNOME)  
+    AC_DEFINE(GNOME,,using GNOME)
 else
   # GNOME_COMPILE_WARNINGS will add -Wall; no need to set it again.
   # also, only add it for GCC.
@@ -968,8 +1000,8 @@ fi
 GNUCASH_ENGINE_BASE_LIBS="${GLIB_LIBS}"
 GNUCASH_ENGINE_LIBS="-L${GNC_MODULE_DIR} -L${GNC_GWRAP_LIBDIR} ${GNUCASH_ENGINE_BASE_LIBS} ${GUILE_LIBS} -lgncmod-engine -lgw-engine -lgw-kvp -lgncmodule"
 
-GNUCASH_ENGINE_BASE_CFLAGS="${GLIB_CFLAGS} ${G_WRAP_COMPILE_ARGS}"
-GNUCASH_ENGINE_CFLAGS="-I${GNC_INCLUDE_DIR} ${GNUCASH_ENGINE_BASE_CFLAGS} ${GUILE_INCS}"
+GNUCASH_ENGINE_BASE_CFLAGS="-DGNUCASH ${GLIB_CFLAGS} ${G_WRAP_COMPILE_ARGS}"
+GNUCASH_ENGINE_CFLAGS="${GNUCASH_ENGINE_BASE_CFLAGS} ${GUILE_INCS}"
 
 AC_SUBST(GNUCASH_ENGINE_BASE_LIBS)
 AC_SUBST(GNUCASH_ENGINE_LIBS)
@@ -1033,7 +1065,7 @@ then
   # Enable error-on-warning by default -- I'm tired of fixing other
   # people's missing #includes, etc.
   AC_ARG_ENABLE(error-on-warning,
-    [  --enable-error-on-warning    treat compile warnings as errors],
+    [  --disable-error-on-warning    disable treating compile warnings as errors],
     [case "${enableval}" in
        yes) warnFLAGS="${warnFLAGS} -Werror" ;;
        no)  ;;
@@ -1143,6 +1175,7 @@ AC_OUTPUT( m4/Makefile  intl/Makefile po/Makefile.in
           src/import-export/qif-io-core/test/Makefile
           src/import-export/ofx/Makefile
           src/import-export/ofx/test/Makefile
+		  src/import-export/log-replay/Makefile
           src/import-export/hbci/Makefile
           src/import-export/hbci/glade/Makefile
           src/import-export/hbci/test/Makefile

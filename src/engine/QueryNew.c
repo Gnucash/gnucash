@@ -1,8 +1,25 @@
-/*
- * QueryNew.c -- API for finding Gnucash objects
- * Copyright (C) 2002 Derek Atkins <warlord@MIT.EDU>
- *
- */
+/********************************************************************\
+ * QueryNew.c -- API for finding Gnucash objects                    *
+ * Copyright (C) 2002 Derek Atkins <warlord@MIT.EDU>                *
+ *                                                                  *
+ * This program is free software; you can redistribute it and/or    *
+ * modify it under the terms of the GNU General Public License as   *
+ * published by the Free Software Foundation; either version 2 of   *
+ * the License, or (at your option) any later version.              *
+ *                                                                  *
+ * This program is distributed in the hope that it will be useful,  *
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of   *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    *
+ * GNU General Public License for more details.                     *
+ *                                                                  *
+ * You should have received a copy of the GNU General Public License*
+ * along with this program; if not, contact:                        *
+ *                                                                  *
+ * Free Software Foundation           Voice:  +1-617-542-5942       *
+ * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
+ * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ *                                                                  *
+\********************************************************************/
 
 #include "config.h"
 
@@ -13,82 +30,83 @@
 #include <string.h>
 
 #include "gnc-engine-util.h"
-#include "gnc-book-p.h"
 #include "gncObject.h"
 #include "BackendP.h"
 
 #include "QueryObjectP.h"
 #include "QueryCoreP.h"
 #include "QueryNewP.h"
+#include "qofbook.h"
+#include "qofbook-p.h"
 
 static short module = MOD_QUERY;
 
 typedef struct query_new_term {
-  GSList *		param_list;
-  QueryPredData_t	pdata;
-  gboolean		invert;
+  GSList *                param_list;
+  QueryPredData_t        pdata;
+  gboolean                invert;
 
   /* These values are filled in during "compilation" of the query
    * term, based upon the obj_name, param_name, and searched-for
    * object type.  If conv_fcn is NULL, then we don't know how to
    * convert types.
    */
-  GSList *		param_fcns;
-  QueryPredicate	pred_fcn;
+  GSList *                param_fcns;
+  QueryPredicate        pred_fcn;
 } QueryNewTerm;
 
 typedef struct query_new_sort {
-  GSList *	param_list;
-  gint		options;
-  gboolean	increasing;
+  GSList *        param_list;
+  gint                options;
+  gboolean        increasing;
 
   /* These values are filled in during "compilation" of the query
    * term, based upon the obj_name, param_name, and searched-for
    * object type.  If conv_fcn is NULL, then we don't know how to
    * convert types.
    */
-  gboolean	use_default;
-  GSList *	param_fcns;
-  QuerySort	obj_cmp;	/* In case you are comparing objects */
-  QueryCompare	comp_fcn;	/* When you are comparing core types */
+  gboolean        use_default;
+  GSList *        param_fcns;
+  QuerySort        obj_cmp;        /* In case you are comparing objects */
+  QueryCompare        comp_fcn;        /* When you are comparing core types */
 } QueryNewSort;
 
 /* The QUERY structure */
 struct querynew_s {
   /* The object type that we're searching for */
-  GNCIdType	search_for;
+  GNCIdType        search_for;
 
   /* terms is a list of the OR-terms in a sum-of-products 
    * logical expression. */
-  GList *	terms;  
+  GList *        terms;  
 
   /* sorting and chopping is independent of the search filter */
 
-  QueryNewSort	primary_sort;
-  QueryNewSort	secondary_sort;
-  QueryNewSort	tertiary_sort;
-  QuerySort	defaultSort;	/* <- Computed from search_for */
+  QueryNewSort        primary_sort;
+  QueryNewSort        secondary_sort;
+  QueryNewSort        tertiary_sort;
+  QuerySort        defaultSort;        /* <- Computed from search_for */
 
   /* The maximum number of results to return */
-  int		max_results;
+  int                max_results;
 
   /* list of books that will be participating in the query */
-  GList *	books;
+  GList *        books;
 
   /* a map of book to backend-compiled queries */
-  GHashTable*	be_compiled;
+  GHashTable*        be_compiled;
 
   /* cache the results so we don't have to run the whole search 
    * again until it's really necessary */
-  int		changed;
+  int                changed;
 
-  GList *	results;
+  GList *        results;
 };
 
 typedef struct query_cb {
-  QueryNew *	query;
-  GList *	list;
-  int		count;
+  QueryNew *        query;
+  GList *        list;
+  int                count;
 } query_cb_t;
 
 /* initial_term will be owned by the new Query */
@@ -168,8 +186,8 @@ static QueryNewTerm * copy_query_term (QueryNewTerm *qt)
 
   new_qt = g_new0 (QueryNewTerm, 1);
   memcpy (new_qt, qt, sizeof(QueryNewTerm));
-  new_qt->param_list = g_slist_copy (new_qt->param_list);
-  new_qt->param_fcns = g_slist_copy (new_qt->param_fcns);
+  new_qt->param_list = g_slist_copy (qt->param_list);
+  new_qt->param_fcns = g_slist_copy (qt->param_fcns);
   new_qt->pdata = gncQueryCorePredicateCopy (qt->pdata);
   return new_qt;
 }
@@ -252,11 +270,11 @@ static void free_members (QueryNew *q)
 }
 
 static int cmp_func (QueryNewSort_t sort, QuerySort default_sort,
-		     gconstpointer a, gconstpointer b)
+                     gconstpointer a, gconstpointer b)
 {
   GSList *node;
   gpointer conva, convb;
-  QueryAccess get_fcn = NULL;	/* to appease the compiler */
+  QueryAccess get_fcn = NULL;        /* to appease the compiler */
 
   g_return_val_if_fail (sort, 0);
   g_return_val_if_fail (default_sort, 0);
@@ -308,10 +326,10 @@ static int sort_func (gconstpointer a, gconstpointer b)
   retval = cmp_func (&(sortQuery->primary_sort), sortQuery->defaultSort, a, b);
   if (retval == 0) {
     retval = cmp_func (&(sortQuery->secondary_sort), sortQuery->defaultSort,
-		       a, b);
+                       a, b);
     if (retval == 0) {
       retval = cmp_func (&(sortQuery->tertiary_sort), sortQuery->defaultSort,
-			 a, b);
+                         a, b);
       return sortQuery->tertiary_sort.increasing ? retval : -retval;
     } else {
       return sortQuery->secondary_sort.increasing ? retval : -retval;
@@ -321,7 +339,14 @@ static int sort_func (gconstpointer a, gconstpointer b)
   }
 }
 
-static int check_object (QueryNew *q, gpointer object)
+/* ==================================================================== */ 
+/* This is the main workhorse for performing the query.  For each
+ * object, it walks over all of the query terms to see if the 
+ * object passes the seive.
+ */
+
+static int 
+check_object (QueryNew *q, gpointer object)
 {
   GList     * and_ptr;
   GList     * or_ptr;
@@ -333,28 +358,28 @@ static int check_object (QueryNew *q, gpointer object)
     for(and_ptr = or_ptr->data; and_ptr; and_ptr = and_ptr->next) {
       qt = (QueryNewTerm *)(and_ptr->data);
       if (qt->param_fcns && qt->pred_fcn) {
-	GSList *node;
-	QueryAccess get_fcn;
-	gpointer conv_obj = object;
+        GSList *node;
+        QueryAccess get_fcn;
+        gpointer conv_obj = object;
 
-	/* iterate through the conversions */
-	for (node = qt->param_fcns; node; node = node->next) {
-	  get_fcn = node->data;
+        /* iterate through the conversions */
+        for (node = qt->param_fcns; node; node = node->next) {
+          get_fcn = node->data;
 
-	  /* The last term is the actual parameter getter */
-	  if (!node->next)
-	    break;
+          /* The last term is the actual parameter getter */
+          if (!node->next)
+            break;
 
-	  conv_obj = get_fcn (conv_obj);
-	}
+          conv_obj = get_fcn (conv_obj);
+        }
 
-	if (((qt->pred_fcn)(conv_obj, get_fcn, qt->pdata))
-	    == qt->invert) {
-	  and_terms_ok = 0;
-	  break;
-	}
+        if (((qt->pred_fcn)(conv_obj, get_fcn, qt->pdata))
+            == qt->invert) {
+          and_terms_ok = 0;
+          break;
+        }
       } else {
-	/* XXX: Don't know how to do this conversion -- do we care? */
+        /* XXX: Don't know how to do this conversion -- do we care? */
       }
     }
     if(and_terms_ok) {
@@ -371,7 +396,7 @@ static int check_object (QueryNew *q, gpointer object)
  * returns NULL if the first parameter is bad (and final is unchanged).
  */
 static GSList * compile_params (GSList *param_list, GNCIdType start_obj,
-				QueryObjectDef const **final)
+                                QueryObjectDef const **final)
 {
   const QueryObjectDef *objDef = NULL;
   GSList *fcns = NULL;
@@ -450,16 +475,16 @@ static void compile_terms (QueryNew *q)
 
       /* Walk the parameter list of obtain the parameter functions */
       qt->param_fcns = compile_params (qt->param_list, q->search_for,
-				       &resObj);
+                                       &resObj);
 
       /* If we have valid parameters, grab the predicate function,
        * If not, see if this is the default sort.
        */
 
       if (qt->param_fcns)
-	qt->pred_fcn = gncQueryCoreGetPredicate (resObj->param_type);
+        qt->pred_fcn = gncQueryCoreGetPredicate (resObj->param_type);
       else
-	qt->pred_fcn = NULL;
+        qt->pred_fcn = NULL;
     }
   }
 
@@ -472,13 +497,13 @@ static void compile_terms (QueryNew *q)
 
   /* Now compile the backend instances */
   for (node = q->books; node; node = node->next) {
-    GNCBook *book = node->data;
+    QofBook *book = node->data;
     Backend *be = book->backend;
 
     if (be && be->compile_query) {
       gpointer result = (be->compile_query)(be, q);
       if (result)
-	g_hash_table_insert (q->be_compiled, book, result);
+        g_hash_table_insert (q->be_compiled, book, result);
     }
   }
 }
@@ -534,7 +559,7 @@ static GList * merge_books (GList *l1, GList *l2)
 static gboolean
 query_free_compiled (gpointer key, gpointer value, gpointer not_used)
 {
-  GNCBook* book = key;
+  QofBook* book = key;
   Backend* be = book->backend;
 
   if (be && be->free_query)
@@ -572,8 +597,8 @@ gncQueryBuildParamList (char const *param, ...)
   return g_slist_reverse (param_list);
 }
 
-void gncQueryAddTerm (QueryNew *q, GSList *param_list,		      
-		      QueryPredData_t pred_data, QueryOp op)
+void gncQueryAddTerm (QueryNew *q, GSList *param_list,                      
+                      QueryPredData_t pred_data, QueryOp op)
 {
   QueryNewTerm *qt;
   QueryNew *qr, *qs;
@@ -583,7 +608,6 @@ void gncQueryAddTerm (QueryNew *q, GSList *param_list,
   qt = g_new0 (QueryNewTerm, 1);
   qt->param_list = param_list;
   qt->pdata = pred_data;
-
   qs = gncQueryCreate ();
   query_init (qs, qt);
 
@@ -608,19 +632,19 @@ void gncQueryPurgeTerms (QueryNew *q, GSList *param_list)
     for (and = or->data; and; and = and->next) {
       qt = and->data;
       if (!param_list_cmp (qt->param_list, param_list)) {
-	if (g_list_length (or->data) == 1) {
-	  q->terms = g_list_remove_link (q->terms, or);
-	  g_list_free_1 (or);
-	  or = q->terms;
-	  break;
-	} else {
-	  or->data = g_list_remove_link (or->data, and);
-	  g_list_free_1 (and);
-	  and = or->data;
-	  if (!and) break;
-	}
-	q->changed = 1;
-	free_query_term (qt);
+        if (g_list_length (or->data) == 1) {
+          q->terms = g_list_remove_link (q->terms, or);
+          g_list_free_1 (or);
+          or = q->terms;
+          break;
+        } else {
+          or->data = g_list_remove_link (or->data, and);
+          g_list_free_1 (and);
+          and = or->data;
+          if (!and) break;
+        }
+        q->changed = 1;
+        free_query_term (qt);
       }
     }
     if (!or) break;
@@ -631,7 +655,7 @@ GList * gncQueryRun (QueryNew *q)
 {
   GList *matching_objects = NULL;
   GList *node;
-  int	object_count = 0;
+  int        object_count = 0;
 
   if (!q) return NULL;
   g_return_val_if_fail (q->search_for, NULL);
@@ -657,15 +681,15 @@ GList * gncQueryRun (QueryNew *q)
 
     /* For each book */
     for (node=q->books; node; node=node->next) {
-      GNCBook *book = node->data;
+      QofBook *book = node->data;
       Backend *be = book->backend;
 
       /* run the query in the backend */
       if (be) {
-	gpointer compiled_query = g_hash_table_lookup (q->be_compiled, book);
+        gpointer compiled_query = g_hash_table_lookup (q->be_compiled, book);
 
-	if (compiled_query && be->run_query)
-	  (be->run_query) (be, compiled_query);
+        if (compiled_query && be->run_query)
+          (be->run_query) (be, compiled_query);
       }
 
       /* and then iterate over all the objects */
@@ -806,7 +830,7 @@ gboolean gncQueryHasTermType (QueryNew *q, GSList *term_param)
     for(and = or->data; and; and = and->next) {
       QueryNewTerm *qt = and->data;
       if (!param_list_cmp (term_param, qt->param_list))
-	return TRUE;
+        return TRUE;
     }
   }
 
@@ -918,7 +942,7 @@ QueryNew * gncQueryInvert (QueryNew *q)
     retval = gncQueryMerge(iright, ileft, QUERY_AND);
     retval->books          = g_list_copy (q->books);
     retval->max_results    = q->max_results;
-    retval->search_for	   = q->search_for;
+    retval->search_for           = q->search_for;
     retval->changed        = 1;
 
     gncQueryDestroy(iright);
@@ -948,7 +972,7 @@ QueryNew * gncQueryMerge(QueryNew *q1, QueryNew *q2, QueryOp op)
   if(!q1 || !q2 ) return NULL;
   if (q1->search_for && q2->search_for)
     g_return_val_if_fail (safe_strcmp (q1->search_for, q2->search_for) == 0,
-			  NULL);
+                          NULL);
 
   search_for = (q1->search_for ? q1->search_for : q2->search_for);
 
@@ -958,7 +982,7 @@ QueryNew * gncQueryMerge(QueryNew *q1, QueryNew *q2, QueryOp op)
     retval = gncQueryCreate();
     retval->terms = 
       g_list_concat(copy_or_terms(q1->terms), copy_or_terms(q2->terms));
-    retval->books	   = merge_books (q1->books, q2->books);
+    retval->books           = merge_books (q1->books, q2->books);
     retval->max_results    = q1->max_results;
     retval->changed        = 1;
     break;
@@ -1039,7 +1063,7 @@ gncQueryMergeInPlace(QueryNew *q1, QueryNew *q2, QueryOp op)
 
 void
 gncQuerySetSortOrder (QueryNew *q,
-		      GSList *params1, GSList *params2, GSList *params3)
+                      GSList *params1, GSList *params2, GSList *params3)
 {
   if (!q) return;
   if (q->primary_sort.param_list)
@@ -1061,7 +1085,7 @@ gncQuerySetSortOrder (QueryNew *q,
 }
 
 void gncQuerySetSortOptions (QueryNew *q, gint prim_op, gint sec_op,
-			     gint tert_op)
+                             gint tert_op)
 {
   if (!q) return;
   q->primary_sort.options = prim_op;
@@ -1070,7 +1094,7 @@ void gncQuerySetSortOptions (QueryNew *q, gint prim_op, gint sec_op,
 }
 
 void gncQuerySetSortIncreasing (QueryNew *q, gboolean prim_inc,
-				gboolean sec_inc, gboolean tert_inc)
+                                gboolean sec_inc, gboolean tert_inc)
 {
   if (!q) return;
   q->primary_sort.increasing = prim_inc;
@@ -1085,8 +1109,8 @@ void gncQuerySetMaxResults (QueryNew *q, int n)
 }
 
 void gncQueryAddGUIDListMatch (QueryNew *q, GSList *param_list,
-			       GList *guid_list, guid_match_t options,
-			       QueryOp op)
+                               GList *guid_list, guid_match_t options,
+                               QueryOp op)
 {
   QueryPredData_t pdata;
 
@@ -1100,7 +1124,7 @@ void gncQueryAddGUIDListMatch (QueryNew *q, GSList *param_list,
 }
 
 void gncQueryAddGUIDMatch (QueryNew *q, GSList *param_list,
-			   const GUID *guid, QueryOp op)
+                           const GUID *guid, QueryOp op)
 {
   GList *g = NULL;
 
@@ -1110,12 +1134,12 @@ void gncQueryAddGUIDMatch (QueryNew *q, GSList *param_list,
     g = g_list_prepend (g, (gpointer)guid);
 
   gncQueryAddGUIDListMatch (q, param_list, g,
-			    g ? GUID_MATCH_ANY : GUID_MATCH_NULL, op);
+                            g ? GUID_MATCH_ANY : GUID_MATCH_NULL, op);
 
   g_list_free (g);
 }
 
-void gncQuerySetBook (QueryNew *q, GNCBook *book)
+void gncQuerySetBook (QueryNew *q, QofBook *book)
 {
   if (!q || !book) return;
 
@@ -1124,13 +1148,13 @@ void gncQuerySetBook (QueryNew *q, GNCBook *book)
     q->books = g_list_prepend (q->books, book);
 
   gncQueryAddGUIDMatch (q, g_slist_prepend (g_slist_prepend (NULL,
-							     QUERY_PARAM_GUID),
-					    QUERY_PARAM_BOOK),
-			gnc_book_get_guid(book), QUERY_AND);
+                                                             QUERY_PARAM_GUID),
+                                            QUERY_PARAM_BOOK),
+                        qof_book_get_guid(book), QUERY_AND);
 }
 
 void gncQueryAddBooleanMatch (QueryNew *q, GSList *param_list, gboolean value,
-			      QueryOp op)
+                              QueryOp op)
 {
   QueryPredData_t pdata;
   if (!q || !param_list) return;
@@ -1195,7 +1219,7 @@ gboolean gncQueryTermIsInverted (QueryNewTerm_t qt)
 }
 
 void gncQueryGetSorts (QueryNew *q, QueryNewSort_t *primary,
-		       QueryNewSort_t *secondary, QueryNewSort_t *tertiary)
+                       QueryNewSort_t *secondary, QueryNewSort_t *tertiary)
 {
   if (!q)
     return;
@@ -1294,8 +1318,8 @@ gboolean gncQueryEqual (QueryNew *q1, QueryNew *q2)
 */
 
 /* Static prototypes */
-static GList *gncQueryPrintSearchFor (Query * query, GList * output);
-static GList *gncQueryPrintTerms (Query * query, GList * output);
+static GList *gncQueryPrintSearchFor (QueryNew * query, GList * output);
+static GList *gncQueryPrintTerms (QueryNew * query, GList * output);
 static GList *gncQueryPrintSorts (QueryNewSort_t s[], const gint numSorts,
                                   GList * output);
 static GList *gncQueryPrintAndTerms (GList * terms, GList * output);
@@ -1311,8 +1335,8 @@ static void gncQueryPrintValueForParam (QueryPredData_t pd, GString * gs);
 static void gncQueryPrintOutput (GList * output);
 
 /*
-	This function cycles through a QueryNew object, and
-	prints out the values of the various members of the query
+        This function cycles through a QueryNew object, and
+        prints out the values of the various members of the query
 */
 void
 gncQueryPrint (QueryNew * query)
@@ -1367,11 +1391,11 @@ gncQueryPrintOutput (GList * output)
 }
 
 /*
-	Get the search_for type--This is the type of Object
-	we are searching for (SPLIT, TRANS, etc)
+        Get the search_for type--This is the type of Object
+        we are searching for (SPLIT, TRANS, etc)
 */
 static GList *
-gncQueryPrintSearchFor (Query * query, GList * output)
+gncQueryPrintSearchFor (QueryNew * query, GList * output)
 {
   GNCIdType searchFor;
   GString *gs;
@@ -1385,12 +1409,12 @@ gncQueryPrintSearchFor (Query * query, GList * output)
 }                               /* gncQueryPrintSearchFor */
 
 /*
-	Run through the terms of the query.  This is a outer-inner
-	loop.  The elements of the outer loop are ORed, and the
-	elements of the inner loop are ANDed.
+        Run through the terms of the query.  This is a outer-inner
+        loop.  The elements of the outer loop are ORed, and the
+        elements of the inner loop are ANDed.
 */
 static GList *
-gncQueryPrintTerms (Query * query, GList * output)
+gncQueryPrintTerms (QueryNew * query, GList * output)
 {
 
   GList *terms, *lst;
@@ -1416,9 +1440,9 @@ gncQueryPrintTerms (Query * query, GList * output)
 }                               /* gncQueryPrintTerms */
 
 /*
-	Process the sort parameters
-	If this function is called, the assumption is that the first sort
-	not null.
+        Process the sort parameters
+        If this function is called, the assumption is that the first sort
+        not null.
 */
 static GList *
 gncQueryPrintSorts (QueryNewSort_t s[], const gint numSorts, GList * output)
@@ -1452,8 +1476,8 @@ gncQueryPrintSorts (QueryNewSort_t s[], const gint numSorts, GList * output)
 }                               /* gncQueryPrintSorts */
 
 /*
-	Process the AND terms of the query.  This is a GList
-	of WHERE terms that will be ANDed
+        Process the AND terms of the query.  This is a GList
+        of WHERE terms that will be ANDed
 */
 static GList *
 gncQueryPrintAndTerms (GList * terms, GList * output)
@@ -1482,7 +1506,7 @@ gncQueryPrintAndTerms (GList * terms, GList * output)
 }                               /* gncQueryPrintAndTerms */
 
 /*
-	Process the parameter types of the predicate data
+        Process the parameter types of the predicate data
 */
 static GString *
 gncQueryPrintParamPath (GSList * parmList)
@@ -1501,7 +1525,7 @@ gncQueryPrintParamPath (GSList * parmList)
 }                               /* gncQueryPrintParamPath */
 
 /*
-	Process the PredData of the AND terms
+        Process the PredData of the AND terms
 */
 static GString *
 gncQueryPrintPredData (QueryPredData_t pd)
@@ -1519,8 +1543,8 @@ gncQueryPrintPredData (QueryPredData_t pd)
 }                               /* gncQueryPrintPredData */
 
 /*
-	Get a string representation for the
-	query_compare_t enum type.
+        Get a string representation for the
+        query_compare_t enum type.
 */
 static gchar *
 gncQueryPrintStringForHow (query_compare_t how)
@@ -1681,6 +1705,8 @@ gncQueryPrintGuidMatch (guid_match_t g)
       return "GUID_MATCH_NONE";
     case GUID_MATCH_NULL:
       return "GUID_MATCH_NULL";
+    case GUID_MATCH_LIST_ANY:
+      return "GUID_MATCH_LIST_ANY";
   }
 
   return "UNKNOWN MATCH TYPE";
@@ -1702,3 +1728,9 @@ gncQueryPrintCharMatch (char_match_t c)
   }
   return "UNKNOWN MATCH TYPE";
 }                               /* gncQueryPrintGuidMatch */
+
+GList * gncQueryGetBooks (QueryNew *q)
+{
+  if (!q) return NULL;
+  return q->books;
+}

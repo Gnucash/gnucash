@@ -4,6 +4,7 @@ SUBDIRS = \
   xml
 
 EXTRA_DIST = \
+  README \
   backup.txt \
   budget.txt \
   constderv.html \
@@ -68,6 +69,6 @@ uninstall-hook:
 doxygen.cfg: doxygen.cfg.in Makefile
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
-            -e 's:@-top_srcdir-@:${top_srcdir}:g'
+            -e 's:@-top_srcdir-@:${top_srcdir}:g; s:@-VERSION-@:${VERSION}:g'
 	mv $@.tmp $@
 

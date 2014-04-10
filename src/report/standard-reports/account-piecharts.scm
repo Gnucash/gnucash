@@ -78,11 +78,14 @@ balance at a given time"))
 ;; The option-generator. The only dependance on the type of piechart
 ;; is the list of account types that the account selection option
 ;; accepts.
-(define (options-generator account-types do-intervals?)
+(define (options-generator account-types reverse-balance? do-intervals?)
   (let* ((options (gnc:new-options)) 
          (add-option 
           (lambda (new-option)
             (gnc:register-option options new-option))))
+
+    (add-option
+     (gnc:make-internal-option "__report" "reverse-balance?" reverse-balance?))
 
     (if do-intervals?
         (gnc:options-add-date-interval!
@@ -144,7 +147,7 @@ balance at a given time"))
      options gnc:pagename-display
      optname-sort-method "e" 'amount)
 
-    (gnc:options-set-default-section options gnc:pagename-general)      
+    (gnc:options-set-default-section options gnc:pagename-general)
 
     options))
 
@@ -189,6 +192,7 @@ balance at a given time"))
         (height (get-option gnc:pagename-display optname-plot-height))
         (width (get-option gnc:pagename-display optname-plot-width))
 	(sort-method (get-option gnc:pagename-display optname-sort-method))
+	(reverse-balance? (get-option "__report" "reverse-balance?"))
 
 	(work-done 0)
 	(work-to-do 0)
@@ -290,10 +294,10 @@ balance at a given time"))
 
       (define (fix-signs combined)
         (map (lambda (pair)
-               (if (gnc:account-reverse-balance? (cadr pair))
+               (if (reverse-balance? (cadr pair))
                    (cons (- (car pair)) (cdr pair))
                    pair))
-             combined))
+	     combined))
 
       ;; Now do the work here.
 
@@ -455,30 +459,32 @@ balance at a given time"))
 
 (for-each 
  (lambda (l)
-   (gnc:define-report
-    'version 1
-    'name (car l)
-    'menu-path (if (caddr l)
-                   (list gnc:menuname-income-expense)
-                   (list gnc:menuname-asset-liability)) 
-    'menu-name (cadddr l) 
-    'menu-tip (car (cddddr l)) 
-    'options-generator (lambda () (options-generator (cadr l)  
-                                                     (caddr l)))
-    'renderer (lambda (report-obj)
-                (piechart-renderer report-obj 
-                                   (car l) 
-                                   (cadr l)
-                                   (caddr l)))))
+   (let ((tip-and-rev (cddddr l)))
+     (gnc:define-report
+      'version 1
+      'name (car l)
+      'menu-path (if (caddr l)
+		     (list gnc:menuname-income-expense)
+		     (list gnc:menuname-asset-liability)) 
+      'menu-name (cadddr l) 
+      'menu-tip (car tip-and-rev)
+      'options-generator (lambda () (options-generator (cadr l)  
+						       (cadr tip-and-rev)
+						       (caddr l)))
+      'renderer (lambda (report-obj)
+		  (piechart-renderer report-obj 
+				     (car l) 
+				     (cadr l)
+				     (caddr l))))))
  (list 
   ;; reportname, account-types, do-intervals?, 
   ;; menu-reportname, menu-tip
-  (list reportname-income '(income) #t menuname-income menutip-income)
-  (list reportname-expense '(expense) #t menuname-expense menutip-expense)
+  (list reportname-income '(income) #t menuname-income menutip-income (lambda (x) #t))
+  (list reportname-expense '(expense) #t menuname-expense menutip-expense (lambda (x) #f))
   (list reportname-assets 
         '(asset bank cash checking savings money-market receivable
                 stock mutual-fund currency)
-        #f menuname-assets menutip-assets)
+        #f menuname-assets menutip-assets (lambda (x) #f))
   (list reportname-liabilities 
         '(liability payable credit credit-line)
-        #f menuname-liabilities menutip-liabilities)))
+        #f menuname-liabilities menutip-liabilities (lambda (x) #t))))

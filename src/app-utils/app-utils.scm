@@ -75,6 +75,8 @@
 (export gnc:make-internal-option)
 (export gnc:make-query-option)
 (export gnc:make-color-option)
+(export gnc:make-dateformat-option)
+(export gnc:dateformat-get-format)
 
 (export gnc:color->html)
 (export gnc:color-option->html)

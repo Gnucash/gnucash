@@ -9,8 +9,8 @@
 
 #include <glib.h>
 
-#include "date.h"
 #include "gnc-commodity.h"
+#include "gnc-date.h"
 #include "gnc-engine.h"
 #include "gnc-xml-helper.h"
 #include "guid.h"

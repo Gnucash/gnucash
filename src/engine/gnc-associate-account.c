@@ -31,9 +31,9 @@
 #include "AccountP.h"
 #include "GNCIdP.h"
 #include "gnc-associate-account.h"
-#include "gnc-book-p.h"
 #include "gnc-engine.h"
 #include "gnc-engine-util.h"
+#include "qofbook.h"
 
 static short module = MOD_ENGINE;
 
@@ -172,7 +172,7 @@ make_kvpd_on_list(GList *account_list)
 }
 
 static GList *
-de_kvp_account_list(kvp_value *kvpd_list, GNCBook *book)
+de_kvp_account_list(kvp_value *kvpd_list, QofBook *book)
 { 
   GList *guid_account_list = kvp_value_get_glist(kvpd_list);
   if (guid_account_list)

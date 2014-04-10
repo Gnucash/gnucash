@@ -23,8 +23,9 @@
 
 #include "config.h"
 
-#include <guile/gh.h>
 #include <glib.h>
+#include <libguile.h>
+#include "guile-mappings.h"
 
 #include "argv-list-converters.h"
 
@@ -37,10 +38,10 @@ gnc_scheme_list_to_nulltermcharpp(int prelen, const char **prepend, SCM list)
     int len = 0;
     int loc;
 
-    if(gh_pair_p(list))
+    if(SCM_CONSP(list))
     {
         int i;
-        len = gh_length(list) + prelen;
+        len = scm_ilength(list) + prelen;
         ret = g_new(char *, len + 1);
         ret[len] = NULL;
         for(i = 0; i < prelen; i++)
@@ -54,11 +55,11 @@ gnc_scheme_list_to_nulltermcharpp(int prelen, const char **prepend, SCM list)
     }
 
     loc = prelen;
-    while(gh_pair_p(next)) 
+    while(SCM_CONSP(next)) 
     {
-        SCM scm_string = gh_car(next);
-        next = gh_cdr(next);
-        if(gh_string_p(scm_string))
+        SCM scm_string = SCM_CAR(next);
+        next = SCM_CDR(next);
+        if(SCM_STRINGP(scm_string))
         {
             char *onestr = gh_scm2newstr(scm_string, 0);
             ret[loc] = g_strdup (onestr);
@@ -88,12 +89,10 @@ gnc_argvarr_to_scheme_list(int argc, const char** argv)
 
     for(i = 0; i < argc; i++)
     {
-      /* FIXME: when we drop support older guiles,
-       * drop the (char *) coercion. */
-      ret = gh_cons(gh_str02scm((char *) argv[i]), ret);
+      ret = scm_cons(scm_makfrom0str(argv[i]), ret);
     }
 
-    return gh_reverse(ret);
+    return scm_reverse(ret);
 }
 
 void

@@ -23,7 +23,7 @@
 
 #include "search-core-type.h"
 #include "QueryNew.h"
-#include "date.h"
+#include "gnc-date.h"
 
 #define GNCSEARCH_DATE(obj)	GTK_CHECK_CAST (obj, gnc_search_date_get_type (), GNCSearchDate)
 #define GNCSEARCH_DATE_CLASS(klass)	GTK_CHECK_CLASS_CAST (klass, gnc_search_date_get_type (), GNCSearchDateClass)

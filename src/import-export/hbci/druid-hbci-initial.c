@@ -44,6 +44,8 @@
 #include <openhbci/outboxjobkeys.h>
 #include <openhbci/mediumrdhbase.h>
 
+#include <openhbci.h>
+
 typedef enum _infostate {
   INI_ADD_BANK,
   INI_ADD_USER,
@@ -664,6 +666,16 @@ on_configfile_next (GnomeDruidPage *gnomedruidpage,
     if (api == NULL)
       return TRUE;
   }
+  // no libchipcard? Make that button greyed out
+  if (HBCI_API_mediumType(info->api, "DDVCard") != MediumTypeCard)
+    {
+      gtk_widget_set_sensitive (GTK_WIDGET (info->mediumddv),
+				FALSE);
+    } else {
+      gtk_widget_set_sensitive (GTK_WIDGET (info->mediumddv),
+				TRUE);
+    }
+
 
   /* Get HBCI bank and account list */
   {
@@ -886,6 +898,7 @@ on_userid_next (GnomeDruidPage  *gnomedruidpage,
     HBCI_User *newuser;
     HBCI_Error *err;
     char *mediumname;
+    const char *mediumtype;
     int secmode;
 
     //printf("on_userid_next: Didn't find user with userid %s.\n", userid);
@@ -909,18 +922,22 @@ on_userid_next (GnomeDruidPage  *gnomedruidpage,
 	return TRUE;
       }
       secmode = HBCI_SECURITY_RDH;
+      mediumtype = "RDHFile";
     }
     else {
       /* Create DDV Medium */
       mediumname = g_strdup("");
       secmode = HBCI_SECURITY_DDV;
+      mediumtype = "DDVCard";
     }
 
     medium = HBCI_API_createNewMedium (api, 
+				       mediumtype,
+				       FALSE,
 				       HBCI_Bank_countryCode (bank),
 				       HBCI_Bank_bankCode (bank),
 				       userid, 
-				       mediumname, secmode, &err);
+				       mediumname, &err);
     g_free(mediumname);
 
     if (medium == NULL) {
@@ -944,7 +961,7 @@ on_userid_next (GnomeDruidPage  *gnomedruidpage,
       
     /* Test mounting only for DDV cards. RDH files should work... */
     if (secmode == HBCI_SECURITY_DDV) {
-      err = HBCI_Medium_mountMedium (medium, newuser, NULL);
+      err = HBCI_Medium_mountMedium (medium, NULL);
       if (err != NULL) {
 	printf("on_userid_next: Mounting medium failed: %s.\n",
 	       HBCI_Error_message (err));
@@ -1035,7 +1052,8 @@ on_accountinfo_next (GnomeDruidPage  *gnomedruidpage,
     if (!gnc_hbci_api_execute (info->window, info->api, 
 			       job, info->interactor)) {
       /* HBCI_API_executeOutbox failed. */
-      return FALSE;
+      /*return FALSE;*/
+      /* -- it seems to be no problem if this fails ?! */
     }
 
     /* Now the GetAccounts job. */
@@ -1050,7 +1068,7 @@ on_accountinfo_next (GnomeDruidPage  *gnomedruidpage,
       return FALSE;
     }
 
-    HBCI_API_clearQueueByStatus (info->api, HBCI_JOB_STATUS_DONE);
+    HBCI_API_clearQueueByStatus (info->api, HBCI_JOB_STATUS_NONE);
   }
   //update_accountlist(info->api);
   
@@ -1171,7 +1189,7 @@ on_iniletter_info_next (GnomeDruidPage  *gnomedruidpage,
       return FALSE;
     }
 
-    HBCI_API_clearQueueByStatus (info->api, HBCI_JOB_STATUS_DONE);
+    HBCI_API_clearQueueByStatus (info->api, HBCI_JOB_STATUS_NONE);
     info->gotkeysforCustomer = info->newcustomer;
 
   }
@@ -1303,7 +1321,7 @@ on_iniletter_userinfo_next (GnomeDruidPage  *gnomedruidpage,
       return FALSE;
     }
 
-    HBCI_API_clearQueueByStatus (info->api, HBCI_JOB_STATUS_DONE);
+    HBCI_API_clearQueueByStatus (info->api, HBCI_JOB_STATUS_NONE);
   }
   else {
     printf("on_iniletter_userinfo_next: Oops, already got keys for another customer. Not yet implemented.\n");
@@ -1562,10 +1580,6 @@ void gnc_hbci_initial_druid (void)
 	 curdir);
       g_free (curdir);
     }
-    // no libchipcard? Make that button greyed out
-    if (! HBCI_Hbci_hasLibchipcard ()) 
-      gtk_widget_set_sensitive (GTK_WIDGET (info->mediumddv),
-				FALSE);
     gtk_signal_connect (GTK_OBJECT (page), "back", 
 			GTK_SIGNAL_FUNC (on_userid_back), info);
     gtk_signal_connect (GTK_OBJECT (page), "prepare", 

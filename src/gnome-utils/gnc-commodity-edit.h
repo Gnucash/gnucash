@@ -40,8 +40,8 @@ const char * gnc_commodity_edit_get_string (gpointer ptr);
 
 /* Callback function to popup a new selection (modal) dialog.
  *
- * NOTE: The argument here is ignored, so you can safely set the
- * cb_arg to NULL when you create the general_select widget
+ * The generic argument is a pointer to a dialog_commodity_mode
+ * enum. This tells the dialog how to limit the namespaces provided.
  */
 gpointer gnc_commodity_edit_new_select (gpointer arg, gpointer ptr,
 					GtkWidget *toplevel);

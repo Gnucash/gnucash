@@ -24,7 +24,6 @@
 #include "config.h"
 
 #include <gnome.h>
-#include <guile/gh.h>
 #include <time.h>
 
 #include "dialog-utils.h"

@@ -116,16 +116,11 @@ gboolean
 gnc_is_euro_currency(const gnc_commodity * currency)
 {
   gnc_euro_rate_struct *result;
-  const char *namespace;
 
   if (currency == NULL)
     return FALSE;
 
-  namespace = gnc_commodity_get_namespace (currency);
-  if (namespace == NULL)
-    return FALSE;
-
-  if (strcmp (namespace, GNC_COMMODITY_NS_ISO) != 0)
+  if (!gnc_commodity_is_iso(currency))
     return FALSE;
 
   result = bsearch(currency,
@@ -146,16 +141,11 @@ gnc_numeric
 gnc_convert_to_euro(const gnc_commodity * currency, gnc_numeric value)
 {
   gnc_euro_rate_struct *result;
-  const char *namespace;
 
   if (currency == NULL)
     return gnc_numeric_zero ();
 
-  namespace = gnc_commodity_get_namespace (currency);
-  if (namespace == NULL)
-    return gnc_numeric_zero ();
-
-  if (strcmp (namespace, GNC_COMMODITY_NS_ISO) != 0)
+  if (!gnc_commodity_is_iso(currency))
     return gnc_numeric_zero ();
 
   result = bsearch(currency,
@@ -186,16 +176,11 @@ gnc_numeric
 gnc_convert_from_euro(const gnc_commodity * currency, gnc_numeric value)
 {
   gnc_euro_rate_struct * result;
-  const char *namespace;
 
   if (currency == NULL)
     return gnc_numeric_zero ();
 
-  namespace = gnc_commodity_get_namespace (currency);
-  if (namespace == NULL)
-    return gnc_numeric_zero ();
-
-  if (strcmp (namespace, GNC_COMMODITY_NS_ISO) != 0)
+  if (!gnc_commodity_is_iso(currency))
     return gnc_numeric_zero ();
 
   result = bsearch(currency,
@@ -223,16 +208,11 @@ gnc_numeric
 gnc_euro_currency_get_rate (const gnc_commodity *currency)
 {
   gnc_euro_rate_struct * result;
-  const char *namespace;
 
   if (currency == NULL)
     return gnc_numeric_zero ();
 
-  namespace = gnc_commodity_get_namespace (currency);
-  if (namespace == NULL)
-    return gnc_numeric_zero ();
-
-  if (strcmp (namespace, GNC_COMMODITY_NS_ISO) != 0)
+  if (!gnc_commodity_is_iso(currency))
     return gnc_numeric_zero ();
 
   result = bsearch(currency,

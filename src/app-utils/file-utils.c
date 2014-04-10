@@ -1,9 +1,8 @@
 /********************************************************************\
- * file-utils.c -- simple file utilities                                  *
- * Copyright (C) 1997 Robin D. Clark                                *
- * Copyright (C) 1998 Linas Vepstas                                 *
+ * file-utils.c -- simple file utilities                            *
+ * Copyright (C) 1997 Robin D. Clark <rclark@cs.hmc.edu>            *
  * Copyright (C) 1998 Rob Browning                                  *
- * Copyright (C) 1999-2000 Linas Vepstas                            *
+ * Copyright (C) 1998-2000 Linas Vepstas <linas@linas.org>          *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -18,15 +17,11 @@
  * You should have received a copy of the GNU General Public License*
  * along with this program; if not, write to the Free Software      *
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
- *                                                                  *
- *   Author: Rob Clark                                              *
- * Internet: rclark@cs.hmc.edu                                      *
- *  Address: 609 8th Street                                         *
- *           Huntington Beach, CA 92648-4632                        *
 \********************************************************************/
 
 #include "config.h"
 
+#include <errno.h>
 #include <fcntl.h>
 #include <string.h>
 #include <sys/stat.h>
@@ -34,7 +29,8 @@
 #include <unistd.h>
 
 #include <glib.h>
-#include <guile/gh.h>
+#include <libguile.h>
+#include "guile-mappings.h"
 
 #include "file-utils.h"
 #include "messages.h"
@@ -58,12 +54,11 @@ gncFindFile (const char * filename)
   if (!filename || *filename == '\0')
     return NULL;
 
-  /* This should be gh_lookup, but that appears to be broken */
-  find_doc_file = gh_eval_str("gnc:find-doc-file");
-  scm_filename = gh_str02scm ((char *) filename);
-  scm_result = gh_call1(find_doc_file, scm_filename);
+  find_doc_file = scm_c_eval_string("gnc:find-doc-file");
+  scm_filename = scm_makfrom0str ((char *) filename);
+  scm_result = scm_call_1(find_doc_file, scm_filename);
 
-  if (gh_string_p(scm_result))
+  if (SCM_STRINGP(scm_result))
     full_filename = gh_scm2newstr(scm_result, NULL);
 
   g_filename = g_strdup (full_filename);

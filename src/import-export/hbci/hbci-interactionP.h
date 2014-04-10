@@ -57,6 +57,9 @@ struct _inter_data
 
   const char *format_pin_user_bank;
   const char *format_pin_min_char;
+
+  /* PinKeypad dialog, if used */
+  GtkWidget *pin_keypad_dialog;
   
   /* Flags to keep track on whether an HBCI action is running or
      not. */

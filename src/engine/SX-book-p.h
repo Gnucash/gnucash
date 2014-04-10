@@ -1,6 +1,5 @@
 /********************************************************************\
- * druid-hbci-final.c -- hbci creation functionality                *
- * Copyright (C) 2002 Christian Stimming                            *
+ * SX-book-p.h -- private scheduled transaction dataset access      *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -20,13 +19,36 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-#include "config.h"
+/*
+ * FILE:
+ * SX-book-p.h
+ *
+ * FUNCTION:
+ * Private members of SX-in-book utils.
+ * See src/doc/books.txt for design overview.
+ *
+ * HISTORY:
+ * Copyright (c) 2003 Linas Vepstas <linas@linas.org>
+ */
 
-#include <gnome.h>
-#include <sys/stat.h>
-#include <sys/types.h>
-#include <unistd.h>
+#ifndef GNC_SX_BOOK_P_H
+#define GNC_SX_BOOK_P_H
 
-#include "druid-hbci-final.h"
+#include "qofbook.h"
 
-/* Empty file at the moment. */
+/* ====================================================================== */
+
+struct xaccSchedXactionsDef {
+   QofBook *book;
+	GList *sx_list;
+	gboolean sx_notsaved;
+};
+
+void gnc_book_set_schedxactions( QofBook *book, GList *newList );
+
+/* Associate the given template group with a book */
+void gnc_book_set_template_group (QofBook *book, AccountGroup *templateGroup);
+
+gboolean gnc_sxtt_register (void);
+
+#endif /* GNC_SX_BOOK_P_H */

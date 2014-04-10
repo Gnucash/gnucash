@@ -24,9 +24,10 @@
 #include "config.h"
 
 #include <glib.h>
-#include <guile/gh.h>
+#include <libguile.h>
 #include <stdio.h>
 #include <string.h>
+#include "guile-mappings.h"
 
 #include "gnc-report.h"
 
@@ -40,10 +41,10 @@ gnc_run_report (int report_id, char ** data)
   g_return_val_if_fail (data != NULL, FALSE);
   *data = NULL;
 
-  run_report = gh_eval_str ("gnc:report-run");
+  run_report = scm_c_eval_string ("gnc:report-run");
 
-  scm_text = gh_call1 (run_report, gh_int2scm (report_id));
-  if (!gh_string_p (scm_text))
+  scm_text = scm_call_1 (run_report, scm_int2num (report_id));
+  if (!SCM_STRINGP (scm_text))
     return FALSE;
 
   free_data = gh_scm2newstr (scm_text, NULL);

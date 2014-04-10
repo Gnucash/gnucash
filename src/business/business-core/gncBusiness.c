@@ -9,7 +9,8 @@
 #include <glib.h>
 
 #include "gncBusiness.h"
-#include "gnc-book-p.h"
+#include "gnc-book.h"
+#include "GNCIdP.h"
 
 struct _iterate {
   foreachObjectCB cb;

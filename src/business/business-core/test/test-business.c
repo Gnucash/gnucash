@@ -1,5 +1,5 @@
 #include <glib.h>
-#include <guile/gh.h>
+#include <libguile.h>
 
 #include "guid.h"
 #include "gnc-module.h"
@@ -96,7 +96,7 @@ test_printable (const char *name, gpointer obj)
 }
 
 static void
-main_helper (int argc, char **argv)
+main_helper (void *closure, int argc, char **argv)
 {
   gnc_module_load("gnucash/business-core", 0);
   test_business();
@@ -108,6 +108,6 @@ main_helper (int argc, char **argv)
 int
 main (int argc, char **argv)
 {
-  //  gh_enter (argc, argv, main_helper);
+  //  scm_boot_guile (argc, argv, main_helper, NULL);
   return 0;
 }

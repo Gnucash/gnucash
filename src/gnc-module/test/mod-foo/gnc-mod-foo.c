@@ -1,9 +1,11 @@
 /* gnc-mod-foo.c : the Gnucash plugin that wraps the library
  * 'libfoo.so'. it does this by being linked against libfoo.so */
 
+#include "config.h"
 #include <stdio.h>
-#include <guile/gh.h>
 #include <glib.h>
+#include <libguile.h>
+#include "guile-mappings.h"
 
 #include "foo-gwrap.h"
 #include "gnc-module-api.h"
@@ -36,7 +38,7 @@ libgncmodfoo_LTX_gnc_module_init(int refcount) {
   gw_init_wrapset_foo_gwrap();
   
   /* use the Scheme "foo" module */
-  gh_eval_str("(use-modules (gnucash foo))");
+  scm_c_eval_string("(use-modules (gnucash foo))");
   
   return TRUE;
 }

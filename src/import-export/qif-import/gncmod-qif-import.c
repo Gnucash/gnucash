@@ -5,8 +5,9 @@
  * Copyright (c) 2001 Linux Developers Group, Inc. 
  *********************************************************************/
 
+#include "config.h"
 #include <glib.h>
-#include <guile/gh.h>
+#include <libguile.h>
 
 #include "gnc-module.h"
 #include "gnc-module-api.h"
@@ -67,7 +68,7 @@ libgncmod_qif_import_LTX_gnc_module_init(int refcount)
       ((void (*)())gnc_ui_qif_import_druid_make);
   }
 
-  gh_eval_str("(use-modules (gnucash import-export qif-import))");
+  scm_c_eval_string("(use-modules (gnucash import-export qif-import))");
   gnc_ui_qif_import_create_menus();
 
   return TRUE;

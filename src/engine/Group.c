@@ -1,7 +1,7 @@
 /********************************************************************\
  * Group.c -- chart of accounts (hierarchical tree of accounts)     *
  * Copyright (C) 1997 Robin D. Clark                                *
- * Copyright (C) 1997-2001 Linas Vepstas <linas@linas.org>          *
+ * Copyright (C) 1997-2001,2003 Linas Vepstas <linas@linas.org>     *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -29,15 +29,18 @@
 
 #include "Account.h"
 #include "AccountP.h"
+#include "Backend.h"
 #include "BackendP.h"
 #include "GNCIdP.h"
 #include "Group.h"
 #include "GroupP.h"
 #include "TransactionP.h"
-#include "gnc-book-p.h"
 #include "gnc-engine-util.h"
 #include "gnc-event-p.h"
 #include "gnc-numeric.h"
+#include "gncObject.h"
+#include "qofbook.h"
+#include "qofbook-p.h"
 
 static short module = MOD_ENGINE;
 
@@ -52,7 +55,7 @@ static short module = MOD_ENGINE;
 \********************************************************************/
 
 static void
-xaccInitializeAccountGroup (AccountGroup *grp, GNCBook *book)
+xaccInitializeAccountGroup (AccountGroup *grp, QofBook *book)
 {
   grp->saved       = 1;
 
@@ -67,7 +70,7 @@ xaccInitializeAccountGroup (AccountGroup *grp, GNCBook *book)
 \********************************************************************/
 
 AccountGroup *
-xaccMallocAccountGroup (GNCBook *book)
+xaccMallocAccountGroup (QofBook *book)
 {
   AccountGroup *grp;
   g_return_val_if_fail (book, NULL);
@@ -76,6 +79,38 @@ xaccMallocAccountGroup (GNCBook *book)
   xaccInitializeAccountGroup (grp, book);
 
   return grp;
+}
+
+/********************************************************************\
+\********************************************************************/
+
+#define GNC_TOP_GROUP "gnc_top_group"
+AccountGroup * 
+xaccGetAccountGroup (QofBook *book)
+{
+   if (!book) return NULL;
+   return qof_book_get_data (book, GNC_TOP_GROUP);
+}
+
+void
+xaccSetAccountGroup (QofBook *book, AccountGroup *grp)
+{
+  AccountGroup *old_grp;
+  if (!book) return;
+
+  old_grp = xaccGetAccountGroup (book);
+  if (old_grp == grp) return;
+
+  if (grp && grp->book != book)
+  {
+     PERR ("cannot mix and match books freely!");
+     return;
+  }
+
+  qof_book_set_data (book, GNC_TOP_GROUP, grp);
+
+  xaccAccountGroupBeginEdit (old_grp);
+  xaccAccountGroupDestroy (old_grp);
 }
 
 /********************************************************************\
@@ -205,7 +240,7 @@ xaccAccountGroupDestroy (AccountGroup *grp)
 /********************************************************************\
 \********************************************************************/
 
-GNCBook *
+QofBook *
 xaccGroupGetBook (AccountGroup *group)
 {
   if (!group) return NULL;
@@ -1241,6 +1276,62 @@ xaccGroupForEachAccount (AccountGroup *grp,
   }
 
   return(NULL);
+}
+
+/* ============================================================== */
+
+Backend *
+xaccGroupGetBackend (AccountGroup *grp)
+{
+  grp = xaccGroupGetRoot (grp);
+  if (!grp || !grp->book) return NULL;
+  return grp->book->backend;
+}
+
+/* ============================================================== */
+/* gncObject function implementation and registration */
+
+static void 
+group_book_begin (QofBook *book)
+{
+  xaccSetAccountGroup (book, xaccMallocAccountGroup(book));
+}
+
+static void 
+group_book_end (QofBook *book)
+{
+  xaccSetAccountGroup (book, NULL);
+}
+
+static gboolean
+group_is_dirty (QofBook *book)
+{
+  return xaccGroupNotSaved(xaccGetAccountGroup(book));
+}
+
+static void
+group_mark_clean(QofBook *book)
+{
+  xaccGroupMarkSaved(xaccGetAccountGroup(book));
+}
+
+static GncObject_t group_object_def = 
+{
+  interface_version: GNC_OBJECT_VERSION,
+  name:              GNC_ID_GROUP,
+  type_label:        "AccountGroup",
+  book_begin:        group_book_begin,
+  book_end:          group_book_end,
+  is_dirty:          group_is_dirty,
+  mark_clean:        group_mark_clean,
+  foreach:           NULL,
+  printable:         NULL,
+};
+
+gboolean 
+xaccGroupRegister (void)
+{
+  return gncObjectRegister (&group_object_def);
 }
 
 /* ========================= END OF FILE ======================== */

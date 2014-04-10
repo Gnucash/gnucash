@@ -10,7 +10,7 @@
 #endif
 
 #include <stdio.h>
-#include <guile/gh.h>
+#include <libguile.h>
 #include <glib.h>
 
 #include "gnc-module.h"
@@ -74,9 +74,9 @@ libgncmod_business_gnome_LTX_gnc_module_init(int refcount)
   //    return FALSE;
   //  }
 
-  gh_eval_str("(use-modules (g-wrapped gw-business-gnome))");
-  gh_eval_str("(use-modules (gnucash business-gnome))");
-  gh_eval_str("(use-modules (gnucash report business-reports))");
+  scm_c_eval_string("(use-modules (g-wrapped gw-business-gnome))");
+  scm_c_eval_string("(use-modules (gnucash business-gnome))");
+  scm_c_eval_string("(use-modules (gnucash report business-reports))");
 
   if (refcount == 0) {
     /* Register the Owner search type */

@@ -25,17 +25,8 @@
 #include <stdarg.h>
 #include <glib.h>
 
-#include "Account.h"
-#include "AccountP.h"
+#include "Backend.h"
 #include "BackendP.h"
-#include "Group.h"
-#include "GroupP.h"
-#include "gnc-book-p.h"
-#include "gnc-engine-util.h"
-#include "gnc-pricedb.h"
-#include "gnc-pricedb-p.h"
-#include "TransactionP.h"
-#include "messages.h"
 
 /* static short module = MOD_ENGINE; */
 
@@ -103,40 +94,6 @@ xaccBackendGetMessage (Backend *be) {
    return msg;
 }
 
-
-/********************************************************************\
- * Fetch the backend                                                *
-\********************************************************************/
-
-Backend *
-xaccAccountGetBackend (Account * acc)
-{
-  if (!acc || !acc->book) return NULL;
-  return acc->book->backend;
-}
-
-Backend *
-xaccGroupGetBackend (AccountGroup *grp)
-{
-  grp = xaccGroupGetRoot (grp);
-  if (!grp || !grp->book) return NULL;
-  return grp->book->backend;
-}
-
-Backend *
-xaccPriceDBGetBackend (GNCPriceDB *prdb)
-{
-  if (!prdb || !prdb->book) return NULL;
-  return prdb->book->backend;
-}
-
-Backend *
-xaccTransactionGetBackend (Transaction *trans)
-{
-  if (!trans || !trans->book) return NULL;
-  return trans->book->backend;
-}
-
 /***********************************************************************/
 /* Get a clean backend */
 void
@@ -155,7 +112,6 @@ xaccInitBackend(Backend *be)
     be->compile_query = NULL;
     be->free_query = NULL;
     be->run_query = NULL;
-    be->price_lookup = NULL;
 
     be->sync = NULL;
 
@@ -167,6 +123,8 @@ xaccInitBackend(Backend *be)
     be->error_msg = NULL;
     be->percentage = NULL;
 
+    /* XXX remove these */
+    be->price_lookup = NULL;
     be->export = NULL;
 }
 

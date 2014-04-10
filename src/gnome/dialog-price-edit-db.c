@@ -24,7 +24,7 @@
 #include "config.h"
 
 #include <gnome.h>
-#include <guile/gh.h>
+#include <libguile.h>
 #include <time.h>
 
 #include "dialog-utils.h"
@@ -403,16 +403,16 @@ get_quotes_clicked (GtkWidget *widget, gpointer data)
   SCM quotes_func;
   SCM book_scm;
 
-  quotes_func = gh_eval_str ("gnc:book-add-quotes");
-  if (!gh_procedure_p (quotes_func))
+  quotes_func = scm_c_eval_string ("gnc:book-add-quotes");
+  if (!SCM_PROCEDUREP (quotes_func))
     return;
 
   book_scm = gnc_book_to_scm (book);
-  if (gh_scm2bool (gh_not (book_scm)))
+  if (SCM_NFALSEP (scm_not (book_scm)))
     return;
 
   gnc_set_busy_cursor (NULL, TRUE);
-  gh_call1 (quotes_func, book_scm);
+  scm_call_1 (quotes_func, book_scm);
   gnc_unset_busy_cursor (NULL);
 
   gnc_gui_refresh_all ();

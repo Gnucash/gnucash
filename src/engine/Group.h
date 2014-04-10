@@ -1,7 +1,7 @@
 /********************************************************************\
  * Group.h -- chart of accounts (hierarchical tree of accounts)     *
  * Copyright (C) 1997 Robin D. Clark                                *
- * Copyright (C) 1997, 1998, 1999, 2000 Linas Vepstas               *
+ * Copyright (C) 1997-2000,2003 Linas Vepstas <linas@linas.org>     *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -29,24 +29,40 @@
 
 #include "Account.h"
 #include "GNCId.h"
-#include "gnc-book.h"
 #include "gnc-engine.h"
+#include "qofbook.h"
 
 
 /** PROTOTYPES ******************************************************/
+/*
+ * The xaccMallocAccountGroup() routine will create a new account group.
+ *    This is an internal-use function, you almost certainly want to
+ *    be using the xaccGetAccountGroup() routine instead.
+ */
+AccountGroup *xaccMallocAccountGroup (QofBook *book);
+
+/*
+ * The xaccGetAccountGroup() routine will return the top-most
+ * account group associated with the indicated book.
+ */
+AccountGroup * xaccGetAccountGroup (QofBook *book);
+
 /*
  * The xaccAccountDestroy() routine will destroy and free all 
  *    the data associated with this account group.  The group
  *    must have been opened for editing with 
  *    xaccAccountGroupBeginEdit() first, before the Destroy is called.
  */
-AccountGroup *xaccMallocAccountGroup (GNCBook *book);
 void          xaccAccountGroupDestroy (AccountGroup *grp);
 
-GNCBook * xaccGroupGetBook (AccountGroup *group);
+
+/* XXX backwards-compat define, remove at later convenience */
+#define gnc_book_get_group xaccGetAccountGroup
+
+QofBook * xaccGroupGetBook (AccountGroup *group);
 
 void          xaccAccountGroupBeginEdit (AccountGroup *grp);
-void 	      xaccAccountGroupCommitEdit (AccountGroup *grp);
+void          xaccAccountGroupCommitEdit (AccountGroup *grp);
 
 /*
  * The xaccGroupConcatGroup() subroutine will move (reparent) 
@@ -125,7 +141,7 @@ Account * xaccGroupGetAccount (AccountGroup *group, int index);
 /*
  * The xaccGroupGetSubAccounts() subroutine returns an list of the accounts,
  *    including subaccounts, in the account group. The returned list
- *    should be freed with g_list_free when no longer needed.
+ *    should be freed with g_list_free() when no longer needed.
  *
  * The xaccGroupGetAccountList() subroutines returns only the immediate
  *    children of the account group. The returned list should *not*

@@ -1,5 +1,5 @@
 #include <glib.h>
-#include <guile/gh.h>
+#include <libguile.h>
 
 #include "gnc-engine-util.h"
 
@@ -123,7 +123,7 @@ test_commodity(void)
                 "insert test");
 
             do_test_args(
-                gnc_commodity_table_get_size(tbl) == i + 1,
+                (int)gnc_commodity_table_get_size(tbl) == i + 1,
                 "test next size table", __FILE__, __LINE__,
                 "should be %d and is %d", i + 1,
                 gnc_commodity_table_get_size(tbl));
@@ -152,7 +152,7 @@ test_commodity(void)
 }
 
 static void
-main_helper (int argc, char **argv)
+main_helper (void *closure, int argc, char **argv)
 {
   gnc_module_load("gnucash/engine", 0);
   test_commodity();
@@ -163,6 +163,6 @@ main_helper (int argc, char **argv)
 int
 main (int argc, char **argv)
 {
-  gh_enter (argc, argv, main_helper);
+  scm_boot_guile (argc, argv, main_helper, NULL);
   return 0;
 }

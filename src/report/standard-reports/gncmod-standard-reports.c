@@ -5,9 +5,11 @@
  * Copyright (c) 2001 Linux Developers Group, Inc. 
  *********************************************************************/
 
+#include "config.h"
 #include <stdio.h>
-#include <guile/gh.h>
 #include <glib.h>
+#include <libguile.h>
+#include "guile-mappings.h"
 
 #include "gnc-module.h"
 #include "gnc-module-api.h"
@@ -45,7 +47,7 @@ libgncmod_standard_reports_LTX_gnc_module_init(int refcount) {
   }
 
   /* load the report generation scheme code */
-  if(gh_eval_str("(use-modules (gnucash report standard-reports))") ==
+  if(scm_c_eval_string("(use-modules (gnucash report standard-reports))") ==
      SCM_BOOL_F) {
     return FALSE;
   }  

@@ -35,7 +35,6 @@
  * Identifiers can be encoded as hex strings. */
 
 #include "guid.h"
-#include "gnc-engine.h"
 
 /* Identifiers are 'typed' with strings. The ids used in gnucash are
  * defined below. An id with type GNC_ID_NONE does not refer to any
@@ -52,18 +51,34 @@ typedef const char * GNCIdTypeConst;
 #define GNC_ID_NONE           NULL
 #define GNC_ID_ACCOUNT        "Account"
 #define GNC_ID_BOOK           "Book"
+#define GNC_ID_COMMODITY_TABLE "CommodityTable"
 #define GNC_ID_FREQSPEC       "FreqSpec"
+#define GNC_ID_GROUP          "AccountGroup"
 #define GNC_ID_LOT            "Lot"
 #define GNC_ID_NULL           "null"
+#define GNC_ID_PERIOD	      "Period"
 #define GNC_ID_PRICE          "Price"
+#define GNC_ID_PRICEDB        "PriceDB"
 #define GNC_ID_SPLIT          "Split"
 #define GNC_ID_SCHEDXACTION   "SchedXaction"
 #define GNC_ID_SESSION        "Session"
+#define GNC_ID_SXTT           "SXTT"
 #define GNC_ID_TRANS          "Trans"
-#define GNC_ID_PERIOD	      "Period"
 
-/* Return the type of an identifier. */
-GNCIdType xaccGUIDType (const GUID * guid, GNCBook *book);
+
+typedef struct gnc_entity_table GNCEntityTable;
+
+GNCIdType xaccGUIDTypeEntityTable (const GUID * guid,
+                                   GNCEntityTable *entity_table);
+
+/* Return the type of an identifier.
+ * Equivalent function prototype:
+ * GNCIdType xaccGUIDType (const GUID * guid, QofBook *book); 
+ */
+
+#define xaccGUIDType(guid,book)      \
+    xaccGUIDTypeEntityTable ((guid), qof_book_get_entity_table (book))
+
 
 /* Returns a GUID which is guaranteed to never reference any entity. */
 const GUID * xaccGUIDNULL (void);

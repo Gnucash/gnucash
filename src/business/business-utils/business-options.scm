@@ -203,6 +203,67 @@
      validator
      #f #f #f #f)))
 
+;; Internally, values are always a guid. Externally, both guids and
+;; employee pointers may be used to set the value of the option. The
+;; option always returns a single employee pointer.
+
+(define (gnc:make-employee-option
+	 section
+	 name
+	 sort-tag
+	 documentation-string
+	 default-getter
+	 value-validator)
+
+  (define (convert-to-guid item)
+    (if (string? item)
+        item
+        (gnc:employee-get-guid item)))
+
+  (define (convert-to-employee item)
+    (if (string? item)
+        (gnc:employee-lookup item (gnc:get-current-book))
+        item))
+
+  (let* ((option (convert-to-guid (default-getter)))
+         (option-set #f)
+         (getter (lambda () (convert-to-employee
+			     (if option-set
+				 option
+				 (default-getter)))))
+         (value->string (lambda ()
+                          (string-append
+                           "'" (gnc:value->string (if option-set option #f)))))
+         (validator
+          (if (not value-validator)
+              (lambda (employee) (list #t employee))
+              (lambda (employee)
+                (value-validator (convert-to-employee employee))))))
+    (gnc:make-option
+     section name sort-tag 'employee documentation-string getter
+     (lambda (employee)
+       (if (not employee) (set! employee (default-getter)))
+       (set! employee (convert-to-employee employee))
+       (let* ((result (validator employee))
+	      (valid (car result))
+	      (value (cadr result)))
+	 (if valid
+	     (begin
+	       (set! option (convert-to-guid value))
+	       (set! option-set #t))
+	     (gnc:error "Illegal employee value set"))))
+     (lambda () (convert-to-employee (default-getter)))
+     (gnc:restore-form-generator value->string)
+     (lambda (f p) (gnc:kvp-frame-set-slot-path f option p))
+     (lambda (f p)
+       (let ((v (gnc:kvp-frame-get-slot-path f p)))
+	 (if (and v (string? v))
+	     (begin
+	       (set! option v)
+	       (set! option-set #t)))))
+     validator
+     #f #f #f #f)))
+
 ;; Internally, values are always a type/guid pair. Externally, both
 ;; type/guid pairs and owner pointers may be used to set the value of
 ;; the option. The option always returns a single owner pointer.
@@ -239,6 +300,12 @@
 		(gnc:owner-init-vendor
 		 option-value
 		 (gnc:vendor-lookup (cdr pair) (gnc:get-current-book)))
+		option-value)
+
+	       ((gnc-owner-employee)
+		(gnc:owner-init-employee
+		 option-value
+		 (gnc:employee-lookup (cdr pair) (gnc:get-current-book)))
 		option-value)
 
 	       ((gnc-owner-job)
@@ -368,5 +435,6 @@
 (export gnc:make-invoice-option)
 (export gnc:make-customer-option)
 (export gnc:make-vendor-option)
+(export gnc:make-employee-option)
 (export gnc:make-owner-option)
 (export gnc:make-taxtable-option)

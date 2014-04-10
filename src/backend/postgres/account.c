@@ -26,6 +26,7 @@
 #include "config.h"
 
 #include <glib.h>
+#include <stdlib.h>  
 #include <string.h>  
 
 #include <libpq-fe.h>  
@@ -40,6 +41,7 @@
 #include "gnc-commodity.h"
 #include "gnc-engine-util.h"
 #include "gnc-event.h"
+#include "gnc-pricedb.h"
 #include "guid.h"
 
 #include "account.h"

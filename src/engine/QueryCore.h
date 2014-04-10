@@ -1,25 +1,56 @@
-/*
- * QueryCore.h -- API for providing core Query data types
- * Copyright (C) 2002 Derek Atkins <warlord@MIT.EDU>
- *
- */
+/********************************************************************\
+ * QueryCore.h -- API for providing core Query data types           *
+ * Copyright (C) 2002 Derek Atkins <warlord@MIT.EDU>                *
+ *                                                                  *
+ * This program is free software; you can redistribute it and/or    *
+ * modify it under the terms of the GNU General Public License as   *
+ * published by the Free Software Foundation; either version 2 of   *
+ * the License, or (at your option) any later version.              *
+ *                                                                  *
+ * This program is distributed in the hope that it will be useful,  *
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of   *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    *
+ * GNU General Public License for more details.                     *
+ *                                                                  *
+ * You should have received a copy of the GNU General Public License*
+ * along with this program; if not, contact:                        *
+ *                                                                  *
+ * Free Software Foundation           Voice:  +1-617-542-5942       *
+ * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
+ * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ *                                                                  *
+\********************************************************************/
+
+/** @file QueryCore.h
+    @breif API for providing core Query data types
+    @author Copyright (C) 2002 Derek Atkins <warlord@MIT.EDU>
+*/
 
 #ifndef GNC_QUERYCORE_H
 #define GNC_QUERYCORE_H
 
-#include "gnc-numeric.h"
-#include "date.h"
-#include "kvp_frame.h"
-
 #include <glib.h>
+
+#include "gnc-numeric.h"
+#include "gnc-date.h"
+#include "kvp_frame.h"
 
 typedef struct query_pred_data *QueryPredData_t;
 
-/* Type of Query Core Objects (String, Date, Numeric, GUID, etc. */
+/** Type of Query Core Objects (String, Date, Numeric, GUID, etc. */
 typedef const char * QueryCoreType;
 
-/* Standard Query comparitors, for how to compare objects in a predicate.
- * Note that not all core types implement all comparitors
+/** The QueryAccess type defines an arbitrary function pointer
+ *  for access functions.  This is needed because C doesn't have
+ *  templates, so we just cast a lot.  Real functions must be of
+ *  the form:
+ *
+ * <param_type> function (object_type *obj);
+ */
+typedef gpointer (*QueryAccess)(gpointer);
+
+/** Standard Query comparitors, for how to compare objects in a predicate.
+ *  Note that not all core types implement all comparitors
  */
 typedef enum {
   COMPARE_LT = 1,
@@ -30,9 +61,8 @@ typedef enum {
   COMPARE_NEQ
 } query_compare_t;
 
-/*
- * List of known core query data-types... 
- * Each core query type defines it's set of optional "comparitor qualifiers".
+/** List of known core query data-types... 
+ *  Each core query type defines it's set of optional "comparitor qualifiers".
  */
 #define QUERYCORE_STRING	"string"
 typedef enum {
@@ -56,31 +86,38 @@ typedef enum {
 
 #define QUERYCORE_GUID		"guid"
 typedef enum {
+  /* These expect a single object and expect the QueryAccess returns GUID* */
   GUID_MATCH_ANY = 1,
-  GUID_MATCH_ALL,		/* You _must_ pass a GList of objects! */
   GUID_MATCH_NONE,
   GUID_MATCH_NULL,
+  /* These expect a GList* of objects and calls the QueryAccess routine
+   * on each item in the list to obtain a GUID* for each object */
+  GUID_MATCH_ALL,
+  /* These expect a single object and expect the QueryAccess function
+   * to return a GList* of GUID* (the list is the property of the caller) */
+  GUID_MATCH_LIST_ANY,
 } guid_match_t;
 
+#define QUERYCORE_INT32		"gint32"
 #define QUERYCORE_INT64		"gint64"
 #define QUERYCORE_DOUBLE	"double"
 #define QUERYCORE_BOOLEAN	"boolean"
 #define QUERYCORE_KVP		"kvp"
 
-/* A CHAR type is for a RECNCell */
+/** A CHAR type is for a RECNCell */
 #define QUERYCORE_CHAR		"character"
 typedef enum {
   CHAR_MATCH_ANY = 1,
   CHAR_MATCH_NONE
 } char_match_t;
 
-/* Head of Predicate Data structures.  All PData must start like this. */
+/** Head of Predicate Data structures.  All PData must start like this. */
 typedef struct query_pred_data {
   QueryCoreType		type_name;	/* QUERYCORE_* */
   query_compare_t	how;
 } QueryPredDataDef;
 
-/* Core Data Type Predicates */
+/** Core Data Type Predicates */
 QueryPredData_t gncQueryStringPredicate (query_compare_t how, char *str,
 					 string_match_t options,
 					 gboolean is_regex);
@@ -90,6 +127,7 @@ QueryPredData_t gncQueryNumericPredicate (query_compare_t how,
 					  numeric_match_t options,
 					  gnc_numeric value);
 QueryPredData_t gncQueryGUIDPredicate (guid_match_t options, GList *guids);
+QueryPredData_t gncQueryInt32Predicate (query_compare_t how, gint32 val);
 QueryPredData_t gncQueryInt64Predicate (query_compare_t how, gint64 val);
 QueryPredData_t gncQueryDoublePredicate (query_compare_t how, double val);
 QueryPredData_t gncQueryBooleanPredicate (query_compare_t how, gboolean val);
@@ -98,16 +136,14 @@ QueryPredData_t gncQueryCharPredicate (char_match_t options,
 QueryPredData_t gncQueryKVPPredicate (query_compare_t how,
 				      GSList *path, const kvp_value *value);
 
-#include "QueryObject.h"	/* for QueryAccess */
-
-/* Copy a predicate */
+/** Copy a predicate. */
 QueryPredData_t gncQueryCorePredicateCopy (QueryPredData_t pdata);
 
-/* Destroy a predicate */
+/** Destroy a predicate. */
 void gncQueryCorePredicateFree (QueryPredData_t pdata);
 
-/* Return a printable string for a core data object.  Caller needs
- * to g_free() the returned string
+/** Return a printable string for a core data object.  Caller needs
+ *  to g_free() the returned string.
  */
 char * gncQueryCoreToString (char const *type, gpointer object,
 			     QueryAccess fcn);

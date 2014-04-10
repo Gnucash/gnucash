@@ -24,17 +24,22 @@
 #ifndef GNC_PRICEDB_H
 #define GNC_PRICEDB_H
 
-#include "date.h"
-#include "gnc-commodity.h"
-#include "gnc-numeric.h"
-#include "gnc-engine.h"
-#include "guid.h"
-
 #include <stdio.h>
 
-/**********************************************************************\
+#include "gnc-commodity.h"
+#include "gnc-date.h"
+#include "gnc-engine.h"
+#include "gnc-numeric.h"
+#include "guid.h"
+#include "qofbook.h"
 
-  Introduction:
+
+/** @addtogroup Engine
+    @{ */
+/**********************************************************************/
+/** @file gnc-pricedb.h
+
+    @brief a simple price database for gnucash
 
     The PriceDB is intended to be a database of price quotes, or more
     specifically, a database of GNCPrices.  For the time being, it is
@@ -44,15 +49,15 @@
     now in the hope that we get a real DB implementation before
     they're really needed.
 
-    Every GNCBook contains a GNCPriceDB, accessable via
+    Every QofBook contains a GNCPriceDB, accessable via
     gnc_book_get_pricedb.
 
 */
 
 
-/**********************************************************************\
+/* *********************************************************************/ 
 
-  GNCPrice:
+/** GNCPrice:
 
     Each price in the database represents an "instantaneous" quote for
     a given commodity with respect to another commodity.  For example,
@@ -112,30 +117,30 @@
       are pointer unique.
 
  */
-
 typedef struct gnc_price_s GNCPrice;
+/** */
 typedef struct gnc_price_lookup_s GNCPriceLookup;
 
 /****************/
 /* constructors */
 
-/* gnc_price_create - returns a newly allocated and initialized price
+/** gnc_price_create - returns a newly allocated and initialized price
    with a reference count of 1. */
-GNCPrice *gnc_price_create(GNCBook *book);
+GNCPrice *gnc_price_create(QofBook *book);
 
-/* gnc_price_clone - returns a newly allocated price that's a
+/** gnc_price_clone - returns a newly allocated price that's a
    content-wise duplicate of the given price, p.  The returned clone
    will have a reference count of 1. */
-GNCPrice *gnc_price_clone(GNCPrice* p, GNCBook *book);
+GNCPrice *gnc_price_clone(GNCPrice* p, QofBook *book);
 
 /*********************/
 /* memory management */
 
-/* gnc_price_ref - indicate your need for a given price to stick
+/** gnc_price_ref - indicate your need for a given price to stick
    around (i.e. increase its reference count by 1). */
 void      gnc_price_ref(GNCPrice *p);
 
-/* gnc_price_ref - indicate you're finished with a price
+/** gnc_price_ref - indicate you're finished with a price
    (i.e. decrease its reference count by 1). */
 void      gnc_price_unref(GNCPrice *p);
 
@@ -166,12 +171,12 @@ void gnc_price_set_version(GNCPrice *p, gint32 versn);
 /***********/
 /* getters */
 
-/* As mentioned above all of the getters return data that's internal
+/** As mentioned above all of the getters return data that's internal
    to the GNCPrice, not copies, so don't free these values. */
-GNCPrice *      gnc_price_lookup (const GUID *guid, GNCBook *book);
+GNCPrice *      gnc_price_lookup (const GUID *guid, QofBook *book);
 const GUID *    gnc_price_get_guid (GNCPrice *p);
 const GUID      gnc_price_return_guid (GNCPrice *p);
-GNCBook *       gnc_price_get_book (GNCPrice *p);
+QofBook *       gnc_price_get_book (GNCPrice *p);
 gnc_commodity * gnc_price_get_commodity(GNCPrice *p);
 gnc_commodity * gnc_price_get_currency(GNCPrice *p);
 Timespec        gnc_price_get_time(GNCPrice *p);
@@ -181,8 +186,8 @@ gnc_numeric     gnc_price_get_value(GNCPrice *p);
 gint32          gnc_price_get_version(GNCPrice *p);
 gboolean        gnc_price_equal(GNCPrice *p1, GNCPrice *p2);
 
-/**********************************************************************
-  GNCPrice lists:
+/* ******************************************************************** */
+/** GNCPrice lists:
 
     The database communicates multiple prices in and out via gnc price
     lists.  These are just time sorted GLists of GNCPrice pointers.
@@ -195,20 +200,20 @@ gboolean        gnc_price_equal(GNCPrice *p1, GNCPrice *p2);
 
 */
 
-/* gnc_price_list_insert - insert a price into the given list, calling
+/** gnc_price_list_insert - insert a price into the given list, calling
      gnc_price_ref on it during the process. */
 gboolean gnc_price_list_insert(GList **prices, GNCPrice *p);
-/* gnc_price_list_remove - remove the price, p, from the given list,
+/** gnc_price_list_remove - remove the price, p, from the given list,
      calling gnc_price_unref on it during the process. */
 gboolean gnc_price_list_remove(GList **prices, GNCPrice *p);
-/* gnc_price_list_destroy - destroy the given price list, calling
+/** gnc_price_list_destroy - destroy the given price list, calling
      gnc_price_unref on all the prices included in the list. */
 void     gnc_price_list_destroy(GList *prices);
 
 gboolean gnc_price_list_equal(GList *prices1, GList *prices2);
 
-/**********************************************************************
-  GNCPriceDB
+/* ******************************************************************** */
+/** GNCPriceDB
 
   Whenever a you store a price in the pricedb, the pricedb adds its
   own reference to the price, so you can safely unref that price after
@@ -220,43 +225,54 @@ gboolean gnc_price_list_equal(GList *prices1, GList *prices2);
   it/them.
 
 */
-
 typedef struct gnc_price_db_s GNCPriceDB;
 
 
-/* gnc_pricedb_create - create a new pricedb.  Normally you won't need
-     this; you will get the pricedb via gnc_book_get_pricedb. */
-GNCPriceDB * gnc_pricedb_create(GNCBook *book);
+/** gnc_pricedb_create - create a new pricedb.  Normally you won't need
+     this; you will get the pricedb via gnc_pricedb_get_db. */
+GNCPriceDB * gnc_pricedb_create(QofBook *book);
 
-/* gnc_pricedb_destroy - destroy the given pricedb and unref all of
+/* XXX backwards-compat defines, remove these someday */
+#define gnc_book_get_pricedb  gnc_pricedb_get_db
+
+/** return the pricedb associated with the book */
+GNCPriceDB * gnc_pricedb_get_db(QofBook *book);
+
+/** gnc_pricedb_destroy - destroy the given pricedb and unref all of
      the prices it contains.  This may not deallocate all of those
      prices.  Other code may still be holding references to them. */
 void gnc_pricedb_destroy(GNCPriceDB *db);
 
-/* gnc_pricedb_add_price - add a price to the pricedb, you may drop
+/** gnc_pricedb_add_price - add a price to the pricedb, you may drop
      your reference to the price (i.e. call unref) after this
      succeeds, whenever you're finished with the price. */
 gboolean     gnc_pricedb_add_price(GNCPriceDB *db, GNCPrice *p);
 
-/* gnc_pricedb_remove_price - removes the given price, p, from the
+/** gnc_pricedb_remove_price - removes the given price, p, from the
      pricedb.   Returns TRUE if successful, FALSE otherwise. */
 gboolean     gnc_pricedb_remove_price(GNCPriceDB *db, GNCPrice *p);
 
-/* gnc_pricedb_lookup_latest - find the most recent price for the
+/** gnc_pricedb_lookup_latest - find the most recent price for the
      given commodity in the given currency.  Returns NULL on
      failure. */
 GNCPrice   * gnc_pricedb_lookup_latest(GNCPriceDB *db,
                                        gnc_commodity *commodity,
                                        gnc_commodity *currency);
 
-/* gnc_pricedb_get_prices - return all the prices for a given
+/** gnc_pricedb_lookup_latest_any_currency - find the most recent prices
+     for the given commodity in any available currency. Prices will be
+     returned as a GNCPrice list (see above). */
+GList      *gnc_pricedb_lookup_latest_any_currency(GNCPriceDB *db,
+                                                   gnc_commodity *commodity);
+
+/** gnc_pricedb_get_prices - return all the prices for a given
      commodity in the given currency.  Returns NULL on failure.  The
      result is a GNCPrice list (see above).  */
 GList      * gnc_pricedb_get_prices(GNCPriceDB *db,
                                     gnc_commodity *commodity,
                                     gnc_commodity *currency);
 
-/* gnc_pricedb_lookup_at_time - return all prices that match the given
+/** gnc_pricedb_lookup_at_time - return all prices that match the given
      commodity, currency, and timespec.  Prices will be returned as a
      GNCPrice list (see above). */
 GList      * gnc_pricedb_lookup_at_time(GNCPriceDB *db,
@@ -264,7 +280,14 @@ GList      * gnc_pricedb_lookup_at_time(GNCPriceDB *db,
                                         gnc_commodity *currency,
                                         Timespec t);
 
-/* gnc_pricedb_lookup_day - return all prices that match the given
+/** gnc_pricedb_lookup_at_time_any_currency - return all prices that match the
+     given commodity and timespec in any available currency.  Prices will be
+     returned as a GNCPrice list (see above). */
+GList      * gnc_pricedb_lookup_at_time_any_currency(GNCPriceDB *db,
+ 		                                     gnc_commodity *c,
+		                                     Timespec t);
+
+/** gnc_pricedb_lookup_day - return all prices that match the given
      commodity, currency, and timespec.  Prices will be returned as a
      GNCPrice list (see above). */
 GList      * gnc_pricedb_lookup_day(GNCPriceDB *db,
@@ -272,15 +295,45 @@ GList      * gnc_pricedb_lookup_day(GNCPriceDB *db,
 				    gnc_commodity *currency,
 				    Timespec t);
 
-/* gnc_pricedb_lookup_nearest_in_time - return the price for the given
-     commodity in the given currency nearest to the given time t. */
-GNCPrice *
-gnc_pricedb_lookup_nearest_in_time(GNCPriceDB *db,
-                                   gnc_commodity *c,
-                                   gnc_commodity *currency,
-                                   Timespec t);
+/** gnc_pricedb_lookup_day_any_currency - return all prices that match the
+     given commodity and timespec in any available currency.  Prices will be
+     returned as a GNCPrice list (see above). */
+GList      * gnc_pricedb_lookup_day_any_currency(GNCPriceDB *db,
+ 		                                 gnc_commodity *c,
+		                                 Timespec t);
 
-/* gnc_pricedb_foreach_price - call f once for each price in db, until
+/** gnc_pricedb_lookup_nearest_in_time - return the price for the given
+     commodity in the given currency nearest to the given time t. */
+GNCPrice   * gnc_pricedb_lookup_nearest_in_time(GNCPriceDB *db,
+                                                gnc_commodity *c,
+                                                gnc_commodity *currency,
+                                                Timespec t);
+
+/** gnc_pricedb_lookup_nearest_in_time_any_currency - return all prices that
+     match the given commodity and timespec in any available currency. Prices
+     will be returned as a GNCPrice list (see above). */
+GList      * gnc_pricedb_lookup_nearest_in_time_any_currency(GNCPriceDB *db,
+ 		                                             gnc_commodity *c,
+		                                             Timespec t);
+
+/** gnc_pricedb_convert_balance_latest_price - Convert a balance
+    from one currency to another. */
+gnc_numeric
+gnc_pricedb_convert_balance_latest_price(GNCPriceDB *pdb,
+				         gnc_numeric balance,
+				         gnc_commodity *balance_currency,
+				         gnc_commodity *new_currency);
+
+/** gnc_pricedb_convert_balance_nearest_price - Convert a balance
+    from one currency to another. */
+gnc_numeric
+gnc_pricedb_convert_balance_nearest_price(GNCPriceDB *pdb,
+				          gnc_numeric balance,
+				          gnc_commodity *balance_currency,
+				          gnc_commodity *new_currency,
+					  Timespec t);
+
+/** gnc_pricedb_foreach_price - call f once for each price in db, until
      and unless f returns FALSE.  If stable_order is not FALSE, make
      sure the ordering of the traversal is stable (i.e. the same order
      every time given the same db contents -- stable traversals may be
@@ -291,18 +344,19 @@ gboolean     gnc_pricedb_foreach_price(GNCPriceDB *db,
                                        gpointer user_data,
                                        gboolean stable_order);
 
-/* gnc_pricedb_dirty - return FALSE if the database has not been
+/** gnc_pricedb_dirty - return FALSE if the database has not been
    modified. */
 gboolean gnc_pricedb_dirty(GNCPriceDB *db);
 
-/* gnc_pricedb_get_num_prices - return the number of prices
+/** gnc_pricedb_get_num_prices - return the number of prices
    in the database. */
 guint gnc_pricedb_get_num_prices(GNCPriceDB *db);
 
 gboolean gnc_pricedb_equal (GNCPriceDB *db1, GNCPriceDB *db2);
 
-/* semi-lame debugging code */
+/** semi-lame debugging code */
 void gnc_price_print(GNCPrice *db, FILE *f, int indent);
 void gnc_pricedb_print_contents(GNCPriceDB *db, FILE *f);
 
 #endif
+/** @} */

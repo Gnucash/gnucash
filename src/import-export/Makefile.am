@@ -1,4 +1,4 @@
-SUBDIRS = .  binary-import qif-import ${OFX_DIR} ${HBCI_DIR} test
+SUBDIRS = .  binary-import qif-import ${OFX_DIR} ${HBCI_DIR} test log-replay
 
 pkglib_LTLIBRARIES=libgncmod-generic-import.la
 
@@ -80,4 +80,5 @@ EXTRA_DIST = \
 DISTCLEANFILES = gnucash g-wrapped .scm-links import-export
 
 # FIXME remove this when qif-io-core is finished
-DIST_SUBDIRS = binary-import qif-import qif-io-core ofx test hbci
+DIST_SUBDIRS = binary-import qif-import qif-io-core ofx test hbci log-replay
+

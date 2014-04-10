@@ -24,7 +24,7 @@
     An import mapper service that stores Account Maps for the
     generic importer.  This allows importers to map various
     "strings" to Gnucash accounts in a generic manner.
-    @author Copyright (C) 2002 Derek Atkins <derek@ihtfp.com>
+    @author Copyright (C) 2002,2003 Derek Atkins <derek@ihtfp.com>
  */
 #ifndef GNC_IMPORT_MATCH_MAP_H
 #define GNC_IMPORT_MATCH_MAP_H
@@ -48,14 +48,24 @@ void gnc_imap_destroy (GncImportMatchMap *imap);
 void gnc_imap_clear (GncImportMatchMap *imap);
 
 /** Look up an Account in the map */
-Account * gnc_imap_find_account (GncImportMatchMap *imap, const char *category,
-				 const char *key);
+Account* gnc_imap_find_account(GncImportMatchMap *imap, const char* category,
+			       const char *key);
 
 /** Store an Account in the map. This mapping is immediatly stored in
   the underlying kvp frame, regardless of whether the MatchMap is
   destroyed later or not. */
 void gnc_imap_add_account (GncImportMatchMap *imap, const char *category,
 			   const char *key, Account *acc);
+
+/** Look up an Account in the map from a GList* of pointers to strings(tokens)
+  from the current transaction */
+Account* gnc_imap_find_account_bayes (GncImportMatchMap *imap, GList* tokens);
+
+/** Store an Account in the map. This mapping is immediatly stored in
+  the underlying kvp frame, regardless of whether the MatchMap is
+  destroyed later or not. */
+void gnc_imap_add_account_bayes (GncImportMatchMap *imap, GList* tokens,
+				 Account *acc);
 
 
 /** @name Some well-known categories

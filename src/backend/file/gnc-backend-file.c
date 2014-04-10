@@ -20,11 +20,10 @@
 #include "Backend.h"
 #include "BackendP.h"
 #include "Group.h"
-#include "Scrub.h"
 #include "TransLog.h"
+#include "gnc-date.h"
 #include "gnc-engine-util.h"
 #include "gnc-pricedb-p.h"
-#include "DateUtils.h"
 #include "io-gncxml.h"
 #include "io-gncbin.h"
 #include "io-gncxml-v2.h"
@@ -114,6 +113,14 @@ file_session_begin(Backend *be_start, GNCSession *session, const char *book_id,
         if (rc != 0 || !S_ISDIR(statbuf.st_mode))
         {
             xaccBackendSetError (be_start, ERR_FILEIO_FILE_NOT_FOUND);
+            g_free (be->fullpath); be->fullpath = NULL;
+            g_free (be->dirname); be->dirname = NULL;
+            return;
+        }
+        rc = stat (be->fullpath, &statbuf);
+        if (rc != 0 || S_ISDIR(statbuf.st_mode))
+        {
+            xaccBackendSetError (be_start, ERR_FILEIO_UNKNOWN_FILE_TYPE);
             g_free (be->fullpath); be->fullpath = NULL;
             g_free (be->dirname); be->dirname = NULL;
             return;

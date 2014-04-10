@@ -84,9 +84,11 @@ const HBCI_Account *
 gnc_hbci_get_hbci_acc (const HBCI_API *api, Account *gnc_acc);
 
 
-/* Make a lot of debugging messages about this outboxjob.  */
-void 
-gnc_hbci_debug_outboxjob (HBCI_OutboxJob *job);
+/* Return the HBCI return code of the given 'job', or zero if none was
+ * found. If 'verbose' is TRUE, make a lot of debugging messages about
+ * this outboxjob. */
+int
+gnc_hbci_debug_outboxjob (HBCI_OutboxJob *job, gboolean verbose);
 
 /* Check HBCI_Error on whether some feedback should be given to the
  * user. Returns true if the HBCI action should be tried again; on the
@@ -114,6 +116,12 @@ char *gnc_hbci_descr_tognc (const HBCI_Transaction *h_trans);
  * information given in the HBCI_Transaction h_trans. The returned
  * string must be g_free'd by the caller. */
 char *gnc_hbci_memo_tognc (const HBCI_Transaction *h_trans);
+
+/** Return the first customer that can act on the specified account,
+    or NULL if none was found (and an error message is printed on
+    stdout). */
+const HBCI_Customer *
+gnc_hbci_get_first_customer(const HBCI_Account *h_acc);
 
 
 #endif

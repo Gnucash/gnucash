@@ -9,6 +9,7 @@
 #include <assert.h>
 #include <string.h>
 
+#include "config.h"
 #include "gfec.h"
 
 
@@ -26,11 +27,11 @@ gfec_catcher(void *data, SCM tag, SCM throw_args)
   SCM result;
   char *msg = NULL;
 
-  func = gh_eval_str("gnc:error->string");
-  if (gh_procedure_p(func))
+  func = scm_c_eval_string("gnc:error->string");
+  if (SCM_PROCEDUREP(func))
   {
-    result = gh_call2(func, tag, throw_args);
-    if (gh_string_p(result))
+    result = scm_call_2(func, tag, throw_args);
+    if (SCM_STRINGP(result))
       msg = gh_scm2newstr(result, NULL);
   }
 
@@ -93,7 +94,7 @@ gfec_string_helper(void *data)
 {
   char *string = data;
 
-  return gh_eval_str(string);
+  return scm_c_eval_string(string);
 }
 
 SCM
@@ -132,7 +133,7 @@ gfec_apply_helper(void *data)
 {
   struct gfec_apply_rec *apply_rec = (struct gfec_apply_rec *)data;
 
-  return gh_apply(apply_rec->proc, apply_rec->arglist);
+  return scm_apply(apply_rec->proc, apply_rec->arglist, SCM_EOL);
 }
 
 SCM

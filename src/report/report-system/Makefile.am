@@ -17,7 +17,10 @@ libgncmod_report_system_la_LIBADD = \
   ${GLIB_LIBS}
 
 
-AM_CFLAGS = -I${top_srcdir}/src/gnc-module ${GLIB_CFLAGS} ${GUILE_INCS}
+AM_CFLAGS = \
+  -I${top_srcdir}/src \
+  -I${top_srcdir}/src/gnc-module \
+  ${GLIB_CFLAGS} ${GUILE_INCS}
 
 if GNUCASH_SEPARATE_BUILDDIR
 #For executing test cases

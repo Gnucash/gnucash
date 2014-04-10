@@ -48,7 +48,11 @@ gpointer gnc_commodity_edit_new_select (gpointer arg, gpointer ptr,
 					GtkWidget *toplevel)
 {
   gnc_commodity * comm = (gnc_commodity *)ptr;
-  return gnc_ui_select_commodity_modal(comm, toplevel);
+  dialog_commodity_mode *mode_ptr = arg;
+  dialog_commodity_mode mode;
+
+  mode = mode_ptr ? *mode_ptr : DIAG_COMM_ALL;
+  return gnc_ui_select_commodity_modal(comm, toplevel, mode);
 }
 
 /*

@@ -1,7 +1,7 @@
 /********************************************************************
  * gnc-commodity.c -- api for tradable commodities (incl. currency) *
  * Copyright (C) 2000 Bill Gribble                                  *
- * Copyright (C) 2001 Linas Vepstas                                 *
+ * Copyright (C) 2001,2003 Linas Vepstas <linas@linas.org>          *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -31,18 +31,22 @@
 #include <stdio.h>
 #include <glib.h>
 
+#include "gncObject.h"
 #include "gnc-commodity.h"
 #include "gnc-engine-util.h"
+#include "gnc-trace.h"
 #include "guid.h"
+#include "qofbook.h"
 
 static short module = MOD_ENGINE; 
 
-/* parts per unit is nominal, i.e. number of 'partname' units in
+/* Parts per unit is nominal, i.e. number of 'partname' units in
  * a 'unitname' unit.  fraction is transactional, i.e. how many
  * of the smallest-transactional-units of the currency are there
  * in a 'unitname' unit. */ 
 
-struct gnc_commodity_s { 
+struct gnc_commodity_s 
+{ 
   char    * fullname;  
   char    * namespace;
   char    * mnemonic;
@@ -51,6 +55,10 @@ struct gnc_commodity_s {
   int       fraction;
   char    * unique_name;  
   gint16    mark;           /* user-defined mark, handy for traversals */
+
+  gboolean  quote_flag;	    /* user wants price quotes */
+  char    * quote_source;   /* current/old source of quotes */
+  char    * quote_tz;
 };
 
 struct gnc_commodity_namespace_s {
@@ -63,6 +71,16 @@ struct gnc_commodity_table_s {
 
 typedef struct gnc_commodity_namespace_s gnc_commodity_namespace;
 
+struct gnc_new_iso_code {
+  const char *old_code;
+  const char *new_code;
+} gnc_new_iso_codes[] = {
+  {"RUB", "RUR"}, // Russian Ruble
+  {"PLZ", "PLN"}, // Polish Zloty
+};
+#define GNC_NEW_ISO_CODES \
+        (sizeof(gnc_new_iso_codes) / sizeof(struct gnc_new_iso_code))
+  
 /********************************************************************
  * gnc_commodity_new
  ********************************************************************/
@@ -116,11 +134,9 @@ gnc_commodity_destroy(gnc_commodity * cm)
 {
   if(!cm) return;
 
+  /* Set at creation */
   g_free(cm->fullname);
   cm->fullname = NULL;
-
-  g_free(cm->printname);
-  cm->printname = NULL;
 
   g_free(cm->namespace);
   cm->namespace = NULL;
@@ -130,6 +146,17 @@ gnc_commodity_destroy(gnc_commodity * cm)
 
   g_free(cm->mnemonic);
   cm->mnemonic = NULL;
+
+  /* Set through accessor functions */
+  g_free(cm->quote_source);
+  cm->quote_source = NULL;
+
+  g_free(cm->quote_tz);
+  cm->quote_tz = NULL;
+
+  /* Automatically generated */
+  g_free(cm->printname);
+  cm->printname = NULL;
 
   g_free(cm->unique_name);
   cm->unique_name = NULL;
@@ -233,6 +260,41 @@ gnc_commodity_get_mark(const gnc_commodity * cm)
 }
 
 /********************************************************************
+ * gnc_commodity_get_quote_flag
+ ********************************************************************/
+
+gboolean
+gnc_commodity_get_quote_flag(const gnc_commodity *cm)
+{
+  if(!cm) return FALSE;
+  return (cm->quote_flag);
+}
+
+/********************************************************************
+ * gnc_commodity_get_quote_source
+ ********************************************************************/
+
+const char*
+gnc_commodity_get_quote_source(const gnc_commodity *cm)
+{
+  if(!cm) return NULL;
+  if (!cm->quote_source && gnc_commodity_is_iso(cm))
+    return "CURRENCY";
+  return cm->quote_source;
+}
+
+/********************************************************************
+ * gnc_commodity_get_quote_tz
+ ********************************************************************/
+
+const char*
+gnc_commodity_get_quote_tz(const gnc_commodity *cm) 
+{
+  if(!cm) return NULL;
+  return cm->quote_tz;
+}
+
+/********************************************************************
  * gnc_commodity_set_mnemonic
  ********************************************************************/
 
@@ -309,7 +371,7 @@ gnc_commodity_set_fraction(gnc_commodity * cm, int fraction)
 }
 
 /********************************************************************
- * gnc_commodity_get_mark
+ * gnc_commodity_set_mark
  ********************************************************************/
 
 void
@@ -318,6 +380,65 @@ gnc_commodity_set_mark(gnc_commodity * cm, gint16 mark)
   if(!cm) return;
   cm->mark = mark;
 }
+
+/********************************************************************
+ * gnc_commodity_set_quote_flag
+ ********************************************************************/
+
+void
+gnc_commodity_set_quote_flag(gnc_commodity *cm, const gboolean flag)
+{
+  ENTER ("(cm=%p, flag=%d)", cm, flag);
+
+  if(!cm) return;
+  cm->quote_flag = flag;
+  LEAVE(" ");
+}
+
+/********************************************************************
+ * gnc_commodity_set_quote_source
+ ********************************************************************/
+
+void
+gnc_commodity_set_quote_source(gnc_commodity *cm, const char *src)
+{
+  ENTER ("(cm=%p, src=%s)", cm, src);
+
+  if(!cm) return;
+  if (cm->quote_source) {
+    g_free(cm->quote_source);
+    cm->quote_source = NULL;
+  }
+
+  if (src && *src)
+    cm->quote_source = g_strdup(src);
+  LEAVE(" ");
+}
+
+/********************************************************************
+ * gnc_commodity_set_quote_tz
+ ********************************************************************/
+
+void
+gnc_commodity_set_quote_tz(gnc_commodity *cm, const char *tz) 
+{
+  ENTER ("(cm=%p, tz=%s)", cm, tz);
+
+  if(!cm) return;
+
+  if (cm->quote_tz) {
+    g_free(cm->quote_tz);
+    cm->quote_tz = NULL;
+  }
+
+  if (tz && *tz)
+    cm->quote_tz = g_strdup(tz);
+  LEAVE(" ");
+}
+
+/********************************************************************\
+\********************************************************************/
+
 
 /********************************************************************
  * gnc_commodity_equiv
@@ -394,6 +515,30 @@ gnc_commodity_table_new(void)
 }
 
 /********************************************************************
+ * book anchor functons
+ ********************************************************************/
+
+#define GNC_COMMODITY_TABLE "gnc_commodity_table"
+gnc_commodity_table *
+gnc_commodity_table_get_table(QofBook *book)
+{
+  if (!book) return NULL;
+  return qof_book_get_data (book, GNC_COMMODITY_TABLE);
+}
+
+void
+gnc_commodity_table_set_table(QofBook *book, gnc_commodity_table *ct)
+{
+  gnc_commodity_table *old_ct;
+  if (!book) return;
+
+  old_ct = gnc_commodity_table_get_table (book);
+  if (old_ct == ct) return;
+  qof_book_set_data (book, GNC_COMMODITY_TABLE, ct);
+  gnc_commodity_table_destroy (old_ct);
+}
+
+/********************************************************************
  * gnc_commodity_get_size
  * get the size of the commodity table
  ********************************************************************/
@@ -442,8 +587,10 @@ gnc_commodity_table_get_size(gnc_commodity_table* tbl)
 
 gnc_commodity *
 gnc_commodity_table_lookup(const gnc_commodity_table * table, 
-                           const char * namespace, const char * mnemonic) {
+                           const char * namespace, const char * mnemonic)
+{
   gnc_commodity_namespace * nsp = NULL;
+  unsigned int i;
 
   if (!table || !namespace || !mnemonic) return NULL;
 
@@ -451,11 +598,15 @@ gnc_commodity_table_lookup(const gnc_commodity_table * table,
 
   if(nsp) {
     /*
-     * The symbol for Russing Roubles was changed. Need to support the
-     * old symbol to be backward compatible.
+     * Backward compatability support for currencies that have
+     * recently changed.
      */
-    if (strcmp(mnemonic, "RUB") == 0)
-      mnemonic = "RUR";
+    for (i = 0; i < GNC_NEW_ISO_CODES; i++) {
+      if (strcmp(mnemonic, gnc_new_iso_codes[i].old_code) == 0) {
+	mnemonic = gnc_new_iso_codes[i].new_code;
+	break;
+      }
+    }
     return g_hash_table_lookup(nsp->table, (gpointer)mnemonic);
   }
   else {
@@ -553,7 +704,9 @@ gnc_commodity_table_insert(gnc_commodity_table * table,
     gnc_commodity_set_fraction (c, gnc_commodity_get_fraction (comm));
     gnc_commodity_set_exchange_code (c,
                                      gnc_commodity_get_exchange_code (comm));
-
+    gnc_commodity_set_quote_flag (c, gnc_commodity_get_quote_flag (comm));
+    gnc_commodity_set_quote_source (c, gnc_commodity_get_quote_source (comm));
+    gnc_commodity_set_quote_tz (c, gnc_commodity_get_quote_tz (comm));
     gnc_commodity_destroy (comm);
 
     return c;
@@ -602,7 +755,7 @@ gnc_commodity_table_remove(gnc_commodity_table * table,
 
 /********************************************************************
  * gnc_commodity_table_has_namespace
- * see if any commodities in the namespace exist 
+ * see if the commodities namespace exists. May have zero commodities.
  ********************************************************************/
 
 int
@@ -666,6 +819,18 @@ gnc_commodity_table_get_namespaces(const gnc_commodity_table * table)
   return g_hash_table_keys(table->table);
 }
 
+gboolean
+gnc_commodity_namespace_is_iso(const char *namespace)
+{
+  return (safe_strcmp(namespace, GNC_COMMODITY_NS_ISO) == 0);
+}
+
+gboolean
+gnc_commodity_is_iso(const gnc_commodity * cm)
+{
+  if (!cm) return FALSE;
+  return (safe_strcmp(cm->namespace, GNC_COMMODITY_NS_ISO) == 0);
+}
 
 /********************************************************************
  * gnc_commodity_table_get_commodities
@@ -678,16 +843,65 @@ gnc_commodity_table_get_commodities(const gnc_commodity_table * table,
 {
   gnc_commodity_namespace * ns = NULL; 
 
-  if(table) { 
-    ns = g_hash_table_lookup(table->table, (gpointer)namespace);
-  }
-
-  if(ns) {
-    return g_hash_table_values(ns->table);
-  }
-  else {
+  if (!table)
     return NULL;
+
+  ns = g_hash_table_lookup(table->table, (gpointer)namespace);
+  if (!ns)
+    return NULL;
+
+  return g_hash_table_values(ns->table);
+}
+
+/********************************************************************
+ * gnc_commodity_table_get_quotable_commodities
+ * list commodities in a given namespace that get price quotes
+ ********************************************************************/
+
+static void 
+get_quotables_helper1(gpointer key, gpointer value, gpointer data) 
+{
+  gnc_commodity *comm = value; 
+  GList ** l = data;
+
+  if (!comm->quote_flag)
+    return;
+  *l = g_list_prepend(*l, value);
+}
+
+static gboolean 
+get_quotables_helper2 (gnc_commodity *comm, gpointer data)
+{
+  GList ** l = data;
+
+  if (!comm->quote_flag)
+    return TRUE;
+  *l = g_list_prepend(*l, comm);
+  return TRUE;
+}
+
+GList * 
+gnc_commodity_table_get_quotable_commodities(const gnc_commodity_table * table,
+					     const char * namespace)
+{
+  gnc_commodity_namespace * ns = NULL; 
+  GList * l = NULL;
+
+  ENTER("table=%p, namespace=%s", table, namespace);
+  if (!table)
+    return NULL;
+
+  if (namespace && *namespace) {
+    ns = g_hash_table_lookup(table->table, (gpointer)namespace);
+    DEBUG("ns=%p", ns);
+    if (ns)
+      g_hash_table_foreach(ns->table, &get_quotables_helper1, (gpointer) &l);
+  } else {
+    gnc_commodity_table_foreach_commodity(table, get_quotables_helper2,
+					  (gpointer) &l);
   }
+  LEAVE("list head %p", l);
+  return l;
 }
 
 /********************************************************************
@@ -752,29 +966,6 @@ gnc_commodity_table_delete_namespace(gnc_commodity_table * table,
   }
 }
 
-void
-gnc_commodity_table_remove_non_iso (gnc_commodity_table *t)
-{
-  GList *namespaces;
-  GList *node;
-
-  if (!t) return;
-
-  namespaces = gnc_commodity_table_get_namespaces (t);
-
-  for (node = namespaces; node; node = node->next)
-  {
-    char *ns = node->data;
-
-    if (safe_strcmp (ns, GNC_COMMODITY_NS_ISO) == 0)
-      continue;
-
-    gnc_commodity_table_delete_namespace (t, ns);
-  }
-
-  g_list_free (namespaces);
-}
-
 /********************************************************************
  * gnc_commodity_table_foreach_commodity
  * call user-defined function once for every commodity in every
@@ -807,7 +998,7 @@ iter_namespace (gpointer key, gpointer value, gpointer user_data)
 }
 
 gboolean 
-gnc_commodity_table_foreach_commodity (gnc_commodity_table * tbl,
+gnc_commodity_table_foreach_commodity (const gnc_commodity_table * tbl,
                           gboolean (*f)(gnc_commodity *, gpointer),
                           gpointer user_data)
 {
@@ -903,6 +1094,53 @@ gnc_commodity_table_add_default_data(gnc_commodity_table *table)
   gnc_commodity_table_add_namespace(table, GNC_COMMODITY_NS_EUREX);
   gnc_commodity_table_add_namespace(table, GNC_COMMODITY_NS_MUTUAL);
   return TRUE;
+}
+
+/********************************************************************
+ ********************************************************************/
+/* gncObject function implementation and registration */
+
+static void 
+commodity_table_book_begin (QofBook *book)
+{
+  gnc_commodity_table *ct;
+  
+  ct = gnc_commodity_table_new ();
+  if(!gnc_commodity_table_add_default_data(ct))
+  {
+    PWARN("unable to initialize book's commodity_table");
+  }
+  gnc_commodity_table_set_table (book, ct);
+  
+}
+
+static void 
+commodity_table_book_end (QofBook *book)
+{
+  gnc_commodity_table_set_table (book, NULL);
+}
+
+/* XXX Why is the commodity table never marked dirty/clean?
+ * Don't we have to save user-created/modified commodities?
+ * I don't get it ... does this need fixing?
+ */
+static GncObject_t commodity_table_object_def = 
+{
+  interface_version: GNC_OBJECT_VERSION,
+  name:              GNC_ID_COMMODITY_TABLE,
+  type_label:        "CommodityTable",
+  book_begin:        commodity_table_book_begin,
+  book_end:          commodity_table_book_end,
+  is_dirty:          NULL,
+  mark_clean:        NULL,
+  foreach:           NULL,
+  printable:         NULL,
+};
+
+gboolean 
+gnc_commodity_table_register (void)
+{
+  return gncObjectRegister (&commodity_table_object_def);
 }
 
 /* ========================= END OF FILE ============================== */

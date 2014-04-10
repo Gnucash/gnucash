@@ -12,7 +12,8 @@
 #include "messages.h"
 #include "gnc-engine-util.h"
 #include "GNCIdP.h"
-#include "gnc-book-p.h"
+#include "gnc-book.h"
+#include "gnc-commodity.h"
 #include "gnc-numeric.h"
 #include "gncObject.h"
 #include "QueryObject.h"
@@ -119,6 +120,11 @@ static void gncCustomerFree (GncCustomer *cust)
   g_list_free (cust->jobs);
 
   remObj (cust);
+
+  if (cust->terms)
+    gncBillTermDecRef (cust->terms);
+  if (cust->taxtable)
+    gncTaxTableDecRef (cust->taxtable);
 
   g_free (cust);
 }

@@ -40,7 +40,7 @@
 #include <glib.h>
 #include <string.h>
 
-#include "date.h"
+#include "gnc-date.h"
 #include "escape.h"
 #include "builder.h"
 #include "gnc-engine-util.h"

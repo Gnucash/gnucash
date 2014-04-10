@@ -22,11 +22,8 @@
  *                                                                  *
 \********************************************************************/
 
-/*
- * FILE:
- * AccountP.h
+/** @file AccountP.h
  *
- * FUNCTION:
  * This is the *private* header for the account structure.
  * No one outside of the engine should ever include this file.
  *
@@ -45,20 +42,28 @@
 #include "config.h"
 
 #include "Account.h"
+#include "Backend.h"
 #include "GNCIdP.h"
 #include "gnc-commodity.h"
 #include "gnc-engine.h"
 #include "gnc-numeric.h"
 #include "kvp_frame.h"
+#include "qofbook.h"
 
 
 /** STRUCTS *********************************************************/
+
+/** This is the data that describes an account. 
+ *
+ * This is the *private* header for the account structure.
+ * No one outside of the engine should ever include this file.
+*/
 struct account_s
 {
   /* public data, describes account */
   GUID      guid;          /* globally unique account id */
 
-  GNCBook *book;   /* the entity_table in which this account is stored */
+  QofBook *book;   /* the entity_table in which this account is stored */
 
   /* The accountName is an arbitrary string assigned by the user. 
    * It is intended to a short, 5 to 30 character long string that
@@ -200,6 +205,13 @@ void xaccFreeAccount (Account *account);
  */
 void xaccAccountSetVersion (Account*, gint32);
 gint32 xaccAccountGetVersion (Account*);
+
+/*
+ * The xaccGetAccountBackend() subroutine will find the
+ *    persistent-data storage backend associated with this account.
+ */
+
+Backend * xaccAccountGetBackend (Account *account);
 
 /* Register Accounts with the engine */
 gboolean xaccAccountRegister (void);

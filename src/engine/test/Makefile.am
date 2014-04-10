@@ -1,5 +1,6 @@
 
 AM_CFLAGS = \
+  -I${top_srcdir}/src \
   -I${top_srcdir}/src/gnc-module \
   -I${top_srcdir}/src/test-core \
   -I${top_srcdir}/src/engine \
@@ -23,16 +24,17 @@ TESTS = \
   test-commodities \
   test-date \
   test-group-vs-book \
+  test-lots \
   test-object \
   test-period \
   test-querynew \
   test-query \
   test-resolve-file-path \
   test-split-vs-account  \
+  test-transaction-reversal \
   test-transaction-voiding \
   test-freq-spec \
-  test-scm-query \
-  test-scm-query-import
+  test-scm-query
 
 GNC_TEST_DEPS := \
   --gnc-module-dir ${top_builddir}/src/gnc-module \
@@ -53,6 +55,7 @@ noinst_PROGRAMS = \
   test-freq-spec \
   test-group-vs-book \
   test-load-engine \
+  test-lots \
   test-object \
   test-period \
   test-query \
@@ -60,6 +63,7 @@ noinst_PROGRAMS = \
   test-resolve-file-path \
   test-scm-query \
   test-split-vs-account \
+  test-transaction-reversal \
   test-transaction-voiding
 
 EXTRA_DIST = \

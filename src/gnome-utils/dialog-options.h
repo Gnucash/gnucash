@@ -28,7 +28,7 @@
 #endif
 
 #include <gnome.h>
-#include <guile/gh.h>
+#include <libguile.h>
 
 #include "option-util.h"
 

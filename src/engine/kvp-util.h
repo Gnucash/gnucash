@@ -1,6 +1,6 @@
 /********************************************************************\
- * DateUtils.c -- Date Handling Utilities                           *
- * Copyright (C) 1998 Linas Vepstas                                 *
+ * kvp-util.h -- misc KVP utilities                                 *
+ * Copyright (C) 2003 Linas Vepstas <linas@linas.org>               *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -18,54 +18,38 @@
  * Free Software Foundation           Voice:  +1-617-542-5942       *
  * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
- *                                                                  *
 \********************************************************************/
+
+/** @file kvp-util.h @brief GnuCash KVP utility functions */
+
+#ifndef GNC_KVP_UTIL_H
+#define GNC_KVP_UTIL_H
 
 #include "config.h"
 
-#include <glib.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <time.h>
+/***********************************************************************\
 
-#include "DateUtils.h"
+  g_hash_table_key_value_pairs(hash): Returns a GSList* of all the
+  keys and values in a given hash table.  Data elements of lists are
+  actual hash elements, so be careful, and deallocation of the
+  GHashTableKVPairs in the result list are the caller's
+  responsibility.  A typical sequence might look like this:
 
-#define BUFFSIZE 100
+    GSList *kvps = g_hash_table_key_value_pairs(hash);  
+    ... use kvps->data->key and kvps->data->val, etc. here ...
+    g_slist_foreach(kvps, g_hash_table_kv_pair_free_gfunc, NULL);
+    g_slist_free(kvps);
 
+*/
 
-/* ======================================================== */
-char *
-xaccDateUtilGetStamp (time_t thyme)
-{
-   struct tm *stm;
-   char buf[BUFFSIZE];
-   char * retval;
+typedef struct {
+  gpointer key;
+  gpointer value;
+} GHashTableKVPair;
 
-   stm = localtime (&thyme);
+GSList *g_hash_table_key_value_pairs(GHashTable *table);
+void g_hash_table_kv_pair_free_gfunc(gpointer data, gpointer user_data);
 
-   sprintf (buf, "%04d%02d%02d%02d%02d%02d",
-      (stm->tm_year + 1900),
-      (stm->tm_mon +1),
-      stm->tm_mday,
-      stm->tm_hour,
-      stm->tm_min,
-      stm->tm_sec
-   );
-   
-   retval = g_strdup (buf);
-   return retval;
-}
+/***********************************************************************/
 
-/* ======================================================== */
-
-char *
-xaccDateUtilGetStampNow (void)
-{
-   time_t now;
-   time (&now);
-   return xaccDateUtilGetStamp (now);
-}
-
-/************************ END OF ************************************\
-\************************* FILE *************************************/
+#endif /* GNC_KVP_UTIL_H */

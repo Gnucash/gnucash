@@ -5,8 +5,9 @@
  * Copyright (c) 2003 Derek Atkins <warlord@MIT.EDU>
  *********************************************************************/
 
+#include "config.h"
 #include <stdio.h>
-#include <guile/gh.h>
+#include <libguile.h>
 #include <glib.h>
 
 #include "gnc-module.h"
@@ -56,7 +57,7 @@ libgncmod_business_utils_LTX_gnc_module_init(int refcount)
     /* initialize known types */
   }
   
-  gh_eval_str("(use-modules (gnucash business-utils))");
+  scm_c_eval_string("(use-modules (gnucash business-utils))");
 
   return TRUE;
 }

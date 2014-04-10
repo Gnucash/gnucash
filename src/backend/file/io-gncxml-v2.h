@@ -40,6 +40,7 @@
 #include "gnc-commodity.h"
 #include "gnc-engine.h"
 #include "gnc-pricedb.h"
+#include "gnc-session.h"
 #include "SchedXaction.h"
 
 #include "sixtp.h"
@@ -92,6 +93,9 @@ struct sixtp_gdv2
  *
  * The write() method writes out all the objects of this particular type
  *   in the book and stores the XML in the FILE.
+ *
+ * The scrub() method will take a completed, parsed GNCBook* and post process
+ *   the data, allowing you to 'scrub' the data.
  */
 #define GNC_FILE_BACKEND	"gnc:file:2"
 #define GNC_FILE_BACKEND_VERS	2
@@ -104,6 +108,7 @@ typedef struct
   gboolean	(*add_item)(sixtp_gdv2 *, gpointer obj);
   int		(*get_count) (GNCBook *);
   void		(*write) (FILE*, GNCBook*);
+  void		(*scrub) (GNCBook *);
 } GncXmlDataType_t;
 
 /**

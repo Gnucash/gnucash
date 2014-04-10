@@ -3,6 +3,7 @@ SUBDIRS = .
 pkglib_LTLIBRARIES = libgncmod-business-backend-file.la
 
 AM_CFLAGS = \
+  -I${top_srcdir}/src \
   -I${top_srcdir}/src/backend \
   -I${top_srcdir}/src/backend/file \
   -I${top_srcdir}/src/engine \

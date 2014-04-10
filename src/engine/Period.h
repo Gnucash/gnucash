@@ -1,8 +1,5 @@
-/*
- * FILE:
- * Period.h
+/** @file Period.h
  *
- * FUNCTION:
  * Implement accounting periods.
  *
  * CAUTION: this is currently a semi-functional, untested implementation
@@ -17,12 +14,12 @@
 #ifndef XACC_PERIOD_H
 #define XACC_PERIOD_H
 
-#include "gnc-book.h"
 #include "gnc-engine.h"
 #include "Query.h"
+#include "qofbook.h"
 
 
-/* The gnc_book_close_period() routine will 'close' a book at
+/** The gnc_book_close_period() routine will 'close' a book at
  *    the indicated date.  It returns a pointer to the closed book,
  *    while the argument remains open.  This routine will move
  *    all of the older transactions from the open book to the
@@ -101,11 +98,11 @@
    transactions ???
 
  */
-GNCBook * gnc_book_close_period (GNCBook *, Timespec, 
+QofBook * gnc_book_close_period (QofBook *, Timespec, 
                                  Account *equity_acct, 
                                  const char *memo);
 
-/* The gnc_book_partition() uses the result of the indicated query
+/** The gnc_book_partition() uses the result of the indicated query
  *    to move a set of transactions from the "src" book to the "dest"
  *    book.  Before moving the transactions, it will first place a 
  *    copy of all of the accounts in "src" into "dest".  This is done 
@@ -133,9 +130,9 @@ GNCBook * gnc_book_close_period (GNCBook *, Timespec,
  *    For the current usage, this bug aint important, and I'm too 
  *    lazy to fix it.
  */
-void gnc_book_partition (GNCBook *dest, GNCBook *src, Query *);
+void gnc_book_partition (QofBook *dest, QofBook *src, Query *);
 
-/* The gnc_book_insert_trans_clobber() routine takes an existing 
+/** The gnc_book_insert_trans_clobber() routine takes an existing 
  *    transaction that is located in one book, and moves it to 
  *    another book.  It moves all of the splits as well.  In the 
  *    course of the move, the transaction is literally deleted 
@@ -151,8 +148,8 @@ void gnc_book_partition (GNCBook *dest, GNCBook *src, Query *);
  *    books' entity tables, and not much else.
  */
 
-void gnc_book_insert_trans (GNCBook *book, Transaction *trans);
-void gnc_book_insert_trans_clobber (GNCBook *book, Transaction *trans);
+void gnc_book_insert_trans (QofBook *book, Transaction *trans);
+void gnc_book_insert_trans_clobber (QofBook *book, Transaction *trans);
 
 #endif /* XACC_PERIOD_H */
 

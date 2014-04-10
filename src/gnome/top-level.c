@@ -25,7 +25,7 @@
 #include "config.h"
 
 #include <gnome.h>
-#include <guile/gh.h>
+#include <libguile.h>
 #include <popt.h>
 #include <stdlib.h>
 #include <g-wrap-wct.h>
@@ -35,7 +35,6 @@
 #include "TransLog.h"
 #include "backend/gnc-backend-api.h"
 #include "combocell.h"
-#include "date.h"
 #include "dialog-commodity.h"
 #include "dialog-options.h"
 #include "dialog-transfer.h"
@@ -43,6 +42,7 @@
 #include "file-utils.h"
 #include "global-options.h"
 #include "gnc-component-manager.h"
+#include "gnc-date.h"
 #include "gnc-engine-util.h"
 #include "gnc-file.h"
 #include "gnc-menu-extensions.h"
@@ -336,7 +336,7 @@ gnc_gui_init (SCM command_line)
 
     account_separator_callback_id = 
       gnc_register_option_change_callback(gnc_configure_account_separator_cb,
-                                          NULL, "General",
+                                          NULL, "Accounts",
                                           "Account Separator");
 
     gnc_configure_register_colors();
@@ -419,9 +419,9 @@ gnc_gui_init (SCM command_line)
 
     /* Run the ui startup hooks. */
     {
-      SCM run_danglers = gh_eval_str("gnc:hook-run-danglers");
-      SCM hook = gh_eval_str("gnc:*ui-startup-hook*");
-      gh_call1(run_danglers, hook); 
+      SCM run_danglers = scm_c_eval_string("gnc:hook-run-danglers");
+      SCM hook = scm_c_eval_string("gnc:*ui-startup-hook*");
+      scm_call_1(run_danglers, hook); 
     }    
   }
 
@@ -577,34 +577,11 @@ gnc_configure_date_format (void)
 
   DateFormat df;
 
-  if( safe_strcmp(format_code, "us") == 0)
-  {
-    df = DATE_FORMAT_US;
-  }
-
-  else if( safe_strcmp(format_code, "uk") == 0)
-  {
-    df = DATE_FORMAT_UK;
-  }
-
-  else if( safe_strcmp(format_code, "ce") == 0)
-  {
-    df = DATE_FORMAT_CE;
-  }
-
-  else if( safe_strcmp(format_code, "iso") == 0)
-  {
-    df = DATE_FORMAT_ISO;
-  }
-
-  else if( safe_strcmp(format_code, "locale") == 0)
-  {
-    df = DATE_FORMAT_LOCALE;
-  }
-
-  else
+  if (gnc_date_string_to_dateformat(format_code, &df))
   {
     PERR("Incorrect date format code");
+    if (format_code != NULL)
+      free(format_code);
     return;
   }
 

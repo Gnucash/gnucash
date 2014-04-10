@@ -40,6 +40,7 @@
 #include "GNCIdP.h"
 #include "gnc-engine.h"
 #include "kvp_frame.h"
+#include "qofbook.h"
 
 struct gnc_lot_struct
 {
@@ -47,7 +48,7 @@ struct gnc_lot_struct
   GUID guid;
 
   /* Book that this lot belongs to */
-  GNCBook *book;  
+  QofBook *book;  
 
   /* Anchor for generic lot-specific data. */
   kvp_frame *kvp_data;
@@ -60,8 +61,8 @@ struct gnc_lot_struct
   /* List of splits that belong to this lot. */
   SplitList *splits;
 
-  /* handy cached value to indicate if lot is closed */
-  /* if value is negative, then the cache is invalid */
+  /* Handy cached value to indicate if lot is closed. */
+  /* If value is negative, then the cache is invalid. */
   signed char is_closed;
 };
 

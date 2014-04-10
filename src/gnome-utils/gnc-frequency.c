@@ -564,7 +564,7 @@ gnc_frequency_save_state( GNCFrequency *gf, FreqSpec *fs, GDate *outStartDate )
 {
         gint page;
         struct tm *tmpTm;
-        guint day;
+        gint day;
         GtkWidget *o;
         UIFreqType uift;
         FreqSpec *tmpFS;

@@ -800,7 +800,7 @@ gnc_commoditylist * rpcend_build_gnccommoditylist (gnc_commodity_table *ct,
     GList *cl, *this_cl;
 
     /* Ignore all the ISO4217 commodities */
-    if (!strcmp (namespace, GNC_COMMODITY_NS_ISO))
+    if (gnc_commodity_is_iso_namespace (namespace))
       continue;
 
     cl = gnc_commodity_table_get_commodities (ct, namespace);

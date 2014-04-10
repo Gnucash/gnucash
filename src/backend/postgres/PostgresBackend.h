@@ -124,7 +124,6 @@ Backend * pgendNew (void);
 Account * pgendAccountLookup (PGBackend *be, const GUID *acct_guid);
 Transaction * pgendTransLookup (PGBackend *be, const GUID *txn_guid);
 Split * pgendSplitLookup (PGBackend *be, const GUID *split_guid);
-GNCPrice * pgendPriceLookup (PGBackend *be, const GUID *price_guid);
 GNCIdType pgendGUIDType (PGBackend *be, const GUID *guid);
 
 void pgendDisable (PGBackend *be);

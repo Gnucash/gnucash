@@ -44,11 +44,11 @@ static GNCOptionDB *global_options = NULL;
 void
 gnc_options_init(void)
 {
-  SCM func = gh_eval_str("gnc:send-global-options");
+  SCM func = scm_c_eval_string("gnc:send-global-options");
   SCM options;
 
-  if (gh_procedure_p(func))
-    options = gh_call0(func);
+  if (SCM_PROCEDUREP(func))
+    options = scm_call_0(func);
   else
   {
     PERR("gnc_options_init: no guile options!");

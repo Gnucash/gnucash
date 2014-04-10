@@ -30,7 +30,7 @@
       "#include <gnc-ui.h>\n"
       "#include <gnc-ui-util.h>\n"
       "#include <gnc-menu-extensions.h>\n"
-      "#include <date.h>\n"
+      "#include <gnc-date.h>\n"
       "#include <guile-util.h>\n"
       "#include <gnc-engine.h>\n"
       "#include <gnc-commodity.h>\n"

@@ -4,13 +4,13 @@ pkglib_LTLIBRARIES = libgw-engine.la libgw-kvp.la libgncmod-engine.la
 
 AM_CFLAGS = \
 	-I${top_srcdir}/lib/libc \
+	-I${top_srcdir}/src \
 	-I${top_srcdir}/src/gnc-module \
 	${GNUCASH_ENGINE_CFLAGS}
 
 libgncmod_engine_la_SOURCES = \
   Account.c \
   Backend.c \
-  DateUtils.c \
   FreqSpec.c \
   GNCId.c \
   Group.c \
@@ -20,14 +20,15 @@ libgncmod_engine_la_SOURCES = \
   QueryCore.c \
   QueryObject.c \
   SchedXaction.c \
+  SX-book.c \
   SX-ttinfo.c \
   Scrub.c \
+  Scrub2.c \
   TransLog.c \
   Transaction.c \
-  date.c \
   gnc-associate-account.c \
-  gnc-book.c \
   gnc-commodity.c \
+  gnc-date.c \
   gnc-engine-util.c \
   gnc-engine.c \
   gnc-event.c \
@@ -36,13 +37,15 @@ libgncmod_engine_la_SOURCES = \
   gnc-pricedb.c \
   gnc-session.c \
   gnc-session-scm.c \
+  gnc-trace.c \
   gncmod-engine.c \
   guid.c \
   gncObject.c \
   kvp_frame.c \
   kvp-util.c \
   md5.c \
-  messages.c
+  messages.c \
+  qofbook.c
 
 EXTRA_libgncmod_engine_la_SOURCES = iso-4217-currencies.c
 
@@ -50,27 +53,28 @@ gncincludedir = ${GNC_INCLUDE_DIR}
 gncinclude_HEADERS = \
   Account.h \
   Backend.h \
-  DateUtils.h \
   FreqSpec.h \
   GNCId.h \
   Group.h \
   Period.h \
   SchedXaction.h \
+  SX-book.h \
   SX-ttinfo.h \
   Query.h \
   QueryNew.h \
   QueryObject.h \
   QueryCore.h \
   Scrub.h \
+  Scrub2.h \
   TransLog.h \
   Transaction.h \
-  date.h \
   engine-helpers.h \
   glib-helpers.h \
   gnc-associate-account.h \
   gnc-be-utils.h \
   gnc-book.h \
   gnc-commodity.h \
+  gnc-date.h \
   gnc-engine-util.h \
   gnc-engine.h \
   gnc-event.h \
@@ -78,11 +82,14 @@ gncinclude_HEADERS = \
   gnc-pricedb.h \
   gnc-session.h \
   gnc-session-scm.h \
+  gnc-trace.h \
   guid.h \
   gncObject.h \
   kvp_frame.h \
   kvp-scm.h \
-  messages.h
+  kvp-util.h \
+  messages.h \
+  qofbook.h
 
 noinst_HEADERS = \
   AccountP.h \
@@ -95,9 +102,10 @@ noinst_HEADERS = \
   QueryObjectP.h \
   QueryCoreP.h \
   SchedXactionP.h \
+  ScrubP.h \
+  SX-book.h \
   SX-ttinfo.h \
   TransactionP.h \
-  gnc-book-p.h \
   gnc-event-p.h \
   gnc-lot.h \
   gnc-lot-p.h \
@@ -107,12 +115,13 @@ noinst_HEADERS = \
   kvp-util-p.h \
   md5.h \
   gw-engine.h \
-  gw-kvp.h
+  gw-kvp.h \
+  qofbook-p.h
 
 noinst_SCRIPTS = iso-currencies-to-c
 
 libgncmod_engine_la_LDFLAGS = -module
-libgncmod_engine_la_LIBADD = ${GNUCASH_ENGINE_BASE_LIBS} \
+libgncmod_engine_la_LIBADD = ${GNUCASH_ENGINE_BASE_LIBS} ${INTLLIBS} \
  libgw-engine.la \
  libgw-kvp.la \
  ../gnc-module/libgncmodule.la \

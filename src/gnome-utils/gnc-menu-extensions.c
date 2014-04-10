@@ -65,11 +65,11 @@ initialize_getters()
   if (getters_initialized)
     return;
 
-  getters.type = gh_eval_str("gnc:extension-type");
-  getters.name = gh_eval_str("gnc:extension-name");
-  getters.documentation = gh_eval_str("gnc:extension-documentation");
-  getters.path = gh_eval_str("gnc:extension-path");
-  getters.script = gh_eval_str("gnc:extension-script");
+  getters.type = scm_c_eval_string("gnc:extension-type");
+  getters.name = scm_c_eval_string("gnc:extension-name");
+  getters.documentation = scm_c_eval_string("gnc:extension-documentation");
+  getters.path = scm_c_eval_string("gnc:extension-path");
+  getters.script = scm_c_eval_string("gnc:extension-script");
 
   getters_initialized = TRUE;
 }
@@ -145,23 +145,23 @@ gnc_extension_path(SCM extension, char **window, char **fullpath)
     return;
   }
 
-  if (gh_null_p(path)) {
+  if (SCM_NULLP(path)) {
     *window = g_strdup("");
     *fullpath = g_strdup("");
     return;
   }
 
-  strings = g_new0(gchar *, gh_length(path) + 1);
+  strings = g_new0(gchar *, scm_ilength(path) + 1);
 
   i = 0;
-  while (!gh_null_p(path))
+  while (!SCM_NULLP(path))
   {
     SCM item;
 
-    item = gh_car(path);
-    path = gh_cdr(path);
+    item = SCM_CAR(path);
+    path = SCM_CDR(path);
 
-    if (gh_string_p(item))
+    if (SCM_STRINGP(item))
       strings[i] = gh_scm2newstr(item, NULL);
     else
     {
@@ -208,7 +208,7 @@ gnc_extension_run_script(ExtensionInfo *ext_info)
     return;
   }
 
-  gh_call0(script);
+  scm_call_0(script);
 }
 
 

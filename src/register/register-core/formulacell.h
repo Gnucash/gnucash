@@ -40,7 +40,7 @@
 #include "gnc-ui-util.h"
 
 #include "basiccell.h"
-#include "date.h"
+#include "gnc-date.h"
 
 typedef struct _FormulaCell
 {

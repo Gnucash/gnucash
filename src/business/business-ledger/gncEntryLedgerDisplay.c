@@ -1,6 +1,6 @@
 /*
  * gncEntryLedgerDisplay.c -- handle the display management for an Entry Ledger
- * Copyright (C) 2002 Derek Atkins
+ * Copyright (C) 2002, 2003 Derek Atkins
  * Author: Derek Atkins <warlord@MIT.EDU>
  */
 
@@ -45,7 +45,8 @@ gnc_entry_ledger_refresh_internal (GncEntryLedger *ledger, GList *entries)
   /* Viewers must always have at least one entry! */
   if ((ledger->type == GNCENTRY_ORDER_VIEWER ||
        ledger->type == GNCENTRY_INVOICE_VIEWER ||
-       ledger->type == GNCENTRY_BILL_VIEWER) && !entries)
+       ledger->type == GNCENTRY_BILL_VIEWER ||
+       ledger->type == GNCENTRY_EXPVOUCHER_VIEWER) && !entries)
     return;
 
   ledger->loading = TRUE;
@@ -76,6 +77,8 @@ gnc_entry_ledger_set_watches (GncEntryLedger *ledger, GList *entries)
   case GNCENTRY_INVOICE_VIEWER:
   case GNCENTRY_BILL_ENTRY:
   case GNCENTRY_BILL_VIEWER:
+  case GNCENTRY_EXPVOUCHER_ENTRY:
+  case GNCENTRY_EXPVOUCHER_VIEWER:
     type = GNC_INVOICE_MODULE_NAME;
     break;
 
@@ -97,6 +100,17 @@ gnc_entry_ledger_set_watches (GncEntryLedger *ledger, GList *entries)
   gnc_gui_component_watch_entity_type (ledger->component_id,
                                        GNC_TAXTABLE_MODULE_NAME,
                                        GNC_EVENT_MODIFY | GNC_EVENT_DESTROY);
+
+  /* For expense vouchers, watch the employee and refresh if it's changed */
+  if (ledger->type == GNCENTRY_EXPVOUCHER_ENTRY) {
+    GncOwner *owner = gncOwnerGetEndOwner (gncInvoiceGetOwner (ledger->invoice));
+    GncEmployee *employee = gncOwnerGetEmployee (owner);
+
+    if (employee)
+      gnc_gui_component_watch_entity (ledger->component_id,
+				      gncEmployeeGetGUID (employee),
+				      GNC_EVENT_MODIFY);
+  }
 
   for (node = entries; node; node = node->next)
   {

@@ -10,8 +10,8 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
-#include "date.h"
 #include "Group.h"
+#include "gnc-date.h"
 #include "gnc-engine.h"
 #include "gnc-engine-util.h"
 #include "Transaction.h"
@@ -1026,8 +1026,11 @@ make_random_changes_to_transaction (GNCBook *book, Transaction *trans)
 {
   g_return_if_fail (trans && book);
 
-  if (xaccTransGetVoidStatus (trans))
+  if (xaccTransGetVoidStatus (trans)) {
+    if (get_random_int_in_range (1, 2) == 1)
+      xaccTransUnvoid (trans);
     return;
+  }
 
   xaccTransBeginEdit (trans);
 
@@ -1182,7 +1185,7 @@ make_random_changes_to_commodity_table (gnc_commodity_table *table)
     GList *commodities;
     GList *com_node;
 
-    if (strcmp (ns, GNC_COMMODITY_NS_ISO) == 0)
+    if (gnc_commodity_namespace_is_iso (ns))
       continue;
 
     commodities = gnc_commodity_table_get_commodities (table, ns);

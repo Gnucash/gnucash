@@ -125,7 +125,7 @@ struct _GNCSplitReg {
   gint createFlags;
   gint disallowedCaps;
 
-  gint sort_type;
+  guint sort_type;
 
   gboolean read_only;
 };
@@ -149,6 +149,9 @@ struct _GNCSplitRegClass {
   void (*copy_txn_cb)     ( GNCSplitReg *w, gpointer user_data );
   void (*paste_cb)        ( GNCSplitReg *w, gpointer user_data );
   void (*paste_txn_cb)    ( GNCSplitReg *w, gpointer user_data );
+  void (*void_txn_cb)     ( GNCSplitReg *w, gpointer user_data );
+  void (*unvoid_txn_cb)   ( GNCSplitReg *w, gpointer user_data );
+  void (*reverse_txn_cb)  ( GNCSplitReg *w, gpointer user_data );
   void (*help_changed_cb) ( GNCSplitReg *w, gpointer user_data );
   void (*include_date_cb) ( GNCSplitReg *w, time_t date, gpointer user_data );
 };
@@ -173,7 +176,11 @@ typedef enum {
   STYLE_SUBMENU,
 } GNC_SPLIT_REG_ITEM;
 
-/* Easy way to pass the sort-type */
+/* Easy way to pass the sort-type 
+ * Note that this is STUPID -- we should be using parameter lists,
+ * but this provides a simple case statement internally.  This should
+ * probably not actually be exposed in the external interface....
+ */
 typedef enum {
   BY_NONE = 0,
   BY_STANDARD,
@@ -183,7 +190,9 @@ typedef enum {
   BY_NUM,
   BY_AMOUNT,
   BY_MEMO,
-  BY_DESC
+  BY_DESC,
+  BY_ACTION,
+  BY_NOTES
 } SortType;
 
 /**
@@ -269,6 +278,13 @@ void gnc_split_reg_set_double_line( GNCSplitReg *gsr, gboolean doubleLine );
  **/
 void gnc_split_reg_use_extended_popup( GNCSplitReg *gsr );
 
+/**
+ * Check if its OK to close this register window.  Gives the register
+ * a chance to abort the close if there are roblems, e.g. an open
+ * transaction.
+ *
+ * @return TRUE if the register may be closed, FALSE if not.
+ **/
 gboolean gnc_split_reg_check_close( GNCSplitReg *gsr );
 
 void gnc_split_reg_raise( GNCSplitReg *gsr );

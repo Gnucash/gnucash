@@ -233,6 +233,7 @@ make_type_menu (GNCSearchCoreType *fe)
   ADD_TYPE_MENU_ITEM (_("Customer"), GNC_OWNER_CUSTOMER);
   first = item;
   ADD_TYPE_MENU_ITEM (_("Vendor"), GNC_OWNER_VENDOR);
+  ADD_TYPE_MENU_ITEM (_("Employee"), GNC_OWNER_EMPLOYEE);
   ADD_TYPE_MENU_ITEM (_("Job"), GNC_OWNER_JOB);
 
   opmenu = gtk_option_menu_new ();

@@ -1,6 +1,6 @@
 /*
  * gncEntryLedgerControl.c -- Control for GncEntry ledger
- * Copyright (C) 2001,2002 Derek Atkins
+ * Copyright (C) 2001, 2002, 2003 Derek Atkins
  * Author: Derek Atkins <warlord@MIT.EDU>
  */
 
@@ -60,6 +60,8 @@ gnc_entry_ledger_save (GncEntryLedger *ledger, gboolean do_commit)
   if (!gncEntryIsOpen (entry))
     gncEntryBeginEdit (entry);
 
+  gnc_table_save_cells (ledger->table, entry);
+
   if (entry == blank_entry) {
     Timespec ts;
     ts.tv_sec = time(NULL);
@@ -75,6 +77,7 @@ gnc_entry_ledger_save (GncEntryLedger *ledger, gboolean do_commit)
       gncInvoiceAddEntry (ledger->invoice, blank_entry);
       break;
     case GNCENTRY_BILL_ENTRY:
+    case GNCENTRY_EXPVOUCHER_ENTRY:
       /* Anything entered on an invoice entry must be part of the invoice! */
       gncBillAddEntry (ledger->invoice, blank_entry);
       break;
@@ -84,8 +87,6 @@ gnc_entry_ledger_save (GncEntryLedger *ledger, gboolean do_commit)
       break;
     }
   }
-
-  gnc_table_save_cells (ledger->table, entry);
 
   if (entry == blank_entry) {
     if (do_commit) {
@@ -148,6 +149,7 @@ gnc_entry_ledger_verify_can_save (GncEntryLedger *ledger)
 	return FALSE;
       break;
     case GNCENTRY_BILL_ENTRY:
+    case GNCENTRY_EXPVOUCHER_ENTRY:
       if (!gnc_entry_ledger_verify_acc_cell_ok (ledger, ENTRY_BACCT_CELL,
 						_("an Account")))
 	return FALSE;
@@ -227,6 +229,7 @@ gnc_entry_ledger_auto_completion (GncEntryLedger *ledger,
   case GNCENTRY_ORDER_ENTRY:
   case GNCENTRY_INVOICE_ENTRY:
   case GNCENTRY_BILL_ENTRY:
+  case GNCENTRY_EXPVOUCHER_ENTRY:
 
     /* There must be a blank entry */
     if (blank_entry == NULL)
@@ -289,6 +292,8 @@ static gboolean gnc_entry_ledger_traverse (VirtualLocation *p_new_virt_loc,
       break;
     case GNCENTRY_BILL_ENTRY:
     case GNCENTRY_BILL_VIEWER:
+    case GNCENTRY_EXPVOUCHER_ENTRY:
+    case GNCENTRY_EXPVOUCHER_VIEWER:
       cell_name = ENTRY_BACCT_CELL;
       break;
     default:
@@ -456,33 +461,14 @@ static gboolean gnc_entry_ledger_traverse (VirtualLocation *p_new_virt_loc,
    */
 
   /* Ok, we are changing lines and the current entry has
-   * changed. See what the user wants to do. */
+   * changed. We only ask them what they want to do in
+   * limited cases -- usually just let the change go through.
+   */
   {
     const char *message;
 
     switch (ledger->type) {
     case GNCENTRY_INVOICE_ENTRY:
-      {
-	gboolean inv_value;
-	gboolean only_inv_changed = FALSE;
-
-	if (changed == 1 &&
-	    gnc_table_layout_get_cell_changed (ledger->table->layout,
-					       ENTRY_INV_CELL, TRUE))
-	  only_inv_changed = TRUE;
-
-	inv_value = gnc_entry_ledger_get_checkmark (ledger, ENTRY_INV_CELL);
-
-	if (inv_value && only_inv_changed) {
-	  /* If the only change is that the 'inv' entry was clicked
-	   * "on", then just accept the change it without question.
-	   */
-	  result = GNC_VERIFY_YES;
-	  goto dontask;
-	}
-      }
-      /* Ok, something else has changed -- we should ask the user */
-
       if (gncEntryGetOrder (entry) != NULL) {
 	message = _("The current entry has been changed.\n"
 		    "However, this entry is part of an existing order.\n"
@@ -490,11 +476,11 @@ static gboolean gnc_entry_ledger_traverse (VirtualLocation *p_new_virt_loc,
 		    "effectively change your order?");
 	break;
       }
+
       /* FALLTHROUGH */
     default:
-      message = _("The current entry has been changed.\n"
-		  "Would you like to record the change?");
-      break;
+      result = GNC_VERIFY_YES;
+      goto dontask;
     }
 
     result = gnc_verify_cancel_dialog_parented (ledger->parent,

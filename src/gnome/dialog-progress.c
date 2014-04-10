@@ -24,7 +24,8 @@
 #include "config.h"
 
 #include <gnome.h>
-#include <guile/gh.h>
+#include <libguile.h>
+#include "guile-mappings.h"
 
 #include "dialog-progress.h"
 #include "dialog-utils.h"
@@ -85,9 +86,9 @@ cancel_cb(GtkWidget * widget, gpointer data)
   {
     SCM result;
 
-    result = gh_call0(progress->cancel_scm_func);
+    result = scm_call_0(progress->cancel_scm_func);
 
-    if (!gh_scm2bool (result))
+    if (!SCM_NFALSEP (result))
       return;
   }
 
@@ -124,9 +125,9 @@ delete_cb(GtkWidget *widget, GdkEvent  *event, gpointer data)
   {
     SCM result;
 
-    result = gh_call0(progress->cancel_scm_func);
+    result = scm_call_0(progress->cancel_scm_func);
 
-    if (gh_scm2bool (result))
+    if (SCM_NFALSEP (result))
     {
       gtk_widget_hide(progress->dialog);
       progress->closed = TRUE;
@@ -310,7 +311,7 @@ gnc_progress_dialog_set_cancel_scm_func (GNCProgressDialog *progress,
   if (progress->cancel_scm_func != SCM_UNDEFINED)
     scm_unprotect_object (progress->cancel_scm_func);
 
-  if (gh_procedure_p(cancel_scm_func))
+  if (SCM_PROCEDUREP(cancel_scm_func))
   {
     progress->cancel_scm_func = cancel_scm_func;
     scm_protect_object (cancel_scm_func);

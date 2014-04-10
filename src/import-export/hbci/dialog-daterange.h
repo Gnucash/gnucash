@@ -24,7 +24,7 @@
 #define DIALOG_DATERANGE_H
 
 #include <gnome.h>
-#include "date.h"
+#include "gnc-date.h"
 
 gboolean
 gnc_hbci_enter_daterange (GtkWidget *parent,

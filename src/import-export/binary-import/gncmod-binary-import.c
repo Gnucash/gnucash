@@ -5,11 +5,10 @@
  * Copyright (c) 2001 Linux Developers Group, Inc. 
  *********************************************************************/
 
+#include "config.h"
 #include <stdio.h>
-#include <guile/gh.h>
 #include <glib.h>
-#include <libguile/strports.h>
-#include <libguile/modules.h>
+#include <libguile.h>
 
 #include "gnc-module.h"
 #include "gnc-module-api.h"
@@ -43,7 +42,7 @@ static void
 lmod(char * mn) 
 {
   char * form = g_strdup_printf("(use-modules %s)\n", mn);
-  gh_eval_str(form);
+  scm_c_eval_string(form);
   g_free(form);
 }
 

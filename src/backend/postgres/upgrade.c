@@ -26,6 +26,7 @@
 #include "config.h"
 
 #include <libpq-fe.h> 
+#include <stdlib.h>  
 
 #include "PostgresBackend.h"
 #include "upgrade.h"

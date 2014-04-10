@@ -1,9 +1,11 @@
 /* gnc-mod-bar.c : the Gnucash plugin that wraps the library
  * 'libbar.so'. it does this by being linked against libbar.so */
 
+#include "config.h"
 #include <stdio.h>
-#include <guile/gh.h>
 #include <glib.h>
+#include <libguile.h>
+#include "guile-mappings.h"
 
 #include "bar-gwrap.h"
 #include "gnc-module-api.h"
@@ -35,7 +37,7 @@ libgncmodbar_LTX_gnc_module_init(int refcount) {
   gw_init_wrapset_bar_gwrap();
   
   /* use the (bar) module */ 
-  gh_eval_str("(use-modules (gnucash bar))");
+  scm_c_eval_string("(use-modules (gnucash bar))");
 
   return TRUE;
 }

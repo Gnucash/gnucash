@@ -28,6 +28,7 @@
 #include "dialog-utils.h"
 #include "global-options.h"
 #include "gnc-component-manager.h"
+#include "gnc-engine-util.h"
 #include "gnc-html.h"
 #include "gnc-mdi-utils.h"
 #include "gnc-ui-util.h"
@@ -35,8 +36,13 @@
 
 #define GNC_MDI_CM_CLASS "gnc-mdi"
 
+static short module = MOD_GUI;
+
 static GNCMDIInfo *gnc_mdi_current = NULL;
 static gboolean gnc_toolbar_visible = TRUE;
+static gboolean gnc_statusbar_visible = TRUE;
+static gboolean gnc_summarybar_visible = TRUE;
+
 
 /*
  * These strings must match the dispatch enum listed at the start of
@@ -90,10 +96,34 @@ gnc_mdi_get_toolbar_visibility (void)
   return(gnc_toolbar_visible);
 }
 
+gboolean
+gnc_mdi_get_statusbar_visibility (void)
+{
+  return(gnc_statusbar_visible);
+}
+
+gboolean
+gnc_mdi_get_summarybar_visibility (void)
+{
+  return(gnc_summarybar_visible);
+}
+
 void
 gnc_mdi_set_toolbar_visibility (gboolean visible)
 {
   gnc_toolbar_visible = visible;
+}
+
+void
+gnc_mdi_set_statusbar_visibility (gboolean visible)
+{
+  gnc_statusbar_visible = visible;
+}
+
+void
+gnc_mdi_set_summarybar_visibility (gboolean visible)
+{
+  gnc_summarybar_visible = visible;
 }
 
 void
@@ -459,13 +489,131 @@ gnc_mdi_show_toolbar (GNCMDIChildInfo *mc)
 {
   GtkWidget *dockitem = GTK_WIDGET(mc->toolbar)->parent;
 
+  ENTER("mc=%p, mc->app=%p", mc, mc ? mc->app : 0);
   if (gnc_toolbar_visible) {
+    DEBUG("showing toolbar");
     gtk_widget_show(dockitem);
   } else {
     gtk_widget_hide(dockitem);
-    if (mc->app)
+    DEBUG("hiding toolbar");
+    if (mc->app) {
       gtk_widget_queue_resize(mc->app->dock);
+      DEBUG("dock resize");
+    }
   }
+  LEAVE(" ");
+}
+
+/**
+ * gnc_mdi_show_statusbar
+ *
+ * @mc: A pointer to the child data structure for the GNC child
+ * whose statusbar should be shown/hidden.
+ *
+ * This routine shows or hides the gnome dock item containing the
+ * statusbar.
+ */
+void
+gnc_mdi_show_statusbar (GNCMDIChildInfo *mc)
+{
+  ENTER("mc=%p, mc->app=%p", mc, mc ? mc->app : 0);
+  if (!mc || !mc->app) {
+    LEAVE("oops");
+    return;
+  }
+
+  if (gnc_statusbar_visible) {
+    gtk_widget_show(mc->app->statusbar);
+  } else {
+    gtk_widget_hide(mc->app->statusbar);
+    gtk_widget_queue_resize(mc->app->statusbar->parent);
+  }
+  LEAVE(" ");
+}
+
+/**
+ * gnc_mdi_show_summarybar
+ *
+ * @mc: A pointer to the child data structure for the GNC child
+ * whose summarybar should be shown/hidden.
+ *
+ * This routine shows or hides the gnome dock item containing the
+ * summarybar.
+ */
+void
+gnc_mdi_show_summarybar (GNCMDIChildInfo *mc)
+{
+  GnomeDockItem *summarybar;
+  guint dc1, dc2, dc3, dc4;
+
+  ENTER("mc=%p, mc->app=%p", mc, mc ? mc->app : 0);
+  if (!mc || !mc->app) {
+    LEAVE("oops");
+    return;
+  }
+
+  summarybar = gnome_dock_get_item_by_name(GNOME_DOCK(mc->app->dock),
+					   "Summary Bar",
+					   &dc1, &dc2, &dc3, &dc4);
+  if (!summarybar) {
+    LEAVE("no summarybar");
+    return;
+  }
+
+  if (gnc_summarybar_visible) {
+    gtk_widget_show(GTK_WIDGET(summarybar));
+  } else {
+    gtk_widget_hide(GTK_WIDGET(summarybar));
+    gtk_widget_queue_resize(mc->app->dock);
+  }
+  LEAVE(" ");
+}
+
+/**
+ * gnc_mdi_tweak_menus
+ *
+ * @mc: A pointer to the GNC MDI child associated with the Main
+ * window.
+ *
+ * This routine tweaks the View window in the main window menubar so
+ * that the menu checkboxes correctly show the state of the Toolbar,
+ * Summarybar and Statusbar.  There is no way to have the checkboxes
+ * start checked.  This will trigger each of the callbacks once, but
+ * they are designed to ignore the first 'sync' callback.  This is a
+ * suboptimal solution, but I can't find a better one at the moment.
+ */
+static void
+gnc_mdi_tweak_menus(GNCMDIChildInfo * mc)
+{
+  GtkWidget *widget;
+  GnomeMDI *info;
+
+  ENTER(" ");
+  info = mc->gnc_mdi->mdi;
+  widget = gnc_mdi_child_find_menu_item(mc, "_View/_Toolbar");
+  gtk_signal_handler_block_by_data(GTK_OBJECT(widget), info);
+  gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(widget), gnc_toolbar_visible);
+  gtk_signal_handler_unblock_by_data(GTK_OBJECT(widget), info);
+
+  widget = gnc_mdi_child_find_menu_item(mc, "_View/_Status Bar");
+  gtk_signal_handler_block_by_data(GTK_OBJECT(widget), info);
+  gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(widget), gnc_statusbar_visible);
+  gtk_signal_handler_unblock_by_data(GTK_OBJECT(widget), info);
+
+  widget = gnc_mdi_child_find_menu_item(mc, "_View/S_ummary Bar");
+  gtk_signal_handler_block_by_data(GTK_OBJECT(widget), info);
+  gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(widget), gnc_summarybar_visible);
+  gtk_signal_handler_unblock_by_data(GTK_OBJECT(widget), info);
+  LEAVE(" ");
+}
+
+static void
+gnc_mdi_show_bars (GNCMDIChildInfo *mc)
+{
+  gnc_mdi_show_toolbar (mc);
+  gnc_mdi_show_statusbar (mc);
+  gnc_mdi_show_summarybar (mc);
+  gnc_mdi_tweak_menus(mc);
 }
 
 static void
@@ -517,6 +665,7 @@ gnc_mdi_app_destroyed_cb (GnomeApp * app, gpointer user_data)
   GNCMDIInfo * mainwin = user_data;
   GnomeMDI * mdi = mainwin->mdi;
 
+  ENTER(" ");
   if (mainwin->shutdown && (g_list_length (mdi->windows) == 0))
     mainwin->shutdown (0);
   else
@@ -541,6 +690,7 @@ gnc_mdi_app_destroyed_cb (GnomeApp * app, gpointer user_data)
       }
     }
   }
+  LEAVE(" ");
 }
 
 static void
@@ -549,6 +699,7 @@ gnc_mdi_app_created_cb (GnomeMDI * mdi, GnomeApp * app, gpointer data)
   GNCMDIInfo * mainwin = data;
 
   /* enable save and restore of menubar positions */
+  ENTER(" ");
   gnome_app_enable_layout_config (app, TRUE);
 
   /* flag the app as gnc mdi created */
@@ -558,6 +709,7 @@ gnc_mdi_app_created_cb (GnomeMDI * mdi, GnomeApp * app, gpointer data)
   gtk_signal_connect (GTK_OBJECT (app), "destroy", 
                       GTK_SIGNAL_FUNC (gnc_mdi_app_destroyed_cb),
                       mainwin);
+  LEAVE(" ");
 }
 
 /**
@@ -579,6 +731,7 @@ gnc_mdi_destroy_cb (GtkObject * w, gpointer data)
 {
   GNCMDIInfo * gnc_mdi = data;
 
+  ENTER(" ");
   gnc_mdi->mdi = NULL;
 
   if (gnc_mdi->shutdown)
@@ -590,6 +743,7 @@ gnc_mdi_destroy_cb (GtkObject * w, gpointer data)
   gnc_unregister_gui_component (gnc_mdi->component_id);
 
   g_free (gnc_mdi);
+  LEAVE(" ");
 }
 
 /**
@@ -617,8 +771,6 @@ gnc_mdi_child_menu_tweaking (GNCMDIChildInfo * mc)
 
   if (mc->menu_tweaking)
     mc->menu_tweaking(mc);
-  if (mc->gnc_mdi->menu_tweaking)
-    mc->gnc_mdi->menu_tweaking(mc);
 }
 
 /**
@@ -664,6 +816,7 @@ gnc_mdi_child_changed_cb (GnomeMDI * mdi, GnomeMDIChild * prev_child,
   GnomeApp         * new_app = NULL; 
   GnomeDockItemBehavior behavior;
 
+  ENTER(" ");
   if (prev_child)
   {
     prevwin = gtk_object_get_user_data (GTK_OBJECT(prev_child));
@@ -690,7 +843,7 @@ gnc_mdi_child_changed_cb (GnomeMDI * mdi, GnomeMDIChild * prev_child,
       {
         if (oldbar->parent)
           gtk_widget_hide (GTK_WIDGET(oldbar)->parent);        
-	gnc_mdi_show_toolbar(childwin);
+	gnc_mdi_show_bars(childwin);
       }
     }
     else if (childwin->app)
@@ -717,7 +870,7 @@ gnc_mdi_child_changed_cb (GnomeMDI * mdi, GnomeMDIChild * prev_child,
 
       gtk_toolbar_set_style (GTK_TOOLBAR(childwin->toolbar), 
                              gnc_get_toolbar_style ());
-      gnc_mdi_show_toolbar(childwin);
+      gnc_mdi_show_bars(childwin);
     }
     else
     {
@@ -733,7 +886,7 @@ gnc_mdi_child_changed_cb (GnomeMDI * mdi, GnomeMDIChild * prev_child,
 
       gtk_toolbar_set_style (GTK_TOOLBAR(childwin->toolbar), 
                              gnc_get_toolbar_style ());
-      gnc_mdi_show_toolbar(childwin);
+      gnc_mdi_show_bars(childwin);
       gnc_mdi_child_menu_tweaking(childwin);
     }
 
@@ -764,6 +917,7 @@ gnc_mdi_child_changed_cb (GnomeMDI * mdi, GnomeMDIChild * prev_child,
       gnome_app_install_menu_hints (new_app, hintinfo);
     gnc_mdi_update_widgets(childwin, TRUE);
   }
+  LEAVE(" ");
 }
 
 static void
@@ -773,6 +927,7 @@ gnc_mdi_configure_toolbar_cb (gpointer data)
   GtkToolbarStyle tbstyle;
   GList * child;
 
+  ENTER(" ");
   tbstyle = gnc_get_toolbar_style ();
 
   for (child = mi->children; child; child = child->next)
@@ -786,6 +941,7 @@ gnc_mdi_configure_toolbar_cb (gpointer data)
       }
     }
   }
+  LEAVE(" ");
 }
 
 static void
@@ -793,7 +949,9 @@ gnc_mdi_configure_mdi_cb (gpointer data)
 {
   GNCMDIInfo * mi = data; 
 
+  ENTER(" ");
   gnome_mdi_set_mode (mi->mdi, gnc_get_mdi_mode ());
+  LEAVE(" ");
 }
 
 static int
@@ -872,7 +1030,9 @@ gnc_mdi_new (const char *app_name,
 {
   GNCMDIInfo * gnc_mdi;
 
+  ENTER(" ");
   if (gnc_mdi_current) {
+    LEAVE("already exists");
     return gnc_mdi_current;
   }
   g_return_val_if_fail (app_name != NULL, NULL);
@@ -891,7 +1051,7 @@ gnc_mdi_new (const char *app_name,
   gnc_mdi->restore_cb = restore_cb;
 
   gnc_mdi->mdi = GNOME_MDI (gnome_mdi_new (app_name, title));
-
+  DEBUG("gnc_mdi=%p, mdi=%p", gnc_mdi, gnc_mdi->mdi);
   gnc_mdi->component_id = gnc_register_gui_component (GNC_MDI_CM_CLASS,
                                                       NULL, NULL, gnc_mdi);
 
@@ -921,6 +1081,7 @@ gnc_mdi_new (const char *app_name,
 
   gnc_mdi_current = gnc_mdi;
 
+  LEAVE("set gnc_mdi_current");
   return gnc_mdi;
 }
 
@@ -936,6 +1097,7 @@ gnc_mdi_add_child (GNCMDIInfo * wind, GNCMDIChildInfo * child)
   g_return_if_fail (wind != NULL);
   g_return_if_fail (child != NULL);
 
+  ENTER("GNCMDIInfo=%p, GNCMDIChildInfo=%p, mdi_child=%p", wind, child, child->child);
   wind->children = g_list_append (wind->children, child);
   child->gnc_mdi = wind;
 
@@ -948,14 +1110,17 @@ gnc_mdi_add_child (GNCMDIInfo * wind, GNCMDIChildInfo * child)
     gnome_mdi_generic_child_set_config_func (mdi_child,
                                              gnc_mdi_child_save_func, NULL);
   }
+  LEAVE(" ");
 }
 
 void
 gnc_mdi_remove_child (GNCMDIInfo * gnc_mdi, GNCMDIChildInfo * child)
 {
+  ENTER(" ");
   if (!gnc_mdi || !child) return;
 
   gnc_mdi->children = g_list_remove (gnc_mdi->children, child);
+  LEAVE(" ");
 }
 
 void
@@ -969,6 +1134,22 @@ gnc_mdi_child_refresh (GNCMDIChildInfo *child)
   /* pesky child_set_name tries to change the window title. Set it back. */
   if ((child->gnc_mdi->mdi->active_child == child->child) && child->app)
     gnc_mdi_child_set_title (child);
+}
+
+GNCMDIChildInfo *
+gnc_mdi_child_find_by_app (GnomeApp *app)
+{
+  GNCMDIChildInfo *child;
+  GList *item;
+
+  g_return_val_if_fail (gnc_mdi_current != NULL, NULL);
+
+  for (item = gnc_mdi_current->children; item; item = g_list_next(item)) {
+    child = item->data;
+    if (child->app == app)
+      return child;
+  }
+  return NULL;
 }
 
 GNCMDIInfo *
@@ -1045,6 +1226,7 @@ gnc_mdi_destroy (GNCMDIInfo * gnc_mdi)
   GNCMDIChildInfo *gnc_child;
   GnomeMDIChild *active;
 
+  ENTER(" ");
   if (!gnc_mdi) return;
 
   gnc_mdi->shutdown = NULL;
@@ -1071,6 +1253,7 @@ gnc_mdi_destroy (GNCMDIInfo * gnc_mdi)
 
   if (gnc_mdi->mdi)
     gtk_object_destroy (GTK_OBJECT (gnc_mdi->mdi));
+  LEAVE(" ");
 }
 
 void
@@ -1079,8 +1262,11 @@ gnc_mdi_save (GNCMDIInfo * gnc_mdi, char * filename)
   char * encoded;
   char * session_name;
 
-  if (!gnc_mdi)
+  ENTER(" ");
+  if (!gnc_mdi) {
+    LEAVE("oops");
     return;
+  }
 
   encoded = gnc_html_encode_string (filename);
   session_name = g_strdup_printf ("/%s/MDI : %s",
@@ -1091,6 +1277,7 @@ gnc_mdi_save (GNCMDIInfo * gnc_mdi, char * filename)
   if (filename && *filename != '\0')
     gnome_mdi_save_state (GNOME_MDI (gnc_mdi->mdi), session_name);
 
+  LEAVE(" ");
   g_free (session_name);
 }
 
@@ -1102,6 +1289,7 @@ gnc_mdi_restore (GNCMDIInfo * gnc_mdi, const char * filename)
   GList * old_children;
   GList * c;
 
+  ENTER(" ");
   old_children = g_list_copy (gnc_mdi->mdi->children);
   encoded = gnc_html_encode_string (filename);
   session_name = g_strdup_printf ("/%s/MDI : %s",
@@ -1124,6 +1312,7 @@ gnc_mdi_restore (GNCMDIInfo * gnc_mdi, const char * filename)
     gnome_mdi_remove_child (gnc_mdi->mdi, GNOME_MDI_CHILD(c->data), TRUE);
 
   g_list_free (old_children);
+  LEAVE(" ");
 }
 
 void
@@ -1132,6 +1321,7 @@ gnc_mdi_create_child_toolbar (GNCMDIInfo * mi, GNCMDIChildInfo * child)
   GnomeUIInfo * tbinfo;
   GtkToolbar  * tb;
 
+  ENTER(" ");
   g_return_if_fail (mi != NULL);
   g_return_if_fail (child != NULL);
 
@@ -1149,4 +1339,5 @@ gnc_mdi_create_child_toolbar (GNCMDIInfo * mi, GNCMDIChildInfo * child)
   child->toolbar = GTK_WIDGET (tb);
 
   gnome_app_fill_toolbar (tb, tbinfo, NULL);
+  LEAVE(" ");
 }

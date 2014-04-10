@@ -28,6 +28,7 @@
 
 #include "Group.h"
 #include "SchedXactionP.h"
+#include "SX-book.h"
 
 #include "gnc-xml-helper.h"
 #include "gnc-engine-util.h"

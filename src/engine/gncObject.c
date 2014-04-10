@@ -1,3 +1,23 @@
+/********************************************************************\
+ * gncObject.c -- the Core Object Registration/Lookup Interface     *
+ * This program is free software; you can redistribute it and/or    *
+ * modify it under the terms of the GNU General Public License as   *
+ * published by the Free Software Foundation; either version 2 of   *
+ * the License, or (at your option) any later version.              *
+ *                                                                  *
+ * This program is distributed in the hope that it will be useful,  *
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of   *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    *
+ * GNU General Public License for more details.                     *
+ *                                                                  *
+ * You should have received a copy of the GNU General Public License*
+ * along with this program; if not, contact:                        *
+ *                                                                  *
+ * Free Software Foundation           Voice:  +1-617-542-5942       *
+ * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
+ * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ *                                                                  *
+\********************************************************************/
 /*
  * gncObject.c -- the Core Object Object Registry
  * Copyright (C) 2001 Derek Atkins
@@ -8,17 +28,17 @@
 
 #include <glib.h>
 
-#include "messages.h"
 #include "gnc-engine-util.h"
-
+#include "gncObject.h"
 #include "gncObjectP.h"
+#include "qofbook.h"
 
 static gboolean object_is_initialized = FALSE;
 static GList *object_modules = NULL;
 static GList *book_list = NULL;
 static GHashTable *backend_data = NULL;
 
-void gncObjectBookBegin (GNCBook *book)
+void gncObjectBookBegin (QofBook *book)
 {
   GList *l;
 
@@ -33,7 +53,7 @@ void gncObjectBookBegin (GNCBook *book)
   book_list = g_list_prepend (book_list, book);
 }
 
-void gncObjectBookEnd (GNCBook *book)
+void gncObjectBookEnd (QofBook *book)
 {
   GList *l;
 
@@ -48,7 +68,7 @@ void gncObjectBookEnd (GNCBook *book)
   book_list = g_list_remove (book_list, book);
 }
 
-gboolean gncObjectIsDirty (GNCBook *book)
+gboolean gncObjectIsDirty (QofBook *book)
 {
   GList *l;
 
@@ -62,7 +82,7 @@ gboolean gncObjectIsDirty (GNCBook *book)
   return FALSE;
 }
 
-void gncObjectMarkClean (GNCBook *book)
+void gncObjectMarkClean (QofBook *book)
 {
   GList *l;
 
@@ -86,7 +106,7 @@ void gncObjectForeachType (foreachTypeCB cb, gpointer user_data)
   }
 }
 
-void gncObjectForeach (GNCIdTypeConst type_name, GNCBook *book, 
+void gncObjectForeach (GNCIdTypeConst type_name, QofBook *book, 
 		       foreachObjectCB cb, gpointer user_data)
 {
   const GncObject_t *obj;
@@ -127,7 +147,7 @@ const char * gncObjectGetTypeLabel (GNCIdTypeConst type_name)
   obj = gncObjectLookup (type_name);
   if (!obj) return NULL;
 
-  return _(obj->type_label);
+  return (obj->type_label);
 }
 
 static gboolean clear_table (gpointer key, gpointer value, gpointer user_data)

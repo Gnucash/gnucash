@@ -122,7 +122,7 @@ gnc_payment_ok_cb (GtkWidget *widget, gpointer data)
     char *msg = g_strdup_printf (
 			 _("Your selected post account, %s, does not exist"),
 			 text);
-    gnc_error_dialog_parented (GTK_WINDOW (pw->dialog), msg);
+    gnc_error_dialog_parented (GTK_WINDOW (pw->dialog), "%s", msg);
     g_free (msg);
     return;
   }

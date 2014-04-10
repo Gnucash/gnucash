@@ -57,6 +57,8 @@
 		 "GNC_CUSTOMER_MODULE_NAME")
   (gw:wrap-value ws 'gnc:url-type-vendor '<gnc:url-type> 
 		 "GNC_VENDOR_MODULE_NAME")
+  (gw:wrap-value ws 'gnc:url-type-employee '<gnc:url-type> 
+		 "GNC_EMPLOYEE_MODULE_NAME")
   (gw:wrap-value ws 'gnc:url-type-invoice '<gnc:url-type> 
 		 "GNC_INVOICE_MODULE_NAME")
   (gw:wrap-value ws 'gnc:url-type-ownerreport '<gnc:url-type>
@@ -161,6 +163,14 @@
    "Dialog: Select a GncInvoice.  Either start_selection or "
    "owner may be NULL.")
   
+  (gw:wrap-function
+   ws
+   'gnc:invoice-show-bills-due
+   '<gw:void>
+   "gnc_invoice_show_bills_due"
+   '((<gnc:Book*> book) (<gw:double> days_in_advance))
+   "Dialog: display the bills due within the next \"days\"")
+
   ;;
   ;; dialog-job.h
   ;;

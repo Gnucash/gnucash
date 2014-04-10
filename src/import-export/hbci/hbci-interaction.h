@@ -33,6 +33,7 @@ GNCInteractor *gnc_hbci_api_interactors (HBCI_API *api, GtkWidget *parent);
 
 gboolean GNCInteractor_aborted(const GNCInteractor *i);
 void GNCInteractor_show(GNCInteractor *i);
+void GNCInteractor_show_nodelete(GNCInteractor *i);
 void GNCInteractor_hide(GNCInteractor *i);
 void GNCInteractor_delete(GNCInteractor *i);
 void GNCInteractor_erasePIN(GNCInteractor *i);

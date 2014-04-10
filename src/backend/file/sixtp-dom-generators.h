@@ -33,7 +33,7 @@
 #include "sixtp-dom-generators.h"
 #include "GNCId.h"
 #include "gnc-commodity.h"
-#include "date.h"
+#include "gnc-date.h"
 #include "gnc-numeric.h"
 #include "kvp_frame.h"
 

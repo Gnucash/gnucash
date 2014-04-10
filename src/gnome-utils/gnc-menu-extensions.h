@@ -23,8 +23,9 @@
 #ifndef GNC_MENU_EXTENSIONS_H
 #define GNC_MENU_EXTENSIONS_H
 
-#include <guile/gh.h>
 #include <gnome.h>
+#include <libguile.h>
+#include "guile-mappings.h"
 
 #define WINDOW_NAME_MAIN     "Main"
 #define WINDOW_NAME_REGISTER "Register"

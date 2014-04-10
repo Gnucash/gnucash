@@ -387,8 +387,6 @@
 
 #include <glib.h>
 
-#include <guile/gh.h>
-
 #include "../engine/gnc-numeric.h"
 
 #define EXPRESSION_PARSER_STATICS

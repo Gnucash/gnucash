@@ -1,4 +1,5 @@
 AM_CFLAGS=\
+  -I${top_srcdir}/src \
   -I${top_srcdir}/src/gnc-module \
   ${GUILE_INCS} \
   ${G_WRAP_COMPILE_ARGS} \

@@ -12,7 +12,7 @@
 #include "gnc-numeric.h"
 #include "kvp_frame.h"
 #include "gnc-engine-util.h"
-#include "gnc-book-p.h"
+#include "gnc-book.h"
 #include "GNCIdP.h"
 #include "QueryObject.h"
 #include "gnc-event-p.h"

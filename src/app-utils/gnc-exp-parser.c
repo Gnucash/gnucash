@@ -33,6 +33,7 @@
 #include "gnc-exp-parser.h"
 #include "messages.h"
 #include "gnc-ui-util.h"
+#include "guile-mappings.h"
 
 
 /** Data Types *****************************************************/
@@ -74,7 +75,7 @@ gnc_exp_parser_real_init ( gboolean addPredefined )
   if ( addPredefined ) {
     alist = gnc_lookup_option ("__exp_parser", "defined_variables", SCM_EOL);
 
-    while (gh_list_p(alist) && !gh_null_p(alist))
+    while (SCM_LISTP(alist) && !SCM_NULLP(alist))
       {
         char *name;
         SCM assoc;
@@ -82,29 +83,29 @@ gnc_exp_parser_real_init ( gboolean addPredefined )
         gnc_numeric value;
         gboolean good;
 
-        assoc = gh_car (alist);
-        alist = gh_cdr (alist);
+        assoc = SCM_CAR (alist);
+        alist = SCM_CDR (alist);
 
-        if (!gh_pair_p (assoc))
+        if (!SCM_CONSP (assoc))
           continue;
 
-        name = gh_scm2newstr (gh_car (assoc), NULL);
+        name = gh_scm2newstr (SCM_CAR (assoc), NULL);
         if (name == NULL)
           continue;
 
-        val_scm = gh_cdr (assoc);
+        val_scm = SCM_CDR (assoc);
         good = TRUE;
 
-        if (gh_number_p (val_scm))
+        if (SCM_NUMBERP (val_scm))
           {
             double dvalue;
 
-            dvalue = gh_scm2double (val_scm);
+            dvalue = scm_num2dbl (val_scm, __FUNCTION__);
             value = double_to_gnc_numeric (dvalue, GNC_DENOM_AUTO, 
                                            GNC_DENOM_SIGFIGS(6)
                                            | GNC_RND_ROUND);
           }
-        else if (gh_string_p (val_scm))
+        else if (SCM_STRINGP (val_scm))
           {
             char *s;
             const char *err;
@@ -147,10 +148,10 @@ binding_cons (gpointer key, gpointer value, gpointer data)
   SCM assoc;
 
   num_str = gnc_numeric_to_string (gnc_numeric_reduce (pnum->value));
-  assoc = gh_cons (gh_str02scm (name), gh_str02scm (num_str));
+  assoc = scm_cons (scm_makfrom0str (name), scm_makfrom0str (num_str));
   g_free (num_str);
 
-  *alist_p = gh_cons (assoc, *alist_p);
+  *alist_p = scm_cons (assoc, *alist_p);
 }
 
 void
@@ -361,23 +362,23 @@ func_op( const char *fname,
   g_string_sprintf( realFnName, "gnc:%s", fname );
   scmFn = gh_eval_str_with_standard_handler( realFnName->str );
   g_string_free( realFnName, TRUE );
-  if ( ! gh_procedure_p( scmFn ) ) {
+  if ( ! SCM_PROCEDUREP( scmFn ) ) {
     /* FIXME: handle errors correctly. */
     printf( "gnc:\"%s\" is not a scm procedure\n", fname );
     return NULL;
   }
-  scmArgs = gh_list( SCM_UNDEFINED );
+  scmArgs = scm_listify( SCM_UNDEFINED );
   for ( i=0; i<argc; i++ ) {
     /* cons together back-to-front. */
     vs = (var_store*)argv[argc - i - 1];
     switch ( vs->type ) {
     case VST_NUMERIC:
       n = *(gnc_numeric*)(vs->value);
-      scmTmp = gh_double2scm( gnc_numeric_to_double( n ) );
+      scmTmp = scm_make_real( gnc_numeric_to_double( n ) );
       break;
     case VST_STRING:
       str = (char*)(vs->value);
-      scmTmp = gh_str2scm( str, strlen(str) );
+      scmTmp = scm_mem2string( str, strlen(str) );
       break;
     default:
       /* FIXME: error */
@@ -386,15 +387,15 @@ func_op( const char *fname,
       return NULL;
       break; /* notreached */
     }
-    scmArgs = gh_cons( scmTmp, scmArgs );
+    scmArgs = scm_cons( scmTmp, scmArgs );
   }
-  scmTmp = gh_apply( scmFn, scmArgs );
+  scmTmp = scm_apply( scmFn, scmArgs , SCM_EOL);
   
   result = g_new0( gnc_numeric, 1 );
-  *result = double_to_gnc_numeric( gh_scm2double(scmTmp),
+  *result = double_to_gnc_numeric( scm_num2dbl(scmTmp, __FUNCTION__),
                                    GNC_DENOM_AUTO,
                                    GNC_DENOM_SIGFIGS(6) | GNC_RND_ROUND );
-  /* FIXME: cleanup scmArgs = gh_list, cons'ed cells? */
+  /* FIXME: cleanup scmArgs = scm_list, cons'ed cells? */
   return (void*)result;
 }
 

@@ -104,7 +104,7 @@ gnc_network_set_session_id(char * sid) {
 
 char * 
 gnc_network_get_uid(void) {
-  SCM val = gnc_lookup_option("__gnc_network", "uid", gh_str02scm("0"));
+  SCM val = gnc_lookup_option("__gnc_network", "uid", scm_makfrom0str("0"));
   if(val != SCM_BOOL_F) {
     return gh_scm2newstr(val, NULL);
   }
@@ -450,7 +450,7 @@ static int
 gnc_network_store_uid_handler(gnc_html * html, GtkHTMLEmbedded * eb, 
                               gpointer data) {
   char * uid = g_hash_table_lookup(eb->params, "uid");
-  gnc_set_option("__gnc_network", "uid", gh_str02scm(uid));
+  gnc_set_option("__gnc_network", "uid", scm_makfrom0str(uid));
   return TRUE;
 }
 
@@ -551,7 +551,7 @@ gnc_network_send_info_handler(gnc_html * html,
     return FALSE;
   }
   
-  version_string  = gh_scm2newstr(gh_eval_str("gnc:version"), NULL);  
+  version_string  = gh_scm2newstr(scm_c_eval_string("gnc:version"), NULL);  
 
   feature_string = 
     g_strjoin(",",

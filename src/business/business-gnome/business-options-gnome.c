@@ -20,6 +20,7 @@
 #include "business-options-gnome.h"
 #include "business-gnome-utils.h"
 #include "dialog-invoice.h"
+#include "guile-mappings.h"
 
 static int
 option_changed_cb (GtkWidget *widget, gpointer data)
@@ -45,6 +46,9 @@ create_owner_widget (GNCOption *option, GncOwnerType type, GtkWidget *hbox)
     break;
   case GNC_OWNER_VENDOR:
     gncOwnerInitVendor (&owner, NULL);
+    break;
+  case GNC_OWNER_EMPLOYEE:
+    gncOwnerInitEmployee (&owner, NULL);
     break;
   case GNC_OWNER_JOB:
     gncOwnerInitJob (&owner, NULL);
@@ -87,10 +91,10 @@ get_owner_type_from_option (GNCOption *option)
   SCM odata = gnc_option_get_option_data (option);
   SCM conv_func;
 
-  conv_func = gh_eval_str ("gw:enum-<gnc:GncOwnerType>-val->int");
-  odata = gh_call1 (conv_func, odata);
+  conv_func = scm_c_eval_string ("gw:enum-<gnc:GncOwnerType>-val->int");
+  odata = scm_call_1 (conv_func, odata);
 
-  return gh_scm2long (odata);
+  return scm_num2long (odata, SCM_ARG1, __FUNCTION__);
 }
 
 
@@ -155,7 +159,7 @@ owner_get_value (GNCOption *option, GtkWidget *widget)
   owner.type = type;
   gnc_owner_get_owner (widget, &owner);
 
-  return gw_wcp_assimilate_ptr (&owner, gh_eval_str("<gnc:GncOwner*>"));
+  return gw_wcp_assimilate_ptr (&owner, scm_c_eval_string("<gnc:GncOwner*>"));
 }
 
 
@@ -215,7 +219,7 @@ customer_get_value (GNCOption *option, GtkWidget *widget)
   gnc_owner_get_owner (widget, &owner);
 
   return gw_wcp_assimilate_ptr (owner.owner.undefined,
-				gh_eval_str("<gnc:GncCustomer*>"));
+				scm_c_eval_string("<gnc:GncCustomer*>"));
 }
 
 
@@ -275,7 +279,66 @@ vendor_get_value (GNCOption *option, GtkWidget *widget)
   gnc_owner_get_owner (widget, &owner);
 
   return gw_wcp_assimilate_ptr (owner.owner.undefined,
-				gh_eval_str("<gnc:GncVendor*>"));
+				scm_c_eval_string("<gnc:GncVendor*>"));
+}
+
+/********************************************************************/
+/* "Employee" Option functions */
+
+
+/* Function to set the UI widget based upon the option */
+static GtkWidget *
+employee_set_widget (GNCOption *option, GtkBox *page_box,
+		     GtkTooltips *tooltips,
+		     char *name, char *documentation,
+		     /* Return values */
+		     GtkWidget **enclosing, gboolean *packed)
+{
+  GtkWidget *value;
+  GtkWidget *label;
+
+  *enclosing = gtk_hbox_new (FALSE, 5);
+  label = make_name_label (name);
+  gtk_box_pack_start (GTK_BOX (*enclosing), label, FALSE, FALSE, 0);
+
+  value = create_owner_widget (option, GNC_OWNER_EMPLOYEE, *enclosing);
+
+  gnc_option_set_ui_value (option, FALSE);
+
+  gtk_widget_show_all (*enclosing);
+  return value;
+}
+
+/* Function to set the UI Value for a particular option */
+static gboolean
+employee_set_value (GNCOption *option, gboolean use_default,
+		    GtkWidget *widget, SCM value)
+{
+  GncOwner owner;
+  GncEmployee *employee;
+
+  if (!gw_wcp_p (value))
+    scm_misc_error("business_options:employee_set_value",
+		   "Item is not a gw:wcp.", value);
+
+  employee = gw_wcp_get_ptr (value);
+  gncOwnerInitEmployee (&owner, employee);
+
+  widget = gnc_option_get_widget (option);
+  gnc_owner_set_owner (widget, &owner);
+  return FALSE;
+}
+
+/* Function to get the UI Value for a particular option */
+static SCM
+employee_get_value (GNCOption *option, GtkWidget *widget)
+{
+  GncOwner owner;
+
+  gnc_owner_get_owner (widget, &owner);
+
+  return gw_wcp_assimilate_ptr (owner.owner.undefined,
+				scm_c_eval_string("<gnc:GncEmployee*>"));
 }
 
 /********************************************************************/
@@ -348,7 +411,7 @@ invoice_get_value (GNCOption *option, GtkWidget *widget)
   GncInvoice *invoice;
 
   invoice = gnc_general_search_get_selected (GNC_GENERAL_SEARCH (widget));
-  return gw_wcp_assimilate_ptr (invoice, gh_eval_str("<gnc:GncInvoice*>"));
+  return gw_wcp_assimilate_ptr (invoice, scm_c_eval_string("<gnc:GncInvoice*>"));
 }
 
 
@@ -423,7 +486,7 @@ taxtable_get_value (GNCOption *option, GtkWidget *widget)
   GncTaxTable *taxtable;
 
   taxtable = gnc_ui_optionmenu_get_value (widget);
-  return gw_wcp_assimilate_ptr (taxtable, gh_eval_str("<gnc:GncTaxTable*>"));
+  return gw_wcp_assimilate_ptr (taxtable, scm_c_eval_string("<gnc:GncTaxTable*>"));
 }
 
 
@@ -438,6 +501,7 @@ gnc_business_options_gnome_initialize (void)
     { "customer", customer_set_widget, customer_set_value,
       customer_get_value },
     { "vendor", vendor_set_widget, vendor_set_value, vendor_get_value },
+    { "employee", employee_set_widget, employee_set_value, employee_get_value },
     { "invoice", invoice_set_widget, invoice_set_value, invoice_get_value },
     { "taxtable", taxtable_set_widget, taxtable_set_value, taxtable_get_value },
     { NULL }

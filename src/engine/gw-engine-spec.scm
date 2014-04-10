@@ -26,13 +26,14 @@
     "#include <Query.h>\n"
     "#include <Backend.h>\n"
     "#include <Group.h>\n"
-    "#include <gnc-book.h>\n"
+    "#include <qofbook.h>\n"
     "#include <gnc-session.h>\n"
     "#include <gnc-session-scm.h>\n"
     "#include <gnc-engine-util.h>\n"
     "#include <gnc-event.h>\n"
+    "#include <gnc-pricedb.h>\n"
     "#include <gnc-lot.h>\n"
-    "#include <date.h>\n"
+    "#include <gnc-date.h>\n"
     "#include <engine-helpers.h>\n"
     "#include <gnc-engine.h>\n"
     "#include <gnc-commodity.h>\n"
@@ -98,7 +99,7 @@
 (gw:wrap-as-wct ws '<gnc:InvAcct*> "InvAcct*" "const InvAcct*")
 (gw:wrap-as-wct ws '<gnc:AccInfo*> "AccInfo*" "const AccInfo*")
 (gw:wrap-as-wct ws '<gnc:AccountGroup*> "AccountGroup*" "const AccountGroup*")
-(gw:wrap-as-wct ws '<gnc:Book*> "GNCBook*" "const GNCBook*")
+(gw:wrap-as-wct ws '<gnc:Book*> "QofBook*" "const QofBook*")
 (gw:wrap-as-wct ws '<gnc:Lot*> "GNCLot*" "const GNCLot*")
 (gw:wrap-as-wct ws '<gnc:Session*> "GNCSession*" "const GNCSession**")
 (gw:wrap-as-wct ws '<gnc:Split*> "Split*" "const Split*")
@@ -164,6 +165,7 @@
   (gw:enum-add-value! wt "GUID_MATCH_ANY" 'guid-match-any)
   (gw:enum-add-value! wt "GUID_MATCH_NULL" 'guid-match-null)
   (gw:enum-add-value! wt "GUID_MATCH_NONE" 'guid-match-none)
+  (gw:enum-add-value! wt "GUID_MATCH_LIST_ANY" 'guid-match-list-any)
   #t)
 
 (let ((wt (gw:wrap-enumeration ws '<gnc:char-match-how> "char_match_t")))
@@ -921,22 +923,6 @@ Expenses) are given numeric codes in corresponding ``number ranges.''")
 
 (gw:wrap-function
  ws
- 'gnc:account-get-price-src
- '(<gw:mchars> callee-owned const)
- "xaccAccountGetPriceSrc"
- '((<gnc:Account*> a))
- "Get the account's price source, if any.")
-
-(gw:wrap-function
- ws
- 'gnc:account-get-quote-tz
- '(<gw:mchars> callee-owned const)
- "xaccAccountGetQuoteTZ"
- '((<gnc:Account*> a))
- "Get the quote source's timezone, if any.")
-
-(gw:wrap-function
- ws
  'gnc:account-get-children
  '<gnc:AccountGroup*>
  "xaccAccountGetChildren"
@@ -1030,7 +1016,7 @@ children to this account.")
  '<gnc:Book*>
  "xaccGroupGetBook"
  '((<gnc:AccountGroup*> g))
- "Return the GNCBook of group g.")
+ "Return the QofBook of group g.")
 
 (gw:wrap-function
  ws
@@ -1285,12 +1271,29 @@ when no longer needed.")
 
 (gw:wrap-function
  ws
+ 'gnc:price-list-destroy
+ '<gw:void>
+ "gnc_price_list_destroy"
+ '(((gw:glist-of <gnc:Price*> callee-owned) prices))
+ "Destroys a gnc price list unrefing the prices included in the list")
+
+(gw:wrap-function
+ ws
  'gnc:pricedb-lookup-latest
  '<gnc:Price*>
  "gnc_pricedb_lookup_latest"
  '((<gnc:PriceDB*> db)
    (<gnc:commodity*> commodity) (<gnc:commodity*> currency))
  "Returns the latest price.  Unref the price when you're finished with it.")
+
+(gw:wrap-function
+ ws
+ 'gnc:pricedb-lookup-latest-any-currency
+ '(gw:glist-of <gnc:Price*> caller-owned)
+ "gnc_pricedb_lookup_latest_any_currency"
+ '((<gnc:PriceDB*> db)
+   (<gnc:commodity*> commodity))
+ "Returns the latest price(s) in any currency available.")
 
 (gw:wrap-function
  ws
@@ -1301,6 +1304,15 @@ when no longer needed.")
    (<gnc:commodity*> commodity) (<gnc:commodity*> currency)
    (<gnc:time-pair> t))
  "Returns the price quote nearest to t.  Unref price when finished with it.")
+
+(gw:wrap-function
+ ws
+ 'gnc:pricedb-lookup-nearest-in-time-any-currency
+ '(gw:glist-of <gnc:Price*> caller-owned)
+ "gnc_pricedb_lookup_nearest_in_time_any_currency"
+ '((<gnc:PriceDB*> db)
+   (<gnc:commodity*> commodity) (<gnc:time-pair> t))
+ "Returns the price(s) nearest to t in any currency available.")
 
 (gw:wrap-function
  ws
@@ -1331,6 +1343,28 @@ when no longer needed.")
    (<gnc:commodity*> commodity) (<gnc:commodity*> currency)
    (<gnc:time-pair> t))
  "Lookup a price on the day specified by time t.")
+
+(gw:wrap-function
+ ws
+ 'gnc:pricedb-convert-balance-latest-price
+ '<gnc:numeric>
+ "gnc_pricedb_convert_balance_latest_price"
+ '((<gnc:PriceDB*> db)
+   (<gnc:numeric> balance)
+   (<gnc:commodity*> balance_commodity) (<gnc:commodity*> new_currency))
+ "convert balance in commodity balance_commodity to new_currency using latest price.")
+
+(gw:wrap-function
+ ws
+ 'gnc:pricedb-convert-balance-nearest-price
+ '<gnc:numeric>
+ "gnc_pricedb_convert_balance_nearest_price"
+ '((<gnc:PriceDB*> db)
+   (<gnc:numeric> balance)
+   (<gnc:commodity*> balance_commodity) (<gnc:commodity*> new_currency)
+   (<gnc:time-pair> t))
+ "convert balance in commodity balance_commodity to new_currency using nearest price
+to time t.")
 
 ;;===========
 ;; GNCSession
@@ -1415,7 +1449,7 @@ argument between 0 and 100 (inclusive).")
  ws
  'gnc:book-get-group
  '<gnc:AccountGroup*>
- "gnc_book_get_group"
+ "xaccGetAccountGroup"
  '((<gnc:Book*> book))
  "Get the book's account group.")
 
@@ -1423,7 +1457,7 @@ argument between 0 and 100 (inclusive).")
  ws
  'gnc:book-get-commodity-table
  '<gnc:commodity-table*>
- "gnc_book_get_commodity_table"
+ "gnc_commodity_table_get_table"
  '((<gnc:Book*> book))
  "Get the book's commodity table.")
 
@@ -1431,7 +1465,7 @@ argument between 0 and 100 (inclusive).")
  ws
  'gnc:book-get-pricedb
  '<gnc:PriceDB*>
- "gnc_book_get_pricedb"
+ "gnc_pricedb_get_db"
  '((<gnc:Book*> book))
  "Get the book's pricedb.")
 
@@ -1439,7 +1473,7 @@ argument between 0 and 100 (inclusive).")
  ws
  'gnc:book-kvp-changed
  '<gw:void>
- "gnc_book_kvp_changed"
+ "qof_book_kvp_changed"
  '((<gnc:Book*> book))
  "Set the flag that the Book's kvp changed.")
 
@@ -2141,7 +2175,16 @@ of having a parent transaction with which one is working...")
  "gnc_commodity_table_get_commodities"
  '((<gnc:commodity-table*> table)
    ((<gw:mchars> caller-owned const) namespace))
- "Return a list of all the namespaces in the table.")
+ "Return a list of all the commodities in a given namespace in the table.")
+
+(gw:wrap-function
+ ws
+ 'gnc:commodity-table-get-quotable-commodities
+ '(gw:glist-of <gnc:commodity*> caller-owned)
+ "gnc_commodity_table_get_quotable_commodities"
+ '((<gnc:commodity-table*> table)
+   ((<gw:mchars> caller-owned const) namespace))
+ "Return a list of all the quotable commodities in a given namespace in the table.")
 
 (gw:wrap-function
  ws
@@ -2387,7 +2430,7 @@ of having a parent transaction with which one is working...")
  '()
  "Run the RPC Server") 
 
-;; src/engine/date.h
+;; gnc-date.h
 
 (gw:wrap-function
  ws

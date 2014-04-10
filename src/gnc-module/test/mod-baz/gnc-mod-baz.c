@@ -1,8 +1,10 @@
 /* gnc-mod-baz.c : the Gnucash plugin that wraps the library
  * 'libbaz.so'. it does this by being linked against libbaz.so */
 
+#include "config.h"
 #include <stdio.h>
-#include <guile/gh.h>
+#include <libguile.h>
+#include "guile-mappings.h"
 
 #include "gnc-module.h"
 #include "gnc-module-api.h"
@@ -37,7 +39,7 @@ libgncmodbaz_LTX_gnc_module_init(int refcount) {
     gw_init_wrapset_baz_gwrap();
     
     /* use the scheme module */
-    gh_eval_str("(use-modules (gnucash baz))");
+    scm_c_eval_string("(use-modules (gnucash baz))");
 
     return TRUE;
   }

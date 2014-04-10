@@ -34,24 +34,6 @@
 static short module = MOD_LEDGER;
 
 
-static time_t
-gnc_get_today_midnight (void)
-{
-  time_t present;
-  struct tm tm;
-
-  present = time (NULL);
-
-  tm = *localtime (&present);
-
-  tm.tm_sec  = 0;
-  tm.tm_min  = 0;
-  tm.tm_hour = 0;
-  tm.tm_isdst = -1;
-
-  return mktime (&tm);
-}
-
 /* The routines below create, access, and destroy the SRInfo structure
  * used by SplitLedger routines to store data for a particular register.
  * This is the only code that should access the user_data member of a
@@ -72,7 +54,7 @@ gnc_split_register_init_info (SplitRegister *reg)
   info->default_account = *xaccGUIDNULL ();
   info->template_account = *xaccGUIDNULL ();
 
-  info->last_date_entered = gnc_get_today_midnight ();
+  info->last_date_entered = gnc_timet_get_today_start ();
 
   info->first_pass = TRUE;
   info->full_refresh = TRUE;

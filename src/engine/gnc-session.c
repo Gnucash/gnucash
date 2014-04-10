@@ -43,16 +43,23 @@
 
 #include <glib.h>
 
+#include "Backend.h"
 #include "BackendP.h"
-#include "TransLog.h"
-#include "gnc-engine-util.h"
-#include "DateUtils.h"
-#include "gnc-book-p.h"
-#include "gnc-engine.h"
-#include "gnc-engine-util.h"
-#include "gnc-module.h"
-#include "gnc-session-p.h"
 #include "gnc-event.h"
+#include "gnc-session.h"
+#include "gnc-session-p.h"
+#include "gnc-trace.h"
+#include "qofbook.h"
+#include "qofbook-p.h"
+
+#ifdef GNUCASH
+#include "gnc-module.h"
+#include "TransLog.h"
+#else
+#define xaccLogSetBaseName(x)
+#define xaccLogEnable()
+#define xaccLogDisable()
+#endif /* GNUCASH */
 
 static GNCSession * current_session = NULL;
 static short module = MOD_IO;
@@ -147,7 +154,7 @@ gnc_session_init (GNCSession *session)
 {
   if (!session) return;
 
-  session->books = g_list_append (NULL, gnc_book_new ());
+  session->books = g_list_append (NULL, qof_book_new ());
   session->book_id = NULL;
   session->fullpath = NULL;
   session->logpath = NULL;
@@ -183,7 +190,7 @@ gnc_set_current_session (GNCSession *session)
   current_session = session;
 }
 
-GNCBook *
+QofBook *
 gnc_session_get_book (GNCSession *session)
 {
    GList *node;
@@ -191,14 +198,14 @@ gnc_session_get_book (GNCSession *session)
 
    for (node=session->books; node; node=node->next)
    {
-      GNCBook *book = node->data;
+      QofBook *book = node->data;
       if ('y' == book->book_open) return book;
    }
    return NULL;
 }
 
 void
-gnc_session_set_book (GNCSession *session, GNCBook *addbook)
+gnc_session_set_book (GNCSession *session, QofBook *addbook)
 {
   GList *node;
   if (!session) return;
@@ -208,7 +215,7 @@ gnc_session_set_book (GNCSession *session, GNCBook *addbook)
   /* See if this book is already there ... */
   for (node=session->books; node; node=node->next)
   {
-     GNCBook *book = node->data;
+     QofBook *book = node->data;
      if (addbook == book) return;
   }
 
@@ -225,7 +232,7 @@ gnc_session_set_book (GNCSession *session, GNCBook *addbook)
     session->books = g_list_append (session->books, addbook);
   }
 
-  gnc_book_set_backend (addbook, session->backend);
+  qof_book_set_backend (addbook, session->backend);
   LEAVE (" ");
 }
 
@@ -271,7 +278,11 @@ gnc_session_int_backend_load_error(GNCSession *session,
 }
 
 
-/* FIXME : reinstate better error messages with gnc_module errors */
+#ifdef GNUCASH 
+
+/* Gnucash uses its module system to load a backend; other users
+ * use traditional dlopen calls.
+ */
 static void
 gnc_session_load_backend(GNCSession * session, char * backend_name)
 {
@@ -279,6 +290,7 @@ gnc_session_load_backend(GNCSession * session, char * backend_name)
   Backend    *(* be_new_func)(void);
   char       * mod_name = g_strdup_printf("gnucash/backend/%s", backend_name);
 
+  /* FIXME : reinstate better error messages with gnc_module errors */
   ENTER (" ");
   /* FIXME: this needs to be smarter with version numbers. */
   /* FIXME: this should use dlopen(), instead of guile/scheme, 
@@ -297,8 +309,8 @@ gnc_session_load_backend(GNCSession * session, char * backend_name)
 
       for (node=session->books; node; node=node->next)
       {
-         GNCBook *book = node->data;
-         gnc_book_set_backend (book, session->backend);
+         QofBook *book = node->data;
+         qof_book_set_backend (book, session->backend);
       }
     }
     else
@@ -317,6 +329,16 @@ gnc_session_load_backend(GNCSession * session, char * backend_name)
   g_free(mod_name);
   LEAVE (" ");
 }
+
+#else /* GNUCASH */
+
+static void
+gnc_session_load_backend(GNCSession * session, char * backend_name)
+{
+  ENTER (" ");
+  LEAVE (" ");
+}
+#endif /* GNUCASH */
 
 /* ====================================================================== */
 
@@ -462,8 +484,8 @@ void
 gnc_session_load (GNCSession *session,
 		  GNCPercentageFunc percentage_func)
 {
-  GNCBook *newbook;
-  BookList *oldbooks, *node;
+  QofBook *newbook;
+  QofBookList *oldbooks, *node;
   Backend *be;
   GNCBackendError err;
 
@@ -478,7 +500,7 @@ gnc_session_load (GNCSession *session,
    * id and a lock on the file. */
 
   oldbooks = session->books;
-  newbook = gnc_book_new();
+  newbook = qof_book_new();
   session->books = g_list_append (NULL, newbook);
   PINFO ("new book=%p", newbook);
 
@@ -494,7 +516,7 @@ gnc_session_load (GNCSession *session,
    * generic, backend-independent operation.
    */
   be = session->backend;
-  gnc_book_set_backend(newbook, be);
+  qof_book_set_backend(newbook, be);
 
   /* Starting the session should result in a bunch of accounts
    * and currencies being downloaded, but probably no transactions;
@@ -512,34 +534,9 @@ gnc_session_load (GNCSession *session,
       }
 
       /* we just got done loading, it can't possibly be dirty !! */
-      gnc_book_mark_saved (newbook);
+      qof_book_mark_saved (newbook);
 
       xaccLogEnable();
-  }
-
-  /* Technically, the following tests can never succeed, because a group
-   * and pricedb is always allocated when a book is created.  So even
-   * if the load fails, there will be a topgroup and a pricedb. */
-  if (!gnc_book_get_group (newbook))
-  {
-      /* Something broke, put back the old stuff */
-      gnc_book_set_backend (newbook, NULL);
-      gnc_book_destroy (newbook);
-      g_list_free (session->books);
-      session->books = oldbooks;
-      PERR("topgroup NULL");
-      return;
-  }
-  
-  if (!gnc_book_get_pricedb (newbook))
-  {
-      /* Something broke, put back the old stuff */
-      gnc_book_set_backend (newbook, NULL);
-      gnc_book_destroy (newbook);
-      g_list_free (session->books);
-      session->books = oldbooks;
-      PERR("pricedb NULL");
-      return;
   }
 
   err = gnc_session_get_error(session);
@@ -548,20 +545,22 @@ gnc_session_load (GNCSession *session,
       (err != ERR_SQL_DB_TOO_OLD))
   {
       /* Something broke, put back the old stuff */
-      gnc_book_set_backend (newbook, NULL);
-      gnc_book_destroy (newbook);
+      xaccLogDisable();
+      qof_book_set_backend (newbook, NULL);
+      qof_book_destroy (newbook);
       g_list_free (session->books);
       session->books = oldbooks;
       LEAVE("error from backend %d", gnc_session_get_error(session));
+      xaccLogEnable();
       return;
   }
 
   xaccLogDisable();
   for (node=oldbooks; node; node=node->next)
   {
-     GNCBook *ob = node->data;
-     gnc_book_set_backend (ob, NULL);
-     gnc_book_destroy (ob);
+     QofBook *ob = node->data;
+     qof_book_set_backend (ob, NULL);
+     qof_book_destroy (ob);
   }
   xaccLogEnable();
 
@@ -634,10 +633,10 @@ gnc_session_save (GNCSession *session,
   {
     for (node = session->books; node; node=node->next)
     {
-      GNCBook *abook = node->data;
+      QofBook *abook = node->data;
 
       /* if invoked as SaveAs(), then backend not yet set */
-      gnc_book_set_backend (abook, be);
+      qof_book_set_backend (abook, be);
       be->percentage = percentage_func;
   
       if (be->sync)
@@ -645,7 +644,11 @@ gnc_session_save (GNCSession *session,
         (be->sync)(be, abook);
         if (save_error_handler(be, session)) return;
       }
+		
+	 	/* XXX The backend should really be calling this, not us. */
+		qof_book_mark_saved (abook);
     }
+
     
     /* If we got to here, then the backend saved everything 
      * just fine, and we are done. So return. */
@@ -666,13 +669,14 @@ gnc_session_save (GNCSession *session,
 }
 
 /* ====================================================================== */
+/* XXX what does this function do ?? */
 
 gboolean
 gnc_session_export (GNCSession *tmp_session,
 		    GNCSession *real_session,
 		    GNCPercentageFunc percentage_func)
 {
-  GNCBook *book;
+  QofBook *book;
   Backend *be;
 
   if ((!tmp_session) || (!real_session)) return FALSE;
@@ -750,9 +754,9 @@ gnc_session_destroy (GNCSession *session)
 
   for (node=session->books; node; node=node->next)
   {
-    GNCBook *book = node->data;
-    gnc_book_set_backend (book, NULL);
-    gnc_book_destroy (book);
+    QofBook *book = node->data;
+    qof_book_set_backend (book, NULL);
+    qof_book_destroy (book);
   }
 
   session->books  = NULL;
@@ -787,13 +791,13 @@ gnc_session_swap_data (GNCSession *session_1, GNCSession *session_2)
 
   for (node=books_1; node; node=node->next)
   {
-    GNCBook *book_1 = node->data;
-    gnc_book_set_backend (book_1, session_2->backend);
+    QofBook *book_1 = node->data;
+    qof_book_set_backend (book_1, session_2->backend);
   }
   for (node=books_2; node; node=node->next)
   {
-    GNCBook *book_2 = node->data;
-    gnc_book_set_backend (book_2, session_1->backend);
+    QofBook *book_2 = node->data;
+    qof_book_set_backend (book_2, session_1->backend);
   }
 
   LEAVE (" ");
@@ -1088,13 +1092,18 @@ xaccResolveURL (const char * pathfrag)
 void
 gnc_run_rpc_server (void)
 {
-  char * dll_err;
+  const char * dll_err;
   void * dll_handle;
   int (*rpc_run)(short);
   int ret;
  
   /* open and resolve all symbols now (we don't want mystery 
    * failure later) */
+#ifndef RTLD_NOW
+# ifdef RTLD_LAZY
+#  define RTLD_NOW RTLD_LAZY
+# endif
+#endif
   dll_handle = dlopen ("libgnc_rpc.so", RTLD_NOW);
   if (! dll_handle) 
   {

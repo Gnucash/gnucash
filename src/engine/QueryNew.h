@@ -1,19 +1,42 @@
-/*
- * QueryNew.h -- API for finding Gnucash objects
- * Copyright (C) 2002 Derek Atkins <warlord@MIT.EDU>
- *
- */
+/********************************************************************\
+ * QueryNew.h -- API for finding Gnucash objects                    *
+ *                                                                  *
+ * This program is free software; you can redistribute it and/or    *
+ * modify it under the terms of the GNU General Public License as   *
+ * published by the Free Software Foundation; either version 2 of   *
+ * the License, or (at your option) any later version.              *
+ *                                                                  *
+ * This program is distributed in the hope that it will be useful,  *
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of   *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    *
+ * GNU General Public License for more details.                     *
+ *                                                                  *
+ * You should have received a copy of the GNU General Public License*
+ * along with this program; if not, contact:                        *
+ *                                                                  *
+ * Free Software Foundation           Voice:  +1-617-542-5942       *
+ * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
+ * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ *                                                                  *
+\********************************************************************/
+
+/** @file QueryNew.h
+    @breif API for finding Gnucash objects 
+    @author Copyright (C) 2002 Derek Atkins <warlord@MIT.EDU>
+*/
+
 
 #ifndef GNC_QUERYNEW_H
 #define GNC_QUERYNEW_H
 
 #include "GNCId.h"
 #include "QueryCore.h"
+#include "qofbook.h"
 
-/* A Query */
+/** A Query */
 typedef struct querynew_s QueryNew;
 
-/* Query Term Operators, for combining Query Terms */
+/** Query Term Operators, for combining Query Terms */
 typedef enum {
   QUERY_AND=1,
   QUERY_OR,
@@ -22,33 +45,36 @@ typedef enum {
   QUERY_XOR
 } QueryOp;
 
-/* Default sort object type */
+/* First/only term is same as 'and' */
+#define QUERY_FIRST_TERM QUERY_AND
+
+/** Default sort object type */
 #define QUERY_DEFAULT_SORT	"GnucashQueryDefaultSortObject"
 
-/* "Known" Object Parameters -- all objects must support these */
+/** "Known" Object Parameters -- all objects must support these */
 #define QUERY_PARAM_BOOK	"book"
 #define QUERY_PARAM_GUID	"guid"
 #define QUERY_PARAM_ACTIVE	"active" /* it's ok if an object does
 					  * not support this */
 
-/* Basic API Functions */
+/** Basic API Functions */
 
 GSList * gncQueryBuildParamList (char const *param, ...);
 
-/* Create a new query.  A Query MUST be set with a 'search-for' type.
- * you can create and set this value in one step or two */
+/** Create a new query.  A Query MUST be set with a 'search-for' type.
+ *  you can create and set this value in one step or two */
 QueryNew * gncQueryCreate (void);
 QueryNew * gncQueryCreateFor (GNCIdTypeConst obj_type);
 void gncQueryDestroy (QueryNew *q);
 
-/* Set the object type to be searched for */
+/** Set the object type to be searched for */
 void gncQuerySearchFor (QueryNew *query, GNCIdTypeConst obj_type);
 
-/* Set the book to be searched (you can search multiple books) */
-void gncQuerySetBook (QueryNew *q, GNCBook *book);
+/** Set the book to be searched (you can search multiple books) */
+void gncQuerySetBook (QueryNew *q, QofBook *book);
 
 
-/* This is the general function that adds a new Query Term to a query.
+/** This is the general function that adds a new Query Term to a query.
  * It will find the 'obj_type' object of the search item and compare
  * the 'param_list' parameter to the predicate data via the comparitor.
  *
@@ -79,10 +105,10 @@ void gncQueryAddGUIDListMatch (QueryNew *q, GSList *param_list,
 void gncQueryAddBooleanMatch (QueryNew *q, GSList *param_list, gboolean value,
 			      QueryOp op);
 
-/* Run the query: */
+/** Run the query: */
 GList * gncQueryRun (QueryNew *query);
 
-/* Return the results of the last query, without re-running */
+/** Return the results of the last query, without re-running */
 GList * gncQueryLastRun (QueryNew *query);
 
 void gncQueryClear (QueryNew *query);
@@ -95,7 +121,7 @@ gboolean gncQueryHasTermType (QueryNew *q, GSList *term_param);
 QueryNew * gncQueryCopy (QueryNew *q);
 QueryNew * gncQueryInvert(QueryNew *q);
 
-/* Merges two queries together.  Both queries must be compatible
+/** Merges two queries together.  Both queries must be compatible
  * search-types.  If both queries are set, they must search for the
  * same object type.  If only one is set, the resulting query will
  * search for the set type.  If neither query has the search-type set,
@@ -103,12 +129,12 @@ QueryNew * gncQueryInvert(QueryNew *q);
  */
 QueryNew * gncQueryMerge(QueryNew *q1, QueryNew *q2, QueryOp op);
 
-/* Like gncQueryMerge, but this will merge q2 into q1.  q2 remains
+/** Like gncQueryMerge, but this will merge q2 into q1.  q2 remains
  * unchanged.
  */
 void gncQueryMergeInPlace(QueryNew *q1, QueryNew *q2, QueryOp op);
 
-/* The lists become the property of the Query and will be freed
+/** The lists become the property of the Query and will be freed
  * by the query when it is destroyed.
  */
 void gncQuerySetSortOrder (QueryNew *q,
@@ -125,7 +151,7 @@ void gncQuerySetSortIncreasing (QueryNew *q, gboolean prim_inc,
 
 void gncQuerySetMaxResults (QueryNew *q, int n);
 
-/* compare two queries for equality. this is a simplistic
+/** Compare two queries for equality. This is a simplistic
  * implementation -- logical equivalences between different
  * and/or trees are ignored. */
 gboolean gncQueryEqual (QueryNew *q1, QueryNew *q2);
@@ -134,5 +160,11 @@ gboolean gncQueryEqual (QueryNew *q1, QueryNew *q2);
  * Useful for debugging and development.
  */
 void gncQueryPrint (QueryNew *query);
+
+/* Return the type of data we're querying for */
+GNCIdType gncQueryGetSearchFor (QueryNew *q);
+
+/* Return the list of books we're using */
+GList * gncQueryGetBooks (QueryNew *q);
 
 #endif /* GNC_QUERYNEW_H */

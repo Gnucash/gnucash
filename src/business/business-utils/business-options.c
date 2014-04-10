@@ -26,7 +26,7 @@
   if (getter == SCM_UNDEFINED) \
     return default_value; \
   \
-  value = gh_call0 (getter); \
+  value = scm_call_0 (getter); \
   if (value == SCM_BOOL_F) \
     return NULL; \
   \

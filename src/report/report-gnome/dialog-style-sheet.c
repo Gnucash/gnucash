@@ -50,9 +50,9 @@ static void
 gnc_style_sheet_options_apply_cb(GNCOptionWin * propertybox,
                                  gpointer user_data) {
   struct ss_info * ssi = (struct ss_info *)user_data;
-  SCM    apply_changes = gh_eval_str("gnc:html-style-sheet-apply-changes");
+  SCM    apply_changes = scm_c_eval_string("gnc:html-style-sheet-apply-changes");
   gnc_option_db_commit(ssi->odb);
-  gh_call1(apply_changes, ssi->stylesheet);
+  scm_call_1(apply_changes, ssi->stylesheet);
 }
 
 
@@ -94,15 +94,15 @@ row_data_destroy_cb(gpointer data) {
 
 static void
 gnc_style_sheet_dialog_fill(StyleSheetDialog * ss, SCM selected) {
-  SCM stylesheets = gh_eval_str("(gnc:get-html-style-sheets)");
-  SCM get_options = gh_eval_str("gnc:html-style-sheet-options");
-  SCM get_name    = gh_eval_str("gnc:html-style-sheet-name");
+  SCM stylesheets = scm_c_eval_string("(gnc:get-html-style-sheets)");
+  SCM get_options = scm_c_eval_string("gnc:html-style-sheet-options");
+  SCM get_name    = scm_c_eval_string("gnc:html-style-sheet-name");
   int sel_row = 0;
 
   /* pack it full of content */
-  for(; !gh_null_p(stylesheets); stylesheets=gh_cdr(stylesheets)) {
-    SCM            scm_name = gh_call1(get_name, gh_car(stylesheets));
-    SCM            scm_options = gh_call1(get_options, gh_car(stylesheets));
+  for(; !SCM_NULLP(stylesheets); stylesheets=SCM_CDR(stylesheets)) {
+    SCM            scm_name = scm_call_1(get_name, SCM_CAR(stylesheets));
+    SCM            scm_options = scm_call_1(get_options, SCM_CAR(stylesheets));
     struct ss_info * ssinfo = g_new0(struct ss_info, 1);
     int            this_row;
     char           * c_names[1];
@@ -111,7 +111,7 @@ gnc_style_sheet_dialog_fill(StyleSheetDialog * ss, SCM selected) {
     /* make the options DB and dialog, but don't parent it yet */ 
     ssinfo->odialog = gnc_options_dialog_new(FALSE, NULL);
     ssinfo->odb     = gnc_option_db_new(scm_options);
-    ssinfo->stylesheet = gh_car(stylesheets);
+    ssinfo->stylesheet = SCM_CAR(stylesheets);
 
     scm_protect_object(ssinfo->stylesheet);
     gtk_widget_ref(gnc_options_dialog_widget(ssinfo->odialog));
@@ -137,7 +137,7 @@ gnc_style_sheet_dialog_fill(StyleSheetDialog * ss, SCM selected) {
     gtk_clist_set_row_data_full(GTK_CLIST(ss->list), this_row, 
                                 (gpointer)ssinfo, 
                                 row_data_destroy_cb);
-    if(gh_eq_p(selected, gh_car(stylesheets))) {
+    if(SCM_EQ_P(selected, SCM_CAR(stylesheets))) {
       sel_row = this_row;
     }
   }
@@ -149,9 +149,9 @@ gnc_style_sheet_dialog_fill(StyleSheetDialog * ss, SCM selected) {
 static void
 gnc_style_sheet_new_cb(GtkWidget * w, gpointer user_data) {
   StyleSheetDialog * ssd = user_data;
-  SCM              make_ss   = gh_eval_str("gnc:make-html-style-sheet");
-  SCM              templates = gh_eval_str("(gnc:get-html-templates)");
-  SCM              t_name = gh_eval_str("gnc:html-style-sheet-template-name");
+  SCM              make_ss   = scm_c_eval_string("gnc:make-html-style-sheet");
+  SCM              templates = scm_c_eval_string("(gnc:get-html-templates)");
+  SCM              t_name = scm_c_eval_string("gnc:html-style-sheet-template-name");
   GtkWidget        * template_entry;
   GtkWidget        * name_entry;
   GtkWidget        * template_combo;
@@ -170,9 +170,9 @@ gnc_style_sheet_new_cb(GtkWidget * w, gpointer user_data) {
   name_entry     = glade_xml_get_widget (xml, "name_entry");
 
   /* put in the list of style sheet type names */
-  for(; !gh_null_p(templates); templates=gh_cdr(templates)) {
-    SCM t = gh_car(templates);
-    strings = g_list_append(strings, gh_scm2newstr(gh_call1(t_name, t), 
+  for(; !SCM_NULLP(templates); templates=SCM_CDR(templates)) {
+    SCM t = SCM_CAR(templates);
+    strings = g_list_append(strings, gh_scm2newstr(scm_call_1(t_name, t), 
                                                    NULL));
   }
   
@@ -191,9 +191,9 @@ gnc_style_sheet_new_cb(GtkWidget * w, gpointer user_data) {
     template_str = gtk_entry_get_text(GTK_ENTRY(template_entry));
     name_str     = gtk_entry_get_text(GTK_ENTRY(name_entry));
     if(template_str && name_str) {
-      SCM new_ss = gh_call2(make_ss, 
-                            gh_str02scm(template_str),
-                            gh_str02scm(name_str));
+      SCM new_ss = scm_call_2(make_ss, 
+			      scm_makfrom0str(template_str),
+			      scm_makfrom0str(name_str));
       gtk_clist_clear(GTK_CLIST(ssd->list));
       gnc_style_sheet_dialog_fill(ssd, new_ss);
     }
@@ -207,8 +207,8 @@ static void
 gnc_style_sheet_delete_cb(GtkWidget * w, gpointer user_data) {
   StyleSheetDialog * ssd = user_data;
   struct ss_info   * ssi = ssd->selection;
-  SCM remover = gh_eval_str("gnc:html-style-sheet-remove");
-  gh_call1(remover, ssi->stylesheet);
+  SCM remover = scm_c_eval_string("gnc:html-style-sheet-remove");
+  scm_call_1(remover, ssi->stylesheet);
   gtk_clist_clear(GTK_CLIST(ssd->list));
   gnc_style_sheet_dialog_fill(ssd, SCM_BOOL_F);
 }

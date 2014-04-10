@@ -28,6 +28,7 @@
 
 #include <openhbci/interactorcb.h>
 #include <openhbci/progressmonitorcb.h>
+#include <openhbci.h>
 #include "dialog-utils.h"
 #include "druid-utils.h"
 #include "gnc-ui-util.h"
@@ -174,6 +175,22 @@ static void jobStarted(JobProgressType type, int actions, void *user_data)
   case    JOB_SEND_KEYS:
     msg = _("Job: Send Keys");
     break;
+    /** Disable keys */
+  case JOB_DISABLE_KEYS:
+    msg = _("Job: Disable Keys");
+    break;
+    /** Change keys */
+  case JOB_CHANGE_KEYS:
+    msg = _("Job: Change Keys");
+    break;
+    /** Change keys */
+  case JOB_GET_STATUS:
+    msg = _("Job: Get Status Reports");
+    break;
+#if 0
+  default:
+    msg = _("Unknown");
+#endif 
   }
   g_assert(msg);
     
@@ -316,8 +333,11 @@ on_button_clicked (GtkButton *button,
   if (strcmp (name, "abort_button") == 0) {
     GNCInteractor_setAborted(data);
   } else if (strcmp (name, "close_button") == 0) {
-    if (data->state != RUNNING)
-      GNCInteractor_hide (data);
+    if (data->state != RUNNING) {
+      gtk_widget_hide_all (data->dialog); 
+      /*data->dont_hide = FALSE;*/
+      /*GNCInteractor_hide (data);*/
+    }
   } else {
     printf("on_button_clicked: Oops, unknown button: %s\n",
 	   name);

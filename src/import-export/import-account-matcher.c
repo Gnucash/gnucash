@@ -39,6 +39,7 @@
 #include "dialog-utils.h"
 #include "AccWindow.h"
 
+#include "gnc-commodity.h"
 #include "gnc-engine-util.h"
 
 #include "gnc-ui-util.h"
@@ -81,7 +82,7 @@ static gboolean acct_tree_add_accts(struct _accountpickerdialog * picker, Accoun
 {
   GtkCTreeNode * node;
   Account *current_acct;
-  guint i;
+  gint i;
   gboolean expand_parent = FALSE;
   gboolean expand;
   gchar * acctinfo[NUM_COLUMNS_CLIST];

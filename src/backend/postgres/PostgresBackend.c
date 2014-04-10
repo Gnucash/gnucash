@@ -30,6 +30,7 @@
 #include <netdb.h>
 #include <pwd.h>
 #include <stdio.h>  
+#include <stdlib.h>  
 #include <string.h>  
 #include <sys/types.h>  
 #include <unistd.h>  
@@ -193,23 +194,6 @@ pgendSplitLookup (PGBackend *be, const GUID *split_guid)
    }
 
    LEAVE("split = (null)");
-   return NULL;
-}
-
-GNCPrice *
-pgendPriceLookup (PGBackend *be, const GUID *price_guid)
-{
-   GList *node;
-   GNCPrice * price = NULL;
-
-   ENTER("guid = %s", guid_to_string(price_guid));
-   for (node=be->blist; node; node=node->next)
-   {
-      GNCBook *book = node->data;
-      price = gnc_price_lookup (price_guid, book);
-      if (price) { LEAVE("price = %p", price); return price; }
-   }
-
    return NULL;
 }
 

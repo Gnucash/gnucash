@@ -28,7 +28,7 @@
 #include <time.h>
 #include <glib.h>
 
-#include "date.h" 
+#include "gnc-date.h" 
 #include "gnc-engine.h" 
 #include "GNCId.h" 
 #include "guid.h" 

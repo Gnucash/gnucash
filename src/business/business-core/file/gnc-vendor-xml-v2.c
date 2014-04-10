@@ -461,6 +461,7 @@ gnc_vendor_xml_initialize (void)
     NULL,			/* add_item */
     vendor_get_count,
     vendor_write,
+    NULL,			/* scrub */
   };
 
   gncObjectRegisterBackend (_GNC_MOD_NAME,

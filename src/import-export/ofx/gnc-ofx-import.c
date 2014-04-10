@@ -32,7 +32,7 @@
 #include <sys/time.h>
 
 #include <glib.h>
-#include <guile/gh.h>
+#include <libguile.h>
 #include <gmodule.h>
 
 #include "libofx/libofx.h"

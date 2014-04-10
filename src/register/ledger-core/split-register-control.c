@@ -129,18 +129,17 @@ gnc_split_register_balance_trans (SplitRegister *reg, Transaction *trans)
         break;
 
       case 1:
-        xaccTransScrubImbalance (trans, gnc_get_current_group (), NULL,
-                                 gnc_get_current_book ());
+        xaccTransScrubImbalance (trans, gnc_get_current_group (), NULL);
         break;
 
       case 2:
         xaccTransScrubImbalance (trans, gnc_get_current_group (),
-                                 default_account, gnc_get_current_book ());
+                                 default_account);
         break;
 
       case 3:
         xaccTransScrubImbalance (trans, gnc_get_current_group (),
-                                 other_account, gnc_get_current_book ());
+                                 other_account);
         break;
     }
 

@@ -353,9 +353,10 @@ pgendGetAllPricesInBook (PGBackend *be, GNCBook *book)
 /* ============================================================= */
 
 void
-pgendPriceFind (Backend *bend, GNCPriceLookup *look)
+pgendPriceFind (Backend *bend, gpointer olook)
 {
    PGBackend *be = (PGBackend *)bend;
+   GNCPriceLookup *look = (GNCPriceLookup *)olook;
    const char * commodity_str;
    const char * currency_str;
    sqlEscape *escape;

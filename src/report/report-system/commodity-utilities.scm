@@ -736,10 +736,11 @@
   (if (and (record? foreign) (gnc:gnc-monetary? foreign))
       (or (gnc:exchange-by-euro foreign domestic #f)
 	  (gnc:exchange-if-same foreign domestic)
-	   (gnc:exchange-by-pricedb-helper
-	    foreign domestic
-	    (gnc:pricedb-lookup-latest
-	     (gnc:book-get-pricedb (gnc:get-current-book))
+	   (gnc:make-gnc-monetary
+	    domestic
+	    (gnc:pricedb-convert-balance-latest-price
+             (gnc:book-get-pricedb (gnc:get-current-book))
+	     (gnc:gnc-monetary-amount foreign)
 	     (gnc:gnc-monetary-commodity foreign)
 	     domestic)))
       #f))
@@ -758,10 +759,11 @@
 	   date)
       (or (gnc:exchange-by-euro foreign domestic date)
 	  (gnc:exchange-if-same foreign domestic)
-	   (gnc:exchange-by-pricedb-helper
-	    foreign domestic
-	    (gnc:pricedb-lookup-nearest-in-time
-	     (gnc:book-get-pricedb (gnc:get-current-book))
+	   (gnc:make-gnc-monetary
+	    domestic
+	    (gnc:pricedb-convert-balance-nearest-price
+             (gnc:book-get-pricedb (gnc:get-current-book))
+	     (gnc:gnc-monetary-amount foreign)
 	     (gnc:gnc-monetary-commodity foreign)
 	     domestic date)))
       #f))

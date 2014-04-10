@@ -101,7 +101,7 @@
     sort-tag (N_ "The amount of time between data points") default
     (list (vector 'DayDelta (N_ "Day") (N_ "Day"))
 	  (vector 'WeekDelta (N_ "Week") (N_ "Week"))
-	  (vector 'TwoWeekDelta (N_ "2Week") (N_ "Two Week"))
+	  (vector 'TwoWeekDelta (N_ "2Week") (N_ "Two Weeks"))
 	  (vector 'MonthDelta (N_ "Month") (N_ "Month"))
 	  (vector 'QuarterDelta (N_ "Quarter") (N_ "Quarter"))
 	  (vector 'HalfYearDelta (N_ "Half Year") (N_ "Half Year"))
@@ -266,12 +266,12 @@
     (N_ "Choose the marker for each data point.")
     default
     (list
-     (vector 'circle "circle" "circle")
-     (vector 'cross "cross" "cross")
-     (vector 'square "square" "square")
-     (vector 'asterisk "asterisk" "asterisk")
-     (vector 'filledcircle "filled circle" "filled circle")
-     (vector 'filledsquare "filled square" "filled square")))))
+     (vector 'circle (N_ "Circle") (N_ "Circle"))
+     (vector 'cross (N_ "Cross") (N_ "Cross"))
+     (vector 'square (N_ "Square") (N_ "Square"))
+     (vector 'asterisk (N_ "Asterisk") (N_ "Asterisk"))
+     (vector 'filledcircle (N_ "Filled circle") (N_ "Circle filled with color"))
+     (vector 'filledsquare (N_ "Filled square") (N_ "Square filled with color"))))))
 
 
 (define (gnc:options-add-sort-method!
@@ -284,7 +284,7 @@
     (N_ "Choose the method for sorting accounts.")
     default
     (list
-     (vector 'acct-code "Account Code" "Alphabetical by account code")
-     (vector 'alphabetical "Alphabetical" "Alphabetical by account name")
-     (vector 'amount "Amount" "By amount, largest to smallest")))))
+     (vector 'acct-code (N_ "Account Code") (N_ "Alphabetical by account code"))
+     (vector 'alphabetical (N_ "Alphabetical") (N_ "Alphabetical by account name"))
+     (vector 'amount (N_ "Amount") (N_ "By amount, largest to smallest"))))))
 

@@ -48,6 +48,7 @@
 #include "Group.h"
 #include "messages.h"
 #include "Transaction.h"
+#include "guile-mappings.h"
 
 
 static short module = MOD_GUI;
@@ -132,7 +133,7 @@ gnc_get_account_separator (void)
   char separator = ':';
   char *string;
 
-  string = gnc_lookup_multichoice_option("General",
+  string = gnc_lookup_multichoice_option("Accounts",
                                          "Account Separator",
                                          "colon");
 
@@ -290,323 +291,130 @@ gnc_get_current_commodities (void)
   return gnc_book_get_commodity_table (gnc_get_current_book ());
 }
 
-const char *
-gnc_ui_account_get_field_name (AccountFieldCode field)
-{
-  g_return_val_if_fail ((field >= 0) && (field < NUM_ACCOUNT_FIELDS), NULL);
-
-  switch (field)
-  {
-    case ACCOUNT_TYPE :
-      return _("Type");
-      break;
-    case ACCOUNT_NAME :
-      return _("Account Name");
-      break;
-    case ACCOUNT_CODE :
-      return _("Account Code");
-      break;
-    case ACCOUNT_DESCRIPTION :
-      return _("Description");
-      break;
-    case ACCOUNT_NOTES :
-      return _("Notes");
-      break;
-    case ACCOUNT_COMMODITY :
-      return _("Commodity");
-      break;
-    case ACCOUNT_BALANCE :
-      return _("Balance");
-      break;
-    case ACCOUNT_BALANCE_REPORT :
-      return _("Balance");
-      break;
-    case ACCOUNT_TOTAL :
-      return _("Total");
-      break;
-    case ACCOUNT_TOTAL_REPORT :
-      return _("Total");
-      break;
-    case ACCOUNT_TAX_INFO :
-      return _("Tax Info");
-    default:
-      break;
-  }
-
-  return NULL;
-}
-
-
+/*
+ * This is a wrapper routine around an xaccGetBalanceInCurrency
+ * function that handles additional needs of the gui.
+ *
+ * @param fn        The underlying function in Account.c to call to retrieve
+ *                  a specific balance from the account.
+ * @param account   The account to retrieve data about.
+ * @param recurse   Include all sub-accounts of this account.
+ * @param negative  An indication of whether or not the returned value
+ *                  is negative.  This can be used by the caller to
+ *                  easily decode whether or not to color the output.
+ * @param commodity The commodity in which the account balance should
+ *                  be returned. If NULL, the value will be returned in
+ *                  the commodity of the account. This is normally used
+ *                  to specify a currency, which forces the conversion
+ *                  of things like stock account values from share
+ *                  values to an amount the requested currency.
+ */
 static gnc_numeric
-gnc_account_get_balance_in_currency (Account *account,
-                                     gnc_commodity *currency)
-{
-  GNCBook *book;
-  GNCPriceDB *pdb;
-  GNCPrice *price;
-  gnc_numeric balance;
-  gnc_commodity *commodity;
-
-  if (!account || !currency)
-    return gnc_numeric_zero ();
-
-  balance = xaccAccountGetBalance (account);
-  commodity = xaccAccountGetCommodity (account);
-
-  if (gnc_numeric_zero_p (balance) ||
-      gnc_commodity_equiv (currency, commodity))
-    return balance;
-
-  book = xaccGroupGetBook (xaccAccountGetRoot (account));
-  g_return_val_if_fail (book != NULL, gnc_numeric_zero ());
-
-  pdb = gnc_book_get_pricedb (book);
-
-  price = gnc_pricedb_lookup_latest (pdb, commodity, currency);
-  if (!price)
-    return gnc_numeric_zero ();
-
-  balance = gnc_numeric_mul (balance, gnc_price_get_value (price),
-                             gnc_commodity_get_fraction (currency),
-                             GNC_RND_ROUND);
-
-  gnc_price_unref (price);
-
-  return balance;
-}
-
-
-gnc_numeric
-gnc_ui_convert_balance_to_currency(gnc_numeric balance, gnc_commodity *balance_currency, gnc_commodity *currency)
-{
-  GNCBook *book;
-  GNCPriceDB *pdb;
-  GNCPrice *price;
-
-  if (gnc_numeric_zero_p (balance) ||
-      gnc_commodity_equiv (currency, balance_currency))
-    return balance;
-
-  book = gnc_get_current_book ();
-  pdb = gnc_book_get_pricedb (book);
-
-  price = gnc_pricedb_lookup_latest (pdb, balance_currency, currency);
-  if (!price)
-    return gnc_numeric_zero ();
-
-  balance = gnc_numeric_mul (balance, gnc_price_get_value (price),
-                             gnc_commodity_get_fraction (currency),
-                             GNC_RND_ROUND);
-
-  gnc_price_unref (price);
-
-  return balance;
-}
-
-static gnc_numeric
-gnc_account_get_reconciled_balance_in_currency (Account *account,
-                                                gnc_commodity *currency)
+gnc_ui_account_get_balance_internal (xaccGetBalanceInCurrencyFn fn,
+				     Account *account,
+				     gboolean recurse,
+				     gboolean *negative,
+				     gnc_commodity *commodity)
 {
   gnc_numeric balance;
-  gnc_commodity *balance_currency;
 
-  if (!account || !currency)
-    return gnc_numeric_zero ();
-
-  balance = xaccAccountGetReconciledBalance (account);
-  balance_currency = xaccAccountGetCommodity (account);
-
-  return gnc_ui_convert_balance_to_currency (balance, balance_currency,
-                                             currency);
-}
-
-typedef struct
-{
-  gnc_commodity *currency;
-  gnc_numeric balance;
-} CurrencyBalance;
-
-
-static gpointer
-balance_helper (Account *account, gpointer data)
-{
-  CurrencyBalance *cb = data;
-  gnc_numeric balance;
-
-  if (!cb->currency)
-    return NULL;
-
-  balance = gnc_account_get_balance_in_currency (account, cb->currency);
-
-  cb->balance = gnc_numeric_add (cb->balance, balance,
-                                 gnc_commodity_get_fraction (cb->currency),
-                                 GNC_RND_ROUND);
-
-  return NULL;
-}
-
-static gpointer
-reconciled_balance_helper (Account *account, gpointer data)
-{
-  CurrencyBalance *cb = data;
-  gnc_numeric balance;
-
-  balance = gnc_account_get_reconciled_balance_in_currency (account, cb->currency);
-
-  cb->balance = gnc_numeric_add (cb->balance, balance,
-                                 gnc_commodity_get_fraction (cb->currency),
-                                 GNC_RND_ROUND);
-
-  return NULL;
-}
-
-gnc_numeric
-gnc_ui_account_get_balance (Account *account, gboolean include_children)
-{
-  gnc_numeric balance;
-  gnc_commodity *commodity;
-
-  if (account == NULL)
-    return gnc_numeric_zero ();
-
-  commodity = xaccAccountGetCommodity (account);
-
-  balance = gnc_account_get_balance_in_currency (account, commodity);
-
-  if (include_children)
-  {
-    AccountGroup *children;
-    CurrencyBalance cb = { commodity, balance };
-
-    children = xaccAccountGetChildren (account);
-
-    xaccGroupForEachAccount (children, balance_helper, &cb, TRUE);
-
-    balance = cb.balance;
-  }
+  balance = fn(account, commodity, recurse);
 
   /* reverse sign if needed */
   if (gnc_reverse_balance (account))
     balance = gnc_numeric_neg (balance);
 
+  /* Record whether the balance is negative. */
+  if (negative)
+    *negative = gnc_numeric_negative_p(balance);
+
   return balance;
 }
 
-
-static char *
-gnc_ui_account_get_tax_info_string (Account *account)
+/*
+ * This routine retrives the total balance in an account, possibly
+ * including all sub-accounts under the specified account.
+ */
+gnc_numeric
+gnc_ui_account_get_balance (Account *account, gboolean recurse)
 {
-  static SCM get_form = SCM_UNDEFINED;
-  static SCM get_desc = SCM_UNDEFINED;
-
-  GNCAccountType atype;
-  const char *code;
-  SCM category;
-  SCM code_scm;
-  char *result;
-  char *form;
-  char *desc;
-  SCM scm;
-
-  if (get_form == SCM_UNDEFINED)
-  {
-    GNCModule module;
-
-    module = gnc_module_load ("gnucash/tax/us", 0);
-
-    g_return_val_if_fail (module, NULL);
-
-    get_form = gh_eval_str ("(false-if-exception gnc:txf-get-form)");
-    get_desc = gh_eval_str ("(false-if-exception gnc:txf-get-description)");
-  }
-
-  g_return_val_if_fail (gh_procedure_p (get_form), NULL);
-  g_return_val_if_fail (gh_procedure_p (get_desc), NULL);
-
-  if (!account)
-    return NULL;
-
-  if (!xaccAccountGetTaxRelated (account))
-    return NULL;
-
-  atype = xaccAccountGetType (account);
-  if (atype != INCOME && atype != EXPENSE)
-    return NULL;
-
-  code = xaccAccountGetTaxUSCode (account);
-  if (!code)
-    return NULL;
-
-  category = gh_eval_str (atype == INCOME ?
-                          "txf-income-categories" :
-                          "txf-expense-categories");
-
-  /* FIXME: when we drop support older guiles, drop the (char *) coercion. */ 
-  code_scm = gh_symbol2scm ((char *) code);
-
-  scm = gh_call2 (get_form, category, code_scm);
-  if (!gh_string_p (scm))
-    return NULL;
-
-  form = gh_scm2newstr (scm, NULL);
-  if (!form)
-    return NULL;
-
-  scm = gh_call2 (get_desc, category, code_scm);
-  if (!gh_string_p (scm))
-  {
-    free (form);
-    return NULL;
-  }
-
-  desc = gh_scm2newstr (scm, NULL);
-  if (!desc)
-  {
-    free (form);
-    return NULL;
-  }
-
-  result = g_strdup_printf ("%s %s", form, desc);
-
-  free (form);
-  free (desc);
-
-  return result;
+  return gnc_ui_account_get_balance_internal (xaccAccountGetBalanceInCurrency,
+					      account, recurse, NULL, NULL);
 }
 
-
+/*
+ * This routine retrives the reconciled balance in an account,
+ * possibly including all sub-accounts under the specified account.
+ */
 gnc_numeric
 gnc_ui_account_get_reconciled_balance (Account *account,
-                                       gboolean include_children)
+                                       gboolean recurse)
 {
-  gnc_numeric balance;
-  gnc_commodity *currency;
-
-  if (account == NULL)
-    return gnc_numeric_zero ();
-
-  currency = xaccAccountGetCommodity (account);
-
-  balance = gnc_account_get_reconciled_balance_in_currency (account, currency);
-
-  if (include_children)
-  {
-    AccountGroup *children;
-    CurrencyBalance cb = { currency, balance };
-
-    children = xaccAccountGetChildren (account);
-
-    xaccGroupForEachAccount (children, reconciled_balance_helper, &cb, TRUE);
-
-    balance = cb.balance;
-  }
-
-  /* reverse sign if needed */
-  if (gnc_reverse_balance (account))
-    balance = gnc_numeric_neg (balance);
-
-  return balance;
+  return gnc_ui_account_get_balance_internal (xaccAccountGetReconciledBalanceInCurrency,
+					      account, recurse, NULL, NULL);
 }
+
+
+/**
+ * Wrapper around gnc_ui_account_get_balance_internal that converts
+ * the resulting number to a character string.  The number is
+ * formatted according to the specification of the account currency.
+ *
+ * @param fn        The underlying function in Account.c to call to retrieve
+ *                  a specific balance from the account.
+ * @param account   The account to retrieve data about.
+ * @param recurse   Include all sub-accounts of this account.
+ * @param negative  An indication of whether or not the returned value
+ *                  is negative.  This can be used by the caller to
+ *                  easily decode whether or not to color the output.
+ */
+static gchar *
+gnc_ui_account_get_print_balance (xaccGetBalanceInCurrencyFn fn,
+				  Account *account,
+				  gboolean recurse,
+				  gboolean *negative)
+{
+  GNCPrintAmountInfo print_info;
+  gnc_numeric balance;
+
+  balance = gnc_ui_account_get_balance_internal(fn, account, recurse,
+						negative, NULL);
+  print_info = gnc_account_print_info(account, TRUE);
+  return g_strdup(xaccPrintAmount(balance, print_info));
+}
+
+
+/**
+ * Wrapper around gnc_ui_account_get_balance_internal that converts
+ * the resulting number to a character string.  The number is
+ * formatted according to the specification of the default reporting
+ * currency.
+ *
+ * @param fn        The underlying function in Account.c to call to retrieve
+ *                  a specific balance from the account.
+ * @param account   The account to retrieve data about.
+ * @param recurse   Include all sub-accounts of this account.
+ * @param negative  An indication of whether or not the returned value
+ *                  is negative.  This can be used by the caller to
+ *                  easily decode whether or not to color the output.
+ */
+static gchar *
+gnc_ui_account_get_print_report_balance (xaccGetBalanceInCurrencyFn fn,
+					 Account *account,
+					 gboolean recurse,
+					 gboolean *negative)
+{
+  GNCPrintAmountInfo print_info;
+  gnc_numeric balance;
+  gnc_commodity *report_commodity;
+
+  report_commodity = gnc_default_report_currency();
+  balance = gnc_ui_account_get_balance_internal(fn, account, recurse,
+						negative, report_commodity);
+  print_info = gnc_commodity_print_info(report_commodity, TRUE);
+  return g_strdup(xaccPrintAmount(balance, print_info));
+}
+
 
 gnc_numeric
 gnc_ui_account_get_balance_as_of_date (Account *account, time_t date,
@@ -638,8 +446,8 @@ gnc_ui_account_get_balance_as_of_date (Account *account, time_t date,
       child = node->data;
       child_currency = xaccAccountGetCommodity (child);
       child_balance = xaccAccountGetBalanceAsOfDate (child, date);
-      child_balance = gnc_ui_convert_balance_to_currency
-        (child_balance, child_currency, currency);
+      child_balance = xaccAccountConvertBalanceToCurrency (child,
+        child_balance, child_currency, currency);
       balance = gnc_numeric_add_fixed (balance, child_balance);
     }
   }
@@ -651,12 +459,95 @@ gnc_ui_account_get_balance_as_of_date (Account *account, time_t date,
   return balance;
 }
 
+static char *
+gnc_ui_account_get_tax_info_string (Account *account)
+{
+  static SCM get_form = SCM_UNDEFINED;
+  static SCM get_desc = SCM_UNDEFINED;
+
+  GNCAccountType atype;
+  const char *code;
+  SCM category;
+  SCM code_scm;
+  char *result;
+  char *form;
+  char *desc;
+  SCM scm;
+
+  if (get_form == SCM_UNDEFINED)
+  {
+    GNCModule module;
+
+    module = gnc_module_load ("gnucash/tax/us", 0);
+
+    g_return_val_if_fail (module, NULL);
+
+    get_form = scm_c_eval_string ("(false-if-exception gnc:txf-get-form)");
+    get_desc = scm_c_eval_string ("(false-if-exception gnc:txf-get-description)");
+  }
+
+  g_return_val_if_fail (SCM_PROCEDUREP (get_form), NULL);
+  g_return_val_if_fail (SCM_PROCEDUREP (get_desc), NULL);
+
+  if (!account)
+    return NULL;
+
+  if (!xaccAccountGetTaxRelated (account))
+    return NULL;
+
+  atype = xaccAccountGetType (account);
+  if (atype != INCOME && atype != EXPENSE)
+    return NULL;
+
+  code = xaccAccountGetTaxUSCode (account);
+  if (!code)
+    return NULL;
+
+  category = scm_c_eval_string (atype == INCOME ?
+				"txf-income-categories" :
+				"txf-expense-categories");
+
+  code_scm = scm_str2symbol (code);
+
+  scm = scm_call_2 (get_form, category, code_scm);
+  if (!SCM_STRINGP (scm))
+    return NULL;
+
+  form = gh_scm2newstr (scm, NULL);
+  if (!form)
+    return NULL;
+
+  scm = scm_call_2 (get_desc, category, code_scm);
+  if (!SCM_STRINGP (scm))
+  {
+    free (form);
+    return NULL;
+  }
+
+  desc = gh_scm2newstr (scm, NULL);
+  if (!desc)
+  {
+    free (form);
+    return NULL;
+  }
+
+  result = g_strdup_printf ("%s %s", form, desc);
+
+  free (form);
+  free (desc);
+
+  return result;
+}
+
+
 char *
 gnc_ui_account_get_field_value_string (Account *account,
-                                       AccountFieldCode field)
+                                       AccountFieldCode field,
+				       gboolean *negative)
 {
   g_return_val_if_fail ((field >= 0) && (field < NUM_ACCOUNT_FIELDS), NULL);
 
+  *negative = FALSE;
   if (account == NULL)
     return NULL;
 
@@ -682,49 +573,66 @@ gnc_ui_account_get_field_value_string (Account *account,
         g_strdup
         (gnc_commodity_get_printname(xaccAccountGetCommodity(account)));
 
-    case ACCOUNT_BALANCE :
-      {
-        gnc_numeric balance = gnc_ui_account_get_balance(account, FALSE);
+    case ACCOUNT_PRESENT :
+      return
+	gnc_ui_account_get_print_balance(xaccAccountGetPresentBalanceInCurrency,
+					 account, FALSE, negative);
 
-        return g_strdup
-          (xaccPrintAmount (balance, gnc_account_print_info (account, TRUE)));
-      }
+    case ACCOUNT_PRESENT_REPORT :
+      return
+	gnc_ui_account_get_print_report_balance(xaccAccountGetPresentBalanceInCurrency,
+						account, FALSE, negative);
+
+    case ACCOUNT_BALANCE :
+      return
+	gnc_ui_account_get_print_balance(xaccAccountGetBalanceInCurrency,
+					 account, FALSE, negative);
 
     case ACCOUNT_BALANCE_REPORT :
-      {
-	gnc_commodity * commodity = xaccAccountGetCommodity(account);
-        gnc_commodity * report_commodity = gnc_default_report_currency();
-        gnc_numeric balance = gnc_ui_account_get_balance(account, FALSE);
+      return
+	gnc_ui_account_get_print_report_balance(xaccAccountGetBalanceInCurrency,
+						account, FALSE, negative);
 
-	gnc_numeric report_balance = gnc_ui_convert_balance_to_currency(balance, commodity, 
-                                                                        report_commodity);
+    case ACCOUNT_CLEARED :
+      return
+	gnc_ui_account_get_print_balance(xaccAccountGetClearedBalanceInCurrency,
+					 account, FALSE, negative);
 
-        return g_strdup
-          (xaccPrintAmount(report_balance,
-                           gnc_commodity_print_info (report_commodity, TRUE)));
-      }
+    case ACCOUNT_CLEARED_REPORT :
+      return
+	gnc_ui_account_get_print_report_balance(xaccAccountGetClearedBalanceInCurrency,
+						account, FALSE, negative);
+
+    case ACCOUNT_RECONCILED :
+      return
+	gnc_ui_account_get_print_balance(xaccAccountGetReconciledBalanceInCurrency,
+					 account, FALSE, negative);
+
+    case ACCOUNT_RECONCILED_REPORT :
+      return
+	gnc_ui_account_get_print_report_balance(xaccAccountGetReconciledBalanceInCurrency,
+						account, FALSE, negative);
+
+    case ACCOUNT_FUTURE_MIN :
+      return
+	gnc_ui_account_get_print_balance(xaccAccountGetProjectedMinimumBalanceInCurrency,
+					 account, FALSE, negative);
+
+    case ACCOUNT_FUTURE_MIN_REPORT :
+      return
+	gnc_ui_account_get_print_report_balance(xaccAccountGetProjectedMinimumBalanceInCurrency,
+						account, FALSE, negative);
 
     case ACCOUNT_TOTAL :
-      {
-	gnc_numeric balance = gnc_ui_account_get_balance(account, TRUE);
+      return
+	gnc_ui_account_get_print_balance(xaccAccountGetBalanceInCurrency,
+					 account, TRUE, negative);
 
-        return g_strdup
-          (xaccPrintAmount(balance, gnc_account_print_info (account, TRUE)));
-      }
 
     case ACCOUNT_TOTAL_REPORT :
-      {
-	gnc_commodity * commodity = xaccAccountGetCommodity(account);
-        gnc_commodity * report_commodity = gnc_default_report_currency();
-	gnc_numeric balance = gnc_ui_account_get_balance(account, TRUE);
-
-	gnc_numeric report_balance = gnc_ui_convert_balance_to_currency(balance, commodity, 
-                                                                        report_commodity);
-
-	return g_strdup
-          (xaccPrintAmount(report_balance,
-                           gnc_commodity_print_info (report_commodity, TRUE)));
-      }
+      return
+	gnc_ui_account_get_print_report_balance(xaccAccountGetBalanceInCurrency,
+						account, TRUE, negative);
 
     case ACCOUNT_TAX_INFO:
       return gnc_ui_account_get_tax_info_string (account);
@@ -1317,8 +1225,7 @@ gnc_commodity_print_info (const gnc_commodity *commodity,
 
   info.commodity = commodity;
 
-  is_iso = (safe_strcmp (gnc_commodity_get_namespace (commodity),
-                         GNC_COMMODITY_NS_ISO) == 0);
+  is_iso = gnc_commodity_is_iso (commodity);
 
   if (is_decimal_fraction (gnc_commodity_get_fraction (commodity),
                            &info.max_decimal_places))
@@ -1355,8 +1262,7 @@ gnc_account_print_info_helper(Account *account, gboolean use_symbol,
 
   info.commodity = efffunc (account);
 
-  is_iso = (safe_strcmp (gnc_commodity_get_namespace (info.commodity),
-                         GNC_COMMODITY_NS_ISO) == 0);
+  is_iso = gnc_commodity_is_iso (info.commodity);
 
   scu = scufunc (account);
 
@@ -1712,9 +1618,7 @@ xaccSPrintAmount (char * bufp, gnc_numeric val, GNCPrintAmountInfo info)
      }
      else
      {
-       if (info.commodity &&
-           safe_strcmp (GNC_COMMODITY_NS_ISO,
-                        gnc_commodity_get_namespace (info.commodity)) != 0)
+       if (info.commodity && !gnc_commodity_is_iso (info.commodity))
          is_shares = TRUE;
 
        currency_symbol = gnc_commodity_get_mnemonic (info.commodity);

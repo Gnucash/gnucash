@@ -308,7 +308,7 @@ gnc_dense_cal_init (GncDenseCal *dcal)
         /* Deal with the various label sizes. */
         {
                 gint i;
-                guint maxWidth, maxHeight, maxAscent, maxLBearing;
+                gint maxWidth, maxHeight, maxAscent, maxLBearing;
                 gint lbearing, rbearing, width, ascent, descent;
 
                 dcal->monthLabelFont = gdk_font_load( LABEL_FONT_NAME );
@@ -754,7 +754,7 @@ gnc_dense_cal_draw_to_buffer( GncDenseCal *dcal )
                                          gdk_visual_get_system()->depth );
                 black.pixel = gdk_rgb_xpixel_from_rgb(0);
                 for ( i=0; i<12; i++ ) {
-                        gint x,y;
+                        guint x,y;
                         /* these are going to be rotated, so transpose width
                          * and height */
                         dcal->monthLabels[i] =
@@ -1497,7 +1497,8 @@ gnc_dense_cal_mark( GncDenseCal *dcal,
                     guint size, GDate **dateArray,
                     gchar *name, gchar *info )
 {
-        gint i, doc;
+        guint i;
+	gint doc;
         gdc_mark_data *newMark;
         GDate *d;
 
@@ -1547,7 +1548,7 @@ gnc_dense_cal_mark_remove( GncDenseCal *dcal, guint markToRemove )
         gdc_mark_data *gdcmd;
 
         /* Ignore non-realistic marks */
-        if ( markToRemove == -1 ) {
+        if ( (gint)markToRemove == -1 ) {
                 return;
         }
 

@@ -11,11 +11,12 @@
 
 #include "guid.h"
 #include "messages.h"
+#include "gnc-book.h"
+#include "gnc-commodity.h"
 #include "gnc-engine-util.h"
-#include "gnc-book-p.h"
+#include "gnc-event-p.h"
 #include "GNCIdP.h"
 #include "QueryObject.h"
-#include "gnc-event-p.h"
 #include "gnc-be-utils.h"
 
 #include "gncBusiness.h"
@@ -110,6 +111,11 @@ static void gncVendorFree (GncVendor *vendor)
   g_list_free (vendor->jobs);
 
   remObj (vendor);
+
+  if (vendor->terms)
+    gncBillTermDecRef (vendor->terms);
+  if (vendor->taxtable)
+    gncTaxTableDecRef (vendor->taxtable);
 
   g_free (vendor);
 }

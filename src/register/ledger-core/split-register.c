@@ -100,7 +100,7 @@
 #include "config.h"
 
 #include <glib.h>
-#include <guile/gh.h>
+#include <libguile.h>
 #include <stdio.h>
 #include <string.h>
 #include <time.h>
@@ -1005,6 +1005,104 @@ gnc_split_register_delete_current_trans (SplitRegister *reg)
 
   xaccTransBeginEdit(trans);
   xaccTransDestroy(trans);
+  xaccTransCommitEdit(trans);
+
+  /* Check pending transaction */
+  if (trans == pending_trans)
+  {
+    info->pending_trans_guid = *xaccGUIDNULL();
+    pending_trans = NULL;
+  }
+
+  gnc_resume_gui_refresh ();
+}
+
+void
+gnc_split_register_void_current_trans (SplitRegister *reg, const char *reason)
+{
+  SRInfo *info = gnc_split_register_get_info (reg);
+  Transaction *pending_trans;
+  Transaction *trans;
+  Split *blank_split;
+  Split *split;
+
+  if (!reg) return;
+
+  blank_split = xaccSplitLookup (&info->blank_split_guid,
+                                 gnc_get_current_book ());
+  pending_trans = xaccTransLookup (&info->pending_trans_guid,
+                                   gnc_get_current_book ());
+
+  /* get the current split based on cursor position */
+  split = gnc_split_register_get_current_split (reg);
+  if (split == NULL)
+    return;
+
+  /* Bail if trying to void the blank split. */
+  if (split == blank_split)
+    return;
+
+  /* already voided. */
+  if (xaccSplitGetReconcile (split) == VREC)
+    return;
+
+  info->trans_expanded = FALSE;
+
+  gnc_suspend_gui_refresh ();
+
+  trans = xaccSplitGetParent(split);
+
+  xaccTransBeginEdit(trans);
+  xaccTransVoid(trans, reason);
+  xaccTransCommitEdit(trans);
+
+  /* Check pending transaction */
+  if (trans == pending_trans)
+  {
+    info->pending_trans_guid = *xaccGUIDNULL();
+    pending_trans = NULL;
+  }
+
+  gnc_resume_gui_refresh ();
+}
+
+void
+gnc_split_register_unvoid_current_trans (SplitRegister *reg)
+{
+  SRInfo *info = gnc_split_register_get_info (reg);
+  Transaction *pending_trans;
+  Transaction *trans;
+  Split *blank_split;
+  Split *split;
+
+  if (!reg) return;
+
+  blank_split = xaccSplitLookup (&info->blank_split_guid,
+                                 gnc_get_current_book ());
+  pending_trans = xaccTransLookup (&info->pending_trans_guid,
+                                   gnc_get_current_book ());
+
+  /* get the current split based on cursor position */
+  split = gnc_split_register_get_current_split (reg);
+  if (split == NULL)
+    return;
+
+  /* Bail if trying to unvoid the blank split. */
+  if (split == blank_split)
+    return;
+
+  /* not voided. */
+  if (xaccSplitGetReconcile (split) != VREC)
+    return;
+
+  info->trans_expanded = FALSE;
+
+  gnc_suspend_gui_refresh ();
+
+  trans = xaccSplitGetParent(split);
+
+  xaccTransBeginEdit(trans);
+  xaccTransUnvoid(trans);
   xaccTransCommitEdit(trans);
 
   /* Check pending transaction */
@@ -2101,14 +2199,12 @@ gnc_split_register_config_cells (SplitRegister *reg)
     ((PriceCell *) gnc_table_layout_get_cell (reg->table->layout, TSHRS_CELL),
      gnc_default_share_print_info ());
 
-  /* Initialize the rate cells */
-  gnc_price_cell_set_fraction
-    ((PriceCell *)
-     gnc_table_layout_get_cell (reg->table->layout, RATE_CELL), 1000000);
-
+  /* Initialize the rate cell
+   * use a share_print_info to make sure we don't have rounding errors
+   */
   gnc_price_cell_set_print_info
     ((PriceCell *) gnc_table_layout_get_cell (reg->table->layout, RATE_CELL),
-     gnc_default_price_print_info());
+     gnc_default_share_print_info());
 
   /* The action cell should accept strings not in the list */
   gnc_combo_cell_set_strict
@@ -2234,6 +2330,24 @@ gnc_split_register_config (SplitRegister *reg,
                            gboolean use_double_line)
 {
   if (!reg) return;
+
+  /* If shrinking the transaction split, put the cursor on the first row of the trans */
+  if (reg->use_double_line && !use_double_line) {
+    VirtualLocation virt_loc = reg->table->current_cursor_loc;
+    if (gnc_table_find_close_valid_cell (reg->table, &virt_loc, FALSE)) {
+      if (virt_loc.phys_row_offset) {
+	gnc_table_move_vertical_position (reg->table, &virt_loc, -virt_loc.phys_row_offset);
+	gnc_table_move_cursor_gui (reg->table, virt_loc);
+      }
+    } else {
+      /* WTF?  Go to a known safe location. */
+      virt_loc.vcell_loc.virt_row = 1;
+      virt_loc.vcell_loc.virt_col = 0;
+      virt_loc.phys_row_offset = 0;
+      virt_loc.phys_col_offset = 0;
+      gnc_table_move_cursor_gui (reg->table, virt_loc);
+    }
+  }
 
   reg->type = newtype;
 

@@ -156,7 +156,7 @@ static gboolean check_entry_nonempty (GtkWidget *dialog, GtkWidget *entry,
   const char *res = gtk_entry_get_text (GTK_ENTRY (entry));
   if (safe_strcmp (res, "") == 0) {
     if (error_message)
-      gnc_error_dialog_parented (GTK_WINDOW (dialog), error_message);
+      gnc_error_dialog_parented (GTK_WINDOW (dialog), "%s", error_message);
     return TRUE;
   }
   return FALSE;
@@ -169,7 +169,10 @@ gnc_vendor_window_ok_cb (GtkWidget *widget, gpointer data)
 
   /* Check for valid company name */
   if (check_entry_nonempty (vw->dialog, vw->company_entry,
-		   _("You must enter a company name.")))
+		   _("You must enter a company name.\n"
+		     "If this vendor is an individual (and not a company) "
+		     "you should set the \"company name\" and \"contact name\" "
+		     "the same.")))
     return;
 
   /* Make sure we have an address */
@@ -246,7 +249,7 @@ gnc_vendor_name_changed_cb (GtkWidget *widget, gpointer data)
   if (!vw)
     return;
 
-  name = gtk_entry_get_text (GTK_ENTRY (vw->name_entry));
+  name = gtk_entry_get_text (GTK_ENTRY (vw->company_entry));
   if (!name || *name == '\0')
     name = _("<No name>");
 
@@ -433,8 +436,6 @@ gnc_vendor_new_window (GNCBook *bookp, GncVendor *vendor)
     addr = gncVendorGetAddr (vendor);
 
     gtk_entry_set_text (GTK_ENTRY (vw->id_entry), gncVendorGetID (vendor));
-    gtk_entry_set_editable (GTK_ENTRY (vw->id_entry), FALSE);
-
     gtk_entry_set_text (GTK_ENTRY (vw->company_entry), gncVendorGetName (vendor));
 
     /* Setup Address */

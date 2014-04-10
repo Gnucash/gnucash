@@ -26,7 +26,7 @@
 
 #include <gnome.h>
 #include <glib.h>
-#include <guile/gh.h>
+#include <libguile.h>
 #include <gtkhtml/gtkhtml.h>
 #include <gtkhtml/gtkhtml-embedded.h>
 

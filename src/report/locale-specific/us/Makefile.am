@@ -12,7 +12,10 @@ libgncmod_locale_reports_us_la_LIBADD = \
   ${GLIB_LIBS} 
 
 
-AM_CFLAGS = -I${top_srcdir}/src/gnc-module ${GUILE_INCS} ${GLIB_CFLAGS}
+AM_CFLAGS = \
+  -I${top_srcdir}/src \
+  -I${top_srcdir}/src/gnc-module \
+  ${GUILE_INCS} ${GLIB_CFLAGS}
 
 if GNUCASH_SEPARATE_BUILDDIR
 #For executing test cases

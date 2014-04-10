@@ -10,8 +10,9 @@
 #endif
 
 #include <stdio.h>
-#include <guile/gh.h>
 #include <glib.h>
+#include <libguile.h>
+#include "guile-mappings.h"
 
 #include "gnc-module.h"
 #include "gnc-module-api.h"
@@ -63,8 +64,8 @@ libgncmod_gnome_search_LTX_gnc_module_init(int refcount)
     gnc_search_core_initialize ();
   }
   
-  gh_eval_str("(use-modules (g-wrapped gw-gnome-search))");
-  gh_eval_str("(use-modules (gnucash gnome-search))");
+  scm_c_eval_string("(use-modules (g-wrapped gw-gnome-search))");
+  scm_c_eval_string("(use-modules (gnucash gnome-search))");
 
   return TRUE;
 }

@@ -5,9 +5,10 @@
  * Copyright (c) 2001 Derek Atkins <warlord@MIT.EDU>
  *********************************************************************/
 
+#include "config.h"
 #include <stdio.h>
-#include <guile/gh.h>
 #include <glib.h>
+#include <libguile.h>
 
 #include "gnc-module.h"
 #include "gnc-module-api.h"
@@ -75,8 +76,8 @@ libgncmod_business_core_LTX_gnc_module_init(int refcount)
     gncVendorRegister ();
   }
   
-  gh_eval_str("(use-modules (g-wrapped gw-business-core))");
-  gh_eval_str("(use-modules (gnucash business-core))");
+  scm_c_eval_string("(use-modules (g-wrapped gw-business-core))");
+  scm_c_eval_string("(use-modules (gnucash business-core))");
 
   return TRUE;
 }

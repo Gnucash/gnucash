@@ -304,7 +304,7 @@
   (gnc:register-reg-option
    (gnc:make-simple-boolean-option
     (N_ "Display") (N_ "Running Balance")
-    "k" (N_ "Display a running balance") #f))
+    "k" (N_ "Display a running balance") #t))
 
   (gnc:register-reg-option
    (gnc:make-simple-boolean-option
@@ -334,14 +334,13 @@
 
       (define (colspan monetary)
         (cond
-         ((balance-col used-columns) (balance-col used-columns))
          ((amount-single-col used-columns) (amount-single-col used-columns))
          ((gnc:numeric-negative-p (gnc:gnc-monetary-amount monetary))
           (credit-col used-columns))
          (else (debit-col used-columns))))
 
       (define (display-subtotal monetary)
-        (if (or (balance-col used-columns) (amount-single-col used-columns))
+        (if (amount-single-col used-columns)
             (if (and leader (gnc:account-reverse-balance? leader))
                 (gnc:monetary-neg monetary)
                 monetary)
@@ -362,7 +361,7 @@
                    table
                    subtotal-style
                    (append (cons (gnc:make-html-table-cell/markup
-                                  "total-label-cell" (_ "Total"))
+                                  "total-label-cell" (_ "Net Change"))
                                  '())
                            (list (gnc:make-html-table-cell/size/markup
                                   1 (colspan currency)

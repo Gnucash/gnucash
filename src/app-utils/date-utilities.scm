@@ -299,7 +299,8 @@
 (define deltalist
   (list (cons 'SecDelta SecDelta)
 	(cons 'DayDelta DayDelta)
-	(cons 'WeejDelta WeekDelta)
+	(cons 'WeekDelta WeekDelta)
+	(cons 'TwoWeekDelta TwoWeekDelta)
 	(cons 'MonthDelta MonthDelta)
 	(cons 'QuarterDelta QuarterDelta)
 	(cons 'HalfYearDelta HalfYearDelta)

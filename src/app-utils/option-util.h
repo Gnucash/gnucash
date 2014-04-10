@@ -24,14 +24,15 @@
 #ifndef OPTION_UTIL_H
 #define OPTION_UTIL_H
 
-#include <guile/gh.h>
 #include <glib.h>
+#include <libguile.h>
+#include "guile-mappings.h"
 
 #include "gnc-commodity.h"
+#include "gnc-date.h"
 #include "kvp_frame.h"
 #include "GNCId.h"
 #include "gnc-ui-common.h"
-#include "date.h"
 
 
 typedef struct gnc_option GNCOption;
@@ -252,6 +253,13 @@ void gnc_option_db_set_option_selectable_by_name(SCM guile_options,
                                                  const char *section, 
                                                  const char *name,
                                                  gboolean selectable);
+
+gboolean gnc_dateformat_option_value_parse(SCM value, DateFormat *format,
+					   GNCDateMonthFormat *months,
+					   gboolean *years, char **custom);
+SCM gnc_dateformat_option_set_value(DateFormat format, GNCDateMonthFormat months,
+				    gboolean years, const char *custom);
+
 
 /* private */
 void gncp_option_db_register_option(GNCOptionDBHandle handle,

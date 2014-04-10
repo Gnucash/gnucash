@@ -9,7 +9,7 @@
 
 #include <stdlib.h>
 #include <glib.h>
-#include <guile/gh.h>
+#include <libguile.h>
 
 #include "test-stuff.h"
 #include "FreqSpec.h"
@@ -524,7 +524,7 @@ test_composite (void)
 }
 
 static void
-guile_main( int argc, char* argv[] )
+guile_main ( void *closure, int argc, char* argv[] )
 {
         gnc_module_load("gnucash/engine", 0);
 
@@ -558,6 +558,6 @@ guile_main( int argc, char* argv[] )
 int
 main (int argc, char **argv)
 {
-  gh_enter (argc, argv, guile_main);
+  scm_boot_guile (argc, argv, guile_main, NULL);
   return 0;
 }

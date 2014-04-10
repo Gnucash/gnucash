@@ -87,7 +87,7 @@
  *    on the "commit" button.  This is the routine to call for that.
  *
  * HISTORY:
- * Copyright (c) 1998, 1999, 2000 Linas Vepstas
+ * Copyright (c) 1998, 1999, 2000 Linas Vepstas <linas@linas.org>
  * Copyright (c) 2000 Dave Peticolas
  */
  
@@ -97,7 +97,7 @@
 #include <time.h>
 
 #include "basiccell.h"
-#include "date.h"
+#include "gnc-date.h"
 
 
 typedef struct date_cell
