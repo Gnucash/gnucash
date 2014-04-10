@@ -205,7 +205,7 @@ gnc_module_system_refresh(void)
         
         /* is the file a .la shared lib? */
         if((namelen > 3) && (!strncmp(dent->d_name + namelen - 3, ".la", 3)))
-	{
+        {
           /* get the full path name, then dlopen the library and see
            * if it has the appropriate symbols to be a gnc_module */
           fullpath = g_strdup_printf("%s/%s", (char *)(current->data), 
@@ -213,7 +213,7 @@ gnc_module_system_refresh(void)
           info     = gnc_module_get_info(fullpath);
           
           if(info) 
-	  {
+          {
             module_info = g_list_prepend(module_info, info);
           }
           g_free(fullpath);
@@ -296,7 +296,7 @@ gnc_module_get_info(const char * fullpath)
         info->module_interface   = *(int *)interface;
         info->module_age         = *(int *)age;
         info->module_revision    = *(int *)revision;
-	//printf("(init) closing %s\n", fullpath);
+        //printf("(init) closing %s\n", fullpath);
         //lt_dlclose(handle);
         return info;
       }
@@ -311,7 +311,7 @@ gnc_module_get_info(const char * fullpath)
     {
       /* unsupported module system interface version */
       /* printf("\n** WARNING ** : module '%s' requires newer module system\n",
-	 fullpath); */
+         fullpath); */
       //lt_dlclose(handle);
       return NULL;
     }
@@ -356,7 +356,7 @@ gnc_module_locate(const gchar * module_name, int interface)
            ((current->module_interface == best->module_interface) &&
             (current->module_age == best->module_age) &&
             (current->module_revision > best->module_revision))) 
-	{
+        {
           best = current;
         }
       }
@@ -442,14 +442,14 @@ gnc_module_load_common(char * module_name, gint interface, gboolean optional)
     {
       if(info->init_func(info->load_count)) 
       {
-	info->load_count++;
-	return info;
+        info->load_count++;
+        return info;
       }
       else
       {
         g_warning ("module init failed: %s", module_name);
-	return NULL;
-      }	
+        return NULL;
+      }
     }
     else {
       g_warning ("module has no init func: %s", module_name);
@@ -475,13 +475,13 @@ gnc_module_load_common(char * module_name, gint interface, gboolean optional)
         info->handle     = handle;
         info->filename   = g_strdup(modinfo->module_filepath);
         info->load_count = 1;
-	info->init_func  = initfunc;
+        info->init_func  = initfunc;
         g_hash_table_insert(loaded_modules, info, info);
         
         /* now call its init function.  this should load any dependent
          * modules, too.  If it doesn't return TRUE unload the module. */
         if(!info->init_func(0)) 
-	{
+        {
           /* init failed. unload the module. */
           g_warning ("Initialization failed for module %s\n", module_name);
           g_hash_table_remove(loaded_modules, info);
@@ -491,7 +491,7 @@ gnc_module_load_common(char * module_name, gint interface, gboolean optional)
           return NULL;
         }
 
-	return info;
+        return info;
       }
       else 
       {

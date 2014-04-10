@@ -326,20 +326,20 @@ sql_sort_need_entry(QofQuery * q)
                                                               \
    if (invert)                                                \
       sq->pq = stpcpy (sq->pq, "NOT (");                      \
-   if (pd->how == QOF_COMPARE_NEQ)                                \
+   if (pd->how == QOF_COMPARE_NEQ)                            \
       sq->pq = stpcpy (sq->pq, "NOT (");                      \
    if (pdata->is_regex || pdata->options == QOF_STRING_MATCH_CASEINSENSITIVE) \
      sq->pq = stpcpy(sq->pq, fieldname " ~");                 \
    else                                                       \
      sq->pq = stpcpy(sq->pq, fieldname " =");                 \
-   if (pdata->options == QOF_STRING_MATCH_CASEINSENSITIVE) {      \
+   if (pdata->options == QOF_STRING_MATCH_CASEINSENSITIVE) {  \
       sq->pq = stpcpy(sq->pq, "*");                           \
    }                                                          \
    sq->pq = stpcpy(sq->pq, " '");                             \
    tmp = sqlEscapeString (sq->escape, pdata->matchstring);    \
    sq->pq = stpcpy(sq->pq, tmp);                              \
    sq->pq = stpcpy(sq->pq, "'");                              \
-   if (pd->how == QOF_COMPARE_NEQ)                                \
+   if (pd->how == QOF_COMPARE_NEQ)                            \
       sq->pq = stpcpy (sq->pq, ") ");                         \
    if (invert)                                                \
       sq->pq = stpcpy (sq->pq, ") ");                         \
@@ -355,16 +355,16 @@ sql_sort_need_entry(QofQuery * q)
 #define AMOUNT_TERM(signcheck,fieldname,comtable)                    \
 {                                                                    \
    double amt = gnc_numeric_to_double (pdata->amount);               \
-								     \
+                                                                     \
    if (invert)                                                       \
       sq->pq = stpcpy (sq->pq, "NOT (");                             \
                                                                      \
    switch(pdata->options)                                            \
    {                                                                 \
-      case QOF_NUMERIC_MATCH_CREDIT:                                     \
+      case QOF_NUMERIC_MATCH_CREDIT:                                 \
          sq->pq = stpcpy(sq->pq, signcheck " <= 0 AND ");            \
          break;                                                      \
-      case QOF_NUMERIC_MATCH_DEBIT:                                      \
+      case QOF_NUMERIC_MATCH_DEBIT:                                  \
          sq->pq = stpcpy(sq->pq, signcheck " >= 0 AND ");            \
          break;                                                      \
       default:                                                       \
@@ -372,36 +372,36 @@ sql_sort_need_entry(QofQuery * q)
    }                                                                 \
    switch(pd->how)                                                   \
    {                                                                 \
-      case QOF_COMPARE_GTE:                                              \
+      case QOF_COMPARE_GTE:                                          \
          sq->pq = stpcpy(sq->pq,                                     \
             fieldname " >= "comtable" * float8");                    \
-         sq->pq += sprintf (sq->pq, "(%22.18g)", amt);                    \
+         sq->pq += sprintf (sq->pq, "(%22.18g)", amt);               \
          break;                                                      \
-      case QOF_COMPARE_GT:                                               \
+      case QOF_COMPARE_GT:                                           \
          sq->pq = stpcpy(sq->pq,                                     \
-            fieldname " > "comtable" * float8");    \
-         sq->pq += sprintf (sq->pq, "(%22.18g)", amt);     \
+            fieldname " > "comtable" * float8");                     \
+         sq->pq += sprintf (sq->pq, "(%22.18g)", amt);               \
          break;                                                      \
-      case QOF_COMPARE_LTE:                                              \
+      case QOF_COMPARE_LTE:                                          \
          sq->pq = stpcpy(sq->pq,                                     \
-            fieldname " <= "comtable" * float8");   \
-         sq->pq += sprintf (sq->pq, "(%22.18g)", amt);     \
+            fieldname " <= "comtable" * float8");                    \
+         sq->pq += sprintf (sq->pq, "(%22.18g)", amt);               \
          break;                                                      \
-      case QOF_COMPARE_LT:                                               \
+      case QOF_COMPARE_LT:                                           \
          sq->pq = stpcpy(sq->pq,                                     \
-            fieldname " < "comtable" * float8");    \
-         sq->pq += sprintf (sq->pq, "(%22.18g)", amt);     \
+            fieldname " < "comtable" * float8");                     \
+         sq->pq += sprintf (sq->pq, "(%22.18g)", amt);               \
          break;                                                      \
-      case QOF_COMPARE_EQUAL:                                            \
+      case QOF_COMPARE_EQUAL:                                        \
          sq->pq = stpcpy(sq->pq,                                     \
-            "abs(" fieldname " - abs("comtable" * float8"); \
-         sq->pq += sprintf (sq->pq, "(%22.18g)", amt);     \
+            "abs(" fieldname " - abs("comtable" * float8");          \
+         sq->pq += sprintf (sq->pq, "(%22.18g)", amt);               \
          sq->pq = stpcpy(sq->pq, ")) < 1");                          \
          break;                                                      \
-      case QOF_COMPARE_NEQ:                                              \
+      case QOF_COMPARE_NEQ:                                          \
          sq->pq = stpcpy(sq->pq,                                     \
-            "abs(" fieldname " - abs("comtable" * float8"); \
-         sq->pq += sprintf (sq->pq, "(%22.18g)", amt);     \
+            "abs(" fieldname " - abs("comtable" * float8");          \
+         sq->pq += sprintf (sq->pq, "(%22.18g)", amt);               \
          sq->pq = stpcpy(sq->pq, ")) > 1");                          \
          break;                                                      \
    }                                                                 \

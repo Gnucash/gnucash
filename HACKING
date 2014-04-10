@@ -89,7 +89,7 @@ To run gdb on an installed version of gnucash (installed in /usr/local/bin:)
     
 To run gdb on the version in your build tree:
 
-    % gnucash-build-env gdb /usr/bin/guile
+    % ./src/bin/overrides/gnucash-build-env gdb /usr/bin/guile
     [gdb output]
     % gdb> run -e main -s ./src/bin/overrides/gnucash --g-fatal-warnings
 
