@@ -31,6 +31,8 @@
 #include "messages.h"
 #include "gnc-query-list.h"
 #include "search-param.h"
+#include "QueryCore.h"
+#include "QueryNew.h"
 #include "QueryObject.h"
 
 /* Signal codes */

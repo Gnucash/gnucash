@@ -9,6 +9,7 @@
 #include <glib.h>
 
 #include "gnc-engine-util.h"	/* safe_strcmp */
+#include "QueryCore.h"
 #include "QueryObject.h"
 #include "guid.h"
 #include "gnc-event-p.h"

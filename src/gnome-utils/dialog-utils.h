@@ -48,21 +48,6 @@ struct _GNCOptionInfo
 
 /**** PROTOTYPES *************************************************/
 
-/********************************************************************\
- * Create the menu of stock quote sources                           *
- *                                                                  *
- * Args:    account - account to use to set default choice          *
- * Returns: the menu                                                *
- \*******************************************************************/
-GtkWidget * gnc_ui_source_menu_create (void);
-
-/********************************************************************\
- * price quote timezone handling
- */
-guint       gnc_find_timezone_menu_position(const gchar *timezone);
-gchar *     gnc_timezone_menu_position_to_string(guint pos);
-GtkWidget * gnc_ui_quote_tz_menu_create (void);
-
 GtkWidget * gnc_build_option_menu (GNCOptionInfo *option_info,
 				   gint num_options);
 

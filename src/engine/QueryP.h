@@ -144,9 +144,9 @@ typedef struct {
 } QueryTerm;
 
 void xaccQueryAddMiscMatch(Query * q, Predicate p, int how, int data,
-                           QueryOp op);
+                           QofQueryOp op);
 
-void xaccQueryAddPredicate (Query * q, PredicateData *pred, QueryOp op);
+void xaccQueryAddPredicate (Query * q, PredicateData *pred, QofQueryOp op);
 
 /* This is useful for network systems */
 Predicate xaccQueryGetPredicate (pr_type_t term_type);

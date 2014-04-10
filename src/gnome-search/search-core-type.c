@@ -25,6 +25,7 @@
 #include <string.h>
 #include <gnome.h>
 
+#include "QueryCore.h"
 #include "QueryNew.h"
 #include "Account.h"		/* for ACCOUNT_MATCH_ALL_TYPE */
 #include "Transaction.h"	/* for RECONCILED_MATCH_TYPE */

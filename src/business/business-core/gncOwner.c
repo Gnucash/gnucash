@@ -9,6 +9,8 @@
 #include <glib.h>
 #include <string.h>		/* for memcpy() */
 
+#include "QueryCore.h"
+#include "QueryNew.h"
 #include "QueryObject.h"
 
 #include "gncOwner.h"

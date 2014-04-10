@@ -35,6 +35,7 @@
 #include <stdio.h>
 
 #include "gnc-component-manager.h"
+#include "QueryCore.h"
 #include "QueryObject.h"
 #include "gncObject.h"
 #include "gnc-general-search.h"
