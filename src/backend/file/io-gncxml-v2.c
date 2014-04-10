@@ -168,19 +168,13 @@ add_account_local(sixtp_gdv2 *data, Account *act)
     clear_up_account_commodity(table, act,
                                        DxaccAccountGetCurrency,
                                        DxaccAccountSetCurrency,
-                                       DxaccAccountGetCurrencySCU,
-                                       DxaccAccountSetCurrencySCU);
-
-    clear_up_account_commodity(table, act,
-                                       DxaccAccountGetSecurity,
-                                       DxaccAccountSetSecurity,
                                        NULL, NULL);
 
     clear_up_account_commodity(table, act,
                                xaccAccountGetCommodity,
                                xaccAccountSetCommodity,
                                xaccAccountGetCommoditySCUi,
-                               xaccAccountSetCommoditySCUandFlag);
+                               xaccAccountSetCommoditySCU);
 
     xaccAccountScrubCommodity (act);
 

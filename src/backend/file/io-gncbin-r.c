@@ -228,7 +228,7 @@ cvt_potential_prices_to_pricedb_and_cleanup(GNCPriceDB **prices,
       gnc_price_set_commodity(price,
                               DxaccAccountGetSecurity(split_acct));
       gnc_price_set_currency(price,
-                             DxaccAccountGetCurrency(split_acct));
+                             xaccTransGetCurrency(txn));
       gnc_price_set_time(price, time);
       gnc_price_set_source(price, "old-file-import");
       gnc_price_set_type(price, "unknown");

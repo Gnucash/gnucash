@@ -37,6 +37,7 @@
 #include "gnc-engine.h"
 #include "gnc-engine-util.h"
 #include "gnc-event-p.h"
+#include "gnc-trace.h"
 #include "guid.h"
 #include "messages.h"
 #include "qofbook.h"

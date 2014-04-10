@@ -289,14 +289,6 @@ void         DxaccSplitSetSharePriceAndAmount (Split *split,
                                                double amount);
 void         DxaccSplitSetShareAmount (Split *split, double amount);
 
-/* The deprecated xaccTransFindCommonCurrency () method returns 
- *    a gnc_commodity indicating a currency denomination that all 
- *    of the splits in this transaction have in common, using the 
- *    old currency/security fields of the split accounts.  DO NOT
- *    USE THIS ROUTINE! */
-gnc_commodity * xaccTransFindOldCommonCurrency (Transaction *trans,
-                                                QofBook *book);
-
 /*@}*/
 
 

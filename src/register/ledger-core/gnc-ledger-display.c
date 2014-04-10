@@ -574,7 +574,12 @@ refresh_handler (GHashTable *changes, gpointer user_data)
     }
   }
 
-  splits = xaccQueryGetSplits (ld->query);
+  /* Its not clear if we should re-run the query, or if we should
+   * just use qof_query_last_run().  Its possible that the dates
+   * changed, requiring a full new query.  Similar considerations
+   * needed for multi-user mode.
+   */
+  splits = qof_query_run (ld->query);
 
   gnc_ledger_display_set_watches (ld, splits);
 
@@ -777,7 +782,7 @@ gnc_ledger_display_internal (Account *lead_account, Query *q,
 
   gnc_split_register_set_data (ld->reg, ld, gnc_ledger_display_parent);
 
-  splits = xaccQueryGetSplits (ld->query);
+  splits = qof_query_run (ld->query);
 
   gnc_ledger_display_set_watches (ld, splits);
 

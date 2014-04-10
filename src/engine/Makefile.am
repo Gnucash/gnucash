@@ -20,6 +20,7 @@ libgncmod_engine_la_SOURCES = \
   SX-ttinfo.c \
   Scrub.c \
   Scrub2.c \
+  Scrub3.c \
   TransLog.c \
   Transaction.c \
   cap-gains.c \
@@ -67,6 +68,7 @@ gncinclude_HEADERS = \
   QueryCore.h \
   Scrub.h \
   Scrub2.h \
+  Scrub3.h \
   TransLog.h \
   Transaction.h \
   cap-gains.h \

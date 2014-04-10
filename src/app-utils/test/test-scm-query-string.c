@@ -64,12 +64,23 @@ run_tests (void)
   val2str = scm_c_eval_string ("gnc:value->string");
   g_return_if_fail (SCM_PROCEDUREP (val2str));
 
-  for (i = 0; i < 100; i++) {
+  for (i = 0; i < 244; i++) {
     q = get_random_query ();
     test_query (q, val2str);
     xaccFreeQuery (q);
+    printf("%d ", i);
+    fflush(stdout);
   }
-  success ("");
+
+  { 
+    q = get_random_query ();
+    test_query (q, val2str);
+    xaccFreeQuery (q);
+    printf("%d ", i);
+    fflush(stdout);
+  }
+
+  printf("\n");
 }
 
 static void
@@ -85,6 +96,10 @@ main_helper (void *closure, int argc, char **argv)
 
   /* double->string->double is not idempotent */
   kvp_exclude_type (KVP_TYPE_DOUBLE);
+
+  /* Initialize to a known RNG position */
+  guid_init();
+  srand(1);
 
   run_tests ();
 

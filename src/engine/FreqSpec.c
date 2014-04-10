@@ -89,6 +89,7 @@
 #include "gnc-engine-util.h"
 #include "gnc-event-p.h"
 #include "messages.h"
+#include "gnc-trace.h"
 #include "qofbook.h"
 #include "qofbook-p.h"
 #include "qofid-p.h"

@@ -47,6 +47,7 @@
 #include "gnc-engine-util.h"
 #include "gnc-lot.h"
 #include "gnc-lot-p.h"
+#include "gnc-trace.h"
 #include "kvp-util-p.h"
 #include "messages.h"
 

@@ -69,6 +69,7 @@ const gchar *vendor_version_string = "2.0.0";
 #define vendor_currency_string "vendor:currency"
 #define vendor_taxtable_string "vendor:taxtable"
 #define vendor_taxtableoverride_string "vendor:use-tt"
+#define vendor_slots_string "vendor:slots"
 
 static void
 maybe_add_string (xmlNodePtr ptr, const char *tag, const char *str)
@@ -314,6 +315,12 @@ vendor_taxtableoverride_handler (xmlNodePtr node, gpointer vendor_pdata)
     return set_boolean (node, pdata->vendor, gncVendorSetTaxTableOverride);
 }
 
+static gboolean
+vendor_slots_handler (xmlNodePtr node, gpointer vendor_pdata)
+{
+  return TRUE;
+}
+
 static struct dom_tree_handler vendor_handlers_v2[] = {
     { vendor_name_string, vendor_name_handler, 1, 0 },
     { vendor_guid_string, vendor_guid_handler, 1, 0 },
@@ -327,6 +334,7 @@ static struct dom_tree_handler vendor_handlers_v2[] = {
     { "vendor:commodity", vendor_currency_handler, 0, 0 }, /* XXX */
     { vendor_taxtable_string, vendor_taxtable_handler, 0, 0 },
     { vendor_taxtableoverride_string, vendor_taxtableoverride_handler, 0, 0 },
+    { vendor_slots_string, vendor_slots_handler, 0, 0 },
     { NULL, 0, 0, 0 }
 };
 

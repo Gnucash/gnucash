@@ -35,6 +35,7 @@
 #include "global-options.h"
 #include "gnc-ui-util.h"
 #include "gnc-engine-util.h"
+#include "gnc-trace.h"
 #include "import-settings.h"
 #include "import-match-map.h"
 #include "import-match-picker.h"
@@ -386,7 +387,7 @@ GNCImportMainMatcher *gnc_gen_trans_list_new (GtkWidget *parent,
   GladeXML *xml;
   GtkWidget *heading_label;
   
-  gnc_should_log(MOD_IMPORT, GNC_LOG_TRACE);
+  gnc_set_log_level(MOD_IMPORT, GNC_LOG_TRACE);
 
   info = g_new0 (GNCImportMainMatcher, 1);
 

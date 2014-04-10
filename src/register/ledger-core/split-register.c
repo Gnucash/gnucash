@@ -1653,7 +1653,7 @@ gnc_split_register_auto_calc (SplitRegister *reg, Split *split)
   gboolean recalc_value = FALSE;
   GNCAccountType account_type;
   gboolean price_changed;
-  gboolean amount_changed;
+  gboolean amount_changed;  /* please s/amount_changed/value_changed/ */
   gboolean shares_changed;
   gnc_numeric calc_value;
   gnc_numeric value;
@@ -1819,14 +1819,8 @@ gnc_split_register_auto_calc (SplitRegister *reg, Split *split)
     else
       radio_list = g_list_append (radio_list, g_strdup (_("Value")));
 
-    if (!price_changed)
-      default_value = 1;
-    else if (!shares_changed)
-      default_value = 0;
-    else if (!amount_changed)
-      default_value = 2;
-    else
-      default_value = 1;
+    if (price_changed) default_value = 2;  /* change the value */
+    else  default_value = 1;  /* change the value */
 
     choice = gnc_choose_radio_option_dialog
       (gnc_split_register_get_parent (reg),

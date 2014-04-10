@@ -260,53 +260,71 @@ void     xaccAccountSetAutoInterestXfer (Account *account, gboolean value);
 /** @} */
 
 /* @name Account Commodity setters/getters
+ *   Accounts are used to store an amount of 'something', that 'something'
+ *   is called the 'commodity'.  An account can only hold one kind of
+ *   commodity.  The following are used to get and set the commodity,
+ *   and also to set the SCU, the 'Smallest Commodity Unit'.
  *
- * New commodity access routines.
+ * Note that when we say that a 'split' holds an 'amount', that amount
+ *   is denominated in the account commodity.  Do not confuse 'amount'
+ *   and 'value'.  The 'value' of a split is the value of the amount
+ *   expressed in the currency fo the transaction.  Thus, for example,
+ *   the 'amount' may be 12 apples, where the account commodity is
+ *   'apples'.  The value of these 12 apples may be 12 dollars, where 
+ *   the transaction currency is 'dollars'.
  *
- * The account structure no longer stores two commodities ('currency'
- * and 'security'). Instead it stores only one commodity. This single
- * commodity is the one formerly known as 'security'.  Use
- * xaccAccountSetCommodity() and xaccAccountGetCommodity() to set and
- * fetch it. (This transition has been done between version 1.6.x and
- * 1.7.0.)
+ * The SCU is the 'Smallest Commodity Unit', signifying the smallest
+ *   non-zero amount that can be stored in the account.  It is 
+ *   represented as the integer denominator of a fraction.  Thus,
+ *   for example, a SCU of 12 means that 1/12 of something is the
+ *   smallest amount that can be stored in the account.  SCU's can
+ *   be any value; they do not need to be decimal.  This allows
+ *   the use of accounts with unusual, non-decimal commodities and
+ *   currencies.
  *
- * Basically, the engine eliminates the 'currency' field of the
- * Account structure. Instead, the common currency is stored with the
- * transaction.  The 'value' of a split is a translation of the
- * Split's 'amount' (which is the amount of the Account's commodity
- * involved) into the Transaction's balancing currency. */
+ *   Normally, the SCU is determined by the commodity of the account.
+ *   However, this default SCU can be over-ridden and set to an
+ *   account-specific value.  This is account-specific value is 
+ *   called the 'non-standard' value in the documentation below.
+ */
 /** @{ */
 
 /** Set the account's commodity */
 void xaccAccountSetCommodity (Account *account, gnc_commodity *comm);
-/** Get the account's commodity 
- *
- * This is from the new commodity access routines.
- *
- * The account structure no longer stores two commodities ('currency'
- * and 'security'). Instead it stores only one commodity. This single
- * commodity is the one formerly known as 'security'.  Use
- * xaccAccountSetCommodity() and xaccAccountGetCommodity() to set and
- * fetch it. (This transition has been done between version 1.6.x and
- * 1.7.0.)
- *
- * Basically, the engine eliminates the 'currency' field of the
- * Account structure. Instead, the common currency is stored with the
- * transaction.  The 'value' of a split is a translation of the
- * Split's 'amount' (which is the amount of the Account's commodity
- * involved) into the Transaction's balancing currency. */
+
+/* deprecated do not use */
+#define DxaccAccountSetSecurity xaccAccountSetCommodity
+
+/** Get the account's commodity  */
 gnc_commodity * xaccAccountGetCommodity (Account *account);
-/** DOCUMENT ME! */
+
+/* deprecated do not use */
+#define DxaccAccountGetSecurity xaccAccountGetCommodity
+
+/** Return the SCU for the account.  If a non-standard SCU has been
+ *   set for the account, that s returned; else the default SCU for 
+ *   the account commodity is returned.
+ */
 int  xaccAccountGetCommoditySCU (Account *account);
-/** DOCUMENT ME! */
+
+/** Return the 'internal' SCU setting.  This returns the over-ride
+ *   SCU for the account (which might not be set, and might be zero).  */
 int  xaccAccountGetCommoditySCUi (Account *account);
-/** DOCUMENT ME! */
+
+/** Set the SCU for the account. Normally, this routine is not
+ *   required, as the default SCU for an account is given by its
+ *   commodity.
+ */
 void xaccAccountSetCommoditySCU (Account *account, int frac);
-/** DOCUMENT ME! */
-void xaccAccountSetCommoditySCUandFlag (Account *account, int frac);
-/** DOCUMENT ME! */
+
+/* deprecated -- do not use for future development */
+#define xaccAccountSetCommoditySCUandFlag xaccAccountSetCommoditySCU 
+
+/** Set the flag indicating that this account uses a non-standard SCU. */
 void  xaccAccountSetNonStdSCU (Account *account, gboolean flag);
-/** DOCUMENT ME! */
+
+/** Return boolean, indicating whether this account uses a 
+ *   non-standard SCU. */ 
 gboolean  xaccAccountGetNonStdSCU (Account *account);
 /**@}*/
 
@@ -406,10 +424,6 @@ gboolean       xaccAccountHasAncestor (Account *account, Account *ancestor);
 /** @{ */
 KvpFrame * xaccAccountGetSlots (Account *account);
 void xaccAccountSetSlots_nc(Account *account, KvpFrame *frame);
-
-/** Delete any old data in the account's kvp data.
- * This includes the old currency and security fields. */
-void xaccAccountDeleteOldData (Account *account);
 /** @} */
 
 /* ------------------ */
@@ -681,29 +695,8 @@ void DxaccAccountSetCurrency (Account *account, gnc_commodity *currency);
 
 /** @deprecated The current API associates only one thing with an
  * account: the 'commodity'. Use xaccAccountGetCommodity() to fetch
- * it.
- *
- * These two funcs take control of their gnc_commodity args. Don't free */
-void DxaccAccountSetSecurity (Account *account, gnc_commodity *security);
-
-/** @deprecated The current API associates only one thing with an
- * account: the 'commodity'. Use xaccAccountGetCommodity() to fetch
  * it. */
 gnc_commodity * DxaccAccountGetCurrency (Account *account);
-
-/** @deprecated The current API associates only one thing with an
- * account: the 'commodity'. Use xaccAccountGetCommodity() to fetch
- * it. */
-gnc_commodity * DxaccAccountGetSecurity (Account *account);
-
-/** @deprecated The current API associates only one thing with an
- * account: the 'commodity'. Use xaccAccountGetCommodity() to fetch
- * it. */
-void DxaccAccountSetCurrencySCU (Account *account, int frac);
-/** @deprecated The current API associates only one thing with an
- * account: the 'commodity'. Use xaccAccountGetCommodity() to fetch
- * it. */
-int  DxaccAccountGetCurrencySCU (Account *account);
 
 /** Set the timezone to be used when interpreting the results from a
  *  given Finance::Quote backend.  Unfortunately, the upstream sources
@@ -711,6 +704,7 @@ int  DxaccAccountGetCurrencySCU (Account *account);
  *
  *  @deprecated Price quote information is now stored on the
  *  commodity, not the account. */
+
 void         dxaccAccountSetQuoteTZ (Account *account, const char *tz);
 /** Get the timezone to be used when interpreting the results from a
  *  given Finance::Quote backend.  Unfortunately, the upstream sources

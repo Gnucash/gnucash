@@ -102,8 +102,8 @@ gncReadFile (const char * file, char ** data)
 
   if( fd == -1 )
   {
-    ERROR();
-    PERR ("file was %s\n", file);
+    int norr = errno;
+    PERR ("file %s: (%d) %s \n", file, norr, strerror(norr));
     return 0;
   }
 

@@ -76,93 +76,128 @@ typedef enum
   GNC_LOG_TRACE   = 6,
 } gncLogLevel;
 
+extern gncLogLevel gnc_log_modules[MOD_LAST + 1];
 
+/** Initialize the error logging subsystem */
+void gnc_log_init (void);
+
+/** Set the logging level of the given module. */
+void gnc_set_log_level(gncModuleType module, gncLogLevel level);
+
+/** Set the logging level for all modules. */
+void gnc_set_log_level_global(gncLogLevel level);
+
+/** Specify an alternate log output, to pipe or file.  By default,
+ *  all logging goes to STDERR. */
+void gnc_set_logfile (FILE *outfile);
+
+
+/** gnc_log_prettify() cleans up subroutine names. AIX/xlC has the habit
+ * of printing signatures not names; clean this up. On other operating
+ * systems, truncate name to 30 chars. Note this routine is not thread
+ * safe. Note we wouldn't need this routine if AIX did something more
+ * reasonable. Hope thread safety doesn't poke us in eye. */
+const char * gnc_log_prettify (const char *name);
+
+/* We want logging decisions to be made inline, rather than through
+ * a CPU-cucking subroutine call. Thus, this is a #define, not a
+ * subroutine call.  The prototype would have been:
+ * gboolean gnc_should_log (gncModuleType module, gncLogLevel log_level); 
+ */
+#define gnc_should_log(module,log_level)   \
+              (log_level <= gnc_log_modules[module]) 
+
+#define FUNK gnc_log_prettify(__FUNCTION__)
+
+/** Log error/waring/info messages to stderr or to other pipe. 
+ *  This logging infrastructure is meant for validating the 
+ *  correctness of the execution of the code.  'Info' level 
+ *  messages help trace program flow. 'Error' messages are 
+ *  meant to indicate internal data inconsistencies.
+ * 
+ * Messages can be logged to stdout, stderr, or to any desired
+ * FILE * file handle. Use fdopen() to get a file handle from a 
+ * file descriptor. Use gnc_set_logfile to set the logging file 
+ * handle.
+ */
+
+#define FATAL(format, args...) {                     \
+  if (gnc_should_log (module, GNC_LOG_FATAL)) {      \
+    g_log (G_LOG_DOMAIN, G_LOG_LEVEL_ERROR,          \
+      "Fatal Error: %s: " format, FUNK, ## args);    \
+  }                                                  \
+}
+
+#define PERR(format, args...) {                    \
+  if (gnc_should_log (module, GNC_LOG_ERROR)) {    \
+    g_log (G_LOG_DOMAIN, G_LOG_LEVEL_CRITICAL,     \
+      "Error: %s: " format, FUNK, ## args);        \
+  }                                                \
+}
+
+#define PWARN(format, args...) {                   \
+  if (gnc_should_log (module, GNC_LOG_WARNING)) {  \
+    g_log (G_LOG_DOMAIN, G_LOG_LEVEL_WARNING,      \
+      "Warning: %s: " format, FUNK, ## args);      \
+  }                                                \
+}
+
+#define PWARN_GUI(format, args...) {               \
+   gnc_send_gui_error(format, ## args);            \
+}
+
+#define PINFO(format, args...) {                   \
+  if (gnc_should_log (module, GNC_LOG_INFO)) {     \
+    g_log (G_LOG_DOMAIN, G_LOG_LEVEL_INFO,         \
+      "Info: %s: " format, FUNK, ## args);         \
+  }                                                \
+}
+
+#define DEBUG(format, args...) {                   \
+  if (gnc_should_log (module, GNC_LOG_DEBUG)) {    \
+    g_log (G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG,        \
+      "Debug: %s: " format, FUNK, ## args);        \
+  }                                                \
+}
+
+#define ENTER(format, args...) {                   \
+  if (gnc_should_log (module, GNC_LOG_DEBUG)) {    \
+    g_log (G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG,        \
+      "Enter: %s: " format, FUNK, ## args);        \
+  }                                                \
+}
+
+#define LEAVE(format, args...) {                   \
+  if (gnc_should_log (module, GNC_LOG_DEBUG)) {    \
+    g_log (G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG,        \
+      "Leave: %s: " format, FUNK, ## args);        \
+  }                                                \
+}
+
+#define TRACE(format, args...) {                   \
+  if (gnc_should_log (module, GNC_LOG_TRACE)) {    \
+    g_log (G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG,        \
+      "Trace: %s: " format, FUNK, ## args);        \
+  }                                                \
+}
+
+#define DEBUGCMD(x) { if (gnc_should_log (module, GNC_LOG_DEBUG)) { (x); }}
+
+/* -------------------------------------------------------- */
+/* Infrastructure to send messages go to GUI popups, not to stderr! 
+ * Incompletely implemented, needs work.
+ */
 typedef void (*GNCGuiMessage) (const char *format, va_list args);
 void gnc_set_warning_message (GNCGuiMessage func);
 void gnc_set_error_message (GNCGuiMessage func);
 
-gboolean gnc_send_gui_warning (const char *format, ...);
-gboolean gnc_send_gui_error (const char *format, ...);
+gboolean gnc_send_gui_warning (const char *format, ...) G_GNUC_PRINTF(1,2);
+gboolean gnc_send_gui_error (const char *format, ...) G_GNUC_PRINTF(1,2);
 
-/* FIXME: these logging functions should proably get replaced by
- * the glib.h g_error(), etc functions. That way, we would have
- * unified logging mechanism, instead of having some messages
- * work one way, and other a different way ... 
- *
- * FIXME: the if test should not be a subroutine call, it should
- * not use that many CPU cycles.  These logging functions are supposed
- * to be lightweight.  Who changed this ??? Why ??? 
- *
+/* -------------------------------------------------------- */
+/* Infrastructure to make timing measurements for critical peices 
+ * of code. Used for only for performance tuning & debugging. 
  */
-gboolean gnc_should_log (gncModuleType module, gncLogLevel log_level);
-void gnc_log (gncModuleType module, gncLogLevel log_level,
-              const char *prefix, const char *function_name,
-              const char *format, ...) G_GNUC_PRINTF(5,6);
-
-#define FATAL(format, args...) {                   \
-  if (gnc_should_log (module, GNC_LOG_FATAL))      \
-    gnc_log (module, GNC_LOG_FATAL, "Fatal Error", \
-             __FUNCTION__, format, ## args);       \
-}
-
-#define PERR(format, args...) {                    \
-  if (gnc_should_log (module, GNC_LOG_ERROR))      \
-    gnc_log (module, GNC_LOG_ERROR, "Error",       \
-             __FUNCTION__, format, ##args);        \
-}
-
-#define PWARN(format, args...) {                   \
-  if (gnc_should_log (module, GNC_LOG_WARNING))    \
-    gnc_log (module, GNC_LOG_WARNING, "Warning",   \
-             __FUNCTION__, format, ## args);       \
-}
-
-#define PWARN_GUI(format, args...) {               \
-  if (!gnc_send_gui_error(format, ## args))        \
-    PWARN(format, ## args);                        \
-}
-
-#define PINFO(format, args...) {                   \
-  if (gnc_should_log (module, GNC_LOG_INFO))       \
-    gnc_log (module, GNC_LOG_INFO, "Info",         \
-             __FUNCTION__, format, ## args);       \
-}
-
-#define DEBUG(format, args...) {                   \
-  if (gnc_should_log (module, GNC_LOG_DEBUG))      \
-    gnc_log (module, GNC_LOG_DEBUG, "Debug",       \
-             __FUNCTION__, format, ## args);       \
-}
-
-#define ENTER(format, args...) {                   \
-  if (gnc_should_log (module, GNC_LOG_DEBUG))      \
-    gnc_log (module, GNC_LOG_DEBUG, "Enter",       \
-             __FUNCTION__, format, ## args);       \
-}
-
-#define LEAVE(format, args...) {                   \
-  if (gnc_should_log (module, GNC_LOG_DEBUG))      \
-    gnc_log (module, GNC_LOG_DEBUG, "Leave",       \
-            __FUNCTION__, format, ## args);        \
-}
-
-#define DETAIL(format, args...) {                  \
-  if (gnc_should_log (module, GNC_LOG_DETAIL))     \
-    gnc_log (module, GNC_LOG_DETAIL, "Detail",     \
-             __FUNCTION__, format, ## args);       \
-}
-
-
-#define DEBUGCMD(x) { if (gnc_should_log (module, GNC_LOG_DEBUG)) { x; }}
-
-#define ERROR()     fprintf(stderr,"%s: Line %d, error = %s\n", \
-			    __FILE__, __LINE__, strerror(errno));
-
-#define TRACE(format, args...) {                   \
-  if (gnc_should_log (module, GNC_LOG_TRACE))      \
-    gnc_log (module, GNC_LOG_TRACE, "Trace",       \
-             __FUNCTION__, format, ## args);       \
-}
 
 void gnc_start_clock (int clockno, gncModuleType module, gncLogLevel log_level,
                       const char *function_name, const char *format, ...);
@@ -179,16 +214,16 @@ void gnc_report_clock_total (int clockno,
                              const char *function_name,
                              const char *format, ...);
 
-#define START_CLOCK(clockno,format, args...) {     \
-  if (gnc_should_log (module, GNC_LOG_INFO))       \
-    gnc_start_clock (clockno, module, GNC_LOG_INFO,\
-             __FUNCTION__, format, ## args);       \
+#define START_CLOCK(clockno,format, args...) {              \
+  if (gnc_should_log (module, GNC_LOG_INFO))                \
+    gnc_start_clock (clockno, module, GNC_LOG_INFO,         \
+             __FUNCTION__, format, ## args);                \
 }
 
-#define REPORT_CLOCK(clockno,format, args...) {    \
-  if (gnc_should_log (module, GNC_LOG_INFO))       \
-    gnc_report_clock (clockno, module, GNC_LOG_INFO,\
-             __FUNCTION__, format, ## args);       \
+#define REPORT_CLOCK(clockno,format, args...) {             \
+  if (gnc_should_log (module, GNC_LOG_INFO))                \
+    gnc_report_clock (clockno, module, GNC_LOG_INFO,        \
+             __FUNCTION__, format, ## args);                \
 }
 
 #define REPORT_CLOCK_TOTAL(clockno,format, args...) {       \
@@ -196,14 +231,5 @@ void gnc_report_clock_total (int clockno,
     gnc_report_clock_total (clockno, module, GNC_LOG_INFO,  \
              __FUNCTION__, format, ## args);                \
 }
-
-/* Set the logging level of the given module. */
-void gnc_set_log_level(gncModuleType module, gncLogLevel level);
-
-/* Set the logging level for all modules. */
-void gnc_set_log_level_global(gncLogLevel level);
-
-/* Pipe log output to pipe or file */
-void gnc_set_logfile (FILE *outfile);
 
 #endif /* GNC_TRACE_H */

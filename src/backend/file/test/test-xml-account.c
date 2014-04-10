@@ -97,14 +97,6 @@ node_and_account_equal(xmlNodePtr node, Account *act)
                 return g_strdup("commodities differ");
             }
         }
-        else if(safe_strcmp(mark->name, "act:currency") == 0)
-        {
-            if(!equals_node_val_vs_commodity(
-                   mark, DxaccAccountGetCurrency(act), xaccAccountGetBook(act)))
-            {
-                return g_strdup("currencies differ");
-            }
-        }
         else if(safe_strcmp(mark->name, "act:code") == 0)
         {
             if(!equals_node_val_vs_string(mark, xaccAccountGetCode(act)))
@@ -120,17 +112,9 @@ node_and_account_equal(xmlNodePtr node, Account *act)
                 return g_strdup("descriptions differ");
             }
         }
-        else if(safe_strcmp(mark->name, "act:security") == 0)
-        {
-            if(!equals_node_val_vs_commodity(
-                   mark, DxaccAccountGetSecurity(act), xaccAccountGetBook(act)))
-            {
-                return g_strdup("securities differ");
-            }
-        }
         else if(safe_strcmp(mark->name, "act:slots") == 0)
         {
-            xaccAccountDeleteOldData (act);
+            /* xaccAccountDeleteOldData (act); */
 
             if(!equals_node_val_vs_kvp_frame(mark, xaccAccountGetSlots(act)))
             {
@@ -147,20 +131,6 @@ node_and_account_equal(xmlNodePtr node, Account *act)
             }
         }
         else if(safe_strcmp(mark->name, "act:commodity-scu") == 0)
-        {
-            if(!equals_node_val_vs_int(mark, xaccAccountGetCommoditySCU(act)))
-            {
-                return g_strdup("commodity scus differ");
-            }
-        }
-        else if(safe_strcmp(mark->name, "act:currency-scu") == 0)
-        {
-            if(!equals_node_val_vs_int(mark, DxaccAccountGetCurrencySCU(act)))
-            {
-                return g_strdup("currency scus differ");
-            }
-        }
-        else if(safe_strcmp(mark->name, "act:security-scu") == 0)
         {
             if(!equals_node_val_vs_int(mark, xaccAccountGetCommoditySCU(act)))
             {

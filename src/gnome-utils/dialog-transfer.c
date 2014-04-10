@@ -838,6 +838,14 @@ gnc_xfer_dialog_update_conv_info (XferDialog *xferData)
   from_mnemonic = gnc_commodity_get_mnemonic(xferData->from_commodity);
   to_mnemonic = gnc_commodity_get_mnemonic(xferData->to_commodity);
 
+  /* On the theory that if we don't have a mnemonic then we don't
+   * have a commodity...  On Solaris this crashes without a string.
+   * So, just leave now and wait for the second initialization to
+   * occur.
+   */
+  if (!from_mnemonic || !to_mnemonic)
+    return;
+
   // price = gnc_amount_edit_get_amount(GNC_AMOUNT_EDIT(xferData->price_edit));
   price = gnc_xfer_dialog_compute_price(xferData);
 

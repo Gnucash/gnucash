@@ -64,6 +64,7 @@ const gchar *order_version_string = "2.0.0";
 #define order_notes_string "order:notes"
 #define order_reference_string "order:reference"
 #define order_active_string "order:active"
+#define order_slots_string "order:slots"
 
 static void
 maybe_add_string (xmlNodePtr ptr, const char *tag, const char *str)
@@ -229,6 +230,12 @@ order_active_handler (xmlNodePtr node, gpointer order_pdata)
     return ret;
 }
 
+static gboolean
+order_slots_handler (xmlNodePtr node, gpointer order_pdata)
+{
+  return TRUE;
+}
+
 static struct dom_tree_handler order_handlers_v2[] = {
     { order_guid_string, order_guid_handler, 1, 0 },
     { order_id_string, order_id_handler, 1, 0 },
@@ -238,6 +245,7 @@ static struct dom_tree_handler order_handlers_v2[] = {
     { order_notes_string, order_notes_handler, 0, 0 },
     { order_reference_string, order_reference_handler, 0, 0 },
     { order_active_string, order_active_handler, 1, 0 },
+    { order_slots_string, order_slots_handler, 0, 0 },
     { NULL, 0, 0, 0 }
 };
 

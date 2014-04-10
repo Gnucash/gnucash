@@ -1,3 +1,30 @@
+2003-09-11  Derek Atkins  <derek@ihtfp.com>
+
+	* src/business/business-core/file/gnc-*.c:
+	  Add a "slots" parameter to allow for future expansion.  Right
+	  now this is completely ignored (which will allow future releases
+	  to add a kvp-frame slots to any business function and allow that
+	  file to be read by older versions).  Right now the slot is ignored,
+	  but that's better than barfing on the data file.
+
+2003-09-09  Derek Atkins  <derek@ihtfp.com>
+
+	* src/gnome-utils/dialog-transfer.c:  during the dialog startup it
+	  tries to build the transfer rate.  This crashes on Solaris because
+	  during startup one commodity is still NULL when it tries to print
+	  it.
+	Fixes bug #121677
+
+	* src/engine/engine-helpers.c:  turn off scheme garbage collection
+	  during query->scm and scm->query conversion.  It shaves about 50%
+	  off the test-scm-query-string tests.
+	* src/engine/test-core/test-engine-stuff.c:  add some code to help
+	  track down what the get_random_query() is doing.  Turned off by
+	  default.
+	* src/app-utils/test/test-scm-query-string.c: make the test
+	  deterministic by seeding the RNG with a known value.  There is a
+	  known "delay" at #245 with a seed of 1 on Linux systems.
+
 2003-09-04  Derek Atkins  <derek@ihtfp.com>
 
 	Apply Nigel Titley's patch to fix #103174:

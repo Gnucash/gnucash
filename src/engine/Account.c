@@ -39,6 +39,7 @@
 #include "gnc-lot.h"
 #include "gnc-lot-p.h"
 #include "gnc-pricedb.h"
+#include "gnc-trace.h"
 #include "kvp_frame.h"
 #include "kvp-util-p.h"
 #include "messages.h"
@@ -1494,6 +1495,7 @@ xaccAccountSetCommodity (Account * acc, gnc_commodity * com)
   {
     acc->commodity    = com;
     acc->commodity_scu = gnc_commodity_get_fraction(com);
+    acc->non_standard_scu = FALSE;
     update_split_commodity(acc);
 
     acc->sort_dirty = TRUE;
@@ -1502,25 +1504,13 @@ xaccAccountSetCommodity (Account * acc, gnc_commodity * com)
     mark_account (acc);
   }
   acc->core_dirty = TRUE;
-  xaccAccountCommitEdit(acc);
-  if (gnc_commodity_is_iso(com)) {
+
+  if (gnc_commodity_is_iso(com)) 
+  {
     /* compatability hack - Gnucash 1.8 gets currency quotes when a
        non-default currency is assigned to an account.  */
     gnc_commodity_set_quote_flag(com, TRUE);
   }
-}
-
-void
-xaccAccountSetCommoditySCU (Account *acc, int scu)
-{
-  if (!acc) return;
-
-  xaccAccountBeginEdit(acc);
-  {
-    acc->commodity_scu = scu;
-    mark_account (acc);
-  }
-  acc->core_dirty = TRUE;
   xaccAccountCommitEdit(acc);
 }
 
@@ -1531,7 +1521,7 @@ xaccAccountSetCommoditySCU (Account *acc, int scu)
  * to mismatched values in the past.
  */
 void
-xaccAccountSetCommoditySCUandFlag (Account *acc, int scu)
+xaccAccountSetCommoditySCU (Account *acc, int scu)
 {
   if (!acc) return;
 
@@ -1611,69 +1601,6 @@ DxaccAccountSetCurrency (Account * acc, gnc_commodity * currency)
   {
     gnc_commodity_table_insert (gnc_commodity_table_get_table (acc->book), currency);
   }
-}
-
-void 
-DxaccAccountSetSecurity (Account *acc, gnc_commodity * security)
-{
-  const char *string;
-  gnc_commodity *commodity;
-
-  if ((!acc) || (!security)) return;
-
-  xaccAccountBeginEdit(acc);
-  string = gnc_commodity_get_unique_name (security);
-  kvp_frame_set_slot_nc(acc->kvp_data, "old-security",
-                        kvp_value_new_string(string));
-  mark_account (acc);
-  acc->core_dirty = TRUE;
-  xaccAccountCommitEdit(acc);
-
-  commodity = DxaccAccountGetSecurity (acc);
-  if (!commodity)
-  {
-    gnc_commodity_table_insert (gnc_commodity_table_get_table (acc->book), security);
-  }
-}
-
-void 
-DxaccAccountSetCurrencySCU (Account * acc, int scu) 
-{
-  if (!acc) return;
-
-  xaccAccountBeginEdit(acc);
-  kvp_frame_set_slot_nc(acc->kvp_data, "old-currency-scu",
-                        kvp_value_new_gint64(scu));
-  mark_account (acc);
-  acc->core_dirty = TRUE;
-  xaccAccountCommitEdit(acc);
-}
-
-int
-DxaccAccountGetCurrencySCU (Account * acc) 
-{
-  KvpValue *v;
-
-  if (!acc) return 0;
-
-  v = kvp_frame_get_slot(acc->kvp_data, "old-currency-scu");
-  if (v) return kvp_value_get_gint64 (v);
-
-  return 0;
-}
-
-/********************************************************************\
-\********************************************************************/
-
-void
-xaccAccountDeleteOldData (Account *account)
-{
-  if (!account) return;
-
-  kvp_frame_set_slot_nc (account->kvp_data, "old-currency", NULL);
-  kvp_frame_set_slot_nc (account->kvp_data, "old-security", NULL);
-  kvp_frame_set_slot_nc (account->kvp_data, "old-currency-scu", NULL);
-  kvp_frame_set_slot_nc (account->kvp_data, "old-security-scu", NULL);
 }
 
 /********************************************************************\
@@ -1831,26 +1758,6 @@ xaccAccountGetCommodity (Account *acc)
   if (!acc) return NULL;
 
   return (acc->commodity);
-}
-
-gnc_commodity *
-DxaccAccountGetSecurity (Account *acc)
-{
-  KvpValue *v;
-  const char *s;
-  gnc_commodity_table *table;
-
-  if (!acc) return NULL;
-
-  v = kvp_frame_get_slot(acc->kvp_data, "old-security");
-  if (!v) return NULL;
-
-  s = kvp_value_get_string (v);
-  if (!s) return NULL;
-
-  table = gnc_commodity_table_get_table (acc->book);
-
-  return gnc_commodity_table_lookup_unique (table, s);
 }
 
 gnc_numeric

@@ -52,6 +52,7 @@
 #include "gnc-engine-util.h"
 #include "messages.h"
 #include "gnc-commodity.h"
+#include "gnc-trace.h"
 
 static short module = MOD_SCRUB;
 
@@ -410,6 +411,118 @@ xaccTransScrubImbalance (Transaction *trans, AccountGroup *root,
 }
 
 /* ================================================================ */
+/* The xaccTransFindCommonCurrency () method returns
+ *    a gnc_commodity indicating a currency denomination that all
+ *    of the splits in this transaction have in common, using the
+ *    old/obsolete currency/security fields of the split accounts.  
+ */
+
+static gnc_commodity *
+FindCommonExclSCurrency (SplitList *splits,
+                         gnc_commodity * ra, gnc_commodity * rb,
+                         Split *excl_split)
+{
+  GList *node;
+
+  if (!splits) return NULL;
+
+  for (node = splits; node; node = node->next)
+  {
+    Split *s = node->data;
+    gnc_commodity * sa, * sb;
+
+    if (s == excl_split) continue;
+
+    g_return_val_if_fail (s->acc, NULL);
+
+    sa = DxaccAccountGetCurrency (s->acc);
+    sb = xaccAccountGetCommodity (s->acc);
+
+    if (ra && rb) {
+       int aa = !gnc_commodity_equiv(ra,sa);
+       int ab = !gnc_commodity_equiv(ra,sb);
+       int ba = !gnc_commodity_equiv(rb,sa);
+       int bb = !gnc_commodity_equiv(rb,sb);
+
+       if ( (!aa) && bb) rb = NULL;
+       else
+       if ( (!ab) && ba) rb = NULL;
+       else
+       if ( (!ba) && ab) ra = NULL;
+       else
+       if ( (!bb) && aa) ra = NULL;
+       else
+       if ( aa && bb && ab && ba ) { ra = NULL; rb = NULL; }
+
+       if (!ra) { ra = rb; rb = NULL; }
+    }
+    else
+    if (ra && !rb) {
+       int aa = !gnc_commodity_equiv(ra,sa);
+       int ab = !gnc_commodity_equiv(ra,sb);
+       if ( aa && ab ) ra = NULL;
+    }
+
+    if ((!ra) && (!rb)) return NULL;
+  }
+
+  return (ra);
+}
+
+/* This is the wrapper for those calls (i.e. the older ones) which
+ * don't exclude one split from the splitlist when looking for a
+ * common currency.  
+ */
+static gnc_commodity *
+FindCommonCurrency (GList *splits, gnc_commodity * ra, gnc_commodity * rb)
+{
+  return FindCommonExclSCurrency(splits, ra, rb, NULL);
+}
+
+static gnc_commodity *
+xaccTransFindOldCommonCurrency (Transaction *trans, QofBook *book)
+{
+  gnc_commodity *ra, *rb, *retval;
+  Split *split;
+
+  if (!trans) return NULL;
+
+  if (trans->splits == NULL) return NULL;
+
+  g_return_val_if_fail (book, NULL);
+
+  split = trans->splits->data;
+
+  if (!split || NULL == split->acc) return NULL;
+
+  ra = DxaccAccountGetCurrency (split->acc);
+  rb = xaccAccountGetCommodity (split->acc);
+
+  retval = FindCommonCurrency (trans->splits, ra, rb);
+
+  /* Compare this value to what we think should be the 'right' value */
+  if (!trans->common_currency)
+  {
+    trans->common_currency = retval;
+  }
+  else if (!gnc_commodity_equiv (retval,trans->common_currency))
+  {
+    PWARN ("expected common currency %s but found %s\n",
+           gnc_commodity_get_unique_name (trans->common_currency),
+           gnc_commodity_get_unique_name (retval));
+  }
+
+  if (NULL == retval)
+  {
+     /* In every situation I can think of, this routine should return 
+      * common currency.  So make note of this ... */
+     PWARN ("unable to find a common currency, and that is strange.");
+  }
+
+  return retval;
+}
+
+/* ================================================================ */
 
 void
 xaccTransScrubCurrency (Transaction *trans)
@@ -543,6 +656,17 @@ xaccAccountScrubCommodity (Account *account)
 }
 
 /* ================================================================ */
+
+static void
+xaccAccountDeleteOldData (Account *account)
+{
+  if (!account) return;
+
+  kvp_frame_set_slot_nc (account->kvp_data, "old-currency", NULL);
+  kvp_frame_set_slot_nc (account->kvp_data, "old-security", NULL);
+  kvp_frame_set_slot_nc (account->kvp_data, "old-currency-scu", NULL);
+  kvp_frame_set_slot_nc (account->kvp_data, "old-security-scu", NULL);
+}
 
 static int
 scrub_trans_currency_helper (Transaction *t, gpointer data)
