@@ -1,5 +1,5 @@
 /********************************************************************\
- * Account.h -- the Account data structure                          *
+ * Account.h -- Account handling public routines                    *
  * Copyright (C) 1997 Robin D. Clark                                *
  * Copyright (C) 1997-2000 Linas Vepstas <linas@linas.org>          *
  *                                                                  *
@@ -22,17 +22,17 @@
  *                                                                  *
 \********************************************************************/
 
-#ifndef __XACC_ACCOUNT_H__
-#define __XACC_ACCOUNT_H__
+#ifndef XACC_ACCOUNT_H
+#define XACC_ACCOUNT_H
 
-#include "config.h"
-#include "Transaction.h"
-#include "kvp_frame.h"
+#include "gnc-book.h"
 #include "GNCId.h"
+#include "gnc-engine.h"
+#include "kvp_frame.h"
 
 
-/** PROTOTYPES ******************************************************/
 
+/** ENUMS ******************************************************/
 /*
  * The account types are used to determine how the transaction data
  * in the account is displayed.   These values can be safely changed
@@ -80,16 +80,13 @@ typedef enum
   CURRENCY = 7, 
   /* The currency account type indicates that the account is a
    * currency trading account.  In many ways, a currency trading
-   * account is like a stock trading account, where both quantities
-   * and prices are set.
+   * account is like a stock trading account, where both values
+   * and share quantities are set.
    */
 
   INCOME = 8,
   EXPENSE = 9,
-  /* Income and expense accounts are used to denote income and expenses.
-   * Thus, when data in these accountsare displayed, the sign of the
-   * splits (entries) must be reversed.
-   */ 
+  /* Income and expense accounts are used to denote income and expenses. */
 
   EQUITY = 10,
   /* Equity account is used to balance the balance sheet. */
@@ -104,55 +101,73 @@ typedef enum
   CREDITLINE = 14,     /* line of credit */
 } GNCAccountType;
 
-char * xaccAccountGetTypeStr (int type); /* GUI names */
+/* ------------------ */
+const char * xaccAccountGetTypeStr (GNCAccountType type); /* GUI names */
 
 /* Conversion routines for the account types to/from strings.
-   Critical for the text communication mechanisms. i.e. INCOME ->
-   "INCOME". */
-char *   xaccAccountTypeEnumAsString (int type); 
-gboolean xaccAccountStringToType(const char* str, int *type);
+ * Critical for the text communication mechanisms. i.e. INCOME ->
+ * "INCOME". */
+char *   xaccAccountTypeEnumAsString (GNCAccountType type); 
+gboolean xaccAccountStringToType (const char* str, GNCAccountType *type);
+GNCAccountType xaccAccountStringToEnum (const char* str);
 
-gboolean xaccAccountTypesCompatible (int parent_type, int child_type);
+/* Return TRUE if accounts of type parent_type can have accounts
+ * of type child_type as children. */
+gboolean xaccAccountTypesCompatible (GNCAccountType parent_type,
+                                     GNCAccountType child_type);
 
-Account     *xaccMallocAccount( void );
-void         xaccInitAccount( Account * );
-void         xaccFreeAccount( Account * );
-
-/* Compare two accounts for equality - this is a deep compare. */
-gboolean xaccAccountEqual(Account *a, Account* b, gboolean check_guids);
-
+/** PROTOTYPES ******************************************************/
 /* 
  * The xaccAccountBeginEdit() and xaccAccountCommitEdit() subroutines
- * provide a pseudo-two-phase-commit wrapper for account updates. 
- * They are mildly useful for detecting attempted updates outside
- * of their scope. However, they do not provide any true two-phase-anything
- * in the current implementation.
+ * provide a two-phase-commit wrapper for account updates. 
+ * They are incompletely implemented.
+ *
+ * The xaccAccountDestroy() routine can be used to get rid of an
+ *    account.  The account should have been opened for editing 
+ *    (by calling xaccAccountBeginEdit()) before calling this routine.
  */
-void         xaccAccountBeginEdit (Account *);
-void         xaccAccountCommitEdit (Account *);
+Account    * xaccMallocAccount (GNCBook *book);
+Account    * xaccCloneAccountSimple(const Account *from, GNCBook *book);
+void         xaccAccountBeginEdit (Account *account);
+void         xaccAccountCommitEdit (Account *account);
+void         xaccAccountDestroy (Account *account);
 
-kvp_frame * xaccAccountGetSlots(Account * account);
+kvp_frame * xaccAccountGetSlots (Account *account);
+void xaccAccountSetSlots_nc(Account *account, kvp_frame *frame);
 
+/* ------------------ */
 /*
  * The xaccAccountGetGUID() subroutine will return the
  *    globally unique id associated with that account.
- *    User code should use this id to reference accounts
- *    and *not* the integer account id below.
+ *    xaccAccountReturnGUID() returns the same as a
+ *    struct.
  *
  * The xaccAccountLookup() subroutine will return the
  *    account associated with the given id, or NULL
  *    if there is no such account.
+ *    xaccAccountLookupDirect performs the same
+ *    function but takes a GUID struct directly.
  */
 const GUID * xaccAccountGetGUID (Account *account);
-Account    * xaccAccountLookup (const GUID *guid);
+GUID         xaccAccountReturnGUID (Account *account);
+Account    * xaccAccountLookup (const GUID *guid, GNCBook *book);
+Account    * xaccAccountLookupDirect (GUID guid, GNCBook *book);
 
+GNCBook * xaccAccountGetBook (Account *account);
+
+/* ------------------ */
+
+/* Compare two accounts for equality - this is a deep compare. */
+gboolean xaccAccountEqual(Account *a, Account* b, gboolean check_guids);
+
+/* ------------------ */
 /*
  * The xaccAccountInsertSplit() method will insert the indicated
  *    split into the indicated account.  If the split already 
  *    belongs to another account, it will be removed from that
  *    account first.
  */
-void         xaccAccountInsertSplit (Account *, Split *);
+void         xaccAccountInsertSplit (Account *account, Split *split);
 
 /* The xaccAccountFixSplitDateOrder() subroutine checks to see if 
  *    a split is in proper sorted date order with respect 
@@ -162,13 +177,8 @@ void         xaccAccountInsertSplit (Account *, Split *);
  *    all of the splits in this transaction are in
  *    proper date order.
  */
-void         xaccAccountFixSplitDateOrder (Account * acc, Split *split);
-void         xaccTransFixSplitDateOrder (Transaction *t);
-
-/* The xaccIsAccountInList() subroutine returns the number of times
- *    that an account appears in the account list. 
- */
-int          xaccIsAccountInList (Account * acc, Account **list);
+void         xaccAccountFixSplitDateOrder (Account *account, Split *split);
+void         xaccTransFixSplitDateOrder (Transaction *trans);
 
 /* The xaccAccountOrder() subroutine defines a sorting order 
  *    on accounts.  It takes pointers to two accounts, and
@@ -178,74 +188,81 @@ int          xaccIsAccountInList (Account * acc, Account **list);
  *    the account codes are compared, and if these are equal, then 
  *    account types, and, if these are equal, the account names.
  */
-int          xaccAccountOrder (Account**, Account **);
+int          xaccAccountOrder (Account **account_1, Account **account_2);
 
-/* The xaccAccountAutoCode() method will assign an automatically
- *    generated account code to the account, if one does not already 
- *    exist.  Account codes will have the indicated number of digits
- *    in them.  The numbering scheme roughly follows generally
- *    accepted accounting practice, in that top-level accounts
- *    will be number 100, 200, etc., second level accounts 110, 120,
- *    .. 210, 220, ...etc. and third level accounts 111, 112, .. etc.
+void xaccAccountSetType (Account *account, int);
+void xaccAccountSetName (Account *account, const char *name);
+void xaccAccountSetCode (Account *account, const char *code);
+void xaccAccountSetDescription (Account *account, const char *desc);
+void xaccAccountSetNotes (Account *account, const char *notes);
+
+GNCAccountType xaccAccountGetType (Account *account);
+const char *   xaccAccountGetName (Account *account);
+const char *   xaccAccountGetCode (Account *account);
+const char *   xaccAccountGetDescription (Account *account);
+const char *   xaccAccountGetNotes (Account *account);
+
+/* New commodity access routines.
+ *
+ * The account structure no longer stores two commodities ('currency'
+ * and 'security'). Instead it stores only one commodity, that is the
+ * one formerly known as 'security'.  Use xaccAccountSetCommodity()
+ * and xaccAccountGetCommodity() to set and fetch it.
+ *
+ * Basically, the engine eliminates the 'currency' field of the
+ * Account structure. Instead, the common currency is stored with the
+ * transaction.  The 'value' of a split is a translation of the
+ * Split's 'amount' (which is the amount of the Account's commodity
+ * involved) into the Transaction's balancing currency. */
+void xaccAccountSetCommodity (Account *account, gnc_commodity *comm);
+gnc_commodity * xaccAccountGetCommodity (Account *account);
+int  xaccAccountGetCommoditySCU (Account *account);
+void xaccAccountSetCommoditySCU (Account *account, int frac);
+
+/* Deprecated currency/security access routines.
+ * The current API associates only one thing with an account:
+ * the 'commodity'. Use xaccAccountGetCommodity() to fetch it.
  */
-void         xaccAccountAutoCode (Account *, int digits);
+/* these two funcs take control of their gnc_commodity args. Don't free */
+void DxaccAccountSetCurrency (Account *account, gnc_commodity *currency,
+                              GNCBook *book);
+void DxaccAccountSetSecurity (Account *account, gnc_commodity *security,
+                              GNCBook *book);
+gnc_commodity * DxaccAccountGetCurrency (Account *account,
+                                         GNCBook *book);
+gnc_commodity * DxaccAccountGetSecurity (Account *account,
+                                         GNCBook *book);
+void DxaccAccountSetCurrencySCU (Account *account, int frac);
+int  DxaccAccountGetCurrencySCU (Account *account);
 
-/* The xaccMoveFarEnd() method changes the account to which the 
- *    "far end" of the split belongs.  The "far end" is as follows:
- *    Double-entry transactions by their nature consist of a set of 
- *    two or more splits. If the transaction has precisely two splits,
- *    then the "far end" is the "other split" of the pair.  If
- *    the transaction consists of three or more splits, then the 
- *    "far end" is undefined.  All that the xaccMoveFareEnd() method
- *    does is reparent the "other split" to the indicated account.
- *    The first argument is the split whose far end will be changed,
- *    the second argument is the new far-end account.
- */
+/* Delete any old data in the account's kvp data.
+ * This includes the old currency and security fields. */
+void xaccAccountDeleteOldData (Account *account);
 
-void xaccMoveFarEnd (Split *, Account *);
-void xaccMoveFarEndByName (Split *, const char *);
+AccountGroup * xaccAccountGetChildren (Account *account);
+AccountGroup * xaccAccountGetParent (Account *account);
+Account *      xaccAccountGetParentAccount (Account *account);
 
-void xaccAccountSetType (Account *, int);
-void xaccAccountSetName (Account *, const char *);
-void xaccAccountSetCode (Account *, const char *);
-void xaccAccountSetDescription (Account *, const char *);
-void xaccAccountSetNotes (Account *, const char *);
-void xaccAccountSetCurrency (Account *, const gnc_commodity *);
-void xaccAccountSetSecurity (Account *, const gnc_commodity *);
-void xaccAccountSetCurrencySCU (Account *, int frac);
-void xaccAccountSetSecuritySCU (Account *, int frac);
-int  xaccAccountGetCurrencySCU (Account *);
-int  xaccAccountGetSecuritySCU (Account *);
+gnc_numeric     xaccAccountGetBalance (Account *account);
+gnc_numeric     xaccAccountGetClearedBalance (Account *account);
+gnc_numeric     xaccAccountGetReconciledBalance (Account *account);
 
-GNCAccountType xaccAccountGetType (Account *);
-const char *   xaccAccountGetName (Account *);
-const char *   xaccAccountGetCode (Account *);
-const char *   xaccAccountGetDescription (Account *);
-const char *   xaccAccountGetNotes (Account *);
-const gnc_commodity * xaccAccountGetCurrency (Account *);
-const gnc_commodity * xaccAccountGetSecurity (Account *);
-AccountGroup * xaccAccountGetChildren (Account *);
-AccountGroup * xaccAccountGetParent (Account *);
-Account *      xaccAccountGetParentAccount (Account *);
-/* deprecated old double API : thie will go away! */
-double          DxaccAccountGetBalance (Account *);
-double          DxaccAccountGetClearedBalance (Account *);
-double          DxaccAccountGetReconciledBalance (Account *);
-double          DxaccAccountGetShareBalance (Account *);
-double          DxaccAccountGetShareClearedBalance (Account *);
-double          DxaccAccountGetShareReconciledBalance (Account *);
+void            xaccAccountSetReconcileChildrenStatus(Account *account, gboolean status);
+gboolean        xaccAccountGetReconcileChildrenStatus(Account *account);
 
-gnc_numeric     xaccAccountGetBalance (Account *);
-gnc_numeric     xaccAccountGetClearedBalance (Account *);
-gnc_numeric     xaccAccountGetReconciledBalance (Account *);
-gnc_numeric     xaccAccountGetShareBalance (Account *);
-gnc_numeric     xaccAccountGetShareClearedBalance (Account *);
-gnc_numeric     xaccAccountGetShareReconciledBalance (Account *);
+gnc_numeric     xaccAccountGetBalanceAsOfDate (Account *account, time_t date);
 
-Split *        xaccAccountGetSplit (Account *acc, int i);
-int            xaccAccountGetNumSplits (Account *acc);
+SplitList*      xaccAccountGetSplitList (Account *account);
 
-GList*         xaccAccountGetSplitList (Account *acc);
+gboolean        xaccAccountGetTaxRelated (Account *account);
+void            xaccAccountSetTaxRelated (Account *account,
+                                          gboolean tax_related);
+
+const char *    xaccAccountGetTaxUSCode (Account *account);
+void            xaccAccountSetTaxUSCode (Account *account, const char *code);
+const char *    xaccAccountGetTaxUSPayerNameSource (Account *account);
+void            xaccAccountSetTaxUSPayerNameSource (Account *account,
+                                                    const char *source);
 
 /* The xaccAccountGetFullName routine returns the fully qualified name
  * of the account using the given separator char. The name must be freed
@@ -260,24 +277,11 @@ GList*         xaccAccountGetSplitList (Account *acc);
  * hack alert -- since it breaks the rule of string allocation, maybe this
  * routine should not be in this library, but some utility library?
  */
-char *         xaccAccountGetFullName (Account *, const char separator);
-
-/* The IthAccount() routine merely dereferences: the returned
- *    value is just list[i].  This routine is needed for the perl 
- *    swig wrappers, which cannot dereference a list.
- */
-Account *      IthAccount (Account **list, int i);
-
-/* xaccAccountsHaveCommonCurrency returns true if the two given accounts
- * have a currency in common, i.e., if they can have common transactions.
- * Useful for UI sanity checks.
- */
-gboolean       xaccAccountsHaveCommonCurrency(Account *account_1,
-                                              Account *account_2);
+char *         xaccAccountGetFullName (Account *account, const char separator);
 
 /* Returns true if the account has 'ancestor' as an ancestor.
  * Returns false if either is NULL. */
-gboolean       xaccAccountHasAncestor (Account *, Account * ancestor);
+gboolean       xaccAccountHasAncestor (Account *account, Account *ancestor);
 
 /* Get and Set a mark on the account.  The meaning of this mark is
  * completely undefined. Its presented here as a utility for the
@@ -290,31 +294,63 @@ gboolean       xaccAccountHasAncestor (Account *, Account * ancestor);
  * The xaccClearMarkDown will clear the mark only in this and in
  * sub-accounts.
  */
-short          xaccAccountGetMark (Account *acc); 
-void           xaccAccountSetMark (Account *acc, short mark); 
-void           xaccClearMark (Account *, short val);
-void           xaccClearMarkDown (Account *, short val);
-void           xaccClearMarkDownGr (AccountGroup *, short val);
+short          xaccAccountGetMark (Account *account); 
+void           xaccAccountSetMark (Account *account, short mark); 
+void           xaccClearMark (Account *account, short val);
+void           xaccClearMarkDown (Account *account, short val);
+void           xaccClearMarkDownGr (AccountGroup *group, short val);
+
+/* The following functions get and set reconciliation information */
+gboolean       xaccAccountGetReconcileLastDate (Account *account,
+                                                time_t *last_date);
+void           xaccAccountSetReconcileLastDate (Account *account,
+                                                time_t last_date);
+
+gboolean       xaccAccountGetReconcilePostponeDate (Account *account,
+                                                    time_t *postpone_date);
+void           xaccAccountSetReconcilePostponeDate (Account *account,
+                                                    time_t postpone_date);
+
+gboolean       xaccAccountGetReconcilePostponeBalance (Account *account,
+                                                       gnc_numeric *balance);
+void           xaccAccountSetReconcilePostponeBalance (Account *account,
+                                                       gnc_numeric balance);
+
+void           xaccAccountClearReconcilePostpone (Account *account);
+
+gboolean xaccAccountGetAutoInterestXfer (Account *account, gboolean default_value);
+void     xaccAccountSetAutoInterestXfer (Account *account, gboolean option);
+
+/* Get and set the last num field of an Account */
+const char *   xaccAccountGetLastNum (Account *account);
+void           xaccAccountSetLastNum (Account *account, const char *num);
 
 /* The xaccAccountSetPriceSrc() and xaccAccountGetPriceSrc() routines
-  are used to get and set a string that identifies the current source
-  for investment pricing info.  Currently supported values include
-  "yahoo", "fidelity", "troweprice", etc.
- 
-  Since prices are not going to be stored in the accounts in the
-  future, and since the whole commodities infrastructure is changing
-  radically as we speak, this interface is not long for this world. */
+   are used to get and set a string that identifies the Finance::Quote
+   backend that should be used to retrieve online prices.  See
+   price-quotes.scm for more information.
 
-void         xaccAccountSetPriceSrc (Account *acc, const char *src);
-const char * xaccAccountGetPriceSrc (Account *acc);
+   xaccAccountGetQuoteTZ() and xaccAccountSetQuoteTZ() set the
+   timezone to be used when interpreting the results from a given
+   Finance::Quote backend.  Unfortunately, the upstream sources don't
+   label their output, so the user has to specify this bit.
 
-void xaccAccountSortSplits(Account *);
+   Since prices are not going to be stored in the accounts in the
+   future, and since the whole commodities infrastructure is changing
+   radically as we speak, this interface is not long for this
+   world. */
 
-gpointer xaccAccountForEachSplit(Account *s,
-                                 gpointer (*thunk)(Split *s, gpointer data),
+void         xaccAccountSetPriceSrc (Account *account, const char *src);
+const char * xaccAccountGetPriceSrc (Account *account);
+
+void         xaccAccountSetQuoteTZ (Account *account, const char *tz);
+const char * xaccAccountGetQuoteTZ (Account *account);
+
+
+typedef  gpointer (*SplitCallback)(Split *s, gpointer data);
+gpointer xaccAccountForEachSplit(Account *account,
+                                 SplitCallback,
                                  gpointer data);
-
-#ifndef SWIG
 
 /* Traverse all of the transactions in the given account.  Continue
    processing IFF proc does not return FALSE. This function does not
@@ -329,9 +365,10 @@ gpointer xaccAccountForEachSplit(Account *s,
    
    The result of this function will not be FALSE IFF every relevant
    transaction was traversed exactly once.  */
+typedef  gboolean (*TransactionCallback)(Transaction *t, void *data);
 gboolean
-xaccAccountForEachTransaction(Account *acc,
-                              gboolean (*proc)(Transaction *t, void *data),
+xaccAccountForEachTransaction(Account *account,
+                              TransactionCallback,
                               void *data);
 
 /* Visit every transaction in the account that hasn't already been
@@ -344,12 +381,15 @@ xaccAccountForEachTransaction(Account *acc,
    The result of this function will not be FALSE IFF every relevant
    transaction was traversed exactly once.  */
 gboolean
-xaccAccountVisitUnvisitedTransactions(Account *acc,
-                                      gboolean (*proc)(Transaction *t,
-                                                       void *data),
+xaccAccountVisitUnvisitedTransactions(Account *account,
+                                      TransactionCallback,
                                       void *data,
                                       GHashTable *visited_txns);
 
-#endif /* SWIG */
+/* Returns a pointer to the transaction, not a copy. */
+Transaction *
+xaccAccountFindTransByDesc(Account *account, const char *description);
+Split *
+xaccAccountFindSplitByDesc(Account *account, const char *description);
 
-#endif /* __XACC_ACCOUNT_H__ */
+#endif /* XACC_ACCOUNT_H */

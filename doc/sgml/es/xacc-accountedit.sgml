@@ -1,0 +1,36 @@
+
+<ARTICLE ID="XACC-ACCOUNTEDIT">
+<ARTHEADER>
+<TITLE>Editando los Parámetros de la Cuenta</TITLE>
+</ARTHEADER>
+<SECT1>
+<TITLE> Editando los Parámetros de la Cuenta</TITLE>
+<PARA>    </PARA>
+<PARA>El diálogo "Editar Cuenta" le permite modificar las propiedades de
+    una cuenta. Puede acceder a este diálogo a través del botón "editar"
+    de la barra de herramientas de la ventana principal, desde el menú
+    "Cuentas", o desde las teclas aceleradoras. Para una descripción de
+    las diversas propiedades, consulte la información acerca
+    <LINK LINKEND="XACC-NEWACCTWIN">nuevas cuentas</LINK>.
+
+    </PARA>
+<PARA>La <EMPHASIS>información de la cuenta</EMPHASIS> puede ser cambiada
+    modificando el valor en el campo apropiado. El tipo de cuenta
+    no puede ser cambiado.
+
+    </PARA>
+<PARA>Una nueva <EMPHASIS>Cuenta Padre</EMPHASIS> puede ser seleccionada.
+    Solamente aquellas cuentas que puedan legalmente llegar a ser las
+    cuentas padres de la cuenta actual serán mostradas.
+
+    </PARA>
+<PARA>La fuente para las <EMPHASIS>Cuotas de Existencias</EMPHASIS> pueden
+    ser seleccionadas. Consulte <LINK LINKEND="XACC-TICKER">las tareas</LINK>
+    para más información.
+
+    </PARA>
+<PARA>Las <EMPHASIS>Notas</EMPHASIS> sobre la cuenta pueden ser editadas.
+
+</PARA>
+</SECT1>
+</ARTICLE>

@@ -86,7 +86,7 @@ dnl /*=== End new stuff for acconfig.h ===*/
 dnl 
 
 
-AC_DEFUN(AC_CHECK_CURSES,[
+AC_DEFUN([AC_CHECK_CURSES],[
 	search_ncurses=true
 	screen_manager=""
 	has_curses=false
@@ -150,7 +150,7 @@ AC_DEFUN(AC_CHECK_CURSES,[
 ])
 
 
-AC_DEFUN(AC_USE_SUNOS_CURSES, [
+AC_DEFUN([AC_USE_SUNOS_CURSES], [
 	search_ncurses=false
 	screen_manager="SunOS 4.x /usr/5include curses"
 	AC_MSG_RESULT(Using SunOS 4.x /usr/5include curses)
@@ -164,7 +164,7 @@ AC_DEFUN(AC_USE_SUNOS_CURSES, [
 	AC_MSG_RESULT(Please note that some screen refreshs may fail)
 ])
 
-AC_DEFUN(AC_USE_OSF1_CURSES, [
+AC_DEFUN([AC_USE_OSF1_CURSES], [
        AC_MSG_RESULT(Using OSF1 curses)
        search_ncurses=false
        screen_manager="OSF1 curses"
@@ -175,7 +175,7 @@ AC_DEFUN(AC_USE_OSF1_CURSES, [
        CURSES_LIBS="-lcurses"
 ])
 
-AC_DEFUN(AC_USE_SYSV_CURSES, [
+AC_DEFUN([AC_USE_SYSV_CURSES], [
 	AC_MSG_RESULT(Using SysV curses)
 	AC_DEFINE(HAS_CURSES)
 	has_curses=true
@@ -210,7 +210,7 @@ dnl)
 dnl
 dnl Parameters: directory filename cureses_LIBS curses_INCLUDEDIR nicename
 dnl
-AC_DEFUN(AC_NCURSES, [
+AC_DEFUN([AC_NCURSES], [
     if $search_ncurses
     then
         if test -f $1/$2
@@ -227,7 +227,7 @@ AC_DEFUN(AC_NCURSES, [
     fi
 ])
 
-AC_DEFUN(AC_SEARCH_NCURSES, [
+AC_DEFUN([AC_SEARCH_NCURSES], [
     AC_CHECKING("location of ncurses.h file")
 
     AC_NCURSES(/usr/include, ncurses.h, -lncurses,, "ncurses on /usr/include")

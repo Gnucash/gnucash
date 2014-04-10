@@ -1,0 +1,171 @@
+  <article id="xacc-calculator">
+    <artheader>
+      <title>Loan and Interest Calculations</title>
+    </artheader>
+    
+
+    <sect1>
+      <title>
+	Using the Financial Calculator
+      </title>
+
+      <para>
+	Given that you know the payment interval and compound interval, given
+	any four of Present Value, Future Value, Interest Rate, Periodic Payment, 
+	and number of Payment Periods, you can instantly find the missing figure
+	using GnuCash's financial calculator.
+	If you need an explanation of those concepts, see the 
+	<link linkend="xacc-compound-interest">compound interest tutorial</link>.
+      </para>
+
+      <para>
+	To use the financial calculator, find it on the "tools" menu.
+	</para>
+
+      <screenshot>
+	<mediaobject>
+	  <imageobject>
+	    <imagedata fileref="image/financial-calculator.png">
+	  </imageobject>
+	</mediaobject>
+      </screenshot>
+
+      <para>To do a calculation, simply enter the figures that you <emphasis>do</emphasis>
+	have into the text boxes on the left, and select the appropriate compounding and
+	payment intervals on the right.  Then, to calculate the figure that you <emphasis>want</emphasis>, simply click on the appropriate "calculate" button.  
+	</para>
+
+      <para>For instance, say you have a loan of $5,000 at %5, compounding monthly, and are
+	paying back $200 at the end of each month.  
+	How many payment periods is it going to take to pay
+	back the loan?  Easy.  Enter "5000" as the present value, the interest rate as "5", 
+	the periodic payment as <emphasis>-200</emphasis> - note that if you are paying money
+	back, this number should be negative, and the future value "0", select the appropriate
+	compounding and payment options (make sure that the "discrete compounding" radio 
+	button is selected), and then press "calculate" for the "payment periods" box.  
+	You should find that "26" appears in the "Payment Period" box.  Therefore, you'll need
+	to make 26 monthly payments to pay back the loan.
+       </para>
+    </sect1>
+    <sect1 id="xacc-compound-interest">
+      <title>
+	Explaining Compound Interest
+      </title>
+      <sect2>
+	<title>
+	  Introduction
+	</title>
+      <para>
+	  GnuCash offers the facility to do simple interest calculations
+	  for loans and interest-bearing deposits, giving you the ability
+	  to answer questions like "How long will it take me to pay off
+	  this loan?", "Which of these two term deposits generate better
+	  returns?", and "What loan payments do I need to make to pay
+	  off this loan in, say, five years?"  GnuCash's financial
+	  calculator gives you that information, and more.
+      </para>
+      </sect2>
+      <sect2>
+	<title>
+	  How Interest Works
+	</title>
+	<para>
+	  There's two angles for talking about interest - 
+	  interest-bearing accounts such as savings accounts
+	  and term deposits, when financial institutions pay
+	  you for the use of your money.  Alternatively, 
+	  we can discuss interest in the context of loans, where
+	  you pay your financial institution for using their money.
+	  To make things simple, we'll talk about loans first.
+	</para>
+	
+	<para>
+	  Firstly, let's consider the simplest possible loan
+	  where with a simple interest rate and we pay it
+	  back at the conclusion  of the term.  For example, 
+	  let's say we borrow $10,000 (in financial terms, 
+	  the <emphasis>Present Value</emphasis> is $10,000)
+	  for one year at an interest rate of 10% per annum
+	  that doesn't compound.  How much do we owe at the end
+	  of it?
+          In this case, calculating the <emphasis>Future Value</emphasis> 
+	  that we owe is easy: it's just
+	</para>
+
+	
+	<programlisting>
+	  Future Value = Present Value + (10 % * Present Value)
+	               = 10,000 + (10% * 10,000)
+	               = 11,000
+	</programlisting>
+
+	<para>
+	  Now, let's make things a bit more interesting.
+	  Let's make the interest <emphasis>compound</emphasis> 
+	  monthly.  After the first month, then, you'll owe
+	</para>
+
+	<programlisting>
+	  Future Value = 10,000 + (10% * 1/12)
+	               ~= 10,083.33
+	</programlisting>
+	   
+	<para>Now, for the second month, you'll pay interest
+	  on the 10,083.83, so the value after the second month 
+	  is:
+	  </para>
+	<programlisting>
+	  Future Value = 10,083.83 + (10% * 1/12)
+	              ~= 10167.36
+	</programlisting>
+	<para>
+	  Eventually, after 12 months, you'll owe $11,047.13, rather
+	  than the $11,000 you would have paid with simple interest.
+	</para>
+	<para>
+	  Next, we'll make things more complex again - let's say
+	  we'll make a <emphasis>periodic payment</emphasis> of 
+	  $200 at the end of every month?  Well, let's see.  After
+	  one month, you'd owe:
+	</para>
+	<programlisting>
+	  Future Value  = Present Value + Interest - Periodic Payment
+          after month 1 = 10,000 + (10% * 1/12) - 200 
+	                = 9,883.33
+	</programlisting>
+
+	<para>
+	  After one year, if you do the calculations, you'll still
+	  owe $8534.02 (if I've done my maths right . . .)
+	</para>
+
+	<para>
+	  For our final example, consider <emphasis>continuous compounding</emphasis>,
+	  where interest is charged continuously.  Explaining this calculation in
+	  detail requires a little bit of university-level maths, but, roughly,
+	  imagine that the payment periods are, really, really, really small!  
+	  I can't easily show you the calculations for this, but that doesn't
+	  matter.  GnuCash's financial calculator can do them!
+	</para>
+
+	<para>
+	  So, to summarize, the following bits of information are used in interest
+	  calculations:
+	</para>
+	<itemizedlist>
+	  <listitem><para>Present Value</para></listitem>
+	  <listitem><para>Future Value</para></listitem>
+	  <listitem><para>Interest Rate</para></listitem>
+	  <listitem><para>Number of Payment Periods</para></listitem>
+	  <listitem><para>Periodic Payment</para></listitem>
+	  <listitem><para>Compounding Type (discrete or continuous)</para></listitem>
+	  <listitem><para>Compounding Interval (if discrete)</para></listitem>
+	  <listitem><para>Payment Time (beginning or end of period)</para></listitem>
+	</itemizedlist>
+      </sect2>
+    </sect1>
+  </article>
+
+<!-- Local variables: -->
+<!-- sgml-parent-document: "gnucash.sgml" -->
+<!-- End: -->

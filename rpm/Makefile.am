@@ -15,4 +15,4 @@ gnucash.spec: gnucash.spec.in Makefile
             -e 's:@-VERSION-@:${VERSION}:'
 	mv $@.tmp $@
 
-CLEANFILES += gnucash.spec
+CLEANFILES = gnucash.spec

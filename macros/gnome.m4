@@ -16,7 +16,7 @@ AC_DEFUN([GNOME_INIT_HOOK],[
 
 	AC_ARG_WITH(gnome-includes,
 	[  --with-gnome-includes   Specify location of GNOME headers],[
-	CFLAGS="$CFLAGS -I$withval"
+	CPPFLAGS="$CPPFLAGS -I$withval"
 	])
 	
 	AC_ARG_WITH(gnome-libs,
@@ -38,7 +38,7 @@ AC_DEFUN([GNOME_INIT_HOOK],[
 	    		else
 	        		want_gnome=yes
 	    			LDFLAGS="$LDFLAGS -L$withval/lib"
-	    			CFLAGS="$CFLAGS -I$withval/include"
+	    			CPPFLAGS="$CPPFLAGS -I$withval/include"
 	    			gnome_prefix=$withval/lib
 	    		fi
   		fi,
@@ -59,8 +59,8 @@ AC_DEFUN([GNOME_INIT_HOOK],[
 	        GNOMEGNORBA_LIBS="`$GNOME_CONFIG --libs-only-l gnorba gnomeui`"
 	        GTKXMHTML_LIBS="`$GNOME_CONFIG --libs-only-l gtkxmhtml`"
 		ZVT_LIBS="`$GNOME_CONFIG --libs-only-l zvt`"
-	        GNOME_LIBDIR="`$GNOME_CONFIG --libs-only-L gnorba gnomeui`"
-	        GNOME_INCLUDEDIR="`$GNOME_CONFIG --cflags gnorba gnomeui`"
+	        GNOME_LIBDIR="`$GNOME_CONFIG --libs-only-L gtk gnorba gnomeui`"
+	        GNOME_INCLUDEDIR="`$GNOME_CONFIG --cflags gtk gnorba gnomeui`"
                 $1
 	      else
 	        AC_MSG_RESULT(no)

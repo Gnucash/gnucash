@@ -1,0 +1,177 @@
+
+<ARTICLE ID="XACC-ACCTYPES">
+<ARTHEADER>
+<TITLE>Tipos de Contas</TITLE>
+</ARTHEADER>
+<SECT1>
+<TITLE></TITLE>
+<PARA></PARA>
+<PARA> O GnuCash suporta um número de tipos de contas diferentes.  
+Escolha sempre o tipo que é apropriado para o que deseja registar. 
+Se não tiver a certeza, as explicações seguintes deverão dar uma
+ajuda na decisão.
+
+    <GLOSSLIST>
+<GLOSSENTRY>
+<GLOSSTERM><EMPHASIS>Dinheiro</EMPHASIS></GLOSSTERM>
+<GLOSSDEF>
+<PARA>O tipo de conta <EMPHASIS>dinheiro</EMPHASIS> é utilizada para indicar 
+      o dinheiro que você guarda na sua carteira, caixa de sapatos, mealheiro 
+      ou debaixo do colchão.</PARA>
+</GLOSSDEF>
+</GLOSSENTRY>
+<GLOSSENTRY>
+<GLOSSTERM><EMPHASIS>Banco</EMPHASIS></GLOSSTERM>
+<GLOSSDEF>
+<PARA>O tipo de conta <EMPHASIS>Banco</EMPHASIS> refere-se a contas 
+      à ordem ou a prazo, residentes num banco ou outra instituição 
+      financeira.
+      Alguma sdestas contas podem gerar juros.
+      Esta é também o tipo de conta apropriada para cartões de débito, 
+      que levantam os pagamentos directamente de uma conta à ordem.
+      </PARA>
+</GLOSSDEF>
+</GLOSSENTRY>
+<GLOSSENTRY>
+<GLOSSTERM><EMPHASIS>Cartão de Crédito</EMPHASIS></GLOSSTERM>
+<GLOSSDEF>
+<PARA>O tipo de conta <EMPHASIS>Cartão de Crédito</EMPHASIS> aplica-se
+      a contas de cartão de crédito, tanto para cartões que permitem 
+      linhas de crédito flutuantes (por ex. VISA, MasterCard) e para 
+      cartões que não permitão saldos contínuos (por ex. American Express)
+      </PARA>
+</GLOSSDEF>
+</GLOSSENTRY>
+<GLOSSENTRY>
+<GLOSSTERM><EMPHASIS>Activos, Passivos</EMPHASIS></GLOSSTERM>
+<GLOSSDEF>
+<PARA>As contas de <EMPHASIS>Activos</EMPHASIS> e <EMPHASIS>Passivos</EMPHASIS> 
+      são utilizadas para controlar coisas de valor, mas que não são directamente 
+      convertíveis em <EMPHASIS>dinheiro</EMPHASIS>. Por exemplo, pode 
+      reunir os custos de adquirir uma casa numa conta de activos chamada 
+      <EMPHASIS>Minha Casa</EMPHASIS>, ou os custos de um carro na 
+      <EMPHASIS> Meu Carro,</EMPHASIS> ou agrupar o valor do seu 
+      <EMPHASIS>Equipamento Informático.</EMPHASIS>
+      A hipoteca da casa ou empréstimo do carro seriam representados por 
+      contas de passivo, <EMPHASIS> Hipoteca da Casa</EMPHASIS> e <EMPHASIS> 
+      Empréstimo do Carro</EMPHASIS>, sendo o seu saldo abatido à medida que 
+      fossem pagas as prestações sobre estas dívidas.
+</PARA>
+<PARA>
+      Caso detenha activos para utilização empresarial, eles desvalorizam 
+      ao longo do tempo e isso pode ser tratado como uma dedução aos
+      impostos, sendo essa dedução denominada 
+      <LINK LINKEND="XACC-DEPRECIATION">Depreciação.</LINK>
+      Por outro lado, caso detenha activos que <EMPHASIS>valorizam</EMPHASIS> 
+      ao longo do tempo, tais como propriedades, coleccionáveis e investimentos 
+      tipo acções de empresas, poderá vê-los aumentar de valor, e ter de o 
+      reconhecer, para efeitos fiscais, como <LINK LINKEND="APPR"> Ganhos de Capital.</LINK></PARA>
+</GLOSSDEF>
+</GLOSSENTRY>
+<GLOSSENTRY>
+<GLOSSTERM><ANCHOR ID="STOCKACCT"><EMPHASIS>Acções, Certificados de Aforro</EMPHASIS></GLOSSTERM>
+<GLOSSDEF>
+<PARA>Acções e afins em que você investe são uma forma de activo que 
+      são habitualmente adquiridos com o fim expresso de obter 
+      mais-valias quer sob a forma de dividendos, juros, ou 
+      <LINK LINKEND="APPR"> Ganhos de Capital.</LINK> Existem mercados 
+      de valores em todo o mundo, e papeis muito transaccionados com 
+      valores concretos podem ser analisados diariamente.</PARA>
+<PARA>
+        Contas de Acções e outros fundos podem ser tipicamente acompanhadas em 
+        registos tendo três colunas principais: 
+
+        <ITEMIZEDLIST>
+<LISTITEM>
+<PARA>Preço </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Número de acções </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Custo </PARA>
+</LISTITEM>
+</ITEMIZEDLIST>
+      </PARA>
+<PARA>  Por forma a obter informação <EMPHASIS>útil</EMPHASIS> a partir do registo, 
+        é necessário ter "vistas" múltiplas sobre os dados para que possa avaliar 
+        aspectos tais como: 
+
+        <ITEMIZEDLIST>
+<LISTITEM>
+<PARA>Valor Total por documento </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Lucros/Prejuizos por documento </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Taxas de Retorno do Investimento (ROI) por documento </PARA> 
+</LISTITEM>
+</ITEMIZEDLIST>
+      </PARA>
+<PARA>Mais detalhes podem ser encontrados nas secções <LINK LINKEND="xacc-price-editor">editor de cotações</LINK>
+      e <link linkend="xacc-price-sources">fontes de cotações</link>.</PARA>
+</GLOSSDEF>
+</GLOSSENTRY>
+<GLOSSENTRY>
+<GLOSSTERM><EMPHASIS><LINK LINKEND="XACC-INCOMEEXPENSE">Receitas,
+      Despesas</LINK></EMPHASIS></GLOSSTERM>
+<GLOSSDEF>
+<PARA>Os tipos de conta <EMPHASIS>Receitas</EMPHASIS> e <EMPHASIS>Despesas</EMPHASIS> 
+     são utilizados para registar receitas e despesas.
+     Por exemplo, se depositar um cheque do salário na sua conta bancária, deverá 
+marca-lo como uma transferência de uma conta de 'Receitas'.  
+Marcar receitas desta forma ajuda a balancear os registos: a modificação no 
+seu valor líquido ao longo das semanas, meses ou anos, deverá ser 
+exactamente igual às suas receitas (menos despesas) para o mesmo período.  
+O valor disponível na sua conta bancária contribui para o seu 'valor líquido',
+mas as suas receitas contribuem para os seus 'lucros'.
+
+</PARA>
+</GLOSSDEF>
+</GLOSSENTRY>
+<GLOSSENTRY>
+<GLOSSTERM><EMPHASIS>Saldo Inicial</EMPHASIS></GLOSSTERM>
+<GLOSSDEF>
+<PARA>As contas de <EMPHASIS>Saldo Inicial</EMPHASIS> são utilizadas 
+para registar os valores iniciais para quando começa a utilizar o GnuCash 
+(ou inicia um novo período contabilistico).   
+Assumindo que possui uma conta bancária à mais tempo do que o que 
+está a utilizar o GnuCash, e assumindo que não deseja inserir as
+transacções antigas, irá querer inserir um <EMPHASIS> saldo inicial </EMPHASIS>  
+diferente de zero na sua conta bancária.  Este valor de abertura 
+deverá ser marcado como uma transferência de uma conta do tipo 'Saldo Inicial'.  
+Por outro lado, se fechar e reabrir todos os seus registos no final de cada 
+trimestre/ano, o 'saldo inicial' será o seu valor líquido no início do 
+período: é equivalente a todos os activos menos todos os passivos. Com o 
+passar do tempo, terá receitas e despesas. No final do ano, o seu valor 
+líquido será o saldo inicial no princípio do ano, acrescido de todas as 
+receitas e deduzido de todas as despesas. Este valor torna-se então no 
+saldo inicial para o período contabilístico seguinte.
+      </PARA>
+</GLOSSDEF>
+</GLOSSENTRY>
+<GLOSSENTRY>
+<GLOSSTERM><LINK LINKEND="XACC-CURRENCYHANDLING">
+      <EMPHASIS>Câmbios</EMPHASIS></LINK></GLOSSTERM>
+<GLOSSDEF>
+<PARA><EMPHASIS> Contas de Câmbio (ou Moeda)</EMPHASIS> são utilizadas
+      para efectuar o câmbio de moedas.
+      De forma geral, comportam-se como acções, excepto em que a única 
+      forma de obter "receitas" será através da flutuação dos valores 
+      relativos das moedas. Note que transferências directas não podem 
+      ser efectuadas entre duas contas definidas em moedas diferentes. 
+      Tais transferências apenas podem ser feitas recorrendo a contas 
+      de câmbio.</PARA>
+</GLOSSDEF>
+</GLOSSENTRY>
+</GLOSSLIST>
+
+
+</PARA>
+</SECT1>
+</ARTICLE>
+
+<!-- Local variables: -->
+<!-- sgml-parent-document: "gnucash.sgml" -->
+<!-- End: -->

@@ -1,0 +1,54 @@
+<ARTICLE ID="XACC-MAINWIN">
+
+<ARTHEADER>
+<TITLE>Ventana Principal</TITLE>
+</ARTHEADER>
+
+<PARA>Esta es la ventana principal de cuentas. Controla su conjunto
+    de cuentas desde aquí.
+
+    </PARA>
+<PARA>A continuación se muestra una imagen de la ventana principal,
+    con sólo las cuentas principales. Observe que los <EMPHASIS>Gastos
+    de la Empresa</EMPHASIS> ha sido seleccionado. La caja con una cruz
+    dentro, en la parte izquierda, muestra que tiene una o más cuentas
+    de detalle que no se muestran en este momento. Para mostrarlas,
+    apriete en la caja.
+
+    </PARA>
+<PARA><INLINEMEDIAOBJECT>
+<IMAGEOBJECT>
+<IMAGEDATA FILEREF="image/contract.png">
+</IMAGEOBJECT>
+</INLINEMEDIAOBJECT>
+    
+
+    </PARA>
+<PARA>Aquí tiene la ventana principal, mostrando también las cuentas
+    de detalle.
+
+    </PARA>
+<PARA>     <INLINEMEDIAOBJECT>
+<IMAGEOBJECT>
+<IMAGEDATA FILEREF="image/expand.png">
+</IMAGEOBJECT>
+</INLINEMEDIAOBJECT>
+    
+
+
+    </PARA>
+<PARA>El menú <GUIMENU>Abrir Subcuentas</GUIMENU> es interesante solamente
+    si selecciona una cuenta con subcuentas (cuentas de detalle).
+    Las cuentas con subcuentas siempre tendrán la caja en la parte
+    izquierda. Seleccionando el menú <GUIMENU>Abrir Subcuentas</GUIMENU>,
+    una ventana del libro mayor se abre, que enseña todas las
+    transacciones para la cuenta principal y las de detalle. Observe
+    que la ventana de libro mayor es más complicada y difícil de
+    trabajar con ella que los registros de cuentas individuales.
+    La ventana de libro mayor permite tener una visión general de
+    las cuentas en poco espacio. Debido a su gran complejidad, su
+    uso solamente se recomienda a los expertos.
+
+</PARA>
+
+</ARTICLE>

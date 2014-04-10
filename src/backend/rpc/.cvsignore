@@ -1,0 +1,7 @@
+.deps
+.libs
+*.lo
+*.la
+Makefile
+Makefile.in
+gncRpc_xdr.c

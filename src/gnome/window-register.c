@@ -3,7 +3,8 @@
  * Copyright (C) 1997 Robin D. Clark                                *
  * Copyright (C) 1997-1998 Linas Vepstas <linas@linas.org>          *
  * Copyright (C) 1998 Rob Browning <rlb@cs.utexas.edu>              *
- * Copyright (C) 1999-2000 Dave Peticolas <peticola@cs.ucdavis.edu> *
+ * Copyright (C) 1999-2000 Dave Peticolas <dave@krondo.com>         *
+ * Copyright (C) 2001 Gnumatic, Inc.                                *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -26,33 +27,35 @@
 
 #define _GNU_SOURCE
 
-#include "top-level.h"
+#include "config.h"
 
 #include <gnome.h>
-#include <math.h>
+#include <g-wrap-runtime-guile.h>
+#include <time.h>
 
-#include "gnome-top-level.h"
-#include "window-register.h"
-#include "ui-callbacks.h"
-#include "MultiLedger.h"
-#include "MainWindow.h"
-#include "Refresh.h"
-#include "RegWindow.h"
-#include "Scrub.h"
-#include "window-reconcile.h"
 #include "AccWindow.h"
-#include "window-help.h"
+#include "Scrub.h"
+#include "dialog-find-transactions.h"
 #include "dialog-transfer.h"
 #include "dialog-utils.h"
-#include "query-user.h"
-#include "enriched-messages.h"
-#include "table-allgui.h"
-#include "gnucash-sheet.h"
+#include "dialog-sx-from-trans.h"
 #include "global-options.h"
-#include "dialog-find-transactions.h"
-#include "gnc-dateedit.h"
-#include "util.h"
-#include "EuroUtils.h"
+#include "gnc-component-manager.h"
+#include "gnc-date-edit.h"
+#include "gnc-engine-util.h"
+#include "gnc-euro.h"
+#include "gnc-gui-query.h"
+#include "gnc-ledger-display.h"
+#include "gnc-pricedb.h"
+#include "gnc-ui-util.h"
+#include "gnc-ui.h"
+#include "gnucash-sheet.h"
+#include "messages.h"
+#include "table-allgui.h"
+#include "window-help.h"
+#include "window-reconcile.h"
+#include "window-register.h"
+#include "top-level.h"
 
 
 typedef struct _RegDateWindow RegDateWindow;
@@ -74,27 +77,36 @@ struct _RegDateWindow
  * register.  Any state info for the regWindow goes here. */
 struct _RegWindow
 {
-  xaccLedgerDisplay * ledger;   
+  GNCLedgerDisplay * ledger;   
 
   /* Top level window */
   GtkWidget * window;
+
+  gint width;
 
   GtkWidget * toolbar;
   SCM toolbar_change_callback_id;
 
   GtkWidget * statusbar;
 
+  GtkWidget * double_line_check;
+
+  GtkWidget * split_button;
+  GtkWidget * split_menu_check;
+  GtkWidget * split_popup_check;
+
   GtkWidget * balance_label;
   GtkWidget * cleared_label;
+  GtkWidget * reconciled_label;
+  GtkWidget * future_label;
+  GtkWidget * shares_label;
+  GtkWidget * value_label;
 
   GnucashRegister *reg;
 
   sort_type_t sort_type;
 
   RegDateWindow *date_window;
-
-  /* Do we close the ledger when the window closes? */
-  gboolean close_ledger;
 };
 
 
@@ -106,15 +118,12 @@ static int last_stock_width = 0;
 
 
 /** PROTOTYPES ******************************************************/
-RegWindow * regWindowLedger(xaccLedgerDisplay *ledger);
-static void regRefresh(xaccLedgerDisplay *ledger);
+static void gnc_register_redraw_all_cb (GnucashRegister *g_reg, gpointer data);
+static void gnc_register_redraw_help_cb (GnucashRegister *g_reg,
+                                         gpointer data);
 static void gnc_reg_refresh_toolbar(RegWindow *regData);
-static void regDestroy(xaccLedgerDisplay *ledger);
-static void regSetHelp(xaccLedgerDisplay *ledger, const char *help_str);
-
-static void closeRegWindow(GtkWidget *w, RegWindow *regData);
+static void regDestroy(GNCLedgerDisplay *ledger);
 static void gnc_register_check_close(RegWindow *regData);
-
 static void cutCB(GtkWidget *w, gpointer data);
 static void copyCB(GtkWidget *w, gpointer data);
 static void pasteCB(GtkWidget *w, gpointer data);
@@ -123,19 +132,26 @@ static void copyTransCB(GtkWidget *w, gpointer data);
 static void pasteTransCB(GtkWidget *w, gpointer data);
 static void startRecnCB(GtkWidget *w, gpointer data);
 static void xferCB(GtkWidget *w, gpointer data);
+static void stockSplitCB (GtkWidget * w, gpointer data);
 static void editCB(GtkWidget *w, gpointer data);
 static void helpCB(GtkWidget *w, gpointer data);
 static void newAccountCB(GtkWidget * w, gpointer data);
 static void deleteCB(GtkWidget *w, gpointer data);
 static void duplicateCB(GtkWidget *w, gpointer data);
+static void recurCB(GtkWidget *w, gpointer data);
 static void recordCB(GtkWidget *w, gpointer data);
 static void cancelCB(GtkWidget *w, gpointer data);
 static void closeCB(GtkWidget *w, gpointer data);
+static void reportCB(GtkWidget *w, gpointer data);
+static void invoiceCB(GtkWidget *w, gpointer data);
+static void invoiceTransCB(GtkWidget *w, gpointer data);
+static void printReportCB(GtkWidget *w, gpointer data);
 static void dateCB(GtkWidget *w, gpointer data);
+static void expand_trans_cb(GtkWidget *widget, gpointer data);
 static void new_trans_cb(GtkWidget *widget, gpointer data);
 static void jump_cb(GtkWidget *widget, gpointer data);
 static void print_check_cb(GtkWidget * widget, gpointer data);
-static void gnc_ui_find_transactions_cb ( GtkWidget *widget, gpointer data );
+static void gnc_ui_find_transactions_cb (GtkWidget *widget, gpointer data);
 
 static gboolean gnc_register_include_date(RegWindow *regData, time_t date);
 
@@ -148,13 +164,13 @@ static gboolean gnc_register_include_date(RegWindow *regData, time_t date);
  * Return: regData - the register window instance                   *
 \********************************************************************/
 RegWindow *
-regWindowSimple(Account *account)
+regWindowSimple (Account *account)
 {
   RegWindow *result = NULL;
-  xaccLedgerDisplay * ledger = xaccLedgerDisplaySimple(account);
+  GNCLedgerDisplay * ledger = gnc_ledger_display_simple (account);
 
   if (ledger != NULL)
-    result = regWindowLedger(ledger);
+    result = regWindowLedger (ledger);
 
   return result;
 }
@@ -168,13 +184,13 @@ regWindowSimple(Account *account)
  * Return: regData - the register window instance                   *
 \********************************************************************/
 RegWindow *
-regWindowAccGroup(Account *account)
+regWindowAccGroup (Account *account)
 {
   RegWindow *result = NULL;
-  xaccLedgerDisplay * ledger = xaccLedgerDisplayAccGroup(account);
+  GNCLedgerDisplay * ledger = gnc_ledger_display_subaccounts (account);
 
   if (ledger != NULL)
-    result = regWindowLedger(ledger);
+    result = regWindowLedger (ledger);
 
   return result;
 }
@@ -188,7 +204,7 @@ regWindowAccGroup(Account *account)
  * Return: nothing                                                  *
 \********************************************************************/
 void
-gnc_register_raise(RegWindow *regData)
+gnc_register_raise (RegWindow *regData)
 {
   if (regData == NULL)
     return;
@@ -196,12 +212,12 @@ gnc_register_raise(RegWindow *regData)
   if (regData->window == NULL)
     return;
 
-  gtk_widget_show(regData->window);
+  gtk_widget_show (regData->window);
 
   if (regData->window->window == NULL)
     return;
 
-  gdk_window_raise(regData->window->window);
+  gdk_window_raise (regData->window->window);
 }
 
 
@@ -218,16 +234,20 @@ gnc_register_jump_to_split(RegWindow *regData, Split *split)
 {
   Transaction *trans;
   VirtualCellLocation vcell_loc;
+  SplitRegister *reg;
+
+  if (!regData) return;
 
   trans = xaccSplitGetParent(split);
   if (trans != NULL)
     if (gnc_register_include_date(regData, xaccTransGetDate(trans)))
     {
-      regData->ledger->dirty = 1;
-      xaccLedgerDisplayRefresh(regData->ledger);
+      gnc_ledger_display_refresh (regData->ledger);
     }
 
-  if (xaccSRGetSplitVirtLoc(regData->ledger->ledger, split, &vcell_loc))
+  reg = gnc_ledger_display_get_split_register (regData->ledger);
+
+  if (gnc_split_register_get_split_virt_loc(reg, split, &vcell_loc))
     gnucash_register_goto_virt_cell(regData->reg, vcell_loc);
 }
 
@@ -245,113 +265,98 @@ gnc_register_jump_to_split_amount(RegWindow *regData, Split *split)
 {
   Transaction *trans;
   VirtualLocation virt_loc;
+  SplitRegister *reg;
+
+  if (!regData) return;
 
   trans = xaccSplitGetParent(split);
   if (trans != NULL)
     if (gnc_register_include_date(regData, xaccTransGetDate(trans)))
     {
-      regData->ledger->dirty = 1;
-      xaccLedgerDisplayRefresh(regData->ledger);
+      gnc_ledger_display_refresh (regData->ledger);
     }
 
-  if (xaccSRGetSplitAmountVirtLoc(regData->ledger->ledger, split, &virt_loc))
-    gnucash_register_goto_virt_loc(regData->reg, virt_loc);
-}
+  reg = gnc_ledger_display_get_split_register (regData->ledger);
 
-
-static SplitRegisterStyle
-gnc_get_default_register_style()
-{
-  SplitRegisterStyle new_style = REG_SINGLE_LINE;
-  char *style_string;
-
-  style_string = gnc_lookup_multichoice_option("Register", 
-                                               "Default Register Mode",
-                                               "single_line");
-
-  if (safe_strcmp(style_string, "single_line") == 0)
-    new_style = REG_SINGLE_LINE;
-  else if (safe_strcmp(style_string, "double_line") == 0)
-    new_style = REG_DOUBLE_LINE;
-  else if (safe_strcmp(style_string, "multi_line") == 0)
-    new_style = REG_MULTI_LINE;
-  else if (safe_strcmp(style_string, "auto_single") == 0)
-    new_style = REG_SINGLE_DYNAMIC;
-  else if (safe_strcmp(style_string, "auto_double") == 0)
-    new_style = REG_DOUBLE_DYNAMIC;
-
-  if (style_string != NULL)
-    free(style_string);
-
-  return new_style;
+  if (gnc_split_register_get_split_amount_virt_loc (reg, split, &virt_loc))
+    gnucash_register_goto_virt_loc (regData->reg, virt_loc);
 }
 
 
 static void
-gnc_register_change_style(RegWindow *regData, SplitRegisterStyle style)
+gnc_register_change_style (RegWindow *regData, SplitRegisterStyle style)
 {
-  SplitRegister *reg = regData->ledger->ledger;
+  SplitRegister *reg = gnc_ledger_display_get_split_register (regData->ledger);
 
   if (style == reg->style)
     return;
 
-  xaccConfigSplitRegister(reg, reg->type, style);
+  gnc_split_register_config (reg, reg->type, style, reg->use_double_line);
 
-  regData->ledger->dirty = 1;
-  xaccLedgerDisplayRefresh(regData->ledger);
+  gnc_ledger_display_refresh (regData->ledger);
 }
 
 static void
-gnc_register_style_single_cb(GtkWidget *w, gpointer data)
+gnc_register_style_ledger_cb (GtkWidget *w, gpointer data)
 {
   RegWindow *regData = data;
 
-  gnc_register_change_style(regData, REG_SINGLE_LINE);
+  if (!GTK_CHECK_MENU_ITEM (w)->active)
+    return;
+
+  gnc_register_change_style (regData, REG_STYLE_LEDGER);
 }
 
 static void
-gnc_register_style_double_cb(GtkWidget *w, gpointer data)
+gnc_register_style_auto_ledger_cb (GtkWidget *w, gpointer data)
 {
   RegWindow *regData = data;
 
-  gnc_register_change_style(regData, REG_DOUBLE_LINE);
+  if (!GTK_CHECK_MENU_ITEM (w)->active)
+    return;
+
+  gnc_register_change_style (regData, REG_STYLE_AUTO_LEDGER);
 }
 
 static void
-gnc_register_style_multi_cb(GtkWidget *w, gpointer data)
+gnc_register_style_journal_cb (GtkWidget *w, gpointer data)
 {
   RegWindow *regData = data;
 
-  gnc_register_change_style(regData, REG_MULTI_LINE);
+  if (!GTK_CHECK_MENU_ITEM (w)->active)
+    return;
+
+  gnc_register_change_style (regData, REG_STYLE_JOURNAL);
 }
 
 static void
-gnc_register_style_auto_single_cb(GtkWidget *w, gpointer data)
+gnc_register_double_line_cb (GtkWidget *w, gpointer data)
 {
   RegWindow *regData = data;
+  SplitRegister *reg = gnc_ledger_display_get_split_register (regData->ledger);
+  gboolean use_double_line;
 
-  gnc_register_change_style(regData, REG_SINGLE_DYNAMIC);
+  use_double_line = GTK_CHECK_MENU_ITEM(w)->active;
+
+  if (use_double_line == reg->use_double_line)
+    return;
+
+  gnc_split_register_config (reg, reg->type, reg->style, use_double_line);
+
+  gnc_ledger_display_refresh (regData->ledger);
 }
 
 static void
-gnc_register_style_auto_double_cb(GtkWidget *w, gpointer data)
+gnc_register_sort (RegWindow *regData, sort_type_t sort_code)
 {
-  RegWindow *regData = data;
-
-  gnc_register_change_style(regData, REG_DOUBLE_DYNAMIC);
-}
-
-
-static void
-gnc_register_sort(RegWindow *regData, sort_type_t sort_code)
-{
-  Query *query = regData->ledger->query;
+  Query *query = gnc_ledger_display_get_query (regData->ledger);
   gboolean show_present_divider = FALSE;
+  SplitRegister *reg;
 
   if (regData->sort_type == sort_code)
     return;
 
-  switch(sort_code)
+  switch (sort_code)
   {
     case BY_STANDARD:
       xaccQuerySetSortOrder(query, BY_STANDARD, BY_NONE, BY_NONE);
@@ -381,15 +386,16 @@ gnc_register_sort(RegWindow *regData, sort_type_t sort_code)
       xaccQuerySetSortOrder(query, BY_DESC, BY_STANDARD, BY_NONE);
       break;
     default:
-      assert(0); /* we should never be here */
+      g_return_if_fail (FALSE);
   }
 
-  xaccSRShowPresentDivider (regData->ledger->ledger, show_present_divider);
+  reg = gnc_ledger_display_get_split_register (regData->ledger);
+
+  gnc_split_register_show_present_divider (reg, show_present_divider);
 
   regData->sort_type = sort_code;
 
-  regData->ledger->dirty = 1;
-  xaccLedgerDisplayRefresh(regData->ledger);
+  gnc_ledger_display_refresh(regData->ledger);
 }
 
 static void
@@ -493,10 +499,17 @@ gnc_date_range_set_sensitivities(RegWindow *regData)
 {
   RegDateWindow *regDateData;
   GtkToggleButton *toggle;
+  Query *query;
 
-  assert(regData != NULL);
-  assert(regData->ledger != NULL);
-  assert(regData->ledger->query != NULL);
+  if (!regData)
+    return;
+
+  if (!regData->ledger)
+    return;
+
+  query = gnc_ledger_display_get_query (regData->ledger);
+  if (!query)
+    return;
 
   regDateData = regData->date_window;
   if (regDateData == NULL)
@@ -526,10 +539,17 @@ gnc_register_set_date_range(RegWindow *regData)
 {
   RegDateWindow *regDateData;
   GtkToggleButton *toggle;
+  Query *query;
 
-  assert(regData != NULL);
-  assert(regData->ledger != NULL);
-  assert(regData->ledger->query != NULL);
+  if (!regData)
+    return;
+
+  if (!regData->ledger)
+    return;
+
+  query = gnc_ledger_display_get_query (regData->ledger);
+  if (!query)
+    return;
 
   regDateData = regData->date_window;
   if (regDateData == NULL)
@@ -539,28 +559,30 @@ gnc_register_set_date_range(RegWindow *regData)
 
   toggle = GTK_TOGGLE_BUTTON(regDateData->show_earliest);
 
-  xaccQueryPurgeTerms(regData->ledger->query, PD_DATE);
+  xaccQueryPurgeTerms (query, PD_DATE);
 
-  if (!gtk_toggle_button_get_active(toggle)) {
+  if (!gtk_toggle_button_get_active(toggle))
+  {
     time_t start;
 
     start = gnc_date_edit_get_date(GNC_DATE_EDIT(regDateData->start_date));
     start = gnc_register_min_day_time(start);
 
-    xaccQueryAddDateMatchTT(regData->ledger->query, 
+    xaccQueryAddDateMatchTT(query, 
                             TRUE, start, 
                             FALSE, 0, 
                             QUERY_AND);
   }
 
   toggle = GTK_TOGGLE_BUTTON(regDateData->show_latest);
-  if (!gtk_toggle_button_get_active(toggle)) {
+  if (!gtk_toggle_button_get_active(toggle))
+  {
     time_t end;
 
     end = gnc_date_edit_get_date(GNC_DATE_EDIT(regDateData->end_date));
     end = gnc_register_max_day_time(end);
 
-    xaccQueryAddDateMatchTT(regData->ledger->query, 
+    xaccQueryAddDateMatchTT(query, 
                             FALSE, 0,
                             TRUE, end,                            
                             QUERY_AND);
@@ -572,22 +594,21 @@ gnc_register_set_date_range(RegWindow *regData)
 static void
 gnc_register_date_cb(GtkWidget *widget, gpointer data)
 {
-  RegWindow *regData = (RegWindow *) data;
+  RegWindow *regData = data;
 
   gnc_register_set_date_range(regData);
 
-  regData->ledger->dirty = 1;
-  xaccLedgerDisplayRefresh(regData->ledger);
+  gnc_ledger_display_refresh (regData->ledger);
 }
 
 static void
 show_all_cb(GtkWidget *widget, gpointer data)
 {
-  RegWindow *regData = (RegWindow *) data;
+  RegWindow *regData = data;
   RegDateWindow *regDateData;
   GtkToggleButton *toggle;
 
-  assert(regData != NULL);
+  g_return_if_fail(regData != NULL);
 
   regDateData = regData->date_window;
   if (regDateData == NULL)
@@ -605,10 +626,10 @@ show_all_cb(GtkWidget *widget, gpointer data)
 static void
 gnc_register_today_cb(GtkWidget *widget, gpointer data)
 {
-  RegWindow *regData = (RegWindow *) data;
+  RegWindow *regData = data;
   RegDateWindow *regDateData;
 
-  assert(regData != NULL);
+  g_return_if_fail(regData != NULL);
 
   regDateData = regData->date_window;
   gnc_date_edit_set_time(GNC_DATE_EDIT(regDateData->end_date), time(NULL));
@@ -619,7 +640,7 @@ gnc_register_today_cb(GtkWidget *widget, gpointer data)
 static void
 gnc_register_date_toggle_cb(GtkToggleButton *toggle, gpointer data)
 {
-  RegWindow *regData = (RegWindow *) data;
+  RegWindow *regData = data;
 
   gtk_widget_set_sensitive(regData->date_window->set_button, TRUE);
 
@@ -654,7 +675,7 @@ gnc_register_show_date_window(RegWindow *regData)
 }
 
 static RegDateWindow *
-gnc_register_date_window(RegWindow *regData)
+gnc_register_date_window (RegWindow *regData, gboolean show_all)
 {
   RegDateWindow *regDateData;
   GtkWidget *dialog;
@@ -664,7 +685,7 @@ gnc_register_date_window(RegWindow *regData)
   regDateData = g_new0(RegDateWindow, 1);
   regData->date_window = regDateData;
 
-  dialog = gnome_dialog_new(REG_DATE_RANGES_STR,
+  dialog = gnome_dialog_new(_("Register date ranges"),
                             GNOME_STOCK_BUTTON_CLOSE,
                             NULL);
 
@@ -692,11 +713,6 @@ gnc_register_date_window(RegWindow *regData)
     GtkWidget *line;
     time_t time_val;
     GSList *group;
-    gboolean show_all;
-
-    show_all = gnc_lookup_boolean_option("Register",
-                                         "Show All Transactions",
-                                         TRUE);
 
     vbox = gtk_vbox_new(FALSE, 2);
     gtk_container_set_border_width(GTK_CONTAINER(vbox), 5);
@@ -706,7 +722,7 @@ gnc_register_date_window(RegWindow *regData)
     vbox2 = gtk_vbox_new(TRUE, 2);
     gtk_box_pack_start(GTK_BOX(vbox), vbox2, FALSE, FALSE, 0);
 
-    radio = gtk_radio_button_new_with_label(NULL, SHOW_EARLIEST_STR);
+    radio = gtk_radio_button_new_with_label(NULL, _("Show Earliest"));
     gtk_box_pack_start(GTK_BOX(vbox2), radio, FALSE, FALSE, 0);
     regDateData->show_earliest = radio;
 
@@ -717,7 +733,7 @@ gnc_register_date_window(RegWindow *regData)
     gtk_box_pack_start(GTK_BOX(vbox2), hbox, FALSE, FALSE, 0);
 
     group = gtk_radio_button_group(GTK_RADIO_BUTTON(radio));
-    radio = gtk_radio_button_new_with_label(group, START_DATE_C_STR);
+    radio = gtk_radio_button_new_with_label(group, _("Start date:"));
     gtk_box_pack_start(GTK_BOX(hbox), radio, FALSE, FALSE, 0);
 
     if (!show_all)
@@ -730,7 +746,8 @@ gnc_register_date_window(RegWindow *regData)
     gtk_box_pack_start(GTK_BOX(hbox), date, FALSE, FALSE, 0);
     regDateData->start_date = date;
 
-    time_val = xaccQueryGetEarliestDateFound(regData->ledger->query);
+    time_val = xaccQueryGetEarliestDateFound
+      (gnc_ledger_display_get_query (regData->ledger));
     if (time_val < time(NULL))
       gnc_date_edit_set_time(GNC_DATE_EDIT(date), time_val);
 
@@ -755,7 +772,7 @@ gnc_register_date_window(RegWindow *regData)
     vbox2 = gtk_vbox_new(TRUE, 2);
     gtk_box_pack_start(GTK_BOX(vbox), vbox2, FALSE, FALSE, 0);
 
-    radio = gtk_radio_button_new_with_label(NULL, SHOW_LATEST_STR);
+    radio = gtk_radio_button_new_with_label(NULL, _("Show Latest"));
     gtk_box_pack_start(GTK_BOX(vbox2), radio, FALSE, FALSE, 0);
     regDateData->show_latest = radio;
 
@@ -766,7 +783,7 @@ gnc_register_date_window(RegWindow *regData)
     gtk_box_pack_start(GTK_BOX(vbox2), hbox, FALSE, FALSE, 0);
 
     group = gtk_radio_button_group(GTK_RADIO_BUTTON(radio));
-    radio = gtk_radio_button_new_with_label(group, END_DATE_C_STR);
+    radio = gtk_radio_button_new_with_label(group, _("End date:"));
     gtk_box_pack_start(GTK_BOX(hbox), radio, FALSE, FALSE, 0);
 
     if (!show_all)
@@ -792,13 +809,13 @@ gnc_register_date_window(RegWindow *regData)
     gtk_signal_connect(GTK_OBJECT(entry), "changed",
 		       GTK_SIGNAL_FUNC(gnc_register_date_changed_cb), regData);
 
-    button = gtk_button_new_with_label(TODAY_STR);
+    button = gtk_button_new_with_label(_("Today"));
     gtk_box_pack_start(GTK_BOX(hbox), button, FALSE, FALSE, 0);
     gtk_signal_connect(GTK_OBJECT(button), "clicked",
 		       GTK_SIGNAL_FUNC(gnc_register_today_cb), regData);
     regDateData->today_button = button;
 
-    button = gtk_button_new_with_label(SET_DATE_RANGE_STR);
+    button = gtk_button_new_with_label(_("Set Date Range"));
     gtk_box_pack_start(GTK_BOX(dvbox), button, FALSE, FALSE, 5);
     gtk_widget_set_sensitive(button, FALSE);
     regDateData->set_button = button;
@@ -811,29 +828,41 @@ gnc_register_date_window(RegWindow *regData)
 }
 
 static GtkWidget *
-gnc_register_create_tool_bar(RegWindow *regData)
+gnc_register_create_tool_bar (RegWindow *regData)
 {
   GtkWidget *toolbar;
 
-  static GnomeUIInfo toolbar_info[] =
+  GnomeUIInfo toolbar_info[] =
   {
     {
       GNOME_APP_UI_ITEM,
-      RECORD_STR_N, TOOLTIP_RECORD_N,
+      N_("Close"),
+      N_("Close this register window"),
+      closeCB, NULL, NULL,
+      GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_CLOSE,
+      0, 0, NULL
+    },
+    GNOMEUIINFO_SEPARATOR,
+    {
+      GNOME_APP_UI_ITEM,
+      N_("Enter"),
+      N_("Record the current transaction"),
       recordCB, NULL, NULL,
       GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_ADD,
       0, 0, NULL
     },
     {
       GNOME_APP_UI_ITEM,
-      CANCEL_STR_N, TOOLTIP_CANCEL_TRANS_N,
+      N_("Cancel"),
+      N_("Cancel the current transaction"),
       cancelCB, NULL, NULL,
       GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_UNDELETE,
       0, 0, NULL
     },
     {
       GNOME_APP_UI_ITEM,
-      DELETE_STR_N, TOOLTIP_DEL_TRANS_N,
+      N_("Delete"),
+      N_("Delete the current transaction"),
       deleteCB, NULL, NULL,
       GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_TRASH,
       0, 0, NULL
@@ -841,22 +870,43 @@ gnc_register_create_tool_bar(RegWindow *regData)
     GNOMEUIINFO_SEPARATOR,
     {
       GNOME_APP_UI_ITEM,
-      DUPLICATE_STR_N, TOOLTIP_DUP_TRANS_N,
+      N_("Duplicate"),
+      N_("Make a copy of the current transaction"),
       duplicateCB, NULL, NULL,
       GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_COPY,
       0, 0, NULL
     },
-    GNOMEUIINFO_SEPARATOR,
     {
       GNOME_APP_UI_ITEM,
-      BLANK_STR_N, TOOLTIP_BLANK_TRANS_N,
+      N_("Schedule"),
+      N_("Create a scheduled transaction using the current one as a template"),
+      recurCB, NULL, NULL,
+      GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_LINE_IN,
+      0, 0, NULL
+    },
+    GNOMEUIINFO_SEPARATOR,
+    {
+      GNOME_APP_UI_TOGGLEITEM,
+      N_("Split"),
+      N_("Show all splits in the current transaction"),
+      expand_trans_cb, NULL, NULL,
+      GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_BOOK_OPEN,
+      0, 0, NULL
+    },
+    {
+      GNOME_APP_UI_ITEM,
+      N_("Blank"),
+      N_("Move to the blank transaction at the "
+         "bottom of the register"),
       new_trans_cb, NULL, NULL,
       GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_NEW,
       0, 0, NULL
     },
     {
       GNOME_APP_UI_ITEM,
-      JUMP_STR_N, TOOLTIP_JUMP_TRANS_N,
+      N_("Jump"),
+      N_("Jump to the corresponding transaction in "
+         "the other account"),
       jump_cb, NULL, NULL,
       GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_JUMP_TO,
       0, 0, NULL
@@ -864,7 +914,8 @@ gnc_register_create_tool_bar(RegWindow *regData)
     GNOMEUIINFO_SEPARATOR,
     {
       GNOME_APP_UI_ITEM,
-      TRANSFER_STR_N, TOOLTIP_TRANSFER_N,
+      N_("Transfer"),
+      N_("Transfer funds from one account to another"),
       xferCB, NULL, NULL,
       GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_CONVERT,
       0, 0, NULL
@@ -872,140 +923,226 @@ gnc_register_create_tool_bar(RegWindow *regData)
     GNOMEUIINFO_SEPARATOR,
     {
       GNOME_APP_UI_ITEM,
-      FIND_STR_N, TOOLTIP_FIND_N,
+      N_("Find"),
+      N_("Find transactions with a search"),
       gnc_ui_find_transactions_cb, 
       NULL, NULL,
       GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_SEARCH,
       0, 0, NULL
     },
-    GNOMEUIINFO_SEPARATOR,
     {
       GNOME_APP_UI_ITEM,
-      CLOSE_STR_N, TOOLTIP_CLOSE_REG_N,
-      closeCB, NULL, NULL,
-      GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_CLOSE,
+      N_("Report"),
+      N_("Open a report window for this register"),
+      reportCB, 
+      NULL, NULL,
+      GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_BOOK_GREEN,
+      0, 0, NULL
+    },
+    {
+      GNOME_APP_UI_ITEM,
+      N_("Print"),
+      N_("Print a report for this register"),
+      printReportCB,
+      NULL, NULL,
+      GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_PRINT,
       0, 0, NULL
     },
     GNOMEUIINFO_END
   };
 
-  toolbar = gtk_toolbar_new(GTK_ORIENTATION_HORIZONTAL, GTK_TOOLBAR_BOTH);
+  toolbar = gtk_toolbar_new (GTK_ORIENTATION_HORIZONTAL, GTK_TOOLBAR_BOTH);
 
-  gnome_app_fill_toolbar_with_data(GTK_TOOLBAR(toolbar), toolbar_info,
-                                   NULL, regData);
+  gnome_app_fill_toolbar_with_data (GTK_TOOLBAR(toolbar), toolbar_info,
+                                    NULL, regData);
 
   regData->toolbar = toolbar;
+
+  regData->split_button = toolbar_info[9].widget;
 
   return toolbar;
 }
 
 static void
-gnc_ui_find_transactions_cb ( GtkWidget *widget, gpointer data )
+gnc_ui_find_transactions_cb (GtkWidget *widget, gpointer data)
 {
-  RegWindow * regdata = data;
-  if(regdata->ledger->type == SEARCH_LEDGER) {
-    gnc_ui_find_transactions_dialog_create(regdata->ledger);
-  }
-  else {
-    gnc_ui_find_transactions_dialog_create(NULL);
-  }    
+  RegWindow * regData = data;
+  SplitRegister *reg;
+
+  reg = gnc_ledger_display_get_split_register (regData->ledger);
+
+  if (reg->type == SEARCH_LEDGER)
+    gnc_ui_find_transactions_dialog_create (regData->ledger);
+  else
+    gnc_ui_find_transactions_dialog_create (NULL);
 }
 
-
 static GtkWidget *
-gnc_register_create_status_bar(RegWindow *regData)
+add_summary_label (GtkWidget *summarybar, const char *label_str)
 {
-  GtkWidget *statusbar;
   GtkWidget *hbox;
   GtkWidget *label;
 
-  statusbar = gnome_appbar_new(FALSE, /* no progress bar */
-			       TRUE,  /* has status area */
-			       GNOME_PREFERENCES_USER);
+  hbox = gtk_hbox_new(FALSE, 2);
+  gtk_box_pack_start (GTK_BOX(summarybar), hbox, FALSE, FALSE, 5);
 
-  regData->statusbar = statusbar;
+  label = gtk_label_new (label_str);
+  gtk_misc_set_alignment (GTK_MISC(label), 1.0, 0.5);
+  gtk_box_pack_start (GTK_BOX(hbox), label, FALSE, FALSE, 0);
 
-  switch (regData->ledger->type)
+  label = gtk_label_new ("");
+  gtk_misc_set_alignment (GTK_MISC(label), 1.0, 0.5);
+  gtk_box_pack_start (GTK_BOX(hbox), label, FALSE, FALSE, 0);
+
+  return label;
+}
+
+static GtkWidget *
+gnc_register_create_summary_bar (RegWindow *regData)
+{
+  gboolean has_shares;
+  GtkWidget *summarybar;
+  GtkWidget *hbox;
+  GtkWidget *label;
+
+  regData->cleared_label    = NULL;
+  regData->balance_label    = NULL;
+  regData->reconciled_label = NULL;
+  regData->future_label     = NULL;
+  regData->shares_label     = NULL;
+  regData->value_label      = NULL;
+
+  if (gnc_ledger_display_type (regData->ledger) >= LD_SUBACCOUNT)
+    return NULL;
+
   {
-    case GENERAL_LEDGER:
-    case INCOME_LEDGER:
-    case PORTFOLIO_LEDGER:
-    case SEARCH_LEDGER:
-      regData->cleared_label = NULL;
-      regData->balance_label = NULL;
-      return statusbar;
-    default:
-      break;
+    Account *account;
+    GNCAccountType atype;
+
+    account = gnc_ledger_display_leader (regData->ledger);
+    atype = xaccAccountGetType (account);
+
+    switch (atype)
+    {
+      case STOCK:
+      case MUTUAL:
+      case CURRENCY:
+        has_shares = TRUE;
+        break;
+
+      default:
+        has_shares = FALSE;
+        break;
+    }
   }
 
-  hbox = gtk_hbox_new(FALSE, 2);
-  gtk_box_pack_end(GTK_BOX(statusbar), hbox, FALSE, FALSE, 5);
+  summarybar = gtk_hbox_new (FALSE, 4);
 
-  label = gtk_label_new(CLEARED_C_STR);
-  gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
-  gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
+  if (!has_shares)
+  {
+    regData->balance_label    = add_summary_label (summarybar, _("Present:"));
+    regData->future_label     = add_summary_label (summarybar, _("Future:"));
+    regData->cleared_label    = add_summary_label (summarybar, _("Cleared:"));
+    regData->reconciled_label = add_summary_label (summarybar,
+                                                   _("Reconciled:"));
+  }
+  else
+  {
+    regData->shares_label     = add_summary_label (summarybar, _("Shares:"));
+    regData->value_label      = add_summary_label (summarybar,
+                                                   _("Current Value:"));
+  }
 
-  label = gtk_label_new("");
-  gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
-  regData->cleared_label = label;
-  gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
+  return summarybar;
+}
 
-  hbox = gtk_hbox_new(FALSE, 2);
-  gtk_box_pack_end(GTK_BOX(statusbar), hbox, FALSE, FALSE, 5);
+static GtkWidget *
+gnc_register_create_status_bar (RegWindow *regData)
+{
+  GtkWidget *statusbar;
 
-  label = gtk_label_new(BALN_C_STR);
-  gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
-  gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
+  statusbar = gnome_appbar_new (FALSE, /* no progress bar */
+                                TRUE,  /* has status area */
+                                GNOME_PREFERENCES_USER);
 
-  label = gtk_label_new("");
-  gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
-  regData->balance_label = label;
-  gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
+  regData->statusbar = statusbar;
 
   return statusbar;
 }
 
-
 void
-gnc_register_jump_to_blank(RegWindow *regData)
+gnc_register_jump_to_blank (RegWindow *regData)
 {
-  SplitRegister *sr = regData->ledger->ledger;
-  Split *blank;
+  SplitRegister *reg = gnc_ledger_display_get_split_register (regData->ledger);
   VirtualCellLocation vcell_loc;
+  Split *blank;
 
-  blank = xaccSRGetBlankSplit(sr);
+  blank = gnc_split_register_get_blank_split (reg);
   if (blank == NULL)
     return;
 
-  if (xaccSRGetSplitVirtLoc(sr, blank, &vcell_loc))
-    gnucash_register_goto_virt_cell(regData->reg, vcell_loc);
+  if (gnc_split_register_get_split_virt_loc (reg, blank, &vcell_loc))
+    gnucash_register_goto_virt_cell (regData->reg, vcell_loc);
 }
 
 
 static void
-new_trans_cb(GtkWidget *widget, gpointer data)
+expand_trans_check_cb (GtkWidget *widget, gpointer data)
 {
   RegWindow *regData = data;
+  gboolean expand;
+  SplitRegister *reg;
 
-  if (xaccSRCheckReconciled (regData->ledger->ledger))
-  {
-    if (xaccSRSaveRegEntry(regData->ledger->ledger, TRUE))
-      xaccSRRedrawRegEntry(regData->ledger->ledger);
-  }
-  else
-    xaccSRCancelCursorTransChanges (regData->ledger->ledger);
+  if (!regData)
+    return;
 
-  gnc_register_jump_to_blank(regData);
+  reg = gnc_ledger_display_get_split_register (regData->ledger);
+
+  expand = GTK_CHECK_MENU_ITEM (widget)->active;
+
+  gnc_split_register_expand_current_trans (reg, expand);
+}
+
+static void
+expand_trans_cb (GtkWidget *widget, gpointer data)
+{
+  RegWindow *regData = data;
+  gboolean expand;
+  SplitRegister *reg;
+
+  reg = gnc_ledger_display_get_split_register (regData->ledger);
+
+  expand = GTK_TOGGLE_BUTTON (widget)->active;
+
+  gnc_split_register_expand_current_trans (reg, expand);
+}
+
+static void
+new_trans_cb (GtkWidget *widget, gpointer data)
+{
+  RegWindow *regData = data;
+  SplitRegister *reg;
+
+  reg = gnc_ledger_display_get_split_register (regData->ledger);
+
+  if (gnc_split_register_save (reg, TRUE))
+    gnc_split_register_redraw (reg);
+
+  gnc_register_jump_to_blank (regData);
 }
 
 static void
 jump_cb(GtkWidget *widget, gpointer data)
 {
-  RegWindow *regData = (RegWindow *) data;
+  RegWindow *regData = data;
+  SplitRegister *reg;
   Account *account;
+  Account *leader;
   Split *split;
 
-  split = xaccSRGetCurrentSplit(regData->ledger->ledger);
+  reg = gnc_ledger_display_get_split_register (regData->ledger);
+
+  split = gnc_split_register_get_current_split (reg);
   if (split == NULL)
     return;
 
@@ -1013,16 +1150,18 @@ jump_cb(GtkWidget *widget, gpointer data)
   if (account == NULL)
     return;
 
-  if (account == regData->ledger->leader)
+  leader = gnc_ledger_display_leader (regData->ledger);
+
+  if (account == leader)
   {
-    split = xaccGetOtherSplit(split);
+    split = xaccSplitGetOtherSplit(split);
     if (split == NULL)
       return;
 
     account = xaccSplitGetAccount(split);
     if (account == NULL)
       return;
-    if (account == regData->ledger->leader)
+    if (account == leader)
       return;
   }
 
@@ -1030,21 +1169,23 @@ jump_cb(GtkWidget *widget, gpointer data)
   if (regData == NULL)
     return;
 
-  gnc_register_raise(regData);
-  gnc_register_jump_to_split(regData, split);
+  gnc_register_raise (regData);
+  gnc_register_jump_to_split (regData, split);
 }
 
 static void
 print_check_cb(GtkWidget * widget, gpointer data)
 {
-  RegWindow    * reg_data = data;
-  Split        * split    = xaccSRGetCurrentSplit(reg_data->ledger->ledger);
-  Transaction  * trans    = xaccSplitGetParent(split);
+  RegWindow     * reg_data = data;
+  SplitRegister * reg      =
+    gnc_ledger_display_get_split_register (reg_data->ledger);
+  Split         * split    = gnc_split_register_get_current_split(reg);
+  Transaction   * trans    = xaccSplitGetParent(split);
 
-  const char   * payee;
-  const char   * memo;
-  double       amount;
-  time_t       date;
+  const char    * payee;
+  const char    * memo;
+  gnc_numeric   amount;
+  time_t        date;
 
   SCM print_check = gh_eval_str("gnc:print-check");
 
@@ -1052,33 +1193,71 @@ print_check_cb(GtkWidget * widget, gpointer data)
      gh_procedure_p(print_check))
   {
     payee  = xaccTransGetDescription(trans);
-    amount = DxaccSplitGetValue(split);
+    amount = xaccSplitGetAmount(split);
+    amount = gnc_numeric_abs (amount);
     date   = xaccTransGetDate(trans);
     memo   = xaccSplitGetMemo(split);
 
     gh_apply(print_check,
-             SCM_LIST4(gh_str02scm(payee),
-                       gh_double2scm(fabs(amount)),
+             /* FIXME: when we drop support older guiles, drop the
+                (char *) coercions below. */
+             SCM_LIST4(gh_str02scm((char *) payee),
+                       gh_double2scm(gnc_numeric_to_double (amount)),
                        gh_ulong2scm(date),
-                       gh_str02scm(memo)));
+                       gh_str02scm((char *) memo)));
   }
 }
 
 
 static void
-gnc_register_scrub_cb(GtkWidget *widget, gpointer data)
+gnc_register_scrub_all_cb (GtkWidget *widget, gpointer data)
 {
-  RegWindow *regData = (RegWindow *) data;
-  Account *account = regData->ledger->leader;
+  RegWindow *regData = data;
+  Query *query = gnc_ledger_display_get_query (regData->ledger);
+  AccountGroup *root;
+  GList *node;
 
-  if (account == NULL)
+  if (query == NULL)
     return;
 
-  xaccAccountTreeScrubOrphans(account);
-  xaccAccountTreeScrubImbalance(account);
+  gnc_suspend_gui_refresh ();
 
-  gnc_account_ui_refresh(account);
-  gnc_refresh_main_window();
+  root = gnc_get_current_group ();
+
+  for (node = xaccQueryGetSplits (query); node; node = node->next)
+  {
+    Split *split = node->data;
+    Transaction *trans = xaccSplitGetParent (split);
+
+    xaccTransScrubOrphans (trans, root, gnc_get_current_book ());
+    xaccTransScrubImbalance (trans, root, NULL, gnc_get_current_book ());
+  }
+
+  gnc_resume_gui_refresh ();
+}
+
+static void
+gnc_register_scrub_current_cb (GtkWidget *widget, gpointer data)
+{
+  RegWindow *regData = data;
+  SplitRegister *reg;
+  Transaction *trans;
+  AccountGroup *root;
+
+  reg = gnc_ledger_display_get_split_register (regData->ledger);
+  trans = gnc_split_register_get_current_trans (reg);
+
+  if (!trans)
+    return;
+
+  gnc_suspend_gui_refresh ();
+
+  root = gnc_get_current_group ();
+
+  xaccTransScrubOrphans (trans, root, gnc_get_current_book ());
+  xaccTransScrubImbalance (trans, root, NULL, gnc_get_current_book ());
+
+  gnc_resume_gui_refresh ();
 }
 
 static GtkWidget *
@@ -1089,48 +1268,59 @@ gnc_register_create_menu_bar(RegWindow *regData, GtkWidget *statusbar)
 
   static GnomeUIInfo style_list[] =
   {
-    GNOMEUIINFO_RADIOITEM_DATA(SINGLE_LINE_STR_N, TOOLTIP_SINGLE_LINE_N,
-                               gnc_register_style_single_cb, NULL, NULL),
-    GNOMEUIINFO_RADIOITEM_DATA(DOUBLE_LINE_STR_N, TOOLTIP_DOUBLE_LINE_N,
-                               gnc_register_style_double_cb, NULL, NULL),
-    GNOMEUIINFO_RADIOITEM_DATA(MULTI_LINE_STR_N, TOOLTIP_MULTI_LINE_N,
-                               gnc_register_style_multi_cb, NULL, NULL),
-    GNOMEUIINFO_RADIOITEM_DATA(AUTO_SINGLE_STR_N, TOOLTIP_AUTO_SINGLE_N,
-                               gnc_register_style_auto_single_cb,
-                               NULL, NULL),
-    GNOMEUIINFO_RADIOITEM_DATA(AUTO_DOUBLE_STR_N, TOOLTIP_AUTO_DOUBLE_N,
-                               gnc_register_style_auto_double_cb,
-                               NULL, NULL),
+    GNOMEUIINFO_RADIOITEM_DATA(N_("Basic Ledger"),
+                               N_("Show transactions on one or two lines"),
+                               gnc_register_style_ledger_cb, NULL, NULL),
+    GNOMEUIINFO_RADIOITEM_DATA(N_("Auto-Split Ledger"),
+                               N_("Show transactions on one or two lines and "
+                                  "expand the current transaction"),
+                               gnc_register_style_auto_ledger_cb, NULL, NULL),
+    GNOMEUIINFO_RADIOITEM_DATA(N_("Transaction Journal"),
+                               N_("Show expanded transactions with all "
+                                  "splits"),
+                               gnc_register_style_journal_cb, NULL, NULL),
     GNOMEUIINFO_END
   };
 
   static GnomeUIInfo style_menu[] =
   {
     GNOMEUIINFO_RADIOLIST(style_list),
+    GNOMEUIINFO_SEPARATOR,
+    GNOMEUIINFO_TOGGLEITEM(N_("_Double Line"),
+                           N_("Show two lines of information for each "
+                              "transaction"),
+                           gnc_register_double_line_cb, NULL),
     GNOMEUIINFO_END
   };
 
   static GnomeUIInfo sort_list[] =
   {
-    GNOMEUIINFO_RADIOITEM_DATA(STANDARD_ORDER_STR_N, TOOLTIP_STANDARD_ORD_N,
+    GNOMEUIINFO_RADIOITEM_DATA(N_("Standard order"),
+                               N_("Keep normal account order"),
                                gnc_register_sort_standard_cb, NULL, NULL),
-    GNOMEUIINFO_RADIOITEM_DATA(SORT_BY_DATE_STR_N, TOOLTIP_SORT_BY_DATE_N,
+    GNOMEUIINFO_RADIOITEM_DATA(N_("Sort by Date"),
+                               N_("Sort by Date"),
                                gnc_register_sort_date_cb, NULL, NULL),
-    GNOMEUIINFO_RADIOITEM_DATA(SORT_BY_ENTERED_STR_N,
-                               TOOLTIP_SORT_BY_ENTERED_N,
+    GNOMEUIINFO_RADIOITEM_DATA(N_("Sort by date of entry"),
+                               N_("Sort by the date of entry"),
                                gnc_register_sort_date_entered_cb,
                                NULL, NULL),
-    GNOMEUIINFO_RADIOITEM_DATA(SORT_BY_STMT_STR_N,
-                               TOOLTIP_SORT_BY_STMT_N,
+    GNOMEUIINFO_RADIOITEM_DATA(N_("Sort by statement date"),
+                               N_("Sort by the statement date "
+                                  "(unreconciled items last)"),
                                gnc_register_sort_date_reconciled_cb,
                                NULL, NULL),
-    GNOMEUIINFO_RADIOITEM_DATA(SORT_BY_NUM_STR_N, TOOLTIP_SORT_BY_NUM_N,
+    GNOMEUIINFO_RADIOITEM_DATA(N_("Sort by Num"),
+                               N_("Sort by Num"),
                                gnc_register_sort_num_cb, NULL, NULL),
-    GNOMEUIINFO_RADIOITEM_DATA(SORT_BY_AMNT_STR_N, TOOLTIP_SORT_BY_AMNT_N,
+    GNOMEUIINFO_RADIOITEM_DATA(N_("Sort by Amount"),
+                               N_("Sort by Amount"),
                                gnc_register_sort_amount_cb, NULL, NULL),
-    GNOMEUIINFO_RADIOITEM_DATA(SORT_BY_MEMO_STR_N, TOOLTIP_SORT_BY_MEMO_N,
+    GNOMEUIINFO_RADIOITEM_DATA(N_("Sort by Memo"),
+                               N_("Sort by Memo"),
                                gnc_register_sort_memo_cb, NULL, NULL),
-    GNOMEUIINFO_RADIOITEM_DATA(SORT_BY_DESC_STR_N, TOOLTIP_SORT_BY_DESC_N,
+    GNOMEUIINFO_RADIOITEM_DATA(N_("Sort by Description"),
+                               N_("Sort by Description"),
                                gnc_register_sort_desc_cb, NULL, NULL),
     GNOMEUIINFO_END
   };
@@ -1145,14 +1335,16 @@ gnc_register_create_menu_bar(RegWindow *regData, GtkWidget *statusbar)
   {
     {
       GNOME_APP_UI_ITEM,
-      SHOW_ALL_MENU_STR_N, TOOLTIP_SHOW_ALL_N,
+      N_("Show _All"),
+      N_("Show all of the transactions in the account"),
       show_all_cb, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },
     {
       GNOME_APP_UI_ITEM,
-      SET_RANGE_MENU_E_STR_N, TOOLTIP_DATE_RANGE_N,
+      N_("Set _Range..."),
+      N_("Set the date range of this register"),
       dateCB, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
@@ -1162,13 +1354,39 @@ gnc_register_create_menu_bar(RegWindow *regData, GtkWidget *statusbar)
 
   static GnomeUIInfo register_menu[] =
   {
-    GNOMEUIINFO_SUBTREE(STYLE_MENU_STR_N, style_menu),
-    GNOMEUIINFO_SUBTREE(SORT_ORDER_MENU_STR_N, sort_menu),
-    GNOMEUIINFO_SUBTREE(DATE_RANGE_MENU_STR_N, date_menu),
+    GNOMEUIINFO_SUBTREE(N_("_Style"), style_menu),
+    GNOMEUIINFO_SUBTREE(N_("Sort _Order"), sort_menu),
+    GNOMEUIINFO_SUBTREE(N_("_Date Range"), date_menu),
     GNOMEUIINFO_SEPARATOR,
     {
       GNOME_APP_UI_ITEM,
-      CLOSE_STR_N, TOOLTIP_CLOSE_REG_N,
+      N_("Report"),
+      N_("Open a report window for this register"),
+      reportCB, NULL, NULL,
+      GNOME_APP_PIXMAP_NONE, NULL,
+      0, 0, NULL
+    },
+    {
+      GNOME_APP_UI_ITEM,
+      N_("Invoice"),
+      N_("Open an invoice report window for this register"),
+      invoiceCB, NULL, NULL,
+      GNOME_APP_PIXMAP_NONE, NULL,
+      0, 0, NULL
+    },
+    {
+      GNOME_APP_UI_ITEM,
+      N_("Print"),
+      N_("Print a report for this register"),
+      printReportCB, NULL, NULL,
+      GNOME_APP_PIXMAP_NONE, NULL,
+      0, 0, NULL
+    },
+    GNOMEUIINFO_SEPARATOR,
+    {
+      GNOME_APP_UI_ITEM,
+      N_("Close"),
+      N_("Close this register window"),
       closeCB, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
@@ -1184,21 +1402,24 @@ gnc_register_create_menu_bar(RegWindow *regData, GtkWidget *statusbar)
     GNOMEUIINFO_SEPARATOR,
     {
       GNOME_APP_UI_ITEM,
-      CUT_TRANS_STR_N, TOOLTIP_CUT_TRANS_N,
+      N_("Cut Transaction"),
+      N_("Cut the selected transaction"),
       cutTransCB, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },
     {
       GNOME_APP_UI_ITEM,
-      COPY_TRANS_STR_N, TOOLTIP_COPY_TRANS_N,
+      N_("Copy Transaction"),
+      N_("Copy the selected transaction"),
       copyTransCB, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },
     {
       GNOME_APP_UI_ITEM,
-      PASTE_TRANS_STR_N, TOOLTIP_PASTE_TRANS_N,
+      N_("Paste Transaction"),
+      N_("Paste the transaction clipboard"),
       pasteTransCB, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
@@ -1210,7 +1431,8 @@ gnc_register_create_menu_bar(RegWindow *regData, GtkWidget *statusbar)
   {
     {
       GNOME_APP_UI_ITEM,
-      EDIT_ACC_MENU_STR_N, TOOLTIP_EDIT_REG_N,
+      N_("_Edit Account"),
+      N_("Edit the main account for this register"),
       editCB, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
@@ -1218,31 +1440,34 @@ gnc_register_create_menu_bar(RegWindow *regData, GtkWidget *statusbar)
     GNOMEUIINFO_SEPARATOR,
     {
       GNOME_APP_UI_ITEM,
-      RECONCILE_MENU_E_STR_N, TOOLTIP_RECN_REG_N,
+      N_("_Reconcile..."),
+      N_("Reconcile the main account for this register"),
       startRecnCB, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },
     {
       GNOME_APP_UI_ITEM,
-      TRANSFER_MENU_E_STR_N, TOOLTIP_TRANSFER_N,
+      N_("_Transfer..."),
+      N_("Transfer funds from one account to another"),
       xferCB, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },
-    GNOMEUIINFO_SEPARATOR,
     {
       GNOME_APP_UI_ITEM,
-      NEW_ACC_MENU_E_STR_N, TOOLTIP_NEW_N,
-      newAccountCB, NULL, NULL,
+      N_("Stock S_plit..."),
+      N_("Record a stock split or a stock merger"),
+      stockSplitCB, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },
     GNOMEUIINFO_SEPARATOR,
     {
       GNOME_APP_UI_ITEM,
-      SCRUB_MENU_STR_N, TOOLTIP_SCRUB_REG_N,
-      gnc_register_scrub_cb, NULL, NULL,
+      N_("_New Account..."),
+      N_("Create a new account"),
+      newAccountCB, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },
@@ -1253,21 +1478,24 @@ gnc_register_create_menu_bar(RegWindow *regData, GtkWidget *statusbar)
   {
     {
       GNOME_APP_UI_ITEM,
-      RECORD_MENU_STR_N, TOOLTIP_RECORD_N,
+      N_("_Enter"),
+      N_("Record the current transaction"),
       recordCB, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },
     {
       GNOME_APP_UI_ITEM,
-      CANCEL_MENU_STR_N, TOOLTIP_CANCEL_TRANS_N,
+      N_("_Cancel"),
+      N_("Cancel the current transaction"),
       cancelCB, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },
     {
       GNOME_APP_UI_ITEM,
-      DELETE_MENU_STR_N, TOOLTIP_DEL_TRANS_N,
+      N_("_Delete"),
+      N_("Delete the current transaction"),
       deleteCB, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
@@ -1275,22 +1503,43 @@ gnc_register_create_menu_bar(RegWindow *regData, GtkWidget *statusbar)
     GNOMEUIINFO_SEPARATOR,
     {
       GNOME_APP_UI_ITEM,
-      DUPLICATE_MENU_STR_N, TOOLTIP_DUP_TRANS_N,
+      N_("D_uplicate"),
+      N_("Make a copy of the current transaction"),
       duplicateCB, NULL, NULL,
+      GNOME_APP_PIXMAP_NONE, NULL,
+      0, 0, NULL
+    },
+    {
+      GNOME_APP_UI_ITEM,
+      N_("_Schedule..."),
+      N_("Create a scheduled transaction using the current one as a template"),
+      recurCB, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },
     GNOMEUIINFO_SEPARATOR,
     {
+      GNOME_APP_UI_TOGGLEITEM,
+      N_("_Split"),
+      N_("Show all splits in the current transaction"),
+      expand_trans_check_cb, NULL, NULL,
+      GNOME_APP_PIXMAP_NONE, NULL,
+      0, 0, NULL
+    },
+    {
       GNOME_APP_UI_ITEM,
-      BLANK_MENU_STR_N, TOOLTIP_BLANK_TRANS_N,
+      N_("_Blank"),
+      N_("Move to the blank transaction at the "
+         "bottom of the register"),
       new_trans_cb, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },
     {
       GNOME_APP_UI_ITEM,
-      JUMP_MENU_STR_N, TOOLTIP_JUMP_TRANS_N,
+      N_("_Jump"),
+      N_("Jump to the corresponding transaction in "
+         "the other account"),
       jump_cb, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
@@ -1298,7 +1547,35 @@ gnc_register_create_menu_bar(RegWindow *regData, GtkWidget *statusbar)
     GNOMEUIINFO_SEPARATOR,
     {
       GNOME_APP_UI_ITEM,
-      PRINT_CHECK_MENU_E_STR_N, TOOLTIP_PRINT_CHECK_N,
+      N_("_Check & Repair All"),
+      N_("Check for and repair unbalanced transactions and orphan splits "
+	 "in all transactions of this account"),
+      gnc_register_scrub_all_cb, NULL, NULL,
+      GNOME_APP_PIXMAP_NONE, NULL,
+      0, 0, NULL
+    },
+    {
+      GNOME_APP_UI_ITEM,
+      N_("Check & _Repair Current"),
+      N_("Check for and repair unbalanced transactions and orphan splits "
+	 "in this transaction"),
+      gnc_register_scrub_current_cb, NULL, NULL,
+      GNOME_APP_PIXMAP_NONE, NULL,
+      0, 0, NULL
+    },
+    GNOMEUIINFO_SEPARATOR,
+    {
+      GNOME_APP_UI_ITEM,
+      N_("Invoice"),
+      N_("Open an invoice report window for this transaction"),
+      invoiceTransCB, NULL, NULL,
+      GNOME_APP_PIXMAP_NONE, NULL,
+      0, 0, NULL
+    },
+    {
+      GNOME_APP_UI_ITEM,
+      N_("_Print Check..."),
+      N_("Print a check using a standard format"),
       print_check_cb, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
@@ -1310,7 +1587,8 @@ gnc_register_create_menu_bar(RegWindow *regData, GtkWidget *statusbar)
   {
     {
       GNOME_APP_UI_ITEM,
-      HELP_MENU_STR_N, TOOLTIP_HELP_N,
+      N_("_Help"),
+      N_("Open the GnuCash help window"),
       helpCB, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
@@ -1320,10 +1598,10 @@ gnc_register_create_menu_bar(RegWindow *regData, GtkWidget *statusbar)
 
   static GnomeUIInfo register_window_menu[] =
   {
-    GNOMEUIINFO_SUBTREE(REGISTER_MENU_STR_N, register_menu),
+    GNOMEUIINFO_SUBTREE(N_("_Register"), register_menu),
     GNOMEUIINFO_MENU_EDIT_TREE(edit_menu),
-    GNOMEUIINFO_SUBTREE(ACCOUNT_MENU_STR_N, account_menu),
-    GNOMEUIINFO_SUBTREE(TRANSACTION_MENU_STR_N, transaction_menu),
+    GNOMEUIINFO_SUBTREE(N_("_Account"), account_menu),
+    GNOMEUIINFO_SUBTREE(N_("_Transaction"), transaction_menu),
     GNOMEUIINFO_MENU_HELP_TREE(help_menu),
     GNOMEUIINFO_END
   };
@@ -1341,29 +1619,39 @@ gnc_register_create_menu_bar(RegWindow *regData, GtkWidget *statusbar)
   gnome_app_install_appbar_menu_hints(GNOME_APPBAR(statusbar),
                                       register_window_menu);
 
+  regData->double_line_check = style_menu[2].widget;
+  regData->split_menu_check = transaction_menu[7].widget;
+
   /* Make sure the right style radio item is active */
   {
+    SplitRegister *reg;
     GtkWidget *widget;
     int index;
 
-    switch (gnc_get_default_register_style())
+    reg = gnc_ledger_display_get_split_register (regData->ledger);
+
+    switch (reg->style)
     {
       default:
-      case REG_SINGLE_LINE:
+      case REG_STYLE_LEDGER:
         index = 0;
         break;
-      case REG_DOUBLE_LINE:
+      case REG_STYLE_AUTO_LEDGER:
         index = 1;
         break;
-      case REG_MULTI_LINE:
+      case REG_STYLE_JOURNAL:
         index = 2;
         break;
-      case REG_SINGLE_DYNAMIC:
-        index = 3;
-        break;
-      case REG_DOUBLE_DYNAMIC:
-        index = 4;
-        break;
+    }
+
+    /* registers with more than one account can only use journal mode */
+    if (reg->type >= NUM_SINGLE_REGISTER_TYPES)
+    {
+      widget = style_list[0].widget;
+      gtk_widget_set_sensitive (widget, FALSE);
+
+      widget = style_list[1].widget;
+      gtk_widget_set_sensitive (widget, FALSE);
     }
 
     widget = style_list[index].widget;
@@ -1380,29 +1668,32 @@ gnc_register_create_menu_bar(RegWindow *regData, GtkWidget *statusbar)
 
 
 static GtkWidget *
-gnc_register_create_popup_menu(RegWindow *regData)
+gnc_register_create_popup_menu (RegWindow *regData)
 {
   GtkWidget *popup;
 
-  static GnomeUIInfo transaction_menu[] =
+  GnomeUIInfo transaction_menu[] =
   {
     {
       GNOME_APP_UI_ITEM,
-      RECORD_MENU_STR_N, TOOLTIP_RECORD_N,
+      N_("_Enter"),
+      N_("Record the current transaction"),
       recordCB, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },
     {
       GNOME_APP_UI_ITEM,
-      CANCEL_MENU_STR_N, TOOLTIP_CANCEL_TRANS_N,
+      N_("_Cancel"),
+      N_("Cancel the current transaction"),
       cancelCB, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },
     {
       GNOME_APP_UI_ITEM,
-      DELETE_MENU_STR_N, TOOLTIP_DEL_TRANS_N,
+      N_("_Delete"),
+      N_("Delete the current transaction"),
       deleteCB, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
@@ -1410,22 +1701,43 @@ gnc_register_create_popup_menu(RegWindow *regData)
     GNOMEUIINFO_SEPARATOR,
     {
       GNOME_APP_UI_ITEM,
-      DUPLICATE_MENU_STR_N, TOOLTIP_DUP_TRANS_N,
+      N_("D_uplicate"),
+      N_("Make a copy of the current transaction"),
       duplicateCB, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },
-    GNOMEUIINFO_SEPARATOR,
     {
       GNOME_APP_UI_ITEM,
-      BLANK_MENU_STR_N, TOOLTIP_BLANK_TRANS_N,
+      N_("_Schedule..."), 
+      N_("Create a scheduled transaction using the current one as a template"),
+      recurCB, NULL, NULL,
+      GNOME_APP_PIXMAP_NONE, NULL, 
+      0, 0, NULL
+    },
+    GNOMEUIINFO_SEPARATOR,
+    {
+      GNOME_APP_UI_TOGGLEITEM,
+      N_("_Split"),
+      N_("Show all splits in the current transaction"),
+      expand_trans_check_cb, NULL, NULL,
+      GNOME_APP_PIXMAP_NONE, NULL,
+      0, 0, NULL
+    },
+    {
+      GNOME_APP_UI_ITEM,
+      N_("_Blank"),
+      N_("Move to the blank transaction at the "
+         "bottom of the register"),
       new_trans_cb, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },
     {
       GNOME_APP_UI_ITEM,
-      JUMP_MENU_STR_N, TOOLTIP_JUMP_TRANS_N,
+      N_("_Jump"),
+      N_("Jump to the corresponding transaction in "
+         "the other account"),
       jump_cb, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
@@ -1433,18 +1745,60 @@ gnc_register_create_popup_menu(RegWindow *regData)
     GNOMEUIINFO_END
   };
 
-  gnc_fill_menu_with_data(transaction_menu, regData);
+  gnc_fill_menu_with_data (transaction_menu, regData);
 
-  popup = gnome_popup_menu_new(transaction_menu);
+  popup = gnome_popup_menu_new (transaction_menu);
+
+  regData->split_popup_check = transaction_menu[7].widget;
 
   return popup;
 }
 
+static void
+gnc_register_record (RegWindow *regData)
+{
+  SplitRegister *reg;
+  Transaction *trans;
+
+  reg = gnc_ledger_display_get_split_register (regData->ledger);
+
+  trans = gnc_split_register_get_current_trans (reg);
+
+  if (!gnc_split_register_save (reg, TRUE))
+    return;
+
+  if (trans != NULL)
+    gnc_register_include_date (regData, xaccTransGetDate(trans));
+
+  gnc_split_register_redraw (reg);
+}
+
+static gboolean
+gnc_register_match_trans_row (VirtualLocation virt_loc,
+                              gpointer user_data)
+{
+  RegWindow *regData = user_data;
+  CursorClass cursor_class;
+  SplitRegister *sr;
+
+  sr = gnc_ledger_display_get_split_register (regData->ledger);
+  cursor_class = gnc_split_register_get_cursor_class (sr, virt_loc.vcell_loc);
+
+  return (cursor_class == CURSOR_CLASS_TRANS);
+}
 
 static void
-gnc_register_record_cb(GnucashRegister *reg, gpointer data)
+gnc_register_goto_next_trans_row (RegWindow *regData)
 {
-  RegWindow *regData = data;
+  gnucash_register_goto_next_matching_row (regData->reg,
+                                           gnc_register_match_trans_row,
+                                           regData);
+}
+
+static void
+gnc_register_enter (RegWindow *regData, gboolean next_transaction)
+{
+  SplitRegister *sr = gnc_ledger_display_get_split_register (regData->ledger);
   gboolean goto_blank;
 
   goto_blank = gnc_lookup_boolean_option("Register",
@@ -1455,21 +1809,20 @@ gnc_register_record_cb(GnucashRegister *reg, gpointer data)
    * on the blank split, go to the blank split instead of the
    * next row. This prevents the cursor from jumping around
    * when you are entering transactions. */
-  if (!goto_blank)
+  if (!goto_blank && !next_transaction)
   {
-    SplitRegister *sr = regData->ledger->ledger;
     SplitRegisterStyle style = sr->style;
 
-    if ((style == REG_SINGLE_LINE) || (style == REG_DOUBLE_LINE))
+    if (style == REG_STYLE_LEDGER)
     {
       Split *blank_split;
 
-      blank_split = xaccSRGetBlankSplit(sr);
+      blank_split = gnc_split_register_get_blank_split(sr);
       if (blank_split != NULL)
       {
         Split *current_split;
 
-        current_split = xaccSRGetCurrentSplit(sr);
+        current_split = gnc_split_register_get_current_split(sr);
 
         if (blank_split == current_split)
           goto_blank = TRUE;
@@ -1478,437 +1831,45 @@ gnc_register_record_cb(GnucashRegister *reg, gpointer data)
   }
 
   /* First record the transaction. This will perform a refresh. */
-  recordCB(GTK_WIDGET(reg), data);
+  gnc_register_record (regData);
+
+  if (!goto_blank && next_transaction)
+    gnc_split_register_expand_current_trans (sr, FALSE);
 
   /* Now move. */
   if (goto_blank)
-    gnc_register_jump_to_blank(regData);
+    gnc_register_jump_to_blank (regData);
+  else if (next_transaction)
+    gnc_register_goto_next_trans_row (regData);
   else
-    gnucash_register_goto_next_virt_row(reg);
+    gnucash_register_goto_next_virt_row (regData->reg);
+}
+
+static void
+gnc_register_record_cb (GnucashRegister *reg, gpointer data)
+{
+  RegWindow *regData = data;
+
+  gnc_register_enter (regData, FALSE);
+}
+
+static gboolean
+gnc_register_delete_cb(GtkWidget *widget, GdkEvent *event, gpointer data)
+{
+  RegWindow *regData = data;
+
+  gnc_register_check_close (regData);
+
+  gnc_ledger_display_close (regData->ledger);
+
+  return TRUE; /* don't close */
 }
 
 static void
 gnc_register_destroy_cb(GtkWidget *widget, gpointer data)
 {
   RegWindow *regData = data;
-
-  closeRegWindow(widget, regData);
-}
-
-static gncUIWidget
-gnc_register_get_parent(xaccLedgerDisplay *ledger)
-{
-  RegWindow *regData;
-
-  if (ledger == NULL)
-    return NULL;
-
-  regData = ledger->gui_hook;
-  if (regData == NULL)
-    return NULL;
-
-  return regData->window;
-}
-
-static void
-gnc_reg_set_window_name(RegWindow *regData)
-{
-  Account *leader;
-  gchar *windowname;
-  gchar *account_name;
-  gchar *reg_name;
-  gboolean single_account;
-
-  if (regData == NULL)
-    return;
-
-  switch (regData->ledger->type)
-  {
-    case GENERAL_LEDGER:
-    case INCOME_LEDGER:
-      reg_name = GENERAL_LEDGER_STR;
-      single_account = FALSE;
-      break;
-    case PORTFOLIO_LEDGER:
-      reg_name = PORTFOLIO_STR;
-      single_account = FALSE;
-      break;
-    case SEARCH_LEDGER:
-      reg_name = SEARCH_RESULTS_STR;
-      single_account = FALSE;
-      break;
-    default:
-      reg_name = REGISTER_STR;
-      single_account = TRUE;
-      break;
-  }
-
-  leader = regData->ledger->leader;
-
-  if ((leader != NULL) && single_account)
-  {
-    account_name = xaccAccountGetFullName(leader, gnc_get_account_separator());
-
-    windowname = g_strconcat(account_name, " - ", reg_name, NULL);
-
-    free(account_name);
-  }
-  else
-    windowname = g_strdup(reg_name);
-
-  gtk_window_set_title(GTK_WINDOW(regData->window), windowname);
-
-  g_free(windowname);
-}
-
-static void
-gnc_toolbar_change_cb(void *data)
-{
-  RegWindow *regData = data;
-
-  gnc_reg_refresh_toolbar(regData);
-}
-
-/********************************************************************\
- * regWindowLedger                                                  *
- *   opens up a ledger window for the account list                  *
- *                                                                  *
- * Args:   ledger - ledger data structure                           *
- * Return: regData - the register window instance                   *
-\********************************************************************/
-RegWindow *
-regWindowLedger(xaccLedgerDisplay *ledger)
-{
-  RegWindow *regData;
-  GtkWidget *vbox;
-  GtkWidget *register_window;
-  GtkWidget *register_dock;
-  GtkWidget *table_frame;
-  GtkWidget *statusbar;
-
-  regData = ledger->gui_hook;
-  if (regData != NULL)
-    return regData;
-
-  regData = g_new(RegWindow, 1);
-
-  ledger->gui_hook = regData;
-  ledger->redraw = regRefresh;
-  ledger->destroy = regDestroy;
-  ledger->set_help = regSetHelp;
-  ledger->get_parent = gnc_register_get_parent;
-
-  register_window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-
-  vbox = gtk_vbox_new(FALSE, 0);
-  gtk_container_add(GTK_CONTAINER(register_window), vbox);
-
-  register_dock = gnome_dock_new();
-  gtk_box_pack_start(GTK_BOX(vbox), register_dock, TRUE, TRUE, 0);
-
-  regData->ledger = ledger;
-  regData->close_ledger = TRUE;
-  regData->window = register_window;
-  regData->sort_type = BY_STANDARD;
-
-  gnc_reg_set_window_name(regData);
-
-  /* Invoked when window is being destroyed. */
-  gtk_signal_connect(GTK_OBJECT(regData->window), "destroy",
-		     GTK_SIGNAL_FUNC (gnc_register_destroy_cb), regData);
-
-  regData->date_window = gnc_register_date_window(regData);
-
-  if (ledger->type != SEARCH_LEDGER)
-    gnc_register_set_date_range(regData);
-
-  /* Now that we have a date range, remove any existing
-   * maximum on the number of splits returned. */
-  xaccQuerySetMaxSplits(regData->ledger->query, -1);
-
-  statusbar = gnc_register_create_status_bar(regData);
-  gtk_box_pack_start(GTK_BOX(vbox), statusbar, FALSE, FALSE, 0);
-
-  /* The menu bar */
-  {
-    GtkWidget *dock_item;
-    GtkWidget *menubar;
-
-    dock_item = gnome_dock_item_new("menu", GNOME_DOCK_ITEM_BEH_EXCLUSIVE);
-
-    menubar = gnc_register_create_menu_bar(regData, statusbar);
-    gtk_container_set_border_width(GTK_CONTAINER(menubar), 2);
-    gtk_container_add(GTK_CONTAINER(dock_item), menubar);
-
-    gnome_dock_add_item (GNOME_DOCK(register_dock), GNOME_DOCK_ITEM(dock_item),
-                         GNOME_DOCK_TOP, 0, 0, 0, TRUE);
-  }
-
-  /* The tool bar */
-  {
-    GtkWidget *dock_item;
-    GtkWidget *toolbar;
-    SCM id;
-
-    dock_item = gnome_dock_item_new("toolbar", GNOME_DOCK_ITEM_BEH_EXCLUSIVE);
-
-    toolbar = gnc_register_create_tool_bar(regData);
-    gtk_container_set_border_width(GTK_CONTAINER(toolbar), 2);
-    gtk_container_add(GTK_CONTAINER(dock_item), toolbar);
-
-    id = gnc_register_option_change_callback(gnc_toolbar_change_cb, regData,
-                                             "General", "Toolbar Buttons");
-    regData->toolbar_change_callback_id = id;
-
-    gnome_dock_add_item (GNOME_DOCK(register_dock), GNOME_DOCK_ITEM(dock_item),
-                         GNOME_DOCK_TOP, 1, 0, 0, TRUE);
-  }
-
-  /* The CreateTable will do the actual gui init, returning a widget */
-  {
-    GtkWidget *register_widget;
-    GtkWidget *popup;
-    guint num_rows;
-
-    table_frame = gtk_frame_new(NULL);
-    gnome_dock_set_client_area(GNOME_DOCK(register_dock), table_frame);
-
-    num_rows = (guint) gnc_lookup_number_option("Register",
-                                                "Number of Rows", 15.0);
-    gnucash_register_set_initial_rows(num_rows);
-
-    register_widget = gnucash_register_new(ledger->ledger->table);
-    gnc_table_init_gui(register_widget, ledger->ledger);
-
-    gtk_container_add(GTK_CONTAINER(table_frame), register_widget);
-
-    regData->reg = GNUCASH_REGISTER(register_widget);
-    GNUCASH_SHEET(regData->reg->sheet)->window = register_window;
-
-    gtk_signal_connect(GTK_OBJECT(register_widget), "activate_cursor",
-                       GTK_SIGNAL_FUNC(gnc_register_record_cb), regData);
-
-    popup = gnc_register_create_popup_menu(regData);
-    gnucash_register_attach_popup(GNUCASH_REGISTER(register_widget),
-                                  popup, regData);
-  }
-
-  /* be sure to initialize the gui elements associated with the cursor */
-  xaccConfigSplitRegister(ledger->ledger, ledger->type,
-                          gnc_get_default_register_style());
-
-  /* Allow grow, allow shrink, auto-shrink */
-  gtk_window_set_policy(GTK_WINDOW(register_window), TRUE, TRUE, TRUE);
-
-  {
-    int *width;
-    char *prefix;
-
-    switch (ledger->type)
-    {
-      case STOCK_REGISTER:
-      case PORTFOLIO_LEDGER:
-      case CURRENCY_REGISTER:
-        prefix = "reg_stock_win";
-        width = &last_stock_width;
-        break;
-      default:
-        prefix = "reg_win";
-        width = &last_width;
-        break;
-    }
-
-    if (*width == 0)
-      gnc_get_window_size(prefix, width, NULL);
-
-    gtk_window_set_default_size(GTK_WINDOW(register_window), *width, 0);
-  }
-
-  gtk_widget_show_all(register_window);
-
-  xaccSRShowPresentDivider (ledger->ledger, TRUE);
-
-  ledger->dirty = 1;
-  xaccLedgerDisplayRefresh(ledger);
-  gnc_reg_refresh_toolbar(regData);
-
-  gnc_register_jump_to_blank(regData);
-
-  gnc_window_adjust_for_screen(GTK_WINDOW(register_window));
-
-  return regData;
-}
-
-
-static void
-gnc_reg_refresh_toolbar(RegWindow *regData)
-{
-  GtkToolbarStyle tbstyle;
-
-  if ((regData == NULL) || (regData->toolbar == NULL))
-    return;
-
-  tbstyle = gnc_get_toolbar_style();
-
-  gtk_toolbar_set_style(GTK_TOOLBAR(regData->toolbar), tbstyle);
-}
-
-
-static void
-regRefresh(xaccLedgerDisplay *ledger)
-{
-  RegWindow *regData = (RegWindow *) (ledger->gui_hook);
-  GNCPrintAmountFlags print_flags = PRTSYM | PRTSEP;
-  gboolean euro = gnc_lookup_boolean_option("International",
-					    "Enable EURO support",
-					    FALSE);
-  const gnc_commodity * currency = xaccAccountGetCurrency(ledger->leader);
-
-  /* no EURO converson, if account is already EURO or no EURO currency */
-  if(currency != NULL)
-  {
-    euro = (euro && gnc_is_euro_currency(currency));
-  }
-  else
-  {
-    euro = FALSE;
-  }
-
-  xaccSRLoadXferCells(ledger->ledger, ledger->leader);
-
-  if (regData->window != NULL)
-  {
-    char string[256];
-    gboolean reverse = gnc_reverse_balance(ledger->leader);
-    double amount;
-
-    if (regData->balance_label != NULL)
-    {
-      amount = ledger->balance;
-      if (reverse)
-        amount = -amount;
-
-      DxaccSPrintAmount(string, amount, print_flags,
-                       gnc_commodity_get_mnemonic(currency));
-      if(euro)
-      {
-	strcat(string, " / ");
-	DxaccSPrintAmount(string + strlen(string),
-			 gnc_convert_to_euro(currency, amount),
-			 print_flags | PRTEUR, NULL);
-      }
-
-      gnc_set_label_color(regData->balance_label, amount);
-      gtk_label_set_text(GTK_LABEL(regData->balance_label),
-                         string);
-    }
-
-    if (regData->cleared_label != NULL)
-    {
-      amount = ledger->clearedBalance;
-      if (reverse)
-        amount = -amount;
-
-      DxaccSPrintAmount(string, amount, print_flags,
-                       gnc_commodity_get_mnemonic(currency));
-      if(euro)
-      {
-	strcat(string, " / ");
-	DxaccSPrintAmount(string + strlen(string),
-			 gnc_convert_to_euro(currency, amount),
-			 print_flags | PRTEUR, NULL);
-      }
-
-      gnc_set_label_color(regData->cleared_label, amount);
-      gtk_label_set_text(GTK_LABEL(regData->cleared_label),
-                         string);
-    }
-
-    gnc_reg_set_window_name(regData);
-  }
-}
-
-
-static void
-gnc_reg_save_size(RegWindow *regData)
-{
-  int *width;
-  char *prefix;
-
-  switch (regData->ledger->type)
-  {
-    case STOCK_REGISTER:
-    case PORTFOLIO_LEDGER:
-    case CURRENCY_REGISTER:
-      prefix = "reg_stock_win";
-      width = &last_stock_width;
-      break;
-    default:
-      prefix = "reg_win";
-      width = &last_width;
-      break;
-  }
-
-  gdk_window_get_geometry(regData->window->window, NULL, NULL,
-                          width, NULL, NULL);
-
-  gnc_save_window_size(prefix, *width, 0);
-}
-
-
-/********************************************************************\
- * regDestroy()
-\********************************************************************/
-
-static void
-regDestroy(xaccLedgerDisplay *ledger)
-{
-  RegWindow *regData = (RegWindow *) (ledger->gui_hook);
-
-  if (regData)
-  {
-    gnc_register_check_close(regData);
-
-    /* It will be closed elsewhere */
-    regData->close_ledger = FALSE;
-
-    gnc_reg_save_size(regData);
-
-    gtk_widget_destroy(regData->window);
-  }
-}
-
-
-static void
-regSetHelp(xaccLedgerDisplay *ledger, const char *help_str)
-{
-  RegWindow *regData = (RegWindow *) (ledger->gui_hook);
-  const gchar *status;
-
-  if (help_str != NULL)
-    status = help_str;
-  else
-    status = "";
-
-  gnome_appbar_set_default(GNOME_APPBAR(regData->statusbar), status);
-}
-
-
-/********************************************************************\
- * closeRegWindow                                                   *
- *   frees memory for a regWindow, and other cleanup stuff          *
- *                                                                  *
- * Args:   widget  - the widget that called us                      *
- *         regData - the data struct for this register              *
- * Return: none                                                     *
-\********************************************************************/
-static void 
-closeRegWindow(GtkWidget * widget, RegWindow *regData)
-{
   SCM id;
-
-  if (regData->close_ledger)
-    xaccLedgerDisplayClose(regData->ledger);
 
   id = regData->toolbar_change_callback_id;
   gnc_unregister_option_change_callback_id(id);
@@ -1924,14 +1885,722 @@ closeRegWindow(GtkWidget * widget, RegWindow *regData)
 
   g_free(regData);
 
-  DEBUG("closed RegWindow\n");
+  DEBUG ("destroyed RegWindow");
+}
+
+static gncUIWidget
+gnc_register_get_parent(GNCLedgerDisplay *ledger)
+{
+  RegWindow *regData = gnc_ledger_display_get_user_data (ledger);
+
+  if (regData == NULL)
+    return NULL;
+
+  return regData->window;
+}
+
+static char *
+gnc_reg_get_name (RegWindow *regData, gboolean for_window)
+{
+  Account *leader;
+  SplitRegister *reg;
+  gboolean single_account;
+  gchar *account_name;
+  gchar *reg_name;
+  gchar *name;
+
+  if (regData == NULL)
+    return NULL;
+
+  reg = gnc_ledger_display_get_split_register (regData->ledger);
+
+  switch (reg->type)
+  {
+    case GENERAL_LEDGER:
+    case INCOME_LEDGER:
+      if (for_window)
+        reg_name = _("General Ledger");
+      else
+        reg_name = _("General Ledger Report");
+      single_account = FALSE;
+      break;
+    case PORTFOLIO_LEDGER:
+      if (for_window)
+        reg_name = _("Portfolio");
+      else
+        reg_name = _("Portfolio Report");
+      single_account = FALSE;
+      break;
+    case SEARCH_LEDGER:
+      if (for_window)
+        reg_name = _("Search Results");
+      else
+        reg_name = _("Search Results Report");
+      single_account = FALSE;
+      break;
+    default:
+      if (for_window)
+        reg_name = _("Register");
+      else
+        reg_name = _("Register Report");
+      single_account = TRUE;
+      break;
+  }
+
+  leader = gnc_ledger_display_leader (regData->ledger);
+
+  if ((leader != NULL) && single_account)
+  {
+    account_name = xaccAccountGetFullName (leader,
+                                           gnc_get_account_separator ());
+
+    name = g_strconcat (account_name, " - ", reg_name, NULL);
+
+    g_free(account_name);
+  }
+  else
+    name = g_strdup (reg_name);
+
+  return name;
+}
+
+static void
+gnc_reg_set_window_name (RegWindow *regData)
+{
+  SplitRegister *reg;
+  gchar *windowname;
+
+  if (regData == NULL)
+    return;
+
+  windowname = gnc_reg_get_name (regData, TRUE);
+
+  gtk_window_set_title (GTK_WINDOW(regData->window), windowname);
+
+  g_free (windowname);
+}
+
+static void
+gnc_toolbar_change_cb (void *data)
+{
+  RegWindow *regData = data;
+
+  gnc_reg_refresh_toolbar (regData);
+}
+
+static void
+size_allocate (GtkWidget *widget,
+               GtkAllocation *allocation,
+               gpointer user_data)
+{
+  RegWindow *regData = user_data;
+
+  /* HACK ALERT. this seems to be the only thing to get the
+   * freekin register window to stop freekin resizing itself
+   * all the freekin time. */
+
+  if (regData->width == allocation->width)
+    return;
+
+  regData->width = allocation->width;
+
+  gtk_window_set_default_size (GTK_WINDOW(regData->window), regData->width, 0);
+}
+
+/********************************************************************\
+ * regWindowLedger                                                  *
+ *   opens up a ledger window for the account list                  *
+ *                                                                  *
+ * Args:   ledger - ledger data structure                           *
+ * Return: regData - the register window instance                   *
+\********************************************************************/
+RegWindow *
+regWindowLedger (GNCLedgerDisplay *ledger)
+{
+  SplitRegister *reg;
+  RegWindow *regData;
+  GtkWidget *vbox;
+  GtkWidget *register_window;
+  GtkWidget *register_dock;
+  GtkWidget *table_frame;
+  GtkWidget *statusbar;
+  gboolean show_all;
+  gboolean has_date;
+
+  reg = gnc_ledger_display_get_split_register (ledger);
+
+  regData = gnc_ledger_display_get_user_data (ledger);
+  if (regData != NULL)
+    return regData;
+
+  regData = g_new (RegWindow, 1);
+
+  gnc_ledger_display_set_user_data (ledger, regData);
+
+  gnc_ledger_display_set_handlers (ledger,
+                                   regDestroy,
+                                   gnc_register_get_parent);
+
+  register_window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+
+  vbox = gtk_vbox_new(FALSE, 0);
+  gtk_container_add(GTK_CONTAINER(register_window), vbox);
+
+  register_dock = gnome_dock_new();
+  gtk_box_pack_start(GTK_BOX(vbox), register_dock, TRUE, TRUE, 0);
+
+  regData->ledger = ledger;
+  regData->window = register_window;
+  regData->sort_type = BY_STANDARD;
+  regData->width = -1;
+
+  gnc_reg_set_window_name(regData);
+
+  /* Invoked when window is being destroyed. */
+  gtk_signal_connect (GTK_OBJECT(regData->window), "destroy",
+                      GTK_SIGNAL_FUNC (gnc_register_destroy_cb), regData);
+
+  gtk_signal_connect (GTK_OBJECT(regData->window), "delete-event",
+                      GTK_SIGNAL_FUNC (gnc_register_delete_cb), regData);
+
+  gtk_signal_connect (GTK_OBJECT(regData->window), "size_allocate",
+                      GTK_SIGNAL_FUNC (size_allocate), regData);
+
+  show_all = gnc_lookup_boolean_option ("Register",
+                                        "Show All Transactions",
+                                        TRUE);
+
+  {
+    Query *q = gnc_ledger_display_get_query (regData->ledger);
+
+    has_date = xaccQueryHasTermType (q, PD_DATE);
+  }
+
+  if (has_date)
+    show_all = FALSE;
+
+  regData->date_window = gnc_register_date_window (regData, show_all);
+
+  if (reg->type != SEARCH_LEDGER && !has_date)
+    gnc_register_set_date_range (regData);
+
+  /* Now that we have a date range, remove any existing
+   * maximum on the number of splits returned. */
+  xaccQuerySetMaxSplits (gnc_ledger_display_get_query (regData->ledger), -1);
+
+  statusbar = gnc_register_create_status_bar(regData);
+  gtk_box_pack_start(GTK_BOX(vbox), statusbar, FALSE, FALSE, 0);
+
+  /* The menu bar */
+  {
+    GnomeDockItemBehavior behavior;
+    GtkWidget *dock_item;
+    GtkWidget *menubar;
+
+    behavior = GNOME_DOCK_ITEM_BEH_EXCLUSIVE;
+    if (!gnome_preferences_get_menubar_detachable ())
+      behavior |= GNOME_DOCK_ITEM_BEH_LOCKED;
+
+    dock_item = gnome_dock_item_new("menu", behavior);
+
+    menubar = gnc_register_create_menu_bar(regData, statusbar);
+    gtk_container_set_border_width(GTK_CONTAINER(menubar), 2);
+    gtk_container_add(GTK_CONTAINER(dock_item), menubar);
+
+    gnome_dock_add_item (GNOME_DOCK(register_dock), GNOME_DOCK_ITEM(dock_item),
+                         GNOME_DOCK_TOP, 0, 0, 0, TRUE);
+  }
+
+  /* The tool bar */
+  {
+    GnomeDockItemBehavior behavior;
+    GtkWidget *dock_item;
+    GtkWidget *toolbar;
+    SCM id;
+
+    behavior = GNOME_DOCK_ITEM_BEH_EXCLUSIVE;
+    if (!gnome_preferences_get_toolbar_detachable ())
+      behavior |= GNOME_DOCK_ITEM_BEH_LOCKED;
+
+    dock_item = gnome_dock_item_new("toolbar", behavior);
+
+    toolbar = gnc_register_create_tool_bar(regData);
+    gtk_container_set_border_width(GTK_CONTAINER(toolbar), 2);
+    gtk_container_add(GTK_CONTAINER(dock_item), toolbar);
+
+    id = gnc_register_option_change_callback(gnc_toolbar_change_cb, regData,
+                                             "General", "Toolbar Buttons");
+    regData->toolbar_change_callback_id = id;
+
+    gnome_dock_add_item (GNOME_DOCK(register_dock), GNOME_DOCK_ITEM(dock_item),
+                         GNOME_DOCK_TOP, 1, 0, 0, TRUE);
+  }
+
+  /* The summary bar */
+  {
+    GtkWidget *summarybar;
+
+    summarybar = gnc_register_create_summary_bar (regData);
+    if (summarybar)
+    {
+      GnomeDockItemBehavior behavior;
+      GtkWidget *dock_item;
+
+      behavior = GNOME_DOCK_ITEM_BEH_EXCLUSIVE | GNOME_DOCK_ITEM_BEH_NEVER_VERTICAL;
+      if (!gnome_preferences_get_toolbar_detachable ())
+        behavior |= GNOME_DOCK_ITEM_BEH_LOCKED;
+
+      dock_item = gnome_dock_item_new ("summarybar", behavior);
+
+      gtk_container_set_border_width (GTK_CONTAINER (summarybar), 2);
+      gtk_container_add (GTK_CONTAINER (dock_item), summarybar);
+
+      gnome_dock_add_item (GNOME_DOCK (register_dock),
+                           GNOME_DOCK_ITEM (dock_item),
+                           GNOME_DOCK_TOP, 2, 0, 0, TRUE);
+    }
+  }
+
+  /* The CreateTable will do the actual gui init, returning a widget */
+  {
+    GtkWidget *register_widget;
+    GtkWidget *popup;
+    guint num_rows;
+
+    table_frame = gtk_frame_new (NULL);
+    gnome_dock_set_client_area (GNOME_DOCK(register_dock), table_frame);
+
+    num_rows = (guint) gnc_lookup_number_option ("Register",
+                                                 "Number of Rows", 20.0);
+    gnucash_register_set_initial_rows (num_rows);
+
+    register_widget = gnucash_register_new (reg->table);
+    gnc_table_init_gui (register_widget, reg);
+
+    gtk_container_add (GTK_CONTAINER(table_frame), register_widget);
+
+    regData->reg = GNUCASH_REGISTER (register_widget);
+    GNUCASH_SHEET(regData->reg->sheet)->window = register_window;
+
+    gtk_signal_connect (GTK_OBJECT(register_widget), "activate_cursor",
+                        GTK_SIGNAL_FUNC(gnc_register_record_cb), regData);
+    gtk_signal_connect (GTK_OBJECT(register_widget), "redraw_all",
+                        GTK_SIGNAL_FUNC(gnc_register_redraw_all_cb), regData);
+    gtk_signal_connect (GTK_OBJECT(register_widget), "redraw_help",
+                        GTK_SIGNAL_FUNC(gnc_register_redraw_help_cb), regData);
+
+    popup = gnc_register_create_popup_menu (regData);
+    gnucash_register_attach_popup (GNUCASH_REGISTER(register_widget),
+                                   popup, regData);
+  }
+
+  {
+    gboolean use_double_line;
+    GtkCheckMenuItem *check;
+
+    use_double_line = gnc_lookup_boolean_option ("Register",
+                                                 "Double Line Mode",
+                                                 FALSE);
+
+    /* be sure to initialize the gui elements associated with the cursor */
+    gnc_split_register_config (reg, reg->type, reg->style, use_double_line);
+
+    check = GTK_CHECK_MENU_ITEM (regData->double_line_check);
+
+    gtk_signal_handler_block_by_func
+      (GTK_OBJECT (check),
+       GTK_SIGNAL_FUNC (gnc_register_double_line_cb), regData);
+
+    gtk_check_menu_item_set_active (check, use_double_line);
+
+    gtk_signal_handler_unblock_by_func
+      (GTK_OBJECT (check),
+       GTK_SIGNAL_FUNC (gnc_register_double_line_cb), regData);
+  }
+
+  /* Allow grow, allow shrink, auto-shrink */
+  gtk_window_set_policy (GTK_WINDOW(register_window), TRUE, TRUE, FALSE);
+
+  {
+    int *width;
+    char *prefix;
+
+    switch (reg->type)
+    {
+      case STOCK_REGISTER:
+      case PORTFOLIO_LEDGER:
+      case CURRENCY_REGISTER:
+        prefix = "reg_stock_win";
+        width = &last_stock_width;
+        break;
+
+      default:
+        prefix = "reg_win";
+        width = &last_width;
+        break;
+    }
+
+    if (*width == 0)
+      gnc_get_window_size (prefix, width, NULL);
+
+    gtk_window_set_default_size (GTK_WINDOW(register_window), *width, 0);
+  }
+
+  gtk_widget_show_all (register_window);
+
+  gnc_split_register_show_present_divider (reg, TRUE);
+
+  gnc_ledger_display_refresh (ledger);
+  gnc_reg_refresh_toolbar (regData);
+
+  gnc_window_adjust_for_screen (GTK_WINDOW(register_window));
+
+  return regData;
+}
+
+
+static void
+gnc_reg_refresh_toolbar (RegWindow *regData)
+{
+  GtkToolbarStyle tbstyle;
+
+  if ((regData == NULL) || (regData->toolbar == NULL))
+    return;
+
+  tbstyle = gnc_get_toolbar_style ();
+
+  gtk_toolbar_set_style (GTK_TOOLBAR (regData->toolbar), tbstyle);
+}
+
+
+static gnc_numeric
+gnc_account_present_balance (Account *account)
+{
+  GList *list;
+  GList *node;
+  time_t today;
+  struct tm *tm;
+
+  if (!account)
+    return gnc_numeric_zero ();
+
+  today = time (NULL);
+
+  tm = localtime (&today);
+
+  tm->tm_hour = 23;
+  tm->tm_min = 59;
+  tm->tm_sec = 59;
+  tm->tm_isdst = -1;
+
+  today = mktime (tm);
+
+  list = xaccAccountGetSplitList (account);
+
+  for (node = g_list_last (list); node; node = node->prev)
+  {
+    Split *split = node->data;
+
+    if (xaccTransGetDate (xaccSplitGetParent (split)) <= today)
+      return xaccSplitGetBalance (split);
+  }
+
+  return gnc_numeric_zero ();
+}
+
+static GNCPrice *
+account_latest_price (Account *account)
+{
+  GNCBook *book;
+  GNCPriceDB *pdb;
+  gnc_commodity *commodity;
+  gnc_commodity *currency;
+
+  commodity = xaccAccountGetCommodity (account);
+  currency = gnc_default_currency ();
+
+  book = gnc_get_current_book ();
+  pdb = gnc_book_get_pricedb (book);
+
+  return gnc_pricedb_lookup_latest (pdb, commodity, currency);
+}
+
+static void
+gnc_register_redraw_all_cb (GnucashRegister *g_reg, gpointer data)
+{
+  RegWindow *regData = data;
+  gnc_commodity * commodity;
+  GNCPrintAmountInfo print_info;
+  gnc_numeric amount;
+  Account *leader;
+  char string[256];
+  gboolean reverse;
+  gboolean euro;
+
+  if (regData->window == NULL)
+    return;
+
+  leader = gnc_ledger_display_leader (regData->ledger);
+
+  euro = gnc_lookup_boolean_option ("International",
+                                    "Enable EURO support",
+                                    FALSE);
+
+  commodity = xaccAccountGetCommodity (leader);
+
+  /* no EURO converson, if account is already EURO or no EURO currency */
+  if (commodity != NULL)
+    euro = (euro && gnc_is_euro_currency(commodity));
+  else
+    euro = FALSE;
+
+  print_info = gnc_account_print_info (leader, TRUE);
+
+  reverse = gnc_reverse_balance(leader);
+
+  if (regData->balance_label != NULL)
+  {
+    amount = gnc_account_present_balance (leader);
+    if (reverse)
+      amount = gnc_numeric_neg (amount);
+
+    xaccSPrintAmount (string, amount, print_info);
+    if (euro)
+    {
+      strcat (string, " / ");
+      xaccSPrintAmount (string + strlen (string),
+                        gnc_convert_to_euro (commodity, amount),
+                        gnc_commodity_print_info (gnc_get_euro (), TRUE));
+    }
+
+    gnc_set_label_color (regData->balance_label, amount);
+    gtk_label_set_text (GTK_LABEL(regData->balance_label), string);
+  }
+
+  if (regData->cleared_label != NULL)
+  {
+    amount = xaccAccountGetClearedBalance (leader);
+    if (reverse)
+      amount = gnc_numeric_neg (amount);
+
+    xaccSPrintAmount (string, amount, print_info);
+    if (euro)
+    {
+      strcat (string, " / ");
+      xaccSPrintAmount (string + strlen (string),
+                        gnc_convert_to_euro (commodity, amount),
+                        gnc_commodity_print_info (gnc_get_euro (), TRUE));
+    }
+
+    gnc_set_label_color (regData->cleared_label, amount);
+    gtk_label_set_text (GTK_LABEL (regData->cleared_label), string);
+  }
+
+  if (regData->reconciled_label != NULL)
+  {
+    amount = xaccAccountGetReconciledBalance (leader);
+    if (reverse)
+      amount = gnc_numeric_neg (amount);
+
+    xaccSPrintAmount (string, amount, print_info);
+    if (euro)
+    {
+      strcat(string, " / ");
+      xaccSPrintAmount (string + strlen(string),
+                        gnc_convert_to_euro(commodity, amount),
+                        gnc_commodity_print_info (gnc_get_euro (), TRUE));
+    }
+
+    gnc_set_label_color (regData->reconciled_label, amount);
+    gtk_label_set_text (GTK_LABEL(regData->reconciled_label), string);
+  }
+
+  if (regData->future_label != NULL)
+  {
+    amount = xaccAccountGetBalance (leader);
+    if (reverse)
+      amount = gnc_numeric_neg (amount);
+
+    xaccSPrintAmount (string, amount, print_info);
+    if (euro)
+    {
+      strcat (string, " / ");
+      xaccSPrintAmount (string + strlen(string),
+                        gnc_convert_to_euro(commodity, amount),
+                        gnc_commodity_print_info (gnc_get_euro (), TRUE));
+    }
+
+    gnc_set_label_color (regData->future_label, amount);
+    gtk_label_set_text (GTK_LABEL (regData->future_label), string);
+  }
+
+  if (regData->shares_label != NULL)
+  {
+    print_info = gnc_account_print_info (leader, TRUE);
+
+    amount = xaccAccountGetBalance (leader);
+    if (reverse)
+      amount = gnc_numeric_neg (amount);
+
+    xaccSPrintAmount (string, amount, print_info);
+
+    gnc_set_label_color (regData->shares_label, amount);
+    gtk_label_set_text (GTK_LABEL (regData->shares_label), string);
+  }
+
+  if (regData->value_label != NULL)
+  {
+    GNCPrice *price;
+
+    price = account_latest_price (leader);
+    if (!price)
+    {
+      gnc_set_label_color (regData->value_label, gnc_numeric_zero ());
+      gtk_label_set_text (GTK_LABEL (regData->value_label),
+                          _("<No information>"));
+    }
+    else
+    {
+      gnc_commodity *currency = gnc_price_get_currency (price);
+
+      print_info = gnc_commodity_print_info (currency, TRUE);
+
+      amount = xaccAccountGetBalance (leader);
+      if (reverse)
+        amount = gnc_numeric_neg (amount);
+
+      amount = gnc_numeric_mul (amount, gnc_price_get_value (price),
+                                gnc_commodity_get_fraction (currency),
+                                GNC_RND_ROUND);
+
+      xaccSPrintAmount (string, amount, print_info);
+
+      gnc_set_label_color (regData->value_label, amount);
+      gtk_label_set_text (GTK_LABEL (regData->value_label), string);
+
+      gnc_price_unref (price);
+    }
+  }
+
+  gnc_reg_set_window_name (regData);
+
+  {
+    gboolean expand;
+    gboolean sensitive;
+    SplitRegister *reg;
+
+    reg = gnc_ledger_display_get_split_register (regData->ledger);
+
+    expand = gnc_split_register_current_trans_expanded (reg);
+
+    gtk_signal_handler_block_by_data
+      (GTK_OBJECT (regData->split_button), regData);
+    gtk_toggle_button_set_active
+      (GTK_TOGGLE_BUTTON (regData->split_button), expand);
+    gtk_signal_handler_unblock_by_data
+      (GTK_OBJECT (regData->split_button), regData);
+
+    gtk_signal_handler_block_by_data
+      (GTK_OBJECT (regData->split_menu_check), regData);
+    gtk_check_menu_item_set_active
+      (GTK_CHECK_MENU_ITEM (regData->split_menu_check), expand);
+    gtk_signal_handler_unblock_by_data
+      (GTK_OBJECT (regData->split_menu_check), regData);
+
+    gtk_check_menu_item_set_active
+      (GTK_CHECK_MENU_ITEM (regData->split_popup_check), expand);
+
+    sensitive = reg->style == REG_STYLE_LEDGER;
+
+    gtk_widget_set_sensitive (regData->split_button, sensitive);
+    gtk_widget_set_sensitive (regData->split_menu_check, sensitive);
+    gtk_widget_set_sensitive (regData->split_popup_check, sensitive);
+  }
+}
+
+static void
+gnc_register_redraw_help_cb (GnucashRegister *g_reg, gpointer data)
+{
+  RegWindow *regData = data;
+  SplitRegister *reg;
+  const char *status;
+  char *help;
+
+  if (!regData)
+    return;
+
+  reg = gnc_ledger_display_get_split_register (regData->ledger);
+
+  help = gnc_table_get_help (reg->table);
+
+  status = help ? help : "";
+
+  gnome_appbar_set_default (GNOME_APPBAR(regData->statusbar), status);
+
+  g_free (help);
+}
+
+static void
+gnc_reg_save_size (RegWindow *regData)
+{
+  SplitRegister *reg;
+  int *width;
+  char *prefix;
+
+  reg = gnc_ledger_display_get_split_register (regData->ledger);
+
+  switch (reg->type)
+  {
+    case STOCK_REGISTER:
+    case PORTFOLIO_LEDGER:
+    case CURRENCY_REGISTER:
+      prefix = "reg_stock_win";
+      width = &last_stock_width;
+      break;
+    default:
+      prefix = "reg_win";
+      width = &last_width;
+      break;
+  }
+
+  gdk_window_get_geometry (regData->window->window, NULL, NULL,
+                           width, NULL, NULL);
+
+  gnc_save_window_size (prefix, *width, 0);
+}
+
+
+/********************************************************************\
+ * regDestroy()
+\********************************************************************/
+
+static void
+regDestroy (GNCLedgerDisplay *ledger)
+{
+  RegWindow *regData = gnc_ledger_display_get_user_data (ledger);
+
+  if (regData)
+  {
+    SplitRegister *reg;
+
+    gnc_reg_save_size (regData);
+
+    reg = gnc_ledger_display_get_split_register (ledger);
+
+    if (reg && reg->table)
+      gnc_table_save_state (reg->table);
+
+    gtk_widget_destroy (regData->window);
+  }
+
+  gnc_ledger_display_set_user_data (ledger, NULL);
 }
 
 
 static void 
-newAccountCB(GtkWidget * w, gpointer data)
+newAccountCB (GtkWidget * w, gpointer data)
 {
-  gnc_ui_new_account_window(NULL);
+  gnc_ui_new_account_window (NULL);
 }
 
 
@@ -1943,11 +2612,11 @@ newAccountCB(GtkWidget * w, gpointer data)
  * Return: none                                                     *
 \********************************************************************/
 static void 
-cutCB(GtkWidget *w, gpointer data)
+cutCB (GtkWidget *w, gpointer data)
 {
   RegWindow *regData = data;
 
-  gnucash_register_cut_clipboard(regData->reg);
+  gnucash_register_cut_clipboard (regData->reg);
 }
 
 
@@ -1959,11 +2628,11 @@ cutCB(GtkWidget *w, gpointer data)
  * Return: none                                                     *
 \********************************************************************/
 static void 
-copyCB(GtkWidget *w, gpointer data)
+copyCB (GtkWidget *w, gpointer data)
 {
   RegWindow *regData = data;
 
-  gnucash_register_copy_clipboard(regData->reg);
+  gnucash_register_copy_clipboard (regData->reg);
 }
 
 
@@ -1975,11 +2644,11 @@ copyCB(GtkWidget *w, gpointer data)
  * Return: none                                                     *
 \********************************************************************/
 static void 
-pasteCB(GtkWidget *w, gpointer data)
+pasteCB (GtkWidget *w, gpointer data)
 {
   RegWindow *regData = data;
 
-  gnucash_register_paste_clipboard(regData->reg);
+  gnucash_register_paste_clipboard (regData->reg);
 }
 
 
@@ -1991,11 +2660,12 @@ pasteCB(GtkWidget *w, gpointer data)
  * Return: none                                                     *
 \********************************************************************/
 static void
-cutTransCB(GtkWidget *w, gpointer data)
+cutTransCB (GtkWidget *w, gpointer data)
 {
   RegWindow *regData = data;
 
-  xaccSRCutCurrent(regData->ledger->ledger);
+  gnc_split_register_cut_current
+    (gnc_ledger_display_get_split_register (regData->ledger));
 }
 
 
@@ -2011,7 +2681,8 @@ copyTransCB(GtkWidget *w, gpointer data)
 {
   RegWindow *regData = data;
 
-  xaccSRCopyCurrent(regData->ledger->ledger);
+  gnc_split_register_copy_current
+    (gnc_ledger_display_get_split_register (regData->ledger));
 }
 
 
@@ -2023,11 +2694,12 @@ copyTransCB(GtkWidget *w, gpointer data)
  * Return: none                                                     *
 \********************************************************************/
 static void
-pasteTransCB(GtkWidget *w, gpointer data)
+pasteTransCB (GtkWidget *w, gpointer data)
 {
   RegWindow *regData = data;
 
-  xaccSRPasteCurrent(regData->ledger->ledger);
+  gnc_split_register_paste_current
+    (gnc_ledger_display_get_split_register (regData->ledger));
 }
 
 
@@ -2039,19 +2711,28 @@ pasteTransCB(GtkWidget *w, gpointer data)
  * Return: none                                                     *
 \********************************************************************/
 static void 
-xferCB(GtkWidget * w, gpointer data)
+xferCB (GtkWidget * w, gpointer data)
 {
   RegWindow *regData = data;
-  xaccLedgerDisplay *ledger = regData->ledger;
-  Account *account = ledger->leader;
 
-  if (account == NULL)
-    account = g_list_nth_data(ledger->displayed_accounts, 0);
+  gnc_xfer_dialog (regData->window,
+                   gnc_ledger_display_leader (regData->ledger));
+}
 
-  if (account == NULL)
-    return;
 
-  gnc_xfer_dialog(regData->window, account);
+/********************************************************************\
+ * stockSplitCB -- open up the stock split druid                    *
+ *                                                                  *
+ * Args:   w    - the widget that called us                         *
+ *         data - the data struct for this register                 *
+ * Return: none                                                     *
+\********************************************************************/
+static void
+stockSplitCB (GtkWidget * w, gpointer data)
+{
+  RegWindow *regData = data;
+
+  gnc_stock_split_dialog (gnc_ledger_display_leader (regData->ledger));
 }
 
 
@@ -2065,9 +2746,8 @@ xferCB(GtkWidget * w, gpointer data)
 static void 
 editCB(GtkWidget * w, gpointer data)
 {
-  RegWindow *regData = (RegWindow *) data;
-  xaccLedgerDisplay *ledger = regData->ledger;
-  Account *account = ledger->leader;
+  RegWindow *regData = data;
+  Account *account = gnc_ledger_display_leader (regData->ledger);
 
   if (account == NULL)
     return;
@@ -2087,9 +2767,8 @@ editCB(GtkWidget * w, gpointer data)
 static void 
 startRecnCB(GtkWidget * w, gpointer data)
 {
-  RegWindow *regData = (RegWindow *) data;
-  xaccLedgerDisplay *ledger = regData->ledger;
-  Account *account = ledger->leader;
+  RegWindow *regData = data;
+  Account *account = gnc_ledger_display_leader (regData->ledger);
 
   if (account == NULL)
     return;
@@ -2137,28 +2816,11 @@ gnc_register_include_date(RegWindow *regData, time_t date)
  * Return: none                                                     *
 \********************************************************************/
 static void
-recordCB(GtkWidget *w, gpointer data)
+recordCB (GtkWidget *w, gpointer data)
 {
   RegWindow *regData = data;
-  Transaction *trans;
 
-  trans = xaccSRGetCurrentTrans(regData->ledger->ledger);
-
-  if (xaccSRCheckReconciled (regData->ledger->ledger))
-  {
-    if (!xaccSRSaveRegEntry(regData->ledger->ledger, TRUE))
-      return;
-  }
-  else
-  {
-    xaccSRCancelCursorTransChanges (regData->ledger->ledger);
-    return;
-  }
-
-  if (trans != NULL)
-    gnc_register_include_date(regData, xaccTransGetDate(trans));
-
-  xaccSRRedrawRegEntry(regData->ledger->ledger);
+  gnc_register_enter (regData, TRUE);
 }
 
 
@@ -2182,6 +2844,30 @@ gnc_transaction_delete_toggle_cb(GtkToggleButton *button, gpointer data)
 }
 
 
+static gboolean
+trans_has_reconciled_splits (Transaction *trans)
+{
+  GList *node;
+
+  for (node = xaccTransGetSplitList (trans); node; node = node->next)
+  {
+    Split *split = node->data;
+
+    switch (xaccSplitGetReconcile (split))
+    {
+      case YREC:
+      case FREC:
+        return TRUE;
+
+      default:
+        break;
+    }
+  }
+
+  return FALSE;
+}
+
+
 /********************************************************************\
  * gnc_transaction_delete_query                                     *
  *   creates and displays a dialog which asks the user wheter they  *
@@ -2192,7 +2878,7 @@ gnc_transaction_delete_toggle_cb(GtkToggleButton *button, gpointer data)
  * Returns: DeleteType choice indicator                             *
  \*******************************************************************/
 static DeleteType
-gnc_transaction_delete_query(GtkWindow *parent)
+gnc_transaction_delete_query (GtkWindow *parent, Transaction *trans)
 {
   GtkWidget *dialog;
   GtkWidget *dvbox;
@@ -2204,18 +2890,28 @@ gnc_transaction_delete_query(GtkWindow *parent)
   GSList    *group;
   gint       pos = 0;
   gint       result;
+  gboolean   reconciled;
 
   const char *usual = _("This selection will delete the whole "
                         "transaction. This is what you usually want.");
-  const char *warn  = _("Warning: Just deleting all the splits will "
+  const char *usual_recn = _("This selection will delete the whole "
+                             "transaction.\n\n"
+                             "You would be deleting a transaction "
+                             "with reconciled splits!");
+  const char *warn  = _("Warning: Just deleting all the other splits will "
                         "make your account unbalanced. You probably "
                         "shouldn't do this unless you're going to "
                         "immediately add another split to bring the "
                         "transaction back into balance.");
+  const char *warn_recn = _("You would be deleting reconciled splits!");
+  const char *cbuf;
+  char *buf;
 
   DeleteType return_value;
 
-  dialog = gnome_dialog_new(DEL_TRANS_STR,
+  reconciled = trans_has_reconciled_splits (trans);
+
+  dialog = gnome_dialog_new(_("Delete Transaction"),
                             GNOME_STOCK_BUTTON_OK,
                             GNOME_STOCK_BUTTON_CANCEL,
                             NULL);
@@ -2243,21 +2939,27 @@ gnc_transaction_delete_query(GtkWindow *parent)
 
   gtk_signal_connect(GTK_OBJECT(trans_button), "toggled",
                      GTK_SIGNAL_FUNC(gnc_transaction_delete_toggle_cb),
-                     (gpointer) usual);
+                     (gpointer) (reconciled ? usual_recn : usual));
 
   group = gtk_radio_button_group(GTK_RADIO_BUTTON(trans_button));
-  splits_button = gtk_radio_button_new_with_label(group,
-                                                  _("Delete all the splits"));
+  splits_button =
+    gtk_radio_button_new_with_label(group, _("Delete all the other splits"));
   gtk_object_set_user_data(GTK_OBJECT(splits_button), text);
   gtk_box_pack_start(GTK_BOX(vbox), splits_button, TRUE, TRUE, 0);
 
+  if (reconciled)
+    buf = g_strconcat (warn, "\n\n", warn_recn, NULL);
+  else
+    buf = g_strdup (warn);
+
   gtk_signal_connect(GTK_OBJECT(splits_button), "toggled",
                      GTK_SIGNAL_FUNC(gnc_transaction_delete_toggle_cb),
-                     (gpointer) warn);
+                     (gpointer) buf);
 
   gtk_box_pack_start(GTK_BOX(dvbox), frame, TRUE, TRUE, 0);
 
-  gtk_editable_insert_text(GTK_EDITABLE(text), usual, strlen(warn), &pos);
+  cbuf = reconciled ? usual_recn : usual;
+  gtk_editable_insert_text(GTK_EDITABLE(text), cbuf, strlen(cbuf), &pos);
   gtk_text_set_line_wrap(GTK_TEXT(text), TRUE);
   gtk_text_set_word_wrap(GTK_TEXT(text), TRUE);
   gtk_text_set_editable(GTK_TEXT(text), FALSE);
@@ -2266,6 +2968,8 @@ gnc_transaction_delete_query(GtkWindow *parent)
   gtk_widget_show_all(dvbox);
 
   result = gnome_dialog_run_and_close(GNOME_DIALOG(dialog));
+
+  g_free (buf);
 
   if (result != 0)
     return_value = DELETE_CANCEL;
@@ -2295,70 +2999,105 @@ deleteCB(GtkWidget *widget, gpointer data)
   RegWindow *regData = data;
   SplitRegisterStyle style;
   CursorClass cursor_class;
+  SplitRegister *reg;
   Transaction *trans;
   char *buf = NULL;
   Split *split;
   gint result;
 
+  reg = gnc_ledger_display_get_split_register (regData->ledger);
+
   /* get the current split based on cursor position */
-  split = xaccSRGetCurrentSplit(regData->ledger->ledger);
+  split = gnc_split_register_get_current_split(reg);
   if (split == NULL)
   {
-    xaccSRCancelCursorSplitChanges(regData->ledger->ledger);
+    gnc_split_register_cancel_cursor_split_changes (reg);
     return;
   }
 
   trans = xaccSplitGetParent(split);
-  style = regData->ledger->ledger->style;
-  cursor_class =
-    xaccSplitRegisterGetCurrentCursorClass(regData->ledger->ledger);
+  style = reg->style;
+  cursor_class = gnc_split_register_get_current_cursor_class (reg);
 
   /* Deleting the blank split just cancels */
   {
-    Split *blank_split = xaccSRGetBlankSplit(regData->ledger->ledger);
+    Split *blank_split = gnc_split_register_get_blank_split (reg);
 
     if (split == blank_split)
     {
-      xaccSRCancelCursorTransChanges(regData->ledger->ledger);
+      gnc_split_register_cancel_cursor_trans_changes (reg);
       return;
     }
   }
 
-  if (cursor_class == CURSOR_NONE)
+  if (cursor_class == CURSOR_CLASS_NONE)
     return;
 
   /* On a split cursor, just delete the one split. */
-  if (cursor_class == CURSOR_SPLIT)
+  if (cursor_class == CURSOR_CLASS_SPLIT)
   {
-    /* ask for user confirmation before performing permanent damage */
-    buf = g_strdup_printf(TRANS_DEL_MSG, xaccSplitGetMemo(split),
-                          xaccTransGetDescription(trans));
+    const char *format = _("Are you sure you want to delete\n   %s\n"
+                           "from the transaction\n   %s ?");
+    const char *recn_warn = _("You would be deleting a reconciled split!");
+    const char *memo;
+    const char *desc;
+    char recn;
 
-    result = gnc_verify_dialog_parented(regData->window, buf, FALSE);
+    memo = xaccSplitGetMemo (split);
+    memo = (memo && *memo) ? memo : _("(no memo)");
+
+    desc = xaccTransGetDescription (trans);
+    desc = (desc && *desc) ? desc : _("(no description)");
+
+    /* ask for user confirmation before performing permanent damage */
+    buf = g_strdup_printf (format, memo, desc);
+
+    recn = xaccSplitGetReconcile (split);
+    if (recn == YREC || recn == FREC)
+    {
+      char *new_buf;
+
+      new_buf = g_strconcat (buf, "\n\n", recn_warn, NULL);
+      g_free (buf);
+      buf = new_buf;
+    }
+
+    result = gnc_verify_dialog_parented (regData->window, buf, FALSE);
 
     g_free(buf);
 
     if (!result)
       return;
 
-    xaccSRDeleteCurrentSplit(regData->ledger->ledger);
+    gnc_split_register_delete_current_split (reg);
     return;
   }
 
-  assert(cursor_class == CURSOR_TRANS);
+  g_return_if_fail(cursor_class == CURSOR_CLASS_TRANS);
 
   /* On a transaction cursor with 2 or fewer splits in single or double
    * mode, we just delete the whole transaction, kerblooie */
-  if ((xaccTransCountSplits(trans) <= 2) &&
-      ((style == REG_SINGLE_LINE) || (style == REG_DOUBLE_LINE)))
+  if ((xaccTransCountSplits(trans) <= 2) && (style == REG_STYLE_LEDGER))
   {
-    result = gnc_verify_dialog_parented(regData->window,
-                                        TRANS_DEL2_MSG, FALSE);
+    const char *message = _("Are you sure you want to delete the current "
+                            "transaction?");
+    const char *recn_warn = _("You would be deleting a transaction "
+                              "with reconciled splits!");
+    char *buf;
+
+    if (trans_has_reconciled_splits (trans))
+      buf = g_strconcat (message, "\n\n", recn_warn, NULL);
+    else
+      buf = g_strdup (message);
+
+    result = gnc_verify_dialog_parented (regData->window, buf, FALSE);
+
+    g_free (buf);
 
     if (!result)
       return;
 
-    xaccSRDeleteCurrentTrans(regData->ledger->ledger);
+    gnc_split_register_delete_current_trans (reg);
     return;
   }
 
@@ -2369,20 +3108,21 @@ deleteCB(GtkWidget *widget, gpointer data)
   {
     DeleteType del_type;
 
-    del_type = gnc_transaction_delete_query(GTK_WINDOW(regData->window));
+    del_type = gnc_transaction_delete_query (GTK_WINDOW(regData->window),
+                                             trans);
 
     if (del_type == DELETE_CANCEL)
       return;
 
     if (del_type == DELETE_TRANS)
     {
-      xaccSRDeleteCurrentTrans(regData->ledger->ledger);
+      gnc_split_register_delete_current_trans (reg);
       return;
     }
 
     if (del_type == DELETE_SPLITS)
     {
-      xaccSREmptyCurrentTrans(regData->ledger->ledger);
+      gnc_split_register_emtpy_current_trans (reg);
       return;
     }
   }
@@ -2398,12 +3138,31 @@ deleteCB(GtkWidget *widget, gpointer data)
 \********************************************************************/
 static void duplicateCB(GtkWidget *w, gpointer data)
 {
-  RegWindow *regData = (RegWindow *) data;
+  RegWindow *regData = data;
 
-  xaccSRDuplicateCurrent(regData->ledger->ledger);
+  gnc_split_register_duplicate_current
+    (gnc_ledger_display_get_split_register (regData->ledger));
 }
 
 
+/********************************************************************\
+ * recurCB                                                          *
+ *                                                                  *
+ * Args:   widget - the widget that called us                       *
+ *         data   - the data struct for this register               *
+ * Return: none                                                     *
+\********************************************************************/
+
+static void recurCB(GtkWidget *w, gpointer data)
+{
+  RegWindow *regData = data;
+  SplitRegister *reg = gnc_ledger_display_get_split_register (regData->ledger);
+  Transaction *pending_trans = gnc_split_register_get_current_trans (reg);
+
+  gnc_sx_create_from_trans(pending_trans);
+}
+
+  
 /********************************************************************\
  * cancelCB                                                         *
  *                                                                  *
@@ -2414,9 +3173,10 @@ static void duplicateCB(GtkWidget *w, gpointer data)
 static void
 cancelCB(GtkWidget *w, gpointer data)
 {
-  RegWindow *regData = (RegWindow *) data;
+  RegWindow *regData = data;
 
-  xaccSRCancelCursorTransChanges(regData->ledger->ledger);
+  gnc_split_register_cancel_cursor_trans_changes
+    (gnc_ledger_display_get_split_register (regData->ledger));
 }
 
 
@@ -2430,14 +3190,19 @@ static void
 gnc_register_check_close(RegWindow *regData)
 {
   gboolean pending_changes;
+  SplitRegister *reg;
 
-  pending_changes = xaccSRHasPendingChanges(regData->ledger->ledger);
+  reg = gnc_ledger_display_get_split_register (regData->ledger);
+
+  pending_changes = gnc_split_register_changed (reg);
   if (pending_changes)
   {
-    if (gnc_verify_dialog_parented(regData->window, TRANS_CHANGED_MSG, TRUE))
+    const char *message = _("The current transaction has been changed.\n"
+                            "Would you like to record it?");
+    if (gnc_verify_dialog_parented(regData->window, message, TRUE))
       recordCB(regData->window, regData);
     else
-      xaccSRCancelCursorTransChanges(regData->ledger->ledger);
+      gnc_split_register_cancel_cursor_trans_changes (reg);
   }
 }
 
@@ -2449,15 +3214,154 @@ gnc_register_check_close(RegWindow *regData)
  * Return: none                                                     *
 \********************************************************************/
 static void
-closeCB(GtkWidget *widget, gpointer data)
+closeCB (GtkWidget *widget, gpointer data)
 {
   RegWindow *regData = data;
 
-  gnc_register_check_close(regData);
+  gnc_register_check_close (regData);
 
-  gnc_reg_save_size(regData);
+  gnc_ledger_display_close (regData->ledger);
+}
 
-  gtk_widget_destroy(regData->window);
+static void
+report_helper (RegWindow *regData, SCM func, Query *query)
+{
+  SplitRegister *reg = gnc_ledger_display_get_split_register (regData->ledger);
+  char *str;
+  SCM qtype;
+  SCM args;
+  SCM arg;
+
+  g_return_if_fail (gh_procedure_p (func));
+
+  args = SCM_EOL;
+
+  /* FIXME: when we drop support older guiles, drop the (char *) coercion. */
+  arg = gh_str02scm ((char *) gnc_split_register_get_credit_string (reg));
+  args = gh_cons (arg, args);
+
+  /* FIXME: when we drop support older guiles, drop the (char *) coercion. */
+  arg = gh_str02scm ((char *) gnc_split_register_get_debit_string (reg));
+  args = gh_cons (arg, args);
+
+  str = gnc_reg_get_name (regData, FALSE);
+  arg = gh_str02scm (str);
+  args = gh_cons (arg, args);
+  g_free (str);
+
+  arg = gh_bool2scm (reg->use_double_line);
+  args = gh_cons (arg, args);
+
+  arg = gh_bool2scm (reg->style == REG_STYLE_JOURNAL);
+  args = gh_cons (arg, args);
+
+  qtype = gh_eval_str("<gnc:Query*>");
+  g_return_if_fail (qtype != SCM_UNDEFINED);
+
+  if (!query)
+  {
+    query = gnc_ledger_display_get_query (regData->ledger);
+    g_return_if_fail (query != NULL);
+  }
+
+  arg = gw_wcp_assimilate_ptr (query, qtype);
+  args = gh_cons (arg, args);
+  if (arg == SCM_UNDEFINED)
+    return;
+
+  gh_apply (func, args);
+}
+
+/********************************************************************\
+ * reportCB                                                         *
+ *                                                                  *
+ * Args:   widget - the widget that called us                       *
+ *         data - regData - the data struct for this register       *
+ * Return: none                                                     *
+\********************************************************************/
+static void
+reportCB (GtkWidget *widget, gpointer data)
+{
+  RegWindow *regData = data;
+  SCM func;
+
+  func = gh_eval_str ("gnc:show-register-report");
+  g_return_if_fail (gh_procedure_p (func));
+
+  report_helper (regData, func, NULL);
+}
+
+/********************************************************************\
+ * invoiceCB                                                        *
+ *                                                                  *
+ * Args:   widget - the widget that called us                       *
+ *         data - regData - the data struct for this register       *
+ * Return: none                                                     *
+\********************************************************************/
+static void
+invoiceCB (GtkWidget *widget, gpointer data)
+{
+  RegWindow *regData = data;
+  SCM func;
+
+  func = gh_eval_str ("gnc:show-invoice-report");
+  g_return_if_fail (gh_procedure_p (func));
+
+  report_helper (regData, func, NULL);
+}
+
+/********************************************************************\
+ * invoiceTransCB                                                   *
+ *                                                                  *
+ * Args:   widget - the widget that called us                       *
+ *         data - regData - the data struct for this register       *
+ * Return: none                                                     *
+\********************************************************************/
+static void
+invoiceTransCB (GtkWidget *widget, gpointer data)
+{
+  RegWindow *regData = data;
+  SplitRegister *reg;
+  Split *split;
+  Query *query;
+  SCM func;
+
+  reg = gnc_ledger_display_get_split_register (regData->ledger);
+
+  split = gnc_split_register_get_current_split (reg);
+  if (!split)
+    return;
+
+  func = gh_eval_str ("gnc:show-invoice-report");
+  g_return_if_fail (gh_procedure_p (func));
+
+  query = xaccMallocQuery ();
+
+  xaccQuerySetGroup (query, gnc_get_current_group ());
+
+  xaccQueryAddGUIDMatch (query, xaccSplitGetGUID (split),
+                         GNC_ID_SPLIT, QUERY_AND);
+
+  report_helper (regData, func, query);
+}
+
+/********************************************************************\
+ * printReportCB                                                    *
+ *                                                                  *
+ * Args:   widget - the widget that called us                       *
+ *         data - regData - the data struct for this register       *
+ * Return: none                                                     *
+\********************************************************************/
+static void
+printReportCB (GtkWidget *widget, gpointer data)
+{
+  RegWindow *regData = data;
+  SCM func;
+
+  func = gh_eval_str ("gnc:print-register-report");
+  g_return_if_fail (gh_procedure_p (func));
+
+  report_helper (regData, func, NULL);
 }
 
 /********************************************************************\
@@ -2468,9 +3372,9 @@ closeCB(GtkWidget *widget, gpointer data)
  * Return: none                                                     *
 \********************************************************************/
 static void
-dateCB(GtkWidget *widget, gpointer data)
+dateCB (GtkWidget *widget, gpointer data)
 {
-  RegWindow *regData = (RegWindow *) data;
+  RegWindow *regData = data;
 
   gnc_register_show_date_window(regData);
 }
@@ -2483,9 +3387,9 @@ dateCB(GtkWidget *widget, gpointer data)
  * Return: none                                                     *
 \********************************************************************/
 static void
-helpCB(GtkWidget *widget, gpointer data)
+helpCB (GtkWidget *widget, gpointer data)
 {
-  helpWindow(NULL, HELP_STR, HH_REGWIN);
+  helpWindow (NULL, NULL, HH_REGWIN);
 }
 
 /************************** END OF FILE **************************/

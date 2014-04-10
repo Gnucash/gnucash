@@ -1,5 +1,3 @@
-;;; $Id$
-(gnc:support "substring-search.scm")
 ; IMPLEMENTS Substring search
 ; AUTHOR Ken Dickey
 ; DATE 1991 August 6

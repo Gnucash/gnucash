@@ -21,8 +21,8 @@
  *                                                                  *
 \********************************************************************/
 
-#ifndef __XACC_TRANS_LOG_H__
-#define __XACC_TRANS_LOG_H__
+#ifndef XACC_TRANS_LOG_H
+#define XACC_TRANS_LOG_H
 
 #include "config.h"
 
@@ -42,5 +42,5 @@ void    xaccLogDisable (void);
  */
 void    xaccLogSetBaseName (const char *);
 
-#endif /* __XACC_TRANS_LOG_H__ */
+#endif /* XACC_TRANS_LOG_H */
 

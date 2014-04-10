@@ -21,15 +21,47 @@
  *                                                                  *
 \********************************************************************/
 
+#include "config.h"
+
+#include <glib.h>
+
 #include "Account.h"
 #include "AccountP.h"
 #include "BackendP.h"
 #include "Group.h"
 #include "GroupP.h"
+#include "gnc-engine-util.h"
+#include "gnc-pricedb.h"
+#include "gnc-pricedb-p.h"
 #include "TransactionP.h"
-#include "util.h"
 
 /* static short module = MOD_ENGINE; */
+
+/********************************************************************\
+ * error handling                                                   *
+\********************************************************************/
+
+void 
+xaccBackendSetError (Backend *be, GNCBackendError err)
+{
+   if (!be) return;
+
+   /* use stack-push semantics. Only the earliest error counts */
+   if (ERR_BACKEND_NO_ERR != be->last_err) return;
+   be->last_err = err;
+}
+
+GNCBackendError 
+xaccBackendGetError (Backend *be)
+{
+   GNCBackendError err;
+   if (!be) return ERR_BACKEND_NO_BACKEND;
+
+   /* use 'stack-pop' semantics */
+   err = be->last_err;
+   be->last_err = ERR_BACKEND_NO_ERR;
+   return err;
+}
 
 
 /********************************************************************\
@@ -45,13 +77,13 @@ xaccAccountGetBackend (Account * acc)
   if (!acc) return NULL;
 
   /* find the first account group that has a backend */
-  grp = (AccountGroup *) acc->parent;
+  grp = acc->parent;
   while (grp) {
     if (grp->backend) return (grp->backend);
     parent_acc = grp -> parent;
     grp = NULL;
     if (parent_acc) {
-       grp = (AccountGroup *) parent_acc->parent;
+       grp = parent_acc->parent;
     }
   }
   return NULL;
@@ -64,21 +96,40 @@ xaccAccountGetBackend (Account * acc)
 Backend *
 xaccTransactionGetBackend (Transaction *trans)
 {
-  Backend *be;
-  Split *s;
+  GList *snode, *node;
+  Split *s=NULL;
+
   if (!trans) return NULL;
 
   /* find an account */
-  s = trans->splits[0];
-  if (!s) return NULL;
+  snode = xaccTransGetSplitList(trans);
+  for (node = snode; node; node=node->next)
+  {
+    s = node->data;
+    if (xaccSplitGetAccount(s)) break;
+    s = NULL;
+  }
 
+  /* if transaction is being deleted, it won't have any splits
+   * so lets take a look at the 'original' transaction */
+  if (!s)
+  {
+    snode = xaccTransGetSplitList(trans->orig);
+    for (node = snode; node; node=node->next)
+    {
+      s = node->data;
+      if (xaccSplitGetAccount(s)) break;
+      s = NULL;
+    }
+  }
+  if (!s) return NULL;
+  
   /* I suppose it would be more 'technically correct' to make sure that
-   * all splits share teh same backend, and flag an error if they
+   * all splits share the same backend, and flag an error if they
    * don't.  However, at this point, it seems quite unlikely, so we'll
-   * just use teh first backend we find.
+   * just use the first backend we find.
    */
-  be = xaccAccountGetBackend (s->acc);
-  return be;
+  return xaccAccountGetBackend (xaccSplitGetAccount(s));
 }
 
 /********************************************************************\
@@ -95,8 +146,64 @@ xaccGroupSetBackend (AccountGroup *grp, Backend *be)
 Backend *
 xaccGroupGetBackend (AccountGroup *grp)
 {
-   if (!grp) return NULL;
-   return (grp->backend);
+   while (grp)
+   {
+     Account *parent;
+     if (grp->backend) return (grp->backend);
+     parent = grp->parent;
+     if (!parent) return NULL;
+     grp = parent->parent;
+   }
+   return NULL;
+}
+
+/********************************************************************\
+ * Set the backend                                                  *
+\********************************************************************/
+
+void
+xaccPriceDBSetBackend (GNCPriceDB *prdb, Backend *be)
+{
+  if (!prdb) return;
+  prdb->backend = be;
+}
+
+Backend *
+xaccPriceDBGetBackend (GNCPriceDB *prdb)
+{
+  if (!prdb) return NULL;
+  return prdb->backend;
+}
+
+/***********************************************************************/
+/* Get a clean backend */
+void
+xaccInitBackend(Backend *be)
+{
+    be->session_begin = NULL;
+    be->book_load = NULL;
+    be->price_load = NULL;
+    be->session_end = NULL;
+    be->destroy_backend = NULL;
+
+    be->account_begin_edit = NULL;
+    be->account_commit_edit = NULL;
+    be->trans_begin_edit = NULL;
+    be->trans_commit_edit = NULL;
+    be->trans_rollback_edit = NULL;
+    be->price_begin_edit = NULL;
+    be->price_commit_edit = NULL;
+
+    be->run_query = NULL;
+    be->price_lookup = NULL;
+    be->sync_all = NULL;
+    be->sync_group = NULL;
+    be->sync_price = NULL;
+
+    be->events_pending = NULL;
+    be->process_events = NULL;
+
+    be->last_err = ERR_BACKEND_NO_ERR;
 }
 
 /************************* END OF FILE ********************************/

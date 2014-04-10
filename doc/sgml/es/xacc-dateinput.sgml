@@ -1,0 +1,69 @@
+
+<ARTICLE ID="XACC-DATEINPUT">
+<ARTHEADER>
+<TITLE>Date Data Input</TITLE>
+</ARTHEADER>
+<SECT1>
+<TITLE> Date Input</TITLE>
+<PARA>    The date cell handles the following accelerator keys: 
+
+    <ITEMIZEDLIST>
+<LISTITEM>
+<PARA><KEYSYM>+, =</KEYSYM> increment day
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><KEYSYM>_ , -</KEYSYM> decrement day
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><KEYSYM>} , ]</KEYSYM> increment month
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><KEYSYM>{ , [</KEYSYM> decrement month
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><KEYSYM>M , m</KEYSYM> beginning of month
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><KEYSYM>H , h</KEYSYM> end of month
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><KEYSYM>Y , y</KEYSYM> beginning of year
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><KEYSYM>R , r</KEYSYM> end of year
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><KEYSYM>T , t</KEYSYM> today
+    </PARA>
+</LISTITEM>
+</ITEMIZEDLIST>
+
+    </PARA>
+<PARA>GnuCash can be configured to use a variety of date input
+    formats by <LINK LINKEND="XACC-PREFERENCES">setting a
+    preference</LINK>.
+
+
+</PARA>
+</SECT1>
+</ARTICLE>
+
+<!-- Local variables: -->
+<!-- sgml-parent-document: "gnucash.sgml" -->
+<!-- End: -->

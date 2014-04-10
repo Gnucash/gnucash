@@ -1,0 +1,125 @@
+<!DOCTYPE BOOK PUBLIC "-//OASIS//DTD DocBook V3.1//EN" [
+<!entity xaccabout system "xacc-about.sgml">
+<!entity xaccfeatures system "xacc-features.sgml">
+<!entity xaccquickstart system "xacc-quickstart.sgml">
+<!entity xaccwhatsnew system "xacc-whats-new.sgml">
+
+<!entity xaccaccountedit system "../C/xacc-accountedit.sgml">
+<!entity xaccaccounthier system "../C/xacc-account-hierarchy-creator.sgml">
+<!entity xaccacctypes system "../C/xacc-acctypes.sgml">
+<!entity xaccnewacctwin system "../C/xacc-newacctwin.sgml">
+<!entity xaccassetbarcharts system "../C/xacc-asset-liability-barcharts.sgml">
+<!entity xaccassetpiecharts system "../C/xacc-asset-liability-piecharts.sgml">
+<!entity xaccapar system "../C/xacc-apar.sgml">
+<!entity xacccalculator system "../C/xacc-calculator.sgml">
+<!entity xacccommodity system "../C/xacc-commodity.sgml">
+<!entity xacccommonreportoptions system "../C/xacc-common-report-options.sgml">
+<!entity xaccdepreciation system "../C/xacc-depreciation.sgml">
+<!entity xaccbalancereport system "../C/xacc-balancereport.sgml">
+<!entity xaccbalancesheet system "../C/xacc-balancesheet.sgml">
+<!entity xacccurrencyhandling system "../C/xacc-currencyhandling.sgml">
+<!entity xaccdoubleentry system "../C/xacc-doubleentry.sgml">
+<!entity xacceuro system "../C/xacc-euro.sgml">
+<!entity xaccdateinput system "../C/xacc-dateinput.sgml">
+<!entity xaccfileoperations system "../C/xacc-file-operations.sgml">
+<!entity xaccgnomemdi system "../C/xacc-gnome-mdi.sgml">
+<!entity xaccgnucashwebbrowser system "../C/xacc-gnucash-web-browser.sgml">
+<!entity xaccincomeexpense system "../C/xacc-incomeexpense.sgml">
+<!entity xaccincomeexpensebarcharts system "../C/xacc-income-expense-barcharts.sgml">
+<!entity xaccincomeexpensepiecharts system "../C/xacc-income-expense-piecharts.sgml">
+<!entity xacclocatingtxns system "../C/xacc-locatingtxns.sgml">
+<!entity xaccmulticolumnviewreports system "../C/xacc-multicolumn-view-reports.sgml">
+<!entity xaccpreferences system "../C/xacc-preferences.sgml">
+<!entity xaccchartofaccts system "../C/xacc-chartofaccts.sgml">
+<!entity xaccuserdocs system "../C/xacc-userdocs.sgml">
+<!entity xaccmainwin system "../C/xacc-mainwin.sgml">
+<!entity xaccnetworthbarchart system "../C/xacc-net-worth-barchart.sgml">
+<!entity xaccpnl system "../C/xacc-pnl.sgml">
+<!entity xaccportfolioreport system "../C/xacc-portfolio-report.sgml">
+<!entity xaccpriceeditor system "../C/xacc-price-editor.sgml">
+<!entity xaccpricesources system "../C/xacc-price-sources.sgml">
+<!entity xaccprintcheck system "../C/xacc-print-check.sgml">
+<!entity xaccprint system "../C/xacc-print.sgml">
+<!entity xaccqifimport system "../C/xacc-qif-import.sgml">
+<!entity xaccquicken system "../C/xacc-quicken.sgml">
+<!entity xaccrecnwin system "../C/xacc-recnwin.sgml">
+<!entity xaccregwin system "../C/xacc-regwin.sgml">
+<!entity xaccregwinkbd system "../C/xacc-regwin-kbd.sgml">
+<!entity xaccreports system "../C/xacc-reports.sgml">
+<!entity xaccrepdev system "../C/xacc-repdev.sgml">
+<!entity xaccstockpricereport system "../C/xacc-stock-price-report.sgml">
+<!entity xacctaxreport system "../C/xacc-tax-report.sgml">
+<!entity xacctoplevel system "../C/xacc-toplevel.sgml">
+<!entity xacctransreport system "../C/xacc-trans-report.sgml">
+<!entity xacctxfcategories system "../C/xacc-txf-categories.sgml">
+<!entity xacctxfexportanomalies system "../C/xacc-txf-export-anomalies.sgml">
+<!entity xacctxfexport system "../C/xacc-txf-export.sgml">
+<!entity xaccdochack system "../C/xacc-dochack.sgml">
+<!entity xaccscheme system "../C/xacc-scheme.sgml">
+<!entity xaccy2k system "../C/xacc-y2k.sgml">
+<!entity xaccgpl system "../C/xacc-gpl.sgml">
+]>
+<BOOK ID="index">
+<TITLE>GnuCash Online-Handbuch</TITLE>
+
+&xaccabout;
+&xaccfeatures;
+&xaccquickstart;
+&xaccwhatsnew;
+
+&xaccaccountedit;
+&xaccacctypes;
+&xaccaccounthier;
+&xaccassetbarcharts;
+&xaccassetpiecharts;
+&xaccnewacctwin;
+&xaccapar;
+&xaccdepreciation;
+&xaccbalancereport;
+&xaccbalancesheet;
+&xacccalculator;  
+&xacccommodity;
+&xacccommonreportoptions;
+&xacccurrencyhandling;
+&xaccdoubleentry;
+&xacceuro;
+&xaccdateinput;
+&xaccfileoperations;
+&xaccgnomemdi;
+&xaccgnucashwebbrowser;
+&xaccincomeexpense;
+&xaccincomeexpensebarcharts;
+&xaccincomeexpensepiecharts;
+&xacclocatingtxns;
+&xaccpreferences;
+&xaccchartofaccts;
+&xaccuserdocs;
+&xaccmainwin;
+&xaccmulticolumnviewreports;
+&xaccnetworthbarchart;
+&xaccpnl;
+&xaccportfolioreport;
+&xaccpriceeditor;
+&xaccpricesources;
+&xaccprintcheck;
+&xaccprint;
+&xaccqifimport;
+&xaccquicken;
+&xaccrecnwin;
+&xaccregwin;
+&xaccregwinkbd;
+&xaccreports;
+&xacctaxreport;
+&xacctoplevel;
+&xacctransreport;
+&xacctxfcategories;
+&xacctxfexportanomalies;
+&xacctxfexport;
+&xaccdochack;
+&xaccscheme;
+&xaccstockpricereport;
+&xaccrepdev;
+&xaccy2k;
+&xaccgpl;
+
+</book>

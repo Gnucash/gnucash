@@ -28,11 +28,11 @@
  * If a file-io thing needs date handling, it should do it itself,
  * instead of depending on the routines here. */
 
-#ifndef __XACC_DATE_H__
-#define __XACC_DATE_H__
+#ifndef XACC_DATE_H
+#define XACC_DATE_H
 
-#include "config.h"
-#include "glib.h"
+#include <glib.h>
+#include <time.h>
 
 
 /** Constants *******************************************************/
@@ -64,7 +64,8 @@ typedef enum
  * even on the 32-bit Intel x86 and PowerPC architectures.  I'm
  * assuming that all the other modern compilers are clean on this
  * issue too. */
-#ifndef SWIG /* swig 1.1p5 can't hack the long long type */
+
+#ifndef SWIG   /* swig 1.1p5 can't hack the long long type */
 struct timespec64
 {
    long long int tv_sec;     
@@ -77,7 +78,29 @@ typedef struct timespec64 Timespec;
 
 /** Prototypes ******************************************************/
 
+/* strict equality */
 gboolean timespec_equal(const Timespec *ta, const Timespec *tb);
+/* comparison:  if (ta < tb) -1; else if (ta > tb) 1; else 0; */
+int      timespec_cmp(const Timespec *ta, const Timespec *tb);
+
+/* difference between ta and tb, results are normalised
+ * ie tv_sec and tv_nsec of the result have the same size
+ * abs(result.tv_nsec) <= 1000000000
+ */
+
+Timespec timespec_diff(const Timespec *ta, const Timespec *tb);
+
+/*
+ * absolute value, also normalised
+ */
+Timespec timespec_abs(const Timespec *t);
+
+/* 
+ * convert a timepair on a certain day (localtime) to
+ * the timepair representing midday on that day
+ */
+
+Timespec timespecCanonicalDayTime(Timespec t);
 
 void setDateFormat(DateFormat df);
 
@@ -103,6 +126,11 @@ char * xaccPrintDateSecs (time_t secs);
 const char * gnc_print_date(Timespec ts);
 
 /**
+ * Turns a time_t into a Timespec
+ **/
+void timespecFromTime_t( Timespec *ts, time_t t );
+
+/**
  * scanDate
  *    Convert a string into  day / month / year integers according to
  *    the current dateFormat value.
@@ -112,7 +140,7 @@ const char * gnc_print_date(Timespec ts);
  *         month - will store month of the year as 1 ... 12
  *         year - will store the year (4-digit)
  *
- * Return: 0 if conversion was successful, 1 otherwise
+ * Return: nothing
  *
  * Globals: global dateFormat value
  */
@@ -130,12 +158,50 @@ void scanDate (const char *buff, int *day, int *month, int *year);
  */
 char dateSeparator(void);
 
+/*
+ * hack alert XXX FIXME -- these date routines return incorrect
+ * values for dates before 1970.  Most of them are good only up 
+ * till 2038.  This needs fixing ...
+ */
+
 time_t xaccDMYToSec (int day, int month, int year);
 time_t xaccScanDateS (const char *buff);
 
-void xaccValidateDate (struct tm *date);
-
 /* Convert a day, month, and year to a Timespec */
-Timespec gnc_dmy2timespec(int day, int month, int year);
+Timespec gnc_dmy2timespec (int day, int month, int year);
 
-#endif /* __XACC_DATE_H__ */
+/* Same as gnc_dmy2timespec, but last second of the day */
+Timespec gnc_dmy2timespec_end (int day, int month, int year);
+
+/* The gnc_iso8601_to_timespec_xxx() routines converts an ISO-8601 style 
+ *    date/time string to Timespec.
+ *    For example: 1998-07-17 11:00:00.68-05 
+ *    is 680 milliseconds after 11 o'clock, central daylight time 
+ *    The _gmt() routine returns the time in gmt. The _local() routine
+ *    returns the local time.
+ *
+ * The gnc_timespec_to_iso8601_buff() routine prints a Timespec
+ *    as an ISO-8601 style string.  The buffer must be long enough
+ *    to contain the string.  The string is null-terminated. This
+ *    routine returns a pointer to the null terminator (and can 
+ *    thus be used in the 'stpcpy' metaphor of string concatenation).
+ */
+Timespec gnc_iso8601_to_timespec_local(const char *);
+Timespec gnc_iso8601_to_timespec_gmt(const char *);
+char * gnc_timespec_to_iso8601_buff (Timespec ts, char * buff);
+
+/* The gnc_timezone function returns the number of seconds *west*
+ * of UTC represented by the tm argument, adjusted for daylight
+ * savings time.
+ *
+ * This function requires a tm argument returned by localtime or set
+ * by mktime. This is a strange function! It requires that localtime
+ * or mktime be called before use. Subsequent calls to localtime or
+ * mktime *may* invalidate the result! The actual contents of tm *may*
+ * be used for both timezone offset and daylight savings time, or only
+ * daylight savings time! Timezone stuff under unix is not
+ * standardized and is a big mess.
+ */
+long int gnc_timezone (struct tm *tm);
+
+#endif /* XACC_DATE_H */

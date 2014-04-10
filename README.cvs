@@ -1,0 +1,66 @@
+This file contains guidelines for those with CVS write access.
+They have been adapted from the guidelines for gnome-libs by
+Miguel de Icaza who adapted them from guidelines written by
+Owen Taylor.
+
+ + Ask first. If your changes are major, or could possibly break existing
+   code, you should always ask. If your change is minor and you have
+   been working on gnucash for a while it is probably not necessary
+   to ask. But when in doubt, ask. Even if your change is correct,
+   somebody may know a better way to do things.
+
+   If you want other people to review your code before it goes in,
+   you can submit your changes as a patch to gnucash-patches@gnucash.org.
+   See README.patches for details.
+
+   If you are making changes to gnucash CVS, you should be subscribed
+   to gnucash-devel@gnucash.org and to gnucash-patches@gnucash.org.
+   (Subscription address: http://www.gnucash.org/en/lists.phtml)
+   gnucash-devel@gnucash.org is a good place to ask about intended
+   changes.
+
+ + There must be a ChangeLog entry for every commit. If you discover that
+   you only committed half the files you meant to and need to fix that
+   up you do not need a new ChangeLog entry.  But in general, ChangeLog
+   entries are mandatory. Changes with out ChangeLog entries will be
+   reverted.
+
+ + When you commit, use your ChangeLog entry as the log message.
+
+ + You must not break the build! Never check in changes that do not
+   compile, install or run. Just because your local tree compiles
+   doesn't mean you are done. The most common way to break the build
+   is to forget to add new files or directories to CVS. But it is easy
+   to fix this problem:
+
+    +  Keep two directories, one where you make changes and another
+       'pristine' tree that you keep up to date. As soon as you check
+       in changes to your working tree, update the pristine tree then
+       recompile, install and run the pristine version. If you forgot
+       to add some new files, it will quickly show up.
+
+ + Try not to break 'make dist' tarballs. These are generally broken
+   by not updating Makefile.am files when files are added or removed
+   to the repository.
+
+ + Only one person (currently Dave Peticolas) should commit changes
+   to stable branches. If you have changes to a stable branch, send
+   them to gnucash-patches@gnucash.org.
+
+ + Only one person (currently Dave Peticolas) should commit patches
+   from new developers.
+
+ + If you are going to be changing many files in an experimental fashion,
+   it is probably a good idea to create a separate branch for your
+   changes. Please see the CVS info documentation to see how to create
+   a branch. Also, please inform the gnucash-devel-list about what you
+   are going to do.
+
+ + The ChangeLog entries should preferably match in date format with
+   the existing entries. You can set how emacs does this by using
+   customize mode:
+
+   - M-x customize
+
+Dave Peticolas
+May 2, 2001

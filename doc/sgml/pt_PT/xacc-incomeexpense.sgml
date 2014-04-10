@@ -1,0 +1,229 @@
+<ARTICLE ID="XACC-INCOMEEXPENSE">
+
+<ARTHEADER>
+<TITLE>Utilização de Contas de Receitas/Despesas</TITLE>
+</ARTHEADER>
+
+<SECT1>
+<TITLE> O que são Receitas e Despesas?</TITLE>
+
+<PARA>As palavras "Receita" e "Despesa" são enganosamente simples;
+toda a gente <EMPHASIS>pensa</EMPHASIS> que sabe o que significam.
+<EMPHASIS>O dinheiro que recebo são receitas, o dinheiro que gasto 
+são despesas</EMPHASIS>, certo?  Errado!  No entanto, existem subtilezas.
+O momento em que realiza a sua receita é muitas vezes diferente do 
+momento em que realmente recebe o dinheiro: para facilitar o registo 
+deste tipo de transacções, o conceito das 'contas a pagar' e 'contas 
+a receber' foi inventado. Siga esse link para saber mais. Esta secção 
+debruça-se sobre o registo mais simples de receitas e despesas.
+</PARA>
+</SECT1>
+
+<SECT1 ID="XACC-RECORDING-INCOMEEXPENSE">
+<TITLE> Registar Receitas e Despesas</TITLE>
+
+<PARA>Num sistema de dupla entrada, dois tipos de contas têm de ser 
+    criadas: algumas do tipo "Receita" e outras do tipo "Despesa". 
+    (Há a tendência para existirem muito mais tipos de despesas do 
+    que de receitas.)
+    Receitas tais como o ordenado, honorários, juros bancários e 
+    mais-valias de acções são assim registadas como transferências 
+    de uma conta de receita para uma conta de banco (ou, em geral, 
+    algum activo). Da mesma forma, despesas são registadas como 
+    transferências de uma conta de cartão de crédito (ou, em geral, 
+    uma conta de passivo) para uma de despesas. 
+
+    </PARA>
+<PARA>Outra forma de descrever os requisitos da "dupla entrada" 
+    é o de que quando você tem uma receita, acontecem duas coisas:
+
+    <ITEMIZEDLIST>
+<LISTITEM>
+<PARA>Você recebe uma quantia em <EMPHASIS>dinheiro,</EMPHASIS> e tem 
+      de registar essa ocorrência na sua conta bancária.
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Você teve uma receita, e tem de registar esse acontecimento numa
+      conta de receita.
+    </PARA>
+</LISTITEM>
+</ITEMIZEDLIST>
+
+    </PARA>
+<PARA>Quando, por exemplo, o ordenado é depositado na conta bancária,
+    esta é debitada, e a conta de receita é creditada, pelo que:
+
+    <TABLE>
+<TITLE>Contabilizar o Ordenado</TITLE>
+<TGROUP COLS="3">
+<THEAD>
+<ROW>
+<ENTRY>Conta</ENTRY>
+<ENTRY>Débito</ENTRY>
+<ENTRY>Crédito</ENTRY>
+</ROW>
+</THEAD>
+<TBODY>
+<ROW>
+<ENTRY>Conta BCP</ENTRY>
+<ENTRY>300,000.00</ENTRY>
+<ENTRY>        </ENTRY>
+</ROW>
+<ROW>
+<ENTRY>Ordenado</ENTRY>
+<ENTRY>        </ENTRY>
+<ENTRY>300,000.00</ENTRY>
+</ROW>
+</TBODY>
+</TGROUP>
+</TABLE>
+
+    </PARA>
+<PARA>Isto pode ser facilmente extendido para um maior número de 
+    itens em "parcelas" pelo que:
+
+    <TABLE>
+<TITLE>Um ordenado mais complexo</TITLE>
+<TGROUP COLS="3">
+<THEAD>
+<ROW>
+<ENTRY>Conta</ENTRY>
+<ENTRY>Débito</ENTRY>
+<ENTRY>Crédito</ENTRY>
+</ROW>
+</THEAD>
+<TBODY>
+<ROW>
+<ENTRY>Conta BCP</ENTRY>
+<ENTRY>210,000.00</ENTRY>
+<ENTRY>        </ENTRY>
+</ROW>
+<ROW>
+<ENTRY>IRS</ENTRY>
+<ENTRY>56,000.00</ENTRY>
+<ENTRY>        </ENTRY>
+</ROW>
+<ROW>
+<ENTRY>Seg. Social</ENTRY>
+<ENTRY>33,000.00</ENTRY>
+<ENTRY>        </ENTRY>
+</ROW>
+<ROW>
+<ENTRY>Seg. Saúde</ENTRY>
+<ENTRY>3,500.00</ENTRY>
+<ENTRY>        </ENTRY>
+</ROW>
+<ROW>
+<ENTRY>Ordenado</ENTRY>
+<ENTRY>        </ENTRY>
+<ENTRY>300,000.00</ENTRY>
+</ROW>
+</TBODY>
+</TGROUP>
+</TABLE>
+
+    </PARA>
+<PARA>Podem existir muito mais do que apenas duas entradas numa 
+    transacção, mas a soma total dos Débitos, 300,000$00, tem de 
+    ser igual à soma total dos Créditos, 300,000$00.
+
+    </PARA>
+<PARA>Se, como no <EMPHASIS>GnuCash</EMPHASIS>, tudo for forçado a 
+usar apenas uma coluna, em que <EMPHASIS>débitos</EMPHASIS> são 
+representados por valores positivos, e <EMPHASIS>créditos</EMPHASIS> 
+por valores negativos, as contas de receita/despesa fazem uma coisa 
+pouco intuitiva e verá as receitas como valores <EMPHASIS>negativos</EMPHASIS>. 
+Isso <EMPHASIS>parece</EMPHASIS> contrário ao intuitivo, mas é de todo 
+necessário por forma a que a <LINK LINKEND="XACC-DOUBLEENTRYRULE">regra 
+da contabilidade de dupla entrada se mantenha verdadeira</LINK>.
+
+    </PARA>
+<PARA>As contas de receitas e despesas são também especiais pois 
+    os seus totais de conta não não aparecem directamente na folha 
+    de saldos (ou balanço). A folha de saldos mostra "Resultado 
+    Líquido": a soma de todas as receitas menos todas as despesas.
+    Receitas e Despesas não são nem activos nem passivos e assim 
+    não surgem na folha de saldos. O que surge na folha de balanço 
+    é o seu efeito nos <EMPHASIS>saldos</EMPHASIS>.
+
+    </PARA>
+<PARA>Outro relatório, o de "Lucros e Prejuizos" (L&amp;P), 
+    analiza receitas e despesas. O lucro total (ou prejuizo) é 
+    calculado como total das receitas menos o total das despesas. 
+    Numa boa forma simétrica, visto activos e passivos não serem 
+    nem receitas nem despesas, <EMPHASIS>eles</EMPHASIS> obviamente 
+    não surgem num relatório de L&amp;P.
+
+    </PARA>
+<PARA>Apesar de estas contas serem de certa forma "especiais", você 
+    não tem fazer nada de especial para utilizar as contas de receitas 
+    e despesas. O GnuCash gere os valores automaticamente, pelo que se 
+    registar correctamente os efeitos de uma transacção na sua conta 
+    bancária ou cartão de crédito, o lado da receita/despesa da transacção 
+    deverá ser também correctamente gerada.
+</PARA>
+<PARA>
+    As coisas apenas são "peculiares" quando montantes são transferidos 
+    entre contas de receitas e despesas.   Se achar que tem de fazer 
+    uma transferência assim, então terá de aprender os conceitos mais 
+    avançados por detrás das "contas a pagar" e "contas a receber". 
+    Tais transferências tipicamente ocorrem em empresas, quando receitas e 
+    despesas podem ocorrer em momentos que são diferentes daqueles em que 
+    o dinheiro dá realmente entrada ou saida das contas bancárias da empresa.
+
+    </PARA>
+<PARA>Por exemplo, normalmente as empresas reconhecem a receita
+    <EMPHASIS>quando a venda é feita</EMPHASIS>. Isso pode significar 
+    que você reconhece uma venda de 200.000$ no <EMPHASIS>momento 
+    em que você e o seu cliente apertarem a mão pelo negócio</EMPHASIS>.
+    Visto que o dinheiro ainda não entrou, a venda tem de ser registada 
+    de outra forma. Tem de <EMPHASIS>reconhecer</EMPHASIS> a venda no 
+    momento do acordo. Para fazer com que as transacções saldem, você 
+    adiciona a venda de 200.000$ às <EMPHASIS>Contas a receber</EMPHASIS>, 
+    em vez de as adicionar a algo como dinheiro.
+    </PARA>
+<PARA>
+    <EMPHASIS>Conhecimento de Causa:</EMPHASIS> Quando uma venda é 
+    reconhecida e como é registada é decidido não só baseado em 
+    princípios contabilísticos aceites mas também com base em 
+    legislação nacional ou internacional.
+</PARA>
+<PARA>
+(A documentação deveria indicar que para mais informações, deveria 
+seguir o link para a página de Contas a Pagar e Contas a Receber).
+</PARA>
+
+</SECT1>
+<SECT1 ID="XACC-INCEXPUSE">
+<TITLE> Utilizar Contas de Receitas/Despesas</TITLE>
+<PARA>Para utilizar uma conta de receitas/despesas, basta criar uma 
+    na janela de "Nova Conta" e depois certificar-se que transfere 
+    receitas/despesas para lá à medida que regista cheques, juros,
+    etc.
+    Você irá sem dúvida querer criar um vasto número de contas de 
+    receitas e despesas; poderá ser útil olhar para o 
+    <LINK LINKEND="XACC-SAMPLECHART">Exemplo de Plano de Contas</LINK> 
+    para obter ideias.
+    Esta partição de contas de receitas e despesas irá provavelmente 
+    provar-se muito útil para os Norte Americanos quando <EMPHASIS>a 
+    altura do imposto de rendimento</EMPHASIS> surgir.
+
+    </PARA>
+</SECT1>
+<SECT1 ID="XACC-TERMSOTHER">
+<TITLE> Utilização de Terminologia Noutras Aplicações</TITLE>
+<PARA>    </PARA>
+<PARA>Se tiver utilizado outras aplicações de finanças pessoais, note 
+    que <LINK LINKEND="XACC-QUICKENCATS">o Quicken lhes chama 
+    "Categories" (categorias)</LINK>.
+
+
+</PARA>
+</SECT1>
+</ARTICLE>
+
+<!-- Local variables: -->
+<!-- sgml-parent-document: "gnucash.sgml" -->
+<!-- End: -->

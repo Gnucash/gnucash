@@ -6,7 +6,10 @@
 ;;;  $Id$
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(gnc:support "printing/number-to-words.scm")
+(define-module (gnucash printing number-to-words))
+(export integer-to-words)
+(export printable-value)
+(export number-to-words)
 
 (define (integer-to-words val)
   (let ((current-string "")

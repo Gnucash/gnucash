@@ -1,28 +1,35 @@
 
-bin_SCRIPTS = gnc-prices
+gncsharedir = ${GNC_SHAREDIR}
 
-perllibdir = ${GNC_LIBDIR}/perl
-
-perlsharedir = ${GNC_SHAREDIR}/perl
+bin_SCRIPTS = gnc-prices update-finance-quote
+gncshare_SCRIPTS = finance-quote-helper
 
 EXTRA_DIST = \
   .cvsignore \
   Quote_example.pl \
-  gnc-prices-2.in \
-  gnc-prices.in \
+  finance-quote-helper.in \
+  gnc-prices \
+  update-finance-quote.in \
   value_portfolio
 
 ## We borrow guile's convention and use @-...-@ as the substitution
 ## brackets here, instead of the usual @...@.  This prevents autoconf
 ## from substituting the values directly into the left-hand sides of
 ## the sed substitutions.
-gnc-prices: gnc-prices.in
+finance-quote-helper: finance-quote-helper.in
 	rm -f $@.tmp
 	sed < $@.in > $@.tmp \
             -e 's:@-PERL-@:${PERL}:g' \
-            -e 's:@-GNC_PERLSHAREDIR-@:${perlsharedir}:g' \
-            -e 's:@-GNC_PERLLIBDIR-@:${perllibdir}:g'
+            -e 's:@-PERLINCL-@:${PERLINCL}:g'
 	chmod +x $@.tmp
 	mv $@.tmp $@
+CLEANFILES = finance-quote-helper
 
-CLEANFILES += gnc-prices
+update-finance-quote: update-finance-quote.in
+	rm -f $@.tmp
+	sed < $@.in > $@.tmp \
+            -e 's:@-PERL-@:${PERL}:g' \
+            -e 's:@-PERLINCL-@:${PERLINCL}:g'
+	chmod +x $@.tmp
+	mv $@.tmp $@
+CLEANFILES += update-finance-quote

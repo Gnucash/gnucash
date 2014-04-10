@@ -20,8 +20,8 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-#ifndef __DIALOG_TOTD_H_
-#define __DIALOG_TOTD_H_
+#ifndef DIALOG_TOTD_H
+#define DIALOG_TOTD_H
 
 void gnc_ui_totd_dialog_create_and_run(void);
 

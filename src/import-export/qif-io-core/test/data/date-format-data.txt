@@ -1,0 +1,19 @@
+(("01/20/2001" (d-m-y m-d-y y-m-d y-d-m)) #f (m-d-y))
+(("20.1.01" (d-m-y m-d-y y-m-d y-d-m)) #f (d-m-y y-m-d y-d-m))
+(("19101-1-20"  (d-m-y m-d-y y-m-d y-d-m)) #f (y-m-d))
+(("1/20/1"  (d-m-y m-d-y y-m-d y-d-m)) #f (m-d-y y-d-m))
+(("1/20'01"  (d-m-y m-d-y y-m-d y-d-m)) #f (m-d-y y-d-m))
+(("1/20' 1"  (d-m-y m-d-y y-m-d y-d-m)) #f (m-d-y y-d-m))
+(("2/dd/2001"  (d-m-y m-d-y y-m-d y-d-m)) #t
+ (qif-io:parse-failed qif-io:check-date-format "2/dd/2001"))
+(("not a date" (d-m-y)) #t 
+ (qif-io:parse-failed qif-io:check-date-format "not a date"))
+((nonstring d-m-y) #t (qif-io:arg-type qif-io:check-date-format string nonstring))
+(("01/04/2001" bad-format) #t 
+ (qif-io:arg-type qif-io:check-date-format list bad-format))
+(("3-3" d-m-y) #t
+ (qif-io:arg-type qif-io:check-date-format list d-m-y))	
+(("3-3" (d-m-y)) #t
+ (qif-io:parse-failed qif-io:check-date-format "3-3"))
+
+

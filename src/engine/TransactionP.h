@@ -1,5 +1,5 @@
 /********************************************************************\
- * TransactionP.h -- defines transaction for xacc (X-Accountant)    *
+ * TransactionP.h -- private header for transaction & splits        *
  * Copyright (C) 1997 Robin D. Clark                                *
  * Copyright (C) 1997, 1998, 1999, 2000 Linas Vepstas               *
  * Copyright (C) 2000 Bill Gribble                                  *
@@ -42,8 +42,8 @@
  *
  */
 
-#ifndef __XACC_TRANSACTION_P_H__
-#define __XACC_TRANSACTION_P_H__
+#ifndef XACC_TRANSACTION_P_H
+#define XACC_TRANSACTION_P_H
 
 #include <time.h>
 #include <glib.h>
@@ -52,7 +52,7 @@
 #include "kvp_frame.h"
 #include "gnc-numeric.h"
 #include "Transaction.h"   /* for typedefs */
-#include "GNCId.h"
+#include "GNCIdP.h"
 
 
 /** STRUCTS *********************************************************/
@@ -74,11 +74,15 @@
  */
 
 
-struct _split 
+struct split_s
 {
   GUID guid;  /* globally unique id */
 
+  GNCEntityTable *entity_table; /* The table where this split is stored. */
+
+  GUID acc_guid;             /* the guid of the associated account */
   Account *acc;              /* back-pointer to debited/credited account  */
+
   Transaction *parent;       /* parent of split                           */
 
   /* The memo field is an arbitrary user-assiged value. 
@@ -100,17 +104,14 @@ struct _split
    * it's NULL until accessed. */
   kvp_frame * kvp_data;
 
-  /* The reconciled field ...
-   */
-  char    reconciled;
+  char    reconciled;        /* The reconciled field                      */
   Timespec date_reconciled;  /* date split was reconciled                 */
 
-  /* value is the amount of the account's currency involved,
-   * damount is the amount of the account's security.  For 
-   * bank-type accounts, currency == security and 
-   * value == damount. */
-  gnc_numeric  value;         
-  gnc_numeric  damount;  
+  /* 'value' is the amount of the transaction balancing commodity
+   * (i.e. currency) involved, 'amount' is the amount of the account's
+   * commodity (formerly known as 'security') involved. */
+  gnc_numeric  value;
+  gnc_numeric  amount;
 
   /* -------------------------------------------------------------- */
   /* Below follow some 'temporary' fields */
@@ -123,18 +124,21 @@ struct _split
   gnc_numeric  cleared_balance;
   gnc_numeric  reconciled_balance;
 
-  gnc_numeric  share_balance;
-  gnc_numeric  share_cleared_balance;
-  gnc_numeric  share_reconciled_balance;
+  /* -------------------------------------------------------------- */
+  /* Backend private expansion data */
+  guint32  idata;     /* used by the sql backend for kvp management */
 };
 
 
-struct _transaction 
+struct transaction_s
 {
   /* guid is a globally unique identifier which can be used to
    * reference the transaction.
    */
   GUID guid;
+
+  /* entity_table is the table where the transaction is stored by guid */
+  GNCEntityTable *entity_table;
 
   Timespec date_entered;     /* date register entry was made              */
   Timespec date_posted;      /* date transaction was posted at bank       */
@@ -143,19 +147,37 @@ struct _transaction
    * It is intended to store a short id number, typically the check number,
    * deposit number, invoice number or other tracking number.
    */
-  char  * num;  
+  char * num;  
 
   /* The description field is an arbitrary user-assigned value. 
    * It is meant to be a short descriptive phrase.
    */
-  char  * description;        
+  char * description;        
 
   /* kvp_data is a key-value pair database for storing simple 
    * "extra" information in splits, transactions, and accounts. 
    * it's NULL until accessed. */
   kvp_frame * kvp_data;
 
-  Split   **splits;          /* list of splits, null terminated           */
+
+  /* The common_currency field is the balancing common currency for
+   * all the splits in the transaction. 
+   *
+   * This field is going to replace the currency field in the account
+   * structures.  However, right now we are in a transition period: we
+   * store it here an in the account, and test its value dynamically
+   * for correctness.  If we can run for a few months without errors,
+   * then we'll make the conversion permanent.
+   *
+   * Alternate, better(?) name: "valuation currency": it is the
+   * currency in which all of the splits can be valued.  */
+  gnc_commodity *common_currency;
+
+  /* version number, used for tracking multiuser updates */
+  gint32 version;
+  guint32 version_check; /* data aging timestamp */
+
+  GList * splits; /* list of splits */
 
   /* marker is used to track the progress of transaction traversals. 
    * 0 is never a legitimate marker value, so we can tell is we hit
@@ -165,34 +187,36 @@ struct _transaction
    * corresponding to the current traversal. */
   unsigned char  marker;      
 
-  /* the "open" flag indicates if the transaction has been 
-   * opened for editing. */
-  char open;
+  gint32 editlevel; /* nestcount of begin/end edit calls */
+  gboolean do_free; /* transaction in process of being destroyed */
 
   /* the orig pointer points at a copy of the original transaction,
    * before editing was started.  This orig copy is used to rollback 
    * any changes made if/when the edit is abandoned.
    */
   Transaction *orig;
+
+  /* -------------------------------------------------------------- */
+  /* Backend private expansion data */
+  guint32  idata;     /* used by the sql backend for kvp management */
 };
+
+/* Lookup the transaction/split with the guid, using the given table. */
+Transaction * xaccTransLookupEntityTable (const GUID *guid,
+                                          GNCEntityTable *entity_table);
+
+Split * xaccSplitLookupEntityTable (const GUID *guid,
+                                    GNCEntityTable *entity_table);
 
 /* Set the transaction's GUID. This should only be done when reading
  * a transaction from a datafile, or some other external source. Never
  * call this on an existing transaction! */
-void xaccTransSetGUID (Transaction *trans, GUID *guid);
+void xaccTransSetGUID (Transaction *trans, const GUID *guid);
 
 /* Set the split's GUID. This should only be done when reading
  * a split from a datafile, or some other external source. Never
  * call this on an existing split! */
-void xaccSplitSetGUID (Split *split, GUID *guid);
-
-/* The xaccFreeTransaction() method simply frees all memory associated
- * with the transaction.  It does not perform any consistency checks 
- * to verify that such freeing can be safely done. (e.g. id does
- * not check to see if any of the member splits are referenced
- * by an account.
- */
-void  xaccFreeTransaction (Transaction *);
+void xaccSplitSetGUID (Split *split, const GUID *guid);
 
 /* The xaccFreeSplit() method simply frees all memory associated
  * with the split.  It does not verify that the split isn't
@@ -200,48 +224,26 @@ void  xaccFreeTransaction (Transaction *);
  * account, then calling this method will leave the system in an 
  * inconsistent state.
  */
-void  xaccFreeSplit   (Split *);    /* frees memory */
+void  xaccFreeSplit (Split *split);    /* frees memory */
 
-/* The xaccTransRemoveSplit() routine will remove the indicated
- *    split from the transaction.  It will *NOT* otherwise 
- *    re-adjust balances, modify accounts, etc.
+/* compute the value of a list of splits in the given currency,
+ * excluding the skip_me split. */
+gnc_numeric xaccSplitsComputeValue (GList *splits, Split * skip_me,
+                                    const gnc_commodity * base_currency);
+
+/* The xaccTransSet/GetVersion() routines set & get the version
+ *    numbers on this transaction.  The version number is used to manage
+ *    multi-user updates.  These routines are private because we don't
+ *    want anyone except the backend to mess with them.
  */
-void  xaccTransRemoveSplit (Transaction*, Split *);
+void xaccTransSetVersion (Transaction*, gint32);
+gint32 xaccTransGetVersion (Transaction*);
 
+/* The xaccTransFindCommonCurrency () method returns a gnc_commodity
+ *    indicating a currency denomination that all of the splits in this
+ *    transaction have in common, using the old currency/security fields
+ *    of the split accounts. */
+gnc_commodity * xaccTransFindOldCommonCurrency (Transaction *trans,
+                                                GNCBook *book);
 
-/*
- * The xaccSplitRebalance() routine is an important routine for
- * maintaining and ensuring that double-entries balance properly.
- * This routine forces the sum-total of the values of all the
- * splits in a transaction to total up to exactly zero.
- *
- * It is worthwhile to understand the algorithm that this routine
- * uses to acheive balance.  It goes like this:
- * If the indicated split is a destination split (i.e. is not
- * the first split), then the total value of the destination 
- * splits is computed, and the value of the source split (ie.
- * the first split) is adjusted to be minus this amount.
- * (the share price of the source split is not changed).
- * If the indicated split is the source split, then the value
- * of the very first destination split is adjusted so that
- * the balance is zero.  If there is not destination split,
- * one of two outcomes are possible, depending on whether
- * "forced_double_entry" is enabled or disabled.
- * (1) if forced-double-entry is disabled, the fact that
- *     the destination is missing is ignored.
- * (2) if force-double-entry is enabled, then a destination
- *     split that exactly mirrors the source split is created,
- *     and credited to the same account as the source split.
- *     Hopefully, the user will notice this, and reparent the
- *     destination split properly.
- */
-
-void xaccSplitRebalance (Split *);
-
-
-/* FIXME: this is probably wrong, but it'll have to wait until Bill
-   returns.  It's *ONLY* for file IO.  Don't use these elsewhere. */
-void xaccSplitSetValueDirectly(Split *s, gnc_numeric n);
-void xaccSplitSetQuantityDirectly(Split *s, gnc_numeric n);
-
-#endif /* __XACC_TRANSACTION_P_H__ */
+#endif /* XACC_TRANSACTION_P_H */

@@ -1,0 +1,125 @@
+  <article id="xacc-file-operations">
+    <artheader>
+      <title>File Operations</title>
+    </artheader>
+    <sect1>
+      <title>
+	GnuCash Data Files
+      </title>
+      <para>In normal operation, GnuCash saves your data in normal data files,
+	which can be located in any directory you have permissions for.  They
+	are self-contained and can be moved, copied, and backed-up to tape, 
+	floppies, or any other medium you choose.
+        They can be saved using any name, and any file extension you choose, but, traditionally
+      the developers and users have used the extension ".xac", or "gml2"
+	to distinguish the new XML format files from the old 1.4 binary file format.
+      </para>
+
+      <para>
+	The GnuCash file format has changed between the 1.4 and 1.6 releases.  The
+	new version uses XML (making it much easier to write independent tools to 
+	manipulate GnuCash files) and supports storing much more meta-information, amongst
+	many other benefits.  GnuCash 1.6 can read files from older versions, but
+	older versions <emphasis>cannot</emphasis>read GnuCash 1.6 files.  We suggest
+	that GnuCash users who wish to share data upgrade to 1.6.
+      </para>
+
+      <para>Gnucash <emphasis>cannot</emphasis> directly open data files from any other 
+      accounting package.  It can, however, import QIF files that Quicken, Microsoft
+      Money, and several other packages use an export format with the 
+      <link linkend="xacc-quicken">QIF importer</link>.  GnuCash does not have the 
+	ability to export QIFs at present, though such functionality would be highly
+	desirable - if anybody with some coding skills wants to work on it, please
+	contact the developers.
+      </para>
+    </sect1>
+
+    <sect1>
+      <title>
+	The File Menu
+      </title>      
+      <para>Like most applications, file operations are performed from the file menu:</para>
+ 
+      <itemizedlist>
+	<listitem><para><emphasis>New File</emphasis>: Create a brand-new, empty
+	    GnuCash file.  If you have unsaved work, GnuCash will ask you if you
+	    wish to save it.
+	    </para></listitem>
+
+	<listitem><para><emphasis>Open</emphasis>: Retrieve an existing GnuCash file.</para>
+	  </listitem>
+	<listitem><para><emphasis>Save</emphasis>: Save your current GnuCash data to disk under
+	    its current name.</para>
+	    </listitem>
+	<listitem><para><emphasis>Save as</emphasis>: Save the current data under a new 
+	    name.</para></listitem>
+	<listitem><para><emphasis><link linkend="xacc-export-accounts">Export Accounts</link>
+	      </emphasis>: Export your account structure, without any transactions.  Useful
+	    for making templates for others, or as a simple, but still useful way to close
+	    out books.
+	    </para></listitem>
+	<listitem>
+	  <para>
+	    <emphasis>
+	      <link linkend="xacc-quicken">Import QIF</link></emphasis>: Import QIF data
+	    files.</para></listitem>
+	<listitem>
+	  <para>
+	    <emphasis>
+	      <link linkend="xacc-new-account-tree">New Account Tree</link></emphasis>: 
+	    A shortcut
+	    to create many of the common accounts used by households.</para>
+	  </listitem>
+	<listitem><para><emphasis>Short cuts to previously opened files</emphasis>: 
+	    the previous four or so 
+	  GnuCash files you have opened will appear.  Select them to open.</para></listitem>
+
+	<listitem><para><emphasis>Move to New Window</emphasis>: create a new 
+	    top-level window.  See <link linkend="xacc-toplevel">here for more details.</link>
+	    </para></listitem>
+	<listitem><para><emphasis>Close This Window</emphasis>: Close <emphasis>this</emphasis>
+	    top-level window, leaving others open.  See <link linkend="xacc-toplevel">here</link> for more details.</para>
+	</listitem>
+	 <listitem><para><emphasis>Exit GnuCash</emphasis>: Close all windows and exit.
+	    GnuCash will prompt you to save the file, if there have been any changes since
+	    the last save.</para>
+	</listitem>
+      </itemizedlist>
+    </sect1>
+    <sect1 id="xacc-export-accounts">
+      <title>
+	Exporting Your account Hierachy
+      </title>
+     
+      <para>
+	If you wish for some reason, to create an empty file with the 
+	same account structure as a current one, you can do so by
+	selecting "Export accounts" from the File menu.
+	</para>
+      <para>
+	This can be used as a basic way to close your accounts, 
+	if you wish.
+      </para>
+    </sect1>
+
+    <sect1 id="xacc-postgres-backend">
+      <title>
+	Using PostGres to store your data
+      </title>
+      <para><emphasis>FIXME: Need Content!</emphasis></para>
+      <para>
+	GnuCash has beta support for using postgres, a free, powerful, 
+	mostly SQL-compliant database engine, as a data storage method
+	rather than flat files.
+      </para>
+      <para>
+	At this stage, the only documentation is in the file 
+	src/doc/engine/sql/README in the GnuCash source distribution.
+      </para>
+    </sect1>
+  </article>
+  
+
+<!-- Local variables: -->
+<!-- sgml-parent-document: "gnucash.sgml" -->
+<!-- End: -->

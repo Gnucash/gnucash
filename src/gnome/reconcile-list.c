@@ -22,17 +22,16 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-#include "top-level.h"
+#include "config.h"
 
 #include <gnome.h>
 
-#include "gnucash.h"
-#include "reconcile-list.h"
-#include "dialog-utils.h"
-#include "FileDialog.h"
-#include "messages.h"
 #include "date.h"
-#include "util.h"
+#include "dialog-utils.h"
+#include "global-options.h"
+#include "gnc-ui-util.h"
+#include "messages.h"
+#include "reconcile-list.h"
 
 
 /* Signal codes */
@@ -61,7 +60,7 @@ static void gnc_reconcile_list_fill(GNCReconcileList *list);
 
 
 GtkType
-gnc_reconcile_list_get_type()
+gnc_reconcile_list_get_type (void)
 {
   static GtkType gnc_reconcile_list_type = 0;
 
@@ -99,9 +98,11 @@ GtkWidget *
 gnc_reconcile_list_new(Account *account, GNCReconcileListType type)
 {
   GNCReconcileList *list;
+  gboolean include_children;
 
-  assert(account != NULL);
-  assert((type == RECLIST_DEBIT) || (type == RECLIST_CREDIT));
+  g_return_val_if_fail(account, NULL);
+  g_return_val_if_fail((type == RECLIST_DEBIT) ||
+                       (type == RECLIST_CREDIT), NULL);
 
   list = GNC_RECONCILE_LIST(gtk_type_new(gnc_reconcile_list_get_type()));
 
@@ -110,101 +111,106 @@ gnc_reconcile_list_new(Account *account, GNCReconcileListType type)
 
   list->query = xaccMallocQuery();
 
-  xaccQuerySetGroup(list->query, gncGetCurrentGroup());
+  xaccQuerySetGroup(list->query, gnc_get_current_group ());
 
   /* match the account */
   xaccQueryAddSingleAccountMatch(list->query, account, QUERY_OR);
 
+  include_children = xaccAccountGetReconcileChildrenStatus(account);
+  if(include_children)
+  {
+    /* match child accounts */
+    AccountGroup *account_group = xaccAccountGetChildren(account);
+    GList *children_list = xaccGroupGetSubAccounts(account_group);
+    GList *node;
+
+    for (node = children_list; node; node = node->next)
+      xaccQueryAddSingleAccountMatch (list->query, node->data, QUERY_OR);
+
+    g_list_free (children_list);
+  }
+
   if (type == RECLIST_CREDIT)
     DxaccQueryAddAmountMatch(list->query, 0.0, AMT_SGN_MATCH_CREDIT,
-                            AMT_MATCH_ATLEAST, QUERY_AND);
+                             AMT_MATCH_ATLEAST, QUERY_AND);
   else
     DxaccQueryAddAmountMatch(list->query, 0.0, AMT_SGN_MATCH_DEBIT,
-                            AMT_MATCH_ATLEAST, QUERY_AND);
+                             AMT_MATCH_ATLEAST, QUERY_AND);
 
   return GTK_WIDGET(list);
 }
 
 static void
-gnc_reconcile_list_init(GNCReconcileList *list)
+update_toggle (GtkCList *list, gint row)
 {
-  GtkCList *clist = GTK_CLIST(list);
+  GNCReconcileList *rlist = GNC_RECONCILE_LIST (list);
+  gboolean reconciled;
+  Split *split;
+
+  split = gtk_clist_get_row_data (list, row);
+  reconciled = g_hash_table_lookup (rlist->reconciled, split) != NULL;
+
+  gnc_clist_set_check (list, row, 4, reconciled);
+}
+
+static void
+gnc_reconcile_list_init (GNCReconcileList *list)
+{
+  GtkCList *clist = GTK_CLIST (list);
+  GtkStyle *style;
   gchar * titles[] =
     {
-      DATE_STR,
-      NUM_STR,
-      DESC_STR,
-      AMT_STR,
-      RECONCILE_ABBREV,
+      _("Date"),
+      _("Num"),
+      _("Description"),
+      _("Amount"),
+      _("Reconciled:R") + 11,
       NULL
     };
 
   list->num_splits = 0;
   list->num_columns = 0;
-  list->reconciled = g_hash_table_new(NULL, NULL);
+  list->reconciled = g_hash_table_new (NULL, NULL);
   list->current_row = -1;
   list->current_split = NULL;
   list->no_toggle = FALSE;
   list->always_unselect = FALSE;
+  list->first_fill = TRUE;
   list->query = NULL;
 
   while (titles[list->num_columns] != NULL)
     list->num_columns++;
 
-  gtk_clist_construct(clist, list->num_columns, titles);
+  gtk_clist_construct (clist, list->num_columns, titles);
   gtk_clist_set_shadow_type (clist, GTK_SHADOW_IN);
-  gtk_clist_set_column_justification(clist, 3, GTK_JUSTIFY_RIGHT);
-  gtk_clist_set_column_justification(clist, 4, GTK_JUSTIFY_CENTER);
-  gtk_clist_column_titles_passive(clist);
+  gtk_clist_set_column_justification (clist, 3, GTK_JUSTIFY_RIGHT);
+  gtk_clist_set_column_justification (clist, 4, GTK_JUSTIFY_CENTER);
+  gtk_clist_column_titles_passive (clist);
+
+  style = gtk_widget_get_style (GTK_WIDGET(list));
 
   {
-    GtkStyle *st = gtk_widget_get_style(GTK_WIDGET(list));
     GdkFont *font = NULL;
     gint width;
     gint i;
 
-    if (st != NULL)
-      font = st->font;
-
+    font = style->font;
     if (font != NULL)
+    {
       for (i = 0; i < list->num_columns; i++)
       {
-	width = gdk_string_width(font, titles[i]);
-	gtk_clist_set_column_min_width(GTK_CLIST(list), i, width + 5);
+	width = gdk_string_width (font, titles[i]);
+	gtk_clist_set_column_min_width (clist, i, width + 5);
 	if (i == 4)
-	  gtk_clist_set_column_max_width(GTK_CLIST(list), i, width + 5);
+	  gtk_clist_set_column_max_width (clist, i, width + 5);
       }
-  }
-
-  {
-    GdkColormap *cm = gtk_widget_get_colormap(GTK_WIDGET(list));
-    GtkStyle *style = gtk_widget_get_style(GTK_WIDGET(list));
-
-    list->reconciled_style = gtk_style_copy(style);
-
-    if (gnc_color_deficits())
-    {
-      style = list->reconciled_style;
-
-      /* A dark green */
-      style->fg[GTK_STATE_NORMAL].red   = 0;
-      style->fg[GTK_STATE_NORMAL].green = 40000;
-      style->fg[GTK_STATE_NORMAL].blue  = 0;
-
-      gdk_colormap_alloc_color(cm, &style->fg[GTK_STATE_NORMAL], FALSE, TRUE);
-
-      /* A nice yellow */
-      style->fg[GTK_STATE_SELECTED].red   = 65280;
-      style->fg[GTK_STATE_SELECTED].green = 62976;
-      style->fg[GTK_STATE_SELECTED].blue  = 36608;
-
-      gdk_colormap_alloc_color(cm, &style->fg[GTK_STATE_SELECTED], FALSE, TRUE);
     }
   }
 }
 
+
 static void
-gnc_reconcile_list_class_init(GNCReconcileListClass *klass)
+gnc_reconcile_list_class_init (GNCReconcileListClass *klass)
 {
   GtkObjectClass    *object_class;
   GtkWidgetClass    *widget_class;
@@ -252,75 +258,131 @@ gnc_reconcile_list_class_init(GNCReconcileListClass *klass)
 }
 
 static void
-gnc_reconcile_list_set_row_style(GNCReconcileList *list, gint row,
-                                 gboolean reconciled)
+gnc_reconcile_list_toggle_row(GNCReconcileList *list, gint row)
 {
-  if (reconciled)
-    gtk_clist_set_cell_style(GTK_CLIST(list), row, 4, list->reconciled_style);
+  Split *split, *current;
+
+  g_return_if_fail (IS_GNC_RECONCILE_LIST(list));
+  g_return_if_fail (list->reconciled != NULL);
+
+  if (list->no_toggle)
+    return;
+
+  split = gtk_clist_get_row_data (GTK_CLIST(list), row);
+  current = g_hash_table_lookup (list->reconciled, split);
+
+  list->current_split = split;
+
+  if (current == NULL)
+    g_hash_table_insert (list->reconciled, split, split);
   else
-    gtk_clist_set_cell_style(GTK_CLIST(list), row, 4,
-			     gtk_widget_get_style(GTK_WIDGET(list)));
+    g_hash_table_remove (list->reconciled, split);
+
+  update_toggle (GTK_CLIST (list), row);
 }
 
 static void
-gnc_reconcile_list_toggle(GNCReconcileList *list)
+gnc_reconcile_list_toggle_children(Account *account, GNCReconcileList *list, Split *split)
+{
+  AccountGroup *account_group;
+  GList *child_accounts, *node;
+  Transaction *transaction;
+
+  /*
+   * Need to get all splits in this transaction and identify any that are
+   * in the same heirarchy as the account being reconciled (not necessarily
+   * the account this split is from.)
+   *
+   * For each of these splits toggle them all to the same state.
+   */
+  account_group = xaccAccountGetChildren(account);
+  child_accounts = xaccGroupGetSubAccounts(account_group);
+  child_accounts = g_list_prepend(child_accounts, account);
+  transaction = xaccSplitGetParent(split);
+  for(node = xaccTransGetSplitList(transaction); node; node = node->next)
+  {
+    Split *other_split;
+    Account *other_account;
+    GNCReconcileList *current_list;
+    gint row;
+    GtkCList *split_list;
+
+    other_split = node->data;
+    other_account = xaccSplitGetAccount(other_split);
+    if(other_split == split)
+      continue;
+    /* Check this 'other' account in in the same heirarchy */
+    if(!g_list_find(child_accounts,other_account))
+      continue;
+    /* Search our sibling list for this split first.  We search the 
+     * sibling list first because that it where it is most likely to be.
+     */
+    current_list = list->sibling;
+    row = gtk_clist_find_row_from_data(GTK_CLIST(&current_list->clist), other_split);
+    if(row == -1) {
+      /* Not in the sibling list, try this list */
+      current_list = list;
+      row = gtk_clist_find_row_from_data(GTK_CLIST(&current_list->clist), other_split);
+      if(row == -1)
+	/* We can't find it, nothing more I can do about it */
+	continue;
+    }
+    gnc_reconcile_list_toggle_row(current_list, row);
+  }
+}
+
+static void
+gnc_reconcile_list_toggle (GNCReconcileList *list)
 {
   Split *split, *current;
-  gboolean reconciled;
-  const char *recn_str;
-  char recn;
   gint row;
+  Account * account;
+  gboolean include_children;
 
-  assert(IS_GNC_RECONCILE_LIST(list));
-  assert(list->reconciled != NULL);
+  g_return_if_fail (IS_GNC_RECONCILE_LIST(list));
+  g_return_if_fail (list->reconciled != NULL);
 
   if (list->no_toggle)
     return;
 
   row = list->current_row;
-  split = gtk_clist_get_row_data(GTK_CLIST(list), row);
-  current = g_hash_table_lookup(list->reconciled, split);
+  split = gtk_clist_get_row_data (GTK_CLIST(list), row);
+  current = g_hash_table_lookup (list->reconciled, split);
 
   list->current_split = split;
 
   if (current == NULL)
-  {
-    reconciled = TRUE;
-    g_hash_table_insert(list->reconciled, split, split);
-  }
+    g_hash_table_insert (list->reconciled, split, split);
   else
-  {
-    reconciled = FALSE;
-    g_hash_table_remove(list->reconciled, split);
-  }
+    g_hash_table_remove (list->reconciled, split);
 
-  recn = xaccSplitGetReconcile(split);
-  recn = reconciled ? YREC : recn;
-  recn_str = gnc_get_reconcile_str(recn);
-  gtk_clist_set_text(GTK_CLIST(list), row, 4, recn_str);
+  update_toggle (GTK_CLIST (list), row);
 
-  gnc_reconcile_list_set_row_style(list, row, reconciled);
+  include_children = xaccAccountGetReconcileChildrenStatus(list->account);
+  if(include_children)
+    gnc_reconcile_list_toggle_children(list->account, list, split);
 
-  gtk_signal_emit(GTK_OBJECT(list),
-                  reconcile_list_signals[TOGGLE_RECONCILED], split);
+  gtk_signal_emit (GTK_OBJECT (list),
+                   reconcile_list_signals[TOGGLE_RECONCILED], split);
 }
 
 static void
-gnc_reconcile_list_select_row(GtkCList *clist, gint row, gint column,
-			      GdkEvent *event)
+gnc_reconcile_list_select_row (GtkCList *clist, gint row, gint column,
+			       GdkEvent *event)
 {
   GNCReconcileList *list = GNC_RECONCILE_LIST(clist);
 
   list->current_row = row;
-  gnc_reconcile_list_toggle(list);
 
-  GTK_CLIST_CLASS(parent_class)->select_row(clist, row, column, event);
+  gnc_reconcile_list_toggle (list);
+
+  GTK_CLIST_CLASS(parent_class)->select_row (clist, row, column, event);
 
   if (event && (event->type == GDK_2BUTTON_PRESS))
   {
     Split *split;
 
-    split = gtk_clist_get_row_data(clist, row);
+    split = gtk_clist_get_row_data (clist, row);
 
     gtk_signal_emit(GTK_OBJECT(list),
                     reconcile_list_signals[DOUBLE_CLICK_SPLIT], split);
@@ -328,41 +390,35 @@ gnc_reconcile_list_select_row(GtkCList *clist, gint row, gint column,
 }
 
 static void
-gnc_reconcile_list_unselect_row(GtkCList *clist, gint row, gint column,
-				GdkEvent *event)
+gnc_reconcile_list_unselect_row (GtkCList *clist, gint row, gint column,
+                                 GdkEvent *event)
 {
   GNCReconcileList *list = GNC_RECONCILE_LIST(clist);
 
   if (row == list->current_row)
   {
-    gnc_reconcile_list_toggle(list);
+    gnc_reconcile_list_toggle (list);
     if (!list->always_unselect)
       return;
   }
 
-  GTK_CLIST_CLASS(parent_class)->unselect_row(clist, row, column, event);
+  GTK_CLIST_CLASS(parent_class)->unselect_row (clist, row, column, event);
 
   if (event && (event->type == GDK_2BUTTON_PRESS))
   {
     Split *split;
 
-    split = gtk_clist_get_row_data(clist, row);
+    split = gtk_clist_get_row_data (clist, row);
 
-    gtk_signal_emit(GTK_OBJECT(list),
-                    reconcile_list_signals[DOUBLE_CLICK_SPLIT], split);
+    gtk_signal_emit (GTK_OBJECT(list),
+                     reconcile_list_signals[DOUBLE_CLICK_SPLIT], split);
   }
 }
 
 static void
-gnc_reconcile_list_destroy(GtkObject *object)
+gnc_reconcile_list_destroy (GtkObject *object)
 {
   GNCReconcileList *list = GNC_RECONCILE_LIST(object);
-
-  if (list->reconciled_style != NULL)
-  {
-    gtk_style_unref(list->reconciled_style);
-    list->reconciled_style = NULL;
-  }
 
   if (list->reconciled != NULL)
   {
@@ -377,23 +433,23 @@ gnc_reconcile_list_destroy(GtkObject *object)
   }
 
   if (GTK_OBJECT_CLASS(parent_class)->destroy)
-    (* GTK_OBJECT_CLASS(parent_class)->destroy) (object);
+    GTK_OBJECT_CLASS(parent_class)->destroy (object);
 }
 
 gint
-gnc_reconcile_list_get_needed_height(GNCReconcileList *list, gint num_rows)
+gnc_reconcile_list_get_needed_height (GNCReconcileList *list, gint num_rows)
 {
   GtkCList *clist;
   gint list_height;
   gint title_height;
 
-  g_return_val_if_fail(list != NULL, 0);
-  g_return_val_if_fail(IS_GNC_RECONCILE_LIST(list), 0);
+  g_return_val_if_fail (list != NULL, 0);
+  g_return_val_if_fail (IS_GNC_RECONCILE_LIST(list), 0);
 
-  if (!GTK_WIDGET_REALIZED(list))
+  if (!GTK_WIDGET_REALIZED (list))
     return 0;
 
-  clist = GTK_CLIST(list);
+  clist = GTK_CLIST (list);
 
   /* sync with gtkclist.c */
   title_height = (clist->column_title_area.height +
@@ -405,19 +461,19 @@ gnc_reconcile_list_get_needed_height(GNCReconcileList *list, gint num_rows)
 }
 
 gint
-gnc_reconcile_list_get_num_splits(GNCReconcileList *list)
+gnc_reconcile_list_get_num_splits (GNCReconcileList *list)
 {
-  g_return_val_if_fail(list != NULL, 0);
-  g_return_val_if_fail(IS_GNC_RECONCILE_LIST(list), 0);
+  g_return_val_if_fail (list != NULL, 0);
+  g_return_val_if_fail (IS_GNC_RECONCILE_LIST(list), 0);
 
   return list->num_splits;
 }
 
 Split *
-gnc_reconcile_list_get_current_split(GNCReconcileList *list)
+gnc_reconcile_list_get_current_split (GNCReconcileList *list)
 {
-  g_return_val_if_fail(list != NULL, NULL);
-  g_return_val_if_fail(IS_GNC_RECONCILE_LIST(list), NULL);
+  g_return_val_if_fail (list != NULL, NULL);
+  g_return_val_if_fail (IS_GNC_RECONCILE_LIST(list), NULL);
 
   return list->current_split;
 }
@@ -430,53 +486,69 @@ gnc_reconcile_list_get_current_split(GNCReconcileList *list)
  * Returns: nothing                                                 *
 \********************************************************************/
 void
-gnc_reconcile_list_refresh(GNCReconcileList *list)
+gnc_reconcile_list_refresh (GNCReconcileList *list)
 {
   GtkCList *clist = GTK_CLIST(list);
   GtkAdjustment *adjustment;
   gfloat save_value = 0.0;
+  Split *old_focus_split;
   Split *old_split;
+  gint old_focus_row;
   gint new_row;
 
-  g_return_if_fail(list != NULL);
-  g_return_if_fail(IS_GNC_RECONCILE_LIST(list));
+  g_return_if_fail (list != NULL);
+  g_return_if_fail (IS_GNC_RECONCILE_LIST(list));
 
-  adjustment = gtk_clist_get_vadjustment(GTK_CLIST(list));
+  adjustment = gtk_clist_get_vadjustment (GTK_CLIST(list));
   if (adjustment != NULL)
     save_value = adjustment->value;
 
-  gtk_clist_freeze(clist);
+  old_focus_row = clist->focus_row;
+  old_focus_split = gtk_clist_get_row_data (clist, old_focus_row);
 
-  gtk_clist_clear(clist);
+  gtk_clist_freeze (clist);
+
+  gtk_clist_clear (clist);
 
   old_split = list->current_split;
   list->num_splits = 0;
   list->current_row = -1;
   list->current_split = NULL;
 
-  gnc_reconcile_list_fill(list);
+  gnc_reconcile_list_fill (list);
 
-  gtk_clist_columns_autosize(clist);
+  gtk_clist_columns_autosize (clist);
 
-  if (adjustment != NULL)
+  if (adjustment)
   {
-    save_value = CLAMP(save_value, adjustment->lower, adjustment->upper);
-    gtk_adjustment_set_value(adjustment, save_value);
+    save_value = CLAMP (save_value, adjustment->lower, adjustment->upper);
+    gtk_adjustment_set_value (adjustment, save_value);
   }
 
-  if (old_split != NULL)
+  if (old_split)
   {
-    new_row = gtk_clist_find_row_from_data(clist, old_split);
+    new_row = gtk_clist_find_row_from_data (clist, old_split);
     if (new_row >= 0)
     {
       list->no_toggle = TRUE;
-      gtk_clist_select_row(clist, new_row, 0);
+      gtk_clist_select_row (clist, new_row, 0);
       list->no_toggle = FALSE;
       list->current_split = old_split;
     }
   }
 
-  gtk_clist_thaw(clist);
+  if (old_focus_split)
+  {
+    new_row = gtk_clist_find_row_from_data (clist, old_focus_split);
+
+    if (new_row < 0)
+      new_row = old_focus_row;
+
+    if (new_row >= 0)
+      clist->focus_row = new_row;
+  }
+
+  gtk_clist_thaw (clist);
 }
 
 
@@ -485,40 +557,35 @@ gnc_reconcile_list_refresh(GNCReconcileList *list)
  *   returns the reconciled balance of the list                     *
  *                                                                  *
  * Args: list - list to get reconciled balance of                   *
- * Returns: reconciled balance (double)                             *
+ * Returns: reconciled balance (gnc_numeric)                        *
 \********************************************************************/
-double
-gnc_reconcile_list_reconciled_balance(GNCReconcileList *list)
+gnc_numeric
+gnc_reconcile_list_reconciled_balance (GNCReconcileList *list)
 {
   GtkCList *clist = GTK_CLIST(list);
   Split *split;
-  double total = 0.0;
-  int account_type;
+  gnc_numeric total;
   int i;
 
-  g_return_val_if_fail(list != NULL, 0.0);
-  g_return_val_if_fail(IS_GNC_RECONCILE_LIST(list), 0.0);
+  total = gnc_numeric_zero ();
+
+  g_return_val_if_fail (list != NULL, total);
+  g_return_val_if_fail (IS_GNC_RECONCILE_LIST(list), total);
 
   if (list->reconciled == NULL)
-    return 0.0;
-
-  account_type = xaccAccountGetType(list->account);
+    return total;
 
   for (i = 0; i < list->num_splits; i++)
   {
-    split = gtk_clist_get_row_data(clist, i);
+    split = gtk_clist_get_row_data (clist, i);
 
-    if (g_hash_table_lookup(list->reconciled, split) == NULL)
+    if (g_hash_table_lookup (list->reconciled, split) == NULL)
       continue;
 
-    if ((account_type == STOCK) || (account_type == MUTUAL) ||
-        (account_type == CURRENCY))
-      total += DxaccSplitGetShareAmount(split);
-    else
-      total += DxaccSplitGetValue(split);
+    total = gnc_numeric_add_fixed (total, xaccSplitGetAmount(split));
   }
 
-  return DABS(total);
+  return gnc_numeric_abs (total);
 }
 
 
@@ -531,8 +598,50 @@ gnc_reconcile_list_reconciled_balance(GNCReconcileList *list)
  * Returns: nothing                                                 *
 \********************************************************************/
 void
-gnc_reconcile_list_commit(GNCReconcileList *list, time_t date)
+gnc_reconcile_list_commit (GNCReconcileList *list, time_t date)
 {
+  GtkCList *clist = GTK_CLIST(list);
+  Split *split;
+  int i;
+
+  g_return_if_fail (list != NULL);
+  g_return_if_fail (IS_GNC_RECONCILE_LIST(list));
+
+  if (list->reconciled == NULL)
+    return;
+
+  for (i = 0; i < list->num_splits; i++)
+  {
+    Transaction *trans;
+    char recn;
+
+    split = gtk_clist_get_row_data (clist, i);
+    trans = xaccSplitGetParent(split);
+
+    recn = g_hash_table_lookup (list->reconciled, split) ? YREC : NREC;
+
+    xaccTransBeginEdit(trans);
+    xaccSplitSetReconcile (split, recn);
+    if (recn == YREC) {
+      xaccSplitSetDateReconciledSecs (split, date);
+    }
+    xaccTransCommitEdit(trans);
+  }
+}
+
+
+/********************************************************************\
+ * gnc_reconcile_list_commit                                        *
+ *   postpone the reconcile information in the list by setting      *
+ *   reconciled splits to cleared status                            *
+ *                                                                  *
+ * Args: list - list to commit                                      *
+ * Returns: nothing                                                 *
+\********************************************************************/
+void
+gnc_reconcile_list_postpone (GNCReconcileList *list)
+{
+  Transaction *trans;
   GtkCList *clist = GTK_CLIST(list);
   Split *split;
   int i;
@@ -545,13 +654,16 @@ gnc_reconcile_list_commit(GNCReconcileList *list, time_t date)
 
   for (i = 0; i < list->num_splits; i++)
   {
-    split = gtk_clist_get_row_data(clist, i);
+    char recn;
 
-    if (g_hash_table_lookup(list->reconciled, split) != NULL)
-    {
-      xaccSplitSetReconcile(split, YREC);
-      xaccSplitSetDateReconciledSecs(split, date);
-    }
+    split = gtk_clist_get_row_data (clist, i);
+
+    recn = g_hash_table_lookup (list->reconciled, split) ? CREC : NREC;
+
+    trans = xaccSplitGetParent(split);
+    xaccTransBeginEdit(trans);
+    xaccSplitSetReconcile (split, recn);
+    xaccTransCommitEdit(trans);
   }
 }
 
@@ -566,13 +678,13 @@ gnc_reconcile_list_commit(GNCReconcileList *list, time_t date)
 void
 gnc_reconcile_list_unselect_all(GNCReconcileList *list)
 {
-  g_return_if_fail(list != NULL);
-  g_return_if_fail(IS_GNC_RECONCILE_LIST(list));
+  g_return_if_fail (list != NULL);
+  g_return_if_fail (IS_GNC_RECONCILE_LIST(list));
 
   list->no_toggle = TRUE;
   list->always_unselect = TRUE;
 
-  gtk_clist_unselect_all(GTK_CLIST(list));
+  gtk_clist_unselect_all (GTK_CLIST(list));
 
   list->always_unselect = FALSE;
   list->no_toggle = FALSE;
@@ -589,12 +701,12 @@ gnc_reconcile_list_unselect_all(GNCReconcileList *list)
  * Returns: true if any reconciled splits                           *
 \********************************************************************/
 gboolean
-gnc_reconcile_list_changed(GNCReconcileList *list)
+gnc_reconcile_list_changed (GNCReconcileList *list)
 {
-  g_return_val_if_fail(list != NULL, FALSE);
-  g_return_val_if_fail(IS_GNC_RECONCILE_LIST(list), FALSE);
+  g_return_val_if_fail (list != NULL, FALSE);
+  g_return_val_if_fail (IS_GNC_RECONCILE_LIST(list), FALSE);
 
-  return g_hash_table_size(list->reconciled) != 0;
+  return g_hash_table_size (list->reconciled) != 0;
 }
 
 
@@ -606,89 +718,83 @@ gnc_reconcile_list_changed(GNCReconcileList *list)
  * Returns: nothing                                                 *
 \********************************************************************/
 void
-gnc_reconcile_list_set_sort_order(GNCReconcileList *list, sort_type_t key)
+gnc_reconcile_list_set_sort_order (GNCReconcileList *list, sort_type_t key)
 {
-  g_return_if_fail(list != NULL);
-  g_return_if_fail(IS_GNC_RECONCILE_LIST(list));
-  g_return_if_fail(list->query != NULL);
+  g_return_if_fail (list != NULL);
+  g_return_if_fail (IS_GNC_RECONCILE_LIST(list));
+  g_return_if_fail (list->query != NULL);
 
-  xaccQuerySetSortOrder(list->query, key,
-                        (key == BY_STANDARD) ? BY_NONE : BY_STANDARD,
-                        BY_NONE);
+  xaccQuerySetSortOrder (list->query, key,
+                         (key == BY_STANDARD) ? BY_NONE : BY_STANDARD,
+                         BY_NONE);
 
   if (list->list_type == RECLIST_DEBIT)
     return;
 
-  xaccQuerySetSortIncreasing(list->query, !(key == BY_AMOUNT));
+  xaccQuerySetSortIncreasing (list->query,
+                              !(key == BY_AMOUNT),
+                              !(key == BY_AMOUNT),
+                              !(key == BY_AMOUNT));
 }
 
 static void
 gnc_reconcile_list_fill(GNCReconcileList *list)
 {
   const gchar *strings[list->num_columns + 1];
-  GNCPrintAmountFlags flags = PRTSEP;
-  GNCAccountType account_type;
-  gboolean reconciled;
-
+  GNCPrintAmountInfo print_info;
   Transaction *trans;
-  Split **splits;
+  gboolean auto_check;
+  GList *splits;
   Split *split;
 
-  const gnc_commodity * currency;
-  char recn;
+  auto_check = gnc_lookup_boolean_option ("Reconcile",
+                                          "Check off cleared transactions",
+                                          TRUE);
 
-  double amount;
-  int row;
-
-  account_type = xaccAccountGetType(list->account);
-  currency = xaccAccountGetCurrency(list->account);
   strings[5] = NULL;
 
-  if ((account_type == STOCK) || (account_type == MUTUAL) ||
-      (account_type == CURRENCY))
-    flags |= PRTSHR;
+  print_info = gnc_account_print_info (list->account, FALSE);
 
-  splits = xaccQueryGetSplits(list->query);
-
-  for ( ; *splits != NULL; splits++)
+  for (splits = xaccQueryGetSplits (list->query); splits; splits=splits->next)
   {
+    gnc_numeric amount;
     Timespec ts;
+    char recn;
+    int row;
 
-    split = *splits;
+    split = splits->data;
 
     recn = xaccSplitGetReconcile(split);
     if ((recn != NREC) && (recn != CREC))
       continue;
 
-    if((account_type == STOCK) || (account_type == MUTUAL))
-      amount = DxaccSplitGetShareAmount(split);
-    else
-      amount = DxaccSplitGetValue(split);
+    amount = xaccSplitGetAmount (split);
 
-    if ((amount < 0) && (list->list_type == RECLIST_DEBIT))
+    if (gnc_numeric_negative_p (amount) && list->list_type == RECLIST_DEBIT)
       continue;
-    if ((amount >= 0) && (list->list_type == RECLIST_CREDIT))
+    if (!gnc_numeric_negative_p (amount) && list->list_type == RECLIST_CREDIT)
       continue;
 
-    trans = xaccSplitGetParent(split);
+    trans = xaccSplitGetParent (split);
 
-    xaccTransGetDateTS(trans, &ts);
+    xaccTransGetDatePostedTS (trans, &ts);
 
-    strings[0] = gnc_print_date(ts);
-    strings[1] = xaccTransGetNum(trans);
-    strings[2] = xaccTransGetDescription(trans);
-    strings[3] = DxaccPrintAmount(DABS(amount), flags, 
-                                 gnc_commodity_get_mnemonic(currency));
+    strings[0] = gnc_print_date (ts);
+    strings[1] = xaccTransGetNum (trans);
+    strings[2] = xaccTransGetDescription (trans);
+    strings[3] = xaccPrintAmount (gnc_numeric_abs (amount), print_info);
+    strings[4] = "";
 
-    reconciled = g_hash_table_lookup(list->reconciled, split) != NULL;
-    recn = reconciled ? YREC : recn;
-    strings[4] = gnc_get_reconcile_str(recn);
+    if (list->first_fill && auto_check && recn == CREC)
+      g_hash_table_insert (list->reconciled, split, split);
 
-    row = gtk_clist_append(GTK_CLIST(list), (gchar **) strings);
-    gtk_clist_set_row_data(GTK_CLIST(list), row, split);
+    row = gtk_clist_append (GTK_CLIST(list), (gchar **) strings);
+    gtk_clist_set_row_data (GTK_CLIST(list), row, split);
 
-    gnc_reconcile_list_set_row_style(list, row, reconciled);
+    update_toggle (GTK_CLIST (list), row);
 
     list->num_splits++;
   }
+
+  list->first_fill = FALSE;
 }

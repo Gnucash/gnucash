@@ -1,0 +1,273 @@
+<article id="xacc-whats-new">
+  <artheader>
+    <title>
+      What's New?
+    </title>
+  </artheader>
+  <sect1>
+    <title>
+      What's new in GnuCash 1.6?
+    </title>
+    
+    <para>
+      Hello to all our existing GnuCash users!  A lot has changed since 1.4.x,
+      and we believe that our new version is a major improvement on the old 
+      version.  Virtually every aspect of the program has changed, and 
+      lots of new capabilities have been added.
+    </para>
+    <sect2>
+      <title>
+	New File Format
+      </title>
+      <para>
+	We have switched to an XML-based text file format.  GnuCash will read
+	your existing 1.4 files without conversion.  However, 1.6 will
+	always save your files in the new format.</para>
+      <para>The new format is much, much more flexible than the old,
+	and was required for all the other new features, as well as 
+	many other features to be added in the future.  In addition,
+	because it is based on XML, it makes it much easier for
+	external tools to manipulate GnuCash files.
+      </para>
+      <para>
+	We have tested the
+	new format extensively, but, as always, it pays to keep a
+	backup of your old data handy, just in case.
+      </para>
+      
+      <para>
+	As a small example of the improvements made possible by the
+	new file format, GnuCash 1.4 uses "floating-point" numbers
+	for its internal calculations, just like a calculator.
+	Unfortunately, floating-point numbers are (rarely)
+	susceptible to rounding errors.  Therefore, GnuCash has
+	changed to fixed-point number representation stored to
+	exactly the accuracy required.  Even some expensive
+	proprietary "enterprise" accounting 
+	packages do not support this vital feature.
+      </para>
+    </sect2>
+    
+    <sect2>
+      <title>
+	New Interface
+      </title>
+      <para>The interface has been massively revamped to make it 
+	faster and easier to use.</para>
+      <itemizedlist>
+	<listitem><para>The register has been totally
+	    revamped.  The confusing auto-balancing has been
+	    reworked, the multi-line modes are much improved -
+	    making it much easier to handle split transactions,
+	    and you can now display a report of the transactions
+	    in a register, making it easy to export or print them.
+	  </para>
+	</listitem>
+	<listitem><para>The QIF importer's interface is now much
+	    simpler to use</para></listitem>
+	<listitem><para>The main window has been totally revamped.
+	    You now have the choice of displaying the account window
+	    and one or more reports in a tabbed-notebook style view,
+	    as multiple top-level windows, or all in the one
+	    window.</para>
+	</listitem>
+	<listitem><para>
+	    The help window is now fully indexed and searchable.
+	  </para>
+	</listitem>
+	<listitem>
+	  <para>
+	    The financial calculator, available from the "Tools"
+	    menu, lets you calculate loan repayments and compound
+	    interest easily.
+	  </para>
+	</listitem>
+      </itemizedlist>
+    </sect2>
+    
+    <sect2>
+      <title>
+	Reports
+      </title>
+      <para>The reporting architecture has changed radically for
+	this release - and so reports are now more informative,
+	flexible, and attractive than ever before.  Some of the
+	improvements and new features include:
+      </para>
+      <itemizedlist>
+	<listitem>
+	  <para>
+	    The new gtkhtml "widget" is used for report display.
+	    The new display engine is faster, and produces 
+	    better-looking output.
+	  </para>
+	</listitem>
+	<listitem>
+	  <para>
+	    Reports are now saved from session to session.  
+	    To make this more useful, "rolling reports" with
+	    date ranges specified using symbolic dates such 
+	    as "today" or "beginning of this year" are now
+	    available.
+	  </para>
+	</listitem>
+	<listitem>
+	  <para>
+	    <emphasis>Stylesheets</emphasis> control report
+	    formatting, allowing you to customize the look
+	    of your report.
+	  </para>
+	</listitem>
+	<listitem>
+	  <para>
+	    Reports now display useful information when 
+	    multiple currencies are involved.
+	  </para>
+	</listitem>
+	<listitem>
+	  <para>
+	    Virtually every individual report has been 
+	    radically improved, with nicer layout, 
+	    closer correspondence with standard accounting
+	    procedures, and radically improved flexibility
+	    and configurability.
+	  </para>
+	</listitem>
+	<listitem>
+	  <para>
+	    Multiple reports can be packed together
+	    into the one window for convenient display
+	    of all the financial information you want,
+	    using the multicolumn view, a special 
+	    "container" report.
+	  </para>
+	</listitem>
+	<listitem>
+	  <para>
+	      Last, but certainly not least, reports can now
+	    be printed.  Yay!
+	    </para>
+	</listitem>
+      </itemizedlist>
+    </sect2>
+    
+    <sect2>
+      <title>
+	Graphs
+      </title>
+      
+      <para>
+	One of our most long-awaited features, GnuCash can now
+	display your financial data in attractive bar, pie, and
+	scatter plots.  This feature is provided through the
+	use of the GUPPI plotting tool.
+      </para>
+      <para>
+	We could talk about the graphs all day, but they're 
+	  much more interesting to look at than talk about - 
+	  for example:
+	  </para>
+	<screenshot>
+	  <mediaobject>
+	    <imageobject>
+	      <imagedata fileref="image/asset-piechart.png">
+	    </imageobject>
+	  </mediaobject>
+	</screenshot>
+    </sect2>
+
+    <sect2>
+      <title>
+	The Online World
+      </title>
+      
+      <para>GnuCash can get price quotes online, with the 
+	aid of Paul Fenwick's Finance::Quote module.  
+	Finance::Quote continues to add more price sources, 
+	allowing more international users to have more 
+	convenient access to stock prices online.</para>
+      <para>A major improvement of the new version is the
+	ability to get price quotes from within the program 
+	itself, without having to run a helper application.
+	The ability to update price quotes from the command
+	line remains, however.
+      </para>
+      <para>
+	Mozilla not stable enough for you yet?  Don't like
+	Galeon?  Don't have the libraries installed for 
+	Konqueror?  Well, then, wait until you try GnuCash,
+	the only web browser that also tracks your finances.
+	Seriously, GnuCash can be used to display simple
+	web pages using the "Frame URL" report - 
+	handy for displaying web-based financial
+	information, and particularly in combination with
+	the multicolumn view.
+      </para>
+    </sect2>
+    
+    <sect2>
+      <title>
+	A taste of the Future
+      </title>
+      
+      <para>GnuCash now supports using Postgres as a backend
+	data store.  While perhaps not so important in a personal
+	finance package, as GnuCash is extended to support 
+	business accounting features database support will 
+	be needed to handle massive datasets.</para>
+      
+      <para>The Postgres backend allows multiple simultaneous
+        users to work on the same set of accounts at the same 
+        time. When one user makes a change to a transaction,
+        the change is sent to the Postgres database, and other
+        users see the effect of that change within (10) seconds.
+        The Postgres backend also maintains an audit trail
+        of modified transactions, allowing you to see what changed,
+        when. (Currently, there is no GUI to review the audit trail,
+        one must be an SQL user to review the trail).  The
+        Postgres backend also 'caches' data, so that a user
+        only sees the data they are working with, without requiring
+        that the entire contents of the database be loaded into  
+        GnucCash.  This should make it possible to work with much 
+        larger datasets.  The Postgres backend is currently 'beta',
+        meaning that it works, but hasn't been well-tested, and
+        may contain bugs.
+      </para>
+
+      <para>Similarly, an RPC backend exists, which allows you
+	to seperate the engine and interface and have them 
+	running on totally seperate machines.  Developments
+	using this facility to build independent, specific-function
+	clients have already commenced.
+      </para>
+      
+      <para>Budgeting and scheduled transactions are perhaps 
+	GnuCash's most requested features.  Unfortunately,
+	they didn't make it this time around, but developers
+	are already working hard towards adding this support,
+	to go into the main development verison soon after the
+	1.6 release, for inclusion in the next stable version
+	(which will probably be 2.0).
+      </para>
+      
+      <para>Similarly, more sophisticated automatic handling 
+	of dividend and brokerages for stock tracking began,
+	but didn't make the feature cut this time around.
+	Expect this to be sorted out in the next major release.
+      </para>
+      
+      <para>This is just a taste of what's coming in the future.
+	However, with GnuCash, <emphasis>you</emphasis> are in 
+	a position to get what you want.  The GnuCash developers
+	are easy to contact (see the webpage for more details),
+	and love to hear how GnuCash can be improved.  If you are
+	a programmer, consider contributing to GnuCash development
+	and helping to turn GnuCash into the program that you want
+	it to be.
+      </para>
+    </sect2>
+  </sect1>
+</article>
+<!-- Local variables: -->
+<!-- sgml-parent-document: "gnucash.sgml" -->
+<!-- End: -->

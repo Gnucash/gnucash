@@ -20,24 +20,26 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
+#include "config.h"
+
 #include <ctype.h>
 #include <glib.h>
+#include <math.h>
+#include <string.h>
 #include <sys/types.h>
+
 #include <regex.h>
 #include <sys/time.h>
 #include <unistd.h>
-#include <string.h>
-#include <math.h>
 
-#include <assert.h>
-
-#include "gnc-common.h"
+#include "gnc-engine-util.h"
 #include "gnc-numeric.h"
-#include "TransactionP.h"
-#include "Transaction.h"
-#include "Account.h"
-#include "Group.h"
+#include "AccountP.h"
+#include "BackendP.h"
+#include "GNCId.h"
+#include "GroupP.h"
 #include "Query.h"
+#include "TransactionP.h"
 
 static short module = MOD_QUERY;
 
@@ -57,14 +59,19 @@ struct _querystruct {
   sort_type_t primary_sort;
   sort_type_t secondary_sort;
   sort_type_t tertiary_sort;
-  gboolean    sort_increasing;
+  gboolean    primary_increasing;
+  gboolean    secondary_increasing;
+  gboolean    tertiary_increasing;
   int         max_splits;
 
   /* cache the results so we don't have to run the whole search 
    * again until it's really necessary */
-  int      changed;
+  int          changed;
+  query_run_t  last_run_type; 
   AccountGroup * acct_group;
-  Split ** split_list;
+
+  GList        * split_list;
+  GList        * xtn_list;  
 };
 
 /*******************************************************************
@@ -72,33 +79,45 @@ struct _querystruct {
  *******************************************************************/
 
 static int  xaccAccountMatchPredicate(Split * s, PredicateData * pd);
-static int  xaccDescriptionMatchPredicate(Split * s, PredicateData * pd);
 static int  xaccActionMatchPredicate(Split * s, PredicateData * pd);
-static int  xaccNumberMatchPredicate(Split * s, PredicateData * pd);
 static int  xaccAmountMatchPredicate(Split * s, PredicateData * pd);
+static int  xaccBalanceMatchPredicate(Split * s, PredicateData * pd);
+static int  xaccClearedMatchPredicate(Split * s, PredicateData * pd);
 static int  xaccDateMatchPredicate(Split * s, PredicateData * pd);
+static int  xaccDescriptionMatchPredicate(Split * s, PredicateData * pd);
+static int  xaccGUIDMatchPredicate(Split * s, PredicateData * pd);
+static int  xaccKVPMatchPredicate(Split * s, PredicateData * pd);
 static int  xaccMemoMatchPredicate(Split * s, PredicateData * pd);
+static int  xaccNumberMatchPredicate(Split * s, PredicateData * pd);
 static int  xaccSharePriceMatchPredicate(Split * s, PredicateData * pd);
 static int  xaccSharesMatchPredicate(Split * s, PredicateData * pd);
-static int  xaccClearedMatchPredicate(Split * s, PredicateData * pd);
 
 /********************************************************************
  ********************************************************************/
 
-#if 0
-static void 
-print_query(Query * q) {
+
+void 
+xaccQueryPrint(Query * q) 
+{
   GList * aterms;
   GList * i, * j;
   QueryTerm * qt;
 
+  if (!q)
+  {
+    printf("Query: null\n");
+    return;
+  }
+
   printf("Query: max splits = %d\n", q->max_splits);
+
+  /* print and & or terms */
   for(i=q->terms; i; i=i->next) {
     aterms = i->data;
     printf("(");
     for(j=aterms; j; j=j->next) {
       qt = (QueryTerm *)j->data;
-      if(!qt->sense) printf("~");
+      if(!qt->data.base.sense) printf("~");
       printf("%d ", qt->data.type);
     }
     printf(")");
@@ -107,8 +126,134 @@ print_query(Query * q) {
     }    
   }
   printf("\n");
+
+  /* print the node contents */
+  for(i=q->terms; i; i=i->next) {
+    aterms = i->data;
+    printf("aterm=%p\n", aterms);
+    for(j=aterms; j; j=j->next) {
+      qt = (QueryTerm *)j->data;
+      switch (qt->data.base.term_type) 
+      {
+        case PR_ACCOUNT: {
+          GList *p;
+          char buff[40];
+          printf ("account sense=%d how=%d\n",
+                  qt->data.base.sense,
+                  qt->data.acct.how);
+          for (p=qt->data.acct.account_guids; p; p=p->next) {
+             guid_to_string_buff (p->data, buff);
+             printf ("\tguid=%s\n", buff);
+          }
+          for (p=qt->data.acct.accounts; p; p=p->next) {
+             printf ("\tacct ptr=%p\n", p->data);
+          }
+          break;
+        }
+        case PR_ACTION:
+          printf ("action sense=%d case sensitive=%d\n", qt->data.str.sense,
+                  qt->data.str.case_sens);
+          printf ("\tmatch string=%s \n", qt->data.str.matchstring);
+          break;
+        case PR_AMOUNT:
+          printf ("amount sense=%d how=%d\n", qt->data.amount.sense,
+                  qt->data.amount.how);
+          printf ("\tsign=%d amount=%f\n", qt->data.amount.amt_sgn,
+                  qt->data.amount.amount);
+          break;
+        case PR_BALANCE:
+          printf ("balance sense=%d how=%d\n", qt->data.balance.sense,
+                  qt->data.balance.how);
+          break;
+        case PR_CLEARED:
+          printf ("cleared sense=%d how=%d\n", qt->data.cleared.sense,
+                  qt->data.cleared.how);
+          break;
+        case PR_DATE: {
+          char buff[40];
+          printf ("date sense=%d use_start=%d use_end=%d\n", 
+                  qt->data.base.sense,
+                  qt->data.date.use_start,
+                  qt->data.date.use_end
+                  );
+          if (qt->data.date.use_start) {
+             gnc_timespec_to_iso8601_buff (qt->data.date.start, buff);
+             printf ("\tstart date=%s\n", buff);
+          }
+          if (qt->data.date.use_end) {
+             gnc_timespec_to_iso8601_buff (qt->data.date.end, buff);
+             printf ("\tend date=%s\n", buff);
+          }
+          break;
+        }
+        case PR_DESC:
+          printf ("desc sense=%d case sensitive=%d\n", qt->data.str.sense,
+                  qt->data.str.case_sens);
+          printf ("\tmatch string=%s \n", qt->data.str.matchstring);
+          break;
+
+        case PR_GUID: {
+          char buff[40];
+          printf ("guid sense=%d\n", qt->data.guid.sense);
+          guid_to_string_buff (&qt->data.guid.guid, buff);
+          printf ("\tguid=%s\n", buff);
+          printf ("\tid type=%d\n", qt->data.guid.id_type);
+          break;
+        }
+        case PR_KVP: {
+          GSList *node;
+          char *str;
+          printf ("kvp sense=%d how=%d where=%d\n", qt->data.kvp.sense,
+                  qt->data.kvp.how, qt->data.kvp.where);
+          printf ("path:");
+          for (node = qt->data.kvp.path; node; node = node->next)
+          {
+            printf (node->data);
+            if (node->next)
+              printf ("/");
+          }
+          printf ("\n");
+          str = kvp_value_to_string (qt->data.kvp.value);
+          printf ("value: %s\n", str);
+          g_free (str);
+          break;
+        }
+        case PR_MEMO:
+          printf ("memo sense=%d case sensitive=%d\n", qt->data.str.sense,
+                  qt->data.str.case_sens);
+          printf ("\tmatch string=%s \n", qt->data.str.matchstring);
+          break;
+        case PR_MISC:
+          printf ("misc\n");
+          break;
+        case PR_NUM:
+          printf ("num sense=%d case sensitive=%d\n", qt->data.str.sense,
+                  qt->data.str.case_sens);
+          printf ("\tmatch string=%s \n", qt->data.str.matchstring);
+          break;
+        case PR_PRICE:
+          printf ("price sense=%d how=%d\n", qt->data.amount.sense,
+                  qt->data.amount.how);
+          printf ("\tsign=%d amount=%f\n", qt->data.amount.amt_sgn,
+                  qt->data.amount.amount);
+          break;
+        case PR_SHRS:
+          printf ("shrs sense=%d how=%d\n", qt->data.amount.sense,
+                  qt->data.amount.how);
+          printf ("\tsign=%d amount=%f\n", qt->data.amount.amt_sgn,
+                  qt->data.amount.amount);
+          break;
+
+        default:
+          printf ("unkown term type=%d \n", qt->data.base.term_type);
+      }
+    }
+    printf("\n");
+    if(i->next) {
+      printf("\n");
+    }    
+  }
 }
-#endif
 
 
 /********************************************************************
@@ -142,7 +287,9 @@ xaccInitQuery(Query * q, QueryTerm * initial_term) {
   q->secondary_sort = BY_NONE;
   q->tertiary_sort = BY_NONE;
 
-  q->sort_increasing = TRUE;
+  q->primary_increasing = TRUE;
+  q->secondary_increasing = TRUE;
+  q->tertiary_increasing = TRUE;
 }
 
 
@@ -167,6 +314,10 @@ xaccMallocQuery(void) {
 static void
 xaccQuerySwapTerms(Query * q1, Query * q2) {
   GList * g;
+
+  if (!q1 || !q2)
+    return;
+
   g = q1->terms;
   q1->terms = q2->terms;
   q2->terms = g;
@@ -178,19 +329,69 @@ xaccQuerySwapTerms(Query * q1, Query * q2) {
 
 /********************************************************************
  * xaccQueryHasTerms
- * returns the number of terms in the query, which is generally
+ * returns the number of 'OR' terms in the query, which is generally
  * used as a truth test.
  ********************************************************************/
 
 int
-xaccQueryHasTerms(Query * q) {
+xaccQueryHasTerms(Query * q) 
+{
+  if (!q)
+    return 0;
+
   return g_list_length(q->terms);    
 }
 
+int
+xaccQueryNumTerms(Query * q) 
+{
+  GList *o;
+  int n=0;
+  if (!q)
+    return 0;
+
+  for(o=q->terms; o; o=o->next) {
+     n += g_list_length(o->data);    
+  }
+  return n;
+}
+
+GList *
+xaccQueryGetTerms (Query *q)
+{
+   if (!q) return NULL;
+   return q->terms;
+}
+
+
+/********************************************************************
+ * xaccQueryHasTermType
+ * returns TRUE if the query has any terms of the given type
+ ********************************************************************/
+gboolean
+xaccQueryHasTermType(Query * q, pd_type_t type) {
+  GList *or;
+  GList *and;
+
+  if (!q)
+    return FALSE;
+
+  for(or = q->terms; or; or = or->next) {
+    for(and = or->data; and; and = and->next) {
+      QueryTerm *qt = and->data;
+      if(qt->data.type == type)
+        return TRUE;
+    }
+  }
+
+  return FALSE;
+}
 
 static void
 free_query_term(QueryTerm *qt)
 {
+  GList *node;
+
   if (qt == NULL)
     return;
 
@@ -199,6 +400,19 @@ free_query_term(QueryTerm *qt)
     case PD_ACCOUNT:
       g_list_free (qt->data.acct.accounts);
       qt->data.acct.accounts = NULL;
+
+      for (node = qt->data.acct.account_guids; node; node = node->next)
+        xaccGUIDFree (node->data);
+
+      g_list_free (qt->data.acct.account_guids);
+      qt->data.acct.account_guids = NULL;
+      break;
+
+    case PD_KVP:
+      g_slist_free (qt->data.kvp.path);
+      qt->data.kvp.path = NULL;
+      kvp_value_delete (qt->data.kvp.value);
+      qt->data.kvp.value = NULL;
       break;
 
     case PD_STRING:
@@ -216,6 +430,7 @@ free_query_term(QueryTerm *qt)
 static QueryTerm *
 copy_query_term(QueryTerm * qt) {
   QueryTerm * nqt;
+  GList *node;
 
   if (qt == NULL)
     return NULL;
@@ -228,7 +443,29 @@ copy_query_term(QueryTerm * qt) {
   {
     case PD_ACCOUNT:
       nqt->data.acct.accounts = g_list_copy (nqt->data.acct.accounts);
+      nqt->data.acct.account_guids =
+        g_list_copy (nqt->data.acct.account_guids);
+      for (node = nqt->data.acct.account_guids; node; node = node->next)
+      {
+        GUID *old = node->data;
+        GUID *new = xaccGUIDMalloc ();
+
+        *new = *old;
+        node->data = new;
+      }
       break;
+
+    case PD_KVP: {
+      GSList *node;
+
+      nqt->data.kvp.path = g_slist_copy (nqt->data.kvp.path);
+      nqt->data.kvp.value = kvp_value_copy (nqt->data.kvp.value);
+
+      for (node = nqt->data.kvp.path; node; node = node->next)
+        node->data = g_strdup (node->data);
+
+      break;
+    }
 
     case PD_STRING:
       nqt->data.str.matchstring = g_strdup(nqt->data.str.matchstring);
@@ -270,8 +507,8 @@ copy_or_terms(GList * or_terms) {
  * allocated it 
  ********************************************************************/
 
-void    
-xaccFreeQuery(Query * q) {
+static void
+xaccFreeQueryMembers(Query *q) {
   GList * cur_or;
 
   if (q == NULL)
@@ -292,12 +529,47 @@ xaccFreeQuery(Query * q) {
   g_list_free(q->terms);
   q->terms = NULL;
 
-  g_free(q->split_list);
+  g_list_free(q->split_list);
   q->split_list = NULL;
+}
+
+void    
+xaccFreeQuery(Query * q) {
+  if (q == NULL)
+    return;
+
+  xaccFreeQueryMembers (q);
 
   g_free(q);
 }
 
+Query *
+xaccQueryCopy(Query *q) {
+  Query *copy;
+
+  if (q == NULL)
+    return NULL;
+
+  copy = xaccMallocQuery ();
+  xaccFreeQueryMembers (copy);
+
+  copy->terms = copy_or_terms (q->terms);
+
+  copy->primary_sort = q->primary_sort;
+  copy->secondary_sort = q->secondary_sort;
+  copy->tertiary_sort = q->tertiary_sort;
+
+  copy->primary_increasing = q->primary_increasing;
+  copy->secondary_increasing = q->secondary_increasing;      
+  copy->tertiary_increasing = q->tertiary_increasing;
+  copy->max_splits = q->max_splits;
+
+  copy->changed = q->changed;
+  copy->acct_group = q->acct_group;
+  copy->split_list = g_list_copy (q->split_list);
+
+  return copy;
+}
 
 /********************************************************************
  * xaccQueryInvert 
@@ -335,7 +607,7 @@ xaccQueryInvert(Query * q) {
     new_oterm = NULL;
     for(cur=aterms; cur; cur=cur->next) {
       qt = copy_query_term(cur->data);
-      qt->sense = !(qt->sense);
+      qt->data.base.sense = !(qt->data.base.sense);
       new_oterm = g_list_append(NULL, qt);
       retval->terms = g_list_append(retval->terms, new_oterm);
     }
@@ -483,9 +755,8 @@ acct_query_matches(QueryTerm * qt, Account * acct) {
   gboolean account_in_set = FALSE;
   gboolean first_account = TRUE;
 
-  assert(qt && acct);
-  assert(qt->data.type == PD_ACCOUNT);
-  assert(qt->data.acct.accounts);
+  g_return_val_if_fail(qt && acct, FALSE);
+  g_return_val_if_fail(qt->data.type == PD_ACCOUNT, FALSE);
 
   for(node = qt->data.acct.accounts; node ; node = node->next) {
     if(acct == node->data) {
@@ -537,16 +808,28 @@ date_cmp_func(Timespec *t1, Timespec *t2) {
   return 0;
 }
 
+/* compared by dates but return 0 if on same day */
+
 static int
-split_cmp_func(sort_type_t how, gconstpointer ga, gconstpointer gb) {
+date_rounded_cmp_func(Timespec *t1, Timespec *t2)
+{
+  Timespec canon_t1, canon_t2;
+  canon_t1 = timespecCanonicalDayTime(*t1);
+  canon_t2 = timespecCanonicalDayTime(*t2);
+  return date_cmp_func(&canon_t1, &canon_t2);
+}
+
+
+static int
+split_cmp_func(sort_type_t how, gconstpointer ga, gconstpointer gb) 
+{
   Split       * sa = (Split *)ga;
   Split       * sb = (Split *)gb;
   Transaction * ta;
   Transaction * tb;
-  int retval;
   unsigned long n1;                             
   unsigned long n2;                             
-  char   *da, *db;                               
+  const char   *da, *db;                               
   gnc_numeric fa, fb;                                
   
   if (sa && !sb)  return -1; 
@@ -574,13 +857,29 @@ split_cmp_func(sort_type_t how, gconstpointer ga, gconstpointer gb) {
 
     break;
 
+  case BY_DATE_ROUNDED:
+    return date_rounded_cmp_func(&(ta->date_posted), &(tb->date_posted));
+    
+    break;
+    
+
   case BY_DATE_ENTERED:
     return date_cmp_func(&(ta->date_entered), &(tb->date_entered));
+
+    break;
+ 
+  case BY_DATE_ENTERED_ROUNDED:
+    return date_rounded_cmp_func(&(ta->date_entered), &(tb->date_entered));
 
     break;
 
   case BY_DATE_RECONCILED:
     return date_cmp_func(&(sa->date_reconciled), &(sb->date_reconciled));
+
+    break;
+
+  case BY_DATE_RECONCILED_ROUNDED:
+    return date_rounded_cmp_func(&(sa->date_reconciled), &(sb->date_reconciled));
 
     break;
 
@@ -605,56 +904,17 @@ split_cmp_func(sort_type_t how, gconstpointer ga, gconstpointer gb) {
     if (gnc_strisnum(db)) {                       
       return +1;                                  
     }                                             
-    if (!da && db) {                              
-      return -1;                                  
-    }                                             
-    if (da && !db) {                              
-      return +1;                                  
-    }                                             
-    if (!da && !db) {                             
-      return 0;                                   
-    } 
-    return strcmp (da, db); 
-
+    return safe_strcmp (da, db); 
     break;
 
   case BY_MEMO:
     /* sort on memo strings */                    
-    da = sa->memo;                             
-    db = sb->memo;                             
-    if (da && db) {                               
-      return strcmp (da, db);                   
-    } 
-    else if (!da && db) {                              
-      return -1;                                  
-    } 
-    else if (da && !db) {                              
-      return +1;                                  
-    }                                             
-    else {
-      return 0;
-    }
+    return safe_strcmp (sa->memo, sb->memo);
     break;
 
   case BY_DESC:
     /* sort on transaction strings */             
-    da = ta->description;                         
-    db = tb->description;   
-    
-    if (da && db) {                               
-      retval = strcmp (da, db);                   
-      /* if strings differ, return */             
-      if (retval) return retval;                  
-    } 
-    else if (!da && db) {                              
-      return -1;                                  
-    } 
-    else if (da && !db) {                              
-      return +1;                                  
-    }         
-    else {
-      return 0;
-    }
+    return safe_strcmp (ta->description, tb->description);
     break;
 
   case BY_AMOUNT:    
@@ -686,6 +946,19 @@ split_cmp_func(sort_type_t how, gconstpointer ga, gconstpointer gb) {
     }
     break;
 
+  case BY_ACCOUNT_FULL_NAME:
+    return xaccSplitCompareAccountFullNames(sa, sb);
+    
+  case BY_ACCOUNT_CODE:
+    return xaccSplitCompareAccountCodes(sa, sb);
+    break;
+
+  case BY_CORR_ACCOUNT_FULL_NAME:
+    return xaccSplitCompareOtherAccountFullNames(sa, sb);
+
+  case BY_CORR_ACCOUNT_CODE:
+    return xaccSplitCompareOtherAccountCodes(sa, sb);
+
   case BY_NONE:
     return 0;
     break;
@@ -697,14 +970,8 @@ split_cmp_func(sort_type_t how, gconstpointer ga, gconstpointer gb) {
 static int
 split_sort_func(gconstpointer a, gconstpointer b) {
   int retval;
-  int multiplier;
-
-  assert(split_sort_query);
-
-  if (split_sort_query->sort_increasing)
-    multiplier = 1;
-  else
-    multiplier = -1;
+ 
+  g_return_val_if_fail (split_sort_query, 0);
 
   retval = split_cmp_func(split_sort_query->primary_sort, a, b);
   if((retval == 0) && 
@@ -713,14 +980,14 @@ split_sort_func(gconstpointer a, gconstpointer b) {
     if((retval == 0) &&
        (split_sort_query->tertiary_sort != BY_NONE)) {
       retval = split_cmp_func(split_sort_query->tertiary_sort, a, b);
-      return retval * multiplier;
+      return split_sort_query->tertiary_increasing ? retval : - retval;
     }
     else {
-      return retval * multiplier;
+      return split_sort_query->secondary_increasing ? retval : - retval;
     }
   }
   else {
-    return retval * multiplier;
+    return split_sort_query->primary_increasing ? retval : - retval;
   }
 }
 
@@ -742,7 +1009,7 @@ xaccQueryCheckSplit(Query * q, Split * s) {
     and_terms_ok = 1;
     for(and_ptr = or_ptr->data; and_ptr; and_ptr = and_ptr->next) {
       qt = (QueryTerm *)(and_ptr->data);
-      if(((qt->p)(s, &(qt->data))) != qt->sense) {
+      if(((qt->p)(s, &(qt->data))) != qt->data.base.sense) {
         and_terms_ok = 0;
         break;
       }
@@ -754,28 +1021,126 @@ xaccQueryCheckSplit(Query * q, Split * s) {
   return 0;
 }
 
+static GList *
+account_list_to_guid_list (GList *accounts)
+{
+  GList *guids = NULL;
+  GList *node;
+
+  for (node = accounts; node; node = node->next)
+  {
+    Account *account = node->data;
+    GUID *guid;
+
+    if (!account)
+      continue;
+
+    guid = xaccGUIDMalloc ();
+    *guid = *xaccAccountGetGUID (account);
+
+    guids = g_list_prepend (guids, guid);
+  }
+
+  return g_list_reverse (guids);
+}
+
+static GList *
+copy_guid_list (GList *guids)
+{
+  GList *new_guids = NULL;
+  GList *node;
+
+  for (node = guids; node; node = node->next)
+  {
+    GUID *guid = node->data;
+    GUID *new_guid;
+
+    if (!guid)
+      continue;
+
+    new_guid = xaccGUIDMalloc ();
+    *new_guid = *guid;
+
+    new_guids = g_list_prepend (new_guids, new_guid);
+  }
+
+  return g_list_reverse (new_guids);
+}
+
+static GList *
+guid_list_to_account_list (Query * q, GList *guids)
+{
+  GList *accounts = NULL;
+  GList *node;
+
+  if (!q || !q->acct_group)
+    return NULL;
+
+  for (node = guids; node; node = node->next)
+  {
+    GUID *guid = node->data;
+    Account *account;
+
+    if (!guid)
+      continue;
+
+    account = xaccAccountLookupEntityTable (guid, q->acct_group->entity_table);
+    if (!account)
+      continue;
+
+    accounts = g_list_prepend (accounts, account);
+  }
+
+  return g_list_reverse (accounts);
+}
+
+/********************************************************************
+ * xaccQueryCompileTerms
+ * Prepare terms for processing by xaccQueryGetSplits
+ ********************************************************************/
+static void
+xaccQueryCompileTerms (Query *q)
+{
+  GList * or_ptr, * and_ptr;
+
+  for(or_ptr = q->terms; or_ptr ; or_ptr = or_ptr->next) {
+    for(and_ptr = or_ptr->data; and_ptr; and_ptr = and_ptr->next) {
+      QueryTerm *qt = and_ptr->data;
+      switch (qt->data.type)
+      {
+        case PD_ACCOUNT:
+          g_list_free (qt->data.acct.accounts);
+          qt->data.acct.accounts =
+            guid_list_to_account_list (q, qt->data.acct.account_guids);
+          break;
+
+        default:
+          break;
+      }
+    }
+  }
+}
 
 /********************************************************************
  * xaccQueryGetSplits
  * Run the search.
  ********************************************************************/
 
-Split **
+GList *
 xaccQueryGetSplits(Query * q) {
   GList     * matching_splits=NULL;
   GList     * or_ptr, * and_ptr, * mptr;  
-  Account   ** all_accts, ** ptr;
+  GList     * all_accts, * node;
   Account   * current;
   QueryTerm * qt;
+  Backend   * be;
 
   int       total_splits_checked = 0;
   int       split_count = 0;
   int       acct_ok;
-  int       posn;
 
-  struct timeval start, end;
-
-  gettimeofday(&start, NULL);
+  if (!q) return NULL;
+  ENTER("query=%p", q);
 
   /* tmp hack alert */
   q->changed = 1;
@@ -794,10 +1159,23 @@ xaccQueryGetSplits(Query * q) {
     or_ptr->data = g_list_sort(and_ptr, query_sort_func);
   }
 
+  /* prepare the terms for processing */
+  xaccQueryCompileTerms (q);
+
+  /* if there is a backend, query the backend, let it fetch the data */
+  be = xaccGroupGetBackend (q->acct_group);
+  if (be && be->run_query) {
+   (be->run_query) (be, q);
+  }
+  
   /* iterate over accounts */
-  all_accts = xaccGetAccounts(q->acct_group);
-  for(ptr = all_accts; ptr && *ptr; ptr++) {
-    current = *ptr;
+  all_accts = xaccGroupGetSubAccounts (q->acct_group);
+
+  for (node = all_accts; node; node = node->next) {
+    current = node->data;
+
+    if (!current)
+      continue;
 
     /* first, check this account to see if we need to look at it at
      * all.  If the query is "ANY" matching or "NONE" matching, you
@@ -840,6 +1218,8 @@ xaccQueryGetSplits(Query * q) {
     }
   }
 
+  g_list_free (all_accts);
+
   /* There is no absolute need to reverse this list, since it's
    * being sorted below. However, in the common case, we will be
    * searching in a single account and returning in the account
@@ -873,35 +1253,340 @@ xaccQueryGetSplits(Query * q) {
     }
     split_count = q->max_splits;
   }
+  
+  q->changed = 0;
+  
+  g_list_free(q->split_list);
+  q->split_list = matching_splits;
+  
+  return matching_splits;
+}
 
-  { /* convert the g_list into a split array. */
+/********************************************************************
+ * xaccQueryGetSplitsUniqueTrans 
+ * Get splits but no more than one from a given transaction.
+ ********************************************************************/
 
-    Split **splits = g_new0(Split *, split_count+1);
-    posn = 0;
-    for(mptr = matching_splits; mptr; mptr=mptr->next) {
-      splits[posn] = mptr->data;
-      posn++;
+GList *
+xaccQueryGetSplitsUniqueTrans(Query *q)
+{
+  GList       * splits = xaccQueryGetSplits(q);
+  GList       * current;
+  GList       * result = NULL;
+  GHashTable  * trans_hash = g_hash_table_new(g_direct_hash, g_direct_equal);
+
+  for (current = splits; current; current = current->next)
+  {
+    Split *split = current->data;
+    Transaction *trans = xaccSplitGetParent (split);
+
+    if (!g_hash_table_lookup (trans_hash, trans))
+    {
+      g_hash_table_insert (trans_hash, trans, trans);
+      result = g_list_prepend (result, split);
     }
-    splits[split_count] = NULL;
-    g_list_free(matching_splits);
-    
-    gettimeofday(&end, NULL);
-    
-    PINFO("elapsed time = %e ms\n",
-          (end.tv_sec - start.tv_sec)*1000.0 +
-          (end.tv_usec - start.tv_usec)/1000.0);
-    PINFO("%d splits checked, %d splits matched.\n",
-          total_splits_checked, split_count);
-    
-    q->changed = 0;
-    
-    g_free(q->split_list);
-    q->split_list = splits;
-    
-    return splits;
+  }
+
+  g_hash_table_destroy (trans_hash);
+
+  return g_list_reverse (result);
+}
+
+/********************************************************************
+ * xaccQueryGetTransactions 
+ * Get transactions matching the query terms, specifying whether 
+ * we require some or all splits to match 
+ ********************************************************************/
+
+static void
+query_match_all_filter_func(gpointer key, gpointer value, gpointer user_data) {
+  Transaction * t = key;
+  int         num_matches = GPOINTER_TO_INT(value);
+  GList       ** matches = user_data;
+
+  if(num_matches == xaccTransCountSplits(t)) {
+    *matches = g_list_prepend(*matches, t);
   }
 }
 
+static void
+query_match_any_filter_func(gpointer key, gpointer value, gpointer user_data) {
+  Transaction * t = key;
+  GList       ** matches = user_data;
+  *matches = g_list_prepend(*matches, t);
+}
+
+GList * 
+xaccQueryGetTransactions (Query * q, query_run_t runtype) {
+  GList       * splits = xaccQueryGetSplits(q);
+  GList       * current = NULL;
+  GList       * retval = NULL;
+  GHashTable  * trans_hash = g_hash_table_new(g_direct_hash, g_direct_equal);
+  Transaction * trans = NULL;
+  gpointer    val = NULL;
+  int         count = 0;
+  
+  /* iterate over matching splits, incrementing a match-count in
+   * the hash table */
+  for(current = splits; current; current=current->next) {
+    trans = xaccSplitGetParent((Split *)(current->data));
+    
+    /* don't waste time looking up unless we need the count 
+     * information */
+    if(runtype == QUERY_MATCH_ALL) {
+      val   = g_hash_table_lookup(trans_hash, trans);
+      count = GPOINTER_TO_INT(val);
+    }
+    g_hash_table_insert(trans_hash, trans, GINT_TO_POINTER(count + 1));
+  }
+  
+  /* now pick out the transactions that match */
+  if(runtype == QUERY_MATCH_ALL) {
+    g_hash_table_foreach(trans_hash, query_match_all_filter_func, 
+                         &retval);
+  }
+  else {
+    g_hash_table_foreach(trans_hash, query_match_any_filter_func, 
+                         &retval);
+  }
+
+  /* ATM we rerun the xtn filter every time.  Need to add checks and 
+   * updates for using cached results. */
+  q->last_run_type = runtype;
+  q->xtn_list = retval;
+  
+  g_hash_table_destroy(trans_hash);
+
+  return retval;
+}
+
+/********************************************************************
+ * xaccQueryEqual
+ * Compare two queries for equality
+ ********************************************************************/
+
+static gboolean
+xaccQueryTermEqual (QueryTerm *qt1, QueryTerm *qt2)
+{
+  GList *l1, *l2;
+
+  if (qt1 == qt2) return TRUE;
+  if (!qt1 || !qt2) return FALSE;
+
+  if (qt1->p != qt2->p) return FALSE;
+  if (qt1->data.type != qt2->data.type) return FALSE;
+  if (qt1->data.base.term_type != qt2->data.base.term_type) return FALSE;
+  if (qt1->data.base.sense != qt2->data.base.sense) return FALSE;
+
+  switch (qt1->data.type)
+  {
+    case PD_DATE:
+      if (qt1->data.date.use_start != qt2->data.date.use_start) return FALSE;
+      if (qt1->data.date.use_end != qt2->data.date.use_end) return FALSE;
+      if (!timespec_equal (&qt1->data.date.start, &qt2->data.date.start))
+        return FALSE;
+      if (!timespec_equal (&qt1->data.date.end, &qt2->data.date.end))
+        return FALSE;
+      break;
+
+    case PD_AMOUNT:
+      if (qt1->data.amount.how != qt2->data.amount.how) return FALSE;
+      if (qt1->data.amount.amt_sgn != qt2->data.amount.amt_sgn) return FALSE;
+      if (qt1->data.amount.amount != qt2->data.amount.amount)
+        return FALSE;
+      break;
+
+    case PD_ACCOUNT:
+      if (qt1->data.acct.how != qt2->data.acct.how) return FALSE;
+      l1 = qt1->data.acct.account_guids;
+      l2 = qt2->data.acct.account_guids;
+      if (g_list_length (l1) != g_list_length (l2)) return FALSE;
+      for ( ; l1; l1 = l1->next, l2 = l2->next)
+        if (!guid_equal (l1->data, l2->data))
+          return FALSE;
+      break;
+
+    case PD_STRING:
+      if (qt1->data.str.case_sens != qt2->data.str.case_sens)
+        return FALSE;
+      if (qt1->data.str.use_regexp != qt2->data.str.use_regexp)
+        return FALSE;
+      if (strcmp (qt1->data.str.matchstring, qt2->data.str.matchstring) != 0)
+        return FALSE;
+      break;
+
+    case PD_CLEARED:
+      if (qt1->data.cleared.how != qt2->data.cleared.how) return FALSE;
+      break;
+
+    case PD_BALANCE:
+      if (qt1->data.balance.how != qt2->data.balance.how) return FALSE;
+      break;
+
+    case PD_GUID:
+      if (!guid_equal (&qt1->data.guid.guid, &qt2->data.guid.guid))
+        return FALSE;
+      if (qt1->data.guid.id_type != qt2->data.guid.id_type)
+        return FALSE;
+      break;
+
+    case PD_KVP: {
+      GSList *n1, *n2;
+
+      n1 = qt1->data.kvp.path;
+      n2 = qt2->data.kvp.path;
+
+      for ( ; n1 && n2; n1 = n1->next, n2 = n2->next)
+        if (safe_strcmp (n1->data, n2->data) != 0)
+          return FALSE;
+
+      if (n1 || n2)
+        return FALSE;
+
+      if (kvp_value_compare (qt1->data.kvp.value, qt2->data.kvp.value) != 0)
+        return FALSE;
+
+      break;
+    }
+
+    case PD_MISC:
+      if (qt1->data.misc.how != qt2->data.misc.how) return FALSE;
+      if (qt1->data.misc.data != qt2->data.misc.data) return FALSE;
+      break;
+
+    default:
+      PERR ("bad query term type");
+      return FALSE;
+  }
+
+  return TRUE;
+}
+
+gboolean
+xaccQueryEqual (Query *q1, Query *q2)
+{
+  GList *or1, *or2;
+
+  if (q1 == q2) return TRUE;
+  if (!q1 || !q2) return FALSE;
+
+  if (g_list_length (q1->terms) != g_list_length (q2->terms)) return FALSE;
+
+  for (or1 = q1->terms, or2 = q2->terms; or1;
+       or1 = or1->next, or2 = or2->next)
+  {
+    GList *and1, *and2;
+
+    and1 = or1->data;
+    and2 = or2->data;
+
+    if (g_list_length (and1) != g_list_length (and2)) return FALSE;
+
+    for ( ; and1; and1 = and1->next, and2 = and2->next)
+      if (!xaccQueryTermEqual (and1->data, and2->data))
+        return FALSE;
+  }
+
+  if (q1->primary_sort != q2->primary_sort) return FALSE;
+  if (q1->secondary_sort != q2->secondary_sort) return FALSE;
+  if (q1->tertiary_sort != q2->tertiary_sort) return FALSE;
+
+  if (q1->primary_increasing != q2->primary_increasing) return FALSE;
+  if (q1->secondary_increasing != q2->secondary_increasing) return FALSE;
+  if (q1->tertiary_increasing != q2->tertiary_increasing) return FALSE;
+
+  if (q1->max_splits != q2->max_splits) return FALSE;
+
+  return TRUE;
+}
+
+Predicate
+xaccQueryGetPredicate (pr_type_t term_type)
+{
+  Predicate p = NULL;
+
+  /* the predicates are only known in the local 
+   * address space, which is why we have to set them 
+   * from the abstract type here. 
+   */
+  switch (term_type) 
+  {
+    case PR_ACCOUNT:
+      p = & xaccAccountMatchPredicate;
+      break;
+    case PR_ACTION:
+      p = & xaccActionMatchPredicate;
+      break;
+    case PR_AMOUNT:
+      p = & xaccAmountMatchPredicate;
+      break;
+    case PR_BALANCE:
+      p = & xaccBalanceMatchPredicate;
+      break;
+    case PR_CLEARED:
+      p = & xaccClearedMatchPredicate;
+      break;
+    case PR_DATE:
+      p = & xaccDateMatchPredicate;
+      break;
+    case PR_DESC:
+      p = & xaccDescriptionMatchPredicate;
+      break;
+    case PR_GUID:
+      p = & xaccGUIDMatchPredicate;
+      break;
+    case PR_KVP:
+      p = & xaccKVPMatchPredicate;
+      break;
+    case PR_MEMO:
+      p = & xaccMemoMatchPredicate;
+      break;
+    case PR_NUM:
+      p = & xaccNumberMatchPredicate;
+      break;
+    case PR_PRICE:
+      p = & xaccSharePriceMatchPredicate;
+      break;
+    case PR_SHRS:
+      p = & xaccSharesMatchPredicate;
+      break;
+    case PR_MISC:
+      PERR ("misc term must not appear");
+      break;
+  }
+  return p;
+}
+
+/********************************************************************
+ * xaccQueryAddPredicate
+ * Add a predicate an existing query. 
+ ********************************************************************/
+
+void
+xaccQueryAddPredicate (Query * q, 
+                       PredicateData *pred,
+                       QueryOp op) 
+{
+  Query     * qs  = xaccMallocQuery(); 
+  QueryTerm * qt  = g_new0(QueryTerm, 1);
+  Query     * qr;
+
+  qt->data   = *pred;
+  qt->p = xaccQueryGetPredicate (qt->data.base.term_type);
+  
+  xaccInitQuery(qs, qt);
+  xaccQuerySetGroup(qs, q->acct_group);
+  
+  if(xaccQueryHasTerms(q)) {
+    qr = xaccQueryMerge(q, qs, op);
+  }
+  else {
+    qr = xaccQueryMerge(q, qs, QUERY_OR);
+  }
+  xaccQuerySwapTerms(q, qr);
+  xaccFreeQuery(qs);
+  xaccFreeQuery(qr);
+}
 
 /********************************************************************
  * xaccQueryAddAccountMatch
@@ -915,11 +1600,13 @@ xaccQueryAddAccountMatch(Query * q, GList * accounts, acct_match_t how,
   QueryTerm * qt  = g_new0(QueryTerm, 1);
   Query     * qr;
 
-  qt->p      = & xaccAccountMatchPredicate;
-  qt->sense  = 1;
-  qt->data.type           = PD_ACCOUNT;
-  qt->data.acct.how       = how;
-  qt->data.acct.accounts  = g_list_copy(accounts);
+  qt->p                       = & xaccAccountMatchPredicate;
+  qt->data.type               = PD_ACCOUNT;
+  qt->data.base.term_type     = PR_ACCOUNT;
+  qt->data.base.sense         = 1;
+  qt->data.acct.how           = how;
+  qt->data.acct.accounts      = NULL;
+  qt->data.acct.account_guids = account_list_to_guid_list (accounts);
 
   xaccInitQuery(qs, qt);
   xaccQuerySetGroup(qs, q->acct_group);
@@ -936,6 +1623,41 @@ xaccQueryAddAccountMatch(Query * q, GList * accounts, acct_match_t how,
   xaccFreeQuery(qr);
 }
 
+/********************************************************************
+ * xaccQueryAddAccountGUIDMatch
+ * Add an account filter to an existing query. 
+ ********************************************************************/
+
+void
+xaccQueryAddAccountGUIDMatch(Query * q, GList * account_guids,
+                             acct_match_t how, QueryOp op)
+{
+  Query     * qs  = xaccMallocQuery(); 
+  QueryTerm * qt  = g_new0(QueryTerm, 1);
+  Query     * qr;
+
+  qt->p                       = & xaccAccountMatchPredicate;
+  qt->data.type               = PD_ACCOUNT;
+  qt->data.base.term_type     = PR_ACCOUNT;
+  qt->data.base.sense         = 1;
+  qt->data.acct.how           = how;
+  qt->data.acct.accounts      = NULL;
+  qt->data.acct.account_guids = copy_guid_list (account_guids);
+
+  xaccInitQuery(qs, qt);
+  xaccQuerySetGroup(qs, q->acct_group);
+
+  if(xaccQueryHasTerms(q)) {
+    qr = xaccQueryMerge(q, qs, op);
+  }
+  else {
+    qr = xaccQueryMerge(q, qs, QUERY_OR);
+  }        
+  xaccQuerySwapTerms(q, qr);
+
+  xaccFreeQuery(qs);
+  xaccFreeQuery(qr);
+}
 
 /********************************************************************
  * xaccQueryAddSingleAccountMatch
@@ -949,12 +1671,15 @@ xaccQueryAddSingleAccountMatch(Query * q, Account * acct,
   QueryTerm * qt  = g_new0(QueryTerm, 1);
   Query     * qr;
 
-  qt->p      = & xaccAccountMatchPredicate;
-  qt->sense  = 1;
+  qt->p                   = & xaccAccountMatchPredicate;
   qt->data.type           = PD_ACCOUNT;
+  qt->data.base.term_type = PR_ACCOUNT;
+  qt->data.base.sense     = 1;
   qt->data.acct.how       = ACCT_MATCH_ANY;
   qt->data.acct.accounts  = g_list_prepend(NULL, acct);
-  
+  qt->data.acct.account_guids
+    = account_list_to_guid_list (qt->data.acct.accounts);
+
   xaccInitQuery(qs, qt);
   xaccQuerySetGroup(qs, q->acct_group);
   
@@ -976,19 +1701,18 @@ xaccQueryAddSingleAccountMatch(Query * q, Account * acct,
  ********************************************************************/
 
 void
-xaccQueryAddDescriptionMatch(Query * q, char * matchstring,
+xaccQueryAddDescriptionMatch(Query * q, const char * matchstring,
                              int case_sens, int use_regexp,
                              QueryOp op) {
   Query     * qs  = xaccMallocQuery(); 
   QueryTerm * qt  = g_new0(QueryTerm, 1);
   Query     * qr;
-  char      * teststr;
-  char      * src, * dest;
   int       flags = REG_EXTENDED;
 
-  qt->p      = & xaccDescriptionMatchPredicate;
-  qt->sense  = 1;
+  qt->p                    = & xaccDescriptionMatchPredicate;
   qt->data.type            = PD_STRING;
+  qt->data.base.term_type  = PR_DESC;
+  qt->data.base.sense      = 1;
   qt->data.str.case_sens   = case_sens;
   qt->data.str.use_regexp  = use_regexp;
   qt->data.str.matchstring = g_strdup(matchstring);
@@ -1001,25 +1725,23 @@ xaccQueryAddDescriptionMatch(Query * q, char * matchstring,
     regcomp(&qt->data.str.compiled, matchstring, flags);
   }
   else if(!case_sens) {
-    teststr = g_new0(char, strlen(matchstring)+1);
-    dest    = teststr;
-    for(src=matchstring; *src; src++) {
-      *dest = tolower(*src);
-      dest++;      
+    char *s;
+
+    for(s = qt->data.str.matchstring; *s; s++) {
+      *s = tolower(*s);
     }
-    *dest = 0;    
-    qt->data.str.matchstring = teststr;
   }
-  
+
   xaccInitQuery(qs, qt);
   xaccQuerySetGroup(qs, q->acct_group);
-  
+
   if(xaccQueryHasTerms(q)) {
     qr = xaccQueryMerge(q, qs, op);
   }
   else {
     qr = xaccQueryMerge(q, qs, QUERY_OR);
-  }        
+  }
+
   xaccQuerySwapTerms(q, qr);
   xaccFreeQuery(qs);
   xaccFreeQuery(qr);
@@ -1032,19 +1754,18 @@ xaccQueryAddDescriptionMatch(Query * q, char * matchstring,
  ********************************************************************/
 
 void
-xaccQueryAddMemoMatch(Query * q, char * matchstring,
+xaccQueryAddMemoMatch(Query * q, const char * matchstring,
                       int case_sens, int use_regexp,
                       QueryOp op) {
   Query     * qs  = xaccMallocQuery(); 
   QueryTerm * qt  = g_new0(QueryTerm, 1);
   Query     * qr;
-  char      * teststr;
-  char      * src, * dest;
   int       flags = REG_EXTENDED;
 
-  qt->p      = & xaccMemoMatchPredicate;
-  qt->sense  = 1;
+  qt->p                    = & xaccMemoMatchPredicate;
   qt->data.type            = PD_STRING;
+  qt->data.base.term_type  = PR_MEMO;
+  qt->data.base.sense      = 1;
   qt->data.str.case_sens   = case_sens;
   qt->data.str.use_regexp  = use_regexp;
   qt->data.str.matchstring = g_strdup(matchstring);
@@ -1057,16 +1778,13 @@ xaccQueryAddMemoMatch(Query * q, char * matchstring,
     regcomp(&qt->data.str.compiled, matchstring, flags);
   }
   else if(!case_sens) {
-    teststr = g_new0(char, strlen(matchstring)+1);
-    dest    = teststr;
-    for(src=matchstring; *src; src++) {
-      *dest = tolower(*src);
-      dest++;      
+    char *s;
+
+    for(s = qt->data.str.matchstring; *s; s++) {
+      *s = tolower(*s);
     }
-    *dest = 0;    
-    qt->data.str.matchstring = teststr;
   }
-  
+
   xaccInitQuery(qs, qt);
   xaccQuerySetGroup(qs, q->acct_group);
 
@@ -1075,48 +1793,13 @@ xaccQueryAddMemoMatch(Query * q, char * matchstring,
   }
   else {
     qr = xaccQueryMerge(q, qs, QUERY_OR);
-  }        
+  }
+
   xaccQuerySwapTerms(q, qr);
   xaccFreeQuery(qs);
   xaccFreeQuery(qr);
 }
 
-
-/********************************************************************
- * xaccQueryAddDateMatch
- * Add a date filter to an existing query. 
- ********************************************************************/
-
-void
-xaccQueryAddDateMatch(Query * q, 
-                      int use_start, int sday, int smonth, int syear,
-                      int use_end, int eday, int emonth, int eyear,
-                      QueryOp op) {
-  Query     * qs  = xaccMallocQuery(); 
-  QueryTerm * qt  = g_new0(QueryTerm, 1);
-  Query     * qr;
-
-  qt->p      = & xaccDateMatchPredicate;
-  qt->sense  = 1;
-  qt->data.type           = PD_DATE;
-  qt->data.date.use_start = use_start;
-  qt->data.date.start     = gnc_dmy2timespec(sday, smonth, syear);
-  qt->data.date.use_end   = use_end;
-  qt->data.date.end       = gnc_dmy2timespec(eday, emonth, eyear);
-
-  xaccInitQuery(qs, qt);
-  xaccQuerySetGroup(qs, q->acct_group);
-  
-  if(xaccQueryHasTerms(q)) {
-    qr = xaccQueryMerge(q, qs, op);
-  }
-  else {
-    qr = xaccQueryMerge(q, qs, QUERY_OR);
-  }
-  xaccQuerySwapTerms(q, qr);
-  xaccFreeQuery(qs);
-  xaccFreeQuery(qr);
-}
 
 /********************************************************************
  * xaccQueryAddDateMatchTS
@@ -1134,9 +1817,10 @@ xaccQueryAddDateMatchTS(Query * q,
   QueryTerm * qt  = g_new0(QueryTerm, 1);
   Query     * qr;
 
-  qt->p      = & xaccDateMatchPredicate;
-  qt->sense  = 1;
+  qt->p                   = & xaccDateMatchPredicate;
   qt->data.type           = PD_DATE;
+  qt->data.base.term_type = PR_DATE;
+  qt->data.base.sense     = 1;
   qt->data.date.use_start = use_start;
   qt->data.date.use_end   = use_end;
   qt->data.date.start     = sts;  
@@ -1157,6 +1841,25 @@ xaccQueryAddDateMatchTS(Query * q,
 }
 
 /********************************************************************
+ * xaccQueryAddDateMatch
+ * Add a date filter to an existing query. 
+ ********************************************************************/
+
+void
+xaccQueryAddDateMatch(Query * q, 
+                      int use_start, int sday, int smonth, int syear,
+                      int use_end, int eday, int emonth, int eyear,
+                      QueryOp op) 
+{
+  /* gcc -O3 will auto-inline this function, avoiding a call overhead */
+  xaccQueryAddDateMatchTS (q, use_start,
+                           gnc_dmy2timespec(sday, smonth, syear),
+                           use_end,
+                           gnc_dmy2timespec_end(eday, emonth, eyear),
+                           op);
+}
+
+/********************************************************************
  * xaccQueryAddDateMatchTT
  * Add a date filter to an existing query. 
  ********************************************************************/
@@ -1167,10 +1870,8 @@ xaccQueryAddDateMatchTT(Query * q,
                         time_t stt,
                         int    use_end,
                         time_t ett,
-                        QueryOp op) {
-  Query      * qs  = xaccMallocQuery(); 
-  QueryTerm  * qt  = g_new0(QueryTerm, 1);
-  Query      * qr;  
+                        QueryOp op) 
+{
   Timespec   sts;
   Timespec   ets;
   
@@ -1179,27 +1880,11 @@ xaccQueryAddDateMatchTT(Query * q,
 
   ets.tv_sec  = (long long)ett;
   ets.tv_nsec = 0;
+
+  /* gcc -O3 will auto-inline this function, avoiding a call overhead */
+  xaccQueryAddDateMatchTS (q, use_start, sts,
+                           use_end, ets, op);
   
-  qt->p      = & xaccDateMatchPredicate;
-  qt->sense  = 1;
-  qt->data.type           = PD_DATE;  
-  qt->data.date.use_start = use_start;
-  qt->data.date.use_end   = use_end;
-  qt->data.date.start     = sts;
-  qt->data.date.end       = ets;
-  
-  xaccInitQuery(qs, qt);
-  xaccQuerySetGroup(qs, q->acct_group);
-  
-  if(xaccQueryHasTerms(q)) {
-    qr = xaccQueryMerge(q, qs, op);
-  }
-  else {
-    qr = xaccQueryMerge(q, qs, QUERY_OR);
-  }
-  xaccQuerySwapTerms(q, qr);
-  xaccFreeQuery(qr);
-  xaccFreeQuery(qs);
 }
 
 /********************************************************************
@@ -1207,19 +1892,18 @@ xaccQueryAddDateMatchTT(Query * q,
  * Add a number-field filter 
  ********************************************************************/
 void
-xaccQueryAddNumberMatch(Query * q, char * matchstring, int case_sens,
+xaccQueryAddNumberMatch(Query * q, const char * matchstring, int case_sens,
                         int use_regexp, QueryOp op) {
   
   Query     * qs  = xaccMallocQuery(); 
   QueryTerm * qt  = g_new0(QueryTerm, 1);
   Query     * qr;
-  char      * teststr;
-  char      * src, * dest;
   int       flags = REG_EXTENDED;
 
-  qt->p      = & xaccNumberMatchPredicate;
-  qt->sense  = 1;
+  qt->p                    = & xaccNumberMatchPredicate;
   qt->data.type            = PD_STRING;
+  qt->data.base.term_type  = PR_NUM;
+  qt->data.base.sense      = 1;
   qt->data.str.case_sens   = case_sens;
   qt->data.str.use_regexp  = use_regexp;
   qt->data.str.matchstring = g_strdup(matchstring);
@@ -1232,25 +1916,23 @@ xaccQueryAddNumberMatch(Query * q, char * matchstring, int case_sens,
     regcomp(&qt->data.str.compiled, matchstring, flags);
   }
   else if(!case_sens) {
-    teststr = g_new0(char, strlen(matchstring)+1);
-    dest    = teststr;
-    for(src=matchstring; *src; src++) {
-      *dest = tolower(*src);
-      dest++;      
+    char *s;
+
+    for(s = qt->data.str.matchstring; *s; s++) {
+      *s = tolower(*s);
     }
-    *dest = 0;    
-    qt->data.str.matchstring = teststr;
   }
-  
+
   xaccInitQuery(qs, qt);
   xaccQuerySetGroup(qs, q->acct_group);
-  
+
   if(xaccQueryHasTerms(q)) {
     qr = xaccQueryMerge(q, qs, op);
   }
   else {
     qr = xaccQueryMerge(q, qs, QUERY_OR);
-  }        
+  }
+
   xaccQuerySwapTerms(q, qr);
   xaccFreeQuery(qs);
   xaccFreeQuery(qr);
@@ -1262,19 +1944,18 @@ xaccQueryAddNumberMatch(Query * q, char * matchstring, int case_sens,
  * Add a action-field filter 
  ********************************************************************/
 void
-xaccQueryAddActionMatch(Query * q, char * matchstring, int case_sens,
+xaccQueryAddActionMatch(Query * q, const char * matchstring, int case_sens,
                         int use_regexp, QueryOp op) {
   
   Query     * qs  = xaccMallocQuery(); 
   QueryTerm * qt  = g_new0(QueryTerm, 1);
   Query     * qr;
-  char      * teststr;
-  char      * src, * dest;
   int       flags = REG_EXTENDED;
 
-  qt->p      = & xaccActionMatchPredicate;
-  qt->sense  = 1;
+  qt->p                    = & xaccActionMatchPredicate;
   qt->data.type            = PD_STRING;
+  qt->data.base.term_type  = PR_ACTION;
+  qt->data.base.sense      = 1;
   qt->data.str.case_sens   = case_sens;
   qt->data.str.use_regexp  = use_regexp;
   qt->data.str.matchstring = g_strdup(matchstring);
@@ -1287,25 +1968,23 @@ xaccQueryAddActionMatch(Query * q, char * matchstring, int case_sens,
     regcomp(&qt->data.str.compiled, matchstring, flags);
   }
   else if(!case_sens) {
-    teststr = g_new0(char, strlen(matchstring)+1);
-    dest    = teststr;
-    for(src=matchstring; *src; src++) {
-      *dest = tolower(*src);
-      dest++;      
+    char *s;
+
+    for(s = qt->data.str.matchstring; *s; s++) {
+      *s = tolower(*s);
     }
-    *dest = 0;    
-    qt->data.str.matchstring = teststr;
   }
-  
+
   xaccInitQuery(qs, qt);
   xaccQuerySetGroup(qs, q->acct_group);
-  
+
   if(xaccQueryHasTerms(q)) {
     qr = xaccQueryMerge(q, qs, op);
   }
   else {
     qr = xaccQueryMerge(q, qs, QUERY_OR);
-  }        
+  }
+
   xaccQuerySwapTerms(q, qr);
   xaccFreeQuery(qs);
   xaccFreeQuery(qr);
@@ -1315,7 +1994,7 @@ xaccQueryAddActionMatch(Query * q, char * matchstring, int case_sens,
 /********************************************************************
  * DxaccQueryAddAmountMatch
  * Add a value filter to an existing query. 
- * FIXME 
+ * FIXME ?? fix what ??
  ********************************************************************/
 
 void
@@ -1328,9 +2007,10 @@ DxaccQueryAddAmountMatch(Query * q, double amt,
   QueryTerm * qt  = g_new0(QueryTerm, 1);
   Query     * qr;
 
-  qt->p      = & xaccAmountMatchPredicate;
-  qt->sense  = 1;
+  qt->p                     = & xaccAmountMatchPredicate;
   qt->data.type             = PD_AMOUNT;
+  qt->data.base.term_type   = PR_AMOUNT;
+  qt->data.base.sense       = 1;
   qt->data.amount.how       = how;
   qt->data.amount.amt_sgn   = amt_sgn;
   qt->data.amount.amount    = amt;
@@ -1353,7 +2033,7 @@ DxaccQueryAddAmountMatch(Query * q, double amt,
 /********************************************************************
  * DxaccQueryAddSharePriceMatch
  * Add a share-price filter to an existing query. 
- * FIXME 
+ * FIXME  ?? fix what ??
  ********************************************************************/
 
 void
@@ -1364,11 +2044,12 @@ DxaccQueryAddSharePriceMatch(Query * q, double amt,
   QueryTerm * qt  = g_new0(QueryTerm, 1);
   Query     * qr;
   
-  qt->p      = & xaccSharePriceMatchPredicate;
-  qt->sense  = 1;
+  qt->p                     = & xaccSharePriceMatchPredicate;
   qt->data.type             = PD_AMOUNT;
+  qt->data.base.term_type   = PR_PRICE;
+  qt->data.base.sense       = 1;
   qt->data.amount.how       = how;
-  qt->data.amount.amt_sgn   = 0;
+  qt->data.amount.amt_sgn   = AMT_SGN_MATCH_EITHER;
   qt->data.amount.amount    = amt;
   
   xaccInitQuery(qs, qt);
@@ -1388,8 +2069,8 @@ DxaccQueryAddSharePriceMatch(Query * q, double amt,
 
 /********************************************************************
  * DxaccQueryAddSharesMatch
- * Add a share-price filter to an existing query. 
- * FIXME 
+ * Add a quantity filter to an existing query. 
+ * FIXME ?? fix what ??
  ********************************************************************/
  
 void
@@ -1400,11 +2081,12 @@ DxaccQueryAddSharesMatch(Query * q, double amt,
   QueryTerm * qt  = g_new0(QueryTerm, 1);
   Query     * qr;
   
-  qt->p      = & xaccSharesMatchPredicate;
-  qt->sense  = 1;
+  qt->p                     = & xaccSharesMatchPredicate;
   qt->data.type             = PD_AMOUNT;
+  qt->data.base.term_type   = PR_SHRS;
+  qt->data.base.sense       = 1;
   qt->data.amount.how       = how;
-  qt->data.amount.amt_sgn   = 0;
+  qt->data.amount.amt_sgn   = AMT_SGN_MATCH_EITHER;
   qt->data.amount.amount    = amt;
   
   xaccInitQuery(qs, qt);
@@ -1435,9 +2117,10 @@ xaccQueryAddMiscMatch(Query * q, Predicate p, int how, int data,
   QueryTerm * qt  = g_new0(QueryTerm, 1);
   Query     * qr;
 
-  qt->p      = p;
-  qt->sense  = 1;
+  qt->p                   = p;
   qt->data.type           = PD_MISC;
+  qt->data.base.term_type = PR_MISC;
+  qt->data.base.sense     = 1;
   qt->data.misc.how       = how;
   qt->data.misc.data      = data;
 
@@ -1462,16 +2145,17 @@ xaccQueryAddMiscMatch(Query * q, Predicate p, int how, int data,
  ********************************************************************/
 
 void
-xaccQueryAddClearedMatch(Query * q, int how, 
+xaccQueryAddClearedMatch(Query * q, cleared_match_t how,
                          QueryOp op) {
   Query     * qs  = xaccMallocQuery(); 
   QueryTerm * qt  = g_new0(QueryTerm, 1);
   Query     * qr;
   
-  qt->p      = & xaccClearedMatchPredicate;
-  qt->sense  = 1;
-  qt->data.type      = PD_CLEARED;
-  qt->data.cleared.how  = how;
+  qt->p                   = & xaccClearedMatchPredicate;
+  qt->data.type           = PD_CLEARED;
+  qt->data.base.term_type = PR_CLEARED;
+  qt->data.base.sense     = 1;
+  qt->data.cleared.how    = how;
 
   xaccInitQuery(qs, qt);
   xaccQuerySetGroup(qs, q->acct_group);
@@ -1487,6 +2171,111 @@ xaccQueryAddClearedMatch(Query * q, int how,
   xaccFreeQuery(qr);
 }
 
+/********************************************************************
+ * xaccQueryAddBalanceMatch
+ * Add a 'balance' filter to an existing query. 
+ ********************************************************************/
+
+void
+xaccQueryAddBalanceMatch(Query * q, balance_match_t how, QueryOp op)
+{
+  Query     * qs  = xaccMallocQuery(); 
+  QueryTerm * qt  = g_new0(QueryTerm, 1);
+  Query     * qr;
+
+  qt->p                   = & xaccBalanceMatchPredicate;
+  qt->data.type           = PD_BALANCE;
+  qt->data.base.term_type = PR_BALANCE;
+  qt->data.base.sense     = 1;
+  qt->data.balance.how    = how;
+
+  xaccInitQuery(qs, qt);
+  xaccQuerySetGroup(qs, q->acct_group);
+
+  if(xaccQueryHasTerms(q)) {
+    qr = xaccQueryMerge(q, qs, op);
+  }
+  else {
+    qr = xaccQueryMerge(q, qs, QUERY_OR);
+  }
+  xaccQuerySwapTerms(q, qr);
+  xaccFreeQuery(qs);
+  xaccFreeQuery(qr);
+}
+
+/********************************************************************
+ * xaccQueryAddGUIDMatch
+ * Add a 'guid' filter to an existing query. 
+ ********************************************************************/
+
+void
+xaccQueryAddGUIDMatch(Query * q, const GUID *guid,
+                      GNCIdType id_type, QueryOp op)
+{
+  Query     * qs  = xaccMallocQuery(); 
+  QueryTerm * qt  = g_new0(QueryTerm, 1);
+  Query     * qr;
+
+  qt->p                   = & xaccGUIDMatchPredicate;
+  qt->data.type           = PD_GUID;
+  qt->data.base.term_type = PR_GUID;
+  qt->data.base.sense     = 1;
+  qt->data.guid.guid      = guid ? *guid : *xaccGUIDNULL ();
+  qt->data.guid.id_type   = id_type;
+
+  xaccInitQuery(qs, qt);
+  xaccQuerySetGroup(qs, q->acct_group);
+
+  if(xaccQueryHasTerms(q)) {
+    qr = xaccQueryMerge(q, qs, op);
+  }
+  else {
+    qr = xaccQueryMerge(q, qs, QUERY_OR);
+  }
+  xaccQuerySwapTerms(q, qr);
+  xaccFreeQuery(qs);
+  xaccFreeQuery(qr);
+}
+
+/********************************************************************
+ * xaccQueryAddKVPMatch
+ * Add a 'kvp' filter to an existing query. 
+ ********************************************************************/
+
+void
+xaccQueryAddKVPMatch(Query *q, GSList *path, const kvp_value *value,
+                     kvp_match_t how, kvp_match_where_t where, QueryOp op)
+{
+  Query     * qs  = xaccMallocQuery(); 
+  QueryTerm * qt  = g_new0(QueryTerm, 1);
+  Query     * qr;
+  GSList    * node;
+
+  qt->p                   = &xaccKVPMatchPredicate;
+  qt->data.type           = PD_KVP;
+  qt->data.base.term_type = PR_KVP;
+  qt->data.base.sense     = 1;
+  qt->data.kvp.how        = how;
+  qt->data.kvp.where      = where;
+  qt->data.kvp.path       = g_slist_copy (path);
+  qt->data.kvp.value      = kvp_value_copy (value);
+
+  for (node = qt->data.kvp.path; node; node = node->next)
+    node->data = g_strdup (node->data);
+
+  xaccInitQuery(qs, qt);
+  xaccQuerySetGroup(qs, q->acct_group);
+
+  if(xaccQueryHasTerms(q)) {
+    qr = xaccQueryMerge(q, qs, op);
+  }
+  else {
+    qr = xaccQueryMerge(q, qs, QUERY_OR);
+  }
+  xaccQuerySwapTerms(q, qr);
+  xaccFreeQuery(qs);
+  xaccFreeQuery(qr);
+}
 
 /*******************************************************************
  *  xaccQueryPurgeTerms
@@ -1499,7 +2288,8 @@ xaccQueryPurgeTerms(Query * q, pd_type_t type) {
   GList * or;
   GList * and;
 
-  assert(q != NULL);
+  if (!q)
+    return;
 
   for(or = q->terms; or; or = or->next) {
     for(and = or->data; and; and = and->next) {
@@ -1551,7 +2341,7 @@ string_match_predicate(const char * s, PredicateData * pd)
 {
   regmatch_t match;
 
-  assert(s && pd && (pd->type == PD_STRING));
+  g_return_val_if_fail(s && pd && (pd->type == PD_STRING), FALSE);
 
   if(!pd->str.matchstring) return 0;
 
@@ -1609,16 +2399,15 @@ xaccAccountMatchPredicate(Split * s, PredicateData * pd) {
   int         i;
   int         numsplits;
 
-  assert(s && pd);
-  assert(pd->type == PD_ACCOUNT);
-
-  parent = xaccSplitGetParent(s);
-  assert(parent);
+  g_return_val_if_fail(s && pd, FALSE);
+  g_return_val_if_fail(pd->type == PD_ACCOUNT, FALSE);
 
   switch(pd->acct.how) {
   case ACCT_MATCH_ALL:
     /* there must be a split in parent that matches each of the 
      * accounts listed in pd. */
+    parent = xaccSplitGetParent(s);
+    g_return_val_if_fail(parent, FALSE);
     numsplits = xaccTransCountSplits(parent);
     for(acct_node=pd->acct.accounts; acct_node; acct_node=acct_node->next) {
       for(i=0; i < numsplits; i++) {
@@ -1665,14 +2454,127 @@ xaccDescriptionMatchPredicate(Split * s, PredicateData * pd) {
   Transaction * parent;
   const char  * descript;
   
-  assert(s && pd);  
-  assert(pd->type == PD_STRING);
+  g_return_val_if_fail(s && pd, FALSE);
+  g_return_val_if_fail(pd->type == PD_STRING, FALSE);
 
   parent = xaccSplitGetParent(s);
-  assert(parent);
+  g_return_val_if_fail(parent, FALSE);
 
   descript = xaccTransGetDescription(parent);
   return string_match_predicate(descript, pd);
+}
+
+/*******************************************************************
+ *  xaccGUIDMatchPredicate
+ *******************************************************************/
+static int
+xaccGUIDMatchPredicate(Split * s, PredicateData * pd)
+{
+  GUID *guid;
+
+  g_return_val_if_fail (s, 0);
+  g_return_val_if_fail (pd, 0);
+  g_return_val_if_fail (pd->type == PD_GUID, 0);
+
+  guid = &pd->guid.guid;
+
+  switch (pd->guid.id_type)
+  {
+    case GNC_ID_NONE:
+    case GNC_ID_NULL:
+    default:
+      return 0;
+
+    case GNC_ID_ACCOUNT:
+      return (xaccSplitGetAccount (s) ==
+              xaccAccountLookupEntityTable (guid, s->entity_table));
+
+    case GNC_ID_TRANS:
+      return (xaccSplitGetParent (s) ==
+              xaccTransLookupEntityTable (guid, s->entity_table));
+
+    case GNC_ID_SPLIT:
+      return s == xaccSplitLookupEntityTable (guid, s->entity_table);
+  }
+}
+
+/*******************************************************************
+ *  xaccKVPMatchPredicate
+ *******************************************************************/
+static int
+kvp_match_helper (GSList *path, kvp_value *value, kvp_match_t how,
+                  kvp_frame *frame)
+{
+  kvp_value *value_2;
+  int compare;
+
+  if (!path || !value || !frame || !how) return 0;
+
+  value_2 = kvp_frame_get_slot_path_gslist (frame, path);
+  if (!value_2)
+    return 0;
+
+  if (kvp_value_get_type (value) != kvp_value_get_type (value_2))
+    return 0;
+
+  compare = kvp_value_compare (value_2, value);
+
+  switch (how)
+  {
+    case KVP_MATCH_LT:
+      return (compare < 0);
+    case KVP_MATCH_LTE:
+      return (compare <= 0);
+    case KVP_MATCH_EQ:
+      return (compare == 0);
+    case KVP_MATCH_GTE:
+      return (compare >= 0);
+    case KVP_MATCH_GT:
+      return (compare > 0);
+    default:
+      PWARN ("bad match type: %d", how);
+      return FALSE;
+  }
+}
+
+static int
+xaccKVPMatchPredicate(Split * s, PredicateData * pd)
+{
+  KVPPredicateData *kpd;
+
+  g_return_val_if_fail (s, FALSE);
+  g_return_val_if_fail (pd, FALSE);
+  g_return_val_if_fail (pd->type == PD_KVP, FALSE);
+
+  kpd = &pd->kvp;
+
+  if (kpd->where && KVP_MATCH_SPLIT)
+  {
+    kvp_frame *frame = xaccSplitGetSlots (s);
+
+    if (kvp_match_helper (kpd->path, kpd->value, kpd->how, frame))
+      return TRUE;
+  }
+
+  if (kpd->where && KVP_MATCH_TRANS)
+  {
+    Transaction *trans = xaccSplitGetParent (s);
+    kvp_frame *frame = xaccTransGetSlots (trans);
+
+    if (kvp_match_helper (kpd->path, kpd->value, kpd->how, frame))
+      return TRUE;
+  }
+
+  if (kpd->where && KVP_MATCH_ACCOUNT)
+  {
+    Account *account = xaccSplitGetAccount (s);
+    kvp_frame *frame = xaccAccountGetSlots (account);
+
+    if (kvp_match_helper (kpd->path, kpd->value, kpd->how, frame))
+      return TRUE;
+  }
+
+  return 0;
 }
 
 /*******************************************************************
@@ -1683,11 +2585,11 @@ xaccNumberMatchPredicate(Split * s, PredicateData * pd) {
   Transaction * parent;
   const char  * number;
   
-  assert(s && pd);  
-  assert(pd->type == PD_STRING);
+  g_return_val_if_fail(s && pd, FALSE);
+  g_return_val_if_fail(pd->type == PD_STRING, FALSE);
 
   parent = xaccSplitGetParent(s);
-  assert(parent);
+  g_return_val_if_fail(parent, FALSE);
 
   number = xaccTransGetNum(parent);
   return string_match_predicate(number, pd);
@@ -1701,8 +2603,8 @@ static int
 xaccActionMatchPredicate(Split * s, PredicateData * pd) {
   const char  * action;
   
-  assert(s && pd);  
-  assert(pd->type == PD_STRING);
+  g_return_val_if_fail(s && pd, FALSE);
+  g_return_val_if_fail(pd->type == PD_STRING, FALSE);
 
   action = xaccSplitGetAction(s);
   return string_match_predicate(action, pd);
@@ -1716,7 +2618,7 @@ static int
 xaccMemoMatchPredicate(Split * s, PredicateData * pd) {
   const char  * memo;
   
-  assert(s && pd);  
+  g_return_val_if_fail(s && pd, FALSE);
   memo = xaccSplitGetMemo(s);
   
   return string_match_predicate(memo, pd);
@@ -1730,8 +2632,8 @@ static int
 xaccAmountMatchPredicate(Split * s, PredicateData * pd) {
   double splitamt;
 
-  assert(s && pd);
-  assert(pd->type == PD_AMOUNT);
+  g_return_val_if_fail(s && pd, FALSE);
+  g_return_val_if_fail(pd->type == PD_AMOUNT, FALSE);
 
   splitamt = DxaccSplitGetValue(s);
   
@@ -1758,17 +2660,14 @@ xaccSharePriceMatchPredicate(Split * s, PredicateData * pd) {
   Account  * acct;
   int      type;
 
-  assert(s && pd);
-  assert(pd->type == PD_AMOUNT);
-  
+  g_return_val_if_fail(s && pd, FALSE);
+  g_return_val_if_fail(pd->type == PD_AMOUNT, FALSE);
+
   acct = xaccSplitGetAccount(s);
   type = xaccAccountGetType(acct);
 
-  if((type != STOCK) && (type != MUTUAL)) {
-    return 0;
-  }
   splitamt = DxaccSplitGetSharePrice(s);
-  
+
   return value_match_predicate(splitamt, pd);  
 }
 
@@ -1782,15 +2681,11 @@ xaccSharesMatchPredicate(Split * s, PredicateData * pd) {
   Account  * acct;
   int      type;
 
-  assert(s && pd);
-  assert(pd->type == PD_AMOUNT);
+  g_return_val_if_fail(s && pd, FALSE);
+  g_return_val_if_fail(pd->type == PD_AMOUNT, FALSE);
   
   acct = xaccSplitGetAccount(s);
   type = xaccAccountGetType(acct);
-
-  if((type != STOCK) && (type != MUTUAL)) {
-    return 0;
-  }
 
   splitamt = DxaccSplitGetShareAmount(s);
   
@@ -1805,10 +2700,10 @@ static int
 xaccDateMatchPredicate(Split * s, PredicateData * pd) {
   Timespec transtime;
 
-  assert(s && pd);
-  assert(pd->type == PD_DATE);
+  g_return_val_if_fail(s && pd, FALSE);
+  g_return_val_if_fail(pd->type == PD_DATE, FALSE);
   
-  xaccTransGetDateTS(xaccSplitGetParent(s), &transtime);
+  xaccTransGetDatePostedTS(xaccSplitGetParent(s), &transtime);
 
   if(pd->date.use_start && pd->date.use_end) {
     return ((transtime.tv_sec >= pd->date.start.tv_sec) &&
@@ -1832,8 +2727,8 @@ static int
 xaccClearedMatchPredicate(Split * s, PredicateData * pd) {
   int      cstate;
 
-  assert(s && pd);
-  assert(pd->type == PD_CLEARED);
+  g_return_val_if_fail(s && pd, FALSE);
+  g_return_val_if_fail(pd->type == PD_CLEARED, FALSE);
   
   cstate = xaccSplitGetReconcile(s);
   switch(cstate) {
@@ -1849,7 +2744,37 @@ xaccClearedMatchPredicate(Split * s, PredicateData * pd) {
   case NREC:
     return ((pd->cleared.how & CLEARED_NO) ? 1 : 0);
     break;      
+  case VREC:
+    return ((pd->cleared.how & CLEARED_VOIDED) ? 1 : 0);
+    break;
+    
   }
+
+  return 0;
+}
+
+/*******************************************************************
+ *  xaccBalanceMatchPredicate 
+ *******************************************************************/
+static int
+xaccBalanceMatchPredicate(Split * s, PredicateData * pd) {
+  gboolean balanced;
+
+  g_return_val_if_fail(s && pd, FALSE);
+  g_return_val_if_fail(pd->type == PD_BALANCE, FALSE);
+
+  if ((pd->balance.how & BALANCE_BALANCED) &&
+      (pd->balance.how & BALANCE_UNBALANCED))
+    return 1;
+
+  balanced =
+    gnc_numeric_zero_p (xaccTransGetImbalance (xaccSplitGetParent (s)));
+
+  if (balanced && (pd->balance.how & BALANCE_BALANCED))
+    return 1;
+
+  if (!balanced && (pd->balance.how & BALANCE_UNBALANCED))
+    return 1;
 
   return 0;
 }
@@ -1861,6 +2786,7 @@ xaccClearedMatchPredicate(Split * s, PredicateData * pd) {
 void
 xaccQuerySetSortOrder(Query * q, sort_type_t primary, 
                       sort_type_t secondary, sort_type_t tertiary) {
+  if (!q) return;
   q->primary_sort   = primary;
   q->secondary_sort = secondary;
   q->tertiary_sort  = tertiary;
@@ -1869,12 +2795,78 @@ xaccQuerySetSortOrder(Query * q, sort_type_t primary,
 }
 
 /*******************************************************************
+ *  xaccQueryGetPrimarySortOrder
+ *******************************************************************/
+sort_type_t
+xaccQueryGetPrimarySortOrder(Query * q)
+{
+  if (!q) return BY_NONE;
+  return q->primary_sort;
+}
+
+/*******************************************************************
+ *  xaccQueryGetSecondarySortOrder
+ *******************************************************************/
+sort_type_t
+xaccQueryGetSecondarySortOrder(Query * q)
+{
+  if (!q) return BY_NONE;
+  return q->secondary_sort;
+}
+
+/*******************************************************************
+ *  xaccQueryGetTertiarySortOrder
+ *******************************************************************/
+sort_type_t
+xaccQueryGetTertiarySortOrder(Query * q)
+{
+  if (!q) return BY_NONE;
+  return q->tertiary_sort;
+}
+
+/*******************************************************************
  *  xaccQuerySetSortIncreasing
  *******************************************************************/
 void
-xaccQuerySetSortIncreasing(Query * q, gboolean increasing)
+xaccQuerySetSortIncreasing(Query * q, gboolean prim_increasing,
+			   gboolean sec_increasing, 
+			   gboolean tert_increasing)
 {
-  q->sort_increasing = increasing;
+  if (!q) return;
+  q->primary_increasing = prim_increasing;
+  q->secondary_increasing = sec_increasing;
+  q->tertiary_increasing = tert_increasing;
+  return;
+}
+
+/*******************************************************************
+ *  xaccQueryGetSortPrimaryIncreasing
+ *******************************************************************/
+gboolean
+xaccQueryGetSortPrimaryIncreasing (Query *q)
+{
+  if (!q) return TRUE;
+  return q->primary_increasing;
+}
+
+/*******************************************************************
+ *  xaccQueryGetSortSecondaryIncreasing
+ *******************************************************************/
+gboolean
+xaccQueryGetSortSecondaryIncreasing (Query *q)
+{
+  if (!q) return TRUE;
+  return q->secondary_increasing;
+}
+
+/*******************************************************************
+ *  xaccQueryGetSortTertiaryIncreasing
+ *******************************************************************/
+gboolean
+xaccQueryGetSortTertiaryIncreasing (Query *q)
+{
+  if (!q) return TRUE;
+  return q->tertiary_increasing;
 }
 
 /*******************************************************************
@@ -1882,7 +2874,14 @@ xaccQuerySetSortIncreasing(Query * q, gboolean increasing)
  *******************************************************************/
 void
 xaccQuerySetMaxSplits(Query * q, int n) {
+  if (!q) return;
   q->max_splits = n;
+}
+
+int
+xaccQueryGetMaxSplits(Query * q) {
+  if (!q) return 0;
+  return q->max_splits;
 }
 
 
@@ -1891,7 +2890,18 @@ xaccQuerySetMaxSplits(Query * q, int n) {
  *******************************************************************/
 void
 xaccQuerySetGroup(Query * q, AccountGroup * g) {
+  if (!q) return;
   q->acct_group = g;
+}
+
+
+/*******************************************************************
+ *  xaccQueryGetGroup
+ *******************************************************************/
+AccountGroup *
+xaccQueryGetGroup(Query * q) {
+  if (!q) return NULL;
+  return (q->acct_group);
 }
 
 
@@ -1900,14 +2910,17 @@ xaccQuerySetGroup(Query * q, AccountGroup * g) {
  *******************************************************************/
 time_t
 xaccQueryGetEarliestDateFound(Query * q) {
-  Split  ** sp;
+  GList * spl;
+  Split * sp;
   time_t earliest = LONG_MAX;
 
-  if(!q->split_list) { return 0; }
+  if (!q) return 0;
+  if (!q->split_list) return 0;
 
-  for(sp = q->split_list; *sp; sp++) {
-    if((*sp)->parent->date_posted.tv_sec < earliest) {
-      earliest = (*sp)->parent->date_posted.tv_sec;
+  for(spl = q->split_list; spl; spl=spl->next) {
+    sp = spl->data;
+    if(sp->parent->date_posted.tv_sec < earliest) {
+      earliest = (time_t) sp->parent->date_posted.tv_sec;
     }
   }
   return earliest;
@@ -1918,55 +2931,18 @@ xaccQueryGetEarliestDateFound(Query * q) {
  *******************************************************************/
 time_t
 xaccQueryGetLatestDateFound(Query * q) {
-  Split  ** sp;
+  Split  * sp;
+  GList  * spl;
   time_t latest = 0;
 
-  if(!q->split_list) { return 0; }
+  if(!q) return 0;
+  if(!q->split_list) return 0;
 
-  for(sp = q->split_list; *sp; sp++) {
-    if((*sp)->parent->date_posted.tv_sec > latest) {
-      latest = (*sp)->parent->date_posted.tv_sec;
+  for(spl = q->split_list; spl; spl=spl->next) {
+    sp = spl->data;
+    if(sp->parent->date_posted.tv_sec > latest) {
+      latest = (time_t) sp->parent->date_posted.tv_sec;
     }
   }
   return latest;
 }
-
-#if 0
-int
-main(int argc, char ** argv) {
-  Query * q = xaccMallocQuery();
-  Query * q2 = xaccMallocQuery();
-  Query * r;
-
-  printf("testing queries...\n");
-
-  xaccQueryAddMiscMatch(q, NULL, 1);
-  xaccQueryAddMiscMatch(q, NULL, 2);
-  xaccQueryAddMiscMatch(q, NULL, 3);
-  print_query(q);
-
-  xaccQueryAddMiscMatch(q2, NULL, 4);
-  xaccQueryAddMiscMatch(q2, NULL, 5);
-  xaccQueryAddMiscMatch(q2, NULL, 6);
-  print_query(q2);
-
-  printf("AND of two simple queries:\n");
-
-  r = xaccQueryMerge(q, q2, QUERY_AND);
-  print_query(r);
-
-  printf("OR of two simple queries:\n");
-
-  r = xaccQueryMerge(q, q2, QUERY_OR);
-  print_query(r);
-
-  printf("NAND of two simple queries:\n");
-  r = xaccQueryMerge(q, q2, QUERY_NAND);
-  print_query(r);
-
-  printf("XOR of two simple queries:\n");
-  r = xaccQueryMerge(q, q2, QUERY_XOR);
-  print_query(r);
-    
-}
-#endif

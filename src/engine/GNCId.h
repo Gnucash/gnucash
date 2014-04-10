@@ -21,8 +21,8 @@
  *                                                                  *
 \********************************************************************/
 
-#ifndef __GNC_ID_H__
-#define __GNC_ID_H__ 1
+#ifndef GNC_ID_H
+#define GNC_ID_H 
 
 /* This file defines an API for using gnucash entity identifiers.
  *
@@ -34,11 +34,8 @@
  *
  * Identifiers can be encoded as hex strings. */
 
-#include <config.h>
-
 #include "guid.h"
-#include "util.h"
-
+#include "gnc-engine.h"
 
 /* Identifiers are 'typed' with integers. The ids used in gnucash are
  * defined below. An id with type GNC_ID_NONE does not refer to any
@@ -55,14 +52,21 @@ typedef enum
   GNC_ID_ACCOUNT,
   GNC_ID_TRANS,
   GNC_ID_SPLIT,
-  LAST_GNC_ID = GNC_ID_SPLIT
+  GNC_ID_PRICE,
+  GNC_ID_SCHEDXACTION,
+  GNC_ID_FREQSPEC,
+  LAST_GNC_ID = GNC_ID_FREQSPEC
 } GNCIdType;
 
 
 /* Return the type of an identifier. */
-GNCIdType xaccGUIDType(const GUID * guid);
+GNCIdType xaccGUIDType (const GUID * guid, GNCBook *book);
 
 /* Returns a GUID which is guaranteed to never reference any entity. */
-const GUID * xaccGUIDNULL(void);
+const GUID * xaccGUIDNULL (void);
+
+/* Efficiently allocate & free memory for GUIDs */
+GUID * xaccGUIDMalloc (void);
+void   xaccGUIDFree (GUID *guid);
 
 #endif

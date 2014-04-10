@@ -1,77 +1,37 @@
 
 SUBDIRS = \
   doc \
+  core-utils \
+  gnc-module \
+  test-core \
+  network-utils \
   engine \
+  backend \
   calculation \
-  experimental \
+  tax \
+  app-utils \
+  gnome-utils \
+  app-file \
+  import-export \
+  report \
+  dialog-account \
   register \
-  guile \
   gnome \
+  experimental \
   scm \
   quotes \
   pixmaps \
-  optional
-
-# Engine Makefile.am file.
-bin_PROGRAMS = gnucash
-
-# libraries show up twice because they both provide functions for
-# other libs and use functions from other libs.  These mutual
-# dependencies need to go away.  The libgwrap one in particular is a
-# problem with the current version of gwrap, and will go away when
-# that's fixed.
-LDADD = \
-  gnome/libgncgnome.a \
-  register/libgncregister.a \
-  register/gnome/libgncregistergnome.a \
-  guile/libgncguile.a \
-  gnome/libgncgnome.a \
-  calculation/libgnccalc.a \
-  engine/libgncengine.la \
-  ${GNOMEUI_LIBS} \
-  ${GNOME_LIBDIR} \
-  ${GNOME_PRINT_LIBS} \
-  ${G_WRAP_LINK_ARGS} \
-  ${GUILE_LIBS} \
-  ${GTKHTML_LIBS} \
-  ${INTLLIBS}
-
-gnucash_SOURCES = \
-  MultiLedger.c \
-  SplitLedger.c \
-  Destroy.c \
-  EuroUtils.c \
-  FileDialog.c \
-  Refresh.c \
-  gnc-exp-parser.c
+  business \
+  optional \
+  bin
 
 noinst_HEADERS = \
   AccWindow.h \
-  Destroy.h \
-  EuroUtils.h \
-  FileBox.h \
-  FileDialog.h \
-  MainWindow.h \
-  MultiLedger.h \
   RecnWindow.h \
-  Refresh.h \
-  RegWindow.h \
-  SplitLedger.h \
-  file-history.h \
-  gnc-exp-parser.h \
-  gnc-ui-common.h \
-  messages.h \
-  messages_i18n.h \
-  top-level.h \
-  ui-callbacks.h
+  gnc-ui.h
+
+bin_SCRIPTS = gnc-test-env
 
 EXTRA_DIST = \
-  .cvsignore
-
-CFLAGS = @CFLAGS@ ${GNOME_INCLUDEDIR} ${GUILE_INCS}
-
-INCLUDES = \
-  -I./calculation \
-  -I./engine \
-  -I./guile \
-  -I./register
+  .cvsignore \
+  README.modules

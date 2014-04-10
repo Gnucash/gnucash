@@ -19,8 +19,8 @@
  *
  ***************************************************************************/
 
-#ifndef __NUMERIC_OPS_H__
-#define __NUMERIC_OPS_H__
+#ifndef NUMERIC_OPS_H
+#define NUMERIC_OPS_H
 
 void *trans_numeric(const char *str, /* pointer to string to translate */
                     char radix_point, /* radix character */

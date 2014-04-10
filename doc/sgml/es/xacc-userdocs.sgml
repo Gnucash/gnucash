@@ -1,0 +1,168 @@
+<ARTICLE ID="XACC-USERDOCS">
+<ARTHEADER>
+<TITLE>Ventana Principal de Ayuda de GnuCash</TITLE>
+</ARTHEADER>
+<SECT1>
+<TITLE> Introducción a la Documentación de Usuario</TITLE>
+
+<PARA> Para obtener ayuda de un elemento en concreto:
+
+<ITEMIZEDLIST>
+
+<LISTITEM>
+<PARA><LINK LINKEND="XACC-ABOUT">Acerca GnuCash</LINK>
+
+</PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><LINK LINKEND="XACC-ACCTYPES">Tipos de Cuenta</LINK>
+
+  </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><LINK LINKEND="XACC-APAR">Cuentas Pagables y Cuentas
+      Recibibles</LINK>
+
+  </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><LINK LINKEND="XACC-CHARTOFACCTS">Gráfico de Cuentas</LINK>
+
+  </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><LINK LINKEND="XACC-NEWACCTWIN">Crear una nueva
+      cuenta</LINK>
+
+  </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><LINK LINKEND="DATE">Entrada de Fechas</LINK>
+
+  </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><LINK LINKEND="XACC-DEPRECIATION">Depreciación y Ganancia de
+      Capital</LINK>
+
+  </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><LINK LINKEND="XACC-CURRENCYHANDLING">Cuentas en Moneda
+      Extranjera</LINK>
+
+  </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><LINK LINKEND="XACC-EURO">GnuCash y el EURO</LINK>
+
+  </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><ULINK URL="bofa-mym.html">Importar archivos MYM (Manejar Su
+      Dinero)</ULINK>
+
+  </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><LINK LINKEND="XACC-QIF-IMPORT">Guía para Usuarios Noveles
+      de Quicken(TM)</LINK>
+
+  </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>        <LINK LINKEND="XACC-GPL">Licencia - GPL</LINK> 
+
+        <ITEMIZEDLIST>
+<LISTITEM>
+<PARA><LINK LINKEND="SEC003">Garantía</LINK>
+    </PARA>
+</LISTITEM>
+</ITEMIZEDLIST>
+      
+
+  </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><LINK LINKEND="XACC-MAINWIN">La Ventana Principal</LINK>
+
+  </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><LINK LINKEND="XACC-RECNWIN">La Ventana de Reconciliación</LINK>
+
+  </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><LINK LINKEND="XACC-REGWIN">La Ventana de Registros</LINK>
+
+  </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><LINK LINKEND="XACC-TICKER">Comprobantes de Acciones</LINK>
+
+  </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><LINK LINKEND="XACC-DOUBLEENTRY">Utilizar Doble Entrada</LINK>
+
+  </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><LINK LINKEND="XACC-INCOMEEXPENSE">Utilizar Cuentas de
+      Cobros/Gastos</LINK>
+
+  </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><LINK LINKEND="XACC-PREFERENCES">Configurar Gnucash</LINK>
+
+  </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><LINK LINKEND="XACC-ACCOUNTEDIT">Modificar Propiedades de la
+      Cuenta</LINK>
+
+  </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><LINK LINKEND="XACC-Y2K">Consideraciones de Y2K</LINK>
+
+  </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><LINK LINKEND="XACC-REPORTS">Listados</LINK>
+</PARA>
+</LISTITEM>
+</ITEMIZEDLIST>
+
+</PARA>
+</SECT1>
+<SECT1 ID="XACC-EXTHELP">
+<TITLE> Ayuda Avanzada/Sistema de Documentación</TITLE>
+
+<PARA>La siguiente documentación es acerca de la <EMPHASIS>
+implementación</EMPHASIS> de GnuCash en oposición a la
+<EMPHASIS>documentación de Usuario</EMPHASIS> que explica como
+se debe <EMPHASIS>utilizar</EMPHASIS>.
+</PARA>
+
+<PARA>Algunas representan documentaciones preliminares de
+partes del sistema que no están suficientemente probadas para
+ser utilizadas por los usuarios finales.
+
+<ITEMIZEDLIST>
+<LISTITEM>
+<PARA><ULINK URL="projects.html">Objetivos del Proyecto GnuCash</ULINK>
+
+</PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><LINK LINKEND="XACC-PRINT">Impresión</LINK>
+</PARA>
+</LISTITEM>
+</ITEMIZEDLIST>
+
+</PARA>
+</SECT1>
+</ARTICLE>

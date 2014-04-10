@@ -1,0 +1,92 @@
+<?xml version="1.0"?>
+<gnc-account-example>
+    <gnc-act:title>
+      Boligejer
+    </gnc-act:title>
+    <gnc-act:short-description>
+      Udgifter i forbindelse med at eje en bolig
+    </gnc-act:short-description>
+    <gnc-act:long-description>
+    Du vil have nytte af disse konti, hvis du ejer en bolig. Konti til at holde øje med udgifter til boligen er medtaget (forsikring, skatter, vedligehold)
+</gnc-act:long-description>    
+<gnc:account version="2.0.0">
+  <act:name>Udgifter</act:name>
+  <act:id type="new">84732f5fdd27b6463d75bf958e3a4b06</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>DKK</cmdty:id>
+  </act:currency>
+  <act:description>Udgifter</act:description>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Vedligehold af bolig</act:name>
+  <act:id type="new">fa27de57090e107fa99fe1db53790f23</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>DKK</cmdty:id>
+  </act:currency>
+  <act:description>Vedligehold af bolig</act:description>
+  <act:parent type="new">84732f5fdd27b6463d75bf958e3a4b06</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Fællesudgifter</act:name>
+  <act:id type="new">fa27de57090e107fa99fe1db537a0f23</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>DKK</cmdty:id>
+  </act:currency>
+  <act:description>Fællesudgifter til ejerforening</act:description>
+  <act:parent type="new">84732f5fdd27b6463d75bf958e3a4b06</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Forsikring</act:name>
+  <act:id type="new">4677fe36914ebcf23758f3bf20686b4a</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>DKK</cmdty:id>
+  </act:currency>
+  <act:description>Forsikring</act:description>
+  <act:parent type="new">84732f5fdd27b6463d75bf958e3a4b06</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Husforsikring</act:name>
+  <act:id type="new">3b5909f31bda0e0f76149fd600e0cb1d</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>DKK</cmdty:id>
+  </act:currency>
+  <act:description>Husforsikring</act:description>
+  <act:parent type="new">4677fe36914ebcf23758f3bf20686b4a</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Skatter/afgifter</act:name>
+  <act:id type="new">a931b8ffe2917ff9a069333623da96ca</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>DKK</cmdty:id>
+  </act:currency>
+  <act:description>Skatter/afgifter</act:description>
+  <act:parent type="new">84732f5fdd27b6463d75bf958e3a4b06</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Ejendomsskat</act:name>
+  <act:id type="new">3994b8f5a6a8b2a0a48126fa955e03f7</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>DKK</cmdty:id>
+  </act:currency>
+  <act:description>Ejendomsskat</act:description>
+  <act:parent type="new">a931b8ffe2917ff9a069333623da96ca</act:parent>
+</gnc:account>
+</gnc-account-example>
+
+<!-- Local variables: -->
+<!-- mode: xml        -->
+<!-- End:             -->

@@ -1,0 +1,409 @@
+Notes on the new HTML generation infrastructure.  
+
+It's been time to fix the current HTML infrastructure for a while.
+Pretty much every report reinvents any wheel it happens to need for
+generating HTML markup and for the most part the reports are brutally
+brittle; since they consist of literal HTML strings embedded in Scheme
+code, you will have a very hard time customizing the way they look or
+what they do.
+
+I am mostly done with a completely new system for generating HTML in
+reports.  It's not terribly complicated or sophisticated but it does
+have some nice features, including support for CSS-like "styles" for
+markup that can by changed on the fly and a "style sheet" template
+mechanism that creates a new kind of entity, the style sheet, that can
+influence the overall appearance and style of any report which uses
+it.  This will allow folks to create custom style sheets which make
+all of their reports share a common look and feel, without having to
+modify the reports.
+
+My goal is to make reports much shorter and cleaner, trying to leave
+all the fancy formatting stuff to the style sheets, and to make it
+possible to make reports both arbitrarily good-looking and similar to
+each other.  That will make it easier to use reports in different
+contexts (printed formal statements vs.  short tables embedded in a
+big window with other short statements) and will make it easier for
+people to scavenge other people's reports for code to make new
+reports.
+
+I would like report writers and other interested parties to have a look
+at this document and the bits of sample code in it and let me know if 
+this looks reasonable. 
+
+By convention, I name all Guile "record types" with surrounding <>.
+So <html-document> is the "class object" for the <html-document>
+record type. I will probably use "method" and "class" a lot even
+though it's not a proper object system.  You know what I mean.
+
+Thanks, 
+b.g.
+
+========================================================
+
+At the top level, each report should create exactly one object of type
+<html-document>.  The <html-document> is the "container" for all your
+report HTML information.  You can render it to an HTML string with
+(gnc:html-document-render) or add some content to it with
+(gnc:html-document-add-object!).
+
+An <html-document> is basically a set of <html-object> that get
+rendered in sequence when you call (gnc:html-document-render) at the
+end of your report.  You can think of one <html-object> as a
+block-level element in HTML, like a paragraph, a table, or a guppi
+graph.  There are several different types:
+
+   - text.  You can stick as much marked up text as you want in one
+     text object; you can limit an <html-text> object to one paragraph
+     or stick multiple paragraphs in it.  
+
+     In order to preserve style information, you shouldn't use direct
+     literal markup in your strings (though it doesn't really hurt
+     anything, it is not seen by the style system so you can't
+     influence the way tags are rendered after the fact).  There is a
+     family of functions called gnc:html-markup-* that are shortcuts
+     to most of the common HTML markup (<i>, <b>, <p>, <h1>-<h3>).
+     The markup functions can be composed and take any number of
+     arguments; the arguments are rendered and concatenated to become
+     the body of the <tag>body</tag>.
+
+     You can also markup using ANY tag with (gnc:html-markup tag
+     . body), which does the expected <tag>body</tag> by default (or
+     something else entirely if you have the "tag" style set
+     differently... more later) or (gnc:html-markup/attr tag attr
+     . body), which puts the attribute string 'attr' inside the start
+     tag: <tag attr>body</tag>.  If there are attributes for the tag
+     specified as part of the current style, the attributes you
+     specify will be appended to the style's attributes.
+
+     gnc:html-markup puts an end tag after the body; you should use
+     gnc:html-markup/no-end and gnc:html-markup/attr/no-end if you
+     wish to force no end tag.  Don't do this unless HTML syntax
+     forbids end tags, please.
+
+     Here is a short but complete HTML document demonstrating how to
+     create and render text: 
+
+     (let ((doc (gnc:make-html-document))
+           (txt (gnc:make-html-text)))
+       (gnc:html-text-append! txt
+         (gnc:html-markup-h2 "This is a header")
+	 (gnc:html-markup-p 
+           "This is a paragraph of plain text with a "
+	   (gnc:html-markup-b "bold")
+           " section in the middle."))
+       (gnc:html-document-add-object! doc txt)
+       (gnc:html-document-render doc))
+
+     html-document-render returns a string:      
+
+     "<html><head></head>
+      <body>
+      <h2>This is a header</h2>
+      <p>This is a paragraph of plain text with a 
+      <b>bold</b> section in the middle.</p>
+      </body></html>"
+
+     Any literals, like strings or numbers, that you include in an
+     html-text object get rendered according to the <html-data-style>
+     in effect for their type, so please don't render them yourself
+     (unless you really want to).  
+
+     See the <html-data-style> section for more info, but as a rule of
+     thumb strings will be interpreted literally with HTML special
+     characters escaped for you (i.e. you don't need to put &gt; in
+     the string, go ahead and put >), but if you want to translate to
+     gibberish on the fly or write a stylesheet to render strings in
+     tables as all caps you can do that too.
+
+   - tables.  You can add data by rows or columns to an <html-table>
+     and set row and column headers.  You can set row and column
+     styles for tags and data, and even individual cell styles if you
+     want, so you can have pretty good control over how numbers and
+     rows are rendered even if you just add a column of numbers as
+     numbers.  If you need to get and set the contents of individual
+     cells, you can do that too; the table is automatically grown to
+     whatever dimensions you need.
+
+     A simple example, taken from the account-summary report: 
+     
+           (let ((table (gnc:make-html-table)))
+             ;; column 1: account names (just strings)
+             (gnc:html-table-append-column!
+              table
+              (map (lambda (acct)
+                     (let ((name (gnc:account-get-name acct)))
+                       (gnc:make-html-text
+                        (gnc:html-markup-anchor
+                         (string-append "gnc-register:account=" name)
+                         (gnc:account-get-name acct)))))
+                   accounts))
+             
+             ;; column 2: balances 
+             (gnc:html-table-append-column!
+              table
+              (map (lambda (acct)
+                     (gnc:account-get-balance acct))
+                   accounts))
+
+             ;; column headers 
+             (gnc:html-table-set-column-headers!
+              table
+              (list (_ "Account name") (_ "Balance")))
+             (gnc:html-document-add-object! doc table))
+          
+     The 'html-markup-anchor' bit just makes each account name into an
+     anchor that opens the appropriate register, like
+
+     <a href="gnc-register:account=My Bank Account">My Bank Account</a>
+
+     The contents of a cell can be any type of data or any
+     <html-object>.  There's a special kind of <html-object> that's
+     only useful in tables: the <html-table-cell>.  You want to use
+     this if you need to specify a rowspan or colspan that is not 1;
+     table cells have methods to set the rowspan and colspan.
+
+   - pie charts.  Pie charts are simple affairs.  They have data (a
+     list of numbers), a title and subtitle, a list of colors and a
+     list of labels.  Colors and labels are matched to data points in
+     order.
+
+   - bar charts.  Bar charts have "rows" and "columns" of data, where
+     the value of a data point determines the height of the bar and
+     you generally want more rows than columns:
+
+     X           X   Y
+     X    Y      X   Y           X : Column 0
+     X    Y      X   Y           Y : Column 1
+     X    Y      X   Y
+     X    Y      X   Y
+   r0c0 r0c1   r1c0 r1c1
+      Row 0      Row 1 
+
+     Each column has a distinct color (gnc:html-bar-chart-set-column-colors!)
+     and there's a legend that associates column colors with column labels.
+     Row labels are printed under row groupings.
+
+   - scatter charts.  There's a vector of "X", and a vector of "Y", of
+     the same length; a marker-style; a marker color; X label; and Y
+     label.
+      
+
+Styles 
+------
+
+We have three different kinds of style control information available:
+
+   - markup styles, embodied by the <html-markup-style-info> class.
+     Whenever ANY HTML tag is rendered, a markup style is looked up 
+     starting from the most local context and working back to the 
+     <html-document> and <html-style-sheet>.  The markup style associates
+     a tag name with an <html-markup-style-info> structure, which has 
+     the following fields:  
+     
+       - the HTML tag to render (specified by 'tag).  Note that this
+         may be different from the tag used to look up the style (the
+         one passed to html-markup).
+       - Any attributes to be used inside the start tag (listed 
+         individually as 'attribute (list name value))
+       - The font face to use in the body ('font-face)
+       - The font size to use ('font-size)
+       - The font color ('font-color)
+
+     These properties are merged hierarchically, with the child (most
+     local context) taking precedence.  For all fields except the
+     'attributes', it's a "child-take-all" strategy, i.e. the child's
+     style completely overrides the parent's.  For 'attributes', as long as 
+     the child does not explicitly specify a new HTML tag the attributes are
+     merged with the parent's, with the child's style winning if both 
+     parent and child specify values for the same attribute. 
+
+     Each type of <html-object> is responsible for creating its own
+     "local style context" and representing local style info, so to set 
+     the style for (for example) an HTML text object, you call
+     (gnc:html-text-set-style! obj "tag" style-info).  
+
+     The style-info for any html-object is a bunch of field-value pairs: 
+
+     ;; render all bold text as big and green as well as bold 
+     (gnc:html-text-set-style! my-txt "b" 
+                               'font-color "00ff00" 'font-size 7)
+
+     ;; make sure all table cells are aligned right 
+     (gnc:html-table-set-style! my-table "td"
+                                'attribute '("align" "right"))
+                                 
+     You can use ANY string as a markup tag, not just legit HTML ones.
+     By default, the HTML tag used is the same as the markup tag
+     (which is why the examples above don't specify a 'tag in the
+     style info.. it's OK to do so but redundant) but if you pass
+     another tag it's used instead; 'tag "" means use no tag at all.
+      
+     So here's how to make text marked up with the tag "bigred" be big
+     and red:
+ 
+     (let ((doc (gnc:make-html-document))
+          (txt (gnc:make-html-text)))
+
+       ;; add some text with bigred markup to the 
+       ;; text object 
+       (gnc:html-text-append! txt
+         (gnc:html-markup "bigred" 
+	   (gnc:html-markup-p
+             "This is big red text.")
+           (gnc:html-markup-p
+             (gnc:html-markup-b
+              "This is big red BOLD text."))))
+
+       ;; set the style for bigred text .. it doesn't have to 
+       ;; be before bigred markup is used, just before the 
+       ;; object is rendered.
+       (gnc:html-text-set-style! txt 
+         "bigred" 'tag "" 'font-color "ff0000" 'font-size 7)
+
+       (gnc:html-document-add-object! doc txt)
+       (gnc:html-document-render doc))
+
+    This will render to 
+
+     <html><head></head>
+     <body>
+     <font color=ff0000 size=7>
+     <p>This is big red text.</p>
+     <p><b>This is big red BOLD text</b></p>
+     </font>
+     </body></html>
+
+   - data styles, embodied by the <html-data-style-info> class.
+     Whenever a rendering function needs to render a literal piece of
+     Scheme data, it invokes the data style to figure out how.  As of
+     this writing, an <html-data-style-info> record just contains a
+     function which knows how to render a particular type of data, but
+     this may change in the future.  
+
+     Data styles and markup styles are both set through the
+     "-set-style" methods for various classes, with the difference
+     being that the type name is the key (i.e. "<gnc-numeric>")
+     instead of the HTML tag name.  For built-in Scheme types, there
+     are special cases: "<number>", "<string>", and "<boolean>" are
+     defined.  Since angle brackets aren't legal in HTML tags, there's
+     no namespace conflict; if your record type names (as returned by
+     (record-type-name (record-type-descriptor obj)) don't start and
+     end with angle brackets they will be added for setting and
+     getting data style information.  You shouldn't have to worry about 
+     this.  
+
+   - "style sheets", embodied by the <html-style-sheet> class.  They
+     are more like templates than CSS stylesheets.  Every
+     <html-document> has a stylesheet, and that stylesheet controls
+     the HTML "frame" that the document is rendered into, as well as
+     setting up the highest level of markup styles and data styles for
+     rendering the document.
+
+     Every report now automatically has a "Stylesheet" option in the
+     "General" section which allows a stylesheet to be selected.  At
+     the moment, the list of available stylesheets is fixed when the
+     report is created; this is a bug but I'm not sure how to fix it.
+
+     The default stylesheet (if none is specified in the report) puts
+     the trivial HTML frame around your <html-document>'s
+     <html-object>s:
+
+     <html><head><title> Your Title Here </title></head>
+           <body> Your Objects Rendered Here </body></html>
+     
+     It has some basic options for setting the background color, table
+     formatting, background pixmap, and so on.
+
+     Other stylesheets haven't been written as of this writing, but
+     may put your objects in a cell of an HTML table with a fancy logo
+     in the top right, the document title in a "prepared for" section
+     with a date, letterhead or other graphics in the background, and
+     so on.  Some or all of this should be customized in the style
+     sheet's parameter editor, which uses the same framework as the
+     report parameters editor and the Gnucash preferences editor. 
+
+     Creating stylesheets:
+
+     You can create your own style sheets through the
+     gnc:define-html-style-sheet function.  Defining a style sheet is
+     much like defining a report: you need an 'options' object and a
+     'renderer' function, plus a style-sheet version and name.
+     
+     Since the stylesheet is really defining a complete HTML document
+     itself, you should use an <html-document> created locally in the
+     stylesheet renderer to handle all the rendering.  Just use the
+     default stylesheet for that document so you don't get off into
+     recursive meta-style land.  It will DTRT.  As you are creating 
+     the document, grab the appropriate objects and styles from the 
+     user document (the one you are writing a style sheet for, which 
+     is passed as an argument to the renderer) and stuff them in the
+     local html-document.  
+
+     This sounds more confusing than it actually is.  Here's a very
+     simple style sheet that provides a configurable background color
+     for any report that uses it.  Of course you could just add a bg
+     color as an option to every report; the advantage of doing it
+     here is that when you change the bgcolor in the stylesheet
+     options editor, it changes it in every report that uses that
+     style sheet.
+
+     There's a new "Style Sheet Dialog" in gnucash that lets you copy
+     and modify existing stylesheets from the GUI, so you can take a
+     distributed stylesheet, copy it with a new name, and change the
+     parameters to customize it.
+
+     (let ()
+      (define sample-options
+        (let* ((options (gnc:new-options))
+               (opt-register 
+                 (lambda (opt)
+                   (gnc:register-option options opt))))
+          (opt-register
+            (gnc:make-color-option
+              (_ "Style Sheet Options")
+	      (_ "Background Color") "a" (_ "Background color for reports.")
+	      (list #xff #xff #xff 0)
+	      255 #f))
+          options))
+
+       (define (sample-renderer options doc)
+         (let ((ssdoc (gnc:make-html-document))
+               (bgcolor 
+                (gnc:color-option->html
+                 (gnc:lookup-option options 
+                                    (_ "Style Sheet Options")
+                                    (_ "Background Color")))))
+
+           ;; this says that the HTML <body> tag should have 
+           ;; the attributes bgcolor=COLOR, so it will get 
+           ;; rendered like <body bgcolor=#ffffff>
+           (gnc:html-document-set-style! 
+            ssdoc "body" 'attributes 
+            (with-output-to-string 
+              (lambda ()
+                (display "bgcolor=")
+                (display bgcolor))))
+   
+           ;; if you want to set default markup and data styles for
+           ;; documents using this stylesheet, do it here.  This 
+           ;; style element dosn't do anything, it's just there 
+           ;; as an example:
+           (gnc:html-document-set-style! ssdoc "p" 'tag "p")
+
+           ;; grab the markup and data styles and objects out of the
+           ;; document...  you have to do this in every style sheet!
+           (gnc:html-document-push-style 
+            ssdoc (gnc:html-document-style doc))            
+           (gnc:html-document-append-objects! 
+            ssdoc (gnc:html-document-objects doc))
+  
+           ;; render the ssdocument (using the trivial stylesheet).
+	   ;; since the objects from 'doc' are now in ssdoc, this 
+	   ;; renders the whole package. 
+           (gnc:html-document-render ssdoc)))
+
+       (gnc:define-html-style-sheet 
+        'version 1
+        'name "Sample Style Sheet"
+        'renderer sample-renderer
+        'options sample-options))

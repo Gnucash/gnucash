@@ -1,4 +1,23 @@
-This document explains how to create a GnuCash translation file for
+This document describes the different things needed to translate
+GnuCash for a particular locale.
+
+
+Table Of Contents
+
+1. How to create a GnuCash translation file for use with gettext
+
+2. Remarks about the keyword 'fuzzy' in the po file
+
+3. How to translate the GnuCash manual
+
+4. How to translate the files containing the new account hierarchies
+
+----------------------------------------------------------------------
+
+
+ 1. How to create a GnuCash translation file for use with gettext
+
+This section explains how to create a GnuCash translation file for
 use with GNU gettext.
 
    by Yannick  LE  NY <y-le-ny@ifrance.com>, the French translator
@@ -96,7 +115,9 @@ In French, with tcsh:
 
 
 ------------------------------------------------------------------------------
-Remarks
+
+
+ 2. Remarks about the keyword 'fuzzy' in the po file
 
 You can get more information about gettext and the po file format in
 the 'info' pages for GNU gettext. Type 'info gettext' at the command
@@ -151,3 +172,48 @@ For example:
 #: messages-i18n.c:251
 msgid "Show Income/Expense"
 msgstr "Einnahmen/Ausgaben anzeigen"
+
+----------------------------------------------------------------------
+
+
+ 3. How to translate the GnuCash manual
+
+This section describes the actions needed to translate the manual.
+
+1) Create a new directory doc/sgml/<locale> (where <locale> is
+   something like es, en_GB, or pt_PT).
+2) Copy the files from doc/sgml/C into this directory.
+3) Recreate the image files in doc/sgml/C/gnucash so that they are
+   appropriate to the locale.
+4) Edit all the sgml files and translate for the locale.
+
+----------------------------------------------------------------------
+
+
+ 4. How to translate the files containing the new account hierarchies
+
+This section describes the actions needed to translate the files
+containing the new account hierarchies.
+
+1) Create a new directory accounts/<locale>.
+2) Copy the acctchrt_* files from accounts/C to accounts/<locale>
+3) Do not change any xml tags.
+For each file:
+4) Change the gnc-act:title, gnc-act:short-description, and
+   gnc-act:long-description to contain appropriately translated text.
+   Do not add any newlines in the long description except at the end
+   and begining of the string.
+5) For each gnc:account in the file translate the act:name, and
+   act:description fields.  Please do not translate any other fields.
+
+Note: You absolutely don't need to translate all of the files from
+accounts/C.  A subset of those are fine as well. Probably several of
+them will not apply to your local legislative/economic system anyway.
+For a really customized account hierarchy you might better create a
+new account hierarchy file in GnuCash, and then, by hand-editing the
+xml code, split it up into several files and cut&paste the appropriate
+tags from the accounts/C/acctchrt_* files.
+----------------------------------------------------------------------
+
+Thanks so very much to all the translators for their hard effort and
+excellent work.

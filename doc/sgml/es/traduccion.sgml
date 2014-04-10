@@ -1,0 +1,165 @@
+<appendix label="B">
+<TITLE>
+Acerca de la traducción
+</TITLE>
+<SECT1>
+<TITLE>
+
+Breve historia
+
+</TITLE>
+<PARA>
+</para>
+<PARA>
+
+Cuando leas el manual ten en cuenta que, aunque hemos intentado no descuidar
+la calidad del trabajo, ninguno de nosotros es traductor profesional y esta es
+una de las primeras versiones del documento. Así que si encuentras errores, 
+imprecisiones e incluso faltas de ortografía, no dudes
+en enviarnos un mensaje con tus correcciones y comentarios.
+
+</PARA>
+</SECT1>
+
+<SECT1>
+<TITLE>
+Licencía de la traducción al Castellano
+</TITLE>
+<PARA>
+Esta traducción se distribuye bajo licencia GDPL con las siguientes partes invariantes:
+<ITEMIZEDLIST MARK="bullet">
+<LISTITEM>
+<para>
+Portada del documento
+</para>
+</LISTITEM>
+<LISTITEM>
+<para>
+Apendice acerca de la traducción
+</para>
+</LISTITEM>
+</ITEMIZEDLIST> 
+</PARA>
+<para>
+Esta restricción no busca otra cosa que el respeto al trabajo de todos los voluntarios
+que colaboraron en esta traducción.
+</PARA>
+<para>
+Si usas un extracto de este trabajo, deberías citar la fuente del trabajo e incluir un
+enlace al trabajo completo.
+</PARA>
+</SECT1>
+
+<SECT1>
+<TITLE>El equipo de la versión x.x</TITLE>
+
+<PARA>Formaron parte del grupo de traducción:
+(provisional)
+<ITEMIZEDLIST MARK="bullet">
+<LISTITEM>
+<para>
+Miquel Jordana Vilamitjana
+</para>
+</LISTITEM>
+</ITEMIZEDLIST>
+</PARA>
+
+<PARA>
+También colaboraron con sus revisiones, comentarios y capturas de pantallas :
+
+<ITEMIZEDLIST MARK="bullet">
+
+<LISTITEM>
+<para>
+</para>
+</LISTITEM>
+
+
+</ITEMIZEDLIST>
+</PARA>
+
+</SECT1>
+
+
+
+<SECT1>
+<TITLE>
+
+Ultimas revisiones
+
+</TITLE>
+<PARA>
+
+Puedes encontrar la ultima versión de la traducción 
+
+</PARA>
+<PARA>
+<ULINK URL="http://www.croftj.net/~barreiro/spanish/gnome-es/"TYPE="http">
+http://www.croftj.net/~barreiro/spanish/gnome-es/
+</ULINK>
+</PARA>
+<para> y copias en distintos formatos en el 
+<ULINK URL="ftp://ftp.croftj.net/usr/barreiro/spanish/gnome-es/"TYPE="ftp">
+servidor ftp
+</ULINK>
+de 
+<ULINK URL="http://www.croftj.net/~barreiro/"TYPE="http">
+Linux Landia
+</ULINK>
+
+
+</para>
+<PARA>
+
+También encontraras copias en las siguientes direcciones:
+
+</PARA>
+<PARA>
+
+Si tienes una copia de la traducción en tu servidor y quieres que
+incluya un enlace, indícamelo. De esta forma podré avisarte cuando aparezcan
+nuevas versiones.
+
+</PARA>
+<PARA>
+<ITEMIZEDLIST MARK="bullet">
+<LISTITEM>
+<para>
+Revisión x.x (alfa), 09 de Febrero de 2001.
+</para>
+</LISTITEM>
+</ITEMIZEDLIST>
+</PARA>
+</SECT1>
+
+
+<SECT1>
+<TITLE>
+
+Agradecimientos
+
+</TITLE>
+<PARA>
+
+Al grupo de desarrollo de GNOME.
+
+</PARA>
+<PARA>
+
+A Linus y todos los que han hecho posible el sistema operativo Linux.
+
+</PARA>
+<PARA>
+
+A Joe de Croftj Internet Services por el espacio en su servidor.
+
+</PARA>
+<PARA>
+Manuel de Vega Barreiro.
+</PARA>
+</SECT1>
+</appendix>
+
+
+
+

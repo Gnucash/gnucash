@@ -3,14 +3,6 @@ order to build gnucash, but isn't considered widely available.
 
 ------------------------------------------------
 
-gtkhtml
--------
-
-gtkhtml was stored here, but now there are more recent versions
-available from Helix Code <http://www.helixcode.com> in conveniently
-packaged form.
-
-
 Finance::Quote
 --------------
 
@@ -20,7 +12,7 @@ be built after GnuCash if required.  (If you try to use gnc-prices and
 other scripts without Finance::Quote installed, you'll get an ugly
 error message.)
 
-Building is simple.  In the finance-quote directory:
+Building is simple.  In the Finance-Quote-1.05 directory:
 
 	perl Makefile.PL
 	make
@@ -29,8 +21,3 @@ Building is simple.  In the finance-quote directory:
 
 This will install the module into the appropriate place where perl modules
 live on your system.
-
-Please note that the test scripts for Finance::Quote 1.01 (which is included
-here) may take a VERY long time to complete.  This problem is fixed in
-version 1.02 (which is still in development at the time of writing this
-README).

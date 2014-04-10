@@ -1,0 +1,838 @@
+
+<ARTICLE ID="XACC-CURRENCYHANDLING">
+<ARTHEADER>
+<TITLE></TITLE>
+<TITLE>Tratamiento de monedas y Registrado con doble entrada (monedas)</TITLE>
+</ARTHEADER>
+<SECT1>
+<TITLE> Tratamiento de monedas y Registrado con doble entrada (monedas)</TITLE> <PARA>
+</PARA> <PARA>un <LINK LINKEND="XACC-DOUBLEENTRY">Sistema de Registrado
+    de doble entrada</LINK> guarda los dos valores, y requiere que
+    los balances de todas las transacciones, se realicen como se
+    describe en la <LINK LINKEND="IDENTITY">Identidad de doble entrada.</LINK>
+
+    </PARA>
+<PARA>Cuando introducimos la noción de tener múltiples monedas,
+    o existencias que pueden variar en precio, las identidades se
+    complican un poco, e introducimos la fórmula siguiente:
+
+    <ITEMIZEDLIST>
+<LISTITEM>
+<PARA><EMPHASIS>valor=ratio-cambio-*cantidad</EMPHASIS> (para cantidades
+      de monedas)
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><EMPHASIS>valor=precio*número-artículos</EMPHASIS> (para
+      existencias/acciones mutuales)
+    </PARA>
+</LISTITEM>
+</ITEMIZEDLIST>
+
+    </PARA>
+<PARA>Por lo que, comprar una máquina en Japón (JPY) y utilizar
+    dólares americanos (USD) para pagarlo se registraría de la
+    forma siguiente:
+
+    <ITEMIZEDLIST>
+<LISTITEM>
+<PARA>        <EMPHASIS><EMPHASIS>CuentaGastos:</EMPHASIS> (una cuenta ordinaria de caja/banco valorado
+        en USD)</EMPHASIS> 
+<LITERAL REMAP="TT"><MSGTEXT>
+<LITERALLAYOUT><EMPHASIS>Fecha      origen de       memo                coste
+1/5/99    [JPYCuenta]       Comprar máquina          $1.00</EMPHASIS></LITERALLAYOUT>
+</MSGTEXT></LITERAL>
+      
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>        <EMPHASIS><EMPHASIS>JPYCuenta</EMPHASIS>: (una cuenta de registro de monedas valorado en
+        yen)</EMPHASIS> 
+<LITERAL REMAP="TT"><MSGTEXT>
+<LITERALLAYOUT><EMPHASIS>Fecha      origen de       memo                ratio de compra
+1/5/99    [CuentaGastos]     Comprar máquina          Y150       0.00667</EMPHASIS></LITERALLAYOUT>
+</MSGTEXT></LITERAL>
+      
+    </PARA>
+</LISTITEM>
+</ITEMIZEDLIST>
+
+    </PARA>
+<PARA>El motor del programa junta los tres valores <ENVAR>     (1.0, 150, 0.00667)</ENVAR>
+    permanentemente y hace imposible cambiar uno sin cambiar otro,
+    porque el total es siempre cero, para garantizar satisfactoriamente
+    la <LINK LINKEND="IDENTITY">Identidad de doble entrada.</LINK>
+
+    </PARA>
+</SECT1>
+<SECT1 ID="XACC-ISOCURR">
+<TITLE> Códigos de Monedas ISO</TITLE>
+<PARA>Más monedas de las que creías posibles...
+
+    <TABLE>
+<TITLE>Códigos de Monedas ISO</TITLE>
+<TGROUP COLS="2">
+<THEAD>
+<ROW>
+<ENTRY>Código ISO</ENTRY>
+<ENTRY>Descripción Completa</ENTRY>
+</ROW>
+</THEAD>
+<TBODY>
+<ROW>
+<ENTRY>        </ENTRY>
+</ROW>
+<ROW>
+<ENTRY>ADP</ENTRY>
+<ENTRY>Peseta Andorrana</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>AED</ENTRY>
+<ENTRY>Dirham de los Emiratos Árabes Unidos</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>AFA</ENTRY>
+<ENTRY>Afghani</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>ALL</ENTRY>
+<ENTRY>Lek Albanés</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>AMD</ENTRY>
+<ENTRY>Dram Armenio</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>ANG</ENTRY>
+<ENTRY>Guilder de India Occidental</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>AOK</ENTRY>
+<ENTRY>Kwanza Angolés</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>ARA</ENTRY>
+<ENTRY>Austral Argentino</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>ARS</ENTRY>
+<ENTRY>Peso Argentino</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>ATS</ENTRY>
+<ENTRY>Chelín Austriaco</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>AUD</ENTRY>
+<ENTRY>Dólar Australiano</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>AWG</ENTRY>
+<ENTRY>Guilder de Aruba</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>AZM</ENTRY>
+<ENTRY>Manat de Azerbaijan</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>BAD</ENTRY>
+<ENTRY>Dinar de Bosnia-Herzogovinia</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>BBD</ENTRY>
+<ENTRY>Dólar de Barbados</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>BDT</ENTRY>
+<ENTRY>Taka de Bangladesh</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>BEF</ENTRY>
+<ENTRY>Franco Belga</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>BGL</ENTRY>
+<ENTRY>Lev Bulgaro</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>BHD</ENTRY>
+<ENTRY>Dinar de Barein</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>BIF</ENTRY>
+<ENTRY>Franco de Burundi</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>BMD</ENTRY>
+<ENTRY>Dólar de Bermudas</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>BND</ENTRY>
+<ENTRY>Dólar de Brunei</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>BOB</ENTRY>
+<ENTRY>Boliviano de Bolivia</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>BRL</ENTRY>
+<ENTRY>Real de Brazil</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>BRR</ENTRY>
+<ENTRY>Brazil</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>BSD</ENTRY>
+<ENTRY>Dólar de Bahamas</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>BWP</ENTRY>
+<ENTRY>Pula de Botswana</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>BYR</ENTRY>
+<ENTRY>Rublo de Belorusia</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>BZD</ENTRY>
+<ENTRY>Dólar de Belize</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>CAD</ENTRY>
+<ENTRY>Dólar Canadiense</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>CDP</ENTRY>
+<ENTRY>Santo Domingo</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>CHF</ENTRY>
+<ENTRY>Franco Suizo</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>CLP</ENTRY>
+<ENTRY>Peso Chileno</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>CNY</ENTRY>
+<ENTRY>China</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>COP</ENTRY>
+<ENTRY>Peso de Colombia</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>CRC</ENTRY>
+<ENTRY>Colon de Costa Rica</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>CUP</ENTRY>
+<ENTRY>Peso Cubano</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>CVE</ENTRY>
+<ENTRY>Escudo de Cabo Verde</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>CYP</ENTRY>
+<ENTRY>Libra de Chipre</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>CZK</ENTRY>
+<ENTRY>Krona Checa</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>DEM</ENTRY>
+<ENTRY>Marco Alemán</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>DJF</ENTRY>
+<ENTRY>Franco de Djibouti</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>DKK</ENTRY>
+<ENTRY>Corona Danesa</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>DOP</ENTRY>
+<ENTRY>Peso Dominicano</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>DRP</ENTRY>
+<ENTRY>Peso de la República Dominicana</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>DZD</ENTRY>
+<ENTRY>Dinar de Algeria</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>ECS</ENTRY>
+<ENTRY>Sucre de Ecuador</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>ECU</ENTRY>
+<ENTRY>Moenda Única Europea (EURO)</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>EEK</ENTRY>
+<ENTRY>Corona de Estonia</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>EGP</ENTRY>
+<ENTRY>Libra Egipcia</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>ESP</ENTRY>
+<ENTRY>Peseta Española</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>ETB</ENTRY>
+<ENTRY>Birr de Etiopía</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>EUR</ENTRY>
+<ENTRY>Moneda de los estados miembros de EMU</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>FIM</ENTRY>
+<ENTRY>Marco Finlandés</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>FJD</ENTRY>
+<ENTRY>Dólar de Fiji</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>FKP</ENTRY>
+<ENTRY>Libra de Falkland</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>FRF</ENTRY>
+<ENTRY>Franco Francés</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>GBP</ENTRY>
+<ENTRY>Libra Británica</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>GEK</ENTRY>
+<ENTRY>Kupon de Georgia</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>GHC</ENTRY>
+<ENTRY>Cedi de Ghana</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>GIP</ENTRY>
+<ENTRY>Libra de Gibraltar</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>GMD</ENTRY>
+<ENTRY>Dalasi de Gambia</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>GNF</ENTRY>
+<ENTRY>Franco de Guinea</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>GRD</ENTRY>
+<ENTRY>Dracma Griego</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>GTQ</ENTRY>
+<ENTRY>Quedzal de Guatemala</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>GWP</ENTRY>
+<ENTRY>Peso de Guinea</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>GYD</ENTRY>
+<ENTRY>Dólar Guayanés</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>HKD</ENTRY>
+<ENTRY>Dólar de Hong Kong</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>HNL</ENTRY>
+<ENTRY>Lempira de Honduras</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>HRD</ENTRY>
+<ENTRY>Dinar de Croacia</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>HTG</ENTRY>
+<ENTRY>Gourde de Haiti</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>HUF</ENTRY>
+<ENTRY>Florín Húngaro</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>IDR</ENTRY>
+<ENTRY>Rupia Indonesia</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>IEP</ENTRY>
+<ENTRY>Libra Irlandesa</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>ILS</ENTRY>
+<ENTRY>Scheckel Israelí</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>INR</ENTRY>
+<ENTRY>Rupia India</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>IQD</ENTRY>
+<ENTRY>Dinar Iraquí</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>IRR</ENTRY>
+<ENTRY>Rial Iraní</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>ISK</ENTRY>
+<ENTRY>Corona Islandesa</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>ITL</ENTRY>
+<ENTRY>Lira Italiana</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>JMD</ENTRY>
+<ENTRY>Dólar de Jamaica</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>JOD</ENTRY>
+<ENTRY>Dinar de Jordania</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>JPY</ENTRY>
+<ENTRY>Yen Japonés</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>KES</ENTRY>
+<ENTRY>Chelín de Kenya</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>KHR</ENTRY>
+<ENTRY>Riel de Camboya</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>KIS</ENTRY>
+<ENTRY>Som de Kirghizstan</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>KMF</ENTRY>
+<ENTRY>Franco de Comoros</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>KPW</ENTRY>
+<ENTRY>Won de Corea del Norte</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>KRW</ENTRY>
+<ENTRY>Won de Corea del Sur</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>KWD</ENTRY>
+<ENTRY>Dinar de Kuwait</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>KYD</ENTRY>
+<ENTRY>Dólar de las Caimán</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>KZT</ENTRY>
+<ENTRY>Tenge de Kazakhstán</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>LAK</ENTRY>
+<ENTRY>Kip de Letonia</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>LBP</ENTRY>
+<ENTRY>Libra Libanesa</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>LKR</ENTRY>
+<ENTRY>Rupia de Ceilán</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>LRD</ENTRY>
+<ENTRY>Dólar de Liberia</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>LSL</ENTRY>
+<ENTRY>Loti de Lesotho</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>LTL</ENTRY>
+<ENTRY>Lita de Lituania</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>LUF</ENTRY>
+<ENTRY>Franco de Luxemburgo</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>LVL</ENTRY>
+<ENTRY>Lat Latonia</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>LYD</ENTRY>
+<ENTRY>Dinar Libio</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>MAD</ENTRY>
+<ENTRY>Dirham Marroquí</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>MDL</ENTRY>
+<ENTRY>Lei de Moldavia</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>MGF</ENTRY>
+<ENTRY>Franco de Madagascar</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>MNC</ENTRY>
+<ENTRY>Monaco</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>MNT</ENTRY>
+<ENTRY>Tugrik de Mongolia</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>MOP</ENTRY>
+<ENTRY>Pataca de Macao</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>MRO</ENTRY>
+<ENTRY>Ouguiya de Mauritania</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>MTL</ENTRY>
+<ENTRY>Lira de Malta</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>MUR</ENTRY>
+<ENTRY>Rupia de "Mauritius"</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>MVR</ENTRY>
+<ENTRY>Rufia de Maldivas</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>MWK</ENTRY>
+<ENTRY>Kwacha de Malawi</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>MXN</ENTRY>
+<ENTRY>Peso Mexicano (nuevo)</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>MXP</ENTRY>
+<ENTRY>Peso Mexicano (viejo)</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>MYR</ENTRY>
+<ENTRY>Ringgit de Malaysia</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>MZM</ENTRY>
+<ENTRY>Metical de Mozambique</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>NGN</ENTRY>
+<ENTRY>Naira de Nigeria</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>NIC</ENTRY>
+<ENTRY>Nicaragua</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>NIO</ENTRY>
+<ENTRY>Cordoba de Nicaragua</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>NIS</ENTRY>
+<ENTRY>Isreal</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>NLG</ENTRY>
+<ENTRY>Guilder de Holanda</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>NOK</ENTRY>
+<ENTRY>Córona Noruega</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>NPR</ENTRY>
+<ENTRY>Rupia de Nepal</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>NZD</ENTRY>
+<ENTRY>Dólar de Nueva Zelanda</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>OMR</ENTRY>
+<ENTRY>Rial de Omán</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>PAB</ENTRY>
+<ENTRY>Balboa de Panamá</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>PEI</ENTRY>
+<ENTRY>Inti de Perú</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>PEN</ENTRY>
+<ENTRY>Sol de Perú - Nuevo</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>PES</ENTRY>
+<ENTRY>Sol de Perú</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>PGK</ENTRY>
+<ENTRY>Kina de Papua Nueva Guinea</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>PHP</ENTRY>
+<ENTRY>Peso Filipino</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>PKR</ENTRY>
+<ENTRY>Rupia de Pakistán</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>PLN</ENTRY>
+<ENTRY>Zloty de Polonia</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>PLZ</ENTRY>
+<ENTRY>Polonia</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>PTE</ENTRY>
+<ENTRY>Escudo Portugués</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>PYG</ENTRY>
+<ENTRY>Guarani de Paraguay</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>QAR</ENTRY>
+<ENTRY>Riyal de Qatar</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>RMB</ENTRY>
+<ENTRY>Remnminbi Yuan de China</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>ROL</ENTRY>
+<ENTRY>Lei de Rumania</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>RUR</ENTRY>
+<ENTRY>Rublo Ruso</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>RWF</ENTRY>
+<ENTRY>Franco de Rwanda</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>SAR</ENTRY>
+<ENTRY>Riyal de Arabia Saudí</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>SBD</ENTRY>
+<ENTRY>Dólar de las Islas Solomon</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>SCR</ENTRY>
+<ENTRY>Rupias de Seychelles</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>SDP</ENTRY>
+<ENTRY>Libra de Sudán</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>SEK</ENTRY>
+<ENTRY>Córona Sueca</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>SGD</ENTRY>
+<ENTRY>Dólar de Singapur</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>SHP</ENTRY>
+<ENTRY>Libra de St.Helena</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>SIT</ENTRY>
+<ENTRY>Tolar de Eslovenia</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>SKK</ENTRY>
+<ENTRY>Córona Eslovaca</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>SLL</ENTRY>
+<ENTRY>Sierra León</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>SOL</ENTRY>
+<ENTRY>Perú</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>SOS</ENTRY>
+<ENTRY>Chellín de Somalia</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>SRG</ENTRY>
+<ENTRY>Guilder de Surinam</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>STD</ENTRY>
+<ENTRY>Sao Tome / Principe Dobra</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>SUR</ENTRY>
+<ENTRY>Rublo Ruso (viejo)</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>SVC</ENTRY>
+<ENTRY>Colon de El Salvador</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>SYP</ENTRY>
+<ENTRY>libra de Siria</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>SZL</ENTRY>
+<ENTRY>Lilangeni de Swaziland</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>THB</ENTRY>
+<ENTRY>Baht de Tailandia</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>TJR</ENTRY>
+<ENTRY>Rublo de Tadzikistán</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>TMM</ENTRY>
+<ENTRY>Manat de Turkmenistán</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>TND</ENTRY>
+<ENTRY>Dinar de Tunícia</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>TOP</ENTRY>
+<ENTRY>Pa'anga de Tonga</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>TPE</ENTRY>
+<ENTRY>Escudo de Timor</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>TRL</ENTRY>
+<ENTRY>Lira de Turquía</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>TTD</ENTRY>
+<ENTRY>Dólar de Trinidad y Tobagor</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>TWD</ENTRY>
+<ENTRY>Dólar de Nuevo Taiwán</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>TZS</ENTRY>
+<ENTRY>Chellín de Tanzania</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>UAK</ENTRY>
+<ENTRY>karbowanez de Ucrainia</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>UGS</ENTRY>
+<ENTRY>Chellín de Uganda</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>USD</ENTRY>
+<ENTRY>Dólar Americano</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>UYP</ENTRY>
+<ENTRY>Nuevo Peso de Uruguay</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>UYU</ENTRY>
+<ENTRY>Uruguay</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>VEB</ENTRY>
+<ENTRY>Bolivar de Venezuela</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>VND</ENTRY>
+<ENTRY>Dong de Vietnám</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>VUV</ENTRY>
+<ENTRY>Vatu de Vanuatu</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>WST</ENTRY>
+<ENTRY>Tala de Samoa</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>XAF</ENTRY>
+<ENTRY>Franco de Gabón</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>XCD</ENTRY>
+<ENTRY>Dólar de Caribe Oriental</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>XOF</ENTRY>
+<ENTRY>Franco de Benin (C.f.A.)</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>YER</ENTRY>
+<ENTRY>Ryal de Yemen</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>ZAR</ENTRY>
+<ENTRY>Rand de Sur África</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>ZMK</ENTRY>
+<ENTRY>Kwacha de Zambia</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>ZRZ</ENTRY>
+<ENTRY>Zaire</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>ZWD</ENTRY>
+<ENTRY>Dólar de Zimbawe</ENTRY>
+</ROW>
+</TBODY>
+</TGROUP>
+</TABLE>
+
+
+</PARA>
+</SECT1>
+</ARTICLE>

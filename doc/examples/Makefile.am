@@ -12,6 +12,7 @@ doc_DATA = \
   bogus.qif \
   cbb-export.qif \
   currency.xac \
+  currency_tree_xml.xac \
   every.qif \
   ms-money.qif \
   quicktest.qif \

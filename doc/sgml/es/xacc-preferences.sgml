@@ -1,0 +1,58 @@
+<ARTICLE ID="XACC-PREFERENCES">
+
+<ARTHEADER>
+<TITLE>Configuración</TITLE>
+</ARTHEADER>
+
+<PARA>Puede personalizar la apariencia de GnuCash cambiando los
+    parámetros en este diálogo. Todos los parámetros son
+    automáticamente guardados y por lo tanto prevalecen para
+    futuras sesiones.
+
+    </PARA>
+<PARA>Para cambiar los parámetros, simplemente apriete para
+    seleccionar la página apropiada, entonces realice los
+    cambios apropiados, y apriete en el botón "Aplicar" para ver
+    que sus cambios tienen efecto. Apretando el botón "Aceptar"
+    se aplican los cambios, y se cierra el diálogo de configuración.
+    El botón "Cerrar" simplemente cierra el diálogo sin aplicar
+    los últimos cambios.
+
+    </PARA>
+<PARA>Los parámetros están agrupados en las siguientes categorías:
+
+    <ITEMIZEDLIST>
+<LISTITEM>
+<PARA><EMPHASIS>Campos de Cuenta:</EMPHASIS> establece que campos se muestran
+      en la lista de cuentas de la ventana principal.
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><EMPHASIS>Tipos de Cuentas:</EMPHASIS> establece que tipos de cuentas se
+      muestran en la ventana principal.
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><EMPHASIS>General:</EMPHASIS> todo aquello que no encaja en ningún
+      otro sitio.
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><EMPHASIS>Internacional:</EMPHASIS> opciones relacionadas con el formato
+      visual de fechas y horas.
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><EMPHASIS>Registro:</EMPHASIS> opciones relacionadas con la apariencia
+      por defecto de los registros de cuentas.
+    </PARA>
+</LISTITEM>
+</ITEMIZEDLIST>
+
+
+</PARA>
+</ARTICLE>

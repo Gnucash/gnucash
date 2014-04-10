@@ -1,0 +1,1028 @@
+<html><head><title>Taxable Income / Deductable Expenses</title></head>
+<body bgcolor=#f6ffdb><center><p><font color="#000000">Period From: 2001-Jan-01  To: 2001-Mar-09</font></p>
+<p><font color="#0000ff"></font></p>
+</center><P><font color="#0000ff">No TXF init function because, no txf-account</font></P>
+<P><font color="#0000ff">No TXF init function because, no txf-account</font></P>
+<table border=1 cellpadding=1><caption><b>Taxable Income / Deductable Expenses</b></caption>
+<tr><th>Tax Form \ TXF Code<br>Description</th>
+<th>Extended TXF Help messages<font color="#0000ff"> Income</font><font color="#ff0000"> Expense</font></th>
+</tr>
+<TR><TD align=left><font color="#0000ff"><b>&lt; help \ </b>H001<br>Name of Current account is exported.</font></TD>
+<TD align=left><font color="#0000ff">Categories marked with a "&lt;" or a "^", require a Payer identification to be exported.  "&lt;" indicates that the name of this account is exported as this Payer ID.  Typically, this is a bank, stock, or mutual fund name.</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>^ help \ </b>H002<br>Name of Parent account is exported.</font></TD>
+<TD align=left><font color="#0000ff">Categories marked with a "&lt;" or a "^", require a Payer identification to be exported.  "^" indicates that the name of the PARENT of this account is exported as this Payer ID.  Typically, this is a bank, stock, or mutual fund name.</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b># help \ </b>H003<br>Not implimented yet, Do NOT Use!</font></TD>
+<TD align=left><font color="#0000ff">Categories marked with a "#" are not fully implemented yet!  Do not use these codes!</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>  none \ </b>N000<br>Tax Report Only - No TXF Export</font></TD>
+<TD align=left><font color="#0000ff">This is a dummy category and only shows up on the tax report, but is not exported.</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>Help F1040 \ </b>H256<br>Form 1040 - the main tax form</font></TD>
+<TD align=left><font color="#0000ff">Form 1040 is the main form of your tax return.</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>  F1040 \ </b>N261<br>Alimony received</font></TD>
+<TD align=left><font color="#0000ff">Amounts received as alimony or separate maintenance.  Note: child support is not considered alimony.</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>  F1040 \ </b>N257<br>Other income, misc.</font></TD>
+<TD align=left><font color="#0000ff">Miscellaneous income such as: a hobby or a farm you operate mostly for recreation and pleasure, jury duty pay. Exclude self employment income, gambling winnings, prizes and awards.</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>  F1040 \ </b>N520<br>RR retirement inc., spouse</font></TD>
+<TD align=left><font color="#0000ff">Spouse's part of tier I railroad retirement benefits, which are treated as a social security benefits. These will be reported on Form RRB-1099.</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>  F1040 \ </b>N519<br>RR retirement income, self</font></TD>
+<TD align=left><font color="#0000ff">The part of tier I railroad retirement benefits, which are treated as a social security benefits. These will be reported on Form RRB-1099.</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>  F1040 \ </b>N258<br>Sick pay or disability pay</font></TD>
+<TD align=left><font color="#0000ff">Amounts you receive from your employer while you are sick or injured are part of your salary or wages. Exclude workers' compensation, accident or health insurance policy benefits, if you paid the premiums.</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>  F1040 \ </b>N483<br>Social Security inc., spouse</font></TD>
+<TD align=left><font color="#0000ff">Spouse's part of any monthly benefit under title II of the Social Security Act. These will be reported on Form SSA-1099.</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>  F1040 \ </b>N266<br>Social Security income, self</font></TD>
+<TD align=left><font color="#0000ff">The part of any monthly benefit under title II of the Social Security Act. These will be reported on Form SSA-1099.</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>  F1040 \ </b>N260<br>State and local tax refunds</font></TD>
+<TD align=left><font color="#0000ff">Refund of state or local income tax refund (or credit or offset) which you deducted or took a credit for in an earlier year. You should receive a statement, Form 1099-G. Not reportable if you didn't itemize last year.</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>  F1040 \ </b>N269<br>Taxable fringe benefits</font></TD>
+<TD align=left><font color="#0000ff">Fringe benefits you receive in connection with the performance of your services are included in your gross income as compensation. Examples: Accident or Health Plan, Educational Assistance, Group-Term Life Insurance, Transportation (company car).</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>Help F1099-G \ </b>H634<br>Form 1099-G - certian Government payments</font></TD>
+<TD align=left><font color="#0000ff">Form 1099-G is used to report certain government payments from federal, state, or local governments.</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>  F1099-G \ </b>N672<br>Qualified state tuition earnings</font></TD>
+<TD align=left><font color="#0000ff">Qualified state tuition program earnings you recieved this year.</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>  F1099-G \ </b>N260<br>State and local tax refunds</font></TD>
+<TD align=left><font color="#0000ff">Refund of state or local income tax refund (or credit or offset) which you deducted or took a credit for in an earlier year. You should receive a statement, Form 1099-G. Not reportable if you didn't itemize last year.</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>  F1099-G \ </b>N479<br>Unemployment compensation</font></TD>
+<TD align=left><font color="#0000ff">Total unemployment compensation paid to you this year. Reported on Form 1099-G.</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>Help F1099-MISC \ </b>H553<br>Form 1099-MISC - MISCellaneous income</font></TD>
+<TD align=left><font color="#0000ff">Form 1099-MISC is used to report miscellaneous income received and direct sales of consumer goods for resale.</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>^ F1099-MISC \ </b>N562<br>Crop insurance proceeds</font></TD>
+<TD align=left><font color="#0000ff">The amount of crop insurance proceeds as the result of crop damage.</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>^ F1099-MISC \ </b>N559<br>Fishing boat proceeds</font></TD>
+<TD align=left><font color="#0000ff">Your share of all proceeds from the sale of a catch or the fair market value of a distribution in kind that you recieved as a crew member of a fishing boat.</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>^ F1099-MISC \ </b>N560<br>Medical/health payments</font></TD>
+<TD align=left><font color="#0000ff">The amount of payments recieved as a physician or other supplier or provider of medical or health care services. This includes payments made by medical and health care insurers under health, accident, and sickness insurance programs.</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>^ F1099-MISC \ </b>N561<br>Nonemployee compensation</font></TD>
+<TD align=left><font color="#0000ff">The amount of non-employee compensation received. This includes fees, commissions, prizes and awards for services performed, other forms of compensation for services you performed for a trade or business by which you are not employed.  Also include oil and gas payments for a working interest.</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>^ F1099-MISC \ </b>N557<br>Other income</font></TD>
+<TD align=left><font color="#0000ff">The amount of prizes and awards that are not for services performed. Included is the fair market value of merchandise won on game shows. Included is all punitive damages, any damages for nonphysical injuries or sickness, and any other taxable damages, Deceased employee's wages paid to estate or beneficiary.</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>^ F1099-MISC \ </b>N259<br>Prizes and awards</font></TD>
+<TD align=left><font color="#0000ff">The amount of prizes and awards that are not for services performed. Included is the fair market value of merchandise won on game shows.</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>^ F1099-MISC \ </b>N555<br>Rents</font></TD>
+<TD align=left><font color="#0000ff">Amounts recieved for all types of rents, such as real estate rentals for office space, machine rentals, and pasture rentals.</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>^ F1099-MISC \ </b>N556<br>Royalties</font></TD>
+<TD align=left><font color="#0000ff">The gross royalty payments recieved from a publisher or literary agent.</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>Help F1099=MSA \ </b>H629<br>Form 1099-MSA Medical Savings Account</font></TD>
+<TD align=left><font color="#0000ff">Form 1099-MSA is used to report medical savings account distributions.</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>  F1099-MSA \ </b>N632<br>MSA earnings on excess contrib</font></TD>
+<TD align=left><font color="#0000ff">The earnings on any excess contributions you withdrew from an MSA by the due date of your income tax return. If you withdrew the excess, plus any earnings, by the due date of your income tax return, you must include the earnings in your income in the year you received the distribution even if you used it to pay qualified medical expenses.</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>  F1099-MSA \ </b>N631<br>MSA gross distribution</font></TD>
+<TD align=left><font color="#0000ff">The amount you received this year from a Medical Savings Account. The amount may have been a direct payment to the medical service provider or distributed to you.</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>Help F1099-R \ </b>H473<br>Form 1099-R - Rretirement distributions</font></TD>
+<TD align=left><font color="#0000ff">Form 1099-R is used to report taxable and non-taxable retirement distributions from retirement, pension, profit-sharing, or annuity plans. Use a separate Form 1099-R for each payer.</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>^ F1099-R \ </b>N623<br>SIMPLE total gross distribution</font></TD>
+<TD align=left><font color="#0000ff">The gross amount of a distribution received from a qualified SIMPLE pension plan.</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>^ F1099-R \ </b>N624<br>SIMPLE total taxable distribution</font></TD>
+<TD align=left><font color="#0000ff">The taxable amount of a distribution received from a qualified SIMPLE plan. This amount may be subject to a federal penalty of up to 25%.</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>^ F1099-R \ </b>N477<br>Total IRA gross distribution</font></TD>
+<TD align=left><font color="#0000ff">The gross amount of a distribution from a qualified Individual Retirement Arrangement (IRA) plan.</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>^ F1099-R \ </b>N478<br>Total IRA taxable distribution</font></TD>
+<TD align=left><font color="#0000ff">The taxable amount of a distribution from a qualified Individual Retirement Arrangement (IRA) plan.</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>^ F1099-R \ </b>N475<br>Total pension gross distribution</font></TD>
+<TD align=left><font color="#0000ff">The gross amount of a distribution from a qualified pension or annuity plan. Note: IRA distributions are not included here.</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>^ F1099-R \ </b>N476<br>Total pension taxable distribution</font></TD>
+<TD align=left><font color="#0000ff">The taxable amount of a distribution from a qualified pension or annuity plan. Note: IRA distributions are not included here.</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>Help F2106 \ </b>H380<br>employee business expenses</font></TD>
+<TD align=left><font color="#0000ff">Form 2106 is used to deduct employee business expenses. You must file this form if you were reimbursed by your employer or claim job-related travel, transportation, meal, or entertainment expenses. Use a separate Form 2106 for your spouse's expenses.</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>  F2106 \ </b>N387<br>Reimb. business expenses (non-meal/ent.)</font></TD>
+<TD align=left><font color="#0000ff">Reimbursement for business expenses from your employer that is NOT included on your Form W-2. Note: meals and entertainment are NOT included here.</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>  F2106 \ </b>N388<br>Reimb. meal/entertainment expenses</font></TD>
+<TD align=left><font color="#0000ff">Reimbursement for meal and entertainment expenses from your employer that is NOT included on your Form W-2.</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>Help F4137 \ </b>H503<br>Form 4137 - tips not reported</font></TD>
+<TD align=left><font color="#0000ff">Form 4137 is used to compute social security and Medicare tax owed on tips you did not report to your employer.</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>  F4137 \ </b>N505<br>Total cash/tips not reported to employer</font></TD>
+<TD align=left><font color="#0000ff">The amount of tips you did not report to your employer.</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>Help F4684 \ </b>H412<br>Form 4684 - casualties and thefts</font></TD>
+<TD align=left><font color="#0000ff">Form 4684 is used to report gains and losses from casualties and thefts.</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>  F4684 \ </b>N416<br>FMV after casualty</font></TD>
+<TD align=left><font color="#0000ff">The fair market value (FMV) is the price at which the property would change hands between a willing buyer and seller, each having knowledge of the relevant facts. The FMV after a theft is zero if the property is not recovered. The FMV is generally determined by competent appraisal.</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>  F4684 \ </b>N415<br>FMV before casualty</font></TD>
+<TD align=left><font color="#0000ff">The fair market value (FMV) is the price at which the property would change hands between a willing buyer and seller, each having knowledge of the relevant facts. FMV is generally determined by competent appraisal.</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>  F4684 \ </b>N414<br>Insurance/reimbursement</font></TD>
+<TD align=left><font color="#0000ff">The amount of insurance or other reimbursement you received expect to receive.</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>Help F4835 \ </b>H569<br>Form 4835 - farm rental income</font></TD>
+<TD align=left><font color="#0000ff">Form 4835 is used to report farm rental income received as a share of crops or livestock produced by your tenant if you did not materially participate in the operation or management of the farm.  Use a different copy of Form 4835 for each farm rented.</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>  F4835 \ </b>N573<br>Agricultural program payments</font></TD>
+<TD align=left><font color="#0000ff">Government payments received for: price support payments, market gain from the repayment of a secured Commodity Credit Corporation (CCC) loan for less than the original loan amount, diversion payments, cost-share payments (sight drafts), payments in the form of materials (such as fertilizer or lime) or services (such asgrading or building dams). Reported on Form 1099-G.</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>  F4835 \ </b>N575<br>CCC loans forfeited/repaid</font></TD>
+<TD align=left><font color="#0000ff">The full amount forfeited or repaid with certificates, even if you reported the loan proceeds as income.  See IRS Pub 225.</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>  F4835 \ </b>N574<br>CCC loans reported/election</font></TD>
+<TD align=left><font color="#0000ff">Generally, you do not report CCC loan pro-ceeds as income. However, if you pledge part or all of your production to secure a CCC loan, you may elect to report the loan proceeds as income in the year you receive them, instead of the year you sell the crop.</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>  F4835 \ </b>N577<br>Crop insurance proceeds deferred</font></TD>
+<TD align=left><font color="#0000ff">If you use the cash method of accounting and receive crop insurance proceeds in the same tax year in which the crops are damaged, you can choose to postpone reporting the proceeds as income until the following tax year. A statement must also be attached to your return.  See IRS Pub 225.</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>  F4835 \ </b>N576<br>Crop insurance proceeds received</font></TD>
+<TD align=left><font color="#0000ff">You generally include crop insurance proceeds in the year you receive them. Treat as crop insurance proceeds the crop disaster payments you receive from the federal government.</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>  F4835 \ </b>N578<br>Other income</font></TD>
+<TD align=left><font color="#0000ff">Illegal Federal irrigation subsidies, bartering income, income from discharge of indebtedness, state gasoline or fuel tax refund, the gain or loss on the sale of commodity futures contracts, etc.</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>  F4835 \ </b>N571<br>Sale of livestock/produce</font></TD>
+<TD align=left><font color="#0000ff">Income you received from livestock, produce, grains, and other crops based on production. Under both the cash and the accrual methods of reporting, you must report livestock or crop share rentals received in the year you convert them into money or its equivalent.</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>  F4835 \ </b>N572<br>Total cooperative distributions</font></TD>
+<TD align=left><font color="#0000ff">Distributions received from a cooperative. This includes patronage dividends, nonpatronage distributions, per-unit retain allocations, and redemption of nonqualified notices and perunit retain allocations. Reported on Form 1099-PATR.</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>Help F6252 \ </b>H427<br>Form 6252 - income from casual sales</font></TD>
+<TD align=left><font color="#0000ff">Form 6252 is used to report income from casual sales of real or personal property when you will receive any payments in a tax year after the year of sale (i.e., installment sale).</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>  F6252 \ </b>N429<br>Debt assumed by buyer</font></TD>
+<TD align=left><font color="#0000ff">Enter only mortgages or other debts the buyer assumed from the seller or took the property subject to. Do not include new mortgages the buyer gets from a bank, the seller, or other sources.</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>  F6252 \ </b>N431<br>Depreciation allowed</font></TD>
+<TD align=left><font color="#0000ff">Enter all depreciation or amortization you deducted or should have deducted from the date of purchase until the date of sale. Add any section 179 expense deduction.  Several other adjustmants are allowed, See Form 6252 instructions.</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>  F6252 \ </b>N435<br>Payments received prior years</font></TD>
+<TD align=left><font color="#0000ff">Enter all money and the fair market value (FMV) of property you received before this tax year from the sale. Include allocable installment income and any other deemed payments from prior years. Do not include interest whether stated or unstated.</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>  F6252 \ </b>N434<br>Payments received this year</font></TD>
+<TD align=left><font color="#0000ff">Enter all money and the fair market value (FMV) of any property you received in this tax year. Include as payments any amount withheld to pay off a mortgage or other debt, such as broker and legal fees. Do not include interest whether stated or unstated.</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>  F6252 \ </b>N428<br>Selling price</font></TD>
+<TD align=left><font color="#0000ff">Enter the total of any money, face amount of the installment obligation, and the FMV of other property that you received or will receive in exchange for the property sold.</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>Help F8815 \ </b>H441<br>Form 8815 - EE U.S. savings bonds sold for education</font></TD>
+<TD align=left><font color="#0000ff">Form 8815 is used to compute the amount of interest you may exclude if you cashed series EE U.S. savings bonds this year that were issued after 1989 to pay for qualified higher education costs.</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>  F8815 \ </b>N444<br>EE US svgs. bonds proceeds</font></TD>
+<TD align=left><font color="#0000ff">Enter the total proceeds (principal and interest) from all series EE and I U.S. savings bonds issued after 1989 that you cashed during this tax year.</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>  F8815 \ </b>N443<br>Nontaxable education benefits</font></TD>
+<TD align=left><font color="#0000ff">Nontaxable educational benefits. These benefits include: Scholarship or fellowship grants excludable from income under section 117; Veterans’ educational assistance benefits; Employer-provided educational assistance benefits that are not included in box 1 of your W-2 form(s); Any other payments (but not gifts, bequests, or inheritances) for educational expenses that are exempt from income tax by any U.S. law. Do not include nontaxable educational benefits paid directly to, or by, the educational institution.</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>  F8815 \ </b>N445<br>Post-89 EE bond face value</font></TD>
+<TD align=left><font color="#0000ff">The face value of all post-1989 series EE bonds cashed this tax year.</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>Help F8863 \ </b>H639<br>Form 8863 - Hope and Lifetime Learning education credits</font></TD>
+<TD align=left><font color="#0000ff">Form 8863 is used to compute the Hope and Lifetime Learning education credits. IRS rules are stringent for these credits.  Refer to IRS Publication 970 for more information.</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>  F8863 \ </b>N637<br>Hope credit</font></TD>
+<TD align=left><font color="#0000ff">Expenses qualified for the Hope credit are amounts paid this tax year for tuition and fees required for the student’s enrollment or attendance at an eligible educational institution.</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>  F8863 \ </b>N638<br>Lifetime learning credit</font></TD>
+<TD align=left><font color="#0000ff">Expenses qualified for the Lifetime Learning credit are amounts paid this tax year for tuition and fees required for the student's enrollment or attendance at an eligible educational institution.</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>  Home Sale \ </b>N392<br>Home Sale worksheets (was F2119)</font></TD>
+<TD align=left><font color="#0000ff">Home Sale worksheets (replaces Form 2119) are used to report the sale of your personal residence. See IRS Pub 523.</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>  Home Sale \ </b>N393<br>Selling price of old home</font></TD>
+<TD align=left><font color="#0000ff">The selling price is the total amount you receive for your home. It includes money, all notes, mortgages, or other debts assumed by the buyer as part of the sale, and the fair market value of any other property or any services you receive. Reported on Form 1099-S.</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>Help Sched B \ </b>H285<br>Schedule B - interest and dividend income</font></TD>
+<TD align=left><font color="#0000ff">Schedule B is used to report your interest and dividend income.</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>&lt; Sched B \ </b>N487<br>Dividend income, non-taxable</font></TD>
+<TD align=left><font color="#0000ff">Some mutual funds pay shareholders non-taxable dividends. The amount of non-taxable dividends are indicated on your monthly statements or Form 1099-DIV.</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>^ Sched B \ </b>N286<br>Dividend income, Ordinary</font></TD>
+<TD align=left><font color="#0000ff">Ordinary dividends from mutual funds, stocks, etc., are reported to you on a 1099-DIV.  Note: these are sometimes called short term capital gain distributions. Do not include (long term) capital gain distributions or non-taxable dividends here, these go on Sched D</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>&lt; Sched B \ </b>N287<br>Interest income</font></TD>
+<TD align=left><font color="#0000ff">Taxable interest includes interest you receive from bank accounts, credit unions, loans you made to others. There are several categories of interest, be sure you select the correct one!</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>&lt; Sched B \ </b>N489<br>Interest income, non-taxable</font></TD>
+<TD align=left><font color="#0000ff">Non-taxable interest income other than from bonds or notes of states, counties, cities, the District of Columbia, or a possession of the United States, or from a qualified private activity bond. There are several categories of interest, be sure you select the correct one!</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>&lt; Sched B \ </b>N492<br>Interest income, OID bonds</font></TD>
+<TD align=left><font color="#0000ff">Interest income from Original Issue Discount (OID) bonds will be reported to you on Form 1099-OID. There are several categories of interest, be sure you select the correct one!</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>&lt; Sched B \ </b>N524<br>Interest income, Seller-financed mortgage</font></TD>
+<TD align=left><font color="#0000ff">Interest the buyer paid you on a mortgage or other form of seller financing, for your home or other property and the buyer used the property as a personal residence. There are several categories of interest, be sure you select the correct one!</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>&lt; Sched B \ </b>N289<br>Interest income, State and muni bond</font></TD>
+<TD align=left><font color="#0000ff">Interest on bonds or notes of states, counties, cities, the District of Columbia, or possessions of the United States is generally free of federal income tax (but you may pay state income tax). There are several categories of interest, be sure you select the correct one!</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>&lt; Sched B \ </b>N490<br>Interest income, taxed only by fed</font></TD>
+<TD align=left><font color="#0000ff">Interest income that is taxed on your federal return, but not on your state income tax return - other than interest paid on U.S. obligations. There are several categories of interest, be sure you select the correct one!</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>&lt; Sched B \ </b>N491<br>Interest income, taxed only by state</font></TD>
+<TD align=left><font color="#0000ff">Interest income that is not taxed on your federal return, but is taxed on your state income tax return - other than interest income from state bonds or notes, the District of Columbia, or a possession of the United States. There are several categories of interest, be sure you select the correct one!</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>&lt; Sched B \ </b>N290<br>Interest income, tax-exempt private activity bond</font></TD>
+<TD align=left><font color="#0000ff">Interest income from a qualified tax-exempt private activity bond is not taxable if it meets all requirements. This income is included on your Schedule B as non-taxable interest income. There are several categories of interest, be sure you select the correct one!</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>&lt; Sched B \ </b>N288<br>Interest income, US government</font></TD>
+<TD align=left><font color="#0000ff">Interest on U.S. obligations, such as U.S. Treasury bills, notes, and bonds issued by any agency of the United States. This income is exempt from all state and local income taxes. There are several categories of interest, be sure you select the correct one!</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>Help Sched C \ </b>H291<br>Schedule C - self-employment income</font></TD>
+<TD align=left><font color="#0000ff">Schedule C is used to report income from self-employment. Use a separate Schedule C to report income and expenses from different businesses.</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>  Sched C \ </b>N293<br>Gross receipts or sales</font></TD>
+<TD align=left><font color="#0000ff">The amount of gross receipts from your trade or business. Include amounts you received in your trade or business that were properly shown on Forms 1099-MISC.</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>  Sched C \ </b>N303<br>Other business income</font></TD>
+<TD align=left><font color="#0000ff">The amounts from finance reserve income, scrap sales, bad debts you recovered, interest (such as on notes and accounts receivable), state gasoline or fuel tax refunds you got this year, prizes and awards related to your trade or business, and other kinds of miscellaneous business income.</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>Help Sched D \ </b>H320<br>Schedule D - capital gains and losses </font></TD>
+<TD align=left><font color="#0000ff">Schedule D is used to report gains and losses from the sale of capital assets.</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>^ Sched D \ </b>N488<br>Dividend income, capital gain distributions</font></TD>
+<TD align=left><font color="#0000ff">Sometimes called long term capital gain distributions. These are from mutual funds, other regulated investment companies, or real estate investment trusts.  These are reported on your monthly statements or Form 1099-DIV. Note: short term capital gain distributions are reported on Sched B as ordinary dividends</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b># Sched D \ </b>N323<br>Long Term gain/loss - security</font></TD>
+<TD align=left><font color="#0000ff">Long term gain or loss from the sale of a security.</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b># Sched D \ </b>N321<br>Short Term gain/loss - security</font></TD>
+<TD align=left><font color="#0000ff">Short term gain or loss from the sale of a security.</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b># Sched D \ </b>N810<br>Short/Long Term gain or loss</font></TD>
+<TD align=left><font color="#0000ff">Short term or long term gain or loss from the sale of capital assets other than securities.</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>Help Sched E \ </b>H325<br>Schedule E - rental and royalty income</font></TD>
+<TD align=left><font color="#0000ff">Schedule E is used to report income or loss from rental real estate, royalties, and residual interest in REMIC's. Use a different copy for each rental or royalty. Use the Schedule K-1 categories for partnership rental income and loss amounts.</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>  Sched E \ </b>N326<br>Rents received</font></TD>
+<TD align=left><font color="#0000ff">The amounts received as rental income from real estate (including personal property leased with real estate) but you were not in the real estate business. (If you are in the buisness of renting personal property, use Schedule C.)</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>  Sched E \ </b>N327<br>Royalties received</font></TD>
+<TD align=left><font color="#0000ff">Royalties recieved from oil, gas, or mineral properties (not including operating interests); copyrights; and patents.</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>Help Sched F \ </b>H343<br>Schedule F - Farm income and expense</font></TD>
+<TD align=left><font color="#0000ff">Schedule F is used to report farm income and expense. Use a different copy of Schedule F for each farm you own.</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>  Sched F \ </b>N372<br>Agricultural program payments</font></TD>
+<TD align=left><font color="#0000ff">Government payments received for: price support payments, market gain from the repayment of a secured Commodity Credit Corporation (CCC) loan for less than the original loan amount, diversion payments, cost-share payments (sight drafts), payments in the form of materials (such as fertilizer or lime) or services (such asgrading or building dams). Reported on Form 1099-G.</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>  Sched F \ </b>N374<br>CCC loans forfeited or repaid</font></TD>
+<TD align=left><font color="#0000ff">The amount forfeited or repaid with certificates, even if you reported the loan proceeds as income.  See IRS Pub 225.</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>  Sched F \ </b>N373<br>CCC loans reported/election</font></TD>
+<TD align=left><font color="#0000ff">Generally, you do not report CCC loan pro-ceeds as income. However, if you pledge part or all of your production to secure a CCC loan, you may elect to report the loan proceeds as income in the year you receive them, instead of the year you sell the crop.</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>  Sched F \ </b>N376<br>Crop insurance proceeds deferred</font></TD>
+<TD align=left><font color="#0000ff">If you use the cash method of accounting and receive crop insurance proceeds in the same tax year in which the crops are damaged, you can choose to postpone reporting the proceeds as income until the following tax year. A statement must also be attached to your return.  See IRS Pub 225.</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>  Sched F \ </b>N375<br>Crop insurance proceeds received</font></TD>
+<TD align=left><font color="#0000ff">You generally include crop insurance proceeds in the year you receive them. Treat as crop insurance proceeds the crop disaster payments you receive from the federal government.</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>  Sched F \ </b>N370<br>Custom hire income</font></TD>
+<TD align=left><font color="#0000ff">The income you received for custom hire (machine work).</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>  Sched F \ </b>N377<br>Other farm income</font></TD>
+<TD align=left><font color="#0000ff">Illegal Federal irrigation subsidies, bartering income, income from discharge of indebtedness, state gasoline or fuel tax refund, the gain or loss on the sale of commodity futures contracts, etc.</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>  Sched F \ </b>N369<br>Resales of livestock/items</font></TD>
+<TD align=left><font color="#0000ff">Amounts you received from the sales of livestock and other items you bought specifically for resale. Do not include sales of livestock held for breeding, dairy purposes, draft, or sport.  These are reported on Form 4797, Sales of Business Property.</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>  Sched F \ </b>N368<br>Sales livestock/product raised</font></TD>
+<TD align=left><font color="#0000ff">Amounts you received from the sale of livestock, produce, grains, and other products you raised.</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>  Sched F \ </b>N371<br>Total cooperative distributions</font></TD>
+<TD align=left><font color="#0000ff">Distributions received from a cooperative. This includes patronage dividends, nonpatronage distributions, per-unit retain allocations, and redemption of nonqualified notices and perunit retain allocations. Reported on Form 1099-PATR.</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>Help Sched K-1 \ </b>H446<br>Schedule K-1 - partnership income, credits, deductions</font></TD>
+<TD align=left><font color="#0000ff">Schedule K-1 is used to report your share of a partnership's income, credits, deductions, etc.  Use a separate copy of Schedule K-1 for each partnership.</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>  Sched K-1 \ </b>N452<br>Dividends, ordinary</font></TD>
+<TD align=left><font color="#0000ff">The amount of dividend income the partnership reported to you on Schedule K-1. (You report this on Schedule B)</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>  Sched K-1 \ </b>N455<br>Guaranteed partner payments</font></TD>
+<TD align=left><font color="#0000ff">A guaranteed payments the partnership reported to you on Schedule K-1. (You report this on Schedule E)</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>  Sched K-1 \ </b>N451<br>Interest income</font></TD>
+<TD align=left><font color="#0000ff">The amount of interest income the partnership reported to you on Schedule K-1. (You report this on Schedule B)</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b># Sched K-1 \ </b>N454<br>Net LT capital gain or loss</font></TD>
+<TD align=left><font color="#0000ff">The long-term gain or (loss) from the sale of assets the partnership reported to you on Schedule K-1. (You report this on Schedule D)</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b># Sched K-1 \ </b>N453<br>Net ST capital gain or loss</font></TD>
+<TD align=left><font color="#0000ff">The short-term gain or (loss) from sale of assets the partnership reported to you on K-1. (You report this on Schedule D)</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b># Sched K-1 \ </b>N456<br>Net Section 1231 gain or loss</font></TD>
+<TD align=left><font color="#0000ff">The gain or (loss) from sale of Section 1231 assets the partnership reported to you on Schedule K-1. (You report this on Form 4797)</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b># Sched K-1 \ </b>N448<br>Ordinary income or loss</font></TD>
+<TD align=left><font color="#0000ff">Your share of the ordinary income (loss) from the trade or business activities of the partnership. This is reported to you on Schedule K-1. (You usually report this on Schedule E, See instructions for Schedule K-1)</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b># Sched K-1 \ </b>N450<br>Other rental income or loss</font></TD>
+<TD align=left><font color="#0000ff">The income or (loss) from rental activities, other than the rental of real estate.  This is reported to you on Schedule K-1. (You usually report this on Schedule E, See instructions for Schedule K-1)</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b># Sched K-1 \ </b>N449<br>Rental real estate income or loss</font></TD>
+<TD align=left><font color="#0000ff">The income or (loss) from rental real estate activities engaged in by the partnership. This is reported to you on Schedule K-1. (You usually report this on Schedule E, See instructions for Schedule K-1)</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>  Sched K-1 \ </b>N527<br>Royalties</font></TD>
+<TD align=left><font color="#0000ff">The amount of the royalty income the partnership reported to you on Schedule K-1. (You report this on Schedule E)</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>  Sched K-1 \ </b>N528<br>Tax-exempt interest income</font></TD>
+<TD align=left><font color="#0000ff">The amount of tax-exempt interest income the partnership reported to you on Schedule K-1. (You report this on Form 1040)</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>Help W-2 \ </b>H458<br>Form W-2 - Wages earned and taxes withheld</font></TD>
+<TD align=left><font color="#0000ff">Form W-2 is used by your employer to report the amount of wages and other compensation you earned as an employee, and the amount of federal and state taxes withheld and fringe benefits received. Use a separate copy of Form W-2 for each employer.</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>^ W-2 \ </b>N465<br>Dependent care benefits, self</font></TD>
+<TD align=left><font color="#0000ff">The amount dependent care benefits, including the fair market value of employer-provided or employer-sponsored day-care facilities you recieved.</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>^ W-2 \ </b>N512<br>Dependent care benefits, spouse</font></TD>
+<TD align=left><font color="#0000ff">The amount dependent care benefits, including the fair market value of employer-provided or employer-sponsored day-care facilities your spouse recieved.</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>^ W-2 \ </b>N267<br>Reimbursed moving expenses, self</font></TD>
+<TD align=left><font color="#0000ff">Qualified moving expense reimbursements paid directly to you by an employer.</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>^ W-2 \ </b>N546<br>Reimbursed moving expenses, spouse</font></TD>
+<TD align=left><font color="#0000ff">Qualified moving expense reimbursements paid directly to your spouse by your spouse's employer.</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>^ W-2 \ </b>N460<br>Salary or wages, self</font></TD>
+<TD align=left><font color="#0000ff">The total wages, tips, and other compensation, before any payroll deductions, you receive from your employer.</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>^ W-2 \ </b>N506<br>Salary or wages, spouse</font></TD>
+<TD align=left><font color="#0000ff">The total wages, tips, and other compensation, before any payroll deductions, your spouse receives from yourr spouse's employer.</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>Help W-2G \ </b>H547<br>Form W-2G - gambling winnings</font></TD>
+<TD align=left><font color="#0000ff">Form W-2G is used to report certain gambling winnings.</font></TD>
+</TR>
+<TR><TD align=left><font color="#0000ff"><b>^ W-2G \ </b>N549<br>Gross winnings</font></TD>
+<TD align=left><font color="#0000ff">The amount of gross winnings from gambling.  This may include winnings from horse racing, dog racing, jai alai, lotteries, keno, bingo, slot machines, sweepstakes, and wagering pools. If the amount is large enough, it will be reported on Form W-2G.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  none \ </b>N000<br>Tax Report Only - No TXF Export</font></TD>
+<TD align=left><font color="#ff0000">This is a dummy category and only shows up on the tax report, but is not exported.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>Help F1040 \ </b>H256<br>Form 1040 - the main tax form</font></TD>
+<TD align=left><font color="#ff0000">Form 1040 is the main form of your tax return.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  F1040 \ </b>N264<br>Alimony paid</font></TD>
+<TD align=left><font color="#ff0000">Amounts payed as alimony or separate maintenance.  Note: child support is not considered alimony.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>&lt; F1040 \ </b>N265<br>Early withdrawal penalty</font></TD>
+<TD align=left><font color="#ff0000">Penalty on Early Withdrawal of Savings from CD's or similar instruments. This is reported on Form 1099-INT or Form 1099-OID.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  F1040 \ </b>N521<br>Federal estimated tax, qrtrly</font></TD>
+<TD align=left><font color="#ff0000">The quarterly payments you made on your estimated Federal income tax (Form 1040-ES). Include any overpay from your previous year return that you applied to your estimated tax. NOTE: If a full year (Jan 1, YEAR to Dec 31, YEAR) is specified, GnuCash adjusts the date to Mar 1, YEAR to Feb 28, YEAR+1. Thus, the payment due Jan 15 is exported for the correct year.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  F1040 \ </b>N613<br>Fed tax withheld, RR retire, self</font></TD>
+<TD align=left><font color="#ff0000">The amount of federal income taxes withheld from your part of tier I railroad retirement benefits, which are treated as a social security benefits.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  F1040 \ </b>N614<br>Fed tax withheld, RR retire, spouse</font></TD>
+<TD align=left><font color="#ff0000">The amount of federal income taxes withheld from your spouse's part of tier I railroad retirement benefits, which are treated as a social security benefits.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  F1040 \ </b>N611<br>Fed tax withheld, Social Security, self</font></TD>
+<TD align=left><font color="#ff0000">The amount of federal income taxes withheld from your part of any monthly benefit under title II of the Social Security Act.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  F1040 \ </b>N612<br>Fed tax withheld, Social Security, spouse</font></TD>
+<TD align=left><font color="#ff0000">The amount of federal income taxes withheld from your spouse's part of any monthly benefit under title II of the Social Security Act.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  F1040 \ </b>N482<br>IRA contrib., non-work spouse</font></TD>
+<TD align=left><font color="#ff0000">IRA contribution for a non-working spouse.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  F1040 \ </b>N262<br>IRA contribution, self</font></TD>
+<TD align=left><font color="#ff0000">Contribution to a qualified IRA.  If you or your spouse are covered by a company retirement plan, this amount could be limited or eliminated.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  F1040 \ </b>N481<br>IRA contribution, spouse</font></TD>
+<TD align=left><font color="#ff0000">Contribution of a working spouse to a qualified IRA. If you or your spouse are covered by a company retirement plan, the deductible contribution could be limited or eliminated.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  F1040 \ </b>N263<br>Keogh deduction, self</font></TD>
+<TD align=left><font color="#ff0000">Contributions to a Keogh or HR 10 plan of a sole proprietor or a partnership.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  F1040 \ </b>N516<br>Keogh deduction, spouse</font></TD>
+<TD align=left><font color="#ff0000">Spouse Contributions to a Keogh or HR 10 plan of a sole proprietor or a partnership.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  F1040 \ </b>N608<br>Medical savings contribution, spouse</font></TD>
+<TD align=left><font color="#ff0000">Contributions made to your spouse's medical savings account that were not reported on their Form W-2.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  F1040 \ </b>N607<br>Medical savings contribution, self</font></TD>
+<TD align=left><font color="#ff0000">Contributions made to your medical savings account that were not reported on your Form W-2.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  F1040 \ </b>N517<br>SEP-IRA deduction, self</font></TD>
+<TD align=left><font color="#ff0000">Contributions made to a simplified employee pension plan (SEP-IRA).</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  F1040 \ </b>N518<br>SEP-IRA deduction, spouse</font></TD>
+<TD align=left><font color="#ff0000">Spouse contributions made to a simplified employee pension plan (SEP-IRA).</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  F1040 \ </b>N609<br>SIMPLE contribution, self</font></TD>
+<TD align=left><font color="#ff0000">Contributions made to your SIMPLE retirement plan that were not reported on your Form W-2.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  F1040 \ </b>N610<br>SIMPLE contribution, spouse</font></TD>
+<TD align=left><font color="#ff0000">Contributions made to your spouse's SIMPLE retirement plan that were not reported on your spouse's Form W-2.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  F1040 \ </b>N636<br>Student loan interest</font></TD>
+<TD align=left><font color="#ff0000">The amount of interest you paid this year on qualified student loans.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>Help F1099-G \ </b>H634<br>Form 1099-G - certian Government payments</font></TD>
+<TD align=left><font color="#ff0000">Form 1099-G is used to report certain government payments from federal, state, or local governments.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  F1099-G \ </b>N606<br>Fed tax withheld, unemplyment comp</font></TD>
+<TD align=left><font color="#ff0000">The amount of federal income taxes withheld from your unemployment compensation.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  F1099-G \ </b>N605<br>Unemployment comp repaid</font></TD>
+<TD align=left><font color="#ff0000">If you received an overpayment of unemployment compensation this year or last and you repaid any of it this year, subtract the amount you repaid from the total amount you received.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>Help F1099-MISC \ </b>H553<br>Form 1099-MISC - MISCellaneous income</font></TD>
+<TD align=left><font color="#ff0000">Form 1099-MISC is used to report miscellaneous income received and direct sales of consumer goods for resale.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>^ F1099-MISC \ </b>N558<br>Federal tax withheld</font></TD>
+<TD align=left><font color="#ff0000">The amount of federal income tax withheld (backup withholding) from 1099-MISC income.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>^ F1099-MISC \ </b>N563<br>State tax withheld</font></TD>
+<TD align=left><font color="#ff0000">The amount of state income tax withheld (state backup withholding) from 1099-MISC income.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>Help F1099-R \ </b>H473<br>Form 1099-R - Rretirement distributions</font></TD>
+<TD align=left><font color="#ff0000">Form 1099-R is used to report taxable and non-taxable retirement distributions from retirement, pension, profit-sharing, or annuity plans. Use a separate Form 1099-R for each payer.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>^ F1099-R \ </b>N532<br>IRA federal tax withheld</font></TD>
+<TD align=left><font color="#ff0000">The amount of federal income taxes withheld from your IRA distribution.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>^ F1099-R \ </b>N534<br>IRA local tax withheld</font></TD>
+<TD align=left><font color="#ff0000">The amount of local income taxes withheld from your IRA distribution.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>^ F1099-R \ </b>N533<br>IRA state tax withheld</font></TD>
+<TD align=left><font color="#ff0000">The amount of state income taxes withheld from your IRA distribution.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>^ F1099-R \ </b>N529<br>Pension federal tax withheld</font></TD>
+<TD align=left><font color="#ff0000">The amount of federal income taxes withheld from your pension distribution.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>^ F1099-R \ </b>N531<br>Pension local tax withheld</font></TD>
+<TD align=left><font color="#ff0000">The amount of local income taxes withheld from your pension distribution.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>^ F1099-R \ </b>N530<br>Pension state tax withheld</font></TD>
+<TD align=left><font color="#ff0000">The amount of state income taxes withheld from your pension distribution.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>^ F1099-R \ </b>N625<br>SIMPLE federal tax withheld</font></TD>
+<TD align=left><font color="#ff0000">The amount of federal income taxes withheld from a SIMPLE distribution received.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>^ F1099-R \ </b>N627<br>SIMPLE local tax withheld</font></TD>
+<TD align=left><font color="#ff0000">The amount of local income taxes withheld from a SIMPLE distribution received.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>^ F1099-R \ </b>N626<br>SIMPLE state tax withheld</font></TD>
+<TD align=left><font color="#ff0000">The amount of state income taxes withheld from a SIMPLE distribution received.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>Help F2106 \ </b>H380<br>employee business expenses</font></TD>
+<TD align=left><font color="#ff0000">Form 2106 is used to deduct employee business expenses. You must file this form if you were reimbursed by your employer or claim job-related travel, transportation, meal, or entertainment expenses. Use a separate Form 2106 for your spouse's expenses.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  F2106 \ </b>N382<br>Automobile expenses</font></TD>
+<TD align=left><font color="#ff0000">Total annual expenses for gasoline, oil, repairs, insurance, tires, license plates, or similar items.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  F2106 \ </b>N381<br>Education expenses</font></TD>
+<TD align=left><font color="#ff0000">Cost of tuition, books, supplies, laboratory fees, and similar items, and certain transportation costs if the education maintains or improves skills required in your present work or is required by your employer or the law to keep your salary, status, or job, and the requirement serves a business purpose of your employer. Expenses are not decutable if they are needed to meet the minimum educational requirements to qualify you in your work or business orwWill lead to qualifying you in a new trade or business.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  F2106 \ </b>N391<br>Employee home office expenses</font></TD>
+<TD align=left><font color="#ff0000">Your use of the business part of your home must be: exclusive, regular, for your trade or business, AND The business part of your home must be one of the following: your principal place of business, a place where you meet or deal with patients, clients, or customers in the normal course of your trade or business, or a separate structure (not attached to yourhome) you use in connection with your trade or business. Additionally, Your business use must be for the convenience of your employer, and You do not rent all or part of your home to your employer and use the rented portion to perform services as an employee. See IRS Pub 587.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  F2106 \ </b>N389<br>Job seeking expenses</font></TD>
+<TD align=left><font color="#ff0000">Fees to employment agencies and other costs to look for a new job in your present occupation, even if you do not get a new job.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  F2106 \ </b>N384<br>Local transportation expenses</font></TD>
+<TD align=left><font color="#ff0000">Local transportation expenses are the expenses of getting from one workplace to another when you are not traveling away from home. They include the cost of transportation by air, rail, bus, taxi, and the cost of using your car. Generally, the cost of commuting to and from your regular place of work is not deductible.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  F2106 \ </b>N386<br>Meal/entertainment expenses</font></TD>
+<TD align=left><font color="#ff0000">Allowable meals and entertainment expense, including meals while away from your tax home overnight and other business meals and entertainment.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  F2106 \ </b>N385<br>Other business expenses</font></TD>
+<TD align=left><font color="#ff0000">Other job-related expenses, including expenses for business gifts, trade publications, etc.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  F2106 \ </b>N390<br>Special clothing expenses</font></TD>
+<TD align=left><font color="#ff0000">cost and upkeep of work clothes, if you must wear them as a condition of your employment, and the clothes are not suitable for everyday wear. Include the cost of protective clothing required in your work, such as safety shoes or boots, safety glasses, hard hats, and work gloves.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  F2106 \ </b>N383<br>Travel (away from home)</font></TD>
+<TD align=left><font color="#ff0000">Travel expenses are those incurred while traveling away from home for your employer. The cost of getting to and from your business destination (air, rail, bus, car, etc.), taxi fares, baggage charges, and cleaning and laundry expenses. Note: meal and entertainment expenses are not included here.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>Help F2441 \ </b>H400<br>Form 2441 - child and dependent credit</font></TD>
+<TD align=left><font color="#ff0000">Form 2441 is used to claim a credit for child and dependent care expenses.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>&lt; F2441 \ </b>N401<br>Qualifying child/dependent care expenses</font></TD>
+<TD align=left><font color="#ff0000">The total amount you actually paid to the care provider. Also, include amounts your employer paid to a third party on your behalf.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>&lt; F2441 \ </b>N402<br>Qualifying household expenses</font></TD>
+<TD align=left><font color="#ff0000">The cost of services needed to care for the qualifying person as well as to run the home.  They include the services of a babysitter, cleaning person, cook, maid, or housekeeper if the services were partly for the care of the qualifying person.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>Help F3903 \ </b>H403<br>Form 3903 - moving expenses</font></TD>
+<TD align=left><font color="#ff0000">Form 3903 is used to claim moving expenses.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  F3903 \ </b>N406<br>Transport/storage of goods</font></TD>
+<TD align=left><font color="#ff0000">The amount you paid to pack, crate and move your household goods and personal effects.  You may include the cost to store and insure household goods and personal effects within any period of 30 days in a row after the items were moved from your old home.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  F3903 \ </b>N407<br>Travel/lodging, except meals</font></TD>
+<TD align=left><font color="#ff0000">The amount you paid to travel from your old home to your new home. This includes transportation and lodging on the way. Although not all members of your household must travel together, you may only include expenses for one trip per person. Do not include meals.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>Help F4684 \ </b>H412<br>Form 4684 - casualties and thefts</font></TD>
+<TD align=left><font color="#ff0000">Form 4684 is used to report gains and losses from casualties and thefts.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  F4684 \ </b>N413<br>Basis of casualty property</font></TD>
+<TD align=left><font color="#ff0000">Cost or other basis usually means original cost plus improvements. Subtract any postponed gain from the sale of aprevious main home. Special rules applyto property received as a gift or inheritance. See Pub  551, Basis of Assets, for details.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>Help F4835 \ </b>H569<br>Form 4835 - farm rental income</font></TD>
+<TD align=left><font color="#ff0000">Form 4835 is used to report farm rental income received as a share of crops or livestock produced by your tenant if you did not materially participate in the operation or management of the farm.  Use a different copy of Form 4835 for each farm rented.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  F4835 \ </b>N579<br>Car and truck expenses</font></TD>
+<TD align=left><font color="#ff0000">The business portion of car or truck expenses, such as, for gasoline, oil, repairs, insurance, tires, license plates, etc.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  F4835 \ </b>N580<br>Chemicals</font></TD>
+<TD align=left><font color="#ff0000">Chemicals used in operating your farm, such as insect sprays and dusts.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  F4835 \ </b>N581<br>Conservation expenses</font></TD>
+<TD align=left><font color="#ff0000">Your expenses for soil or water conservation or for the prevention of erosion of land used in farming. To take this deduction, your expenses must be consistent with a plan approved by the Natural Resources Conservation Service (NRCS) of the Department of Agriculture.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  F4835 \ </b>N582<br>Custom hire expenses</font></TD>
+<TD align=left><font color="#ff0000">Amounts you paid for custom hire (machine work) (the machine operator furnished the equipment).  Do not include amounts paid for rental or lease of equipment you operated yourself.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  F4835 \ </b>N583<br>Employee benefit programs</font></TD>
+<TD align=left><font color="#ff0000">Contributions to employee benefit programs, such as accident and health plans, group-term life insurance, and dependent care assistance programs. Do not include contributions  that are a incidental part of a pension or profit-sharing plan.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  F4835 \ </b>N584<br>Feed purchased</font></TD>
+<TD align=left><font color="#ff0000">The cost of feed for your livestock. Generally, you cannot currently deduct ex-penses for feed to be consumed by your livestock in a later tax year. See insctuctions for Schedule F.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  F4835 \ </b>N585<br>Fertilizers and lime</font></TD>
+<TD align=left><font color="#ff0000">The cost of fertilizer, lime, and other materials applied to farm land to enrich, neutralize, or condition it. You can also deduct the cost of applying these materials. However, see Prepaid Farm Supplies, in Pub 225, for a rule that may limit your deduction for these materials.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  F4835 \ </b>N586<br>Freight and trucking</font></TD>
+<TD align=left><font color="#ff0000">The costs of freight or trucking of produce or livestock.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  F4835 \ </b>N587<br>Gasoline, fuel, and oil</font></TD>
+<TD align=left><font color="#ff0000">The costs of gas, fuel, oil, etc. for farm equipment.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  F4835 \ </b>N588<br>Insurance (other than health)</font></TD>
+<TD align=left><font color="#ff0000">Premiums paid for farm busines insurance, such as: fire, storm, crop, theft and liability protection of farm assets.  Do not include premiums for employee accident and health insurance.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  F4835 \ </b>N589<br>Interest expense, mortgage</font></TD>
+<TD align=left><font color="#ff0000">The interest you paid to banks or other financial institutions for which you received a Form 1098, for a mortgage on real property used in your farming business (other than your main home). If you paid interest on a debt secured by your main home, and any proceeds from that debt were used in your farming operation, refer to IRS Pub 225.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  F4835 \ </b>N590<br>Interest expense, other</font></TD>
+<TD align=left><font color="#ff0000">The interest you paid for which you did not receive a Form 1098 (perhaps someone else did, and you are liable too), for a mortgage or other loans for your farm business.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  F4835 \ </b>N591<br>Labor hired</font></TD>
+<TD align=left><font color="#ff0000">The amounts you paid for farm labor. Do not include amounts paid to yourself.  Count the cost of boarding farm labor but not the value of any products they used from the farm. Count only what you paid house-hold help to care for farm laborers.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  F4835 \ </b>N602<br>Other farm expenses</font></TD>
+<TD align=left><font color="#ff0000">Include all ordinary and necessary farm rental expenses not deducted elsewhere on Form 4835, such as advertising, office supplies, etc. Do not include fines or penalties paid to a government for violating any law.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  F4835 \ </b>N592<br>Pension/profit-sharing plans</font></TD>
+<TD align=left><font color="#ff0000">Enter your deduction for contributions to employee pension, profit-sharing, or annuity plans. If the plan included you as a self-employed person, see the instructions for Schedule C (Form 1040).</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  F4835 \ </b>N594<br>Rent/lease land, animals</font></TD>
+<TD align=left><font color="#ff0000">Amounts paid to rent or lease property such as pasture or farm land.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  F4835 \ </b>N593<br>Rent/lease vehicles, equip.</font></TD>
+<TD align=left><font color="#ff0000">The business portion of your rental cost, for rented or leased vehicles, machinery, or equipment. But if you leased a vehicle for a term of 30 days or more, you may have to reduce your deduction by an inclusion amount. For details, see the instructions for Schedule C (Form 1040).</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  F4835 \ </b>N595<br>Repairs and maintenance</font></TD>
+<TD align=left><font color="#ff0000">Amounts you paid for repairs and maintenance of farm buildings, machinery, and equipment. You can also include what you paid for tools of short life or minimal cost, such as shovels and rakes.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  F4835 \ </b>N596<br>Seeds and plants purchased</font></TD>
+<TD align=left><font color="#ff0000">The amounts paid for seeds and plants purchased for farming.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  F4835 \ </b>N597<br>Storage and warehousing</font></TD>
+<TD align=left><font color="#ff0000">Amounts paid for storage and warehousing of crops, grains, etc.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  F4835 \ </b>N598<br>Supplies purchased</font></TD>
+<TD align=left><font color="#ff0000">Livestock supplies and other supplies, including bedding, office supplies, etc.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  F4835 \ </b>N599<br>Taxes</font></TD>
+<TD align=left><font color="#ff0000">Real estate and personal property taxes on farm business assets; Social security and Medicare taxes you paid to match what you are required to withhold from farm employees' wages and any Federal unemployment tax paid; Federal highway use tax.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  F4835 \ </b>N600<br>Utilities</font></TD>
+<TD align=left><font color="#ff0000">Amounts you paid for gas, electricity, water, etc., for business use on the farm. Do not include personal utilities. You cannot deduct the base rate (including taxes) of the first telephone line into your residence, even if you use it for business.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  F4835 \ </b>N601<br>Vet, breeding, medicine</font></TD>
+<TD align=left><font color="#ff0000">The costs of veterinary services, medicine and breeding fees.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>Help F4952 \ </b>H425<br>Form 4952 - investment interest</font></TD>
+<TD align=left><font color="#ff0000">Form 4952 is used to compute the amount of investment interest expense deductible for the current year and the amount, if any, to carry forward to future years.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  F4952 \ </b>N426<br>Investment interest expense</font></TD>
+<TD align=left><font color="#ff0000">The investment interest paid or accrued during the tax year, regardless of when you incurred the indebtedness. Investment interest is interest paid or accrued on a loan (or part of a loan) that is allocable to property held for investment.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>Help F6252 \ </b>H427<br>Form 6252 - income from casual sales</font></TD>
+<TD align=left><font color="#ff0000">Form 6252 is used to report income from casual sales of real or personal property when you will receive any payments in a tax year after the year of sale (i.e., installment sale).</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  F6252 \ </b>N432<br>Expenses of sale</font></TD>
+<TD align=left><font color="#ff0000">Enter sales commissions, advertising expenses, attorney and legal fees, etc., in selling the property.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>Help F8815 \ </b>H441<br>Form 8815 - EE U.S. savings bonds sold for education</font></TD>
+<TD align=left><font color="#ff0000">Form 8815 is used to compute the amount of interest you may exclude if you cashed series EE U.S. savings bonds this year that were issued after 1989 to pay for qualified higher education costs.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  F8815 \ </b>N442<br>Qualified higher education expenses</font></TD>
+<TD align=left><font color="#ff0000">Qualified higher education expenses include tuition and fees required for the enrollment or attendance of the person(s). Do not include expenses for room and board, or courses involving sports, games, or hobbies that are not part of a degree or certificate granting program.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>Help F8829 \ </b>H536<br>Form 8829 - business use of your home</font></TD>
+<TD align=left><font color="#ff0000">Form 8829 is used only if you file a Schedule C, Profit or Loss from Business, and you meet specific requirements to deduct expenses for the business use of your home.  IRS rules are stringent for this deduction.  Refer to IRS Publication 587.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  F8829 \ </b>N537<br>Deductible mortgage interest</font></TD>
+<TD align=left><font color="#ff0000">The total amount of mortgage interest that would be deductible whether or not you used your home for business (i.e., amounts allowable as itemized deductions on Schedule A, Form 1040). Form 8829 computes the deductible business portion.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  F8829 \ </b>N539<br>Insurance</font></TD>
+<TD align=left><font color="#ff0000">The total amount of insurance paid for your home, in which an area or room is used regularly and exclusively for business. Form 8829 computes the deductible business portion.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  F8829 \ </b>N542<br>Other expenses</font></TD>
+<TD align=left><font color="#ff0000">If you rent rather than own your home, include rent paid for your home, in which an area or room is used regularly and exclusively for business. Form 8829 computes the deductible business portion.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  F8829 \ </b>N538<br>Real estate taxes</font></TD>
+<TD align=left><font color="#ff0000">The total amount of real estate taxes that would be deductible whether or not you used your home for business (i.e., amounts allowable as itemized deductions on Schedule A, Form 1040). Form 8829 computes the deductible business portion.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  F8829 \ </b>N540<br>Repairs and maintenance</font></TD>
+<TD align=left><font color="#ff0000">The total amount of repairs and maintenance paid for your home, in which an area or room is used regularly and exclusively for business. Form 8829 computes the deductible business portion.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  F8829 \ </b>N541<br>Utilities</font></TD>
+<TD align=left><font color="#ff0000">The total amount of utilities paid for your home, in which an area or room is used regularly and exclusively for business.  Form 8829 computes the deductible business portion.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>Help F8839 \ </b>H617<br>Form 8839 - adoption expenses</font></TD>
+<TD align=left><font color="#ff0000">Form 8839 is used to report qualified adoption expenses.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  F8839 \ </b>N618<br>Adoption fees</font></TD>
+<TD align=left><font color="#ff0000">Adoption fees that are reasonable and necessary, directly related to, and for the principal purpose of, the legal adoption of an eligible child.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  F8839 \ </b>N620<br>Attorney fees</font></TD>
+<TD align=left><font color="#ff0000">Attorney fees that are reasonable and necessary, directly related to, and for the principal purpose of, the legal adoption of an eligible child.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  F8839 \ </b>N619<br>Court costs</font></TD>
+<TD align=left><font color="#ff0000">Court costs that are reasonable and necessary, directly related to, and for the principal purpose of, the legal adoption of an eligible child.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  F8839 \ </b>N622<br>Other expenses</font></TD>
+<TD align=left><font color="#ff0000">Other expenses that are reasonable and necessary, directly related to, and for the principal purpose of, the legal adoption of an eligible child.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  F8839 \ </b>N621<br>Traveling expenses</font></TD>
+<TD align=left><font color="#ff0000">Traveling expenses (including meals and lodging) while away from home, directly related to, and for the principal purpose of, the legal adoption of an eligible child.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  Home Sale \ </b>N392<br>Home Sale worksheets (was F2119)</font></TD>
+<TD align=left><font color="#ff0000">Home Sale worksheets (replaces Form 2119) are used to report the sale of your personal residence. See IRS Pub 523.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  Home Sale \ </b>N397<br>Cost of new home</font></TD>
+<TD align=left><font color="#ff0000">The cost of your new home includes costs incurred within the replacement period (beginning 2 years before and ending 2 years after the date of sale) for the following items: Buying or building the home; Rebuilding the home; and Capital improvements or additions.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  Home Sale \ </b>N394<br>Expense of sale</font></TD>
+<TD align=left><font color="#ff0000">Selling expenses include commissions, advertising fees, legal fees, title insurance, and loan charges paid by the seller, such as loan placement fees or "points."</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  Home Sale \ </b>N396<br>Fixing-up expenses</font></TD>
+<TD align=left><font color="#ff0000">Fixing-up expenses are decorating and repair costs that you paid to sell your old home. For example, the costs of painting the home, planting flowers, and replacing broken windows are fixing-up expenses. Fixing-up expenses must meet all the following conditions. The expenses: Must be for work done during the 90-day period ending on the day you sign the contract of sale with the buyer; Must be paid no later than 30 days after the date of sale; Cannot be deductible in arriving at your taxable in-come; Must not be used in figuring the amount realized; and Must not be capital expenditures or improvements.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>Help Sched A \ </b>H270<br>Schedule A - itemized deductions</font></TD>
+<TD align=left><font color="#ff0000">Schedule A is used to report your itemized deductions.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  Sched A \ </b>N280<br>Cash charity contributions</font></TD>
+<TD align=left><font color="#ff0000">Contributions or gifts by cash or check you gave to organizations that are religious, charitable, educational, scientific, or literary in purpose. You may also deduct what you gave to organizations that work to prevent cruelty to children or animals. For donations of $250 or more, you must have a statement from the charitable organization showing the amount donated and the value of goods or services you received.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  Sched A \ </b>N484<br>Doctors, dentists, hospitals</font></TD>
+<TD align=left><font color="#ff0000">Insurance premiums for medical and dental care, medical doctors, dentists, eye doctors, surgeons, X-ray, laboratory services, hospital care, etc. See IRS Pub 502.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  Sched A \ </b>N272<br>Gambling losses</font></TD>
+<TD align=left><font color="#ff0000">Gambling losses, but only to the extent of gambling winnings reported on Form 1040. Note: not subject to the 2% AGI of limitation.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  Sched A \ </b>N545<br>Home mortgage interest (no 1098)</font></TD>
+<TD align=left><font color="#ff0000">Home mortgage interest paid, for which you did not receive a Form 1098 from the recipient. The interest could be on a first or second mortgage, home equity loan, or refinanced mortgage.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  Sched A \ </b>N283<br>Home mortgage interest (1098)</font></TD>
+<TD align=left><font color="#ff0000">Home mortgage interest and points reported to you on Form 1098. The interest could be on a first or second mortgage, home equity loan, or refinanced mortgage.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  Sched A \ </b>N282<br>Investment management fees</font></TD>
+<TD align=left><font color="#ff0000">Investment interest is interest paid on money you borrowed that is allocable to property held for investment. It does not include any interest allocable to passive activities or to securities that generate tax-exempt income.
+</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  Sched A \ </b>N544<br>Local income taxes</font></TD>
+<TD align=left><font color="#ff0000">Local income taxes that were not withheld from your salary, such as local income taxes you paid this year for a prior year.
+</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  Sched A \ </b>N274<br>Medical travel and lodging</font></TD>
+<TD align=left><font color="#ff0000">Lodging expenses while away from home to receive medical care in a hospital or a medical care facility related to a hospital. Do not include more than $50 a night for each eligible person. Ambulance service and other travel costs to get medical care.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  Sched A \ </b>N273<br>Medicine and drugs</font></TD>
+<TD align=left><font color="#ff0000">Prescription medicines, eyeglasses, contact lenses, hearing aids. Over-the-counter medicines are not deductable.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  Sched A \ </b>N523<br>Misc., no 2% AGI limit</font></TD>
+<TD align=left><font color="#ff0000">Other miscellaneous itemized deductions that are not reduced by 2% of adjusted gross income, such as casualty and theft losses from income-producing, amortizable bond premium on bonds acquired before October 23, 1986, federal estate tax on income in respect to a decedent, certain unrecovered investment in a pension, impairment-related work expenses of a disabled person.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  Sched A \ </b>N486<br>Misc., subject to 2% AGI limit</font></TD>
+<TD align=left><font color="#ff0000">Safety equipment, small tools, and supplies you needed for your job; Uniforms required by your employer and which you may not usually wear away from work; subscriptions to professional journals; job search expenses; certain educational expenses. You may need to file Form 2106.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  Sched A \ </b>N485<br>Non-cash charity contributions</font></TD>
+<TD align=left><font color="#ff0000">
+The fair market value of donated property, such as used clothing or furniture.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  Sched A \ </b>N277<br>Other taxes</font></TD>
+<TD align=left><font color="#ff0000">Other taxes paid not included under state and local income taxes, real estate taxes, or personal property taxes. You may want to take a credit for the foreign tax instead of a deduction.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  Sched A \ </b>N535<br>Personal property taxes</font></TD>
+<TD align=left><font color="#ff0000">Enter personal property tax you paid, but only if it is based on value alone. Example: You paid a fee for the registration of your car. Part of the fee was based on the car s value and part was based on its weight. You may deduct only the part of the fee that is based on the car s value.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  Sched A \ </b>N284<br>Points paid (no 1098)</font></TD>
+<TD align=left><font color="#ff0000">Generally, you must deduct points you paid to refinance a mortgage over the life of the loan. If you used part of the proceeds to improve your main home, you may be able to deduct the part of the points related to the improvement in the year paid. See Pub. 936 Use this line for points not reported on Form 1098.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  Sched A \ </b>N276<br>Real estate taxes</font></TD>
+<TD align=left><font color="#ff0000">Include taxes (state, local, or foreign) you paid on real estate you own that was not used for business, but only if the taxes are based on the assessed value of the property. Do not include taxes charged for improvements that tend to increase the value of your property (for example, an assessment to build a new sidewalk).</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  Sched A \ </b>N522<br>State estimated tax, qrtrly</font></TD>
+<TD align=left><font color="#ff0000">State estimated tax payments made this year.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  Sched A \ </b>N275<br>State income taxes</font></TD>
+<TD align=left><font color="#ff0000">State income taxes paid this year for a prior year. Includ any part of a prior year refund that you chose to have credited to this years state income taxes.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  Sched A \ </b>N271<br>Subscriptions</font></TD>
+<TD align=left><font color="#ff0000">Amounts paid for subscriptions to magazines or services that are directly related to the production or collection of taxable income.  (exapmle: subscriptions to investment publications, stock newsletters, etc.).</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  Sched A \ </b>N281<br>Tax preparation fees</font></TD>
+<TD align=left><font color="#ff0000">Fees you paid for preparation of your tax return, including fees paid for filing your return electronically.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>Help Sched B \ </b>H285<br>Schedule B - interest and dividend income</font></TD>
+<TD align=left><font color="#ff0000">Schedule B is used to report your interest and dividend income.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>&lt; Sched B \ </b>N615<br>Fed tax withheld, dividend income</font></TD>
+<TD align=left><font color="#ff0000">The amount of federal income taxes withheld from dividend income. This is usually reported on Form 1099-DIV.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>&lt; Sched B \ </b>N616<br>Fed tax withheld, interest income</font></TD>
+<TD align=left><font color="#ff0000">The amount of federal income taxes withheld from interest income. This is usually reported on Form 1099-INT.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>Help Sched C \ </b>H291<br>Schedule C - self-employment income</font></TD>
+<TD align=left><font color="#ff0000">Schedule C is used to report income from self-employment. Use a separate Schedule C to report income and expenses from different businesses.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  Sched C \ </b>N304<br>Advertising</font></TD>
+<TD align=left><font color="#ff0000">The amounts paid for advertising your trade or business in newspapers, publications, radio or television. Also include the cost of brochures, business cards, or other promotional material.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  Sched C \ </b>N305<br>Bad debts from sales/services</font></TD>
+<TD align=left><font color="#ff0000">Include debts and partial debts from sales or services that were included in income and are definitely known to be worthless.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  Sched C \ </b>N306<br>Car and truck expenses</font></TD>
+<TD align=left><font color="#ff0000">You can deduct the actual expenses of running your car or truck, or take the standard mileage rate.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  Sched C \ </b>N307<br>Commissions and fees</font></TD>
+<TD align=left><font color="#ff0000">The amounts of commissions or fees paid to independent contractors (nonemployees) for their services.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  Sched C \ </b>N494<br>Cost of Goods Sold - Labor</font></TD>
+<TD align=left><font color="#ff0000">Labor costs are usually an element of cost of goods sold only in a manufacturing or mining business. In a manufacturing business, labor costs that are properly allocable to the cost of goods sold include both the direct and indirect labor used in fabricating the raw material into a finished, saleable product.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  Sched C \ </b>N495<br>Cost of Goods Sold - Materials/supplies</font></TD>
+<TD align=left><font color="#ff0000">Materials and supplies, such as hardware and chemicals, used in manufacturing goods are charged to cost of goods sold. Those that are not used in the manufacturing process are treated as deferred charges. You deduct them as a business expense when you use them.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  Sched C \ </b>N496<br>Cost of Goods Sold - Other costs</font></TD>
+<TD align=left><font color="#ff0000">Other costs incurred in a manufacturing or mining process that you charge to your cost of goods sold are containers, freight-in, overhead expenses.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  Sched C \ </b>N493<br>Cost of Goods Sold - Purchases</font></TD>
+<TD align=left><font color="#ff0000">If you are a merchant, use the cost of all merchandise you bought for sale. If you are a manufacturer or producer, this includes the cost of all raw materials or parts purchased for manufacture into a finished product. You must exclude the cost of merchandise you withdraw for your personal or family use.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  Sched C \ </b>N309<br>Depletion</font></TD>
+<TD align=left><font color="#ff0000">The amounts for depletion. If you have timber depletion, attach Form T.  See Pub. 535.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  Sched C \ </b>N308<br>Employee benefit programs</font></TD>
+<TD align=left><font color="#ff0000">Contributions to employee benefit programs that are not an incidental part of a pension or profit-sharing plan. Examples are accident and health plans, group-term life insurance, and dependent care assistance programs.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  Sched C \ </b>N310<br>Insurance, other than health</font></TD>
+<TD align=left><font color="#ff0000">Premiums paid for business insurance. Do not include amounts paid for employee accident and health insurance. nor amounts credited to a reserve for self-insurance or premiums paid for a policy that pays for your lost earnings due to sickness or disability. See Pub. 535.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  Sched C \ </b>N311<br>Interest expense, mortgage</font></TD>
+<TD align=left><font color="#ff0000">The interest you paid to banks or other financial institutions for which you received a Form 1098, for a mortgage on real property used in your business (other than your main home).</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  Sched C \ </b>N312<br>Interest expense, other</font></TD>
+<TD align=left><font color="#ff0000">The interest you paid for which you did not receive a Form 1098 (perhaps someone else did, and you are liable too), for a mortgage or other loans for your business.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  Sched C \ </b>N298<br>Legal and professional fees</font></TD>
+<TD align=left><font color="#ff0000">Accountant's or legal fees for tax advice related to your business and for preparation of the tax forms related to your business.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  Sched C \ </b>N294<br>Meals and entertainment</font></TD>
+<TD align=left><font color="#ff0000">Total business meal and entertainment expenses. Business meal expenses are deductible only if they are (a) directly related to or associated with the active conduct of your trade or business, (b) not lavish or extravagant, and (c) incurred while you or your employee is present at the meal.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  Sched C \ </b>N313<br>Office expenses</font></TD>
+<TD align=left><font color="#ff0000">The cost of consumable office supplies such as business cards, computer supplies, pencils, pens, postage stamps, rental of postal box or postage machines, stationery, Federal Express and UPS charges, etc.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  Sched C \ </b>N302<br>Other business expenses</font></TD>
+<TD align=left><font color="#ff0000">Other costs not specified on other lines of Schedule C, such as: Clean-fuel vehicles and refueling property; Donations to business organizations; Educational expenses; Environmental cleanup costs; Impairment-related expenses; Interview expense allowances; Licenses and regulatory fees; Moving machinery; Outplacement services; Penalties and fines you pay for late performanc or nonperformance of a contract; Subscriptions to trade or professional publications.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  Sched C \ </b>N314<br>Pension/profit sharing plans</font></TD>
+<TD align=left><font color="#ff0000">You can set up and maintain the following small business retirement plans for yourself and your employees, such as: SEP (Simplified Employee Pension) plans; SIMPLE (Savings Incentive Match Plan for Em-ployees) plans; Qualified plans (including Keogh or H.R. 10 plans). You deduct contributions you make to the plan for yourself on Form 1040.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  Sched C \ </b>N300<br>Rent/lease other business property</font></TD>
+<TD align=left><font color="#ff0000">The amounts paid to rent or lease real estate or  property, such as office space in a building.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  Sched C \ </b>N299<br>Rent/lease vehicles, equip.</font></TD>
+<TD align=left><font color="#ff0000">The amount paied to rent or lease vehicles, machinery, or equipment, for your business. If you leased a vehicle for a term of 30 days or more, you may have to reduce your deduction by an amount called the inclusion amount. See Pub. 463.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  Sched C \ </b>N315<br>Repairs and maintenance</font></TD>
+<TD align=left><font color="#ff0000">The cost of repairs and maintenance. Include labor, supplies, and other items that do not add to the value or increase the life of the property. Do not include the value of your own labor. Do not include amounts spent to restore or replace property; they must be capitalized.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  Sched C \ </b>N296<br>Returns and allowances</font></TD>
+<TD align=left><font color="#ff0000">Credits you allow customers for returned merchandise and any other allowances you make on sales.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  Sched C \ </b>N301<br>Supplies (not from Cost of Goods Sold)</font></TD>
+<TD align=left><font color="#ff0000">The cost of supplies not reported under Cost Of Goods Sold.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  Sched C \ </b>N316<br>Taxes and licenses</font></TD>
+<TD align=left><font color="#ff0000">Include the following taxes: State and local sales taxes imposed on you as the seller of goods or services; Real estate and personal property taxes on business assets; Social security and Medicare taxes paid to match required withholding from your employees’ wages; Also, Federal unemployment tax paid; Federal highway use tax.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  Sched C \ </b>N317<br>Travel</font></TD>
+<TD align=left><font color="#ff0000">Expenses for lodging and transportation connected with overnight travel for business while away from your tax home.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  Sched C \ </b>N318<br>Utilities</font></TD>
+<TD align=left><font color="#ff0000">The costs of electricity, gas, telephone, etc. for your business property.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  Sched C \ </b>N297<br>Wages paid</font></TD>
+<TD align=left><font color="#ff0000">The total amount of salaries and wages for the tax year. Do not include amounts paid to yourself.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>Help Sched E \ </b>H325<br>Schedule E - rental and royalty income</font></TD>
+<TD align=left><font color="#ff0000">Schedule E is used to report income or loss from rental real estate, royalties, and residual interest in REMIC's. Use a different copy for each rental or royalty. Use the Schedule K-1 categories for partnership rental income and loss amounts.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  Sched E \ </b>N328<br>Advertising</font></TD>
+<TD align=left><font color="#ff0000">Amounts paid to advertise rental unit(s) in newspapers or other media or paid to realtors to obtain tenants.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  Sched E \ </b>N329<br>Auto and travel</font></TD>
+<TD align=left><font color="#ff0000">The ordinary and necessary amounts of auto and travel expenses related to your rental activities, including 50% of meal expenses incurred while traveling away from home.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  Sched E \ </b>N330<br>Cleaning and maintenance</font></TD>
+<TD align=left><font color="#ff0000">The amounts paid for cleaning services (carpet, drapes), cleaning supplies, locks and keys, pest control, pool service, and general cost of upkeep of the rental property.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  Sched E \ </b>N331<br>Commissions</font></TD>
+<TD align=left><font color="#ff0000">The amounts paid as Commissions to realtors or management companies to collect rent.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  Sched E \ </b>N332<br>Insurance</font></TD>
+<TD align=left><font color="#ff0000">Insurasnce premiums paid for fire, theft, liability.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  Sched E \ </b>N333<br>Legal and professional fees</font></TD>
+<TD align=left><font color="#ff0000">The amounts of fees for tax advice and the preparation of tax forms related to your rental real estate or royalty properties.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  Sched E \ </b>N502<br>Management fees</font></TD>
+<TD align=left><font color="#ff0000">The amount of fees to a manager or property management company to oversee your rental or royalty property.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  Sched E \ </b>N334<br>Mortgage interest expense</font></TD>
+<TD align=left><font color="#ff0000">Interest paid to banks or other financial institutions for a mortgage on your rental property, and you recieved a Form 1098.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  Sched E \ </b>N341<br>Other expenses</font></TD>
+<TD align=left><font color="#ff0000">Other expenses that are not listed on other tax lines of Schedule E.  These might include the cost of gardening and/or snow removal services, association dues, bank charges, etc.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  Sched E \ </b>N335<br>Other interest expense</font></TD>
+<TD align=left><font color="#ff0000">Interest paid for a mortgage on your rental property, not paid to banks or other financial institutions or you did not recieve a Form 1098.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  Sched E \ </b>N336<br>Repairs</font></TD>
+<TD align=left><font color="#ff0000">You may deduct the cost of repairs made to keep your property in good working condition. Repairs generally do not add significant value to the property or extend its life.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  Sched E \ </b>N337<br>Supplies</font></TD>
+<TD align=left><font color="#ff0000">Miscellaneous items needed to maintain the property, such as: brooms, cleaning supplies, nails, paint brushes, etc.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  Sched E \ </b>N338<br>Taxes</font></TD>
+<TD align=left><font color="#ff0000">The amounts paid for real estate and personal property taxes. Also include the portion of any payroll taxes you paid for your employees.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  Sched E \ </b>N339<br>Utilities</font></TD>
+<TD align=left><font color="#ff0000">The costs of electricity, gas, telephone, etc. for your rental property.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>Help Sched F \ </b>H343<br>Schedule F - Farm income and expense</font></TD>
+<TD align=left><font color="#ff0000">Schedule F is used to report farm income and expense. Use a different copy of Schedule F for each farm you own.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  Sched F \ </b>N543<br>Car and truck expenses</font></TD>
+<TD align=left><font color="#ff0000">The business portion of car or truck expenses, such as, for gasoline, oil, repairs, insurance, tires, license plates, etc.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  Sched F \ </b>N366<br>Chemicals</font></TD>
+<TD align=left><font color="#ff0000">Chemicals used in operating your farm, such as insect sprays and dusts.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  Sched F \ </b>N362<br>Conservation expenses</font></TD>
+<TD align=left><font color="#ff0000">Your expenses for soil or water conservation or for the prevention of erosion of land used in farming. To take this deduction, your expenses must be consistent with a plan approved by the Natural Resources Conservation Service (NRCS) of the Department of Agriculture.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  Sched F \ </b>N378<br>Cost of resale livestock/items</font></TD>
+<TD align=left><font color="#ff0000">The cost or other basis of the livestock and other items you actually sold.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  Sched F \ </b>N367<br>Custom hire expenses</font></TD>
+<TD align=left><font color="#ff0000">Amounts you paid for custom hire (machine work) (the machine operator furnished the equipment).  Do not include amounts paid for rental or lease of equipment you operated yourself.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  Sched F \ </b>N364<br>Employee benefit programs</font></TD>
+<TD align=left><font color="#ff0000">Contributions to employee benefit programs, such as accident and health plans, group-term life insurance, and dependent care assistance programs. Do not include contributions  that are a incidental part of a pension or profit-sharing plan.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  Sched F \ </b>N350<br>Feed purchased</font></TD>
+<TD align=left><font color="#ff0000">The cost of feed for your livestock. Generally, you cannot currently deduct ex-penses for feed to be consumed by your livestock in a later tax year. See insctuctions for Schedule F.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  Sched F \ </b>N352<br>Fertilizers and lime</font></TD>
+<TD align=left><font color="#ff0000">The cost of fertilizer, lime, and other materials applied to farm land to enrich, neutralize, or condition it. You can also deduct the cost of applying these materials. However, see Prepaid Farm Supplies, in Pub 225, for a rule that may limit your deduction for these materials.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  Sched F \ </b>N361<br>Freight and trucking</font></TD>
+<TD align=left><font color="#ff0000">The costs of freight or trucking of produce or livestock.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  Sched F \ </b>N356<br>Gasoline, fuel, and oil</font></TD>
+<TD align=left><font color="#ff0000">The costs of gas, fuel, oil, etc. for farm equipment.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  Sched F \ </b>N359<br>Insurance, other than health</font></TD>
+<TD align=left><font color="#ff0000">Premiums paid for farm busines insurance, such as: fire, storm, crop, theft and liability protection of farm assets.  Do not include premiums for employee accident and health insurance.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  Sched F \ </b>N346<br>Interest expense, mortgage</font></TD>
+<TD align=left><font color="#ff0000">The interest you paid to banks or other financial institutions for which you received a Form 1098, for a mortgage on real property used in your farming business (other than your main home). If you paid interest on a debt secured by your main home, and any proceeds from that debt were used in your farming operation, refer to IRS Pub 225.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  Sched F \ </b>N347<br>Interest expense, other</font></TD>
+<TD align=left><font color="#ff0000">The interest you paid for which you did not receive a Form 1098 (perhaps someone else did, and you are liable too), for a mortgage or other loans for your farm business.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  Sched F \ </b>N344<br>Labor hired</font></TD>
+<TD align=left><font color="#ff0000">The amounts you paid for farm labor. Do not include amounts paid to yourself.  Count the cost of boarding farm labor but not the value of any products they used from the farm. Count only what you paid house-hold help to care for farm laborers.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  Sched F \ </b>N365<br>Other farm expenses</font></TD>
+<TD align=left><font color="#ff0000">Include all ordinary and necessary farm expenses not deducted elsewhere on Schedule F, such as advertising, office supplies, etc. Do not include fines or penalties paid to a government for violating any law.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  Sched F \ </b>N363<br>Pension/profit sharing plans</font></TD>
+<TD align=left><font color="#ff0000">Enter your deduction for contributions to employee pension, profit-sharing, or annuity plans. If the plan included you as a self-employed person, see the instructions for Schedule C (Form 1040).</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  Sched F \ </b>N348<br>Rent/lease land, animals</font></TD>
+<TD align=left><font color="#ff0000">Amounts paid to rent or lease property such as pasture or farm land.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  Sched F \ </b>N349<br>Rent/lease vehicles, equip.</font></TD>
+<TD align=left><font color="#ff0000">The business portion of your rental cost, for rented or leased vehicles, machinery, or equipment. But if you leased a vehicle for a term of 30 days or more, you may have to reduce your deduction by an inclusion amount. For details, see the instructions for Schedule C (Form 1040).</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  Sched F \ </b>N345<br>Repairs and maintenance</font></TD>
+<TD align=left><font color="#ff0000">Amounts you paid for repairs and maintenance of farm buildings, machinery, and equipment. You can also include what you paid for tools of short life or minimal cost, such as shovels and rakes.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  Sched F \ </b>N351<br>Seeds and plants purchased</font></TD>
+<TD align=left><font color="#ff0000">The amounts paid for seeds and plants purchased for farming.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  Sched F \ </b>N357<br>Storage and warehousing</font></TD>
+<TD align=left><font color="#ff0000">Amounts paid for storage and warehousing of crops, grains, etc.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  Sched F \ </b>N353<br>Supplies purchased</font></TD>
+<TD align=left><font color="#ff0000">Livestock supplies and other supplies, including bedding, office supplies, etc.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  Sched F \ </b>N358<br>Taxes</font></TD>
+<TD align=left><font color="#ff0000">Real estate and personal property taxes on farm business assets; Social security and Medicare taxes you paid to match what you are required to withhold from farm employees’ wages and any Federal unemployment tax paid; Federal highway use tax.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  Sched F \ </b>N360<br>Utilities</font></TD>
+<TD align=left><font color="#ff0000">Amounts you paid for gas, electricity, water, etc., for business use on the farm. Do not include personal utilities. You cannot deduct the base rate (including taxes) of the first telephone line into your residence, even if you use it for business.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>  Sched F \ </b>N355<br>Vet, breeding, and medicine</font></TD>
+<TD align=left><font color="#ff0000">The costs of veterinary services, medicine and breeding fees.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>Help Sched H \ </b>H565<br>Schedule H - Household employees</font></TD>
+<TD align=left><font color="#ff0000">Schedule H is used to report Federal employment taxes on cash wages paid this year to household employees.  Federal employment taxes include social security, Medicare, withheld Federal income, and Federal unemployment (FUTA) taxes.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>^ Sched H \ </b>N567<br>Cash wages paid</font></TD>
+<TD align=left><font color="#ff0000">For household employees to whom you paid $1,100 (as of 1999) or more each of cash wages that are subject to social security and Medicare taxes. To find out if the wages are subject to these taxes, see the instructions for Schedule H.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>^ Sched H \ </b>N568<br>Federal tax withheld</font></TD>
+<TD align=left><font color="#ff0000">Federal income tax withheld from total cash wages paid to household employees during the year.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>Help W-2 \ </b>H458<br>Form W-2 - Wages earned and taxes withheld</font></TD>
+<TD align=left><font color="#ff0000">Form W-2 is used by your employer to report the amount of wages and other compensation you earned as an employee, and the amount of federal and state taxes withheld and fringe benefits received. Use a separate copy of Form W-2 for each employer.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>^ W-2 \ </b>N461<br>Federal tax withheld, self</font></TD>
+<TD align=left><font color="#ff0000">The amount of Federal income tax withheld from your wages for the year.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>^ W-2 \ </b>N507<br>Federal tax withheld, spouse</font></TD>
+<TD align=left><font color="#ff0000">The amount of Federal income tax withheld from your spouse's wages for the year.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>^ W-2 \ </b>N463<br>Local tax withheld, self</font></TD>
+<TD align=left><font color="#ff0000">The amount of local taxes withheld from your wages.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>^ W-2 \ </b>N509<br>Local tax withheld, spouse</font></TD>
+<TD align=left><font color="#ff0000">The amount of local taxes withheld from your spouse's wages.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>^ W-2 \ </b>N480<br>Medicare tax withheld, self</font></TD>
+<TD align=left><font color="#ff0000">The amount of Medicare taxes withheld from your wages.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>^ W-2 \ </b>N510<br>Medicare tax withheld, spouse</font></TD>
+<TD align=left><font color="#ff0000">The amount of Medicare taxes withheld from your spouse's wages.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>^ W-2 \ </b>N462<br>Social Security tax withheld, self</font></TD>
+<TD align=left><font color="#ff0000">The amount of social security taxes withheld from your wages.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>^ W-2 \ </b>N508<br>Social Security tax withheld, spouse</font></TD>
+<TD align=left><font color="#ff0000">The amount of social security taxes withheld from your spouse's wages.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>^ W-2 \ </b>N464<br>State tax withheld, self</font></TD>
+<TD align=left><font color="#ff0000">The amount of state taxes withheld from your wages.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>^ W-2 \ </b>N511<br>State tax withheld, spouse</font></TD>
+<TD align=left><font color="#ff0000">The amount of state taxes withheld from your spouse's wages.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>Help W-2G \ </b>H547<br>Form W-2G - gambling winnings</font></TD>
+<TD align=left><font color="#ff0000">Form W-2G is used to report certain gambling winnings.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>^ W-2G \ </b>N550<br>Federal tax withheld</font></TD>
+<TD align=left><font color="#ff0000">The amount of federal income taxes withheld from gross gambling winnings.</font></TD>
+</TR>
+<TR><TD align=left><font color="#ff0000"><b>^ W-2G \ </b>N551<br>State tax withheld</font></TD>
+<TD align=left><font color="#ff0000">The amount of state income taxes withheld from gross gambling winnings.</font></TD>
+</TR>
+</table>
+ </body></html>diff -up /dev/null 'gnucash-1.5.6-new/doc/sgml/C/xacc-txf-categories.sgml'

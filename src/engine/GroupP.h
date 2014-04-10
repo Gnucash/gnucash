@@ -1,5 +1,5 @@
 /********************************************************************\
- * GroupP.h -- the main data structure of the program               *
+ * GroupP.h -- private header file for chart of accounts            *
  * Copyright (C) 1997 Robin D. Clark                                *
  * Copyright (C) 1997, 1998, 1999, 2000 Linas Vepstas               *
  *                                                                  *
@@ -33,30 +33,37 @@
  *
  */
 
-#ifndef __XACC_ACCOUNT_GROUP_P_H__
-#define __XACC_ACCOUNT_GROUP_P_H__
+#ifndef XACC_GROUP_P_H
+#define XACC_GROUP_P_H
 
 #include "config.h"
+
 #include "BackendP.h"
-#include "GNCId.h"
+#include "GNCIdP.h"
 #include "Transaction.h"
+#include "gnc-book.h"
 #include "gnc-numeric.h"
 
+
 /** STRUCTS *********************************************************/
-struct _account_group {
+struct account_group_s
+{
   /* The flags: */
   unsigned int saved : 1;
-  /* unsigned int new   : 1; */
-  
-  Account *parent;                 /* back-pointer to parent */
 
-  int      numAcc;                 /* number of accounts in array */
-  Account  **account;              /* array of account pointers   */
+  GNCEntityTable *entity_table; /* table which child accounts must
+                                 * be stored in. */
 
-  Backend *backend;                /* persistant storage backend */
+  Account *parent;         /* back-pointer to parent */
 
-  /* cached parameters */
-  gnc_numeric balance;
+  AccountList *accounts;   /* list of account pointers */
+
+  Backend *backend;        /* persistant storage backend */
+
+  GNCBook *book;           /* The book which this group belongs to */
 };
 
-#endif /* __XACC_ACCOUNT_GROUP_P_H__ */
+
+void xaccGroupSetBook (AccountGroup *group, GNCBook *book);
+
+#endif

@@ -1,0 +1,111 @@
+<article ID="XACC-COMMON-REPORT-OPTIONS">
+<artheader>
+<title>Common Report Options</title>
+</artheader>
+<sect1>
+<title></title>
+<para>Many reports share similar sorts of options.  Some common ones
+include:</para>
+
+<itemizedlist>
+<listitem>
+<para><emphasis><anchor id="xacc-options-report-title">Report Title</emphasis></para>
+<para>Set the title of the report.  This doesn't affect anything
+else, but can be handy if you need to print the report for later
+viewing.</para></listitem>
+
+<listitem>
+<para><emphasis><anchor id="xacc-options-date">Date Options</emphasis></para>
+<para>Reports typically allow you to specify either a single date, or
+a date range, for the report.  Dates can be specified in two ways:
+directly (using the date selector), or selecting a "relative" date
+from the menu.  Relative dates allow you to specify dates like "the
+beginning of this year" or "today", and are highly convenient for
+doing "rolling reports".</para></listitem>
+
+<listitem>
+<para><emphasis><anchor id="xacc-options-interval">Interval/Step Size</emphasis></para>
+<para>This option is used on bar charts to determine the interval
+which each bar represents.  Typical values are daily, weekly,
+monthly, and yearly.</para></listitem>
+
+<listitem>
+<para><emphasis><anchor id="xacc-options-accounts">Accounts</emphasis></para>
+<para>Most reports give you the opportunity to select the appropriate
+accounts.  Note that some reports only allow you to select certain 
+types of accounts - for instance, an expense piechart only allows
+expense accounts to be selected.  </para>
+</listitem>
+
+<listitem>
+<para><emphasis><anchor id="xacc-options-show-full-names">Show full 
+Account Names</emphasis></para>
+<para>Many reports and graphs let you select whether to display short
+account names (for example "power") or full account names (for example
+"utilities:power").</para>
+</listitem>
+
+<listitem>
+<para><emphasis><anchor id="xacc-options-include-subaccounts">
+Include Subaccounts?</emphasis></para>
+<para>Summary reports typically have "include all subaccounts" option,
+which if selected ensures that all subaccounts are included if the
+parent account is.</para>
+</listitem>
+
+<listitem>
+<para><emphasis><anchor id="xacc-options-depth">Depth</emphasis></para>
+<para>This option allows the selection of how "deep" the 
+report displays subaccounts.  If the subaccounts go deeper 
+than selected, most reports will calculate an overall value
+for all the subaccounts and include it in a higher-level
+total.  If you want to make sure every account selected is 
+individually displayed, select "All".</para>
+</listitem>
+
+<listitem>
+<para><emphasis><anchor id="xacc-options-style-sheet">Style Sheet</emphasis></para>
+<para>Select a Style Sheet.  Style sheets control how reports are 
+displayed.  At the moment, there are two style sheets, 
+"default" and "technicolor".  You can customize each of these from
+the global Style Sheet menu item.</para>
+</listitem>
+
+<listitem>
+  <para><emphasis><anchor id="xacc-options-plot-dimensions">Plot
+	Dimensions</emphasis></para> 
+	  
+  <para>There are "Width" and "Height"
+    options for most of the graphs, which specify the 
+    displayed dimensions
+    (in pixels).</para>
+</listitem>
+	
+<listitem>
+<para><emphasis><anchor id="xacc-options-report-currency">Report Currency</emphasis></para>
+<para>Most reports allow you to select the report currency (the default
+is your "home" currency).  Generally, values will be converted to
+this currency for graphical display or summarization.</para>
+</listitem>
+
+<listitem>
+<para><emphasis><anchor id="xacc-options-price-source">Price Source</emphasis></para>
+<para>Select how stock and currency prices are calculated in this report.
+You can choose a weighted average of prices over all transactions, 
+prices at current values, or prices at the time of the report date.</para>
+</listitem>
+<listitem>
+	<para><emphasis><anchor id="xacc-options-graph-totals">Totals</emphasis></para>
+	<para>Some piecharts display totals in the chart legend if this option is
+	  selected.
+	  </para></listitem>
+
+<listitem>
+	<para><emphasis><anchor id="xacc-options-max-slices">Maximum Slices</emphasis></para>
+	<para>Controls the maximum number of slices displayed in a piechart - other accounts
+	  will be placed in a slice marked "other".
+	</para>
+	</listitem></itemizedlist>
+
+</sect1>
+</article>

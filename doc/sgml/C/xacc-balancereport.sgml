@@ -3,7 +3,8 @@
 <ARTHEADER>
 <TITLE>Balance Tracking Report</TITLE>
 </ARTHEADER>
-
+<sect1>
+      <title></title>
 <PARA>    <INLINEMEDIAOBJECT>
 <IMAGEOBJECT>
 <IMAGEDATA FILEREF="image/report-av-baln.png">
@@ -28,7 +29,7 @@
 <LISTITEM>
 <PARA>The accounts for which the report is to be produced. If
       more than one account is selected, the sum of all balances of
-      accounts selected is used <EMPHASIS>NB: Could somebody make sure
+      accounts selected is used <EMPHASIS>FIXME: Could somebody make sure
       this is right?</EMPHASIS>
 
       </PARA>
@@ -60,4 +61,10 @@
 
 
 </PARA>
+
+    </sect1>
 </ARTICLE>
+
+<!-- Local variables: -->
+<!-- sgml-parent-document: "gnucash.sgml" -->
+<!-- End: -->

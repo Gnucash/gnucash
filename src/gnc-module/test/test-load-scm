@@ -1,0 +1,11 @@
+#! /bin/sh
+exec guile -s $0 "$@"
+!#
+
+(use-modules (gnucash gnc-module))
+(gnc:module-system-init)
+(gnc:module-load "gnucash/foo" 0)
+
+;; Local Variables:
+;; mode: scheme
+;; End:

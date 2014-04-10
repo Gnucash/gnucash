@@ -26,16 +26,33 @@
 \********************************************************************/
 
 #define _GNU_SOURCE
+#define __EXTENSIONS__
+
+#include "config.h"
 
 #include <ctype.h>
+
+#ifdef HAVE_LANGINFO_D_FMT
+#include <langinfo.h>
+#endif
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
 
-#include "config.h"
+#include <glib.h>
+
 #include "date.h"
-#include "util.h"
+#include "gnc-engine-util.h"
+
+#define NANOS_PER_SECOND 1000000000
+
+#ifdef HAVE_LANGINFO_D_FMT
+#  define GNC_D_FMT (nl_langinfo (D_FMT))
+#else
+#  define GNC_D_FMT "%Y-%m-%d"
+#endif
 
 /* This is now user configured through the gnome options system() */
 static DateFormat dateFormat = DATE_FORMAT_US;
@@ -47,13 +64,104 @@ static short module = MOD_ENGINE;
 /********************************************************************\
 \********************************************************************/
 
+static void
+timespec_normalize(Timespec *t)
+{
+  if(t->tv_nsec > NANOS_PER_SECOND)
+  {
+    t->tv_sec+= (t->tv_nsec / NANOS_PER_SECOND);
+    t->tv_nsec= t->tv_nsec % NANOS_PER_SECOND;
+  }
+
+  if(t->tv_nsec < - NANOS_PER_SECOND)
+  {
+    t->tv_sec+= - (-t->tv_nsec / NANOS_PER_SECOND);
+    t->tv_nsec = - (-t->tv_nsec % NANOS_PER_SECOND);
+  }
+
+  if (t->tv_sec > 0 && t->tv_nsec < 0)
+  {
+    t->tv_sec--;
+    t->tv_nsec = NANOS_PER_SECOND + t->tv_nsec;
+  }
+  
+  if (t->tv_sec < 0 && t->tv_nsec > 0)
+  {
+    t->tv_sec++;
+    t->tv_nsec = - NANOS_PER_SECOND + t->tv_nsec;
+  }
+  return;
+}
+  
+
 gboolean
-timespec_equal(const Timespec *ta, const Timespec *tb) {
+timespec_equal (const Timespec *ta, const Timespec *tb)
+{
+  if(ta == tb) return TRUE;
   if(ta->tv_sec != tb->tv_sec) return FALSE;
   if(ta->tv_nsec != tb->tv_nsec) return FALSE;
   return TRUE;
 }
 
+gint
+timespec_cmp(const Timespec *ta, const Timespec *tb)
+{
+  if(ta == tb) return 0;
+  if(ta->tv_sec < tb->tv_sec) return -1;
+  if(ta->tv_sec > tb->tv_sec) return 1;
+  if(ta->tv_nsec < tb->tv_nsec) return -1;
+  if(ta->tv_nsec > tb->tv_nsec) return 1;
+  return 0;
+}
+
+Timespec
+timespec_diff(const Timespec *ta, const Timespec *tb)
+{
+  Timespec retval;
+  retval.tv_sec = ta->tv_sec - tb->tv_sec;
+  retval.tv_nsec = ta->tv_nsec - tb->tv_nsec;
+  timespec_normalize(&retval);
+  return retval;
+}
+
+Timespec
+timespec_abs(const Timespec *t)
+{
+  Timespec retval = *t;
+
+  timespec_normalize(&retval);
+  if (retval.tv_sec < 0)
+  {
+    retval.tv_sec = - retval.tv_sec;
+    retval.tv_nsec = - retval.tv_nsec;
+  }
+  
+  return retval;
+}
+
+/**
+ * timespecCanonicalDayTime
+ * given a timepair contains any time on a certain day (local time)
+ * converts it to be midday that day.  
+ */
+
+Timespec
+timespecCanonicalDayTime(Timespec t)
+{
+  struct tm tm, *result;
+  Timespec retval;
+  time_t t_secs = t.tv_sec + (t.tv_nsec / NANOS_PER_SECOND);
+  result = localtime(&t_secs);
+  tm = *result;
+  tm.tm_sec = 0;
+  tm.tm_min = 0;
+  tm.tm_hour = 12;
+  tm.tm_isdst = -1;
+  retval.tv_sec = mktime(&tm);
+  retval.tv_nsec = 0;
+  return retval;
+}
+    
 /**
  * setDateFormat
  * set date format to one of US, UK, CE, OR ISO
@@ -120,12 +228,17 @@ printDate (char * buff, int day, int month, int year)
     case DATE_FORMAT_LOCALE:
       {
         struct tm tm_str;
+
         tm_str.tm_mday = day;
         tm_str.tm_mon = month - 1;    /* tm_mon = 0 through 11 */
         tm_str.tm_year = year - 1900; /* this is what the standard 
                                        * says, it's not a Y2K thing */
+        tm_str.tm_hour = 0;
+        tm_str.tm_min = 0;
+        tm_str.tm_sec = 0;
+        tm_str.tm_isdst = -1;
 
-        strftime(buff, MAX_DATE_LENGTH, "%x", &tm_str);
+        strftime (buff, MAX_DATE_LENGTH, GNC_D_FMT, &tm_str);
       }
       break;
 
@@ -142,9 +255,9 @@ printDateSecs (char * buff, time_t t)
   struct tm *theTime;
 
   if (!buff) return;
-  
-  theTime = localtime(&t);
-  
+
+  theTime = localtime (&t);
+
   printDate (buff, theTime->tm_mday, 
                    theTime->tm_mon + 1,
                    theTime->tm_year + 1900);
@@ -155,18 +268,18 @@ xaccPrintDateSecs (time_t t)
 {
    char buff[100];
    printDateSecs (buff, t);
-   return strdup (buff);
+   return g_strdup (buff);
 }
 
 const char *
-gnc_print_date(Timespec ts)
+gnc_print_date (Timespec ts)
 {
   static char buff[MAX_DATE_LENGTH];
   time_t t;
 
   t = ts.tv_sec + (ts.tv_nsec / 1000000000.0);
 
-  printDateSecs(buff, t);
+  printDateSecs (buff, t);
 
   return buff;
 }
@@ -181,12 +294,12 @@ gnc_print_date(Timespec ts)
  *         month - will store month of the year as 1 ... 12
  *         year - will store the year (4-digit)
  *
- * Return: 0 if conversion was successful, 1 otherwise
+ * Return: nothing
  *
  * Globals: global dateFormat value
  */
-void 
-scanDate(const char *buff, int *day, int *month, int *year)
+void
+scanDate (const char *buff, int *day, int *month, int *year)
 {
    char *dupe, *tmp, *first_field, *second_field, *third_field;
    int iday, imonth, iyear;
@@ -228,7 +341,7 @@ scanDate(const char *buff, int *day, int *month, int *year)
        {
          struct tm thetime;
 
-         strptime(buff, "%x", &thetime);
+         strptime (buff, GNC_D_FMT, &thetime);
 
          iday = thetime.tm_mday;
          imonth = thetime.tm_mon + 1;
@@ -276,11 +389,11 @@ scanDate(const char *buff, int *day, int *month, int *year)
  *
  * Globals: global dateFormat value
  */
-char dateSeparator()
+char dateSeparator ()
 {
   static char locale_separator = '\0';
 
-  switch(dateFormat)
+  switch (dateFormat)
   {
     case DATE_FORMAT_CE:
       return '.';
@@ -302,7 +415,7 @@ char dateSeparator()
 
         secs = time(NULL);
         tm = localtime(&secs);
-        strftime(string, sizeof(string), "%x", tm);
+        strftime(string, sizeof(string), GNC_D_FMT, tm);
 
         for (s = string; s != '\0'; s++)
           if (!isdigit(*s))
@@ -314,129 +427,288 @@ char dateSeparator()
 }
 
 /********************************************************************\
+ * iso 8601 datetimes should look like 1998-07-02 11:00:00.68-05
 \********************************************************************/
+/* hack alert -- this routine returns incorrect values for 
+ * dates before 1970 */
+
+static Timespec
+gnc_iso8601_to_timespec(const char *str, int do_localtime)
+{
+  char buf[4];
+  Timespec ts;
+  struct tm stm;
+  long int nsec =0;
+
+  ts.tv_sec=0;
+  ts.tv_nsec=0;
+  if (!str) return ts;
+
+  stm.tm_year = atoi(str) - 1900;
+  str = strchr (str, '-'); if (str) { str++; } else { return ts; }
+  stm.tm_mon = atoi(str) - 1;
+  str = strchr (str, '-'); if (str) { str++; } else { return ts; }
+  stm.tm_mday = atoi(str);
+
+  str = strchr (str, ' '); if (str) { str++; } else { return ts; }
+  stm.tm_hour = atoi(str);
+  str = strchr (str, ':'); if (str) { str++; } else { return ts; }
+  stm.tm_min = atoi(str);
+  str = strchr (str, ':'); if (str) { str++; } else { return ts; }
+  stm.tm_sec = atoi (str);
+
+  /* the decimal point, optionally present ... */
+  /* hack alert -- this algo breaks if more than 9 decimal places present */
+  if (strchr (str, '.')) 
+  { 
+     int decimals, i, multiplier=1000000000;
+     str = strchr (str, '.') +1;
+     decimals = strcspn (str, "+- ");
+     for (i=0; i<decimals; i++) multiplier /= 10;
+     nsec = atoi(str) * multiplier;
+  }
+  stm.tm_isdst = -1;
+
+  /* timezone format can be +hh or +hhmm or +hh.mm (or -) */
+  str += strcspn (str, "+-");
+  buf[0] = str[0];
+  buf[1] = str[1];
+  buf[2] = str[2];
+  buf[3] = 0;
+  stm.tm_hour -= atoi(buf);
+
+  str +=3;
+  if ('.' == *str) str++;
+  if (isdigit (*str) && isdigit (*(str+1)))
+  {
+     int cyn;
+     /* copy sign from hour part */
+     if ('+' == buf[0]) { cyn = -1; } else { cyn = +1; } 
+     buf[0] = str[0];
+     buf[1] = str[1];
+     buf[2] = str[2];
+     buf[3] = 0;
+     stm.tm_min += cyn * atoi(buf);
+  }
+
+  /* adjust for the local timezone */
+  if (do_localtime)
+  {
+    struct tm tmp_tm;
+    struct tm *tm;
+    long int tz;
+    int tz_hour;
+    time_t secs;
+
+    /* Use a temporary tm struct so the mktime call below
+     * doesn't mess up stm. */
+    tmp_tm = stm;
+    tmp_tm.tm_isdst = -1;
+
+    secs = mktime (&tmp_tm);
+
+    /* The call to localtime is 'bogus', but it forces 'timezone' to
+     * be set. Note that we must use the accurate date, since the
+     * value of 'gnc_timezone' includes daylight savings corrections
+     * for that date. */
+    tm = localtime (&secs);
+
+    tz = gnc_timezone (tm);
+
+    tz_hour = tz / 3600;
+    stm.tm_hour -= tz_hour;
+    stm.tm_min -= (tz - (3600 * tz_hour)) / 60;
+    stm.tm_isdst = tmp_tm.tm_isdst;
+  }
+
+  /* compute number of seconds */
+  ts.tv_sec = mktime (&stm);
+  ts.tv_nsec = nsec;
+
+  return ts;
+}
+
+Timespec
+gnc_iso8601_to_timespec_local(const char *str)
+{
+   return gnc_iso8601_to_timespec(str, 1);
+}
+
+Timespec
+gnc_iso8601_to_timespec_gmt(const char *str)
+{
+   return gnc_iso8601_to_timespec(str, 0);
+}
+
+/********************************************************************\
+\********************************************************************/
+
+char * 
+gnc_timespec_to_iso8601_buff (Timespec ts, char * buff)
+{
+  int len;
+  int tz_hour, tz_min;
+  char cyn;
+  time_t tmp;
+  struct tm parsed;
+
+  tmp = ts.tv_sec;
+  localtime_r(&tmp, &parsed);
+
+  tz_hour = gnc_timezone (&parsed) / 3600;
+  tz_min = (gnc_timezone (&parsed) - 3600*tz_hour) / 60;
+  if (0>tz_min) { tz_min +=60; tz_hour --; }
+  if (60<=tz_min) { tz_min -=60; tz_hour ++; }
+
+  /* we also have to print the sign by hand, to work around a bug
+   * in the glibc 2.1.3 printf (where %+02d fails to zero-pad)
+   */
+  cyn = '-';
+  if (0>tz_hour) { cyn = '+'; tz_hour = -tz_hour; }
+
+  len = sprintf (buff, "%4d-%02d-%02d %02d:%02d:%02d.%06ld %c%02d%02d",
+                 parsed.tm_year + 1900,
+                 parsed.tm_mon + 1,
+                 parsed.tm_mday,
+                 parsed.tm_hour,
+                 parsed.tm_min,
+                 parsed.tm_sec,
+                 ts.tv_nsec / 1000,
+                 cyn,
+                 tz_hour,
+                 tz_min);
+
+  /* return pointer to end of string */
+  buff += len;
+  return buff;
+}
+
+
+/********************************************************************\
+\********************************************************************/
+/* hack alert -- this routine returns incorrect values for 
+ * dates before 1970 */
 
 time_t 
 xaccDMYToSec (int day, int month, int year)
 {
-   struct tm stm;
-   time_t secs;
+  struct tm stm;
+  time_t secs;
 
-   stm.tm_year = year - 1900;
-   stm.tm_mon = month - 1;
-   stm.tm_mday = day;
-   stm.tm_hour = 11;
-   stm.tm_min = 0;
-   stm.tm_sec = 0;
+  stm.tm_year = year - 1900;
+  stm.tm_mon = month - 1;
+  stm.tm_mday = day;
+  stm.tm_hour = 0;
+  stm.tm_min = 0;
+  stm.tm_sec = 0;
+  stm.tm_isdst = -1;
 
-   /* compute number of seconds */
-   secs = mktime (&stm);
+  /* compute number of seconds */
+  secs = mktime (&stm);
 
-   return (secs);
+  return secs;
 }
 
 time_t
 xaccScanDateS (const char *str)
 {
-   int month,day,year;
-   scanDate (str, &day, &month, &year);
-   return (xaccDMYToSec (day,month,year));
+  int month, day, year;
+
+  scanDate (str, &day, &month, &year);
+
+  return xaccDMYToSec (day,month,year);
 }
 
 #define THIRTY_TWO_YEARS 0x3c30fc00LL
 
-Timespec
-gnc_dmy2timespec(int day, int month, int year) {
+static Timespec
+gnc_dmy2timespec_internal (int day, int month, int year, gboolean start_of_day)
+{
   Timespec result;
   struct tm date;
   long long secs = 0;
   long long era = 0;
-  
+
   year -= 1900;
-  
-  /* make a crude attempt to deal with dates outside the 
-   * range of Dec 1901 to Jan 2038. Note the we screw up 
-   * centenial leap years here ... so hack alert --
-   */
+
+  /* make a crude attempt to deal with dates outside the range of Dec
+   * 1901 to Jan 2038. Note we screw up centennial leap years here so
+   * hack alert */
   if ((2 > year) || (136 < year)) 
   {
     era = year / 32;
     year %= 32;
     if (0 > year) { year += 32; era -= 1; } 
   }
-  
+
   date.tm_year = year;
   date.tm_mon = month - 1;
   date.tm_mday = day;
-  date.tm_hour = 11;
-  date.tm_min = 0;
-  date.tm_sec = 0;
-  
+
+  if (start_of_day)
+  {
+    date.tm_hour = 0;
+    date.tm_min = 0;
+    date.tm_sec = 0;
+  }
+  else
+  {
+    date.tm_hour = 23;
+    date.tm_min = 59;
+    date.tm_sec = 59;
+  }
+
+  date.tm_isdst = -1;
+
   /* compute number of seconds */
   secs = mktime (&date);
-  
+
   secs += era * THIRTY_TWO_YEARS;
-  
+
   result.tv_sec = secs;
   result.tv_nsec = 0;
-  
-  return(result);
+
+  return result;
 }
 
-/* ================================================ */
-/* february default is 28, and patched below */
-static char days_in_month[12] = { 31,28,31,30,31,30,31,31,30,31,30,31 };
-
-static void
-xaccValidateDateInternal (struct tm *date, int recur)
+Timespec
+gnc_dmy2timespec (int day, int month, int year)
 {
-   int day, month, year;
-
-   /* avoid infinite recursion */
-   if (1 < recur) return;
-
-   day = date->tm_mday;
-   month = date->tm_mon + 1;
-   year = date->tm_year + 1900;
-
-   /* adjust days in february for leap year */
-   if (((year % 4 == 0) && (year % 100 != 0)) || (year % 400 == 0)) {
-      days_in_month[1] = 29;
-   } else {
-      days_in_month[1] = 28;
-   }
-
-   /* the "% 12" business is because month might not be valid!*/
-
-   while (day > days_in_month[(month+11) % 12]) {
-      day -= days_in_month[(month+11) % 12];
-      month++;
-   }
-   while (day < 1) {
-      month--;
-      day += days_in_month[(month+11) % 12];
-   }
-   while (month > 12) {
-      month -= 12;
-      year++;
-   }
-   while (month < 1) {
-      month += 12;
-      year--;
-   }
-
-   date->tm_mday = day;
-   date->tm_mon = month - 1;
-   date->tm_year = year - 1900;
-
-   /* do it again, in case leap-year scrolling messed things up */
-   xaccValidateDateInternal (date, ++recur);
+  return gnc_dmy2timespec_internal (day, month, year, TRUE);
 }
+
+Timespec
+gnc_dmy2timespec_end (int day, int month, int year)
+{
+  return gnc_dmy2timespec_internal (day, month, year, FALSE);
+}
+
+/********************************************************************\
+\********************************************************************/
+
+long int
+gnc_timezone (struct tm *tm)
+{
+  g_return_val_if_fail (tm != NULL, 0);
+
+#ifdef HAVE_STRUCT_TM_GMTOFF
+  /* tm_gmtoff is seconds *east* of UTC and is
+   * already adjusted for daylight savings time. */
+  return -(tm->tm_gmtoff);
+#else
+  /* timezone is seconds *west* of UTC and is
+   * not adjusted for daylight savings time.
+   * In Spring, we spring forward, wheee! */
+  return timezone - (tm->tm_isdst > 0 ? 60 * 60 : 0);
+#endif
+}
+
 
 void
-xaccValidateDate (struct tm *date)
+timespecFromTime_t( Timespec *ts, time_t t )
 {
-  xaccValidateDateInternal (date, 0);
+    ts->tv_sec = t;
+    ts->tv_nsec = 0;
 }
 
 /********************** END OF FILE *********************************\

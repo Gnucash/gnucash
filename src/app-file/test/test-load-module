@@ -1,0 +1,11 @@
+#! /bin/sh 
+exec guile -s $0
+!#
+
+(use-modules (gnucash gnc-module))
+(gnc:module-system-init)
+
+(display "  testing app-file module load ... ")
+(gnc:module-load "gnucash/app-file" 0)
+
+(display "  ok\n")

@@ -1,0 +1,100 @@
+<ARTICLE ID="XACC-TXF-EXPORT-ANOMALIES">
+
+<ARTHEADER>
+<TITLE>Exportação TXF - Problemas Conhecidos e Limitações</TITLE>
+</ARTHEADER>
+
+    <sect1>
+      <title></title>
+<PARA><EMPHASIS>TaxCut 1999</EMPHASIS> </PARA>
+
+<PARA>
+    <ITEMIZEDLIST>
+      <LISTITEM><PARA><EMPHASIS>Código: N488 "^ Sched B \ Div. income, cap
+        gain distrib."</EMPHASIS></PARA>
+
+        <PARA><EMPHASIS>Código: N286 "^ Sched B \ Dividend
+        income"</EMPHASIS></PARA>
+
+        <PARA>Estes dois códigos, do mesmo pagador, não são co-relacionados.
+        O utilizador terá de ajustar esta situação após a importação.
+        </PARA>
+      </LISTITEM>
+    </ITEMIZEDLIST></PARA>
+
+<PARA><EMPHASIS>TaxCut 1999, 2000</EMPHASIS> </PARA>
+
+<PARA>
+    <ITEMIZEDLIST>
+
+      <LISTITEM><PARA><EMPHASIS>Código: N521 "  F1040 \ Federal estimated
+        tax, qrtrly"</EMPHASIS></PARA>
+
+        <PARA>Não aceita o campo de data e não importa os montantes 
+        individuais de pagamento, apenas o total. A data e montantes 
+        individuais de pagamento apenas interessam se tiver de calcular 
+        a penalização. (isto poderá ser um melhoramento do TurboTax)
+        </PARA></LISTITEM>  
+      <LISTITEM><PARA><EMPHASIS>Código: N460 "  W-2 \ Salário ou Honorários,
+        próprio"</EMPHASIS></PARA>
+
+  <PARA><EMPHASIS>Código: N506 "  W-2 \ Salário ou Honorários, conjuge"
+  </EMPHASIS></PARA>
+
+        <PARA>e outros códigos relacionados.</PARA>
+
+  <PARA>Apenas informação de um emprego pode ser importada.
+         </PARA></LISTITEM>
+
+    </ITEMIZEDLIST></PARA>
+
+<PARA><EMPHASIS>TurboTax 1999, 2000</EMPHASIS> </PARA>
+
+<PARA>
+    <ITEMIZEDLIST>
+      <LISTITEM><PARA><EMPHASIS>Código: N521 "  F1040 \ Federal estimated
+        tax, qrtrly"</EMPHASIS></PARA>
+
+        <PARA>Não aceita as datas fora do ano fiscal. Isto é um problema 
+        para o último pagamento que é devido a 15 de Jan. O GnuCash altera 
+        a data do último pagamento para 31 Dez. O utilizador terá de ajustar 
+        esta questão após a importação. A data apenas interessa caso tenha 
+        de calcular a penalização.
+        </PARA></LISTITEM>
+    </ITEMIZEDLIST></PARA>
+
+<PARA><EMPHASIS>Formato de Exportação de Impostos TXF</EMPHASIS> </PARA>
+
+<PARA>
+    <ITEMIZEDLIST>
+      <LISTITEM><PARA><EMPHASIS>Códigos Duplicados</EMPHASIS></PARA>
+
+        <PARA>Muitos dos códigos não deveriam surgir mais que uma vez.
+        GnuCash emite uma mensagem de erro se detectar isto, mas continuará
+        a exportar os dados. Estes dados duplicados não são geridos da mesma 
+        forma pelo TaxCut e pelo TurboTax.</PARA>
+
+        <ITEMIZEDLIST>
+          <LISTITEM><PARA><EMPHASIS>TurboTax</EMPHASIS></PARA>
+
+          <PARA>Soma os códigos duplicados. por ex., emprego um e emprego dois 
+          são somados como se fossem um só.</PARA>
+          </LISTITEM>  
+
+          <LISTITEM><PARA><EMPHASIS>TaxCut</EMPHASIS></PARA>
+
+          <PARA>Mantém apenas o <EMPHASIS>ÚLTIMO</EMPHASIS> dos códigos duplicados. 
+          Por ex., o emprego um é ignorado e o emprego dois é mantido.
+          </PARA>
+          </LISTITEM>  
+        </ITEMIZEDLIST>
+
+      </LISTITEM>  
+
+    </ITEMIZEDLIST></PARA>
+</sect1>
+</ARTICLE>
+
+<!-- Local variables: -->
+<!-- sgml-parent-document: "gnucash.sgml" -->
+<!-- End: -->

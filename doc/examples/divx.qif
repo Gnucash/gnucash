@@ -1,0 +1,83 @@
+!Option:AutoSwitch
+!Account
+NChecking
+DOur checking
+TBank
+^
+!Type:Bank 
+D3/29' 0
+Pthis is an opening balance. no really.
+T1000.00
+CX
+L[Checking]
+^
+D3/29' 0
+U36.00
+T36.00
+CX
+L[Schwab]
+^
+D6/22/95
+U938.19
+T938.19
+CX
+PGPay
+LG Inc:gross
+SG Inc:gross
+$1,833.69
+SG Inc:fedtax
+$-297.48
+SG Inc:ficatax
+$-113.69
+SG Inc:meditax
+$-26.58
+SG Inc:401K
+$-274.93
+S[G Stock]
+$-183.29
+SG Inc:misc
+$-17.30
+S[G Stock]
+$17.77
+^
+!Account
+NG Stock
+Dstock
+TOth A
+^
+!Type:Oth A
+D6/22/95
+U165.52
+T165.52
+PGPay
+L[Checking]
+^
+!Account
+NSchwab
+DSchwab
+TInvst
+^
+!Type:Invst
+D1/11' 0
+NDivX
+YAdobe
+CR
+U0.75
+T0.75
+L[Checking]
+$0.75
+^
+D2/28' 0
+NIntIncX
+YSchwab M Mkt
+U62.93
+T62.93
+L[Checking]
+$62.93
+^
+D3/29' 0
+NMiscIncX
+U36.00
+T36.00
+LC Inc:fedtax|[Schwab]
+^

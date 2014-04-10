@@ -1,0 +1,145 @@
+
+<ARTICLE ID="XACC-EURO">
+<ARTHEADER>
+<TITLE></TITLE>
+<TITLE>GnuCash y el EURO</TITLE>
+</ARTHEADER>
+<SECT1>
+<TITLE> GnuCash y el EURO</TITLE>
+<PARA>    </PARA>
+<SECT2>
+<TITLE>Introducción</TITLE>
+<PARA>    </PARA>
+<PARA>El 1 de Enero de 1999, los once países de la Unión Europea
+    formaron una unión económica y monetaria (EMU) y empezaron
+    por utilizar un única moneda - el euro. Estos países fijaron
+    el ratio de intercambio de sus monedas nacionales con el euro
+    y se intercambian la nueva moneda.
+
+    </PARA>
+<PARA>Sin embargo, los billetes y monedas de euro no estarán disponibles
+    hasta el 1 de Enero del 2002. Incluso entonces, los billetes
+    de moneda antigua (francos franceses, marcos alemanes, pesetas, etc...)
+    continuarán circulando. Pero en ley son parte del euro. Su valor
+    con respecto al euro es completamente fijo. Todo tipo de
+    transacciones sin intercambio de billetes como cheques o
+    transferencias bancarias son posibles en euros.
+
+    </PARA>
+<PARA>Puede encontrar más información sobre el euro en: <ULINK URL="http://europa.eu.int/euro">http://europa.eu.int/euro</ULINK> .
+
+    </PARA>
+</SECT2>
+<SECT2>
+<TITLE>Países Miembros del EME  y Ratio de Intercambio</TITLE>
+<PARA>    <ANCHOR ID="EUROISOCURR"> 
+
+    </PARA>
+<PARA>La siguiente tabla muestra los países miembros del EMU y los
+    respectivos ratios de intercambio del euro con sus antiguas
+    monedas nacionales. Se espera que más países se unan al EMU
+    más adelante.
+
+    <TABLE>
+<TITLE>Ratio de Intercambio con el EURO</TITLE>
+<TGROUP COLS="4">
+<THEAD>
+<ROW>
+<ENTRY>País</ENTRY>
+<ENTRY>Código ISO</ENTRY>
+<ENTRY>Descripción Completa</ENTRY>
+<ENTRY>Ratio de Intercambio</ENTRY>
+</ROW>
+</THEAD>
+<TBODY>
+<ROW>
+<ENTRY>        </ENTRY>
+</ROW>
+<ROW>
+<ENTRY>Austria</ENTRY>
+<ENTRY>ATS</ENTRY>
+<ENTRY>Chelín Austriaco</ENTRY>
+<ENTRY>1 euro = 13.7603 S</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>Bélgica</ENTRY>
+<ENTRY>BEF</ENTRY>
+<ENTRY>Franco Belga</ENTRY>
+<ENTRY>1 euro = 40.3399 bfrs</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>Finlandia</ENTRY>
+<ENTRY>FIM</ENTRY>
+<ENTRY>Marco Finlandés</ENTRY>
+<ENTRY>1 euro = 5.94573 Fmk</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>Francia</ENTRY>
+<ENTRY>FRF</ENTRY>
+<ENTRY>Franco Francés</ENTRY>
+<ENTRY>1 euro = 6.55957 FF</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>Alemania</ENTRY>
+<ENTRY>DEM</ENTRY>
+<ENTRY>Marco Alemán</ENTRY>
+<ENTRY>1 euro = 1.95538 DM</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>Irlanda</ENTRY>
+<ENTRY>IEP</ENTRY>
+<ENTRY>Libra Irlandesa</ENTRY>
+<ENTRY>1 euro = 0.787564 Ir. &pound;</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>Italia</ENTRY>
+<ENTRY>ITL</ENTRY>
+<ENTRY>Lira Italiana</ENTRY>
+<ENTRY>1 euro = 1936.27 Liras</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>Luxemburgo</ENTRY>
+<ENTRY>LUF</ENTRY>
+<ENTRY>Franco Luxemburgués</ENTRY>
+<ENTRY>1 euro = 40.3399 lfrs</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>Holanda</ENTRY>
+<ENTRY>NLG</ENTRY>
+<ENTRY>Guilda Holandesa</ENTRY>
+<ENTRY>1 euro = 2.20371 hfl</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>Portugal</ENTRY>
+<ENTRY>PTE</ENTRY>
+<ENTRY>Escudo Portugués</ENTRY>
+<ENTRY>1 euro = 200.482 Esc</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>España</ENTRY>
+<ENTRY>ESP</ENTRY>
+<ENTRY>Peseta Española</ENTRY>
+<ENTRY>1 euro = 166.386 Ptas</ENTRY>
+</ROW>
+</TBODY>
+</TGROUP>
+</TABLE>
+
+    </PARA>
+</SECT2>
+<SECT2>
+<TITLE>soporte del EURO en GnuCash</TITLE>
+<PARA>    </PARA>
+<PARA>Puede activar el soporte del EURO en GnuCash en la categoría
+    internacional del diálogo de <LINK LINKEND="XACC-PREFERENCES">configuración</LINK>.
+    Si la configuración local de su sistema establece una de las
+    <LINK LINKEND="EUROISOCURR">monedas de los países miembros del EMU</LINK>, el soporte del euro
+    se activa por defecto.
+
+    </PARA>
+<PARA>FIXME: Documentación actual con algunas imágenes y demás
+
+</PARA>
+</SECT2>
+</SECT1>
+</ARTICLE>

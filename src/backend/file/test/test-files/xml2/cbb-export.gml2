@@ -1,0 +1,418 @@
+<?xml version="1.0"?>
+<gnc-v2>
+<gnc:count-data cd:type="account">12</gnc:count-data>
+<gnc:count-data cd:type="transaction">9</gnc:count-data>
+<gnc:account version="2.0.0">
+  <act:name>cbb export</act:name>
+  <act:id type="guid">504a8f7f0ff8e1e53c6df8b1bb714c47</act:id>
+  <act:type>BANK</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </act:currency>
+  <act:currency-scu>100</act:currency-scu>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Gifts</act:name>
+  <act:id type="guid">8cd43c12f1dc32ea8a51ec997fcf35ef</act:id>
+  <act:type>INCOME</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </act:currency>
+  <act:currency-scu>100</act:currency-scu>
+  <act:description>Gift Expenses</act:description>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Reimbursements</act:name>
+  <act:id type="guid">4f502fe69043087c2186dcac27cc56bf</act:id>
+  <act:type>INCOME</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </act:currency>
+  <act:currency-scu>100</act:currency-scu>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Salary</act:name>
+  <act:id type="guid">077894556323647344da06d5f5fe6449</act:id>
+  <act:type>INCOME</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </act:currency>
+  <act:currency-scu>100</act:currency-scu>
+  <act:description>Salary Income</act:description>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Clothing</act:name>
+  <act:id type="guid">37539261eaf4bcf82c17eba0a5bf5949</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </act:currency>
+  <act:currency-scu>100</act:currency-scu>
+  <act:description>Clothing</act:description>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Credit Card</act:name>
+  <act:id type="guid">3b09243ca91d85c7b2984dd5f2490701</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </act:currency>
+  <act:currency-scu>100</act:currency-scu>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Dining-Out</act:name>
+  <act:id type="guid">cd6d68365b6c9f80e4b68a552b71950b</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </act:currency>
+  <act:currency-scu>100</act:currency-scu>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Entertainment</act:name>
+  <act:id type="guid">47585dff7df1969ea961e4b1a7fa9f27</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </act:currency>
+  <act:currency-scu>100</act:currency-scu>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Household</act:name>
+  <act:id type="guid">46d28144c136899835833bca6cda4e52</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </act:currency>
+  <act:currency-scu>100</act:currency-scu>
+  <act:description>Household Misc. Exp</act:description>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Personal Cash</act:name>
+  <act:id type="guid">98e07d070ecce19416db949e9124a45d</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </act:currency>
+  <act:currency-scu>100</act:currency-scu>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Telephone</act:name>
+  <act:id type="guid">72e555d138c8a1e7c5e8c7953a54a55e</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </act:currency>
+  <act:currency-scu>100</act:currency-scu>
+  <act:description>Telephone Expense</act:description>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Textbooks</act:name>
+  <act:id type="guid">224840878e17f4f7c6a5d6418747cafa</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </act:currency>
+  <act:currency-scu>100</act:currency-scu>
+</gnc:account>
+<gnc:transaction version="2.0.0">
+  <trn:id type="guid">9d2c18d552ab4a405bee914ca188eb70</trn:id>
+  <trn:num>323</trn:num>
+  <trn:date-posted>
+    <ts:date>1997-06-23 00:00:00 -0400</ts:date>
+  </trn:date-posted>
+  <trn:date-entered>
+    <ts:date>2001-03-26 15:37:09 -0500</ts:date>
+    <ts:ns>256981000</ts:ns>
+  </trn:date-entered>
+  <trn:description>Eurest Dining</trn:description>
+  <trn:splits>
+    <trn:split>
+      <split:id type="guid">d62de62239db355ba3597b6a68722cbf</split:id>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>435/100</split:value>
+      <split:quantity>435/100</split:quantity>
+      <split:account type="guid">cd6d68365b6c9f80e4b68a552b71950b</split:account>
+    </trn:split>
+    <trn:split>
+      <split:id type="guid">7cbe9fae8a6a7b5f53fb233e6cb19490</split:id>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>-435/100</split:value>
+      <split:quantity>-435/100</split:quantity>
+      <split:account type="guid">504a8f7f0ff8e1e53c6df8b1bb714c47</split:account>
+    </trn:split>
+  </trn:splits>
+</gnc:transaction>
+<gnc:transaction version="2.0.0">
+  <trn:id type="guid">7b855de3a9f29605b1d5e0cb63d4b4cf</trn:id>
+  <trn:num>331</trn:num>
+  <trn:date-posted>
+    <ts:date>1997-07-12 00:00:00 -0400</ts:date>
+  </trn:date-posted>
+  <trn:date-entered>
+    <ts:date>2001-03-26 15:37:09 -0500</ts:date>
+    <ts:ns>251045000</ts:ns>
+  </trn:date-entered>
+  <trn:description>Sally Wood</trn:description>
+  <trn:splits>
+    <trn:split>
+      <split:id type="guid">2c298a4d03fbe7cf10a416d06f83abc0</split:id>
+      <split:memo>VISA Bill - June</split:memo>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>51343/100</split:value>
+      <split:quantity>51343/100</split:quantity>
+      <split:account type="guid">3b09243ca91d85c7b2984dd5f2490701</split:account>
+    </trn:split>
+    <trn:split>
+      <split:id type="guid">31e772f55b364e2cdef8e02e12287e1f</split:id>
+      <split:memo>VISA Bill - June</split:memo>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>-51343/100</split:value>
+      <split:quantity>-51343/100</split:quantity>
+      <split:account type="guid">504a8f7f0ff8e1e53c6df8b1bb714c47</split:account>
+    </trn:split>
+  </trn:splits>
+</gnc:transaction>
+<gnc:transaction version="2.0.0">
+  <trn:id type="guid">1964523ed04475405c7f841548c0ae75</trn:id>
+  <trn:num>ATM</trn:num>
+  <trn:date-posted>
+    <ts:date>1997-09-20 00:00:00 -0400</ts:date>
+  </trn:date-posted>
+  <trn:date-entered>
+    <ts:date>2001-03-26 15:37:09 -0500</ts:date>
+    <ts:ns>252071000</ts:ns>
+  </trn:date-entered>
+  <trn:description>Withdrawal</trn:description>
+  <trn:splits>
+    <trn:split>
+      <split:id type="guid">fe76f038b9d07bc9a47c1824f9752f68</split:id>
+      <split:memo>Claremont</split:memo>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>4000/100</split:value>
+      <split:quantity>4000/100</split:quantity>
+      <split:account type="guid">98e07d070ecce19416db949e9124a45d</split:account>
+    </trn:split>
+    <trn:split>
+      <split:id type="guid">bc707d062a5900ebb3ca4e313a7d0e96</split:id>
+      <split:memo>Claremont</split:memo>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>-4000/100</split:value>
+      <split:quantity>-4000/100</split:quantity>
+      <split:account type="guid">504a8f7f0ff8e1e53c6df8b1bb714c47</split:account>
+    </trn:split>
+  </trn:splits>
+</gnc:transaction>
+<gnc:transaction version="2.0.0">
+  <trn:id type="guid">d32f7312b4970cde93b1814a69604c72</trn:id>
+  <trn:num>ATM</trn:num>
+  <trn:date-posted>
+    <ts:date>1997-09-29 00:00:00 -0400</ts:date>
+  </trn:date-posted>
+  <trn:date-entered>
+    <ts:date>2001-03-26 15:37:09 -0500</ts:date>
+    <ts:ns>258296000</ts:ns>
+  </trn:date-entered>
+  <trn:description>Deposit</trn:description>
+  <trn:splits>
+    <trn:split>
+      <split:id type="guid">937572eea8894521984a6364b0a98128</split:id>
+      <split:memo>HMC Orientation -97</split:memo>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>-5042/100</split:value>
+      <split:quantity>-5042/100</split:quantity>
+      <split:account type="guid">4f502fe69043087c2186dcac27cc56bf</split:account>
+    </trn:split>
+    <trn:split>
+      <split:id type="guid">6e99285a28ef72ff06bc0e61a7af13d1</split:id>
+      <split:memo>AE paycheck</split:memo>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>-14300/100</split:value>
+      <split:quantity>-14300/100</split:quantity>
+      <split:account type="guid">077894556323647344da06d5f5fe6449</split:account>
+    </trn:split>
+    <trn:split>
+      <split:id type="guid">18927d376a09bad9b06565df5402518d</split:id>
+      <split:memo>HMC Orientation -97</split:memo>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>19342/100</split:value>
+      <split:quantity>19342/100</split:quantity>
+      <split:account type="guid">504a8f7f0ff8e1e53c6df8b1bb714c47</split:account>
+    </trn:split>
+  </trn:splits>
+</gnc:transaction>
+<gnc:transaction version="2.0.0">
+  <trn:id type="guid">6622109f3b62c5ccf1a95918c7a1c248</trn:id>
+  <trn:num>276</trn:num>
+  <trn:date-posted>
+    <ts:date>1997-09-30 00:00:00 -0400</ts:date>
+  </trn:date-posted>
+  <trn:date-entered>
+    <ts:date>2001-03-26 15:37:09 -0500</ts:date>
+    <ts:ns>253063000</ts:ns>
+  </trn:date-entered>
+  <trn:description>TCI</trn:description>
+  <trn:splits>
+    <trn:split>
+      <split:id type="guid">605eeca327a57a30af2ed3ff6518c174</split:id>
+      <split:memo>Cable - August</split:memo>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>1399/100</split:value>
+      <split:quantity>1399/100</split:quantity>
+      <split:account type="guid">47585dff7df1969ea961e4b1a7fa9f27</split:account>
+    </trn:split>
+    <trn:split>
+      <split:id type="guid">0c48c1184a392f5b95e998b4dca76ebc</split:id>
+      <split:memo>Cable - August</split:memo>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>-1399/100</split:value>
+      <split:quantity>-1399/100</split:quantity>
+      <split:account type="guid">504a8f7f0ff8e1e53c6df8b1bb714c47</split:account>
+    </trn:split>
+  </trn:splits>
+</gnc:transaction>
+<gnc:transaction version="2.0.0">
+  <trn:id type="guid">3048039143626c17d3109ff7fc37467e</trn:id>
+  <trn:num>277</trn:num>
+  <trn:date-posted>
+    <ts:date>1997-10-11 00:00:00 -0400</ts:date>
+  </trn:date-posted>
+  <trn:date-entered>
+    <ts:date>2001-03-26 15:37:09 -0500</ts:date>
+    <ts:ns>248714000</ts:ns>
+  </trn:date-entered>
+  <trn:description>AT&amp;T/063</trn:description>
+  <trn:splits>
+    <trn:split>
+      <split:id type="guid">eac0bf2d0950dedbaae474e0c1d4e085</split:id>
+      <split:memo>Phone Bill - September</split:memo>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>619/100</split:value>
+      <split:quantity>619/100</split:quantity>
+      <split:account type="guid">72e555d138c8a1e7c5e8c7953a54a55e</split:account>
+    </trn:split>
+    <trn:split>
+      <split:id type="guid">79e1478ef9dcd2b207b22b943283049a</split:id>
+      <split:memo>Phone Bill - September</split:memo>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>-619/100</split:value>
+      <split:quantity>-619/100</split:quantity>
+      <split:account type="guid">504a8f7f0ff8e1e53c6df8b1bb714c47</split:account>
+    </trn:split>
+  </trn:splits>
+</gnc:transaction>
+<gnc:transaction version="2.0.0">
+  <trn:id type="guid">8bf78f94bb539e8f904cc49ec7f99444</trn:id>
+  <trn:num>278</trn:num>
+  <trn:date-posted>
+    <ts:date>1997-10-11 00:00:00 -0400</ts:date>
+  </trn:date-posted>
+  <trn:date-entered>
+    <ts:date>2001-03-26 15:37:09 -0500</ts:date>
+    <ts:ns>249996000</ts:ns>
+  </trn:date-entered>
+  <trn:description>BofA</trn:description>
+  <trn:splits>
+    <trn:split>
+      <split:id type="guid">3743498b2f1c99256bde3d3160826579</split:id>
+      <split:memo>Wal-Mart</split:memo>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>4475/100</split:value>
+      <split:quantity>4475/100</split:quantity>
+      <split:account type="guid">46d28144c136899835833bca6cda4e52</split:account>
+    </trn:split>
+    <trn:split>
+      <split:id type="guid">c22bfdb9021873b31caedd002c22f036</split:id>
+      <split:memo>Fall 1997 - Huntley</split:memo>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>5330/100</split:value>
+      <split:quantity>5330/100</split:quantity>
+      <split:account type="guid">224840878e17f4f7c6a5d6418747cafa</split:account>
+    </trn:split>
+    <trn:split>
+      <split:id type="guid">d67f1387b0bb534372a80e168cb6e1b8</split:id>
+      <split:memo>Wal-Mart</split:memo>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>-9805/100</split:value>
+      <split:quantity>-9805/100</split:quantity>
+      <split:account type="guid">504a8f7f0ff8e1e53c6df8b1bb714c47</split:account>
+    </trn:split>
+  </trn:splits>
+</gnc:transaction>
+<gnc:transaction version="2.0.0">
+  <trn:id type="guid">4097ea8244e81a99d5862a7313e51ff8</trn:id>
+  <trn:num>279</trn:num>
+  <trn:date-posted>
+    <ts:date>1997-10-27 00:00:00 -0500</ts:date>
+  </trn:date-posted>
+  <trn:date-entered>
+    <ts:date>2001-03-26 15:37:09 -0500</ts:date>
+    <ts:ns>255798000</ts:ns>
+  </trn:date-entered>
+  <trn:description>Scripps College</trn:description>
+  <trn:splits>
+    <trn:split>
+      <split:id type="guid">30a555c9081c84934ca827f652c2e1d3</split:id>
+      <split:memo>Orchestra T-Shirt</split:memo>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>1000/100</split:value>
+      <split:quantity>1000/100</split:quantity>
+      <split:account type="guid">37539261eaf4bcf82c17eba0a5bf5949</split:account>
+    </trn:split>
+    <trn:split>
+      <split:id type="guid">a02cc758726391ec2c64e21d2188e987</split:id>
+      <split:memo>Orchestra T-Shirt</split:memo>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>-1000/100</split:value>
+      <split:quantity>-1000/100</split:quantity>
+      <split:account type="guid">504a8f7f0ff8e1e53c6df8b1bb714c47</split:account>
+    </trn:split>
+  </trn:splits>
+</gnc:transaction>
+<gnc:transaction version="2.0.0">
+  <trn:id type="guid">c1b75a304185a70beefd55f9f3b5cb17</trn:id>
+  <trn:num>283</trn:num>
+  <trn:date-posted>
+    <ts:date>1997-11-24 00:00:00 -0500</ts:date>
+  </trn:date-posted>
+  <trn:date-entered>
+    <ts:date>2001-03-26 15:37:09 -0500</ts:date>
+    <ts:ns>254099000</ts:ns>
+  </trn:date-entered>
+  <trn:description>West Dorm</trn:description>
+  <trn:splits>
+    <trn:split>
+      <split:id type="guid">ee024d6fed778265b1e6513d6ee7d8d4</split:id>
+      <split:memo>Dorm T-Shirts</split:memo>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>1500/100</split:value>
+      <split:quantity>1500/100</split:quantity>
+      <split:account type="guid">8cd43c12f1dc32ea8a51ec997fcf35ef</split:account>
+    </trn:split>
+    <trn:split>
+      <split:id type="guid">cd59b6089604201628093e13dfd4bced</split:id>
+      <split:memo>Dorm T-Shirts</split:memo>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>-1500/100</split:value>
+      <split:quantity>-1500/100</split:quantity>
+      <split:account type="guid">504a8f7f0ff8e1e53c6df8b1bb714c47</split:account>
+    </trn:split>
+  </trn:splits>
+</gnc:transaction>
+</gnc-v2>
+
+<!-- Local variables: -->
+<!-- mode: xml        -->
+<!-- End:             -->

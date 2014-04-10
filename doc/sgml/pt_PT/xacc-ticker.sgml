@@ -1,0 +1,295 @@
+<ARTICLE ID="XACC-TICKER">
+
+<ARTHEADER>
+<TITLE>Ticker de Acções</TITLE>
+</ARTHEADER>
+
+<SECT1 ID="XACC-STOCKTICKER">
+
+<TITLE>Preços de Acções e Símbolos do Ticker</TITLE>
+
+<PARA>O GnuCash disponibiliza um sistema de obtenção de cotações 
+algo rudimentar.
+Se uma <LINK LINKEND="STOCKACCT">conta de acções</LINK> do GnuCash 
+estiver correctamente configurada, e o computador estiver conectado à 
+Internet, o programa <APPLICATION>gnc-prices</APPLICATION> poderá ser 
+utilizado para carregar cotações de acções e outros papeis, a partir de 
+vários servidores na web, directamente para o GnuCash.
+</PARA>
+
+<PARA>Isto é o que tem a fazer:
+
+<ITEMIZEDLIST>
+  <LISTITEM>
+    <PARA>Crie uma conta e marque-a como sendo do tipo "Certificados 
+      de Aforro" ou "Acções".
+    </PARA>
+  </LISTITEM>
+  <LISTITEM>
+    <PARA>Introduza um símbolo de ticker válido na caixa denominada "Activo:"
+     </PARA>
+  </LISTITEM>
+  <LISTITEM>
+    <PARA>Seleccione uma fonte de cotações a partir do menu de selecção. De momento 
+    as fontes de cotações suportadas incluem o <EMPHASIS>Yahoo</EMPHASIS>,
+    <EMPHASIS>Yahoo Europa</EMPHASIS>, <EMPHASIS>Fidelity
+    Investments</EMPHASIS>, <EMPHASIS>T. Rowe Price</EMPHASIS>, o 
+    <EMPHASIS>Vanguard Group</EMPHASIS>, <EMPHASIS>the Australian
+    Stock Exchange</EMPHASIS> (ASX) e 
+    <EMPHASIS>TIAA-CREF</EMPHASIS>.  Note que o Yahoo disponibiliza 
+    cotações para muitos certificados <EMPHASIS>incluindo</EMPHASIS>
+    Fidelity, T.Rowe Price e Vanguard, e que os preços citados no 
+    Yahoo <EMPHASIS>deverão</EMPHASIS> ser identicos aos que podem ser 
+    encontrados noutras fontes (caso contrário, alguém anda a divulgar 
+    informação incorrecta!). Caso seleccione Yahoo Europa, deverá adicionar 
+    o código de mercado para o activo, tal como PA para Paris, BE para 
+    Berlim, etc. Exemplo: 12150.PA (um papel Peugeot no mercado de Paris).
+    </PARA>
+  </LISTITEM>
+  <LISTITEM>
+    <PARA>Assegure-se que a moeda da conta coincide com a da fonte para 
+    a acção que seleccionou. Isto significa:
+
+        <ITEMIZEDLIST>
+<LISTITEM>
+<PARA>Cotações da <EMPHASIS>Australian Stock Exchange</EMPHASIS>
+          (ASX - Bolsa Australiana) deverão estar em dólares Australianos (AUD).
+
+          </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Cotações do <EMPHASIS>Yahoo Europe</EMPHASIS> deverão estar em Euros
+          (ECU)
+
+          </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Cotações do <EMPHASIS>Yahoo</EMPHASIS>, <EMPHASIS>Fidelity
+      Investments</EMPHASIS>, <EMPHASIS>T. Rowe Price</EMPHASIS> 
+      e do <EMPHASIS>Vanguard
+      Group</EMPHASIS> deverão estar em dólares americanos (USD).
+        </PARA>
+</LISTITEM>
+</ITEMIZEDLIST>
+      
+    </PARA>
+</LISTITEM>
+</ITEMIZEDLIST>
+
+<note>
+<PARA>Note que a BVL não é suportada pelo Yahoo Europa.</PARA>
+</note>
+
+<TABLE>
+<TITLE>Lista de Códigos para os Mercados Europeus</TITLE>
+<TGROUP COLS="2">
+<THEAD>
+<ROW>
+<ENTRY>Código</ENTRY>
+<ENTRY>Mercado</ENTRY>
+</ROW>
+</THEAD>
+<TBODY>
+<ROW>
+<ENTRY>PA</ENTRY>
+<ENTRY>Paris</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>BC</ENTRY>
+<ENTRY>Barcelona</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>BE</ENTRY>
+<ENTRY>Berlim</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>BI</ENTRY>
+<ENTRY>Bilbao</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>BR</ENTRY>
+<ENTRY>Br&ecirc;men</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>CO</ENTRY>
+<ENTRY>Copenhaga</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>D</ENTRY>
+<ENTRY>Dusseldorf</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>F</ENTRY>
+<ENTRY>Frankfurt</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>H</ENTRY>
+<ENTRY>Hamburgo</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>HA</ENTRY>
+<ENTRY>Hanover</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>L</ENTRY>
+<ENTRY>Londres</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>MA</ENTRY>
+<ENTRY>Madrid</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>MC</ENTRY>
+<ENTRY>Madrid (M.C.)</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>MI</ENTRY>
+<ENTRY>Milão</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>MU</ENTRY>
+<ENTRY>Munique</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>O</ENTRY>
+<ENTRY>Oslo</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>ST</ENTRY>
+<ENTRY>Estocolmo</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>SG</ENTRY>
+<ENTRY>Estugarda</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>VA</ENTRY>
+<ENTRY>Valência</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>FX</ENTRY>
+<ENTRY>Xetra</ENTRY>
+</ROW>
+</TBODY>
+</TGROUP>
+</TABLE>
+
+    <TABLE>
+<TITLE>Pseudo-símbolos que podem ser utilizados para cotações TIAA-CREF</TITLE>
+<TGROUP COLS="2">
+<THEAD>
+<ROW>
+<ENTRY>Nome</ENTRY>
+<ENTRY>Pseudo-símbolo</ENTRY>
+</ROW>
+</THEAD>
+<TBODY>
+<ROW>
+<ENTRY>Acção</ENTRY>
+<ENTRY>CREFstok</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>Mercado Cambial</ENTRY>
+<ENTRY>CREFmony</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>Índice Activos</ENTRY>
+<ENTRY>CREFequi</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>Obrigação Indexada à Inflacção</ENTRY>
+<ENTRY>CREFinfb</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>Mercado Obrigacionista</ENTRY>
+<ENTRY>CREFbond</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>TIAA Imobiliário</ENTRY>
+<ENTRY>TIAAreal</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>Escolha Social (Social Choice)</ENTRY>
+<ENTRY>CREFsoci</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>Índice de Acções Teachers PA</ENTRY>
+<ENTRY>TIAAsndx</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>Activos Globais</ENTRY>
+<ENTRY>CREFglob</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>Selecção de Acções Teachers PA</ENTRY>
+<ENTRY>TIAAsele</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>Crescimento</ENTRY>
+<ENTRY>CREFgrow</ENTRY>
+</ROW>
+</TBODY>
+</TGROUP>
+</TABLE>
+
+</PARA>
+
+<PARA>Uma imagem simples é mostrada abaixo:
+<INLINEMEDIAOBJECT>
+<IMAGEOBJECT>
+<IMAGEDATA FILEREF="image/ticker-a.png">
+</IMAGEOBJECT>
+<TEXTOBJECT>
+<PHRASE>Diagrama Simples</PHRASE>
+</TEXTOBJECT>
+</INLINEMEDIAOBJECT>
+
+    </PARA>
+<PARA>Para actualizar os preços armazenados num ficheiro de conta gnucash, execute 
+    o comando de consola <APPLICATION>gnc-price</APPLICATION>, especificando o nome 
+    do ficheiro; por exemplo:
+<COMMAND>    gnc-prices minhascontas.xac</COMMAND>
+
+    </PARA>
+<PARA>Executar este comando irá imprimir várias mensagens de diagnóstico 
+    para o ecrã à medida que os dados são carregados. Apenas funcionará 
+    quando o computador estiver conectado à Internet. É possível funcionar 
+    em conjunto com firewalls e servidores proxy estilo masquerading.
+
+    </PARA>
+<PARA>O comando pode ser executado várias vezes no mesmo dia; no entanto, 
+    irá actualizar as contas no máximo uma vez com os mais recentes dados 
+    da sessão.
+
+    Assim, se o <APPLICATION>gnc-prices</APPLICATION> for executado na 
+    Sexta-Feira, Sábado, Domingo e Segunda-Feira, apenas duas entradas 
+    serão feitas: uma contendo os dados de Sexta-feira, e outra com os 
+    dados de Segunda-Feira, visto as execuções de Sábado e Domingo apenas 
+    devolverem as cotações de fecho de Sexta-feira.
+
+    </PARA>
+<PARA>Para impedir o <APPLICATION>gnc-prices</APPLICATION> de actualizar 
+    uma conta, deixando-o actualizar outra, simplesmente marque a fonte 
+    de cotações para essa conta como <SCREEN>(nenhuma)</SCREEN>. Pode faze-lo 
+    a partir da janela <GUIMENU>Editar Conta</GUIMENU>.
+
+    </PARA>
+<PARA>Após correr o <APPLICATION>gnc-prices</APPLICATION> durante uns dias, as 
+    suas contas começarão a ter a seguinte aparência:
+     <INLINEMEDIAOBJECT>
+<IMAGEOBJECT>
+<IMAGEDATA FILEREF="image/ticker-b.png">
+</IMAGEOBJECT>
+<TEXTOBJECT>
+<PHRASE>Últimas Listagens do Ticker</PHRASE>
+</TEXTOBJECT>
+</INLINEMEDIAOBJECT>
+
+
+</PARA>
+</SECT1>
+</ARTICLE>
+
+<!-- Local variables: -->
+<!-- sgml-parent-document: "gnucash.sgml" -->
+<!-- End: -->

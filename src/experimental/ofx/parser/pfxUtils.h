@@ -9,8 +9,8 @@
 // Written by Linas Vepstas March 1998
 
 
-#ifndef __PFX_UTILS_H__
-#define __PFX_UTILS_H__
+#ifndef PFX_UTILS_H
+#define PFX_UTILS_H
 
 #include <stdio.h>
 
@@ -37,4 +37,4 @@ char * pfxCapLower (char * str);
 }
 #endif
 
-#endif /* __PFX_UTILS_H__ */
+#endif /* PFX_UTILS_H */

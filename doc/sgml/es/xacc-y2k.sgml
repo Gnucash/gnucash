@@ -1,0 +1,42 @@
+<ARTICLE ID="XACC-Y2K">
+
+<ARTHEADER>
+<TITLE>Guía Y2K de GnuCash</TITLE>
+</ARTHEADER>
+
+<PARA>Las versiones 1.1.25 o posteriores de GnuCash almacenan todas
+las fechas como segundos y nanosegundos, donde los segundos se
+almacenan como enteros con signo de 64 bits. Esto es suficiente para
+almacenar fechas tanto del pasado distante como del futuro distante,
+tan lejos que permite almacenar hasta dos millones de años. </PARA>
+
+<PARA>El formato de archivo para la versión 1.1.25 y posteriores
+almacenan las fechas en el forma descrita.  </PARA>
+
+<PARA>Algunas rutinas internas utilizan el tipo <FUNCTION>time_t</FUNCTION>
+para expresar segundos. Observe que en la mayoría de sistemas operativos,
+este valor es una cantidad de 32 bits, y está limitado a valores de UNIX,
+desde Diciembre de 1901 a Enero de 2038. Es razonable esperar que 
+<FUNCTION>time_t</FUNCTION> pasará a utilizar valores de 64 bits con
+el tiempo.  </PARA>
+
+<PARA>Los archivos de "backup" y de "log" son marcados con fechas
+utilizando la función estándar de Unix <FUNCTION>ctime()</FUNCTION> que
+tiene un parámetro <FUNCTION>time_t</FUNCTION>. Por lo que,
+este mecanismo puede presentar problemas en el 2038, asumiendo que
+el sistema UNIX actual continuará en servicio entonces sin ninguna
+modificación.
+</PARA>
+
+<PARA>Observe que GnuCash también reconoce correctamente el 29 de
+Febrero del 2000 por ser año bisiesto, otro de los "problemas críticos
+con fechas" Y2K.  </PARA>
+
+<PARA>Todo esto sugiere que GnuCash puede pasar razonablemente
+bien por la transición al nuevo milenio, tanto si considera
+que tiene lugar en el 2000 o en el 2001...  </PARA>
+
+<PARA>Las característica Y2K se describen con mayor detalle en
+ <ULINK URL="http://www.ntlug.org/~cbbrowne/linuxy2k.html">Linux y el Año 2000.</ULINK> </PARA>
+
+</ARTICLE>

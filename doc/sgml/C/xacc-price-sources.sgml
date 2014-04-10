@@ -1,0 +1,251 @@
+<ARTICLE ID="xacc-price-sources">
+
+<ARTHEADER>
+<TITLE>Stock Ticker</TITLE>
+</ARTHEADER>
+<sect1>
+<TITLE>Price Sources for Automatic Price Updates</TITLE>
+
+<PARA>To get automatic price updates from the Internet for for 
+<LINK LINKEND="STOCKACCT">stock accounts</LINK>, you need to set
+the price source appropriately.  This can be done in the new
+account dialog box, when the account is created, or changed at
+any time by selecting the account in an account window, and chosing
+"edit account" from the main menu.  Both dialog boxes have a
+section called "Price Quote Source".
+</PARA>
+
+<para>To enable automatic price updates, do the following:</para>
+
+<ITEMIZEDLIST>
+  <LISTITEM>
+	    <para>
+	      Make sure the "get online quotes" check box is checked.
+	      
+	    </PARA>
+	  </LISTITEM>
+  <LISTITEM>
+    <PARA>Enter a valid ticker symbol in the text box marked "Security:"
+	  A ticker symbol is the code that identifies the stock or fund - 
+	  to take a familiar example, International Business Machines'
+	  ticker symbol is IBM, listed on the New York Stock Exchange.
+	  To take another example, McDonald's Corpororation is MCD.
+	</para>
+  </LISTITEM>
+  <LISTITEM>
+    <PARA>Select a quote source from the pull-down menu. Currently
+    supported quote sources include <EMPHASIS>Yahoo</EMPHASIS>,
+    <EMPHASIS>Yahoo Europe</EMPHASIS>, <EMPHASIS>Fidelity
+    Investments</EMPHASIS>, <EMPHASIS>T. Rowe Price</EMPHASIS>, the
+    <EMPHASIS>Vanguard Group</EMPHASIS>, <EMPHASIS>the Australian
+    Stock Exchange</EMPHASIS> (ASX) and
+    <EMPHASIS>TIAA-CREF</EMPHASIS>.  Note that Yahoo will provide
+    price quotes for many mutual funds <EMPHASIS>including</EMPHASIS>
+    Fidelity, T.Rowe Price and Vanguard, and that the quoted prices at
+    Yahoo <EMPHASIS>should</EMPHASIS> be identical to those that may
+    be found at the source sites (otherwise, somebody's reporting
+    wrong information!). If you choose Yahoo Europe, you should append
+    the market code for the security, such as PA for Paris, BE for
+    Berlin, etc. Example: 12150.PA (a Peugeot security in the Paris
+    market).  The table below lists the codes for the various markets.
+    </PARA>
+  </LISTITEM>
+  <LISTITEM>
+    <PARA>Ensure that the currency of the account matches the source
+    of the stock you have selected. This means:
+
+        <ITEMIZEDLIST>
+<LISTITEM>
+<PARA>Quotes from the <EMPHASIS>Australian Stock Exchange</EMPHASIS>
+          (ASX) should be in Australian dollars (AUD).
+
+          </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Quotes from <EMPHASIS>Yahoo Europe</EMPHASIS> should be in Euros
+          (ECU)
+
+          </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Quotes from <EMPHASIS>Yahoo</EMPHASIS>, <EMPHASIS>Fidelity
+      Investments</EMPHASIS>, <EMPHASIS>T. Rowe Price</EMPHASIS> 
+      and the <EMPHASIS>Vanguard
+      Group</EMPHASIS> should be in US Dollars (USD).
+        </PARA>
+</LISTITEM>
+	  </itemizedlist>
+	</para>
+      </listitem>
+
+<listitem>      
+<para>Select the correct timezone setting (FIXME: WHAT IS THE CORRECT
+TIMEZONE SETTING???)
+	      </para></listitem>
+	</ITEMIZEDLIST>
+
+<note>
+<para>Instructions for updating prices are found in the documentation
+on the <link linkend="xacc-price-editor">price editor</link>.
+</para>
+</note>
+
+
+    <TABLE>
+<TITLE>Code List for European Markets</TITLE>
+<TGROUP COLS="2">
+<THEAD>
+<ROW>
+<ENTRY>Code</ENTRY>
+<ENTRY>Market</ENTRY>
+</ROW>
+</THEAD>
+<TBODY>
+<ROW>
+<ENTRY>PA</ENTRY>
+<ENTRY>Paris</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>BC</ENTRY>
+<ENTRY>Barcelona</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>BE</ENTRY>
+<ENTRY>Berlin</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>BI</ENTRY>
+<ENTRY>Bilbao</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>BR</ENTRY>
+<ENTRY>Br&ecirc;me</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>CO</ENTRY>
+<ENTRY>Copenhagen</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>D</ENTRY>
+<ENTRY>Dusseldorf</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>F</ENTRY>
+<ENTRY>Frankfurt</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>H</ENTRY>
+<ENTRY>Hamburg</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>HA</ENTRY>
+<ENTRY>Hanover</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>L</ENTRY>
+<ENTRY>London</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>MA</ENTRY>
+<ENTRY>Madrid</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>MC</ENTRY>
+<ENTRY>Madrid (M.C.)</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>MI</ENTRY>
+<ENTRY>Milan</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>MU</ENTRY>
+<ENTRY>Munich</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>O</ENTRY>
+<ENTRY>Oslo</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>ST</ENTRY>
+<ENTRY>Stockholm</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>SG</ENTRY>
+<ENTRY>Stuttgart</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>VA</ENTRY>
+<ENTRY>Valence</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>FX</ENTRY>
+<ENTRY>Xetra</ENTRY>
+</ROW>
+</TBODY>
+</TGROUP>
+</TABLE>
+
+    <TABLE>
+<TITLE>Pseudo-symbols that can be used for TIAA-CREF quotes</TITLE>
+<TGROUP COLS="2">
+<THEAD>
+<ROW>
+<ENTRY>Name</ENTRY>
+<ENTRY>Pseudo-symbol</ENTRY>
+</ROW>
+</THEAD>
+<TBODY>
+<ROW>
+<ENTRY>Stock</ENTRY>
+<ENTRY>CREFstok</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>Money Market</ENTRY>
+<ENTRY>CREFmony</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>Equity Index</ENTRY>
+<ENTRY>CREFequi</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>Inflation-Linked Bond</ENTRY>
+<ENTRY>CREFinfb</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>Bond Market</ENTRY>
+<ENTRY>CREFbond</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>TIAA Real Estate</ENTRY>
+<ENTRY>TIAAreal</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>Social Choice</ENTRY>
+<ENTRY>CREFsoci</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>Teachers PA Stock Index</ENTRY>
+<ENTRY>TIAAsndx</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>Global Equities</ENTRY>
+<ENTRY>CREFglob</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>Teachers PA Select Stock</ENTRY>
+<ENTRY>TIAAsele</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>Growth</ENTRY>
+<ENTRY>CREFgrow</ENTRY>
+</ROW>
+</TBODY>
+</TGROUP>
+</TABLE>
+
+</SECT1>
+</ARTICLE>
+
+<!-- Local variables: -->
+<!-- sgml-parent-document: "gnucash.sgml" -->
+<!-- End: -->

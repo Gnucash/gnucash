@@ -4,6 +4,8 @@
 <TITLE>Creating a "commodity"</TITLE>
 </ARTHEADER>
 
+    <sect1>
+      <title></title>
 <PARA>Gnucash represents national currencies, stocks, mutual funds,
 and all other tradable commodities using a unified framework.  In
 this dialog, you will specify the properties of a new commodity. 
@@ -16,7 +18,7 @@ name such as "US Dollars" or "IBM Common Stock". </para>
 ticker symbol (for stocks), ISO currency symbol (for national
 currencies), or other unique abbreviation for the commodity.  If the
 commodity is traded on any public exchange, it is important to use the
-same identifier used on that exchange.
+same identifier used on that exchange. </para>
 
 <para>The <emphasis>type</emphasis> of a commodity is the grouping or
 namespace in which it exists.  For example, national currencies are of
@@ -43,4 +45,9 @@ example, stock ownership may be reckoned to 1/1000 of a share by some
 brokerage houses, though actual transactions in the stock are in
 integer numbers of shares (the fractional share ownership is an "on
 paper" accounting trick of the brokerage house).</para>
+    </sect1>
 </ARTICLE>
+
+<!-- Local variables: -->
+<!-- sgml-parent-document: "gnucash.sgml" -->
+<!-- End: -->

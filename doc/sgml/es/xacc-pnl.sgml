@@ -1,0 +1,22 @@
+<ARTICLE ID="XACC-PNL">
+<ARTHEADER>
+<TITLE>Estado de Pérdidas y Beneficios</TITLE>
+</ARTHEADER>
+
+<PARA>    <INLINEMEDIAOBJECT>
+<IMAGEOBJECT>
+<IMAGEDATA FILEREF="image/report-pnl.png">
+</IMAGEOBJECT>
+</INLINEMEDIAOBJECT> 
+
+    </PARA>
+<PARA>Este listado totaliza sus datos de entradas y
+    gastos.
+
+    </PARA>
+<PARA>Puede especificar el periodo contable para el listado
+    utilizando el botón "parámetros" de la barra de herramientas.
+
+</PARA>
+
+</ARTICLE>

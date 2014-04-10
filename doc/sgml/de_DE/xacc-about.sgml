@@ -1,0 +1,1058 @@
+<article id="xacc-about">
+
+<artheader>
+<title>Über GnuCash</title>
+</artheader>
+
+<sect1>
+<title>Einleitung</title>
+
+<para>GnuCash ist eine Programm, mit dem Sie Ihre persönlichen
+Finanzen verwalten können. Um sofort zu beginnen, lesen Sie einfach die 
+<link linkend="xacc-quickstart">Schnelleinführung</link>. Falls Sie
+GnuCash bereits in der Version 1.4 kannten, wird die Lektüre von <link
+linkend="xacc-whats-new">Was ist neu in GnuCash 1.6</link> empfohlen.
+
+Weitere Informationen über die vielfältigen Funktionen von GnuCash
+sind auf der <link linkend="xacc-features">Funktionenübersicht </link>
+zu finden. Hinweis: Alle soeben genannten Seiten wurden ganz frisch
+ins Deutsche übersetzt, aber alle anderen Seiten des Handbuchs sind
+zur Zeit leider nur in Englisch erhältlich.
+</para>
+</sect1>
+
+<sect1 id="xacc-versioning">
+<title>Versioning (english)</title>
+
+<para>The versioning scheme for GnuCash parallels that of the
+    Linux kernel, where "even" sub-versions indicate versions that
+    are intended to be stable, only seeing maintenance to fix bugs,
+    and "odd" sub-versions indicate an "experimental" stream that
+    seeks to add enhancement.
+    The latest stable release is 1.4.x; if you don't intend to
+    do development work, you should be using either this version,
+    or an older stable version. These versions are fairly stable,
+    with all currently known bugs fixed.
+    The present "experimental" stream is gnucash-1.5.x, which is
+    now almost at beta-test stage.  This is the version you are
+    using right now, obviously!   If you are using this version
+    with real data, PLEASE MAKE BACKUPS REGULARLY!
+
+    Once the 1.5.x series stabilizes, the next stable series
+    will be 1.6.x.
+
+ </para>
+<para>If you wish to "hack" on the experimental version, you should
+    first start by reading through the <ulink url="http://linas.org/linux/xacc/projects.html">Project Goals</ulink>
+    page in order to get some perspective on the overall design.
+
+ </para>
+</sect1>
+
+<sect1 id="xacc-developers">
+<title>Lead Developers (english)</title>
+<para>    <glosslist>
+<glossentry>
+<glossterm><email>rclark@hmc.edu</email> Robin Clark</glossterm>
+<glossdef>
+<para>wrote the original <application>X-Accountant</application> in
+    Motif as a school project, taking it to version 0.9 by October
+    1997.  Although every single
+    line of his code has been re-written, his name appears as a
+    credit in almost every file.  Such is the magic of copyrights.
+</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>linas@linas.org</email> Linas Vepstas</glossterm>
+<glossdef>
+<para>liked what he saw: the GUI was slick, the code was
+      documented and well structured, and it was all GPL'ed. And so he
+      re-wrote it: adding cell-widgets to XbaeMatrix, so that the
+      combobox and arrows would make an even slicker GUI, rewrote the
+      <application>X-Accountant</application> internals to add
+      double-entry, an account hierarchy, split out a transaction
+      mini-engine, add support for stocks, and spiffed up the help
+      menus. That was version 1.0 as of January 1998. For
+      version 1.1 &amp; 1.2, the engine was expanded and refined, and the
+      register window code completely redesigned and made mostly
+      Motif-(and GUI-)independent. 
+    Linas is now active with Gnumatic Incorporated, a company formed to
+    enhance and support GnuCash for everyone, from home desktop users
+    to commercial and professional accountants.
+</para>
+
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>jcollins@gnucash.org</email> Jeremy
+      Collins</glossterm>
+<glossdef>
+<para>publicized the <application>GnoMoney</application> project widely
+      and broadly, and then changed its name to
+      <application>GnuCash</application>. 
+      (Actually, put the selection
+      of the name up to popular vote.  Democracy is not
+      a good way to pick names.)
+      Jeremy registered the domain name, and created and maintained
+      the gnucash.org web site for years,
+      and got the initial GTK/gnome code working. The newest 
+      website design is Jeremy's as well. 
+      </para>
+
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>rlb@cs.utexas.edu</email> Rob Browning</glossterm>
+<glossdef>
+
+<para>abused everyone for not using Perl, and then after we added Perl
+support, dumped Perl in favor of <link linkend="Guile"> Guile</link> /
+<link linkend="Scheme"> Scheme </link> support.  Rob built the build
+infrastructure, hacked the gtk code, and is whacking the file format.
+Also, the re-write of reports and statement downloading in <link
+linkend="scheme"> Scheme </link>, the <link linkend="gwrap"> g-wrap
+</link> guile wrapper, and the user preferences.
+</para>
+
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>dave@krondo.com</email> Dave Peticolas</glossterm>
+<glossdef>
+<para>hacks obsessively on GnuCash. But he can stop anytime he
+      wants to. Really.
+      (As he is now the gatekeeper of the GnuCash CVS tree, be nice to him,
+      or he may decide to stop hacking in the middle of your patch).
+      </para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>grib@billgribble.com</email> Bill
+      Gribble</glossterm>
+<glossdef>
+<para>
+    is not shy, or softly spoken.  So don't be shy if you find a bug in
+    his code: QIF import, query API and transaction search, check-printing,
+    commodity and currency support, gtkhtml integration and report printing.
+    </para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>rgmerk@mira.net</email> Robert Graham
+    Merkel</glossterm>
+<glossdef>
+<para>
+   extensive work on reports and reporting infrastructure,
+   gnome GUI work, and user preferences.
+   </para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>dres@debian.org</email>James LewisMoss</glossterm>
+<glossdef>
+<para>
+   design doc patches, XML refactoring, 
+   automated test suite, new file hierarchy import.
+   </para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>stimming@uclink.berkeley.edu</email>Christian
+   Stimming</glossterm>
+<glossdef>
+<para>
+   is a report-generating monster. He's been on of the largest
+   contributors to the current report infrastructure, creating
+   many of the important reports.
+   </para>
+</glossdef>
+</glossentry>
+
+</glosslist>
+
+</para>
+</sect1>
+
+<sect1 id="xacc-contributors">
+<title>Other Contributors (english)</title>
+
+<para>The <emphasis>cast of thousands</emphasis> includes:
+
+<glosslist>
+
+<glossentry>
+<glossterm><email>arensb@cfar.umd.edu</email> Andrew
+      Arensburger</glossterm>
+<glossdef>
+<para>for FreeBSD and other patches</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>matt_armstrong@bigfoot.com</email> Matt
+      Armstrong</glossterm>
+<glossdef>
+<para>for misc fixes</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>warlord@MIT.EDU</email> Derek
+      Atkins</glossterm>
+<glossdef>
+<para>build system patch, rpc backend</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>fred@moremagic.com</email> Fred Baube</glossterm>
+<glossdef>
+<para>for attempted Java port/MoneyDance</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>dennisb@cs.chalmers.se</email> Dennis
+      Bj&ouml;rklund</glossterm>
+<glossdef>
+<para>Swedish translation</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>bojsen@worldnet.att.net</email> Per
+      Bojsen</glossterm>
+<glossdef>
+<para>several core dump fixes</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>tboldt@attglobal.net</email> Terry Boldt
+      </glossterm>
+<glossdef>
+<para>financial calculator and expression parser</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><ulink url="simon.britnell@peace.com">Simon
+      Britnell</ulink></glossterm>
+<glossdef>
+<para>patch to RPM spec</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><ulink url="http://www.hex.net/~cbbrowne">Christopher B.
+      Browne</ulink></glossterm>
+<glossdef>
+<para>for perl stock scripts, Guile-based QIF import code, lots
+      of changes to English documentation, and lots of guile
+      code</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>conrad@mail.watersprite.com.au</email> Conrad
+      Canterford</glossterm>
+<glossdef>
+<para>register bug fix</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>wwc@wwcnet.nu</email> Bill
+      Carlson</glossterm>
+<glossdef>
+<para>performance improvements</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>carol@gnumatic.com</email> Carol
+      Champagne</glossterm>
+<glossdef>
+<para>documentation & a patient GUI usability critic</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>grahamc@zeta.org.au</email> Graham
+      Chapman</glossterm>
+<glossdef>
+<para>for the xacc-rpts addon package</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>georgec@sco.com</email> George Chen</glossterm>
+<glossdef>
+<para>for MS-Money QIF support</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>china@thewrittenword.com</email>Albert
+      Chin-A-Young</glossterm>
+<glossdef>
+<para>configure.in patch</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>kenneth@gnome.org</email>Kenneth
+Christiansen</glossterm>
+<glossdef>
+<para>Danish translation</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>jcollins@gnucash.org</email> Jeremey
+      Collins</glossterm>
+<glossdef>
+<para>for GnoMoney and GTK port</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>mcondell@bbn.com</email> Matthew
+      Condell</glossterm>
+<glossdef>
+<para>FreeBSD patch</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>pcondon@rackspace.com</email> Patrick
+      Condron</glossterm>
+<glossdef>
+<para>for webserver and T1 connection.</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>raphael.dechenaux@worldonline.fr</email> Raphael
+      Dechenaux</glossterm>
+<glossdef>
+<para>register patch</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>Ciaran.Deignan@bull.net</email> Ciaran
+      Deignan</glossterm>
+<glossdef>
+<para>for AIX binary version</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>gjditchfield@acm.org</email> Glen
+      Ditchfield</glossterm>
+<glossdef>
+<para>updated documentation</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>tyson@tyse.net</email> Tyson Dowd</glossterm>
+<glossdef>
+<para>for config/make patches and debian maintenance</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>ripley@xs4all.nl</email> Koen D'Hondt</glossterm>
+<glossdef>
+<para>for Solaris patches to XmHTML</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>bob@mostly.com</email> Bob Drzyzgula</glossterm>
+<glossdef>
+<para>for budgeting design notes</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>pjf@schools.net.au</email> Paul
+      Fenwick</glossterm>
+<glossdef>
+<para>ASX support, Finance::Quote</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>hfiguiere@teaser.fr</email> Hubert
+      Figuiere</glossterm>
+<glossdef>
+<para>patch to <application>gnc-prices</application></para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>frob@df.ru</email> Valek Filippov
+      </glossterm>
+<glossdef>
+<para>Russian translation</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>jufi@nerdnet.de</email> Jan-Uwe
+      Finck</glossterm>
+<glossdef>
+<para>for German message translation</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>kevinfinn@mediaone.net</email> Kevin
+      Finn</glossterm>
+<glossdef>
+<para>auto-decimal point patch, options patch</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>rjf@aracnet.com</email> Ron
+      Forrester</glossterm>
+<glossdef>
+<para>for gnome patches</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>DFreese@osc.uscg.mil</email> Dave
+      Freese</glossterm>
+<glossdef>
+<para>for leap-year fix</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>jgoerzen@complete.org</email> John
+      Goerzen</glossterm>
+<glossdef>
+<para>file i/o fix for 64-bit architectures</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>hans@degraaff.org</email> Hans de Graaff
+      </glossterm>
+<glossdef>
+<para>xml patches</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>grib@billgribble.com</email> Bill
+      Gribble</glossterm>
+<glossdef>
+<para>QIF import code, check printing, transaction find
+      dialog</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>mhamada@redhat.com</email> Mitsuo
+      Hamada</glossterm>
+<glossdef>
+<para>Japanese translations</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>otto@bug.redhat.com</email> Otto
+      Hammersmith</glossterm>
+<glossdef>
+<para>for RedHat RPM packaging</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>hampton@employees.org</email> David Hampton</glossterm>
+<glossdef>
+<para>qif import patch</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>offby1@blarg.net</email> Eric Hanchrow</glossterm>
+<glossdef>
+<para>updated currency documentation</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>haral@codec.ro</email> Alexandru
+      Harsanyi</glossterm>
+<glossdef>
+<para>for fixing miscellaneous core dumps and lockups.</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>john@dhh.gt.org</email> John Hasler</glossterm>
+<glossdef>
+<para>engine patch</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>hellan@acm.org</email> Jon K&aring;re
+      Hellan</glossterm>
+<glossdef>
+<para>for fixing miscellaneous core dumps and lockups.</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>claus_h@image.dk</email>Claus Hindsgaul</glossterm>
+<glossdef>
+<para>Danish translation</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>jjvmjv@mundomail.net</email>Miquel Jordana
+      Vilamitjana</glossterm>
+<glossdef>
+<para>Spanish translation of manual</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>PrakashK@bigfoot.com</email> Prakash
+      Kailasa</glossterm>
+<glossdef>
+<para>for gnome build fixes</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>small@arcadia.spb.ru</email> Alexey
+      Kakunin</glossterm>
+<glossdef>
+<para>quickfill patch for cyrillic</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>ben.kelly@ieee.org</email>Ben Kelly</glossterm>
+<glossdef>
+<para>for Motif menu bug fix, core dump fixes</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>tkludy@csd.sgi.com</email> Tom Kludy</glossterm>
+<glossdef>
+<para>for SGI Irix port</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>sk@xgm.de</email> Sven Kuenzler</glossterm>
+<glossdef>
+<para>for SuSE README file</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>blarsen@ada-works.com</email> Bryan
+      Larsen</glossterm>
+<glossdef>
+<para>guile budget report</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>LeachCJ@az1.bp.com</email> Chris
+      J (Oakton) Leach</glossterm>
+<glossdef>
+<para>autoconf patch</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>minfrin@sharp.fm</email>Graham Leggett</glossterm>
+<glossdef>
+<para>for fixing a hang</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>mellon@andare.fugue.com</email> Ted
+      Lemon</glossterm>
+<glossdef>
+<para>for NetBSD port</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>y-le-ny@ifrance.com</email> Yannick Le
+      Ny</glossterm>
+<glossdef>
+<para>pour la traduction en Fran&ccedil;ais</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>glikely@nortelnetworks.com</email> Grant
+      Likely</glossterm>
+<glossdef>
+<para>gnome and engine patches</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>happyguy_pt@hotmail.com</email> Duarte
+      Loreto</glossterm>
+<glossdef>
+<para>Portuguese translations</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>chris@wilddev.net</email> Chris Lyttle</glossterm>
+<glossdef>
+<para>Register documentation and screenshots.</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>kmaraas@gnome.org</email>Kjartan Maraas</glossterm>
+<glossdef>
+<para>Norwegian translations</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>martinh@pegasus.cc.ucf.edu</email> Heath
+      Martin</glossterm>
+<glossdef>
+<para>major work on the gnome register</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>mgmartin@abacusnet.net</email> Matt
+      Martin</glossterm>
+<glossdef>
+<para>guile error handling code</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>rgmerk@mira.net</email> Robert Graham
+      Merkel</glossterm>
+<glossdef>
+<para>extensive work on reports and reporting infrastructure, gnome
+      GUI work, and user preferences.</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>juanmagm@mail.com</email> Juan Manuel
+      García Molina</glossterm>
+<glossdef>
+<para>spanish translation</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>molnarc@mandrakesoft.com</email> Christopher
+      Molnar</glossterm>
+<glossdef>
+<para>build system patch</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>mooney@dogbert.cc.ndsu.NoDak.edu</email> Tim
+      Mooney</glossterm>
+<glossdef>
+<para>port to alpha-dec-osf4.0f</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>gam3@ann.softgams.com</email> G. Allen Morris
+      III</glossterm>
+<glossdef>
+<para>for QIF core dump fix</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>dres@phoenixdsl.com</email> James
+      LewisMoss</glossterm>
+<glossdef>
+<para>design doc patches</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>sjmurdoch@bigfoot.com</email> Steven
+      Murdoch</glossterm>
+<glossdef>
+<para>gnc-prices fix for London exchange</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>brent@baton.phys.lsu.edu</email> Brent
+      Neal</glossterm>
+<glossdef>
+<para>TIAA-CREF support</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>j.e.nielsen@iname.com</email>Johnny Ernst
+Nielsen</glossterm>
+<glossdef>
+<para>Danish translation</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>stefan-ml@snobis.de</email> Stefan
+      Nobis</glossterm>
+<glossdef>
+<para>German translation patch</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>spacey@inch.com</email> Peter
+      Norton</glossterm>
+<glossdef>
+<para>for a valiant attempt at a GTK port</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>webmaster@obsidian.uia.net</email> OmNiBuS
+      </glossterm>
+<glossdef>
+<para>web site graphics and content</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>gordo@pincoya.com</email> Gordon Oliver
+      </glossterm>
+<glossdef>
+<para>multiple currency status line patch</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>dwarf@solarisresources.com</email> Alan Orndorff
+      </glossterm>
+<glossdef>
+<para>Solaris packager</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>mopyr@IPM.Lviv.UA</email> Myroslav
+      Opyr</glossterm>
+<glossdef>
+<para>for misc patches</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>laurent.pelecq@wanadoo.fr</email> Laurent
+      P&eacute;lecq</glossterm>
+<glossdef>
+<para>i18n patches with gettext</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>Alain.Peyrat@nmu.alcatel.fr</email> Alain
+      Peyrat</glossterm>
+<glossdef>
+<para>for <filename>configure.in</filename> patches</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>peter@wuzel.m.isar.de</email> Peter
+      Pointner</glossterm>
+<glossdef>
+<para>motif and configuration patches</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>maufk@csv.warwick.ac.uk</email> Gavin
+      Porter</glossterm>
+<glossdef>
+<para>for euro style dates</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>tpo@spin.ch</email> Tomas Pospisek</glossterm>
+<glossdef>
+<para>debian patches</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>rr@sco.com</email> Ron Record</glossterm>
+<glossdef>
+<para>for SCO Unixware and OpenServer binaries</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>Keith.Refson@earth.ox.ac.uk</email> Keith
+      Refson</glossterm>
+<glossdef>
+<para>Solaris fixes</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>schoenberger@signsoft.com</email> Dirk
+      Schoenberger</glossterm>
+<glossdef>
+<para>began the Qt/KDE port</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>jan.schrage@urz.uni-heidelberg.de</email> Jan
+      Schrage</glossterm>
+<glossdef>
+<para>documentation patches</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>cls@seawood.org</email> Christopher
+      Seawood</glossterm>
+<glossdef>
+<para>for XbaeMatrix core dump</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>aleseveso@tiscalinet.it</email> Alessandro
+      Seveso</glossterm>
+<glossdef>
+<para>Italian translations</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>msimons@fsimons01.erols.com</email> Mike
+      Simons</glossterm>
+<glossdef>
+<para>misc <filename>configure.in</filename> patches</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>keld@dkuug.dk</email>Keld Simonsen</glossterm>
+<glossdef>
+<para>Danish translation</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>rich@brake.demon.co.uk</email> Richard
+      Skelton</glossterm>
+<glossdef>
+<para>for Solaris cleanup</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>spruth@bigfoot.com</email> Henning
+      Spruth</glossterm>
+<glossdef>
+<para>for German text and euro date rework</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>bds02@uow.edu.au</email> Ben Stanley</glossterm>
+<glossdef>
+<para>test infrastructure</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>robby.stephenson@usa.net</email> Robby
+      Stephenson</glossterm>
+<glossdef>
+<para>register &amp; file history patches</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>stimming@uclink.berkeley.edu</email> Christian
+      Stimming</glossterm>
+<glossdef>
+<para>report patch</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>bszx@bszxdomain.edu.eu.org</email> Bartek
+      Szady</glossterm>
+<glossdef>
+<para>engine and build system patches</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>tma@iis.fhg.de</email> Herbert Thoma</glossterm>
+<glossdef>
+<para>gnome register &amp; euro support patches</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>troeger@samart.co.th</email>Arnold Troeger</glossterm>
+<glossdef>
+<para>Mandrake packager</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>detrout@earthlink.net</email> Diane
+      Trout</glossterm>
+<glossdef>
+<para><link linkend="scheme"> Scheme </link>  qif import patch</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>uschold@cs.ucf.edu</email> Richard
+      -Gilligan- Uschold</glossterm>
+<glossdef>
+<para>tax report and txf export</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>rkw@dataplex.net</email> Richard
+      Wackerbarth</glossterm>
+<glossdef>
+<para>patch to <application>gnc-prices</application>, qif import fixes</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>rob@valinux.com</email> Rob Walker</glossterm>
+<glossdef>
+<para>guile and register patches</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>dwmw2@infradead.org</email> David
+      Woodhouse</glossterm>
+<glossdef>
+<para>Great Britain translations</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>gooch@ic.EECS.Berkeley.EDU</email> Ken
+      Yamaguchi</glossterm>
+<glossdef>
+<para>QIF import fixes; MYM import</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>shimpei@gol.com</email> Shimpei
+      Yamashita</glossterm>
+<glossdef>
+<para>Japanese translation</para>
+</glossdef>
+</glossentry>
+</glosslist>
+
+</para>
+</sect1>
+
+<sect1 id="xacc-oses">
+<title>Supported Operating Systems (english)</title>
+
+<para>GnuCash 1.5.0 is known to work on the following systems: 
+
+<itemizedlist>
+
+<listitem>
+<para>Linux</para>
+</listitem>
+
+<listitem>
+<para>FreeBSD</para>
+</listitem>
+
+<listitem>
+<para>NetBSD</para>
+</listitem>
+
+<listitem>
+<para>Solaris</para>
+</listitem>
+
+</itemizedlist>
+
+</para>
+
+<para>
+
+<ulink url="http://www.gnucash.org/">
+  <inlinemediaobject>
+    <imageobject>
+      <imagedata fileref="image/logo-linux.png">
+    </imageobject>
+  </inlinemediaobject>
+</ulink>
+
+<ulink url="http://www.debian.org"><inlinemediaobject>
+<imageobject>
+<imagedata fileref="image/logo-debian.png">
+</imageobject>
+</inlinemediaobject></ulink>
+
+<ulink url="http://www.netbsd.org"><inlinemediaobject>
+<imageobject>
+<imagedata fileref="image/logo-NetBSD-banner.png">
+</imageobject>
+</inlinemediaobject></ulink>
+
+ </para>
+</sect1>
+
+</article>
+
+<!-- Local variables: -->
+<!-- sgml-parent-document: "gnucash.sgml" -->
+<!-- End: -->

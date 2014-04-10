@@ -1,0 +1,101 @@
+<ARTICLE ID="XACC-TXF-EXPORT-REPORT">
+
+<ARTHEADER>
+<TITLE>Relatório de Exportação TXF</TITLE>
+</ARTHEADER>
+<PARA>    <INLINEMEDIAOBJECT>
+<IMAGEOBJECT>
+<IMAGEDATA FILEREF="image/report-txf.png">
+</IMAGEOBJECT>
+</INLINEMEDIAOBJECT> 
+
+    </PARA>
+
+<PARA>Este relatório permite-lhe exportar todas as Receitas e Despesas 
+      tributáveis para um ficheiro TXF (Tax eXchange Format - Formato de 
+      Troca de Impostos) que pode ser importado em programas de preenchimento 
+      de impostos tais como o TaxCut ou TurboTax.
+    </PARA>
+
+<PARA><EMPHASIS>NOTE:</EMPHASIS> Para que isto funcione, o utilizador tem de 
+      separar os rendimentos tributáveis dos não tributáveis para contas distintas, 
+      tal como com as despesas dedutíveis e não dedutíveis. O utilizador tem 
+      também de definir a categoria TXF de cada conta relacionada com impostos. A 
+      pasta "Conf. Exportação Txf" na janela de parametros permite isto. É mais 
+      aconselhavel definir isto no Relatório de Impostos antes de realmente gerar 
+      este relatório. Caso contrário, você ira apenas obter um ficheiro vazio. Existe 
+      um ficheiro taxreport.xac no directório de exemplos, que mostra uma maneira 
+      de realizar esta configuração. 
+
+    </PARA>
+<PARA>    <INLINEMEDIAOBJECT>
+<IMAGEOBJECT>
+<IMAGEDATA FILEREF="image/report-txf-options.png">
+</IMAGEOBJECT>
+</INLINEMEDIAOBJECT> 
+
+    </PARA>
+<PARA><EMPHASIS>IMPORTANTE:</EMPHASIS> A maioria dos códigos TXF 
+      deverá aparecer exclusivamente numa conta!  As excepções são 
+      códigos precedidos por "&lt;" or "^", que podem ser repetidos. 
+      Obviamente, cada duplicado deverá ter um nome de pagador único.
+
+    </PARA>
+
+<PARA>Todos os parâmetros para o Relatório de Imposts se aplicam para a 
+      exportação em sí. Apenas os parâmetros da "Conf Exportação Txf" serão 
+      descritos aqui.
+
+    <ITEMIZEDLIST>
+      <LISTITEM><PARA>A(s) conta(s) para as quais definir uma categoria TXF.
+        Se nenhuma conta estiver seleccionada nada é alterado. Se várias 
+        contas estiverem seleccionadas, todas as contas de Receitas serão 
+        configuradas para o item seleccionado na caixa de lista RECEITA, 
+        e todas as contas de Despesas serão configuradas para o item seleccionado 
+        na caixa de lista DESPESAS. </PARA></LISTITEM>
+
+      <LISTITEM><PARA>Imprimir mensagens de AJUDA TXF extensas dá <ULINK
+        URL="xacc-txf-categories.html">descrições detalhadas</ULINK> de
+        cada categoria TXF, em vez do relatório de impostos habitual. </PARA></LISTITEM>
+
+      <LISTITEM><PARA>Selecção da categoria TXF de RECEITAS (Seleccione 
+        APENAS UMA!)</PARA></LISTITEM> 
+
+      <LISTITEM><PARA>Categorias TXF precedidas por um "&lt;" ou "^"
+        exportam o nome do pagador junto com o valor da conta.  Isto é 
+        normalmente o nome do banco, acção ou fundo de investimento que 
+        paga dividendos ou juros.  Ocasionalmente, é a descrição de uma 
+        dedução.</PARA>
+
+        <PARA>No relatório acima, "Money Market Fund One" é um exemplo de 
+        de que local o nome da conta corrente é exportado.  Isto é tipicamente 
+        utilizado quando o fundo paga apenas um tipo de rendimento, tal 
+        como juros. Para o "Mutual Fund Four" e "Mutual Fund Five", as 
+        categorias "Ganho Cap. Longo Prazo" e "Receitas de Dividendos" 
+        serão ambas exportadas com o nome da conta pai. Isto é tipicamente 
+        utilizado quando o fundo paga diversos tipos de distribuição.  Tal 
+        como mostrado no exemplo, estes fundos têm três tipos de distribuições, 
+        mas as categorias "Receitas" e "Ganhos Capital Curto Prazo" são somadas 
+        e exportadas como uma só chamada de "Receitas de Dividendos", visto 
+        serem tributadas da mesma forma.</PARA>
+
+  <ITEMIZEDLIST>
+    <LISTITEM><PARA>Defeito como indicado na lista de selecção</PARA>
+          </LISTITEM>
+    <LISTITEM><PARA>&lt; Conta Actual</PARA></LISTITEM>
+    <LISTITEM><PARA>^ Conta Pai</PARA></LISTITEM>
+  </ITEMIZEDLIST></LISTITEM>
+
+      <LISTITEM><PARA>Selecção de categoria TXF DESPESA (Seleccione 
+        APENAS UMA!)</PARA></LISTITEM> 
+    </ITEMIZEDLIST>
+
+    <LINK LINKEND="XACC-TXF-EXPORT-ANOMALIES">Problemas conhecidos e 
+      limitações.</LINK>
+</PARA>
+
+</ARTICLE>
+
+<!-- Local variables: -->
+<!-- sgml-parent-document: "gnucash.sgml" -->
+<!-- End: -->

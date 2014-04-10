@@ -1,0 +1,18 @@
+#! /bin/bash
+exec guile -s "$0" 
+!#
+
+(use-modules (gnucash gnc-module))
+(gnc:module-system-init)
+
+(if (gnc:module-load "gnucash/app-utils" 0)
+    (begin    
+      (if (and (procedure? gnc:error->string)
+               (procedure? gnc:c-options-init)
+	       (macro? N_)
+	       (string=? (N_ "foobar") "foobar"))
+          (exit 0)
+          (exit -1)))
+    (exit -1))
+
+

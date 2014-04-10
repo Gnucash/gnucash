@@ -47,8 +47,6 @@ C:
 
  * All gnucash functions and global variables are prefixed with gnc_
 
- * All private functions are enclosed in __ (i.e. _gnc_do_not_call_)
-
  * Use static functions whenever possible
 
  * Use const whenever possible

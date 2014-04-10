@@ -22,117 +22,363 @@
  *                                                                  *
 \********************************************************************/
 
-#include "top-level.h"
+#include "config.h"
 
-#include <stdlib.h>
-#include <guile/gh.h>
 #include <gnome.h>
-#include <gtk/gtk.h>
-#include <gtkhtml/gtkhtml.h>
+#include <guile/gh.h>
+#include <popt.h>
+#include <stdlib.h>
+#ifdef GTKHTML_HAVE_GCONF
+#include <gconf/gconf.h>
+#endif
+#include <g-wrap-runtime-guile.h>
+#include <X11/Xlib.h>
 
-#include "g-wrap.h"
-#include "gnc.h"
-#include "gnucash.h"
-#include "gnome-top-level.h"
-#include "window-main.h"
-#include "dialog-account.h"
-#include "dialog-transfer.h"
-#include "global-options.h"
-#include "gnucash-sheet.h"
-#include "gnucash-color.h"
-#include "gnucash-style.h"
-#include "ui-callbacks.h"
-#include "extensions.h"
-#include "window-help.h"
-#include "window-report.h"
-#include "dialog-utils.h"
-#include "FileIO.h"
-#include "FileBox.h"
-#include "FileDialog.h"
-#include "MainWindow.h"
-#include "Destroy.h"
-#include "Refresh.h"
-#include "messages.h"
-#include "TransLog.h"
-#include "util.h"
-#include "date.h"
 #include "AccWindow.h"
-#include "SplitLedger.h"
-#include "guile-util.h"
-#include "splitreg.h"
+#include "TransLog.h"
+#include "argv-list-converters.h"
 #include "combocell.h"
+#include "date.h"
+#include "dialog-commodity.h"
+#include "dialog-options.h"
+#include "dialog-transfer.h"
+#include "dialog-utils.h"
+#include "file-utils.h"
+#include "global-options.h"
+#include "gnc-component-manager.h"
+#include "gnc-engine-util.h"
+#include "gnc-file.h"
+#include "gnc-menu-extensions.h"
+#include "gnc-network.h"
+#include "gnc-splash.h"
+#ifdef USE_GUPPI
+#include "gnc-html-guppi.h"
+#endif
+#include "gnc-html.h"
+#include "gnc-gpg.h"
+#include "gnc-report.h"
+#include "gnc-ui.h"
+#include "gnucash-color.h"
+#include "gnucash-sheet.h"
+#include "gnucash-style.h"
+#include "gnucash.h"
+#include "guile-util.h"
+#include "messages.h"
 #include "recncell.h"
+#include "split-register.h"
+#include "top-level.h"
+#include "window-help.h"
+#include "window-main.h"
+#include "window-acct-tree.h"
+#include "window-register.h"
+#include "window-report.h"
 
 
 /** PROTOTYPES ******************************************************/
-static void gnc_configure_date_format_cb(void *);
+static void gnc_configure_date_format_cb(gpointer);
 static void gnc_configure_date_format(void);
-static void gnc_configure_newacc_currency_cb(void *);
-static void gnc_configure_newacc_currency(void);
-static void gnc_configure_account_separator_cb(void *);
-static void gnc_configure_account_separator(void);
-static void gnc_configure_register_colors_cb(void *);
+static void gnc_configure_account_separator_cb(gpointer);
+static void gnc_configure_register_colors_cb(gpointer);
 static void gnc_configure_register_colors(void);
-static void gnc_configure_register_borders_cb(void *);
+static void gnc_configure_register_borders_cb(gpointer);
 static void gnc_configure_register_borders(void);
-static void gnc_configure_reverse_balance_cb(void *);
-static void gnc_configure_reverse_balance(void);
-static void gnc_configure_sr_label_callbacks(void);
-static void gnc_configure_auto_raise_cb(void *);
+static void gnc_configure_auto_raise_cb(gpointer);
 static void gnc_configure_auto_raise(void);
-static void gnc_configure_auto_decimal_cb(void *);
+static void gnc_configure_negative_color_cb(gpointer);
+static void gnc_configure_negative_color(void);
+static void gnc_configure_auto_decimal_cb(gpointer);
 static void gnc_configure_auto_decimal(void);
-static void gnc_configure_auto_decimal_places_cb(void *);
+static void gnc_configure_auto_decimal_places_cb(gpointer);
 static void gnc_configure_auto_decimal_places(void);
-static void gnc_configure_register_font_cb(void *);
+static void gnc_configure_register_font_cb(gpointer);
 static void gnc_configure_register_font(void);
-static void gnc_configure_register_hint_font_cb(void *);
+static void gnc_configure_register_hint_font_cb(gpointer);
 static void gnc_configure_register_hint_font(void);
+
 
 /** GLOBALS *********************************************************/
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_GUI;
-
-static GtkWidget *app = NULL;
 
 static int gnome_is_running = FALSE;
 static int gnome_is_initialized = FALSE;
 static int gnome_is_terminating = FALSE;
 
 static SCM date_callback_id = SCM_UNDEFINED;
-static SCM currency_callback_id = SCM_UNDEFINED;
 static SCM account_separator_callback_id = SCM_UNDEFINED;
 static SCM register_colors_callback_id = SCM_UNDEFINED;
 static SCM register_borders_callback_id = SCM_UNDEFINED;
-static SCM reverse_balance_callback_id = SCM_UNDEFINED;
 static SCM auto_raise_callback_id = SCM_UNDEFINED;
+static SCM negative_color_callback_id = SCM_UNDEFINED;
 static SCM auto_decimal_callback_id = SCM_UNDEFINED;
 static SCM auto_decimal_places_callback_id = SCM_UNDEFINED;
 static SCM register_font_callback_id = SCM_UNDEFINED;
 static SCM register_hint_font_callback_id = SCM_UNDEFINED;
 
-/* ============================================================== */
 
-int 
+gboolean
 gnucash_ui_is_running(void)
 {
   return gnome_is_running;
 }
 
-/* ============================================================== */
-
-int 
+gboolean 
 gnucash_ui_is_terminating(void)
 {
   return gnome_is_terminating;
 }
 
-/* ============================================================== */
+static const char* gnc_scheme_remaining_var = "gnc:*command-line-remaining*";
 
-gncUIWidget
-gnc_get_ui_data(void)
+static char**
+gnc_get_remaining_argv(int prelen, const char **prependargv)
 {
-  return app;
+  /* FIXME: when we drop support older guiles, drop the (char *) coercion. */
+  SCM rem = gh_eval_str ((char *) gnc_scheme_remaining_var);
+  return gnc_scheme_list_to_nulltermcharpp (prelen, prependargv, rem);
+}
+
+static void
+gnc_set_remaining_argv(int len, const char **rest)
+{
+  SCM toput = gnc_argvarr_to_scheme_list(len, rest);
+  /* FIXME: when we drop support older guiles, drop the (char *) coercion. */
+  gh_define((char *) gnc_scheme_remaining_var, toput);
+}
+
+
+static void
+gnc_global_options_help_cb (GNCOptionWin *win, gpointer dat)
+{
+  helpWindow (NULL, NULL, HH_GLOBPREFS);
+}
+
+static gboolean
+gnc_html_file_stream_cb (const char *location, char ** data)
+{
+  return (gncReadFile (location, data) > 0);
+}
+
+static gboolean
+gnc_html_report_stream_cb (const char *location, char ** data)
+{
+  gboolean ok;
+
+  ok = gnc_run_report_id_string (location, data);
+
+  if (!ok)
+    *data = g_strdup (_("<html><body><h3>Report error</h3>"
+                        "<p>An error occurred while running the report.</p>"
+                        "</body></html>"));
+
+  return ok;
+}
+
+static gboolean
+gnc_html_register_url_cb (const char *location, const char *label,
+                          gboolean new_window, GNCURLResult *result)
+{
+  RegWindow   * reg = NULL;
+  Split       * split = NULL;
+  Account     * account;
+  Transaction * trans;
+  GList       * node;
+
+  g_return_val_if_fail (location != NULL, FALSE);
+  g_return_val_if_fail (result != NULL, FALSE);
+
+  result->load_to_stream = FALSE;
+
+  /* href="gnc-register:account=My Bank Account" */
+  if (strncmp("account=", location, 8) == 0)
+  {
+    account = xaccGetAccountFromFullName (gnc_get_current_group (),
+                                          location + 8, 
+                                          gnc_get_account_separator ());
+    reg = regWindowSimple (account);
+    gnc_register_raise (reg);
+  }
+  /* href="gnc-register:guid=12345678901234567890123456789012" */
+  else if (strncmp ("guid=", location, 5) == 0)
+  {
+    GUID guid;
+
+    if (!string_to_guid (location + 5, &guid))
+    {
+      result->error_message = g_strdup_printf (_("Bad URL: %s"), location);
+      return FALSE;
+    }
+
+    switch (xaccGUIDType (&guid, gnc_get_current_book ()))
+    {
+      case GNC_ID_NONE:
+      case GNC_ID_NULL:
+        result->error_message = g_strdup_printf (_("No such entity: %s"),
+                                                 location);
+        return FALSE;
+
+      case GNC_ID_ACCOUNT:
+        account = xaccAccountLookup (&guid, gnc_get_current_book ());
+        reg = regWindowSimple (account);
+        break;
+
+      case GNC_ID_TRANS:
+        trans = xaccTransLookup (&guid, gnc_get_current_book ());
+        split = NULL;
+
+        for (node = xaccTransGetSplitList (trans); node; node = node->next)
+        {
+          split = node->data;
+          if (xaccSplitGetAccount (split))
+            break;
+        }
+
+        if (!split)
+        {
+          result->error_message =
+            g_strdup_printf (_("Transaction with no Accounts: %s"), location);
+          return FALSE;
+        }
+
+        reg = regWindowSimple (xaccSplitGetAccount (split));
+        break;
+
+      case GNC_ID_SPLIT:
+        split = xaccSplitLookup (&guid, gnc_get_current_book ());
+        if (!split)
+        {
+          result->error_message = g_strdup_printf (_("No such split: %s"),
+                                                   location);
+          return FALSE;
+        }
+
+        reg = regWindowSimple (xaccSplitGetAccount (split));
+        break;
+
+      default:
+        result->error_message =
+          g_strdup_printf (_("Unsupported entity type: %s"), location);
+        return FALSE;
+    }
+
+    gnc_register_raise(reg);
+    if (split)
+      gnc_register_jump_to_split (reg, split);
+  }
+  else
+  {
+    result->error_message = g_strdup_printf (_("Badly formed URL %s"),
+                                             location);
+    return FALSE;
+  }
+
+  return TRUE;
+}
+
+static gboolean
+gnc_html_report_url_cb (const char *location, const char *label,
+                        gboolean new_window, GNCURLResult *result)
+{
+  gnc_report_window * rwin;
+  GtkHTMLStream * handle;
+  char * url;
+
+  g_return_val_if_fail (location != NULL, FALSE);
+  g_return_val_if_fail (result != NULL, FALSE);
+
+  /* make a new window if necessary */ 
+  if (new_window)
+  {
+    char *url;
+
+    url = gnc_build_url (URL_TYPE_REPORT, location, label);
+    gnc_main_window_open_report_url (url, FALSE);
+    g_free (url);
+
+    result->load_to_stream = FALSE;
+  }
+  else
+  {
+    result->load_to_stream = TRUE;
+  }
+
+  return TRUE;
+}
+
+static gboolean
+gnc_html_options_url_cb (const char *location, const char *label,
+                         gboolean new_window, GNCURLResult *result)
+{
+  SCM find_report  = gh_eval_str ("gnc:find-report");
+  SCM start_editor = gh_eval_str ("gnc:report-edit-options");
+  SCM report;
+  int report_id;
+
+  g_return_val_if_fail (location != NULL, FALSE);
+  g_return_val_if_fail (result != NULL, FALSE);
+
+  result->load_to_stream = FALSE;
+
+  /* href="gnc-options:report-id=2676" */
+  if (strncmp ("report-id=", location, 10) == 0)
+  {
+    if (sscanf (location + 10, "%d", &report_id) != 1)
+    {
+      result->error_message =
+        g_strdup_printf (_("Badly formed options URL: %s"), location);
+
+      return FALSE;
+    }
+
+    report = gh_call1 (find_report, gh_int2scm (report_id));
+    if (report == SCM_UNDEFINED ||
+        report == SCM_BOOL_F)
+    {
+      result->error_message =
+        g_strdup_printf (_("Badly report id: %s"), location);
+
+      return FALSE;
+    }
+
+    gh_call1 (start_editor, report);
+
+    return TRUE;
+  }
+  else
+  {
+    result->error_message =
+      g_strdup_printf (_("Badly formed options URL: %s"), location);
+
+    return FALSE;
+  }
+}
+
+static gboolean
+gnc_html_help_url_cb (const char *location, const char *label,
+                      gboolean new_window, GNCURLResult *result)
+{
+  g_return_val_if_fail (location != NULL, FALSE);
+  g_return_val_if_fail (result != NULL, FALSE);
+
+  if (new_window)
+  {
+    gnc_help_window * help;
+
+    help = gnc_help_window_new ();
+    gnc_help_window_show_help (help, location, label);
+
+    result->load_to_stream = FALSE;
+  }
+  else
+    result->load_to_stream = TRUE;
+
+  return TRUE;
+}
+
+static void
+gnc_commodity_help_cb (void)
+{
+  helpWindow (NULL, _("Help"), HH_COMMODITY);
 }
 
 /* ============================================================== */
@@ -142,40 +388,84 @@ gnc_get_ui_data(void)
    what they should do soon, and expect that the open/select functions
    will be merged with the code in FMB_OPEN in MainWindow.c */
 
+static const char *default_argv[] = {"gnucash", 0};
+
+static const struct poptOption nullPoptTable[] = {
+  { NULL, 0, 0, NULL, 0 }
+};
+
 int
 gnucash_ui_init(void)
 {
-  int fake_argc = 1;
-  char *fake_argv[] = {"gnucash"};
+  int restargc;
+  char **restargv;
+  char **restargv2;
+  poptContext returnedPoptContext;
 
-  ENTER ("\n");
+#ifdef GTKHTML_HAVE_GCONF
+  GError *gerror;
+#endif
+
+  ENTER (" ");
 
   /* We're going to have to have other ways to handle X and GUI
      specific args... */
   if (!gnome_is_initialized)
   {
-    gnome_init("GnuCash", NULL, fake_argc, fake_argv);
+    restargv = gnc_get_remaining_argv(1, default_argv);
+    if(restargv == NULL)
+    {
+      restargv = g_new(char*, 2);
+      restargv[0] = g_strdup(default_argv[0]);
+      restargv[1] = NULL;
+    }
+
+    restargc = argv_length(restargv);
+ 
+    gnome_init_with_popt_table("GnuCash", VERSION, restargc, restargv,
+                               nullPoptTable, 0, &returnedPoptContext);
     gnome_is_initialized = TRUE;
-    
+
+    restargv2 = (char**)poptGetArgs(returnedPoptContext);
+    gnc_set_remaining_argv(argv_length(restargv2), (const char**)restargv2);
+
+#ifdef GTKHTML_HAVE_GCONF
+    if( !gconf_init(restargc, restargv, &gerror) )
+        g_error_free(gerror);
+    gerror = NULL;
+#endif
+
+    /* this must come after using the poptGetArgs return value */
+    poptFreeContext (returnedPoptContext);
+    gnc_free_argv (restargv);
+
+    gnc_component_manager_init ();
+
     /* initialization required for gtkhtml */
     gdk_rgb_init ();    
     gtk_widget_set_default_colormap (gdk_rgb_get_cmap ());
     gtk_widget_set_default_visual (gdk_rgb_get_visual ());
     
-    app = gnome_app_new("GnuCash", "GnuCash");
+    /* load default HTML action handlers */ 
+    gnc_network_init();
+
+#ifdef USE_GUPPI    
+    /* initialize guppi handling in gnc-html */
+    gnc_html_guppi_init();
+#endif
+
+    /* put up splash screen */
+    gnc_show_splash_screen ();
+    
+    /* make sure splash is up */
+    while (gtk_events_pending ())
+      gtk_main_iteration ();
 
     gnc_configure_date_format();
     date_callback_id =
       gnc_register_option_change_callback(gnc_configure_date_format_cb, NULL,
                                           "International", "Date Format");
 
-    gnc_configure_newacc_currency();
-    currency_callback_id = 
-      gnc_register_option_change_callback(gnc_configure_newacc_currency_cb,
-                                          NULL, "International",
-                                          "Default Currency");
-
-    gnc_configure_account_separator();
     account_separator_callback_id = 
       gnc_register_option_change_callback(gnc_configure_account_separator_cb,
                                           NULL, "General",
@@ -191,29 +481,29 @@ gnucash_ui_init(void)
       gnc_register_option_change_callback(gnc_configure_register_borders_cb,
                                           NULL, "Register", NULL);
     
-    gnc_configure_reverse_balance();
-    reverse_balance_callback_id = 
-      gnc_register_option_change_callback(gnc_configure_reverse_balance_cb,
-                                          NULL, "General",
-                                          "Reversed-balance account types");
-
     gnc_configure_auto_raise();
     auto_raise_callback_id = 
       gnc_register_option_change_callback(gnc_configure_auto_raise_cb,
                                           NULL, "Register",
                                           "Auto-Raise Lists");
 
+    gnc_configure_negative_color();
+    negative_color_callback_id = 
+      gnc_register_option_change_callback(gnc_configure_negative_color_cb,
+                                          NULL, "General",
+                                          "Display negative amounts in red");
+
     gnc_configure_auto_decimal();
     auto_decimal_callback_id =
       gnc_register_option_change_callback(gnc_configure_auto_decimal_cb,
                                           NULL, "General",
-                                         "Automatic Decimal Point");
+                                          "Automatic Decimal Point");
 
     gnc_configure_auto_decimal_places();
     auto_decimal_places_callback_id = 
-       gnc_register_option_change_callback(gnc_configure_auto_decimal_places_cb,
-                                           NULL, "General",
-                                           "Auto Decimal Places");
+      gnc_register_option_change_callback(gnc_configure_auto_decimal_places_cb,
+                                          NULL, "General",
+                                          "Auto Decimal Places");
 
     gnc_configure_register_font();
     register_font_callback_id =
@@ -226,17 +516,41 @@ gnucash_ui_init(void)
                                           NULL, "Register",
                                           "Register hint font");
 
-    gnc_configure_sr_label_callbacks();
-
-    xaccRecnCellSetStringGetter(gnc_get_reconcile_str);
-
-    mainWindow();
+    gnc_recn_cell_set_string_getter (gnc_get_reconcile_str);
 
     gnucash_style_init();
     gnucash_color_init();
+
+    gnc_html_register_stream_handler (URL_TYPE_HELP, gnc_html_file_stream_cb);
+    gnc_html_register_stream_handler (URL_TYPE_FILE, gnc_html_file_stream_cb);
+    gnc_html_register_stream_handler (URL_TYPE_REPORT,
+                                      gnc_html_report_stream_cb);
+
+    gnc_html_register_url_handler (URL_TYPE_REGISTER,
+                                   gnc_html_register_url_cb);
+    gnc_html_register_url_handler (URL_TYPE_REPORT, gnc_html_report_url_cb);
+    gnc_html_register_url_handler (URL_TYPE_OPTIONS, gnc_html_options_url_cb);
+    gnc_html_register_url_handler (URL_TYPE_HELP, gnc_html_help_url_cb);
+
+    gnc_ui_commodity_set_help_callback (gnc_commodity_help_cb);
+
+    gnc_file_set_can_cancel_callback (gnc_mdi_has_apps);
+
+    gnc_options_dialog_set_global_help_cb (gnc_global_options_help_cb, NULL);
+
+    /* initialize gnome MDI and set up application window defaults  */
+    if (!gnc_mdi_get_current ())
+      gnc_main_window_new ();
+
+    /* Run the ui startup hooks. */
+    {
+      SCM run_danglers = gh_eval_str("gnc:hook-run-danglers");
+      SCM hook = gh_eval_str("gnc:*ui-startup-hook*");
+      gh_call1(run_danglers, hook); 
+    }    
   }
 
-  LEAVE ("\n");
+  LEAVE (" ");
 
   return 0;
 }
@@ -249,23 +563,13 @@ gnc_ui_shutdown (void)
   if (gnome_is_running && !gnome_is_terminating)
   {
     gnome_is_terminating = TRUE;
-    gnc_ui_destroy_all_subwindows();
-    gnc_ui_mainWindow_save_size();
-    gtk_widget_hide(app);
+
     gtk_main_quit();
+
+#ifdef USE_GUPPI    
+    gnc_html_guppi_shutdown();
+#endif
   }
-}
-
-/* ============================================================== */
-
-void
-gnc_ui_destroy_all_subwindows (void)
-{
-  xaccGroupWindowDestroy(gncGetCurrentGroup());
-  gnc_ui_destroy_help_windows();
-  gnc_ui_destroy_report_windows();
-  gnc_ui_destroy_account_add_windows();
-  gnc_ui_destroy_xfer_windows();
 }
 
 /* ============================================================== */
@@ -277,51 +581,92 @@ gnc_ui_destroy (void)
     return;
 
   gnc_unregister_option_change_callback_id(date_callback_id);
-  gnc_unregister_option_change_callback_id(currency_callback_id);
   gnc_unregister_option_change_callback_id(account_separator_callback_id);
   gnc_unregister_option_change_callback_id(register_colors_callback_id);
   gnc_unregister_option_change_callback_id(register_borders_callback_id);
-  gnc_unregister_option_change_callback_id(reverse_balance_callback_id);
   gnc_unregister_option_change_callback_id(auto_raise_callback_id);
+  gnc_unregister_option_change_callback_id(negative_color_callback_id);
   gnc_unregister_option_change_callback_id(register_font_callback_id);
   gnc_unregister_option_change_callback_id(register_hint_font_callback_id);
 
-  if (app != NULL)
-  {
-    gtk_widget_destroy(app);
-    app = NULL;
-  }
+  gnc_mdi_destroy (gnc_mdi_get_current ());
 
-  gnc_extensions_shutdown();
+  gnc_extensions_shutdown ();
+
+  gnc_component_manager_shutdown ();
 }
 
 /* ============================================================== */
 
-int
-gnc_ui_main(void)
+static gboolean
+gnc_ui_check_events (gpointer not_used)
 {
-  /* Initialize gnome */
-  gnucash_ui_init();
+  GNCSession *session;
+  gboolean force;
 
-  gnc_refresh_main_window();
-  gtk_widget_show(app);
+  if (gtk_main_level() != 1)
+    return TRUE;
+
+  session = gnc_get_current_session ();
+  if (!session)
+    return TRUE;
+
+  if (gnc_gui_refresh_suspended ())
+    return TRUE;
+
+  if (!gnc_session_events_pending (session))
+    return TRUE;
+
+  gnc_suspend_gui_refresh ();
+
+  force = gnc_session_process_events (session);
+
+  gnc_resume_gui_refresh ();
+
+  if (force)
+    gnc_gui_refresh_all ();
+
+  return TRUE;
+}
+
+static int
+gnc_x_error (Display	 *display,
+	     XErrorEvent *error)
+{
+  if (error->error_code)
+  {
+    char buf[64];
+
+    XGetErrorText (display, error->error_code, buf, 63);
+
+    g_warning ("X-ERROR **: %s\n  serial %ld error_code %d "
+               "request_code %d minor_code %d\n", 
+               buf, 
+               error->serial, 
+               error->error_code, 
+               error->request_code,
+               error->minor_code);
+  }
+
+  return 0;
+}
+
+int
+gnc_ui_start_event_loop (void)
+{
+  guint id;
 
   gnome_is_running = TRUE;
 
-  /* Get the main window on screen. */
-  while (gtk_events_pending())
-    gtk_main_iteration();
+  id = g_timeout_add_full (G_PRIORITY_DEFAULT_IDLE, 10000, /* 10 secs */
+                           gnc_ui_check_events, NULL, NULL);
 
-  /* Run the main window hooks. */
-  {
-    SCM run_danglers = gh_eval_str("gnc:hook-run-danglers");
-    SCM hook = gh_eval_str("gnc:*main-window-opened-hook*");
-    SCM window = POINTER_TOKEN_to_SCM(make_POINTER_TOKEN("gncUIWidget", app));
-    gh_call2(run_danglers, hook, window); 
-  }
+  XSetErrorHandler (gnc_x_error);
 
   /* Enter gnome event loop */
-  gtk_main();
+  gtk_main ();
+
+  g_source_remove (id);
 
   gnome_is_running = FALSE;
   gnome_is_terminating = FALSE;
@@ -331,95 +676,6 @@ gnc_ui_main(void)
 
 /* ============================================================== */
 
-int
-gnucash_ui_open_file(const char name[])
-{
-  gncFileOpenFile(name);
-  return 1;
-}
-
-/* ============================================================== */
-
-int
-gnucash_ui_select_file(void)
-{
-  gncFileOpen();
-  return 1;
-}
-
-/* ============================================================== */
-
-const char *
-gnc_register_default_font(void)
-{
-  return gnucash_style_get_default_register_font_name();
-}
-
-/* ============================================================== */
-
-const char *
-gnc_register_default_hint_font(void)
-{
-  return gnucash_style_get_default_register_hint_font_name();
-}
-
-/* ============================================================== */
-
-static GNCAccountType
-sr_type_to_account_type(SplitRegisterType sr_type)
-{
-  switch (sr_type)
-  {
-    case BANK_REGISTER:
-      return BANK;
-    case CASH_REGISTER:
-      return CASH;
-    case ASSET_REGISTER:
-      return ASSET;
-    case CREDIT_REGISTER:
-      return CREDIT;
-    case LIABILITY_REGISTER:
-      return LIABILITY;
-    case INCOME_LEDGER:  
-    case INCOME_REGISTER:
-      return INCOME;
-    case EXPENSE_REGISTER:
-      return EXPENSE;
-    case STOCK_REGISTER:
-    case PORTFOLIO_LEDGER:
-      return STOCK;
-    case CURRENCY_REGISTER:
-      return CURRENCY;
-    case GENERAL_LEDGER:  
-      return NO_TYPE;
-    case EQUITY_REGISTER:
-      return EQUITY;
-    case SEARCH_LEDGER:
-      return NO_TYPE;
-    default:
-      return NO_TYPE;
-  }
-}
-
-static char *
-gnc_sr_debit_string(SplitRegisterType sr_type)
-{
-  return gnc_get_debit_string(sr_type_to_account_type(sr_type));
-}
-
-static char *
-gnc_sr_credit_string(SplitRegisterType sr_type)
-{
-  return gnc_get_credit_string(sr_type_to_account_type(sr_type));
-}
-
-static void
-gnc_configure_sr_label_callbacks(void)
-{
-  xaccSplitRegisterSetDebitStringGetter(gnc_sr_debit_string);
-  xaccSplitRegisterSetCreditStringGetter(gnc_sr_credit_string);
-}
-
 /* gnc_configure_date_format_cb
  *    Callback called when options change - sets dateFormat to the current
  *    value on the scheme side and refreshes register windows
@@ -428,10 +684,10 @@ gnc_configure_sr_label_callbacks(void)
  * Returns: Nothing
  */
 static void 
-gnc_configure_date_format_cb(void *data)
+gnc_configure_date_format_cb (gpointer data)
 {
-  gnc_configure_date_format();
-  gnc_group_ui_refresh(gncGetCurrentGroup());
+  gnc_configure_date_format ();
+  gnc_gui_refresh_all ();
 }
 
 
@@ -487,40 +743,6 @@ gnc_configure_date_format (void)
     free(format_code);
 }
 
-/* gnc_configure_date_format_cb
- *    Callback called when options change - sets default currency to
- *    the current value on the scheme side
- *
- * Args: Nothing
- * Returns: Nothing
- */
-static void 
-gnc_configure_newacc_currency_cb(void *data)
-{
-  gnc_configure_newacc_currency();
-}
-
-/* gnc_configure_newacc_currency
- *    sets the default currency for new accounts to the 
- *    current value on the scheme side
- *
- * Args: Nothing
- * Returns: Nothing
- */
-static void
-gnc_configure_newacc_currency(void)
-{
-  char *newacc_def_currency = 
-    gnc_lookup_string_option("International",
-                             "Default Currency",
-                             "USD");
-
-  gnc_ui_set_default_new_account_currency (newacc_def_currency);
-
-  if (newacc_def_currency != NULL)
-    free(newacc_def_currency);
-}
-
 /* gnc_configure_account_separator_cb
  *    Callback called when options change - sets account separator
  *    to the current value on the scheme side
@@ -529,25 +751,9 @@ gnc_configure_newacc_currency(void)
  * Returns: Nothing
  */
 static void 
-gnc_configure_account_separator_cb(void *data)
+gnc_configure_account_separator_cb (gpointer data)
 {
-  gnc_configure_account_separator();
-  gnc_group_ui_refresh(gncGetCurrentGroup());
-}
-
-/* gnc_configure_account_separator
- *    sets the account separator to the
- *    current value on the scheme side
- *
- * Args: Nothing
- * Returns: Nothing
- */
-static void
-gnc_configure_account_separator(void)
-{
-  char separator = gnc_get_account_separator();
-
-  xaccSRSetAccountSeparator(separator);
+  gnc_gui_refresh_all ();
 }
 
 /* gnc_configure_register_colors_cb
@@ -558,10 +764,10 @@ gnc_configure_account_separator(void)
  * Returns: Nothing
  */
 static void
-gnc_configure_register_colors_cb(void *data)
+gnc_configure_register_colors_cb (gpointer data)
 {
-  gnc_configure_register_colors();
-  gnc_group_ui_refresh(gncGetCurrentGroup());
+  gnc_configure_register_colors ();
+  gnc_gui_refresh_all ();
 }
 
 /* gnc_configure_register_colors_cb
@@ -571,33 +777,43 @@ gnc_configure_register_colors_cb(void *data)
  * Returns: Nothing
  */
 static void
-gnc_configure_register_colors(void)
+gnc_configure_register_colors (void)
 {
   SplitRegisterColors reg_colors;
 
-  reg_colors.single_cursor_passive_bg_color =
+  reg_colors.header_bg_color =
     gnc_lookup_color_option_argb("Register Colors",
-                                 "Single mode default even row background",
-                                 0xccccff);
+                                 "Header color",
+                                 0xffffff);
 
-  reg_colors.single_cursor_passive_bg_color2 =
+  reg_colors.primary_bg_color =
     gnc_lookup_color_option_argb("Register Colors",
-                                 "Single mode default odd row background",
-                                 0xccccff);
+                                 "Primary color",
+                                 0xffffff);
 
-  reg_colors.single_cursor_active_bg_color =
+  reg_colors.secondary_bg_color =
     gnc_lookup_color_option_argb("Register Colors",
-                                 "Single mode active background",
-                                 0xffdddd);
+                                 "Secondary color",
+                                 0xffffff);
 
-  reg_colors.double_cursor_passive_bg_color =
+  reg_colors.primary_active_bg_color =
     gnc_lookup_color_option_argb("Register Colors",
-                                 "Double mode default even row background",
-                                 0xccccff);
+                                 "Primary active color",
+                                 0xffffff);
 
-  reg_colors.double_cursor_passive_bg_color2 =
+  reg_colors.secondary_active_bg_color =
     gnc_lookup_color_option_argb("Register Colors",
-                                 "Double mode default odd row background",
+                                 "Secondary active color",
+                                 0xffffff);
+
+  reg_colors.split_bg_color =
+    gnc_lookup_color_option_argb("Register Colors",
+                                 "Split color",
+                                 0xffffff);
+
+  reg_colors.split_active_bg_color =
+    gnc_lookup_color_option_argb("Register Colors",
+                                 "Split active color",
                                  0xffffff);
 
   reg_colors.double_alternate_virt =
@@ -605,37 +821,7 @@ gnc_configure_register_colors(void)
                               "Double mode colors alternate with transactions",
                               FALSE);
 
-  reg_colors.double_cursor_active_bg_color =
-    gnc_lookup_color_option_argb("Register Colors",
-                                 "Double mode active background",
-                                 0xffdddd);
-
-  reg_colors.trans_cursor_passive_bg_color =
-    gnc_lookup_color_option_argb("Register Colors",
-                                 "Multi mode default transaction background",
-                                 0xccccff);
-
-  reg_colors.trans_cursor_active_bg_color =
-    gnc_lookup_color_option_argb("Register Colors",
-                                 "Multi mode active transaction background",
-                                 0xffdddd);
-
-  reg_colors.split_cursor_passive_bg_color =
-    gnc_lookup_color_option_argb("Register Colors",
-                                 "Multi mode default split background",
-                                 0xffffff);
-
-  reg_colors.split_cursor_active_bg_color =
-    gnc_lookup_color_option_argb("Register Colors",
-                                 "Multi mode active split background",
-                                 0xffffdd);
-
-  reg_colors.header_bg_color =
-    gnc_lookup_color_option_argb("Register Colors",
-                                 "Header background",
-                                 0xffffff);
-
-  xaccSetSplitRegisterColors(reg_colors);
+  gnc_split_register_set_colors (reg_colors);
 }
 
 
@@ -647,10 +833,10 @@ gnc_configure_register_colors(void)
  * Returns: Nothing
  */
 static void
-gnc_configure_register_borders_cb(void *data)
+gnc_configure_register_borders_cb (gpointer data)
 {
-  gnc_configure_register_borders();
-  gnc_group_ui_refresh(gncGetCurrentGroup());
+  gnc_configure_register_borders ();
+  gnc_gui_refresh_all ();
 }
 
 /* gnc_configure_register_border
@@ -660,21 +846,22 @@ gnc_configure_register_borders_cb(void *data)
  * Returns: Nothing
  */
 static void
-gnc_configure_register_borders(void)
+gnc_configure_register_borders (void)
 {
-  RegisterBorders reg_borders = 0;
+  gboolean use_vertical_lines;
+  gboolean use_horizontal_lines;
 
-  if (gnc_lookup_boolean_option("Register",
-                                "Show Vertical Borders",
-                                TRUE))
-    reg_borders |= STYLE_BORDER_LEFT | STYLE_BORDER_RIGHT;
+  use_vertical_lines = gnc_lookup_boolean_option("Register",
+                                                 "Show Vertical Borders",
+                                                 FALSE);
+
   
-  if (gnc_lookup_boolean_option("Register",
-                                "Show Horizontal Borders",
-                                TRUE))
-    reg_borders |= STYLE_BORDER_TOP | STYLE_BORDER_BOTTOM;
-  
-  gnucash_style_set_register_borders (reg_borders);
+  use_horizontal_lines = gnc_lookup_boolean_option("Register",
+                                                   "Show Horizontal Borders",
+                                                   FALSE);
+
+  gnucash_style_config_register_borders (use_vertical_lines,
+                                         use_horizontal_lines);
 }
 
 /* gnc_configure_auto_raise_cb
@@ -685,9 +872,9 @@ gnc_configure_register_borders(void)
  * Returns: Nothing
  */
 static void
-gnc_configure_auto_raise_cb(void *data)
+gnc_configure_auto_raise_cb (gpointer data)
 {
-  gnc_configure_auto_raise();
+  gnc_configure_auto_raise ();
 }
 
 /* gnc_configure_auto_raise
@@ -697,103 +884,48 @@ gnc_configure_auto_raise_cb(void *data)
  * Returns: Nothing
  */
 static void
-gnc_configure_auto_raise(void)
+gnc_configure_auto_raise (void)
 {
   gboolean auto_pop;
 
   auto_pop = gnc_lookup_boolean_option("Register", "Auto-Raise Lists", TRUE);
 
-  xaccComboCellSetAutoPop(auto_pop);
+  gnc_combo_cell_set_autopop (auto_pop);
 }
 
-/* gnc_configure_reverse_balance_cb
+/* gnc_configure_negative_color_cb
  *    Callback called when options change - sets
- *    reverse balance info for the callback
+ *    negative amount color flags
  *
  * Args: Nothing
  * Returns: Nothing
  */
 static void
-gnc_configure_reverse_balance_cb(void *not_used)
+gnc_configure_negative_color_cb (gpointer data)
 {
-  gnc_configure_reverse_balance();
-  gnc_group_ui_refresh(gncGetCurrentGroup());
-  gnc_refresh_main_window();
+  gnc_configure_negative_color ();
+
+  gnc_gui_refresh_all ();
 }
 
-static gboolean reverse_type[NUM_ACCOUNT_TYPES];
-
-gboolean
-gnc_reverse_balance_type(int type)
-{
-  if ((type < 0) || (type >= NUM_ACCOUNT_TYPES))
-    return FALSE;
-
-  return reverse_type[type];
-}
-
-gboolean
-gnc_reverse_balance(Account *account)
-{
-  int type;
-
-  if (account == NULL)
-    return FALSE;
-
-  type = xaccAccountGetType(account);
-  if ((type < 0) || (type >= NUM_ACCOUNT_TYPES))
-    return FALSE;
-
-  return reverse_type[type];
-}
-
-/* gnc_configure_reverse_balance
- *    sets reverse balance info for the callback
+/* gnc_configure_negative_color
+ *    sets negative amount color flags
  *
  * Args: Nothing
  * Returns: Nothing
  */
 static void
-gnc_configure_reverse_balance(void)
+gnc_configure_negative_color(void)
 {
-  gchar *choice;
-  gint i;
+  gboolean use_red;
 
-  xaccSRSetReverseBalanceCallback(gnc_reverse_balance);
+  use_red = gnc_lookup_boolean_option("General",
+                                      "Display negative amounts in red",
+                                      TRUE);
 
-  for (i = 0; i < NUM_ACCOUNT_TYPES; i++)
-    reverse_type[i] = FALSE;
-
-  choice = gnc_lookup_multichoice_option("General",
-                                         "Reversed-balance account types",
-                                         "default");
-
-  if (safe_strcmp(choice, "default") == 0)
-  {
-    reverse_type[INCOME]  = TRUE;
-    reverse_type[EXPENSE] = TRUE;
-  }
-  else if (safe_strcmp(choice, "credit") == 0)
-  {
-    reverse_type[LIABILITY] = TRUE;
-    reverse_type[EQUITY]    = TRUE;
-    reverse_type[INCOME]    = TRUE;
-    reverse_type[CREDIT]    = TRUE;
-  }
-  else if (safe_strcmp(choice, "none") == 0)
-  {
-  }
-  else
-  {
-    PERR("bad value\n");
-
-    reverse_type[INCOME]  = TRUE;
-    reverse_type[EXPENSE] = TRUE;
-  }
-
-  if (choice != NULL)
-    free(choice);
+  gnc_split_register_colorize_negative (use_red);
 }
+
 
 /* gnc_configure_auto_decimal_cb
  *     Callback called when options change -
@@ -803,7 +935,7 @@ gnc_configure_reverse_balance(void)
  *  Returns: Nothing
  */
 static void
-gnc_configure_auto_decimal_cb(void *not_used)
+gnc_configure_auto_decimal_cb(gpointer not_used)
 {
   gnc_configure_auto_decimal();
 }
@@ -834,9 +966,9 @@ gnc_configure_auto_decimal(void)
  *  Returns: Nothing
  */
 static void
-gnc_configure_auto_decimal_places_cb(void *not_used)
+gnc_configure_auto_decimal_places_cb (gpointer not_used)
 {
-  gnc_configure_auto_decimal_places();
+  gnc_configure_auto_decimal_places ();
 }
 
 /* gnc_configure_auto_decimal_places
@@ -846,14 +978,11 @@ gnc_configure_auto_decimal_places_cb(void *not_used)
  * Returns: Nothing
  */
 static void
-gnc_configure_auto_decimal_places(void)
+gnc_configure_auto_decimal_places (void)
 {
    gnc_set_auto_decimal_places
-      ( 
-         (int) gnc_lookup_number_option( "General",
-                                         "Auto Decimal Places",
-                                         2 )
-      );
+     (gnc_lookup_number_option("General",
+                               "Auto Decimal Places", 2));
 }
 
 
@@ -865,9 +994,9 @@ gnc_configure_auto_decimal_places(void)
  *  Returns: Nothing
  */
 static void
-gnc_configure_register_font_cb(void *not_used)
+gnc_configure_register_font_cb (gpointer not_used)
 {
-  gnc_configure_register_font();
+  gnc_configure_register_font ();
 }
 
 /* gnc_configure_register_font
@@ -897,7 +1026,7 @@ gnc_configure_register_font(void)
  *  Returns: Nothing
  */
 static void
-gnc_configure_register_hint_font_cb(void *not_used)
+gnc_configure_register_hint_font_cb(gpointer not_used)
 {
   gnc_configure_register_hint_font();
 }

@@ -1,0 +1,447 @@
+2000-04-06	Paul Fenwick	<pjf@cpan.org>
+	* CVSTAG: finance_quote_0_16
+
+	* Initial public release.
+
+2000-04-08	Paul Fenwick	<pjf@cpan.org>
+	* Integrated TIAA-CREF changes from Brent Neal.
+
+	* Changes to Makefile.PL to check dependancies, etc.
+
+	* Updated Examples/Quote_example.pl to include TIAA-CREF examples.
+
+	* CVSTAG: finance_quote_0_17
+
+2000-04-10	Paul Fenwick	<pjf@cpan.org>
+	* Changed Examples/chkshares.pl to print a pretty table.
+
+	* Incorporated Cooper Vertz's patch to add high, low and net change
+	  to quotes obtained from Yahoo!
+
+2000-04-13	Paul Fenwick	<pjf@cpan.org>
+	* Fidelity private functions renamed to indicate they are private.
+
+	* Small optimisations in fidelity functions to avoid spurious warnings
+	  and un-needed processing of non-useful lines.
+
+	* Functions now quickly return undef when not passed a list of stocks.
+	  Previously they would waste time looking up nothing.
+
+	* Documentation additions and corrections.
+
+	* Added test files (Use.t, asx.t, yahoo.t, fidelity.t)
+
+	* Added experimental function (currency) to look-up conversion
+	  rates between currencies.
+
+	* Added an example script (currency-lookup.pl) to test said
+	  currency conversion.
+
+2000-04-14	Paul Fenwick	<pjf@cpan.org>
+	* Added TIAA-CREF testing script.
+
+	* Added troweprice testing script.
+
+2000-04-16	Paul Fenwick	<pjf@cpan.org>
+	* Added yahoo_europe test script.
+
+	* Removed depreciated vanguard function.
+
+2000-04-18	Paul Fenwick	<pjf@cpan.org>
+	* Added fetch() function to provide a cleaner interface to fetching
+	  quotes from a variety of sources.
+
+	* Added tests for fetch() to the asx.t test script.
+
+2000-04-20	Paul Fenwick	<pjf@cpan.org>
+	* Removed misleading comments from Finance::Quote.pm
+
+2000-04-21	Paul Fenwick	<pjf@cpan.org>
+	* Added extra methods to fetch (nasdaq, nyse) which act as
+	  aliases to yahoo.
+
+	* Added stockdump.pl example script, which is handy in debugging.
+
+	* fetch is now an exportable function.
+
+	* yahoo() function no longer returns entries for fields that
+	  used to be returned as 'N/A'.
+
+	* yahoo() now supports the $stocks{$sym,'success'} notation.
+
+2000-04-21      Brent Neal      <brentn@users.sourceforge.net>
+        * Added checking for bogus symbols in tiaacref
+        * Added checking of the LWP::UserAgent->is_success method
+	* tiaacref() now supports $stocks{$sym,'success'} notation.
+        * Updated t/tiaacref.t and Examples/Quote_example.pl for
+               the changes
+
+2000-04-23	Paul Fenwick	<pjf@cpan.org>
+	* Added success/fail tests to asx, fidelity, troweprice, yahoo
+	  and yahoo_europe.
+
+	* Updated appropriate testing functions.
+
+	* Updated documentation to include fetch and list of known
+	  bugs.
+
+	* Updated yahoo_europe to return undef's instead of N/As.
+
+	* Removed HTML from returns from yahoo_europe.
+
+	* Fixed logic bug in process yahoo_* N/As into undefs.
+
+2000-04-24	Paul Fenwick	<pjf@cpan.org>
+	* Updated in-line code regarding checking for Yahoo!
+	  successes.
+
+	* Added meaningful error-messages to Yahoo! when stock
+	  lookups fail.
+	  
+2000-04-24	Brent Neal		<brentn@users.sourceforge.net>
+	* Finished updating error-checking for tiaacref. The tiaacref
+	  function now returns a success/failure flag for every symbol
+	  passed to it. It also checks that the data is valid. Returns
+	  meaningful error messages for these failures.
+
+2000-04-25	Paul Fenwick	<pjf@cpan.org>
+	* Rolled changes together when CVS got a little out-of-whack.  :)
+
+	* Return many new fields from yahoo() which we previously fetched
+	  but did not use.  These include avg_vol, day_range, year_range,
+	  div_date, div, and div_yield.
+
+	* Fixed typo in docs  s/yeild/yield/;
+	
+	* Added ex_div for Ex-Divident Date in yahoo().
+
+2000-04-30	Paul Fenwick	<pjf@cpan.org>
+	* Updated POD.
+
+	* Improved returned error messages.
+
+	* Updated the README file.
+
+	* Updated the INSTALL file.
+
+	* Tagged files as finance_quote_0_18 for release.
+
+2000-05-13	Paul Fenwick	<pjf@cpan.org>
+	* Added Documentation/FAQ file.
+
+2000-05-14	Paul Fenwick	<pjf@cpan.org>
+	* Huge re-write and change of everything so that it should be easy
+	  to plug in new modules without changing any existing code.
+
+2000-05-27	Paul Fenwick	<pjf@cpan.org>
+	* Added Documentation/Hackers-Guide.
+
+	* Tweaked Quote.pm to provide an AUTOLOAD method for those people
+	  who don't want to go through the fetch() methods.
+
+2000-05-31	Paul Fenwick	<pjf@cpan.org>
+	* Added Documentation/TODO.
+
+2000-06-03	Paul Fenwick	<pjf@cpan.org>
+	* Revived dead vanguard method by rolling it through Yahoo.
+
+	* Added labels method to everything.
+
+	* Added price labels to everything.
+
+	* Updated Quote.pm to query new labels methods.
+
+	* Provided a failover method for fidelity via Yahoo.
+
+	* Added failover functionality.
+
+2000-06-03	Jacinta Richardson	<jarich@users.sourceforge.net>
+	* Changed modules so they return undef in scalar context,
+	  empty list in list context, on failure.
+
+	* Changed modules so they return a hashref when in scalar
+	  context, and a hash in list context.
+
+	* Reviewed/corrected hackers guide.
+
+        * Added currency tags to existing modules to signal currency type
+          (AUD, EUR, USD)
+
+        * Added tests to check currency tags.
+
+2000-06-16	Paul Fenwick	<pjf@cpan.org>
+	* Added webpage to CVS repository.
+
+2000-06-17	Paul Fenwick	<pjf@cpan.org>
+	* Re-added currency lookups to Quote.pm
+
+	* Added regression testing script for currency.
+
+	* Added automatic currency conversion stub.
+
+	* Removed TODO file as we now keep track of outstanding jobs
+	  in SourceForge.
+
+2000-06-21	Paul Fenwick	<pjf@cpan.org>
+	* Rolled all the Yahoo functions into a base pseudo-class.
+
+	* Fixed bug whereby large lookups in the yahoo functions would
+	  overflow the maximum URL length of some proxies/servers.
+
+	* Expanded the number of fields available via Yahoo::Europe.
+
+2000-06-22	Paul Fenwick	<pjf@cpan.org>
+	* Added sections on currency conversion to the hacker's guide.
+	  Now I just need to write the code.  :)
+
+	# Added currency conversion code, but haven't tested it yet.
+
+2000-06-23	Paul Fenwick	<pjf@cpan.org>
+	* Cleaned up the hacker's guide.
+
+	* Updated Examples/stockdump.pl to allow currency to be specified.
+
+	* Automatic currency conversion now works.
+
+	* Updated ASX and Yahoo::USA to not tag indexes with currency
+	  labels.
+
+	* Updated Yahoo::Base to automatically accomodate suffixes for
+	  when we wish to add them automatically.
+
+	* Added Yahoo::Australia to look up Australian stocks.
+
+	* Tested failover of Yahoo::Australia to Yahoo::ASX.
+
+2000-06-24	Paul Fenwick	<pjf@cpan.org>
+	* Updated currency regression testing script.
+
+	* Updated currency fetching routines to handle different date
+	  formats returned by Yahoo!
+
+	* Updated automatic currency conversion routines to avoid
+	  spurious warnings.
+
+2000-06-25	Paul Fenwick	<pjf@cpan.org>
+	* Documented many of the new 0.19 functions in the Finance::Quote
+	  POD.
+
+2000-07-02	Paul Fenwick	<pjf@cpan.org>
+	* Many more documentation improvements in both the Finance::Quote
+	  POD and the sub-modules.
+
+2000-07-08	Paul Fenwick	<pjf@cpan.org>
+	* Added POD for TIAA-CREF and T. Rowe Price sub-modules.
+
+2000-07-13	Paul Fenwick	<pjf@cpan.org>
+	* Improved fidelity module such that it doesn't return information
+	  about stocks we did not request.
+
+2000-07-15	Paul Fenwick	<pjf@cpan.org>
+	* Wrote documentation for Yahoo::Europe (incomplete) and
+	  Yahoo::USA.  Changed modules to require perl 5.005 because
+	  we make use of some of its features (like hash slices).
+
+	* Improved labels documentation in Finance::Quote.
+
+	* Added exchange and method information (where possible)
+	  to the various sub-modules.
+
+	* Improved chkshares example script to check for errors.
+
+	* Removed bad test in currency.t and replaced it with a better
+	  one.
+
+2000-07-16	Paul Fenwick	<pjf@cpan.org>
+	* Documented the list of possible markets in Yahoo::Europe.
+
+	* Many many small syntax fixes in documentation.
+
+	* Expanded and improved webpage.
+
+	* Updated revision to 1.00
+
+	* Updated INSTALL documentation.
+
+	* CVSTAG: finance_quote_1_00
+
+2000-07-25	Paul Fenwick	<pjf@cpan.org>
+	* Finance::Quote::Yahoo::Base now removes more HTML-ish guff that
+	  Yahoo tries to place in CSVs.
+
+	* Updated yahoo_europe.t to check that stocks from London are in
+	  GBP.
+
+	* Finance::Quote::Yahoo::Europe now returns London stocks in
+	  GBP.  Previously it was incorrectly returning them in pence
+	  and calling it Euros.
+
+	* Finance::Quote has a new scale_field() function that is used in
+	  currency conversion and by some sub-modules (Yahoo::Europe).  This
+	  may be useful for future module writers.
+
+	* CVSTAG: finance_quote_1_01
+
+2000-07-31	Paul Fenwick	<pjf@cpan.org>
+	* The currency function no longer makes an expensive HTTP
+	  request if both the to and from currencies are identical.
+
+2000-08-04	Paul Fenwick	<pjf@cpan.org>
+	* Patched Yahoo::Base to no longer return spurious percentage signs.
+
+2000-08-06	Paul Fenwick	<pjf@cpan.org>
+	* Updated regression testing scripts to make sure that spurious
+	  percentage signs are no longer returned.
+
+2000-08-14	Paul Fenwick	<pjf@cpan.org>
+	* Updated chkshares script so that it can deal with any market,
+	  not just the ASX.
+
+2000-08-16	Paul Fenwick	<pjf@cpan.org>
+	* Added DWS.pm module to the CVS repository, courtesy of
+	  Volker Stuerzl.  This module fetches information from the
+	  Deutsche Bank Gruppe.
+
+	* Updated asx.t script because it really hurts the entire
+	  "make test" thing when ASX is unhappy.  Now it still hurts
+	  (because the ASX module sucks), but less.
+
+2000-08-21	Paul Fenwick	<pjf@cpan.org>
+	* Improved documentation in the yahoo_europe test script.
+
+2000-08-22	Volker Stuerzl	<volkers@users.sourceforge.net>
+	* Added DWS test script.
+
+2000-08-29	Paul Fenwick	<pjf@cpan.org>
+	* Rejiggered ASX module to try and make it work again after
+	  an ASX site rewrite.
+
+	* Updated Quote.pm so that if a method was called directly
+	  (old-style) not through fetch, then it would do the right
+	  thing if called via an object.  This means that things
+	  like $q->asx(@stocks) work correctly again.
+
+	* Updated fetch() method so that it returns the empty list
+	  rather than undef when called in an array context.
+
+	* fetch() now returns a hashref if called in a scalar context.
+
+2000-08-31	Paul Fenwick	<pjf@cpan.org>
+	* Added Keith Refson's Trustnet module.
+
+	* Added .cvsignore file to reduce spam for developers using CVS.
+
+	* Updated Yahoo/USA.pm to provide more compatible returns when
+	  called as a fidelity failover.
+
+	* Tweaked DWS.t testing script so that it loads the module
+	  correctly.
+
+2000-09-01	Paul Fenwick	<pjf@cpan.org>
+	* Tweaked ASX.pm to avoid divide-by-zero errors and dodgy
+	  bogus-looking label values.
+
+2000-09-04	Paul Fenwick	<pjf@cpan.org>
+	* Keith Refson's patch to Trustnet to avoid premature returns
+	  in case of a bad symbol.
+
+2000-09-12	Paul Fenwick	<pjf@cpan.org>
+	* Mention of Bill Bell's java library in the FAQ.
+
+2000-09-16	Paul Fenwick	<pjf@cpan.org>
+	* Added Volker's VWD module and testing script.
+
+	* Updated Makefile to check for HTML::TableExtract.
+
+	* Updated INSTALL file to provide infomation on how to install
+	  modules that F::Q depends upon.
+
+	* Updated Quote.pm to load VWD, DWS and Trustnet by default.
+
+	* Updated README file to mention the webpage.
+
+	* Added Trustnet regression testing program.
+
+	* CVSTAG: finance_quote_1_02
+
+2000-09-27	Paul Fenwick	<pjf@cpan.org>
+	* Updated Trustnet module with patch from Keith Refson.
+
+2000-10-20	Paul Fenwick	<pjf@cpan.org>
+	* Much better discovery of non-existant stocks in ASX.pm.
+
+	* Checks for possible divide-by-zero problems in ASX.pm.
+	  Thanks to Stephen Stebbing for catching this.
+
+	* Updated ASX testing.
+
+	* Updated all test scripts to remove spurious warnings under
+	  Perl 5.6.
+
+	* Updated ASX module to deal with stocks when they have market
+	  announcements.  Previously this would result in garbage being
+	  returned for that stock.
+
+	* Updated VWD module so it can parse information from the new
+	  VWD site.
+
+	* Updated F::Q version to 1.03.
+
+	* CVSTAG: finance_quote_1_03
+
+2000-10-27	Paul Fenwick	<pjf@cpan.org>
+	* Updated yahoo_europe test suite as one of the symbols we were
+	  using for testing has since dissapeared.  (Bankrupt? Merged?)
+
+2000-10-29	Paul Fenwick	<pjf@cpan.org>
+	* F::Q now makes use of a custom F::Q::UserAgent to fetch
+	  information.  This is capable of doing proxy authentication
+	  and other arbitary http-headers.
+
+2000-11-05	Paul Fenwick	<pjf@cpan.org>
+	* BUG 121557: Fixed bug where the 40th symbol in a Yahoo lookup
+	  would fail.
+
+	* F::Q::UserAgent is now ready for release, but is still considered
+	  experimental.  Users must explicitly turn it on by setting
+	  $Finance::Quote::USE_EXPERIMENTAL_UA = 1;
+
+	* Updated the FAQ.
+
+	* Added MANIFEST file.
+
+	* CVSTAG: finance_quote_1_04
+
+2000-11-21	Paul Fenwick	<pjf@cpan.org>
+	* Extra code to ensure that currency-fields returned by a
+	  Quotelet are unique.  This prevents the potential bug of
+	  a field undergoing currency conversion multiple times and
+	  hence being quite off-track.
+
+2000-11-29	Paul Fenwick	<pjf@cpan.org>
+	* Updated the URL we obtain currency information to
+	  http://uk.finance.yahoo.com/m5?"
+
+	* Updated docs in Yahoo/Europe.pm to note the Xtera exchange
+	  moving from FX to DE.
+
+	* Thanks to Jan Willamowius for the above two changes.
+
+2000-12-05	Paul Fenwick	<pjf@cpan.org>
+	* Updated the Yahoo::USA source to finance.yahoo.com as
+	  the quote.yahoo.com may become depreciated in the future.
+	  Thanks to Iain Lea for spotting this.
+
+2000-01-22	Paul Fenwick	<pjf@cpan.org>
+	* Updated to respect the FQ_LOAD_QUOTELET environment variable
+	  to auto-load custom Quotelet.
+
+2000-02-16	Paul Fenwick	<pjf@cpan.org>
+	* Updated to repsect formatting changes in data fed to the
+	  currency function.
+
+	* Updated Quote.pm to include updated information on 
+	  FQ_LOAD_QUOTELET
+
+	* CVSTAG: finance_quote_1_05
+

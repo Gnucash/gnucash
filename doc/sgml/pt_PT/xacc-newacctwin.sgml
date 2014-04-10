@@ -1,0 +1,46 @@
+
+<ARTICLE ID="XACC-NEWACCTWIN">
+<ARTHEADER>
+<TITLE>Janela de Nova Conta</TITLE>
+</ARTHEADER>
+<SECT1>
+<TITLE></TITLE>
+<PARA>A janela de nova conta terá este aspecto:
+</PARA>
+
+<PARA><INLINEMEDIAOBJECT>
+<IMAGEOBJECT>
+<IMAGEDATA FILEREF="image/newaccwin-code.png">
+</IMAGEOBJECT>
+</INLINEMEDIAOBJECT>
+</PARA>
+
+<PARA>Escolha um <LINK LINKEND="XACC-ACCTYPES"><EMPHASIS>Tipo de 
+    Conta</EMPHASIS></LINK>.
+
+    </PARA>
+<PARA>O campo de <EMPHASIS>Moeda</EMPHASIS> deverá tipicamente ser um <LINK LINKEND="XACC-ISOCURR">código ISO de moeda de três letras</LINK>
+    (<EMPHASIS>por ex.</EMPHASIS> - <ACRONYM>PTE</ACRONYM> para Escudos Portugueses). O <EMPHASIS>Código de 
+    Conta</EMPHASIS> é um número que determina a <LINK LINKEND="SORTORDER">ordenação</LINK> da conta quando 
+    ela surgir num relatório ou no <LINK LINKEND="XACC-CHARTOFACCTS"><EMPHASIS>Plano de Contas</EMPHASIS></LINK>.
+
+    </PARA>
+<PARA>A imagem abaixo representa um exemplo de uma conta de negociação 
+    de acções ou moedas. Note que o campo Activo não está desabilitado 
+    e que pode introduzir um valor. Esse valor deverá ser tipicamente um 
+    <LINK LINKEND="XACC-ISOCURR">código de moeda ISO de três letras.</LINK>
+
+    </PARA>
+<PARA>     <INLINEMEDIAOBJECT>
+<IMAGEOBJECT>
+<IMAGEDATA FILEREF="image/newaccwin-trade.png">
+</IMAGEOBJECT>
+</INLINEMEDIAOBJECT>
+
+</PARA>
+</SECT1>
+</ARTICLE>
+
+<!-- Local variables: -->
+<!-- sgml-parent-document: "gnucash.sgml" -->
+<!-- End: -->

@@ -1,0 +1,11 @@
+#! /bin/sh
+echo "  test-scm-init: testing Scheme-only module system init. ";
+exec guile -s $0 "$@"
+!#
+
+(use-modules (gnucash gnc-module))
+(gnc:module-system-init)
+
+;; LocalVariables:
+;; mode: scheme
+;; End:

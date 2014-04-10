@@ -1,0 +1,14 @@
+Makefile
+Makefile.in
+.deps
+.libs
+test-load-engine
+test-commodities
+test-date
+test-freq-spec
+test-group-vs-book
+test-query
+test-resolve-file-path
+test-scm-query
+test-split-vs-account
+test-transaction-voiding

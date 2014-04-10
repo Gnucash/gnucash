@@ -1,0 +1,23 @@
+  <article id="xacc-print">
+
+    <artheader>
+      <title>Imprimir</title>
+    </artheader>
+
+    <sect1>
+      <title></title>
+
+      <para>O GnuCash suporta <link linkend="xacc-print-check">a impressão 
+      de cheques</link>, de relatórios, e de janelas de registo.
+    </para>
+
+      <para><link linkend="xacc-reports">Os relatórios</link> também podem ser 
+      <link linkend="export">exportados como HTML</link>.
+</para>
+
+</sect1>
+</article>
+
+<!-- Local variables: -->
+<!-- sgml-parent-document: "gnucash.sgml" -->
+<!-- End: -->

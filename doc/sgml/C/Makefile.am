@@ -4,49 +4,81 @@ gnucash_helpdir = $(GNC_HELPDIR)/C
 
 GNUCASH_SGML_FILES = \
 	bofa-mym.sgml \
-        gnucash.sgml \
+	gnucash.sgml \
 	xacc-about.sgml \
 	xacc-accountedit.sgml \
 	xacc-acctypes.sgml \
-	xacc-adjbalwin.sgml \
+	xacc-account-hierarchy-creator.sgml \
+	xacc-account-summary.sgml \
 	xacc-apar.sgml \
+	xacc-asset-liability-barcharts.sgml \
+	xacc-asset-liability-piecharts.sgml \
 	xacc-balancereport.sgml \
 	xacc-balancesheet.sgml \
+	xacc-calculator.sgml \
 	xacc-chartofaccts.sgml \
+	xacc-commodity.sgml \
+        xacc-common-report-options.sgml \
 	xacc-currencyhandling.sgml \
 	xacc-dateinput.sgml \
 	xacc-depreciation.sgml \
         xacc-dochack.sgml \
 	xacc-doubleentry.sgml \
 	xacc-euro.sgml \
+	xacc-features.sgml \
+	xacc-file-operations.sgml \
+	xacc-gnome-mdi.sgml \
+	xacc-gnucash-web-browser.sgml \
 	xacc-gpl.sgml \
 	xacc-incomeexpense.sgml \
+	xacc-income-expense-barcharts.sgml \
+	xacc-income-expense-piecharts.sgml \
 	xacc-locatingtxns.sgml \
 	xacc-mainwin.sgml \
+	xacc-multicolumn-view-reports.sgml \
+	xacc-net-worth-barchart.sgml \
 	xacc-newacctwin.sgml \
 	xacc-pnl.sgml \
 	xacc-portfolio-report.sgml \
+	xacc-price-editor.sgml \
+	xacc-price-sources.sgml \
 	xacc-preferences.sgml \
 	xacc-print-check.sgml \
 	xacc-print.sgml \
 	xacc-qif-import.sgml \
 	xacc-quicken.sgml \
+	xacc-quickstart.sgml \
 	xacc-recnwin.sgml \
 	xacc-regwin-kbd.sgml \
 	xacc-regwin.sgml \
+	xacc-repdev.sgml \
 	xacc-reports.sgml \
+	xacc-scheme.sgml \
+	xacc-stock-price-report.sgml \
+	xacc-sxeditor.sgml \
 	xacc-tax-report.sgml \
-	xacc-ticker.sgml \
+	xacc-toplevel.sgml \
 	xacc-trans-report.sgml \
+	xacc-txf-categories.sgml \
+	xacc-txf-export.sgml \
+	xacc-txf-export-anomalies.sgml \
 	xacc-userdocs.sgml \
+	xacc-whats-new.sgml \
 	xacc-y2k.sgml
 
-install-data-local: gnucash/index.html
+gnucash_html_dir = $(top_srcdir)/doc/html/C
+
+GNUCASH_HTML_FILES = \
+	$(gnucash_html_dir)/xacc-tax-report-example.html
+
+install-data-local: gnucash/index.html gnucash/help-search-index.db
 	$(mkinstalldirs) $(DESTDIR)$(gnucash_helpdir)
 	$(mkinstalldirs) $(DESTDIR)$(gnucash_helpdir)/image
 	$(mkinstalldirs) $(DESTDIR)$(gnucash_helpdir)/stylesheet-images
 	$(INSTALL_DATA) $(srcdir)/topic.dat \
 			$(DESTDIR)$(gnucash_helpdir)/topic.dat
+	-$(INSTALL_DATA) gnucash/help-search-index.db \
+			 $(DESTDIR)$(gnucash_helpdir)/help-search-index.db
 	-(for file in gnucash/*.html; do \
 	    basefile=`basename $$file` \
 	    $(INSTALL_DATA) $(srcdir)/$$file \
@@ -67,6 +99,7 @@ install-data-local: gnucash/index.html
 
 EXTRA_DIST = \
 	$(GNUCASH_SGML_FILES) \
+	$(GNUCASH_HTML_FILES) \
 	topic.dat
 
 manual-html: gnucash/index.html
@@ -90,17 +123,23 @@ gnucash/gnucash.ps: $(GNUCASH_SGML_FILES)
 gnucash/gnucash.rtf: $(GNUCASH_SGML_FILES)
 	db2rtf gnucash.sgml
 
-gnucash/index.html: $(GNUCASH_SGML_FILES)
+gnucash/index.html: $(GNUCASH_SGML_FILES) $(GNUCASH_HTML_FILES)
 	-(db2html gnucash.sgml \
+	  && cp $(GNUCASH_HTML_FILES) gnucash \
 	  && mkdir -p gnucash/image \
-	  && cp $(srcdir)/image/*.png gnucash/image || exit 1)
+	  && cp $(srcdir)/image/*.png gnucash/image || exit 1) 
 
+gnucash/help-search-index.db: $(GNUCASH_SGML_FILES) $(GNUCASH_HTML_FILES)
+	-(cd gnucash && \
+	  rm -f help-search-index.db && \
+	  ../$(top_srcdir)/doc-tools/build-help-index \
+            ../$(top_srcdir)/doc-tools/dbadd help-search-index.db *.html)
 
 dist-hook:
 	mkdir $(distdir)/gnucash
 	mkdir $(distdir)/gnucash/image
 	mkdir $(distdir)/gnucash/stylesheet-images
 	cp gnucash/*.html $(distdir)/gnucash
-	cp gnucash/*.css $(distdir)/gnucash
 	cp gnucash/image/*.png $(distdir)/gnucash/image
-	cp gnucash/stylesheet-images/*.gif $(distdir)/gnucash/stylesheet-images
+	-cp gnucash/*.css $(distdir)/gnucash
+	-cp gnucash/stylesheet-images/*.gif $(distdir)/gnucash/stylesheet-images

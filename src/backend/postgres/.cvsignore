@@ -1,0 +1,15 @@
+.deps
+.libs
+*.lo
+*.la
+Makefile
+Makefile.in
+a.out
+base-autogen.c
+check-autogen.c
+functions.c
+kvp-autogen.c
+table-audit.c
+table-create.c
+table-drop.c
+table-version.c

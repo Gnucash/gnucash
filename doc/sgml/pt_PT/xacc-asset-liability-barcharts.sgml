@@ -1,0 +1,51 @@
+<article id="xacc-asset-liability-barcharts">
+<artheader>
+<title>Gráficos de Barras de Activos e Passivos</title>
+</artheader>
+<sect1>
+<title></title>
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="image/asset-barchart.png">
+</imageobject>
+</mediaobject>
+</screenshot>
+<para>Estes relatórios permitem-lhe visualizar as alterações de 
+um, alguns, ou todos os seus activos ou passivos ao longo do tempo.  
+Se deseja um gráfico de barras que mostre a imagem global do seu 
+valor líquido, utilize então o <link linkend="xacc-net-worth-barchart">
+    Gráfico de Barras de Valor Líquido</link>.</para>
+      
+<para>As opções disponíveis para este relatório incluem:</para>
+      <itemizedlist>
+  <listitem><para><emphasis><link linkend="xacc-options-accounts">
+    Contas</link></emphasis></para>
+  </listitem>
+  <listitem><para><emphasis><link linkend="xacc-options-report-title">
+    Título de Relatório</link></emphasis></para></listitem>
+  <listitem><para><emphasis><link linkend="xacc-options-date">
+    De & Até</link></emphasis></para></listitem>
+  <listitem><para><emphasis><link linkend="xacc-options-interval">
+    Tamanho do Incremento</link></emphasis></para>
+  </listitem>
+  <listitem><para><emphasis><link linkend="xacc-options-style-sheet">
+    Folha de Estilos</link></emphasis></para>
+  </listitem>
+  <listitem><para><emphasis><link linkend="xacc-options-price-source">
+    Fonte de Cotações</link></emphasis></para>
+  </listitem>
+  <listitem><para><emphasis><link linkend="xacc-options-depth">
+    Profundidade</link></emphasis></para>
+  </listitem>
+  <listitem><para><emphasis>Adicionar Restantes!!!
+        </emphasis></para>
+  </listitem>
+
+      </itemizedlist>
+    </sect1>
+  </article>
+  
+<!-- Local variables: -->
+<!-- sgml-parent-document: "gnucash.sgml" -->
+<!-- End: -->

@@ -1,0 +1,62 @@
+SUBDIRS = . test
+
+pkglib_LTLIBRARIES = libgncmod-register-gnome.la
+
+libgncmod_register_gnome_la_LDFLAGS = -module 
+libgncmod_register_gnome_la_LIBADD = \
+  ${top_srcdir}/src/register/register-core/libgncmod-register-core.la \
+  ${top_srcdir}/src/gnc-module/libgncmodule.la \
+  ${top_srcdir}/src/engine/libgncmod-engine.la \
+  ${top_srcdir}/src/app-utils/libgncmod-app-utils.la \
+  ${top_srcdir}/src/gnome-utils/libgncmod-gnome-utils.la \
+  ${GLIB_LIBS} \
+  ${GNOMEUI_LIBS}
+
+libgncmod_register_gnome_la_SOURCES = \
+  gncmod-register-gnome.c \
+  combocell-gnome.c \
+  datecell-gnome.c \
+  gnucash-color.c \
+  gnucash-cursor.c \
+  gnucash-date-picker.c \
+  gnucash-grid.c \
+  gnucash-header.c \
+  gnucash-item-edit.c \
+  gnucash-item-list.c \
+  gnucash-scrolled-window.c \
+  gnucash-sheet.c \
+  gnucash-style.c \
+  pricecell-gnome.c \
+  quickfillcell-gnome.c \
+  table-gnome.c 
+
+noinst_HEADERS = \
+  gnucash-color.h \
+  gnucash-cursor.h \
+  gnucash-date-picker.h \
+  gnucash-grid.h \
+  gnucash-header.h \
+  gnucash-item-edit.h \
+  gnucash-item-list.h \
+  gnucash-scrolled-window.h \
+  gnucash-sheet.h \
+  gnucash-style.h \
+  pricecell-gnome.h \
+  quickfillcell-gnome.h \
+  table-gnome.h
+
+EXTRA_DIST = \
+  .cvsignore
+
+AM_CFLAGS = \
+  -I${top_srcdir}/src \
+  -I${top_srcdir}/src/engine \
+  -I${top_srcdir}/src/gnc-module \
+  -I${top_srcdir}/src/app-utils \
+  -I${top_srcdir}/src/gnome-utils \
+  -I${top_srcdir}/src/register/ledger-core \
+  -I${top_srcdir}/src/register/register-core \
+  ${GUILE_INCS} \
+  ${GLIB_CFLAGS} \
+  ${GTK_XIM_FLAGS} \
+  ${GNOME_INCLUDEDIR}

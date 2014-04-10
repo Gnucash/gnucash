@@ -1,6 +1,7 @@
-/*******************************************************************\
+/********************************************************************
  * window-main.h -- public GNOME main window functions              *
  * Copyright (C) 1998,1999 Linas Vepstas                            *
+ * Copyright (C) 2001 Bill Gribble <grib@gnumatic.com>              *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -18,20 +19,13 @@
  * Free Software Foundation           Voice:  +1-617-542-5942       *
  * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
-\********************************************************************/
+ ********************************************************************/
 
-#ifndef __WINDOW_MAIN_H__
-#define __WINDOW_MAIN_H__
+#ifndef WINDOW_MAIN_H
+#define WINDOW_MAIN_H
 
-#include "account-tree.h"
+#include "gnc-mdi-utils.h"
 
-
-/** PROTOTYPES ******************************************************/
-
-void mainWindow(void);
-
-GNCAccountTree * gnc_get_current_account_tree(void);
-
-void gnc_ui_mainWindow_save_size(void);
+GNCMDIInfo * gnc_main_window_new (void);
 
 #endif

@@ -3,12 +3,11 @@
 <ARTHEADER>
 <TITLE>Currency Handling and Double Entry Bookkeeping</TITLE>
 </ARTHEADER>
-<SECT1>
-<TITLE> Currency Handling and Double Entry Bookkeeping</TITLE> <PARA>
-</PARA> <PARA>A <LINK LINKEND="XACC-DOUBLEENTRY">Double Entry
+
+    <PARA>A <LINK LINKEND="XACC-DOUBLEENTRY">Double Entry
     bookkeeping system</LINK> stores both values, and requires
     that all transactions balance, as described in the <LINK
-    LINKEND="IDENTITY">Double Entry Identity.</LINK>
+    LINKEND="XACC-DOUBLEENTRYRULE">Rule of Double Entry Accounting.</LINK>
 
     </PARA>
 <PARA>When we introduce the notion of having multiple currencies,
@@ -58,13 +57,15 @@
 </ITEMIZEDLIST>
 
     </PARA>
-<PARA>The engine links together all three of these values <ENVAR>    (1.0, 150, 0.00667)</ENVAR> permanently and makes it impossible to
-    change one without changing another, so that the grand total is
-    always zero, thereby guaranteeing satisfaction of the <LINK LINKEND="IDENTITY">double entry accounting
-    identity.</LINK>
+
+<PARA>The engine links together all three of these values <ENVAR>
+(1.0, 150, 0.00667)</ENVAR> permanently and makes it impossible to
+change one without changing another, so that the grand total is always
+zero, thereby guaranteeing satisfaction of the <LINK
+LINKEND="XACC-DOUBLEENTRYRULE">rule of double entry accounting.</LINK>
 
     </PARA>
-</SECT1>
+
   <SECT1>
   <TITLE>How to set up a foreign-currency account</TITLE>
   <PARA>All of the above may sound straightforward, but you may get
@@ -904,3 +905,7 @@
 </PARA>
 </SECT1>
 </ARTICLE>
+
+<!-- Local variables: -->
+<!-- sgml-parent-document: "gnucash.sgml" -->
+<!-- End: -->

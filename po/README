@@ -1,0 +1,41 @@
+Notes on I18n for GnuCash
+-------------------------
+
+Please send new and updated .po files to gnucash-patches@gnucash.org.
+
+To update the .pot file for GnuCash it is best to simply build the
+sources using 'make'. Don't run xgettext by hand, because many of the
+translatable strings in GnuCash are taken from scheme files and will
+be missed.
+
+
+The subdirectory glossary/ contains a glossary of the financial terms
+used inside GnuCash. To achieve a decent consistency in terminology
+within GnuCash, it is recommended to translate it and to use it during
+the translation process. There is one po files per translation of the
+glossary. The english definitions are in the file gnc-glossary.txt
+which is a tab-delimited ASCII table with each table cell enclosed in
+double quotation marks ("). If the file gnc-glossary.txt was updated,
+you can build a new glossary.pot file by using the shell script
+txt-to-pot.sh so that you can update the po file.
+
+
+GnuCash .pot files contain some strings of the form:
+
+sample:<some text>
+Reconciled:R
+reconciled:y
+not cleared:n
+cleared:c
+frozen:f
+
+In each of the cases above, the translator should only translate the
+portion after the ':' and leave the rest as is. In the cases of single
+letters (such as reconciled:y), the letters are abbreviations of the
+word before the colon. The 'sample:' items are strings which are not
+displayed, but only used to estimate widths.
+
+Dave Peticolas
+April 02, 2001
+
+Christian Stimming, May 24, 2001

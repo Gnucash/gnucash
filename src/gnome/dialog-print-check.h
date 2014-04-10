@@ -20,8 +20,8 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-#ifndef __DIALOG_PRINT_CHECK_H_
-#define __DIALOG_PRINT_CHECK_H_
+#ifndef DIALOG_PRINT_CHECK_H
+#define DIALOG_PRINT_CHECK_H
 
 #include "config.h"
 
@@ -29,7 +29,6 @@
 #include <guile/gh.h>
 
 #include "print-session.h"
-#include "glade-gnc-dialogs.h"
 
 typedef struct {
   GtkWidget * dialog;
@@ -54,13 +53,5 @@ typedef struct {
 
 PrintCheckDialog * gnc_ui_print_check_dialog_create(SCM callback);
 void gnc_ui_print_check_dialog_destroy(PrintCheckDialog * pcd);
-void gnc_ui_print_check_dialog_ok_cb(GtkButton * button,
-                                     gpointer  user_data);
-
-void gnc_ui_print_check_dialog_cancel_cb(GtkButton * button,
-                                         gpointer user_data);
-
-void gnc_ui_print_check_dialog_help_cb(GtkButton * button,
-                                       gpointer user_data);
 
 #endif

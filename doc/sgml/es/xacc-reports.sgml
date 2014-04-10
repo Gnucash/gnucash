@@ -1,0 +1,143 @@
+<ARTICLE ID="XACC-REPORTS">
+<ARTHEADER>
+<TITLE>Listados</TITLE>
+</ARTHEADER>
+<SECT1>
+<TITLE> Listados</TITLE>
+<PARA>Una gran variedad de listados financieros se pueden seleccionar
+    en el menú "Listados":
+
+    <ITEMIZEDLIST>
+<LISTITEM>
+<PARA><LINK LINKEND="XACC-BALANCESHEET">Hoja de Balance:</LINK> muestra
+      Asientos, Lo que se posee y Equidad.
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><LINK LINKEND="XACC-PNL">Estado de Beneficios y Pérdidas:</LINK> muestra
+      Cobros y Gastos en un periodo determinado (seleccionable).
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><LINK LINKEND="XACC-TRANS-REPORT">Listado de Transacciones:</LINK> muestra
+      las transacciones de la cuenta, presentadas en una gran variedad
+      de formas.
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><LINK LINKEND="XACC-PORTFOLIO-REPORT">Portafolio de Existencias:</LINK>
+      proporciona un sumario rápido de sus existencias, su valor
+      actual, y los beneficios generados.
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><APPLICATION>Seguimiento de Balances</APPLICATION> 
+      Resigue el balance de una o más cuentas en el tiempo, y
+      soporta dibujar un gráfico (si tiene <APPLICATION>gnuplot</APPLICATION>
+      instalado).
+    </PARA>
+</LISTITEM>
+</ITEMIZEDLIST>
+
+    </PARA>
+</SECT1>
+<SECT1 ID="XACC-REPORTWINDOW">
+<TITLE> La Ventana de Listados</TITLE>
+<PARA>    Una vez ha seleccionado un listado, aparece la ventana
+       de listados:
+
+    </PARA>
+<PARA><INLINEMEDIAOBJECT>
+<IMAGEOBJECT>
+<IMAGEDATA FILEREF="image/reportwin.png">
+</IMAGEOBJECT>
+</INLINEMEDIAOBJECT>
+
+    </PARA>
+<PARA>El listado es mostrado en una ventana de tamaño variable y
+    con desplazamiento. Para controlar el listado, puede utilizar
+    los botones de la barra de herramientas de la parte superior
+    de la ventana:
+
+    <ITEMIZEDLIST>
+<LISTITEM>
+<PARA><EMPHASIS>Atrás</EMPHASIS> y <EMPHASIS>Siguiente</EMPHASIS> le permite visualizar
+      el contenido previo de la ventan, como un navegador web
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>        <EMPHASIS>Parámetros</EMPHASIS> despliega un diálogo que le permite
+        modificar la información que se presenta en el listado:
+
+        </PARA>
+<PARA><INLINEMEDIAOBJECT>
+<IMAGEOBJECT>
+<IMAGEDATA FILEREF="image/report-option.png">
+</IMAGEOBJECT>
+</INLINEMEDIAOBJECT>
+
+        </PARA>
+<PARA>Vea la ayuda de cada listado individual para la explicación
+        de los opciones disponibles.
+     
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><ANCHOR ID="EXPORT"><EMPHASIS>Exportar</EMPHASIS> le permite exportar el
+      contenido de un listado como un archivo HTML para ser visualizado
+      o imprimido posteriormente.
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><EMPHASIS>Cerrar</EMPHASIS> cierra la ventana de listados.
+    </PARA>
+</LISTITEM>
+</ITEMIZEDLIST>
+
+    </PARA>
+</SECT1>
+
+<SECT1 ID="XACC-CUSTOMREPORTS">
+<TITLE> Construir listados personalizados</TITLE>
+
+<PARA> Es posible escribir sus propios listados para satisfacer
+sus necesidades, si puede programar un poco. Necesitará conocer
+SCHEME (un lenguaje de programación parecido a LISP), además
+es una idea excelente disponer de una copia del código fuente de
+<application>GnuCash</application>.
+</PARA>
+
+<PARA>La interfície de listados está indocumentada, pero puede
+obtener una idea de como funciona examinando el archivo <filename>
+src/scm/report/hello-world.scm </filename> en la distribución
+del código fuente de <application>GnuCash</application>.
+</PARA>
+
+<PARA>También necesitará acceder a los datos del "motor" para
+rellenar de datos su listado. Esto se consigue con un conjunto
+de funciones de Scheme que están documentadas en el archivo
+<filename>src/g-wrap/gnc.html</filename>. Quizá desee examinar
+alguno de los listados en <filename> src/scm/report </filename> 
+para tener un punto de referencia de como están hechos.
+</PARA>
+
+<PARA>Por el momento, los listados se hacen creando internamente
+páginas HTML y procesándolas con un control HTML ("widget").
+(Próximas versiones de GnuCash esperemos que soporten un sistema
+más flexible).  </PARA>
+
+<PARA>Si necesita más información, o ha desarrollado un nuevo
+listado que sea de utilidad para otros usuarios, por favor
+contacte con la lista de correo del desarrollo de GnuCash en
+<email> gnucash-devel@gnucash.org </email>.
+
+</PARA>
+</SECT1>
+</ARTICLE>

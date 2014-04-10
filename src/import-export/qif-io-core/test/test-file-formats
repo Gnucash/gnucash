@@ -1,0 +1,2 @@
+#!/bin/sh
+guile -l test-file-formats.scm -c "(exit (run-test))"

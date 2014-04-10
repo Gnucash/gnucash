@@ -1,0 +1,165 @@
+
+  <article id="xacc-price-editor">
+    <artheader>
+      <title>Actualizar Cotações de Acções e Câmbios Monetários</title>
+    </artheader>
+    <sect1>
+      <title>Introdução</title>
+      <para>Quando se transaccionam moedas, fundos, ou acções, e se tenta 
+  acompanhar o crescimento do nosso investimento, é necessário ser possível 
+  controlar o valor destes activos. O <emphasis>editor de preços</emphasis> 
+  disponibiliza um interface unificado para fazer precisamente isso.
+      </para>
+    </sect1>
+    <sect1>
+      <title>
+  O Editor de Preços
+      </title>
+      <para>O editor de preços encontra-se disponível no menu "Ferramentas". 
+  Ao selecciona-lo surge o editor:</para>
+      
+      <screenshot>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="image/pricedb.png">
+      
+    </imageobject>
+  </mediaobject>
+      </screenshot>
+      
+      <para>Cada entrada no editor mostra o registo de um preço:</para>
+      <itemizedlist>
+  <listitem>
+    <para><emphasis>Activo</emphasis>: Ao que se refere o preço.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      <emphasis>Moeda</emphasis>: em que moeda o preço está registado.
+      Como um exemplo simples, O Activo das acções da EDP S.A. é EDP, 
+      e a moeda seria EUR, já que as cotações são quase sempre indicadas 
+      em Euros.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      <emphasis>Data</emphasis>: a que a cotação se destina.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      <emphasis>Fonte</emphasis>: de onde veio a cotação. Tipicamente, 
+      isto será ou "user:price-editor" (indicando que você o introduziu 
+      directamente) ou "Finance::Quote", indicando que foi obtido de 
+      uma fonte online através do módulo Finance::Quote que o GnuCash 
+      utiliza para esta tarefa.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      <emphasis>Tipo</emphasis>: Existem vários tipos diferentes de 
+      cotações de acções, e explicar os aspectos técnicos requer 
+      algum conhecimento do mercado financeiro.  A maioria das acções, 
+      na maior parte dos mercados, têm correctores especializados que 
+      estão quase sempre dispostos a comprar e vender essa acção, e 
+      ter algum lucro pelo caminho ao comprar e vender a preços 
+      ligeiramente diferentes.
+      </para>
+    
+    <itemizedlist>
+      <listitem>
+        <para><emphasis>Compra</emphasis> - as cotações indicam quanto 
+        um corrector especializado está disposto a pagar por uma acção.
+        </para>
+      </listitem>
+      <listitem>
+        <para><emphasis>Venda</emphasis> - as cotações indicam por quanto 
+        os correctores estão dispostos a vender as acções - naturalmente, 
+        este é ligeiramente superior à cotação de compra.
+        </para>
+      </listitem>
+      <listitem>
+        <para><emphasis>Última</emphasis> - as cotações indicam a cotação 
+        a que ocorreu a última transacção para essa acção/título. Esta é 
+        a cotação mais normalmente citada nos meios de informação.
+        </para>
+      </listitem>
+      <listitem>
+        <para><emphasis>Valor Líquido do Activo</emphasis> - cotações 
+    tipicamente utilizadas para fundos de investimento. São calculadas 
+    utilizando o valor líquido dos activos do fundo.
+        </para>
+      </listitem>
+      <listitem>
+        <para><emphasis>Desconhecida</emphasis> - tal como o nome sugere, 
+    utilize esta se o tipo de cotação for desconhecida.
+        </para>
+      </listitem>
+    </itemizedlist>
+  </listitem>
+  <listitem>
+    <para>
+      <emphasis>Cotação</emphasis>: a cotação actual.
+    </para>
+  </listitem>
+      </itemizedlist>
+      <para>
+  Você pode seleccionar como deseja ordenar a lista de cotações 
+  clicando no botão de selecção "Ordenar por . . ." apropriado 
+  directamente abaixo da lista de cotações.
+      </para>
+    </sect1>
+
+    <sect1>
+      <title>
+  Actualizar Cotações Manualmente
+      </title>
+      <para>Para adicionar uma nova cotação, clique em "Adicionar", e introduza 
+  os deralhes da cotação na caixa de diálogo. Da mesma forma, para editar uma 
+  cotação existente, clique na cotação na lista de cotações, prima no botão 
+  "Editar", e modifique os valores.</para>
+      <para>
+  Para agapar apenas uma cotação, basta primir o botão "Apagar", ou, se desejar 
+  apagar todas as cotações anteriores a uma certa data, prima o botão "Apagar 
+  Antigas..." e utilize a caixa de diálogo.
+  </para>
+    </sect1>
+    
+    <sect1>
+      <title>
+  Obter Cotações Online
+      </title>
+      <para>
+      O GnuCash é capaz de obter cotações online de uma variedade de fontes,
+      através do módulo Finance::Quote. Para suportar cotações online para 
+      uma determinada acção ou fundo de investimento, você tem primeiro de 
+      activar a obtenção de cotações online e seleccionar uma fonte de cotações. 
+      Pode faze-lo na cauxa de diálogo de <link linkend="xacc-accountedit">edição 
+      de conta</link>. Mais detalhes em exactamente como seleccionar uma fonte 
+      de cotações podem ser encontrados na opção de ajuda <link linkend="xacc-price-sources">
+      fontes de preços</link>.
+      </para>
+      <para>
+      Uma vez tendo feito isso, poderá actualizar os preços das suas acções 
+      e fundos de investimento primindo o botão "obter cotações".
+      </para>
+
+      <para>
+      Se desejar actualizar as cotações utilizando a linha de comandos, 
+      pode faze-lo utilizando o seguinte comando 
+      </para>
+      <para>
+      gnucash --add-price-quotes &lt;gnucash-file&gt;
+      </para>
+      
+      <para>
+      O GnuCash 1.4 tinha um script de ajuda para obter cotações,
+      mas tal já não é necessário.
+      </para>
+    </sect1>
+
+</article>
+
+<!-- Local variables: -->
+<!-- sgml-parent-document: "gnucash.sgml" -->
+<!-- End: -->

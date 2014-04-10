@@ -1,5 +1,5 @@
 /********************************************************************\
- * window-report.h -- a report window for hypertext help.           *
+ * window-report.h -- a report window for hypertext report.         *
  * Copyright (C) 1997 Robin D. Clark                                *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
@@ -20,19 +20,45 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-#ifndef __WINDOW_REPORT_H__
-#define __WINDOW_REPORT_H__
+#ifndef GNC_REPORT_WINDOW_H
+#define GNC_REPORT_WINDOW_H
 
 #include <gnome.h>
 #include <guile/gh.h>
 
-#include "config.h"
-
+#include "gnc-html.h"
+#include "gnc-mdi-utils.h"
+  
+typedef struct gnc_report_window_s gnc_report_window;
 
 /** PROTOTYPES ******************************************************/
 
-void reportWindow(const char *title, SCM rendering_thunk, SCM guile_options);
+gnc_report_window * gnc_report_window_new(GNCMDIChildInfo * mc);
+void       gnc_report_window_destroy(gnc_report_window * rep);
+void       gnc_report_window_show_report(gnc_report_window * rw, int id);
+void       gnc_report_window_reload(gnc_report_window * rw);
+gnc_html   * gnc_report_window_get_html(gnc_report_window * rw);
+GtkWidget  * gnc_report_window_get_container(gnc_report_window * rw);
+SCM        gnc_report_window_get_report(gnc_report_window * rw);
 
-void gnc_ui_destroy_report_windows(void);
+void       gnc_report_window_create_menu(gnc_report_window * report, 
+                                         GNCMDIChildInfo * child);
+void       gnc_report_window_create_toolbar(gnc_report_window * report, 
+                                            GNCMDIChildInfo * child);
+
+GtkWidget * gnc_report_window_default_params_editor(SCM options, SCM report);
+
+void       gnc_main_window_open_report (int report_id, gint toplevel);
+void       gnc_main_window_open_report_url (const char * url, gint toplevel);
+
+GnomeMDIChild * gnc_report_window_create_child(const gchar * url);
+void       reportWindow(int id);
+void       gnc_print_report (int report_id);
+
+void       gnc_report_window_add_edited_report(gnc_report_window * win, 
+                                               SCM report);
+void       gnc_report_window_remove_edited_report(gnc_report_window * win, 
+                                                  SCM report);
+void       gnc_report_raise_editor(SCM report);
 
 #endif

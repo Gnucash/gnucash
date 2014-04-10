@@ -21,14 +21,15 @@
  *                                                                  *
 \********************************************************************/
 
-#ifndef __GUID_H__
-#define __GUID_H__ 
+#ifndef GUID_H
+#define GUID_H 
 
 #ifdef HAVE_CONFIG_H
-# include <config.h>
+# include "config.h"
 #endif
 
 #include <glib.h>
+#include <stddef.h>
 
 /* This file defines an API for using globally unique identifiers. */
 
@@ -70,14 +71,25 @@ void guid_init_only_salt(const void *salt, size_t salt_len);
 /* Generate a new id. If no initialization function has been called,
  * guid_init() will be called before the id is created. */
 void guid_new(GUID *guid);
+GUID guid_new_return(void);
 
 
-/* Return a null-terminated string encoding of the id. String
- * encodings of identifiers are hex numbers printed only with the
- * characters '0' through '9' and 'a' through 'f'. The encoding will
- * always be GUID_ENCODING_LENGTH characters long. The returned string
- * should be freed when no longer needed. */
-char * guid_to_string(const GUID * guid);
+/* The guid_to_string() routine returns a null-terminated string 
+ *    encoding of the id. String encodings of identifiers are hex 
+ *    numbers printed only with the characters '0' through '9' and 
+ *    'a' through 'f'. The encoding will always be GUID_ENCODING_LENGTH 
+ *    characters long. The returned string should be freed when no 
+ *    longer needed. 
+ *
+ * The guid_to_string_buff() routine does the same, except that the
+ *    string is written into the memory pointed at by buff.  The
+ *    buffer must be at least GUID_ENCODING_LENGTH+1 characters long.
+ *    This routine is handy for avoiding a malloc/free cycle.
+ *    It returns a pointer to the >>end<< of what was written.
+ *    (i.e. it can be used like 'stpcpy' during string concatenation)
+ */
+char * guid_to_string (const GUID * guid);
+char * guid_to_string_buff (const GUID * guid, char *buff);
 
 
 /* Given a string, decode the id into the guid if guid is non-NULL.
@@ -96,6 +108,6 @@ gint     guid_compare(const GUID *g1, const GUID *g2);
 /* Given a GUID *, hash it to a guint */
 guint guid_hash_to_guint(gconstpointer ptr);
 
-GHashTable *guid_hash_table_new();
+GHashTable *guid_hash_table_new(void);
 
 #endif

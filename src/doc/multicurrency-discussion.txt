@@ -1,0 +1,202 @@
+<cstim> goonie: well...
+<goonie> How about this: 
+<cstim> goonie: You can print each value as a gnc-monetary
+<cstim> goonie: this?
+<goonie> cstim: don't worry, go on with your outline.
+<cstim> How are you printing balances right now?
+<cstim> I guess you plug a gnc-numeric into the html code.
+<cstim> If you do a s/gnc-numeric/gnc-monetary/
+<cstim> ... then everything would be multi-currency compilant
+<cstim> Of course the gnc-monetary needs the actual currency specified. 
+<cstim> Would that lead to problems
+<cstim> ?
+<cstim> Definition of gnc-monetary is in src/scm/gnc-numeric.scm
+<goonie> Cool.
+<cstim> Right now every gnc-monetary is printed like $500.23, DEM 123.45, CHF 456.32
+<goonie> I think that should work fine.
+<cstim> but the formatting of gnc-monetary could be modified by any style sheet.
+<cstim> goonie: ok. 
+<goonie> You also had some code for calculating totals in multiple currencies?
+<cstim> goonie: ouch. Yes. But that gets complicated quickly.
+<goonie> Yes, it does.
+<cstim> goonie: You will need to use a commodity-collector from report-utilities.scm
+<goonie> OK, cool, I think I can figure it out.
+<<cstim> goonie: You will need to use a commodity-collector from report-utilities.scm
+<goonie> OK, cool, I think I can figure it out.
+<cstim> If you want the total of only one commodity, you can use the 'getpair action of commodity-collector...
+<cstim> but if you want to show (correctly) all of the currencies, you will have a lot of trouble.
+<cstim> Basically, I have the "reference implementation" in html-utilities.scm .
+<goonie> OK, excellent.  
+<cstim> You can see how I print just one balance...
+<cstim> in the big function gnc:html-build-acct-table, line 297, where I print the total sum.
+<cstim> That would be a starting point to see how a balance with a bunch of commodities gets printed.
+<goonie> cstim: taking it up a level for a second, how would you prefer a total for a collection of splits in different currencies to be displayed?
+<cstim> what do you mean by "total for splits"?
+<goonie> OK, consider a transaction report for the account Expenses:Beer for the period 1/1/2001 to 2/1/2001 (UK date format ;)
+<goonie> and let's say I've had beer in Australia, the US, Germany, and Hong Kong during that period.
+* cstim prefers to have the beer in Germany...
+<goonie> further, let's assume that my "native currency" is AUD.
+<goonie> cstim: try some of the Australian specialty beers.
+<cstim> yes
+<goonie> cstim: but even VB or Carlton Draught is an improvement on soap suds . . . er, Budweiser.
+<goonie> but back to Gnucash matters . . . 
+<-- dres has quit (Connection reset by peer)
+<cstim> yes
+<goonie> now there's several possibilities for doing the totals here . . .
+<cstim> wait wait
+<cstim> what accounts and what splits are you thinking of?
+<cstim> or in other words, what are your sorting/account/viewing parameters?
+<goonie> Only one account selected, sorted by date, say (we'll discuss subtotals in a sec).
+<cstim> goonie: One account means that there is only one currency, right?
+<goonie> dave_p: hang on, let me just check . . . 
+<goonie> s/dave_p/cstim
+<cstim> oh
+* cstim screwed up his homework about pole-zero plots
+<goonie> dave_p: what's the status of currency-in-transaction?
+<cstim> s/dave_p/???/ 
+<goonie> nope, really dave_p this time :)
+<cstim> dave_p is away: I'm doin' stuff
+<cstim> AFAIK an account has a commodity and a transaction has a commodity.
+<goonie> correct.
+<cstim> gnc:account-get-commodity, gnc:transaction-get-commodity
+<goonie> However, read the comments in TransactionP.h
+<goonie>   /* The common_currency field indicates the currency type that
+<goonie>    * all of the splits in this transaction share in common.  This
+<goonie>    * field is going to replace the currency field in the account
+<goonie>    * structures. 
+* cstim is reading
+<cstim> yeah, that's right.
+<goonie> So, in the short term, your assumption is correct.
+<goonie> In the long term, not the case.
+<cstim> What I would usually call the "currency" of an account is in Gnucash acctually called "security".
+<cstim> gnc:account-get-commodity will return this security of the account.
+<goonie> Gotta love terminology.
+<goonie> The reason for the differentiation is for stock/mutual fund accounts, IIRC.
+<cstim> info IIRC?
+<goonie> If I Recall Correctly.
+<cstim> oh
+<cstim> BTW, is cvs down? Seems like...
+<goonie> Yes.
+<goonie> It's driving the rest of us nuts too .
+<cstim> The more recent comments about commodities are in Transaction.h, line 229 ff.
+<cstim> or Account.h, line 203ff.
+<goonie> Yep, so the situation I described above can't happen right now, but will be possible in the near future.
+<goonie> Which brings us back to how should we display things:
+<goonie> A total for each currency.
+* cstim doesn't yet understand the situation.
+<cstim> What account would that be?
+<goonie> The account Expenses:Beer.
+<cstim> What security will it have?
+<goonie> AUD
+<cstim> okay.
+<cstim> go ahead
+<goonie> OK, say that there's only four transactions in that account for the period in question:
+<goonie> $2 in AUD, 5 USD, 1 EURO, and 12 HKD being the values.
+<goonie> What should we display as the total(s)?
+<goonie> Or more to the point, what options do we need to offer?
+<cstim> waitwait.
+<cstim> Expenses:beer has security AUD.
+--> dres (dres@user-2ivf2cm.dialup.mindspring.com) has joined #gnucash
+<dres> have I pointed out that having a modem connection sucks recently? :)
+<cstim> So there is one Transaction between Cash:USD and the beer.
+<cstim> And one between Cash:Euro and the beer.
+<cstim> And one between (what the heck is) Cash:HKD and the beer.
+<goonie> Hong Kong Dollar, BTW.
+<dres> hong kong dollars?
+<goonie> yep, they have their own currency.
+<dres> smart of them.
+<cstim> And, say, those Transaction have the transaction-commodity according to the Cash:*
+<goonie> yep.
+<cstim> But the split which belongs to Exp:Beer has only one value
+<cstim> and that value represents the beer expense in AUD.
+<cstim> i.e. in the split's account's security.
+<goonie> hang on . . . let me think this through carefully . . . 
+<cstim> ok, lets get things straight: Each split has two fields, value and damount
+* goonie is thinking this through.
+<cstim> Quote from a grib posting last October:
+<cstim>   - Eliminate the 'share price' field from the Split structure and
+<cstim>     replace it with a 'value' field.  The 'value' is a translation of
+<cstim>     the Split's 'damount' (which is the amount of the Account's
+<cstim>     security involved) into the Transaction's balancing currency.
+<cstim> the last sentence is the one that matters.
+<goonie>   /* value is the amount of the account's currency involved,
+<goonie>    * damount is the amount of the account's security.  For 
+<goonie>    * bank-type accounts, currency == security and 
+<goonie>    * value == damount. */
+<goonie>   gnc_numeric  value;         
+<goonie>   gnc_numeric  damount;  
+<goonie> from src/engine/TransactionP.h
+<cstim> that's outdated.
+<cstim> In the long run: value is the amount of the transaction-commodity involved, damount is the amount of the account-commodity involved.
+<goonie> OK, but the value returned from gnc:split-get-value is the value rather than the damount.
+<goonie> sorry for the long delay, I was reading code to make sure I understood what was going on.
+<goonie> value being the one denominated in the transaction-commodity.
+<cstim> That's right. gnc:split-get-value gives you the value, whereas gnc:split-get-share-amount gives you the damount
+<cstim> Maybe that functions need some name change in the future.
+<goonie> perhaps.
+<goonie> the trouble is that there are so many things that need names in gnucash, that you start to run out :)
+<cstim> :)
+<cstim> We could gnc:split-get-share-amount => gnc:split-get-damount
+<cstim> whatever.
+<cstim> My point for the Beer is
+<cstim> let's have some.
+<dres> beer doesn't need a point.  it just is.
+<cstim> oops. 
+<cstim> I would expect that the transaction report uses gnc:split-get-share-amount
+<cstim> which in this case gives you already the amounts exchanged into AUD and everything's fine.
+<goonie> You would prefer that over the transaction-specific value, then?
+<cstim> Well, if I want the list for one specific account, then I would expect all amounts to be in that account's commodity, i.e. the account-commodity (formerly known as security :)
+<goonie> yep.
+<goonie> But then the problem just arises in a different light if you have multiple accounts, sorted by date, say.
+<cstim> I would recommend a name change for gnc:split-get-share-amount.
+<cstim> multiple accounts.
+<cstim> okay, let's talk about that.
+<cstim> what scenario do you think of?
+<goonie> cstim: could you mail Dave wrt function renaming?
+<cstim> I'll send a mail to the ML
+<goonie> OK, let's say you've selected Expenses:Champagne (in Francs), Expenses:Saki (in Yen), and Expenses:VB (in Aussie dollars), and you want a report for all those transactions for the past month, sorted by date.
+<goonie> You have Cash:Francs, Cash:Yen and Cash:Aussie accounts with the expected currencies.
+<cstim> what's VB?
+<goonie> Victoria Bitter (Australian Beer).
+<cstim> okay.
+<cstim> well...
+<goonie> If you want a distinctively Australian Alcoholic beverage, s/VB/Sparkling Red
+<cstim> Lets have some.
+* goonie offers cstim a glass of fine Rutherglen sparkling red.
+<cstim> Transaction report: but it doesn't make much sense to show a total sum for that anyway, does it_
+<cstim> s/_/?/
+<cstim> oh well, it might.
+<goonie> Option 1) display a total for each currency in the report.
+<cstim> exactly.
+<cstim> Option 2) shows the total for only one currency, the report-currency.
+<cstim> Option 3) somehow gets the right exchange rate so that it also ends up with only one total.
+<cstim> I'd recommend option 2 for now.
+<cstim> For option one you basically would have to copy the code out of the html-build-acct-table function cited above.
+<goonie> So, what happens to transactions not in the report-currency in option 2) - they aren't totalled?
+<cstim> Maybe with the tons of comments it is do-able
+<cstim> goonie: yes, they dissolve in heat and aren't totalled.
+<goonie> OK, I think I can implement 1) and 2).  3 (which might have to be split into 3a, 3b . . . ) can probably wait.
+<goonie> Well, I could implement a "quickie" 3a that just grabs a current exchange rate and does the conversion on it.
+<cstim> again, for 1) you "just" have to copy ~100 lines of code from html-utilities.scm and adapt them to your table structure.
+<goonie> that has all sorts of problems, but might be useful if taken with a grain of salt.
+<goonie> OK.
+<cstim> oh, a quick 3) costs you about 5 lines of extra cost.
+<goonie> I think I can cope with that :)
+<cstim> just look into pnl.scm and see how they (i.e. I) use gnc:make-exchange-alist  and gnc:make-exchange-function
+<cstim> both from src/scm/commodity-utilities.scm
+<goonie> OK, cool.
+<goonie> Thanks for your help.
+<cstim> what did you mean by "quickie" 3a that just grabs a current exchange rate "
+<cstim> a dialog box? a parameter? gnc-prices?
+<goonie> gnc-prices.
+<goonie> or a parameter.
+<goonie> something other than digging through a bunch of historical data trying to figure out what the exchange rate was at the time of particular transactions.
+<cstim> parameter: Bad. gnc-prices: Goood. I'd be happy if someone could implement that to augment the current code in commodity-utilities.scm
+<cstim> Oh, the exchange rate at the time of a particular *transaction* is easy --
+<cstim> -- that's just the fraction value/damount .
+<goonie> not always - what if the transaction is (say) yen/yen but you want to display in dollars?
+<goonie> for instance, our glass of saki, paid for in cash yen.
+<cstim> Yes, right. currently the commodity-utilities stuff uses a weighted average over the history. But using the last known exchange rate instead may be useful at times.
+<cstim> Maybe I'll implmement something like that
+<cstim> maybe if i have time :)
+<goonie>diff -up 'gnucash/src/engine/Query.c' 'gnucash_transaction_report/src/engine/Query.c'

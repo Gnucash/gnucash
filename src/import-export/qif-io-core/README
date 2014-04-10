@@ -1,0 +1,57 @@
+qif-io-core module: top-level docs
+----------------------------------
+
+The file: 
+
+A QIF file is a line-oriented text file.  A file consists of a series
+of objects; each object is either a "bang switch" or a "record".
+
+A bang switch is a single line starting with the "!" character.
+
+A record is a set of newline-delimited tag-value pairs, terminated by
+a line starting with "^".  The tag is the first character of the line,
+the value is the remainder of the line.
+
+There are several different types of records: bank transactions,
+investment transactions, accounts, classes, categories, securities are
+handled by this module.  Currently unhandled are memorized
+transactions and prices.
+
+Tests for reading and writing various kinds of records from sample
+QIF files are in test/test-readwrite.scm.
+
+Interpreting the file: 
+
+We read each "record" and convert it to a Scheme structure depending
+on the record type.  Type is determined by "bang switches" indicating
+that the following records are of a certain type.
+
+qif-io:read-file reads records and converts them into the appropriate
+Scheme data structure.  All values are strings.
+ 
+current scheme (with qif-import module): 
+ - translate strings to gnucash data types.  transform transactions to
+   make them look more like they will look in gnucash (account types, 
+   balance signs, etc)
+ - build the map of gnucash accounts and commodities
+ - eliminate duplicate transactions within the qif files 
+ - translate to gnucash transactions 
+ - eliminate duplicates within the gnucash files 
+
+new plan: 
+ - scan strings in transactions to make sure we know how to interpret 
+   them
+ - build the map of gnucash accounts and commodities 
+ - go to gnc transactions
+ - find matches within the gnc transaction set and eliminate them
+   automatically 
+ - find matches between the new set and the existing one
+
+i.e. in the new scheme we do as little interpretation and editing as
+possible in the qif realm. we translate to gnc transactions as early
+as possible and work in that domain.  If nothing else it will be
+faster.  It's also clearer because you know the QIF data structure
+never contains anything except uninterpreted strings from the QIF
+file.  with the qif-import module you're never sure what's in those
+slots.
+

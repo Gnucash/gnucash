@@ -1,0 +1,194 @@
+  <article id="xacc-quickstart">
+    <artheader>
+      <title>
+	Schnelleinführung
+      </title>
+    </artheader>
+    
+      <sect1>
+	<title>
+	  Willkommen
+	</title>
+	
+	<para>Willkommen zu GnuCash 1.6, ein einfaches benutzbarer,
+	leistungsfähiger und verläßlicher perönlicher
+	Finanzmanager. Diese rundum neue Version besitzt eine ganze
+	Reihe neuer Funktionen, die in der <link
+	linkend="xacc-features">Funktionenübersicht</link> aufgeführt
+	sind. Für den ungeduldigen Anwender gibt es im folgenden eine
+	Schnelleinführung.</para>
+
+	<para>GnuCash ist so konzipiert, daß die Anwendung so intuitiv
+	wie möglich sein soll. Nichtsdestotrotz ist, um den vollen
+	Funktionsumfang zu genießen, ein gewisses Verständnis von
+	einigen Konzepten der Buchführung vonnöten. Daher empfehlen
+	wir sehr, einige Minuten auf die folgende Einführung zu
+	verwenden.</para>
+
+        <para>Leider ist die deutsche Übersetzung erst teilweise
+        vollendet -- das Programm selber wurde sorgfältig dem
+        deutschen Sprachraum angepasst, aber das Benutzerhandbuch
+        liegt bisher nur in Englisch vor. Bis das Handbuch von
+        weiteren Freiwilligen übersetzt wird, können die weiteren
+        Seiten leider nur auf Englisch geboten werden. </para>
+      </sect1>
+      
+      <sect1 id="xacc-remedial-accounting">
+	<title>
+	  Remedial Accounting 101 (englisch)
+	</title>
+	
+	<para>
+	At its core, GnuCash is a tool for tracking
+	<emphasis>transactions</emphasis>. A transaction is a record
+	of money being removed from one "account" and placed in
+	another.  To take a simple example, say you have two bank
+	accounts - a cheque account (that's checking, for the
+	Americans in the audience . . .), and an investment account,
+	and you transfer $500 from the cheque account to the
+	investment account. GnuCash records that transfer.
+	</para>
+	
+	<para>
+	  "But what about when I buy things, or get paid?"  I hear you ask.
+	  Well, "accounts" in GnuCash aren't just bank accounts.  You can
+	  set up Income accounts, expense accounts, asset, liability, share
+	  accounts, mutual fund accounts - in fact, there are a total of 
+	  11 different account types GnuCash supports.  You can (and should)
+	  set up a number of different expense accounts for different
+	  types of expenditure.  So, your paycheck would be a transfer
+	  from, say "salary", an income account, to your checking account.
+	  Buying fuel with your credit card might be a transfer from 
+	  "ABC Visa", a credit card account, to "Fuel", an expense account.
+	  If you've grasped all that, you're 90% of the way to making best
+	  use of GnuCash!
+	</para>
+	
+	<para>
+	  Now, if you're going to keep proper track of your finances,
+	  you'll obviously want to create a variety of expense and
+	  income accounts for keeping track of various transactions
+	  you'll make - in fact, setting up the right set of accounts
+	  is the key to making GnuCash work for you.  However, if you
+	  create many different accounts, it can be a pain to keep
+	  track of them all.  GnuCash has a way of dealing with this,
+	  though.  It lets you create a <emphasis>tree</emphasis>of
+	  accounts.  For instance, you can create a "Utilities"
+	  expense account, and then create "Utilities:Power",
+	  "Utilities:Gas", and "Utilities:Phone".  We term "Utilities"
+	  to be the "parent" account, and the three others to be
+	  "subaccounts".  When you produce <link
+	  linkend="xacc-reports"> reports</link> of your financial
+	  data, you can choose whether to display a summary of all
+	  "utilities" accounts, or data for each individual account.
+	</para>
+	
+	<para>
+	  Now let's go create some accounts!
+	</para>
+      </sect1>
+      
+      <sect1 id="xacc-new-account-tree">
+	<title>
+	  Setting up accounts from scratch (englisch)
+	</title>
+
+	<para>
+	  This section is intended for people who are
+	  using a personal finance program for the first time,
+	  or can't import their data into GnuCash using the 
+	  <link linkend="xacc-data-from-existing">QIF
+	    importer</link>.  
+	</para>
+	
+	<para>
+	  If you want, GnuCash can help set up a default set of
+	  accounts for you, using the
+        <link linkend="xacc-account-hierarchy-creator">New Account Setup</link>
+	  druid.  What's a druid?  Well, it's kind of like a wizard,
+	  but it's called a druid.  Why? Because it's not a wizard,
+	  it's a druid . . .
+	  </para>
+	<para>
+	Anyway, the druid will take you through the process
+	of creating a set of accounts to get you going.
+	To get started, go to the "File" menu (in the top left
+	hand corner of the GnuCash window), and select "new
+	account tree".
+	  Simply follow the prompts to select a default currency, 
+	  then select the types of accounts you wish to create.
+	  You will then be given the opportunity to enter opening
+	  balances for these accounts.  Now, here's where things
+	  get a little tricky.  The opening balances are just
+	  a transaction, but where is it transferred from?
+	  A special account of type "equity" is created, called
+	  "Opening Balances", and all opening balances consist
+	  of a transfer to (or from) this account.
+	</para>
+      </sect1>
+
+      <sect1 id="xacc-data-from-existing">
+	<title>
+	  Importing data from other personal finance programs (englisch)
+	</title>
+	
+	<para>
+	  If you have used another personal finance program that
+	  can export QIF files, such as Quicken or Microsoft Money,
+	  you can import the data into GnuCash.  See the instructions
+	  for the <link linkend="xacc-quicken">QIF importer</link>.
+	</para>
+
+	<para>Once you've done that, you're ready to go - but first, 
+	  couple of quick hints about two things GnuCash 
+	  does a little differently from those programs:
+	  </para>
+	<itemizedlist>
+	  <listitem><para>Where some programs uses "categories"
+	      to categorize expenses and income types, GnuCash
+	      uses income and expense accounts.  They work 
+	      in a similar way, but it's a considerably cleaner
+	      and more flexible way of handling things once
+	      you get used to the idea.
+	    </para></listitem>
+	  <listitem><para>Some programs use a list of accounts.
+	      GnuCash uses a "tree" of accounts, allowing you
+	      to group similar sorts of accounts - very useful
+	      when reporting your financial data.  You can
+	      rearrange your accounts to use a more tree-like 
+	      structure by using the <link linkend="xacc-accountedit">
+		Account Edit Dialog</link>.
+	    </para>
+	  </listitem>
+        </itemizedlist>
+      </sect1>
+
+      <sect1>
+	<title>
+	  Starting to use GnuCash (englisch)
+	</title>
+	<para>
+	  Once the druid has done it's thing, you'll end up 
+	  at the GnuCash <link linkend="xacc-mainwin">main 
+	   window.</link>  To start entering transactions, select
+	  the appropriate account and click on the "open" button
+	  on the the toolbar.  This brings up the account's 
+	  <link linkend="xacc-regwin">register</link>, so you
+	  can enter transactions.  
+	  You might also want to <link linkend="xacc-newacctwin">
+	    add more accounts</link> or <link linkend="xacc-accountedit">
+	    change something</link> about
+	  existing accounts.
+	</para>
+	<para>
+	  Please take the time to read some more about GnuCash
+	  in this online manual.  You'll get much more out of 
+	  it!
+	</para>
+      </sect1>
+  </article>
+  
+  <!-- Local variables: -->
+  <!-- sgml-parent-document: "gnucash.sgml" -->
+  <!-- End: -->
+  

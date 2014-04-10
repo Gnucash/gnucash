@@ -29,6 +29,7 @@
 
 #include <ctype.h>
 #include <dirent.h>
+#include <glib.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -40,6 +41,7 @@
 
 #include "guid.h"
 #include "md5.h"
+#include "gnc-engine-util.h"
 
 # ifndef P_tmpdir
 #  define P_tmpdir "/tmp"
@@ -47,6 +49,7 @@
 
 
 /** Constants *******************************************************/
+#define DEBUG_GUID 0
 #define BLOCKSIZE 4096
 #define THRESHOLD (2 * BLOCKSIZE)
 
@@ -54,6 +57,9 @@
 /** Static global variables *****************************************/
 static gboolean guid_initialized = FALSE;
 static struct md5_ctx guid_context;
+
+/* This static indicates the debugging module that this .o belongs to.  */
+static short module = MOD_ENGINE;
 
 
 /** Function implementations ****************************************/
@@ -124,13 +130,14 @@ init_from_file(const char *filename, size_t max_size)
 {
   struct stat stats;
   size_t total = 0;
+  size_t file_bytes;
   FILE *fp;
 
-  if (stat(filename, &stats) == 0)
-  {
-    md5_process_bytes(&stats, sizeof(stats), &guid_context);
-    total += sizeof(stats);
-  }
+  if (stat(filename, &stats) != 0)
+    return 0;
+
+  md5_process_bytes(&stats, sizeof(stats), &guid_context);
+  total += sizeof(stats);
 
   if (max_size <= 0)
     return total;
@@ -139,7 +146,13 @@ init_from_file(const char *filename, size_t max_size)
   if (fp == NULL)
     return total;
 
-  total += init_from_stream(fp, max_size);
+  file_bytes = init_from_stream(fp, max_size);
+
+#if DEBUG_GUID
+  g_warning ("guid_init got %u bytes from %s", file_bytes, filename);
+#endif
+
+  total += file_bytes;
 
   fclose(fp);
 
@@ -221,11 +234,13 @@ guid_init(void)
 
   md5_init_ctx(&guid_context);
 
+  /* entropy pool */
+  bytes += init_from_file ("/dev/urandom", 512);
+
   /* files */
   {
     const char * files[] =
-    { "/dev/urandom",
-      "/etc/passwd",
+    { "/etc/passwd",
       "/proc/loadavg",
       "/proc/meminfo",
       "/proc/net/dev",
@@ -234,7 +249,6 @@ guid_init(void)
       "/proc/self/stat",
       "/proc/stat",
       "/proc/uptime",
-      "/dev/urandom", /* once more for good measure :) */
       NULL
     };
     int i;
@@ -329,10 +343,13 @@ guid_init(void)
   /* time in secs and clock ticks */
   bytes += init_from_time();
 
+#if DEBUG_GUID
+  g_warning ("guid_init got %u bytes", bytes);
+#endif
+
   if (bytes < THRESHOLD)
-    fprintf(stderr,
-            "WARNING: guid_init only got %u bytes.\n"
-            "The identifiers might not be very random.\n", bytes);
+    g_warning("WARNING: guid_init only got %u bytes.\n"
+              "The identifiers might not be very random.\n", bytes);
 
   guid_initialized = TRUE;
 }
@@ -355,9 +372,12 @@ guid_init_only_salt(const void *salt, size_t salt_len)
   guid_initialized = TRUE;
 }
 
+#define GUID_PERIOD 5000
+
 void
 guid_new(GUID *guid)
 {
+  static int counter = 0;
   struct md5_ctx ctx;
 
   if (guid == NULL)
@@ -372,6 +392,33 @@ guid_new(GUID *guid)
 
   /* update the global context */
   init_from_time();
+
+  if (counter == 0)
+  {
+    FILE *fp;
+
+    fp = fopen ("/dev/urandom", "r");
+    if (fp == NULL)
+      return;
+
+    init_from_stream(fp, 32);
+
+    fclose(fp);
+
+    counter = GUID_PERIOD;
+  }
+
+  counter--;
+}
+
+GUID
+guid_new_return(void)
+{
+  GUID guid;
+
+  guid_new (&guid);
+
+  return guid;
 }
 
 /* needs 32 bytes exactly, doesn't print a null char */
@@ -391,21 +438,22 @@ static gboolean
 decode_md5_string(const char *string, unsigned char *data)
 {
   unsigned char n1, n2;
-  size_t count;
+  size_t count = -1;
   char c1, c2;
 
-  if (string == NULL)
-    return FALSE;
+  if (NULL == data) return FALSE;
+  if (NULL == string) goto badstring;
 
   for (count = 0; count < 16; count++)
   {
+    /* check for a short string e.g. null string ... */
+    if ((0==string[2*count]) || (0==string[2*count+1])) goto badstring;
+
     c1 = tolower(string[2 * count]);
-    if (!isxdigit(c1))
-      return FALSE;
+    if (!isxdigit(c1)) goto badstring;
 
     c2 = tolower(string[2 * count + 1]);
-    if (!isxdigit(c2))
-      return FALSE;
+    if (!isxdigit(c2)) goto badstring;
 
     if (isdigit(c1))
       n1 = c1 - '0';
@@ -417,26 +465,43 @@ decode_md5_string(const char *string, unsigned char *data)
     else
       n2 = c2 - 'a' + 10;
 
-    if (data != NULL)
-      data[count] = (n1 << 4) | n2;
+    data[count] = (n1 << 4) | n2;
   }
-
   return TRUE;
+
+badstring:
+  for (count = 0; count < 16; count++)
+  {
+    data[count] = 0;
+  }
+  return FALSE;
 }
 
 char *
 guid_to_string(const GUID * guid)
 {
-  char *string = malloc(GUID_ENCODING_LENGTH+1);
-  if (!string) return NULL;
+  char *string;
 
   if(!guid) return(NULL);
+
+  string = g_malloc(GUID_ENCODING_LENGTH+1);
 
   encode_md5_data(guid->data, string);
 
   string[GUID_ENCODING_LENGTH] = '\0';
 
   return string;
+}
+
+char *
+guid_to_string_buff(const GUID * guid, char *string)
+{
+  if (!string || !guid) return NULL;
+
+  encode_md5_data(guid->data, string);
+
+  string[GUID_ENCODING_LENGTH] = '\0';
+  return &string[GUID_ENCODING_LENGTH];
 }
 
 gboolean
@@ -455,28 +520,38 @@ guid_equal(const GUID *guid_1, const GUID *guid_2)
 }
 
 gint
-guid_compare(const GUID *guid_1, const GUID *guid_2) {
-  if(guid_1 == guid_2) return 0;
-  /* nothing is always less than something */
-  if(!guid_1 && guid_2) return -1;
-  if(guid_1 && !guid_2) return 1;
+guid_compare(const GUID *guid_1, const GUID *guid_2)
+{
+  if (guid_1 == guid_2)
+    return 0;
 
-  return(memcmp(guid_1, guid_2, sizeof(GUID)));
+  /* nothing is always less than something */
+  if (!guid_1 && guid_2)
+    return -1;
+
+  if (guid_1 && !guid_2)
+    return 1;
+
+  return memcmp (guid_1, guid_2, sizeof (GUID));
 }
 
 guint
-guid_hash_to_guint(gconstpointer ptr)
+guid_hash_to_guint (gconstpointer ptr)
 {
-  GUID *guid = (GUID *) ptr;
+  const GUID *guid = ptr;
 
-  if(!guid) {
-    fprintf(stderr, "guid_g_hash_table_hash: received NULL guid pointer.");
-    return(0);
+  if (!guid)
+  {
+    PERR ("received NULL guid pointer.");
+    return 0;
   }
 
-  if (sizeof(guint) <= sizeof(guid->data)) {
-    return(*((guint *) guid->data));
-  } else {
+  if (sizeof(guint) <= sizeof(guid->data))
+  {
+    return (*((guint *) guid->data));
+  }
+  else
+  {
     guint hash = 0;
     int i, j;
 
@@ -487,17 +562,18 @@ guid_hash_to_guint(gconstpointer ptr)
       hash |= guid->data[j];
     }
 
-    return(hash);
+    return hash;
   }
 }
 
 static gint
-guid_g_hash_table_equal(gconstpointer guid_a, gconstpointer guid_b)
+guid_g_hash_table_equal (gconstpointer guid_a, gconstpointer guid_b)
 {
-  return((gint) guid_equal((GUID *) guid_a, (GUID *) guid_b));
+  return guid_equal (guid_a, guid_b);
 }
 
 GHashTable *
-guid_hash_table_new() {
-  return(g_hash_table_new(guid_hash_to_guint, guid_g_hash_table_equal));
+guid_hash_table_new (void)
+{
+  return g_hash_table_new (guid_hash_to_guint, guid_g_hash_table_equal);
 }

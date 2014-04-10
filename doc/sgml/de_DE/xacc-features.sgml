@@ -1,0 +1,161 @@
+<article id="xacc-features">
+  <artheader>
+    <title>
+      Funktionenübersicht
+      </title>
+  </artheader>
+
+  <sect1>
+    <title>
+      Grundfunktionen
+    </title>
+
+    <para>
+      GnuCash ist ein leistungsfähiges, universelles und einfach
+benutzbares Programm. Es bietet insbesondere folgende Möglichkeiten:
+    </para>
+
+    <itemizedlist>
+      <listitem> <para><emphasis>Eine vollständige
+      Konten-Hierarchie.</emphasis> Sie können für jedes Ihrer
+      Bankkonten ein GnuCash Konto erstellen. Jedes Konto verwaltet
+      sowohl einen laufenden Saldo als auch einen bestätigten, mit dem
+      Kontoauszug abgeglichenen Saldo, so daß Sie immer den Überblick
+      haben, welche Buchung bereits stattgefunden hat und welche
+      nicht.
+	</para>
+      </listitem>
+
+      <listitem> <para> <emphasis><link
+linkend="xacc-recnwin">Hilfmittel zum Abgleichen des Kontoauszugs.</link></emphasis> </para>
+	
+	<para>Wann immer Sie Ihre Kontoauszüge bekommen, können Sie
+	mit dem <emphasis>Abgleichen</emphasis>-Fenster Ihren
+	Schlußsaldo eingeben, und alle Buchungen abhaken, die auf dem
+	Kontoauszug erscheinen. Sie können auf einfachste Weise Ihre
+	tatsächlichen Buchungen mit den vorgemerkten vergleichen und
+	Diskrepanzen problemlos finden.</para>
+      </listitem>
+      
+      <listitem> <para> <emphasis>QuickFill.</emphasis> </para>
+	
+	<para>Wenn Sie die ersten Buchstaben im Textfeld Beschreibung
+	eingeben, findet GnuCash die Vervollständigung in früheren
+	Buchungen und bietet Ihnen an, den Rest der Buchung wie die
+	frühere Buchung auszufüllen. Sie brauchen nur noch
+	<keycap>TAB</keycap> (die Tabulatortaste) drücken, und schon
+	ist eine neue Buchung fertig. Dies ist ein ungemein
+	zeitsparendes Hilfsmittel bei vielen gleichartigen Buchungen.
+	</para>
+      </listitem>
+      
+      <listitem> <para> <emphasis>Portfolio aus Aktiendepots.</emphasis> </para>
+	
+	<para>Verfolgen Sie Ihre Aktiendepots individuell oder zu
+	einem Portfolio kombiniert. In GnuCash finden Sie außerdem
+	Hilfsmittel, um die Börsenkurse <link
+	linkend="xacc-price-editor">automatisch online abzurufen
+	(englisch).</link>
+	</para>
+      </listitem>
+      
+      <listitem>
+	<para>Unterstützung von <emphasis><link
+	linkend="xacc-currencyhandling">mehreren Währungen
+	(englisch)</link></emphasis> und <emphasis>Währungskonten.
+	  </emphasis>
+	  (teilweise, wird demnächst noch geändert). Alle Konten
+	  können in völlig verschiedenen Währungen angelegt
+	  werden. Der Umtausch mit variierenden Umtauschraten kann
+	  problemlos über Währungskonten abgewickelt werden, ähnlich
+	  wie auch Aktien gehandelt werden.
+	</para>
+      </listitem>
+      
+      <listitem>
+	<para><emphasis><link linkend="XACC-QIF-IMPORT">Import von
+	Daten aus Quicken (QIF) (englisch)</link>.</emphasis>
+	</para>
+	<para>Finanzdaten aus Quicken, d.h. im QIF Dateiformat, können
+	jederzeit importiert werden. Der Import-Assistent detektiert
+	dabei doppelte Buchungen und ermöglicht Ihnen, mit minimalem
+	Aufwand Ihre Bücher aktuell zu halten.
+	</para>
+      </listitem>
+      
+      <listitem>
+	<para><emphasis>Wählbarer Fenstermodus (GNOME
+	MDI)</emphasis></para> <para>Ihre Finanzdaten können in einem
+	oder mehreren Fenstern gleichzeitig angezeigt werden, ganz wie
+	Sie es wünschen. Ihre Konfiguration der Oberfläche wird
+	zwischen verschiedenen Programmstarts automatisch gespeichert
+	und wiederhergestellt.
+	</para>
+      </listitem>
+      
+      <listitem>
+	<para><emphasis><link linkend="xacc-reports">Berichte
+	(englisch)</link>.</emphasis> Sie können den Stand Ihrer
+	Finanzen ansehen, als HTML exportieren oder ausdrucken. Über
+	20 verschiedene Berichte stehen zur Verfügung, um eine
+	Auswertung zu ermöglichen. Sie finden die Bilanz und die
+	Gewinn- und Verlustrechnung ebenso wie Balken- und
+	Tortendiagramme, um die Zusammensetzung Ihres Vermögens oder
+	Ihrer Zahlungsströme zu visualisieren. Die Konfiguration der
+	Berichte wird zwischen verschiedenen Programmstarts
+	automatisch gespeichert. Ihnen stehen auch relative
+	Datumsangaben wie 'Monatsanfang' zur Verfügung, um die
+	relevanten Zeitabschnitte noch einfacher auswählen zu können.
+	</para>
+      </listitem>
+      
+    </itemizedlist>
+
+  </sect1>
+  <sect1 id="xacc-advanced-features">
+    <title>Anspruchsvollere Funktionen</title> <para>GnuCash erfüllt
+    auch anspruchsvollere Funktionen, die Sie in den meisten
+    OpenSource Finanzprogrammen nicht mehr finden.</para>
+
+    <itemizedlist>
+<listitem>
+<para><emphasis><link linkend="xacc-doubleentry">Doppelte
+Buchführung</link></emphasis>
+
+ </para>
+<para>Jede Buchung besteht aus einem Debitoren- und einem
+Kreditoren-Teil. Die Beträge beider Teile müssen übereinstimmen, um
+ausgeglichene Bücher zu garantieren. Dann entspricht die Different
+zwischen Zahlungseingängen und -ausgängen exakt der Summe aller
+Anlagevermögen, sei das ein Bankkonto, Bargeld, Aktien oder was auch
+immer.
+ </para>
+</listitem>
+<listitem>
+<para><emphasis><link linkend="xacc-incomeexpense">Einnahmen/Ausgaben Kontoarten (Kategorien)</link></emphasis> 
+ </para>
+<para>Diese dienen nicht nur dazu, Ihre Zahlungsströme aufzugliedern,
+sondern sie ergeben eine akkurate Gewinn- und Verlustrechnung.
+ </para>
+</listitem>
+
+<listitem>
+<para><emphasis>Hauptbuch</emphasis> </para>
+
+<para>Mehrere Konten können zur gleichen Zeit im Register angezeigt
+werden. Dies hilft dabei, Fehlbuchungen aufzuspüren. Außerdem ist das
+eine bequeme Art, ein Portfolie von vielen Aktien zu kontrollieren, da
+alle Buchungen eines Portfolios in einem einzigen Register angezeigt
+werden.
+
+ </para>
+</listitem>
+</itemizedlist>
+
+</sect1>
+
+
+</article>
+<!-- Local variables: -->
+<!-- sgml-parent-document: "gnucash.sgml" -->
+<!-- End: -->

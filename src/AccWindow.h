@@ -23,8 +23,8 @@
  *           Huntington Beach, CA 92648-4632                        *
 \********************************************************************/
 
-#ifndef __ACC_WINDOW_H__
-#define __ACC_WINDOW_H__
+#ifndef ACC_WINDOW_H
+#define ACC_WINDOW_H
 
 #include "config.h"
 
@@ -36,16 +36,13 @@
 typedef struct _AccountWindow  AccountWindow;
 
 AccountWindow * gnc_ui_new_account_window (AccountGroup *group);
+AccountWindow * gnc_ui_new_account_window_with_default(AccountGroup *group,
+                                                       Account * parent);
 AccountWindow * gnc_ui_edit_account_window (Account *account);
 
-/* The xaccDestroyEditAccWindow() subroutine can be called from
- *   anywhere to shut down the Register window. Used primarily when
- *   destroying the underlying account.  */
-void gnc_ui_destroy_edit_account_window (Account *account);
-
-void gnc_ui_refresh_edit_account_window (Account *account);
+Account * gnc_ui_new_accounts_from_name_window (const char *name);
 
 void gnc_ui_set_default_new_account_currency (const char *currency);
 
 
-#endif /* __ACC_WINDOW_H__ */
+#endif /* ACC_WINDOW_H */

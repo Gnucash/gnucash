@@ -22,16 +22,16 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-#include "top-level.h"
+#include "config.h"
 
 #include <gnome.h>
 
-#include "global-options.h"
-#include "query-user.h"
-#include "messages.h"
-#include "util.h"
-#include "tip-of-the-day.h"
 #include "dialog-totd.h"
+#include "global-options.h"
+#include "gnc-gui-query.h"
+#include "gnc-ui.h"
+#include "messages.h"
+#include "tip-of-the-day.h"
 
 
 /* This static indicates the debugging module that this .o belongs to.  */
@@ -61,7 +61,7 @@ static void totd_close_cb(GtkWidget *widget, gpointer data);
 /** Implementations ***************************************************/
 
 /************************************************************************\
- * gnc_ui_totd_dialog_crfeate_and_run                                   *
+ * gnc_ui_totd_dialog_create_and_run                                    *
  *   display and run the "Tip of the Day" dialog                        *
  *                                                                      *
  * Returns: nothing                                                     *
@@ -85,13 +85,12 @@ static GtkWidget *
 gnc_ui_totd_dialog_create(void)
 {
   char *new_hint;
-  win = gnome_dialog_new(TOTD_STR, 
+
+  win = gnome_dialog_new(_("Tip of the Day"), 
 			 GNOME_STOCK_BUTTON_PREV, 
 			 GNOME_STOCK_BUTTON_NEXT, 
 			 GNOME_STOCK_BUTTON_CLOSE, 
 			 NULL);	
-
-  gnome_dialog_set_parent(GNOME_DIALOG(win), GTK_WINDOW(gnc_get_ui_data()));
 
   gnome_dialog_set_default(GNOME_DIALOG(win), 2);
   gnome_dialog_close_hides(GNOME_DIALOG(win), FALSE);
@@ -100,7 +99,8 @@ gnc_ui_totd_dialog_create(void)
   gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scrollwin),
 				 GTK_POLICY_NEVER,
 				 GTK_POLICY_NEVER);
-  gtk_box_pack_start(GTK_BOX(GNOME_DIALOG(win)->vbox), scrollwin, TRUE, TRUE, 0);
+  gtk_box_pack_start(GTK_BOX(GNOME_DIALOG(win)->vbox),
+                     scrollwin, TRUE, TRUE, 0);
   canvas = gnome_canvas_new();
   gnome_canvas_set_scroll_region(GNOME_CANVAS(canvas),
   				 0.0,0.0,width,height);
@@ -115,11 +115,14 @@ gnc_ui_totd_dialog_create(void)
   old_enabled = gnc_lookup_boolean_option("General",
 					  "Display \"Tip of the Day\"",
 					  TRUE);
-  disable_cb = gtk_check_button_new_with_label(DISPLAY_NEXT_TIME_STR);
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (disable_cb),
-  				old_enabled);
+  {
+    const char *message = _("Display this dialog next time");
+    disable_cb = gtk_check_button_new_with_label(message);
+  }
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (disable_cb), old_enabled);
 
-  gtk_box_pack_start(GTK_BOX(GNOME_DIALOG(win)->vbox), disable_cb, TRUE, TRUE, 0);
+  gtk_box_pack_start(GTK_BOX(GNOME_DIALOG(win)->vbox),
+                     disable_cb, TRUE, TRUE, 0);
   gtk_widget_show(disable_cb);
 
   gnome_dialog_button_connect(GNOME_DIALOG(win), 0,
@@ -167,6 +170,8 @@ totd_close_cb(GtkWidget *widget, gpointer data)
   gboolean new_enabled =
     gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(disable_cb));
 
+  gnc_increment_tip();
+
   gtk_widget_destroy(GTK_WIDGET(win));
   win = NULL;
   if (new_enabled != old_enabled)
@@ -174,14 +179,7 @@ totd_close_cb(GtkWidget *widget, gpointer data)
     gnc_set_boolean_option("General", 
 			   "Display \"Tip of the Day\"",
 			   new_enabled);
-    gnc_option_refresh_ui_by_name("General", "Display \"Tip of the Day\"");    
-    if(new_enabled == FALSE)
-    {
-      const char *message = _("You have disabled \"Tip of the Day\"\n"
-                              "You can re-enable tips from the General\n"
-                              "section of the Preferences menu");
-      gnc_info_dialog(message);
-    }
+    gnc_option_refresh_ui_by_name("General", "Display \"Tip of the Day\"");
   }
   return;
 }
@@ -302,7 +300,7 @@ draw_on_canvas(GtkWidget *canvas, char *hint)
     "y",(double)25.0,
     "fill_color","white",
     "font",_("-*-helvetica-bold-r-normal-*-*-180-*-*-p-*-*-*"),
-    "text",TOTD_STR,
+    "text",_("Tip of the Day:"),
     NULL);
 
   grow_text_if_necessary();

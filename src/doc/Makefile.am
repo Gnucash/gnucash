@@ -1,6 +1,7 @@
 
 SUBDIRS = \
-  design
+  design \
+  xml
 
 EXTRA_DIST = \
   backup.txt \

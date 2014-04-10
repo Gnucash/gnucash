@@ -1,0 +1,50 @@
+<ARTICLE ID="XACC-MAINWIN">
+
+<ARTHEADER>
+<TITLE>Janela de Contas</TITLE>
+</ARTHEADER>
+    <sect1>
+      <title></title>
+<PARA>Esta é uma janela de contas. Você controla o conjunto das suas 
+    contas a partir daqui.
+
+    </PARA>
+<PARA>Abaixo encontra-se uma imagem da janela de contas, apenas com as contas
+    principais visíveis. Note como <EMPHASIS>Despesas de Negócios</EMPHASIS> foram 
+    seleccionadas por destaque. A caixa com uma cruz lá dentro, imediatamente à 
+    esquerda, mostra que contém uma ou mais contas de detalhe que de momento 
+    não estão visíveis. Para as mostrar, clique nesta caixa.
+
+    </PARA>
+<PARA><INLINEMEDIAOBJECT>
+<IMAGEOBJECT>
+<IMAGEDATA FILEREF="image/contract.png">
+</IMAGEOBJECT>
+</INLINEMEDIAOBJECT>
+    
+
+    </PARA>
+<PARA>Aqui está a janela de contas, com as contas de detalhe visíveis.
+
+    </PARA>
+<PARA>     <INLINEMEDIAOBJECT>
+<IMAGEOBJECT>
+<IMAGEDATA FILEREF="image/expand.png">
+</IMAGEOBJECT>
+</INLINEMEDIAOBJECT>
+    
+
+
+    </PARA>
+<PARA>A entrada de menu <GUIMENU>Abrir Sub-contas</GUIMENU> é interessante 
+    apenas se seleccionar uma conta com sub-contas (contas de detalhe).
+    Contas com sub-contas terão sempre uma caixa à sua esquerda. Ao seleccionar 
+    a entrada de menu <GUIMENU>Abrir Sub-contas</GUIMENU>, uma janela com o 
+    <link linkend="xacc-general-ledger">plano de contas</link> é aberta. 
+</PARA>
+</sect1>
+</ARTICLE>
+
+<!-- Local variables: -->
+<!-- sgml-parent-document: "gnucash.sgml" -->
+<!-- End: -->

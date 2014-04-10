@@ -1,0 +1,38 @@
+<article id="XACC-PORTFOLIO-REPORT">
+<artheader>
+<title>Relatório de Portfólio de Acções</title>
+</artheader>
+<sect1>
+<title></title>
+<para>    <inlinemediaobject>
+<imageobject>
+<imagedata fileref="image/report-folio.png">
+</imageobject>
+</inlinemediaobject> 
+
+    </para>
+<para>Este relatório resume o valor actual do seu portfólio de acções.
+
+    </para>
+<para>As opções suportadas por este relatório incluem as seguintes:
+<itemizedlist>
+<listitem><para><emphasis><link linkend="xacc-options-accounts">
+      Contas</link></emphasis></para></listitem>
+<listitem><para><emphasis><link linkend="xacc-options-report-title">
+      Título de Relatório</link></emphasis></para></listitem>
+<listitem><para><emphasis><link linkend="xacc-options-style-sheet">
+      Folha de Estilo</link></emphasis></para></listitem>
+<listitem><para><emphasis><link linkend="xacc-options-date">
+      Data</link></emphasis></para></listitem>
+<listitem><para><emphasis><link linkend="xacc-options-report-currency">
+      Moeda de Relatório</link></emphasis></para></listitem>
+<listitem><para><emphasis<link linkend="xacc-options-price-source">
+      Fonte de Cotações</link></emphasis></para></listitem>
+</itemizedlist>
+</para>
+</sect1>
+</article>
+
+<!-- Local variables: -->
+<!-- sgml-parent-document: "gnucash.sgml" -->
+<!-- End: -->

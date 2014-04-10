@@ -6,10 +6,7 @@
 ;;;  $Id$
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(gnc:support "printing/print-check.scm")
-(gnc:depend  "printing/number-to-words.scm")
-(gnc:depend  "qif-import/simple-obj.scm")
-
+(use-modules (gnucash printing number-to-words))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  <print-check-format> class
@@ -136,7 +133,7 @@
         (gnc:print-session-text ps (number-to-words amount 100)))
       
       (gnc:print-session-done ps)       
-      (gnc:print-dialog-create ps)))
+      (gnc:print-session-print ps)))
 
   (gnc:print-check-dialog-create print-check-callback))
 

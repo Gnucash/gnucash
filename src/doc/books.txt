@@ -1,0 +1,238 @@
+
+                Books / Accounting Periods
+		--------------------------
+                 Implementation Proposal
+
+                Linas Vepstas 7 April 2001
+
+
+A top, unimplemented request for gnucash is the ability to 'close 
+the books', that is, to add support for 'accounting periods'.
+
+Definition
+----------
+An accounting period or 'book' is a set of accounts and transactions
+that, once closed, must never be modified again.   Books are usually
+closed once a quarter, or once a year.  Generating a report from a 
+closed book tells you how well you did for that year (or quarter).
+The provision against modifying a closed book helps ensure correctness,
+and discourages cheating.   Note that the closing balances of a closed
+book must be carried forward as the opening balance in the next book.
+
+Requirements
+------------
+Must have good performance (large data files usually mean poor performance).
+Use the idea of 'books' to prevent file bloat.  Must have access to 
+historical data.  Must be able to create bar-charts, graphs, reports
+of multi-year data (i.e. create reports spanning multiple books).
+
+
+Possible Solutions
+------------------
+Listed in order from worst to best:
+
+Plan F:
+-------
+Simply 'delete' old transactions, and adjust the equity to make up for 
+this.  More specifically: Split one file into two, with only 'old' 
+transactions in one, and only 'new' transactions in the other.
+
+I believe that this can be 'easily' coded by creating a second instance
+of a gnc-book structure in memory, copying all the account info 
+into it, and using Query.c to copy in only the 'old' transactions.
+(and v.v. using Query.c to delete the old transactions in the other copy.)
+Then, look up the ending balance on all asset/liability accounts
+in the 'old' book, and create new transactions in the 'new' book
+that transfers that balance amount to an equity account.
+The transfer description is, of course, 'opening balance'.
+Balances of income/expense accounts are zeroed out.
+
+I believe this code would be easy to write in C or scheme. There may be
+a few bugs/difficulties lurking in gnc-book that might trip things up.
+Also, at a minimum, there needs to be a GUI dialog, asking for the 
+date on which to close the books.
+
+(A fancy but optional GUI dialog/wizard might ask 'which equity 
+account to transfer the opening balances, and what the description 
+should say. This GUI is optional, since, after all, these can be 
+tweaked by hand, and its only done once a year or once a quarter.)
+
+(An even fancier GUI would remember how often the books should close:
+1,2,3,4 times a year, 12 times a year, whatever, and 'remind' you 
+when that happens.)
+
+(Another 'fancy' feature might be to not allow user to close book until
+all 'old' transactions have been cleared/reconciled.  But that might be 
+a bit much for non-bank accounts).
+
+Pros & Cons of plan F:
+----------------------
+pro: simple. The simplest option.
+pro: truncated file loads much faster
+pro: old/irrelevant accounts can be safely deleted from newest file
+     (while still being preserved in old files).
+con: impossible to generate 5 year reports, multi-year graphs.  This
+     would really hurt, esp, when tracking stocks/mutual funds/retirement
+     accounts over a number of years.
+
+I think this last one is the Achilles heel, the torpedo in the rudder
+that sinks the boat.
+
+
+
+
+Plan D:
+-------
+As above, but instead of deleting, add a kvp to each transaction stating
+'/book/closed-on=12.31.2000'.  Then modify the default query for the 
+registers so that the only displayed transactions are those that are *not*
+part of a closed book.  Modify the Query GUI dialog to add 'book' as 
+a query parameter. 
+
+pro: easy access to historical record
+con: slow loads.
+con: dealing with opening balances, equity, is icky.
+con: can't delete/hide old/stale accounts.
+
+We move on....
+
+Plan C:
+-------
+As in plan F, but instead of creating two books, clone the account tree
+into two: 'old' and 'new'.   The old and new accounts are identical, 
+except that they get different guid's.  Every  account in the old 
+tree gets a kvp in it: '/book/closed-on=12.31.2000'.   We don't copy
+or delete any transactions; instead, we reclassify them: Old transactions 
+are transfers between old accounts, new transactions are transfers 
+between new accounts. 
+
+The account summary needs to be modified to show only 'new' accounts 
+by default.  The transfer-from pop-down needs to be modified to show 
+only 'new' accounts only, and never the old accounts.
+
+Transfers between closed and open accounts are never allowed (this is 
+validated/forced in the engine).  Opening balances are handled just as 
+in plan 'F'.   User can only view data in closed books, and not change 
+it.  
+
+If we allow books to be reopened re-opened, then the 'starting balance' 
+equity transfers must be deleted.   We can save 're-opening' for some
+future day.
+
+The 'starting balance equity transfers' must have a kvp pair in them: 
+'/book/closing-balance-of-account-guid=0xdeadbeef'.
+This way, we know that this transaction is associated with the closure
+of the book on some specific account, and that way, we can find this
+transaction someday in the future, if we ever need to.
+
+Each new account needs to point back at the copy that is its 'old' self. 
+(these don't have to be C pointers, they could be some suitably clever
+kvp: '/book/previous-guid=0xdeadbeef')  This continuity is needed in order
+to be able to create reports that scan over multiple books.  The Query.c
+interface needs to be modified so that it searches only new accounts,
+or it searches new accounts *and* their corresponding 'old' copies.
+
+(There are three ways to deal with this account continuity issue:
+ \\ don't deal with it in query.c:  force various GUI dialogs to explicitly 
+    formulate queries involving the /book/previous-guid string.  
+    but this gets messy in the GUI's.  May lead to excess cut-n-paste
+    of similar code between different GUI's.
+    
+ \\ 'hide' the distinction between 'old' and 'new' in query.c: 
+    the users of query.c need only to specify a boolean flag: search 
+    closed books: yes/no.  However, this is conceptually ugly, and 
+    prevents query from doing low-level queries on specific 
+    books.
+    
+ \\ create query utility wrapper/pre-processor that takes a query,
+    and then modifies it to search through closed books as well.
+    This is the 'cleanest' solution. ??
+    
+ \\ All these are delicate, and need a little more thought and 
+    exploration. Goal is to simplify queries, not burden the system 
+    with cryptic, complex code.
+)
+
+I believe that if we can deal with the account-continuity issue in query.c
+or in a wrapper thereto, that there are no remaining issues with
+reporting.  i.e., for any given report, we are either reporting
+data in closed books, or not.  Different reports should have different
+defaults.  e.g. income/expense pie chart never looks at old books. 
+asset-value-over-time-bar-chart always looks at closed books.
+
+
+pro: safer than plan F, since we really can enforce the 'you aren't 
+     allowed to edit closed books' rule.
+pro: solves the old-account/new-account problem, since new accounts 
+     can be edited/deleted without damaging old account.
+pro: solves the historical reporting problem.
+
+con: queries are potentially slow, loading of file is potentially slow.
+
+But now we have enough info to propose the final solution:
+
+Plan A:
+-------
+The kvp markup of plan C coupled to the multi-file solution of plan F.
+In initial startup of gnucash, only the 'current' book is loaded.  
+If user asks for a report that requires data from old books, then
+we have to pause to load one or more of the older books.   
+
+If the books are stored as separate files, then the 'current' book 
+needs to somehow know the filenames of the old books.  I recommend
+against storing the books as different sections of one file, for 
+many reasons:
+ % risk of corruption of old books 
+ % bloated file size 
+ % the single-file solution would need to invent a 'directory' so 
+   that the location of the old books in the file can be quickly 
+   found and lseek()'ed or mmap()'ed.  But why invent a directory? 
+   Unix already provides directories!
+
+I recommend that every book get a unique guid.  The current book
+would know the guid's if its closed book progeny.  The filename
+would incorporate some compressed version of the guid (and/or
+the date of closure).
+
+Optional:
+every book gets not only a unique guid, and also stores some 
+meta-information (as book-level kvp's):
+
+/book/name=some-user-supplied-name
+/book/notes=user-supplied-descriptive-comments
+/book/start-date=xxx
+/book/end-date=xxx
+/book/previous-book-guids=(list 0xa 0xb 0xc)
+/book/accounting-period=enum {none, week, month, quarter, trimester, year}
+
+I don't know if the latest XML format provides for top-level 'global'
+data: but in principle, a top-level kvp is enough?
+
+Pro's & Con's
+-------------
+I am not aware of any con's to plan A at this point.
+
+
+Implementation Notes:
+---------------------
+Plan F is the easiest to implement: a few days to a week; maybe two weeks
+if gnc-book.c needs serious overhaul.
+
+Plan C is mostly just as easy as F (writing out the kvp is near trivial).
+The hard part of plan C is the wrapper/utility to allow searches of 
+current and/or old books.  The wrapper could be delicate, and needs 
+more thought.  Also, add another week to deal with the GUI tab/button 
+to search 'current book' or 'all books'.
+
+Plan A is only a little harder than Plan C: maybe another week or two 
+on top of C (??)
+
+
+Open Issues
+-----------
+*) Naming convention for the different books?  Each book is really
+   written out as a backend: although it could be a file, it could
+   also be a database, and a naming convention is needed for that ...
+
+=========================== end of file ========================
+

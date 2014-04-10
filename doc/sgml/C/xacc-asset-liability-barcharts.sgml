@@ -1,0 +1,51 @@
+<article id="xacc-asset-liability-barcharts">
+<artheader>
+<title>Asset and Liability Barcharts</title>
+</artheader>
+<sect1>
+<title></title>
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="image/asset-barchart.png">
+</imageobject>
+</mediaobject>
+</screenshot>
+<para>These reports allow you to display home one, some,
+or all of your assets or liabilities change over time.  
+If you want a barchart showing an overall picture of
+your net worth, use the <link linkend="xacc-net-worth-barchart">
+	  Net Worth Barchart</link> instead.</para>
+
+<para>Options available for this report include:</para>
+      <itemizedlist>
+	<listitem><para><emphasis><link linkend="xacc-options-accounts">
+		Accounts</link></emphasis></para>
+	</listitem>
+	<listitem><para><emphasis><link linkend="xacc-options-report-title">
+		Report Title</link></emphasis></para></listitem>
+	<listitem><para><emphasis><link linkend="xacc-options-date">
+		From & To</link></emphasis></para></listitem>
+	<listitem><para><emphasis><link linkend="xacc-options-interval">
+		Step Size</link></emphasis></para>
+	</listitem>
+	<listitem><para><emphasis><link linkend="xacc-options-style-sheet">
+		Style Sheet</link></emphasis></para>
+	</listitem>
+	<listitem><para><emphasis><link linkend="xacc-options-price-source">
+		Price Source</link></emphasis></para>
+	</listitem>
+	<listitem><para><emphasis><link linkend="xacc-options-depth">
+		Depth</link></emphasis></para>
+	</listitem>
+	<listitem><para><emphasis>Add More!!!
+	      </emphasis></para>
+	</listitem>
+
+      </itemizedlist>
+    </sect1>
+  </article>
+  
+<!-- Local variables: -->
+<!-- sgml-parent-document: "gnucash.sgml" -->
+<!-- End: -->

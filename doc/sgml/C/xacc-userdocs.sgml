@@ -98,11 +98,7 @@
 
   </PARA>
 </LISTITEM>
-<LISTITEM>
-<PARA><LINK LINKEND="XACC-TICKER">Stock Ticker</LINK>
 
-  </PARA>
-</LISTITEM>
 <LISTITEM>
 <PARA><LINK LINKEND="XACC-DOUBLEENTRY">Using Double Entry</LINK>
 
@@ -166,3 +162,7 @@ that are not yet sufficiently functional for use by end users.
 </PARA>
 </SECT1>
 </ARTICLE>
+
+<!-- Local variables: -->
+<!-- sgml-parent-document: "gnucash.sgml" -->
+<!-- End: -->

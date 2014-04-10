@@ -1,0 +1,47 @@
+
+<ARTICLE ID="XACC-NEWACCTWIN">
+<ARTHEADER>
+<TITLE></TITLE>
+<TITLE>Ventana de Nueva Cuenta</TITLE>
+</ARTHEADER>
+<SECT1>
+<TITLE> Ventana de Nueva Cuenta</TITLE>
+<PARA>    </PARA>
+<PARA>Así es como queda la ventana de nueva cuenta:
+
+    </PARA>
+<PARA><INLINEMEDIAOBJECT>
+<IMAGEOBJECT>
+<IMAGEDATA FILEREF="image/newaccwin-code.png">
+</IMAGEOBJECT>
+</INLINEMEDIAOBJECT>
+
+    </PARA>
+<PARA>Escoge un <LINK LINKEND="XACC-ACCTYPES"><EMPHASIS>Tipo
+    de cuenta</EMPHASIS></LINK>.
+
+    </PARA>
+<PARA>El campo de <EMPHASIS>Moneda</EMPHASIS> suele ser un <LINK LINKEND="XACC-ISOCURR">código de moneda ISO de tres letras</LINK>
+    (<EMPHASIS>p.e.</EMPHASIS> - <ACRONYM>USD</ACRONYM> para Dólares de EE.UU.). El <EMPHASIS>Código
+    de Cuenta</EMPHASIS> es un número que determina el <LINK LINKEND="SORTORDER">orden de ordenación</LINK> de la cuenta
+    cuando aparezca en el listado o en la <LINK LINKEND="XACC-CHARTOFACCTS"><EMPHASIS>    Tabla de Cuentas</EMPHASIS></LINK>.
+
+    </PARA>
+<PARA>La imagen siguiente muestra un ejemplo para una cuenta
+    de negocio de monedas o de existencias. Observe que el campo
+    Seguridad no está en gris, y por lo que puede entrar un valor.
+    El valor es normalmente un <LINK LINKEND="XACC-ISOCURR">código de moneda
+    ISO de tres letras.</LINK> 
+
+    </PARA>
+<PARA>     <INLINEMEDIAOBJECT>
+<IMAGEOBJECT>
+<IMAGEDATA FILEREF="image/newaccwin-trade.png">
+</IMAGEOBJECT>
+</INLINEMEDIAOBJECT>
+    
+
+
+</PARA>
+</SECT1>
+</ARTICLE>

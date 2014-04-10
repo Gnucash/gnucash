@@ -1,0 +1,834 @@
+<ARTICLE ID="XACC-DEPRECIATION">
+<ARTHEADER>
+<TITLE>Pérdida y Ganancia de Capital</TITLE>
+</ARTHEADER>
+<SECT1>
+<TITLE> Pérdida y Ganancia de Capital</TITLE>
+<PARA>    </PARA>
+<PARA>Esta sección proporciona como tratar la depreciación
+    y apreciación de acciones en el programa GnuCash.
+
+    </PARA>
+<PARA>También proporciona una breve introducción de las
+    entradas de impuestos relacionadas.
+
+    </PARA>
+<PARA><EMPHASIS>Cuidado:</EMPHASIS> <EMPHASIS>Tenga en cuenta que diferentes países pueden
+    tener <EMPHASIS>substanciales</EMPHASIS> diferencias en sus políticas de
+    impuestos para tratar estos temas; todo lo que este documento
+    realmente puede proporcionar es algunas ideas para ayudarle a 
+    aplicar su política de impuestos/depreciación "favorita".</EMPHASIS>
+
+    </PARA>
+<PARA>Observe que la apreciación y depreciación de acciones tiende
+    a tratarse de forma distinta:
+
+    <ITEMIZEDLIST>
+<LISTITEM>
+<PARA>        <LINK LINKEND="XACC-DEPRECIATION">Depreciación</LINK> es <EMPHASIS>normalmente</EMPHASIS>
+        reconocido (el término técnico es <EMPHASIS>amortización</EMPHASIS>)
+        como reducción de una base inicial, que se reduce de valor en
+        la acción hasta llegar a cero.
+
+        </PARA>
+<PARA>La depreciación se suele calcular solamente en acciones
+        que se utilizan para fines de negocio o profesionales,
+        porque los gobierno generalmente no le permiten obtener
+        deducciones por depreciación en acciones personales, y es
+        inútil hacer todo el proceso si el acción no es deducible.
+      
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>        En contraste, <LINK LINKEND="APPR">Ganancia de Capital,</LINK>
+        que se puede llamar <EMPHASIS>asentamiento de apreciación de valor,</EMPHASIS>
+        <EMPHASIS>no</EMPHASIS> es típicamente reconocido hasta que el objeto es
+        vendido, y en ese <EMPHASIS>instante,</EMPHASIS> se consigue la ganancia
+        de golpe.
+
+        </PARA>
+<PARA>Al contrario que la depreciación, los gobiernos tienden a poner
+        <EMPHASIS>intereses altos</EMPHASIS> en los impuestos de las
+        ganancias de capital en una manera u otra.
+
+        </PARA>
+<PARA>(Como en todo, hay excepciones. Si tiene un bono que
+        paga todos sus intereses al vencimiento, las autoridades
+        normalmente requerirán que reconozca el interés cada año,
+        y reusan tratarlo como una ganancia de capital. Las
+        frases <EMPHASIS>interés acumulado,</EMPHASIS> o <EMPHASIS>interés
+        imputado</EMPHASIS> son normalmente las que se esquivan porque
+        son sensibles a estas cosas...)
+      
+    </PARA>
+</LISTITEM>
+</ITEMIZEDLIST>
+
+    </PARA>
+</SECT1>
+<SECT1 ID="XACC-CAPITALGAINS">
+<TITLE> Ganancias de capital - Apreciación de acciones</TITLE>
+<PARA>    <ANCHOR ID="APPR"> 
+
+    </PARA>
+<PARA>La apreciación de acciones es, en general, un asunto
+    bastante difícil de tratar. Esto es porque, por algunas
+    clases de acciones, es difícil de estimar correctamente
+    un incremento del valor <EMPHASIS>antes de que la acción es
+    realmente vendido.</EMPHASIS>
+
+    </PARA>
+<PARA>Si usted invierte en <LINK LINKEND="XACC-TICKER">acciones</LINK>
+    que son tratados con base diaria en los mercados abiertos como
+    el mercado de existencias, los precios pueden bastante exactos,
+    y vender la acción al precio del mercado puede ser tan simple
+    como llamar a un corredor de borsa y notificarle una
+    <EMPHASIS>Orden de Mercado.</EMPHASIS>
+
+    </PARA>
+<PARA>Por otro lado, casas en su vecindario son vendidas con bastante
+    menos frecuencia, porque estas vendas conllevan un gasto
+    considerable, y conllevan negociaciones, que significan que
+    estimar el precio es bastante impreciso. De igual forma, vender
+    un coche usado también conlleva un proceso de negociación que
+    hace el poner un preciso poco predecible.
+
+    </PARA>
+<PARA>Más difíciles de estimar son los valores de objetos coleccionables
+    como joyas, objetos de arte, tarjetas de béisbol, etc... El
+    mercado de estos objetos es mucho menos abierto que los
+    mercados de acciones.
+
+    </PARA>
+<PARA>Peor todavía son los objetos de un tipo. Las empresas, a menudo,
+    tienen maquinaria y equipo especializado para construir un
+    producto muy específico que ha costado millones o centenares de
+    millones; este equipamiento puede <EMPHASIS>no tener valor</EMPHASIS>
+    fuera de este contexto específico. En estos casos, varios valores
+    arbritarios se pueden poner al objeto, <EMPHASIS>ninguno</EMPHASIS>
+    de ellos correcto objetivamente.
+
+    </PARA>
+<PARA>Supongamos que compra un objeto que espera que incremente
+    en valor, como una pintura de Degas, y quiere valorarla.
+    (La compañía de seguros tendrá cura de ello, incluso si
+    nadie más lo hace.)
+
+    </PARA>
+<PARA>Propiamente valorar el valor que continuamente se incrementa de
+    un Degas requerirá al menos tres, o muy posiblemente las cuatro
+    cuentas siguientes (más una cuenta de banco o caja de donde
+    proviene el dinero para la compra):
+
+    <ITEMIZEDLIST>
+<LISTITEM>
+<PARA>Un asiento de <EMPHASIS>Coste del objeto</EMPHASIS> para valorar
+      el valor original de la pintura,
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Una cuenta de <EMPHASIS>Ganancias acumuladas y no realizadas del
+      objeto</EMPHASIS> para guardar la valoración del incremento en
+      el valor, y
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Una cuenta de <EMPHASIS>haberes de las ganancias acumuladas del
+      objeto</EMPHASIS> en la cual se guardan la parte de haberes de
+      las ganancias anuales que consiga, y
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Una cuenta de <EMPHASIS>haberes de las ganancias realizadas del
+      objeto</EMPHASIS> en la cual se guardan los haberes realizados
+      cuando venda el objeto.
+    </PARA>
+</LISTITEM>
+</ITEMIZEDLIST>
+
+    </PARA>
+<PARA>Las <EMPHASIS>ganancias acumuladas</EMPHASIS> casi no afectan su
+    base de haberes para fines fiscales de <EMPHASIS>haberes</EMPHASIS>,
+    en otro lado podría tener algún efecto en los impuestos de
+    <EMPHASIS>propiedad</EMPHASIS>.
+
+    </PARA>
+<SECT2>
+<TITLE>El tratamiento de ganancias de capital en GnuCash</TITLE>
+<PARA>    </PARA>
+<SECT3>
+<TITLE>La Adquisición</TITLE>
+<PARA>La primera cosa que tiene que hacer es crear la <EMPHASIS>cuenta
+    de coste del objeto</EMPHASIS>, luego transferir la suma que ha
+    pagado por esta pintura desde su cuenta de banco a esta cuenta
+    del objeto para registrar la compra.
+
+    </PARA>
+<PARA>Un mes más tarde, tiene razones para sospechar que el valor de
+    la pintura ha incrementado en 1200 dólares. Para registrar esto
+    transfiera 1200 dólares desde su cuenta de haberes de 
+    <EMPHASIS>ganancias acumuladas del objeto</EMPHASIS> a su cuenta del objeto.
+
+    </PARA>
+<PARA>Su ventana principal se parecerá a:
+    <INLINEMEDIAOBJECT>
+<IMAGEOBJECT>
+<IMAGEDATA FILEREF="image/appr-main1.png">
+</IMAGEOBJECT>
+<TEXTOBJECT>
+<PHRASE>Ventana principal desde de la compra y la apreciación</PHRASE>
+</TEXTOBJECT>
+</INLINEMEDIAOBJECT> 
+
+    </PARA>
+<PARA>y su cuenta del objeto se parecerá a:
+    <INLINEMEDIAOBJECT>
+<IMAGEOBJECT>
+<IMAGEDATA FILEREF="image/appr-asset1.png">
+</IMAGEOBJECT>
+<TEXTOBJECT>
+<PHRASE>Cuenta del objeto después de la compra y la apreciación</PHRASE>
+</TEXTOBJECT>
+</INLINEMEDIAOBJECT> 
+
+    </PARA>
+</SECT3>
+<SECT3>
+<TITLE>Mientras Posea el Objeto</TITLE>
+<PARA>La apreciación del objeto es una serie de haberes pero 
+    <EMPHASIS>no</EMPHASIS> es dinero en caja (dinero líquido).
+
+    </PARA>
+<PARA>Las personas que poseen "acciones" en 1999 de IPOs de
+    compañías relacionadas con Linux como Red Hat Software y VA Linux
+    Systems podría verificar esto. Ellos poseen acciones o opciones que
+    <EMPHASIS>teóricamente</EMPHASIS> eran valoradas en millones de dólares.
+
+    </PARA>
+<PARA>Eso no significa que actualmente sean millonarios: los principales
+    participantes tienen que poseer sus acciones por lo menos seis
+    meses antes de poder vender <EMPHASIS>cualquiera</EMPHASIS> de ellas.
+    El hecho que ellos <EMPHASIS>no pueden</EMPHASIS> vender significa que
+    mientras en teoría podrían poseer millones de dólares en dinero,
+    en realidad, a finales de 1999, no había forma legal de
+    <EMPHASIS>conseguir</EMPHASIS> esos millones.
+
+    </PARA>
+</SECT3>
+<SECT3>
+<TITLE>Venda del objeto</TITLE>
+<PARA>Decimos que un mes más tarde los precios por las pinturas
+    de Degas han subido un poco más, en su caso alrededor de 2500 dólares,
+    según su estimación. Esperaría registrar estos 2500 dólares en su
+    haber como se ha hecho antes, y luego decide vender la pintura.
+
+    </PARA>
+<PARA>Ahora se plantean tres posibilidades:
+
+    <ITEMIZEDLIST>
+<LISTITEM>
+<PARA>        Su estimación optimística del valor de la pintura
+        fue correcto.
+
+        </PARA>
+<PARA>La cuenta de haberes se deja a parte (o quizás transfiera
+        de una cuenta de haber de <EMPHASIS>Ganancia Acumulada</EMPHASIS> a
+        una cuenta de haber de <EMPHASIS>Ganancia Realizada</EMPHASIS>), y
+        la registración de la operación sería parecido a:
+
+        <TABLE>
+<TITLE>Convertir una Ganancia Acumulada a una Ganancia Realizada</TITLE>
+<TGROUP COLS="2">
+<THEAD>
+<ROW>
+<ENTRY>Cuenta</ENTRY>
+<ENTRY>Cantidad</ENTRY>
+</ROW>
+</THEAD>
+<TBODY>
+<ROW>
+<ENTRY>Caja</ENTRY>
+<ENTRY>$16055</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>Pintura</ENTRY>
+<ENTRY>-$11000</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>Haber de Ganancia Realizada</ENTRY>
+<ENTRY>-$5055</ENTRY>
+</ROW>
+</TBODY>
+</TGROUP>
+</TABLE>
+
+        </PARA>
+<PARA>Y si cualquier cantidad ha sido acumulado como <EMPHASIS>Ganancia
+        Acumulada,</EMPHASIS> la cantidad del objeto debe ser eliminada,
+        con una diferencia de valor <EMPHASIS>negativa</EMPHASIS> para el
+        haber de la <EMPHASIS>Ganancia Acumulada</EMPHASIS>. Si el total que
+        ha sido acumulado fue de 5000 dólares, entonces la transacción
+        se podría parecer a la siguiente:
+
+        <TABLE>
+<TITLE>Ganancias acumuladas convertidas en Pérdidas Realizadas</TITLE>
+<TGROUP COLS="2">
+<THEAD>
+<ROW>
+<ENTRY>Cuenta</ENTRY>
+<ENTRY>Cantidad</ENTRY>
+</ROW>
+</THEAD>
+<TBODY>
+<ROW>
+<ENTRY>Caja</ENTRY>
+<ENTRY>$16055</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>Pintura</ENTRY>
+<ENTRY>-$11000</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>Ganancia acumulada del objeto</ENTRY>
+<ENTRY>-$5000</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>Haber de Ganancia Realizada</ENTRY>
+<ENTRY>-$5055</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>Haber de Ganancia Acumulada</ENTRY>
+<ENTRY>$5000</ENTRY>
+</ROW>
+</TBODY>
+</TGROUP>
+</TABLE>
+
+        </PARA>
+<PARA>Observe que las cuentas de haberes difieren una de la otra por
+        lo que el haber <EMPHASIS>actual</EMPHASIS> resultante de la
+        transacción es sólo de 55 dólares. Los restantes 5000 dólares
+        habían sido reconocido previamente como <EMPHASIS>Haber de
+        Ganancia Acumulada.</EMPHASIS>
+      
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>        Fue demasiado optimista sobre el valor de la pintura.
+
+        </PARA>
+<PARA>En lugar de los 16055 dólares que pensó que valía la pintura
+        solamente se se ofrecen 15000 por ella. Pero aún así decide
+        vender, porque valora más los 15000 dólares que la pintura.
+
+        </PARA>
+<PARA>Los números cambian un poco, perno no demasiado.
+
+        <TABLE>
+<TITLE>Ganancias Acumuladas convertido en Ganancias Realizadas</TITLE>
+<TGROUP COLS="2">
+<THEAD>
+<ROW>
+<ENTRY>Cuenta</ENTRY>
+<ENTRY>Cantidad</ENTRY>
+</ROW>
+</THEAD>
+<TBODY>
+<ROW>
+<ENTRY>Caja</ENTRY>
+<ENTRY>$15000</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>Pintura</ENTRY>
+<ENTRY>-$11000</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>Ganancia Acumulada del Objeto</ENTRY>
+<ENTRY>-$5000</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>Haber de la Ganancia Realizada</ENTRY>
+<ENTRY>-$4000</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>Haber de la Ganancia Acumulada</ENTRY>
+<ENTRY>$5000</ENTRY>
+</ROW>
+</TBODY>
+</TGROUP>
+</TABLE>
+
+        </PARA>
+<PARA>Observe que los dos cuentas de haberes difieren una de
+        la otra por lo que el haber <EMPHASIS>actual</EMPHASIS>
+        resultante de la transacción se convierte en una
+        <EMPHASIS>pérdida</EMPHASIS> de 1000 dólares. Este es correcto,
+        porque había reconocido con anterioridad 5000 dólares
+        en el haber.
+      
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>        Consigue vender su pintura por más de lo que había
+        pensado en sus sueños más salvajes.
+
+        </PARA>
+<PARA>El valor extra es, de nuevo, registrado como una ganancia,
+        <EMPHASIS>i.e.</EMPHASIS> un haber. 
+
+        <TABLE>
+<TITLE>Ganancias Acumuladas convertidas en Ganancias Realizadas</TITLE>
+<TGROUP COLS="2">
+<THEAD>
+<ROW>
+<ENTRY>Cuenta</ENTRY>
+<ENTRY>Cantidad</ENTRY>
+</ROW>
+</THEAD>
+<TBODY>
+<ROW>
+<ENTRY>Caja</ENTRY>
+<ENTRY>$50000</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>Pintura</ENTRY>
+<ENTRY>-$11000</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>Ganancia Acumulada del Objeto</ENTRY>
+<ENTRY>-$5000</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>Ganancia Realizada del Objeto</ENTRY>
+<ENTRY>-$39000</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>Haber de Ganancia Acumulada</ENTRY>
+<ENTRY>$5000</ENTRY>
+</ROW>
+</TBODY>
+</TGROUP>
+</TABLE>
+      
+    </PARA>
+</LISTITEM>
+</ITEMIZEDLIST>
+
+    </PARA>
+<PARA>En la práctica, es importante mantener el <EMPHASIS>Haber de
+    Ganancia Acumulada</EMPHASIS> separado de el <EMPHASIS>Haber de
+    Ganancia Realizada</EMPHASIS> como el modo más elegante de ignorar
+    los impuestos de las autoridades, que solamente cargan
+    impuestos en las <EMPHASIS>Ganancias Realizadas.</EMPHASIS>
+
+    </PARA>
+<PARA>Ahora, vamos a ver el segundo caso discutido.
+    <INLINEMEDIAOBJECT>
+<IMAGEOBJECT>
+<IMAGEDATA FILEREF="image/appr-main2.png">
+</IMAGEOBJECT>
+<TEXTOBJECT>
+<PHRASE>Ventana principal después de la venta</PHRASE>
+</TEXTOBJECT>
+</INLINEMEDIAOBJECT>
+     <INLINEMEDIAOBJECT>
+<IMAGEOBJECT>
+<IMAGEDATA FILEREF="image/appr-asset2.png">
+</IMAGEOBJECT>
+<TEXTOBJECT>
+<PHRASE>Cuenta del objeto después de la venta</PHRASE>
+</TEXTOBJECT>
+</INLINEMEDIAOBJECT> 
+
+    </PARA>
+</SECT3>
+</SECT2>
+<SECT2>
+<TITLE>Precaución sobre la Valoración</TITLE>
+<PARA>    </PARA>
+<PARA>Como se ha visto en este ejemplo, para objetos no financieros,
+    puede ser difícil estimar correctamente el valor "real" de
+    un objeto.
+
+    </PARA>
+<PARA>Es bastante sencillo contar su riqueza basándose en
+    estimaciones cuestionables que no reflejan "dinero en el
+    banco."
+
+    </PARA>
+<PARA>Lo mismo, cuando trabaja con apreciaciones de objetos,
+
+    <ITEMIZEDLIST>
+<LISTITEM>
+<PARA>        Sea precavido con sus estimaciones del valor de los objetos. 
+
+        </PARA>
+<PARA>No eché a volar su pensamiento.
+      
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>        Nunca, en ningún caso, cuente en dinero lo que no tiene
+        en el banco o como caja.
+
+        </PARA>
+<PARA>Hasta que no haya vendió su objeto y posea el dinero, cualquier
+        número en papel (o soporte magnético en disco) son meramente éso,
+        números.
+
+        </PARA>
+<PARA>Si pudiera convencer realmente a un banquero que le prestará
+        dinero, usando los objetos como garantía, ésto es una
+        evidencia razonable que sus objetos tienen valor, pero los
+        prestamistas son sospechosos profesionalmente de
+        sobreestimaciones del valor de objetos.
+
+        </PARA>
+<PARA>Tenga cuidado: Las posesiones de muchas compañías que
+        aparece como "aprovechable" en el papel está fuera de
+        negociación como el resultado de sacarlo de <EMPHASIS>caja,</EMPHASIS>
+        precisamente porque los "objetos valorables" no son la misma
+        cosa que caja.
+      
+    </PARA>
+</LISTITEM>
+</ITEMIZEDLIST>
+
+    </PARA>
+</SECT2>
+<SECT2>
+<TITLE>Tasación de Ganancias de Capital</TITLE>
+<PARA>    </PARA>
+<PARA>Las políticas de tasación varían considerablemente entre
+    países, por lo que es virtualmente imposible decir nada
+    que sea universalmente útil.
+
+    </PARA>
+<PARA>De todos modos, es <EMPHASIS>común</EMPHASIS> para los haberes
+    generados de ganancias de capital no estén sujetos a tasación
+    hasta el día que el objeto es realmente vendido, y a veces
+    incluso no entonces.
+
+    </PARA>
+<PARA>Los propietarios de casas estadounidenses <EMPHASIS>normalmente</EMPHASIS>
+    encuentran que cuando venden sus residencias, las ganancias de
+    capital que ocurren están exentas de tasación. Parece que
+    las ventas de casas en otros países se trata de forma diferente,
+    tasando estas ganancias. Las autoridades alemanas, por ejemplo,
+    tasa estas ganancias solamente si el propietario tenía la casa
+    en propiedad por un periodo inferior a diez años.
+
+    </PARA>
+
+<PARA><ULINK URL="mailto:cbbrowne@hex.net">Tengo</ULINK> un historia de
+mis días de preparación profesional para tasaciones donde una
+familia vendió una granja y esperaba una <EMPHASIS>considerable</EMPHASIS>
+factura de impuestos que sería virtualmente nada debido a que había
+sido los propietarios desde antes de 1971 (que es una "Fecha de
+Valoración" en Canada) y debido a siendo una granja <EMPHASIS>lechera</EMPHASIS>,
+con algunas deducciones resultantes <EMPHASIS>realmente peculiares.</EMPHASIS>
+</PARA>
+
+<PARA>La moraleja de esta historia es que aunque la explicación aquí
+es bastante sencilla, la tasación a menudo llegar a ser terriblemente
+complicada... </PARA>
+
+</SECT2>
+</SECT1>
+<SECT1 ID="XACC-DEPR">
+<TITLE> Depreciación de objetos</TITLE>
+<PARA>Comparado con el a menudo incierta estimación que uno tiene
+    que hacer sobre la apreciación de objetos, aquí estamos en
+    un terreno más firme.
+
+    <ITEMIZEDLIST>
+<LISTITEM>
+<PARA>Los gobiernos tienden a establecer normas precisas de cómo
+      se debe calcular la depreciación para fines fiscales.
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Es fácil buscar en referencias como las estimaciones de
+      los "libros azules" sobre el valor de tendrá un automóvil
+      después de 3 años de uso.
+    </PARA>
+</LISTITEM>
+</ITEMIZEDLIST>
+
+    </PARA>
+<PARA>Como la depreciación de objetos a menudo es conducido
+    por las políticas de impuestos, la explicación de la depreciación
+    se centrará en esa dirección, en algunos de los más comunes
+    situaciones de cálculo de la depreciación.
+
+    </PARA>
+<PARA>Mientras ha habido bastante debate sobre como acometer la
+    calculación automática y la creación de transacciones para
+    tratar cosas como la depreciación, no hay aún nada empezado,
+    por lo que por el momento, tendrá que hacer los cálculos
+    manualmente.
+
+    </PARA>
+<SECT2>
+<TITLE>Situaciones de Depreciación</TITLE>
+<PARA>    </PARA>
+<SECT3>
+<TITLE>Depreciación Linear</TITLE>
+<PARA>La depreciación linear disminuye el valor de un objeto en una
+    cantidad fija cada cierto tiempo hasta el valor neto de cero. Esta
+    es la calculación <EMPHASIS>más simple</EMPHASIS>, estimando la
+    vida útil del objeto, y simplemente dividir el coste entre la
+    vida útil.
+
+    </PARA>
+<PARA><EMPHASIS>Ejemplo:</EMPHASIS> Ha comprado un ordenador por 1500
+    dólares y desea depreciarlo en un periodo de 5 años. Cada año
+    la cantidad de la depreciación es de 300 dólares, dando los
+    cálculos siguientes:
+
+
+    <TABLE>
+<TITLE>Ejemplo 1</TITLE>
+<TGROUP COLS="3">
+<THEAD>
+<ROW>
+<ENTRY>Año</ENTRY>
+<ENTRY>Depreciación</ENTRY>
+<ENTRY>Valor Restante</ENTRY>
+</ROW>
+</THEAD>
+<TBODY>
+<ROW>
+<ENTRY>1</ENTRY>
+<ENTRY>300</ENTRY>
+<ENTRY>1200</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>2</ENTRY>
+<ENTRY>300</ENTRY>
+<ENTRY>900</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>3</ENTRY>
+<ENTRY>300</ENTRY>
+<ENTRY>600</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>4</ENTRY>
+<ENTRY>300</ENTRY>
+<ENTRY>300</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>5</ENTRY>
+<ENTRY>300</ENTRY>
+<ENTRY>0</ENTRY>
+</ROW>
+</TBODY>
+</TGROUP>
+</TABLE>
+
+    </PARA>
+</SECT3>
+<SECT3>
+<TITLE>Depreciación Geométrica</TITLE>
+<PARA>Cada periodo de tiempo el objeto es depreciado por un porcentaje
+    fijo de su valor en el periodo previo. En esta situación el 
+    valor restante del objeto decrece exponencialmente dejando un valor
+    final mayor de cero ( <EMPHASIS>p.e.</EMPHASIS> - un valor remanente).
+
+    </PARA>
+<PARA><EMPHASIS>Cuidado: Los impuestos de las autoridades pueden requerir
+    (o exigir) un porcentaje mayor en el primer periodo.</EMPHASIS>
+    Por otro lado, en Canada, esto es al revés, ya que permiten utilizar
+    la <EMPHASIS>mitad</EMPHASIS> del "Coste de capital exigido" en el
+    primer año.
+
+    </PARA>
+<PARA>El resultado de esta situación es que el valor del objeto
+    decrece más rápidamente al principio que al final que es
+    <EMPHASIS>probablemente</EMPHASIS> la más real para la mayoría de
+    objetos que una situación linear. Esto es ciertamente verdad
+    para los automóviles. 
+
+    </PARA>
+<PARA><EMPHASIS>Ejemplo:</EMPHASIS> Tomamos el mismo ejemplo anterior,
+    con una depreciación anual del 30%.
+
+    <TABLE>
+<TITLE>Ejemplo 2</TITLE>
+<TGROUP COLS="3">
+<THEAD>
+<ROW>
+<ENTRY>Año</ENTRY>
+<ENTRY>Depreciación</ENTRY>
+<ENTRY>Valor Restante</ENTRY>
+</ROW>
+</THEAD>
+<TBODY>
+<ROW>
+<ENTRY>1</ENTRY>
+<ENTRY>450</ENTRY>
+<ENTRY>1050</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>2</ENTRY>
+<ENTRY>315</ENTRY>
+<ENTRY>735</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>3</ENTRY>
+<ENTRY>220.50</ENTRY>
+<ENTRY>514.50</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>4</ENTRY>
+<ENTRY>154.35</ENTRY>
+<ENTRY>360.15</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>5</ENTRY>
+<ENTRY>108.05</ENTRY>
+<ENTRY>252.10</ENTRY>
+</ROW>
+</TBODY>
+</TGROUP>
+</TABLE>
+
+    </PARA>
+</SECT3>
+<SECT3>
+<TITLE>Suma de dígitos</TITLE>
+<PARA>El tercer métodos más utilizado en países anglosajones es el
+    método de "suma de dígitos". Lo explicaremos con una ilustración: 
+
+    </PARA>
+<PARA><EMPHASIS>Ejemplo:</EMPHASIS> Primero divida el valor del objeto por una
+    suma de los años de uso, <EMPHASIS>p.e.</EMPHASIS> para nuestro ejemplo
+    donde tenemos un objeto valorado en 1500 dólares que es utilizado
+    por un periodo de cinco años tiene 1500/(1+2+3+4+5)=100. Entonces
+    la depreciación y el valor del objeto se calculan como sigue:
+
+    <TABLE>
+<TITLE>Ejemplo 3</TITLE>
+<TGROUP COLS="3">
+<THEAD>
+<ROW>
+<ENTRY>Año</ENTRY>
+<ENTRY>Depreciación</ENTRY>
+<ENTRY>Valor Restante</ENTRY>
+</ROW>
+</THEAD>
+<TBODY>
+<ROW>
+<ENTRY>1</ENTRY>
+<ENTRY>100*5=500</ENTRY>
+<ENTRY>1000</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>2</ENTRY>
+<ENTRY>100*4=400</ENTRY>
+<ENTRY>600</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>3</ENTRY>
+<ENTRY>100*3=300</ENTRY>
+<ENTRY>300</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>4</ENTRY>
+<ENTRY>100*2=200</ENTRY>
+<ENTRY>100</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>5</ENTRY>
+<ENTRY>100*1=100</ENTRY>
+<ENTRY>0</ENTRY>
+</ROW>
+</TBODY>
+</TGROUP>
+</TABLE>
+
+    </PARA>
+</SECT3>
+</SECT2>
+<SECT2>
+<TITLE>El tratamiento de la depreciación en GnuCash</TITLE>
+<PARA>    </PARA>
+<PARA>Para registrar la depreciación de un objeto, necesita:
+
+    <ITEMIZEDLIST>
+<LISTITEM>
+<PARA>Una cuenta de <EMPHASIS>Coste del objeto</EMPHASIS> para registrar el
+      valor original;
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Una cuenta de <EMPHASIS>Depreciación Acumulada</EMPHASIS> en la que
+      recogerá la suma de todas las cantidades de las depreciaciones
+      de todos los años;
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Una cuenta de <EMPHASIS>Gastos de Depreciación</emphasis> en la que registrar
+      periódicamente los gastos de depreciación.
+    </PARA>
+</LISTITEM>
+</ITEMIZEDLIST>
+
+    </PARA>
+<PARA>El primer paso, de nuevo, es registrar la compra de su objeto
+    transfiriendo el dinero de la cuenta de banco a la cuenta
+    <EMPHASIS>Coste del objeto</EMPHASIS>. Después de lo cual, en cada
+    periodo contable registrará la depreciación como un gasto en la
+    cuenta apropiada.
+
+    </PARA>
+<PARA>Las dos ventanas que se muestran a continuación le muestran una
+    cuenta de objeto y la ventana principal después del tercer año
+    de depreciación utilizando el método de "suma de dígitos" para
+    el ejemplo anterior.
+    <INLINEMEDIAOBJECT>
+<IMAGEOBJECT>
+<IMAGEDATA FILEREF="image/depr-asset.png">
+</IMAGEOBJECT>
+<TEXTOBJECT>
+<PHRASE>Cuenta del objeto después de la depreciación</PHRASE>
+</TEXTOBJECT>
+</INLINEMEDIAOBJECT>
+     <INLINEMEDIAOBJECT>
+<IMAGEOBJECT>
+<IMAGEDATA FILEREF="image/depr-main.png">
+</IMAGEOBJECT>
+<TEXTOBJECT>
+<PHRASE>Ventana principal después de la depreciación</PHRASE>
+</TEXTOBJECT>
+</INLINEMEDIAOBJECT>
+    
+
+    </PARA>
+</SECT2>
+<SECT2>
+<TITLE>Aviso</TITLE>
+<PARA>    </PARA>
+<PARA>Como la depreciación y las normativas de impuestos están
+    íntimamente relacionados, no es siempre libre para seleccionar
+    su método preferido. Arreglar cálculos erróneos le costará
+    mucho más tiempo y problemas que hacer los cálculos correctos
+    la primera vez, por lo que si planea hacer la depreciación de
+    los objetos, es recomendable que se aseguré de los métodos
+    permitidos <EMPHASIS>o requeridos</EMPHASIS> a utilizar.
+
+</PARA>
+</SECT2>
+</SECT1>
+</ARTICLE>

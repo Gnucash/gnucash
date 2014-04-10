@@ -20,12 +20,13 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-#ifndef __GNC_RECONCILE_LIST_H__
-#define __GNC_RECONCILE_LIST_H__
+#ifndef GNC_RECONCILE_LIST_H
+#define GNC_RECONCILE_LIST_H
 
 #include <gtk/gtkclist.h>
 
 #include "Query.h"
+#include "gnc-numeric.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -60,13 +61,14 @@ struct _GNCReconcileList
 
   gboolean no_toggle;
   gboolean always_unselect;
+  gboolean first_fill;
 
   GHashTable *reconciled;
 
-  GtkStyle *reconciled_style;
-
   Account *account;
   Query *query;
+
+  GNCReconcileList *sibling;
 };
 
 struct _GNCReconcileListClass
@@ -97,9 +99,11 @@ Split * gnc_reconcile_list_get_current_split(GNCReconcileList *list);
 
 void gnc_reconcile_list_refresh (GNCReconcileList *list);
 
-double gnc_reconcile_list_reconciled_balance(GNCReconcileList *list);
+gnc_numeric gnc_reconcile_list_reconciled_balance(GNCReconcileList *list);
 
-void gnc_reconcile_list_commit(GNCReconcileList *list, time_t date);
+void gnc_reconcile_list_commit (GNCReconcileList *list, time_t date);
+
+void gnc_reconcile_list_postpone (GNCReconcileList *list);
 
 void gnc_reconcile_list_unselect_all(GNCReconcileList *list);
 
@@ -112,4 +116,4 @@ void gnc_reconcile_list_set_sort_order(GNCReconcileList *list,
 }
 #endif /* __cplusplus */
 
-#endif /* __RECONCILE_LIST_H__ */
+#endif /* RECONCILE_LIST_H */

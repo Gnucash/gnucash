@@ -1,7 +1,7 @@
 dnl
 dnl Check for struct linger
 dnl
-AC_DEFUN(AC_STRUCT_LINGER, [
+AC_DEFUN([AC_STRUCT_LINGER], [
 av_struct_linger=no
 AC_MSG_CHECKING(struct linger is available)
 AC_TRY_RUN([

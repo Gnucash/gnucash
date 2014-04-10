@@ -1,0 +1,109 @@
+<article id="xacc-account-hierarchy-creator">
+    <artheader>
+      <title>Criador de Hierarquias de Contas</title>
+    </artheader>
+    
+    <para>Quando um utilizador inicia o GnuCash pela primeira vez ou 
+    pede no menu "Ficheiro" para criar um "Novo Ficheiro" este druida 
+    é executado para dar apoio na criação de uma lista de contas.  Você 
+    pode desligar o druida que surge ao criar novo ficheiro activando a 
+    a opção "Sem configuração de lista de contas em novo ficheiro" na secção 
+    "Genérica" da janela <link linkend="XACC-PREFERENCES">Preferências</link>
+    .</para>
+
+    <para>O druida será executado para um novo utilizador até que este utilize 
+    um ficheiro, ou complete o druida, ou remova a selecção na caixa que surge 
+    quando é primido o "Cancelar".</para>
+
+    <para>Você pode primir Cancelar a qualquer momento para parar o druida. 
+    Uma vez tendo terminado um determinado passo prima o botão Seguinte para 
+    passar ao passo seguinte.  Caso se aperceba que cometeu um erro ou se 
+    esqueceu de algo pode primir o botão Anterior para ser levado até ao passo 
+    anterior.</para>
+    
+    <sect1>
+      <title>Primeiro Passo de Explicação</title>
+
+      <para><inlinemediaobject><imageobject>
+          <imagedata fileref="image/new-user-frame1.png">
+        </imageobject></inlinemediaobject></para>
+
+      <para>A primeira janela que vê dá-lhe uma breve explicação 
+      de qual é o objectivo do druida.</para>
+    </sect1>
+
+    <sect1>
+      <title>Selecção de Moeda</title>
+      
+    <para><inlinemediaobject><imageobject>
+          <imagedata fileref="image/new-user-frame2.png">
+        </imageobject></inlinemediaobject></para>
+
+      <para>Nesta janela você seleccionará a moeda que gostaria que as 
+      contas utilizassem.  Esta moeda será utilizada como a moeda de 
+      defeito para todas as contas criadas.  Pelo menos uma das selecções 
+      de tipos de contas inclui uma conta de câmbio de moedas.  Você terá 
+      de voltar atrás após Terminar este druida e modificar a moeda de 
+      conversão para essa conta.</para>
+    </sect1>
+
+    <sect1>
+      <title>Selecção de Tipos de Contas</title>
+      
+    <para><inlinemediaobject><imageobject>
+          <imagedata fileref="image/new-user-frame3.png">
+        </imageobject></inlinemediaobject></para>
+
+      <para>Nesta janela você selecciona que tipos de contas desejaria 
+      que fossem configurados.  A maioria das pessoas desejará seleccionar 
+      as contas Comuns.  As outras categorias deverão ser bastante auto-
+      explicativas.</para>
+
+      <para>No canto inferior direito da janela poderá visualizar a 
+      hieraquia de contas que serão criadas devido a esta categoria. 
+      No canto inferior esquerdo da janela encontra-se uma descrição 
+      mais detalhada das contas que fazem parte deste tipo.</para>
+
+      <para>Você pode seleccionar uma, mais do que uma, ou todas as 
+      categorias.  O botão Seleccionar Todas permite-lhe facilmente 
+      seleccionar todas as categorias.  O botão Limpar Todas permite-lhe 
+      facilmente apagar todas as selecções.</para>
+    </sect1>
+
+    <sect1>
+      <title>Definir Saldos Iniciais</title>
+      
+    <para><inlinemediaobject><imageobject>
+          <imagedata fileref="image/new-user-frame4.png">
+        </imageobject></inlinemediaobject></para>
+
+      <para>Nesta janela você poderá visualizar uma lista final de todas 
+      as contas que serão criadas.  Poderá definir também aqui os saldos 
+      iniciais de algumas contas.</para>
+
+      <para>Para definir os saldos iniciais prima a linha que contém a 
+      conta que desejaria definir e introduza na caixa de texto à direita 
+      o saldo inicial .</para>
+      
+    </sect1>
+
+    <sect1>
+      <title>Janela Final</title>
+      
+    <para><inlinemediaobject><imageobject>
+          <imagedata fileref="image/new-user-frame5.png">
+        </imageobject></inlinemediaobject></para>
+
+      <para>Se tudo correu bem até este ponto, prima o botão "Terminar" 
+      e as contas serão criadas na nova arquitectura de contas.</para>
+
+      <para>Terá ainda de gravar o novo ficheiro que criou para um 
+      qualquer lugar para que tudo isto se torne persistente.</para>
+      
+    </sect1>
+    
+</article>
+
+<!-- Local variables: -->
+<!-- sgml-parent-document: "gnucash.sgml" -->
+<!-- End: -->

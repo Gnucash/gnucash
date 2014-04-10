@@ -21,15 +21,36 @@
  *                                                                  *
  ********************************************************************/
 
-#include <glib.h>
-#include <assert.h>
+#include "config.h"
 
+#include <glib.h>
+
+#include "GNCIdP.h"
 #include "gnc-engine.h"
 
 static GList * engine_init_hooks = NULL;
-static gnc_commodity_table * known_commodities = NULL;
 static int engine_is_initialized = 0;
+GCache * gnc_string_cache = NULL;
 
+
+/* GnuCash version functions */
+unsigned int
+gnucash_major_version (void)
+{
+  return GNUCASH_MAJOR_VERSION;
+}
+
+unsigned int
+gnucash_minor_version (void)
+{
+  return GNUCASH_MINOR_VERSION;
+}
+
+unsigned int
+gnucash_micro_version (void)
+{
+  return GNUCASH_MICRO_VERSION;
+}
 
 /********************************************************************
  * gnc_engine_init
@@ -37,24 +58,55 @@ static int engine_is_initialized = 0;
  ********************************************************************/
 
 void 
-gnc_engine_init(int argc, char ** argv) {
+gnc_engine_init(int argc, char ** argv)
+{
   gnc_engine_init_hook_t hook;
   GList                  * cur;
 
+  if (1 == engine_is_initialized) return;
   engine_is_initialized = 1;
 
-  /* initialize the commodity table (it starts empty) */
-  known_commodities = gnc_commodity_table_new();
+  /* initialize the string cache */
+  gnc_engine_get_string_cache();
+  
+  xaccGUIDInit ();
 
   /* call any engine hooks */
-  for(cur = engine_init_hooks; cur; cur = cur->next) {
+  for (cur = engine_init_hooks; cur; cur = cur->next)
+  {
     hook = (gnc_engine_init_hook_t)cur->data;
-    if(hook) {
+
+    if (hook)
       (*hook)(argc, argv);
-    }
   }
 }
 
+GCache*
+gnc_engine_get_string_cache(void)
+{
+    if(!gnc_string_cache) 
+    {
+        gnc_string_cache = g_cache_new(
+            (GCacheNewFunc) g_strdup, g_free,
+            (GCacheDupFunc) g_strdup, g_free, g_str_hash, 
+            g_str_hash, g_str_equal);
+    }
+    return gnc_string_cache;
+}
+
+/********************************************************************
+ * gnc_engine_shutdown
+ * shutdown backend, destroy any global data, etc.
+ ********************************************************************/
+
+void
+gnc_engine_shutdown (void)
+{
+  g_cache_destroy (gnc_string_cache);
+  gnc_string_cache = NULL;
+
+  xaccGUIDShutdown ();
+}
 
 /********************************************************************
  * gnc_engine_add_init_hook
@@ -64,16 +116,4 @@ gnc_engine_init(int argc, char ** argv) {
 void
 gnc_engine_add_init_hook(gnc_engine_init_hook_t h) {
   engine_init_hooks = g_list_append(engine_init_hooks, (gpointer)h);
-}
-
-
-/********************************************************************
- * gnc_engine_commodities()
- * get the global gnc_engine commodity table 
- ********************************************************************/
-
-gnc_commodity_table *
-gnc_engine_commodities(void) {
-  assert(engine_is_initialized);
-  return known_commodities;
 }

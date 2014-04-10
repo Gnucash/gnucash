@@ -1,6 +1,6 @@
 /********************************************************************\
  * dialog-fincalc.c : dialog for a financial calculator             *
- * Copyright (C) 2000 Dave Peticolas <peticola@cs.ucdavis.edu>      *
+ * Copyright (C) 2000 Dave Peticolas <dave@krondo.com>              *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -28,15 +28,19 @@
 
 #include "dialog-fincalc.h"
 #include "dialog-utils.h"
-#include "finvar.h"
 #include "finproto.h"
-#include "glade-gnc-dialogs.h"
+#include "finvar.h"
+#include "global-options.h"
 #include "gnc-amount-edit.h"
-#include "gnc-dateedit.h"
-#include "query-user.h"
+#include "gnc-commodity.h"
+#include "gnc-component-manager.h"
+#include "gnc-date-edit.h"
+#include "gnc-engine-util.h"
+#include "gnc-gui-query.h"
 #include "messages.h"
-#include "util.h"
 
+
+#define DIALOG_FINCALC_CM_CLASS "dialog-fincalc"
 
 typedef enum
 {
@@ -100,7 +104,7 @@ normalize_period(unsigned int *period)
 {
   int i;
 
-  assert(period != NULL);
+  g_return_val_if_fail (period, 0);
 
   for (i = (sizeof(periods) / sizeof(unsigned int)) - 1; i >= 0; i--)
     if (*period >= periods[i])
@@ -110,6 +114,7 @@ normalize_period(unsigned int *period)
     }
 
   *period = periods[0];
+
   return 0;
 }
 
@@ -117,31 +122,37 @@ normalize_period(unsigned int *period)
 static void
 fi_to_gui(FinCalcDialog *fcd)
 {
-  char string[1024];
-  struct lconv *lc;
-  double total;
+  const gnc_commodity *commodity;
+  static char string[64];
+  gnc_numeric total;
+  gnc_numeric npp;
+  gnc_numeric pmt;
   int i;
 
   if (fcd == NULL)
     return;
 
-  lc = gnc_localeconv();
+  npp = gnc_numeric_create (fcd->financial_info.npp, 1);
 
-  snprintf(string, sizeof(string), "%u", fcd->financial_info.npp);
-  gtk_entry_set_text(GTK_ENTRY(fcd->amounts[PAYMENT_PERIODS]), string);
+  gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT(fcd->amounts[PAYMENT_PERIODS]),
+                              npp);
+  gnc_amount_edit_set_damount (GNC_AMOUNT_EDIT(fcd->amounts[INTEREST_RATE]),
+                               fcd->financial_info.ir);
+  gnc_amount_edit_set_damount (GNC_AMOUNT_EDIT(fcd->amounts[PRESENT_VALUE]),
+                               fcd->financial_info.pv);
+  gnc_amount_edit_set_damount (GNC_AMOUNT_EDIT(fcd->amounts[PERIODIC_PAYMENT]),
+                               fcd->financial_info.pmt);
+  gnc_amount_edit_set_damount (GNC_AMOUNT_EDIT(fcd->amounts[FUTURE_VALUE]),
+                               -fcd->financial_info.fv);
 
-  gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT(fcd->amounts[INTEREST_RATE]),
-                              fcd->financial_info.ir);
+  pmt = double_to_gnc_numeric (fcd->financial_info.pmt, 100000, GNC_RND_ROUND);
 
-  gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT(fcd->amounts[PRESENT_VALUE]),
-                              fcd->financial_info.pv);
-  gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT(fcd->amounts[PERIODIC_PAYMENT]),
-                              fcd->financial_info.pmt);
-  gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT(fcd->amounts[FUTURE_VALUE]),
-                              -fcd->financial_info.fv);
-  total = fcd->financial_info.npp * fcd->financial_info.pmt;
+  commodity = gnc_default_currency ();
 
-  DxaccSPrintAmount (string, total, PRTSEP, NULL);
+  total = gnc_numeric_mul (npp, pmt, gnc_commodity_get_fraction (commodity),
+                           GNC_RND_ROUND);
+
+  xaccSPrintAmount (string, total, gnc_default_print_info (FALSE));
   gtk_label_set_text (GTK_LABEL(fcd->payment_total_label), string);
 
   i = normalize_period(&fcd->financial_info.CF);
@@ -163,26 +174,27 @@ static void
 gui_to_fi(FinCalcDialog *fcd)
 {
   GtkToggleButton *toggle;
-  struct lconv *lc;
-  char *string;
+  gnc_numeric npp;
   int i;
 
   if (fcd == NULL)
     return;
 
-  lc = gnc_localeconv();
+  npp =
+    gnc_amount_edit_get_amount(GNC_AMOUNT_EDIT(fcd->amounts[PAYMENT_PERIODS]));
+  fcd->financial_info.npp = npp.num;
 
-  string = gtk_entry_get_text(GTK_ENTRY(fcd->amounts[PAYMENT_PERIODS]));
-  fcd->financial_info.npp = strtol(string, NULL, 10);
   fcd->financial_info.ir =
-    gnc_amount_edit_get_amount(GNC_AMOUNT_EDIT(fcd->amounts[INTEREST_RATE]));
+    gnc_amount_edit_get_damount(GNC_AMOUNT_EDIT(fcd->amounts[INTEREST_RATE]));
 
   fcd->financial_info.pv =
-    gnc_amount_edit_get_amount(GNC_AMOUNT_EDIT(fcd->amounts[PRESENT_VALUE]));
+    gnc_amount_edit_get_damount(GNC_AMOUNT_EDIT(fcd->amounts[PRESENT_VALUE]));
+
   fcd->financial_info.pmt =
-    gnc_amount_edit_get_amount(GNC_AMOUNT_EDIT(fcd->amounts[PERIODIC_PAYMENT]));
+    gnc_amount_edit_get_damount(GNC_AMOUNT_EDIT(fcd->amounts[PERIODIC_PAYMENT]));
+
   fcd->financial_info.fv =
-    gnc_amount_edit_get_amount(GNC_AMOUNT_EDIT(fcd->amounts[FUTURE_VALUE]));
+    gnc_amount_edit_get_damount(GNC_AMOUNT_EDIT(fcd->amounts[FUTURE_VALUE]));
   fcd->financial_info.fv = -fcd->financial_info.fv;
 
   i = gnc_option_menu_get_active(fcd->compounding_menu);
@@ -197,7 +209,7 @@ gui_to_fi(FinCalcDialog *fcd)
   toggle = GTK_TOGGLE_BUTTON(fcd->discrete_compounding_radio);
   fcd->financial_info.disc = gtk_toggle_button_get_active(toggle);
 
-  fcd->financial_info.prec = lc->frac_digits;
+  fcd->financial_info.prec = gnc_locale_decimal_places ();
 }
 
 /* Set the sensitivity of the calculation buttons based on the argument. */
@@ -221,6 +233,8 @@ fincalc_dialog_destroy(GtkObject *object, gpointer data)
 
   if (fcd == NULL)
     return;
+
+  gnc_unregister_gui_component_by_data (DIALOG_FINCALC_CM_CLASS, fcd);
 
   g_list_free(fcd->calc_buttons);
   fcd->calc_buttons = NULL;
@@ -267,15 +281,25 @@ fincalc_radio_toggled(GtkToggleButton *togglebutton, gpointer data)
 }
 
 static void
-close_button_clicked(GtkButton *button, FinCalcDialog *fcd)
+fincalc_compounding_radio_toggled(GtkToggleButton *togglebutton, gpointer data)
 {
-  gnc_ui_fincalc_dialog_destroy(fcd);
+  FinCalcDialog *fcd = data;
+  gboolean sensitive;
+
+  if (fcd == NULL)
+    return;
+
+  fincalc_allow_calc(fcd, TRUE);
+
+  sensitive = gtk_toggle_button_get_active (togglebutton);
+
+  gtk_widget_set_sensitive (fcd->compounding_menu, sensitive);
 }
 
 static void
-fincalc_entry_clear_clicked(GtkButton *button, GtkEntry *entry)
+close_button_clicked(GtkButton *button, FinCalcDialog *fcd)
 {
-  gtk_entry_set_text(GTK_ENTRY(entry), "");
+  gnc_close_gui_component_by_data (DIALOG_FINCALC_CM_CLASS, fcd);
 }
 
 static void
@@ -315,23 +339,15 @@ can_calc_value(FinCalcDialog *fcd, FinCalcValue value, int *error_item)
 {
   const char *missing = _("You must enter values for the other quantities.");
   const char *bad_exp = _("You must enter a valid expression.");
-  unsigned int uvalue;
   const char *string;
-  double dvalue;
+  gnc_numeric nvalue;
   int i;
 
   if (fcd == NULL)
     return NULL;
 
-  string = gtk_entry_get_text(GTK_ENTRY(fcd->amounts[PAYMENT_PERIODS]));
-  if ((string == NULL) || (*string == '\0'))
-  {
-    *error_item = PAYMENT_PERIODS;
-    return missing;
-  }
-
   /* Check for missing values */
-  for (i = 1; i < NUM_FIN_CALC_VALUES; i++)
+  for (i = 0; i < NUM_FIN_CALC_VALUES; i++)
     if (i != value)
     {
       GtkWidget *entry;
@@ -358,9 +374,9 @@ can_calc_value(FinCalcDialog *fcd, FinCalcValue value, int *error_item)
     case PRESENT_VALUE:
     case PERIODIC_PAYMENT:
     case FUTURE_VALUE:
-      dvalue = gnc_amount_edit_get_amount
+      nvalue = gnc_amount_edit_get_amount
         (GNC_AMOUNT_EDIT (fcd->amounts[INTEREST_RATE]));
-      if (DEQ(dvalue, 0.0))
+      if (gnc_numeric_zero_p (nvalue))
       {
         *error_item = INTEREST_RATE;
         return _("The interest rate cannot be zero.");
@@ -377,12 +393,17 @@ can_calc_value(FinCalcDialog *fcd, FinCalcValue value, int *error_item)
     case PRESENT_VALUE:
     case PERIODIC_PAYMENT:
     case FUTURE_VALUE:
-      string = gtk_entry_get_text(GTK_ENTRY(fcd->amounts[PAYMENT_PERIODS]));
-      uvalue = strtol(string, NULL, 10);
-      if (uvalue == 0)
+      nvalue = gnc_amount_edit_get_amount
+        (GNC_AMOUNT_EDIT(fcd->amounts[PAYMENT_PERIODS]));
+      if (gnc_numeric_zero_p (nvalue))
       {
         *error_item = PAYMENT_PERIODS;
         return _("The number of payments cannot be zero.");
+      }
+      if (gnc_numeric_negative_p (nvalue))
+      {
+        *error_item = PAYMENT_PERIODS;
+        return _("The number of payments cannot be negative.");
       }
       break;
     default:
@@ -474,9 +495,19 @@ calc_future_value(GtkButton *button, FinCalcDialog *fcd)
   calc_value(fcd, FUTURE_VALUE);
 }
 
+static void
+close_handler (gpointer user_data)
+{
+  FinCalcDialog *fcd = user_data;
+
+  gnome_dialog_close (GNOME_DIALOG (fcd->dialog));
+}
+
 FinCalcDialog *
 gnc_ui_fincalc_dialog_create(void)
 {
+  gnc_commodity *commodity;
+  GNCPrintAmountInfo print_info;
   FinCalcDialog *fcd;
   GtkObject *fcdo;
   GtkWidget *button;
@@ -484,27 +515,49 @@ gnc_ui_fincalc_dialog_create(void)
   GtkWidget *menu;
   GtkWidget *hbox;
   GtkWidget *edit;
+  GladeXML  *xml;
+
+  commodity = gnc_default_currency ();
 
   fcd = g_new0(FinCalcDialog, 1);
 
-  fcd->dialog = create_Financial_Calculator_Dialog();
+  xml = gnc_glade_xml_new ("fincalc.glade", "Financial Calculator Dialog");
+
+  fcd->dialog = glade_xml_get_widget (xml, "Financial Calculator Dialog");
   fcdo = GTK_OBJECT(fcd->dialog);
+
+  gnc_register_gui_component (DIALOG_FINCALC_CM_CLASS,
+                              NULL, close_handler, fcd);
+
   gtk_signal_connect(fcdo, "destroy",
                      GTK_SIGNAL_FUNC(fincalc_dialog_destroy), fcd);
 
 
-  entry = gtk_object_get_data(fcdo, "payment_periods_entry");
-  fcd->amounts[PAYMENT_PERIODS] = entry;
+  edit = gnc_amount_edit_new();
+  gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT (edit), TRUE);
+  print_info = gnc_integral_print_info ();
+  gnc_amount_edit_set_print_info (GNC_AMOUNT_EDIT (edit), print_info);
+  gnc_amount_edit_set_fraction (GNC_AMOUNT_EDIT (edit), 1);
+  fcd->amounts[PAYMENT_PERIODS] = edit;
+  gtk_widget_show (edit);
+
+  hbox = glade_xml_get_widget (xml, "payment_periods_hbox");
+  gtk_box_pack_start (GTK_BOX (hbox), edit, TRUE, TRUE, 0);
+
+  entry = GNC_AMOUNT_EDIT (edit)->amount_entry;
   gtk_signal_connect(GTK_OBJECT(entry), "changed",
                      GTK_SIGNAL_FUNC(fincalc_entry_changed), fcd);
 
 
   edit = gnc_amount_edit_new();
   gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT (edit), TRUE);
+  print_info.max_decimal_places = 5;
+  gnc_amount_edit_set_print_info (GNC_AMOUNT_EDIT (edit), print_info);
+  gnc_amount_edit_set_fraction (GNC_AMOUNT_EDIT (edit), 100000);
   fcd->amounts[INTEREST_RATE] = edit;
   gtk_widget_show (edit);
 
-  hbox = gtk_object_get_data(fcdo, "interest_rate_hbox");
+  hbox = glade_xml_get_widget (xml, "interest_rate_hbox");
   gtk_box_pack_start (GTK_BOX (hbox), edit, TRUE, TRUE, 0);
 
   entry = GNC_AMOUNT_EDIT (edit)->amount_entry;
@@ -512,13 +565,17 @@ gnc_ui_fincalc_dialog_create(void)
                      GTK_SIGNAL_FUNC(fincalc_entry_changed), fcd);
 
 
+  print_info = gnc_commodity_print_info (commodity, FALSE);
+
   edit = gnc_amount_edit_new();
   gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT (edit), TRUE);
-  gnc_amount_edit_set_print_flags (GNC_AMOUNT_EDIT(edit), PRTSEP);
+  gnc_amount_edit_set_print_info (GNC_AMOUNT_EDIT (edit), print_info);
+  gnc_amount_edit_set_fraction (GNC_AMOUNT_EDIT (edit),
+                                gnc_commodity_get_fraction (commodity));
   fcd->amounts[PRESENT_VALUE] = edit;
   gtk_widget_show (edit);
 
-  hbox = gtk_object_get_data(fcdo, "present_value_hbox");
+  hbox = glade_xml_get_widget (xml, "present_value_hbox");
   gtk_box_pack_start (GTK_BOX (hbox), edit, TRUE, TRUE, 0);
 
   entry = GNC_AMOUNT_EDIT (edit)->amount_entry;
@@ -528,11 +585,13 @@ gnc_ui_fincalc_dialog_create(void)
 
   edit = gnc_amount_edit_new();
   gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT (edit), TRUE);
-  gnc_amount_edit_set_print_flags (GNC_AMOUNT_EDIT(edit), PRTSEP);
+  gnc_amount_edit_set_print_info (GNC_AMOUNT_EDIT (edit), print_info);
+  gnc_amount_edit_set_fraction (GNC_AMOUNT_EDIT (edit),
+                                gnc_commodity_get_fraction (commodity));
   fcd->amounts[PERIODIC_PAYMENT] = edit;
   gtk_widget_show (edit);
 
-  hbox = gtk_object_get_data(fcdo, "periodic_payment_hbox");
+  hbox = glade_xml_get_widget (xml, "periodic_payment_hbox");
   gtk_box_pack_start (GTK_BOX (hbox), edit, TRUE, TRUE, 0);
 
   entry = GNC_AMOUNT_EDIT (edit)->amount_entry;
@@ -542,11 +601,13 @@ gnc_ui_fincalc_dialog_create(void)
 
   edit = gnc_amount_edit_new();
   gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT (edit), TRUE);
-  gnc_amount_edit_set_print_flags (GNC_AMOUNT_EDIT(edit), PRTSEP);
+  gnc_amount_edit_set_print_info (GNC_AMOUNT_EDIT (edit), print_info);
+  gnc_amount_edit_set_fraction (GNC_AMOUNT_EDIT (edit),
+                                gnc_commodity_get_fraction (commodity));
   fcd->amounts[FUTURE_VALUE] = edit;
   gtk_widget_show (edit);
 
-  hbox = gtk_object_get_data(fcdo, "future_value_hbox");
+  hbox = glade_xml_get_widget (xml, "future_value_hbox");
   gtk_box_pack_start (GTK_BOX (hbox), edit, TRUE, TRUE, 0);
 
   entry = GNC_AMOUNT_EDIT (edit)->amount_entry;
@@ -554,83 +615,85 @@ gnc_ui_fincalc_dialog_create(void)
                      GTK_SIGNAL_FUNC(fincalc_entry_changed), fcd);
 
 
-  button = gtk_object_get_data(fcdo, "payment_periods_calc_button");
+  button = glade_xml_get_widget (xml, "payment_periods_calc_button");
   fcd->calc_buttons = g_list_prepend(fcd->calc_buttons, button);
   gtk_signal_connect(GTK_OBJECT(button), "clicked",
                      GTK_SIGNAL_FUNC(calc_payment_periods), fcd);
 
-  button = gtk_object_get_data(fcdo, "interest_rate_calc_button");
+  button = glade_xml_get_widget (xml, "interest_rate_calc_button");
   fcd->calc_buttons = g_list_prepend(fcd->calc_buttons, button);
   gtk_signal_connect(GTK_OBJECT(button), "clicked",
                      GTK_SIGNAL_FUNC(calc_interest_rate), fcd);
 
-  button = gtk_object_get_data(fcdo, "present_value_calc_button");
+  button = glade_xml_get_widget (xml, "present_value_calc_button");
   fcd->calc_buttons = g_list_prepend(fcd->calc_buttons, button);
   gtk_signal_connect(GTK_OBJECT(button), "clicked",
                      GTK_SIGNAL_FUNC(calc_present_value), fcd);
 
-  button = gtk_object_get_data(fcdo, "periodic_payment_calc_button");
+  button = glade_xml_get_widget (xml, "periodic_payment_calc_button");
   fcd->calc_buttons = g_list_prepend(fcd->calc_buttons, button);
   gtk_signal_connect(GTK_OBJECT(button), "clicked",
                      GTK_SIGNAL_FUNC(calc_periodic_payment), fcd);
 
-  button = gtk_object_get_data(fcdo, "future_value_calc_button");
+  button = glade_xml_get_widget (xml, "future_value_calc_button");
   fcd->calc_buttons = g_list_prepend(fcd->calc_buttons, button);
   gtk_signal_connect(GTK_OBJECT(button), "clicked",
                      GTK_SIGNAL_FUNC(calc_future_value), fcd);
 
-  button = gtk_object_get_data(fcdo, "payment_periods_clear_button");
+  button = glade_xml_get_widget (xml, "payment_periods_clear_button");
   gtk_signal_connect(GTK_OBJECT(button), "clicked",
-                     GTK_SIGNAL_FUNC(fincalc_entry_clear_clicked),
+                     GTK_SIGNAL_FUNC(fincalc_amount_clear_clicked),
                      fcd->amounts[PAYMENT_PERIODS]);
 
-  button = gtk_object_get_data(fcdo, "interest_rate_clear_button");
+  button = glade_xml_get_widget (xml, "interest_rate_clear_button");
   gtk_signal_connect(GTK_OBJECT(button), "clicked",
                      GTK_SIGNAL_FUNC(fincalc_amount_clear_clicked),
                      fcd->amounts[INTEREST_RATE]);
 
-  button = gtk_object_get_data(fcdo, "present_value_clear_button");
+  button = glade_xml_get_widget (xml, "present_value_clear_button");
   gtk_signal_connect(GTK_OBJECT(button), "clicked",
                      GTK_SIGNAL_FUNC(fincalc_amount_clear_clicked),
                      fcd->amounts[PRESENT_VALUE]);
 
-  button = gtk_object_get_data(fcdo, "periodic_payment_clear_button");
+  button = glade_xml_get_widget (xml, "periodic_payment_clear_button");
   gtk_signal_connect(GTK_OBJECT(button), "clicked",
                      GTK_SIGNAL_FUNC(fincalc_amount_clear_clicked),
                      fcd->amounts[PERIODIC_PAYMENT]);
 
-  button = gtk_object_get_data(fcdo, "future_value_clear_button");
+  button = glade_xml_get_widget (xml, "future_value_clear_button");
   gtk_signal_connect(GTK_OBJECT(button), "clicked",
                      GTK_SIGNAL_FUNC(fincalc_amount_clear_clicked),
                      fcd->amounts[FUTURE_VALUE]);
 
-  menu = gtk_object_get_data(fcdo, "compounding_menu");
+  menu = glade_xml_get_widget (xml, "compounding_menu");
   fcd->compounding_menu = menu;
   gnc_option_menu_init(menu);
   menu = gtk_option_menu_get_menu(GTK_OPTION_MENU(menu));
   gtk_container_forall(GTK_CONTAINER(menu), connect_fincalc_menu_item, fcd);
 
-  menu = gtk_object_get_data(fcdo, "payment_menu");
+  menu = glade_xml_get_widget (xml, "payment_menu");
   fcd->payment_menu = menu;
   gnc_option_menu_init(menu);
   menu = gtk_option_menu_get_menu(GTK_OPTION_MENU(menu));
   gtk_container_forall(GTK_CONTAINER(menu), connect_fincalc_menu_item, fcd);
 
-  button = gtk_object_get_data(fcdo, "period_payment_radio");
+  button = glade_xml_get_widget (xml, "period_payment_radio");
   fcd->end_of_period_radio = button;
   gtk_signal_connect(GTK_OBJECT(button), "toggled",
                      GTK_SIGNAL_FUNC(fincalc_radio_toggled), fcd);
 
-  button = gtk_object_get_data(fcdo, "discrete_compounding_radio");
+  button = glade_xml_get_widget (xml, "discrete_compounding_radio");
   fcd->discrete_compounding_radio = button;
   gtk_signal_connect(GTK_OBJECT(button), "toggled",
-                     GTK_SIGNAL_FUNC(fincalc_radio_toggled), fcd);
+                     GTK_SIGNAL_FUNC(fincalc_compounding_radio_toggled), fcd);
 
-  button = gtk_object_get_data(fcdo, "close_button");
+  button = glade_xml_get_widget (xml, "close_button");
   gtk_signal_connect(GTK_OBJECT(button), "clicked",
                      GTK_SIGNAL_FUNC(close_button_clicked), fcd);
+  fcd->payment_total_label = glade_xml_get_widget (xml, "payment_total_label");
 
-  fcd->payment_total_label = gtk_object_get_data (fcdo, "payment_total_label");
+  button = glade_xml_get_widget (xml, "schedule_button");
+  gtk_widget_hide (button);
 
   init_fi(fcd);
 
@@ -651,6 +714,5 @@ gnc_ui_fincalc_dialog_destroy(FinCalcDialog *fcd)
   if (fcd == NULL)
     return;
 
-  if (fcd->dialog != NULL)
-    gnome_dialog_close(GNOME_DIALOG(fcd->dialog));
+  gnc_close_gui_component_by_data (DIALOG_FINCALC_CM_CLASS, fcd);
 }

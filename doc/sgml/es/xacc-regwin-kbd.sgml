@@ -1,0 +1,77 @@
+<ARTICLE ID="XACC-REGWIN-KBD">
+
+<ARTHEADER>
+<TITLE>Teclas aceleradoras para los Registros</TITLE>
+</ARTHEADER>
+
+<PARA>    Las siguientes teclas se pueden utilizar para moverse
+    en el registro: 
+    <EMPHASIS>Por favor verifique que no falte ninguna</EMPHASIS>
+
+    <ITEMIZEDLIST>
+<LISTITEM>
+<PARA><KEYCAP>Fecha Derecha, Fecha Izquierda</KEYCAP> mueve a izquierda
+      y derecha dentro del campo
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><KEYCAP>Inicio</KEYCAP> mueve al inicio (izquierda) del campo
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><KEYCAP>Fin</KEYCAP> mueve al final (derecha) del campo
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><KEYCAP>TAB</KEYCAP> mueve al próximo campo
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><KEYCAP>May + TAB</KEYCAP> mueve al campo previo
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><KEYCAP>Enter, Fecha Abajo</KEYCAP> mueve hacia la próxima
+      transacción (si es necesario, se creará una transacción nueva
+      en blanco)
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><KEYCAP>Fecha Arriba</KEYCAP> mueve hacia la transacción previa
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><KEYCAP>Retroceder Página</KEYCAP> mueve hacia arriba una ventana
+       de datos visualizados
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><KEYCAP>Avanzar Página</KEYCAP> mueve hacia abajo una ventana
+       de datos visualizados
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><KEYCAP>May + Retroceder Página</KEYCAP>Va a la primera transacción
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><KEYCAP>May + Avanzar Página</KEYCAP>Va a la última transacción
+       (en blanco)
+    </PARA>
+</LISTITEM>
+</ITEMIZEDLIST>
+
+
+</PARA>
+
+</ARTICLE>

@@ -24,69 +24,227 @@
 
 #include "config.h"
 
-#include <stdio.h>
 #include <gnome.h>
 #include <guile/gh.h>
+#include <stdio.h>
 #include <time.h>
-#include <assert.h>
 
-#include "top-level.h"
-#include "messages_i18n.h"
-#include "ui-callbacks.h"
-#include "RegWindow.h"
-#include "window-register.h"
-#include "account-tree.h"
-#include "MultiLedger.h"
-#include "FileDialog.h"
-#include "splitreg.h"
-#include "glade-cb-gnc-dialogs.h"
-#include "dialog-find-transactions.h"
-#include "window-help.h"
 #include "Query.h"
-#include "gnc-dateedit.h"
+#include "dialog-find-transactions.h"
+#include "dialog-utils.h"
+#include "gnc-account-tree.h"
+#include "gnc-amount-edit.h"
+#include "gnc-component-manager.h"
+#include "gnc-date-edit.h"
+#include "gnc-engine-util.h"
+#include "gnc-ledger-display.h"
+#include "gnc-ui.h"
+#include "gnc-ui-util.h"
+#include "messages.h"
+#include "window-help.h"
+#include "window-register.h"
 
-/********************************************************************\
- * gnc_ui_find_transactions_dialog_create
- * make a new print check dialog and wait for it.
-\********************************************************************/
+#define DIALOG_FIND_TRANS_CM_CLASS "dialog-find-trans"
+
+/* This static indicates the debugging module that this .o belongs to.  */
+static short module = MOD_GUI;
+
+struct _SelectDateDialog {
+  GtkWidget * dialog;
+  GtkWidget * cal;
+  GtkWidget * entry_1;
+  GtkWidget * entry_2;
+  GtkWidget * entry_3;
+  char      * ymd_format;
+};
+
+struct _FindTransactionsDialog {
+  GtkWidget  * dialog;
+  Query      * q;
+  Query      * ledger_q;
+
+  char       * ymd_format;
+
+  int        search_type;
+
+  GtkWidget  * new_search_radiobutton;
+  GtkWidget  * narrow_search_radiobutton;
+  GtkWidget  * add_search_radiobutton;
+  GtkWidget  * delete_search_radiobutton;
+
+  GtkWidget  * match_accounts_picker;
+  GtkWidget  * match_accounts_scroller;
+  GtkWidget  * account_tree;
+
+  GtkWidget  * date_start_toggle;
+  GtkWidget  * date_start_frame;
+  GtkWidget  * date_start_entry;
+
+  GtkWidget  * date_end_toggle;
+  GtkWidget  * date_end_frame;
+  GtkWidget  * date_end_entry;
+
+  GtkWidget  * description_entry;
+  GtkWidget  * description_case_toggle;
+  GtkWidget  * description_regexp_toggle;
+
+  GtkWidget  * number_entry;
+  GtkWidget  * number_case_toggle;
+  GtkWidget  * number_regexp_toggle;
+
+  GtkWidget  * credit_debit_picker;
+  GtkWidget  * amount_comp_picker;
+  GtkWidget  * amount_edit;
+
+  GtkWidget  * memo_entry;
+  GtkWidget  * memo_case_toggle;
+  GtkWidget  * memo_regexp_toggle;
+
+  GtkWidget  * shares_comp_picker;
+  GtkWidget  * shares_edit;
+
+  GtkWidget  * price_comp_picker;
+  GtkWidget  * price_edit;
+  
+  GtkWidget  * action_entry;
+  GtkWidget  * action_case_toggle;
+  GtkWidget  * action_regexp_toggle;
+
+  GtkWidget  * cleared_not_cleared_toggle;
+  GtkWidget  * cleared_cleared_toggle;
+  GtkWidget  * cleared_reconciled_toggle;
+
+  GtkWidget  * balance_balanced_toggle;
+  GtkWidget  * balance_not_balanced_toggle;
+
+  GtkWidget  * tag_entry;
+  GtkWidget  * tag_case_toggle;
+  GtkWidget  * tag_regexp_toggle;
+};
+
+
+static void gnc_ui_find_transactions_dialog_ok_cb(GtkButton * button, 
+                                                  gpointer user_data);
+static void gnc_ui_find_transactions_dialog_cancel_cb(GtkButton * button, 
+                                                      gpointer user_data);
+static void gnc_ui_find_transactions_dialog_help_cb(GtkButton * button, 
+                                                    gpointer user_data);
+static void
+gnc_ui_find_transactions_dialog_early_date_toggle_cb(GtkToggleButton * button, 
+                                                     gpointer user_data);
+static void
+gnc_ui_find_transactions_dialog_late_date_toggle_cb(GtkToggleButton * button, 
+                                                    gpointer user_data);
+static void
+gnc_ui_find_transactions_dialog_search_type_cb(GtkToggleButton * tb,
+                                               gpointer user_data);
+
+
+static int
+gnc_find_dialog_close_cb(GnomeDialog *dialog, gpointer data) {
+  FindTransactionsDialog * ftd = data;
+
+  ftd->dialog = NULL;
+
+  xaccFreeQuery (ftd->q);
+  ftd->q = NULL;
+
+  g_free (ftd->ymd_format);
+  ftd->ymd_format = NULL;
+
+  gnc_unregister_gui_component_by_data (DIALOG_FIND_TRANS_CM_CLASS, ftd);
+
+  g_free (ftd);
+
+  return FALSE;
+}
+
+static void
+close_handler (gpointer user_data)
+{
+  FindTransactionsDialog * ftd = user_data;
+
+  gnome_dialog_close (GNOME_DIALOG (ftd->dialog));
+}
 
 FindTransactionsDialog * 
-gnc_ui_find_transactions_dialog_create(xaccLedgerDisplay * orig_ledg) {
-  FindTransactionsDialog * ftd = g_new0(FindTransactionsDialog, 1);  
+gnc_ui_find_transactions_dialog_create(GNCLedgerDisplay * orig_ledg) {
+  FindTransactionsDialog * ftd = g_new0(FindTransactionsDialog, 1);
+  GtkWidget *box;
+  GtkWidget *edit;
+  GtkWidget *notebook;
+  GladeXML  *xml;
+  gint page_num;
 
-  /* call the glade-defined creator */
-  ftd->dialog = create_Find_Transactions();
-  ftd->ledger = orig_ledg;
+  xml = gnc_glade_xml_new ("find.glade", "Find Transactions");
+
+  glade_xml_signal_connect_data
+    (xml, "gnc_ui_find_transactions_dialog_ok_cb",
+     GTK_SIGNAL_FUNC (gnc_ui_find_transactions_dialog_ok_cb), ftd);
+
+  glade_xml_signal_connect_data
+    (xml, "gnc_ui_find_transactions_dialog_cancel_cb",
+     GTK_SIGNAL_FUNC (gnc_ui_find_transactions_dialog_cancel_cb), ftd);
+
+  glade_xml_signal_connect_data
+    (xml, "gnc_ui_find_transactions_dialog_help_cb",
+     GTK_SIGNAL_FUNC (gnc_ui_find_transactions_dialog_help_cb), ftd);
+
+  glade_xml_signal_connect_data
+    (xml, "gnc_ui_find_transactions_dialog_early_date_toggle_cb",
+     GTK_SIGNAL_FUNC (gnc_ui_find_transactions_dialog_early_date_toggle_cb),
+     ftd);
+
+  glade_xml_signal_connect_data
+    (xml, "gnc_ui_find_transactions_dialog_late_date_toggle_cb",
+     GTK_SIGNAL_FUNC (gnc_ui_find_transactions_dialog_late_date_toggle_cb),
+     ftd);
+
+  glade_xml_signal_connect_data
+    (xml, "gnc_ui_find_transactions_dialog_search_type_cb",
+     GTK_SIGNAL_FUNC (gnc_ui_find_transactions_dialog_search_type_cb), ftd);
+
+  ftd->dialog = glade_xml_get_widget (xml, "Find Transactions");
 
   if(orig_ledg) {
-    ftd->q = orig_ledg->query;
+    ftd->q = xaccQueryCopy (gnc_ledger_display_get_query (orig_ledg));
+    ftd->ledger_q = gnc_ledger_display_get_query (orig_ledg);
   }
   else {
     ftd->q = NULL;
+    ftd->ledger_q = NULL;
   }
-  
+
   /* initialize the radiobutton state vars */
   ftd->search_type = 0;
 
+  /* remove the tags page (unfinished) */
+  notebook = glade_xml_get_widget (xml, "find_notebook");
+  box = glade_xml_get_widget (xml, "tags_frame");
+
+  page_num = gtk_notebook_page_num (GTK_NOTEBOOK (notebook), box);
+  if (page_num >= 0)
+    gtk_notebook_remove_page (GTK_NOTEBOOK (notebook), page_num);
+
   /* find the important widgets */
-  ftd->new_search_radiobutton = 
-    gtk_object_get_data(GTK_OBJECT(ftd->dialog), "new_search_radiobutton");
+  ftd->new_search_radiobutton =
+    glade_xml_get_widget (xml, "new_search_radiobutton");
   ftd->narrow_search_radiobutton = 
-    gtk_object_get_data(GTK_OBJECT(ftd->dialog), "narrow_search_radiobutton");
+    glade_xml_get_widget (xml, "narrow_search_radiobutton");
   ftd->add_search_radiobutton = 
-    gtk_object_get_data(GTK_OBJECT(ftd->dialog), "add_search_radiobutton");
+    glade_xml_get_widget (xml, "add_search_radiobutton");
   ftd->delete_search_radiobutton = 
-    gtk_object_get_data(GTK_OBJECT(ftd->dialog), "delete_search_radiobutton");
+    glade_xml_get_widget (xml, "delete_search_radiobutton");
 
   ftd->match_accounts_scroller =
-    gtk_object_get_data(GTK_OBJECT(ftd->dialog), "account_match_scroller");
+    glade_xml_get_widget (xml, "account_match_scroller");
   ftd->match_accounts_picker = 
-    gtk_object_get_data(GTK_OBJECT(ftd->dialog), "account_match_picker");
+    glade_xml_get_widget (xml, "account_match_picker");
 
   ftd->date_start_toggle =
-    gtk_object_get_data(GTK_OBJECT(ftd->dialog), "date_start_toggle");
+    glade_xml_get_widget (xml, "date_start_toggle");
   ftd->date_start_frame =
-    gtk_object_get_data(GTK_OBJECT(ftd->dialog), "date_start_frame");
+    glade_xml_get_widget (xml, "date_start_frame");
 
   ftd->date_start_entry = gnc_date_edit_new(time(NULL), FALSE, FALSE);
   gtk_container_add(GTK_CONTAINER(ftd->date_start_frame), 
@@ -94,9 +252,9 @@ gnc_ui_find_transactions_dialog_create(xaccLedgerDisplay * orig_ledg) {
   gtk_widget_set_sensitive(ftd->date_start_entry, FALSE);
 
   ftd->date_end_toggle =
-    gtk_object_get_data(GTK_OBJECT(ftd->dialog), "date_end_toggle");
+    glade_xml_get_widget (xml, "date_end_toggle");
   ftd->date_end_frame =
-    gtk_object_get_data(GTK_OBJECT(ftd->dialog), "date_end_frame");
+    glade_xml_get_widget (xml, "date_end_frame");
 
   ftd->date_end_entry = gnc_date_edit_new(time(NULL), FALSE, FALSE);
   gtk_container_add(GTK_CONTAINER(ftd->date_end_frame), 
@@ -104,63 +262,70 @@ gnc_ui_find_transactions_dialog_create(xaccLedgerDisplay * orig_ledg) {
   gtk_widget_set_sensitive(ftd->date_end_entry, FALSE);
 
   ftd->description_entry =
-    gtk_object_get_data(GTK_OBJECT(ftd->dialog), "description_entry");
+    glade_xml_get_widget (xml, "description_entry");
   ftd->description_case_toggle =
-    gtk_object_get_data(GTK_OBJECT(ftd->dialog), "description_case_toggle");
+    glade_xml_get_widget (xml, "description_case_toggle");
   ftd->description_regexp_toggle =
-    gtk_object_get_data(GTK_OBJECT(ftd->dialog), "description_regexp_toggle");
+    glade_xml_get_widget (xml, "description_regexp_toggle");
 
   ftd->number_entry =
-    gtk_object_get_data(GTK_OBJECT(ftd->dialog), "number_entry");
+    glade_xml_get_widget (xml, "number_entry");
   ftd->number_case_toggle =
-    gtk_object_get_data(GTK_OBJECT(ftd->dialog), "number_case_toggle");
+    glade_xml_get_widget (xml, "number_case_toggle");
   ftd->number_regexp_toggle =
-    gtk_object_get_data(GTK_OBJECT(ftd->dialog), "number_regexp_toggle");
+    glade_xml_get_widget (xml, "number_regexp_toggle");
 
-  ftd->credit_debit_picker =
-    gtk_object_get_data(GTK_OBJECT(ftd->dialog), "credit_debit_picker");
-  ftd->amount_comp_picker =
-    gtk_object_get_data(GTK_OBJECT(ftd->dialog), "amount_comp_picker");
-  ftd->amount_entry =
-    gtk_object_get_data(GTK_OBJECT(ftd->dialog), "amount_entry");
+  ftd->credit_debit_picker = glade_xml_get_widget (xml, "credit_debit_picker");
+  ftd->amount_comp_picker = glade_xml_get_widget (xml, "amount_comp_picker");
 
-  ftd->memo_entry =
-    gtk_object_get_data(GTK_OBJECT(ftd->dialog), "memo_entry");
-  ftd->memo_case_toggle =
-    gtk_object_get_data(GTK_OBJECT(ftd->dialog), "memo_case_toggle");
-  ftd->memo_regexp_toggle =
-    gtk_object_get_data(GTK_OBJECT(ftd->dialog), "memo_regexp_toggle");
+  box = glade_xml_get_widget (xml, "amount_box");
+  edit = gnc_amount_edit_new ();
+  gtk_widget_show (edit);
+  gtk_box_pack_start (GTK_BOX (box), edit, TRUE, TRUE, 0);
+  ftd->amount_edit = edit;
 
-  ftd->shares_comp_picker =
-    gtk_object_get_data(GTK_OBJECT(ftd->dialog), "shares_comp_picker");
-  ftd->shares_entry =
-    gtk_object_get_data(GTK_OBJECT(ftd->dialog), "shares_entry");
+  ftd->memo_entry = glade_xml_get_widget (xml, "memo_entry");
+  ftd->memo_case_toggle = glade_xml_get_widget (xml, "memo_case_toggle");
+  ftd->memo_regexp_toggle = glade_xml_get_widget (xml, "memo_regexp_toggle");
 
-  ftd->price_comp_picker =
-    gtk_object_get_data(GTK_OBJECT(ftd->dialog), "price_comp_picker");
-  ftd->price_entry =
-    gtk_object_get_data(GTK_OBJECT(ftd->dialog), "price_entry");
+  ftd->shares_comp_picker = glade_xml_get_widget (xml, "shares_comp_picker");
+
+  box = glade_xml_get_widget (xml, "shares_box");
+  edit = gnc_amount_edit_new ();
+  gtk_widget_show (edit);
+  gtk_box_pack_start (GTK_BOX (box), edit, TRUE, TRUE, 0);
+  ftd->shares_edit = edit;
+
+  ftd->price_comp_picker = glade_xml_get_widget (xml, "price_comp_picker");
+
+  box = glade_xml_get_widget (xml, "price_box");
+  edit = gnc_amount_edit_new ();
+  gtk_widget_show (edit);
+  gtk_box_pack_start (GTK_BOX (box), edit, TRUE, TRUE, 0);
+  ftd->price_edit = edit;
 
   ftd->action_entry =
-    gtk_object_get_data(GTK_OBJECT(ftd->dialog), "action_entry");
+    glade_xml_get_widget (xml, "action_entry");
   ftd->action_case_toggle =
-    gtk_object_get_data(GTK_OBJECT(ftd->dialog), "action_case_toggle");
+    glade_xml_get_widget (xml, "action_case_toggle");
   ftd->action_regexp_toggle =
-    gtk_object_get_data(GTK_OBJECT(ftd->dialog), "action_regexp_toggle");
+    glade_xml_get_widget (xml, "action_regexp_toggle");
 
   ftd->cleared_cleared_toggle = 
-    gtk_object_get_data(GTK_OBJECT(ftd->dialog), "cleared_cleared_toggle");
+    glade_xml_get_widget (xml, "cleared_cleared_toggle");
   ftd->cleared_reconciled_toggle = 
-    gtk_object_get_data(GTK_OBJECT(ftd->dialog), "cleared_reconciled_toggle");
+    glade_xml_get_widget (xml, "cleared_reconciled_toggle");
   ftd->cleared_not_cleared_toggle = 
-    gtk_object_get_data(GTK_OBJECT(ftd->dialog), "cleared_not_cleared_toggle");
+    glade_xml_get_widget (xml, "cleared_not_cleared_toggle");
 
-  ftd->tag_entry =
-    gtk_object_get_data(GTK_OBJECT(ftd->dialog), "tag_entry");
-  ftd->tag_case_toggle =
-    gtk_object_get_data(GTK_OBJECT(ftd->dialog), "tag_case_toggle");
-  ftd->tag_regexp_toggle =
-    gtk_object_get_data(GTK_OBJECT(ftd->dialog), "tag_regexp_toggle");
+  ftd->balance_balanced_toggle = 
+    glade_xml_get_widget (xml, "balance_balanced_toggle");
+  ftd->balance_not_balanced_toggle = 
+    glade_xml_get_widget(xml, "balance_not_balanced_toggle");
+
+  ftd->tag_entry = glade_xml_get_widget (xml, "tag_entry");
+  ftd->tag_case_toggle = glade_xml_get_widget (xml, "tag_case_toggle");
+  ftd->tag_regexp_toggle = glade_xml_get_widget (xml, "tag_regexp_toggle");
 
   /* add an account picker to the first tab */
   ftd->account_tree = gnc_account_tree_new();
@@ -183,11 +348,6 @@ gnc_ui_find_transactions_dialog_create(xaccLedgerDisplay * orig_ledg) {
   gnc_option_menu_init(ftd->shares_comp_picker);
   gnc_option_menu_init(ftd->price_comp_picker);
 
-  /* set data so we can find the struct in callbacks */
-  gtk_object_set_data(GTK_OBJECT(ftd->dialog), "find_transactions_structure",
-                      ftd);
-  
-
   /* if there's no original query, make the narrow, add, delete 
    * buttons inaccessible */
   if(!ftd->q) {
@@ -206,8 +366,15 @@ gnc_ui_find_transactions_dialog_create(xaccLedgerDisplay * orig_ledg) {
                                  (ftd->narrow_search_radiobutton),
                                  1);
   }
-  
+
+  gnc_register_gui_component (DIALOG_FIND_TRANS_CM_CLASS,
+                              NULL, close_handler, ftd);
+
+  gtk_signal_connect(GTK_OBJECT(ftd->dialog), "close",
+                     GTK_SIGNAL_FUNC(gnc_find_dialog_close_cb), ftd);
+
   gtk_widget_show_all(ftd->dialog);
+
   return ftd;
 }
 
@@ -218,32 +385,28 @@ gnc_ui_find_transactions_dialog_create(xaccLedgerDisplay * orig_ledg) {
 
 void
 gnc_ui_find_transactions_dialog_destroy(FindTransactionsDialog * ftd) {
-  gnome_dialog_close(GNOME_DIALOG(ftd->dialog));
-  
-  ftd->dialog = NULL;
-  g_free(ftd->ymd_format);
-  g_free(ftd);
+  if (!ftd)
+    return;
+
+  gnc_close_gui_component_by_data (DIALOG_FIND_TRANS_CM_CLASS, ftd);
 }
-  
+
 
 /********************************************************************\
  * callbacks for radio button selections 
 \********************************************************************/
 
-void
+static void
 gnc_ui_find_transactions_dialog_search_type_cb(GtkToggleButton * tb,
                                                gpointer user_data) {
+  FindTransactionsDialog * ftd = user_data;
   GSList * buttongroup = 
     gtk_radio_button_group(GTK_RADIO_BUTTON(tb));
   
-  FindTransactionsDialog * ftd = 
-    gtk_object_get_data(GTK_OBJECT(user_data), "find_transactions_structure");
-    
   if(gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(tb))) {
     ftd->search_type = 
-      g_slist_length(buttongroup) -  g_slist_index(buttongroup, tb) - 1;
+      g_slist_length(buttongroup) - g_slist_index(buttongroup, tb) - 1;
   } 
-
 }
 
 
@@ -251,11 +414,10 @@ gnc_ui_find_transactions_dialog_search_type_cb(GtkToggleButton * tb,
  * gnc_ui_find_transactions_dialog_cancel_cb
 \********************************************************************/
 
-void
+static void
 gnc_ui_find_transactions_dialog_cancel_cb(GtkButton * button, 
-                                    gpointer user_data) {
-  FindTransactionsDialog * ftd =
-    gtk_object_get_data(GTK_OBJECT(user_data), "find_transactions_structure");
+                                          gpointer user_data) {
+  FindTransactionsDialog * ftd = user_data;
 
   gnc_ui_find_transactions_dialog_destroy(ftd);
 }
@@ -265,10 +427,10 @@ gnc_ui_find_transactions_dialog_cancel_cb(GtkButton * button,
  * gnc_ui_find_transactions_dialog_help_cb
 \********************************************************************/
 
-void
+static void
 gnc_ui_find_transactions_dialog_help_cb(GtkButton * button, 
                                         gpointer user_data) {
-  helpWindow(NULL, HELP_STR, HH_FIND_TRANSACTIONS);
+  helpWindow(NULL, NULL, HH_FIND_TRANSACTIONS);
 }
 
 
@@ -276,11 +438,10 @@ gnc_ui_find_transactions_dialog_help_cb(GtkButton * button,
  * gnc_ui_find_transactions_dialog_early_date_toggle_cb
 \********************************************************************/
 
-void
+static void
 gnc_ui_find_transactions_dialog_early_date_toggle_cb(GtkToggleButton * button, 
                                                      gpointer user_data) {
-  FindTransactionsDialog * ftd =
-    gtk_object_get_data(GTK_OBJECT(user_data), "find_transactions_structure");
+  FindTransactionsDialog * ftd = user_data;
   
   if(gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(button))) {
     gtk_widget_set_sensitive(GTK_WIDGET(ftd->date_start_entry), TRUE);
@@ -295,11 +456,10 @@ gnc_ui_find_transactions_dialog_early_date_toggle_cb(GtkToggleButton * button,
  * gnc_ui_find_transactions_dialog_late_date_toggle_cb
 \********************************************************************/
 
-void
+static void
 gnc_ui_find_transactions_dialog_late_date_toggle_cb(GtkToggleButton * button, 
-                                                     gpointer user_data) {
-  FindTransactionsDialog * ftd =
-    gtk_object_get_data(GTK_OBJECT(user_data), "find_transactions_structure");
+                                                    gpointer user_data) {
+  FindTransactionsDialog * ftd = user_data;
   
   if(gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(button))) {
     gtk_widget_set_sensitive(GTK_WIDGET(ftd->date_end_entry), TRUE);
@@ -314,13 +474,13 @@ gnc_ui_find_transactions_dialog_late_date_toggle_cb(GtkToggleButton * button,
  * gnc_ui_find_transactions_dialog_ok_cb
 \********************************************************************/
 
-void
+static void
 gnc_ui_find_transactions_dialog_ok_cb(GtkButton * button, 
                                       gpointer user_data) {
-  GtkWidget              * dialog = user_data;
-  FindTransactionsDialog * ftd = 
-    gtk_object_get_data(GTK_OBJECT(dialog), "find_transactions_structure");
-  
+  FindTransactionsDialog * ftd = user_data;
+
+  GNCLedgerDisplay *ledger;
+
   GList   * selected_accounts;
   char    * descript_match_text;
   char    * memo_match_text;
@@ -333,22 +493,24 @@ gnc_ui_find_transactions_dialog_ok_cb(GtkButton * button,
   float   amt_temp;
   int     amt_type;
   Query   * q, * q2;
+  Query   * new_q;
   gboolean new_ledger = FALSE;
 
   int    use_start_date, use_end_date;
   time_t start_date, end_date;
 
   int c_cleared, c_notcleared, c_reconciled;
+  int b_balanced, b_not_balanced;
 
   if(search_type == 0) {
     if(ftd->q) xaccFreeQuery(ftd->q);
     ftd->q = xaccMallocQuery();    
   }
 
-  assert(ftd->q);
+  g_assert(ftd->q);
 
   q = xaccMallocQuery();
-  xaccQuerySetGroup(q, gncGetCurrentGroup());
+  xaccQuerySetGroup(q, gnc_get_current_group ());
 
   /* account selections */
   selected_accounts = 
@@ -372,16 +534,15 @@ gnc_ui_find_transactions_dialog_ok_cb(GtkButton * button,
     gtk_entry_get_text(GTK_ENTRY(ftd->action_entry));
   
   /* tag */
-  tag_match_text = 
-    gtk_entry_get_text(GTK_ENTRY(ftd->tag_entry));
+  tag_match_text = ""; /* gtk_entry_get_text(GTK_ENTRY(ftd->tag_entry)); */
   
   if(selected_accounts) {
     xaccQueryAddAccountMatch(q, selected_accounts,
                              gnc_option_menu_get_active
-                             (ftd->match_accounts_picker),
+                             (ftd->match_accounts_picker) + 1,
                              QUERY_AND);
   }                             
-  
+
   if(strlen(descript_match_text)) {    
     xaccQueryAddDescriptionMatch(q, descript_match_text, 
                                  gtk_toggle_button_get_active
@@ -392,7 +553,6 @@ gnc_ui_find_transactions_dialog_ok_cb(GtkButton * button,
                                   (ftd->description_regexp_toggle)),
                                  QUERY_AND);
   }
-  
 
   if(strlen(number_match_text)) {    
     xaccQueryAddNumberMatch(q, number_match_text, 
@@ -404,30 +564,26 @@ gnc_ui_find_transactions_dialog_ok_cb(GtkButton * button,
                              (ftd->number_regexp_toggle)),
                             QUERY_AND);
   }
-  
 
-  amt_temp = 
-    (double)gtk_spin_button_get_value_as_float
-    (GTK_SPIN_BUTTON(ftd->amount_entry));
-  
-  amt_type = gnc_option_menu_get_active(ftd->credit_debit_picker);
-  
-  if((amt_temp > 0.00001) || (amt_type != 0)) {
+  amt_temp = gnc_amount_edit_get_damount (GNC_AMOUNT_EDIT (ftd->amount_edit));
+  amt_type = gnc_option_menu_get_active(ftd->credit_debit_picker) + 1;
+
+  if((amt_temp > 0.00001) || (amt_type != AMT_SGN_MATCH_EITHER)) {
     DxaccQueryAddAmountMatch(q, 
                             amt_temp,
                             amt_type,
                             gnc_option_menu_get_active
-                            (ftd->amount_comp_picker),
+                            (ftd->amount_comp_picker) + 1,
                             QUERY_AND);
   }
-  
+
   use_start_date = 
     gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(ftd->date_start_toggle));
   use_end_date = 
     gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(ftd->date_end_toggle));
 
   start_date = gnc_date_edit_get_date(GNC_DATE_EDIT(ftd->date_start_entry));
-  end_date   = gnc_date_edit_get_date(GNC_DATE_EDIT(ftd->date_end_entry));
+  end_date   = gnc_date_edit_get_date_end(GNC_DATE_EDIT(ftd->date_end_entry));
 
   if(use_start_date || use_end_date) {
     xaccQueryAddDateMatchTT(q, 
@@ -435,7 +591,7 @@ gnc_ui_find_transactions_dialog_ok_cb(GtkButton * button,
                             use_end_date, end_date,
                             QUERY_AND);
   }
-  
+
   if(strlen(memo_match_text)) {    
     xaccQueryAddMemoMatch(q, memo_match_text, 
                           gtk_toggle_button_get_active
@@ -445,26 +601,20 @@ gnc_ui_find_transactions_dialog_ok_cb(GtkButton * button,
                           QUERY_AND);    
   }
 
-  amt_temp = 
-    (double)gtk_spin_button_get_value_as_float
-    (GTK_SPIN_BUTTON(ftd->price_entry));
-  amt_type = 
-    gnc_option_menu_get_active(ftd->price_comp_picker);
+  amt_temp = gnc_amount_edit_get_damount (GNC_AMOUNT_EDIT (ftd->price_edit));
+  amt_type = gnc_option_menu_get_active(ftd->price_comp_picker) + 1;
 
-  if((amt_temp > 0.00001) || (amt_type != 0)) {
+  if((amt_temp > 0.00001) || (amt_type != AMT_MATCH_ATLEAST)) {
     DxaccQueryAddSharePriceMatch(q, 
                                 amt_temp,
                                 amt_type,
                                 QUERY_AND);
   }
-  
-  amt_temp = 
-    (double)gtk_spin_button_get_value_as_float
-    (GTK_SPIN_BUTTON(ftd->shares_entry));
-  amt_type = 
-    gnc_option_menu_get_active(ftd->shares_comp_picker);
-  
-  if((amt_temp > 0.00001) || (amt_type != 0)) {
+
+  amt_temp = gnc_amount_edit_get_damount (GNC_AMOUNT_EDIT (ftd->shares_edit));
+  amt_type = gnc_option_menu_get_active(ftd->shares_comp_picker) + 1;
+
+  if((amt_temp > 0.00001) || (amt_type != AMT_MATCH_ATLEAST)) {
     DxaccQueryAddSharesMatch(q, 
                             amt_temp,
                             amt_type,
@@ -497,39 +647,57 @@ gnc_ui_find_transactions_dialog_ok_cb(GtkButton * button,
     xaccQueryAddClearedMatch(q, how, QUERY_AND);
   }
 
-  if(!ftd->ledger) {
-    new_ledger = TRUE;
-    ftd->ledger = xaccLedgerDisplayGeneral(NULL, NULL,
-                                           SEARCH_LEDGER,
-                                           REG_SINGLE_LINE);
-    xaccFreeQuery(ftd->ledger->query);
+  b_balanced = gtk_toggle_button_get_active
+    (GTK_TOGGLE_BUTTON(ftd->balance_balanced_toggle));
+  b_not_balanced = gtk_toggle_button_get_active
+    (GTK_TOGGLE_BUTTON(ftd->balance_not_balanced_toggle));
+
+  if(b_balanced || b_not_balanced) {
+    balance_match_t how = 0;
+    if(b_balanced)     how = how | BALANCE_BALANCED;
+    if(b_not_balanced) how = how | BALANCE_UNBALANCED;
+    xaccQueryAddBalanceMatch(q, how, QUERY_AND);
   }
 
   switch(search_type) {
   case 0:
-    ftd->ledger->query = q;
+    new_q = q;
     break;
   case 1:    
-    ftd->ledger->query = xaccQueryMerge(ftd->q, q, QUERY_AND);
+    new_q = xaccQueryMerge(ftd->q, q, QUERY_AND);
     xaccFreeQuery(q);
     break;
   case 2:
-    ftd->ledger->query = xaccQueryMerge(ftd->q, q, QUERY_OR);
+    new_q = xaccQueryMerge(ftd->q, q, QUERY_OR);
     xaccFreeQuery(q);
     break;
   case 3:
     q2 = xaccQueryInvert(q);
-    ftd->ledger->query = xaccQueryMerge(ftd->q, q2, QUERY_AND);
+    new_q = xaccQueryMerge(ftd->q, q2, QUERY_AND);
     xaccFreeQuery(q2);
     xaccFreeQuery(q);
     break;
+  default:
+    PERR ("bad search type: %d", search_type);
+    new_q = q;
+    break;
   }
 
-  ftd->ledger->dirty = 1;
-  xaccLedgerDisplayRefresh(ftd->ledger);
-  if (new_ledger) regWindowLedger(ftd->ledger);
-  
+  ledger = gnc_ledger_display_find_by_query (ftd->ledger_q);
+  if(!ledger) {
+    new_ledger = TRUE;
+    ledger = gnc_ledger_display_query (new_q, SEARCH_LEDGER,
+                                       REG_STYLE_JOURNAL);
+  }
+  else
+    gnc_ledger_display_set_query (ledger, new_q);
+
+  xaccFreeQuery (new_q);
+
+  gnc_ledger_display_refresh (ledger);
+
+  if (new_ledger)
+    regWindowLedger(ledger);
+
   gnc_ui_find_transactions_dialog_destroy(ftd);
 }
-
-

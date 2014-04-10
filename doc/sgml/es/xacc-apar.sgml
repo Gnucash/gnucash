@@ -1,0 +1,244 @@
+<ARTICLE ID="XACC-APAR">
+<ARTHEADER>
+<TITLE>Cuentas Pagables/Cuentas Recibibles</TITLE>
+</ARTHEADER>
+<SECT1 ID="XACC-AP-AR">
+<TITLE> Cuentas Pagables y Cuentas Recibibles</TITLE>
+<PARA>    </PARA>
+<PARA>C/R (Cuentas Recibibles) y C/P (Cuentas Pagables) son conceptos
+    avanzados que se usan en los negocios para registrar las ventas
+    que son pagadas aún, o para registrar facturas que se han recibido,
+    pero que serán pagadas más tarde.
+
+    </PARA>
+<PARA>Este tipo de cuentas se utilizan principalmente cuando tiene
+    muchas facturas y recibos entrando y saliendo, y no quiere
+    perderles la pista porque solamente no se han pagado o cobrado
+    en el mismo momento.
+
+    </PARA>
+<PARA>Para la mayoría de usuarios no profesionales, las cuentas C/R y
+    C/P son demasiado complicadas y confusas para merecer el esfuerzo
+    de utilizarlas.
+
+    </PARA>
+</SECT1>
+<SECT1 ID="XACC-ARDEF">
+<TITLE> Cunetas Recibibles</TITLE>
+<PARA>    </PARA>
+<PARA>Primero, permítanos examinar las cuentas C/R. Después de todo,
+    realmente no queremos tener la <EMPHASIS>necesidad</EMPHASIS> de trabajar
+    con las cuentas C/P porque siempre pagamos <EMPHASIS>nuestras</EMPHASIS>
+    a tiempo, ¿no es verdad? :-)
+
+    </PARA>
+<PARA>Como primera aproximación, permítanos asumir que no requerimos
+    que nuestros clientes paguen <EMPHASIS>instantáneamente,</EMPHASIS> en
+    efectivo, en su lugar les entregamos un albarán, y les damos 30
+    días para pagar las facturas. (Después de los 30 días, podemos
+    empezar a cargar intereses y enviarles cartas para obligarle
+    a pagar :-)).
+
+    </PARA>
+<PARA>Cuando hacemos un venta, las dos cuentas afectadas son
+    <EMPHASIS>Ventas</EMPHASIS> (cuenta entrante) y <EMPHASIS>Cuentas Recibibles.</EMPHASIS>
+    Las cuentas recibibles son un asiento, pero no es "líquido," ya
+    que no puede decir que esta vendido, y no es por supuesto caja.
+
+    </PARA>
+<PARA>Luego cuando paguen la factura, entregándole un gran saco de
+    billetes (o, con más frecuencia, un cheque), transferiremos
+    la cantidad de la cuenta C/R a caja.
+
+    </PARA>
+<PARA>La razón de que hagamos esto en dos pasos es porque hemos
+    decidido que necesitamos hacer nuestra anotaciones en cuentas
+    en base incremental y no en base a la caja, porque la mayoría
+    de nuestras transacciones no son solamente basadas en el intercambio
+    de caja de unas manos a otras, sino basadas en <EMPHASIS> establecer
+    obligaciones.</EMPHASIS>
+
+    </PARA>
+<PARA>En operaciones más sofisticadas, puede haber una secuencia más
+    compleja de documentos generados y registrados:
+
+    <ITEMIZEDLIST>
+<LISTITEM>
+<PARA>Un cliente nos envía una <EMPHASIS>Orden de Compra</EMPHASIS>, que
+      nos informa de su petición de compra.
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Creamos una <EMPHASIS>Orden de trabajo</EMPHASIS> para
+      programar la producción de lo que el cliente está comprando
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Hacemos una <EMPHASIS>Orden de transporte</EMPHASIS>, para transportar
+      los productos al cliente
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Una vez transportados, hacemos una <EMPHASIS>factura</EMPHASIS>, que
+      representa nuestra <EMPHASIS>petición de pago</EMPHASIS>
+    </PARA>
+</LISTITEM>
+</ITEMIZEDLIST>
+
+    </PARA>
+<PARA>El hecho que se creen cuatro documentos para manejar esto
+    hace que exista mucho papeleo. Cosas como estas y otros
+    procesos parecidos explica porque las organizaciones grandes
+    tienden a tener grandes burocracias.
+
+    </PARA>
+<PARA>Reportamos las ventas en nuestras cuentas de ventas tan
+    pronto como las hacemos. Desafortunadamente, podemos haber
+    vendido algunos productos con operaciones poco claras que no
+    conocemos porque son confusas, y con lo que quizá obtengamos
+    algunas "perdidas."
+
+    </PARA>
+<PARA>Para determinar que partes de las Cuentas Recibibles puedan
+    ser de mayor riesgo, es típico catalogar las cuentas C/R en
+    base a la "edad" de las deudas, normalmente separado en varios
+    periodos de edades, impagados de 0-30 días, aquellos de 31-60 días,
+    de 61-90 días, y aquellos que están <EMPHASIS>fuera de fechas.</EMPHASIS>
+
+    </PARA>
+<PARA>En este punto (fuera de fechas), es bastante claro que un
+    cliente nunca pagará lo que debe, y tenemos que imputarlo como
+    <EMPHASIS>Pérdidas.</EMPHASIS>
+
+    </PARA>
+<PARA>Luego, es típico hacer una entrada en el registro como:
+
+    <TABLE>
+<TITLE>Ejemplo de Entrada de Perdidas</TITLE>
+<TGROUP COLS="3">
+<THEAD>
+<ROW>
+<ENTRY>Cuenta</ENTRY>
+<ENTRY>DR</ENTRY>
+<ENTRY>CR</ENTRY>
+</ROW>
+</THEAD>
+<TBODY>
+<ROW>
+<ENTRY>Perdidas</ENTRY>
+<ENTRY>$10,000</ENTRY>
+<ENTRY>        </ENTRY>
+</ROW>
+<ROW>
+<ENTRY>        </ENTRY>
+</ROW>
+<ROW>
+<ENTRY>Cuentas Recibibles</ENTRY>
+<ENTRY>        </ENTRY>
+<ENTRY>$10,000</ENTRY>
+</ROW>
+</TBODY>
+</TGROUP>
+</TABLE>
+
+    </PARA>
+<PARA>Podríamos haber reducido las <EMPHASIS>Peticiones de Venta</EMPHASIS>,
+    pero las compañías prefieren seguir específicamente el dinero que
+    pierden con los malos clientes. 
+
+    </PARA>
+<PARA><EMPHASIS>Advertencia: <EMPHASIS>Concepto de Cuenta Avanzado.</EMPHASIS>
+    Las pérdidas es un ejemplo de "contra-cuenta." que no se puede referir
+    a <EMPHASIS>dinero pagado a los rebeldes nicaragüenses,</EMPHASIS> pero
+    si la idea que la cuenta es una cuenta de entrada que tiene
+    un balance opuesto al normalmente esperado, para contradecir
+    el balance en otra cuenta entrante. La <LINK LINKEND="XACC-DEPRECIATION">Depreciación del Acumulado,</LINK>
+    se utiliza para disminuir el valor de un asiento con el tiempo, es
+    otro ejemplo de contracuenta.</EMPHASIS>
+
+    </PARA>
+</SECT1>
+<SECT1 ID="XACC-AR">
+<TITLE> Cuentas Pagables</TITLE>
+<PARA>El escenario explicado para las Cuentas Recibibles, a la inversa,
+    refleja como funcionan las Cuentas Pagables; solamente cambie
+    cliente por proveedor, y vea los actores al revés.
+
+    <ITEMIZEDLIST>
+<LISTITEM>
+<PARA>Si compramos materiales "a cuenta," las cuentas con base
+      incremental requieren un registro que muestren el gasto
+      inmediatamente, y por no reducir caja, ponemos el "crédito"
+      en la cuenta de <EMPHASIS>Cuentas Pagables</EMPHASIS>.
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Tres semanas después, la factura nos llega, y hacemos el oportuno
+      pago, por lo que <EMPHASIS>Debe C/P, Haber Caja.</EMPHASIS>
+            
+    </PARA>
+</LISTITEM>
+</ITEMIZEDLIST>
+
+    </PARA>
+</SECT1>
+<SECT1 ID="XACC-PREPAIDEXPENSES">
+<TITLE> Despesas Por Adelantado</TITLE>
+<PARA>    </PARA>
+<PARA>También se utilizan técnicas análogas para los gastos que
+    se realizan por adelantado.
+
+    </PARA>
+<PARA>Si tiene que pagar el alquiler de seis meses por adelantado,
+    se trata como un "asiento incremental."
+
+    <ITEMIZEDLIST>
+<LISTITEM>
+<PARA>        En el momento del pago, <EMPHASIS>Debe</EMPHASIS> <EMPHASIS>Alquiler por adelantado</EMPHASIS>
+        por el dinero pagado que es <EMPHASIS>Haber</EMPHASIS> de <EMPHASIS>Caja.</EMPHASIS>
+
+        </PARA>
+<PARA>Mientras se pone desafortunadamente en la cuenta de Caja,
+        se <EMPHASIS>debe</EMPHASIS> mostrar en los libros como un asiento,
+        y no hay más pagos que hacer hasta los próximos seis meses.      
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Cada mes, el balance en <EMPHASIS>Alquiler Por Adelantado</EMPHASIS> debería
+      disminuir a través de <EMPHASIS>Debe</EMPHASIS> <EMPHASIS>Gastos Alquiler</EMPHASIS>,
+      <EMPHASIS>Haber</EMPHASIS><emphasis>Alquiler Por Adelantado</EMPHASIS>.
+    </PARA>
+</LISTITEM>
+</ITEMIZEDLIST>
+
+    </PARA>
+<PARA>De forma parecida, las compañías recoger los impuestos de los
+    empleados en su lugar, y los guardan en una cuenta de banco especial.
+
+    <ITEMIZEDLIST>
+<LISTITEM>
+<PARA><EMPHASIS>Ese</EMPHASIS> dinero no es de la compañía, por lo que se
+      registra como <EMPHASIS>Debe</EMPHASIS> de la cuenta <EMPHASIS>Caja</EMPHASIS> en un lado,
+      y <EMPHASIS>Haber</EMPHASIS> de un Capital Incremental, llamado, <EMPHASIS>Impuestos
+      Pagables por los Empleados</EMPHASIS>, en el otro lado.
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Cuando el periodo que el gobierno marca para hacer <EMPHASIS>ese</EMPHASIS>
+      llega, la cuenta <EMPHASIS>Impuestos Pagables por los Empleados</EMPHASIS>
+      se elimina haciendo balance con la <EMPHASIS>Cuenta corriente</EMPHASIS>.
+      
+    </PARA>
+</LISTITEM>
+</ITEMIZEDLIST>
+
+
+</PARA>
+</SECT1>
+</ARTICLE>

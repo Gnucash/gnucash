@@ -1,0 +1,11 @@
+*.lo
+*.la
+.deps
+.libs
+.scm-links
+Makefile
+Makefile.in
+gw-business-core.c
+gw-business-core.h
+gw-business-core.html
+gw-business-core.scm

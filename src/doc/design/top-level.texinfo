@@ -1,23 +1,23 @@
 @node Top Level, Engine, Introduction, Top
 @chapter Architectural Overview
 
-GnuCash is written primarily in two languages: C and Scheme.
-The engine/server is written in C primarily for speed,
-portability, stability and historical purposes.  Much of the
-day-to-day workhorse code is written in Scheme, primarily
-for its power, expressiveness and ease of development.
-The user interface is gtk/gnome, some of it done up in C,
-some in scheme, and some with the
-GUI designer tool glade @uref{glade.pn.org}.
+GnuCash is written primarily in two languages: C and Scheme. The
+engine/server is written in C primarily for speed, portability,
+stability and historical purposes. Much of the day-to-day workhorse code
+is written in Scheme, primarily for its power, expressiveness and ease
+of development.  The user interface is Gtk/Gnome, some of it written in
+C, some in scheme, and some with the GUI designer tool Glade
+@uref{glade.pn.org}.
 
 GnuCash is modular, thereby allowing separate individuals
 to maintain, develop and enhance certain modules without
-disturbing the overall development.  (Never mind that 
+disturbing the overall development. (Never mind that 
 modules help avoid spaghetti code and nasty, ugly hacks).
 The interfaces between modules are documented, and, for the
 most part, stable and unchanging.
 
 GnuCash currently consists of the following modules:
+
 
 @section The Engine
 
@@ -41,9 +41,21 @@ queries can be combined using standard boolean operators.
 
 The @dfn{File I/O} module (@file{src/engine/FileIO.*}) provides an
 interface for reading and writing a set of Accounts, Transactions, and
-Splits to a binary file. This module is being deprecated. A text-based
-format using scheme forms is being developed as a replacement. This new
-module will be separate from the Engine.
+Splits to a binary file. This module is deprecated.
+
+@subsection XML I/O
+
+The @dfn{XML I/O} module (@file{src/engine/*xml*.*} and
+@file{src/engine/*sixtp*.*}) provides an interface for reading and
+writing the engine information to an XML format.
+
+@subsection Backend
+
+The @dfn{Backend} module (@file{src/engine/Backend*.*}) provides
+hooks to allow different modules to be used for storing and retrieving
+Engine data. There are two backends currently under development, a
+Postgresql backend (@file{src/engine/sql/*}) and an RPC backend
+(@file{src/engine/rpc/*}).
 
 
 @section The Register
@@ -75,23 +87,23 @@ The @dfn{Reports} module (@file{src/scm/report.scm},
 balance sheets, profit & loss statements, etc. by using the engine
 API to fetch and display data formatted in HTML.
 
-This module is being redesigned to use the Query API to fetch the engine
-information instead of using the raw engine interface. The new reporting
-design will use Queries to extract the data and assemble it into a
-view-independent format. This data will then be converted to HTML
-reports and/or graphs such as bar and pie charts.
+For the most part, this module uses the Query API to fetch the engine
+information instead of using the raw engine interface. This design uses
+Queries to extract the data and assemble it into a view-independent
+format. This data is then be converted to HTML reports and/or graphs
+such as bar and pie charts.
 
 
 @section Graphs
 
-The @dfn{Graphs} module will be a future module implementing GUI graphs
-such as bar and pie charts. These graphs will be interactive in that the
-user can, for example, move pie wedges, and 'live' in that the user will
-be able to click on graph subsections to see a detail graph or report of
-that particular subsection.
+The @dfn{Graphs} module implements GUI graphs such as bar and pie
+charts. These graphs can be interactive in that the user can, for
+example, move pie wedges, and 'live' in that the user can click on graph
+subsections to see a detail graph or report of that particular
+subsection.
 
-This module will be implemented using the GUPPI library being developed
-by Jon Trowbridge (@url{http://www.gnome.org/guppi}).
+This module is implemented using the GUPPI library being developed by
+Jon Trowbridge (@url{http://www.gnome.org/guppi}).
 
 
 @section Price Quotes
@@ -146,5 +158,6 @@ be a personal-finance manager with enough power for the power user
 and the ease of use for the beginner.
 
 Currently, the Gnome interface is the only operational interface. There
-is an obsolete Motif interface which is not maintained. The Qt code
-won't compile, and most/all functions are missing.
+is an obsolete Motif interface which is not maintained and which is
+removed in current CVS. There is also old Qt code (removed in current
+CVS) which won't compile, and most/all functions are missing.

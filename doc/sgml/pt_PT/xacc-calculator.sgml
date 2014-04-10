@@ -1,0 +1,169 @@
+  <article id="xacc-calculator">
+    <artheader>
+      <title>Cálculo de Empréstimos e Juros</title>
+    </artheader>
+    
+
+    <sect1>
+      <title>
+  Utilizar a Calculadora Financeira
+      </title>
+
+      <para>
+  Dado que você sabe o intrevalo de pagamento e intrevalo composto, dados 
+  quaisquer quatro de entre Valor Actual, Valor Futuro, Taxa de Juro, Prestação, 
+  e número de Períodos de Pagamento, você poderá instantaneamente encontrar o 
+  valor em falta, utilizando a calculadora financeira do GnuCash.
+  Caso necessite de uma explicação dos conceitos acima, veja o 
+  <link linkend="xacc-compound-interest">tutorial de juro composto</link>.
+      </para>
+
+      <para>
+  Para utilizar a calculadora financeira, procure-a no menu "ferramentas".
+  </para>
+
+      <screenshot>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="image/financial-calculator.png">
+    </imageobject>
+  </mediaobject>
+      </screenshot>
+
+      <para>Para efectuar um cálculo, simplesmente introduza os valores que você 
+  <emphasis>tem</emphasis> nas caixas de texto à esquerda, e seleccione o tipo de 
+  juro e intrevalo de pagamentos apropriado, à direita. Assim, para calcular o valor que você <emphasis>quer</emphasis>, simplesmente prima o botão "calcular" apropriado.  
+  </para>
+
+      <para>Por exemplo, digamos que tem um empréstimo de 5.000cts a %5, composto mensalmente, e está 
+  a pagar 200cts no final de cada mês.  
+  Quantos períodos de pagamento terá de suportar para amortizar 
+  o empréstimo?  Fácil.  Introduza "5000" como o valor actual, a taxa de juro como "5", 
+  o pagamento períodico como <emphasis>-200</emphasis> - note que se está a fazer entregas de 
+  dinheiro, este numero deverá ser negativo, e o valor futuro "0", seleccione a composição de juro 
+  apropriada e opções de pagamento (certifique-se que o botão de selecção "composição discreta" 
+  está seleccionado), e depois prima "calcular" para a caixa de "períodos de pagamento".  
+  Deverá verificar que surge "26" na caixa de "Períodos de Pagamento".  Assim, você 
+  terá de efectuar 26 pagamentos mensais para amortizar o empréstimo.
+       </para>
+    </sect1>
+    <sect1 id="xacc-compound-interest">
+      <title>
+  Explicar Juro Composto
+      </title>
+      <sect2>
+  <title>
+    Introdução
+  </title>
+      <para>
+    O GnuCash oferece a funcionalidade de executar cálculos simples 
+    de juros para empréstimos e depósitos com juros, dando-lhe a 
+    possibilidade de responder a questões como "Quanto tempo demorarei 
+    a pagar este empréstimo?", "Qual destes depósitos a prazo gera 
+    melhores rendimentos?", e "Que montante de prestação terei de pagar 
+    para amortizar este empréstimo em cinco anos?"  A calculadora financeira 
+    do GnuCash da-lhe essa informação e muito mais.
+      </para>
+      </sect2>
+      <sect2>
+  <title>
+    Como Funciona o Juro
+  </title>
+  <para>
+    Existem duas ópticas quando se fala de juros - contas que 
+    pagam juros tais como contas a prazo e contas de poupança, 
+    em que as instituições financeiras lhe pagam pela utilização 
+    do seu dinheiro.  Alternativamente, podemos falar de juros 
+    no contexto dos empréstimos, onde você paga à instituição 
+    financeira por utilizar o dinheiro deles. Para tornar as 
+    coisas mais simples, falaremos primeiro de empréstimos.
+  </para>
+  
+  <para>
+    Primeiro, vamos considerar o empréstimo mais simples 
+    possível com uma taxa de juro simples e onde o amortizamos 
+    no final do prazo.  Por exemplo, digamos que pedimos 
+    emprestados 10.000cts (em termos financeiros, o 
+    <emphasis>Valor Actual</emphasis> é 10.000cts) por um 
+    ano à taxa de juro anual de 10% que não é composta. Quanto 
+    devemos nós no final do período?
+          Neste caso, calcular o <emphasis>Valor Futuro</emphasis> 
+    que devemos é simples: basta
+  </para>
+
+  
+  <programlisting>
+    Valor Futuro = Valor Actual + (10 % * Valor Actual)
+                 = 10,000 + (10% * 10,000)
+                 = 11,000
+  </programlisting>
+
+  <para>
+    Agora, vamos tornar as coisas um pouco mais interessantes.
+    Vamos fazer com que o juro seja <emphasis>composto</emphasis> 
+    mensalmente.  Após o primeiro mês, você deverá 
+  </para>
+
+  <programlisting>
+    Valor Futuro = 10,000 + (10% * 1/12)
+                 ~= 10,083.33
+  </programlisting>
+     
+  <para>Agora, para o segundo mês, você pagará juros sobre os 
+    10,083.83, pelo que o valor no final do segundo mês é:
+    </para>
+  <programlisting>
+    Valor Futuro = 10,083.83 + (10% * 1/12)
+                ~= 10167.36
+  </programlisting>
+  <para>
+    Eventualmente, após 12 meses, você deverá 11.047.130$, em vez 
+    dos 11.000cts que teria de pagar com a taxa de juro simples.
+  </para>
+  <para>
+    De seguida, faremos as coisas mais complexas novamente - digamos 
+    que vamos efectuar um <emphasis>pagamento periódico</emphasis> de 
+    200cts no final de cada mês?  Bem, vejamos.  Após um mês, você 
+    deveria:
+  </para>
+  <programlisting>
+    Valor Futuro  = Valor Actual + Juro - Pagamento Periódico
+          após mês 1 = 10,000 + (10% * 1/12) - 200 
+                  = 9,883.33
+  </programlisting>
+
+  <para>
+    Após um ano, se fizer os cálculos, ainda estará a dever 
+    8.534.020$ (se eu tiver feito correctamente as contas . . .)
+  </para>
+
+  <para>
+    Para o nosso exemplo final, considere <emphasis>composição contínua</emphasis>,
+    onde os juros são cobrados continuamente.  Explicar este cálculo em detalhe 
+    requer um pouco de matemática de nível universitário, mas, grosso modo,
+    imagine que os períodos de pagamento são, muito, muito, muito pequenos!  
+    Não consigo facilmente mostrar-lhe os cálculos para isto, mas isso não interessa. 
+    A calculadora financeira do GnuCashpode efectua-los!
+  </para>
+
+  <para>
+    Assim, para resumir, os seguintes pedaços de informação são utilizados 
+    no cálculo de juros:
+  </para>
+  <itemizedlist>
+    <listitem><para>Valor Actual</para></listitem>
+    <listitem><para>Valor Futuro</para></listitem>
+    <listitem><para>Taxa de Juro</para></listitem>
+    <listitem><para>Número de Períodos de Pagamento</para></listitem>
+    <listitem><para>Montante Prestação</para></listitem>
+    <listitem><para>Tipo de Capitalização (discreto ou contínuo)</para></listitem>
+    <listitem><para>Intrevalo de Capitalização (se discreto)</para></listitem>
+    <listitem><para>Altura de Pagamento (início ou fim do período)</para></listitem>
+  </itemizedlist>
+      </sect2>
+    </sect1>
+  </article>
+
+<!-- Local variables: -->
+<!-- sgml-parent-document: "gnucash.sgml" -->
+<!-- End: -->

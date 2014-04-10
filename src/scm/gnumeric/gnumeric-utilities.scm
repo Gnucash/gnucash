@@ -1,8 +1,11 @@
 ;;;; $Id$
 ;;;; gnumeric-utilities.scm - Gnumeric spreadsheet generation functions
 
-(gnc:support "gnumeric/gnumeric-utilities.scm")
-(gnc:depend "xml-generator.scm")
+(use-modules (srfi srfi-19))
+
+;; (gnc:depend "xml-generator.scm") -- this needs to be changed to a
+;; use-modules, but since this file doesn't appear to be used right
+;; now, that can wait.
 
 ;;;; Gnumeric spreadsheet consists of:
 ;;;; gmr:Workbook
@@ -39,7 +42,6 @@
 ;;; to suggest a better function.
 ;;; The point of this is that Gnumeric uses this as the "native" data
 ;;; representation. 
-(gnc:depend "srfi/srfi-19.scm")
 
 (define (exceldate y m d)
   (let 

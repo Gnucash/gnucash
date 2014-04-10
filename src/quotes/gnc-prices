@@ -1,0 +1,23 @@
+#!/bin/sh
+#
+# Usage: gnc-prices <datafile>
+
+# Vestigal script for adding current prices to a gnucash data file for
+# all the accounts having a price source.
+
+if [ "$#" -ne 1 ]
+then
+  echo "Usage: gnc-prices <file>"
+  exit 1
+fi
+
+echo -n "gnc-prices is obsolete: "
+
+if [ "$1"x = x ]
+then
+  echo "please use gnucash --add-price-quotes <file>"
+else
+  echo "please use gnucash --add-price-quotes $1"
+fi
+
+exec gnucash --add-price-quotes "$1"

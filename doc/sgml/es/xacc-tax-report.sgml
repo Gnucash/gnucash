@@ -1,0 +1,74 @@
+<ARTICLE ID="XACC-TAX-REPORT">
+
+<ARTHEADER>
+
+<TITLE>Tax Report / <LINK LINKEND="XACC-TXF-EXPORT">TXF Export</LINK>
+</TITLE>
+
+</ARTHEADER>
+<PARA>
+  <ULINK URL="xacc-tax-report-example.html">
+    <INLINEMEDIAOBJECT>
+      <IMAGEOBJECT>
+        <IMAGEDATA FILEREF="image/report-tax.png">
+      </IMAGEOBJECT>
+    </INLINEMEDIAOBJECT> 
+  </ULINK>
+</PARA>
+
+<PARA>This report allows you to view all tax related Income and Expenses.
+      Up to fifteen sub-accounts are displayed. Lower sub-accounts are ignored.
+
+</PARA>
+
+<PARA><EMPHASIS>NOTE:</EMPHASIS> For this to work, the user has to
+      segregate taxable and not taxable income to different accounts, as
+      well as deductible and non deductible expenses. The user also must
+      Set the Tax Status of each tax related account. The "Tax
+      Information" dialog on the "Account" menu does this.  There is a
+      taxreport.xac file in the examples directory, which shows one way
+      this can be set up.
+</PARA>
+
+<PARA>    <INLINEMEDIAOBJECT>
+  <IMAGEOBJECT>
+  <IMAGEDATA FILEREF="image/report-tax-options.png">
+  </IMAGEOBJECT>
+  </INLINEMEDIAOBJECT> 
+</PARA>
+
+<PARA>Options specifiable for this report include:
+    
+    <ITEMIZEDLIST>
+      <LISTITEM><PARA>The start and end dates - default: Year-to-Date.
+                </PARA></LISTITEM>
+      <LISTITEM><PARA>Alternate Period: (Year is relative to From:)
+	<ITEMIZEDLIST>
+	  <LISTITEM><PARA>Use From - To (default if current date is
+          after April 16)</PARA></LISTITEM>
+	  <LISTITEM><PARA>1st, 2nd, 3rd, 4th Estimated Tax Quarters 
+          (From: year)</PARA></LISTITEM>
+	  <LISTITEM><PARA>Last Year (year before From: year) (default if
+          current date is before April 16)
+                    </PARA></LISTITEM>
+	  <LISTITEM><PARA>1st, 2nd, 3rd, 4th Estimated Tax Quarters for
+           Last Year</PARA></LISTITEM>
+	</ITEMIZEDLIST></PARA></LISTITEM>
+      <LISTITEM><PARA>The accounts for which the report is to be
+        produced.  All tax related sub-accounts of the selected accounts
+        are automatically displayed.  If no account is selected, all tax
+        related accounts are displayed. Non-tax related accounts are not
+        displayed, even if selected, though tax related sub-accounts
+        will be displayed.</PARA></LISTITEM>
+
+      <LISTITEM><PARA>Suppress $0.00 values</PARA></LISTITEM>
+      <LISTITEM><PARA>Display Full account names</PARA></LISTITEM>
+    </ITEMIZEDLIST>
+
+</PARA>
+
+</ARTICLE>
+
+<!-- Local variables: -->
+<!-- sgml-parent-document: "gnucash.sgml" -->
+<!-- End: -->

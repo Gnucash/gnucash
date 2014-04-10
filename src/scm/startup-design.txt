@@ -1,16 +1,16 @@
 The startup process looks like this right now:
 
-  * (at the C level) look for any environment variables affecting
-    startup (GNC_BOOTSTRAP_SCM, GNC_SCM_LOAD_PATH, GNC_RUN_AS_SHELL).
+  * gnucash is a hybrid /bin/sh and guile script which first execs
+    gnucash-env on itself to set up the proper environment and then
+    run the rest of the code in the gnucash file as a guile script.
 
-  * load the desired bootstrap file (either the default
-    sharedir/scm/bootstrap.scm, or the override).  This sets up
-    gnc:load, and minimal defaults.
+  * from the gnucash script itself, the (gnucash bootstrap) is loaded,
+    and then control transfers to the scheme function, main.
 
-  * (gnc:load "startup.scm")
+  * the current module is set to (gnucash bootstrap) -- this is a hack
+    and should change later.
 
-  * setup the default config-vars (including the ones that represent
-    the command-line options).
+  * gnc:main is called to finish starting up the application.
 
   * parse the command line
 

@@ -1,5 +1,5 @@
 /********************************************************************\
- * AccountP.h -- the Account data structure                         *
+ * AccountP.h -- Account engine-private data structure              *
  * Copyright (C) 1997 Robin D. Clark                                *
  * Copyright (C) 1997-2000, Linas Vepstas <linas@linas.org>         *
  *                                                                  *
@@ -39,39 +39,45 @@
  *
  */
 
-#ifndef __XACC_ACCOUNT_P_H__
-#define __XACC_ACCOUNT_P_H__
+#ifndef XACC_ACCOUNT_P_H
+#define XACC_ACCOUNT_P_H
 
 #include "config.h"
-#include "gnc-numeric.h"
-#include "gnc-commodity.h"
-#include "kvp_frame.h"
-#include "GNCId.h"
+
+#include "Account.h"
+#include "GNCIdP.h"
 #include "Transaction.h"
+#include "gnc-commodity.h"
+#include "gnc-numeric.h"
+#include "kvp_frame.h"
 
 
 /** STRUCTS *********************************************************/
-struct _account {
+struct account_s
+{
   /* public data, describes account */
   GUID      guid;          /* globally unique account id */
 
-  /* The accountName is an arbitrary string assinged by the user. 
+  GNCEntityTable *entity_table; /* Entity table this account is
+                                 * stored in. */
+
+  /* The accountName is an arbitrary string assigned by the user. 
    * It is intended to a short, 5 to 30 character long string that
-   * is displayed by the GUI as the account mnomenic. 
+   * is displayed by the GUI as the account mnemonic. 
    */
   char     *accountName;
 
-  /* The accountCode is an arbitary string assigned by the user.
+  /* The accountCode is an arbitrary string assigned by the user.
    * It is intended to be reporting code that is a synonym for the 
-   * accountName. Typically, it will be a numeric value tht follows 
+   * accountName. Typically, it will be a numeric value that follows 
    * the numbering assignments commonly used by accountants, such 
    * as 100, 200 or 600 for top-level * accounts, and 101, 102..  etc.
    * for detail accounts.
    */
   char     *accountCode;
 
-  /* The description is an arbitraary string assigned by the user. 
-   * It is intended to be a longer, 1-5 sentance description of what
+  /* The description is an arbitrary string assigned by the user. 
+   * It is intended to be a longer, 1-5 sentence description of what
    * this account is all about.
    */
   char     *description;
@@ -87,17 +93,25 @@ struct _account {
    * intended use is to be a hint to the GUI as to how to display   
    * and format the transaction data.
    */
-  short     type;
+  GNCAccountType type;
 
-  /* The currency field denotes the default currency in which all
-   * splits in this account are denominated.  The gnc_commodity type
-   * represents the namespace, full name, and symbol for the currency.
-   * Currency trading accounts allow splits between accounts when the
-   * currency string matches the security string.  */
-  const gnc_commodity * currency;
-  const gnc_commodity * security;
-  int  currency_scu;
-  int  security_scu;
+  /* Old semantics: The currency field denotes the default currency in
+   * which all splits in this account are denominated.  Currency
+   * trading accounts allow splits between accounts when the currency
+   * string matches the security string.
+   *
+   * The gnc_commodity type represents the namespace, full name, and
+   * symbol for the currency.
+   *
+   * New semantics: The account structure will no longer store a
+   * 'currency' and a 'security'. Instead it will store only one
+   * commodity (i.e. currency), that is the one formerly known as
+   * 'security'. The 'amount' of each split represents the
+   * transferred amount in the account's commodity (formerly known as
+   * security).
+   */
+  gnc_commodity * commodity;
+  int commodity_scu;
 
   /* The parent and children pointers are used to implement an account
    * hierarchy, of accounts that have sub-accounts ("detail accounts").
@@ -106,47 +120,43 @@ struct _account {
   AccountGroup *children;  /* pointer to sub-accounts */
 
   /* protected data, cached parameters */
+  gnc_numeric starting_balance;
+  gnc_numeric starting_cleared_balance;
+  gnc_numeric starting_reconciled_balance;
+
   gnc_numeric balance;
   gnc_numeric cleared_balance;
   gnc_numeric reconciled_balance;
 
-  gnc_numeric share_balance;
-  gnc_numeric share_cleared_balance;
-  gnc_numeric share_reconciled_balance;
+  /* version number, used for tracking multiuser updates */
+  gint32 version;
+  guint32  version_check;  /* data aging timestamp */
 
-  GList *splits;               /* ptr to array of ptrs to splits */
-
-  /* The "changed" flag is used to invalidate cached values in this structure.
-   * Currently, the balances and the cost basis are cached.
-   */
-  /*short changed;*/
-
-  /* The "open" flag indicates if the account has been 
-   * opened for editing. */
-  /* short open; */
+  SplitList *splits;       /* list of split pointers */
 
   /* keep track of nesting level of begin/end edit calls */
   gint32 editlevel;
 
-  gboolean balance_dirty;
-  gboolean sort_dirty;
+  gboolean balance_dirty;  /* balances in splits incorrect */
+  gboolean sort_dirty;     /* sort order of splits is bad */
+  gboolean core_dirty;     /* fields in this struct have changed */
+  gboolean do_free;        /* in process of being destroyed */
 
   /* The "mark" flag can be used by the user to mark this account
    * in any way desired.  Handy for specialty traversals of the 
    * account tree. */
   short mark;
+
+  /* -------------------------------------------------------------- */
+  /* Backend private expansion data */
+  guint32  idata;     /* used by the sql backend for kvp management */
 };
 
-/* bitfields for the changed flag */
-#define ACC_INVALID_BALN      0x1
-#define ACC_INVALID_COSTB     0x2
-#define ACC_INVALIDATE_ALL    0x3
 
-/* bitflields for the open flag */
-#define ACC_BEGIN_EDIT        0x1
-#define ACC_DEFER_REBALANCE   0x2
-#define ACC_BEING_DESTROYED   0x4
-
+/* The xaccAccountLookupEntityTable() routine is like xaccAccountLookup
+ *    but accepts and entity table instead of a book. */
+Account * xaccAccountLookupEntityTable (const GUID *guid,
+                                        GNCEntityTable *entity_table);
 
 /* The xaccAccountRemoveSplit() routine will remove the indicated split
  *    from the indicated account.  Note that this will leave the split
@@ -157,20 +167,55 @@ struct _account {
  */
 void         xaccAccountRemoveSplit (Account *, Split *);
 
+/* xaccAccountSortSplits() will resort the account's splits
+ * if the sort is dirty. If 'force' is true, the account is
+ * sorted even if the editlevel is not zero. */
+void xaccAccountSortSplits (Account *acc, gboolean force);
+
 /* the following recompute the partial balances (stored with the
- * transaction)
- * and the total balance, for this account */
+ * transaction) and the total balance, for this account */
 void         xaccAccountRecomputeBalance (Account *);
-void         xaccAccountRecomputeBalances (Account **);
 
 /* Set the account's GUID. This should only be done when reading
  * an account from a datafile, or some other external source. Never
  * call this on an existing account! */
-void xaccAccountSetGUID (Account *account, GUID *guid);
+void         xaccAccountSetGUID (Account *account, const GUID *guid);
 
+/* The xaccAccountSetStartingBalance() routine will set the starting
+ *    commodity balance for this account.  This routine is intended for
+ *    use with backends that do not return the complete list of splits
+ *    for an account, but rather return a partial list.  In such a case,
+ *    the backend will typically return all of the splits after some 
+ *    certain date, and the 'starting balance' will represent the summation 
+ *    of the splits up to that date.
+ *
+ *    Design Note: this routine assumes that there is only one commodity
+ *    associated with this account, and that the reporting currency will
+ *    no longer be stored with the account.
+ *
+ *    This routine is in the private .h file because only backends are 
+ *    allowed to set the starting balance.  This is *not* a user interface
+ *    function.
+ */
+void xaccAccountSetStartingBalance(Account *account, 
+                                   const gnc_numeric start_baln, 
+                                   const gnc_numeric start_cleared_baln, 
+                                   const gnc_numeric start_reconciled_baln); 
 
-/** GLOBALS *********************************************************/
+/* The xaccFreeAccount() routine releases memory associated with the
+ *    account.  It should never be called directly from user code;
+ *    instead, the xaccAccountDestroy() routine should be used
+ *    (because xaccAccountDestroy() has the correct commit semantics).
+ */
 
-extern int next_free_unique_account_id;
- 
-#endif /* __XACC_ACCOUNT_P_H__ */
+void xaccFreeAccount (Account *account);
+
+/* The xaccAccountSet/GetVersion() routines set & get the version 
+ *    numbers on this account.  The version number is used to manage
+ *    multi-user updates.  These routines are private because we don't
+ *    want anyone except the backend to mess with them.
+ */
+void xaccAccountSetVersion (Account*, gint32);
+gint32 xaccAccountGetVersion (Account*);
+
+#endif /* XACC_ACCOUNT_P_H */

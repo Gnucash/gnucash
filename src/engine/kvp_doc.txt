@@ -36,12 +36,18 @@ Please put the keys in alphabetical order.
 
 --------------------------------------------------------------------------
 
-Name: balance-split
+Name: from-sched-xaction
 Type: GUID
 Entities: Transaction
-Use: xaccTransGetBalanceSplit, xaccTransSetBalanceSplit
-     Store the GUID of the 'balance' split of a transaction.
-     This split, if present, ensures the transaction is balanced.
+Use: Identifies that the Transaction was created from a ScheduledTransaction,
+     and stores the GUID of that SX.
+
+Name: last-num
+Type: string
+Entities: Account
+Use: xaccAccountGetLastNum, xaccAccountSetLastNum
+     Store the last number used in an account's transactions.
+     Used in auto-filling the Num field.
 
 Name: memo
 Type: string
@@ -51,10 +57,23 @@ Use: xaccSplitGetMemo, xaccSplitSetMemo
 
 Name: notes
 Type: string
-Entities: Account
-Use: xaccAccountGetNotes, xaccAccountSetNotes
+Entities: Account, Transaction
+Use: xaccAccountGetNotes, xaccAccountSetNotes,
+     xaccTransGetNotes, xaccTransSetNotes
      Store the 'Notes' string which was previously stored in
      the Account structure directly.
+
+Name: old-currency
+Type: string
+Entities: Account
+Use: This string holds the canonical name of the old Account
+     currency. This may be deleted at some point in the future.
+
+Name: old-currency-scu
+Type: gint64
+Entities: Account
+Use: This holds the old currency scu. This may be deleted at
+     some point in the future.
 
 Name: old-docref
 Type: string
@@ -72,9 +91,111 @@ Use: This string holds the old Price Source code used by earlier versions
      is fully supported. The new version of Finance::Quote uses a different
      scheme to identify sources for price quotes.
 
+Name: old-security
+Type: string
+Entities: Account
+Use: This string holds the canonical name of the old Account
+     security. This may be deleted at some point in the future.
+
+Name: old-security-scu
+Type: gint64
+Entities: Account
+Use: This holds the old security scu. This may be deleted at
+     some point in the future.
+
+Name: reconcile-info
+Type: frame
+Entities: Account
+Use: store reconcile information about accounts
+
+Name: reconcile-info/include-children
+Type: gint64
+Entities: Account
+Use: A boolean flag indicating whether transactions in sub-accounts should be
+     included during reconcilition.
+
+Name: reconcile-info/last-date
+Type: frame
+Entities: Account
+Use: store the statement date of the last reconciliation
+
+Name: reconcile-info/postpone/date
+Type: gint64
+Entities: Account
+Use: store the ending statement date of a postponed reconciliation
+
+Name: reconcile-info/postpone/balance
+Type: numeric
+Entities: Account
+Use: store the ending balance of a postponed reconciliation
+
+Name: reconcile-info/auto-interest-transfer
+Type: string
+Entities: Account
+Use: allows the user to override the global reconcile option
+     "Automatic interest transfer" on a per-account basis.
+     Acceptable values are "true" and "false".
+     (This really could use a KVP_TYPE_BOOLEAN.)
+
+Name: split-type
+Entities: Split
+Use: xaccSplitGetType, xaccSplitMakeStockSplit
+     Store a string representing the type of split, if not normal.
+
+Name: tax-US/code
+Type: string
+Entities: Account
+Use: see src/scm/report/[tax,txf]*.scm
+
+Name: tax-US/payer-name-source
+Type: string
+Entities: Account
+Use: see src/scm/report/[tax,txf]*.scm
+
+Name: tax-related
+Type: gint64
+Entities: Account
+Use: A boolean flag indicated whether the Account is tax-related.
+
+Name: sched-xaction
+Type: frame
+Entities: Split in a SchedXaction
+Use: Storage for the various fields of a scheduled transaction's
+     template Splits.
+
+Name: sched-xaction/account
+Type: GUID
+Entities: Split associated with a SchedXaction
+Use: The GUID of this Split's xfrm account.
+
+Name: sched-xaction/credit-formula
+Type: string
+Entities: Split associated with a SchedXaction
+Use: Store the formula for the credit side of the split
+
+Name: sched-xaction/debit-formula
+Type: string
+Entities: Split associated with a SchedXaction
+Use: Formula for the debit.  Either the credit or the 
+debit formula must be empty.
+
 Name: user-keys
 Type: frame
 Entities: All
 Use: This frame is used to store keys which are editable directly by
      the user. The program should not attach any semantics to keys
      under this frame.
+
+Name: void-reason
+Type: string
+Entities: Transaction
+Use: This string is used to store the reason why a transaction has been 
+voided.  Note that it should only exist if the transaction has been voided.
+
+Name: void-former-amount
+Type: gnc_numeric
+Entities: Split
+Use: To store the amount of the this split before it was voided.  Note
+that it should only exist if the parent transaction has been voided (but
+checking the reconcile status of the split is a more direct way of finding
+out a split has been voided).

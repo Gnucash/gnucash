@@ -1,0 +1,106 @@
+2001-02-04  Marius Vollmer  <mvo@zagadka.ping.de>
+
+	* http.scm: Use (ice-9 rdelim) if `read-line' not defined.  Thanks
+	to Thien-Thi Nguyen.
+
+2000-06-04  Mikael Djurfeldt  <mdj@mdj.nada.kth.se>
+
+	* main.scm (www:get): Pass url as single arg.
+	(Thanks to Dale	P. Smith.)
+
+1998-07-27  Jim Blandy  <jimb@red-bean.com>
+
+        * Test of EGCS repository access.
+
+1997-12-24  Tim Pierce  <twp@skepsis.com>
+
+	* cgi.scm (init-environment): Make server-software and
+	server-protocol optional.
+
+1997-12-22  Tim Pierce  <twp@skepsis.com>
+
+	* cgi.scm (read-raw-form-data): Add `cgi-' to content-length.
+	(parse-form): Change `url-decode' to `url:decode'.
+
+Mon Oct 20 18:06:10 1997  Jim Blandy  <jimb@totoro.red-bean.com>
+
+	* configure.in: Update version to 1.0b.
+	configure: Regenerated.
+
+	* Makefile.in, aclocal.m4, configure: Regenerated w/automake 1.2c.
+
+	* url.scm (url:scheme, url:host, url:port, url:path): Move
+	accessors up.
+	(url:address): New accessor for "mailto:" URLs.
+	(url:unknown): New accessor for unrecognized URL types.
+	(url:user): New accessor for "ftp" URLs.
+	(url:make, url:make-http, url:make-ftp, url:make-mailto): New
+	constructors for URL objects.
+	(url-regexp): Replaced by...
+	(http-regexp, ftp-regexp, mailto-regexp): Separate regular
+	expressions for different URL schemes.
+	(url:parse): Use the above to handle ftp and mailto URLs, and also
+	do something graceful with unrecognized garbage.
+	(url:unparse): New function, for turning a parsed url into a
+	string.
+	
+	* http.scm (add-open-connection!, get-open-connection): Incomplete
+ 	code replaced with dummy definitions, so we can give it to Mikael
+	immediately.
+	(http:request): Close the socket after we're done reading the
+	body.
+
+	* http.scm (http:request): Reformatted for readability.
+
+	* http.scm (http:request): Don't expect a body in reply to a
+	"HEAD" request, even though we do get a "content-length" header.
+
+Tue Jun 17 17:27:04 1997  Tim Pierce  <twpierce@bio-5.bsd.uchicago.edu>
+
+	* http.scm: (http:request): Force "/" onto the beginning of the
+	"path" variable unconditionally.  We must do this because of a
+	stupid incompatibility between the URL RFC and HTTP RFC.
+
+	* http.scm: (parse-status-line): New function.
+	(http:request): Use parse-status-line instead of
+	separate-fields-discarding-char (which does not work when a status
+	line contains more than two spaces).
+	(separate-fields-discarding-char): Removed.
+
+Tue Jun 17 01:45:59 1997  Tim Pierce  <twp@twp.tezcat.com>
+
+	* http.scm (http:request): Change calling conventions to accept a
+ 	method and a URL rather than a port and request string.  Do some
+	sanity checking on arguments.
+  	(http:get): Pass a single URL argument to http:request.
+	(http:open): Permit port argument to be #f in addition to '().
+	(display-with-crlf): Make port argument optional.
+	(add-open-connection!): Braino fix (set! for setq).
+
+	* Makefile: New file. (Oops.)
+
+Mon Jun 16 17:49:20 1997  Tim Pierce  <twpierce@bio-5.bsd.uchicago.edu>
+
+	Release preparations.
+	* Makefile.am, configure.in, install-sh, mkinstalldirs, missing:
+	New files.
+	* Makefile.in, configure, aclocal.m4: Generated, not re.
+	* README: New file.
+
+Sun Jun 15 00:50:22 1997  Tim Pierce  <twp@twp.tezcat.com>
+
+	* http.scm: add some support for persistent connections.
+	(http:connect): check get-open-connection before creating a new
+	socket, and call add-open-connection! after creating one.
+	(add-open-connection!): New function.
+	(get-open-connection): New function.
+
+Mon Jun  9 23:42:32 1997  Tim Pierce  <twp@twp.tezcat.com>
+
+	New WWW module.
+	* cgi.scm: New file.
+	* http.scm: New file.
+	* main.scm: New file.
+	* url.scm: New file.
+	* wwwcat: New file.
+	

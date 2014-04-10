@@ -1,0 +1,39 @@
+Welcome to Finance::Quote
+=========================
+Maintained by: Paul Fenwick <pjf@cpan.org>
+
+What does Finance::Quote provide?
+=================================
+Finance::Quote provides access to time-delayed stockquotes from a
+number of sources.  After you've installed the pacakage, try
+'perldoc Finance::Quote' for full information.  Alternatively,
+you can 'perldoc lib/Finance/Quote.pm' before the install.
+
+How do I install this package?
+==============================
+See the `INSTALL' file.  It's very simple.
+
+I've found a bug / written a patch / have an idea.  What do I do?
+=================================================================
+Well, you could always mail it to <finance-quote-devel@lists.sourceforge.net>,
+which is read by all the active developers.  Alternatively, you
+might wish to visit <http://sourceforge.net/project/?group_id=4232>
+and make use of the patch manager, bug tracker, or public forums.
+
+How do I download the most recent copy of Finance::Quote?
+=========================================================
+You can find all releases of Finance::Quote at:
+<http://sourceforge.net/project/filelist.php?group_id=4232>.
+
+You might also wish to consider subscribing to finance-quote-news,
+which can be done from: <http://sourceforge.net/mail/?group_id=4232>.
+
+How can I get a copy of the current CVS development tree?
+=========================================================
+Check out the instructions at <http://sourceforge.net/cvs/?group_id=4232>.
+You can also browse the repository using your web-browser at this site.
+
+Where can I find more information?
+==================================
+Try the Finance::Quote webpage.  There are lots of goodies there.
+http://finance-quote.sourceforge.net/

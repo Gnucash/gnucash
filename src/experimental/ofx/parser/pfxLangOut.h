@@ -9,8 +9,8 @@
 // HISTORY:
 // Written by Linas Vepstas April 1998
 
-#ifndef __PFX_COMP_OUT_H__
-#define __PFX_COMP_OUT_H__
+#ifndef PFX_COMP_OUT_H
+#define PFX_COMP_OUT_H
 
 #include "config.h"
 #include <vector.h>
@@ -104,4 +104,4 @@ class pfxOutConstructor  :
 
 };
 
-#endif /* __PFX_COMP_OUT_H__ */
+#endif /* PFX_COMP_OUT_H */

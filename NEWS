@@ -1,5 +1,63 @@
 Version history:
 ------- -------
+ 1.5.98 - 04 June 2001
+         o second beta release
+         o updated documentation (English & Portuguese)
+         o updated German and Portuguese translations
+         o more work on sql backend
+         o fixes for FreeBSD
+         o bug fixes
+
+ 1.5.97 - 27 May 2001
+         o first beta release
+         o feature freeze
+         o updated documentation
+         o updated Norwegian and Portuguese translations
+         o bug fixes
+
+ 1.5.96 - 20 May 2001
+         o second alpha release
+         o updated user documentation
+         o updated api documentation
+         o bug fixes
+
+ 1.5.95 - 13 May 2001
+         o alpha release, string freeze
+         o new user account hierarchy wizard
+         o account hierarchy export
+         o reporting improvements
+         o transfer dialog auto-completion
+         o many bug fixes
+
+ 1.5.6  - 23 April 2001
+         o reporting improvements
+         o many misc GUI improvements
+         o updated German and Portuguese translations
+         o fixes for Solaris
+         o bug fixes
+
+ 1.5.5  - 15 April 2001
+         o more new & improved reports
+         o use of gnome MDI for main window
+         o GUI improvements
+         o bug fixes
+
+ 1.5.4  - 01 April 2001
+         o several new & improved reports/graphs
+         o online price quotes now work
+         o new main window display
+         o Spanish & Portuguese translations of the manual
+         o many bug fixes
+
+ 1.5.3  - 25 February 2001
+         o new XML file format
+         o better support for importing qifs from online banks
+         o improved checking register
+         o support for charts & graphs
+         o financial calculator
+         o new user account hierarchy wizard
+         o many UI improvements
+
  1.5.2  - 25 September 2000
          o fixes for Solaris 8
          o fixes for gnome-print 0.23

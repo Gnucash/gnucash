@@ -1,0 +1,232 @@
+<ARTICLE ID="XACC-ACCTYPES">
+<ARTHEADER>
+<TITLE></TITLE>
+<TITLE>Tipos de Cuentas</TITLE>
+</ARTHEADER>
+<SECT1>
+<TITLE> Tipos de Cuentas</TITLE>
+<PARA></PARA>
+<PARA> GnuCash soporte un variado número de tipos de cuentas. Debe
+seleccionar el tipo más apropiado para lo que desee grabar. Si no
+está seguro, las siguientes explicaciones le ayudarán a decidirse.
+
+    <GLOSSLIST>
+<GLOSSENTRY>
+<GLOSSTERM><EMPHASIS>Caja</EMPHASIS></GLOSSTERM>
+<GLOSSDEF>
+<PARA>El tipo de cuenta <EMPHASIS>caja</EMPHASIS> se usa para expresar
+      el dinero que se guarda en su bolsillo, guardiola o en casa.</PARA>
+</GLOSSDEF>
+</GLOSSENTRY>
+<GLOSSENTRY>
+<GLOSSTERM><EMPHASIS>Banco</EMPHASIS></GLOSSTERM>
+<GLOSSDEF>
+<PARA>El tipo de cuenta <EMPHASIS>banco</EMPHASIS> expresa una
+      cuenta corriente o de ahorros de un banco o de otra
+      institución financiera.</PARA>
+</GLOSSDEF>
+<GLOSSDEF>
+<PARA>      Estas cuentas a veces tienen interés.
+
+      </PARA>
+</GLOSSDEF>
+</GLOSSENTRY>
+<GLOSSENTRY>
+<GLOSSTERM><EMPHASIS>Crédito</EMPHASIS></GLOSSTERM>
+<GLOSSDEF>
+<PARA>El tipo de cuenta tarjeta de <EMPHASIS>crédito</EMPHASIS> se
+      usa para expresar tarjetas de crédito, que tienen líneas de
+      crédito flotante como con VISA, MasterCard, o Discover, y
+      también otras como American Express que <EMPHASIS>no</EMPHASIS>
+      le permiten mantener balances continuos.</PARA>
+</GLOSSDEF>
+<GLOSSDEF>
+<PARA>The introduction of <ULINK URL="http://www.visa.com/pd/debit/checkcard.html"> Check
+      Cards</ULINK> where payments are withdrawn directly from a
+      checking account makes the selection less clear; it is
+      probably more appropriate to treat a "Check Card" as a <EMPHASIS>      Bank</EMPHASIS> account, as it does withdraw amounts directly from
+      such an account, not really involving any granting of
+      credit.</PARA>
+</GLOSSDEF>
+<GLOSSDEF>
+<PARA> Observe la ambiguedad de AMEX y de las tarjetas de crédito.
+      Esto le muestra que decidir donde colocar las cuentas no es
+      una ciencia exacta.</PARA>
+</GLOSSDEF>
+</GLOSSENTRY>
+<GLOSSENTRY>
+<GLOSSTERM><EMPHASIS>Capital, Disponible</EMPHASIS></GLOSSTERM>
+<GLOSSDEF>
+<PARA>Las cuentas <EMPHASIS>Capital</EMPHASIS> y <EMPHASIS>Disponible</EMPHASIS> se usan para
+      anotar cosas de valor, pero que no se trasladan directamente
+      en <EMPHASIS>caja</EMPHASIS>. </PARA> 
+</GLOSSDEF>
+<GLOSSDEF>
+<PARA>Por lo que, podría recoger los costes de compra de una casa
+      en una cuenta de capital titulada <EMPHASIS> Mi casa,</EMPHASIS> o el
+      coste de un coche en <EMPHASIS> Mi coche,</EMPHASIS> o recoger también
+      el valor de su <EMPHASIS> Equipamiento de ordenadores.</EMPHASIS></PARA>
+</GLOSSDEF>
+<GLOSSDEF>
+<PARA>Y la hipoteca de una casa o el alquiler serían representados por
+      cuentas de disponible, <EMPHASIS> Hipoteca de la Casa</EMPHASIS> y
+      <EMPHASIS> Alquiler coche</EMPHASIS>, para representar como pagos hechos
+      a estos alquileres.</PARA>
+</GLOSSDEF>
+<GLOSSDEF>
+<PARA>Si usted anota cuentas de capital con propósitos financieros, su
+      devaluación en valor en el tiempo debe ser tratado como una
+      deducción en impuestos, esa deducción suele ser
+      llamada <LINK LINKEND="XACC-DEPRECIATION">Depreciación.</LINK></PARA>
+</GLOSSDEF>
+<GLOSSDEF>
+<PARA>Por otro lado, si su propio capital se <EMPHASIS> aprecia</EMPHASIS> en valor
+      con el tiempo, como un terreno, coleccionables como pinturas, e
+      inversiones como acciones en compañias, debe verlas apreciadas en
+      valor, y debe reconocerlo, para los impuestos, que se llama
+      <LINK LINKEND="APPR"> Ganancias de Capital.</LINK></PARA>
+</GLOSSDEF>
+</GLOSSENTRY>
+<GLOSSENTRY>
+<GLOSSTERM><ANCHOR ID="STOCKACCT"><EMPHASIS>Existencias, Fondos Mutuales</EMPHASIS></GLOSSTERM>
+<GLOSSDEF>
+<PARA>Los fondos que invierte son una forma de capital que normalmente
+      se adquieren con el expreso propósito de recibir a cambio ganancias
+      en forma de dividendos, intereses, o <LINK LINKEND="APPR"> Ganancias de Capital.</LINK>
+      Hay una multitud de mercados de valores en todo el mundo, y los
+      valores que son más ampliamente tratados pueden tener un valor
+      concreto que debe ser analizado en base al día a día.</PARA>
+</GLOSSDEF>
+<GLOSSDEF>
+<PARA>        Las cuentas de Existencias y los Fondos Mutuales son cuentas
+        tipicamente anotados en registros con tres columnas principales:
+
+        <ITEMIZEDLIST>
+<LISTITEM>
+<PARA>Precio
+
+          </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Número de acciones
+
+          </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Coste
+        </PARA>
+</LISTITEM>
+</ITEMIZEDLIST>
+      </PARA>
+</GLOSSDEF>
+<GLOSSDEF>
+<PARA>        Para obtener información <EMPHASIS> útil</EMPHASIS> de los
+        registros, es necesario tener "vistas" múltiples donde los datos
+        pueden expresar cosas como:
+
+        <ITEMIZEDLIST>
+<LISTITEM>
+<PARA>Valor total por valor
+
+          </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Ganancias/Pérdidas por valor
+
+          </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Ratios de Retorno De Inversión por valor
+        </PARA>
+</LISTITEM>
+</ITEMIZEDLIST>
+      </PARA>
+</GLOSSDEF>
+<GLOSSDEF>
+<PARA>Más detalles se pueden encontrar en la sección <LINK LINKEND="XACC-TICKER">Listas de existencias.</LINK></PARA>
+</GLOSSDEF>
+</GLOSSENTRY>
+<GLOSSENTRY>
+<GLOSSTERM><EMPHASIS><LINK LINKEND="XACC-INCOMEEXPENSE"> Entradas,
+      Gastos</LINK></EMPHASIS></GLOSSTERM>
+<GLOSSDEF>
+<PARA>Los tipos de cuentas de <EMPHASIS>Entradas</EMPHASIS> y <EMPHASIS>Gastos</EMPHASIS> se usan para
+      anotar las entradas y los gastos.</PARA>
+</GLOSSDEF>
+<GLOSSDEF>
+<PARA>      Por ejemplo, si deposita un pago en su cuenta del bancom debe
+anotarlo como una transferencía desde un tipo de cuenta 'entrada'. </PARA>
+</GLOSSDEF>
+<GLOSSDEF>
+<PARA> Anotar las entradas de esta forma ayuda a cuadrar los libros: el
+total neto en el transcurso de unas semanas, meses o un año, debe
+ser exactamente igual a sus entradas (menos despesas) por ese periodo. </PARA>
+</GLOSSDEF>
+<GLOSSDEF>
+<PARA> El valor guardado en su cuenta del banco repercute en su 'total neto';
+del mismo modo las entradas contribuyen en sus 'beneficios'.
+
+</PARA>
+</GLOSSDEF>
+</GLOSSENTRY>
+<GLOSSENTRY>
+<GLOSSTERM><EMPHASIS>Equidad</EMPHASIS></GLOSSTERM>
+<GLOSSDEF>
+<PARA>Las cuentas de <EMPHASIS>Equidad</EMPHASIS> se usan para almacenar
+los balances abiertos la primera vez que utiliza GnuCash
+(o empieza uno nuevo periodo contable).
+
+
+</PARA>
+</GLOSSDEF>
+<GLOSSDEF>
+<PARA>Asumiendo que tenía una cuenta en el banco
+desde antes de empezar GnuCash, y asumiendo que no quiere anotar las
+transacciones viejas, deberá querer anotar en <EMPHASIS>balance abierto</EMPHASIS>
+no cero en su cuenta de banco. Este balance abierto debe ser marcado como
+una transferencia desde una cuenta de tipo 'equidad'.
+
+</PARA>
+</GLOSSDEF>
+<GLOSSDEF>
+<PARA> Alternativamente, si cierra y reabre todos sus libros al final de
+cada periodo/año, la 'equidad' debe ser su total neto al principo del
+periodo: igual a todo el capital menos disponible.
+
+</PARA>
+</GLOSSDEF>
+<GLOSSDEF>
+<PARA> A medida que el tiempo avanza, tendrá también entradas y despesas.
+
+</PARA>
+</GLOSSDEF>
+<GLOSSDEF>
+<PARA> Al final del año, su total neto será ñla 'equidad' del principio
+de año, más todas las entradas menos todas las despesas. Este valor será,
+por supuesto, la 'equidad' para el próximo periodo contable.
+
+      </PARA>
+</GLOSSDEF>
+</GLOSSENTRY>
+<GLOSSENTRY>
+<GLOSSTERM><LINK LINKEND="XACC-CURRENCYHANDLING">
+      <EMPHASIS>Moneda</EMPHASIS></LINK></GLOSSTERM>
+<GLOSSDEF>
+<PARA><EMPHASIS> Las Cuentas de Monedas</EMPHASIS> se utilizan para anotar las operaciones
+      con monedas.</PARA>
+</GLOSSDEF>
+<GLOSSDEF>
+<PARA>En la mayoría de los casos, parecerán existencias, excepto
+      que sean "entradas" conseguidad como fluctuaciones en el
+      cambio entre monedas. Observe que las transferencias no se
+      pueden hacer directamente entre dos cuentas con monedas
+      diferentes. Estas transferencias se pueden hacer
+      entre cuentas de negocio de monedas.</PARA>
+</GLOSSDEF>
+</GLOSSENTRY>
+</GLOSSLIST>
+
+
+</PARA>
+</SECT1>
+</ARTICLE>

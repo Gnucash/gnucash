@@ -1,0 +1,244 @@
+
+<ARTICLE ID="XACC-DOUBLEENTRY">
+<ARTHEADER>
+<TITLE></TITLE>
+<TITLE>Explicación de Cuentas con Doble Entrada</TITLE>
+</ARTHEADER>
+<SECT1>
+<TITLE> ¿Por qué Utilizar Cuentas con Doble Entrada?</TITLE>
+<PARA>    </PARA>
+<PARA>
+    Las cuentas con doble entrada le ayudan a evitar errores. Este
+    es el motivo por lo que los profesionales lo utilizan. Si usted
+    es un novato en balances, le ayudará a organizar sus registros y
+    mantenerlos en lugar de crear una masa ininteligible. Si es
+    un administrativo experimentado, entonces probablemente no
+    podrá imaginarse como era la vida antes.
+
+    </PARA>
+</SECT1>
+<SECT1 ID="XACC-DOUBLEDEF">
+<TITLE> ¿Qué son las Cuentas con Doble Entrada?</TITLE>
+<PARA>    </PARA>
+<PARA>Los registros con doble entrada es un método de registro
+    introducido en el siglo 13 para asegurarse que cada transacción
+    y cuenta está debidamente equilibrada. Esto reduce
+    notablemente la entrada de datos erróneos.
+
+    </PARA>
+<PARA>Una transacción con doble entrada es una transacción que contiene
+    entradas para dos (o más) cuentas que se equilibran una contra la otra
+    (balance). Una cuenta es <EMPHASIS>débito</EMPHASIS> por una cantidad
+    igual a otra que es <EMPHASIS>crédito.</EMPHASIS> Asegurando que
+    cada transacción está equilibrada, un balance de un conjunto de
+    cuenta está garantizado. Esto no previene los errores totalmente,
+    pero elimina el tipo de errores <EMPHASIS>"Olvidé entrar esa parte de la
+    transacción"</EMPHASIS>. En el transcurso de un mantenimiento largo,
+    conjuntos de cuentas complejas con muchas transacciones, es muy
+    fácil cometer errores que pueden pasar inadvertidos por mucho tiempo,
+    y ser casi imposible de encontrarlos, incluso utilizando
+    el registrado con doble entrada.
+
+    </PARA>
+</SECT1>
+
+<SECT1 ID="XACC-DOUBLEENTRYRULE">
+<TITLE> Las Reglas de la Cuentas con Doble Entrada</TITLE>
+
+<PARA>La forma intuitiva de comprender la doble entrada es como
+    una transferencia de una cuenta de banco a otra, donde la
+    cantidad tomada de una de las cuentas debe ser igual a la
+    depositada en la otra. Esto es efectivamente la "regla"
+    del balance con doble entrada; si añade algo en una cuenta,
+    lo debe substraer de otro sitio. Cuando este proceso se
+    realiza de forma regular y consistente, conduce a la
+    identidad de la cuenta:
+
+    <ANCHOR ID="IDENTITY">
+    <ENVAR>Total de Deber = Total de Haber.</ENVAR>
+
+
+    </PARA>
+<PARA>hay otro aspecto importante de la doble entrada que
+    debe ser también comprendido: para obtener una pintura
+    completa, debe registrar ventas y gastos. Cuando deposita
+    sus pagos en la cuenta del banco, ese dinero no apareció
+    "del cielo". Por lo que, cuando registra un depósito a
+    ese banco, debe registrar su beneficio en una cuenta de
+    ventas: el dinero que va al banco viene de su cuenta
+    de ventas. Una vez más, añadir en un lugar lo que se substrae
+    de otro. Registrando correctamente sus ventas y gastos,
+    puede mantener registrado su equidad: Simplemente ponga,
+    después de años de beneficios y gastos, lo que resta es lo
+    que tiene, menos la cantidad que gastó.
+    </PARA>
+
+<PARA>
+(En este punto, la documentación debería explicar con mayor detalle
+que sucede cuando gasta dinero para comprar un sofá (excepto por el
+dinero perdido por impuestos y transporte, su capital no debe variar
+mucho), y que sucede cuando ese sofá pierde valor (depreciación).
+De nuevo, hay transferencias de dinero entre cuentas. Lo que queda
+de nuevo está equilibrado. Esté seguro que anotarlo utilizando
+la doble entrada contra cuentas de gastos y ventas es la forma
+correcta de registrar el cambio en el tiempo.) 
+    </PARA>
+
+<PARA>
+    Esto es explicado con mayor detalle en el capitulo
+    <LINK LINKEND="XACC-INCOMEEXPENSE">Ventas/Compras</LINK>.
+
+    </PARA>
+<PARA><EMPHASIS>Conocimiento Profundo</EMPHASIS> 
+    El programa GnuCash trata el "Deber" como valores positivos,
+    y el "Haber" como valores negativos, por lo que identidad de
+    las cuentas se simplifica a
+    <LITERAL>valor<SUBSCRIPT>1</SUBSCRIPT> + 
+    valor<SUBSCRIPT>2</SUBSCRIPT> + 
+    valor<SUBSCRIPT>3</SUBSCRIPT> + ...
+    = 0</LITERAL>
+    Llamar esto
+    registrado de <EMPHASIS>doble</EMPHASIS> entrada  es un poco equivocado; 
+    Sería más correcto llamarlo registrado de <EMPHASIS>múltiples</EMPHASIS>
+    entradas. Desafortunadamente, hay 700 años de historia del uso
+    de este término, que desaconseja cambiarlo. (Y piensa en partes
+    de Unix que son engañosas y viejas!)
+
+    </PARA>
+
+<PARA><EMPHASIS>Conocimiento profundo:</EMPHASIS>
+    Los extractos bancarios son escritos con frecuencia desde
+    la perspectiva del <EMPHASIS>banco</EMPHASIS>, que es exactamente
+    la opuesta a la suya. Por ejemplo, cuando usted hace un depósito
+    en el banco les deja el dinero el cual le prometen devolver algún
+    día. par el banco, su dinero es un débito: es el dinero que
+    le deben. Por lo que, cuando recibe un extracto del banco,
+    puede ver que los columnas están mal llamadas: Los depósitos
+    están marcados como "débitos", y sus pagos como "créditos".
+    Esta práctica es particularmente común con bancos más viejos y
+    conservadores.
+    </PARA>
+
+</SECT1>
+
+<SECT1 ID="XACC-DOUBLEUSE">
+<TITLE> Utilizando Doble Entrada</TITLE>
+<PARA>    </PARA>
+<SECT2>
+<TITLE>Crear Transacciones</TITLE>
+<PARA>    </PARA>
+<PARA>Crear una transacción de doble entrada:
+
+    <ITEMIZEDLIST>
+<LISTITEM>
+<PARA>        Apretar en la caja de la columna llamada
+        <SCREEN>Transferir de</SCREEN> en la parte izquierda del registro.
+
+        </PARA>
+<PARA>Aparecerá un menú emergente, mostrando todas las cuentas de las
+        que se pueda realizar una transferencia.
+      
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>        Seleccione una. 
+
+        </PARA>
+<PARA>Cuando registre la transacción, la doble entrada será
+        automáticamente hecha, y la transacción aparecerá de forma
+        automática en todas las ventanas que muestren las cuentas
+        "transferido de" y "transferido a".
+      
+    </PARA>
+</LISTITEM>
+</ITEMIZEDLIST>
+
+    </PARA>
+</SECT2>
+<SECT2>
+<TITLE>Modificar transacciones</TITLE>
+<PARA>    </PARA>
+<PARA>Para <EMPHASIS>modificar</EMPHASIS> una transacción de doble entrada:
+
+    </PARA>
+<PARA>Simplemente edite la transacción en cualquier ventada en la
+    que aparezca.
+
+    </PARA>
+<PARA>Cualquier cambio hecho se reflejará de forma automática en los
+    dos cuentas y todas las ventanas que muestren la transacción.
+
+    </PARA>
+<PARA>Similarmente, cuando una transacción es eliminada, las dos partes
+    serán eliminadas de ambas cuentas, y el balance será automáticamente
+    recalculado para <EMPHASIS>ambas</EMPHASIS> cuentas.
+
+    </PARA>
+<PARA>Para modificar la cuenta de transferencia, simplemente una nueva
+    cuenta del menú desplegable. Cuando registre la transacción, será
+    automáticamente seleccionado de la cuenta antigua, y insertado
+    en la nueva cuenta.
+
+    </PARA>
+</SECT2>
+</SECT1>
+<SECT1 ID="XACC-SCRUBBING">
+<TITLE> Hacer limpieza</TITLE>
+<PARA>    </PARA>
+<PARA>El programa GnuCash puede ser configurado para trabajar
+    estrictamente con doble entrada, o puede configurarlo para
+    permitir "pérdidas."
+
+    </PARA>
+<PARA>En el modo de "pérdidas", puede crear <EMPHASIS>transacciones
+    no equilibradas,</EMPHASIS> esto es, transacciones que el balance
+    no es cero. Este modo descarta la validación que proviene de utilizar
+    el esquema más estricto de doble entrada, que probablemente
+    no es realmente el más utilizado. En efecto:
+
+    <ITEMIZEDLIST>
+<LISTITEM>
+<PARA>Si no está seguro lo que está haciendo, preferirá no
+      descarta la validación de <EMPHASIS>doble entrada,</EMPHASIS> como 
+      ayuda a mantener sus cuentas equilibradas incluso cuando no
+      sea perfectamente consciente de ello.
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Si es un <EMPHASIS>mago de los balances,</EMPHASIS> conocerá
+      que es <EMPHASIS>realmente importante</EMPHASIS> mantener las cosas en
+      balance, y de nuevo preferirá la <EMPHASIS>doble entrada.</EMPHASIS>
+    </PARA>
+</LISTITEM>
+</ITEMIZEDLIST>
+
+    </PARA>
+<PARA>Pero si decide "desmarcarse del sistema", y tiene una serie
+    de transacciones no equilibradas, probablemente querrá limpiarlo
+    en algún momento. Para limpiar estas transacciones desequilibradas,
+    puede <EMPHASIS>hacer limpieza</EMPHASIS> en la cuenta seleccionando
+    <GUIMENU>Limpieza</GUIMENU> de la ventana principal.
+
+    </PARA>
+<PARA>El proceso examinará cada transacción; si la transacción no está
+    equilibrada, una entrada en un lado será creada y puesta en la 
+    cuenta llamada <EMPHASIS>Descuadre.</EMPHASIS> Luego puede revisar estas
+    entradas parciales y moverlas a las cuentas correctas.
+
+    </PARA>
+<PARA><EMPHASIS>Cuidado: Modificación de Funcionalidad...</EMPHASIS>
+
+    </PARA>
+<PARA>Por el momento, el control sobre si GnuCash es "estricto" o
+    admite "pérdidas" se establece en tiempo de compilación, y el valor
+    por defecto es <EMPHASIS>estricto.</EMPHASIS>
+
+    </PARA>
+<PARA>En el futuro, no existirá la opción de "no pérdidas."
+
+
+</PARA>
+</SECT1>
+</ARTICLE>

@@ -1,0 +1,132 @@
+What is a Gnucash module? 
+-------------------------
+
+A gnucash module is a dynamically loadable libtool library that
+defines the following symbols:
+
+    /* what version of the module system interface is assumed */
+    int  gnc_module_system_interface;
+
+    /* information about the module's version */ 
+    int  gnc_module_current;
+    int  gnc_module_revision;
+    int  gnc_module_age; 
+
+    /* init is called each time a module is loaded; 
+     * 'refcount' is 0 the first time the module is loaded. */ 
+    int  gnc_module_init(int refcount);
+     
+    /* end is called each time the module is unloaded, if present.  
+     * 'refcount' is 0 the last time the module is unloaded. */
+    void gnc_module_end(int refcount);  
+
+    /* descriptive information */ 
+    char  * gnc_module_path(void);
+    char  * gnc_module_description(void); 
+    
+
+gnc_module_system_interface is the revision number of the interface
+listed above (i.e. the names and type signatures of the symbols each
+module must define).  The current revision number is 0; all modules
+should assign gnc_module_system_interface = 0.  As the interface
+evolves, this should allow us to continue to load older modules.
+
+The current, revision, age triplet describe the module version
+according to libtool(1) conventions.  To quote from the libtool info
+pages:
+
+  1. Start with version information of `0:0:0' for each libtool library.
+
+  2. Update the version information only immediately before a public
+     release of your software.  More frequent updates are unnecessary,
+     and only guarantee that the current interface number gets larger
+     faster.
+
+  3. If the library source code has changed at all since the last
+     update, then increment REVISION (`C:R:A' becomes `C:r+1:A').
+
+  4. If any interfaces have been added, removed, or changed since the
+     last update, increment CURRENT, and set REVISION to 0.
+
+  5. If any interfaces have been added since the last public release,
+     then increment AGE.
+
+  6. If any interfaces have been removed since the last public release,
+     then set AGE to 0.
+
+gnc_module_path should return a newly-allocated string containing the
+"module path". The module path is a logical path with elements
+separated by /.  The path will be used to structure views of available
+modules so that similar modules can be grouped together; it may or may
+not actually correspond to a filesystem path.  The last element of the
+module path is the name of this module.  For example,
+  char * path = "gnucash/core/engine";
+defines the "engine" module, which is in the gnucash/core group of 
+modules. 
+
+gnc_module_description should return a newly-allocated 1-line
+description of what the module does.  This can be displayed by GUI
+elements to allow users to select modules to load.
+
+
+Initializing the module system
+------------------------------
+
+Somewhere at program startup time, you need to call
+gnc_module_system_init from C (see below from Scheme).  This scans the
+directories in the GNC_MODULE_PATH and builds a database of the
+available modules.
+
+In Scheme, you need to (use-modules (gnucash gnc-module)) and call
+(gnc:module-system-init) if it was not called from C.  You will need
+to use-modules this module is you intend to use any module system 
+functions from Scheme.  
+
+On the Scheme side, gnc:module-system-init is not a g-wrapped
+function.  It uses Guile's dynamic-link to open the libgncmodule.la
+library directly and call gnc_module_system_init.  dynamic-link uses
+lt_dlopen() under the hood, so you need to make sure that the
+libgncmodule.la install directory is in your LD_LIBRARY_PATH or
+LTDL_LIBRARY_PATH.  The Gnucash app will set up this path by default.
+
+You can rebuild the module database at any time (say, if you know a
+new module has been installed or the user has changed the module path
+via some in-program mechanism) by calling gnc_module_system_refresh.
+
+Loading modules
+---------------
+
+From C call gnc_module_load(path, interface), or gnc:module-load from
+Scheme.  This returns a GNCModule (<gnc:module>) if a qualifying
+module was successfully loaded, #f / FALSE otherside.  GNCModule is an
+opaque type.
+
+A qualifying module is any module whose gnc_module_path matches the
+path specification and for whom "interface" falls between
+gnc_module_current and (gnc_module_current - gnc_module_age).  If
+multiple modules qualify, libtool's rules are used to determine which
+to load: the larger of gnc_module_interface, gnc_module_age, and
+gnc_module_revision take precedence, in that order.
+
+Module initialization/cleanup
+-----------------------------
+
+Each time a module is loaded, its gnc_module_init function is called
+with an integer argument, 'refcount'.  The refcount is the number of
+times that gnc_module_load has been called on that particular module.
+It is 0 the first time gnc_module_load is called on a module.
+
+Any startup/initialization code should be defined in this function.
+If this module depends on other modules, put the necessary
+gnc_module_load calls in the init function.
+
+If gnc_module_init returns FALSE, the module is immediately unloaded.
+Any cleanup must be done within gnc_module_init before returning.
+
+Each time a module is unloaded via gnc_module_unload, its
+gnc_module_end function is called with an integer refcount argument.
+refcount is 0 if this 'unload' drops the last reference.  In this
+case, after the gnc_module_end handler is called the library is
+dlclose()-ed. 
+
+

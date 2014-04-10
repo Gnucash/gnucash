@@ -1,0 +1,14 @@
+This document attempts to summerize discussion on gnucash-devel about
+generic objects in the engine.  This discussion took place between
+2001-11-17 and ... (in case you want to find the archives) and the
+subject was "GncBusiness v. GNCSession".
+
+One part of the problem, explained:
+
+> > That is the whole point.  The problem is that there is no generic
+> > hooks into the GNCSession to store the GNCEntityTable for each
+> > object-type; there is no hook in the GNCBook to store the object
+> > tables (list of existing Customers, Vendors, Invoices, etc); there
+> > is no hook in the Backend structure to load or save these objects;
+> > there is no hook in the Query structure to search these objects.
+

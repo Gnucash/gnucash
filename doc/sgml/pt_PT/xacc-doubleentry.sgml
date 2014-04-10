@@ -1,0 +1,261 @@
+<ARTICLE ID="XACC-DOUBLEENTRY">
+<ARTHEADER>
+<TITLE>Compreender a Contabilidade de Dupla Entrada</TITLE>
+</ARTHEADER>
+
+<SECT1 ID="XACC-DOUBLEDEF">
+<TITLE> O Que é a Contabilidade de Dupla Entrada?</TITLE>
+
+<PARA>
+Provavelmente já ouviu o ditado "O dinheiro não nasce nas árvores".
+     Significa que o dinheiro tem de vir de algum lado, não surge do
+     "nada."  A contabilidade de "dupla entrada" é um método de
+     registo que lhe permite controlar exactamente <emphasis>de onde</emphasis>
+     o seu dinheiro vem e exactamente <emphasis>para onde</emphasis>
+     vai. </para>
+
+<para> Utilizar a dupla entrada significa que o dinheiro nunca é ganho ou
+     perdido; é sempre transferido de algum lugar (uma conta de origem)
+     para outro lado (a conta de destino). No GnuCash, esta transferência
+     é conhecida como uma <EMPHASIS>transacção</emphasis> e cada
+     transacção requer pelo menos duas contas. </para>
+
+<para>     Uma <emphasis>conta</emphasis> no GnuCash é um registo para
+     controlar o que você possui, deve, gasta ou recebe.   Por exemplo,
+     se pagar uma conta do telefone com cheque, o dinheiro é transferido
+     da conta bancária para a empresa de telecomunicações.  No GnuCash,
+     esta é uma transacção a transferir dinheiro da conta à ordem para
+     uma conta de despesas de telefone.  Você provavelmente já pensa na
+     sua conta bancária como uma conta aberta num banco, mas as suas
+     despesas (tais como a conta do telefone) são também contas no GnuCash.  </para>
+
+ <para>Este conceito de dupla entrada já existe desde cerca do séc. XIII,
+      e o seu objectivo foi sempre o de reduzir a probabilidade de erros
+      de entrada de dados.  Felizmente, o GnuCash torna muito mais fácil
+      introduzir transacções do que o era naqueles tempos primordiais da
+      contabilidade!
+    </PARA>
+
+<sidebar><title>Conhecimentos práticos:</title>
+<para>
+    Chamar a isto contabilidade de <EMPHASIS>dupla</EMPHASIS>-entrada
+    é algo enganoso; seria de certa forma mais correcto chamar-lhe
+    contabilidade de <EMPHASIS>entrada</EMPHASIS>-multipla, visto uma
+    transacção poder afectar mais do que duas contas. Infelizmente,
+    existem 700 anos de história da utilização do termo, o que é
+    suficiente para desencorajar a sua modificação.
+</para>
+</sidebar>
+
+</SECT1>
+
+<SECT1>
+<TITLE>Porque Utilizar a Contabilidade de Dupla Entrada?</TITLE>
+<PARA>
+    A contabilidade de dupla entrada ajuda-o a evitar erros.  É por esta
+    razão que os contabilistas profissionais a utilizam. Um sistema de
+    dupla entrada proporciona um benefício regista-e-salda, tornando-lhe
+    mais fácil encontrar a raiz de qualquer erro de introdução. </para>
+
+<para>Também lhe proporciona informação mais útil e completa do que obteria
+    com apenas a aproximação de entrada única de "ligvro de cheques". Visto
+    cada transacção conter tanto uma fonte como um destino, a dupla entrada
+    proporciona detalhes valiosos que podem ser ordenados e visualisados em
+    relatórios, mais tarde.  Os relatórios permitem-lhe ver coisas como quanto
+    dinheiro ganhou nos últimos anos e para onde foi, qual é o seu património
+    líquido, e quanto poderão ser os seus impostos no final do ano.</para>
+
+<para>O GnuCash oferece uma vantagem sobre os pacotes tradicionais de contabilidade
+    porque realiza muito do trabalho de dupla entrada por si mantendo ainda assim
+    os benefícios de precisão da contabilidade de dupla entrada.
+    </PARA>
+
+
+</SECT1>
+
+
+<SECT1 ID="XACC-DOUBLEENTRYRULE">
+<TITLE> A regra da Contabilidade de Dupla Entrada</TITLE>
+
+<PARA>Numa transacção de dupla entrada, uma quantia igual de dinheiro é
+    sempre transferida de uma conta (ou grupo de contas) para outra
+    conta (ou grupo de contas). Os contabilistas utilizam os termos
+    <emphasis>débito</emphasis> e <emphasis> crédito</emphasis> para
+    descrever se o dinheiro está a ser transferido <emphasis>
+    para</emphasis> ou <emphasis>de</emphasis> uma conta. </para>
+
+<para> O montante é registado na coluna do débito, que é a coluna da
+    esquerda, quando está a ser transferido <emphasis>para</emphasis>
+    uma conta. O montante é registado na coluna do crédito, que é a
+    coluna da direita, quando está a ser transferido <emphasis>de
+    </emphasis> uma conta. Para qualquer transacção, o total dos
+    débitos (entradas na coluna da esquerda) tem de ser igual ao
+    total dos créditos (entradas na coluna da direita).
+
+    </PARA>
+
+<para> Você não tem de utilizar os termos "débito" e "crédito" para
+    utilizar o GnuCash. Os registos do GnuCash usam por defeito títulos
+    de colunas "comuns" tais como "depósito" e "levantamento"; se estiver
+    mais à vontade com esses cabeçalhos, utilize-os. Se preferir os cabeçalhos
+    de débito e crédito, pode modificar os cabeçalhos das colunas para
+    "utilizar nomes contabilísticos" na opção de menu
+    <guimenuitem>Definições|Preferências...Geral</guimenuitem>.</para>
+
+    <para>O conceito principal a reter, independentemente da terminologia, 
+    é que todas as transacções involvem a transferência de um montante de 
+    dinheiro de uma origem para um destino. Por exemplo, se passar um cheque 
+    de 15000$ para supermercado, você regista-o como uma transferência de 
+    15000$ da conta à ordem para a conta de despesas alimentares. Em termos 
+    contabilisticos, isto é um crédito da conta à ordem e um débito das 
+    despesas alimentares:</para>
+
+  <literallayout>
+      Débito  Alimentação    15000
+      Crédito Conta Ordem    15000</literallayout>
+
+
+<PARA>Então e o cheque do ordenado? Você pode verificar que o dinheiro entrou 
+      na conta bancária, mas de onde veio? Na dupla entrada, o dinheiro tem de 
+      ter uma origem, e a origem do seu cheque do ordenado é uma conta de 
+      receitas. Assim, para introduzir o depósito de um cheque de ordenado de 
+      250.000$ na sua conta à ordem, você regista uma transferência de 250.000$ 
+      de uma conta de receitas para a conta à ordem. Em termos contabilísticos, 
+      isto é um crédito às receitas e um débito à conta bancária:</para>
+
+   <literallayout>
+      Débito  Conta Ordem  250.000
+      Crédito Receita      250.000</literallayout>
+
+
+
+      <sidebar><title>Conhecimento de causa:</title>
+      <para>
+        Os extractos bancários são muitas vezes escritos na prespectiva 
+        do banco, que é exactamente <emphasis>oposta</emphasis> à nossa. 
+        Quando você deposita aquele cheque de ordenado no banco, você 
+        está a dar dinheiro ao banco, prometendo este devolver-lho um 
+        dia. Assim, para o banco, o deu depósito é um empréstimo; é 
+        dinheiro que lhe devem. Visto esse dinheiro ser uma 
+        <emphasis>origem</emphasis> de fundos para o banco, eles mostram 
+        um <emphasis>crédito</emphasis> na sua conta bancária quando você 
+        realiza um depósito.</para>
+      </sidebar>
+
+
+
+    </SECT1>
+
+    <SECT1 ID="XACC-DOUBLEUSE">
+      <TITLE>Utilizar a Dupla Entrada no GnuCash</TITLE>
+      <para>Vamos analisar um exemplo que aplica a contabilidade de dupla entrada à utilização 
+        do GnuCash. Vamos registar o depósito de um cheque de ordenado de 250.000$. </para>
+
+
+      <SECT2>
+        <title>Criar Contas</title>
+        <para>
+          Para registar o depósito do ordenado, tem primeiro de criar 
+          duas contas. A primeira conta é o depósito à ordem. Clique 
+          no botão <guibutton>Nova</guibutton> na barra de ferramentas 
+          da janela principal para criar a nova conta, depois introduza 
+          os seguintes detalhes de conta na janela que surge:
+
+<literallayout>
+ Nome Conta:  "À Ordem"
+ Tipo Conta:  Seleccione "Bancária"
+ Conta Pai :  Seleccione "Nova conta de topo"
+</literallayout>
+  </para>
+
+      <para> Clique "OK" para terminar a definição, depois crie uma segunda conta de 
+        receitas. Clique novamente no botão <guibutton>Nova</guibutton> e introduza 
+        os seguintes detalhes na janela:
+
+<literallayout>
+ Nome Conta:  "Salário"
+ Tipo Conta:  Seleccione "Receita"
+ Conta Pai :  Seleccione "Nova conta de topo"</literallayout></para>
+
+<sidebar><title>Insider knowledge:</title>
+
+   <para>
+    O GnuCash disponibiliza vários tipos de contas, debatidos na secção 
+    <LINK LINKEND="XACC-ACCTYPES">Tipos de Contas</LINK>. Os débitos 
+    aumentam as suas contas de activos e de despesas, enquanto os créditos 
+    aumentam as suas receitas, dívidas e contas de saldos iniciais. As 
+    contas de receitas e despesas são também discutidas em mais detalhe 
+    na secção <LINK LINKEND="XACC-INCOMEEXPENSE">Receitas/Despesas</LINK>.</para></sidebar>
+
+</sect2>
+<SECT2>
+<TITLE>Criar Transacções</TITLE>
+<PARA>Para criar uma transacção de dupla entrada para o depósito do ordenado:
+
+<orderedLIST>
+<LISTITEM>
+<PARA> Abra o registo da Conta à Ordem que acabou de criar, clicando duas vezes 
+                no nome da conta na janela principal.
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Prima Tab até chegar ao campo Descrição e introduza "Depósito de Ordenado".
+
+    </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Prima Tab até ao campo de Transferir e seleccione a conta de Salário no menu 
+                de lista de selecção.
+
+    </PARA>
+</LISTITEM><LISTITEM>
+<PARA> Prima Tab até à coluna de Depósito e introduza "250000", depois prima "Enter" 
+                para registar a transacção. Agora a sua conta à ordem mostra uma 
+                entrada a débito de 250.000$.
+    </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Seleccione a transacção novamente e clique no botão "Saltar" na 
+                barra de ferramentas pata ver o efeito da transacção 
+                na conta de Salário. Note que na conta de Salário, tem 
+                agora uma entrada a crédito coincidente no valor de 250.000$ 
+                que o GnuCash introduziu automaticamente por si.
+    </PARA>
+</LISTITEM>
+
+</orderedLIST>
+    </PARA>
+
+</SECT2>
+
+<SECT2>
+<TITLE>Modificar Transacções</TITLE>
+ <PARA>
+        E se desejasse modificar esta transacção para aumentar o depósito 
+        do ordenado para 300.000$? Para <EMPHASIS>modificar</EMPHASIS> uma 
+        transacção de dupla entrada, basta seleccionar a transacção em 
+        qualquer registo em que apareça, realizar as suas modificações e 
+        gravar a transacção. Neste caso, pode ou editar a transacção no 
+        registo da Conta à Ordem ou no registo da conta de Salário. Qualquer 
+        modificação efectuada será automaticamente reflectida em ambas as 
+        contas e em todas as janelas que mostrem a transacção.
+    </PARA>
+      <PARA>
+        Para modificar a conta de transferência, simplesmente seleccione 
+        uma nova conta da lista de selecção. Quando gravar a transacção, 
+        esta alteração de conta será reflectida em todas as contas afectadas. 
+        Da mesma forma, quando uma transacção de dupla entrada é apagada, as 
+        entradas são apagadas de todas as contas afectadas e os saldos são 
+        automaticamente recalculados para essas mesmas contas.
+
+      </PARA>
+
+</SECT2>
+
+
+</sect1>
+</ARTICLE>
+
+<!-- Local variables: -->
+<!-- sgml-parent-document: "gnucash.sgml" -->
+<!-- End: -->

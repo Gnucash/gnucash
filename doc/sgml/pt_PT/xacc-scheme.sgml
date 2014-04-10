@@ -1,0 +1,145 @@
+<article id="xacc-scheme">
+<artheader>
+<title> GnuCash e Scheme </title>
+<author>
+<firstname>Christopher</firstname>
+<surname>Browne</surname>
+</author>
+</artheader>
+<sect1 id="scheme">
+<title>Scheme</title>
+
+<para> A linguagem de programação Scheme é utilizada como uma linguagem 
+de extensão do <application>GnuCash</application>.  É particularmente 
+utilizada para as seguintes funcionalidades:
+
+<itemizedlist>
+
+<listitem><para> A <link linkend="xacc-qif-import"> importação QIF </link>,</para></listitem>
+<listitem><para> Geração de <link linkend="xacc-reports"> relatórios </link>,</para></listitem>
+<listitem><para> Apresentar a "dica do dia".</para></listitem>
+
+</itemizedlist></para>
+
+<para> Scheme é um ``dialecto'' LISP que é relativamente pequeno, suporta 
+agradavelmente a recursão, disponibiliza estruturas de bloco e âmbito lexico,
+e dá a uma variedade de tipos de objectos um status de ``primeira-classe'' 
+(<emphasis>isto é</emphasis> - objectos de primeira classe não nomeáveis e 
+podem ser passados como argumentos de funções, resultados, ou elementos de 
+listas).</para>
+
+<para> <application>GnuCash</application> utiliza a implementação 
+chamada <link linkend="guile"> Guile. </link> </para></sect1>
+
+<sect1 id="xacc-schemedocs"> <title>Documentação Scheme</title>
+
+<para> Existe uma rica literatura de boas referências sobre Scheme,
+incluindo as seguintes:
+
+<itemizedlist>
+
+<listitem> <para> <ulink url=
+"http://www.swiss.ai.mit.edu/projects/scheme/index.html"> Página principal 
+do Scheme </ulink></para></listitem>
+
+<listitem> <para> <ulink url="http://mitpress.mit.edu/sicp/"
+id="sicp"> Estrutura e Interpretação de Programas de Computador 
+(SICP)</ulink> </para>
+
+<para> Este trabalho clássico está agora disponível na web <ulink
+url="http://mitpress.mit.edu/sicp/full-text/book/book.html"> no formato 
+de texto completo. </ulink> SICP é utilizado no MIT para ajudar a introduzir 
+os estudantes à Ciência Informática; é excelente para tal, mas poderá ser 
+demasiado complexo para os que 'apenas querem fazer algo'.</para></listitem>
+
+<listitem> <para> <ulink
+url="http://www.scheme.com/tspl2d/index.html"> A Linguagem de Programação 
+Scheme, 2ª Edição (Cópia online do livro de Dybvig)</ulink>
+</para>
+
+<para> Esta referência excelente apresenta o ANSI standard Scheme,
+incluindo bastantes exemplos. </para>
+</listitem>
+
+<listitem id="r5rs"> <para> <ulink
+url="http://www-swiss.ai.mit.edu/~jaffer/r5rs_toc.html"> Especificações 
+R5RS do Scheme</ulink> </para> </listitem>
+
+<listitem><para><ulink url="http://www.htdp.org/"> Como Definir 
+Programas </ulink></para>
+
+<para> Este livro, publicado pela MIT Press, e disponível na web,
+disponibiliza aconselhamento tipo tutorial sobre como programar, utilizando o 
+excelente ambiente <ulink
+url="http://www.cs.rice.edu/CS/PLT/packages/drscheme/" id="drscheme">
+<application> DrScheme </application> </ulink>.</para>
+
+<para> Este poderá ser o livro mais adequado para os chegados ao Scheme 
+consultarem já que apresenta um bom número de exemplos de como fazer coisas 
+úteis em <link linkend="scheme"> Scheme </link>.</para></listitem>
+
+</itemizedlist></para></sect1>
+
+<sect1 id="xacc-guile"> <title>Guile Scheme</title>
+
+<para> <ulink url="http://www.guile.org/" id="guile"> Guile </ulink>
+é uma implementação de <link linkend="scheme"> Scheme </link> utilizado 
+em muitos projectos FSF.  Está particularmente destinado a ser prontamente 
+embebido em aplicações escritas em C.
+
+<itemizedlist>
+
+<listitem> <para> <ulink url="ftp://ftp.red-bean.com/pub/guile/">
+Directório de /pub/guile no red-bean.com</ulink> </para>
+
+<para> Esta é a localização ``oficial'' onde o código fonte experimental 
+do Guile se encontra.  </para> </listitem>
+
+<listitem> <para><ulink url=
+"http://www.gnu.org/software/goops/goops.html" id="goops"> GOOPS
+</ulink> - CLOS para Guile </para> </listitem>
+
+<listitem id="gwrap"> <para> <ulink
+url="http://www.cs.cmu.edu/~chrislee/Software/g-wrap/"> g-wrap
+</ulink> </para>
+
+<para> G-Wrap é uma ferramenta portável para facilmente importar tipos,
+funções, e constantes do C para interpretadores <link linkend="scheme"> 
+Scheme </link>.  G-Wrap suporta <link linkend="guile"> Guile
+</link> e RScheme.
+</para>
+
+<para> <application>GnuCash</application> utiliza o G-Wrap para conectar 
+o Guile e o motor do <application>GnuCash</application>.
+</para> </listitem>
+
+<listitem> <para><ulink url="http://srfi.schemers.org/" id="srfi">
+SRFI - Proposta de Implementação Scheme (Scheme Requests For Implementation) </ulink></para>
+
+<para> Uma das deficiências mais antigas do Scheme tem sido que a definição 
+da linguagem é deliberadamente espartana, faltando-lhe funcionalidades. 
+Compare a parca definição do Scheme, <link linkend=
+"r5rs"> R5RS </link> com a do <ulink url= "http://www.cons.org/">
+Common Lisp, </ulink> que tem uma muito maior, mais funcional
+<ulink url= "http://www.harlequin.com/education/books/HyperSpec/">
+especificação HyperSpec. </ulink> (Nota: O HyperSpec é discutivelmente 
+um dos melhores e mais sofisticados conjuntos de documentação jamais 
+construidos utilizando HTML.)</para>
+
+<para> O processo SRFI procura essencialmente adicionar conjuntos de 
+funções em bibliotecas para disponibilizar funcionalidades expandidas 
+que possam ser portáveis através das implementações Scheme.  Isto tem 
+incluido bibliotecas para manipular conjuntos, caracteres, texto (strings), 
+"pacotes", registos, datas, objectos.</para>
+
+<para> <application>GnuCash</application> utiliza o SRFI 1 (Listas),
+8 (ligações de múltiplos valores; utilizado pelo SRFI 1), e 19 (Datas). </para>
+</listitem>
+
+</itemizedlist></para></sect1>
+
+</article>
+
+<!-- Local variables: -->
+<!-- sgml-parent-document: "gnucash.sgml" -->
+<!-- End: -->

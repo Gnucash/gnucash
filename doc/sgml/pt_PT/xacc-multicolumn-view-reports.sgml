@@ -1,0 +1,21 @@
+<article id="xacc-multicolumn-view-report">
+<artheader>
+<title>Visualização Multi-coluna</title>
+</artheader>
+<sect1>
+<title></title>
+<screenshot>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="image/multicolumn-view.png">
+    </imageobject>
+  </mediaobject>
+  </screenshot>
+<para>Se desejar visualizar vários relatórios numa mesma 
+janela, poderá utilizar a visualização multi-coluna.</para>
+</sect1>
+</article>
+
+<!-- Local variables: -->
+<!-- sgml-parent-document: "gnucash.sgml" -->
+<!-- End: -->

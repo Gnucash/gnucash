@@ -16,87 +16,107 @@
 ;; Free Software Foundation           Voice:  +1-617-542-5942
 ;; 59 Temple Place - Suite 330        Fax:    +1-617-542-2652
 ;; Boston, MA  02111-1307,  USA       gnu@gnu.org
-;;
-;; Minimal startup code. This file should just contain enough code to
-;; get gnc:load defined, and the "default" environment setup.  After
-;; that *everything* should be loaded via gnc:load, starting with
-;; startup.scm
 
-(define (display-slib-error)
-        (display "Obtain slib at: http://swissnet.ai.mit.edu/~jaffer/SLIB.html\n")
-        (newline)
-        (display "If you have slib installed, you may need to create\n")
-        (display "a symbolic link named 'slib' from the guile directory\n")
-        (display "(usually /usr/share/guile) to the directory where slib\n")
-        (display "is installed.\n\n")
-        (display "You may also need to run the following command as root:")
-        (newline)
-        (newline)
-        (display "  guile -c \"(use-modules (ice-9 slib)) (require 'new-catalog)\"")
-        (newline)
-        (newline))
+(define-module (gnucash bootstrap))
 
-;; Test for slib.
-(let* ((try-slib (lambda () (use-modules (ice-9 slib))))
-       (handler (lambda args #f))
-       (result (catch #t try-slib handler)))
-  (if (not result)
-      (begin
-        (newline)
-        (display "It appears you do not have the 'slib' scheme ")
-        (display "library installed.\nYou need slib2c4 or later ")
-        (display "to run GnuCash.\n")
-        (newline)
-        (display-slib-error)
-        (exit 1))))
+(use-modules (ice-9 slib))
+(use-modules (g-wrapped gw-gnc))
+(use-modules (g-wrapped gw-runtime))
 
-;; This variable determines whether slib-backup.scm gets loaded.
-(define gnc:*load-slib-backup* #f)
+;; from bootstrap.scm
+(export gnc:version)
+(export gnc:debugging?)
+(export gnc:warn)
+(export gnc:error)
+(export gnc:msg)
+(export gnc:debug)
+(export build-path)
+(export gnc:load)
+(export gnc:use-module-here!)
 
-;; Test for slib >= 2c6.
-(let* ((try-slib (lambda () (require 'printf) (sprintf #f "test")))
-       (handler (lambda args #f))
-       (result (catch #t try-slib handler)))
-  (if (not result)
-      (set! gnc:*load-slib-backup* #t)))
+;; from main.scm
+(export gnc:main)
 
+;; from path.scm
+(export gnc:make-home-dir)
+(export gnc:current-config-auto)
 
-(define (build-path firstelement . restofpath)
-  (define separator "/")
-  (define (bp first rest)
-    (if (null? rest)
-	first
-	(bp 	
-	 (string-append first separator (car rest))
-	 (cdr rest))))
-  (if (null? restofpath)
-      firstelement
-      (bp 
-       (string-append firstelement separator
-		      (car restofpath))
-       (cdr restofpath))))
+;; from command-line.scm
+(export gnc:*command-line-remaining*)
+(export gnc:*config-dir*)
+(export gnc:*share-dir*)
 
-;; In pre 1.3 guile's you have to do this manually, unless you call
-;; scm_shell, which we can't.
-(if (or (string=? (version) "1.2")
-        (string=? (version) "1.3a"))
-    (let ((boot-file (if (assoc 'prefix %guile-build-info)
-                         (string-append (cdr (assoc 'prefix %guile-build-info))
-                                        "/share/guile/"
-                                        (version)
-                                        "/ice-9/boot-9.scm")
-                         "/usr/share/guile/1.3a/ice-9/boot-9.scm")))
-      (primitive-load boot-file)))
+;; from doc.scm
+(export gnc:find-doc-file)
+(export gnc:load-help-topics)
+
+;; from extensions.scm
+(export gnc:extension-type)
+(export gnc:extension-name)
+(export gnc:extension-documentation)
+(export gnc:extension-path)
+(export gnc:extension-script)
+
+;; from main-window.scm
+(export gnc:find-acct-tree-window-options)
+(export gnc:make-new-acct-tree-window)  
+(export gnc:free-acct-tree-window)
+(export gnc:main-window-save-state)
+
+;; from printing/print-check.scm
+(export make-print-check-format)
+(export gnc:print-check)
+
+;; from tip-of-the-day.scm
+(export gnc:get-current-tip)
+(export gnc:increment-tip-number)
+(export gnc:decrement-tip-number)
+
+(define gnc:use-guile-module-here!
+  ;; FIXME: this should be a temporary fix.  We need to check to see
+  ;; if there's a more approved way to do this.  As I recall, there's
+  ;; not, but I belive a better way will be added to Guile soon.
+
+  ;; module == '(ice-9 slib)
+  (cond
+   ((or (string=? "1.3" (version))
+        (string=? "1.3.4" (version))
+        (string=? "1.4" (version)))
+    (lambda (module)
+      (process-use-modules (list module))))
+   (else
+    (lambda (module)
+      (process-use-modules (list (list module)))))))
+
+;; Test for simple-format
+(if (not (defined? 'simple-format))
+    (begin
+      (require 'format)
+      (export simple-format)
+      (define simple-format format)))
 
 ;; Automatically generated defaults
 (define gnc:_config-dir-default_ "@-GNC_CONFIGDIR-@")
 (define gnc:_share-dir-default_ "@-GNC_SHAREDIR-@")
 (define gnc:_help-dir-default_ "@-GNC_HELPDIR-@")
+(define gnc:_lib-dir-default_ "@-GNC_LIB_INSTALLDIR-@")
+(define gnc:_pkglib-dir-default_ "@-GNC_PKGLIB_INSTALLDIR-@")
+
 (define gnc:version "@-VERSION-@")
 
-;; These will be converted to config vars later (see prefs.scm)
+(set! %load-path
+      (cons (string-append gnc:_share-dir-default_ "/scm")
+            %load-path))
+(set! %load-path
+      (cons (string-append gnc:_share-dir-default_ "/guile-modules")
+            %load-path))
+
+;(simple-format #t "load-path == ~S\n" %load-path)
+
+;; These will be converted to config vars later (see command-line.scm)
 (define gnc:*load-path* #f)
 (define gnc:*debugging?* (if (getenv "GNC_DEBUG") #t #f))
+(define gnc:*develmode* (if (getenv "GNC_DEVEL_MODE") #t #f))
 
 ;; Function to get debugging
 (define (gnc:debugging?)
@@ -157,6 +177,21 @@
 
 ;;; Set up gnc:load.
 
+(define (build-path firstelement . restofpath)
+  (define separator "/")
+  (define (bp first rest)
+    (if (null? rest)
+	first
+	(bp 	
+	 (string-append first separator (car rest))
+	 (cdr rest))))
+  (if (null? restofpath)
+      firstelement
+      (bp 
+       (string-append firstelement separator
+		      (car restofpath))
+       (cdr restofpath))))
+
 (define (gnc:find-in-directories file directories)
   "Find file named 'file' anywhere in 'directories'.  'file' must be a
 string and 'directories' must be a list of strings."
@@ -168,7 +203,7 @@ string and 'directories' must be a list of strings."
        (result #f))
       ((or (null? rest) finished?) result)
 
-    (let ((file-name (string-append (car rest) "/" file)))
+    (let ((file-name (build-path (car rest) file)))
       (gnc:debug "  checking for " file-name)
       (if (access? file-name F_OK)
           (begin
@@ -180,32 +215,16 @@ string and 'directories' must be a list of strings."
   "Name must be a string.  The system attempts to locate the file of
 the given name and load it.  The system will attempt to locate the
 file in all of the directories specified by gnc:*load-path*."
-
-  (define (make-thunk file-name)
-    (lambda () (primitive-load file-name) #t))
-
-  (define (handler key . args)
-    (apply display-error #f (current-error-port) args)
-    #f)
-
+  
   (let* ((path (if (list? gnc:*load-path*)
                    gnc:*load-path*
                    (gnc:config-var-value-get gnc:*load-path*)))
          (file-name (gnc:find-in-directories name path)))
     (if (not file-name)
         #f
-        (if 
-         (catch #t (make-thunk file-name) handler)
-         (begin
-           (gnc:debug "loaded file " file-name)
-           #t)
-         (begin
-           (gnc:warn "failure loading " file-name)
-           #f)))))
+        (primitive-load file-name))))
 
-(define (gnc:_expand-load-path_ new-path)
-  ;; FIXME: Bad items should probably cause this to abort with #f or
-  ;; throw an exception.
+(define (gnc:expand-load-path new-path)
   (let ((load-path-interpret
          (lambda (item)
            (cond ((string? item) (list item))
@@ -233,4 +252,6 @@ file in all of the directories specified by gnc:*load-path*."
                      (call-with-input-string
                       load-path-override (lambda (p) (read p)))
                      '(default))))
-  (set! gnc:*load-path* (gnc:_expand-load-path_ new-path)))
+  (set! gnc:*load-path* (gnc:expand-load-path new-path)))
+
+(gnc:load "main.scm")

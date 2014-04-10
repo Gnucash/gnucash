@@ -17,15 +17,15 @@ fi
   DIE=1
 }
 
-(grep "^AM_PROG_LIBTOOL" $srcdir/configure.in >/dev/null) && {
-  (libtool --version) < /dev/null > /dev/null 2>&1 || {
-    echo
-    echo "**Error**: You must have \`libtool' installed to compile Gnome."
-    echo "Get ftp://ftp.gnu.org/pub/gnu/libtool-1.2d.tar.gz"
-    echo "(or a newer version if it is available)"
-    DIE=1
-  }
-}
+#(grep "^AM_PROG_LIBTOOL" $srcdir/configure.in >/dev/null) && {
+#  (libtool --version) < /dev/null > /dev/null 2>&1 || {
+#    echo
+#    echo "**Error**: You must have \`libtool' installed to compile Gnome."
+#    echo "Get ftp://ftp.gnu.org/pub/gnu/libtool-1.2d.tar.gz"
+#    echo "(or a newer version if it is available)"
+#    DIE=1
+#  }
+#}
 
 #grep "^AM_GNU_GETTEXT" $srcdir/configure.in >/dev/null && {
 #  grep "sed.*POTFILES" $srcdir/configure.in >/dev/null || \
@@ -125,7 +125,7 @@ do
 	  echo "Creating $dr/aclocal.m4 ..."
 	  test -r $dr/aclocal.m4 || touch $dr/aclocal.m4
 	  echo "Running gettextize...  Ignore non-fatal messages."
-	  echo "no" | gettextize --copy
+	  echo "no" | gettextize --force --copy
 	  echo "Making $dr/aclocal.m4 writable ..."
 	  test -r $dr/aclocal.m4 && chmod u+w $dr/aclocal.m4
         fi
@@ -134,16 +134,20 @@ do
 	echo "Creating $dr/aclocal.m4 ..."
 	test -r $dr/aclocal.m4 || touch $dr/aclocal.m4
 	echo "Running gettextize...  Ignore non-fatal messages."
-	echo "no" | gettextize --copy
+	echo "no" | gettextize --force --copy
 	echo "Making $dr/aclocal.m4 writable ..."
 	test -r $dr/aclocal.m4 && chmod u+w $dr/aclocal.m4
       fi
-      if grep "^AM_PROG_LIBTOOL" configure.in >/dev/null; then
-	if test -z "$NO_LIBTOOLIZE" ; then 
-	  echo "Running libtoolize..."
-	  libtoolize --force --copy
-	fi
-      fi
+      if grep "^AC_PROG_INTLTOOL" configure.in >/dev/null; then
+        echo "Running intltoolize ..."
+        intltoolize --copy --force --automake
+      fi 
+#      if grep "^AM_PROG_LIBTOOL" configure.in >/dev/null; then
+#	if test -z "$NO_LIBTOOLIZE" ; then 
+#	  echo "Running libtoolize..."
+#	  libtoolize --force --copy
+#	fi
+#      fi
       echo "Running aclocal $aclocalinclude ..."
       aclocal $aclocalinclude || {
 	echo
@@ -159,7 +163,7 @@ do
 	echo "Running autoheader..."
 	autoheader || { echo "**Error**: autoheader failed."; exit 1; }
       fi
-      echo "Running automake --add-missing --gnu $am_opt ..."
+      echo "Running automake --gnu $am_opt ..."
       automake --add-missing --gnu $am_opt ||
 	{ echo "**Error**: automake failed."; exit 1; }
       echo "Running autoconf ..."
@@ -168,7 +172,7 @@ do
   fi
 done
 
-conf_flags="--enable-maintainer-mode --enable-compile-warnings" #--enable-iso-c
+conf_flags="--enable-maintainer-mode" # --enable-compile-warnings --enable-iso-c
 
 if test x$NOCONFIGURE = x; then
   echo Running $srcdir/configure $conf_flags "$@" ...

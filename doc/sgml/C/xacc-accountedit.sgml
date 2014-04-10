@@ -4,7 +4,7 @@
 <TITLE>Editing an Account</TITLE>
 </ARTHEADER>
 <SECT1>
-<TITLE>Editing an Account</TITLE>
+<TITLE></TITLE>
 <PARA>The "Edit Account" dialog box lets you change the properties
     of an account. Access this via the "edit" button of the
     main window toolbar, the "Accounts" menu, or via the keyboard
@@ -21,7 +21,7 @@
     account are shown.
 
     </PARA>
-<PARA>The source for <EMPHASIS>Stock Quotes</EMPHASIS> can be selected. See <LINK LINKEND="XACC-TICKER">the ticker</LINK> for more
+<PARA>The source for <EMPHASIS>Stock Quotes</EMPHASIS> can be selected. See <LINK LINKEND="xacc-price-sources">Selecting price sources</LINK> for more
     information.
 
     </PARA>
@@ -31,3 +31,7 @@
 </PARA>
 </SECT1>
 </ARTICLE>
+
+<!-- Local variables: -->
+<!-- sgml-parent-document: "gnucash.sgml" -->
+<!-- End: -->

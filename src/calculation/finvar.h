@@ -19,8 +19,8 @@
  *
  ***************************************************************************/
 
-#ifndef __FINVAR_H__
-#define __FINVAR_H__
+#ifndef FINVAR_H
+#define FINVAR_H
 
 #if !defined( EOS )
 #define EOS '\x000'
@@ -46,6 +46,7 @@ typedef enum
   UNDEFINED_CHARACTER,
   NOT_A_VARIABLE,
   PARSER_OUT_OF_MEMORY,
+  NUMERIC_ERROR,
   PARSER_NUM_ERRORS
 }
 ParseError;

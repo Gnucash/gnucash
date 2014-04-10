@@ -1,7 +1,7 @@
 How to install gnucash on SuSE
 ==============================
 (written 2000-01-07 by Peter Pointner <peter@wuzel.m.isar.de>)
-(last changed 2000-09-04 by Herbert Thoma (tma@iis.fhg.de))
+(last changed 2001-06-13 by Herbert Thoma (herbie@hthoma.de))
 
 Notes:
 
@@ -10,9 +10,9 @@ Notes:
   your own risk. If you find errors, you might report them to the
   gnucash mailing list (gnucash-devel@gnucash.org)
 
-- This is for SuSE 6.3 and 6.4 (Intel). Earlier SuSE distributions
-  lack some required packages. Later SuSE distributions didn't exist
-  at the time of writing.
+- This is for SuSE 6.3, 6.4, 7.0, 7.1 and 7.2 (Intel). Earlier SuSE 
+  distributions lack some required packages. Later SuSE distributions 
+  didn't exist at the time of writing.
   NOTE: You can install new packages to older versions of SuSE from
         CD or ftp.suse.de or ftp.suse.com
 
@@ -21,14 +21,17 @@ Notes:
   and you don't need g-wrap. (However, you won't see this howto
   until you installed the GnuCash rpm succesfully ;-).)
 
-- The current stable version is gnucash-1.4.x,
-  the current development version is gnucash-1.5.x,
+- The current stable version is gnucash-1.6.x,
+  the current development version is gnucash-1.7.x,
   the development version needs the latest GNOME libraries
-  to build, especially gnprint >= 0.16 and gdk_pix >= 0.7,
-  which are not included with current SuSE distibutions.
-  The easiest way to get the latest GNOME is to do
+  to build, especially gnprint >= 0.23, gdk_pix >= 0.8
+  and gtkhtml-0.8, which are not included with current SuSE 
+  distibutions. The easiest way to get the latest GNOME is to do
    "lynx -source http://go-gnome.com | sh"
-  as root.
+  as root. 
+  SuSE 7.2 comes with all required gnome packages, but you
+  should get a newer revision of Guppi, if you want to use
+  all features of graphical reports, see below.
 
 Let's go:
 
@@ -36,22 +39,26 @@ Let's go:
   started with a default installation and removed some packages to
   save diskspace.
 
-* Install the following packages:
+* Install the following packages (the list is valid for SuSE 7.2):
   + from series d
-       eperl  guile  swig  xmhtml  xmhtmld gettext
-       libxml libxmld
+       guile gettext libxml libxmld
     and optionally
        autoconf  automake  libtool
     (You must install libtool if you have autoconf/automake
     installed!) 
   + from series x
        xdevel
+  + from series xdev
+       glade glib-devel gtk gtk-devel libglade libglade-devel
   + from series gnm
-       gnlibs gnlibsd
-    for (check) printing
-       gnprint gnprintd
+       Guppi bonobo bonobo-devel gal gconf gdk-pixbuf gdk-pixbuf-devel
+       gnome-core gnome-core-devel gnome-libs gnome-libs-devel
+       gnome-print gnome-print-devel gtkhtml gtkhtml-devel
+       libghttp libghttp-devel libunicode oaf oaf-devel
   + from series gra
        imlib imlibdev
+  + from series sgm
+       docb* jade* sgmltools
 
 * Download slib from
     ftp://ftp.gnu.org/pub/gnu/jacal/slib2c7.zip
@@ -61,15 +68,23 @@ Let's go:
     su root -c "unzip -L /tmp/slib2c7"
 
 * Download g-wrap from
-    ftp://ftp.gnucash.org/pub/g-wrap/g-wrap-0.9.1..tar.gz
+    ftp://ftp.gnucash.org/pub/g-wrap/
+  For the 1.6.x version you need g-wrap-1.1.5.tar.gz or newer
   unpack and untar, then
   ./configure, make, su, make install
 
+* Download Guppi from
+    ftp://ftp.gnome.org/pub/guppi/
+  You need Guppi-0.35.5 or newer, if you want to use all features
+  of the reports
+  unpack and untar, then
+  ./configure --prefix=/opt/gnome, make, su, make install
+
 * Download GnuCash
   stable version:
-    http://www.gnucash.org/pub/gnucash/sources/stable/gnucash-1.4.x.tar.gz
+    http://www.gnucash.org/pub/gnucash/sources/stable/gnucash-1.6.x.tar.gz
   development version:
-    http://www.gnucash.org/pub/gnucash/sources/unstable/1.5.x/gnucash-1.5.x.tar.gz
+    http://www.gnucash.org/pub/gnucash/sources/unstable/
   and unpack it
     tar xzf gnucash-1.y.x.tar.gz
 * Alternatively get GnuCash from cvs
@@ -79,6 +94,10 @@ Let's go:
 
 * The lib directory contains packages that are needed to build GnuCash
   but are not widely available yet. Read the file lib/README for details.
+
+* Make symbolic link for every file in /opt/gnome/share/aclocal
+  to /usr/share/aclocal (or tell me how to modify the automake setup
+  so that it looks in /opt/gnome/share/aclocal for input ;-))
 
 * Configure, build and install gnucash. Installation must probably be
   done as root, the files go to various places in /usr/local.
@@ -91,3 +110,10 @@ Let's go:
 * You may need to run GnuCash once as root, because guile needs to set up
   some things for slib. Alternatively you can try as root:
     guile -c '(use-modules (ice-9 slib)) (require 'new-catalog)'
+
+* If want to send a patch, you need the makepatch perl module, which can
+  be found at:
+    ftp://ftp.cpan.org/pub/CPAN/authors/Johan_Vromans/makepatch-2.00a.tar.gz
+  unpack and untar, then
+  perl Makefile.PL, make, su, make install
+

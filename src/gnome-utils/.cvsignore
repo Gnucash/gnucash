@@ -1,0 +1,12 @@
+Makefile
+Makefile.in
+*.lo
+*.la
+.deps
+.libs
+.scm-links
+gnc-dir.h
+gw-gnome-utils.html
+gw-gnome-utils.h
+gw-gnome-utils.scm
+gw-gnome-utils.c

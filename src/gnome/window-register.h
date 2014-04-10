@@ -21,13 +21,18 @@
  *                                                                  *
 \********************************************************************/
 
-#ifndef __WINDOW_REGISTER_H__
-#define __WINDOW_REGISTER_H__
+#ifndef WINDOW_REGISTER_H
+#define WINDOW_REGISTER_H
 
-#include "RegWindow.h"
-#include "MultiLedger.h"
+#include "gnc-ledger-display.h"
 
-RegWindow * regWindowLedger(xaccLedgerDisplay *ledger);
+/** STRUCTS *********************************************************/
+typedef struct _RegWindow RegWindow;
+
+/** PROTOTYPES ******************************************************/
+RegWindow * regWindowSimple(Account *account);
+RegWindow * regWindowAccGroup(Account *account_group);
+RegWindow * regWindowLedger(GNCLedgerDisplay *ledger);
 
 void gnc_register_raise(RegWindow *regData);
 void gnc_register_jump_to_blank(RegWindow *regData);

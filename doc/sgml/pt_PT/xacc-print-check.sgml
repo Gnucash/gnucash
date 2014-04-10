@@ -1,0 +1,107 @@
+
+<ARTICLE ID="XACC-PRINT-CHECK">
+<ARTHEADER>
+<TITLE>Imprimir Cheques</TITLE>
+</ARTHEADER>
+<PARA>Pode imprimir uma transacção GnuCash como um cheque seleccionando 
+    "Imprimir Cheque" no menu de Transacções numa janela de visualização 
+    de registo.
+
+    </PARA>
+<PARA>Na janela de Impressão de Cheque, seleccione o estilo de formato 
+    de cheque que deseja utilizar, a posição do cheque na página, e o 
+    formato de impressão da data no cheque. Carregar no <GUIMENU>OK</GUIMENU> 
+    leva-lo-á para a janela de <LINK LINKEND="XACC-PRINT">Impressão GnuCash</LINK>, 
+    Que lhe permitirá ver o cheque antes de o imprimir, seleccionar 
+    uma impressora e tamanho de papel, e também iniciar o processo de impressão.
+
+    </PARA>
+<sect1>
+<TITLE>Formato do cheque</TITLE>
+<PARA>    </PARA>
+<PARA>Por forma a imprimir um cheque, você tem de saber onde as linhas e 
+    caixas pré-impressas se encontram no cheque. Existem dois formatos de 
+    cheque muito utilizados: compatíveis Quicken/QuickBooks (tm) e
+    compatíveis Microsoft Money (tm).
+    Por defeito, o formato do cheque é <APPLICATION>Quicken/QuickBooks</APPLICATION>,
+    que imprime para qualquer cheque pré-impresso compatível com o 
+    Quicken.
+
+    </PARA>
+</sect1>
+<sect1>
+<TITLE>Formatos de Cheque Personalizados</TITLE>
+<PARA>Caso deseje imprimir para um tipo de cheque que não existe 
+    na opção de menu <GUIMENU>Formato de Cheque</GUIMENU>, seleccione 
+    <GUIMENU>Personalizado</GUIMENU> no menu de formato e introduza a 
+    posição dos vários campos do cheque nas caixas de entrada abaixo.
+
+    </PARA>
+<PARA>Posições na área de introdução do Formato de Cheque Personalizado 
+    são especificadas com x = 0 no extremo esquerdo do cheque e x 
+    sendo incrementado para a direita, e y = 0 no extremo inferior do cheque 
+    com o y a ser incrementado para o topo. Os valores podem ser introduzidos 
+    como sendo inteiros ou decimais. As unidades de medida especificadas na 
+    opção de menu <GUIMENU>Unidades</GUIMENU> são utilizadas para interpretar 
+    todos os valores introduzidos na área de formato de cheque personalizado.
+
+    </PARA>
+<PARA>Caso consiga um conjunto operacional de parâmetros de um Formato de Cheque 
+    Personalizado para um formato de cheque imprimível disponível comercialmente, 
+    por favor envie-o para <EMAIL>gnucash-devel@gnucash.org</EMAIL> para que o 
+    possamos incluir como opção da aplicação numa versão futura.
+
+    </PARA>
+</sect1>
+<sect1>
+<TITLE>Posição do cheque</TITLE>
+<PARA>Impressos de cheques imprimíveis estão disponíveis em vários estilos. Em 
+    geral, cada folha imprimível está dividida em três secções, e cada secção 
+    pode ser um cheque ou um talão. A opção de menu de Posição do Cheque 
+    permite-lhe seleccionar que secção da página contém o cheque no qual 
+    deseja imprimir. <GUIMENU>Topo</GUIMENU>, <GUIMENU>Centro</GUIMENU> e 
+    <GUIMENU>Rodapé</GUIMENU> deverão ser correctamente definidas para 
+    formulários de cheques que utilizem o tamanho de papel que seleccionar 
+    na janela de impressão.
+
+    </PARA>
+</sect1>
+<sect1>
+<TITLE>Posição personalizada de cheque</TITLE>
+<PARA>Se as posições de cheque pré-definidas não funcionarem correctamente 
+    para os seus formulários de cheque, pode seleccionar <GUIMENU>Personalizar</GUIMENU> 
+    na opção de menu Posição do Cheque e introduzir uma posição para o cheque 
+    na entrada <GUIMENU>Posição do Cheque</GUIMENU>. Introduza a distância ao longo 
+    da margem esquerda do papel desde o canto inferior esquerdo da página 
+    até ao canto inferior esquerdo do cheque. As unidades desta medida são aquelas 
+    seleccionadas na opção de menu "Unidades".
+    </PARA>
+</sect1>
+<sect1>
+<TITLE>Formato da data</TITLE>
+<PARA>Seleccione o seu formato de data favorito da lista. A 
+    lista mostra exemplos utilizando a data de 31 de Dezembro de 2000 
+    para todos os formatos, mas a data será sunstituída pela real 
+    aquando da impressão.
+    Os formatos <SCREEN>MM/DD/</SCREEN> e <SCREEN>DD/MM/</SCREEN> estão 
+    disponíveis, mas eles são fortemente desaconselhados visto nem sempre 
+    ser possível distinguir um do outro. Por favor utilize um formato com 
+    um nome de mês completo ou abreviado em vez de um número.
+
+    </PARA>
+</sect1>
+<sect1>
+<TITLE>Formatos de data personalizados</TITLE>
+<PARA>Caso deseje utilizar outro formato de data para além dos disponíveis na 
+    lista, seleccione <GUIMENU>Personalizar</GUIMENU> e introduza um formato 
+    de data na caixa <GUIMENU>Formato de Data</GUIMENU> na área de definições 
+    personalizadas. Se o formato de data personalizado for seleccionado, este 
+    texto de formatação é passado para o <FUNCTION>strftime(3)</FUNCTION> como 
+    um identificador de formato.
+  </PARA>
+</sect1>
+</ARTICLE>
+
+<!-- Local variables: -->
+<!-- sgml-parent-document: "gnucash.sgml" -->
+<!-- End: -->

@@ -21,33 +21,57 @@
  *                                                                  *
 \********************************************************************/
 
-#ifndef __GNC_ID_P_H__
-#define __GNC_ID_P_H__ 1
+#ifndef GNC_ID_P_H
+#define GNC_ID_P_H 1
+
+#include <glib.h>
 
 #include "GNCId.h"
+#include "gnc-engine.h"
 
 /* This file defines an engine-only API for using gnucash entity
  * identifiers. */
 
+typedef struct gnc_entity_table GNCEntityTable;
+
+/* Create and destroy entity tables */
+GNCEntityTable * xaccEntityTableNew (void);
+void xaccEntityTableDestroy (GNCEntityTable *table);
+
 /* Generate a new id. This function is guaranteed to return an id that
  * is unique within the scope of all GnuCash entities being managed by
  * the current invocation of GnuCash. GnuCash routines should always
- * use this function and not guid_new! */
-void xaccGUIDNew(GUID *guid);
+ * use this function and not guid_new! 
+ *
+ * When considered over all possible instances of gnucash, the odds of 
+ * this routine returning a non-unique id are still astronomically small.
+ * If you had a gazzillion computers computing new ids, for the entire
+ * age of teh universe, you'd still have a one-in-a-million chance of
+ * coming up with a duplicate.  2^128 is a really really big number.
+ */
+void xaccGUIDNew (GUID *guid, GNCBook *book);
+void xaccGUIDNewEntityTable (GUID *guid, GNCEntityTable *entity_table);
 
 /* Lookup an entity given an id and a type. If there is no entity
  * associated with the id, or if it has a different type, NULL
  * is returned. */
-void * xaccLookupEntity(const GUID * guid, GNCIdType entity_type);
+gpointer xaccLookupEntity (GNCEntityTable *entity_table,
+                           const GUID * guid, GNCIdType entity_type);
 
 /* Store the given entity under the given id with the given type. */
-void xaccStoreEntity(void * entity, const GUID * guid, GNCIdType entity_type);
+void xaccStoreEntity (GNCEntityTable *entity_table,
+                      gpointer entity, const GUID * guid,
+                      GNCIdType entity_type);
 
 /* Remove any existing association between an entity and the given
  * id. The entity is not changed in any way. */
-void xaccRemoveEntity(const GUID * guid);
+void xaccRemoveEntity (GNCEntityTable *entity_table, const GUID * guid);
 
-GHashTable *xaccGetAndResetEntityTable();
-void xaccSetEntityTable(GHashTable *et);
+GNCIdType xaccGUIDTypeEntityTable (const GUID * guid,
+                                   GNCEntityTable *entity_table);
+
+/* Initialize and shutdown the GNC Id system. */
+void xaccGUIDInit (void);
+void xaccGUIDShutdown (void);
 
 #endif

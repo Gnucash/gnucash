@@ -22,12 +22,16 @@
 \********************************************************************/
 
 
-#ifndef __XACC_CONFIG_H__
-#define __XACC_CONFIG_H__
+#ifndef GNC_CONFIG_H
+#define GNC_CONFIG_H
 
 /* Package name and version number */
 #undef PACKAGE
 #undef VERSION
+
+#undef GNUCASH_MAJOR_VERSION
+#undef GNUCASH_MINOR_VERSION
+#undef GNUCASH_MICRO_VERSION
 
 /* Are we compiling for GNOME?  The answer right now is always yes... */
 #undef GNOME
@@ -53,8 +57,25 @@
 /* is guile available */
 #undef HAVE_GUILE
 
+/* New or old Guile Smob for G-wrap */
+#undef GWRAP_OLD_GUILE_SMOB
+
+/* The db1 database library */
+#undef PREFER_DB1
+
+/* Should we add guppi support? */
+#undef USE_GUPPI
+
+/* Should we have efence linked in */
+#undef USE_EFENCE
+
 /* Use the new gtkhtml widget instead of the old xmhtml widget */
 #undef HAVE_LIBGTKHTML
+
+/* SSL support for ghttp is still not in the main tree, so test for it
+ * separately */
+#undef HAVE_LIBGHTTP
+#undef HAVE_OPENSSL
 
 /* misc image and compression libs needed by html widget */
 #undef HAVE_ZLIB               
@@ -63,6 +84,7 @@
 
 /* Configure found the function malloc_usable_size */
 #undef HAVE_MALLOC_USABLE_SIZE  
+
 
 /*** Begin i18n ***/
 
@@ -82,5 +104,7 @@
 #undef ENABLE_NLS
 
 /*** End i18n ***/
+
+#undef HAVE_XML_VERSION_HEADER
 
 #endif

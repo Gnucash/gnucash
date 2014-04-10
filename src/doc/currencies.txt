@@ -1,0 +1,52 @@
+From Bill Gribble <grib@billgribble.com>
+Tue, 3 Oct 2000 11:09:54 -0500 
+
+We need to fix a single way of dealing with this that
+addresses all of the concerns.  Maybe we should list the
+problems/requirements to make sure we are talking about the same
+thing.  I know I've repeated several times that I believe the
+"eliminate Currency accounts" problem-set is separable from the
+"global A=L+E" problem-set; I'll list them all together here, because
+I think it's just a "feature" of some particular solutions that they
+are separable.
+
+  - we want to eliminate the need for currency trading accounts.  From
+    a user interaction perspective, this means we need to allow
+    transfers directly between accounts denominated in different
+    commodities.
+  - we want transactions to have clear and unambiguous balancing
+    semantics.
+  - we want to store the actual amounts of commodities involved 
+    transactions rather than price and quantity.
+  - we want to be able to globally check and display the terms of the
+    accounting equation (and all account balances) in a
+    user-selectable functional currency.
+
+I think the following bits will address the first three issues above.
+Basically I'm just agreeing with your last suggestion, Dave; Rob and I
+hammered on it on a white board and weren't able to poke any holes.
+
+  - Eliminate the 'currency' from the Account structure.  Add a
+    'currency' to the Transaction structure.  Each transaction's
+    'currency' is by definition the balancing common currency for the
+    splits in that transaction.
+
+  - Eliminate the 'share price' field from the Split structure and
+    replace it with a 'value' field.  The 'value' is a translation of
+    the Split's 'damount' (which is the amount of the Account's
+    security involved) into the Transaction's balancing currency.
+
+The balancing semantics of this approach are unambiguous, no existing
+balanced gnucash transactions would be disallowed (the transaction's
+common currency just gets saved in a pointer) and the fuzzy
+distinction between the account's currency, security, damount, value
+is cleared up.
+
+About the last point, the global accounting equation.  Evaluating this
+equation requires the computation of current asset values and
+unrealized gains/losses.  I believe this is possible in a
+straightforward way using the reporting framework, a user-selectable
+functional currency, accepted accounting policies, and a historical
+price database.  There has been discussion about moving to a
+report-based main window; if that were to be the case, we could make
+the accounting equation readily visible to the user.

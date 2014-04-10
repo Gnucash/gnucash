@@ -1,0 +1,90 @@
+module Query {
+  enum SortBy { STANDARD, DATE, DATEENTERED, DATERECONCILED, NUM,
+		AMOUNT, MEMO, DESC, RECONCILE, NONE };
+  enum QueryOp { AND, OR, NAND, NOR, XOR };
+  enum pdtypet { DATE, AMOUNT, ACCOUNT, STRING, CLEARED, MISC };
+  enum acctmatcht { ACCT_MATCH_ALL, ACCT_MATCH_ANY, ACCT_MATCH_NONE } 
+  enum amtmatcht { AMT_MATCH_ATLEAST, AMT_MATCH_ATMOST, 
+		   AMT_MATCH_EXACTLY } ;
+  
+  enum amtmatchsgnt { AMT_SGN_MATCH_EITHER, AMT_SGN_MATCH_CREDIT, 
+		      AMT_SGN_MATCH_DEBIT } ;
+
+  enum clearing { CLEARED_NO, CLEARED_CLEARED, CLEARED_RECONCILED,
+		  CLEARED_FROZEN };
+
+  enum strmatching { STRING_MATCH_CASE, STRING_MATCH_REGEXP,
+		     STRING_MATCH_INSENSITIVE };
+  
+  struct DatePredicateData {
+    long          usestart;
+    Timespec     start;
+    long          useend;
+    Timespec     end;
+  } 
+  struct AmountPredicateData {
+    amtmatcht     how;
+    amtmatchsgnt amt_sgn;
+    double          amount;
+  };
+  struct AccountPredicateData {
+    acctmatcht how;
+    Accounts::AccountList accounts;
+    // Note that this references a type from
+    // module "Accounts"
+  }
+  struct StringPredicateData {
+    strmatching behavior;  /* what kind of search? */
+    string matchstring;
+    // regex_t        compiled;  // Compilation isn't part of the interface
+  } StringPredicateData;
+  struct MiscPredicateData {
+    long how;  /* Shouldn't this use one of the enums? */
+    long data; /* What is this? */
+  }; 
+  struct ClearedPredicateData {
+    long how;
+  };
+
+  union PredicateData switch (pdtypet) {
+  case DATE:
+    DatePredicateData date;
+  case AMOUNT:
+    AmountPredicateData amount;
+  case ACCOUNT: 
+    AccountPredicateData acct;
+  case STRING:  
+    StringPredicateData str;
+  case CLEARED: 
+    ClearedPredicateData cleared;
+  case MISC: 
+    MiscPredicateData misc;  
+  }
+
+  struct QueryTerm {
+    Predicate p;  /* What is this type supposed to be? */
+    PredicateData data;
+    long sense;
+  };
+
+  /* Something is wrong with the following; I am somehow not correctly
+     understanding what the Predicate type is...  I'll punt and
+     pretend that a Query consists of a binary tree of QueryTerm
+     elements... */
+
+  struct Query {
+    QueryTerm qt;
+    QueryOp combinethus;
+    Query subquery;
+  }; 
+  
+  // Locally, there would be the whole host of "Query Construction"
+  // functions to build up a complex query.
+
+  void InvokeQuery (in query q, 
+		    out Transactions::TransactionList txns);
+
+  /* Note that this references, from the "Transactions" module, the
+     "TransactionList" typedef, which would reflect a sequence of
+     transactions... */
+};

@@ -1,0 +1,254 @@
+<ARTICLE ID="xacc-price-sources">
+
+<ARTHEADER>
+<TITLE>Fontes de Cotações</TITLE>
+</ARTHEADER>
+<sect1>
+<TITLE>Fontes de Cotações para Actualização Automática de Preços</TITLE>
+
+<PARA>Para obter actualizações automáticas de preços da internet para 
+<LINK LINKEND="STOCKACCT">contas de acções</LINK>, você necessita de 
+definir apropriadamente a fonte de cotações.  Isto pode ser feito na 
+nova janela de conta, quando a conta é criada, ou modificado em qualquer 
+altura seleccionando a conta na janela de contas, e escolhendo "editar 
+conta" do menu principal.  Ambas as janelas têm uma secção chamada 
+"Fonte de Cotações".
+</PARA>
+
+<para>Para activar a actualização automática de preços, faça o seguinte:</para>
+
+<ITEMIZEDLIST>
+  <LISTITEM>
+      <para>
+        Cretifique-se que a caixa de selecção "obter cotações online" está picada.
+        
+    </PARA>
+  </LISTITEM>
+  <LISTITEM>
+    <PARA>Introduza um símbolo de ticker válido na caixa de texto marcada 
+    "Activo:" Um símbolo de ticker é o código que identifica a acção ou 
+    fundo - usando um exemplo familiar, o símbolo de ticker da International 
+    Business Machines é IBM, listado na Bolsa de Nova York. Dando outro exemplo, 
+    a McDonald's Corpororation é MCD e a Electricidade de Portugal é EDP.
+  </para>
+  </LISTITEM>
+  <LISTITEM>
+    <PARA>Seleccione uma fonte de cotações a partir do menu de selecção. De momento 
+    as fontes de cotações suportadas incluem o <EMPHASIS>Yahoo</EMPHASIS>,
+    <EMPHASIS>Yahoo Europa</EMPHASIS>, <EMPHASIS>Fidelity
+    Investments</EMPHASIS>, <EMPHASIS>T. Rowe Price</EMPHASIS>, o 
+    <EMPHASIS>Vanguard Group</EMPHASIS>, <EMPHASIS>the Australian
+    Stock Exchange</EMPHASIS> (ASX) e 
+    <EMPHASIS>TIAA-CREF</EMPHASIS>.  Note que o Yahoo disponibiliza 
+    cotações para muitos fundos <EMPHASIS>incluindo</EMPHASIS>
+    Fidelity, T.Rowe Price e Vanguard, e que os preços citados no 
+    Yahoo <EMPHASIS>deverão</EMPHASIS> ser identicos aos que podem ser 
+    encontrados noutras fontes (caso contrário, alguém anda a divulgar 
+    informação incorrecta!). Caso seleccione Yahoo Europa, deverá adicionar 
+    o código de mercado para o activo, tal como PA para Paris, BE para 
+    Berlim, etc. Exemplo: 12150.PA (um papel Peugeot no mercado de Paris).
+    A tabela abaixo lista os códigos para os vários mercados.
+    </PARA>
+  </LISTITEM>
+  <LISTITEM>
+    <PARA>Assegure-se que a moeda da conta coincide com a da fonte para 
+    a acção que seleccionou. Isto significa:
+
+        <ITEMIZEDLIST>
+<LISTITEM>
+<PARA>Cotações da <EMPHASIS>Australian Stock Exchange</EMPHASIS>
+          (ASX - Bolsa Australiana) deverão estar em dólares Australianos (AUD).
+
+          </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Cotações do <EMPHASIS>Yahoo Europe</EMPHASIS> deverão estar em Euros
+          (ECU)
+
+          </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Cotações do <EMPHASIS>Yahoo</EMPHASIS>, <EMPHASIS>Fidelity
+      Investments</EMPHASIS>, <EMPHASIS>T. Rowe Price</EMPHASIS> 
+      e do <EMPHASIS>Vanguard
+      Group</EMPHASIS> deverão estar em dólares americanos (USD).
+        </PARA>
+</LISTITEM>
+    </itemizedlist>
+  </para>
+      </listitem>
+
+<listitem>      
+<para>Seleccione a configuração correcta de fuso-horário (CORRIGIR: QUAL É A CONFIGURAÇÃO 
+CORRECTA DE FUSO-HORÁRIO???)
+        </para></listitem>
+  </ITEMIZEDLIST>
+
+<note>
+<para>Instruções para actualizar as cotações encontram-se na documentação 
+no <link linkend="xacc-price-editor">editor de cotações</link>.
+</para>
+</note>
+
+<note>
+<PARA>Note que a BVL não é suportada pelo Yahoo Europa.</PARA>
+</note>
+
+    <TABLE>
+<TITLE>Lista de Códigos para os Mercados Europeus</TITLE>
+<TGROUP COLS="2">
+<THEAD>
+<ROW>
+<ENTRY>Código</ENTRY>
+<ENTRY>Mercado</ENTRY>
+</ROW>
+</THEAD>
+<TBODY>
+<ROW>
+<ENTRY>PA</ENTRY>
+<ENTRY>Paris</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>BC</ENTRY>
+<ENTRY>Barcelona</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>BE</ENTRY>
+<ENTRY>Berlim</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>BI</ENTRY>
+<ENTRY>Bilbao</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>BR</ENTRY>
+<ENTRY>Br&ecirc;men</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>CO</ENTRY>
+<ENTRY>Copenhaga</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>D</ENTRY>
+<ENTRY>Dusseldorf</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>F</ENTRY>
+<ENTRY>Frankfurt</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>H</ENTRY>
+<ENTRY>Hamburgo</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>HA</ENTRY>
+<ENTRY>Hanover</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>L</ENTRY>
+<ENTRY>Londres</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>MA</ENTRY>
+<ENTRY>Madrid</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>MC</ENTRY>
+<ENTRY>Madrid (M.C.)</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>MI</ENTRY>
+<ENTRY>Milão</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>MU</ENTRY>
+<ENTRY>Munique</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>O</ENTRY>
+<ENTRY>Oslo</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>ST</ENTRY>
+<ENTRY>Estocolmo</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>SG</ENTRY>
+<ENTRY>Estugarda</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>VA</ENTRY>
+<ENTRY>Valência</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>FX</ENTRY>
+<ENTRY>Xetra</ENTRY>
+</ROW>
+</TBODY>
+</TGROUP>
+</TABLE>
+
+    <TABLE>
+<TITLE>Pseudo-símbolos que podem ser utilizados para cotações TIAA-CREF</TITLE>
+<TGROUP COLS="2">
+<THEAD>
+<ROW>
+<ENTRY>Nome</ENTRY>
+<ENTRY>Pseudo-símbolo</ENTRY>
+</ROW>
+</THEAD>
+<TBODY>
+<ROW>
+<ENTRY>Acção</ENTRY>
+<ENTRY>CREFstok</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>Mercado Cambial</ENTRY>
+<ENTRY>CREFmony</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>Índice Activos</ENTRY>
+<ENTRY>CREFequi</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>Obrigação Indexada à Inflacção</ENTRY>
+<ENTRY>CREFinfb</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>Mercado Obrigacionista</ENTRY>
+<ENTRY>CREFbond</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>TIAA Imobiliário</ENTRY>
+<ENTRY>TIAAreal</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>Escolha Social (Social Choice)</ENTRY>
+<ENTRY>CREFsoci</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>Índice de Acções Teachers PA</ENTRY>
+<ENTRY>TIAAsndx</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>Activos Globais</ENTRY>
+<ENTRY>CREFglob</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>Selecção de Acções Teachers PA</ENTRY>
+<ENTRY>TIAAsele</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>Crescimento</ENTRY>
+<ENTRY>CREFgrow</ENTRY>
+</ROW>
+</TBODY>
+</TGROUP>
+</TABLE>
+
+</SECT1>
+</ARTICLE>
+
+<!-- Local variables: -->
+<!-- sgml-parent-document: "gnucash.sgml" -->
+<!-- End: -->

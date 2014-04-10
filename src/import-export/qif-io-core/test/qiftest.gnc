@@ -1,0 +1,218 @@
+<?xml version="1.0"?>
+<gnc-v2>
+<gnc:count-data cd:type="account">2</gnc:count-data>
+<gnc:count-data cd:type="transaction">7</gnc:count-data>
+<gnc:account version="2.0.0">
+  <act:name/>
+  <act:id type="guid">676b480e5cfaa3457ee392e3c51ced88</act:id>
+  <act:type>NO_TYPE</act:type>
+  <act:commodity-scu>100000</act:commodity-scu>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name/>
+  <act:id type="guid">e67c88bb5901cbd39a577e196258bb1d</act:id>
+  <act:type>NO_TYPE</act:type>
+  <act:commodity-scu>100000</act:commodity-scu>
+</gnc:account>
+<gnc:transaction version="2.0.0">
+  <trn:id type="guid">a45aab10729e86f89a09fdade4ccc2e0</trn:id>
+  <trn:date-posted>
+    <ts:date>1999-03-18 00:00:00 -0600</ts:date>
+  </trn:date-posted>
+  <trn:date-entered>
+    <ts:date>2001-07-27 11:28:22 -0500</ts:date>
+    <ts:ns>329019000</ts:ns>
+  </trn:date-entered>
+  <trn:description>Check Number:   203</trn:description>
+  <trn:splits>
+    <trn:split>
+      <split:id type="guid">9d2a30fa881189fbc8384f81e13fa709</split:id>
+      <split:reconciled-state>c</split:reconciled-state>
+      <split:value>-9999000/100000</split:value>
+      <split:quantity>-9999000/100000</split:quantity>
+      <split:account type="guid">e67c88bb5901cbd39a577e196258bb1d</split:account>
+    </trn:split>
+    <trn:split>
+      <split:id type="guid">e2e6868646216b8e96d6c9273dda2dff</split:id>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>9999000/100000</split:value>
+      <split:quantity>9999000/100000</split:quantity>
+      <split:account type="guid">676b480e5cfaa3457ee392e3c51ced88</split:account>
+    </trn:split>
+  </trn:splits>
+</gnc:transaction>
+<gnc:transaction version="2.0.0">
+  <trn:id type="guid">d46556507b3b7b19682763a184499486</trn:id>
+  <trn:date-posted>
+    <ts:date>1999-03-19 00:00:00 -0600</ts:date>
+  </trn:date-posted>
+  <trn:date-entered>
+    <ts:date>2001-07-27 11:28:22 -0500</ts:date>
+    <ts:ns>315763000</ts:ns>
+  </trn:date-entered>
+  <trn:description>Direct Deposit</trn:description>
+  <trn:splits>
+    <trn:split>
+      <split:id type="guid">7035db7e9ba78c6dd4cc8967c5f5f954</split:id>
+      <split:memo>                ADMINISTAFF COMP</split:memo>
+      <split:reconciled-state>c</split:reconciled-state>
+      <split:value>9999000/100000</split:value>
+      <split:quantity>9999000/100000</split:quantity>
+      <split:account type="guid">e67c88bb5901cbd39a577e196258bb1d</split:account>
+    </trn:split>
+    <trn:split>
+      <split:id type="guid">427cce0e2b033b697ca6433cd4f5ad13</split:id>
+      <split:memo>                ADMINISTAFF COMP</split:memo>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>-9999000/100000</split:value>
+      <split:quantity>-9999000/100000</split:quantity>
+      <split:account type="guid">676b480e5cfaa3457ee392e3c51ced88</split:account>
+    </trn:split>
+  </trn:splits>
+</gnc:transaction>
+<gnc:transaction version="2.0.0">
+  <trn:id type="guid">e3a6834c0a9695aa082562e48223e845</trn:id>
+  <trn:date-posted>
+    <ts:date>1999-03-20 00:00:00 -0600</ts:date>
+  </trn:date-posted>
+  <trn:date-entered>
+    <ts:date>2001-07-27 11:28:22 -0500</ts:date>
+    <ts:ns>314187000</ts:ns>
+  </trn:date-entered>
+  <trn:description>Point of Sale Transaction  FRY'S</trn:description>
+  <trn:splits>
+    <trn:split>
+      <split:id type="guid">71222dc2c372f559ce3a0ce4e2ae09ef</split:id>
+      <split:memo>FOOD STOR 7770 E. MCDOWELL       SCOTTSDALE</split:memo>
+      <split:reconciled-state>c</split:reconciled-state>
+      <split:value>-9999000/100000</split:value>
+      <split:quantity>-9999000/100000</split:quantity>
+      <split:account type="guid">e67c88bb5901cbd39a577e196258bb1d</split:account>
+    </trn:split>
+    <trn:split>
+      <split:id type="guid">7af77bf9af90902aef1d1ec745614c4f</split:id>
+      <split:memo>FOOD STOR 7770 E. MCDOWELL       SCOTTSDALE</split:memo>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>9999000/100000</split:value>
+      <split:quantity>9999000/100000</split:quantity>
+      <split:account type="guid">676b480e5cfaa3457ee392e3c51ced88</split:account>
+    </trn:split>
+  </trn:splits>
+</gnc:transaction>
+<gnc:transaction version="2.0.0">
+  <trn:id type="guid">5470ac24f1f928b1722720b4be94073a</trn:id>
+  <trn:date-posted>
+    <ts:date>1999-03-21 00:00:00 -0600</ts:date>
+  </trn:date-posted>
+  <trn:date-entered>
+    <ts:date>2001-07-27 11:28:22 -0500</ts:date>
+    <ts:ns>312579000</ts:ns>
+  </trn:date-entered>
+  <trn:description>Point of Sale Transaction  ABCO</trn:description>
+  <trn:splits>
+    <trn:split>
+      <split:id type="guid">62a43470f3850db3af8be603292e0664</split:id>
+      <split:memo>FOODS #425 4101 N. 28TH STREET    PHOENIX</split:memo>
+      <split:reconciled-state>c</split:reconciled-state>
+      <split:value>-9999000/100000</split:value>
+      <split:quantity>-9999000/100000</split:quantity>
+      <split:account type="guid">e67c88bb5901cbd39a577e196258bb1d</split:account>
+    </trn:split>
+    <trn:split>
+      <split:id type="guid">0a6ed5cdf4aeaa0bb8540de7f118291b</split:id>
+      <split:memo>FOODS #425 4101 N. 28TH STREET    PHOENIX</split:memo>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>9999000/100000</split:value>
+      <split:quantity>9999000/100000</split:quantity>
+      <split:account type="guid">676b480e5cfaa3457ee392e3c51ced88</split:account>
+    </trn:split>
+  </trn:splits>
+</gnc:transaction>
+<gnc:transaction version="2.0.0">
+  <trn:id type="guid">6500bf9438dcda6eef08336db1d6e309</trn:id>
+  <trn:date-posted>
+    <ts:date>1999-03-22 00:00:00 -0600</ts:date>
+  </trn:date-posted>
+  <trn:date-entered>
+    <ts:date>2001-07-27 11:28:22 -0500</ts:date>
+    <ts:ns>310653000</ts:ns>
+  </trn:date-entered>
+  <trn:description>Check Number:   200</trn:description>
+  <trn:splits>
+    <trn:split>
+      <split:id type="guid">221dc1b9ae283c96a330f8281849eced</split:id>
+      <split:reconciled-state>c</split:reconciled-state>
+      <split:value>-9999000/100000</split:value>
+      <split:quantity>-9999000/100000</split:quantity>
+      <split:account type="guid">e67c88bb5901cbd39a577e196258bb1d</split:account>
+    </trn:split>
+    <trn:split>
+      <split:id type="guid">82279f63494c9d3b4469e9eab793315b</split:id>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>9999000/100000</split:value>
+      <split:quantity>9999000/100000</split:quantity>
+      <split:account type="guid">676b480e5cfaa3457ee392e3c51ced88</split:account>
+    </trn:split>
+  </trn:splits>
+</gnc:transaction>
+<gnc:transaction version="2.0.0">
+  <trn:id type="guid">dd52a96000be560b831a3c6b72756997</trn:id>
+  <trn:date-posted>
+    <ts:date>1999-03-24 00:00:00 -0600</ts:date>
+  </trn:date-posted>
+  <trn:date-entered>
+    <ts:date>2001-07-27 11:28:22 -0500</ts:date>
+    <ts:ns>309076000</ts:ns>
+  </trn:date-entered>
+  <trn:description>Point of Sale Transaction</trn:description>
+  <trn:splits>
+    <trn:split>
+      <split:id type="guid">30f71490ba4dc5004f957994efa46ce5</split:id>
+      <split:memo>   TGI FRIDAYS #1859      SCOTTSDALE   AZUS</split:memo>
+      <split:reconciled-state>c</split:reconciled-state>
+      <split:value>-9999000/100000</split:value>
+      <split:quantity>-9999000/100000</split:quantity>
+      <split:account type="guid">e67c88bb5901cbd39a577e196258bb1d</split:account>
+    </trn:split>
+    <trn:split>
+      <split:id type="guid">24c1b63b4037f310044c440eb25d6afa</split:id>
+      <split:memo>   TGI FRIDAYS #1859      SCOTTSDALE   AZUS</split:memo>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>9999000/100000</split:value>
+      <split:quantity>9999000/100000</split:quantity>
+      <split:account type="guid">676b480e5cfaa3457ee392e3c51ced88</split:account>
+    </trn:split>
+  </trn:splits>
+</gnc:transaction>
+<gnc:transaction version="2.0.0">
+  <trn:id type="guid">c9106cc5f7fb3c5d89d019b67058b208</trn:id>
+  <trn:date-posted>
+    <ts:date>1999-03-25 00:00:00 -0600</ts:date>
+  </trn:date-posted>
+  <trn:date-entered>
+    <ts:date>2001-07-27 11:28:22 -0500</ts:date>
+    <ts:ns>307172000</ts:ns>
+  </trn:date-entered>
+  <trn:description>Share Withdrawal</trn:description>
+  <trn:splits>
+    <trn:split>
+      <split:id type="guid">32367c2efb4d0585c7e57443be43556c</split:id>
+      <split:reconciled-state>c</split:reconciled-state>
+      <split:value>-9999000/100000</split:value>
+      <split:quantity>-9999000/100000</split:quantity>
+      <split:account type="guid">e67c88bb5901cbd39a577e196258bb1d</split:account>
+    </trn:split>
+    <trn:split>
+      <split:id type="guid">884a392c130f96856c0ffb3887c9eb9f</split:id>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>9999000/100000</split:value>
+      <split:quantity>9999000/100000</split:quantity>
+      <split:account type="guid">676b480e5cfaa3457ee392e3c51ced88</split:account>
+    </trn:split>
+  </trn:splits>
+</gnc:transaction>
+</gnc-v2>
+
+<!-- Local variables: -->
+<!-- mode: xml        -->
+<!-- End:             -->

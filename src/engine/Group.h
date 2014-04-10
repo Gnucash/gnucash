@@ -1,5 +1,5 @@
 /********************************************************************\
- * Group.h -- the main data structure of the program                *
+ * Group.h -- chart of accounts (hierarchical tree of accounts)     *
  * Copyright (C) 1997 Robin D. Clark                                *
  * Copyright (C) 1997, 1998, 1999, 2000 Linas Vepstas               *
  *                                                                  *
@@ -22,37 +22,42 @@
  *                                                                  *
 \********************************************************************/
 
-#ifndef __XACC_ACCOUNT_GROUP_H__
-#define __XACC_ACCOUNT_GROUP_H__
+#ifndef XACC_ACCOUNT_GROUP_H
+#define XACC_ACCOUNT_GROUP_H
 
 #include <glib.h>
 
-#include "config.h"
-#include "gnc-common.h"
-
 #include "Account.h"
 #include "GNCId.h"
+#include "gnc-book.h"
+#include "gnc-engine.h"
 
 
 /** PROTOTYPES ******************************************************/
-AccountGroup *xaccMallocAccountGroup( void );
-void          xaccFreeAccountGroup( AccountGroup *account_group );
+AccountGroup *xaccMallocAccountGroup (GNCBook *book);
+void          xaccFreeAccountGroup (AccountGroup *account_group);
+
+GNCBook * xaccGroupGetBook (AccountGroup *group);
+
+void          xaccAccountGroupBeginEdit (AccountGroup *grp);
+void 	      xaccAccountGroupCommitEdit (AccountGroup *grp);
 
 /*
- * The xaccConcatGroups() subroutine will move all accounts
+ * The xaccGroupConcatGroup() subroutine will move all accounts
  *    from the "from" group to the "to" group
  *
- * The xaccMergeAccounts() subroutine will go through a group,
+ * The xaccGroupMergeAccounts() subroutine will go through a group,
  *    merging all accounts that have the same name and description.
  *    This function is useful when importing Quicken(TM) files.
  */
-void    xaccConcatGroups (AccountGroup *to, AccountGroup *from);
-void    xaccMergeAccounts (AccountGroup *grp);
+
+void    xaccGroupConcatGroup (AccountGroup *to, AccountGroup *from);
+void    xaccGroupMergeAccounts (AccountGroup *grp);
 
 /*
- * The xaccGroupNotSaved() subroutine will return 
- *    a non-zero value if any account in the group or in
- *    any subgroup hasn't been saved.
+ * The xaccGroupNotSaved() subroutine will return TRUE
+ *    if any account in the group or in any subgroup
+ *    hasn't been saved.
  *
  * The xaccGroupMarkSaved() subroutine will mark
  *    the entire group as having been saved, including 
@@ -60,33 +65,40 @@ void    xaccMergeAccounts (AccountGroup *grp);
  *
  * The xaccGroupMarkNotSaved() subroutine will mark
  *    the given group as not having been saved.
+ *
+ * The xaccGroupMarkDoFree() subroutine will mark
+ *    all accounts in the group as being destroyed.
  */
-int     xaccGroupNotSaved  (AccountGroup *grp);
-void    xaccGroupMarkSaved (AccountGroup *grp);
-void    xaccGroupMarkNotSaved (AccountGroup *grp);
+
+gboolean xaccGroupNotSaved  (AccountGroup *grp);
+void     xaccGroupMarkSaved (AccountGroup *grp);
+void     xaccGroupMarkNotSaved (AccountGroup *grp);
+
+void     xaccGroupMarkDoFree (AccountGroup *grp);
 
 /*
- * The xaccRemoveAccount() subroutine will remove the indicated
+ * The xaccGroupRemoveAccount() subroutine will remove the indicated
  *    account from its parent account group. It will NOT free the
  *    associated memory or otherwise alter the account: the account
  *    can now be reparented to a new location.
  *    Note, however, that it will mark the old parents as having 
  *    been modified.
  *
- * The xaccRemoveGroup() subroutine will remove the indicated
+ * The xaccAccountRemoveGroup() subroutine will remove the indicated
  *    account group from its parent account. It will NOT free the
  *    associated memory or otherwise alter the account group: the 
  *    account group can now be reparented to a new location.
  *    Note, however, that it will mark the old parents as having 
  *    been modified.
  */
-void    xaccRemoveAccount (Account *);
-void    xaccRemoveGroup (AccountGroup *);
-void    xaccGroupInsertAccount( AccountGroup *grp, Account *acc );
-void    xaccInsertSubAccount( Account *parent, Account *child );
+
+void    xaccGroupRemoveAccount (AccountGroup *grp, Account *account);
+void    xaccAccountRemoveGroup (Account *acc);
+void    xaccGroupInsertAccount (AccountGroup *grp, Account *acc);
+void    xaccAccountInsertSubAccount (Account *parent, Account *child);
 
 /*
- * The xaccGetNumAccounts() subroutine returns the number
+ * The xaccGroupGetNumSubAccounts() subroutine returns the number
  *    of accounts, including subaccounts, in the account group
  *
  * The xaccGroupGetNumAccounts() subroutine returns the number
@@ -96,23 +108,24 @@ void    xaccInsertSubAccount( Account *parent, Account *child );
  *    longest tree branch.  Each link between an account and its
  *    (non-null) children counts as one unit of length.
  */
-int     xaccGetNumAccounts (AccountGroup *grp);
+
+int     xaccGroupGetNumSubAccounts (AccountGroup *grp);
 int     xaccGroupGetNumAccounts (AccountGroup *grp);
 int     xaccGroupGetDepth (AccountGroup *grp);
-Account * xaccGroupGetAccount (AccountGroup *, int);
+Account * xaccGroupGetAccount (AccountGroup *group, int index);
 
 /*
- * The xaccGetAccounts() subroutine returns an array containing 
- *    all of the accounts, including subaccounts, in the account group.
- *    The returned array should be freed when no longer needed.
+ * The xaccGroupGetSubAccounts() subroutine returns an list of the accounts,
+ *    including subaccounts, in the account group. The returned list
+ *    should be freed with g_list_free when no longer needed.
  *
- * The xaccFillInAccounts() routine performs the same function as the
- *    above routine, except that it fills in the array provided by the
- *    user.  The array provided by the user *must* be large enough,
- *    including a terminating NULL pointer.
+ * The xaccGroupGetAccountList() subroutines returns only the immediate
+ *    children of the account group. The returned list should *not*
+ *    be freed by the caller.
  */
-Account ** xaccGetAccounts (AccountGroup *grp);
-int        xaccFillInAccounts ( AccountGroup *root, Account **arr );
+
+AccountList * xaccGroupGetSubAccounts (AccountGroup *grp);
+AccountList * xaccGroupGetAccountList (AccountGroup *grp);
 
 /* 
  * The xaccGetAccountFromName() subroutine fetches the
@@ -134,81 +147,48 @@ int        xaccFillInAccounts ( AccountGroup *root, Account **arr );
  *     names using the given separator.
  */
 
-Account *xaccGetAccountFromName     (AccountGroup *, const char *);
-Account *xaccGetAccountFromFullName (AccountGroup *,
+Account *xaccGetAccountFromName     (AccountGroup *group, const char *name);
+Account *xaccGetAccountFromFullName (AccountGroup *group,
                                      const char *name,
                                      const char separator);
-Account *xaccGetPeerAccountFromName (Account *, const char *);
+Account *xaccGetPeerAccountFromName (Account *account, const char *name);
 Account *xaccGetPeerAccountFromFullName (Account *acc,
                                          const char * name,
                                          const char separator);
 
 /*
- * The xaccRecomputeGroupBalance() subroutine recursively totals
- *    up the balances of all accounts in a group.
- */
-
-void xaccRecomputeGroupBalance (AccountGroup *);
-
-/*
- * The xaccGroupGetBalance() method returns the total of the balances 
- *    of all the children in this group.
- */
-
-/* deprecated double API will go away */
-double      DxaccGroupGetBalance (AccountGroup *);
-gnc_numeric xaccGroupGetBalance (AccountGroup *);
-
-/*
  * The xaccGetAccountRoot () subroutine will find the topmost 
  *    (root) group to which this account belongs.
  */
-
-AccountGroup * xaccGetAccountRoot (Account *);
+AccountGroup * xaccAccountGetRoot (Account *account);
 
 /* The xaccGroupGetParentAccount() subroutine returns the parent
  * account of the group, or NULL.
  */
-Account * xaccGroupGetParentAccount (AccountGroup *);
-
-/*
- * The xaccGroupGetNextFreeCode() method will try to guess a reasonable 
- *    candidate for the next unused account code in this group.
- *    The returned string is malloced, you must free the returned 
- *    pointer when done.
- *
- * The xaccAccountGetNextChildCode() method does same as above,
- *    except that it returns a value appropriate for a child account.
- *    The returned string is malloced, you must free the returned 
- *    pointer when done.
- *
- * The xaccGroupAutoCode() method will traverse the group, automatically
- *    inserting account codes into those accounts whose account codes 
- *    are blank.  It uses the algorithm used in xaccAccountAutoCode()
- *    to pick an account code.
- *
- * The xaccGroupDepthAutoCode() first measures the depth of the account
- *    tree, and uses that depth to pick the number of digits in the account
- *    code.
- */
-
-char * xaccGroupGetNextFreeCode (AccountGroup *grp, int num_digits);
-char * xaccAccountGetNextChildCode (Account *acc, int num_digits);
-void   xaccGroupAutoCode (AccountGroup *grp, int num_digits);
-void   xaccGroupDepthAutoCode (AccountGroup *grp);
+Account * xaccGroupGetParentAccount (AccountGroup *group);
 
 /* if the function returns null for a given item, it won't show up in
    the result list */
+typedef  gpointer (*AccountCallback)(Account *a, gpointer data);
 GSList *xaccGroupMapAccounts(AccountGroup *grp,
-                             gpointer (*thunk)(Account *a, void *data),
+                             AccountCallback,
                              gpointer data);
-gpointer xaccGroupForEachAccountDeeply(AccountGroup *grp,
-                                       gpointer (*thunk)(Account *a, void *data),
-                                       gpointer data);
 
-gboolean xaccGroupEqual(AccountGroup *a, AccountGroup *b, gboolean check_guids);
+/* The xaccGroupForEachAccount() method will traverse the AccountGroup
+ *    tree, calling 'func' on each account.   Traversal will stop when
+ *    func returns a non-null value, and the routine wil return with that 
+ *    value.  If 'deeply' is FALSE, then only the immediate children of 
+ *    the account will be traversed.  If TRUE, then the whole tree will
+ *    be traversed.
+ */
 
-#ifndef SWIG
+gpointer xaccGroupForEachAccount (AccountGroup *grp,
+                                  AccountCallback,
+                                  gpointer data,
+                                  gboolean deeply);
+
+gboolean xaccGroupEqual(AccountGroup *a, AccountGroup *b,
+                        gboolean check_guids);
 
 /*
  * The following functions provide support for "staged traversals"
@@ -258,15 +238,11 @@ gboolean xaccGroupEqual(AccountGroup *a, AccountGroup *b, gboolean check_guids);
  *    marker for each transaction which is a parent of one of the
  *    splits in the account.
  *
- * xaccAccountsBeginStagedTransactionTraversals() resets the traversal
- *    marker for each transaction which is a parent of one of the
- *    splits in any of the accounts in the list.
  */
 
 void xaccGroupBeginStagedTransactionTraversals(AccountGroup *grp);
-void xaccSplitsBeginStagedTransactionTraversals(GList *splits);
+void xaccSplitsBeginStagedTransactionTraversals(SplitList *splits);
 void xaccAccountBeginStagedTransactionTraversals(Account *account);
-void xaccAccountsBeginStagedTransactionTraversals (Account **accounts);
 
 /* xaccTransactionTraverse() checks the stage of the given transaction.
  *    If the transaction hasn't reached the given stage, the transaction
@@ -292,10 +268,10 @@ gboolean xaccSplitTransactionTraverse(Split *split, int stage);
  *    a traversal is undefined, so don't do that.
  */
 
-int 
-xaccGroupStagedTransactionTraversal(AccountGroup *grp,
+typedef  int (*TransactionCallbackInt)(Transaction *t, void *data);
+int xaccGroupStagedTransactionTraversal(AccountGroup *grp,
                                     unsigned int stage,
-                                    int (*thunk)(Transaction *t, void *data),
+                                    TransactionCallbackInt,
                                     void *data);
 
 /* xaccAccountStagedTransactionTraversal() calls thunk on each
@@ -312,18 +288,17 @@ xaccGroupStagedTransactionTraversal(AccountGroup *grp,
 
 int xaccAccountStagedTransactionTraversal(Account *a,
                                           unsigned int stage,
-                                          int (*thunk)(Transaction *t,
-                                                       void *data),
+                                          TransactionCallbackInt,
                                           void *data);
 
 /* Traverse all of the transactions in the given account group.
    Continue processing IFF proc does not return FALSE. This function
-   does not descend recursively to traverse transactions in the
+   will descend recursively to traverse transactions in the
    children of the accounts in the group.
 
    Proc will be called exactly once for each transaction that is
-   pointed to by at least one split in an account in the account
-   group.
+   pointed to by at least one split in any account in the hierarchy
+   topped by AccountGroup g.
 
    Note too, that if you call this function on two separate account
    groups and those accounts groups share transactions, proc will be
@@ -333,7 +308,7 @@ int xaccAccountStagedTransactionTraversal(Account *a,
    transaction was traversed exactly once.  */
 gboolean
 xaccGroupForEachTransaction(AccountGroup *g,
-                            gboolean (*proc)(Transaction *t, void *data),
+                            TransactionCallback,
                             void *data);
 
 /* Visit every transaction in the account that hasn't already been
@@ -347,10 +322,8 @@ xaccGroupForEachTransaction(AccountGroup *g,
    transaction was traversed exactly once.  */
 gboolean
 xaccGroupVisitUnvisitedTransactions(AccountGroup *g,
-                                    gboolean (*proc)(Transaction *t, void *data),
+                                    TransactionCallback,
                                     void *data,
                                     GHashTable *visited_txns);
 
-#endif /* SWIG */
-
-#endif /* __XACC_ACCOUNT_GROUP_H__ */
+#endif /* XACC_ACCOUNT_GROUP_H */

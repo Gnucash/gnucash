@@ -1,55 +1,47 @@
 
-SUBDIRS = gnumeric printing qif-import report srfi
+SUBDIRS = gnumeric printing
 
 gncscmdir = ${GNC_SCM_INSTALL_DIR}
+gncscmmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash
 
-gnc_autogen_scm_files = \
-  bootstrap.scm
+gncscmmod_DATA = process.scm bootstrap.scm price-quotes.scm
 
 gnc_regular_scm_files = \
-  bs-interp.scm \
-  c-interface.scm \
   command-line.scm \
-  config-var.scm \
-  currencies.scm \
-  date-utilities.scm \
   depend.scm \
   doc.scm \
-  engine-interface.scm \
-  engine-utilities.scm \
   extensions.scm \
-  graph.scm \
-  hooks.scm \
-  html-generator.scm \
+  help-topics-index.scm \
   main.scm \
-  options.scm \
+  main-window.scm \
   path.scm \
-  prefs.scm \
-  report-utilities.scm \
-  report.scm \
-  slib-backup.scm \
-  startup.scm \
-  structure.scm \
   substring-search.scm \
-  testbed.scm \
-  text-export.scm \
-  tip-of-the-day.scm \
   tip-list.scm \
-  utilities.scm \
-  xml-generator.scm \
-  iso-4217-currencies.scm \
-  engine-init.scm \
-  commodity-table.scm \
-  commodity-import.scm
+  tip-of-the-day.scm \
+  xml-generator.scm
 
-gncscm_DATA = ${gnc_autogen_scm_files} ${gnc_regular_scm_files}
+gncscm_DATA = ${gnc_regular_scm_files}
+
+noinst_DATA = .scm-links
+
+configdir = ${GNC_CONFIGDIR}
+config_DATA = config
+
+.scm-links: 
+	rm -f gnucash
+	ln -sf . gnucash
+	touch .scm-links
+
+CLEANFILES = .scm-links gnucash 
+
+SCM_FILES = ${gncscm_DATA} ${gncscmmod_DATA}
 
 EXTRA_DIST = \
   .cvsignore \
   bootstrap.scm.in \
-  design.txt \
+  config \
   startup-design.txt \
-  ${gnc_regular_scm_files}
+  ${SCM_FILES}
 
 ## We borrow guile's convention and use @-...-@ as the substitution
 ## brackets here, instead of the usual @...@.  This prevents autoconf
@@ -61,6 +53,8 @@ bootstrap.scm: bootstrap.scm.in Makefile
             -e 's:@-VERSION-@:${VERSION}:' \
             -e 's:@-GNC_CONFIGDIR-@:${GNC_CONFIGDIR}:' \
             -e 's:@-GNC_SHAREDIR-@:${GNC_SHAREDIR}:' \
+            -e 's:@-GNC_LIB_INSTALLDIR-@:${libdir}:' \
+            -e 's:@-GNC_PKGLIB_INSTALLDIR-@:${pkglibdir}:' \
             -e 's:@-GNC_HELPDIR-@:${GNC_HELPDIR}:'
 	mv $@.tmp $@
 CLEANFILES += bootstrap.scm

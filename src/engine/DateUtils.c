@@ -21,15 +21,18 @@
  *                                                                  *
 \********************************************************************/
 
+#include "config.h"
+
+#include <glib.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <time.h>
-
-#include "config.h"
 
 #include "DateUtils.h"
 
 #define BUFFSIZE 100
+
 
 /* ======================================================== */
 char *
@@ -50,7 +53,7 @@ xaccDateUtilGetStamp (time_t thyme)
       stm->tm_sec
    );
    
-   retval = strdup (buf);
+   retval = g_strdup (buf);
    return retval;
 }
 

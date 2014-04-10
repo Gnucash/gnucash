@@ -1,3 +1,7 @@
+SUBDIRS = examples
+
+
+SWIG = swig
 
 docdir = ${GNC_DOC_INSTALL_DIR}
 doc_DATA = \
@@ -14,7 +18,7 @@ libgncswig_la_SOURCES = \
   helperfuncs.c \
   gnucash-engine-perl5_wrap.c
 
-libgncswig_la_LDFLAGS = -version-info 1:1:1
+libgncswig_la_LDFLAGS = -version-info 2:0:2
 
 noinst_HEADERS = \
   helperfuncs.h
@@ -22,45 +26,37 @@ noinst_HEADERS = \
 EXTRA_DIST = \
   .cvsignore \
   examples/scan-acct.pl \
-  perl5_swig_annotations.i \
+  perl5_typemaps.i \
   gnucash-swig-defines.c
 
-CFLAGS = @CFLAGS@ ${GLIB_CFLAGS} -Dbool=char
-
-INCLUDES = \
+AM_CFLAGS = \
   -I@PERLINCL@/CORE \
+  ${GNOME_INCLUDEDIR} \
   -I${top_srcdir}/src/engine
 
+#
+# technically, the engine is independent of the gnome libs, however,
+# we need to specify the inlcude path for glibconfig.h, and so this is the way
+
 libgncswig_la_LIBADD = \
-  @GLIB_LIBS@ \
-  ${top_srcdir}/src/engine/Account.lo \
-  ${top_srcdir}/src/engine/DateUtils.lo \
-  ${top_srcdir}/src/engine/FileIO.lo \
-  ${top_srcdir}/src/engine/GNCId.lo \
-  ${top_srcdir}/src/engine/Group.lo \
-  ${top_srcdir}/src/engine/Query.lo \
-  ${top_srcdir}/src/engine/Scrub.lo \
-  ${top_srcdir}/src/engine/Session.lo \
-  ${top_srcdir}/src/engine/TransLog.lo \
-  ${top_srcdir}/src/engine/Transaction.lo \
-  ${top_srcdir}/src/engine/Backend.lo \
-  ${top_srcdir}/src/engine/date.lo \
-  ${top_srcdir}/src/engine/util.lo \
-  ${top_srcdir}/src/engine/guid.lo \
-  ${top_srcdir}/src/engine/md5.lo
+  -L${prefix}/lib/gnucash \
+  -lgncmod-engine \
+  ${GLIB_LIBS} 
+
 
 SWIG_INPUT_HDRS := \
   ${top_srcdir}/src/engine/Account.h \
   ${top_srcdir}/src/engine/DateUtils.h \
-  ${top_srcdir}/src/engine/FileIO.h \
   ${top_srcdir}/src/engine/GNCId.h \
   ${top_srcdir}/src/engine/Group.h \
   ${top_srcdir}/src/engine/Query.h \
   ${top_srcdir}/src/engine/Scrub.h \
-  ${top_srcdir}/src/engine/Session.h \
-  ${top_srcdir}/src/engine/TransLog.h \
   ${top_srcdir}/src/engine/Transaction.h \
-  ${top_srcdir}/src/engine/date.h
+  ${top_srcdir}/src/engine/date.h \
+  ${top_srcdir}/src/engine/gnc-book.h \
+  ${top_srcdir}/src/engine/gnc-engine.h \
+  ${top_srcdir}/src/engine/gnc-numeric.h \
+  ${top_srcdir}/src/engine/gnc-session.h
 
 ## This is kinda ugly, but swig insists that the .so file be named the
 ## same as the .pm file, and automake won't tolerate libraries that
@@ -69,9 +65,9 @@ install-data-local: libgncswig.la
 	cd ${DESTDIR}${perllibdir} && rm -f gnucash.so
 	if [ -f ${DESTDIR}${perllibdir}/libgncswig.so ]; then \
 		cd ${DESTDIR}${perllibdir} && ln -s libgncswig.so gnucash.so; \
-	elif [ -f ${DESTDIR}${perllibdir}/libgncswig.so.1.1 ]; then \
+	elif [ -f ${DESTDIR}${perllibdir}/libgncswig.so.0 ]; then \
 		cd ${DESTDIR}${perllibdir} && \
-                ln -s libgncswig.so.1.1 gnucash.so; \
+                ln -s libgncswig.so.0 gnucash.so; \
 	else \
 		echo "Can't find libgncswig shared library!" \
 		exit 1; \
@@ -80,10 +76,10 @@ install-data-local: libgncswig.la
 uninstall-local:
 	rm -f ${DESTDIR}${perllibdir}/gnucash.so
 
-gnucash.engine.i: ${SWIG_INPUT_HDRS} perl5_swig_annotations.i
+gnucash.engine.i: ${SWIG_INPUT_HDRS} perl5_typemaps.i
 	@echo Making $@.
 	@echo "%module gnucash" > $@
-	@echo "%include perl5_swig_annotations.i" >> $@
+	@echo "%include perl5_typemaps.i" >> $@
 	@echo "%{" >> $@
 	@for file in ${SWIG_INPUT_HDRS}; \
         do \
@@ -92,18 +88,20 @@ gnucash.engine.i: ${SWIG_INPUT_HDRS} perl5_swig_annotations.i
 	@echo "%}" >> $@
 	@for file in ${SWIG_INPUT_HDRS}; \
         do \
-          echo "%include `basename $$file`" >> $@; \
+          echo "%include \"`basename $$file`\"" >> $@; \
 	done
 
-CLEANFILES += gnucash.engine.i
+CLEANFILES = gnucash.engine.i
 
 gnucash.engine_wrap.doc gnucash-engine-perl5_wrap_int.c: gnucash.engine.i
 	${SWIG} -perl5 -I.. -I${top_srcdir}/src/engine -o $@ gnucash.engine.i
+
 CLEANFILES += gnucash.engine_wrap.doc gnucash-engine-perl5_wrap_int.c
 
 gnucash-engine-perl5_wrap.c: gnucash-swig-defines.c \
                              gnucash-engine-perl5_wrap_int.c
 	cat gnucash-swig-defines.c gnucash-engine-perl5_wrap_int.c > $@
+
 CLEANFILES += gnucash-engine-perl5_wrap.c
 
 CLEANFILES += gnucash.pm gnucash.so

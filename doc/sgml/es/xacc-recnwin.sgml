@@ -1,0 +1,128 @@
+<ARTICLE ID="XACC-RECNWIN">
+
+<ARTHEADER>
+<TITLE>Ventana de Reconciliación</TITLE>
+</ARTHEADER>
+
+<PARA>La ventana de Reconciliación se utiliza para reconciliar una 
+    cuenta GnuCash con el extracto que el banco u otra institución
+    le envía.
+
+    </PARA>
+<PARA>Por ejemplo, cuando escribe un cheque para alguien, debe introducir
+    la transacción en GnuCash. El campo (<GUILABEL>R</GUILABEL>) de la
+    reconciliación de la transacción inicialmente contendrá
+    <LITERAL>n</LITERAL> (no reconciliado). Más adelante, si piensa
+    que el cheque se ha hecho efectivo, puede apretar el campo
+    <GUILABEL>R</GUILABEL> de la transacción para cambiarlo a
+    <LITERAL>c</LITERAL> (limpio, pero no reconciliado).
+
+    </PARA>
+<PARA>A final de mes, recibe el extracto bancario, quizás incluyendo
+    cheques cancelados. En este momento, debe "reconciliar" su cuenta,
+    esto es, corresponden sus registros personales con la documentación
+    proporcionada por el banco.
+
+    </PARA>
+
+    <ITEMIZEDLIST>
+<LISTITEM>
+<PARA>Abra la ventana de reconciliación seleccionando
+    <GUIMENUITEM>Reconciliar...</GUIMENUITEM> del menú
+    <GUIMENU>Cuentas</GUIMENU> de la
+    <LINK LINKEND="xacc-regwin">ventana de registros</LINK>
+    de la cuenta. GnuCash le pedirá alguna información del
+    extracto.
+
+    </PARA>
+    
+    <MEDIAOBJECT>
+    <IMAGEOBJECT>
+    <IMAGEDATA FILEREF="image/recninfo.png">
+    </IMAGEOBJECT>
+    </MEDIAOBJECT>
+</LISTITEM>
+<LISTITEM>
+<PARA>Introduzca la fecha del final del periodo que extracto cubre,
+     y el balance final del extracto, y apriete <GUIBUTTON>Aceptar</GUIBUTTON>.
+     La ventana de Reconciliación aparecerá. Se parece a esto:
+
+     </PARA>
+      
+     <MEDIAOBJECT>
+     <IMAGEOBJECT>
+     <IMAGEDATA FILEREF="image/recnwin.png">
+     </IMAGEOBJECT>
+     </MEDIAOBJECT>
+
+     <PARA>Los grupos <GUILABEL>Fondos Entrantes</GUILABEL> y
+     <GUILABEL>Fondos Salientes</GUILABEL> muestran todas las
+     transacciones no reconciliadas. Las columnas '<GUILABEL>?</GUILABEL>'
+     muestran el estado de las transacciones (limpias o reconciliadas).
+
+     </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Ahora, examine cada elemento en el extracto bancario, y busque
+     el elemento correspondiente en la ventana de Reconciliación.
+
+     </PARA>
+<PARA>Si no puede encontrar ninguno, entonces quizás se olvidó de
+     introducir la transacción, o no conocía que la transacción tuvo
+     lugar. Puede utilizar el botón <GUIBUTTON>Nuevo</GUIBUTTON> en
+     la barra de herramientas, o la opción de menú <GUIMENUITEM>Nuevo</GUIMENUITEM>
+     del menú <GUIMENU>Transacción</GUIMENU>, para abrir una ventan
+     de registros y introducir la transacción que falta. El nuevo
+     elemento aparecerá en la ventana de Reconciliación cuando apriete
+     <GUIBUTTON>enter</GUIBUTTON> después de introducir la transacción.
+
+     </PARA>
+<PARA>Cuando encuentre el elemento en la ventana de Reconciliación,
+     compare la cantidad con la cantidad del extracto. Si no son iguales,
+     debe haber cometido un error cuando introdució la transacción en
+     GnuCash. Puede utilizar el botón <GUIBUTTON>Editar</GUIBUTTON> de la 
+     barra de herramientas, o la opción del menú <GUIMENUITEM>Editar</GUIMENUITEM>
+     del menú <GUIMENU>Transacción</GUIMENU>, para abrir la ventana de
+     Registros y corregir el problema (transacción).
+
+     </PARA>
+<PARA>Si las cantidades coinciden, apriete en el elemento en la ventana
+     de Reconciliación. El valor de la columna '<GUILABEL>?</GUILABEL>'
+     cambiará de '<LITERAL>n</LITERAL>' o '<LITERAL>c</LITERAL>' a '<LITERAL>y</LITERAL>' (reconciliado).
+
+     </PARA>
+<PARA>Entonces repita este proceso para cada elemento que aparece
+        en el extracto bancario, verificando que las cantidades
+        correspondan con las de GnuCash, y marcando las transacciones
+        de GnuCash como reconciliadas.
+      
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>En la parte inferior de la ventanas hay un campo diferencia,
+      que debe ser 0.00 cuando haya finalizado la reconciliación.
+      Si no lo es, entonces o ha omitido transacciones, o algunas
+      cantidades quizás sean incorrectas en GnuCash. (O, menos 
+      probable, el banco haya cometido un error.)
+      
+      
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Cuando haya completado el proceso para todos los elementos
+      en el extracto bancario, y la diferencia sea 0.00, debe
+      apretar el botón <GUIBUTTON>Finalizar</GUIBUTTON> en la
+      barra de herramientas o seleccionar <GUIMENUITEM>Finalizar</GUIMENUITEM>
+      del menú <GUIMENU>Reconciliar</GUIMENU>. La ventana de Reconciliación
+      se cerrará. En la <LINK LINKEND="xacc-regwin">Ventana de
+      Reconciliación</LINK>, el campo <GUILABEL>R</GUILABEL> de las
+      transacciones reconciliadas se cambiará a '<LITERAL>y</LITERAL>'.
+      
+      
+    </PARA>
+</LISTITEM>
+</ITEMIZEDLIST>
+
+</ARTICLE>

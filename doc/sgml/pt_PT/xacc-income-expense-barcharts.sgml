@@ -1,0 +1,54 @@
+<article id="xacc-income-expense-barcharts">
+<artheader>
+<title>Gráficos de Barras de Receitas & Despesas</title>
+</artheader>
+<sect1>
+<title></title>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="image/income-barchart.png">
+</imageobject>
+</mediaobject>
+</screenshot>
+
+<para>Estes relatórios permitem-lhe controlar como algumas despesas se 
+      modificam durante um determinado período de tempo.</para>
+
+<para>As opções disponíveis para este relatório incluem:</para>
+      <itemizedlist>
+  <listitem><para><emphasis><link linkend="xacc-options-accounts">
+    Contas</link></emphasis></para>
+  </listitem>
+  <listitem><para><emphasis><link linkend="xacc-options-report-title">
+    Título de Relatório</link></emphasis></para></listitem>
+  <listitem><para><emphasis><link linkend="xacc-options-date">
+    De & Até</link></emphasis></para></listitem>
+  <listitem><para><emphasis><link linkend="xacc-options-interval">
+    Tamanho do Incremento</link></emphasis></para>
+  </listitem>
+  <listitem><para><emphasis><link linkend="xacc-options-style-sheet">
+    Folha de Estilos</link></emphasis></para>
+  </listitem>
+  <listitem><para><emphasis><link linkend="xacc-options-price-source">
+    Fonte de Cotações</link></emphasis></para>
+  </listitem>
+  <listitem><para><emphasis><link linkend="xacc-options-max-slices">
+    Nº Máx. de Fatias</link></emphasis></para>
+  </listitem>
+  <listitem><para><emphasis><link linkend="xacc-options-plot-dimensions">
+    Largura & Altura</link></emphasis></para>
+  </listitem>
+  <listitem><para><emphasis><link linkend="xacc-options-graph-totals">Show Totals:</link></emphasis></para></listitem>
+  <listitem>
+    <para><emphasis><link linkend="xacc-options-show-full-names">Mostrar Nomes Longos de Contas</link></emphasis></para>
+  </listitem>
+
+      </itemizedlist>
+</sect1>
+</article>
+
+<!-- Local variables: -->
+<!-- sgml-parent-document: "gnucash.sgml" -->
+<!-- End: -->

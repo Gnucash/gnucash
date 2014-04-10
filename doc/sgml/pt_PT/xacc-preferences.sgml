@@ -1,0 +1,89 @@
+  <article id="XACC-PREFERENCES">
+
+    <artheader>
+      <title>Preferências</title>
+    </artheader>
+
+    <sect1>
+      <title></title>
+      <para>Você pode personalizar o comportamento do GnuCash alterando 
+        as definições nesta janela. Todas as definições são automaticamente 
+        gravadas pelo que as alterações se mantêm em futuras sessões.
+
+      </para>
+      <para>Para modificar definições, basta clicar para seleccionar a página 
+        apropriada, depois realizar as modificações necessárias e carregar no 
+        botão "Aplicar" para ver as modificações tomarem efeito. Clicar no "OK" aplica 
+        as alterações, fechando a janela de propriedades de seguida. O botão de 
+        "Fechar" limita-se a fechar a janela sem aplicar as últimas modificações.
+
+      </para>
+      <para>As definições encontram-se agrupadas nas seguintes categorias:
+
+        <itemizedlist>
+          <listitem>
+            <para><emphasis>Genérico:</emphasis> tudo o que não se encaixar 
+              em qualquer outro lado.</para>
+            <para><inlinemediaobject><imageobject>
+                  <imagedata fileref="image/prefs-general.png">
+                </imageobject></inlinemediaobject></para>
+          </listitem>
+          <listitem>
+            <para><emphasis>Internacional:</emphasis> Opções relacionadas com 
+              formatos de visualização de datas e hora.</para>
+            <para><inlinemediaobject><imageobject>
+                  <imagedata fileref="image/prefs-international.png">
+                </imageobject></inlinemediaobject></para>
+          </listitem>
+          <listitem>
+            <para><emphasis>Rede:</emphasis> Opções relacionadas com 
+              ligações à rede</para>
+            <para><inlinemediaobject><imageobject>
+                  <imagedata fileref="image/prefs-network.png">
+                </imageobject></inlinemediaobject></para>
+          </listitem>
+          <listitem>
+            <para><emphasis>Importação QIF:</emphasis> Opções relacionadas 
+              com a importação de ficheiros QIF.</para>
+            <para><inlinemediaobject><imageobject>
+                  <imagedata fileref="image/prefs-qif-import.png">
+                </imageobject></inlinemediaobject></para>
+          </listitem>
+          <listitem>
+            <para><emphasis>Reconciliação:</emphasis> Opções relacionadas 
+              com a reconciliação de contas.</para>
+            <para><inlinemediaobject><imageobject>
+                  <imagedata fileref="image/prefs-reconcile.png">
+                </imageobject></inlinemediaobject></para>
+          </listitem>
+          <listitem>
+            <para><emphasis>Registo:</emphasis> Opções relacionadas com 
+              a aparência por defeito dos registos de contas.
+            </para>
+            <para><inlinemediaobject><imageobject>
+                  <imagedata fileref="image/prefs-register.png">
+                </imageobject></inlinemediaobject></para>
+          </listitem>
+          <listitem>
+            <para><emphasis>Cores do Registo:</emphasis> Definir as 
+              cores a serem utilizadas no registo</para>
+            <para><inlinemediaobject><imageobject>
+                  <imagedata fileref="image/prefs-register-colors.png">
+                </imageobject></inlinemediaobject></para>
+          </listitem>
+          <listitem>
+            <para><emphasis>Informação do Utilizador:</emphasis> Definição da 
+              informação do utilizador</para>
+            <para><inlinemediaobject><imageobject>
+                  <imagedata fileref="image/prefs-user-info.png">
+                </imageobject></inlinemediaobject></para>
+          </listitem>
+        </itemizedlist>
+
+      </para>
+    </sect1>
+  </article>
+
+<!-- Local variables: -->
+<!-- sgml-parent-document: "gnucash.sgml" -->
+<!-- End: -->

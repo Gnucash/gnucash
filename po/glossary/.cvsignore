@@ -1,0 +1,6 @@
+*.gmo
+*.pox
+*.mo
+Makefile
+Makefile.in
+glossary.pot

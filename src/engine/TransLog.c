@@ -22,11 +22,12 @@
 \********************************************************************/
 
 #define _GNU_SOURCE
-#include <assert.h>
+#include "config.h"
+
 #include <stdio.h>
 #include <string.h>
 
-#include "config.h"
+#include <glib.h>
 
 #include "Account.h"
 #include "AccountP.h"
@@ -35,7 +36,7 @@
 #include "Transaction.h"
 #include "TransactionP.h"
 #include "TransLog.h"
-#include "util.h"
+#include "gnc-engine-util.h"
 
 /*
  * The logfiles are useful for tracing, journalling, error recovery.
@@ -100,8 +101,8 @@
 
 
 static int gen_logs = 1;
-static FILE * trans_log = 0x0;
-static char * log_base_name = 0x0;
+static FILE * trans_log = NULL;
+static char * log_base_name = NULL;
 
 /********************************************************************\
 \********************************************************************/
@@ -117,8 +118,8 @@ xaccLogSetBaseName (const char *basepath)
 {
    if (!basepath) return;
 
-   if (log_base_name) free (log_base_name);
-   log_base_name = strdup (basepath);
+   g_free (log_base_name);
+   log_base_name = g_strdup (basepath);
 
    if (trans_log) {
       xaccCloseLog();
@@ -138,28 +139,26 @@ xaccOpenLog (void)
    if (!gen_logs) return;
    if (trans_log) return;
 
-   if (!log_base_name) log_base_name = strdup ("translog");
+   if (!log_base_name) log_base_name = g_strdup ("translog");
 
    /* tag each filename with a timestamp */
    timestamp = xaccDateUtilGetStampNow ();
 
-   filename = (char *) malloc (strlen (log_base_name) + 50);
-   strcpy (filename, log_base_name);
-   strcat (filename, ".");
-   strcat (filename, timestamp);
-   strcat (filename, ".log");
+   filename = g_strconcat (log_base_name, ".", timestamp, ".log", NULL);
 
    trans_log = fopen (filename, "a");
    if (!trans_log) {
       int norr = errno;
       printf ("Error: xaccOpenLog(): cannot open journal \n"
               "\t %d %s\n", norr, strerror (norr));
-      free (filename);
-      free (timestamp);
+
+      g_free (filename);
+      g_free (timestamp);
       return;
    }
-   free (filename);
-   free (timestamp);
+
+   g_free (filename);
+   g_free (timestamp);
 
    /* use tab-separated fields */
    fprintf (trans_log, "mod	id	time_now	" \
@@ -168,7 +167,6 @@ xaccOpenLog (void)
                        "memo	action	reconciled	" \
                        "amount	price date_reconciled\n");
    fprintf (trans_log, "-----------------\n");
-
 }
 
 /********************************************************************\
@@ -180,7 +178,7 @@ xaccCloseLog (void)
    if (!trans_log) return;
    fflush (trans_log);
    fclose (trans_log);
-   trans_log = 0x0;
+   trans_log = NULL;
 }
 
 /********************************************************************\
@@ -189,8 +187,7 @@ xaccCloseLog (void)
 void
 xaccTransWriteLog (Transaction *trans, char flag)
 {
-   Split *split;
-   int i = 0;
+   GList *node;
    char *dnow, *dent, *dpost, *drecn; 
 
    if (!gen_logs) return;
@@ -202,40 +199,44 @@ xaccTransWriteLog (Transaction *trans, char flag)
 
    fprintf (trans_log, "===== START\n");
 
-   split = trans->splits[0];
-   while (split) {
-      char * accname = "";
-      if (split->acc) accname = split->acc->accountName;
+   for (node = trans->splits; node; node = node->next) {
+      Split *split = node->data;
+      const char * accname = "";
+
+      if (xaccSplitGetAccount(split))
+        accname = xaccAccountGetName (xaccSplitGetAccount(split));
+
       drecn = xaccDateUtilGetStamp (split->date_reconciled.tv_sec);
 
       /* use tab-separated fields */
-      fprintf (trans_log, "%c	%p/%p	%s	%s	%s	%s	%s	" \
-               "%s	%s	%s	%c	%Ld/%Ld	%Ld/%Ld	%s\n",
+      fprintf (trans_log,
+               "%c\t%p/%p\t%s\t%s\t%s\t%s\t%s\t"
+               "%s\t%s\t%s\t%c\t%lld/%lld\t%lld/%lld\t%s\n",
                flag,
                trans, split,  /* trans+split make up unique id */
-               dnow,
-               dent, 
-               dpost, 
-               accname,
-               trans->num, 
-               trans->description,
-               split->memo,
-               split->action,
+               dnow ? dnow : "",
+               dent ? dent : "", 
+               dpost ? dpost : "", 
+               accname ? accname : "",
+               trans->num ? trans->num : "", 
+               trans->description ? trans->description : "",
+               split->memo ? split->memo : "",
+               split->action ? split->action : "",
                split->reconciled,
-               gnc_numeric_num(split->damount), 
-               gnc_numeric_denom(split->damount),
-               gnc_numeric_num(split->value), 
-               gnc_numeric_denom(split->value),
-               drecn
-               );
-      free (drecn);
-      i++;
-      split = trans->splits[i];
+               (long long int) gnc_numeric_num(split->amount), 
+               (long long int) gnc_numeric_denom(split->amount),
+               (long long int) gnc_numeric_num(split->value), 
+               (long long int) gnc_numeric_denom(split->value),
+               drecn ? drecn : "");
+
+      g_free (drecn);
    }
+
    fprintf (trans_log, "===== END\n");
-   free (dnow);
-   free (dent);
-   free (dpost);
+
+   g_free (dnow);
+   g_free (dent);
+   g_free (dpost);
 
    /* get data out to the disk */
    fflush (trans_log);
@@ -262,7 +263,7 @@ xaccSplitAsString(Split *split, const char prefix[]) {
   const char *dest_name =
     split_dest ? xaccAccountGetName(split_dest) : NULL;
 
-  assert(stream);
+  g_return_val_if_fail (stream, NULL);
 
   fputc('\n', stream);
   fputs(prefix, stream);
@@ -272,6 +273,22 @@ xaccSplitAsString(Split *split, const char prefix[]) {
           split_memo ? split_memo : "<no-split-memo>");
   fclose(stream); 
   return(result);
+}
+
+static char *
+xaccTransGetDateStr (Transaction *trans)
+{
+   char buf [MAX_DATE_LENGTH];
+   struct tm *date;
+   time_t secs;
+
+   secs = xaccTransGetDate (trans);
+
+   date = localtime (&secs);
+
+   printDate(buf, date->tm_mday, date->tm_mon+1, date->tm_year +1900);
+
+   return g_strdup (buf);
 }
 
 char *
@@ -285,7 +302,7 @@ xaccTransAsString(Transaction *txn, const char prefix[]) {
   const char *memo = xaccSplitGetMemo(xaccTransGetSplit(txn, 0));
   const double total = DxaccSplitGetValue(xaccTransGetSplit(txn, 0));
   
-  assert(stream);
+  g_return_val_if_fail (stream, NULL);
 
   fputs(prefix, stream);
   if(date) {

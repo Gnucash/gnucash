@@ -1,0 +1,103 @@
+<?xml version="1.0"?>
+<gnc-account-example>
+    <gnc-act:title>
+      Bilejer
+    </gnc-act:title>
+    <gnc-act:short-description>
+      Udgifter vedrørende bil
+    </gnc-act:short-description>
+    <gnc-act:long-description>
+    Udgifter i forbindelse med at holde bil. Vedligehold, drift og skatter.
+  </gnc-act:long-description>    
+<gnc:account version="2.0.0">
+  <act:name>Udgifter</act:name>
+  <act:id type="new">1884bbd7394883ebafec8b9e2eb091a4</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>DKK</cmdty:id>
+  </act:currency>
+  <act:description>Udgifter</act:description>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Bil</act:name>
+  <act:id type="new">56df186f1ce6114ddca7b9e5d03af390</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>DKK</cmdty:id>
+  </act:currency>
+  <act:description>Bil</act:description>
+  <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Vægtafgift</act:name>
+  <act:id type="new">2ff007a389bd23d8970afeba2d58c9a8</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>DKK</cmdty:id>
+  </act:currency>
+  <act:description>Vægtafgift</act:description>
+  <act:parent type="new">56df186f1ce6114ddca7b9e5d03af390</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Benzin</act:name>
+  <act:id type="new">e64b5eecf86ce4e27a64c477a4c77477</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>DKK</cmdty:id>
+  </act:currency>
+  <act:description>Benzin</act:description>
+  <act:parent type="new">56df186f1ce6114ddca7b9e5d03af390</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Parking</act:name>
+  <act:id type="new">d72262c1c0e2c3388183ebb44a98b011</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>DKK</cmdty:id>
+  </act:currency>
+  <act:description>Parking</act:description>
+  <act:parent type="new">56df186f1ce6114ddca7b9e5d03af390</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Reparation og vedligehold</act:name>
+  <act:id type="new">665dd78f0cc75dd331f556949337de68</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>DKK</cmdty:id>
+  </act:currency>
+  <act:description>Reparation og vedligehold</act:description>
+  <act:parent type="new">56df186f1ce6114ddca7b9e5d03af390</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Forsikring</act:name>
+  <act:id type="new">5bda5ff833bc395dc1b00f95c66ce555</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>DKK</cmdty:id>
+  </act:currency>
+  <act:description>Forsikring</act:description>
+  <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Bilforsikring</act:name>
+  <act:id type="new">cd72695526906a15ba1a1d9a7680b8e7</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>DKK</cmdty:id>
+  </act:currency>
+  <act:description>Bilforsikring</act:description>
+  <act:parent type="new">5bda5ff833bc395dc1b00f95c66ce555</act:parent>
+</gnc:account>
+</gnc-account-example>
+
+<!-- Local variables: -->
+<!-- mode: xml        -->
+<!-- End:             -->

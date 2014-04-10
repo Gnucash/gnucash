@@ -1,0 +1,141 @@
+<ARTICLE ID="XACC-TRANS-REPORT">
+
+<ARTHEADER>
+<TITLE>Listado de Transacciones</TITLE>
+</ARTHEADER>
+
+<PARA>Los listados de transacciones listan los detalles de las
+    transacciones en una cuenta determinada durante un periodo
+    especificado, en un formato conveniente para ser visualizado
+    o exportado.
+
+    </PARA>
+<PARA>Las opciones especificables para estos listados incluyen:
+    
+    <ITEMIZEDLIST>
+
+<LISTITEM><PARA> <EMPHASIS>Ver:</EMPHASIS>Selecciona los campos
+que se mostrarán en el listado. Las opciones son:
+
+        <ITEMIZEDLIST>
+<LISTITEM>
+<PARA><EMPHASIS>Fecha</EMPHASIS>
+
+          </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><EMPHASIS>Número</EMPHASIS>
+
+          </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><EMPHASIS>Descripción</EMPHASIS>
+
+          </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><EMPHASIS>Explicación (Memo)</EMPHASIS>
+
+          </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><EMPHASIS>Cuenta</EMPHASIS>
+
+          </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><EMPHASIS>Otra Cuenta</EMPHASIS>
+
+          </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><EMPHASIS>Cantidad</EMPHASIS> - Observe que puede escoger
+          ver la cantidad en una columna simple o en doble columna.
+          La doble columna muestra los créditos y los débitos en
+          columnas separadas. 
+
+          </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><EMPHASIS>Títulos de Columna</EMPHASIS> - Nombres de la etiquetas
+          de los campos.
+
+          </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><EMPHASIS>Totales</EMPHASIS> - campos numéricos que se totalizarán.
+        </PARA>
+</LISTITEM>
+</ITEMIZEDLIST>
+      
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>        <EMPHASIS>Opciones de Listados:</EMPHASIS> Son opciones generales de los listados,
+        incluyen: 
+
+        <ITEMIZEDLIST>
+<LISTITEM>
+<PARA><EMPHASIS>Desde Fecha y Hasta Fecha:</EMPHASIS> El periodo de fechas que
+          cubre el listado. 
+
+          </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><EMPHASIS>Cuenta:</EMPHASIS> la cuenta(s) para incluir en el listado.
+
+          </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><EMPHASIS>Estilo:</EMPHASIS> Selecciones entre línea simple (en la
+          que todas las transacciones se mostrarán en una sola
+          línea), o multi-línea (en la que cada elemento de la
+          transacción se muestra en una línea separada).
+        </PARA>
+</LISTITEM>
+</ITEMIZEDLIST>
+      
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>        <EMPHASIS>Ordenación:</EMPHASIS>
+
+        <ITEMIZEDLIST>
+<LISTITEM>
+<PARA><EMPHASIS>Clave de Ordenación Primaria:</EMPHASIS> El campo ha ordenar
+          es el primero.
+
+          </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><EMPHASIS>Orden de Ordenación Primaria:</EMPHASIS> El orden en que
+          se realiza la ordenación. "Ascendente" significa de menor a
+          mayor, ordenación alfabética, del primero al último, o la
+          cantidad menor primero. "Descendente" produce el efecto
+          opuesto.
+
+          </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><EMPHASIS>Clave de Ordenación Secundaria:</EMPHASIS> El campo a ordenar
+          si los valores de la clave de ordenación primaria son iguales.
+
+          </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><EMPHASIS>Orden de Ordenación Secundaria:</EMPHASIS> El orden en que
+          se realiza la ordenación de la clave secundaria.
+        </PARA>
+</LISTITEM>
+</ITEMIZEDLIST>
+      
+    </PARA>
+</LISTITEM>
+</ITEMIZEDLIST>
+
+
+</PARA>
+
+</ARTICLE>

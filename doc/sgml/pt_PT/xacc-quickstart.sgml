@@ -1,0 +1,180 @@
+  <article id="xacc-quickstart">
+    <artheader>
+      <title>
+  Iniciar a Utilização
+      </title>
+    </artheader>
+    
+    <sect1>
+  <title>
+    Bem Vindo
+  </title>
+  
+  <para>Olá!  Bem vindo ao GnuCash 1.6, uma aplicação financeira simples 
+    de utilizar, poderosa e robusta.  Esta versão quase totalmente 
+    reconstruida tem uma longa lista de funcionalidades, e se desejar 
+    saber tudo o que o GnuCash pode fazer, consulte a 
+    <link linkend="xacc-features">secção de funcionalidades</link> deste manual.
+    No entanto, se for como nós e impaciente em realizar algumas tarefas,
+    essa consulta pode esperar um pouco.</para>
+
+  <para>
+    Tanto quanto possível, o GnuCash está desenhado para ser de 
+    utilização intuitiva.  Apesar disso, obter o máximo do GnuCash 
+    requer compreender um conjunto de ideias simples utilizadas ao 
+    longo de toda a aplicação, e também ao longo do resto do manual.
+    Assim sendo, recomendamos vivamente que dispenda alguns minutos 
+    a ler esta página do manual.  
+  </para>
+      </sect1>
+      
+      <sect1 id="xacc-remedial-accounting">
+  <title>
+    Princípios Contabilísticos
+  </title>
+  
+  <para>
+  Na sua essência, o GnuCash é uma ferramenta para controlo de 
+  <emphasis>transacções</emphasis>. Uma transacção é um registo 
+  onde dinheiro é removido de uma "conta" e colocado noutra. 
+  Como exemplo simples, digamos que você possui duas contas 
+  bancárias - uma conta à ordem e uma conta a prazo, e transfere 
+  100.000$ da conta à ordem para a conta de poupança. O GnuCash 
+  regista essa transferência.
+  </para>
+  
+  <para>
+    "Mas então e quando eu compro coisas, ou sou pago?"  já o ouço 
+    perguntar. Bem, "contas" no GnuCash não são apenas contas bancárias.  
+    Pode definir contas de Recebimentos, de despesas, de activos, de 
+    passivos, acções, fundos de investimento - de facto, existe um total 
+    de 11 tipos de contas diferentes que o GnuCash suporta.  Você pode (e 
+    deve) configurar um conjunto de contas de despesas diferentes para 
+    diferentes tipos de despesas.  Assim, o seu recibo de vencimento seria 
+    uma transferência de, digamos "salário", uma conta de receitas, para a 
+    sua conta à ordem. Comprar gasolina com o cartão de crédito poderá ser 
+    uma transferência da "ABC Visa", uma conta de cartão de crédito, para 
+    "Gasolina", uma conta de despesas. Se compreendeu tudo isto, está a 90% 
+    de conseguir maximizar a sua utilização do GnuCash!
+  </para>
+  
+  <para>
+    Se vai manter um controlo apropriado das suas finanças, 
+    quererá obviamente criar uma variedade de contas de despesas 
+    e receitas para controlar as várias transacções que realizar 
+    - de facto, configurar o conjunto certo de contas é a chave 
+    para fazer com que o GnuCash funcione para sí.  No entanto, se 
+    criar muitas contas diferentes, poderá ser penoso acompanha-las 
+    a todas. Mas o GnuCash tem uma forma de gerir isto. Permite-lhe 
+    criar uma <emphasis>árvore</emphasis> de contas. Por exemplo, 
+    pode criar uma conta de despesas "Casa", e depois criar 
+    "Casa:Electricidade", "Casa:Gás" e "Casa:Telefone". Definimos 
+    "Casa" como sendo a conta pai, e as outras três como sub-contas. 
+    Quando gerar <link linkend="xacc-reports">relatórios</link> dos 
+    seus dados financeiros, pode decidir se quer visualizar um resumo 
+    de todas as contas "Casa", ou a informação individual de cada conta.
+  </para>
+  
+  <para>
+    Vamos então criar algumas contas!
+  </para>
+      </sect1>
+      
+      <sect1 id="xacc-new-account-tree">
+  <title>
+    Definir contas desde o início
+  </title>
+
+  <para>
+    Esta secção destina-se a pessoas que estão a utilizar 
+    uma aplicação de finanças pessoais pela primeira vez,
+    ou não podem importar os seus dados para o GnuCash 
+    utilizando o <link linkend="xacc-data-from-existing">
+    importador QIF</link>.  
+  </para>
+  
+  <para>
+    Se desejar, o GnuCash pode ajudar a configurar um 
+    conjunto de contas de defeito para sí, utilizando o 
+    druida de <link linkend="xacc-account-hierarchy-creator">
+    Configuração de Novas Contas</link>. O que é um druida?  
+    Bem, é uma espécie assistente, mas chama-se druida.  Porquê? 
+    Porque não é um assistente, é um druida . . .
+    </para>
+  <para>
+    De qualquer modo, o druida leva-lo-á através do processo 
+    de criar um conjunto de contas para que possa começar.
+    Para começar, vá ao menu "Ficheiro" (no topo superior esquerdo 
+    da janelo do GnuCash), e seleccione "Novo Ficheiro".
+    Basta seguir as questões para definir a moeda de defeito, 
+    depois definir os tipos de contas que deseja criar. Ser-lhe-á 
+    então dada a possibilidade de inserir saldos iniciais para 
+    estas contas.  Agora, é aqui que as coisas se tornam mais 
+    complicadas.  Os saldos iniciais são apenas uma transacção, 
+    mas de onde são transferidos? Uma conta especial do tipo "saldo 
+    inicial" é criada, chamada "Saldos Iniciais", e todos os saldos 
+    iniciais consistem numa transferência para (ou de) esta conta.
+  </para>
+      </sect1>
+
+      <sect1 id="xacc-data-from-existing">
+  <title>
+    Importar dados de outras aplicações de finanças pessoais
+  </title>
+  
+  <para>
+    Se tiver utilizado outra aplicação financeira pessoal que 
+    possa exportar ficheiros QIF, tal como o Quicken ou o Microsoft 
+    Money, pode importar os dados para o GnuCash.  Veja as instruções 
+    para o <link linkend="xacc-quicken">importador QIF</link>.
+  </para>
+
+  <para>Uma vez tendo feito isso, está tudo pronto para começar - mas 
+    primeiro, um par de dicas rápidas sobre coisas que o GnuCash faz 
+    de um modo ligeiramente diferente dessas aplicações:
+    </para>
+  <itemizedlist>
+    <listitem><para>Onde algumas aplicações utilizam "categorias" 
+        para catalogar os tipos de despesas e receitas, o GnuCash
+        utiliza contas de despesas e receitas.  Elas funcionam de 
+        forma idêntica, mas é uma forma consideravelmente mais 
+        correcta e flexível de gerir as coisas, uma vez ocê se 
+        habituando à ideia.
+      </para></listitem>
+    <listitem><para>Algumas aplicações utilizam uma lista de contas.
+        O GnuCash utiiza uma "árvore" de contas, permitindo-lhe agrupar 
+        conjuntos semelhantes de contas - muito útil quando se geram 
+        relatórios dos dados financeiros.  Pode rearranjar as suas 
+        contas para utilizar uma estrutura mais tipo-árvore utilizando 
+        a <link linkend="xacc-accountedit">Janela de Edição de Contas</link>.
+      </para>
+    </listitem>
+        </itemizedlist>
+      </sect1>
+
+      <sect1>
+  <title>
+    Começar a utilizar o GnuCash
+  </title>
+  <para>
+    Uma vez o ajudante tendo feito as suas coisas, você ficará na 
+    <link linkend="xacc-mainwin">janela principal</link> do GnuCash. 
+    Para começar a introduzir transacções, seleccione a conta apropriada 
+    e clique no botão "abrir" na barra de ferramentas.  Isto faz surgir o 
+    <link linkend="xacc-regwin">registo</link> da conta, para que possa 
+    introduzir transacções.  
+    Poderá também desejar <link linkend="xacc-newacctwin">adicionar mais 
+    contas</link> ou <link linkend="xacc-accountedit">modificar algo</link> 
+    nas contas existentes.
+  </para>
+  <para>
+    Por favor invista algum tempo para ler mais sobre o GnuCash neste manual 
+    electrónico.  Conseguirá obter muito mais desta aplicação!
+  </para>
+    </sect1>
+  </article>
+  
+  <!-- Local variables: -->
+  <!-- sgml-parent-document: "gnucash.sgml" -->
+  <!-- End: -->
+  

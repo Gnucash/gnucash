@@ -23,7 +23,7 @@ double-entry accounting principles to ensure balanced books.
 
 
 %build
-./configure --prefix=/usr --sysconfdir=/etc
+./configure --prefix=/usr --sysconfdir=/etc --enable-sql
 make
 
 
@@ -39,22 +39,23 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(444,root,root,755)
 %attr(555,-,-) /usr/bin/gnucash
+%attr(555,-,-) /usr/bin/gnucash-make-guids
 %attr(555,-,-) /usr/bin/gnc-prices
-/usr/info/*
-/usr/lib/libgncengine.*
-/usr/lib/gnucash
-/usr/share/gnucash
+%attr(555,-,-) /usr/bin/update-finance-quote
+%attr(555,-,-) /usr/share/gnucash/finance-quote-helper
+/usr/info/*.gz
+/usr/lib/libgnc*
+/usr/share/gnucash/accounts
+/usr/share/gnucash/doc
+/usr/share/gnucash/glade
+/usr/share/gnucash/guile-modules
+/usr/share/gnucash/html
+/usr/share/gnucash/scm
 /usr/share/gnome/help/gnucash
 /usr/share/gnome/apps/Applications/gnucash.desktop
-/usr/share/locale/de/LC_MESSAGES/gnucash.*mo
-/usr/share/locale/en_GB/LC_MESSAGES/gnucash.*mo
-/usr/share/locale/es/LC_MESSAGES/gnucash.*mo
-/usr/share/locale/fr/LC_MESSAGES/gnucash.*mo
-/usr/share/locale/it/LC_MESSAGES/gnucash.*mo
-/usr/share/locale/ja/LC_MESSAGES/gnucash.*mo
-/usr/share/locale/ru/LC_MESSAGES/gnucash.*mo
-/usr/share/locale/sv/LC_MESSAGES/gnucash.*mo
+/usr/share/locale/*/LC_MESSAGES/gnucash.*mo
+/usr/share/pixmaps/gnucash
 /usr/man/*
 %config /etc/gnucash
-%doc AUTHORS COPYING ChangeLog HACKING NEWS README
+%doc AUTHORS COPYING ChangeLog ChangeLog.1 HACKING NEWS README README.patches
 %doc doc/README.german doc/README.francais doc/guile-hackers.txt

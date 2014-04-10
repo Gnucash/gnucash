@@ -1,0 +1,174 @@
+<article id="xacc-reports">
+<artheader>
+<title>Relatórios</title>
+</artheader>
+
+<para>Uma variedade de relatórios financeiros pode ser seleccionada no 
+    menu de "Relatórios":
+
+    <itemizedlist>
+<listitem>
+<para><link linkend="xacc-balancesheet">Folha de Balanço:</link>Mostra 
+      Activos, Passívos e Saldos Iniciais.   </para>
+<para><link linkend="xacc-net-worth-barchart">Gráfico de Barras de Valor 
+Líquido</link>mostra o seu valor líquido num ambiente gráfico. Examinar 
+apenas <link linkend="xacc-asset-liability-barcharts">gráficos de barras
+</link> de activos ou passivos, mostrando dados ao longo do tempo, também 
+é possível, tal como o é em <link linkend="xacc-asset-liability-piecharts">
+gráficos circulares</link>.
+</para>
+</listitem>
+
+<listitem>
+<para><link linkend="xacc-pnl">Estado de Proveitos e Prejuizos:</link>mostra 
+      Receitas e Despesas ao longo de um período seleccionável. </para>
+<para>
+Existem também gráficos de <link linkend="xacc-income-expense-barcharts">barras</link>
+e <link linkend="xacc-income-expense-piecharts">circulares</link>.</para>
+</listitem>
+
+<listitem>
+<para><link linkend="xacc-trans-report">Relatório de 
+      Transacções:</link>mostra transacções sobre uma conta, apresentadas de 
+      várias formas.
+
+      </para>
+</listitem>
+<listitem>
+<para><link linkend="xacc-portfolio-report">Portfólio de Acções:</link>
+      disponibiliza um resumo rápido das suas acções, o seu valor actual e 
+      mais-valias obtidas. O <link linkend="xacc-stock-price-report">Controlo de 
+Cotações de Acções </link> permite-lhe acompanhar a cotação de uma acção específica 
+ao longo do tempo.</para></listitem>
+
+<listitem> <para><link linkend="xacc-tax-report">Relatório de Impostos / 
+Exportação TXF:</link> mostra Receitas e Despesas tributáveis ou dedutíveis. 
+Pode <link linkend="xacc-txf-export">exportar para um ficheiro .TXF</link> 
+que pode ser importado no TaxCut ou TurboTax.  </para>
+</listitem>
+
+<listitem> <para><link linkend="xacc-balancereport">Histórico de Saldos</link> 
+acompanha o saldo de uma ou mais contas ao longo do tempo, 
+com a opção de apresentar tanto tabelas como gráficos de barras.</para>
+</listitem>
+
+</itemizedlist>
+
+    </para>
+
+<sect1 id="xacc-reportwindow">
+<title>A Janela de Relatório</title>
+<para>Após ter seleccionado um relatório, uma janela de relatório surgirá: 
+Esta poderá surgir como uma janela de topo, uma pasta tipo separador de dossier, 
+ou na janela principal, seleccionável para visualização através do menu "Janela". 
+Isto é controlável <link linkend="xacc-gnome-mdi">utilizando o interface 
+MDI.</link></para>
+
+<para><inlinemediaobject>
+<imageobject>
+<imagedata fileref="image/reportwin.png">
+</imageobject>
+</inlinemediaobject>
+
+    </para>
+<para>O relatório é apresentado numa janela redimensionável e com barras de 
+    rolamento. Para controlar o relatório, pode utilizar os botões da barra 
+    de ferramentas no topo da janela:
+
+    <itemizedlist>
+<listitem>
+<para><emphasis>Retroceder</emphasis> e <emphasis>Avançar</emphasis> permitem-lhe 
+      ver o conteudo anterior da janela, tal como um navegador (browser) de internet
+
+      </para>
+</listitem>
+<listitem>
+<para>        <emphasis>Opções</emphasis> faz surgir uma janela que lhe permite 
+        modificar a informação apresentada no relatório: 
+
+        </para>
+<para><inlinemediaobject>
+<imageobject>
+<imagedata fileref="image/report-option.png">
+</imageobject>
+</inlinemediaobject>
+
+        </para>
+<para>Veja a ajuda específica para cada relatório para mais detalhes sobre 
+        as opções disponíveis.
+      
+
+      </para>
+</listitem>
+<listitem>
+<para><anchor id="export"><emphasis>Exportar</emphasis> permite-lhe exportar 
+      o conteudo do relatório para um ficheiro HTML para posterior visualização 
+      ou impressão.
+
+      </para>
+</listitem>
+<listitem>
+<para><emphasis>Fechar</emphasis> fecha a janela de relatório.
+    </para>
+</listitem>
+</itemizedlist>
+
+    </para>
+</sect1>
+
+<sect1 id="xacc-multiple-reports">
+<title> Múltiplos relatórios numa Janela</title> <para>O GnuCash permite-lhe 
+colocar vários relatórios numa única janela, permitindo-lhe examinar um 
+conjunto de informação financeira num relance. Esta funcionalidade é 
+disponibilizada pelo relatório especial de <link linkend="xacc-multicolumn-view-report">
+Visualização Multi-coluna</link>.</para></sect1>
+
+<sect1 id="xacc-url-reports">
+<title>Páginas Web como Relatórios</title>
+<para>Você pode ver páginas web como uma espécie especial de relatórios - muito 
+útil para manter num único local toda a informação financeira de que necessita, 
+incluíndo a de outras fontes.  Utilize o <link linkend="xacc-gnucash-web-browser">
+Relatório de Endereço em Frame</link> para o fazer.
+</para></sect1>
+
+<sect1 id="xacc-style-sheets">
+<title>Folhas de Estilos</title>
+<para><emphasis>CORRIGIR:documentar este ponto!!!</emphasis></para>
+</sect1>
+
+<sect1 id="xacc-customreports">
+<title> Construir relatórios personalizados</title>
+
+<para> É possível escrever os seus proprios relatórios para suprir as 
+suas necessidades, caso saiba programar um pouco. Terá de saber <link 
+linkend="scheme">Scheme</link> (uma linguagem de programação semelhante 
+a LISP), sendo uma óptima ideia ter por perto uma cópia do código-fonte 
+do <application>GnuCash</application>.</para>
+
+<para>O interface de relatórios encontra-se documentado em <link linkend= 
+"xacc-repdev">Desenvolvimento de Relatórios</link>; mas poderá ter uma boa ideia de 
+como funciona examinando o ficheiro <filename>src/scm/report/hello-world.scm
+</filename> na árvore de código do <application>GnuCash</application>.
+</para>
+
+<para>Também terá de aceder a dados do "motor" para obter informação para o 
+seu relatório. Isto é conseguido através de um conjunto de funções de envolvimento 
+(wrapper) <link linkend="scheme"> Scheme </link> que se encontram documentadas 
+no ficheiro <filename>src/g-wrap/gnc.html</filename>. Poderá desejar examinar 
+alguns dos outros relatórios em <filename> src/scm/report </filename> para uma 
+indicação de como as funções são utilizadas.
+</para>
+
+<para>De momento, os relatórios são produzidos chamando uma API que gera HTML, 
+que retorna um dialecto de HTML e o apresenta utilizando um widget HTML.  Isto 
+tem limitações (particularmente quando se tenta alinhar com precisão objectos, 
+tal como pode ser necessário na impressão de facturas em papel pré-impresso, por 
+exemplo), pelo que futuramente poderá ser necessária uma nova interface de geração 
+de relatórios.</para>
+
+</sect1>
+</article>
+
+<!-- Local variables: -->
+<!-- sgml-parent-document: "gnucash.sgml" -->
+<!-- End: -->

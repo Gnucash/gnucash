@@ -1,0 +1,126 @@
+  <article id="xacc-file-operations">
+    <artheader>
+      <title>Operações com Ficheiros</title>
+    </artheader>
+    <sect1>
+      <title>
+  Ficheiros de Dados do GnuCash
+      </title>
+      <para>Em modo normal de operação, o GnuCash grava os seus dados em vulgares 
+      ficheiros de dados, que podem estar localizados em qualquer directório para 
+      que você possua permissões.  São independentes e podem ser movidos, copiados, 
+      e guardados em fita, disquettes, ou outro suporte de sua escolha.
+      Podem ser gravados utilizando qualquer nome, e qualquer extensão de ficheiro que 
+      escolha, mas, tradicionalmente os programadores e utilizadores têm utilizado 
+      a extensão ".xac", ou "gml2" para distinguir o novo formato de ficheiro em XML 
+      do antigo formato binário da versão 1.4.
+      </para>
+
+      <para>
+      O formato de ficheiro do GnuCash foi modificado entre as versões 1.4 e 1.6. A nova versão 
+      utiliza XML (tornando muito mais fácil programar ferramentas independentes para manipularem 
+      ficheiros GnuCash) e suporta o armazenamento de muito mais meta-informação, entre muitos 
+      outros benefícios. O GnuCash 1.6 consegue carregar ficheiros de versões anteriores, mas 
+      estas <emphasis>não</emphasis> conseguem ler ficheiros do GnuCash 1.6. Sugerimos que 
+      utilizadores GnuCash que queiram partilhar dados actualizem para a 1.6.
+      </para>
+
+      <para>O Gnucash <emphasis>não pode</emphasis> abrir directamente ficheiros de dados de 
+      qualquer outro pacote financeiro. Pode, no entanto, importar ficheiros QIF que o Quicken, 
+      Microsoft Money, e vários outros pacotes utilizam como formato de exportação, utilizando 
+      o <link linkend="xacc-quicken">importador QIF</link>. O GnuCash não tem de momento a 
+      capacidade de exportar QIFs, apesar dessa funcionalidade ser muito apreciada - se alguma 
+      pessoa com conhecimentos de programação desejar trabalhar nisso, por favor contacte os 
+      programadores.
+      </para>
+    </sect1>
+
+    <sect1>
+      <title>
+      O Menu Ficheiro
+      </title>      
+      <para>Tal como a maioria das aplicações, as operações com ficheiros são feitas através do menu ficheiro:</para>
+ 
+      <itemizedlist>
+  <listitem><para><emphasis>Novo Ficheiro</emphasis>: Crie um ficheiro GnuCash 
+      novo e vazio. Se tiver trabalho por gravar, o GnuCash irá perguntar-lhe se 
+      o deseja gravar.
+      </para></listitem>
+
+  <listitem><para><emphasis>Abrir</emphasis>: Carregue um ficheiro GnuCash existente.</para>
+    </listitem>
+  <listitem><para><emphasis>Gravar</emphasis>: Grave o seu ficheiro de dados GnuCash actual 
+      para disco com o seu nome actual.</para>
+      </listitem>
+  <listitem><para><emphasis>Gravar como</emphasis>: Grave o seu ficheiro de dados GnuCash 
+      actual com um novo nome.</para></listitem>
+  <listitem><para><emphasis><link linkend="xacc-export-accounts">Exportar Contas</link>
+        </emphasis>: Exporte a sua estrutura de contas, sem quaisquer transacções. Útil 
+      para criar bases de trabalho para outras pessoas, ou como uma forma simples, mas 
+      ainda assim útil, de fechar os livros (encerrar um período).
+      </para></listitem>
+  <listitem>
+    <para>
+      <emphasis>
+        <link linkend="xacc-quicken">Importar QIF</link></emphasis>: Importar 
+      ficheiros de dados QIF .</para></listitem>
+  <listitem>
+    <para>
+      <emphasis>
+        <link linkend="xacc-new-account-tree">Nova Árvore de Contas</link></emphasis>: 
+      Um atalho para criar muitas das contas comuns utilizadas por um agregado 
+      familiar.</para>
+    </listitem>
+  <listitem><para><emphasis>Atalhos para ficheiros carregados anteriormente</emphasis>: 
+      os últimos quatro ficheiros GnuCash que você abriu irão surgir. Seleccione-os 
+    para os carregar.</para></listitem>
+
+  <listitem><para><emphasis>Mover para Nova Janela</emphasis>: crie uma nova janela 
+      de topo. Veja <link linkend="xacc-toplevel">aqui para mais detalhes.</link>
+      </para></listitem>
+  <listitem><para><emphasis>Fechar Esta Janela</emphasis>: Fecha <emphasis>esta</emphasis>
+      janela de topo, deixando as restantes abertas.  Veja <link linkend="xacc-toplevel">aqui</link> para mais detalhes.</para>
+  </listitem>
+   <listitem><para><emphasis>Sair do GnuCash</emphasis>: Fecha todas as janelas e sai.
+      O GnuCash irá questiona-lo para gravar o ficheiro, caso tenham ocorrido modificações 
+      desde a última gravação.</para>
+  </listitem>
+      </itemizedlist>
+    </sect1>
+    <sect1 id="xacc-export-accounts">
+      <title>
+      Exportar a sua Hierarquia de Contas
+      </title>
+     
+      <para>
+  Caso deseje, por alguma razão, criar um ficheiro vazio com a mesma 
+  estrutura de contas do ficheiro actual, poderá faze-lo seleccionando 
+  "Exportar contas" no menu Ficheiro.
+  </para>
+      <para>
+  Isto poderá ser utilizado como uma forma básica de fechar as suas  
+  contas, caso o deseje.
+      </para>
+    </sect1>
+
+    <sect1 id="xacc-postgres-backend">
+      <title>
+  Utilizar o PostGres para armzenar os seus dados
+      </title>
+      <para><emphasis>CORRIGIR: Necessita de Conteúdo!</emphasis></para>
+      <para>
+  O GnuCash tem suporte beta para a utilização do postgres, um motor de base de dados 
+  poderoso, livre, quase totalmente de acordo com o standard SQL, como forma de armazenar 
+  os dados em vez de se recorrer à utilização de ficheiros.
+      </para>
+      <para>
+  Neste momento, a única documentação encontra-se no ficheiro 
+  src/doc/engine/sql/README na distribuição de código fonte do GnuCash.
+      </para>
+    </sect1>
+  </article>
+  
+
+<!-- Local variables: -->
+<!-- sgml-parent-document: "gnucash.sgml" -->
+<!-- End: -->

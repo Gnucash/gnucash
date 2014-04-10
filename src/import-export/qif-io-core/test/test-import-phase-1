@@ -1,0 +1,2 @@
+#! /bin/sh
+guile -l test-import-phase-1.scm -c "(run-test)"

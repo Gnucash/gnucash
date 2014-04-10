@@ -1,0 +1,14 @@
+Makefile
+Makefile.in
+*.diff
+*.diffs
+*.patch
+*.log
+*.xac.*.xac
+gnucash
+gnucash-env
+gnucash-run-script
+gnucash-make-guids
+guile
+.deps
+.libs

@@ -1,0 +1,162 @@
+<article id="xacc-dochack">
+<artheader>
+<title> Modificar a Documentação GnuCash </title>
+<author>
+<firstname>Christopher</firstname>
+<surname>Browne</surname>
+</author>
+</artheader>
+
+<sect1 id="xacc-docbook">
+
+<title> Sobre o DocBook </title>
+
+<para> A documentação do GnuCash foi modificada para utilizar SGML e, em 
+específico, o formato (DTD) DocBook.  </para>
+
+<para> DocBook é um DTD desenhado para a elaboração de documentação técnica 
+tal como manuais de informática.  Existe um número crescente de ferramentas 
+para apoiar o processamento de material baseado em DocBook. As páginas de 
+seguida indicadas estão redigidas em inglês.
+
+<itemizedlist>
+
+<listitem>
+<para> <ulink url="http://docbook.org/tdg/html/docbook.html"> DocBook:
+O Guia Completo (online)</ulink>
+
+</para>
+</listitem>
+
+<listitem> <para><ulink url=
+"http://www.oasis-open.org/docbook/documentation/index.html"> DocBook
+- Documentação</ulink></para> </listitem>
+
+<listitem>
+<para><ulink url="http://www.oasis-open.org/docbook/">DocBook -
+DocBook</ulink></para>
+</listitem>
+
+<listitem>
+<para> <ulink url="http:///ella.slis.indiana.edu/~jfieber/docbook/doc/over/index.html"> Apresentação 
+do DocBook</ulink> </para>
+</listitem>
+<listitem>
+<para> <ulink url="http:///ella.slis.indiana.edu/~jfieber/docbook/doc/user/index.html"> Guia do 
+Utilizador de DocBook </ulink> </para>
+</listitem>
+<listitem>
+<para> <ulink url="http:///ella.slis.indiana.edu/~jfieber/docbook/doc/ref/index.html"> Guia de 
+Referência do DocBook </ulink> </para>
+</listitem>
+<listitem>
+<para> <ulink url="http:///ella.slis.indiana.edu/~jfieber/docbook/doc/maint/index.html">Guia de 
+Personalização do DocBook </ulink> </para>
+</listitem>
+<LISTITEM ID="MODULARDOCBOOK">
+<para> <ulink url="http://nwalsh.com/docbook/dsssl/index.html"> As Folhas de 
+Estilo Modulares do DocBook </ulink> </para>
+</listitem>
+<listitem>
+<para><ulink url="http://nwalsh.com/docbook/edbsyn/"> A Página 
+nwalsh.com - Sintaxe Completa do DocBook </ulink>
+</para>
+<para> Adiciona etiquetas (tags) ao DocBook para suportar linguagens 
+orientadas por objectos tais como o Java, C++, e IDL, incluindo novas 
+entidades tais como classes, campos, métodos, excepções, etc.
+</para>
+
+</listitem>
+<listitem>
+<para> <ulink url="http://nis-www.lanl.gov/~rosalia/mydocs/docbook-intro.html"> Inicie-se 
+Com o DocBook </ulink></para>
+<para> Este documento descreve como o DTD DocBook pode ser utilizado para 
+elaborar documentos, incluindo informação em como utilizar tabelas e inserir 
+listagens de programas.  </para>
+<para> Espera-se que em breve documente os cuidados e necessidades da inserção 
+de imagens além de mais informação na ``interessante'' referência cruzada.</para>
+</listitem>
+<listitem>
+<para><ulink url="http://lwn.net/2000/features/DocBook/">Explorando o DocBook SGML </ulink>
+
+</para>
+</listitem>
+
+<listitem> <para><ulink url=
+"http://www.dfwuug.org/newsletters/2000/newsletter_0003.html"> A Minha 
+Avaliação do DocBook: O Guia Completo </ulink> tal como foi escrito para 
+O Grupo de Utilizadores de UNIX de DFW
+
+</para>
+</listitem>
+<listitem>
+<para><ulink url="http://www.sslug.dk/%7epto/docbook.html">Iniciação às SGMLTOOLS e ao DOCBOOK</ulink></para>
+</listitem>
+</itemizedlist> </para>
+
+</sect1>
+
+<sect1 id="xacc-docbookuse">
+<title>O Conjunto de Documentação GnuCash</title>
+
+<para> A documentação do GnuCash é gerida como um LIVRO, composte por 
+um conjunto de "ARTIGOS" DocBook. </para>
+
+<para> O documento principal é o <filename>gnucash.sgml</filename>, que na 
+verdade contém apenas a informação "sequencial" sobre que ficheiros têm de 
+ser analisados para criar o corpo do documento, cada ficheiro representando 
+um dos ARTIGOS. </para>
+
+<para> Note que nomes de ficheiros para o resultado em HTML gerado são definidos 
+de três formas:</para>
+
+<itemizedlist>
+
+<listitem><para> A etiqueta (tag) ID de cada ARTIGO define um 
+nome de ficheiro;</para></listitem>
+
+<listitem><para> A etiqueta (tag) ID para cada SECT1 define um nome de ficheiro, excepto 
+se for a primeira SECT1 no ARTIGO;</para></listitem>
+
+<listitem><para> Se você criar um novo ARTIGO ou SECT1 sem uma etiqueta ID, 
+os nomes dos ficheiros serão gerados com nomes tais como 
+<filename>t1234.html</filename>, <filename>x892.html</filename> e semelhantes.
+Eles terão um aspecto bem aleatório. </para>
+
+<para> Isto é algo mau; certifique-se que especifica uma etiqueta ID ao 
+ARTIGO ou SECT1. </para>
+</listitem>
+
+</itemizedlist>
+
+<para> O Estilo é controlado pelo documento DSSSL, 
+<filename>mysheet.dsl</filename>, utilizando as convenções 
+documentadas em <link linkend="modstyle"> Folhas de Estilo Modulares para DocBook
+</link></para>
+
+<para> Componentes que têm de ser instalados para que o comando 
+<command>jade -ioutput.html -d mysheet.dsl -t sgml
+gnucash.sgml</command> funcione incluem:
+
+<itemizedlist>
+
+<listitem><para> <ulink url="http://www.jclark.com/jade/">Jade
+</ulink> ou <ulink url= "http://www.netfolder.com/DSSSL/index.html">
+DSSSL/OpenJade </ulink></para></listitem>
+
+<listitem><para> O DTD DocBook 3.1, disponível em <ulink url=
+"http://docbook.org"> DocBook.org </ulink></para></listitem>
+
+<listitem><para> <ulink id="MODSTYLE" url=
+"http://nwalsh.com/docbook/dsssl/index.html"> Folhas de Estilo 
+Modulares </ulink></para></listitem>
+
+</itemizedlist>
+</para>
+</sect1>
+
+</article>
+
+<!-- Local variables: -->
+<!-- sgml-parent-document: "gnucash.sgml" -->
+<!-- End: -->

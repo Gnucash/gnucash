@@ -1,0 +1,30 @@
+<ARTICLE ID="XACC-NET-WORTH-BARCHART">
+<ARTHEADER>
+<TITLE>Net Worth Barchart</TITLE>
+</ARTHEADER>
+<SECT1>
+<TITLE></TITLE>
+
+<PARA>Your net worth is the difference between the value of your
+assets or liabilities - a measure of your wealth, in other words.
+As such, it's interesting and informative to track this information
+over time.  This bar chart lets you view how it (hopefully) grows</PARA>
+
+<para><emphasis>Options</emphasis></para>
+<itemizedlist>
+<listitem><para>Accounts</para></listitem>
+<listitem><para>Report Name</para></listitem>
+<listitem><para>Stylesheet</para></listitem>
+<listitem><para>From, To</para></listitem>
+<listitem><para>Step Size</para></listitem>
+<listitem><para>Report Currency</para></listitem>
+<listitem><para>Plot Width, Height</para></listitem>
+<listitem><para>Show Asset & Liability Bars</para>
+<para>Show a pair of bars for each time step representing
+your assets and liabilities, respectively</para></listitem>
+<listitem><para>Show Net Worth Bars</para>
+<para>Show a a bar in each time step representing your overall
+net worth at that time.</para></listitem>
+</itemizedlist>
+</sect1>
+</article>

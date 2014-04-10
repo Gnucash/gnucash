@@ -1,20 +1,21 @@
+-*-text-*-
 
 This directory contains assorted stock quote scripts.
 
-value_portfolio is a stand-alone perl script for updating and printing
-    the value of a portfolio.  To use this script, edit the the first 
-    few lines at the top of the file to indicate your portfolio and 
-    purchase price.
-    (from Christopher B. Browne, cbbrowne@hex.net)
+finance-quote-helper.in:
 
-update_prices is a stand-alone perl script  for updating the prices
-    of stocks and mutual funds in a gnucash file. Its rather lame at the
-    moment.
+  Source file for finance-quote-helper which is a perl script that
+  allows gnucash to communicate with Finance::Quote over pipes from
+  guile.  The requests and responses are scheme forms.
 
-Finance::Quote
-    This is a perl 5 module that will pull one or more stock and/or mutual
-    fund quotes from a variety of sources, including Yahoo! Finance.  
-    Now maintained in SourceForge by Paul Fenwick (<pjf@cpan.org>)
-    http://sourceforge.net/project/?group_id=4232
+gnc-prices:
 
+  Deprecated wrapper to support old setup.  Use "gnucash --add-quotes
+  filename" instead.
 
+value_portfolio:
+
+  A stand-alone perl script for updating and printing the value of a
+  portfolio.  To use this script, edit the the first few lines at the
+  top of the file to indicate your portfolio and purchase price.
+  (from Christopher B. Browne, cbbrowne@hex.net)

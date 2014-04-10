@@ -23,20 +23,12 @@
 ;; Tips should be written as a list of lists of string.  Each list of strings 
 ;; represents one tip
 
-(gnc:depend "config-var.scm")
-(gnc:depend "prefs.scm")
-(gnc:depend "hooks.scm")
-
 (define (non-negative-integer? value)
   (and (integer? value) (>= value 0)))
 
-(define gnc:*current-tip-number* 
-  (gnc:make-config-var
-   "Which tip we're up to"
-;  (lambda (x) (if (and (integer? x) (>= x 0)) '(x) #f))
-   (lambda (var value) (if (non-negative-integer? value) (list value) #f))
-   =
-   0))
+(gnc:register-configuration-option
+ (gnc:make-internal-option
+  "__tips" "current_tip_number" 0))
 
 (define gnc:*number-of-tips* 
   (gnc:make-config-var
@@ -54,63 +46,59 @@
 
 (define gnc:*tip-list* '())
 
-(define (string-fold list-strings concatenator)
-  (if (null? list-strings)
-      ""
-     (string-append (car list-strings) concatenator
-                    (string-fold (cdr list-strings) concatenator))))
-
-
 (define (gnc:read-tips)
   (let ((in-port (open-input-file 
 		  (gnc:find-in-directories 
 		   (gnc:config-var-value-get gnc:*tip-file*)
 		   (gnc:config-var-value-get gnc:*load-path*)))))
 	(set! gnc:*tip-list* (read in-port))
-        (if (gnc:debugging?)
-            (for-each (lambda (list-strings)
-                        (gnc:register-translatable-strings
-                         (string-fold list-strings "\n")))
-                      gnc:*tip-list*))
-	(if (not (= (length gnc:*tip-list*)
-                    (gnc:config-var-value-get gnc:*current-tip-number*)))
-	    (begin 
+        (set! gnc:*tip-list*
+              (map (lambda (pair) (cadr pair)) gnc:*tip-list*))
+	(if (not (= (length gnc:*tip-list*) (gnc:current-tip-number)))
+	    (begin
 	      (gnc:config-var-value-set! gnc:*number-of-tips* #t
                                          (length gnc:*tip-list*))
 	      (if (<= (gnc:config-var-value-get gnc:*number-of-tips*)
-		      (gnc:config-var-value-get gnc:*current-tip-number*))
-		  (gnc:config-var-value-set! #t gnc:*current-tip-number 0))))
+		      (gnc:current-tip-number))
+		  (gnc:reset-tip-number))))
 	(close-port in-port)
 	#f))
 
+(define (gnc:current-tip-number)
+  (let ((num (gnc:option-value
+              (gnc:lookup-global-option "__tips" "current_tip_number"))))
+    (if (<= (gnc:config-var-value-get gnc:*number-of-tips*) num)
+        (gnc:reset-tip-number))
+  (gnc:option-value (gnc:lookup-global-option "__tips" "current_tip_number"))))
+
 (define (gnc:get-current-tip)
-  (gnc:_ (string-fold
-          (list-ref gnc:*tip-list*
-                    (gnc:config-var-value-get gnc:*current-tip-number*))
-          "\n")))
+  (_ (list-ref gnc:*tip-list* (gnc:current-tip-number))))
+
+(define (gnc:reset-tip-number)
+  (let ((opt (gnc:lookup-global-option "__tips" "current_tip_number")))
+    (gnc:option-set-value opt 0)))
 
 (define (gnc:increment-tip-number)
-  (let ((new-value (+ (gnc:config-var-value-get gnc:*current-tip-number*) 1)))
+  (let ((new-value (+ (gnc:current-tip-number) 1))
+        (opt (gnc:lookup-global-option "__tips" "current_tip_number")))
     (if (< new-value (gnc:config-var-value-get gnc:*number-of-tips*))
-	(gnc:config-var-value-set! gnc:*current-tip-number* #t new-value)
-	(gnc:config-var-value-set! gnc:*current-tip-number* #t 0))))
+	(gnc:option-set-value opt new-value)
+	(gnc:option-set-value opt 0))))
 
 (define (gnc:decrement-tip-number)
-  (let ((new-value (- (gnc:config-var-value-get gnc:*current-tip-number*) 1)))
+  (let ((new-value (- (gnc:current-tip-number) 1))
+        (opt (gnc:lookup-global-option "__tips" "current_tip_number")))
     (if (< new-value 0)
-	(gnc:config-var-value-set! gnc:*current-tip-number* #t 
-				   (- (gnc:config-var-value-get
-                                       gnc:*number-of-tips*) 1))
-	(gnc:config-var-value-set! gnc:*current-tip-number* #t new-value))))
-				  
+	(gnc:option-set-value opt (- (gnc:config-var-value-get
+                                      gnc:*number-of-tips*) 1))
+	(gnc:option-set-value opt new-value))))
 
 (gnc:read-tips)
 
-;(let ((mainopen-hook (gnc:hook-lookup 'main-window-opened-hook)))
-;  (gnc:hook-add-dangler 
-;   mainopen-hook
-;   (lambda (window) 
-;     (let ((tip-opt (gnc:lookup-global-option "General"
-;                                              "Display \"Tip of the Day\"")))
-;       (if (gnc:option-value tip-opt)
-;           (gnc:ui-totd-dialog-create-and-run))))))
+(gnc:hook-add-dangler 
+ gnc:*ui-startup-hook* 
+ (lambda () 
+   (let ((tip-opt (gnc:lookup-global-option "General"
+                                            "Display \"Tip of the Day\"")))
+     (if (gnc:option-value tip-opt)
+         (gnc:ui-totd-dialog-create-and-run)))))

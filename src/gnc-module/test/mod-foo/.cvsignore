@@ -1,0 +1,10 @@
+Makefile
+*.so.*
+foo-gwrap.c
+foo-gwrap.h
+foo-gwrap.html
+.deps
+.libs
+Makefile.in
+*.lo
+*.la

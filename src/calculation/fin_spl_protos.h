@@ -19,8 +19,8 @@
  *
  ***************************************************************************/
 
-#ifndef __FIN_SPL_PROTOS_H__
-#define __FIN_SPL_PROTOS_H__
+#ifndef FIN_SPL_PROTOS_H
+#define FIN_SPL_PROTOS_H
 
 /*==================================================*/
 /* expression_parser.c */

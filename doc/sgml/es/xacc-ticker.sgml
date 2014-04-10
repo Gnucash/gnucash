@@ -1,0 +1,295 @@
+<ARTICLE ID="XACC-TICKER">
+
+<ARTHEADER>
+<TITLE>Comprobantes de Acciones</TITLE>
+</ARTHEADER>
+
+<SECT1 ID="XACC-STOCKTICKER">
+
+<TITLE>Precios de las acciones y Símbolos de Comprobantes</TITLE>
+
+<PARA>GnuCash proporciona un sistema rudimentario de cargar el valor
+de las acciones de forma automática.
+</PARA>
+
+<PARA>Si una <LINK LINKEND="STOCKACCT">cuenta de acciones</LINK>
+de GnuCash está debidamente configurada, y el ordenador está conectado
+a Internet, el programa <APPLICATION>gnc-prices</APPLICATION> se puede
+utilizar para cargar el valor de los precios de las acciones y de los
+bonos desde diversos sitios WEB directamente en GnuCash.
+</PARA>
+
+<PARA>Para hacer uso de esta facultad, se debe hacer lo siguiente:
+
+<ITEMIZEDLIST>
+  <LISTITEM>
+    <PARA>Crear una cuenta y marcarla como del tipo "Fondos Mutuales"
+      (bonos) o "Acciones".
+    </PARA>
+  </LISTITEM>
+  <LISTITEM>
+    <PARA>Introduzca un símbolo de comprobante válido en la caja
+      llamada "Seguridad:"
+     </PARA>
+  </LISTITEM>
+  <LISTITEM>
+    <PARA>Seleccione un lugar de consulta de precios en el menú
+    desplegable. Actualmente los lugares de consulta soportados son
+    <EMPHASIS>Yahoo</EMPHASIS>, <EMPHASIS>Yahoo Europe</EMPHASIS>, <EMPHASIS>Fidelity Investments</EMPHASIS>,
+    <EMPHASIS>T. Rowe Price</EMPHASIS>, la <EMPHASIS>Vanguard Group</EMPHASIS>,
+    la <EMPHASIS>Australian Stock Exchange</EMPHASIS> (ASX) y la
+    <EMPHASIS>TIAA-CREF</EMPHASIS>. Observe que Yahoo proporciona valores
+    de precios para muchos fondos mutuales <EMPHASIS>incluyendo</EMPHASIS>
+    Fidelity, T.Rowe Price y Vanguard, y esos precios de Yahoo
+    <EMPHASIS>deben</EMPHASIS> ser idénticos a aquellos que se
+    pueden encontrar en otras fuentes (de otra forma, alguien está
+    suministrando información errónea!). Si selecciona Yahoo Europe,
+    debe añadir el código de mercado para seguridad, como PA para París,
+    BE para Berlín, etc. Ejemplo: 12150.PA (la seguridad Peugeot en
+    el mercado de París).
+    </PARA>
+  </LISTITEM>
+  <LISTITEM>
+    <PARA>Asegúrese que la cantidad se expresa en la moneda que
+    corresponda con el lugar de consulta de precios de la acción que
+    ha seleccionado. Esto significa:
+
+        <ITEMIZEDLIST>
+<LISTITEM>
+<PARA>Las participaciones de la fuente <EMPHASIS>Australian Stock
+          Exchange</EMPHASIS> (ASX) se calculan en dólares australianos (AUD).
+
+          </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Las participaciones de la fuente <EMPHASIS>Yahoo Europe</EMPHASIS>
+          se calculan en euros (ECU).
+
+          </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Las participaciones de <EMPHASIS>Yahoo</EMPHASIS>, <EMPHASIS> Fidelity
+          Investments</EMPHASIS>, <EMPHASIS>T. Rowe Price</EMPHASIS> y de <EMPHASIS>Vanguard
+          Group</EMPHASIS> se calculan en dólares americanos (USD).
+        </PARA>
+</LISTITEM>
+</ITEMIZEDLIST>
+      
+    </PARA>
+</LISTITEM>
+</ITEMIZEDLIST>
+
+    <TABLE>
+<TITLE>        Lista de códigos de los mercados europeos
+      </TITLE>
+<TGROUP COLS="2">
+<THEAD>
+<ROW>
+<ENTRY>Código</ENTRY>
+<ENTRY>Mercado</ENTRY>
+</ROW>
+</THEAD>
+<TBODY>
+<ROW>
+<ENTRY>PA</ENTRY>
+<ENTRY>Paris</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>BC</ENTRY>
+<ENTRY>Barcelona</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>BE</ENTRY>
+<ENTRY>Berlín</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>BI</ENTRY>
+<ENTRY>Bilbao</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>BR</ENTRY>
+<ENTRY>Br&ecirc;me</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>CO</ENTRY>
+<ENTRY>Copenagen</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>D</ENTRY>
+<ENTRY>Dusseldorf</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>F</ENTRY>
+<ENTRY>Frankfurt</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>H</ENTRY>
+<ENTRY>Hamburgo</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>HA</ENTRY>
+<ENTRY>Hanover</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>L</ENTRY>
+<ENTRY>London</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>MA</ENTRY>
+<ENTRY>Madrid</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>MC</ENTRY>
+<ENTRY>Madrid (M.C.)</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>MI</ENTRY>
+<ENTRY>Milán</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>MU</ENTRY>
+<ENTRY>Munich</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>O</ENTRY>
+<ENTRY>Oslo</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>ST</ENTRY>
+<ENTRY>Estocolmo</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>SG</ENTRY>
+<ENTRY>Stuttgart</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>VA</ENTRY>
+<ENTRY>Valencia</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>FX</ENTRY>
+<ENTRY>Xetra</ENTRY>
+</ROW>
+</TBODY>
+</TGROUP>
+</TABLE>
+
+    <TABLE>
+<TITLE>        Seudo-símbolos que pueden se utilizados para las
+         partipaciones de TIAA-CREF.
+      </TITLE>
+<TGROUP COLS="2">
+<THEAD>
+<ROW>
+<ENTRY>Nombre</ENTRY>
+<ENTRY>Seudo-símbolo</ENTRY>
+</ROW>
+</THEAD>
+<TBODY>
+<ROW>
+<ENTRY>Acción</ENTRY>
+<ENTRY>CREFstok</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>Mercado de Dinero</ENTRY>
+<ENTRY>CREFmony</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>Índice de Equidad</ENTRY>
+<ENTRY>CREFequi</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>Bonos de Interés garantizado</ENTRY>
+<ENTRY>CREFinfb</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>Mercado de Bonos</ENTRY>
+<ENTRY>CREFbond</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>Bonos del Gobierno (TIAA)</ENTRY>
+<ENTRY>TIAAreal</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>Opciones Sociales</ENTRY>
+<ENTRY>CREFsoci</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>Índice de Acciones de PA</ENTRY>
+<ENTRY>TIAAsndx</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>Equidades Globales</ENTRY>
+<ENTRY>CREFglob</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>Acciones seleccionadas de PA</ENTRY>
+<ENTRY>TIAAsele</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>Crecimiento</ENTRY>
+<ENTRY>CREFgrow</ENTRY>
+</ROW>
+</TBODY>
+</TGROUP>
+</TABLE>
+
+    </PARA>
+<PARA>Una imagen de ejemplo se muestra a continuación:
+     <INLINEMEDIAOBJECT>
+<IMAGEOBJECT>
+<IMAGEDATA FILEREF="image/ticker-a.png">
+</IMAGEOBJECT>
+<TEXTOBJECT>
+<PHRASE>Diagrama de Ejemplo</PHRASE>
+</TEXTOBJECT>
+</INLINEMEDIAOBJECT>
+
+    </PARA>
+<PARA>Para actualizar los precios almacenados en los archivos de cuentas
+    de GnuCash, ejecute la orden <APPLICATION>gnc-price</APPLICATION>,
+    desde la línea de comandos, especificando el nombre del archivo;
+    por ejemplo:
+<COMMAND>    gnc-prices myaccts.xac</COMMAND>
+
+    </PARA>
+<PARA>Cuando se ejecuta este programa se muestran varios mensajes
+    de diagnóstico en la pantalla durante la carga de los datos.
+    Este programa solamente funcionará si su ordenador está conectado
+    a Internet. Puede funcionar en conjunción con cortafuegos
+    ("firewalls") del tipo enmascaramiento y con servidores "proxy".
+
+    </PARA>
+<PARA>El programa puede ser ejecutado varias veces el mismo día;
+    de todos modos, se actualizará las cuentas con los datos más
+    recientes.
+
+    </PARA>
+<PARA>Por lo que, si <APPLICATION>gnc-prices</APPLICATION> se ejecuta
+    en viernes, sábado, domingo y lunes, solamente se harán dos
+    actualizaciones de precios: uno conteniendo los datos del viernes,
+    y otro conteniendo los datos del lunes, ya que el sábado y domingo
+    devolverán los precios de la sesión del viernes.
+
+    </PARA>
+<PARA>Para evitar que <APPLICATION>gnc-prices</APPLICATION> actualice una
+    cuenta, mientras le permite que actualice otra cuenta, simplemente
+    marque el lugar de consulta para la cuenta como <SCREEN>(none)</SCREEN>.
+    Puede hacer esto desde la ventana <GUIMENU>Editar Cuenta</GUIMENU>.
+
+    </PARA>
+<PARA>Después de ejecutar <APPLICATION>gnc-prices</APPLICATION> durante
+    unos días, sus cuentas empezarán a parecer a lo siguiente:
+     <INLINEMEDIAOBJECT>
+<IMAGEOBJECT>
+<IMAGEDATA FILEREF="image/ticker-b.png">
+</IMAGEOBJECT>
+<TEXTOBJECT>
+<PHRASE>Listados de Comprobantes Posteriores</PHRASE>
+</TEXTOBJECT>
+</INLINEMEDIAOBJECT>
+
+
+</PARA>
+</SECT1>
+</ARTICLE>

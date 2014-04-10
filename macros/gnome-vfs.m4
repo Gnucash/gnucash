@@ -60,7 +60,7 @@ AC_DEFUN([GNOME_WITH_VFS],[
   SAMBAFILES=""
   AC_ARG_WITH(samba,
   	  [--with-samba	            Support smb virtual file system],[
-  	  if test "x$withval != xno"; then
+  	  if test "x$withval" != "xno"; then
   		  AC_DEFINE(WITH_SMBFS)
 	          vfs_flags="$vfs_flags, smbfs"
 		  smbfs="smbfs.o"

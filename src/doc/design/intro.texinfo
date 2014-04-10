@@ -41,4 +41,4 @@ The ability to generate and print graphs of financial information.
 @end itemize
 
 A more comprehensive list of current and planned features for GnuCash
-is at @uref{http://cvs.gnucash.org/linux/gnucash/projects.html}.
+is located at @uref{http://cvs.gnucash.org/linux/gnucash/projects.html}.

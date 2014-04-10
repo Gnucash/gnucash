@@ -5,6 +5,6 @@ Makefile.in
 *.patch
 *.log
 *.xac.*.xac
-gnucash
 .deps
 .libs
+gnc-dir.h

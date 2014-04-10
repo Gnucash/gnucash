@@ -8,8 +8,8 @@
 // HISTORY:
 // Written by Linas Vepstas March 1998
 
-#ifndef __PFX_COMP_TYPES_H__
-#define __PFX_COMP_TYPES_H__
+#ifndef PFX_COMP_TYPES_H
+#define PFX_COMP_TYPES_H
 
 #include "config.h"
 #include "DtdParser.h"
@@ -54,4 +54,4 @@ class pfxCompoundType :
 }
 #endif
 
-#endif /* __PFX_COMP_TYPES_H__ */
+#endif /* PFX_COMP_TYPES_H */

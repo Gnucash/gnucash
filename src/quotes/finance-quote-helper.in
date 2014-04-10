@@ -1,0 +1,444 @@
+#!@-PERL-@ -w
+######################################################################
+### finance-quote-helper - present a scheme interface to Finance::Quote
+### Copyright 2001 Rob Browning <rlb@cs.utexas.edu>
+### 
+### This program is free software; you can redistribute it and/or    
+### modify it under the terms of the GNU General Public License as   
+### published by the Free Software Foundation; either version 2 of   
+### the License, or (at your option) any later version.              
+###                                                                  
+### This program is distributed in the hope that it will be useful,  
+### but WITHOUT ANY WARRANTY; without even the implied warranty of   
+### MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    
+### GNU General Public License for more details.                     
+###                                                                  
+### You should have received a copy of the GNU General Public License
+### along with this program# if not, contact:
+###
+### Free Software Foundation           Voice:  +1-617-542-5942
+### 59 Temple Place - Suite 330        Fax:    +1-617-542-2652
+### Boston, MA  02111-1307,  USA       gnu@gnu.org
+######################################################################
+
+use lib '@-PERLINCL-@';
+
+use strict;
+use English;
+use FileHandle;
+
+# Input: (on standard input - one entry per line and one line per
+# entry, and double quotes must only be delimiters, not string
+# content -- remember, we don't have a real scheme parser on the perl
+# side :>).
+
+# (<method-name> symbol symbol symbol ...)
+
+# where <method-name> indicates the desired Finance::Quote method.
+# The currently recognized subset is yahoo, yahoo_europe,
+# fidelity_direct, troweprice_direct, vanguard, asx, tiaacref,
+# and currency.
+
+# For currency quotes, the symbols alternate between the 'from'
+# and 'to' currencies.
+
+# For examle:
+#
+# (yahoo "IBM" "LNUX")
+# (fidelity_direct "FBIOX" "FSELX")
+# (currency "USD" "AUD")
+
+# Output (on standard output, one output form per input line):
+
+# Schemified version of finance-quote's output, basically an alist of
+# alists, as in the example below.  Right now, only the fields that
+# this script knows about (and knows how to convert to scheme) are
+# returned, so the conversion function will have to be updated
+# whenever Finance::Quote changes.  Currently you'll get symbol,
+# gnc:time-no-zone, and currency, and either last, nav, or price.
+# Fields with gnc: prefixes are non-Finance::Quote fields.
+# gnc:time-no-zone is returned as a string of the form "YYYY-MM-DD
+# HH:MM:SS", basically the unmolested (and underspecified) output of
+# the quote source.  It's up to you to know what it's proper timezone
+# really is.  i.e. if you know the time was in America/Chicago, you'll
+# need to convert it to that.
+
+# For example:
+
+#  $ echo '(yahoo "CSCO" "JDSU")' | ./price-quote-helper
+# (("CSCO" (symbol . "CSCO")
+#          (gnc:time-no-zone . "2001-03-13 19:27:00")
+#          (last . 20.375)
+#          (currency . "USD"))
+#  ("JDSU" (symbol . "JDSU")
+#          (gnc:time-no-zone . "2001-03-13 19:27:00")
+#          (last . 23.5625)
+#          (currency . "USD")))
+
+# On error, the overall result may be #f, or on individual errors, the
+# list sub-item for a given symbol may be #f, like this:
+
+#  $ echo '(yahoo "CSCO" "JDSU")' | ./price-quote-helper
+# (#f
+#  ("JDSU" (symbol . "JDSU")
+#          (gnc:time-no-zone . "2001-03-13 19:27:00")
+#          (last . 23.5625)
+#          (currency . "USD")))
+
+# further, errors may be stored with each quote as indicated in
+# Finance::Quote, and whenever the conversion to scheme data fails,
+# the field will have the value 'failed-conversion, and accordingly
+# this symbol will never be a legitimate conversion.
+
+# Exit status
+#
+# 0 - success
+# non-zero - failure
+
+# The methods we know about.  For now we assume they all have the same
+# signature so this works OK.
+
+sub check_modules {
+  my @modules = qw(Date::Manip Finance::Quote);
+  my @missing;
+
+  foreach my $mod (@modules) {
+    if (eval "require $mod") {
+      $mod->import();
+    }
+    else {
+      push (@missing, $mod);
+    }
+  }
+
+  return unless @missing;
+
+  print STDERR "\n";
+  print STDERR "You need to install the following Perl modules:\n";
+  foreach my $mod (@missing) {
+    print STDERR "  ".$mod."\n";
+  }
+
+  print STDERR "\n";
+  print STDERR "Run 'update-finance-quote' as root to install them.\n";
+
+  print "missing-lib";
+
+  exit 1;
+}
+
+sub schemify_string {
+  my($str) = @_;
+
+  if(!$str) { return "failed-conversion"; }
+
+  # FIXME: Is this safe?  Can we just double all backslashes and backslash
+  # escape all double quotes and get the right answer?
+
+  # double all backslashes.
+  my $bs = "\\";
+  $str =~ s/$bs$bs/$bs$bs/gmo;
+
+  # escape all double quotes.
+  # Have to do this because the perl-mode parser freaks out otherwise.
+  my $dq = '"';
+  $str =~ s/$dq/$bs$dq/gmo;
+  return '"' . $str . '"';
+}
+
+sub schemify_boolean {
+  my($bool) = @_;
+
+  if($bool) {
+    return "#t";
+  } else {
+    return "#f";
+  }
+}
+
+sub schemify_num {
+  my($numstr) = @_;
+  # This is for normal numbers, not the funny ones like "2.346B".
+  # For now we don't need to do anything.
+
+  if(!$numstr) { return "failed-conversion"; }
+
+  if($numstr =~ /^\s*(\d+(\.\d+)?)$/o) {
+    return $1;
+  } else {
+    return "failed-conversion";
+  }
+}
+
+sub schemify_date {
+  # return the date in epoch seconds.
+  my ($datestr) = @_;
+
+  my $date = ParseDate($datestr);
+  my $result = UnixDate($date, "%s");
+  if($result !~ /^(\+|-)?\d+$/) {
+    $result = "failed-conversion";
+  }
+  return("$result");
+}
+
+# sub schemify_range {
+#   #convert range in form ``num1 - num2'' to ``(num1 num2)''.
+# }
+
+sub get_quote_time {
+  # return the date.
+  my ($item, $quotehash) = @_;
+
+  my $datestr = $$quotehash{$item, 'date'};
+  my $timestr = $$quotehash{$item, 'time'};
+
+  if(!$datestr) {
+    return undef;
+  }
+
+  my $parsestr = $datestr;
+  if($timestr) {
+    $parsestr .= " $timestr";
+  }
+
+  $parsestr = ParseDateString($parsestr);
+
+  my $result = UnixDate($parsestr, "\"%Y-%m-%d %H:%M:%S\"");
+  if($result !~ /^\"\d\d\d\d-\d\d-\d\d \d\d:\d\d:\d\d\"$/) {
+    $result = "failed-conversion";
+  }
+  return $result;
+}
+
+sub schemify_quote {
+  my($itemname, $quotehash, $indentlevel) = @_;
+  my $scmname = schemify_string($itemname);
+  my $quotedata = "";
+  my $field;
+  my $data;
+
+  if (!$$quotehash{$itemname, "success"}) {
+    return schemify_boolean(0);
+  }
+
+  $field = 'symbol';
+  $data = schemify_string($$quotehash{$itemname, $field});
+  $quotedata .= "($field . $data)";
+
+  $field = 'gnc:time-no-zone';
+  $data = get_quote_time($itemname, $quotehash);
+  $quotedata .= " ($field . $data)" if $data;
+
+  $field = 'last';
+  if (!($$quotehash{$itemname, $field})) {
+    $field = 'nav';
+  }
+  if (!($$quotehash{$itemname, $field})) {
+    $field = 'price';
+  }
+
+  $data = schemify_num($$quotehash{$itemname, $field});
+  $quotedata .= " ($field . $data)";
+
+  $field = 'currency';
+  $data = schemify_string($$quotehash{$itemname, $field});
+  $quotedata .= " ($field . $data)";
+
+  return "($scmname $quotedata)";
+}
+
+sub schemify_quotes {
+  my($symbols, $quotehash) = @_;
+  my $resultstr = "";
+  my $sym;
+  my $separator = "";
+
+  # we have to pass in @$items because Finance::Quote just uses the
+  # mangled "$name$field string as the key, so there's no way (I know
+  # of) to find out which stocks are in a given quotehash, just given
+  # the quotehash.
+
+  foreach $sym (@$symbols) {
+    $resultstr .= $separator . schemify_quote($sym, $quotehash, 2);
+    if(!$separator) { $separator = "\n "; }
+  }
+  return "($resultstr)\n";
+}
+
+sub parse_input_line {
+
+  # FIXME: we need to rewrite parsing to handle commands modularly.
+  # Right now all we do is hard-code "fetch".
+
+  my($input) = @_;
+  # Have to do this because the perl-mode parser freaks out otherwise.
+  my $dq = '"';
+  my @symbols;
+
+  # Make sure we have an opening ( preceeded only by whitespace.
+  # and followed by a one word method name composed of [a-z_]+.
+  # Kill off the whitespace if we do and grab the command.
+  if($input !~ s/^\s*\(\s*([a-z_]+)\s+//o) { return 0; }
+
+  my $quote_method_name = $1;
+
+  # Make sure we have an ending ) followed only by whitespace
+  # and kill it off if we do...
+  if($input !~ s/\s*\)\s*$//o) { return 0; }
+
+  while($input) {
+    # Items should look like "RHAT"
+    # Grab RHAT and delete "RHAT"\s*
+    if($input !~ s/^$dq([^$dq]+)$dq\s*//o) { return 0; }
+    my $symbol = $1;
+    push @symbols, $symbol;
+  }
+
+  my @result = ($quote_method_name, \@symbols);
+  return \@result;
+}
+
+#---------------------------------------------------------------------------
+# Runtime.
+
+# Check for and load non-standard modules
+check_modules ();
+
+# Create a stockquote object.
+my $quoter = Finance::Quote->new();
+my $prgnam = "scmio-finance-quote";
+
+# Disable default currency conversions.
+$quoter->set_currency();
+
+while(<>) {
+
+  my $result = parse_input_line($_);
+
+  if(!$result) {
+    print STDERR "$prgnam: bad input line ($_)\n";
+    exit 1;
+  }
+
+  my($quote_method_name, $symbols) = @$result;
+  my %quote_data;
+
+ SWITCH:
+  {
+    if($quote_method_name =~ m/^yahoo$/) {
+      %quote_data = $quoter->yahoo(@$symbols);
+      last SWITCH;
+    }
+    if($quote_method_name =~ m/^yahoo_europe$/) {
+      %quote_data = $quoter->yahoo_europe(@$symbols);
+      last SWITCH;
+    }
+    if($quote_method_name =~ m/^fidelity_direct$/) {
+      %quote_data = $quoter->fidelity_direct(@$symbols);
+      last SWITCH;
+    }
+    if($quote_method_name =~ m/^troweprice_direct$/) {
+      %quote_data = $quoter->troweprice_direct(@$symbols);
+      last SWITCH;
+    }
+    if($quote_method_name =~ m/^vanguard$/) {
+      %quote_data = $quoter->vanguard(@$symbols);
+      last SWITCH;
+    }
+    if($quote_method_name =~ m/^asx$/) {
+      %quote_data = $quoter->asx(@$symbols);
+      last SWITCH;
+    }
+    if($quote_method_name =~ m/^tiaacref$/) {
+      %quote_data = $quoter->tiaacref(@$symbols);
+      last SWITCH;
+    }
+    if($quote_method_name =~ m/^trustnet$/) {
+      %quote_data = $quoter->trustnet(@$symbols);
+      last SWITCH;
+    }
+    if($quote_method_name =~ m/^currency$/) {
+      my ($from_currency, $to_currency) = @$symbols;
+
+      last SWITCH unless $from_currency;
+      last SWITCH unless $to_currency;
+
+      my $price = $quoter->currency($from_currency, $to_currency);
+      last SWITCH unless $price;
+
+      $quote_data{$from_currency, "success"} = 1;
+      $quote_data{$from_currency, "symbol"} = $from_currency;
+      $quote_data{$from_currency, "currency"} = $to_currency;
+      $quote_data{$from_currency, "last"} = $price;
+
+      my @new_symbols = ($from_currency);
+      $symbols = \@new_symbols;
+
+      last SWITCH;
+    }
+  }
+
+  if(!%quote_data) {
+    print "#f\n";
+    exit 1;
+  }
+
+  print schemify_quotes($symbols, \%quote_data);
+  STDOUT->flush();
+}
+
+exit 0;
+
+__END__
+
+# Keep this around in case we need to go back to complex per-symbol args.
+#
+#    while($input) {
+#      # Items should look like "RHAT" "EST")
+#      # Grab RHAT and delete ("RHAT"\s*
+#      if($input !~ s/^\(\s*$dq([^$dq]+)$dq\s*//o) { return 0; }
+#      my $symbol = $1;
+#      my $timezone;
+#      # Now grab EST or #f and delete \s*"EST") or #f)
+#      if($input =~ s/^\s*$dq([^$dq]+)$dq\)\s*//o) {
+#        $timezone = $1;
+#      } else {
+#        if($input =~ s/^\s*(\#f)\)\s*//o) {
+#          $timezone = 0;
+#        } else {
+#          return 0;
+#        }                
+#      }
+
+#  sub get_quote_utc {
+#    # return the date in utc epoch seconds, using $timezone if specified.
+#    my ($item, $timezone, $quotehash) = @_;
+
+#    if(!defined($timezone)) { return "failed-conversion"; }
+
+#    my $datestr = $$quotehash{$item, 'date'};
+#    my $timestr = $$quotehash{$item, 'time'};
+
+#    if(!$datestr) {
+#      return "failed-conversion";
+#    }
+#    my $parsestr = $datestr;
+#    if($timestr) {
+#      $parsestr .= " $timestr";
+#    }
+
+#    if($timezone) {
+#      # Perform a conversion.
+#      $parsestr = Date_ConvTZ(ParseDate($parsestr), $timezone, 'UTC');
+#    }
+#    my $result = UnixDate($parsestr, "%s");
+#    if($result !~ /^(\+|-)?\d+$/) {
+#      $result = "failed-conversion";
+#    }
+#    return $result;
+#  }
+
+## Local Variables:
+## mode: perl
+## End:

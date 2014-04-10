@@ -1,0 +1,26 @@
+<ARTICLE ID="XACC-PNL">
+<ARTHEADER>
+<TITLE>Extracto de Lucros e Prejuizos</TITLE>
+</ARTHEADER>
+    <sect1>
+      <title></title>
+<PARA>    <INLINEMEDIAOBJECT>
+<IMAGEOBJECT>
+<IMAGEDATA FILEREF="image/report-pnl.png">
+</IMAGEOBJECT>
+</INLINEMEDIAOBJECT> 
+
+    </PARA>
+<PARA>Este relatório resume as suas fontes de receitas e de despesas.
+
+    </PARA>
+<PARA>Pode especificar o período contabilistico a utilizar pelo relatório 
+    utilizando o botão "parâmetros" na barra de ferramentas.
+
+</PARA>
+</sect1>
+</ARTICLE>
+
+<!-- Local variables: -->
+<!-- sgml-parent-document: "gnucash.sgml" -->
+<!-- End: -->

@@ -1,0 +1,79 @@
+<ARTICLE ID="XACC-TXF-EXPORT">
+
+<ARTHEADER>
+<TITLE>Exportação TXF de dados de impostos</TITLE>
+</ARTHEADER>
+    <sect1>
+      <title></title>
+<PARA>O relatório de impostos permite-lhe exportar todas as Receitas e 
+      Despesas relacionadas com impostos para um ficheiro <ULINK 
+      URL="http://www.turbotax.com/txf/index.html">TXF (Tax eXchange Format)
+      </ULINK> para além do formato html que todos os relatórios permitem. 
+      O ficheiro TXF pode ser importado para aplicações de preenchimento de 
+      declarações de impostos tais como o TaxCut ou o TurboTax.
+</PARA>
+
+<PARA><EMPHASIS>NOTE:</EMPHASIS> Para que isto funcione, o utilizador tem de 
+      separar as receitas tributáveis das isentas para contas diferentes, bem 
+      como despesas dedutíveis e não dedutíveis. O utilizador tem também de 
+      definir a categoria TXF de cada conta relacionada com impostos. A janela 
+      de "Informação de Impostos" no menu "Contas" é utilizada para tal.  É melhor 
+      definir estes pontos antes de realmente exportar, caso contrário, você 
+      irá ficar apenas com um ficheiro vazio.  Existe um ficheiro taxreport.xac 
+      no directório de exemplos, que mostra uma maneira de definir estes pontos.
+</PARA>
+
+<PARA>    <INLINEMEDIAOBJECT>
+<IMAGEOBJECT>
+<IMAGEDATA FILEREF="image/tax-info-dialog.png">
+</IMAGEOBJECT>
+</INLINEMEDIAOBJECT> 
+</PARA>
+
+<PARA><EMPHASIS>IMPORTANTE:</EMPHASIS> A maioria dos códigos TXF apenas 
+      devem surgir numa única conta!  As excepções são códigos para os quais 
+      a "Fonte do Nome do Pagador" não está cinzenta, sendo que cada uma pode 
+      surgir várias vezes. Claro, cada duplicado deverá ter um nome de pagador 
+      único. Estas são tipicamente contas de poupança, acções ou fundos de 
+      investimento que pagam dividendos.
+</PARA>
+
+<PARA>
+    <ITEMIZEDLIST>
+      <LISTITEM><PARA>Contas: para as quais definir uma categoria TXF.
+        Se nenhuma conta for seleccionada nada é alterado.  Se várias 
+        contas forem seleccionadas, todas as contas de Receitas serão 
+        definidas para o item seleccionado. </PARA></LISTITEM>
+
+      <LISTITEM><PARA>Categorias TXF: Seleccione a desejada. Uma <LINK
+        LINKEND="XACC-TXF-CATEGORIES">descrição detalhada</LINK>
+        surge mais abaixo.</PARA></LISTITEM>
+
+      <LISTITEM><PARA>Fonte do Nome do Pagador: Um texto descritivo que é 
+        exportado junto com o valor da conta.  Isto é normalmente o nome 
+        do banco, acção, ou fundo de investimento que paga dividendos ou 
+        juros.  Ocasionalmente, é uma descrição de uma dedução.</PARA>
+
+        <PARA>Na lista de selecção de contas acima, "Fundo de Mercado 
+        Monetário Um" é um exemplo de onde o nome da conta corrente é 
+        exportado. Isto é tipicamente utilizado quando o fundo paga apenas 
+        um tipo de receitas, tais como juro.  Para o "Fundo Mútuo Quatro" e 
+        "Fundo Mútuo Cinco", as categorias "Ganho de Capital de Longo Prazo" 
+        e "Receitas de Dividendos" irão ambas exportar o nome da conta pai. 
+        Isto é tipicamente utilizado quando o fundo paga vários tipos diferentes 
+        de rendimentos.  Tal como apresentado neste exemplo, estes fundos têm 
+        três tipos de distribuições, mas as categorias "Receitas" e "Ganhos de 
+        Capital de Curto Prazo" são somadas e exportadas em conjunto como "Receitas 
+        de Dividendos", visto serem tributadas da mesma forma.</PARA></LISTITEM>
+
+    </ITEMIZEDLIST>
+
+    <LINK LINKEND="XACC-TXF-EXPORT-ANOMALIES">Anomalias e limitações 
+      conhecidas.</LINK>
+</PARA>
+</sect1>
+</ARTICLE>
+
+<!-- Local variables: -->
+<!-- sgml-parent-document: "gnucash.sgml" -->
+<!-- End: -->

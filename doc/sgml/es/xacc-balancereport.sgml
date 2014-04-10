@@ -1,0 +1,62 @@
+<ARTICLE ID="XACC-BALANCEREPORT">
+
+<ARTHEADER>
+<TITLE>Listado de Registros de Balance</TITLE>
+</ARTHEADER>
+
+<PARA>    <INLINEMEDIAOBJECT>
+<IMAGEOBJECT>
+<IMAGEDATA FILEREF="image/report-av-baln.png">
+</IMAGEOBJECT>
+</INLINEMEDIAOBJECT>
+    </PARA>
+
+<PARA>Los parámetros para este listado incluyen:
+
+    <ITEMIZEDLIST>
+<LISTITEM>
+<PARA>Las fechas de inicio y fin de los periodos contables.
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>La longitud de cada "paso", o intervalo en el periodo contable.
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Las cuentas que el listado incluirá. Si más de una cuenta
+      está seleccionado, la suma de todos los balances de las cuentas
+      seleccionadas es utilizado <EMPHASIS>NB: ¿Puede alguien
+      asegurarse que es correcto?</EMPHASIS>
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>        Que aspecto del listado es utilizado en el gráfico.
+        Hay tres gráficos disponibles:
+
+        <ITEMIZEDLIST>
+<LISTITEM>
+<PARA>Balance medio durante el intervalo
+
+          </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Total neto de Ganancias/Perdidas durante el intervalo
+
+          </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Ganancias y Perdidas durante el intervalo
+        </PARA>
+</LISTITEM>
+</ITEMIZEDLIST>
+      
+    </PARA>
+</LISTITEM>
+</ITEMIZEDLIST>
+
+
+</PARA>
+</ARTICLE>

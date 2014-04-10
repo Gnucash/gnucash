@@ -1,0 +1,73 @@
+<ARTICLE ID="XACC-TAX-REPORT">
+
+<ARTHEADER>
+<TITLE>Relatório de Impostos / <LINK LINKEND="XACC-TXF-EXPORT">Exportação TXF</LINK></TITLE>
+
+</ARTHEADER>
+
+    <sect1>
+      <title></title>
+<PARA>
+  <ULINK URL="xacc-tax-report-example.html">
+    <INLINEMEDIAOBJECT>
+      <IMAGEOBJECT>
+        <IMAGEDATA FILEREF="image/report-tax.png">
+      </IMAGEOBJECT>
+    </INLINEMEDIAOBJECT> 
+  </ULINK>
+</PARA>
+
+<PARA>Este relatório permite-lhe ver todas as Receitas e Despesas relaccionadas com impostos. 
+      Visualisavel até à décima-quinta subconta. Sub-contas inferiores são ignoradas.
+
+    </PARA>
+
+<PARA><EMPHASIS>NOTE:</EMPHASIS> Para que isto funcione, o utilizador tem 
+      de separar rendimentos tributáveis dos não tributáveis para contas 
+      diferentes, tal como despesas dedutíveis e não dedutíveis. O utilizador 
+      tem também de Definir o Estado de tributação de cada conta tributável. 
+      A janela "Informação de Impostos" na opção de menu "Contas" permite-o. 
+      Existe um ficheiro taxreport.xac no directório dos exemplos, que mostra 
+      uma forma como isto pode ser configurado. 
+    </PARA>
+<PARA>    <INLINEMEDIAOBJECT>
+<IMAGEOBJECT>
+<IMAGEDATA FILEREF="image/report-tax-options.png">
+</IMAGEOBJECT>
+</INLINEMEDIAOBJECT> 
+
+    </PARA>
+
+<PARA>Opções definíveis para este relatório incluem:
+    
+    <ITEMIZEDLIST>
+      <LISTITEM><PARA>As datas de início e de fim - defeito: Desde o Início do Ano.
+                </PARA></LISTITEM>
+      <LISTITEM><PARA>Período Alternativo: (Ano é relativo desde:)
+  <ITEMIZEDLIST>
+    <LISTITEM><PARA>Utilizar Desde - Até (defeito se data actual é 
+            posterior a 16 de Abril)</PARA></LISTITEM>
+    <LISTITEM><PARA>1º, 2º, 3º e 4º Trimestres Fiscais Estimados 
+          (Desde: ano)</PARA></LISTITEM>
+    <LISTITEM><PARA>Ano anterior (ano anterior a Desde: ano) (defeito se 
+            a data actual é anterior a 16 de Abril) </PARA></LISTITEM>
+    <LISTITEM><PARA>1º, 2º, 3º e 4º Trimestres Fiscais Estimados 
+           do ano anterior</PARA></LISTITEM>
+  </ITEMIZEDLIST></PARA></LISTITEM>
+      <LISTITEM><PARA>As contas sobre as quais o relatório será gerado. 
+        Todas as subcontas tributáveis das contas seleccionadas são automaticamente 
+        apresentadas. Se nenhuma conta for seleccionada, todas as contas 
+        tributáveis são apresentadas. Contas não tributáveis não são visíveis, 
+        mesmo que seleccionadas, mas as sub-contas tributáveis serão 
+        visualisáveis.</PARA></LISTITEM>
+      <LISTITEM><PARA>Suprimir valores 0.00</PARA></LISTITEM>
+      <LISTITEM><PARA>Mostrar nome completo da conta</PARA></LISTITEM>
+    </ITEMIZEDLIST>
+
+</PARA>
+</sect1>
+</ARTICLE>
+
+<!-- Local variables: -->
+<!-- sgml-parent-document: "gnucash.sgml" -->
+<!-- End: -->

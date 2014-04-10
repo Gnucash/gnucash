@@ -1,4 +1,6 @@
 /********************************************************************\
+ * Scrub.h -- convert single-entry accounts to clean double-entry   *
+ *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
  * published by the Free Software Foundation; either version 2 of   *
@@ -32,17 +34,20 @@
  * Copyright (c) 1998, 1999, 2000 Linas Vepstas
  */
 
-#ifndef __XACC_SCRUB_H__
-#define __XACC_SCRUB_H__
+#ifndef XACC_SCRUB_H
+#define XACC_SCRUB_H
 
-#include "Account.h"
 #include "Group.h"
+#include "gnc-engine.h"
 
 /* The ScrubOrphans() methods search for transacations that contain
  *    splits that do not have a parent account. These "orphaned splits"
  *    are placed into an "orphan account" which the user will have to 
  *    go into and clean up.  Kind of like the unix "Lost+Found" directory
  *    for orphaned inodes.
+ *
+ * The xaccTransScrubOrphans() method scrubs only the splits in the
+ *    given transaction. A root account group must be provided.
  *
  * The xaccAccountScrubOrphans() method performs this scrub only for the 
  *    indicated account, and not for any of its children.
@@ -53,17 +58,43 @@
  * The xaccGroupScrubOrphans() method performs this scrub for the 
  *    child accounts of this group.
  */
-void xaccAccountScrubOrphans (Account *acc);
-void xaccAccountTreeScrubOrphans (Account *acc);
-void xaccGroupScrubOrphans (AccountGroup *grp);
+void xaccTransScrubOrphans (Transaction *trans, AccountGroup *root,
+                            GNCBook *book);
+void xaccAccountScrubOrphans (Account *acc, GNCBook *book);
+void xaccAccountTreeScrubOrphans (Account *acc, GNCBook *book);
+void xaccGroupScrubOrphans (AccountGroup *grp, GNCBook *book);
+
+/* The ScrubSplit methods ensure that splits with the same commodity
+ *   and command currency have the same amount and value.
+ */
+void xaccSplitScrub (Split *split);
+void xaccTransScrubSplits (Transaction *trans);
+void xaccAccountScrubSplits (Account *account);
+void xaccAccountTreeScrubSplits (Account *account);
+void xaccGroupScrubSplits (AccountGroup *group);
 
 /* The xaccScrubImbalance() method searches for transactions that do
  *    not balance to zero. If any such transactions are found, a split
  *    is created to offset this amount and is added to an "imbalance"
  *    account.
  */
-void xaccAccountScrubImbalance (Account *acc);
-void xaccAccountTreeScrubImbalance (Account *acc);
-void xaccGroupScrubImbalance (AccountGroup *grp);
+void xaccTransScrubImbalance (Transaction *trans, AccountGroup *root,
+                              Account *parent, GNCBook *book);
+void xaccAccountScrubImbalance (Account *acc, GNCBook *book);
+void xaccAccountTreeScrubImbalance (Account *acc, GNCBook *book);
+void xaccGroupScrubImbalance (AccountGroup *grp, GNCBook *book);
 
-#endif /* __XACC_SCRUB_H__ */
+/* The xaccTransScrubCurrency method fixes transactions without a
+ * common_currency by using the old account currency and security
+ * fields of the parent accounts of the transaction's splits. */
+void xaccTransScrubCurrency (Transaction *trans, GNCBook *book);
+
+/* The xaccAccountScrubCommodity method fixed accounts without
+ * a commodity by using the old account currency and security. */
+void xaccAccountScrubCommodity (Account *account, GNCBook *book);
+
+/* The xaccGroupScrubCommodities will scrub the currency/commodity
+ * of all accounts & transactions in the group. */
+void xaccGroupScrubCommodities (AccountGroup *group, GNCBook *book);
+
+#endif /* XACC_SCRUB_H */
