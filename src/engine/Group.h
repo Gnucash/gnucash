@@ -34,8 +34,14 @@
 
 
 /** PROTOTYPES ******************************************************/
+/*
+ * The xaccAccountDestroy() routine will destroy and free all 
+ *    the data associated with this account group.  The group
+ *    must have been opened for editing with 
+ *    xaccAccountGroupBeginEdit() first, before the Destroy is called.
+ */
 AccountGroup *xaccMallocAccountGroup (GNCBook *book);
-void          xaccFreeAccountGroup (AccountGroup *account_group);
+void          xaccAccountGroupDestroy (AccountGroup *grp);
 
 GNCBook * xaccGroupGetBook (AccountGroup *group);
 
@@ -43,15 +49,26 @@ void          xaccAccountGroupBeginEdit (AccountGroup *grp);
 void 	      xaccAccountGroupCommitEdit (AccountGroup *grp);
 
 /*
- * The xaccGroupConcatGroup() subroutine will move all accounts
- *    from the "from" group to the "to" group
+ * The xaccGroupConcatGroup() subroutine will move (reparent) 
+ *    all accounts from the "src" group to the "dest" group,
+ *    preserving the account heirarchy.  It will also take care 
+ *    that the moved accounts will have the "dest" group's book
+ *    parent as well.
+ *
+ * The xaccGroupCopyGroup() subroutine will copy all accounts
+ *    from the "src" group to the "dest" group, preserving the 
+ *    account heirarchy.  It will also take care that the moved 
+ *    accounts will have the "dest" group's book parent as well.
+ *    This routine will *NOT* copy any splits/transactions.
+ *    It will copy the KVP trees in each account.
  *
  * The xaccGroupMergeAccounts() subroutine will go through a group,
  *    merging all accounts that have the same name and description.
  *    This function is useful when importing Quicken(TM) files.
  */
 
-void    xaccGroupConcatGroup (AccountGroup *to, AccountGroup *from);
+void    xaccGroupConcatGroup (AccountGroup *dest, AccountGroup *src);
+void    xaccGroupCopyGroup (AccountGroup *dest, AccountGroup *src);
 void    xaccGroupMergeAccounts (AccountGroup *grp);
 
 /*
@@ -65,35 +82,26 @@ void    xaccGroupMergeAccounts (AccountGroup *grp);
  *
  * The xaccGroupMarkNotSaved() subroutine will mark
  *    the given group as not having been saved.
- *
- * The xaccGroupMarkDoFree() subroutine will mark
- *    all accounts in the group as being destroyed.
  */
 
 gboolean xaccGroupNotSaved  (AccountGroup *grp);
 void     xaccGroupMarkSaved (AccountGroup *grp);
 void     xaccGroupMarkNotSaved (AccountGroup *grp);
 
-void     xaccGroupMarkDoFree (AccountGroup *grp);
-
 /*
- * The xaccGroupRemoveAccount() subroutine will remove the indicated
- *    account from its parent account group. It will NOT free the
- *    associated memory or otherwise alter the account: the account
- *    can now be reparented to a new location.
- *    Note, however, that it will mark the old parents as having 
- *    been modified.
+ * The xaccGroupInsertAccount() subroutine will insert the indicated
+ *    account into the indicated group.  If it already is the child 
+ *    of another group, it will be removed there first.  If the
+ *    account belongs to a different book than the the group, it
+ *    will be removed from the other book (and thus, the other book's
+ *    entity tables, generating destroy & create events).  If the 
+ *    account is removed from and inserted into the same group, the 
+ *    overall account sort order will be recomputed.  
  *
- * The xaccAccountRemoveGroup() subroutine will remove the indicated
- *    account group from its parent account. It will NOT free the
- *    associated memory or otherwise alter the account group: the 
- *    account group can now be reparented to a new location.
- *    Note, however, that it will mark the old parents as having 
- *    been modified.
+ * The xaccAccountInsertSubAccount() does the same, except that
+ *    the parent is specified as an account.
  */
 
-void    xaccGroupRemoveAccount (AccountGroup *grp, Account *account);
-void    xaccAccountRemoveGroup (Account *acc);
 void    xaccGroupInsertAccount (AccountGroup *grp, Account *acc);
 void    xaccAccountInsertSubAccount (Account *parent, Account *child);
 
@@ -157,9 +165,13 @@ Account *xaccGetPeerAccountFromFullName (Account *acc,
                                          const char separator);
 
 /*
- * The xaccGetAccountRoot () subroutine will find the topmost 
+ * The xaccGroupGetRoot() subroutine will find the topmost 
+ *    (root) group to which this group belongs.
+ *
+ * The xaccGetAccountRoot() subroutine will find the topmost 
  *    (root) group to which this account belongs.
  */
+AccountGroup * xaccGroupGetRoot (AccountGroup *grp);
 AccountGroup * xaccAccountGetRoot (Account *account);
 
 /* The xaccGroupGetParentAccount() subroutine returns the parent
@@ -167,10 +179,14 @@ AccountGroup * xaccAccountGetRoot (Account *account);
  */
 Account * xaccGroupGetParentAccount (AccountGroup *group);
 
-/* if the function returns null for a given item, it won't show up in
-   the result list */
+/* The xaccGroupMapAccounts() routine will traverse the account 
+      group, returning a list of accounts.  If the callback
+      returns null for a given item, it won't show up in
+      the result list.  You should free the returned list when
+      you are done with it.
+*/
 typedef  gpointer (*AccountCallback)(Account *a, gpointer data);
-GSList *xaccGroupMapAccounts(AccountGroup *grp,
+AccountList *xaccGroupMapAccounts(AccountGroup *grp,
                              AccountCallback,
                              gpointer data);
 

@@ -43,9 +43,6 @@
 #include "gnc-engine-util.h"
 
 
-/* This static indicates the debugging module that this .o belongs to. */
-static short module = MOD_REGISTER;
-
 gboolean
 gnc_cell_name_equal (const char * cell_name_1,
                      const char * cell_name_2)

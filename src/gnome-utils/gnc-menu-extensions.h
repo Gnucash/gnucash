@@ -26,8 +26,51 @@
 #include <guile/gh.h>
 #include <gnome.h>
 
-void gnc_add_extension(SCM extension);
-void gnc_extensions_menu_setup(GnomeApp * app);
+#define WINDOW_NAME_MAIN     "Main"
+#define WINDOW_NAME_REGISTER "Register"
+#define WINDOW_NAME_INVOICE  "Invoice"
+#define WINDOW_NAME_ALL      "All"
+
+void gnc_add_c_extension(GnomeUIInfo *info, gchar *path);
+void gnc_add_scm_extension(SCM extension);
+
+/* Replacement for gnome_app_insert_menus, since the original one will
+ * fail for i18n. In particular, as soon as the gnome stock menus
+ * (created through the macros in gnome-app-helper) have a different
+ * translation in the original gnome libs compared to the gnucash
+ * message catalog, then the gnome_app_insert_menus will
+ * fail. Therefore this function looks up the translation of each 'path'
+ * element in the gettext domain "gnome-libs" first. 
+ *
+ * This function should be used in all places where the 'path'
+ * contains a stock gnome menu, created through the macros in
+ * gnome-app-helper. */
+void
+gnc_gnome_app_insert_menus (GnomeApp *app, const gchar *path, 
+			    GnomeUIInfo *menuinfo);
+
+/* This is called from the window initializing code, when the actual
+ * menu items stored by the above functions should now be inserted in
+ * the menu of the GnomeApp app.
+ *
+ * app - The GnomeApp to add the stored menu items
+ * prefix - The prefix of the window that is currently being set up.
+ */
+void gnc_extensions_menu_setup(GnomeApp * app, gchar *prefix);
+/* This is called from the window initializing code, when the actual
+ * menu items stored by the above functions should now be inserted in
+ * the menu of the GnomeApp app.
+ *
+ * Use this function when your menu callbacks needs some user_data
+ * pointer in order to access window-related data.
+ *
+ * app - The GnomeApp to add the stored menu items
+ * prefix - The prefix of the window that is currently being set up.
+ * user_data - The user data to be passed on to menu item's callback functions.
+ */
+void gnc_extensions_menu_setup_with_data(GnomeApp * app, 
+					 gchar *prefix, 
+					 gpointer user_data);
 void gnc_extensions_shutdown(void);
 
 #endif

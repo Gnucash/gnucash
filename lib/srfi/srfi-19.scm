@@ -26,6 +26,10 @@
 ;; of the file, by rewriting the code with use of more Guile native
 ;; functions that do more work in a "chunk".
 
+;;; Modifications from the "official" implementation.
+;;;
+;;; Removed all non r5rs-isms that I detected (i.e :optional).
+
 (define-module (srfi srfi-19)
   :use-module (srfi srfi-8)
   :use-module (srfi srfi-9))
@@ -1209,12 +1213,14 @@
                                                port))))))))))))
 
 
-(define (date->string date .  format-string)
+(define (date->string date format-string)
   (call-with-output-string
    (lambda (str-port)
-     (let ((fmt-str (:optional format-string "~c")))
+     (let ((fmt-str format-string))
+       (if (not (and format-string (> (string-length format-string) 0)))
+	   (set! fmt-str "~c"))
        (priv:date-printer date 0 fmt-str (string-length fmt-str) str-port)
-       (get-output-string str-port)))))
+       ))))
 
 (define (priv:char->int ch)
   (case ch

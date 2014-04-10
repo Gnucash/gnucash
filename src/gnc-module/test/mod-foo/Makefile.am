@@ -10,21 +10,28 @@ checklib_LTLIBRARIES=libfoo.la libgncmodfoo.la
 libfoo_la_LDFLAGS = -module
 libfoo_la_SOURCES = foo.c
 
-noinst_HEADERS = foo.h
+noinst_HEADERS = \
+  foo.h \
+  foo-gwrap.h
 
 libgncmodfoo_la_SOURCES = foo-gwrap.c gnc-mod-foo.c
 libgncmodfoo_la_LDFLAGS = -module 
-libgncmodfoo_la_LIBADD = -L. -L.libs -lfoo
+libgncmodfoo_la_LIBADD = libfoo.la
 
 EXTRA_DIST = \
   foo-gwrap.scm \
   gnucash/foo.scm
 
-foo-gwrap.c foo-gwrap.h: foo-gwrap.scm
+foo-gwrap.c foo-gwrap.h: foo-gwrap.scm ${top_builddir}/config.status
 	FLAVOR=gnome guile -c \
 	  "(set! %load-path (cons \"${G_WRAP_MODULE_DIR}\" %load-path)) \
-	  (primitive-load \"./foo-gwrap.scm\") \
-	  (gw:generate-module \"foo-gwrap\")"
+           (primitive-load \"${srcdir}/foo-gwrap.scm\") \
+           (gw:generate-wrapset \"foo-gwrap\")"
 
 BUILT_SOURCES = foo-gwrap.c foo-gwrap.h
-CLEANFILES = *.so* *.a foo-gwrap.c foo-gwrap.h foo-gwrap.html
+
+DISTCLEANFILES = foo-gwrap.html
+
+# Keep automake from generating install targets for test libs
+install-checklibLTLIBRARIES:
+uninstall-checklibLTLIBRARIES:

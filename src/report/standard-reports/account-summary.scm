@@ -29,7 +29,7 @@
 (define-module (gnucash report account-summary))
 
 (use-modules (srfi srfi-1))
-(use-modules (gnucash bootstrap) (g-wrapped gw-gnc)) ;; FIXME: delete after we finish modularizing.
+(use-modules (gnucash main)) ;; FIXME: delete after we finish modularizing.
 (use-modules (gnucash gnc-module))
 
 (gnc:module-load "gnucash/report/report-system" 0)
@@ -38,7 +38,9 @@
 ;; prints a table of account information with clickable 
 ;; links to open the corresponding register window.
 
-;; first define all option's names such that typos etc. are no longer
+(define reportname (N_ "Account Summary"))
+
+;; define all option's names such that typos etc. are no longer
 ;; possible.
 (define optname-date (N_ "Date"))
 (define optname-display-depth (N_ "Account Display Depth"))
@@ -81,13 +83,14 @@
     (gnc:options-add-account-selection! 
      options gnc:pagename-accounts 
      optname-display-depth optname-show-subaccounts
-     optname-accounts "a" 1
+     optname-accounts "a" 2
      (lambda ()
        ;; FIXME : gnc:get-current-accounts disappeared
        (let ((current-accounts '()))
          (cond ((not (null? current-accounts)) current-accounts)
                (else
-                (gnc:group-get-account-list (gnc:get-current-group)))))))
+                (gnc:group-get-account-list (gnc:get-current-group))))))
+     #t)
     
     ;; with or without grouping
     (gnc:options-add-group-accounts!      
@@ -134,6 +137,7 @@
      (gnc:lookup-option 
       (gnc:report-options report-obj) pagename optname)))
   
+  (gnc:report-starting reportname)
   (let ((display-depth (get-option gnc:pagename-accounts 
                                    optname-display-depth ))
         (show-subaccts? (get-option gnc:pagename-accounts
@@ -161,7 +165,12 @@
         (doc (gnc:make-html-document))
         (txt (gnc:make-html-text)))
 
-    (gnc:html-document-set-title! doc report-title)
+    (gnc:html-document-set-title! 
+     doc 
+     (string-append 
+      report-title
+      " "
+      (gnc:print-date date-tp)))
 
     (if (not (null? accounts))
         ;; if no max. tree depth is given we have to find the
@@ -170,19 +179,27 @@
 				  (gnc:get-current-group-depth)
 				  display-depth)
                               (if do-grouping? 1 0)))
-               (exchange-fn (gnc:case-exchange-fn 
+               (exchange-fn #f)
+	       (table #f))
+
+	  (gnc:report-percent-done 2)
+	  (set! exchange-fn (gnc:case-exchange-fn 
                              price-source report-currency date-tp))
-               ;; do the processing here
-               (table (gnc:html-build-acct-table 
+	  (gnc:report-percent-done 10)
+
+	  ;; do the processing here
+	  (set! table (gnc:html-build-acct-table 
                        #f date-tp 
                        tree-depth show-subaccts? accounts
+		       10 80
                        #t
                        #t gnc:accounts-get-comm-total-assets 
                        (_ "Total") do-grouping? 
                        show-parent-balance? show-parent-total?
-                       show-fcur? report-currency exchange-fn)))
+                       show-fcur? report-currency exchange-fn #t))
 
           ;; add the table 
+	  (gnc:report-percent-done 90)
           (gnc:html-document-add-object! doc table)
 
           ;; add currency information
@@ -200,12 +217,14 @@
         ;; error condition: no accounts specified
         (gnc:html-document-add-object! 
          doc 
-         (gnc:html-make-no-account-warning report-title)))
+         (gnc:html-make-no-account-warning 
+	  report-title (gnc:report-id report-obj))))
 
+    (gnc:report-finished)
     doc))
 
 (gnc:define-report 
  'version 1
- 'name (N_ "Account Summary")
+ 'name reportname
  'options-generator accsum-options-generator
  'renderer accsum-renderer)

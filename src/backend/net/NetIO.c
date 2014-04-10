@@ -219,9 +219,16 @@ xmlbeBookLoad (Backend *bend)
 
 /* ==================================================================== */
 
-static void
-xmlbeRunQuery (Backend *b, Query *q) 
+static gpointer
+xmlbeCompileQuery (Backend *b, Query *q)
 {
+  return q;
+}
+
+static void
+xmlbeRunQuery (Backend *b, gpointer q_p) 
+{
+  Query *q = (Query*) q_p;
   XMLBackend *be = (XMLBackend *) b;
   AccountGroup *grp, *reply_grp;
   ghttp_request *request;
@@ -293,21 +300,18 @@ xmlendNew (void)
 
   /* generic backend handlers */
   be->be.book_begin = NULL;
-  be->be.book_load = xmlbeBookLoad;
-  be->be.price_load = NULL;
   be->be.book_end = xmlbeBookEnd;
 
-  be->be.account_begin_edit = NULL;
-  be->be.account_commit_edit = NULL;
-  be->be.trans_begin_edit = NULL;
-  be->be.trans_commit_edit = NULL;
-  be->be.trans_rollback_edit = NULL;
-  be->be.price_begin_edit = NULL;
-  be->be.price_commit_edit = NULL;
+  be->be.load = xmlbeBookLoad;
+
+  be->be.begin = NULL;
+  be->be.commit = NULL;
+  be->be.rollback = NULL;
+  be->be.compile_query = xmlbeCompileQuery;
+  be->be.free_query = NULL;
   be->be.run_query = xmlbeRunQuery;
   be->be.price_lookup = NULL;
   be->be.sync = NULL;
-  be->be.sync_price = NULL;
   be->be.events_pending = NULL;
   be->be.process_events = NULL;
 

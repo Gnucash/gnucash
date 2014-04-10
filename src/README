@@ -1,35 +1,11 @@
-This directory contains
+This directory contains the source for GnuCash.
+See README.modules for the layout of the module subdirectories.
+The non-module directories are:
 
-  calculation: an implementation of a financial calculator, an
-               amortization scheduler, and an expression parser.
   doc: various notes about design and the design documentation.
-  engine: a directory containing a gui-independent accounting engine
   experimental: for experimental systems.
-  gnome: most of the code for the gtk/gnome front end.
-  guile: guile related code including g-wrap bits.
+  gnome: misc code for the gtk/gnome front end.
   optional: bits supported via ./configure --enable-* or --with-* args.
   pixmaps: various runtime images.
   quotes: code for downloading stock quotes.
-  register: a directory containg the register object.
-  scm: all of the scheme code.
-
-This directory contains a smatttering of gui-independent files.
-
-  Destroy.[ch]      -- functions for destroying GUI windows
-  EuroUtils.[ch]    -- implements euro currency conversions
-  FileBox.h         -- generic interface to a file picker dialog
-  FileDialog.[ch]   -- GUI independent functions for saving and loading
-                       GnuCash files. The name of the file is rather
-                       misleading!
-  MainWindow.h      -- generic interface to main GUI window
-  MultiLedger.[ch]  -- utilities for handling and updating multiple
-                       register windows
-  Refresh.[ch]      -- utilities for refreshing GUI windows
-  SplitLedger.[ch]  -- loads a register window with data from the engine
-
-  file-history.h    -- interface for saving and restoring file open history
-  gnc-ui-common.h   -- define some GUI abstractions
-  messages.h
-  messages_i18n.h   -- translatable strings
-  top-level.h       -- generic top-level interfaces
-  ui-callbacks.h    -- an interface that any gnucash gui must support
+  scm: misc scheme code.

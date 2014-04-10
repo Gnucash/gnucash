@@ -38,8 +38,6 @@
 #include "gnc-html-guppi.h"
 #include "gnc-ui-util.h"
 
-static short module = MOD_GUI;
-
 static int handle_piechart(gnc_html * html, GtkHTMLEmbedded * eb, gpointer d);
 static int handle_barchart(gnc_html * html, GtkHTMLEmbedded * eb, gpointer d);
 static int handle_scatter(gnc_html * html, GtkHTMLEmbedded * eb, gpointer d);
@@ -222,31 +220,6 @@ free_strings(char ** strings, int nstrings) {
 }
 
 
-/* 
- * if at least one is non-zero, return TRUE
- * ie TRUE==good
- */
-
-static gboolean
-check_doubles(double *numbers, int size)
-{
-  int count;
-
-  for(count = 0;count < size; count++)
-  {
-    /* FIXME: floating point equalities are strictly evil but 
-     * it shouldn't catch us here
-     */
-    if(numbers[count] != 0.0)
-    {
-      return TRUE;
-    }
-  }
-
-  return FALSE;
-}
-
-
 struct guppi_chart_data {
   GtkWidget    * widget;
   GuppiObject  * guppiobject;
@@ -353,6 +326,7 @@ guppi_bar_1_callback(gint row, gint col, gpointer user_data) {
 			 col);  
 }
 
+#if UNNEEDED_OPTIONS
 static void
 guppi_bar_2_callback(gint row, gint col, gpointer user_data) {
   struct guppi_chart_data * chart = user_data;
@@ -370,6 +344,7 @@ guppi_bar_3_callback(gint row, gint col, gpointer user_data) {
                          /* (chart->cols * row)+ FIXME: see above*/
                          col);  
 }
+#endif
 
 static GPtrArray * 
 convert_string_array(char ** strings, int nstrings) {
@@ -587,10 +562,14 @@ gnc_html_embedded_barchart(gnc_html * parent,
   char        * param;
   int         datarows=0;
   int         datacols=0;
+#if UNNEEDED_OPTIONS
   int         legend_reversed=0;
+#endif
   int         rotate=0;
   int         stacked=0;  
-  int         normalize_stacks=0;  
+#if UNNEEDED_OPTIONS
+  int         normalize_stacks=0; 
+#endif
   double      * data=NULL;
   char        ** col_labels=NULL;
   char        ** row_labels=NULL;
@@ -932,30 +911,5 @@ gnc_html_embedded_scatter(gnc_html * parent,
   else 
     return NULL;
 }
-
-
-/********************************************************************
- * gnc_html_embedded_account_tree
- * create a gnucash account tree display from an <object> form
- ********************************************************************/
-
-static void 
-set_bools(char * indices, gboolean * array, int num) {
-  int index, n, args;
-  int accum = 0;
-  int choffset = 0;
-  
-  for(n=0; n<num; n++) {
-    args = sscanf(indices+accum, "%d%n", &index, &choffset);
-    accum += choffset;
-    if(args == 0) {
-      break;
-    }
-    if(index < num) {
-      array[index] = TRUE;
-    }
-  }
-}
-
 
 #endif

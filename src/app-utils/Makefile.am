@@ -38,14 +38,18 @@ gncinclude_HEADERS = \
   gnc-ui-common.h \
   gnc-ui-util.h \
   guile-util.h \
-  option-util.h
+  option-util.h \
+  i18n.h
+
+noinst_HEADERS = \
+  gw-app-utils.h
 
 libgncmod_app_utils_la_LDFLAGS = -module
 
 libgncmod_app_utils_la_LIBADD = \
-  ${top_srcdir}/src/gnc-module/libgncmodule.la \
-  ${top_srcdir}/src/engine/libgncmod-engine.la \
-  ${top_srcdir}/src/calculation/libgncmod-calculation.la \
+  ${top_builddir}/src/gnc-module/libgncmodule.la \
+  ${top_builddir}/src/engine/libgncmod-engine.la \
+  ${top_builddir}/src/calculation/libgncmod-calculation.la \
   ${GUILE_LIBS} \
   ${GLIB_LIBS}
 
@@ -61,10 +65,10 @@ gncscm_DATA = \
   config-var.scm \
   date-utilities.scm \
   hooks.scm \
+  kvp-option-registry.scm \
   options.scm \
   prefs.scm \
-  simple-obj.scm \
-  utilities.scm
+  simple-obj.scm
 
 gwmoddir = ${GNC_GWRAP_LIBDIR}
 gwmod_DATA = gw-app-utils.scm gw-app-utils-spec.scm
@@ -75,22 +79,51 @@ EXTRA_DIST = \
   .cvsignore \
   ${gncmod_DATA} \
   ${gncscm_DATA} \
-  ${gwmod_DATA}
+  ${gwmod_DATA} \
+  i18n.h.in 
+
+## We borrow guile's convention and use @-...-@ as the substitution
+## brackets here, instead of the usual @...@.  This prevents autoconf
+## from substituting the values directly into the left-hand sides of
+## the sed substitutions.
+i18n.h: i18n.h.in ${top_builddir}/config.status
+	rm -f $@.tmp
+	sed < $< > $@.tmp \
+            -e 's:@-PACKAGE-@:${PACKAGE}:g' \
+            -e 's:@-LOCALE_DIR-@:${LOCALE_DIR}:g'
+	mv $@.tmp $@
+
+# This has to be in BUILT_SOURCES because other files depend on it,
+# but it's never a target itself.
+BUILT_SOURCES = i18n.h
+
+if GNUCASH_SEPARATE_BUILDDIR
+#For compiling
+SCM_FILE_LINKS = gw-app-utils-spec.scm
+#For executing test cases
+SCM_FILE_LINKS += app-utils.scm
+endif
 
 .scm-links: 
 	rm -f gnucash g-wrapped
 	ln -sf . gnucash 
 	ln -sf . g-wrapped 
+if GNUCASH_SEPARATE_BUILDDIR
+	for X in ${SCM_FILE_LINKS} ; do \
+	  ln -sf ${srcdir}/$$X . ; \
+	done
+endif
 	touch .scm-links
 
-gw-app-utils.scm gw-app-utils.c gw-app-utils.h: .scm-links gw-app-utils-spec.scm
+gw-app-utils.scm gw-app-utils.c gw-app-utils.h: \
+  .scm-links gw-app-utils-spec.scm ${top_builddir}/config.status
 	FLAVOR=gnome guile -c \
 	 "(set! %load-path (cons \"${G_WRAP_MODULE_DIR}\" %load-path)) \
 	  (set! %load-path (cons \"${PWD}\" %load-path)) \
-	  (set! %load-path (cons \"${top_srcdir}/src/engine\" %load-path)) \
+	  (set! %load-path (cons \"${top_builddir}/src/engine\" %load-path)) \
 	  (primitive-load \"./gw-app-utils-spec.scm\") \
-	  (gw:generate-module \"gw-app-utils\")"
+	  (gw:generate-wrapset \"gw-app-utils\")"
 
-BUILT_SOURCES = gw-app-utils.scm gw-app-utils.c gw-app-utils.h
-CLEANFILES = gw-app-utils.scm gw-app-utils.c gw-app-utils.h gw-app-utils.html \
-              gnucash g-wrapped .scm-links
+BUILT_SOURCES += gw-app-utils.scm gw-app-utils.c gw-app-utils.h
+DISTCLEANFILES = ${SCM_FILE_LINKS} gnucash g-wrapped .scm-links \
+                 gw-app-utils.html

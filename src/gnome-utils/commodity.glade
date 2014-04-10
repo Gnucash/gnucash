@@ -102,6 +102,23 @@
     </widget>
 
     <widget>
+      <class>GtkLabel</class>
+      <name>select_user_prompt</name>
+      <label>Select user information here...</label>
+      <justify>GTK_JUSTIFY_CENTER</justify>
+      <wrap>False</wrap>
+      <xalign>0.5</xalign>
+      <yalign>0.5</yalign>
+      <xpad>0</xpad>
+      <ypad>0</ypad>
+      <child>
+	<padding>0</padding>
+	<expand>False</expand>
+	<fill>False</fill>
+      </child>
+    </widget>
+
+    <widget>
       <class>GtkHBox</class>
       <name>hbox62</name>
       <border_width>5</border_width>
@@ -237,7 +254,7 @@
 <widget>
   <class>GnomeDialog</class>
   <name>Commodity Dialog</name>
-  <title>New Currency/Security</title>
+  <title>New Security</title>
   <type>GTK_WINDOW_TOPLEVEL</type>
   <position>GTK_WIN_POS_NONE</position>
   <modal>False</modal>
@@ -280,6 +297,7 @@
 	<class>GtkButton</class>
 	<name>button66</name>
 	<can_default>True</can_default>
+	<has_default>True</has_default>
 	<can_focus>True</can_focus>
 	<signal>
 	  <name>clicked</name>
@@ -443,6 +461,7 @@
 	  <name>fullname_entry</name>
 	  <tooltip>Enter the full name of the commodity. Example: US Dollars</tooltip>
 	  <can_focus>True</can_focus>
+	  <has_focus>True</has_focus>
 	  <editable>True</editable>
 	  <text_visible>True</text_visible>
 	  <text_max_length>0</text_max_length>

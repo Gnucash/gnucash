@@ -25,10 +25,10 @@
 
 (define-module (gnucash report account-piecharts))
 
-(use-modules (g-wrapped gw-gnc))
-(use-modules (gnucash bootstrap) (g-wrapped gw-gnc)) ;; FIXME: delete after we finish modularizing.
+(use-modules (gnucash main)) ;; FIXME: delete after we finish modularizing.
 (use-modules (srfi srfi-1))
 (use-modules (ice-9 slib))
+(use-modules (ice-9 regex))
 (use-modules (gnucash gnc-module))
 
 (require 'printf)
@@ -73,6 +73,7 @@ balance at a given time"))
 (define optname-slices (N_ "Maximum Slices"))
 (define optname-plot-width (N_ "Plot Width"))
 (define optname-plot-height (N_ "Plot Height"))
+(define optname-sort-method (N_ "Sort Method"))
 
 ;; The option-generator. The only dependance on the type of piechart
 ;; is the list of account types that the account selection option
@@ -137,7 +138,11 @@ balance at a given time"))
 
     (gnc:options-add-plot-size!
      options gnc:pagename-display 
-     optname-plot-width optname-plot-height "d" 500 250)
+     optname-plot-width optname-plot-height "d" 500 350)
+
+    (gnc:options-add-sort-method! 
+     options gnc:pagename-display
+     optname-sort-method "e" 'amount)
 
     (gnc:options-set-default-section options gnc:pagename-general)      
 
@@ -157,6 +162,8 @@ balance at a given time"))
      (gnc:lookup-option 
       (gnc:report-options report-obj) section name)))
   
+  (gnc:report-starting reportname)
+
   ;; Get all options
   (let ((to-date-tp (gnc:timepair-end-day-time 
                      (gnc:date-option-absolute-time
@@ -181,7 +188,10 @@ balance at a given time"))
         (max-slices (get-option gnc:pagename-display optname-slices))
         (height (get-option gnc:pagename-display optname-plot-height))
         (width (get-option gnc:pagename-display optname-plot-width))
+	(sort-method (get-option gnc:pagename-display optname-sort-method))
 
+	(work-done 0)
+	(work-to-do 0)
         (document (gnc:make-html-document))
         (chart (gnc:make-html-piechart))
         (topl-accounts (gnc:filter-accountlist-type 
@@ -231,6 +241,17 @@ balance at a given time"))
            c report-currency 
            exchange-fn))))
 
+      (define (count-accounts current-depth accts)
+	(if (< current-depth tree-depth)
+	    (let ((sum 0))
+	      (for-each
+	       (lambda (a)
+		 (set! sum (+ sum (+ 1 (count-accounts (+ 1 current-depth)
+						       (gnc:account-get-immediate-subaccounts a))))))
+	       accts)
+	      sum)
+	    (length (filter show-acct? accts))))
+
       ;; Calculates all account's balances. Returns a list of
       ;; balance <=> account pairs, like '((10.0 Earnings) (142.5
       ;; Gifts)). If current-depth >= tree-depth, then the balances
@@ -247,6 +268,8 @@ balance at a given time"))
               (for-each
                (lambda (a)
                  (begin
+		   (set! work-done (+ 1 work-done))
+		   (gnc:report-percent-done (* 100 (/ work-done work-to-do)))
                    (if (show-acct? a)
                        (set! res (cons (list (collector->double 
                                               (profit-fn a #f)) a)
@@ -260,6 +283,8 @@ balance at a given time"))
               res)
             (map
              (lambda (a)
+	       (set! work-done (+ 1 work-done))
+	       (gnc:report-percent-done (* 100 (/ work-done work-to-do)))
                (list (collector->double (profit-fn a #t)) a))
              (filter show-acct? accts))))
 
@@ -274,11 +299,26 @@ balance at a given time"))
 
       (if (not (null? accounts))
           (begin
+	    (set! work-to-do (count-accounts 1 topl-accounts))
             (set! combined
 		  (sort (filter (lambda (pair) (not (>= 0.0 (car pair))))
 				(fix-signs
                                  (traverse-accounts 1 topl-accounts)))
-			(lambda (a b) (> (car a) (car b)))))
+			(cond
+			 ((eq? sort-method 'acct-code)
+			  (lambda (a b) 
+			    (string<? (gnc:account-get-code (cadr a))
+				      (gnc:account-get-code (cadr b)))))
+			 ((eq? sort-method 'alphabetical)
+			  (lambda (a b) 
+			    (string<? ((if show-fullname?
+					   gnc:account-get-full-name
+					   gnc:account-get-name) (cadr a))
+				      ((if show-fullname?
+					   gnc:account-get-full-name
+					   gnc:account-get-name) (cadr b)))))
+			 (else
+			  (lambda (a b) (> (car a) (car b)))))))
 
             ;; if too many slices, condense them to an 'other' slice
             ;; and add a link to a new pie report with just those
@@ -378,21 +418,23 @@ balance at a given time"))
                       (map 
                        (lambda (pair)
                          (string-append
-                          (if (string? (cadr pair))
-                              (cadr pair)
-                              ((if show-fullname?
-                                   gnc:account-get-full-name
-                                   gnc:account-get-name) (cadr pair)))
-                          (if show-total?
-                              (string-append 
-                               " - "
-                               (gnc:amount->string
-                                (gnc:double-to-gnc-numeric
-                                 (car pair)
-                                 (gnc:commodity-get-fraction report-currency)
-                                 GNC-RND-ROUND)
-                                print-info))
-                              "")))
+			  (regexp-substitute/global #f "&"
+                           (if (string? (cadr pair))
+			       (cadr pair)
+			       ((if show-fullname?
+				    gnc:account-get-full-name
+				    gnc:account-get-name) (cadr pair)))
+			       'pre " " (_ "and") " " 'post)
+			   (if show-total?
+			       (string-append 
+				" - "
+				(gnc:amount->string
+				 (gnc:double-to-gnc-numeric
+				  (car pair)
+				  (gnc:commodity-get-fraction report-currency)
+				  GNC-RND-ROUND)
+				 print-info))
+			       "")))
                        combined)))
                  (gnc:html-piechart-set-labels! chart legend-labels))
 
@@ -400,12 +442,15 @@ balance at a given time"))
 
              (gnc:html-document-add-object!
               document
-              (gnc:html-make-empty-data-warning report-title))))
+	      (gnc:html-make-empty-data-warning
+	       report-title (gnc:report-id report-obj)))))
 
           (gnc:html-document-add-object!
            document
-           (gnc:html-make-no-account-warning report-title)))
+	   (gnc:html-make-no-account-warning 
+	    report-title (gnc:report-id report-obj))))
 
+      (gnc:report-finished)
       document)))
 
 (for-each 
@@ -431,9 +476,9 @@ balance at a given time"))
   (list reportname-income '(income) #t menuname-income menutip-income)
   (list reportname-expense '(expense) #t menuname-expense menutip-expense)
   (list reportname-assets 
-        '(asset bank cash checking savings money-market 
+        '(asset bank cash checking savings money-market receivable
                 stock mutual-fund currency)
         #f menuname-assets menutip-assets)
   (list reportname-liabilities 
-        '(liability credit credit-line)
+        '(liability payable credit credit-line)
         #f menuname-liabilities menutip-liabilities)))

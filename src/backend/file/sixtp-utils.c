@@ -1,6 +1,6 @@
 /********************************************************************
  * sixtp-utils.c                                                    *
- * Copyright 2001 Gnumatic, Inc.                                    *
+ * Copyright (c) 2001 Gnumatic, Inc.                                *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -35,12 +35,20 @@
 
 #include "sixtp.h"
 #include "sixtp-utils.h"
+#include "core-utils.h"
 
 #include "date.h"
 #include "guid.h"
 #include "gnc-numeric.h"
 #include "gnc-engine-util.h"
+#ifndef HAVE_STRPTIME
+#include "strptime.h"
+#endif
+#ifndef HAVE_LOCALTIME_R
+#include "localtime_r.h"
+#endif
 
+static short module = MOD_IO;
 
 gboolean
 isspace_str(const gchar *str, int nomorethan)
@@ -107,13 +115,18 @@ concatenate_child_result_chars(GSList *data_from_children)
   /* child data lists are in reverse chron order */
   data_from_children = g_slist_reverse(g_slist_copy(data_from_children));
 
-  for(lp = data_from_children; lp; lp = lp->next) {
+  for(lp = data_from_children; lp; lp = lp->next) 
+  {
     sixtp_child_result *cr = (sixtp_child_result *) lp->data;
-    if(cr->type != SIXTP_CHILD_RESULT_CHARS) {
+    if(cr->type != SIXTP_CHILD_RESULT_CHARS) 
+    {
+      PERR ("result type is not chars");
       g_slist_free (data_from_children);
       g_free(name);
       return(NULL);
-    } else {
+    } 
+    else 
+    {
       char *temp;
       temp = g_strconcat(name, (gchar *) cr->data, NULL);
       g_free (name);
@@ -207,9 +220,18 @@ string_to_gint64(const gchar *str, gint64 *v)
   g_return_val_if_fail(str, FALSE);
   
   /* must use "<" here because %n's effects aren't well defined */
-  if(sscanf(str, " " GNC_SCANF_LLD " %n", &v_in, &num_read) < 1) {
+  if(sscanf(str, " " GNC_SCANF_LLD "%n", &v_in, &num_read) < 1) {
     return(FALSE);
   }
+
+  /*
+   * Mac OS X version 10.1 and under has a silly bug where scanf
+   * returns bad values in num_read if there is a space before %n. It
+   * is fixed in the next release 10.2 afaik
+   */  
+  while( (*((gchar*)str + num_read)!='\0') &&
+	 isspace(*((char*)str + num_read)))
+    num_read++;
 
   if (v)
     *v = v_in;
@@ -230,9 +252,12 @@ string_to_gint32(const gchar *str, gint32 *v)
   int v_in;
 
   /* must use "<" here because %n's effects aren't well defined */
-  if(sscanf(str, " %d %n", &v_in, &num_read) < 1) {
+  if(sscanf(str, " %d%n", &v_in, &num_read) < 1) {
     return(FALSE);
   }
+  while( (*((gchar*)str + num_read)!='\0') &&
+	 isspace(*((char*)str + num_read)))
+    num_read++;
 
   if (v)
     *v = v_in;
@@ -369,7 +394,7 @@ gnc_timegm (struct tm *tm)
 
   /* FIXME: there's no way to report this error to the caller. */
   if(gnc_setenv("TZ", "UTC", 1) != 0)
-    g_error ("gnc_timegm couldn't switch the TZ.");
+    PERR ("couldn't switch the TZ.");
 
   result = mktime (tm);
 
@@ -377,13 +402,14 @@ gnc_timegm (struct tm *tm)
   {
     /* FIXME: there's no way to report this error to the caller. */
     if(gnc_setenv("TZ", old_tz, 1) != 0)
-      g_error ("gnc_timegm couldn't switch the TZ back.");
+      PERR ("couldn't switch the TZ back.");
   }
   else
   {
     /* FIXME: there's no way to report this error to the caller. */
-    if(gnc_unsetenv("TZ") != 0)
-      g_error ("gnc_timegm couldn't restore the TZ to undefined.");
+    gnc_unsetenv("TZ");
+    if(errno != 0)
+      PERR ("couldn't restore the TZ to undefined.");
   }
   return result;
 }
@@ -467,14 +493,17 @@ string_to_timespec_secs(const gchar *str, Timespec *ts) {
 }
 
 gboolean
-string_to_timespec_nsecs(const gchar *str, Timespec *ts) {
-
+string_to_timespec_nsecs(const gchar *str, Timespec *ts)
+{
   long int nanosecs;
   int charcount;
 
   if (!str || !ts) return FALSE;
 
-  sscanf(str, " %ld %n", &nanosecs, &charcount);
+  sscanf(str, " %ld%n", &nanosecs, &charcount);
+  while( (*((gchar*)str + charcount)!='\0') &&
+	 isspace(*((char*)str + charcount)))
+    charcount++;
 
   if(charcount != strlen(str)) return(FALSE);
 
@@ -726,7 +755,8 @@ generic_guid_end_handler(gpointer data_for_children,
   g_return_val_if_fail(txt, FALSE);
   
   gid = g_new(GUID, 1);
-  if(!gid) {
+  if(!gid) 
+  {
     g_free(txt);
     return(FALSE);
   }
@@ -734,7 +764,9 @@ generic_guid_end_handler(gpointer data_for_children,
   ok = string_to_guid(txt, gid);
   g_free(txt);
 
-  if(!ok) {
+  if(!ok) 
+  {
+    PERR ("couldn't parse GUID");
     g_free(gid);
     return(FALSE);
   }
@@ -790,10 +822,13 @@ generic_gnc_numeric_end_handler(gpointer data_for_children,
 
   txt = concatenate_child_result_chars(data_from_children);
 
-  if(txt) {
+  if(txt) 
+  {
     num = g_new(gnc_numeric, 1);
-    if(num) {
-      if(string_to_gnc_numeric(txt, num)) {
+    if(num) 
+    {
+      if(string_to_gnc_numeric(txt, num)) 
+      {
         ok = TRUE;
         *result = num;
       }
@@ -801,7 +836,11 @@ generic_gnc_numeric_end_handler(gpointer data_for_children,
   }
 
   g_free(txt);
-  if(!ok) g_free(num);
+  if(!ok) 
+  {
+    PERR ("couldn't parse numeric quantity");
+    g_free(num);
+  }
 
   return(ok);
 }
@@ -833,3 +872,5 @@ restore_char_generator(sixtp_end_handler ender)
         SIXTP_CHARS_FAIL_ID, sixtp_child_free_data,
         SIXTP_NO_MORE_HANDLERS);
 }
+
+/***************************** END OF FILE *********************************/

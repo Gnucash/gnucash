@@ -67,7 +67,9 @@ typedef enum {
   ERR_FILEIO_FILE_LOCKERR,   /* mangled locks (unspecified error) */
   ERR_FILEIO_FILE_NOT_FOUND, /* not found / no such file */
   ERR_FILEIO_FILE_TOO_OLD,   /* file version so old we can't read it */
-  ERR_FILEIO_UNKNOWN_FILE_TYPE,
+  ERR_FILEIO_UNKNOWN_FILE_TYPE, /* didn't recognize the file type */
+  ERR_FILEIO_PARSE_ERROR,    /* couldn't parse the data in the file */
+  ERR_FILEIO_BACKUP_ERROR,   /* couldn't make a backup of the file */
   
   /* network errors */
   ERR_NETIO_SHORT_READ = 2000,  /* not enough bytes received */
@@ -92,5 +94,7 @@ typedef enum {
 /* NOTE: if you modify GNCBackendError, please update src/scm/gnc.gwp */
 
 typedef struct backend_s Backend;
+
+typedef void (*GNCBePercentageFunc) (const char *message, double percent);
 
 #endif /* XACC_BACKEND_H */

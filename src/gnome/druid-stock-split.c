@@ -24,6 +24,7 @@
 #include "config.h"
 
 #include <gnome.h>
+#include <libgnomeui/gnome-window-icon.h>
 
 #include "Group.h"
 #include "Transaction.h"
@@ -35,6 +36,7 @@
 #include "gnc-component-manager.h"
 #include "gnc-currency-edit.h"
 #include "gnc-date-edit.h"
+#include "gnc-engine-util.h"
 #include "gnc-exp-parser.h"
 #include "gnc-gui-query.h"
 #include "gnc-ui.h"
@@ -114,6 +116,9 @@ fill_account_list (StockSplitInfo *info, Account *account)
     balance = xaccAccountGetBalance (account);
     if (gnc_numeric_zero_p (balance))
       continue;
+
+    if (xaccAccountGetPlaceholder (account))
+	continue;
 
     commodity = xaccAccountGetCommodity (account);
 
@@ -211,7 +216,6 @@ static void
 gnc_parse_error_dialog (StockSplitInfo *info, const char *error_string)
 {
   const char * parse_error_string;
-  char * error_phrase;
 
   parse_error_string = gnc_exp_parser_error_string ();
   if (parse_error_string == NULL)
@@ -220,13 +224,20 @@ gnc_parse_error_dialog (StockSplitInfo *info, const char *error_string)
   if (error_string == NULL)
     error_string = "";
 
-  error_phrase = g_strdup_printf ("%s.\n\n%s: %s.",
-                                  error_string, _("Error"),
-                                  parse_error_string);
+  gnc_error_dialog_parented (GTK_WINDOW (info->window),
+			     "%s.\n\n%s: %s.",
+			     error_string, _("Error"),
+			     parse_error_string);
+}
 
-  gnc_error_dialog_parented (GTK_WINDOW (info->window), error_phrase);
+static void
+details_prepare (GnomeDruidPage *druidpage,
+		 gpointer arg1,
+		 gpointer user_data)
+{
+  StockSplitInfo *info = user_data;
 
-  g_free (error_phrase);
+  gtk_widget_grab_focus(info->distribution_edit);
 }
 
 static gboolean
@@ -288,6 +299,8 @@ cash_prepare (GnomeDruidPage *druidpage,
   gnc_account_tree_refresh (GNC_ACCOUNT_TREE (info->asset_tree));
   gnc_account_tree_expand_all (GNC_ACCOUNT_TREE (info->asset_tree));
   gtk_clist_select_row (GTK_CLIST (info->asset_tree), 0, 0);
+
+  gtk_widget_grab_focus(info->cash_edit);
 }
 
 static gboolean
@@ -495,20 +508,6 @@ druid_cancel (GnomeDruid *druid, gpointer user_data)
   gnc_close_gui_component_by_data (DRUID_STOCK_SPLIT_CM_CLASS, info);
 }
 
-static gboolean
-account_currency_filter (Account *account, gpointer user_data)
-{
-  StockSplitInfo *info = user_data;
-  Account *split_account = xaccAccountLookup (&info->account,
-                                              gnc_get_current_book ());
-
-  if (!account)
-    return FALSE;
-
-  return gnc_commodity_equiv (xaccAccountGetCommodity (split_account),
-                              xaccAccountGetCommodity (account));
-}
-
 static void
 gnc_stock_split_druid_create (StockSplitInfo *info)
 {
@@ -585,6 +584,8 @@ gnc_stock_split_druid_create (StockSplitInfo *info)
 
     page = glade_xml_get_widget (xml, "details_page");
 
+    gtk_signal_connect (GTK_OBJECT (page), "prepare",
+                        GTK_SIGNAL_FUNC (details_prepare), info);
     gtk_signal_connect (GTK_OBJECT (page), "next",
                         GTK_SIGNAL_FUNC (details_next), info);
   }
@@ -619,10 +620,6 @@ gnc_stock_split_druid_create (StockSplitInfo *info)
 
     gnc_account_tree_set_view_info (GNC_ACCOUNT_TREE (tree), &view_info);
 
-    gnc_account_tree_set_selectable_filter (GNC_ACCOUNT_TREE (tree),
-                                            account_currency_filter,
-                                            info);
-
     gtk_widget_show (tree);
 
     scroll = glade_xml_get_widget (xml, "income_scroll");
@@ -643,10 +640,6 @@ gnc_stock_split_druid_create (StockSplitInfo *info)
         (type == BANK) || (type == CASH) || (type == ASSET);
 
     gnc_account_tree_set_view_info (GNC_ACCOUNT_TREE (tree), &view_info);
-
-    gnc_account_tree_set_selectable_filter (GNC_ACCOUNT_TREE (tree),
-                                            account_currency_filter,
-                                            info);
 
     gtk_widget_show (tree);
 
@@ -689,7 +682,7 @@ refresh_handler (GHashTable *changes, gpointer user_data)
 
   new_account = xaccAccountLookup (&info->account, gnc_get_current_book ());
 
-  if (id_type == GNC_ID_NULL || old_account == new_account)
+  if (!safe_strcmp (id_type, GNC_ID_NULL) || old_account == new_account)
     return;
 
   xml = glade_get_widget_tree (info->window);
@@ -740,6 +733,7 @@ gnc_stock_split_dialog (Account * initial)
     return;
   }
 
+  gnome_window_icon_set_from_default(GTK_WINDOW(info->window));
   gtk_widget_show_all (info->window);
 
   gnc_window_adjust_for_screen (GTK_WINDOW(info->window));

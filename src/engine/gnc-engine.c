@@ -26,7 +26,14 @@
 #include <glib.h>
 
 #include "GNCIdP.h"
+#include "QueryNewP.h" 
+#include "gncObjectP.h"
 #include "gnc-engine.h"
+
+#include "TransactionP.h"
+#include "AccountP.h"
+#include "gnc-book-p.h"
+#include "gnc-lot-p.h"
 
 static GList * engine_init_hooks = NULL;
 static int engine_is_initialized = 0;
@@ -70,6 +77,15 @@ gnc_engine_init(int argc, char ** argv)
   gnc_engine_get_string_cache();
   
   xaccGUIDInit ();
+  gncObjectInitialize ();
+  gncQueryNewInit ();
+
+  /* Now register our core types */
+  xaccSplitRegister ();
+  xaccTransRegister ();
+  xaccAccountRegister ();
+  gnc_book_register ();
+  gnc_lot_register ();
 
   /* call any engine hooks */
   for (cur = engine_init_hooks; cur; cur = cur->next)
@@ -102,9 +118,12 @@ gnc_engine_get_string_cache(void)
 void
 gnc_engine_shutdown (void)
 {
+  gncQueryNewShutdown ();
+
   g_cache_destroy (gnc_string_cache);
   gnc_string_cache = NULL;
 
+  gncObjectShutdown ();
   xaccGUIDShutdown ();
 }
 

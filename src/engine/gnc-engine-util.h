@@ -1,7 +1,7 @@
 /********************************************************************\
  * gnc-engine-util.h -- GnuCash engine utility functions            *
  * Copyright (C) 1997 Robin D. Clark                                *
- * Copyright (C) 1998-2001 Linas Vepstas <linas@linas.org>          *
+ * Copyright (C) 1998-2002 Linas Vepstas <linas@linas.org>          *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -61,7 +61,13 @@ typedef enum
   MOD_TXN     = 14,
   MOD_KVP     = 15,
   MOD_SX      = 16,
-  MOD_LAST    = 16
+  MOD_BOOK    = 17,
+  MOD_TEST    = 18,
+  MOD_LOT     = 19,
+  MOD_ACCOUNT = 20,
+  MOD_IMPORT  = 21,
+  MOD_BUSINESS= 22,
+  MOD_LAST    = 22
 } gncModuleType;
 
 typedef enum
@@ -75,10 +81,23 @@ typedef enum
   GNC_LOG_TRACE   = 6,
 } gncLogLevel;
 
+
+typedef void (*GNCGuiMessage) (const gchar *format, va_list args);
+void gnc_set_warning_message (GNCGuiMessage func);
+void gnc_set_error_message (GNCGuiMessage func);
+
+gboolean gnc_send_gui_warning (const gchar *format, ...);
+gboolean gnc_send_gui_error (const gchar *format, ...);
+
 /* FIXME: these logging functions should proably get replaced by
  * the glib.h g_error(), etc functions. That way, we would have
  * unified logging mechanism, instead of having some messages
  * work one way, and other a different way ... 
+ *
+ * FIXME: the if test should not be a subroutine call, it should
+ * not use that many CPU cycles.  These logging functions are supposed
+ * to be lightweight.  Who changed this ??? Why ??? 
+ *
  */
 gboolean gnc_should_log (gncModuleType module, gncLogLevel log_level);
 void gnc_log (gncModuleType module, gncLogLevel log_level,
@@ -101,6 +120,11 @@ void gnc_log (gncModuleType module, gncLogLevel log_level,
   if (gnc_should_log (module, GNC_LOG_WARNING))    \
     gnc_log (module, GNC_LOG_WARNING, "Warning",   \
              __FUNCTION__, format, ## args);       \
+}
+
+#define PWARN_GUI(format, args...) {               \
+  if (!gnc_send_gui_error(format, ## args))        \
+    PWARN(format, ## args);                        \
 }
 
 #define PINFO(format, args...) {                   \
@@ -146,11 +170,19 @@ void gnc_log (gncModuleType module, gncLogLevel log_level,
 }
 
 void gnc_start_clock (int clockno, gncModuleType module, gncLogLevel log_level,
-        const char *function_name, const char *format, ...);
+                      const char *function_name, const char *format, ...);
 
-void gnc_report_clock (int clockno, gncModuleType module, gncLogLevel log_level,
-        const char *function_name, const char *format, ...);
+void gnc_report_clock (int clockno,
+                       gncModuleType module,
+                       gncLogLevel log_level,
+                       const char *function_name,
+                       const char *format, ...);
 
+void gnc_report_clock_total (int clockno,
+                             gncModuleType module,
+                             gncLogLevel log_level,
+                             const char *function_name,
+                             const char *format, ...);
 
 #define START_CLOCK(clockno,format, args...) {     \
   if (gnc_should_log (module, GNC_LOG_INFO))       \
@@ -164,6 +196,11 @@ void gnc_report_clock (int clockno, gncModuleType module, gncLogLevel log_level,
              __FUNCTION__, format, ## args);       \
 }
 
+#define REPORT_CLOCK_TOTAL(clockno,format, args...) {       \
+  if (gnc_should_log (module, GNC_LOG_INFO))                \
+    gnc_report_clock_total (clockno, module, GNC_LOG_INFO,  \
+             __FUNCTION__, format, ## args);                \
+}
 
 /* Set the logging level of the given module. */
 void gnc_set_log_level(gncModuleType module, gncLogLevel level);
@@ -171,16 +208,17 @@ void gnc_set_log_level(gncModuleType module, gncLogLevel level);
 /* Set the logging level for all modules. */
 void gnc_set_log_level_global(gncLogLevel level);
 
+/* Pipe log output to pipe or file */
+void gnc_set_logfile (FILE *outfile);
 
 /** Macros *****************************************************/
 #define EPS  (1.0e-6)
 #define DEQEPS(x,y,eps) (((((x)+(eps))>(y)) ? 1 : 0) && ((((x)-(eps))<(y)) ? 1 : 0))
 #define DEQ(x,y) DEQEPS(x,y,EPS)
 
-
-#define SAFE_STRCMP(da,db) {		\
+#define SAFE_STRCMP_REAL(fcn,da,db) {	\
   if ((da) && (db)) {			\
-    int retval = strcmp ((da), (db));	\
+    int retval = fcn ((da), (db));	\
     /* if strings differ, return */	\
     if (retval) return retval;		\
   } else 				\
@@ -191,6 +229,9 @@ void gnc_set_log_level_global(gncLogLevel level);
     return +1;				\
   }					\
 }
+
+#define SAFE_STRCMP(da,db) SAFE_STRCMP_REAL(strcmp,(da),(db))
+#define SAFE_STRCASECMP(da,db) SAFE_STRCMP_REAL(strcasecmp,(da),(db))
 
 /* Define the long long int conversion for scanf */
 #if HAVE_SCANF_LLD
@@ -207,6 +248,7 @@ void gnc_set_log_level_global(gncLogLevel level);
  * a non-null string is always greater than a null string.
  */
 int safe_strcmp (const char * da, const char * db);
+int safe_strcasecmp (const char * da, const char * db);
 
 /* The null_strcmp compares strings a and b the same way that strcmp()
  * does, except that either may be null.  This routine assumes that

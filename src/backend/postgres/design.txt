@@ -158,6 +158,30 @@ database that is always created when Postgres is installed.  Thus,
 we assume its always present.
 
 
+Multi-User-Poll Pseudocode
+--------------------------
+Specifically, this scenario:
+
+1. User A loads a session for the data.
+2. User B loads a session for the data. 
+
+At this point, both users have complete
+account trees for the original data.
+ 
+3. User A adds some new accounts with
+   transactions.
+4. User B runs a transaction query that
+   picks up the new transactions created
+   by A. 
+
+At step 4, there is currently a bug; but the following should happen:
+
+At step 4, B will notice that there are splits in 
+the accounts that it does not know about.  B will then go
+to the database and get these accounts, and create them 
+in the engine.
+
+
 m4 macros
 ---------
 Some of the code is auto-gen'ed from m4 macros.  This mostly just
@@ -371,6 +395,8 @@ older databases.  Otherise, if the client is creating a fresh, brand
 new db, then one does not need to upgrade: put the newest db design
 into table-create.sql, as usual, and stick in the version number 
 into table-version.sql
+
+
 
 -----------------------------------------------------------------------
 End of Document.

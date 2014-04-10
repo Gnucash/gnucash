@@ -37,7 +37,7 @@ static short module = MOD_BACKEND;
 /* ============================================================= */
 
 #define PGEND_CURRENT_MAJOR_VERSION  1
-#define PGEND_CURRENT_MINOR_VERSION  3
+#define PGEND_CURRENT_MINOR_VERSION  4
 #define PGEND_CURRENT_REV_VERSION    1
 
 /* ============================================================= */
@@ -46,7 +46,7 @@ static short module = MOD_BACKEND;
 static gpointer
 version_table_cb (PGBackend *be, PGresult *result, int j, gpointer data)
 {
-   return (gpointer) TRUE;
+   return GINT_TO_POINTER (TRUE);
 }
 
 static void
@@ -60,8 +60,9 @@ pgendVersionTable (PGBackend *be)
 
    p = "SELECT tablename FROM pg_tables WHERE tablename='gncversion';";
    SEND_QUERY (be,p, );
-   table_exists = (gboolean) pgendGetResults (be, version_table_cb, FALSE);
-   
+   table_exists = GPOINTER_TO_INT (pgendGetResults (be, version_table_cb,
+                                                    FALSE));
+
    if (table_exists) return;
 
    /* create the table if it doesn't exist */
@@ -70,7 +71,7 @@ pgendVersionTable (PGBackend *be)
        "  minor    INT NOT NULL,\n"
        "  rev      INT DEFAULT '0',\n"
        "  name     TEXT UNIQUE NOT NULL CHECK (name <> ''),\n"
-       "  date     DATETIME DEFAULT 'NOW' \n"
+       "  date     TIMESTAMP DEFAULT 'NOW' \n"
        ");\n"
        "INSERT INTO gncVersion (major,minor,rev,name) VALUES \n"
        " (1,0,0,'Version Table');";
@@ -142,60 +143,6 @@ put_iguid_in_tables (PGBackend *be)
    SEND_QUERY (be,p, );
    FINISH_QUERY(be->connection);
 
-   p = "ALTER TABLE gncEntry ADD COLUMN iguid INT4 DEFAULT 0;\n"
-       "UPDATE gncEntry SET iguid = 0;\n" 
-       
-       "UPDATE gncEntry SET iguid = gncGUIDCache.iguid "
-       " FROM gncGUIDCache, gncKVPValue "
-       " WHERE gncGUIDCache.guid = gncEntry.entryGUID "
-       " AND gncGUIDCache.iguid = gncKVPValue.iguid;\n"
-
-       "ALTER TABLE gncEntryTrail ADD COLUMN iguid INT4 DEFAULT 0;\n"
-       "UPDATE gncEntryTrail SET iguid = 0;\n" 
-       
-       "UPDATE gncEntryTrail SET iguid = gncGUIDCache.iguid "
-       " FROM gncGUIDCache, gncKVPValue "
-       " WHERE gncGUIDCache.guid = gncEntryTrail.entryGUID "
-       " AND gncGUIDCache.iguid = gncKVPValue.iguid;\n";
-   SEND_QUERY (be,p, );
-   FINISH_QUERY(be->connection);
-   
-   p = "ALTER TABLE gncTransaction ADD COLUMN iguid INT4 DEFAULT 0;\n"
-       "UPDATE gncTransaction SET iguid = 0;\n" 
-       
-       "UPDATE gncTransaction SET iguid = gncGUIDCache.iguid "
-       " FROM gncGUIDCache, gncKVPValue "
-       " WHERE gncGUIDCache.guid = gncTransaction.transGUID "
-       " AND gncGUIDCache.iguid = gncKVPValue.iguid;\n"
-
-       "ALTER TABLE gncTransactionTrail ADD COLUMN iguid INT4 DEFAULT 0;\n"
-       "UPDATE gncTransactionTrail SET iguid = 0;\n" 
-       
-       "UPDATE gncTransactionTrail SET iguid = gncGUIDCache.iguid "
-       " FROM gncGUIDCache, gncKVPValue "
-       " WHERE gncGUIDCache.guid = gncTransactionTrail.transGUID "
-       " AND gncGUIDCache.iguid = gncKVPValue.iguid;\n";
-   SEND_QUERY (be,p, );
-   FINISH_QUERY(be->connection);
-	   
-   p = "ALTER TABLE gncAccount ADD COLUMN iguid INT4 DEFAULT 0;\n"
-       "UPDATE gncAccount SET iguid = 0;\n" 
-       
-       "UPDATE gncAccount SET iguid = gncGUIDCache.iguid "
-       " FROM gncGUIDCache, gncKVPValue "
-       " WHERE gncGUIDCache.guid = gncAccount.accountGUID "
-       " AND gncGUIDCache.iguid = gncKVPValue.iguid;\n"
-
-       "ALTER TABLE gncAccountTrail ADD COLUMN iguid INT4 DEFAULT 0;\n"
-       "UPDATE gncAccountTrail SET iguid = 0;\n" 
-       
-       "UPDATE gncAccountTrail SET iguid = gncGUIDCache.iguid "
-       " FROM gncGUIDCache, gncKVPValue "
-       " WHERE gncGUIDCache.guid = gncAccountTrail.accountGUID "
-       " AND gncGUIDCache.iguid = gncKVPValue.iguid;\n";
-   SEND_QUERY (be,p, );
-   FINISH_QUERY(be->connection);
-
    p = "SELECT iguid FROM gncGUIDCache ORDER BY iguid DESC LIMIT 1;";
    SEND_QUERY (be,p, );
    iguid = (guint32) pgendGetResults (be, get_iguid_cb, 0);
@@ -205,6 +152,66 @@ put_iguid_in_tables (PGBackend *be)
    SEND_QUERY (be,buff, );
    FINISH_QUERY(be->connection);
 
+   p = "ALTER TABLE gncEntry ADD COLUMN iguid INT4;\n"
+       "ALTER TABLE gncEntry ALTER COLUMN iguid set DEFAULT 0;\n"
+       "UPDATE gncEntry SET iguid = 0;\n" 
+       
+       "UPDATE gncEntry SET iguid = gncGUIDCache.iguid "
+       " FROM gncGUIDCache, gncKVPValue "
+       " WHERE gncGUIDCache.guid = gncEntry.entryGUID "
+       " AND gncGUIDCache.iguid = gncKVPValue.iguid;\n"
+
+       "ALTER TABLE gncEntryTrail ADD COLUMN iguid INT4;\n"
+       "ALTER TABLE gncEntryTrail ALTER COLUMN iguid set DEFAULT 0;\n"
+       "UPDATE gncEntryTrail SET iguid = 0;\n" 
+       
+       "UPDATE gncEntryTrail SET iguid = gncGUIDCache.iguid "
+       " FROM gncGUIDCache, gncKVPValue "
+       " WHERE gncGUIDCache.guid = gncEntryTrail.entryGUID "
+       " AND gncGUIDCache.iguid = gncKVPValue.iguid;\n";
+   SEND_QUERY (be,p, );
+   FINISH_QUERY(be->connection);
+   
+   p = "ALTER TABLE gncTransaction ADD COLUMN iguid INT4;\n"
+       "ALTER TABLE gncTransaction ALTER COLUMN iguid set DEFAULT 0;\n"
+       "UPDATE gncTransaction SET iguid = 0;\n" 
+       
+       "UPDATE gncTransaction SET iguid = gncGUIDCache.iguid "
+       " FROM gncGUIDCache, gncKVPValue "
+       " WHERE gncGUIDCache.guid = gncTransaction.transGUID "
+       " AND gncGUIDCache.iguid = gncKVPValue.iguid;\n"
+
+       "ALTER TABLE gncTransactionTrail ADD COLUMN iguid INT4;\n"
+       "ALTER TABLE gncTransactionTrail ALTER COLUMN iguid set DEFAULT 0;\n"
+       "UPDATE gncTransactionTrail SET iguid = 0;\n" 
+       
+       "UPDATE gncTransactionTrail SET iguid = gncGUIDCache.iguid "
+       " FROM gncGUIDCache, gncKVPValue "
+       " WHERE gncGUIDCache.guid = gncTransactionTrail.transGUID "
+       " AND gncGUIDCache.iguid = gncKVPValue.iguid;\n";
+   SEND_QUERY (be,p, );
+   FINISH_QUERY(be->connection);
+	   
+   p = "ALTER TABLE gncAccount ADD COLUMN iguid INT4;\n"
+       "ALTER TABLE gncAccount ALTER COLUMN iguid set DEFAULT 0;\n"
+       "UPDATE gncAccount SET iguid = 0;\n" 
+       
+       "UPDATE gncAccount SET iguid = gncGUIDCache.iguid "
+       " FROM gncGUIDCache, gncKVPValue "
+       " WHERE gncGUIDCache.guid = gncAccount.accountGUID "
+       " AND gncGUIDCache.iguid = gncKVPValue.iguid;\n"
+
+       "ALTER TABLE gncAccountTrail ADD COLUMN iguid INT4;\n"
+       "ALTER TABLE gncAccountTrail ALTER COLUMN iguid set DEFAULT 0;\n"
+       "UPDATE gncAccountTrail SET iguid = 0;\n" 
+       
+       "UPDATE gncAccountTrail SET iguid = gncGUIDCache.iguid "
+       " FROM gncGUIDCache, gncKVPValue "
+       " WHERE gncGUIDCache.guid = gncAccountTrail.accountGUID "
+       " AND gncGUIDCache.iguid = gncKVPValue.iguid;\n";
+   SEND_QUERY (be,p, );
+   FINISH_QUERY(be->connection);
+
    p = "DROP TABLE gncGUIDCache; \n"
        "INSERT INTO gncVersion (major,minor,rev,name) VALUES \n"
        " (1,1,1,'End Put iGUID in Main Tables');";
@@ -212,23 +219,26 @@ put_iguid_in_tables (PGBackend *be)
    FINISH_QUERY(be->connection);
 }
 
+/* ============================================================= */
+
 static void 
 fix_reconciled_balance_func (PGBackend *be)
 {
    char *p;
 
-   p = "INSERT INTO gncVersion (major,minor,rev,name) VALUES \n"
+   p = "LOCK TABLE gncVersion IN ACCESS EXCLUSIVE MODE;\n "
+       "INSERT INTO gncVersion (major,minor,rev,name) VALUES \n"
        " (1,2,0,'Start Fix gncSubtotalReconedBalance');";
    SEND_QUERY (be,p, );
    FINISH_QUERY(be->connection);
 
    p = "DROP FUNCTION "
-       "gncSubtotalReconedBalance (CHAR(32), DATETIME, DATETIME);";
+       "gncSubtotalReconedBalance (CHAR(32), TIMESTAMP, TIMESTAMP);";
    SEND_QUERY (be,p, );
    FINISH_QUERY(be->connection);
 
    p = "CREATE FUNCTION "
-       "gncSubtotalReconedBalance (CHAR(32), DATETIME, DATETIME)"
+       "gncSubtotalReconedBalance (CHAR(32), TIMESTAMP, TIMESTAMP)"
          "RETURNS INT8 "
          "AS 'SELECT INT8(sum(gncEntry.amount)) "
            "FROM gncEntry, gncTransaction "
@@ -248,18 +258,21 @@ fix_reconciled_balance_func (PGBackend *be)
    FINISH_QUERY(be->connection);
 }
 
+/* ============================================================= */
+
 static void
 add_kvp_timespec_tables (PGBackend *be)
 {
   char *p;
 
-  p = "INSERT INTO gncVersion (major,minor,rev,name) VALUES \n"
+  p = "LOCK TABLE gncVersion IN ACCESS EXCLUSIVE MODE;\n "
+      "INSERT INTO gncVersion (major,minor,rev,name) VALUES \n"
       " (1,3,0,'Start Add kvp_timespec tables');";
   SEND_QUERY (be,p, );
   FINISH_QUERY(be->connection);
 
   p = "CREATE TABLE gncKVPvalue_timespec ( "
-      "  data		DATETIME "
+      "  data		TIMESTAMP "
       ") INHERITS (gncKVPvalue);";
   SEND_QUERY (be,p, );
   FINISH_QUERY(be->connection);
@@ -268,7 +281,7 @@ add_kvp_timespec_tables (PGBackend *be)
       "  iguid		INT4, "
       "  ipath		INT4, "
       "  type		char(4), "
-      "  data		DATETIME "
+      "  data		TIMESTAMP "
       ") INHERITS (gncAuditTrail);";
   SEND_QUERY (be,p, );
   FINISH_QUERY(be->connection);
@@ -277,6 +290,84 @@ add_kvp_timespec_tables (PGBackend *be)
       " (1,3,1,'End Add kvp_timespec tables');";
   SEND_QUERY (be,p, );
   FINISH_QUERY(be->connection);
+}
+
+/* ============================================================= */
+
+static void
+add_multiple_book_support (PGBackend *be)
+{
+   char buff[4000];
+   char *p;
+ 
+   p = "LOCK TABLE gncAccount IN ACCESS EXCLUSIVE MODE;\n"
+       "LOCK TABLE gncAccountTrail IN ACCESS EXCLUSIVE MODE;\n"
+       "LOCK TABLE gncPrice IN ACCESS EXCLUSIVE MODE;\n"
+       "LOCK TABLE gncPriceTrail IN ACCESS EXCLUSIVE MODE;\n"
+       "LOCK TABLE gncVersion IN ACCESS EXCLUSIVE MODE;\n"
+       "INSERT INTO gncVersion (major,minor,rev,name) VALUES \n"
+       " (1,4,0,'Start Add multiple book support');";
+   SEND_QUERY (be,p, );
+   FINISH_QUERY(be->connection);
+ 
+   p = "CREATE TABLE gncBook (  \n"
+       " bookGuid        CHAR(32) PRIMARY KEY, \n"
+       " book_open       CHAR DEFAULT 'n', \n"
+       " version         INT4 NOT NULL, \n"
+       " iguid           INT4 DEFAULT 0 \n"
+       ");";
+   SEND_QUERY (be,p, );
+   FINISH_QUERY(be->connection);
+ 
+   p = "CREATE TABLE gncBookTrail ( \n"
+       " bookGuid        CHAR(32) NOT NULL, \n"
+       " book_open       CHAR DEFAULT 'n', \n"
+       " version         INT4 NOT NULL, \n"
+       " iguid           INT4 DEFAULT 0 \n"
+       ") INHERITS (gncAuditTrail); \n\n"
+       "CREATE INDEX gncBookTrail_book_idx ON gncBookTrail (bookGuid);" ;
+   SEND_QUERY (be,p, );
+   FINISH_QUERY(be->connection);
+ 
+   p = "ALTER TABLE gncAccount ADD COLUMN bookGuid CHAR(32) NOT NULL;\n"
+       "ALTER TABLE gncAccountTrail ADD COLUMN bookGuid CHAR(32) NOT NULL;\n"
+       "ALTER TABLE gncPrice ADD COLUMN bookGuid CHAR(32) NOT NULL;\n"
+       "ALTER TABLE gncPriceTrail ADD COLUMN bookGuid CHAR(32) NOT NULL;\n";
+   SEND_QUERY (be,p, );
+   FINISH_QUERY(be->connection);
+ 
+   p = buff;
+   p = stpcpy (p, "UPDATE gncAccount SET bookGuid = '");
+   p = guid_to_string_buff (gnc_book_get_guid (be->book), p);
+   p = stpcpy (p, "';\n");
+   p = stpcpy (p, "UPDATE gncAccountTrail SET bookGuid = '");
+   p = guid_to_string_buff (gnc_book_get_guid (be->book), p);
+   p = stpcpy (p, "';\n");
+   SEND_QUERY (be,buff, );
+   FINISH_QUERY(be->connection);
+
+   p = buff;
+   p = stpcpy (p, "UPDATE gncPrice SET bookGuid = '");
+   p = guid_to_string_buff (gnc_book_get_guid (be->book), p);
+   p = stpcpy (p, "';\n");
+   p = stpcpy (p, "UPDATE gncPriceTrail SET bookGuid = '");
+   p = guid_to_string_buff (gnc_book_get_guid (be->book), p);
+   p = stpcpy (p, "';\n");
+   SEND_QUERY (be,buff, );
+   FINISH_QUERY(be->connection);
+
+   p = buff;
+   p = stpcpy (p, "INSERT INTO gncBook (bookGuid, book_open, version, iguid) "
+                  "VALUES ('");
+   p = guid_to_string_buff (gnc_book_get_guid (be->book), p);
+   p = stpcpy (p, "', 'y', 1, 0);");
+   SEND_QUERY (be,buff, );
+   FINISH_QUERY(be->connection);
+
+   p = "INSERT INTO gncVersion (major,minor,rev,name) VALUES \n"
+       " (1,4,1,'End Add multiple book support');";
+   SEND_QUERY (be,p, );
+   FINISH_QUERY(be->connection);
 }
 
 /* ============================================================= */
@@ -336,6 +427,10 @@ pgendUpgradeDB (PGBackend *be)
       if (3 > vers.minor)
       {
         add_kvp_timespec_tables (be);
+      }
+      if (4 > vers.minor)
+      {
+        add_multiple_book_support (be);
       }
    }
 }

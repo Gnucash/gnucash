@@ -93,7 +93,7 @@ node_and_account_equal(xmlNodePtr node, Account *act)
         else if(safe_strcmp(mark->name, "act:commodity") == 0)
         {
             if(!equals_node_val_vs_commodity(
-                   mark, xaccAccountGetCommodity(act)))
+                   mark, xaccAccountGetCommodity(act), xaccAccountGetBook(act)))
             {
                 return g_strdup("commodities differ");
             }
@@ -101,7 +101,7 @@ node_and_account_equal(xmlNodePtr node, Account *act)
         else if(safe_strcmp(mark->name, "act:currency") == 0)
         {
             if(!equals_node_val_vs_commodity(
-                   mark, DxaccAccountGetCurrency(act, book)))
+                   mark, DxaccAccountGetCurrency(act, book), xaccAccountGetBook(act)))
             {
                 return g_strdup("currencies differ");
             }
@@ -124,7 +124,7 @@ node_and_account_equal(xmlNodePtr node, Account *act)
         else if(safe_strcmp(mark->name, "act:security") == 0)
         {
             if(!equals_node_val_vs_commodity(
-                   mark, DxaccAccountGetSecurity(act, book)))
+                   mark, DxaccAccountGetSecurity(act, book), xaccAccountGetBook(act)))
             {
                 return g_strdup("securities differ");
             }
@@ -227,10 +227,9 @@ test_account(int i, Account *test_act)
     xmlNodePtr test_node;
     gchar *filename1;
     gchar *compare_msg;
-    FILE *cmp_file;
     int fd;
 
-    test_node = gnc_account_dom_tree_create(test_act);
+    test_node = gnc_account_dom_tree_create(test_act, FALSE);
 
     if(!test_node)
     {

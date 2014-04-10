@@ -23,7 +23,7 @@
 
 (define-module (gnucash report portfolio))
 
-(use-modules (gnucash bootstrap) (g-wrapped gw-gnc)) ;; FIXME: delete after we finish modularizing.
+(use-modules (gnucash main)) ;; FIXME: delete after we finish modularizing.
 (use-modules (srfi srfi-1))
 (use-modules (ice-9 slib))
 (use-modules (gnucash gnc-module))
@@ -32,7 +32,11 @@
 
 (gnc:module-load "gnucash/report/report-system" 0)
 
+(define reportname (N_ "Investment Portfolio"))
+
 (define optname-price-source (N_ "Price Source"))
+(define optname-shares-digits (N_ "Share decimal places"))
+(define optname-zero-shares (N_ "Include accounts with no shares"))
 
 (define (options-generator)
   (let* ((options (gnc:new-options)) 
@@ -55,6 +59,12 @@
      options gnc:pagename-general
      optname-price-source "d" 'pricedb-latest)
 
+    (add-option
+     (gnc:make-number-range-option
+      gnc:pagename-general optname-shares-digits
+      "e" (N_ "The number of decimal places to use for share numbers") 2
+      0 6 0 1))
+
     ;; Account tab
     (add-option
      (gnc:make-account-list-option
@@ -68,6 +78,13 @@
                                 (filter gnc:account-is-stock? accounts)))
       #t))
 
+    (gnc:register-option 
+     options 
+     (gnc:make-simple-boolean-option
+      gnc:pagename-accounts optname-zero-shares "e" 
+      (N_ "Include accounts that have a zero share balances.")
+      #f))
+    
     (gnc:options-set-default-section options gnc:pagename-general)      
     options))
 
@@ -78,6 +95,9 @@
 ;; to the function is one created by the options-generator function
 ;; defined above.
 (define (portfolio-renderer report-obj)
+
+ (let ((work-done 0)
+       (work-to-do 0))
   
   ;; These are some helper functions for looking up option values.
   (define (get-op section name)
@@ -87,14 +107,17 @@
     (gnc:option-value (get-op section name)))
   
   (define (table-add-stock-rows table accounts to-date
-                                currency price-fn collector)
+                                currency price-fn include-empty collector)
+
+   (let ((share-print-info
+	  (gnc:share-print-info-places (get-option gnc:pagename-general
+						   optname-shares-digits))))
 
     (define (table-add-stock-rows-internal accounts odd-row?)
       (if (null? accounts) collector
           (let* ((row-style (if odd-row? "normal-row" "alternate-row"))
                  (current (car accounts))
                  (rest (cdr accounts))
-                 (name (gnc:account-get-name current))
                  (commodity (gnc:account-get-commodity current))
                  (ticker-symbol (gnc:commodity-get-mnemonic commodity))
                  (listing (gnc:commodity-get-namespace commodity))
@@ -102,32 +125,47 @@
                                   current to-date #f))
                  (units (cadr (unit-collector 'getpair commodity #f)))
 
-                 (price-value (price-fn commodity currency to-date))
+                 (price-info (price-fn commodity currency to-date))
                  
                  (value-num (gnc:numeric-mul
                              units 
-                             price-value
+                             (cdr price-info)
                              (gnc:commodity-get-fraction currency)
                              GNC-RND-ROUND))
 
                  (value (gnc:make-gnc-monetary currency value-num)))
-            (collector 'add currency value-num)
-            (gnc:html-table-append-row/markup!
-             table
-             row-style
-             (list name
-                   ticker-symbol
-                   listing
-                   (gnc:make-html-table-header-cell/markup
-                    "number-cell" (gnc:numeric-to-double units))
-                   (gnc:make-html-table-header-cell/markup
-                    "number-cell" (gnc:make-gnc-monetary currency
-                                                         price-value))
-                   (gnc:make-html-table-header-cell/markup
-                    "number-cell" value)))
-            (table-add-stock-rows-internal rest (not odd-row?)))))
 
-    (table-add-stock-rows-internal accounts #t))
+	    (set! work-done (+ 1 work-done))
+	    (gnc:report-percent-done (* 100 (/ work-done work-to-do)))
+	    (if (or include-empty (not (gnc:numeric-zero-p units)))
+		(begin (collector 'add currency value-num)
+		       (gnc:html-table-append-row/markup!
+			table
+			row-style
+			(list (gnc:html-account-anchor current)
+			      ticker-symbol
+			      listing
+			      (gnc:make-html-table-header-cell/markup
+			       "number-cell" 
+			       (gnc:amount->string units share-print-info))
+			      (gnc:make-html-table-header-cell/markup
+			       "number-cell"
+			       (gnc:html-price-anchor
+				(car price-info)
+				(gnc:make-gnc-monetary currency
+						       (cdr price-info))))
+			      (gnc:make-html-table-header-cell/markup
+			       "number-cell" value)))
+		       ;;(display (sprintf #f "Shares: %6.6d  " (gnc:numeric-to-double units)))
+		       ;;(display units) (newline)
+		       (table-add-stock-rows-internal rest (not odd-row?)))
+		(table-add-stock-rows-internal rest odd-row?)))))
+
+    (set! work-to-do (length accounts))
+    (table-add-stock-rows-internal accounts #t)))
+
+  ;; Tell the user that we're starting.
+  (gnc:report-starting reportname)
 
   ;; The first thing we do is make local variables for all the specific
   ;; options in the set of options given to the function. This set will
@@ -140,6 +178,8 @@
                                   gnc:optname-reportname))
         (price-source (get-option gnc:pagename-general
                                   optname-price-source))
+        (include-empty (get-option gnc:pagename-accounts
+                                  optname-zero-shares))
 
         (collector   (gnc:make-commodity-collector))
         ;; document will be the HTML document that we return.
@@ -151,7 +191,7 @@
                report-title
                (sprintf #f " %s" (gnc:print-date to-date))))
 
-    (gnc:debug "accounts" accounts)
+    ;(gnc:debug "accounts" accounts)
     (if (not (null? accounts))
         (let* ((commodity-list (gnc:accounts-get-commodities 
                                 (append 
@@ -165,8 +205,8 @@
                           (gnc:get-commoditylist-totalavg-prices
                            commodity-list currency to-date)))
                      (lambda (foreign domestic date) 
-                       (gnc:pricealist-lookup-nearest-in-time
-                        pricealist foreign date))))
+                       (cons #f (gnc:pricealist-lookup-nearest-in-time
+				 pricealist foreign date)))))
                   ('pricedb-latest 
                    (lambda (foreign domestic date) 
                      (let ((price
@@ -174,9 +214,8 @@
                              pricedb foreign domestic)))
                        (if price
                            (let ((v (gnc:price-get-value price)))
-                             (gnc:price-unref price)
-                             v)
-                           (gnc:numeric-zero)))))
+                             (cons price v))
+                           (cons #f (gnc:numeric-zero))))))
                   ('pricedb-nearest 
                    (lambda (foreign domestic date) 
                      (let ((price
@@ -184,9 +223,8 @@
                              pricedb foreign domestic date)))
                        (if price
                            (let ((v (gnc:price-get-value price)))
-                             (gnc:price-unref price)
-                             v)
-                           (gnc:numeric-zero))))))))
+                             (cons price v))
+                           (cons #f (gnc:numeric-zero)))))))))
           
           (gnc:html-table-set-col-headers!
            table
@@ -199,7 +237,7 @@
           
           (table-add-stock-rows
            table accounts to-date currency 
-           price-fn collector)
+           price-fn include-empty collector)
           
           (gnc:html-table-append-row/markup!
            table
@@ -225,14 +263,16 @@
 
                                         ;if no accounts selected.
         (gnc:html-document-add-object!
-         document (gnc:html-make-no-account-warning report-title)))
+         document
+	 (gnc:html-make-no-account-warning 
+	  report-title (gnc:report-id report-obj))))
     
-    
-    document))
+    (gnc:report-finished)
+    document)))
 
 (gnc:define-report
  'version 1
- 'name (N_ "Investment Portfolio")
+ 'name reportname
  'menu-path (list gnc:menuname-asset-liability)
  'options-generator options-generator
  'renderer portfolio-renderer)

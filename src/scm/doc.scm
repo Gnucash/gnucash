@@ -16,7 +16,7 @@
 ;; Boston, MA  02111-1307,  USA       gnu@gnu.org
 
 (define (gnc:find-doc-file file)
-  (gnc:find-in-directories file (gnc:config-var-value-get gnc:*doc-path*)))
+  (gnc:find-localized-file file (gnc:config-var-value-get gnc:*doc-path*)))
 
 (define (remove-i18n-macros input)
   (cond ((null? input) input)
@@ -49,9 +49,9 @@
         (else input)))
 
 (define (gnc:load-help-topics fname) 
-  (with-input-from-file
-      (gnc:find-in-directories fname
-                               (gnc:config-var-value-get gnc:*load-path*))
+  ;; Should this be %load-path, or should we use doc-path, and should
+  ;; topics be a .scm file, or just a file since there's no code in
+  ;; there?
+  (with-input-from-file (%search-load-path fname)
     (lambda ()
       (fill-out-topics (remove-i18n-macros (read))))))
-

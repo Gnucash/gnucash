@@ -1,0 +1,160 @@
+		GnuCash Backend API (v2)
+
+		     Derek Atkins
+		   <derek@ihtfp.com>
+
+Created: 2002-10-07
+
+Problem:
+--------
+
+The current Backend API is hardcoded to dealing with Accounts,
+Transactions, and Splits.  The Backend Query API does not allow
+caching of a Query (meaning the Backend has to recompile the Query
+every time the query is executed).  With the inclusion of a multitude
+of new datatypes and plugable architure, the Backend API requires
+modification to handle the new data.
+
+
+"Dynamic" Data Types:
+---------------------
+
+The engine has a set of APIs to load new data types into the engine.
+The Backends need this as well.  Currently the engine supplies a set
+of registration functions to register Backend handlers for new data
+types.  Each Backend defines a plug-in API and then data types can
+register themselves.  This is how extensibility works.
+
+For example, the "file" Backend defines the API for plug-in data
+types.  It requires data types to implement four functions:
+create_parser(), add_item(), get_count(), and write().
+
+A new data-type, the GncFOO type, implements the required APIs and
+registers itself with gncObjectRegisterBackend().  The file backend
+can then either lookup the GncFOO object by name by calling
+gncObjectLookupBackend(), or can iterate over all the registered
+objects by using gncObjectForeachBackend(), depending on the
+particular backend operation.
+
+By using these functions, new data types can be registered and new
+types of data stored using generic Backend API functions.  The backend
+implementing generic *_edit() or session_load() APIs could then lookup
+data types by name or iterate over all known data types to determine
+how to load or save data.  Each backend can define the set of
+interfaces it requires data-types to implement.
+
+
+Handling Queries:
+-----------------
+
+The version-1 Backend provides a single run-query method that returns
+a list of splits.  This has proven to be limiting, and recompiling the
+query into the backend format each time can be time consuming.  To fix
+this the backend query API needs to be broken into three pieces:
+
+    gpointer (*query_compile)(Backend* be, Query* query);
+
+	compiles a Query* into whatever Backend Language is necessary.
+
+    void (*query_free)(Backend* be, gpointer query);
+
+	frees the compiled Query (obtained from the query_compile method).
+
+    void (*query_run)(Backend* be, gpointer query);
+
+	executes the compiled Query and inserts the responses into the
+	engine.  It will search for the type corresponding to the
+	Query search_for type: gncQueryGetSearchFor().  Note that the
+	search type CANNOT change between a compile and the execute,
+	but the query infrastructure maintains that invariant.
+
+
+In this manner, a Backend (e.g. the Postgres backend) can compile the
+Query into its own format (e.g. a SQL expression) and then use the
+pre-compiled expression every run instead of rebuilding the
+expression.
+
+There is an implementation issue in the case of Queries across
+multiple Books.  Each book could theoretically be in a different
+backend, which means we need to tie the compiled query to the book's
+Backend for which it was compiled.  This is an implementation detail,
+and not even a challenging one, but it needs to be clearly
+acknowledged up front.
+
+Also note that this API can usurp the price_lookup() method, assuming
+the GNCPriceLookup can be subsumed by the Query.
+
+
+Handling Multiple Datatypes:
+----------------------------
+
+The current API specifically defines "edit" functions for Accounts and
+Transactions.  This rather rigid API does not allow for adding new
+data types to the Backend.  A better approach is to generalize the
+begin_edit, rollback_edit, and commit_edit APIs into a general API
+which is dynamically sub-typed at runtime:
+
+    void (*begin_edit)(Backend* be, GNCIdTypeConst data_type, gpointer object);
+    void (*rollback_edit)(Backend* be, GNCIdTypeConst data_type, gpointer object);
+    void (*commit_edit)(Backend* be, GNCIdTypeConst data_type, gpointer object);
+
+This API looks just like the existing API for Accounts, Periods, and
+Price entries, although it quite obviously does not match the
+Transaction commit.  Note that not all data-types need to implement
+all three types (there is no rollback on Accounts, Prices, or
+Periods).  Note that certain data-types can _still_ be special (e.g.
+the Period handling).
+
+Question: why does the transaction commit have two transactions?  In
+particular, can't the backend "know" that the "original" transaction
+is in "trans->orig".  Besides, if the Backend is truly in charge of
+the data, then the engine can make changes to the local copy and can
+"back out" by accessing the backend (or commit by sending it to the
+backend).  Can't one assume that the "backend" knows how the engine is
+implementing the rollback caching?
+
+
+When to load data?
+------------------
+
+Data loads into the engine at two times, at start time and at query
+time.  Loading data during queries is discussed above.  This section
+discusses data loaded at startup.
+
+Currently the API has book_load() and price_load().  That's nice for
+the book and price DB, but there may be other items that need to be
+loaded at "start" time.  A better approach would be to combine all
+the _load() APIs into a single API:
+
+    void session_load(Backend*, GNCBook*);
+
+This one API would load all the necessary "start-time" data, including
+the Chart of Accounts, the Commodity Table, the Scheduled Transaction
+List, the Pricedb, etc.  There is no need to have multiple APIs for
+each of the data types loaded at start-time.  Dynamic data-types that
+require data to be loaded at start-time can register a specific API
+for the backend to execute the load.
+
+
+Usefulness of sync_*()?
+-----------------------
+
+What is the point of sync_all(), sync_group(), and sync_price()?
+Obviously one of them is necessary to implement "save-as", but there
+is no need for multiple versions.  New datatypes can just be plugged
+in by the dynamic API.  There is no reason to differentiate the book
+from the pricedb, as they are still attached to each other.
+Therefore, sync_all() should be left and sync_group() and sync_price()
+should be removed.
+
+
+Usefulness of export()?
+-----------------------
+
+The export() method is used to export a Chart of Accounts to a file.
+Is it really necessary that this be in the backend?  What does it mean
+to "export" in anything else?  Note that only the file backend even
+IMPLEMENTS this method...  How general is export?
+
+
+============================== END OF DOCUMENT ===================== 

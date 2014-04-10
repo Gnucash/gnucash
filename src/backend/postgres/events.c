@@ -56,7 +56,6 @@ pgendEventsPending (Backend *bend)
 {
    PGBackend *be = (PGBackend *) bend;
    PGnotify *note;
-   char *p;
    int rc;
 
    if (!be) return FALSE;
@@ -108,6 +107,11 @@ pgendEventsPending (Backend *bend)
       if (0 == strcasecmp ("gncAccount", note->relname))
       {
          be->do_account ++;
+      } 
+      else
+      if (0 == strcasecmp ("gncBook", note->relname))
+      {
+         be->do_book ++;
       } 
       else
       if (0 == strcasecmp ("gncSession", note->relname))
@@ -168,6 +172,7 @@ get_event_cb (PGBackend *be, PGresult *result, int j, gpointer data)
    switch (objtype)
    {
       case 'a': obj_type = GNC_ID_ACCOUNT; break;
+      case 'b': obj_type = GNC_ID_BOOK; break;
       case 'c': obj_type = GNC_ID_NONE; break;  /* should be commodity */
       case 'e': obj_type = GNC_ID_SPLIT; break;
       case 'p': obj_type = GNC_ID_PRICE; break;
@@ -215,20 +220,20 @@ get_event_cb (PGBackend *be, PGresult *result, int j, gpointer data)
    return (gpointer) list;
 }
 
-#define GET_EVENTS(guid_name,table, timestamp)			\
-{								\
-   char *p;							\
-   p = be->buff; *p = 0;					\
-   p = stpcpy (p, "SELECT objtype, change, date_changed, " 	\
-                  #guid_name " AS guid  FROM " #table		\
-                  "  WHERE sessionGuid <> '");			\
-   p = stpcpy (p, be->session_guid_str);			\
-   p = stpcpy (p, "' AND date_changed >= '");			\
-   p = gnc_timespec_to_iso8601_buff (timestamp, p);		\
-   p = stpcpy (p, "';");					\
-								\
-   SEND_QUERY (be, be->buff, FALSE);				\
-   pending = (GList *) pgendGetResults (be, get_event_cb, pending);	\
+#define GET_EVENTS(guid_name,table, timestamp)	                    \
+{                                                                   \
+   char *p;                                                         \
+   p = be->buff; *p = 0;                                            \
+   p = stpcpy (p, "SELECT objtype, change, date_changed, "          \
+                  #guid_name " AS guid  FROM " #table               \
+                  "  WHERE sessionGuid <> '");                      \
+   p = stpcpy (p, be->session_guid_str);                            \
+   p = stpcpy (p, "' AND date_changed >= '");                       \
+   p = gnc_timespec_to_iso8601_buff (timestamp, p);                 \
+   p = stpcpy (p, "';");                                            \
+                                                                    \
+   SEND_QUERY (be, be->buff, FALSE);                                \
+   pending = (GList *) pgendGetResults (be, get_event_cb, pending); \
 }
 
 gboolean
@@ -241,7 +246,7 @@ pgendProcessEvents (Backend *bend)
 
    ENTER (" ");
 
-   /* get all recent events from teh SQL db. */
+   /* Get all recent events from the SQL db. */
    if (be->do_account)
    {
       GET_EVENTS (accountGuid, gncAccountTrail, be->last_account);
@@ -265,97 +270,117 @@ pgendProcessEvents (Backend *bend)
       GNCIdType local_obj_type;
 
       /* lets see if the local cache has this item in it */
-      local_obj_type = xaccGUIDType (&(ev->guid), be->book);
-      if ((local_obj_type != GNC_ID_NONE) && (local_obj_type != ev->obj_type))
+      local_obj_type = pgendGUIDType (be, &(ev->guid));
+      if ((local_obj_type != GNC_ID_NONE) && 
+          (safe_strcmp (local_obj_type, ev->obj_type)))
       {
-         PERR ("ouch! object type mismatch, local=%d, event=%d",
+         PERR ("ouch! object type mismatch, local=%s, event=%s",
                local_obj_type, ev->obj_type);
          g_free (ev);
          continue;
       }
 
-      switch (ev->obj_type)
+      if (!safe_strcmp (ev->obj_type, GNC_ID_ACCOUNT))
       {
-         case GNC_ID_NONE:
-         case GNC_ID_NULL:
-            PERR ("bad event type");
-            break;
-         case GNC_ID_ACCOUNT:
-            if (0 < timespec_cmp(&(ev->stamp), &(be->last_account))) 
-            {
-               be->last_account = ev->stamp;
+         if (0 < timespec_cmp(&(ev->stamp), &(be->last_account))) 
+         {
+            be->last_account = ev->stamp;
+         }
+         switch (ev->type)
+         {
+            default:
+               PERR ("account: cant' happen !!!!!!!");
+               break;
+            case GNC_EVENT_CREATE:
+            case GNC_EVENT_MODIFY: {
+               Account *acc;
+
+               /* if the remote user created an account, mirror it here */
+               acc = pgendCopyAccountToEngine (be, &(ev->guid));
+               xaccGroupMarkSaved (xaccAccountGetRoot(acc));
+               break;
             }
-            switch (ev->type)
-            {
-               default:
-                  PERR ("account: cant' happen !!!!!!!");
-                  break;
-               case GNC_EVENT_CREATE:
-               case GNC_EVENT_MODIFY: 
-                  /* if the remote user created an account, mirror it here */
-                  pgendCopyAccountToEngine (be, &(ev->guid));
-                  xaccGroupMarkSaved (pgendGetTopGroup (be));
-                  break;
-               case GNC_EVENT_DESTROY: {
-                  Account * acc = xaccAccountLookup (&(ev->guid), be->book);
-                  xaccAccountBeginEdit (acc);
-                  xaccAccountDestroy (acc);
-                  xaccGroupMarkSaved (pgendGetTopGroup (be));
-                  break;
-               }
+            case GNC_EVENT_DESTROY: {
+               Account * acc = pgendAccountLookup (be, &(ev->guid));
+               AccountGroup *topgrp = xaccAccountGetRoot(acc);
+               xaccAccountBeginEdit (acc);
+               xaccAccountDestroy (acc);
+               xaccGroupMarkSaved (topgrp);
+               break;
             }
-
-            break;
-
-         case GNC_ID_TRANS:
-            if (0 < timespec_cmp(&(ev->stamp), &(be->last_transaction))) 
-            {
-               be->last_transaction = ev->stamp;
+         }
+      }
+      else 
+      if (!safe_strcmp (ev->obj_type, GNC_ID_TRANS))
+      {
+         if (0 < timespec_cmp(&(ev->stamp), &(be->last_transaction))) 
+          {
+            be->last_transaction = ev->stamp;
+         }
+         switch (ev->type)
+         {
+            default:
+               PERR ("transaction: cant' happen !!!!!!!");
+               break;
+            case GNC_EVENT_CREATE:
+               /* don't mirror transaction creations. If a register needs
+                * it, it will do a query. */
+               PINFO ("create transaction");
+               break;
+            case GNC_EVENT_MODIFY: 
+               pgendCopyTransactionToEngine (be, &(ev->guid));
+               break;
+            case GNC_EVENT_DESTROY: {
+               Transaction *trans = pgendTransLookup (be, &(ev->guid));
+               xaccTransBeginEdit (trans);
+               xaccTransDestroy (trans);
+               xaccTransCommitEdit (trans);
+               break;
             }
-            switch (ev->type)
-            {
-               default:
-                  PERR ("transaction: cant' happen !!!!!!!");
-                  break;
-               case GNC_EVENT_CREATE:
-                  /* don't mirror transaction creations. If a register needs
-                   * it, it will do a query. */
-                  PINFO ("create transaction");
-                  break;
-               case GNC_EVENT_MODIFY: 
-                  pgendCopyTransactionToEngine (be, &(ev->guid));
-                  break;
-               case GNC_EVENT_DESTROY: {
-                  Transaction *trans = xaccTransLookup (&(ev->guid),
-                                                        be->book);
-                  xaccTransBeginEdit (trans);
-                  xaccTransDestroy (trans);
-                  xaccTransCommitEdit (trans);
-                  break;
-               }
-            }
-
-            break;
-
-         case GNC_ID_SPLIT:
-            if (0 < timespec_cmp(&(ev->stamp), &(be->last_transaction)))
-              be->last_transaction = ev->stamp;
-            break;
-
-         case GNC_ID_PRICE:
-            if (0 < timespec_cmp(&(ev->stamp), &(be->last_price)))
-              be->last_price = ev->stamp;
-            break;
-
-         default:
-            PERR ("unknown guid type %d", ev->obj_type);
+         }
+      }
+      else 
+      if (!safe_strcmp (ev->obj_type, GNC_ID_SPLIT))
+      {
+         if (0 < timespec_cmp(&(ev->stamp), &(be->last_transaction)))
+         {
+            be->last_transaction = ev->stamp;
+         }
+      }
+      else 
+      if (!safe_strcmp (ev->obj_type, GNC_ID_PRICE))
+      {
+         if (0 < timespec_cmp(&(ev->stamp), &(be->last_price)))
+         {
+            be->last_price = ev->stamp;
+         }
+      }
+      else
+      {
+         PERR ("unknown guid type %s", ev->obj_type);
       }
    
-      /* get the local type again, since we created guid above */
-      local_obj_type = xaccGUIDType (&(ev->guid), be->book);
-      if (GNC_ID_NONE != local_obj_type)
+      /* test the local type again, since we created/modified/destroyed
+       * the guid above */
+      if (GNC_ID_NONE == local_obj_type)
       {
-         gnc_engine_generate_event (&(ev->guid), local_obj_type);
+         local_obj_type = pgendGUIDType (be, &(ev->guid));
+         if (GNC_ID_NONE != local_obj_type)
+         {
+            gnc_engine_generate_event (&(ev->guid), GNC_EVENT_CREATE);
+         }
+      }
+      else 
+      {
+         local_obj_type = pgendGUIDType (be, &(ev->guid));
+         if (GNC_ID_NONE != local_obj_type)
+         {
+            gnc_engine_generate_event (&(ev->guid), GNC_EVENT_MODIFY);
+         }
+         else
+         {
+            gnc_engine_generate_event (&(ev->guid), GNC_EVENT_DESTROY);
+         }
       }
    
       g_free (ev);
@@ -426,7 +451,7 @@ pgendSessionSetupNotifies (PGBackend *be)
 {
    char *p;
 
-   /* get latest times from the database; this to avoid clock 
+   /* Get latest times from the database; this to avoid clock 
     * skew between database and this local process */
    p = "SELECT date_changed FROM gncAuditTrail* ORDER BY date_changed DESC LIMIT 1;";
    SEND_QUERY (be, p, );
@@ -434,7 +459,7 @@ pgendSessionSetupNotifies (PGBackend *be)
 
    p = "LISTEN gncSession;\nLISTEN gncAccount;\n"
        "LISTEN gncPrice;\nLISTEN gncTransaction;\n"
-       "LISTEN gncCheckpoint;";
+       "LISTEN gncCheckpoint;\nLISTEN gncBook;\n";
    SEND_QUERY (be, p, );
    FINISH_QUERY(be->connection);
 }

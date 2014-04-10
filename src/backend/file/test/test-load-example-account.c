@@ -44,10 +44,15 @@ test_load_file(GNCBook *book, const char *filename)
 static void
 guile_main(int argc, char **argv)
 {
-    const char *location = "../../../../accounts/C";
+    const char *location = getenv("GNC_ACCOUNT_PATH");
     GSList *list = NULL;
     DIR *ea_dir;
     GNCBook *book;
+
+    if (!location)
+    {
+	location = "../../../../accounts/C";
+    }
 
     gnc_module_system_init();
     gnc_module_load("gnucash/engine", 0);

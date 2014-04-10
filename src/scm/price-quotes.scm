@@ -23,14 +23,16 @@
 (define-module (gnucash price-quotes))
 
 (export yahoo-get-historical-quotes)
+(export gnc:fq-check-sources)
 (export gnc:book-add-quotes)
 (export gnc:add-quotes-to-book-at-url)
 
 (use-modules (gnucash process))
 (use-modules (www main))
 (use-modules (srfi srfi-1))
-(use-modules (gnucash bootstrap) (g-wrapped gw-gnc)) ;; FIXME: delete after we finish modularizing.
+(use-modules (gnucash main) (g-wrapped gw-gnc)) ;; FIXME: delete after we finish modularizing.
 (use-modules (gnucash gnc-module))
+(use-modules (g-wrapped gw-gnome-utils))
 
 (gnc:module-load "gnucash/app-utils" 0)
 
@@ -210,6 +212,45 @@
             #f))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(define gnc:*finance-quote-check*
+  (gnc:find-file "finance-quote-check"
+                 (gnc:config-var-value-get gnc:*share-path*)))
+
+(define (gnc:fq-check-sources)
+  (let ((program #f))
+
+    (define (start-program)
+      (set! program (gnc:run-sub-process #f
+                                        gnc:*finance-quote-check*
+                                        gnc:*finance-quote-check*)))
+
+    (define (get-sources)
+      (and program
+           (let ((from-child (cadr program))
+                 (results #f))
+	     (catch
+	      #t
+	      (lambda ()
+		(set! results (read from-child))
+;;		(write (list 'results results)) (newline)
+		results)
+	      (lambda (key . args)
+		key)))))
+
+    (define (kill-program)
+      (and program
+           (let ((pid (car program)))
+             (close-input-port (cadr program))
+             (close-output-port (caddr program))
+             (gnc:cleanup-sub-process (car program) 1))))
+
+    (dynamic-wind
+        start-program
+        get-sources
+        kill-program)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;; Finance::Quote based instantaneous quotes -- used by the
 ;; --add-price-quotes command line option, etc.
@@ -222,8 +263,8 @@
 ;; src/engine/gnc-pricedb.h
 
 (define gnc:*finance-quote-helper*
-  (string-append (gnc:config-var-value-get gnc:*share-dir*)
-                 "/finance-quote-helper"))
+  (gnc:find-file "finance-quote-helper"
+                 (gnc:config-var-value-get gnc:*share-path*)))
 
 (define (gnc:fq-get-quotes requests)
   ;; requests should be a list where each item is of the form
@@ -273,21 +314,29 @@
     (define (get-quotes)
       (and quoter
            (let ((to-child (caddr quoter))
-                 (from-child (cadr quoter)))
+                 (from-child (cadr quoter))
+                 (results #f))
              (map
               (lambda (request)
-                (write (list 'handling-request request))
-                (newline)
-                ;; we need to display the first element (the method, so it
-                ;; won't be quoted) and then write the rest
-                (display #\( to-child)
-                (display (car request) to-child)
-                (display " " to-child)
-                (for-each (lambda (x) (write x to-child)) (cdr request))
-                (display #\) to-child)
-                (newline to-child)
-                (force-output to-child)
-                (read from-child))
+		(catch
+		 #t
+		 (lambda ()
+		   (write (list 'handling-request request))
+		   (newline)
+		   ;; we need to display the first element (the method, so it
+		   ;; won't be quoted) and then write the rest
+		   (display #\( to-child)
+		   (display (car request) to-child)
+		   (display " " to-child)
+		   (for-each (lambda (x) (write x to-child)) (cdr request))
+		   (display #\) to-child)
+		   (newline to-child)
+		   (force-output to-child)
+		   (set! results (read from-child))
+;;		   (write (list 'results results)) (newline)
+		   results)
+		 (lambda (key . args)
+		   key)))
              requests))))
 
     (define (kill-quoter)
@@ -314,7 +363,8 @@
     (define (quotable-account? a)
       (let ((type (gw:enum-<gnc:AccountType>-val->sym (gnc:account-get-type a)
                                                       #f))
-	    (src (gnc:account-get-price-src a)))
+	    (src (gnc:account-get-price-src a))
+	    (balance (not (gnc:numeric-zero-p (gnc:account-get-balance a)))))
 
         (if (not type) (set! type '()))
         (if (symbol? type) (set! type (list type)))
@@ -326,7 +376,11 @@
 	    a
 	    #f)))
 
-    (filter quotable-account? (gnc:group-get-subaccounts group)))
+    (let ((quotables (filter quotable-account? (gnc:group-get-subaccounts group))))
+      (if (null? quotables)
+	  #f
+	  quotables))
+    )
 
   (define (accounts->fq-call-data account-list)
     ;; Take a list of accounts that should be "quotable" -- i.e. they
@@ -346,33 +400,6 @@
     ;;                     (commodity-4 currency-4 tz-4) ...)
     ;;  ...)
 
-  (define (src->fq-method-sym src)
-    (cond
-     ((string=? "YAHOO" src) 'yahoo)
-     ((string=? "YAHOO_EUROPE" src) 'yahoo-europe)
-     ((string=? "FIDELITY" src) 'fidelity)
-     ((string=? "TRPRICE" src) 'troweprice)
-     ((string=? "VANGUARD" src) 'vanguard)
-     ((string=? "ASX" src) 'asx)
-     ((string=? "TIAACREF" src) 'tiaacref)
-     ((string=? "TRUSTNET" src) 'trustnet)
-     ((string=? "CURRENCY" src) 'currency)
-     (else #f)))
-
-  ;; NOTE: If you modify this, please update finance-quote-helper.in as well.
-  (define (fq-method-sym->str src-sym)
-    (case src-sym
-     ((yahoo) "yahoo")
-     ((yahoo-europe) "yahoo_europe")
-     ((fidelity) "fidelity_direct")
-     ((troweprice) "troweprice_direct")
-     ((vanguard) "vanguard")
-     ((asx) "asx")
-     ((tiaacref) "tiaacref")
-     ((trustnet) "trustnet")
-     ((currency) "currency")
-     (else #f)))
-
   (define (account->fq-cmd account)
     ;; Returns (cons fq-method-sym
     ;;               (list commodity currency assumed-timezone-str))
@@ -380,7 +407,7 @@
            (currency (gnc:default-currency))
            (src (and account (gnc:account-get-price-src account)))
            (tz (gnc:account-get-quote-tz account))
-	   (fq-method-sym (and src (src->fq-method-sym src)))
+	   (fq-method-sym (and src (gnc:price-source-internal2fq src)))
            (mnemonic (and commodity (gnc:commodity-get-mnemonic commodity))))
       (and
        commodity
@@ -394,23 +421,23 @@
          (currency-cmd-list (call-with-values 
                              (lambda () (partition!
                                          (lambda (cmd)
-                                           (not (eq? (car cmd) 'currency)))
+                                           (not (equal? (car cmd) "currency")))
                                          big-list))
                              (lambda (a b) (set! cmd-list a) b)))
          (cmd-hash (make-hash-table 31)))
 
     ;; Now collect symbols going to the same backend.
-    (item-list->hash! cmd-list cmd-hash car cdr hashq-ref hashq-set! #t)
+    (item-list->hash! cmd-list cmd-hash car cdr hash-ref hash-set! #t)
 
     ;; Now translate to just what finance-quote-helper expects.
     (append
      (hash-fold
       (lambda (key value prior-result)
-        (cons (cons (fq-method-sym->str key) value)
+        (cons (cons key value)
               prior-result))
       '()
       cmd-hash)
-     (map (lambda (cmd) (cons (fq-method-sym->str (car cmd)) (list (cdr cmd))))
+     (map (lambda (cmd) (cons (car cmd) (list (cdr cmd))))
           currency-cmd-list))))
 
   (define (fq-call-data->fq-calls fq-call-data)
@@ -593,7 +620,7 @@
                                (map fq-call-data->fq-calls fq-call-data))))
          (fq-results (and fq-calls (gnc:fq-get-quotes fq-calls)))
          (commod-tz-quote-triples
-          (and fq-results (not (member 'missing-lib fq-results))
+          (and fq-results (list? (car fq-results))
                (fq-results->commod-tz-quote-triples fq-call-data fq-results)))
          ;; At this point commod-tz-quote-triples will either be #f or a
          ;; list of items. Each item will either be (commodity
@@ -615,6 +642,16 @@
          (keep-going? #t))
 
     (cond
+     ((eq? quotables #f)
+      (set! keep-going? #f)
+      (if (gnc:ui-is-running?)
+          (gnc:error-dialog  (_ "No accounts marked for quote retrieval."))
+	  (gnc:warn (_ "No accounts marked for quote retrieval."))))
+     ((eq? fq-results #f)
+      (set! keep-going? #f)
+      (if (gnc:ui-is-running?)
+          (gnc:error-dialog  (_ "Unable to get quotes or diagnose the problem."))
+	  (gnc:warn (_ "Unable to get quotes or diagnose the problem."))))
      ((member 'missing-lib fq-results)
       (set! keep-going? #f)
       (if (gnc:ui-is-running?)
@@ -623,6 +660,18 @@
 Run 'update-finance-quote' as root to install them."))
           (gnc:warn (_ "You are missing some needed Perl libraries.
 Run 'update-finance-quote' as root to install them.") "\n")))
+     ((member 'system-error fq-results)
+      (set! keep-going? #f)
+      (if (gnc:ui-is-running?)
+          (gnc:error-dialog
+           (_ "There was a system error while retrieving the price quotes."))
+          (gnc:warn (_ "There was a system error while retrieving the price quotes.") "\n")))
+     ((not (list? (car fq-results)))
+      (set! keep-going? #f)
+      (if (gnc:ui-is-running?)
+          (gnc:error-dialog
+           (_ "There was an unknown error while retrieving the price quotes."))
+          (gnc:warn (_ "There was an unknown error while retrieving the price quotes.") "\n")))
      ((and (not commod-tz-quote-triples) (gnc:ui-is-running?))
       (gnc:error-dialog
        (_ "Unable to get quotes or diagnose the problem."))
@@ -635,7 +684,7 @@ Run 'update-finance-quote' as root to install them.") "\n")))
           (if (and ok-syms (not (null? ok-syms)))
               (set!
                keep-going?
-               (gnc:verify-dialog
+               (gnc:verify-dialog #t
                 (call-with-output-string
                  (lambda (p)
                    (display (_ "Unable to retrieve quotes for these items:") p)
@@ -643,8 +692,7 @@ Run 'update-finance-quote' as root to install them.") "\n")))
                    (display "  " p)
                    (display (string-join problem-syms "\n  ") p)
                    (newline p)
-                   (display (_ "Continue using only the good quotes?") p)))
-                #t))
+                   (display (_ "Continue using only the good quotes?") p)))))
               (begin
                 (gnc:error-dialog
                  (call-with-output-string
@@ -675,7 +723,7 @@ Run 'update-finance-quote' as root to install them.") "\n")))
            (if (gnc:ui-is-running?)
                (set!
                 keep-going?
-                (gnc:verify-dialog
+                (gnc:verify-dialog #t
                  (call-with-output-string
                   (lambda (p)
                     (display (_ "Unable to create prices for these items:") p)
@@ -683,8 +731,7 @@ Run 'update-finance-quote' as root to install them.") "\n")))
                     (display "  " p)
                     (display (string-join (filter string? prices) "\n  ") p)
                     (newline p)
-                    (display (_ "Add remaining good quotes?") p)))
-                 #t))
+                    (display (_ "Add remaining good quotes?") p)))))
                (gnc:warn
                 (call-with-output-string
                  (lambda (p)
@@ -703,19 +750,22 @@ Run 'update-finance-quote' as root to install them.") "\n")))
 
 (define (gnc:add-quotes-to-book-at-url url)
   (let* ((session (gnc:url->loaded-session url #f #f))
-         (quote-ok? (and session
-                         (gnc:book-add-quotes
-                          (gnc:session-get-book session)))))
+         (quote-ok? #f))
+    (if session
+	(begin
+	  (set! quote-ok? (and (gnc:book-add-quotes
+				(gnc:session-get-book session))))
 
-    (if (not quote-ok?) (gnc:msg "book-add-quotes failed"))
-    (and session (gnc:session-save session))
-    (if (not (eq? 'no-err
-                  (gw:enum-<gnc:BackendError>-val->sym
-                   (gnc:session-get-error session) #f)))
-        (set! quote-ok? #f))
-    (if (not quote-ok?)
-        (gnc:msg "session-save failed " (gnc:session-get-error session)))
-    (and session (gnc:session-destroy session))
+	  (if (not quote-ok?) (gnc:msg "book-add-quotes failed"))
+	  (gnc:session-save session)
+	  (if (not (eq? 'no-err
+			(gw:enum-<gnc:BackendError>-val->sym
+			 (gnc:session-get-error session) #f)))
+	      (set! quote-ok? #f))
+	  (if (not quote-ok?)
+	      (gnc:msg "session-save failed " (gnc:session-get-error session)))
+	  (gnc:session-destroy session))
+	(gnc:error "book-add-quotes unable to open file"))
     quote-ok?))
 
 ; (define (get-1-quote exchange . items)

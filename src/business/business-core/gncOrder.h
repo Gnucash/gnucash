@@ -9,31 +9,25 @@
 
 typedef struct _gncOrder GncOrder;
 
-typedef enum {
-  GNC_ORDER_NONE = 0,
-  GNC_ORDER_SALES = 1,
-  GNC_ORDER_PURCHASE = 2
-} GncOrderType;
-
-#include "gncBusiness.h"
-#include "gncJob.h"
-#include "gncVendor.h"
+#include "gnc-book.h"
+#include "gncEntry.h"
+#include "gncOwner.h"
 
 #define GNC_ORDER_MODULE_NAME "gncOrder"
 
 /* Create/Destroy Functions */
 
-GncOrder *gncOrderCreate (GncBusiness *business, GncOrderType type);
+GncOrder *gncOrderCreate (GNCBook *book);
 void gncOrderDestroy (GncOrder *order);
 
 /* Set Functions */
 
 void gncOrderSetID (GncOrder *order, const char *id);
-void gncOrderSetJob (GncOrder *order, GncJob *job);
-void gncOrderSetVendor (GncOrder *order, GncVendor *vendor);
-void gncOrderSetDateOpened (GncOrder *order, Timespec *date);
-void gncOrderSetDateClosed (GncOrder *order, Timespec *date);
+void gncOrderSetOwner (GncOrder *order, GncOwner *owner);
+void gncOrderSetDateOpened (GncOrder *order, Timespec date);
+void gncOrderSetDateClosed (GncOrder *order, Timespec date);
 void gncOrderSetNotes (GncOrder *order, const char *notes);
+void gncOrderSetReference (GncOrder *order, const char *reference);
 void gncOrderSetActive (GncOrder *order, gboolean active);
 
 /* Add an Entry to the Order */
@@ -42,21 +36,33 @@ void gncOrderRemoveEntry (GncOrder *order, GncEntry *entry);
 
 /* Get Functions */
 
-GncBusiness * gncOrderGetBusiness (GncOrder *order);
+GNCBook * gncOrderGetBook (GncOrder *order);
 const GUID * gncOrderGetGUID (GncOrder *order);
 const char * gncOrderGetID (GncOrder *order);
-GncOrderType gncOrderGetType (GncOrder *order);
-GncJob * gncOrderGetJob (GncOrder *order);
-GncVendor * gncOrderGetVendor (GncOrder *order);
+GncOwner * gncOrderGetOwner (GncOrder *order);
 Timespec gncOrderGetDateOpened (GncOrder *order);
 Timespec gncOrderGetDateClosed (GncOrder *order);
 const char * gncOrderGetNotes (GncOrder *order);
+const char * gncOrderGetReference (GncOrder *order);
 gboolean gncOrderGetActive (GncOrder *order);
 
 /* Get the list Entries */
 GList * gncOrderGetEntries (GncOrder *order);
 
+GncOrder * gncOrderLookup (GNCBook *book, const GUID *guid);
 gboolean gncOrderIsDirty (GncOrder *order);
+void gncOrderBeginEdit (GncOrder *order);
 void gncOrderCommitEdit (GncOrder *order);
+int gncOrderCompare (GncOrder *a, GncOrder *b);
+
+gboolean gncOrderIsClosed (GncOrder *order);
+
+#define ORDER_ID	"id"
+#define ORDER_REFERENCE	"reference"
+#define ORDER_OWNER	"owner"
+#define ORDER_OPENED	"date_opened"
+#define ORDER_CLOSED	"date_closed"
+#define ORDER_IS_CLOSED	"is_closed?"
+#define ORDER_NOTES	"notes"
 
 #endif /* GNC_ORDER_H_ */

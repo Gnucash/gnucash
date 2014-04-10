@@ -1,0 +1,368 @@
+<?xml version="1.0"?>
+<GTK-Interface>
+
+<project>
+  <name>OFX import</name>
+  <program_name>ofx-import</program_name>
+  <directory></directory>
+  <source_directory></source_directory>
+  <pixmaps_directory></pixmaps_directory>
+  <language>C</language>
+  <gnome_support>True</gnome_support>
+  <gettext_support>True</gettext_support>
+  <output_main_file>False</output_main_file>
+  <output_support_files>False</output_support_files>
+  <output_build_files>False</output_build_files>
+  <backup_source_files>False</backup_source_files>
+</project>
+
+<widget>
+  <class>GtkWindow</class>
+  <name>OFX Import Druid</name>
+  <title>OFX Import</title>
+  <type>GTK_WINDOW_TOPLEVEL</type>
+  <position>GTK_WIN_POS_NONE</position>
+  <modal>False</modal>
+  <allow_shrink>False</allow_shrink>
+  <allow_grow>True</allow_grow>
+  <auto_shrink>True</auto_shrink>
+
+  <widget>
+    <class>GnomeDruid</class>
+    <name>ofx_import_druid</name>
+    <signal>
+      <name>cancel</name>
+      <handler>gnc_ui_ofx_import_cancel_cb</handler>
+      <data>OFX_Import_Druid</data>
+      <last_modification_time>Wed, 30 Aug 2000 15:11:02 GMT</last_modification_time>
+    </signal>
+
+    <widget>
+      <class>GnomeDruidPageStart</class>
+      <name>start_page</name>
+      <signal>
+	<name>next</name>
+	<handler>gnc_ui_ofx_import_generic_next_cb</handler>
+	<data>OFX_Import_Druid</data>
+	<last_modification_time>Tue, 06 Feb 2001 17:04:30 GMT</last_modification_time>
+      </signal>
+      <title>Import OFX files</title>
+      <text>GnuCash can import financial data from OFX (Quicken 
+Interchange Format) files written by Quicken/QuickBooks,
+MS Money, Moneydance, and many other programs. 
+
+The import process has several steps. Your GnuCash
+accounts will not be changed until you click &quot;Finish&quot;
+at the end of the process. 
+
+Click &quot;Next&quot; to start loading your OFX data, or &quot;Cancel&quot;
+to abort the process. </text>
+      <title_color>255,255,255</title_color>
+      <text_color>0,0,0</text_color>
+      <background_color>153,191,153</background_color>
+      <logo_background_color>255,255,255</logo_background_color>
+      <textbox_color>255,255,255</textbox_color>
+    </widget>
+
+    <widget>
+      <class>GnomeDruidPageStandard</class>
+      <name>load_file_page</name>
+      <signal>
+	<name>next</name>
+	<handler>gnc_ui_ofx_import_load_file_next_cb</handler>
+	<data>OFX_Import_Druid</data>
+	<last_modification_time>Wed, 30 Aug 2000 14:30:37 GMT</last_modification_time>
+      </signal>
+      <signal>
+	<name>back</name>
+	<handler>gnc_ui_ofx_import_generic_back_cb</handler>
+	<data>OFX_Import_Druid</data>
+	<last_modification_time>Tue, 06 Feb 2001 17:05:58 GMT</last_modification_time>
+      </signal>
+      <title>Select a OFX file to load</title>
+      <title_color>255,255,255</title_color>
+      <background_color>153,191,154</background_color>
+      <logo_background_color>255,255,255</logo_background_color>
+
+      <widget>
+	<class>GtkVBox</class>
+	<child_name>GnomeDruidPageStandard:vbox</child_name>
+	<name>druid-vbox8</name>
+	<border_width>25</border_width>
+	<homogeneous>False</homogeneous>
+	<spacing>0</spacing>
+	<child>
+	  <padding>0</padding>
+	  <expand>True</expand>
+	  <fill>True</fill>
+	</child>
+
+	<widget>
+	  <class>GtkLabel</class>
+	  <name>label822</name>
+	  <label>Please select a file to load. When you click &quot;Next&quot;, the file will be loaded
+and analyzed. You may need to answer some questions about the account(s)
+in the file.
+
+You will have the opportunity to load as many files as you wish, so don't 
+worry if your data is in multiple files. 
+</label>
+	  <justify>GTK_JUSTIFY_LEFT</justify>
+	  <wrap>False</wrap>
+	  <xalign>0.5</xalign>
+	  <yalign>0.5</yalign>
+	  <xpad>0</xpad>
+	  <ypad>0</ypad>
+	  <child>
+	    <padding>5</padding>
+	    <expand>False</expand>
+	    <fill>False</fill>
+	  </child>
+	</widget>
+
+	<widget>
+	  <class>GtkHBox</class>
+	  <name>hbox69</name>
+	  <homogeneous>False</homogeneous>
+	  <spacing>0</spacing>
+	  <child>
+	    <padding>0</padding>
+	    <expand>False</expand>
+	    <fill>False</fill>
+	  </child>
+
+	  <widget>
+	    <class>GtkLabel</class>
+	    <name>label821</name>
+	    <label>OFX Filename:</label>
+	    <justify>GTK_JUSTIFY_CENTER</justify>
+	    <wrap>False</wrap>
+	    <xalign>1</xalign>
+	    <yalign>0.5</yalign>
+	    <xpad>0</xpad>
+	    <ypad>0</ypad>
+	    <child>
+	      <padding>4</padding>
+	      <expand>False</expand>
+	      <fill>False</fill>
+	    </child>
+	  </widget>
+
+	  <widget>
+	    <class>GtkEntry</class>
+	    <name>ofx_filename_entry</name>
+	    <can_default>True</can_default>
+	    <has_default>True</has_default>
+	    <can_focus>True</can_focus>
+	    <editable>True</editable>
+	    <text_visible>True</text_visible>
+	    <text_max_length>0</text_max_length>
+	    <text></text>
+	    <child>
+	      <padding>0</padding>
+	      <expand>True</expand>
+	      <fill>True</fill>
+	    </child>
+	  </widget>
+
+	  <widget>
+	    <class>GtkButton</class>
+	    <name>button71</name>
+	    <can_focus>True</can_focus>
+	    <signal>
+	      <name>clicked</name>
+	      <handler>gnc_ui_ofx_import_select_file_cb</handler>
+	      <data>OFX_Import_Druid</data>
+	      <last_modification_time>Wed, 30 Aug 2000 17:33:50 GMT</last_modification_time>
+	    </signal>
+	    <label>Select...</label>
+	    <relief>GTK_RELIEF_NORMAL</relief>
+	    <child>
+	      <padding>3</padding>
+	      <expand>False</expand>
+	      <fill>False</fill>
+	    </child>
+	  </widget>
+	</widget>
+      </widget>
+    </widget>
+
+    <widget>
+      <class>GnomeDruidPageStandard</class>
+      <name>loaded_files_page</name>
+      <signal>
+	<name>prepare</name>
+	<handler>gnc_ui_ofx_import_loaded_files_prepare_cb</handler>
+	<data>OFX_Import_Druid</data>
+	<last_modification_time>Wed, 30 Aug 2000 22:42:22 GMT</last_modification_time>
+      </signal>
+      <signal>
+	<name>next</name>
+	<handler>gnc_ui_ofx_import_generic_next_cb</handler>
+	<data>OFX_Import_Druid</data>
+	<last_modification_time>Fri, 09 Feb 2001 17:04:25 GMT</last_modification_time>
+      </signal>
+      <signal>
+	<name>back</name>
+	<handler>gnc_ui_ofx_import_generic_back_cb</handler>
+	<data>OFX_Import_Druid</data>
+	<last_modification_time>Tue, 06 Feb 2001 17:08:05 GMT</last_modification_time>
+      </signal>
+      <title>OFX files you have loaded</title>
+      <title_color>255,255,255</title_color>
+      <background_color>153,191,153</background_color>
+      <logo_background_color>255,255,255</logo_background_color>
+
+      <widget>
+	<class>GtkVBox</class>
+	<child_name>GnomeDruidPageStandard:vbox</child_name>
+	<name>druid-vbox1</name>
+	<border_width>25</border_width>
+	<homogeneous>False</homogeneous>
+	<spacing>4</spacing>
+	<child>
+	  <padding>0</padding>
+	  <expand>True</expand>
+	  <fill>True</fill>
+	</child>
+
+	<widget>
+	  <class>GtkFrame</class>
+	  <name>frame33</name>
+	  <label>OFX Files</label>
+	  <label_xalign>0</label_xalign>
+	  <shadow_type>GTK_SHADOW_ETCHED_IN</shadow_type>
+	  <child>
+	    <padding>0</padding>
+	    <expand>True</expand>
+	    <fill>True</fill>
+	  </child>
+
+	  <widget>
+	    <class>GtkScrolledWindow</class>
+	    <name>scrolledwindow10</name>
+	    <hscrollbar_policy>GTK_POLICY_ALWAYS</hscrollbar_policy>
+	    <vscrollbar_policy>GTK_POLICY_AUTOMATIC</vscrollbar_policy>
+	    <hupdate_policy>GTK_UPDATE_CONTINUOUS</hupdate_policy>
+	    <vupdate_policy>GTK_UPDATE_CONTINUOUS</vupdate_policy>
+
+	    <widget>
+	      <class>GtkCList</class>
+	      <name>selected_file_list</name>
+	      <can_focus>True</can_focus>
+	      <signal>
+		<name>select_row</name>
+		<handler>gnc_ui_ofx_import_select_loaded_file_cb</handler>
+		<data>OFX_Import_Druid</data>
+		<last_modification_time>Wed, 30 Aug 2000 23:00:57 GMT</last_modification_time>
+	      </signal>
+	      <columns>1</columns>
+	      <column_widths>80</column_widths>
+	      <selection_mode>GTK_SELECTION_SINGLE</selection_mode>
+	      <show_titles>False</show_titles>
+	      <shadow_type>GTK_SHADOW_IN</shadow_type>
+
+	      <widget>
+		<class>GtkLabel</class>
+		<child_name>CList:title</child_name>
+		<name>label827</name>
+		<label>label827</label>
+		<justify>GTK_JUSTIFY_CENTER</justify>
+		<wrap>False</wrap>
+		<xalign>0.5</xalign>
+		<yalign>0.5</yalign>
+		<xpad>0</xpad>
+		<ypad>0</ypad>
+	      </widget>
+	    </widget>
+	  </widget>
+	</widget>
+
+	<widget>
+	  <class>GtkLabel</class>
+	  <name>label816</name>
+	  <label>Click &quot;Load another file&quot; if you have more data to import at this time.
+Do this if you have saved your accounts to separate OFX files.
+
+Click &quot;Next&quot; to finish loading files and move to the next step 
+of the OFX import process. </label>
+	  <justify>GTK_JUSTIFY_LEFT</justify>
+	  <wrap>False</wrap>
+	  <xalign>0.5</xalign>
+	  <yalign>0.5</yalign>
+	  <xpad>0</xpad>
+	  <ypad>0</ypad>
+	  <child>
+	    <padding>3</padding>
+	    <expand>False</expand>
+	    <fill>False</fill>
+	  </child>
+	</widget>
+
+	<widget>
+	  <class>GtkHBox</class>
+	  <name>hbox68</name>
+	  <homogeneous>False</homogeneous>
+	  <spacing>0</spacing>
+	  <child>
+	    <padding>0</padding>
+	    <expand>False</expand>
+	    <fill>False</fill>
+	  </child>
+
+	  <widget>
+	    <class>GtkButton</class>
+	    <name>button69</name>
+	    <can_focus>True</can_focus>
+	    <signal>
+	      <name>clicked</name>
+	      <handler>gnc_ui_ofx_import_load_another_cb</handler>
+	      <data>OFX_Import_Druid</data>
+	      <last_modification_time>Wed, 30 Aug 2000 15:32:12 GMT</last_modification_time>
+	    </signal>
+	    <label>Load another file</label>
+	    <relief>GTK_RELIEF_NORMAL</relief>
+	    <child>
+	      <padding>0</padding>
+	      <expand>True</expand>
+	      <fill>True</fill>
+	    </child>
+	  </widget>
+
+	  <widget>
+	    <class>GtkButton</class>
+	    <name>button70</name>
+	    <can_focus>True</can_focus>
+	    <signal>
+	      <name>clicked</name>
+	      <handler>gnc_ui_ofx_import_unload_file_cb</handler>
+	      <data>OFX_Import_Druid</data>
+	      <last_modification_time>Wed, 30 Aug 2000 15:34:33 GMT</last_modification_time>
+	    </signal>
+	    <label>Unload selected file</label>
+	    <relief>GTK_RELIEF_NORMAL</relief>
+	    <child>
+	      <padding>0</padding>
+	      <expand>True</expand>
+	      <fill>True</fill>
+	    </child>
+	  </widget>
+	</widget>
+      </widget>
+    </widget>
+
+    <widget>
+      <class>GnomeDruidPageFinish</class>
+      <name>druidpagefinish1</name>
+      <title></title>
+      <text>OFX import complete</text>
+      <background_color>153,191,153</background_color>
+      <logo_background_color>255,255,255</logo_background_color>
+      <textbox_color>255,255,255</textbox_color>
+      <text_color>0,0,0</text_color>
+      <title_color>255,255,255</title_color>
+    </widget>
+  </widget>
+</widget>
+
+</GTK-Interface>

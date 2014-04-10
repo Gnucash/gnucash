@@ -22,6 +22,8 @@
 
 #include <ctype.h>
 #include <locale.h>
+#include <string.h>
+
 #include <glib.h>
 #include <guile/gh.h>
 
@@ -42,15 +44,22 @@ typedef struct ParserNum
 
 
 /** Static Globals *************************************************/
-static GHashTable *variable_bindings = NULL;
-static ParseError  last_error = PARSER_NO_ERROR;
-static gboolean    parser_inited = FALSE;
+static GHashTable   *variable_bindings = NULL;
+static ParseError    last_error        = PARSER_NO_ERROR;
+static GNCParseError last_gncp_error   = NO_ERR;
+static gboolean      parser_inited     = FALSE;
 
 
 /** Implementations ************************************************/
 
 void
-gnc_exp_parser_init (void)
+gnc_exp_parser_init ( void )
+{
+  gnc_exp_parser_real_init( TRUE );
+}
+
+void
+gnc_exp_parser_real_init ( gboolean addPredefined )
 {
   SCM alist;
 
@@ -62,57 +71,60 @@ gnc_exp_parser_init (void)
   /* This comes after the statics have been initialized. Not at the end! */
   parser_inited = TRUE;
 
-  alist = gnc_lookup_option ("__exp_parser", "defined_variables", SCM_EOL);
+  if ( addPredefined ) {
+    alist = gnc_lookup_option ("__exp_parser", "defined_variables", SCM_EOL);
 
-  while (gh_list_p(alist) && !gh_null_p(alist))
-  {
-    char *name;
-    SCM assoc;
-    SCM val_scm;
-    gnc_numeric value;
-    gboolean good;
+    while (gh_list_p(alist) && !gh_null_p(alist))
+      {
+        char *name;
+        SCM assoc;
+        SCM val_scm;
+        gnc_numeric value;
+        gboolean good;
 
-    assoc = gh_car (alist);
-    alist = gh_cdr (alist);
+        assoc = gh_car (alist);
+        alist = gh_cdr (alist);
 
-    if (!gh_pair_p (assoc))
-      continue;
+        if (!gh_pair_p (assoc))
+          continue;
 
-    name = gh_scm2newstr (gh_car (assoc), NULL);
-    if (name == NULL)
-      continue;
+        name = gh_scm2newstr (gh_car (assoc), NULL);
+        if (name == NULL)
+          continue;
 
-    val_scm = gh_cdr (assoc);
-    good = TRUE;
+        val_scm = gh_cdr (assoc);
+        good = TRUE;
 
-    if (gh_number_p (val_scm))
-    {
-      double dvalue;
+        if (gh_number_p (val_scm))
+          {
+            double dvalue;
 
-      dvalue = gh_scm2double (val_scm);
-      value = double_to_gnc_numeric (dvalue, GNC_DENOM_AUTO, 
-                                     GNC_DENOM_SIGFIGS(6) | GNC_RND_ROUND);
-    }
-    else if (gh_string_p (val_scm))
-    {
-      char *s;
-      const char *err;
+            dvalue = gh_scm2double (val_scm);
+            value = double_to_gnc_numeric (dvalue, GNC_DENOM_AUTO, 
+                                           GNC_DENOM_SIGFIGS(6)
+                                           | GNC_RND_ROUND);
+          }
+        else if (gh_string_p (val_scm))
+          {
+            char *s;
+            const char *err;
 
-      s = gh_scm2newstr (val_scm, NULL);
+            s = gh_scm2newstr (val_scm, NULL);
 
-      err = string_to_gnc_numeric (s, &value);
-      if (err == NULL)
-        good = FALSE;
+            err = string_to_gnc_numeric (s, &value);
+            if (err == NULL)
+              good = FALSE;
 
-      free (s);
-    }
-    else
-      good = FALSE;
+            free (s);
+          }
+        else
+          good = FALSE;
 
-    if (good)
-      gnc_exp_parser_set_value (name, gnc_numeric_reduce (value));
+        if (good)
+          gnc_exp_parser_set_value (name, gnc_numeric_reduce (value));
 
-    free (name);
+        free (name);
+      }
   }
 }
 
@@ -158,6 +170,7 @@ gnc_exp_parser_shutdown (void)
   variable_bindings = NULL;
 
   last_error = PARSER_NO_ERROR;
+  last_gncp_error = NO_ERR;
 
   parser_inited = FALSE;
 }
@@ -332,6 +345,59 @@ update_variables (var_store_ptr vars)
   }
 }
 
+static
+void*
+func_op( const char *fname,
+         int argc, void **argv )
+{
+  SCM scmFn, scmArgs, scmTmp;
+  int i;
+  var_store *vs;
+  gchar *str;
+  gnc_numeric n, *result;
+  GString *realFnName;
+
+  realFnName = g_string_sized_new( strlen(fname) + 5 );
+  g_string_sprintf( realFnName, "gnc:%s", fname );
+  scmFn = gh_eval_str_with_standard_handler( realFnName->str );
+  g_string_free( realFnName, TRUE );
+  if ( ! gh_procedure_p( scmFn ) ) {
+    /* FIXME: handle errors correctly. */
+    printf( "gnc:\"%s\" is not a scm procedure\n", fname );
+    return NULL;
+  }
+  scmArgs = gh_list( SCM_UNDEFINED );
+  for ( i=0; i<argc; i++ ) {
+    /* cons together back-to-front. */
+    vs = (var_store*)argv[argc - i - 1];
+    switch ( vs->type ) {
+    case VST_NUMERIC:
+      n = *(gnc_numeric*)(vs->value);
+      scmTmp = gh_double2scm( gnc_numeric_to_double( n ) );
+      break;
+    case VST_STRING:
+      str = (char*)(vs->value);
+      scmTmp = gh_str2scm( str, strlen(str) );
+      break;
+    default:
+      /* FIXME: error */
+      printf( "argument %d not a numeric or string [type = %d]\n",
+              i, vs->type );
+      return NULL;
+      break; /* notreached */
+    }
+    scmArgs = gh_cons( scmTmp, scmArgs );
+  }
+  scmTmp = gh_apply( scmFn, scmArgs );
+  
+  result = g_new0( gnc_numeric, 1 );
+  *result = double_to_gnc_numeric( gh_scm2double(scmTmp),
+                                   GNC_DENOM_AUTO,
+                                   GNC_DENOM_SIGFIGS(6) | GNC_RND_ROUND );
+  /* FIXME: cleanup scmArgs = gh_list, cons'ed cells? */
+  return (void*)result;
+}
+
 static void *
 trans_numeric(const char *digit_str,
               char        radix_point,
@@ -406,12 +472,58 @@ negate_numeric(void *value)
   return result;
 }
 
+static
+void
+gnc_ep_tmpvarhash_check_vals( gpointer key, gpointer value, gpointer user_data )
+{
+  gboolean *allVarsHaveValues = (gboolean*)user_data;
+  gnc_numeric *num = (gnc_numeric*)value;
+  printf( "var %s with value %s\n",
+          (char*)key, num ? gnc_numeric_to_string( *num ) : "(null)" );
+  *allVarsHaveValues &= ( num && gnc_numeric_check( *num ) != GNC_ERROR_ARG );
+}
+
+static
+void
+gnc_ep_tmpvarhash_clean( gpointer key, gpointer value, gpointer user_data )
+{
+  if ( key ) {
+    g_free( (gchar*)key );
+  }
+  if ( value ) {
+    g_free( (gnc_numeric*)value );
+  }
+}
+
 gboolean
 gnc_exp_parser_parse( const char * expression, gnc_numeric *value_p,
                       char **error_loc_p )
 {
-  return gnc_exp_parser_parse_separate_vars( expression, value_p,
-                                             error_loc_p, NULL );
+  GHashTable *tmpVarHash;
+  gboolean ret, toRet = TRUE;
+  gboolean allVarsHaveValues = TRUE;
+
+  tmpVarHash = g_hash_table_new( g_str_hash, g_str_equal );
+  ret = gnc_exp_parser_parse_separate_vars( expression, value_p,
+                                            error_loc_p, tmpVarHash );
+  if ( !ret ) {
+    toRet = ret;
+    goto cleanup;
+  }
+
+  g_hash_table_foreach( tmpVarHash,
+                        gnc_ep_tmpvarhash_check_vals,
+                        &allVarsHaveValues );
+  if ( !allVarsHaveValues ) {
+    toRet = FALSE;
+    last_gncp_error = VARIABLE_IN_EXP;
+  }
+
+ cleanup:
+  g_hash_table_foreach( tmpVarHash, gnc_ep_tmpvarhash_clean, NULL );
+  g_hash_table_destroy( tmpVarHash );
+
+  return toRet;
 }
 
 gboolean
@@ -431,7 +543,7 @@ gnc_exp_parser_parse_separate_vars (const char * expression,
     return FALSE;
 
   if (!parser_inited)
-    gnc_exp_parser_init ();
+    gnc_exp_parser_real_init ( (varHash == NULL) );
 
   result.variable_name = NULL;
   result.value = NULL;
@@ -446,7 +558,8 @@ gnc_exp_parser_parse_separate_vars (const char * expression,
   lc = gnc_localeconv ();
 
   pe = init_parser (vars, *lc->mon_decimal_point, *lc->mon_thousands_sep,
-                    trans_numeric, numeric_ops, negate_numeric, g_free);
+                    trans_numeric, numeric_ops, negate_numeric, g_free,
+                    func_op);
 
   error_loc = parse_string (&result, expression, pe);
 
@@ -502,14 +615,14 @@ gnc_exp_parser_parse_separate_vars (const char * expression,
         }
         numericValue = g_new0( gnc_numeric, 1 );
         *numericValue = ((ParserNum*)newVars->value)->value;
-        numericValue = NULL;
+        // WTF?
+        // numericValue = NULL;
         g_hash_table_insert( varHash,
                              g_strdup(newVars->variable_name),
                              numericValue );
       }
   } else {
     update_variables (vars);
-    update_variables (parser_get_vars (pe));
   }
 
   free_predefined_variables (vars);
@@ -522,6 +635,16 @@ gnc_exp_parser_parse_separate_vars (const char * expression,
 const char *
 gnc_exp_parser_error_string (void)
 {
+  if ( last_error == PARSER_NO_ERROR ) {
+    switch ( last_gncp_error ) {
+    default:
+    case NO_ERR:
+      return NULL; break;
+    case VARIABLE_IN_EXP:
+      return _("Illegal variable in expression." ); break;
+    }
+  }
+
   switch (last_error)
   {
     default:
@@ -537,6 +660,8 @@ gnc_exp_parser_error_string (void)
       return _("Undefined character");
     case NOT_A_VARIABLE:
       return _("Not a variable");
+    case NOT_A_FUNC:
+      return _("Not a defined function");
     case PARSER_OUT_OF_MEMORY:
       return _("Out of memory");
     case NUMERIC_ERROR:

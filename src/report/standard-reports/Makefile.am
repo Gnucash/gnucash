@@ -12,7 +12,7 @@ AM_CFLAGS = -I${top_srcdir}/src/gnc-module ${GUILE_INCS} ${GLIB_CFLAGS}
 .scm-links:
 	rm -f gnucash report
 	ln -sf . gnucash
-	ln -sf . report 
+	ln -sf ${srcdir} report 
 	touch .scm-links
 
 noinst_DATA = .scm-links
@@ -21,11 +21,12 @@ gncscmmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash/report/
 gncscmmod_DATA = \
    account-piecharts.scm \
    account-summary.scm \
+   advanced-portfolio.scm \
    average-balance.scm \
    balance-sheet.scm \
+   cash-flow.scm \
    category-barchart.scm \
    net-barchart.scm \
-   payables.scm \
    pnl.scm \
    portfolio.scm \
    price-scatter.scm \

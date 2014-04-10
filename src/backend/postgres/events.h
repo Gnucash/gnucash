@@ -27,7 +27,7 @@
  * Implements the event handling callbacks for the postgres backend.
  *
  * HISTORY:
- * Copyright (c) 2001 Linas Vepstas 
+ * Copyright (c) 2001 Linas Vepstas <linas@linas.org>
  */
 
 

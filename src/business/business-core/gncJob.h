@@ -1,50 +1,59 @@
 /*
  * gncJob.h -- the Core Job Interface
- * Copyright (C) 2001 Derek Atkins
+ * Copyright (C) 2001, 2002 Derek Atkins
  * Author: Derek Atkins <warlord@MIT.EDU>
  */
 
 #ifndef GNC_JOB_H_
 #define GNC_JOB_H_
 
-struct _gncJob;
 typedef struct _gncJob GncJob;
 
-#include "gncBusiness.h"
 #include "gncAddress.h"
-#include "gncCustomer.h"
+#include "gncOwner.h"
 
 #define GNC_JOB_MODULE_NAME "gncJob"
 
 /* Create/Destroy Functions */
 
-GncJob *gncJobCreate (GncBusiness *business);
+GncJob *gncJobCreate (GNCBook *book);
 void gncJobDestroy (GncJob *job);
 
 /* Set Functions */
 
 void gncJobSetID (GncJob *job, const char *id);
-void gncJobSetName (GncJob *job, const char *username);
-void gncJobSetDesc (GncJob *job, const char *language);
-void gncJobSetCustomer (GncJob *job, GncCustomer *customer);
+void gncJobSetName (GncJob *job, const char *jobname);
+void gncJobSetReference (GncJob *job, const char *owner_reference);
+void gncJobSetOwner (GncJob *job, GncOwner *owner);
 void gncJobSetActive (GncJob *job, gboolean active);
 
+void gncJobBeginEdit (GncJob *job);
 void gncJobCommitEdit (GncJob *job);
 
 /* Get Functions */
 
-GncBusiness * gncJobGetBusiness (GncJob *job);
+GNCBook * gncJobGetBook (GncJob *job);
 const GUID * gncJobGetGUID (GncJob *job);
 const char * gncJobGetID (GncJob *job);
 const char * gncJobGetName (GncJob *job);
-const char * gncJobGetDesc (GncJob *job);
-GncCustomer * gncJobGetCustomer (GncJob *job);
+const char * gncJobGetReference (GncJob *job);
+GncOwner * gncJobGetOwner (GncJob *job);
 gboolean gncJobGetActive (GncJob *job);
 
+GUID gncJobRetGUID (GncJob *job);
+GncJob *gncJobLookupDirect (GUID guid, GNCBook *book);
+
+GncJob * gncJobLookup (GNCBook *book, const GUID *guid);
 gboolean gncJobIsDirty (GncJob *job);
 
 /* Other functions */
 
-gint gncJobSortFunc (gconstpointer a, gconstpointer b);
+int gncJobCompare (const GncJob *a, const GncJob *b);
+
+#define JOB_ID		"id"
+#define JOB_NAME	"name"
+#define JOB_REFERENCE	"reference"
+#define JOB_OWNER	"owner"
+#define JOB_ACTIVE	"active"
 
 #endif /* GNC_JOB_H_ */

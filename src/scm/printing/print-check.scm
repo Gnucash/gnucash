@@ -70,15 +70,14 @@
 (define gnc:*stock-check-positions*
   '((top . 540.0)
     (middle . 288.0)
-    (bottom . 0.0)))
+    (bottom . 36.0)))
 
-(define (gnc:print-check payee amount date memo)
-  (define (print-check-callback format-info)
+(define (gnc:print-check format-info payee amount date memo)
     (let* ((int-part (inexact->exact (truncate amount)))
            (frac-part (inexact->exact 
                      (truncate 
                       (+ (/ .5 100) (* 100 (- amount int-part))))))
-           (ps (gnc:print-session-create))
+           (ps (gnc:print-session-create #t))
            (format #f)
            (offset #f)
            (date-string ""))
@@ -131,9 +130,12 @@
         (gnc:print-session-moveto ps (cadr words-pos) 
                                   (+ offset (caddr words-pos)))
         (gnc:print-session-text ps (number-to-words amount 100)))
-      
-      (gnc:print-session-done ps)       
-      (gnc:print-session-print ps)))
 
-  (gnc:print-check-dialog-create print-check-callback))
+      (let ((memo-pos (assq 'memo format)))
+        (gnc:print-session-moveto ps (cadr memo-pos) 
+                                  (+ offset (caddr memo-pos)))
+        (gnc:print-session-text ps memo))
+
+      (gnc:print-session-done ps #t)
+      (gnc:print-session-print ps)))
 

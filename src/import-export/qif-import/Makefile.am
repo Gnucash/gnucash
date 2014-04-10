@@ -14,10 +14,10 @@ noinst_HEADERS = \
 libgncmod_qif_import_la_LDFLAGS = -module 
 
 libgncmod_qif_import_la_LIBADD = \
-  ${top_srcdir}/src/gnome-utils/libgncmod-gnome-utils.la \
-  ${top_srcdir}/src/app-file/libgncmod-app-file.la \
-  ${top_srcdir}/src/gnc-module/libgncmodule.la \
-  ${top_srcdir}/src/engine/libgncmod-engine.la \
+  ${top_builddir}/src/gnome-utils/libgncmod-gnome-utils.la \
+  ${top_builddir}/src/app-file/libgncmod-app-file.la \
+  ${top_builddir}/src/gnc-module/libgncmodule.la \
+  ${top_builddir}/src/engine/libgncmod-engine.la \
   ${GUILE_LIBS} \
   ${GNOME_LIBS} \
   ${GLADE_LIBS} \
@@ -54,6 +54,7 @@ AM_CFLAGS = \
   ${G_WRAP_COMPILE_ARGS} \
   ${GUILE_INCS} \
   ${GLIB_CFLAGS} \
+  ${GLADE_CFLAGS} \
   ${GNOME_PRINT_CFLAGS} \
   ${GNOME_INCLUDEDIR} \
   ${GDK_PIXBUF_CFLAGS} \
@@ -64,3 +65,16 @@ EXTRA_DIST = \
   ${gncscm_DATA} \
   ${glade_DATA} \
   file-format.txt
+
+CLEANFILES =
+
+noinst_DATA = .scm-links
+
+.scm-links: 
+	rm -f g-wrapped gnucash import-export qif-import
+	ln -sf . qif-import # to fix (load "qif-import/foo.scm")
+	ln -sf . import-export
+	ln -sf . gnucash 
+	ln -sf . g-wrapped 
+	touch .scm-links
+CLEANFILES += qif-import import-export gnucash g-wrapped .scm-links

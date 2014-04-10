@@ -21,13 +21,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
-;; Returns true if the commodity comm represents a currency, false if
-;; it represents a stock or mutual-fund.
-(define (gnc:commodity-is-currency? comm)
-  (equal? GNC_COMMODITY_NS_ISO
-	  (gnc:commodity-get-namespace comm)))
-
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Functions to get splits with interesting data from accounts.
 
@@ -41,11 +34,11 @@
   (let ((query (gnc:malloc-query))
 	(splits #f))
     
-    (gnc:query-set-group query (gnc:get-current-group))
-    (gnc:query-set-match-non-voids-only! query (gnc:get-current-group))
-    (gnc:query-add-account-match 
-     query (gnc:list->glist currency-accounts)
-     'acct-match-any 'query-and)
+    (gnc:query-set-book query (gnc:get-current-book))
+    (gnc:query-set-match-non-voids-only! query (gnc:get-current-book))
+    (gnc:query-add-account-match query
+                                 currency-accounts
+                                 'guid-match-any 'query-and)
     (gnc:query-add-date-match-timepair 
      query #f end-date-tp #t end-date-tp 'query-and) 
     
@@ -70,17 +63,16 @@
 				   commodity trans-comm)
 				  (gnc:commodity-equiv?
 				   commodity acc-comm)))))
-		  (gnc:glist->list 
-		   (gnc:query-get-splits query) 
-		   <gnc:Split*>)))
+		  (gnc:query-get-splits query)))
     (gnc:free-query query)
     splits))
 
 ;; Returns a sorted list of all splits in the 'currency-accounts' up
 ;; to 'end-date-tp' which have the 'commodity' and one other commodity
 ;; involved. The splits are sorted by date.
-(define (gnc:get-match-commodity-splits-sorted
-	 currency-accounts end-date-tp commodity)
+(define (gnc:get-match-commodity-splits-sorted currency-accounts
+                                               end-date-tp
+                                               commodity)
   (sort (gnc:get-match-commodity-splits currency-accounts 
 					end-date-tp commodity)
 	(lambda (a b)
@@ -91,8 +83,7 @@
 
 ;; Returns a list of all splits in the currency-accounts up to
 ;; end-date which have two *different* commodities involved.
-(define (gnc:get-all-commodity-splits 
-	 currency-accounts end-date-tp)
+(define (gnc:get-all-commodity-splits currency-accounts end-date-tp)
   (gnc:get-match-commodity-splits currency-accounts end-date-tp #f))
 
 
@@ -113,6 +104,10 @@
    (gnc:make-gnc-monetary foreign-commodity foreign-numeric)
    domestic date))
 
+;; Returns true if the given pricealist element is a non-zero price.
+(define (gnc:price-is-not-zero? elem)
+  (not (gnc:numeric-zero-p (second elem))))
+
 ;; Create a list of all prices of 'price-commodity' measured in the
 ;; currency 'report-currency'. The prices are taken from all splits in
 ;; 'currency-accounts' up until the date 'end-date-tp'. Returns a list
@@ -122,76 +117,78 @@
 	 currency-accounts end-date-tp price-commodity report-currency)
   (let ((total-foreign (gnc:numeric-zero))
 	(total-domestic (gnc:numeric-zero)))
-    (map-in-order
-     (lambda (a)
-       (let* ((transaction-comm (gnc:transaction-get-currency 
-				 (gnc:split-get-parent a)))
-	      (account-comm (gnc:account-get-commodity 
-			     (gnc:split-get-account a)))
-	      (share-amount (gnc:numeric-abs
-			     (gnc:split-get-amount a)))
-	      (value-amount (gnc:numeric-abs
-			     (gnc:split-get-value a)))
-	      (transaction-date (gnc:transaction-get-date-posted
-				 (gnc:split-get-parent a)))
-	      (foreignlist
-	       (if (gnc:commodity-equiv? transaction-comm 
-					 price-commodity)
-		   (list account-comm
-			 share-amount value-amount)
-		   (list transaction-comm
-			 value-amount share-amount))))
-	 
-	 ;;(warn "gnc:get-commodity-totalavg-prices: value " 
-	 ;;      (gnc:commodity-numeric->string
-	 ;;	(first foreignlist) (second foreignlist))
-	 ;;     " bought shares "
-	 ;;   (gnc:commodity-numeric->string
-	 ;;price-commodity (third foreignlist)))
+    (filter 
+     gnc:price-is-not-zero?
+     (map-in-order
+      (lambda (a)
+	(let* ((transaction-comm (gnc:transaction-get-currency 
+				  (gnc:split-get-parent a)))
+	       (account-comm (gnc:account-get-commodity 
+			      (gnc:split-get-account a)))
+	       (share-amount (gnc:numeric-abs
+			      (gnc:split-get-amount a)))
+	       (value-amount (gnc:numeric-abs
+			      (gnc:split-get-value a)))
+	       (transaction-date (gnc:transaction-get-date-posted
+				  (gnc:split-get-parent a)))
+	       (foreignlist
+		(if (gnc:commodity-equiv? transaction-comm 
+					  price-commodity)
+		    (list account-comm
+			  share-amount value-amount)
+		    (list transaction-comm
+			  value-amount share-amount))))
+	  
+	  ;;(warn "gnc:get-commodity-totalavg-prices: value " 
+	  ;;    (gnc:commodity-numeric->string
+	  ;;(first foreignlist) (second foreignlist))
+	  ;;      " bought shares "
+	  ;;    (gnc:commodity-numeric->string
+	  ;;price-commodity (third foreignlist)))
 
-	 ;; Try EURO exchange if necessary
-	 (if (not (gnc:commodity-equiv? (first foreignlist) 
-					report-currency))
-	     (let ((exchanged (gnc:exchange-by-euro-numeric
-			       (first foreignlist) (second foreignlist)
-			       report-currency transaction-date)))
-	       (if exchanged
-		   (set! foreignlist
-			 (list report-currency
-			       (gnc:gnc-monetary-amount exchanged)
-			       (third foreignlist))))))
-	 
-	 (list
-	  transaction-date
+	  ;; Try EURO exchange if necessary
 	  (if (not (gnc:commodity-equiv? (first foreignlist) 
 					 report-currency))
-	      (begin
-		(warn "gnc:get-commodity-totalavg-prices: " 
-		      "Sorry, currency exchange not yet implemented:"
-		      (gnc:commodity-numeric->string
-		       (first foreignlist) (second foreignlist))
-		      " (buying "
-		      (gnc:commodity-numeric->string
-		       price-commodity (third foreignlist))
-		      ") =? "
-		      (gnc:commodity-numeric->string
-		       report-currency (gnc:numeric-zero)))
-		(gnc:numeric-zero))
-	      (begin
-		(set! total-foreign (gnc:numeric-add-fixed 
-				     total-foreign (third foreignlist)))
-		(set! total-domestic (gnc:numeric-add-fixed 
-				      total-domestic (second foreignlist)))
-		(gnc:numeric-div 
-		 total-domestic
-		 total-foreign
-		 GNC-DENOM-AUTO 
-		 (logior (GNC-DENOM-SIGFIGS 8) GNC-RND-ROUND)))))))
-     ;; Get all the interesting splits, and sort them according to the
-     ;; date.
-     (gnc:get-match-commodity-splits-sorted
-      currency-accounts 
-      end-date-tp price-commodity))))
+	      (let ((exchanged (gnc:exchange-by-euro-numeric
+				(first foreignlist) (second foreignlist)
+				report-currency transaction-date)))
+		(if exchanged
+		    (set! foreignlist
+			  (list report-currency
+				(gnc:gnc-monetary-amount exchanged)
+				(third foreignlist))))))
+	  
+	  (list
+	   transaction-date
+	   (if (not (gnc:commodity-equiv? (first foreignlist) 
+					  report-currency))
+	       (begin
+		 (warn "gnc:get-commodity-totalavg-prices: " 
+		       "Sorry, currency exchange not yet implemented:"
+		       (gnc:commodity-numeric->string
+			(first foreignlist) (second foreignlist))
+		       " (buying "
+		       (gnc:commodity-numeric->string
+			price-commodity (third foreignlist))
+		       ") =? "
+		       (gnc:commodity-numeric->string
+			report-currency (gnc:numeric-zero)))
+		 (gnc:numeric-zero))
+	       (begin
+		 (set! total-foreign (gnc:numeric-add-fixed 
+				      total-foreign (third foreignlist)))
+		 (set! total-domestic (gnc:numeric-add-fixed 
+				       total-domestic (second foreignlist)))
+		 (gnc:numeric-div 
+		  total-domestic
+		  total-foreign
+		  GNC-DENOM-AUTO 
+		  (logior (GNC-DENOM-SIGFIGS 8) GNC-RND-ROUND)))))))
+      ;; Get all the interesting splits, and sort them according to the
+      ;; date.
+      (gnc:get-match-commodity-splits-sorted
+       currency-accounts 
+       end-date-tp price-commodity)))))
 
 ;; Create a list of prices for all commodities in 'commodity-list',
 ;; i.e. the same thing as in get-commodity-totalavg-prices but
@@ -199,15 +196,24 @@
 ;; of the foreign-currency and the appropriate list from
 ;; gnc:get-commodity-totalavg-prices, see there.
 (define (gnc:get-commoditylist-totalavg-prices
-	 commodity-list report-currency end-date-tp)
+	 commodity-list report-currency end-date-tp
+	 start-percent delta-percent)
   (let ((currency-accounts 
-	 (filter gnc:account-has-shares? (gnc:group-get-subaccounts
-					  (gnc:get-current-group)))))
+	 ;;(filter gnc:account-has-shares?  
+	 ;; -- use all accounts, not only share accounts, since gnucash-1.7
+	 (gnc:group-get-subaccounts (gnc:get-current-group)))
+	(work-to-do (length commodity-list))
+	(work-done 0))
     (map
      (lambda (c)
-       (cons c
-	     (gnc:get-commodity-totalavg-prices
-	      currency-accounts end-date-tp c report-currency)))
+       (begin
+	 (set! work-done (+ 1 work-done))
+	 (if start-percent
+	     (gnc:report-percent-done
+	      (+ start-percent (* delta-percent (/ work-done work-to-do)))))
+	 (cons c
+	       (gnc:get-commodity-totalavg-prices
+		currency-accounts end-date-tp c report-currency))))
      commodity-list)))
 
 ;; Get the instantaneous prices for the 'price-commodity', measured in
@@ -219,69 +225,71 @@
 (define (gnc:get-commodity-inst-prices
 	 currency-accounts end-date-tp price-commodity report-currency)
   ;; go through all splits; convert all splits into a price.
-  (map-in-order
-   (lambda (a)
-     (let* ((transaction-comm (gnc:transaction-get-currency 
-			       (gnc:split-get-parent a)))
-	    (account-comm (gnc:account-get-commodity 
-			   (gnc:split-get-account a)))
-	    (share-amount (gnc:numeric-abs
-			   (gnc:split-get-amount a)))
-	    (value-amount (gnc:numeric-abs
-			   (gnc:split-get-value a)))
-	    (transaction-date (gnc:transaction-get-date-posted
-			       (gnc:split-get-parent a)))
-	    (foreignlist 
-	     (if (gnc:commodity-equiv? transaction-comm price-commodity)
-		 (list account-comm
-		       share-amount value-amount)
-		 (list transaction-comm
-		       value-amount share-amount))))
-       
-       ;;(warn "get-commodity-inst-prices: value " 
-       ;;    (gnc:commodity-numeric->string
-       ;;   (first foreignlist) (second foreignlist))
-       ;; " bought shares "
-       ;;(gnc:commodity-numeric->string
-       ;; price-commodity (third foreignlist)))
-       
-       ;; Try EURO exchange if necessary
-       (if (not (gnc:commodity-equiv? (first foreignlist) 
-				      report-currency))
-	   (let ((exchanged (gnc:exchange-by-euro-numeric
-			     (first foreignlist) (second foreignlist)
-			     report-currency transaction-date)))
-	     (if exchanged
-		 (set! foreignlist
-		       (list report-currency
-			     (gnc:gnc-monetary-amount exchanged)
-			     (third foreignlist))))))
-       
-       (list
-	transaction-date
+  (filter 
+   gnc:price-is-not-zero?
+   (map-in-order
+    (lambda (a)
+      (let* ((transaction-comm (gnc:transaction-get-currency 
+				(gnc:split-get-parent a)))
+	     (account-comm (gnc:account-get-commodity 
+			    (gnc:split-get-account a)))
+	     (share-amount (gnc:numeric-abs
+			    (gnc:split-get-amount a)))
+	     (value-amount (gnc:numeric-abs
+			    (gnc:split-get-value a)))
+	     (transaction-date (gnc:transaction-get-date-posted
+				(gnc:split-get-parent a)))
+	     (foreignlist 
+	      (if (gnc:commodity-equiv? transaction-comm price-commodity)
+		  (list account-comm
+			share-amount value-amount)
+		  (list transaction-comm
+			value-amount share-amount))))
+	
+	;;(warn "get-commodity-inst-prices: value " 
+	;;    (gnc:commodity-numeric->string
+	;;   (first foreignlist) (second foreignlist))
+	;; " bought shares "
+	;;(gnc:commodity-numeric->string
+	;; price-commodity (third foreignlist)))
+	
+	;; Try EURO exchange if necessary
 	(if (not (gnc:commodity-equiv? (first foreignlist) 
 				       report-currency))
-	    (begin
-	      (warn "get-commodity-inst-prices: " 
-		    "Sorry, currency exchange not yet implemented:"
-		    (gnc:commodity-numeric->string
-		     (first foreignlist) (second foreignlist))
-		    " (buying "
-		    (gnc:commodity-numeric->string
-		     price-commodity (third foreignlist))
-		    ") =? "
-		    (gnc:commodity-numeric->string
-		     report-currency (gnc:numeric-zero)))
-	      (gnc:numeric-zero))
-	    (gnc:numeric-div 
-	     (second foreignlist)
-	     (third foreignlist)
-	     GNC-DENOM-AUTO 
-	     (logior (GNC-DENOM-SIGFIGS 8) GNC-RND-ROUND))))))
-   ;; Get all the interesting splits, sorted by date.
-   (gnc:get-match-commodity-splits-sorted
-    currency-accounts 
-    end-date-tp price-commodity)))
+	    (let ((exchanged (gnc:exchange-by-euro-numeric
+			      (first foreignlist) (second foreignlist)
+			      report-currency transaction-date)))
+	      (if exchanged
+		  (set! foreignlist
+			(list report-currency
+			      (gnc:gnc-monetary-amount exchanged)
+			      (third foreignlist))))))
+	
+	(list
+	 transaction-date
+	 (if (not (gnc:commodity-equiv? (first foreignlist) 
+					report-currency))
+	     (begin
+	       (warn "get-commodity-inst-prices: " 
+		     "Sorry, currency exchange not yet implemented:"
+		     (gnc:commodity-numeric->string
+		      (first foreignlist) (second foreignlist))
+		     " (buying "
+		     (gnc:commodity-numeric->string
+		      price-commodity (third foreignlist))
+		     ") =? "
+		     (gnc:commodity-numeric->string
+		      report-currency (gnc:numeric-zero)))
+	       (gnc:numeric-zero))
+	     (gnc:numeric-div 
+	      (second foreignlist)
+	      (third foreignlist)
+	      GNC-DENOM-AUTO 
+	      (logior (GNC-DENOM-SIGFIGS 8) GNC-RND-ROUND))))))
+    ;; Get all the interesting splits, sorted by date.
+    (gnc:get-match-commodity-splits-sorted
+     currency-accounts 
+     end-date-tp price-commodity))))
 
 ;; Get the instantaneous prices for all commodities in
 ;; 'commodity-list', i.e. the same thing as get-commodity-inst-prices
@@ -289,15 +297,24 @@
 ;; consists of the foreign-currency and the appropriate list from
 ;; gnc:get-commodity-inst-prices, see there.
 (define (gnc:get-commoditylist-inst-prices
-	 commodity-list report-currency end-date-tp)
+	 commodity-list report-currency end-date-tp
+	 start-percent delta-percent)
   (let ((currency-accounts 
-	 (filter gnc:account-has-shares? (gnc:group-get-subaccounts
-					  (gnc:get-current-group)))))
+	 ;;(filter gnc:account-has-shares? 
+	 ;; -- use all accounts, not only share accounts, since gnucash-1.7
+	 (gnc:group-get-subaccounts (gnc:get-current-group)))
+	(work-to-do (length commodity-list))
+	(work-done 0))
     (map
      (lambda (c)
-       (cons c
-	     (gnc:get-commodity-inst-prices
-	      currency-accounts end-date-tp c report-currency)))
+       (begin
+	 (set! work-done (+ 1 work-done))
+	 (if start-percent
+	     (gnc:report-percent-done
+	      (+ start-percent (* delta-percent (/ work-done work-to-do)))))
+	 (cons c
+	       (gnc:get-commodity-inst-prices
+		currency-accounts end-date-tp c report-currency))))
      commodity-list)))
 
 
@@ -397,57 +414,93 @@
        (if (not (gnc:commodity-equiv? (car otherlist) report-commodity))
 	   (for-each
 	    (lambda (pair)
-	      ;; pair-{a,b}: Try to find either the currency of
-	      ;; otherlist or of pair in reportlist.
-	      (let ((pair-a (assoc (car otherlist) reportlist))
-		    (pair-b (assoc (car pair) reportlist))
-		    (rate (gnc:numeric-zero)))
-		(if (and (not pair-a) (not pair-b))
-		    ;; If neither the currency of otherlist nor of
-		    ;; pair was found in reportlist then we can't
-		    ;; resolve the exchange rate to this currency.
-		    (warn "gnc:resolve-unknown-comm:" 
-			  "can't calculate rate for "
-			  (gnc:commodity-value->string 
-			   (list (car pair) ((caadr pair) 'total #f)))
-			  " = "
-			  (gnc:commodity-value->string 
-			   (list (car otherlist) ((cdadr pair) 'total #f)))
-			  " to "
-			  (gnc:commodity-value->string 
-			   (list report-commodity (gnc:numeric-zero))))
-		    (if (and pair-a pair-b)
-			;; If both currencies are found then something
-			;; went wrong inside
-			;; gnc:get-exchange-totals. FIXME: Find a
-			;; better thing to do in this case.
-			(warn "gnc:resolve-unknown-comm:" 
-			      "Oops - exchange rate ambiguity error: "
-			      (gnc:commodity-value->string 
-			       (list (car pair) ((caadr pair) 'total #f)))
-			      " = "
-				(gnc:commodity-value->string 
-				 (list (car otherlist) 
-				       ((cdadr pair) 'total #f))))
-			(let 
-			    ;; Usual case: one of pair-{a,b} was found
-			    ;; in reportlist, i.e. this transaction
-			    ;; can be resolved to report-commodity.
-			    ((newrate
-			      (if (not pair-a)
-				  (list (car otherlist)
-					(make-newrate (cdadr pair) 
-						      (caadr pair) pair-b))
-				  (list (car pair)
-					(make-newrate (caadr pair) 
-						      (cdadr pair) pair-a)))))
-			  ;; (warn "created new rate: "
-			  ;; (gnc:commodity-value->string (list (car
-			  ;; newrate) ((caadr newrate) 'total #f))) "
-			  ;; = " (gnc:commodity-value->string (list
-			  ;; report-commodity ((cdadr newrate) 'total
-			  ;; #f))))
-			  (set! reportlist (cons newrate reportlist)))))))
+	      ;; Check whether by any accident the report-commodity
+	      ;; appears here.
+	      (if 
+	       (not (gnc:commodity-equiv? (car pair) report-commodity))
+	       ;; pair-{a,b}: Try to find either the currency of
+	       ;; otherlist or of pair in reportlist.
+	       (let ((pair-a 
+		      (or
+		       ;; Find the otherlist's currency in reportlist
+		       (assoc (car otherlist) reportlist)
+		       ;; Or try whether that's an Euro currency.
+		       (let 
+			   ((euro-monetary
+			     (gnc:exchange-by-euro (gnc:make-gnc-monetary
+						    (car otherlist)
+						    ((cdadr pair) 'total #f))
+						   report-commodity #f)))
+			 ;; If this is an Euro currency, create the
+			 ;; pair of appropriately exchanged amounts.
+			 (if euro-monetary
+			     (let ((a (gnc:make-numeric-collector)))
+			       (a 'add 
+				  (gnc:gnc-monetary-amount euro-monetary))
+			       (list report-commodity
+				     (cons (cdadr pair) a)))
+			     #f))))
+		     ;; Find the pair's currency in reportlist. FIXME:
+		     ;; Also try the Euro here.
+		     (pair-b (assoc (car pair) reportlist))
+		     (rate (gnc:numeric-zero)))
+		 (if (and (not pair-a) (not pair-b))
+		     ;; If neither the currency of otherlist nor of
+		     ;; pair was found in reportlist then we can't
+		     ;; resolve the exchange rate to this currency.
+		     (warn "gnc:resolve-unknown-comm:" 
+			   "can't calculate rate for "
+			   (gnc:commodity-value->string 
+			    (list (car pair) ((caadr pair) 'total #f)))
+			   " = "
+			   (gnc:commodity-value->string 
+			    (list (car otherlist) ((cdadr pair) 'total #f)))
+			   " to "
+			   (gnc:commodity-value->string 
+			    (list report-commodity (gnc:numeric-zero))))
+		     (if (and pair-a pair-b)
+			 ;; If both currencies are found then something
+			 ;; went wrong inside
+			 ;; gnc:get-exchange-totals. FIXME: Find a
+			 ;; better thing to do in this case.
+			 (warn "gnc:resolve-unknown-comm:" 
+			       "Oops - exchange rate ambiguity error: "
+			       (gnc:commodity-value->string 
+				(list (car pair) ((caadr pair) 'total #f)))
+			       " = "
+			       (gnc:commodity-value->string 
+				(list (car otherlist) 
+				      ((cdadr pair) 'total #f))))
+			 (let 
+			     ;; Usual case: one of pair-{a,b} was found
+			     ;; in reportlist, i.e. this transaction
+			     ;; can be resolved to report-commodity.
+			     ((newrate
+			       (if (not pair-a)
+				   (list (car otherlist)
+					 (make-newrate (cdadr pair) 
+						       (caadr pair) pair-b))
+				   (list (car pair)
+					 (make-newrate (caadr pair) 
+						       (cdadr pair) pair-a)))))
+			   ;; (warn "created new rate: "
+			   ;; (gnc:commodity-value->string (list (car
+			   ;; newrate) ((caadr newrate) 'total #f))) "
+			   ;; = " (gnc:commodity-value->string (list
+			   ;; report-commodity ((cdadr newrate) 'total
+			   ;; #f))))
+			   (set! reportlist (cons newrate reportlist))))))
+	       ;; Huh, the report-currency showed up on the wrong side
+	       ;; -- we will just add it to the reportlist on the
+	       ;; right side.
+	       (let ((newrate (list (car otherlist) 
+				    (cons (cdadr pair) (caadr pair)))))
+		 ;; (warn "created new rate: "
+		 ;; (gnc:commodity-value->string (list (car newrate)
+		 ;; ((caadr newrate) 'total #f))) " = "
+		 ;; (gnc:commodity-value->string (list
+		 ;; report-commodity ((cdadr newrate) 'total #f))))
+		 (set! reportlist (cons newrate reportlist)))))
 	    (cadr otherlist))))
      sumlist)
 
@@ -466,8 +519,9 @@
 ;; sumlist.
 (define (gnc:get-exchange-totals report-commodity end-date)
   (let ((curr-accounts 
-	 (filter gnc:account-has-shares? (gnc:group-get-subaccounts
-					  (gnc:get-current-group))))
+	 ;;(filter gnc:account-has-shares? ))
+	 ;; -- use all accounts, not only share accounts, since gnucash-1.7
+	 (gnc:group-get-subaccounts (gnc:get-current-group)))
 	;; sumlist: a multilevel alist. Each element has a commodity
 	;; as key, and another alist as a value. The value-alist's
 	;; elements consist of a commodity as a key, and a pair of two
@@ -764,12 +818,18 @@
 ;; Return a ready-to-use function. Which one to use is determined by
 ;; the value of 'source-option', whose possible values are set in
 ;; gnc:options-add-price-source!.
+;;
+;; <int> start-percent, delta-percent: Fill in the [start:start+delta]
+;; section of the progress bar while running this function.
+;;
 (define (gnc:case-exchange-time-fn 
-	 source-option report-currency commodity-list to-date-tp)
+	 source-option report-currency commodity-list to-date-tp
+	 start-percent delta-percent)
   (case source-option
     ('weighted-average (let ((pricealist
 			      (gnc:get-commoditylist-totalavg-prices
-			       commodity-list report-currency to-date-tp)))
+			       commodity-list report-currency to-date-tp
+			       start-percent delta-percent)))
 			 (lambda (foreign domestic date)
 			   (gnc:exchange-by-pricealist-nearest
 			    pricealist foreign domestic date))))

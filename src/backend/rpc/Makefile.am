@@ -40,12 +40,16 @@ RPCGEN_FILES = \
 EXTRA_DIST = \
   .cvsignore \
   README \
+  gncRpc_server_stubs.c \
   $(RPCGEN_SRCS)
 
 LDADD = -lpthread
 
 AM_CFLAGS = \
-  -I.. -I../../engine -I../../gnc-module ${GLIB_CFLAGS} -DGNCACCT_COMMODITY
+  -I.. -I${srcdir}/.. \
+  -I../../engine -I${srcdir}/../../engine \
+  -I../../gnc-module -I${srcdir}/../../gnc-module \
+  ${GLIB_CFLAGS} -DGNCACCT_COMMODITY
 
 #RPCGEN=rpcgen -M
 RPCGEN=rpcgen -DGNCACCT_COMMODITY
@@ -59,7 +63,7 @@ RPCGEN_SRCS = gncAccount.x gncCommodity.x gncKVP.x gncGUID.x \
 
 gncRpc_xdr.c: $(RPCGEN_SRCS)
 	$(RM) $@
-	$(RPCGEN) -c -o $@ gncRpc.x
+	$(RPCGEN) -c -o $@ ${srcdir}/gncRpc.x
 
 #gncRpc_clnt.c: $(RPCGEN_SRCS)
 #	$(RM) $@

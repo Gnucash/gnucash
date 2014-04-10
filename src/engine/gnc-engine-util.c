@@ -62,9 +62,16 @@ static gncLogLevel loglevel[MOD_LAST + 1] =
   GNC_LOG_WARNING,      /* SQL EVENT */
   GNC_LOG_WARNING,      /* SQL TXN */
   GNC_LOG_WARNING,      /* KVP */
-  GNC_LOG_DEBUG,        /* SX */
+  GNC_LOG_WARNING,        /* SX */
+  GNC_LOG_WARNING,      /* BOOK */
+  GNC_LOG_TRACE,        /* TEST */
+  GNC_LOG_WARNING,        /* LOT */
+  GNC_LOG_WARNING,      /* ACCOUNT */
+  GNC_LOG_WARNING,	/* IMPORT */
+  GNC_LOG_WARNING,	/* BUSINESS */
 };
 
+static FILE *fout = NULL;
 
 /* Set the logging level of the given module. */
 void
@@ -84,6 +91,12 @@ gnc_set_log_level_global(gncLogLevel level)
 
   for (module = 0; module <= MOD_LAST; module++)
     loglevel[module] = level;
+}
+
+void
+gnc_set_logfile (FILE *outfile)
+{
+   fout = outfile;
 }
 
 /* prettify() cleans up subroutine names. AIX/xlC has the habit of
@@ -138,17 +151,19 @@ gnc_log (gncModuleType module, gncLogLevel log_level, const char *prefix,
   if (!gnc_should_log (module, log_level))
     return;
 
-  fprintf (stderr, "%s: %s: ",
+  if (!fout) fout = stderr;
+
+  fprintf (fout, "%s: %s: ",
            prefix ? prefix : "(null)",
            prettify (function_name));
 
   va_start (ap, format);
 
-  vfprintf (stderr, format, ap);
+  vfprintf (fout, format, ap);
 
   va_end (ap);
 
-  fprintf (stderr, "\n");
+  fprintf (fout, "\n");
 }
 
 
@@ -163,9 +178,15 @@ struct timeval gnc_clock[NUM_CLOCKS] = {
    {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, 
 };
 
+static
+struct timeval gnc_clock_total[NUM_CLOCKS] = {
+   {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, 
+   {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, 
+};
+
 void
 gnc_start_clock (int clockno, gncModuleType module, gncLogLevel log_level,
-        const char *function_name, const char *format, ...)
+                 const char *function_name, const char *format, ...)
 {
   struct timezone tz;
   va_list ap;
@@ -173,21 +194,23 @@ gnc_start_clock (int clockno, gncModuleType module, gncLogLevel log_level,
   if ((0>clockno) || (NUM_CLOCKS <= clockno)) return;
   gettimeofday (&gnc_clock[clockno], &tz);
 
-  fprintf (stderr, "Clock %d Start: %s: ",
+  if (!fout) fout = stderr;
+
+  fprintf (fout, "Clock %d Start: %s: ",
            clockno, prettify (function_name));
 
   va_start (ap, format);
 
-  vfprintf (stderr, format, ap);
+  vfprintf (fout, format, ap);
 
   va_end (ap);
 
-  fprintf (stderr, "\n");
+  fprintf (fout, "\n");
 }
 
 void
 gnc_report_clock (int clockno, gncModuleType module, gncLogLevel log_level,
-        const char *function_name, const char *format, ...)
+                  const char *function_name, const char *format, ...)
 {
   struct timezone tz;
   struct timeval now;
@@ -196,7 +219,7 @@ gnc_report_clock (int clockno, gncModuleType module, gncLogLevel log_level,
   if ((0>clockno) || (NUM_CLOCKS <= clockno)) return;
   gettimeofday (&now, &tz);
 
-  /* need to borrow to make differnce */
+  /* need to borrow to make difference */
   if (now.tv_usec < gnc_clock[clockno].tv_usec)
   {
     now.tv_sec --;
@@ -205,16 +228,54 @@ gnc_report_clock (int clockno, gncModuleType module, gncLogLevel log_level,
   now.tv_sec -= gnc_clock[clockno].tv_sec;
   now.tv_usec -= gnc_clock[clockno].tv_usec;
 
-  fprintf (stderr, "Clock %d Elapsed: %ld.%06ld  %s: ",
+  gnc_clock_total[clockno].tv_sec += now.tv_sec;
+  gnc_clock_total[clockno].tv_usec += now.tv_usec;
+
+  if (!fout) fout = stderr;
+
+  fprintf (fout, "Clock %d Elapsed: %ld.%06lds %s: ",
            clockno, now.tv_sec, now.tv_usec, prettify (function_name));
 
   va_start (ap, format);
 
-  vfprintf (stderr, format, ap);
+  vfprintf (fout, format, ap);
 
   va_end (ap);
 
-  fprintf (stderr, "\n");
+  fprintf (fout, "\n");
+}
+
+void
+gnc_report_clock_total (int clockno,
+                        gncModuleType module, gncLogLevel log_level,
+                        const char *function_name, const char *format, ...)
+{
+  va_list ap;
+
+  if ((0>clockno) || (NUM_CLOCKS <= clockno)) return;
+
+  /* need to normalize usec */
+  while (gnc_clock_total[clockno].tv_usec >= 1000000)
+  {
+    gnc_clock_total[clockno].tv_sec ++;
+    gnc_clock_total[clockno].tv_usec -= 1000000;
+  }
+
+  if (!fout) fout = stderr;
+
+  fprintf (fout, "Clock %d Total Elapsed: %ld.%06lds  %s: ",
+           clockno,
+           gnc_clock_total[clockno].tv_sec,
+           gnc_clock_total[clockno].tv_usec,
+           prettify (function_name));
+
+  va_start (ap, format);
+
+  vfprintf (fout, format, ap);
+
+  va_end (ap);
+
+  fprintf (fout, "\n");
 }
 
 /********************************************************************\
@@ -256,6 +317,13 @@ int
 safe_strcmp (const char * da, const char * db)
 {
    SAFE_STRCMP (da, db);
+   return 0;
+}
+
+int 
+safe_strcasecmp (const char * da, const char * db)
+{
+   SAFE_STRCASECMP (da, db);
    return 0;
 }
 
@@ -384,6 +452,52 @@ g_hash_table_kv_pair_free_gfunc(gpointer data, gpointer user_data)
 {
   GHashTableKVPair *kvp = (GHashTableKVPair *) data;
   g_free(kvp);
+}
+
+
+/********************************************************************\
+  Callbacks so that the engine can display gui messages.
+\********************************************************************/
+
+static GNCGuiMessage gnc_gui_warning_func = NULL;
+static GNCGuiMessage gnc_gui_error_func = NULL;
+
+void gnc_set_warning_message (GNCGuiMessage func)
+{
+  gnc_gui_warning_func = func;
+}
+
+void gnc_set_error_message (GNCGuiMessage func)
+{
+  gnc_gui_error_func = func;
+}
+
+gboolean
+gnc_send_gui_warning(const gchar *format, ...)
+{
+  va_list args;
+
+  if (!gnc_gui_warning_func)
+    return(FALSE);
+
+  va_start(args, format);
+  gnc_gui_warning_func(format, args);
+  va_end(args);
+  return(TRUE);
+}
+
+gboolean
+gnc_send_gui_error(const gchar *format, ...)
+{
+  va_list args;
+
+  if (!gnc_gui_error_func)
+    return(FALSE);
+
+  va_start(args, format);
+  gnc_gui_error_func(format, args);
+  va_end(args);
+  return(TRUE);
 }
 
 

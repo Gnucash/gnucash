@@ -53,7 +53,6 @@
 #include "gnc-html.h"
 #include "gnc-http.h"
 #include "gnc-html-history.h"
-#include "gnc-network.h"
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"
 #include "messages.h"
@@ -87,6 +86,10 @@ struct gnc_html_struct {
 /* indicates the debugging module that this .o belongs to.  */
 static short module = MOD_HTML;
 
+/* hashes for URLType -> protocol and protocol -> URLType */
+static GHashTable * gnc_html_type_to_proto_hash = NULL;
+static GHashTable * gnc_html_proto_to_type_hash = NULL;
+
 /* hashes an HTML <object classid="ID"> classid to a handler function */
 static GHashTable * gnc_html_object_handlers = NULL;
 
@@ -101,15 +104,24 @@ static GHashTable * gnc_html_stream_handlers = NULL;
 /* hashes handlers for handling different URLType data */
 static GHashTable * gnc_html_url_handlers = NULL;
 
-static char error_404[] = 
-N_("<html><body><h3>Not found</h3><p>The specified URL could not be loaded.</body></html>");
+static char error_404_format[] =
+"<html><body><h3>%s</h3><p>%s</body></html>";
+static char error_404_title[] = N_("Not found");
+static char error_404_body[] = 
+N_("The specified URL could not be loaded.");
 
-static char error_start[] = N_("<html><body><h3>Error</h3><p>There was an error loading the specified URL. <p>Error message: <p> ");
+static char error_format[] = 
+"<html><body><h3>%s</h3><p>%s</p>\n<p>%s:</p><p>";
+static char error_title[] = N_("Error");
+static char error_body1[] = 
+N_("There was an error loading the specified URL.");
+static char error_body2[] = N_("Error message");
 static char error_end[] = "</body></html>";
 
 
 static char * 
-extract_machine_name(const gchar * path) {
+extract_machine_name(const gchar * path)
+{
   char       machine_rexp[] = "^(//[^/]*)/*(.*)?$";
   regex_t    compiled_m;
   regmatch_t match[4];
@@ -132,6 +144,27 @@ extract_machine_name(const gchar * path) {
 }
 
 
+/* Register the URLType if it doesn't already exist.
+ * Returns TRUE if successful, FALSE if the type already exists.
+ */
+gboolean
+gnc_html_register_urltype (URLType type, const char *protocol)
+{
+  if (!gnc_html_type_to_proto_hash) {
+    gnc_html_type_to_proto_hash = g_hash_table_new (g_str_hash, g_str_equal);
+    gnc_html_proto_to_type_hash = g_hash_table_new (g_str_hash, g_str_equal);
+  }
+  if (!protocol) return FALSE;
+  if (g_hash_table_lookup (gnc_html_type_to_proto_hash, type))
+    return FALSE;
+
+  g_hash_table_insert (gnc_html_type_to_proto_hash, type, (gpointer)protocol);
+  if (*protocol)
+    g_hash_table_insert (gnc_html_proto_to_type_hash, (gpointer)protocol, type);
+
+  return TRUE;
+}
+
 /********************************************************************
  * gnc_html_parse_url
  * this takes a URL and determines the protocol type, location, and
@@ -140,7 +173,8 @@ extract_machine_name(const gchar * path) {
 
 URLType
 gnc_html_parse_url(gnc_html * html, const gchar * url, 
-                   char ** url_location, char ** url_label) {
+                   char ** url_location, char ** url_label)
+{
   char        uri_rexp[] = "^(([^:]*):)?([^#]+)?(#(.*))?$";
   regex_t     compiled;
   regmatch_t  match[6];
@@ -148,6 +182,8 @@ gnc_html_parse_url(gnc_html * html, const gchar * url,
   int         found_protocol=0, found_path=0, found_label=0; 
   URLType     retval;   
 
+  DEBUG("parsing %s, base_location %s", url,
+	html ? html->base_location : "<null hmtl>");
   regcomp(&compiled, uri_rexp, REG_EXTENDED);
 
   if(!regexec(&compiled, url, 6, match, 0)) {
@@ -177,40 +213,8 @@ gnc_html_parse_url(gnc_html * html, const gchar * url,
   regfree(&compiled);
 
   if(found_protocol) {
-    if(!strcmp(protocol, "file")) {
-      retval = URL_TYPE_FILE;
-    }
-    else if(!strcmp(protocol, "http")) {
-      retval = URL_TYPE_HTTP;
-    }
-    else if(!strcmp(protocol, "ftp")) {
-      retval = URL_TYPE_FTP;
-    }
-    else if(!strcmp(protocol, "https")) {
-      retval = URL_TYPE_SECURE;
-    }
-    else if(!strcmp(protocol, "gnc-action")) {
-      retval = URL_TYPE_ACTION;
-    }
-    else if(!strcmp(protocol, "gnc-register")) {
-      retval = URL_TYPE_REGISTER;
-    } 
-    else if(!strcmp(protocol, "gnc-acct-tree")) {
-      retval = URL_TYPE_ACCTTREE;
-    }
-    else if(!strcmp(protocol, "gnc-report")) {
-      retval = URL_TYPE_REPORT;
-    }
-    else if(!strcmp(protocol, "gnc-options")) {
-      retval = URL_TYPE_OPTIONS;
-    }
-    else if(!strcmp(protocol, "gnc-scm")) {
-      retval = URL_TYPE_SCHEME;
-    }
-    else if(!strcmp(protocol, "gnc-help")) {
-      retval = URL_TYPE_HELP;
-    }
-    else {
+    retval = g_hash_table_lookup (gnc_html_proto_to_type_hash, protocol);
+    if (!retval) {
       PWARN("unhandled URL type for '%s'", url ? url : "(null)");
       retval = URL_TYPE_OTHER;
     }
@@ -229,14 +233,13 @@ gnc_html_parse_url(gnc_html * html, const gchar * url,
   
   g_free(protocol);
  
-  switch(retval) {
-  case URL_TYPE_FILE:    
+  if (!safe_strcmp (retval, URL_TYPE_FILE)) {
     if(!found_protocol && path && html && html->base_location) {
       if(path[0] == '/') {
         *url_location = g_strdup(path);
       }
       else {
-        *url_location = g_strconcat(html->base_location, path, NULL);
+        *url_location = g_strconcat(html->base_location, "/", path, NULL);
       }
       g_free(path);
     }
@@ -244,15 +247,14 @@ gnc_html_parse_url(gnc_html * html, const gchar * url,
       *url_location = g_strdup(path);
       g_free(path);
     }
-    break;
-    
-  case URL_TYPE_JUMP:
+
+  } else if (!safe_strcmp (retval, URL_TYPE_JUMP)) {
     *url_location = NULL;
     g_free(path);
-    break;
 
-  case URL_TYPE_OTHER:
-  default:
+  } else {
+    /* case URL_TYPE_OTHER: */
+
     if(!found_protocol && path && html && html->base_location) {
       if(path[0] == '/') {
         *url_location = 
@@ -268,7 +270,6 @@ gnc_html_parse_url(gnc_html * html, const gchar * url,
       *url_location = g_strdup(path);
       g_free(path);
     }
-    break;
   }
   
   *url_label = label;
@@ -277,7 +278,8 @@ gnc_html_parse_url(gnc_html * html, const gchar * url,
 
 
 static char * 
-extract_base_name(URLType type, const gchar * path) {
+extract_base_name(URLType type, const gchar * path)
+{
   char       machine_rexp[] = "^(//[^/]*)/*(/.*)?$";
   char       path_rexp[] = "^/*(.*)/+([^/]*)$";
   regex_t    compiled_m, compiled_p;
@@ -285,15 +287,16 @@ extract_base_name(URLType type, const gchar * path) {
   char       * machine=NULL, * location = NULL, * base=NULL;
   char       * basename=NULL;
 
+  DEBUG(" ");
   if(!path) return NULL;
   
   regcomp(&compiled_m, machine_rexp, REG_EXTENDED);
   regcomp(&compiled_p, path_rexp, REG_EXTENDED);
 
-  switch(type) {
-  case URL_TYPE_HTTP:
-  case URL_TYPE_SECURE:
-  case URL_TYPE_FTP:
+  if (!safe_strcmp (type, URL_TYPE_HTTP) ||
+      !safe_strcmp (type, URL_TYPE_SECURE) ||
+      !safe_strcmp (type, URL_TYPE_FTP)) {
+
     /* step 1: split the machine name away from the path
      * components */
     if(!regexec(&compiled_m, path, 4, match, 0)) {
@@ -308,8 +311,8 @@ extract_base_name(URLType type, const gchar * path) {
                              match[2].rm_eo - match[2].rm_so);
       }
     }  
-    break;
-  default:
+
+  } else {
     location = g_strdup(path);
   }
   /* step 2: split up the path into prefix and file components */ 
@@ -351,42 +354,79 @@ extract_base_name(URLType type, const gchar * path) {
   return basename;
 }
 
-static char * url_type_names[] = {
-  "file:", "", "http:", "ftp:", "https:", 
-  "gnc-register:", "gnc-acct-tree:", "gnc-report:", "gnc-options:", "gnc-scm:",
-  "gnc-help:", "gnc-xml:", "gnc-action:", ""
-};
+void
+gnc_html_initialize (void)
+{
+  int i;
+  static struct {
+    URLType	type;
+    char *	protocol;
+  } types[] = {
+    { URL_TYPE_FILE, "file" },
+    { URL_TYPE_JUMP, "" },
+    { URL_TYPE_HTTP, "http" },
+    { URL_TYPE_FTP, "ftp" },
+    { URL_TYPE_SECURE, "https" },
+    { URL_TYPE_REGISTER, "gnc-register" },
+    { URL_TYPE_ACCTTREE, "gnc-acct-tree" },
+    { URL_TYPE_REPORT, "gnc-report" },
+    { URL_TYPE_OPTIONS, "gnc-options" },
+    { URL_TYPE_SCHEME, "gnc-scm" },
+    { URL_TYPE_HELP, "gnc-help" },
+    { URL_TYPE_XMLDATA, "gnc-xml" },
+    { URL_TYPE_ACTION, "gnc-action" },
+    { URL_TYPE_PRICE, "gnc-price" },
+    { URL_TYPE_OTHER, "" },
+    { NULL, NULL }};
+
+  for (i = 0; types[i].type; i++)
+    gnc_html_register_urltype (types[i].type, types[i].protocol);
+}
 
 
 char  *
-gnc_build_url (URLType type, const gchar * location, const gchar * label) {
+gnc_build_url (URLType type, const gchar * location, const gchar * label)
+{
+  char * type_name;
+
+  DEBUG(" ");
+  type_name = g_hash_table_lookup (gnc_html_type_to_proto_hash, type);
+  if (!type_name)
+    type_name = "";
+
   if(label) {
-    return g_strdup_printf("%s%s#%s", url_type_names[type], 
+    return g_strdup_printf("%s%s%s#%s", type_name, (*type_name ? ":" : ""),
                            (location ? location : ""),
                            label ? label : "");
   }
   else {
-    return g_strdup_printf("%s%s", url_type_names[type], 
+    return g_strdup_printf("%s%s%s", type_name, (*type_name ? ":" : ""),
                            (location ? location : ""));
   }
 }
 
 static gboolean
-http_allowed() {
-  return gnc_lookup_boolean_option("Network", "Allow http network access", 
-                                   TRUE);
+http_allowed()
+{
+  return TRUE;
+//return gnc_lookup_boolean_option("Network", "Allow http network access", 
+//                                 TRUE);
 }
 
 static gboolean
-https_allowed() {
-  return gnc_lookup_boolean_option("Network", "Allow https network access", 
-                                   TRUE);
+https_allowed()
+{
+  return TRUE;
+//return gnc_lookup_boolean_option("Network", "Allow https network access using OpenSSL", 
+//                                 TRUE);
 }
 
 static gboolean
-gnc_network_allowed() {
-  return gnc_lookup_boolean_option("Network", "Enable GnuCash Network", 
-                                   TRUE);
+gnc_network_allowed()
+{
+  return FALSE;
+//return gnc_lookup_boolean_option("Network", "Enable GnuCash Network", 
+//                                 TRUE);
 }
 
 
@@ -399,7 +439,8 @@ gnc_network_allowed() {
 static void
 gnc_html_http_request_cb(const gchar * uri, int completed_ok, 
                          const gchar * body, gint body_len, 
-                         gpointer user_data) {
+                         gpointer user_data)
+{
   gnc_html * html = user_data; 
   URLType  type;
   char     * location = NULL;
@@ -407,6 +448,7 @@ gnc_html_http_request_cb(const gchar * uri, int completed_ok,
   GList    * handles  = NULL;
   GList    * current;
   
+  DEBUG("uri %s, ok %d, body %10.10s, body len %d", uri, completed_ok, body, body_len);
   g_hash_table_lookup_extended(html->request_info, uri, 
                                (gpointer *)&location, 
                                (gpointer *)&handles);
@@ -421,8 +463,10 @@ gnc_html_http_request_cb(const gchar * uri, int completed_ok,
     else {
       char *data;
 
-      data = _(error_start);
+      data = g_strdup_printf(error_format, 
+			     _(error_title), _(error_body1), _(error_body2));
       gtk_html_write(GTK_HTML(html->html), handle, data, strlen (data));
+      g_free (data);
       gtk_html_write(GTK_HTML(html->html), handle, body, body_len);
       gtk_html_write(GTK_HTML(html->html), handle,
                      error_end, strlen(error_end));
@@ -457,9 +501,11 @@ gnc_html_http_request_cb(const gchar * uri, int completed_ok,
       else {
         char *data;
 
-        data = _(error_start);
+	data = g_strdup_printf(error_format, 
+			       _(error_title), _(error_body1), _(error_body2));
         gtk_html_write(GTK_HTML(html->html), (GtkHTMLStream *)(current->data), 
                        data, strlen(data));
+	g_free (data);
         gtk_html_write(GTK_HTML(html->html), (GtkHTMLStream *)(current->data), 
                        body, body_len);
         gtk_html_write(GTK_HTML(html->html), (GtkHTMLStream *)(current->data), 
@@ -481,13 +527,15 @@ gnc_html_http_request_cb(const gchar * uri, int completed_ok,
  ************************************************************/
 
 static void 
-gnc_html_start_request(gnc_html * html, gchar * uri, GtkHTMLStream * handle) {
+gnc_html_start_request(gnc_html * html, gchar * uri, GtkHTMLStream * handle)
+{
   GList * handles = NULL;
   gint  need_request = FALSE;
 
   /* we want to make a list of handles to fill with this URI.
    * multiple handles with the same URI will all get filled when the
    * request comes in. */
+  DEBUG("requesting %s", uri);
   handles = g_hash_table_lookup(html->request_info, uri);
   if(!handles) {
     need_request = TRUE;
@@ -513,9 +561,12 @@ gnc_html_start_request(gnc_html * html, gchar * uri, GtkHTMLStream * handle) {
 static void
 gnc_html_load_to_stream(gnc_html * html, GtkHTMLStream * handle,
                         URLType type, const gchar * location, 
-                        const gchar * label) {
+                        const gchar * label)
+{
   char * fdata = NULL;
+  int fdata_len = 0;
 
+  DEBUG("type %s, location %s, label %s", type, location, label);
   if(!html) {
     return;
   }
@@ -523,17 +574,19 @@ gnc_html_load_to_stream(gnc_html * html, GtkHTMLStream * handle,
   if (gnc_html_stream_handlers) {
     GncHTMLStreamCB stream_handler;
 
-    stream_handler = g_hash_table_lookup (gnc_html_stream_handlers, &type);
+    stream_handler = g_hash_table_lookup (gnc_html_stream_handlers, type);
     if (stream_handler) {
-      gboolean ok = stream_handler (location, &fdata);
+      gboolean ok = stream_handler (location, &fdata, &fdata_len);
 
       if(ok) {
         fdata = fdata ? fdata : g_strdup ("");
-        gtk_html_write(GTK_HTML(html->html), handle, fdata, strlen (fdata));
+        gtk_html_write(GTK_HTML(html->html), handle, fdata, fdata_len);
         gtk_html_end(GTK_HTML(html->html), handle, GTK_HTML_STREAM_OK);      
       }
       else {
-        fdata = fdata ? fdata : g_strdup (_(error_404));
+        fdata = fdata ? fdata : 
+	  g_strdup_printf (error_404_format, 
+			   _(error_404_title), _(error_404_body));
         gtk_html_write(GTK_HTML(html->html), handle, fdata, strlen (fdata));
         gtk_html_end(GTK_HTML(html->html), handle, GTK_HTML_STREAM_ERROR);
       }
@@ -541,6 +594,8 @@ gnc_html_load_to_stream(gnc_html * html, GtkHTMLStream * handle,
       g_free(fdata);
 
       if(label) {
+	while (gtk_events_pending ())
+	  gtk_main_iteration ();
         gtk_html_jump_to_anchor(GTK_HTML(html->html), label);
       }
 
@@ -548,39 +603,44 @@ gnc_html_load_to_stream(gnc_html * html, GtkHTMLStream * handle,
     }
   }
 
-  switch(type) {
-  case URL_TYPE_SECURE:
-    if(!https_allowed()) {
-      gnc_error_dialog(_("Secure HTTP access is disabled.\n"
-                         "You can enable it in the Network section of\n"
-                         "the Preferences dialog."));
-      break;
+  do {
+    if (!safe_strcmp (type, URL_TYPE_SECURE) ||
+	!safe_strcmp (type, URL_TYPE_HTTP)) {
+
+      if (!safe_strcmp (type, URL_TYPE_SECURE)) {
+	if(!https_allowed()) {
+	  gnc_error_dialog(_("Secure HTTP access is disabled.\n"
+			     "You can enable it in the Network section of\n"
+			     "the Preferences dialog."));
+	  break;
+	}
+      }
+
+      if(!http_allowed()) {
+	gnc_error_dialog(_("Network HTTP access is disabled.\n"
+			   "You can enable it in the Network section of\n"
+			   "the Preferences dialog."));
+      } else {
+	char *fullurl;
+      
+	fullurl = gnc_build_url(type, location, label);
+	gnc_html_start_request(html, fullurl, handle);
+      }
+
+    } else {
+      PWARN("load_to_stream for inappropriate type\n"
+	    "\turl = '%s#%s'\n",
+	    location ? location : "(null)",
+	    label ? label : "(null)");
+      fdata = g_strdup_printf (error_404_format, 
+			       _(error_404_title), _(error_404_body));
+      gtk_html_write(GTK_HTML(html->html), handle, fdata, strlen (fdata));
+      gtk_html_end(GTK_HTML(html->html), handle, GTK_HTML_STREAM_ERROR);
+      g_free (fdata);
     }
 
-  case URL_TYPE_HTTP:
-    if(!http_allowed()) {
-      gnc_error_dialog(_("Network HTTP access is disabled.\n"
-                         "You can enable it in the Network section of\n"
-                         "the Preferences dialog."));
-    }
-    else {
-      char *fullurl;
+  } while (FALSE);
 
-      fullurl = gnc_build_url(type, location, label);
-      gnc_html_start_request(html, fullurl, handle);
-    }
-    break;
-
-  default:
-    PWARN("load_to_stream for inappropriate type\n"
-          "\turl = '%s#%s'\n",
-          location ? location : "(null)",
-          label ? label : "(null)");
-    fdata = _(error_404);
-    gtk_html_write(GTK_HTML(html->html), handle, fdata, strlen (fdata));
-    gtk_html_end(GTK_HTML(html->html), handle, GTK_HTML_STREAM_ERROR);
-    break;
-  }
 }
 
 
@@ -590,12 +650,14 @@ gnc_html_load_to_stream(gnc_html * html, GtkHTMLStream * handle,
  ********************************************************************/
 
 static void 
-gnc_html_link_clicked_cb(GtkHTML * html, const gchar * url, gpointer data) {
+gnc_html_link_clicked_cb(GtkHTML * html, const gchar * url, gpointer data)
+{
   URLType   type;
   char      * location = NULL;
   char      * label = NULL;
   gnc_html  * gnchtml = (gnc_html *)data;
 
+  DEBUG("Clicked %s", url);
   type = gnc_html_parse_url(gnchtml, url, &location, &label);
   gnc_html_show_url(gnchtml, type, location, label, 0);
   g_free(location);
@@ -610,12 +672,14 @@ gnc_html_link_clicked_cb(GtkHTML * html, const gchar * url, gpointer data) {
 
 static void 
 gnc_html_url_requested_cb(GtkHTML * html, char * url,
-                          GtkHTMLStream * handle, gpointer data) {
+                          GtkHTMLStream * handle, gpointer data)
+{
   URLType       type;
   char          * location=NULL;
   char          * label=NULL;
   gnc_html      * gnchtml = (gnc_html *)data;
 
+  DEBUG("requesting %s", url);
   type = gnc_html_parse_url(gnchtml, url, &location, &label);
   gnc_html_load_to_stream(gnchtml, handle, type, location, label);
   g_free(location);
@@ -630,12 +694,12 @@ gnc_html_url_requested_cb(GtkHTML * html, char * url,
 
 static int
 gnc_html_object_requested_cb(GtkHTML * html, GtkHTMLEmbedded * eb,
-                             gpointer data) {
-  GtkWidget * widg = NULL;
+                             gpointer data)
+{
   gnc_html  * gnchtml = data; 
-  int retval = FALSE;
   GncHTMLObjectCB h;
 
+  DEBUG(" ");
   if(!eb || !(eb->classid) || !gnc_html_object_handlers) return FALSE;
   
   h = g_hash_table_lookup(gnc_html_object_handlers, eb->classid);
@@ -653,9 +717,11 @@ gnc_html_object_requested_cb(GtkHTML * html, GtkHTMLEmbedded * eb,
  ********************************************************************/
 
 static void 
-gnc_html_on_url_cb(GtkHTML * html, const gchar * url, gpointer data) {
+gnc_html_on_url_cb(GtkHTML * html, const gchar * url, gpointer data)
+{
   gnc_html * gnchtml = (gnc_html *) data;
 
+  DEBUG("Rollover %s", url);
   g_free(gnchtml->current_link);
   gnchtml->current_link = g_strdup(url);
   if(gnchtml->flyover_cb) {
@@ -670,12 +736,14 @@ gnc_html_on_url_cb(GtkHTML * html, const gchar * url, gpointer data) {
 
 static void 
 gnc_html_set_base_cb(GtkHTML * gtkhtml, const gchar * base, 
-                     gpointer data) {
+                     gpointer data)
+{
   gnc_html * html = (gnc_html *)data;
   URLType  type;
   char     * location = NULL;
   char     * label = NULL;
 
+  DEBUG("Setting base location to %s", base);
   type = gnc_html_parse_url(html, base, &location, &label);
 
   g_free(html->base_location);
@@ -693,9 +761,11 @@ gnc_html_set_base_cb(GtkHTML * gtkhtml, const gchar * base,
 
 static int
 gnc_html_button_press_cb(GtkWidget * widg, GdkEventButton * event,
-                         gpointer user_data) {
+                         gpointer user_data)
+{
   gnc_html * html = user_data;
 
+  DEBUG("Button Press");
   if(html->button_cb) {
     (html->button_cb)(html, event, html->button_cb_data);
     return TRUE;
@@ -712,20 +782,26 @@ gnc_html_button_press_cb(GtkWidget * widg, GdkEventButton * event,
  ********************************************************************/
 
 GHashTable *
-gnc_html_unpack_form_data(const char * encoding) {
-  GHashTable * rv = g_hash_table_new(g_str_hash, g_str_equal);
+gnc_html_unpack_form_data(const char * encoding)
+{
+  GHashTable * rv;
+
+  DEBUG(" ");
+  rv = g_hash_table_new(g_str_hash, g_str_equal);
   gnc_html_merge_form_data(rv, encoding);
   return rv;
 }
 
 void
-gnc_html_merge_form_data(GHashTable * rv, const char * encoding) {
+gnc_html_merge_form_data(GHashTable * rv, const char * encoding)
+{
   char * next_pair = NULL; 
   char * name  = NULL;
   char * value = NULL;
   char * extr_name  = NULL;
   char * extr_value = NULL;
   
+  DEBUG(" ");
   if(!encoding) {
     return;
   }
@@ -757,26 +833,32 @@ gnc_html_merge_form_data(GHashTable * rv, const char * encoding) {
 }
 
 static gboolean
-free_form_data_helper(gpointer k, gpointer v, gpointer user) {
+free_form_data_helper(gpointer k, gpointer v, gpointer user)
+{
+  DEBUG(" ");
   g_free(k);
   g_free(v);
   return TRUE;
 }
 
 void 
-gnc_html_free_form_data(GHashTable * d) {
+gnc_html_free_form_data(GHashTable * d)
+{
+  DEBUG(" ");
   g_hash_table_foreach_remove(d, free_form_data_helper, NULL);
   g_hash_table_destroy(d);
 }
 
 static void
 pack_form_data_helper(gpointer key, gpointer val, 
-                      gpointer user_data) {
+                      gpointer user_data)
+{
   char * old_str = *(char **)user_data;
   char * enc_key = gnc_html_encode_string((char *)key);
   char * enc_val = gnc_html_encode_string((char *)val);
   char * new_str = NULL;
 
+  DEBUG(" ");
   if(old_str) {
     new_str = g_strconcat(old_str, "&", enc_key, "=", enc_val, NULL);
   }
@@ -788,8 +870,10 @@ pack_form_data_helper(gpointer key, gpointer val,
 }
 
 char *
-gnc_html_pack_form_data(GHashTable * form_data) {
+gnc_html_pack_form_data(GHashTable * form_data)
+{
   char * encoded = NULL;
+  DEBUG(" ");
   g_hash_table_foreach(form_data, pack_form_data_helper, &encoded);
   return encoded;
 }
@@ -803,20 +887,22 @@ gnc_html_pack_form_data(GHashTable * form_data) {
 static int
 gnc_html_submit_cb(GtkHTML * html, const gchar * method, 
                    const gchar * action, const gchar * encoded_form_data,
-                   gpointer user_data) {
+                   gpointer user_data)
+{
   gnc_html * gnchtml = user_data;
   char     * location = NULL;
   char     * new_loc = NULL;
   char     * label = NULL;
-  char     * submit_encoding = NULL;
   char     ** action_parts;
-  GHashTable * form_data = gnc_html_unpack_form_data(encoded_form_data);
+  GHashTable * form_data;
   URLType  type;
   GncHTMLActionCB cb;
 
+  DEBUG(" ");
+  form_data = gnc_html_unpack_form_data(encoded_form_data);
   type = gnc_html_parse_url(gnchtml, action, &location, &label);
   
-  if(type == URL_TYPE_ACTION) {
+  if(!safe_strcmp (type, URL_TYPE_ACTION)) {
     if(gnc_network_allowed()) {
       if(gnc_html_action_handlers) {
         action_parts = g_strsplit(location, "?", 2);
@@ -867,7 +953,8 @@ gnc_html_submit_cb(GtkHTML * html, const gchar * method,
 
 static void
 gnc_html_open_scm(gnc_html * html, const gchar * location,
-                  const gchar * label, int newwin) {
+                  const gchar * label, int newwin)
+{
   PINFO("location='%s'", location ? location : "(null)");
 }
 
@@ -880,8 +967,12 @@ gnc_html_open_scm(gnc_html * html, const gchar * location,
 
 void
 gnc_html_show_data(gnc_html * html, const char * data, 
-                   int datalen) {
-  GtkHTMLStream * handle = gtk_html_begin(GTK_HTML(html->html));
+                   int datalen)
+{
+  GtkHTMLStream * handle;
+
+  DEBUG("datalen %d, data %20.20s", datalen, data);
+  handle = gtk_html_begin(GTK_HTML(html->html));
   gtk_html_write(GTK_HTML(html->html), handle, data, datalen);
   gtk_html_end(GTK_HTML(html->html), handle, GTK_HTML_STREAM_OK);  
 }
@@ -898,11 +989,13 @@ gnc_html_show_data(gnc_html * html, const char * data,
 void 
 gnc_html_show_url(gnc_html * html, URLType type, 
                   const gchar * location, const gchar * label,
-                  gboolean new_window_hint) {
+                  gboolean new_window_hint)
+{
   GncHTMLUrlCB url_handler;
   GtkHTMLStream * handle;
   gboolean new_window;
 
+  DEBUG(" ");
   if (!html) return;
   if (!location) return;
 
@@ -922,7 +1015,7 @@ gnc_html_show_url(gnc_html * html, URLType type,
   }
 
   if (gnc_html_url_handlers)
-    url_handler = g_hash_table_lookup (gnc_html_url_handlers, &type);
+    url_handler = g_hash_table_lookup (gnc_html_url_handlers, type);
   else
     url_handler = NULL;
 
@@ -942,17 +1035,11 @@ gnc_html_show_url(gnc_html * html, URLType type,
     ok = url_handler (location, label, new_window, &result);
     if (!ok)
     {
-      char *error_message;
-
       if (result.error_message)
-        error_message = g_strdup (result.error_message);
+        gnc_error_dialog(result.error_message);
       else
-        error_message = g_strdup_printf (_("There was an error accessing %s."),
-                                         location);
-
-      gnc_error_dialog (error_message);
- 
-      g_free (error_message);
+	/* %s is a URL (some location somewhere). */
+        gnc_error_dialog(_("There was an error accessing %s."), location);
 
       if (html->load_cb)
         html->load_cb (html, result.url_type,
@@ -975,7 +1062,9 @@ gnc_html_show_url(gnc_html * html, URLType type,
 
       g_free (html->base_location);
       html->base_type = result.base_type;
-      html->base_location = g_strdup (result.base_location);
+      html->base_location =
+	    g_strdup (extract_base_name(result.base_type, new_location));
+      DEBUG("resetting base location to %s",  html->base_location);
     
       stream = gtk_html_begin (GTK_HTML(html->html));
       gnc_html_load_to_stream (html, stream, result.url_type,
@@ -995,55 +1084,57 @@ gnc_html_show_url(gnc_html * html, URLType type,
     return;
   }
 
-  switch(type) {
-  case URL_TYPE_SCHEME:
+  if (!safe_strcmp (type, URL_TYPE_SCHEME)) {
     gnc_html_open_scm(html, location, label, new_window);
-    break;
 
-  case URL_TYPE_JUMP:
+  } else if (!safe_strcmp (type, URL_TYPE_JUMP)) {
     gtk_html_jump_to_anchor(GTK_HTML(html->html), label);
-    break;
 
-  case URL_TYPE_SECURE:
-    if(!https_allowed()) {
-      gnc_error_dialog(_("Secure HTTP access is disabled.\n"
-                         "You can enable it in the Network section of\n"
-                         "the Preferences dialog."));
-      break;
-    }
+  } else if (!safe_strcmp (type, URL_TYPE_SECURE) ||
+	     !safe_strcmp (type, URL_TYPE_HTTP) ||
+	     !safe_strcmp (type, URL_TYPE_FILE)) {
 
-  case URL_TYPE_HTTP:
-    if(!http_allowed()) {
-      gnc_error_dialog(_("Network HTTP access is disabled.\n"
-                         "You can enable it in the Network section of\n"
-                         "the Preferences dialog."));
-      break;
-    }
+    do {
+      if (!safe_strcmp (type, URL_TYPE_SECURE)) {
+	if(!https_allowed()) {
+	  gnc_error_dialog(_("Secure HTTP access is disabled.\n"
+			     "You can enable it in the Network section of\n"
+			     "the Preferences dialog."));
+	  break;
+	}
+      }
 
-  case URL_TYPE_FILE:
-    html->base_type     = type;
-    
-    if(html->base_location) g_free(html->base_location);
-    html->base_location = extract_base_name(type, location);
+      if (safe_strcmp (type, URL_TYPE_FILE)) {
+	if(!http_allowed()) {
+	  gnc_error_dialog(_("Network HTTP access is disabled.\n"
+			     "You can enable it in the Network section of\n"
+			     "the Preferences dialog."));
+	  break;
+	}
+      }
 
-    /* FIXME : handle new_window = 1 */
-    gnc_html_history_append(html->history,
-                            gnc_html_history_node_new(type, location, label));
-    handle = gtk_html_begin(GTK_HTML(html->html));
-    gnc_html_load_to_stream(html, handle, type, location, label);
-    break;
+      html->base_type     = type;
+      
+      if(html->base_location) g_free(html->base_location);
+      html->base_location = extract_base_name(type, location);
 
-  case URL_TYPE_ACTION:
+      /* FIXME : handle new_window = 1 */
+      gnc_html_history_append(html->history,
+			      gnc_html_history_node_new(type, location, label));
+      handle = gtk_html_begin(GTK_HTML(html->html));
+      gnc_html_load_to_stream(html, handle, type, location, label);
+
+    } while (FALSE);
+
+  } else if (!safe_strcmp (type, URL_TYPE_ACTION)) {
     gnc_html_history_append(html->history,
                             gnc_html_history_node_new(type, location, label));
     gnc_html_submit_cb(GTK_HTML(html->html), "get", 
                        gnc_build_url(type, location, label), NULL,
                        (gpointer)html);
-    break;
 
-  default:
-    PERR ("URLType %d not supported.", type);
-    break;
+  } else {
+    PERR ("URLType %s not supported.", type);
   }
 
   if(html->load_cb) {
@@ -1058,8 +1149,12 @@ gnc_html_show_url(gnc_html * html, URLType type,
  ********************************************************************/
 
 void
-gnc_html_reload(gnc_html * html) {
-  gnc_html_history_node * n = gnc_html_history_get_current(html->history);
+gnc_html_reload(gnc_html * html)
+{
+  gnc_html_history_node * n;
+
+  DEBUG(" ");
+  n = gnc_html_history_get_current(html->history);
   if(n) {
     gnc_html_show_url(html, n->type, n->location, n->label, 0);
   }
@@ -1072,7 +1167,8 @@ gnc_html_reload(gnc_html * html) {
  ********************************************************************/
 
 gnc_html * 
-gnc_html_new(void) {
+gnc_html_new(void)
+{
   gnc_html * retval = g_new0(gnc_html, 1);
   
   retval->container = gtk_scrolled_window_new(NULL, NULL);
@@ -1120,8 +1216,6 @@ gnc_html_new(void) {
   gtk_signal_connect (GTK_OBJECT(retval->html), "submit", 
                       GTK_SIGNAL_FUNC(gnc_html_submit_cb), (gpointer)retval);
   
-  gtk_widget_show_all(GTK_WIDGET(retval->html));
-  
   gtk_html_load_empty(GTK_HTML(retval->html));
   
   return retval;
@@ -1134,14 +1228,16 @@ gnc_html_new(void) {
  ********************************************************************/
 
 static gboolean
-html_cancel_helper(gpointer key, gpointer value, gpointer user_data) {
+html_cancel_helper(gpointer key, gpointer value, gpointer user_data)
+{
   g_free(key);
   g_list_free((GList *)value);
   return TRUE;
 }
 
 void
-gnc_html_cancel(gnc_html * html) {
+gnc_html_cancel(gnc_html * html)
+{
   /* remove our own references to requests */ 
   gnc_http_cancel_requests(html->http);
   
@@ -1155,7 +1251,8 @@ gnc_html_cancel(gnc_html * html) {
  ********************************************************************/
 
 void
-gnc_html_destroy(gnc_html * html) {
+gnc_html_destroy(gnc_html * html)
+{
 
   if(!html) return;
 
@@ -1180,27 +1277,31 @@ gnc_html_destroy(gnc_html * html) {
 }
 
 void
-gnc_html_set_urltype_cb(gnc_html * html, GncHTMLUrltypeCB urltype_cb) {
+gnc_html_set_urltype_cb(gnc_html * html, GncHTMLUrltypeCB urltype_cb)
+{
   html->urltype_cb = urltype_cb;
 }
 
 void
 gnc_html_set_load_cb(gnc_html * html, GncHTMLLoadCB load_cb,
-                     gpointer data) {
+                     gpointer data)
+{
   html->load_cb = load_cb;
   html->load_cb_data = data;
 }
 
 void
 gnc_html_set_flyover_cb(gnc_html * html, GncHTMLFlyoverCB flyover_cb,
-                        gpointer data) {
+                        gpointer data)
+{
   html->flyover_cb       = flyover_cb;
   html->flyover_cb_data  = data;
 }
 
 void
 gnc_html_set_button_cb(gnc_html * html, GncHTMLButtonCB button_cb,
-                        gpointer data) {
+                        gpointer data)
+{
   html->button_cb       = button_cb;
   html->button_cb_data  = data;
 }
@@ -1213,14 +1314,16 @@ static gboolean
 raw_html_receiver (gpointer     engine,
                    const gchar *data,
                    guint        len,
-                   gpointer     user_data) {
+                   gpointer     user_data)
+{
   FILE *fh = (FILE *) user_data;
   fwrite (data, len, 1, fh);
   return TRUE;
 }
 
 gboolean
-gnc_html_export(gnc_html * html, const char *filepath) {
+gnc_html_export(gnc_html * html, const char *filepath)
+{
   FILE *fh;
 
   g_return_val_if_fail (html != NULL, FALSE);
@@ -1238,31 +1341,35 @@ gnc_html_export(gnc_html * html, const char *filepath) {
 }
 
 void
-gnc_html_print(gnc_html * html) {
-  PrintSession * ps = gnc_print_session_create();
+gnc_html_print(gnc_html * html)
+{
+  PrintSession * ps = gnc_print_session_create(FALSE);
   
   gtk_html_print(GTK_HTML(html->html),
                  GNOME_PRINT_CONTEXT(ps->meta));
-  gnc_print_session_done(ps);
+  gnc_print_session_done(ps, FALSE);
   gnc_print_session_print(ps);
 }
 
 gnc_html_history * 
-gnc_html_get_history(gnc_html * html) {
+gnc_html_get_history(gnc_html * html)
+{
   if (!html) return NULL;
   return html->history;
 }
 
 
 GtkWidget * 
-gnc_html_get_widget(gnc_html * html) {
+gnc_html_get_widget(gnc_html * html)
+{
   if (!html) return NULL;
   return html->container;
 }
 
 void
 gnc_html_register_object_handler(const char * classid, 
-                                 GncHTMLObjectCB hand) {
+                                 GncHTMLObjectCB hand)
+{
   g_return_if_fail (classid != NULL);
 
   if(!gnc_html_object_handlers) {
@@ -1277,7 +1384,8 @@ gnc_html_register_object_handler(const char * classid,
 }
 
 void
-gnc_html_unregister_object_handler(const char * classid) {
+gnc_html_unregister_object_handler(const char * classid)
+{
   gchar * keyptr=NULL;
   gchar * valptr=NULL;
 
@@ -1293,7 +1401,8 @@ gnc_html_unregister_object_handler(const char * classid) {
 
 void
 gnc_html_register_action_handler(const char * actionid, 
-                                 GncHTMLActionCB hand) {
+                                 GncHTMLActionCB hand)
+{
   g_return_if_fail (actionid != NULL);
 
   if(!gnc_html_action_handlers) {
@@ -1308,7 +1417,8 @@ gnc_html_register_action_handler(const char * actionid,
 }
 
 void
-gnc_html_unregister_action_handler(const char * actionid) {
+gnc_html_unregister_action_handler(const char * actionid)
+{
   gchar * keyptr=NULL;
   gchar * valptr=NULL;
 
@@ -1327,75 +1437,46 @@ gnc_html_unregister_action_handler(const char * actionid) {
 void
 gnc_html_register_stream_handler(URLType url_type, GncHTMLStreamCB hand)
 {
-  URLType *key;
-
-  g_return_if_fail (url_type >= 0);
+  g_return_if_fail (url_type != NULL && *url_type != '\0');
 
   if(!gnc_html_stream_handlers) {
-    gnc_html_stream_handlers = g_hash_table_new(g_int_hash, g_int_equal);
+    gnc_html_stream_handlers = g_hash_table_new(g_str_hash, g_str_equal);
   }
 
   gnc_html_unregister_stream_handler (url_type);
   if (!hand)
     return;
 
-  key = g_new (URLType, 1);
-  *key = url_type;
-
-  g_hash_table_insert (gnc_html_stream_handlers, key, hand);
+  g_hash_table_insert (gnc_html_stream_handlers, url_type, hand);
 }
 
 void
 gnc_html_unregister_stream_handler(URLType url_type)
 {
-  gpointer keyptr;
-  gpointer valptr;
-
-  if (!g_hash_table_lookup_extended(gnc_html_stream_handlers,
-                                    &url_type, 
-                                    &keyptr, 
-                                    &valptr))
-    return;
-
-  g_hash_table_remove (gnc_html_stream_handlers, &url_type);
-  g_free (keyptr);
+  g_hash_table_remove (gnc_html_stream_handlers, url_type);
 }
 
 void
 gnc_html_register_url_handler (URLType url_type, GncHTMLUrlCB hand)
 {
-  URLType *key;
+  g_return_if_fail (url_type != NULL && *url_type != '\0');
 
-  g_return_if_fail (url_type >= 0);
-
-  if(!gnc_html_url_handlers) {
-    gnc_html_url_handlers = g_hash_table_new (g_int_hash, g_int_equal);
+  if(!gnc_html_url_handlers)
+{
+    gnc_html_url_handlers = g_hash_table_new (g_str_hash, g_str_equal);
   }
 
   gnc_html_unregister_url_handler (url_type);
   if (!hand)
     return;
 
-  key = g_new (URLType, 1);
-  *key = url_type;
-
-  g_hash_table_insert (gnc_html_url_handlers, key, hand);
+  g_hash_table_insert (gnc_html_url_handlers, url_type, hand);
 }
 
 void
 gnc_html_unregister_url_handler (URLType url_type)
 {
-  gpointer keyptr;
-  gpointer valptr;
-
-  if (!g_hash_table_lookup_extended (gnc_html_url_handlers,
-                                     &url_type, 
-                                     &keyptr, 
-                                     &valptr))
-    return;
-
-  g_hash_table_remove (gnc_html_url_handlers, &url_type);
-  g_free (keyptr);
+  g_hash_table_remove (gnc_html_url_handlers, url_type);
 }
 
 /********************************************************************
@@ -1409,7 +1490,8 @@ gnc_html_unregister_url_handler (URLType url_type)
  ********************************************************************/
 
 char *
-gnc_html_encode_string(const char * str) {
+gnc_html_encode_string(const char * str)
+{
   static gchar *safe = "$-._!*(),"; /* RFC 1738 */
   unsigned pos      = 0;
   GString *encoded  = g_string_new ("");
@@ -1449,7 +1531,8 @@ gnc_html_encode_string(const char * str) {
 
 
 char *
-gnc_html_decode_string(const char * str) {
+gnc_html_decode_string(const char * str)
+{
   static gchar * safe = "$-._!*(),"; /* RFC 1738 */
   GString * decoded  = g_string_new ("");
   const gchar   * ptr;
@@ -1494,7 +1577,8 @@ gnc_html_decode_string(const char * str) {
  ********************************************************************/
 
 char * 
-gnc_html_unescape_newlines(const gchar * in) {
+gnc_html_unescape_newlines(const gchar * in)
+{
   const char * ip = in;
   char    * cstr = NULL;
   GString * rv = g_string_new("");
@@ -1516,7 +1600,8 @@ gnc_html_unescape_newlines(const gchar * in) {
 }
 
 char * 
-gnc_html_escape_newlines(const gchar * in) {
+gnc_html_escape_newlines(const gchar * in)
+{
   char *out;
   const char * ip   = in;
   GString * escaped = g_string_new("");
@@ -1542,7 +1627,8 @@ gnc_html_escape_newlines(const gchar * in) {
 
 void
 gnc_html_generic_get_submit(gnc_html * html, const char * action, 
-                            GHashTable * form_data) {
+                            GHashTable * form_data)
+{
   URLType type;
   char    * location = NULL;
   char    * label = NULL;
@@ -1566,7 +1652,8 @@ gnc_html_generic_get_submit(gnc_html * html, const char * action,
 
 void
 gnc_html_generic_post_submit(gnc_html * html, const char * action, 
-                             GHashTable * form_data) {
+                             GHashTable * form_data)
+{
   char * encoded = gnc_html_pack_form_data(form_data);
   char * copy = strdup(encoded);
   gnc_http_start_post(html->http, action, 
@@ -1585,7 +1672,8 @@ gnc_html_generic_post_submit(gnc_html * html, const char * action,
 
 static void
 multipart_post_helper(gpointer key, gpointer val, 
-                      gpointer user_data) {
+                      gpointer user_data)
+{
   char * old_str = *(char **)user_data;
   char * new_str = 
     g_strconcat(old_str,
@@ -1601,7 +1689,8 @@ multipart_post_helper(gpointer key, gpointer val,
 
 void
 gnc_html_multipart_post_submit(gnc_html * html, const char * action, 
-                               GHashTable * form_data) {
+                               GHashTable * form_data)
+{
 
   char * htmlstr = g_strdup("");
   char * next_htmlstr;

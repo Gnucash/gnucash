@@ -11,20 +11,21 @@
 #include "dialog-utils.h"
 #include "global-options.h"
 #include "gnc-amount-edit.h"
+#include "gnc-currency-edit.h"
 #include "gnc-component-manager.h"
 #include "gnc-ui.h"
 #include "gnc-gui-query.h"
 #include "gnc-ui-util.h"
 #include "gnc-engine-util.h"
 #include "window-help.h"
+#include "dialog-search.h"
+#include "search-param.h"
 
-#include "gncBusiness.h"
 #include "gncAddress.h"
 #include "gncEmployee.h"
 #include "gncEmployeeP.h"
 
 #include "dialog-employee.h"
-#include "business-chooser.h"
 
 #define DIALOG_NEW_EMPLOYEE_CM_CLASS "dialog-new-employee"
 #define DIALOG_EDIT_EMPLOYEE_CM_CLASS "dialog-edit-employee"
@@ -36,10 +37,11 @@ typedef enum
 } EmployeeDialogType;
 
 struct _employee_select_window {
-  GncBusiness *	business;
+  GNCBook *	book;
+  QueryNew *	q;
 };
 
-typedef struct _employee_window {
+struct _employee_window {
   GtkWidget *	dialog;
 
   GtkWidget *	id_entry;
@@ -58,6 +60,7 @@ typedef struct _employee_window {
 
   GtkWidget *	workday_amount;
   GtkWidget *	rate_amount;
+  GtkWidget *	currency_edit;
 
   GtkWidget *	active_check;
 
@@ -66,10 +69,10 @@ typedef struct _employee_window {
   EmployeeDialogType	dialog_type;
   GUID		employee_guid;
   gint		component_id;
-  GncBusiness *	business;
+  GNCBook *	book;
   GncEmployee *	created_employee;
 
-} EmployeeWindow;
+};
 
 static GncEmployee *
 ew_get_employee (EmployeeWindow *ew)
@@ -77,18 +80,18 @@ ew_get_employee (EmployeeWindow *ew)
   if (!ew)
     return NULL;
 
-  return gncBusinessLookupGUID (ew->business, GNC_EMPLOYEE_MODULE_NAME,
-				&ew->employee_guid);
+  return gncEmployeeLookup (ew->book, &ew->employee_guid);
 }
 
 static void gnc_ui_to_employee (EmployeeWindow *ew, GncEmployee *employee)
 {
   GncAddress *addr;
-  gnc_numeric num;
 
   addr = gncEmployeeGetAddr (employee);
 
   gnc_suspend_gui_refresh ();
+
+  gncEmployeeBeginEdit (employee);
 
   gncEmployeeSetID (employee, gtk_editable_get_chars
 		    (GTK_EDITABLE (ew->id_entry), 0, -1));
@@ -122,11 +125,14 @@ static void gnc_ui_to_employee (EmployeeWindow *ew, GncEmployee *employee)
 		       (GNC_AMOUNT_EDIT (ew->workday_amount)));
   gncEmployeeSetRate (employee, gnc_amount_edit_get_amount
 		       (GNC_AMOUNT_EDIT (ew->rate_amount)));
+  gncEmployeeSetCurrency (employee, gnc_currency_edit_get_currency
+			  (GNC_CURRENCY_EDIT (ew->currency_edit)));
 
   gncEmployeeCommitEdit (employee);
   gnc_resume_gui_refresh ();
 }
 
+#if 0
 static gboolean check_edit_amount (GtkWidget *dialog, GtkWidget *amount,
 				   gnc_numeric *min, gnc_numeric *max,
 				   const char * error_message)
@@ -148,6 +154,7 @@ static gboolean check_edit_amount (GtkWidget *dialog, GtkWidget *amount,
   }
   return FALSE;
 }
+#endif
 
 static gboolean check_entry_nonempty (GtkWidget *dialog, GtkWidget *entry, 
 				      const char * error_message)
@@ -165,14 +172,6 @@ static void
 gnc_employee_window_ok_cb (GtkWidget *widget, gpointer data)
 {
   EmployeeWindow *ew = data;
-  char *res;
-  GncEmployee *employee;
-  gnc_numeric min, max;
-
-  /* Check for valid id */
-  if (check_entry_nonempty (ew->dialog, ew->id_entry,
-			    _("The Employee must be given an ID.")))
-    return;
 
   /* Check for valid username */
   if (check_entry_nonempty (ew->dialog, ew->username_entry,
@@ -192,6 +191,13 @@ gnc_employee_window_ok_cb (GtkWidget *widget, gpointer data)
     const char *msg = _("You must enter an address.");
     gnc_error_dialog_parented (GTK_WINDOW (ew->dialog), msg);
     return;
+  }
+
+  /* Set the employee id if one has not been chosen */
+  if (safe_strcmp (gtk_entry_get_text (GTK_ENTRY (ew->id_entry)), "") == 0) {
+    gtk_entry_set_text (GTK_ENTRY (ew->id_entry),
+			g_strdup_printf ("%.6lld",
+					 gncEmployeeNextID (ew->book)));
   }
 
   /* Now save it off */
@@ -218,8 +224,7 @@ gnc_employee_window_cancel_cb (GtkWidget *widget, gpointer data)
 static void
 gnc_employee_window_help_cb (GtkWidget *widget, gpointer data)
 {
-  EmployeeWindow *ew = data;
-  char *help_file = "";		/* xxx */
+  char *help_file = HH_EMPLOYEE;
 
   helpWindow(NULL, NULL, help_file);
 }
@@ -233,6 +238,7 @@ gnc_employee_window_destroy_cb (GtkWidget *widget, gpointer data)
   gnc_suspend_gui_refresh ();
 
   if (ew->dialog_type == NEW_EMPLOYEE && employee != NULL) {
+    gncEmployeeBeginEdit (employee);
     gncEmployeeDestroy (employee);
     ew->employee_guid = *xaccGUIDNULL ();
   }
@@ -271,22 +277,6 @@ gnc_employee_name_changed_cb (GtkWidget *widget, gpointer data)
   g_free (title);
 }
 
-static int
-gnc_employee_on_close_cb (GnomeDialog *dialog, gpointer data)
-{
-  EmployeeWindow *ew;
-  GncEmployee **created_employee = data;
-
-  if (data) {
-    ew = gtk_object_get_data (GTK_OBJECT (dialog), "dialog_info");
-    *created_employee = ew->created_employee;
-  }
-
-  gtk_main_quit ();
-
-  return FALSE;
-}
-
 static void
 gnc_employee_window_close_handler (gpointer user_data)
 {
@@ -318,20 +308,54 @@ gnc_employee_window_refresh_handler (GHashTable *changes, gpointer user_data)
   }
 }
 
+static gboolean
+find_handler (gpointer find_data, gpointer user_data)
+{
+  const GUID *employee_guid = find_data;
+  EmployeeWindow *ew = user_data;
+
+  return(ew && guid_equal(&ew->employee_guid, employee_guid));
+}
+
 static EmployeeWindow *
-gnc_employee_new_window (GtkWidget *parent, GncBusiness *bus,
+gnc_employee_new_window (GNCBook *bookp,
 			 GncEmployee *employee)
 {
   EmployeeWindow *ew;
   GladeXML *xml;
   GtkWidget *hbox, *edit;
   GnomeDialog *ewd;
-  gnc_commodity *commodity;
+  gnc_commodity *currency;
   GNCPrintAmountInfo print_info;
 
+  /*
+   * Find an existing window for this employee.  If found, bring it to
+   * the front.
+   */
+  if (employee) {
+    GUID employee_guid;
+    
+    employee_guid = *gncEmployeeGetGUID (employee);
+    ew = gnc_find_first_gui_component (DIALOG_EDIT_EMPLOYEE_CM_CLASS,
+				       find_handler, &employee_guid);
+    if (ew) {
+      gtk_window_present (GTK_WINDOW(ew->dialog));
+      return(ew);
+    }
+  }
+  
+  /* Find the default currency */
+  if (employee)
+    currency = gncEmployeeGetCurrency (employee);
+  else
+    currency = gnc_default_currency ();
+
+  /*
+   * No existing employee window found.  Build a new one.
+   */
   ew = g_new0 (EmployeeWindow, 1);
 
-  ew->business = bus;
+  ew->book = bookp;
 
   /* Find the dialog */
   xml = gnc_glade_xml_new ("employee.glade", "Employee Dialog");
@@ -342,9 +366,6 @@ gnc_employee_new_window (GtkWidget *parent, GncBusiness *bus,
 
   /* default to ok */
   gnome_dialog_set_default (ewd, 0);
-
-  if (parent)
-    gnome_dialog_set_parent (ewd, GTK_WINDOW (parent));
 
   /* Get entry points */
   ew->id_entry = glade_xml_get_widget (xml, "id_entry");
@@ -362,6 +383,14 @@ gnc_employee_new_window (GtkWidget *parent, GncBusiness *bus,
   ew->language_entry = glade_xml_get_widget (xml, "language_entry");
   ew->active_check = glade_xml_get_widget (xml, "active_check");
 
+  /* Currency */
+  edit = gnc_currency_edit_new();
+  gnc_currency_edit_set_currency (GNC_CURRENCY_EDIT(edit), currency);
+  ew->currency_edit = edit;
+
+  hbox = glade_xml_get_widget (xml, "currency_box");
+  gtk_box_pack_start (GTK_BOX (hbox), edit, TRUE, TRUE, 0);
+
   /* WORKDAY: Value */
   edit = gnc_amount_edit_new();
   gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT (edit), TRUE);
@@ -377,12 +406,11 @@ gnc_employee_new_window (GtkWidget *parent, GncBusiness *bus,
 
   /* RATE: Monetary Value */
   edit = gnc_amount_edit_new();
-  commodity = gnc_default_currency ();
-  print_info = gnc_commodity_print_info (commodity, FALSE);
+  print_info = gnc_commodity_print_info (currency, FALSE);
   gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT (edit), TRUE);
   gnc_amount_edit_set_print_info (GNC_AMOUNT_EDIT (edit), print_info);
   gnc_amount_edit_set_fraction (GNC_AMOUNT_EDIT (edit),
-                                gnc_commodity_get_fraction (commodity));
+                                gnc_commodity_get_fraction (currency));
   ew->rate_amount = edit;
   gtk_widget_show (edit);
 
@@ -428,8 +456,6 @@ gnc_employee_new_window (GtkWidget *parent, GncBusiness *bus,
   /* Setup initial values */
   if (employee != NULL) {
     GncAddress *addr;
-    const char *string;
-    gint pos = 0;
 
     ew->dialog_type = EDIT_EMPLOYEE;
     ew->employee_guid = *gncEmployeeGetGUID (employee);
@@ -464,13 +490,10 @@ gnc_employee_new_window (GtkWidget *parent, GncBusiness *bus,
 				  gnc_employee_window_close_handler,
 				  ew);
   } else {
-    gnc_numeric num;
-    employee = gncEmployeeCreate (bus);
+    employee = gncEmployeeCreate (bookp);
     ew->employee_guid = *gncEmployeeGetGUID (employee);
 
     ew->dialog_type = NEW_EMPLOYEE;
-    gtk_entry_set_text (GTK_ENTRY (ew->id_entry),
-			g_strdup_printf ("%.6d", gncEmployeeNextID(bus)));
     ew->component_id =
       gnc_register_gui_component (DIALOG_NEW_EMPLOYEE_CM_CLASS,
 				  gnc_employee_window_refresh_handler,
@@ -489,7 +512,7 @@ gnc_employee_new_window (GtkWidget *parent, GncBusiness *bus,
   /* XXX: Set the ACL */
 
   gnc_gui_component_watch_entity_type (ew->component_id,
-				       GNC_ID_NONE,
+				       GNC_EMPLOYEE_MODULE_NAME,
 				       GNC_EVENT_MODIFY | GNC_EVENT_DESTROY);
 
   gtk_widget_show_all (ew->dialog);
@@ -497,94 +520,143 @@ gnc_employee_new_window (GtkWidget *parent, GncBusiness *bus,
   return ew;
 }
 
-GncEmployee *
-gnc_employee_new (GtkWidget *parent, GncBusiness *bus)
+EmployeeWindow *
+gnc_ui_employee_new (GNCBook *bookp)
 {
   EmployeeWindow *ew;
-  GncEmployee *created_employee = NULL;
 
   /* Make sure required options exist */
-  if (!bus) return NULL;
+  if (!bookp) return NULL;
 
-  ew = gnc_employee_new_window (parent, bus, NULL);
+  ew = gnc_employee_new_window (bookp, NULL);
 
-  gtk_signal_connect (GTK_OBJECT (ew->dialog), "close",
-		      GTK_SIGNAL_FUNC (gnc_employee_on_close_cb),
-		      &created_employee);
-
-  gtk_window_set_modal (GTK_WINDOW (ew->dialog), TRUE);
-
-  gtk_main ();
-
-  return created_employee;
+  return ew;
 }
 
-void
-gnc_employee_edit (GtkWidget *parent, GncEmployee *employee)
+EmployeeWindow *
+gnc_ui_employee_edit (GncEmployee *employee)
 {
   EmployeeWindow *ew;
 
-  if (!employee) return;
+  if (!employee) return NULL;
 
-  ew = gnc_employee_new_window (parent, gncEmployeeGetBusiness(employee), employee);
+  ew = gnc_employee_new_window (gncEmployeeGetBook(employee), employee);
 
-  gtk_signal_connect (GTK_OBJECT (ew->dialog), "close",
-		      GTK_SIGNAL_FUNC (gnc_employee_on_close_cb),
-		      NULL);
+  return ew;
+}
 
-  gtk_window_set_modal (GTK_WINDOW (ew->dialog), TRUE);
+/* Functions for employee selection widgets */
 
-  gtk_main ();
+static void
+edit_employee_cb (gpointer *employee_p, gpointer user_data)
+{
+  GncEmployee *employee;
 
+  g_return_if_fail (employee_p && user_data);
+
+  employee = *employee_p;
+
+  if (!employee)
+    return;
+
+  gnc_ui_employee_edit (employee);
   return;
 }
 
-/* Functions for widgets for employee selection */
-
-static gpointer gnc_employee_edit_new_cb (gpointer arg, GtkWidget *toplevel)
+static gpointer
+new_employee_cb (gpointer user_data)
 {
-  struct _employee_select_window *sw = arg;
+  struct _employee_select_window *sw = user_data;
+  EmployeeWindow *ew;
+  
+  g_return_val_if_fail (user_data, NULL);
 
-  if (!arg) return NULL;
-
-  return gnc_employee_new (toplevel, sw->business);
+  ew = gnc_ui_employee_new (sw->book);
+  return ew_get_employee (ew);
 }
 
-static void gnc_employee_edit_edit_cb (gpointer arg, gpointer obj, GtkWidget *toplevel)
+static void
+free_employee_cb (gpointer user_data)
 {
-  GncEmployee *employee = obj;
-  struct _employee_select_window *sw = arg;
+  struct _employee_select_window *sw = user_data;
 
-  if (!arg || !obj) return;
+  g_return_if_fail (sw);
 
-  gnc_employee_edit (toplevel, employee);
+  gncQueryDestroy (sw->q);
+  g_free (sw);
 }
 
-gpointer gnc_employee_edit_new_select (gpointer bus, gpointer employee,
+GNCSearchWindow *
+gnc_employee_search (GncEmployee *start, GNCBook *book)
+{
+  GNCIdType type = GNC_EMPLOYEE_MODULE_NAME;
+  struct _employee_select_window *sw;
+  QueryNew *q, *q2 = NULL;
+  static GList *params = NULL;
+  static GList *columns = NULL;
+  static GNCSearchCallbackButton buttons[] = { 
+    { N_("View/Edit Employee"), edit_employee_cb},
+    { NULL },
+  };
+
+  g_return_val_if_fail (book, NULL);
+
+  /* Build parameter list in reverse order*/
+  if (params == NULL) {
+    params = gnc_search_param_prepend (params, _("Employee ID"), NULL, type,
+				       EMPLOYEE_ID, NULL);
+    params = gnc_search_param_prepend (params, _("Employee Name"), NULL,
+				       type, EMPLOYEE_ADDR, ADDRESS_NAME, NULL);
+    params = gnc_search_param_prepend (params, _("Employee Username"), NULL,
+				       type, EMPLOYEE_USERNAME, NULL);
+  }
+
+  /* Build the column list in reverse order */
+  if (columns == NULL) {
+    columns = gnc_search_param_prepend (columns, _("Name"), NULL, type,
+					EMPLOYEE_ADDR, ADDRESS_NAME, NULL);
+    columns = gnc_search_param_prepend (columns, _("Username"), NULL, type,
+					EMPLOYEE_USERNAME, NULL);
+    columns = gnc_search_param_prepend (columns, _("ID #"), NULL, type,
+					EMPLOYEE_ID, NULL);
+  }
+
+  /* Build the queries */
+  q = gncQueryCreateFor (type);
+  gncQuerySetBook (q, book);
+
+#if 0
+  if (start) {
+    q2 = gncQueryCopy (q);
+    gncQueryAddGUIDMatch (q2, g_slist_prepend (NULL, QUERY_PARAM_GUID),
+			  gncEmployeeGetGUID (start), QUERY_AND);
+  }
+#endif
+
+  /* launch select dialog and return the result */
+  sw = g_new0 (struct _employee_select_window, 1);
+  sw->book = book;
+  sw->q = q;
+
+  return gnc_search_dialog_create (type, params, columns, q, q2,
+				   buttons, NULL, new_employee_cb,
+				   sw, free_employee_cb);
+}
+
+gpointer gnc_employee_edit_new_select (gpointer bookp, gpointer employee,
 				       GtkWidget *toplevel)
 {
-  GncBusiness *business = bus;
-  struct _employee_select_window sw;
-
-  g_return_val_if_fail (bus != NULL, NULL);
-
-  sw.business = business;
-
-  return
-    gnc_ui_business_chooser_new (toplevel, employee,
-				 business, GNC_EMPLOYEE_MODULE_NAME,
-				 gnc_employee_edit_new_cb,
-				 gnc_employee_edit_edit_cb, &sw);
+  gnc_employee_search (employee, bookp); /* XXX */
+  return employee;
 }
 
-gpointer gnc_employee_edit_new_edit (gpointer bus, gpointer v,
+gpointer gnc_employee_edit_new_edit (gpointer bookp, gpointer v,
 				     GtkWidget *toplevel)
 {
-  GncBusiness *busiess = bus;
   GncEmployee *employee = v;
 
   g_return_val_if_fail (employee != NULL, NULL);
 
-  gnc_employee_edit (toplevel, employee);
+  gnc_ui_employee_edit (employee);
   return employee;
 }

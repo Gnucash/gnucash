@@ -63,7 +63,7 @@ struct _GNCMainWinAccountTreeClass
 guint          gnc_mainwin_account_tree_get_type(void);
 GtkWidget*     gnc_mainwin_account_tree_new(void);
 
-void 
+GtkWidget* 
 gnc_mainwin_account_tree_attach_popup(GNCMainWinAccountTree *tree,
                                       GnomeUIInfo *popup_info,
                                       gpointer user_data);

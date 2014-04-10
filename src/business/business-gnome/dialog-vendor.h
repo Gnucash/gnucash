@@ -8,20 +8,25 @@
 #ifndef GNC_DIALOG_VENDOR_H_
 #define GNC_DIALOG_VENDOR_H_
 
-/* Functions to create and edit vendors */
-GncVendor * gnc_vendor_new (GtkWidget *parent, GncBusiness *bus);
-void gnc_vendor_edit (GtkWidget *parent, GncVendor *vendor);
+typedef struct _vendor_window VendorWindow;
 
-/* Callbacks to select a vendor that match the necessary functions
- * for use with the gnc_general_select widget.
+#include "gncVendor.h"
+#include "dialog-search.h"
+
+/* Create or Edit Vendors */
+VendorWindow * gnc_ui_vendor_edit (GncVendor *vendor);
+VendorWindow * gnc_ui_vendor_new (GNCBook *book);
+
+/* Search for vendors */
+GNCSearchWindow * gnc_vendor_search (GncVendor *start, GNCBook *book);
+
+/*
+ * These callbacks are for use with the gnc_general_search widget
  *
- * new_select provides a selection and the ability to create and edit
- *	vendors.
- * new_edit provides only the ability to edit the current selection
+ * select() provides a Select Dialog and returns it.
+ * edit() opens the existing vendor for editing and returns NULL.
  */
-gpointer        gnc_vendor_edit_new_select (gpointer bus, gpointer c,
-					      GtkWidget *toplevel);
-gpointer	gnc_vendor_edit_new_edit (gpointer bus, gpointer vendor,
-					    GtkWidget *toplevel);
+GNCSearchWindow * gnc_vendor_search_select (gpointer start, gpointer book);
+GNCSearchWindow * gnc_vendor_search_edit (gpointer start, gpointer book);
 
 #endif /* GNC_DIALOG_VENDOR_H_ */

@@ -61,6 +61,7 @@
     (lambda () (cons 'relative 'start-cal-year))
      #f 'both 
      '(
+       today
        start-this-month 
        start-prev-month 
        start-current-quarter
@@ -139,7 +140,7 @@
 (define (gnc:options-add-account-selection! 
 	 options pagename 
 	 name-display-depth name-show-subaccounts name-accounts
-	 sort-tag default-depth default-accounts)
+	 sort-tag default-depth default-accounts default-show-subaccounts)
   (gnc:options-add-account-levels!
    options pagename name-display-depth 
    (string-append sort-tag "a")
@@ -152,7 +153,7 @@
     pagename name-show-subaccounts
     (string-append sort-tag "b")
     (N_ "Override account-selection and show sub-accounts of all selected accounts?") 
-    #t))
+    default-show-subaccounts))
 
   ;; Semantics of the account selection, as used in the
   ;; gnc:html-build-acct-table: An account shows up if ( the
@@ -197,7 +198,7 @@
     pagename name-report-currency
     sort-tag 
     (N_ "Select the currency to display the values of this report in.")
-    (gnc:locale-default-iso-currency-code))))
+    (gnc:default-report-currency))))
 
 ;; These are common options for the selection of the report's
 ;; currency/commodity.
@@ -271,4 +272,19 @@
      (vector 'asterisk "asterisk" "asterisk")
      (vector 'filledcircle "filled circle" "filled circle")
      (vector 'filledsquare "filled square" "filled square")))))
+
+
+(define (gnc:options-add-sort-method!
+	 options pagename optname sort-tag default)
+  (gnc:register-option
+   options
+   (gnc:make-multichoice-option
+    pagename optname 
+    sort-tag
+    (N_ "Choose the method for sorting accounts.")
+    default
+    (list
+     (vector 'acct-code "Account Code" "Alphabetical by account code")
+     (vector 'alphabetical "Alphabetical" "Alphabetical by account name")
+     (vector 'amount "Amount" "By amount, largest to smallest")))))
 

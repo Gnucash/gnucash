@@ -1,9 +1,8 @@
 
 (define-module (gnucash app-utils))
 (use-modules (g-wrapped gw-app-utils))
-(use-modules (g-wrapped gw-runtime))
 (use-modules (srfi srfi-1))
-(use-modules (gnucash bootstrap) (g-wrapped gw-gnc)) ;; FIXME: delete after we finish modularizing.
+(use-modules (gnucash main) (g-wrapped gw-gnc)) ;; FIXME: delete after we finish modularizing.
 (use-modules (gnucash gnc-module))
 
 (gnc:module-load "gnucash/engine" 0)
@@ -26,6 +25,8 @@
 (export gnc:option-setter)
 (export gnc:option-default-getter)
 (export gnc:option-generate-restore-form)
+(export gnc:option-scm->kvp)
+(export gnc:option-kvp->scm)
 (export gnc:option-value-validator)
 (export gnc:option-data)
 (export gnc:option-data-fns)
@@ -60,9 +61,14 @@
 (export gnc:date-option-absolute-time)
 (export gnc:date-option-relative-time)
 (export gnc:make-account-list-option)
+(export gnc:make-account-list-limited-option)
+(export gnc:make-account-sel-option)
+(export gnc:make-account-sel-limited-option)
 (export gnc:multichoice-list-lookup)
 (export gnc:make-multichoice-option)
 (export gnc:make-multichoice-callback-option)
+(export gnc:make-radiobutton-option)
+(export gnc:make-radiobutton-callback-option)
 (export gnc:make-list-option)
 
 (export gnc:make-number-range-option)
@@ -83,6 +89,8 @@
 (export gnc:options-for-each-general)
 (export gnc:lookup-option)
 (export gnc:generate-restore-forms)
+(export gnc:options-scm->kvp)
+(export gnc:options-kvp->scm)
 (export gnc:options-clear-changes)
 (export gnc:options-touch)
 (export gnc:options-run-callbacks)
@@ -213,7 +221,7 @@
 (export gnc:reldate-initialize)
 
 ;; hooks 
-(export gnc:hook-export)
+(export gnc:hook-define)
 (export gnc:hook-danglers-get)
 (export gnc:hook-danglers-set!)
 (export gnc:hook-danglers->list)
@@ -227,10 +235,12 @@
 (export gnc:*startup-hook*)
 (export gnc:*shutdown-hook*)
 (export gnc:*ui-startup-hook*)
+(export gnc:*ui-post-startup-hook*)
 (export gnc:*ui-shutdown-hook*)
 (export gnc:*book-opened-hook*)
 (export gnc:*new-book-hook*)
 (export gnc:*book-closed-hook*)
+(export gnc:*report-hook*)
 
 ;; simple-obj
 (export make-simple-class)
@@ -241,21 +251,22 @@
 (export simple-obj-from-list)
 (export make-simple-obj)
 
-;; utilities
-(export hash-fold)
-(export item-list->hash!)
-(export string-split)
-(export string-join)
-(export gnc:backtrace-if-exception)
+;; kvp-option-registry
+(export gnc:register-kvp-option-generator)
+(export gnc:unregister-kvp-option-generator)
+(export gnc:make-kvp-options)
+(export gnc:*kvp-option-path*)
 
 (load-from-path "c-interface.scm")
 (load-from-path "config-var.scm")
 (load-from-path "options.scm")
+(load-from-path "kvp-option-registry.scm")
 (load-from-path "hooks.scm")
 (load-from-path "prefs.scm")
 (load-from-path "date-utilities.scm")
 (load-from-path "simple-obj.scm")
-(load-from-path "utilities.scm")
+
+
 
 (gnc:hook-add-dangler gnc:*startup-hook*
                       (lambda ()
@@ -264,7 +275,7 @@
                           ;; Must come after the scheme options are loaded.
                           (gnc:c-options-init)
 
-                          ;; Initialize the expresion parser.
+                          ;; Initialize the expression parser.
                           ;; Must come after the C side options initialization.
                           (gnc:exp-parser-init))))
 

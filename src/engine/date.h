@@ -43,7 +43,8 @@ typedef enum
   DATE_FORMAT_UK,       /* Britain: dd/mm/yyyy */
   DATE_FORMAT_CE,       /* Continental Europe: dd.mm.yyyy */
   DATE_FORMAT_ISO,      /* ISO: yyyy-mm-dd */
-  DATE_FORMAT_LOCALE    /* Take from locale information */
+  DATE_FORMAT_LOCALE,    /* Take from locale information */
+  DATE_FORMAT_CUSTOM    /* Used by the check printing code */
 } DateFormat;
 
 #define DATE_FORMAT_FIRST DATE_FORMAT_US
@@ -102,7 +103,26 @@ Timespec timespec_abs(const Timespec *t);
 
 Timespec timespecCanonicalDayTime(Timespec t);
 
+/*
+ * Get the numerical last date of the month. (28, 29, 30, 31)
+ */
+int date_get_last_mday(struct tm *tm);
+
+/*
+ * Is the mday field the last day of the specified month.
+ */
+gboolean date_is_last_mday(struct tm *tm);
+
+/*
+ * Add a number of months to a time value and normalize.  Optionally
+ * also track the last day of hte month, i.e. 1/31 -> 2/28 -> 3/30.
+ */
+void date_add_months (struct tm *tm, int months, gboolean track_last_day);
+
+DateFormat getDateFormat(void);
 void setDateFormat(DateFormat df);
+const gchar *getDateFormatString(DateFormat df);
+const gchar *getDateTextFormatString(DateFormat df);
 
 /**
  * printDate
@@ -118,9 +138,12 @@ void setDateFormat(DateFormat df);
  * Return: nothing
  *
  * Globals: global dateFormat value
- */
+ **/
 void printDate (char * buff, int day, int month, int year);
+/** convenience: calls through to printDate. **/
 void printDateSecs (char * buff, time_t secs);
+/** Convenience; calls through to printDate. **/
+void printGDate( char *buf, GDate *gd );
 
 char * xaccPrintDateSecs (time_t secs);
 const char * gnc_print_date(Timespec ts);
@@ -129,6 +152,12 @@ const char * gnc_print_date(Timespec ts);
  * Turns a time_t into a Timespec
  **/
 void timespecFromTime_t( Timespec *ts, time_t t );
+
+/**
+ * Turns a Timespec into a time_t 
+ */
+time_t timespecToTime_t (Timespec ts);
+
 
 /**
  * scanDate
@@ -157,6 +186,10 @@ void scanDate (const char *buff, int *day, int *month, int *year);
  * Globals: global dateFormat value
  */
 char dateSeparator(void);
+
+int gnc_date_my_last_mday (int month, int year);
+int gnc_timespec_last_mday (Timespec ts);
+void gnc_timespec2dmy (Timespec ts, int *day, int *month, int *year);
 
 /*
  * hack alert XXX FIXME -- these date routines return incorrect

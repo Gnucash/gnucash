@@ -30,23 +30,29 @@
 #ifndef GNC_BOOK_P_H
 #define GNC_BOOK_P_H
 
-#include "BackendP.h"
+#include "Backend.h"
 #include "GNCIdP.h"
-#include "DateUtils.h"
-#include "TransLog.h"
 #include "gnc-book.h"
-#include "gnc-engine-util.h"
 #include "gnc-engine.h"
-#include "gnc-pricedb-p.h"
+#include "kvp_frame.h"
 
 struct gnc_book_struct
 {
+  /* Unique guid for this book. */
+  GUID guid;
+
+  /* The kvp_frame provides a place for top-level data associated 
+   * with this book. */
+  kvp_frame *kvp_data;
+  gboolean dirty;
+  
   /* The entity table associates the GUIDs of all the objects
-   * created in the session with their respective objects
-   * (pointer addresses) */
+   * belonging to this book, with their pointers to the respective
+   * objects.  This allows a lookup of objects based on thier guid.
+   */
   GNCEntityTable *entity_table;
 
-  /* Pointers to top-level data structures */
+  /* Pointers to top-level data structures. */
   AccountGroup *topgroup;
   GNCPriceDB *pricedb;
 
@@ -56,26 +62,55 @@ struct gnc_book_struct
 
   gnc_commodity_table *commodity_table;
 
+  /* In order to store arbitrary data, for extensibility, add a table
+   * that will be used to hold arbitrary pointers.
+   */
+  GHashTable *data_tables;
+
+  /* state flag: 'y' means 'open for editing', 
+   * 'n' means 'book is closed'  
+   */
+  char book_open;
+
+  /* version number, used for tracking multiuser updates */
+  gint32  version;
+
   /* To be technically correct, backends belong to sessions and
    * not books.  So the pointer below "really shouldn't be here", 
    * except that it provides a nice convenience, avoiding a lookup 
    * from the session.  Better solutions welcome ... */ 
   Backend *backend;
+
+  /* -------------------------------------------------------------- */
+  /* Backend private expansion data */
+  guint32  idata;     /* used by the sql backend for kvp management */
 };
 
-
+/*
+ * These gnc_book_set_*() routines are used by backends to 
+ *    initialize the pointers in the book structure to 
+ *    something that contains actual data.  These routines 
+ *    should not be used otherwise.  (Its somewhat questionable
+ *    if the backends should even be doing this much, but for
+ *    backwards compatibility, we leave these here.)
+ */
+void gnc_book_set_guid(GNCBook *book, GUID guid);
 void gnc_book_set_group(GNCBook *book, AccountGroup *grp);
 void gnc_book_set_pricedb(GNCBook *book, GNCPriceDB *db);
+void gnc_book_set_schedxactions( GNCBook *book, GList *newList );
+void gnc_book_set_template_group( GNCBook *book, AccountGroup *templateGroup );
 
 void gnc_book_set_backend (GNCBook *book, Backend *be);
 
 GNCEntityTable * gnc_book_get_entity_table (GNCBook *book);
 
-/*
- * used by backends to mark the notsaved as FALSE just after 
- * loading.  Do not use otherwise!
+/* The gnc_book_mark_saved() routine marks the book as having been
+ *    saved (to a file, to a database). Used by backends to mark the 
+ *    notsaved flag as FALSE just after loading.  Do not use otherwise!
  */
-
 void gnc_book_mark_saved(GNCBook *book);
+
+/* Register books with the engine */
+gboolean gnc_book_register (void);
 
 #endif /* GNC_BOOK_P_H */

@@ -40,6 +40,7 @@
 
 /* static short module = MOD_ENGINE; */
 
+#if 0
 static const char * _numeric_error_strings[] = 
 {
   "No error",
@@ -48,6 +49,7 @@ static const char * _numeric_error_strings[] =
   "Argument denominators differ in GNC_DENOM_FIXED operation",
   "Remainder part in GNC_RND_NEVER operation"
 };
+#endif
 
 static gint64 gnc_numeric_lcd(gnc_numeric a, gnc_numeric b);
 
@@ -189,6 +191,7 @@ gnc_numeric
 gnc_numeric_add(gnc_numeric a, gnc_numeric b, 
                 gint64 denom, gint how) {
   gnc_numeric sum;
+  gint64 lcd;
   
   if(gnc_numeric_check(a) || gnc_numeric_check(b)) {
     return gnc_numeric_error(GNC_ERROR_ARG);
@@ -226,8 +229,12 @@ gnc_numeric_add(gnc_numeric a, gnc_numeric b,
     sum.denom = a.denom;
   }
   else {
-    sum.num   = a.num*b.denom + b.num*a.denom;
-    sum.denom = a.denom*b.denom;
+    /* ok, convert to the lcd and compute from there... */
+    lcd = gnc_numeric_lcd(a,b);
+    sum.num   = a.num*(lcd/a.denom) + b.num*(lcd/b.denom);
+    sum.denom = lcd;
+    //    sum.num = a.num*b.denom + b.num*a.denom;
+    //    sum.denom = a.denom*b.denom;
   }
   
   if((denom == GNC_DENOM_AUTO) &&
@@ -259,6 +266,7 @@ gnc_numeric
 gnc_numeric_sub(gnc_numeric a, gnc_numeric b, 
                 gint64 denom, gint how) {
   gnc_numeric diff;
+  gint64 lcd;
 
   if(gnc_numeric_check(a) || gnc_numeric_check(b)) {
     return gnc_numeric_error(GNC_ERROR_ARG);
@@ -296,8 +304,12 @@ gnc_numeric_sub(gnc_numeric a, gnc_numeric b,
     diff.denom = a.denom;
   }
   else {
-    diff.num   = a.num*b.denom - b.num*a.denom;
-    diff.denom = a.denom*b.denom;
+    /* ok, convert to the lcd and compute from there... */
+    lcd = gnc_numeric_lcd(a,b);
+    diff.num   = a.num*(lcd/a.denom) - b.num*(lcd/b.denom);
+    diff.denom = lcd;
+    //    diff.num   = a.num*b.denom - b.num*a.denom;
+    //    diff.denom = a.denom*b.denom;
   }
   
   if((denom == GNC_DENOM_AUTO) &&
@@ -385,6 +397,7 @@ gnc_numeric
 gnc_numeric_div(gnc_numeric a, gnc_numeric b, 
                 gint64 denom, gint how) {
   gnc_numeric quotient;
+  gint64 lcd;
 
   if(gnc_numeric_check(a) || gnc_numeric_check(b)) {
     return gnc_numeric_error(GNC_ERROR_ARG);
@@ -419,8 +432,12 @@ gnc_numeric_div(gnc_numeric a, gnc_numeric b,
     quotient.denom = b.num;
   }
   else {
-    quotient.num   = a.num*b.denom;
-    quotient.denom = a.denom*b.num;
+    /* ok, convert to the lcd and compute from there... */ 
+    lcd = gnc_numeric_lcd(a,b);
+    quotient.num   = a.num*(lcd/a.denom);
+    quotient.denom = b.num*(lcd/b.denom);
+    //    quotient.num   = a.num*b.denom;
+    //    quotient.denom = a.denom*b.num;
   }
   
   if(quotient.denom < 0) {
@@ -683,15 +700,22 @@ gnc_numeric_lcd(gnc_numeric a, gnc_numeric b) {
   
   max_square = small_denom;
   
-  /* the LCM algorithm : take the union of the prime factors of the
-   * two args and multiply them together. To do this, we find the
-   * successive prime factors of the smaller denominator and eliminate
-   * them from the larger denominator, then multiply the smaller by
-   * the remains of the larger. */
+  /* the LCM algorithm : factor out the union of the prime factors of the
+   * two args and then multiply the remainders together. 
+   *
+   * To do this, we find the successive prime factors of the smaller
+   * denominator and eliminate them from both the smaller and larger
+   * denominator (so we only count factors on a one-on-one basis),
+   * then multiply the original smaller by the remains of the larger.
+   *
+   * I.e. LCM 100,96875 == 2*2*5*5,31*5*5*5*5 = 2*2,31*5*5
+   *      answer: multiply 100 by 31*5*5 == 387500
+   */
   while(current_divisor * current_divisor <= max_square) {
     if(((small_denom % current_divisor) == 0) &&
        ((big_denom % current_divisor) == 0)) {
       big_denom = big_denom / current_divisor;
+      small_denom = small_denom / current_divisor;
     }
     else {
       if(current_divisor == 2) {
@@ -713,7 +737,8 @@ gnc_numeric_lcd(gnc_numeric a, gnc_numeric b) {
     }
   }
   
-  return small_denom * big_denom;
+  /* max_sqaure is the original small_denom */
+  return max_square * big_denom;
 
 }
   
@@ -725,6 +750,34 @@ gnc_numeric_lcd(gnc_numeric a, gnc_numeric b) {
  *  as the output denominator.
  ********************************************************************/
 
+#if 1
+gnc_numeric
+gnc_numeric_reduce(gnc_numeric in) {
+  gint64   t;
+  gint64   num = (in.num < 0) ? (- in.num) : in.num ;
+  gint64   denom = in.denom;
+  gnc_numeric out;
+
+  if(gnc_numeric_check(in)) {
+    return gnc_numeric_error(GNC_ERROR_ARG);
+  }
+
+  /* the strategy is to use euclid's algorithm */
+  while (denom > 0) {
+    t = num % denom;
+    num = denom;
+    denom = t;
+  }
+  /* num = gcd */
+
+  /* all calculations are done on positive num, since it's not 
+   * well defined what % does for negative values */
+  out.num   = in.num / num;
+  out.denom = in.denom / num;
+  return out;
+}
+
+#else
 gnc_numeric
 gnc_numeric_reduce(gnc_numeric in) {
 
@@ -798,6 +851,7 @@ gnc_numeric_reduce(gnc_numeric in) {
   out.denom = denom;
   return out;
 }
+#endif
 
 /********************************************************************
  *  double_to_gnc_numeric

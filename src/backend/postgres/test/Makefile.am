@@ -6,27 +6,30 @@ TESTS = \
 GNC_TEST_DEPS := \
   --gnc-module-dir ${top_builddir}/src/gnc-module \
   --gnc-module-dir ${top_builddir}/src/engine \
+  --guile-load-dir ${top_srcdir}/src/engine \
   --gnc-module-dir ${top_builddir}/src/backend/file \
   --gnc-module-dir ${top_builddir}/src/backend/postgres \
-  --guile-load-dir ${G_WRAP_MODULE_DIR}
+  --guile-load-dir ${G_WRAP_MODULE_DIR} \
+  --library-dir    ${G_WRAP_LIB_DIR}
 
 TESTS_ENVIRONMENT := \
+  TEST_DB_SOCKET_DIR=`pwd`/gnc_test_db_sock \
   $(shell ${top_srcdir}/src/gnc-test-env --no-exports ${GNC_TEST_DEPS})
 
 noinst_PROGRAMS = \
   test-db \
-  test-escape
+  test-escape \
+  test-period
 
-LDADD = ${top_srcdir}/src/test-core/libgncmod-test.la \
-        ${top_srcdir}/src/gnc-module/libgncmodule.la \
-        ${top_srcdir}/src/engine/libgncmod-engine.la \
-        ${top_srcdir}/src/engine/libgncmod-engine.la \
-        ${top_srcdir}/src/engine/libgw-engine.la \
-        ${top_srcdir}/src/engine/libgw-glib.la \
-        ${top_srcdir}/src/engine/libgw-kvp.la \
-        ${top_srcdir}/src/engine/test-core/libgncmod-test-engine.la \
-	${top_srcdir}/src/backend/postgres/libgncmod-backend-postgres.la \
-	${top_srcdir}/src/backend/file/libgncmod-backend-file.la \
+LDADD = ${top_builddir}/src/test-core/libgncmod-test.la \
+        ${top_builddir}/src/gnc-module/libgncmodule.la \
+        ${top_builddir}/src/engine/libgncmod-engine.la \
+        ${top_builddir}/src/engine/libgncmod-engine.la \
+        ${top_builddir}/src/engine/libgw-engine.la \
+        ${top_builddir}/src/engine/libgw-kvp.la \
+        ${top_builddir}/src/engine/test-core/libgncmod-test-engine.la \
+	${top_builddir}/src/backend/postgres/libgncmod-backend-postgres.la \
+	${top_builddir}/src/backend/file/libgncmod-backend-file.la \
         -lltdl
 
 AM_CFLAGS = \
@@ -35,8 +38,12 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/engine/test-core \
   -I.. \
-  ${GLIB_CFLAGS}
+  -I${srcdir}/.. \
+  ${PGSQL_CFLAGS} \
+  ${GLIB_CFLAGS} \
+  ${GUILE_INCS} 
 
 EXTRA_DIST = \
-  db-control.sh
-
+  test-load-module \
+  db-control.sh \
+  run-tests.sh

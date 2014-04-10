@@ -159,9 +159,7 @@ gnc_commodities_load_commodities (CommoditiesDialog *cd)
 {
   gnc_commodity_table *ct;
   GList *namespaces;
-  GList *node;
   int new_row;
-  guint size;
 
   ct = gnc_get_current_commodities ();
 
@@ -264,9 +262,9 @@ remove_clicked (GtkWidget *widget, gpointer data)
   else
   {
     const char *message = _("Are you sure you want to delete the\n"
-                            "current commodity?");
+                            "selected commodity?");
 
-    do_delete = gnc_verify_dialog_parented (cd->dialog, message, TRUE);
+    do_delete = gnc_verify_dialog_parented (cd->dialog, TRUE, message);
   }
 
   if (do_delete)
@@ -462,6 +460,18 @@ refresh_handler (GHashTable *changes, gpointer user_data)
   gnc_commodities_load_commodities (cd);
 }
 
+static gboolean
+show_handler (const char *class, gint component_id,
+	      gpointer user_data, gpointer iter_data)
+{
+  CommoditiesDialog *cd = user_data;
+
+  if (!cd)
+    return(FALSE);
+  gtk_window_present (GTK_WINDOW(cd->dialog));
+  return(TRUE);
+}
+
 /********************************************************************\
  * gnc_commodities_dialog                                           *
  *   opens up a window to edit price information                    *
@@ -474,6 +484,10 @@ gnc_commodities_dialog (GtkWidget * parent)
 {
   CommoditiesDialog *cd;
   gint component_id;
+
+  if (gnc_forall_gui_components (DIALOG_COMMODITIES_CM_CLASS,
+				 show_handler, NULL))
+      return;
 
   cd = g_new0 (CommoditiesDialog, 1);
 

@@ -7,18 +7,20 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define-module (gnucash import-export qif-import))
-(use-modules (gnucash bootstrap) (g-wrapped gw-gnc)) ;; FIXME: delete after we finish modularizing.
-(use-modules (g-wrapped gw-runtime))
+(use-modules (gnucash main) (g-wrapped gw-gnc)) ;; FIXME: delete after we finish modularizing.
+
 (use-modules (gnucash gnc-module))
 (use-modules (ice-9 slib))
 (use-modules (ice-9 regex))
 (use-modules (srfi srfi-1))
+(use-modules (g-wrap gw-wct))
 
 (debug-enable 'debug)
 (debug-enable 'backtrace)
 
 (gnc:module-load "gnucash/engine" 0)
 (gnc:module-load "gnucash/app-utils" 0)
+(gnc:module-load "gnucash/gnome-utils" 0)
 
 (load-from-path "qif-import/qif-objects.scm")      ;; class definitions 
 (load-from-path "qif-import/qif-parse.scm")        ;; string-to-value
@@ -48,6 +50,7 @@
 
 (export qif-file:read-file)
 (export qif-file:parse-fields)
+(export qif-file:parse-fields-results)
 (export qif-file:check-from-acct)
 (export qif-file:reparse-dates)
 (export qif-file:check-from-acct)

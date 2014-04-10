@@ -27,13 +27,14 @@
 ;; don't have to worry about that here.
 
 (define-module (gnucash report view-column))
-(use-modules (gnucash bootstrap) (g-wrapped gw-gnc)) ;; FIXME: delete after we finish modularizing.
+(use-modules (gnucash main)) ;; FIXME: delete after we finish modularizing.
 (use-modules (ice-9 slib))
 (use-modules (gnucash gnc-module))
 
 (require 'printf)
 
 (gnc:module-load "gnucash/report/report-system" 0)
+(gnc:module-load "gnucash/gnome-utils" 0) ;for gnc:html-build-url
 
 (define (make-options)
   (let* ((options (gnc:new-options))
@@ -53,9 +54,6 @@
       1 0 20 0 1))
     
     options))
-
-(define (edit-options option-obj report-obj)
-  (gnc:column-view-edit-options option-obj report-obj))
 
 (define (make-child-options-callback view child)
   (let* ((view-opts (gnc:report-options view))
@@ -156,11 +154,19 @@
 	  report-table 
 	  (list (gnc:make-html-text 
 		 (gnc:html-markup-anchor
-		  (sprintf #f "gnc-options:report-id=%a" (car report-info))
+		  (gnc:html-build-url 
+		   gnc:url-type-options
+		   (string-append "report-id=" 
+				  (sprintf #f "%a" (car report-info)))
+		   #f)
 		  (_ "Edit Options"))
 		 "&nbsp;"
 		 (gnc:html-markup-anchor
-		  (sprintf #f "gnc-report:id=%a" (car report-info))
+		  (gnc:html-build-url
+		   gnc:url-type-report
+		   (string-append "id=" 
+				  (sprintf #f "%a" (car report-info)))
+		   #f)
 		  (_ "Single Report")))))
 
 	 ;; add the report-table to the toplevel-cell
@@ -222,11 +228,9 @@
 (gnc:define-report 
  'version 1
  'name (N_ "Multicolumn View")
+ 'menu-name (N_ "Custom Multicolumn Report")
  'menu-path (list gnc:menuname-utility)
  'renderer render-view
  'options-generator make-options
- 'options-editor edit-options
  'options-cleanup-cb cleanup-options 
  'options-changed-cb options-changed-cb)
-
-

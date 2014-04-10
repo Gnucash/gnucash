@@ -248,7 +248,7 @@
                       
                     ((rtrncap rtrncapx)
                      (set! qif-account
-                           (default-capital-return-acct from-acct))
+                           (default-capital-return-acct from-acct stock-acct))
                      (set! qif-account-types (list GNC-INCOME-TYPE)))
 
                     ((shrsin shrsout)
@@ -725,7 +725,7 @@
 (define (qif-import:refresh-match-selection matches item)
   (if (> item -1)
       (let ((i 0))
-        (for-each-in-order 
+        (for-each
          (lambda (match)
            (if (= i item)
                (if (cdr match) 

@@ -15,42 +15,20 @@
 ;; 59 Temple Place - Suite 330        Fax:    +1-617-542-2652
 ;; Boston, MA  02111-1307,  USA       gnu@gnu.org
 
-(define (gnc:locale-prefixes)
-  (let* ((locale (setlocale LC_MESSAGES))
-         (strings (cond ((not (string? locale)) '())
-                        ((equal? locale "C") '())
-                        ((<= (string-length locale) 2) (list locale))
-                        (else (list (substring locale 0 2) locale)))))
-    (reverse (cons "C" strings))))
-
-(define (gnc:default-doc-dirs)
-  (let ((user-paths (list
-                     (list (getenv "HOME") ".gnucash" "html")))
-        (locale-paths (map (lambda (prefix)
-                             (list gnc:_help-dir-default_ prefix))
-                           (gnc:locale-prefixes)))
-        (base-paths (list
-                     (list gnc:_help-dir-default_))))
-    (map (lambda (paths) (apply build-path paths))
-         (append user-paths locale-paths base-paths))))
-
-(define (gnc:_expand-doc-path_ new-path)
-  (gnc:debug "expanding doc-path value " new-path)
-  (let ((path-interpret
-         (lambda (item)
-           (cond ((string? item) (list item))
-                 ((symbol? item)
-                  (case item
-                    ((default) (gnc:default-doc-dirs))
-                    ((current)
-                     (gnc:config-var-value-get gnc:*doc-path*))
-                    (else
-                     (gnc:warn "bad item " item " in doc-path. Ignoring.")
-                     '())))
-                 (else 
-                  (gnc:warn "bad item " item " in doc-path. Ignoring.")
-                  '())))))
-    (apply append (map path-interpret new-path))))
+(define (gnc:expand-path new-list current-list default-generator)
+  (define (expand-path-item item)
+    (cond ((string? item) (list item))
+          ((symbol? item)
+           (case item
+             ((default) (default-generator))
+             ((current) current-list)
+             (else
+              (gnc:warn "bad symbol " item " in gnc path. Ignoring.")
+              '())))
+          (else 
+           (gnc:warn "bad item " item " in gnc path. Ignoring.")
+           '())))
+  (apply append (map expand-path-item new-list)))
 
 (define (gnc:make-dir dir)
   (if (access? dir X_OK)
@@ -62,7 +40,7 @@
     (gnc:make-dir home-dir)))
 
 (define gnc:current-config-auto
-  (build-path (getenv "HOME") ".gnucash" "config-1.6.auto"))
+  (build-path (getenv "HOME") ".gnucash" "config-1.8.auto"))
 
 (define gnc:load-user-config-if-needed
   (let ((user-config-loaded? #f))
@@ -84,8 +62,11 @@
           (begin
             (gnc:debug "loading user configuration")
             (or-map try-load
-                    '("config-1.6.user" "config.user"
-                      "config-1.6.auto" "config.auto")))))))
+		    ;; Don't continue adding to this list. When 2.0
+		    ;; rolls around bump the 1.4 (unnumbered) files
+		    ;; off the list.
+                    '("config-1.8.user" "config-1.6.user" "config.user"
+                      "config-1.8.auto" "config-1.6.auto" "config.auto")))))))
 
 ;; the system config should probably be loaded from some directory
 ;; that wouldn't be a site wide mounted directory, like /usr/share
@@ -98,10 +79,9 @@
           (begin
             (gnc:debug "loading system configuration")
             
-            (let ((system-config (build-path
-                                  (gnc:config-var-value-get gnc:*config-dir*)
-                                  "config")))
-              
+            (let ((system-config (gnc:find-file
+                                  "config"
+                                  (gnc:config-var-value-get gnc:*config-path*))))
               (if (false-if-exception (primitive-load system-config))
                   (set! system-config-loaded? #t)        
                   (begin

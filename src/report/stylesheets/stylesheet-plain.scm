@@ -23,7 +23,7 @@
 
 (define-module (gnucash report stylesheet-plain))
 
-(use-modules (gnucash bootstrap) (g-wrapped gw-gnc)) ;; FIXME: delete after we finish modularizing.
+(use-modules (gnucash main)) ;; FIXME: delete after we finish modularizing.
 (use-modules (gnucash gnc-module))
 
 (gnc:module-load "gnucash/report/report-system" 0)
@@ -105,7 +105,8 @@
     (gnc:html-document-set-style!
      ssdoc "number-cell"
      'tag "td"
-     'attribute (list "align" "right"))
+     'attribute (list "align" "right")
+     'attribute (list "nowrap"))
 
     (gnc:html-document-set-style!
      ssdoc "number-header"
@@ -126,6 +127,11 @@
      ssdoc "total-label-cell"
      'tag '("td" "b")
      'attribute (list "align" "left"))
+    
+    (gnc:html-document-set-style!
+     ssdoc "centered-label-cell"
+     'tag '("td" "b")
+     'attribute (list "align" "center"))
     
     (gnc:html-document-set-style!
      ssdoc "normal-row"

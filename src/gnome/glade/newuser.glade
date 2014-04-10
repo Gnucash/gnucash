@@ -19,7 +19,7 @@
 <widget>
   <class>GnomeDialog</class>
   <name>New User Dialog</name>
-  <title>Welcome to GnuCash 1.6!</title>
+  <title>Welcome to GnuCash!</title>
   <type>GTK_WINDOW_TOPLEVEL</type>
   <position>GTK_WIN_POS_NONE</position>
   <modal>False</modal>

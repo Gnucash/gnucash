@@ -24,11 +24,11 @@
 
 #include "config.h"
 
+#include <sys/types.h>
 #include <ctype.h>
 #include <dirent.h>
 #include <string.h>
 #include <sys/stat.h>
-#include <sys/types.h>
 #include <unistd.h>
 
 #include <glib.h>
@@ -48,10 +48,14 @@
 #include "Scrub.h"
 #include "TransLog.h"
 
+static short module = MOD_IO;
+
 #define GNC_ACCOUNT_STRING "gnc-account-example"
 #define GNC_ACCOUNT_SHORT "gnc-act:short-description"
 #define GNC_ACCOUNT_LONG "gnc-act:long-description"
 #define GNC_ACCOUNT_TITLE "gnc-act:title"
+#define GNC_ACCOUNT_EXCLUDEP "gnc-act:exclude-from-select-all"
+#define GNC_ACCOUNT_SELECTED "gnc-act:start-selected"
 
 void
 gnc_destroy_example_account(GncExampleAccount *gea)
@@ -68,10 +72,8 @@ gnc_destroy_example_account(GncExampleAccount *gea)
     }
     if(gea->group != NULL)
     {
-        /* mark the accounts as being freed
-         * to avoid tons of balance recomputations. */
-        xaccGroupMarkDoFree (gea->group);
-        xaccFreeAccountGroup(gea->group);
+        xaccAccountGroupBeginEdit (gea->group);
+        xaccAccountGroupDestroy(gea->group);
         gea->group = NULL;
     }
     if(gea->short_description != NULL)
@@ -117,7 +119,7 @@ clear_up_account_commodity_session(
     }
     else if(!gcom)
     {
-        g_warning("unable to find global commodity for %s adding new",
+        PWARN("unable to find global commodity for %s adding new",
                   gnc_commodity_get_unique_name(com));
         gnc_commodity_table_insert(tbl, com);
     }
@@ -154,7 +156,7 @@ clear_up_account_commodity(
     }
     else if(!gcom)
     {
-        g_warning("unable to find global commodity for %s adding new",
+        PWARN("unable to find global commodity for %s adding new",
                   gnc_commodity_get_unique_name(com));
         gnc_commodity_table_insert(tbl, com);
     }
@@ -271,6 +273,50 @@ gnc_long_descrip_sixtp_parser_create(void)
 }
 
 static gboolean
+gnc_excludep_end_handler(gpointer data_for_children,
+                             GSList* data_from_children, GSList* sibling_data,
+                             gpointer parent_data, gpointer global_data,
+                             gpointer *result, const gchar *tag)
+{
+    GncExampleAccount *gea =
+    (GncExampleAccount*)((gxpf_data*)global_data)->parsedata;
+    gint64 val = 0;
+
+    dom_tree_to_integer ((xmlNodePtr)data_for_children, &val);
+    gea->exclude_from_select_all = (val ? TRUE : FALSE);
+    
+    return TRUE;
+}
+
+static sixtp*
+gnc_excludep_sixtp_parser_create(void)
+{
+    return sixtp_dom_parser_new(gnc_excludep_end_handler, NULL, NULL);
+}
+
+static gboolean
+gnc_selected_end_handler(gpointer data_for_children,
+                             GSList* data_from_children, GSList* sibling_data,
+                             gpointer parent_data, gpointer global_data,
+                             gpointer *result, const gchar *tag)
+{
+    GncExampleAccount *gea =
+    (GncExampleAccount*)((gxpf_data*)global_data)->parsedata;
+    gint64 val = 0;
+
+    dom_tree_to_integer ((xmlNodePtr)data_for_children, &val);
+    gea->start_selected = (val ? TRUE : FALSE);
+    
+    return TRUE;
+}
+
+static sixtp*
+gnc_selected_sixtp_parser_create(void)
+{
+    return sixtp_dom_parser_new(gnc_selected_end_handler, NULL, NULL);
+}
+
+static gboolean
 gnc_title_end_handler(gpointer data_for_children,
                              GSList* data_from_children, GSList* sibling_data,
                              gpointer parent_data, gpointer global_data,
@@ -322,6 +368,8 @@ gnc_read_example_account(GNCBook *book, const gchar *filename)
            GNC_ACCOUNT_TITLE, gnc_titse_sixtp_parser_create(),
            GNC_ACCOUNT_SHORT, gnc_short_descrip_sixtp_parser_create(),
            GNC_ACCOUNT_LONG, gnc_long_descrip_sixtp_parser_create(),
+	   GNC_ACCOUNT_EXCLUDEP, gnc_excludep_sixtp_parser_create(),
+	   GNC_ACCOUNT_SELECTED, gnc_selected_sixtp_parser_create(),
            "gnc:account", gnc_account_sixtp_parser_create(),
            NULL, NULL))
     {
@@ -355,12 +403,29 @@ write_string_part(FILE *out, const char *tag, const char *data)
     xmlFreeNode(node);
 }
 
+static void
+write_bool_part(FILE *out, const char *tag, gboolean data)
+{
+    xmlNodePtr node;
+
+    node = int_to_dom_tree(tag, data);
+
+    xmlElemDump(out, NULL, node);
+    fprintf(out, "\n");
+
+    xmlFreeNode(node);
+}
+
 gboolean
 gnc_write_example_account(GncExampleAccount *gea, const gchar *filename)
 {
     FILE *out;
 
     out = fopen(filename, "w");
+    if (out == NULL)
+    {
+        return FALSE;
+    }
 
     fprintf(out, "<?xml version=\"1.0\"?>\n");
     fprintf(out, "<" GNC_ACCOUNT_STRING ">\n");
@@ -371,7 +436,9 @@ gnc_write_example_account(GncExampleAccount *gea, const gchar *filename)
 
     write_string_part(out, GNC_ACCOUNT_LONG, gea->long_description);
     
-    write_account_group(out, gea->group);
+    write_bool_part(out, GNC_ACCOUNT_EXCLUDEP, gea->exclude_from_select_all);
+
+    write_account_group(out, gea->group, NULL);
 
     fprintf(out, "</" GNC_ACCOUNT_STRING ">\n\n");
     
@@ -394,7 +461,7 @@ slist_destroy_example_account(gpointer data, gpointer user_data)
     }
     else
     {
-        g_warning("GncExampleAccount pointer in slist was NULL");
+        PWARN("GncExampleAccount pointer in slist was NULL");
     }
 }
 

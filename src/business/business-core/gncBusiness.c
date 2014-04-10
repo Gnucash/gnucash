@@ -1,188 +1,104 @@
 /*
- * gncBusiness.c -- the Core Business Object Registry
- * Copyright (C) 2001 Derek Atkins
+ * gncBusiness.c -- Business helper functions 
+ * Copyright (C) 2002 Derek Atkins
  * Author: Derek Atkins <warlord@MIT.EDU>
  */
 
 #include "config.h"
 
 #include <glib.h>
-#include <string.h>
-
-#include "messages.h"
 
 #include "gncBusiness.h"
-#include "gncBusinessP.h"
+#include "gnc-book-p.h"
 
-static gboolean business_is_initialized = FALSE;
-static GList *business_modules = NULL;
-
-struct _gncBusiness {
-  GHashTable *	objects;
-  GNCBook *	book;
+struct _iterate {
+  foreachObjectCB cb;
+  gpointer user_data;
 };
 
-GncBusiness *gncBusinessCreate (GNCBook *book)
+static void get_list (gpointer key, gpointer item, gpointer arg)
 {
-  GncBusiness *bus;
-  GList *iter;
-
-  if (!book) return NULL;
-
-  bus = g_new0 (GncBusiness, 1);
-  bus->objects = g_hash_table_new (g_str_hash, g_str_equal);
-  bus->book = book;
-
-  /* Populate the objects hash table with hash tables for
-   * each of the business objects.
-   */
-  for (iter = business_modules; iter; iter = iter->next) {
-    const GncBusinessObject *obj = iter->data;
-    g_hash_table_insert (bus->objects, (gpointer)obj->name,
-			 guid_hash_table_new ());
-  }
-
-  return bus;
+  struct _iterate *iter = arg;
+  iter->cb (item, iter->user_data);
 }
 
-void gncBusinessDestroy (GncBusiness *bus)
+void gncBusinessForeach (GNCBook *book, GNCIdType mod_name,
+			 foreachObjectCB cb, gpointer user_data)
 {
-  if (!bus) return;
+  GncBookInfo *bi;
+  struct _iterate iter;
 
-  /* XXX: destroy the objects under us... */
-  g_hash_table_destroy (bus->objects);
-  g_free (bus);
+  if (!book || !cb) return;
+
+  iter.cb = cb;
+  iter.user_data = user_data;
+
+  bi = gnc_book_get_data (book, mod_name);
+  if (bi && bi->ht)
+    g_hash_table_foreach (bi->ht, get_list, &iter);
 }
 
-GNCBook * gncBusinessGetBook (const GncBusiness *bus)
+void gncBusinessCreate (GNCBook *book, GNCIdType mod_name)
 {
-  if (!bus) return NULL;
+  GncBookInfo *bi;
 
-  return bus->book;
+  if (!book) return;
+
+  bi = g_new0 (GncBookInfo, 1);
+  bi->ht = guid_hash_table_new ();
+  gnc_book_set_data (book, mod_name, bi);
 }
 
-gpointer
-gncBusinessLookupGUID (GncBusiness *business, const char *type_name,
-		       const GUID * guid)
+void gncBusinessDestroy (GNCBook *book, GNCIdType mod_name)
 {
-  GHashTable *table;
+  GncBookInfo *bi;
 
-  if (!business || !type_name || !guid) return NULL;
+  if (!book) return;
 
-  table = gncBusinessEntityTable (business, type_name);
-  if (!table) return NULL;
+  bi = gnc_book_get_data (book, mod_name);
 
-  return g_hash_table_lookup (table, guid);
+  /* XXX : Destroy the objects? */
+  g_hash_table_destroy (bi->ht);
+  g_free (bi);
 }
 
-GList *
-gncBusinessGetList (GncBusiness *business, const char *type_name,
-		    gboolean show_all)
+gboolean gncBusinessIsDirty (GNCBook *book, GNCIdType mod_name)
 {
-  const GncBusinessObject *obj;
+  GncBookInfo *bi;
 
-  if (!business || !type_name) return NULL;
+  if (!book) return FALSE;
 
-  obj = gncBusinessLookup (type_name);
-  if (!obj) return NULL;
-
-  if (obj->get_list)
-    return ((*(obj->get_list))(business, show_all));
-
-  return NULL;	    
+  bi = gnc_book_get_data (book, mod_name);
+  return bi->is_dirty;
 }
 
-const char *
-gncBusinessPrintable (GncBusiness *business, const char *type_name,
-		      gpointer obj)
+void gncBusinessSetDirtyFlag (GNCBook *book, GNCIdType mod_name,
+			      gboolean is_dirty)
 {
-  const GncBusinessObject *b_obj;
+  GncBookInfo *bi;
 
-  if (!business || !type_name || !obj) return NULL;
+  if (!book) return;
 
-  b_obj = gncBusinessLookup (type_name);
-  if (!b_obj) return NULL;
-
-  if (b_obj->printable)
-    return ((*(b_obj->printable))(obj));
-
-  return NULL;	    
+  bi = gnc_book_get_data (book, mod_name);
+  bi->is_dirty = is_dirty;
 }
 
-const char * gncBusinessGetTypeLabel (const char *type_name)
+void gncBusinessAddObject (GNCBook *book, GNCIdType mod_name,
+			   gpointer obj, const GUID *guid)
 {
-  const GncBusinessObject *obj;
+  GncBookInfo *bi;
 
-  if (!type_name) return NULL;
-
-  obj = gncBusinessLookup (type_name);
-  if (!obj) return NULL;
-
-  return _(obj->type_label);
+  xaccStoreEntity (gnc_book_get_entity_table (book), obj, guid, mod_name);
+  bi = gnc_book_get_data (book, mod_name);
+  g_hash_table_insert (bi->ht, (gpointer)guid, obj);
 }
 
-/* INITIALIZATION and PRIVATE FUNCTIONS */
-
-void
-gncBusinessInitialize (int argc, char **argv)
-{
-  if (business_is_initialized) return;
-  business_is_initialized = TRUE;
-}
-
-/* Register new types of business objects.
- * Return TRUE if successful,
- * return FALSE if it fails, invalid arguments, or if the object
- * already exists
- */
-gboolean gncBusinessRegister (const GncBusinessObject *object)
-{
-  if (!object) return FALSE;
-  if (object->version != GNC_BUSINESS_VERSION) return FALSE;
-  if (!business_is_initialized) return FALSE;
-
-  if (g_list_index (business_modules, (gpointer)object) == -1)
-    business_modules = g_list_append (business_modules, (gpointer)object);
-  else
-    return FALSE;
-
-  return TRUE;
-}
-
-const GncBusinessObject * gncBusinessLookup (const char *name)
-{
-  GList *iter;
-  const GncBusinessObject *obj;
-
-  if (!name) return NULL;
-
-  for (iter = business_modules; iter; iter = iter->next) {
-    obj = iter->data;
-    if (!strcmp (obj->name, name))
-      return obj;
-  }
-  return NULL;
-}
-
-GHashTable * gncBusinessEntityTable (GncBusiness *bus, const char *name)
-{
-  if (!bus || !name) return NULL;
-  return (g_hash_table_lookup (bus->objects, name));
-}
-
-void gncBusinessAddEntity (GncBusiness *bus, const char *name,
-			   const GUID *guid, gpointer obj)
-{
-  GHashTable *ht = gncBusinessEntityTable (bus, name);
-  if (!ht || !obj || !guid) return;
-  g_hash_table_insert (ht, (gpointer)guid, obj);
-}
-
-void gncBusinessRemoveEntity (GncBusiness *bus, const char *name,
+void gncBusinessRemoveObject (GNCBook *book, GNCIdType mod_name,
 			      const GUID *guid)
 {
-  GHashTable *ht = gncBusinessEntityTable (bus, name);
-  if (!ht || !guid) return;
-  g_hash_table_remove (ht, guid);
-}
+  GncBookInfo *bi;
 
+  xaccRemoveEntity (gnc_book_get_entity_table (book), guid);
+  bi = gnc_book_get_data (book, mod_name);
+  g_hash_table_remove (bi->ht, guid);
+}

@@ -26,10 +26,14 @@
 #include "test-engine-stuff.h"
 #include "test-file-stuff.h"
 
+#include "AccountP.h"
 #include "Transaction.h"
+#include "TransactionP.h"
 #include "GNCIdP.h"
 
 static GNCBook *book;
+
+extern gboolean gnc_transaction_xml_v2_testing;
 
 static xmlNodePtr
 find_appropriate_node(xmlNodePtr node, Split *spl)
@@ -58,8 +62,9 @@ find_appropriate_node(xmlNodePtr node, Split *spl)
             else if(safe_strcmp(mark2->name, "split:account") == 0)
             {
                 GUID *accid = dom_tree_to_guid(mark2);
+                Account *account = xaccSplitGetAccount (spl);
 
-                if(guid_equal(accid, xaccSplitGetAccountGUID(spl)))
+                if(guid_equal(accid, xaccAccountGetGUID(account)))
                 {
                     account_guid_good = TRUE;
                 }
@@ -76,7 +81,7 @@ find_appropriate_node(xmlNodePtr node, Split *spl)
     return NULL;
 }
 
-static gboolean
+static char *
 equals_node_val_vs_split_internal(xmlNodePtr node, Split* spl)
 {
     xmlNodePtr mark;
@@ -89,9 +94,8 @@ equals_node_val_vs_split_internal(xmlNodePtr node, Split* spl)
 
             if(!guid_equal(id, xaccSplitGetGUID(spl)))
             {
-                printf("ids differ\n");
                 g_free(id);
-                return FALSE;
+                return "ids differ";
             }
             g_free(id);
         }
@@ -101,9 +105,8 @@ equals_node_val_vs_split_internal(xmlNodePtr node, Split* spl)
 
             if(safe_strcmp(memo, xaccSplitGetMemo(spl)) != 0)
             {
-                printf("memos differ\n");
                 g_free(memo);
-                return FALSE;
+                return "memos differ";
             }
             g_free(memo);
         }
@@ -113,57 +116,66 @@ equals_node_val_vs_split_internal(xmlNodePtr node, Split* spl)
 
             if(rs[0] != xaccSplitGetReconcile(spl))
             {
-                printf("states differ\n");
                 g_free(rs);
-                return FALSE;
+                return "states differ";
             }
             g_free(rs);
         }
         else if(safe_strcmp(mark->name, "split:value") == 0)
         {
             gnc_numeric *num = dom_tree_to_gnc_numeric(mark);
+	    gnc_numeric val = xaccSplitGetValue(spl);
 
-            if(!gnc_numeric_equal(*num, xaccSplitGetValue(spl)))
+            if(!gnc_numeric_equal(*num, val))
             {
-                printf("values differ\n");
                 g_free(num);
-                return FALSE;
+                return g_strdup_printf ("values differ: %lld/%lld v %lld/%lld",
+					(*num).num, (*num).denom,
+					val.num, val.denom);
             }
             g_free(num);
         }
         else if(safe_strcmp(mark->name, "split:quantity") == 0)
         {
             gnc_numeric *num = dom_tree_to_gnc_numeric(mark);
+	    gnc_numeric val = xaccSplitGetAmount(spl);
 
-            if(!gnc_numeric_equal(*num, xaccSplitGetAmount(spl)))
+            if (!gnc_numeric_equal(*num, val)) {
+              return g_strdup_printf( "quantities differ under _equal: %lld/%lld v %lld/%lld",
+                                      (*num).num, (*num).denom,
+                                      val.num, val.denom );
+            }
+            if(!gnc_numeric_equal(*num, val))
             {
-                printf("quantities differ\n");
                 g_free(num);
-                return FALSE;
+                return g_strdup_printf ("quantities differ: %lld/%lld v %lld/%lld",
+					(*num).num, (*num).denom,
+					val.num, val.denom);
             }
             g_free(num);
         }
         else if(safe_strcmp(mark->name, "split:account") == 0)
         {
             GUID *id = dom_tree_to_guid(mark);
+            Account *account = xaccSplitGetAccount (spl);
 
-            if(!guid_equal(id, xaccSplitGetAccountGUID(spl)))
+            if(!guid_equal(id, xaccAccountGetGUID(account)))
             {
-                printf("accounts differ\n");
                 g_free(id);
-                return FALSE;
+                return "accounts differ";
             }
             g_free(id);
         }
     }
-    return TRUE;
+    return NULL;
 }
 
-static gboolean
+static char *
 equals_node_val_vs_splits(xmlNodePtr node, const Transaction *trn)
 {
     xmlNodePtr spl_node;
     Split *spl_mark;
+    char *msg;
     int i;
 
     g_return_val_if_fail(node, FALSE);
@@ -177,16 +189,17 @@ equals_node_val_vs_splits(xmlNodePtr node, const Transaction *trn)
 
         if(!spl_node)
         {
-            return FALSE;
+            return "no matching split found";
         }
 
-        if(!equals_node_val_vs_split_internal(spl_node, spl_mark))
+	msg = equals_node_val_vs_split_internal(spl_node, spl_mark);
+        if(msg != NULL)
         {
-            return FALSE;
+            return msg;
         }
     }
     
-    return TRUE;
+    return NULL;
 }
 
 static gchar*
@@ -222,7 +235,7 @@ node_and_transaction_equal(xmlNodePtr node, Transaction *trn)
         else if(safe_strcmp(mark->name, "trn:currency") == 0)
         {
             if(!equals_node_val_vs_commodity(
-                   mark, xaccTransGetCurrency(trn)))
+                   mark, xaccTransGetCurrency(trn), xaccTransGetBook(trn)))
             {
                 return g_strdup("currencies differ");
             }
@@ -264,9 +277,10 @@ node_and_transaction_equal(xmlNodePtr node, Transaction *trn)
         }
         else if(safe_strcmp(mark->name, "trn:splits") == 0)
         {
-            if(!equals_node_val_vs_splits(mark, trn))
+	    char *msg = equals_node_val_vs_splits (mark, trn);
+            if(msg != NULL)
             {
-                return "splits differ";
+	        return msg;
             }
         }
         else
@@ -305,10 +319,11 @@ test_add_transaction(const char *tag, gpointer globaldata, gpointer data)
     xaccTransSetCurrency (trans, gdata->com);
     xaccTransCommitEdit (trans);
 
-    do_test_args(xaccTransEqual(gdata->trn, trans, TRUE, TRUE),
-                 "gnc_transaction_sixtp_parser_create",
-                 __FILE__, __LINE__,
-                 "%d", gdata->value);
+    if (!do_test_args(xaccTransEqual(gdata->trn, trans, TRUE, TRUE),
+		      "gnc_transaction_sixtp_parser_create",
+		      __FILE__, __LINE__,
+		      "%d", gdata->value))
+      return FALSE;
 
     gdata->new_trn = trans;
 
@@ -320,17 +335,33 @@ test_transaction(void)
 {
     int i;
 
-    for(i = 0; i < 20; i++)
+    for(i = 0; i < 50; i++)
     {
         Transaction *ran_trn;
         xmlNodePtr test_node;
         gnc_commodity *com;
         gchar *compare_msg;
         gchar *filename1;
-        FILE *cmp_file;
         int fd;
 
         ran_trn = get_random_transaction(book);
+
+        {
+	  /* xaccAccountInsertSplit can reorder the splits. */
+          GList * list = g_list_copy(xaccTransGetSplitList (ran_trn));
+          GList * node = list;
+          for ( ; node; node = node->next)
+          {
+            Split * s = node->data;
+            Account * a = xaccMallocAccount(book);
+
+            xaccAccountBeginEdit (a);
+            xaccAccountSetCommoditySCU (a, xaccSplitGetAmount (s).denom);
+            xaccAccountInsertSplit (a, s);
+            xaccAccountCommitEdit (a);
+          }
+	  g_list_free(list);
+        }
 
         com = xaccTransGetCurrency (ran_trn);
 
@@ -370,13 +401,28 @@ test_transaction(void)
         close(fd);
         
         {
+          GList * node = xaccTransGetSplitList (ran_trn);
+          for ( ; node; node = node->next)
+          {
+            Split * s = node->data;
+            Account * a1 = xaccSplitGetAccount(s);
+            Account * a2 = xaccMallocAccount(book);
+
+            xaccAccountBeginEdit (a2);
+            xaccAccountSetCommoditySCU (a2, xaccAccountGetCommoditySCU (a1));
+            xaccAccountSetGUID (a2, xaccAccountGetGUID (a1));
+            xaccAccountCommitEdit (a2);
+          }
+        }
+
+        {
             sixtp *parser;
             tran_data data;
 
             data.trn = ran_trn;
             data.com = com;
             data.value = i;
-            
+
             parser = gnc_transaction_sixtp_parser_create();
             
             if(!gnc_xml_parse_file(parser, filename1, test_add_transaction,
@@ -419,6 +465,8 @@ guile_main(int argc, char **argv)
     gnc_module_load("gnucash/engine", 0);
 
     xaccLogDisable();
+
+    gnc_transaction_xml_v2_testing = TRUE;
 
     book = gnc_book_new ();
 

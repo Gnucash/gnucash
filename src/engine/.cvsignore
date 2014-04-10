@@ -1,8 +1,10 @@
-Makefile
-Makefile.in
+*.lo
+*.la
 .deps
 .libs
 .scm-links
+Makefile
+Makefile.in
 gw-engine.scm
 gw-engine.c
 gw-engine.h
@@ -11,9 +13,8 @@ gw-glib.scm
 gw-glib.c
 gw-glib.h
 gw-glib.html
-*.lo
-*.la
 gw-kvp.scm
 gw-kvp.c
 gw-kvp.h
 gw-kvp.html
+iso-4217-currencies.c

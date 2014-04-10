@@ -14,6 +14,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define (qif-import:find-or-make-acct acct-info check-types? commodity
+				      check-commodity? default-currency
                                       gnc-acct-hash old-group new-group)
   (let* ((separator (string-ref (gnc:account-separator-char) 0))
          (gnc-name (qif-map-entry:gnc-name acct-info))
@@ -33,7 +34,9 @@
              (and (list? allowed-types)
                   (memv acc-type allowed-types))
              #t)
-         (gnc:commodity-equiv? acc-commodity commodity))))
+	 (if check-commodity?
+	     (gnc:commodity-equiv? acc-commodity commodity)
+	     #t))))
     
     (define (make-unique-name-variant long-name short-name)
       (if (gnc:get-account-from-full-name old-group long-name separator)
@@ -153,7 +156,7 @@
                  pinfo (qif-map-entry:allowed-parent-types acct-info))
                 
                 (set! parent-acct (qif-import:find-or-make-acct 
-                                   pinfo #t commodity
+                                   pinfo #t default-currency #f default-currency
                                    gnc-acct-hash old-group new-group))))
           (if parent-acct
               (gnc:account-insert-subaccount parent-acct new-acct)
@@ -248,7 +251,9 @@
                                  (qif-import:get-account-name 
                                   (qif-map-entry:qif-name acctinfo)))))
                  (ok-types (qif-map-entry:allowed-types acctinfo))
-                 (equity? (memv GNC-EQUITY-TYPE ok-types)))
+                 (equity? (memv GNC-EQUITY-TYPE ok-types))
+		 (stock? (or (memv GNC-STOCK-TYPE ok-types)
+			     (memv GNC-MUTUAL-TYPE ok-types))))
             
 	    ;; Debug
 	    ;; (for-each
@@ -260,16 +265,17 @@
 
             (cond ((and equity? security)  ;; a "retained holdings" acct
                    (qif-import:find-or-make-acct acctinfo #f
-                                                 security
+                                                 security #t default-currency
                                                  gnc-acct-hash 
                                                  old-group new-group))
-                  (security 
+                  ((and security (or stock?
+				     (gnc:commodity-is-currency? security)))
                    (qif-import:find-or-make-acct 
-                    acctinfo #f security
+                    acctinfo #f security #t default-currency
                     gnc-acct-hash old-group new-group))
                   (#t 
                    (qif-import:find-or-make-acct 
-                    acctinfo #f default-currency
+                    acctinfo #f default-currency #t default-currency
                     gnc-acct-hash old-group new-group)))))
         sorted-accounts-list)
        
@@ -293,9 +299,9 @@
        (if (> work-to-do 100)
            (begin 
              (set! progress-dialog (gnc:progress-dialog-new #f #f))
-             (gnc:progress-dialog-set-title progress-dialog "Progress")
+             (gnc:progress-dialog-set-title progress-dialog (_ "Progress"))
              (gnc:progress-dialog-set-heading progress-dialog
-                                              "Importing transactions...")
+                                              (_ "Importing transactions..."))
              (gnc:progress-dialog-set-limits progress-dialog 0.0 100.0)))
        
 
@@ -391,7 +397,11 @@
     (if qif-number
         (gnc:transaction-set-xnum gnc-xtn qif-number))
     (if qif-memo
-        (gnc:split-set-memo gnc-near-split qif-memo))
+	(begin
+	  (gnc:split-set-memo gnc-near-split qif-memo)
+	  (if (or (not qif-payee)
+		  (equal? qif-payee ""))
+	      (gnc:transaction-set-description gnc-xtn qif-memo))))
     
     (if (eq? qif-cleared 'cleared)        
         (gnc:split-set-reconcile gnc-near-split #\c))
@@ -922,7 +932,7 @@
                    (default-margin-interest-acct from-acct)))
             ((rtrncap rtrncapx)
              (set! far-acct-name
-                   (default-return-capital-acct from-acct)))
+                   (default-capital-return-acct from-acct security)))
             ((div divx reinvdiv)
              (set! far-acct-name
                    (default-dividend-acct from-acct security)))            

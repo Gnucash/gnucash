@@ -59,6 +59,7 @@ static short module = MOD_SX;
  *   <sx:autoCreateNotify>n</sx:autoCreateNotify>
  *   <sx:advanceCreateDays>0</sx:advanceCreateDays>
  *   <sx:advanceRemindDays>5</sx:advanceRemindDays>
+ *   <sx:instanceCount>100</sx:instanceCount>
  *   <sx:lastOccur>
  *     <gdate>2001-02-28</gdate>
  *   </sx:lastOccur>
@@ -69,6 +70,11 @@ static short module = MOD_SX;
  *   <sx:freq>
  *     <!-- freq spec tree -->
  *   </sx:freq>
+ *   <sx:deferredInstance>
+ *     <sx:last>2001-10-02</sx:last>
+ *     [...]
+ *   </sx:deferredInstance>
+ *   [...]
  * </gnc:schedxaction>
  * <gnc:schedxaction version="1.0.0">
  *   <sx:id type="guid">...</sx:id>
@@ -80,6 +86,7 @@ static short module = MOD_SX;
  *   <sx:end type="date">
  *     <gdate>2004-03-20</gdate>
  *   </sx:end>
+ *   <sx:instanceCount>100</sx:instanceCount>
  *   <sx:freq>
  *     <!-- freqspec tree -->
  *   </sx:freq>
@@ -88,6 +95,7 @@ static short module = MOD_SX;
  *   <sx:id type="guid">...</sx:id>
  *   <sx:name>Loan 2</sx:name>
  *   <sx:manual-conf>f</sx:manual-conf>
+ *   <sx:instanceCount>100</sx:instanceCount>
  *   <sx:start>
  *      <gdate>2000-12-31</gdate>
  *   </sx:start>
@@ -113,6 +121,7 @@ static short module = MOD_SX;
 #define SX_AUTOCREATE_NOTIFY    "sx:autoCreateNotify"
 #define SX_ADVANCE_CREATE_DAYS  "sx:advanceCreateDays"
 #define SX_ADVANCE_REMIND_DAYS  "sx:advanceRemindDays"
+#define SX_INSTANCE_COUNT       "sx:instanceCount"
 #define SX_START                "sx:start"
 #define SX_LAST                 "sx:last"
 #define SX_NUM_OCCUR            "sx:num-occur"
@@ -121,7 +130,7 @@ static short module = MOD_SX;
 #define SX_TEMPL_ACCT           "sx:templ-acct" 
 #define SX_FREQSPEC             "sx:freqspec"
 #define SX_SLOTS                "sx:slots"
-
+#define SX_DEFER_INSTANCE       "sx:deferredInstance"
 
 /*
  * FIXME: These should be defined in a header somewhere
@@ -138,8 +147,8 @@ gnc_schedXaction_dom_tree_create(SchedXaction *sx)
 {
     xmlNodePtr	ret;
     xmlNodePtr	fsNode;
-    Timespec	ts;
     GDate	*date;
+    gint        instCount;
     const GUID        *templ_acc_guid;
 
     templ_acc_guid = xaccAccountGetGUID(sx->template_acct);
@@ -164,6 +173,10 @@ gnc_schedXaction_dom_tree_create(SchedXaction *sx)
     xmlAddChild(ret, int_to_dom_tree(SX_ADVANCE_REMIND_DAYS,
                                      sx->advanceRemindDays));
 
+    instCount = gnc_sx_get_instance_count( sx, NULL );
+    xmlAddChild( ret, int_to_dom_tree( SX_INSTANCE_COUNT,
+                                       instCount ) );
+
     xmlAddChild( ret,
                  gdate_to_dom_tree( SX_START,
                                     xaccSchedXactionGetStartDate(sx) ) );
@@ -175,12 +188,10 @@ gnc_schedXaction_dom_tree_create(SchedXaction *sx)
 
     if ( xaccSchedXactionHasOccurDef(sx) ) {
 
-        xmlAddChild(ret, int_to_dom_tree(
-                        SX_NUM_OCCUR,
-                        (gint32)xaccSchedXactionGetNumOccur(sx)));
-        xmlAddChild(ret, int_to_dom_tree(
-                        SX_REM_OCCUR,
-                        (gint32)xaccSchedXactionGetRemOccur(sx)));
+        xmlAddChild(ret, int_to_dom_tree( SX_NUM_OCCUR,
+                                          xaccSchedXactionGetNumOccur(sx)));
+        xmlAddChild(ret, int_to_dom_tree( SX_REM_OCCUR,
+                                          xaccSchedXactionGetRemOccur(sx)));
 
     } else if ( xaccSchedXactionHasEndDate(sx) ) {
             xmlAddChild( ret,
@@ -189,7 +200,6 @@ gnc_schedXaction_dom_tree_create(SchedXaction *sx)
     }
 
     /* output template account GUID */
-
     xmlAddChild( ret, 
 		 guid_to_dom_tree(SX_TEMPL_ACCT,
 				  templ_acc_guid));
@@ -200,6 +210,29 @@ gnc_schedXaction_dom_tree_create(SchedXaction *sx)
                  gnc_freqSpec_dom_tree_create(
                          xaccSchedXactionGetFreqSpec(sx)) );
     xmlAddChild( ret, fsNode );
+
+    /* Output deferred-instance list. */
+    {
+            xmlNodePtr instNode;
+            temporalStateData *tsd;
+            GList *l;
+
+            for ( l = gnc_sx_get_defer_instances( sx ); l; l = l->next ) {
+                    tsd = (temporalStateData*)l->data;
+
+                    instNode = xmlNewNode( NULL, SX_DEFER_INSTANCE );
+                    if ( g_date_valid( &tsd->last_date ) )
+                    {
+                      xmlAddChild( instNode, gdate_to_dom_tree( SX_LAST,
+                                                                &tsd->last_date ) );
+                    }
+                    xmlAddChild( instNode, int_to_dom_tree( SX_REM_OCCUR,
+                                                            tsd->num_occur_rem ) );
+                    xmlAddChild( instNode, int_to_dom_tree( SX_INSTANCE_COUNT,
+                                                            tsd->num_inst ) );
+                    xmlAddChild( ret, instNode );
+            }
+    }
     
     /* output kvp_frame */
     {
@@ -321,6 +354,22 @@ sx_set_date( xmlNodePtr node, SchedXaction *sx,
 
 static
 gboolean
+sx_instcount_handler( xmlNodePtr node, gpointer sx_pdata )
+{
+  struct sx_pdata *pdata = sx_pdata;
+  SchedXaction *sx = pdata->sx;
+  gint64 instanceNum;
+
+  if ( ! dom_tree_to_integer( node, &instanceNum ) ) {
+    return FALSE;
+  }
+
+  gnc_sx_set_instance_count( sx, instanceNum );
+  return TRUE;
+}
+
+static
+gboolean
 sx_start_handler( xmlNodePtr node, gpointer sx_pdata )
 {
     struct sx_pdata *pdata = sx_pdata;
@@ -355,7 +404,6 @@ sx_freqspec_handler( xmlNodePtr node, gpointer sx_pdata )
 {
     struct sx_pdata *pdata = sx_pdata;
     SchedXaction *sx = pdata->sx;
-    xmlNodePtr mark;
     FreqSpec *fs;
 
     g_return_val_if_fail( node, FALSE );
@@ -364,6 +412,85 @@ sx_freqspec_handler( xmlNodePtr node, gpointer sx_pdata )
     xaccSchedXactionSetFreqSpec( sx, fs );
 
     return TRUE;
+}
+
+static
+gboolean
+sx_defer_last_handler( xmlNodePtr node, gpointer gpTSD )
+{
+        GDate *gd;
+        temporalStateData *tsd = (temporalStateData*)gpTSD;
+
+        g_return_val_if_fail( node, FALSE );
+        gd = dom_tree_to_gdate( node );
+        g_return_val_if_fail( gd, FALSE );
+        tsd->last_date = *gd;
+        g_date_free( gd );
+        return TRUE;
+}
+
+static
+gboolean
+sx_defer_rem_occur_handler( xmlNodePtr node, gpointer gpTSD )
+{
+        gint64 remOccur;
+        temporalStateData *tsd = (temporalStateData*)gpTSD;
+        g_return_val_if_fail( node, FALSE );
+
+        if ( ! dom_tree_to_integer( node, &remOccur ) ) {
+                return FALSE;
+        }
+        tsd->num_occur_rem = remOccur;
+        return TRUE;
+}
+
+static
+gboolean
+sx_defer_inst_count_handler( xmlNodePtr node, gpointer gpTSD )
+{
+        gint64 instCount;
+        temporalStateData *tsd = (temporalStateData*)gpTSD;
+        g_return_val_if_fail( node, FALSE );
+
+        if ( ! dom_tree_to_integer( node, &instCount ) ) {
+                return FALSE;
+        }
+        tsd->num_inst = instCount;
+        return TRUE;
+}
+
+struct dom_tree_handler sx_defer_dom_handlers[] = {
+       /* tag name, handler, opt, ? */
+        { SX_LAST,           sx_defer_last_handler,       1, 0 },
+        { SX_REM_OCCUR,      sx_defer_rem_occur_handler,  1, 0 },
+        { SX_INSTANCE_COUNT, sx_defer_inst_count_handler, 1, 0 },
+        { NULL, NULL, 0, 0 }
+};
+
+static
+gboolean
+sx_defer_inst_handler( xmlNodePtr node, gpointer sx_pdata )
+{
+        struct sx_pdata *pdata = sx_pdata;
+        SchedXaction *sx = pdata->sx;
+        temporalStateData *tsd;
+
+        g_return_val_if_fail( node, FALSE );
+
+        tsd = g_new0( temporalStateData, 1 );
+        g_assert( sx_defer_dom_handlers != NULL );
+        if ( !dom_tree_generic_parse( node,
+                                      sx_defer_dom_handlers,
+                                      tsd ) ) {
+                xmlElemDump(stdout, NULL, node);
+                g_free( tsd );
+                tsd = NULL;
+                return FALSE;
+        }
+
+        /* We assume they were serialized in sorted order, here. */
+        sx->deferredList = g_list_append( sx->deferredList, tsd );
+        return TRUE;
 }
 
 static
@@ -438,6 +565,7 @@ struct dom_tree_handler sx_dom_handlers[] = {
     { SX_AUTOCREATE_NOTIFY,   sx_notify_handler,     1, 0 },
     { SX_ADVANCE_CREATE_DAYS, sx_advCreate_handler,  1, 0 },
     { SX_ADVANCE_REMIND_DAYS, sx_advRemind_handler,  1, 0 },
+    { SX_INSTANCE_COUNT,      sx_instcount_handler,  0, 0 },
     { SX_START,               sx_start_handler,      1, 0 },
     { SX_LAST,                sx_last_handler,       0, 0 },
     { SX_NUM_OCCUR,           sx_numOccur_handler,   0, 0 },
@@ -445,7 +573,9 @@ struct dom_tree_handler sx_dom_handlers[] = {
     { SX_END,                 sx_end_handler,        0, 0 },
     { SX_TEMPL_ACCT,          sx_templ_acct_handler, 0, 0 },
     { SX_FREQSPEC,            sx_freqspec_handler,   1, 0 },
+    { SX_DEFER_INSTANCE,      sx_defer_inst_handler, 0, 0 },
     { SX_SLOTS,               sx_slots_handler,      0, 0 },
+    { NULL,                   NULL, 0, 0 }
 };
 
 static gboolean
@@ -456,7 +586,6 @@ gnc_schedXaction_end_handler(gpointer data_for_children,
 {
     SchedXaction *sx;
     gboolean     successful = FALSE;
-    xmlNodePtr   achild;
     xmlNodePtr   tree = (xmlNodePtr)data_for_children;
     gxpf_data    *gdata = (gxpf_data*)global_data;
     struct sx_pdata sx_pdata;
@@ -486,11 +615,17 @@ gnc_schedXaction_end_handler(gpointer data_for_children,
     sx_pdata.sx = sx;
     sx_pdata.book = gdata->bookdata;
 
+    g_assert( sx_dom_handlers != NULL );
+
     successful = dom_tree_generic_parse( tree, sx_dom_handlers, &sx_pdata );
 
-    if ( successful ) {
+    if ( successful ) 
+    {
             gdata->cb( tag, gdata->parsedata, sx );
-    } else {
+    } 
+    else 
+    {
+            PERR ("failed to parse scheduled xaction");
             xmlElemDump( stdout, NULL, tree );
             xaccSchedXactionFree( sx );
     }
@@ -579,7 +714,8 @@ tt_act_handler( xmlNodePtr node, gpointer data )
                            applies for
                            SchedXaction.c:xaccSchedXactionInit... */
                         com = gnc_commodity_new( "template", "template",
-                                                 "template", "template", 1 );
+                                                 "template", "template",
+                                                 1 );
                         xaccAccountSetCommodity( acc, com );
                 }
 
@@ -607,8 +743,6 @@ tt_trn_handler( xmlNodePtr node, gpointer data )
         return TRUE;
 }
 
-
-
 struct dom_tree_handler tt_dom_handlers[] = {
         { GNC_ACCOUNT_TAG,     tt_act_handler, 0, 0 },
         { GNC_TRANSACTION_TAG, tt_trn_handler, 0, 0 },
@@ -625,7 +759,6 @@ gnc_template_transaction_end_handler(gpointer data_for_children,
                                      const gchar *tag)
 {
         gboolean   successful = FALSE;
-        xmlNodePtr achild;
         xmlNodePtr tree = data_for_children;
         gxpf_data  *gdata = global_data;
         GNCBook    *book = gdata->bookdata;
@@ -656,9 +789,13 @@ gnc_template_transaction_end_handler(gpointer data_for_children,
         
         successful = dom_tree_generic_parse( tree, tt_dom_handlers, &txd );
 
-        if ( successful ) {
+        if ( successful ) 
+        {
                 gdata->cb( tag, gdata->parsedata, &txd );
-        } else {
+        } 
+        else 
+        {
+                PERR ("failed to parse template transaction");
                 xmlElemDump( stdout, NULL, tree );
         }
 

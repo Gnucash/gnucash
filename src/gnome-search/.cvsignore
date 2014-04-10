@@ -1,0 +1,11 @@
+*.lo
+*.la
+.deps
+.libs
+.scm-links
+Makefile
+Makefile.in
+gw-gnome-search.c
+gw-gnome-search.h
+gw-gnome-search.html
+gw-gnome-search.scm

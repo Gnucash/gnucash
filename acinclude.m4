@@ -3937,10 +3937,10 @@ AC_DEFUN(AC_GWRAP_CHECK_GUILE,
  fi
 ])
 
-dnl AM_PATH_GWRAP ([MINIMUM-VERSION, [ACTION-IF-FOUND.
+dnl AM_PATH_GWRAP ([MINIMUM-VERSION, MAXIMUM-VERSION, [ACTION-IF-FOUND.
 dnl	           [ACTION-IF-NOT-FOUND]]])
 
-dnl tests for minimum version of g-wrap.
+dnl tests for minimum and maximum versions of g-wrap.
 dnl sets G_WRAP_CONFIG and GWRAP_OLD_GUILE_SMOB if needed.
 
 AC_DEFUN(AM_PATH_GWRAP,
@@ -3950,11 +3950,14 @@ dnl
 AC_ARG_WITH(g-wrap-prefix,[ --with-g-wrap-prefix=PFX  Prefix where g-wrap is installed (optional)], 
     gwrap_prefix="$withval", g_wrap_prefix="")
 
-min_gwrap_version=ifelse([$1], , 0.9.1,$1)
+min_gwrap_version=ifelse([$1], , 1.3.2,$1)
+max_gwrap_version=ifelse([$2], , 99.99.99,$2)
 
 if test x${GUILE} = x ; then
    AC_PATH_PROG(GUILE, guile, no)
 fi
+
+CHECK_VERSION=yes
 
 dnl if prefix set, then set them explicitly
 if test x${gwrap_prefix} != x ; then
@@ -3963,14 +3966,15 @@ else
 
   AC_PATH_PROG(G_WRAP_CONFIG, g-wrap-config, no)
   if test x${G_WRAP_CONFIG} = xno ; then
-	CHECK_VERSION="no"
-	ifelse([$3], , true , [AC_MSG_WARN(g-wrap-config failed)
-	$3])
+	CHECK_VERSION=no
+	ifelse([$4], , true , [AC_MSG_WARN(g-wrap-config failed)
+	$4])
   fi
 fi
 
+version_ok=
 if test x$CHECK_VERSION != xno ; then
-AC_MSG_CHECKING(for g-wrap - version >= ${min_gwrap_version})
+AC_MSG_CHECKING(for g-wrap - ${min_gwrap_version} <= version < ${max_gwrap_version})
 
 gwrap_major_version=`${G_WRAP_CONFIG} --version | \
 	sed 's/g-wrap-config \([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\)/\1/'`
@@ -3979,7 +3983,6 @@ gwrap_minor_version=`${G_WRAP_CONFIG} --version | \
 gwrap_micro_version=`${G_WRAP_CONFIG} --version | \
 	sed 's/g-wrap-config \([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\)/\3/'`
 
-
 major_required=`echo ${min_gwrap_version} |\
         sed 's/\([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\)/\1/'`
 minor_required=`echo ${min_gwrap_version} |\
@@ -3987,20 +3990,114 @@ minor_required=`echo ${min_gwrap_version} |\
 micro_required=`echo ${min_gwrap_version} |\
 	sed 's/\([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\)/\3/'`
 
+major_prohibited=`echo ${max_gwrap_version} |\
+        sed 's/\([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\)/\1/'`
+minor_prohibited=`echo ${max_gwrap_version} |\
+	sed 's/\([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\)/\2/'`
+micro_prohibited=`echo ${max_gwrap_version} |\
+	sed 's/\([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\)/\3/'`
+
+
 if ${GUILE} -c "(cond ((> ${gwrap_major_version} ${major_required}) (exit 0))\
 	           ((< ${gwrap_major_version} ${major_required}) (exit 1))\
                    ((> ${gwrap_minor_version} ${minor_required}) (exit 0))\
 		   ((< ${gwrap_minor_version} ${minor_required}) (exit 1))\
 	           ((< ${gwrap_micro_version} ${micro_required}) (exit 1))\
 		   (else (exit 0)))" ; then
+  if ${GUILE} -c "(cond ((> ${gwrap_major_version} ${major_prohibited}) (exit 1))\
+	           ((< ${gwrap_major_version} ${major_prohibited}) (exit 0))\
+                   ((> ${gwrap_minor_version} ${minor_prohibited}) (exit 1))\
+		   ((< ${gwrap_minor_version} ${minor_prohibited}) (exit 0))\
+	           ((< ${gwrap_micro_version} ${micro_prohibited}) (exit 0))\
+		   (else (exit 1)))" ; then
+	version_ok=yes
+  fi
+fi
+
+if test -n "$version_ok"; then
 	AC_MSG_RESULT(yes)
-	ifelse([$2], , true, [$2])
+	ifelse([$3], , true, [$4])
+
 else
 	AC_MSG_RESULT(no)
-	ifelse([$3], , true , [AC_MSG_WARN(guile check failed)
-	$3])
+	ifelse([$4], , true , [AC_MSG_WARN(gwrap check failed)
+	$4])
 fi
 dnl check version
+fi])
+
+
+
+dnl AM_GUILE_VERSION_CHECK ([MINIMUM-VERSION, MAXIMUM-VERSION, [ACTION-IF-FOUND.
+dnl	           [ACTION-IF-NOT-FOUND]]])
+
+dnl tests for minimum and maximum versions of guile.
+
+AC_DEFUN(AM_GUILE_VERSION_CHECK,
+[
+dnl
+dnl
+
+if test x${GUILE} = x ; then
+   AC_PATH_PROG(GUILE, guile, no)
+fi
+
+version_ok=
+min_guile_version=ifelse([$1], , 1.3,$1)
+max_guile_version=ifelse([$2], , 99.99.99,$2)
+
+AC_MSG_CHECKING(for guile - ${min_guile_version} <= version < ${max_guile_version})
+
+if test x${BUILD_GUILE} != x -a ${BUILD_GUILE} != no ; then
+  guile_version=`${name_build_guile} --version 2>&1`
+  guile_version="$guile_version.0"
+  guile_major_version=`echo $guile_version | \
+	sed 's/.*Guile version \([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\).*/\1/'`
+  guile_minor_version=`echo $guile_version | \
+	sed 's/.*Guile version \([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\).*/\2/'`
+  guile_micro_version=`echo $guile_version | \
+	sed 's/.*Guile version \([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\).*/\3/'`
+
+  major_required=`echo ${min_guile_version} |\
+        sed 's/\([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\)/\1/'`
+  minor_required=`echo ${min_guile_version} |\
+	sed 's/\([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\)/\2/'`
+  micro_required=`echo ${min_guile_version} |\
+	sed 's/\([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\)/\3/'`
+
+  major_prohibited=`echo ${max_guile_version} |\
+        sed 's/\([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\)/\1/'`
+  minor_prohibited=`echo ${max_guile_version} |\
+	sed 's/\([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\)/\2/'`
+  micro_prohibited=`echo ${max_guile_version} |\
+	sed 's/\([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\)/\3/'`
+
+
+  if ${GUILE} -c "(cond ((> ${guile_major_version} ${major_required}) (exit 0))\
+	           ((< ${guile_major_version} ${major_required}) (exit 1))\
+                   ((> ${guile_minor_version} ${minor_required}) (exit 0))\
+		   ((< ${guile_minor_version} ${minor_required}) (exit 1))\
+	           ((< ${guile_micro_version} ${micro_required}) (exit 1))\
+		   (else (exit 0)))" ; then
+    if ${GUILE} -c "(cond ((> ${guile_major_version} ${major_prohibited}) (exit 1))\
+	           ((< ${guile_major_version} ${major_prohibited}) (exit 0))\
+                   ((> ${guile_minor_version} ${minor_prohibited}) (exit 1))\
+		   ((< ${guile_minor_version} ${minor_prohibited}) (exit 0))\
+	           ((< ${guile_micro_version} ${micro_prohibited}) (exit 0))\
+		   (else (exit 1)))" ; then
+  	version_ok=yes
+    fi
+  fi
+fi
+
+if test -n "$version_ok"; then
+	AC_MSG_RESULT(yes)
+	ifelse([$3], , true, [$4])
+
+else
+	AC_MSG_RESULT(no)
+	ifelse([$4], , true , [AC_MSG_WARN(guile version check failed)
+	$4])
 fi])
 
 
@@ -4049,6 +4146,7 @@ AC_ARG_ENABLE(libguppitest, [  --disable-libguppitest       Do not try to compil
   else
     LIBGUPPI_CFLAGS=`$GNOME_CONFIG $libguppiconf_args --cflags gtk libguppi`
     LIBGUPPI_LIBS=`$GNOME_CONFIG $libguppiconf_args --libs gtk libguppi`
+    AS_SCRUB_INCLUDE(LIBGUPPI_CFLAGS)
 
     libguppi_major_version=`$GNOME_CONFIG --modversion libguppi | \
            sed 's/libguppi-\([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\)/\1/'`

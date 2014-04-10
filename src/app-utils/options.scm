@@ -35,6 +35,11 @@
          ;; option. The function should restore the option to the original
          ;; value.
          generate-restore-form
+	 ;; the scm->kvp and kvp->scm functions should save and load
+	 ;; the option to a kvp.  The arguments to these function will be
+	 ;; a kvp-frame and a base key-path list for this option.
+	 scm->kvp
+	 kvp->scm	 
          ;; Validation func should accept a value and return (#t value)
          ;; on success, and (#f "failure-message") on failure. If #t,
          ;; the supplied value will be used by the gui to set the option.
@@ -82,6 +87,8 @@
               (if changed-callback (changed-callback)))
             default-getter
             generate-restore-form
+	    scm->kvp
+	    kvp->scm
             value-validator
             option-data
 	    option-data-fns
@@ -107,20 +114,24 @@
   (vector-ref option 7))
 (define (gnc:option-generate-restore-form option)
   (vector-ref option 8))
-(define (gnc:option-value-validator option)  
+(define (gnc:option-scm->kvp option)
   (vector-ref option 9))
-(define (gnc:option-data option)
-    (vector-ref option 10))
-(define (gnc:option-data-fns option)
+(define (gnc:option-kvp->scm option)
+  (vector-ref option 10))
+(define (gnc:option-value-validator option)  
   (vector-ref option 11))
+(define (gnc:option-data option)
+    (vector-ref option 12))
+(define (gnc:option-data-fns option)
+  (vector-ref option 13))
 
 (define (gnc:option-set-changed-callback option callback)
- (let ((cb-setter (vector-ref option 12)))
+ (let ((cb-setter (vector-ref option 14)))
     (cb-setter callback)))
 (define (gnc:option-strings-getter option)
-  (vector-ref option 13))
+  (vector-ref option 15))
 (define (gnc:option-widget-changed-proc option)
-  (vector-ref option 14))
+  (vector-ref option 16))
 
 (define (gnc:option-value option)
   (let ((getter (gnc:option-getter option)))
@@ -185,6 +196,11 @@
      (lambda (x) (set! value x))
      (lambda () default-value)
      (gnc:restore-form-generator value->string)
+     (lambda (f p) (gnc:kvp-frame-set-slot-path f value p))
+     (lambda (f p)
+       (let ((v (gnc:kvp-frame-get-slot-path f p)))
+	 (if (and v (string? v))
+	     (set! value v))))
      (lambda (x)
        (cond ((string? x)(list #t x))
              (else (list #f "string-option: not a string"))))
@@ -204,6 +220,11 @@
      (lambda (x) (set! value x))
      (lambda () default-value)
      (gnc:restore-form-generator value->string)
+     (lambda (f p) (gnc:kvp-frame-set-slot-path f value p))
+     (lambda (f p)
+       (let ((v (gnc:kvp-frame-get-slot-path f p)))
+	 (if (and v (string? v))
+	     (set! value v))))
      (lambda (x)
        (cond ((string? x)(list #t x))
              (else (list #f "text-option: not a string"))))
@@ -233,6 +254,11 @@
      (lambda (x) (set! value x))
      (lambda () default-value)
      (gnc:restore-form-generator value->string)     
+     (lambda (f p) (gnc:kvp-frame-set-slot-path f value p))
+     (lambda (f p)
+       (let ((v (gnc:kvp-frame-get-slot-path f p)))
+	 (if (and v (string? v))
+	     (set! value v))))
      (lambda (x)
        (cond ((string? x)(list #t x))
              (else (list #f "font-option: not a string"))))
@@ -267,6 +293,11 @@
       (lambda (x) (set! value (currency->scm x)))
       (lambda ()  (scm->currency default-value))
       (gnc:restore-form-generator value->string)
+      (lambda (f p) (gnc:kvp-frame-set-slot-path f value p))
+      (lambda (f p)
+	(let ((v (gnc:kvp-frame-get-slot-path f p)))
+	  (if (and v (string? v))
+	      (set! value v))))
       (lambda (x) (list #t x))
       #f #f #f #f)))
 
@@ -304,6 +335,14 @@
                       (set! value (commodity->scm x))))
       (lambda () default-value)
       (gnc:restore-form-generator value->string)
+      (lambda (f p) 
+	(gnc:kvp-frame-set-slot-path f (cadr value) (append p '("ns")))
+	(gnc:kvp-frame-set-slot-path f (caddr value) (append p '("monic"))))
+      (lambda (f p)
+	(let ((ns (gnc:kvp-frame-get-slot-path f (append p '("ns"))))
+	      (monic (gnc:kvp-frame-get-slot-path f (append p '("monic")))))
+	  (if (and ns monic (string? ns) (string? monic))
+	      (set! value (list 'commodity-scm ns monic)))))
       (lambda (x) (list #t x))
       #f #f #f #f)))
 
@@ -355,6 +394,11 @@
                       (setter-function-called-cb x)))
       (lambda () default-value)
       (gnc:restore-form-generator value->string)
+      (lambda (f p) (gnc:kvp-frame-set-slot-path f value p))
+      (lambda (f p)
+	(let ((v (gnc:kvp-frame-get-slot-path f p)))
+	  (if (and v (boolean? v) (not (equal? v default-value)))
+	      (set! value v))))
       (lambda (x)
         (if (boolean? x)
             (list #t x)
@@ -373,6 +417,8 @@
      (lambda (x) (set! value x))
      (lambda () default-value)
      (gnc:restore-form-generator  (lambda () (gnc:value->string value)))
+     #f
+     #f
      (lambda (x)
        (if (string? x)
            (begin 
@@ -419,6 +465,20 @@
            (gnc:error "Illegal date value set:" date)))
      default-getter
      (gnc:restore-form-generator value->string)
+     (lambda (f p)
+       (gnc:kvp-frame-set-slot-path f (symbol->string (car value))
+				    (append p '("type")))
+       (gnc:kvp-frame-set-slot-path f
+				    (if (symbol? (cdr value))
+					(symbol->string (cdr value))
+					(cdr value))
+				    (append p '("value"))))
+     (lambda (f p)
+       (let ((t (gnc:kvp-frame-get-slot-path f (append p '("type"))))
+	     (v (gnc:kvp-frame-get-slot-path f (append p '("value")))))
+	 (if (and t v (string? t))
+	     (set! value (cons (string->symbol t)
+			       (if (string? v) (string->symbol v) v))))))
      (lambda (date)
        (if (date-legal date)
            (list #t date)
@@ -466,11 +526,9 @@
       #f
       (cdr option-value)))
 
-;; account-list options use the option-data as a boolean value. If
-;; true, the gui should allow the user to select multiple accounts.
-;; Internally, values are always a list of guids. Externally, both
-;; guids and account pointers may be used to set the value of the
-;; option. The option always returns a list of account pointers.
+;; Just like gnc:make-account-list-limited-option except it
+;; does not limit the types of accounts that are available
+;; to the user.
 (define (gnc:make-account-list-option
          section
          name
@@ -479,6 +537,27 @@
          default-getter
          value-validator
          multiple-selection)
+
+  (gnc:make-account-list-limited-option
+   section name sort-tag documentation-string
+   default-getter value-validator multiple-selection '()))
+
+;; account-list options use the option-data as a pair; the car is
+;; a boolean value, the cdr is a list of account-types. If the boolean is
+;; true, the gui should allow the user to select multiple accounts.
+;; If the cdr is an empty list, then all account types are shown.
+;; Internally, values are always a list of guids. Externally, both
+;; guids and account pointers may be used to set the value of the
+;; option. The option always returns a list of account pointers.
+(define (gnc:make-account-list-limited-option
+         section
+         name
+         sort-tag
+         documentation-string
+         default-getter
+         value-validator
+         multiple-selection
+	 acct-type-list)
 
   (define (convert-to-guid item)
     (if (string? item)
@@ -523,8 +602,131 @@
              (gnc:error "Illegal account list value set"))))
      (lambda () (map convert-to-account (default-getter)))
      (gnc:restore-form-generator value->string)
+     (lambda (f p)
+       (define (save-acc list count)
+	 (if (not (null? list))
+	     (let ((key (string-append "acc" (gnc:value->string count))))
+	       (gnc:kvp-frame-set-slot-path f (car list) (append p (list key)))
+	       (save-acc (cdr list) (+ 1 count)))))
+
+       (if option-set
+	   (begin
+	     (gnc:kvp-frame-set-slot-path f (length option)
+					  (append p '("len")))
+	     (save-acc option 0))))
+     (lambda (f p)
+       (let ((len (gnc:kvp-frame-get-slot-path f (append p '("len")))))
+	 (define (load-acc count)
+	   (if (< count len)
+	       (let* ((key (string-append "acc" (gnc:value->string count)))
+		      (guid (gnc:kvp-frame-get-slot-path
+			     f (append p (list key)))))
+		 (cons guid (load-acc (+ count 1))))
+	       '()))
+
+	 (if (and len (integer? len))
+	     (begin
+	       (set! option (load-acc 0))
+	       (set! option-set #t)))))
      validator
-     multiple-selection #f #f #f)))
+     (cons multiple-selection acct-type-list) #f #f #f)))
+
+;; Just like gnc:make-account-sel-limited-option except it
+;; does not limit the types of accounts that are available
+;; to the user.
+(define (gnc:make-account-sel-option
+         section
+         name
+         sort-tag
+         documentation-string
+         default-getter
+         value-validator)
+
+  (gnc:make-account-sel-limited-option
+   section name sort-tag documentation-string
+   default-getter value-validator '()))
+
+;; account-sel options use the option-data as a pair; the car is
+;; ignored, the cdr is a list of account-types. If the cdr is an empty
+;; list, then all account types are shown.  Internally, the value is
+;; always a guid.  Externally, both guids and account pointers may be
+;; used to set the value of the option. The option always returns the
+;; "current" account pointer.
+(define (gnc:make-account-sel-limited-option
+         section
+         name
+         sort-tag
+         documentation-string
+         default-getter
+         value-validator
+	 acct-type-list)
+
+  (define (convert-to-guid item)
+    (if (string? item)
+        item
+        (gnc:account-get-guid item)))
+
+  (define (convert-to-account item)
+    (if (string? item)
+        (gnc:account-lookup item (gnc:get-current-book))
+        item))
+
+  (define (find-first-account)
+    (define (find-first account-list)
+      (if (null? account-list)
+	  #f
+	  (let* ((this-account (car account-list))
+		 (account-type (gw:enum-<gnc:AccountType>-val->sym
+				(gnc:account-get-type this-account) #f)))
+	    (if (if (null? acct-type-list) #t (member account-type acct-type-list))
+		this-account
+		(find-first (cdr account-list))))))
+
+    (let* ((current-group (gnc:get-current-group))
+	   (account-list (gnc:group-get-subaccounts current-group)))
+      (find-first account-list)))
+	   
+  (define (get-default)
+    (if default-getter
+	(default-getter)
+	(find-first-account)))
+
+  (let* ((option (convert-to-guid (get-default)))
+         (option-set #f)
+         (getter (lambda () (convert-to-account
+			     (if option-set
+				 option
+				 (get-default)))))
+         (value->string (lambda ()
+                          (string-append
+                           "'" (gnc:value->string (if option-set option #f)))))
+         (validator
+          (if (not value-validator)
+              (lambda (account) (list #t account))
+              (lambda (account)
+                (value-validator (convert-to-account account))))))
+    (gnc:make-option
+     section name sort-tag 'account-sel documentation-string getter
+     (lambda (account)
+       (if (not account) (set! account (get-default)))
+       (set! account (convert-to-account account))
+       (let* ((result (validator account))
+	      (valid (car result))
+	      (value (cadr result)))
+	 (if valid
+	     (begin
+	       (set! option (convert-to-guid value))
+	       (set! option-set #t))
+	     (gnc:error "Illegal account value set"))))
+     (lambda () (convert-to-account (get-default)))
+     (gnc:restore-form-generator value->string)
+     (lambda (f p) (gnc:kvp-frame-set-slot-path f value p))
+     (lambda (f p)
+       (let ((v (gnc:kvp-frame-get-slot-path f p)))
+	 (if (and v (string? v))
+	     (set! value v))))
+     validator
+     (cons #f acct-type-list) #f #f #f)))
 
 (define (gnc:multichoice-list-lookup list item )
   (cond
@@ -597,6 +799,11 @@
            (gnc:error "Illegal Multichoice option set")))
      (lambda () default-value)
      (gnc:restore-form-generator value->string)
+     (lambda (f p) (gnc:kvp-frame-set-slot-path f (symbol->string value) p))
+     (lambda (f p)
+       (let ((v (gnc:kvp-frame-get-slot-path f p)))
+	 (if (and v (string? v))
+	     (set! value (string->symbol v)))))
      (lambda (x)
        (if (multichoice-legal x ok-values)
            (list #t x)
@@ -609,6 +816,92 @@
        (lambda (x)
 	 (gnc:multichoice-list-lookup ok-values x)))
      (lambda () (multichoice-strings ok-values)) 
+     (and option-widget-changed-cb
+	  (lambda (x) (option-widget-changed-cb x))))))
+
+
+;; radiobutton options use the option-data as a list of vectors.
+;; Each vector contains a permissible value (scheme symbol), a
+;; name, and a description string.
+(define (gnc:make-radiobutton-option
+         section
+         name
+         sort-tag
+         documentation-string
+         default-value
+         ok-values)
+  (gnc:make-radiobutton-callback-option section
+					name
+					sort-tag
+					documentation-string
+					default-value
+					ok-values
+					#f
+					#f))
+
+;; The radiobutton-option with callback function is the same as the
+;; usual radiobutton options (see above), with the addition of two
+;; function arguments. (If both of them are #f, you have exactly a
+;; radiobutton-option.) Both functions should expect one argument.
+;; When the option's value is changed, the function
+;; option-widget-changed-cb will be called with the new option value
+;; at the time that the GUI widget representing the option is changed,
+;; and the function setter-function-called-cb will be called when the
+;; option's setter is called (that is, when the user selects "OK" or
+;; "Apply").
+(define (gnc:make-radiobutton-callback-option
+         section
+         name
+         sort-tag
+         documentation-string
+         default-value
+         ok-values
+         setter-function-called-cb
+         option-widget-changed-cb)
+  (define (radiobutton-legal val p-vals)
+    (cond ((null? p-vals) #f)
+          ((eq? val (vector-ref (car p-vals) 0)) #t)
+          (else (radiobutton-legal val (cdr p-vals)))))
+
+  (define (radiobutton-strings p-vals)
+    (if (null? p-vals)
+        ()
+        (cons (vector-ref (car p-vals) 1)
+              (cons (vector-ref (car p-vals) 2)
+                    (radiobutton-strings (cdr p-vals))))))
+
+  (let* ((value default-value)
+         (value->string (lambda ()
+                          (string-append "'" (gnc:value->string value)))))
+    (gnc:make-option
+     section name sort-tag 'radiobutton documentation-string
+     (lambda () value)
+     (lambda (x)
+       (if (radiobutton-legal x ok-values)
+           (begin
+	     (set! value x)
+	     (if (procedure? setter-function-called-cb)
+		 (setter-function-called-cb x)))
+           (gnc:error "Illegal Radiobutton option set")))
+     (lambda () default-value)
+     (gnc:restore-form-generator value->string)
+     (lambda (f p) (gnc:kvp-frame-set-slot-path f (symbol->string value) p))
+     (lambda (f p)
+       (let ((v (gnc:kvp-frame-get-slot-path f p)))
+	 (if (and v (string? v))
+	     (set! value (string->symbol v)))))
+     (lambda (x)
+       (if (radiobutton-legal x ok-values)
+           (list #t x)
+           (list #f "radiobutton-option: illegal choice")))
+     ok-values
+     (vector (lambda () (length ok-values))
+       (lambda (x) (vector-ref (list-ref ok-values x) 0))
+       (lambda (x) (vector-ref (list-ref ok-values x) 1))
+       (lambda (x) (vector-ref (list-ref ok-values x) 2))
+       (lambda (x)
+	 (gnc:multichoice-list-lookup ok-values x)))
+     (lambda () (radiobutton-strings ok-values)) 
      (and option-widget-changed-cb
 	  (lambda (x) (option-widget-changed-cb x))))))
 
@@ -654,6 +947,26 @@
            (gnc:error "Illegal list option set")))
      (lambda () default-value)
      (gnc:restore-form-generator value->string)
+     (lambda (f p)
+       (define (save-item list count)
+	 (if (not (null? list))
+	     (let ((key (string-append "item" (gnc:value->string count))))
+	       (gnc:kvp-frame-set-slot-path f (car list) (append p (list key)))
+	       (save-item (cdr list) (+ 1 count)))))
+       (gnc:kvp-frame-set-slot-path f (length value) (append p '("len")))
+       (save-item value 0))
+     (lambda (f p)
+       (let ((len (gnc:kvp-frame-get-slot-path f (append p '("len")))))
+	 (define (load-item count)
+	   (if (< count len)
+	       (let* ((key (string-append "item" (gnc:value->string count)))
+		      (val (gnc:kvp-frame-get-slot-path
+			    f (append p (list key)))))
+		 (cons val (load-item (+ count 1))))
+	       '()))
+
+	 (if (and len (integer? len))
+	     (set! value (load-item 0)))))
      (lambda (x)
        (if (list-legal x)
            (list #t x)
@@ -686,6 +999,11 @@
      (lambda (x) (set! value x))
      (lambda () default-value)
      (gnc:restore-form-generator value->string)
+     (lambda (f p) (gnc:kvp-frame-set-slot-path f (symbol->string value) p))
+     (lambda (f p)
+       (let ((v (gnc:kvp-frame-get-slot-path f p)))
+	 (if (and v (number? v))
+	     (set! value v))))
      (lambda (x)
        (cond ((not (number? x)) (list #f "number-range-option: not a number"))
              ((and (>= value lower-bound)
@@ -708,6 +1026,8 @@
      (lambda (x) (set! value x))
      (lambda () default-value)
      (gnc:restore-form-generator value->string)
+     #f
+     #f
      (lambda (x) (list #t x))
      #f #f #f #f)))
 
@@ -729,6 +1049,8 @@
                     default-value
                     (gnc:query->scm default-value)))
      (gnc:restore-form-generator value->string)
+     #f
+     #f
      (lambda (x) (list #t x))
      #f #f #f #f)))
 
@@ -775,6 +1097,8 @@
      (lambda (x) (set! value (canonicalize x)))
      (lambda () (canonicalize default-value))
      (gnc:restore-form-generator value->string)
+     #f
+     #f
      validate-color
      (list range use-alpha)
      #f #f #f)))
@@ -905,6 +1229,32 @@
 
     (call-with-output-string generate-forms))
 
+  (define (scm->kvp kvp-frame key-path)
+    (options-for-each
+     (lambda (option)
+       (let ((value (gnc:option-value option))
+	     (default-value (gnc:option-default-value option))
+	     (section (gnc:option-section option))
+	     (name (gnc:option-name option)))
+	 (gnc:debug "value: " value "; default: " default-value
+		    "; section: " section "; name: " name)
+	 (if (not (equal? value default-value))
+	     (let ((save-fcn (gnc:option-scm->kvp option)))
+	       (gnc:debug "save-fcn: " save-fcn)
+	       (if save-fcn
+		   (save-fcn kvp-frame (append key-path
+					       (list section name))))))))))
+
+  (define (kvp->scm kvp-frame key-path)
+    (options-for-each
+     (lambda (option)
+       (let ((section (gnc:option-section option))
+	     (name (gnc:option-name option))
+	     (load-fcn (gnc:option-kvp->scm option)))
+	 (if load-fcn
+	     (load-fcn kvp-frame (append key-path
+					(list section name))))))))
+
   (define (register-callback section name callback)
     (let ((id last-callback-id)
           (data (list section name callback)))
@@ -965,6 +1315,8 @@
       ((for-each) options-for-each)
       ((for-each-general) options-for-each-general)
       ((generate-restore-forms) generate-restore-forms)
+      ((scm->kvp) scm->kvp)
+      ((kvp->scm) kvp->scm)
       ((touch) touch)
       ((clear-changes) clear-changes)
       ((run-callbacks) run-callbacks)
@@ -998,6 +1350,14 @@
 
 (define (gnc:generate-restore-forms options options-string)
   ((options 'generate-restore-forms) options-string))
+
+(define (gnc:options-scm->kvp options kvp-frame key-path clear-kvp?)
+  (if clear-kvp?
+      (gnc:kvp-frame-delete-at-path kvp-frame key-path))
+  ((options 'scm->kvp) kvp-frame key-path))
+
+(define (gnc:options-kvp->scm options kvp-frame key-path)
+  ((options 'kvp->scm) kvp-frame key-path))
 
 (define (gnc:options-clear-changes options)
   ((options 'clear-changes)))

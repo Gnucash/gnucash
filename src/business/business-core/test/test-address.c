@@ -17,15 +17,13 @@ test_string_fcn (GncAddress *address, const char *message,
 static void
 test_address (void)
 {
-  GncBusiness *bus;
   GncAddress *address;
-
-  bus = gncBusinessCreate ((GNCBook *)1);
+  GNCBook *book = gnc_book_new ();
 
   /* Test creation/destruction */
   {
-    do_test (gncAddressCreate (NULL) == NULL, "address create NULL");
-    address = gncAddressCreate (bus);
+    do_test (gncAddressCreate (NULL, NULL) == NULL, "address create NULL");
+    address = gncAddressCreate (book, NULL);
     do_test (address != NULL, "address create");
 
     gncAddressDestroy (address);
@@ -34,7 +32,7 @@ test_address (void)
 
   /* Test setting routines */
   {
-    address = gncAddressCreate (bus);
+    address = gncAddressCreate (book, NULL);
     test_string_fcn (address, "Name", gncAddressSetName, gncAddressGetName);
     test_string_fcn (address, "Addr1", gncAddressSetAddr1, gncAddressGetAddr1);
     test_string_fcn (address, "Addr2", gncAddressSetAddr2, gncAddressGetAddr2);

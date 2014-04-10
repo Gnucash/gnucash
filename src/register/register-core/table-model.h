@@ -36,7 +36,9 @@ typedef enum
   XACC_CELL_ALLOW_INPUT      = 1 << 0,
   XACC_CELL_ALLOW_SHADOW     = 1 << 1,
   XACC_CELL_ALLOW_ALL        = XACC_CELL_ALLOW_INPUT | XACC_CELL_ALLOW_SHADOW,
-  XACC_CELL_ALLOW_EXACT_ONLY = 1 << 2
+  XACC_CELL_ALLOW_EXACT_ONLY = 1 << 2,
+  XACC_CELL_ALLOW_ENTER	     = 1 << 3,
+  XACC_CELL_ALLOW_READ_ONLY  = XACC_CELL_ALLOW_SHADOW | XACC_CELL_ALLOW_ENTER
 } CellIOFlags;
 
 typedef enum
@@ -84,6 +86,10 @@ typedef void (*TableGetCellBorderHandler) (VirtualLocation virt_loc,
 typedef gboolean (*TableConfirmHandler) (VirtualLocation virt_loc,
                                          gpointer user_data);
 
+typedef void (*TableSaveCellHandler) (BasicCell * cell,
+                                      gpointer save_data,
+                                      gpointer user_data);
+
 typedef void (*TableSaveHandler) (gpointer save_data,
                                   gpointer user_data);
 
@@ -102,9 +108,15 @@ typedef struct
   GHashTable *cell_border_handlers;
   GHashTable *confirm_handlers;
 
-  TableSaveHandler save_handler;
+  GHashTable *save_handlers;
+  TableSaveHandler pre_save_handler;
+  TableSaveHandler post_save_handler;
 
   gpointer handler_user_data;
+
+  /* If true, denotes that this table is read-only
+   * and edits should not be allowed. */
+  gboolean read_only;
 
   /* If positive, denotes a row that marks a boundary that should
    * be visually distinguished. */
@@ -118,6 +130,10 @@ typedef struct
 
 TableModel * gnc_table_model_new (void);
 void         gnc_table_model_destroy (TableModel *model);
+
+void         gnc_table_model_set_read_only (TableModel *model,
+                                            gboolean read_only);
+gboolean     gnc_table_model_read_only (TableModel *model);
 
 void gnc_table_model_set_entry_handler
                                      (TableModel *model,
@@ -206,5 +222,23 @@ void gnc_table_model_set_default_confirm_handler
 TableConfirmHandler gnc_table_model_get_confirm_handler
                                  (TableModel *model,
                                   const char * cell_name);
+
+void gnc_table_model_set_save_handler
+                                 (TableModel *model,
+                                  TableSaveCellHandler save_handler,
+                                  const char * cell_name);
+void gnc_table_model_set_pre_save_handler
+                                 (TableModel *model,
+                                  TableSaveHandler save_handler);
+void gnc_table_model_set_post_save_handler
+                                 (TableModel *model,
+                                  TableSaveHandler save_handler);
+TableSaveCellHandler gnc_table_model_get_save_handler
+                                 (TableModel *model,
+                                  const char * cell_name);
+TableSaveHandler gnc_table_model_get_pre_save_handler
+                                 (TableModel *model);
+TableSaveHandler gnc_table_model_get_post_save_handler
+                                 (TableModel *model);
 
 #endif

@@ -28,6 +28,8 @@
 #include <glib.h>
 
 #include "gnc-commodity.h"
+#include "kvp_frame.h"
+#include "GNCId.h"
 #include "gnc-ui-common.h"
 #include "date.h"
 
@@ -60,6 +62,17 @@ void gnc_option_set_selectable (GNCOption *option, gboolean selectable);
 GNCOptionDB * gnc_option_db_new(SCM guile_options);
 void          gnc_option_db_destroy(GNCOptionDB *odb);
 
+/* Create an option DB for a particular type, and save/load from a kvp.
+ * This assumes the gnc:*kvp-option-path* location for the options
+ * in the kvp.
+ *
+ * Note: the id_type MUST be a reference to the actual SCM
+ * gnc:id-type.  Just wrapping the type in scheme is *NOT* sufficient.
+ */
+GNCOptionDB * gnc_option_db_new_for_type(SCM id_type);
+void gnc_option_db_load_from_kvp(GNCOptionDB* odb, kvp_frame *slots);
+void gnc_option_db_save_to_kvp(GNCOptionDB* odb, kvp_frame *slots);
+
 void gnc_option_db_set_ui_callbacks (GNCOptionDB *odb,
                                      GNCOptionGetUIValue get_ui_value,
                                      GNCOptionSetUIValue set_ui_value,
@@ -84,6 +97,7 @@ SCM    gnc_option_setter(GNCOption *option);
 SCM    gnc_option_default_getter(GNCOption *option);
 SCM    gnc_option_value_validator(GNCOption *option);
 SCM    gnc_option_widget_changed_proc_getter(GNCOption *option);
+SCM    gnc_option_get_option_data(GNCOption *option);
 
 int    gnc_option_num_permissible_values(GNCOption *option);
 int    gnc_option_permissible_value_index(GNCOption *option, SCM value);
@@ -94,6 +108,7 @@ char * gnc_option_permissible_value_description(GNCOption *option, int index);
 gboolean gnc_option_show_time(GNCOption *option);
 
 gboolean gnc_option_multiple_selection(GNCOption *option);
+GList * gnc_option_get_account_type_list(GNCOption *option);
 
 gboolean gnc_option_get_range_info(GNCOption *option,
                                    double *lower_bound,
@@ -134,6 +149,7 @@ GNCOption * gnc_option_db_get_option_by_SCM(GNCOptionDB *odb,
 gboolean gnc_option_db_dirty(GNCOptionDB *odb);
 void     gnc_option_db_clean(GNCOptionDB *odb);
 
+gboolean gnc_option_db_get_changed(GNCOptionDB *odb);
 void gnc_option_db_commit(GNCOptionDB *odb);
 
 char * gnc_option_db_get_default_section(GNCOptionDB *odb);
@@ -221,6 +237,11 @@ gboolean gnc_option_db_set_boolean_option(GNCOptionDB *odb,
                                           const char *name,
                                           gboolean value);
 
+gboolean gnc_option_db_set_string_option(GNCOptionDB *odb,
+                                          const char *section,
+                                          const char *name,
+                                          const char *value);
+
 char * gnc_option_date_option_get_subtype(GNCOption *option);
 
 char * gnc_date_option_value_get_type (SCM option_value);
@@ -238,5 +259,11 @@ void gncp_option_db_register_option(GNCOptionDBHandle handle,
 
 void gncp_option_invoke_callback(GNCOptionChangeCallback callback,
                                  gpointer data);
+
+/* Reset all the widgets in one section to their default values */
+void gnc_option_db_section_reset_widgets (GNCOptionSection *section);
+
+/* Reset all the widgets to their default values */
+void gnc_option_db_reset_widgets (GNCOptionDB *odb);
 
 #endif /* OPTION_UTIL_H */

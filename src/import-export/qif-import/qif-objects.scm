@@ -82,7 +82,7 @@
   (make-simple-class 
    'qif-split
    '(category class memo amount category-is-account? matching-cleared mark
-              miscx-category miscx-is-account? miscx-class)))
+              miscx-category miscx-is-account? miscx-class negative)))
 
 (define qif-split:category 
   (simple-obj-getter <qif-split> 'category))
@@ -124,6 +124,12 @@
 (define qif-split:set-amount! 
   (simple-obj-setter <qif-split> 'amount))
 
+(define qif-split:neg?
+  (simple-obj-getter <qif-split> 'negative))
+
+(define qif-split:set-neg!
+  (simple-obj-setter <qif-split> 'negative))
+
 (define qif-split:mark 
   (simple-obj-getter <qif-split> 'mark))
 
@@ -163,6 +169,7 @@
 (define (make-qif-split)
   (let ((self (make-simple-obj <qif-split>)))
     (qif-split:set-category! self "")
+    (qif-split:set-neg! self #f)
     self))
 
 
@@ -288,7 +295,8 @@
 (define (qif-xtn:set-split-amounts! self amounts)
   (map 
    (lambda (split amount)
-     (qif-split:set-amount! split amount))
+     (let ((neg? (qif-split:neg? split)))
+       (qif-split:set-amount! split (if neg? (gnc:numeric-neg amount) amount))))
    (qif-xtn:splits self) amounts))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

@@ -64,7 +64,7 @@ struct _SheetBlockStyle
 };
 
 
-void gnucash_style_init (void);
+gboolean gnucash_style_init (void);
 
 void gnucash_sheet_style_init(void);
 

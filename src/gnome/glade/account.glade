@@ -156,6 +156,23 @@
 
 	      <widget>
 		<class>GtkLabel</class>
+		<name>label811</name>
+		<label>Account Code:</label>
+		<justify>GTK_JUSTIFY_RIGHT</justify>
+		<wrap>False</wrap>
+		<xalign>1</xalign>
+		<yalign>0.5</yalign>
+		<xpad>0</xpad>
+		<ypad>0</ypad>
+		<child>
+		  <padding>0</padding>
+		  <expand>False</expand>
+		  <fill>False</fill>
+		</child>
+	      </widget>
+
+	      <widget>
+		<class>GtkLabel</class>
 		<name>label808</name>
 		<label>Description:</label>
 		<justify>GTK_JUSTIFY_RIGHT</justify>
@@ -190,8 +207,8 @@
 
 	      <widget>
 		<class>GtkLabel</class>
-		<name>label811</name>
-		<label>Account Code:</label>
+		<name>label8477389</name>
+		<label>Smallest Fraction:</label>
 		<justify>GTK_JUSTIFY_RIGHT</justify>
 		<wrap>False</wrap>
 		<xalign>1</xalign>
@@ -221,6 +238,21 @@
 	      <widget>
 		<class>GtkEntry</class>
 		<name>name_entry</name>
+		<can_focus>True</can_focus>
+		<editable>True</editable>
+		<text_visible>True</text_visible>
+		<text_max_length>0</text_max_length>
+		<text></text>
+		<child>
+		  <padding>0</padding>
+		  <expand>False</expand>
+		  <fill>False</fill>
+		</child>
+	      </widget>
+
+	      <widget>
+		<class>GtkEntry</class>
+		<name>code_entry</name>
 		<can_focus>True</can_focus>
 		<editable>True</editable>
 		<text_visible>True</text_visible>
@@ -265,13 +297,20 @@
 	      </widget>
 
 	      <widget>
-		<class>GtkEntry</class>
-		<name>code_entry</name>
+		<class>GtkOptionMenu</class>
+		<name>account_scu</name>
+		<tooltip>Smallest fraction of this commodity that can be referenced.</tooltip>
 		<can_focus>True</can_focus>
-		<editable>True</editable>
-		<text_visible>True</text_visible>
-		<text_max_length>0</text_max_length>
-		<text></text>
+		<items>Use Commodity Value
+1
+1/10
+1/100
+1/1000
+1/10000
+1/100000
+1/1000000
+</items>
+		<initial_choice>0</initial_choice>
 		<child>
 		  <padding>0</padding>
 		  <expand>False</expand>
@@ -427,7 +466,7 @@
 
 		<widget>
 		  <class>GtkLabel</class>
-		  <name>label813</name>
+		  <name>source_label</name>
 		  <label>The source for price quotes:</label>
 		  <justify>GTK_JUSTIFY_RIGHT</justify>
 		  <wrap>False</wrap>
@@ -444,7 +483,7 @@
 
 		<widget>
 		  <class>GtkLabel</class>
-		  <name>label847713</name>
+		  <name>quote_tz_label</name>
 		  <label>Timezone for these quotes:</label>
 		  <justify>GTK_JUSTIFY_RIGHT</justify>
 		  <wrap>False</wrap>
@@ -504,6 +543,24 @@
 		</widget>
 	      </widget>
 	    </widget>
+
+	    <widget>
+	      <class>GtkLabel</class>
+	      <name>finance_quote_warning</name>
+	      <sensitive>False</sensitive>
+	      <label>Warning: Finance::Quote not installed properly.</label>
+	      <justify>GTK_JUSTIFY_CENTER</justify>
+	      <wrap>False</wrap>
+	      <xalign>0.5</xalign>
+	      <yalign>0.5</yalign>
+	      <xpad>0</xpad>
+	      <ypad>0</ypad>
+	      <child>
+		<padding>0</padding>
+		<expand>False</expand>
+		<fill>False</fill>
+	      </child>
+	    </widget>
 	  </widget>
 	</widget>
 
@@ -540,18 +597,50 @@
 	</widget>
 
 	<widget>
-	  <class>GtkCheckButton</class>
-	  <name>tax_related_button</name>
-	  <border_width>3</border_width>
-	  <can_focus>True</can_focus>
-	  <label>Tax Related</label>
-	  <active>False</active>
-	  <draw_indicator>True</draw_indicator>
+	  <class>GtkHBox</class>
+	  <name>hbox104</name>
+	  <homogeneous>True</homogeneous>
+	  <spacing>0</spacing>
 	  <child>
 	    <padding>0</padding>
 	    <expand>False</expand>
 	    <fill>False</fill>
 	  </child>
+
+	  <widget>
+	    <class>GtkCheckButton</class>
+	    <name>tax_related_button</name>
+	    <border_width>3</border_width>
+	    <can_focus>True</can_focus>
+	    <label>Tax Related</label>
+	    <active>False</active>
+	    <draw_indicator>True</draw_indicator>
+	    <child>
+	      <padding>0</padding>
+	      <expand>False</expand>
+	      <fill>False</fill>
+	    </child>
+	  </widget>
+
+	  <widget>
+	    <class>Placeholder</class>
+	  </widget>
+
+	  <widget>
+	    <class>GtkCheckButton</class>
+	    <name>placeholder_button</name>
+	    <border_width>3</border_width>
+	    <tooltip>This account is present solely as a placeholder in the hierarchy.  Transactions may not be posted to this account, only to sub-accounts of this account.</tooltip>
+	    <can_focus>True</can_focus>
+	    <label>Placeholder</label>
+	    <active>False</active>
+	    <draw_indicator>True</draw_indicator>
+	    <child>
+	      <padding>0</padding>
+	      <expand>False</expand>
+	      <fill>False</fill>
+	    </child>
+	  </widget>
 	</widget>
       </widget>
 
@@ -1189,7 +1278,7 @@ additional accounts by hand later.</label>
 	  <name>finalAccountLabel</name>
 	  <label>If you would like an account to have an opening balance, click on the account
 and enter the starting balance in the box on the right. All accounts except Equity
-accounts may have an opening balance.</label>
+and placeholder accounts may have an opening balance.</label>
 	  <justify>GTK_JUSTIFY_LEFT</justify>
 	  <wrap>False</wrap>
 	  <xalign>0.5</xalign>
@@ -1217,7 +1306,7 @@ accounts may have an opening balance.</label>
 	  <widget>
 	    <class>GtkScrolledWindow</class>
 	    <name>scrolledwindow4</name>
-	    <hscrollbar_policy>GTK_POLICY_NEVER</hscrollbar_policy>
+	    <hscrollbar_policy>GTK_POLICY_AUTOMATIC</hscrollbar_policy>
 	    <vscrollbar_policy>GTK_POLICY_ALWAYS</vscrollbar_policy>
 	    <hupdate_policy>GTK_UPDATE_CONTINUOUS</hupdate_policy>
 	    <vupdate_policy>GTK_UPDATE_CONTINUOUS</vupdate_policy>
@@ -1300,6 +1389,26 @@ accounts may have an opening balance.</label>
 	    </child>
 
 	    <widget>
+	      <class>GtkCheckButton</class>
+	      <name>placeholder</name>
+	      <border_width>2</border_width>
+	      <can_focus>True</can_focus>
+	      <signal>
+		<name>toggled</name>
+		<handler>on_final_account_tree_placeholder_toggled</handler>
+		<last_modification_time>Fri, 05 Apr 2002 23:41:25 GMT</last_modification_time>
+	      </signal>
+	      <label>Placeholder</label>
+	      <active>False</active>
+	      <draw_indicator>True</draw_indicator>
+	      <child>
+		<padding>0</padding>
+		<expand>False</expand>
+		<fill>False</fill>
+	      </child>
+	    </widget>
+
+	    <widget>
 	      <class>GtkFrame</class>
 	      <name>frame3</name>
 	      <label>Opening Balance</label>
@@ -1351,6 +1460,159 @@ Press `Cancel' to close this dialog without creating any new accounts.</text>
       <textbox_color>255,255,255</textbox_color>
       <text_color>0,0,0</text_color>
       <title_color>255,255,255</title_color>
+    </widget>
+  </widget>
+</widget>
+
+<widget>
+  <class>GnomeDialog</class>
+  <name>Account Picker</name>
+  <title>Select Account</title>
+  <type>GTK_WINDOW_TOPLEVEL</type>
+  <position>GTK_WIN_POS_NONE</position>
+  <modal>False</modal>
+  <default_width>300</default_width>
+  <default_height>400</default_height>
+  <allow_shrink>True</allow_shrink>
+  <allow_grow>True</allow_grow>
+  <auto_shrink>True</auto_shrink>
+  <auto_close>False</auto_close>
+  <hide_on_close>False</hide_on_close>
+
+  <widget>
+    <class>GtkVBox</class>
+    <child_name>GnomeDialog:vbox</child_name>
+    <name>vbox1</name>
+    <homogeneous>False</homogeneous>
+    <spacing>8</spacing>
+    <child>
+      <padding>1</padding>
+      <expand>True</expand>
+      <fill>True</fill>
+    </child>
+
+    <widget>
+      <class>GtkHButtonBox</class>
+      <child_name>GnomeDialog:action_area</child_name>
+      <name>hbuttonbox1</name>
+      <layout_style>GTK_BUTTONBOX_SPREAD</layout_style>
+      <spacing>8</spacing>
+      <child_min_width>85</child_min_width>
+      <child_min_height>27</child_min_height>
+      <child_ipad_x>7</child_ipad_x>
+      <child_ipad_y>0</child_ipad_y>
+      <child>
+	<padding>0</padding>
+	<expand>False</expand>
+	<fill>False</fill>
+	<pack>GTK_PACK_END</pack>
+      </child>
+
+      <widget>
+	<class>GtkButton</class>
+	<name>button1</name>
+	<can_default>True</can_default>
+	<can_focus>True</can_focus>
+	<stock_button>GNOME_STOCK_BUTTON_OK</stock_button>
+      </widget>
+
+      <widget>
+	<class>GtkButton</class>
+	<name>button2</name>
+	<can_default>True</can_default>
+	<can_focus>True</can_focus>
+	<stock_button>GNOME_STOCK_BUTTON_CANCEL</stock_button>
+      </widget>
+    </widget>
+
+    <widget>
+      <class>GtkVBox</class>
+      <name>vbox2</name>
+      <homogeneous>False</homogeneous>
+      <spacing>0</spacing>
+      <child>
+	<padding>0</padding>
+	<expand>True</expand>
+	<fill>True</fill>
+      </child>
+
+      <widget>
+	<class>GtkFrame</class>
+	<name>frame1</name>
+	<label>Select or add a GnuCash account</label>
+	<label_xalign>0</label_xalign>
+	<shadow_type>GTK_SHADOW_ETCHED_IN</shadow_type>
+	<child>
+	  <padding>0</padding>
+	  <expand>True</expand>
+	  <fill>True</fill>
+	</child>
+
+	<widget>
+	  <class>GtkScrolledWindow</class>
+	  <name>scrolledwindow24</name>
+	  <hscrollbar_policy>GTK_POLICY_AUTOMATIC</hscrollbar_policy>
+	  <vscrollbar_policy>GTK_POLICY_AUTOMATIC</vscrollbar_policy>
+	  <hupdate_policy>GTK_UPDATE_CONTINUOUS</hupdate_policy>
+	  <vupdate_policy>GTK_UPDATE_CONTINUOUS</vupdate_policy>
+
+	  <widget>
+	    <class>GtkCTree</class>
+	    <name>account_tree</name>
+	    <can_focus>True</can_focus>
+	    <columns>2</columns>
+	    <column_widths>214,48</column_widths>
+	    <selection_mode>GTK_SELECTION_SINGLE</selection_mode>
+	    <show_titles>True</show_titles>
+	    <shadow_type>GTK_SHADOW_IN</shadow_type>
+
+	    <widget>
+	      <class>GtkLabel</class>
+	      <child_name>CTree:title</child_name>
+	      <name>label847711</name>
+	      <label>Account</label>
+	      <justify>GTK_JUSTIFY_CENTER</justify>
+	      <wrap>False</wrap>
+	      <xalign>0.5</xalign>
+	      <yalign>0.5</yalign>
+	      <xpad>0</xpad>
+	      <ypad>0</ypad>
+	    </widget>
+
+	    <widget>
+	      <class>GtkLabel</class>
+	      <child_name>CTree:title</child_name>
+	      <name>label847712</name>
+	      <label>New?</label>
+	      <justify>GTK_JUSTIFY_CENTER</justify>
+	      <wrap>False</wrap>
+	      <xalign>0.5</xalign>
+	      <yalign>0.5</yalign>
+	      <xpad>0</xpad>
+	      <ypad>0</ypad>
+	    </widget>
+	  </widget>
+	</widget>
+      </widget>
+    </widget>
+
+    <widget>
+      <class>GtkButton</class>
+      <name>new_account_button</name>
+      <can_focus>True</can_focus>
+      <signal>
+	<name>clicked</name>
+	<handler>gnc_ui_qif_account_picker_new_cb</handler>
+	<data>QIF_Import_Account_Picker</data>
+	<last_modification_time>Sat, 10 Feb 2001 21:26:10 GMT</last_modification_time>
+      </signal>
+      <label>New Account (not implemented)</label>
+      <relief>GTK_RELIEF_NORMAL</relief>
+      <child>
+	<padding>0</padding>
+	<expand>False</expand>
+	<fill>False</fill>
+      </child>
     </widget>
   </widget>
 </widget>

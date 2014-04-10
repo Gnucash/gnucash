@@ -1,6 +1,6 @@
 /********************************************************************\
  * price.h -- implements price & commodity handling for pg backend  *
- * Copyright (c) 2000, 2001 Linas Vepstas                           *
+ * Copyright (c) 2000, 2001 Linas Vepstas  <linas@linas.org>        *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -27,10 +27,11 @@
 #include "PostgresBackend.h"
 
 void pgendGetAllCommodities (PGBackend *be);
-void pgendStorePriceDB (PGBackend *be, GNCPriceDB *prdb);
-void pgendStorePriceDBNoLock (PGBackend *be, GNCPriceDB *prdb);
-GNCPriceDB * pgendGetAllPrices (PGBackend *be, GNCPriceDB *prdb);
-void pgendPriceLookup (Backend *bend, GNCPriceLookup *look);
+void pgendGetCommodity (PGBackend *be, const char * unique_name);
+void pgendStorePriceDB (PGBackend *be, GNCBook *book);
+void pgendStorePriceDBNoLock (PGBackend *be, GNCBook *book);
+void pgendGetAllPricesInBook (PGBackend *be, GNCBook *);
+void pgendPriceFind (Backend *bend, GNCPriceLookup *look);
 
 
 void pgend_price_begin_edit (Backend * bend, GNCPrice *pr);

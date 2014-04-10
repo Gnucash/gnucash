@@ -4,9 +4,9 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gnucash 1.6\n"
-"POT-Creation-Date: 2001-08-19 23:23+0200\n"
-"PO-Revision-Date: 2001-08-19 23:26+02:00\n"
+"Project-Id-Version: gnucash 1.7\n"
+"POT-Creation-Date: 2002-11-05 23:04+0100\n"
+"PO-Revision-Date: 2002-11-05 23:05+0100\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: DE\n"
 "MIME-Version: 1.0\n"
@@ -189,9 +189,21 @@ msgstr "Ausgleichen "
 msgid "bank"
 msgstr "Bank"
 
+#. "A written statement of money owed for goods or services supplied. In Gnucash, a 'bill' is a statement that we received, whereas an 'invoice' is one that we sent out."
+msgid "bill"
+msgstr "Rechnung (Rechnungseingang, Empfangene Rechnung)"
+
+#. "Conditions on paying a bill. Both an invoice and a bill have billing terms. For example, you can have 'terms' of 'Net-30', where the bill is due in full in 30 days."
+msgid "billing terms"
+msgstr "Zahlungsbedingungen"
+
 #. "-"
 msgid "business (adjective)"
 msgstr "Geschäftlich"
+
+#. "as Menu Item: Headline for features that are related to small business accounting"
+msgid "business (noun)"
+msgstr "Geschäft (Firma, Kaufmännisch, Unternehmen)"
 
 #. "Profits made from the sale of investments or property"
 msgid "capital gains"
@@ -235,7 +247,8 @@ msgstr "Symbol"
 
 #. "(a) A sum of money paid into an account. (b) A record of such a payment. (c) The state of having money in one's bank account."
 msgid "Credit (column in register)"
-msgstr "Haben (ist der professionelle Ausdruck für (a). Sonst: Gutschrift, Eingang?)"
+msgstr ""
+"Haben (ist der professionelle Ausdruck für (a). Sonst: Gutschrift, Eingang?)"
 
 #. "-"
 msgid "Credit Card"
@@ -271,7 +284,8 @@ msgstr "Zeitraum"
 
 #. "(a) A written note in an account of a sum owed or paid out. (b) A sum withdrawn from an account."
 msgid "Debit (column in register)"
-msgstr "Soll (ist der professionelle Ausdruck für (b). Sonst: Belastung, Ausgang?)"
+msgstr ""
+"Soll (ist der professionelle Ausdruck für (b). Sonst: Belastung, Ausgang?)"
 
 #. "Each option has a default setting that it is shipped with, until the user changes the setting."
 msgid "default"
@@ -293,9 +307,17 @@ msgstr "Beschreibung (Verwendungszweck, Buchungstext, Text?)"
 msgid "double entry"
 msgstr "Doppelte Buchführung"
 
+#. "a person who works for somebody or a company in return for wages"
+msgid "employee"
+msgstr "Angestellter<"
+
 #. "1. The money value of a property after all charges on it have been paid. Equity isn't debt, it's a representation of long-term capital (So combining it with liability isn't really very meaningful, except in the balance sheet. 2. (a) The value of the shares issued by  a company. (b) Ordinary stocks and shares that carry no fixed interest."
 msgid "equity"
 msgstr "Eigenkapital"
+
+#. "A trusted third party that holds a payment or deposit until a transaction is completed. In the US, many mortgage companies set up an escrow account when you get a mortgage.  You pay into the account every month and they disburse amounts out of the escrow to pay for hazard insurance and property taxes. So they are holding funds 'in escrow' to complete the transactions (paying insurance and taxes)."
+msgid "escrow (account)"
+msgstr "Treuhandkonto"
 
 #. "The relation in value between the money used in different countries"
 msgid "exchange rate"
@@ -337,9 +359,13 @@ msgstr "Import"
 msgid "interest"
 msgstr "Zinsen"
 
-#. "A list of goods sold or services provided together with the prices charged; a bill"
+#. "A list of goods sold or services provided together with the prices charged; see also: a bill. In Gnucash, an 'invoice' is a statement that we sent out, whereas a 'bill' is one that we received."
 msgid "invoice"
-msgstr "Rechnung"
+msgstr "Rechnung (Rechnungsausgang, Versandte Rechnung)"
+
+#. "In small business accounting: A piece of work or task undertaken on order at a stated rate?????"
+msgid "job"
+msgstr "Auftrag"
 
 #. "A book in which a bank, business firm, etc. records its financial accounts"
 msgid "ledger"
@@ -348,6 +374,10 @@ msgstr "Hauptbuch"
 #. "The heading for the right side of the balance sheet. See also: Equity."
 msgid "liabilities/equity"
 msgstr "Passiva"
+
+#. "A sum of money that is lent (by a bank)"
+msgid "loan"
+msgstr "Darlehen"
 
 #. "The money lost in business activity"
 msgid "loss"
@@ -368,6 +398,10 @@ msgstr "Fenstermodus"
 #. "One textfield per split that should help you remember what this split was about."
 msgid "Memo"
 msgstr "Buchungstext, (Verwendungszweck, Text, Erklärung?)"
+
+#. "(a) An agreement by which money is lent by a bank for buying a house or other property, the property being the security. (b) A sum of money lent in this way."
+msgid "Mortgage"
+msgstr "Hypothek"
 
 #. "e.g. USD, DEM, see Currency."
 msgid "national currency"
@@ -409,13 +443,17 @@ msgstr "Anfangsbestand"
 msgid "options"
 msgstr "Optionen"
 
+#. "In small business accounting: unused term at the moment (maybe: a particular piece of work, maybe created through an order from a customer???)"
+msgid "order"
+msgstr "Bestellung"
+
 #. "Name of an automatically created account that holds splits that have no account."
 msgid "orphan"
 msgstr "Ausbuchungskonto??"
 
 #. "A secret phrase that one needs to know in order to get access to a user account "
 msgid "passphrase"
-msgstr "Mantra (Passphrase)"
+msgstr "Passwort (Mantra, Passphrase)"
 
 #. "An amount that must be paid / An amount for which money has not yet been received"
 msgid "Payables/Receivables"
@@ -432,6 +470,10 @@ msgstr "Zahlungspflichtiger"
 #. "1. The action of paying sb/sth or of being paid. 2. A sum of money paid."
 msgid "payment"
 msgstr "Zahlung"
+
+#. "An account where no transactions may be posted to; transactions can only be posted to subaccounts of this account, so this account serves as a placeholder in the hierarchy"
+msgid "placeholder"
+msgstr "Platzhalter"
 
 #. "A set of investments owned by a person"
 msgid "portfolio"
@@ -521,6 +563,10 @@ msgstr "Gewinnrücklagen"
 msgid "save, to (to a file)"
 msgstr "speichern"
 
+#. "A transaction or reminder of a transaction that can be automatically executed at a specific time. It can be executed either once, or several times at regular intervals."
+msgid "Scheduled Transaction"
+msgstr "Terminierte Buchung (Dauerauftrag, Termin-Überweisung)"
+
 #. "DEPRECATED. To repair unbalanced transactions and orphan splits in an account tree. Any transactions that have debits != credits will get a balancing split added (pointing to a special new account called 'Imbalance'). Any splits that do not have accounts are put into another special account called 'Orphan'. Deprecated - use the term 'to check and repair' now."
 msgid "scrub, to"
 msgstr "Ausbuchen??"
@@ -573,11 +619,11 @@ msgstr "Gesamt"
 msgid "total"
 msgstr "Betrag"
 
-#. "A piece of business done; the transfer of money from one account to one or more other accounts"
+#. "A piece of business done; the transfer of money from one account to one or more other accounts. (see also: Scheduled Transaction)"
 msgid "transaction"
 msgstr "Geschäftsvorgang"
 
-#. "-"
+#. "A transaction whose amount has actually been moved. The word comes from checks: a check is issued, but several steps have to be done until the amount is actually retrieved from the bank account, which is the point in time where that transaction (check) gets cleared."
 msgid "transaction state: cleared"
 msgstr "Bestätigt"
 
@@ -588,6 +634,10 @@ msgstr "Fixiert"
 #. "A transaction that was reconciled with the bank's statement."
 msgid "transaction state: reconciled"
 msgstr "Abgeglichen"
+
+#. "A transaction that is void i.e. not valid (anymore)."
+msgid "transaction state: voided"
+msgstr "Storniert (Gelöscht?)"
 
 #. "1. The action of transferring sth. 2. see: credit transfer"
 msgid "transfer (noun)"
@@ -616,6 +666,10 @@ msgstr "URL"
 #. "The worth of sth in terms of money or other commodities for which it can be exchanged"
 msgid "value (in a split)"
 msgstr "Wert "
+
+#. "In small business accounting: A person or company that sells items and is supplying goods"
+msgid "vendor"
+msgstr "Zulieferer"
 
 #. "see debit"
 msgid "withdraw (in the reconcile dialog)"

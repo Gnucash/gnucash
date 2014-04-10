@@ -50,7 +50,6 @@ typedef enum
   LD_SINGLE,
   LD_SUBACCOUNT,
   LD_GL,
-  LD_TEMPLATE,
 } GNCLedgerDisplayType;
 
 
@@ -70,6 +69,9 @@ gpointer gnc_ledger_display_get_user_data (GNCLedgerDisplay *ld);
 void gnc_ledger_display_set_handlers (GNCLedgerDisplay *ld,
                                       GNCLedgerDisplayDestroy destroy,
                                       GNCLedgerDisplayGetParent get_parent);
+
+/** Returns the parent of a given */
+gncUIWidget gnc_ledger_display_get_parent( GNCLedgerDisplay *ld );
 
 /* return the split register associated with a ledger display */
 SplitRegister * gnc_ledger_display_get_split_register (GNCLedgerDisplay *ld);
@@ -119,5 +121,9 @@ void gnc_ledger_display_close (GNCLedgerDisplay * ledger_display);
 
 /* close all ledger windows containing this account. */
 void gnc_ledger_display_destroy_by_account (Account *account);
+
+/* Returns a boolean of whether this display should be single or double lined
+ * mode by default */
+gboolean gnc_ledger_display_default_double_line (GNCLedgerDisplay *gld);
 
 #endif

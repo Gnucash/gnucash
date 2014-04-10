@@ -25,6 +25,7 @@
  *
  * FUNCTION:
  * Encapsulate all the information about a gnucash dataset.
+ * See src/doc/books.txt for design overview.
  *
  * HISTORY:
  * Created by Linas Vepstas December 1998
@@ -56,35 +57,47 @@
 #include "gnc-book-p.h"
 #include "gnc-engine.h"
 #include "gnc-engine-util.h"
+#include "gnc-event.h"
+#include "gnc-event-p.h"
 #include "gnc-module.h"
+#include "gncObjectP.h"
+#include "QueryObject.h"
 
 static short module = MOD_IO;
 
-/* ---------------------------------------------------------------------- */
+/* ====================================================================== */
+/* constructor / destructor */
 
 static void
 gnc_book_init (GNCBook *book)
 {
-  Account *template_acct;
-
   if (!book) return;
 
   book->entity_table = xaccEntityTableNew ();
+
+  xaccGUIDNew(&book->guid, book);
+  xaccStoreEntity(book->entity_table, book, &book->guid, GNC_ID_BOOK);
+
+  book->kvp_data = kvp_frame_new ();
   book->topgroup = xaccMallocAccountGroup(book);
-  book->pricedb = gnc_pricedb_create();
+  book->pricedb = gnc_pricedb_create(book);
 
   book->sched_xactions = NULL;
   book->sx_notsaved = FALSE;
   book->template_group = xaccMallocAccountGroup(book);
+  book->commodity_table = gnc_commodity_table_new ();
 
-  /* FIXME: the gnc_engine_commodity_table_new() routine invokes
-   * guile/scheme to load the default list of currencies.  This 
-   * forces the engine to link to guile, which is an obvious 
-   * architecture flaw.  */
-  book->commodity_table = gnc_engine_commodity_table_new ();
+  if(book->commodity_table)
+  {
+    if(!gnc_commodity_table_add_default_data(book->commodity_table))
+      PWARN("unable to initialize book's commodity_table");
+  }
 
-  xaccGroupSetBook (book->topgroup, book);
-  xaccGroupSetBook (book->template_group, book);
+  book->data_tables = g_hash_table_new (g_str_hash, g_str_equal);
+
+  book->book_open = 'y';
+  book->version = 0;
+  book->idata = 0;
 }
 
 GNCBook *
@@ -92,13 +105,69 @@ gnc_book_new (void)
 {
   GNCBook *book;
 
+  ENTER (" ");
   book = g_new0(GNCBook, 1);
   gnc_book_init(book);
+  gncObjectBookBegin (book);
 
+#if 0
+  gnc_engine_generate_event (&book->guid, GNC_EVENT_CREATE);
+#endif
+  LEAVE ("book=%p", book);
   return book;
 }
 
-/* ---------------------------------------------------------------------- */
+void
+gnc_book_destroy (GNCBook *book) 
+{
+  if (!book) return;
+
+  ENTER ("book=%p", book);
+  gnc_engine_generate_event (&book->guid, GNC_EVENT_DESTROY);
+
+  gncObjectBookEnd (book);
+
+  xaccAccountGroupBeginEdit (book->topgroup);
+  xaccAccountGroupDestroy (book->topgroup);
+  book->topgroup = NULL;
+
+  gnc_pricedb_destroy (book->pricedb);
+  book->pricedb = NULL;
+
+  gnc_commodity_table_destroy (book->commodity_table);
+  book->commodity_table = NULL;
+
+  /* FIXME: destroy SX data members here, too */
+
+  xaccRemoveEntity (book->entity_table, &book->guid);
+  xaccEntityTableDestroy (book->entity_table);
+  book->entity_table = NULL;
+
+  /* FIXME: Make sure the data_table is empty */
+  g_hash_table_destroy (book->data_tables);
+
+  xaccLogEnable();
+
+  g_free (book);
+  LEAVE ("book=%p", book);
+}
+
+/* ====================================================================== */
+/* getters */
+
+const GUID *
+gnc_book_get_guid (GNCBook *book)
+{
+  if (!book) return NULL;
+  return &book->guid;
+}
+
+kvp_frame *
+gnc_book_get_slots (GNCBook *book)
+{
+  if (!book) return NULL;
+  return book->kvp_data;
+}
 
 GNCEntityTable *
 gnc_book_get_entity_table (GNCBook *book)
@@ -106,8 +175,6 @@ gnc_book_get_entity_table (GNCBook *book)
   if (!book) return NULL;
   return book->entity_table;
 }
-
-/* ---------------------------------------------------------------------- */
 
 gnc_commodity_table *
 gnc_book_get_commodity_table(GNCBook *book)
@@ -123,72 +190,12 @@ gnc_book_get_group (GNCBook *book)
    return book->topgroup;
 }
 
-void
-gnc_book_set_group (GNCBook *book, AccountGroup *grp)
-{
-  if (!book) return;
-
-  /* Do not free the old topgroup here unless you also fix
-   * all the other uses of gnc_book_set_group! */
-
-  if (book->topgroup == grp)
-    return;
-
-  xaccGroupSetBook (book->topgroup, NULL);
-  xaccGroupSetBook (grp, book);
-
-  book->topgroup = grp;
-
-  xaccGroupSetBackend (grp, book->backend);
-}
-
-void
-gnc_book_set_backend (GNCBook *book, Backend *be)
-{
-  if (!book) return;
-
-  book->backend = be;
-  xaccGroupSetBackend (book->topgroup, be);
-  xaccPriceDBSetBackend (book->pricedb, be);
-}
-
-/* ---------------------------------------------------------------------- */
-
-static gboolean
-counter_thunk(Transaction *t, void *data)
-{
-    (*((guint*)data))++;
-    return TRUE;
-}
-
-guint
-gnc_book_count_transactions(GNCBook *book)
-{
-    guint count = 0;
-    xaccGroupForEachTransaction(gnc_book_get_group(book),
-                                counter_thunk, (void*)&count);
-    return count;
-}
-
-/* ---------------------------------------------------------------------- */
-
 GNCPriceDB *
 gnc_book_get_pricedb(GNCBook *book)
 {
-  if(!book) return NULL;
+  if (!book) return NULL;
   return book->pricedb;
 }
-
-void
-gnc_book_set_pricedb(GNCBook *book, GNCPriceDB *db)
-{
-  if(!book) return;
-
-  book->pricedb = db;
-  xaccPriceDBSetBackend (db, book->backend);
-}
-
-/* ---------------------------------------------------------------------- */
 
 GList *
 gnc_book_get_schedxactions( GNCBook *book )
@@ -196,6 +203,90 @@ gnc_book_get_schedxactions( GNCBook *book )
         if ( book == NULL ) return NULL;
         return book->sched_xactions;
 }
+
+AccountGroup *
+gnc_book_get_template_group( GNCBook *book )
+{
+  if (!book) return NULL;
+  return book->template_group;
+}
+
+Backend * 
+xaccGNCBookGetBackend (GNCBook *book)
+{
+   if (!book) return NULL;
+   return book->backend;
+}
+
+/* ====================================================================== */
+/* setters */
+
+void
+gnc_book_set_guid (GNCBook *book, GUID uid)
+{
+  if (!book) return;
+
+  if (guid_equal (&book->guid, &uid)) return;
+
+  xaccRemoveEntity(book->entity_table, &book->guid);
+  book->guid = uid;
+  xaccStoreEntity(book->entity_table, book, &book->guid, GNC_ID_BOOK);
+}
+
+void
+gnc_book_set_group (GNCBook *book, AccountGroup *grp)
+{
+  if (!book) return;
+
+  /* Do not free the old topgroup here unless you also fix
+   * all the other uses of gnc_book_set_group! 
+   */
+
+  if (book->topgroup == grp)
+    return;
+
+  if (grp->book != book)
+  {
+     PERR ("cannot mix and match books freely!");
+     return;
+  }
+  /* Note: code that used to be here to set/reset the book
+   * a group belonged to was removed, mostly because it 
+   * was wrong: You can't just change the book a group
+   * belongs to without also dealing with the entity
+   * tables.  The previous code would have allowed entity
+   * tables to reside in one book, while the groups were 
+   * in another.  Note: please remove this comment sometime 
+   * after gnucash-1.8 goes out.
+   */
+
+  book->topgroup = grp;
+}
+
+void
+gnc_book_set_backend (GNCBook *book, Backend *be)
+{
+  if (!book) return;
+  ENTER ("book=%p be=%p", book, be);
+  book->backend = be;
+}
+
+gpointer gnc_book_get_backend (GNCBook *book)
+{
+  if (!book) return NULL;
+  return (gpointer)book->backend;
+}
+
+
+void
+gnc_book_set_pricedb(GNCBook *book, GNCPriceDB *db)
+{
+  if(!book) return;
+  book->pricedb = db;
+  if (db) db->book = book;
+}
+
+/* ====================================================================== */
 
 void
 gnc_book_set_schedxactions( GNCBook *book, GList *newList )
@@ -206,13 +297,6 @@ gnc_book_set_schedxactions( GNCBook *book, GList *newList )
   book->sx_notsaved = TRUE;
 }
 
-AccountGroup *
-gnc_book_get_template_group( GNCBook *book )
-{
-  if (!book) return NULL;
-  return book->template_group;
-}
-
 void
 gnc_book_set_template_group (GNCBook *book, AccountGroup *templateGroup)
 {
@@ -221,20 +305,17 @@ gnc_book_set_template_group (GNCBook *book, AccountGroup *templateGroup)
   if (book->template_group == templateGroup)
     return;
 
-  xaccGroupSetBook (book->template_group, NULL);
-  xaccGroupSetBook (templateGroup, book);
+  if (templateGroup->book != book)
+  {
+     PERR ("cannot mix and match books freely!");
+     return;
+  }
 
   book->template_group = templateGroup;
-
-  xaccGroupSetBackend (templateGroup, book->backend);
 }
 
-Backend * 
-xaccGNCBookGetBackend (GNCBook *book)
-{
-   if (!book) return NULL;
-   return book->backend;
-}
+/* ====================================================================== */
+/* dirty flag stuff */
 
 static void
 mark_sx_clean(gpointer data, gpointer user_data)
@@ -249,21 +330,9 @@ book_sxns_mark_saved(GNCBook *book)
 {
   book->sx_notsaved = FALSE;
   g_list_foreach(gnc_book_get_schedxactions(book),
-		 mark_sx_clean, 
-		 NULL);
+                 mark_sx_clean, 
+                 NULL);
   return;
-}
-
-void
-gnc_book_mark_saved(GNCBook *book)
-{
-  if (!book) return;
-
-  xaccGroupMarkSaved(gnc_book_get_group(book));
-  gnc_pricedb_mark_clean(gnc_book_get_pricedb(book));
-
-  xaccGroupMarkSaved(gnc_book_get_template_group(book));
-  book_sxns_mark_saved(book);
 }
 
 static gboolean
@@ -287,46 +356,46 @@ book_sxlist_notsaved(GNCBook *book)
   return FALSE;
 }
   
+void
+gnc_book_mark_saved(GNCBook *book)
+{
+  if (!book) return;
+
+  book->dirty = FALSE;
+
+  xaccGroupMarkSaved(gnc_book_get_group(book));
+  gnc_pricedb_mark_clean(gnc_book_get_pricedb(book));
+
+  xaccGroupMarkSaved(gnc_book_get_template_group(book));
+  book_sxns_mark_saved(book);
+
+  /* Mark everything as clean */
+  gncObjectMarkClean (book);
+}
+
 gboolean
 gnc_book_not_saved(GNCBook *book)
 {
   if (!book) return FALSE;
 
-  return(xaccGroupNotSaved(book->topgroup)
+  return(book->dirty
+	 ||
+	 xaccGroupNotSaved(book->topgroup)
          ||
          gnc_pricedb_dirty(book->pricedb)
-	 ||
-	 book_sxlist_notsaved(book));
+         ||
+         book_sxlist_notsaved(book)
+         ||
+         gncObjectIsDirty (book));
 }
 
-void
-gnc_book_destroy (GNCBook *book) 
+void gnc_book_kvp_changed (GNCBook *book)
 {
   if (!book) return;
-
-  /* mark the accounts as being freed
-   * to avoid tons of balance recomputations. */
-  xaccGroupMarkDoFree (book->topgroup);
-
-  xaccFreeAccountGroup (book->topgroup);
-  book->topgroup = NULL;
-
-  gnc_pricedb_destroy (book->pricedb);
-  book->pricedb = NULL;
-
-  gnc_commodity_table_destroy (book->commodity_table);
-  book->commodity_table = NULL;
-
-  /* FIXME: destroy SX data members here, too */
-
-  xaccEntityTableDestroy (book->entity_table);
-  book->entity_table = NULL;
-
-  xaccLogEnable();
-
-  g_free (book);
-  LEAVE(" ");
+  book->dirty = TRUE;
 }
+
+/* ====================================================================== */
 
 gboolean
 gnc_book_equal (GNCBook *book_1, GNCBook *book_2)
@@ -360,3 +429,108 @@ gnc_book_equal (GNCBook *book_1, GNCBook *book_2)
 
   return TRUE;
 }
+
+/* ====================================================================== */
+
+/* Store arbitrary pointers in the GNCBook for data storage extensibility */
+void gnc_book_set_data (GNCBook *book, const char *key, gpointer data)
+{
+  if (!book || !key || !data) return;
+  g_hash_table_insert (book->data_tables, (gpointer)key, data);
+}
+
+gpointer gnc_book_get_data (GNCBook *book, const char *key)
+{
+  if (!book || !key) return NULL;
+  return g_hash_table_lookup (book->data_tables, (gpointer)key);
+}
+
+/* ====================================================================== */
+
+static gboolean
+counter_thunk(Transaction *t, void *data)
+{
+    (*((guint*)data))++;
+    return TRUE;
+}
+
+guint
+gnc_book_count_transactions(GNCBook *book)
+{
+    guint count = 0;
+    xaccGroupForEachTransaction(gnc_book_get_group(book),
+                                counter_thunk, (void*)&count);
+    return count;
+}
+
+/* ====================================================================== */
+
+gint64
+gnc_book_get_counter (GNCBook *book, const char *counter_name)
+{
+  Backend *be;
+  kvp_frame *kvp;
+  kvp_value *value;
+  gint64 counter;
+
+  if (!book) {
+    PWARN ("No book!!!");
+    return -1;
+  }
+
+  if (!counter_name || *counter_name == '\0') {
+    PWARN ("Invalid counter name.");
+    return -1;
+  }
+
+  /* If we've got a backend with a counter method, call it */
+  be = book->backend;
+  if (be && be->counter)
+    return ((be->counter)(be, counter_name));
+
+  /* If not, then use the KVP in the book */
+  kvp = gnc_book_get_slots (book);
+
+  if (!kvp) {
+    PWARN ("Book has no KVP_Frame");
+    return -1;
+  }
+
+  value = kvp_frame_get_slot_path (kvp, "counters", counter_name, NULL);
+  if (value) {
+    /* found it */
+    counter = kvp_value_get_gint64 (value);
+  } else {
+    /* New counter */
+    counter = 0;
+  }
+
+  /* Counter is now valid; increment it */
+  counter++;
+
+  /* Save off the new counter */
+  value = kvp_value_new_gint64 (counter);
+  kvp_frame_set_slot_path (kvp, value, "counters", counter_name, NULL);
+  kvp_value_delete (value);
+
+  /* and return the value */
+  return counter;
+}
+
+/* gncObject function implementation and registration */
+gboolean gnc_book_register (void)
+{
+  static QueryObjectDef params[] = {
+    { BOOK_KVP, QUERYCORE_KVP, (QueryAccess)gnc_book_get_slots },
+    { QUERY_PARAM_GUID, QUERYCORE_GUID, (QueryAccess)gnc_book_get_guid },
+    { NULL },
+  };
+
+  gncQueryObjectRegister (GNC_ID_BOOK, NULL, params);
+
+  return TRUE;
+}
+
+
+
+/* ========================== END OF FILE =============================== */

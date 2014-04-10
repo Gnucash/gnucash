@@ -147,7 +147,6 @@ test_generation(void)
         gnc_commodity *ran_com;
         xmlNodePtr test_node;
         gchar *filename1;
-        FILE *cmp_file;
         int fd;
         gchar *compare_msg;
         

@@ -111,6 +111,7 @@ gnc_split_register_set_cells (SplitRegister *reg, TableLayout *layout)
           gnc_table_layout_set_cell (layout, curs, CRED_CELL,  0, 6);
         }
         gnc_table_layout_set_cell (layout, curs, BALN_CELL,  0, 7);
+	gnc_table_layout_set_cell (layout, curs, RATE_CELL, 0, 8);
 
         curs_last = curs;
         curs = gnc_table_layout_get_cursor (layout,
@@ -130,6 +131,7 @@ gnc_split_register_set_cells (SplitRegister *reg, TableLayout *layout)
         gnc_table_layout_set_cell (layout, curs, TDEBT_CELL, 0, 5);
         gnc_table_layout_set_cell (layout, curs, TCRED_CELL, 0, 6);
         gnc_table_layout_set_cell (layout, curs, TBALN_CELL, 0, 7);
+	gnc_table_layout_set_cell (layout, curs, RATE_CELL, 0, 8);
 
         curs_last = curs;
         curs = gnc_table_layout_get_cursor (layout,
@@ -156,6 +158,68 @@ gnc_split_register_set_cells (SplitRegister *reg, TableLayout *layout)
           gnc_table_layout_set_cell (layout, curs, DEBT_CELL, 0, 5);
           gnc_table_layout_set_cell (layout, curs, CRED_CELL, 0, 6);
         }
+	gnc_table_layout_set_cell (layout, curs, RATE_CELL, 0, 8);
+
+        break;
+      }
+      /* --------------------------------------------------------- */
+
+    case PAYABLE_REGISTER:
+    case RECEIVABLE_REGISTER:
+      {
+        curs = gnc_table_layout_get_cursor (layout,
+                                            CURSOR_SINGLE_LEDGER);
+
+        gnc_table_layout_set_cell (layout, curs, DATE_CELL,  0, 0);
+	gnc_table_layout_set_cell (layout, curs, TYPE_CELL,  0, 1);
+	gnc_table_layout_set_cell (layout, curs, DDUE_CELL,  0, 2);
+        gnc_table_layout_set_cell (layout, curs, NUM_CELL,   0, 3);
+        gnc_table_layout_set_cell (layout, curs, DESC_CELL,  0, 4);
+        gnc_table_layout_set_cell (layout, curs, MXFRM_CELL, 0, 5);
+        gnc_table_layout_set_cell (layout, curs, RECN_CELL,  0, 6);
+	gnc_table_layout_set_cell (layout, curs, DEBT_CELL,  0, 7);
+	gnc_table_layout_set_cell (layout, curs, CRED_CELL,  0, 8);
+        gnc_table_layout_set_cell (layout, curs, BALN_CELL,  0, 9);
+
+        curs_last = curs;
+        curs = gnc_table_layout_get_cursor (layout,
+                                            CURSOR_DOUBLE_LEDGER);
+
+        copy_cursor_row (layout, curs, curs_last, 0);
+
+        gnc_table_layout_set_cell (layout, curs, ACTN_CELL,  1, 3);
+        gnc_table_layout_set_cell (layout, curs, MEMO_CELL, 1, 4);
+
+        curs = gnc_table_layout_get_cursor (layout,
+                                            CURSOR_SINGLE_JOURNAL);
+
+        gnc_table_layout_set_cell (layout, curs, DATE_CELL,  0, 0);
+	gnc_table_layout_set_cell (layout, curs, TYPE_CELL,  0, 1);
+	gnc_table_layout_set_cell (layout, curs, DDUE_CELL,  0, 2);
+        gnc_table_layout_set_cell (layout, curs, NUM_CELL,   0, 3);
+        gnc_table_layout_set_cell (layout, curs, DESC_CELL,  0, 4);
+
+        gnc_table_layout_set_cell (layout, curs, TDEBT_CELL, 0, 7);
+        gnc_table_layout_set_cell (layout, curs, TCRED_CELL, 0, 8);
+        gnc_table_layout_set_cell (layout, curs, TBALN_CELL, 0, 9);
+
+        curs_last = curs;
+        curs = gnc_table_layout_get_cursor (layout,
+                                            CURSOR_DOUBLE_JOURNAL);
+
+        copy_cursor_row (layout, curs, curs_last, 0);
+
+        gnc_table_layout_set_cell (layout, curs, MEMO_CELL, 1, 4);
+
+        curs = gnc_table_layout_get_cursor (layout,
+                                            CURSOR_SPLIT);
+
+        gnc_table_layout_set_cell (layout, curs, ACTN_CELL, 0, 3);
+        gnc_table_layout_set_cell (layout, curs, MEMO_CELL, 0, 4);
+        gnc_table_layout_set_cell (layout, curs, XFRM_CELL, 0, 5);
+        gnc_table_layout_set_cell (layout, curs, RECN_CELL, 0, 6);
+	gnc_table_layout_set_cell (layout, curs, DEBT_CELL, 0, 7);
+	gnc_table_layout_set_cell (layout, curs, CRED_CELL, 0, 8);
 
         break;
       }
@@ -183,6 +247,7 @@ gnc_split_register_set_cells (SplitRegister *reg, TableLayout *layout)
           gnc_table_layout_set_cell (layout, curs, DEBT_CELL,  0, 5);
           gnc_table_layout_set_cell (layout, curs, CRED_CELL,  0, 6);
         }
+	gnc_table_layout_set_cell (layout, curs, RATE_CELL, 0, 7);
 
         curs_last = curs;
         curs = gnc_table_layout_get_cursor (layout,
@@ -201,6 +266,7 @@ gnc_split_register_set_cells (SplitRegister *reg, TableLayout *layout)
         gnc_table_layout_set_cell (layout, curs, DESC_CELL,  0, 2);
         gnc_table_layout_set_cell (layout, curs, TDEBT_CELL, 0, 5);
         gnc_table_layout_set_cell (layout, curs, TCRED_CELL, 0, 6);
+	gnc_table_layout_set_cell (layout, curs, RATE_CELL, 0, 7);
 
         curs_last = curs;
         curs = gnc_table_layout_get_cursor (layout,
@@ -227,6 +293,7 @@ gnc_split_register_set_cells (SplitRegister *reg, TableLayout *layout)
           gnc_table_layout_set_cell (layout, curs, DEBT_CELL,  0, 5);
           gnc_table_layout_set_cell (layout, curs, CRED_CELL,  0, 6);
         }
+	gnc_table_layout_set_cell (layout, curs, RATE_CELL, 0, 7);
 
         break;
       }
@@ -374,13 +441,18 @@ gnc_split_register_layout_add_cursors (SplitRegister *reg,
     case INCOME_REGISTER:
     case EXPENSE_REGISTER:
     case EQUITY_REGISTER:
-      num_cols = 8;
+      num_cols = 9;
+      break;
+
+    case PAYABLE_REGISTER:
+    case RECEIVABLE_REGISTER:
+      num_cols = 10;
       break;
 
     case INCOME_LEDGER:
     case GENERAL_LEDGER:
     case SEARCH_LEDGER:
-      num_cols = 7;
+      num_cols = 8;
       break;
 
     case STOCK_REGISTER:
@@ -434,8 +506,21 @@ gnc_split_register_layout_add_cells (SplitRegister *reg,
                          FALSE);
 
   gnc_register_add_cell (layout,
+                         DDUE_CELL,
+                         DATE_CELL_TYPE_NAME,
+                         N_("sample:12/12/2000") + 7,
+                         CELL_ALIGN_RIGHT,
+                         FALSE,
+                         FALSE);
+
+  gnc_register_add_cell (layout,
                          NUM_CELL,
                          NUM_CELL_TYPE_NAME,
+			 /* Translators: The 'sample:' items are
+			    strings which are not displayed, but only
+			    used to estimate widths. Please only
+			    translate the portion after the ':' and
+			    leave the rest ("sample:") as is. */
                          N_("sample:99999") + 7,
                          CELL_ALIGN_LEFT,
                          FALSE,
@@ -447,6 +532,14 @@ gnc_split_register_layout_add_cells (SplitRegister *reg,
                          N_("sample:Description of a transaction") + 7,
                          CELL_ALIGN_LEFT,
                          TRUE,
+                         FALSE);
+
+  gnc_register_add_cell (layout,
+                         RATE_CELL,
+                         PRICE_CELL_TYPE_NAME,
+                         "",
+                         CELL_ALIGN_RIGHT,
+                         FALSE,
                          FALSE);
 
   gnc_register_add_cell (layout,
@@ -514,15 +607,17 @@ gnc_split_register_layout_add_cells (SplitRegister *reg,
                          FALSE);
 
   gnc_register_add_cell (layout,
-                         PRIC_CELL,
+                         SHRS_CELL,
                          PRICE_CELL_TYPE_NAME,
                          N_("sample:999,999.000") + 7,
                          CELL_ALIGN_RIGHT,
                          FALSE,
                          FALSE);
 
+  /* Price cell must come after shares cell, as its callback performs
+   * a computation on the value set by the shares cell callback. */
   gnc_register_add_cell (layout,
-                         SHRS_CELL,
+                         PRIC_CELL,
                          PRICE_CELL_TYPE_NAME,
                          N_("sample:999,999.000") + 7,
                          CELL_ALIGN_RIGHT,
@@ -562,6 +657,14 @@ gnc_split_register_layout_add_cells (SplitRegister *reg,
                          FALSE);
 
   gnc_register_add_cell (layout,
+                         TYPE_CELL,
+                         RECN_CELL_TYPE_NAME,
+                         N_("Type:T") + 5,
+                         CELL_ALIGN_LEFT,
+                         FALSE,
+                         FALSE);
+
+  gnc_register_add_cell (layout,
                          NOTES_CELL,
                          QUICKFILL_CELL_TYPE_NAME,
                          N_("sample:Notes field sample text string") + 7,
@@ -571,7 +674,7 @@ gnc_split_register_layout_add_cells (SplitRegister *reg,
 
   gnc_register_add_cell (layout,
                          FCRED_CELL,
-                         QUICKFILL_CELL_TYPE_NAME,
+                         FORMULA_CELL_TYPE_NAME,
                          N_("sample:(x + 0.33 * y + (x+y) )") + 7,
                          CELL_ALIGN_LEFT,
                          FALSE,
@@ -579,12 +682,11 @@ gnc_split_register_layout_add_cells (SplitRegister *reg,
 
   gnc_register_add_cell (layout,
                          FDEBT_CELL,
-                         QUICKFILL_CELL_TYPE_NAME,
+                         FORMULA_CELL_TYPE_NAME,
                          N_("sample:(x + 0.33 * y + (x+y) )") + 7,
                          CELL_ALIGN_LEFT,
                          FALSE,
                          FALSE);
-
 }
 
 TableLayout *
@@ -600,4 +702,3 @@ gnc_split_register_layout_new (SplitRegister *reg)
 
   return layout;
 }
-

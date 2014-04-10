@@ -1,7 +1,12 @@
 /*********************************************************************
- * gnc-backend-file.c
+ * gnc-backend-file.c: load and save data to files
+ *
+ *
  *********************************************************************/
 
+#define _GNU_SOURCE
+
+#include <stdio.h>
 #include <fcntl.h>
 #include <limits.h>
 #include <sys/stat.h>
@@ -9,6 +14,8 @@
 #include <unistd.h>
 #include <errno.h>
 #include <string.h>
+#include <dirent.h>
+#include <time.h>
 
 #include "Backend.h"
 #include "BackendP.h"
@@ -33,6 +40,7 @@ struct FileBackend_struct
 {
     Backend be;
 
+    char *dirname;
     char *fullpath;
     char *lockfile;
     char *linkfile;
@@ -51,17 +59,37 @@ typedef enum
     GNC_BOOK_XML2_FILE,
 } GNCBookFileType;
 
+static int file_retention_days = 0;
+static gboolean file_compression = FALSE;
+
+static void gnc_file_be_load_from_file(Backend *, GNCBook *);
+
 static gboolean gnc_file_be_get_file_lock (FileBackend *be);
-static gboolean gnc_file_be_load_from_file(FileBackend *be);
 static gboolean gnc_file_be_write_to_file(FileBackend *be,
                                           gboolean make_backup);
+static void gnc_file_be_write_accounts_to_file(Backend *be,
+					       GNCBook *book);
+static void gnc_file_be_remove_old_files(FileBackend *be);
+
+Backend * libgncmod_backend_file_LTX_gnc_backend_new(void);
+
+void
+gnc_file_be_set_retention_days (int days)
+{
+    file_retention_days = days;
+}
+
+void
+gnc_file_be_set_compression (gboolean compress)
+{
+    file_compression = compress;
+}
 
 static void
 file_session_begin(Backend *be_start, GNCSession *session, const char *book_id,
                    gboolean ignore_lock, gboolean create_if_nonexistent)
 {
     FileBackend* be;
-    char *dirname;
     char *p;
 
     ENTER (" ");
@@ -72,26 +100,25 @@ file_session_begin(Backend *be_start, GNCSession *session, const char *book_id,
 
     /* Make sure the directory is there */
 
-    dirname = g_strdup (gnc_session_get_file_path (session));
-    be->fullpath = g_strdup (dirname);
-    p = strrchr (dirname, '/');
-    if (p && p != dirname)
+    be->dirname = g_strdup (gnc_session_get_file_path (session));
+    be->fullpath = g_strdup (be->dirname);
+    p = strrchr (be->dirname, '/');
+    if (p && p != be->dirname)
     {
         struct stat statbuf;
         int rc;
 
         *p = '\0';
 
-        rc = stat (dirname, &statbuf);
+        rc = stat (be->dirname, &statbuf);
         if (rc != 0 || !S_ISDIR(statbuf.st_mode))
         {
             xaccBackendSetError (be_start, ERR_FILEIO_FILE_NOT_FOUND);
             g_free (be->fullpath); be->fullpath = NULL;
-            g_free (dirname);
+            g_free (be->dirname); be->dirname = NULL;
             return;
         }
     }
-    g_free (dirname);
 
     /* ---------------------------------------------------- */
     /* We should now have a fully resolved path name.
@@ -110,27 +137,6 @@ file_session_begin(Backend *be_start, GNCSession *session, const char *book_id,
     return;
 }
 
-static gboolean
-file_load_file(Backend *be)
-{
-    if(!gnc_file_be_load_from_file((FileBackend*)be))
-    {
-        xaccBackendSetError(be, ERR_BACKEND_MISC);
-        g_free(((FileBackend*)be)->lockfile);
-        ((FileBackend*)be)->lockfile = NULL;
-        return FALSE;
-    }
-    return TRUE;
-}
-
-static void
-file_book_load (Backend *be, GNCBook *book)
-{
-    if (!file_load_file(be))
-    {
-      PERR("file_load_file returned FALSE");
-    }
-}
 
 static void
 file_session_end(Backend *be_start)
@@ -147,6 +153,9 @@ file_session_end(Backend *be_start)
 
     if (be->lockfile)
         unlink (be->lockfile);
+
+    g_free (be->dirname);
+    be->dirname = NULL;
 
     g_free (be->fullpath);
     be->fullpath = NULL;
@@ -168,39 +177,48 @@ static void
 file_sync_all(Backend* be, GNCBook *book)
 {
     gnc_file_be_write_to_file((FileBackend*)be, TRUE);
+    gnc_file_be_remove_old_files((FileBackend*)be);
 }
 
 Backend *
-gnc_backend_new(void)
+libgncmod_backend_file_LTX_gnc_backend_new(void)
 {
     FileBackend *fbe;
     Backend *be;
     
-    fbe = g_new(FileBackend, 1);
+    fbe = g_new0(FileBackend, 1);
     be = (Backend*)fbe;
     xaccInitBackend(be);
     
     be->session_begin = file_session_begin;
-    be->book_load = file_book_load;
-    be->price_load = NULL;
     be->session_end = file_session_end;
     be->destroy_backend = file_destroy_backend;
 
-/*     be->account_begin_edit = file_account_begin_edit; */
-/*     be->account_commit_edit = file_account_commit_edit; */
-/*     be->trans_begin_edit = file_trans_begin_edit; */
-/*     be->trans_commit_edit = file_trans_commit_edit; */
-/*     be->trans_rollback_edit = file_trans_rollback_edit; */
-/*     be->price_begin_edit = file_price_begin_edit; */
-/*     be->price_commit_edit = file_price_commit_edit; */
+    be->load = gnc_file_be_load_from_file;
 
-/*     be->run_query = file_run_query; */
-/*     be->price_lookup = file_price_lookup; */
-    be->sync_all = file_sync_all;
+    /* The file backend will never have transactional
+     * behaviour.  So these vectors are null. */
 
-/*     be->events_pending = file_events_pending; */
-/*     be->process_events = file_process_events; */
+    be->begin = NULL;
+    be->commit = NULL;
+    be->rollback = NULL;
 
+    /* the file backend always loads all data ... */
+    be->compile_query = NULL;
+    be->free_query = NULL;
+    be->run_query = NULL;
+    be->price_lookup = NULL;
+
+    be->counter = NULL;
+
+    /* the file backend will never be multi-user... */
+    be->events_pending = NULL;
+    be->process_events = NULL;
+
+    be->sync = file_sync_all;
+    be->export = gnc_file_be_write_accounts_to_file;
+
+    fbe->dirname = NULL;
     fbe->fullpath = NULL;
     fbe->lockfile = NULL;
     fbe->linkfile = NULL;
@@ -212,6 +230,7 @@ gnc_backend_new(void)
 }
 
 /* ---------------------------------------------------------------------- */
+
 static gboolean
 gnc_file_be_get_file_lock (FileBackend *be)
 {
@@ -346,52 +365,39 @@ gnc_file_be_determine_file_type(const char *path)
    it's not NULL.  This function does not manage file locks in any
    way. */
 
-static gboolean
-happy_or_push_error(Backend *be, gboolean errret, GNCBackendError errcode)
+static void
+gnc_file_be_load_from_file (Backend *bend, GNCBook *book)
 {
-    if(errret) {
-        return TRUE;
-    } else {
-        xaccBackendSetError(be, errcode);
-        return FALSE;
-    }
-}
+    GNCBackendError error = ERR_BACKEND_NO_ERR;
+    gboolean rc;
+    FileBackend *be = (FileBackend *) bend;
 
-static gboolean
-gnc_file_be_load_from_file(FileBackend *be)
-{
     switch (gnc_file_be_determine_file_type(be->fullpath))
     {
     case GNC_BOOK_XML2_FILE:
-        return happy_or_push_error((Backend*)be,
-                                   gnc_session_load_from_xml_file_v2
-                                   (be->session, NULL),
-                                   ERR_BACKEND_MISC);
-    case GNC_BOOK_XML1_FILE:
-        return happy_or_push_error((Backend*)be,
-                                   gnc_session_load_from_xml_file(be->session),
-                                   ERR_BACKEND_MISC);
-    case GNC_BOOK_BIN_FILE:
-    {
-        /* presume it's an old-style binary file */
-        GNCBackendError error;
+        rc = gnc_session_load_from_xml_file_v2 (be->session);
+        if (FALSE == rc) error = ERR_FILEIO_PARSE_ERROR;
+        break;
 
+    case GNC_BOOK_XML1_FILE:
+        rc = gnc_session_load_from_xml_file (be->session);
+        if (FALSE == rc) error = ERR_FILEIO_PARSE_ERROR;
+        break;
+
+    case GNC_BOOK_BIN_FILE:
+        /* presume it's an old-style binary file */
         gnc_session_load_from_binfile(be->session);
         error = gnc_get_binfile_io_error();
+        break;
 
-        if(error == ERR_BACKEND_NO_ERR) {
-            return TRUE;
-        } else {
-            xaccBackendSetError((Backend*)be, error);
-            return FALSE;
-        }
-    }
     default:
-        g_warning("File not any known type");
-        xaccBackendSetError((Backend*)be, ERR_FILEIO_UNKNOWN_FILE_TYPE);
-        return FALSE;
+        PWARN("File not any known type");
+        error = ERR_FILEIO_UNKNOWN_FILE_TYPE;
         break;
     }
+
+    if(error != ERR_BACKEND_NO_ERR) 
+        xaccBackendSetError(bend, error);
 }
 
 /* ---------------------------------------------------------------------- */
@@ -469,10 +475,9 @@ gnc_int_link_or_make_backup(FileBackend *be, const char *orig, const char *bkup)
 
         if(!err_ret)
         {
-            xaccBackendSetError((Backend*)be, ERR_BACKEND_MISC);
-/*                 g_strdup_printf("unable to make file backup from %s to %s: %s", */
-/*                                 orig, bkup, */
-/*                                 strerror(errno) ? strerror(errno) : "")); */
+            xaccBackendSetError((Backend*)be, ERR_FILEIO_BACKUP_ERROR);
+            PWARN ("unable to make file backup from %s to %s: %s", 
+                    orig, bkup, strerror(errno) ? strerror(errno) : ""); 
             return FALSE;
         }
     }
@@ -525,12 +530,111 @@ gnc_file_be_backup_file(FileBackend *be)
     return bkup_ret;
 }
 
+static int
+gnc_file_be_select_files (const struct dirent *d)
+{
+    int len = strlen(d->d_name) - 4;
+
+    if (len <= 0)
+        return(0);
+  
+    return((strcmp(d->d_name + len, ".LNK") == 0) ||
+	   (strcmp(d->d_name + len, ".xac") == 0) ||
+	   (strcmp(d->d_name + len, ".log") == 0));
+}
+
+static void
+gnc_file_be_remove_old_files(FileBackend *be)
+{
+    struct dirent *dent;
+    DIR *dir;
+    struct stat lockstatbuf, statbuf;
+    int pathlen;
+    time_t now;
+
+    if (stat (be->lockfile, &lockstatbuf) != 0)
+        return;
+    pathlen = strlen(be->fullpath);
+
+    /*
+     * Clean up any lockfiles from prior crashes, and clean up old
+     * data and log files.  Scandir will do a fist pass on the
+     * filenames and cull the directory down to just files with the
+     * appropriate extensions.  Pity you can't pass user data into
+     * scandir...
+     */
+
+    /*
+     * Unfortunately scandir() is not portable, so re-write this
+     * function without it.  Note that this version will be even a bit
+     * faster because it does not have to sort, malloc, or anything
+     * else that scandir did, and it only performs a single pass
+     * through the directory rather than one pass through the
+     * directory and then one pass over the 'matching' files. --
+     * warlord@MIT.EDU 2002-05-06
+     */
+    
+    dir = opendir (be->dirname);
+    if (!dir)
+        return;
+
+    now = time(NULL);
+    while((dent = readdir(dir)) != NULL) {
+        char *name;
+        int len;
+
+	if (gnc_file_be_select_files (dent) == 0)
+	    continue;
+
+	name = g_strconcat(be->dirname, "/", dent->d_name, NULL);
+	len = strlen(name) - 4;
+
+        /* Is this file associated with the current data file */
+        if (strncmp(name, be->fullpath, pathlen) == 0) {
+
+            if ((safe_strcmp(name + len, ".LNK") == 0) &&
+		/* Is a lock file. Skip the active lock file */
+                (safe_strcmp(name, be->linkfile) != 0) &&
+                /* Only delete lock files older than the active one */
+                (stat(name, &statbuf) == 0) &&
+                (statbuf.st_mtime <lockstatbuf.st_mtime)) {
+	            unlink(name);
+            } else if (file_retention_days > 0) {
+	        time_t file_time;
+	        struct tm file_tm;
+	        int days;
+		const char* res;
+
+                /* Is the backup file old enough to delete */
+                memset(&file_tm, 0, sizeof(file_tm));
+                res = strptime(name+pathlen+1, "%Y%m%d%H%M%S", &file_tm);
+		file_time = mktime(&file_tm);
+		days = (int)(difftime(now, file_time) / 86400);
+
+		/* Make sure this file actually has a date before unlinking */
+		if (res && res != name+pathlen+1 &&
+		    /* We consumed some but not all of the filename */
+		    file_time > 0 &&
+		    /* we actually have a reasonable time and it is old enough */
+		    days > file_retention_days) {
+		    unlink(name);
+		}
+            }
+        }
+        g_free(name);
+    }
+    closedir (dir);
+}
+
+    
 static gboolean
 gnc_file_be_write_to_file(FileBackend *be, gboolean make_backup)
 {
     const gchar *datafile;
     char *tmp_name;
     GNCBook *book;
+    struct stat statbuf;
+    int rc;
 
     book = gnc_session_get_book (be->session);
 
@@ -554,14 +658,28 @@ gnc_file_be_write_to_file(FileBackend *be, gboolean make_backup)
         }
     }
   
-    if(gnc_book_write_to_xml_file_v2(book, tmp_name)) 
+    if(gnc_book_write_to_xml_file_v2(book, tmp_name, file_compression)) 
     {
+        /* Record the file's permissions before unlinking it */
+        rc = stat(datafile, &statbuf);
+        if(rc == 0)
+        {
+            /* Use the permissions from the original data file */
+            if(chmod(tmp_name, statbuf.st_mode) != 0)
+            {
+                PWARN("unable to chmod filename %s: %s",
+                        datafile ? datafile : "(null)", 
+                        strerror(errno) ? strerror(errno) : ""); 
+                g_free(tmp_name);
+                return FALSE;
+            }
+        }
         if(unlink(datafile) != 0 && errno != ENOENT)
         {
             xaccBackendSetError((Backend*)be, ERR_BACKEND_MISC);
-/*                 g_strdup_printf("unable to unlink filename %s: %s", */
-/*                                 datafile ? datafile : "(null)", */
-/*                                 strerror(errno) ? strerror(errno) : "")); */
+            PWARN("unable to unlink filename %s: %s",
+                  datafile ? datafile : "(null)", 
+                  strerror(errno) ? strerror(errno) : ""); 
             g_free(tmp_name);
             return FALSE;
         }
@@ -573,9 +691,9 @@ gnc_file_be_write_to_file(FileBackend *be, gboolean make_backup)
         if(unlink(tmp_name) != 0)
         {
             xaccBackendSetError((Backend*)be, ERR_BACKEND_MISC);
-/*                 g_strdup_printf("unable to unlink temp filename %s: %s", */
-/*                                 tmp_name ? tmp_name : "(null)", */
-/*                                 strerror(errno) ? strerror(errno) : "")); */
+            PWARN("unable to unlink temp filename %s: %s", 
+                   tmp_name ? tmp_name : "(null)", 
+                   strerror(errno) ? strerror(errno) : ""); 
             g_free(tmp_name);
             return FALSE;
         }
@@ -587,13 +705,22 @@ gnc_file_be_write_to_file(FileBackend *be, gboolean make_backup)
         if(unlink(tmp_name) != 0)
         {
             xaccBackendSetError((Backend*)be, ERR_BACKEND_MISC);
-/*                 g_strdup_printf("unable to unlink temp_filename %s: %s", */
-/*                                 tmp_name ? tmp_name : "(null)", */
-/*                                 strerror(errno) ? strerror(errno) : "")); */
+            PWARN("unable to unlink temp_filename %s: %s", 
+                   tmp_name ? tmp_name : "(null)", 
+                   strerror(errno) ? strerror(errno) : ""); 
             /* already in an error just flow on through */
         }
         g_free(tmp_name);
         return FALSE;
     }
+}
+
+static void
+gnc_file_be_write_accounts_to_file(Backend *be, GNCBook *book)
+{
+    const gchar *datafile;
+
+    datafile = ((FileBackend *)be)->fullpath;
+    gnc_book_write_accounts_to_xml_file_v2(be, book, datafile);
 }
 

@@ -1,5 +1,5 @@
 
-SUBDIRS = cbb gg ofx
+SUBDIRS = cbb gg
 DIST_SUBDIRS = ${SUBDIRS} cgi-bin
 
 EXTRA_DIST = \

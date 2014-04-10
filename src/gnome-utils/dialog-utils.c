@@ -26,6 +26,7 @@
 
 #include <glade/glade.h>
 #include <gnome.h>
+#include <gmodule.h>
 
 #include "dialog-utils.h"
 #include "global-options.h"
@@ -56,14 +57,14 @@ gnc_ui_source_menu_create(Account *account)
   GtkMenu   *menu;
   GtkWidget *item;
   GtkWidget *omenu;
-  GNCAccountType type;
 
   menu = GTK_MENU(gtk_menu_new());
   gtk_widget_show(GTK_WIDGET(menu));
 
   for (i = 0; i < NUM_SOURCES; i++)
   {
-    item = gtk_menu_item_new_with_label(gnc_get_source_name(i));
+    item = gtk_menu_item_new_with_label(gnc_price_source_enum2name(i));
+    gtk_widget_set_sensitive(item, gnc_price_source_sensitive(i));
     gtk_widget_show(item);
     gtk_menu_append(menu, item);
   }
@@ -119,7 +120,6 @@ gnc_timezone_menu_position_to_string(guint pos)
 GtkWidget *
 gnc_ui_quote_tz_menu_create(Account *account)
 {
-  gint i;
   GtkMenu   *menu;
   GtkWidget *item;
   GtkWidget *omenu;
@@ -326,7 +326,7 @@ gnc_get_toolbar_style(void)
 GnomeMDIMode 
 gnc_get_mdi_mode(void) {
   GnomeMDIMode mode = GNOME_MDI_DEFAULT_MODE;
-  char * mode_string = gnc_lookup_multichoice_option("General",
+  char * mode_string = gnc_lookup_multichoice_option("_+Advanced",
                                                      "Application MDI mode",
                                                      "");
   if(!safe_strcmp(mode_string, "mdi-notebook")) {
@@ -382,6 +382,7 @@ gnc_set_label_color(GtkWidget *label, gnc_numeric value)
     return;
 
   cm = gtk_widget_get_colormap(GTK_WIDGET(label));
+  gtk_widget_ensure_style(GTK_WIDGET(label));
   style = gtk_widget_get_style(GTK_WIDGET(label));
 
   style = gtk_style_copy(style);
@@ -418,7 +419,7 @@ gnc_get_window_size(const char *prefix, int *width, int *height)
   int w, h;
   char *name;
 
-  if (gnc_lookup_boolean_option("General", "Save Window Geometry", TRUE))
+  if (gnc_lookup_boolean_option("_+Advanced", "Save Window Geometry", TRUE))
   {
     name = g_strconcat(prefix, "_width", NULL);
     w = gnc_lookup_number_option("__gui", name, 0.0);
@@ -458,7 +459,7 @@ gnc_save_window_size(const char *prefix, int width, int height)
   char *name;
   gboolean save;
 
-  save = gnc_lookup_boolean_option("General", "Save Window Geometry", FALSE);
+  save = gnc_lookup_boolean_option("_+Advanced", "Save Window Geometry", FALSE);
 
   name = g_strconcat(prefix, "_width", NULL);
   if (save)
@@ -533,6 +534,39 @@ gnc_option_menu_init(GtkWidget * w)
   gtk_option_menu_set_history(GTK_OPTION_MENU(w), 0);
 }
 
+typedef struct {
+  int i;
+  GtkSignalFunc f;
+  gpointer cb_data;
+} menu_init_data;
+
+static void
+gnc_option_menu_set_one_item (gpointer loop_data, gpointer user_data)
+{
+  GtkObject *item = GTK_OBJECT(loop_data);
+  menu_init_data *args = (menu_init_data *) user_data;
+  
+  gtk_object_set_data(item, "option_index", GINT_TO_POINTER(args->i++));
+  gtk_signal_connect(item, "activate", args->f, args->cb_data);
+}
+
+
+void
+gnc_option_menu_init_w_signal(GtkWidget * w, GtkSignalFunc f, gpointer cb_data)
+{
+  GtkWidget * menu;
+  menu_init_data foo;
+
+  foo.i = 0;
+  foo.f = f;
+  foo.cb_data = cb_data;
+
+  menu = gtk_option_menu_get_menu(GTK_OPTION_MENU(w));
+  g_list_foreach(GTK_MENU_SHELL(menu)->children,
+		 gnc_option_menu_set_one_item, &foo);
+  gtk_option_menu_set_history(GTK_OPTION_MENU(w), 0);
+}
+
 
 int
 gnc_option_menu_get_active(GtkWidget * w)
@@ -587,6 +621,29 @@ gnc_window_adjust_for_screen(GtkWindow * window)
   gtk_widget_queue_resize(GTK_WIDGET(window));
 }
 
+/*
+ * This routine must be removed when GnuCash is ported to GTK 2.0.  It
+ * replicates the functionality (as much as possible) of that routine
+ * using functions available in GTK 1.4.
+ */
+void
+gtk_window_present (GtkWindow *window)
+{
+  GtkWidget *widget;
+
+  g_return_if_fail (GTK_IS_WINDOW (window));
+
+  widget = GTK_WIDGET (window);
+
+  if (GTK_WIDGET_VISIBLE (window)) {
+      g_assert (widget->window != NULL);
+      gdk_window_show(widget->window); 	/* De-iconify */
+      gdk_window_raise(widget->window);	/* Bring to front */
+  } else {
+      gtk_widget_show (widget);
+  }
+}
+
 gboolean
 gnc_handle_date_accelerator (GdkEventKey *event,
                              struct tm *tm,
@@ -601,11 +658,18 @@ gnc_handle_date_accelerator (GdkEventKey *event,
   if (event->type != GDK_KEY_PRESS)
     return FALSE;
 
+  if ((tm->tm_mday == -1) || (tm->tm_mon == -1) || (tm->tm_year == -1))
+    return FALSE;
+
   g_date_set_dmy (&gdate, 
                   tm->tm_mday,
                   tm->tm_mon + 1,
                   tm->tm_year + 1900);
 
+  /* 
+   * Check those keys where the code does different things depending
+   * upon the modifiers.
+   */
   switch (event->keyval)
   {
     case GDK_KP_Add:
@@ -619,7 +683,8 @@ gnc_handle_date_accelerator (GdkEventKey *event,
         g_date_add_years (&gdate, 1);
       else
         g_date_add_days (&gdate, 1);
-      break;
+      g_date_to_struct_tm (&gdate, tm);
+      return TRUE;
 
     case GDK_minus:
       if ((strlen (date_str) != 0) && (dateSeparator () == '-'))
@@ -657,8 +722,25 @@ gnc_handle_date_accelerator (GdkEventKey *event,
         g_date_subtract_years (&gdate, 1);
       else
         g_date_subtract_days (&gdate, 1);
-      break;
+      g_date_to_struct_tm (&gdate, tm);
+      return TRUE;
 
+    default:
+      break;
+  }
+
+  /*
+   * Control and Alt key combinations should be ignored by this
+   * routine so that the menu system gets to handle them.  This
+   * prevents weird behavior of the menu accelerators (i.e. work in
+   * some widgets but not others.)
+   */
+  if (event->state & (GDK_CONTROL_MASK | GDK_MOD1_MASK))
+    return FALSE;
+
+  /* Now check for the remaining keystrokes. */
+  switch (event->keyval)
+  {
     case GDK_braceright:
     case GDK_bracketright:
       /* increment month */
@@ -1017,6 +1099,48 @@ gnc_glade_lookup_widget (GtkWidget *widget, const char *name)
 
   return glade_xml_get_widget (xml, name);
 }
+
+/*
+ * The following function is built from a couple of glade functions.
+ */
+GModule *allsymbols = NULL;
+
+void
+gnc_glade_autoconnect_full_func(const gchar *handler_name,
+				GtkObject *signal_object,
+				const gchar *signal_name,
+				const gchar *signal_data,
+				GtkObject *other_object,
+				gboolean signal_after,
+				gpointer user_data)
+{
+  GtkSignalFunc func;
+
+  if (allsymbols == NULL) {
+    /* get a handle on the main executable -- use this to find symbols */
+    allsymbols = g_module_open(NULL, 0);
+  }
+
+  if (!g_module_symbol(allsymbols, handler_name, (gpointer *)&func)) {
+    g_warning("could not find signal handler '%s'.", handler_name);
+    return;
+  }
+
+  if (other_object) {
+    if (signal_after)
+      gtk_signal_connect_object_after(signal_object, signal_name, func,
+				      other_object);
+    else
+      gtk_signal_connect_object(signal_object, signal_name, func,
+				other_object);
+  } else {
+    if (signal_after)
+      gtk_signal_connect_after(signal_object, signal_name, func, user_data);
+    else
+      gtk_signal_connect(signal_object, signal_name, func, user_data);
+  }
+}
+
 
 gint
 gnc_mbstowcs (GdkWChar **dest_p, const char *src)

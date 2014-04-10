@@ -33,6 +33,7 @@
 
 #if defined(LIBXML_VERSION) && LIBXML_VERSION >= 20000
 
+#  include <libxml/SAX.h>
 #  include <libxml/tree.h>
 #  include <libxml/parser.h>
 #  include <libxml/xmlmemory.h>
@@ -49,6 +50,7 @@
 
 #else /* defined(LIBXML_VERSION) && LIBXML_VERSION >= 20000 */
 
+#  include <gnome-xml/SAX.h>
 #  include <gnome-xml/tree.h>
 #  include <gnome-xml/parser.h>
 #  include <gnome-xml/xmlmemory.h>

@@ -2,17 +2,22 @@
 
 MACROS=						\
   aclocal-include.m4				\
+  as-scrub-include.m4				\
   compiler-flags.m4				\
   curses.m4					\
   gnome-bonobo-check.m4				\
+  gnome-common.m4				\
+  gnome-cxx-check.m4				\
   gnome-fileutils.m4				\
   gnome-gdk-pixbuf.m4                           \
+  gnome-gettext.m4				\
   gnome-ghttp-check.m4				\
   gnome-gnorba-check.m4				\
   gnome-guile-checks.m4				\
   gnome-libgtop-check.m4			\
   gnome-objc-checks.m4				\
   gnome-orbit-check.m4				\
+  gnome-pilot.m4				\
   gnome-print-check.m4				\
   gnome-pthread-check.m4			\
   gnome-support.m4				\
@@ -23,7 +28,8 @@ MACROS=						\
   gnome.m4					\
   gperf-check.m4				\
   linger.m4					\
-  need-declaration.m4
+  need-declaration.m4				\
+  openhbci.m4
 
 EXTRA_DIST=$(MACROS) gnome-common.m4 autogen.sh
 MAINTAINERCLEANFILES=macros.dep

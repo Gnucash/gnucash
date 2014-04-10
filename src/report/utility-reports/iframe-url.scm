@@ -1,6 +1,6 @@
 
 (define-module (gnucash report iframe-url))
-(use-modules (gnucash bootstrap) (g-wrapped gw-gnc)) ;; FIXME: delete after we finish modularizing.
+(use-modules (gnucash main)) ;; FIXME: delete after we finish modularizing.
 (use-modules (ice-9 slib))
 (use-modules (gnucash gnc-module))
 
@@ -35,6 +35,7 @@
 (gnc:define-report 
  'version 1
  'name (N_ "Frame URL")
+ 'menu-name (N_ "Custom Web Report")
  'menu-path (list gnc:menuname-utility)
  'options-generator options-generator
  'renderer renderer)

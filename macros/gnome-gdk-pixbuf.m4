@@ -65,7 +65,7 @@ dnl
 #include <string.h>
 #include <gdk-pixbuf/gdk-pixbuf.h>
 
-char*
+static char*
 my_strdup (char *str)
 {
   char *new_str;

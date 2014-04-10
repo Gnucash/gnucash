@@ -28,22 +28,23 @@
 
 
 /** Help Files ******************************************************/
-#define HH_ABOUT             "xacc-about.html"
-#define HH_ACC               "xacc-newacctwin.html"
-#define HH_ACCEDIT           "xacc-accountedit.html"
-#define HH_ADJBWIN           "xacc-adjbwin.html"
-#define HH_COMMODITY         "xacc-commodity.html"
-#define HH_FIND_TRANSACTIONS "xacc-locatingtxns.html"
-#define HH_GLOBPREFS         "xacc-preferences.html"
-#define HH_GPL               "xacc-gpl.html"
-#define HH_MAIN              "index.html"
-#define HH_PRINT             "xacc-print.html"
-#define HH_PRINTCHECK        "xacc-print-check.html"
-#define HH_QIFIMPORT         "xacc-qif-import.html"
-#define HH_QUICKSTART        "xacc-quickstart.html"
-#define HH_RECNWIN           "xacc-recnwin.html"
-#define HH_REGWIN            "xacc-regwin.html"
-#define HH_SXEDITOR          "xacc-sxeditor.html" 
+#define HH_ACC               "gnucash-help/usage.html#acct-create"
+#define HH_ACCEDIT           "gnucash-help/usage.html#acct-edit"
+#define HH_COMMODITY         "gnucash-help/usage.html#tool-commodity"
+#define HH_CUSTOMER          "gnucash-help/usage.html"
+#define HH_EMPLOYEE          "gnucash-help/usage.html"
+#define HH_FIND_TRANSACTIONS "gnucash-help/usage.html#tool-find"
+#define HH_GLOBPREFS         "gnucash-help/custom-gnucash.html#set-prefs"
+#define HH_HELP              "gnucash-help/help.html"
+#define HH_INVOICE           "gnucash-help/usage.html"
+#define HH_JOB               "gnucash-help/usage.html"
+#define HH_MAIN              "gnucash-guide/index.html"
+#define HH_ORDER             "gnucash-help/usage.html"
+#define HH_PRINTCHECK        "gnucash-help/usage.html#print-check"
+#define HH_QUICKSTART        "gnucash-guide/index.html"
+#define HH_RECNWIN           "gnucash-help/usage.html#acct-reconcile"
+#define HH_SXEDITOR          "gnucash-help/usage.html#tran-sched"
+#define HH_VENDOR            "gnucash-help/usage.html"
 
 /* Dialog windows ***************************************************/
 
@@ -55,26 +56,49 @@ typedef enum
   GNC_VERIFY_OK
 } GNCVerifyResult;
 
-GNCVerifyResult
+extern GNCVerifyResult
+gnc_verify_cancel_dialog(GNCVerifyResult default_result,
+			 const char *format, ...) G_GNUC_PRINTF (2, 3);
+extern GNCVerifyResult
 gnc_verify_cancel_dialog_parented(gncUIWidget parent,
-                                  const char *message,
-                                  GNCVerifyResult default_result);
+				  GNCVerifyResult default_result,
+				  const char *format, ...) G_GNUC_PRINTF (3,4);
 
-GNCVerifyResult gnc_verify_cancel_dialog(const char *message, 
-                                         GNCVerifyResult default_result);
 
-gboolean gnc_verify_dialog_parented(gncUIWidget parent,
-                                    const char *message,
-                                    gboolean yes_is_default);
 
-GNCVerifyResult gnc_ok_cancel_dialog_parented(gncUIWidget parent,
-                                              const char *message,
-                                              GNCVerifyResult default_result);
+extern gboolean
+gnc_verify_dialog(gboolean yes_is_default,
+		  const char *format, ...) G_GNUC_PRINTF (2, 3);
+extern gboolean
+gnc_verify_dialog_parented(gncUIWidget parent,
+			   gboolean yes_is_default,
+			   const char *format, ...) G_GNUC_PRINTF (3, 4);
 
-void     gnc_warning_dialog_parented(gncUIWidget parent, const char *message);
 
-gboolean gnc_verify_dialog(const char *message, gboolean yes_is_default);
-void     gnc_error_dialog(const char *message);
+
+extern GNCVerifyResult
+gnc_ok_cancel_dialog(GNCVerifyResult default_result,
+		     const char *format, ...) G_GNUC_PRINTF (2, 3);
+extern GNCVerifyResult
+gnc_ok_cancel_dialog_parented(gncUIWidget parent,
+			      GNCVerifyResult default_result,
+			      const char *format, ...) G_GNUC_PRINTF (3,4);
+
+
+
+extern void
+gnc_warning_dialog_parented(gncUIWidget parent,
+			    const char *forrmat, ...) G_GNUC_PRINTF (2, 3);
+
+
+
+extern void
+gnc_error_dialog(const char *format, ...) G_GNUC_PRINTF (1, 2);
+extern void
+gnc_error_dialog_parented(GtkWindow *parent,
+			  const char *forrmat, ...) G_GNUC_PRINTF (2, 3);
+
+
 
 int      gnc_choose_radio_option_dialog_parented (gncUIWidget parent,
                                                   const char *title,
@@ -86,6 +110,16 @@ gboolean gnc_dup_trans_dialog (gncUIWidget parent, time_t *date_p,
                                const char *num, char **out_num);
 void     gnc_tax_info_dialog (gncUIWidget parent);
 void     gnc_stock_split_dialog (Account * initial);
+
+typedef enum
+{
+  GNC_PRICE_EDIT,
+  GNC_PRICE_NEW,
+} GNCPriceEditType;
+
+GNCPrice* gnc_price_edit_dialog (gncUIWidget parent, GNCPrice *price,
+				GNCPriceEditType type);
+GNCPrice * gnc_price_edit_by_guid (GtkWidget * parent, const GUID * guid);
 void     gnc_prices_dialog (gncUIWidget parent);
 void     gnc_commodities_dialog (gncUIWidget parent);
 
@@ -104,8 +138,6 @@ gboolean gnc_get_username_password (gncUIWidget parent,
 
 /* Managing the GUI Windows *****************************************/
 
-void        gnc_ui_shutdown (void);
-void        gnc_ui_destroy_all_subwindows (void);
 gncUIWidget gnc_ui_get_toplevel (void);
 
 /* Changing the GUI Cursor ******************************************/

@@ -8,9 +8,17 @@
 #ifndef GNC_DIALOG_EMPLOYEE_H_
 #define GNC_DIALOG_EMPLOYEE_H_
 
-/* Functions to create and edit employees */
-GncEmployee * gnc_employee_new (GtkWidget *parent, GncBusiness *bus);
-void gnc_employee_edit (GtkWidget *parent, GncEmployee *employee);
+typedef struct _employee_window EmployeeWindow;
+
+#include "gncEmployee.h"
+#include "dialog-search.h"
+
+/* Functions to edit and create employees */
+EmployeeWindow * gnc_ui_employee_edit (GncEmployee *employee);
+EmployeeWindow * gnc_ui_employee_new (GNCBook *book);
+
+/* Search for an employee */
+GNCSearchWindow * gnc_employee_search (GncEmployee *start, GNCBook *book);
 
 /* Callbacks to select a employee that match the necessary functions
  * for use with the gnc_general_select widget.
@@ -19,9 +27,9 @@ void gnc_employee_edit (GtkWidget *parent, GncEmployee *employee);
  *	employees.
  * new_edit provides only the ability to edit the current selection
  */
-gpointer        gnc_employee_edit_new_select (gpointer bus, gpointer c,
+gpointer        gnc_employee_edit_new_select (gpointer book, gpointer c,
 					      GtkWidget *toplevel);
-gpointer	gnc_employee_edit_new_edit (gpointer bus, gpointer employee,
+gpointer	gnc_employee_edit_new_edit (gpointer book, gpointer employee,
 					    GtkWidget *toplevel);
 
 #endif /* GNC_DIALOG_EMPLOYEE_H_ */

@@ -120,9 +120,10 @@ gnc_cellblock_get_cell (CellBlock *cellblock, int row, int col)
   return cellblock->cells->pdata[(row * cellblock->num_cols) + col];
 }
 
-gboolean
+int
 gnc_cellblock_changed (CellBlock *cursor, gboolean include_conditional)
 {
+  int changed = 0;
   int r, c;
 
   if (!cursor)
@@ -138,14 +139,17 @@ gnc_cellblock_changed (CellBlock *cursor, gboolean include_conditional)
         continue;
 
       if (gnc_basic_cell_get_changed (cell))
-        return TRUE;
+      {
+        changed++;
+        continue;
+      }
 
       if (include_conditional &&
           gnc_basic_cell_get_conditionally_changed (cell))
-        return TRUE;
+        changed++;
     }
 
-  return FALSE;
+  return changed;
 }
 
 void

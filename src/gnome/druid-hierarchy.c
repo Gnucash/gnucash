@@ -26,6 +26,7 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
+#include <libgnomeui/gnome-window-icon.h>
 
 #include "Group.h"
 #include "dialog-new-user.h"
@@ -33,12 +34,13 @@
 #include "druid-hierarchy.h"
 #include "druid-utils.h"
 #include "gnc-amount-edit.h"
-#include "gnc-commodity-edit.h"
+#include "gnc-currency-edit.h"
 #include "gnc-general-select.h"
 #include "gnc-component-manager.h"
 #include "../gnome-utils/gnc-dir.h"
 #include "gnc-gui-query.h"
 #include "gnc-ui-util.h"
+#include "global-options.h"
 #include "io-example-account.h"
 #include "top-level.h"
 
@@ -90,38 +92,36 @@ get_balance_editor (void)
   return gtk_object_get_data (GTK_OBJECT (hierarchy_window), "balance_editor");
 }
 
+static GtkToggleButton *
+get_placeholder_checkbox (void)
+{
+  if (!hierarchy_window) return NULL;
+
+  return GTK_TOGGLE_BUTTON(gnc_glade_lookup_widget(GTK_WIDGET(hierarchy_window),
+						   "placeholder"));
+}
+
 static GtkCList*
 get_account_types_clist (void)
 {
   return GTK_CLIST(hierarchy_get_widget ("account_types_clist"));
 }
 
-static GNCGeneralSelect *
-get_commodity_editor(void)
+static GtkWidget *
+get_currency_editor(void)
 {
+  GtkWidget *selector;
   GtkWidget *tmp_wid = gtk_object_get_data (GTK_OBJECT (hierarchy_window),
-                                            "commod_editor");
+                                            "currency_editor");
+  if (tmp_wid)
+    return tmp_wid;
 
-  if(!tmp_wid)
-  {
-    GNCGeneralSelect *cur_editor;
-
-    cur_editor =
-      GNC_GENERAL_SELECT (gnc_general_select_new(GNC_GENERAL_SELECT_TYPE_SELECT,
-						 gnc_commodity_edit_get_string,
-						 gnc_commodity_edit_new_select,
-						 NULL));
-    gtk_widget_show (GTK_WIDGET(cur_editor));
-    gnc_general_select_set_selected (cur_editor,
-                                      gnc_locale_default_currency());
-    gtk_object_set_data(GTK_OBJECT(hierarchy_window),
-                        "commod_editor", cur_editor);
-    return cur_editor;
-  }
-  else
-  {
-    return GNC_GENERAL_SELECT(tmp_wid);
-  }
+  selector = gnc_currency_edit_new();
+  gnc_currency_edit_set_currency (GNC_CURRENCY_EDIT(selector), gnc_default_currency());
+  gtk_widget_show (selector);
+  gtk_object_set_data(GTK_OBJECT(hierarchy_window),
+		      "currency_editor", selector);
+  return selector;
 }
 
 static void
@@ -222,7 +222,7 @@ update_account_balance (GtkCTree *ctree, GtkCTreeNode *node)
 {
   Account *account;
   GNCAmountEdit *balance_edit;
-  gboolean result;
+  gboolean result, placeholder;
 
   balance_edit = get_balance_editor ();
 
@@ -241,11 +241,12 @@ update_account_balance (GtkCTree *ctree, GtkCTreeNode *node)
     const char *string;
 
     balance = gnc_amount_edit_get_amount (balance_edit);
+    placeholder = xaccAccountGetPlaceholder (account);
 
     print_info = gnc_account_print_info (account, FALSE);
     string = xaccPrintAmount (balance, print_info);
 
-    if (gnc_numeric_zero_p (balance))
+    if (gnc_numeric_zero_p (balance) || placeholder)
       string = "";
 
     gtk_ctree_node_set_text (ctree, GTK_CTREE_NODE (node), 2, string);
@@ -283,14 +284,14 @@ on_choose_currency_prepare (GnomeDruidPage  *gnomedruidpage,
                             gpointer         user_data)
 {
   if(!GPOINTER_TO_INT (gtk_object_get_data
-                       (GTK_OBJECT(hierarchy_window), "commod_added")))
+                       (GTK_OBJECT(hierarchy_window), "currency_added")))
   {
     gtk_object_set_data (GTK_OBJECT(hierarchy_window),
-                         "commod_added", GINT_TO_POINTER (1));
+                         "currency_added", GINT_TO_POINTER (1));
 
     gtk_box_pack_start(GTK_BOX(gnc_glade_lookup_widget
                                (hierarchy_window, "currency_chooser_vbox")),
-                       GTK_WIDGET(get_commodity_editor()), FALSE, FALSE, 0);
+                       GTK_WIDGET(get_currency_editor()), FALSE, FALSE, 0);
   }
 }
 
@@ -301,24 +302,36 @@ gnc_get_ea_locale_dir(const char *top_dir)
     gchar *ret;
     gchar *locale;
     struct stat buf;
-
+    int i;
+    
+#ifdef HAVE_LC_MESSAGES
     locale = g_strdup(setlocale(LC_MESSAGES, NULL));
+#else
+    /*
+     * Mac OS X 10.1 and earlier, not only doesn't have LC_MESSAGES
+     * setlocale can sometimes return NULL instead of "C"
+     */
+    locale = g_strdup(setlocale(LC_ALL, NULL) ? 
+		      setlocale(LC_ALL, NULL) : "C");
+#endif
 
+    i = strlen(locale);
     ret = g_strdup_printf("%s/%s", top_dir, locale);
 
-    if(stat(ret, &buf) != 0 && (strlen (locale) > 2))
-    {
-        g_free (ret);
-        locale[2] = '\0';
-        ret = g_strdup_printf("%s/%s", top_dir, locale);
+    while (stat(ret, &buf) != 0)
+    { 
+	i--;
+	if (i<1) 
+	{
+	    g_free(ret);
+	    ret = g_strdup_printf("%s/%s", top_dir, default_locale);
+	    break;
+	}
+	locale[i] = '\0';
+	g_free(ret);
+	ret = g_strdup_printf("%s/%s", top_dir, locale);
     }
-
-    if(stat(ret, &buf) != 0)
-    {
-        g_free (ret);
-        ret = g_strdup_printf("%s/%s", top_dir, default_locale);
-    }
-
+    
     g_free(locale);
 
     return ret;
@@ -337,6 +350,18 @@ add_each_gea_to_clist (gpointer data, gpointer user_data)
 
   row = gtk_clist_insert(clist, row, rowdata);
   gtk_clist_set_row_data(clist, row, gea);
+}
+
+static void
+select_initial_geas (gpointer data, gpointer user_data)
+{
+  GncExampleAccount *gea = (GncExampleAccount*)data;
+  GtkCList *clist = GTK_CLIST (user_data);
+
+  if (gea->start_selected) {
+    gint row = gtk_clist_find_row_from_data (clist, gea);
+    gtk_clist_select_row (clist, row, 0);
+  }
 }
 
 static void
@@ -370,6 +395,17 @@ on_choose_account_types_prepare (GnomeDruidPage  *gnomedruidpage,
     gtk_clist_sort (clist);
 
     gtk_clist_thaw (clist);
+
+    g_slist_foreach (list, select_initial_geas, (gpointer)clist);
+
+    /* clear out the description/tree */
+    {
+      GtkLabel *datext = GTK_LABEL (hierarchy_get_widget
+				    ("account_types_description_entry"));
+      GtkTree *datree = GTK_TREE (hierarchy_get_widget ("account_type_tree"));
+      gtk_label_set_text (datext, "");
+      gtk_tree_clear_items (datree, 0, g_list_length (datree->children));
+    }
 
     g_slist_free (list);
     g_free (locale_dir);
@@ -451,7 +487,17 @@ static void
 select_all_clicked (GtkButton       *button,
                     gpointer         user_data)
 {
-  gtk_clist_select_all (get_account_types_clist ());
+  //  gtk_clist_select_all (get_account_types_clist ());
+  GtkCList *clist;
+  gint row;
+
+  /* Walk the list; select the rows that are not "excluded" */
+  clist = get_account_types_clist ();
+  for (row = 0; row < clist->rows; row++) {
+    GncExampleAccount *gea = gtk_clist_get_row_data (clist, row);
+    if (! gea->exclude_from_select_all)
+      gtk_clist_select_row (clist, row, 0);
+  }
 }
 
 static void
@@ -557,7 +603,8 @@ delete_our_final_group (void)
 {
   if (our_final_group != NULL)
   {
-    xaccFreeAccountGroup (our_final_group);
+    xaccAccountGroupBeginEdit (our_final_group);
+    xaccAccountGroupDestroy (our_final_group);
     our_final_group = NULL;
   }
 }
@@ -641,7 +688,7 @@ hierarchy_merge_groups (GSList *dalist)
   gnc_commodity *com;
   AccountGroup *ret = xaccMallocAccountGroup (gnc_get_current_book ());
 
-  com = gnc_general_select_get_selected (get_commodity_editor ());
+  com = gnc_currency_edit_get_currency (GNC_CURRENCY_EDIT(get_currency_editor ()));
 
   for (mark = dalist; mark; mark = mark->next)
   {
@@ -709,9 +756,11 @@ on_final_account_tree_select_row (GtkCTree        *ctree,
                                   gpointer         user_data)
 {
   Account *account;
+  GtkToggleButton *placeholder_button;
   GNCAmountEdit *balance_edit;
   GNCPrintAmountInfo print_info;
   gnc_numeric balance;
+  gboolean is_placeholder;
 
   balance_edit = get_balance_editor ();
 
@@ -728,7 +777,11 @@ on_final_account_tree_select_row (GtkCTree        *ctree,
     return;
   }
 
-  gtk_widget_set_sensitive (GTK_WIDGET (balance_edit), TRUE);
+  is_placeholder = xaccAccountGetPlaceholder (account);
+  placeholder_button = get_placeholder_checkbox ();
+  gtk_toggle_button_set_active(placeholder_button, is_placeholder);
+
+  gtk_widget_set_sensitive (GTK_WIDGET (balance_edit), !is_placeholder);
 
   balance = get_final_balance (account);
 
@@ -772,6 +825,29 @@ on_final_account_tree_unselect_row (GtkCTree        *ctree,
     gtk_entry_set_text (GTK_ENTRY (entry), "");
 
     gtk_widget_set_sensitive (GTK_WIDGET (balance_edit), FALSE);
+  }
+}
+
+static void
+on_final_account_tree_placeholder_toggled (GtkToggleButton *button,
+					   gpointer   user_data)
+{
+  gboolean state;
+  Account *account;
+  GtkCTree *ctree;
+  GtkCTreeNode *node;
+  GNCAmountEdit *balance_edit;
+
+  state = gtk_toggle_button_get_active(button);
+  if (((ctree = hierarchy_get_final_account_tree ()) != NULL) &&
+      ((node = gtk_ctree_node_nth (ctree, GTK_CLIST(ctree)->focus_row)) != NULL) &&
+      ((account = gtk_ctree_node_get_row_data (ctree, node)) != NULL)) {
+          xaccAccountSetPlaceholder (account, state);
+  }
+
+  balance_edit = get_balance_editor ();
+  if (balance_edit) {
+      gtk_widget_set_sensitive(GTK_WIDGET(balance_edit), !state);
   }
 }
 
@@ -891,6 +967,10 @@ gnc_create_hierarchy_druid (void)
      GTK_SIGNAL_FUNC (on_final_account_tree_unselect_row));
 
   glade_xml_signal_connect
+    (xml, "on_final_account_tree_placeholder_toggled",
+     GTK_SIGNAL_FUNC (on_final_account_tree_placeholder_toggled));
+
+  glade_xml_signal_connect
     (xml, "on_final_account_next",
      GTK_SIGNAL_FUNC (on_final_account_next));
 
@@ -905,6 +985,7 @@ gnc_create_hierarchy_druid (void)
   glade_xml_signal_connect (xml, "on_cancel", GTK_SIGNAL_FUNC (on_cancel));
 
   dialog = glade_xml_get_widget (xml, "Hierarchy Druid");
+  gnome_window_icon_set_from_default (GTK_WINDOW (dialog));
 
   druid = glade_xml_get_widget (xml, "hierarchy_druid");
   gnc_druid_set_colors (GNOME_DRUID (druid));

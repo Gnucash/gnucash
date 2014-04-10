@@ -26,25 +26,27 @@
       (cons #f (gnc:html-make-empty-cells (- n 1)))
       '()))
 
+(define (register-guid guid)
+  (gnc:html-build-url gnc:url-type-register (string-append "guid=" guid) #f))
+
 (define (gnc:account-anchor-text acct)
-  (string-append
-   "gnc-register:guid=" 
-   (gnc:account-get-guid acct)))
+  (register-guid (gnc:account-get-guid acct)))
 
 (define (gnc:split-anchor-text split)
-  (string-append
-   "gnc-register:guid=" 
-   (gnc:split-get-guid split)))
+  (register-guid (gnc:split-get-guid split)))
 
 (define (gnc:transaction-anchor-text trans)
-  (string-append
-   "gnc-register:guid=" 
-   (gnc:transaction-get-guid trans)))
+  (register-guid (gnc:transaction-get-guid trans)))
 
 (define (gnc:report-anchor-text report-id)
-  (string-append
-   "gnc-report:id="
-   (number->string report-id)))
+  (gnc:html-build-url gnc:url-type-report
+		      (string-append "id=" (number->string report-id))
+		      #f))
+
+(define (gnc:price-anchor-text price)
+  (gnc:html-build-url gnc:url-type-price
+		      (string-append "guid=" (gnc:price-get-guid price))
+		      #f))
 
 ;; Make a new report and return the anchor to it. The new report of
 ;; type 'reportname' will have the option values copied from
@@ -90,6 +92,15 @@
   (gnc:make-html-text (gnc:html-markup-anchor
                        (gnc:transaction-anchor-text trans)
                        text)))
+
+(define (gnc:html-price-anchor price value)
+  (gnc:make-html-text (if price
+                          (gnc:html-markup-anchor
+                           (gnc:price-anchor-text price)
+			   (if value
+			       value
+			       (gnc:price-get-value price)))
+                          value)))
 
 (define (gnc:assign-colors num-colors)
   (define base-colors '("red" "orange" "yellow" "green"
@@ -163,10 +174,12 @@
      (- tree-depth (+ current-depth (if group-header-line? 1 0))))
     ;; the account balance
     (list (and my-balance
-	       (gnc:make-html-text
-		((if boldface? gnc:html-markup-b identity)
-		 ((if reverse-balance? gnc:monetary-neg identity)
-		  my-balance)))))
+	       (gnc:make-html-table-cell/markup 
+		"number-cell"
+		(gnc:make-html-text
+		 ((if boldface? gnc:html-markup-b identity)
+		  ((if reverse-balance? gnc:monetary-neg identity)
+		   my-balance))))))
     (gnc:html-make-empty-cells (- current-depth 
 				  (if group-header-line? 0 1))))))
 
@@ -210,10 +223,21 @@
 	(if boldface?
 	    (list 
 	     (and foreign-balance 
-		  (gnc:make-html-text (gnc:html-markup-b foreign-balance)))
-	     (and domestic-balance
-		  (gnc:make-html-text (gnc:html-markup-b domestic-balance))))
-	    (list foreign-balance domestic-balance))
+		  (gnc:make-html-table-cell/markup 
+		   "number-cell"
+		   (gnc:make-html-text (gnc:html-markup-b foreign-balance))))
+	     (and 
+	      domestic-balance
+	      (gnc:make-html-table-cell/markup 
+	       "number-cell"
+	       (gnc:make-html-text (gnc:html-markup-b domestic-balance)))))
+	    (list 
+	     (gnc:make-html-table-cell/markup 
+	      "number-cell"
+	      foreign-balance)
+	     (gnc:make-html-table-cell/markup 
+	      "number-cell"
+	      domestic-balance)))
 	(gnc:html-make-empty-cells (* 2 (- current-depth 
 					   (if group-header-line? 0 1)))))))
     
@@ -229,15 +253,17 @@
 	(commodity-row-helper! 
 	 my-name #f
 	 (if balance 
-	     (balance 'getmonetary report-commodity reverse-balance?)
+	     (gnc:commodity-collector-assoc 
+	      balance report-commodity reverse-balance?)
 	     #f)
 	 main-row-style)
 	;; Special case for stock-accounts: then the foreign commodity
 	;; gets displayed in this line rather then the following lines
 	;; (loop below). Is also used if is-stock-account? is true.
 	(let ((my-balance 
-	       (if balance (balance 'getmonetary 
-				    my-commodity reverse-balance?) #f)))
+	       (if balance 
+		   (gnc:commodity-collector-assoc 
+		    balance my-commodity reverse-balance?) #f)))
 	  (set! already-printed my-commodity)
 	  (commodity-row-helper! 
 	   my-name
@@ -249,8 +275,8 @@
     ;; balance and its corresponding value in the
     ;; report-currency. One row for each non-report-currency. 
     (if (and balance (not is-stock-account?))
-	(balance 
-	 'format 
+	(gnc:commodity-collector-map
+	 balance 
 	 (lambda (curr val)
 	   (if (or (gnc:commodity-equiv? curr report-commodity)
 		   (and already-printed
@@ -268,7 +294,7 @@
 		  bal
 		  (exchange-fn bal report-commodity)
 		  other-rows-style))))
-	 #f))))
+	 ))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -289,6 +315,8 @@
 ;; Output fine-tuning -- show-col-headers?, show-total? (with
 ;;                       total-name, get-total-fn), group-types?,
 ;;                       show-parent-balance?, show-parent-total?
+;;
+;; Feedback while building -- start-percent, delta-percent
 ;;
 ;; Note: The returned table object will have 2*tree-depth columns if
 ;; show-other-curr?==#f, else it will have 3*tree-depth columns.
@@ -336,14 +364,20 @@
 ;; non-report-currencies will additionally be displayed in the
 ;; second-rightmost column.
 ;;
+;; <int> start-percent, delta-percent: Fill in the [start:start+delta]
+;; section of the progress bar while running this function.
+;;
 (define (gnc:html-build-acct-table 
 	 start-date end-date 
 	 tree-depth show-subaccts? accounts 
+	 start-percent delta-percent
 	 show-col-headers?
 	 show-total? get-total-fn
 	 total-name group-types? show-parent-balance? show-parent-total? 
-	 show-other-curr? report-commodity exchange-fn)
+	 show-other-curr? report-commodity exchange-fn show-zero-entries?)
   (let ((table (gnc:make-html-table))
+	(work-to-do 0)
+	(work-done 0)
 	(topl-accounts (gnc:group-get-account-list 
 			(gnc:get-current-group))))
 
@@ -366,31 +400,41 @@
     ;; Additional function that includes the subaccounts as
     ;; well. Note: It is necessary to define this here (instead of
     ;; changing an argument for account-get-balance) because the
-    ;; show-acct? query is needed.
+    ;; use-acct? query is needed.
     (define (my-get-balance account)
       ;; this-collector for storing the result
       (let ((this-collector (my-get-balance-nosub account)))
 	(for-each 
 	 (lambda (x) (if x 
-			 (this-collector 'merge x #f)))
+			 (gnc:commodity-collector-merge 
+			  this-collector x )))
 	 (gnc:group-map-all-accounts
 	  (lambda (a)
 	    ;; Important: Calculate the balance if and only of the
-	    ;; account a is shown, i.e. (show-acct? a) == #t.
-	    (and (show-acct? a)
+	    ;; account a is shown, i.e. (use-acct? a) == #t.
+	    (and (use-acct? a)
 		 (my-get-balance-nosub a)))
 	  (gnc:account-get-children account)))
 	this-collector))
 
-    ;; show this account? Check against the account selection and,
-    ;; if not selected, show-subaccts?==#t and any parent was
-    ;; selected. (Maybe the other way around is more effective?)
-    (define (show-acct? a)
+    ;; Use this account in the account hierarchy? Check against the
+    ;; account selection and, if not selected, show-subaccts?==#t and
+    ;; any parent was selected. (Maybe the other way around is more
+    ;; effective?)
+    (define (use-acct? a)
       (or (member a accounts)
 	  (and show-subaccts? 
 	       (let ((parent (gnc:account-get-parent-account a)))
 		 (and parent
 		      (show-acct? parent))))))
+
+    ;; Show this account? Only if nonzero amount or appropriate
+    ;; preference.
+    (define (show-acct? a)
+      (and (or show-zero-entries?
+	       (not (gnc:commodity-collector-allzero? 
+		     (my-get-balance a))))
+	   (use-acct? a)))
 
     ;; sort an account list. Currently this uses only the account-code
     ;; field, but anyone feel free to add more options to this.
@@ -479,6 +523,22 @@
 			   row-style
 			   boldface? group-header-line?)))
 
+    (define (count-accounts! current-depth accnts)
+      (if (<= current-depth tree-depth)
+	  (let ((sum 0))
+	    (for-each 
+	     (lambda (acct)
+	       (let ((subaccts (filter 
+				use-acct?
+				(gnc:account-get-immediate-subaccounts acct))))
+		 (set! sum (+ sum  1))
+		 (if (or (= current-depth tree-depth) (null? subaccts))
+		     sum
+		     (set! sum (+ sum (count-accounts! (+ 1 current-depth) subaccts))))))
+	     accnts)
+	    sum)
+	  0))
+
     ;; This prints *all* the rows that belong to one group: the title
     ;; row, the subaccount tree, and the Total row with the balance of
     ;; the subaccounts. groupname may be a string or a html-text
@@ -519,7 +579,7 @@
 				  subaccounts my-get-balance 
 				  gnc:account-reverse-balance?)))
 		 (if thisbalance 
-		     (subbalance 'merge thisbalance #f))
+		     (gnc:commodity-collector-merge subbalance thisbalance))
 		 subbalance)
 	       heading-style
 	       #t #f)))))
@@ -536,11 +596,16 @@
 	  (for-each 
 	   (lambda (acct)
 	     (let ((subaccts (filter 
-			      show-acct?
+			      use-acct?
 			      (gnc:account-get-immediate-subaccounts acct))))
+	       (set! work-done (+ 1 work-done))
+	       (if start-percent
+		   (gnc:report-percent-done
+		    (+ start-percent (* delta-percent (/ work-done work-to-do)))))
 	       (if (or (= current-depth tree-depth) (null? subaccts))
 		   (begin
-		     (add-account-rows! acct current-depth alternate)
+		     (if (show-acct? acct)
+			 (add-account-rows! acct current-depth alternate))
 		     (set! alternate (not alternate)))
 		   (add-group! current-depth 
 			       (gnc:html-account-anchor acct)
@@ -554,6 +619,9 @@
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     
     ;; start the recursive account processing
+    (set! work-to-do (count-accounts!
+		      (if group-types? 2 1)
+		      (filter use-acct? topl-accounts)))
     (if group-types?
 	;; Print a subtotal for each group.
 	(for-each 
@@ -567,7 +635,7 @@
 	;; No extra grouping. 
 	;; FIXME: go through accounts even if not
 	;; shown, because the children might be shown.
-	(traverse-accounts! (filter show-acct? topl-accounts) 1))
+	(traverse-accounts! (filter use-acct? topl-accounts) 1))
 
     (remove-last-empty-row)
 
@@ -578,7 +646,7 @@
 	   table "grand-total" (* (if show-other-curr? 3 2) tree-depth))
           (add-subtotal-row! 
            1 total-name 
-           (get-total-fn (filter show-acct? topl-accounts) my-get-balance)
+           (get-total-fn (filter use-acct? topl-accounts) my-get-balance)
 	   "grand-total"
            #t #f)))
     
@@ -666,7 +734,8 @@
     
     table))
 
-(define (gnc:html-make-no-account-warning report-title-string)
+(define (gnc:html-make-no-account-warning
+	 report-title-string report-id)
   (let ((p (gnc:make-html-text)))
     (gnc:html-text-append! 
      p 
@@ -676,9 +745,20 @@
      (gnc:html-markup-h2 (_ "No accounts selected"))
      (gnc:html-markup-p
       (_ "This report requires accounts to be selected.")))
+    (if report-id
+	(gnc:html-text-append! 
+	 p 
+	 (gnc:html-markup-p
+	  (gnc:html-markup-anchor
+	   (gnc:html-build-url gnc:url-type-options
+			       (string-append "report-id="
+					      (sprintf #f "%a" report-id))
+			       #f)
+	   (_ "Edit report options")))))
     p))
 
-(define (gnc:html-make-empty-data-warning report-title-string)
+(define (gnc:html-make-empty-data-warning 
+	 report-title-string report-id)
   (let ((p (gnc:make-html-text)))
     (gnc:html-text-append! 
      p 
@@ -687,5 +767,14 @@
      (gnc:html-markup-h2 (_ "No data"))
      (gnc:html-markup-p
       (_ "The selected accounts contain no data/transactions (or only zeroes) for the selected time period")))
+    (if report-id
+	(gnc:html-text-append! 
+	 p 
+	 (gnc:html-markup-p
+	  (gnc:html-markup-anchor
+	   (gnc:html-build-url gnc:url-type-options
+			       (string-append "report-id="
+					      (sprintf #f "%a" report-id))
+			       #f)
+	   (_ "Edit report options")))))
     p))
-

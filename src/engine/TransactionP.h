@@ -49,10 +49,10 @@
 #include <glib.h>
 
 #include "config.h"
-#include "kvp_frame.h"
+#include "gnc-engine.h"   /* for typedefs */
 #include "gnc-numeric.h"
-#include "Transaction.h"   /* for typedefs */
 #include "GNCIdP.h"
+#include "kvp_frame.h"
 
 
 /** STRUCTS *********************************************************/
@@ -78,10 +78,11 @@ struct split_s
 {
   GUID guid;  /* globally unique id */
 
-  GNCEntityTable *entity_table; /* The table where this split is stored. */
+  GNCBook *book;             /* The enitity table where this split is stored. */
 
-  GUID acc_guid;             /* the guid of the associated account */
   Account *acc;              /* back-pointer to debited/credited account  */
+
+  GNCLot *lot;               /* back-pointer to debited/credited lot */
 
   Transaction *parent;       /* parent of split                           */
 
@@ -137,8 +138,7 @@ struct transaction_s
    */
   GUID guid;
 
-  /* entity_table is the table where the transaction is stored by guid */
-  GNCEntityTable *entity_table;
+  GNCBook *book;         /* The entity_table where the transaction is stored */
 
   Timespec date_entered;     /* date register entry was made              */
   Timespec date_posted;      /* date transaction was posted at bank       */
@@ -201,13 +201,6 @@ struct transaction_s
   guint32  idata;     /* used by the sql backend for kvp management */
 };
 
-/* Lookup the transaction/split with the guid, using the given table. */
-Transaction * xaccTransLookupEntityTable (const GUID *guid,
-                                          GNCEntityTable *entity_table);
-
-Split * xaccSplitLookupEntityTable (const GUID *guid,
-                                    GNCEntityTable *entity_table);
-
 /* Set the transaction's GUID. This should only be done when reading
  * a transaction from a datafile, or some other external source. Never
  * call this on an existing transaction! */
@@ -222,9 +215,20 @@ void xaccSplitSetGUID (Split *split, const GUID *guid);
  * with the split.  It does not verify that the split isn't
  * referenced in some account.  If the split is referenced by an 
  * account, then calling this method will leave the system in an 
- * inconsistent state.
+ * inconsistent state.  This *will* lead to crashes and hangs.
  */
 void  xaccFreeSplit (Split *split);    /* frees memory */
+
+/* This routine makes a 'duplicate' of the indicated transaction.
+ * This routine cannot be exposed publically since the duplicate
+ * is wrong in many ways: it is not issued a unique guid, and thus
+ * not a properly registered Entity.  The splits are copied, but
+ * these are also funny: they aren't inserted into the accounts 
+ * they claim to be in.  The splits also have bogus GUID's.
+ * Another 'feature': the splits point at the old transaction
+ * as the parent, not the new transaction.  
+ */
+Transaction * xaccDupeTransaction (Transaction *t);
 
 /* compute the value of a list of splits in the given currency,
  * excluding the skip_me split. */
@@ -237,7 +241,7 @@ gnc_numeric xaccSplitsComputeValue (GList *splits, Split * skip_me,
  *    want anyone except the backend to mess with them.
  */
 void xaccTransSetVersion (Transaction*, gint32);
-gint32 xaccTransGetVersion (Transaction*);
+gint32 xaccTransGetVersion (const Transaction*);
 
 /* The xaccTransFindCommonCurrency () method returns a gnc_commodity
  *    indicating a currency denomination that all of the splits in this
@@ -245,5 +249,10 @@ gint32 xaccTransGetVersion (Transaction*);
  *    of the split accounts. */
 gnc_commodity * xaccTransFindOldCommonCurrency (Transaction *trans,
                                                 GNCBook *book);
+
+/* Code to register Split and Transaction types with the engine */
+gboolean xaccSplitRegister (void);
+gboolean xaccTransRegister (void);
+
 
 #endif /* XACC_TRANSACTION_P_H */

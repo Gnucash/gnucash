@@ -1,6 +1,6 @@
 /********************************************************************
  * sixtp-dom-parsers.h                                              *
- * Copyright 2001 Gnumatic, Inc.                                    *
+ * Copyright (c) 2001 Gnumatic, Inc.                                *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -42,7 +42,7 @@
 GUID* dom_tree_to_guid(xmlNodePtr node);
 
 gnc_commodity* dom_tree_to_commodity_ref(xmlNodePtr node, GNCBook *book);
-gnc_commodity *dom_tree_to_commodity_ref_no_engine(xmlNodePtr node);
+gnc_commodity *dom_tree_to_commodity_ref_no_engine(xmlNodePtr node, GNCBook *);
 
 FreqSpec* dom_tree_to_freqSpec( xmlNodePtr node, GNCBook *book);
 
@@ -68,7 +68,10 @@ kvp_value* dom_tree_to_frame_kvp_value(xmlNodePtr node);
 
 gboolean dom_tree_to_integer(xmlNodePtr node, gint64 *daint);
 
+/* higher level structures */
 Account* dom_tree_to_account(xmlNodePtr node, GNCBook *book);
+GNCBook* dom_tree_to_book   (xmlNodePtr node, GNCBook *book);
+GNCLot*  dom_tree_to_lot    (xmlNodePtr node, GNCBook *book);
 Transaction* dom_tree_to_transaction(xmlNodePtr node, GNCBook *book);
 
 struct dom_tree_handler

@@ -56,6 +56,7 @@ struct gnc_ledger_display
   SplitRegister *reg;
 
   gboolean loading;
+  gboolean use_double_line_default;
 
   GNCLedgerDisplayDestroy destroy;
   GNCLedgerDisplayGetParent get_parent;
@@ -76,6 +77,7 @@ gnc_ledger_display_internal (Account *lead_account, Query *q,
                              GNCLedgerDisplayType ld_type,
                              SplitRegisterType reg_type,
                              SplitRegisterStyle style,
+			     gboolean use_double_line,
                              gboolean is_template);
 static void gnc_ledger_display_refresh_internal (GNCLedgerDisplay *ld,
                                                  GList *splits);
@@ -205,24 +207,36 @@ find_by_reg (gpointer find_data, gpointer user_data)
 }
 
 static SplitRegisterStyle
-gnc_get_default_register_style (void)
+gnc_get_default_register_style (GNCAccountType type)
 {
   SplitRegisterStyle new_style = REG_STYLE_LEDGER;
   char *style_string;
 
-  style_string = gnc_lookup_multichoice_option("Register", 
-                                               "Default Register Style",
-                                               "ledger");
-
-  if (safe_strcmp(style_string, "ledger") == 0)
+  switch (type) {
+#if 0
+  case PAYABLE:
+  case RECEIVABLE:
     new_style = REG_STYLE_LEDGER;
-  else if (safe_strcmp(style_string, "auto_ledger") == 0)
-    new_style = REG_STYLE_AUTO_LEDGER;
-  else if (safe_strcmp(style_string, "journal") == 0)
-    new_style = REG_STYLE_JOURNAL;
+    break;
+#endif
 
-  if (style_string != NULL)
-    free(style_string);
+  default:
+    style_string = gnc_lookup_multichoice_option("Register", 
+						 "Default Register Style",
+						 "ledger");
+
+    if (safe_strcmp(style_string, "ledger") == 0)
+      new_style = REG_STYLE_LEDGER;
+    else if (safe_strcmp(style_string, "auto_ledger") == 0)
+      new_style = REG_STYLE_AUTO_LEDGER;
+    else if (safe_strcmp(style_string, "journal") == 0)
+      new_style = REG_STYLE_JOURNAL;
+    
+    if (style_string != NULL)
+      free(style_string);
+
+    break;
+  }
 
   return new_style;
 }
@@ -258,6 +272,12 @@ gnc_get_reg_type (Account *leader, GNCLedgerDisplayType ld_type)
 
       case LIABILITY:
         return LIABILITY_REGISTER;
+
+      case PAYABLE:
+	return PAYABLE_REGISTER;
+
+      case RECEIVABLE:
+	return RECEIVABLE_REGISTER;
 
       case STOCK:
       case MUTUAL:
@@ -296,6 +316,8 @@ gnc_get_reg_type (Account *leader, GNCLedgerDisplayType ld_type)
     case ASSET:
     case CREDIT:
     case LIABILITY:
+    case RECEIVABLE:
+    case PAYABLE:
       /* if any of the sub-accounts have STOCK or MUTUAL types,
        * then we must use the PORTFOLIO_LEDGER ledger. Otherwise,
        * a plain old GENERAL_LEDGER will do. */
@@ -342,17 +364,38 @@ gnc_get_reg_type (Account *leader, GNCLedgerDisplayType ld_type)
   return reg_type;
 }
 
+/* Returns a boolean of whether this display should be single or double lined
+ * mode by default */
+gboolean
+gnc_ledger_display_default_double_line (GNCLedgerDisplay *gld)
+{
+  return (gld->use_double_line_default ||
+	  gnc_lookup_boolean_option ("Register", "Double Line Mode", FALSE));
+}
+
 /* Opens up a register window to display a single account */
 GNCLedgerDisplay *
 gnc_ledger_display_simple (Account *account)
 {
   SplitRegisterType reg_type;
+  GNCAccountType acc_type = xaccAccountGetType (account);
+  gboolean use_double_line;
+
+  switch (acc_type) {
+  case PAYABLE:
+  case RECEIVABLE:
+    use_double_line = TRUE;
+    break;
+  default:
+    use_double_line = FALSE;
+    break;
+  }
 
   reg_type = gnc_get_reg_type (account, LD_SINGLE);
 
   return gnc_ledger_display_internal (account, NULL, LD_SINGLE, reg_type,
-                                      gnc_get_default_register_style (),
-                                      FALSE);
+                                      gnc_get_default_register_style(acc_type),
+                                      use_double_line, FALSE);
 }
 
 /* Opens up a register window to display an account, and all of its
@@ -365,9 +408,9 @@ gnc_ledger_display_subaccounts (Account *account)
   reg_type = gnc_get_reg_type (account, LD_SUBACCOUNT);
 
   return gnc_ledger_display_internal (account, NULL, LD_SUBACCOUNT,
-                                      reg_type, REG_STYLE_JOURNAL, FALSE);
+                                      reg_type, REG_STYLE_JOURNAL, FALSE,
+				      FALSE);
 }
-
 
 /* Opens up a general ledger window. */
 GNCLedgerDisplay *
@@ -379,24 +422,34 @@ gnc_ledger_display_gl (void)
 
   query = xaccMallocQuery ();
 
-  xaccQuerySetGroup (query, gnc_get_current_group());
+  xaccQuerySetBook (query, gnc_get_current_book());
 
-  xaccQueryAddBalanceMatch (query,
-                            BALANCE_BALANCED | BALANCE_UNBALANCED,
-                            QUERY_AND);
+  /* In lieu of not "mis-using" some portion of the infrastructure by writing
+   * a bunch of new code, we just filter out the accounts of the template
+   * transactions.  While these are in a seperate AccountGroup just for this
+   * reason, the query engine makes no distinction between AccountGroups.
+   * See Gnome Bug 86302.
+   * 	-- jsled */
+  {
+    AccountGroup *tAG;
+    AccountList *al;
+    
+    tAG = gnc_book_get_template_group( gnc_get_current_book() );
+    al = xaccGroupGetSubAccounts( tAG );
+    xaccQueryAddAccountMatch( query, al, GUID_MATCH_NONE, QUERY_AND );
+    g_list_free (al);
+    al = NULL;
+    tAG = NULL;
+  }
 
   start = time (NULL);
-
   tm = localtime (&start);
-
   tm->tm_mon--;
   tm->tm_hour = 0;
   tm->tm_min = 0;
   tm->tm_sec = 0;
   tm->tm_isdst = -1;
-
   start = mktime (tm);
-
   xaccQueryAddDateMatchTT (query, 
                            TRUE, start, 
                            FALSE, 0, 
@@ -404,67 +457,67 @@ gnc_ledger_display_gl (void)
 
   return gnc_ledger_display_internal (NULL, query, LD_GL,
                                       GENERAL_LEDGER,
-                                      REG_STYLE_JOURNAL, FALSE);
+                                      REG_STYLE_JOURNAL, FALSE, FALSE);
 }
 
 /**
  * id is some identifier that can be:
- * . used in a query to look for the transaction which belong to this
- *   template ledger
- * . set in a specific key value for new transactions which belong to
- *   this template ledger.
+ * FIXME: what's the correct description of 'id'?
  **/
 GNCLedgerDisplay *
 gnc_ledger_display_template_gl (char *id)
 {
   GNCBook *book;
   Query *q;
-  time_t start;
-  struct tm *tm;
   GNCLedgerDisplay *ld;
   SplitRegister *sr;
   AccountGroup *ag;
   Account *acct;
 
+  acct = NULL;
+
   q = xaccMallocQuery ();
 
   book = gnc_get_current_book ();
+  xaccQuerySetBook (q, book);
 
-  ag = gnc_book_get_template_group (book);
-  acct = xaccGetAccountFromName (ag, id);
-  if (!acct)
-  {
-    /* FIXME */
-    printf( "can't get template account for id \"%s\"\n", id );
+  if ( id != NULL ) {
+    ag = gnc_book_get_template_group (book);
+    acct = xaccGetAccountFromName (ag, id);
+    g_assert( acct );
+    xaccQueryAddSingleAccountMatch (q, acct, QUERY_AND);
   }
-
-  xaccQueryAddSingleAccountMatch (q, acct, QUERY_AND);
-  xaccQuerySetGroup (q, gnc_book_get_template_group(book));
 
   ld = gnc_ledger_display_internal (NULL, q, LD_GL,
                                     GENERAL_LEDGER,
                                     REG_STYLE_JOURNAL,
-                                    TRUE); /* template mode?  TRUE. */
+                                    FALSE, TRUE); /* TRUE : template mode */
 
   sr = gnc_ledger_display_get_split_register (ld);
-
-  gnc_split_register_set_template_account (sr, acct);
+  if ( acct ) {
+    gnc_split_register_set_template_account (sr, acct);
+  }
 
   return ld;
+}
+
+gncUIWidget
+gnc_ledger_display_get_parent( GNCLedgerDisplay *ld )
+{
+  if ( ld == NULL )
+    return NULL;
+
+  if ( ld->get_parent == NULL )
+    return NULL;
+
+  return ld->get_parent( ld );
 }
 
 static gncUIWidget
 gnc_ledger_display_parent (void *user_data)
 {
-  GNCLedgerDisplay *regData = user_data;
-
-  if (regData == NULL)
-    return NULL;
-
-  if (regData->get_parent == NULL)
-    return NULL;
-
-  return regData->get_parent (regData);
+  GNCLedgerDisplay *ld = user_data;
+  return gnc_ledger_display_get_parent( ld );
 }
 
 static void
@@ -569,7 +622,6 @@ gnc_ledger_display_make_query (GNCLedgerDisplay *ld,
       break;
 
     case LD_GL:
-    case LD_TEMPLATE:
       return;
 
     default:
@@ -587,7 +639,7 @@ gnc_ledger_display_make_query (GNCLedgerDisplay *ld,
   if (!show_all && (type != SEARCH_LEDGER))
     xaccQuerySetMaxSplits (ld->query, 30);
 
-  xaccQuerySetGroup (ld->query, gnc_get_current_group());
+  xaccQuerySetBook (ld->query, gnc_get_current_book());
 
   leader = gnc_ledger_display_leader (ld);
 
@@ -599,7 +651,7 @@ gnc_ledger_display_make_query (GNCLedgerDisplay *ld,
   accounts = g_list_prepend (accounts, leader);
 
   xaccQueryAddAccountMatch (ld->query, accounts,
-                            ACCT_MATCH_ANY, QUERY_OR);
+                            GUID_MATCH_ANY, QUERY_AND);
 
   g_list_free (accounts);
 }
@@ -609,7 +661,8 @@ GNCLedgerDisplay *
 gnc_ledger_display_query (Query *query, SplitRegisterType type,
                           SplitRegisterStyle style)
 {
-  return gnc_ledger_display_internal (NULL, query, LD_GL, type, style, FALSE);
+  return gnc_ledger_display_internal (NULL, query, LD_GL, type, style,
+				      FALSE, FALSE);
 }
 
 static GNCLedgerDisplay *
@@ -617,6 +670,7 @@ gnc_ledger_display_internal (Account *lead_account, Query *q,
                              GNCLedgerDisplayType ld_type,
                              SplitRegisterType reg_type,
                              SplitRegisterStyle style,
+			     gboolean use_double_line,
                              gboolean is_template )
 {
   GNCLedgerDisplay *ld;
@@ -684,12 +738,6 @@ gnc_ledger_display_internal (Account *lead_account, Query *q,
 
       break;
 
-  case LD_TEMPLATE:
-    class = REGISTER_TEMPLATE_CM_CLASS;
-    /* FIXME: sanity checks?
-       Check for kvp-frame data? */
-    break;
-    
     default:
       PERR ("bad ledger type: %d", ld_type);
       return NULL;
@@ -706,7 +754,7 @@ gnc_ledger_display_internal (Account *lead_account, Query *q,
   ld->get_parent = NULL;
   ld->user_data = NULL;
 
-  show_all = gnc_lookup_boolean_option ("Register",
+  show_all = gnc_lookup_boolean_option ("_+Advanced",
                                         "Show All Transactions",
                                         TRUE);
 
@@ -724,7 +772,9 @@ gnc_ledger_display_internal (Account *lead_account, Query *q,
    * The main register window itself                                *
   \******************************************************************/
 
-  ld->reg = gnc_split_register_new (reg_type, style, FALSE, is_template);
+  ld->use_double_line_default = use_double_line;
+  ld->reg = gnc_split_register_new (reg_type, style, use_double_line,
+				    is_template);
 
   gnc_split_register_set_data (ld->reg, ld, gnc_ledger_display_parent);
 

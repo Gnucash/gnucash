@@ -4,6 +4,8 @@
 ;; These are TXF codes and a brief description of each. See taxtxf.scm
 ;; and txf-export-help.scm
 ;;
+;; See also http://www.turbotax.com/txf/
+;;
 (define (gnc:txf-get-payer-name-source categories code)
   (gnc:txf-get-code-info categories code 0))
 (define (gnc:txf-get-form categories code)

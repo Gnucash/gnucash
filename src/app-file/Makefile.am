@@ -7,6 +7,7 @@ AM_CFLAGS = \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/app-utils \
+  -I${top_srcdir}/src/gnome-utils \
   ${GNOME_INCLUDEDIR} \
   ${GUILE_INCS} \
   ${GLIB_CFLAGS} \
@@ -22,7 +23,9 @@ gncinclude_HEADERS = \
   gnc-file-dialog.h \
   gnc-file-history.h
 
-noinst_HEADERS = gnc-file-p.h
+noinst_HEADERS = \
+  gnc-file-p.h \
+  gw-app-file.h
 
 libgncmod_app_file_la_LDFLAGS = -module
 
@@ -30,7 +33,8 @@ libgncmod_app_file_la_LIBADD = \
   ../gnc-module/libgncmodule.la \
   ../engine/libgncmod-engine.la \
   ../gnome-utils/libgncmod-gnome-utils.la \
-  ./gnome/libgnc-app-file-gnome.la \
+  gnome/libgnc-app-file-gnome.la \
+  ../app-utils/libgncmod-app-utils.la \
   ${GUILE_LIBS} \
   ${GLIB_LIBS}
 
@@ -45,20 +49,31 @@ noinst_DATA = .scm-links
 EXTRA_DIST = \
   ${gwmod_DATA}
 
+if GNUCASH_SEPARATE_BUILDDIR
+#Only needed when srcdir and builddir are different
+SCM_FILE_LINKS = gw-app-file-spec.scm
+endif
+
 .scm-links: 
 	rm -f gnucash g-wrapped
 	ln -sf . gnucash 
 	ln -sf . g-wrapped 
+if GNUCASH_SEPARATE_BUILDDIR
+	for X in ${SCM_FILE_LINKS} ; do \
+	  ln -sf ${srcdir}/$$X . ; \
+	done
+endif
 	touch .scm-links
 
-gw-app-file.scm gw-app-file.c gw-app-file.h: .scm-links gw-app-file-spec.scm
+gw-app-file.scm gw-app-file.c gw-app-file.h: \
+  .scm-links gw-app-file-spec.scm ${top_builddir}/config.status
 	FLAVOR=gnome guile -c \
 	 "(set! %load-path (cons \"${G_WRAP_MODULE_DIR}\" %load-path)) \
 	  (set! %load-path (cons \"${PWD}\" %load-path)) \
-	  (set! %load-path (cons \"${top_srcdir}/src/engine\" %load-path)) \
+	  (set! %load-path (cons \"${top_builddir}/src/engine\" %load-path)) \
 	  (primitive-load \"./gw-app-file-spec.scm\") \
-	  (gw:generate-module \"gw-app-file\")"
+	  (gw:generate-wrapset \"gw-app-file\")"
 
 BUILT_SOURCES = gw-app-file.scm gw-app-file.c gw-app-file.h
-CLEANFILES = gw-app-file.scm gw-app-file.c gw-app-file.h gw-app-file.html \
-              gnucash g-wrapped .scm-links
+DISTCLEANFILES = gnucash g-wrapped .scm-links ${SCM_FILE_LINKS} \
+	gw-app-file.html

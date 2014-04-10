@@ -20,7 +20,7 @@
 ;; Boston, MA  02111-1307,  USA       gnu@gnu.org
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(use-modules (gnucash bootstrap))
+(use-modules (gnucash main))
 
 ;; This hash should contain all the reports available and will be used
 ;; to generate the reports menu whenever a new window opens and to
@@ -37,12 +37,10 @@
 
 ;; Define those strings here to make changes easier and avoid typos.
 (define gnc:menuname-reports (N_ "_Reports"))
-(define gnc:menuname-asset-liability
-  (N_ "_Assets & Liabilities"))
-(define gnc:menuname-income-expense 
-  (N_ "_Income & Expense"))
+(define gnc:menuname-asset-liability (N_ "_Assets & Liabilities"))
+(define gnc:menuname-income-expense (N_ "_Income & Expense"))
 (define gnc:menuname-taxes (N_ "_Taxes"))
-(define gnc:menuname-utility (N_ "_Utility"))
+(define gnc:menuname-utility (N_ "_Sample & Custom"))
 (define gnc:pagename-general (N_ "General"))
 (define gnc:pagename-accounts (N_ "Accounts"))
 (define gnc:pagename-display (N_ "Display"))
@@ -51,11 +49,10 @@
 (define <report-template>
   (make-record-type "<report-template>"
                     ;; The data items in a report record
-                    '(version name 
-                              options-generator options-editor 
+                    '(version name options-generator
                               options-cleanup-cb options-changed-cb
                               renderer in-menu? menu-path menu-name
-                              menu-tip export-thunk)))
+                              menu-tip export-types export-thunk)))
 
 (define (gnc:define-report . args)
   ;; For now the version is ignored, but in the future it'll let us
@@ -70,7 +67,6 @@
      #f                         ;; version
      #f                         ;; name
      #f                         ;; options-generator
-     #f                         ;; options-editor
      #f                         ;; options-cleanup-cb
      #f                         ;; options-changed-cb
      #f                         ;; renderer
@@ -78,6 +74,7 @@
      #f                         ;; menu-path
      #f                         ;; menu-name
      #f                         ;; menu-tip
+     #f                         ;; export-types
      #f                         ;; export-thunk
      ))
 
@@ -106,8 +103,6 @@
   (record-accessor <report-template> 'name))
 (define gnc:report-template-options-generator
   (record-accessor <report-template> 'options-generator))
-(define gnc:report-template-options-editor
-  (record-accessor <report-template> 'options-editor))
 (define gnc:report-template-options-cleanup-cb
   (record-accessor <report-template> 'options-cleanup-cb))
 (define gnc:report-template-options-changed-cb
@@ -122,6 +117,8 @@
   (record-accessor <report-template> 'menu-name))
 (define gnc:report-template-menu-tip
   (record-accessor <report-template> 'menu-tip))
+(define gnc:report-template-export-types
+  (record-accessor <report-template> 'export-types))
 (define gnc:report-template-export-thunk
   (record-accessor <report-template> 'export-thunk))
 
@@ -223,20 +220,6 @@
 (define gnc:report-set-ctext!
   (record-modifier <report> 'ctext))
 
-(define (gnc:report-edit-options report) 
-  (let* ((editor-widg (gnc:report-editor-widget report)))
-    (if editor-widg
-        (gnc:report-raise-editor report)
-        (begin
-          (if (gnc:report-options report) 
-              (begin 
-                (set! editor-widg
-                      ((gnc:report-options-editor report)
-                       (gnc:report-options report)
-                       report))
-                (gnc:report-set-editor-widget! report editor-widg))
-              (gnc:warning-dialog "This report has no options."))))))
-
 (define (gnc:make-report template-name . rest)
   (let ((r ((record-constructor <report>) 
             template-name ;; type
@@ -282,27 +265,23 @@
         (gnc:report-template-new-options template)
         #f)))
 
-(define (gnc:report-options-editor report) 
-  (let ((template 
-         (hash-ref  *gnc:_report-templates_* 
-                    (gnc:report-type report))))
+(define (gnc:report-export-types report)
+  (let ((template (hash-ref *gnc:_report-templates_* 
+                            (gnc:report-type report))))
     (if template
-        (let ((ed (gnc:report-template-options-editor template)))
-	  (if ed ed 
-	      gnc:default-options-editor))
+        (gnc:report-template-export-types template)
         #f)))
 
 (define (gnc:report-export-thunk report)
-  (let ((template 
-         (hash-ref  *gnc:_report-templates_* 
-                    (gnc:report-type report))))
+  (let ((template (hash-ref *gnc:_report-templates_* 
+                            (gnc:report-type report))))
     (if template
         (gnc:report-template-export-thunk template)
         #f)))
 
 (define (gnc:report-menu-name report)
-  (let ((template (hash-ref  *gnc:_report-templates_* 
-			     (gnc:report-type report))))
+  (let ((template (hash-ref *gnc:_report-templates_* 
+                            (gnc:report-type report))))
     (if template
         (or (gnc:report-template-menu-name template)
 	    (gnc:report-name report))
@@ -349,6 +328,9 @@
 (define (gnc:find-report id) 
   (hash-ref *gnc:_reports_* id))
 
+(define (gnc:find-report-template report-type) 
+  (hash-ref *gnc:_report-templates_* report-type))
+
 (define (gnc:report-generate-restore-forms report)
   ;; clean up the options if necessary.  this is only needed 
   ;; in special cases.  
@@ -380,8 +362,9 @@
       
       ;; otherwise, rerun the report 
       (let ((template (hash-ref *gnc:_report-templates_* 
-                                (gnc:report-type report))))
-        (if template
+                                (gnc:report-type report)))
+	    (doc #f))
+        (set! doc (if template
             (let* ((renderer (gnc:report-template-renderer template))
                    (stylesheet (gnc:report-stylesheet report))
                    (doc (renderer report))
@@ -391,23 +374,26 @@
               (gnc:report-set-ctext! report html)
               (gnc:report-set-dirty?! report #f)              
               html)
-            #f))))
+            #f))
+	doc)))
 
 (define (gnc:report-run id)
-  (gnc:backtrace-if-exception 
-   (lambda ()
-     (let ((report (gnc:find-report id))
-           (start-time (gettimeofday))
-           (html #f))
+  (let ((report (gnc:find-report id))
+	(start-time (gettimeofday))
+	(html #f))
+    (gnc:set-busy-cursor #f #t)
+    (gnc:backtrace-if-exception 
+     (lambda ()
        (if report
-           (begin 
-             (set! html (gnc:report-render-html report #t))
-;;             (display "total time to run report: ")
-;;             (display (gnc:time-elapsed start-time (gettimeofday)))
-;;             (newline)
-;;             (display html) (newline)
-             html)
-           #f)))))
+	   (begin 
+	     (set! html (gnc:report-render-html report #t))
+;;	     (display "total time to run report: ")
+;;	     (display (gnc:time-elapsed start-time (gettimeofday)))
+;;	     (newline)
+;;	     (display html) (newline)
+	     ))))
+    (gnc:unset-busy-cursor #f)
+    html))
 
 (define (gnc:report-templates-for-each thunk)
   (hash-for-each (lambda (name template) (thunk name template))

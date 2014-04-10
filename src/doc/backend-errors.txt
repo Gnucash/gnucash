@@ -1,0 +1,189 @@
+
+              Handling Backend Communications Errors
+              --------------------------------------
+                  Architectural Discussion 
+                        December 2001
+     Proposed/Reviewed, Linas Vepstas, Dave Peticolas
+
+Problem: 
+--------
+What to do if a serious error occurs in a backend while
+GnuCash is being used?  For example, what happens if the connection
+to the SQL server is lost, because the SQL server has died, and/or
+because there is a network problem (unplugged ethernet cable, etc.)
+
+
+Discussion:
+-----------
+There are a set of macros in the Postgres backend that check for
+a Postgres error, and completely shut down the connection to the
+Postgres server whenever even a minor error occurs.  This is 
+excessively harsh.  How to do better?
+
+
+The "Handle it Automatically in the Backend" idea:  
+--------------------------------------------------
+Detect the error in the backend, and do something 'intelligent'
+in the backend, trying to recover from it.  What one does depends on
+the actual context (depending one what is going on in the code at that
+point.)  In other words, implement automatic session-reconnection in 
+the backend.
+
+To do this, you can't just handle the errors in the macros (SEND_QUERY,
+FINISH_QUERY, etc) since it depends on the context and how much work 
+you've sent to the postgres process so far. One error that would
+be nice to be able to recover from is a simple loss of connection (the
+postmaster gets killed and restarted).  This might require one to 
+'replay' some last few queries,
+
+
+The "Generic Handler, Report it to the User" idea:
+--------------------------------------------------
+There's a simple, direct thing we should get working first:
+
+Go ahead and close the connection, but then return to the engine
+in some nice way, let the engine report the error by GUI, and then
+allow the user to initiaite a new session (or maybe try to do it
+automatically): and do all this without deleting all the accounts
+and transactions.
+
+Its some fair amount of work just to untangle the flow of control
+for this case, and leave gnucash in a usable state without having
+an open session.
+
+I like this for several reasons:
+-- its generic, it can handle any backend error anywhere in the code.
+   You don't have to second-guess based on whether some recent query
+   may or might not have completed.
+-- I beleive that reconnect will be quicker, because you won't need
+   reload piles of accounts and transactions.
+-- If the user can't reconnect, then they can always save to a file.
+   This can be a double bonus if done right:  e.g. user works on laptop,
+   saves to file, takes laptop to airport, works off-line, and then
+   syncs her changes back up when she goes on-line again.
+
+
+Discussion:
+----------
+> Should the backend try reconnecting first, or just go ahead and 
+> return an error condition immediately?    If the latter, then the 
+> current backend error-handling can just stay as it is and the gui 
+> codes need to add checks in several places, right?
+
+The backend can try reconnecting automatically.  But lets think through
+what this implies, and we'll see its not that good an idea:
+
+It will need to remember the user's password to reconnect (It currently
+drops the passwd as a security precaution).   I don't have an opinion
+as to whether it should log the reconnect in the gncSession table.
+I don't know if it should try to do a streamlined reconnect -- e.g.
+skip checking the version numbers ... but maybe the SQL server was
+rebooted (or at least, all users were kicked) precisely because the
+version  numbers changed ??
+
+The problem with automatic reconnect from within the backend is that you
+don't know quite where to restart... or rather, you have trouble getting
+to the right place to restart.   Take for example
+
+pgendStoreTransaction (PGBackend *be, Transaction *trans)
+{
+   /* lock it up so that we store atomically */
+   bufp = "BEGIN;\n"
+          "LOCK TABLE gncTransaction IN EXCLUSIVE MODE;\n"
+          "LOCK TABLE gncEntry IN EXCLUSIVE MODE;\n";
+   SEND_QUERY (be,bufp, );
+   FINISH_QUERY(be->connection);
+
+   pgendStoreTransactionNoLock (be, trans, TRUE);
+
+   bufp = "COMMIT;\n"
+          "NOTIFY  gncTransaction;";
+   SEND_QUERY (be,bufp, );
+   FINISH_QUERY(be->connection);  // << network error occurs here!!!
+
+Well, you can't just re-login, and reissue the commit.  You really need
+to rewind to the begining of the subroutine.   How can you do this?
+
+Alternative 1) wrap this routine:
+
+   pgendStoreTransaction (PGBackend *be, Transaction *trans)
+   {
+       do {
+          pgendIfNotLoggedInThenReLogin(be);
+          pgendStoreTransactionOnceOnly(be, trans);
+       } while (NO_ERROR ! pgendGetError());
+   }
+
+   well, maybe not infinite loop, maybe three retries or something.
+
+Alternative 2) throw an error, let some much higher layer catch it.
+
+Well, approach 1) seems reasonable... until you think about what happens
+if three retries doesn't cut it:  then you have to throw an error
+anyway, and hope the higher layer deals with it.   So even if you
+implement 1), you *still* have to implement 2) anyway.  
+
+So my attitude is to skip doing 1 for now (maybe we can add it later)
+and just make sure that when we "throw" the error, it really does behave
+like a throw should behave, and short-cuts its way up to where its
+caught.  The catcher should probably be a few strategic places in the
+GUI, like wherever a xaccQuery() is issued, and wherever an
+xaccTransCommitEdit() is issued (which is hopefully not a lot of
+places ?).
+
+
+What's the point of doing 2 cleanly?   Because I suspect that most
+network errors won't be automatically recoverable.  Most likely,
+either someone tripped over an ethernet cable, or the server crashed,
+and you gotta call the sysadmin on the phone, etc.  The goal is not
+to crash the client when the network is down, but rather let the user
+continue to work off-line (rather than a forced coffee break).
+
+Alternately, user might take a forced coffee break, and 10 minutes
+later, manually reconnects and resumes work ... without having to
+stop & restart gnucash, without having to close and reopen a register,
+re-run a report window, etc.   Because its the re-opening of the
+app that is the major pain in the butt.
+
+
+How to Report Errors to the GUI
+-------------------------------
+> How would the engine->GUI error reporting happen? A direct callback? 
+> Or having the GUI always check for session errors?
+
+We should use the session error mechanism for reporting these errors.  
+Note that the API allows a simple 'try-throw-catch' style error
+handling in C.  Because we don't/can't unwind the stack as a true 
+'throw' would, we need to make sure that when we "throw" the error, 
+it emulates this as best it can:  it short-cuts its way up and out of
+the engine, to where its caught in the GUI.  The catcher should probably 
+be a few strategic places in the GUI, like wherever a xaccQuery() is 
+issued, and wherever an xaccTransCommitEdit() is issued.
+
+Unfortunately, there are a *lot* of places where these calls are
+issued, and therefore, its a lot of work to modify all of these places
+to check for an error condition.  It would simplify things if there
+was also a callback medchanism.
+
+Propose:
+Maybe gnc-event.h should be extended to generate events for errors
+as well ... 
+
+How about this idea:
+
+change gnc_session_push_error() so that it calls 
+gnc_engine_generate_event (GUID_of_session, GNC_EVENT_ERROR)
+
+The GUI would register a handler; the handler would call 
+gnc_session_get_error() to find out the details of the error; and 
+maybe put a popup on the screen, maybe set some flags so that the 
+GUI starts working differently...
+
+This would save a *lot* of trouble of having to check the error code
+in the zillion places where CommitEdit is called.  Of course, if the
+error occurs, then all the code that executes following the CommitEdit 
+is 'suspect', and is potentially buggy/non-robust in the face of that
+error.  Alligators lie here ...
+
+
+============================== END OF DOCUMENT ===================== 

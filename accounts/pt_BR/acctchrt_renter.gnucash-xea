@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<gnc-account-example>
+    <gnc-act:title>
+      Despesas de Aluguel
+    </gnc-act:title>
+    <gnc-act:short-description>
+      Despesas associadas com uma casa alugada
+    </gnc-act:short-description>
+    <gnc-act:long-description>
+    Deverá selecionar este conjunto de contas caso tenha uma casa alugada (renda).
+  </gnc-act:long-description>
+<gnc:account version="2.0.0">
+  <act:name>Despesas</act:name>
+  <act:id type="new">9a2b4520f113372f4e576f5b6dc129c6</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>BRL</cmdty:id>
+  </act:currency>
+  <act:description>Despesas</act:description>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Seguro</act:name>
+  <act:id type="new">b79b231807a98cd562c46cf0454e9f25</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>BRL</cmdty:id>
+  </act:currency>
+  <act:description>Seguro</act:description>
+  <act:parent type="new">9a2b4520f113372f4e576f5b6dc129c6</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Renda</act:name>
+  <act:id type="new">c1638a9a48d4d0e1b17d99219a18f34b</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>BRL</cmdty:id>
+  </act:currency>
+  <act:description>Renda</act:description>
+  <act:parent type="new">9a2b4520f113372f4e576f5b6dc129c6</act:parent>
+</gnc:account>
+</gnc-account-example>
+
+<!-- Local variables: -->
+<!-- mode: xml        -->
+<!-- End:             -->

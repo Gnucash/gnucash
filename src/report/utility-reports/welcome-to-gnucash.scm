@@ -23,14 +23,14 @@
 (define-module (gnucash report welcome-to-gnucash))
 (export gnc:make-welcome-report)
 
-(use-modules (gnucash bootstrap) (g-wrapped gw-gnc)) ;; FIXME: delete after we finish modularizing.
+(use-modules (gnucash main)) ;; FIXME: delete after we finish modularizing.
 (use-modules (gnucash gnc-module))
 
 (gnc:module-load "gnucash/report/report-system" 0)
 
 (define (gnc:make-welcome-report)
   (let* ((view (gnc:make-report "Multicolumn View"))
-         (sub-welcome (gnc:make-report "Welcome to GnuCash 1.6"))
+         (sub-welcome (gnc:make-report "Welcome to GnuCash"))
          (sub-accounts (gnc:make-report "Account Summary"))
          (sub-expense-pie (gnc:make-report "Expense Accounts"))
          (sub-income-pie (gnc:make-report "Income Accounts"))
@@ -42,7 +42,7 @@
        (gnc:lookup-option options section name) value))
 
     (set! options (gnc:report-options (gnc:find-report view)))
-    (set-option! "General" "Report name" (_ "Welcome to GnuCash 1.6"))
+    (set-option! "General" "Report name" (_ "Welcome to GnuCash"))
     (set-option! "General" "Number of columns" 2)
 
     ;; mark the reports as needing to be saved 
@@ -68,7 +68,6 @@
     (set! options (gnc:report-options (gnc:find-report sub-bar)))
     (set-option! "Display" "Plot Width" 800)
 
-    (gnc:main-window-open-report view #f)
     view))
 
 (define (options) 
@@ -79,13 +78,13 @@
     (gnc:html-document-add-object! 
      doc
      (gnc:make-html-text 
-      (gnc:html-markup-h2 (_ "Welcome to GnuCash 1.6!"))
+      (gnc:html-markup-h2 (_ "Welcome to GnuCash 1.8!"))
       (gnc:html-markup-p
-       (_ "GnuCash 1.6 has lots of nice features. Here are a few."))))
+       (_ "GnuCash 1.8 has lots of nice features. Here are a few."))))
     doc))
 
 (gnc:define-report 
- 'name (N_ "Welcome to GnuCash 1.6")
+ 'name (N_ "Welcome to GnuCash")
  'in-menu? #f
  'options-generator options
  'renderer renderer)

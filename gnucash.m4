@@ -41,10 +41,10 @@ AC_ARG_ENABLE(gnucashtest, [  --disable-gnucashtest       Do not try to compile 
         GNUCASH_RUN_SCRIPT=$gnucash_config_prefix/bin/gnucash-run-script
      fi
      if test x${GNUCASH_ENV+set} != xset ; then
-        GNUCASH_ENV=$gnucash_config_exec_prefix/bin/gnucash-env
+        GNUCASH_ENV=$gnucash_config_prefix/bin/gnucash-env
      fi
      if test x${GNC_TEST_ENV+set} != xset ; then
-        GNC_TEST__ENV=$gnucash_config_exec_prefix/bin/gnc-test-env
+        GNC_TEST__ENV=$gnucash_config_prefix/bin/gnc-test-env
      fi
   fi
 

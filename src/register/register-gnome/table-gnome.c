@@ -73,7 +73,7 @@ gnc_table_save_state (Table *table)
                 gnucash_sheet_get_header_widths (sheet, widths);
 
         alist = SCM_EOL;
-        if (gnc_lookup_boolean_option("General", "Save Window Geometry", TRUE))
+        if (gnc_lookup_boolean_option("_+Advanced", "Save Window Geometry", TRUE))
         {
                 GList *node = gnc_table_layout_get_cells (table->layout);
 
@@ -165,7 +165,7 @@ gnc_table_init_gui (gncUIWidget widget, void *data)
 
         widths = gnc_header_widths_new ();
 
-        if (gnc_lookup_boolean_option("General", "Save Window Geometry", TRUE))
+        if (gnc_lookup_boolean_option("_+Advanced", "Save Window Geometry", TRUE))
                 alist = gnc_lookup_option ("__gui", "reg_column_widths",
                                            SCM_EOL);
         else

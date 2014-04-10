@@ -1,7 +1,7 @@
 /********************************************************************\
  * Group.c -- chart of accounts (hierarchical tree of accounts)     *
  * Copyright (C) 1997 Robin D. Clark                                *
- * Copyright (C) 1997-2000 Linas Vepstas <linas@linas.org>          *
+ * Copyright (C) 1997-2001 Linas Vepstas <linas@linas.org>          *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -52,42 +52,30 @@ static short module = MOD_ENGINE;
 \********************************************************************/
 
 static void
-xaccInitializeAccountGroup (AccountGroup *grp, GNCEntityTable *entity_table)
+xaccInitializeAccountGroup (AccountGroup *grp, GNCBook *book)
 {
   grp->saved       = 1;
 
   grp->parent      = NULL;
   grp->accounts    = NULL;
 
-  grp->backend     = NULL;
-  grp->book        = NULL;
-
-  grp->entity_table = entity_table;
+  grp->book        = book;
+  grp->editlevel   = 0;
 }
 
 /********************************************************************\
 \********************************************************************/
 
-static AccountGroup *
-xaccMallocAccountGroupEntityTable (GNCEntityTable *entity_table)
-{
-  AccountGroup *grp;
-
-  g_return_val_if_fail (entity_table, NULL);
-
-  grp = g_new (AccountGroup, 1);
-
-  xaccInitializeAccountGroup (grp, entity_table);
-
-  return grp;
-}
-
 AccountGroup *
 xaccMallocAccountGroup (GNCBook *book)
 {
+  AccountGroup *grp;
   g_return_val_if_fail (book, NULL);
-  return xaccMallocAccountGroupEntityTable
-    (gnc_book_get_entity_table (book));
+
+  grp = g_new (AccountGroup, 1);
+  xaccInitializeAccountGroup (grp, book);
+
+  return grp;
 }
 
 /********************************************************************\
@@ -158,6 +146,7 @@ xaccAccountGroupBeginEdit (AccountGroup *grp)
   GList *node;
 
   if (!grp) return;
+  grp->editlevel++;
 
   for (node = grp->accounts; node; node = node->next)
   {
@@ -185,12 +174,13 @@ xaccAccountGroupCommitEdit (AccountGroup *grp)
     xaccAccountGroupCommitEdit (account->children);
     xaccAccountCommitEdit (account);
   }
+  grp->editlevel--;
 }
 
 /********************************************************************\
 \********************************************************************/
 
-void
+static void
 xaccGroupMarkDoFree (AccountGroup *grp)
 {
   GList *node;
@@ -200,11 +190,16 @@ xaccGroupMarkDoFree (AccountGroup *grp)
   for (node = grp->accounts; node; node = node->next)
   {
     Account *account = node->data;
-
     account->do_free = TRUE;
-
     xaccGroupMarkDoFree (account->children); 
   }
+}
+
+void
+xaccAccountGroupDestroy (AccountGroup *grp)
+{
+   xaccGroupMarkDoFree (grp);
+   xaccFreeAccountGroup (grp);
 }
 
 /********************************************************************\
@@ -215,35 +210,6 @@ xaccGroupGetBook (AccountGroup *group)
 {
   if (!group) return NULL;
   return group->book;
-}
-
-void
-xaccGroupSetBook (AccountGroup *group, GNCBook *book)
-{
-  GList *node;
-
-  if (!group) return;
-
-  group->book = book;
-
-  for (node = group->accounts; node; node = node->next)
-  {
-    Account *account = node->data;
-
-    xaccGroupSetBook (account->children, book); 
-  }
-}
-
-GNCBook *
-xaccAccountGetBook (Account *account)
-{
-  AccountGroup *group;
-
-  if (!account) return NULL;
-
-  group = xaccAccountGetParent (account);
-
-  return xaccGroupGetBook (group);
 }
 
 /********************************************************************\
@@ -272,11 +238,18 @@ xaccFreeAccountGroup (AccountGroup *grp)
     while (grp->accounts->next)
     {
       account = grp->accounts->next->data;
-      xaccAccountBeginEdit (account);
+
+      /* FIXME: this and the same code below is kind of hacky.
+       *        actually, all this code seems to assume that
+       *        the account edit levels are all 1. */
+      if (account->editlevel == 0)
+        xaccAccountBeginEdit (account);
+
       xaccAccountDestroy (account);
     }
     account = grp->accounts->data;
-    xaccAccountBeginEdit (account);
+    if (account->editlevel == 0)
+      xaccAccountBeginEdit (account);
     xaccAccountDestroy (account);
 
     if (!root_grp) return;
@@ -388,7 +361,7 @@ xaccPrependAccounts (AccountGroup *grp, GList **accounts_p)
   }
 }
 
-GList *
+AccountList *
 xaccGroupGetSubAccounts (AccountGroup *grp)
 {
   GList *accounts = NULL;
@@ -400,7 +373,7 @@ xaccGroupGetSubAccounts (AccountGroup *grp)
   return g_list_reverse (accounts);
 }
 
-GList *
+AccountList *
 xaccGroupGetAccountList (AccountGroup *grp)
 {
   if (!grp) return NULL;
@@ -413,16 +386,11 @@ xaccGroupGetAccountList (AccountGroup *grp)
 \********************************************************************/
 
 AccountGroup *
-xaccAccountGetRoot (Account * acc) 
+xaccGroupGetRoot (AccountGroup * grp) 
 {
-  AccountGroup * grp;
   AccountGroup * root = NULL;
 
-  if (!acc) return NULL;
-
   /* find the root of the account group structure */
-  grp = acc->parent;
-
   while (grp)
   {
     Account *parent_acc;
@@ -437,6 +405,13 @@ xaccAccountGetRoot (Account * acc)
   }
 
   return root;
+}
+
+AccountGroup *
+xaccAccountGetRoot (Account * acc) 
+{
+  if (!acc) return NULL;
+  return xaccGroupGetRoot (acc->parent);
 }
 
 /********************************************************************\
@@ -632,7 +607,8 @@ void
 xaccGroupRemoveAccount (AccountGroup *grp, Account *acc)
 {
   if (!acc) return;
-  /* this routine might be called on accounts which 
+
+  /* Note this routine might be called on accounts which 
    * are not yet parented. */
   if (!grp) return;
 
@@ -656,8 +632,6 @@ xaccGroupRemoveAccount (AccountGroup *grp, Account *acc)
     xaccFreeAccountGroup (grp);
   }
 
-  xaccGroupSetBook (acc->children, NULL);
-
   gnc_engine_generate_event (&acc->guid, GNC_EVENT_MODIFY);
 }
 
@@ -667,17 +641,11 @@ xaccGroupRemoveAccount (AccountGroup *grp, Account *acc)
 void
 xaccAccountInsertSubAccount (Account *adult, Account *child)
 {
-  if (!adult || !child) return;
-
-  g_return_if_fail (adult->entity_table);
-  g_return_if_fail (adult->entity_table == child->entity_table);
+  if (!adult) return;
 
   /* if a container for the children doesn't yet exist, add it */
   if (adult->children == NULL)
-  {
-    adult->children = xaccMallocAccountGroupEntityTable (adult->entity_table);
-    xaccGroupSetBook (adult->children, xaccGroupGetBook (adult->parent));
-  }
+    adult->children = xaccMallocAccountGroup (adult->book);
 
   /* set back-pointer to parent */
   adult->children->parent = adult;
@@ -706,10 +674,8 @@ group_sort_helper (gconstpointer a, gconstpointer b)
 void
 xaccGroupInsertAccount (AccountGroup *grp, Account *acc)
 {
-  if (!grp) return;
+  if (!grp || !grp->book) return;
   if (!acc) return;
-
-  g_return_if_fail (grp->entity_table == acc->entity_table);
 
   /* If the account is currently in another group, remove it there
    * first. Basically, we can't have accounts being in two places at
@@ -723,8 +689,34 @@ xaccGroupInsertAccount (AccountGroup *grp, Account *acc)
   {
     xaccAccountBeginEdit (acc);
 
-    if (acc->parent)
+    if (acc->parent) 
+    {
       xaccGroupRemoveAccount (acc->parent, acc);
+
+      /* switch over between books, if needed */
+      if (grp->book != acc->book)
+      {
+// xxxxxxxxxxxxxxxxxxxxxxx
+         /* hack alert -- this implementation is not exactly correct.
+          * If the entity tables are not identical, then the 'from' book 
+          * may have a different backend than the 'to' book.  This means
+          * that we should get the 'from' backend to destroy this account,
+          * and the 'to' backend to save it.  Right now, this is broken.
+          *  
+          * A 'correct' implementation similar to this is in Period.c
+          * except its for transactions ...
+          *
+          * Note also, we need to reparent the children to the new book as well.
+          */
+         PWARN ("reparenting accounts accross books is not correctly supported\n");
+
+         gnc_engine_generate_event (&acc->guid, GNC_EVENT_DESTROY);
+         xaccRemoveEntity (acc->book->entity_table, &acc->guid);
+
+         xaccStoreEntity (grp->book->entity_table, acc, &acc->guid, GNC_ID_ACCOUNT);
+         gnc_engine_generate_event (&acc->guid, GNC_EVENT_CREATE);
+      }
+    }
 
     /* set back-pointer to the account's parent */
     acc->parent = grp;
@@ -738,8 +730,6 @@ xaccGroupInsertAccount (AccountGroup *grp, Account *acc)
 
   grp->saved = 0;
 
-  xaccGroupSetBook (acc->children, xaccGroupGetBook (grp));
-
   gnc_engine_generate_event (&acc->guid, GNC_EVENT_MODIFY);
 }
 
@@ -752,10 +742,10 @@ xaccGroupConcatGroup (AccountGroup *togrp, AccountGroup *fromgrp)
   if (!togrp) return;
   if (!fromgrp) return;
 
-  g_return_if_fail (togrp->entity_table == fromgrp->entity_table);
-
   /* The act of inserting the account into togrp also causes it to
-   * automatically be deleted from fromgrp. Be careful! */
+   * automatically be deleted from fromgrp.  This causes linked 
+   * lists to be re-written, and so a cursor traversal is not safe.
+   * Be careful! */
 
   while (TRUE)
   {
@@ -764,8 +754,7 @@ xaccGroupConcatGroup (AccountGroup *togrp, AccountGroup *fromgrp)
     GList *next;
 
     accounts = fromgrp->accounts;
-    if (!accounts)
-      return;
+    if (!accounts) return;
 
     next = accounts->next;
 
@@ -773,9 +762,54 @@ xaccGroupConcatGroup (AccountGroup *togrp, AccountGroup *fromgrp)
 
     xaccGroupInsertAccount (togrp, account);
 
-    if (!next)
-      return;
+    if (!next) return;
   }
+}
+
+void
+xaccGroupCopyGroup (AccountGroup *to, AccountGroup *from)
+{
+   int i;
+   GList *node;
+   if (!to || !from) return;
+   if (!from->accounts || !to->book) return;
+
+   ENTER (" ");
+   for (node = from->accounts; node; node=node->next)
+   {
+      Account *to_acc, *from_acc = node->data;
+
+      /* This will copy the basic data and the KVP.  It will
+       * not copy any splits/transactions. It will gemini. */
+      to_acc = xaccCloneAccount (from_acc, to->book);
+
+      xaccAccountBeginEdit (to_acc);
+      to->accounts = g_list_insert_sorted (to->accounts, to_acc,
+                                          group_sort_helper);
+
+      to_acc->parent = to;
+      to_acc->core_dirty = TRUE;
+
+      /* copy child accounts too. */
+      if (from_acc->children)
+      {
+         to_acc->children = xaccMallocAccountGroup (to->book);
+         to_acc->children->parent = to_acc;
+         xaccGroupCopyGroup (to_acc->children, from_acc->children);
+      }
+      xaccAccountCommitEdit (to_acc);
+      gnc_engine_generate_event (&to_acc->guid, GNC_EVENT_CREATE);
+
+      /* make sure that we have a symmetric, uniform number of 
+       * begin-edits, so that subsequent GroupCommitEdit's 
+       * balance out. */
+      for (i=0; i<to->editlevel; i++)
+      {
+         xaccAccountBeginEdit (to_acc);
+         xaccAccountGroupBeginEdit (to_acc->children);
+      }
+   }
+   LEAVE (" ");
 }
 
 /********************************************************************\
@@ -847,7 +881,7 @@ xaccGroupMergeAccounts (AccountGroup *grp)
 
           gnc_engine_generate_event (&xaccSplitGetAccount(split)->guid,
                                      GNC_EVENT_MODIFY);
-          xaccSplitSetAccount(split, NULL);
+          split->acc = NULL;
           xaccAccountInsertSplit (acc_a, split);
         }
 
@@ -1154,12 +1188,12 @@ xaccGroupForEachTransaction (AccountGroup *g,
 /********************************************************************\
 \********************************************************************/
 
-GSList *
+AccountList *
 xaccGroupMapAccounts (AccountGroup *grp,
                       gpointer (*thunk)(Account *a, gpointer data),
                       gpointer data)
 {
-  GSList *result = NULL;
+  GList *result = NULL;
   GList *node;
 
   if (!grp) return(NULL);
@@ -1171,10 +1205,12 @@ xaccGroupMapAccounts (AccountGroup *grp,
     gpointer thunk_result = thunk (account, data);
 
     if (thunk_result)
-      result = g_slist_prepend (result, thunk_result);
+    {
+      result = g_list_append (result, thunk_result);
+    }
   }
 
-  return(g_slist_reverse (result));
+  return (result);
 }
 
 gpointer
@@ -1206,3 +1242,5 @@ xaccGroupForEachAccount (AccountGroup *grp,
 
   return(NULL);
 }
+
+/* ========================= END OF FILE ======================== */

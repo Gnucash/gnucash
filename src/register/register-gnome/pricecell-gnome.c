@@ -81,6 +81,9 @@ gnc_price_cell_direct_update (BasicCell *bcell,
 
                 if (parse_ok)
                     changed = gnc_price_cell_set_value (cell, amount);
+                else if (!cell->cell.value || cell->cell.value[0] == '\0')
+                    changed = gnc_price_cell_set_value (cell,
+                                                        gnc_numeric_zero ());
                 else
                     *cursor_position = error_loc - cell->cell.value;
 

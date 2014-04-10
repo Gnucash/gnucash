@@ -34,7 +34,7 @@
 
 
 PrintSession * 
-gnc_print_session_create() {
+gnc_print_session_create(gboolean hand_built_pages) {
   PrintSession * ps = g_new0(PrintSession, 1);
 
   /* this is about the most basic we can get */
@@ -42,11 +42,13 @@ gnc_print_session_create() {
   ps->meta         = gnome_print_meta_new();
   ps->default_font = gnome_font_new("Courier", 12);
 
-  gnome_print_setrgbcolor(GNOME_PRINT_CONTEXT(ps->meta),
-                          0.0, 0.0, 0.0);
-  gnome_print_setfont(GNOME_PRINT_CONTEXT(ps->meta), 
-                      GNOME_FONT(ps->default_font));
-
+  if (hand_built_pages) {
+    gnome_print_beginpage(GNOME_PRINT_CONTEXT(ps->meta), "");
+    gnome_print_setrgbcolor(GNOME_PRINT_CONTEXT(ps->meta),
+			    0.0, 0.0, 0.0);
+    gnome_print_setfont(GNOME_PRINT_CONTEXT(ps->meta), 
+			GNOME_FONT(ps->default_font));
+  }
   return ps;
 }
 
@@ -72,8 +74,10 @@ gnc_print_session_text(PrintSession * ps, const char * text) {
 
 
 void
-gnc_print_session_done(PrintSession * ps) {
-  gnome_print_showpage(GNOME_PRINT_CONTEXT(ps->meta));
+gnc_print_session_done(PrintSession * ps, gboolean hand_built_pages) {
+  if (hand_built_pages) {
+    gnome_print_showpage(GNOME_PRINT_CONTEXT(ps->meta));
+  }
   gnome_print_context_close(GNOME_PRINT_CONTEXT(ps->meta));
 
 }

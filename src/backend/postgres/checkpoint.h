@@ -27,7 +27,7 @@
  * Defines balance checkpoints
  *
  * HISTORY:
- * Copyright (c) 2001 Linas Vepstas 
+ * Copyright (c) 2001 Linas Vepstas <linas@linas.org>
  */
 
 

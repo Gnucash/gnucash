@@ -6,14 +6,14 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define-module (gnucash report report-system))
-(use-modules (gnucash bootstrap) (g-wrapped gw-gnc)) ;; FIXME: delete after we finish modularizing.
+(use-modules (gnucash main)) ;; FIXME: delete after we finish modularizing.
 (use-modules (ice-9 slib))
 (use-modules (ice-9 regex))
 (use-modules (srfi srfi-1))
 (use-modules (srfi srfi-19))
 (use-modules (gnucash gnc-module))
 
-(use-modules (g-wrapped gw-glib))
+(use-modules (g-wrap gw-glib))
 
 (require 'hash-table)
 (if (not (defined? 'simple-format))
@@ -21,9 +21,9 @@
 
 (gnc:module-load "gnucash/engine" 0)
 (gnc:module-load "gnucash/app-utils" 0)
+(gnc:module-load "gnucash/gnome-utils" 0) ; for the html routines
 
 ;; commodity-utilities.scm
-(export gnc:commodity-is-currency?)
 (export gnc:get-match-commodity-splits)
 (export gnc:get-match-commodity-splits-sorted)
 (export gnc:get-all-commodity-splits )
@@ -66,6 +66,7 @@
 (export gnc:options-add-price-source!)
 (export gnc:options-add-plot-size!)
 (export gnc:options-add-marker-choice!)
+(export gnc:options-add-sort-method!)
 
 ;; html-utilities.scm 
 
@@ -78,6 +79,7 @@
 (export gnc:html-account-anchor)
 (export gnc:html-split-anchor)
 (export gnc:html-transaction-anchor)
+(export gnc:html-price-anchor)
 (export gnc:assign-colors)
 (export gnc:html-table-append-ruler!)
 (export gnc:html-table-append-ruler/markup!)
@@ -109,7 +111,6 @@
 (export gnc:report-template-version)
 (export gnc:report-template-name)
 (export gnc:report-template-options-generator)
-(export gnc:report-template-options-editor)
 (export gnc:report-template-options-cleanup-cb)
 (export gnc:report-template-options-changed-cb)
 (export gnc:report-template-renderer)
@@ -117,6 +118,7 @@
 (export gnc:report-template-menu-path)
 (export gnc:report-template-menu-name)
 (export gnc:report-template-menu-tip)
+(export gnc:report-template-export-types)
 (export gnc:report-template-export-thunk)
 (export gnc:report-type)
 (export gnc:report-set-type!)
@@ -132,11 +134,10 @@
 (export gnc:report-set-editor-widget!)
 (export gnc:report-ctext)
 (export gnc:report-set-ctext!)
-(export gnc:report-edit-options)
 (export gnc:make-report)
 (export gnc:restore-report)
 (export gnc:make-report-options)
-(export gnc:report-options-editor)
+(export gnc:report-export-types)
 (export gnc:report-export-thunk)
 (export gnc:report-menu-name)
 (export gnc:report-name)
@@ -145,6 +146,7 @@
 (export gnc:all-report-template-names)
 (export gnc:report-remove-by-id)
 (export gnc:find-report)
+(export gnc:find-report-template)
 (export gnc:report-generate-restore-forms)
 (export gnc:report-render-html)
 (export gnc:report-run)
@@ -542,6 +544,11 @@
 (export gnc:query-set-match-non-voids-only!)
 (export gnc:query-set-match-voids-only!)
 (export gnc:split-voided?)
+(export gnc:report-starting)
+(export gnc:report-render-starting)
+(export gnc:report-percent-done)
+(export gnc:report-finished)
+(export gnc:accounts-count-splits)
 
 (load-from-path "commodity-utilities.scm")
 (load-from-path "html-barchart.scm")

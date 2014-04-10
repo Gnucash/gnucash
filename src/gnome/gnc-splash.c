@@ -26,22 +26,12 @@
 
 #include "dialog-utils.h"
 #include "gnc-splash.h"
+#include "gnc-version.h"
 
 
 static GtkWidget * splash = NULL;
+static GtkWidget * progress = NULL;
 
-
-static gint
-splash_timeout (gpointer not_used)
-{
-  if (splash)
-  {
-    gtk_widget_destroy (splash);
-    splash = NULL;
-  }
-
-  return FALSE;
-}
 
 static void
 splash_destroy_cb (GtkObject *object, gpointer user_data)
@@ -54,6 +44,10 @@ gnc_show_splash_screen (void)
 {
   GtkWidget *pixmap;
   GtkWidget *frame;
+  GtkWidget *vbox;
+  GtkWidget *version;
+  GtkWidget *separator;
+  gchar ver_string[50];
 
   if (splash) return;
 
@@ -75,11 +69,51 @@ gnc_show_splash_screen (void)
   }
 
   frame = gtk_frame_new (NULL);
+  vbox = gtk_vbox_new (FALSE, 3);
+  if (GNUCASH_MINOR_VERSION % 2) {
+    sprintf(ver_string, _("Version: Gnucash-cvs (built %s)"),
+	    GNUCASH_BUILD_DATE);
+  } else {
+    sprintf(ver_string, _("Version: Gnucash-%s"), VERSION);
+  }
+  version = gtk_label_new (ver_string);
+  separator = gtk_hseparator_new();
+  progress = gtk_label_new(_("Loading..."));
 
   gtk_container_add (GTK_CONTAINER (frame), pixmap);
-  gtk_container_add (GTK_CONTAINER (splash), frame);
+  gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox), version, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox), separator, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox), progress, FALSE, FALSE, 0);
+  gtk_container_add (GTK_CONTAINER (splash), vbox);
 
   gtk_widget_show_all (splash);
 
-  gtk_timeout_add (4000, splash_timeout, NULL); /* 4 seconds */
+  /* make sure splash is up */
+  while (gtk_events_pending ())
+    gtk_main_iteration ();
+}
+
+void
+gnc_destroy_splash_screen (void)
+{
+  if (splash)
+  {
+    gtk_widget_destroy (splash);
+    progress = NULL;
+    splash = NULL;
+  }
+}
+
+void
+gnc_update_splash_screen (const gchar *string)
+{
+  if (progress)
+  {
+    gtk_label_set_text (GTK_LABEL(progress), string);
+
+    /* make sure new text is up */
+    while (gtk_events_pending ())
+      gtk_main_iteration ();
+  }
 }

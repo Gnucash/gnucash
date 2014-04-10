@@ -1,5 +1,232 @@
 Version history:
 ------- -------
+
+ 1.7.8  - 20 January 2003
+ 	 o Welcome to Release Canidate 3
+	 o Fixed build issues introduced in last release
+	 o Fix compile errors on SuSE 8.0 + 8.1
+	 o Update translations, po/ru.po by Vitaly Lipatov, po/el.po by
+	   ta_panta_rei@flashmail.com
+	 o Ignore certain splits with an "amount" of zero.
+	 o Convert from the old to new symbols for Russian Roubles.
+	 o Invoices change a couple of columns.  Enable viewing the "taxable"
+	   entry.  Enable viewing all the tax accounts individually.
+	 o Scrub hbci include paths to prevent gcc 3.x compile errors.
+	 o Default the OFX import directory to the directory of the last OFX
+	   file imported, or the user's home dir for the first export.
+	   Remembered across invocations of gnucash.
+	 o Default the save directory to the directory of the last file used.
+	   Default the exports directory to the directory of the last file
+	   exported, or the user's home dir for the first export. Remembered
+	   across invocations of gnucash.
+	 o Correctly handle the case where no stocks have been defined and the
+	   user asks gnucash to get price quotes.
+	 o Work around bug in ghttp library so that intl users whose whole
+	   units/fractions separator is a comma can request web pages.
+	 o Add "Default Report Currency" preference.
+	 o Set invoice currency based on owner's currency.
+	 o Use invoice's currency for printing the invoice.
+	 o Make the progress bar argument a double instead of an int.  This
+	   gets around an issue with guile 1.6.
+	 o Add a checkbox to search-for-all
+	 o Changes to make the build system work on multiple architectures and
+	   with multiple versions of the autotools suite.  Make generated g-wrap
+	   sources depend on config.status.
+	 o Remove restriction on guile versions > 1.4 Provide a version
+	   dependant load path variable for the SRFI location. (Empty in 1.6
+	   since they're bundled with guile.)
+	 o Limit QIF matches against only the accounts in the old group, so we
+	   don't match against ourselves.  This should limit the matches to only
+	   "reasonable" matches.
+	 o Remove "user name" and "user address" preferences, as they are no
+	   longer used by anything.
+	 o Create a taxtable option type using the new generic optionmenu code
+	 o Create a default customer and default vendor taxtable option for
+	   the "File Properties" option menu.
+	 o Reset the search-type to "New Search" if we end up displaying no
+	   results.
+	 o Use the "New Search Limit" pref to decide when to start a new
+	   search vs. when refine the search.
+	 o Create two new global preferences: "Notify Bills Due?" and "Bills
+	   Due Days"
+	 o Added sources needed for OS X to dist.
+	 o Lots more bugfixes, see changelog.
+
+ 1.7.7  - 05 January 2003
+ 	 o Welcome to Release Canidate 2
+	 o Give the user better feedback on exactly what the exchange rate
+	   means.
+	 o Better handling of corrupt XML data files.  Print better error
+	   messages for unknown tags, or mismatched start/end tags.
+	 o When checking for gtkhtml-1.1, make the lack of pkg-config a fatal
+	   error. Also check for pkgconfig
+	 o Updated translations, po/de.po, 
+	 o Fix HBCI reparent warnings. Make the PIN dialog a bit nicer.
+	 o Fixes to Postgresql backend.
+	 o Changed the "ALTER TABLE table ADD COLUMN..." statements to conform
+	   to the current Postgres implementation (and SQL 92) standard by
+	   putting the DEFAULT modifier in a separate ALTER statement.  This was
+	   reported by Christopher B. Browne.
+	 o Implement unpost function in invoices.
+	 o Correctly open a help window when the initial URL contains a label
+	   component to it.
+	 o Make the reconciliation window respect the 'include subaccount'
+	   flag any time it opens a register.  Consolidate logic for opening a
+	   new register. Enhance the reconciliation start window to update the
+	   ending value when this flag is changed.
+	 o If the amount is monetary, map the keypad decimal key to the
+	   correct decimal character for the locale.
+	 o Fix malformed URLs for bringing up a report options window.
+	 o Add new option for specifying sort critera for piecharts and
+	   barcharts.
+	 o The report title should change when the report name field is
+	   changed in the options.
+	 o Add a smart function for going "back" from the "load a file" page.
+	   If there are any files loaded it returns to the "loaded files" page
+	   instead of the initial druid page.
+	 o Add support for i18n of price source strings.
+	 o Add icons to gtk only windows.
+	 o Search on NOTES add code to prevent searching on template-txn
+	   accounts so SXes don't show up in find results.
+	 o Create a 'file compression' option and pass the data into the
+	   backend. This is an option in the preferences.
+	 o Provide a simple checkbook set of accounts
+	 o When editing an exchange rate, always change the _VALUE_ of the
+	   split, not the amount.  This has the affect of keeping the visible
+	   number the same and changing the "other" account.
+	 o Add a set of business accounts to the account setup
+	 o Give a much higher importance to the date heuristics in the OFX
+	   import. 
+	 o Disable skipping transactions which already have an online id
+	   during matching, untill a fix for the "transfer between two accounts"
+	   bug is properly fixed.
+	 o Large set of fixes to the build system by John H. Pierce
+	   <john@killterm.org>
+
+ 1.7.6  - 22 December 2002
+ 	 o Welcome to Release Candidate 1
+	 o Put the build date into the about box for development versions
+	 o Deal with broken QIF files that give broken bang-fields. In
+	   particular, handle the case where it supplies "!Type Bank"
+	   instead of "!Type:Bank"
+	 o Fix g-wrap test to fail properly if it cannot find g-wrap-config
+	 o Add "Edit Exchange Rate" menu items to the Actions menu and the
+	   context menu
+	 o Fix the amount display so that the exchange dialog always shows the
+	   "amount" in the the local (register) currency.
+	 o Add an additional module to check for (LWP aka libwww-perl)
+	   before attempting to call Finance::Quote.
+	 o Updated translations, po/nl.po by Hendrik-Jan Heins <hjh@passys.nl>,
+	   po/uk.po by Volodymyr M. Lisivka <lvm@mystery.lviv.net>, po/el.po,
+	   accounts/el_GR by Nikos Charonitakis <charosn@her.forthnet.gr>
+	 o Major update to generic import architecture/transaction matcher.
+	 o Change HBCI to using new Transaction Matcher GUI
+	 o Require openhbci 0.9.4 for HBCI version choosing.
+	 o When not retrieving stock quotes for an account, dim the price
+	   source labels as well as the option menus.
+	 o Consolidate all knowledge about Finance::Quote sources into one
+	   place. Functions to record whether or not F::Q is installed
+	   properly, and if so, whether a particular source is available.
+	 o Change default new SX frequency to monthly
+	 o Filled in a long-thought of idea for a formula cell: can contain
+	   text unlike a pricecell, but doesn't really want to do
+	   auto-complete like a quickfill cell [what we had been using].  This
+	   allows us to provide the gnome formula cell which can remap the
+	   keypad '.' character based on locale
+	 o Disallow the deletion of accounts with ReadOnly Transacation in
+	   them. You must first "delete" the RO Txns before you delete the
+	   account.
+	 o NOTE: As of now you ABSOLUTELY REQUIRE G-WRAP >= 1.3.3
+	 o Loan Druid re-written
+	 o Add menu items and code so a user can limit transactions in a
+	   register to any combination of the
+	   Reconciled/Cleared/Voided/Unreconciled states.
+	 o Give user feedback during the rendering of a report.
+	 o Remove old user docs and tools that are now in gnucash-docs
+	 o Fix for large accounts overflowing the data types used in the
+	   register code which are causing crashes.
+	 o Add support for new GnuCash icon made by Jakub Steiner
+	   <jimmac@ximian.com>
+	 o Connect up help buttons in dialog's to help files
+	 o Lots more bugfixes
+	 
+ 1.7.5  - 02 December 2002
+ 	 o Fix for a problem with multi-currency that could result in data
+	   corruption. Recommend to use this version over 1.7.4
+
+ 1.7.4  - 01 December 2002
+	 o Second beta release
+	 o Problems with importing 1.6 data files fixed
+	 o Updates to generic transaction matching
+	 o More postgres backend fixes
+	 o New progress bar when making reports
+	 o Payment schedule review page added to loan druid
+	 o Fixes to multi-currency support
+	 o Added Brazilian Portugese account templates by Lucimar Moresco
+	 o Added doxygen documentation support, and integrated it into the
+	   build system. There is a new target, make doc, that can be used to
+	   build the documentation if you have doxygen installed.
+	 o Catch the condition gracefully when OpenHBCI config file does not
+	   exist.
+	 o Compute the implicit exchange rates for ALL transactions when
+	   necessary. No longer requires the pricedb for printing split values.
+	   This will display all transactions in the currency of the current
+	   account, regardless of the number of splits in the transaction.
+	 o First pass at getting multi-currency transactions to work from the
+	   register.
+	 o Lots more bugfixes
+ 
+ 1.7.3  - 17 November 2002
+ 	 o first beta release
+	 o improved libofx configure support.  Add --with-ofx-prefix
+	   so users can define where to look for libofx.
+	 o fixed missing ofx files in tarball
+	 o updated gnucash.spec file to work with rh8
+	 o added new cashflow report contributed by Herbert Thoma
+	 o New functions to get/set read-only status on a transaction, 
+	   and to print a warning message if a transaction is read-only.
+	 o Added a bunch of currencies.
+	 o MAJOR improvement to OFX investment support.  All transactions 
+	   created from an investment account are now already balanced.  
+	   Explicitely support Dividend Reinvestment transactions which 
+	   will now directly create a income account -> stock account 
+	   transaction, and Income transactions which will directly create 
+	   a income account -> cash account transaction. Support memorising 
+	   the income account association. Several stock account can use the 
+	   same income account if desired.
+	 o Updated translations (merged from 1.6 branch plus updates from 
+	   the Translation Project).
+	 o Matthew Vanecek added some bug fixes for the SQL back end.
+	 o Add support for gtkhtml 1.1
+	 o Added calculate the number of remaining payments based on the start
+	   date, loan length and current date to Mortgage druid
+	 o loads of bugfixes, keep those bugs coming!
+	 o NOTE: Report bugs to bugzilla.gnome.org
+
+ 1.7.2  - 27 October 2002
+ 	 o second alpha release
+	 o you can now search by reconcile flag
+	 o ability to set posted invoices and payments read-only
+	 o New commodity matcher for OFX generic import
+	 o latest libofx is needed for OFX support
+	 o Investment transactions now create two accounts, one is for the
+	   stock, the other is the account defined by the FI, where the
+	   cash is swapped.
+	 o Updated glossary
+	 o HBCI improvements to transaction retrieval
+	 o Add Direct Debit HBCI action and add caching of the
+	   PIN to user preferences.
+	 o HBCI suport requires OpenHBCI 0.9.3 or current OpenHBCI CVS
+	 o loads of bugfixes, keep those bugs coming!
+	 o NOTE: Report bugs to bugzilla.gnome.org
+	 
+ 1.7.1  - 13 October 2002
+ 	 o first alpha release
+	 o lots of new features, please test as much as you can
+	 o esp Scheduled Transactions, Small Business and OFX/HBCI.
+	 o please check Changelog for exact details
+	 o NOTE: Report bugs to bugzilla.gnome.org
+
  1.5.98 - 04 June 2001
          o second beta release
          o updated documentation (English & Portuguese)

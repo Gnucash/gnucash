@@ -49,8 +49,6 @@ test_db (int i, GNCPriceDB *db)
 {
   xmlNodePtr test_node;
   gchar *filename1;
-  gchar *compare_msg;
-  FILE *cmp_file;
   int fd;
 
   test_node = gnc_pricedb_dom_tree_create (db);

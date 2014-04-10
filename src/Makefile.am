@@ -1,29 +1,39 @@
-
-SUBDIRS = \
+NONGUI_SUBDIRS = \
   doc \
+  pixmaps \
   core-utils \
   gnc-module \
   test-core \
-  network-utils \
   engine \
   backend \
+  scm \
+  quotes \
+  bin
+
+GUI_SUBDIRS_1 = \
+  network-utils \
   calculation \
   tax \
   app-utils \
   gnome-utils \
-  app-file \
-  import-export \
-  report \
-  dialog-account \
+  gnome-search \
+  app-file
+
+GUI_SUBDIRS_2 = \
   register \
   gnome \
+  import-export \
   experimental \
-  scm \
-  quotes \
-  pixmaps \
   business \
-  optional \
-  bin
+  optional 
+
+DIST_SUBDIRS = $(NONGUI_SUBDIRS) $(GUI_SUBDIRS_1) report $(GUI_SUBDIRS_2)
+
+if GNUCASH_ENABLE_GUI
+SUBDIRS = $(DIST_SUBDIRS)
+else 
+SUBDIRS = $(NONGUI_SUBDIRS) report
+endif
 
 noinst_HEADERS = \
   AccWindow.h \
@@ -34,4 +44,5 @@ bin_SCRIPTS = gnc-test-env
 
 EXTRA_DIST = \
   .cvsignore \
-  README.modules
+  README.modules \
+  gnc-test-env

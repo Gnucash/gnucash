@@ -4,11 +4,11 @@ pkglib_LTLIBRARIES = libgncmod-register-gnome.la
 
 libgncmod_register_gnome_la_LDFLAGS = -module 
 libgncmod_register_gnome_la_LIBADD = \
-  ${top_srcdir}/src/register/register-core/libgncmod-register-core.la \
-  ${top_srcdir}/src/gnc-module/libgncmodule.la \
-  ${top_srcdir}/src/engine/libgncmod-engine.la \
-  ${top_srcdir}/src/app-utils/libgncmod-app-utils.la \
-  ${top_srcdir}/src/gnome-utils/libgncmod-gnome-utils.la \
+  ${top_builddir}/src/register/register-core/libgncmod-register-core.la \
+  ${top_builddir}/src/gnc-module/libgncmodule.la \
+  ${top_builddir}/src/engine/libgncmod-engine.la \
+  ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
+  ${top_builddir}/src/gnome-utils/libgncmod-gnome-utils.la \
   ${GLIB_LIBS} \
   ${GNOMEUI_LIBS}
 
@@ -16,6 +16,7 @@ libgncmod_register_gnome_la_SOURCES = \
   gncmod-register-gnome.c \
   combocell-gnome.c \
   datecell-gnome.c \
+  formulacell-gnome.c \
   gnucash-color.c \
   gnucash-cursor.c \
   gnucash-date-picker.c \
@@ -31,6 +32,7 @@ libgncmod_register_gnome_la_SOURCES = \
   table-gnome.c 
 
 noinst_HEADERS = \
+  formulacell-gnome.h \
   gnucash-color.h \
   gnucash-cursor.h \
   gnucash-date-picker.h \
@@ -57,6 +59,7 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/register/ledger-core \
   -I${top_srcdir}/src/register/register-core \
   ${GUILE_INCS} \
+  ${GLADE_CFLAGS} \
   ${GLIB_CFLAGS} \
   ${GTK_XIM_FLAGS} \
   ${GNOME_INCLUDEDIR}

@@ -74,7 +74,12 @@
         "user:misc", "user:foo", etc.  If the quote came from a user,
         as a matter of policy, you *must* prefix the string you give
         with "user:".  For now, the only other reserved values are
-        "Finance::Quote" and "old-file-import".
+        "Finance::Quote" and "old-file-import".  Any string used must
+        be added to the source_list array in dialog-price-edit-db.c so
+        that it can be properly translated. (There are unfortunately
+        many strings in users databased, so this string must be
+        translated on output instead of always being used intranslated
+        form.)
 
       type: the type of quote - types possible right now are bid, ask,
         last, nav, and unknown.
@@ -165,6 +170,8 @@ void gnc_price_set_version(GNCPrice *p, gint32 versn);
    to the GNCPrice, not copies, so don't free these values. */
 GNCPrice *      gnc_price_lookup (const GUID *guid, GNCBook *book);
 const GUID *    gnc_price_get_guid (GNCPrice *p);
+const GUID      gnc_price_return_guid (GNCPrice *p);
+GNCBook *       gnc_price_get_book (GNCPrice *p);
 gnc_commodity * gnc_price_get_commodity(GNCPrice *p);
 gnc_commodity * gnc_price_get_currency(GNCPrice *p);
 Timespec        gnc_price_get_time(GNCPrice *p);
@@ -219,7 +226,7 @@ typedef struct gnc_price_db_s GNCPriceDB;
 
 /* gnc_pricedb_create - create a new pricedb.  Normally you won't need
      this; you will get the pricedb via gnc_book_get_pricedb. */
-GNCPriceDB * gnc_pricedb_create(void);
+GNCPriceDB * gnc_pricedb_create(GNCBook *book);
 
 /* gnc_pricedb_destroy - destroy the given pricedb and unref all of
      the prices it contains.  This may not deallocate all of those
@@ -256,6 +263,14 @@ GList      * gnc_pricedb_lookup_at_time(GNCPriceDB *db,
                                         gnc_commodity *commodity,
                                         gnc_commodity *currency,
                                         Timespec t);
+
+/* gnc_pricedb_lookup_day - return all prices that match the given
+     commodity, currency, and timespec.  Prices will be returned as a
+     GNCPrice list (see above). */
+GList      * gnc_pricedb_lookup_day(GNCPriceDB *db,
+				    gnc_commodity *commodity,
+				    gnc_commodity *currency,
+				    Timespec t);
 
 /* gnc_pricedb_lookup_nearest_in_time - return the price for the given
      commodity in the given currency nearest to the given time t. */

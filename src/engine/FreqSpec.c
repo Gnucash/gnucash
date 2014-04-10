@@ -120,6 +120,8 @@ static short module = MOD_SX;
  
 /** PROTOTYPES ******************************************************/
 
+static int int_cmp( int a, int b );
+
 /**
  * Destroys all sub-FreqSpecs in a composite FreqSpec.
  * Assertion error if it's not a COMPOSITE FreqSpec.
@@ -144,6 +146,7 @@ get_wday_name(guint day)
   return wday_name;
 }
  
+#if 0
 static const char *
 get_full_month_name(guint month)
 {
@@ -153,6 +156,7 @@ get_full_month_name(guint month)
   strftime(month_name, WDAY_NAME_WIDTH, "%B", &t);
   return month_name;
 }
+#endif
 
 static const char *
 get_abbrev_month_name(guint month)
@@ -197,7 +201,6 @@ xaccFreqSpecMalloc(GNCBook *book)
 
         fs = g_new0(FreqSpec, 1);
         xaccFreqSpecInit( fs, book );
-        /* FIXME:event */
         gnc_engine_generate_event( &fs->guid, GNC_EVENT_CREATE );
         return fs;
 }
@@ -261,37 +264,28 @@ xaccFreqSpecSetUIType( FreqSpec *fs, UIFreqType newUIFreqType )
         fs->uift = newUIFreqType;
 }
 
-/*
-void
-xaccFreqSpecSetTypes( FreqSpec *fs, FreqType newFT, UIFreqType newUIFT )
-{
-        g_return_if_fail( fs );
-        xaccFreqSpecSetType( fs, newFT );
-        xaccFreqSpecSetUIType( fs, newUIFT );
-}
-*/
-
 static inline guint32 min( guint32 a, guint32 b )
 {
         return a > b ? b : a;
 }
 
 void
-xaccFreqSpecGetNextInstance(
-        FreqSpec *fs,
-        const GDate* in_date,
-        GDate* out_date )
+xaccFreqSpecGetNextInstance( FreqSpec *fs,
+                             const GDate* in_date,
+                             GDate* out_date )
 {
-        GList                *list, *blist;
-        int                mon;
+        GList *list;
 
         g_return_if_fail( fs );
         switch( fs->type ) {
         case INVALID:
-                g_return_if_fail(FALSE);
+                /* this is okay, just lame. */
+                g_date_clear( out_date, 1 );
+                break;
 
         case ONCE:
-                if ( g_date_compare( &(fs->s.once.date), CONST_HACK in_date ) > 0 ) {
+                if ( g_date_compare( &(fs->s.once.date),
+                                     CONST_HACK in_date ) > 0 ) {
                         *out_date = fs->s.once.date;
                 } else {
                         /* Date is past due. Return an invalid date. */
@@ -300,147 +294,125 @@ xaccFreqSpecGetNextInstance(
                 break;
 
         case DAILY: {
-                        guint32 julian_in_date, julian_next_repeat, complete_intervals;
+                guint32 julian_in_date, julian_next_repeat, complete_intervals;
 
-                        julian_in_date = g_date_julian( CONST_HACK in_date );
-                        complete_intervals =
-                                (julian_in_date - fs->s.daily.offset_from_epoch) /
-                                        fs->s.daily.interval_days;
-                        julian_next_repeat =
-                                fs->s.daily.offset_from_epoch +
-                                        (complete_intervals + 1) * fs->s.daily.interval_days;
-                        g_date_set_julian( out_date, julian_next_repeat );
-                } break;
+                julian_in_date = g_date_julian( CONST_HACK in_date );
+                complete_intervals =
+                        (julian_in_date - fs->s.daily.offset_from_epoch) /
+                        fs->s.daily.interval_days;
+                julian_next_repeat =
+                        fs->s.daily.offset_from_epoch +
+                        (complete_intervals + 1) * fs->s.daily.interval_days;
+                g_date_set_julian( out_date, julian_next_repeat );
+        } break;
 
         case WEEKLY: {
-                        /* This implementation stores the offset from epoch as the number
-                         * of days, not week epoch offset and day in week offset.
-                         * It is very similar to the daily repeat representation. */
-                        guint32 julian_in_date, julian_next_repeat, complete_intervals;
+                /* This implementation stores the offset from epoch as the number
+                 * of days, not week epoch offset and day in week offset.
+                 * It is very similar to the daily repeat representation. */
+                guint32 julian_in_date, julian_next_repeat, complete_intervals;
 
-                        julian_in_date = g_date_julian( CONST_HACK in_date );
-                        complete_intervals =
-                                (julian_in_date - fs->s.weekly.offset_from_epoch) /
-                                        (fs->s.weekly.interval_weeks * 7);
-                        julian_next_repeat =
-                                fs->s.weekly.offset_from_epoch +
-                                        (complete_intervals + 1) * fs->s.weekly.interval_weeks * 7;
-                        g_date_set_julian( out_date, julian_next_repeat );
-
-                        /* This code passes the test, but it seems large and complicated...
-                         * it uses a separate week offset from epoch and day in week offset. */
-/*                        guint32 julian_in_date, julian_next_repeat, complete_intervals,
-                                in_weeks_from_epoch, after_repeat_in_week_interval;
-                        julian_in_date = g_date_julian( CONST_HACK in_date );
-                        in_weeks_from_epoch = (julian_in_date-1) / 7;
-                        complete_intervals =
-                                (in_weeks_from_epoch -
-                                        fs->s.weekly.offset_from_epoch) /
-                                        fs->s.weekly.interval_weeks;
-                        after_repeat_in_week_interval =
-                                ((julian_in_date-1) % 7 >= fs->s.weekly.day_of_week ||
-                                        (in_weeks_from_epoch - fs->s.weekly.offset_from_epoch) %
-                                                fs->s.weekly.interval_weeks > 0 ) ? 1 : 0;
-                        julian_next_repeat =
-                                (fs->s.weekly.offset_from_epoch +
-                                        (complete_intervals + after_repeat_in_week_interval) *
-                                                fs->s.weekly.interval_weeks) * 7 +
-                                fs->s.weekly.day_of_week + 1;
-                        g_date_set_julian( out_date, julian_next_repeat );
-*/
-                } break;
+                julian_in_date = g_date_julian( CONST_HACK in_date );
+                complete_intervals =
+                        (julian_in_date - fs->s.weekly.offset_from_epoch) /
+                        (fs->s.weekly.interval_weeks * 7);
+                julian_next_repeat =
+                        fs->s.weekly.offset_from_epoch +
+                        (complete_intervals + 1) * fs->s.weekly.interval_weeks * 7;
+                g_date_set_julian( out_date, julian_next_repeat );
+        } break;
 
         case MONTHLY: {
-                        guint32 in_months_from_epoch, after_repeat_in_month_interval,
-                                complete_intervals, next_repeat_months_from_epoch, month, year;
+                guint32 in_months_from_epoch, after_repeat_in_month_interval,
+                        complete_intervals, next_repeat_months_from_epoch, month, year;
 
-                        in_months_from_epoch = (g_date_year( CONST_HACK in_date )-1) * 12 +
-                                g_date_month( CONST_HACK in_date ) - 1;
-                        complete_intervals =
-                                (in_months_from_epoch - fs->s.monthly.offset_from_epoch) /
-                                        fs->s.monthly.interval_months;
-                        after_repeat_in_month_interval =
-                                (g_date_day( CONST_HACK in_date ) >= fs->s.monthly.day_of_month ||
-                                        (in_months_from_epoch - fs->s.monthly.offset_from_epoch) %
-                                                fs->s.monthly.interval_months > 0 ||
-                                        g_date_day( CONST_HACK in_date ) >=
-                                                g_date_days_in_month( g_date_month( CONST_HACK in_date ),
-                                                        g_date_year( CONST_HACK in_date ) ) )  ? 1 : 0;
-                        next_repeat_months_from_epoch =
-                                fs->s.monthly.offset_from_epoch +
-                                        (complete_intervals + after_repeat_in_month_interval) *
-                                                fs->s.monthly.interval_months;
-                        /* Hmmm... what happens if the day of the month is greater than the
-                         * number of days in this month?
-                         * Here I have constrained the day of the month by the number
-                         * of days in the month. This is compensated for above by checking if
-                         * the input day is the last day of that month, in which case it will
-                         * move to the next month interval.
-                         */
-                        month = next_repeat_months_from_epoch % 12 + 1;
-                        year = next_repeat_months_from_epoch / 12 + 1;
-                        g_date_set_dmy( out_date,
+                in_months_from_epoch = (g_date_year( CONST_HACK in_date )-1) * 12 +
+                        g_date_month( CONST_HACK in_date ) - 1;
+                complete_intervals =
+                        (in_months_from_epoch - fs->s.monthly.offset_from_epoch) /
+                        fs->s.monthly.interval_months;
+                after_repeat_in_month_interval =
+                        (g_date_day( CONST_HACK in_date ) >= fs->s.monthly.day_of_month ||
+                         (in_months_from_epoch - fs->s.monthly.offset_from_epoch) %
+                         fs->s.monthly.interval_months > 0 ||
+                         g_date_day( CONST_HACK in_date ) >=
+                         g_date_days_in_month( g_date_month( CONST_HACK in_date ),
+                                               g_date_year( CONST_HACK in_date ) ) )  ? 1 : 0;
+                next_repeat_months_from_epoch =
+                        fs->s.monthly.offset_from_epoch +
+                        (complete_intervals + after_repeat_in_month_interval) *
+                        fs->s.monthly.interval_months;
+                /* Hmmm... what happens if the day of the month is greater than the
+                 * number of days in this month?
+                 * Here I have constrained the day of the month by the number
+                 * of days in the month. This is compensated for above by checking if
+                 * the input day is the last day of that month, in which case it will
+                 * move to the next month interval.
+                 */
+                month = next_repeat_months_from_epoch % 12 + 1;
+                year = next_repeat_months_from_epoch / 12 + 1;
+                g_date_set_dmy( out_date,
                                 min( fs->s.monthly.day_of_month,
-                                        g_date_days_in_month( month, year ) ),
+                                     g_date_days_in_month( month, year ) ),
                                 month,
                                 year );
-                } break;
+        } break;
         
         case MONTH_RELATIVE: {
-                        guint32 in_months_from_epoch, after_repeat_in_month_interval,
-                                complete_intervals, next_repeat_months_from_epoch, month, year,
-                                wday_of_1st, day_of_repeat;
+                guint32 in_months_from_epoch, after_repeat_in_month_interval,
+                        complete_intervals, next_repeat_months_from_epoch, month, year,
+                        wday_of_1st, day_of_repeat;
 
-                        GDate date1;
-                        in_months_from_epoch = (g_date_year( CONST_HACK in_date )-1) * 12 +
-                                g_date_month( CONST_HACK in_date ) - 1;
-                        complete_intervals =
-                                (in_months_from_epoch - fs->s.month_relative.offset_from_epoch) /
-                                        fs->s.month_relative.interval_months;
-                        month = g_date_month( CONST_HACK in_date );
-                        year = g_date_year( CONST_HACK in_date );
-                        g_date_set_dmy( &date1, 1, month, year );
-                        wday_of_1st = g_date_weekday( &date1 );
-                        day_of_repeat = (fs->s.month_relative.occurrence-1)*7 +
-                                ((fs->s.month_relative.weekday + 7 - wday_of_1st)%7 + 1);
-                        after_repeat_in_month_interval =
-                                (g_date_day( CONST_HACK in_date ) >= day_of_repeat ||
-                                day_of_repeat > g_date_days_in_month( month, year ) ||
-                                (in_months_from_epoch - fs->s.month_relative.offset_from_epoch) %
-                                                fs->s.month_relative.interval_months > 0 )  ? 1 : 0;
+                GDate date1;
+                in_months_from_epoch = (g_date_year( CONST_HACK in_date )-1) * 12 +
+                        g_date_month( CONST_HACK in_date ) - 1;
+                complete_intervals =
+                        (in_months_from_epoch - fs->s.month_relative.offset_from_epoch) /
+                        fs->s.month_relative.interval_months;
+                month = g_date_month( CONST_HACK in_date );
+                year = g_date_year( CONST_HACK in_date );
+                g_date_set_dmy( &date1, 1, month, year );
+                wday_of_1st = g_date_weekday( &date1 );
+                day_of_repeat = (fs->s.month_relative.occurrence-1)*7 +
+                        ((fs->s.month_relative.weekday + 7 - wday_of_1st)%7 + 1);
+                after_repeat_in_month_interval =
+                        (g_date_day( CONST_HACK in_date ) >= day_of_repeat ||
+                         day_of_repeat > g_date_days_in_month( month, year ) ||
+                         (in_months_from_epoch - fs->s.month_relative.offset_from_epoch) %
+                         fs->s.month_relative.interval_months > 0 )  ? 1 : 0;
+                next_repeat_months_from_epoch =
+                        fs->s.month_relative.offset_from_epoch +
+                        (complete_intervals + after_repeat_in_month_interval) *
+                        fs->s.month_relative.interval_months;
+                month = next_repeat_months_from_epoch % 12 + 1;
+                year = next_repeat_months_from_epoch / 12 + 1;
+                g_date_set_dmy( &date1, 1, month, year );
+                wday_of_1st = g_date_weekday( &date1 );
+                /* This calculates the day of the month in the month which forms
+                 * the next month in the cycle after the given input date.
+                 * However, this day may be larger than the number of days in that month... */
+                day_of_repeat = (fs->s.month_relative.occurrence-1)*7 +
+                        ((fs->s.month_relative.weekday + 7 - wday_of_1st)%7 + 1);
+                while( day_of_repeat > g_date_days_in_month( month, year ) ) {
+                        /* If the repeat occurs after the end of the month, then
+                         * find the next month containing a day which satisfies the request.
+                         * Each candiate month separated by interval_months is considered
+                         * by this loop.*/
+                        ++complete_intervals;
                         next_repeat_months_from_epoch =
                                 fs->s.month_relative.offset_from_epoch +
-                                        (complete_intervals + after_repeat_in_month_interval) *
-                                                fs->s.month_relative.interval_months;
+                                complete_intervals * fs->s.month_relative.interval_months;
                         month = next_repeat_months_from_epoch % 12 + 1;
                         year = next_repeat_months_from_epoch / 12 + 1;
                         g_date_set_dmy( &date1, 1, month, year );
                         wday_of_1st = g_date_weekday( &date1 );
-                        /* This calculates the day of the month in the month which forms
-                         * the next month in the cycle after the given input date.
-                         * However, this day may be larger than the number of days in that month... */
                         day_of_repeat = (fs->s.month_relative.occurrence-1)*7 +
                                 ((fs->s.month_relative.weekday + 7 - wday_of_1st)%7 + 1);
-                        while( day_of_repeat > g_date_days_in_month( month, year ) ) {
-                                /* If the repeat occurs after the end of the month, then
-                                 * find the next month containing a day which satisfies the request.
-                                 * Each candiate month separated by interval_months is considered
-                                 * by this loop.*/
-                                ++complete_intervals;
-                                next_repeat_months_from_epoch =
-                                        fs->s.month_relative.offset_from_epoch +
-                                                complete_intervals * fs->s.month_relative.interval_months;
-                                month = next_repeat_months_from_epoch % 12 + 1;
-                                year = next_repeat_months_from_epoch / 12 + 1;
-                                g_date_set_dmy( &date1, 1, month, year );
-                                wday_of_1st = g_date_weekday( &date1 );
-                                day_of_repeat = (fs->s.month_relative.occurrence-1)*7 +
-                                        ((fs->s.month_relative.weekday + 7 - wday_of_1st)%7 + 1);
-                                /* Hmmm... It would be nice to know that this loop is
-                                 * guaranteed to terminate... CHECK ME! */
-                        }
-                        g_date_set_dmy( out_date, day_of_repeat, month, year );
-                } break;
+                        /* Hmmm... It would be nice to know that this loop is
+                         * guaranteed to terminate... CHECK ME! */
+                }
+                g_date_set_dmy( out_date, day_of_repeat, month, year );
+        } break;
         
         case COMPOSITE:
                 list = fs->s.composites.subSpecs;
@@ -659,7 +631,7 @@ xaccFreqSpecGetWeekly( FreqSpec *fs, int *outRepeat, int *outDayOfWeek )
         if ( fs->type != WEEKLY )
                 return -1;
         *outRepeat = fs->s.weekly.interval_weeks;
-        *outDayOfWeek = fs->s.weekly.offset_from_epoch;
+        *outDayOfWeek = fs->s.weekly.offset_from_epoch % 7;
         return 0;
 }
 
@@ -714,6 +686,7 @@ get_dom_string(guint dom)
 
   if(dom > 31)
   {
+    /* This is displayed instead of the number of the day of month. */
     g_string_sprintf(str, _( "last day"));
   }
   else
@@ -733,8 +706,11 @@ xaccFreqSpecGetFreqStr( FreqSpec *fs, GString *str )
         int tmpInt;
         char *tmpStr;
         int i;
+#define MAX_FREQ_STR_SIZE 127
+        char freqStrBuf[ MAX_FREQ_STR_SIZE + 1];
 
-        /* FIXME: fill in. */
+        memset( freqStrBuf, 0, MAX_FREQ_STR_SIZE + 1 );
+
         switch( xaccFreqSpecGetUIType( fs ) ) {
         case UIFREQ_ONCE:
                 tmpStr = g_new0( char, GDATE_STRING_BUF_SIZE );
@@ -742,15 +718,22 @@ xaccFreqSpecGetFreqStr( FreqSpec *fs, GString *str )
                 g_date_strftime( tmpStr, GDATE_STRING_SIZE,
                                  GNC_D_FMT,
                                  &fs->s.once.date );
-                g_string_sprintf( str, "Once: %s", tmpStr );
+		/* %s is the strftime-string of the one-time date. */
+                snprintf( freqStrBuf, MAX_FREQ_STR_SIZE, _("Once: %s"), tmpStr );
                 g_free( tmpStr );
                 break;
 
         case UIFREQ_DAILY:
-                g_string_sprintf( str, "Daily" );
-                if ( fs->s.daily.interval_days > 1 ) {
-                        g_string_sprintfa( str, " (x%u)",
-                                           fs->s.daily.interval_days );
+                if ( fs->s.daily.interval_days > 1 ) 
+                {
+                        snprintf( freqStrBuf, MAX_FREQ_STR_SIZE,
+				  /* %u is the number of intervals */
+                                  _("Daily (x%u)"),
+                                  fs->s.daily.interval_days );
+                }
+		else 
+                {
+                        snprintf( freqStrBuf, MAX_FREQ_STR_SIZE, _("Daily") );
                 }
                 break;
 
@@ -759,7 +742,8 @@ xaccFreqSpecGetFreqStr( FreqSpec *fs, GString *str )
                 FreqSpec *subFS;
                 if ( g_list_length( fs->s.composites.subSpecs ) != 5 ) {
                         PERR( "Invalid Daily[M-F] structure." );
-                        g_string_sprintf( str, "Daily[M-F]: error" );
+                        snprintf( freqStrBuf, MAX_FREQ_STR_SIZE,
+                                  "Daily[M-F]: error" );
                         return;
                 }
                 /* We assume that all of the weekly FreqSpecs that make up
@@ -767,12 +751,14 @@ xaccFreqSpecGetFreqStr( FreqSpec *fs, GString *str )
                 subFS = (FreqSpec*)fs->s.composites.subSpecs->data;
 	       
                 if ( subFS->s.weekly.interval_weeks > 1 ) {
-                        g_string_sprintf( str, _("Weekdays: (x%u)"),
-                                           subFS->s.weekly.interval_weeks );
+		  snprintf( freqStrBuf, MAX_FREQ_STR_SIZE,
+			    /* %u is the number of intervals */
+                            _("Weekdays: (x%u)"),
+                            subFS->s.weekly.interval_weeks );
                 }
 		else
 		{
-		  g_string_sprintf(str, _("Weekdays"));
+		  snprintf(freqStrBuf, MAX_FREQ_STR_SIZE, _("Weekdays"));
 		}
 	  
         }
@@ -793,8 +779,8 @@ xaccFreqSpecGetFreqStr( FreqSpec *fs, GString *str )
 
                         tmpFS = (FreqSpec*)list->data;
                         if ( xaccFreqSpecGetType(tmpFS) != WEEKLY ) {
-                                g_string_sprintf( str,
-                                                  "error: UIFREQ_WEEKLY doesn't contain weekly children" );
+                                snprintf( freqStrBuf, MAX_FREQ_STR_SIZE,
+                                          "error: UIFREQ_WEEKLY doesn't contain weekly children" );
                                 return;
                         }
                         if ( tmpInt == -1 ) {
@@ -807,18 +793,25 @@ xaccFreqSpecGetFreqStr( FreqSpec *fs, GString *str )
                 }
 
                 if ( tmpInt > 1 ) {
-		  g_string_sprintf( str, _( "Weekly (x%d): %s"), tmpInt, tmpStr );
+		  snprintf( freqStrBuf, MAX_FREQ_STR_SIZE,
+			    /* %d are the number of intervals; %s is
+			       the name of the weekday */
+                            _( "Weekly (x%d): %s"), tmpInt, tmpStr );
                 }
 		else
 		{
-		  g_string_sprintf( str, _( "Weekly: %s"), tmpStr );
+		  snprintf( freqStrBuf, MAX_FREQ_STR_SIZE,
+			    /* Translators: %s is the name of the weekday */
+                            _( "Weekly: %s"), tmpStr );
 		}
                 g_free( tmpStr );
                 break;
 
         case UIFREQ_BI_WEEKLY:
-                g_string_sprintf( str, _("Bi-Weekly, %ss"), get_wday_name(fs->s.weekly.offset_from_epoch % 7) );
-                break;
+	  /* %s is the name of the weekday */
+	  snprintf( freqStrBuf, MAX_FREQ_STR_SIZE, _("Bi-Weekly, %ss"), 
+                    get_wday_name(fs->s.weekly.offset_from_epoch % 7) );
+	  break;
 
         case UIFREQ_SEMI_MONTHLY:
 	{
@@ -834,16 +827,25 @@ xaccFreqSpecGetFreqStr( FreqSpec *fs, GString *str )
 
 
 	  if ( tmpFS->s.monthly.interval_months > 1 ) {
-	    g_string_sprintf( str, _("Semi-monthly (x%u): %s, %s"), 
-			      tmpFS->s.monthly.interval_months,
-			      first_dom->str, 
-			      second_dom->str);
+	    snprintf( freqStrBuf, MAX_FREQ_STR_SIZE,
+		      /* Translators: %u is the number of intervals;
+			 %s is the day of month of the starting month
+			 (or the string "last day"); %s is the day of
+			 month of the ending month  */
+                      _("Semi-monthly (x%u): %s, %s"), 
+                      tmpFS->s.monthly.interval_months,
+                      first_dom->str, 
+                      second_dom->str);
 	  }
 	  else
 	  {
-	    g_string_sprintf( str, _("Semi-monthly: %s, %s"), 
-			      first_dom->str,
-			      second_dom->str);
+	    snprintf( freqStrBuf, MAX_FREQ_STR_SIZE,
+		      /* Translators: %s is the day of month of the
+			 starting month (or the string "last day"); %s
+			 is the day of month of the ending month  */
+                      _("Semi-monthly: %s, %s"), 
+                      first_dom->str,
+                      second_dom->str);
 	  }
 	  g_string_free(first_dom, TRUE);
 	  g_string_free(second_dom, TRUE);
@@ -854,65 +856,83 @@ xaccFreqSpecGetFreqStr( FreqSpec *fs, GString *str )
         case UIFREQ_MONTHLY:
                
                 if ( fs->s.monthly.interval_months > 1 ) {
-                        g_string_sprintf( str, _("Monthly (x%u): %u"),
-                                           fs->s.monthly.interval_months,
-					  fs->s.monthly.day_of_month);
+		  snprintf( freqStrBuf, MAX_FREQ_STR_SIZE,
+			    /* %u is the number of intervals; %u is
+			       the day of month  */
+                            _("Monthly (x%u): %u"),
+                            fs->s.monthly.interval_months,
+                            fs->s.monthly.day_of_month);
                 }
 		else
 		{
-		  g_string_sprintf( str, _("Monthly: %u"),
-				    fs->s.monthly.day_of_month );
+		  snprintf( freqStrBuf, MAX_FREQ_STR_SIZE,
+			    /* %u is the day of month  */
+                            _("Monthly: %u"),
+                            fs->s.monthly.day_of_month );
 		}
                 break;
 
         case UIFREQ_QUARTERLY:
                 if ( fs->s.monthly.interval_months != 3 ) {
-                        g_string_sprintf( str, _("Quarterly (x%u): %u"),
-					  fs->s.monthly.interval_months/3,
-					  fs->s.monthly.day_of_month);
+		  snprintf( freqStrBuf, MAX_FREQ_STR_SIZE,
+			    /* %u is the number of intervals; %u is
+			       the day of month  */
+                            _("Quarterly (x%u): %u"),
+                            fs->s.monthly.interval_months/3,
+                            fs->s.monthly.day_of_month);
                 }
 		else
 		{
-		  g_string_sprintf( str, _("Quarterly: %u"),
-                                   fs->s.monthly.day_of_month );
+		  snprintf( freqStrBuf, MAX_FREQ_STR_SIZE,
+			    /* %u is the day of month  */
+                            _("Quarterly: %u"),
+                            fs->s.monthly.day_of_month );
 		}
                 break;
 
         case UIFREQ_TRI_ANUALLY:
 
                 if ( fs->s.monthly.interval_months != 4 ) {
-                        g_string_sprintf( str, _("Tri-Annually (x%u): %u"),
-					  fs->s.monthly.interval_months/4,
-					  fs->s.monthly.day_of_month);
+		  snprintf( freqStrBuf, MAX_FREQ_STR_SIZE,
+			    /* %u is the number of intervals; %u is
+			       the day of month  */
+                            _("Tri-Yearly (x%u): %u"),
+                            fs->s.monthly.interval_months/4,
+                            fs->s.monthly.day_of_month);
                 }
 		else
 		{
-                g_string_sprintf( str, _("Tri-Anually: %u"),
-                                   fs->s.monthly.day_of_month );
+		  snprintf( freqStrBuf, MAX_FREQ_STR_SIZE,
+			    /* %u is the day of month  */
+                            _("Tri-Yearly: %u"),
+                            fs->s.monthly.day_of_month );
 		}
                 break;
 
         case UIFREQ_SEMI_YEARLY:
-                g_string_sprintf( str, "Semi-Yearly" );
                 if ( fs->s.monthly.interval_months != 6 ) {
                         if ( (fs->s.monthly.interval_months % 6) != 0 ) {
                                 PERR( "ERROR: FreqSpec Semi-Yearly month-interval "
                                       "is not a multiple of 6 [%d]",
                                       fs->s.monthly.interval_months );
                         }
-                        g_string_sprintf( str, _("Semi-Yearly(x%u): %u"),
-                                           fs->s.monthly.interval_months/6,
-					  fs->s.monthly.day_of_month);
+                        snprintf( freqStrBuf, MAX_FREQ_STR_SIZE,
+				  /* %u is the number of intervals; %u
+				     is the day of month  */
+                                  _("Semi-Yearly (x%u): %u"),
+                                  fs->s.monthly.interval_months/6,
+                                  fs->s.monthly.day_of_month);
                 }
 		else
 		{
-		  g_string_sprintf( str, _("Semi-Yearly: %u"),
-				     fs->s.monthly.day_of_month );
+                  snprintf( freqStrBuf, MAX_FREQ_STR_SIZE,
+			    /* %u is the day of month  */
+                            _("Semi-Yearly: %u"),
+                            fs->s.monthly.day_of_month );
 		}
                 break;
 
         case UIFREQ_YEARLY:
-                g_string_sprintf( str, "Yearly" );
                 if ( fs->s.monthly.interval_months != 12 ) {
                         if ( (fs->s.monthly.interval_months % 12) != 0 ) {
                                 PERR( "ERROR: \"Yearly\" FreqSpec month-interval "
@@ -920,26 +940,162 @@ xaccFreqSpecGetFreqStr( FreqSpec *fs, GString *str )
                                       fs->s.monthly.interval_months );
                         }
 
-			/*
-			 * FIXME: This string *must* be translated for en_GB, en_AU
-			 * and everywhere else with the sensible ordering of ddmmyy
-			 */
-
-                        g_string_sprintf( str, _("Yearly (x%u): %s/%u"),
-                                           fs->s.monthly.interval_months/12,
-					   get_abbrev_month_name(fs->s.monthly.offset_from_epoch),
-					   fs->s.monthly.day_of_month);
+                        snprintf( freqStrBuf, MAX_FREQ_STR_SIZE,
+				  /* FIXME: This string *must* be translated for
+				     en_GB, en_AU and everywhere else with the
+				     sensible ordering of ddmmyy.  Translators
+				     note: to switch the last two arguments,
+				     write "Yearly (x%1$u): %3$u of month %2$s"
+			 
+				     %u is the number of intervals; %s is the
+				     abbreviated name of the month; %u is the
+				     day of month. */
+                                  _("Yearly (x%u): %s/%u"),
+                                  fs->s.monthly.interval_months/12,
+                                  get_abbrev_month_name(fs->s.monthly.offset_from_epoch),
+                                  fs->s.monthly.day_of_month);
                 }
 		else
 		{
-		  g_string_sprintf( str, _("Yearly: %s/%u"),
-				     get_abbrev_month_name(fs->s.monthly.offset_from_epoch),
-				     fs->s.monthly.day_of_month );
+		  snprintf( freqStrBuf, MAX_FREQ_STR_SIZE,
+			    /* %s is the abbreviated name of the
+			       month; %u is the day of month  */
+                            _("Yearly: %s/%u"),
+                            get_abbrev_month_name(fs->s.monthly.offset_from_epoch),
+                            fs->s.monthly.day_of_month );
 		}
                 break;
 
         default:
-                g_string_sprintf( str, _("Unknown") );
+                snprintf( freqStrBuf, MAX_FREQ_STR_SIZE, _("Unknown") );
                 break;
         }
+        g_string_sprintf( str, "%s", freqStrBuf );
+}
+
+static
+int
+int_cmp( int a, int b )
+{
+        if ( a < b )
+                return -1;
+        if ( a == b )
+                return 0;
+        return 1;
+}
+
+/**
+ * Returns the "min" FreqSpec sub-element of a composite FreqSpec.
+ **/
+static
+FreqSpec*
+_gnc_freq_spec_get_min( FreqSpec *fs )
+{
+        FreqSpec *toRet, *tmpFS;
+        GList *l;
+
+        g_assert( xaccFreqSpecGetType(fs) == COMPOSITE );
+        toRet = NULL;
+        for ( l = xaccFreqSpecCompositeGet(fs);
+              l;
+              l = l->next ) {
+                tmpFS = (FreqSpec*)l->data;
+
+                if ( toRet == NULL ) {
+                        toRet = tmpFS;
+                        continue;
+                }
+
+                if ( gnc_freq_spec_compare( toRet, tmpFS ) > 0 ) {
+                        toRet = tmpFS;
+                }
+        }
+        return toRet;
+}
+
+int
+gnc_freq_spec_compare( FreqSpec *a, FreqSpec *b )
+{
+        FreqType fta, ftb;
+        int tmpInt;
+
+        if ( ! (a && b) ) {
+                return 0;
+        } else if ( !a && b ) {
+                return 1;
+        } else if ( a && !b ) {
+                return -1;
+        } /* else { this else intentionally left blank; both-valid code is
+           * below. } */
+
+        fta = xaccFreqSpecGetType( a );
+        ftb = xaccFreqSpecGetType( b );
+
+        if ( fta == COMPOSITE ) {
+                a = _gnc_freq_spec_get_min( a );
+                fta = xaccFreqSpecGetType( a );
+        }
+        if ( ftb == COMPOSITE ) {
+                b = _gnc_freq_spec_get_min( b );
+                ftb = xaccFreqSpecGetType( b );
+        }
+
+        if ( fta < ftb ) {
+                return -1;
+        } else if ( fta > ftb ) {
+                return 1;
+        } /* else { this else intentionally left blank; '='-case code is
+           * below. */
+
+        switch ( fta /* == ftb */ ) {
+        case INVALID:
+                return 0;
+                break;
+        case ONCE:
+                return g_date_compare( &a->s.once.date,
+                                       &b->s.once.date );
+                break;
+        case DAILY:
+                tmpInt = int_cmp( a->s.daily.interval_days,
+                                  b->s.daily.interval_days );
+                if ( tmpInt != 0 ) {
+                        return tmpInt;
+                }
+                return int_cmp( a->s.daily.offset_from_epoch,
+                                b->s.daily.offset_from_epoch );
+                break;
+        case WEEKLY:
+                tmpInt = int_cmp( a->s.weekly.interval_weeks,
+                                  b->s.weekly.interval_weeks );
+                if ( tmpInt != 0 ) {
+                        return tmpInt;
+                }
+                return int_cmp( a->s.weekly.offset_from_epoch,
+                                b->s.weekly.offset_from_epoch );
+                break;
+        case MONTHLY:
+                tmpInt = int_cmp( a->s.monthly.interval_months,
+                                  b->s.monthly.interval_months );
+                if ( tmpInt != 0 ) {
+                        return tmpInt;
+                }
+                return int_cmp( a->s.monthly.day_of_month, 
+                                b->s.monthly.day_of_month );
+                break;
+        case MONTH_RELATIVE:
+                DEBUG( "MONTH-RELATIVE dates not supported." );
+                g_assert( FALSE );
+                break;
+        case COMPOSITE:
+                /* We shouldn't see a composite after doing the
+                 * composite-reduction above. */
+                DEBUG( "This code should not be reached." );
+                g_assert( FALSE );
+                break;
+        default:
+                DEBUG( "Unknown freqspec type %d", fta );
+                g_assert( FALSE );
+                break;
+        }
+        return 0;
 }

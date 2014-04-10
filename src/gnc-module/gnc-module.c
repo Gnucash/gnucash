@@ -5,20 +5,19 @@
 
 #include "config.h"
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <glib.h>
 #include <ltdl.h>
 #include <guile/gh.h>
-#include <dirent.h>
 #include <sys/types.h>
+#include <dirent.h>
+
 
 #include "core-utils.h"
 #include "gnc-module.h"
 #include "gw-gnc-module.h"
-
-#include <guile/gh.h>
-#include <libguile/list.h>
 
 static GHashTable * loaded_modules = NULL;
 static GList      * module_info = NULL;
@@ -110,31 +109,35 @@ gnc_module_system_setup_load_path(void)
 {
   GList * dirs = gnc_module_system_search_dirs();
   GList * lp;
-  char *envt = getenv("LD_LIBRARY_PATH");
 
-  if(envt)
+  if(dirs)
   {
-    envt = g_strdup(envt);
-  }
-  else
-  {
-    envt = g_strdup("");
-  }
-
-  for(lp=dirs; lp; lp=lp->next) 
-  {
-    char *tmp = g_strdup_printf("%s:%s", envt, (char *) lp->data);
+    char *envt = getenv("LD_LIBRARY_PATH");
+    
+    if(envt)
+    {
+      envt = g_strdup(envt);
+    }
+    else
+    {
+      envt = g_strdup("");
+    }
+    
+    for(lp=dirs; lp; lp=lp->next) 
+    {
+      char *tmp = g_strdup_printf("%s:%s", envt, (char *) lp->data);
+      g_free(envt);
+      envt = tmp;
+      g_free(lp->data);
+    }
+    g_list_free(dirs);
+    
+    if(gnc_setenv("LD_LIBRARY_PATH", envt, 1) != 0)
+    {
+      g_warning ("gnc-module failed to set LD_LIBRARY_PATH");
+    }
     g_free(envt);
-    envt = tmp;
-    g_free(lp->data);
   }
-  g_list_free(dirs);
-
-  if(gnc_setenv("LD_LIBRARY_PATH", envt, 1) != 0)
-  {
-    g_warning ("gnc-module failed to set LD_LIBRARY_PATH");
-  }
-  g_free(envt);
 }
 
 /*************************************************************
@@ -413,8 +416,8 @@ gnc_module_check_loaded(const char * module_name, gint interface)
  * Ensure that the module named by "module_name" is loaded. 
  *************************************************************/
 
-GNCModule 
-gnc_module_load(char * module_name, gint interface) 
+static GNCModule 
+gnc_module_load_common(char * module_name, gint interface, gboolean optional)
 {
 
   GNCLoadedModule * info;
@@ -497,17 +500,30 @@ gnc_module_load(char * module_name, gint interface)
       }
       return info;
     }
-    else 
+    else if (!optional)
     {
       g_warning ("Failed to open module %s", module_name);
       if(modinfo) printf(": %s\n", lt_dlerror());
       else g_warning (": could not locate %s interface v.%d\n",
                       module_name, interface);
       return NULL;
-    }      
+    }
+    return NULL;
   }
 }
 
+
+GNCModule 
+gnc_module_load(char * module_name, gint interface) 
+{
+  return gnc_module_load_common(module_name, interface, FALSE);
+}
+
+GNCModule 
+gnc_module_load_optional(char * module_name, gint interface) 
+{
+  return gnc_module_load_common(module_name, interface, TRUE);
+}
 
 /*************************************************************
  * gnc_module_unload

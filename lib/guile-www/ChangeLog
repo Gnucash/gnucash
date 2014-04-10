@@ -1,3 +1,18 @@
+2002-01-09  Rob Browning  <rlb@defaultvalue.org>
+
+	* Makefile.am: handle conditional install inclusion of GUILE_WWW.
+
+2001-12-08  Dave Peticolas  <dave@krondo.com>
+
+	* Makefile.am (Repository): clean .scm-links
+
+2001-11-28  Rob Browning  <rlb@defaultvalue.org>
+
+	* .cvsignore: add .scm-links
+
+	* lib/guile-www/Makefile.am
+	(.scm-links): create so we can run from gnucash build dir.
+
 2001-02-04  Marius Vollmer  <mvo@zagadka.ping.de>
 
 	* http.scm: Use (ice-9 rdelim) if `read-line' not defined.  Thanks

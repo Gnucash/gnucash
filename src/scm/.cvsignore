@@ -1,4 +1,4 @@
 Makefile
 Makefile.in
 .scm-links
-bootstrap.scm
+build-config.scm

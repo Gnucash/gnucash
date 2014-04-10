@@ -6,18 +6,4 @@ order to build gnucash, but isn't considered widely available.
 Finance::Quote
 --------------
 
-Building and installing Finance::Quote is fairly simple.  It is needed
-to perform stock lookups with gnc-prices and other programs.  It can
-be built after GnuCash if required.  (If you try to use gnc-prices and
-other scripts without Finance::Quote installed, you'll get an ugly
-error message.)
-
-Building is simple.  In the Finance-Quote-1.05 directory:
-
-	perl Makefile.PL
-	make
-	make test 	(optional)
-	make install	(as root)
-
-This will install the module into the appropriate place where perl modules
-live on your system.
+Available from http://finance-quote.sourceforge.net.

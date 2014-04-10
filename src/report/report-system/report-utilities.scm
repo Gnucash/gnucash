@@ -94,9 +94,9 @@
 		    (gnc:filter-accountlist-type (cdr x) accounts)))
        (list
 	(cons 'asset
-	      '(asset bank cash checking savings money-market 
+	      '(asset bank cash checking savings money-market receivable
 		      stock mutual-fund currency))
-	(cons 'liability '(liability credit credit-line))
+	(cons 'liability '(liability payable credit credit-line))
 	(cons 'equity '(equity))
 	(cons 'income '(income))
 	(cons 'expense '(expense)))))
@@ -121,6 +121,8 @@
     (cons 'checking (_ "Checking"))
     (cons 'savings (_ "Savings"))
     (cons 'money-market (_ "Money Market"))
+    (cons 'receivable (_ "Accounts Receivable"))
+    (cons 'payable (_ "Accounts Payable"))
     (cons 'credit-line (_ "Credit Lines")))
    type))
 
@@ -131,8 +133,8 @@
 	  (delete-duplicates
 	   (sort (map gnc:account-get-commodity accounts) 
 		 (lambda (a b) 
-		   (string<? (gnc:commodity-get-mnemonic a)
-			     (gnc:commodity-get-mnemonic b)))))))
+		   (string<? (or (gnc:commodity-get-mnemonic a) "")
+			     (or (gnc:commodity-get-mnemonic b) "")))))))
 
 
 ;; Returns the depth of the current account hierarchy, that is, the
@@ -305,6 +307,14 @@
 		  (set! value (+ amount value))))
 	('total value)
 	(else (gnc:warn "bad value-collector action: " action))))))
+;; Bah. Let's get back to normal data types -- this procedure thingy
+;; from above makes every code almost unreadable. First step: replace
+;; all 'action function calls by the normal functions below.
+(define (gnc:value-collector-add collector amount)
+  (collector 'add amount))
+(define (gnc:value-collector-total collector)
+  (collector 'total #f))
+
 
 ;; Same as above but with gnc:numeric
 (define (gnc:make-numeric-collector)
@@ -318,6 +328,11 @@
 		   "gnc:numeric-collector called with wrong argument: " amount)))
 	('total value)
 	(else (gnc:warn "bad gnc:numeric-collector action: " action))))))
+;; Replace all 'action function calls by the normal functions below.
+(define (gnc:numeric-collector-add collector amount)
+  (collector 'add amount))
+(define (gnc:numeric-collector-total collector)
+  (collector 'total #f))
 
 ;; A commodity collector. This is intended to handle multiple
 ;; currencies' amounts. The amounts are accumulated via 'add, the
@@ -356,7 +371,7 @@
 ;;       commodity->numeric-collector
 
 (define (gnc:make-commodity-collector)
-  (let
+  (let 
       ;; the association list of (commodity -> value-collector) pairs.
       ((commoditylist '()))
     
@@ -372,29 +387,32 @@
 	      ;; and add it to the alist
 	      (set! commoditylist (cons pair commoditylist))))
 	;; add the value
-	((cadr pair) 'add value)))
+	(gnc:numeric-collector-add (cadr pair) value)))
     
     ;; helper function to walk an association list, adding each
     ;; (commodity -> collector) pair to our list at the appropriate 
     ;; place
     (define (add-commodity-clist clist)
       (cond ((null? clist) '())
-	    (else (add-commodity-value (caar clist) 
-				       ((cadar clist) 'total #f))
+	    (else (add-commodity-value 
+		   (caar clist) 
+		   (gnc:numeric-collector-total (cadar clist)))
 		  (add-commodity-clist (cdr clist)))))
 
     (define (minus-commodity-clist clist)
       (cond ((null? clist) '())
-	    (else (add-commodity-value (caar clist) 
-				       (gnc:numeric-neg
-					((cadar clist) 'total #f)))
+	    (else (add-commodity-value 
+		   (caar clist) 
+		   (gnc:numeric-neg
+		    (gnc:numeric-collector-total (cadar clist))))
 		  (minus-commodity-clist (cdr clist)))))
 
     ;; helper function walk the association list doing a callback on
     ;; each key-value pair.
     (define (process-commodity-list fn clist)
       (map 
-       (lambda (pair) (fn (car pair) ((cadr pair) 'total #f)))
+       (lambda (pair) (fn (car pair) 
+			  (gnc:numeric-collector-total (cadr pair))))
        clist))
 
     ;; helper function which is given a commodity and returns, if
@@ -406,8 +424,9 @@
 	      (if (not pair)
 		  (gnc:numeric-zero)
 		  (if sign?
-		      (gnc:numeric-neg ((cadr pair) 'total #f))
-		      ((cadr pair) 'total #f)))
+		      (gnc:numeric-neg 
+		       (gnc:numeric-collector-total (cadr pair)))
+		      (gnc:numeric-collector-total (cadr pair))))
 	      '()))))
 
     ;; helper function which is given a commodity and returns, if
@@ -419,21 +438,52 @@
 	 c (if (not pair)
 	       (gnc:numeric-zero)
 	       (if sign?
-		   (gnc:numeric-neg ((cadr pair) 'total #f))
-		   ((cadr pair) 'total #f))))))
-
+		   (gnc:numeric-neg 
+		    (gnc:numeric-collector-total (cadr pair)))
+		   (gnc:numeric-collector-total (cadr pair)))))))
+    
     ;; Dispatch function
     (lambda (action commodity amount)
       (case action
 	('add (add-commodity-value commodity amount))
-	('merge (add-commodity-clist (commodity 'list #f #f)))
-	('minusmerge (minus-commodity-clist (commodity 'list #f #f)))
+	('merge (add-commodity-clist 
+		 (gnc:commodity-collector-list commodity)))
+	('minusmerge (minus-commodity-clist
+		      (gnc:commodity-collector-list commodity)))
 	('format (process-commodity-list commodity commoditylist))
 	('reset (set! commoditylist '()))
 	('getpair (getpair commodity amount))
 	('getmonetary (getmonetary commodity amount))
 	('list commoditylist) ; this one is only for internal use
 	(else (gnc:warn "bad commodity-collector action: " action))))))
+;; Bah. Let's get back to normal data types -- this procedure thingy
+;; from above makes every code almost unreadable. First step: replace
+;; all 'action function calls by the normal functions below.
+(define (gnc:commodity-collector-add collector commodity amount)
+  (collector 'add commodity amount))
+(define (gnc:commodity-collector-merge collector other-collector)
+  (collector 'merge other-collector #f))
+(define (gnc:commodity-collector-minusmerge collector other-collector)
+  (collector 'minusmerge other-collector #f))
+(define (gnc:commodity-collector-map collector function)
+  (collector 'format function #f))
+(define (gnc:commodity-collector-assoc collector commodity sign?)
+  (collector 'getmonetary commodity sign?))
+(define (gnc:commodity-collector-assoc-pair collector commodity sign?)
+  (collector 'getpair commodity sign?))
+(define (gnc:commodity-collector-list collector)
+  (collector 'list #f #f))
+
+;; Returns zero if all entries in this collector are zero.
+(define (gnc:commodity-collector-allzero? collector)
+  (let ((result #t))
+    (gnc:commodity-collector-map 
+     collector
+     (lambda (commodity amount)
+       (if (not (gnc:numeric-zero-p amount))
+	   (set! result #f))))
+    result))
+
 
 ;; get the account balance at the specified date. if include-children?
 ;; is true, the balances of all children (not just direct children)
@@ -441,7 +491,8 @@
 (define (gnc:account-get-balance-at-date account date include-children?)
   (let ((collector (gnc:account-get-comm-balance-at-date
                     account date include-children?)))
-    (cadr (collector 'getpair (gnc:account-get-commodity account) #f))))
+    (cadr (gnc:commodity-collector-assoc-pair 
+	   collector (gnc:account-get-commodity account)))))
 
 ;; This works similar as above but returns a commodity-collector, 
 ;; thus takes care of children accounts with different currencies.
@@ -458,21 +509,23 @@
 	  (query (gnc:malloc-query))
 	  (splits #f))
       
-      (gnc:query-set-group query (gnc:get-current-group))
+      (gnc:query-set-book query (gnc:get-current-book))
       (gnc:query-add-single-account-match query account 'query-and)
       (gnc:query-add-date-match-timepair query #f date #t date 'query-and) 
-      (gnc:query-set-sort-order query 'by-date 'by-standard 'by-none)
+      (gnc:query-set-sort-order query
+				(list gnc:split-trans gnc:trans-date-posted)
+				(list gnc:query-default-sort)
+				'())
       (gnc:query-set-sort-increasing query #t #t #t)
-      (gnc:query-set-max-splits query 1)
+      (gnc:query-set-max-results query 1)
       
-      (set! splits (gnc:glist->list 
-		    (gnc:query-get-splits query) 
-                  <gnc:Split*>))
+      (set! splits (gnc:query-get-splits query))
       (gnc:free-query query)
 
       (if (and splits (not (null? splits)))
-	(balance-collector 'add (gnc:account-get-commodity account)
-			   (gnc:split-get-balance (car splits))))
+	  (gnc:commodity-collector-add balance-collector 
+				       (gnc:account-get-commodity account)
+				       (gnc:split-get-balance (car splits))))
       balance-collector))
 
 ;; Adds all accounts' balances, where the balances are determined with
@@ -485,10 +538,10 @@
   (let ((collector (gnc:make-commodity-collector)))
     (for-each 
      (lambda (acct)
-       (collector (if (reverse-balance-fn acct)
-		      'minusmerge 
-		      'merge) 
-		  (get-balance-fn acct) #f))
+       ((if (reverse-balance-fn acct)
+	    gnc:commodity-collector-minusmerge 
+	    gnc:commodity-collector-merge)
+	collector (get-balance-fn acct)))
      accounts)
     collector))
 
@@ -539,7 +592,8 @@
 (define (gnc:group-get-comm-balance-at-date group date)
   (let ((this-collector (gnc:make-commodity-collector)))
     (for-each 
-     (lambda (x) (this-collector 'merge x #f))
+     (lambda (x) 
+       (gnc:commodity-collector-merge this-collector x))
      (gnc:group-map-all-accounts
       (lambda (account)
 	(gnc:account-get-comm-balance-at-date 
@@ -553,7 +607,8 @@
 (define (gnc:account-get-balance-interval account from to include-children?)
   (let ((collector (gnc:account-get-comm-balance-interval
                     account from to include-children?)))
-    (cadr (collector 'getpair (gnc:account-get-commodity account) #f))))
+    (cadr (gnc:commodity-collector-assoc-pair 
+	   collector (gnc:account-get-commodity account) #f))))
 
 ;; the version which returns a commodity-collector
 (define (gnc:account-get-comm-balance-interval 
@@ -563,17 +618,19 @@
   ;; instead of the plain date.
   (let ((this-collector (gnc:account-get-comm-balance-at-date 
 			 account to include-children?)))
-    (this-collector
-     'minusmerge (gnc:account-get-comm-balance-at-date
-		  account
-		  (gnc:timepair-end-day-time (gnc:timepair-previous-day from))
-		  include-children?) #f)
+    (gnc:commodity-collector-minusmerge
+     this-collector
+     (gnc:account-get-comm-balance-at-date
+      account
+      (gnc:timepair-end-day-time (gnc:timepair-previous-day from))
+      include-children?))
     this-collector))
 
 ;; the version which returns a commodity-collector
 (define (gnc:group-get-comm-balance-interval group from to)
   (let ((this-collector (gnc:make-commodity-collector)))
-    (for-each (lambda (x) (this-collector 'merge x #f))
+    (for-each (lambda (x) 
+		(gnc:commodity-collector-merge this-collector x))
 	      (gnc:group-map-all-accounts
 	       (lambda (account)
 		 (gnc:account-get-comm-balance-interval 
@@ -581,9 +638,9 @@
     this-collector))
 
 ;; utility function - ensure that a query matches only non-voids.  Destructive.
-(define (gnc:query-set-match-non-voids-only! query group)
+(define (gnc:query-set-match-non-voids-only! query book)
   (let ((temp-query (gnc:malloc-query)))
-     (gnc:query-set-group temp-query group)
+     (gnc:query-set-book temp-query book)
      
      (gnc:query-add-cleared-match
 	     temp-query
@@ -596,9 +653,9 @@
 
 ;; utility function - ensure that a query matches only voids.  Destructive
 
-(define (gnc:query-set-match-voids-only! query group)
+(define (gnc:query-set-match-voids-only! query book)
   (let ((temp-query (gnc:malloc-query)))
-     (gnc:query-set-group temp-query group)
+     (gnc:query-set-book temp-query book)
      
      (gnc:query-add-cleared-match
 	     temp-query
@@ -610,3 +667,31 @@
 (define (gnc:split-voided? split)
   (let ((trans (gnc:split-get-parent split)))
     (gnc:transaction-get-void-status trans)))
+
+(define (gnc:report-starting report-name)
+  (gnc:mdi-show-progress (sprintf #f
+				  (_ "Building '%s' report ...")
+				  (gnc:gettext report-name))
+			 0))
+
+(define (gnc:report-render-starting report-name)
+  (gnc:mdi-show-progress (sprintf #f
+				  (_ "Rendering '%s' report ...")
+				  (if (string-null? report-name)
+				      (gnc:gettext "Untitled")
+				      (gnc:gettext report-name)))
+			 0))
+
+(define (gnc:report-percent-done percent)
+  (gnc:mdi-show-progress #f percent))
+
+(define (gnc:report-finished)
+  (gnc:mdi-show-progress #f -1))
+
+;; function to count the total number of splits to be iterated
+(define (gnc:accounts-count-splits accounts)
+  (if (not (null? accounts))
+      (+ (length (gnc:account-get-split-list (car accounts)))
+	 (gnc:accounts-count-splits (cdr accounts)))
+      0))
+

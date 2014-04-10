@@ -1,23 +1,25 @@
 /*
  * gncVendor.h -- the Core Vendor Interface
- * Copyright (C) 2001 Derek Atkins
+ * Copyright (C) 2001, 2002 Derek Atkins
  * Author: Derek Atkins <warlord@MIT.EDU>
  */
 
 #ifndef GNC_VENDOR_H_
 #define GNC_VENDOR_H_
 
-struct _gncVendor;
 typedef struct _gncVendor GncVendor;
 
-#include "gncBusiness.h"
+#include "gnc-book.h"
 #include "gncAddress.h"
+#include "gncBillTerm.h"
+#include "gncTaxTable.h"
+#include "gncJob.h"
 
 #define GNC_VENDOR_MODULE_NAME "gncVendor"
 
 /* Create/Destroy Functions */
 
-GncVendor *gncVendorCreate (GncBusiness *business);
+GncVendor *gncVendorCreate (GNCBook *book);
 void gncVendorDestroy (GncVendor *vendor);
 
 /* Set Functions */
@@ -25,24 +27,47 @@ void gncVendorDestroy (GncVendor *vendor);
 void gncVendorSetID (GncVendor *vendor, const char *id);
 void gncVendorSetName (GncVendor *vendor, const char *name);
 void gncVendorSetNotes (GncVendor *vendor, const char *notes);
-void gncVendorSetTerms (GncVendor *vendor, gint terms);
-void gncVendorSetTaxIncluded (GncVendor *vendor, gboolean taxincl);
+void gncVendorSetTerms (GncVendor *vendor, GncBillTerm *terms);
+void gncVendorSetTaxIncluded (GncVendor *vendor, GncTaxIncluded taxincl);
+void gncVendorSetCurrency (GncVendor *vendor, gnc_commodity *currency);
 void gncVendorSetActive (GncVendor *vendor, gboolean active);
 
+void gncVendorSetTaxTableOverride (GncVendor *vendor, gboolean override);
+void gncVendorSetTaxTable (GncVendor *vendor, GncTaxTable *table);
+
+void gncVendorAddJob (GncVendor *vendor, GncJob *job);
+void gncVendorRemoveJob (GncVendor *vendor, GncJob *job);
+
+void gncVendorBeginEdit (GncVendor *vendor);
 void gncVendorCommitEdit (GncVendor *vendor);
 
 /* Get Functions */
 
-GncBusiness * gncVendorGetBusiness (GncVendor *vendor);
+GNCBook * gncVendorGetBook (GncVendor *vendor);
 const GUID * gncVendorGetGUID (GncVendor *vendor);
 const char * gncVendorGetID (GncVendor *vendor);
 const char * gncVendorGetName (GncVendor *vendor);
 GncAddress * gncVendorGetAddr (GncVendor *vendor);
 const char * gncVendorGetNotes (GncVendor *vendor);
-gint gncVendorGetTerms (GncVendor *vendor);
-gboolean gncVendorGetTaxIncluded (GncVendor *vendor);
+GncBillTerm * gncVendorGetTerms (GncVendor *vendor);
+GncTaxIncluded gncVendorGetTaxIncluded (GncVendor *vendor);
+gnc_commodity * gncVendorGetCurrency (GncVendor *vendor);
 gboolean gncVendorGetActive (GncVendor *vendor);
 
+gboolean gncVendorGetTaxTableOverride (GncVendor *vendor);
+GncTaxTable* gncVendorGetTaxTable (GncVendor *vendor);
+
+GList * gncVendorGetJoblist (GncVendor *vendor, gboolean show_all);
+
+GUID gncVendorRetGUID (GncVendor *vendor);
+GncVendor * gncVendorLookupDirect (GUID guid, GNCBook *book);
+
+GncVendor * gncVendorLookup (GNCBook *book, const GUID *guid);
 gboolean gncVendorIsDirty (GncVendor *vendor);
+int gncVendorCompare (GncVendor *a, GncVendor *b);
+
+#define VENDOR_ID	"id"
+#define VENDOR_NAME	"name"
+#define VENDOR_ADDR	"addr"
 
 #endif /* GNC_VENDOR_H_ */

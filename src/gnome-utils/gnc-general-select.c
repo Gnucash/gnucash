@@ -185,6 +185,8 @@ create_children (GNCGeneralSelect *gsl, GNCGeneralSelectType type)
 	  gsl->button = gtk_button_new_with_label (_("Select..."));
 	else if (type == GNC_GENERAL_SELECT_TYPE_EDIT)
 	  gsl->button = gtk_button_new_with_label (_("Edit..."));
+	else if (type == GNC_GENERAL_SELECT_TYPE_VIEW)
+	  gsl->button = gtk_button_new_with_label (_("View..."));
 
 	gtk_box_pack_start (GTK_BOX (gsl), gsl->button, FALSE, FALSE, 0);
         gtk_signal_connect (GTK_OBJECT (gsl->button), "clicked",

@@ -1,12 +1,48 @@
 
-lib_LTLIBRARIES = libcore-utils.la
+lib_LTLIBRARIES = libcore-utils.la libgw-core-utils.la
 
-libcore_utils_la_LDFLAGS = -module
-libcore_utils_la_LIBADD =
+gwmoddir = ${GNC_GWRAP_LIBDIR}
+gwmod_DATA = gw-core-utils-spec.scm gw-core-utils.scm
+
 libcore_utils_la_SOURCES = core-utils.c
+libcore_utils_la_LDFLAGS = -module ${GLIB_LIBS}
+libcore_utils_la_LIBADD =
 
-noinst_HEADERS = core-utils.h
+libgw_core_utils_la_SOURCES = gw-core-utils.c
+libgw_core_utils_la_LDFLAGS = -module ${G_WRAP_LINK_ARGS} ${GUILE_LIBS}
+libgw_core_utils_la_LIBADD = libcore-utils.la
 
-EXTRA_DIST = .cvsignore
+noinst_HEADERS = \
+  core-utils.h \
+  gw-core-utils.h
 
-AM_CFLAGS = ${GLIB_CFLAGS}
+EXTRA_DIST = .cvsignore ${gwmod_DATA}
+
+AM_CFLAGS = ${G_WRAP_COMPILE_ARGS} ${GLIB_CFLAGS} ${GUILE_INCS}
+
+if GNUCASH_SEPARATE_BUILDDIR
+#Only needed when srcdir and builddir are different
+SCM_FILE_LINKS = gw-core-utils-spec.scm
+endif
+
+.scm-links: 
+	rm -f gnucash g-wrapped
+	ln -sf . gnucash 
+	ln -sf . g-wrapped 
+if GNUCASH_SEPARATE_BUILDDIR
+	for X in ${SCM_FILE_LINKS} ; do \
+	  ln -sf ${srcdir}/$$X . ; \
+	done
+endif
+	touch .scm-links
+
+gw-core-utils.scm gw-core-utils.h gw-core-utils.c gw-core-utils.html: \
+  gw-core-utils-spec.scm .scm-links ${top_builddir}/config.status
+	FLAVOR=gnome guile -c \
+          "(set! %load-path (cons \"${G_WRAP_MODULE_DIR}\" %load-path)) \
+           (primitive-load \"./gw-core-utils-spec.scm\") \
+           (gw:generate-wrapset \"gw-core-utils\")"
+
+BUILT_SOURCES = gw-core-utils.scm gw-core-utils.h gw-core-utils.c
+DISTCLEANFILES = g-wrapped gnucash .scm-links ${SCM_FILE_LINKS} \
+                 gw-core-utils.html

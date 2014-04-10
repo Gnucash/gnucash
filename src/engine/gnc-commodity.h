@@ -25,9 +25,7 @@
 #define GNC_COMMODITY_H
 
 #include <glib.h>
-
-typedef struct _gnc_commodity           gnc_commodity;
-typedef struct _gnc_commodity_table     gnc_commodity_table;
+#include "gnc-engine.h"
 
 #define GNC_COMMODITY_NS_LEGACY "GNC_LEGACY_CURRENCIES"
 #define GNC_COMMODITY_NS_ISO    "ISO4217"
@@ -116,5 +114,7 @@ gboolean gnc_commodity_table_foreach_commodity(gnc_commodity_table * table,
                                        gboolean (*f)(gnc_commodity *cm,
                                                      gpointer user_data),
                                        gpointer user_data);
+
+gboolean gnc_commodity_table_add_default_data(gnc_commodity_table *table);
 
 #endif

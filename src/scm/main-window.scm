@@ -56,7 +56,7 @@ the account instead of opening a register.") #f))
       (N_ "Account Tree") (N_ "Account types to display")
       "b" ""
       (list 'bank 'cash 'credit 'asset 'liability 'stock
-            'mutual 'currency 'income 'expense 'equity)
+            'mutual 'currency 'income 'expense 'equity 'payable 'receivable)
       (list (list->vector (list 'bank      (N_ "Bank") ""))
             (list->vector (list 'cash      (N_ "Cash") ""))
             (list->vector (list 'credit    (N_ "Credit") ""))
@@ -67,21 +67,25 @@ the account instead of opening a register.") #f))
             (list->vector (list 'currency  (N_ "Currency") ""))
             (list->vector (list 'income    (N_ "Income") ""))
             (list->vector (list 'expense   (N_ "Expense") ""))
-            (list->vector (list 'equity    (N_ "Equity") "")))))
+            (list->vector (list 'equity    (N_ "Equity") ""))
+	    (list->vector (list 'payable   (N_ "Accounts Payable") ""))
+	    (list->vector (list 'receivable (N_ "Accounts Receivable") "")))))
 
     (add-option
      (gnc:make-list-option
       (N_ "Account Tree") (N_ "Account fields to display")
       "c" ""
-      (list 'description 'total)
-      (list (list->vector (list 'type        (N_ "Type") ""))
-            (list->vector (list 'code        (N_ "Code") ""))
-            (list->vector (list 'description (N_ "Description") ""))
-            (list->vector (list 'notes       (N_ "Notes") ""))
-            (list->vector (list 'commodity   (N_ "Commodity") ""))
-            (list->vector (list 'balance     (N_ "Balance") ""))
-            (list->vector (list 'total       (N_ "Total") ""))
-            (list->vector (list 'tax-info    (N_ "Tax Info") "")))))
+      (list 'description 'total 'total_report)
+      (list (list->vector (list 'type           (N_ "Type") ""))
+            (list->vector (list 'code           (N_ "Code") ""))
+            (list->vector (list 'description    (N_ "Description") ""))
+            (list->vector (list 'notes          (N_ "Notes") ""))
+            (list->vector (list 'commodity      (N_ "Commodity") ""))
+            (list->vector (list 'balance        (N_ "Balance") ""))
+            (list->vector (list 'balance_report (N_ "Balance in Report Currency") ""))
+            (list->vector (list 'total          (N_ "Total") ""))
+            (list->vector (list 'total_report   (N_ "Total in Report Currency") ""))
+            (list->vector (list 'tax-info       (N_ "Tax Info") "")))))
 
     options))
 
@@ -104,8 +108,9 @@ the account instead of opening a register.") #f))
    (gnc:generate-restore-forms optobj "options")
    (simple-format
     #f "  (hash-set! gnc:*acct-tree-options* ~A options)\n" id)
-   (simple-format
-    #f "  \"gnc-acct-tree:id=~S\")\n\n" id)))
+   "  \""
+   (gnc:html-build-url gnc:url-type-accttree (sprintf #f "%a" id) #f)
+   "\")\n\n"))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -115,8 +120,9 @@ the account instead of opening a register.") #f))
 ;; book close.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define (gnc:main-window-save-state book-url)
-  (let* ((conf-file-name (gnc:html-encode-string book-url))
+(define (gnc:main-window-save-state session)
+  (let* ((book-url (gnc:session-get-url session))
+	 (conf-file-name (gnc:html-encode-string book-url))
 	 (dotgnucash-dir (build-path (getenv "HOME") ".gnucash"))
          (file-dir (build-path dotgnucash-dir "books"))
          (save-file? #f)
@@ -148,8 +154,8 @@ the account instead of opening a register.") #f))
               (force-output)))
           (gnc:mdi-save (gnc:mdi-get-current) book-url)))))
 
-(define (gnc:main-window-book-close-handler book-url)
-    (gnc:main-window-save-state book-url)
+(define (gnc:main-window-book-close-handler session)
+    (gnc:main-window-save-state session)
 
     (let ((dead-reports '()))
       ;; get a list of the reports we'll be needing to nuke     
@@ -165,7 +171,7 @@ the account instead of opening a register.") #f))
          (hash-remove! *gnc:_reports_* dr))
        dead-reports)))
 
-(define (gnc:main-window-book-open-handler book-url)
+(define (gnc:main-window-book-open-handler session)
   (define (try-load file-suffix)
     (let ((file (build-path (getenv "HOME") ".gnucash" "books" file-suffix)))
       ;; make sure the books directory is there 
@@ -175,13 +181,20 @@ the account instead of opening a register.") #f))
                 (gnc:warn "failure loading " file)
                 #f))
           #f)))
-  (let ((conf-file-name (gnc:html-encode-string book-url))
-        (dead-reports '()))
+  (let* ((book-url (gnc:session-get-url session))
+	 (conf-file-name (gnc:html-encode-string book-url))
+	 (dead-reports '()))
     (if conf-file-name 
         (try-load conf-file-name))
     (gnc:mdi-restore (gnc:mdi-get-current) book-url)))
 
+
+(gnc:hook-remove-dangler gnc:*book-opened-hook* 
+                         gnc:main-window-book-open-handler)
 (gnc:hook-add-dangler gnc:*book-opened-hook* 
                       gnc:main-window-book-open-handler)
+
+(gnc:hook-remove-dangler gnc:*book-closed-hook* 
+                         gnc:main-window-book-close-handler)
 (gnc:hook-add-dangler gnc:*book-closed-hook* 
                       gnc:main-window-book-close-handler)

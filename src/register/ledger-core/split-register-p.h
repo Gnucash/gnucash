@@ -30,7 +30,8 @@
 #define SPLIT_TRANS_STR _("-- Split Transaction --")
 #define STOCK_SPLIT_STR _("-- Stock Split --")
 
-
+#define ACTION_BUY_STR  _("Buy")
+#define ACTION_SELL_STR _("Sell")
 struct sr_info
 {
   /* The blank split at the bottom of the register */
@@ -108,6 +109,8 @@ struct sr_info
   char *credit_str;
   char *tdebit_str;
   char *tcredit_str;
+
+  GList *saved_slist;
 };
 
 
@@ -127,10 +130,6 @@ Split *
 gnc_split_register_get_trans_split (SplitRegister *reg,
                                     VirtualCellLocation vcell_loc,
                                     VirtualCellLocation *trans_split_loc);
-
-Split *
-gnc_split_register_get_current_trans_split (SplitRegister *reg,
-                                            VirtualCellLocation *vcell_loc);
 
 gboolean gnc_split_register_find_split (SplitRegister *reg,
                                         Transaction *trans, Split *trans_split,
@@ -152,11 +151,23 @@ CellBlock * gnc_split_register_get_active_cursor (SplitRegister *reg);
 
 void gnc_split_register_set_last_num (SplitRegister *reg, const char *num);
 
+Account * gnc_split_register_get_account_by_name (SplitRegister *reg, BasicCell * cell,
+						  const char *name, gboolean *new);
 Account * gnc_split_register_get_account (SplitRegister *reg,
                                           const char *cell_name);
 
 gboolean gnc_split_register_recn_cell_confirm (char old_flag, gpointer data);
 
 CursorClass gnc_split_register_cursor_name_to_class (const char *cursor_name);
+
+gnc_numeric gnc_split_register_debcred_cell_value (SplitRegister *reg);
+
+/* Determine if we need to perform any conversion on the splits in this
+ * transaction, and if so, what conversion we need
+ */
+gboolean gnc_split_reg_has_rate_cell (SplitRegisterType type);
+gboolean gnc_split_register_split_needs_amount (SplitRegister *reg, Split *split);
+gboolean gnc_split_register_needs_conv_rate (SplitRegister *reg, Transaction *txn, Account *acc);
+gnc_numeric gnc_split_register_get_conv_rate (Transaction *txn, Account *acc);
 
 #endif

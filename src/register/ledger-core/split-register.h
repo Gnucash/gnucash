@@ -48,6 +48,8 @@ typedef enum
   EQUITY_REGISTER,
   STOCK_REGISTER,
   CURRENCY_REGISTER,
+  RECEIVABLE_REGISTER,
+  PAYABLE_REGISTER,
   NUM_SINGLE_REGISTER_TYPES,
 
   GENERAL_LEDGER = NUM_SINGLE_REGISTER_TYPES,
@@ -70,6 +72,7 @@ typedef enum
 #define BALN_CELL  "balance"
 #define CRED_CELL  "credit"
 #define DATE_CELL  "date"
+#define DDUE_CELL  "date-due"
 #define DEBT_CELL  "debit"
 #define DESC_CELL  "description"
 #define FCRED_CELL "credit-formula"
@@ -79,12 +82,14 @@ typedef enum
 #define NOTES_CELL "notes"
 #define NUM_CELL   "num"
 #define PRIC_CELL  "price"
+#define RATE_CELL  "exchrate"
 #define RECN_CELL  "reconcile"
 #define SHRS_CELL  "shares"
 #define TBALN_CELL "trans-balance"
 #define TCRED_CELL "trans-credit"
 #define TDEBT_CELL "trans-debit"
 #define TSHRS_CELL "trans-shares"
+#define TYPE_CELL  "split-type"
 #define XFRM_CELL  "account"
 
 /* Cursor Names */
@@ -159,6 +164,9 @@ void gnc_split_register_config (SplitRegister *reg,
 /* Destroy the split register. */
 void gnc_split_register_destroy (SplitRegister *reg);
 
+/* Make a register window read-only. */
+void gnc_split_register_set_read_only (SplitRegister *reg, gboolean read_only);
+
 /* Set the template account used by template registers */
 void gnc_split_register_set_template_account (SplitRegister *reg,
                                               Account *template_account);
@@ -199,6 +207,13 @@ gboolean
 gnc_split_register_get_split_amount_virt_loc (SplitRegister *reg, Split *split,
                                               VirtualLocation *virt_loc);
 
+/* Given the current virtual location, find the split that anchors
+ * this transaction to the current register. Otherwise, returns NULL.
+ */
+Split *
+gnc_split_register_get_current_trans_split (SplitRegister *reg,
+                                            VirtualCellLocation *vcell_loc);
+
 /* Duplicates either the current transaction or the current split
  *    depending on the register mode and cursor position. Returns the
  *    split just created, or the 'main' split of the transaction just
@@ -227,7 +242,8 @@ void gnc_split_register_delete_current_trans (SplitRegister *reg);
 
 /* Deletes the non-transaction splits associated wih the current
  *    cursor, if both are non-NULL. */
-void gnc_split_register_emtpy_current_trans  (SplitRegister *reg);
+void gnc_split_register_empty_current_trans_except_split  (SplitRegister *reg, Split *split);
+void gnc_split_register_empty_current_trans  (SplitRegister *reg);
 
 /* Cancels any changes made to the current cursor, reloads the cursor
  *    from the engine, reloads the table from the cursor, and updates
@@ -294,5 +310,13 @@ void     gnc_split_register_load_xfer_cells (SplitRegister *reg,
 void gnc_copy_trans_onto_trans (Transaction *from, Transaction *to,
                                 gboolean use_cut_semantics,
                                 gboolean do_commit);
+
+/* (maybe) pop up the exchange-rate dialog for the current split.
+ * if force_dialog is TRUE, the forces the dialog to to be called.
+ * If the dialog does not complete successfully, then return TRUE.
+ * Return FALSE in all other cases (meaning "move on")
+ */
+gboolean
+gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog);
 
 #endif

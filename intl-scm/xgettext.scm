@@ -25,12 +25,15 @@
      (else
       (loop (cdr chars) (cons (car chars) accum))))))
 
-(define (write-string string out-port)
+(define (write-string string out-port filename line-number)
+  (display (string-append "/* " (substring filename 3)) out-port)
+  ;;(display line-number out-port)
+  (display " */\n" out-port)
   (display "_(" out-port)
   (expand-newlines string out-port)
   (display ")\n" out-port))
 
-(define (find-strings-in-item item out-port in-port)
+(define (find-strings-in-item item out-port filename line-no)
   (define (find-internal rest)
     (cond
      ((and (list? rest)                    ; if it's a list
@@ -40,7 +43,7 @@
            (or (eqv? '_ (car rest))        ; and the symbol is _
                (eqv? 'N_ (car rest))       ; or N_
                (eqv? 'gnc:_ (car rest))))  ; or gnc:_
-      (write-string (cadr rest) out-port)) ; then write it out
+      (write-string (cadr rest) out-port filename line-no)) ; then write it out
 
      ((pair? rest)                         ; otherwise, recurse
       (find-internal (car rest))
@@ -48,14 +51,23 @@
 
   (find-internal item))
 
-(define (find-strings in-port out-port)
-  (do ((item (read in-port) (read in-port)))
+(define (count-newlines string)
+  (define (count-internal from)
+    (let ((index (string-index string #\newline from)))
+      (if index
+	  (+ 1 (count-internal (+ 1 index)))
+	  0)))
+  (count-internal 0))
+
+(define (find-strings in-port out-port filename)
+  (do ((item (read in-port) (read in-port))
+       (line-no 1 (+ 1 line-no)))
       ((eof-object? item) #t)
-    (find-strings-in-item item out-port in-port)))
+    (find-strings-in-item item out-port filename line-no)))
 
 (let ((out-port (open "guile-strings.c" (logior O_WRONLY O_CREAT O_TRUNC)))
       (in-files (cdr (command-line))))
   (for-each (lambda (file)
               (call-with-input-file file (lambda (port)
-                                           (find-strings port out-port))))
+                                           (find-strings port out-port file))))
             in-files))

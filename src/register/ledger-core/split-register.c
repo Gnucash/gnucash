@@ -127,6 +127,7 @@
 #include "split-register-model.h"
 #include "split-register-model-save.h"
 #include "table-allgui.h"
+#include "dialog-account.h"
 
 
 /** static variables ******************************************************/
@@ -316,7 +317,7 @@ gnc_split_register_current_trans_expanded (SplitRegister *reg)
 
   if (reg->style == REG_STYLE_AUTO_LEDGER ||
       reg->style == REG_STYLE_JOURNAL)
-    return FALSE;
+    return TRUE;
 
   return info->trans_expanded;
 }
@@ -498,7 +499,7 @@ gnc_split_register_duplicate_current (SplitRegister *reg)
 
     result = gnc_ok_cancel_dialog_parented
       (gnc_split_register_get_parent (reg),
-       message, GNC_VERIFY_OK);
+       GNC_VERIFY_OK, message);
 
     if (result == GNC_VERIFY_CANCEL)
     {
@@ -799,7 +800,7 @@ gnc_split_register_paste_current (SplitRegister *reg)
 
     if (split != NULL)
       result = gnc_verify_dialog_parented (gnc_split_register_get_parent (reg),
-                                           message, FALSE);
+                                           FALSE, message);
     else
       result = TRUE;
 
@@ -836,7 +837,7 @@ gnc_split_register_paste_current (SplitRegister *reg)
 
     if (split != blank_split)
       result = gnc_verify_dialog_parented(gnc_split_register_get_parent(reg),
-                                          message, FALSE);
+                                          FALSE, message);
     else
       result = TRUE;
 
@@ -856,8 +857,9 @@ gnc_split_register_paste_current (SplitRegister *reg)
     trans_split_index = gnc_trans_split_index(trans, trans_split);
 
     if ((gnc_split_register_get_default_account (reg) != NULL) &&
-        (xaccGUIDType(&copied_leader_guid,
-                      gnc_get_current_book ()) != GNC_ID_NULL))
+        (safe_strcmp (xaccGUIDType(&copied_leader_guid,
+				   gnc_get_current_book ()),
+		      GNC_ID_NULL)))
     {
       new_guid = &info->default_account;
       gnc_copy_trans_scm_onto_trans_swap_accounts(copied_item, trans,
@@ -1016,80 +1018,41 @@ gnc_split_register_delete_current_trans (SplitRegister *reg)
 }
 
 void
-gnc_split_register_emtpy_current_trans (SplitRegister *reg)
+gnc_split_register_empty_current_trans_except_split (SplitRegister *reg, Split *split)
 {
-  SRInfo *info = gnc_split_register_get_info (reg);
-  Transaction *pending_trans;
+  SRInfo *info;
   Transaction *trans;
-  Split *blank_split;
-  Account *account;
   GList *splits;
   GList *node;
-  Split *split;
 
-  if (!reg) return;
-
-  blank_split = xaccSplitLookup (&info->blank_split_guid,
-                                 gnc_get_current_book ());
-
-  pending_trans = xaccTransLookup (&info->pending_trans_guid,
-                                   gnc_get_current_book ());
-
-  /* get the current split based on cursor position */
-  split = gnc_split_register_get_current_split (reg);
-  if (split == NULL)
+  if ((reg == NULL)  || (split == NULL))
     return;
-
-  /* If we just deleted the blank split, clean up. The user is
-   * allowed to delete the blank split as a method for discarding
-   * any edits they may have made to it. */
-  if (split == blank_split)
-  {
-    trans = xaccSplitGetParent (blank_split);
-    account = xaccSplitGetAccount (split);
-
-    /* Make sure we don't commit this later on */
-    if (trans == pending_trans)
-    {
-      info->pending_trans_guid = *xaccGUIDNULL ();
-      pending_trans = NULL;
-    }
-
-    gnc_suspend_gui_refresh ();
-
-    xaccTransBeginEdit (trans);
-    xaccTransDestroy (trans);
-    xaccTransCommitEdit (trans);
-
-    info->blank_split_guid = *xaccGUIDNULL ();
-    blank_split = NULL;
-
-    gnc_resume_gui_refresh ();
-    return;
-  }
 
   gnc_suspend_gui_refresh ();
 
   trans = xaccSplitGetParent (split);
-
   splits = g_list_copy (xaccTransGetSplitList (trans));
-
   xaccTransBeginEdit (trans);
   for (node = splits; node; node = node->next)
     if (node->data != split)
       xaccSplitDestroy (node->data);
-  xaccTransCommitEdit (trans);
+  g_list_free (splits);
 
-  /* Check pending transaction */
-  if (trans == pending_trans)
-  {
-    info->pending_trans_guid = *xaccGUIDNULL ();
-    pending_trans = NULL;
-  }
+  /* This is now the  pending transaction */
+  info = gnc_split_register_get_info (reg);
+  info->pending_trans_guid = *xaccTransGetGUID(trans);
 
   gnc_resume_gui_refresh ();
+}
 
-  g_list_free (splits);
+void
+gnc_split_register_empty_current_trans (SplitRegister *reg)
+{
+  Split *split;
+
+  /* get the current split based on cursor position */
+  split = gnc_split_register_get_current_split (reg);
+  gnc_split_register_empty_current_trans_except_split (reg, split);
 }
 
 void
@@ -1407,6 +1370,14 @@ gnc_split_register_save (SplitRegister *reg, gboolean do_commit)
    if (!gnc_split_register_auto_calc (reg, split))
      return FALSE;
 
+   /* Validate the transfer account names */
+   (void *)gnc_split_register_get_account (reg, MXFRM_CELL);
+   (void *)gnc_split_register_get_account (reg, XFRM_CELL);
+
+   /* Maybe deal with exchange-rate transfers */
+   if (gnc_split_register_handle_exchange (reg, FALSE))
+     return TRUE;
+
    gnc_suspend_gui_refresh ();
 
    /* determine whether we should commit the pending transaction */
@@ -1460,7 +1431,10 @@ gnc_split_register_save (SplitRegister *reg, gboolean do_commit)
    {
      SRSaveData *sd;
 
-     sd = gnc_split_register_save_data_new (trans, split);
+     sd = gnc_split_register_save_data_new (trans, split,
+					    (info->trans_expanded ||
+					     reg->style == REG_STYLE_AUTO_LEDGER ||
+					     reg->style == REG_STYLE_JOURNAL));
      gnc_table_save_cells (reg->table, sd);
      gnc_split_register_save_data_destroy (sd);
    }
@@ -1506,18 +1480,70 @@ gnc_split_register_save (SplitRegister *reg, gboolean do_commit)
    return TRUE;
 }
 
+
+Account *
+gnc_split_register_get_account_by_name (SplitRegister *reg, BasicCell * bcell,
+					const char *name, gboolean *refresh)
+{
+  const char *placeholder = _("The account %s does not allow transactions.\n");
+  const char *missing = _("The account %s does not exist.\n"
+			  "Would you like to create it?");
+  char *fullname;
+  ComboCell *cell = (ComboCell *) bcell;
+  Account *account;
+
+  if (!name || (strlen(name) == 0))
+    return NULL;
+
+  /* Find the account */
+  account = xaccGetAccountFromFullName (gnc_get_current_group (),
+					name, gnc_get_account_separator ());
+
+  if (!account) {
+    /* Ask if they want to create a new one. */
+    if (!gnc_verify_dialog_parented (gnc_split_register_get_parent (reg),
+				     TRUE, missing, name))
+      return NULL;
+    
+    /* User said yes, they want to create a new account. */
+    *refresh = FALSE;
+    account = gnc_ui_new_accounts_from_name_window (name);
+    if (!account)
+      return NULL;
+    *refresh = TRUE;
+
+    /* Now have a new account. Update the cell with the name as created. */
+    fullname = xaccAccountGetFullName (account, gnc_get_account_separator ());
+    gnc_combo_cell_set_value (cell, fullname);
+    gnc_basic_cell_set_changed (&cell->cell, TRUE);
+    g_free (fullname);
+  }
+
+  /* See if the account (either old or new) is a placeholder. */
+  if (xaccAccountGetPlaceholder (account)) {
+    gnc_error_dialog_parented (GTK_WINDOW(gnc_split_register_get_parent (reg)),
+			       placeholder, name);
+  }
+
+  /* Be seeing you. */
+  return account;
+}
+
 Account *
 gnc_split_register_get_account (SplitRegister *reg, const char * cell_name)
 {
+  BasicCell *cell;
   const char *name;
+  gboolean dummy;
 
   if (!gnc_table_layout_get_cell_changed (reg->table->layout, cell_name, TRUE))
     return NULL;
 
-  name = gnc_table_layout_get_cell_value (reg->table->layout, cell_name);
-
-  return xaccGetAccountFromFullName (gnc_get_current_group (),
-                                     name, gnc_get_account_separator ());
+  cell = gnc_table_layout_get_cell (reg->table->layout, cell_name);
+  if (!cell)
+    return NULL;
+  name = gnc_basic_cell_get_value (cell);
+  return gnc_split_register_get_account_by_name (reg, cell, name, &dummy);
 }
 
 static gboolean
@@ -1821,6 +1847,10 @@ gnc_split_register_type_to_account_type (SplitRegisterType sr_type)
       return CREDIT;
     case LIABILITY_REGISTER:
       return LIABILITY;
+    case PAYABLE_REGISTER:
+      return PAYABLE;
+    case RECEIVABLE_REGISTER:
+      return RECEIVABLE;
     case INCOME_LEDGER:  
     case INCOME_REGISTER:
       return INCOME;
@@ -1987,6 +2017,13 @@ gnc_split_register_config_action (SplitRegister *reg)
       gnc_combo_cell_add_menu_item (cell, _("Int"));
       gnc_combo_cell_add_menu_item (cell, _("Payment"));
       break;
+    case RECEIVABLE_REGISTER:
+    case PAYABLE_REGISTER:
+      gnc_combo_cell_add_menu_item (cell, _("Invoice"));
+      gnc_combo_cell_add_menu_item (cell, _("Payment"));
+      gnc_combo_cell_add_menu_item (cell, _("Interest"));
+      gnc_combo_cell_add_menu_item (cell, _("Credit"));
+      break;
     case INCOME_LEDGER:
     case INCOME_REGISTER:
       gnc_combo_cell_add_menu_item (cell, _("Buy"));
@@ -2008,8 +2045,8 @@ gnc_split_register_config_action (SplitRegister *reg)
     case STOCK_REGISTER:
     case PORTFOLIO_LEDGER:
     case CURRENCY_REGISTER:
-      gnc_combo_cell_add_menu_item (cell, _("Buy"));
-      gnc_combo_cell_add_menu_item (cell, _("Sell"));
+      gnc_combo_cell_add_menu_item (cell, ACTION_BUY_STR);
+      gnc_combo_cell_add_menu_item (cell, ACTION_SELL_STR);
       gnc_combo_cell_add_menu_item (cell, _("Price"));
       gnc_combo_cell_add_menu_item (cell, _("Fee"));
       /* Action: Dividend */
@@ -2050,7 +2087,7 @@ gnc_split_register_config_cells (SplitRegister *reg)
     ((ComboCell *)
      gnc_table_layout_get_cell (reg->table->layout, ACTN_CELL), TRUE);
 
-  /* Use 6 decimal places for prices */
+  /* Use 6 decimal places for prices and "exchange rates"  */
   gnc_price_cell_set_fraction
     ((PriceCell *)
      gnc_table_layout_get_cell (reg->table->layout, PRIC_CELL), 1000000);
@@ -2063,6 +2100,15 @@ gnc_split_register_config_cells (SplitRegister *reg)
   gnc_price_cell_set_print_info
     ((PriceCell *) gnc_table_layout_get_cell (reg->table->layout, TSHRS_CELL),
      gnc_default_share_print_info ());
+
+  /* Initialize the rate cells */
+  gnc_price_cell_set_fraction
+    ((PriceCell *)
+     gnc_table_layout_get_cell (reg->table->layout, RATE_CELL), 1000000);
+
+  gnc_price_cell_set_print_info
+    ((PriceCell *) gnc_table_layout_get_cell (reg->table->layout, RATE_CELL),
+     gnc_default_price_print_info());
 
   /* The action cell should accept strings not in the list */
   gnc_combo_cell_set_strict
@@ -2099,6 +2145,9 @@ gnc_split_register_init (SplitRegister *reg,
   TableLayout *layout;
   TableModel *model;
   TableControl *control;
+
+  /* Register 'destroy' callback */
+  gnc_ui_register_account_destroy_callback (gnc_ledger_display_destroy_by_account);
 
   reg->sr_info = NULL;
 
@@ -2213,11 +2262,13 @@ gnc_split_register_destroy_info (SplitRegister *reg)
   g_free (info->tdebit_str);
   g_free (info->credit_str);
   g_free (info->tcredit_str);
+  g_list_free (info->saved_slist);
 
   info->debit_str = NULL;
   info->tdebit_str = NULL;
   info->credit_str = NULL;
   info->tcredit_str = NULL;
+  info->saved_slist = NULL;
 
   g_free (reg->sr_info);
 
@@ -2292,8 +2343,6 @@ gnc_split_register_cleanup (SplitRegister *reg)
 void
 gnc_split_register_destroy (SplitRegister *reg)
 {
-  GList *node;
-
   if (!reg)
     return;
 
@@ -2304,4 +2353,10 @@ gnc_split_register_destroy (SplitRegister *reg)
 
   /* free the memory itself */
   g_free (reg);
+}
+
+void 
+gnc_split_register_set_read_only (SplitRegister *reg, gboolean read_only)
+{
+  gnc_table_model_set_read_only (reg->table->model, read_only);
 }

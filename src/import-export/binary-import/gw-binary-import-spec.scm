@@ -1,48 +1,29 @@
-(define-module (g-wrapped gw-app-utils-spec))
 
-(use-modules (g-wrap))
+(define-module (g-wrapped gw-app-utils-spec))
 
 (debug-set! maxdepth 100000)
 (debug-set! stack    2000000)
 
-(let ((mod (gw:new-module "gw-binary-import")))
-  (define (standard-c-call-gen result func-call-code)
-    (list (gw:result-get-c-name result) " = " func-call-code ";\n"))
+(use-modules (g-wrap))
 
-  (define (add-standard-result-handlers! type c->scm-converter)
-    (define (standard-pre-handler result)
-      (let* ((ret-type-name (gw:result-get-proper-c-type-name result))
-             (ret-var-name (gw:result-get-c-name result)))
-        (list "{\n"
-              "    " ret-type-name " " ret-var-name ";\n")))
+(use-modules (g-wrap gw-standard-spec))
 
-    (gw:type-set-pre-call-result-ccodegen! type standard-pre-handler)
+(let ((ws (gw:new-wrapset "gw-binary-import")))
 
-    (gw:type-set-post-call-result-ccodegen!
-     type
-     (lambda (result)
-       (let* ((scm-name (gw:result-get-scm-name result))
-              (c-name (gw:result-get-c-name result)))
-         (list
-          (c->scm-converter scm-name c-name)
-          "  }\n")))))
+  (gw:wrapset-depends-on ws "gw-standard")
 
-  (gw:module-depends-on mod "gw-runtime")
+  (gw:wrapset-set-guile-module! ws '(g-wrapped gw-binary-import))
 
-  (gw:module-set-guile-module! mod '(g-wrapped gw-binary-import))
-
-  (gw:module-set-declarations-ccodegen!
-   mod
-   (lambda (client-only?) 
-     (list 
-      "#include <druid-commodity.h>\n"
-      )))
+  (gw:wrapset-add-cs-declarations!
+   ws
+   (lambda (wrapset client-wrapset) 
+     "#include <druid-commodity.h>\n"))
 
   (gw:wrap-function
-   mod
+   ws
    'gnc:import-legacy-commodities
    '<gw:void>
    "gnc_import_legacy_commodities"
-   '(((<gw:m-chars-caller-owned> gw:const) filename))
+   '(((<gw:mchars> caller-owned const) filename))
    "Launch the legacy-commodity import druid")
 )

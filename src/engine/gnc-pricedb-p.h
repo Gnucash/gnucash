@@ -26,21 +26,21 @@
 
 #include <glib.h>
 
-#include "BackendP.h"
 #include "GNCIdP.h"
 #include "gnc-book.h"
+#include "gnc-engine.h"
 #include "gnc-pricedb.h"
 
 struct gnc_price_s
 {
   /* 'public' data fields */
   GUID    guid;                  /* globally unique price id */
-  GNCEntityTable *entity_table;  /* table in which price is stored */
+  GNCBook *book;                 /* book to which this price belongs to */
 
   GNCPriceDB *db;
   gnc_commodity *commodity;
   gnc_commodity *currency;
-  Timespec time;
+  Timespec tmspec;
   char *source;
   char *type;
   gnc_numeric value;
@@ -48,6 +48,7 @@ struct gnc_price_s
   guint32  version_check;        /* data aging timestamp */
 
   /* 'private' object management fields */
+  GNCEntityTable *entity_table;  /* table in which price is stored */
   guint32  refcount;             /* garbage collection reference count */
   gint32   editlevel;            /* nesting level of begin/end edit calls */
   gboolean not_saved;            /* price edit saved flag */
@@ -59,7 +60,7 @@ struct gnc_price_s
 struct gnc_price_db_s
 {
   GHashTable *commodity_hash;
-  Backend *backend;
+  GNCBook *book;   /* book to which this database and all the prices belong to */
   gboolean dirty;
 };
 

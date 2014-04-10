@@ -12,12 +12,14 @@
   (use-modules (gnucash gnc-module))
   (gnc:module-system-init)
   (gnc:module-load "gnucash/qif-io/core" 0)
+  ;; XXX: Need app/file to initialize (gnc:get-current-session/book)
+  (gnc:module-load "gnucash/app-file" 0)
   
   (let ((qiffile (qif-io:make-empty-file))
         (acct-table (qif-io:make-empty-acct-table))
         (com-table (gnc:commodity-table-new)))
 
-    (gnc:engine-commodity-table-construct com-table)
+    (gnc:commodity-table-add-default-data com-table)
 
     ;; read the file and look at data formats. we need to do this
     ;; immediately when loading a file.
@@ -57,14 +59,16 @@
       (let ((group (qif-io:acct-table-make-gnc-group 
                     acct-table qiffile commodity)))
         ;; write the file
-        (let* ((session (gnc:session-new))
+        (let* ((session (gnc:get-current-session))
                (book (gnc:session-get-book session))
                (name (simple-format #f "file:~A.gnc" filename)))
           (simple-format #t "using book name='~A'\n" name)
-          (gnc:book-set-group book group)
+          (gnc:group-concat-group (gnc:book-get-group book) group)
+	  (gnc:account-group-destroy group)
           (gnc:session-begin session name #t #t)
-          (gnc:session-save book)
-          (gnc:session-end book)))))
+          (gnc:session-save session)
+          (gnc:session-end session)
+	  (gnc:file-quit)))))
   0)
 
 (define (run-test)

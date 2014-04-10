@@ -27,7 +27,7 @@
  * Postgres backend utility macros
  *
  * HISTORY:
- * Copyright (c) 2000, 2001 Linas Vepstas
+ * Copyright (c) 2000, 2001, 2002 Linas Vepstas <linas@linas.org>
  * 
  */
 
@@ -68,11 +68,15 @@ gpointer pgendGetResults (PGBackend *be,
  */
 gnc_commodity * gnc_string_to_commodity (const char *str, GNCBook *book);
 
-/* hack alert -- calling PQFinish() is quite harsh, since all 
- * subsequent sql queries will fail. On the other hand, killing
+int sendQuery(PGBackend *be,char * buff);
+int finishQuery(PGBackend *be);
+
+/* hack alert -- calling PQfinish() on error is quite harsh, since 
+ * all subsequent sql queries will fail. On the other hand, killing
  * anything that follows *is* a way of minimizing data corruption 
  * due to subsequent mishaps ... so anyway, error handling in these 
- * routines needs to be rethought. 
+ * routines needs to be redone.   There are notes describing the
+ * 'correct' solution in src/doc/backend-error.txt.
  */
 
 /* ============================================================= */
@@ -80,23 +84,22 @@ gnc_commodity * gnc_string_to_commodity (const char *str, GNCBook *book);
  * It performs a minimal check to see that the send succeeded. 
  */
 
-#define SEND_QUERY(be,buff,retval) 				\
-{								\
-   int rc;							\
-   if (NULL == be->connection) return retval;			\
-   PINFO ("sending query %s", buff);				\
-   rc = PQsendQuery (be->connection, buff);			\
-   if (!rc)							\
-   {								\
+#define SEND_QUERY(be,buff,retval)                              \
+{                                                               \
+   int rc;                                                      \
+   if (NULL == be->connection) return retval;                   \
+   PINFO ("sending query %s", buff);                            \
+   rc = PQsendQuery (be->connection, buff);                     \
+   if (!rc)                                                     \
+   {                                                            \
+      gchar * msg = (gchar *)PQerrorMessage(be->connection);    \
       /* hack alert -- we need kinder, gentler error handling */\
-      PERR("send query failed:\n"				\
-           "\t%s", PQerrorMessage(be->connection));		\
-      PQfinish (be->connection);				\
-      be->connection = NULL;					\
-      xaccBackendSetError (&be->be, ERR_BACKEND_CONN_LOST);	\
-      return retval;						\
-   }								\
-}
+      PERR("send query failed:\n\t%s", msg);                    \
+      xaccBackendSetMessage (&be->be, msg);                     \
+      xaccBackendSetError (&be->be, ERR_BACKEND_SERVER_ERR);    \
+      return retval;                                            \
+   }                                                            \
+}                                                               \
 
 /* --------------------------------------------------------------- */
 /* The FINISH_QUERY macro makes sure that the previously sent
@@ -105,54 +108,84 @@ gnc_commodity * gnc_string_to_commodity (const char *str, GNCBook *book);
  * discarded (only error conditions are checked for).
  */
 
-#define FINISH_QUERY(conn) 					\
-{								\
-   int i=0;							\
-   PGresult *result; 						\
-   /* complete/commit the transaction, check the status */	\
-   do {								\
-      ExecStatusType status;					\
-      result = PQgetResult((conn));				\
-      if (!result) break;					\
-      PINFO ("clearing result %d", i);				\
-      status = PQresultStatus(result);  			\
-      if (PGRES_COMMAND_OK != status) {				\
-         PERR("finish query failed:\n"				\
-              "\t%s", PQerrorMessage((conn)));			\
-         PQclear(result);					\
-         PQfinish ((conn));					\
-         be->connection = NULL;					\
-         xaccBackendSetError (&be->be, ERR_BACKEND_CONN_LOST);	\
-	 break;							\
-      }								\
-      PQclear(result);						\
-      i++;							\
-   } while (result);						\
-}
+#define FINISH_QUERY(conn)                                      \
+{                                                               \
+   int i=0;                                                     \
+   PGresult *result;                                            \
+   /* complete/commit the transaction, check the status */      \
+   do {                                                         \
+      gchar *msg = NULL;                                        \
+      ExecStatusType status;                                    \
+      result = PQgetResult((conn));                             \
+      if (!result) break;                                       \
+      PINFO ("clearing result %d", i);                          \
+      status = PQresultStatus(result);                          \
+      if (PGRES_COMMAND_OK != status) {                         \
+         msg = PQresultErrorMessage(result);                    \
+         PERR("finish query failed:\n\t%s", msg);               \
+         PQclear(result);                                       \
+         xaccBackendSetMessage (&be->be, msg);                  \
+         xaccBackendSetError (&be->be, ERR_BACKEND_SERVER_ERR); \
+         break;                                                 \
+      }                                                         \
+      PQclear(result);                                          \
+      i++;                                                      \
+   } while (result);                                            \
+}                                                               \
 
 /* --------------------------------------------------------------- */
 /* The GET_RESULTS macro grabs the result of an pgSQL query off the
  * wire, and makes sure that no errors occured. Results are left 
  * in the result buffer.
  */
-#define GET_RESULTS(conn,result) 				\
-{								\
-   ExecStatusType status;  					\
-   result = PQgetResult (conn);					\
-   if (!result) break;						\
-   status = PQresultStatus(result);				\
-   if ((PGRES_COMMAND_OK != status) &&				\
-       (PGRES_TUPLES_OK  != status))				\
-   {								\
-      PERR("failed to get result to query:\n"			\
-           "\t%s", PQerrorMessage((conn)));			\
-      PQclear (result);						\
-      PQfinish (conn);						\
-      be->connection = NULL;					\
-      xaccBackendSetError (&be->be, ERR_BACKEND_SERVER_ERR);	\
-      break;							\
-   }								\
-}
+#define GET_RESULTS(conn,result)                            \
+{                                                           \
+   gchar *msg = NULL;                                       \
+   ExecStatusType status;                                   \
+   result = PQgetResult (conn);                             \
+   if (!result) break;                                      \
+   status = PQresultStatus(result);                         \
+   msg = PQresultErrorMessage(result);                      \
+   if ((PGRES_COMMAND_OK != status) &&                      \
+       (PGRES_TUPLES_OK  != status))                        \
+   {                                                        \
+      PERR("failed to get result to query:\n\t%s", msg);    \
+      PQclear (result);                                     \
+      xaccBackendSetMessage (&be->be, msg);                 \
+      xaccBackendSetError (&be->be, ERR_BACKEND_SERVER_ERR);\
+      break;                                                \
+   }                                                        \
+}                                                           \
+
+/* --------------------------------------------------------------- */
+/* The EXEC_QUERY macro executes a query and returns the results
+ * and makes sure that no errors occured. Results are left 
+ * in the result buffer.
+ */
+#define EXEC_QUERY(conn,buff,result)                        \
+{                                                           \
+   gchar *msg = NULL;                                       \
+   ExecStatusType status = 0;                               \
+   result = PQexec (conn, buff);                            \
+   if (result) {                                            \
+     status = PQresultStatus(result);                       \
+     msg = PQresultErrorMessage(result);                    \
+   } else {                                                 \
+       msg = PQerrorMessage(conn);                          \
+   }                                                        \
+   if (!result ||                                           \
+       ((PGRES_COMMAND_OK != status) &&                     \
+        (PGRES_TUPLES_OK  != status)))                      \
+   {                                                        \
+      PERR("failed to get result to query:\n"               \
+           "\t%s", msg);                                    \
+      if (result)                                           \
+        PQclear (result);                                   \
+      result = NULL;                                        \
+      xaccBackendSetMessage (&be->be, msg);                 \
+      xaccBackendSetError (&be->be, ERR_BACKEND_SERVER_ERR);\
+   }                                                        \
+}                                                           \
 
 /* --------------------------------------------------------------- */
 /* The IF_ONE_ROW macro counts the number of rows returned by 
@@ -309,6 +342,29 @@ gnc_commodity * gnc_string_to_commodity (const char *str, GNCBook *book);
       PINFO("mis-match: %s sql=%24.18g, eng=%24.18g", sqlname, 	\
          sqlval, engval); 					\
       ndiffs++; 						\
+   }								\
+}
+
+/* --------------------------------------------------------------- */
+
+#define FIND_BOOK(book) {					\
+   if (NULL == book)						\
+   {								\
+      GList *node;						\
+      GUID book_guid;						\
+								\
+      /* Find the book that holds this item */			\
+      book_guid = nullguid;  /* just in case the read fails */	\
+      string_to_guid (DB_GET_VAL("bookGUID",j), &book_guid);	\
+								\
+      book = NULL;						\
+      for (node=be->blist; node; node=node->next)		\
+      {								\
+         book = node->data;					\
+         if (guid_equal (&book->guid, &book_guid)) break;	\
+         book = NULL;						\
+      }								\
+      if (!book) return data;					\
    }								\
 }
 

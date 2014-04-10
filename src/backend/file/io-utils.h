@@ -29,10 +29,12 @@
 
 #include "gnc-book.h"
 #include "Group.h"
+#include "io-gncxml-v2.h"
 
-void write_account_group(FILE *out, AccountGroup *grp);
-void write_accounts(FILE *out, GNCBook *book);
-void write_commodities(FILE *out, GNCBook *book);
+void write_account_group(FILE *out, AccountGroup *grp, sixtp_gdv2 *gd);
+void write_accounts(FILE *out, GNCBook *book, sixtp_gdv2 *gd);
+void write_book_parts(FILE *out, GNCBook *book);
+void write_commodities(FILE *out, GNCBook *book, sixtp_gdv2 *gd);
 
 void write_emacs_trailer(FILE *out);
 

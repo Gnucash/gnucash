@@ -26,10 +26,6 @@
 (define (non-negative-integer? value)
   (and (integer? value) (>= value 0)))
 
-(gnc:register-configuration-option
- (gnc:make-internal-option
-  "__tips" "current_tip_number" 0))
-
 (define gnc:*number-of-tips* 
   (gnc:make-config-var
    "Total number of tips"
@@ -37,39 +33,33 @@
    =
    0))
 
-(define gnc:*tip-file*
-  (gnc:make-config-var
-   "Tip file"
-   (lambda (var value) (if (string? value) (list value) #f))
-   string=?
-   "tip-list.scm"))
+(define gnc:*tip-file* #f)
 
 (define gnc:*tip-list* '())
 
 (define (gnc:read-tips)
-  (let ((in-port (open-input-file 
-		  (gnc:find-in-directories 
-		   (gnc:config-var-value-get gnc:*tip-file*)
-		   (gnc:config-var-value-get gnc:*load-path*)))))
-	(set! gnc:*tip-list* (read in-port))
-        (set! gnc:*tip-list*
-              (map (lambda (pair) (cadr pair)) gnc:*tip-list*))
-	(if (not (= (length gnc:*tip-list*) (gnc:current-tip-number)))
-	    (begin
-	      (gnc:config-var-value-set! gnc:*number-of-tips* #t
-                                         (length gnc:*tip-list*))
-	      (if (<= (gnc:config-var-value-get gnc:*number-of-tips*)
-		      (gnc:current-tip-number))
-		  (gnc:reset-tip-number))))
-	(close-port in-port)
-	#f))
+  (let ((in-port
+         (open-input-file
+          (%search-load-path (gnc:config-var-value-get gnc:*tip-file*)))))
+    (set! gnc:*tip-list* (read in-port))
+    (set! gnc:*tip-list*
+          (map (lambda (pair) (cadr pair)) gnc:*tip-list*))
+    (if (not (= (length gnc:*tip-list*) (gnc:current-tip-number)))
+        (begin
+          (gnc:config-var-value-set! gnc:*number-of-tips* #t
+                                     (length gnc:*tip-list*))
+          (if (<= (gnc:config-var-value-get gnc:*number-of-tips*)
+                  (gnc:current-tip-number))
+              (gnc:reset-tip-number))))
+    (close-port in-port)
+    #f))
 
 (define (gnc:current-tip-number)
   (let ((num (gnc:option-value
               (gnc:lookup-global-option "__tips" "current_tip_number"))))
     (if (<= (gnc:config-var-value-get gnc:*number-of-tips*) num)
         (gnc:reset-tip-number))
-  (gnc:option-value (gnc:lookup-global-option "__tips" "current_tip_number"))))
+    (gnc:option-value (gnc:lookup-global-option "__tips" "current_tip_number"))))
 
 (define (gnc:get-current-tip)
   (_ (list-ref gnc:*tip-list* (gnc:current-tip-number))))
@@ -93,12 +83,23 @@
                                       gnc:*number-of-tips*) 1))
 	(gnc:option-set-value opt new-value))))
 
-(gnc:read-tips)
+(define (gnc:tip-of-the-day-startup-func)
+  (let ((tip-opt (gnc:lookup-global-option "General"
+                                           "Display \"Tip of the Day\"")))
+    (if (gnc:option-value tip-opt)
+        (gnc:ui-totd-dialog-create-and-run))))
 
-(gnc:hook-add-dangler 
- gnc:*ui-startup-hook* 
- (lambda () 
-   (let ((tip-opt (gnc:lookup-global-option "General"
-                                            "Display \"Tip of the Day\"")))
-     (if (gnc:option-value tip-opt)
-         (gnc:ui-totd-dialog-create-and-run)))))
+(define (gnc:initialize-tip-of-the-day)
+  (set! gnc:*tip-file*
+        (gnc:make-config-var
+         "Tip file"
+         (lambda (var value) (if (string? value) (list value) #f))
+         string=?
+         "tip-list.scm"))
+
+  (gnc:register-configuration-option
+   (gnc:make-internal-option "__tips" "current_tip_number" 0))
+  
+  (gnc:read-tips)
+  
+  (gnc:hook-add-dangler gnc:*ui-startup-hook*  gnc:tip-of-the-day-startup-func))

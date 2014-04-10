@@ -40,6 +40,42 @@ static short module = MOD_LEDGER;
 
 
 static void
+gnc_split_register_load_recn_cells (SplitRegister *reg)
+{
+  RecnCell *cell;
+  const char * s;
+
+  if (!reg) return;
+
+  cell = (RecnCell *)
+    gnc_table_layout_get_cell (reg->table->layout, RECN_CELL);
+
+  if (!cell) return;
+
+  s = gnc_get_reconcile_valid_flags ();
+  gnc_recn_cell_set_valid_flags (cell, s, *s);
+  gnc_recn_cell_set_flag_order (cell, gnc_get_reconcile_flag_order ());
+  gnc_recn_cell_set_string_getter (cell, gnc_get_reconcile_str);
+}
+
+static void
+gnc_split_register_load_type_cells (SplitRegister *reg)
+{
+  RecnCell *cell;
+
+  if (!reg) return;
+
+  cell = (RecnCell *)
+    gnc_table_layout_get_cell (reg->table->layout, TYPE_CELL);
+
+  if (!cell) return;
+
+  /* FIXME: These should get moved to an i18n function */
+  gnc_recn_cell_set_valid_flags (cell, "IP?", 'I');
+  gnc_recn_cell_set_flag_order (cell, "IP");
+}
+
+static void
 gnc_split_register_add_transaction (SplitRegister *reg,
                                     Transaction *trans,
                                     Split *split,
@@ -47,7 +83,6 @@ gnc_split_register_add_transaction (SplitRegister *reg,
                                     CellBlock *split_cursor,
                                     gboolean visible_splits,
                                     gboolean start_primary_color,
-                                    gboolean sort_splits,
                                     gboolean add_blank,
                                     Transaction *find_trans,
                                     Split *find_split,
@@ -64,43 +99,6 @@ gnc_split_register_add_transaction (SplitRegister *reg,
                        TRUE, start_primary_color, *vcell_loc);
   vcell_loc->virt_row++;
 
-  if (sort_splits)
-  {
-    /* first debits */
-    for (node = xaccTransGetSplitList (trans); node; node = node->next)
-    {
-      Split *secondary = node->data;
-
-      if (gnc_numeric_negative_p (xaccSplitGetValue (secondary)))
-        continue;
-
-      if (secondary == find_split && find_class == CURSOR_CLASS_SPLIT)
-        *new_split_row = vcell_loc->virt_row;
-
-      gnc_table_set_vcell (reg->table, split_cursor,
-                           xaccSplitGetGUID (secondary),
-                           visible_splits, TRUE, *vcell_loc);
-      vcell_loc->virt_row++;
-    }
-
-    /* then credits */
-    for (node = xaccTransGetSplitList (trans); node; node = node->next)
-    {
-      Split *secondary = node->data;
-
-      if (!gnc_numeric_negative_p (xaccSplitGetValue (secondary)))
-        continue;
-
-      if (secondary == find_split && find_class == CURSOR_CLASS_SPLIT)
-        *new_split_row = vcell_loc->virt_row;
-
-      gnc_table_set_vcell (reg->table, split_cursor,
-                           xaccSplitGetGUID (secondary),
-                           visible_splits, TRUE, *vcell_loc);
-      vcell_loc->virt_row++;
-    }
-  }
-  else
   {
     for (node = xaccTransGetSplitList (trans); node; node = node->next)
     {
@@ -177,13 +175,28 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
   if (blank_split == NULL)
   {
     Transaction *trans;
+    gnc_commodity * currency = NULL;
+
+    /* Determine the proper currency to use for this transaction.
+     * if default_account != NULL and default_account->commodity is
+     * a currency, then use that.  Otherwise use the default currency.
+     */
+    if (default_account != NULL) {
+      gnc_commodity * commodity = xaccAccountGetCommodity (default_account);
+      if (commodity) {
+	const char * namespace = gnc_commodity_get_namespace (commodity);
+	if (!safe_strcmp (namespace, GNC_COMMODITY_NS_ISO) ||
+	    !safe_strcmp (namespace, GNC_COMMODITY_NS_LEGACY))
+	  currency = commodity;
+      }
+    }
 
     gnc_suspend_gui_refresh ();
 
     trans = xaccMallocTransaction (gnc_get_current_book ());
 
     xaccTransBeginEdit (trans);
-    xaccTransSetCurrency (trans, gnc_default_currency ()); /* is this lame? */
+    xaccTransSetCurrency (trans, currency ? currency : gnc_default_currency ());
     xaccTransSetDateSecs (trans, info->last_date_entered);
     blank_split = xaccMallocSplit (gnc_get_current_book ());
     xaccTransAppendSplit (trans, blank_split);
@@ -299,6 +312,21 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
   if (multi_line)
     trans_table = g_hash_table_new (g_direct_hash, g_direct_equal);
 
+  /*
+   * Which split list to use?  If there is a transction pending, then
+   * use the saved list so that the transaction is guaranteed to
+   * remain in the register intil the user finishes editing
+   * it. Otherwise, the moment the user changes the account field of
+   * the split that is attached to the register, the transaction will
+   * be ripped out from underneath them.
+   */
+  if (pending_trans != NULL) {
+    slist = info->saved_slist;
+  } else {
+    g_list_free(info->saved_slist);
+    info->saved_slist = g_list_copy(slist);
+  }
+
   /* populate the table */
   for (node = slist; node; node = node->next) 
   {
@@ -373,7 +401,7 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
     gnc_split_register_add_transaction (reg, trans, split,
                                         lead_cursor, split_cursor,
                                         multi_line, start_primary_color,
-                                        TRUE, TRUE,
+                                        TRUE,
                                         find_trans, find_split, find_class,
                                         &new_split_row, &vcell_loc);
 
@@ -410,7 +438,7 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
 
   gnc_split_register_add_transaction (reg, trans, split,
                                       lead_cursor, split_cursor,
-                                      multi_line, start_primary_color, FALSE,
+                                      multi_line, start_primary_color,
                                       info->blank_split_edited, find_trans,
                                       find_split, find_class, &new_split_row,
                                       &vcell_loc);
@@ -518,6 +546,8 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
   gnc_table_control_allow_move (table->control, TRUE);
 
   gnc_split_register_load_xfer_cells (reg, default_account);
+  gnc_split_register_load_recn_cells (reg);
+  gnc_split_register_load_type_cells (reg);
 }
 
 static void
@@ -538,6 +568,9 @@ gnc_load_xfer_cell (ComboCell * cell, AccountGroup * grp)
   {
     Account *account = node->data;
     char *name;
+
+    if (xaccAccountGetPlaceholder (account))
+	continue;
 
     name = xaccAccountGetFullName (account, gnc_get_account_separator ());
     if (name != NULL)

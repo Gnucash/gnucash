@@ -483,7 +483,8 @@ gnc_date_edit_set_time (GNCDateEdit *gde, time_t the_time)
 	struct tm *mytm;
 	char buffer [40];
 
-	g_return_if_fail(gde != NULL);
+	g_return_if_fail (gde != NULL);
+        g_return_if_fail (GNC_IS_DATE_EDIT (gde));
 
 	if (the_time == 0)
 		the_time = time (NULL);
@@ -506,6 +507,12 @@ gnc_date_edit_set_time (GNCDateEdit *gde, time_t the_time)
 	gtk_entry_set_text (GTK_ENTRY (gde->time_entry), buffer);
 }
 
+void
+gnc_date_edit_set_time_ts (GNCDateEdit *gde, Timespec the_time)
+{
+        gnc_date_edit_set_time (gde, the_time.tv_sec);
+}
+
 /**
  * gnc_date_edit_set_popup_range:
  * @gde: The GNCDateEdit widget
@@ -518,7 +525,8 @@ gnc_date_edit_set_time (GNCDateEdit *gde, time_t the_time)
 void
 gnc_date_edit_set_popup_range (GNCDateEdit *gde, int low_hour, int up_hour)
 {
-        g_return_if_fail(gde != NULL);
+	g_return_if_fail (gde != NULL);
+        g_return_if_fail (GNC_IS_DATE_EDIT (gde));
 
 	gde->lower_hour = low_hour;
 	gde->upper_hour = up_hour;
@@ -564,6 +572,25 @@ date_accel_key_press(GtkWidget *widget, GdkEventKey *event, gpointer data)
         return TRUE;
 }
 
+static int
+date_focus_out_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
+{
+	GNCDateEdit *gde = data;
+        struct tm tm;
+
+        tm = gnc_date_edit_get_date_internal (gde);
+        gnc_date_edit_set_time (gde, mktime (&tm));
+
+	gtk_calendar_select_month (GTK_CALENDAR (gde->calendar), tm.tm_mon,
+                                   1900 + tm.tm_year);
+        gtk_calendar_select_day (GTK_CALENDAR (gde->calendar), tm.tm_mday);
+
+	gtk_signal_emit (GTK_OBJECT (gde), date_edit_signals [DATE_CHANGED]);
+	gtk_signal_emit (GTK_OBJECT (gde), date_edit_signals [TIME_CHANGED]);
+
+        return TRUE;
+}
+
 static void
 create_children (GNCDateEdit *gde)
 {
@@ -577,6 +604,8 @@ create_children (GNCDateEdit *gde)
 	gtk_widget_show (gde->date_entry);
 	gtk_signal_connect (GTK_OBJECT (gde->date_entry), "key_press_event",
 			    GTK_SIGNAL_FUNC(date_accel_key_press), gde);
+	gtk_signal_connect (GTK_OBJECT (gde->date_entry), "focus_out_event",
+			    GTK_SIGNAL_FUNC(date_focus_out_event), gde);
 
 	gde->date_button = gtk_button_new ();
 	gtk_signal_connect (GTK_OBJECT (gde->date_button), "clicked",
@@ -675,6 +704,12 @@ gnc_date_edit_new (time_t the_time, int show_time, int use_24_format)
                 (the_time,
                  ((show_time ? GNC_DATE_EDIT_SHOW_TIME : 0)
                   | (use_24_format ? GNC_DATE_EDIT_24_HR : 0)));
+}
+
+GtkWidget *
+gnc_date_edit_new_ts (Timespec the_time, int show_time, int use_24_format)
+{
+        return gnc_date_edit_new (the_time.tv_sec, show_time, use_24_format);
 }
 
 /**
@@ -794,6 +829,16 @@ gnc_date_edit_get_date (GNCDateEdit *gde)
 	return mktime (&tm);
 }
 
+Timespec
+gnc_date_edit_get_date_ts (GNCDateEdit *gde)
+{
+        Timespec ts = { 0, 0 };
+
+        ts.tv_sec = gnc_date_edit_get_date (gde);
+
+        return ts;
+}
+
 /**
  * gnc_date_edit_get_date_end:
  * @gde: The GNCDateEdit widget
@@ -827,6 +872,16 @@ gnc_date_edit_get_date_end (GNCDateEdit *gde)
         }
 
 	return mktime (&tm);
+}
+
+Timespec
+gnc_date_edit_get_date_end_ts (GNCDateEdit *gde)
+{
+        Timespec ts = { 0, 0 };
+
+        ts.tv_sec = gnc_date_edit_get_date_end (gde);
+
+        return ts;
 }
 
 /**
@@ -895,6 +950,26 @@ gnc_date_edit_get_flags (GNCDateEdit *gde)
 
 	return gde->flags;
 }
+
+/**
+ * gnc_date_editable_enters:
+ * @dialog: The gnome dialog this date editor lives in
+ * @gde: The date editor to modity
+ * 
+ * Extracts the editable field from a GNCDateEdit widget, and sets it
+ * up so that pressing the Enter key in this field as the same as
+ * clicking the button that has the default.
+ **/
+void
+gnc_date_editable_enters (GnomeDialog *dialog, GNCDateEdit *gde)
+{
+	if (!dialog || !gde)
+		return;
+
+	gnome_dialog_editable_enters(GNOME_DIALOG(dialog),
+				     GTK_EDITABLE(gde->date_entry));
+}
+
 
 /*
   Local Variables:

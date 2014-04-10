@@ -1,0 +1,80 @@
+<?xml version="1.0"?>
+<gnc-account-example>
+    <gnc-act:title>
+      Emprunt Etudiant 
+    </gnc-act:title>
+    <gnc-act:short-description>
+      Comptes pour pour les emprunts étudiants et les intérêts associés.
+    </gnc-act:short-description>
+    <gnc-act:long-description>
+    Vous devriez sélectionner cet ensemble de comptes si vous avez un emprunt étudiant (emprunt étudiant,  intérêts d'emprunt étudiant).
+  </gnc-act:long-description>    
+<gnc:account version="2.0.0">
+  <act:name>Passif</act:name>
+  <act:id type="new">4e7e8e39487ad4aba0b62c2232c577c5</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Passif</act:description>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Emprunts</act:name>
+  <act:id type="new">c3219e37044b0531d66a7b64433b026d</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Emprunt</act:description>
+  <act:parent type="new">4e7e8e39487ad4aba0b62c2232c577c5</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>emprunt étudiant</act:name>
+  <act:id type="new">ddeba367199bd025e00420a19d6f9ae4</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>emprunt étudiant</act:description>
+  <act:parent type="new">c3219e37044b0531d66a7b64433b026d</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Dépenses</act:name>
+  <act:id type="new">fdbf47b39f70e8818f325eee7931039a</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Dépenses</act:description>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Intérêts</act:name>
+  <act:id type="new">1cfcd30ea97b954ffb550ab87d561033</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Intérêts</act:description>
+  <act:parent type="new">fdbf47b39f70e8818f325eee7931039a</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Intérêts d'emprunt étudiant</act:name>
+  <act:id type="new">04e3d970dc60d3920f40b93fce8924a2</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Intérêts d'emprunt étudiant</act:description>
+  <act:parent type="new">1cfcd30ea97b954ffb550ab87d561033</act:parent>
+</gnc:account>
+</gnc-account-example>
+
+<!-- Local variables: -->
+<!-- mode: xml        -->
+<!-- End:             -->

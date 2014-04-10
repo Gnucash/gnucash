@@ -96,7 +96,10 @@
           (if (eq? field 'attribute)
               (if (list? value)
                   (gnc:html-markup-style-info-set-attribute!
-                   style (car value) (cadr value)))
+                   style (car value) 
+		   (if (null? (cdr value))
+		       #f
+		       (cadr value))))
 	      (begin 
 		(if (memq field '(font-size font-face font-color))
 		    (gnc:html-markup-style-info-set-closing-font-tag!
@@ -281,9 +284,15 @@
   (gnc:amount->string datum (gnc:default-print-info #f)))
 
 (define (gnc:default-html-gnc-monetary-renderer datum params)
-  (gnc:amount->string 
-   (gnc:gnc-monetary-amount datum) 
-   (gnc:commodity-print-info (gnc:gnc-monetary-commodity datum) #t)))
+  (let* ((result (gnc:amount->string 
+		  (gnc:gnc-monetary-amount datum) 
+		  (gnc:commodity-print-info 
+		   (gnc:gnc-monetary-commodity datum) #t)))
+	 (ind (string-index result (integer->char 164))))
+    (if ind
+	(string-append (substring result 0 ind) "&euro;" 
+		       (substring result (+ 1 ind) (string-length result)))
+	result)))
 
 (define (gnc:default-html-number-renderer datum params)  
   (gnc:amount->string

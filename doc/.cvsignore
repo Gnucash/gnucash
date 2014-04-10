@@ -1,2 +1,4 @@
 Makefile
 Makefile.in
+gnucash.1
+gnc-prices.1

@@ -1,0 +1,11 @@
+*.la
+*.lo
+.deps
+.libs
+.scm-links
+Makefile
+Makefile.in
+gw-dialog-tax-table.c
+gw-dialog-tax-table.h
+gw-dialog-tax-table.html
+gw-dialog-tax-table.scm

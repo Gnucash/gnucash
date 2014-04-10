@@ -54,15 +54,33 @@
  *    they want to keep their data files.
  *
  * 6) In the future, this class is probably a good place to manage 
- *    a portion of the user authentication porcess, and hold user
+ *    a portion of the user authentication process, and hold user
  *    credentials/cookies/keys/tokens.  This is because at the 
  *    coarsest level, authorization can happen at the datastore
  *    level: i.e. does this user even have the authority to connect
  *    to and open this datastore?
  *
+ * A breif note about books & sessions:
+ * A book encapsulates the datasets manipulated by GnuCash.  A book
+ * holds the actual data.  By contrast, the session mediates the
+ * connection between a book (the thing that lives in virtual memory
+ * in the local process) and the datastore (the place where book
+ * data lives permanently, e.g., file, database).
+ *
+ * In the current design, a session may hold multiple books.  For 
+ * now, exactly what this means is somewhat vague, and code in  
+ * various places makes some implicit assumptions: first, only
+ * one book is 'current' and open for editing.  Next, its assumed 
+ * that all of the books in a session are related in some way.
+ * i.e. that they are all earlier accounting periods of the
+ * currently open book.  In particular, the backends probably 
+ * make that assumption, in order to store the different accounting
+ * periods in a clump so that one can be found, given another.
+ *
+ *
  * HISTORY:
  * Created by Linas Vepstas December 1998
- * Copyright (c) 1998, 1999, 2001 Linas Vepstas <linas@linas.org>
+ * Copyright (c) 1998, 1999, 2001, 2002 Linas Vepstas <linas@linas.org>
  * Copyright (c) 2000 Dave Peticolas
  */
 
@@ -76,6 +94,8 @@
 
 GNCSession * gnc_session_new (void);
 void         gnc_session_destroy (GNCSession *session);
+GNCSession * gnc_get_current_session (void);
+void	     gnc_set_current_session (GNCSession *session);
 
 /* The gnc_session_swap_data () method swaps the book of
  *    the two given sessions. It is useful
@@ -105,33 +125,37 @@ void gnc_session_swap_data (GNCSession *session_1, GNCSession *session_2);
  *    If set to FALSE, then file/database-global locks will be tested and 
  *    obeyed.
  *
- *    If the datastore exists, can be reached (e.g over the net), connected 
- *    to, opened and read, and a lock can be obtained then a lock will be 
- *    obtained and the function returns TRUE.   Note that multi-user 
- *    datastores (e.g. the SQL backend) typically will not need to get a 
- *    global lock, and thus, the user will not be locked out.  That's the
+ *    If the datastore exists, can be reached (e.g over the net), 
+ *    connected to, opened and read, and a lock can be obtained then 
+ *    a lock will be obtained.   Note that multi-user datastores 
+ *    (e.g. the SQL backend) typically will not need to get a global
+ *    lock, and thus, the user will not be locked out.  That's the
  *    whole point of 'multi-user'.
  *
  *    If the file/database doesn't exist, and the create_if_nonexistent
  *    flag is set to TRUE, then the database is created.
  *
- *    Otherwise the function returns FALSE.
+ *    If an error occurs, it will be pushed onto the session error
+ *    stack, and that is where it should be examined.
  */
-gboolean gnc_session_begin (GNCSession *session, const char * book_id,
+void gnc_session_begin (GNCSession *session, const char * book_id,
                          gboolean ignore_lock, gboolean create_if_nonexistent);
 
 
-/* The gnc_session_load() method causes the GNCBook to be made ready to 
+/* 
+ * The gnc_session_load() method causes the GNCBook to be made ready to 
  *    to use with this URL/datastore.   When the URL points at a file, 
  *    then this routine would load the data from the file.  With remote
  *    backends, e.g. network or SQL, this would load only enough data
- *    to make teh book actually usable; it would not cause *all* of the
+ *    to make the book actually usable; it would not cause *all* of the
  *    data to be loaded.
- *
- *    The function returns TRUE on success.
- *    (Hack alert ... what does failure mean ???)
  */
-gboolean gnc_session_load (GNCSession *session);
+typedef void (*GNCPercentageFunc) (const char *message, double percent);
+void gnc_session_load (GNCSession *session,
+		       GNCPercentageFunc percentage_func);
+gboolean gnc_session_export (GNCSession *tmp_session,
+			     GNCSession *real_session,
+			     GNCPercentageFunc percentage_func);
 
 /* The gnc_session_get_error() routine can be used to obtain the reason
  *    for any failure.  Calling this routine returns the current error.
@@ -191,7 +215,8 @@ gboolean gnc_session_save_may_clobber_data (GNCSession *session);
  *    been written out before this, and so this routines wouldn't 
  *    roll-back anything; it would just shut the connection.
  */
-void     gnc_session_save (GNCSession *session);
+void     gnc_session_save (GNCSession *session,
+			   GNCPercentageFunc percentage_func);
 void     gnc_session_end  (GNCSession *session);
 
 /* The gnc_session_events_pending() method will return TRUE if the backend

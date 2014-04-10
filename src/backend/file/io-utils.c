@@ -31,7 +31,7 @@
 #include "Group.h"
 #include "gnc-book.h"
 #include "gnc-xml.h"
-#include "gnc-xml-helper.h"
+#include "gnc-xml.h"
 #include "io-utils.h"
 
 /*
@@ -53,35 +53,39 @@ write_emacs_trailer(FILE *out)
 }
 
 void
-write_account_group(FILE *out, AccountGroup *grp)
+write_account_group(FILE *out, AccountGroup *grp, sixtp_gdv2 *gd)
 {
     GList *list;
     GList *node;
 
     list = xaccGroupGetAccountList(grp);
 
-    for (node = list; node; node = node->next) {
+    for (node = list; node; node = node->next) 
+    {
         xmlNodePtr accnode;
         AccountGroup *newgrp;
         
-        accnode = gnc_account_dom_tree_create((Account*)(node->data));
+        accnode = gnc_account_dom_tree_create((Account*)(node->data),
+					      gd && gd->exporting);
 
         xmlElemDump(out, NULL, accnode);
         fprintf(out, "\n");
 
         xmlFreeNode(accnode);
+	gd->counter.accounts_loaded++;
+	run_callback(gd, "account");
 
         newgrp = xaccAccountGetChildren((Account*)(node->data));
 
-        if(grp)
+        if (newgrp)
         {
-            write_account_group(out, newgrp);
+            write_account_group(out, newgrp, gd);
         }
     }
 }
 
 void
-write_accounts(FILE *out, GNCBook *book)
+write_accounts(FILE *out, GNCBook *book, sixtp_gdv2 *gd)
 {
-    write_account_group(out, gnc_book_get_group(book));
+    write_account_group(out, gnc_book_get_group(book), gd);
 }

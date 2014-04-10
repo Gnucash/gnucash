@@ -1,4 +1,4 @@
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;  qif-parse.scm
 ;;;  routines to parse values and dates in QIF files. 
 ;;;
@@ -14,13 +14,13 @@
 
 (define decimal-radix-regexp
   (make-regexp 
-   "^ *\\$?-?\\$?[0-9]+$|^ *\\$?-?\\$?[0-9]?[0-9]?[0-9]?(,[0-9][0-9][0-9])*(\\.[0-9]*)? *$|^ *\\$?-?\\$?[0-9]+\\.[0-9]* *$"))
+   "^ *\\$?[+-]?\\$?[0-9]+$|^ *\\$?[+-]?\\$?[0-9]?[0-9]?[0-9]?(,[0-9][0-9][0-9])*(\\.[0-9]*)? *$|^ *\\$?[+-]?\\$?[0-9]+\\.[0-9]* *$"))
 
 (define comma-radix-regexp
   (make-regexp 
-   "^ *\\$?-?\\$?[0-9]+$|^ *\\$?-?\\$?[0-9]?[0-9]?[0-9]?(\\.[0-9][0-9][0-9])*(,[0-9]*) *$|^ *\\$?-?\\$?[0-9]+,[0-9]* *$"))
+   "^ *\\$?[+-]?\\$?[0-9]+$|^ *\\$?[+-]?\\$?[0-9]?[0-9]?[0-9]?(\\.[0-9][0-9][0-9])*(,[0-9]*) *$|^ *\\$?[+-]?\\$?[0-9]+,[0-9]* *$"))
 
-(define integer-regexp (make-regexp "^\\$?-?\\$?[0-9]+ *$"))
+(define integer-regexp (make-regexp "^\\$?[+-]?\\$?[0-9]+ *$"))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  qif-split:parse-category 
@@ -169,8 +169,16 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define (qif-parse:parse-bang-field read-value)
-  (string->symbol (string-downcase! 
-                   (string-remove-trailing-space read-value))))
+  (let ((bang-field (string-downcase! 
+		     (string-remove-trailing-space read-value))))
+;; The QIF files output by the WWW site of Credit Lyonnais
+;; begin by:   !type bank
+;; instead of: !Type:bank
+    (if (>= (string-length bang-field) 5)
+	(if (string=? (substring bang-field 0 5) "type ")
+	    (string-set! bang-field 4 #\:)))
+
+    (string->symbol bang-field)))
 
 
 (define (qif-parse:parse-action-field read-value)
@@ -236,6 +244,10 @@
            'reinvsh)
           ((reminder erinnerg)
            'reminder)
+	  ((rtrncap)
+	   'rtrncap)
+	  ((rtrncapx)
+	   'rtrncapx)
           ((sell verkauf)  ;; verkaufen
            'sell)
           ((sellx verkaufx)
@@ -252,12 +264,13 @@
            'xout)
 ;          ((vest) 
 ;           'vest)
-          (else 
+          (else
            (gnc:warning-dialog 
-            (string-append 
-             (sprintf #f "The file contains an unknown Action '%s'.\n"
+            (string-append
+             (sprintf #f (_ "The file contains an unknown Action '%s'.")
                       read-value)
-             "Some transactions may be discarded."))
+             "\n"
+             (_ "Some transactions may be discarded.")))
            #f)))
       #f))
 
@@ -492,7 +505,8 @@
        (if (number? read-val)
            (gnc:double-to-gnc-numeric
             (+ 0.0 read-val) GNC-DENOM-AUTO
-            (logior (GNC-DENOM-SIGFIGS (- (string-length filtered-string) 1))
+            (logior (GNC-DENOM-SIGFIGS 
+		     (string-length (string-remove-char filtered-string #\.)))
                     GNC-RND-ROUND))
            (gnc:numeric-zero))))
     ((comma)
@@ -508,7 +522,8 @@
        (if (number? read-val)
            (gnc:double-to-gnc-numeric
             (+ 0.0 read-val) GNC-DENOM-AUTO
-            (logior (GNC-DENOM-SIGFIGS (- (string-length filtered-string) 1))
+            (logior (GNC-DENOM-SIGFIGS
+		     (string-length (string-remove-char filtered-string #\.)))
                     GNC-RND-ROUND))
            (gnc:numeric-zero))))
     ((integer)

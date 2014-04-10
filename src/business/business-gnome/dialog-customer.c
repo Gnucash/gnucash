@@ -11,6 +11,7 @@
 #include "dialog-utils.h"
 #include "global-options.h"
 #include "gnc-amount-edit.h"
+#include "gnc-currency-edit.h"
 #include "gnc-component-manager.h"
 #include "gnc-ui.h"
 #include "gnc-gui-query.h"
@@ -18,13 +19,19 @@
 #include "gnc-engine-util.h"
 #include "window-help.h"
 
-#include "gncBusiness.h"
+#include "dialog-search.h"
+#include "search-param.h"
+
 #include "gncAddress.h"
 #include "gncCustomer.h"
 #include "gncCustomerP.h"
 
+#include "business-gnome-utils.h"
 #include "dialog-customer.h"
-#include "business-chooser.h"
+#include "dialog-job.h"
+#include "dialog-order.h"
+#include "dialog-invoice.h"
+#include "dialog-payment.h"
 
 #define DIALOG_NEW_CUSTOMER_CM_CLASS "dialog-new-customer"
 #define DIALOG_EDIT_CUSTOMER_CM_CLASS "dialog-edit-customer"
@@ -36,10 +43,11 @@ typedef enum
 } CustomerDialogType;
 
 struct _customer_select_window {
-  GncBusiness *	business;
+  GNCBook *	book;
+  QueryNew *	q;
 };
 
-typedef struct _customer_window {
+struct _customer_window {
   GtkWidget *	dialog;
 
   GtkWidget *	id_entry;
@@ -63,21 +71,40 @@ typedef struct _customer_window {
   GtkWidget *	shipfax_entry;
   GtkWidget *	shipemail_entry;
 
-  GtkWidget *	terms_amount;
+  GtkWidget *	currency_edit;
+  GtkWidget *	terms_menu;
   GtkWidget *	discount_amount;
   GtkWidget *	credit_amount;
 
   GtkWidget *	active_check;
-  GtkWidget *	taxincluded_check;
+  GtkWidget *	taxincluded_menu;
   GtkWidget *	notes_text;
 
+  GtkWidget *	taxtable_check;
+  GtkWidget *	taxtable_menu;
+
+  GncTaxIncluded taxincluded;
+  GncBillTerm *	terms;
   CustomerDialogType	dialog_type;
   GUID		customer_guid;
   gint		component_id;
-  GncBusiness *	business;
+  GNCBook *	book;
   GncCustomer *	created_customer;
 
-} CustomerWindow;
+  GncTaxTable *	taxtable;
+};
+
+static void
+gnc_customer_taxtable_check_cb (GtkToggleButton *togglebutton,
+				gpointer user_data)
+{
+  CustomerWindow *cw = user_data;
+
+  if (gtk_toggle_button_get_active (togglebutton))
+    gtk_widget_set_sensitive (cw->taxtable_menu, TRUE);
+  else
+    gtk_widget_set_sensitive (cw->taxtable_menu, FALSE);
+}
 
 static GncCustomer *
 cw_get_customer (CustomerWindow *cw)
@@ -85,19 +112,19 @@ cw_get_customer (CustomerWindow *cw)
   if (!cw)
     return NULL;
 
-  return gncBusinessLookupGUID (cw->business, GNC_CUSTOMER_MODULE_NAME,
-				&cw->customer_guid);
+  return gncCustomerLookup (cw->book, &cw->customer_guid);
 }
 
 static void gnc_ui_to_customer (CustomerWindow *cw, GncCustomer *cust)
 {
   GncAddress *addr, *shipaddr;
-  gnc_numeric num;
 
   addr = gncCustomerGetAddr (cust);
   shipaddr = gncCustomerGetShipAddr (cust);
 
   gnc_suspend_gui_refresh ();
+
+  gncCustomerBeginEdit (cust);
 
   gncCustomerSetID (cust, gtk_editable_get_chars
 		    (GTK_EDITABLE (cw->id_entry), 0, -1));
@@ -140,18 +167,23 @@ static void gnc_ui_to_customer (CustomerWindow *cw, GncCustomer *cust)
 
   gncCustomerSetActive (cust, gtk_toggle_button_get_active
 			(GTK_TOGGLE_BUTTON (cw->active_check)));
-  gncCustomerSetTaxIncluded (cust, gtk_toggle_button_get_active
-			     (GTK_TOGGLE_BUTTON (cw->taxincluded_check)));
+  gncCustomerSetTaxIncluded (cust, cw->taxincluded);
   gncCustomerSetNotes (cust, gtk_editable_get_chars
 		       (GTK_EDITABLE (cw->notes_text), 0, -1));
 
-  /* Parse and set the terms, discount, and credit amounts */
-  num = gnc_amount_edit_get_amount (GNC_AMOUNT_EDIT (cw->terms_amount));
-  gncCustomerSetTerms (cust, gnc_numeric_num (num));
+  /* Parse and set the currency, terms, discount, and credit amounts */
+  gncCustomerSetCurrency (cust,
+			  gnc_currency_edit_get_currency (GNC_CURRENCY_EDIT
+							     (cw->currency_edit)));
+  gncCustomerSetTerms (cust, cw->terms);
   gncCustomerSetDiscount (cust, gnc_amount_edit_get_amount
 			  (GNC_AMOUNT_EDIT (cw->discount_amount)));
   gncCustomerSetCredit (cust, gnc_amount_edit_get_amount
 			(GNC_AMOUNT_EDIT (cw->credit_amount)));
+
+  gncCustomerSetTaxTableOverride
+    (cust, gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (cw->taxtable_check)));
+  gncCustomerSetTaxTable (cust, cw->taxtable);
 
   gncCustomerCommitEdit (cust);
   gnc_resume_gui_refresh ();
@@ -195,14 +227,7 @@ static void
 gnc_customer_window_ok_cb (GtkWidget *widget, gpointer data)
 {
   CustomerWindow *cw = data;
-  char *res;
-  GncCustomer *cust;
   gnc_numeric min, max;
-
-  /* Check for valid id */
-  if (check_entry_nonempty (cw->dialog, cw->id_entry,
-			    _("The Customer must be given an ID.")))
-    return;
 
   /* Check for valid company name */
   if (check_entry_nonempty (cw->dialog, cw->company_entry,
@@ -222,10 +247,6 @@ gnc_customer_window_ok_cb (GtkWidget *widget, gpointer data)
   /* Verify terms, discount, and credit are valid (or empty) */
   min = gnc_numeric_zero ();
   max = gnc_numeric_create (100, 1);
-  if (check_edit_amount (cw->dialog, cw->terms_amount, &min, NULL,
-			 _("Terms must be a positive integer or "
-			   "you must leave it blank.")))
-    return;
 
   if (check_edit_amount (cw->dialog, cw->discount_amount, &min, &max,
 			 _("Discount percentage must be between 0-100 "
@@ -236,6 +257,13 @@ gnc_customer_window_ok_cb (GtkWidget *widget, gpointer data)
 			 _("Credit must be a positive amount or "
 			   "you must leave it blank.")))
     return;
+
+  /* Set the customer id if one has not been chosen */
+  if (safe_strcmp (gtk_entry_get_text (GTK_ENTRY (cw->id_entry)), "") == 0) {
+    gtk_entry_set_text (GTK_ENTRY (cw->id_entry),
+			g_strdup_printf ("%.6lld",
+					 gncCustomerNextID (cw->book)));
+  }
 
   /* Now save it off */
   {
@@ -261,8 +289,7 @@ gnc_customer_window_cancel_cb (GtkWidget *widget, gpointer data)
 static void
 gnc_customer_window_help_cb (GtkWidget *widget, gpointer data)
 {
-  CustomerWindow *cw = data;
-  char *help_file = "";		/* xxx */
+  char *help_file = HH_CUSTOMER;
 
   helpWindow(NULL, NULL, help_file);
 }
@@ -276,6 +303,7 @@ gnc_customer_window_destroy_cb (GtkWidget *widget, gpointer data)
   gnc_suspend_gui_refresh ();
 
   if (cw->dialog_type == NEW_CUSTOMER && customer != NULL) {
+    gncCustomerBeginEdit (customer);
     gncCustomerDestroy (customer);
     cw->customer_guid = *xaccGUIDNULL ();
   }
@@ -314,22 +342,6 @@ gnc_customer_name_changed_cb (GtkWidget *widget, gpointer data)
   g_free (title);
 }
 
-static int
-gnc_customer_on_close_cb (GnomeDialog *dialog, gpointer data)
-{
-  CustomerWindow *cw;
-  GncCustomer **created_customer = data;
-
-  if (data) {
-    cw = gtk_object_get_data (GTK_OBJECT (dialog), "dialog_info");
-    *created_customer = cw->created_customer;
-  }
-
-  gtk_main_quit ();
-
-  return FALSE;
-}
-
 static void
 gnc_customer_window_close_handler (gpointer user_data)
 {
@@ -361,20 +373,53 @@ gnc_customer_window_refresh_handler (GHashTable *changes, gpointer user_data)
   }
 }
 
+static gboolean
+find_handler (gpointer find_data, gpointer user_data)
+{
+  const GUID *customer_guid = find_data;
+  CustomerWindow *cw = user_data;
+
+  return(cw && guid_equal(&cw->customer_guid, customer_guid));
+}
+
 static CustomerWindow *
-gnc_customer_new_window (GtkWidget *parent, GncBusiness *bus,
-			 GncCustomer *cust)
+gnc_customer_new_window (GNCBook *bookp, GncCustomer *cust)
 {
   CustomerWindow *cw;
   GladeXML *xml;
   GtkWidget *hbox, *edit;
   GnomeDialog *cwd;
-  gnc_commodity *commodity;
+  gnc_commodity *currency;
   GNCPrintAmountInfo print_info;
+  
+  /*
+   * Find an existing window for this customer.  If found, bring it to
+   * the front.
+   */
+  if (cust) {
+    GUID customer_guid;
 
+    customer_guid = *gncCustomerGetGUID(cust);
+    cw = gnc_find_first_gui_component (DIALOG_EDIT_CUSTOMER_CM_CLASS,
+				       find_handler, &customer_guid);
+    if (cw) {
+      gtk_window_present (GTK_WINDOW(cw->dialog));
+      return(cw);
+    }
+  }
+  
+  /* Find the default currency */
+  if (cust)
+    currency = gncCustomerGetCurrency (cust);
+  else
+    currency = gnc_default_currency ();
+
+  /*
+   * No existing customer window found.  Build a new one.
+   */
   cw = g_new0 (CustomerWindow, 1);
 
-  cw->business = bus;
+  cw->book = bookp;
 
   /* Find the dialog */
   xml = gnc_glade_xml_new ("customer.glade", "Customer Dialog");
@@ -385,9 +430,6 @@ gnc_customer_new_window (GtkWidget *parent, GncBusiness *bus,
 
   /* default to ok */
   gnome_dialog_set_default (cwd, 0);
-
-  if (parent)
-    gnome_dialog_set_parent (cwd, GTK_WINDOW (parent));
 
   /* Get entry points */
   cw->id_entry = glade_xml_get_widget (xml, "id_entry");
@@ -412,24 +454,26 @@ gnc_customer_new_window (GtkWidget *parent, GncBusiness *bus,
   cw->shipemail_entry = glade_xml_get_widget (xml, "shipemail_entry");
 
   cw->active_check = glade_xml_get_widget (xml, "active_check");
-  cw->taxincluded_check = glade_xml_get_widget (xml, "tax_included_check");
+  cw->taxincluded_menu = glade_xml_get_widget (xml, "tax_included_menu");
   cw->notes_text = glade_xml_get_widget (xml, "notes_text");
 
-  /* TERMS: Integer Value */
-  edit = gnc_amount_edit_new();
-  gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT (edit), TRUE);
-  print_info = gnc_integral_print_info ();
-  gnc_amount_edit_set_print_info (GNC_AMOUNT_EDIT (edit), print_info);
-  gnc_amount_edit_set_fraction (GNC_AMOUNT_EDIT (edit), 1);
-  cw->terms_amount = edit;
-  gtk_widget_show (edit);
+  cw->terms_menu = glade_xml_get_widget (xml, "terms_menu");
 
-  hbox = glade_xml_get_widget (xml, "terms_box");
+  cw->taxtable_check = glade_xml_get_widget (xml, "taxtable_button");
+  cw->taxtable_menu = glade_xml_get_widget (xml, "taxtable_menu");
+
+  /* Currency */
+  edit = gnc_currency_edit_new();
+  gnc_currency_edit_set_currency (GNC_CURRENCY_EDIT(edit), currency);
+  cw->currency_edit = edit;
+
+  hbox = glade_xml_get_widget (xml, "currency_box");
   gtk_box_pack_start (GTK_BOX (hbox), edit, TRUE, TRUE, 0);
 
   /* DISCOUNT: Percentage Value */
   edit = gnc_amount_edit_new();
   gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT (edit), TRUE);
+  print_info = gnc_integral_print_info ();
   print_info.max_decimal_places = 5;
   gnc_amount_edit_set_print_info (GNC_AMOUNT_EDIT (edit), print_info);
   gnc_amount_edit_set_fraction (GNC_AMOUNT_EDIT (edit), 100000);
@@ -441,12 +485,11 @@ gnc_customer_new_window (GtkWidget *parent, GncBusiness *bus,
 
   /* CREDIT: Monetary Value */
   edit = gnc_amount_edit_new();
-  commodity = gnc_default_currency ();
-  print_info = gnc_commodity_print_info (commodity, FALSE);
+  print_info = gnc_commodity_print_info (currency, FALSE);
   gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT (edit), TRUE);
   gnc_amount_edit_set_print_info (GNC_AMOUNT_EDIT (edit), print_info);
   gnc_amount_edit_set_fraction (GNC_AMOUNT_EDIT (edit),
-                                gnc_commodity_get_fraction (commodity));
+                                gnc_commodity_get_fraction (currency));
   cw->credit_amount = edit;
   gtk_widget_show (edit);
 
@@ -498,6 +541,9 @@ gnc_customer_new_window (GtkWidget *parent, GncBusiness *bus,
   gtk_signal_connect(GTK_OBJECT (cw->company_entry), "changed",
 		     GTK_SIGNAL_FUNC(gnc_customer_name_changed_cb), cw);
 
+  gtk_signal_connect(GTK_OBJECT (cw->taxtable_check), "toggled",
+		     GTK_SIGNAL_FUNC(gnc_customer_taxtable_check_cb), cw);
+
   /* Setup initial values */
   if (cust != NULL) {
     GncAddress *addr, *shipaddr;
@@ -539,9 +585,6 @@ gnc_customer_new_window (GtkWidget *parent, GncBusiness *bus,
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (cw->active_check),
                                 gncCustomerGetActive (cust));
 
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (cw->taxincluded_check),
-				  gncCustomerGetTaxIncluded (cust));
-
     string = gncCustomerGetNotes (cust);
     gtk_editable_delete_text (GTK_EDITABLE (cw->notes_text), 0, -1);
     gtk_editable_insert_text (GTK_EDITABLE (cw->notes_text), string,
@@ -552,37 +595,43 @@ gnc_customer_new_window (GtkWidget *parent, GncBusiness *bus,
 				  gnc_customer_window_refresh_handler,
 				  gnc_customer_window_close_handler,
 				  cw);
+    cw->terms = gncCustomerGetTerms (cust);
+
   } else {
-    gnc_numeric num;
-    cust = gncCustomerCreate (bus);
+    cust = gncCustomerCreate (bookp);
     cw->customer_guid = *gncCustomerGetGUID (cust);
 
     cw->dialog_type = NEW_CUSTOMER;
-    gtk_entry_set_text (GTK_ENTRY (cw->id_entry),
-			g_strdup_printf ("%.6d", gncCustomerNextID(bus)));
     cw->component_id =
       gnc_register_gui_component (DIALOG_NEW_CUSTOMER_CM_CLASS,
 				  gnc_customer_window_refresh_handler,
 				  gnc_customer_window_close_handler,
 				  cw);
-  }
 
+    /* XXX: get the global-default terms */
+    cw->terms = NULL;
+  }
 
   /* I know that cust exists here -- either passed in or just created */
-  {
-    gnc_numeric terms;
 
-    /* Set the Terms, Discount, and Credit amounts */
-    terms = gnc_numeric_create (gncCustomerGetTerms (cust), 1);
-    gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (cw->terms_amount), terms);
-    gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (cw->discount_amount),
-				gncCustomerGetDiscount (cust));
-    gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (cw->credit_amount),
-				gncCustomerGetCredit (cust));
-  }
+  cw->taxincluded = gncCustomerGetTaxIncluded (cust);
+  gnc_ui_taxincluded_optionmenu (cw->taxincluded_menu, &cw->taxincluded);
+  gnc_ui_billterms_optionmenu (cw->terms_menu, bookp, TRUE, &cw->terms);
+
+  cw->taxtable = gncCustomerGetTaxTable (cust);
+  gnc_ui_taxtables_optionmenu (cw->taxtable_menu, bookp, TRUE, &cw->taxtable);
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (cw->taxtable_check),
+                                gncCustomerGetTaxTableOverride (cust));
+  gnc_customer_taxtable_check_cb (GTK_TOGGLE_BUTTON (cw->taxtable_check), cw);
+
+  /* Set the Discount, and Credit amounts */
+  gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (cw->discount_amount),
+			      gncCustomerGetDiscount (cust));
+  gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (cw->credit_amount),
+			      gncCustomerGetCredit (cust));
 
   gnc_gui_component_watch_entity_type (cw->component_id,
-				       GNC_ID_NONE,
+				       GNC_CUSTOMER_MODULE_NAME,
 				       GNC_EVENT_MODIFY | GNC_EVENT_DESTROY);
 
   gtk_widget_show_all (cw->dialog);
@@ -590,94 +639,226 @@ gnc_customer_new_window (GtkWidget *parent, GncBusiness *bus,
   return cw;
 }
 
-GncCustomer *
-gnc_customer_new (GtkWidget *parent, GncBusiness *bus)
+CustomerWindow *
+gnc_ui_customer_edit (GncCustomer *cust)
 {
   CustomerWindow *cw;
-  GncCustomer *created_customer = NULL;
 
-  /* Make sure required options exist */
-  if (!bus) return NULL;
+  if (!cust) return NULL;
 
-  cw = gnc_customer_new_window (parent, bus, NULL);
+  cw = gnc_customer_new_window (gncCustomerGetBook(cust), cust);
 
-  gtk_signal_connect (GTK_OBJECT (cw->dialog), "close",
-		      GTK_SIGNAL_FUNC (gnc_customer_on_close_cb),
-		      &created_customer);
-
-  gtk_window_set_modal (GTK_WINDOW (cw->dialog), TRUE);
-
-  gtk_main ();
-
-  return created_customer;
+  return cw;
 }
 
-void
-gnc_customer_edit (GtkWidget *parent, GncCustomer *cust)
+CustomerWindow *
+gnc_ui_customer_new (GNCBook *bookp)
 {
   CustomerWindow *cw;
 
-  if (!cust) return;
+  /* Make sure required options exist */
+  if (!bookp) return NULL;
 
-  cw = gnc_customer_new_window (parent, gncCustomerGetBusiness(cust), cust);
+  cw = gnc_customer_new_window (bookp, NULL);
 
-  gtk_signal_connect (GTK_OBJECT (cw->dialog), "close",
-		      GTK_SIGNAL_FUNC (gnc_customer_on_close_cb),
-		      NULL);
+  return cw;
+}
 
-  gtk_window_set_modal (GTK_WINDOW (cw->dialog), TRUE);
+/* Functions for customer selection widgets */
 
-  gtk_main ();
+static void
+invoice_customer_cb (gpointer *cust_p, gpointer user_data)
+{
+  struct _customer_select_window *sw = user_data;
+  GncOwner owner;
+  GncCustomer *cust;
+
+  g_return_if_fail (cust_p && user_data);
+
+  cust = *cust_p;
+
+  if (!cust)
+    return;
+
+  gncOwnerInitCustomer (&owner, cust);
+  gnc_invoice_search (NULL, &owner, sw->book);
+  return;
+}
+
+static void
+order_customer_cb (gpointer *cust_p, gpointer user_data)
+{
+  struct _customer_select_window *sw = user_data;
+  GncOwner owner;
+  GncCustomer *cust;
+
+  g_return_if_fail (cust_p && user_data);
+
+  cust = *cust_p;
+
+  if (!cust)
+    return;
+
+  gncOwnerInitCustomer (&owner, cust);
+  gnc_order_search (NULL, &owner, sw->book);
+  return;
+}
+
+static void
+jobs_customer_cb (gpointer *cust_p, gpointer user_data)
+{
+  struct _customer_select_window *sw = user_data;
+  GncOwner owner;
+  GncCustomer *cust;
+
+  g_return_if_fail (cust_p && user_data);
+
+  cust = *cust_p;
+
+  if (!cust)
+    return;
+
+  gncOwnerInitCustomer (&owner, cust);
+  gnc_job_search (NULL, &owner, sw->book);
+  return;
+}
+
+static void
+payment_customer_cb (gpointer *cust_p, gpointer user_data)
+{
+  struct _customer_select_window *sw = user_data;
+  GncOwner owner;
+  GncCustomer *cust;
+
+  g_return_if_fail (cust_p && user_data);
+
+  cust = *cust_p;
+
+  if (!cust)
+    return;
+
+  gncOwnerInitCustomer (&owner, cust);
+  gnc_ui_payment_new (&owner, sw->book);
+  return;
+}
+
+static void
+edit_customer_cb (gpointer *cust_p, gpointer user_data)
+{
+  GncCustomer *cust;
+
+  g_return_if_fail (cust_p);
+  cust = *cust_p;
+
+  if (!cust)
+    return;
+
+  gnc_ui_customer_edit (cust);
 
   return;
 }
 
-/* Functions for widgets for customer selection */
-
-static gpointer gnc_customer_edit_new_cb (gpointer arg, GtkWidget *toplevel)
+static gpointer
+new_customer_cb (gpointer user_data)
 {
-  struct _customer_select_window *sw = arg;
+  struct _customer_select_window *sw = user_data;
+  CustomerWindow *cw;
+  
+  g_return_val_if_fail (sw, NULL);
 
-  if (!arg) return NULL;
-
-  return gnc_customer_new (toplevel, sw->business);
+  cw = gnc_ui_customer_new (sw->book);
+  return cw_get_customer (cw);
 }
 
-static void gnc_customer_edit_edit_cb (gpointer arg, gpointer obj, GtkWidget *toplevel)
+static void
+free_userdata_cb (gpointer user_data)
 {
-  GncCustomer *cust = obj;
-  struct _customer_select_window *sw = arg;
+  struct _customer_select_window *sw = user_data;
 
-  if (!arg || !obj) return;
+  g_return_if_fail (sw);
 
-  gnc_customer_edit (toplevel, cust);
+  gncQueryDestroy (sw->q);
+  g_free (sw);
 }
 
-gpointer gnc_customer_edit_new_select (gpointer bus, gpointer cust,
-				       GtkWidget *toplevel)
+GNCSearchWindow *
+gnc_customer_search (GncCustomer *start, GNCBook *book)
 {
-  GncBusiness *business = bus;
-  struct _customer_select_window sw;
+  QueryNew *q, *q2 = NULL;
+  GNCIdType type = GNC_CUSTOMER_MODULE_NAME;
+  struct _customer_select_window *sw;
+  static GList *params = NULL;
+  static GList *columns = NULL;
+  static GNCSearchCallbackButton buttons[] = { 
+    { N_("View/Edit Customer"), edit_customer_cb},
+    { N_("Customer's Jobs"), jobs_customer_cb},
+    //    { N_("Customer's Orders"), order_customer_cb},
+    { N_("Customer's Invoices"), invoice_customer_cb},
+    { N_("Process Payment"), payment_customer_cb},
+    { NULL },
+  };
+  (void)order_customer_cb;
 
-  g_return_val_if_fail (bus != NULL, NULL);
+  g_return_val_if_fail (book, NULL);
 
-  sw.business = business;
+  /* Build parameter list in reverse order*/
+  if (params == NULL) {
+    params = gnc_search_param_prepend (params, _("Shipping Contact"), NULL, type,
+				       CUSTOMER_SHIPADDR, ADDRESS_NAME, NULL);
+    params = gnc_search_param_prepend (params, _("Billing Contact"), NULL, type,
+				       CUSTOMER_ADDR, ADDRESS_NAME, NULL);
+    params = gnc_search_param_prepend (params, _("Customer ID"), NULL, type,
+				       CUSTOMER_ID, NULL);
+    params = gnc_search_param_prepend (params, _("Company Name"), NULL, type,
+				       CUSTOMER_NAME, NULL);
+  }
 
-  return
-    gnc_ui_business_chooser_new (toplevel, cust,
-				 business, GNC_CUSTOMER_MODULE_NAME,
-				 gnc_customer_edit_new_cb,
-				 gnc_customer_edit_edit_cb, &sw);
+  /* Build the column list in reverse order */
+  if (columns == NULL) {
+    columns = gnc_search_param_prepend (columns, _("Contact"), NULL, type,
+					CUSTOMER_ADDR, ADDRESS_NAME, NULL);
+    columns = gnc_search_param_prepend (columns, _("Company"), NULL, type,
+					CUSTOMER_NAME, NULL);
+    columns = gnc_search_param_prepend (columns, _("ID #"), NULL, type,
+					CUSTOMER_ID, NULL);
+  }
+
+  /* Build the queries */
+  q = gncQueryCreateFor (type);
+  gncQuerySetBook (q, book);
+
+#if 0
+  if (start) {
+    q2 = gncQueryCopy (q);
+    gncQueryAddGUIDMatch (q2, g_slist_prepend (NULL, QUERY_PARAM_GUID),
+			  gncCustomerGetGUID (start), QUERY_AND);
+  }
+#endif
+
+  /* launch select dialog and return the result */
+  sw = g_new0 (struct _customer_select_window, 1);
+
+  sw->book = book;
+  sw->q = q;
+
+  return gnc_search_dialog_create (type, params, columns,
+				   q, q2, buttons, NULL,
+				   new_customer_cb, sw, free_userdata_cb);
 }
 
-gpointer gnc_customer_edit_new_edit (gpointer bus, gpointer cust,
-				     GtkWidget *toplevel)
+GNCSearchWindow *
+gnc_customer_search_select (gpointer start, gpointer book)
 {
-  GncBusiness *busiess = bus;
-  GncCustomer *customer = cust;
+  if (!book) return NULL;
 
-  g_return_val_if_fail (cust != NULL, NULL);
+  return gnc_customer_search (start, book);
+}
 
-  gnc_customer_edit (toplevel, cust);
-  return cust;
+GNCSearchWindow *
+gnc_customer_search_edit (gpointer start, gpointer book)
+{
+  if (start)
+    gnc_ui_customer_edit (start);
+
+  return NULL;
 }

@@ -1,6 +1,8 @@
 (define-module (gnucash engine))
+
+(use-modules (g-wrap gw-wct))
+
 (use-modules (g-wrapped gw-engine))
-(use-modules (g-wrapped gw-runtime))
 
 (export GNC-RND-FLOOR)
 (export GNC-RND-CEIL)
@@ -40,8 +42,7 @@
 (export GNC_COMMODITY_NS_AMEX)
 (export GNC_COMMODITY_NS_EUREX)
 (export GNC_COMMODITY_NS_MUTUAL)
-
-(export gnc:engine-commodity-table-construct)
+(export gnc:commodity-is-currency?)
 
 (export gnc:url->loaded-session)
 (export gnc:transaction-map-splits)

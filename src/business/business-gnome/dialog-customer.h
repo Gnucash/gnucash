@@ -8,20 +8,25 @@
 #ifndef GNC_DIALOG_CUSTOMER_H_
 #define GNC_DIALOG_CUSTOMER_H_
 
-/* Functions to create and edit customers */
-GncCustomer * gnc_customer_new (GtkWidget *parent, GncBusiness *bus);
-void gnc_customer_edit (GtkWidget *parent, GncCustomer *cust);
+typedef struct _customer_window CustomerWindow;
 
-/* Callbacks to select a customer that match the necessary functions
- * for use with the gnc_general_select widget.
+#include "gncCustomer.h"
+#include "dialog-search.h"
+
+/* Functions to create and edit a customer */
+CustomerWindow * gnc_ui_customer_edit (GncCustomer *cust);
+CustomerWindow * gnc_ui_customer_new (GNCBook *book);
+
+/* Search for customers */
+GNCSearchWindow *gnc_customer_search (GncCustomer *start, GNCBook *book);
+
+/*
+ * These callbacks are for use with the gnc_general_search widget
  *
- * new_select provides a selection and the ability to create and edit
- *	customers.
- * new_edit provides only the ability to edit the current selection
+ * select() provides a Select Dialog and returns it.
+ * edit() opens the existing customer for editing and returns NULL.
  */
-gpointer        gnc_customer_edit_new_select (gpointer bus, gpointer c,
-					      GtkWidget *toplevel);
-gpointer	gnc_customer_edit_new_edit (gpointer bus, gpointer cust,
-					    GtkWidget *toplevel);
+GNCSearchWindow * gnc_customer_search_select (gpointer start, gpointer book);
+GNCSearchWindow * gnc_customer_search_edit (gpointer start, gpointer book);
 
 #endif /* GNC_DIALOG_CUSTOMER_H_ */

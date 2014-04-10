@@ -23,6 +23,10 @@
 #ifndef OPTIONS_DIALOG_H
 #define OPTIONS_DIALOG_H
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
 #include <gnome.h>
 #include <guile/gh.h>
 
@@ -56,5 +60,49 @@ void gnc_options_dialog_set_global_help_cb(GNCOptionWinCallback thunk,
 void gnc_show_options_dialog(void);
 void gnc_build_options_dialog_contents(GNCOptionWin *win,
                                        GNCOptionDB  *odb);
+
+/* Both apply_cb and close_cb should be scheme functions with 0 arguments.
+ * References to these functions will be held until the close_cb is called
+ */
+void gnc_options_dialog_set_scm_callbacks (GNCOptionWin *win,
+					   SCM apply_cb,
+					   SCM close_cb);
+
+/*****************************************************************/
+/* Option Registration                                           */
+
+/* Function to set the UI widget based upon the option */
+typedef GtkWidget *
+	(*GNCOptionUISetWidget)	(GNCOption *option, GtkBox *page_box,
+				 GtkTooltips *tooltips,
+				 char *name, char *documentation,
+				/* Return values */
+				 GtkWidget **enclosing, gboolean *packed);
+
+/* Function to set the UI Value for a particular option */
+typedef gboolean
+	(*GNCOptionUISetValue)	(GNCOption *option, gboolean use_default,
+				 GtkWidget *widget, SCM value);
+
+/* Function to get the UI Value for a particular option */
+typedef SCM
+	(*GNCOptionUIGetValue)	(GNCOption *option, GtkWidget *widget);
+
+
+typedef struct gnc_option_def {
+  const char *		option_name;
+  GNCOptionUISetWidget	set_widget;
+  GNCOptionUISetValue	set_value;
+  GNCOptionUIGetValue	get_value;
+} GNCOptionDef_t;
+
+
+/* Register a new option type in the UI */
+void gnc_options_ui_initialize (void);
+void gnc_options_ui_register_option (GNCOptionDef_t *option);
+GNCOptionDef_t * gnc_options_ui_get_option (const char *option_name);
+
+/* For option definitions outside the main module only */
+void gnc_options_dialog_changed_internal (GtkWidget *widget);
 
 #endif /* OPTIONS_DIALOG_H */

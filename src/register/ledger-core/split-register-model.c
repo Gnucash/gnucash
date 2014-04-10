@@ -117,24 +117,57 @@ gnc_split_register_get_date_label (VirtualLocation virt_loc,
 }
 
 static const char *
+gnc_split_register_get_due_date_label (VirtualLocation virt_loc,
+				       gpointer user_data)
+{
+  return _("Due Date");
+}
+
+static const char *
 gnc_split_register_get_num_label (VirtualLocation virt_loc,
                                   gpointer user_data)
 {
-  return _("Num");
+  SplitRegister *reg = user_data;
+
+  switch (reg->type) {
+  case RECEIVABLE_REGISTER:
+  case PAYABLE_REGISTER:
+    return _("Ref");
+  default:
+    return _("Num");
+  }
 }
 
 static const char *
 gnc_split_register_get_desc_label (VirtualLocation virt_loc,
                                    gpointer user_data)
 {
-  return _("Description");
+  SplitRegister *reg = user_data;
+
+  switch (reg->type) {
+  case RECEIVABLE_REGISTER:
+    return _("Customer");
+  case PAYABLE_REGISTER:
+    return _("Vendor");
+  default:
+    return _("Description");
+  }
 }
 
 static const char *
 gnc_split_register_get_recn_label (VirtualLocation virt_loc,
                                    gpointer user_data)
 {
-  return _("Reconciled:R") + 11;
+  SplitRegister *reg = user_data;
+
+  switch (reg->type) {
+  case RECEIVABLE_REGISTER:
+  case PAYABLE_REGISTER:
+    return _("Paid");
+
+  default:
+    return _("Reconciled:R") + 11;
+  }
 }
 
 static const char *
@@ -169,7 +202,14 @@ static const char *
 gnc_split_register_get_memo_label (VirtualLocation virt_loc,
                                    gpointer user_data)
 {
-  return _("Memo");
+    return _("Memo");
+}
+
+static const char *
+gnc_split_register_get_type_label (VirtualLocation virt_loc,
+                                   gpointer user_data)
+{
+  return _("Type");
 }
 
 static const char *
@@ -603,6 +643,93 @@ gnc_split_register_get_border (VirtualLocation virt_loc,
 }
 
 static const char *
+gnc_split_register_get_type_entry (VirtualLocation virt_loc,
+                                   gboolean translate,
+                                   gboolean *conditionally_changed,
+                                   gpointer user_data)
+{
+  SplitRegister *reg = user_data;
+  Transaction *trans;
+  char type;
+  static char s[2];
+
+  trans = gnc_split_register_get_trans (reg, virt_loc.vcell_loc);
+  if (!trans)
+    return NULL;
+
+  type = xaccTransGetTxnType (trans);
+
+  if (type == TXN_TYPE_NONE)
+    type = '?';
+
+  s[0] = type;
+  s[1] = '\0';
+
+  return s;
+}
+
+static char
+gnc_split_register_get_type_value (SplitRegister *reg,
+				   VirtualLocation virt_loc)
+{
+  RecnCell *cell;
+
+  cell = (RecnCell *)
+    gnc_table_layout_get_cell (reg->table->layout, TYPE_CELL);
+  if (!cell)
+    return '\0';
+
+  return gnc_recn_cell_get_flag (cell);
+}
+
+static const char *
+gnc_split_register_get_due_date_entry (VirtualLocation virt_loc,
+				       gboolean translate,
+				       gboolean *conditionally_changed,
+				       gpointer user_data)
+{
+  SplitRegister *reg = user_data;
+  Transaction *trans;
+  Split *split;
+  Timespec ts;
+  gboolean is_current;
+  char type;
+
+  is_current = virt_cell_loc_equal (reg->table->current_cursor_loc.vcell_loc,
+                                    virt_loc.vcell_loc);
+
+  if (is_current) {
+    type = gnc_split_register_get_type_value (reg, virt_loc);
+  } else {
+    const char *typestr =
+      gnc_split_register_get_type_entry (virt_loc, translate,
+					 conditionally_changed, user_data);
+    if (typestr != NULL)
+      type = *typestr;
+    else
+      type = '\0';
+  }
+
+  /* Only print the due date for invoice transactions */
+  if (type != TXN_TYPE_INVOICE) {
+    //PWARN ("returning NULL due_date entry");
+    return NULL;
+  }
+
+  split = gnc_split_register_get_split (reg, virt_loc.vcell_loc);
+  trans = xaccSplitGetParent (split);
+  if (!trans) {
+    //PWARN ("No transaction in due_date entry");
+    return NULL;
+  }
+
+  xaccTransGetDateDueTS (trans, &ts);
+  //PWARN ("returning valid due_date entry");
+    
+  return gnc_print_date (ts);
+}
+
+static const char *
 gnc_split_register_get_date_entry (VirtualLocation virt_loc,
                                    gboolean translate,
                                    gboolean *conditionally_changed,
@@ -653,13 +780,13 @@ gnc_split_register_get_date_help (VirtualLocation virt_loc,
 
 static const char *
 gnc_split_register_get_inactive_date_entry (VirtualLocation virt_loc,
-                                           gboolean translate,
-                                           gboolean *conditionally_changed,
-                                           gpointer user_data)
+                                            gboolean translate,
+                                            gboolean *conditionally_changed,
+                                            gpointer user_data)
 {
   /* This seems to be the one that initially gets used, the InactiveDateCell
      is set to, and subsequently displayed. */
-  return "Scheduled";
+  return _("Scheduled");
 }
 
 static const char *
@@ -687,7 +814,16 @@ gnc_split_register_get_num_help (VirtualLocation virt_loc,
 
   help = gnc_table_get_entry (reg->table, virt_loc);
   if (!help || *help == '\0')
-    help = _("Enter the transaction number, such as the check number");
+    switch (reg->type) {
+    case RECEIVABLE_REGISTER:
+    case PAYABLE_REGISTER:
+      help = _("Enter the transaction reference, "
+	       "such as the invoice or check number");
+      break;
+    default:
+      help = _("Enter the transaction number, such as the check number");
+      break;
+    }
 
   return g_strdup (help);
 }
@@ -717,8 +853,16 @@ gnc_split_register_get_desc_help (VirtualLocation virt_loc,
 
   help = gnc_table_get_entry (reg->table, virt_loc);
   if (!help || *help == '\0')
-    help = _("Enter a description of the transaction");
-
+    switch (reg->type) {
+    case RECEIVABLE_REGISTER:
+      help = _("Enter the name of the Customer");
+      break;
+    case PAYABLE_REGISTER:
+      help = _("Enter the name of the Vendor");
+      break;
+    default:
+      help = _("Enter a description of the transaction");
+    }
   return g_strdup (help);
 }
 
@@ -750,6 +894,45 @@ gnc_split_register_get_notes_help (VirtualLocation virt_loc,
     help = _("Enter notes for the transaction");
 
   return g_strdup (help);
+}
+
+static const char *
+gnc_split_register_get_rate_entry (VirtualLocation virt_loc,
+                                   gboolean translate,
+                                   gboolean *conditionally_changed,
+                                   gpointer user_data)
+{
+  SplitRegister *reg = user_data;
+  Split *split, *osplit;
+  Transaction *txn;
+  gnc_numeric amount, value, convrate;
+
+  split = gnc_split_register_get_split (reg, virt_loc.vcell_loc);
+  if (!split)
+    return NULL;
+
+  /* If this is a basic, non-expanded ledger with exactly two splits,
+   * and split->txn->curr == split->acc->comm, then use the OTHER
+   * split for the rate.
+   */
+  osplit = xaccSplitGetOtherSplit (split);
+  txn = gnc_split_register_get_trans (reg, virt_loc.vcell_loc);
+
+  if (!gnc_split_register_current_trans_expanded (reg) && osplit &&
+      !gnc_split_register_needs_conv_rate (reg, txn, xaccSplitGetAccount (split)))
+  {
+    split = osplit;
+  }
+
+  amount = xaccSplitGetAmount (split);
+  value = xaccSplitGetValue (split);
+
+  if (gnc_numeric_zero_p (value))
+    return "";
+
+  convrate = gnc_numeric_div (amount, value, GNC_DENOM_AUTO, GNC_DENOM_REDUCE);
+
+  return xaccPrintAmount (convrate, gnc_default_price_print_info ());
 }
 
 static const char *
@@ -829,8 +1012,7 @@ gnc_split_register_get_memo_help (VirtualLocation virt_loc,
 
   help = gnc_table_get_entry (reg->table, virt_loc);
   if (!help || *help == '\0')
-    help = _("Enter a description of the split");
-
+      help = _("Enter a description of the split");
   return g_strdup (help);
 }
 
@@ -973,7 +1155,6 @@ gnc_split_register_get_xfrm_entry (VirtualLocation virt_loc,
 
   SplitRegister *reg = user_data;
   Split *split;
-  Split *s;
 
   split = gnc_split_register_get_split (reg, virt_loc.vcell_loc);
 
@@ -1117,6 +1298,148 @@ gnc_split_register_get_tdebcred_entry (VirtualLocation virt_loc,
   return xaccPrintAmount (total, gnc_split_amount_print_info (split, FALSE));
 }
 
+/* return TRUE if we have a RATE_CELL; return FALSE if we do not.
+ * (note: should match split-register-layout.c)
+ */
+gboolean
+gnc_split_reg_has_rate_cell (SplitRegisterType type)
+{
+  switch (type)
+  {
+  case BANK_REGISTER:
+  case CASH_REGISTER:
+  case ASSET_REGISTER:
+  case CREDIT_REGISTER:
+  case LIABILITY_REGISTER:
+  case INCOME_REGISTER:
+  case EXPENSE_REGISTER:
+  case EQUITY_REGISTER:
+  case GENERAL_LEDGER:
+  case INCOME_LEDGER:
+  case PORTFOLIO_LEDGER:
+    return TRUE;
+
+  default:
+    return FALSE;
+  }
+}
+
+/* returns TRUE if you need to convert the split's value to the local
+ * (account) display currency.  Returns FALSE if you can just use the
+ * split->value directly.
+ */
+gboolean
+gnc_split_register_needs_conv_rate (SplitRegister *reg,
+				    Transaction *txn, Account *acc)
+{
+  gnc_commodity *txn_cur, *acc_com;
+
+  /* If there is not a RATE_CELL, then don't do anything */
+  if (!gnc_split_reg_has_rate_cell (reg->type))
+    return FALSE;
+
+  /* if txn->currency == acc->commodity, then return FALSE */
+  acc_com = xaccAccountGetCommodity (acc);
+  txn_cur = xaccTransGetCurrency (txn);
+  if (txn_cur && acc_com && gnc_commodity_equal (txn_cur, acc_com))
+    return FALSE;
+
+  return TRUE;
+}
+
+/* Compute the conversion rate for the transaction to this account.
+ * Any "split value" (which is in the transaction currency),
+ * multiplied by this conversion rate, will give you the value you
+ * should display for this account.
+ */
+gnc_numeric
+gnc_split_register_get_conv_rate (Transaction *txn, Account *acc)
+{
+  gnc_numeric amount, value, convrate;
+  GList *splits;
+  Split *s;
+
+  /* We need to compute the conversion rate into _this account_.  So,
+   * find the first split into this account, compute the conversion
+   * rate (based on amount/value), and then return this conversion
+   * rate.
+   */
+  splits = xaccTransGetSplitList(txn);
+  for (; splits; splits = splits->next) {
+    s = splits->data;
+    
+    if (xaccSplitGetAccount (s) != acc)
+      continue;
+
+    amount = xaccSplitGetAmount (s);
+
+    /* Ignore splits with "zero" amount */
+    if (gnc_numeric_zero_p (amount))
+      continue;
+
+    value = xaccSplitGetValue (s);
+    convrate = gnc_numeric_div (amount, value, GNC_DENOM_AUTO, GNC_DENOM_REDUCE);
+    return convrate;
+  }
+
+  /* Don't error if we're in a GENERAL_LEDGER and have no account */
+  if (acc)
+    PERR ("Cannot convert transaction -- no splits with proper conversion ratio");
+  return gnc_numeric_create (100, 100);
+}
+
+/* Convert the amount/value of the Split for viewing in the account --
+ * in particular we want to convert the Split to be in to_commodity.
+ * Returns the amount.
+ */
+static gnc_numeric
+gnc_split_register_convert_amount (Split *split, Account * account,
+				   gnc_commodity * to_commodity)
+{
+  gnc_commodity *acc_com;
+  Transaction *txn;
+  gnc_numeric amount, value, convrate;
+  Account * split_acc;
+
+  amount = xaccSplitGetAmount (split);
+
+  /* If this split is attached to this account, just return the amount */
+  split_acc = xaccSplitGetAccount (split);
+  if (split_acc == account)
+    return amount;
+
+  /* If split->account->commodity == to_commodity, return the amount */
+  acc_com = xaccAccountGetCommodity (split_acc);
+  if (acc_com && gnc_commodity_equal (acc_com, to_commodity))
+    return amount;
+
+  /* Ok, this split is not for the viewed account, and the commodity
+   * does not match.  So we need to do some conversion.
+   *
+   * First, we can cheat.  If this transaction is balanced and has
+   * exactly two splits, then we can implicitly determine the exchange
+   * rate and just return the 'other' split amount.
+   */
+  txn = xaccSplitGetParent (split);
+  if (txn && gnc_numeric_zero_p (xaccTransGetImbalance (txn))) {
+    Split *osplit = xaccSplitGetOtherSplit (split);
+
+    if (osplit)
+      return gnc_numeric_neg (xaccSplitGetAmount (osplit));
+  }
+
+  /* ... otherwise, we need to compute the amount from the conversion
+   * rate into _this account_.  So, find the split into this account,
+   * compute the conversion rate (based on amount/value), and then multiply
+   * this times the split value.
+   */
+  convrate = gnc_split_register_get_conv_rate (txn, account);
+  value = xaccSplitGetValue (split);
+  return gnc_numeric_mul (value, convrate,
+			  gnc_commodity_get_fraction (to_commodity),
+			  GNC_RND_ROUND);    
+}
+
 static const char *
 gnc_split_register_get_debcred_entry (VirtualLocation virt_loc,
                                       gboolean translate,
@@ -1126,19 +1449,24 @@ gnc_split_register_get_debcred_entry (VirtualLocation virt_loc,
   SplitRegister *reg = user_data;
   gboolean is_debit;
   Split *split;
+  Transaction *trans;
+  gnc_commodity *currency;
 
   is_debit = gnc_cell_name_equal
     (gnc_table_get_cell_name (reg->table, virt_loc), DEBT_CELL);
 
   split = gnc_split_register_get_split (reg, virt_loc.vcell_loc);
+  trans = gnc_split_register_get_trans (reg, virt_loc.vcell_loc);
+
+  currency = xaccTransGetCurrency (trans);
+  if (!currency)
+    currency = gnc_default_currency ();
 
   if (!split)
   {
-    Transaction *trans;
     gnc_numeric imbalance;
-    gnc_commodity *currency;
+    Account *acc;
 
-    trans = gnc_split_register_get_trans (reg, virt_loc.vcell_loc);
     imbalance = xaccTransGetImbalance (trans);
 
     if (gnc_numeric_zero_p (imbalance))
@@ -1157,13 +1485,17 @@ gnc_split_register_get_debcred_entry (VirtualLocation virt_loc,
 
     imbalance = gnc_numeric_abs (imbalance);
 
-    currency = xaccTransGetCurrency (trans);
-    if (!currency)
-      currency = gnc_default_currency ();
-
-    imbalance = gnc_numeric_convert (imbalance,
-                                     gnc_commodity_get_fraction (currency),
-                                     GNC_RND_ROUND);
+    acc = gnc_split_register_get_default_account (reg);
+    if (gnc_split_register_needs_conv_rate (reg, trans, acc)) {
+      imbalance = gnc_numeric_mul (imbalance,
+				   gnc_split_register_get_conv_rate (trans, acc),
+				   gnc_commodity_get_fraction (currency),
+				   GNC_RND_ROUND);
+    } else {
+      imbalance = gnc_numeric_convert (imbalance,
+				       gnc_commodity_get_fraction (currency),
+				       GNC_RND_ROUND);
+    }
 
     return xaccPrintAmount (imbalance,
                             gnc_split_value_print_info (split, FALSE));
@@ -1172,7 +1504,31 @@ gnc_split_register_get_debcred_entry (VirtualLocation virt_loc,
   {
     gnc_numeric amount;
 
-    amount = xaccSplitGetValue (split);
+    /* If this account is not a stock/mutual/currency account, and currency !=
+     * the account commodity, then use the SplitAmount instead of the SplitValue.
+     */
+    switch (reg->type) {
+    case STOCK_REGISTER:
+    case CURRENCY_REGISTER:
+      amount = xaccSplitGetValue (split);
+      break;
+
+    default:
+      {
+	Account *account;
+	gnc_commodity * commodity;
+
+	account = gnc_split_register_get_default_account (reg);
+	commodity = xaccAccountGetCommodity (account);
+
+	if (commodity && !gnc_commodity_equal (commodity, currency))
+	  /* Convert this to the "local" value */
+	  amount = gnc_split_register_convert_amount (split, account, commodity);
+	else
+	  amount = xaccSplitGetValue (split);
+      }
+    }
+
     if (gnc_numeric_zero_p (amount))
       return NULL;
 
@@ -1188,10 +1544,32 @@ gnc_split_register_get_debcred_entry (VirtualLocation virt_loc,
   }
 }
 
+static gboolean
+gnc_split_register_cursor_is_readonly (VirtualLocation virt_loc,
+				       gpointer user_data)
+{
+  SplitRegister *reg = user_data;
+  Split *split;
+  Transaction *txn;
+  char type;
+
+  split = gnc_split_register_get_split (reg, virt_loc.vcell_loc);
+  if (!split) return FALSE;
+
+  txn = xaccSplitGetParent (split);
+  if (!txn) return FALSE;
+
+  type = xaccTransGetTxnType (txn);
+  return (type == TXN_TYPE_INVOICE);
+}
+
 static CellIOFlags
 gnc_split_register_get_inactive_io_flags (VirtualLocation virt_loc,
                                           gpointer user_data)
 {
+  if (gnc_split_register_cursor_is_readonly (virt_loc, user_data))
+    return XACC_CELL_ALLOW_READ_ONLY;
+
   return XACC_CELL_ALLOW_NONE;
 }
 
@@ -1199,6 +1577,9 @@ static CellIOFlags
 gnc_split_register_get_standard_io_flags (VirtualLocation virt_loc,
                                           gpointer user_data)
 {
+  if (gnc_split_register_cursor_is_readonly (virt_loc, user_data))
+    return XACC_CELL_ALLOW_READ_ONLY;
+
   return XACC_CELL_ALLOW_ALL;
 }
 
@@ -1206,7 +1587,34 @@ static CellIOFlags
 gnc_split_register_get_recn_io_flags (VirtualLocation virt_loc,
                                       gpointer user_data)
 {
+  if (gnc_split_register_cursor_is_readonly (virt_loc, user_data))
+    return XACC_CELL_ALLOW_READ_ONLY;
+
   return XACC_CELL_ALLOW_ALL | XACC_CELL_ALLOW_EXACT_ONLY;
+}
+
+static CellIOFlags
+gnc_split_register_get_ddue_io_flags (VirtualLocation virt_loc,
+                                         gpointer user_data)
+{
+  SplitRegister *reg = user_data;
+  char type;
+
+  type = gnc_split_register_get_type_value (reg, virt_loc);
+
+  /* Only print the due date for invoice transactions */
+  if (type != TXN_TYPE_INVOICE) {
+    return XACC_CELL_ALLOW_NONE;
+  }
+
+  return XACC_CELL_ALLOW_READ_ONLY;
+}
+
+static CellIOFlags
+gnc_split_register_get_rate_io_flags (VirtualLocation virt_loc,
+                                         gpointer user_data)
+{
+  return XACC_CELL_ALLOW_SHADOW;
 }
 
 static CellIOFlags
@@ -1215,6 +1623,9 @@ gnc_split_register_get_debcred_io_flags (VirtualLocation virt_loc,
 {
   SplitRegister *reg = user_data;
   Split *split;
+
+  if (gnc_split_register_cursor_is_readonly (virt_loc, user_data))
+    return XACC_CELL_ALLOW_READ_ONLY;
 
   split = gnc_split_register_get_split (reg, virt_loc.vcell_loc);
 
@@ -1230,6 +1641,9 @@ gnc_split_register_get_security_io_flags (VirtualLocation virt_loc,
 {
   SplitRegister *reg = user_data;
 
+  if (gnc_split_register_cursor_is_readonly (virt_loc, user_data))
+    return XACC_CELL_ALLOW_READ_ONLY;
+
   if (gnc_split_register_use_security_cells (reg, virt_loc))
     return XACC_CELL_ALLOW_ALL;
 
@@ -1241,6 +1655,7 @@ gnc_split_register_confirm (VirtualLocation virt_loc, gpointer user_data)
 {
   SplitRegister *reg = user_data;
   SRInfo *info = gnc_split_register_get_info (reg);
+  Transaction *trans;
   Split *split;
   char recn;
 
@@ -1253,6 +1668,9 @@ gnc_split_register_confirm (VirtualLocation virt_loc, gpointer user_data)
   if (!split)
     return TRUE;
 
+  trans = xaccSplitGetParent (split);
+  if (xaccTransWarnReadOnly(trans))
+    return FALSE;
   if (gnc_table_layout_get_cell_changed (reg->table->layout, RECN_CELL, FALSE))
     recn = gnc_recn_cell_get_flag
       ((RecnCell *) gnc_table_layout_get_cell (reg->table->layout, RECN_CELL));
@@ -1262,8 +1680,8 @@ gnc_split_register_confirm (VirtualLocation virt_loc, gpointer user_data)
   if (recn == YREC)
   {
     gboolean confirm;
-    char *message = _("You are about to change a reconciled split.\n"
-                      "Are you sure you want to do that?");
+    const gchar *message = _("You are about to change a reconciled split.\n"
+			     "Are you sure you want to do that?");
 
     confirm = gnc_lookup_boolean_option ("Register",
                                          "Confirm before changing reconciled",
@@ -1272,7 +1690,7 @@ gnc_split_register_confirm (VirtualLocation virt_loc, gpointer user_data)
       return TRUE;
 
     confirm = gnc_verify_dialog_parented (gnc_split_register_get_parent (reg),
-                                          message, FALSE);
+                                          FALSE, message);
 
     info->change_confirmed = confirm;
 
@@ -1433,6 +1851,7 @@ gnc_template_register_get_debcred_entry (VirtualLocation virt_loc,
                                                  user_data);
 
   kvpf = xaccSplitGetSlots (split);
+  PWARN( "We're very close to \"wrong\".  \"Fix it immediately!!!\"" );
 
   if (kvpf)
   {
@@ -1466,7 +1885,8 @@ gnc_template_register_get_debcred_entry (VirtualLocation virt_loc,
     amount = gnc_numeric_abs (amount);
 
     /* FIXME: This should be fixed to be correct for the "fake" account. */
-    return xaccPrintAmount (amount, gnc_default_print_info (FALSE));
+    return xaccPrintAmount( amount,
+                            gnc_split_value_print_info( split, FALSE ) );
   }
 
   return NULL;
@@ -1504,6 +1924,10 @@ gnc_split_register_model_new (void)
                                      DATE_CELL);
 
   gnc_table_model_set_entry_handler (model,
+                                     gnc_split_register_get_due_date_entry,
+                                     DDUE_CELL);
+
+  gnc_table_model_set_entry_handler (model,
                                      gnc_split_register_get_num_entry,
                                      NUM_CELL);
 
@@ -1514,6 +1938,10 @@ gnc_split_register_model_new (void)
   gnc_table_model_set_entry_handler (model,
                                      gnc_split_register_get_notes_entry,
                                      NOTES_CELL);
+
+  gnc_table_model_set_entry_handler (model,
+                                     gnc_split_register_get_rate_entry,
+                                     RATE_CELL);
 
   gnc_table_model_set_entry_handler (model,
                                      gnc_split_register_get_recn_entry,
@@ -1564,6 +1992,10 @@ gnc_split_register_model_new (void)
                                      TCRED_CELL);
 
   gnc_table_model_set_entry_handler (model,
+                                     gnc_split_register_get_type_entry,
+                                     TYPE_CELL);
+
+  gnc_table_model_set_entry_handler (model,
                                      gnc_split_register_get_debcred_entry,
                                      DEBT_CELL);
 
@@ -1575,6 +2007,10 @@ gnc_split_register_model_new (void)
   gnc_table_model_set_label_handler (model,
                                      gnc_split_register_get_date_label,
                                      DATE_CELL);
+
+  gnc_table_model_set_label_handler (model,
+                                     gnc_split_register_get_due_date_label,
+                                     DDUE_CELL);
 
   gnc_table_model_set_label_handler (model,
                                      gnc_split_register_get_num_label,
@@ -1641,6 +2077,10 @@ gnc_split_register_model_new (void)
                                      TBALN_CELL);
 
   gnc_table_model_set_label_handler (model,
+                                     gnc_split_register_get_type_label,
+                                     TYPE_CELL);
+
+  gnc_table_model_set_label_handler (model,
                                      gnc_split_register_get_notes_label,
                                      NOTES_CELL);
 
@@ -1659,6 +2099,10 @@ gnc_split_register_model_new (void)
   gnc_table_model_set_help_handler (model,
                                     gnc_split_register_get_date_help,
                                     DATE_CELL);
+
+  gnc_table_model_set_help_handler (model,
+                                    gnc_split_register_get_date_help,
+                                    DDUE_CELL);
 
   gnc_table_model_set_help_handler (model,
                                     gnc_split_register_get_num_help,
@@ -1710,6 +2154,21 @@ gnc_split_register_model_new (void)
                                   gnc_split_register_get_standard_io_flags,
                                   DATE_CELL);
 
+  /* FIXME: We really only need a due date for 'invoices', not for
+   * 'payments' or 'receipts'.  This implies we really only need the
+   * due-date for transactions that credit the RECEIVABLE or debit
+   * the PAYABLE account type.
+   */
+  gnc_table_model_set_io_flags_handler
+                                 (model,
+                                  gnc_split_register_get_rate_io_flags,
+                                  RATE_CELL);
+
+  gnc_table_model_set_io_flags_handler
+                                 (model,
+                                  gnc_split_register_get_ddue_io_flags,
+                                  DDUE_CELL);
+
   gnc_table_model_set_io_flags_handler
                                  (model,
                                   gnc_split_register_get_standard_io_flags,
@@ -1759,6 +2218,11 @@ gnc_split_register_model_new (void)
                                  (model,
                                   gnc_split_register_get_recn_io_flags,
                                   RECN_CELL);
+
+  gnc_table_model_set_io_flags_handler
+                                 (model,
+                                  gnc_split_register_get_recn_io_flags,
+                                  TYPE_CELL);
 
   gnc_table_model_set_io_flags_handler
                                  (model,
@@ -1853,9 +2317,17 @@ gnc_template_register_model_new (void)
                                      gnc_split_register_get_inactive_date_entry,
                                      DATE_CELL );
 
+  gnc_table_model_set_entry_handler( model,
+                                     gnc_split_register_get_inactive_date_entry,
+                                     DDUE_CELL );
+
   gnc_table_model_set_io_flags_handler( model,
                                         gnc_split_register_get_inactive_io_flags,
                                         DATE_CELL );
+
+  gnc_table_model_set_io_flags_handler( model,
+                                        gnc_split_register_get_inactive_io_flags,
+                                        DDUE_CELL );
 
   gnc_table_model_set_entry_handler (model,
                                      gnc_template_register_get_xfrm_entry,

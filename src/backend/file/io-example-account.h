@@ -38,6 +38,8 @@ struct GncExampleAccount_struct
     AccountGroup *group;
     gchar *short_description;
     gchar *long_description;
+    gboolean exclude_from_select_all;
+    gboolean start_selected;
 };
 typedef struct GncExampleAccount_struct GncExampleAccount;
 

@@ -69,6 +69,15 @@ struct _GNCReconcileList
   Query *query;
 
   GNCReconcileList *sibling;
+
+  /* Sorting info */
+  gint key;
+  gboolean increasing;
+  GtkWidget *title_arrow[5];
+
+  /* Column resizing */
+  gint prev_allocation;
+  gint title_width[5];
 };
 
 struct _GNCReconcileListClass
@@ -108,9 +117,6 @@ void gnc_reconcile_list_postpone (GNCReconcileList *list);
 void gnc_reconcile_list_unselect_all(GNCReconcileList *list);
 
 gboolean gnc_reconcile_list_changed(GNCReconcileList *list);
-
-void gnc_reconcile_list_set_sort_order(GNCReconcileList *list,
-                                       sort_type_t key);
 
 #ifdef __cplusplus
 }

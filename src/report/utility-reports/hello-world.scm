@@ -5,13 +5,14 @@
 ;; new reports for GnuCash.
 
 (define-module (gnucash report hello-world))
-(use-modules (gnucash bootstrap) (g-wrapped gw-gnc)) ;; FIXME: delete after we finish modularizing.
+(use-modules (gnucash main)) ;; FIXME: delete after we finish modularizing.
 (use-modules (gnucash gnc-module))
 
 (debug-enable 'debug)
 (debug-enable 'backtrace)
 
 (gnc:module-load "gnucash/report/report-system" 0)
+(gnc:module-load "gnucash/gnome-utils" 0) ;for gnc:html-build-url
 
 ;; This function will generate a set of options that GnuCash
 ;; will use to display a dialog where the user can select
@@ -321,11 +322,9 @@ option like this.")
         (gnc:html-markup-p
          (gnc:html-markup/format
           (_ "This is a sample GnuCash report. \
-See the guile (scheme) source code in %s \
+See the guile (scheme) source code in the scm/report directory \
 for details on writing your own reports, \
-or extending existing reports.")
-          (gnc:html-markup-tt 
-           (gnc:config-var-value-get gnc:*share-dir*) "/gnucash/scm/report")))
+or extending existing reports.")))
         (gnc:html-markup-p
          (gnc:html-markup/format
           (_ "For help on writing reports, or to contribute your brand \
@@ -431,7 +430,8 @@ new, totally cool report, consult the mailing list %s.")
       ;; need to do is pass the HREF "gnc-register:account=My
       ;; Account Name" to html-markup-anchor.  The account name
       ;; passed must be the "full" account name that you get from
-      ;; gnc:account-get-full-name.
+      ;; gnc:account-get-full-name.  You should build this url using
+      ;; (gnc:html-build-url ...)
       ;;
       ;; html-markup-anchor takes the link to jump to as its first
       ;; arg and then puts the remaining args in the body of the
@@ -447,9 +447,11 @@ new, totally cool report, consult the mailing list %s.")
              (map 
               (lambda (acct)
                 (gnc:html-markup-anchor 
-                 (string-append 
-                  "gnc-register:account=" 
-                  (gnc:account-get-full-name acct))
+		 (gnc:html-build-url gnc:url-type-register
+				     (string-append "account=" 
+						    (gnc:account-get-full-name
+						     acct))
+				     #f)
                  (gnc:account-get-name acct)))
               accounts))))
           (gnc:html-document-add-object!
@@ -474,6 +476,10 @@ new, totally cool report, consult the mailing list %s.")
  ;; for making its menu item in the main menu. You need to use the
  ;; untranslated value here!
  'name (N_ "Hello, World")
+
+ ;; The name in the menu
+ ;; (only necessary if it differs from the name)
+ 'menu-name (N_ "Sample Report with Examples")
 
  ;; A tip that is used to provide additional information about the
  ;; report to the user.

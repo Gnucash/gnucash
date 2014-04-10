@@ -164,7 +164,7 @@ void        gnc_table_destroy (Table *table);
 
 
 /* Functions to work with current cursor */
-gboolean    gnc_table_current_cursor_changed (Table *table,
+int         gnc_table_current_cursor_changed (Table *table,
                                               gboolean include_conditional);
 
 void        gnc_table_clear_current_cursor_changes (Table *table);

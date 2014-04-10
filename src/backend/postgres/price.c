@@ -1,6 +1,6 @@
 /********************************************************************\
  * price.c -- implements price handling for the postgres backend    *
- * Copyright (c) 2001 Linas Vepstas                                 *
+ * Copyright (c) 2001, 2002 Linas Vepstas <linas@linas.org>         *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -30,6 +30,8 @@
 #include <string.h>
 #include <libpq-fe.h>  
 
+#include "gnc-book.h"
+#include "gnc-book-p.h"
 #include "gnc-commodity.h"
 #include "gnc-engine.h"
 #include "gnc-engine-util.h"
@@ -39,6 +41,7 @@
 #include "guid.h"
 
 #include "PostgresBackend.h"
+#include "base-autogen.h"
 #include "escape.h"
 #include "price.h"
 #include "putil.h"
@@ -57,50 +60,77 @@ static short module = MOD_BACKEND;
 static gpointer
 get_commodities_cb (PGBackend *be, PGresult *result, int j, gpointer data)
 {
-   gnc_commodity_table *comtab = (gnc_commodity_table *) data;
-   gnc_commodity *com;
+   GList *node;
 
-   /* first, lets see if we've already got this one */
-   com = gnc_commodity_table_lookup(comtab,
-         DB_GET_VAL("namespace",j), DB_GET_VAL("mnemonic",j));
+   /* stick the commodity in every book ... */
+   for (node=be->blist; node; node=node->next)
+   {
+      gnc_commodity *com;
+      GNCBook *book = node->data;
+      gnc_commodity_table *comtab = gnc_book_get_commodity_table (book);
+   
+      if (!comtab) continue;
 
-   if (com) return comtab;
-
-   /* no we don't ... restore it */
-   com = gnc_commodity_new (
-                     DB_GET_VAL("fullname",j),
-                     DB_GET_VAL("namespace",j),
-                     DB_GET_VAL("mnemonic",j),
-                     DB_GET_VAL("code",j),
-                     atoi(DB_GET_VAL("fraction",j)));
-
-   gnc_commodity_table_insert (comtab, com);
-   return comtab;
+      /* first, lets see if we've already got this one */
+      com = gnc_commodity_table_lookup(comtab,
+                                       DB_GET_VAL("namespace",j),
+                                       DB_GET_VAL("mnemonic",j));
+   
+      if (com) continue;
+   
+      /* no we don't ... restore it */
+      com = gnc_commodity_new (DB_GET_VAL("fullname",j),
+                               DB_GET_VAL("namespace",j),
+                               DB_GET_VAL("mnemonic",j),
+                               DB_GET_VAL("code",j),
+                               atoi(DB_GET_VAL("fraction",j)));
+   
+      gnc_commodity_table_insert (comtab, com);
+   }
+   return NULL;
 }
 
 void
 pgendGetAllCommodities (PGBackend *be)
 {
-   gnc_commodity_table *comtab;
    char * p;
    if (!be) return;
 
    ENTER ("be=%p, conn=%p", be, be->connection);
 
-   comtab = gnc_book_get_commodity_table (be->book);
-   if (!comtab) {
-      PERR ("can't get commodity table");
-      return;
-   }
-
    /* Get them ALL */
    p = "SELECT * FROM gncCommodity;";
    SEND_QUERY (be, p, );
-   pgendGetResults (be, get_commodities_cb, comtab);
+   pgendGetResults (be, get_commodities_cb, NULL);
 
    LEAVE (" ");
 }
 
+void
+pgendGetCommodity (PGBackend *be, const char * unique_name)
+{
+   sqlEscape *escape;
+   char *p;
+
+   if (!be || !unique_name) return;
+
+   ENTER ("be=%p, conn=%p", be, be->connection);
+
+   escape = sqlEscape_new ();
+
+   /* Get them ALL */
+   p = be->buff;
+   p = stpcpy (p, "SELECT * FROM gncCommodity WHERE gncCommodity.commodity='");
+   p = stpcpy (p, sqlEscapeString (escape, unique_name));
+   p = stpcpy (p, "';");
+
+   SEND_QUERY (be, be->buff, );
+   pgendGetResults (be, get_commodities_cb, NULL);
+
+   sqlEscape_destroy (escape);
+
+   LEAVE (" ");
+}
 
 /* ============================================================= */
 /* ============================================================= */
@@ -177,13 +207,15 @@ commodity_mark_cb (gnc_commodity *cm, gpointer user_data)
 
 
 void
-pgendStorePriceDBNoLock (PGBackend *be, GNCPriceDB *prdb)
+pgendStorePriceDBNoLock (PGBackend *be, GNCBook *book)
 {
+   GNCPriceDB *prdb;
    gnc_commodity_table *comtab;
 
-   comtab = gnc_book_get_commodity_table (be->book);
+   prdb = gnc_book_get_pricedb(book);
+   comtab = gnc_book_get_commodity_table (book);
 
-   /* clear the marks on commodities -- we use this to mark 
+   /* Clear the marks on commodities -- we use this to mark 
     * the thing as 'already stored', avoiding redundant stores */
    gnc_commodity_table_foreach_commodity (comtab, commodity_mark_cb, 0);
 
@@ -194,19 +226,19 @@ pgendStorePriceDBNoLock (PGBackend *be, GNCPriceDB *prdb)
 }
 
 void
-pgendStorePriceDB (PGBackend *be, GNCPriceDB *prdb)
+pgendStorePriceDB (PGBackend *be, GNCBook *book)
 {
    char *p;
-   ENTER ("be=%p, prdb=%p", be, prdb);
-   if (!be || !prdb) return;
+   ENTER ("be=%p, book=%p", be, book);
+   if (!be || !book) return;
 
-   /* lock it up so that we store atomically */
+   /* Lock it up so that we store atomically */
    p = "BEGIN;\n"
        "LOCK TABLE gncPrice IN EXCLUSIVE MODE;\n";
    SEND_QUERY (be,p, );
    FINISH_QUERY(be->connection);
 
-   pgendStorePriceDBNoLock (be, prdb);
+   pgendStorePriceDBNoLock (be, book);
 
    p = "COMMIT;\n"
        "NOTIFY gncPrice;";
@@ -225,7 +257,8 @@ pgendStorePriceDB (PGBackend *be, GNCPriceDB *prdb)
 static gpointer
 get_price_cb (PGBackend *be, PGresult *result, int j, gpointer data)
 {
-   GNCPriceDB *prdb = (GNCPriceDB *) data;
+   GNCBook *book = data;
+   GNCPriceDB *prdb;
    GNCPrice *pr;
    gint32 sql_vers, local_vers;
    Timespec ts;
@@ -236,13 +269,17 @@ get_price_cb (PGBackend *be, PGresult *result, int j, gpointer data)
 
    gnc_commodity * modity;
 
-   /* first, lets see if we've already got this one */
+   FIND_BOOK (book);
+
+   prdb = gnc_book_get_pricedb(book);
+
+   /* First, lets see if we've already got this one */
    string_to_guid (DB_GET_VAL ("priceGuid", j), &guid);
-   pr = gnc_price_lookup (&guid, be->book);
+   pr = gnc_price_lookup (&guid, book);
 
    if (!pr) 
    { 
-      pr = gnc_price_create(be->book);
+      pr = gnc_price_create(book);
       gnc_price_begin_edit (pr);
       gnc_price_set_guid (pr, &guid);
       not_found = 1;
@@ -262,14 +299,14 @@ get_price_cb (PGBackend *be, PGresult *result, int j, gpointer data)
          local_vers, sql_vers);
       gnc_price_commit_edit (pr);
       gnc_price_unref (pr);
-      return prdb;
+      return data;
    }
    gnc_price_set_version (pr, sql_vers);
 
-   modity = gnc_string_to_commodity (DB_GET_VAL("commodity",j), be->book);
+   modity = gnc_string_to_commodity (DB_GET_VAL("commodity",j), book);
    gnc_price_set_commodity (pr, modity);
 
-   modity = gnc_string_to_commodity (DB_GET_VAL("currency",j), be->book);
+   modity = gnc_string_to_commodity (DB_GET_VAL("currency",j), book);
    gnc_price_set_currency (pr, modity);
 
    ts = gnc_iso8601_to_timespec_local (DB_GET_VAL("time",j));
@@ -287,38 +324,36 @@ get_price_cb (PGBackend *be, PGresult *result, int j, gpointer data)
    gnc_price_commit_edit (pr);
    gnc_price_unref (pr);
 
-   return prdb;
+   return data;
 }
 
 
-GNCPriceDB *
-pgendGetAllPrices (PGBackend *be, GNCPriceDB *prdb)
+void
+pgendGetAllPricesInBook (PGBackend *be, GNCBook *book)
 {
-   char * p;
+   char buff[400], *p;
 
-   if (!be) return NULL;
+   if (!be) return;
    ENTER ("be=%p, conn=%p", be, be->connection);
-
-   if (!prdb) {
-      prdb = gnc_pricedb_create();
-   }
 
    /* first, make sure commodities table is up to date */
    pgendGetAllCommodities (be);
 
    /* Get them ALL */
-   p = "SELECT * FROM gncPrice;";
-   SEND_QUERY (be, p, prdb);
-   pgendGetResults (be, get_price_cb, prdb);
+   p = buff;
+   p = stpcpy (p, "SELECT * FROM gncPrice WHERE bookGuid='");
+   p = guid_to_string_buff (gnc_book_get_guid(book), p);
+   p = stpcpy (p, "';");
+   SEND_QUERY (be, buff, );
+   pgendGetResults (be, get_price_cb, book);
 
    LEAVE (" ");
-   return prdb;
 }
 
 /* ============================================================= */
 
 void
-pgendPriceLookup (Backend *bend, GNCPriceLookup *look)
+pgendPriceFind (Backend *bend, GNCPriceLookup *look)
 {
    PGBackend *be = (PGBackend *)bend;
    const char * commodity_str;
@@ -333,9 +368,9 @@ pgendPriceLookup (Backend *bend, GNCPriceLookup *look)
    if (LOOKUP_NEAREST_IN_TIME == look->type)
    {
       look->type = LOOKUP_LATEST_BEFORE;
-      pgendPriceLookup (bend, look);
+      pgendPriceFind (bend, look);
       look->type = LOOKUP_EARLIEST_AFTER;
-      pgendPriceLookup (bend, look);
+      pgendPriceFind (bend, look);
       return;
    }
 
@@ -397,7 +432,7 @@ pgendPriceLookup (Backend *bend, GNCPriceLookup *look)
    }
 
    SEND_QUERY (be, be->buff, );
-   pgendGetResults (be, get_price_cb, look->prdb);
+   pgendGetResults (be, get_price_cb, NULL);
 
    /* insertion into the price db will mark it dirty;
     * but it really isn't at this point. */

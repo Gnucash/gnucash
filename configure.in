@@ -26,12 +26,12 @@ dnl Process this file with autoconf to produce a configure script.
 ### check for various programs, and stuff (do this first because later
 ### commands depend on them):
 
-AC_INIT(src/gnome/gnucash.h)
+AC_INIT(src/engine/Transaction.h)
 
 AC_PROG_CC
 
 GNUCASH_MAJOR_VERSION=1
-GNUCASH_MINOR_VERSION=7
+GNUCASH_MINOR_VERSION=9
 GNUCASH_MICRO_VERSION=0
 GNUCASH_VERSION=$GNUCASH_MAJOR_VERSION.$GNUCASH_MINOR_VERSION.$GNUCASH_MICRO_VERSION
 
@@ -50,19 +50,20 @@ AC_DEFINE_UNQUOTED(GNUCASH_MINOR_VERSION, $GNUCASH_MINOR_VERSION)
 AC_DEFINE_UNQUOTED(GNUCASH_MICRO_VERSION, $GNUCASH_MICRO_VERSION)
 
 dnl Set of available languages.
-ALL_LINGUAS="da de en_GB es fr it ja no pt ru sv"
-AM_GNU_GETTEXT
+ALL_LINGUAS="da de el en_GB es es_NI fr hu it ja nb nl pl pt pt_BR ru sk sv uk zh_CN zh_TW"
+AM_GNU_GETTEXT([use-libtool])
 
 
-AC_CANONICAL_HOST
 AM_MAINTAINER_MODE
 AM_ACLOCAL_INCLUDE(macros)
 
 AC_PROG_INSTALL
 
 AC_LIBTOOL_DLOPEN
-AC_DISABLE_STATIC
+AM_DISABLE_STATIC
 AM_PROG_LIBTOOL
+
+AC_SUBST(LIBTOOL_DEPS)
 
 AC_ISC_POSIX
 AC_C_BIGENDIAN
@@ -74,6 +75,11 @@ AC_CHECK_FUNCS(stpcpy memcpy timegm towupper)
 
 STRUCT_TM_GMTOFF_CHECK
 SCANF_LLD_CHECK
+
+AC_CHECK_HEADERS(ltdl.h)
+if test "x$ac_cv_header_ltdl_h" = xno; then
+  AC_MSG_ERROR([Cannot find ltdl.h -- libtool-devel not installed?])
+fi
 
 AM_PATH_GLIB
 
@@ -101,485 +107,42 @@ AC_CHECK_FUNCS(dlerror,,)
 LIBS="$oLIBS"
 AC_SUBST(DL_LIB)
 
-GNOME_INIT
+### --------------------------------------------------------------------------
+### MacOS 10.x requires some special handling...
 
-GNOME_COMPILE_WARNINGS
-GNOME_CHECK_GDK_PIXBUF
+# Some systems (MacOS) require -lintl
+AC_SEARCH_LIBS(gettext, intl, ,[
+	AC_MSG_ERROR([Cannot find gettext -- do you need to build -lintl?])], )
+
+AC_MSG_CHECKING(for darwin)
+case $host_os in
+	rhapsody* | darwin1*)
+		AC_MSG_RESULT([yes, but too old])
+		AC_MSG_ERROR([This platform is not supported, please
+update to latest  darwin])
+		;;
+	darwin*)
+		AC_MSG_RESULT([yes, patching libtool to always build dylibs])
+		mv libtool libtool.old
+		sed -e 's/^deplibs_check_method.*/deplibs_check_method=pass_all/g' \
+			-e 's|^archive_cmds.*|archive_cmds="$CC -dynamiclib \\$allow_undefined_flag -o \\$lib \\$libobjs \\$deplibs\\$linker_flags -install_name \\$rpath/\\$soname \\$verstring"|g' \
+			-e 's|^library_names_spec.*|library_names_spec="\\$libname\\$release\\$versuffix.dylib \\$libname\\$release\\${major}.dylib \\$libname.dylib"|g' \
+			-e 's|^soname_spec.*|soname_spec="\\$libname\\$release\\$major.dylib"|g' \
+			< libtool.old > libtool
+		rm libtool.old
+		;;
+	*)
+		AC_MSG_RESULT(no)
+		;;	
+esac
+
+
+### --------------------------------------------------------------------------
+### Guile and g-wrap version checks (should this be something other than
+### the Gnome check?)
+
 GNOME_CHECK_GUILE
-GNOME_PRINT_CHECK
-GNOME_XML_CHECK
-
-# gnome-print-check appears tobe sort of b0rked for the time being
-GNOME_PRINT_CFLAGS=`${GNOME_CONFIG} --cflags print`
-
-
-#AC_CHECK_HEADER(libxml/xmlversion.h, [
-#  HAVE_XML_VERSION_HEADER=1
-#  AC_DEFINE(HAVE_XML_VERSION_HEADER)
-#])
-
-
-### --------------------------------------------------------------------------
-### Variables
-### Set up all the initial variable values...
-
-AC_ARG_ENABLE(opt-style-install,
-  [  --enable-opt-style-install   install everything in subdirs of --prefix],
-  [case "${enableval}" in
-     yes) gnc_opt_style_install=true ;;
-     no)  gnc_opt_style_install=false ;;
-     *) AC_MSG_ERROR(bad value ${enableval} for --enable-opt-style-install) ;;
-   esac],
-   [gnc_opt_style_install=false])
-
-if test x${gnc_opt_style_install} = xtrue
-then
-  GNC_CONFIGDIR='${sysconfdir}'
-  GNC_DOC_INSTALL_DIR='${datadir}/doc'
-  GNC_INCLUDE_DIR=${includedir}
-  GNC_LIBDIR='${libdir}'
-  GNC_SCM_INSTALL_DIR='${datadir}/scm'
-  GNC_SHAREDIR='${datadir}'
-  GNC_LIBEXECDIR='${libexecdir}'
-else
-  GNC_CONFIGDIR='${sysconfdir}/gnucash'
-  GNC_DOC_INSTALL_DIR='${pkgdatadir}/doc'
-  GNC_INCLUDE_DIR=${includedir}/gnucash
-  GNC_LIBDIR='${pkglibdir}'
-  GNC_SCM_INSTALL_DIR='${pkgdatadir}/scm'
-  GNC_SHAREDIR='${pkgdatadir}'
-  GNC_LIBEXECDIR='${libexecdir}/gnucash'
-fi
-
-GNC_ACCOUNTS_DIR=${GNC_SHAREDIR}/accounts
-GNC_GLADE_DIR=${GNC_SHAREDIR}/glade
-GNC_GWRAP_LIBDIR='${GNC_SHAREDIR}/guile-modules/g-wrapped'
-GNC_MODULE_DIR='${pkglibdir}'
-GNC_PIXMAP_DIR='${datadir}/pixmaps/gnucash'
-
-AC_SUBST(GNC_ACCOUNTS_DIR)
-AC_SUBST(GNC_CONFIGDIR)
-AC_SUBST(GNC_DOC_INSTALL_DIR)
-AC_SUBST(GNC_GLADE_DIR)
-AC_SUBST(GNC_GWRAP_LIBDIR)
-AC_SUBST(GNC_INCLUDE_DIR)
-AC_SUBST(GNC_LIBDIR)
-AC_SUBST(GNC_MODULE_DIR)
-AC_SUBST(GNC_PIXMAP_DIR)
-AC_SUBST(GNC_SCM_INSTALL_DIR)
-AC_SUBST(GNC_SHAREDIR)
-AC_SUBST(GNC_LIBEXECDIR)
-
-# We should always see these errors...
-CFLAGS="${CFLAGS} -Wall"
-
-AC_ARG_ENABLE(error-on-warning,
-  [  --enable-error-on-warning    treat compile warnings as errors],
-  [case "${enableval}" in
-     yes) CFLAGS="${CFLAGS} -Werror"; enable_compile_warnings=no ;;
-     no)  ;;
-     *) AC_MSG_ERROR(bad value ${enableval} for --enable-error-on-warning) ;;
-   esac])
-
-# This has to come after AC_PROG_CC
-if test ${GCC}x = yesx
-then
-  CFLAGS="${CFLAGS} -Wno-unused"
-  CFLAGS="${CFLAGS} -Werror-implicit-function-declaration"
-fi
-
-AC_ARG_ENABLE( debug,
-  [  --enable-debug               compile with debugging flags set],
-       CFLAGS="${CFLAGS} -g"
-       LDFLAGS="${LDFLAGS} -g"
-       AC_DEFINE(DEBUG_MEMORY,1),
-       AC_DEFINE(DEBUG_MEMORY,0) )
-
-AC_ARG_ENABLE( profile,
-  [  --enable-profile             compile with profiling set],
-       CFLAGS="${CFLAGS} -pg"
-       LDFLAGS="${LDFLAGS} -pg")
-
-
-### --------------------------------------------------------------------------
-### SQL
-# Check to see if the user wants to have Postgres support
-#
-# hack alert ... we should use 'pg_config --includedir' and
-# 'pg_config --libdir' to find paths; unfortunately pg_config itself
-# is hard to find :-(
-
-AC_ARG_ENABLE( sql,
-  [  --enable-sql                 compile with sql support],
-  [
-    PG_CONFIG=`which pg_config`
-
-    if test "x$PG_CONFIG" = "x" ; then
-        PG_CONFIG="/usr/lib/postgresql/bin/pg_config"
-    fi
-
-    if test "x$enableval" != "xno" ; then
-
-      PGSQL_CFLAGS=`${PG_CONFIG} --includedir`
-      if test "x$PGSQL_CFLAGS" != x; then
-         CFLAGS="${CFLAGS} -I${PGSQL_CFLAGS}"
-      fi
-
-      AC_CHECK_HEADERS(pgsql/libpq-fe.h postgresql/libpq-fe.h libpq-fe.h)
-      if test "x$ac_cv_header_pgsql_libpq_fe_h$ac_cv_header_postgresql_libpq_fe_h$ac_cv_header_libpq_fe_h" = xnonono; then
-         AC_MSG_ERROR([Cannot find PostgreSQL headers; won't build sql backend]) 
-      else 
-        master_dirs="/usr/include /usr/local/include"
-        if test "x$ac_cv_header_pgsql_libpq_fe_h" != xno; then
-          for dir in $master_dirs; do
-              if test -f "$dir/pgsql/libpq-fe.h"; then
-                  CFLAGS="${CFLAGS} -I$dir/pgsql"
-                  break
-	      fi
-          done
-        elif test "x$ac_cv_header_postgresql_libpq_fe_h" != xno; then
-          for dir in $master_dirs; do
-              if test -f "$dir/postgresql/libpq-fe.h"; then
-                  CFLAGS="${CFLAGS} -I$dir/postgresql"
-                  break
-              fi
-          done
-	fi
-        
-        saved_LIBS="$LIBS"
-
-        PGSQL_LIBS=`${PG_CONFIG} --libdir`
-        if test "x$PGSQL_LIBS" != x; then
-           LIBS="-L${PGSQL_LIBS} -lpq $LIBS"
-        else
-           LIBS="-lpq $LIBS"
-        fi
-        AC_MSG_CHECKING(for libpq)
-        AC_TRY_LINK(
-          [
-	    #include <libpq-fe.h>
-	  ],
-          [
-             PQconnectdb("asdf");
-          ],
-          [
-            AC_MSG_RESULT(yes)
-            SQL_DIR=postgres
-          ],
-          [
-            AC_MSG_ERROR([Cannot find PostgreSQL libraries; will not build sql backend]) 
-          ]
-        )
-        LIBS="$saved_LIBS"
-      fi
-    fi
-  ]
-)
-
-AC_SUBST(SQL_DIR)
-
-
-### --------------------------------------------------------------------------
-### RPC
-AC_ARG_ENABLE( rpc,
-  [  --enable-rpc                 compile with rpc support],
-       RPC_DIR=rpc)
-
-AC_SUBST(RPC_DIR)
-
-
-### --------------------------------------------------------------------------
-### i18n
-AC_ARG_WITH( locale-dir, 
-  [  --with-locale-dir=PATH       specify where to look for locale-specific information],
-  LOCALE_DIR="$with_locale_dir",
-  LOCALE_DIR="\${prefix}/share/locale")
-
-AC_SUBST(LOCALE_DIR)
-
-dnl check for nl_langinfo(D_FMT) which is missing on FreeBSD
-LANGINFO_D_FMT_CHECK
-
-### --------------------------------------------------------------------------
-### help files
-AC_ARG_WITH( help-prefix,
-  [  --with-help-prefix=PATH      specify where to store the help files],
-  GNC_HELPDIR="$with_help_prefix/gnome/help/gnucash",
-  GNC_HELPDIR="\${datadir}/gnome/help/gnucash")
-
-AC_SUBST(GNC_HELPDIR)
-
-
-### --------------------------------------------------------------------------
-### Check for etags
-
-AC_ARG_ENABLE( etags,
-  [  --enable-etags               enable automatic create of TAGS file],
-  if test $enableval = yes; then
-     USE_ETAGS=1
-  fi,
-  USE_ETAGS=0)
-
-if test ${USE_ETAGS} = 1; then
-  AC_CHECK_PROG(GNC_TAGS_FILE, etags, TAGS)
-fi
-
-AM_CONDITIONAL(GNC_TAGS_FILE, test x${GNC_TAGS_FILE} = xTAGS)
-
-
-### --------------------------------------------------------------------------
-### Check for glade
-
-GLADE_LIBS=`$GNOME_CONFIG --libs libglade`
-GLADE_CFLAGS=`$GNOME_CONFIG --cflags libglade`
-
-# check for glade libs
-AC_CHECK_LIB(glade, glade_init,
-             GNOMEBUILDLIBS="${GNOMEBUILDLIBS} glade",
-             AC_MSG_ERROR([Cannot find libglade. See the README and config.log for more info.]),
-             $GLADE_LIBS)
-
-AC_SUBST(GLADE_LIBS)
-AC_SUBST(GLADE_CFLAGS)
-
-
-### --------------------------------------------------------------------------
-### Check for lib uri and do the right thing
-# AC_CHECK_LIB(uri, uri_alloc)
-
-# if [ -z "$HAVE_LIBURI" ] ; then
-    
-
-### --------------------------------------------------------------------------
-### Check for perl
-
-# Check for perl, force version 5
-AC_ARG_WITH(perl,
-  [  --with-perl=FILE             which perl executable to use ],
-  PERL="${with_perl}")
-
-# If the user didn't specify a perl, then go fetch.
-if test x"$PERL" = x;
-then
-  AC_PATH_PROG(PERL, perl)
-fi
-
-# Make sure Perl was found
-if test x"$PERL" = x; then
-    AC_MSG_ERROR([Cannot find Perl. Try using the --with-perl flag.])
-fi
-
-# Make sure it's version 5 or later
-if "$PERL" -e 'exit 1 if $] < 5.0'; then
-	:
-else
-    AC_MSG_ERROR([Found ${PERL} reports version ]
-                 [`${PERL} -e 'print $]'`, need version 5.*])
-fi
-AC_SUBST(PERL)
-
-# Now check for perl headers
-# This appears to be what Perl's ExtUtils::MakeMaker module does, so
-# I'm reasonably sure it's correct.
-# PERLINCL="/usr/lib/perl5/i386-linux/5.00404"
-#
-PERLINCL=`$PERL -MConfig -e 'print $Config{"archlibexp"}'`
-AC_ARG_WITH( perl-includes, 
-  [  --with-perl-includes=DIR     specify where to look for perl includes],
-       PERLINCL="$with_perl_includes" )
-AC_SUBST(PERLINCL)
-
-
-### --------------------------------------------------------------------------
-### Libraries
-LIBS="$LIBS -lm"
-
-
-### --------------------------------------------------------------------------
-### Berkeley db
-AC_ARG_ENABLE(prefer-db1,
-  [  --enable-prefer-db1          Prefer Berkeley DB 1.x],[prefer_db1="$enableval"],[prefer_db1=yes])
-
-DB_LIBS=
-AC_CHECK_FUNC(dbopen, [],
-if test "$prefer_db1" = "yes"; then
- AC_CHECK_LIB(db1, dbopen, DB_LIBS="-ldb1",
-  AC_CHECK_LIB(db, dbopen, DB_LIBS="-ldb",
-   AC_CHECK_LIB(db-3, __db185_open, DB_LIB="-ldb-3",
-    AC_MSG_ERROR([Your db library is missing db 1.85 compatibility mode])
-   )
-  )
- )
-else
- AC_CHECK_LIB(db, dbopen, DB_LIBS="-ldb",
-  AC_CHECK_LIB(db1, dbopen, DB_LIBS="-ldb1",
-   AC_CHECK_LIB(db-3, __db185_open, DB_LIB="-ldb-3",
-    AC_MSG_ERROR([Your db library is missing db 1.85 compatibility mode])
-   )
-  )
- )
-fi
-)
-
-dnl look for db headers
-if test "$prefer_db1" = "yes"; then
-	AC_CHECK_HEADERS(db_185.h db1/db.h)
-	if test "$ac_cv_header_db_185_h$ac_cv_header_db1_db_h" = nono; then
-	  AC_MSG_ERROR([Berkeley db library required for GnuCash])
-	fi
-	AC_DEFINE(PREFER_DB1)
-else
-	AC_CHECK_HEADERS(db.h db_185.h db1/db.h)
-
-	if test "$ac_cv_header_db_h$ac_cv_header_db_185_h$ac_cv_header_db1_db_h" = nonono; then
-	  AC_MSG_ERROR([Berkeley db library required for GnuCash])
-	fi
-fi
-
-AC_SUBST(DB_LIBS)
-
-
-### --------------------------------------------------------------------------
-### Gnome XML -- GNOME_XML_LIB is define by GNOME_XML_CHECK
-GNOME_XML_CFLAGS=`$GNOME_CONFIG --cflags xml`
-
-AC_SUBST(GNOME_XML_CFLAGS)
-
-oLIBS="$LIBS"
-LIBS="$LIBS $GNOME_XML_LIB"
-AC_CHECK_LIB(xml, xmlElemDump, [:], [
-  AC_MSG_ERROR([libxml 1.8.3 or newer required for GnuCash])
-  ])
-LIBS="$oLIBS"
-
-
-### --------------------------------------------------------------------------
-GTKHTML_LIBS=`$GNOME_CONFIG --libs gtkhtml`
-GTKHTML_CFLAGS=`$GNOME_CONFIG --cflags gtkhtml`
-
-AC_CHECK_LIB(gal, main, true,
-  [AC_MSG_ERROR([gal library not found. See the README and config.log for more info.])],
-  `$GNOME_CONFIG --libs gal`)
-
-# check for gtkhtml and enable it via HAVE_LIBGTKHTML
-# if found
-AC_CHECK_LIB(gtkhtml, gtk_html_new,
-             GNOMEBUILDLIBS="${GNOMEBUILDLIBS} gtkhtml"
-             AC_DEFINE(HAVE_LIBGTKHTML),
-             AC_MSG_ERROR([Cannot find gtkhtml. See the README and config.log for more info.]),
-             $GTKHTML_LIBS)
-
-GHTTP_LIBS=`$GNOME_CONFIG --libs ghttp`
-GHTTP_CFLAGS=`$GNOME_CONFIG --cflags ghttp`
-
-# Note: this doesn't croak if GHTTP_LIBS is empty! (e.g. on RH6.2)
-AC_CHECK_LIB(ghttp, ghttp_request_new,
-             GNOMEBUILDLIBS="${GNOMEBUILDLIBS} ghttp"
-             AC_DEFINE(HAVE_LIBGHTTP)
-	     if test "x$GHTTP_LIBS" = "x" ; then
-		GHTTP_LIBS=-lghttp
-	     fi,
-             AC_MSG_ERROR([Cannot find ghttp. See the README and config.log for more info.]),
-             $GHTTP_LIBS)
-
-AC_CHECK_LIB(ghttp, ghttp_enable_ssl,
-             AC_DEFINE(HAVE_OPENSSL),
-	     AC_MSG_WARN([****** ghttp does not have SSL support.]),
-	     $GHTTP_LIBS)
-
-AC_SUBST(GTKHTML_LIBS)
-AC_SUBST(GTKHTML_CFLAGS)
-AC_SUBST(GHTTP_LIBS)
-AC_SUBST(GHTTP_CFLAGS)
-
-
-### --------------------------------------------------------------------------
-### guppi
-
-AC_ARG_ENABLE( guppi,
-  [  --disable-guppi               compile without guppi support],
-  if test $enableval = no; then
-    USE_GUPPI=0
-  else
-    USE_GUPPI=1
-  fi,
-  USE_GUPPI=1 )
-
-if test ${USE_GUPPI} = 0; then
-  AC_MSG_WARN([Compiling without guppi support])
-else
-  AC_DEFINE(USE_GUPPI)
-
-
-AC_ARG_ENABLE( efence,
-  [  --enable-efence               link using efence],
-  if test $enableval = yes; then
-     EFENCE_LIBS="-lefence"
-     USE_EFENCE=1
-  fi,
-  USE_EFENCE=0
-  EFENCE_LIBS="")
-AC_DEFINE(USE_EFENCE)
-AC_SUBST(EFENCE_LIBS)
-
-## Things guppi needs (actually are these guppi dependencies or gtkhtml's?)
-
-# LAME: if you ask gnome-config for the zvt libs, it doesn't include
-# imlib, though it needs it so we'll just steal gtkhtml's which does.
-AC_CHECK_LIB(zvt, main, true,
-  [AC_MSG_ERROR([libzvt development files not found. See config.log.])],
-  `$GNOME_CONFIG --libs zvt gtkhtml`)
-
-AC_CHECK_LIB(bonobo, main, true,
-  [AC_MSG_ERROR([libbonobo development files not found. See config.log.])
-],
-  `$GNOME_CONFIG --libs bonobo`)
-
-AC_CHECK_LIB(oaf, main, true,
-  [AC_MSG_ERROR([liboaf development files not found. See config.log.])],
-  `$GNOME_CONFIG --libs oaf`)
-
-## guppi itself.
-
-GUPPI_LIBS=`$GNOME_CONFIG --libs libguppi`
-GUPPI_CFLAGS=`$GNOME_CONFIG --cflags libguppi`
-LIBGUPPI_CHECK
-AC_SUBST(GUPPI_LIBS)
-AC_SUBST(GUPPI_CFLAGS)
-
-fi
-
-### --------------------------------------------------------------------------
-### XIM
-AC_ARG_ENABLE(xim,
-  [  --enable-xim                 support XIM [default=yes]],
-  , enable_xim="yes")
-
-if test "x$enable_xim" = "xyes"; then
-  GTK_XIM_FLAGS="-DUSE_XIM"
-fi
-
-AC_SUBST(GTK_XIM_FLAGS)
-
-
-### --------------------------------------------------------------------------
-### popt
-
-AC_CHECK_LIB(popt, poptStrippedArgv,, [AC_MSG_ERROR([
-
-  popt 1.5 or newer is required to build gnucash. You can download
-  the latest version from ftp://people.redhat.com/sopwith/popt/, or if
-  you're running Debian, install the libpopt-dev package.
-])])
-
-### --------------------------------------------------------------------------
-## For now, we just presume you're using the GNOME version.  The other
-## UI's haven't been carried over during the automake transition.  At
-## some point, if it's deemed worthwhile, they can be resurrected...
-
-GNOME=1
-AC_DEFINE(GNOME)
-
+AS_SCRUB_INCLUDE(GUILE_INCS)
 
 ### --------------------------------------------------------------------------
 ### G-wrap (libraries and executable)
@@ -587,12 +150,23 @@ AC_DEFINE(GNOME)
 G_WRAP_COMPILE_ARGS=""
 G_WRAP_LINK_ARGS=""
 
-AM_PATH_GWRAP(1.3.1, , [AC_MSG_ERROR([
+AM_GUILE_VERSION_CHECK(1.3.4, , , [AC_MSG_ERROR([
+
+  guile  does not appear to be installed correctly, or is not in the
+  correct version range.  Perhaps you have not installed the guile
+  development packages?  Right now gnucash requires at least version
+  1.3.4 to build.
+])])
+
+AM_PATH_GWRAP(1.3.3, , , [AC_MSG_ERROR([
 
   g-wrap does not appear to be installed correctly, or is not new
-  enough.  Right now gnucash requires at least version 1.1.12 to build.
+  enough.  Right now gnucash requires at least version 1.3.3 to build
+  as there were major changes between version 1.3.1 and 1.3.2, and
+  extra support added between 1.3.2 and 1.3.3 that is now required
+  by gnucash.
   If you need to install g-wrap, you can find it at
-  ftp://ftp.gnucash.org/pub/g-wrap.
+  http://www.gnucash.org/pub/g-wrap.
 ])])
 
 # Find out what the g-wrap compile and link flags are.
@@ -606,6 +180,7 @@ AC_MSG_RESULT($G_WRAP_LINK_ARGS)
 
 AC_MSG_CHECKING(for g-wrap module directory)
 G_WRAP_MODULE_DIR=`${G_WRAP_CONFIG} --guile-module-directory`
+G_WRAP_LIB_DIR=`echo $G_WRAP_MODULE_DIR | sed -e 's|share/guile|lib|'`
 AC_MSG_RESULT($G_WRAP_MODULE_DIR)
 
 AC_GWRAP_CHECK_GUILE
@@ -614,8 +189,10 @@ AC_SUBST(G_WRAP_CONFIG)
 AC_SUBST(G_WRAP_COMPILE_ARGS)
 AC_SUBST(G_WRAP_LINK_ARGS)
 AC_SUBST(G_WRAP_MODULE_DIR)
+AC_SUBST(G_WRAP_LIB_DIR)
 
-### --------------------------------------------------------------------------
+AS_SCRUB_INCLUDE(CFLAGS)
+
 ### Check size of long_long - some guile's are broken.
 AC_MSG_CHECKING(if guile long_long is at least as big as gint64)
 GNC_OLDCFLAGS="$CFLAGS"
@@ -661,28 +238,738 @@ CFLAGS="$GNC_OLDCFLAGS"
 
 GNC_ADD_ON_SRFIS=""
 
-for srfi in `ls lib/srfi/srfi-*.scm | sed -e 's|lib/srfi/||; s/\.scm//'`
+for f in ${srcdir}/lib/srfi/srfi-*.scm
 do
+  srfi=`echo $f | sed 's%.*/%%' | sed 's/.scm//'`
   AC_MSG_CHECKING(if guile needs our copy of ${srfi})
-  if ! ${GUILE} -c "(use-modules (srfi ${srfi}))" > /dev/null 2>&1
+  if ${GUILE} -c "(use-modules (srfi ${srfi}))" > /dev/null 2>&1
   then
+    AC_MSG_RESULT(no)
+  else
     GNC_ADD_ON_SRFIS="${GNC_ADD_ON_SRFIS} ${srfi}.scm"
     AC_MSG_RESULT(yes)
-  else
-    AC_MSG_RESULT(no)
   fi
 done
 
 AC_SUBST(GNC_ADD_ON_SRFIS)
+if test "x${GNC_ADD_ON_SRFIS}" != "x"
+then
+ GNC_SRFI_LOAD_PATH="\${top_srcdir}/lib/"
+else
+ GNC_SRFI_LOAD_PATH=""
+fi
+AC_SUBST(GNC_SRFI_LOAD_PATH)
+
+### --------------------------------------------------------------------------
+### See if we need guile-www
+
+gnc_have_guile_www=no
+
+AC_MSG_CHECKING([if guile needs our copy of (guile www)])
+if ${GUILE} -c "(use-modules (www main))" > /dev/null 2>&1
+then
+  gnc_have_guile_www=yes
+  AC_MSG_RESULT(no)
+else
+  gnc_have_guile_www=no
+  AC_MSG_RESULT(yes)
+fi
+
+AM_CONDITIONAL(GNC_HAVE_GUILE_WWW, test "${gnc_have_guile_www}" = yes)
+
+### --------------------------------------------------------------------------
+### Gnome XML -- GNOME_XML_LIB is defined by GNOME_XML_CHECK
+
+GNOME_XML_CHECK
+GNOME_XML_CFLAGS=`$GNOME_CONFIG --cflags xml`
+AS_SCRUB_INCLUDE(GNOME_XML_CFLAGS)
+
+AC_SUBST(GNOME_XML_CFLAGS)
+
+oLIBS="$LIBS"
+LIBS="$LIBS $GNOME_XML_LIB"
+AC_CHECK_LIB(xml, xmlElemDump, [:], [
+  AC_MSG_ERROR([libxml 1.8.3 or newer required for GnuCash])
+  ])
+LIBS="$oLIBS"
+
+
+### --------------------------------------------------------------------------
+### Variables
+### Set up all the initial variable values...
+
+AC_ARG_ENABLE(opt-style-install,
+  [  --enable-opt-style-install   install everything in subdirs of --prefix],
+  [case "${enableval}" in
+     yes) gnc_opt_style_install=true ;;
+     no)  gnc_opt_style_install=false ;;
+     *) AC_MSG_ERROR(bad value ${enableval} for --enable-opt-style-install) ;;
+   esac],
+   [gnc_opt_style_install=false])
+
+if test x${gnc_opt_style_install} = xtrue
+then
+  GNC_CONFIGDIR='${sysconfdir}'
+  GNC_DOC_INSTALL_DIR='${datadir}/doc'
+  GNC_INCLUDE_DIR='${includedir}'
+  GNC_LIBDIR='${libdir}'
+  GNC_SCM_INSTALL_DIR='${datadir}/scm'
+  GNC_SHAREDIR='${datadir}'
+  GNC_LIBEXECDIR='${libexecdir}'
+else
+  GNC_CONFIGDIR='${sysconfdir}/gnucash'
+  GNC_DOC_INSTALL_DIR='${pkgdatadir}/doc'
+  GNC_INCLUDE_DIR='${includedir}/gnucash'
+  GNC_LIBDIR='${pkglibdir}'
+  GNC_SCM_INSTALL_DIR='${pkgdatadir}/scm'
+  GNC_SHAREDIR='${pkgdatadir}'
+  GNC_LIBEXECDIR='${libexecdir}/gnucash'
+fi
+
+GNC_ACCOUNTS_DIR='${GNC_SHAREDIR}/accounts'
+GNC_GLADE_DIR='${GNC_SHAREDIR}/glade'
+GNC_GWRAP_LIBDIR='${GNC_SHAREDIR}/guile-modules/g-wrapped'
+GNC_MODULE_DIR='${pkglibdir}'
+GNC_PIXMAP_DIR='${datadir}/pixmaps/gnucash'
+
+AC_SUBST(GNC_ACCOUNTS_DIR)
+AC_SUBST(GNC_CONFIGDIR)
+AC_SUBST(GNC_DOC_INSTALL_DIR)
+AC_SUBST(GNC_GLADE_DIR)
+AC_SUBST(GNC_GWRAP_LIBDIR)
+AC_SUBST(GNC_INCLUDE_DIR)
+AC_SUBST(GNC_LIBDIR)
+AC_SUBST(GNC_MODULE_DIR)
+AC_SUBST(GNC_PIXMAP_DIR)
+AC_SUBST(GNC_SCM_INSTALL_DIR)
+AC_SUBST(GNC_SHAREDIR)
+AC_SUBST(GNC_LIBEXECDIR)
+
+AC_ARG_ENABLE( debug,
+  [  --enable-debug               compile with debugging flags set],
+       CFLAGS="${CFLAGS} -g"
+       LDFLAGS="${LDFLAGS} -g"
+       AC_DEFINE(DEBUG_MEMORY,1),
+       AC_DEFINE(DEBUG_MEMORY,0) )
+
+AC_ARG_ENABLE( profile,
+  [  --enable-profile             compile with profiling set],
+       CFLAGS="${CFLAGS} -pg"
+       LDFLAGS="${LDFLAGS} -pg")
+
+
+### --------------------------------------------------------------------------
+### SQL
+# Check to see if the user wants to have Postgres support
+#
+# hack alert ... we should use 'pg_config --includedir' and
+# 'pg_config --libdir' to find paths; unfortunately pg_config itself
+# is hard to find :-(
+
+AC_ARG_ENABLE( sql,
+  [  --enable-sql                 compile with sql support],
+  [
+    PG_CONFIG=`which pg_config`
+
+    if test "x$PG_CONFIG" = "x" ; then
+        PG_CONFIG="/usr/lib/postgresql/bin/pg_config"
+    fi
+
+    if test "x$enableval" != "xno" ; then
+
+      PGSQL_CFLAGS=`${PG_CONFIG} --includedir`
+      if test "x$PGSQL_CFLAGS" != x; then
+	PGSQL_CFLAGS="-I${PGSQL_CFLAGS}"
+      fi
+
+      saved_CPPFLAGS="${CPPFLAGS}"
+      CPPFLAGS="${CPPFLAGS} ${PGSQL_CFLAGS}"
+      AC_CHECK_HEADERS(pgsql/libpq-fe.h postgresql/libpq-fe.h libpq-fe.h)
+      if test "x$ac_cv_header_pgsql_libpq_fe_h$ac_cv_header_postgresql_libpq_fe_h$ac_cv_header_libpq_fe_h" = xnonono; then
+         AC_MSG_ERROR([Cannot find PostgreSQL headers; won't build sql backend]) 
+      else 
+        master_dirs="/usr/include /usr/local/include"
+        if test "x$ac_cv_header_pgsql_libpq_fe_h" != xno; then
+          for dir in $master_dirs; do
+              if test -f "$dir/pgsql/libpq-fe.h"; then
+                  CFLAGS="${CFLAGS} -I$dir/pgsql"
+                  break
+	      fi
+          done
+        elif test "x$ac_cv_header_postgresql_libpq_fe_h" != xno; then
+          for dir in $master_dirs; do
+              if test -f "$dir/postgresql/libpq-fe.h"; then
+                  CFLAGS="${CFLAGS} -I$dir/postgresql"
+                  break
+              fi
+          done
+	fi
+        
+	AS_SCRUB_INCLUDE(PGSQL_CFLAGS)
+
+        PGSQL_LIBS=`${PG_CONFIG} --libdir`
+        if test "x$PGSQL_LIBS" != x; then
+	  PGSQL_LIBS="-L${PGSQL_LIBS}"
+        fi
+
+        saved_LIBS="$LIBS"
+ 	LIBS="${PGSQL_LIBS} -lpq $LIBS"
+        AC_MSG_CHECKING(for libpq)
+        AC_TRY_LINK(
+          [
+	    #include <libpq-fe.h>
+	  ],
+          [
+             PQconnectdb("asdf");
+          ],
+          [
+            AC_MSG_RESULT(yes)
+            SQL_DIR=postgres
+          ],
+          [
+            AC_MSG_ERROR([Cannot find PostgreSQL libraries; will not build sql backend]) 
+          ]
+        )
+        LIBS="$saved_LIBS"
+      fi
+      CPPFLAGS="$saved_CPPFLAGS"
+    fi
+  ]
+)
+
+AC_SUBST(PGSQL_CFLAGS)
+AC_SUBST(PGSQL_LIBS)
+AC_SUBST(SQL_DIR)
+
+
+### --------------------------------------------------------------------------
+### RPC
+AC_ARG_ENABLE( rpc,
+  [  --enable-rpc                 compile with rpc support],
+  [
+       AC_MSG_WARN([
+
+       The RPC Backend is depricated.  You should not use it.
+       It may go away in the future.  If you need it, please
+       contact gnucash-devel@gnucash.org and let the developers
+       know.
+       ])
+       RPC_DIR=rpc
+  ])
+
+AC_SUBST(RPC_DIR)
+
+### --------------------------------------------------------------------------
+### OFX
+AC_ARG_ENABLE( ofx,
+  [  --enable-ofx                 compile with ofx support (needs LibOFX)],
+       OFX_DIR=ofx)
+if test x${OFX_DIR} = xofx ;
+then
+    AC_ARG_WITH( ofx-prefix, 
+	[  --with-ofx-prefix=DIR     specify where to look for libOFX],
+       OFXPREFIX="$with_ofx_prefix" )
+
+    if test x${OFXPREFIX} != x ; then
+    	LIBOFX_LIBS="-L${OFXPREFIX}/lib"
+	LIBOFX_CFLAGS="-I${OFXPREFIX}/include"
+    fi
+
+    AC_MSG_CHECKING(for libofx/libofx.h)
+    save_CPPFLAGS="${CPPFLAGS}"
+    CPPFLAGS="${CPPFLAGS} ${LIBOFX_CFLAGS}"
+    AC_TRY_CPP( [#include <libofx/libofx.h>], AC_MSG_RESULT(yes), OFXfound=no )
+
+    if test x${OFXPREFIX} = x -a x${OFXfound} = no ; then
+    	LIBOFX_LIBS="-L$/usr/local/lib"
+	LIBOFX_CFLAGS="-I$/usr/local/include"
+        CPPFLAGS="${CPPFLAGS} ${LIBOFX_CFLAGS}"
+
+        AC_TRY_CPP( [#include <libofx/libofx.h>], AC_MSG_RESULT([yes (in /usr/local)]),
+	  [ AC_MSG_ERROR([cannot find libofx header, needed for OFX support.]) ] )
+    fi
+
+    LIBOFX_LIBS="${LIBOFX_LIBS} -lofx -lstdc++"
+    AC_MSG_CHECKING(for libofx)
+    save_LIBS="${LIBS}"
+    LIBS="${LIBS} ${LIBOFX_LIBS}"
+    AC_TRY_LINK( [
+#include <libofx/libofx.h>
+int ofx_proc_status_cb(const struct OfxStatusData data) { return 0; }
+int ofx_proc_account_cb(const struct OfxAccountData data) { return 0; }
+int ofx_proc_security_cb(const struct OfxSecurityData data) { return 0; }
+int ofx_proc_transaction_cb(const struct OfxTransactionData data) { return 0; }
+int ofx_proc_statement_cb(const struct OfxStatementData data) { return 0; }
+	], [
+	ofx_proc_file(0, NULL);
+	], AC_MSG_RESULT(yes),
+	[ AC_MSG_ERROR([*** Cannot compile test program for libofx library. Please check config.log for the exact error.]) ] )
+
+    LIBS="${save_LIBS}"
+    CPPFLAGS="${save_CPPFLAGS}"
+    AS_SCRUB_INCLUDE(LIBOFX_CFLAGS)
+    AC_SUBST(LIBOFX_CFLAGS)
+    AC_SUBST(LIBOFX_LIBS)
+fi
+AC_SUBST(OFX_DIR)
+
+### --------------------------------------------------------------------------
+### HBCI
+AC_ARG_ENABLE( hbci,
+  [  --enable-hbci                compile with HBCI support (needs OpenHBCI)],
+       HBCI_DIR=hbci)
+if test x${HBCI_DIR} = xhbci ;
+then
+    AM_PATH_OPENHBCI(0.9.4)
+    HBCI_LIBS="${OPENHBCI_LIBS}"
+    HBCI_CFLAGS="${OPENHBCI_CXXFLAGS}"
+
+    AS_SCRUB_INCLUDE(HBCI_CFLAGS)
+    AC_SUBST(HBCI_LIBS)
+    AC_SUBST(HBCI_CFLAGS)
+fi
+AC_SUBST(HBCI_DIR)
+### --------------------------------------------------------------------------
+### i18n
+
+AC_ARG_WITH( locale-dir, 
+  [  --with-locale-dir=PATH       specify where to look for locale-specific information],
+  LOCALE_DIR="$with_locale_dir",
+  LOCALE_DIR="\${prefix}/share/locale")
+
+AC_SUBST(LOCALE_DIR)
+
+dnl check for nl_langinfo(D_FMT) which is missing on FreeBSD
+LANGINFO_D_FMT_CHECK
+
+### --------------------------------------------------------------------------
+### help files
+
+# Used to initialize doc-path.
+AC_ARG_WITH( help-prefix,
+  [  --with-help-prefix=PATH      specify where to store the help files],
+  GNC_HELPDIR="$with_help_prefix/gnome/help/gnucash",
+  GNC_HELPDIR="\${datadir}/gnome/help/gnucash")
+
+AC_SUBST(GNC_HELPDIR)
+
+
+### --------------------------------------------------------------------------
+### Check for etags
+
+AC_ARG_ENABLE( etags,
+  [  --enable-etags               enable automatic create of TAGS file],
+  if test $enableval = yes; then
+     USE_ETAGS=1
+  fi,
+  USE_ETAGS=0)
+
+if test ${USE_ETAGS} = 1; then
+  AC_CHECK_PROG(GNC_ETAGS_FILE, etags, TAGS)
+fi
+
+AM_CONDITIONAL(GNC_ETAGS_FILE, test x${GNC_ETAGS_FILE} = xTAGS)
+
+### --------------------------------------------------------------------------
+### Check for ctags
+
+AC_ARG_ENABLE( ctags,
+  [  --enable-ctags               enable automatic create of tags file],
+  if test $enableval = yes; then
+     USE_CTAGS=1
+  fi,
+  USE_CTAGS=0)
+
+if test ${USE_CTAGS} = 1; then
+  AC_CHECK_PROG(GNC_CTAGS_FILE, ctags, tags)
+fi
+
+AM_CONDITIONAL(GNC_CTAGS_FILE, test x${GNC_CTAGS_FILE} = xtags)
+
+### --------------------------------------------------------------------------
+### Check for perl
+
+# Check for perl, force version 5
+AC_ARG_WITH(perl,
+  [  --with-perl=FILE             which perl executable to use ],
+  PERL="${with_perl}")
+
+# If the user didn't specify a perl, then go fetch.
+if test x"$PERL" = x;
+then
+  AC_PATH_PROG(PERL, perl)
+fi
+
+# Make sure Perl was found
+if test x"$PERL" = x; then
+    AC_MSG_ERROR([Cannot find Perl. Try using the --with-perl flag.])
+fi
+
+# Make sure it's version 5 or later
+if "$PERL" -e 'exit 1 if $] < 5.0'; then
+	:
+else
+    AC_MSG_ERROR([Found ${PERL} reports version ]
+                 [`${PERL} -e 'print $]'`, need version 5.*])
+fi
+AC_SUBST(PERL)
+
+# Now check for perl headers
+# This appears to be what Perl's ExtUtils::MakeMaker module does, so
+# I'm reasonably sure it's correct.
+# PERLINCL="/usr/lib/perl5/i386-linux/5.00404"
+#
+PERLINCL=`$PERL -MConfig -e 'print $Config{"archlibexp"}'`
+AC_ARG_WITH( perl-includes, 
+  [  --with-perl-includes=DIR     specify where to look for perl includes],
+       PERLINCL="$with_perl_includes" )
+AC_SUBST(PERLINCL)
+
+# check for doxygen, mostly stolen from http://log4cpp.sourceforge.net/
+# ----------------------------------------------------------------------------
+AC_DEFUN(BB_ENABLE_DOXYGEN,
+[
+AC_ARG_ENABLE(doxygen, [  --enable-doxygen        enable documentation generation with doxygen (auto)])
+AC_ARG_ENABLE(dot, [  --enable-dot            use 'dot' to generate graphs in doxygen (auto)])              
+AC_ARG_ENABLE(html-docs, [  --enable-html-docs      enable HTML generation with doxygen (yes)], [], [ enable_html_docs=yes])              
+AC_ARG_ENABLE(latex-docs, [  --enable-latex-docs     enable LaTeX documentation generation with doxygen (no)], [], [ enable_latex_docs=no])              
+if test "x$enable_doxygen" = xno; then
+        enable_doc=no
+else 
+        AC_PATH_PROG(DOXYGEN, doxygen, , $PATH)
+        if test x$DOXYGEN = x; then
+                if test "x$enable_doxygen" = xyes; then
+                        AC_MSG_ERROR([could not find doxygen])
+                fi
+                enable_doc=no
+        else
+                enable_doc=yes
+                AC_PATH_PROG(DOT, dot, , $PATH)
+        fi
+fi
+AM_CONDITIONAL(DOC, test x$enable_doc = xyes)
+
+if test x$DOT = x; then
+        if test "x$enable_dot" = xyes; then
+                AC_MSG_ERROR([could not find dot])
+        fi
+        enable_dot=no
+else
+        enable_dot=yes
+fi
+AM_CONDITIONAL(ENABLE_DOXYGEN, test x$enable_doc = xtrue)
+AC_SUBST(enable_dot)
+AC_SUBST(enable_html_docs)
+AC_SUBST(enable_latex_docs)
+])
+
+# check for doxygen
+# ----------------------------------------------------------------------------
+BB_ENABLE_DOXYGEN
+
+
+### --------------------------------------------------------------------------
+### Libraries
+LIBS="$LIBS -lm"
+
+
+### --------------------------------------------------------------------------
+### Berkeley db
+
+AC_ARG_ENABLE(prefer-db1,
+  [  --enable-prefer-db1          Prefer Berkeley DB 1.x],[prefer_db1="$enableval"],[prefer_db1=yes])
+
+DB_LIBS=
+AC_CHECK_FUNC(dbopen, [],
+if test "$prefer_db1" = "yes"; then
+ AC_CHECK_LIB(db1, dbopen, DB_LIBS="-ldb1",
+  AC_CHECK_LIB(db, dbopen, DB_LIBS="-ldb",
+   AC_CHECK_LIB(db-3, __db185_open, DB_LIBS="-ldb-3",
+    AC_CHECK_LIB(db-4.0, __db185_open, DB_LIBS="-ldb-4.0",
+     AC_MSG_ERROR([Your db library is missing db 1.85 compatibility mode])
+    )
+   )
+  )
+ )
+else
+ AC_CHECK_LIB(db, dbopen, DB_LIBS="-ldb",
+  AC_CHECK_LIB(db1, dbopen, DB_LIBS="-ldb1",
+   AC_CHECK_LIB(db-3, __db185_open, DB_LIBS="-ldb-3",
+    AC_CHECK_LIB(db-4.0, __db185_open, DB_LIBS="-ldb-4.0",
+     AC_MSG_ERROR([Your db library is missing db 1.85 compatibility mode])
+    )
+   )
+  )
+ )
+fi
+)
+
+dnl look for db headers
+if test "$prefer_db1" = "yes"; then
+	AC_CHECK_HEADERS(db_185.h db1/db.h db4/db_185.h)
+	if test "$ac_cv_header_db_185_h$ac_cv_header_db1_db_h$ac_cv_header_db4_db_185_h" = nonono; then
+	  AC_MSG_ERROR([Berkeley db library required for GnuCash])
+	fi
+	AC_DEFINE(PREFER_DB1)
+else
+	AC_CHECK_HEADERS(db.h db_185.h db1/db.h db4/db_185.h)
+
+	if test "$ac_cv_header_db_h$ac_cv_header_db_185_h$ac_cv_header_db1_db_h$ac_cv_header_db4_db_185_h" = nononono; then
+	  AC_MSG_ERROR([Berkeley db library required for GnuCash])
+	fi
+fi
+
+AC_SUBST(DB_LIBS)
+
+### --------------------------------------------------------------------------
+### popt
+
+AC_CHECK_LIB(popt, poptStrippedArgv,, [AC_MSG_ERROR([
+
+  popt 1.5 or newer is required to build gnucash. You can download
+  the latest version from ftp://people.redhat.com/sopwith/popt/, or if
+  you're running Debian, install the libpopt-dev package.
+])])
+
+
+### --------------------------------------------------------------------------
+### GNOME gui components -- built by default, but not if --enable-gui=no
+### or --disable-gui is passed to autogen 
+### --------------------------------------------------------------------------
+
+AC_ARG_ENABLE(gui, 
+  [  --enable-gui                  build the GNOME GUI components of Gnucash],
+  [case "${enableval}" in
+     yes) gnc_build_gui=true ;;
+     no)  gnc_build_gui=false ;;
+     *) gnc_build_gui=true ;;
+   esac],
+   [gnc_build_gui=true])
+
+AM_CONDITIONAL(GNUCASH_ENABLE_GUI, test x${gnc_build_gui} = xtrue)
+
+if test x${gnc_build_gui} = xtrue ;
+then
+    GNOME_INIT
+    GNOME_COMPILE_WARNINGS
+    GNOME_CHECK_GDK_PIXBUF
+    GNOME_PRINT_CHECK
+    
+    # gnome-print-check appears tobe sort of b0rked for the time being
+    GNOME_PRINT_CFLAGS=`${GNOME_CONFIG} --cflags print`
+    AS_SCRUB_INCLUDE(GNOME_PRINT_CFLAGS)
+    
+    ### ----------------------------------------------------------------------
+    ### Check for glade
+    
+    AM_PATH_LIBGLADE
+    
+    GLADE_LIBS="$LIBGLADE_LIBS"
+    GLADE_CFLAGS="$LIBGLADE_CFLAGS"
+    
+    AS_SCRUB_INCLUDE(GLADE_CFLAGS)
+    AC_SUBST(GLADE_LIBS)
+    AC_SUBST(GLADE_CFLAGS)
+    
+    
+    ### ----------------------------------------------------------------------
+    AC_CHECK_LIB(gal, main, true,
+      [AC_MSG_ERROR([gal library not found. See the README and config.log for more info.])],
+      `$GNOME_CONFIG --libs gal`)
+    
+    AC_MSG_CHECKING([for gtkhtml < 1.1])
+    GTKHTML_LIBS=`$GNOME_CONFIG --libs gtkhtml`
+    GTKHTML_CFLAGS=`$GNOME_CONFIG --cflags gtkhtml`
+    if test "x$GTKHTML_LIBS" != x; then
+	# check for gtkhtml and enable it via HAVE_LIBGTKHTML
+	# if found
+	AC_CHECK_LIB(gtkhtml, gtk_html_new,
+		     GNOMEBUILDLIBS="${GNOMEBUILDLIBS}"
+		     AC_DEFINE(HAVE_LIBGTKHTML),
+		     AC_MSG_ERROR([Cannot find gtkhtml. See the README and config.log for more info.]),
+		     $GTKHTML_LIBS)
+    else
+	AC_PATH_PROG(PKG_CONFIG,pkg-config)
+	if test "x$PKG_CONFIG" = x; then
+	    # @*%&$ Ximian programmers renamed this application
+	    AC_PATH_PROG(PKG_CONFIG,pkgconfig)
+	    if test "x$PKG_CONFIG" = x; then
+	    	AC_MSG_ERROR([Could not find the pkg-config (or pkgconfig) program.],)
+	    fi
+	fi
+	GTKHTML_LIBS=`$PKG_CONFIG --libs gtkhtml-1.1`
+	GTKHTML_CFLAGS=`$PKG_CONFIG --cflags gtkhtml-1.1`
+	# check for gtkhtml and enable it via HAVE_LIBGTKHTML
+	# if found
+	AC_MSG_CHECKING([for gtkhtml >= 1.1])
+	AC_CHECK_LIB(gtkhtml-1.1, gtk_html_new,
+		     GNOMEBUILDLIBS="${GNOMEBUILDLIBS} $GTKHTML_TEST_LIB"
+		     AC_DEFINE(HAVE_LIBGTKHTML),
+		     AC_MSG_ERROR([Cannot find gtkhtml-1.1. See the README and config.log for more info.]),
+		     $GTKHTML_LIBS)
+    fi
+    AS_SCRUB_INCLUDE(GTKHTML_CFLAGS)
+    
+    GHTTP_LIBS=`$GNOME_CONFIG --libs ghttp`
+    GHTTP_CFLAGS=`$GNOME_CONFIG --cflags ghttp`
+    
+    # Note: this doesn't croak if GHTTP_LIBS is empty! (e.g. on RH6.2)
+    AC_CHECK_LIB(ghttp, ghttp_request_new,
+                 GNOMEBUILDLIBS="${GNOMEBUILDLIBS} ghttp"
+                 AC_DEFINE(HAVE_LIBGHTTP)
+    	     if test "x$GHTTP_LIBS" = "x" ; then
+    		GHTTP_LIBS=-lghttp
+    	     fi,
+                 AC_MSG_ERROR([Cannot find ghttp. See the README and config.log for more info.]),
+                 $GHTTP_LIBS)
+    
+    AC_CHECK_LIB(ghttp, ghttp_enable_ssl,
+                 AC_DEFINE(HAVE_OPENSSL),
+    	     AC_MSG_WARN([****** ghttp does not have SSL support.]),
+    	     $GHTTP_LIBS)
+    
+    AS_SCRUB_INCLUDE(GHTTP_CFLAGS)
+    AC_SUBST(GTKHTML_LIBS)
+    AC_SUBST(GTKHTML_CFLAGS)
+    AC_SUBST(GHTTP_LIBS)
+    AC_SUBST(GHTTP_CFLAGS)
+    
+    
+    ### ----------------------------------------------------------------------
+    ### guppi
+    
+    AC_ARG_ENABLE( guppi,
+      [  --disable-guppi               compile without guppi support],
+      if test $enableval = no; then
+        USE_GUPPI=0
+      else
+        USE_GUPPI=1
+      fi,
+      USE_GUPPI=1 )
+    
+    if test ${USE_GUPPI} = 0; then
+      AC_MSG_WARN([Compiling without guppi support])
+    else
+      AC_DEFINE(USE_GUPPI)
+    
+    
+    AC_ARG_ENABLE( efence,
+      [  --enable-efence               link using efence],
+      if test $enableval = yes; then
+         EFENCE_LIBS="-lefence"
+         USE_EFENCE=1
+	 AC_DEFINE(USE_EFENCE)
+      fi,
+      USE_EFENCE=0
+      EFENCE_LIBS="")
+    AC_SUBST(EFENCE_LIBS)
+    
+    ## Things guppi needs (actually are these guppi dependencies or gtkhtml's?)
+    
+    # LAME: if you ask gnome-config for the zvt libs, it doesn't include
+    # imlib, though it needs it so we'll just steal gtkhtml's which does.
+    AC_CHECK_LIB(zvt, main, true,
+      [AC_MSG_ERROR([libzvt development files not found. See config.log.])],
+      `$GNOME_CONFIG --libs zvt` $GTKHTML_LIBS)
+    
+    #AC_CHECK_LIB(bonobo, main, true,
+    #  [AC_MSG_ERROR([libbonobo development files not found. See config.log.])
+    #],
+    #  `$GNOME_CONFIG --libs bonobo`)
+    
+    AC_CHECK_LIB(oaf, main, true,
+      [AC_MSG_ERROR([liboaf development files not found. See config.log.])],
+      `$GNOME_CONFIG --libs oaf`)
+    
+    ## guppi itself.
+    
+    GUPPI_LIBS=`$GNOME_CONFIG --libs libguppi`
+    GUPPI_CFLAGS=`$GNOME_CONFIG --cflags libguppi`
+    AS_SCRUB_INCLUDE(GUPPI_CFLAGS)
+    LIBGUPPI_CHECK
+    AC_SUBST(GUPPI_LIBS)
+    AC_SUBST(GUPPI_CFLAGS)
+    
+    fi
+    
+    ### ----------------------------------------------------------------------
+    ### XIM
+    AC_ARG_ENABLE(xim,
+      [  --enable-xim                 support XIM [default=yes]],
+      , enable_xim="yes")
+    
+    if test "x$enable_xim" = "xyes"; then
+      GTK_XIM_FLAGS="-DUSE_XIM"
+    fi
+    
+    AC_SUBST(GTK_XIM_FLAGS)
+    
+    
+    ### ----------------------------------------------------------------------
+    ## For now, we just presume you're using the GNOME version.  The other
+    ## UI's haven't been carried over during the automake transition.  At
+    ## some point, if it's deemed worthwhile, they can be resurrected...
+    
+    GNOME=1
+    AC_DEFINE(GNOME)  
+else
+  # GNOME_COMPILE_WARNINGS will add -Wall; no need to set it again.
+  # also, only add it for GCC.
+  if test ${GCC}x = yesx
+  then
+     # We should always see these errors...
+     CFLAGS="${CFLAGS} -Wall"
+  fi
+fi
+
+###-------------------------------------------------------------------------
+### Stuff from Mac OS X Port
+###-------------------------------------------------------------------------
+
+AC_CHECK_FUNCS(pthread_mutex_init)
+AC_REPLACE_FUNCS(strptime localtime_r)
+#AC_REPLACE_FUNCS(scm_strptime)
+
+if test $am_cv_val_LC_MESSAGES = "no"; then
+  LC_MESSAGES_ENUM="LC_ALL"
+else
+  LC_MESSAGES_ENUM="LC_MESSAGES"
+fi
+AC_SUBST(LC_MESSAGES_ENUM)
+
+if test $am_cv_scanf_lld = "no"; then
+  AC_MSG_CHECKING(if scanf supports %qd conversion)
+  AC_TRY_RUN([
+#include <stdio.h>
+#include <stdlib.h>
+
+int main ()
+{
+  long long int d;
+  d = 0;
+  if ((sscanf ("10000000000", "%qd", &d) != 1) || (d != 10000000000))
+    exit (1);
+  exit (0);
+}
+],[
+        AC_DEFINE(HAVE_SCANF_QD, 1,
+            [Define if scanf supports %qd conversions.])
+        AC_MSG_RESULT(yes)
+        ],[
+        AC_MSG_RESULT(no)
+        AC_MSG_ERROR([cannot continue, no long long conversion support in scanf])
+        ])
+fi
+
 
 ### --------------------------------------------------------------------------
 ### GnuCash flags and libs configuration
 
-GNUCASH_ENGINE_BASE_LIBS="${GUILE_LIBS} ${GLIB_LIBS}"
-GNUCASH_ENGINE_LIBS="-L${GNC_MODULE_DIR} -L${GNC_GWRAP_LIBDIR} ${GNUCASH_ENGINE_BASE_LIBS} -lgncmod-engine -lgw-engine -lgw-kvp -lgw-glib -lgncmodule"
+GNUCASH_ENGINE_BASE_LIBS="${GLIB_LIBS}"
+GNUCASH_ENGINE_LIBS="-L${GNC_MODULE_DIR} -L${GNC_GWRAP_LIBDIR} ${GNUCASH_ENGINE_BASE_LIBS} ${GUILE_LIBS} -lgncmod-engine -lgw-engine -lgw-kvp -lgncmodule"
 
-GNUCASH_ENGINE_BASE_CFLAGS="${GLIB_CFLAGS} ${G_WRAP_COMPILE_ARGS} ${GUILE_INCS}"
-GNUCASH_ENGINE_CFLAGS="-I${GNC_INCLUDE_DIR} ${GNUCASH_ENGINE_BASE_CFLAGS}"
+GNUCASH_ENGINE_BASE_CFLAGS="${GLIB_CFLAGS} ${G_WRAP_COMPILE_ARGS}"
+GNUCASH_ENGINE_CFLAGS="-I${GNC_INCLUDE_DIR} ${GNUCASH_ENGINE_BASE_CFLAGS} ${GUILE_INCS}"
 
 AC_SUBST(GNUCASH_ENGINE_BASE_LIBS)
 AC_SUBST(GNUCASH_ENGINE_LIBS)
@@ -713,46 +1000,95 @@ GNUCASH_REGISTER_CORE_LIBS="${GNUCASH_GNOME_UTILS_LIBS} -lgncmod-register-core"
 AC_SUBST(GNUCASH_REGISTER_CORE_CFLAGS)
 AC_SUBST(GNUCASH_REGISTER_CORE_LIBS)
 
+AM_CONDITIONAL(GNUCASH_SEPARATE_BUILDDIR, test "x${srcdir}" != "x.")
+AM_CONDITIONAL(GNC_FALSE, false)
+
+###-------------------------------------------------------------------------
+### Additional compiler warnings (or not) if we're running GCC
+###-------------------------------------------------------------------------
+
+# This has to come after AC_PROG_CC _AND_ GNOME_COMPILE_WARNINGS
+AC_MSG_CHECKING(what extra warning flags to pass to the C compiler)
+if test ${GCC}x = yesx
+then
+  warnFLAGS=
+  # These two are because of g-wrap -- it can't avoid unused and uninitialized.
+  #warnFLAGS="${warnFLAGS} -Wno-uninitialized"
+  #warnFLAGS="${warnFLAGS} -Wno-unused"
+  # other flags...
+  # These next two are included in the GNOME_COMPILE_WARNINGS
+  #warnFLAGS="${warnFLAGS} -Wmissing-prototypes"
+  #warnFLAGS="${warnFLAGS} -Wmissing-declarations"
+  #warnFLAGS="${warnFLAGS} -Werror-implicit-function-declaration" # In -Wall
+
+
+  ## Disable error-on-warning by default again because this seriously
+  ## breaks quite a number of configure tests (due to, like, 'warning:
+  ## unused variable some_variable') -- cstim, 02/02/2003
+  #
+  # Re-enabled and moved to later in the build process.  This should allow
+  # us to keep it turned on, but also not break configure proceses.
+  # -- warlord, 02/02/2003
+
+  # Enable error-on-warning by default -- I'm tired of fixing other
+  # people's missing #includes, etc.
+  AC_ARG_ENABLE(error-on-warning,
+    [  --enable-error-on-warning    treat compile warnings as errors],
+    [case "${enableval}" in
+       yes) warnFLAGS="${warnFLAGS} -Werror" ;;
+       no)  ;;
+       *) AC_MSG_ERROR(bad value ${enableval} for --enable-error-on-warning) ;;
+     esac],
+       [  warnFLAGS="${warnFLAGS} -Werror" ])
+
+  CFLAGS="${CFLAGS} ${warnFLAGS}"
+
+else
+  warnFLAGS=none
+fi
+AC_MSG_RESULT($warnFLAGS)
 
 ### --------------------------------------------------------------------------
-### Adjustments.
+### Adjustments -- especially executables that aren't generated via
+### makefiles, so that we don't have an opportunity to adjust them
+### there.
 
-chmod u+x src/gnc-test-env
+chmod u+x ${srcdir}/src/gnc-test-env
+chmod u+x ${srcdir}/src/bin/generate-gnc-script
+chmod u+x ${srcdir}/src/bin/overrides/gnucash
+chmod u+x ${srcdir}/src/bin/overrides/gnucash-run-script
+chmod u+x ${srcdir}/src/bin/overrides/gnucash-make-guids
 
 ### --------------------------------------------------------------------------
 ### Makefile creation
 
-AC_OUTPUT(
+# This is necessary so that .o files in LIBOBJS are also built via
+# the ANSI2KNR-filtering rules.
+LIBOBJS_SEDSCRIPT="s,\.[[^.]]* ,$U&,g;s,\.[[^.]]*\$\$,$U&,"
+AC_SUBST(LIBOBJS_SEDSCRIPT)
+
+AC_OUTPUT( m4/Makefile  intl/Makefile po/Makefile.in
           dnl # Makefiles
           Makefile
           accounts/Makefile
           accounts/C/Makefile
           accounts/da/Makefile
           accounts/de_DE/Makefile
+          accounts/el_GR/Makefile
           accounts/es_ES/Makefile
+          accounts/fr_FR/Makefile
+          accounts/pt_BR/Makefile
           accounts/pt_PT/Makefile
           accounts/sk/Makefile
           debian/Makefile
           doc/Makefile
           doc/examples/Makefile
-          doc/html/Makefile
-          doc/html/fr/Makefile
-          doc/html/fr/image/Makefile
-          doc/sgml/Makefile
-          doc/sgml/C/Makefile
-          doc/sgml/C/image/Makefile
-          doc/sgml/de_DE/Makefile
-          doc/sgml/es/Makefile
-          doc/sgml/pt_PT/Makefile
-          doc-tools/Makefile
-          intl/Makefile
           intl-scm/Makefile
           lib/Makefile
           lib/guile-www/Makefile
           lib/srfi/Makefile
+	  lib/libc/Makefile
           macros/Makefile
-	  po/Makefile.in
-          po/Makefile
           rpm/Makefile
           src/Makefile
           src/app-file/Makefile
@@ -770,10 +1106,11 @@ AC_OUTPUT(
           src/backend/postgres/test/Makefile
           src/backend/rpc/Makefile
           src/bin/Makefile
+          src/bin/overrides/Makefile
+          src/bin/test/Makefile
           src/core-utils/Makefile
           src/calculation/Makefile 
           src/calculation/test/Makefile 
-          src/dialog-account/Makefile
           src/doc/Makefile
           src/doc/design/Makefile
           src/doc/xml/Makefile
@@ -785,10 +1122,6 @@ AC_OUTPUT(
           src/experimental/cbb/cbb-engine/Makefile
           src/experimental/cgi-bin/Makefile
           src/experimental/gg/Makefile
-          src/experimental/ofx/Makefile
-          src/experimental/ofx/dtd/Makefile
-          src/experimental/ofx/explore/Makefile
-          src/experimental/ofx/parser/Makefile
           src/gnc-module/Makefile
           src/gnc-module/test/Makefile
           src/gnc-module/test/mod-foo/Makefile
@@ -799,13 +1132,20 @@ AC_OUTPUT(
           src/gnome/glade/Makefile
           src/gnome-utils/Makefile
           src/gnome-utils/test/Makefile
+          src/gnome-search/Makefile
           src/import-export/Makefile
+          src/import-export/test/Makefile
           src/import-export/binary-import/Makefile
           src/import-export/binary-import/test/Makefile
           src/import-export/qif-import/Makefile
           src/import-export/qif-import/test/Makefile
           src/import-export/qif-io-core/Makefile
           src/import-export/qif-io-core/test/Makefile
+          src/import-export/ofx/Makefile
+          src/import-export/ofx/test/Makefile
+          src/import-export/hbci/Makefile
+          src/import-export/hbci/glade/Makefile
+          src/import-export/hbci/test/Makefile
           src/network-utils/Makefile
           src/network-utils/test/Makefile
           src/optional/Makefile
@@ -821,15 +1161,17 @@ AC_OUTPUT(
           src/register/register-gnome/Makefile
           src/register/register-gnome/test/Makefile
           src/report/Makefile
-          src/report/report-system/test/Makefile
+          src/report/report-gnome/Makefile
+          src/report/report-gnome/test/Makefile
           src/report/report-system/Makefile
-          src/report/standard-reports/test/Makefile
+          src/report/report-system/test/Makefile
           src/report/standard-reports/Makefile
+          src/report/standard-reports/test/Makefile
           src/report/locale-specific/Makefile
           src/report/locale-specific/us/Makefile
           src/report/locale-specific/us/test/Makefile
-          src/report/stylesheets/test/Makefile
           src/report/stylesheets/Makefile
+          src/report/stylesheets/test/Makefile
           src/report/utility-reports/Makefile
           src/report/utility-reports/test/Makefile
           src/scm/Makefile
@@ -842,7 +1184,13 @@ AC_OUTPUT(
           src/business/Makefile
           src/business/business-core/Makefile
           src/business/business-core/test/Makefile
+          src/business/business-core/file/Makefile
+          src/business/business-utils/Makefile
+          src/business/dialog-tax-table/Makefile
           src/business/business-gnome/Makefile
+          src/business/business-gnome/glade/Makefile
+          src/business/business-ledger/Makefile
+          src/business/business-reports/Makefile
 
           dnl # non-makefiles
           dnl # Please read doc/build-system before adding *anything* here
@@ -853,3 +1201,13 @@ AC_OUTPUT(
           ,
           dnl # commands go here, but we don't have any right now
           )
+
+if test x$RPC_DIR = xrpc ; then
+       AC_MSG_WARN([
+
+       The RPC Backend is depricated.  You should not use it.
+       It may go away in the future.  If you need it, please
+       contact gnucash-devel@gnucash.org and let the developers
+       know.
+       ])
+fi

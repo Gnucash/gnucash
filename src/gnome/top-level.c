@@ -28,15 +28,12 @@
 #include <guile/gh.h>
 #include <popt.h>
 #include <stdlib.h>
-#ifdef GTKHTML_HAVE_GCONF
-#include <gconf/gconf.h>
-#endif
-#include <g-wrap-runtime-guile.h>
+#include <g-wrap-wct.h>
 #include <X11/Xlib.h>
 
 #include "AccWindow.h"
 #include "TransLog.h"
-#include "argv-list-converters.h"
+#include "backend/gnc-backend-api.h"
 #include "combocell.h"
 #include "date.h"
 #include "dialog-commodity.h"
@@ -51,20 +48,17 @@
 #include "gnc-menu-extensions.h"
 #include "gnc-network.h"
 #include "gnc-splash.h"
-#ifdef USE_GUPPI
-#include "gnc-html-guppi.h"
-#endif
 #include "gnc-html.h"
+#include "gnc-gnome-utils.h"
 #include "gnc-gpg.h"
 #include "gnc-report.h"
+#include "gnc-split-reg.h"
 #include "gnc-ui.h"
 #include "gnucash-color.h"
 #include "gnucash-sheet.h"
 #include "gnucash-style.h"
-#include "gnucash.h"
 #include "guile-util.h"
 #include "messages.h"
-#include "recncell.h"
 #include "split-register.h"
 #include "top-level.h"
 #include "window-help.h"
@@ -90,6 +84,10 @@ static void gnc_configure_auto_decimal_cb(gpointer);
 static void gnc_configure_auto_decimal(void);
 static void gnc_configure_auto_decimal_places_cb(gpointer);
 static void gnc_configure_auto_decimal_places(void);
+static void gnc_configure_file_be_retention_days_cb(gpointer);
+static void gnc_configure_file_be_retention_days(void);
+static void gnc_configure_file_be_compression_cb(gpointer);
+static void gnc_configure_file_be_compression(void);
 static void gnc_configure_register_font_cb(gpointer);
 static void gnc_configure_register_font(void);
 static void gnc_configure_register_hint_font_cb(gpointer);
@@ -101,6 +99,7 @@ static void gnc_configure_register_hint_font(void);
 static short module = MOD_GUI;
 
 static int gnome_is_running = FALSE;
+static int splash_is_initialized = FALSE;
 static int gnome_is_initialized = FALSE;
 static int gnome_is_terminating = FALSE;
 
@@ -112,6 +111,8 @@ static SCM auto_raise_callback_id = SCM_UNDEFINED;
 static SCM negative_color_callback_id = SCM_UNDEFINED;
 static SCM auto_decimal_callback_id = SCM_UNDEFINED;
 static SCM auto_decimal_places_callback_id = SCM_UNDEFINED;
+static SCM log_retention_days_callback_id = SCM_UNDEFINED;
+static SCM compression_callback_id = SCM_UNDEFINED;
 static SCM register_font_callback_id = SCM_UNDEFINED;
 static SCM register_hint_font_callback_id = SCM_UNDEFINED;
 
@@ -128,25 +129,6 @@ gnucash_ui_is_terminating(void)
   return gnome_is_terminating;
 }
 
-static const char* gnc_scheme_remaining_var = "gnc:*command-line-remaining*";
-
-static char**
-gnc_get_remaining_argv(int prelen, const char **prependargv)
-{
-  /* FIXME: when we drop support older guiles, drop the (char *) coercion. */
-  SCM rem = gh_eval_str ((char *) gnc_scheme_remaining_var);
-  return gnc_scheme_list_to_nulltermcharpp (prelen, prependargv, rem);
-}
-
-static void
-gnc_set_remaining_argv(int len, const char **rest)
-{
-  SCM toput = gnc_argvarr_to_scheme_list(len, rest);
-  /* FIXME: when we drop support older guiles, drop the (char *) coercion. */
-  gh_define((char *) gnc_scheme_remaining_var, toput);
-}
-
-
 static void
 gnc_global_options_help_cb (GNCOptionWin *win, gpointer dat)
 {
@@ -154,31 +136,10 @@ gnc_global_options_help_cb (GNCOptionWin *win, gpointer dat)
 }
 
 static gboolean
-gnc_html_file_stream_cb (const char *location, char ** data)
-{
-  return (gncReadFile (location, data) > 0);
-}
-
-static gboolean
-gnc_html_report_stream_cb (const char *location, char ** data)
-{
-  gboolean ok;
-
-  ok = gnc_run_report_id_string (location, data);
-
-  if (!ok)
-    *data = g_strdup (_("<html><body><h3>Report error</h3>"
-                        "<p>An error occurred while running the report.</p>"
-                        "</body></html>"));
-
-  return ok;
-}
-
-static gboolean
 gnc_html_register_url_cb (const char *location, const char *label,
                           gboolean new_window, GNCURLResult *result)
 {
-  RegWindow   * reg = NULL;
+  GNCSplitReg * gsr   = NULL;
   Split       * split = NULL;
   Account     * account;
   Transaction * trans;
@@ -195,13 +156,14 @@ gnc_html_register_url_cb (const char *location, const char *label,
     account = xaccGetAccountFromFullName (gnc_get_current_group (),
                                           location + 8, 
                                           gnc_get_account_separator ());
-    reg = regWindowSimple (account);
-    gnc_register_raise (reg);
+    gsr = regWindowSimple (account);
+    gnc_split_reg_raise( gsr );
   }
   /* href="gnc-register:guid=12345678901234567890123456789012" */
   else if (strncmp ("guid=", location, 5) == 0)
   {
     GUID guid;
+    GNCIdType id_type;
 
     if (!string_to_guid (location + 5, &guid))
     {
@@ -209,20 +171,20 @@ gnc_html_register_url_cb (const char *location, const char *label,
       return FALSE;
     }
 
-    switch (xaccGUIDType (&guid, gnc_get_current_book ()))
+    id_type = xaccGUIDType (&guid, gnc_get_current_book ());
+    if (id_type == GNC_ID_NONE || !safe_strcmp (id_type, GNC_ID_NULL))
     {
-      case GNC_ID_NONE:
-      case GNC_ID_NULL:
         result->error_message = g_strdup_printf (_("No such entity: %s"),
                                                  location);
         return FALSE;
-
-      case GNC_ID_ACCOUNT:
+    }
+    else if (!safe_strcmp (id_type, GNC_ID_ACCOUNT))
+    {
         account = xaccAccountLookup (&guid, gnc_get_current_book ());
-        reg = regWindowSimple (account);
-        break;
-
-      case GNC_ID_TRANS:
+        gsr = regWindowSimple( account );
+    }
+    else if (!safe_strcmp (id_type, GNC_ID_TRANS))
+    {
         trans = xaccTransLookup (&guid, gnc_get_current_book ());
         split = NULL;
 
@@ -240,10 +202,10 @@ gnc_html_register_url_cb (const char *location, const char *label,
           return FALSE;
         }
 
-        reg = regWindowSimple (xaccSplitGetAccount (split));
-        break;
-
-      case GNC_ID_SPLIT:
+        gsr = regWindowSimple( xaccSplitGetAccount(split) );
+    }
+    else if (!safe_strcmp (id_type, GNC_ID_SPLIT))
+    {
         split = xaccSplitLookup (&guid, gnc_get_current_book ());
         if (!split)
         {
@@ -252,18 +214,18 @@ gnc_html_register_url_cb (const char *location, const char *label,
           return FALSE;
         }
 
-        reg = regWindowSimple (xaccSplitGetAccount (split));
-        break;
-
-      default:
+        gsr = regWindowSimple( xaccSplitGetAccount(split) );
+    }
+    else
+    {
         result->error_message =
           g_strdup_printf (_("Unsupported entity type: %s"), location);
         return FALSE;
     }
 
-    gnc_register_raise(reg);
+    gnc_split_reg_raise(gsr);
     if (split)
-      gnc_register_jump_to_split (reg, split);
+      gnc_split_reg_jump_to_split( gsr, split );
   }
   else
   {
@@ -276,101 +238,45 @@ gnc_html_register_url_cb (const char *location, const char *label,
 }
 
 static gboolean
-gnc_html_report_url_cb (const char *location, const char *label,
-                        gboolean new_window, GNCURLResult *result)
+gnc_html_price_url_cb (const char *location, const char *label,
+		       gboolean new_window, GNCURLResult *result)
 {
-  gnc_report_window * rwin;
-  GtkHTMLStream * handle;
-  char * url;
-
-  g_return_val_if_fail (location != NULL, FALSE);
-  g_return_val_if_fail (result != NULL, FALSE);
-
-  /* make a new window if necessary */ 
-  if (new_window)
-  {
-    char *url;
-
-    url = gnc_build_url (URL_TYPE_REPORT, location, label);
-    gnc_main_window_open_report_url (url, FALSE);
-    g_free (url);
-
-    result->load_to_stream = FALSE;
-  }
-  else
-  {
-    result->load_to_stream = TRUE;
-  }
-
-  return TRUE;
-}
-
-static gboolean
-gnc_html_options_url_cb (const char *location, const char *label,
-                         gboolean new_window, GNCURLResult *result)
-{
-  SCM find_report  = gh_eval_str ("gnc:find-report");
-  SCM start_editor = gh_eval_str ("gnc:report-edit-options");
-  SCM report;
-  int report_id;
-
   g_return_val_if_fail (location != NULL, FALSE);
   g_return_val_if_fail (result != NULL, FALSE);
 
   result->load_to_stream = FALSE;
 
-  /* href="gnc-options:report-id=2676" */
-  if (strncmp ("report-id=", location, 10) == 0)
+  /* href="gnc-register:guid=12345678901234567890123456789012" */
+  if (strncmp ("guid=", location, 5) == 0)
   {
-    if (sscanf (location + 10, "%d", &report_id) != 1)
-    {
-      result->error_message =
-        g_strdup_printf (_("Badly formed options URL: %s"), location);
+      GUID guid;
+      GNCIdType id_type;
 
-      return FALSE;
-    }
+      if (!string_to_guid (location + 5, &guid))
+      {
+	  result->error_message = g_strdup_printf (_("Bad URL: %s"), location);
+	  return FALSE;
+      }
 
-    report = gh_call1 (find_report, gh_int2scm (report_id));
-    if (report == SCM_UNDEFINED ||
-        report == SCM_BOOL_F)
-    {
-      result->error_message =
-        g_strdup_printf (_("Badly report id: %s"), location);
-
-      return FALSE;
-    }
-
-    gh_call1 (start_editor, report);
-
-    return TRUE;
+      id_type = xaccGUIDType (&guid, gnc_get_current_book ());
+      if (id_type == GNC_ID_NONE || safe_strcmp (id_type, GNC_ID_PRICE))
+      {
+          result->error_message =
+	    g_strdup_printf (_("Unsupported entity type: %s"), location);
+	  return FALSE;
+      }
+      if (!gnc_price_edit_by_guid (NULL, &guid)) {
+          result->error_message = g_strdup_printf (_("No such entity: %s"),
+						 location);
+	  return FALSE;
+      }
   }
   else
   {
-    result->error_message =
-      g_strdup_printf (_("Badly formed options URL: %s"), location);
-
-    return FALSE;
+      result->error_message = g_strdup_printf (_("Badly formed URL %s"),
+					       location);
+      return FALSE;
   }
-}
-
-static gboolean
-gnc_html_help_url_cb (const char *location, const char *label,
-                      gboolean new_window, GNCURLResult *result)
-{
-  g_return_val_if_fail (location != NULL, FALSE);
-  g_return_val_if_fail (result != NULL, FALSE);
-
-  if (new_window)
-  {
-    gnc_help_window * help;
-
-    help = gnc_help_window_new ();
-    gnc_help_window_show_help (help, location, label);
-
-    result->load_to_stream = FALSE;
-  }
-  else
-    result->load_to_stream = TRUE;
 
   return TRUE;
 }
@@ -383,83 +289,45 @@ gnc_commodity_help_cb (void)
 
 /* ============================================================== */
 
-/* These gnucash_ui_init and gnucash_ui functions are just hacks to get
-   the guile stuff up and running.  Expect a more formal definition of
-   what they should do soon, and expect that the open/select functions
-   will be merged with the code in FMB_OPEN in MainWindow.c */
-
-static const char *default_argv[] = {"gnucash", 0};
-
-static const struct poptOption nullPoptTable[] = {
-  { NULL, 0, 0, NULL, 0 }
-};
-
-int
-gnucash_ui_init(void)
+SCM
+gnc_gui_init_splash (SCM command_line)
 {
-  int restargc;
-  char **restargv;
-  char **restargv2;
-  poptContext returnedPoptContext;
-
-#ifdef GTKHTML_HAVE_GCONF
-  GError *gerror;
-#endif
+  SCM ret = command_line;
 
   ENTER (" ");
 
-  /* We're going to have to have other ways to handle X and GUI
-     specific args... */
-  if (!gnome_is_initialized)
+  if (!splash_is_initialized)
   {
-    restargv = gnc_get_remaining_argv(1, default_argv);
-    if(restargv == NULL)
-    {
-      restargv = g_new(char*, 2);
-      restargv[0] = g_strdup(default_argv[0]);
-      restargv[1] = NULL;
-    }
+    splash_is_initialized = TRUE;
 
-    restargc = argv_length(restargv);
- 
-    gnome_init_with_popt_table("GnuCash", VERSION, restargc, restargv,
-                               nullPoptTable, 0, &returnedPoptContext);
-    gnome_is_initialized = TRUE;
-
-    restargv2 = (char**)poptGetArgs(returnedPoptContext);
-    gnc_set_remaining_argv(argv_length(restargv2), (const char**)restargv2);
-
-#ifdef GTKHTML_HAVE_GCONF
-    if( !gconf_init(restargc, restargv, &gerror) )
-        g_error_free(gerror);
-    gerror = NULL;
-#endif
-
-    /* this must come after using the poptGetArgs return value */
-    poptFreeContext (returnedPoptContext);
-    gnc_free_argv (restargv);
-
-    gnc_component_manager_init ();
-
-    /* initialization required for gtkhtml */
-    gdk_rgb_init ();    
-    gtk_widget_set_default_colormap (gdk_rgb_get_cmap ());
-    gtk_widget_set_default_visual (gdk_rgb_get_visual ());
-    
-    /* load default HTML action handlers */ 
-    gnc_network_init();
-
-#ifdef USE_GUPPI    
-    /* initialize guppi handling in gnc-html */
-    gnc_html_guppi_init();
-#endif
+    ret = gnc_gnome_init ("gnucash", "GnuCash", VERSION, command_line);
 
     /* put up splash screen */
     gnc_show_splash_screen ();
-    
-    /* make sure splash is up */
-    while (gtk_events_pending ())
-      gtk_main_iteration ();
+  }
+
+  LEAVE (" ");
+
+  return ret;
+}
+
+SCM
+gnc_gui_init (SCM command_line)
+{
+  SCM ret = command_line;
+
+  ENTER (" ");
+
+  if (!gnome_is_initialized)
+  {
+    /* Make sure the splash (and hense gnome) was initialized */
+    if (!splash_is_initialized)
+      ret = gnc_gui_init_splash (ret);
+
+    gnome_is_initialized = TRUE;
+
+    /* load default HTML action handlers */ 
+    // gnc_network_init();
 
     gnc_configure_date_format();
     date_callback_id =
@@ -484,7 +352,7 @@ gnucash_ui_init(void)
     gnc_configure_auto_raise();
     auto_raise_callback_id = 
       gnc_register_option_change_callback(gnc_configure_auto_raise_cb,
-                                          NULL, "Register",
+                                          NULL, "_+Advanced",
                                           "Auto-Raise Lists");
 
     gnc_configure_negative_color();
@@ -505,6 +373,18 @@ gnucash_ui_init(void)
                                           NULL, "General",
                                           "Auto Decimal Places");
 
+    gnc_configure_file_be_retention_days();
+    log_retention_days_callback_id = 
+      gnc_register_option_change_callback(gnc_configure_file_be_retention_days_cb,
+                                          NULL, "General",
+                                          "Days to retain log files");
+
+    gnc_configure_file_be_compression();
+    compression_callback_id = 
+      gnc_register_option_change_callback(gnc_configure_file_be_compression_cb,
+                                          NULL, "General",
+                                          "Use file compression");
+
     gnc_configure_register_font();
     register_font_callback_id =
       gnc_register_option_change_callback(gnc_configure_register_font_cb,
@@ -516,25 +396,20 @@ gnucash_ui_init(void)
                                           NULL, "Register",
                                           "Register hint font");
 
-    gnc_recn_cell_set_string_getter (gnc_get_reconcile_str);
-
-    gnucash_style_init();
+    if (!gnucash_style_init())
+      gnc_shutdown(1);
     gnucash_color_init();
-
-    gnc_html_register_stream_handler (URL_TYPE_HELP, gnc_html_file_stream_cb);
-    gnc_html_register_stream_handler (URL_TYPE_FILE, gnc_html_file_stream_cb);
-    gnc_html_register_stream_handler (URL_TYPE_REPORT,
-                                      gnc_html_report_stream_cb);
 
     gnc_html_register_url_handler (URL_TYPE_REGISTER,
                                    gnc_html_register_url_cb);
-    gnc_html_register_url_handler (URL_TYPE_REPORT, gnc_html_report_url_cb);
-    gnc_html_register_url_handler (URL_TYPE_OPTIONS, gnc_html_options_url_cb);
-    gnc_html_register_url_handler (URL_TYPE_HELP, gnc_html_help_url_cb);
+
+    gnc_html_register_url_handler (URL_TYPE_PRICE,
+                                   gnc_html_price_url_cb);
 
     gnc_ui_commodity_set_help_callback (gnc_commodity_help_cb);
 
     gnc_file_set_can_cancel_callback (gnc_mdi_has_apps);
+    gnc_file_set_shutdown_callback (gnc_shutdown);
 
     gnc_options_dialog_set_global_help_cb (gnc_global_options_help_cb, NULL);
 
@@ -552,13 +427,13 @@ gnucash_ui_init(void)
 
   LEAVE (" ");
 
-  return 0;
+  return ret;
 }
 
 /* ============================================================== */
 
 void
-gnc_ui_shutdown (void)
+gnc_gui_shutdown (void)
 {
   if (gnome_is_running && !gnome_is_terminating)
   {
@@ -566,16 +441,14 @@ gnc_ui_shutdown (void)
 
     gtk_main_quit();
 
-#ifdef USE_GUPPI    
-    gnc_html_guppi_shutdown();
-#endif
+    gnc_gnome_shutdown ();
   }
 }
 
 /* ============================================================== */
 
 void
-gnc_ui_destroy (void)
+gnc_gui_destroy (void)
 {
   if (!gnome_is_initialized)
     return;
@@ -592,8 +465,6 @@ gnc_ui_destroy (void)
   gnc_mdi_destroy (gnc_mdi_get_current ());
 
   gnc_extensions_shutdown ();
-
-  gnc_component_manager_shutdown ();
 }
 
 /* ============================================================== */
@@ -702,7 +573,7 @@ gnc_configure_date_format (void)
 {
   char *format_code = gnc_lookup_multichoice_option("International", 
                                                     "Date Format",
-                                                    "us");
+                                                    "locale");
 
   DateFormat df;
 
@@ -851,12 +722,12 @@ gnc_configure_register_borders (void)
   gboolean use_vertical_lines;
   gboolean use_horizontal_lines;
 
-  use_vertical_lines = gnc_lookup_boolean_option("Register",
+  use_vertical_lines = gnc_lookup_boolean_option("_+Advanced",
                                                  "Show Vertical Borders",
                                                  FALSE);
 
   
-  use_horizontal_lines = gnc_lookup_boolean_option("Register",
+  use_horizontal_lines = gnc_lookup_boolean_option("_+Advanced",
                                                    "Show Horizontal Borders",
                                                    FALSE);
 
@@ -888,7 +759,7 @@ gnc_configure_auto_raise (void)
 {
   gboolean auto_pop;
 
-  auto_pop = gnc_lookup_boolean_option("Register", "Auto-Raise Lists", TRUE);
+  auto_pop = gnc_lookup_boolean_option("_+Advanced", "Auto-Raise Lists", TRUE);
 
   gnc_combo_cell_set_autopop (auto_pop);
 }
@@ -985,6 +856,59 @@ gnc_configure_auto_decimal_places (void)
                                "Auto Decimal Places", 2));
 }
 
+
+/* gnc_configure_file_be_retention_days_cb
+ *     Callback called when options change -
+ *     sets days retained for the file backend.
+ * 
+ *  Args: Nothing
+ *  Returns: Nothing
+ */
+static void
+gnc_configure_file_be_retention_days_cb (gpointer not_used)
+{
+  gnc_configure_file_be_retention_days ();
+}
+
+/* gnc_configure_file_be_retention_days
+ *     Pass the global value for the number of days to retain files to the file backend.
+ * 
+ * Args: Nothing
+ * Returns: Nothing
+ */
+static void
+gnc_configure_file_be_retention_days (void)
+{
+  gnc_file_be_set_retention_days
+    (gnc_lookup_number_option("General",
+			      "Days to retain log files", 0));
+}
+
+/* gnc_configure_file_be_retention_days_cb
+ *     Callback called when options change -
+ *     sets days retained for the file backend.
+ * 
+ *  Args: Nothing
+ *  Returns: Nothing
+ */
+static void
+gnc_configure_file_be_compression_cb (gpointer not_used)
+{
+  gnc_configure_file_be_compression ();
+}
+
+/* gnc_configure_file_be_retention_days
+ *     Pass the global value for the number of days to retain files to the file backend.
+ * 
+ * Args: Nothing
+ * Returns: Nothing
+ */
+static void
+gnc_configure_file_be_compression (void)
+{
+  gnc_file_be_set_compression
+    (gnc_lookup_boolean_option("General", "Use file compression", FALSE));
+}
 
 /* gnc_configure_register_font_cb
  *     Callback called when options change -

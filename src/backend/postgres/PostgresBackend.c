@@ -1,6 +1,6 @@
 /********************************************************************\
  * PostgresBackend.c -- implements postgres backend - main file     *
- * Copyright (c) 2000, 2001 Linas Vepstas                           *
+ * Copyright (c) 2000, 2001, 2002 Linas Vepstas <linas@linas.org>   *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -33,7 +33,9 @@
 #include <string.h>  
 #include <sys/types.h>  
 #include <unistd.h>  
-
+#if HAVE_LANGINFO_CODESET
+#include <langinfo.h>
+#endif
 #include <libpq-fe.h>  
 
 #include "AccountP.h"
@@ -42,6 +44,7 @@
 #include "Group.h"
 #include "GroupP.h"
 #include "gnc-book.h"
+#include "gnc-book-p.h"
 #include "gnc-commodity.h"
 #include "gnc-engine.h"
 #include "gnc-engine-util.h"
@@ -55,20 +58,22 @@
 #include "TransactionP.h"
 
 #include "account.h"
+#include "book.h"
 #include "builder.h"
 #include "checkpoint.h"
 #include "events.h"
 #include "gncquery.h"
 #include "kvp-sql.h"
+#include "messages.h"
 #include "PostgresBackend.h"
 #include "price.h"
 #include "txn.h"
 #include "txnmass.h"
 #include "upgrade.h"
 
-#include "putil.h"
-
 static short module = MOD_BACKEND; 
+
+#include "putil.h"
 
 static void pgendInit (PGBackend *be);
 
@@ -135,11 +140,111 @@ pgendGetUserGecos (PGBackend *be)
    return NULL;
 }
 
-AccountGroup *
-pgendGetTopGroup (PGBackend *be)
+/* ============================================================= */
+
+Account *
+pgendAccountLookup (PGBackend *be, const GUID *acct_guid)
 {
-  if (!be) return NULL;
-  return gnc_book_get_group (be->book);
+   GList *node;
+   Account * acc = NULL;
+
+   ENTER("guid = %s", guid_to_string(acct_guid));
+   for (node=be->blist; node; node=node->next)
+   {
+      GNCBook *book = node->data;
+      acc = xaccAccountLookup (acct_guid, book);
+      if (acc) { LEAVE("acc = %p", acc); return acc; }
+   }
+
+   LEAVE("acc = (null)");
+   return NULL;
+}
+
+Transaction *
+pgendTransLookup (PGBackend *be, const GUID *txn_guid)
+{
+   GList *node;
+   Transaction * txn = NULL;
+
+   ENTER("guid = %s", guid_to_string(txn_guid));
+   for (node=be->blist; node; node=node->next)
+   {
+      GNCBook *book = node->data;
+      txn = xaccTransLookup (txn_guid, book);
+      if (txn) { LEAVE("txt = %p", txn); return txn; }
+   }
+
+   LEAVE("txn = (null");
+   return NULL;
+}
+
+Split *
+pgendSplitLookup (PGBackend *be, const GUID *split_guid)
+{
+   GList *node;
+   Split * split = NULL;
+
+   ENTER("guid = %s", guid_to_string(split_guid));
+   for (node=be->blist; node; node=node->next)
+   {
+      GNCBook *book = node->data;
+      split = xaccSplitLookup (split_guid, book);
+      if (split) { LEAVE("split = %p", split); return split; }
+   }
+
+   LEAVE("split = (null)");
+   return NULL;
+}
+
+GNCPrice *
+pgendPriceLookup (PGBackend *be, const GUID *price_guid)
+{
+   GList *node;
+   GNCPrice * price = NULL;
+
+   ENTER("guid = %s", guid_to_string(price_guid));
+   for (node=be->blist; node; node=node->next)
+   {
+      GNCBook *book = node->data;
+      price = gnc_price_lookup (price_guid, book);
+      if (price) { LEAVE("price = %p", price); return price; }
+   }
+
+   return NULL;
+}
+
+GNCIdType
+pgendGUIDType (PGBackend *be, const GUID *guid)
+{
+   GList *node;
+   GNCIdType tip = GNC_ID_NONE;
+
+   ENTER("guid = %s", guid_to_string(guid));
+   for (node=be->blist; node; node=node->next)
+   {
+      GNCBook *book = node->data;
+      tip = xaccGUIDType (guid, book);
+      if (GNC_ID_NONE != tip) { LEAVE("tip = %s", tip); return tip; }
+   }
+
+   LEAVE("tip = NULL");
+   return GNC_ID_NONE;
+}
+
+/* ============================================================= */
+
+static void 
+pgend_set_book (PGBackend *be, GNCBook *book)
+{
+   GList *node;
+   be->book = book;
+
+   for (node=be->blist; node; node=node->next)
+   {
+      if (book == node->data) return;
+   }
+
+   be->blist = g_list_prepend (be->blist, book);
 }
 
 /* ============================================================= */
@@ -158,6 +263,14 @@ gnc_string_to_commodity (const char *str, GNCBook *book)
 
    space = g_strdup(str);
    name = strchr (space, ':');
+
+   if (!name)
+   {
+     PERR ("bad commodity string: %s", str ? str : "(null)");
+     g_free (space);
+     return NULL;
+   }
+
    *name = 0;
    name += 2;
 
@@ -214,6 +327,7 @@ get_version_cb (PGBackend *be, PGresult *result, int j, gpointer data)
 /* ============================================================= */
 /* include the auto-generated code */
 
+#include "base-autogen.h"
 #include "base-autogen.c"
 
 static const char *table_audit_str = 
@@ -232,9 +346,11 @@ static const char *sql_functions_str =
 #include "functions.c"
 ;
 
+#if 0
 static const char *table_drop_str = 
 #include "table-drop.c"
 ;
+#endif
 
 /* ============================================================= */
 /*             QUERY STUFF                                       */
@@ -291,10 +407,22 @@ static const char *table_drop_str =
  * this tear-up.
  */
 
+typedef struct
+{
+  Transaction * trans;
+  char * commodity_string;
+} TransResolveInfo;
+
+typedef struct
+{
+  GList * xaction_list;
+  GList * resolve_list;
+} QueryData;
+
 static gpointer
 query_cb (PGBackend *be, PGresult *result, int j, gpointer data)
 {
-   GList *xaction_list = (GList *) data;
+   QueryData *qd = data;
    GUID trans_guid;
    Transaction *trans;
    gnc_commodity *currency;
@@ -306,12 +434,12 @@ query_cb (PGBackend *be, PGresult *result, int j, gpointer data)
 
    /* use markers to avoid redundant traversals of transactions we've
     * already checked recently. */
-   trans = xaccTransLookup (&trans_guid, be->book);
+   trans = pgendTransLookup (be, &trans_guid);
    if (NULL != trans)
    {
       if (0 != trans->marker)
       {
-         return xaction_list;
+         return qd;
       }
       else
       {
@@ -319,7 +447,7 @@ query_cb (PGBackend *be, PGresult *result, int j, gpointer data)
          db_version = atoi (DB_GET_VAL("version",j));
          cache_version = xaccTransGetVersion (trans);
          if (db_version <= cache_version) {
-            return xaction_list;
+            return qd;
          }
          xaccTransBeginEdit (trans);
       }
@@ -341,15 +469,26 @@ query_cb (PGBackend *be, PGresult *result, int j, gpointer data)
    trans->idata = atoi(DB_GET_VAL("iguid",j));
 
    currency = gnc_string_to_commodity (DB_GET_VAL("currency",j), be->book);
-   xaccTransSetCurrency (trans, currency);
+   if (currency)
+     xaccTransSetCurrency (trans, currency);
+   else
+   {
+     TransResolveInfo * ri = g_new0 (TransResolveInfo, 1);
+
+     ri->trans = trans;
+     ri->commodity_string = g_strdup (DB_GET_VAL("currency",j));
+
+     qd->resolve_list = g_list_prepend (qd->resolve_list, ri);
+   }
 
    trans->marker = 1;
-   xaction_list = g_list_prepend (xaction_list, trans);
+   qd->xaction_list = g_list_prepend (qd->xaction_list, trans);
 
-   return xaction_list;
+   return qd;
 }
 
-typedef struct acct_earliest {
+typedef struct acct_earliest
+{
    Account *acct;
    Timespec ts;
 } AcctEarliest;
@@ -361,8 +500,11 @@ pgendFillOutToCheckpoint (PGBackend *be, const char *query_string)
 {
    int call_count = ncalls;
    int nact=0;
-   GList *xaction_list = NULL;
+   QueryData qd;
    GList *node, *anode, *acct_list = NULL;
+
+   qd.xaction_list = NULL;
+   qd.resolve_list = NULL;
 
    ENTER (" ");
    if (!be) return;
@@ -377,11 +519,37 @@ pgendFillOutToCheckpoint (PGBackend *be, const char *query_string)
    ncalls ++;
 
    SEND_QUERY (be, query_string, );
-   xaction_list = pgendGetResults (be, query_cb, NULL);
+   pgendGetResults (be, query_cb, &qd);
    REPORT_CLOCK (9, "fetched results at call %d", call_count);
 
+   for (node = qd.resolve_list; node; node = node->next)
+   {
+     TransResolveInfo * ri = node->data;
+     gnc_commodity * commodity;
+
+     pgendGetCommodity (be, ri->commodity_string);
+     commodity = gnc_string_to_commodity (ri->commodity_string, be->book);
+
+     if (commodity)
+     {
+       xaccTransSetCurrency (ri->trans, commodity);
+     }
+     else
+     {
+       PERR ("Can't find commodity %s", ri->commodity_string);
+     }
+
+     g_free (ri->commodity_string);
+     ri->commodity_string = NULL;
+
+     g_free (ri);
+     node->data = NULL;
+   }
+   g_list_free (qd.resolve_list);
+   qd.resolve_list = NULL;
+
    /* restore the splits for these transactions */
-   for (node=xaction_list; node; node=node->next)
+   for (node = qd.xaction_list; node; node = node->next)
    {
       Transaction *trans = (Transaction *) node->data;
 
@@ -389,7 +557,7 @@ pgendFillOutToCheckpoint (PGBackend *be, const char *query_string)
    }
 
    /* restore any kvp data associated with the transaction and splits */
-   for (node=xaction_list; node; node=node->next)
+   for (node = qd.xaction_list; node; node = node->next)
    {
       Transaction *trans = (Transaction *) node->data;
       GList *engine_splits, *snode;
@@ -407,7 +575,7 @@ pgendFillOutToCheckpoint (PGBackend *be, const char *query_string)
    }
 
    /* run the fill-out algorithm */
-   for (node=xaction_list; node; node=node->next)
+   for (node = qd.xaction_list; node; node = node->next)
    {
       Transaction *trans = (Transaction *) node->data;
       GList *split_list, *snode;
@@ -480,8 +648,8 @@ pgendFillOutToCheckpoint (PGBackend *be, const char *query_string)
          }
       }
    }
-   g_list_free (xaction_list);
-
+   g_list_free (qd.xaction_list);
+   qd.xaction_list = NULL;
 
    REPORT_CLOCK (9, "done gathering at call %d", call_count);
    if (NULL == acct_list) return;
@@ -497,37 +665,52 @@ pgendFillOutToCheckpoint (PGBackend *be, const char *query_string)
       char *p;
       AcctEarliest * ae = (AcctEarliest *) anode->data;
       pgendAccountGetBalance (be, ae->acct, ae->ts);
-   
+
       /* n.b. date_posted compare must be strictly greater than, since the 
        * GetBalance goes to less-then-or-equal-to because of the BETWEEN
        * that appears in the gncSubTotalBalance sql function. */
       p = be->buff; *p = 0;
-      p = stpcpy (p, "SELECT DISTINCT gncTransaction.* from gncEntry, gncTransaction WHERE "
-                     "   gncEntry.transGuid = gncTransaction.transGuid AND gncEntry.accountGuid='");
+      p = stpcpy (p,
+                  "SELECT DISTINCT gncTransaction.* "
+                  "FROM gncEntry, gncTransaction WHERE "
+                  "gncEntry.transGuid = gncTransaction.transGuid AND "
+                  "gncEntry.accountGuid='");
       p = guid_to_string_buff(xaccAccountGetGUID(ae->acct), p);
       p = stpcpy (p, "' AND gncTransaction.date_posted > '");
       p = gnc_timespec_to_iso8601_buff (ae->ts, p);
       p = stpcpy (p, "';");
-     
+
       pgendFillOutToCheckpoint (be, be->buff);
-      
+
       g_free (ae);
       nact ++;
    }
    g_list_free(acct_list);
 
-   REPORT_CLOCK (9, "done w/ fillout at call %d, handled %d accounts", call_count, nact);
+   REPORT_CLOCK (9, "done w/ fillout at call %d, handled %d accounts",
+                 call_count, nact);
    LEAVE (" ");
 }
 
+static gpointer
+pgendCompileQuery (Backend *bend, Query *q)
+{
+  return q;
+}
+
+static void
+pgendFreeQuery (Backend *bend, gpointer q)
+{
+}
+
 static void 
-pgendRunQuery (Backend *bend, Query *q)
+pgendRunQuery (Backend *bend, gpointer q_p)
 {
    PGBackend *be = (PGBackend *)bend;
+   Query *q = (Query*) q_p;
    const char * sql_query_string;
    AccountGroup *topgroup;
    sqlQuery *sq;
-   GList *node, *anode, *xaction_list= NULL, *acct_list = NULL;
 
    ENTER ("be=%p, qry=%p", be, q);
    if (!be || !q) return;
@@ -539,9 +722,9 @@ pgendRunQuery (Backend *bend, Query *q)
    /* first thing we do is convert the gnc-engine query into
     * an sql string. */
    sq = sqlQuery_new();
-   sql_query_string = sqlQuery_build (sq, q, be->book);
+   sql_query_string = sqlQuery_build (sq, q);
 
-   topgroup = pgendGetTopGroup (be);
+   topgroup = gnc_book_get_group (be->book);
 
    /* stage transactions, save some postgres overhead */
    xaccGroupBeginStagedTransactionTraversals (topgroup);
@@ -588,10 +771,11 @@ pgendRunQuery (Backend *bend, Query *q)
  *    for a rainy day...
  */
 
+#if 0
 static gpointer
 get_all_trans_cb (PGBackend *be, PGresult *result, int j, gpointer data)
 {
-   GList *node, *xaction_list = (GList *) data;
+   GList *xaction_list = (GList *) data;
    GUID *trans_guid;
 
    /* find the transaction this goes into */
@@ -619,7 +803,7 @@ pgendGetAllTransactions (PGBackend *be, AccountGroup *grp)
    xaccAccountGroupBeginEdit (grp);
    for (node=xaction_list; node; node=node->next)
    {
-      pgendCopyTransactionToEngine (be, (GUID *)node->data);
+      xxxpgendCopyTransactionToEngine (be, (GUID *)node->data);
       xaccGUIDFree (node->data);
    }
    g_list_free(xaction_list);
@@ -628,6 +812,7 @@ pgendGetAllTransactions (PGBackend *be, AccountGroup *grp)
    pgendEnable(be);
    gnc_engine_resume_events();
 }
+#endif
 
 
 /* ============================================================= */
@@ -686,6 +871,7 @@ pgendSync (Backend *bend, GNCBook *book)
 
    ENTER ("be=%p, grp=%p", be, grp);
 
+   pgend_set_book (be, book);
    be->version_check = (guint32) time(0);
 
    /* For the multi-user modes, we allow a save only once,
@@ -701,6 +887,8 @@ pgendSync (Backend *bend, GNCBook *book)
    }
    be->freshly_created_db = FALSE;
 
+   pgendStoreBook (be, book);
+
    /* store the account group hierarchy, and then all transactions */
    pgendStoreGroup (be, grp);
    pgendStoreAllTransactions (be, grp);
@@ -710,7 +898,7 @@ pgendSync (Backend *bend, GNCBook *book)
    pgendDisable(be);
 
    pgendKVPInit(be);
-   pgendGetAllAccounts (be, grp);
+   pgendGetAllAccountsInBook (be, book);
    if ((MODE_SINGLE_FILE != be->session_mode) &&
        (MODE_SINGLE_UPDATE != be->session_mode))
    {
@@ -720,8 +908,14 @@ pgendSync (Backend *bend, GNCBook *book)
    else
    {
       /* in single user mode, read all the transactions */
-      pgendGetMassTransactions (be, grp);
+      pgendGetMassTransactions (be, book);
    }
+
+   /* hack alert -- In some deranged theory, we should be
+    * syncing prices here, as well as syncing any/all other
+    * engine structures that need to be stored.  But instead,
+    * price syn is handled as a separate routine ...
+    */
 
    /* re-enable events */
    pgendEnable(be);
@@ -756,23 +950,67 @@ trans_traverse_cb (Transaction *trans, void *cb_data)
 static void
 pgendSyncSingleFile (Backend *bend, GNCBook *book)
 {
+   char book_guid[40];
+   char buff[4000];
    char *p;
    PGBackend *be = (PGBackend *)bend;
    AccountGroup *grp = gnc_book_get_group (book);
 
    ENTER ("be=%p, grp=%p", be, grp);
 
+   pgend_set_book (be, book);
+
+   /* hack alert -- we shouldn't be doing a global delete, 
+    * we should only be deleting the stuff that's in this particular 
+    * book .... */
    p = "BEGIN;\n"
+       "LOCK TABLE gncBook IN EXCLUSIVE MODE;\n"
        "LOCK TABLE gncAccount IN EXCLUSIVE MODE;\n"
        "LOCK TABLE gncCommodity IN EXCLUSIVE MODE;\n"
        "LOCK TABLE gncTransaction IN EXCLUSIVE MODE;\n"
-       "LOCK TABLE gncEntry IN EXCLUSIVE MODE;\n"
-       "DELETE FROM gncEntry;\n"
-       "DELETE FROM gncTransaction;\n"
-       "DELETE FROM gncAccount;\n"
-       "DELETE FROM gncCommodity;\n";
+       "LOCK TABLE gncEntry IN EXCLUSIVE MODE;\n";
    SEND_QUERY (be,p, );
    FINISH_QUERY(be->connection);
+
+   guid_to_string_buff (gnc_book_get_guid(book), book_guid);
+
+   /* First, we delete all of the accounts, splits and transactions
+    * associated with this book.  Its very tempting to just delete
+    * everything in the SQL db, but we note that there may be several 
+    * books stored here, and we want to delete only one book. 
+    */
+   /* do the one-book equivalent of "DELETE FROM gncTransaction;" */
+   p = buff;
+   p = stpcpy (p, "DELETE FROM gncTransaction WHERE "
+                  "  gncTransaction.transGuid = gncEntry.transGuid AND "
+                  "  gncEntry.accountGuid = gncAccount.accountGuid AND "
+                  "  gncAccount.bookGuid = '");
+   p = stpcpy (p, book_guid);
+   p = stpcpy (p, "';");
+   SEND_QUERY (be,buff, );
+   FINISH_QUERY(be->connection);
+
+   /* do the one-book equivalent of "DELETE FROM gncEntry;" */
+   p = buff;
+   p = stpcpy (p, "DELETE FROM gncEntry WHERE "
+                  "  gncEntry.accountGuid = gncAccount.accountGuid AND "
+                  "  gncAccount.bookGuid = '");
+   p = stpcpy (p, book_guid);
+   p = stpcpy (p, "';");
+   SEND_QUERY (be,buff, );
+   FINISH_QUERY(be->connection);
+
+
+   /* do the one-book equivalent of "DELETE FROM gncAccount;" */
+   p = buff;
+   p = stpcpy (p, "DELETE FROM gncAccount WHERE bookGuid='");
+   p = stpcpy (p, book_guid);
+   p = stpcpy (p, "';");
+   SEND_QUERY (be,buff, );
+   FINISH_QUERY(be->connection);
+
+   /* store the book struct */
+   pgendStoreBookNoLock (be, book, TRUE);
 
    /* Store accounts and commodities */
    xaccClearMarkDownGr (grp, 0);
@@ -784,6 +1022,13 @@ pgendSyncSingleFile (Backend *bend, GNCBook *book)
    xaccGroupBeginStagedTransactionTraversals(grp);
    xaccGroupStagedTransactionTraversal (grp, 1, trans_traverse_cb, be);
 
+   /* hack alert -- In some deranged theory, we should be
+    * syncing prices here, as well as syncing any/all other
+    * engine structures that need to be stored.  But instead,
+    * price sync is handled as a separate routine ...
+    */
+
+
    p = "COMMIT;";
    SEND_QUERY (be,p, );
    FINISH_QUERY(be->connection);
@@ -792,17 +1037,18 @@ pgendSyncSingleFile (Backend *bend, GNCBook *book)
 }
 
 /* ============================================================= */
-/* Please read the commend for pgendSync to truly understand
+/* Please read the comment for pgendSync to truly understand
  * how this routine works.  Its somewhat subtle.
  */
 
 static void
-pgendSyncPriceDB (Backend *bend, GNCPriceDB *prdb)
+pgendSyncPriceDB (Backend *bend, GNCBook *book)
 {
    PGBackend *be = (PGBackend *)bend;
-   ENTER ("be=%p, prdb=%p", be, prdb);
-   if (!be || !prdb) return;
+   ENTER ("be=%p", be);
+   if (!be) return;
 
+   pgend_set_book (be, book);
    be->version_check = (guint32) time(0);
 
    /* for the multi-user modes, we allow a save only once,
@@ -816,13 +1062,13 @@ pgendSyncPriceDB (Backend *bend, GNCPriceDB *prdb)
    }
    be->freshly_created_prdb = FALSE;
 
-   pgendStorePriceDB (be, prdb);
+   pgendStorePriceDB (be, book);
 
    /* don't send events  to GUI, don't accept callbacks to backend */
    gnc_engine_suspend_events();
    pgendDisable(be);
 
-   pgendGetAllPrices (be, prdb);
+   pgendGetAllPricesInBook (be, book);
 
    /* re-enable events */
    pgendEnable(be);
@@ -849,20 +1095,25 @@ pgendSyncPriceDB (Backend *bend, GNCPriceDB *prdb)
  */
 
 static void
-pgendSyncPriceDBSingleFile (Backend *bend, GNCPriceDB *prdb)
+pgendSyncPriceDBSingleFile (Backend *bend, GNCBook *book)
 {
-   char *p;
+   char buff[400], *p;
    PGBackend *be = (PGBackend *)bend;
-   ENTER ("be=%p, prdb=%p", be, prdb);
+   ENTER ("be=%p", be);
+
+   pgend_set_book (be, book);
     
-   p = "BEGIN;\n"
-       "LOCK TABLE gncPrice IN EXCLUSIVE MODE;\n"
-       "DELETE FROM gncPrice;\n";
-   SEND_QUERY (be,p, );
+   p = buff;
+   p = stpcpy (p, "BEGIN;\n"
+                  "LOCK TABLE gncPrice IN EXCLUSIVE MODE;\n"
+                  "DELETE FROM gncPrice WHERE bookGuid='\n");
+   p = guid_to_string_buff (gnc_book_get_guid(book), p);
+   p = stpcpy (p, "';");
+   SEND_QUERY (be,buff, );
    FINISH_QUERY(be->connection);
 
    /* Store accounts and commodities */
-   pgendStorePriceDBNoLock (be, prdb);
+   pgendStorePriceDBNoLock (be, book);
 
    p = "COMMIT;";
    SEND_QUERY (be,p, );
@@ -886,7 +1137,9 @@ pgendSessionGetMode (PGBackend *be)
          return "POLL";
       case MODE_EVENT:
          return "EVENT";
+      /* quiet compiler warnings about MODE_NONE */
       default:
+         return "ERROR";
    }
    return "ERROR";
 }
@@ -895,7 +1148,7 @@ pgendSessionGetMode (PGBackend *be)
 /* Instead of loading the book, just set the lock error */
 
 static void
-pgend_book_load_single_lockerr (Backend *bend)
+pgend_book_load_single_lockerr (Backend *bend, GNCBook *book)
 {
    PGBackend *be = (PGBackend *)bend;
 
@@ -1083,7 +1336,7 @@ pgendSessionValidate (PGBackend *be, int break_lock)
        * file-lock error from the GUI perspective:
        * (The GUI allows users to break the lock, if desired).
        */
-      be->be.book_load = pgend_book_load_single_lockerr;
+      be->be.load = pgend_book_load_single_lockerr;
       xaccBackendSetError (&be->be, ERR_BACKEND_LOCKED);
       retval = FALSE;
    } else {
@@ -1220,9 +1473,8 @@ pgend_session_end (Backend *bend)
  *    the poll & event style load, where only the accounts, 
  *    and never the transactions, need to be loaded. 
  */
-
 static void
-pgend_book_load_poll (Backend *bend)
+pgend_book_load_poll (Backend *bend, GNCBook *book)
 {
    Timespec ts = gnc_iso8601_to_timespec_local (CK_BEFORE_LAST_DATE);
    AccountGroup *grp;
@@ -1230,18 +1482,37 @@ pgend_book_load_poll (Backend *bend)
 
    if (!be) return;
 
-   be->book = gnc_session_get_book (be->session);
-
-   grp = pgendGetTopGroup (be);
-
    /* don't send events  to GUI, don't accept callbacks to backend */
    gnc_engine_suspend_events();
    pgendDisable(be);
    be->version_check = (guint32) time(0);
 
    pgendKVPInit(be);
-   pgendGetAllAccounts (be, grp);
+
+   if (be->blist) 
+   {
+      /* XXX not clear what this means ... should we free old books ?? */
+      /* The old book list is set by the session when the session is 
+       * created.  It is an empty book, and should be discarded in favor
+       * of the Book retrieved from the database.
+       * PWARN ("old book list not empty ");
+       */
+      g_list_free (be->blist);
+      be->blist = NULL;
+   }
+   pgend_set_book (be, book);
+   pgendGetBook (be, book);
+   gnc_session_set_book(be->session, book);
+                        
+   PINFO("Book GUID = %s\n",
+           guid_to_string(gnc_book_get_guid(book)));
+
+   pgendGetAllAccountsInBook (be, book);
+
+   grp = gnc_book_get_group (book);
+   xaccAccountGroupBeginEdit (grp);
    pgendGroupGetAllBalances (be, grp, ts);
+   xaccAccountGroupCommitEdit (grp);
 
    /* re-enable events */
    pgendEnable(be);
@@ -1257,25 +1528,35 @@ pgend_book_load_poll (Backend *bend)
  */
 
 static void
-pgend_book_load_single (Backend *bend)
+pgend_book_load_single (Backend *bend, GNCBook *book)
 {
-   AccountGroup *grp;
    PGBackend *be = (PGBackend *)bend;
 
    if (!be) return;
 
-   be->book = gnc_session_get_book (be->session);
-
-   grp = pgendGetTopGroup (be);
 
    /* don't send events  to GUI, don't accept callbacks to backend */
    gnc_engine_suspend_events();
    pgendDisable(be);
    be->version_check = (guint32) time(0);
 
+   pgend_set_book (be, book);
+
    pgendKVPInit(be);
-   pgendGetAllAccounts (be, grp);
-   pgendGetMassTransactions (be, grp);
+
+   if (be->blist) 
+   {
+      /* XXX not clear what this means ... should we free old books ?? */
+      PWARN ("old book list not empty ");
+      g_list_free (be->blist);
+   }
+   pgendGetBook (be, book);
+
+   be->blist = g_list_append (NULL, book);
+
+   pgendGetAllAccountsInBook (be, book);
+
+   pgendGetMassTransactions (be, book);
 
    /* re-enable events */
    pgendEnable(be);
@@ -1288,27 +1569,147 @@ pgend_book_load_single (Backend *bend)
  */
 
 static void
-pgend_price_load_single (Backend *bend)
+pgend_price_load_single (Backend *bend, GNCBook *book)
 {
    PGBackend *be = (PGBackend *)bend;
-   GNCPriceDB *db;
 
-   if (!be) return;
+   if (!be || !book) return;
 
-   be->book = gnc_session_get_book (be->session);
+   pgend_set_book (be, book);
 
    /* don't send events  to GUI, don't accept callbacks to backend */
    gnc_engine_suspend_events();
    pgendDisable(be);
    be->version_check = (guint32) time(0);
 
-   db = gnc_book_get_pricedb (be->book);
-
-   pgendGetAllPrices (be, db);
+   pgendGetAllPricesInBook (be, book);
 
    /* re-enable events */
    pgendEnable(be);
    gnc_engine_resume_events();
+}
+
+/* ============================================================= */
+/*
+ * These are the Backend Entry Points, which call into the various
+ * functions herein..  These are generic, and (eventually) pluggable.
+ *
+ */
+
+static void
+pgend_do_load_single (Backend *bend, GNCBook *book)
+{
+  ENTER ("be=%p", bend);
+  pgend_book_load_single (bend, book);
+  pgend_price_load_single (bend, book);
+
+  /* XXX: Other things to load here.... (dynamic data) */
+  LEAVE ("be=%p", bend);
+}
+
+static void
+pgendDoSyncSingleFile (Backend *bend, GNCBook *book)
+{
+  ENTER ("be=%p", bend);
+  pgendSyncSingleFile (bend, book);
+  pgendSyncPriceDBSingleFile (bend, book);
+
+  /* XXX: Other data types */
+  LEAVE ("be=%p", bend);
+}
+
+static void
+pgendDoSync (Backend *bend, GNCBook *book)
+{
+  ENTER ("be=%p", bend);
+  pgendSync (bend, book);
+  pgendSyncPriceDB (bend, book);
+
+  /* XXX: Other data types */
+  LEAVE ("be=%p", bend);
+}
+
+static void
+pgend_do_begin (Backend *bend, GNCIdTypeConst type, gpointer object)
+{
+  PGBackend *be = (PGBackend*)bend;
+
+  ENTER ("be=%p, type=%s", bend, type);
+  if (!safe_strcmp (type, GNC_ID_PERIOD))
+    return pgend_book_transfer_begin (bend, object);
+
+  switch (be->session_mode) {
+      case MODE_EVENT:
+      case MODE_POLL:
+      case MODE_SINGLE_UPDATE:
+          if (!safe_strcmp (type, GNC_ID_PRICE))
+              return pgend_price_begin_edit (bend, object);
+
+      case MODE_SINGLE_FILE:
+      case MODE_NONE:
+          break;
+  }
+
+  /* XXX: Add dynamic plug-in here */
+  LEAVE ("be=%p, type=%s", bend, type);
+}
+
+static void
+pgend_do_commit (Backend *bend, GNCIdTypeConst type, gpointer object)
+{
+  PGBackend *be = (PGBackend*)bend;
+
+  ENTER ("be=%p, type=%s", bend, type);
+  if (!safe_strcmp (type, GNC_ID_PERIOD))
+    return pgend_book_transfer_commit (bend, object);
+
+  switch (be->session_mode) {
+  case MODE_EVENT:
+  case MODE_POLL:
+  case MODE_SINGLE_UPDATE:
+
+    if (!safe_strcmp (type, GNC_ID_TRANS)) {
+      Transaction *txn = (Transaction*) object;
+      return pgend_trans_commit_edit (bend, txn, txn->orig);
+    }
+
+    if (!safe_strcmp (type, GNC_ID_PRICE))
+      return pgend_price_commit_edit (bend, object);
+
+    if (!safe_strcmp (type, GNC_ID_ACCOUNT))
+      return pgend_account_commit_edit (bend, object);
+
+  case MODE_SINGLE_FILE:
+  case MODE_NONE:
+    break;
+    
+  }
+
+  /* XXX: Add dynamic plug-in here */
+  LEAVE ("be=%p, type=%s", bend, type);
+}
+
+static void
+pgend_do_rollback (Backend *bend, GNCIdTypeConst type, gpointer object)
+{
+  PGBackend *be = (PGBackend*)bend;
+
+  ENTER ("be=%p, type=%s", bend, type);
+  switch (be->session_mode) {
+  case MODE_EVENT:
+  case MODE_POLL:
+
+    if (!safe_strcmp (type, GNC_ID_TRANS))
+      return pgend_trans_rollback_edit (bend, object);
+
+  case MODE_SINGLE_UPDATE:
+  case MODE_SINGLE_FILE:
+  case MODE_NONE:
+    break;
+  }
+
+  /* XXX: Add dynamic plug-in here */
+  LEAVE ("be=%p, type=%s", bend, type);
 }
 
 /* ============================================================= */
@@ -1325,11 +1726,28 @@ pgend_price_load_single (Backend *bend)
  */
 
 static gpointer 
-db_exists_cb (PGBackend *be, PGresult *result, int j, gpointer data)
+has_results_cb (PGBackend *be, PGresult *result, int j, gpointer data)
 {
    return GINT_TO_POINTER (TRUE);
 }
 
+static void
+pgend_create_db (PGBackend *be)
+{
+  /* We do this in pieces, so as not to exceed the max length
+   * for postgres queries (which is 8192). */
+
+  SEND_QUERY (be,table_create_str, );
+  FINISH_QUERY(be->connection);
+  SEND_QUERY (be,table_version_str, );
+  FINISH_QUERY(be->connection);
+  SEND_QUERY (be,table_audit_str, );
+  FINISH_QUERY(be->connection);
+  SEND_QUERY (be,sql_functions_str, );
+  FINISH_QUERY(be->connection);
+  be->freshly_created_db = TRUE;
+  be->freshly_created_prdb = TRUE;
+}
 
 static void
 pgend_session_begin (Backend *backend,
@@ -1338,7 +1756,6 @@ pgend_session_begin (Backend *backend,
                      gboolean ignore_lock,
                      gboolean create_new_db)
 {
-   int really_do_create = 0;
    int rc;
    PGBackend *be;
    char *url, *start, *end;
@@ -1359,7 +1776,15 @@ pgend_session_begin (Backend *backend,
    pgendInit (be);
 
    be->session = session;
-   be->book = gnc_session_get_book(session);
+
+   if (be->blist) 
+   {
+      /* XXX not clear what this means ... should we free old books ?? */
+      PWARN ("old book list not empty ");
+      g_list_free (be->blist);
+      be->blist = NULL;
+   }
+   pgend_set_book (be, gnc_session_get_book(session));
 
    /* Parse the sessionid for the hostname, port number and db name.
     * The expected URL format is
@@ -1440,6 +1865,8 @@ pgend_session_begin (Backend *backend,
              PWARN ("the following message should be shown in a gui");
              PWARN ("unknown mode %s, will use multi-user mode",
                     start ? start : "(null)");
+             xaccBackendSetMessage((Backend *)be, _("Unknown database access mode '%s'. Using default mode: multi-user."),
+			           start ? start : "(null)");
              be->session_mode = MODE_EVENT;
          } 
          
@@ -1545,9 +1972,9 @@ pgend_session_begin (Backend *backend,
          /* check the connection status */
          if (CONNECTION_BAD == PQstatus(be->connection))
          {
+            char * msg = PQerrorMessage(be->connection);
             PWARN("Connection to database 'template1' failed:\n"
-                  "\t%s", 
-                  PQerrorMessage(be->connection));
+                  "\t%s", msg);
       
             PQfinish (be->connection);
             be->connection = NULL;
@@ -1556,6 +1983,7 @@ pgend_session_begin (Backend *backend,
              * Alas, it does not, so we just bomb out.
              */
             xaccBackendSetError (&be->be, ERR_BACKEND_CANT_CONNECT);
+            xaccBackendSetMessage(&be->be, msg);
             return;
          }
 
@@ -1568,7 +1996,7 @@ pgend_session_begin (Backend *backend,
          p = stpcpy (p, "';");
 
          SEND_QUERY (be,be->buff, );
-         db_exists = GPOINTER_TO_INT(pgendGetResults(be, db_exists_cb,
+         db_exists = GPOINTER_TO_INT(pgendGetResults(be, has_results_cb,
                                                      GINT_TO_POINTER (FALSE)));
 
          PQfinish (be->connection);
@@ -1650,17 +2078,26 @@ pgend_session_begin (Backend *backend,
       p = stpcpy (p, "';");
 
       SEND_QUERY (be,be->buff, );
-      db_exists = GPOINTER_TO_INT (pgendGetResults (be, db_exists_cb,
+      db_exists = GPOINTER_TO_INT (pgendGetResults (be, has_results_cb,
                                                     GINT_TO_POINTER (FALSE)));
 
       if (FALSE == db_exists)
       {
+#if HAVE_LANGINFO_CODESET
+         char* encoding = nl_langinfo(CODESET);
+#else
+		 char* encoding = "SQL_ASCII";	 
+#endif
+         if (!strcmp (encoding, "ANSI_X3.4-1968"))
+           encoding = "SQL_ASCII";
 
          /* create the database */
          p = be->buff; *p =0;
          p = stpcpy (p, "CREATE DATABASE ");
          p = stpcpy (p, be->dbName);
-         p = stpcpy (p, ";");
+         p = stpcpy (p, " WITH ENCODING = '");
+	 p = stpcpy (p, encoding);
+         p = stpcpy (p, "';");
          SEND_QUERY (be,be->buff, );
          FINISH_QUERY(be->connection);
          PQfinish (be->connection);
@@ -1689,30 +2126,21 @@ pgend_session_begin (Backend *backend,
             return;
          }
 
-         /* Finally, create all the tables and indexes.
-          * We do this in pieces, so as not to exceed the max length
-          * for postgres queries (which is 8192). 
-          */
-         SEND_QUERY (be,table_create_str, );
-         FINISH_QUERY(be->connection);
-         SEND_QUERY (be,table_version_str, );
-         FINISH_QUERY(be->connection);
-         SEND_QUERY (be,table_audit_str, );
-         FINISH_QUERY(be->connection);
-         SEND_QUERY (be,sql_functions_str, );
-         FINISH_QUERY(be->connection);
-         be->freshly_created_db = TRUE;
-         be->freshly_created_prdb = TRUE;
+         /* Finally, create all the tables and indexes. */
+         pgend_create_db (be);
       }
       else 
       {
+         gboolean gncaccount_exists;
+
          /* Database exists, although we were asked to create it.
-          * We interpret this to mean that its downlevel, and
-          * user wants us to upgrade it.  So connect and upgrade.
-          */
-         
+          * We interpret this to mean that either it's downlevel,
+          * and user wants us to upgrade it, or we are installing
+          * gnucash tables into an existing database. So do one or
+          * the other. */
+
          PQfinish (be->connection);
-         
+
          /* Connect to the database */
          be->connection = PQsetdbLogin (be->hostname, 
                                   be->portno,
@@ -1740,49 +2168,64 @@ pgend_session_begin (Backend *backend,
             return;
          }
 
-         rc = pgendDBVersionIsCurrent (be);
-         if (0 > rc)
+         /* See if the gncaccount table exists. If it does not,
+          * create all the tables. We assume that there will always
+          * be a gncaccount table. */
+         p = "SELECT tablename FROM pg_tables WHERE tablename='gncaccount';";
+         SEND_QUERY (be,p, );
+         gncaccount_exists =
+           GPOINTER_TO_INT (pgendGetResults (be, has_results_cb, FALSE));
+
+         if (!gncaccount_exists)
          {
-            /* The server is newer than we are, or another error
-             * occured, we don't know how to talk to it. The err
-             * code is already set. */
-            PQfinish (be->connection);
-            be->connection = NULL;
-            return;
+           pgend_create_db (be);
          }
-         if (0 < rc)
+         else
          {
-            gboolean someones_still_on;
-            /* The server is older than we are; lets upgrade */
-            /* But first, make sure all users are logged off ... */
-            p = "BEGIN;\n";
-                "LOCK TABLE gncSession IN ACCESS EXCLUSIVE MODE;\n"
-                "SELECT time_off FROM gncSession WHERE time_off ='infinity';";
-            SEND_QUERY (be,p, );
-            someones_still_on =
-              GPOINTER_TO_INT (pgendGetResults (be, db_exists_cb,
-                                                GINT_TO_POINTER (FALSE)));
-            if (someones_still_on)
-            {
+           rc = pgendDBVersionIsCurrent (be);
+           if (0 > rc)
+           {
+             /* The server is newer than we are, or another error
+              * occured, we don't know how to talk to it. The err
+              * code is already set. */
+             PQfinish (be->connection);
+             be->connection = NULL;
+             return;
+           }
+           if (0 < rc)
+           {
+             gboolean someones_still_on;
+             /* The server is older than we are; lets upgrade */
+             /* But first, make sure all users are logged off ... */
+             p = "BEGIN;\n"
+               "LOCK TABLE gncSession IN ACCESS EXCLUSIVE MODE;\n"
+               "SELECT time_off FROM gncSession WHERE time_off ='infinity';";
+             SEND_QUERY (be,p, );
+             someones_still_on =
+               GPOINTER_TO_INT (pgendGetResults (be, has_results_cb,
+                                                 GINT_TO_POINTER (FALSE)));
+             if (someones_still_on)
+             {
                p = "COMMIT;\n";
                SEND_QUERY (be,p, );
                FINISH_QUERY(be->connection);
                xaccBackendSetError (&be->be, ERR_SQL_DB_BUSY);
                return;
-            }
-            pgendUpgradeDB (be);
-            p = "COMMIT;\n";
-            SEND_QUERY (be,p, );
-            FINISH_QUERY(be->connection);
-         }
-         else
-         {
-            /* Wierd. We were asked to create something that exists.
-             * This shouldn't really happen ... */
-            PWARN ("Asked to create the database %s,\n"
-                   "\tbut it already exists!\n"
-                   "\tThis shouldn't really happen.",
-                   be->dbName);
+             }
+             pgendUpgradeDB (be);
+             p = "COMMIT;\n";
+             SEND_QUERY (be,p, );
+             FINISH_QUERY(be->connection);
+           }
+           else
+           {
+             /* Wierd. We were asked to create something that exists.
+              * This shouldn't really happen ... */
+             PWARN ("Asked to create the database %s,\n"
+                    "\tbut it already exists!\n"
+                    "\tThis shouldn't really happen.",
+                    be->dbName);
+           }
          }
       }
    }
@@ -1810,21 +2253,21 @@ pgend_session_begin (Backend *backend,
       {
          case MODE_SINGLE_FILE:
             pgendEnable(be);
-            be->be.book_load = pgend_book_load_single;
-            be->be.price_load = pgend_price_load_single;
-            be->be.account_begin_edit = NULL;
-            be->be.account_commit_edit = NULL;
-            be->be.trans_begin_edit = NULL;
-            be->be.trans_commit_edit = NULL;
-            be->be.trans_rollback_edit = NULL;
-            be->be.price_begin_edit = NULL;
-            be->be.price_commit_edit = NULL;
-            be->be.run_query = NULL;
-            be->be.price_lookup = NULL;
-            be->be.sync_all = pgendSyncSingleFile;
-            be->be.sync_price = pgendSyncPriceDBSingleFile;
-            be->be.events_pending = NULL;
-            be->be.process_events = NULL;
+            be->be.load         = pgend_do_load_single;
+            be->be.begin        = pgend_do_begin;
+            be->be.commit       = pgend_do_commit;
+            be->be.rollback     = pgend_do_rollback;
+
+            be->be.compile_query        = NULL;
+            be->be.free_query           = NULL;
+            be->be.run_query            = NULL;
+            be->be.price_lookup         = NULL;
+
+            be->be.sync                 = pgendDoSyncSingleFile;
+            be->be.export               = NULL;
+            be->be.percentage           = NULL;
+            be->be.events_pending       = NULL;
+            be->be.process_events       = NULL;
             PWARN ("mode=single-file is final beta -- \n"
                    "we've fixed all known bugs but that doesn't mean\n"
                    "there aren't any! We think it's safe to use.\n");
@@ -1832,21 +2275,20 @@ pgend_session_begin (Backend *backend,
 
          case MODE_SINGLE_UPDATE:
             pgendEnable(be);
-            be->be.book_load = pgend_book_load_single;
-            be->be.price_load = pgend_price_load_single;
-            be->be.account_begin_edit = NULL;
-            be->be.account_commit_edit = pgend_account_commit_edit;
-            be->be.trans_begin_edit = NULL;
-            be->be.trans_commit_edit = pgend_trans_commit_edit;
-            be->be.trans_rollback_edit = NULL;  /* no-op for single user */
-            be->be.price_begin_edit = pgend_price_begin_edit;
-            be->be.price_commit_edit = pgend_price_commit_edit;
-            be->be.run_query = NULL;
-            be->be.price_lookup = NULL;
-            be->be.sync_all = pgendSync;
-            be->be.sync_price = pgendSyncPriceDB;
-            be->be.events_pending = NULL;
-            be->be.process_events = NULL;
+            be->be.load         = pgend_do_load_single;
+            be->be.begin        = pgend_do_begin;
+            be->be.commit       = pgend_do_commit;
+            be->be.rollback     = pgend_do_rollback;
+            be->be.compile_query    = NULL;
+            be->be.free_query	    = NULL;
+            be->be.run_query        = NULL;
+            be->be.price_lookup     = NULL;
+
+            be->be.sync                 = pgendDoSync;
+            be->be.export               = NULL;
+            be->be.percentage           = NULL;
+            be->be.events_pending       = NULL;
+            be->be.process_events       = NULL;
             PWARN ("mode=single-update is final beta -- \n"
                    "we've fixed all known bugs but that doesn't mean\n"
                    "there aren't any! We think it's safe to use.\n");
@@ -1854,21 +2296,21 @@ pgend_session_begin (Backend *backend,
 
          case MODE_POLL:
             pgendEnable(be);
-            be->be.book_load = pgend_book_load_poll;
-            be->be.price_load = NULL;
-            be->be.account_begin_edit = NULL;
-            be->be.account_commit_edit = pgend_account_commit_edit;
-            be->be.trans_begin_edit = NULL;
-            be->be.trans_commit_edit = pgend_trans_commit_edit;
-            be->be.trans_rollback_edit = pgend_trans_rollback_edit;
-            be->be.price_begin_edit = pgend_price_begin_edit;
-            be->be.price_commit_edit = pgend_price_commit_edit;
-            be->be.run_query = pgendRunQuery;
-            be->be.price_lookup = pgendPriceLookup;
-            be->be.sync_all = pgendSync;
-            be->be.sync_price = pgendSyncPriceDB;
-            be->be.events_pending = NULL;
-            be->be.process_events = NULL;
+            be->be.load         = pgend_book_load_poll;
+            be->be.begin		= pgend_do_begin;
+            be->be.commit		= pgend_do_commit;
+            be->be.rollback		= pgend_do_rollback;
+
+            be->be.compile_query	= pgendCompileQuery;
+            be->be.free_query		= pgendFreeQuery;
+            be->be.run_query            = pgendRunQuery;
+            be->be.price_lookup         = pgendPriceFind;
+
+            be->be.sync                 = pgendDoSync;
+            be->be.export               = NULL;
+            be->be.percentage           = NULL;
+            be->be.events_pending       = NULL;
+            be->be.process_events       = NULL;
 
             PWARN ("mode=multi-user-poll is beta -- \n"
                    "we've fixed all known bugs but that doesn't mean\n"
@@ -1881,21 +2323,21 @@ pgend_session_begin (Backend *backend,
             pgendSessionGetPid (be);
             pgendSessionSetupNotifies (be);
 
-            be->be.book_load = pgend_book_load_poll;
-            be->be.price_load = NULL;
-            be->be.account_begin_edit = NULL;
-            be->be.account_commit_edit = pgend_account_commit_edit;
-            be->be.trans_begin_edit = NULL;
-            be->be.trans_commit_edit = pgend_trans_commit_edit;
-            be->be.trans_rollback_edit = pgend_trans_rollback_edit;
-            be->be.price_begin_edit = pgend_price_begin_edit;
-            be->be.price_commit_edit = pgend_price_commit_edit;
-            be->be.run_query = pgendRunQuery;
-            be->be.price_lookup = pgendPriceLookup;
-            be->be.sync_all = pgendSync;
-            be->be.sync_price = pgendSyncPriceDB;
-            be->be.events_pending = pgendEventsPending;
-            be->be.process_events = pgendProcessEvents;
+            be->be.load             = pgend_book_load_poll;
+            be->be.begin            = pgend_do_begin;
+            be->be.commit           = pgend_do_commit;
+            be->be.rollback         = pgend_do_rollback;
+
+            be->be.compile_query	= pgendCompileQuery;
+            be->be.free_query		= pgendFreeQuery;
+            be->be.run_query        = pgendRunQuery;
+            be->be.price_lookup     = pgendPriceFind;
+
+            be->be.sync             = pgendDoSync;
+            be->be.export           = NULL;
+            be->be.percentage       = NULL;
+            be->be.events_pending   = pgendEventsPending;
+            be->be.process_events   = pgendProcessEvents;
 
             PWARN ("mode=multi-user is beta -- \n"
                    "we've fixed all known bugs but that doesn't mean\n"
@@ -1927,33 +2369,35 @@ pgendDisable (PGBackend *be)
    if (1 < be->nest_count) return;
 
    /* save hooks */
-   be->snr.account_begin_edit  = be->be.account_begin_edit;
-   be->snr.account_commit_edit = be->be.account_commit_edit;
-   be->snr.trans_begin_edit    = be->be.trans_begin_edit;
-   be->snr.trans_commit_edit   = be->be.trans_commit_edit;
-   be->snr.trans_rollback_edit = be->be.trans_rollback_edit;
-   be->snr.price_begin_edit    = be->be.price_begin_edit;
-   be->snr.price_commit_edit   = be->be.price_commit_edit;
-   be->snr.run_query           = be->be.run_query;
-   be->snr.price_lookup        = be->be.price_lookup;
-   be->snr.sync_all            = be->be.sync_all;
-   be->snr.sync_price          = be->be.sync_price;
-   be->snr.events_pending      = be->be.events_pending;
-   be->snr.process_events      = be->be.process_events;
+   be->snr.load	                = be->be.load;
+   be->snr.session_end          = be->be.session_end;
+   be->snr.destroy_backend      = be->be.destroy_backend;
+   be->snr.begin	        = be->be.begin;
+   be->snr.commit 	        = be->be.commit;
+   be->snr.rollback	        = be->be.rollback;
+   be->snr.compile_query        = be->be.compile_query;
+   be->snr.run_query            = be->be.run_query;
+   be->snr.price_lookup         = be->be.price_lookup;
+   be->snr.sync                 = be->be.sync;
+   be->snr.export               = be->be.export;
+   be->snr.percentage           = be->be.percentage;
+   be->snr.events_pending       = be->be.events_pending;
+   be->snr.process_events       = be->be.process_events;
 
-   be->be.account_begin_edit  = NULL;
-   be->be.account_commit_edit = NULL;
-   be->be.trans_begin_edit    = NULL;
-   be->be.trans_commit_edit   = NULL;
-   be->be.trans_rollback_edit = NULL;
-   be->be.price_begin_edit    = NULL;
-   be->be.price_commit_edit   = NULL;
-   be->be.run_query           = NULL;
-   be->be.price_lookup        = NULL;
-   be->be.sync_all            = NULL;
-   be->be.sync_price          = NULL;
-   be->be.events_pending      = NULL;
-   be->be.process_events      = NULL;
+   be->be.load                 = NULL;
+   be->be.session_end          = NULL;
+   be->be.destroy_backend      = NULL;
+   be->be.begin		       = NULL;
+   be->be.commit 	       = NULL;
+   be->be.rollback	       = NULL;
+   be->be.compile_query        = NULL;
+   be->be.run_query            = NULL;
+   be->be.price_lookup         = NULL;
+   be->be.sync                 = NULL;
+   be->be.export               = NULL;
+   be->be.percentage           = NULL;
+   be->be.events_pending       = NULL;
+   be->be.process_events       = NULL;
 }
 
 /* ============================================================= */
@@ -1961,6 +2405,7 @@ pgendDisable (PGBackend *be)
 void
 pgendEnable (PGBackend *be)
 {
+    ENTER(" ");
    if (0 >= be->nest_count)
    {
       PERR ("too many nested disables");
@@ -1970,19 +2415,22 @@ pgendEnable (PGBackend *be)
    if (be->nest_count) return;
 
    /* restore hooks */
-   be->be.account_begin_edit  = be->snr.account_begin_edit;
-   be->be.account_commit_edit = be->snr.account_commit_edit;
-   be->be.trans_begin_edit    = be->snr.trans_begin_edit;
-   be->be.trans_commit_edit   = be->snr.trans_commit_edit;
-   be->be.trans_rollback_edit = be->snr.trans_rollback_edit;
-   be->be.price_begin_edit    = be->snr.price_begin_edit;
-   be->be.price_commit_edit   = be->snr.price_commit_edit;
-   be->be.run_query           = be->snr.run_query;
-   be->be.price_lookup        = be->snr.price_lookup;
-   be->be.sync_all            = be->snr.sync_all;
-   be->be.sync_price          = be->snr.sync_price;
-   be->be.events_pending      = be->snr.events_pending;
-   be->be.process_events      = be->snr.process_events;
+   be->be.load                 = be->snr.load;
+   be->be.session_end          = be->snr.session_end;
+   be->be.destroy_backend      = be->snr.destroy_backend;
+   be->be.begin  	       = be->snr.begin;
+   be->be.commit 	       = be->snr.commit;
+   be->be.rollback  	       = be->snr.rollback;
+   be->be.compile_query        = be->snr.compile_query;
+   be->be.run_query            = be->snr.run_query;
+   be->be.price_lookup         = be->snr.price_lookup;
+   be->be.sync                 = be->snr.sync;
+   be->be.export               = be->snr.export;
+   be->be.percentage           = be->snr.percentage;
+   be->be.events_pending       = be->snr.events_pending;
+   be->be.process_events       = be->snr.process_events;
+
+   LEAVE(" ");
 }
 
 /* ============================================================= */
@@ -1996,6 +2444,8 @@ pgendInit (PGBackend *be)
    int i;
    Timespec ts;
 
+   ENTER(" ");
+   
    /* initialize global variable */
    nullguid = *(xaccGUIDNULL());
 
@@ -2026,6 +2476,7 @@ pgendInit (PGBackend *be)
 
    be->my_pid = 0;
    be->do_account = 0;
+   be->do_book = 0;
    be->do_checkpoint = 0;
    be->do_price = 0;
    be->do_session = 0;
@@ -2054,7 +2505,10 @@ pgendInit (PGBackend *be)
    }
    be->ipath_max = 0;
 
+   be->session = NULL;
    be->book = NULL;
+   be->blist = NULL;
+   LEAVE(" ");
 }
 
 /* ============================================================= */
@@ -2064,9 +2518,11 @@ pgendNew (void)
 {
    PGBackend *be;
 
+   ENTER(" ");
    be = g_new0 (PGBackend, 1);
    pgendInit (be);
 
+   LEAVE(" ")
    return (Backend *) be;
 }
 

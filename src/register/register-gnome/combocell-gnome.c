@@ -73,8 +73,6 @@ typedef struct _PopBox
 } PopBox;
 
 
-static void gnc_combo_cell_block_list_signals (ComboCell *cell);
-static void gnc_combo_cell_unblock_list_signals (ComboCell *cell);
 static void gnc_combo_cell_gui_realize (BasicCell *bcell, gpointer w);
 static void gnc_combo_cell_gui_move (BasicCell *bcell);
 static void gnc_combo_cell_gui_destroy (BasicCell *bcell);
@@ -598,16 +596,15 @@ gnc_combo_cell_direct_update (BasicCell *bcell,
         find_pos = -1;
         if (*cursor_position < bcell->value_len)
         {
-                int i = *cursor_position + 1; 
+                int i = *cursor_position;
 
                 while (bcell->value_w[i])
                 {
-                        if (bcell->value_w[i] == box->complete_char)
+                        if (bcell->value_w[i++] == box->complete_char)
                         {
                                 find_pos = i;
                                 break;
                         }
-                        i++;
                 }
         }
 

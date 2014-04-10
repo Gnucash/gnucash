@@ -1,17 +1,18 @@
 /*
  * gncCustomer.h -- the Core Customer Interface
- * Copyright (C) 2001 Derek Atkins
+ * Copyright (C) 2001,2002 Derek Atkins
  * Author: Derek Atkins <warlord@MIT.EDU>
  */
 
 #ifndef GNC_CUSTOMER_H_
 #define GNC_CUSTOMER_H_
 
-struct _gncCustomer;
 typedef struct _gncCustomer GncCustomer;
 
-#include "gncBusiness.h"
+#include "gnc-book.h"
 #include "gncAddress.h"
+#include "gncBillTerm.h"
+#include "gncTaxTable.h"
 #include "gncJob.h"
 
 #include "gnc-numeric.h"
@@ -20,7 +21,7 @@ typedef struct _gncCustomer GncCustomer;
 
 /* Create/Destroy Functions */
 
-GncCustomer *gncCustomerCreate (GncBusiness *business);
+GncCustomer *gncCustomerCreate (GNCBook *book);
 void gncCustomerDestroy (GncCustomer *customer);
 
 /* Set Functions */
@@ -28,34 +29,54 @@ void gncCustomerDestroy (GncCustomer *customer);
 void gncCustomerSetID (GncCustomer *customer, const char *id);
 void gncCustomerSetName (GncCustomer *customer, const char *name);
 void gncCustomerSetNotes (GncCustomer *customer, const char *notes);
-void gncCustomerSetTerms (GncCustomer *customer, gint terms);
-void gncCustomerSetTaxIncluded (GncCustomer *customer, gboolean taxincl);
+void gncCustomerSetTerms (GncCustomer *customer, GncBillTerm *term);
+void gncCustomerSetTaxIncluded (GncCustomer *customer, GncTaxIncluded taxincl);
 void gncCustomerSetActive (GncCustomer *customer, gboolean active);
 void gncCustomerSetDiscount (GncCustomer *customer, gnc_numeric discount);
 void gncCustomerSetCredit (GncCustomer *customer, gnc_numeric credit);
+void gncCustomerSetCurrency (GncCustomer *customer, gnc_commodity *currency);
+
+void gncCustomerSetTaxTableOverride (GncCustomer *customer, gboolean override);
+void gncCustomerSetTaxTable (GncCustomer *customer, GncTaxTable *table);
 
 void gncCustomerAddJob (GncCustomer *customer, GncJob *job);
 void gncCustomerRemoveJob (GncCustomer *customer, GncJob *job);
 
+void gncCustomerBeginEdit (GncCustomer *customer);
 void gncCustomerCommitEdit (GncCustomer *customer);
 
 /* Get Functions */
 
-GncBusiness * gncCustomerGetBusiness (GncCustomer *business);
+GNCBook * gncCustomerGetBook (GncCustomer *customer);
 const GUID * gncCustomerGetGUID (GncCustomer *customer);
 const char * gncCustomerGetID (GncCustomer *customer);
 const char * gncCustomerGetName (GncCustomer *customer);
 GncAddress * gncCustomerGetAddr (GncCustomer *customer);
 GncAddress * gncCustomerGetShipAddr (GncCustomer *customer);
 const char * gncCustomerGetNotes (GncCustomer *customer);
-gint gncCustomerGetTerms (GncCustomer *customer);
-gboolean gncCustomerGetTaxIncluded (GncCustomer *customer);
+GncBillTerm * gncCustomerGetTerms (GncCustomer *customer);
+GncTaxIncluded gncCustomerGetTaxIncluded (GncCustomer *customer);
 gboolean gncCustomerGetActive (GncCustomer *customer);
 gnc_numeric gncCustomerGetDiscount (GncCustomer *customer);
 gnc_numeric gncCustomerGetCredit (GncCustomer *customer);
+gnc_commodity * gncCustomerGetCurrency (GncCustomer *customer);
+
+gboolean gncCustomerGetTaxTableOverride (GncCustomer *customer);
+GncTaxTable* gncCustomerGetTaxTable (GncCustomer *customer);
 
 GList * gncCustomerGetJoblist (GncCustomer *customer, gboolean show_all);
 
+GUID gncCustomerRetGUID (GncCustomer *customer);
+GncCustomer * gncCustomerLookupDirect (GUID guid, GNCBook *book);
+
+GncCustomer * gncCustomerLookup (GNCBook *book, const GUID *guid);
+
 gboolean gncCustomerIsDirty (GncCustomer *customer);
+int gncCustomerCompare (GncCustomer *a, GncCustomer *b);
+
+#define CUSTOMER_ID	"id"
+#define CUSTOMER_NAME	"name"
+#define CUSTOMER_ADDR	"addr"
+#define CUSTOMER_SHIPADDR	"shipaddr"
 
 #endif /* GNC_CUSTOMER_H_ */

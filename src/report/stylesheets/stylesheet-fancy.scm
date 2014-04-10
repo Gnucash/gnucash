@@ -23,7 +23,7 @@
 
 (define-module (gnucash report stylesheet-fancy))
 
-(use-modules (gnucash bootstrap) (g-wrapped gw-gnc)) ;; FIXME: delete after we finish modularizing.
+(use-modules (gnucash main)) ;; FIXME: delete after we finish modularizing.
 (use-modules (gnucash gnc-module))
 
 (gnc:module-load "gnucash/report/report-system" 0)
@@ -197,7 +197,8 @@
     (gnc:html-document-set-style!
      ssdoc "number-cell"
      'tag "td"
-     'attribute (list "align" "right"))
+     'attribute (list "align" "right")
+     'attribute (list "nowrap"))
 
     (if (and bgpixmap
 	     (not (string=? bgpixmap "")))
@@ -246,6 +247,11 @@
      ssdoc "total-label-cell"
      'tag '("td" "b")
      'attribute (list "align" "left"))
+
+    (gnc:html-document-set-style!
+     ssdoc "centered-label-cell"
+     'tag '("td" "b")
+     'attribute (list "align" "center"))
 
     ;; don't surround marked-up links with <a> </a>
     (if (not links?)

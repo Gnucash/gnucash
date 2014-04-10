@@ -232,8 +232,7 @@ gnc_history_update_menu (GtkWidget * app_w)
     data = gtk_object_get_data (GTK_OBJECT (app), "gnc_num_history");
     num_entries = GPOINTER_TO_INT (data);
 
-    gnome_app_remove_menu_range (app, GNOME_MENU_FILE_PATH,
-                                 pos, 1 + num_entries);
+    gnome_app_remove_menu_range (app, path, 0, num_entries);
   }
 
   if (history_list == NULL)
@@ -243,17 +242,15 @@ gnc_history_update_menu (GtkWidget * app_w)
     return;
 
   n = g_slist_length (history_list);
-  /* one separator, plus one for each filename entry, plus one for end */
-  menu = g_new (GnomeUIInfo, 2 + n);
+  /* one for each filename entry, plus one for end */
+  menu = g_new (GnomeUIInfo, n + 1);
 
-  menu->type = GNOME_APP_UI_SEPARATOR;
-
-  for (i = 1; i <= n; i++)
+  for (i = 0; i < n; i++)
   {
     (menu+i)->type = GNOME_APP_UI_ITEM;
 
     /* get the file name */
-    file = g_slist_nth_data (history_list, i - 1);
+    file = g_slist_nth_data (history_list, i);
     if (file == NULL)
       file = "";
 
@@ -273,7 +270,7 @@ gnc_history_update_menu (GtkWidget * app_w)
     }
     *q = '\0';
 
-    (menu+i)->label = g_strdup_printf ("_%d. %s", i, name);
+    (menu+i)->label = g_strdup_printf ("_%d. %s", i+1, name);
 
     g_free (name);
 
@@ -295,7 +292,7 @@ gnc_history_update_menu (GtkWidget * app_w)
   gtk_object_set_data (GTK_OBJECT (app), "gnc_num_history",
                        GINT_TO_POINTER (num_menu_entries));
 
-  for (i = 1; i <= n; i++)
+  for (i = 0; i < n; i++)
     g_free ((menu+i)->label);
 
   g_free (menu);

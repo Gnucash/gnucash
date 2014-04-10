@@ -65,7 +65,7 @@ use FileHandle;
 
 # For example:
 
-#  $ echo '(yahoo "CSCO" "JDSU")' | ./price-quote-helper
+#  $ echo '(yahoo "CSCO" "JDSU" "^IXIC")' | ./finance-quote-helper
 # (("CSCO" (symbol . "CSCO")
 #          (gnc:time-no-zone . "2001-03-13 19:27:00")
 #          (last . 20.375)
@@ -73,12 +73,16 @@ use FileHandle;
 #  ("JDSU" (symbol . "JDSU")
 #          (gnc:time-no-zone . "2001-03-13 19:27:00")
 #          (last . 23.5625)
-#          (currency . "USD")))
+#          (currency . "USD"))
+# ("^IXIC" (symbol . ^IXIC)
+#          (gnc:time-no-zone . 2002-12-04 17:16:00)
+#          (last . 1430.35)
+#          (currency . failed-conversion)))
 
 # On error, the overall result may be #f, or on individual errors, the
 # list sub-item for a given symbol may be #f, like this:
 
-#  $ echo '(yahoo "CSCO" "JDSU")' | ./price-quote-helper
+#  $ echo '(yahoo "CSCO" "JDSU")' | ./finance-quote-helper
 # (#f
 #  ("JDSU" (symbol . "JDSU")
 #          (gnc:time-no-zone . "2001-03-13 19:27:00")
@@ -99,7 +103,7 @@ use FileHandle;
 # signature so this works OK.
 
 sub check_modules {
-  my @modules = qw(Date::Manip Finance::Quote);
+  my @modules = qw(Date::Manip Finance::Quote LWP);
   my @missing;
 
   foreach my $mod (@modules) {
@@ -223,7 +227,12 @@ sub schemify_quote {
   }
 
   $field = 'symbol';
-  $data = schemify_string($$quotehash{$itemname, $field});
+  if (($$quotehash{$itemname, $field})) {
+    $data = schemify_string($$quotehash{$itemname, $field});
+  } else {
+    # VWD and a few others don't set the symbol field
+    $data = schemify_string($itemname);
+  }
   $quotedata .= "($field . $data)";
 
   $field = 'gnc:time-no-zone';
@@ -278,8 +287,9 @@ sub parse_input_line {
 
   # Make sure we have an opening ( preceeded only by whitespace.
   # and followed by a one word method name composed of [a-z_]+.
+  # Also allow the '.' and '^' characters for stock indices.
   # Kill off the whitespace if we do and grab the command.
-  if($input !~ s/^\s*\(\s*([a-z_]+)\s+//o) { return 0; }
+  if($input !~ s/^\s*\(\s*([\.\^a-z_]+)\s+//o) { return 0; }
 
   my $quote_method_name = $1;
 
@@ -324,59 +334,24 @@ while(<>) {
   my($quote_method_name, $symbols) = @$result;
   my %quote_data;
 
- SWITCH:
-  {
-    if($quote_method_name =~ m/^yahoo$/) {
-      %quote_data = $quoter->yahoo(@$symbols);
-      last SWITCH;
-    }
-    if($quote_method_name =~ m/^yahoo_europe$/) {
-      %quote_data = $quoter->yahoo_europe(@$symbols);
-      last SWITCH;
-    }
-    if($quote_method_name =~ m/^fidelity_direct$/) {
-      %quote_data = $quoter->fidelity_direct(@$symbols);
-      last SWITCH;
-    }
-    if($quote_method_name =~ m/^troweprice_direct$/) {
-      %quote_data = $quoter->troweprice_direct(@$symbols);
-      last SWITCH;
-    }
-    if($quote_method_name =~ m/^vanguard$/) {
-      %quote_data = $quoter->vanguard(@$symbols);
-      last SWITCH;
-    }
-    if($quote_method_name =~ m/^asx$/) {
-      %quote_data = $quoter->asx(@$symbols);
-      last SWITCH;
-    }
-    if($quote_method_name =~ m/^tiaacref$/) {
-      %quote_data = $quoter->tiaacref(@$symbols);
-      last SWITCH;
-    }
-    if($quote_method_name =~ m/^trustnet$/) {
-      %quote_data = $quoter->trustnet(@$symbols);
-      last SWITCH;
-    }
-    if($quote_method_name =~ m/^currency$/) {
-      my ($from_currency, $to_currency) = @$symbols;
+  if($quote_method_name =~ m/^currency$/) {
+    my ($from_currency, $to_currency) = @$symbols;
 
-      last SWITCH unless $from_currency;
-      last SWITCH unless $to_currency;
+    last SWITCH unless $from_currency;
+    last SWITCH unless $to_currency;
 
-      my $price = $quoter->currency($from_currency, $to_currency);
-      last SWITCH unless $price;
+    my $price = $quoter->currency($from_currency, $to_currency);
+    last SWITCH unless $price;
 
-      $quote_data{$from_currency, "success"} = 1;
-      $quote_data{$from_currency, "symbol"} = $from_currency;
-      $quote_data{$from_currency, "currency"} = $to_currency;
-      $quote_data{$from_currency, "last"} = $price;
+    $quote_data{$from_currency, "success"} = 1;
+    $quote_data{$from_currency, "symbol"} = $from_currency;
+    $quote_data{$from_currency, "currency"} = $to_currency;
+    $quote_data{$from_currency, "last"} = $price;
 
-      my @new_symbols = ($from_currency);
-      $symbols = \@new_symbols;
-
-      last SWITCH;
-    }
+    my @new_symbols = ($from_currency);
+    $symbols = \@new_symbols;
+  } else {
+    %quote_data = $quoter->fetch($quote_method_name, @$symbols);
   }
 
   if(!%quote_data) {

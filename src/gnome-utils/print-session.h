@@ -80,12 +80,12 @@ PrintDialog * gnc_ui_print_dialog_create(PrintSession * ps);
 void gnc_ui_print_dialog_destroy(PrintDialog * pcd);
 
 /* printsession stuff */
-PrintSession * gnc_print_session_create(void);
+PrintSession * gnc_print_session_create(gboolean);
 void gnc_print_session_destroy(PrintSession * ps);
 
 void gnc_print_session_moveto(PrintSession * ps, double x, double y);
 void gnc_print_session_text(PrintSession * ps, const char * text);
-void gnc_print_session_done(PrintSession * ps);
+void gnc_print_session_done(PrintSession * ps, gboolean);
 
 void gnc_print_session_preview(PrintSession * ps);
 void gnc_print_session_print(PrintSession * ps);

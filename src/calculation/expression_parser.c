@@ -20,6 +20,8 @@
  *  6-21-2000
  */
 
+/* Modified to support functions - Summer, 2002 -- jsled@asynchronous.org */
+
 /* expression parser/evaluator use:
  *
  * Before describing the parser per se, I want to describe the
@@ -42,6 +44,9 @@
  * "variable name". If NULL, then this is a temporary value. The
  * "value" variable points to a user defined structure containing the
  * numeric value of the variable.
+ *
+ * As well, variables now have a VarStoreType, to distinguish between numeric
+ * and string values, as we want string arguments to functions.
  *
  * In designing and writing the parser, I decided early on that the
  * parser should be an "expression parser/evaluator" and that the
@@ -117,6 +122,8 @@
  * 4: free_numeric - this function is responsible for freeing memory
  * used by the internal numeric representation.
  *
+ * 5: func_op - this function is repsonsible for handling function calls.
+ *
  * I have included the file "numeric_ops.c" containing the above
  * functions for the usual "double" and "int" representation of
  * numerics. The functions perform integer or floating point
@@ -172,6 +179,12 @@
  * call. After the parser is eventually exited, the calling function
  * is responsible for freeing any memory used by the "pre-defined"
  * variables and their final numeric representation.
+ *
+ * There may also be strings in the expression, by quoting them in '"'
+ * characters.  These are intended to be passed literally into functions; the
+ * result of using a string in a numeric operation is undefined.  Presently,
+ * the expression-parser code does not check the variable types during
+ * parsing or evaluation.
  *
  * A second design goal of the parser was that it should be callable
  * concurrently by multiple modules independently. That each module
@@ -249,6 +262,14 @@
  * After parsing the above expressions the variables nni, jk, tyh and
  * tgh would all be defined.
  *
+ * Functiosn are invoked with expressions of the format
+ *
+ *   [_a-zA-Z]( <argument_0> : <argument_1> : ... : <argument_n> )
+ *
+ * where each argument can itself be a sub-expression [arithmetic operation
+ * or function call].
+ *
+ *
  * There are six parser functions needed to use the parser/evaluator:
  *
  * Note: in the last five functions, in the function paramter (void
@@ -265,7 +286,8 @@
  *                                              void          *left_value,
  *                                              void          *right_value),
  *                   void          *negate_numeric(void *value),
- *                   void           free_numeric(void *numeric_value));
+ *                   void           free_numeric(void *numeric_value),
+ *                   void          *func_op(const char *fname, int argc, void **argv));
  *
  *         This function is called by the module/function/whatever to
  *         initialize the parser. The parser returns a pointer to a
@@ -365,8 +387,14 @@
 
 #include <glib.h>
 
+#include <guile/gh.h>
+
+#include "../engine/gnc-numeric.h"
+
 #define EXPRESSION_PARSER_STATICS
 #include "finvar.h"
+
+#define MAX_FUNC_ARG_LEN 255
 
 /* structure to hold parser environment - environment particular to
  * each caller */
@@ -375,17 +403,14 @@ typedef struct parser_env
   unsigned stack_cnt;
   unsigned stack_size;
   var_store_ptr *stack;
-
   var_store_ptr predefined_vars;
-
   var_store_ptr named_vars;
-
   var_store_ptr unnamed_vars;
 
   const char *parse_str;
   char radix_point;
   char group_char;
-  char name[50];
+  char name[128];
 
   char Token;
   char asn_op;
@@ -402,6 +427,7 @@ typedef struct parser_env
   void *(*numeric_ops) (char op_sym, void *left_value, void *right_value);
   void *(*negate_numeric) (void *value);
   void (*free_numeric) (void *numeric_value);
+  void *(*func_op)( const char *fname, int argc, void **argv );
 }
 parser_env;
 
@@ -409,8 +435,11 @@ parser_env;
 #include "fin_static_proto.h"
 #include "fin_spl_protos.h"
 
+#define FN_TOKEN 'F'
+#define ARG_TOKEN ':'
 #define VAR_TOKEN 'V'
 #define NUM_TOKEN 'I'
+#define STR_TOKEN '"'
 
 #define STACK_INIT 50
 
@@ -418,7 +447,7 @@ parser_env;
 
 #define NAMED_INCR 5
 
-static char allowed_operators[] = "+-*/()=";
+static char allowed_operators[] = "+-*/()=:";
 
 parser_env_ptr
 init_parser (var_store_ptr predefined_vars,
@@ -432,7 +461,9 @@ init_parser (var_store_ptr predefined_vars,
 				void *left_value,
 				void *right_value),
 	     void *negate_numeric (void *value),
-	     void free_numeric (void *numeric_value))
+	     void free_numeric (void *numeric_value),
+             void *func_op( const char *fname,
+                            int argc, void **argv ))
 {
   parser_env_ptr pe = g_new0 (parser_env, 1);
 
@@ -450,6 +481,7 @@ init_parser (var_store_ptr predefined_vars,
   pe->numeric_ops = numeric_ops;
   pe->negate_numeric = negate_numeric;
   pe->free_numeric = free_numeric;
+  pe->func_op = func_op;
 
   return pe;
 }				/* init_parser */
@@ -662,6 +694,7 @@ get_named_var (parser_env_ptr pe)
     else
       bv->next_var = retp;
     retp->variable_name = g_strdup (pe->name);
+    retp->type = VST_NUMERIC;
     retp->value =
       pe->trans_numeric ("0", pe->radix_point, pe->group_char, NULL);
   }
@@ -682,6 +715,7 @@ get_unnamed_var (parser_env_ptr pe)
       retp = &(pe->unnamed_vars[cntr]);
       retp->variable_name = NULL;
       retp->use_flag = USED_VAR;
+      retp->type = VST_NUMERIC;
       if (retp->value)
       {
 	pe->free_numeric (retp->value);
@@ -741,27 +775,14 @@ next_token (parser_env_ptr pe)
   {
     add_token (pe, EOS);
   }
-  /* test for name */
-  else if (isalpha (*str_parse) || (*str_parse == '_'))
-  {
-    add_token (pe, VAR_TOKEN);
-    nstr = pe->name;
-    do
-    {
-      *nstr++ = *str_parse++;
-    }
-    while ((*str_parse == '_') ||
-           isalpha (*str_parse) ||
-           isdigit (*str_parse));
-
-    *nstr = EOS;
-  }
   /* test for possible operator */
   else if (strchr (allowed_operators, *str_parse))
   {
     add_token (pe, *str_parse++);
     if (*str_parse == ASN_OP)
     {
+      /* BUG/FIXME: this seems to allow '(=' and ')=' [?], neither of which
+       * make sense. */
       if (pe->Token != ASN_OP)
       {
         str_parse++;
@@ -771,6 +792,50 @@ next_token (parser_env_ptr pe)
       else
         pe->error_code = UNDEFINED_CHARACTER;
     }				/* endif */
+  }
+  /* test for string */
+  else if ( *str_parse == '"' ) { 
+    nstr = pe->name;
+    /* skip over the '"'. */
+    str_parse++;
+    do {
+      *nstr++ = *str_parse++;
+    } while ( *str_parse != '"' );
+    *nstr = EOS;
+    str_parse++;
+    add_token( pe, STR_TOKEN );
+  }
+  /* test for name */
+  else if (isalpha (*str_parse)
+           || (*str_parse == '_'))
+  {
+    int funcFlag = 0;
+    
+    /* Check for variable or function */
+    /* If variable: add token. */
+    /* If function: parse args, build struct, add token. */
+    nstr = pe->name;
+    do
+    {
+      if ( *str_parse == '(' ) {
+        funcFlag = 1;
+        str_parse++;
+        break;
+      }
+      *nstr++ = *str_parse++;
+    }
+    while ((*str_parse == '_')
+           || (*str_parse == '(')
+           || isalpha (*str_parse)
+           || isdigit (*str_parse));
+
+    *nstr = EOS;
+    if ( funcFlag ) {
+      add_token( pe, FN_TOKEN );
+    } else {
+      add_token (pe, VAR_TOKEN);
+    }
+
   }
   /* test for numeric token */
   else if ((number = pe->trans_numeric (str_parse, pe->radix_point,
@@ -797,6 +862,7 @@ next_token (parser_env_ptr pe)
  * \=
  * *=
  */
+/* FIXME: add non-numeric checking. */
 static void
 assignment_op (parser_env_ptr pe)
 {
@@ -857,8 +923,9 @@ assignment_op (parser_env_ptr pe)
 	  vl->value = vr->value;
 	  vr->value = NULL;
 	}
-	else
+	else {
 	  pe->numeric_ops (ASN_OP, vl->value, vr->value);
+        }
 
 	free_var (vr, pe);
       }				/* endif */
@@ -875,6 +942,7 @@ assignment_op (parser_env_ptr pe)
 }				/* assignment_op */
 
 /* evaluate addition, subtraction operators */
+/* FIXME: add non-numeric checking. */
 static void
 add_sub_op (parser_env_ptr pe)
 {
@@ -934,6 +1002,7 @@ add_sub_op (parser_env_ptr pe)
 }				/* add_sub_op */
 
 /* evaluate multiplication, division operators */
+/* FIXME: add non-numeric checking. */
 static void
 multiply_divide_op (parser_env_ptr pe)
 {
@@ -997,12 +1066,25 @@ multiply_divide_op (parser_env_ptr pe)
  *  named variables
  *  numerics
  *  grouped expressions, "()"
+ *  functions [ <name>( [exp, exp, ..., exp] ) ]
+ *  strings
  */
 static void
 primary_exp (parser_env_ptr pe)
 {
   var_store_ptr rslt = NULL;
+  char *ident = NULL;
+  int funcArgCount;
   char LToken = pe->Token;
+
+  /* If we are in a state where the non-stacked 'pe->name' is valuable, then
+   * save it before we process the next token. */
+  switch ( LToken ) {
+  case FN_TOKEN:
+  case STR_TOKEN:
+    ident = g_strdup( pe->name );
+    break;
+  }
 
   next_token (pe);
   if (pe->error_code)
@@ -1011,7 +1093,6 @@ primary_exp (parser_env_ptr pe)
   switch (LToken)
   {
     case '(':
-      /*add_sub_op(pe);   */
       assignment_op (pe);
       if (pe->error_code)
         return;
@@ -1058,11 +1139,71 @@ primary_exp (parser_env_ptr pe)
       pe->numeric_value = NULL;
       break;
 
+    case FN_TOKEN:
+      funcArgCount = 0;
+
+      do {
+        assignment_op(pe);
+        if ( pe->error_code )
+          return;
+
+        funcArgCount++;
+        if ( pe->Token == ')' ) {
+          break;
+        }
+        next_token(pe);
+      } while ( pe->Token != ARG_TOKEN );
+
+      if ( pe->Token != ')' ) {
+        add_token( pe, EOS );
+        pe->error_code = UNBALANCED_PARENS;
+      }
+
+      {
+        int i;
+        var_store_ptr val;
+        void **argv;
+
+        argv = g_new0( void*, funcArgCount );
+        for ( i=0; i<funcArgCount; i++ ) {
+          /* fill, in back-to-front order, the funcArgCount tokens we just
+           * parsed out of the expression into a argument list to hand back
+           * to the caller's func_op callback. */
+          val = pop(pe);
+          argv[funcArgCount - i - 1] = val;
+        }
+
+        rslt = get_unnamed_var(pe);
+        rslt->value = (*pe->func_op)( ident, funcArgCount, argv );
+
+        for ( i=0; i<funcArgCount; i++ ) {
+          free_var( argv[i], pe );
+        }
+        g_free( argv );
+        g_free( ident );
+
+        if ( rslt->value == NULL ) {
+          pe->error_code = NOT_A_FUNC;
+          add_token( pe, EOS );
+          return;
+        }
+
+      }
+
+      next_token(pe);
+      break;
+
     case VAR_TOKEN:
       rslt = get_named_var (pe);
+      break;
+    case STR_TOKEN:
+      rslt = get_unnamed_var( pe );
+      rslt->type = VST_STRING;
+      rslt->value = ident;
       break;
   }				/* endswitch */
 
   if (rslt != NULL)
     push (rslt, pe);
+
 }				/* primary_exp */

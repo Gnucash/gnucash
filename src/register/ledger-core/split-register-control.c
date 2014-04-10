@@ -33,10 +33,12 @@
 #include "gnc-ui-util.h"
 #include "messages.h"
 #include "pricecell.h"
+#include "datecell.h"
 #include "split-register-control.h"
 #include "split-register-model-save.h"
 #include "split-register-p.h"
 #include "table-allgui.h"
+#include "dialog-transfer.h"
 
 
 /* This static indicates the debugging module that this .o belongs to. */
@@ -171,6 +173,38 @@ gnc_trans_has_reconciled_splits (Transaction *trans)
   return FALSE;
 }
 
+static gboolean
+gnc_split_register_old_split_empty_p (SplitRegister *reg, Split *split)
+{
+  BasicCell *cell;
+  gnc_numeric amount;
+  const char *string;
+
+  string = gnc_table_layout_get_cell_value (reg->table->layout, MEMO_CELL);
+  if ((string != NULL) && (*string != '\0'))
+    return FALSE;
+
+  string = gnc_table_layout_get_cell_value (reg->table->layout, XFRM_CELL);
+  if ((string != NULL) && (*string != '\0'))
+    return FALSE;
+
+  cell = gnc_table_layout_get_cell (reg->table->layout, CRED_CELL);
+  if (cell) {
+    amount = gnc_price_cell_get_value ((PriceCell *) cell);
+    if (!gnc_numeric_zero_p (amount))
+      return FALSE;
+  }
+
+  cell = gnc_table_layout_get_cell (reg->table->layout, DEBT_CELL);
+  if (cell) {
+    amount = gnc_price_cell_get_value ((PriceCell *) cell);
+    if (!gnc_numeric_zero_p (amount))
+      return FALSE;
+  }
+
+  return TRUE;
+}
+
 static void
 gnc_split_register_move_cursor (VirtualLocation *p_new_virt_loc,
                                 gpointer user_data)
@@ -253,25 +287,46 @@ gnc_split_register_move_cursor (VirtualLocation *p_new_virt_loc,
 
   /* commit the contents of the cursor into the database */
   saved = gnc_split_register_save (reg, old_trans != new_trans);
-  if ((pending_trans != NULL)      &&
-      (pending_trans == old_trans) &&
-      (old_trans != new_trans))
+  if ((old_class == CURSOR_CLASS_SPLIT) &&
+      old_split &&
+      (old_split != new_split) &&
+      gnc_split_register_old_split_empty_p(reg, old_split)) {
+    int current_row;
+
+    xaccSplitDestroy(old_split);
+    old_split = NULL;
+
+    /*
+     * If the user is moving down a row, we've just thrown off the
+     * numbers by deleting a split. Correct for that.
+     */
+    current_row = reg->table->current_cursor_loc.vcell_loc.virt_row;
+    if (new_virt_loc.vcell_loc.virt_row > current_row)
+      new_virt_loc.vcell_loc.virt_row--;
+  }
+  else if ((pending_trans != NULL)      &&
+	   (pending_trans == old_trans) &&
+	   (old_trans != new_trans))
   {
     if (gnc_split_register_balance_trans (reg, old_trans))
     {
+      /* Trans was unbalanced. */
       new_trans = old_trans;
       new_split = old_split;
       new_trans_split = old_trans_split;
       new_class = old_class;
       new_virt_loc = reg->table->current_cursor_loc;
     }
+    else
+    {
+      /* Trans was balanced. Let it go. */
+      if (xaccTransIsOpen (old_trans))
+	xaccTransCommitEdit (old_trans);
 
-    if (xaccTransIsOpen (old_trans))
-      xaccTransCommitEdit (old_trans);
-
-    info->pending_trans_guid = *xaccGUIDNULL ();
-    pending_trans = NULL;
-    saved = TRUE;
+      info->pending_trans_guid = *xaccGUIDNULL ();
+      pending_trans = NULL;
+      saved = TRUE;
+    }
   }
   else if (old_trans &&
            (old_trans != new_trans) &&
@@ -689,7 +744,10 @@ gnc_split_register_auto_completion (SplitRegister *reg,
         {
           SRSaveData *sd;
 
-          sd = gnc_split_register_save_data_new (trans, blank_split);
+          sd = gnc_split_register_save_data_new (trans, blank_split,
+					 (info->trans_expanded ||
+					  reg->style == REG_STYLE_AUTO_LEDGER ||
+					  reg->style == REG_STYLE_JOURNAL));
           gnc_table_save_cells (reg->table, sd);
           gnc_split_register_save_data_destroy (sd);
         }
@@ -830,6 +888,338 @@ gnc_split_register_auto_completion (SplitRegister *reg,
   return TRUE;
 }
 
+static void
+gnc_split_register_traverse_check_stock_action (SplitRegister *reg, const char *cell_name)
+{
+  BasicCell *cell;
+  gnc_numeric shares;
+  gboolean buy, sell;
+  const char *name;
+
+  if (!gnc_cell_name_equal (cell_name, ACTN_CELL) ||
+      !gnc_table_layout_get_cell_changed (reg->table->layout,
+					  ACTN_CELL, FALSE))
+    return;
+
+  cell = gnc_table_layout_get_cell (reg->table->layout, ACTN_CELL);
+  if (!cell)
+    return;
+  name = ((ComboCell *)cell)->cell.value;
+  if ((name == NULL) || (*name == '\0'))
+    return;
+
+  buy  = safe_strcmp (name, ACTION_BUY_STR)  == 0;
+  sell = safe_strcmp (name, ACTION_SELL_STR) == 0;
+  if (!buy && !sell)
+    return;
+
+  cell = gnc_table_layout_get_cell (reg->table->layout, SHRS_CELL);
+  if (!cell)
+    return;
+  shares = gnc_price_cell_get_value ((PriceCell *) cell);
+
+  if ((buy  && !gnc_numeric_positive_p (shares)) ||
+      (sell &&  gnc_numeric_positive_p (shares))) {
+    gnc_price_cell_set_value ((PriceCell *)cell, gnc_numeric_neg (shares));
+    gnc_basic_cell_set_changed (cell, TRUE);
+  }
+}
+
+static void
+gnc_split_register_traverse_check_stock_shares (SplitRegister *reg, const char *cell_name)
+{
+  BasicCell *cell;
+  gnc_numeric shares;
+  gboolean buy;
+  const char *name;
+
+  if (!gnc_cell_name_equal (cell_name, SHRS_CELL) ||
+      !gnc_table_layout_get_cell_changed (reg->table->layout,
+					  SHRS_CELL, FALSE))
+    return;
+
+  cell = gnc_table_layout_get_cell (reg->table->layout, SHRS_CELL);
+  if (!cell)
+    return;
+  shares = gnc_price_cell_get_value ((PriceCell *) cell);
+  if (gnc_numeric_zero_p (shares))
+    return;
+  buy  = gnc_numeric_positive_p (shares);
+
+  cell = gnc_table_layout_get_cell (reg->table->layout, ACTN_CELL);
+  if (!cell)
+    return;
+  name = ((ComboCell *)cell)->cell.value;
+
+  if (buy && (safe_strcmp (name, ACTION_BUY_STR) != 0)) {
+    gnc_combo_cell_set_value((ComboCell *)cell, ACTION_BUY_STR);
+    gnc_basic_cell_set_changed (cell, TRUE);
+  } else if (safe_strcmp (name, ACTION_SELL_STR) != 0) {
+    gnc_combo_cell_set_value((ComboCell *)cell, ACTION_SELL_STR);
+    gnc_basic_cell_set_changed (cell, TRUE);
+  }
+}
+
+static Account *
+gnc_split_register_get_account_always (SplitRegister *reg, const char * cell_name)
+
+{
+  BasicCell *cell;
+  const char *name;
+  gboolean dummy;
+
+  cell = gnc_table_layout_get_cell (reg->table->layout, cell_name);
+  if (!cell)
+    return NULL;
+  name = gnc_basic_cell_get_value (cell);
+
+  /* If 'name' is "-- Split Transaction --" then return NULL or the register acct */
+  if (!safe_strcmp (name, _("-- Split Transaction --"))) {
+    return NULL;
+  }
+
+  return gnc_split_register_get_account_by_name (reg, cell, name, &dummy);
+}
+
+static const char *
+gnc_split_register_get_cell_string (SplitRegister *reg, const char *cell_name)
+{
+  BasicCell *cell;
+
+  cell = gnc_table_layout_get_cell (reg->table->layout, cell_name);
+  if (!cell)
+    return "";
+
+  return gnc_basic_cell_get_value (cell);
+}
+
+static Timespec
+gnc_split_register_get_cell_date (SplitRegister *reg, const char *cell_name)
+{
+  DateCell *cell;
+  Timespec ts;
+
+  cell = (DateCell*) gnc_table_layout_get_cell (reg->table->layout, cell_name);
+
+  if (cell)
+    gnc_date_cell_get_date (cell, &ts);
+  else
+    timespecFromTime_t (&ts, time (NULL));
+
+  return ts;
+}
+
+/* This function checks to see if we need to determine an exchange rate.
+ * If we need to determine an exchange rate, then pop up the dialog.
+ * If the dialog does not complete successfully, then return TRUE.
+ * Return FALSE in all other cases (meaning "move on")
+ */
+gboolean
+gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog)
+{
+  Transaction *txn;
+  Split *split, *osplit;
+  Account *xfer_acc, *reg_acc;
+  gnc_commodity *txn_cur, *xfer_com, *reg_com;
+  gnc_numeric amount, exch_rate;
+  XferDialog *xfer;
+  gboolean swap_amounts = FALSE;
+  gboolean expanded = FALSE;
+  PriceCell *rate_cell;
+  const char *message;
+  CursorClass cursor_class;
+  
+  /* Make sure we NEED this for this type of register */
+  if (!gnc_split_reg_has_rate_cell (reg->type))
+    return FALSE;
+
+  rate_cell = (PriceCell*) gnc_table_layout_get_cell (reg->table->layout, RATE_CELL);
+  if (!rate_cell)
+    return FALSE;
+
+  /* See if we already have an exchange rate... */
+  exch_rate = gnc_price_cell_get_value (rate_cell);
+  if (! gnc_numeric_zero_p (exch_rate) && !force_dialog)
+    return FALSE;
+
+  /* Are we expanded? */
+  expanded = gnc_split_register_current_trans_expanded (reg);
+  cursor_class = gnc_split_register_get_current_cursor_class (reg);
+
+  /* If we're expanded AND a transaction cursor, there is nothing to do */
+  if (expanded && cursor_class == CURSOR_CLASS_TRANS)
+    return FALSE;
+
+  /* Grab the xfer account */
+  if (expanded)
+    xfer_acc = gnc_split_register_get_account_always (reg, XFRM_CELL);
+  else
+    xfer_acc = gnc_split_register_get_account_always (reg, MXFRM_CELL);
+
+  message =
+    _("You need to expand the transaction in order to modify its exchange rates.");
+
+  /* If this is an un-expanded, multi-split transaction, then warn the user */
+  if (force_dialog && !expanded && ! xfer_acc) {
+    gnc_error_dialog (message);
+    return TRUE;
+  }
+
+  /* No account -- don't run the dialog */
+  if (!xfer_acc)
+    return FALSE;
+
+  /* Grab the txn currency and xfer commodity */
+  txn = gnc_split_register_get_current_trans (reg);
+  txn_cur = xaccTransGetCurrency (txn);
+  xfer_com = xaccAccountGetCommodity (xfer_acc);
+
+  /* Grab the register account and commodity (may be used later) */
+  reg_acc = gnc_split_register_get_default_account (reg);
+  reg_com = xaccAccountGetCommodity (reg_acc);
+
+  /* Is this a two-split txn? */
+  split = gnc_split_register_get_current_split (reg);
+  osplit = xaccSplitGetOtherSplit (split);
+
+  /* Check if the txn- and xfer- commodities are the same */
+  if (gnc_commodity_equal (txn_cur, xfer_com)) {
+    /* If we're not forcing the dialog, then there is no reason to
+     * go on.  We're using the correct accounts.
+     */
+    if (!force_dialog)
+      return FALSE;
+
+    /* Only proceed with two-split, basic, non-expanded registers */
+    if (expanded || osplit == NULL)
+      return FALSE;
+
+    /* If we're forcing, then compare the current account
+     * commodity to the transaction commodity.
+     */
+    xfer_acc = reg_acc;
+    xfer_com = reg_com;
+    if (gnc_commodity_equal (txn_cur, xfer_com))
+      return FALSE;
+  }
+
+  /* If this is a non-expanded, two-split txn where BOTH splits need
+   * conversion rates, then require the user to actually expand the
+   * transaction in order to edit it.
+   */
+  if (!expanded && osplit &&
+      gnc_split_register_split_needs_amount (reg, split) &&
+      gnc_split_register_split_needs_amount (reg, osplit)) {
+    gnc_error_dialog (message);
+    return TRUE;
+  }
+
+  /* Ok, we need to grab the exchange rate */
+  amount = gnc_split_register_debcred_cell_value (reg);
+
+  /*
+   * If "amount" is zero then we don't need an exchange-rate.. Return
+   * FALSE to let the user continue on.
+   */
+  if (gnc_numeric_zero_p (amount))
+    return FALSE;
+
+  /* We know that "amount" is always in the reg_com currency.
+   * Unfortunately it is possible that neither xfer_com or txn_cur are
+   * the same as reg_com, in which case we need to convert to the txn
+   * currency...  Or, if the local currency is the xfer_com, then we
+   * need to flip-flop the commodities and the exchange rates.
+   */
+
+  if (gnc_commodity_equal (reg_com, txn_cur)) {
+    /* we're working in the txn currency.  Great.  Nothing to do! */
+    swap_amounts = FALSE;
+
+  } else if (gnc_commodity_equal (reg_com, xfer_com)) {
+    /* We're working in the xfer commodity.  Great.  Just swap the amounts. */
+    swap_amounts = TRUE;
+
+    /* XXX: Do we need to check for expanded v. non-expanded accounts here? */
+
+  } else {
+    /* UGGH -- we're not in either.  That means we need to convert 'amount'
+     * from the register commodity to the txn currency.
+     */
+    gnc_numeric rate = gnc_split_register_get_conv_rate (txn, reg_acc);
+
+    /* XXX: should we tell the user we've done the conversion? */
+    amount = gnc_numeric_div (amount, rate, gnc_commodity_get_fraction (txn_cur),
+			      GNC_DENOM_REDUCE);
+
+    /* Strangely, if we're in a two-split, non-expanded txn, we need
+     * to do something really special with the exchange rate!  In
+     * particular, we have to pick it up from the _other_ split --
+     * right?
+     * XXX: perhaps I should pop up an error here?  Or maybe require the
+     * user to go into expanded-mode?
+     */
+    if (osplit && !expanded) {
+      gnc_numeric amt = xaccSplitGetAmount (osplit);
+      gnc_numeric val = xaccSplitGetValue (osplit);
+      exch_rate = gnc_numeric_div (amt, val, GNC_DENOM_AUTO, GNC_DENOM_REDUCE);
+    }
+  }
+
+  /* create the exchange-rate dialog */
+  xfer = gnc_xfer_dialog (NULL, NULL); /* XXX */
+  gnc_xfer_dialog_is_exchange_dialog (xfer, &exch_rate);
+
+  /* enter the accounts */
+  if (swap_amounts) {
+    gnc_xfer_dialog_select_to_currency (xfer, txn_cur);
+    gnc_xfer_dialog_select_from_currency (xfer, xfer_com);
+    if (!gnc_numeric_zero_p (exch_rate))
+      exch_rate = gnc_numeric_div (gnc_numeric_create (1, 1), exch_rate,
+				   GNC_DENOM_AUTO, GNC_DENOM_REDUCE);
+  } else {
+    gnc_xfer_dialog_select_to_currency (xfer, xfer_com);
+    gnc_xfer_dialog_select_from_currency (xfer, txn_cur);
+  }
+  gnc_xfer_dialog_hide_to_account_tree (xfer);
+  gnc_xfer_dialog_hide_from_account_tree (xfer);
+
+  /* fill in the dialog entries */
+  gnc_xfer_dialog_set_amount (xfer, amount);
+  gnc_xfer_dialog_set_description (xfer,
+				   gnc_split_register_get_cell_string (reg, DESC_CELL));
+  gnc_xfer_dialog_set_memo (xfer, 
+			    gnc_split_register_get_cell_string (reg, MEMO_CELL));
+  gnc_xfer_dialog_set_num (xfer, 
+			   gnc_split_register_get_cell_string (reg, NUM_CELL));
+  gnc_xfer_dialog_set_date (xfer,
+			    timespecToTime_t (
+			    gnc_split_register_get_cell_date (reg, DATE_CELL)));
+
+  /*
+   * When we flip, we should tell the dialog so it can deal with the
+   * pricedb properly.
+   */
+
+  /* Set the exchange rate */
+  gnc_xfer_dialog_set_exchange_rate (xfer, exch_rate);
+
+  /* and run it... */
+  if (gnc_xfer_dialog_run_until_done (xfer) == FALSE)
+    return TRUE;
+
+  /* If we swapped the amounts for the dialog, then make sure we swap
+   * it back now...
+   */
+  if (swap_amounts)
+    exch_rate = gnc_numeric_div (gnc_numeric_create (1, 1), exch_rate,
+				 GNC_DENOM_AUTO, GNC_DENOM_REDUCE);
+
+  /* Set the RATE_CELL on this cursor and mark it changed */
+  gnc_price_cell_set_value (rate_cell, exch_rate);
+  gnc_basic_cell_set_changed (&rate_cell->cell, TRUE);
+  return FALSE;
+}
+
 static gboolean
 gnc_split_register_traverse (VirtualLocation *p_new_virt_loc,
                              gncTableTraversalDir dir,
@@ -843,6 +1233,7 @@ gnc_split_register_traverse (VirtualLocation *p_new_virt_loc,
   gboolean changed;
   SRInfo *info;
   Split *split;
+  const char *cell_name;
 
   if (!reg)
     return FALSE;
@@ -875,15 +1266,15 @@ gnc_split_register_traverse (VirtualLocation *p_new_virt_loc,
     return FALSE;
   }
 
+  /* Get the current cell-name to check it.. */
+  cell_name = gnc_table_get_current_cell_name (reg->table);
+
   /* See if we are leaving an account field */
   do
   {
-    const char *cell_name;
     ComboCell *cell;
-    Account *account;
     char *name;
 
-    cell_name = gnc_table_get_current_cell_name (reg->table);
 
     if (!gnc_cell_name_equal (cell_name, XFRM_CELL) &&
         !gnc_cell_name_equal (cell_name, MXFRM_CELL))
@@ -910,47 +1301,36 @@ gnc_split_register_traverse (VirtualLocation *p_new_virt_loc,
     if (!cell)
       break;
 
+    /* The account changed -- reset the rate
+     * XXX: perhaps we should only do this is the currency changed?
+     */
+    {
+      PriceCell *rate_cell = (PriceCell*)
+	gnc_table_layout_get_cell (reg->table->layout, RATE_CELL);
+
+      if (rate_cell)
+	gnc_price_cell_set_value (rate_cell, gnc_numeric_zero());
+    }
+
     name = cell->cell.value;
     if (!name || *name == '\0' ||
         safe_strcmp (name, SPLIT_TRANS_STR) == 0 ||
         safe_strcmp (name, STOCK_SPLIT_STR) == 0)
       break;
 
-    account = xaccGetAccountFromFullName (gnc_get_current_group (),
-                                          cell->cell.value,
-                                          gnc_get_account_separator ());
-    if (account)
-      break;
-
-    {
-      const char *format = _("The account %s does not exist.\n"
-                             "Would you like to create it?");
-      char *message;
-      gboolean result;
-
-      message = g_strdup_printf (format, name);
-
-      result = gnc_verify_dialog_parented (gnc_split_register_get_parent (reg),
-                                           message, TRUE);
-      if (!result)
-        break;
-    }
-
-    info->full_refresh = FALSE;
-
-    account = gnc_ui_new_accounts_from_name_window (name);
-    if (!account)
-      break;
-
-    info->full_refresh = TRUE;
-
-    name = xaccAccountGetFullName (account, gnc_get_account_separator ());
-    gnc_combo_cell_set_value (cell, name);
-    gnc_basic_cell_set_changed (&cell->cell, TRUE);
-    g_free (name);
-
+    /* Create the account if necessary. Also checks for a placeholder */
+    (void) gnc_split_register_get_account_by_name (reg, (BasicCell *)cell, cell->cell.value,
+						   &info->full_refresh);
   } while (FALSE);
 
+  /* See if we are leaving an action field */
+  if ((reg->type == STOCK_REGISTER) ||
+      (reg->type == PORTFOLIO_LEDGER) ||
+      (reg->type == CURRENCY_REGISTER)) {
+    gnc_split_register_traverse_check_stock_action (reg, cell_name);
+    gnc_split_register_traverse_check_stock_shares (reg, cell_name);
+  }
+ 
   /* See if we are tabbing off the end of the very last line */
   do
   {
@@ -969,6 +1349,10 @@ gnc_split_register_traverse (VirtualLocation *p_new_virt_loc,
     virt_loc = reg->table->current_cursor_loc;
     if (gnc_table_move_tab (reg->table, &virt_loc, TRUE))
       break;
+
+    /* Deal with the exchange-rate */
+    if (gnc_split_register_handle_exchange (reg, FALSE))
+      return TRUE;
 
     *p_new_virt_loc = reg->table->current_cursor_loc;
     (p_new_virt_loc->vcell_loc.virt_row)++;
@@ -1017,6 +1401,11 @@ gnc_split_register_traverse (VirtualLocation *p_new_virt_loc,
      * on the line. Thus, we want to go ahead and add the new
      * split and end up on the new blank split of the current
      * transaction. */
+
+    /* Deal with the exchange-rate */
+    if (gnc_split_register_handle_exchange (reg, FALSE))
+      return TRUE;
+
     info->cursor_hint_trans = trans;
     info->cursor_hint_split = split;
     info->cursor_hint_trans_split =
@@ -1028,9 +1417,24 @@ gnc_split_register_traverse (VirtualLocation *p_new_virt_loc,
 
   } while (FALSE);
 
-  /* Check for going off the end */
-  gnc_table_find_close_valid_cell (reg->table, &virt_loc,
-                                   info->exact_traversal);
+
+  {
+    int old_virt_row;
+
+    old_virt_row = reg->table->current_cursor_loc.vcell_loc.virt_row;
+    
+    /* Check for going off the end */
+    gnc_table_find_close_valid_cell (reg->table, &virt_loc,
+				     info->exact_traversal);
+
+
+    /* Did we change vertical position? */
+    if (virt_loc.vcell_loc.virt_row != old_virt_row)
+      /* Deal with the exchange-rate */
+      if (gnc_split_register_handle_exchange (reg, FALSE))
+	return TRUE;
+  }
+
 
   /* Same transaction, no problem */
   new_trans = gnc_split_register_get_trans (reg, virt_loc.vcell_loc);
@@ -1051,7 +1455,7 @@ gnc_split_register_traverse (VirtualLocation *p_new_virt_loc,
 
     result = gnc_verify_cancel_dialog_parented
       (gnc_split_register_get_parent (reg),
-       message, GNC_VERIFY_YES);
+       GNC_VERIFY_YES, message);
   }
 
   switch (result)
@@ -1129,7 +1533,7 @@ gnc_split_register_recn_cell_confirm (char old_flag, gpointer data)
       return TRUE;
 
     return gnc_verify_dialog_parented (gnc_split_register_get_parent (reg),
-                                       message, TRUE);
+                                       TRUE, message);
   }
 
   return TRUE;

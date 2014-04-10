@@ -4,4 +4,5 @@ the automakery has been removed and it's been reconfigured to work
 with gnucash.  In the long run, we'll probably switch to use whatever
 becomes the guile standard for www access.
 
-
+This code is only used if we don't detect that you have a functional
+(www main) module via (use-modules (www main)) during configure.

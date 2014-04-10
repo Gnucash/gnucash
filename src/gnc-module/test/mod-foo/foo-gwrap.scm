@@ -3,15 +3,19 @@
 (debug-set! maxdepth 100000)
 (debug-set! stack 2000000)
 
-(let ((mod (gw:new-module "foo-gwrap")))
-  (gw:module-depends-on mod "gw-runtime")
-  (gw:module-set-declarations-ccodegen! 
-   mod 
-   (lambda (unused) 
-     (list "#include \"foo.h\"\n")))
+(use-modules (g-wrap gw-standard-spec))
+
+(let ((ws (gw:new-wrapset "foo-gwrap")))
+
+  (gw:wrapset-depends-on ws "gw-standard")
+
+  (gw:wrapset-add-cs-declarations! 
+   ws
+   (lambda (wrapset client-wrapset) 
+     "#include \"foo.h\"\n"))
 
   (gw:wrap-function
-   mod 'foo:hello
-   '<gw:bool> "foo_hello"
-   '()
+   ws
+   'foo:hello
+   '<gw:bool> "foo_hello" '()
    "Print a simple message from C"))

@@ -1,4 +1,6 @@
-AM_CFLAGS = ${GLIB_CFLAGS} -I../../
+AM_CFLAGS = \
+  -I${top_srcdir}/src/gnc-module \
+  ${GLIB_CFLAGS}
 
 LDADD = -L../.. -L../../.libs
 
@@ -15,3 +17,7 @@ libagedver_la_SOURCES=agedver.c
 libagedver_la_LDFLAGS=-module
 
 CLEANFILES = *.so* *.a
+
+# Keep automake from generating install targets for test libs
+install-checklibLTLIBRARIES:
+uninstall-checklibLTLIBRARIES:

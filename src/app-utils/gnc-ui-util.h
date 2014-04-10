@@ -46,10 +46,13 @@ gboolean gnc_reverse_balance(Account *account);
 gboolean gnc_reverse_balance_type(GNCAccountType type);
 
 
-/* Engine enhancements & i18n ***************************************/
-void gnc_set_current_session_handler (GNCSessionCB cb);
+/* Default directories **********************************************/
 
-GNCSession * gnc_get_current_session (void);
+void gnc_init_default_directory (char **dirname);
+void gnc_extract_directory (char **dirname, const char *filename);
+
+
+/* Engine enhancements & i18n ***************************************/
 GNCBook * gnc_get_current_book (void);
 AccountGroup * gnc_get_current_group (void);
 gnc_commodity_table * gnc_get_current_commodities (void);
@@ -62,10 +65,10 @@ typedef enum
   ACCOUNT_DESCRIPTION,
   ACCOUNT_NOTES,
   ACCOUNT_COMMODITY,
-  ACCOUNT_BALANCE, /* with sign reversal */
-  ACCOUNT_BALANCE_EURO,
-  ACCOUNT_TOTAL,   /* balance + children's balance with sign reversal */
-  ACCOUNT_TOTAL_EURO,
+  ACCOUNT_BALANCE,        /* with sign reversal */
+  ACCOUNT_BALANCE_REPORT, /* ACCOUNT_BALANCE in default report currency */
+  ACCOUNT_TOTAL,          /* balance + children's balance with sign reversal */
+  ACCOUNT_TOTAL_REPORT,   /* ACCOUNT_TOTAL in default report currency */
   ACCOUNT_TAX_INFO,
   NUM_ACCOUNT_FIELDS
 } AccountFieldCode;
@@ -90,6 +93,8 @@ gnc_numeric gnc_ui_account_get_balance_as_of_date (Account *account,
                                                    gboolean include_children);
 
 const char * gnc_get_reconcile_str (char reconciled_flag);
+const char * gnc_get_reconcile_valid_flags (void);
+const char * gnc_get_reconcile_flag_order (void);
 
 typedef enum
 {
@@ -117,22 +122,49 @@ char * gnc_account_get_full_name (Account *account);
 typedef enum
 {
   SOURCE_NONE = 0,
+  SPECIFIC_SOURCES,
+  SOURCE_AEX,
+  SOURCE_ASX,
+  SOURCE_DWS,
+  SOURCE_FIDELITY_DIRECT,
+  SOURCE_FOOL,
+  SOURCE_FUNDLIBRARY,
+  SOURCE_TDWATERHOUSE,
+  SOURCE_TIAA_CREF,
+  SOURCE_TROWEPRICE_DIRECT,
+  SOURCE_TRUSTNET,
+  SOURCE_UNION,
+  SOURCE_VANGUARD,
+  SOURCE_VWD,
   SOURCE_YAHOO,
+  SOURCE_YAHOO_ASIA,
+  SOURCE_YAHOO_AUSTRALIA,
   SOURCE_YAHOO_EUROPE,
+  SOURCE_ZUERICH,
+  GENERAL_SOURCES,
+  SOURCE_ASIA,
+  SOURCE_AUSTRALIA,
+  SOURCE_CANADA,
+  SOURCE_CANADAMUTUAL,
+  SOURCE_DUTCH,
+  SOURCE_EUROPE,
   SOURCE_FIDELITY,
   SOURCE_TROWEPRICE,
-  SOURCE_VANGUARD,
-  SOURCE_ASX,
-  SOURCE_TIAA_CREF,
-  SOURCE_TRUSTNET,
+  SOURCE_UKUNITTRUSTS,
+  SOURCE_USA,
   NUM_SOURCES
 } PriceSourceCode;
 /* NOTE: If you modify PriceSourceCode, please update price-quotes.scm
    as well. */
 
-const char * gnc_get_source_name (PriceSourceCode source);
-const char * gnc_get_source_code_name (PriceSourceCode source);
-PriceSourceCode gnc_get_source_code (const char * codename);
+const char * gnc_price_source_enum2name (PriceSourceCode source);
+const char * gnc_price_source_enum2internal (PriceSourceCode source);
+const char * gnc_price_source_internal2fq (const char * codename);
+PriceSourceCode gnc_price_source_internal2enum (const char * internal_name);
+PriceSourceCode gnc_price_source_fq2enum (const char * fq_name);
+gboolean gnc_price_source_sensitive (PriceSourceCode source);
+void gnc_price_source_set_fq_installed (GList *sources_list);
+gboolean gnc_price_source_have_fq (void);
 
 
 /* Locale functions *************************************************/
@@ -142,7 +174,13 @@ PriceSourceCode gnc_get_source_code (const char * codename);
  * is given default (en_US) values.  */
 struct lconv * gnc_localeconv (void);
 
-/* Returns the default currency of the current locale. */
+/* Returns the default currency of the current locale, or NULL if no
+ * sensible currency could be identified from the locale. */
+gnc_commodity * gnc_locale_default_currency_nodefault (void);
+
+/* Returns the default currency of the current locale. WATCH OUT: If
+ * no currency could be identified from the locale, this one returns
+ * "USD", but this will have nothing to do with the actual locale. */
 gnc_commodity * gnc_locale_default_currency (void);
 
 /* Returns the default ISO currency string of the current locale. */
@@ -183,6 +221,8 @@ typedef struct _GNCPrintAmountInfo
   unsigned int use_symbol : 1;     /* Print currency symbol */
   unsigned int use_locale : 1;     /* Use locale for some positioning */
   unsigned int monetary : 1;       /* Is a monetary quantity */
+  unsigned int force_fit : 1;      /* Don't print more than max_dp places */
+  unsigned int round : 1;          /* Round at max_dp instead of truncating */
 } GNCPrintAmountInfo;
 
 
@@ -199,6 +239,7 @@ GNCPrintAmountInfo gnc_split_amount_print_info (Split *split,
 GNCPrintAmountInfo gnc_split_value_print_info (Split *split,
                                                gboolean use_symbol);
 
+GNCPrintAmountInfo gnc_share_print_info_places (int decplaces);
 GNCPrintAmountInfo gnc_default_share_print_info (void);
 GNCPrintAmountInfo gnc_default_price_print_info (void);
 

@@ -29,7 +29,7 @@
 
 (define-module (gnucash report transaction))
 
-(use-modules (gnucash bootstrap) (g-wrapped gw-gnc)) ;; FIXME: delete after we finish modularizing.
+(use-modules (gnucash main)) ;; FIXME: delete after we finish modularizing.
 (use-modules (srfi srfi-1))
 (use-modules (ice-9 slib))
 (use-modules (gnucash gnc-module))
@@ -44,6 +44,7 @@
 
 ;; Define the strings here to avoid typos and make changes easier.
 
+(define reportname (N_ "Transaction Report"))
 (define pagename-sorting (N_ "Sorting"))
 (define optname-prime-sortkey (N_ "Primary Key"))
 (define optname-prime-subtotal (N_ "Primary Subtotal"))
@@ -166,7 +167,7 @@
                 (gnc:html-table-append-row/markup! 
                  table
                  subtotal-style
-                 (append blanks
+                 (cons blanks
                          (list (gnc:make-html-table-cell/markup
                                 "total-number-cell" currency)))))
               (cdr currency-totals))))
@@ -228,37 +229,39 @@
 (define account-types-to-reverse-assoc-list
   (list (cons 'none '())
         (cons 'income-expense '(income expense))
-        (cons 'credit-accounts '(liability equity credit income))))
+        (cons 'credit-accounts '(liability payable equity credit income))))
 
 (define (used-date columns-used)
   (vector-ref columns-used 0))
-(define (used-num columns-used)
+(define (used-reconciled-date columns-used)
   (vector-ref columns-used 1))
-(define (used-description columns-used)
+(define (used-num columns-used)
   (vector-ref columns-used 2))
-(define (used-account columns-used)
+(define (used-description columns-used)
   (vector-ref columns-used 3))
+(define (used-account columns-used)
+  (vector-ref columns-used 4))
 (define (used-other-account columns-used)
-  (vector-ref columns-used 4))	
-(define (used-shares columns-used)
   (vector-ref columns-used 5))	
-(define (used-price columns-used)
+(define (used-shares columns-used)
   (vector-ref columns-used 6))	
-(define (used-amount-single columns-used)
+(define (used-price columns-used)
   (vector-ref columns-used 7))	
-(define (used-amount-double-positive columns-used)
+(define (used-amount-single columns-used)
   (vector-ref columns-used 8))	
-(define (used-amount-double-negative columns-used)
+(define (used-amount-double-positive columns-used)
   (vector-ref columns-used 9))	
+(define (used-amount-double-negative columns-used)
+  (vector-ref columns-used 10))	
 (define (used-running-balance columns-used)
-  (vector-ref columns-used 10))
-(define (used-account-full-name columns-used)
   (vector-ref columns-used 11))
-
-(define (used-memo columns-used)
+(define (used-account-full-name columns-used)
   (vector-ref columns-used 12))
 
-(define columns-used-size 13)
+(define (used-memo columns-used)
+  (vector-ref columns-used 13))
+
+(define columns-used-size 14)
 
 (define (num-columns-required columns-used)  
   (do ((i 0 (+ i 1)) 
@@ -273,36 +276,40 @@
   (let ((column-list (make-vector columns-used-size #f)))
     (if (opt-val (N_ "Display") (N_ "Date"))
         (vector-set! column-list 0 #t))
-    (if (opt-val (N_ "Display") (N_ "Num"))
+    (if (opt-val (N_ "Display") (N_ "Reconciled Date"))
         (vector-set! column-list 1 #t))
-    (if (opt-val (N_ "Display") (N_ "Description"))
+    (if (opt-val (N_ "Display") (N_ "Num"))
         (vector-set! column-list 2 #t))
-    (if (opt-val (N_ "Display") (N_ "Account"))
+    (if (opt-val (N_ "Display") (N_ "Description"))
         (vector-set! column-list 3 #t))
-    (if (opt-val (N_ "Display") (N_ "Other Account"))
+    (if (opt-val (N_ "Display") (N_ "Account"))
         (vector-set! column-list 4 #t))
-    (if (opt-val (N_ "Display") (N_ "Shares"))
+    (if (opt-val (N_ "Display") (N_ "Other Account"))
         (vector-set! column-list 5 #t))
-    (if (opt-val (N_ "Display") (N_ "Price"))
+    (if (opt-val (N_ "Display") (N_ "Shares"))
         (vector-set! column-list 6 #t))
+    (if (opt-val (N_ "Display") (N_ "Price"))
+        (vector-set! column-list 7 #t))
     (let ((amount-setting (opt-val (N_ "Display") (N_ "Amount"))))
       (if (eq? amount-setting 'single)
-          (vector-set! column-list 7 #t))
+          (vector-set! column-list 8 #t))
       (if (eq? amount-setting 'double)
-          (begin (vector-set! column-list 8 #t)
-                 (vector-set! column-list 9 #t))))
+          (begin (vector-set! column-list 9 #t)
+                 (vector-set! column-list 10 #t))))
     (if (opt-val (N_ "Display") (N_ "Running Balance"))
-        (vector-set! column-list 10 #t))
-    (if (opt-val (N_ "Display")  (N_ "Use Full Account Name?"))
         (vector-set! column-list 11 #t))
-    (if (opt-val (N_ "Display") (N_ "Memo"))
+    (if (opt-val (N_ "Display")  (N_ "Use Full Account Name?"))
         (vector-set! column-list 12 #t))
+    (if (opt-val (N_ "Display") (N_ "Memo"))
+        (vector-set! column-list 13 #t))
     column-list))
 
 (define (make-heading-list column-vector)
   (let ((heading-list '()))
     (if (used-date column-vector)
         (addto! heading-list (_ "Date")))
+    (if (used-reconciled-date column-vector)
+        (addto! heading-list (_ "Reconciled Date")))
     (if (used-num column-vector)
         (addto! heading-list (_ "Num")))
     (if (used-description column-vector)
@@ -353,6 +360,12 @@
                 (if transaction-row?
                     (gnc:print-date (gnc:transaction-get-date-posted parent))
                     " ")))
+    (if (used-reconciled-date column-vector)
+        (addto! row-contents
+		(let ((date (gnc:split-get-reconciled-date split)))
+		  (if (equal? date (cons 0 0))
+		      " "
+		      (gnc:print-date date)))))
     (if (used-num column-vector)
         (addto! row-contents
                 (if transaction-row?
@@ -502,7 +515,7 @@
       (gnc:register-trep-option
        (gnc:make-multichoice-option
 	gnc:pagename-accounts optname-void-transactions
-	"d" (N_ "how to handle void transactions")
+	"d" (N_ "How to handle void transactions")
 	'non-void-only
 	(list (vector
 	       'non-void-only
@@ -542,6 +555,9 @@
                (vector 'exact-time
                        (N_ "Exact Time")
                        (N_ "Sort by exact time"))
+	       (vector 'reconciled-date
+		       (N_ "Reconciled Date")
+		       (N_ "Sort by the Reconciled Date"))
                (vector 'register-order
 		       (N_ "Register Order")
 		       (N_ "Sort as with the register"))
@@ -668,6 +684,7 @@
    ;; help-string, default-value
    (list
     (list (N_ "Date") "a" (N_ "Display the date?") #t)
+    (list (N_ "Reconciled Date") "a2" (N_ "Display the reconciled date?") #f)
     (list (N_ "Num")  "b" (N_ "Display the check number?") #t)
     (list (N_ "Description") "c" (N_ "Display the description?") #t)
     (list (N_ "Memo") "d" (N_ "Display the memo?") #t)
@@ -703,8 +720,8 @@
      (vector 'income-expense (N_ "Income and Expense")
              (N_ "Reverse amount display for Income and Expense Accounts"))
      (vector 'credit-accounts (N_ "Credit Accounts")
-             (N_ "Reverse amount display for Liability, Equity, Credit Card,\
-and Income accounts")))))
+             (N_ "Reverse amount display for Liability, Payable, Equity, \
+Credit Card, and Income accounts")))))
 
 
   (gnc:options-set-default-section gnc:*transaction-report-options*
@@ -759,7 +776,8 @@ and Income accounts")))))
                           primary-subtotal-renderer
                           secondary-subtotal-renderer)
   
-
+ (let ((work-to-do (length splits))
+       (work-done 0))
   (define (get-account-types-to-reverse options)
     (cdr (assq (gnc:option-value 
                 (gnc:lookup-option options
@@ -805,6 +823,8 @@ and Income accounts")))))
                                   primary-subtotal-collector 
                                   secondary-subtotal-collector 
                                   total-collector)
+    (set! work-done (+ 1 work-done))
+    (gnc:report-percent-done (* 100 (/ work-done work-to-do)))
     (if (null? splits)
         (begin
           (gnc:html-table-append-row/markup!
@@ -945,7 +965,7 @@ and Income accounts")))))
                                   (gnc:make-commodity-collector)
                                   (gnc:make-commodity-collector))))
     
-    table))
+    table)))
 
 ;; ;;;;;;;;;;;;;;;;;;;;
 ;; Here comes the renderer function for this report.
@@ -963,39 +983,45 @@ and Income accounts")))))
     ;; 'sorting-key-option-value (vector 'query-sorting-key
     ;; subtotal-function subtotal-renderer))
     (list (cons 'account-name  (vector 
-                                'by-account-full-name 
+                                (list gnc:split-account-fullname)
                                 split-account-full-name-same-p 
                                 render-account-full-name-subheading
                                 render-account-full-name-subtotal))
           (cons 'account-code  (vector 
-                                'by-account-code 
+                                (list gnc:split-account gnc:account-code)
                                 split-account-code-same-p
                                 render-account-code-subheading
                                 render-account-code-subtotal))
-          (cons 'exact-time          (vector 'by-date #f #f #f))
+          (cons 'exact-time    (vector
+				(list gnc:split-trans gnc:trans-date-posted)
+				#f #f #f))
           (cons 'date          (vector
-                                'by-date #f #f #f))
+                                (list gnc:split-trans gnc:trans-date-posted)
+				#f #f #f))
+	  (cons 'reconciled-date (vector
+				  (list gnc:split-date-reconciled) #f #f #f))
 	  (cons 'register-order 
 		 (vector
-		  'by-standard
+		  (list gnc:query-default-sort)
 		  #f 
 		  #f 
 		  #f))
           (cons 'corresponding-acc-name
-                (vector 'by-corr-account-full-name 
+                (vector (list gnc:split-corr-account-fullname)
                         split-same-corr-account-full-name-p 
                         render-corresponding-account-name-subheading
                         render-corresponding-account-name-subtotal))
           (cons 'corresponding-acc-code
-                (vector 'by-corr-account-code 
+                (vector (list gnc:split-corr-account-code)
                         split-same-corr-account-code-p 
                         render-corresponding-account-code-subheading
                         render-corresponding-account-code-subtotal))
-          (cons 'amount (vector 'by-amount #f #f #f))
-          (cons 'description (vector 'by-desc #f #f #f))
-          (cons 'number (vector 'by-num #f #f #f))
-          (cons 'memo   (vector 'by-memo #f #f #f))
-          (cons 'none   (vector 'by-none #f #f #f))))
+          (cons 'amount (vector (list gnc:split-value) #f #f #f))
+          (cons 'description (vector (list gnc:split-trans gnc:trans-desc)
+				     #f #f #f))
+          (cons 'number (vector (list gnc:split-trans gnc:trans-num) #f #f #f))
+          (cons 'memo   (vector (list gnc:split-memo) #f #f #f))
+          (cons 'none   (vector '() #f #f #f))))
 
   (define date-comp-funcs-assoc-list
     ;; Extra list for date option. Each entry: (cons
@@ -1054,13 +1080,14 @@ and Income accounts")))))
      name-sortkey name-subtotal name-date-subtotal
      3 2))
 
-      (define (get-other-account-names account-list)
-	( map (lambda (acct)  (gnc:account-get-full-name acct)) account-list))
+  (define (get-other-account-names account-list)
+    ( map (lambda (acct)  (gnc:account-get-full-name acct)) account-list))
 
+  (gnc:report-starting reportname)
   (let ((document (gnc:make-html-document))
-            (c_account_1 (opt-val gnc:pagename-accounts "Report Accounts"))
-            (c_account_2 (opt-val gnc:pagename-accounts "Filter Accounts"))
-	    (filter-mode (opt-val gnc:pagename-accounts "Filter Type"))
+	(c_account_1 (opt-val gnc:pagename-accounts "Report Accounts"))
+	(c_account_2 (opt-val gnc:pagename-accounts "Filter Accounts"))
+	(filter-mode (opt-val gnc:pagename-accounts "Filter Type"))
         (begindate (gnc:timepair-start-day-time
                     (gnc:date-option-absolute-time
                      (opt-val gnc:pagename-general "From"))))
@@ -1078,22 +1105,23 @@ and Income accounts")))))
         (splits '())
         (query (gnc:malloc-query)))
 
-        ;;(gnc:warn "accts in trep-renderer:" c_account_1)
-	  ;;(gnc:warn "Report Account names:" (get-other-account-names c_account_1))
+    ;;(gnc:warn "accts in trep-renderer:" c_account_1)
+    ;;(gnc:warn "Report Account names:" (get-other-account-names c_account_1))
 
-        (if (not (or (null? c_account_1) (and-map not c_account_1)))
+    (if (not (or (null? c_account_1) (and-map not c_account_1)))
         (begin
-          (gnc:query-set-group query (gnc:get-current-group))
+          (gnc:query-set-book query (gnc:get-current-book))
 	      ;;(gnc:warn "query is:" query)
           (gnc:query-add-account-match query
-                                           (gnc:list->glist c_account_1)
-                                       'acct-match-any 'query-and)
+                                       c_account_1
+                                       'guid-match-any 'query-and)
           (gnc:query-add-date-match-timepair
            query #t begindate #t enddate 'query-and)
           (gnc:query-set-sort-order query
-                                    (get-query-sortkey primary-key)
-                                    (get-query-sortkey secondary-key)
-                                    'by-none)
+				    (get-query-sortkey primary-key)
+				    (get-query-sortkey secondary-key)
+				    '())
+
           (gnc:query-set-sort-increasing query
                                          (eq? primary-order 'ascend)
                                          (eq? secondary-order 'ascend)
@@ -1101,36 +1129,36 @@ and Income accounts")))))
 
 	  (case void-status
 	   (('non-void-only) 
-	    (gnc:query-set-match-non-voids-only! query (gnc:get-current-group)))
+	    (gnc:query-set-match-non-voids-only! query (gnc:get-current-book)))
 	   (('void-only)
-	    (gnc:query-set-match-voids-only! query (gnc:get-current-group)))
+	    (gnc:query-set-match-voids-only! query (gnc:get-current-book)))
 	   (else #f))
 
-          (set! splits (gnc:glist->list (gnc:query-get-splits query)
-                                        <gnc:Split*>))
+          (set! splits (gnc:query-get-splits query))
+
           ;;(gnc:warn "Splits in trep-renderer:" splits)
 
-	      ;;(gnc:warn "Filter account names:" (get-other-account-names c_account_2))
+	  ;;(gnc:warn "Filter account names:" (get-other-account-names c_account_2))
 
-	      ;;This should probably a cond or a case to allow for different filter types.
-	      ;;(gnc:warn "Filter Mode: " filter-mode)
-	      (if (string=? filter-mode "include")
-		(begin
-		  ;;(gnc:warn "Including Filter Accounts")
-		  (set! splits (filter (lambda (split) 
-			(member (gnc:split-get-corr-account-full-name split) (get-other-account-names c_account_2)))
-		      splits))
-		 )
+	  ;;This should probably a cond or a case to allow for different filter types.
+	  ;;(gnc:warn "Filter Mode: " filter-mode)
+	  (if (string=? filter-mode "include")
+	      (begin
+		;;(gnc:warn "Including Filter Accounts")
+		(set! splits (filter (lambda (split) 
+				       (member (gnc:split-get-corr-account-full-name split) (get-other-account-names c_account_2)))
+				     splits))
 		)
+	      )
 
-	      (if (string=? filter-mode "exclude")
-		(begin
-		  ;;(gnc:warn "Excluding Filter Accounts")
-		  (set! splits (filter (lambda (split) 
-			(not (member (gnc:split-get-corr-account-full-name split) (get-other-account-names c_account_2))))
-		      splits))
-		 )
+	  (if (string=? filter-mode "exclude")
+	      (begin
+		;;(gnc:warn "Excluding Filter Accounts")
+		(set! splits (filter (lambda (split) 
+				       (not (member (gnc:split-get-corr-account-full-name split) (get-other-account-names c_account_2))))
+				     splits))
 		)
+	      )
 	
           (if (not (null? splits))
               (let ((table 
@@ -1182,8 +1210,10 @@ match the given time interval and account selection.")))
         
         (gnc:html-document-add-object!
          document 
-         (gnc:html-make-no-account-warning report-title)))
+	 (gnc:html-make-no-account-warning 
+	  report-title (gnc:report-id report-obj))))
 
+    (gnc:report-finished)
     document))
 
 ;; Define the report.
@@ -1191,7 +1221,7 @@ match the given time interval and account selection.")))
  
  'version 2
  
- 'name (N_ "Transaction Report")
+ 'name reportname
  
  'options-generator trep-options-generator
  

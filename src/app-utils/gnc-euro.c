@@ -173,7 +173,10 @@ gnc_convert_to_euro(const gnc_commodity * currency, gnc_numeric value)
 
     rate = double_to_gnc_numeric (result->rate, 100000, GNC_RND_ROUND);
 
-    return gnc_numeric_div (value, rate, 100, GNC_RND_FLOOR);
+    /* Which rounding should be used here? H. Thoma said
+       GNC_RND_FLOOR, but I (cstim) think he's wrong -- the official
+       rules say you *have* to use GNC_RND_ROUND! */
+    return gnc_numeric_div (value, rate, 100, GNC_RND_ROUND);
   }
 }
 

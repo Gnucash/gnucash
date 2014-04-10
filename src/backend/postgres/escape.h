@@ -25,7 +25,7 @@
  * escape.h
  *
  * FUNCTION:
- * Escape SQL reserved cahracters \ and ' from strings
+ * Escape SQL reserved characters \ and ' from strings
  *
  * HISTORY:
  * Linas Vepstas January 2001

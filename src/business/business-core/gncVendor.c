@@ -1,6 +1,6 @@
 /*
  * gncVendor.c -- the Core Vendor Interface
- * Copyright (C) 2001 Derek Atkins
+ * Copyright (C) 2001, 2002 Derek Atkins
  * Author: Derek Atkins <warlord@MIT.EDU>
  */
 
@@ -12,51 +12,80 @@
 #include "guid.h"
 #include "messages.h"
 #include "gnc-engine-util.h"
+#include "gnc-book-p.h"
+#include "GNCIdP.h"
+#include "QueryObject.h"
+#include "gnc-event-p.h"
+#include "gnc-be-utils.h"
 
+#include "gncBusiness.h"
 #include "gncVendor.h"
 #include "gncVendorP.h"
 #include "gncAddress.h"
-#include "gncBusiness.h"
 
 struct _gncVendor {
-  GncBusiness *	business;
+  GNCBook *	book;
   GUID		guid;
   char *	id;
   char *	name;
   char *	notes;
+  GncBillTerm *	terms;
   GncAddress *	addr;
-  gint		terms;
-  gboolean	taxincluded;
+  gnc_commodity * currency;
+  GncTaxIncluded taxincluded;
   gboolean	active;
+  GList *	jobs;
+  GncTaxTable*	taxtable;
+  gboolean	taxtable_override;
+
+  int		editlevel;
+  gboolean	do_free;
+
   gboolean	dirty;
 };
+
+static short	module = MOD_BUSINESS;
+
+#define _GNC_MOD_NAME	GNC_VENDOR_MODULE_NAME
 
 #define CACHE_INSERT(str) g_cache_insert(gnc_engine_get_string_cache(), (gpointer)(str));
 #define CACHE_REMOVE(str) g_cache_remove(gnc_engine_get_string_cache(), (str));
 
+static void addObj (GncVendor *vendor);
+static void remObj (GncVendor *vendor);
+
+G_INLINE_FUNC void mark_vendor (GncVendor *vendor);
+G_INLINE_FUNC void
+mark_vendor (GncVendor *vendor)
+{
+  vendor->dirty = TRUE;
+  gncBusinessSetDirtyFlag (vendor->book, _GNC_MOD_NAME, TRUE);
+
+  gnc_engine_generate_event (&vendor->guid, GNC_EVENT_MODIFY);
+}
+
 /* Create/Destroy Functions */
 
-GncVendor *gncVendorCreate (GncBusiness *business)
+GncVendor *gncVendorCreate (GNCBook *book)
 {
   GncVendor *vendor;
 
-  if (!business) return NULL;
+  if (!book) return NULL;
 
   vendor = g_new0 (GncVendor, 1);
-  vendor->business = business;
+  vendor->book = book;
   vendor->dirty = FALSE;
   vendor->id = CACHE_INSERT ("");
   vendor->name = CACHE_INSERT ("");
   vendor->notes = CACHE_INSERT ("");
-  vendor->addr = gncAddressCreate (business);
-  vendor->terms = 0;
-  vendor->taxincluded = FALSE;
+  vendor->addr = gncAddressCreate (book, &vendor->guid);
+  vendor->taxincluded = GNC_TAXINCLUDED_USEGLOBAL;
   vendor->active = TRUE;
 
-  guid_new (&vendor->guid);
+  xaccGUIDNew (&vendor->guid, book);
+  addObj (vendor);
 
-  gncBusinessAddEntity (business, GNC_VENDOR_MODULE_NAME, &vendor->guid,
-			vendor);
+  gnc_engine_generate_event (&vendor->guid, GNC_EVENT_CREATE);
 
   return vendor;
 }
@@ -64,24 +93,34 @@ GncVendor *gncVendorCreate (GncBusiness *business)
 void gncVendorDestroy (GncVendor *vendor)
 {
   if (!vendor) return;
+  vendor->do_free = TRUE;
+  gncVendorCommitEdit (vendor);
+}
+
+static void gncVendorFree (GncVendor *vendor)
+{
+  if (!vendor) return;
+
+  gnc_engine_generate_event (&vendor->guid, GNC_EVENT_DESTROY);
 
   CACHE_REMOVE (vendor->id);
   CACHE_REMOVE (vendor->name);
   CACHE_REMOVE (vendor->notes);
   gncAddressDestroy (vendor->addr);
+  g_list_free (vendor->jobs);
 
-  gncBusinessRemoveEntity (vendor->business, GNC_VENDOR_MODULE_NAME,
-			   &vendor->guid);
+  remObj (vendor);
 
   g_free (vendor);
 }
 
 /* Set Functions */
 
-#define SET_STR(member, str) { \
+#define SET_STR(obj, member, str) { \
 	char * tmp; \
 	\
 	if (!safe_strcmp (member, str)) return; \
+	gncVendorBeginEdit (obj); \
 	tmp = CACHE_INSERT (str); \
 	CACHE_REMOVE (member); \
 	member = tmp; \
@@ -91,67 +130,118 @@ void gncVendorSetID (GncVendor *vendor, const char *id)
 {
   if (!vendor) return;
   if (!id) return;
-  SET_STR(vendor->id, id);
-  vendor->dirty = TRUE;
+  SET_STR(vendor, vendor->id, id);
+  mark_vendor (vendor);
+  gncVendorCommitEdit (vendor);
 }
 
 void gncVendorSetName (GncVendor *vendor, const char *name)
 {
   if (!vendor) return;
   if (!name) return;
-  SET_STR(vendor->name, name);
-  vendor->dirty = TRUE;
+  SET_STR(vendor, vendor->name, name);
+  mark_vendor (vendor);
+  gncVendorCommitEdit (vendor);
 }
 
 void gncVendorSetNotes (GncVendor *vendor, const char *notes)
 {
   if (!vendor) return;
   if (!notes) return;
-  SET_STR(vendor->notes, notes);
-  vendor->dirty = TRUE;
+  SET_STR(vendor,vendor->notes, notes);
+  mark_vendor (vendor);
+  gncVendorCommitEdit (vendor);
 }
 
 void gncVendorSetGUID (GncVendor *vendor, const GUID *guid)
 {
   if (!vendor || !guid) return;
   if (guid_equal (guid, &vendor->guid)) return;
-  gncBusinessRemoveEntity (vendor->business, GNC_VENDOR_MODULE_NAME,
-			   &vendor->guid);
+
+  gncVendorBeginEdit (vendor);
+  remObj (vendor);
   vendor->guid = *guid;
-  gncBusinessAddEntity (vendor->business, GNC_VENDOR_MODULE_NAME,
-			&vendor->guid, vendor);
+  addObj (vendor);
+  gncVendorCommitEdit (vendor);
 }
 
-void gncVendorSetTerms (GncVendor *vendor, gint terms)
+void gncVendorSetTerms (GncVendor *vendor, GncBillTerm *terms)
 {
   if (!vendor) return;
-  if (terms == vendor->terms) return;
+  if (vendor->terms == terms) return;
+
+  gncVendorBeginEdit (vendor);
+  if (vendor->terms)
+    gncBillTermDecRef (vendor->terms);
   vendor->terms = terms;
-  vendor->dirty = TRUE;
+  if (vendor->terms)
+    gncBillTermDecRef (vendor->terms);
+  mark_vendor (vendor);
+  gncVendorCommitEdit (vendor);
 }
 
-void gncVendorSetTaxIncluded (GncVendor *vendor, gboolean taxincl)
+void gncVendorSetTaxIncluded (GncVendor *vendor, GncTaxIncluded taxincl)
 {
   if (!vendor) return;
   if (taxincl == vendor->taxincluded) return;
+  gncVendorBeginEdit (vendor);
   vendor->taxincluded = taxincl;
-  vendor->dirty = TRUE;
+  mark_vendor (vendor);
+  gncVendorCommitEdit (vendor);
+}
+
+void gncVendorSetCurrency (GncVendor *vendor, gnc_commodity *currency)
+{
+  if (!vendor || !currency) return;
+  if (vendor->currency &&
+      gnc_commodity_equal (vendor->currency, currency))
+    return;
+  gncVendorBeginEdit (vendor);
+  vendor->currency = currency;
+  mark_vendor (vendor);
+  gncVendorCommitEdit (vendor);
 }
 
 void gncVendorSetActive (GncVendor *vendor, gboolean active)
 {
   if (!vendor) return;
   if (active == vendor->active) return;
+  gncVendorBeginEdit (vendor);
   vendor->active = active;
-  vendor->dirty = TRUE;
+  mark_vendor (vendor);
+  gncVendorCommitEdit (vendor);
+}
+
+void gncVendorSetTaxTableOverride (GncVendor *vendor, gboolean override)
+{
+  if (!vendor) return;
+  if (vendor->taxtable_override == override) return;
+  gncVendorBeginEdit (vendor);
+  vendor->taxtable_override = override;
+  mark_vendor (vendor);
+  gncVendorCommitEdit (vendor);
+}
+
+void gncVendorSetTaxTable (GncVendor *vendor, GncTaxTable *table)
+{
+  if (!vendor) return;
+  if (vendor->taxtable == table) return;
+  gncVendorBeginEdit (vendor);
+  if (vendor->taxtable)
+    gncTaxTableDecRef (vendor->taxtable);
+  if (table)
+    gncTaxTableIncRef (table);
+  vendor->taxtable = table;
+  mark_vendor (vendor);
+  gncVendorCommitEdit (vendor);
 }
 
 /* Get Functions */
 
-GncBusiness * gncVendorGetBusiness (GncVendor *vendor)
+GNCBook * gncVendorGetBook (GncVendor *vendor)
 {
   if (!vendor) return NULL;
-  return vendor->business;
+  return vendor->book;
 }
 
 const GUID * gncVendorGetGUID (GncVendor *vendor)
@@ -184,16 +274,22 @@ const char * gncVendorGetNotes (GncVendor *vendor)
   return vendor->notes;
 }
 
-gint gncVendorGetTerms (GncVendor *vendor)
+GncBillTerm * gncVendorGetTerms (GncVendor *vendor)
 {
   if (!vendor) return 0;
   return vendor->terms;
 }
 
-gboolean gncVendorGetTaxIncluded (GncVendor *vendor)
+GncTaxIncluded gncVendorGetTaxIncluded (GncVendor *vendor)
 {
-  if (!vendor) return FALSE;
+  if (!vendor) return GNC_TAXINCLUDED_USEGLOBAL;
   return vendor->taxincluded;
+}
+
+gnc_commodity * gncVendorGetCurrency (GncVendor *vendor)
+{
+  if (!vendor) return NULL;
+  return vendor->currency;
 }
 
 gboolean gncVendorGetActive (GncVendor *vendor)
@@ -202,59 +298,163 @@ gboolean gncVendorGetActive (GncVendor *vendor)
   return vendor->active;
 }
 
+gboolean gncVendorGetTaxTableOverride (GncVendor *vendor)
+{
+  if (!vendor) return FALSE;
+  return vendor->taxtable_override;
+}
+
+GncTaxTable* gncVendorGetTaxTable (GncVendor *vendor)
+{
+  if (!vendor) return NULL;
+  return vendor->taxtable;
+}
+
+/* Note that JobList changes do not affect the "dirtiness" of the vendor */
+void gncVendorAddJob (GncVendor *vendor, GncJob *job)
+{
+  if (!vendor) return;
+  if (!job) return;
+
+  if (g_list_index(vendor->jobs, job) == -1)
+    vendor->jobs = g_list_insert_sorted (vendor->jobs, job,
+					 (GCompareFunc)gncJobCompare);
+
+  gnc_engine_generate_event (&vendor->guid, GNC_EVENT_MODIFY);
+}
+
+void gncVendorRemoveJob (GncVendor *vendor, GncJob *job)
+{
+  GList *node;
+
+  if (!vendor) return;
+  if (!job) return;
+
+  node = g_list_find (vendor->jobs, job);
+  if (!node) {
+    /*    PERR ("split not in account"); */
+  } else {
+    vendor->jobs = g_list_remove_link (vendor->jobs, node);
+    g_list_free_1 (node);
+  }
+
+  gnc_engine_generate_event (&vendor->guid, GNC_EVENT_MODIFY);
+}
+
+void gncVendorBeginEdit (GncVendor *vendor)
+{
+  GNC_BEGIN_EDIT (vendor, _GNC_MOD_NAME);
+}
+
+static void gncVendorOnError (GncVendor *vendor, GNCBackendError errcode)
+{
+  PERR("Vendor Backend Failure: %d", errcode);
+}
+
+static void gncVendorOnDone (GncVendor *vendor)
+{
+  vendor->dirty = FALSE;
+  gncAddressClearDirty (vendor->addr);
+}
+
+void gncVendorCommitEdit (GncVendor *vendor)
+{
+  GNC_COMMIT_EDIT_PART1 (vendor);
+  GNC_COMMIT_EDIT_PART2 (vendor, _GNC_MOD_NAME, gncVendorOnError,
+			 gncVendorOnDone, gncVendorFree);
+}
+
+/* Other functions */
+
+int gncVendorCompare (GncVendor *a, GncVendor *b)
+{
+  if (!a && !b) return 0;
+  if (!a && b) return 1;
+  if (a && !b) return -1;
+
+  return(strcmp(a->name, b->name));
+}
+
+GList * gncVendorGetJoblist (GncVendor *vendor, gboolean show_all)
+{
+  if (!vendor) return NULL;
+
+  if (show_all) {
+    return (g_list_copy (vendor->jobs));
+  } else {
+    GList *list = NULL, *iterator;
+    for (iterator = vendor->jobs; iterator; iterator=iterator->next) {
+      GncJob *j = iterator->data;
+      if (gncJobGetActive (j))
+	list = g_list_append (list, j);
+    }
+    return list;
+  }
+}
+
+GUID gncVendorRetGUID (GncVendor *vendor)
+{
+  if (!vendor)
+    return *xaccGUIDNULL();
+
+  return vendor->guid;
+}
+
+GncVendor * gncVendorLookupDirect (GUID guid, GNCBook *book)
+{
+  if (!book) return NULL;
+  return gncVendorLookup (book, &guid);
+}
+
+GncVendor * gncVendorLookup (GNCBook *book, const GUID *guid)
+{
+  if (!book || !guid) return NULL;
+  return xaccLookupEntity (gnc_book_get_entity_table (book),
+			   guid, _GNC_MOD_NAME);
+}
+
 gboolean gncVendorIsDirty (GncVendor *vendor)
 {
   if (!vendor) return FALSE;
   return (vendor->dirty || gncAddressIsDirty (vendor->addr));
 }
 
-void gncVendorCommitEdit (GncVendor *vendor)
-{
-
-  /* XXX COMMIT TO DATABASE */
-  vendor->dirty = FALSE;
-}
-
-/* Other functions */
-
-static gint gncVendorSortFunc (gconstpointer a, gconstpointer b) {
-  GncVendor *va = (GncVendor *) a;
-  GncVendor *vb = (GncVendor *) b;
-  return(strcmp(va->name, vb->name));
-}
-
 /* Package-Private functions */
 
-struct _iterate {
-  GList *list;
-  gboolean show_all;
-};
-
-static void get_list (gpointer key, gpointer item, gpointer arg)
+static void addObj (GncVendor *vendor)
 {
-  struct _iterate *iter = arg;
-  GncVendor *vendor = item;
-
-  if (iter->show_all || gncVendorGetActive (vendor)) {
-    iter->list = g_list_insert_sorted (iter->list, vendor, gncVendorSortFunc);
-  }
+  gncBusinessAddObject (vendor->book, _GNC_MOD_NAME, vendor, &vendor->guid);
 }
 
-static GList * _gncVendorGetList (GncBusiness *bus, gboolean show_all)
+static void remObj (GncVendor *vendor)
 {
-  GHashTable *ht;
-  struct _iterate iter;
+  gncBusinessRemoveObject (vendor->book, _GNC_MOD_NAME, &vendor->guid);
+}
 
-  if (!bus) return NULL;
+static void _gncVendorCreate (GNCBook *book)
+{
+  gncBusinessCreate (book, _GNC_MOD_NAME);
+}
 
-  iter.list = NULL;
-  iter.show_all = show_all;
+static void _gncVendorDestroy (GNCBook *book)
+{
+  gncBusinessDestroy (book, _GNC_MOD_NAME);
+}
 
-  ht = gncBusinessEntityTable (bus, GNC_VENDOR_MODULE_NAME);
-  if (ht)
-    g_hash_table_foreach (ht, get_list, &iter);
+static gboolean _gncVendorIsDirty (GNCBook *book)
+{
+  return gncBusinessIsDirty (book, _GNC_MOD_NAME);
+}
 
-  return iter.list;
+static void _gncVendorMarkClean (GNCBook *book)
+{
+  gncBusinessSetDirtyFlag (book, _GNC_MOD_NAME, FALSE);
+}
+
+static void _gncVendorForeach (GNCBook *book, foreachObjectCB cb,
+			       gpointer user_data)
+{
+  gncBusinessForeach (book, _GNC_MOD_NAME, cb, user_data);
 }
 
 static const char * _gncVendorPrintable (gpointer item)
@@ -267,30 +467,36 @@ static const char * _gncVendorPrintable (gpointer item)
   return v->name;
 }
 
-static void _gncVendorDestroy (GncBusiness *obj)
-{
-  if (!obj) return;
-
-  /* XXX: should we be sure to destroy all the vendor objects? */
-}
-
-static GncBusinessObject gncVendorDesc = {
-  GNC_BUSINESS_VERSION,
-  GNC_VENDOR_MODULE_NAME,
+static GncObject_t gncVendorDesc = {
+  GNC_OBJECT_VERSION,
+  _GNC_MOD_NAME,
   "Vendor",
+  _gncVendorCreate,
   _gncVendorDestroy,
-  _gncVendorGetList,
+  _gncVendorIsDirty,
+  _gncVendorMarkClean,
+  _gncVendorForeach,
   _gncVendorPrintable
 };
 
 gboolean gncVendorRegister (void)
 {
-  return gncBusinessRegister (&gncVendorDesc);
+  static QueryObjectDef params[] = {
+    { VENDOR_ID, QUERYCORE_STRING, (QueryAccess)gncVendorGetID },
+    { VENDOR_NAME, QUERYCORE_STRING, (QueryAccess)gncVendorGetName },
+    { VENDOR_ADDR, GNC_ADDRESS_MODULE_NAME, (QueryAccess)gncVendorGetAddr },
+    { QUERY_PARAM_BOOK, GNC_ID_BOOK, (QueryAccess)gncVendorGetBook },
+    { QUERY_PARAM_GUID, QUERYCORE_GUID, (QueryAccess)gncVendorGetGUID },
+    { QUERY_PARAM_ACTIVE, QUERYCORE_BOOLEAN, (QueryAccess)gncVendorGetActive },
+    { NULL },
+  };
+
+  gncQueryObjectRegister (_GNC_MOD_NAME, (QuerySort)gncVendorCompare, params);
+
+  return gncObjectRegister (&gncVendorDesc);
 }
 
-static gint lastVendor = 17;
-
-gint gncVendorNextID (GncBusiness *business)
+gint64 gncVendorNextID (GNCBook *book)
 {
-  return ++lastVendor;		/* XXX: Look into Database! */
+  return gnc_book_get_counter (book, _GNC_MOD_NAME);
 }

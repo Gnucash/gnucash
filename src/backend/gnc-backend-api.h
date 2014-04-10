@@ -27,5 +27,7 @@
 #include "Backend.h"
 
 Backend * gnc_backend_new (void);
+void gnc_file_be_set_retention_days (int days);
+void gnc_file_be_set_compression (gboolean compress);
 
 #endif

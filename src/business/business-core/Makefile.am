@@ -1,4 +1,4 @@
-SUBDIRS = . test
+SUBDIRS = . test file
 
 pkglib_LTLIBRARIES = libgw-business-core.la libgncmod-business-core.la
 
@@ -13,28 +13,46 @@ AM_CFLAGS = \
 libgncmod_business_core_la_SOURCES = \
   businessmod-core.c \
   gncAddress.c \
+  gncBillTerm.c \
   gncBusiness.c \
+  gncBusGuile.c \
   gncCustomer.c \
   gncEmployee.c \
   gncEntry.c \
   gncInvoice.c \
   gncJob.c \
   gncOrder.c \
+  gncOwner.c \
+  gncTaxTable.c \
   gncVendor.c
 
 noinst_HEADERS = \
   gncAddress.h \
+  gncAddressP.h \
+  gncBillTerm.h \
+  gncBillTermP.h \
   gncBusiness.h \
+  gncBusinessP.h \
+  gncBusGuile.h \
   gncCustomer.h \
   gncCustomerP.h \
   gncEmployee.h \
   gncEmployeeP.h \
   gncEntry.h \
   gncEntryP.h \
+  gncInvoice.h \
+  gncInvoiceP.h \
   gncJob.h \
   gncJobP.h \
+  gncOrder.h \
+  gncOrderP.h \
+  gncOwner.h \
+  gncOwnerP.h \
+  gncTaxTable.h \
+  gncTaxTableP.h \
   gncVendor.h \
-  gncVendorP.h
+  gncVendorP.h \
+  gw-business-core.h
 
 libgncmod_business_core_la_LDFLAGS = -module
 
@@ -43,7 +61,8 @@ libgncmod_business_core_la_LIBADD = \
   ${GLIB_LIBS} \
   ${EFENCE_LIBS}
 
-						# business-core-helpers.c
+# business-core-helpers.c
+
 libgw_business_core_la_SOURCES = gw-business-core.c 
 libgw_business_core_la_LDFLAGS = -module ${G_WRAP_LINK_ARGS}
 
@@ -55,21 +74,38 @@ gwmod_DATA = \
   gw-business-core.scm \
   gw-business-core-spec.scm
 
+EXTRA_DIST = \
+  .cvsignore \
+  ${gncmod_DATA} \
+  ${gwmod_DATA}
+
+if GNUCASH_SEPARATE_BUILDDIR
+#For compiling
+SCM_FILE_LINKS = gw-business-core-spec.scm
+#For executing test cases
+SCM_FILE_LINKS += business-core.scm
+endif
+
 .scm-links: 
 	rm -f gnucash g-wrapped
 	ln -sf . gnucash 
 	ln -sf . g-wrapped 
+if GNUCASH_SEPARATE_BUILDDIR
+	for X in ${SCM_FILE_LINKS} ; do \
+	  ln -sf ${srcdir}/$$X . ; \
+	done
+endif
 	touch .scm-links
 
-gncmod-business-core.c: gw-business-core.h
-
-gw-business-core.scm gw-business-core.c gw-business-core.h: .scm-links gw-business-core-spec.scm
+gw-business-core.scm gw-business-core.c gw-business-core.h: \
+ .scm-links gw-business-core-spec.scm ${top_builddir}/config.status
 	FLAVOR=gnome guile -c \
 	 "(set! %load-path (cons \"${G_WRAP_MODULE_DIR}\" %load-path)) \
 	 (set! %load-path (cons \"${PWD}\" %load-path)) \
 	 (set! %load-path (cons \"../../engine\" %load-path)) \
 	 (primitive-load \"./gw-business-core-spec.scm\") \
-	 (gw:generate-module \"gw-business-core\")"
+	 (gw:generate-wrapset \"gw-business-core\")"
 
 BUILT_SOURCES = gw-business-core.scm gw-business-core.c gw-business-core.h
-CLEANFILES = gw-business-core.scm gw-business-core.c gw-business-core.h gw-business-core.html
+DISTCLEANFILES = g-wrapped gnucash .scm-links ${SCM_FILE_LINKS} \
+                 gw-business-core.html

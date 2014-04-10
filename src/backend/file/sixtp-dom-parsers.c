@@ -445,21 +445,26 @@ dom_tree_to_text(xmlNodePtr tree)
      Ignores comment nodes and collapse text nodes into one string.
      Returns NULL if expectations are unsatisfied.
   */
-  gboolean ok = TRUE;
-  xmlNodePtr current;
   gchar *result;
   gchar *temp;
 
   g_return_val_if_fail(tree, NULL);
+
   /* no nodes means it's an empty string text */
   if(!tree->xmlChildrenNode)
   {
+      PINFO ("No children");
       return g_strdup("");
   }
 
   temp = xmlNodeListGetString (NULL, tree->xmlChildrenNode, TRUE);
-  if (!temp) return NULL;
+  if (!temp) 
+  {
+    PINFO ("Null string");
+    return NULL;
+  }
 
+  PINFO ("node string is >>>%s<<<\n", temp);
   result = g_strdup (temp);
   xmlFree (temp);
   return result;
@@ -629,20 +634,20 @@ dom_tree_to_gdate(xmlNodePtr node)
           seen_date = TRUE;
           g_date_set_dmy( ret, day, month, year );
           if( !g_date_valid( ret ) ) {
-            g_warning("dom_tree_to_gdate: invalid date");
+            PWARN("invalid date");
             goto failure;
           }
         }
       }
       break;
     default:
-      PERR("dom_tree_to_gdate: unexpected sub-node.");
+      PERR("unexpected sub-node.");
       goto failure;
     }
   }
 
   if(!seen_date) {
-      g_warning("dom_tree_to_gdate: no gdate node found.");
+      PWARN("no gdate node found.");
       goto failure;
   }
 
@@ -654,7 +659,7 @@ failure:
 
 
 gnc_commodity *
-dom_tree_to_commodity_ref_no_engine(xmlNodePtr node)
+dom_tree_to_commodity_ref_no_engine(xmlNodePtr node, GNCBook *book)
 {
   /* Turn something like this
      
@@ -725,7 +730,7 @@ dom_tree_to_commodity_ref(xmlNodePtr node, GNCBook *book)
     gnc_commodity *ret;
     gnc_commodity_table *table;
 
-    daref = dom_tree_to_commodity_ref_no_engine(node);
+    daref = dom_tree_to_commodity_ref_no_engine(node, book);
 
     table = gnc_book_get_commodity_table (book);
 
@@ -787,7 +792,7 @@ gnc_xml_set_data(const gchar* tag, xmlNodePtr node, gpointer item,
 
     if(!handlers->tag) 
     {
-        PERR("Unhandled tag: %s\n",
+        PERR("Unhandled tag: %s",
              tag ? tag : "(null)");
         return FALSE;
     }
@@ -814,13 +819,13 @@ dom_tree_generic_parse(xmlNodePtr node, struct dom_tree_handler *handlers,
         {
             PERR("gnc_xml_set_data failed");
             successful = FALSE;
-            break;
+            continue;
         }
     }
 
     if(!dom_tree_handlers_all_gotten_p(handlers))
     {
-        PERR("missing tag in input");
+        PERR("didn't find all of the expected tags in the input");
         successful = FALSE;
     }
 

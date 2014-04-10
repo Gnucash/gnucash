@@ -27,6 +27,7 @@
 #include <glib.h>
 #include <limits.h>
 #include <locale.h>
+#include <math.h>
 #include <stdarg.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -57,9 +58,49 @@ static int auto_decimal_places = 2;    /* default, can be changed */
 static gboolean reverse_balance_inited = FALSE;
 static SCM reverse_balance_callback_id = SCM_UNDEFINED;
 static gboolean reverse_type[NUM_ACCOUNT_TYPES];
+static gboolean fq_is_installed = FALSE;
 
-static GNCSessionCB session_cb = NULL;
+typedef struct quote_source_t {
+  gboolean supported;
+  gboolean translate;
+  char *user_name;	/* User friendly name */
+  char *internal_name;	/* Name used internally. */
+  char *fq_name;	/* Name used by finance::quote. */
+} quote_source;
 
+static quote_source quote_sources[NUM_SOURCES] = {
+  { TRUE,  TRUE,  N_("(none)"), NULL, NULL },
+  { FALSE, TRUE,  N_("-- Single Sources --"), NULL, NULL },
+  { FALSE, FALSE, "AEX", "AEX", "aex" },
+  { FALSE, FALSE, "ASX", "ASX", "asx" },
+  { FALSE, FALSE, "DWS", "DWS", "dwsfunds" },
+  { FALSE, FALSE, "Fidelity Direct", "FIDELITY_DIRECT", "fidelity_direct" },
+  { FALSE, FALSE, "Motley Fool", "FOOL", "fool" },
+  { FALSE, FALSE, "Fund Library", "FUNDLIBRARY", "fundlibrary" },
+  { FALSE, FALSE, "TD Waterhouse Canada", "TDWATERHOUSE", "tdwaterhouse" },
+  { FALSE, FALSE, "TIAA-CREF", "TIAACREF", "tiaacref" },
+  { FALSE, FALSE, "T. Rowe Price", "TRPRICE_DIRECT", "troweprice_direct" }, /* Not Implemented */
+  { FALSE, FALSE, "Trustnet", "TRUSTNET", "trustnet" },
+  { FALSE, FALSE, "Union Investments", "UNIONFUNDS", "unionfunds" },
+  { FALSE, FALSE, "Vanguard", "VANGUARD", "vanguard" },
+  { FALSE, FALSE, "VWD", "VWD", "vwd" },
+  { FALSE, FALSE, "Yahoo", "YAHOO", "yahoo" },
+  { FALSE, FALSE, "Yahoo Asia", "YAHOO_ASIA", "yahoo_asia" },
+  { FALSE, FALSE, "Yahoo Australia", "YAHOO_AUSTRALIA", "yahoo_australia" },
+  { FALSE, FALSE, "Yahoo Europe", "YAHOO_EUROPE", "yahoo_europe" },
+  { FALSE, FALSE, "Zuerich Investments", "ZIFUNDS", "zifunds" },
+  { FALSE, TRUE,  N_("-- Multiple Sources --"), NULL, NULL },
+  { FALSE, FALSE, "Asia (Yahoo, ...)", "ASIA", "asia" },
+  { FALSE, FALSE, "Australia (ASX, Yahoo, ...)", "AUSTRALIA", "australia" },
+  { FALSE, FALSE, "Canada (Yahoo, ...)", "CANADA", "canada" },
+  { FALSE, FALSE, "Canada Mutual (Fund Library, ...)", "CANADAMUTUAL", "canadamutual" },
+  { FALSE, FALSE, "Dutch (AEX, ...)", "DUTCH", "dutch" },
+  { FALSE, FALSE, "Europe (Yahoo, ...)", "EUROPE", "europe" },
+  { FALSE, FALSE, "Fidelity (Fidelity, ...)", "FIDELITY", "fidelity" },
+  { FALSE, FALSE, "T. Rowe Price", "TRPRICE", "troweprice" },
+  { FALSE, FALSE, "U.K. Unit Trusts", "UKUNITTRUSTS", "uk_unit_trusts" },
+  { FALSE, FALSE, "USA (Yahoo, Fool ...)", "USA", "usa" },
+};
 
 /********************************************************************\
  * gnc_color_deficits                                               *
@@ -122,7 +163,7 @@ gnc_configure_reverse_balance (void)
   for (i = 0; i < NUM_ACCOUNT_TYPES; i++)
     reverse_type[i] = FALSE;
 
-  choice = gnc_lookup_multichoice_option ("General",
+  choice = gnc_lookup_multichoice_option ("Accounts",
                                           "Reversed-balance account types",
                                           "credit");
 
@@ -134,6 +175,7 @@ gnc_configure_reverse_balance (void)
   else if (safe_strcmp (choice, "credit") == 0)
   {
     reverse_type[LIABILITY] = TRUE;
+    reverse_type[PAYABLE]   = TRUE;
     reverse_type[EQUITY]    = TRUE;
     reverse_type[INCOME]    = TRUE;
     reverse_type[CREDIT]    = TRUE;
@@ -167,7 +209,7 @@ gnc_reverse_balance_init (void)
 
   reverse_balance_callback_id = 
     gnc_register_option_change_callback (gnc_configure_reverse_balance_cb,
-                                         NULL, "General",
+                                         NULL, "Accounts",
                                          "Reversed-balance account types");
 
   reverse_balance_inited = (reverse_balance_callback_id != SCM_UNDEFINED);
@@ -203,19 +245,31 @@ gnc_reverse_balance (Account *account)
   return reverse_type[type];
 }
 
+
 void
-gnc_set_current_session_handler (GNCSessionCB cb)
+gnc_init_default_directory (char **dirname)
 {
-  session_cb = cb;
+  if (*dirname == NULL)
+    *dirname = g_strdup_printf("%s/", getenv("HOME"));
 }
 
-GNCSession *
-gnc_get_current_session (void)
+void
+gnc_extract_directory (char **dirname, const char *filename)
 {
-  if (session_cb)
-    return session_cb ();
+  char *tmp;
 
-  return NULL;
+  if (*dirname)
+    free(*dirname);
+
+  /* Parse out the directory. */
+  if ((filename == NULL) || (rindex(filename, '/') == NULL)) {
+    *dirname = NULL;
+    return;
+  }
+
+  *dirname = g_strdup(filename);
+  tmp = rindex(*dirname, '/');
+  *(tmp+1) = '\0';
 }
 
 GNCBook *
@@ -264,13 +318,13 @@ gnc_ui_account_get_field_name (AccountFieldCode field)
     case ACCOUNT_BALANCE :
       return _("Balance");
       break;
-    case ACCOUNT_BALANCE_EURO :
+    case ACCOUNT_BALANCE_REPORT :
       return _("Balance");
       break;
     case ACCOUNT_TOTAL :
       return _("Total");
       break;
-    case ACCOUNT_TOTAL_EURO :
+    case ACCOUNT_TOTAL_REPORT :
       return _("Total");
       break;
     case ACCOUNT_TAX_INFO :
@@ -291,7 +345,6 @@ gnc_account_get_balance_in_currency (Account *account,
   GNCPriceDB *pdb;
   GNCPrice *price;
   gnc_numeric balance;
-  GNCAccountType atype;
   gnc_commodity *commodity;
 
   if (!account || !currency)
@@ -354,12 +407,7 @@ static gnc_numeric
 gnc_account_get_reconciled_balance_in_currency (Account *account,
                                                 gnc_commodity *currency)
 {
-  GNCBook *book;
-  GNCPriceDB *pdb;
-  GNCPrice *price;
-  gboolean has_shares;
   gnc_numeric balance;
-  GNCAccountType atype;
   gnc_commodity *balance_currency;
 
   if (!account || !currency)
@@ -642,15 +690,18 @@ gnc_ui_account_get_field_value_string (Account *account,
           (xaccPrintAmount (balance, gnc_account_print_info (account, TRUE)));
       }
 
-    case ACCOUNT_BALANCE_EURO :
+    case ACCOUNT_BALANCE_REPORT :
       {
 	gnc_commodity * commodity = xaccAccountGetCommodity(account);
+        gnc_commodity * report_commodity = gnc_default_report_currency();
         gnc_numeric balance = gnc_ui_account_get_balance(account, FALSE);
-	gnc_numeric euro_balance = gnc_convert_to_euro(commodity, balance);
+
+	gnc_numeric report_balance = gnc_ui_convert_balance_to_currency(balance, commodity, 
+                                                                        report_commodity);
 
         return g_strdup
-          (xaccPrintAmount(euro_balance,
-                           gnc_commodity_print_info (gnc_get_euro (), TRUE)));
+          (xaccPrintAmount(report_balance,
+                           gnc_commodity_print_info (report_commodity, TRUE)));
       }
 
     case ACCOUNT_TOTAL :
@@ -661,15 +712,18 @@ gnc_ui_account_get_field_value_string (Account *account,
           (xaccPrintAmount(balance, gnc_account_print_info (account, TRUE)));
       }
 
-    case ACCOUNT_TOTAL_EURO :
+    case ACCOUNT_TOTAL_REPORT :
       {
 	gnc_commodity * commodity = xaccAccountGetCommodity(account);
+        gnc_commodity * report_commodity = gnc_default_report_currency();
 	gnc_numeric balance = gnc_ui_account_get_balance(account, TRUE);
-	gnc_numeric euro_balance = gnc_convert_to_euro(commodity, balance);
+
+	gnc_numeric report_balance = gnc_ui_convert_balance_to_currency(balance, commodity, 
+                                                                        report_commodity);
 
 	return g_strdup
-          (xaccPrintAmount(euro_balance,
-                           gnc_commodity_print_info (gnc_get_euro (), TRUE)));
+          (xaccPrintAmount(report_balance,
+                           gnc_commodity_print_info (report_commodity, TRUE)));
       }
 
     case ACCOUNT_TAX_INFO:
@@ -695,99 +749,175 @@ gnc_get_reconcile_str (char reconciled_flag)
 {
   switch (reconciled_flag)
   {
+    /* Translators: For the following strings, the single letters
+       after the colon are abbreviations of the word before the
+       colon. Please only translate the letter *after* the colon. */
     case NREC: return _("not cleared:n") + 12;
+      /* Please only translate the letter *after* the colon. */
     case CREC: return _("cleared:c") + 8;
+      /* Please only translate the letter *after* the colon. */
     case YREC: return _("reconciled:y") + 11;
+      /* Please only translate the letter *after* the colon. */
     case FREC: return _("frozen:f") + 7;
+      /* Please only translate the letter *after* the colon. */
+    case VREC: return _("void:v") + 5;
     default:
       PERR("Bad reconciled flag\n");
       return NULL;
   }
 }
 
+/********************************************************************\
+ * gnc_get_reconcile_valid_flags                                    *
+ *   return a string containing the list of reconciled flags        *
+ *                                                                  *
+ * Returns: the i18n'd reconciled flags string                      *
+\********************************************************************/
+const char *
+gnc_get_reconcile_valid_flags (void)
+{
+  static const char flags[] = { NREC, CREC, YREC, FREC, VREC, 0 };
+  return flags;
+}
+
+/********************************************************************\
+ * gnc_get_reconcile_flag_order                                     *
+ *   return a string containing the reconciled-flag change order    *
+ *                                                                  *
+ * Args: reconciled_flag - the flag to stringize                    *
+ * Returns: the i18n'd reconciled string                            *
+\********************************************************************/
+const char *
+gnc_get_reconcile_flag_order (void)
+{
+  static const char flags[] = { NREC, CREC, 0 };
+  return flags;
+}
+
 
 /* Get the full name of a quote source */
 const char *
-gnc_get_source_name (PriceSourceCode source)
+gnc_price_source_enum2name (PriceSourceCode source)
 {
-  switch (source)
-  {
-    case SOURCE_NONE :
-      return _("(none)");
-    case SOURCE_YAHOO :
-      return "Yahoo";
-    case SOURCE_YAHOO_EUROPE :
-      return "Yahoo Europe";
-    case SOURCE_FIDELITY :
-      return "Fidelity";
-    case SOURCE_TROWEPRICE :
-      return "T. Rowe Price";
-    case SOURCE_VANGUARD :
-      return "Vanguard";
-    case SOURCE_ASX :
-      return "ASX";
-    case SOURCE_TIAA_CREF :
-      return "TIAA-CREF";
-    case SOURCE_TRUSTNET :
-      return "Trustnet";
-    default:
-      break;
+  if (source >= NUM_SOURCES) {
+    PWARN("Unknown source %d", source);
+    return NULL;
   }
-
-  PWARN("Unknown source");
-  return NULL;
+  return quote_sources[source].user_name;
 }
 
 /* Get the codename string of a quote source */
 const char *
-gnc_get_source_code_name (PriceSourceCode source)
+gnc_price_source_enum2internal (PriceSourceCode source)
 {
-  switch (source)
-  {
-    case SOURCE_NONE :
-      return NULL;
-    case SOURCE_YAHOO :
-      return "YAHOO";
-    case SOURCE_YAHOO_EUROPE :
-      return "YAHOO_EUROPE";
-    case SOURCE_FIDELITY :
-      return "FIDELITY";
-    case SOURCE_TROWEPRICE :
-      return "TRPRICE";
-    case SOURCE_VANGUARD :
-      return "VANGUARD";
-    case SOURCE_ASX :
-      return "ASX";
-    case SOURCE_TIAA_CREF :
-      return "TIAACREF";
-    case SOURCE_TRUSTNET :
-      return "TRUSTNET";
-    default:
-      break;
+  if (source >= NUM_SOURCES) {
+    PWARN("Unknown source %d", source);
+    return NULL;
   }
-
-  PWARN("Unknown source");
-  return NULL;
+  return quote_sources[source].internal_name;
 }
 
 /* Get the codename string of a source */
 PriceSourceCode
-gnc_get_source_code (const char * codename)
+gnc_price_source_internal2enum (const char * internal_name)
+{
+  gint i;
+
+  if (internal_name == NULL)
+    return SOURCE_NONE;
+
+  if (safe_strcmp(internal_name, "") == 0)
+    return SOURCE_NONE;
+
+  for (i = 1; i < NUM_SOURCES; i++)
+    if (safe_strcmp(internal_name, quote_sources[i].internal_name) == 0)
+      return i;
+
+  PWARN("Unknown source %s", internal_name);
+  return SOURCE_NONE;
+}
+
+/* Get the codename string of a source */
+PriceSourceCode
+gnc_price_source_fq2enum (const char * fq_name)
+{
+  gint i;
+
+  if (fq_name == NULL)
+    return SOURCE_NONE;
+
+  if (safe_strcmp(fq_name, "") == 0)
+    return SOURCE_NONE;
+
+  for (i = 1; i < NUM_SOURCES; i++)
+    if (safe_strcmp(fq_name, quote_sources[i].fq_name) == 0)
+      return i;
+
+//  NYSE and Nasdaq have deliberately been left out. Don't always print them.
+//  PWARN("Unknown source %s", fq_name);
+  return SOURCE_NONE;
+}
+
+/* Get the codename string of a source */
+const char *
+gnc_price_source_internal2fq (const char * codename)
 {
   gint i;
 
   if (codename == NULL)
-    return SOURCE_NONE;
+    return NULL;
 
   if (safe_strcmp(codename, "") == 0)
-    return SOURCE_NONE;
+    return NULL;
+
+  if (safe_strcmp(codename, "CURRENCY") == 0)
+    return "currency";
 
   for (i = 1; i < NUM_SOURCES; i++)
-    if (safe_strcmp(codename, gnc_get_source_code_name(i)) == 0)
-      return i;
+    if (safe_strcmp(codename, quote_sources[i].internal_name) == 0)
+      return quote_sources[i].fq_name;
 
-  PWARN("Unknown source");
-  return SOURCE_NONE;
+  PWARN("Unknown source %s", codename);
+  return NULL;
+}
+
+/* Get whether or not a quote source should be sensitive in the menu */
+void
+gnc_price_source_set_fq_installed (GList *sources_list)
+{
+  GList *node;
+  PriceSourceCode code;
+  char *source;
+
+  if (!sources_list)
+    return;
+
+  fq_is_installed = TRUE;
+  for (node = sources_list; node; node = node->next) {
+    source = node->data;
+    code = gnc_price_source_fq2enum (source);
+    if ((code != SOURCE_NONE) && (code < NUM_SOURCES)) {
+      quote_sources[code].supported = TRUE;
+    }
+  }
+}
+
+gboolean
+gnc_price_source_have_fq (void)
+{
+  return fq_is_installed;
+}
+
+/* Get whether or not a quote source should be sensitive in the menu */
+gboolean
+gnc_price_source_sensitive (PriceSourceCode source)
+{
+  if (source >= NUM_SOURCES) {
+    PWARN("Unknown source");
+    return FALSE;
+  }
+
+  return quote_sources[source].supported;
 }
 
 static const char *
@@ -874,7 +1004,7 @@ gnc_find_or_create_equity_account (AccountGroup *group,
 
   parent = xaccGetAccountFromName (group, _("Equity"));
   if (parent && xaccAccountGetType (parent) != EQUITY)
-    parent == NULL;
+    parent = NULL;
 
   account = xaccMallocAccount (book);
 
@@ -1043,7 +1173,7 @@ gnc_locale_default_iso_currency_code (void)
 }
 
 gnc_commodity *
-gnc_locale_default_currency (void)
+gnc_locale_default_currency_nodefault (void)
 {
   gnc_commodity * currency;
   gnc_commodity_table *table;
@@ -1054,10 +1184,17 @@ gnc_locale_default_currency (void)
 
   currency = gnc_commodity_table_lookup (table, GNC_COMMODITY_NS_ISO, code);
 
-  if (currency)
-    return currency;
+  return (currency ? currency : NULL);
+}
 
-  return gnc_commodity_table_lookup (table, GNC_COMMODITY_NS_ISO, "USD");
+gnc_commodity *
+gnc_locale_default_currency (void)
+{
+  gnc_commodity * currency = gnc_locale_default_currency_nodefault ();
+
+  return (currency ? currency :
+	  gnc_commodity_table_lookup (gnc_get_current_commodities (), 
+				      GNC_COMMODITY_NS_ISO, "USD"));
 }
 
 
@@ -1137,6 +1274,8 @@ gnc_default_print_info (gboolean use_symbol)
   info.use_separators = 1;
   info.use_locale = 1;
   info.monetary = 1;
+  info.force_fit = 0;
+  info.round = 0;
 
   got_it = TRUE;
 
@@ -1196,6 +1335,8 @@ gnc_commodity_print_info (const gnc_commodity *commodity,
   info.use_symbol = use_symbol ? 1 : 0;
   info.use_locale = is_iso ? 1 : 0;
   info.monetary = 1;
+  info.force_fit = 0;
+  info.round = 0;
 
   return info;
 }
@@ -1233,6 +1374,8 @@ gnc_account_print_info_helper(Account *account, gboolean use_symbol,
   info.use_symbol = use_symbol ? 1 : 0;
   info.use_locale = is_iso ? 1 : 0;
   info.monetary = 1;
+  info.force_fit = 0;
+  info.round = 0;
 
   return info;
 }
@@ -1284,6 +1427,8 @@ gnc_default_print_info_helper (int decplaces)
     info.use_symbol = 0;
     info.use_locale = 1;
     info.monetary = 1;
+    info.force_fit = 0;
+    info.round = 0;
 
     return info;
 }
@@ -1300,6 +1445,19 @@ gnc_default_share_print_info (void)
       got_it = TRUE;
   }
 
+  return info;
+}
+
+GNCPrintAmountInfo
+gnc_share_print_info_places (int decplaces)
+{
+  GNCPrintAmountInfo info;
+
+  info = gnc_default_share_print_info ();
+  info.max_decimal_places = decplaces;
+  info.min_decimal_places = decplaces;
+  info.force_fit = 1;
+  info.round = 1;
   return info;
 }
 
@@ -1340,7 +1498,8 @@ PrintAmountInternal(char *buf, gnc_numeric val, const GNCPrintAmountInfo *info)
   struct lconv *lc = gnc_localeconv();
   int num_whole_digits;
   char temp_buf[64];
-  gnc_numeric whole;
+  gnc_numeric whole, rounding;
+  int min_dp, max_dp;
 
   g_return_val_if_fail (info != NULL, 0);
 
@@ -1353,6 +1512,27 @@ PrintAmountInternal(char *buf, gnc_numeric val, const GNCPrintAmountInfo *info)
 
   /* print the absolute value */
   val = gnc_numeric_abs (val);
+
+  /* Force at least auto_decimal_places zeros */
+  if (auto_decimal_enabled) {
+    min_dp = MAX(auto_decimal_places, info->min_decimal_places);
+    max_dp = MAX(auto_decimal_places, info->max_decimal_places);
+  } else {
+    min_dp = info->min_decimal_places;
+    max_dp = info->max_decimal_places;
+  }
+
+  /* Don to limit the number of decimal places _UNLESS_ force_fit is
+   * true. */
+  if (!info->force_fit)
+    max_dp = 99;
+
+  /* rounding? -- can only ROUND if force_fit is also true */
+  if (info->round && info->force_fit) {
+    rounding.num = 5; /* Limit the denom to 10^13 ~= 2^44, leaving max at ~524288 */
+    rounding.denom = pow(10, max_dp + 1);
+    val = gnc_numeric_add(val, rounding, GNC_DENOM_AUTO, GNC_DENOM_LCD);
+  }
 
   /* calculate the integer part and the remainder */
   whole = gnc_numeric_create (val.num / val.denom, 1);
@@ -1454,7 +1634,8 @@ PrintAmountInternal(char *buf, gnc_numeric val, const GNCPrintAmountInfo *info)
     *temp_ptr++ = info->monetary ?
       lc->mon_decimal_point[0] : lc->decimal_point[0];
 
-    while (!gnc_numeric_zero_p (val) && val.denom != 1)
+    while (!gnc_numeric_zero_p (val) && (val.denom != 1) &&
+	   (num_decimal_places < max_dp))
     {
       gint64 digit;
 
@@ -1468,8 +1649,7 @@ PrintAmountInternal(char *buf, gnc_numeric val, const GNCPrintAmountInfo *info)
       val.num = val.num - (digit * val.denom);
     }
 
-    /* add in needed zeros */
-    while (num_decimal_places < info->min_decimal_places)
+    while (num_decimal_places < min_dp)
     {
       *temp_ptr++ = '0';
       num_decimal_places++;
@@ -1479,15 +1659,16 @@ PrintAmountInternal(char *buf, gnc_numeric val, const GNCPrintAmountInfo *info)
     *temp_ptr-- = '\0';
 
     /* Here we strip off trailing decimal zeros per the argument. */
-    while (*temp_ptr == '0' && num_decimal_places > info->min_decimal_places)
+    while (*temp_ptr == '0' && num_decimal_places > min_dp)
     {
       *temp_ptr-- = '\0';
       num_decimal_places--;
     }
 
-    if (num_decimal_places > info->max_decimal_places)
+    if (num_decimal_places > max_dp)
     {
-      PWARN ("max_decimal_places too small");
+      PWARN ("max_decimal_places too small; limit %d, value %s%s",
+	     info->max_decimal_places, buf, temp_buf);
     }
 
     if (num_decimal_places > 0)
@@ -1497,6 +1678,9 @@ PrintAmountInternal(char *buf, gnc_numeric val, const GNCPrintAmountInfo *info)
   return strlen(buf);
 }
 
+/**
+ * @param bufp Should be at least 64 chars.
+ **/
 int
 xaccSPrintAmount (char * bufp, gnc_numeric val, GNCPrintAmountInfo info)
 {
@@ -1520,8 +1704,12 @@ xaccSPrintAmount (char * bufp, gnc_numeric val, GNCPrintAmountInfo info)
 
    if (info.use_symbol)
    {
-     if (gnc_commodity_equiv (info.commodity, gnc_locale_default_currency ()))
+     /* There was a bug here: don't use gnc_locale_default_currency */
+     if (gnc_commodity_equiv (info.commodity, 
+			      gnc_locale_default_currency_nodefault ()))
+     {
        currency_symbol = lc->currency_symbol;
+     }
      else
      {
        if (info.commodity &&
@@ -2095,7 +2283,7 @@ xaccParseAmount (const char * in_str, gboolean monetary, gnc_numeric *result,
     numer *= denom;
     numer += fraction;
   }
-  else if (auto_decimal_enabled && !got_decimal)
+  else if (monetary && auto_decimal_enabled && !got_decimal)
   {
     if ((auto_decimal_places > 0) && (auto_decimal_places < 9))
     {

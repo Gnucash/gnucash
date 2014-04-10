@@ -111,6 +111,8 @@
         (cons 'CURRENCY  (N_ "Buy"))
         (cons 'INCOME    (N_ "Charge"))
         (cons 'EXPENSE   (N_ "Expense"))
+	(cons 'PAYABLE   (N_ "Payment"))
+	(cons 'RECEIVABLE (N_ "Invoice"))
         (cons 'EQUITY    (N_ "Decrease"))))
 
 (define gnc:*credit-strings*
@@ -125,6 +127,8 @@
         (cons 'CURRENCY  (N_ "Sell"))
         (cons 'INCOME    (N_ "Income"))
         (cons 'EXPENSE   (N_ "Rebate"))
+	(cons 'PAYABLE   (N_ "Bill"))
+	(cons 'RECEIVABLE (N_ "Payment"))
         (cons 'EQUITY    (N_ "Increase"))))
 
 (define (gnc:get-debit-string type)
@@ -137,18 +141,18 @@
 (gnc:register-configuration-option
  (gnc:make-multichoice-option
   (N_ "International") (N_ "Date Format")
-  "a" (N_ "Date Format Display") 'us
+  "a" (N_ "Date Format Display") 'locale
   (list (list->vector (list 'us
-                            (N_ "US")
+                            (N_ "US (12/31/2001)")
                             (N_ "US-style: mm/dd/yyyy")))
         (list->vector (list 'uk
-                            (N_ "UK")
+                            (N_ "UK (31/12/2001)")
                             (N_ "UK-style dd/mm/yyyy")))
         (list->vector (list 'ce
-                            (N_ "Europe")
+                            (N_ "Europe (31.12.2001)")
                             (N_ "Continental Europe: dd.mm.yyyy")))
         (list->vector (list 'iso
-                            (N_ "ISO")
+                            (N_ "ISO (2001-12-31)")
                             (N_ "ISO Standard: yyyy-mm-dd")))
         (list->vector (list 'locale
                             (N_ "Locale")
@@ -156,8 +160,14 @@
 
 (gnc:register-configuration-option
  (gnc:make-currency-option
-  (N_ "International") (N_ "Default Currency")
-  "b" (N_ "Default currency for new accounts")
+  (N_ "International") (N_ "New Account Default Currency")
+  "b1" (N_ "Default currency for new accounts")
+  (gnc:locale-default-iso-currency-code)))
+
+(gnc:register-configuration-option
+ (gnc:make-currency-option
+  (N_ "International") (N_ "Default Report Currency")
+  "b2" (N_ "Default currency for reports")
   (gnc:locale-default-iso-currency-code)))
 
 (gnc:register-configuration-option
@@ -197,38 +207,6 @@ and expand the current transaction")))
  (gnc:make-simple-boolean-option
   (N_ "Register") (N_ "Double Line Mode")
   "aa" (N_ "Show two lines of information for each transaction") #f))
-
-(gnc:register-configuration-option     
- (gnc:make-simple-boolean-option
-  (N_ "Register") (N_ "Auto-Raise Lists")
-  "b" (N_ "Automatically raise the list of accounts or actions during input.")
-  #t))
-
-(gnc:register-configuration-option
- (gnc:make-simple-boolean-option
-  (N_ "Register") (N_ "Show All Transactions")
-  "c" (N_ "By default, show every transaction in an account.") #t))
-
-(gnc:register-configuration-option
- (gnc:make-number-range-option
-  (N_ "Register") (N_ "Number of Rows")
-  "d" (N_ "Default number of register rows to display.")
-   20.0 ;; default
-    1.0 ;; lower bound
-  200.0 ;; upper bound
-    0.0 ;; number of decimals
-    1.0 ;; step size
-  ))
-
-(gnc:register-configuration-option
- (gnc:make-simple-boolean-option
-  (N_ "Register") (N_ "Show Vertical Borders")
-  "e" (N_ "By default, show vertical borders on the cells.") #f))
-
-(gnc:register-configuration-option
- (gnc:make-simple-boolean-option
-  (N_ "Register") (N_ "Show Horizontal Borders")
-  "f" (N_ "By default, show horizontal borders on the cells.") #f))
 
 (gnc:register-configuration-option
  (gnc:make-simple-boolean-option
@@ -331,7 +309,7 @@ not each row")
   (N_ "Reconcile") (N_ "Automatic interest transfer")
   "a" (N_ "Prior to reconciling an account which charges or pays interest, \
 prompt the user to enter a transaction for the interest charge or payment.
-Currently only enabled for Bank, Credit, Mutual, Asset, and Liability accounts.")
+Currently only enabled for Bank, Credit, Mutual, Asset, Receivable, Payable, and Liability accounts.")
   #f))
 
 (gnc:register-configuration-option
@@ -350,23 +328,23 @@ to enter a credit card payment")
 
 ;;; User Info Options
 
-(gnc:register-configuration-option
- (gnc:make-string-option
-  (N_ "User Info") (N_ "User Name")
-  "b" (N_ "The name of the user. This is used in some reports.") ""))
+;(gnc:register-configuration-option
+; (gnc:make-string-option
+;  (N_ "User Info") (N_ "User Name")
+;  "b" (N_ "The name of the user. This is used in some reports.") ""))
 
-(gnc:register-configuration-option
- (gnc:make-text-option
-  (N_ "User Info") (N_ "User Address")
-  "c" (N_ "The address of the user. This is used in some reports.") ""))
+;(gnc:register-configuration-option
+; (gnc:make-text-option
+;  (N_ "User Info") (N_ "User Address")
+;  "c" (N_ "The address of the user. This is used in some reports.") ""))
 
 
 ;;; General Options
 
 (gnc:register-configuration-option
  (gnc:make-simple-boolean-option
-  (N_ "General") (N_ "Save Window Geometry")
-  "a" (N_ "Save window sizes and positions.") #t))
+  (N_ "General") (N_ "Show Advanced Settings")
+  "a" (N_ "Allow modification of less commonly used settings.") #f))
 
 (gnc:register-configuration-option
  (gnc:make-multichoice-option
@@ -387,34 +365,8 @@ to enter a credit card payment")
                (N_ "Show text only"))))))
 
 (gnc:register-configuration-option
- (gnc:make-multichoice-option
-  (N_ "General") (N_ "Application MDI mode")
-  "ba" (N_ "Choose how new windows are created for reports and account trees.")
-  'mdi-notebook
-  (list (list->vector
-         (list 'mdi-notebook
-               (N_ "Notebook")
-               (N_ "New windows are created as notebook tabs in the \
-current top-level window")))
-        (list->vector
-         (list 'mdi-toplevel
-               (N_ "Top-level")
-               (N_ "Create a new top-level window for each report \
-or account tree")))
-        (list->vector
-         (list 'mdi-modal
-               (N_ "Single window")
-               (N_ "One window is used for all displays (select contents \
-through Window menu)")))
-        (list->vector
-         (list 'mdi-default
-               (N_ "Use GNOME default")
-               (N_ "Default MDI mode can be set in the GNOME \
-Control Center"))))))
-
-(gnc:register-configuration-option
- (gnc:make-multichoice-option
-  (N_ "General") (N_ "Account Separator")
+ (gnc:make-radiobutton-option
+  (N_ "Accounts") (N_ "Account Separator")
   "c" (N_ "The character used to separate fully-qualified account names")
   'colon
   (list (list->vector
@@ -440,7 +392,7 @@ Control Center"))))))
 
 (gnc:register-configuration-option
  (gnc:make-multichoice-option
-  (N_ "General") (N_ "Reversed-balance account types")
+  (N_ "Accounts") (N_ "Reversed-balance account types")
   "d" (N_ "The types of accounts for which balances are sign-reversed")
  'credit
   (list (list->vector
@@ -450,7 +402,7 @@ Control Center"))))))
         (list->vector
          (list 'credit
                (N_ "Credit Accounts")
-               (N_ "Reverse Credit Card, Liability, Equity, and Income \
+               (N_ "Reverse Credit Card, Payable, Liability, Equity, and Income \
 Accounts")))
         (list->vector
          (list 'none
@@ -459,7 +411,7 @@ Accounts")))
 
 (gnc:register-configuration-option
  (gnc:make-simple-boolean-option
-  (N_ "General") (N_ "Use accounting labels")
+  (N_ "Accounts") (N_ "Use accounting labels")
   "e" (N_ "Only use 'debit' and 'credit' instead of informal synonyms") #f))
 
 (gnc:register-configuration-option
@@ -502,39 +454,56 @@ without one.")
   (N_ "General") (N_ "No account list setup on new file")
   "j" (N_ "Don't popup the new account list dialog when you choose \"New File\" from the \"File\" menu") #f))
 
+(gnc:register-configuration-option
+ (gnc:make-simple-boolean-option
+  (N_ "General") (N_ "Use file compression")
+  "k" (N_ "Compress the data file.")
+  #f))
+
+(gnc:register-configuration-option
+ (gnc:make-number-range-option
+  (N_ "General") (N_ "Days to retain log files")
+  "k" (N_ "Delete old log/backup files after this many days (0 = never).")
+    30.0 ;; default
+    0.0 ;; lower bound
+    99999.0 ;; upper bound
+    0.0 ;; number of decimals used for this range calculation
+    1.0 ;; step size
+  ))
+
 ;; QIF Import options. 
 
 (gnc:register-configuration-option
  (gnc:make-simple-boolean-option
-  (N_ "QIF Import") (N_ "Verbose documentation")
+  (N_ "Online Banking & Importing") (N_ "QIF Verbose documentation")
   "a" (N_ "Show some documentation-only pages in QIF Import druid")
   #t))
 
 
 ;; Network/security options 
-(gnc:register-configuration-option
- (gnc:make-simple-boolean-option
-  (N_ "Network") (N_ "Allow http network access")
-  "a" (N_ "Enable GnuCash's HTTP client support.")
-  #t))
-
-(gnc:register-configuration-option
- (gnc:make-simple-boolean-option
-  (N_ "Network") (N_ "Allow https connections using OpenSSL")
-  "b" (N_ "Enable secure HTTP connections using OpenSSL")
-  #t))
-
-(gnc:register-configuration-option
- (gnc:make-simple-boolean-option
-  (N_ "Network") (N_ "Enable GnuCash Network")
-  "c" (N_ "The GnuCash Network server provides support and other services")
-  #t))
-
-(gnc:register-configuration-option 
- (gnc:make-string-option
-  (N_ "Network") (N_ "GnuCash Network server") 
-  "d" (N_ "Host to connect to for user registration and support services")
-  "www.gnumatic.com"))
+;;(gnc:register-configuration-option
+;; (gnc:make-simple-boolean-option
+;;  (N_ "Network") (N_ "Allow http network access")
+;;  "a" (N_ "Enable GnuCash's HTTP client support.")
+;;  #t))
+;;
+;;(gnc:register-configuration-option
+;; (gnc:make-simple-boolean-option
+;;  (N_ "Network") (N_ "Allow https connections using OpenSSL")
+;;  "b" (N_ "Enable secure HTTP connections using OpenSSL")
+;;  #t))
+;;
+;;(gnc:register-configuration-option
+;; (gnc:make-simple-boolean-option
+;;  (N_ "Network") (N_ "Enable GnuCash Network")
+;;  "c" (N_ "The GnuCash Network server provides support and other services")
+;;  #t))
+;;
+;;(gnc:register-configuration-option 
+;; (gnc:make-string-option
+;;  (N_ "Network") (N_ "GnuCash Network server") 
+;;  "d" (N_ "Host to connect to for user registration and support services")
+;;  "www.gnucash.org"))
 
 
 ;; Scheduled|Recurring Transactions
@@ -550,21 +519,21 @@ without one.")
  (gnc:make-simple-boolean-option
   (N_ "Scheduled Transactions")
   (N_ "Auto-Create new Scheduled Transactions by default")
-  "b" (N_ "Should new SchedXactions have the 'Auto Create' flag set by default?")
+  "b" (N_ "Should new Scheduled Transactions have the 'Auto Create' flag set by default?")
   #f ))
 
 (gnc:register-configuration-option
  (gnc:make-simple-boolean-option
   (N_ "Scheduled Transactions")
   (N_ "Notify on new, auto-created Scheduled Transactions")
-  "c" (N_ "Should new SchedXactions with the 'AutoCreate' flag set also be set to notify?")
+  "c" (N_ "Should new Scheduled Transactions with the 'AutoCreate' flag set also be set to notify?")
   #t ))
 
 (gnc:register-configuration-option
  (gnc:make-number-range-option
   (N_ "Scheduled Transactions")
   (N_ "Default number of days in advance to create")
-  "d" (N_ "Default number of days in advance to create new SXes")
+  "d" (N_ "Default number of days in advance to create new Scheduled Transactions.")
   0 ; default
   0 ; min
   99999 ; max
@@ -576,7 +545,7 @@ without one.")
  (gnc:make-number-range-option
   (N_ "Scheduled Transactions")
   (N_ "Default number of days in advance to remind")
-  "e" (N_ "Default number of days in advance to remind on new SXes")
+  "e" (N_ "Default number of days in advance to remind on new Scheduled Transactions.")
   0 ; default
   0 ; min
   99999 ; max
@@ -594,6 +563,83 @@ without one.")
   50 ; max
   0  ; num-decimals
   1  ; step size
+  ))
+
+
+;;; Advanced Options
+
+(gnc:register-configuration-option
+ (gnc:make-simple-boolean-option
+  (N_ "_+Advanced") (N_ "Save Window Geometry")
+  "a" (N_ "Save window sizes and positions.") #t))
+
+(gnc:register-configuration-option
+ (gnc:make-multichoice-option
+  (N_ "_+Advanced") (N_ "Application MDI mode")
+  "ba" (N_ "Choose how new windows are created for reports and account trees.")
+  'mdi-notebook
+  (list (list->vector
+         (list 'mdi-notebook
+               (N_ "Notebook")
+               (N_ "New windows are created as notebook tabs in the \
+current top-level window")))
+        (list->vector
+         (list 'mdi-toplevel
+               (N_ "Top-level")
+               (N_ "Create a new top-level window for each report \
+or account tree")))
+        (list->vector
+         (list 'mdi-modal
+               (N_ "Single window")
+               (N_ "One window is used for all displays (select contents \
+through Window menu)")))
+        (list->vector
+         (list 'mdi-default
+               (N_ "Use GNOME default")
+               (N_ "Default MDI mode can be set in the GNOME \
+Control Center"))))))
+
+(gnc:register-configuration-option
+ (gnc:make-simple-boolean-option
+  (N_ "_+Advanced") (N_ "Show Vertical Borders")
+  "c" (N_ "By default, show vertical borders on the cells.") #f))
+
+(gnc:register-configuration-option
+ (gnc:make-simple-boolean-option
+  (N_ "_+Advanced") (N_ "Show Horizontal Borders")
+  "d" (N_ "By default, show horizontal borders on the cells.") #f))
+
+(gnc:register-configuration-option     
+ (gnc:make-simple-boolean-option
+  (N_ "_+Advanced") (N_ "Auto-Raise Lists")
+  "e" (N_ "Automatically raise the list of accounts or actions during input.")
+  #t))
+
+(gnc:register-configuration-option
+ (gnc:make-simple-boolean-option
+  (N_ "_+Advanced") (N_ "Show All Transactions")
+  "f" (N_ "By default, show every transaction in an account.") #t))
+
+(gnc:register-configuration-option
+ (gnc:make-number-range-option
+  (N_ "_+Advanced") (N_ "Number of Rows")
+  "g" (N_ "Default number of register rows to display.")
+   20.0 ;; default
+    1.0 ;; lower bound
+  200.0 ;; upper bound
+    0.0 ;; number of decimals
+    1.0 ;; step size
+  ))
+
+(gnc:register-configuration-option
+ (gnc:make-number-range-option
+  (N_ "_+Advanced") (N_ "New Search Limit")
+  "j" (N_ "Default to 'new search' if fewer than this number of items is returned.")
+    1.0 ;; default
+    1.0 ;; lower bound
+  100.0 ;; upper bound
+    0.0 ;; number of decimals
+    1.0 ;; step size
   ))
 
 
@@ -670,6 +716,30 @@ without one.")
 
 (gnc:register-configuration-option
  (gnc:make-internal-option
+  "__gui" "sx_list_win_width" 0))
+
+(gnc:register-configuration-option
+ (gnc:make-internal-option
+  "__gui" "sx_list_win_height" 0))
+
+(gnc:register-configuration-option
+ (gnc:make-internal-option
+  "__gui" "sx_editor_win_width" 0))
+
+(gnc:register-configuration-option
+ (gnc:make-internal-option
+  "__gui" "sx_editor_win_height" 0))
+
+(gnc:register-configuration-option
+ (gnc:make-internal-option
+  "__gui" "sx_sincelast_win_width" 0))
+
+(gnc:register-configuration-option
+ (gnc:make-internal-option
+  "__gui" "sx_sincelast_win_height" 0))
+
+(gnc:register-configuration-option
+ (gnc:make-internal-option
   "__exp_parser" "defined_variables" '()))
 
 (gnc:register-configuration-option
@@ -679,3 +749,21 @@ without one.")
 (gnc:register-configuration-option
  (gnc:make-internal-option
   "__gnc_network" "uid" ""))
+
+(gnc:register-configuration-option
+ (gnc:make-internal-option
+  "__paths"  "Export Accounts" #f))
+
+(gnc:register-configuration-option
+ (gnc:make-internal-option
+  "__paths"  "Import QIF" #f))
+
+(gnc:register-configuration-option
+ (gnc:make-internal-option
+  "__paths"  "Import OFX" #f))
+
+(gnc:register-configuration-option
+ (gnc:make-simple-boolean-option
+  "__gui" "search_for_active_only"
+  "" ""
+  #t))

@@ -29,6 +29,11 @@ EXTRA_DIST = \
   perl5_typemaps.i \
   gnucash-swig-defines.c
 
+#
+# We include this here so we do not try to distribute gnucash-engine-perl5_wrap.c
+#
+DISTFILES = $(DIST_COMMON) helperfuncs.c $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
+
 AM_CFLAGS = \
   -I@PERLINCL@/CORE \
   ${GNOME_INCLUDEDIR} \
@@ -94,20 +99,14 @@ gnucash.engine.i: ${SWIG_INPUT_HDRS} perl5_typemaps.i
 CLEANFILES = gnucash.engine.i
 
 gnucash.engine_wrap.doc gnucash-engine-perl5_wrap_int.c: gnucash.engine.i
-	${SWIG} -perl5 -I.. -I${top_srcdir}/src/engine -o $@ gnucash.engine.i
+	${SWIG} -perl5 -I.. -I${srcdir} -I${top_srcdir}/src/engine -o $@ gnucash.engine.i
 
 CLEANFILES += gnucash.engine_wrap.doc gnucash-engine-perl5_wrap_int.c
 
 gnucash-engine-perl5_wrap.c: gnucash-swig-defines.c \
                              gnucash-engine-perl5_wrap_int.c
-	cat gnucash-swig-defines.c gnucash-engine-perl5_wrap_int.c > $@
+	cat $^ > $@
 
 CLEANFILES += gnucash-engine-perl5_wrap.c
 
 CLEANFILES += gnucash.pm gnucash.so
-
-# We have to do this because otherwise automake insists on putting
-# these files into the dist tarfile.  If there's a a better way,
-# by all means, let us know...
-dist-hook:
-	rm -f ${distdir}/gnucash-engine-perl5_wrap.c

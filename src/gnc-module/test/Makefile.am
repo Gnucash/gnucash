@@ -2,7 +2,10 @@ SUBDIRS = mod-foo mod-bar mod-baz misc-mods
 
 LDADD = ../libgncmodule.la ${GLIB_LIBS} -lltdl
 
-AM_CFLAGS = ${GLIB_CFLAGS} -I../ ${GUILE_INCS}
+AM_CFLAGS = \
+  -I${top_srcdir}/src/gnc-module \
+  ${GUILE_INCS} \
+  ${GLIB_CFLAGS}
 
 TESTS = \
   test-load-c \
@@ -24,7 +27,13 @@ GNC_TEST_DEPS := \
   --gnc-module-dir ${top_builddir}/src/gnc-module/test/mod-bar \
   --gnc-module-dir ${top_builddir}/src/gnc-module/test/mod-baz \
   --gnc-module-dir ${top_builddir}/src/gnc-module/test/misc-mods \
-  --guile-load-dir ${G_WRAP_MODULE_DIR}
+  --gnc-module-dir ${top_srcdir}/src/gnc-module \
+  --gnc-module-dir ${top_srcdir}/src/gnc-module/test/mod-foo \
+  --gnc-module-dir ${top_srcdir}/src/gnc-module/test/mod-bar \
+  --gnc-module-dir ${top_srcdir}/src/gnc-module/test/mod-baz \
+  --gnc-module-dir ${top_srcdir}/src/gnc-module/test/misc-mods \
+  --guile-load-dir ${G_WRAP_MODULE_DIR} \
+  --library-dir    ${G_WRAP_LIB_DIR}
 
 TESTS_ENVIRONMENT := \
   $(shell ${top_srcdir}/src/gnc-test-env --no-exports ${GNC_TEST_DEPS})

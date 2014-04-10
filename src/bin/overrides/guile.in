@@ -1,0 +1,8 @@
+#!/bin/sh
+
+if test "${GNC_GUILE}"x = x
+then
+  GNC_GUILE="@-GUILE-@"
+fi
+
+exec ${GNC_GUILE} "$@"

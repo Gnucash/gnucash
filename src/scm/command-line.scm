@@ -15,114 +15,156 @@
 ;; 59 Temple Place - Suite 330        Fax:    +1-617-542-2652
 ;; Boston, MA  02111-1307,  USA       gnu@gnu.org
 
+(use-modules (srfi srfi-2))
+
 (define gnc:*command-line-remaining* #f)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Configuration variables
 
-(define gnc:*arg-show-version*
+(define gnc:*arg-show-version* #f)
+(define gnc:*arg-show-usage* #f)
+(define gnc:*arg-show-help* #f)
+(define gnc:*arg-no-file* #f)
+(define gnc:*loglevel* #f)
+
+(define gnc:*config-path* #f)
+(define gnc:*share-path* #f)
+(define gnc:*doc-path* #f)
+
+;; If command line args are present, then those dominate, and take
+;; effect in order, left-to-right.  Otherwise, any envt var setting
+;; dominates, otherwise, we use the default.  To effect this, we first
+;; set it to the default, then later we process the envt vars, then
+;; lastly we process the command line.
+
+(define (gnc:make-path-config-var name default-path-func)
   (gnc:make-config-var
-   (N_ "Show version.")
-   (lambda (var value) (if (boolean? value) (list value) #f))
-   eq?
-   #f))
-
-(define gnc:*arg-show-usage*
-  (gnc:make-config-var
-   (N_ "Generate an argument summary.")
-   (lambda (var value) (if (boolean? value) (list value) #f))
-   eq?
-   #f))
-
-(define gnc:*arg-show-help*
-  (gnc:make-config-var
-   (N_ "Generate an argument summary.")
-   (lambda (var value) (if (boolean? value) (list value) #f))
-   eq?
-   #f))
-
-(define gnc:*arg-no-file*
-  (gnc:make-config-var
-   (N_ "Don't load any file, including autoloading the last file.")
-   (lambda (var value) (if (boolean? value) (list value) #f))
-   eq?
-   #f))
-
-(define gnc:*config-dir*
-  (gnc:make-config-var
-   (N_ "Configuration directory.")
-   (lambda (var value) (if (string? value) (list value) #f))
-   string=?
-   gnc:_config-dir-default_))
-
-(define gnc:*share-dir*
-  (gnc:make-config-var
-   (N_ "Shared files directory.")
-   (lambda (var value) (if (string? value) (list value) #f))
-   string=?
-   gnc:_share-dir-default_))
-
-;; Convert the temporary startup value into a config var.
-(let ((current-value gnc:*debugging?*))
-  (set! 
-   gnc:*debugging?*
-   (gnc:make-config-var
-    (N_ "Enable debugging code.")
-    (lambda (var value) (if (boolean? value) (list value) #f))
-    eq?
-    #f))
-  (gnc:config-var-value-set! gnc:*debugging?* #f current-value))
-
-(let ((current-value gnc:*debugging?*))
-  (set! 
-   gnc:*develmode*
-   (gnc:make-config-var
-    (N_ "Enable developers mode.")
-    (lambda (var value) (if (boolean? value) (list value) #f))
-    eq?
-    #f))
-  (gnc:config-var-value-set! gnc:*develmode* #f current-value))
-
-(define gnc:*loglevel*
-  (gnc:make-config-var
-   (N_ "Logging level from 0 (least logging) to 5 (most logging).")
-   (lambda (var value) (if (exact? value) (list value) #f))
-   eq?
-   #f))
-
-;; Convert the temporary startup value into a config var.
-(let ((current-load-path gnc:*load-path*))
-  (set!
-   gnc:*load-path*
-   (gnc:make-config-var
-    (N_ "A list of strings indicating the load path for (gnc:load name).
-Each element must be a string representing a directory or a symbol
-where 'default expands to the default path, and 'current expands to
-the current value of the path.")
-    (lambda (var value)
-      (let ((result (gnc:expand-load-path value)))
-        (if (list? result)
-            (list result)
-            #f)))
-    equal?
-    '(default)))
-  (gnc:config-var-value-set! gnc:*load-path* #f current-load-path))
-
-(define gnc:*doc-path*
-
-  (gnc:make-config-var
-   (N_ "A list of strings indicating where to look for html and parsed-html files. \
-Each element must be a string representing a directory or a symbol \
-where 'default expands to the default path, and 'current expands to \
-the current value of the path.")
+   name
    (lambda (var value)
-     (let ((result (gnc:_expand-doc-path_ value)))
+     (let ((result (gnc:expand-path value
+                                    (gnc:config-var-value-get var)
+                                    default-path-func)))
        (if (list? result)
            (list result)
            #f)))
    equal?
    '(default)))
 
+(define (gnc:read-from-string str)
+  (call-with-input-string str (lambda (port) (read port))))
 
+(define (gnc:initialize-config-vars)
+  ;; We use a function so we don't do this at file load time.
+  
+  (set! gnc:*arg-show-version*
+        (gnc:make-config-var
+         (N_ "Show version.")
+         (lambda (var value) (if (boolean? value) (list value) #f))
+         eq?
+         #f))
+  
+  (set! gnc:*arg-show-usage*
+        (gnc:make-config-var
+         (N_ "Generate an argument summary.")
+         (lambda (var value) (if (boolean? value) (list value) #f))
+         eq?
+         #f))
+  
+  (set! gnc:*arg-show-help*
+        (gnc:make-config-var
+         (N_ "Generate an argument summary.")
+         (lambda (var value) (if (boolean? value) (list value) #f))
+         eq?
+         #f))
+  
+  (set! gnc:*arg-no-file*
+        (gnc:make-config-var
+         (N_ "Don't load any file, including autoloading the last file.")
+         (lambda (var value) (if (boolean? value) (list value) #f))
+         eq?
+         #f))
+  
+  ;; Convert the temporary startup value into a config var.
+  (let ((current-value gnc:*debugging?*))
+    (set! 
+     gnc:*debugging?*
+     (gnc:make-config-var
+      (N_ "Enable debugging code.")
+      (lambda (var value) (if (boolean? value) (list value) #f))
+      eq?
+      #f))
+    (gnc:config-var-value-set! gnc:*debugging?* #f current-value))
+  
+  (let ((current-value gnc:*develmode*))
+    (set! 
+     gnc:*develmode*
+     (gnc:make-config-var
+      (N_ "Enable developers mode.")
+      (lambda (var value) (if (boolean? value) (list value) #f))
+      eq?
+      #f))
+    (gnc:config-var-value-set! gnc:*develmode* #f current-value))
+  
+  (set! gnc:*loglevel*
+        (gnc:make-config-var
+         (N_ "Logging level from 0 (least logging) to 5 (most logging).")
+         (lambda (var value) (if (exact? value) (list value) #f))
+         eq?
+         #f))
+  
+  (set! gnc:*config-path*
+        (gnc:make-path-config-var
+         (N_ "List of directories to search when looking for config files. \
+Each element must be a string representing a directory or a symbol \
+where 'default expands to the default path, and 'current expands to \
+the current value of the path.")
+         (lambda () gnc:_install-config-path_)))
+  
+  (set! gnc:*share-path*
+        (gnc:make-path-config-var
+         (N_ "List of directories to search when looking for shared data files. \
+Each element must be a string representing a directory or a symbol \
+where 'default expands to the default path, and 'current expands to \
+the current value of the path.")
+         (lambda () gnc:_install-share-path_)))
+  
+
+  (set! gnc:*doc-path*
+        (gnc:make-path-config-var
+         (N_ "A list of directories (strings) indicating where to look for html and parsed-html files. \
+Each element must be a string representing a directory or a symbol \
+where 'default expands to the default path, and 'current expands to \
+the current value of the path.")
+         (let ((result (cons
+                        (build-path (getenv "HOME") ".gnucash" "html")
+                        gnc:_install-doc-path_)))
+         (lambda () result))))
+
+
+  ;; Now handle any envt var overrides.
+
+  (and-let* ((envdir (getenv "GNC_CONFIG_PATH"))
+             (data (gnc:read-from-string envdir))
+             ((list? data)))
+    (gnc:config-var-value-set! gnc:*config-path* #f (gnc:flatten data)))
+             
+  (and-let* ((envdir (getenv "GNC_SHARE_PATH"))
+             (data (gnc:read-from-string envdir))
+             ((list? data)))
+    (gnc:config-var-value-set! gnc:*share-path* #f (gnc:flatten data)))
+
+  (and-let* ((envdir (getenv "GNC_DOC_PATH"))
+             (data (gnc:read-from-string envdir))
+             ((list? data)))
+    (gnc:config-var-value-set! gnc:*doc-path* #f (gnc:flatten data))))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Argument parsing.
+
+;; This is a fairly complex initialization during load, but it's OK
+;; for now since it doesn't depend on running any code.
 (define gnc:*arg-defs*
   (list
    (list "version"
@@ -174,39 +216,37 @@ the current value of the path.")
          #f
          (N_ "Do not load the last file opened"))
 
-   (list "config-dir"
+   (list "config-path"
          'string
          (lambda (val)
-           (gnc:config-var-value-set! gnc:*config-dir* #f val))
-         "CONFIGDIR"
-         (N_ "Set configuration directory"))
-
-   (list "share-dir"
-         'string
-         (lambda (val)
-           (gnc:config-var-value-set! gnc:*share-dir* #f val))
-         "SHAREDIR"
-         (N_ "Set shared directory"))
-
-   (list "load-path"
-         'string
-         (lambda (val)
-           (let ((path-list
-                  (call-with-input-string val (lambda (port) (read port)))))
+           (gnc:debug "parsing --config-path " val)
+           (let ((path-list (gnc:read-from-string val)))
              (if (list? path-list)
-                 (gnc:config-var-value-set! gnc:*load-path* #f path-list)
+                 (gnc:config-var-value-set! gnc:*config-path* #f path-list)
                  (begin
-                   (gnc:error "non-list given for --load-path: " val)
+                   (gnc:error "non-list given for --config-path: " val)
                    (gnc:shutdown 1)))))
-         "LOADPATH"
-         (N_ "Set the search path for .scm files."))
+         "CONFIGPATH"
+         (N_ "Set configuration path"))
+
+   (list "share-path"
+         'string
+         (lambda (val)
+           (gnc:debug "parsing --share-path " val)
+           (let ((path-list (gnc:read-from-string val)))
+             (if (list? path-list)
+                 (gnc:config-var-value-set! gnc:*share-path* #f path-list)
+                 (begin
+                   (gnc:error "non-list given for --share-path: " val)
+                   (gnc:shutdown 1)))))
+         "SHAREPATH"
+         (N_ "Set shared data file search path"))
 
    (list "doc-path"
          'string
          (lambda (val)
            (gnc:debug "parsing --doc-path " val)
-           (let ((path-list
-                  (call-with-input-string val (lambda (port) (read port)))))
+           (let ((path-list (gnc:read-from-string val)))
              (if (list? path-list)
                  (gnc:config-var-value-set! gnc:*doc-path* #f path-list)
                  (begin
@@ -214,7 +254,7 @@ the current value of the path.")
                    (gnc:shutdown 1)))))
          "DOCPATH"
          (N_ "Set the search path for documentation files"))
-
+   
    (list "evaluate"
          'string
          (lambda (val)
@@ -240,10 +280,14 @@ the current value of the path.")
                  (cons
                   (lambda ()
                     (gnc:use-guile-module-here! '(gnucash price-quotes))
+                    (gnc:suspend-gui-refresh)
+                    (gnc:engine-suspend-events)
                     (if (not (gnc:add-quotes-to-book-at-url val))
                         (begin
                           (gnc:error "Failed to add quotes to " val)
-                          (gnc:shutdown 1))))
+                          (gnc:shutdown 1)))
+                    (gnc:engine-suspend-events)
+                    (gnc:resume-gui-refresh))
                   gnc:*batch-mode-things-to-do*)))
          "FILE"
          (N_ "Add price quotes to given FILE."))
@@ -265,7 +309,7 @@ the current value of the path.")
 	 (lambda (val)
 	   (if val (gnc:run-rpc-server)))
 	 #f
-	 (N_ "Run the RPC Server"))))
+	 (N_ "Run the RPC Server if GnuCash was configured with --enable-rpc"))))
 
 (define (gnc:cmd-line-get-boolean-arg args)
   ;; --arg         means #t
@@ -300,7 +344,7 @@ the current value of the path.")
 (define (gnc:prefs-show-version)
   (display "GnuCash ")
   (display gnc:version)
-  (display " development version")
+  (if gnc:*is-development-version?* (display " development version"))
   (newline))
 
 (define (gnc:prefs-show-usage)
@@ -378,7 +422,7 @@ the current value of the path.")
       (set! item (car rest))      
       
       (gnc:debug "handling arg " item)
- 
+      
       (if (not (string=? "--"
 			 (make-shared-substring item 0
 						(min (string-length item) 2))))

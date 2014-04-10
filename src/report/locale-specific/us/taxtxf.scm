@@ -29,7 +29,7 @@
 ;; depends must be outside module scope -- and should eventually go away.
 
 (define-module (gnucash report taxtxf))
-(use-modules (gnucash bootstrap) (g-wrapped gw-gnc)) ;; FIXME: delete after we finish modularizing.
+(use-modules (gnucash main)) ;; FIXME: delete after we finish modularizing.
 (use-modules (srfi srfi-1))
 (use-modules (ice-9 slib))
 (require 'printf)
@@ -37,7 +37,9 @@
 (use-modules (gnucash gnc-module))
 (gnc:module-load "gnucash/tax/us" 0)
 (gnc:module-load "gnucash/report/report-system" 0)
-(gnc:module-load "gnucash/app-file" 0)
+
+
+(define reportname (N_ "Tax Report / TXF Export"))
 
 (define (make-level-collector num-levels)
   (let ((level-collector (make-vector num-levels)))
@@ -66,8 +68,7 @@
 
 (define (make-split-list account split-filter-pred)
   (reverse (filter split-filter-pred
-                   (gnc:glist->list (gnc:account-get-split-list account)
-                                    <gnc:Split*>))))
+                   (gnc:account-get-split-list account))))
 
 ;; returns a predicate that returns true only if a split is
 ;; between early-date and late-date
@@ -404,24 +405,11 @@
                     #t)))
           accounts))
 
-;; returns 'html if html is chosen, 'txf if txf is chosen,
-;; and #f otherwise
-(define (choose-export-format)
-  (let ((choice (gnc:choose-radio-option-dialog-parented
-                 #f
-                 (_ "Choose export format")
-                 (_ "Choose the export format for this report:")
-                 0
-                 (list (_ "HTML") (_ "TXF")))))
-    (case choice
-      ((0) 'html)
-      ((1) 'txf)
-      (else #f))))
-
 (define (generate-tax-or-txf report-name
                              report-description
                              report-obj
-                             tax-mode?)
+                             tax-mode?
+                             file-name)
 
   (define (get-option pagename optname)
     (gnc:option-value
@@ -440,6 +428,7 @@
                       (lambda (x) (num-generations x (+ 1 gen)))
                       children)))))
 
+  (gnc:report-starting reportname)
   (let* ((from-value (gnc:date-option-absolute-time 
                       (get-option gnc:pagename-general "From")))
          (to-value (gnc:timepair-end-day-time
@@ -464,6 +453,8 @@
                                           selected-accounts))
                           0))
          (max-level (min MAX-LEVELS (max 1 generations)))
+	 (work-to-do 0)
+	 (work-done 0)
 
          ;; Alternate dates are relative to from-date
          (from-date (gnc:timepair->date from-value))
@@ -610,10 +601,24 @@
                                          #t fudge-date  #t date))))
              split-list)))
     
+    (define (count-accounts level accounts)
+      (if (< level max-level)
+	  (let ((sum 0))
+	    (for-each (lambda (x)
+		   (if (gnc:account-is-inc-exp? x)
+		       (set! sum (+ sum (+ 1 (count-accounts (+ 1 level)
+							     (gnc:account-get-immediate-subaccounts x)))))
+		       0))
+		 accounts)
+	    sum)
+	  (length accounts)))
+
     (define (handle-level-x-account level account)
       (let ((type (gw:enum-<gnc:AccountType>-val->sym
                    (gnc:account-get-type account) #f)))
 
+	(set! work-done (+ 1 work-done))
+	(gnc:report-percent-done (* 100 (/ work-done work-to-do)))
         (if (gnc:account-is-inc-exp? account)
             (let* ((children (gnc:account-get-children account))
                    (to-special #f)	; clear special-splits-period
@@ -706,8 +711,7 @@
           (today-date (strftime "D%m/%d/%Y" 
                                 (localtime 
                                  (car (gnc:timepair-canonical-day-time
-                                       (cons (current-time) 0))))))
-          (file-name #f))
+                                       (cons (current-time) 0)))))))
 
       ;; Now, the main body
       ;; Reset all the balance collectors
@@ -717,31 +721,10 @@
 
       (set! txf-last-payer "")
       (set! txf-l-count 0)
+      (set! work-to-do (count-accounts 1 selected-accounts))
 
       (if (not tax-mode?)		; Do Txf mode
           (begin
-            (set! file-name		; get file name from user
-                  (do ((fname (gnc:file-selection-dialog
-                               (_ "Select file for .TXF export") ""
-                               "~/export.txf")
-                              (gnc:file-selection-dialog
-                               (_ "Select file for .TXF export") ""
-                               "~/export.txf")))  
-                      ((if (not fname)
-                           #t		; no "Cancel" button, exit
-                           (if (access? fname F_OK)
-                               (if (gnc:verify-dialog
-                                    (sprintf
-                                     #f 
-                                     (_ "File: \"%s\" exists.\nOverwrite?")
-                                     fname)
-                                    #f)
-                                   (begin (delete-file fname)
-                                          #t)
-                                   #f)
-                               #t))
-                       fname)))
-
             (if file-name		; cancel TXF if no file selected
                 (let* ((port (open-output-file file-name))    
                        (output
@@ -757,9 +740,9 @@
                   (gnc:display-report-list-item output-txf port
                                                 "taxtxf.scm - ")
                   (close-output-port port)
-                  #f)
-                #t))
-          
+                  #t)
+                #f))
+
           (begin			; else do tax report
             (gnc:html-document-set-style! 
              doc "blue"
@@ -815,13 +798,15 @@
                  (gnc:make-html-text
                   (gnc:html-markup-p
                    (_ "No Tax Related accounts were found.  Go to the\
- Accounts->Tax Information dialog to set up tax-related accounts.")))))
-            
+ Edit->Tax Options dialog to set up tax-related accounts.")))))
+
+	    (gnc:report-finished)
             doc)))))
 
 (gnc:define-report
  'version 1
- 'name (N_ "Tax Report / TXF Export")
+ 'name reportname
+ 'menu-name (N_ "Tax Report & TXF Export")
  ;;'menu-path (list gnc:menuname-taxes)
  'menu-tip (N_ "Taxable Income / Deductible Expenses / Export to .TXF file")
  'options-generator tax-options-generator
@@ -831,16 +816,14 @@
               (_ "This report shows your Taxable Income and \
 Deductible Expenses.")
               report-obj
-              #t))
- 'export-thunk (lambda (report-obj)
-                 (let ((choice (choose-export-format)))
-                   (case choice
-                     ((txf)
-                      (generate-tax-or-txf
-                       (_ "Taxable Income / Deductible Expenses")
-                       (_ "This page shows your Taxable Income and \
+              #t
+              #f))
+ 'export-types (list (cons (_ "TXF") 'txf))
+ 'export-thunk (lambda (report-obj choice file-name)
+                 (generate-tax-or-txf
+                  (_ "Taxable Income / Deductible Expenses")
+                  (_ "This page shows your Taxable Income and \
 Deductible Expenses.")
-                       report-obj
-                       #f)
-                      #f)
-                     (else choice)))))
+                  report-obj
+                  #f
+                  file-name)))

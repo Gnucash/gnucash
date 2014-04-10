@@ -20,7 +20,7 @@
 #include "Group.h"
 #include "io-gncxml.h"
  
-#include "fcgi_stdio.h"
+#include <fcgi_stdio.h>
 
 
 /* ======================================================== */

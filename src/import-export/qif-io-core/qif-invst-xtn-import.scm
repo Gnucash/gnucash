@@ -127,7 +127,7 @@
              (cons (default-margin-interest-acct from-acct) 'brokerage)))
       ((rtrncap rtrncapx)
        (set! far-acct
-             (cons (default-return-capital-acct from-acct) 'brokerage)))
+             (cons (default-capital-return-acct from-acct) 'brokerage)))
       ((div divx reinvdiv)
        (set! far-acct
              (cons (default-dividend-acct from-acct security) 'brokerage)))
@@ -186,7 +186,7 @@
          qif-xtn (qif-io:file-default-src-acct qif-file)))
     
     (gnc:transaction-begin-edit gnc-xtn)
-    (gnc:transaction-set-commodity gnc-xtn commodity)
+    (gnc:transaction-set-currency gnc-xtn commodity)
     
     ;; set the transaction date, number and description 
     (let ((date (qif-io:parse-date/format 

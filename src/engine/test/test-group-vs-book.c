@@ -2,10 +2,11 @@
 #include <glib.h>
 #include <guile/gh.h>
 
-#include "Group.h"
+#include "GroupP.h"
 #include "GNCIdP.h"
 #include "TransLog.h"
 #include "gnc-book.h"
+#include "gnc-book-p.h"
 #include "gnc-engine.h"
 #include "gnc-module.h"
 #include "test-engine-stuff.h"
@@ -61,12 +62,18 @@ run_test (void)
     exit(get_rv());
   }
 
-  if (!group_has_book (group1, NULL))
+  if (!group_has_book (group1, book))
   {
-    failure("new group has non-null book");
+    failure("new group has wrong book");
     exit(get_rv());
   }
 
+  /* this test is testing routines that are private
+   * to the engine. these tests are intended to test
+   * the engine as a whole, not just the public
+   * interface. the maintenance of the correct
+   * book pointers is important for correct
+   * engine operation. */
   gnc_book_set_group (book, group1);
   if (!group_has_book (group1, book))
   {
@@ -83,11 +90,14 @@ run_test (void)
 
   gnc_book_set_group (book, group2);
 
+#if 0
+  /* a group cannot have a 'null' book; this test is nonsense. */
   if (!group_has_book (group1, NULL))
   {
     failure("gnc_book_set_group didn't clear old");
     exit(get_rv());
   }
+#endif
 
   if (!group_has_book (group2, book))
   {
@@ -130,11 +140,14 @@ run_test (void)
     exit(get_rv());
   }
 
+#if 0
+  /* a group cannot have a 'null' book; this test is nonsense. */
   if (!group_has_book (xaccAccountGetParent (account2), NULL))
   {
     failure("remove group didn't clear book");
     exit(get_rv());
   }
+#endif
 }
 
 static void
@@ -142,7 +155,13 @@ main_helper (int argc, char **argv)
 {
   int i;
 
-  gnc_module_load("gnucash/engine", 0);
+  gnc_module_system_init();
+
+  if(!gnc_module_load("gnucash/engine", 0))
+  {
+    failure("couldn't load gnucash/engine");
+    exit(get_rv());
+  }
 
   xaccLogDisable ();
 

@@ -221,7 +221,6 @@ void
 gnc_gpg_encrypt_async(const gchar * cleartext, int cleartext_size, 
                       const gchar * recipient, const gchar * passphrase,
                       GncGPGCb cb, gpointer data) {
-  char * retval = NULL;
   char * argv[] = 
   {
     "gpg",
@@ -279,8 +278,6 @@ gnc_gpg_decrypt_async(const gchar * cryptext, int cryptext_size,
                       const gchar * passphrase, 
                       void (* cb)(char * clrtxt, gpointer d),
                       gpointer data) {
-  char * retval = NULL;
-  
   char * argv[] = 
   { "gpg",
     "-q",
@@ -326,7 +323,6 @@ gnc_gpg_export(const gchar * keyname) {
 
 void
 gnc_gpg_export_async(const gchar * keyname, GncGPGCb cb, gpointer data) {
-  char * retval;
   char * argv[] = 
   { "gpg",
     "-q",

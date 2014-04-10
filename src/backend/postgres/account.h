@@ -1,6 +1,6 @@
 /********************************************************************\
  * account.h -- implements accounts for postgres backend            *
- * Copyright (c) 2000, 2001 Linas Vepstas                           *
+ * Copyright (c) 2000, 2001 Linas Vepstas <linas@linas.org>         *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -25,15 +25,19 @@
 #define POSTGRES_ACCOUNT_H
 
 #include "Group.h"
+#include "gnc-book.h"
 #include "guid.h"
 
 #include "PostgresBackend.h"
 
-AccountGroup * pgendGetAllAccounts (PGBackend *be, AccountGroup *topgrp);
+void pgendGetAllAccountsInBook (PGBackend *be, GNCBook *);
+
+void pgendGetAllAccounts (PGBackend *be);
+
 void pgendStoreGroup (PGBackend *be, AccountGroup *grp);
 void pgendStoreGroupNoLock (PGBackend *be, AccountGroup *grp,
                        gboolean do_mark, gboolean do_check_version);
-int pgendCopyAccountToEngine (PGBackend *be, const GUID *acct_guid);
+Account * pgendCopyAccountToEngine (PGBackend *be, const GUID *acct_guid);
 
 void pgend_account_commit_edit (Backend * bend, Account * acct);
 

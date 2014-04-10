@@ -21,6 +21,14 @@
  *                                                                  *
 \********************************************************************/
 
+/**
+ * @addtogroup Engine
+ * @{ */
+/**
+ * @file SchedXaction.h
+ * @brief Scheduled Transactions public handling routines.
+ **/
+
 #ifndef XACC_SCHEDXACTION_H
 #define XACC_SCHEDXACTION_H
 
@@ -48,6 +56,9 @@
 #define GNC_SX_AMOUNT                "amnt"
 #define GNC_SX_FROM_SCHED_XACTION    "from-sched-xaction"
 
+/**
+ * The SchedXaction data.
+ **/
 typedef struct gncp_SchedXaction SchedXaction;
 
 /**
@@ -55,23 +66,22 @@ typedef struct gncp_SchedXaction SchedXaction;
  **/
 SchedXaction *xaccSchedXactionMalloc(GNCBook *book);
 
-/*
- * returns true if the scheduled transaction is dirty and needs to
- * be saved
- */
-
+/**
+ * @return True if the scheduled transaction is dirty and needs to
+ * be saved.
+ **/
 gboolean xaccSchedXactionIsDirty(SchedXaction *sx);
 
-/*
+/**
  * Set dirtyness state.  Only save/load code should modify this outside
  * SX engine CODE . . . 
  * (set it to FALSE after backend completes reading in data 
  *
  * FIXME: put this into a private header . . . .
- */
-
+ **/
 void xaccSchedXactionSetDirtyness(SchedXaction *sx, gboolean dirty_p);
-/*
+
+/**
  * Cleans up and frees a SchedXaction and it's associated data.
  **/
 void xaccSchedXactionFree( SchedXaction *sx );
@@ -118,11 +128,29 @@ void xaccSchedXactionSetNumOccur( SchedXaction *sx, gint numNum );
 gint xaccSchedXactionGetRemOccur( SchedXaction *sx );
 void xaccSchedXactionSetRemOccur( SchedXaction *sx, gint numRemain );
 
+/**
+ * Set the instance count.  This is incremented by one for every created
+ * instance of the SX.  Returns the instance num of the SX unless stateData
+ * is non-null, in which case it returns the instance num from the state
+ * data.
+ * @param stateData may be NULL.
+ **/
+gint gnc_sx_get_instance_count( SchedXaction *sx, void *stateData );
+/**
+ * Sets the instance count to something other than the default.  As the
+ * default is the incorrect value '0', callers should DTRT here.
+ **/
+void gnc_sx_set_instance_count( SchedXaction *sx, gint instanceNum );
+
 GList *xaccSchedXactionGetSplits( SchedXaction *sx );
 void xaccSchedXactionSetSplits( SchedXaction *sx, GList *newSplits );
 
-void xaccSchedXactionGetAutoCreate( SchedXaction *sx, gboolean *outAutoCreate, gboolean *outNotify );
-void xaccSchedXactionSetAutoCreate( SchedXaction *sx, gboolean newAutoCreate, gboolean newNotify );
+void xaccSchedXactionGetAutoCreate( SchedXaction *sx,
+                                    gboolean *outAutoCreate,
+                                    gboolean *outNotify );
+void xaccSchedXactionSetAutoCreate( SchedXaction *sx,
+                                    gboolean newAutoCreate,
+                                    gboolean newNotify );
 
 gint xaccSchedXactionGetAdvanceCreation( SchedXaction *sx );
 void xaccSchedXactionSetAdvanceCreation( SchedXaction *sx, gint createDays );
@@ -161,30 +189,38 @@ void xaccSchedXactionSetSlot( SchedXaction *sx,
 const GUID *xaccSchedXactionGetGUID( SchedXaction *sx );
 void xaccSchedXactionSetGUID( SchedXaction *sx, GUID g );
 
+///@{
 /**
- * Next-Instance state data.
+ * Temporal state data.
  *
- * If you're looking at to-create [but not-yet-created] scheduled
- * transactions, you'll want to use this to keep track of any
- * SX-type-specific information that relates to the sequence and when it
- * should end.  This is an opaque structure to the caller; it should be
- * created and freed with the following functions, and passed into the
- * GetNextInstance and GetInstanceAfter functions.
- *
- * The necessity for this arose in dealing with SXes with some number of
- * remaining occurances, and thinking about how to keep track of this when
- * looking at reminders... and generally thinking about not wanting the
- * caller to know every possible thing that needs to be kept track of in a
- * forward-looking sequence of SXes.
+ * These functions allow us to opaquely save the entire temporal state of
+ * ScheduledTransactions.  This is used by the "since-last-run" dialog to
+ * store the initial state of SXes before modification ... if it later
+ * becomes necessary to revert an entire set of changes, we can 'revert' the
+ * SX without having to rollback all the individual state changes.
  **/
-void *xaccSchedXactionCreateSequenceState( SchedXaction *sx );
-void xaccSchedXactionIncrSequenceState( SchedXaction *sx, void *stateData );
-void xaccSchedXactionDestroySequenceState( SchedXaction *sx, void *stateData );
+void *gnc_sx_create_temporal_state( SchedXaction *sx );
+void gnc_sx_incr_temporal_state( SchedXaction *sx, void *stateData );
+void gnc_sx_revert_to_temporal_state( SchedXaction *sx,
+                                      void *stateData );
+void gnc_sx_destroy_temporal_state( void *stateData );
+/**
+ * Allocates and returns a copy of the given temporal state.  Destroy with
+ * gnc_sx_destroy_temporal_state(), as you'd expect.
+ **/
+void *gnc_sx_clone_temporal_state( void *stateData );
+///@}
 
 /**
  * Returns the next occurance of a scheduled transaction.  If the
  * transaction hasn't occured, then it's based off the start date.
  * Otherwise, it's based off the last-occurance date.
+ *
+ * If state data is NULL, the current value of the SX is used for
+ * computation.  Otherwise, the values in the state data are used.  This
+ * allows the caller to correctly create a set of instances into the future
+ * for possible action without modifying the SX state until action is
+ * actually taken.
  **/
 GDate xaccSchedXactionGetNextInstance( SchedXaction *sx, void *stateData );
 GDate xaccSchedXactionGetInstanceAfter( SchedXaction *sx,
@@ -192,11 +228,33 @@ GDate xaccSchedXactionGetInstanceAfter( SchedXaction *sx,
                                         void *stateData );
 
 /*
- * Set the schedxaction's template transaction.  t_t_list is a glist
- * of TTInfo's as defined in SX-ttinfo.h
- * the edit dialog doesn't use this mechanism.  Maybe it should
+ * Set the schedxaction's template transaction.  t_t_list is a glist of
+ * TTInfo's as defined in SX-ttinfo.h.  The edit dialog doesn't use this
+ * mechanism; maybe it should.
  */
-void xaccSchedXactionSetTemplateTrans(SchedXaction *sx, GList *t_t_list,
-                                      GNCBook *book);
+void xaccSchedXactionSetTemplateTrans( SchedXaction *sx,
+                                       GList *t_t_list,
+                                       GNCBook *book );
+
+/**
+ * Adds an instance to the deferred list of the SX.  Added instances are
+ * added in date-sorted order.
+ **/
+void gnc_sx_add_defer_instance( SchedXaction *sx, void *deferStateData );
+
+/**
+ * Removes an instance from the deferred list.  If the instance is no longer
+ * useful; gnc_sx_destroy_temporal_state() it.
+ **/
+void gnc_sx_remove_defer_instance( SchedXaction *sx, void *deferStateData );
+
+/**
+ * Returns the defer list from the SX; this is a date-sorted state-data
+ * instance list.  The list should not be modified by the caller; use the
+ * gnc_sx_{add,remove}_defer_instance() functions to modifiy the list.
+ **/
+GList *gnc_sx_get_defer_instances( SchedXaction *sx );
 
 #endif /* XACC_SCHEDXACTION_H */
+
+/** @} */

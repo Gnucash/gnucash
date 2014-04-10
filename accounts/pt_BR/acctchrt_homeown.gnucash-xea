@@ -1,0 +1,70 @@
+<?xml version="1.0"?>
+<gnc-account-example>
+    <gnc-act:title>
+      Despesas da Casa
+    </gnc-act:title>
+    <gnc-act:short-description>
+      Despesas associadas à posse de uma habitação
+    </gnc-act:short-description>
+    <gnc-act:long-description>
+    Deverá selecionar este conjunto de contas caso possua uma habitação própria. Este conjunto disponibiliza um grupo de contas para acompanhar despesas da casa (seguro, impostos, reparos).
+  </gnc-act:long-description>
+<gnc:account version="2.0.0">
+  <act:name>Despesas</act:name>
+  <act:id type="new">84732f5fdd27b6463d75bf958e3a4b06</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>BRL</cmdty:id>
+  </act:currency>
+  <act:description>Despesas</act:description>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Reparos na Casa</act:name>
+  <act:id type="new">fa27de57090e107fa99fe1db53790f23</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>BRL</cmdty:id>
+  </act:currency>
+  <act:description>Reparos na Casa</act:description>
+  <act:parent type="new">84732f5fdd27b6463d75bf958e3a4b06</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Seguro</act:name>
+  <act:id type="new">4677fe36914ebcf23758f3bf20686b4a</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>BRL</cmdty:id>
+  </act:currency>
+  <act:description>Seguro</act:description>
+  <act:parent type="new">84732f5fdd27b6463d75bf958e3a4b06</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Seguro da Casa</act:name>
+  <act:id type="new">3b5909f31bda0e0f76149fd600e0cb1d</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>BRL</cmdty:id>
+  </act:currency>
+  <act:description>Seguro da Casa</act:description>
+  <act:parent type="new">4677fe36914ebcf23758f3bf20686b4a</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>IPTU</act:name>
+  <act:id type="new">a931b8ffe2917ff9a069333623da96ca</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>BRL</cmdty:id>
+  </act:currency>
+  <act:description>IPTU</act:description>
+  <act:parent type="new">84732f5fdd27b6463d75bf958e3a4b06</act:parent>
+</gnc:account>
+</gnc-account-example>
+
+<!-- Local variables: -->
+<!-- mode: xml        -->
+<!-- End:             -->

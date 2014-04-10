@@ -27,10 +27,10 @@ transaction_set_splits_to_accounts(Transaction *tr, Account *a1, Account *a2)
 
   split  = xaccTransGetSplit(tr, 0);
   
-  xaccSplitSetAccount(split, a1);
+  xaccAccountInsertSplit(a1, split);
 
   split = xaccTransGetSplit(tr, 1);
-  xaccSplitSetAccount(split, a2);
+  xaccAccountInsertSplit(a2, split);
   return;
 }
 
@@ -39,8 +39,7 @@ run_test (void)
 {
   Account *acc1, *acc2;
   Transaction *transaction;
-  gnc_numeric old_amt, new_amt, new_kvp_amt, old_val, new_val, new_kvp_val;
-  int rval;
+  gnc_numeric old_amt, new_amt, old_val, new_val;
   GNCBook *book;
   Timespec ts;
   time_t now;

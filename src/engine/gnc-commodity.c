@@ -42,26 +42,26 @@ static short module = MOD_ENGINE;
  * of the smallest-transactional-units of the currency are there
  * in a 'unitname' unit. */ 
 
-struct _gnc_commodity { 
-  char   * fullname;  
-  char   * namespace;
-  char   * mnemonic;
-  char   * printname;
-  char   * exchange_code;  /* CUSIP or other identifying code */
-  int    fraction;
-  char   * unique_name;  
-  gint16 mark;             /* user-defined mark, handy for traversals */
+struct gnc_commodity_s { 
+  char    * fullname;  
+  char    * namespace;
+  char    * mnemonic;
+  char    * printname;
+  char    * exchange_code;  /* CUSIP or other identifying code */
+  int       fraction;
+  char    * unique_name;  
+  gint16    mark;           /* user-defined mark, handy for traversals */
 };
 
-struct _gnc_commodity_namespace {
+struct gnc_commodity_namespace_s {
   GHashTable * table;
 };
 
-struct _gnc_commodity_table {
+struct gnc_commodity_table_s {
   GHashTable * table;
 };
 
-typedef struct _gnc_commodity_namespace gnc_commodity_namespace;
+typedef struct gnc_commodity_namespace_s gnc_commodity_namespace;
 
 /********************************************************************
  * gnc_commodity_new
@@ -145,7 +145,8 @@ gnc_commodity_destroy(gnc_commodity * cm)
  ********************************************************************/
 
 const char *
-gnc_commodity_get_mnemonic(const gnc_commodity * cm) {
+gnc_commodity_get_mnemonic(const gnc_commodity * cm) 
+{
   if(!cm) return NULL;
   return cm->mnemonic;
 }
@@ -155,7 +156,8 @@ gnc_commodity_get_mnemonic(const gnc_commodity * cm) {
  ********************************************************************/
 
 const char *
-gnc_commodity_get_printname(const gnc_commodity * cm) {
+gnc_commodity_get_printname(const gnc_commodity * cm) 
+{
   if(!cm) return NULL;
   return cm->printname;
 }
@@ -166,7 +168,8 @@ gnc_commodity_get_printname(const gnc_commodity * cm) {
  ********************************************************************/
 
 const char *
-gnc_commodity_get_namespace(const gnc_commodity * cm) {
+gnc_commodity_get_namespace(const gnc_commodity * cm) 
+{
   if(!cm) return NULL;
   return cm->namespace;
 }
@@ -177,7 +180,8 @@ gnc_commodity_get_namespace(const gnc_commodity * cm) {
  ********************************************************************/
 
 const char *
-gnc_commodity_get_fullname(const gnc_commodity * cm) {
+gnc_commodity_get_fullname(const gnc_commodity * cm) 
+{
   if(!cm) return NULL;
   return cm->fullname;
 }
@@ -188,7 +192,8 @@ gnc_commodity_get_fullname(const gnc_commodity * cm) {
  ********************************************************************/
 
 const char *
-gnc_commodity_get_unique_name(const gnc_commodity * cm) {
+gnc_commodity_get_unique_name(const gnc_commodity * cm) 
+{
   if(!cm) return NULL;
   return cm->unique_name;
 }
@@ -199,7 +204,8 @@ gnc_commodity_get_unique_name(const gnc_commodity * cm) {
  ********************************************************************/
 
 const char * 
-gnc_commodity_get_exchange_code(const gnc_commodity * cm) {
+gnc_commodity_get_exchange_code(const gnc_commodity * cm) 
+{
   if(!cm) return NULL;
   return cm->exchange_code;
 }
@@ -209,7 +215,8 @@ gnc_commodity_get_exchange_code(const gnc_commodity * cm) {
  ********************************************************************/
 
 int
-gnc_commodity_get_fraction(const gnc_commodity * cm) {
+gnc_commodity_get_fraction(const gnc_commodity * cm) 
+{
   if(!cm) return 0;
   return cm->fraction;
 }
@@ -219,7 +226,8 @@ gnc_commodity_get_fraction(const gnc_commodity * cm) {
  ********************************************************************/
 
 gint16
-gnc_commodity_get_mark(const gnc_commodity * cm) {
+gnc_commodity_get_mark(const gnc_commodity * cm) 
+{
   if(!cm) return 0;
   return cm->mark;
 }
@@ -229,7 +237,8 @@ gnc_commodity_get_mark(const gnc_commodity * cm) {
  ********************************************************************/
 
 void
-gnc_commodity_set_mnemonic(gnc_commodity * cm, const char * mnemonic) {
+gnc_commodity_set_mnemonic(gnc_commodity * cm, const char * mnemonic) 
+{
   if(!cm) return;
   if(cm->mnemonic == mnemonic) return;
 
@@ -245,7 +254,8 @@ gnc_commodity_set_mnemonic(gnc_commodity * cm, const char * mnemonic) {
  ********************************************************************/
 
 void
-gnc_commodity_set_namespace(gnc_commodity * cm, const char * namespace) {
+gnc_commodity_set_namespace(gnc_commodity * cm, const char * namespace) 
+{
   if(!cm) return;
   if(cm->namespace == namespace) return;
 
@@ -261,7 +271,8 @@ gnc_commodity_set_namespace(gnc_commodity * cm, const char * namespace) {
  ********************************************************************/
 
 void
-gnc_commodity_set_fullname(gnc_commodity * cm, const char * fullname) {
+gnc_commodity_set_fullname(gnc_commodity * cm, const char * fullname) 
+{
   if(!cm) return;
   if(cm->fullname == fullname) return;
 
@@ -277,7 +288,8 @@ gnc_commodity_set_fullname(gnc_commodity * cm, const char * fullname) {
 
 void
 gnc_commodity_set_exchange_code(gnc_commodity * cm, 
-                                const char * exchange_code) {
+                                const char * exchange_code) 
+{
   if(!cm) return;
   if(cm->exchange_code == exchange_code) return;
 
@@ -290,7 +302,8 @@ gnc_commodity_set_exchange_code(gnc_commodity * cm,
  ********************************************************************/
 
 void
-gnc_commodity_set_fraction(gnc_commodity * cm, int fraction) {
+gnc_commodity_set_fraction(gnc_commodity * cm, int fraction) 
+{
   if(!cm) return;
   cm->fraction = fraction;
 }
@@ -300,7 +313,8 @@ gnc_commodity_set_fraction(gnc_commodity * cm, int fraction) {
  ********************************************************************/
 
 void
-gnc_commodity_set_mark(gnc_commodity * cm, gint16 mark) {
+gnc_commodity_set_mark(gnc_commodity * cm, gint16 mark) 
+{
   if(!cm) return;
   cm->mark = mark;
 }
@@ -311,7 +325,8 @@ gnc_commodity_set_mark(gnc_commodity * cm, gint16 mark) {
  ********************************************************************/
 
 gboolean
-gnc_commodity_equiv(const gnc_commodity * a, const gnc_commodity * b) {
+gnc_commodity_equiv(const gnc_commodity * a, const gnc_commodity * b) 
+{
   if(a == b) return TRUE;
   if(!a || !b) return FALSE;
   if(safe_strcmp(a->namespace, b->namespace) != 0) return FALSE;
@@ -326,38 +341,38 @@ gnc_commodity_equal(const gnc_commodity * a, const gnc_commodity * b)
 
   if (!a || !b)
   {
-    PWARN ("one is NULL");
+    DEBUG ("one is NULL");
     return FALSE;
   }
 
   if (safe_strcmp(a->namespace, b->namespace) != 0)
   {
-    PWARN ("namespaces differ: %s vs %s", a->namespace, b->namespace);
+    DEBUG ("namespaces differ: %s vs %s", a->namespace, b->namespace);
     return FALSE;
   }
 
   if (safe_strcmp(a->mnemonic, b->mnemonic) != 0)
   {
-    PWARN ("mnemonics differ: %s vs %s", a->mnemonic, b->mnemonic);
+    DEBUG ("mnemonics differ: %s vs %s", a->mnemonic, b->mnemonic);
     return FALSE;
   }
 
   if (safe_strcmp(a->fullname, b->fullname) != 0)
   {
-    PWARN ("fullnames differ: %s vs %s", a->fullname, b->fullname);
+    DEBUG ("fullnames differ: %s vs %s", a->fullname, b->fullname);
     return FALSE;
   }
 
   if (safe_strcmp(a->exchange_code, b->exchange_code) != 0)
   {
-    PWARN ("exchange codes differ: %s vs %s",
+    DEBUG ("exchange codes differ: %s vs %s",
            a->exchange_code, b->exchange_code);
     return FALSE;
   }
 
   if (a->fraction != b->fraction)
   {
-    PWARN ("fractions differ: %d vs %d", a->fraction, b->fraction);
+    DEBUG ("fractions differ: %d vs %d", a->fraction, b->fraction);
     return FALSE;
   }
 
@@ -371,7 +386,8 @@ gnc_commodity_equal(const gnc_commodity * a, const gnc_commodity * b)
  ********************************************************************/
 
 gnc_commodity_table *
-gnc_commodity_table_new(void) {
+gnc_commodity_table_new(void) 
+{
   gnc_commodity_table * retval = g_new0(gnc_commodity_table, 1);
   retval->table = g_hash_table_new(&g_str_hash, &g_str_equal);
   return retval;
@@ -434,6 +450,12 @@ gnc_commodity_table_lookup(const gnc_commodity_table * table,
   nsp = g_hash_table_lookup(table->table, (gpointer)namespace);
 
   if(nsp) {
+    /*
+     * The symbol for Russing Roubles was changed. Need to support the
+     * old symbol to be backward compatible.
+     */
+    if (strcmp(mnemonic, "RUB") == 0)
+      mnemonic = "RUR";
     return g_hash_table_lookup(nsp->table, (gpointer)mnemonic);
   }
   else {
@@ -513,7 +535,8 @@ gnc_commodity_table_find_full(const gnc_commodity_table * table,
 
 gnc_commodity *
 gnc_commodity_table_insert(gnc_commodity_table * table, 
-                           gnc_commodity * comm) {
+                           gnc_commodity * comm) 
+{
   gnc_commodity_namespace * nsp = NULL;
   gnc_commodity *c;
 
@@ -584,7 +607,8 @@ gnc_commodity_table_remove(gnc_commodity_table * table,
 
 int
 gnc_commodity_table_has_namespace(const gnc_commodity_table * table,
-                                  const char * namespace) {
+                                  const char * namespace) 
+{
   gnc_commodity_namespace * nsp = NULL;
   
   if(!table || !namespace) { return 0; }
@@ -599,26 +623,30 @@ gnc_commodity_table_has_namespace(const gnc_commodity_table * table,
 }
 
 static void 
-hash_keys_helper(gpointer key, gpointer value, gpointer data) {
+hash_keys_helper(gpointer key, gpointer value, gpointer data) 
+{
   GList ** l = data;
   *l = g_list_prepend(*l, key);
 }
 
 static GList *
-g_hash_table_keys(GHashTable * table) {
+g_hash_table_keys(GHashTable * table) 
+{
   GList * l = NULL;
   g_hash_table_foreach(table, &hash_keys_helper, (gpointer) &l);
   return l;
 }
 
 static void 
-hash_values_helper(gpointer key, gpointer value, gpointer data) {
+hash_values_helper(gpointer key, gpointer value, gpointer data) 
+{
   GList ** l = data;
   *l = g_list_prepend(*l, value);
 }
 
 static GList *
-g_hash_table_values(GHashTable * table) {
+g_hash_table_values(GHashTable * table) 
+{
   GList * l = NULL;
   g_hash_table_foreach(table, &hash_values_helper, (gpointer) &l);
   return l;
@@ -630,7 +658,8 @@ g_hash_table_values(GHashTable * table) {
  ********************************************************************/
 
 GList * 
-gnc_commodity_table_get_namespaces(const gnc_commodity_table * table) {
+gnc_commodity_table_get_namespaces(const gnc_commodity_table * table) 
+{
   if (!table)
     return NULL;
 
@@ -645,7 +674,8 @@ gnc_commodity_table_get_namespaces(const gnc_commodity_table * table) {
 
 GList * 
 gnc_commodity_table_get_commodities(const gnc_commodity_table * table,
-                                    const char * namespace) {
+                                    const char * namespace) 
+{
   gnc_commodity_namespace * ns = NULL; 
 
   if(table) { 
@@ -667,7 +697,8 @@ gnc_commodity_table_get_commodities(const gnc_commodity_table * table,
 
 void 
 gnc_commodity_table_add_namespace(gnc_commodity_table * table,
-                                  const char * namespace) {
+                                  const char * namespace) 
+{
   gnc_commodity_namespace * ns = NULL; 
   
   if(table) { 
@@ -690,7 +721,8 @@ gnc_commodity_table_add_namespace(gnc_commodity_table * table,
  ********************************************************************/
 
 static int
-ns_helper(gpointer key, gpointer value, gpointer user_data) {
+ns_helper(gpointer key, gpointer value, gpointer user_data) 
+{
   gnc_commodity * c = value;
   gnc_commodity_destroy(c);
   g_free(key);
@@ -699,7 +731,8 @@ ns_helper(gpointer key, gpointer value, gpointer user_data) {
 
 void 
 gnc_commodity_table_delete_namespace(gnc_commodity_table * table,
-                                     const char * namespace) {
+                                     const char * namespace) 
+{
   gpointer orig_key;
   gnc_commodity_namespace * value;
 
@@ -780,6 +813,8 @@ gnc_commodity_table_foreach_commodity (gnc_commodity_table * tbl,
 {
   IterData iter_data;
 
+  if (!tbl || !f) return FALSE;
+
   iter_data.ok = TRUE;
   iter_data.func = f;
   iter_data.user_data = user_data;
@@ -795,7 +830,8 @@ gnc_commodity_table_foreach_commodity (gnc_commodity_table * tbl,
  ********************************************************************/
 
 static int
-ct_helper(gpointer key, gpointer value, gpointer data) {
+ct_helper(gpointer key, gpointer value, gpointer data) 
+{
   gnc_commodity_namespace * ns = value;
   g_hash_table_foreach_remove(ns->table, ns_helper, NULL);
   g_hash_table_destroy(ns->table);
@@ -806,7 +842,8 @@ ct_helper(gpointer key, gpointer value, gpointer data) {
 }
 
 void
-gnc_commodity_table_destroy(gnc_commodity_table * t) {
+gnc_commodity_table_destroy(gnc_commodity_table * t) 
+{
   if (!t) return;
   
   g_hash_table_foreach_remove(t->table, ct_helper, t);
@@ -848,6 +885,24 @@ gnc_commodity_table_equal(gnc_commodity_table *t_1,
     return FALSE;
 
   return gnc_commodity_table_foreach_commodity (t_2, table_equal_helper, t_1);
+}
+
+/********************************************************************
+ * gnc_commodity_table_add_default_data
+ ********************************************************************/
+
+gboolean
+gnc_commodity_table_add_default_data(gnc_commodity_table *table)
+{
+
+  #include "iso-4217-currencies.c"
+
+  gnc_commodity_table_add_namespace(table, GNC_COMMODITY_NS_AMEX);
+  gnc_commodity_table_add_namespace(table, GNC_COMMODITY_NS_NYSE);
+  gnc_commodity_table_add_namespace(table, GNC_COMMODITY_NS_NASDAQ);
+  gnc_commodity_table_add_namespace(table, GNC_COMMODITY_NS_EUREX);
+  gnc_commodity_table_add_namespace(table, GNC_COMMODITY_NS_MUTUAL);
+  return TRUE;
 }
 
 /* ========================= END OF FILE ============================== */

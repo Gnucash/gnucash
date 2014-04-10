@@ -442,7 +442,6 @@ gnc_date_cell_direct_update (BasicCell *bcell,
   PopBox *box = cell->cell.gui_private;
   GdkEventKey *event = gui_data;
   char buff[DATE_BUF];
-  GDate gdate;
 
   if (!gnc_handle_date_accelerator (event, &(box->date), bcell->value))
     return FALSE;
@@ -638,6 +637,7 @@ gnc_date_cell_enter (BasicCell *bcell,
 static void
 gnc_date_cell_leave (BasicCell *bcell)
 {
+  Timespec ts;
   PopBox *box = bcell->gui_private;
 
   date_picker_disconnect_signals ((DateCell *) bcell);
@@ -646,6 +646,10 @@ gnc_date_cell_leave (BasicCell *bcell)
                        NULL, NULL, NULL, NULL, NULL);
 
   box->calendar_popped = FALSE;
+
+  /* Refresh the date to expand any shortcuts. */
+  gnc_date_cell_get_date ((DateCell *)bcell, &ts);
+  gnc_date_cell_set_value_secs ((DateCell *)bcell, ts.tv_sec);
 }
 
 void

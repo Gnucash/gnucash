@@ -12,17 +12,27 @@ gncinclude_HEADERS = \
 
 libgncmod_report_system_la_LDFLAGS = -module
 libgncmod_report_system_la_LIBADD = \
-  ${top_srcdir}/src/gnc-module/libgncmodule.la \
+  ${top_builddir}/src/gnc-module/libgncmodule.la \
   ${GUILE_LIBS} \
   ${GLIB_LIBS}
 
 
 AM_CFLAGS = -I${top_srcdir}/src/gnc-module ${GLIB_CFLAGS} ${GUILE_INCS}
 
+if GNUCASH_SEPARATE_BUILDDIR
+#For executing test cases
+SCM_FILE_LINKS = report-system.scm
+endif
+
 .scm-links:
 	rm -f gnucash report
 	ln -sf . gnucash
 	ln -sf . report 
+if GNUCASH_SEPARATE_BUILDDIR
+	for X in ${SCM_FILE_LINKS} ; do \
+	  ln -sf ${srcdir}/$$X . ; \
+	done
+endif
 	touch .scm-links
 
 gncscmmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash/report/
@@ -48,4 +58,4 @@ gncscm_DATA = \
 
 EXTRA_DIST = ${gncscmmod_DATA} ${gncscm_DATA}
 
-CLEANFILES = gnucash report .scm-links
+CLEANFILES = ${SCM_FILE_LINKS} gnucash report .scm-links

@@ -29,4 +29,4 @@ gncscm_DATA = \
 	qif-parse.scm \
 	qif-record-xform.scm 
 
-CLEANFILES = gnucash import-export .scm-links
+DISTCLEANFILES = gnucash import-export .scm-links

@@ -11,7 +11,7 @@ all-local: gnucash.spec
 ## the sed substitutions.  *sigh*
 gnucash.spec: gnucash.spec.in Makefile
 	rm -f $@.tmp
-	sed < $@.in > $@.tmp \
+	sed < $< > $@.tmp \
             -e 's:@-VERSION-@:${VERSION}:'
 	mv $@.tmp $@
 

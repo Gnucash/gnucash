@@ -53,7 +53,7 @@ sqlQuery *sqlQuery_new(void);
 void sql_Query_destroy (sqlQuery *);
 
 /* convert a gnc query to an sql query */
-const char *sqlQuery_build (sqlQuery *, Query *, GNCBook *);
+const char *sqlQuery_build (sqlQuery *, Query *);
 
 
 #endif  /* GNC_QUERY_H */

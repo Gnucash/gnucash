@@ -4,8 +4,8 @@
 #include "guid.h"
 #include "gnc-module.h"
 #include "gnc-engine-util.h"
+#include "gncObject.h"
 
-#include "gncBusiness.h"
 #include "gncVendor.h"
 #include "gncVendorP.h"
 #include "test-stuff.h"
@@ -13,41 +13,46 @@
 static int count = 0;
 
 static void
-test_string_fcn (GncBusiness *bus, const char *message,
+test_string_fcn (GNCBook *book, const char *message,
 		 void (*set) (GncVendor *, const char *str),
 		 const char * (*get)(GncVendor *));
 
+#if 0
 static void
-test_numeric_fcn (GncBusiness *bus, const char *message,
+test_numeric_fcn (GNCBook *book, const char *message,
 		  void (*set) (GncVendor *, gnc_numeric),
 		  gnc_numeric (*get)(GncVendor *));
+#endif
 
 static void
-test_bool_fcn (GncBusiness *bus, const char *message,
+test_bool_fcn (GNCBook *book, const char *message,
 		  void (*set) (GncVendor *, gboolean),
 		  gboolean (*get) (GncVendor *));
 
+#if 0
 static void
-test_gint_fcn (GncBusiness *bus, const char *message,
+test_gint_fcn (GNCBook *book, const char *message,
 	       void (*set) (GncVendor *, gint),
 	       gint (*get) (GncVendor *));
+#endif
 
 static void
 test_vendor (void)
 {
-  GncBusiness *bus;
+  GNCBook *book;
   GncVendor *vendor;
 
-  bus = gncBusinessCreate ((GNCBook *)1);
+  book = gnc_book_new ();
 
   /* Test creation/destruction */
   {
     do_test (gncVendorCreate (NULL) == NULL, "vendor create NULL");
-    vendor = gncVendorCreate (bus);
+    vendor = gncVendorCreate (book);
     do_test (vendor != NULL, "vendor create");
-    do_test (gncVendorGetBusiness (vendor) == bus,
-	     "getbusiness");
+    do_test (gncVendorGetBook (vendor) == book,
+	     "getbook");
 
+    gncVendorBeginEdit (vendor);
     gncVendorDestroy (vendor);
     success ("create/destroy");
   }
@@ -56,107 +61,125 @@ test_vendor (void)
   {
     GUID guid;
 
-    test_string_fcn (bus, "Id", gncVendorSetID, gncVendorGetID);
-    test_string_fcn (bus, "Name", gncVendorSetName, gncVendorGetName);
-    test_string_fcn (bus, "Notes", gncVendorSetNotes, gncVendorGetNotes);
+    test_string_fcn (book, "Id", gncVendorSetID, gncVendorGetID);
+    test_string_fcn (book, "Name", gncVendorSetName, gncVendorGetName);
+    test_string_fcn (book, "Notes", gncVendorSetNotes, gncVendorGetNotes);
 
-    test_gint_fcn (bus, "Terms", gncVendorSetTerms, gncVendorGetTerms);
+    //test_string_fcn (book, "Terms", gncVendorSetTerms, gncVendorGetTerms);
 
-    test_bool_fcn (bus, "TaxIncluded", gncVendorSetTaxIncluded, gncVendorGetTaxIncluded);
-    test_bool_fcn (bus, "Active", gncVendorSetActive, gncVendorGetActive);
+    //test_bool_fcn (book, "TaxIncluded", gncVendorSetTaxIncluded, gncVendorGetTaxIncluded);
+    test_bool_fcn (book, "Active", gncVendorSetActive, gncVendorGetActive);
 
     do_test (gncVendorGetAddr (vendor) != NULL, "Addr");
 
     guid_new (&guid);
-    vendor = gncVendorCreate (bus); count++;
+    vendor = gncVendorCreate (book); count++;
     gncVendorSetGUID (vendor, &guid);
     do_test (guid_equal (&guid, gncVendorGetGUID (vendor)), "guid compare");
   }
+#if 0
   {
     GList *list;
 
-    list = gncBusinessGetList (bus, GNC_VENDOR_MODULE_NAME, TRUE);
+    list = gncBusinessGetList (book, GNC_VENDOR_MODULE_NAME, TRUE);
     do_test (list != NULL, "getList all");
     do_test (g_list_length (list) == count, "correct length: all");
     g_list_free (list);
 
-    list = gncBusinessGetList (bus, GNC_VENDOR_MODULE_NAME, FALSE);
+    list = gncBusinessGetList (book, GNC_VENDOR_MODULE_NAME, FALSE);
     do_test (list != NULL, "getList active");
     do_test (g_list_length (list) == 1, "correct length: active");
     g_list_free (list);
   }
+#endif
   {
     const char *str = get_random_string();
     const char *res;
 
     gncVendorSetName (vendor, str);
-    res = gncBusinessPrintable (bus, GNC_VENDOR_MODULE_NAME, vendor);
+    res = gncObjectPrintable (GNC_VENDOR_MODULE_NAME, vendor);
     do_test (res != NULL, "Printable NULL?");
     do_test (safe_strcmp (str, res) == 0, "Printable equals");
   }    
 }
 
 static void
-test_string_fcn (GncBusiness *bus, const char *message,
+test_string_fcn (GNCBook *book, const char *message,
 		 void (*set) (GncVendor *, const char *str),
 		 const char * (*get)(GncVendor *))
 {
-  GncVendor *vendor = gncVendorCreate (bus);
+  GncVendor *vendor = gncVendorCreate (book);
   char const *str = get_random_string ();
 
   do_test (!gncVendorIsDirty (vendor), "test if start dirty");
+  gncVendorBeginEdit (vendor);
   set (vendor, str);
   do_test (gncVendorIsDirty (vendor), "test dirty later");
+  gncVendorCommitEdit (vendor);
+  do_test (!gncVendorIsDirty (vendor), "test dirty after commit");
   do_test (safe_strcmp (get (vendor), str) == 0, message);
   gncVendorSetActive (vendor, FALSE); count++;
 }
 
+#if 0
 static void
-test_numeric_fcn (GncBusiness *bus, const char *message,
+test_numeric_fcn (GNCBook *book, const char *message,
 		  void (*set) (GncVendor *, gnc_numeric),
 		  gnc_numeric (*get)(GncVendor *))
 {
-  GncVendor *vendor = gncVendorCreate (bus);
+  GncVendor *vendor = gncVendorCreate (book);
   gnc_numeric num = gnc_numeric_create (17, 1);
 
   do_test (!gncVendorIsDirty (vendor), "test if start dirty");
+  gncVendoryBeginEdit (vendor);
   set (vendor, num);
   do_test (gncVendorIsDirty (vendor), "test dirty later");
+  gncVendorCommitEdit (vendor);
+  do_test (!gncVendorIsDirty (vendor), "test dirty after commit");
   do_test (gnc_numeric_equal (get (vendor), num), message);
   gncVendorSetActive (vendor, FALSE); count++;
 }
+#endif
 
 static void
-test_bool_fcn (GncBusiness *bus, const char *message,
+test_bool_fcn (GNCBook *book, const char *message,
 	       void (*set) (GncVendor *, gboolean),
 	       gboolean (*get) (GncVendor *))
 {
-  GncVendor *vendor = gncVendorCreate (bus);
+  GncVendor *vendor = gncVendorCreate (book);
   gboolean num = get_random_boolean ();
 
   do_test (!gncVendorIsDirty (vendor), "test if start dirty");
+  gncVendorBeginEdit (vendor);
   set (vendor, FALSE);
   set (vendor, TRUE);
   set (vendor, num);
   do_test (gncVendorIsDirty (vendor), "test dirty later");
+  gncVendorCommitEdit (vendor);
+  do_test (!gncVendorIsDirty (vendor), "test dirty after commit");
   do_test (get (vendor) == num, message);
   gncVendorSetActive (vendor, FALSE); count++;
 }
 
+#if 0
 static void
-test_gint_fcn (GncBusiness *bus, const char *message,
+test_gint_fcn (GNCBook *book, const char *message,
 	       void (*set) (GncVendor *, gint),
 	       gint (*get) (GncVendor *))
 {
-  GncVendor *vendor = gncVendorCreate (bus);
+  GncVendor *vendor = gncVendorCreate (book);
   gint num = 17;
 
   do_test (!gncVendorIsDirty (vendor), "test if start dirty");
+  gncVendorBeginEdit (vendor);
   set (vendor, num);
   do_test (gncVendorIsDirty (vendor), "test dirty later");
+  gncVendorCommitEdit (vendor);
+  do_test (!gncVendorIsDirty (vendor), "test dirty after commit");
   do_test (get (vendor) == num, message);
   gncVendorSetActive (vendor, FALSE); count++;
 }
+#endif
 
 static void
 main_helper (int argc, char **argv)

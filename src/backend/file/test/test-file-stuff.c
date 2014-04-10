@@ -181,14 +181,14 @@ equals_node_val_vs_guid(xmlNodePtr node, const GUID *id)
 }
 
 gboolean
-equals_node_val_vs_commodity(xmlNodePtr node, const gnc_commodity *com)
+equals_node_val_vs_commodity(xmlNodePtr node, const gnc_commodity *com, GNCBook *book)
 {
     gnc_commodity *cmpcom;
 
     g_return_val_if_fail(node, FALSE);
     g_return_val_if_fail(com, FALSE);
 
-    cmpcom = dom_tree_to_commodity_ref_no_engine(node);
+    cmpcom = dom_tree_to_commodity_ref_no_engine(node, book);
 
     g_return_val_if_fail(cmpcom, FALSE);
 
@@ -262,9 +262,6 @@ just_dom_tree_end_handler(gpointer data_for_children,
                           gpointer parent_data, gpointer global_data,
                           gpointer *result, const gchar *tag)
 {
-    Transaction *trn = NULL;
-    gboolean successful = FALSE;
-    xmlNodePtr achild;
     xmlNodePtr tree = (xmlNodePtr)data_for_children;
     xmlNodePtr *globaldata = (xmlNodePtr*)global_data;
 
@@ -366,6 +363,9 @@ test_files_in_dir(int argc, char **argv, gxpf_callback cb,
         {
             if(!S_ISDIR(file_info.st_mode))
             {
+#if 0
+                printf( "testing load of file \"%s\":\n", argv[count] );
+#endif
                 test_load_file(to_open, cb, parser, parser_tag, book);
             }
         }

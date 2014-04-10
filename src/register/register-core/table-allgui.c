@@ -144,7 +144,7 @@ gnc_table_destroy (Table * table)
   g_free (table);
 }
 
-gboolean
+int
 gnc_table_current_cursor_changed (Table *table,
                                   gboolean include_conditional)
 {
@@ -304,6 +304,7 @@ gnc_table_get_io_flags (Table *table, VirtualLocation virt_loc)
 {
   TableGetCellIOFlagsHandler io_flags_handler;
   const char *cell_name;
+  CellIOFlags flags;
 
   if (!table || !table->model)
     return XACC_CELL_ALLOW_NONE;
@@ -315,7 +316,12 @@ gnc_table_get_io_flags (Table *table, VirtualLocation virt_loc)
   if (!io_flags_handler)
     return XACC_CELL_ALLOW_NONE;
 
-  return io_flags_handler (virt_loc, table->model->handler_user_data);
+  flags = io_flags_handler (virt_loc, table->model->handler_user_data);
+
+  if (gnc_table_model_read_only (table->model))
+    flags &= XACC_CELL_ALLOW_SHADOW;
+
+  return flags;
 }
 
 const char *
@@ -378,7 +384,7 @@ gnc_table_get_bg_color (Table *table, VirtualLocation virt_loc,
   bg_color_handler = gnc_table_model_get_bg_color_handler (table->model,
                                                            cell_name);
   if (!bg_color_handler)
-    return 0x0;
+    return 0xffffff;
 
   return bg_color_handler (virt_loc, hatching,
                            table->model->handler_user_data);
@@ -504,7 +510,7 @@ gnc_table_get_cell_location (Table *table,
 
       cell = gnc_cellblock_get_cell (cellblock, cell_row, cell_col);
       if (!cell)
-        return FALSE;
+        continue;
 
       if (gnc_basic_cell_has_name (cell, cell_name))
       {
@@ -526,12 +532,43 @@ gnc_table_get_cell_location (Table *table,
 void
 gnc_table_save_cells (Table *table, gpointer save_data)
 {
-  if (!table || !table->model->save_handler)
+  TableSaveHandler save_handler;
+  GList * cells;
+  GList * node;
+
+  g_return_if_fail (table);
+
+  /* ignore any changes to read-only tables */
+  if (gnc_table_model_read_only (table->model))
     return;
 
   gnc_table_leave_update (table, table->current_cursor_loc);
 
-  table->model->save_handler (save_data, table->model->handler_user_data);
+  save_handler = gnc_table_model_get_pre_save_handler (table->model);
+  if (save_handler)
+    save_handler (save_data, table->model->handler_user_data);
+
+  cells = gnc_table_layout_get_cells (table->layout);
+  for (node = cells; node; node = node->next)
+  {
+    BasicCell * cell = node->data;
+    TableSaveCellHandler save_cell_handler;
+
+    if (!cell) continue;
+
+    if (!gnc_table_layout_get_cell_changed (table->layout,
+                                            cell->cell_name, TRUE))
+      continue;
+
+    save_cell_handler = gnc_table_model_get_save_handler (table->model,
+                                                          cell->cell_name);
+    if (save_cell_handler)
+      save_cell_handler (cell, save_data, table->model->handler_user_data);
+  }
+
+  save_handler = gnc_table_model_get_post_save_handler (table->model);
+  if (save_handler)
+    save_handler (save_data, table->model->handler_user_data);
 }
 
 void 
@@ -920,26 +957,26 @@ gnc_table_realize_gui (Table * table)
 void
 gnc_table_wrap_verify_cursor_position (Table *table, VirtualLocation virt_loc)
 {
-   VirtualLocation save_loc;
-   gboolean moved_cursor;
+  VirtualLocation save_loc;
+  gboolean moved_cursor;
 
-   if (!table) return;
+  if (!table) return;
 
-   ENTER("(%d %d)", virt_loc.vcell_loc.virt_row, virt_loc.vcell_loc.virt_col);
+  ENTER("(%d %d)", virt_loc.vcell_loc.virt_row, virt_loc.vcell_loc.virt_col);
 
-   save_loc = table->current_cursor_loc;
+  save_loc = table->current_cursor_loc;
 
-   /* VerifyCursor will do all sorts of gui-independent machinations */
-   moved_cursor = gnc_table_verify_cursor_position (table, virt_loc);
+  /* VerifyCursor will do all sorts of gui-independent machinations */
+  moved_cursor = gnc_table_verify_cursor_position (table, virt_loc);
 
-   if (moved_cursor)
-   {
-      /* make sure *both* the old and the new cursor rows get redrawn */
-      gnc_table_refresh_current_cursor_gui (table, TRUE);
-      gnc_table_refresh_cursor_gui (table, save_loc.vcell_loc, FALSE);
-   }
+  if (moved_cursor)
+  {
+    /* make sure *both* the old and the new cursor rows get redrawn */
+    gnc_table_refresh_current_cursor_gui (table, TRUE);
+    gnc_table_refresh_cursor_gui (table, save_loc.vcell_loc, FALSE);
+  }
 
-   LEAVE ("\n");
+  LEAVE ("\n");
 }
 
 void        
@@ -981,7 +1018,14 @@ gnc_table_virtual_loc_valid(Table *table,
   /* check for a cell handler, but only if cell address is valid */
   if (vcell->cellblock == NULL) return FALSE;
 
+  /* if table is read-only, any cell is ok :) */
+  if (gnc_table_model_read_only (table->model)) return TRUE;
+
   io_flags = gnc_table_get_io_flags (table, virt_loc);
+
+  /* if the cell allows ENTER, then it is ok */
+  if (io_flags & XACC_CELL_ALLOW_ENTER) return TRUE;
+
   /* if cell is marked as output-only, you can't enter */
   if (0 == (XACC_CELL_ALLOW_INPUT & io_flags)) return FALSE;
 
@@ -1007,6 +1051,7 @@ gnc_table_enter_update (Table *table,
   CellBlock *cb;
   int cell_row;
   int cell_col;
+  CellIOFlags io_flags;
 
   if (table == NULL)
     return FALSE;
@@ -1026,6 +1071,10 @@ gnc_table_enter_update (Table *table,
   if (!cell)
     return FALSE;
 
+  io_flags = gnc_table_get_io_flags (table, virt_loc);
+  if (io_flags == XACC_CELL_ALLOW_READ_ONLY)
+    return FALSE;
+
   enter = cell->enter_cell;
 
   if (enter)
@@ -1040,7 +1089,14 @@ gnc_table_enter_update (Table *table,
     can_edit = enter (cell, cursor_position, start_selection, end_selection);
 
     if (safe_strcmp (old_value, cell->value) != 0)
+    {
+      if (gnc_table_model_read_only (table->model))
+      {
+        PWARN ("enter update changed read-only table");
+      }
+
       cell->changed = TRUE;
+    }
 
     g_free (old_value);
   }
@@ -1091,7 +1147,14 @@ gnc_table_leave_update (Table *table, VirtualLocation virt_loc)
     leave (cell);
 
     if (safe_strcmp (old_value, cell->value) != 0)
+    {
+      if (gnc_table_model_read_only (table->model))
+      {
+        PWARN ("leave update changed read-only table");
+      }
+
       cell->changed = TRUE;
+    }
 
     g_free (old_value);
   }
@@ -1138,8 +1201,14 @@ gnc_table_modify_update (Table *table,
   int cell_col;
   char * old_value;
 
-  if (table == NULL)
+  g_return_val_if_fail (table, NULL);
+  g_return_val_if_fail (table->model, NULL);
+
+  if (gnc_table_model_read_only (table->model))
+  {
+    PWARN ("change to read-only table");
     return NULL;
+  }
 
   cb = table->current_cursor;
 
@@ -1217,8 +1286,14 @@ gnc_table_direct_update (Table *table,
   int cell_col;
   char * old_value;
 
-  if (table == NULL)
+  g_return_val_if_fail (table, FALSE);
+  g_return_val_if_fail (table->model, FALSE);
+
+  if (gnc_table_model_read_only (table->model))
+  {
+    PWARN ("input to read-only table");
     return FALSE;
+  }
 
   cb = table->current_cursor;
 
@@ -1264,6 +1339,10 @@ gnc_table_direct_update (Table *table,
   return result;
 }
 
+static gboolean gnc_table_find_valid_cell_horiz (Table *table,
+                                                 VirtualLocation *virt_loc,
+                                                 gboolean exact_cell);
+
 static gboolean
 gnc_table_find_valid_row_vert (Table *table, VirtualLocation *virt_loc)
 {
@@ -1293,12 +1372,24 @@ gnc_table_find_valid_row_vert (Table *table, VirtualLocation *virt_loc)
     vloc.vcell_loc.virt_row = top;
     vcell = gnc_table_get_virtual_cell (table, vloc.vcell_loc);
     if (vcell && vcell->cellblock && vcell->visible)
-      break;
+    {
+      vloc.phys_row_offset = 0;
+      vloc.phys_col_offset = 0;
+
+      if (gnc_table_find_valid_cell_horiz (table, &vloc, FALSE))
+        break;
+    }
 
     vloc.vcell_loc.virt_row = bottom;
     vcell = gnc_table_get_virtual_cell (table, vloc.vcell_loc);
     if (vcell && vcell->cellblock && vcell->visible)
-      break;
+    {
+      vloc.phys_row_offset = 0;
+      vloc.phys_col_offset = 0;
+
+      if (gnc_table_find_valid_cell_horiz (table, &vloc, FALSE))
+        break;
+    }
 
     top--;
     bottom++;
@@ -1312,15 +1403,15 @@ gnc_table_find_valid_row_vert (Table *table, VirtualLocation *virt_loc)
   if (vloc.phys_row_offset >= vcell->cellblock->num_rows)
     vloc.phys_row_offset = vcell->cellblock->num_rows - 1;
 
-  *virt_loc = vloc;
+  virt_loc->vcell_loc = vloc.vcell_loc;
 
   return TRUE;
 }
 
 static gboolean
-gnc_table_find_valid_cell_horiz(Table *table,
-                                VirtualLocation *virt_loc,
-                                gboolean exact_cell)
+gnc_table_find_valid_cell_horiz (Table *table,
+                                 VirtualLocation *virt_loc,
+                                 gboolean exact_cell)
 {
   VirtualLocation vloc;
   VirtualCell *vcell;
@@ -1336,7 +1427,7 @@ gnc_table_find_valid_cell_horiz(Table *table,
   if (gnc_table_virtual_cell_out_of_bounds (table, virt_loc->vcell_loc))
     return FALSE;
 
-  if (gnc_table_virtual_loc_valid(table, *virt_loc, exact_cell))
+  if (gnc_table_virtual_loc_valid (table, *virt_loc, exact_cell))
     return TRUE;
 
   vloc = *virt_loc;

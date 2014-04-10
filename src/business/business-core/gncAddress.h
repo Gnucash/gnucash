@@ -7,14 +7,16 @@
 #ifndef GNC_ADDRESS_H_
 #define GNC_ADDRESS_H_
 
-#include "gncBusiness.h"
+#include "gnc-book.h"
+
+#define GNC_ADDRESS_MODULE_NAME	"gncAddress"
 
 struct _gncAddress;
 typedef struct _gncAddress GncAddress;
 
 /* Create/Destroy functions */
 
-GncAddress * gncAddressCreate (GncBusiness *business);
+GncAddress * gncAddressCreate (GNCBook *book, const GUID *parent);
 void gncAddressDestroy (GncAddress *addr);
 
 /* Set functions */
@@ -40,5 +42,12 @@ const char * gncAddressGetPhone (const GncAddress *addr);
 const char * gncAddressGetFax (const GncAddress *addr);
 const char * gncAddressGetEmail (const GncAddress *addr);
 gboolean gncAddressIsDirty (const GncAddress *addr);
+
+int gncAddressCompare (const GncAddress *a, const GncAddress *b);
+
+#define ADDRESS_NAME	"name"
+#define ADDRESS_PHONE	"phone"
+#define ADDRESS_FAX	"fax"
+#define ADDRESS_EMAIL	"email"
 
 #endif /* GNC_ADDRESS_H_ */

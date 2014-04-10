@@ -4,16 +4,21 @@ pkglib_LTLIBRARIES = libgncmod-backend-file.la
 
 AM_CFLAGS = \
   -I.. -I../.. \
-  -I../../engine \
-  -I../../gnc-module \
+  -I${top_srcdir}/src/backend \
+  -I${top_srcdir}/src/engine \
+  -I${top_srcdir}/src/gnc-module \
+  -I${top_srcdir}/src/core-utils\
+  -I${top_srcdir}/lib/libc\
   ${GLIB_CFLAGS}
 
 libgncmod_backend_file_la_SOURCES = \
   gncmod-backend-file.c \
   gnc-account-xml-v2.c \
   gnc-backend-file.c \
+  gnc-book-xml-v2.c \
   gnc-commodity-xml-v2.c \
   gnc-freqspec-xml-v2.c \
+  gnc-lot-xml-v2.c \
   gnc-pricedb-xml-v2.c \
   gnc-schedxaction-xml-v2.c \
   gnc-transaction-xml-v2.c \
@@ -49,4 +54,4 @@ noinst_HEADERS = \
 libgncmod_backend_file_la_LDFLAGS = -module
 libgncmod_backend_file_la_LIBADD = \
    ${GLIB_LIBS} ${GNOME_XML_LIB} \
-   ${top_srcdir}/src/engine/libgncmod-engine.la 
+   ${top_builddir}/src/engine/libgncmod-engine.la 

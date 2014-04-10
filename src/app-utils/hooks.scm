@@ -88,6 +88,11 @@
    'ui-startup-hook
    "Functions to run when the ui comes up.  Hook args: ()"))
 
+(define gnc:*ui-post-startup-hook*
+  (gnc:hook-define
+   'ui-post-startup-hook
+   "Functions to run after the ui comes up.  Hook args: ()"))
+
 (define gnc:*ui-shutdown-hook*
   (gnc:hook-define 
    'ui-shutdown-hook
@@ -96,7 +101,7 @@
 (define gnc:*book-opened-hook*
   (gnc:hook-define 
    'book-opened-hook
-   "Run after book open.  Hook args: book URL."))
+   "Run after book open.  Hook args: <gnc:Session*>."))
 
 (define gnc:*new-book-hook*
   (gnc:hook-define 
@@ -106,7 +111,12 @@
 (define gnc:*book-closed-hook*
   (gnc:hook-define 
    'book-closed-hook
-   "Run before file close.  Hook args: book URL"))
+   "Run before file close.  Hook args: <gnc:Session*>"))
+
+(define gnc:*report-hook*
+  (gnc:hook-define
+   'report-hook
+   "Run just before the reports are pushed into the menus.  Hook args: ()"))
 
 ;;(let ((hook (gnc:hook-lookup 'startup-hook)))
 ;;  (display (gnc:hook-name-get hook))

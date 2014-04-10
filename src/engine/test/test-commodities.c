@@ -3,6 +3,7 @@
 
 #include "gnc-engine-util.h"
 
+#include "gnc-book.h"
 #include "gnc-commodity.h"
 #include "gnc-engine.h"
 #include "gnc-module.h"

@@ -1,0 +1,623 @@
+# Dutch translation of GNUCash-glossary
+# Copyright (C) YEAR Free Software Foundation, Inc.
+# Jan-Willem Harmanny <jwharmanny@hotmail.com>, 2002
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Gnucash-glossary cvs\n"
+"POT-Creation-Date: 2002-02-09 06:21-0500\n"
+"PO-Revision-Date: 2002-02-26 00:00+100\n"
+"Last-Translator: Jan-Willem Harmanny <jwharmanny@hotmail.com>\n"
+"Language-Team: NL <NL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-15\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#. "English Definition"
+msgid "Term"
+msgstr "Begrip"
+
+#. "A detailed record of money spent and received"
+msgid "account"
+msgstr "rekening"
+
+#. "-"
+msgid "account code"
+msgstr "rekeningnummer"
+
+#. "the tree view of all accounts"
+msgid "account hierarchy"
+msgstr "rekening hierarchie"
+
+#. "-"
+msgid "account name"
+msgstr "rekening naam"
+
+#. "A thing, esp. owned by a person or company, that has value and can be used or sold to pay debts"
+msgid "account type: Asset"
+msgstr "rekening type: Aktiva"
+
+#. "(esp. US) (Brit = current account) a bank account from which money can be withdrawn without previous notice"
+msgid "account type: checking"
+msgstr "rekening type: Giro"
+
+#. "-"
+msgid "account type: currency"
+msgstr "rekening type: valuta"
+
+#. "see: Equity"
+msgid "account type: Equity"
+msgstr "rekening type: Eigen kapitaal"
+
+#. "-"
+msgid "account type: Expense"
+msgstr "rekening type: Uitgaven"
+
+#. "-"
+msgid "account type: Income"
+msgstr "rekening type: Inkomsten"
+
+#. "A debt, a financial obligation"
+msgid "account type: Liability"
+msgstr "rekening type: Passiva"
+
+#. "-"
+msgid "account type: money-market"
+msgstr "rekening type: valutamarkt"
+
+#. "-"
+msgid "account type: Mutual fund"
+msgstr "rekening type: gemeenschappelijke gelden"
+
+#. "1. (US) any type of account that earns interest 2. (Brit) any type of bank account that earns a higher level of interest than a current account or deposit account"
+msgid "account type: saving"
+msgstr "rekening type: spaar"
+
+#. "-"
+msgid "account type: Stock"
+msgstr "rekening type: Beurs"
+
+#. "-"
+msgid "account: parent account"
+msgstr "rekening: bovenliggende rekening (???)"
+
+#. "-"
+msgid "account: subaccount"
+msgstr "rekening: subrekening"
+
+#. "-"
+msgid "account: top level account"
+msgstr "rekening: bovenste niveau rekening"
+
+#. "The process of doing something that caused a transaction to happen"
+msgid "Action (register)"
+msgstr "Actie"
+
+#. "Automated teller machine"
+msgid "action: ATM"
+msgstr "Geldautomaat"
+
+#. "Transaction was an auto deposit"
+msgid "action: autoDep"
+msgstr "actie: autoDep"
+
+#. "-"
+msgid "action: buy"
+msgstr "actie: koop"
+
+#. "-"
+msgid "action: deposit"
+msgstr "actie: betaling"
+
+#. "When people can automatically deduct money straight from your account. The reverse of Direct Deposit."
+msgid "action: direct debit"
+msgstr "actie: direct debet"
+
+#. "transaction is a distribution (???)"
+msgid "action: dist"
+msgstr "uitschrijving"
+
+#. "transaction is a dividend"
+msgid "action: div"
+msgstr "divident"
+
+#. "-"
+msgid "action: fee"
+msgstr "actie: betaling"
+
+#. "transaction comes from interest"
+msgid "action: int"
+msgstr "actie: rente"
+
+#. "-"
+msgid "action: loan"
+msgstr "actie: lenen"
+
+#. "see: payment 1."
+msgid "action: payment"
+msgstr "actie: betaling"
+
+#. "-"
+msgid "action: POS"
+msgstr "actie: POS"
+
+#. "-"
+msgid "action: rebate"
+msgstr "actie: korting"
+
+#. "-"
+msgid "action: sell"
+msgstr "actie: verkoop"
+
+#. "-"
+msgid "action: Teller"
+msgstr "actie: Kassier"
+
+#. "see: transfer 2. (=credit transfer)"
+msgid "action: transfer"
+msgstr "actie: overboeken"
+
+#. "-"
+msgid "action: wire"
+msgstr "actie: draad"
+
+#. "-"
+msgid "action: withdraw"
+msgstr "actie: opnemen"
+
+#. "A sum of money"
+msgid "amount"
+msgstr "bedrag"
+
+#. "The result of adding several amounts together and then dividing this total by the number of amounts"
+msgid "average"
+msgstr "gemiddelde"
+
+#. "The amount of money that is in one's account"
+msgid "balance (noun)"
+msgstr "saldo"
+
+#. "A written record of money received and paid out, showing the difference between the two total amounts"
+msgid "balance sheet"
+msgstr "balans"
+
+#. "To arrange for income and spending to be equal"
+msgid "balance, to"
+msgstr "balans opmaken"
+
+#. "-"
+msgid "bank"
+msgstr "bank"
+
+#. "-"
+msgid "business (adjective)"
+msgstr "zakelijk"
+
+#. "Profits made from the sale of investments or property"
+msgid "capital gains"
+msgstr "opbrengst uit kapitaal"
+
+#. "Distinguishing the uppercase and lowercase letters"
+msgid "case sensitive"
+msgstr "hoofdletter gevoelig"
+
+#. "Money in coins or notes"
+msgid "cash"
+msgstr "contant"
+
+#. "(esp. US) (= cheque) A special printed form on which one writes an order to a bank to pay a sum of money from one's account to another person"
+msgid "check"
+msgstr "cheque"
+
+#. "To repair unbalanced transactions and orphan splits in an account tree. Any transactions that have debits != credits will get a balancing split added (pointing to a special new account called 'Imbalance'). Any splits that do not have accounts are put into another special account called 'Orphan'. Formerly known as 'to scrub'."
+msgid "check and repair, to"
+msgstr "controleren en repareren"
+
+#. "To end an application's relationship with an open file so that the application will no longer be able to access the file without opening it again. "
+msgid "close, to"
+msgstr "sluiten"
+
+#. "An article that is bought and sold. The most general term of what an account keeps track of, e.g. a currency or a stock."
+msgid "commodity"
+msgstr "(munt)eenheid"
+
+#. "e.g. NASDAQ"
+msgid "commodity listing"
+msgstr "beurskoerslijst"
+
+#. "the smallest amount of a commodity that's traded (e.g. 1/100 for USD, 1 for most stocks)"
+msgid "commodity option: fraction"
+msgstr "fractie"
+
+#. "e.g. USD, DEM"
+msgid "commodity option: Symbol"
+msgstr "symbool"
+
+#. "(a) A sum of money paid into an account. (b) A record of such a payment. (c) The state of having money in one's bank account."
+msgid "Credit (column in register)"
+msgstr "Credit"
+
+#. "-"
+msgid "Credit Card"
+msgstr "Credit Card"
+
+#. "A transfer of money direct from one bank account to another, without using a cheque"
+msgid "credit transfer"
+msgstr "overboeken"
+
+#. "The system of money used in a country"
+msgid "currency"
+msgstr "valuta"
+
+#. "Custom print format (i.e. according to the user's wishes) as opposed to a template choice."
+msgid "Custom"
+msgstr "Aangepast"
+
+#. "The backend where the data is stored."
+msgid "database"
+msgstr "database"
+
+#. "A specific numbered day of the month"
+msgid "Date"
+msgstr "Datum"
+
+#. "DD/MM/YY or MM/DD/YY or something else"
+msgid "date format"
+msgstr "Datum indeling"
+
+#. "A range in time that is delimited by two distinct dates."
+msgid "date range"
+msgstr "tijdzone"
+
+#. "(a) A written note in an account of a sum owed or paid out. (b) A sum withdrawn from an account."
+msgid "Debit (column in register)"
+msgstr "Debet"
+
+#. "Each option has a default setting that it is shipped with, until the user changes the setting."
+msgid "default"
+msgstr "standaard"
+
+#. "see credit"
+msgid "deposit (in the reconcile dialog)"
+msgstr "deposito"
+
+#. "The process of something becoming less valuable"
+msgid "depreciation"
+msgstr "waardevermindering"
+
+#. "1. One textfield per transaction. The text in it should describe what the transaction was about. A short descriptive phrase (up to 40 chars) 2. One textfield per account. It is intended to be a longer, 1-5 sentence description of what this account is all about."
+msgid "Description (column in register)"
+msgstr "Beschrijving"
+
+#. "Important Buzzword :)"
+msgid "double entry"
+msgstr "dubbel invoeren"
+
+#. "1. The money value of a property after all charges on it have been paid. Equity isn't debt, it's a representation of long-term capital (So combining it with liability isn't really very meaningful, except in the balance sheet. 2. (a) The value of the shares issued by  a company. (b) Ordinary stocks and shares that carry no fixed interest."
+msgid "equity"
+msgstr "eigen kapitaal"
+
+#. "The relation in value between the money used in different countries"
+msgid "exchange rate"
+msgstr "wisselkoers"
+
+#. "in the account creation dialog??"
+msgid "field"
+msgstr "veld"
+
+#. "Any piece of information (text, graphics, executable) put together and given a name. All the information you have on the hard drive is arranged as a collection of  files."
+msgid "file"
+msgstr "bestand"
+
+#. "-"
+msgid "file type"
+msgstr "bestandstype"
+
+#. "-"
+msgid "financial calculator: interest rate"
+msgstr "rentepercentage"
+
+#. "see: payment"
+msgid "financial calculator: payments"
+msgstr "betalingen"
+
+#. "An increase in wealth; profit; advantage (See also: capital gains)"
+msgid "gain"
+msgstr "opbrengsten"
+
+#. "Name of an automaticly created account to get imbalanced transactions back in balance"
+msgid "imbalance"
+msgstr "onbalans"
+
+#. "Process of extracting data from a non-Gnucash format into a Gnucash file. E.g. QIF Import."
+msgid "import"
+msgstr "importeren"
+
+#. "Money charged for borrowing money, or paid to somebody who invests money"
+msgid "interest"
+msgstr "interest"
+
+#. "A list of goods sold or services provided together with the prices charged; a bill"
+msgid "invoice"
+msgstr "rekening"
+
+#. "A book in which a bank, business firm, etc. records its financial accounts"
+msgid "ledger"
+msgstr "grootboek"
+
+#. "The heading for the right side of the balance sheet. See also: Equity."
+msgid "liabilities/equity"
+msgstr "passiva"
+
+#. "The money lost in business activity"
+msgid "loss"
+msgstr "verlies"
+
+#. "name of an automatically created account"
+msgid "Lost Accounts"
+msgstr "Verloren Rekeningen"
+
+#. "The thing that the scatter plot uses to mark each data point"
+msgid "marker"
+msgstr "markeerstift"
+
+#. "The way how more than one window is displayed in GnuCash at the same time. MDI = Multiple Document Interface."
+msgid "MDI modus"
+msgstr "MDI modus"
+
+#. "One textfield per split that should help you remember what this split was about."
+msgid "Memo"
+msgstr "Memo"
+
+#. "e.g. USD, DEM, see Currency."
+msgid "national currency"
+msgstr "nationale valuta"
+
+#. "(of money) remaining when nothing more is to be taken away"
+msgid "net"
+msgstr "netto"
+
+#. "net total of all assets"
+msgid "net assets"
+msgstr "netto bezit"
+
+#. "The total income minus the total expenses of a given time period."
+msgid "net profit"
+msgstr "netto winst"
+
+#. "Your net worth is your assets minus your liabilities. If your accounts are balanced, your net worth should equal your equity plus your net profit."
+msgid "net worth"
+msgstr "netto waarde"
+
+#. "One textfield per transaction that can hold explanatory text about the transaction."
+msgid "notes (register)"
+msgstr "opmerkingen"
+
+#. "Abbreviation for: number; Field in a transaction. If this transaction was done by check, then the check number should be noted in this field."
+msgid "Num (column in register)"
+msgstr "Nr"
+
+#. "to make accessible"
+msgid "open, to"
+msgstr "openen"
+
+#. "If an account starts with a non-zero balance, then this amount is called the opening balance."
+msgid "opening balance"
+msgstr "aanvangs saldo"
+
+#. "A menu choice in the graphical user interface that allows the user to specify how the application will act each time it is used. "
+msgid "options"
+msgstr "opties"
+
+#. "Name of an automatically created account that holds splits that have no account."
+msgid "orphan"
+msgstr "uitboekingen rekening"
+
+#. "A secret phrase that one needs to know in order to get access to a user account "
+msgid "passphrase"
+msgstr "wachtwoord"
+
+#. "An amount that must be paid / An amount for which money has not yet been received"
+msgid "Payables/Receivables"
+msgstr "Te betalen/Vorderingen"
+
+#. "A person to whom sth is paid"
+msgid "payee"
+msgstr "Betalingsontvanger"
+
+#. "A person who pays or who has to pay for sth"
+msgid "payer"
+msgstr "betaler"
+
+#. "1. The action of paying sb/sth or of being paid. 2. A sum of money paid."
+msgid "payment"
+msgstr "betaling"
+
+#. "A set of investments owned by a person"
+msgid "portfolio"
+msgstr "portfolio"
+
+#. "A menu choice in many graphical user interface applications that allows the user to specify how the application will act each time it is used. "
+msgid "preferences"
+msgstr "instellingen"
+
+#. "An amount of money for which sth may be bought or sold"
+msgid "price (in a split)"
+msgstr "prijs"
+
+#. "An ask is an offer to sell, and the price you want to sell at."
+msgid "price type: ask"
+msgstr "prijstype: vraag"
+
+#. "A bid is an offer to buy, and the price you want to buy at."
+msgid "price type: bid"
+msgstr "prijstype: aanbod"
+
+#. "online quotes (rather: quotation!?) A statement of the current price of stocks or commodities"
+msgid "price: quotes"
+msgstr "prijs: noteringen"
+
+#. "Money gained in business, esp. the difference between the amount earned and the amount spent"
+msgid "profit"
+msgstr "winst"
+
+#. "(rather: profit and loss account!?) A list that shows the amount of money spent compared with the amount earned by a business in a particular period"
+msgid "Profit & Loss"
+msgstr "Winst & Verlies"
+
+#. "-"
+msgid "quick-fill"
+msgstr "quick-fill"
+
+#. "-"
+msgid "rebalance, to (a transaction)"
+msgstr "opnieuw berekenen"
+
+#. "reconcile an account, a reconciled split. To find a way to make the bank's account statement agree with the user's recorded transactions in an account."
+msgid "reconcile, to"
+msgstr "overeenbrengen"
+
+#. "-"
+msgid "record keeping"
+msgstr "boekhouding"
+
+#. "A list of items; a book containing such a list"
+msgid "register"
+msgstr "register (of, gezien de context, kasboek?)"
+
+#. "A transaction that is divided into two or more parts"
+msgid "register entry: split transaction"
+msgstr "register ingang: verdeelde transactie"
+
+#. "-"
+msgid "register entry: stock split"
+msgstr "register ingang: beurs splitsing"
+
+#. "one form of register"
+msgid "register: auto-split ledger"
+msgstr "register: auto-splitsing grootboek"
+
+#. "another form of register"
+msgid "register: basic ledger"
+msgstr "register: basis grootboek"
+
+#. "another form of register"
+msgid "register: general ledger"
+msgstr "register: algemeen grootboek"
+
+#. "another form of register"
+msgid "register: transaction journal"
+msgstr "register: transactie verslag"
+
+#. "reload the current document"
+msgid "reload, to"
+msgstr "opnieuw laden"
+
+#. "name of an equity account (?); to be distinguished from the opening balance."
+msgid "Retained Earnings"
+msgstr "winst reserves"
+
+#. "To write data (typically a file) to a storage medium, such as a disk or tape."
+msgid "save, to (to a file)"
+msgstr "opslaan"
+
+#. "DEPRECATED. To repair unbalanced transactions and orphan splits in an account tree. Any transactions that have debits != credits will get a balancing split added (pointing to a special new account called 'Imbalance'). Any splits that do not have accounts are put into another special account called 'Orphan'. Deprecated - use the term 'to check and repair' now."
+msgid "scrub, to"
+msgstr "uitboeken"
+
+#. "A document or certificate showing who owns shares"
+msgid "security"
+msgstr "waardepapier"
+
+#. "-"
+msgid "Share Balance (register)"
+msgstr "Aandelen saldo"
+
+#. "Any of the equal parts into which the money of a business company is divided, giving the holder a right to a portion of the profits"
+msgid "shares"
+msgstr "aandelen"
+
+#. "(of a price) A place wfrom which sth comes or is obtained"
+msgid "source"
+msgstr "bron"
+
+#. "One of the two or several parts a transaction is divided into"
+msgid "split"
+msgstr "deel"
+
+#. "This sets the particular design or shape of a report."
+msgid "style sheet"
+msgstr "style sheet"
+
+#. "The total of a set of figures that are part of a larger group of figures"
+msgid "subtotal"
+msgstr "subtotaal"
+
+#. "field of an account"
+msgid "tax info"
+msgstr "informatie voor belasting"
+
+#. "if you create a new e.g. style sheet, you can start from a template"
+msgid "template"
+msgstr "voorbeeld"
+
+#. "see: date range"
+msgid "time period"
+msgstr "tijdzone"
+
+#. "as abbreviation for Total"
+msgid "Tot"
+msgstr "Tot"
+
+#. "The full number or amount: total of some balances, of any account's running balance etc."
+msgid "total"
+msgstr "totaal"
+
+#. "A piece of business done; the transfer of money from one account to one or more other accounts"
+msgid "transaction"
+msgstr "transactie"
+
+#. "-"
+msgid "transaction state: cleared"
+msgstr "transactie status: verrekend"
+
+#. "-"
+msgid "transaction state: frozen"
+msgstr "transactie status: bevroren"
+
+#. "A transaction that was reconciled with the bank's statement."
+msgid "transaction state: reconciled"
+msgstr "transactie status: overeengebracht"
+
+#. "1. The action of transferring sth. 2. see: credit transfer"
+msgid "transfer (noun)"
+msgstr "overboeking"
+
+#. "The account where an amount is transferred to"
+msgid "transfer account"
+msgstr "begunstigde rekening"
+
+#. "To move money from one account to another. Will create a transaction."
+msgid "transfer, to (register toolbar)"
+msgstr "overboeken"
+
+#. "A class or things that have characteristics in common; type of an account, of a commodity etc."
+msgid "type"
+msgstr "type"
+
+#. "A fixed amount or number used as a standard of measurement; e.g. millimeters, inch; for absolute positioning in the custom check format."
+msgid "units"
+msgstr "eenheden"
+
+#. "-"
+msgid "URL"
+msgstr "URL"
+
+#. "The worth of sth in terms of money or other commodities for which it can be exchanged"
+msgid "value (in a split)"
+msgstr "waarde"
+
+#. "see debit"
+msgid "withdraw (in the reconcile dialog)"
+msgstr "uitgave"
+

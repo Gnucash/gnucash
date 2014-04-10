@@ -37,6 +37,8 @@ parser_env_ptr init_parser(
                                                       void *left_value,
                                                       void *right_value),
                            void          *negate_numeric(void *value),
-                           void           free_numeric(void *numeric_value));
+                           void           free_numeric(void *numeric_value),
+                           void		 *func_op( const char *fname,
+                                                   int argc, void **argv ) );
 
 #endif

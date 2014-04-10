@@ -34,6 +34,7 @@
 #include <glib.h>
 
 #include "Account.h"
+#include "Backend.h"
 #include "Transaction.h"
 #include "gnc-book.h"
 #include "gnc-commodity.h"
@@ -41,10 +42,15 @@
 #include "gnc-pricedb.h"
 #include "SchedXaction.h"
 
+#include "sixtp.h"
+
 typedef struct
 {
     int accounts_total;
     int accounts_loaded;
+
+    int books_total;
+    int books_loaded;
 
     int commodities_total;
     int commodities_loaded;
@@ -59,12 +65,46 @@ typedef struct
     int schedXactions_loaded;
 } load_counter;
 
-typedef struct
+typedef struct sixtp_gdv2 sixtp_gdv2;
+typedef void (*countCallbackFn)(sixtp_gdv2 *gd, const char *type);
+struct sixtp_gdv2
 {
     GNCBook *book;
     load_counter counter;
-    void (*countCallback)(const char *type, load_counter counter);
-} sixtp_gdv2;
+    countCallbackFn countCallback;
+    GNCBePercentageFunc gui_display_fn;
+    gboolean exporting;
+};
+
+/**
+ * Struct used to pass in a new data type for XML storage.  This contains
+ * the set of callbacks to read and write XML for new data objects..  New
+ * types should register an instance of this object with the engine.
+ *
+ * The create_parser() method will create a new sixtp parser for this
+ *   data type.
+ *
+ * The add_item() method takes a local state and a new object of this type
+ *   and the method implementation should do whatever is necessary to cleanup
+ *   the object and (maybe) add it into the book stored in the local-state.
+ *
+ * The get_count() method returns the number of items of this type.
+ *
+ * The write() method writes out all the objects of this particular type
+ *   in the book and stores the XML in the FILE.
+ */
+#define GNC_FILE_BACKEND	"gnc:file:2"
+#define GNC_FILE_BACKEND_VERS	2
+typedef struct
+{
+  int		version;	/* backend version number */
+  const char *	type_name;	/* The XML tag for this type */
+
+  sixtp *	(*create_parser) (void);
+  gboolean	(*add_item)(sixtp_gdv2 *, gpointer obj);
+  int		(*get_count) (GNCBook *);
+  void		(*write) (FILE*, GNCBook*);
+} GncXmlDataType_t;
 
 /**
  * Struct used to pass the account group/accounts and trasnactions in
@@ -74,23 +114,25 @@ typedef struct
  **/
 typedef struct
 {
-	GList	*accts;
-	GList	*transactions;
+	AccountList	*accts;
+	TransList	*transactions;
         GNCBook *book;
 } gnc_template_xaction_data;
 
+/* Call after loading each record */
+void run_callback(sixtp_gdv2 *data, const char *type);
+
 /* read in an account group from a file */
-gboolean gnc_session_load_from_xml_file_v2(
-    GNCSession *session,
-    void (*countcallback)(const char *type, load_counter count));
+gboolean gnc_session_load_from_xml_file_v2(GNCSession *session);
 
 /* write all book info to a file */
 gboolean gnc_book_write_to_xml_filehandle_v2(GNCBook *book, FILE *fh);
-gboolean gnc_book_write_to_xml_file_v2(GNCBook *book, const char *filename);
+gboolean gnc_book_write_to_xml_file_v2(GNCBook *book, const char *filename, gboolean compress);
 
 /* write just the commodities and accounts to a file */
-gboolean gnc_book_write_accounts_to_xml_filehandle_v2(GNCBook *book,
-                                                      FILE *out);
+gboolean gnc_book_write_accounts_to_xml_filehandle_v2(Backend *be, GNCBook *book, FILE *fh);
+gboolean gnc_book_write_accounts_to_xml_file_v2(Backend * be, GNCBook *book,
+						const char *filename);
 
 /* The is_gncxml_file() routine checks to see if the first few 
  * chars of the file look like gnc-xml data.

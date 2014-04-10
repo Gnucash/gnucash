@@ -27,7 +27,7 @@
  * Implements the callbacks for the postgres backend.
  *
  * HISTORY:
- * Copyright (c) 2000, 2001 Linas Vepstas 
+ * Copyright (c) 2000, 2001, 2002 Linas Vepstas <linas@linas.org>
  */
 
 
@@ -85,6 +85,7 @@ struct _pgend {
 
    /* notify counters */
    int do_account;
+   int do_book;
    int do_checkpoint;
    int do_price;
    int do_session;
@@ -109,7 +110,10 @@ struct _pgend {
 
    /* engine data caches */
    GNCSession *session;
-   GNCBook *book;
+   GNCBook *book;  /* the currently open book -- XXX -- depricate ???*/
+   BookList *blist;  /* list of books in this db */
+
+   GList *tmp_return;
 };
 
 /*
@@ -117,28 +121,13 @@ struct _pgend {
  */
 Backend * pgendNew (void);
 
-AccountGroup * pgendGetTopGroup (PGBackend *be);
+Account * pgendAccountLookup (PGBackend *be, const GUID *acct_guid);
+Transaction * pgendTransLookup (PGBackend *be, const GUID *txn_guid);
+Split * pgendSplitLookup (PGBackend *be, const GUID *split_guid);
+GNCPrice * pgendPriceLookup (PGBackend *be, const GUID *price_guid);
+GNCIdType pgendGUIDType (PGBackend *be, const GUID *guid);
 
 void pgendDisable (PGBackend *be);
 void pgendEnable (PGBackend *be);
-
-void pgendStoreOneTransactionOnly (PGBackend *be, Transaction *ptr, sqlBuild_QType update);
-
-void pgendPutOneAccountOnly (PGBackend *be, Account *ptr);
-void pgendPutOneCommodityOnly (PGBackend *be, gnc_commodity *ptr);
-void pgendPutOnePriceOnly (PGBackend *be, GNCPrice *ptr);
-void pgendPutOneSplitOnly (PGBackend *be, Split *ptr);
-void pgendPutOneTransactionOnly (PGBackend *be, Transaction *ptr);
-
-int pgendAccountCompareVersion (PGBackend *be, Account *ptr);
-int pgendPriceCompareVersion (PGBackend *be, GNCPrice *ptr);
-int pgendTransactionCompareVersion (PGBackend *be, Transaction *ptr);
-
-void pgendStoreAuditAccount (PGBackend *be, Account *ptr, sqlBuild_QType update);
-void pgendStoreAuditPrice (PGBackend *be, GNCPrice *ptr, sqlBuild_QType update);
-void pgendStoreAuditSplit (PGBackend *be, Split *ptr, sqlBuild_QType update);
-void pgendStoreAuditTransaction (PGBackend *be, Transaction *ptr, sqlBuild_QType update);
-
-int pgendTransactionGetDeletedVersion (PGBackend *be, Transaction *ptr);
 
 #endif /* POSTGRES_BACKEND_H */

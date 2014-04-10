@@ -14,27 +14,34 @@
 #include "gw-engine.h"
 
 /* version of the gnc module system interface we require */
-int gnc_module_system_interface = 0;
+int libgncmod_engine_LTX_gnc_module_system_interface = 0;
 
 /* module versioning uses libtool semantics. */
-int gnc_module_current  = 0;
-int gnc_module_revision = 0;
-int gnc_module_age      = 0;
+int libgncmod_engine_LTX_gnc_module_current  = 0;
+int libgncmod_engine_LTX_gnc_module_revision = 0;
+int libgncmod_engine_LTX_gnc_module_age      = 0;
+
+/* forward references */
+char *libgncmod_engine_LTX_gnc_module_path(void);
+char *libgncmod_engine_LTX_gnc_module_description(void);
+int libgncmod_engine_LTX_gnc_module_init(int refcount);
+int libgncmod_engine_LTX_gnc_module_end(int refcount);
+
 
 char *
-gnc_module_path(void) 
+libgncmod_engine_LTX_gnc_module_path(void) 
 {
   return g_strdup("gnucash/engine");
 }
 
 char * 
-gnc_module_description(void) 
+libgncmod_engine_LTX_gnc_module_description(void) 
 {
   return g_strdup("The Gnucash accounting engine");
 }
 
 int
-gnc_module_init(int refcount) 
+libgncmod_engine_LTX_gnc_module_init(int refcount) 
 {
   if(refcount == 0) 
   {
@@ -43,7 +50,9 @@ gnc_module_init(int refcount)
   }
   
   gh_eval_str("(use-modules (gnucash engine))");
-  gh_eval_str("(use-modules (g-wrapped gw-glib))");
+
+  gh_eval_str("(use-modules (g-wrap gw-glib))");
+
   gh_eval_str("(use-modules (g-wrapped gw-kvp))");
   gh_eval_str("(use-modules (g-wrapped gw-engine))");
 
@@ -51,7 +60,7 @@ gnc_module_init(int refcount)
 }
 
 int
-gnc_module_end(int refcount) {
+libgncmod_engine_LTX_gnc_module_end(int refcount) {
   return TRUE;
 }
 

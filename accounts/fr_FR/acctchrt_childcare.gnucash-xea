@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<gnc-account-example>
+    <gnc-act:title>
+      Dépenses de garderie
+    </gnc-act:title>
+    <gnc-act:short-description>
+      Un compte de suivi des coûts de garderie d'enfants
+    </gnc-act:short-description>
+    <gnc-act:long-description>
+    Vous devriez sélectionner cet ensemble de comptes si vous avez des dépenses de garderie.
+  </gnc-act:long-description>    
+<gnc:account version="2.0.0">
+  <act:name>Dépenses</act:name>
+  <act:id type="new">ee8238ee2c2ce590160761df09b99b72</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Dépenses</act:description>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Garderie</act:name>
+  <act:id type="new">8999739a6bfc46088a3ea5ec45e5f8a4</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Garderie</act:description>
+  <act:parent type="new">ee8238ee2c2ce590160761df09b99b72</act:parent>
+</gnc:account>
+</gnc-account-example>
+
+<!-- Local variables: -->
+<!-- mode: xml        -->
+<!-- End:             -->

@@ -230,7 +230,7 @@ test_monthly (void)
 static void
 test_month_relative (void)
 {
-	guint32 interval, i, start_julian, monthday, month, j, day_of_year;
+	guint32 interval, i, start_julian, monthday, month, j;
 	FreqSpec *fs;
 	GDate date0, date1, date2, next_date;
 
@@ -345,9 +345,8 @@ test_month_relative (void)
 static void
 test_composite (void)
 {
-	guint32 interval, i, start_julian, monthday, month, j, day_of_year;
 	FreqSpec *fs, *fs2;
-	GDate date0, date1, date2, next_date;
+	GDate date0, date1, date2;
 
 	fs = xaccFreqSpecMalloc(book);
 

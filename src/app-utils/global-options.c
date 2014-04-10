@@ -354,7 +354,20 @@ gnc_default_currency (void)
   gnc_commodity *currency;
 
   currency = gnc_lookup_currency_option ("International",
-                                         "Default Currency", NULL);
+                                         "New Account Default Currency", NULL);
+  if (currency)
+    return currency;
+
+  return gnc_locale_default_currency ();
+}
+
+gnc_commodity *
+gnc_default_report_currency (void)
+{
+  gnc_commodity *currency;
+
+  currency = gnc_lookup_currency_option ("International",
+                                         "Default Report Currency", NULL);
   if (currency)
     return currency;
 
@@ -424,6 +437,23 @@ gboolean
 gnc_set_boolean_option(const char *section, const char *name, gboolean value)
 {
   return gnc_option_db_set_boolean_option(global_options, section, name, value);
+}
+
+
+/********************************************************************\
+ * gnc_set_string_option                                            *
+ *   sets the string option to the given value. If successful       *
+ *   returns TRUE, otherwise FALSE.                                 *
+ *                                                                  *
+ * Args: section   - section name of option                         *
+ *       name      - name of option                                 *
+ *       value     - value to set to                                *
+ * Return: success indicator                                        *
+\********************************************************************/
+gboolean
+gnc_set_string_option(const char *section, const char *name, const char *value)
+{
+  return gnc_option_db_set_string_option(global_options, section, name, value);
 }
 
 

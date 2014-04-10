@@ -22,7 +22,7 @@
 (cond
  ((or (string=? "1.3" (version))
       (string=? "1.3.4" (version))
-      (string=? "1.4" (version)))
+      (string=? "1.4" (substring (version) 0 3)))
   
   (use-modules (ice-9 slib))
   (require 'macro-by-example)

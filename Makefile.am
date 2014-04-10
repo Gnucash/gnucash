@@ -1,9 +1,18 @@
 
-SUBDIRS = macros debian intl doc-tools doc lib src intl-scm po rpm accounts
+SUBDIRS = intl  m4  macros debian doc lib src intl-scm po rpm accounts
 
 docdir = ${GNC_DOC_INSTALL_DIR}
 
-noinst_DATA = make-gnucash-patch make-gnucash-potfiles @GNC_TAGS_FILE@
+GNC_CTAGS_FILE = @GNC_CTAGS_FILE@
+GNC_ETAGS_FILE = @GNC_ETAGS_FILE@
+
+if GNC_FALSE
+noinst_PROGRAMS = dummy
+
+dummy_SOURCES = dummy.c
+endif
+
+noinst_DATA = make-gnucash-patch make-gnucash-potfiles
 
 doc_DATA = \
   AUTHORS \
@@ -30,7 +39,7 @@ m4data_DATA = gnucash.m4
 # Don't list any directories or you'll get *everything*, including the
 # CVS dirs.
 
-EXTRA_DIST = \
+EXTRA_DIST = config.rpath  \
   .cvsignore \
   ChangeLog.1 \
   HACKING \
@@ -45,11 +54,14 @@ EXTRA_DIST = \
   po/glossary/da.po \
   po/glossary/de.po \
   po/glossary/es.po \
+  po/glossary/es_NI-policy.txt \
   po/glossary/gnc-glossary.txt \
   po/glossary/txt-to-pot.sh \
   intltool-extract.in \
   intltool-merge.in \
-  intltool-update.in
+  intltool-update.in \
+  Makefile.DEPS \
+  distdep-automake1.4-hack
 
 bin_SCRIPTS = gnucash-config
 
@@ -61,20 +73,22 @@ CLEANFILES = gnucash-config
 ## the sed substitutions.
 make-gnucash-patch: make-gnucash-patch.in
 	rm -f $@.tmp
-	sed < $@.in > $@.tmp \
+	sed < $< > $@.tmp \
             -e 's:@-PERL-@:${PERL}:g'
 	chmod +x $@.tmp
 	mv $@.tmp $@
 
 make-gnucash-potfiles: make-gnucash-potfiles.in
 	rm -f $@.tmp
-	sed < $@.in > $@.tmp \
+	sed < $< > $@.tmp \
             -e 's:@-PERL-@:${PERL}:g'
 	chmod +x $@.tmp
 	mv $@.tmp $@
 
 DISTCLEANFILES = \
-  cscope.files cscope.out etags.files make-gnucash-patch
+  intltool-extract intltool-update intltool-merge\
+  cscope.files cscope.out etags.files make-gnucash-patch \
+  make-gnucash-potfiles po/.intltool-merge-cache
 
 cscope.files:
 	find . -name '*.[ch]' > cscope.files
@@ -82,27 +96,76 @@ cscope.files:
 cscope.out: cscope.files
 	cscope -b
 
-if GNC_TAGS_FILE
+if GNC_ETAGS_FILE
 
-etags.files: $(shell find . -type d)
-	find . -path './debian' -prune -o -name '*.[ch]' -print -o -name '*.scm' -print | sort > etags.files.tmp
-	@if cmp --quiet etags.files etags.files.tmp; \
-        then \
-          echo "TAGS file list hasn't changed."; \
-          rm -f etags.files.tmp; \
-        else \
-          echo "TAGS file list has changed."; \
-          mv etags.files.tmp etags.files; \
-        fi
-
-TAGS: etags.files $(shell cat etags.files)
-	etags `cat etags.files`
+etags:
+        # make sure etags.files is up to date.
+	${MAKE} -f Makefile.TAGS etags.files
+        # now use the contents of etags.files to re-make TAGS if needed.
+	${MAKE} -f Makefile.TAGS etags
 
 else
 
-TAGS:
-	@echo "You must ./configure with --enable-etags to use TAGS."
+etags:
+	@echo "You must ./configure with --enable-etags to use ctags."
 
 endif
 
-.PHONY: TAGS
+if GNC_CTAGS_FILE
+
+ctags:
+        # make sure etags.files is up to date.
+	${MAKE} -f Makefile.TAGS etags.files
+        # now use the contents of etags.files to re-make TAGS if needed.
+	${MAKE} -f Makefile.TAGS ctags
+
+else
+
+ctags:
+	@echo "You must ./configure with --enable-ctags to use ctags."
+
+endif
+
+.PHONY: etags ctags
+
+ACLOCAL_AMFLAGS = -I m4
+
+.PHONY: doc
+doc:
+	$(MAKE) -C src/doc doc
+
+.PHONY: distdep
+
+#
+# All references to distdep-automake1.4-hack can be removed when
+# Automake 1.4 is no longer used to compile gnucash.  The files
+# Makefile.DEPS and src/bin/strsub.c are also specific to AM 1.4 and
+# can be removed at the same time.  See the commit at 2003-01-15 00:45
+# UTC for more information.
+#
+distdep-automake1.4-hack: distdep
+	: > distdep-automake1.4-hack
+
+distdep:
+	test x"$(DEP_FILES)" = x || \
+	$(MAKE) $(AM_MAKE_FLAGS) -f ${top_srcdir}/Makefile.DEPS \
+		all-distdep-recursive
+
+dist-hook:
+	rm -f $(distdir)/distdep-automake1.4-hack
+	rm -f distdep-automake1.4-hack
+
+distcleancheck_listfiles = \
+  find -type f -exec sh -c 'test -f ${srcdir}/{} || echo {}' ';'
+
+# ack this is stupid
+distcheck-hook:
+	: > "$(distdir)/=build/distcleancheck1.5-is-stupid"
+
+distclean-local:
+	-test -f distcleancheck1.5-is-stupid \
+	&& rm -f distcleancheck1.5-is-stupid \
+	&& find . -type f -exec sh -c 'test -f ${srcdir}/{} && rm -f {}' ';'
+
+libtool: $(LIBTOOL_DEPS)
+	$(SHELL) ./config.status --recheck

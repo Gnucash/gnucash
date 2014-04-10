@@ -41,13 +41,37 @@ void gnc_ui_select_commodity_destroy(SelectCommodityWindow * w);
 
 void gnc_ui_commodity_destroy(CommodityWindow * w);
 
+/*Offer the user to select a commodity matching exchange_code,
+ fullname and mnemonic.  If the user decides to create a new one, those
+ values are used as default.  If fullname is NULL, the user won't be
+ told he has to match anything in perticular.*/
+
+gnc_commodity * 
+gnc_ui_select_commodity_modal_full(gnc_commodity * orig_sel, 
+				   GtkWidget * parent,
+				   char * user_message,
+				   char * exchange_code,
+				   char * fullname,
+				   char * mnemonic,
+				   int fraction);
+
 gnc_commodity * 
 gnc_ui_select_commodity_modal(gnc_commodity * orig_sel, 
                               GtkWidget * parent);
 
+
+gnc_commodity * 
+gnc_ui_new_commodity_modal_full(const char * default_namespace, 
+				GtkWidget * parent,
+				char * exchange_code,
+				char * fullname,
+				char * mnemonic,
+				int fraction);
+
 gnc_commodity * 
 gnc_ui_new_commodity_modal(const char * default_namespace, 
-                           GtkWidget * parent);
+                           GtkWidget * parent
+			   );
 
 gboolean
 gnc_ui_edit_commodity_modal(gnc_commodity *commodity,

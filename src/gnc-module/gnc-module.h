@@ -35,6 +35,7 @@ GList         * gnc_module_system_modinfo(void);
 /* load and unload a module.  gnc_module_system_init() must be called
  * before loading and unloading. */
 GNCModule       gnc_module_load(gchar * module_name, gint interface);
+GNCModule       gnc_module_load_optional(gchar * module_name, gint interface);
 int             gnc_module_unload(GNCModule mod);
 GNCModuleInfo * gnc_module_get_info(const char * lib_path);
 int             gnc_module_use_scm_module(gchar * module_path);

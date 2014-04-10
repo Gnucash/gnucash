@@ -13,8 +13,16 @@ define(`account', `gncAccount, Account, Account, a,
        commodity,      , char *, gnc_commodity_get_unique_name(xaccAccountGetCommodity(ptr)),
        version,        , int32,  xaccAccountGetVersion(ptr),
        iguid,          , int32,  ptr->idata,
+       bookGUID,       , GUID *, gnc_book_get_guid(xaccAccountGetBook(ptr)),
        parentGUID,     , GUID *, xaccAccountGetGUID(xaccAccountGetParentAccount(ptr)),
        accountGUID, KEY, GUID *, xaccAccountGetGUID(ptr),
+       ')
+
+define(`book', `gncBook, Book, GNCBook, b,
+       book_open,      , char,   ptr->book_open,
+       version,        , int32,  ptr->version,
+       iguid,          , int32,  ptr->idata,
+       bookGUID,    KEY, GUID *, gnc_book_get_guid(ptr),
        ')
 
 define(`split', `gncEntry, Split, Split, e,
@@ -69,6 +77,7 @@ define(`price', `gncPrice, Price, GNCPrice, p,
        valueNum,     , int64,    gnc_numeric_num(gnc_price_get_value(ptr)),
        valueDenom,   , int64,    gnc_numeric_denom(gnc_price_get_value(ptr)),
        version,      , int32,    gnc_price_get_version(ptr),
+       bookGUID,     , GUID *,   gnc_book_get_guid(gnc_price_get_book(ptr)),
        priceGUID, KEY, GUID *,   gnc_price_get_guid(ptr),
        ')
        
@@ -219,18 +228,20 @@ define(`version_function', `version_function_r(firstrec($@))')
 
 /* -------- */
 
-define(`store_one_only', 
+define(`store_one_only_header',
 `
 /* ------------------------------------------------------ */
 /* This routine stores/updates one record in the database.
  * It does not do any traversals, it does not lock.  
  * It just pokes the data in.
  */
-
 void 
 pgendStoreOne`'func_name($@)`'Only (PGBackend *be,
-                     xacc_type($@) *ptr,
-                     sqlBuild_QType update)
+                                    xacc_type($@) *ptr,
+                                    sqlBuild_QType update)')
+
+define(`store_one_only',
+`store_one_only_header($@)
 {
    const char *buf;
    ENTER ("be=%p, xacc_type($@)=%p", be, ptr);
@@ -243,14 +254,14 @@ pgendStoreOne`'func_name($@)`'Only (PGBackend *be,
    buf = sqlBuild_Query (be->builder);
    SEND_QUERY (be,buf, );
 
-   /* complete/commit the transaction, check the status */
+   /* flush the buffers, check the status */
    FINISH_QUERY(be->connection);
    LEAVE (" ");
 }
 
 ')
 
-define(`compare_one_only', 
+define(`compare_one_only_header',
 `
 /* ------------------------------------------------------ */
 /* This routine returns a positive int if the indicated object
@@ -258,9 +269,11 @@ define(`compare_one_only',
  * number if theres an error.
  * It does not do any traversals, it does not lock.  
  */
-
 int
-pgendCompareOne`'func_name($@)`'Only (PGBackend *be, xacc_type($@) *ptr)
+pgendCompareOne`'func_name($@)`'Only (PGBackend *be, xacc_type($@) *ptr)')
+
+define(`compare_one_only', 
+`compare_one_only_header($@)
 {
    const char *buf;
    PGresult *result;
@@ -296,16 +309,18 @@ pgendCompareOne`'func_name($@)`'Only (PGBackend *be, xacc_type($@) *ptr)
 
 ')
 
-define(`put_one_only', 
+define(`put_one_only_header',
 `
 /* ------------------------------------------------------ */
 /* This routine inserts or updates, as appropriate
  * It does not do any traversals, it does not lock.  
  * It just updates.
  */
-
 void 
-pgendPutOne`'func_name($@)`'Only (PGBackend *be, xacc_type($@) *ptr)
+pgendPutOne`'func_name($@)`'Only (PGBackend *be, xacc_type($@) *ptr)')
+
+define(`put_one_only', 
+`put_one_only_header($@)
 {
    int ndiffs;
    ndiffs = pgendCompareOne`'func_name($@)`'Only (be, ptr);
@@ -326,7 +341,7 @@ pgendPutOne`'func_name($@)`'Only (PGBackend *be, xacc_type($@) *ptr)
 
 ')
 
-define(`compare_version', 
+define(`compare_version_header',
 `
 /* ------------------------------------------------------ */
 /* This routine compares the version number of the object in 
@@ -336,9 +351,11 @@ define(`compare_version',
  * if the sql version is newer.  It returns zero if the
  * two are equal.
  */
-
 int 
-pgend`'func_name($@)`'CompareVersion (PGBackend *be, xacc_type($@) *ptr)
+pgend`'func_name($@)`'CompareVersion (PGBackend *be, xacc_type($@) *ptr)')
+
+define(`compare_version', 
+`compare_version_header($@)
 {
    char *p;
    int sql_version = 0;
@@ -356,7 +373,7 @@ pgend`'func_name($@)`'CompareVersion (PGBackend *be, xacc_type($@) *ptr)
 
 ')
 
-define(`is_deleted',
+define(`is_deleted_header',
 `
 /* ------------------------------------------------------ */
 /* This routine looks at the audit trail to see if the
@@ -364,9 +381,11 @@ define(`is_deleted',
  * it returns the version number of the deleted object;
  * otherwise it returns -1.
  */ 
+int
+pgend`'func_name($@)`'GetDeletedVersion (PGBackend *be, xacc_type($@) *ptr)')
 
-int 
-pgend`'func_name($@)`'GetDeletedVersion (PGBackend *be, xacc_type($@) *ptr)
+define(`is_deleted',
+`is_deleted_header($@)
 {
    char *p;
    int sql_version = -1;
@@ -383,18 +402,20 @@ pgend`'func_name($@)`'GetDeletedVersion (PGBackend *be, xacc_type($@) *ptr)
 
 ')
 
-define(`store_audit', 
+define(`store_audit_header',
 `
 /* ------------------------------------------------------ */
 /* This routine stores one autdit record in the database.
  * It does not do any traversals, it does not lock.  
  * It just pokes the data in. 
  */
-
 void 
 pgendStoreAudit`'func_name($@)`' (PGBackend *be,
-                     xacc_type($@) *ptr,
-                     sqlBuild_QType update)
+                                  xacc_type($@) *ptr,
+                                  sqlBuild_QType update)')
+
+define(`store_audit', 
+`store_audit_header($@)
 {
    const char *buf;
    ENTER ("be=%p, xacc_type($@)=%p", be, ptr);
@@ -418,7 +439,7 @@ pgendStoreAudit`'func_name($@)`' (PGBackend *be,
    buf = sqlBuild_Query (be->builder);
    SEND_QUERY (be,buf, );
 
-   /* complete/commit the transaction, check the status */
+   /* flush the buffers, check the status */
    FINISH_QUERY(be->connection);
    LEAVE (" ");
 }
