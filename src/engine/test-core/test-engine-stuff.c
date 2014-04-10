@@ -1265,7 +1265,7 @@ free_random_kvp_path (GSList *path)
   g_slist_free (path);
 }
 
-static GNCIdType
+static QofIdType
 get_random_id_type (void)
 {
   switch (get_random_int_in_range (1,3)) {
@@ -1621,7 +1621,7 @@ make_random_changes_to_session (GNCSession *session)
 
 typedef struct
 {
-  GNCIdType where;
+  QofIdType where;
   GSList *path;
   Query *q;
 } KVPQueryData;
@@ -1648,7 +1648,7 @@ add_kvp_value_query (const char *key, kvp_value *value, gpointer data)
 }
 
 static void
-add_kvp_query (Query *q, kvp_frame *frame, GNCIdType where)
+add_kvp_query (Query *q, kvp_frame *frame, QofIdType where)
 {
   KVPQueryData kqd;
 

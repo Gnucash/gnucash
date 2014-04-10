@@ -28,8 +28,8 @@
 #ifndef XACC_ACCOUNT_H
 #define XACC_ACCOUNT_H
 
-#include "GNCId.h"
 #include "gnc-engine.h"
+#include "guid.h"
 #include "kvp_frame.h"
 #include "qofbook.h"
 

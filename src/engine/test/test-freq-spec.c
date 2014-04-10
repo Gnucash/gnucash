@@ -13,7 +13,6 @@
 
 #include "test-stuff.h"
 #include "FreqSpec.h"
-#include "GNCIdP.h"
 #include "gnc-engine.h"
 #include "gnc-module.h"
 #include "gnc-book.h"

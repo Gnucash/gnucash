@@ -30,7 +30,6 @@
 
 #include "gnc-date.h" 
 #include "gnc-engine.h" 
-#include "GNCId.h" 
 #include "guid.h" 
 #include "kvp_frame.h" 
 
@@ -202,13 +201,13 @@ typedef enum {
 
 void xaccQueryAddClearedMatch(Query * q, cleared_match_t how, QofQueryOp op);
 void xaccQueryAddGUIDMatch(Query * q, const GUID *guid,
-                           GNCIdType id_type, QofQueryOp op);
+                           QofIdType id_type, QofQueryOp op);
 void xaccQueryAddGUIDMatchGL (QofQuery *q, GList *param_list,
 			      GUID guid, QofQueryOp op);
 
 /* given kvp value is on right side of comparison */
 void xaccQueryAddKVPMatch(Query *q, GSList *path, const kvp_value *value,
-                          QofQueryCompare how, GNCIdType id_type,
+                          QofQueryCompare how, QofIdType id_type,
                           QofQueryOp op);
 
 void xaccQuerySetSortOrder(Query *q, GList *p1, GList *p2, GList *p3);

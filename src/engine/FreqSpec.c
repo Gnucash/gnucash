@@ -85,13 +85,13 @@
 #endif
 
 #include "FreqSpecP.h"
-#include "GNCIdP.h"
 #include "gnc-date.h"
 #include "gnc-engine-util.h"
 #include "gnc-event-p.h"
 #include "messages.h"
 #include "qofbook.h"
 #include "qofbook-p.h"
+#include "qofid-p.h"
 
 /* I have done this to prevent compiler warnings...
  * This is used to convert a const GDate* to a GDate* for passing
@@ -184,8 +184,8 @@ xaccFreqSpecInit( FreqSpec *fs, QofBook *book )
 
         fs->entity_table = qof_book_get_entity_table (book);
 
-        xaccGUIDNew( &fs->guid, book );
-        xaccStoreEntity( fs->entity_table, fs, &fs->guid, GNC_ID_FREQSPEC );
+        qof_entity_guid_new (fs->entity_table, &fs->guid);
+        qof_entity_store( fs->entity_table, fs, &fs->guid, GNC_ID_FREQSPEC );
 
         fs->type = INVALID;
         fs->uift = UIFREQ_ONCE;
@@ -234,7 +234,7 @@ xaccFreqSpecFree( FreqSpec *fs )
 {
         if ( fs == NULL ) return;
         gnc_engine_generate_event( &fs->guid, GNC_EVENT_DESTROY );
-        xaccRemoveEntity( fs->entity_table, &fs->guid );
+        qof_entity_remove( fs->entity_table, &fs->guid );
 
         xaccFreqSpecCleanUp( fs );
 

@@ -55,7 +55,7 @@
 #include "gnc-pricedb-p.h"
 #include "guid.h"
 #include "GNCId.h"
-#include "GNCIdP.h"
+#include "qofid-p.h"
 #include "TransactionP.h"
 
 #include "account.h"

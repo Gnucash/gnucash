@@ -53,9 +53,9 @@
 #include "Backend.h"
 #include "gnc-engine.h"   /* for typedefs */
 #include "gnc-numeric.h"
-#include "GNCIdP.h"
 #include "kvp_frame.h"
 #include "qofbook.h"
+#include "qofid.h"
 
 
 /** STRUCTS *********************************************************/

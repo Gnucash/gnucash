@@ -25,6 +25,7 @@
     @brief All type declarations for the whole Gnucash engine
     @author Copyright (C) 1997 Robin D. Clark
     @author Copyright (C) 2000 Bill Gribble <grib@billgribble.com>
+    @author Copyright (C) 2000 Dave Peticolas <peticola@cs.ucdavis.edu>
     @author Copyright (C) 1997-2001 Linas Vepstas <linas@linas.org>
 */
 
@@ -32,6 +33,48 @@
 #define GNC_ENGINE_H
 
 #include <glib.h>
+#include "qofid.h"
+
+/* IDENTIFIERS *****************************************************/
+/** GUID Identifiers can be used to reference Accounts, Transactions, 
+ *  Splits and other objects. These Gnucash types are referred to as Gnucash
+ *  entities. GUID Identifiers are globally-unique and permanent, i.e., once
+ *  an entity has been assigned an identifier, it retains that same
+ *  identifier for its lifetime.
+ *
+ *  Identifiers are 'typed' with strings. The ids used in gnucash are
+ *  defined below. An id with type GNC_ID_NONE does not refer to any
+ *  entity, although that may change as new ids are created. An id with
+ *  type GNC_ID_NULL does not refer to any entity, and will never refer
+ *  to any entity. An identifier with any other type may refer to an
+ *  actual entity, but that is not guaranteed. If an id does refer to
+ *  an entity, the type of the entity will match the type of the
+ *  identifier. 
+ */
+
+#define GNC_ID_NONE           QOF_ID_NONE
+#define GNC_ID_BOOK           QOF_ID_BOOK
+#define GNC_ID_SESSION        QOF_ID_SESSION
+#define GNC_ID_NULL           QOF_ID_NULL
+
+#define GNC_ID_ACCOUNT        "Account"
+#define GNC_ID_COMMODITY_TABLE "CommodityTable"
+#define GNC_ID_FREQSPEC       "FreqSpec"
+#define GNC_ID_GROUP          "AccountGroup"
+#define GNC_ID_LOT            "Lot"
+#define GNC_ID_PERIOD         "Period"
+#define GNC_ID_PRICE          "Price"
+#define GNC_ID_PRICEDB        "PriceDB"
+#define GNC_ID_SPLIT          "Split"
+#define GNC_ID_SCHEDXACTION   "SchedXaction"
+#define GNC_ID_SXTT           "SXTT"
+#define GNC_ID_TRANS          "Trans"
+                                                                                
+
+                                                                                
+
+
+
 
 /* TYPES **********************************************************/
 

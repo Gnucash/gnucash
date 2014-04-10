@@ -80,7 +80,7 @@ typedef struct {
   pr_type_t       term_type;
   int             sense;
   GUID            guid;
-  GNCIdType       id_type;
+  QofIdType       id_type;
 } GUIDPredicateData;
 
 typedef struct {

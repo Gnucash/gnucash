@@ -191,14 +191,14 @@
    "img" 
    (with-output-to-string
      (lambda ()
-       (display "src=") (display src)
+       (display "src=\"") (display src) (display"\"")
        (display " ")
        (for-each 
         (lambda (kvp)
           (display (car kvp))
-          (display "=")
+          (display "=\"")
           (display (cadr kvp))
-          (display " "))
+          (display "\" "))
         rest)))))
 
 (define (gnc:html-text-render p doc)

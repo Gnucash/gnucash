@@ -24,12 +24,11 @@
 #ifndef QOF_QUERYOBJECTP_H
 #define QOF_QUERYOBJECTP_H
 
-#include "GNCId.h"
 #include "qofqueryobject.h"
 
 void qof_query_object_init(void);
 void qof_query_object_shutdown (void);
 
-QofSortFunc qof_query_object_default_sort (GNCIdTypeConst obj_name);
+QofSortFunc qof_query_object_default_sort (QofIdTypeConst obj_name);
 
 #endif /* QOF_QUERYOBJECTP_H */

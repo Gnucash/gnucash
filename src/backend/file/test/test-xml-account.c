@@ -20,7 +20,6 @@
 #include "test-file-stuff.h"
 
 #include "Account.h"
-#include "GNCIdP.h"
 #include "Group.h"
 #include "Scrub.h"
 #include "gnc-book.h"

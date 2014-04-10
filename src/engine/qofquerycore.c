@@ -612,7 +612,7 @@ static void guid_free_pdata (QofQueryPredData *pd)
   GList *node;
   VERIFY_PDATA (query_guid_type);
   for (node = pdata->guids; node; node = node->next)
-    xaccGUIDFree (node->data);
+    guid_free (node->data);
   g_list_free (pdata->guids);
   g_free (pdata);
 }
@@ -652,7 +652,7 @@ qof_query_guid_predicate (QofGuidMatch options, GList *guids)
   pdata->options = options;
   pdata->guids = g_list_copy (guids);
   for (node = pdata->guids; node; node = node->next) {
-    GUID *guid = xaccGUIDMalloc ();
+    GUID *guid = guid_malloc ();
     *guid = *((GUID *)node->data);
     node->data = guid;
   }

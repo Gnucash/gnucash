@@ -15,11 +15,12 @@
 #include "gnc-commodity.h"
 #include "gnc-engine-util.h"
 #include "gnc-event-p.h"
-#include "GNCIdP.h"
+#include "GNCId.h"
 #include "QueryCore.h"
 #include "QueryNew.h"
 #include "QueryObject.h"
 #include "gnc-be-utils.h"
+#include "qofid-p.h"
 
 #include "gncBusiness.h"
 #include "gncVendor.h"

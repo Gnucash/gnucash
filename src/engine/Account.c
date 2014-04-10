@@ -31,7 +31,6 @@
 #include "AccountP.h"
 #include "Backend.h"
 #include "BackendP.h"
-#include "GNCIdP.h"
 #include "Group.h"
 #include "GroupP.h"
 #include "TransactionP.h"
@@ -48,6 +47,7 @@
 
 #include "qofbook.h"
 #include "qofbook-p.h"
+#include "qofid-p.h"
 #include "qofobject.h"
 #include "qofqueryobject.h"
 
@@ -127,8 +127,8 @@ xaccInitAccount (Account * acc, QofBook *book)
 
   acc->book = book;
 
-  xaccGUIDNew(&acc->guid, book);
-  xaccStoreEntity(book->entity_table, acc, &acc->guid, GNC_ID_ACCOUNT);
+  qof_entity_guid_new (book->entity_table, &acc->guid);
+  qof_entity_store(book->entity_table, acc, &acc->guid, GNC_ID_ACCOUNT);
   LEAVE ("account=%p\n", acc);
 }
 
@@ -281,7 +281,7 @@ xaccFreeAccount (Account *acc)
 
   gnc_engine_generate_event (&acc->guid, GNC_EVENT_DESTROY);
 
-  xaccRemoveEntity (acc->book->entity_table, &acc->guid);
+  qof_entity_remove (acc->book->entity_table, &acc->guid);
 
   if (acc->children) 
   {
@@ -826,7 +826,7 @@ const GUID *
 xaccAccountGetGUID (Account *account)
 {
   if (!account)
-    return xaccGUIDNULL();
+    return guid_null();
 
   return &account->guid;
 }
@@ -835,7 +835,7 @@ GUID
 xaccAccountReturnGUID (Account *account)
 {
   if (!account)
-    return *xaccGUIDNULL();
+    return *guid_null();
 
   return account->guid;
 }
@@ -850,11 +850,11 @@ xaccAccountSetGUID (Account *account, const GUID *guid)
 
   PINFO("acct=%p", account);
   xaccAccountBeginEdit (account);
-  xaccRemoveEntity (account->book->entity_table, &account->guid);
+  qof_entity_remove (account->book->entity_table, &account->guid);
 
   account->guid = *guid;
 
-  xaccStoreEntity (account->book->entity_table, account,
+  qof_entity_store (account->book->entity_table, account,
                    &account->guid, GNC_ID_ACCOUNT);
   account->core_dirty = TRUE;
   xaccAccountCommitEdit (account);
@@ -867,7 +867,7 @@ Account *
 xaccAccountLookup (const GUID *guid, QofBook *book)
 {
   if (!guid || !book) return NULL;
-  return xaccLookupEntity (qof_book_get_entity_table (book),
+  return qof_entity_lookup (qof_book_get_entity_table (book),
                            guid, GNC_ID_ACCOUNT);
 }
 
@@ -875,7 +875,7 @@ Account *
 xaccAccountLookupDirect (GUID guid, QofBook *book)
 {
   if (!book) return NULL;
-  return xaccLookupEntity (qof_book_get_entity_table (book),
+  return qof_entity_lookup (qof_book_get_entity_table (book),
                            &guid, GNC_ID_ACCOUNT);
 }
 
@@ -3164,15 +3164,15 @@ xaccAccountGetBackend (Account * acc)
 /* gncObject function implementation and registration */
 
 static void
-account_foreach (QofBook *book, foreachObjectCB cb, gpointer ud)
+account_foreach (QofBook *book, QofEntityForeachCB cb, gpointer ud)
 {
-  GNCEntityTable *et;
+  QofEntityTable *et;
 
   g_return_if_fail (book);
   g_return_if_fail (cb);
 
   et = qof_book_get_entity_table (book);
-  xaccForeachEntity (et, GNC_ID_ACCOUNT, cb, ud);
+  qof_entity_foreach (et, GNC_ID_ACCOUNT, cb, ud);
 }
 
 static QofObject account_object_def = {

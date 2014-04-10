@@ -1,5 +1,5 @@
 /********************************************************************\
- * GNCIdP.h -- Gnucash entity identifier engine-only API            *
+ * qofid-p.h -- QOF entity identifier engine-only API               *
  * Copyright (C) 2000 Dave Peticolas <peticola@cs.ucdavis.edu>      *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
@@ -21,19 +21,19 @@
  *                                                                  *
 \********************************************************************/
 
-#ifndef GNC_ID_P_H
-#define GNC_ID_P_H 1
+#ifndef QOF_ID_P_H
+#define QOF_ID_P_H 
 
 #include <glib.h>
 
-#include "GNCId.h"
+#include "qofid.h"
 
 /* This file defines an engine-only API for using gnucash entity
  * identifiers. */
 
 /* Create and destroy entity tables */
-GNCEntityTable * xaccEntityTableNew (void);
-void xaccEntityTableDestroy (GNCEntityTable *table);
+QofEntityTable * qof_entity_new (void);
+void qof_entity_destroy (QofEntityTable *table);
 
 /* Generate a new id. This function is guaranteed to return an id that
  * is unique within the scope of all GnuCash entities being managed by
@@ -43,39 +43,29 @@ void xaccEntityTableDestroy (GNCEntityTable *table);
  * When considered over all possible instances of gnucash, the odds of 
  * this routine returning a non-unique id are still astronomically small.
  * If you had a gazzillion computers computing new ids, for the entire
- * age of teh universe, you'd still have a one-in-a-million chance of
+ * age of the universe, you'd still have a one-in-a-million chance of
  * coming up with a duplicate.  2^128 is a really really big number.
  */
-void xaccGUIDNewEntityTable (GUID *guid, GNCEntityTable *entity_table);
-
-/* Equivalent function prototype:
- * void xaccGUIDNew (GUID *guid, QofBook *book) 
- */
-#define xaccGUIDNew(guid,book)     \
-      xaccGUIDNewEntityTable ((guid), qof_book_get_entity_table (book))
-
+void qof_entity_guid_new (QofEntityTable *entity_table, GUID *guid);
 
 /* Lookup an entity given an id and a type. If there is no entity
  * associated with the id, or if it has a different type, NULL
- * is returned. */
-gpointer xaccLookupEntity (GNCEntityTable *entity_table,
-                           const GUID * guid, GNCIdType entity_type);
+ * is returned. Input: GUID, returns reference (pointer) to object. 
+ */
+gpointer qof_entity_lookup (QofEntityTable *entity_table,
+                           const GUID * guid, QofIdType entity_type);
 
 /* Store the given entity under the given id with the given type. */
-void xaccStoreEntity (GNCEntityTable *entity_table,
+void qof_entity_store (QofEntityTable *entity_table,
                       gpointer entity, const GUID * guid,
-                      GNCIdType entity_type);
+                      QofIdType entity_type);
 
 /* Remove any existing association between an entity and the given
  * id. The entity is not changed in any way. */
-void xaccRemoveEntity (GNCEntityTable *entity_table, const GUID * guid);
+void qof_entity_remove (QofEntityTable *entity_table, const GUID * guid);
 
 /* Call a function for each object of type 'type' in the entity table */
-void xaccForeachEntity (GNCEntityTable *entity_table, GNCIdType type,
-			foreachObjectCB cb_func, gpointer user_data);
+void qof_entity_foreach (QofEntityTable *entity_table, QofIdType type,
+			QofEntityForeachCB cb_func, gpointer user_data);
 
-/* Initialize and shutdown the GNC Id system. */
-void xaccGUIDInit (void);
-void xaccGUIDShutdown (void);
-
-#endif
+#endif /* QOF_ID_P_H */

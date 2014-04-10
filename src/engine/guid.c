@@ -56,10 +56,63 @@
 /** Static global variables *****************************************/
 static gboolean guid_initialized = FALSE;
 static struct md5_ctx guid_context;
+static GMemChunk *guid_memchunk = NULL;
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_ENGINE;
 
+/** Memory management routines ***************************************/
+static void
+guid_memchunk_init (void)
+{
+  if (!guid_memchunk)
+    guid_memchunk = g_mem_chunk_create (GUID, 512, G_ALLOC_AND_FREE);
+}
+
+static void
+guid_memchunk_shutdown (void)
+{
+  if (guid_memchunk)
+  {
+    g_mem_chunk_destroy (guid_memchunk);
+    guid_memchunk = NULL;
+  }
+}
+
+GUID *
+guid_malloc (void)
+{
+  return g_chunk_new (GUID, guid_memchunk);
+}
+
+void
+guid_free (GUID *guid)
+{
+  if (!guid)
+    return;
+
+  g_chunk_free (guid, guid_memchunk);
+}
+
+
+const GUID *
+guid_null(void)
+{
+  static int null_inited = (0 == 1);
+  static GUID null_guid;
+
+  if (!null_inited)
+  {
+    int i;
+
+    for (i = 0; i < 16; i++)
+      null_guid.data[i] = 0;
+
+    null_inited = (0 == 0);
+  }
+
+  return &null_guid;
+}
 
 /** Function implementations ****************************************/
 
@@ -230,6 +283,8 @@ guid_init(void)
 {
   size_t bytes = 0;
 
+  guid_memchunk_init();
+
   md5_init_ctx(&guid_context);
 
   /* entropy pool */
@@ -367,6 +422,12 @@ guid_init_only_salt(const void *salt, size_t salt_len)
   md5_process_bytes(salt, salt_len, &guid_context);
 
   guid_initialized = TRUE;
+}
+
+void 
+guid_shutdown (void)
+{
+	guid_memchunk_shutdown();
 }
 
 #define GUID_PERIOD 5000

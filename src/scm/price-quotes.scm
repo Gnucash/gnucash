@@ -321,8 +321,7 @@
 		(catch
 		 #t
 		 (lambda ()
-		   (write (list 'handling-request request))
-		   (newline)
+;;		   (write (list 'handling-request request)) (newline)
 		   ;; we need to display the first element (the method, so it
 		   ;; won't be quoted) and then write the rest
 		   (display #\( to-child)

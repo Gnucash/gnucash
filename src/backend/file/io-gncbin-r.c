@@ -108,7 +108,6 @@
 #include "gnc-date.h"
 #include "gnc-engine.h"
 #include "gnc-engine-util.h"
-#include "GNCIdP.h"
 #include "gnc-pricedb.h"
 #include "gnc-pricedb-p.h"
 

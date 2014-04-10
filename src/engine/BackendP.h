@@ -235,9 +235,9 @@ struct backend_s
 
   void (*load) (Backend *, QofBook *);
 
-  void (*begin) (Backend *, GNCIdTypeConst, gpointer);
-  void (*commit) (Backend *, GNCIdTypeConst, gpointer);
-  void (*rollback) (Backend *, GNCIdTypeConst, gpointer);
+  void (*begin) (Backend *, QofIdTypeConst, gpointer);
+  void (*commit) (Backend *, QofIdTypeConst, gpointer);
+  void (*rollback) (Backend *, QofIdTypeConst, gpointer);
 
   gpointer (*compile_query) (Backend *, QofQuery *);
   void (*free_query) (Backend *, gpointer);

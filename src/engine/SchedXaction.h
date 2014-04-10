@@ -32,10 +32,10 @@
 #include <time.h>
 #include <glib.h>
 
-#include "GNCId.h"
 #include "FreqSpec.h"
 #include "gnc-date.h"
 #include "gnc-engine.h"
+#include "guid.h"
 #include "kvp_frame.h"
 #include "qofbook.h"
 

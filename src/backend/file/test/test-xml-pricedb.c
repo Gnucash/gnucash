@@ -20,7 +20,6 @@
 #include "test-engine-stuff.h"
 #include "test-file-stuff.h"
 
-#include "GNCIdP.h"
 #include "gnc-book.h"
 
 static GNCSession *session;

@@ -11,7 +11,7 @@
 
 #include "messages.h"
 #include "gnc-engine-util.h"
-#include "GNCIdP.h"
+#include "GNCId.h"
 #include "gnc-book.h"
 #include "gnc-commodity.h"
 #include "gnc-numeric.h"
@@ -21,6 +21,7 @@
 #include "QueryObject.h"
 #include "gnc-event-p.h"
 #include "gnc-be-utils.h"
+#include "qofid-p.h"
 
 #include "gncBusiness.h"
 #include "gncCustomer.h"
