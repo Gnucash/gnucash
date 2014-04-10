@@ -1,6 +1,6 @@
 /********************************************************************\
  * gnc-trace.c -- GnuCash error loging and tracing facility         *
- * Copyright (C) 1997-2001 Linas Vepstas <linas@linas.org>          *
+ * Copyright (C) 1997-2003 Linas Vepstas <linas@linas.org>          *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -249,68 +249,6 @@ gnc_report_clock_total (int clockno,
 
   fprintf (fout, "\n");
 }
-
-/********************************************************************\
-  Callbacks so that the engine can display gui messages.
-\********************************************************************/
-
-static GNCGuiMessage gnc_gui_warning_func = NULL;
-static GNCGuiMessage gnc_gui_error_func = NULL;
-
-void 
-gnc_set_warning_message (GNCGuiMessage func)
-{
-  gnc_gui_warning_func = func;
-}
-
-void 
-gnc_set_error_message (GNCGuiMessage func)
-{
-  gnc_gui_error_func = func;
-}
-
-gboolean
-gnc_send_gui_warning(const gchar *format, ...)
-{
-  va_list args;
-
-  va_start (args, format);
-  if (!gnc_gui_warning_func)
-  {
-    if (!fout) gnc_log_init();
-
-    g_log (G_LOG_DOMAIN, G_LOG_LEVEL_WARNING, 
-      format, args);
-    va_end (args);
-    return(FALSE);
-  }
-
-  gnc_gui_warning_func(format, args);
-  va_end(args);
-  return(TRUE);
-}
-
-gboolean
-gnc_send_gui_error(const gchar *format, ...)
-{
-  va_list args;
-
-  va_start (args, format);
-  if (!gnc_gui_error_func)
-  {
-    if (!fout) gnc_log_init();
-
-    g_logv (G_LOG_DOMAIN, G_LOG_LEVEL_CRITICAL,
-      format, args);
-    va_end (args);
-    return(FALSE);
-  }
-
-  gnc_gui_error_func(format, args);
-  va_end(args);
-  return(TRUE);
-}
-
 
 /************************* END OF FILE ******************************\
 \********************************************************************/

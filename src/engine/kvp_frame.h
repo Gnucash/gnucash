@@ -507,8 +507,11 @@ void          kvp_value_delete(KvpValue * value);
 /** This is a deep value copy. */
 KvpValue   * kvp_value_copy(const KvpValue * value);
 
-/** replace old frame value with new, return old frame */
+/** Replace old frame value with new, return old frame */
 KvpFrame * kvp_value_replace_frame_nc(KvpValue *value, KvpFrame * newframe);
+
+/** Replace old glist value with new, return old glist */
+GList * kvp_value_replace_glist_nc(KvpValue *value, GList *newlist);
 
 /*@}*/
 

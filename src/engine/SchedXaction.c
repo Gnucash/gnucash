@@ -55,30 +55,25 @@ xaccSchedXactionInit( SchedXaction *sx, QofBook *book)
 {
    AccountGroup        *ag;
 
-   sx->entity_table = qof_book_get_entity_table (book);
+   qof_instance_init (&sx->inst, GNC_ID_SCHEDXACTION, book);
 
    sx->freq = xaccFreqSpecMalloc(book);
 
-   qof_entity_guid_new (sx->entity_table, &sx->guid);
-   qof_entity_store( sx->entity_table, sx,
-                    &sx->guid, GNC_ID_SCHEDXACTION );
    g_date_clear( &sx->last_date, 1 );
    g_date_clear( &sx->start_date, 1 );
    g_date_clear( &sx->end_date, 1 );
 
    sx->num_occurances_total = 0;
-   sx->kvp_data = kvp_frame_new();
    sx->autoCreateOption = FALSE;
    sx->autoCreateNotify = FALSE;
    sx->advanceCreateDays = 0;
    sx->advanceRemindDays = 0;
    sx->instance_num = 0;
-	sx->dirty = TRUE;
    sx->deferredList = NULL;
 
    /* create a new template account for our splits */
    sx->template_acct = xaccMallocAccount(book);
-   xaccAccountSetName( sx->template_acct, guid_to_string( &sx->guid ));
+   xaccAccountSetName( sx->template_acct, guid_to_string( &sx->inst.entity.guid ));
    xaccAccountSetCommodity
      (sx->template_acct,
       gnc_commodity_new( "template", "template",
@@ -97,7 +92,7 @@ xaccSchedXactionMalloc(QofBook *book)
 
    sx = g_new0( SchedXaction, 1 );
    xaccSchedXactionInit( sx, book );
-   gnc_engine_generate_event( &sx->guid, GNC_ID_SCHEDXACTION, GNC_EVENT_CREATE );
+   gnc_engine_gen_event( &sx->inst.entity, GNC_EVENT_CREATE );
 
    return sx;
 }
@@ -133,13 +128,13 @@ delete_template_trans(SchedXaction *sx)
     if(! (g_list_find(templ_acct_transactions, split_trans)))
     {
       templ_acct_transactions 
-	= g_list_prepend(templ_acct_transactions, split_trans);
+   = g_list_prepend(templ_acct_transactions, split_trans);
     }
   }
   
   g_list_foreach(templ_acct_transactions,
-		 sxprivTransMapDelete, 
-		 NULL);
+       sxprivTransMapDelete, 
+       NULL);
   
   return;
 }
@@ -151,8 +146,7 @@ xaccSchedXactionFree( SchedXaction *sx )
   if ( sx == NULL ) return;
   
   xaccFreqSpecFree( sx->freq );
-  gnc_engine_generate_event( &sx->guid, GNC_ID_SCHEDXACTION, GNC_EVENT_DESTROY );
-  qof_entity_remove( sx->entity_table, &sx->guid );
+  gnc_engine_gen_event( &sx->inst.entity, GNC_EVENT_DESTROY );
   
   if ( sx->name )
     g_free( sx->name );
@@ -181,29 +175,26 @@ xaccSchedXactionFree( SchedXaction *sx )
           sx->deferredList = NULL;
   }
   
+  qof_instance_release (&sx->inst);
   g_free( sx );
-  
-  return;
 }
 
-
-
-
+/* ============================================================ */
 
 FreqSpec *
 xaccSchedXactionGetFreqSpec( SchedXaction *sx )
 {
-        return sx->freq;
+   return sx->freq;
 }
 
 void
 xaccSchedXactionSetFreqSpec( SchedXaction *sx, FreqSpec *fs )
 {
-        g_return_if_fail( fs );
+   g_return_if_fail( fs );
 
-        xaccFreqSpecFree( sx->freq );
-        sx->freq = fs;
-	sx->dirty = TRUE;
+   xaccFreqSpecFree( sx->freq );
+   sx->freq = fs;
+   sx->inst.dirty = TRUE;
 }
 
 gchar *
@@ -220,7 +211,7 @@ xaccSchedXactionSetName( SchedXaction *sx, const gchar *newName )
            g_free( sx->name );
            sx->name = NULL;
    }
-	sx->dirty = TRUE;
+   sx->inst.dirty = TRUE;
    sx->name = g_strdup( newName );
 }
 
@@ -234,7 +225,7 @@ void
 xaccSchedXactionSetStartDate( SchedXaction *sx, GDate* newStart )
 {
    sx->start_date = *newStart;
-	sx->dirty = TRUE;
+   sx->inst.dirty = TRUE;
 }
 
 gboolean
@@ -264,8 +255,7 @@ xaccSchedXactionSetEndDate( SchedXaction *sx, GDate *newEnd )
   }
 
   sx->end_date = *newEnd;
-  sx->dirty = TRUE;
-  return;
+  sx->inst.dirty = TRUE;
 }
 
 GDate*
@@ -278,8 +268,7 @@ void
 xaccSchedXactionSetLastOccurDate( SchedXaction *sx, GDate* newLastOccur )
 {
   sx->last_date = *newLastOccur;
-  sx->dirty = TRUE;
-  return;
+  sx->inst.dirty = TRUE;
 }
 
 gboolean
@@ -298,8 +287,7 @@ void
 xaccSchedXactionSetNumOccur( SchedXaction *sx, gint newNum )
 {
   sx->num_occurances_remain = sx->num_occurances_total = newNum;
-  sx->dirty = TRUE;
-        
+  sx->inst.dirty = TRUE;
 }
 
 gint
@@ -313,68 +301,35 @@ xaccSchedXactionSetRemOccur( SchedXaction *sx,
                              gint numRemain )
 {
   /* FIXME This condition can be tightened up */
-  if ( numRemain > sx->num_occurances_total ) {
+  if ( numRemain > sx->num_occurances_total ) 
+  {
     PWARN("The number remaining is greater than the total occurrences");
   }
   else
   {
     sx->num_occurances_remain = numRemain;
-    sx->dirty = TRUE;
+    sx->inst.dirty = TRUE;
   }
-  return;
 }
 
 
 KvpValue *
 xaccSchedXactionGetSlot( SchedXaction *sx, const char *slot )
 {
-  if (!sx) 
-  {
-    return NULL;
-  }
+  if (!sx) return NULL;
 
-  return kvp_frame_get_slot(sx->kvp_data, slot);
+  return kvp_frame_get_slot(sx->inst.kvp_data, slot);
 }
 
 void
 xaccSchedXactionSetSlot( SchedXaction *sx, 
-			 const char *slot,
-			 const KvpValue *value )
+          const char *slot,
+          const KvpValue *value )
 {
-  if (!sx)
-  {
-    return;
-  }
+  if (!sx) return;
 
-  kvp_frame_set_slot( sx->kvp_data, slot, value );
-  sx->dirty = TRUE;
-  return;
-}
-
-KvpFrame*
-xaccSchedXactionGetSlots( SchedXaction *sx )
-{
-   return sx->kvp_data;
-}
-
-void
-xaccSchedXactionSetSlots( SchedXaction *sx, KvpFrame *frm )
-{
-  sx->kvp_data = frm;
-  sx->dirty = TRUE;
-}
-
-const GUID*
-xaccSchedXactionGetGUID( SchedXaction *sx )
-{
-        return &sx->guid;
-}
-
-void
-xaccSchedXactionSetGUID( SchedXaction *sx, GUID g )
-{
-  sx->guid = g;
-  sx->dirty = TRUE;
+  kvp_frame_set_slot( sx->inst.kvp_data, slot, value );
+  sx->inst.dirty = TRUE;
 }
 
 void
@@ -395,7 +350,7 @@ xaccSchedXactionSetAutoCreate( SchedXaction *sx,
  
   sx->autoCreateOption = newAutoCreate;
   sx->autoCreateNotify = newNotify; 
-  sx->dirty = TRUE;
+  sx->inst.dirty = TRUE;
   return;
 }
 
@@ -409,19 +364,19 @@ void
 xaccSchedXactionSetAdvanceCreation( SchedXaction *sx, gint createDays )
 {
   sx->advanceCreateDays = createDays;
-  sx->dirty = TRUE;
+  sx->inst.dirty = TRUE;
 }
 
 gint
 xaccSchedXactionGetAdvanceReminder( SchedXaction *sx )
 {
-        return sx->advanceRemindDays;
+   return sx->advanceRemindDays;
 }
 
 void
 xaccSchedXactionSetAdvanceReminder( SchedXaction *sx, gint reminderDays )
 {
-  sx->dirty = TRUE;
+  sx->inst.dirty = TRUE;
   sx->advanceRemindDays = reminderDays;
 }
 
@@ -429,64 +384,64 @@ xaccSchedXactionSetAdvanceReminder( SchedXaction *sx, gint reminderDays )
 GDate
 xaccSchedXactionGetNextInstance( SchedXaction *sx, void *stateData )
 {
-        GDate         last_occur, next_occur, tmpDate;
+   GDate    last_occur, next_occur, tmpDate;
 
-        g_date_clear( &last_occur, 1 );
-        g_date_clear( &next_occur, 1 );
-        g_date_clear( &tmpDate, 1 );
+   g_date_clear( &last_occur, 1 );
+   g_date_clear( &next_occur, 1 );
+   g_date_clear( &tmpDate, 1 );
 
-        if ( g_date_valid( &sx->last_date ) ) {
-                last_occur = sx->last_date;
-        } 
+   if ( g_date_valid( &sx->last_date ) ) {
+      last_occur = sx->last_date;
+   } 
 
-        if ( stateData != NULL ) {
-                temporalStateData *tsd = (temporalStateData*)stateData;
-                last_occur = tsd->last_date;
-        }
+   if ( stateData != NULL ) {
+      temporalStateData *tsd = (temporalStateData*)stateData;
+      last_occur = tsd->last_date;
+   }
 
-        if ( g_date_valid( &sx->start_date ) ) {
-                if ( g_date_valid(&last_occur) ) {
-                        last_occur =
-                                ( g_date_compare( &last_occur,
-                                                  &sx->start_date ) > 0 ?
-                                  last_occur : sx->start_date );
-                } else {
-                        /* Think about this for a second, and you realize that if the
-                         * start date is _today_, we need a last-occur date such that
-                         * the 'next instance' is after that date, and equal to the
-                         * start date... one day should be good.
-                         *
-                         * This only holds for the first instance [read: if the
-                         * last[-occur]_date is invalid] */
-                        last_occur = sx->start_date;
-                        g_date_subtract_days( &last_occur, 1 );
-                }
-        }
+   if ( g_date_valid( &sx->start_date ) ) {
+      if ( g_date_valid(&last_occur) ) {
+         last_occur =
+            ( g_date_compare( &last_occur,
+                    &sx->start_date ) > 0 ?
+              last_occur : sx->start_date );
+      } else {
+         /* Think about this for a second, and you realize that if the
+          * start date is _today_, we need a last-occur date such that
+          * the 'next instance' is after that date, and equal to the
+          * start date... one day should be good.
+          *
+          * This only holds for the first instance [read: if the
+          * last[-occur]_date is invalid] */
+         last_occur = sx->start_date;
+         g_date_subtract_days( &last_occur, 1 );
+      }
+   }
 
-        xaccFreqSpecGetNextInstance( sx->freq, &last_occur, &next_occur );
+   xaccFreqSpecGetNextInstance( sx->freq, &last_occur, &next_occur );
 
-        /* out-of-bounds check */
-        if ( xaccSchedXactionHasEndDate( sx ) ) {
-                GDate *end_date = xaccSchedXactionGetEndDate( sx );
-                if ( g_date_compare( &next_occur, end_date ) > 0 ) {
-                        PINFO( "next_occur past end date" );
-                        g_date_clear( &next_occur, 1 );
-                }
-        } else if ( xaccSchedXactionHasOccurDef( sx ) ) {
-                if ( stateData ) {
-                        temporalStateData *tsd = (temporalStateData*)stateData;
-                        if ( tsd->num_occur_rem == 0 ) {
-                                PINFO( "no more occurances remain" );
-                                g_date_clear( &next_occur, 1 );
-                        }
-                } else {
-                        if ( sx->num_occurances_remain == 0 ) {
-                                g_date_clear( &next_occur, 1 );
-                        }
-                }
-        }
+   /* out-of-bounds check */
+   if ( xaccSchedXactionHasEndDate( sx ) ) {
+      GDate *end_date = xaccSchedXactionGetEndDate( sx );
+      if ( g_date_compare( &next_occur, end_date ) > 0 ) {
+         PINFO( "next_occur past end date" );
+         g_date_clear( &next_occur, 1 );
+      }
+   } else if ( xaccSchedXactionHasOccurDef( sx ) ) {
+      if ( stateData ) {
+         temporalStateData *tsd = (temporalStateData*)stateData;
+         if ( tsd->num_occur_rem == 0 ) {
+            PINFO( "no more occurances remain" );
+            g_date_clear( &next_occur, 1 );
+         }
+      } else {
+         if ( sx->num_occurances_remain == 0 ) {
+            g_date_clear( &next_occur, 1 );
+         }
+      }
+   }
 
-        return next_occur;
+   return next_occur;
 }
 
 GDate
@@ -494,46 +449,46 @@ xaccSchedXactionGetInstanceAfter( SchedXaction *sx,
                                   GDate *date,
                                   void *stateData )
 {
-        GDate prev_occur, next_occur;
+   GDate prev_occur, next_occur;
 
-        g_date_clear( &prev_occur, 1 );
-        if ( date ) {
-                prev_occur = *date;
-        }
+   g_date_clear( &prev_occur, 1 );
+   if ( date ) {
+      prev_occur = *date;
+   }
 
-        if ( stateData != NULL ) {
-                temporalStateData *tsd = (temporalStateData*)stateData;
-                prev_occur = tsd->last_date;
-        }
+   if ( stateData != NULL ) {
+      temporalStateData *tsd = (temporalStateData*)stateData;
+      prev_occur = tsd->last_date;
+   }
 
-        if ( ! g_date_valid( &prev_occur ) ) {
-                /* We must be at the beginning. */
-                prev_occur = sx->start_date;
-                g_date_subtract_days( &prev_occur, 1 );
-        }
+   if ( ! g_date_valid( &prev_occur ) ) {
+      /* We must be at the beginning. */
+      prev_occur = sx->start_date;
+      g_date_subtract_days( &prev_occur, 1 );
+   }
 
-        xaccFreqSpecGetNextInstance( sx->freq, &prev_occur, &next_occur );
+   xaccFreqSpecGetNextInstance( sx->freq, &prev_occur, &next_occur );
 
-        if ( xaccSchedXactionHasEndDate( sx ) ) {
-                GDate *end_date;
+   if ( xaccSchedXactionHasEndDate( sx ) ) {
+      GDate *end_date;
 
-                end_date = xaccSchedXactionGetEndDate( sx );
-                if ( g_date_compare( &next_occur, end_date ) > 0 ) {
-                        g_date_clear( &next_occur, 1 );
-                }
-        } else if ( xaccSchedXactionHasOccurDef( sx ) ) {
-                if ( stateData ) {
-                        temporalStateData *tsd = (temporalStateData*)stateData;
-                        if ( tsd->num_occur_rem == 0 ) {
-                                g_date_clear( &next_occur, 1 );
-                        }
-                } else {
-                        if ( sx->num_occurances_remain == 0 ) {
-                                g_date_clear( &next_occur, 1 );
-                        }
-                }
-        }
-        return next_occur;
+      end_date = xaccSchedXactionGetEndDate( sx );
+      if ( g_date_compare( &next_occur, end_date ) > 0 ) {
+         g_date_clear( &next_occur, 1 );
+      }
+   } else if ( xaccSchedXactionHasOccurDef( sx ) ) {
+      if ( stateData ) {
+         temporalStateData *tsd = (temporalStateData*)stateData;
+         if ( tsd->num_occur_rem == 0 ) {
+            g_date_clear( &next_occur, 1 );
+         }
+      } else {
+         if ( sx->num_occurances_remain == 0 ) {
+            g_date_clear( &next_occur, 1 );
+         }
+      }
+   }
+   return next_occur;
 }
 
 gint
@@ -566,23 +521,9 @@ xaccSchedXactionGetSplits( SchedXaction *sx )
   return xaccAccountGetSplitList(sx->template_acct);
 }
 
-void
-xaccSchedXactionSetDirtyness( SchedXaction *sx, gboolean dirty_p)
-{
-  sx->dirty = dirty_p;
-  return;
-}
-
-gboolean
-xaccSchedXactionIsDirty(SchedXaction *sx)
-{
-  return sx->dirty;
-}
-
-
 static Split *
 pack_split_info (TTSplitInfo *s_info, Account *parent_acct,
-                 Transaction *parent_trans, QofBook *book)
+       Transaction *parent_trans, QofBook *book)
 {
   Split *split;
   KvpFrame *split_frame;
@@ -592,14 +533,14 @@ pack_split_info (TTSplitInfo *s_info, Account *parent_acct,
   split = xaccMallocSplit(book);
 
   xaccSplitSetMemo(split, 
-		   gnc_ttsplitinfo_get_memo(s_info));
+         gnc_ttsplitinfo_get_memo(s_info));
 
   xaccSplitSetAction(split,
-		     gnc_ttsplitinfo_get_action(s_info));
+           gnc_ttsplitinfo_get_action(s_info));
   
 
   xaccAccountInsertSplit(parent_acct, 
-			 split);
+          split);
 
   split_frame = xaccSplitGetSlots(split);
   
@@ -607,20 +548,20 @@ pack_split_info (TTSplitInfo *s_info, Account *parent_acct,
     = kvp_value_new_string(gnc_ttsplitinfo_get_credit_formula(s_info));
 
   kvp_frame_set_slot_path(split_frame, 
-			  tmp_value,
-			  GNC_SX_ID,
-			  GNC_SX_CREDIT_FORMULA,
-                          NULL);
+           tmp_value,
+           GNC_SX_ID,
+           GNC_SX_CREDIT_FORMULA,
+           NULL);
   kvp_value_delete(tmp_value);
-		      
+            
   tmp_value
     = kvp_value_new_string(gnc_ttsplitinfo_get_debit_formula(s_info));
   
   kvp_frame_set_slot_path(split_frame,
-			  tmp_value,
-			  GNC_SX_ID,
-			  GNC_SX_DEBIT_FORMULA,
-                          NULL);
+           tmp_value,
+           GNC_SX_ID,
+           GNC_SX_DEBIT_FORMULA,
+           NULL);
 
   kvp_value_delete(tmp_value);
 
@@ -629,10 +570,10 @@ pack_split_info (TTSplitInfo *s_info, Account *parent_acct,
   tmp_value = kvp_value_new_guid(acc_guid);
 
   kvp_frame_set_slot_path(split_frame,
-                          tmp_value,
-                          GNC_SX_ID,
-                          GNC_SX_ACCOUNT,
-                          NULL);
+           tmp_value,
+           GNC_SX_ID,
+           GNC_SX_ACCOUNT,
+           NULL);
 
   kvp_value_delete(tmp_value);
 
@@ -642,7 +583,7 @@ pack_split_info (TTSplitInfo *s_info, Account *parent_acct,
 
 void
 xaccSchedXactionSetTemplateTrans(SchedXaction *sx, GList *t_t_list,
-                                 QofBook *book)
+             QofBook *book)
 {
   Transaction *new_trans;
   TTInfo *tti;
@@ -664,20 +605,20 @@ xaccSchedXactionSetTemplateTrans(SchedXaction *sx, GList *t_t_list,
     xaccTransBeginEdit(new_trans);
 
     xaccTransSetDescription(new_trans, 
-			    gnc_ttinfo_get_description(tti));
+             gnc_ttinfo_get_description(tti));
 
     xaccTransSetNum(new_trans,
-		    gnc_ttinfo_get_num(tti));
+          gnc_ttinfo_get_num(tti));
     xaccTransSetCurrency( new_trans,
-                          gnc_ttinfo_get_currency(tti) );
+           gnc_ttinfo_get_currency(tti) );
 
     for(split_list = gnc_ttinfo_get_template_splits(tti);
-	split_list;
-	split_list = split_list->next)
+   split_list;
+   split_list = split_list->next)
     {
       s_info = split_list->data;
       new_split = pack_split_info(s_info, sx->template_acct,
-                                  new_trans, book);
+              new_trans, book);
       xaccTransAppendSplit(new_trans, new_split);
     }
     xaccTransCommitEdit(new_trans);
@@ -687,72 +628,72 @@ xaccSchedXactionSetTemplateTrans(SchedXaction *sx, GList *t_t_list,
 void*
 gnc_sx_create_temporal_state( SchedXaction *sx )
 {
-        temporalStateData *toRet =
-                g_new0( temporalStateData, 1 );
-        toRet->last_date       = sx->last_date;
-        toRet->num_occur_rem   = sx->num_occurances_remain;
-        toRet->num_inst        = sx->instance_num;
-        return (void*)toRet;
+   temporalStateData *toRet =
+      g_new0( temporalStateData, 1 );
+   toRet->last_date       = sx->last_date;
+   toRet->num_occur_rem   = sx->num_occurances_remain;
+   toRet->num_inst   = sx->instance_num;
+   return (void*)toRet;
 }
 
 void
 gnc_sx_incr_temporal_state( SchedXaction *sx, void *stateData )
 {
-        GDate unused;
-        temporalStateData *tsd = (temporalStateData*)stateData;
+   GDate unused;
+   temporalStateData *tsd = (temporalStateData*)stateData;
 
-        g_date_clear( &unused, 1 );
-        tsd->last_date =
-                xaccSchedXactionGetInstanceAfter( sx,
-                                                  &unused,
-                                                  stateData );
-        if ( xaccSchedXactionHasOccurDef( sx ) ) {
-                tsd->num_occur_rem -= 1;
-        }
-        tsd->num_inst += 1;
+   g_date_clear( &unused, 1 );
+   tsd->last_date =
+      xaccSchedXactionGetInstanceAfter( sx,
+                    &unused,
+                    stateData );
+   if ( xaccSchedXactionHasOccurDef( sx ) ) {
+      tsd->num_occur_rem -= 1;
+   }
+   tsd->num_inst += 1;
 }
 
 void
 gnc_sx_revert_to_temporal_state( SchedXaction *sx, void *stateData )
 {
-        temporalStateData *tsd = (temporalStateData*)stateData;
-        sx->last_date             = tsd->last_date;
-        sx->num_occurances_remain = tsd->num_occur_rem;
-        sx->instance_num          = tsd->num_inst;
-        sx->dirty = TRUE;
+   temporalStateData *tsd = (temporalStateData*)stateData;
+   sx->last_date        = tsd->last_date;
+   sx->num_occurances_remain = tsd->num_occur_rem;
+   sx->instance_num     = tsd->num_inst;
+   sx->inst.dirty = TRUE;
 }
 
 void
 gnc_sx_destroy_temporal_state( void *stateData )
 {
-        g_free( (temporalStateData*)stateData );
+   g_free( (temporalStateData*)stateData );
 }
 
 void*
 gnc_sx_clone_temporal_state( void *stateData )
 {
-        temporalStateData *toRet, *tsd;
-        tsd = (temporalStateData*)stateData;
-        toRet = g_memdup( tsd, sizeof( temporalStateData ) );
-        return (void*)toRet;
+   temporalStateData *toRet, *tsd;
+   tsd = (temporalStateData*)stateData;
+   toRet = g_memdup( tsd, sizeof( temporalStateData ) );
+   return (void*)toRet;
 }
 
 static
 gint
 _temporal_state_data_cmp( gconstpointer a, gconstpointer b )
 {
-        temporalStateData *tsd_a, *tsd_b;
-        tsd_a = (temporalStateData*)a;
-        tsd_b = (temporalStateData*)b;
+   temporalStateData *tsd_a, *tsd_b;
+   tsd_a = (temporalStateData*)a;
+   tsd_b = (temporalStateData*)b;
 
-        if ( !tsd_a && !tsd_b )
-                return 0;
-        if ( !tsd_a )
-                return 1;
-        if ( !tsd_b )
-                return -1;
-        return g_date_compare( &tsd_a->last_date,
-                               &tsd_b->last_date );
+   if ( !tsd_a && !tsd_b )
+      return 0;
+   if ( !tsd_a )
+      return 1;
+   if ( !tsd_b )
+      return -1;
+   return g_date_compare( &tsd_a->last_date,
+                &tsd_b->last_date );
 }
 
 /**
@@ -762,9 +703,9 @@ _temporal_state_data_cmp( gconstpointer a, gconstpointer b )
 void
 gnc_sx_add_defer_instance( SchedXaction *sx, void *deferStateData )
 {
-        sx->deferredList = g_list_insert_sorted( sx->deferredList,
-                                                 deferStateData,
-                                                 _temporal_state_data_cmp );
+   sx->deferredList = g_list_insert_sorted( sx->deferredList,
+                   deferStateData,
+                   _temporal_state_data_cmp );
 }
 
 /**
@@ -774,7 +715,7 @@ gnc_sx_add_defer_instance( SchedXaction *sx, void *deferStateData )
 void
 gnc_sx_remove_defer_instance( SchedXaction *sx, void *deferStateData )
 {
-        sx->deferredList = g_list_remove( sx->deferredList, deferStateData );
+   sx->deferredList = g_list_remove( sx->deferredList, deferStateData );
 }
 
 /**
@@ -786,6 +727,6 @@ gnc_sx_remove_defer_instance( SchedXaction *sx, void *deferStateData )
 GList*
 gnc_sx_get_defer_instances( SchedXaction *sx )
 {
-        return sx->deferredList;
+   return sx->deferredList;
 }
 

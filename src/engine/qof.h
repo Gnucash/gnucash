@@ -31,10 +31,10 @@
 #include "qof/kvp_frame.h"
 #include "qof/qofbackend.h"
 #include "qof/qofid.h"
-#include "qof/qofquery.h"
-#include "qof/qofqueryobject.h"
 #include "qof/qofbook.h"
+#include "qof/qofclass.h"
 #include "qof/qofobject.h"
+#include "qof/qofquery.h"
 #include "qof/qofquerycore.h"
 #include "qof/qofsession.h"
 

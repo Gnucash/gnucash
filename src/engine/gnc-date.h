@@ -189,7 +189,7 @@ Timespec gnc_iso8601_to_timespec_gmt(const char *);
 
 /** The gnc_timespec_to_iso8601_buff() routine prints a Timespec
 * as an ISO-8601 style string.  The buffer must be long enough
-* to contain the string.  The string is null-terminated. This
+* to contain the NULL-terminated string (32 characters + NUL).  This
 * routine returns a pointer to the null terminator (and can 
 * thus be used in the 'stpcpy' metaphor of string concatenation).*/
 char * gnc_timespec_to_iso8601_buff (Timespec ts, char * buff);

@@ -37,6 +37,7 @@
 #include "SX-book.h"
 #include "SX-book-p.h"
 #include "Transaction.h"
+#include "TransactionP.h"
 #include "TransLog.h"
 #include "qofbackend-p.h"
 #include "qofbook.h"
@@ -420,22 +421,20 @@ gnc_counter_sixtp_parser_create(void)
      return sixtp_dom_parser_new(gnc_counter_end_handler, NULL, NULL);
 }
 
-#if 0
 static void
 print_counter_data(load_counter *data)
 {
-    PINFO("Transactions: Total: %d, Loaded: %d\n",
+    PINFO("Transactions: Total: %d, Loaded: %d",
            data->transactions_total, data->transactions_loaded);
-    PINFO("Accounts: Total: %d, Loaded: %d\n",
+    PINFO("Accounts: Total: %d, Loaded: %d",
            data->accounts_total, data->accounts_loaded);
-    PINFO("Books: Total: %d, Loaded: %d\n",
+    PINFO("Books: Total: %d, Loaded: %d",
            data->books_total, data->books_loaded);
-    PINFO("Commodities: Total: %d, Loaded: %d\n",
+    PINFO("Commodities: Total: %d, Loaded: %d",
            data->commodities_total, data->commodities_loaded);
-    PINFO("Scheduled Tansactions: Total: %d, Loaded: %d\n",
+    PINFO("Scheduled Tansactions: Total: %d, Loaded: %d",
            data->schedXactions_total, data->schedXactions_loaded);
 }
-#endif
 
 static void
 file_rw_feedback (sixtp_gdv2 *gd, const char *type)
@@ -700,14 +699,23 @@ qof_session_load_from_xml_file_v2(FileBackend *fbe, QofBook *book)
 
     /* stop logging while we load */
     xaccLogDisable ();
+    xaccDisableDataScrubbing();
 
     if(!gnc_xml_parse_file(top_parser, fbe->fullpath,
                            generic_callback, gd, book))
     {
         sixtp_destroy(top_parser);
         xaccLogEnable ();
+        xaccEnableDataScrubbing();
         goto bail;
     }
+    DEBUGCMD (print_counter_data(&gd->counter));
+
+    /* destroy the parser */
+    sixtp_destroy (top_parser);
+    g_free(gd);
+
+    xaccEnableDataScrubbing();
 
     /* Mark the book as saved */
     qof_book_mark_saved (book);
@@ -732,15 +740,8 @@ qof_session_load_from_xml_file_v2(FileBackend *fbe, QofBook *book)
      */
     xaccAccountGroupCommitEdit (grp);
 
-    /* destroy the parser */
-    sixtp_destroy (top_parser);
-
     /* start logging again */
     xaccLogEnable ();
-
-    g_free(gd);
-    /* DEBUG */
-    /* print_counter_data(&gd->counter); */
 
     return TRUE;
 

@@ -142,10 +142,6 @@ const char * gnc_log_prettify (const char *name);
   }                                                \
 }
 
-#define PWARN_GUI(format, args...) {               \
-   gnc_send_gui_error(format, ## args);            \
-}
-
 #define PINFO(format, args...) {                   \
   if (gnc_should_log (module, GNC_LOG_INFO)) {     \
     g_log (G_LOG_DOMAIN, G_LOG_LEVEL_INFO,         \
@@ -182,17 +178,6 @@ const char * gnc_log_prettify (const char *name);
 }
 
 #define DEBUGCMD(x) { if (gnc_should_log (module, GNC_LOG_DEBUG)) { (x); }}
-
-/* -------------------------------------------------------- */
-/* Infrastructure to send messages go to GUI popups, not to stderr! 
- * Incompletely implemented, needs work.
- */
-typedef void (*GNCGuiMessage) (const char *format, va_list args);
-void gnc_set_warning_message (GNCGuiMessage func);
-void gnc_set_error_message (GNCGuiMessage func);
-
-gboolean gnc_send_gui_warning (const char *format, ...) G_GNUC_PRINTF(1,2);
-gboolean gnc_send_gui_error (const char *format, ...) G_GNUC_PRINTF(1,2);
 
 /* -------------------------------------------------------- */
 /* Infrastructure to make timing measurements for critical peices 

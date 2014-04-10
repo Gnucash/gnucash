@@ -49,7 +49,7 @@ test_job (void)
     do_test (gncJobCreate (NULL) == NULL, "job create NULL");
     job = gncJobCreate (book);
     do_test (job != NULL, "job create");
-    do_test (gncJobGetBook (job) == book,
+    do_test (qof_instance_get_book(QOF_INSTANCE(job)) == book,
 	     "getbook");
 
     gncJobBeginEdit (job);
@@ -70,7 +70,7 @@ test_job (void)
     guid_new (&guid);
     job = gncJobCreate (book); count++;
     gncJobSetGUID (job, &guid);
-    do_test (guid_equal (&guid, gncJobGetGUID (job)), "guid compare");
+    do_test (guid_equal (&guid, qof_instance_get_guid(QOF_INSTANCE(job))), "guid compare");
   }
 #if 0
   {
@@ -129,12 +129,12 @@ test_string_fcn (GNCBook *book, const char *message,
   GncJob *job = gncJobCreate (book);
   char const *str = get_random_string ();
 
-  do_test (!gncJobIsDirty (job), "test if start dirty");
+  do_test (!qof_instance_is_dirty (QOF_INSTANCE(job)), "test if start dirty");
   gncJobBeginEdit (job);
   set (job, str);
-  do_test (gncJobIsDirty (job), "test dirty later");
+  do_test (qof_instance_is_dirty (QOF_INSTANCE(job)), "test dirty later");
   gncJobCommitEdit (job);
-  do_test (!gncJobIsDirty (job), "test dirty after commit");
+  do_test (!qof_instance_is_dirty (QOF_INSTANCE(job)), "test dirty after commit");
   do_test (safe_strcmp (get (job), str) == 0, message);
   gncJobSetActive (job, FALSE); count++;
 }
@@ -148,12 +148,12 @@ test_numeric_fcn (GNCBook *book, const char *message,
   GncJob *job = gncJobCreate (book);
   gnc_numeric num = gnc_numeric_create (17, 1);
 
-  do_test (!gncJobIsDirty (job), "test if start dirty");
+  do_test (!qof_instance_is_dirty (QOF_INSTANCE(job)), "test if start dirty");
   gncJobBeginEdit (job);
   set (job, num);
-  do_test (gncJobIsDirty (job), "test dirty later");
+  do_test (qof_instance_is_dirty (QOF_INSTANCE(job)), "test dirty later");
   gncJobCommitEdit (job);
-  do_test (!gncJobIsDirty (job), "test dirty after commit");
+  do_test (!qof_instance_is_dirty (QOF_INSTANCE(job)), "test dirty after commit");
   do_test (gnc_numeric_equal (get (job), num), message);
   gncJobSetActive (job, FALSE); count++;
 }
@@ -167,14 +167,14 @@ test_bool_fcn (GNCBook *book, const char *message,
   GncJob *job = gncJobCreate (book);
   gboolean num = get_random_boolean ();
 
-  do_test (!gncJobIsDirty (job), "test if start dirty");
+  do_test (!qof_instance_is_dirty (QOF_INSTANCE(job)), "test if start dirty");
   gncJobBeginEdit (job);
   set (job, FALSE);
   set (job, TRUE);
   set (job, num);
-  do_test (gncJobIsDirty (job), "test dirty later");
+  do_test (qof_instance_is_dirty (QOF_INSTANCE(job)), "test dirty later");
   gncJobCommitEdit (job);
-  do_test (!gncJobIsDirty (job), "test dirty after commit");
+  do_test (!qof_instance_is_dirty (QOF_INSTANCE(job)), "test dirty after commit");
   do_test (get (job) == num, message);
   gncJobSetActive (job, FALSE); count++;
 }
@@ -188,12 +188,12 @@ test_gint_fcn (GNCBook *book, const char *message,
   GncJob *job = gncJobCreate (book);
   gint num = 17;
 
-  do_test (!gncJobIsDirty (job), "test if start dirty");
+  do_test (!qof_instance_is_dirty (QOF_INSTANCE(job)), "test if start dirty");
   gncJobBeginEdit (job);
   set (job, num);
-  do_test (gncJobIsDirty (job), "test dirty later");
+  do_test (qof_instance_is_dirty (QOF_INSTANCE(job)), "test dirty later");
   gncJobCommitEdit (job);
-  do_test (!gncJobIsDirty (job), "test dirty after commit");
+  do_test (!qof_instance_is_dirty (QOF_INSTANCE(job)), "test dirty after commit");
   do_test (get (job) == num, message);
   gncJobSetActive (job, FALSE); count++;
 }

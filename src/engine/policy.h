@@ -24,22 +24,18 @@
  *  @author Created by Linas Vepstas August 2003
  *  @author Copyright (c) 2003 Linas Vepstas <linas@linas.org>
  *
- *  This file implements Accounting Policy.  The Accounting Polciy 
+ *  This file implements Accounting Policy.  The Accounting Policy 
  *  determines how splits are assigned to lots.  The default policy
- *  is teh FIFO policy: the first thing bought is also the first 
+ *  is the FIFO policy: the first thing bought is also the first 
  *  thing sold. 
  */
 
 #ifndef XACC_POLICY_H 
 #define XACC_POLICY_H 
 
-#include "gnc-engine.h"
+typedef struct gncpolicy_s GNCPolicy;
 
-/* Accounting-policy callback.  Given an account and an amount, 
- * this routine should return a lot.  By implementing this as 
- * a callback, we can 'easily' add other accounting policies.
- * Currently, we only implement the FIFO policy.
- */
-typedef GNCLot * (*AccountingPolicyGetLot) (Split *, 
-                                            gpointer user_data);
+GNCPolicy *xaccGetFIFOPolicy (void); 
+GNCPolicy *xaccGetLIFOPolicy (void); 
+
 #endif /* XACC_POLICY_H */

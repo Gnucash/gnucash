@@ -80,6 +80,7 @@ gboolean xaccAccountHasTrades (Account *);
  *   that the balance only decreases.
  */
 GNCLot * xaccAccountFindEarliestOpenLot (Account *acc, gnc_numeric sign);
+GNCLot * xaccAccountFindLatestOpenLot (Account *acc, gnc_numeric sign);
 
 /** The xaccAccountGetDefaultGainAccount() routine will return
  *   the account to which realized gains/losses may be posted.  
@@ -152,6 +153,15 @@ gboolean xaccSplitAssign (Split *split);
  *    are used.
  */
 Split * xaccSplitAssignToLot (Split *split, GNCLot *lot);
+
+/** The xaccTransScrubGains() routine performs a number of cleanup
+ *  functions on the indicated transaction, with the end-goal of
+ *  setting up a consistent set of gains/losses for all the splits
+ *  in the transaction.  This includes making sure that the lot
+ *  assignments of all the splits are good, and that the lots 
+ *  balance appropriately.
+ */
+void xaccTransScrubGains (Transaction *trans, Account *gain_acc);
 
 /** The xaccSplitComputeCapGains() routine computes the cap gains
  *  or losses for the indicated split.  The gains are placed into

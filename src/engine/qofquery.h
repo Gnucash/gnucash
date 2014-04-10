@@ -31,8 +31,8 @@
 #define QOF_QUERYNEW_H
 
 #include "guid.h"
-#include "qofquerycore.h"
 #include "qofbook.h"
+#include "qofquerycore.h"
 
 /** A Query */
 typedef struct _QofQuery QofQuery;

@@ -11,12 +11,13 @@
 
 #define GNC_ADDRESS_MODULE_NAME	"gncAddress"
 
-struct _gncAddress;
 typedef struct _gncAddress GncAddress;
 
 /* Create/Destroy functions */
-
 GncAddress * gncAddressCreate (QofBook *book, const GUID *parent, QofIdType ptype);
+
+/** make a copy of the address, but associate it with a different book */
+GncAddress * gncCloneAddress (GncAddress *from, QofBook *book);
 void gncAddressDestroy (GncAddress *addr);
 
 /* Set functions */

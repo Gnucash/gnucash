@@ -29,6 +29,7 @@
 #include "datecell.h"
 #include "global-options.h"
 #include "gnc-engine-util.h"
+#include "gnc-err-popup.h"
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"
 #include "messages.h"
@@ -1696,6 +1697,24 @@ gnc_split_register_get_security_io_flags (VirtualLocation virt_loc,
 
   return XACC_CELL_ALLOW_SHADOW;
 }
+
+static gboolean
+xaccTransWarnReadOnly (const Transaction *trans)
+{
+  const gchar *reason;
+                                                                               
+  if (!trans) return FALSE;
+                                                                               
+  reason = xaccTransGetReadOnly (trans);
+  if (reason) {
+    gnc_send_gui_error(_("Cannot modify or delete this transaction.\n"
+                       "This transaction is marked read-only because:\n\n'%s'"),
+                       reason);
+    return TRUE;
+  }
+  return FALSE;
+}
+
 
 static gboolean
 gnc_split_register_confirm (VirtualLocation virt_loc, gpointer user_data)

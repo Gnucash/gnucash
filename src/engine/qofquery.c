@@ -35,13 +35,13 @@
 #include "qofbackend-p.h"
 #include "qofbook.h"
 #include "qofbook-p.h"
+#include "qofclass.h"
+#include "qofclass-p.h"
 #include "qofobject.h"
 #include "qofquery.h"
 #include "qofquery-p.h"
 #include "qofquerycore.h"
 #include "qofquerycore-p.h"
-#include "qofqueryobject.h"
-#include "qofqueryobject-p.h"
 
 static short module = MOD_QUERY;
 
@@ -429,9 +429,9 @@ check_object (QofQuery *q, gpointer object)
  * returns NULL if the first parameter is bad (and final is unchanged).
  */
 static GSList * compile_params (GSList *param_list, QofIdType start_obj,
-                                QofQueryObject const **final)
+                                QofParam const **final)
 {
-  const QofQueryObject *objDef = NULL;
+  const QofParam *objDef = NULL;
   GSList *fcns = NULL;
 
   ENTER ("param_list=%p id=%s", param_list, start_obj);
@@ -442,7 +442,7 @@ static GSList * compile_params (GSList *param_list, QofIdType start_obj,
   for (; param_list; param_list = param_list->next) 
   {
     QofIdType param_name = param_list->data;
-    objDef = qof_query_object_get_parameter (start_obj, param_name);
+    objDef = qof_class_get_parameter (start_obj, param_name);
 
     /* If it doesn't exist, then we've reached the end */
     if (!objDef) break;
@@ -464,7 +464,7 @@ static GSList * compile_params (GSList *param_list, QofIdType start_obj,
 static void 
 compile_sort (QofQuerySort *sort, QofIdType obj)
 {
-  const QofQueryObject *resObj = NULL;
+  const QofParam *resObj = NULL;
 
   ENTER ("sort=%p id=%s params=%p", sort, obj, sort->param_list);
   sort->use_default = FALSE;
@@ -490,7 +490,7 @@ compile_sort (QofQuerySort *sort, QofIdType obj)
     /* Hrm, perhaps this is an object compare, not a core compare? */
     if (sort->comp_fcn == NULL)
     {
-      sort->obj_cmp = qof_query_object_default_sort (resObj->param_type);
+      sort->obj_cmp = qof_class_get_default_sort (resObj->param_type);
     }
   } 
   else if (!safe_strcmp (sort->param_list->data, QUERY_DEFAULT_SORT))
@@ -511,7 +511,7 @@ static void compile_terms (QofQuery *q)
   for (or_ptr = q->terms; or_ptr; or_ptr = or_ptr->next) {
     for (and_ptr = or_ptr->data; and_ptr; and_ptr = and_ptr->next) {
       QofQueryTerm *qt = and_ptr->data;
-      const QofQueryObject *resObj = NULL;
+      const QofParam *resObj = NULL;
       
       g_slist_free (qt->param_fcns);
       qt->param_fcns = NULL;
@@ -536,7 +536,7 @@ static void compile_terms (QofQuery *q)
   compile_sort (&(q->secondary_sort), q->search_for);
   compile_sort (&(q->tertiary_sort), q->search_for);
 
-  q->defaultSort = qof_query_object_default_sort (q->search_for);
+  q->defaultSort = qof_class_get_default_sort (q->search_for);
 
   /* Now compile the backend instances */
   for (node = q->books; node; node = node->next) {
@@ -1224,14 +1224,14 @@ void qof_query_add_boolean_match (QofQuery *q, GSList *param_list, gboolean valu
 
 void qof_query_init (void)
 {
-  PINFO("New Query Module Initialization");
+  ENTER (" ");
   qof_query_core_init ();
-  qof_query_object_init ();
+  qof_class_init ();
 }
 
 void qof_query_shutdown (void)
 {
-  qof_query_object_shutdown ();
+  qof_class_shutdown ();
   qof_query_core_shutdown ();
 }
 
@@ -1632,7 +1632,7 @@ static void
 qof_query_printValueForParam (QofQueryPredData *pd, GString * gs)
 {
 
-  if (!safe_strcmp (pd->type_name, QOF_QUERYCORE_GUID))
+  if (!safe_strcmp (pd->type_name, QOF_TYPE_GUID))
   {
     GList *node;
     query_guid_t pdata = (query_guid_t) pd;
@@ -1645,7 +1645,7 @@ qof_query_printValueForParam (QofQueryPredData *pd, GString * gs)
     }
     return;
   }
-  if (!safe_strcmp (pd->type_name, QOF_QUERYCORE_STRING))
+  if (!safe_strcmp (pd->type_name, QOF_TYPE_STRING))
   {
     query_string_t pdata = (query_string_t) pd;
     g_string_sprintfa (gs, "\n      Match type %s",
@@ -1655,7 +1655,7 @@ qof_query_printValueForParam (QofQueryPredData *pd, GString * gs)
                        pdata->matchstring);
     return;
   }
-  if (!safe_strcmp (pd->type_name, QOF_QUERYCORE_NUMERIC))
+  if (!safe_strcmp (pd->type_name, QOF_TYPE_NUMERIC))
   {
     query_numeric_t pdata = (query_numeric_t) pd;
     g_string_sprintfa (gs, "\n      Match type %s",
@@ -1664,7 +1664,7 @@ qof_query_printValueForParam (QofQueryPredData *pd, GString * gs)
                        gnc_numeric_to_string (pdata->amount));
     return;
   }
-  if (!safe_strcmp (pd->type_name, QOF_QUERYCORE_KVP))
+  if (!safe_strcmp (pd->type_name, QOF_TYPE_KVP))
   {
     GSList *node;
     query_kvp_t pdata = (query_kvp_t) pd;
@@ -1674,25 +1674,25 @@ qof_query_printValueForParam (QofQueryPredData *pd, GString * gs)
       return;
     }
   }
-  if (!safe_strcmp (pd->type_name, QOF_QUERYCORE_INT64))
+  if (!safe_strcmp (pd->type_name, QOF_TYPE_INT64))
   {
     query_int64_t pdata = (query_int64_t) pd;
     g_string_sprintfa (gs, " int64: %lld", pdata->val);
     return;
   }
-  if (!safe_strcmp (pd->type_name, QOF_QUERYCORE_INT32))
+  if (!safe_strcmp (pd->type_name, QOF_TYPE_INT32))
   {
     query_int32_t pdata = (query_int32_t) pd;
     g_string_sprintfa (gs, " int32: %d", pdata->val);
     return;
   }
-  if (!safe_strcmp (pd->type_name, QOF_QUERYCORE_DOUBLE))
+  if (!safe_strcmp (pd->type_name, QOF_TYPE_DOUBLE))
   {
     query_double_t pdata = (query_double_t) pd;
     g_string_sprintfa (gs, " double: %20.16g", pdata->val);
     return;
   }
-  if (!safe_strcmp (pd->type_name, QOF_QUERYCORE_DATE))
+  if (!safe_strcmp (pd->type_name, QOF_TYPE_DATE))
   {
     query_date_t pdata = (query_date_t) pd;
     g_string_sprintfa (gs, "\n      Match type %s",
@@ -1700,7 +1700,7 @@ qof_query_printValueForParam (QofQueryPredData *pd, GString * gs)
     g_string_sprintfa (gs, " query_date: %s", gnc_print_date (pdata->date));
     return;
   }
-  if (!safe_strcmp (pd->type_name, QOF_QUERYCORE_CHAR))
+  if (!safe_strcmp (pd->type_name, QOF_TYPE_CHAR))
   {
     query_char_t pdata = (query_char_t) pd;
     g_string_sprintfa (gs, "\n      Match type %s",
@@ -1708,7 +1708,7 @@ qof_query_printValueForParam (QofQueryPredData *pd, GString * gs)
     g_string_sprintfa (gs, " char list: %s", pdata->char_list);
     return;
   }
-  if (!safe_strcmp (pd->type_name, QOF_QUERYCORE_BOOLEAN))
+  if (!safe_strcmp (pd->type_name, QOF_TYPE_BOOLEAN))
   {
     query_boolean_t pdata = (query_boolean_t) pd;
     g_string_sprintfa (gs, " boolean: %s", pdata->val?"TRUE":"FALSE");

@@ -1,5 +1,26 @@
+/********************************************************************\
+ * gncBillTerm.h -- the Gnucash Billing Term interface              *
+ *                                                                  *
+ * This program is free software; you can redistribute it and/or    *
+ * modify it under the terms of the GNU General Public License as   *
+ * published by the Free Software Foundation; either version 2 of   *
+ * the License, or (at your option) any later version.              *
+ *                                                                  *
+ * This program is distributed in the hope that it will be useful,  *
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of   *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    *
+ * GNU General Public License for more details.                     *
+ *                                                                  *
+ * You should have received a copy of the GNU General Public License*
+ * along with this program; if not, contact:                        *
+ *                                                                  *
+ * Free Software Foundation           Voice:  +1-617-542-5942       *
+ * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
+ * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ *                                                                  *
+\********************************************************************/
+
 /*
- * gncBillTerm.h -- the Gnucash Billing Term interface
  * Copyright (C) 2002 Derek Atkins
  * Author: Derek Atkins <warlord@MIT.EDU>
  */
@@ -9,9 +30,10 @@
 
 typedef struct _gncBillTerm GncBillTerm;
 
-#include "gnc-numeric.h"
-#include "gnc-book.h"
 #include "gnc-date.h"
+#include "gnc-numeric.h"
+#include "qofbook.h"
+#include "qofinstance.h"
 
 #define GNC_BILLTERM_MODULE_NAME "gncBillTerm"
 
@@ -48,9 +70,8 @@ void gncBillTermCommitEdit (GncBillTerm *term);
 GncBillTerm *gncBillTermLookup (QofBook *book, const GUID *guid);
 GncBillTerm *gncBillTermLookupByName (QofBook *book, const char *name);
 GList * gncBillTermGetTerms (QofBook *book);
+KvpFrame* gncBillTermGetSlots (GncBillTerm *term);
 
-const GUID *gncBillTermGetGUID (GncBillTerm *term);
-QofBook *gncBillTermGetBook (GncBillTerm *term);
 const char *gncBillTermGetName (GncBillTerm *term);
 const char *gncBillTermGetDescription (GncBillTerm *term);
 GncBillTermType gncBillTermGetType (GncBillTerm *term);
@@ -74,5 +95,8 @@ int gncBillTermCompare (GncBillTerm *a, GncBillTerm *b);
 /* Compute the due date and discount dates from the post date */
 Timespec gncBillTermComputeDueDate (GncBillTerm *term, Timespec post_date);
 Timespec gncBillTermComputeDiscountDate (GncBillTerm *term, Timespec post_date);
+
+/* deprecated */
+#define gncBillTermGetGUID(x) qof_instance_get_guid (QOF_INSTANCE(x))
 
 #endif /* GNC_BILLTERM_H_ */

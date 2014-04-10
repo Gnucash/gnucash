@@ -10,11 +10,13 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
+#include "AccountP.h"
 #include "Group.h"
 #include "gnc-date.h"
 #include "gnc-engine.h"
 #include "gnc-engine-util.h"
 #include "Transaction.h"
+#include "TransactionP.h"
 #include "qofquerycore.h"
 
 #include "test-engine-stuff.h"
@@ -988,17 +990,14 @@ get_random_transaction_with_currency(QofBook *book,
     ret = xaccMallocTransaction(book);
 
     xaccTransBeginEdit(ret);
-
     xaccTransSetCurrency (ret,
                           currency ? currency :
                           get_random_commodity (book));
 
     set_tran_random_string(ret, xaccTransSetNum);
-
+    set_tran_random_string(ret, xaccTransSetDescription);
     trn_add_ran_timespec(ret, xaccTransSetDatePostedTS);
     trn_add_ran_timespec(ret, xaccTransSetDateEnteredTS);
-
-    set_tran_random_string(ret, xaccTransSetDescription);
 
     xaccTransSetSlots_nc(ret, get_random_kvp_frame());
 
@@ -1012,7 +1011,6 @@ get_random_transaction_with_currency(QofBook *book,
     }
 
     xaccTransCommitEdit(ret);
-
     return ret;
 }
 
@@ -1585,7 +1583,6 @@ add_random_transactions_to_book (QofBook *book, gint num_transactions)
     Split *split;
 
     com = get_random_commodity_from_table (table);
-
     trans = get_random_transaction_with_currency (book, com);
 
     xaccTransBeginEdit (trans);
@@ -1600,7 +1597,6 @@ add_random_transactions_to_book (QofBook *book, gint num_transactions)
 
     xaccTransCommitEdit (trans);
   }
-
   g_list_free (accounts);
 }
 

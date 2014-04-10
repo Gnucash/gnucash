@@ -1,6 +1,6 @@
 /********************************************************************\
- * qofqueryobject-p.h -- Private API for registering queriable objects  *
- * Copyright (C) 2002 Derek Atkins <warlord@MIT.EDU>                *
+ * gnc-err-popup.c -- GnuCash error GUI popups                      *
+ * Copyright (c) 2001 Linux Developers Group, Inc.                  *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -18,17 +18,62 @@
  * Free Software Foundation           Voice:  +1-617-542-5942       *
  * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
- *                                                                  *
 \********************************************************************/
 
-#ifndef QOF_QUERYOBJECTP_H
-#define QOF_QUERYOBJECTP_H
+#include "config.h"
 
-#include "qofqueryobject.h"
+#include <glib.h>
+#include <stdarg.h>
+#include <string.h>
 
-void qof_query_object_init(void);
-void qof_query_object_shutdown (void);
+#include "gnc-err-popup.h"
 
-QofSortFunc qof_query_object_default_sort (QofIdTypeConst obj_name);
 
-#endif /* QOF_QUERYOBJECTP_H */
+/********************************************************************\
+  Callbacks so that app can display gui messages.
+\********************************************************************/
+
+static GNCGuiMessage gnc_gui_warning_func = NULL;
+static GNCGuiMessage gnc_gui_error_func = NULL;
+
+void 
+gnc_set_warning_message (GNCGuiMessage func)
+{
+  gnc_gui_warning_func = func;
+}
+
+void 
+gnc_set_error_message (GNCGuiMessage func)
+{
+  gnc_gui_error_func = func;
+}
+
+gboolean
+gnc_send_gui_warning(const gchar *format, ...)
+{
+  va_list args;
+
+  if (!gnc_gui_warning_func) return FALSE;
+
+  va_start (args, format);
+  gnc_gui_warning_func(format, args);
+  va_end(args);
+  return(TRUE);
+}
+
+gboolean
+gnc_send_gui_error(const gchar *format, ...)
+{
+  va_list args;
+
+  if (!gnc_gui_error_func) return(FALSE);
+
+  va_start (args, format);
+  gnc_gui_error_func(format, args);
+  va_end(args);
+  return(TRUE);
+}
+
+
+/************************* END OF FILE ******************************\
+\********************************************************************/

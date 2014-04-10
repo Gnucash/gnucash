@@ -25,6 +25,7 @@
 #define GNC_EVENT_P_H
 
 #include "gnc-event.h"
+#include "qofid.h"
 
 /* gnc_engine_generate_event
  *   Invoke all registered event handlers using the given arguments.
@@ -42,6 +43,9 @@
  */
 void gnc_engine_generate_event (const GUID *entity, QofIdType type,
 				GNCEngineEventType event_type);
+
+#define gnc_engine_gen_event(ent, ev) \
+     gnc_engine_generate_event (&((ent)->guid), (ent)->e_type, ev);
 
 /* generates an event even when events are suspended! */
 void gnc_engine_force_event (const GUID *entity, QofIdType type,

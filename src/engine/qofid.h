@@ -32,8 +32,8 @@
 */
 
 /** This file defines an API that adds types to the GUID's.
- *  GUID's with types cna be used to identify and reference 
- * typed entities.
+ *  GUID's with types can be used to identify and reference 
+ *  typed entities.
  *
  * GUID Identifiers can be used to reference QOF Objects.
  * Identifiers are globally-unique and permanent, i.e., once
@@ -41,11 +41,8 @@
  * identifier for its lifetime.
  *
  * Identifiers can be encoded as hex strings. 
- */
-
-#include "guid.h"
-
-/** GUID Identifiers are 'typed' with strings. The native ids used 
+ *
+ * GUID Identifiers are 'typed' with strings.  The native ids used 
  * by QOF are defined below. An id with type QOF_ID_NONE does not 
  * refer to any entity, although that may change (???). An id with 
  * type QOF_ID_NULL does not refer to any entity, and will never refer
@@ -55,6 +52,8 @@
  * type of the identifier. 
  */
 
+#include "guid.h"
+
 typedef const char * QofIdType;
 typedef const char * QofIdTypeConst;
 
@@ -63,14 +62,46 @@ typedef const char * QofIdTypeConst;
 #define QOF_ID_NULL           "null"
 #define QOF_ID_SESSION        "Session"
 
+/* simple,cheesy cast but holds water for now */
+#define QOF_ENTITY(object) ((QofEntity *)(object))
 
-typedef struct _QofEntityTable QofEntityTable;
+typedef struct QofEntity_s QofEntity;
+typedef struct QofCollection_s QofCollection;
 
-/** Return the type of the indicated guid */
-QofIdType qof_entity_type (QofEntityTable *entity_table, const GUID * guid);
+struct QofEntity_s
+{
+   QofIdType        e_type;
+	GUID             guid;
+	QofCollection  * collection;
+};
+
+/** Initialise the memory associated with an entity */
+void qof_entity_init (QofEntity *, QofIdType, QofCollection *);
+                                                                                
+/** Release the data associated with this entity. Dont actually free
+ * the memory associated with the instance. */
+void qof_entity_release (QofEntity *);
+
+/* Return the GUID of this entity */
+GUID * qof_entity_get_guid (QofEntity *);
+
+/** collections of entities */
+QofCollection * qof_collection_new (QofIdType type);
+void qof_collection_destroy (QofCollection *col);
+
+/** return the type that the collection stores */
+QofIdType qof_collection_get_type (QofCollection *);
+
+/** Find the entity going only from its guid */
+QofEntity * qof_collection_lookup_entity (QofCollection *, const GUID *);
 
 /* Callback type for qof_entity_foreach */
-typedef void (*QofEntityForeachCB) (gpointer object, gpointer user_data);
+typedef void (*QofEntityForeachCB) (QofEntity *, gpointer user_data);
+
+void qof_collection_foreach (QofCollection *, 
+                       QofEntityForeachCB, gpointer user_data);
+
+
 
 #endif /* QOF_ID_H */
 /** @} */

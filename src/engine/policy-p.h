@@ -1,5 +1,5 @@
 /********************************************************************\
- * policy-.h -- Implement Accounting Policy Private Header File     *
+ * policy-p.h -- Implement Accounting Policy Private Header File    *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -24,9 +24,9 @@
  *  @author Created by Linas Vepstas August 2003
  *  @author Copyright (c) 2003 Linas Vepstas <linas@linas.org>
  *
- *  This file implements Accounting Policy.  The Accounting Polciy 
+ *  This file implements Accounting Policy.  The Accounting Policy 
  *  determines how splits are assigned to lots.  The default policy
- *  is teh FIFO policy: the first thing bought is also the first 
+ *  is the FIFO policy: the first thing bought is also the first 
  *  thing sold. 
  */
 
@@ -34,42 +34,44 @@
 #define XACC_POLICY_P_H 
 
 #include "gnc-engine.h"
+#include "policy.h"
 
 /* ============================================================== */
-/** The FIFOPolicy routines try to encapsulate the FIFO-specific
- *  parts of the cap-gains routine, and can eb replaced by something
- *  else for other policies (e.g. LIFO)
+/** The Policy routines try to encapsulate the FIFO/LIFO-specific
+ *  parts of the cap-gains routine, and can be replaced by something
+ *  else for other policies. 
  * 
- *  The FIFOPolicyGetLot() routine returns a lot into which the 
+ *  The PolicyGetLot() routine returns a lot into which the 
  *     indicated split should be placed.
  *
- *  The FIFOPolicyGetSplit() routine returns an unassinged split
+ *  The PolicyGetSplit() routine returns an unassinged split
  *     from the account that is appropriate for placing into the
  *     indicated lot.  For the FIFO policy, that would be the 
  *     earliest split that is not in any account, and is of the
- *     appropriate sign.
+ *     appropriate sign.  For a LIFO, it would be the latest.
  *
- *  The FIFOPolicyIsOpeningSplit() predicate returns a true/false
+ *  The PolicyIsOpeningSplit() predicate returns a true/false
  *     value, indicating if the indicated split was used to 'open'
  *     or 'grow' the lot. 
  *
- *  The FIFOPolicyGetLotOpening() routine returns information about
+ *  The PolicyGetLotOpening() routine returns information about
  *     the opening balances for the lot.  The 'opening balances' 
  *     are the sum of all the splits used to grow (increase the size
- *     of) the lot.  For a FIFO polciy, there is only one split 
- *     that opens a lot.
+ *     of) the lot.  For a LIFO or FIFO policy, there is only one 
+ *     split that opens a lot.
  */
 
-GNCLot * FIFOPolicyGetLot (Split *split, gpointer user_data);
+struct gncpolicy_s
+{
+   GNCLot * (*PolicyGetLot) (GNCPolicy *, Split *split);
+   Split  * (*PolicyGetSplit) (GNCPolicy *, GNCLot *lot);
+   void     (*PolicyGetLotOpening) (GNCPolicy *, GNCLot *lot,
+                                   gnc_numeric *ret_amount, 
+                                   gnc_numeric *ret_value,
+                                   gnc_commodity **ret_currency);
 
-Split * FIFOPolicyGetSplit (GNCLot *lot, gpointer user_data);
-
-void FIFOPolicyGetLotOpening (GNCLot *lot,
-        gnc_numeric *ret_amount, gnc_numeric *ret_value,
-        gnc_commodity **ret_currency,
-        gpointer user_data);
-
-gboolean FIFOPolicyIsOpeningSplit (GNCLot *lot, Split *split, 
-                                   gpointer user_data);
+   gboolean (*PolicyIsOpeningSplit) (GNCPolicy *, GNCLot *lot, 
+                                    Split *split);
+};
 
 #endif /* XACC_POLICY_P_H */
