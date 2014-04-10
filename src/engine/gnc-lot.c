@@ -41,7 +41,7 @@
 #include "gnc-lot-p.h"
 #include "Transaction.h"
 #include "TransactionP.h"
-#include "QueryObject.h"
+#include "qofqueryobject.h"
 #include "qofbook.h"
 #include "qofbook-p.h"
 

@@ -42,13 +42,13 @@
 
 #include "Backend.h"
 #include "BackendP.h"
-#include "QueryObject.h"
 #include "gnc-event.h"
 #include "gnc-event-p.h"
 #include "gnc-trace.h"
 #include "qofbook.h"
 #include "qofbook-p.h"
 #include "qofobject-p.h"
+#include "qofqueryobject.h"
 
 static short module = MOD_ENGINE;
 

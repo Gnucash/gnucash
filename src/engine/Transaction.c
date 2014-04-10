@@ -46,11 +46,11 @@
 #include "gnc-lot-p.h"
 #include "gnc-lot.h"
 #include "messages.h"
+
 #include "qofbook.h"
 #include "qofbook-p.h"
 #include "qofobject.h"
-
-#include "QueryObject.h"
+#include "qofqueryobject.h"
 
 /* 
  * The "force_double_entry" flag determines how 
