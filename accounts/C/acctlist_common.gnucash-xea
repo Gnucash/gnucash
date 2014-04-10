@@ -1,11 +1,10 @@
 <?xml version="1.0"?>
 <gnc-account-example>
     <gnc-act:title>
-      Brokerage Accounts
+      Common Accounts
     </gnc-act:title>
     <gnc-act:short-description>
-      These accounts provide a set of accounts to deal with a
-      brokerage.
+      A basic set of accounts most commonly used
     </gnc-act:short-description>
 <gnc:account version="2.0.0">
   <act:name>Checking Account</act:name>

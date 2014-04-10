@@ -56,15 +56,24 @@ void xaccGroupScrubLotsBalance (AccountGroup *grp);
 void xaccAccountScrubLotsBalance (Account *acc);
 void xaccAccountTreeScrubLotsBalance (Account *acc);
 
-/** The xaccAccountScrubLots() routine will walk over all of
+/** The xaccAccountAssignLots() routine will walk over all of
  *   the splits in an account, and make sure that each belongs
- *   to a lot.  Any splits that are not in a lot will be used
- *   to close the oldest open lot(s).  If there are no open 
- *   lots, a new lot will be started.  By trying to close the 
- *   oldest lots, this routine implements a FIFO acounting
- *   policy.
+ *   to a lot.  Currently, the default (and only implemented)
+ *   assignment policy is a FIFO policy: Any splits that are 
+ *   not in a lot will be used to close the oldest open lot(s).
+ *   If there are no open lots, a new lot will be started.  
+ *   By trying to close the oldest lots, this effectively
+ *   implements a FIFO acounting policy.  
  */
-void xaccAccountScrubLots (Account *acc);
+void xaccAccountAssignLots (Account *acc);
+
+/** The xaccLotFill() routine attempts to assign splits to the
+ *  indicated lot until the lot balance goes to zero, or until
+ *  there are no suitable (i.e. unassigned) splits left in the
+ *  account.  It uses the default accounting policy to choose
+ *  the splits to fill out the lot. 
+ */
+void xaccLotFill (GNCLot *lot);
 
 /** The xaccAccountScrubDoubleBalance() routine examines all
  *   of the closed lots in an account, and verifies that the

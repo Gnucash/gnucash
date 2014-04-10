@@ -50,13 +50,14 @@
 #include "gnc-trace.h"
 #include "kvp-util-p.h"
 #include "messages.h"
+#include "policy-p.h"
 
 static short module = MOD_LOT;
 
 /* ============================================================== */
 
 void
-xaccAccountScrubLots (Account *acc)
+xaccAccountAssignLots (Account *acc)
 {
    SplitList *node;
 
@@ -67,8 +68,7 @@ xaccAccountScrubLots (Account *acc)
 
    /* Loop over all splits, and make sure that every split
     * belongs to some lot.  If a split does not belong to 
-    * any lots, its is placed into the earliest possible
-    * lot (thus enforcing FIFO accounting rules).
+    * any lots, poke it into one.
     */
 restart_loop:
    for (node=acc->splits; node; node=node->next)
@@ -77,12 +77,60 @@ restart_loop:
 
       /* If already in lot, then no-op */
       if (split->lot) continue;
-      if (xaccSplitFIFOAssignToLot (split)) goto restart_loop;
+      if (xaccSplitAssign (split)) goto restart_loop;
    }
    xaccAccountCommitEdit (acc);
    LEAVE ("acc=%s", acc->accountName);
 }
 
+
+/* ============================================================== */
+
+/** The xaccLotFill() routine attempts to assign splits to the 
+ *  indicated lot until the lot balance goes to zero, or until 
+ *  there are no suitable (i.e. unassigned) splits left in the 
+ *  account.  It uses the default accounting policy to choose
+ *  the splits to fill out the lot.
+ */
+
+void
+xaccLotFill (GNCLot *lot)
+{
+   gnc_numeric lot_baln;
+   Account *acc;
+
+   if (!lot) return;
+   acc = lot->account;
+
+   ENTER ("acc=%s", acc->accountName);
+
+   /* If balance already zero, we have nothing to do. */
+   lot_baln = gnc_lot_get_balance (lot);
+   if (gnc_numeric_zero_p (lot_baln)) return;
+
+   xaccAccountBeginEdit (acc);
+
+   /* Loop until we've filled up the lot, (i.e. till the 
+    * balance goes to zero) or there are no splits left.  */
+   while (1)
+   {
+      Split *split, *subsplit;
+
+      split = FIFOPolicyGetSplit (lot, NULL);
+      subsplit = xaccSplitAssignToLot (split, lot);
+      if (subsplit == split)
+      {
+         PERR ("Accounting Policy gave us a split that "
+               "doesn't fit into this lot");
+         break;
+      }
+
+      lot_baln = gnc_lot_get_balance (lot);
+      if (gnc_numeric_zero_p (lot_baln)) break;
+   }
+   xaccAccountCommitEdit (acc);
+   LEAVE ("acc=%s", acc->accountName);
+}
 
 /* ============================================================== */
 
@@ -172,7 +220,7 @@ static gpointer
 lot_scrub_cb (Account *acc, gpointer data)
 {
    if (FALSE == xaccAccountHasTrades (acc)) return NULL;
-   xaccAccountScrubLots (acc);
+   xaccAccountAssignLots (acc);
    xaccAccountScrubDoubleBalance (acc);
    return NULL;
 }
@@ -189,7 +237,7 @@ xaccAccountScrubLotsBalance (Account *acc)
 {
    if (!acc) return;
    if (FALSE == xaccAccountHasTrades (acc)) return;
-   xaccAccountScrubLots (acc);
+   xaccAccountAssignLots (acc);
    xaccAccountScrubDoubleBalance (acc);
 }
 
@@ -201,7 +249,7 @@ xaccAccountTreeScrubLotsBalance (Account *acc)
    xaccGroupScrubLotsBalance (acc->children);
    
    if (FALSE == xaccAccountHasTrades (acc)) return;
-   xaccAccountScrubLots (acc);
+   xaccAccountAssignLots (acc);
    xaccAccountScrubDoubleBalance (acc);
 }
 

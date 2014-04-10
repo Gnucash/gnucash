@@ -11,7 +11,8 @@ account_DATA = \
   acctchrt_kids.gnucash-xea \
   acctchrt_otherasset.gnucash-xea \
   acctchrt_otherloan.gnucash-xea \
-  acctchrt_studium.gnucash-xea 
+  acctchrt_studium.gnucash-xea \
+  acctchrt_skr04.gnucash-xea
 
 
 EXTRA_DIST = \
