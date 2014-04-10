@@ -100,7 +100,7 @@ static const char * query_boolean_type = QOF_QUERYCORE_BOOLEAN;
 typedef char (*query_char_getter) (gpointer);
 static const char * query_char_type = QOF_QUERYCORE_CHAR;
 
-typedef kvp_frame * (*query_kvp_getter) (gpointer);
+typedef KvpFrame * (*query_kvp_getter) (gpointer);
 static const char * query_kvp_type = QOF_QUERYCORE_KVP;
 
 /* Tables for predicate storage and lookup */
@@ -1087,8 +1087,8 @@ static int kvp_match_predicate (gpointer object, QofAccessFunc get_fcn,
                                 QofQueryPredData *pd)
 {
   int compare;
-  kvp_frame *kvp;
-  kvp_value *value;
+  KvpFrame *kvp;
+  KvpValue *value;
   query_kvp_t pdata = (query_kvp_t)pd;
 
   VERIFY_PREDICATE (query_kvp_type);
@@ -1171,7 +1171,7 @@ kvp_predicate_equal (QofQueryPredData *p1, QofQueryPredData *p2)
 
 QofQueryPredData *
 qof_query_kvp_predicate (QofQueryCompare how,
-                                      GSList *path, const kvp_value *value)
+                                      GSList *path, const KvpValue *value)
 {
   query_kvp_t pdata;
   GSList *node;

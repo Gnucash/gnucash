@@ -511,7 +511,7 @@ xaccQueryAddGUIDMatchGL (QofQuery *q, GList *param_list,
 }
 
 void
-xaccQueryAddKVPMatch(QofQuery *q, GSList *path, const kvp_value *value,
+xaccQueryAddKVPMatch(QofQuery *q, GSList *path, const KvpValue *value,
 		     QofQueryCompare how, QofIdType id_type,
 		     QofQueryOp op)
 {

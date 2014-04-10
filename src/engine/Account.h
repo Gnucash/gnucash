@@ -402,10 +402,10 @@ gboolean       xaccAccountHasAncestor (Account *account, Account *ancestor);
 
 /* ------------------ */
 
-/** @name Account kvp_frame getters/setters */
+/** @name Account KvpFrame getters/setters */
 /** @{ */
-kvp_frame * xaccAccountGetSlots (Account *account);
-void xaccAccountSetSlots_nc(Account *account, kvp_frame *frame);
+KvpFrame * xaccAccountGetSlots (Account *account);
+void xaccAccountSetSlots_nc(Account *account, KvpFrame *frame);
 
 /** Delete any old data in the account's kvp data.
  * This includes the old currency and security fields. */

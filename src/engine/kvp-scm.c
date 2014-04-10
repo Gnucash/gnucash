@@ -18,8 +18,9 @@ gnc_kvp_value_ptr_p(SCM arg)
  *       guids are stored simply as strings in scheme, so some
  *       strings could be mistaken for guids, although that is
  *       unlikely. The general problem is distinguishing kvp
- *       types based only on the scheme type. */
-kvp_value*
+ *       types based only on the scheme type.
+ */
+KvpValue *
 gnc_scm_to_kvp_value_ptr(SCM val)
 {
     if(SCM_EXACTP (val) && gnc_gh_gint64_p(val))
@@ -47,7 +48,7 @@ gnc_scm_to_kvp_value_ptr(SCM val)
     else if(SCM_STRINGP(val))
     {
         char *newstr;
-        kvp_value *ret;
+        KvpValue *ret;
         newstr = gh_scm2newstr(val, NULL);
         ret = kvp_value_new_string(newstr);
         free(newstr);
@@ -56,7 +57,7 @@ gnc_scm_to_kvp_value_ptr(SCM val)
     else if(gw_wcp_p(val) &&
 	    gw_wcp_is_of_type_p(scm_c_eval_string("<gnc:kvp-frame*>"), val))
     {
-        kvp_frame *frame = gw_wcp_get_ptr(val);
+        KvpFrame *frame = gw_wcp_get_ptr(val);
         return kvp_value_new_frame (frame);
     }
     /* FIXME: add binary handler here when it's figured out */
@@ -65,7 +66,7 @@ gnc_scm_to_kvp_value_ptr(SCM val)
 }
 
 SCM
-gnc_kvp_value_ptr_to_scm(kvp_value* val)
+gnc_kvp_value_ptr_to_scm(KvpValue* val)
 {
     switch(kvp_value_get_type(val))
     {
@@ -93,7 +94,7 @@ gnc_kvp_value_ptr_to_scm(kvp_value* val)
 
     case KVP_TYPE_FRAME:
     {
-        kvp_frame *frame = kvp_value_get_frame(val);
+        KvpFrame *frame = kvp_value_get_frame(val);
 	if (frame)
 	  return gw_wcp_assimilate_ptr (frame,
 					scm_c_eval_string("<gnc:kvp-frame*>"));
@@ -110,7 +111,7 @@ gnc_kvp_value_ptr_to_scm(kvp_value* val)
 }
 
 void
-gnc_kvp_frame_delete_at_path (kvp_frame *frame, GSList *key_path)
+gnc_kvp_frame_delete_at_path (KvpFrame *frame, GSList *key_path)
 {
   kvp_frame_set_slot_path_gslist (frame, NULL, key_path);
 }

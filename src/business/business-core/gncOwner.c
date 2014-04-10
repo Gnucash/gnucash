@@ -242,8 +242,8 @@ const GUID * gncOwnerGetEndGUID (GncOwner *owner)
 
 void gncOwnerAttachToLot (GncOwner *owner, GNCLot *lot)
 {
-  kvp_frame *kvp;
-  kvp_value *value;
+  KvpFrame *kvp;
+  KvpValue *value;
   
   if (!owner || !lot)
     return;
@@ -262,8 +262,8 @@ void gncOwnerAttachToLot (GncOwner *owner, GNCLot *lot)
 
 gboolean gncOwnerGetOwnerFromLot (GNCLot *lot, GncOwner *owner)
 {
-  kvp_frame *kvp;
-  kvp_value *value;
+  KvpFrame *kvp;
+  KvpValue *value;
   GUID *guid;
   QofBook *book;
   GncOwnerType type;

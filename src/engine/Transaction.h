@@ -212,15 +212,15 @@ void          xaccTransSortSplits (Transaction *trans);
  */
 void          xaccTransDump (Transaction *trans, const char *tag);
 
-/** Returns the transaction's kvp_frame slots.
+/** Returns the transaction's KvpFrame slots.
  *
  Transaction slots are used to store arbitrary strings, numbers, and
  structures which aren't members of the transaction struct.  */
-kvp_frame *xaccTransGetSlots(const Transaction *trans);
+KvpFrame *xaccTransGetSlots(const Transaction *trans);
 
-/** Set the kvp_frame slots of this transaction to the given frm by
+/** Set the KvpFrame slots of this transaction to the given frm by
  * directly using the frm pointer (i.e. non-copying). */
-void xaccTransSetSlots_nc(Transaction *t, kvp_frame *frm);
+void xaccTransSetSlots_nc(Transaction *t, KvpFrame *frm);
 
 
 /** Set the  Transaction Type
@@ -465,17 +465,17 @@ Transaction * xaccSplitGetParent (const Split *split);
 GNCLot *      xaccSplitGetLot (const Split *split);
 
 
-/** Returns the kvp_frame slots of this split for direct editing. 
+/** Returns the KvpFrame slots of this split for direct editing. 
  *
  * Split slots are used to store arbitrary strings, numbers, and
  * structures which aren't members of the transaction struct.  See
  * kvp_doc.txt for reserved slot names.
  */
-kvp_frame *xaccSplitGetSlots(const Split *split);
+KvpFrame *xaccSplitGetSlots(const Split *split);
 
-/** Set the kvp_frame slots of this split to the given frm by directly
+/** Set the KvpFrame slots of this split to the given frm by directly
  * using the frm pointer (i.e. non-copying). */
-void xaccSplitSetSlots_nc(Split *s, kvp_frame *frm);
+void xaccSplitSetSlots_nc(Split *s, KvpFrame *frm);
 
 
 /** The xaccSplitGetGUID() subroutine will return the

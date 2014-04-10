@@ -38,12 +38,12 @@
  */
 
 void 
-gnc_kvp_gemini (kvp_frame *kvp_root, const GUID *acct_guid, 
+gnc_kvp_gemini (KvpFrame *kvp_root, const GUID *acct_guid, 
         const GUID *book_guid, time_t secs)
 {
    char buff[80];
-   kvp_frame *cwd, *pwd;
-   kvp_value *v_ncopies, *vvv;
+   KvpFrame *cwd, *pwd;
+   KvpValue *v_ncopies, *vvv;
    gint64 ncopies = 0;
    Timespec ts;
 

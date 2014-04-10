@@ -90,7 +90,7 @@ struct account_s
    * information in splits, transactions, and accounts.  it's NULL
    * until accessed.  See src/engine/kvp_doc.txt for a list and 
    * description of the important keys. */
-  kvp_frame * kvp_data;
+  KvpFrame * kvp_data;
 
   /* The type field is the account type, picked from the enumerated 
    * list that includes BANK, STOCK, CREDIT, INCOME, etc.  Its

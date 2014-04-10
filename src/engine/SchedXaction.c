@@ -327,7 +327,7 @@ xaccSchedXactionSetRemOccur( SchedXaction *sx,
 }
 
 
-kvp_value *
+KvpValue *
 xaccSchedXactionGetSlot( SchedXaction *sx, const char *slot )
 {
   if (!sx) 
@@ -341,7 +341,7 @@ xaccSchedXactionGetSlot( SchedXaction *sx, const char *slot )
 void
 xaccSchedXactionSetSlot( SchedXaction *sx, 
 			 const char *slot,
-			 const kvp_value *value )
+			 const KvpValue *value )
 {
   if (!sx)
   {
@@ -353,14 +353,14 @@ xaccSchedXactionSetSlot( SchedXaction *sx,
   return;
 }
 
-kvp_frame*
+KvpFrame*
 xaccSchedXactionGetSlots( SchedXaction *sx )
 {
    return sx->kvp_data;
 }
 
 void
-xaccSchedXactionSetSlots( SchedXaction *sx, kvp_frame *frm )
+xaccSchedXactionSetSlots( SchedXaction *sx, KvpFrame *frm )
 {
   sx->kvp_data = frm;
   sx->dirty = TRUE;
@@ -587,8 +587,8 @@ pack_split_info (TTSplitInfo *s_info, Account *parent_acct,
                  Transaction *parent_trans, QofBook *book)
 {
   Split *split;
-  kvp_frame *split_frame;
-  kvp_value *tmp_value;
+  KvpFrame *split_frame;
+  KvpValue *tmp_value;
   const GUID *acc_guid; 
   
   split = xaccMallocSplit(book);

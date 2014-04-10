@@ -84,7 +84,7 @@ struct gncp_SchedXaction
   /* Changed since last save? */
   gboolean       dirty;
 
-  kvp_frame        *kvp_data;
+  KvpFrame        *kvp_data;
 };
 
 /** Just the variable temporal bits from the SX structure. */

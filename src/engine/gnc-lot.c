@@ -158,7 +158,7 @@ gnc_lot_get_account (GNCLot *lot)
    return lot->account;
 }
 
-kvp_frame *
+KvpFrame *
 gnc_lot_get_slots (GNCLot *lot)
 {
    if (!lot) return NULL;

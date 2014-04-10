@@ -594,31 +594,31 @@ gnc_query_path_free (GSList *path)
 }
 
 static SCM
-gnc_kvp_value_type2scm (kvp_value_t how)
+gnc_KvpValueTypeype2scm (KvpValueType how)
 {
   return gnc_gw_enum_val2scm ("<gnc:kvp-value-t>", how);
 }
 
-static kvp_value_t
-gnc_scm2kvp_value_type (SCM value_type_scm)
+static KvpValueType
+gnc_scm2KvpValueTypeype (SCM value_type_scm)
 {
   return gnc_gw_enum_scm2val ("<gnc:kvp-value-t>", value_type_scm);
 }
 
-static SCM gnc_kvp_frame2scm (kvp_frame *frame);
+static SCM gnc_kvp_frame2scm (KvpFrame *frame);
 
 static SCM
-gnc_kvp_value2scm (kvp_value *value)
+gnc_kvp_value2scm (KvpValue *value)
 {
   SCM value_scm = SCM_EOL;
-  kvp_value_t value_t;
+  KvpValueType value_t;
   SCM scm;
 
   if (!value) return SCM_BOOL_F;
 
   value_t = kvp_value_get_type (value);
 
-  value_scm = scm_cons (gnc_kvp_value_type2scm (value_t), value_scm);
+  value_scm = scm_cons (gnc_KvpValueTypeype2scm (value_t), value_scm);
 
   switch (value_t)
   {
@@ -682,7 +682,7 @@ typedef struct
 } KVPSCMData;
 
 static void
-kvp_frame_slot2scm (const char *key, kvp_value *value, gpointer data)
+kvp_frame_slot2scm (const char *key, KvpValue *value, gpointer data)
 {
   KVPSCMData *ksd = data;
   SCM value_scm;
@@ -697,7 +697,7 @@ kvp_frame_slot2scm (const char *key, kvp_value *value, gpointer data)
 }
 
 static SCM
-gnc_kvp_frame2scm (kvp_frame *frame)
+gnc_kvp_frame2scm (KvpFrame *frame)
 {
   KVPSCMData ksd;
 
@@ -710,13 +710,13 @@ gnc_kvp_frame2scm (kvp_frame *frame)
   return ksd.scm;
 }
 
-static kvp_frame * gnc_scm2kvp_frame (SCM frame_scm);
+static KvpFrame * gnc_scm2KvpFrame (SCM frame_scm);
 
-static kvp_value *
-gnc_scm2kvp_value (SCM value_scm)
+static KvpValue *
+gnc_scm2KvpValue (SCM value_scm)
 {
-  kvp_value_t value_t;
-  kvp_value *value;
+  KvpValueType value_t;
+  KvpValue *value;
   SCM type_scm;
   SCM val_scm;
 
@@ -724,7 +724,7 @@ gnc_scm2kvp_value (SCM value_scm)
     return NULL;
 
   type_scm = SCM_CAR (value_scm);
-  value_t = gnc_scm2kvp_value_type (type_scm);
+  value_t = gnc_scm2KvpValueTypeype (type_scm);
 
   value_scm = SCM_CDR (value_scm);
   if (!SCM_LISTP (value_scm) || SCM_NULLP (value_scm))
@@ -786,7 +786,7 @@ gnc_scm2kvp_value (SCM value_scm)
       {
         SCM scm = SCM_CAR (val_scm);
 
-        list = g_list_prepend (list, gnc_scm2kvp_value (scm));
+        list = g_list_prepend (list, gnc_scm2KvpValue (scm));
       }
 
       list = g_list_reverse (list);
@@ -800,9 +800,9 @@ gnc_scm2kvp_value (SCM value_scm)
     }
 
     case KVP_TYPE_FRAME: {
-      kvp_frame *frame;
+      KvpFrame *frame;
 
-      frame = gnc_scm2kvp_frame (val_scm);
+      frame = gnc_scm2KvpFrame (val_scm);
       value = kvp_value_new_frame (frame);
       kvp_frame_delete (frame);
       break;
@@ -816,10 +816,10 @@ gnc_scm2kvp_value (SCM value_scm)
   return value;
 }
 
-static kvp_frame *
-gnc_scm2kvp_frame (SCM frame_scm)
+static KvpFrame *
+gnc_scm2KvpFrame (SCM frame_scm)
 {
-  kvp_frame * frame;
+  KvpFrame * frame;
 
   if (!SCM_LISTP (frame_scm)) return NULL;
 
@@ -829,7 +829,7 @@ gnc_scm2kvp_frame (SCM frame_scm)
        frame_scm = SCM_CDR (frame_scm))
   {
     SCM pair = SCM_CAR (frame_scm);
-    kvp_value *value;
+    KvpValue *value;
     SCM key_scm;
     SCM val_scm;
     char *key;
@@ -847,7 +847,7 @@ gnc_scm2kvp_frame (SCM frame_scm)
     if (!key)
       continue;
 
-    value = gnc_scm2kvp_value (val_scm);
+    value = gnc_scm2KvpValue (val_scm);
     if (!value)
     {
       free (key);
@@ -1118,7 +1118,7 @@ gnc_scm2query_term_query_v2 (SCM qt_scm)
 
     } else if (!safe_strcmp (type, QOF_QUERYCORE_KVP)) {
       GSList *kvp_path;
-      kvp_value *value;
+      KvpValue *value;
 
       scm = SCM_CAR (qt_scm);
       qt_scm = SCM_CDR (qt_scm);
@@ -1132,7 +1132,7 @@ gnc_scm2query_term_query_v2 (SCM qt_scm)
 	gnc_query_path_free (kvp_path);
 	break;
       }
-      value = gnc_scm2kvp_value (scm);
+      value = gnc_scm2KvpValue (scm);
 
       pd = qof_query_kvp_predicate (compare_how, kvp_path, value);
       gnc_query_path_free (kvp_path);
@@ -1432,7 +1432,7 @@ gnc_scm2query_term_query_v1 (SCM query_term_scm)
 
     } else if (!safe_strcmp (pd_type, "pd-kvp")) {
       GSList *path;
-      kvp_value *value;
+      KvpValue *value;
       QofQueryCompare how;
       QofIdType where;
 
@@ -1462,7 +1462,7 @@ gnc_scm2query_term_query_v1 (SCM query_term_scm)
         break;
       scm = SCM_CAR (query_term_scm);
       query_term_scm = SCM_CDR (query_term_scm);
-      value = gnc_scm2kvp_value (scm);
+      value = gnc_scm2KvpValue (scm);
 
       xaccQueryAddKVPMatch (q, path, value, how, where, QOF_QUERY_OR);
 

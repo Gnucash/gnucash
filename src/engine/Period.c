@@ -312,8 +312,8 @@ add_closing_balances (AccountGroup *closed_grp,
    acc_list = xaccGroupGetAccountList (closed_grp);
    for (node=acc_list; node; node=node->next)
    {
-      kvp_frame *cwd;
-      kvp_value *vvv;
+      KvpFrame *cwd;
+      KvpValue *vvv;
       Account *twin;
       AccountGroup *childs;
       Account * candidate = (Account *) node->data;
@@ -446,8 +446,8 @@ gnc_book_close_period (QofBook *existing_book, Timespec calve_date,
 {
    Query *query;
    QofBook *closing_book;
-   kvp_frame *exist_cwd, *partn_cwd;
-   kvp_value *vvv;
+   KvpFrame *exist_cwd, *partn_cwd;
+   KvpValue *vvv;
    Timespec ts;
 
    if (!existing_book) return NULL;

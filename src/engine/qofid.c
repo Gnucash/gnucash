@@ -46,7 +46,8 @@ typedef struct entity_node
 
 struct _QofEntityTable
 {
-  GHashTable * hash;
+  GHashTable * hash_by_guid;
+  GHashTable * hash_of_types;
 };
 
 
@@ -72,15 +73,29 @@ entity_node_destroy(gpointer key, gpointer value, gpointer not_used)
   return TRUE;
 }
 
+static gboolean
+entity_types_table_destroy(gpointer key, gpointer value, gpointer not_used)
+{
+  GHashTable *ht = value;
+  g_hash_table_destroy(ht);
+  return TRUE;
+}
+
 void
 qof_entity_destroy (QofEntityTable *entity_table)
 {
   if (entity_table == NULL)
     return;
 
-  g_hash_table_foreach_remove (entity_table->hash, entity_node_destroy, NULL);
-  g_hash_table_destroy (entity_table->hash);
-  entity_table->hash = NULL;
+  g_hash_table_foreach_remove (entity_table->hash_by_guid, entity_node_destroy,
+			       NULL);
+  g_hash_table_destroy (entity_table->hash_by_guid);
+  entity_table->hash_by_guid = NULL;
+
+  g_hash_table_foreach_remove (entity_table->hash_of_types,
+			       entity_types_table_destroy, NULL);
+  g_hash_table_destroy (entity_table->hash_of_types);
+  entity_table->hash_of_types = NULL;
 
   g_free (entity_table);
 }
@@ -136,7 +151,7 @@ summarize_table (QofEntityTable *entity_table)
   if (entity_table == NULL)
     return;
 
-  g_hash_table_foreach (entity_table->hash, print_node, NULL);
+  g_hash_table_foreach (entity_table->hash_by_guid, print_node, NULL);
 }
 #endif /* QOFID_DEBUG */
 
@@ -147,7 +162,8 @@ qof_entity_new (void)
 
   entity_table = g_new0 (QofEntityTable, 1);
 
-  entity_table->hash = g_hash_table_new (id_hash, id_compare);
+  entity_table->hash_by_guid = g_hash_table_new (id_hash, id_compare);
+  entity_table->hash_of_types = g_hash_table_new (g_str_hash, g_str_equal);
 
   qof_entity_store (entity_table, NULL, guid_null(), QOF_ID_NULL);
 
@@ -164,7 +180,7 @@ qof_entity_type (QofEntityTable *entity_table, const GUID * guid)
 
   g_return_val_if_fail (entity_table, QOF_ID_NONE);
 
-  e_node = g_hash_table_lookup (entity_table->hash, guid->data);
+  e_node = g_hash_table_lookup (entity_table->hash_by_guid, guid->data);
   if (e_node == NULL)
     return QOF_ID_NONE;
 
@@ -201,7 +217,7 @@ qof_entity_lookup (QofEntityTable *entity_table,
   if (guid == NULL)
     return NULL;
 
-  e_node = g_hash_table_lookup (entity_table->hash, guid->data);
+  e_node = g_hash_table_lookup (entity_table->hash_by_guid, guid->data);
   if (e_node == NULL)
     return NULL;
 
@@ -209,6 +225,31 @@ qof_entity_lookup (QofEntityTable *entity_table,
     return NULL;
 
   return e_node->entity;
+}
+
+static GHashTable *
+entity_get_types_table (QofEntityTable *entity_table, QofIdType entity_type)
+{
+  GHashTable *ht;
+
+  ht = g_hash_table_lookup (entity_table->hash_of_types, entity_type);
+  if (ht)
+    return ht;
+
+  ht = g_hash_table_new (id_hash, id_compare);
+  g_assert(ht);
+  g_hash_table_insert (entity_table->hash_of_types, (gpointer)entity_type, ht);
+  return ht;
+}
+
+static void
+entity_store_by_type (QofEntityTable *entity_table,
+		      GUID *new_guid, EntityNode *e_node)
+{
+  GHashTable *ht;
+
+  ht = entity_get_types_table (entity_table, e_node->entity_type);
+  g_hash_table_insert (ht, new_guid, e_node);
 }
 
 void
@@ -239,7 +280,17 @@ qof_entity_store (QofEntityTable *entity_table, gpointer entity,
   
   *new_guid = *guid;
 
-  g_hash_table_insert (entity_table->hash, new_guid, e_node);
+  g_hash_table_insert (entity_table->hash_by_guid, new_guid, e_node);
+  entity_store_by_type (entity_table, new_guid, e_node);
+}
+
+static void
+entity_remove_by_type (QofEntityTable *entity_table, GUID *guid, QofIdType type)
+{
+  GHashTable *ht;
+
+  ht = entity_get_types_table (entity_table, type);
+  g_hash_table_remove (ht, guid);
 }
 
 void
@@ -254,14 +305,15 @@ qof_entity_remove (QofEntityTable *entity_table, const GUID * guid)
   if (guid == NULL)
     return;
 
-  if (g_hash_table_lookup_extended(entity_table->hash, guid, &old_guid, &node))
+  if (g_hash_table_lookup_extended(entity_table->hash_by_guid, guid, &old_guid, &node))
   {
     e_node = node;
 
     if (!safe_strcmp (e_node->entity_type, QOF_ID_NULL))
       return;
 
-    g_hash_table_remove (entity_table->hash, old_guid);
+    g_hash_table_remove (entity_table->hash_by_guid, old_guid);
+    entity_remove_by_type (entity_table, old_guid, e_node->entity_type);
     entity_node_destroy (old_guid, node, NULL);
   }
 }
@@ -277,15 +329,14 @@ static void foreach_cb (gpointer key, gpointer item, gpointer arg)
   struct _iterate *iter = arg;
   EntityNode *e_node = item;
 
-  /* Call the callback if this entity is of the proper type */
-  if (!safe_strcmp (e_node->entity_type, iter->type))
-    iter->fcn (e_node->entity, iter->data);
+  iter->fcn (e_node->entity, iter->data);
 }
 
 void
 qof_entity_foreach (QofEntityTable *entity_table, QofIdType type,
 		   QofEntityForeachCB cb_func, gpointer user_data)
 {
+  GHashTable *ht;
   struct _iterate iter;
 
   g_return_if_fail (entity_table);
@@ -297,5 +348,7 @@ qof_entity_foreach (QofEntityTable *entity_table, QofIdType type,
   iter.data = user_data;
   iter.type = type;
 
-  g_hash_table_foreach (entity_table->hash, foreach_cb, &iter);
+  /* Iterate over the objects of the particular type */
+  ht = entity_get_types_table (entity_table, type);
+  g_hash_table_foreach (ht, foreach_cb, &iter);
 }

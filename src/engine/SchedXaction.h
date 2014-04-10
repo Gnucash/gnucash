@@ -40,7 +40,7 @@
 #include "qofbook.h"
 
 /* 
- * #defines for kvp_frame strings
+ * #defines for KvpFrame strings
  * FIXME: Is this the right spot for them <rgmerk>?
  * FIXME: No, they should be private data and there should
  *        be an api for getting/setting the values <dave_p>
@@ -158,22 +158,22 @@ void xaccSchedXactionSetAdvanceReminder( SchedXaction *sx, gint reminderDays );
 
 /*
  * The following function is slightly risky.  If you change
- * the retrieved kvp_frame you must mark the SchedXaction
+ * the retrieved KvpFrame you must mark the SchedXaction
  * dirty with xaccSchedXactionSetDirtyness
  */
-kvp_frame *xaccSchedXactionGetSlots( SchedXaction *sx );
+KvpFrame *xaccSchedXactionGetSlots( SchedXaction *sx );
 /**
  * Sets the SX kvp data to the given kvp_frame.
  * NOTE: This is not copied, but set directly.
  **/
 void xaccSchedXactionSetSlots( SchedXaction *sx,
-                               kvp_frame *frm );
+                               KvpFrame *frm );
 
 /**
  * Use the following two functions in preference to 
  * the above two . . .
  */
-kvp_value *xaccSchedXactionGetSlot( SchedXaction *sx, 
+KvpValue *xaccSchedXactionGetSlot( SchedXaction *sx, 
 				    const char *slot );
 
 /*
@@ -182,7 +182,7 @@ kvp_value *xaccSchedXactionGetSlot( SchedXaction *sx,
 
 void xaccSchedXactionSetSlot( SchedXaction *sx, 
 			      const char *slot,
-			      const kvp_value *value );
+			      const KvpValue *value );
 
 const GUID *xaccSchedXactionGetGUID( SchedXaction *sx );
 void xaccSchedXactionSetGUID( SchedXaction *sx, GUID g );

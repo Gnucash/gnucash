@@ -178,7 +178,7 @@
   (gw:enum-add-value! wt "QUERY_TXN_MATCH_ANY" 'query-txn-match-any)
   #t)
 
-(let ((wt (gw:wrap-enumeration ws '<gnc:kvp-value-t> "kvp_value_t")))
+(let ((wt (gw:wrap-enumeration ws '<gnc:kvp-value-t> "KvpValueType")))
   (gw:enum-add-value! wt "KVP_TYPE_GINT64" 'kvp-type-gint64)
   (gw:enum-add-value! wt "KVP_TYPE_DOUBLE" 'kvp-type-double)
   (gw:enum-add-value! wt "KVP_TYPE_NUMERIC" 'kvp-type-numeric)

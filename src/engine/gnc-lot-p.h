@@ -51,7 +51,7 @@ struct gnc_lot_struct
   QofBook *book;  
 
   /* Anchor for generic lot-specific data. */
-  kvp_frame *kvp_data;
+  KvpFrame *kvp_data;
 
   /* Account to which this lot applies.  All splits in the lot must
    * belong to this account. 
