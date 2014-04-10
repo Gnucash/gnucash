@@ -45,7 +45,7 @@ COMMON_SRCS := basiccell.c cellblock.c \
                table-allgui.c table-html.c textcell.c
 MOTIF_SRCS := table-motif.c combocell-motif.c
 GNOME_SRCS := table-gtk.c combocell-gtk.c
-QT_SRCS    := 
+QT_SRCS    := table-qt.cpp combocell-qt.cpp
 ######################################################################
 
 all:

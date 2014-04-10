@@ -7,18 +7,23 @@
 # AC_OUTPUT, and prefix isn't guaranteed to be defined until AC_OUTPUT
 # is called.
 
-# We use a makefile because it gives us the proper variable expansions
-# for free.
+include ./Makefile.init
+
+PWD := $(shell pwd)
 
 all:
 	perl -p \
 	  -e "s|\@GNC_RUNTIME_SHAREDIR\@|${GNC_SHAREDIR}|o;" \
 	  -e "s|\@GNC_RUNTIME_CONFIGDIR\@|${GNC_SHAREDIR}|o" \
-	  < src/scm/startup/init.scm.in > src/scm/startup/init.scm
+	  < src/scm/bootstrap.scm.in > src/scm/bootstrap.scm
 	perl -p \
 	  -e "s|\@GNC_RUNTIME_SHAREDIR\@|${GNC_SHAREDIR}|o;" \
 	  -e "s|\@GNC_RUNTIME_CONFIGDIR\@|${GNC_SHAREDIR}|o" \
 	  < src/guile/gnucash.h.in > src/guile/gnucash.h
+
+	cd lib/g-wrap && \
+    ./configure --prefix=${PWD}/lib/g-wrap-install
+
 
 # Local Variables:
 # tab-width: 2

@@ -36,8 +36,8 @@ GTKSHEET_DIR := @GTKSHEET_DIR@
 
 ######################################################################
 # See Makefile.common for information about these variables.
-CLEAN_SUBDIRS := XmHTML-1.1.0 ComboBox-1.33 Xbae-4.6.2-linas
-CLEAN_SUBDIRS += ${GTKSHEET_DIR}
+CLEAN_SUBDIRS := XmHTML-1.1.0 ComboBox-1.33 Xbae-4.6.2-linas g-wrap
+CLEAN_SUBDIRS += ${GTKSHEET_DIR} gtkfilesel2
 ######################################################################
 
 all:
@@ -52,16 +52,24 @@ all:
 # definitions of *_SRCS, etc., but before the usage of *_OBJS.
 include @top_srcdir@/Makefile.common
 
-motif:
+g-wrap-install:
+	(cd g-wrap && make)
+	(cd g-wrap && make install)
+TRASH += g-wrap-install
+
+
+motif:	g-wrap-install
 	@cd ComboBox-1.33;    $(MAKE) default
 	@cd Xbae-4.6.2-linas; $(MAKE) default
 
-gnome:
+gnome:	g-wrap-install
 	@cd ${GTKSHEET_DIR};  $(MAKE) default
+	@cd gtkfilesel2;      $(MAKE) default
 
-qt:
+qt:	g-wrap-install
 
-.PHONY: gnome motif qt
+
+.PHONY: gnome motif qt g-wrap-install
 
 # Local Variables:
 # tab-width: 2

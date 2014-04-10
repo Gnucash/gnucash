@@ -40,6 +40,8 @@
 /** PROTOTYPES ******************************************************/
 
 /** GLOBALS *********************************************************/
+/* This static indicates the debugging module that this .o belongs to.  */
+static short module = MOD_GUI;
 
 GtkWidget *app;
 
@@ -63,6 +65,7 @@ gnucash_lowlev_app_init()
   printf(" coresize = %d\n",_coresize());
   DEBUG("Done initializing memory");
 #endif
+  ENTER ("gnucash_lowlev_app_init");
   
   printf ("\n\n");
   printf ("This is a BETA development version.  We think everything works \n");
@@ -94,9 +97,9 @@ gnucash_lowlev_app_init()
         st->font = f;
       }
     }
-
-
   } 
+
+  LEAVE ("gnucash_lowlev_app_init");
   return 0;
 }
 

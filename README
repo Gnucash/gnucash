@@ -1,3 +1,4 @@
+-*-text-*-
 
 ************ BETA  RELEASE ******************
 The version 1.1.x series of gnucash are considered BETA development code.
@@ -99,6 +100,7 @@ To be able to use certain features of GnuCash, such as reports and network stock
 price downloads, you must have the following packages below installed.
 RPM's for most of these can be found at http://rufus.w3.org/linux/  
 
+slib    -- scheme libraries for guile.  Need version slib2c0 or later.
 perl    -- Almost any version of perl5 should work.  I run perl-5.004 
 eperl   -- Almost any version of eperl should work.  I run eperl-2.2.14
 
@@ -128,13 +130,41 @@ the latter has Motif statically linked in.  If you have Motif,
 then just run xacc.  If you do not have Motif, then copy 
 'gnucash-static.bin' to 'gnucash.bin'.
 
-You can then start GnuCash at the command-line, with
-"gnucash" or "gnucash <filename>", where <filename> is a
-GnuCash account file.  Sample accounts can be found in 
-"data" subdirectory.  *.dat files are GnuCash accounts that can 
-opened with the "Open File" menu entry.  *.qif files are
-Quicken Import Format files that can be opened with the 
-"Import QIF" menu entry.
+Invocation:
+-----------
+
+You can start GnuCash at the command-line, with "gnucash" or "gnucash
+<filename>", where <filename> is a GnuCash account file.  Sample
+accounts can be found in "data" subdirectory.  *.dat files are GnuCash
+accounts that can opened with the "Open File" menu entry.  *.qif files
+are Quicken Import Format files that can be opened with the "Import
+QIF" menu entry.
+
+GnuCash responds to the following environment variables:
+
+  GNC_RUN_AS_SHELL - if set, makes GnuCash pop up in a guile shell
+  with all the gnucash functions loaded.  From there, you can get the
+  normal startup behavior like this:
+
+    GNC_RUN_AS_SHELL=t ./gnucash
+    guile> (primitive-load (getenv "GNC_BOOTSTRAP_SCM"))
+    guile> (gnc:load "startup.scm")
+    guile> (gnc:main)
+
+  which is the same thing that happens if you don't use the --shell
+  option.  This can be helpful when trying to write and test new .scm
+  files.
+
+  GNC_BOOTSTRAP_SCM - the location of the initial bootstrapping scheme code.
+
+  GNC_SCM_LOAD_PATH - an override for the GnuCash scheme load path.
+  it should be a string representing a proper scheme list.  Each
+  element can either be a string representing a directory, the symbol
+  'default which will expand to the default path, or 'current which
+  will expand to the current load-path.
+
+  GNC_DEBUG - enable debugging output.  This allows you to turn on
+  debugging earlier in the startup process than you can with --debug.
 
 Important Note:
 ---------------
@@ -145,10 +175,24 @@ Lesstif 0.82: broken
 Lesstif 0.86.0: works
 Lesstif 0.86.5: broken
 Lesstif 0.86.9  works ... but some menus come out 2 pixels high.
-Lesstif 0.87.0: broken (missing symbols for XmeDrawShadows, etc.)
+Lesstif 0.87.0: works ... "" ?
+Lesstif 0.88.1: works ... "" ?
+
+Note: some versions of XmHTML have been compiled with Motif, and these
+need XmeDrawShadows to link and run.  However, this is an undefined symbol
+in most versions of lesstif. Solution: download XmHTML source and 
+compile/install it.
 
 These core dumps do not occur with RedHat Motif (or other commercial
 versions of Motif).
+
+Other Tools
+-----------
+A tool to generate (ascii) reports from gnucash/xacc files can be found 
+at http://www.zeta.org.au/~grahamc/xacc_rpts.html.
+
+A tool to cleanup & import Quicken files can be found at (insert the url
+here).
 
 Building & Installing:
 ----------------------
@@ -170,7 +214,6 @@ guile   -- Provides main extension language infrastructure.
            ftp://ftp.gnucash.org/pub/gnucash/extra_libs/TAR/guile-core-19980818.tar.gz 
            guile-core-19980818-1.i386.rpm works
            guile-1.3.1-1 from redhat.com/pub/rawhide works ...
-slib    -- scheme libraries for guile.  Need version slib2c0 or later.
 eperl   -- embeddedPerl needed for Reports.  The menu item "Reports" will not
            work witout this.
            version eperl-2.2.14 works well with perl 5.00404
@@ -180,7 +223,7 @@ eperl   -- embeddedPerl needed for Reports.  The menu item "Reports" will not
 Motif or Lesstif  --
            Lesstif 0.81    works   
            Lesstif 0.82    broken    
-           Lesstif 0.83    works    
+           Lesstif 0.83    works ... but get fast blinking cursor ...
            Lesstif 0.86.0  is reported to work     
            Lesstif 0.86.5  crashes.   
            Lesstif 0.86.9  works ... but some menus come out 2 pixels high.
@@ -270,23 +313,6 @@ Examples of other funny configure options:
 Flag --with-gtk-config.  The way gtk phiolosphy goes,
 you should *only* specify the config program location and
 rely on it to tell you the right CFLAGS and XLIBS values.
-
-The new --shell option should work properly now too.  There is no
-gnucash-shell anymore.  There's just one binary.  You can invoke
-gnucash with the --shell option now to get a guile shell with all the
-gnucash functions loaded.  You can also get the normal startup
-behavior from that shell like this:
-
-  ./gnucash --shell
-  guile> (load (string-append gnc:_startup-dir-default_ "/init.scm"))
-  guile> (gnc:main)
-
-which is the same thing that happens if you don't use the --shell
-option.
-
-The --shell option can be helpful when trying to write and test new
-.scm files.  I set it up so that I (or someone else) could
-(eventually) work on the graphing stuff...
 
 Anyone who's having the same problem with the added termcap libs that
 I am can look in configure.in and comment out the TERMCAP_TMP line and
@@ -400,11 +426,15 @@ Rob Browning <rlb@cs.utexas.edu> abused everyone for not using perl,
    infrastructure, is handling the whole guile/perl extension language 
    thing, and is dealing with configuration & configurability.
 
+Dirk Schoenberger <schoenberger@signsoft.com> is working on the Qt/KDE port
+
 Fixes & Patches:
 ----------------
 Andrew Arensburger <arensb@cfar.umd.edu> for FreeBSD & other patches
+Matt Armstrong <matt_armstrong@bigfoot.com> for misc fixes
 Fred Baube <fred@moremagic.com> for attempted Java port/MoneyDance
 Christopher B. Browne <cbbrowne@hex.net> for perl stock scripts
+Graham Chapman <grahamc@zeta.org.au> for the xacc-rpts addon package
 George Chen <georgec@sco.com> for MS-Money QIF's & fixes
 Jeremey Collins <jcollins@gnucash.org> for GnoMoney & GTK port
 Patrick Condron <pcondon@rackspace.com> for webserver and T1 connection.
@@ -429,7 +459,6 @@ Myroslav Opyr <mopyr@IPM.Lviv.UA> for misc patches
 Alain Peyrat <Alain.Peyrat@nmu.alcatel.fr> for configure.in patches
 Gavin Porter <maufk@csv.warwick.ac.uk> for euro style dates
 Ron Record <rr@sco.com> for SCO Unixware & OpenServer binaries
-Dirk Schoenberger <schoenberger@signsoft.com> for Qt/KDE port
 Christopher Seawood <cls@seawood.org> for XbaeMatrix core dump
 Mike Simons <msimons@fsimons01.erols.com> misc configure.in patches
 Richard Skelton <rich@brake.demon.co.uk> for Solaris cleanup

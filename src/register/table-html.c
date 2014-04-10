@@ -60,6 +60,10 @@
 #include "cellblock.h"
 #include "table-allgui.h"
 #include "table-html.h"
+#include "util.h"
+
+/* This static indicates the debugging module that this .o belongs to.  */
+static short module = MOD_REGISTER; 
 
 /* ==================================================== */
 
@@ -85,8 +89,8 @@ xaccTableDumpHTML (Table * table, int fd)
    fh = fdopen (fd, "a");
    if (!fh) {
       int norr = errno;
-      printf ("Error: xaccTableDumpHTML(): can't open fd=%d \n", fd);
-      printf ("(%d) %s \n", norr, strerror (norr));
+      PERR ("xaccTableDumpHTML(): can't open fd=%d \n"
+            "\t(%d) %s \n", fd, norr, strerror (norr));
       return 0;
    }
 
@@ -152,8 +156,8 @@ xaccTablePrintHTML (Table * table, char *filename)
    fd = open (filename, O_CREAT | O_APPEND | O_WRONLY, S_IRUSR | S_IWUSR);
    if (0 > fd) {
       int norr = errno;
-      printf ("Error: xaccTablePrintHTML(): can't open file %s\n", filename);
-      printf ("(%d) %s \n", norr, strerror (norr));
+      PERR ("xaccTablePrintHTML(): can't open file %s\n"
+            "\t(%d) %s\n", filename, norr, strerror (norr));
       return 0;
    }
    cnt = xaccTableDumpHTML (table, fd);
@@ -168,8 +172,8 @@ xaccTablePrintHTML (Table * table, char *filename)
 #define CHKERR(val, msg) {						\
    if (0 > val) {							\
       int norr = errno;							\
-      printf ("Error: xaccTableWebServeHTML(): " msg "\n");		\
-      printf ("(%d) %s \n", norr, strerror (norr));			\
+      PERR ("Error: xaccTableWebServeHTML(): " msg "\n"			\
+            "(%d) %s \n", norr, strerror (norr));			\
       if (pid) return;							\
       exit (0);								\
    }									\

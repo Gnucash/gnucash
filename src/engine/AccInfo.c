@@ -27,6 +27,36 @@
 
 /* =========================================================== */
 
+#define GNC_RETURN_ENUM_AS_STRING(x) case x: return #x;
+
+char *
+xaccAccountTypeEnumAsString(int type) {
+  switch(type) {
+    GNC_RETURN_ENUM_AS_STRING(BANK);
+    GNC_RETURN_ENUM_AS_STRING(CASH);
+    GNC_RETURN_ENUM_AS_STRING(CREDIT);
+    GNC_RETURN_ENUM_AS_STRING(ASSET);
+    GNC_RETURN_ENUM_AS_STRING(LIABILITY);
+    GNC_RETURN_ENUM_AS_STRING(STOCK);
+    GNC_RETURN_ENUM_AS_STRING(MUTUAL);
+    GNC_RETURN_ENUM_AS_STRING(CURRENCY);
+    GNC_RETURN_ENUM_AS_STRING(INCOME);
+    GNC_RETURN_ENUM_AS_STRING(EXPENSE);
+    GNC_RETURN_ENUM_AS_STRING(EQUITY);
+    GNC_RETURN_ENUM_AS_STRING(CHECKING);
+    GNC_RETURN_ENUM_AS_STRING(SAVINGS);
+    GNC_RETURN_ENUM_AS_STRING(MONEYMRKT);
+    GNC_RETURN_ENUM_AS_STRING(CREDITLINE);
+    default:
+      fprintf(stderr,
+              "Big problem asked to translate unknown account type %d.\n", type);
+      break;
+  };
+  return(NULL);
+};
+
+/* =========================================================== */
+
 char *account_type_name[NUM_ACCOUNT_TYPES] =
    { 
 	BANK_STR, 

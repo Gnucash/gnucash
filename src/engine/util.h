@@ -1,7 +1,8 @@
 /********************************************************************\
- * util.h -- utility functions that are used everywhere else for    *
- *           xacc (X-Accountant)                                    *
+ * util.h -- utility functions that are used everywhere for         *
+ *           gnucash (ex-xacc (X-Accountant))                       *
  * Copyright (C) 1997 Robin D. Clark                                *
+ * Copyright (C) 1998, 1999 Linas Vepstas                           *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -53,10 +54,11 @@
 #define MOD_IO         2
 #define MOD_REGISTER   3
 #define MOD_LEDGER     4
-#define MOD_GUI        5
-#define MOD_SCRUB      6
-#define MOD_GTK_REG    7
-#define MODULE_MAX     8
+#define MOD_HTML       5
+#define MOD_GUI        6
+#define MOD_SCRUB      7
+#define MOD_GTK_REG    8
+#define MODULE_MAX     9
 
 extern int loglevel[MODULE_MAX];
 
@@ -66,8 +68,12 @@ extern int loglevel[MODULE_MAX];
 #define LDEBUG  (4 <= loglevel[module])
 #define LDETAIL (5 <= loglevel[module])
 
+#ifdef KDE
+#undef DEBUG
+#endif
 
 /* utility macros  */
+#define FATAL(x...)    LG(1, "Fatal Error: ");   LG(1,       ##x);
 #define PERR(x...)     LG(LERR,    "Error: ");   LG(LERR,    ##x);
 #define PWARN(x...)    LG(LWARN,   "Waring: ");  LG(LWARN,   ##x);
 #define PINFO(x...)    LG(LINFO,   "Info: ");    LG(LINFO,   ##x);
@@ -146,8 +152,15 @@ char * ultostr (unsigned long val, int base);
  * 4-7 as above, but comma separated
  *
  * shrs must be bitwise-OR of PRTSYM, PRTSHR and PRTSEP
+ *
+ * The xaccPrintAmount() routine returns a pointer to a statically
+ *    allocated buffer, and is therefore not thread-safe.
+ *
+ * The xaccSPrintAmount() routine accepts a pointer to the buffer to be
+ *    printed to.  It returns the length of the printed string.
  */
 char * xaccPrintAmount (double val, short shrs);
+int xaccSPrintAmount (char *buf, double val, short shrs);
 
 /********************************************************************\
  * xaccParseUSAmount                                                * 
@@ -159,6 +172,31 @@ double xaccParseUSAmount (const char * str);
 
 
 /** TEMPLATES ******************************************************/
+/* 
+ * There are several ideas going on in here.
+ *  -- if an account is already being edited, and user clicks on "open", it
+ *     should raise that dialog to the top or de-iconize it instead of 
+ *     creating a new window. 
+ *
+ * -- association between windows and accounts is many-to-one & one-to-many.
+ *    e.g.  if a "general ledger" dialog is open, then it might be displaying 
+ *    four accounts all at once. Thus, an account may be visible in its 
+ *    "main" dialog (of which there is only one), and possibly many "general 
+ *    ledger" windows.
+ *
+ * -- I don't remember, but I think I might also use these to manage redraws
+ *    when some entry is updated, and it is visible in multiple windows. 
+ *    (again, visible in the account main window, and possibly some general 
+ *    ledger windows).
+ *
+ * -- If user deletes an account, then any open windows associated with this
+ *    account are auto-closed (and other windows possibly updated).
+ *
+ * -- the macros associate an xaccAccount struct with a gui-specific struct
+ *    which contains things like widgets and other pieces the GUI needs 
+ *    to "remember" about that dialog.
+ */
+
 
 #define FIND_IN_LIST(Type,list,id,member,found) 	\
 {							\

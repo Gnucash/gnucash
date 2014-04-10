@@ -193,9 +193,9 @@ struct _BasicCell {
   const char * (*enter_cell)    (BasicCell *,
                                  const char * current);
   const char * (*modify_verify) (BasicCell *,
-                                 const char *old, 
-                                 const char *add, 
-                                 const char *new); 
+                                 const char *old_value, 
+                                 const char *add_str, 
+                                 const char *new_value); 
   const char * (*leave_cell)    (BasicCell *,
                                  const char * current);
 

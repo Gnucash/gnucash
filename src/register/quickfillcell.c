@@ -50,8 +50,7 @@ quick_set (BasicCell *_cell,
 /* when entering new cell, reset pointer to root    */
 
 static const char * 
-quick_enter (BasicCell *_cell,
-             const char *val) 
+quick_enter (BasicCell *_cell, const char *val) 
 {
    QuickFillCell *cell = (QuickFillCell *) _cell;
 
@@ -111,8 +110,7 @@ quick_modify (BasicCell *_cell,
 /* when leaving cell, make sure that text was put into the qf    */
 
 static const char * 
-quick_leave (BasicCell *_cell,
-             const char *val) 
+quick_leave (BasicCell *_cell, const char *val) 
 {
    QuickFillCell *cell = (QuickFillCell *) _cell;
 

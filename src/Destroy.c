@@ -27,7 +27,19 @@
 #include "Group.h"
 #include "LedgerUtils.h"
 #include "MultiLedger.h"
+
+#ifdef KDE
+#include "qt/reconciledlg.h"
+#endif
+
+#ifdef GNOME
+#include "window-reconcile.h"
+#endif
+
+#ifdef MOTIF
 #include "RecnWindow.h"
+#endif
+
 #include "util.h"
 
    

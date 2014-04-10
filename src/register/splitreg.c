@@ -38,6 +38,10 @@
 #include "splitreg.h"
 #include "table-allgui.h"
 #include "textcell.h"
+#include "util.h"
+
+/* This static indicates the debugging module that this .o belongs to.  */
+static short module = MOD_REGISTER;
 
 /* utility defines for cell configuration data */
 #define DATE_CELL      0
@@ -423,7 +427,7 @@ configLayout (SplitRegister *reg)
       }
       /* --------------------------------------------------------- */
       default:
-         printf ("Internal Error: configLayout(): "
+         PERR ("configLayout(): "
            "unknown register type %d \n", type);
          break;
    }

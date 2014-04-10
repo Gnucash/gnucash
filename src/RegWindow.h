@@ -38,6 +38,5 @@ typedef struct _RegWindow RegWindow;
 void       accRefresh (Account *);
 RegWindow *regWindowSimple(Account *account);
 RegWindow *regWindowAccGroup(Account *account_group);
-// RegWindow *regWindowLedger (Widget parent, xaccLedgerDisplay *);
 
 #endif

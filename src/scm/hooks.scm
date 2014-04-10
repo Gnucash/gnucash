@@ -10,12 +10,6 @@
 ;; Central repository for all hooks -- so we can look them up later by name.
 (define gnc:*hooks* '())
 
-(define (gnc:hook-danglers-get hook)
-  (vector-ref hook 2))
-
-(define (gnc:hook-danglers-set! hook danglers)
-  (vector-set! hook 2 danglers))
-
 ;;; Developers
 
 (define (gnc:hook-define name description)
@@ -23,15 +17,22 @@
     (set! gnc:*hooks* (assoc-set! gnc:*hooks* name hook-data))
     hook-data))
 
+(define (gnc:hook-danglers-get hook)
+  (vector-ref hook 2))
+
+(define (gnc:hook-danglers-set! hook danglers)
+  (vector-set! hook 2 danglers))
+
 (define (gnc:hook-danglers->list hook)
   (gnc:hook-danglers-get hook))
 
 (define (gnc:hook-replace-danglers hook function-list)
   (gnc:hook-danglers-set! hook function-list))
 
-(define (gnc:hook-run-danglers hook)
+(define (gnc:hook-run-danglers hook . args)
   (gnc:debug "Running functions on hook " (gnc:hook-name-get hook))
-  (for-each (lambda (dangler) (dangler)) (gnc:hook-danglers-get hook)))
+  (for-each (lambda (dangler) (apply dangler args))
+            (gnc:hook-danglers-get hook)))
 
 ;;; Public
 
@@ -53,10 +54,19 @@
   (vector-ref hook 0))
 
 (define gnc:*startup-hook*
-  (gnc:hook-define 'startup-hook "Functions to run at startup."))
+  (gnc:hook-define
+   'startup-hook
+   "Functions to run at startup.  Hook args: ()"))
 
 (define gnc:*shutdown-hook*
-  (gnc:hook-define 'shutdown-hook "Functions to run at shutdown."))
+  (gnc:hook-define 
+   'shutdown-hook
+   "Functions to run at shutdown.  Hook args: ()"))
+
+(define gnc:*main-window-opened-hook*
+  (gnc:hook-define
+   'main-window-opened-hook
+   "Functions to run whenever the main window is opened.  Hook args: (window)"))
 
 ;;(let ((hook (gnc:hook-lookup 'startup-hook)))
 ;;  (display (gnc:hook-name-get hook))

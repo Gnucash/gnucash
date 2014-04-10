@@ -500,7 +500,7 @@ gncFileQuit (void)
   xaccSessionEnd (current_session);
   xaccSessionDestroy (current_session);
   current_session = NULL;
-  xaccGroupWindowDestroy (grp);
+//  xaccGroupWindowDestroy (grp);
   xaccFreeAccountGroup (grp);
   topgroup = NULL;
 

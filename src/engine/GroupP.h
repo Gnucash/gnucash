@@ -43,7 +43,7 @@
 struct _account_group {
   /* The flags: */
   unsigned int saved : 1;
-  unsigned int new   : 1;
+  /* unsigned int new   : 1; */
   
   Account *parent;                 /* back-pointer to parent */
 
