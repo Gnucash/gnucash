@@ -45,4 +45,5 @@ bin_SCRIPTS = gnc-test-env
 EXTRA_DIST = \
   .cvsignore \
   README.modules \
-  gnc-test-env
+  gnc-test-env \
+  valgrind-gnucash.supp

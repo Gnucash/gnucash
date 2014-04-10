@@ -362,18 +362,15 @@ int  xaccTransOrder     (const Transaction *ta, const Transaction *tb);
 void          xaccTransSetDate (Transaction *trans,
                                 int day, int mon, int year);
 
-/** The xaccTransSetDateSecs() method will modify the <i>posted</i>
+/** The xaccTransSetDatePostedSecs() method will modify the <i>posted</i>
     date of the transaction, specified by a time_t (see ctime(3)). The
     posted date is the date when this transaction was posted at the
     bank. */
-void          xaccTransSetDateSecs (Transaction *trans, time_t time);
-
-/**     xaccTransSetDatePostedSecs() is just an alias for
-	xaccTransSetDateSecs() -- both functions access the same date. */
+#define xaccTransSetDateSecs xaccTransSetDatePostedSecs
 void          xaccTransSetDatePostedSecs (Transaction *trans, time_t time);
 
 /**  The xaccTransSetDatePostedTS() method does the same thing as
-     xaccTransSetDate[Posted]Secs(), but takes a struct timespec64. */
+     xaccTransSetDatePostedSecs(), but takes a struct timespec64. */
 void          xaccTransSetDatePostedTS (Transaction *trans,
                                         const Timespec *ts);
 
@@ -592,13 +589,17 @@ gnc_numeric   xaccSplitGetSharePrice (const Split * split);
 
 /** Depending on the base_currency, set either the value or the amount
  * of this split or both: If the base_currency is the transaction's
- * commodity, set the value.  If it's the account's commodity, set the
+ * commodity, set the value.  If it is the account's commodity, set the
  * amount. If both, set both. 
  *
- * @note This function is useful when filling in the value/amount for
- * a newly created transaction, since otherwise you have to manually
- * make sure that both Value and Amount are correctly set (and not
- * that value or amount remains zero).  */
+ * @note <b>WATCH OUT:</b> When using this function and the
+ * transaction's and account's commodities are different, the amount
+ * or the value will be left as zero. This might screw up the
+ * multi-currency handling code in the register. So please think twice
+ * whether you need this function -- using xaccSplitSetValue()
+ * together with xaccSplitSetAmount() is definitely the better and
+ * safer solution!
+ */
 void         xaccSplitSetBaseValue (Split *split, gnc_numeric value,
                                     const gnc_commodity * base_currency);
 

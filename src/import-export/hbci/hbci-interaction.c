@@ -56,10 +56,10 @@ GNCInteractor *gnc_hbci_api_interactors (HBCI_API *api, GtkWidget *parent)
 			      "HBCI Remember PIN in memory",
                               FALSE);
 
-  // set HBCI_Interactor
+  /* set HBCI_Interactor */
   HBCI_Hbci_setInteractor(HBCI_API_Hbci(api), 
 			  gnc_hbci_new_interactor(data), TRUE);
-  // Set HBCI_Progressmonitor
+  /* Set HBCI_Progressmonitor */
   HBCI_API_setMonitor(api, gnc_hbci_new_pmonitor(data), TRUE);
   return data;
 }
@@ -259,9 +259,7 @@ static int msgInputPin(const HBCI_User *user,
 	g_strdup_printf (  _("The PIN needs to be at least %d characters \n"
 			     "long. Do you want to try again?"),
 			   minsize);
-      retval = gnc_verify_dialog_parented (GTK_WIDGET (data->parent), 
-					   TRUE,
-					   msg);
+      retval = gnc_verify_dialog (data->parent, TRUE, msg);
       g_free (msg);
       if (!retval)
 	break;
@@ -269,7 +267,7 @@ static int msgInputPin(const HBCI_User *user,
     else {
       *pinbuf = g_strdup (passwd);
       if (user && data->cache_pin) {
-	//printf("Cached the PIN for user %s.\n", HBCI_User_userId (user));
+	/*printf("Cached the PIN for user %s.\n", HBCI_User_userId (user));*/
 	data->user = user;
 	if (data->pw)
 	  g_free (memset (data->pw, 0, strlen (data->pw)));
@@ -343,12 +341,10 @@ static int msgInsertMediumOrAbort(const HBCI_User *user,
 			      "unknown user at unknown bank."));
       }
     
-  retval = gnc_ok_cancel_dialog_parented (data->parent,
-					  GNC_VERIFY_OK, 
-					  "%s", msgstr);
+  retval = gnc_ok_cancel_dialog (data->parent, GTK_RESPONSE_OK, "%s", msgstr);
   g_free (msgstr);
   
-  return (retval == GNC_VERIFY_OK);
+  return (retval == GTK_RESPONSE_OK);
 }
 
 
@@ -412,12 +408,10 @@ static int msgInsertCorrectMediumOrAbort(const HBCI_User *user,
 			      "unknown user at unknown bank."));
       }
   
-  retval = gnc_ok_cancel_dialog_parented (data->parent,
-					  GNC_VERIFY_OK,
-					  "%s", msgstr);
+  retval = gnc_ok_cancel_dialog (data->parent, GTK_RESPONSE_OK, "%s", msgstr);
   g_free (msgstr);
   
-  return (retval == GNC_VERIFY_OK);
+  return (retval == GTK_RESPONSE_OK);
 }
 
 
@@ -427,7 +421,7 @@ static void msgStateResponse(const char *msg, void *user_data)
   g_assert(data);
 
   add_log_text (data, msg);
-  //fprintf(stdout,"hbci-initial-druid-msgStateResponse: %s\n",msg);
+  /*fprintf(stdout,"hbci-initial-druid-msgStateResponse: %s\n",msg);*/
   /* Let the widgets be redrawn */
   while (g_main_iteration (FALSE));
 }
@@ -436,7 +430,7 @@ static int keepAlive(void *user_data)
 {
   GNCInteractor *data = user_data;
   g_assert(data);
-  //fprintf(stdout, "my-keepAlive: returning 1\n");
+  /*fprintf(stdout, "my-keepAlive: returning 1\n");*/
 
   /* Let the widgets be redrawn */
   while (g_main_iteration (FALSE));

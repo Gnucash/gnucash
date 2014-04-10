@@ -373,7 +373,7 @@ gnc_get_export_type_choice (SCM export_types)
 
     choices = g_list_prepend (choices, g_strdup (_("HTML")));
 
-    choice = gnc_choose_radio_option_dialog_parented
+    choice = gnc_choose_radio_option_dialog
       (NULL, _("Choose export format"),
        _("Choose the export format for this report:"), 0, choices);
   }
@@ -434,7 +434,7 @@ gnc_get_export_filename (SCM choice)
     /* %s is the strerror(3) string of the error that occurred. */
     const char *format = _("You cannot save to that filename.\n\n%s");
 
-    gnc_error_dialog (format, strerror(errno));
+    gnc_error_dialog (NULL, format, strerror(errno));
     return NULL;
   }
 
@@ -443,7 +443,7 @@ gnc_get_export_filename (SCM choice)
   {
     const char *message = _("You cannot save to that file.");
 
-    gnc_error_dialog (message);
+    gnc_error_dialog (NULL, message);
     return NULL;
   }
 
@@ -452,7 +452,7 @@ gnc_get_export_filename (SCM choice)
     const char *format = _("The file \n    %s\n already exists.\n"
                            "Are you sure you want to overwrite it?");
 
-    if (!gnc_verify_dialog (FALSE, format, filepath))
+    if (!gnc_verify_dialog (NULL, FALSE, format, filepath))
       return NULL;
   }
 
@@ -506,7 +506,7 @@ gnc_report_window_export_button_cb(GtkWidget * w, gpointer data)
   {
     const char *fmt = _("Could not open the file\n"
                         "     %s\n%s");
-    gnc_error_dialog (fmt, filepath ? filepath : "(null)",
+    gnc_error_dialog (NULL, fmt, filepath ? filepath : "(null)",
 		      strerror (errno) ? strerror (errno) : "");
   }
 
@@ -523,7 +523,8 @@ gnc_report_window_params_cb(GtkWidget * w, gpointer data)
   if(report->cur_report != SCM_BOOL_F)
   {
     if(scm_call_1(start_editor, report->cur_report) == SCM_BOOL_F) {
-      gnc_warning_dialog(_("There are no options for this report."));
+      gnc_warning_dialog(GTK_WIDGET(report->mc->app),
+			 _("There are no options for this report."));
     }
     else {
       gnc_report_window_add_edited_report(report, report->cur_report);

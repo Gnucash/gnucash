@@ -63,15 +63,6 @@ struct _QofSession
 };
 
 
-/* 
- * qof_session_set_book() has funny semantics.
- * The session stores a list of books.  If you call this routine
- * with a book that is closed, then its added to the list.  If
- * you call this routine with a book that is open, then the
- * old list is blown away.
- */
-void qof_session_set_book (QofSession *session, QofBook *book);
-
 QofBackend * qof_session_get_backend (QofSession *session);
 
 void qof_session_push_error (QofSession *session, QofBackendError err,

@@ -278,6 +278,8 @@ xaccFreqSpecGetNextInstance( FreqSpec *fs,
         GList *list;
 
         g_return_if_fail( fs );
+        g_return_if_fail( in_date );
+        g_return_if_fail( out_date );
         switch( fs->type ) {
         case INVALID:
                 /* this is okay, just lame. */

@@ -36,6 +36,7 @@ libgncmod_backend_file_la_SOURCES = \
   sixtp.c
 
 noinst_HEADERS = \
+  gnc-backend-file.h \
   gnc-xml.h \
   gnc-xml-helper.h \
   io-example-account.h \

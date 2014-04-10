@@ -49,16 +49,18 @@ static short module = MOD_GUI;
  *                string.                                           *
  * Return: the result the user selected                             *
 \********************************************************************/
-static GNCVerifyResult
-gnc_ok_cancel_dialog_common(gncUIWidget parent,
-			    GNCVerifyResult default_result,
-			    const gchar *format, va_list args)
+GNCVerifyResult
+gnc_ok_cancel_dialog(gncUIWidget parent,
+		     GNCVerifyResult default_result,
+		     const gchar *format,...)
 {
   GtkWidget *dialog = NULL;
   gint default_button;
   gint result;
   gchar *buffer;
+  va_list args;
 
+  va_start(args, format);
   buffer = g_strdup_vprintf(format, args);
   dialog = gnome_message_box_new(buffer,
                                  GNOME_MESSAGE_BOX_QUESTION,
@@ -66,13 +68,14 @@ gnc_ok_cancel_dialog_common(gncUIWidget parent,
                                  GNOME_STOCK_BUTTON_CANCEL,
                                  NULL);
   g_free(buffer);
+  va_end(args);
 
   switch (default_result)
   {
-    case GNC_VERIFY_OK:
+    case GTK_RESPONSE_OK:
       default_button = 0;
       break;
-    case GNC_VERIFY_CANCEL:
+    case GTK_RESPONSE_CANCEL:
       default_button = 1;
       break;
     default:
@@ -90,39 +93,11 @@ gnc_ok_cancel_dialog_common(gncUIWidget parent,
   switch (result)
   {
     case 0:
-      return GNC_VERIFY_OK;
+      return GTK_RESPONSE_OK;
     case 1:
     default:
-      return GNC_VERIFY_CANCEL;
+      return GTK_RESPONSE_CANCEL;
   }
-}
-
-GNCVerifyResult
-gnc_ok_cancel_dialog(GNCVerifyResult default_result, const gchar *format, ...)
-{
-  gboolean result;
-  va_list args;
-
-  va_start(args, format);
-  result = gnc_ok_cancel_dialog_common(gnc_ui_get_toplevel(),
-				       default_result, format, args);
-  va_end(args);
-  return(result);
-}
-
-GNCVerifyResult
-gnc_ok_cancel_dialog_parented(gncUIWidget parent,
-			      GNCVerifyResult default_result,
-			      const gchar *format, ...)
-{
-  gboolean result;
-  va_list args;
-
-  va_start(args, format);
-  result = gnc_ok_cancel_dialog_common(parent ? parent : gnc_ui_get_toplevel(),
-				       default_result, format, args);
-  va_end(args);
-  return(result);
 }
 
 
@@ -143,16 +118,18 @@ gnc_ok_cancel_dialog_parented(gncUIWidget parent,
  * Return: the result the user selected                             *
 \********************************************************************/
 
-static GNCVerifyResult
-gnc_verify_cancel_dialog_common(GtkWidget *parent,
-				GNCVerifyResult default_result,
-				const gchar *format, va_list args)
+GNCVerifyResult
+gnc_verify_cancel_dialog(GtkWidget *parent,
+			 GNCVerifyResult default_result,
+			 const gchar *format, ...)
 {
   GtkWidget *verify_box = NULL;
   gint default_button;
   gint result;
   gchar *buffer;
+  va_list args;
 
+  va_start(args, format);
   buffer = g_strdup_vprintf(format, args);
   verify_box = gnome_message_box_new(buffer,
 				     GNOME_MESSAGE_BOX_QUESTION,
@@ -161,16 +138,17 @@ gnc_verify_cancel_dialog_common(GtkWidget *parent,
                                      GNOME_STOCK_BUTTON_CANCEL,
 				     NULL);
   g_free(buffer);
+  va_end(args);
 
   switch (default_result)
   {
-    case GNC_VERIFY_YES:
+    case GTK_RESPONSE_YES:
       default_button = 0;
       break;
-    case GNC_VERIFY_NO:
+    case GTK_RESPONSE_NO:
       default_button = 1;
       break;
-    case GNC_VERIFY_CANCEL:
+    case GTK_RESPONSE_CANCEL:
       default_button = 2;
       break;
     default:
@@ -188,41 +166,13 @@ gnc_verify_cancel_dialog_common(GtkWidget *parent,
   switch (result)
   {
     case 0:
-      return GNC_VERIFY_YES;
+      return GTK_RESPONSE_YES;
     case 1:
-      return GNC_VERIFY_NO;
+      return GTK_RESPONSE_NO;
     case 2:
     default:
-      return GNC_VERIFY_CANCEL;
+      return GTK_RESPONSE_CANCEL;
   }
-}
-
-GNCVerifyResult
-gnc_verify_cancel_dialog(GNCVerifyResult default_result, const gchar * format, ...)
-{
-  gboolean result;
-  va_list args;
-
-  va_start(args, format);
-  result = gnc_verify_cancel_dialog_common(gnc_ui_get_toplevel(),
-					   default_result, format, args);
-  va_end(args);
-  return(result);
-}
-
-GNCVerifyResult
-gnc_verify_cancel_dialog_parented(GtkWidget *parent,
-				  GNCVerifyResult default_result,
-				  const gchar *format, ...)
-{
-  gboolean result;
-  va_list args;
-
-  va_start(args, format);
-  result = gnc_verify_cancel_dialog_common(parent ? parent : gnc_ui_get_toplevel(),
-					   default_result, format, args);
-  va_end(args);
-  return(result);
 }
 
 
@@ -241,13 +191,15 @@ gnc_verify_cancel_dialog_parented(GtkWidget *parent,
  *         args - a pointer to the first argument for the format    *
  *                string.                                           *
 \********************************************************************/
-static gboolean
-gnc_verify_dialog_common(gncUIWidget parent, gboolean yes_is_default,
-			 const gchar *format, va_list args)
+gboolean
+gnc_verify_dialog(gncUIWidget parent, gboolean yes_is_default,
+		  const gchar *format, ...)
 {
   GtkWidget *verify_box = NULL;
   gchar *buffer;
+  va_list args;
 
+  va_start(args, format);
   buffer = g_strdup_vprintf(format, args);
   verify_box = gnome_message_box_new(buffer,
 				     GNOME_MESSAGE_BOX_QUESTION,
@@ -255,6 +207,7 @@ gnc_verify_dialog_common(gncUIWidget parent, gboolean yes_is_default,
 				     GNOME_STOCK_BUTTON_NO,
 				     NULL);
   g_free(buffer);
+  va_end(args);
 
   if (parent != NULL)
     gnome_dialog_set_parent(GNOME_DIALOG(verify_box), GTK_WINDOW(parent));
@@ -262,34 +215,6 @@ gnc_verify_dialog_common(gncUIWidget parent, gboolean yes_is_default,
   gnome_dialog_set_default(GNOME_DIALOG(verify_box), (yes_is_default ? 0 : 1));
 
   return (gnome_dialog_run_and_close(GNOME_DIALOG(verify_box)) == 0);
-}
-
-gboolean
-gnc_verify_dialog(gboolean yes_is_default, const gchar *format, ...)
-{
-  gboolean result;
-  va_list args;
-
-  va_start(args, format);
-  result = gnc_verify_dialog_common(gnc_ui_get_toplevel(),
-				    yes_is_default, format, args);
-  va_end(args);
-  return(result);
-}
-
-gboolean
-gnc_verify_dialog_parented(gncUIWidget parent, gboolean yes_is_default,
-			   const gchar *format, ...)
-{
-  gboolean result;
-  va_list args;
-
-  va_start(args, format);
-  result = gnc_verify_dialog_common(parent ? parent : gnc_ui_get_toplevel(),
-				    yes_is_default, format, args);
-  va_end(args);
-
-  return(result);
 }
 
 
@@ -305,16 +230,20 @@ gnc_verify_dialog_parented(gncUIWidget parent, gboolean yes_is_default,
  *                string.                                           *
  * Return: none                                                     * 
 \********************************************************************/
-static void 
-gnc_info_dialog_common(GtkWidget *parent, const gchar *format, va_list args)
+void 
+gnc_info_dialog(GtkWidget *parent, const gchar *format, ...)
 {
   GtkWidget *info_box = NULL;
   gchar *buffer;
+  va_list args;
 
   if (parent == NULL)
     parent = gnc_ui_get_toplevel();
 
+  va_start(args, format);
   buffer = g_strdup_vprintf(format, args);
+  va_end(args);
+
   if (parent)
     info_box = gnome_ok_dialog_parented(buffer, GTK_WINDOW(parent));
   else
@@ -322,27 +251,6 @@ gnc_info_dialog_common(GtkWidget *parent, const gchar *format, va_list args)
   g_free(buffer);
 
   gnome_dialog_run_and_close(GNOME_DIALOG(info_box));
-}
-
-void 
-gnc_info_dialog(const gchar *format, ...)
-{
-  va_list args;
-
-  va_start(args, format);
-  gnc_info_dialog_common(NULL, format, args);
-  va_end(args);
-}
-
-void 
-gnc_info_dialog_parented(GtkWindow *parent, const gchar *format, ...)
-{
-  va_list args;
-
-  va_start(args, format);
-  gnc_info_dialog_common(parent ? GTK_WIDGET(parent) : gnc_ui_get_toplevel(),
-			 format, args);
-  va_end(args);
 }
 
 
@@ -382,17 +290,7 @@ gnc_warning_dialog_va(const gchar *format, va_list args)
 }
 
 void 
-gnc_warning_dialog(const gchar *format, ...)
-{
-  va_list args;
-
-  va_start(args, format);
-  gnc_warning_dialog_common(NULL, format, args);
-  va_end(args);
-}
-
-void 
-gnc_warning_dialog_parented(GtkWidget *parent, const gchar *format, ...)
+gnc_warning_dialog(GtkWidget *parent, const gchar *format, ...)
 {
   va_list args;
 
@@ -415,18 +313,18 @@ gnc_warning_dialog_parented(GtkWidget *parent, const gchar *format, ...)
  * Return: none                                                     * 
 \********************************************************************/
 static void 
-gnc_error_dialog_common(GtkWindow *parent, const gchar *format, va_list args)
+gnc_error_dialog_common(GtkWidget *parent, const gchar *format, va_list args)
 {
   GtkWidget *top_window, *error_box = NULL;
   gchar *buffer;
 
   if (parent == NULL) {
     top_window = gnc_ui_get_toplevel();
-    parent = top_window ? GTK_WINDOW(top_window) : NULL;
+    parent = top_window ? top_window : NULL;
   }
 
   buffer = g_strdup_vprintf(format, args);
-  error_box = gnome_error_dialog_parented(buffer, parent);
+  error_box = gnome_error_dialog_parented(buffer, GTK_WINDOW(parent));
   g_free(buffer);
 
   gnome_dialog_run_and_close(GNOME_DIALOG(error_box));
@@ -439,17 +337,7 @@ gnc_error_dialog_va(const gchar *format, va_list args)
 }
 
 void 
-gnc_error_dialog(const gchar *format, ...)
-{
-  va_list args;
-
-  va_start(args, format);
-  gnc_error_dialog_common(NULL, format, args);
-  va_end(args);
-}
-
-void 
-gnc_error_dialog_parented(GtkWindow *parent, const gchar *format, ...)
+gnc_error_dialog(GtkWidget *parent, const gchar *format, ...)
 {
   va_list args;
 
@@ -505,22 +393,8 @@ gnc_generic_dialog_common(gncUIWidget parent, const char *type,
 }
 
 int
-gnc_generic_question_dialog(const char **buttons, const gchar *format, ...)
-{
-  int result;
-  va_list args;
-
-  va_start(args, format);
-  result = gnc_generic_dialog_common(gnc_ui_get_toplevel(),
-				     GNOME_MESSAGE_BOX_QUESTION,
-				     buttons, format, args);
-  va_end(args);
-  return(result);
-}
-
-int
-gnc_generic_question_dialog_parented(GtkWidget *parent, const char **buttons,
-				     const gchar *format, ...)
+gnc_generic_question_dialog(GtkWidget *parent, const char **buttons,
+			    const gchar *format, ...)
 {
   int result;
   va_list args;
@@ -534,22 +408,8 @@ gnc_generic_question_dialog_parented(GtkWidget *parent, const char **buttons,
 }
 
 int
-gnc_generic_warning_dialog(const char **buttons, const char *format, ...)
-{
-  int result;
-  va_list args;
-
-  va_start(args, format);
-  result = gnc_generic_dialog_common(gnc_ui_get_toplevel(),
-				     GNOME_MESSAGE_BOX_WARNING,
-				     buttons, format, args);
-  va_end(args);
-  return(result);
-}
-
-int
-gnc_generic_warning_dialog_parented(GtkWidget *parent, const char **buttons,
-				    const char *format, ...)
+gnc_generic_warning_dialog(GtkWidget *parent, const char **buttons,
+			   const char *format, ...)
 {
   int result;
   va_list args;
@@ -557,20 +417,6 @@ gnc_generic_warning_dialog_parented(GtkWidget *parent, const char **buttons,
   va_start(args, format);
   result = gnc_generic_dialog_common(parent,
 				     GNOME_MESSAGE_BOX_WARNING,
-				     buttons, format, args);
-  va_end(args);
-  return(result);
-}
-
-int
-gnc_generic_error_dialog(const char **buttons, const gchar *format, ...)
-{
-  int result;
-  va_list args;
-
-  va_start(args, format);
-  result = gnc_generic_dialog_common(gnc_ui_get_toplevel(),
-				     GNOME_MESSAGE_BOX_ERROR,
 				     buttons, format, args);
   va_end(args);
   return(result);
@@ -586,18 +432,18 @@ gnc_choose_radio_button_cb(GtkWidget *w, gpointer data)
 }
 
 /********************************************************************
- gnc_choose_radio_option_dialog_parented
+ gnc_choose_radio_option_dialog
 
  display a group of radio_buttons and return the index of
  the selected one
 */
 
 int
-gnc_choose_radio_option_dialog_parented(gncUIWidget parent,
-                                        const char *title, 
-                                        const char *msg,
-                                        int default_value,
-                                        GList *radio_list)
+gnc_choose_radio_option_dialog(gncUIWidget parent,
+			       const char *title, 
+			       const char *msg,
+			       int default_value,
+			       GList *radio_list)
 {
   int radio_result = 0; /* initial selected value is first one */
   GtkWidget *vbox;

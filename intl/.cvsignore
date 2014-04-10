@@ -3,6 +3,7 @@ Makefile
 Makefile.in
 VERSION
 bindtextdom.c
+cat-compat.c
 config.charset
 dcgettext.c
 dcigettext.c
@@ -19,6 +20,7 @@ hash-string.h
 intl-compat.c
 l10nflist.c
 libgnuintl.h
+linux-msg.sed
 loadinfo.h
 loadmsgcat.c
 localcharset.c
@@ -33,6 +35,8 @@ plural-exp.c
 plural-exp.h
 plural.c
 plural.y
+po2tbl.sed.in
 ref-add.sin
 ref-del.sin
 textdomain.c
+xopen-msg.sed

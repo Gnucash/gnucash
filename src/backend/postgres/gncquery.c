@@ -135,13 +135,13 @@ sql_sort_get_type(char *p, GSList * path)
         }
 
     } else if (!safe_strcmp(path->data, SPLIT_DATE_RECONCILED)) {
-        p = stpcpy(p, "gncEntry.date_reconciled");
+        p = stpcpy(p, "gncSplit.date_reconciled");
     } else if (!safe_strcmp(path->data, SPLIT_MEMO)) {
-        p = stpcpy(p, "gncEntry.memo");
+        p = stpcpy(p, "gncSplit.memo");
     } else if (!safe_strcmp(path->data, SPLIT_RECONCILE)) {
-        p = stpcpy(p, "gncEntry.reconciled");
+        p = stpcpy(p, "gncSplit.reconciled");
     } else if (!safe_strcmp(path->data, SPLIT_VALUE)) {
-        p = stpcpy(p, "gncEntry.amount");
+        p = stpcpy(p, "gncSplit.amount");
     } else if (!safe_strcmp(path->data, SPLIT_ACCT_FULLNAME)) {
         /* XXX hack alert FIXME implement this */
         PERR("BY_ACCOUNT_FULL_NAME badly implemented");
@@ -418,7 +418,7 @@ sql_sort_need_entry(QofQuery * q)
       if (got_one)                                                \
          sq->pq = stpcpy(sq->pq, "OR ");                          \
                                                                   \
-      sq->pq = stpcpy(sq->pq, "gncEntry.reconciled = '");         \
+      sq->pq = stpcpy(sq->pq, "gncSplit.reconciled = '");         \
       *(sq->pq) = flagchar;  (sq->pq) ++;                         \
       sq->pq = stpcpy(sq->pq, "' ");                              \
       got_one++;                                                  \
@@ -644,7 +644,7 @@ sqlQuery_kvp_build(sqlQuery * sq, GSList * sort_path, QofQueryCompare how,
 
     list = NULL;
     if (!safe_strcmp(sort_path->data, SPLIT_KVP))
-        list = g_list_prepend(list, "gncEntry");
+        list = g_list_prepend(list, "gncSplit");
     else if (!safe_strcmp(sort_path->data, SPLIT_TRANS))
         list = g_list_prepend(list, "gncTransaction");
     else
@@ -814,12 +814,12 @@ sqlQuery_build(sqlQuery * sq, Query * q)
 
     if (need_entry || need_account) {
         sq->pq = stpcpy(sq->pq,
-                        " gncEntry.transGuid = gncTransaction.transGuid AND ");
+                        " gncSplit.transGuid = gncTransaction.transGuid AND ");
     }
 
     if (need_account) {
         sq->pq = stpcpy(sq->pq,
-                        " gncEntry.accountGuid = gncAccount.accountGuid AND ");
+                        " gncSplit.accountGuid = gncAccount.accountGuid AND ");
     }
 
     sq->pq = stpcpy(sq->pq, "  ( ");
@@ -863,24 +863,24 @@ sqlQuery_build(sqlQuery * sq, Query * q)
                 PINFO("term is QOF_QUERYCORE_GUID");
 
                 if (!safe_strcmp(path->data, QOF_QUERY_PARAM_GUID)) {
-                    field = "gncEntry.entryGUID";
+                    field = "gncSplit.splitGuid";
                     g_assert(pdata->options != QOF_GUID_MATCH_ALL);
 
                 } else if (!safe_strcmp(path->data, SPLIT_TRANS) &&
                            !safe_strcmp(path->next->data, QOF_QUERY_PARAM_GUID)) {
-                    field = "gncEntry.transGUID";
+                    field = "gncSplit.transGUID";
                     g_assert(pdata->options != QOF_GUID_MATCH_ALL);
 
                 } else if (!safe_strcmp(path->data, SPLIT_ACCOUNT) &&
                            !safe_strcmp(path->next->data, QOF_QUERY_PARAM_GUID)) {
-                    field = "gncEntry.accountGUID";
+                    field = "gncSplit.accountGUID";
                     g_assert(pdata->options != QOF_GUID_MATCH_ALL);
 
                 } else if (!safe_strcmp(path->data, SPLIT_TRANS) &&
                            !safe_strcmp(path->next->data, TRANS_SPLITLIST) &&
                            !safe_strcmp(path->next->next->data,
                                         SPLIT_ACCOUNT_GUID)) {
-                    field = "gncEntry.accountGUID";
+                    field = "gncSplit.accountGUID";
                     g_assert(pdata->options == QOF_GUID_MATCH_ALL);
 
                 } else if (!safe_strcmp(path->data, QOF_QUERY_PARAM_BOOK) &&
@@ -916,7 +916,7 @@ sqlQuery_build(sqlQuery * sq, Query * q)
 
                             case QOF_GUID_MATCH_ALL:
                                 sq->pq = stpcpy(sq->pq,
-                                                " EXISTS ( SELECT true FROM gncEntry e"
+                                                " EXISTS ( SELECT true FROM gncSplit e"
                                                 "          WHERE "
                                                 "e.transGuid = gncTransaction.transGuid"
                                                 " AND " "e.accountGuid='");
@@ -964,11 +964,11 @@ sqlQuery_build(sqlQuery * sq, Query * q)
 
                 if (!safe_strcmp(path->data, SPLIT_ACTION)) {
                     PINFO("term is PR_ACTION");
-                    STRING_TERM("gncEntry.action");
+                    STRING_TERM("gncSplit.action");
 
                 } else if (!safe_strcmp(path->data, SPLIT_MEMO)) {
                     PINFO("term is PR_MEMO");
-                    STRING_TERM("gncEntry.memo");
+                    STRING_TERM("gncSplit.memo");
 
                 } else if (!safe_strcmp(path->data, SPLIT_TRANS)) {
                     path = path->next;
@@ -999,7 +999,7 @@ sqlQuery_build(sqlQuery * sq, Query * q)
                     PINFO("term is PR_SHRS");
                     sq->pq = stpcpy(sq->pq,
                                     "gncAccount.commodity = account_com.commodity AND ");
-                    AMOUNT_TERM("gncEntry.amount", "abs(gncEntry.amount)",
+                    AMOUNT_TERM("gncSplit.amount", "abs(gncSplit.amount)",
                                 "account_com.fraction");
 
                 } else if (!safe_strcmp(path->data, SPLIT_VALUE)) {
@@ -1007,16 +1007,16 @@ sqlQuery_build(sqlQuery * sq, Query * q)
                     PINFO("term is PR_VALUE");
                     sq->pq = stpcpy(sq->pq,
                                     "gncTransaction.currency = trans_com.commodity AND ");
-                    AMOUNT_TERM("gncEntry.value", "abs(gncEntry.value)",
+                    AMOUNT_TERM("gncSplit.value", "abs(gncSplit.value)",
                                 "trans_com.fraction");
 
                 } else if (!safe_strcmp(path->data, SPLIT_SHARE_PRICE)) {
 
                     PINFO("term is PR_PRICE");
 
-                    AMOUNT_TERM("gncEntry.value / gncEntry.amount",
-                                "gncHelperPrVal(gncEntry)",
-                                "gncHelperPrAmt(gncEntry)");
+                    AMOUNT_TERM("gncSplit.value / gncSplit.amount",
+                                "gncHelperPrVal(gncSplit)",
+                                "gncHelperPrAmt(gncSplit)");
                 } else {
 
                     PINFO("Unknown NUMERIC: %s", (char *)(path->data));

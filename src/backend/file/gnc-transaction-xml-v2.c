@@ -202,7 +202,7 @@ struct split_pdata
   QofBook *book;
 };
 
-static gboolean
+static inline gboolean
 set_spl_string(xmlNodePtr node, Split *spl,
                void (*func)(Split *spl, const char *txt))
 {
@@ -216,7 +216,7 @@ set_spl_string(xmlNodePtr node, Split *spl,
     return TRUE;
 }
 
-static gboolean
+static inline gboolean
 set_spl_gnc_num(xmlNodePtr node, Split* spl,
                 void (*func)(Split *spl, gnc_numeric gn))
 {
@@ -275,14 +275,12 @@ static gboolean
 spl_reconcile_date_handler(xmlNodePtr node, gpointer data)
 {
     struct split_pdata *pdata = data;
-    Timespec *ts;
+    Timespec ts;
 
     ts = dom_tree_to_timespec(node);
-    g_return_val_if_fail(ts, FALSE);
+    g_return_val_if_fail(is_valid_timespec(ts), FALSE);
 
-    xaccSplitSetDateReconciledTS(pdata->split, ts);
-
-    g_free(ts);
+    xaccSplitSetDateReconciledTS(pdata->split, &ts);
 
     return TRUE;
 }
@@ -415,7 +413,7 @@ struct trans_pdata
   QofBook *book;
 };
 
-static gboolean
+static inline gboolean
 set_tran_string(xmlNodePtr node, Transaction *trn,
                 void (*func)(Transaction *trn, const char *txt))
 {
@@ -432,24 +430,22 @@ set_tran_string(xmlNodePtr node, Transaction *trn,
     return TRUE;
 }
 
-static gboolean
+static inline gboolean
 set_tran_date(xmlNodePtr node, Transaction *trn,
               void (*func)(Transaction *trn, const Timespec *tm))
 {
-    Timespec *tm;
+    Timespec tm;
 
     tm = dom_tree_to_timespec(node);
 
-    g_return_val_if_fail(tm, FALSE);
+    g_return_val_if_fail(is_valid_timespec(tm), FALSE);
     
-    func(trn, tm);
-
-    g_free(tm);
+    func(trn, &tm);
 
     return TRUE;
 }
 
-static gboolean
+static inline gboolean
 trn_id_handler(xmlNodePtr node, gpointer trans_pdata)
 {
     struct trans_pdata *pdata = trans_pdata;

@@ -4,7 +4,6 @@
 ;;;  transaction
 ;;;
 ;;;  Copyright (c) 2001 Linux Developers Group, Inc.
-;;;  $Id$
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 

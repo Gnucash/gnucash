@@ -22,8 +22,16 @@
 
 /** @file gnc-lot.h
  * 
- * Lots implement the fundamental conceptual idea behind invoices,
- * inventory lots, and stock market investment lots.  See the file
+ * One often needs to know that the item 'bought' in one transaction
+ * is the same one as the item 'sold' in a different transaction.
+ * Lots are used to make this association.  One Lot holds all of the
+ * splits that involve the same item.   A lot is typically formed when
+ * the item is bought, and is closed when the item is sold out. 
+ * A lot need not be a single item, it can be a quantity of the same 
+ * thing e.g. 500 gallons of paint (sold off a few gallons at a time).
+ *
+ * Lots are required to correctly implement invoices, inventory,
+ * depreciation and stock market investment gains. See the file
  * src/doc/lots.txt for implmentation overview.
  *
  * HISTORY:

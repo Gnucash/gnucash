@@ -10,3 +10,4 @@ gw-gnome-utils.html
 gw-gnome-utils.h
 gw-gnome-utils.scm
 gw-gnome-utils.c
+gnc-version.h

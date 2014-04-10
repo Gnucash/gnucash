@@ -1,3 +1,413 @@
+2003-08-29  David Hampton  <hampton@employees.org>
+
+	* src/engine/Account.c: Fix bug in computing cleared balance.  The
+	bug was introdiced 4/1.
+
+	* lots of scm files: Remove the RCS "Id:" tag.  Its a PITA when
+	syncing between branches.
+
+2003-08-28  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/import-backend.c: Aaarg. Fixed extremely
+	stupid bug in the import value setting workaround.
+
+2003-08-19  Chris Lyttle  <chris@wilddev.net>
+
+	* src/scm/main.scm: Update for 1.8.5 release
+
+2003-08-15  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/import-backend.c: Workaround for
+	multi-currency importing bug as discussed on gnucash-devel.
+
+2003-08-13  Matt Vanecek   <mevanecek@yahoo.com>
+
+    * src/backend/postgres/PostgresBackend.c pgend_session_begin():
+      Moved the pgendUpdgradeDB() call outside of the SQL transaction,
+      because the upgrades performed each have their own separate
+      transaction.
+
+    * src/backend/postgres/newtables.h: A little bit of cleanup. Also
+      changed all the INSERTs to specify column names, to prevent
+      problems with column orders between old/new tables.
+
+    * src/backend/postgres/table-audit.sql: Moved bookGuid in
+      gncPriceTrail to be the second column.
+      
+    * src/backend/postgres/table-create.sql: Moved bookGuid in
+      gncPrice to be the second column.
+
+    * src/backend/postgres/upgrade.c: (re)Added transaction control
+      to each upgrade function.  Also, the following fixes came out
+      of regression testing:
+    - add_multiple_book_support():  Removed the "NOT NULL" from the 
+      ADD COLUMN statements, and placed them in an ALTER TABLE...SET
+      NULL construct.  The original is not supported in Postgresql
+      and fails to execute.
+    - Changed the stpcpy() to use g_strdup_printf() instead, for dynamic
+      query assembly.
+    - Made a few cosmetic changes to comparisons for readability.
+    
+2003-08-10  David Hampton  <hampton@employees.org>
+
+	* src/gnome/gnc-splash.[ch]:
+	* src/gnome-utils/gnc-splash.[ch]: Move this code to the
+	gnome-utils directory.
+
+2003-08-10  Derek Atkins  <derek@ihtfp.com>
+
+	* rpm/Makefile.am: add gnucash.spec to the DIST; clean during
+	  distclean.  Rebuild it whenever the .in, Makefile, or config.status
+	  changes.  Fixes #119446.
+
+	* src/backend/file/sixtp.c: Add code to read XML files with real
+	  namespace declarations.  (see bug #88078)
+
+	* src/*/Makefile.am: Make sure we define PWD, as not all shells
+	  define it properly.  Fixes #119114.
+
+	* src/gnome/reconcile-list.c: our parent is a gnc-query-list, not
+	  a clist.  Fix a bug so we properly call the parent destroy function.
+
+2003-08-08  Matt Vanecek  <mevanecek@yahoo.com>
+
+    * src/backend/postgres/PostgresBackend.c: Changed all the
+      gncEntry references to gncSplit, and entryGuid to splitGuid.
+    - pgend_session_begin(): Changed the 2nd qof_backend_set_message()
+      message argument to the internationalization format.
+    - Changed the pgendUpgradeDB() call to come after a commit--the
+      upgrade process uses its own transaction handling (now).
+      
+    * src/backend/postgres/checkpoint.c:
+    * src/backend/postgres/gncquery.c:
+    * src/backend/postgres/gncquery.h:
+    * src/backend/postgres/txn.c:
+    * src/backend/postgres/txnmass.c:
+    * src/backend/postgres/events.c: Changed all the gncEntry
+      references to gncSplit, and entryGuid to splitGuid.
+      
+    * src/backend/postgres/functions.sql: Changed the TIMESTAMP args
+      to TIMESTAMP WITH TIME ZONE args, and gncEntry args to gncSplit.
+    
+    * src/backend/postgres/putil.c: Added the execQuery() function
+    - sendQuery(): Added internationalization to the
+      qof_backend_set_message() call.
+
+    * src/backend/postgres/putil.h: Added the execQuery() prototype.
+    
+    * src/backend/postgres/table-create.sql:
+    * src/backend/postgres/table-audit.sql: Changed all the TIMESTAMP
+      types to TIMESTAMP WITH TIME ZONE.  Change all the gncEntry refs
+      to gncSplit, and entryGuid to splitGuid.
+    - Grouped all the index creates at the end for readability and
+      maintenance ease.
+
+    * src/backend/postgres/table-version.sql: Added a new insert row for
+      the gncVersion table to reflect these changes.
+
+    * src/backend/postgres/table.m4: Change all the gncEntry refs to
+      gncSplit, and entryGuid to splitGuid.
+
+    * src/backend/postgres/upgrade.c: Added message.h and qofbackend.h
+      for error messaging support.
+    - In each update function, added a call the DB for BEGIN and COMMIT.
+    - Changed all the gncEntry and entryGuid to gncSplit and splitGuid.
+    - Added the add_timezone_support() function to perform the latest
+      upgrades.
+    - pgendUpgradeDB(): Add a call to add_timezone_support() if the minor
+      version is less than 5.
+    - Changed PGEND_CURRENT_MINOR_VERSION from 4 to 5
+
+    * src/backend/postgres/newtables.h: new file for upgrading db tables
+      to v1.5.0.
+
+    * src/engine/qofbackend.c -- qof_backend_set_message(): Allow the
+      function to accept an NULL argument for the message, and to set
+      the backend error message to NULL in such a case.
+
+	FIXES #90768
+
+2003-08-03  Derek Atkins  <derek@ihtfp.com>
+
+	* src/gnome/druid-loan.c: Apply patch to fix a number of
+	  off-by-one bugs in the loan druid.  Fixes #119001.
+
+2003-07-30  Derek Atkins  <derek@ihtfp.com>
+
+	* src/gnome-utils/gnc-account-tree.c: add "(Report)" strings
+	  to the various columns displayed in the report currency.
+	  Partial fix for #118695.
+
+	* src/business/business-core/gncInvoice.c: set the date-entered on
+	  invoice transactions to "now" instead of the post date.  This
+	  lets us know when an invoice was actually posted, or a payment
+	  was actually made.
+
+	Support "gain/loss" balancing splits on stocks:
+	* src/engine/Transaction.c: fix xaccSplitGetPrice() to return '0'
+	  if 'amount' is zero but 'value' is non-zero
+	* src/register/ledger-core/split-register-model-save.c: if we've
+	  already handled the debcred cell then DON'T handle the price cell
+	  as it will override the debcred's value.
+	* src/register/ledger-core/split-register.c: if #shares == 0,
+	  price == 0, and value (buy/sell) != 0 then allow this entry;
+	  it's an income/expense balancing split.
+	* src/register/ledger-core/split-register-control.c: if the exchange
+	  rate cell is 0 but this is NOT the blank split, then don't run
+	  the exchange-rate dialog unless specifically requested.
+	* src/register/ledger-core/split-register-model.c: when trying to
+	  find the conversion rate for a split, remember if we found
+	  a matching split (even if the amount is 0).  If all matching
+	  splits are 0, then return 0, not 1.
+
+2003-07-29  Derek Atkins  <derek@ihtfp.com>
+
+	* src/import-export/qif/ -- add functionality to merge multiple
+	  qif file contexts into a single parent context while retaining
+	  the ability to add/remove new files.
+
+	* src/import-export/qif-context.c: add functions to get the list
+	  of used QifAccount and QifCategory objects from the set of
+	  transactions.
+
+2003-07-28  Derek Atkins  <derek@ihtfp.com>
+
+	* src/business/business-gnome/business-gnome.scm: remove
+	  some unused (old) code.
+
+2003-07-28  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/druid-hbci-initial.c: Add button for
+	manual adding of HBCI accounts. Fixes #117760. Requires latest
+	OpenHBCI CVS -- next openhbci-0.9.13 will be out this weekend.
+
+	* src/import-export/hbci/gnc-hbci-{getbalance,gettrans,transfer}.c:
+	Add saving of the HBCI_API so that bank's status changes will now
+	be remembered immediately. However this might save some
+	unnecessary information to disk, but hopefully we will have fixed
+	that in OpenHBCI soon.
+
+2003-07-28  Derek Atkins  <derek@ihtfp.com>
+
+	* src/gnome-utils/gnc-date-edit.c: hide the calendar popup
+	  on enter/return keypress events (in addition to ESC).
+	Fixes #118500
+
+2003-07-27  Matt Vanecek  <mevanecek@yahoo.com>
+
+    * src/backend/postgres/PostgresBackend.c: Added pgendGetBook(),
+      to retrieve the QofBook from the session, instead of storing the
+      book in the backend object.
+    - Where be->book was used, use pgendGetBook() instead.
+    - Enhanced debug messages.
+    * src/backend/postgres/PostgresBackend.h: Added the qofbook.h
+      include, and the pgendGetBook() prototype
+    * src/backend/postgres/book.c: Changed pgendGetBook to
+      pgendBookRestore() to reflect its functionality of restoring
+      the book's data to the engine.
+    * src/backend/postgres/price.c: In pgendPriceFind(), couched the
+      currenct portion of the SQL statement in an "if" statement,
+      because gnc_pricedb_lookup_latest_any_currency() can pass in
+      a NULL currency, and stpcpy() doesn't like NULLs.
+    * src/backend/postgres/escape.c: enhanced debug messages.
+    Fixes bug #116546
+
+2003-07-26  Derek Atkins  <derek@ihtfp.com>
+
+	* src/engine/qofbackend.h: add a new error, ERR_BACKEND_READONLY
+	* src/engine/gw-engine-spec.scm: add new error type
+	* src/backend/file/gnc-backend-file.c: differentiate between
+	  "file is already locked" and "we can't create the lockfile"
+	  so we can let the user know.
+	* src/app-file/gnc-file.c: handle the new ERR_BACKEND_READONLY
+	  error message by changing the error dialog presented to the
+	  user.
+	Fixes #117665
+
+	* src/backend/file/gnc-backend-file.c: don't make the chmod() and
+	  chown() functions fatal errors.  Warn the user if they fail, but
+	  don't fail to save.  In the long run we need some way to pop up
+	  warning messages from a backend, but until then we'll have to
+	  stick with PWARN() and hope users see the console.
+	Fixes #118258
+
+	* src/app-file/gnc-file.c: fix the message to be more appropriate
+	  when we hit a READONLY error.
+	* src/backend/file/gnc-backend-file.c: return ERR_BACKEND_READONLY
+	  on save if the XML write fails and the unlink() fails with
+	  ENOENT, EPERM, EROFS, or EACCES.
+	* src/engine/qofsession.c: don't call end_session just because
+	  there's an error.
+	Fixes #117657
+
+2003-07-26  Benoit Grégoire  <bock@step.polymtl.ca>
+	
+	* src/import-export/import-account-matcher.c: Fix bug #105293
+
+2003-07-23  Derek Atkins  <derek@ihtfp.com>
+
+	* src/engine/qofbook.c: be sure to delete the book's KVP when we
+	  destroy it.
+
+2003-07-22  Derek Atkins  <derek@ihtfp.com>
+
+	* src/import-export/qif/...
+	  more work on the new qif importer.  structure it into a parent
+	  context that contains a "list of files" (each file has its own
+	  context).  Add some tests to actually test the code.  It
+	  actually loads a basic qif file, now.  Still need to perform
+	  merging (internal and into GNC) as well as the qif-to-gnc maps.
+
+2003-07-17  Derek Atkins  <derek@ihtfp.com>
+
+	* src/backend/file/gnc-backend-file.c:  Don't need to set the
+	  backend error directly after calling gnc_file_be_get_file_lock(),
+	  as get_file_lock will set the backend error itself.
+
+2003-07-16  Derek Atkins  <derek@ihtfp.com>
+
+	* src/business/business-core/gncInvoice.c: change the description
+	  and action of Invoice and Payement Transactions/Splits, to make
+	  it easier to print a check off the posted transactions.
+
+	* src/report/standard-reports/cash-flow.scm: fix some labels and
+	  add more text to make it more clear what's going on.  Hopefully
+	  fixes #104878.
+
+	* src/report/standard-reports/register.scm: add Debit and Credit
+	  totals.  Fixes bug #115611.
+
+2003-07-14  Derek Atkins  <derek@ihtfp.com>
+
+	* src/import-export/qif: an incomplete implementation of a new
+	  (written-in-C) QIF importer.  The code compiles but has not
+	  been tested.  Yet to do: merging, conversion to gnc, and UI.
+
+	* configure.in: search for db-4.1.  Fixes #116509.
+
+	* src/gnome-util/dialog-transfer.c: fix a bunch more rounding
+	  errors, and add more precision to the price.  There is still a
+	  problem when acquiring a high-precision price out of the pricedb
+	  where it will get truncated in the AmountEdit widget.
+
+2003-07-10  Derek Atkins  <derek@ihtfp.com>
+
+	* src/import-export/import-parse.[ch]: routines to parse numbers
+	  and dates in a mostly-locale-agnostic way.
+	* src/import-export/import-format-dialog.c: a dialog to ask the user
+	  to choose a format, when parsing just isn't enough.
+	* src/import-export/generic-import.glade: add the format_match dialog
+	* src/import-export/test/test-import-parse.c: test the import-parse
+	  routines.
+
+2003-07-09  Derek Atkins  <derek@ihtfp.com>
+
+	* configure.in: change (and comment out) checks for pthreads
+	* macros/acx_pthread.m4: change pthread search (should be removed)
+	* src/engine/guid.c: remove pthread code and just use a static buffer.
+	  (pthread code is kept within some #ifdef's, just in case we decide to
+	   put it back in later).
+
+	* src/app-utils/gnc-ui-util.[ch]: add a function to parse a numeric
+	  with the caller providing all the locale-specific information
+
+	* src/business/business-core/gncBillTerm.c:
+	* src/business/business-core/gncTaxTable.c:
+	  Fix a crash where removing items in the wrong order could
+	  cause "Bad Things" to happen -- referencing an invalid
+	  object.  When being destroyed, an object should remove itself
+	  from it's parent's list of children, in addition to removing
+	  itself from it's children's pointer-to-parent.
+
+2003-07-09  Christian Stimming  <stimming@tuhh.de>
+
+	* README: Added remark about gnucash-docs.
+	
+	* src/import-export/hbci/druid-hbci-initial.c: Clarify the part of
+	the HBCI setup about potentially adding HBCI accounts manually.
+
+2003-07-04  David Hampton  <hampton@employees.org>
+
+	* src/gnome/dialog-price-edit-db.c: Add a couple of extra checks
+	to prevent crashing if the commodity attached to a price quote has
+	disappeared. #111643
+
+	* src/gnome/dialog-commodities.c: Provide a new warning message
+	before deletion if a commodity has any quice quotes.  If the user
+	deletes the commodity anyway, removed any quotes are based on the
+	commodity
+
+	* src/engine/gnc-pricedb.c: Enhance the get prices routine to
+	handle a request with a NULL currency.
+
+2003-07-03  David Hampton  <hampton@employees.org>
+
+	* src/scm/price-quotes.scm:
+	* src/engine/gnc-commodity.[ch]: Allow the user to specify by
+	namespace which commodities should be retrieved when getting price
+	quotes.
+
+	* src/scm/command-line.scm:
+	* src/scm/main.scm: Support a new command line argument for
+	specifying a namespace.  To be used in conjunction with the
+	--add-price-quotes argument.
+
+2003-07-02  Chris Lyttle  <chris@wilddev.net>
+
+	* src/scm/help-topics-index.scm: add Jon Lapham's patch
+
+2003-07-03  Matthew Vanecek  <mevanecek@yahoo.com>
+
+    * po/POTFILES.in: ran make-gnucash-potfile, to pick up all the
+    changes for the Qof migration.
+
+2003-07-02  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/gnc-hbci-transfer.c,
+	src/import-export/hbci/dialog-hbcitrans.c: Change HBCI online
+	transfer action so that first the gnucash Transaction is created
+	and only after that the HBCI connection is started. Necessary for
+	later implementation of offline queueing and multi-job execution.
+
+2003-07-01  David Hampton  <hampton@employees.org>
+
+	* src/backend/file/gnc-backend-file.c: New data file should have
+	same uid/gidas original file. #105662
+
+	* src/app-utils/gnc-ui-util.[ch]:
+	* src/app-utils/gw-app-utils-spec.scm:
+	* src/engine/gnc-commodity.[ch]:
+	* src/engine/gw-engine-spec.scm:
+	Move Finance::Quote related information to live with the rest of
+	the commodity related code.
+
+	* src/engine/gnc-engine.h:
+	* src/engine/gnc-commodity.[ch]: Convert the price quote source
+	data into an object of its own.  Eliminate the old "internal" name
+	in favor of the F::Q name.  Dynamically find and add new quote
+	sources when the user runs gnucash.
+
+	* src/backend/file/gnc-account-xml-v2.c:
+	* src/backend/file/gnc-commodity-xml-v2.c:
+	* src/engine/Scrub.c: Ensure backwards compatability of the XML file.
+
+	* src/app-utils/gnc-helpers.c: Update for changes in accessing
+	quote source information.
+	
+	* src/gnome-utils/commodity.glade:
+	* src/gnome-utils/dialog-commodity.c: Reorganize the dialog for
+	selection price quote information.
+
+	* src/scm/price-quotes.scm: Print debugging info when getting
+	stock quotes if gnucash is run with the --debug flag.
+
+2003-06-30  Derek Atkins  <derek@ihtfp.com>
+
+	* macros/acx_pthread.m4: macro to find the pthread library for
+	  the particular system
+	* configure.in: look for pthread library (now that we actually
+	  USE pthreads, even if only for Thread Local Storage).
+
 2003-06-27  David Hampton  <hampton@employees.org>
 
 	* src/backend/file/gnc-backend-file.c: Fix 'Save As' so it can

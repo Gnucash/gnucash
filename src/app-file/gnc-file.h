@@ -106,10 +106,6 @@
  *    The user WILL NOT BE PROMPTED to confirm this action, or do do
  *    any kind of saving beforehand.
  *
- * The gncGetCurrentGroup() routine will return the account group associated
- *    with the current session.  It will always return a non-null value
- *    (barring system catastrophe such as out of memory).
- *
  * HISTORY:
  * Derived from Rob Clark's original MainWindow.c code, Dec 1998
  */

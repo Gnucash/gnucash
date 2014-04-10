@@ -1015,7 +1015,7 @@ ld_cancel_check( GnomeDruid *gd, LoanDruidData *ldd )
 {
         const char *cancelMsg = _( "Are you sure you want to cancel "
                                    "the Mortgage/Loan Setup Druid?" );
-        if ( gnc_verify_dialog_parented( ldd->dialog, FALSE, cancelMsg ) ) {
+        if ( gnc_verify_dialog( ldd->dialog, FALSE, cancelMsg ) ) {
                 gnc_close_gui_component_by_data( DIALOG_LOAN_DRUID_CM_CLASS,
                                                  ldd );
         }
@@ -1129,9 +1129,8 @@ ld_info_save( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
 
         ldd->ld.primaryAcct = gnc_account_sel_get_account( ldd->prmAccountGAS );
         if ( ldd->ld.primaryAcct == NULL ) {
-                gnc_info_dialog_parented( GTK_WINDOW(ldd->dialog),
-                                          _("Please select a valid "
-                                            "loan account.") );
+                gnc_info_dialog( ldd->dialog,
+				 _("Please select a valid loan account.") );
                 return TRUE;
         } 
         if ( ! ldd->ld.repPriAcct ) {
@@ -1217,9 +1216,9 @@ ld_opts_save_state( LoanDruidData *ldd )
                 ldd->ld.escrowAcct =
                         gnc_account_sel_get_account( ldd->optEscrowGAS );
                 if ( ldd->ld.escrowAcct == NULL ) {
-                        gnc_info_dialog_parented( GTK_WINDOW(ldd->dialog),
-                                                  _("Please select a valid "
-                                                    "Escrow Account.") );
+                        gnc_info_dialog( ldd->dialog,
+					 _("Please select a valid "
+					   "Escrow Account.") );
                         return TRUE;
                 }
                 
@@ -1283,25 +1282,23 @@ ld_rep_save( LoanDruidData *ldd )
         ldd->ld.repFromAcct =
                 gnc_account_sel_get_account( ldd->repAssetsFromGAS );
         if ( ldd->ld.repFromAcct == NULL ) {
-                gnc_info_dialog_parented( GTK_WINDOW(ldd->dialog),
-                                          _("Please select a valid "
-                                            "\"from\" account.") );
+                gnc_info_dialog( ldd->dialog,
+				 _("Please select a valid \"from\" account."));
                 return TRUE;
         }
         ldd->ld.repPriAcct =
                 gnc_account_sel_get_account( ldd->repPrincToGAS );
         if ( ldd->ld.repPriAcct == NULL ) {
-                gnc_info_dialog_parented( GTK_WINDOW(ldd->dialog),
-                                          _("Please select a valid "
-                                            "\"to\" account.") );
+                gnc_info_dialog( ldd->dialog,
+				 _("Please select a valid \"to\" account.") );
                 return TRUE;
         }
         ldd->ld.repIntAcct =
                 gnc_account_sel_get_account( ldd->repIntToGAS );
         if ( ldd->ld.repIntAcct == NULL ) {
-                gnc_info_dialog_parented( GTK_WINDOW(ldd->dialog),
-                                          _("Please select a valid "
-                                            "\"interest\" account.") );
+                gnc_info_dialog( ldd->dialog,
+				 _("Please select a valid "
+				   "\"interest\" account.") );
                 return TRUE;
         }
         gnc_frequency_save_state( ldd->repGncFreq,
@@ -1504,18 +1501,18 @@ ld_pay_save_current( LoanDruidData *ldd )
         if ( rod->specSrcAcctP ) {
                 rod->from = gnc_account_sel_get_account( ldd->payAcctFromGAS );
                 if ( rod->from == NULL ) {
-                        gnc_info_dialog_parented( GTK_WINDOW(ldd->dialog),
-                                                  _("Please select a valid "
-                                                    "\"from\" account.") );
+                        gnc_info_dialog( ldd->dialog,
+					 _("Please select a valid "
+					   "\"from\" account.") );
                         return TRUE;
                 }
         }
 
         rod->to   = gnc_account_sel_get_account( ldd->payAcctToGAS );
         if ( rod->to == NULL ) {
-                gnc_info_dialog_parented( GTK_WINDOW(ldd->dialog),
-                                          _("Please select a valid "
-                                            "\"to\" account.") );
+                gnc_info_dialog( ldd->dialog,
+				 _("Please select a valid "
+				   "\"to\" account.") );
                 return TRUE;
         }
         
@@ -2198,16 +2195,17 @@ ld_create_sxes( LoanDruidData *ldd )
         paymentSX->name  = g_strdup(ldd->ld.repMemo);
         paymentSX->start = *ldd->ld.startDate;
         paymentSX->last  = *ldd->ld.repStartDate;
+	g_date_subtract_months( &paymentSX->last, 1 );
         {
                 paymentSX->end = *ldd->ld.repStartDate;
-                g_date_add_months( &paymentSX->end, ldd->ld.numMonRemain );
+                g_date_add_months( &paymentSX->end, ldd->ld.numMonRemain - 1);
         }
         paymentSX->freq = ldd->ld.repFreq;
         /* Figure out the correct current instance-count for the txns in the
          * SX. */
         paymentSX->instNum =
                 (ldd->ld.numPer * ( ldd->ld.perSize == YEARS ? 12 : 1 ))
-                - ldd->ld.numMonRemain;
+                - ldd->ld.numMonRemain + 1;
 
         paymentSX->mainTxn = gnc_ttinfo_malloc();
         gnc_ttinfo_set_currency( paymentSX->mainTxn,
@@ -2489,7 +2487,7 @@ ld_get_loan_range( LoanDruidData *ldd, GDate *start, GDate *end )
         *start = *ldd->ld.startDate;
         *end = *start;
         g_date_add_months( end,
-                           ldd->ld.numPer
+                           ldd->ld.numPer - 1
                            * ( ldd->ld.perSize == MONTHS ? 1 : 12 ) );
 }
 
@@ -2593,7 +2591,7 @@ ld_rev_recalc_schedule( LoanDruidData *ldd )
                 g_date_subtract_days( &curDate, 1 );
                 xaccFreqSpecGetNextInstance( ldd->ld.repFreq,
                                              &curDate, &curDate );
-                for ( i=0;
+                for ( i=1;
                       g_date_valid( &curDate )
                       && g_date_compare( &curDate, &end ) <= 0 ;
                       i++,

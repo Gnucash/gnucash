@@ -64,6 +64,9 @@ struct gnc_lot_struct
   /* Handy cached value to indicate if lot is closed. */
   /* If value is negative, then the cache is invalid. */
   signed char is_closed;
+
+  /* traversal marker, handy for preventing recursion */
+  unsigned char marker;
 };
 
 void gnc_lot_set_guid(GNCLot *lot, GUID guid);

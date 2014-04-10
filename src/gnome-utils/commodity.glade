@@ -763,8 +763,8 @@
 	  <can_focus>True</can_focus>
 	  <signal>
 	    <name>toggled</name>
-	    <handler>gnc_ui_commodity_quote_cb</handler>
-	    <last_modification_time>Sun, 20 Apr 2003 03:35:34 GMT</last_modification_time>
+	    <handler>gnc_ui_commodity_quote_info_cb</handler>
+	    <last_modification_time>Wed, 25 Jun 2003 06:17:32 GMT</last_modification_time>
 	  </signal>
 	  <label>Get Online Quotes</label>
 	  <active>False</active>
@@ -779,8 +779,8 @@
 	<widget>
 	  <class>GtkTable</class>
 	  <name>table2</name>
-	  <rows>2</rows>
-	  <columns>2</columns>
+	  <rows>5</rows>
+	  <columns>3</columns>
 	  <homogeneous>False</homogeneous>
 	  <row_spacing>3</row_spacing>
 	  <column_spacing>3</column_spacing>
@@ -802,7 +802,7 @@
 	    <ypad>0</ypad>
 	    <child>
 	      <left_attach>0</left_attach>
-	      <right_attach>1</right_attach>
+	      <right_attach>2</right_attach>
 	      <top_attach>0</top_attach>
 	      <bottom_attach>1</bottom_attach>
 	      <xpad>0</xpad>
@@ -814,6 +814,118 @@
 	      <xfill>True</xfill>
 	      <yfill>False</yfill>
 	    </child>
+	  </widget>
+
+	  <widget>
+	    <class>GtkRadioButton</class>
+	    <name>single_source_button</name>
+	    <can_focus>True</can_focus>
+	    <signal>
+	      <name>toggled</name>
+	      <handler>gnc_ui_commodity_quote_info_cb</handler>
+	      <last_modification_time>Wed, 25 Jun 2003 06:17:44 GMT</last_modification_time>
+	    </signal>
+	    <label>single source</label>
+	    <active>False</active>
+	    <draw_indicator>True</draw_indicator>
+	    <group>stock source</group>
+	    <child>
+	      <left_attach>1</left_attach>
+	      <right_attach>2</right_attach>
+	      <top_attach>1</top_attach>
+	      <bottom_attach>2</bottom_attach>
+	      <xpad>0</xpad>
+	      <ypad>0</ypad>
+	      <xexpand>False</xexpand>
+	      <yexpand>False</yexpand>
+	      <xshrink>False</xshrink>
+	      <yshrink>False</yshrink>
+	      <xfill>True</xfill>
+	      <yfill>False</yfill>
+	    </child>
+	  </widget>
+
+	  <widget>
+	    <class>GtkRadioButton</class>
+	    <name>multi_source_button</name>
+	    <can_focus>True</can_focus>
+	    <signal>
+	      <name>toggled</name>
+	      <handler>gnc_ui_commodity_quote_info_cb</handler>
+	      <last_modification_time>Wed, 25 Jun 2003 06:17:53 GMT</last_modification_time>
+	    </signal>
+	    <label>multiple sources</label>
+	    <active>False</active>
+	    <draw_indicator>True</draw_indicator>
+	    <group>stock source</group>
+	    <child>
+	      <left_attach>1</left_attach>
+	      <right_attach>2</right_attach>
+	      <top_attach>2</top_attach>
+	      <bottom_attach>3</bottom_attach>
+	      <xpad>0</xpad>
+	      <ypad>0</ypad>
+	      <xexpand>False</xexpand>
+	      <yexpand>False</yexpand>
+	      <xshrink>False</xshrink>
+	      <yshrink>False</yshrink>
+	      <xfill>True</xfill>
+	      <yfill>False</yfill>
+	    </child>
+	  </widget>
+
+	  <widget>
+	    <class>GtkRadioButton</class>
+	    <name>unknown_source_button</name>
+	    <can_focus>True</can_focus>
+	    <signal>
+	      <name>toggled</name>
+	      <handler>gnc_ui_commodity_quote_info_cb</handler>
+	      <last_modification_time>Wed, 25 Jun 2003 06:18:00 GMT</last_modification_time>
+	    </signal>
+	    <label>unknown sources</label>
+	    <active>False</active>
+	    <draw_indicator>True</draw_indicator>
+	    <group>stock source</group>
+	    <child>
+	      <left_attach>1</left_attach>
+	      <right_attach>2</right_attach>
+	      <top_attach>3</top_attach>
+	      <bottom_attach>4</bottom_attach>
+	      <xpad>0</xpad>
+	      <ypad>0</ypad>
+	      <xexpand>False</xexpand>
+	      <yexpand>False</yexpand>
+	      <xshrink>False</xshrink>
+	      <yshrink>False</yshrink>
+	      <xfill>True</xfill>
+	      <yfill>False</yfill>
+	    </child>
+	  </widget>
+
+	  <widget>
+	    <class>GtkHBox</class>
+	    <name>quote_tz_box</name>
+	    <homogeneous>False</homogeneous>
+	    <spacing>0</spacing>
+	    <child>
+	      <left_attach>2</left_attach>
+	      <right_attach>3</right_attach>
+	      <top_attach>4</top_attach>
+	      <bottom_attach>5</bottom_attach>
+	      <xpad>0</xpad>
+	      <ypad>0</ypad>
+	      <xexpand>False</xexpand>
+	      <yexpand>False</yexpand>
+	      <xshrink>False</xshrink>
+	      <yshrink>False</yshrink>
+	      <xfill>True</xfill>
+	      <yfill>True</yfill>
+	    </child>
+
+	    <widget>
+	      <class>Placeholder</class>
+	    </widget>
 	  </widget>
 
 	  <widget>
@@ -828,9 +940,9 @@
 	    <ypad>0</ypad>
 	    <child>
 	      <left_attach>0</left_attach>
-	      <right_attach>1</right_attach>
-	      <top_attach>1</top_attach>
-	      <bottom_attach>2</bottom_attach>
+	      <right_attach>2</right_attach>
+	      <top_attach>4</top_attach>
+	      <bottom_attach>5</bottom_attach>
 	      <xpad>0</xpad>
 	      <ypad>0</ypad>
 	      <xexpand>False</xexpand>
@@ -844,17 +956,17 @@
 
 	  <widget>
 	    <class>GtkHBox</class>
-	    <name>source_box</name>
+	    <name>multi_source_box</name>
 	    <homogeneous>False</homogeneous>
 	    <spacing>0</spacing>
 	    <child>
-	      <left_attach>1</left_attach>
-	      <right_attach>2</right_attach>
-	      <top_attach>0</top_attach>
-	      <bottom_attach>1</bottom_attach>
+	      <left_attach>2</left_attach>
+	      <right_attach>3</right_attach>
+	      <top_attach>2</top_attach>
+	      <bottom_attach>3</bottom_attach>
 	      <xpad>0</xpad>
 	      <ypad>0</ypad>
-	      <xexpand>True</xexpand>
+	      <xexpand>False</xexpand>
 	      <yexpand>False</yexpand>
 	      <xshrink>False</xshrink>
 	      <yshrink>False</yshrink>
@@ -869,17 +981,42 @@
 
 	  <widget>
 	    <class>GtkHBox</class>
-	    <name>quote_tz_box</name>
+	    <name>unknown_source_box</name>
 	    <homogeneous>False</homogeneous>
 	    <spacing>0</spacing>
 	    <child>
-	      <left_attach>1</left_attach>
-	      <right_attach>2</right_attach>
+	      <left_attach>2</left_attach>
+	      <right_attach>3</right_attach>
+	      <top_attach>3</top_attach>
+	      <bottom_attach>4</bottom_attach>
+	      <xpad>0</xpad>
+	      <ypad>0</ypad>
+	      <xexpand>False</xexpand>
+	      <yexpand>False</yexpand>
+	      <xshrink>False</xshrink>
+	      <yshrink>False</yshrink>
+	      <xfill>True</xfill>
+	      <yfill>True</yfill>
+	    </child>
+
+	    <widget>
+	      <class>Placeholder</class>
+	    </widget>
+	  </widget>
+
+	  <widget>
+	    <class>GtkHBox</class>
+	    <name>single_source_box</name>
+	    <homogeneous>False</homogeneous>
+	    <spacing>0</spacing>
+	    <child>
+	      <left_attach>2</left_attach>
+	      <right_attach>3</right_attach>
 	      <top_attach>1</top_attach>
 	      <bottom_attach>2</bottom_attach>
 	      <xpad>0</xpad>
 	      <ypad>0</ypad>
-	      <xexpand>False</xexpand>
+	      <xexpand>True</xexpand>
 	      <yexpand>False</yexpand>
 	      <xshrink>False</xshrink>
 	      <yshrink>False</yshrink>

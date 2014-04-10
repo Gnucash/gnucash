@@ -3,7 +3,6 @@
 ;;;  guess (or load from prefs) mappings from QIF cats/accts to gnc
 ;;;
 ;;;  Bill Gribble <grib@billgribble.com> 20 Feb 2000 
-;;;  $Id$
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define GNC-BANK-TYPE 0)

@@ -32,11 +32,6 @@
 #include "qofbook.h"
 #include "qofobject.h"
 
-/* Initialize the object registration subsystem */
-void qof_object_initialize (void);
-void qof_object_shutdown (void);
-
-/* Note that the following are per-class and not per-instance */
 /* To be called from within the book */
 void qof_object_book_begin (QofBook *book);
 void qof_object_book_end (QofBook *book);

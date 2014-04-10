@@ -23,9 +23,10 @@
 \********************************************************************/
 
 /*
- * io-gncxml.h -- api for new XML-based file format
+ * @file io-gncxml.h
+ * @breif api for Version 1 XML-based file format
  *
- * Initial code by Rob l. Browning 4Q 2000
+ * Initial code by Rob L. Browning 4Q 2000
  * Tuneups by James LewisMoss Dec 2000
  */
 
@@ -33,17 +34,15 @@
 #define IO_GNCXML_H
 
 #include <glib.h>
-
-#include "qofsession.h"
-#include "Query.h"
+#include "qofbook.h"
 
 /* FIXME: eventually, we probably need to add an error stack
    accessable via gnc_book_get_xml_io_error() a la binfile. */
 
-/* read in an account group from a file */
-gboolean qof_session_load_from_xml_file(QofSession *session);
+/** Read in an account group from a file */
+gboolean qof_session_load_from_xml_file(QofBook *, const char * filename);
 
-/* The is_gncxml_file() routine checks to see if the first few 
+/** The is_gncxml_file() routine checks to see if the first few 
  * chars of the file look like gnc-xml data.
  */
 gboolean gnc_is_xml_data_file(const gchar *name);

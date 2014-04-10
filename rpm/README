@@ -21,3 +21,43 @@ wait a bit, and a new binary rpm will be in
 /usr/src/redhat/SRPMS.
 
 
+================================
+
+JPL version:
+
+1) Obtain a GnuCash distribution (source code .tar.gz file), 
+   either by downloading from an ftp site somewhere, or building
+   from CVS using "make dist".  The file should have the nomenclature
+   gnucash-X.Y.Z.tar.gz where X.Y.Z are the release numbers.
+
+2) Copy and uncompress/tar the distribution in your 
+   /usr/src/redhat/SOURCES directory.  You will need to do this as the 
+   root user.  Note, use your distribution-specific path here, only 
+   redhat uses "/usr/src/redhat".
+
+   cd /usr/src/redhat/SOURCES
+   cp /SOMEPATH/gnucash-X.Y.Z.tar.gz
+   tar xvzf gnucash-X.Y.Z.tar.gz
+
+3) Copy the rpm spec file to /usr/src/redhat/SPEC.
+
+   cp gnucash-X.Y.Z/rpm/gnucash.spec /usr/src/redhat/SPECS/.
+   
+4) Edit the spec file, you probably will only need to modify the 
+   following 3 lines, depending on what features you want to include 
+   in the rpm:
+
+   %define _with_postgres 0      (use postgres backend?)
+   %define _with_ofx 0           (use openofx package?)
+   %define _with_hbci 0          (use hbci package?)
+
+5) Build the binary and source RPMs
+   cd /usr/src/redhat/SPECS
+   rpmbuild -ba gnucash.spec
+
+   (note: older versions of rpm use "rpm -ba FILE.spec" to build) 
+   
+6) Wait a bit, and a new binary rpm will be in
+   /usr/src/redhat/RPMS/<arch> and a new src.rpm will be in
+   /usr/src/redhat/SRPMS.
+

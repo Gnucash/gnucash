@@ -64,6 +64,155 @@
 #define GNC_COMMODITY_NS_ASX    "ASX"
 
 
+/** @name Commodity Quote Source functions */
+/** @{ */
+
+/** The quote source type enum account types are used to determine how
+ *  the transaction data in the account is displayed.  These values
+ *  can be safely changed from one release to the next.
+ */
+typedef enum
+{
+  SOURCE_SINGLE = 0,	/**< This quote source pulls from a single
+			 *   specific web site.  For example, the
+			 *   yahoo_australia source only pulls from
+			 *   the yahoo web site. */
+  SOURCE_MULTI,		/**< This quote source may pull from multiple
+			 *   web sites.  For example, the australia
+			 *   source may pull from ASX, yahoo, etc. */
+  SOURCE_UNKNOWN,	/**< This is a locally installed quote source
+			 *   that gnucash knows nothing about. May
+			 *   pull from single or multiple
+			 *   locations. */
+  SOURCE_MAX,
+  SOURCE_CURRENCY = SOURCE_MAX, /**< The special currency quote source. */
+} QuoteSourceType;
+
+/** This function indicates whether or not the Finance::Quote module
+ *  is installed on a users computer.  This includes any other related
+ *  modules that gnucash need to process F::Q information.
+ *
+ *  @return TRUE is F::Q is installed properly.
+ */
+gboolean gnc_quote_source_fq_installed (void);
+
+/** Update gnucash internal tables based on what Finance::Quote
+ *  sources are installed.  Sources that have been explicitly coded
+ *  into gnucash are marked sensitive/insensitive based upon whether
+ *  they are present. New sources that gnucash doesn't know about are
+ *  added to its internal tables.
+ *
+ *  @param sources_list A list of strings containing the source names
+ *  as they are known to F::Q.
+ */
+void gnc_quote_source_set_fq_installed (GList *sources_list);
+
+/** Return the number of entries for a given type of quote source.
+ *
+ *  @param type The quote source type whose count should be returned.
+ *
+ *  @return The number of entries for this type of quote source.
+ */
+gint gnc_quote_source_num_entries(QuoteSourceType type);
+
+/** Create a new quote source. This is called by the F::Q startup code
+ *  or the XML parsing code to add new entries to the list of
+ *  available quote sources.
+ *
+ *  @param name The internal name for this new quote source.
+ *
+ *  @param supported TRUE is this quote source is supported by F::Q.
+ *  Should only be set by the F::Q startup routine.
+ *
+ *  @return A pointer to the newly created quote source.
+ */
+gnc_quote_source *gnc_quote_source_add_new(const char * name, gboolean supported);
+
+/** Given the internal (gnucash or F::Q) name of a quote source, find
+ *  the data structure identified by this name.
+ *
+ *  @param internal_name The name of this quote source.
+ *
+ *  @return A pointer to the price quote source that has the specified
+ *  internal name.
+ */
+gnc_quote_source *gnc_quote_source_lookup_by_internal(const char * internal_name);
+
+/** Given the type/index of a quote source, find the data structure
+ *  identified by this pair.
+ *
+ *  @param type The type of this quote source.
+ *
+ *  @param index The index of this quote source within its type.
+ *
+ *  @return A pointer to the price quote source that has the specified
+ *  type/index.
+ */
+gnc_quote_source *gnc_quote_source_lookup_by_ti(QuoteSourceType type, gint i);
+
+/** Given a gnc_quote_source data structure, return the flag that
+ *  indicates whether this particular quote source is supported by
+ *  the user's F::Q installation.
+ *
+ *  @param source The quote source in question.
+ *
+ *  @return TRUE if the user's computer supports this quote source.
+ */
+gboolean gnc_quote_source_get_supported (gnc_quote_source *source);
+
+/** Given a gnc_quote_source data structure, return the type of this
+ *  particular quote source. (SINGLE, MULTI, UNKNOWN)
+ *
+ *  @param source The quote source in question.
+ *
+ *  @return The type of this quote source.
+ */
+QuoteSourceType gnc_quote_source_get_type (gnc_quote_source *source);
+
+/** Given a gnc_quote_source data structure, return the index of this
+ *  particular quote source within its type.
+ *
+ *  @param source The quote source in question.
+ *
+ *  @return The index of this quote source in its type.
+ */
+gint gnc_quote_source_get_index (gnc_quote_source *source);
+
+/** Given a gnc_quote_source data structure, return the user friendly
+ *  name of this quote source.  E.G. "Yahoo Australia" or "Australia
+ *  (Yahoo, ASX, ...)"
+ *
+ *  @param source The quote source in question.
+ *
+ *  @return The user friendly name.
+ */
+const char *gnc_quote_source_get_user_name (gnc_quote_source *source);
+
+/** Given a gnc_quote_source data structure, return the internal name
+ *  of this quote source.  This is the name used by both gnucash and
+ *  by Finance::Quote.  E.G. "yahoo_australia" or "australia"
+ *
+ *  @param source The quote source in question.
+ *
+ *  @return The internal name.
+ */
+const char *gnc_quote_source_get_internal_name (gnc_quote_source *source);
+
+/** Given a gnc_quote_source data structure, return the internal name
+ *  of this quote source.  This is the name used by both gnucash and
+ *  by Finance::Quote.  E.G. "yahoo_australia" or "australia"
+ *
+ *  @note This routine should only be used for backward compatability
+ *  with the existing XML files.  The rest of the code should use the
+ *  gnc_quote_source_lookup_by_internal() routine.
+ *
+ *  @param source The quote source in question.
+ *
+ *  @return The internal name.
+ */
+const char *gnc_quote_source_get_old_internal_name (gnc_quote_source *source);
+/** @} */
+
 
 /** @name Commodity Creation */
 /** @{ */
@@ -110,6 +259,12 @@ gnc_commodity * gnc_commodity_new(const char * fullname,
  *  @param cm The commodity to destroy.
  */
 void  gnc_commodity_destroy(gnc_commodity * cm);
+
+/** Copy src into dest */
+void  gnc_commodity_copy(gnc_commodity * dest, gnc_commodity *src);
+
+/** allocate and copy */
+gnc_commodity * gnc_commodity_clone(gnc_commodity *src);
 /** @} */
 
 
@@ -235,7 +390,8 @@ gboolean    gnc_commodity_get_quote_flag(const gnc_commodity *cm);
  *  This string is owned by the engine and should not be freed by the
  *  caller.
  */
-const char* gnc_commodity_get_quote_source(const gnc_commodity *cm);
+gnc_quote_source* gnc_commodity_get_quote_source(const gnc_commodity *cm);
+gnc_quote_source* gnc_commodity_get_default_quote_source(const gnc_commodity *cm);
 
 /** Retrieve the automatic price quote timezone for the specified
  *  commodity.  This will be a pointer to a null terminated string of
@@ -319,16 +475,6 @@ void  gnc_commodity_set_exchange_code(gnc_commodity * cm,
  */
 void  gnc_commodity_set_fraction(gnc_commodity * cm, int smallest_fraction);
 
-/** Set the 'mark' field for the specified commodity.
- *
- *  @note This is a private field used by the Postgres back end.
- *
- *  @param cm A pointer to a commodity data structure.
- *
- *  @param mark The new value of the mark field.
- */
-void  gnc_commodity_set_mark(gnc_commodity * cm, gint16 mark);
-
 /** Set the automatic price quote flag for the specified commodity.
  *  This flag indicates whether stock quotes should be retrieved for
  *  the specified stock.
@@ -351,7 +497,7 @@ void  gnc_commodity_set_quote_flag(gnc_commodity *cm, const gboolean flag);
  *  This string belongs to the caller and will be duplicated by the
  *  engine.
  */
-void  gnc_commodity_set_quote_source(gnc_commodity *cm, const char *src);
+void  gnc_commodity_set_quote_source(gnc_commodity *cm, gnc_quote_source *src);
 
 /** Set the automatic price quote timezone for the specified
  *  commodity.  This should be a pointer to a null terminated string
@@ -409,49 +555,25 @@ gboolean gnc_commodity_is_iso(const gnc_commodity * cm);
 
 
 /* =============================================================== */
-/** @name Commodity Table Creation */
+/** @name Commodity Table */
 /** @{ */
-
-/* gnc_commodity_table functions : operate on a database of commodity
- * info */
-
-/** You proably shouldn't be using gnc_commodity_table_new() directly,
- * its for internal use only. You should probably be using
- * gnc_commodity_table_get_table()
- */
-gnc_commodity_table * gnc_commodity_table_new(void);
-void          gnc_commodity_table_destroy(gnc_commodity_table * table);
 
 /** Returns the commodity table assoicated with a book.
  */
 gnc_commodity_table * gnc_commodity_table_get_table(QofBook *book);
 
-/** You should probably not be using gnc_commodity_table_set_table()
- * directly.  Its for internal use only.
- */
-void gnc_commodity_table_set_table(QofBook *book, gnc_commodity_table *ct);
-
-/** You should probably not be using gnc_commodity_table_register()
- * It is an internal routine for registering the gncObject for the
- * commodity table.
- */
-gboolean gnc_commodity_table_register (void);
-		  
-/** @} */
-
-
 /* XXX backwards compat function; remove me someday */
 #define gnc_book_get_commodity_table gnc_commodity_table_get_table
 
-
-/** @name Commodity Table Comparison */
-/** @{ */
+/** compare two tables for equality */
 gboolean gnc_commodity_table_equal(gnc_commodity_table *t_1,
                                    gnc_commodity_table *t_2);
+
+/** copy all commodities from src table to dest table */
+void gnc_commodity_table_copy(gnc_commodity_table *dest,
+                              gnc_commodity_table *src);
 /** @} */
-
-
-
+/* ---------------------------------------------------------- */
 /** @name Commodity Table Lookup functions */
 /** @{ */
 gnc_commodity * gnc_commodity_table_lookup(const gnc_commodity_table * table, 
@@ -464,8 +586,7 @@ gnc_commodity * gnc_commodity_table_find_full(const gnc_commodity_table * t,
                                               const char * namespace,
                                               const char * fullname);
 /** @} */
-
-
+/* ---------------------------------------------------------- */
 
 /** @name Commodity Table Maintenance functions */
 /** @{ */
@@ -503,10 +624,9 @@ void gnc_commodity_table_remove(gnc_commodity_table * table,
  *
  *  @param table A pointer to the commodity table for the book. */
 gboolean gnc_commodity_table_add_default_data(gnc_commodity_table *table);
+
 /** @} */
-
-
-
+/* ---------------------------------------------------------- */
 /** @name Commodity Table Namespace functions */
 /** @{ */
 
@@ -561,8 +681,7 @@ void      gnc_commodity_table_add_namespace(gnc_commodity_table * table,
 void      gnc_commodity_table_delete_namespace(gnc_commodity_table * t,
                                                const char * namespace);
 /** @} */
-
-
+/* ---------------------------------------------------------- */
 /** @name Commodity Table Accessor functions */
 /** @{ */
 
@@ -597,10 +716,10 @@ GList * gnc_commodity_table_get_commodities(const gnc_commodity_table * t,
  *  @param table A pointer to the commodity table for the current
  *  book.
  *
- *  @param namespace Use the given namespace as a filter on the
- *  commodities to be returned. If non-null, only commodities in the
- *  specified namespace are checked.  If null, all commodities are
- *  checked.
+ *  @param expression Use the given expression as a filter on the
+ *  commodities to be returned. If non-null, only commodities in
+ *  namespace that match the specified regular expression are checked.
+ *  If null, all commodities are checked.
  *
  *  @return A pointer to a list of commodities.  NULL if invalid
  *  arguments were supplied or if there no commodities are flagged for
@@ -608,7 +727,7 @@ GList * gnc_commodity_table_get_commodities(const gnc_commodity_table * t,
  *
  *  @note It is the callers responsibility to free the list. */
 GList * gnc_commodity_table_get_quotable_commodities(const gnc_commodity_table * table,
-						     const char * namespace);
+						     const char * expression);
 
 /** Call a function once for each commodity in the commodity table.
  *  This table walk returns whenever the end of the table is reached,
@@ -626,6 +745,41 @@ gboolean gnc_commodity_table_foreach_commodity(const gnc_commodity_table * table
                                                      gpointer user_data),
                                        gpointer user_data);
 /** @} */
+
+/* ---------------------------------------------------------- */
+/** @name Commodity Table Private/Internal-Use Only Routines */
+/** @{ */
+
+/** Set the 'mark' field for the specified commodity.
+ *
+ *  @note This is a private field used by the Postgres back end.
+ *
+ *  @param cm A pointer to a commodity data structure.
+ *
+ *  @param mark The new value of the mark field.
+ */
+void  gnc_commodity_set_mark(gnc_commodity * cm, gint16 mark);
+
+/** You proably shouldn't be using gnc_commodity_table_new() directly,
+ * its for internal use only. You should probably be using
+ * gnc_commodity_table_get_table()
+ */
+gnc_commodity_table * gnc_commodity_table_new(void);
+void          gnc_commodity_table_destroy(gnc_commodity_table * table);
+
+/** You should probably not be using gnc_commodity_table_set_table()
+ * directly.  Its for internal use only.
+ */
+void gnc_commodity_table_set_table(QofBook *book, gnc_commodity_table *ct);
+
+/** You should probably not be using gnc_commodity_table_register()
+ * It is an internal routine for registering the gncObject for the
+ * commodity table.
+ */
+gboolean gnc_commodity_table_register (void);
+		  
+/** @} */
+
 
 #endif /* GNC_COMMODITY_H */
 /** @} */

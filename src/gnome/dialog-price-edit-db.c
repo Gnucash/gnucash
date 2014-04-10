@@ -105,20 +105,24 @@ price_compare (gconstpointer a, gconstpointer b)
   comm_a = gnc_price_get_commodity (price_a);
   comm_b = gnc_price_get_commodity (price_b);
 
-  SAFE_STRCMP (gnc_commodity_get_namespace (comm_a),
-               gnc_commodity_get_namespace (comm_b));
+  if (comm_a && comm_b){
+    SAFE_STRCMP (gnc_commodity_get_namespace (comm_a),
+		 gnc_commodity_get_namespace (comm_b));
 
-  SAFE_STRCMP (gnc_commodity_get_mnemonic (comm_a),
-               gnc_commodity_get_mnemonic (comm_b));
+    SAFE_STRCMP (gnc_commodity_get_mnemonic (comm_a),
+		 gnc_commodity_get_mnemonic (comm_b));
+  }
 
   comm_a = gnc_price_get_currency (price_a);
   comm_b = gnc_price_get_currency (price_b);
 
-  SAFE_STRCMP (gnc_commodity_get_namespace (comm_a),
-               gnc_commodity_get_namespace (comm_b));
+  if (comm_a && comm_b){
+    SAFE_STRCMP (gnc_commodity_get_namespace (comm_a),
+		 gnc_commodity_get_namespace (comm_b));
 
-  SAFE_STRCMP (gnc_commodity_get_mnemonic (comm_a),
-               gnc_commodity_get_mnemonic (comm_b));
+    SAFE_STRCMP (gnc_commodity_get_mnemonic (comm_a),
+		 gnc_commodity_get_mnemonic (comm_b));
+  }
 
   ts_a = gnc_price_get_time (price_a);
   ts_b = gnc_price_get_time (price_b);
@@ -314,7 +318,7 @@ remove_clicked (GtkWidget *widget, gpointer data)
   if (!pdb_dialog->price)
     return;
 
-  if (gnc_verify_dialog_parented (pdb_dialog->dialog, TRUE, message))
+  if (gnc_verify_dialog (pdb_dialog->dialog, TRUE, message))
   {
     GNCBook *book = gnc_get_current_book ();
     GNCPriceDB *pdb = gnc_book_get_pricedb (book);

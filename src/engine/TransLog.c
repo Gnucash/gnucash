@@ -281,7 +281,7 @@ xaccTransGetDateStr (Transaction *trans)
 
    date = localtime (&secs);
 
-   printDate(buf, date->tm_mday, date->tm_mon+1, date->tm_year +1900);
+   qof_print_date_buff(buf, date->tm_mday, date->tm_mon+1, date->tm_year +1900);
 
    return g_strdup (buf);
 }

@@ -1,7 +1,8 @@
 
 EXTRA_DIST = \
   .cvsignore \
-  gnucash.spec.in
+  gnucash.spec.in \
+  gnucash.spec
 
 all-local: gnucash.spec
 
@@ -9,10 +10,10 @@ all-local: gnucash.spec
 ## brackets here, instead of the usual @...@.  This prevents autoconf
 ## from substituting the values directly into the left-hand sides of
 ## the sed substitutions.  *sigh*
-gnucash.spec: gnucash.spec.in Makefile
+gnucash.spec: gnucash.spec.in Makefile ${top_builddir}/config.status
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
             -e 's:@-VERSION-@:${VERSION}:'
 	mv $@.tmp $@
 
-CLEANFILES = gnucash.spec
+DISTCLEANFILES = gnucash.spec

@@ -274,8 +274,7 @@ sxed_confirmed_cancel( SchedXactionEditorDialog *sxed )
                 const char *sx_changed_msg =
                         _( "This SX has changed; are you "
                            "sure you want to cancel?" );
-                if ( !gnc_verify_dialog_parented( GTK_WIDGET(sxed->dialog),
-                                                  FALSE, sx_changed_msg ) ) {
+                if (!gnc_verify_dialog(sxed->dialog, FALSE, sx_changed_msg)) {
                         return FALSE;
                 }
         }
@@ -762,13 +761,13 @@ gnc_sxed_check_consistent( SchedXactionEditorDialog *sxed )
                 g_hash_table_destroy( txns );
 
                 if ( unbalanceable
-                     && !gnc_verify_dialog_parented( sxed->dialog, FALSE,
-                                                     "%s",
-                                                     _("The Scheduled Transaction Editor "
-                                                       "cannot automatically\nbalance "
-                                                       "this transaction. "
-                                                       "Should it still be "
-                                                       "entered?") ) ) {
+                     && !gnc_verify_dialog( sxed->dialog, FALSE,
+					    "%s",
+					    _("The Scheduled Transaction Editor "
+					      "cannot automatically\nbalance "
+					      "this transaction. "
+					      "Should it still be "
+					      "entered?") ) ) {
                         return FALSE;
                 }
         }
@@ -784,8 +783,7 @@ gnc_sxed_check_consistent( SchedXactionEditorDialog *sxed )
                 if ( strlen(name) == 0 ) {
                         const char *sx_has_no_name_msg =
                                 _( "Please name the Scheduled Transaction." );
-                        gnc_error_dialog_parented( GTK_WINDOW(sxed->dialog),
-                                                   sx_has_no_name_msg );
+                        gnc_error_dialog( sxed->dialog, sx_has_no_name_msg );
                         g_free( name );
                         return FALSE;
                         
@@ -811,9 +809,9 @@ gnc_sxed_check_consistent( SchedXactionEditorDialog *sxed )
                                    "name \"%s\" already exists.\n"
                                    "Are you sure you want to name "
                                    "this one the same?" );
-                        if ( ! gnc_verify_dialog_parented( sxed->dialog, FALSE,
-                                                           sx_has_existing_name_msg,
-							   name) ) {
+                        if ( ! gnc_verify_dialog( sxed->dialog, FALSE,
+						  sx_has_existing_name_msg,
+						  name) ) {
                                 g_free( name );
                                 return FALSE;
                         }
@@ -832,9 +830,9 @@ gnc_sxed_check_consistent( SchedXactionEditorDialog *sxed )
                                 GTK_TOGGLE_BUTTON(sxed->notifyOpt) );
 
                 if ( (ttVarCount > 0) && autocreateState ) {
-                        gnc_warning_dialog_parented( sxed->dialog,
-                                                     _("Scheduled Transactions with variables\n"
-                                                       "cannot be automatically created.") );
+                        gnc_warning_dialog( sxed->dialog,
+					    _("Scheduled Transactions with variables\n"
+					      "cannot be automatically created.") );
                         return FALSE;
                 }
         }
@@ -848,7 +846,7 @@ gnc_sxed_check_consistent( SchedXactionEditorDialog *sxed )
                      && !gtk_toggle_button_get_active(sxed->optEndNone) ) {
                         const char *sx_end_spec_msg =
                                 _( "Please provide a valid end selection." );
-                        gnc_error_dialog( sx_end_spec_msg );
+                        gnc_error_dialog( sxed->dialog, sx_end_spec_msg );
                         return FALSE;
                 }
 
@@ -864,8 +862,8 @@ gnc_sxed_check_consistent( SchedXactionEditorDialog *sxed )
                         if ( occur == 0 ) {
                                 const char *sx_occur_count_zero_msg =
                                         _( "There must be some number of occurrences." );
-                                gnc_error_dialog_parented( GTK_WINDOW(sxed->dialog),
-                                                           sx_occur_count_zero_msg );
+                                gnc_error_dialog( sxed->dialog,
+						  sx_occur_count_zero_msg );
                                 return FALSE;
                         }
 
@@ -874,9 +872,9 @@ gnc_sxed_check_consistent( SchedXactionEditorDialog *sxed )
                                         _( "The number of remaining occurrences "
                                            "(%d) is greater than the number of "
                                            "total occurrences (%d)." );
-                                gnc_error_dialog_parented( GTK_WINDOW(sxed->dialog),
-                                                           sx_occur_counts_wrong_msg,
-                                                           rem, occur );
+                                gnc_error_dialog( sxed->dialog,
+						  sx_occur_counts_wrong_msg,
+						  rem, occur );
                                 return FALSE;
                         }
 
@@ -908,8 +906,8 @@ gnc_sxed_check_consistent( SchedXactionEditorDialog *sxed )
                                 _( "You have attempted to create a Scheduled "
                                    "Transaction which will never run.\nDo you "
                                    "really want to do this?" );
-                        if ( ! gnc_verify_dialog_parented( sxed->dialog, FALSE,
-                                                           invalid_sx_check_msg) ) {
+                        if ( ! gnc_verify_dialog( sxed->dialog, FALSE,
+						  invalid_sx_check_msg) ) {
                         
                                 return FALSE;
                         }
@@ -1757,8 +1755,8 @@ delete_button_clicked( GtkButton *b, gpointer d )
                  * they confirm they actually want to do the deletion
                  * generically.  If it's false, cleanup and return. */
                 if ( ! (destroyOpenedResult =
-                        gnc_verify_dialog_parented( sxd->dialog, FALSE, "%s",
-                                                    realConfDelOpenMsg->str )) ) {
+                        gnc_verify_dialog( sxd->dialog, FALSE, "%s",
+					   realConfDelOpenMsg->str )) ) {
                         for ( l = beingEditedList; l; l = l->next ) {
                                 g_list_free( (GList*)l->data );
                         }
@@ -1768,8 +1766,8 @@ delete_button_clicked( GtkButton *b, gpointer d )
                 }
         }
 
-        if ( gnc_verify_dialog_parented( sxd->dialog, FALSE, "%s",
-                                         realConfDeleteMsg->str ) ) {
+        if ( gnc_verify_dialog( sxd->dialog, FALSE, "%s",
+				realConfDeleteMsg->str ) ) {
                 /* Close the being-edited transactions. */
                 if ( destroyOpenedResult ) {
                         GList *component;
@@ -2047,7 +2045,7 @@ gnc_sxed_reg_check_close(SchedXactionEditorDialog *sxed)
                 return;
         }
 
-        if (gnc_verify_dialog_parented(sxed->dialog, TRUE, message)) {
+        if (gnc_verify_dialog(sxed->dialog, TRUE, message)) {
                 Transaction *trans;
                 trans = gnc_split_register_get_current_trans( reg );
                 if ( !gnc_split_register_save( reg, TRUE ) )

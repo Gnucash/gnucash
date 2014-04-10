@@ -148,7 +148,7 @@ gncs_validate (GNCSearchCoreType *fe)
 	
   if (fi->priv->owner.owner.undefined == NULL) {
     valid = FALSE;
-    gnc_error_dialog (_("You have not selected an owner"));
+    gnc_error_dialog (NULL, _("You have not selected an owner"));
   }
 
   /* XXX */

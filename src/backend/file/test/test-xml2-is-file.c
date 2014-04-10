@@ -17,7 +17,7 @@ main(int argc, char **argv)
 
     if (!directory)
     {
-	directory = "../../../../accounts/C";
+        directory = "../../../../accounts/C";
     }
 
     filename = malloc(strlen(directory) + 1 + strlen(FILENAME) + 1);

@@ -1,6 +1,6 @@
 /********************************************************************
  * window-acct-tree.c -- the main window account tree               * 
- * Copyright (C) 1998,1999 Jeremy Collins	                    *
+ * Copyright (C) 1998,1999 Jeremy Collins	                          *
  * Copyright (C) 1998,1999,2000 Linas Vepstas                       *
  * Copyright (C) 2001 Bill Gribble                                  *
  *                                                                  *
@@ -36,6 +36,7 @@
 #include "dialog-options.h"
 #include "dialog-transfer.h"
 #include "dialog-utils.h"
+#include "druid-stock-split.h"
 #include "global-options.h"
 #include "gnc-account-tree.h"
 #include "gnc-book.h"
@@ -49,6 +50,7 @@
 #include "gnc-ui.h"
 #include "gtkselect.h"
 #include "io-gncxml-v2.h"
+#include "lot-viewer.h"
 #include "mainwindow-account-tree.h"
 #include "messages.h"
 #include "option-util.h"
@@ -281,6 +283,7 @@ gnc_acct_tree_view_new(GnomeMDIChild * child, gpointer user_data)
     gnc_acct_tree_window_find_popup_item(win, popup, "Edit Account");
     gnc_acct_tree_window_find_popup_item(win, popup, "Delete Account");
     gnc_acct_tree_window_find_popup_item(win, popup, "Reconcile...");
+    gnc_acct_tree_window_find_popup_item(win, popup, "View Lots...");
   }
 
   /*
@@ -352,7 +355,7 @@ gnc_acct_tree_window_toolbar_open_cb (GtkWidget *widget, gpointer data)
   {
     const char *message = _("To open an account, you must first\n"
                             "choose an account to open.");
-    gnc_error_dialog(message);
+    gnc_error_dialog(NULL, message);
     return;
   }
 
@@ -379,7 +382,7 @@ gnc_acct_tree_window_toolbar_edit_cb (GtkWidget *widget, gpointer data)
   {
     const char *message = _("To edit an account, you must first\n"
                             "choose an account to edit.\n");
-    gnc_error_dialog(message);
+    gnc_error_dialog(NULL, message);
   }
 }
 
@@ -462,7 +465,7 @@ gnc_acct_tree_window_delete_common (Account *account)
 	Split *s = splits->data;
 	Transaction *txn = xaccSplitGetParent (s);
 	if (xaccTransGetReadOnly (txn)) {
-	  gnc_error_dialog (acct_has_ro_splits, name);
+	  gnc_error_dialog (NULL, acct_has_ro_splits, name);
 	  return;
 	}
       }
@@ -476,7 +479,7 @@ gnc_acct_tree_window_delete_common (Account *account)
 
       /* Check for RO txns in the children -- disallow deletion if there are any */
       if (delete_res.has_ro_splits) {
-	gnc_error_dialog (child_has_ro_splits, name);
+	gnc_error_dialog (NULL, child_has_ro_splits, name);
 	return;
 
       } else if (delete_res.has_splits) 
@@ -485,7 +488,7 @@ gnc_acct_tree_window_delete_common (Account *account)
 	format = children ? no_splits : no_splits_no_children;
     }
 
-    if (gnc_verify_dialog(FALSE, format, name)) {
+    if (gnc_verify_dialog(NULL, FALSE, format, name)) {
       gnc_suspend_gui_refresh ();
       
       xaccAccountBeginEdit (account);
@@ -499,7 +502,7 @@ gnc_acct_tree_window_delete_common (Account *account)
   {
     const char *message = _("To delete an account, you must first\n"
                             "choose an account to delete.\n");
-    gnc_error_dialog(message);
+    gnc_error_dialog(NULL, message);
   }
 }
 
@@ -542,7 +545,7 @@ gnc_acct_tree_window_menu_open_subs_cb(GtkWidget * widget,
   if (account == NULL) {
     const char *message = _("To open an account, you must first\n"
                             "choose an account to open.");
-    gnc_error_dialog(message);
+    gnc_error_dialog(NULL, message);
     return;
   }
   else {
@@ -571,7 +574,7 @@ gnc_acct_tree_window_menu_edit_cb (GtkWidget * widget,
   {
     const char *message = _("To edit an account, you must first\n"
                             "choose an account to edit.\n");
-    gnc_error_dialog(message);
+    gnc_error_dialog(NULL, message);
   }
 }
 
@@ -593,7 +596,7 @@ gnc_acct_tree_window_menu_reconcile_cb(GtkWidget * widget,
   {
     const char *message = _("To reconcile an account, you must first\n"
                             "choose an account to reconcile.");
-    gnc_error_dialog(message);
+    gnc_error_dialog(NULL, message);
   }
 }
 
@@ -616,6 +619,16 @@ gnc_acct_tree_window_menu_stock_split_cb (GtkWidget * widget,
 
   account = gnc_acct_tree_find_account_from_gncmdi(info);
   gnc_stock_split_dialog (account);
+}
+
+static void
+gnc_acct_tree_window_menu_lots_view_cb (GtkWidget * widget, 
+					  GNCMDIInfo * info)
+{
+  Account *account;
+
+  account = gnc_acct_tree_find_account_from_gncmdi(info);
+  gnc_lot_viewer_dialog (account);
 }
 
 static void
@@ -648,7 +661,7 @@ gnc_acct_tree_window_menu_scrub_cb(GtkWidget * widget,
   if (account == NULL)
   {
     const char *message = _("You must select an account to check and repair.");
-    gnc_error_dialog (message);
+    gnc_error_dialog (NULL, message);
     return;
   }
 
@@ -671,7 +684,7 @@ gnc_acct_tree_window_menu_scrub_sub_cb(GtkWidget * widget,
   if (account == NULL)
   {
     const char *message = _("You must select an account to check and repair.");
-    gnc_error_dialog(message);
+    gnc_error_dialog(NULL, message);
     return;
   }
 
@@ -709,7 +722,7 @@ gnc_acct_tree_window_menu_open_cb (GtkWidget *widget, GNCMDIInfo * info)
   if (account == NULL) {
     const char *message = _("To open an account, you must first\n"
                             "choose an account to open.");
-    gnc_error_dialog(message);
+    gnc_error_dialog(NULL, message);
     return;
   }
   else {
@@ -1013,6 +1026,14 @@ gnc_acct_tree_window_create_menu(GNCAcctTreeWin * main_info,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },
+    {
+      GNOME_APP_UI_ITEM,
+      N_("View _Lots..."),
+      N_("View and edit the lots in this account"),
+      gnc_acct_tree_window_menu_lots_view_cb, NULL, NULL,
+      GNOME_APP_PIXMAP_NONE, NULL,
+      0, 0, NULL
+    },
     GNOMEUIINFO_SEPARATOR,
     {
       GNOME_APP_UI_ITEM,
@@ -1273,6 +1294,9 @@ gnc_acct_tree_tweak_menu (GNCMDIChildInfo * mc)
   GNCMDIInfo     * info = mc->gnc_mdi;
   GNCAcctTreeWin * win;
   GtkWidget      * widget;
+
+#if FILEITEMS_DEPRECATED
+  /* XXX I think fileitems1 and 2 do not belong in the file menu. */
   GnomeUIInfo fileitems1[] =
   {
     {
@@ -1305,6 +1329,7 @@ gnc_acct_tree_tweak_menu (GNCMDIChildInfo * mc)
     },
     GNOMEUIINFO_END
   };
+#endif
 
   GnomeUIInfo edititems[] =
   {
@@ -1358,6 +1383,14 @@ gnc_acct_tree_tweak_menu (GNCMDIChildInfo * mc)
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },
+    {
+      GNOME_APP_UI_ITEM,
+      N_("View _Lots..."),
+      N_("View and edit the lots in this account"),
+      gnc_acct_tree_window_menu_lots_view_cb, info, NULL,
+      GNOME_APP_PIXMAP_NONE, NULL,
+      0, 0, NULL
+    },
     GNOMEUIINFO_SEPARATOR,
     GNOMEUIINFO_SUBTREE(N_("_Check & Repair"), dup_scrub),
     GNOMEUIINFO_END
@@ -1381,18 +1414,23 @@ gnc_acct_tree_tweak_menu (GNCMDIChildInfo * mc)
   dup_scrub[0].user_data = info;
   dup_scrub[1].user_data = info;
   dup_scrub[2].user_data = info;
+#if FILEITEMS_DEPRECATED
   gnc_gnome_app_insert_menus (mc->app, "_File/_New File", fileitems1);
   gnc_gnome_app_insert_menus (mc->app, "_File/_Open...", fileitems2);
+#endif
   gnc_gnome_app_insert_menus (mc->app, "_Edit/_Paste", edititems);
   gnome_app_insert_menus (mc->app, "_Actions/_Scheduled Transactions",
 			  actionitems);
 
   win = (GNCAcctTreeWin *)mc->user_data;
+#if FILEITEMS_DEPRECATED
   gnc_acct_tree_window_add_sensitive(win, fileitems2[0].widget);
   gnc_acct_tree_window_add_sensitive(win, fileitems2[1].widget);
+#endif
   gnc_acct_tree_window_add_sensitive(win, edititems[1].widget);
   gnc_acct_tree_window_add_sensitive(win, edititems[2].widget);
   gnc_acct_tree_window_add_sensitive(win, actionitems[2].widget);
+  gnc_acct_tree_window_add_sensitive(win, actionitems[4].widget);
 
   /* Do not i18n these strings!!! */
   widget = gnc_mdi_child_find_toolbar_item(mc, "Open");

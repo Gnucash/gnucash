@@ -4,4 +4,5 @@
 .libs
 Makefile
 Makefile.in
+test-import-parse
 test-link

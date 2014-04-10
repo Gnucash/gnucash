@@ -4,7 +4,6 @@
 ;;;  system from Scheme 
 ;;;
 ;;;  Copyright 2001 Linux Developers Group
-;;;  $Id$
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define-module (gnucash gnc-module))

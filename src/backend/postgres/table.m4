@@ -25,7 +25,7 @@ define(`book', `gncBook, Book, QofBook, b,
        bookGUID,    KEY, GUID *, qof_book_get_guid(ptr),
        ')
 
-define(`split', `gncEntry, Split, Split, e,
+define(`split', `gncSplit, Split, Split, e,
        accountGUID,     , GUID *,   xaccAccountGetGUID(xaccSplitGetAccount(ptr)),
        transGUID,       , GUID *,   xaccTransGetGUID(xaccSplitGetParent(ptr)),
        memo,            , char *,   xaccSplitGetMemo(ptr),
@@ -35,7 +35,7 @@ define(`split', `gncEntry, Split, Split, e,
        amount,          , int64,    gnc_numeric_num(xaccSplitGetAmount(ptr)),
        value,           , int64,    gnc_numeric_num(xaccSplitGetValue(ptr)),
        iguid,           , int32,    ptr->idata,
-       entryGUID,    KEY, GUID *,   xaccSplitGetGUID(ptr),
+       splitGuid,    KEY, GUID *,   xaccSplitGetGUID(ptr),
        ')
 
 /* note that for the last_modified, we use the sql database     */

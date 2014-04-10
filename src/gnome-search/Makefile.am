@@ -1,3 +1,4 @@
+PWD := $(shell pwd)
 
 pkglib_LTLIBRARIES = libgncmod-gnome-search.la libgw-gnome-search.la
 

@@ -137,13 +137,15 @@ gnc_printinfo_p(SCM info_scm)
 SCM
 gnc_quoteinfo2scm(gnc_commodity *comm)
 {
-  const char *source, *tz;
+  gnc_quote_source *source;
+  const char *name, *tz;
   SCM info_scm = SCM_EOL, comm_scm, def_comm_scm;
 
   if (!comm)
     return SCM_EOL;
 
-  source = gnc_price_source_internal2fq (gnc_commodity_get_quote_source (comm));
+  source = gnc_commodity_get_quote_source (comm);
+  name = gnc_quote_source_get_internal_name (source);
   tz = gnc_commodity_get_quote_tz (comm);
   comm_scm = gw_wcp_assimilate_ptr (comm, scm_c_eval_string("<gnc:commodity*>"));
   def_comm_scm = gw_wcp_assimilate_ptr (gnc_default_currency (),
@@ -155,7 +157,7 @@ gnc_quoteinfo2scm(gnc_commodity *comm)
     info_scm = scm_cons (SCM_BOOL_F, info_scm);
   info_scm = scm_cons (def_comm_scm, info_scm);
   info_scm = scm_cons (comm_scm, info_scm);
-  info_scm = scm_cons (scm_makfrom0str (source), info_scm);
+  info_scm = scm_cons (scm_makfrom0str (name), info_scm);
   return info_scm;
 }
 

@@ -866,7 +866,7 @@ on_final_account_next (GnomeDruidPage  *gnomedruidpage,
     const char *message = _("You must enter a valid balance.");
 
     top = gtk_widget_get_toplevel (GTK_WIDGET (gnomedruidpage));
-    gnc_error_dialog_parented (GTK_WINDOW(top), message);
+    gnc_error_dialog(top, message);
 
     return TRUE;
   }

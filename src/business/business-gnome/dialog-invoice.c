@@ -347,13 +347,13 @@ gnc_invoice_window_verify_ok (InvoiceWindow *iw)
   gnc_owner_get_owner (iw->owner_choice, &(iw->owner));
   res = gncOwnerGetName (&(iw->owner));
   if (res == NULL || safe_strcmp (res, "") == 0) {
-    gnc_error_dialog_parented (GTK_WINDOW (iw->dialog),
-			       /* Translators: In this context,
-				* 'Billing information' maps to the
-				* label in the frame and means
-				* e.g. customer i.e. the company being
-				* invoiced. */
-  			       _("You need to supply Billing Information."));
+    gnc_error_dialog (iw->dialog,
+		      /* Translators: In this context,
+		       * 'Billing information' maps to the
+		       * label in the frame and means
+		       * e.g. customer i.e. the company being
+		       * invoiced. */
+		      _("You need to supply Billing Information."));
     return FALSE;
   }
 
@@ -519,7 +519,7 @@ gnc_invoice_window_deleteCB (GtkWidget *widget, gpointer data)
     else
       msg = g_strdup (message);
 
-    result = gnc_verify_dialog_parented (iw->dialog, FALSE, msg);
+    result = gnc_verify_dialog (iw->dialog, FALSE, msg);
     g_free (msg);
 
     if (!result)
@@ -615,8 +615,8 @@ gnc_invoice_window_postCB (GtkWidget *widget, gpointer data)
   /* Check that there is at least one Entry */
   invoice = iw_get_invoice (iw);
   if (gncInvoiceGetEntries (invoice) == NULL) {
-    gnc_error_dialog_parented (GTK_WINDOW (iw->dialog),
-			       _("The Invoice must have at least one Entry."));
+    gnc_error_dialog (iw->dialog,
+		      _("The Invoice must have at least one Entry."));
     return;
   }
 

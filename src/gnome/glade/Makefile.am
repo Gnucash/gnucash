@@ -1,9 +1,11 @@
 gladedir = $(GNC_GLADE_DIR)
 glade_DATA = \
 	account.glade \
+	acctperiod.glade \
 	commodities.glade \
 	fincalc.glade \
 	help.glade \
+	lots.glade \
 	newuser.glade \
 	price.glade \
 	print.glade \

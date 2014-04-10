@@ -39,6 +39,7 @@
 #include "dialog-find-transactions.h"
 #include "dialog-transfer.h"
 #include "dialog-utils.h"
+#include "druid-stock-split.h"
 #include "global-options.h"
 #include "gnc-component-manager.h"
 #include "gnc-date-edit.h"
@@ -52,6 +53,7 @@
 #include "gnc-ui-util.h"
 #include "gnc-ui.h"
 #include "gnucash-sheet.h"
+#include "lot-viewer.h"
 #include "messages.h"
 #include "table-allgui.h"
 #include "window-help.h"
@@ -144,6 +146,7 @@ static void gnc_register_help_changed_cb( GNCSplitReg *gsr, gpointer data );
 void gnc_register_start_recn_cb(GtkWidget *w, gpointer data);
 void gnc_register_xfer_cb(GtkWidget *w, gpointer data);
 void gnc_register_stock_split_cb (GtkWidget * w, gpointer data);
+void gnc_register_lots_cb(GtkWidget *w, gpointer data);
 void gnc_register_edit_cb(GtkWidget *w, gpointer data);
 void gnc_register_new_account_cb(GtkWidget * w, gpointer data);
 
@@ -1143,7 +1146,13 @@ gnc_register_setup_menu_widgets( RegWindow *regData, GladeXML *xml )
   gtk_container_remove( GTK_CONTAINER(regMenu), tmpMi );
   gtk_menu_insert( GTK_MENU(menu), tmpMi, (2 + adj) );
   gtk_object_unref( GTK_OBJECT(tmpMi) );
-  gtk_menu_insert( GTK_MENU(menu), gtk_menu_item_new(), (3 + adj) );
+  tmpMi = glade_xml_get_widget( xml, "gnc_register_lots_mi" );
+  gtk_object_ref( GTK_OBJECT(tmpMi) );
+  gtk_container_remove( GTK_CONTAINER(regMenu), tmpMi );
+  gtk_menu_insert( GTK_MENU(menu), tmpMi, (3 + adj) );
+  gtk_object_unref( GTK_OBJECT(tmpMi) );
+
+  gtk_menu_insert( GTK_MENU(menu), gtk_menu_item_new(), (4 + adj) );
   /* Base this off the end of the list for a bit more flexibility. */
   gtk_menu_append( GTK_MENU(menu), gtk_menu_item_new() );
   tmpMi = glade_xml_get_widget( xml, "gnc_register_scrub_mi" );
@@ -1364,6 +1373,21 @@ gnc_register_stock_split_cb (GtkWidget * w, gpointer data)
 
 
 /********************************************************************\
+ * gnc_register_lots_cb -- open up the lot viewer window            *
+ *                                                                  *
+ * Args:   w    - the widget that called us                         *
+ *         data - the data struct for this register                 *
+ * Return: none                                                     *
+\********************************************************************/
+void 
+gnc_register_lots_cb (GtkWidget * w, gpointer data)
+{
+  RegWindow *regData = data;
+
+  gnc_lot_viewer_dialog (gnc_ledger_display_leader (regData->ledger));
+}
+
+/********************************************************************\
  * gnc_register_edit_cb -- open up the account edit window          *
  *                                                                  *
  * Args:   w    - the widget that called us                         *
@@ -1485,11 +1509,11 @@ gnc_register_void_trans_cb(GtkWidget *w, gpointer data)
   if (trans == NULL)
     return;
   if (xaccTransHasSplitsInState(trans, VREC)) {
-    gnc_error_dialog(_("This transaction has already been voided."));
+    gnc_error_dialog(NULL, _("This transaction has already been voided."));
     return;
   }
   if (xaccTransHasReconciledSplits(trans) || xaccTransHasSplitsInState(trans, CREC)) {
-    gnc_error_dialog(_("You cannot void a transaction with reconciled or cleared splits."));
+    gnc_error_dialog(NULL, _("You cannot void a transaction with reconciled or cleared splits."));
     return;
   }
 
@@ -1534,7 +1558,7 @@ gnc_register_unvoid_trans_cb(GtkWidget *w, gpointer data)
   reg = gnc_ledger_display_get_split_register (regData->ledger);
   trans = gnc_split_register_get_current_trans (reg);
   if (!xaccTransHasSplitsInState(trans, VREC)) {
-    gnc_error_dialog(_("This transaction is not voided."));
+    gnc_error_dialog(NULL, _("This transaction is not voided."));
     return;
   }
   gnc_split_register_unvoid_current_trans

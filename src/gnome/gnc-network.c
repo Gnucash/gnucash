@@ -220,7 +220,7 @@ gnc_network_auth_check(gpointer data) {
       gnc_html_show_url(na->html, URL_TYPE_ACTION, na->url, NULL, 0);
     }
     else {
-      gnc_warning_dialog(_("GnuCash Network authorization failed."));      
+      gnc_warning_dialog(NULL, _("GnuCash Network authorization failed."));      
       gnc_passphrase = NULL;
     }
     /* clean up */ 

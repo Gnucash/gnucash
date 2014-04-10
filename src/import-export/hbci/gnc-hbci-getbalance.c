@@ -117,6 +117,7 @@ gnc_hbci_getbalance (GtkWidget *parent, Account *gnc_acc)
 
     /* Clean up after ourselves. */
     HBCI_API_clearQueueByStatus (api, HBCI_JOB_STATUS_NONE);
+    gnc_hbci_api_save (api);
     GNCInteractor_hide (interactor);
   }
 }
@@ -215,7 +216,7 @@ gnc_hbci_getbalance_finish (GtkWidget *parent,
     {
       char *booked_str = HBCI_Value_toReadableString (booked_val);
 
-      dialogres = gnc_verify_dialog_parented
+      dialogres = gnc_verify_dialog
 	(parent, 
 	 TRUE,
 	 /* Translators: %s is the amount. */

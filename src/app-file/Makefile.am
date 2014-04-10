@@ -1,4 +1,5 @@
 SUBDIRS = gnome . test
+PWD := $(shell pwd)
 
 pkglib_LTLIBRARIES = libgncmod-app-file.la libgw-app-file.la
 

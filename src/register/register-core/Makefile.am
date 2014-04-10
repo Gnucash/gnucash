@@ -1,4 +1,5 @@
 SUBDIRS = . test
+PWD := $(shell pwd)
 
 pkglib_LTLIBRARIES = libgncmod-register-core.la libgw-register-core.la
 

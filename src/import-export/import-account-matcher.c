@@ -140,8 +140,8 @@ build_acct_tree(struct _accountpickerdialog * picker) {
     }
   gtk_clist_freeze (GTK_CLIST(picker->treeview));
 
-  /*gtk_clist_clear(GTK_CLIST(picker->treeview));
-  gtk_clist_set_column_justification (GTK_CLIST(picker->treeview),
+  gtk_clist_clear(GTK_CLIST(picker->treeview));
+  /*gtk_clist_set_column_justification (GTK_CLIST(picker->treeview),
                                       1, GTK_JUSTIFY_CENTER);*/
 
   acct_tree_add_accts(picker, picker->acct_group,  GTK_CTREE(picker->treeview), NULL);

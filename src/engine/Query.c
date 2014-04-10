@@ -585,30 +585,4 @@ xaccQueryGetLatestDateFound(Query * q)
   return latest;
 }
 
-void
-xaccQuerySetSortOrder(Query *q, GList *p1, GList *p2, GList *p3)
-{
-  GSList *l1 = NULL, *l2 = NULL, *l3 = NULL;
-  GList *node;
-
-  for (node = p1; node; node = node->next)
-    l1 = g_slist_prepend (l1, node->data);
-
-  for (node = p2; node; node = node->next)
-    l2 = g_slist_prepend (l2, node->data);
-
-  for (node = p3; node; node = node->next)
-    l3 = g_slist_prepend (l3, node->data);
-
-  if (l1) l1 = g_slist_reverse (l1);
-  if (l2) l2 = g_slist_reverse (l2);
-  if (l3) l3 = g_slist_reverse (l3);
-
-  if (p1) g_list_free (p1);
-  if (p2) g_list_free (p2);
-  if (p3) g_list_free (p3);
-
-  qof_query_set_sort_order (q, l1, l2, l3);
-}
-
 /* ======================== END OF FILE ======================= */

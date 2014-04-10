@@ -31,6 +31,7 @@
 (define gnc:*config-path* #f)
 (define gnc:*share-path* #f)
 (define gnc:*doc-path* #f)
+(define gnc:*namespace-regexp* #f)
 
 ;; If command line args are present, then those dominate, and take
 ;; effect in order, left-to-right.  Otherwise, any envt var setting
@@ -82,6 +83,13 @@
         (gnc:make-config-var
          (N_ "Don't load any file, including autoloading the last file.")
          (lambda (var value) (if (boolean? value) (list value) #f))
+         eq?
+         #f))
+  
+  (set! gnc:*namespace-regexp*
+        (gnc:make-config-var
+         (N_ "Limit price quotes retrieved to commodities whose namespace matched this regexp.")
+         (lambda (var value) (if (string? value) (list value) #f))
          eq?
          #f))
   
@@ -291,6 +299,14 @@ the current value of the path.")
                   gnc:*batch-mode-things-to-do*)))
          "FILE"
          (N_ "Add price quotes to given FILE."))
+
+   (list "namespace"
+         'string
+         (lambda (val)
+           (gnc:debug "parsing --namespace " val)
+           (gnc:config-var-value-set! gnc:*namespace-regexp* #f val))
+         #f
+         (N_ "Regular expression determining which namespace commodities will be retrieved"))
 
    (list "load-user-config"
          'boolean

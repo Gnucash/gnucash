@@ -32,28 +32,32 @@
 #include "kvp-util-p.h"
 
 /* ================================================================ */
-/* mark the guid and date of the copy, using kvp.  The info will be
- * places in /gemini/ncopies, /gemini/<n>/acct_guid, /gemini/<n>/book_guid,
- * /gemini/<n>/date, where <n> = ncopies-1.
- */
-
-void 
-gnc_kvp_gemini (KvpFrame *kvp_root, const GUID *acct_guid, 
-        const GUID *book_guid, time_t secs)
+ 
+static void 
+gnc_kvp_array_va (KvpFrame *kvp_root, const char * path, 
+                  time_t secs, const char * first_name, va_list ap)
 {
    char buff[80];
    KvpFrame *cwd, *pwd;
-   KvpValue *v_ncopies, *vvv;
+   KvpValue *v_ncopies;
    gint64 ncopies = 0;
    Timespec ts;
+   const char *name;
 
-   if (!kvp_root) return;
+   if (!kvp_root) return;  
+   if (!first_name) return;
+   
+   if (!path) 
+   {
+      pwd = kvp_root;
+   }
+   else
+   {
+      pwd = kvp_frame_get_frame_slash (kvp_root, path);
+      if (!pwd) return;  /* error: can't ever happen */
+   }
 
-   /* cwd == 'current working directory' */
-   pwd = kvp_frame_get_frame (kvp_root, "gemini", NULL);
-   if (!pwd) return;  /* error: can't ever happen */
-
-   /* find, increment, store number of copies */
+   /* Find, increment, store number of copies */
    v_ncopies = kvp_frame_get_slot (pwd, "ncopies");
    if (v_ncopies)
    { 
@@ -61,31 +65,55 @@ gnc_kvp_gemini (KvpFrame *kvp_root, const GUID *acct_guid,
    }
 
    ncopies ++;
-   v_ncopies = kvp_value_new_gint64 (ncopies);
-   kvp_frame_set_slot_nc (pwd, "ncopies", v_ncopies);
+   kvp_frame_set_gint64 (pwd, "ncopies", ncopies);
 
    /* OK, now create subdirectory and put the actual data */
    --ncopies;
    sprintf (buff, GNC_SCANF_LLD, (long long int) ncopies);
+
    cwd = kvp_frame_new();
    kvp_frame_set_slot_nc(pwd, buff, kvp_value_new_frame_nc(cwd));
 
-   if (acct_guid)
-   {
-      vvv = kvp_value_new_guid (acct_guid);
-      kvp_frame_set_slot_nc (cwd, "acct_guid", vvv);
-   }
-
-   if (book_guid)
-   {
-      vvv = kvp_value_new_guid (book_guid);
-      kvp_frame_set_slot_nc (cwd, "book_guid", vvv);
-   }
-
+   /* Record the time */
    ts.tv_sec = secs;
    ts.tv_nsec = 0;
-   vvv = kvp_value_new_timespec (ts);
-   kvp_frame_set_slot_nc (cwd, "date", vvv);
+   kvp_frame_set_timespec (cwd, "date", ts);
+
+   /* Loop over the args */
+   name = first_name;
+
+   while (name)
+   {
+      const GUID *guid;
+      guid = va_arg (ap, const GUID *);
+
+      kvp_frame_set_guid (cwd, name, guid);
+
+      name = va_arg (ap, const char *);
+   }
+}
+
+/* ================================================================ */
+
+void 
+gnc_kvp_array (KvpFrame *pwd, const char * path, 
+               time_t secs, const char *first_name, ...)
+{
+   va_list ap;
+   va_start (ap, first_name);
+   gnc_kvp_array_va (pwd, path, secs, first_name, ap);
+   va_end (ap);
+}
+
+/* ================================================================ */
+ 
+void 
+gnc_kvp_gemini (KvpFrame *kvp_root, time_t secs, const char *first_name, ...)
+{
+   va_list ap;
+   va_start (ap, first_name);
+   gnc_kvp_array_va (kvp_root, "gemini", secs, first_name, ap);
+   va_end (ap);
 }
 
 /* ================================================================ */

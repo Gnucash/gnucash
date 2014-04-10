@@ -1108,7 +1108,7 @@ gnc_ui_reconcile_window_delete_cb(GtkButton *button, gpointer data)
                             "transaction?");
     gboolean result;
 
-    result = gnc_verify_dialog_parented(recnData->window, FALSE, message);
+    result = gnc_verify_dialog(recnData->window, FALSE, message);
 
     if (!result)
       return;
@@ -2069,7 +2069,7 @@ recnFinishCB (GtkWidget *w, gpointer data)
   {
     const char *message = _("The account is not balanced.\n"
                             "Are you sure you want to finish?");
-    if (!gnc_verify_dialog_parented (recnData->window, FALSE, message))
+    if (!gnc_verify_dialog (recnData->window, FALSE, message))
       return;
   }
 
@@ -2127,7 +2127,7 @@ recnPostponeCB (GtkWidget *w, gpointer data)
   {
     const char *message = _("Do you want to postpone this reconciliation "
                             "and finish it later?");
-    if (!gnc_verify_dialog_parented (recnData->window, FALSE, message))
+    if (!gnc_verify_dialog (recnData->window, FALSE, message))
       return;
   }
 
@@ -2161,7 +2161,7 @@ recnCancelCB (GtkWidget *w, gpointer data)
   {
     const char *message = _("You have made changes to this reconcile "
                             "window.\nAre you sure you want to cancel?");
-    if (!gnc_verify_dialog_parented(recnData->window, FALSE, message))
+    if (!gnc_verify_dialog(recnData->window, FALSE, message))
       return;
   }
 

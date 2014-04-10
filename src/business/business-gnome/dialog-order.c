@@ -129,8 +129,8 @@ gnc_order_window_verify_ok (OrderWindow *ow)
   /* Check the ID */
   res = gtk_entry_get_text (GTK_ENTRY (ow->id_entry));
   if (safe_strcmp (res, "") == 0) {
-    gnc_error_dialog_parented (GTK_WINDOW (ow->dialog),
-			       _("The Order must be given an ID."));
+    gnc_error_dialog (ow->dialog,
+		      _("The Order must be given an ID."));
     return FALSE;
   }
 
@@ -138,8 +138,8 @@ gnc_order_window_verify_ok (OrderWindow *ow)
   gnc_owner_get_owner (ow->owner_choice, &(ow->owner));
   res = gncOwnerGetName (&(ow->owner));
   if (res == NULL || safe_strcmp (res, "") == 0) {
-    gnc_error_dialog_parented (GTK_WINDOW (ow->dialog),
-  			       _("You need to supply Billing Information."));
+    gnc_error_dialog (ow->dialog,
+		      _("You need to supply Billing Information."));
     return FALSE;
   }
 
@@ -234,8 +234,8 @@ gnc_order_window_close_order_cb (GtkWidget *widget, gpointer data)
 
   /* Check that there is at least one Entry */
   if (gncOrderGetEntries (order) == NULL) {
-    gnc_error_dialog_parented (GTK_WINDOW (ow->dialog),
-			       _("The Order must have at least one Entry."));
+    gnc_error_dialog (ow->dialog,
+		      _("The Order must have at least one Entry."));
     return;
   }
 
@@ -258,7 +258,7 @@ gnc_order_window_close_order_cb (GtkWidget *widget, gpointer data)
 		"Are you sure you want to close it out before\n"
 		"you invoice all the entries?");
 
-    if (gnc_verify_dialog_parented (ow->dialog, FALSE, message) == FALSE)
+    if (gnc_verify_dialog (ow->dialog, FALSE, message) == FALSE)
       return;
   }
 

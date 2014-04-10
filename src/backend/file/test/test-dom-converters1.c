@@ -82,7 +82,7 @@ test_dom_tree_to_text(void)
         }
         else
         {
-	    failure_args("dom_tree_to_text", __FILE__, __LINE__,
+            failure_args("dom_tree_to_text", __FILE__, __LINE__,
                          "with string %s", test_string1);
         }
 
@@ -100,7 +100,7 @@ test_dom_tree_to_timespec(void)
     for(i = 0; i < 20; i++)
     {
         Timespec *test_spec1;
-        Timespec *test_spec2;
+        Timespec test_spec2;
         xmlNodePtr test_node;
 
         test_spec1 = get_random_timespec();
@@ -109,7 +109,7 @@ test_dom_tree_to_timespec(void)
 
         test_spec2 = dom_tree_to_timespec(test_node);
 
-        if(test_spec2 == NULL)
+        if(!is_valid_timespec(test_spec2))
         {
             failure_args("dom_tree_to_timespec",
                          __FILE__, __LINE__, "NULL return");
@@ -118,7 +118,7 @@ test_dom_tree_to_timespec(void)
             printf("\n");
         }
         
-        else if(timespec_cmp(test_spec1, test_spec2) == 0)
+        else if(timespec_cmp(test_spec1, &test_spec2) == 0)
         {
             success("dom_tree_to_timespec");
         }
@@ -130,14 +130,13 @@ test_dom_tree_to_timespec(void)
             printf("\n");
             printf("Secs are %lld vs %lld :: ",
                    test_spec1->tv_sec,
-                   test_spec2->tv_sec);
+                   test_spec2.tv_sec);
             printf("NSecs are %ld vs %ld\n",
                    test_spec1->tv_nsec,
-                   test_spec2->tv_nsec);
+                   test_spec2.tv_nsec);
         }
 
         g_free(test_spec1);
-        g_free(test_spec2);
         xmlFreeNode(test_node);
     }
 }
@@ -223,7 +222,7 @@ test_dom_tree_to_guid(void)
 
         if (!(test_node = guid_to_dom_tree("test-guid", test_guid1)))
         {
-	     failure_args("guid_to_dom_tree", __FILE__, __LINE__, 
+             failure_args("guid_to_dom_tree", __FILE__, __LINE__, 
                           "conversion to dom tree failed");
         }
 

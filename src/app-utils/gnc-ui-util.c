@@ -59,49 +59,6 @@ static int auto_decimal_places = 2;    /* default, can be changed */
 static gboolean reverse_balance_inited = FALSE;
 static SCM reverse_balance_callback_id = SCM_UNDEFINED;
 static gboolean reverse_type[NUM_ACCOUNT_TYPES];
-static gboolean fq_is_installed = FALSE;
-
-typedef struct quote_source_t {
-  gboolean supported;
-  gboolean translate;
-  char *user_name;	/* User friendly name */
-  char *internal_name;	/* Name used internally. */
-  char *fq_name;	/* Name used by finance::quote. */
-} quote_source;
-
-static quote_source quote_sources[NUM_SOURCES] = {
-  { TRUE,  TRUE,  N_("(none)"), NULL, NULL },
-  { FALSE, TRUE,  N_("-- Single Sources --"), NULL, NULL },
-  { FALSE, FALSE, "AEX", "AEX", "aex" },
-  { FALSE, FALSE, "ASX", "ASX", "asx" },
-  { FALSE, FALSE, "DWS", "DWS", "dwsfunds" },
-  { FALSE, FALSE, "Fidelity Direct", "FIDELITY_DIRECT", "fidelity_direct" },
-  { FALSE, FALSE, "Motley Fool", "FOOL", "fool" },
-  { FALSE, FALSE, "Fund Library", "FUNDLIBRARY", "fundlibrary" },
-  { FALSE, FALSE, "TD Waterhouse Canada", "TDWATERHOUSE", "tdwaterhouse" },
-  { FALSE, FALSE, "TIAA-CREF", "TIAACREF", "tiaacref" },
-  { FALSE, FALSE, "T. Rowe Price", "TRPRICE_DIRECT", "troweprice_direct" }, /* Not Implemented */
-  { FALSE, FALSE, "Trustnet", "TRUSTNET", "trustnet" },
-  { FALSE, FALSE, "Union Investments", "UNIONFUNDS", "unionfunds" },
-  { FALSE, FALSE, "Vanguard", "VANGUARD", "vanguard" },
-  { FALSE, FALSE, "VWD", "VWD", "vwd" },
-  { FALSE, FALSE, "Yahoo", "YAHOO", "yahoo" },
-  { FALSE, FALSE, "Yahoo Asia", "YAHOO_ASIA", "yahoo_asia" },
-  { FALSE, FALSE, "Yahoo Australia", "YAHOO_AUSTRALIA", "yahoo_australia" },
-  { FALSE, FALSE, "Yahoo Europe", "YAHOO_EUROPE", "yahoo_europe" },
-  { FALSE, FALSE, "Zuerich Investments", "ZIFUNDS", "zifunds" },
-  { FALSE, TRUE,  N_("-- Multiple Sources --"), NULL, NULL },
-  { FALSE, FALSE, "Asia (Yahoo, ...)", "ASIA", "asia" },
-  { FALSE, FALSE, "Australia (ASX, Yahoo, ...)", "AUSTRALIA", "australia" },
-  { FALSE, FALSE, "Canada (Yahoo, ...)", "CANADA", "canada" },
-  { FALSE, FALSE, "Canada Mutual (Fund Library, ...)", "CANADAMUTUAL", "canadamutual" },
-  { FALSE, FALSE, "Dutch (AEX, ...)", "DUTCH", "dutch" },
-  { FALSE, FALSE, "Europe (Yahoo, ...)", "EUROPE", "europe" },
-  { FALSE, FALSE, "Fidelity (Fidelity, ...)", "FIDELITY", "fidelity" },
-  { FALSE, FALSE, "T. Rowe Price", "TRPRICE", "troweprice" },
-  { FALSE, FALSE, "U.K. Unit Trusts", "UKUNITTRUSTS", "uk_unit_trusts" },
-  { FALSE, FALSE, "USA (Yahoo, Fool ...)", "USA", "usa" },
-};
 
 /********************************************************************\
  * gnc_color_deficits                                               *
@@ -702,131 +659,6 @@ gnc_get_reconcile_flag_order (void)
   return flags;
 }
 
-
-/* Get the full name of a quote source */
-const char *
-gnc_price_source_enum2name (PriceSourceCode source)
-{
-  if (source >= NUM_SOURCES) {
-    PWARN("Unknown source %d", source);
-    return NULL;
-  }
-  return quote_sources[source].user_name;
-}
-
-/* Get the codename string of a quote source */
-const char *
-gnc_price_source_enum2internal (PriceSourceCode source)
-{
-  if (source >= NUM_SOURCES) {
-    PWARN("Unknown source %d", source);
-    return NULL;
-  }
-  return quote_sources[source].internal_name;
-}
-
-/* Get the codename string of a source */
-PriceSourceCode
-gnc_price_source_internal2enum (const char * internal_name)
-{
-  gint i;
-
-  if (internal_name == NULL)
-    return SOURCE_NONE;
-
-  if (safe_strcmp(internal_name, "") == 0)
-    return SOURCE_NONE;
-
-  for (i = 1; i < NUM_SOURCES; i++)
-    if (safe_strcmp(internal_name, quote_sources[i].internal_name) == 0)
-      return i;
-
-  PWARN("Unknown source %s", internal_name);
-  return SOURCE_NONE;
-}
-
-/* Get the codename string of a source */
-PriceSourceCode
-gnc_price_source_fq2enum (const char * fq_name)
-{
-  gint i;
-
-  if (fq_name == NULL)
-    return SOURCE_NONE;
-
-  if (safe_strcmp(fq_name, "") == 0)
-    return SOURCE_NONE;
-
-  for (i = 1; i < NUM_SOURCES; i++)
-    if (safe_strcmp(fq_name, quote_sources[i].fq_name) == 0)
-      return i;
-
-//  NYSE and Nasdaq have deliberately been left out. Don't always print them.
-//  PWARN("Unknown source %s", fq_name);
-  return SOURCE_NONE;
-}
-
-/* Get the codename string of a source */
-const char *
-gnc_price_source_internal2fq (const char * codename)
-{
-  gint i;
-
-  if (codename == NULL)
-    return NULL;
-
-  if (safe_strcmp(codename, "") == 0)
-    return NULL;
-
-  if (safe_strcmp(codename, "CURRENCY") == 0)
-    return "currency";
-
-  for (i = 1; i < NUM_SOURCES; i++)
-    if (safe_strcmp(codename, quote_sources[i].internal_name) == 0)
-      return quote_sources[i].fq_name;
-
-  PWARN("Unknown source %s", codename);
-  return NULL;
-}
-
-/* Get whether or not a quote source should be sensitive in the menu */
-void
-gnc_price_source_set_fq_installed (GList *sources_list)
-{
-  GList *node;
-  PriceSourceCode code;
-  char *source;
-
-  if (!sources_list)
-    return;
-
-  fq_is_installed = TRUE;
-  for (node = sources_list; node; node = node->next) {
-    source = node->data;
-    code = gnc_price_source_fq2enum (source);
-    if ((code != SOURCE_NONE) && (code < NUM_SOURCES)) {
-      quote_sources[code].supported = TRUE;
-    }
-  }
-}
-
-gboolean
-gnc_price_source_have_fq (void)
-{
-  return fq_is_installed;
-}
-
-/* Get whether or not a quote source should be sensitive in the menu */
-gboolean
-gnc_price_source_sensitive (PriceSourceCode source)
-{
-  if (source >= NUM_SOURCES) {
-    PWARN("Unknown source");
-    return FALSE;
-  }
-
-  return quote_sources[source].supported;
-}
 
 static const char *
 equity_base_name (GNCEquityType equity_type)
@@ -1802,6 +1634,36 @@ xaccParseAmount (const char * in_str, gboolean monetary, gnc_numeric *result,
                  char **endstr)
 {
   struct lconv *lc = gnc_localeconv();
+
+  char negative_sign;
+  char decimal_point;
+  char group_separator;
+  char *group;
+
+  negative_sign = lc->negative_sign[0];
+  if (monetary)
+  {
+    group_separator = lc->mon_thousands_sep[0];
+    decimal_point = lc->mon_decimal_point[0];
+    group = lc->mon_grouping;
+  }
+  else
+  {
+    group_separator = lc->thousands_sep[0];
+    decimal_point = lc->decimal_point[0];
+    group = lc->grouping;
+  }
+
+  return xaccParseAmountExtended(in_str, monetary, negative_sign, decimal_point,
+				 group_separator, group, NULL, result, endstr);
+}
+
+gboolean
+xaccParseAmountExtended (const char * in_str, gboolean monetary,
+			 char negative_sign, char decimal_point,
+			 char group_separator, char *group, char *ignore_list,
+			 gnc_numeric *result, char **endstr)
+{
   gboolean is_negative;
   gboolean got_decimal;
   gboolean need_paren;
@@ -1811,10 +1673,6 @@ xaccParseAmount (const char * in_str, gboolean monetary, gnc_numeric *result,
   int group_count;
 
   ParseState state;
-
-  char negative_sign;
-  char decimal_point;
-  char group_separator;
 
   const char *in;
   char *out_str;
@@ -1826,18 +1684,6 @@ xaccParseAmount (const char * in_str, gboolean monetary, gnc_numeric *result,
 
   if (in_str == NULL)
     return FALSE;
-
-  negative_sign = lc->negative_sign[0];
-  if (monetary)
-  {
-    group_separator = lc->mon_thousands_sep[0];
-    decimal_point = lc->mon_decimal_point[0];
-  }
-  else
-  {
-    group_separator = lc->thousands_sep[0];
-    decimal_point = lc->decimal_point[0];
-  }
 
   /* 'out_str' will be used to store digits for numeric conversion.
    * 'out' will be used to traverse out_str. */
@@ -1861,6 +1707,12 @@ xaccParseAmount (const char * in_str, gboolean monetary, gnc_numeric *result,
   while (TRUE)
   {
     ParseState next_state = state;
+
+    /* Ignore anything in the 'ignore list' */
+    if (ignore_list && *in != '\0' && strchr(ignore_list, *in) != NULL) {
+      in++;
+      continue;
+    }
 
     /* Note we never need to check for then end of 'in_str' explicitly.
      * The 'else' clauses on all the state transitions will handle that. */
@@ -2115,13 +1967,10 @@ xaccParseAmount (const char * in_str, gboolean monetary, gnc_numeric *result,
   {
     gboolean good_grouping = TRUE;
     GList *node;
-    char *group;
-
-    group = monetary ? lc->mon_grouping : lc->grouping;
 
     /* The groups were built in reverse order. This
      * is the easiest order to verify them in. */
-    for (node = group_data; node; node = node->next)
+    for (node = group_data; group && node; node = node->next)
     {
       /* Verify group size */
       if (*group != GPOINTER_TO_INT(node->data))

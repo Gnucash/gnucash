@@ -59,16 +59,23 @@ sqlEscapeString (sqlEscape *b, const char *str)
    char *dst_tail;
    size_t len, slen;
 
-   if (!b || !str) return NULL;
+   ENTER("str = %s", str);
+   
+   if (!b || !str) { LEAVE("(null) args"); return NULL; }
 
    /* if a string is escaped twice, just return the first */
-   if (b->escape == str)
-     return str;
+   if (b->escape == str) {
+       LEAVE("%s: already escaped", str);
+       return str;
+   }
 
    /* if nothing to escape, just return */
    len = strlen (str);
    slen = strcspn (str, "\\\'");
-   if (len == slen) return str;
+   if (len == slen) {
+       LEAVE("nothing to escape");
+       return str;
+   }
 
    /* count to see how much space we'll need */
    p = str + slen + 1;
@@ -112,6 +119,7 @@ sqlEscapeString (sqlEscape *b, const char *str)
    }
    *dst_tail = 0;
 
+   LEAVE("b->escape = %s", b->escape);
    return b->escape;
 }
 

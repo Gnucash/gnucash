@@ -48,6 +48,9 @@ typedef struct _QofBook       QofBook;
 /** GList of QofBook */
 typedef GList                 QofBookList;
 
+/** Register the book boject with the QOF object system. */
+gboolean qof_book_register (void);
+                                                                                
 /** Allocate, initialise and return a new QofBook.  Books contain references
  *  to all of the top-level object containers. */
 QofBook * qof_book_new (void);
@@ -106,7 +109,7 @@ gint64 qof_book_get_counter (QofBook *book, const char *counter_name);
 /** Book parameter names */
 /**@{*/ 
 
-#define QOF_BOOK_KVP		"qof-kvp"
+#define QOF_BOOK_KVP     "qof-kvp"
 
 /**@}*/
  

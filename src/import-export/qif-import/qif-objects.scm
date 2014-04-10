@@ -3,7 +3,6 @@
 ;;;  representations for parts of an imported Quicken file.  
 ;;;
 ;;;  Bill Gribble <grib@billgribble.com> 20 Feb 2000 
-;;;  $Id$
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 

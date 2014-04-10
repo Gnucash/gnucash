@@ -684,7 +684,7 @@ make_random_changes_to_transaction_and_splits (QofBook *book,
     xaccTransRollbackEdit (trans);
 }
 
-static gboolean
+static int
 add_trans_helper (Transaction *trans, gpointer data)
 {
   TransInfo *ti;
@@ -695,8 +695,7 @@ add_trans_helper (Transaction *trans, gpointer data)
   ti->guid = *xaccTransGetGUID (trans);
 
   *list = g_list_prepend (*list, ti);
-
-  return TRUE;
+  return 0;
 }
 
 void

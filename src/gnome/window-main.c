@@ -1,7 +1,7 @@
 /********************************************************************
  * window-main.c -- open/close/configure GNOME MDI main window      *
- * Copyright (C) 1998,1999 Jeremy Collins	                    *
- * Copyright (C) 1998,1999,2000 Linas Vepstas                       *
+ * Copyright (C) 1998,1999 Jeremy Collins	                          *
+ * Copyright (C) 1998,1999,2000 Linas Vepstas <linas@linas.org>     *
  * Copyright (C) 2001 Bill Gribble                                  *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
@@ -42,6 +42,7 @@
 #include "dialog-totd.h"
 #include "dialog-transfer.h"
 #include "dialog-utils.h"
+#include "druid-acct-period.h"
 #include "druid-loan.h"
 #include "gfec.h"
 #include "global-options.h"
@@ -564,6 +565,7 @@ gnc_main_window_file_close_cb(GtkWidget * widget, gpointer data)
 {
   GNCMDIInfo *main_info;
   GnomeMDI *mdi;
+  GNCMDIChildInfo * inf;
 
   main_info = gnc_mdi_get_current ();
   if (!main_info) return;
@@ -571,11 +573,10 @@ gnc_main_window_file_close_cb(GtkWidget * widget, gpointer data)
   mdi = main_info->mdi;
   if (!mdi) return;
 
+  inf = gtk_object_get_user_data(GTK_OBJECT(mdi->active_child));
+
   if (mdi->active_child)
   {
-    GNCMDIChildInfo * inf;
-
-    inf = gtk_object_get_user_data(GTK_OBJECT(mdi->active_child));
     if (inf->toolbar)
     {
       gtk_widget_destroy (GTK_WIDGET(inf->toolbar)->parent);
@@ -586,7 +587,8 @@ gnc_main_window_file_close_cb(GtkWidget * widget, gpointer data)
   }  
   else
   {
-    gnc_warning_dialog (_("Select \"Exit\" to exit GnuCash."));
+    gnc_warning_dialog (GTK_WIDGET(inf->app),
+			_("Select \"Exit\" to exit GnuCash."));
   }
 }
 
@@ -594,6 +596,12 @@ void
 gnc_main_window_fincalc_cb(GtkWidget *widget, gpointer data)
 {
   gnc_ui_fincalc_dialog_create();
+}
+
+static void
+gnc_main_window_books_druid_cb(GtkWidget *widget, gpointer data)
+{
+	gnc_acct_period_dialog();
 }
 
 void
@@ -643,10 +651,10 @@ gnc_main_window_sched_xaction_slr_cb (GtkWidget *widget, gpointer data)
 
   ret = gnc_ui_sxsincelast_dialog_create();
   if ( ret == 0 ) {
-    gnc_info_dialog( nothing_to_do_msg );
+    gnc_info_dialog(NULL, nothing_to_do_msg );
   } else if ( ret < 0 ) {
     gnc_info_dialog
-      (ngettext 
+      (NULL, ngettext 
        /* Translators: %d is the number of transactions. This is a
 	  ngettext(3) message. */
        ("There are no Scheduled Transactions to be entered at this time.\n"
@@ -894,6 +902,14 @@ gnc_main_window_create_menus(GNCMDIInfo * maininfo)
   {
     GNOMEUIINFO_SUBTREE( N_("_Scheduled Transactions"),
                          gnc_sched_xaction_tools_submenu_template ),
+    {
+      GNOME_APP_UI_ITEM,
+      N_("Close Books"),
+      N_("Archive old data using accounting periods"),
+      gnc_main_window_books_druid_cb, NULL, NULL,
+      GNOME_APP_PIXMAP_NONE, NULL,
+      0, 0, NULL
+    },
     GNOMEUIINFO_END
   };
   static GnomeUIInfo gnc_tools_menu_template[] =

@@ -375,6 +375,10 @@
           )
 
 
+	  (gnc:html-document-add-object!
+	   doc
+	   (gnc:make-html-text (_ "Selected Accounts")))
+
           (gnc:html-document-add-object!
            doc
            (gnc:make-html-text
@@ -387,7 +391,7 @@
            table
            "primary-subheading"
            (list
-             (_ "Money In")
+             (_ "Money into selected accounts comes from")
              ""))
 
           (set! row-num 0)
@@ -432,7 +436,7 @@
            table
            "primary-subheading"
            (list
-             (_ "Money Out")
+             (_ "Money out of selected accounts goes to")
              ""))
 
           (set! row-num 0)

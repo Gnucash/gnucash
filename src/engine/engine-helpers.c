@@ -863,7 +863,7 @@ gnc_scm2KvpFrame (SCM frame_scm)
 }
 
 static SCM
-gnc_queryterm2scm (QofQueryTerm_t qt)
+gnc_queryterm2scm (QofQueryTerm *qt)
 {
   SCM qt_scm = SCM_EOL;
   QofQueryPredData *pd = NULL;
@@ -1526,7 +1526,7 @@ gnc_query_terms2scm (GList *terms)
 
     for (and_node = or_node->data; and_node; and_node = and_node->next)
     {
-      QofQueryTerm_t qt = and_node->data;
+      QofQueryTerm *qt = and_node->data;
       SCM qt_scm;
 
       qt_scm = gnc_queryterm2scm (qt);
@@ -1625,7 +1625,7 @@ gnc_scm2query_or_terms (SCM or_terms, query_version_t vers)
 }
 
 static SCM
-gnc_query_sort2scm (QofSortFunc_t qs)
+gnc_query_sort2scm (QofQuerySort *qs)
 {
   SCM sort_scm = SCM_EOL;
   GSList *path;
@@ -1698,11 +1698,11 @@ gnc_query_scm2sort (SCM sort_scm, GSList **path, gint *options, gboolean *inc)
 }
 
 SCM
-gnc_query2scm (Query *q)
+gnc_query2scm (QofQuery *q)
 {
   SCM query_scm = SCM_EOL;
   SCM pair;
-  QofSortFunc_t s1, s2, s3;
+  QofQuerySort *s1, *s2, *s3;
 
   if (!q) return SCM_BOOL_F;
 

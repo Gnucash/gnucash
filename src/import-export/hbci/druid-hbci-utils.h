@@ -52,7 +52,7 @@ gboolean
 gnc_verify_exist_or_new_file (GtkWidget *parent, const char *filename);
 
 gboolean
-gnc_test_dir_exist_error (GtkWindow *parent, const char *filename);
+gnc_test_dir_exist_error (GtkWidget *parent, const char *filename);
 
 
 #endif

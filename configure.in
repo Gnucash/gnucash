@@ -73,6 +73,29 @@ AM_PROG_LIBTOOL
 
 AC_SUBST(LIBTOOL_DEPS)
 
+# # checks for the pthreads library
+# have_pthread=no
+# for i in pthreads lthread pthread; do
+#   if test "x$have_pthread" = xno; then
+#     AC_CHECK_LIB($i, pthread_once, [
+#  	PTHREAD_LIBS=-l$i
+# 	have_pthread=yes
+# 	])
+#   fi
+# done
+# 
+# # Hmm, maybe it's just in libc?
+# if test "x$have_pthread" = xno; then
+#     AC_CHECK_FUNC(pthread_once, [ have_pthread=yes ])
+# fi
+# 
+# # Do we HAVE threads?!?
+# if test "x$have_pthread" = xno; then
+#   AC_MSG_ERROR([unable to find pthreads on your system.  Sorry.])
+# fi
+# 
+# AC_SUBST(PTHREAD_LIBS)
+
 AC_ISC_POSIX
 AC_C_BIGENDIAN
 AC_PROG_MAKE_SET
@@ -545,7 +568,7 @@ AC_ARG_ENABLE( hbci,
   fi)
 if test x${HBCI_DIR} = xhbci ;
 then
-    AM_PATH_OPENHBCI(0.9.11)
+    AM_PATH_OPENHBCI(0.9.13)
     HBCI_LIBS="${OPENHBCI_LIBS}"
     HBCI_CFLAGS="${OPENHBCI_CFLAGS}"
 
@@ -717,7 +740,9 @@ if test "$prefer_db1" = "yes"; then
   AC_CHECK_LIB(db, dbopen, DB_LIBS="-ldb",
    AC_CHECK_LIB(db-3, __db185_open, DB_LIBS="-ldb-3",
     AC_CHECK_LIB(db-4.0, __db185_open, DB_LIBS="-ldb-4.0",
-     AC_MSG_ERROR([Your db library is missing db 1.85 compatibility mode])
+     AC_CHECK_LIB(db-4.1, __db185_open, DB_LIBS="-ldb-4.1",
+      AC_MSG_ERROR([Your db library is missing db 1.85 compatibility mode])
+     )
     )
    )
   )
@@ -727,7 +752,9 @@ else
   AC_CHECK_LIB(db1, dbopen, DB_LIBS="-ldb1",
    AC_CHECK_LIB(db-3, __db185_open, DB_LIBS="-ldb-3",
     AC_CHECK_LIB(db-4.0, __db185_open, DB_LIBS="-ldb-4.0",
-     AC_MSG_ERROR([Your db library is missing db 1.85 compatibility mode])
+     AC_CHECK_LIB(db-4.1, __db185_open, DB_LIBS="-ldb-4.1",
+      AC_MSG_ERROR([Your db library is missing db 1.85 compatibility mode])
+     )
     )
    )
   )
@@ -1170,12 +1197,14 @@ AC_OUTPUT( m4/Makefile  intl/Makefile po/Makefile.in
           src/import-export/binary-import/Makefile
           src/import-export/binary-import/test/Makefile
           src/import-export/qif-import/Makefile
+          src/import-export/qif/Makefile
+          src/import-export/qif/test/Makefile
           src/import-export/qif-import/test/Makefile
           src/import-export/qif-io-core/Makefile
           src/import-export/qif-io-core/test/Makefile
           src/import-export/ofx/Makefile
           src/import-export/ofx/test/Makefile
-		  src/import-export/log-replay/Makefile
+          src/import-export/log-replay/Makefile
           src/import-export/hbci/Makefile
           src/import-export/hbci/glade/Makefile
           src/import-export/hbci/test/Makefile

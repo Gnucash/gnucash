@@ -1,7 +1,7 @@
 /********************************************************************\
  * Account.c -- Account data structure implementation               *
  * Copyright (C) 1997 Robin D. Clark                                *
- * Copyright (C) 1997-2002 Linas Vepstas <linas@linas.org>          *
+ * Copyright (C) 1997-2003 Linas Vepstas <linas@linas.org>          *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -215,9 +215,13 @@ xaccCloneAccount (const Account *from, QofBook *book)
     ret->non_standard_scu = from->non_standard_scu;
     ret->core_dirty   = TRUE;
 
-    /* make a note of where the copy came from */
-    gnc_kvp_gemini (ret->kvp_data, &from->guid, &from->book->guid, now);
-    gnc_kvp_gemini (from->kvp_data, &ret->guid, &book->guid, now);
+    /* Make a note of where the copy came from */
+    gnc_kvp_gemini (ret->kvp_data, now, "acct_guid", &from->guid, 
+                                        "book_guid", &from->book->guid,
+                                        NULL);
+    gnc_kvp_gemini (from->kvp_data, now, "acct_guid", &ret->guid, 
+                                         "book_guid", &book->guid, 
+                                         NULL);
 
     LEAVE (" ");
     return ret;
@@ -414,6 +418,7 @@ xaccAccountCommitEdit (Account *acc)
   acc->editlevel--;
   if (0 < acc->editlevel) return;
 
+  ENTER (" ");
   if (0 > acc->editlevel) 
   {
     PERR ("unbalanced call - resetting (was %d)", acc->editlevel);
@@ -509,6 +514,7 @@ xaccAccountCommitEdit (Account *acc)
     xaccGroupRemoveAccount(acc->parent, acc);
     xaccFreeAccount(acc);
   }
+  LEAVE (" ");
 }
 
 void 
@@ -1048,20 +1054,21 @@ xaccAccountInsertSplit (Account *acc, Split *split)
   acc->balance_dirty = TRUE;
   acc->sort_dirty = TRUE;
 
-  /* convert the split to the new account's denominator */
-  /* if the denominator can't be exactly converted, it's an error */
+  /* Convert the split to the new account's denominator */
+  /* If the denominator can't be exactly converted, it's an error */
   /* FIXME : need to enforce ordering of insertion/value */
   split->amount = gnc_numeric_convert(split->amount, 
                                       xaccAccountGetCommoditySCU(acc),
                                       GNC_RND_ROUND);
 
-  /* if this split belongs to another account, remove it from there
-     * first.  We don't want to ever leave the system in an inconsistent
-     * state.  Note that it might belong to the current account if we're
-     * just using this call to re-order.  */
-  if (xaccSplitGetAccount(split) &&
-      xaccSplitGetAccount(split) != acc)
-    xaccAccountRemoveSplit (xaccSplitGetAccount(split), split);
+  /* If this split belongs to another account, remove it from there
+   * first.  We don't want to ever leave the system in an inconsistent
+   * state.  Note that it might belong to the current account if we're
+   * just using this call to re-order.  */
+  if (split->acc && split->acc != acc)
+  {
+    xaccAccountRemoveSplit (split->acc, split);
+  }
 
   split->acc = acc;
   if (split->lot && (NULL == split->lot->account))
@@ -1078,7 +1085,9 @@ xaccAccountInsertSplit (Account *acc, Split *split)
           acc->sort_dirty = FALSE;
       }
       else
+      {
           acc->splits = g_list_prepend(acc->splits, split);
+      }
 
       mark_account (acc);
       if (split->parent)
@@ -1098,6 +1107,8 @@ xaccAccountRemoveSplit (Account *acc, Split *split)
 {
   if (!acc) return;
   if (!split) return;
+  if (split->acc && split->acc != acc) return;
+
   ENTER ("(acc=%p, split=%p)", acc, split);
 
   xaccAccountBeginEdit(acc);
@@ -1120,7 +1131,9 @@ xaccAccountRemoveSplit (Account *acc, Split *split)
 
       xaccTransBeginEdit (trans);
       split->acc = NULL;
-      if (split->lot)
+
+      /* Remove from lot (but only if it hasn't been moved to new lot already) */
+      if (split->lot && split->lot->account == acc)
       {
         gnc_lot_remove_split (split->lot, split);
       }
@@ -1187,7 +1200,7 @@ xaccAccountRecomputeBalance (Account * acc)
 
     balance = gnc_numeric_add_fixed(balance, split->amount);
 
-    if (CREC == split->reconciled)
+    if (NREC != split->reconciled)
       cleared_balance = gnc_numeric_add_fixed(cleared_balance, split->amount);
 
     if (YREC == split->reconciled ||
@@ -1278,7 +1291,7 @@ xaccTransFixSplitDateOrder (Transaction *trans)
   for (node = trans->splits; node; node = node->next)
   {
     Split *s = node->data;
-    xaccAccountFixSplitDateOrder (xaccSplitGetAccount(s), s);
+    xaccAccountFixSplitDateOrder (s->acc, s);
   }
   gnc_engine_resume_events();
 }
@@ -1906,7 +1919,7 @@ xaccAccountGetBalanceAsOfDate (Account *acc, time_t date)
    * it doesn't exist yet and I'm uncertain of exactly how
    * it would work at this time, since it differs from
    * xaccAccountForEachTransaction by using gpointer return
-   * values rather than gbooleans.
+   * values rather than gints.
    */
   GList   *lp;
   Timespec ts, trans_ts;
@@ -3027,60 +3040,14 @@ xaccAccountGetReconcileChildrenStatus(Account *account)
 /********************************************************************\
 \********************************************************************/
 
-gboolean
-xaccAccountVisitUnvisitedTransactions(Account *acc,
-                                      gboolean (*proc)(Transaction *t,
-                                                       void *data),
-                                      void *data,
-                                      GHashTable *visited_txns) 
-{
-  gboolean keep_going = TRUE;
-  GList *lp;
-
-  if(!acc) return(FALSE);
-  if(!proc) return(FALSE);
-  if(!visited_txns) return(FALSE);
-
-  for(lp = acc->splits; lp && keep_going; lp = lp->next) {
-    Split *s = (Split *) lp->data;
-    Transaction *t = xaccSplitGetParent(s);
-
-    if(t) {
-      const GUID *guid = xaccTransGetGUID(t);
-      gpointer been_here = g_hash_table_lookup(visited_txns, guid);
-
-      if(!GPOINTER_TO_INT(been_here)) {
-        g_hash_table_insert(visited_txns, (gpointer) guid,
-                            GINT_TO_POINTER(TRUE));
-        if(!proc(t, data)) {
-          keep_going = FALSE;
-        }
-      }
-    }
-  }
-  return(keep_going);
-}
-
-gboolean
+gint
 xaccAccountForEachTransaction(Account *acc,
-                              gboolean (*proc)(Transaction *t, void *data),
+                              TransactionCallback proc,
                               void *data) 
 {
-  GHashTable *visited_txns = NULL;
-  gboolean result = FALSE;
-
-  if(!acc) return(FALSE);
-  if(!proc) return(FALSE);
-  
-  visited_txns = guid_hash_table_new();
-  if(visited_txns) {
-    result =
-      xaccAccountVisitUnvisitedTransactions(acc, proc, data, visited_txns);
-  }
-  
-  /* cleanup */
-  if(visited_txns) g_hash_table_destroy(visited_txns);  
-  return(result);
+  if(!acc || !proc) return 0;
+  xaccAccountBeginStagedTransactionTraversals (acc);
+  return xaccAccountStagedTransactionTraversal(acc, 42, proc, data);
 }
 
 /********************************************************************\

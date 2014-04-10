@@ -5,6 +5,7 @@ AM_CFLAGS = \
 
 LDADD = -L../.. -L../../.libs
 
+PWD := $(shell pwd)
 checklibdir=${PWD}
 checklib_LTLIBRARIES=libfuturemodsys.la libincompatdep.la libagedver.la
 

@@ -51,7 +51,7 @@ guile_main (void *closure, int argc, char **argv)
 
     if (!location)
     {
-	location = "../../../../accounts/C";
+        location = "../../../../accounts/C";
     }
 
     gnc_module_system_init();

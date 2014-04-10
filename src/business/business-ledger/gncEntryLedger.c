@@ -75,7 +75,7 @@ gnc_entry_ledger_get_account_by_name (GncEntryLedger *ledger, BasicCell * bcell,
 
   if (!account) {
     /* Ask if they want to create a new one. */
-    if (!gnc_verify_dialog_parented (ledger->parent, TRUE, missing, name))
+    if (!gnc_verify_dialog (ledger->parent, TRUE, missing, name))
       return NULL;
     
     /* No changes, as yet. */
@@ -96,7 +96,7 @@ gnc_entry_ledger_get_account_by_name (GncEntryLedger *ledger, BasicCell * bcell,
 
   /* See if the account (either old or new) is a placeholder. */
   if (xaccAccountGetPlaceholder (account)) {
-    gnc_error_dialog_parented (GTK_WINDOW(ledger->parent), placeholder, name);
+    gnc_error_dialog (ledger->parent, placeholder, name);
   }
 
   /* Be seeing you. */
@@ -787,10 +787,9 @@ gnc_entry_ledger_duplicate_current_entry (GncEntryLedger *ledger)
 			  "Would you like to save it?");
     GNCVerifyResult result;
 
-    result = gnc_ok_cancel_dialog_parented (ledger->parent,      
-					    GNC_VERIFY_OK, message);
+    result = gnc_ok_cancel_dialog (ledger->parent, GTK_RESPONSE_OK, message);
 
-    if (result == GNC_VERIFY_CANCEL) {
+    if (result == GTK_RESPONSE_CANCEL) {
       gnc_resume_gui_refresh ();
       return;
     }

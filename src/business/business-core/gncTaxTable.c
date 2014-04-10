@@ -136,6 +136,8 @@ static void addObj (GncTaxTable *table);
 static void remObj (GncTaxTable *table);
 static void maybe_resort_list (GncTaxTable *table);
 
+static void gncTaxTableRemoveChild (GncTaxTable *table, GncTaxTable *child);
+
 G_INLINE_FUNC void mark_table (GncTaxTable *table);
 G_INLINE_FUNC void
 mark_table (GncTaxTable *table)
@@ -194,6 +196,10 @@ static void gncTaxTableFree (GncTaxTable *table)
 
   if (!table->do_free)
     PERR("free a taxtable without do_free set!");
+
+  /* disconnect from parent */
+  if (table->parent)
+    gncTaxTableRemoveChild(table->parent, table);
 
   /* disconnect from the children */
   for (list = table->children; list; list=list->next) {

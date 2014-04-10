@@ -223,6 +223,7 @@
   (gw:enum-add-value! we "ERR_BACKEND_CONN_LOST" 'connection-lost)
   (gw:enum-add-value! we "ERR_BACKEND_NO_SUCH_DB" 'no-such-db)
   (gw:enum-add-value! we "ERR_BACKEND_LOCKED" 'locked)
+  (gw:enum-add-value! we "ERR_BACKEND_READONLY" 'read-only)
   (gw:enum-add-value! we "ERR_BACKEND_DATA_CORRUPT" 'data-corrupt)
   (gw:enum-add-value! we "ERR_BACKEND_SERVER_ERR" 'server-error)
   (gw:enum-add-value! we "ERR_BACKEND_ALLOC" 'alloc)
@@ -1974,11 +1975,11 @@ of having a parent transaction with which one is working...")
  ws
  'gnc:query-set-sort-order
  '<gw:void>
- "xaccQuerySetSortOrder"
+ "qof_query_set_sort_order"
  '((<gnc:Query*> q)
-   ((gw:glist-of <gnc:id-type> callee-owned) primary)
-   ((gw:glist-of <gnc:id-type> callee-owned) secondary)
-   ((gw:glist-of <gnc:id-type> callee-owned) tertiary))
+   ((gw:gslist-of <gnc:id-type> callee-owned) primary)
+   ((gw:gslist-of <gnc:id-type> callee-owned) secondary)
+   ((gw:gslist-of <gnc:id-type> callee-owned) tertiary))
  "set sort order.")
 
 (gw:wrap-function
@@ -2484,3 +2485,11 @@ the timepair representing midday on that day")
  "gnc_engine_resume_events"
  '()
  "Resume engine event generation.") 
+
+(gw:wrap-function
+ ws
+ 'gnc:quote-source-set-fq-installed
+ '<gw:void>
+ "gnc_quote_source_set_fq_installed"
+ '(((gw:glist-of (<gw:mchars> callee-owned) callee-owned) choices))
+ "Takes a list of installed Finance::Quote souces and records it internally.")

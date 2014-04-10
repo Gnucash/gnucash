@@ -5,6 +5,7 @@ AM_CFLAGS = \
   ${GUILE_INCS} \
   ${GLIB_CFLAGS}
 
+PWD := $(shell pwd)
 checklibdir=${PWD}
 checklib_LTLIBRARIES = libbar.la libgncmodbar.la
 

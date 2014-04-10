@@ -3,7 +3,6 @@
 ;;;  eliminate duplicate xtns in a new (imported) account group 
 ;;;
 ;;;  Copyright 2001 Bill Gribble <grib@billgribble.com> 
-;;;  $Id$
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define (gnc:group-get-transactions group)

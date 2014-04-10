@@ -217,6 +217,17 @@ pgendGUIDType (PGBackend *be, const GUID *guid)
 
 /* ============================================================= */
 
+QofBook *
+pgendGetBook(PGBackend *pbe) {
+    QofBook *book;
+    
+    ENTER(" ");
+    book = qof_session_get_book(pbe->session);
+
+    LEAVE("book = %p", book);
+    return book;
+}
+
 static void 
 pgend_set_book (PGBackend *be, QofBook *book)
 {
@@ -438,7 +449,7 @@ query_cb (PGBackend *be, PGresult *result, int j, gpointer data)
    }
    else
    {
-      trans = xaccMallocTransaction(be->book);
+      trans = xaccMallocTransaction(pgendGetBook(be));
       xaccTransBeginEdit (trans);
       xaccTransSetGUID (trans, &trans_guid);
    }
@@ -452,7 +463,8 @@ query_cb (PGBackend *be, PGresult *result, int j, gpointer data)
    xaccTransSetVersion (trans, atoi(DB_GET_VAL("version",j)));
    trans->idata = atoi(DB_GET_VAL("iguid",j));
 
-   currency = gnc_string_to_commodity (DB_GET_VAL("currency",j), be->book);
+   currency = gnc_string_to_commodity (DB_GET_VAL("currency",j), 
+                                       pgendGetBook(be));
    if (currency)
      xaccTransSetCurrency (trans, currency);
    else
@@ -512,7 +524,8 @@ pgendFillOutToCheckpoint (PGBackend *be, const char *query_string)
      gnc_commodity * commodity;
 
      pgendGetCommodity (be, ri->commodity_string);
-     commodity = gnc_string_to_commodity (ri->commodity_string, be->book);
+     commodity = gnc_string_to_commodity (ri->commodity_string,
+                                          pgendGetBook(be));
 
      if (commodity)
      {
@@ -656,9 +669,9 @@ pgendFillOutToCheckpoint (PGBackend *be, const char *query_string)
       p = be->buff; *p = 0;
       p = stpcpy (p,
                   "SELECT DISTINCT gncTransaction.* "
-                  "FROM gncEntry, gncTransaction WHERE "
-                  "gncEntry.transGuid = gncTransaction.transGuid AND "
-                  "gncEntry.accountGuid='");
+                  "FROM gncSplit, gncTransaction WHERE "
+                  "gncSplit.transGuid = gncTransaction.transGuid AND "
+                  "gncSplit.accountGuid='");
       p = guid_to_string_buff(xaccAccountGetGUID(ae->acct), p);
       p = stpcpy (p, "' AND gncTransaction.date_posted > '");
       p = gnc_timespec_to_iso8601_buff (ae->ts, p);
@@ -697,7 +710,7 @@ pgendRunQuery (QofBackend *bend, gpointer q_p)
    sqlQuery *sq;
 
    ENTER ("be=%p, qry=%p", be, q);
-   if (!be || !q) return;
+   if (!be || !q) { LEAVE("(null) args"); return; }
    be->version_check = (guint32) time(0);
 
    gnc_engine_suspend_events();
@@ -708,7 +721,7 @@ pgendRunQuery (QofBackend *bend, gpointer q_p)
    sq = sqlQuery_new();
    sql_query_string = sqlQuery_build (sq, q);
 
-   topgroup = gnc_book_get_group (be->book);
+   topgroup = gnc_book_get_group (pgendGetBook(be));
 
    /* stage transactions, save some postgres overhead */
    xaccGroupBeginStagedTransactionTraversals (topgroup);
@@ -952,7 +965,7 @@ pgendSyncSingleFile (QofBackend *bend, QofBook *book)
        "LOCK TABLE gncAccount IN EXCLUSIVE MODE;\n"
        "LOCK TABLE gncCommodity IN EXCLUSIVE MODE;\n"
        "LOCK TABLE gncTransaction IN EXCLUSIVE MODE;\n"
-       "LOCK TABLE gncEntry IN EXCLUSIVE MODE;\n";
+       "LOCK TABLE gncSplit IN EXCLUSIVE MODE;\n";
    SEND_QUERY (be,p, );
    FINISH_QUERY(be->connection);
 
@@ -966,18 +979,18 @@ pgendSyncSingleFile (QofBackend *bend, QofBook *book)
    /* do the one-book equivalent of "DELETE FROM gncTransaction;" */
    p = buff;
    p = stpcpy (p, "DELETE FROM gncTransaction WHERE "
-                  "  gncTransaction.transGuid = gncEntry.transGuid AND "
-                  "  gncEntry.accountGuid = gncAccount.accountGuid AND "
+                  "  gncTransaction.transGuid = gncSplit.transGuid AND "
+                  "  gncSplit.accountGuid = gncAccount.accountGuid AND "
                   "  gncAccount.bookGuid = '");
    p = stpcpy (p, book_guid);
    p = stpcpy (p, "';");
    SEND_QUERY (be,buff, );
    FINISH_QUERY(be->connection);
 
-   /* do the one-book equivalent of "DELETE FROM gncEntry;" */
+   /* do the one-book equivalent of "DELETE FROM gncSplit;" */
    p = buff;
-   p = stpcpy (p, "DELETE FROM gncEntry WHERE "
-                  "  gncEntry.accountGuid = gncAccount.accountGuid AND "
+   p = stpcpy (p, "DELETE FROM gncSplit WHERE "
+                  "  gncSplit.accountGuid = gncAccount.accountGuid AND "
                   "  gncAccount.bookGuid = '");
    p = stpcpy (p, book_guid);
    p = stpcpy (p, "';");
@@ -1475,18 +1488,13 @@ pgend_book_load_poll (QofBackend *bend, QofBook *book)
 
    if (be->blist) 
    {
+      PWARN ("old book list not empty--clearing it out ");
       /* XXX not clear what this means ... should we free old books ?? */
-      /* The old book list is set by the session when the session is 
-       * created.  It is an empty book, and should be discarded in favor
-       * of the Book retrieved from the database.
-       * PWARN ("old book list not empty ");
-       */
       g_list_free (be->blist);
       be->blist = NULL;
    }
+   pgendBookRestore (be, book);
    pgend_set_book (be, book);
-   pgendGetBook (be, book);
-   qof_session_set_book(be->session, book);
                         
    PINFO("Book GUID = %s\n",
            guid_to_string(qof_book_get_guid(book)));
@@ -1524,19 +1532,17 @@ pgend_book_load_single (QofBackend *bend, QofBook *book)
    pgendDisable(be);
    be->version_check = (guint32) time(0);
 
-   pgend_set_book (be, book);
-
    pgendKVPInit(be);
 
    if (be->blist) 
    {
+      PWARN ("old book list not empty--clearing it out ");
       /* XXX not clear what this means ... should we free old books ?? */
-      PWARN ("old book list not empty ");
       g_list_free (be->blist);
+      be->blist = NULL;
    }
-   pgendGetBook (be, book);
-
-   be->blist = g_list_append (NULL, book);
+   pgendBookRestore (be, book);
+   pgend_set_book (be, book);
 
    pgendGetAllAccountsInBook (be, book);
 
@@ -1557,7 +1563,9 @@ pgend_price_load_single (QofBackend *bend, QofBook *book)
 {
    PGBackend *be = (PGBackend *)bend;
 
-   if (!be || !book) return;
+   ENTER("be = %p", bend);
+   
+   if (!be || !book) { LEAVE("(null) args"); return; }
 
    pgend_set_book (be, book);
 
@@ -1571,6 +1579,7 @@ pgend_price_load_single (QofBackend *bend, QofBook *book)
    /* re-enable events */
    pgendEnable(be);
    gnc_engine_resume_events();
+   LEAVE(" ");
 }
 
 /* ============================================================= */
@@ -1768,7 +1777,6 @@ pgend_session_begin (QofBackend *backend,
       g_list_free (be->blist);
       be->blist = NULL;
    }
-   pgend_set_book (be, qof_session_get_book(session));
 
    /* Parse the sessionid for the hostname, port number and db name.
     * The expected URL format is
@@ -1967,7 +1975,7 @@ pgend_session_begin (QofBackend *backend,
              * Alas, it does not, so we just bomb out.
              */
             qof_backend_set_error (&be->be, ERR_BACKEND_CANT_CONNECT);
-            qof_backend_set_message(&be->be, msg);
+            qof_backend_set_message(&be->be, _("From the Postgresql Server: %s"), msg);
             return;
          }
 
@@ -2003,7 +2011,7 @@ pgend_session_begin (QofBackend *backend,
       /* Check to see if we have a database version that we can 
        * live with */
       rc = pgendDBVersionIsCurrent (be);
-      if (0 > rc)
+      if (rc < 0)
       {
          /* The server is newer than we are, or another error occured,
           * we don't know how to talk to it.  The err code is already set. */
@@ -2011,7 +2019,7 @@ pgend_session_begin (QofBackend *backend,
          be->connection = NULL;
          return;
       }
-      if (0 < rc)
+      if (rc > 0)
       {
          /* The server is older than we are; ask user if they want to 
           * upgrade the database contents. */
@@ -2183,7 +2191,7 @@ pgend_session_begin (QofBackend *backend,
              /* But first, make sure all users are logged off ... */
              p = "BEGIN;\n"
                "LOCK TABLE gncSession IN ACCESS EXCLUSIVE MODE;\n"
-               "SELECT time_off FROM gncSession WHERE time_off ='infinity';";
+               "SELECT time_off FROM gncSession WHERE time_off ='infinity';\n";
              SEND_QUERY (be,p, );
              someones_still_on =
                GPOINTER_TO_INT (pgendGetResults (be, has_results_cb,
@@ -2196,10 +2204,10 @@ pgend_session_begin (QofBackend *backend,
                qof_backend_set_error (&be->be, ERR_SQL_DB_BUSY);
                return;
              }
-             pgendUpgradeDB (be);
              p = "COMMIT;\n";
              SEND_QUERY (be,p, );
              FINISH_QUERY(be->connection);
+             pgendUpgradeDB (be);
            }
            else
            {
@@ -2344,13 +2352,17 @@ pgend_session_begin (QofBackend *backend,
 void
 pgendDisable (PGBackend *be)
 {
+   ENTER("be = %p", be);
    if (0 > be->nest_count)
    {
       PERR ("too many nested enables");
    }
    be->nest_count ++;
    PINFO("nest count=%d", be->nest_count);
-   if (1 < be->nest_count) return;
+   if (1 < be->nest_count) {
+       LEAVE("be->nest_count > 1: %d", be->nest_count); 
+       return;
+   }
 
    /* save hooks */
    be->snr.load	                = be->be.load;
@@ -2382,6 +2394,8 @@ pgendDisable (PGBackend *be)
    be->be.percentage           = NULL;
    be->be.events_pending       = NULL;
    be->be.process_events       = NULL;
+
+   LEAVE(" ");
 }
 
 /* ============================================================= */

@@ -1,9 +1,5 @@
 /********************************************************************\
- * io-gncbin.c -- read and write (old format) binary datafile       *
- *             (GnuCash/X-Accountant)                               *
- * Copyright (C) 1997 Robin D. Clark                                *
- * Copyright (C) 1997-2001 Linas Vepstas <linas@linas.org>          *
- * Copyright (C) 1999-2000 Rob Browning                             *
+ * io-gncbin-r.c -- read (old X-Accountant format) binary datafile  *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -23,6 +19,12 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
  *                                                                  *
  ********************************************************************
+ * @file io-gncbin-r.c
+ * @breif read (old X-Accountant format) binary datafile 
+ * @author Copyright (C) 1997 Robin D. Clark
+ * @author Copyright (C) 1997-2001 Linas Vepstas <linas@linas.org>
+ * @author Copyright (C) 1999-2000 Rob Browning
+ *
  * NOTE: the readxxxx/writexxxx functions changed the current       *
  *       position in the file, and so the order which these         *
  *       functions are called in important                          *
@@ -536,11 +538,10 @@ gnc_load_financials_from_fd(QofBook *book, int fd)
  * Return: the struct with the program data in it                   * 
 \********************************************************************/
 void
-qof_session_load_from_binfile(QofSession *session)
+qof_session_load_from_binfile(QofBook *book, const char * datafile)
 {
   int  fd;
 
-  const gchar *datafile = qof_session_get_file_path(session);
   if(!datafile) {
     error_code = ERR_BACKEND_MISC;
     return;
@@ -555,8 +556,7 @@ qof_session_load_from_binfile(QofSession *session)
     return;
   }
 
-  if (!gnc_load_financials_from_fd(qof_session_get_book(session), fd))
-    return;
+  gnc_load_financials_from_fd(book, fd);
 
   close(fd);
 }
@@ -617,7 +617,7 @@ readGroup (QofBook *book, int fd, Account *aparent, int token)
  * readAccount                                                      * 
  *   reads in the data for an account from the datafile             *
  *                                                                  * 
- * Args:   book  - the session                                      *
+ * Args:   book  - the top-level account object                     *
  *         fd    - the filedescriptor of the data file              * 
  *         acc   - the account structure to be filled in            *
  *         token - the datafile version                             * 

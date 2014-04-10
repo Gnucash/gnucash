@@ -3,7 +3,6 @@
 ;;;  string munging and other utility routines 
 ;;;
 ;;;  Bill Gribble <grib@billgribble.com> 20 Feb 2000 
-;;;  $Id$
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define (simple-filter pred list)

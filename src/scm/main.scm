@@ -66,6 +66,7 @@
 (export gnc:*config-path*)
 (export gnc:*share-path*)
 (export gnc:*doc-path*)
+(export gnc:*namespace-regexp*)
 
 ;; from doc.scm
 (export gnc:find-doc-file)
@@ -354,7 +355,7 @@ string and 'directories' must be a list of strings."
      (_ "This is a development version. It may or may not work.\n")
      (_ "Report bugs and other problems to gnucash-devel@gnucash.org.\n")
      (_ "You can also lookup and file bug reports at http://bugzilla.gnome.org\n")
-     (_ "The last stable version was ") "GnuCash 1.8.4" "\n"
+     (_ "The last stable version was ") "GnuCash 1.8.5" "\n"
      (_ "The next stable version will be ") "GnuCash 1.10 or 2.0"
      "\n\n"))))
 
@@ -448,10 +449,9 @@ string and 'directories' must be a list of strings."
 
     (gnc:update-splash-screen (_ "Checking Finance::Quote..."))
     (gnc:use-guile-module-here! '(gnucash price-quotes))
-;    (gnc:price-source-set-fq-installed (gnc:fq-check-sources))
     (let ((sources (gnc:fq-check-sources)))
       (if (list? sources)
-	  (gnc:price-source-set-fq-installed sources)))
+	  (gnc:quote-source-set-fq-installed sources)))
 
     (gnc:update-splash-screen (_ "Loading tip-of-the-day..."))
     (gnc:initialize-tip-of-the-day)

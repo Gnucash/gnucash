@@ -53,7 +53,8 @@ noinst_HEADERS = \
   putil.h \
   txn.h \
   txnmass.h \
-  upgrade.h
+  upgrade.h \
+  newtables.h
 
 EXTRA_DIST = \
   .cvsignore \

@@ -144,7 +144,7 @@ day_selected (GtkCalendar *calendar, GNCDateEdit *gde)
 
 	gtk_calendar_get_date (calendar, &year, &month, &day);
 
-        printDate (buffer, day, month + 1, year);
+	qof_print_date_dmy_buff (buffer, 40, day, month + 1, year);
 	gtk_entry_set_text (GTK_ENTRY (gde->date_entry), buffer);
 	gtk_signal_emit (GTK_OBJECT (gde), date_edit_signals [DATE_CHANGED]);
 }
@@ -171,8 +171,10 @@ key_press_popup (GtkWidget *widget, GdkEventKey *event, gpointer data)
 {
 	GNCDateEdit *gde = data;
 
-	if (event->keyval != GDK_Escape)
-		return date_accel_key_press(gde->date_entry, event, data);
+	if (event->keyval != GDK_Return &&
+	    event->keyval != GDK_KP_Enter &&
+	    event->keyval != GDK_Escape)
+	  return date_accel_key_press(gde->date_entry, event, data);
 
 	gtk_signal_emit_stop_by_name (GTK_OBJECT (widget), "key_press_event");
 	hide_popup (gde);
@@ -481,7 +483,7 @@ gnc_date_edit_set_time (GNCDateEdit *gde, time_t the_time)
 	mytm = localtime (&the_time);
 
 	/* Set the date */
-        printDate (buffer,
+	qof_print_date_dmy_buff (buffer, 40,
                    mytm->tm_mday,
                    mytm->tm_mon + 1,
                    1900 + mytm->tm_year);

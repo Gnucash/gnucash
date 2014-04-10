@@ -1,11 +1,14 @@
 
-                    kvp_doc.txt
-                    -----------
+                    KVP Values used By GnuCash
+                    --------------------------
+                    Date Last Revised: August 2003
+
 
 This file documents the use of keys in the key-value pair system
-used by the Engine. Before assigning keys for use, please read
-the Key-Value Policy in the GnuCash Design Document located
-under src/doc/design.
+used by the GnuCash Application (both the engine, and non-engine, GUI
+pieces).  Before assigning keys for use, please read the Key-Value 
+Policy in the GnuCash Design Document located under src/doc/design.
+
 
 The format of the data below is:
 
@@ -27,7 +30,7 @@ Use: The use to which the key will be put. Include any requirements
 
 Example:
 
-Name: my-favorite-thing
+Name: /my-favorite-thing
 Type: string
 Entities: Account
 Use:  xaccGetMyFavoriteThing(), xaccSetMyFavoriteThing()
@@ -46,11 +49,18 @@ Use:  kvp subdirectory holding info relating to accounting periods, including
       the 'twin' of an open/closed account, pointers to the open-balance
       transactions, the closing dates, etc.
 
+Name: /book/accounting-period
+Type: string, enum {none, week, month, quarter, trimester, year} XXX not used, should be UIFreqSpec stuff ..
+Entities: Book
+Use:  An enumerated identifier indicating how often books are supposed
+      to be closed.  This key will typically be present only in an
+      open book, as it seems meaningless in a closed book.
+
 Name: /book/close-date
 Type: Timespec
 Entities: Book
-Use:  The posted closing date of this book.  This book only contains transactions
-      whose posted date is earlier than this closing date.
+Use:  The posted closing date of this book.  This book only contains 
+      transactions whose posted date is earlier than this closing date.
 
 Name: /book/closed-acct
 Type: GUID
@@ -85,11 +95,17 @@ Use:  The GUID of the book that follows this one, chronologically.
       Note that the open-date of the next book should equal the close-date
       of this book.
 
+Name: /book/notes
+Type: string
+Entities: Book
+Use:  User-suplied notes for the book.  The user can set this to any value
+      and change it at any time for any reason.
+
 Name: /book/open-date
 Type: Timespec
 Entities: Book
 Use:  The posted opening date of this book.  This book only contains transactions
-      whose posted date is laterr than this closing date.
+      whose posted date is later than this closing date.
 
 Name: /book/prev-acct
 Type: GUID
@@ -105,6 +121,12 @@ Use:  The GUID of the book that preceeds this one, chronologically.
       Note that the close-date of the previous book should equal the open-date
       of this book.
 
+Name: /book/title
+Type: string
+Entities: Book
+Use:  A user-suplied title for the book.  The user can set this to any value
+      and change it at any time for any reason.
+
 -----------------------
 
 Name: /counters/...
@@ -117,11 +139,22 @@ Use:  Holders for a bunch of counters for various types.  Used specifically
 
 -----------------------
 
-Name: from-sched-xaction
+Name: /from-sched-xaction
 Type: GUID
 Entities: Transaction
 Use: Identifies that the Transaction was created from a ScheduledTransaction,
      and stores the GUID of that SX.
+
+Name: /gains-source
+Type: guid
+Entities: Split
+Use:  GUID of the split that is at the source of the cap gains recorded
+      in this split.
+
+Name: /gains-split
+Type: guid
+Entities: Split
+Use:  GUID of the split that records the capital gains for this split.
 
 -----------------------
 
@@ -227,16 +260,34 @@ Entities: Account
 Use: When a lot in this account is double-balanced, this key specifies
      the account to which realized gains are to be posted.
 
+Name: /lot-mgmt/next-id
+Type: int64
+Entities: Account
+Use: The next unused lot id number, used to autogenerate
+     a lot title.
+
+
+Name: /lot-split/
+Type: kvp_frame
+Entities: Split
+Use:  A gemini-style kvp subdirectory holding identification of splits
+      that were split off of this split.  See /gemini/ for additional 
+      doco's.
+
+Name: /lot-split/0/peer_guid
+Type: GUID
+Entities: Split
+Use:  The GUID of the peer split which was split from this split.
 
 -----------------------
 
-Name: notes
+Name: /notes
 Type: string
 Entities: Account, Lot, Transaction
-Use: xaccAccountGetNotes(), xaccAccountSetNotes(),
-     xaccTransGetNotes(), xaccTransSetNotes(),
-     gnc_lot_get_notes(), gnc_lot_set_notes()
-     Store the 'Notes' string.
+Use: A user-suplied 'Notes' text field.  The user can set this to 
+     any value and change it at any time for any reason.
+     Accessors: xaccAccountGetNotes(), xaccAccountSetNotes(),
+     xaccTransGetNotes(), xaccTransSetNotes()
 
 Name: old-currency
 Type: string
@@ -280,7 +331,7 @@ Use: This holds the old security scu. This may be deleted at
 
 -----------------------
 
-Name: /reconcile-info
+Name: /reconcile-info/
 Type: frame
 Entities: Account
 Use: store reconcile information about accounts
@@ -336,13 +387,14 @@ Name: /sched-xaction/debit-formula
 Type: string
 Entities: Split associated with a SchedXaction
 Use: Formula for the debit.  Either the credit or the 
-debit formula must be empty.
+     debit formula must be empty.
+
+-----------------------
+
 Name: split-type
 Entities: Split
 Use: xaccSplitGetType, xaccSplitMakeStockSplit
      Store a string representing the type of split, if not normal.
-
------------------------
 
 Name: /tax-US/code
 Type: string
@@ -358,6 +410,12 @@ Name: tax-related
 Type: gint64
 Entities: Account
 Use: A boolean flag indicated whether the Account is tax-related.
+
+Name: /title
+Type: string
+Entities: Lot
+Use:  A user-suplied title for the lot.  The user can set this to 
+      any value and change it at any time for any reason.
 
 Name: trans-date-due
 Type: Timespec

@@ -195,7 +195,7 @@ static gboolean check_edit_amount (GtkWidget *dialog, GtkWidget *amount,
 {
   if (!gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT (amount))) {
     if (error_message)
-      gnc_error_dialog_parented (GTK_WINDOW (dialog), "%s", error_message);
+      gnc_error_dialog (dialog, "%s", error_message);
     return TRUE;
   }
   /* We've got a valid-looking number; check mix/max */
@@ -204,7 +204,7 @@ static gboolean check_edit_amount (GtkWidget *dialog, GtkWidget *amount,
     if ((min && gnc_numeric_compare (*min, val) > 0) ||
 	(max && gnc_numeric_compare (val, *max) > 0)) {
       if (error_message)
-	gnc_error_dialog_parented (GTK_WINDOW (dialog), "%s", error_message);
+	gnc_error_dialog (dialog, "%s", error_message);
       return TRUE;
     }
   }
@@ -217,7 +217,7 @@ static gboolean check_entry_nonempty (GtkWidget *dialog, GtkWidget *entry,
   const char *res = gtk_entry_get_text (GTK_ENTRY (entry));
   if (safe_strcmp (res, "") == 0) {
     if (error_message)
-      gnc_error_dialog_parented (GTK_WINDOW (dialog), "%s", error_message);
+      gnc_error_dialog (dialog, "%s", error_message);
     return TRUE;
   }
   return FALSE;
@@ -243,7 +243,7 @@ gnc_customer_window_ok_cb (GtkWidget *widget, gpointer data)
       check_entry_nonempty (cw->dialog, cw->addr3_entry, NULL) &&
       check_entry_nonempty (cw->dialog, cw->addr4_entry, NULL)) {
     const char *msg = _("You must enter a billing address.");
-    gnc_error_dialog_parented (GTK_WINDOW (cw->dialog), msg);
+    gnc_error_dialog (cw->dialog, msg);
     return;
   }
 

@@ -1,4 +1,5 @@
 SUBDIRS = . glade
+PWD := $(shell pwd)
 
 pkglib_LTLIBRARIES = libgncmod-business-gnome.la libgw-business-gnome.la
 

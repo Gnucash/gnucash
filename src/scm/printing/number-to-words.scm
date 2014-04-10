@@ -3,7 +3,6 @@
 ;;;  convert a number into a sentence for check printing
 ;;;
 ;;;  Copyright 2000 Bill Gribble <grib@billgribble.com>
-;;;  $Id$
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define-module (gnucash printing number-to-words))

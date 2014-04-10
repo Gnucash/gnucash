@@ -45,8 +45,8 @@ gnc_dialog_date_close_ok_cb (GtkWidget *widget, gpointer user_data)
     acc = gnc_account_sel_get_account( GNC_ACCOUNT_SEL(ddc->acct_combo) );
 
     if (!acc) {
-      gnc_error_dialog_parented (GTK_WINDOW (ddc->dialog),
-				 _("No Account selected.  Please try again."));
+      gnc_error_dialog (ddc->dialog,
+			_("No Account selected.  Please try again."));
       return;
     }
 

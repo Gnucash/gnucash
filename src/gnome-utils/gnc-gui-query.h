@@ -24,44 +24,27 @@
 #define QUERY_USER_H
 
 extern void
-gnc_info_dialog(const char *format, ...) G_GNUC_PRINTF (1, 2);
-extern void
-gnc_info_dialog_parented(GtkWindow *parent,
-			 const char *format, ...) G_GNUC_PRINTF (2, 3);
+gnc_info_dialog(GtkWidget *parent,
+		const char *format, ...) G_GNUC_PRINTF (2, 3);
 
 
-extern void
-gnc_warning_dialog(const char *format, ...) G_GNUC_PRINTF (1, 2);
 extern void
 gnc_warning_dialog_va(const char *format, va_list args);
 
 
 extern void
-gnc_error_dialog(const char *format, ...) G_GNUC_PRINTF (1, 2);
-extern void
 gnc_error_dialog_va(const char *format, va_list args);
+
 extern void
-gnc_error_dialog_parented(GtkWindow *parent,
-			  const char *forrmat, ...) G_GNUC_PRINTF (2, 3);
+gnc_error_dialog(GtkWidget *parent,
+		 const char *format, ...) G_GNUC_PRINTF (2, 3);
 
 extern int
-gnc_generic_question_dialog(const char **buttons,
-			    const char *format, ...) G_GNUC_PRINTF (2, 3);
-
-extern int
-gnc_generic_question_dialog_parented(GtkWidget *parent, const char **buttons,
+gnc_generic_question_dialog(GtkWidget *parent, const char **buttons,
 			    const char *format, ...) G_GNUC_PRINTF (3, 4);
 
 extern int
-gnc_generic_warning_dialog(const char **buttons,
-			   const char *format, ...) G_GNUC_PRINTF (2, 3);
-
-extern int
-gnc_generic_warning_dialog_parented(GtkWidget *parent, const char **buttons,
-				    const char *format, ...) G_GNUC_PRINTF (3, 4);
-
-extern int
-gnc_generic_error_dialog(const char **buttons,
-			 const char *format, ...) G_GNUC_PRINTF (2, 3);
+gnc_generic_warning_dialog(GtkWidget *parent, const char **buttons,
+			   const char *format, ...) G_GNUC_PRINTF (3, 4);
 
 #endif

@@ -4,7 +4,6 @@
 ;;;  interpret number and date fields 
 ;;;
 ;;;  Copyright (c) 2001 Linux Developers Group 
-;;;  $Id$
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 

@@ -138,9 +138,9 @@ get_mass_entry_cb (PGBackend *be, PGresult *result, int j, gpointer data)
    FIND_BOOK (book);
 
    /* --------------------------------------------- */
-   PINFO ("split GUID=%s", DB_GET_VAL("entryGUID",j));
+   PINFO ("split GUID=%s", DB_GET_VAL("splitGuid",j));
    guid = nullguid;  /* just in case the read fails ... */
-   string_to_guid (DB_GET_VAL("entryGUID",j), &guid);
+   string_to_guid (DB_GET_VAL("splitGuid",j), &guid);
    s = xaccSplitLookup (&guid, book);
    if (!s)
    {
@@ -167,7 +167,7 @@ get_mass_entry_cb (PGBackend *be, PGresult *result, int j, gpointer data)
             "\t(split with  guid=%s\n"
             "\twants a trans with guid=%s\n"
             "\tin book with guid=%s)\n",
-            DB_GET_VAL("entryGUID",j),
+            DB_GET_VAL("splitGuid",j),
             DB_GET_VAL("transGUID",j),
             DB_GET_VAL("bookGUID",j)
             );
@@ -188,7 +188,7 @@ get_mass_entry_cb (PGBackend *be, PGresult *result, int j, gpointer data)
             "\t(split with  guid=%s\n"
             "\twants an acct with guid=%s\n"
             "\tin book with guid=%s)\n",
-            DB_GET_VAL("entryGUID",j),
+            DB_GET_VAL("splitGuid",j),
             DB_GET_VAL("accountGUID",j),
             DB_GET_VAL("bookGUID",j)
             );
@@ -231,9 +231,9 @@ pgendGetMassTransactions (PGBackend *be, QofBook *book)
     * a bookguid to the transaction table */
    p = buff;
    p = stpcpy (p, "SELECT DISTINCT gncTransaction.*, gncAccount.bookGuid as bookGuid "
-                  " FROM gncTransaction, gncEntry, gncAccount "
-                  " WHERE gncTransaction.transGuid = gncEntry.transGuid AND "
-                  " gncEntry.accountGuid = gncAccount.accountGuid AND "
+                  " FROM gncTransaction, gncSplit, gncAccount "
+                  " WHERE gncTransaction.transGuid = gncSplit.transGuid AND "
+                  " gncSplit.accountGuid = gncAccount.accountGuid AND "
                   " gncAccount.bookGuid = '");
    p = guid_to_string_buff(qof_book_get_guid (book), p);
    p = stpcpy (p, "';");
@@ -248,9 +248,9 @@ pgendGetMassTransactions (PGBackend *be, QofBook *book)
    xaction_list = be->tmp_return;
 
    p = buff;
-   p = stpcpy (p, "SELECT gncEntry.*, gncAccount.bookGuid as bookGuid "
-                  " FROM gncEntry, gncAccount "
-                  " WHERE gncEntry.accountGuid = gncAccount.accountGuid AND "
+   p = stpcpy (p, "SELECT gncSplit.*, gncAccount.bookGuid as bookGuid "
+                  " FROM gncSplit, gncAccount "
+                  " WHERE gncSplit.accountGuid = gncAccount.accountGuid AND "
                   " gncAccount.bookGuid = '");
    p = guid_to_string_buff(qof_book_get_guid (book), p);
    p = stpcpy (p, "';");

@@ -94,7 +94,7 @@ qof_book_destroy (QofBook *book)
 {
   if (!book) return;
 
-  ENTER ("book=%p", book);
+  ENTER ("book=%p etable=%p", book, book->entity_table);
   gnc_engine_force_event (&book->guid, QOF_ID_BOOK, GNC_EVENT_DESTROY);
 
   qof_object_book_end (book);
@@ -102,6 +102,8 @@ qof_book_destroy (QofBook *book)
   qof_entity_remove (book->entity_table, &book->guid);
   qof_entity_destroy (book->entity_table);
   book->entity_table = NULL;
+
+  kvp_frame_delete (book->kvp_data);
 
   /* FIXME: Make sure the data_table is empty */
   g_hash_table_destroy (book->data_tables);
@@ -203,7 +205,7 @@ void qof_book_kvp_changed (QofBook *book)
 /* ====================================================================== */
 
 /* Store arbitrary pointers in the QofBook for data storage extensibility */
-/* XXX if data is NULL, we ashould remove the key from the hash table!
+/* XXX if data is NULL, we should remove the key from the hash table!
  *
  * XXX We need some design comments:  an equivalent storage mechanism
  * would have been to give each item a GUID, store the GUID in a kvp frame,
@@ -280,7 +282,7 @@ qof_book_get_counter (QofBook *book, const char *counter_name)
   return counter;
 }
 
-/* gncObject function implementation and registration */
+/* QofObject function implementation and registration */
 gboolean qof_book_register (void)
 {
   static QofQueryObject params[] = {

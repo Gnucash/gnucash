@@ -3,7 +3,6 @@
 ;;;  virtual loader for QIF import facility 
 ;;;
 ;;;  Bill Gribble <grib@billgribble.com> 20 Feb 2000 
-;;;  $Id$
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define-module (gnucash import-export qif-import))

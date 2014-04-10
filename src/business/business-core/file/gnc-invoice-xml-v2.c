@@ -168,7 +168,7 @@ struct invoice_pdata
   GNCBook *book;
 };
 
-static gboolean
+static inline gboolean
 set_string(xmlNodePtr node, GncInvoice* invoice,
            void (*func)(GncInvoice *invoice, const char *txt))
 {
@@ -181,20 +181,18 @@ set_string(xmlNodePtr node, GncInvoice* invoice,
   return TRUE;
 }
 
-static gboolean
+static inline gboolean
 set_timespec(xmlNodePtr node, GncInvoice* invoice,
            void (*func)(GncInvoice *invoice, Timespec ts))
 {
-  Timespec* ts = dom_tree_to_timespec(node);
-  g_return_val_if_fail(ts, FALSE);
+  Timespec ts = dom_tree_to_timespec(node);
+  g_return_val_if_fail(is_valid_timespec(ts), FALSE);
     
-  func(invoice, *ts);
-
-  g_free(ts);
+  func(invoice, ts);
   return TRUE;
 }
 
-static gboolean
+static inline gboolean
 invoice_guid_handler (xmlNodePtr node, gpointer invoice_pdata)
 {
     struct invoice_pdata *pdata = invoice_pdata;

@@ -330,7 +330,9 @@ gnc_split_register_save_price_cell (BasicCell * bcell,
 
   DEBUG ("PRIC");
 
-  xaccSplitSetSharePrice (sd->split, price);
+  /* If we handled the Debcred cell then don't set the share price! */
+  if (!sd->handled_dc)
+    xaccSplitSetSharePrice (sd->split, price);
 
   sd->do_scrub = TRUE;
 }

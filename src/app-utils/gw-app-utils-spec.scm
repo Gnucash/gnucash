@@ -453,22 +453,6 @@ determines formatting details.")
 
   (gw:wrap-function
    ws
-   'gnc:price-source-internal2fq
-   '(<gw:mchars> callee-owned const)
-   "gnc_price_source_internal2fq"
-   '(((<gw:mchars> caller-owned const) str))
-   "Returns a string with the Finace::Quote identifier correspopnding to the internal name.")
-
-  (gw:wrap-function
-   ws
-   'gnc:price-source-set-fq-installed
-   '<gw:void>
-   "gnc_price_source_set_fq_installed"
-   '(((gw:glist-of (<gw:mchars> callee-owned) callee-owned) choices))
-   "Takes a list of installed Finance::Quote souces and records it internally.")
-
-  (gw:wrap-function
-   ws
    'gnc:commodity-table-get-quotable-commodities-info
    '(gw:glist-of <gnc:quote-info-scm> caller-owned)
    "gnc_commodity_table_get_quotable_commodities"
