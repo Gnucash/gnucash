@@ -43,6 +43,7 @@
 #include "gnc-engine-util.h"
 #include "gnc-engine.h"
 #include "gnc-gui-query.h"
+#include "gnc-session.h"
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"
 #include "messages.h"

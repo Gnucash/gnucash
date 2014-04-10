@@ -12,10 +12,10 @@
 #include "gnc-numeric.h"
 #include "gnc-engine-util.h"
 #include "gnc-book.h"
-#include "GNCId.h"
-#include "QueryCore.h"
-#include "QueryNew.h"
-#include "QueryObject.h"
+#include "qofid.h"
+#include "qofquerycore.h"
+#include "qofquery.h"
+#include "qofqueryobject.h"
 #include "gnc-event-p.h"
 #include "gnc-be-utils.h"
 #include "qofid-p.h"
@@ -31,7 +31,7 @@ struct _gncTaxTable {
 
   Timespec	modtime;	/* internal date of last modtime */
   gint64	refcount;
-  GNCBook *	book;
+  QofBook *	book;
   GncTaxTable *	parent;		/* if non-null, we are an immutable child */
   GncTaxTable *	child;		/* if non-null, we have not changed */
   gboolean	invisible;
@@ -143,7 +143,7 @@ mark_table (GncTaxTable *table)
   table->dirty = TRUE;
   gncBusinessSetDirtyFlag (table->book, _GNC_MOD_NAME, TRUE);
 
-  gnc_engine_generate_event (&table->guid, GNC_EVENT_MODIFY);
+  gnc_engine_generate_event (&table->guid, _GNC_MOD_NAME, GNC_EVENT_MODIFY);
 }
 
 G_INLINE_FUNC void mod_table (GncTaxTable *table);
@@ -154,7 +154,7 @@ mod_table (GncTaxTable *table)
 }
 
 /* Create/Destroy Functions */
-GncTaxTable * gncTaxTableCreate (GNCBook *book)
+GncTaxTable * gncTaxTableCreate (QofBook *book)
 {
   GncTaxTable *table;
   if (!book) return NULL;
@@ -162,9 +162,9 @@ GncTaxTable * gncTaxTableCreate (GNCBook *book)
   table = g_new0 (GncTaxTable, 1);
   table->book = book;
   table->name = CACHE_INSERT ("");
-  xaccGUIDNew (&table->guid, book);
+  qof_entity_guid_new (qof_book_get_entity_table (book), &table->guid);
   addObj (table);
-  gnc_engine_generate_event (&table->guid, GNC_EVENT_CREATE);
+  gnc_engine_generate_event (&table->guid, _GNC_MOD_NAME, GNC_EVENT_CREATE);
   return table;
 }
 
@@ -183,7 +183,7 @@ static void gncTaxTableFree (GncTaxTable *table)
 
   if (!table) return;
 
-  gnc_engine_generate_event (&table->guid, GNC_EVENT_DESTROY);
+  gnc_engine_generate_event (&table->guid, _GNC_MOD_NAME, GNC_EVENT_DESTROY);
   CACHE_REMOVE (table->name);
   remObj (table);
 
@@ -394,9 +394,9 @@ void gncTaxTableBeginEdit (GncTaxTable *table)
   GNC_BEGIN_EDIT (table, _GNC_MOD_NAME);
 }
 
-static void gncTaxTableOnError (GncTaxTable *table, GNCBackendError errcode)
+static void gncTaxTableOnError (GncTaxTable *table, QofBackendError errcode)
 {
-  PERR("TaxTable Backend Failure: %d", errcode);
+  PERR("TaxTable QofBackend Failure: %d", errcode);
 }
 
 static void gncTaxTableOnDone (GncTaxTable *table)
@@ -413,14 +413,14 @@ void gncTaxTableCommitEdit (GncTaxTable *table)
 
 
 /* Get Functions */
-GncTaxTable * gncTaxTableLookup (GNCBook *book, const GUID *guid)
+GncTaxTable * gncTaxTableLookup (QofBook *book, const GUID *guid)
 {
   if (!book || !guid) return NULL;
-  return xaccLookupEntity (gnc_book_get_entity_table (book),
+  return qof_entity_lookup (gnc_book_get_entity_table (book),
 			   guid, _GNC_MOD_NAME);
 }
 
-GncTaxTable *gncTaxTableLookupByName (GNCBook *book, const char *name)
+GncTaxTable *gncTaxTableLookupByName (QofBook *book, const char *name)
 {
   GList *list = gncTaxTableGetTables (book);
 
@@ -432,7 +432,7 @@ GncTaxTable *gncTaxTableLookupByName (GNCBook *book, const char *name)
   return NULL;
 }
 
-GList * gncTaxTableGetTables (GNCBook *book)
+GList * gncTaxTableGetTables (QofBook *book)
 {
   struct _book_info *bi;
   if (!book) return NULL;
@@ -448,7 +448,7 @@ const GUID *gncTaxTableGetGUID (GncTaxTable *table)
   return &table->guid;
 }
 
-GNCBook *gncTaxTableGetBook (GncTaxTable *table)
+QofBook *gncTaxTableGetBook (GncTaxTable *table)
 {
   if (!table) return NULL;
   return table->book;
@@ -652,12 +652,12 @@ void gncAccountValueDestroy (GList *list)
 GUID gncTaxTableRetGUID (GncTaxTable *table)
 {
   if (!table)
-    return *xaccGUIDNULL();
+    return *guid_null();
 
   return table->guid;
 }
 
-GncTaxTable *gncTaxTableLookupDirect (GUID guid, GNCBook *book)
+GncTaxTable *gncTaxTableLookupDirect (GUID guid, QofBook *book)
 {
   if (!book) return NULL;
   return gncTaxTableLookup (book, &guid);
@@ -700,7 +700,7 @@ static void remObj (GncTaxTable *table)
   add_or_rem_object (table, FALSE);
 }
 
-static void _gncTaxTableCreate (GNCBook *book)
+static void _gncTaxTableCreate (QofBook *book)
 {
   struct _book_info *bi;
 
@@ -711,7 +711,7 @@ static void _gncTaxTableCreate (GNCBook *book)
   gnc_book_set_data (book, _GNC_MOD_NAME, bi);
 }
 
-static void _gncTaxTableDestroy (GNCBook *book)
+static void _gncTaxTableDestroy (QofBook *book)
 {
   struct _book_info *bi;
 
@@ -725,24 +725,24 @@ static void _gncTaxTableDestroy (GNCBook *book)
   g_free (bi);
 }
 
-static gboolean _gncTaxTableIsDirty (GNCBook *book)
+static gboolean _gncTaxTableIsDirty (QofBook *book)
 {
   return gncBusinessIsDirty (book, _GNC_MOD_NAME);
 }
 
-static void _gncTaxTableMarkClean (GNCBook *book)
+static void _gncTaxTableMarkClean (QofBook *book)
 {
   gncBusinessSetDirtyFlag (book, _GNC_MOD_NAME, FALSE);
 }
 
-static void _gncTaxTableForeach (GNCBook *book, foreachObjectCB cb,
+static void _gncTaxTableForeach (QofBook *book, QofEntityForeachCB cb,
 			      gpointer user_data)
 {
   gncBusinessForeach (book, _GNC_MOD_NAME, cb, user_data);
 }
 
-static GncObject_t gncTaxTableDesc = {
-  GNC_OBJECT_VERSION,
+static QofObject gncTaxTableDesc = {
+  QOF_OBJECT_VERSION,
   _GNC_MOD_NAME,
   "Tax Table",
   _gncTaxTableCreate,
@@ -755,13 +755,13 @@ static GncObject_t gncTaxTableDesc = {
 
 gboolean gncTaxTableRegister (void)
 {
-  static QueryObjectDef params[] = {
-    { QUERY_PARAM_BOOK, GNC_ID_BOOK, (QueryAccess)gncTaxTableGetBook },
-    { QUERY_PARAM_GUID, QUERYCORE_GUID, (QueryAccess)gncTaxTableGetGUID },
+  static QofQueryObject params[] = {
+    { QOF_QUERY_PARAM_BOOK, GNC_ID_BOOK, (QofAccessFunc)gncTaxTableGetBook },
+    { QOF_QUERY_PARAM_GUID, QOF_QUERYCORE_GUID, (QofAccessFunc)gncTaxTableGetGUID },
     { NULL },
   };
 
-  gncQueryObjectRegister (_GNC_MOD_NAME, (QuerySort)gncTaxTableCompare, params);
+  qof_query_object_register (_GNC_MOD_NAME, (QofSortFunc)gncTaxTableCompare, params);
 
-  return gncObjectRegister (&gncTaxTableDesc);
+  return qof_object_register (&gncTaxTableDesc);
 }

@@ -41,7 +41,7 @@ const char * gncTaxIncludedTypeToString (GncTaxIncluded type);
 gboolean gncTaxIncludedStringToType (const char *str, GncTaxIncluded *type);
 
 /* Create/Destroy Functions */
-GncTaxTable * gncTaxTableCreate (GNCBook *book);
+GncTaxTable * gncTaxTableCreate (QofBook *book);
 void gncTaxTableDestroy (GncTaxTable *table);
 GncTaxTableEntry * gncTaxTableEntryCreate (void);
 void gncTaxTableEntryDestroy (GncTaxTableEntry *entry);
@@ -63,12 +63,12 @@ void gncTaxTableBeginEdit (GncTaxTable *table);
 void gncTaxTableCommitEdit (GncTaxTable *table);
 
 /* Get Functions */
-GncTaxTable *gncTaxTableLookup (GNCBook *book, const GUID *guid);
-GncTaxTable *gncTaxTableLookupByName (GNCBook *book, const char *name);
-GList * gncTaxTableGetTables (GNCBook *book);
+GncTaxTable *gncTaxTableLookup (QofBook *book, const GUID *guid);
+GncTaxTable *gncTaxTableLookupByName (QofBook *book, const char *name);
+GList * gncTaxTableGetTables (QofBook *book);
 
 const GUID *gncTaxTableGetGUID (GncTaxTable *table);
-GNCBook *gncTaxTableGetBook (GncTaxTable *table);
+QofBook *gncTaxTableGetBook (GncTaxTable *table);
 const char *gncTaxTableGetName (GncTaxTable *table);
 GncTaxTable *gncTaxTableGetParent (GncTaxTable *table);
 GncTaxTable *gncTaxTableReturnChild (GncTaxTable *table, gboolean make_new);
@@ -85,7 +85,7 @@ int gncTaxTableCompare (GncTaxTable *a, GncTaxTable *b);
 int gncTaxTableEntryCompare (GncTaxTableEntry *a, GncTaxTableEntry *b);
 
 GUID gncTaxTableRetGUID (GncTaxTable *table);
-GncTaxTable *gncTaxTableLookupDirect (GUID guid, GNCBook *book);
+GncTaxTable *gncTaxTableLookupDirect (GUID guid, QofBook *book);
 
 /************************************************/
 

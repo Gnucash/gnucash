@@ -99,7 +99,7 @@ xaccSchedXactionMalloc(QofBook *book)
 
    sx = g_new0( SchedXaction, 1 );
    xaccSchedXactionInit( sx, book );
-   gnc_engine_generate_event( &sx->guid, GNC_EVENT_CREATE );
+   gnc_engine_generate_event( &sx->guid, GNC_ID_SCHEDXACTION, GNC_EVENT_CREATE );
 
    return sx;
 }
@@ -153,7 +153,7 @@ xaccSchedXactionFree( SchedXaction *sx )
   if ( sx == NULL ) return;
   
   xaccFreqSpecFree( sx->freq );
-  gnc_engine_generate_event( &sx->guid, GNC_EVENT_DESTROY );
+  gnc_engine_generate_event( &sx->guid, GNC_ID_SCHEDXACTION, GNC_EVENT_DESTROY );
   qof_entity_remove( sx->entity_table, &sx->guid );
   
   if ( sx->name )

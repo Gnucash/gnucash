@@ -33,6 +33,7 @@
 #include "global-options.h"
 #include "gnc-account-tree.h"
 #include "gnc-amount-edit.h"
+#include "gnc-book.h"
 #include "gnc-component-manager.h"
 #include "gnc-currency-edit.h"
 #include "gnc-date-edit.h"

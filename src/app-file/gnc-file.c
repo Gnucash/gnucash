@@ -27,9 +27,7 @@
 #include <string.h>
 #include <g-wrap-wct.h>
 
-#include "Backend.h"
 #include "global-options.h"
-#include "gnc-book.h"
 #include "gnc-commodity.h"
 #include "gnc-component-manager.h"
 #include "gnc-engine-util.h"
@@ -39,9 +37,11 @@
 #include "gnc-file-history.h"
 #include "gnc-file-p.h"
 #include "gnc-gui-query.h"
-#include "gnc-session.h"
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"
+#include "qofbackend.h"
+#include "qofbook.h"
+#include "qofsession.h"
 #include "messages.h"
 
 /** GLOBALS *********************************************************/
@@ -78,11 +78,11 @@ void
 gnc_file_init (void)
 {
   /* Make sure we have a current session. */
-  gnc_get_current_session ();
+  qof_session_get_current_session ();
 }
 
 static gboolean
-show_session_error (GNCBackendError io_error, const char *newfile)
+show_session_error (QofBackendError io_error, const char *newfile)
 {
   gboolean uh_oh = TRUE;
   const char *fmt;
@@ -222,7 +222,7 @@ show_session_error (GNCBackendError io_error, const char *newfile)
 }
 
 static void
-gnc_add_history (GNCSession * session)
+gnc_add_history (QofSession * session)
 {
   char *url;
   char *file;
@@ -230,7 +230,7 @@ gnc_add_history (GNCSession * session)
   if (!session) return;
   if (!history_add_file_func) return;
 
-  url = xaccResolveURL (gnc_session_get_url (session));
+  url = xaccResolveURL (qof_session_get_url (session));
   if (!url)
     return;
 
@@ -247,7 +247,7 @@ gnc_add_history (GNCSession * session)
 static void
 gnc_book_opened (void)
 {
-  GNCSession *session = gnc_get_current_session();
+  QofSession *session = qof_session_get_current_session();
   scm_call_2 (scm_c_eval_string("gnc:hook-run-danglers"),
 	      scm_c_eval_string("gnc:*book-opened-hook*"),
 	      (session ? 
@@ -258,14 +258,14 @@ gnc_book_opened (void)
 void
 gnc_file_new (void)
 {
-  GNCSession *session;
+  QofSession *session;
 
   /* If user attempts to start a new session before saving results of
    * the last one, prompt them to clean up their act. */
   if (!gnc_file_query_save ())
     return;
 
-  session = gnc_get_current_session ();
+  session = qof_session_get_current_session ();
 
   /* close any ongoing file sessions, and free the accounts.
    * disable events so we don't get spammed by redraws. */
@@ -278,10 +278,10 @@ gnc_file_new (void)
 	      SCM_BOOL_F));
 
   gnc_close_gui_component_by_session (session);
-  gnc_session_destroy (session);
+  qof_session_destroy (session);
 
   /* start a new book */
-  gnc_get_current_session ();
+  qof_session_get_current_session ();
 
   scm_call_1(scm_c_eval_string("gnc:hook-run-danglers"),
 	     scm_c_eval_string("gnc:*new-book-hook*"));
@@ -301,7 +301,7 @@ gnc_file_query_save (void)
    * up the file-selection dialog, we don't blow em out of the water;
    * instead, give them another chance to say "no" to the verify box.
    */
-  while (gnc_book_not_saved(gnc_session_get_book (gnc_get_current_session ())))
+  while (qof_book_not_saved(qof_session_get_book (qof_session_get_current_session ())))
   {
     GNCVerifyResult result;
     const char *message = _("Changes have been made since the last "
@@ -333,10 +333,10 @@ gnc_file_query_save (void)
 static gboolean
 gnc_post_file_open (const char * filename)
 {
-  GNCSession *current_session, *new_session;
+  QofSession *current_session, *new_session;
   gboolean uh_oh = FALSE;
   char * newfile;
-  GNCBackendError io_err = ERR_BACKEND_NO_ERR;
+  QofBackendError io_err = ERR_BACKEND_NO_ERR;
 
   if (!filename) return FALSE;
 
@@ -357,21 +357,21 @@ gnc_post_file_open (const char * filename)
 
   /* -------------- BEGIN CORE SESSION CODE ------------- */
   /* -- this code is almost identical in FileOpen and FileSaveAs -- */
-  current_session  = gnc_get_current_session();
+  current_session  = qof_session_get_current_session();
   scm_call_2(scm_c_eval_string("gnc:hook-run-danglers"),
 	     scm_c_eval_string("gnc:*book-closed-hook*"),
 	     (current_session ?
 	      gw_wcp_assimilate_ptr (current_session,
 				     scm_c_eval_string("<gnc:Session*>")) :
 	      SCM_BOOL_F));
-  gnc_session_destroy (current_session);
+  qof_session_destroy (current_session);
 
   /* load the accounts from the users datafile */
   /* but first, check to make sure we've got a session going. */
-  new_session = gnc_session_new ();
+  new_session = qof_session_new ();
 
-  gnc_session_begin (new_session, newfile, FALSE, FALSE);
-  io_err = gnc_session_get_error (new_session);
+  qof_session_begin (new_session, newfile, FALSE, FALSE);
+  io_err = qof_session_get_error (new_session);
 
   /* if file appears to be locked, ask the user ... */
   if (ERR_BACKEND_LOCKED == io_err)
@@ -400,7 +400,7 @@ gnc_post_file_open (const char * filename)
     else if (rc == 1)
     {
       /* user told us to ignore locks. So ignore them. */
-      gnc_session_begin (new_session, newfile, TRUE, FALSE);
+      qof_session_begin (new_session, newfile, TRUE, FALSE);
     }
     else
     {
@@ -419,14 +419,14 @@ gnc_post_file_open (const char * filename)
     if (FALSE == show_session_error (io_err, newfile))
     {
       /* user told us to create a new database. Do it. */
-      gnc_session_begin (new_session, newfile, FALSE, TRUE);
+      qof_session_begin (new_session, newfile, FALSE, TRUE);
     }
   }
 
   /* Check for errors again, since above may have cleared the lock.
    * If its still locked, still, doesn't exist, still too old, then
    * don't bother with the message, just die. */
-  io_err = gnc_session_get_error (new_session);
+  io_err = qof_session_get_error (new_session);
   if ((ERR_BACKEND_LOCKED == io_err) ||
       (ERR_BACKEND_NO_SUCH_DB == io_err) ||
       (ERR_SQL_DB_TOO_OLD == io_err))
@@ -444,17 +444,17 @@ gnc_post_file_open (const char * filename)
 
     if (file_percentage_func) {
       file_percentage_func(_("Reading file..."), 0.0);
-      gnc_session_load (new_session, file_percentage_func);
+      qof_session_load (new_session, file_percentage_func);
       file_percentage_func(NULL, -1.0);
     } else {
-      gnc_session_load (new_session, NULL);
+      qof_session_load (new_session, NULL);
     }
 
     /* check for i/o error, put up appropriate error dialog */
-    io_err = gnc_session_get_error (new_session);
+    io_err = qof_session_get_error (new_session);
     uh_oh = show_session_error (io_err, newfile);
 
-    new_group = gnc_book_get_group (gnc_session_get_book (new_session));
+    new_group = gnc_book_get_group (qof_session_get_book (new_session));
     if (uh_oh) new_group = NULL;
 
     /* Umm, came up empty-handed, but no error: 
@@ -470,7 +470,7 @@ gnc_post_file_open (const char * filename)
   /* going down -- abandon ship */
   if (uh_oh) 
   {
-    gnc_session_destroy (new_session);
+    qof_session_destroy (new_session);
 
     /* well, no matter what, I think it's a good idea to have a
      * topgroup around.  For example, early in the gnucash startup
@@ -478,7 +478,7 @@ gnc_post_file_open (const char * filename)
      * reason, we don't want to leave them high & dry without a
      * topgroup, because if the user continues, then bad things will
      * happen. */
-    gnc_get_current_session ();
+    qof_session_get_current_session ();
 
     g_free (newfile);
 
@@ -492,7 +492,7 @@ gnc_post_file_open (const char * filename)
 
   /* if we got to here, then we've successfully gotten a new session */
   /* close up the old file session (if any) */
-  gnc_set_current_session(new_session);
+  qof_session_set_current_session(new_session);
 
   gnc_book_opened ();
 
@@ -533,7 +533,7 @@ gnc_file_open (void)
    * user fails to pick a file (by e.g. hitting the cancel button), we
    * might be left with a null topgroup, which leads to nastiness when
    * user goes to create their very first account. So create one. */
-  gnc_get_current_session ();
+  qof_session_get_current_session ();
 
   return result;
 }
@@ -552,9 +552,9 @@ gnc_file_open_file (const char * newfile)
 void
 gnc_file_export_file(const char * newfile)
 {
-  GNCSession *current_session, *new_session;
+  QofSession *current_session, *new_session;
   gboolean ok;
-  GNCBackendError io_err = ERR_BACKEND_NO_ERR;
+  QofBackendError io_err = ERR_BACKEND_NO_ERR;
   char *default_dir;
 
   default_dir = gnc_lookup_string_option("__paths", "Export Accounts", NULL);
@@ -581,10 +581,10 @@ gnc_file_export_file(const char * newfile)
 
   /* -- this session code is NOT identical in FileOpen and FileSaveAs -- */
 
-  new_session = gnc_session_new ();
-  gnc_session_begin (new_session, newfile, FALSE, FALSE);
+  new_session = qof_session_new ();
+  qof_session_begin (new_session, newfile, FALSE, FALSE);
 
-  io_err = gnc_session_get_error (new_session);
+  io_err = qof_session_get_error (new_session);
 
   /* if file appears to be locked, ask the user ... */
   if (ERR_BACKEND_LOCKED == io_err) 
@@ -592,14 +592,14 @@ gnc_file_export_file(const char * newfile)
     if (FALSE == show_session_error (io_err, newfile))
     {
        /* user told us to ignore locks. So ignore them. */
-      gnc_session_begin (new_session, newfile, TRUE, FALSE);
+      qof_session_begin (new_session, newfile, TRUE, FALSE);
     }
   }
 
   /* --------------- END CORE SESSION CODE -------------- */
 
   /* oops ... file already exists ... ask user what to do... */
-  if (gnc_session_save_may_clobber_data (new_session))
+  if (qof_session_save_may_clobber_data (new_session))
   {
     const char *format = _("The file \n    %s\n already exists.\n"
                            "Are you sure you want to overwrite it?");
@@ -615,17 +615,17 @@ gnc_file_export_file(const char * newfile)
 
   /* use the current session to save to file */
   gnc_set_busy_cursor (NULL, TRUE);
-  current_session = gnc_get_current_session();
+  current_session = qof_session_get_current_session();
   if (file_percentage_func) {
     file_percentage_func(_("Exporting file..."), 0.0);
-    ok = gnc_session_export (new_session, current_session,
+    ok = qof_session_export (new_session, current_session,
 			     file_percentage_func);
     file_percentage_func(NULL, -1.0);
   } else {
-    ok = gnc_session_export (new_session, current_session, NULL);
+    ok = qof_session_export (new_session, current_session, NULL);
   }
   gnc_unset_busy_cursor (NULL);
-  gnc_session_destroy (new_session);
+  qof_session_destroy (new_session);
   gnc_engine_resume_events();
 
   if (!ok)
@@ -643,17 +643,17 @@ static gboolean been_here_before = FALSE;
 void
 gnc_file_save (void)
 {
-  GNCBackendError io_err;
+  QofBackendError io_err;
   const char * newfile;
-  GNCSession *session;
+  QofSession *session;
   ENTER (" ");
 
   /* hack alert -- Somehow make sure all in-progress edits get committed! */
 
   /* If we don't have a filename/path to save to get one. */
-  session = gnc_get_current_session ();
+  session = qof_session_get_current_session ();
 
-  if (!gnc_session_get_file_path (session))
+  if (!qof_session_get_file_path (session))
   {
     gnc_file_save_as ();
     return;
@@ -663,17 +663,17 @@ gnc_file_save (void)
   gnc_set_busy_cursor (NULL, TRUE);
   if (file_percentage_func) {
     file_percentage_func(_("Writing file..."), 0.0);
-    gnc_session_save (session, file_percentage_func);
+    qof_session_save (session, file_percentage_func);
     file_percentage_func(NULL, -1.0);
   } else {
-    gnc_session_save (session, NULL);
+    qof_session_save (session, NULL);
   }
   gnc_unset_busy_cursor (NULL);
 
   /* Make sure everything's OK - disk could be full, file could have
      become read-only etc. */
-  newfile = gnc_session_get_file_path (session);
-  io_err = gnc_session_get_error (session);
+  newfile = qof_session_get_file_path (session);
+  io_err = qof_session_get_error (session);
   if (ERR_BACKEND_NO_ERR != io_err)
   {
     show_session_error (io_err, newfile);
@@ -699,14 +699,14 @@ gnc_file_save (void)
 void
 gnc_file_save_as (void)
 {
-  GNCSession *new_session;
-  GNCSession *session;
+  QofSession *new_session;
+  QofSession *session;
   const char *filename;
   char *default_dir = NULL;	/* Default to last open */
   const char *last;
   char *newfile;
   const char *oldfile;
-  GNCBackendError io_err = ERR_BACKEND_NO_ERR;
+  QofBackendError io_err = ERR_BACKEND_NO_ERR;
 
   ENTER(" ");
 
@@ -736,8 +736,8 @@ gnc_file_save_as (void)
      return;
   }
 
-  session = gnc_get_current_session ();
-  oldfile = gnc_session_get_file_path (session);
+  session = qof_session_get_current_session ();
+  oldfile = qof_session_get_file_path (session);
   if (oldfile && (strcmp(oldfile, newfile) == 0))
   {
     g_free (newfile);
@@ -747,10 +747,10 @@ gnc_file_save_as (void)
 
   /* -- this session code is NOT identical in FileOpen and FileSaveAs -- */
 
-  new_session = gnc_session_new ();
-  gnc_session_begin (new_session, newfile, FALSE, FALSE);
+  new_session = qof_session_new ();
+  qof_session_begin (new_session, newfile, FALSE, FALSE);
 
-  io_err = gnc_session_get_error (new_session);
+  io_err = qof_session_get_error (new_session);
 
   /* if file appears to be locked, ask the user ... */
   if (ERR_BACKEND_LOCKED == io_err) 
@@ -758,7 +758,7 @@ gnc_file_save_as (void)
     if (FALSE == show_session_error (io_err, newfile))
     {
        /* user told us to ignore locks. So ignore them. */
-      gnc_session_begin (new_session, newfile, TRUE, FALSE);
+      qof_session_begin (new_session, newfile, TRUE, FALSE);
     }
   }
 
@@ -769,7 +769,7 @@ gnc_file_save_as (void)
     if (FALSE == show_session_error (io_err, newfile))
     {
       /* user told us to create a new database. Do it. */
-      gnc_session_begin (new_session, newfile, FALSE, TRUE);
+      qof_session_begin (new_session, newfile, FALSE, TRUE);
     }
   }
 
@@ -777,27 +777,27 @@ gnc_file_save_as (void)
    * cleared a file lock & moved things forward some more) 
    * This time, errors will be fatal.
    */
-  io_err = gnc_session_get_error (new_session);
+  io_err = qof_session_get_error (new_session);
   if (ERR_BACKEND_NO_ERR != io_err) 
   {
     show_session_error (io_err, newfile);
-    gnc_session_destroy (new_session);
+    qof_session_destroy (new_session);
     g_free (newfile);
     return;
   }
 
   /* if we got to here, then we've successfully gotten a new session */
   /* close up the old file session (if any) */
-  gnc_session_swap_data (session, new_session);
-  gnc_session_destroy (session);
+  qof_session_swap_data (session, new_session);
+  qof_session_destroy (session);
   session = NULL;
 
-  gnc_set_current_session(new_session);
+  qof_session_set_current_session(new_session);
 
   /* --------------- END CORE SESSION CODE -------------- */
 
   /* oops ... file already exists ... ask user what to do... */
-  if (gnc_session_save_may_clobber_data (new_session))
+  if (qof_session_save_may_clobber_data (new_session))
   {
     const char *format = _("The file \n    %s\n already exists.\n"
                            "Are you sure you want to overwrite it?");
@@ -821,9 +821,9 @@ gnc_file_save_as (void)
 void
 gnc_file_quit (void)
 {
-  GNCSession *session;
+  QofSession *session;
 
-  session = gnc_get_current_session ();
+  session = qof_session_get_current_session ();
 
   /* disable events; otherwise the mass deletetion of accounts and
    * transactions during shutdown would cause massive redraws */
@@ -835,9 +835,9 @@ gnc_file_quit (void)
 	      gw_wcp_assimilate_ptr (session, scm_c_eval_string("<gnc:Session*>")) :
 	      SCM_BOOL_F));
   
-  gnc_session_destroy (session);
+  qof_session_destroy (session);
 
-  gnc_get_current_session ();
+  qof_session_get_current_session ();
 
   gnc_engine_resume_events ();
 }

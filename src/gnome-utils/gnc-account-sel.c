@@ -50,7 +50,7 @@ static void gas_accounts_to_names( gpointer data, gpointer user_data );
 
 static void gas_populate_list( GNCAccountSel *gas );
 static void gas_strcmp_adapter( gpointer a, gpointer b );
-static void gnc_account_sel_event_cb( GUID *entity,
+static void gnc_account_sel_event_cb( GUID *entity, QofIdType id_type,
                                       GNCEngineEventType event_type,
                                       gpointer user_data );
 
@@ -92,16 +92,14 @@ gnc_account_sel_get_type (void)
 
 static
 void
-gnc_account_sel_event_cb( GUID *entity,
+gnc_account_sel_event_cb( GUID *entity, QofIdType type,
                           GNCEngineEventType event_type,
                           gpointer user_data )
 {
         if ( ! ( event_type == GNC_EVENT_CREATE
                  || event_type == GNC_EVENT_MODIFY
                  || event_type == GNC_EVENT_DESTROY )
-             || strcmp( xaccGUIDType( entity,
-                                      gnc_get_current_book() ),
-                        GNC_ID_ACCOUNT ) != 0 ) {
+             || strcmp( type, GNC_ID_ACCOUNT ) != 0 ) {
                 return;
         }
         gas_populate_list( (GNCAccountSel*)user_data );

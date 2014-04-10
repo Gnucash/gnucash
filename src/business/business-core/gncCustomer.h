@@ -21,7 +21,7 @@ typedef struct _gncCustomer GncCustomer;
 
 /* Create/Destroy Functions */
 
-GncCustomer *gncCustomerCreate (GNCBook *book);
+GncCustomer *gncCustomerCreate (QofBook *book);
 void gncCustomerDestroy (GncCustomer *customer);
 
 /* Set Functions */
@@ -47,7 +47,7 @@ void gncCustomerCommitEdit (GncCustomer *customer);
 
 /* Get Functions */
 
-GNCBook * gncCustomerGetBook (GncCustomer *customer);
+QofBook * gncCustomerGetBook (GncCustomer *customer);
 const GUID * gncCustomerGetGUID (GncCustomer *customer);
 const char * gncCustomerGetID (GncCustomer *customer);
 const char * gncCustomerGetName (GncCustomer *customer);
@@ -67,9 +67,9 @@ GncTaxTable* gncCustomerGetTaxTable (GncCustomer *customer);
 GList * gncCustomerGetJoblist (GncCustomer *customer, gboolean show_all);
 
 GUID gncCustomerRetGUID (GncCustomer *customer);
-GncCustomer * gncCustomerLookupDirect (GUID guid, GNCBook *book);
+GncCustomer * gncCustomerLookupDirect (GUID guid, QofBook *book);
 
-GncCustomer * gncCustomerLookup (GNCBook *book, const GUID *guid);
+GncCustomer * gncCustomerLookup (QofBook *book, const GUID *guid);
 
 gboolean gncCustomerIsDirty (GncCustomer *customer);
 int gncCustomerCompare (GncCustomer *a, GncCustomer *b);

@@ -541,13 +541,13 @@ G_INLINE_FUNC void gen_event (Split *split)
   if (account)
   {
      xaccGroupMarkNotSaved (account->parent);
-     gnc_engine_generate_event (&account->guid, GNC_EVENT_MODIFY);
+     gnc_engine_generate_event (&account->guid, GNC_ID_ACCOUNT, GNC_EVENT_MODIFY);
   }
 
   trans = split->parent;
   if (trans)
   {
-    gnc_engine_generate_event (&trans->guid, GNC_EVENT_MODIFY);
+    gnc_engine_generate_event (&trans->guid, GNC_ID_TRANS, GNC_EVENT_MODIFY);
   }
 }
 
@@ -563,7 +563,7 @@ G_INLINE_FUNC void gen_event_trans (Transaction *trans)
       xaccGroupMarkNotSaved (account->parent);
   }
 
-  gnc_engine_generate_event (&trans->guid, GNC_EVENT_MODIFY);
+  gnc_engine_generate_event (&trans->guid, GNC_ID_TRANS, GNC_EVENT_MODIFY);
 }
 
 /********************************************************************\
@@ -854,7 +854,7 @@ xaccMallocTransaction (QofBook *book)
 
   trans = g_new(Transaction, 1);
   xaccInitTransaction (trans, book);
-  gnc_engine_generate_event (&trans->guid, GNC_EVENT_CREATE);
+  gnc_engine_generate_event (&trans->guid, GNC_ID_TRANS, GNC_EVENT_CREATE);
 
   return trans;
 }
@@ -2180,7 +2180,7 @@ xaccTransDestroy (Transaction *trans)
   trans->do_free = TRUE;
   xaccTransWriteLog (trans, 'D');
 
-  gnc_engine_generate_event (&trans->guid, GNC_EVENT_DESTROY);
+  gnc_engine_generate_event (&trans->guid, GNC_ID_TRANS, GNC_EVENT_DESTROY);
 
   for (node = trans->splits; node; node = node->next)
   {

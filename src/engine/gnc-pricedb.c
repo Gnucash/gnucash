@@ -72,7 +72,7 @@ gnc_price_create (QofBook *book)
 
   qof_entity_guid_new (p->entity_table, &p->guid);
   qof_entity_store (p->entity_table, p, &p->guid, GNC_ID_PRICE); 
-  gnc_engine_generate_event (&p->guid, GNC_EVENT_CREATE);
+  gnc_engine_generate_event (&p->guid, GNC_ID_PRICE, GNC_EVENT_CREATE);
 
   return p;
 }
@@ -81,7 +81,7 @@ static void
 gnc_price_destroy (GNCPrice *p)
 {
   ENTER(" ");
-  gnc_engine_generate_event (&p->guid, GNC_EVENT_DESTROY);
+  gnc_engine_generate_event (&p->guid, GNC_ID_PRICE, GNC_EVENT_DESTROY);
   qof_entity_remove(p->entity_table, &p->guid);
 
   if(p->type) g_cache_remove(gnc_engine_get_string_cache(), p->type);

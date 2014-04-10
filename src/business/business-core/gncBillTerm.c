@@ -9,17 +9,17 @@
 #include <glib.h>
 
 #include "messages.h"
-#include "gnc-book.h"
 #include "gnc-numeric.h"
 #include "gnc-engine.h"
 #include "gnc-engine-util.h"
-#include "GNCId.h"
-#include "QueryCore.h"
-#include "QueryNew.h"
-#include "QueryObject.h"
+#include "qofquerycore.h"
 #include "gnc-event-p.h"
 #include "gnc-be-utils.h"
+#include "qofbook.h"
+#include "qofid.h"
 #include "qofid-p.h"
+#include "qofquery.h"
+#include "qofqueryobject.h"
 
 #include "gncBusiness.h"
 #include "gncBillTermP.h"
@@ -36,7 +36,7 @@ struct _gncBillTerm {
   gint		cutoff;
 
   gint64	refcount;
-  GNCBook *	book;
+  QofBook *	book;
   GncBillTerm *	parent;		/* if non-null, we are an immutable child */
   GncBillTerm *	child;		/* if non-null, we have not changed */
   gboolean	invisible;
@@ -83,11 +83,11 @@ mark_term (GncBillTerm *term)
   term->dirty = TRUE;
   gncBusinessSetDirtyFlag (term->book, _GNC_MOD_NAME, TRUE);
 
-  gnc_engine_generate_event (&term->guid, GNC_EVENT_MODIFY);
+  gnc_engine_generate_event (&term->guid, _GNC_MOD_NAME, GNC_EVENT_MODIFY);
 }
 
 /* Create/Destroy Functions */
-GncBillTerm * gncBillTermCreate (GNCBook *book)
+GncBillTerm * gncBillTermCreate (QofBook *book)
 {
   GncBillTerm *term;
   if (!book) return NULL;
@@ -97,9 +97,9 @@ GncBillTerm * gncBillTermCreate (GNCBook *book)
   term->name = CACHE_INSERT ("");
   term->desc = CACHE_INSERT ("");
   term->discount = gnc_numeric_zero ();
-  xaccGUIDNew (&term->guid, book);
+  qof_entity_guid_new (qof_book_get_entity_table (book), &term->guid);
   addObj (term);
-  gnc_engine_generate_event (&term->guid, GNC_EVENT_CREATE);
+  gnc_engine_generate_event (&term->guid, _GNC_MOD_NAME, GNC_EVENT_CREATE);
   return term;
 }
 
@@ -118,7 +118,7 @@ static void gncBillTermFree (GncBillTerm *term)
 
   if (!term) return;
 
-  gnc_engine_generate_event (&term->guid, GNC_EVENT_DESTROY);
+  gnc_engine_generate_event (&term->guid, _GNC_MOD_NAME, GNC_EVENT_DESTROY);
   CACHE_REMOVE (term->name);
   CACHE_REMOVE (term->desc);
   remObj (term);
@@ -306,9 +306,9 @@ void gncBillTermBeginEdit (GncBillTerm *term)
   GNC_BEGIN_EDIT (term, _GNC_MOD_NAME);
 }
 
-static void gncBillTermOnError (GncBillTerm *term, GNCBackendError errcode)
+static void gncBillTermOnError (GncBillTerm *term, QofBackendError errcode)
 {
-  PERR("BillTerm Backend Failure: %d", errcode);
+  PERR("BillTerm QofBackend Failure: %d", errcode);
 }
 
 static void gncBillTermOnDone (GncBillTerm *term)
@@ -324,14 +324,14 @@ void gncBillTermCommitEdit (GncBillTerm *term)
 }
 
 /* Get Functions */
-GncBillTerm * gncBillTermLookup (GNCBook *book, const GUID *guid)
+GncBillTerm * gncBillTermLookup (QofBook *book, const GUID *guid)
 {
   if (!book || !guid) return NULL;
-  return xaccLookupEntity (gnc_book_get_entity_table (book),
+  return qof_entity_lookup (gnc_book_get_entity_table (book),
 			   guid, _GNC_MOD_NAME);
 }
 
-GncBillTerm *gncBillTermLookupByName (GNCBook *book, const char *name)
+GncBillTerm *gncBillTermLookupByName (QofBook *book, const char *name)
 {
   GList *list = gncBillTermGetTerms (book);
 
@@ -343,7 +343,7 @@ GncBillTerm *gncBillTermLookupByName (GNCBook *book, const char *name)
   return NULL;
 }
 
-GList * gncBillTermGetTerms (GNCBook *book)
+GList * gncBillTermGetTerms (QofBook *book)
 {
   struct _book_info *bi;
   if (!book) return NULL;
@@ -359,7 +359,7 @@ const GUID *gncBillTermGetGUID (GncBillTerm *term)
   return &term->guid;
 }
 
-GNCBook *gncBillTermGetBook (GncBillTerm *term)
+QofBook *gncBillTermGetBook (GncBillTerm *term)
 {
   if (!term) return NULL;
   return term->book;
@@ -598,7 +598,7 @@ static void remObj (GncBillTerm *term)
   add_or_rem_object (term, FALSE);
 }
 
-static void _gncBillTermCreate (GNCBook *book)
+static void _gncBillTermCreate (QofBook *book)
 {
   struct _book_info *bi;
 
@@ -609,7 +609,7 @@ static void _gncBillTermCreate (GNCBook *book)
   gnc_book_set_data (book, _GNC_MOD_NAME, bi);
 }
 
-static void _gncBillTermDestroy (GNCBook *book)
+static void _gncBillTermDestroy (QofBook *book)
 {
   struct _book_info *bi;
 
@@ -623,24 +623,24 @@ static void _gncBillTermDestroy (GNCBook *book)
   g_free (bi);
 }
 
-static gboolean _gncBillTermIsDirty (GNCBook *book)
+static gboolean _gncBillTermIsDirty (QofBook *book)
 {
   return gncBusinessIsDirty (book, _GNC_MOD_NAME);
 }
 
-static void _gncBillTermMarkClean (GNCBook *book)
+static void _gncBillTermMarkClean (QofBook *book)
 {
   gncBusinessSetDirtyFlag (book, _GNC_MOD_NAME, FALSE);
 }
 
-static void _gncBillTermForeach (GNCBook *book, foreachObjectCB cb,
+static void _gncBillTermForeach (QofBook *book, QofEntityForeachCB cb,
 			      gpointer user_data)
 {
   gncBusinessForeach (book, _GNC_MOD_NAME, cb, user_data);
 }
 
-static GncObject_t gncBillTermDesc = {
-  GNC_OBJECT_VERSION,
+static QofObject gncBillTermDesc = {
+  QOF_OBJECT_VERSION,
   _GNC_MOD_NAME,
   "Billing Term",
   _gncBillTermCreate,
@@ -653,13 +653,13 @@ static GncObject_t gncBillTermDesc = {
 
 gboolean gncBillTermRegister (void)
 {
-  static QueryObjectDef params[] = {
-    { QUERY_PARAM_BOOK, GNC_ID_BOOK, (QueryAccess)gncBillTermGetBook },
-    { QUERY_PARAM_GUID, QUERYCORE_GUID, (QueryAccess)gncBillTermGetGUID },
+  static QofQueryObject params[] = {
+    { QOF_QUERY_PARAM_BOOK, GNC_ID_BOOK, (QofAccessFunc)gncBillTermGetBook },
+    { QOF_QUERY_PARAM_GUID, QOF_QUERYCORE_GUID, (QofAccessFunc)gncBillTermGetGUID },
     { NULL },
   };
 
-  gncQueryObjectRegister (_GNC_MOD_NAME, (QuerySort)gncBillTermCompare, params);
+  qof_query_object_register (_GNC_MOD_NAME, (QofSortFunc)gncBillTermCompare, params);
 
-  return gncObjectRegister (&gncBillTermDesc);
+  return qof_object_register (&gncBillTermDesc);
 }

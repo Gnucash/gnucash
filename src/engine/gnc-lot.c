@@ -84,7 +84,7 @@ gnc_lot_destroy (GNCLot *lot)
    if (!lot) return;
    
    ENTER ("(lot=%p)", lot);
-   gnc_engine_generate_event (&lot->guid, GNC_EVENT_DESTROY);
+   gnc_engine_generate_event (&lot->guid, GNC_ID_LOT, GNC_EVENT_DESTROY);
 
    qof_entity_remove (lot->book->entity_table, &lot->guid);
    

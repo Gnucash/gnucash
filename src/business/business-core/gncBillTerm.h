@@ -25,7 +25,7 @@ typedef enum {
 } GncBillTermType;
 
 /* Create/Destroy Functions */
-GncBillTerm * gncBillTermCreate (GNCBook *book);
+GncBillTerm * gncBillTermCreate (QofBook *book);
 void gncBillTermDestroy (GncBillTerm *term);
 
 /* Set Functions */
@@ -45,12 +45,12 @@ void gncBillTermBeginEdit (GncBillTerm *term);
 void gncBillTermCommitEdit (GncBillTerm *term);
 
 /* Get Functions */
-GncBillTerm *gncBillTermLookup (GNCBook *book, const GUID *guid);
-GncBillTerm *gncBillTermLookupByName (GNCBook *book, const char *name);
-GList * gncBillTermGetTerms (GNCBook *book);
+GncBillTerm *gncBillTermLookup (QofBook *book, const GUID *guid);
+GncBillTerm *gncBillTermLookupByName (QofBook *book, const char *name);
+GList * gncBillTermGetTerms (QofBook *book);
 
 const GUID *gncBillTermGetGUID (GncBillTerm *term);
-GNCBook *gncBillTermGetBook (GncBillTerm *term);
+QofBook *gncBillTermGetBook (GncBillTerm *term);
 const char *gncBillTermGetName (GncBillTerm *term);
 const char *gncBillTermGetDescription (GncBillTerm *term);
 GncBillTermType gncBillTermGetType (GncBillTerm *term);

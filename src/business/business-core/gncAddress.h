@@ -7,7 +7,7 @@
 #ifndef GNC_ADDRESS_H_
 #define GNC_ADDRESS_H_
 
-#include "gnc-book.h"
+#include "qofbook.h"
 
 #define GNC_ADDRESS_MODULE_NAME	"gncAddress"
 
@@ -16,7 +16,7 @@ typedef struct _gncAddress GncAddress;
 
 /* Create/Destroy functions */
 
-GncAddress * gncAddressCreate (GNCBook *book, const GUID *parent);
+GncAddress * gncAddressCreate (QofBook *book, const GUID *parent, QofIdType ptype);
 void gncAddressDestroy (GncAddress *addr);
 
 /* Set functions */

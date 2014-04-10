@@ -35,8 +35,6 @@
 #ifndef QOF_BACKEND_H
 #define QOF_BACKEND_H
 
-#include "config.h"
-
 /** \brief The errors that can be reported to the GUI & other front-end users
 \warning If you modify QofBackendError, please update src/scm/gnc.gwp */
 typedef enum {

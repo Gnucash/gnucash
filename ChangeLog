@@ -1,3 +1,39 @@
+2003-06-27  Derek Atkins  <derek@ihtfp.com>
+
+	* src/engine/gnc-event*.[ch]:
+	  Change the event generation and callback routines to
+	  pass a QofIdType in addition to the GUID*
+
+	* src/app-utils/gnc-component-manager.c:
+	* src/gnome-utils/gnc-account-sel.c:
+	  change to match the new event API.  Remove the need for
+	  xaccGUIDType(), which means we no longer get the g_warning.
+	
+	* src/backend/postgres/events.c:
+	* src/business/business-core/gncAddress.c:
+	* src/business/business-core/gncAddress.h:
+	* src/business/business-core/gncBillTerm.c:
+	* src/business/business-core/gncCustomer.c:
+	* src/business/business-core/gncEmployee.c:
+	* src/business/business-core/gncEntry.c:
+	* src/business/business-core/gncInvoice.c:
+	* src/business/business-core/gncJob.c:
+	* src/business/business-core/gncOrder.c:
+	* src/business/business-core/gncTaxTable.c:
+	* src/business/business-core/gncVendor.c:
+	* src/business/business-core/test/test-address.c:
+	* src/engine/Account.c:
+	* src/engine/FreqSpec.c:
+	* src/engine/Group.c:
+	* src/engine/Period.c:
+	* src/engine/SchedXaction.c:
+	* src/engine/Transaction.c:
+	* src/engine/gnc-lot.c:
+	* src/engine/gnc-pricedb.c:
+	* src/engine/qofbook.c:
+	  Pass the QofIdType into the event generation code.
+	Fixes #115988
+
 2003-06-27  Christian Stimming  <stimming@tuhh.de>
 
 	* src/import-export/hbci/dialog-hbcitrans.c: Fix stupid bug with

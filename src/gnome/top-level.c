@@ -58,6 +58,8 @@
 #include "gnucash-sheet.h"
 #include "gnucash-style.h"
 #include "guile-util.h"
+#include "qofbook.h"
+#include "qofsession.h"
 #include "messages.h"
 #include "split-register.h"
 #include "top-level.h"
@@ -472,25 +474,25 @@ gnc_gui_destroy (void)
 static gboolean
 gnc_ui_check_events (gpointer not_used)
 {
-  GNCSession *session;
+  QofSession *session;
   gboolean force;
 
   if (gtk_main_level() != 1)
     return TRUE;
 
-  session = gnc_get_current_session ();
+  session = qof_session_get_current_session ();
   if (!session)
     return TRUE;
 
   if (gnc_gui_refresh_suspended ())
     return TRUE;
 
-  if (!gnc_session_events_pending (session))
+  if (!qof_session_events_pending (session))
     return TRUE;
 
   gnc_suspend_gui_refresh ();
 
-  force = gnc_session_process_events (session);
+  force = qof_session_process_events (session);
 
   gnc_resume_gui_refresh ();
 
