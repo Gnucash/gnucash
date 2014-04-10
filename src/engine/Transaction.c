@@ -2696,17 +2696,20 @@ xaccTransGetNotes (const Transaction *trans)
 
 /********************************************************************\
 \********************************************************************/
-/* The posted date is kept in sync using a lazy-evaluation scheme.
- * If xaccTransactionSetDatePosted() is called, the date change is
- * accepted, and the split is marked date-dirty.  If the posted date
- * is queried for (using GetDatePosted()), then the transaction is
- * evaluated. If its a gains-transaction, then it's date is copied 
- * from the source transaction that created the gains.
+/** The xaccScrubGainsDate() routine is used to keep the posted date
+ *    of gains splis in sync with the posted date of the transaction
+ *    that caused the gains.
+ *  
+ *    The posted date is kept in sync using a lazy-evaluation scheme.
+ *    If xaccTransactionSetDatePosted() is called, the date change is
+ *    accepted, and the split is marked date-dirty.  If the posted date
+ *    is queried for (using GetDatePosted()), then the transaction is
+ *    evaluated. If its a gains-transaction, then it's date is copied 
+ *    from the source transaction that created the gains.
  */
 
-
 static inline void
-handle_gains_date (Transaction *trans)
+xaccScrubGainsDate (Transaction *trans)
 {
    SplitList *node;
    Timespec ts = {0,0};
@@ -2750,7 +2753,7 @@ time_t
 xaccTransGetDate (const Transaction *trans)
 {
    if (!trans) return 0;
-   handle_gains_date((Transaction *) trans);  /* XXX wrong not const ! */
+   xaccScrubGainsDate((Transaction *) trans);  /* XXX wrong not const ! */
    return (trans->date_posted.tv_sec);
 }
 
@@ -2758,7 +2761,7 @@ void
 xaccTransGetDatePostedTS (const Transaction *trans, Timespec *ts)
 {
    if (!trans || !ts) return;
-   handle_gains_date((Transaction *) trans);  /* XXX wrong not const ! */
+   xaccScrubGainsDate((Transaction *) trans);  /* XXX wrong not const ! */
    *ts = (trans->date_posted);
 }
 
@@ -2774,7 +2777,7 @@ xaccTransRetDatePostedTS (const Transaction *trans)
 {
    Timespec ts = {0, 0};
    if (!trans) return ts;
-   handle_gains_date((Transaction *) trans);  /* XXX wrong not const ! */
+   xaccScrubGainsDate((Transaction *) trans);  /* XXX wrong not const ! */
    return (trans->date_posted);
 }
 

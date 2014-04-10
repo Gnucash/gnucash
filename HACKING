@@ -67,7 +67,9 @@ Scheme:
 Dave Peticolas <dave@krondo.com>
 August 22, 2000
 
---------------------------------------------------
+=====================================================================
+TIPS AND HINTS
+=====================================================================
 
 Starting Gnucash from the build tree:
 -------------------------------------
@@ -77,6 +79,18 @@ To run gnucash from your build tree:
    gnucash-build-env
 -- then start gnucash by saying ./src/bin/overrides/gnucash
 -- Make sure you undo this change before installing gnucash
+
+
+Getting Trace Messages From GnuCash:
+------------------------------------
+Note that piping stdout from gnucash to a file causes gnucash to crash.
+Don't know why, this is a bug that needs to be fixed.  Here's another
+way to get trace messages into a file:
+
+-- edit src/engine/gnc-trace.c, adjust values in the array
+   gnc_log_modules[] to what you want to have for a given module.
+-- edit gnc_log_init() to fopen() the log file where you want 
+   messages to go to.
 
 
 Starting GnuCash in GDB
@@ -105,6 +119,7 @@ I get a bunch of errors:
    warning: Cannot initialize thread debugging library: unknown thread_db error '22'
 
 If you know how to fix this, please update tehse instructions.
+
 
 Using Valgrind with GnuCash
 ---------------------------
