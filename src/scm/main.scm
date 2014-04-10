@@ -15,6 +15,10 @@
 ;; 59 Temple Place - Suite 330        Fax:    +1-617-542-2652
 ;; Boston, MA  02111-1307,  USA       gnu@gnu.org
 
+;; A list of strings provided by the --evaluate option that should be
+;; executed in reverse order.
+(define gnc:*batch-mode-forms-to-evaluate* '())
+
 (define (gnc:startup)
   (gnc:debug "starting up.")
   (if (not (gnc:handle-command-line-args))
@@ -88,20 +92,35 @@
 
   ;; Now the fun begins.
   (gnc:startup)
-
+  
   (if (not (= (gnc:lowlev-app-init) 0))
       (gnc:shutdown 0))
-
-  (let ((ok (not (gnc:config-var-value-get gnc:*arg-no-file*)))
-        (file (if (pair? gnc:*command-line-files*)
-                  (car gnc:*command-line-files*)
-                  (gnc:history-get-last))))
-    (if (and ok (string? file))
-      (gnc:ui-open-file file)))
-
+  
   ;; add a hook to save the user configs on shutdown
   (gnc:hook-add-dangler gnc:*shutdown-hook* gnc:save-global-options)
-  (gnc:hook-add-dangler gnc:*ui-shutdown-hook* gnc:ui-finish)
-  (gnc:ui-main)
-  (gnc:hook-remove-dangler gnc:*ui-shutdown-hook* gnc:ui-finish)
+
+  (if (null? gnc:*batch-mode-forms-to-evaluate*)
+      ;; We're not in batch mode; we can go ahead and do the normal thing.
+      (let ((ok (not (gnc:config-var-value-get gnc:*arg-no-file*)))
+            (file (if (pair? gnc:*command-line-files*)
+                      (car gnc:*command-line-files*)
+                      (gnc:history-get-last))))
+        (if (and ok (string? file))
+            (gnc:ui-open-file file))
+        (gnc:hook-add-dangler gnc:*ui-shutdown-hook* gnc:ui-finish)
+        (gnc:ui-main)
+        (gnc:hook-remove-dangler gnc:*ui-shutdown-hook* gnc:ui-finish))
+      
+      ;; else: we're in batch mode.  Just do what the user said on the
+      ;; command line
+      (map (lambda (cmd-line-string-to-eval) 
+             (call-with-input-string
+              cmd-line-string-to-eval
+              (lambda (port)
+                (let loop ((form (read port)))
+                  (if (not (eof-object? form))
+                      (begin (eval form)
+                             (loop (read port))))))))
+           (reverse gnc:*batch-mode-forms-to-evaluate*)))
+  
   (gnc:shutdown 0))

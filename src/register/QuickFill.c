@@ -2,6 +2,7 @@
  * QuickFill.h -- the quickfill tree data structure                 *
  * Copyright (C) 1997 Robin D. Clark                                *
  * Copyright (C) 1998 Linas Vepstas                                 *
+ * Copyright (C) 2000 Dave Peticolas                                *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -30,22 +31,19 @@
 #include "QuickFill.h"
 #include "util.h"
 
+
 /** PROTOTYPES ******************************************************/
-static void qfInsertTextRec( QuickFill *qf, const char * text, int depth,
-                             QuickFillSort sort );
+static void qfInsertTextRec(QuickFill *qf, const char * text, int depth,
+                            QuickFillSort sort);
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_REGISTER;
 
-/********************************************************************\
- * Because I can't use C++ for this project, doesn't mean that I    *
- * can't pretend too!  These functions perform actions on the       *
- * QuickFill tree structure, in order to encapsulate the knowledge  *
- * of the internals of QuickFill into one file.                     *
-\********************************************************************/
 
+/********************************************************************\
+\********************************************************************/
 static int 
-CHAR_TO_INDEX( char c )
+CHAR_TO_INDEX(char c)
 {
   int index = toupper(c);
 
@@ -58,58 +56,61 @@ CHAR_TO_INDEX( char c )
 /********************************************************************\
 \********************************************************************/
 QuickFill *
-xaccMallocQuickFill( void )
+xaccMallocQuickFill(void)
 {
+  QuickFill *qf;
   int i;
-  QuickFill *qf = (QuickFill *)malloc(sizeof(QuickFill));
-  
-  for( i=0; i<QFNUM; i++ ) 
+
+  qf = g_new(QuickFill, 1);
+
+  for(i = 0; i < QFNUM; i++) 
     qf->qf[i] = NULL;
-  
+
   qf->text = NULL;
-  
+
   return qf;
 }
 
 /********************************************************************\
 \********************************************************************/
 void
-xaccFreeQuickFill( QuickFill *qf )
+xaccFreeQuickFill(QuickFill *qf)
 {
   int i;
 
   if (qf == NULL )
     return;
 
-  for( i=0; i<QFNUM; i++ )
+  for(i = 0; i < QFNUM; i++)
   {
-    xaccFreeQuickFill( qf->qf[i] );
+    xaccFreeQuickFill(qf->qf[i]);
     qf->qf[i] = NULL;
   }
 
   if (qf->text != NULL)
-    free(qf->text);
+    g_free(qf->text);
   qf->text = NULL;
 
-  free(qf);
+  g_free(qf);
 }
 
 /********************************************************************\
 \********************************************************************/
 QuickFill *
-xaccGetQuickFill( QuickFill *qf, char c )
+xaccGetQuickFill(QuickFill *qf, char c)
 {
   if (qf == NULL)
     return NULL;
 
   DEBUG("xaccGetQuickFill(): index = %d\n",CHAR_TO_INDEX(c));
+
   return qf->qf[CHAR_TO_INDEX(c)];
 }
 
 /********************************************************************\
 \********************************************************************/
 QuickFill *
-xaccGetQuickFillStrLen( QuickFill *qf, const char *str, int len )
+xaccGetQuickFillStrLen(QuickFill *qf, const char *str, int len)
 {
   if (str == NULL)
     return NULL;
@@ -130,7 +131,7 @@ xaccGetQuickFillStrLen( QuickFill *qf, const char *str, int len )
 /********************************************************************\
 \********************************************************************/
 QuickFill *
-xaccGetQuickFillStr( QuickFill *qf, const char *str )
+xaccGetQuickFillStr(QuickFill *qf, const char *str)
 {
   if (str == NULL)
     return NULL;
@@ -155,7 +156,7 @@ xaccGetQuickFillUniqueLen( QuickFill *qf, int * length )
   while (1)
   {
     count = 0;
-    for( i=0; i<QFNUM; i++ )
+    for(i = 0; i < QFNUM; i++)
     {
       if (qf->qf[i] != NULL)
       {
@@ -178,9 +179,9 @@ xaccGetQuickFillUniqueLen( QuickFill *qf, int * length )
 /********************************************************************\
 \********************************************************************/
 void
-xaccQFInsertText( QuickFill *qf, const char * text, QuickFillSort sort )
+xaccQFInsertText(QuickFill *qf, const char * text, QuickFillSort sort)
 {
-  qfInsertTextRec( qf, text, 0, sort );
+  qfInsertTextRec(qf, text, 0, sort);
 }
 
 /********************************************************************\
@@ -189,35 +190,48 @@ static void
 qfInsertTextRec( QuickFill *qf, const char *text, int depth,
                  QuickFillSort sort )
 {
-  if (NULL == qf) return;
+  int index;
+  char *old_text;
 
-  if( text )
+  if (qf == NULL)
+    return;
+
+  if ((text == NULL) || (text[depth] == '\0'))
+    return;
+
+  index = CHAR_TO_INDEX(text[depth]);
+
+  if( qf->qf[index] == NULL )
+    qf->qf[index] = xaccMallocQuickFill();
+
+  old_text = qf->qf[index]->text;
+
+  switch(sort)
   {
-    if( text[depth] != '\0' )
-    {
-      int index = CHAR_TO_INDEX( text[depth] );
-
-      if( qf->qf[index] == NULL )
-        qf->qf[index] = xaccMallocQuickFill();
-
-      switch(sort)
+    case QUICKFILL_ALPHA:
+      if ((old_text != NULL) &&
+          (safe_strcmp(text, old_text) >= 0))
+        break;
+    case QUICKFILL_LIFO:
+    default:
+      /* If there's no string there already, just put the new one in. */
+      if (old_text == NULL)
       {
-        case QUICKFILL_ALPHA:
-          if ((qf->qf[index]->text != NULL) &&
-              (safe_strcmp(text, qf->qf[index]->text) >= 0))
-            break;
-        case QUICKFILL_LIFO:
-        default:
-          /* store text in LIFO order, recent
-           * stuff shows up before old stuff */
-          if (qf->qf[index]->text) free (qf->qf[index]->text);
-          qf->qf[index]->text = strdup (text);
-          break;
+        qf->qf[index]->text = g_strdup (text);
+        break;
       }
 
-      qfInsertTextRec( qf->qf[index], text, ++depth, sort );
-    }
+      /* Leave prefixes in place */
+      if ((strlen(text) > strlen(old_text)) &&
+          (strncmp(text, old_text, strlen(old_text)) == 0))
+        break;
+
+      g_free (old_text);
+      qf->qf[index]->text = g_strdup (text);
+      break;
   }
+
+  qfInsertTextRec(qf->qf[index], text, ++depth, sort);
 }
 
 /********************** END OF FILE *********************************\

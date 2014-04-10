@@ -1,0 +1,989 @@
+Dave - the attached file contains the following files:
+
+drwx------    4096 Jul  4 16:20 ./
+drwxr-xr-x    4096 Jun 19 17:20 ../
+-rw-r--r--     211 Jun 23 20:24 .kdbgrc.financial		#kdebug file
+-rw-r--r--     259 Jul  4 15:24 .kdbgrc.fini			#kdebug file
+-rw-r--r--     732 Jul  4 15:24 Makefile
+-rw-r--r--    5711 Jul  3 20:02 amort_opt.c			# display/set amortization options
+-rw-r--r--    4392 Jul  4 15:25 amort_opt.o			
+-rw-r--r--   13020 Jul  4 16:16 amort_prt.c			# print amortization schedule(s)
+-rw-r--r--    7256 Jul  4 16:16 amort_prt.o
+-rw-r--r--   14778 Jul  3 20:09 expression_parser.c	# expression parser/evaluator
+-rw-r--r--    5148 Jul  4 15:24 expression_parser.o
+-rw-r--r--   19225 Jul  3 20:03 fin-interactive.c		# demo
+-rw-r--r--   12964 Jul  4 15:25 fin-interactive.o
+-rw-r--r--    6102 Jul  4 16:01 fin-main.c				# fixed examples
+-rw-r--r--    5008 Jul  4 16:02 fin-main.o
+-rwxr-xr-x    1431 Jul  2 19:21 fin-proto.sh*			# shell script for making 'h' files
+-rw-r--r--   83854 Jul  4 16:34 fin.c					# financial and amortization functions
+-rw-r--r--   23880 Jul  4 16:16 fin.o
+-rw-r--r--    1063 Jun 28 16:28 fin_spl_protos.h		# function prototypes
+-rw-r--r--    4631 Jul  3 20:07 fin_static_proto.h		# function prototypes
+-rwxr-xr-x   41011 Jul  4 16:16 financial*				# executable demo - from fin-main.c
+-rwxr-xr-x   54720 Jul  4 16:16 fini*					# executable demo - from fin-interactive.c
+-rw-r--r--      90 Jun 22 20:37 fini-input
+-rw-r--r--    2624 Jun 22 20:24 fini-output
+-rw-r--r--    7407 Jul  3 20:07 finproto.h				# function prototypes
+-rw-r--r--    8152 Jul  4 15:23 finvar.h				# define global structures used
+drwx------    4096 Jun 27 20:24 html/					# html documentation
+-rw-r--r--    6938 Jul  3 20:04 numeric_ops.c			# numeric functions - for expression parser
+-rw-r--r--    2204 Jul  4 15:24 numeric_ops.o		
+-rw-r--r--   11814 Jun 20 19:58 readme					# this file
+-rw-r--r--  131016 Jul  4 16:20 sample					# output of financial executable
+
+financial-equations/html:
+total 164
+drwx------     4096 Jun 27 20:24 ./
+drwx------     4096 Jul  4 16:20 ../
+-rw-r--r--    17430 Jun 20 15:29 amorta.html		# amortization schedule
+-rw-r--r--    26222 Jun 20 15:29 amortp.html		# amortization schedule
+-rw-r--r--     2361 Jun 27 20:38 constderv.html		# equations derivation
+-rw-r--r--    11290 Jun 27 20:25 finderv.html		# equations derivation
+-rw-r--r--    82204 Jun 27 20:36 finutil.html		# basic use of financial calculator
+
+This 'readme' file is probably somewhat rambling - it is coming off
+the top of my head with very little organization. Note also that much
+of the following "explanation" has been duplicated as comments at the
+top of the "fin.c" and the "expression-parser.c" files. Thus, anyone
+desiring to use the functions contained therein will have some ready
+documentation.
+
+Look into the 'sample' file. It contains sample output from the
+routines - both from the calculator and the amortization routines. The
+sample file was created with the "financial" executable. If running
+Linux, you should be able to execute this program without compiling to
+recreate 'sample' as "./financial >sample"
+
+You may want to view the file "finutil.html" in a browser - it
+explains in detail the calculator functions and variables and concepts
+and amortization schedule options.
+
+The file 'finvar.h' contains the structures needed by functions
+calling the financial functions and amortization functions and the
+expression parser/evaluator and should be included by any file calling
+any financial function and and the amortization functions.  The two
+prototype files:
+
+finproto.h
+fin_spl_protos.h
+
+should be "included" by any files containing functions which call
+either the financial calculator functions (including the amortization
+functions) or the expression parser/evaluator.
+
+There are no "global variables". My first iteration on "porting"
+the calculator contained global variables for the basic financial
+variables. I decided against doing this for reasons of conflict with
+other variables used in other modules and also to insure that ANY
+module in gnucash could call the financial functions and have their
+own set of financial variables. Thus any gnucash module may use the
+financial functions without concern of interaction with any other
+module also using the functions concurrently.
+
+There are 9 "financial variables". Of the nine, four are ALWAYS set by
+the "user", i.e., calling function. Of the remaining five, four are
+set and the fifth computed by the appropriate financial calculator
+function listed below. The 9 "financial variables" are: (if more than
+one name is used for a particular financial variable, all are listed)
+
+n or npp == number of payment periods in the transaction under
+            consideration
+
+i, nint or ir == nominal interest rate for the transaction.
+                 Use the interest rate as used by humans,
+                 i.e., 9.5, 8.25, etc. and not 0.095, 0.0825
+
+pv == present value, i.e., the value of the transaction at the
+      present moment in time. This would be the amount of the
+      loan/mortgage/Certificate of Deposit/bank account/etc.
+
+pmt == periodic payment
+
+fv == future value, i.e., the value of the transaction at some
+      future time after n payment periods.
+
+Of the five values above, four are set by the "user" and the fifth
+computed. The remaining financial variables are:
+
+CF == Compounding Frequency, number of compounding periods in one year
+PF == Payment Frequency, number of payment periods in one year
+disc == TRUE, 1, for discrete compounding (used by most financial
+        institutions in US)
+        FALSE, 0, for continuous compounding (used by some banks
+        in my area for CDs)
+bep == TRUE for beginning of periods payments
+       FALSE for end of period payments (the norm in the US at least)
+
+The function 'set_default(fi_ptr fi)' will set the variables in the
+'fi' structure to the default values:
+
+n == 0
+i = 0.0
+pv = 0.0
+pmt = 0.0
+fv = 0.0
+CF = 12
+PF = 12
+disc = 1
+bep = 0
+
+(Maybe this could/should be made locale specific or configurable ??? )
+
+In addition, there is one other "financial variable" which is not
+really a financial variable, but which should be specific to any
+particular financial computation and under the control of the user:
+
+prec == numeric precesion used for round-off of numeric values, i.e.,
+        number of digits past the radix point.
+
+I currently have a static function defined in the "fin.c" file:
+
+static double rnd(
+                  double        x,
+                  unsigned      places)
+{
+    double        r;
+    unsigned char buf[50]; /* make buffer large enough */
+
+    if ( places >= 0 ) {
+        sprintf(buf,"%.*f",places,x);
+        sscanf(buf,"%lf",&r);
+    } else r = x;
+
+    return r;
+} /* rnd */
+
+The function returns x rounded to the specified number of decimal
+digits past the radix point. I assume that gnucash currently has such
+a function. I will need the name of this function, since it is used
+extensively in the financial computation and the computation of
+amortization schedules.  The function 'rnd' that I have included is
+pretty simple - it simply writes the double value to a string using
+'sprintf' to print the value and round the value. It then uses
+'sscanf' to read the value into a temporary double variable and
+returns that value. I have written many rounding functions in the past
+and could never find one that everybody agreed with. Not every one
+agrees with the rounding rules used by the C 'printf' functions, but
+at least everybody writing C and C++ uses them and is used to them.
+
+The financial functions use a structure (defined in 'finvar.h'):
+
+/* structure used by financial computation routines to store
+ * financial variables */
+typedef struct financial_info *fi_ptr;
+typedef struct financial_info {
+	double ir;          /* interest rate            */
+	double pv;          /* present value            */
+	double pmt;         /* periodic payment         */
+	double fv;          /* future value             */
+	
+	unsigned npp;       /* number of payment periods            */
+	unsigned CF;        /* Compounding frequency                */
+	unsigned PF;        /* payment frequency                    */
+	unsigned bep;       /* beginning/end of period payment flag */
+	                    /* TRUE  == beginning of period         */
+	                    /* FALSE == end of period               */
+	unsigned disc;      /* discrete/continuous compounding flag */
+	                    /* TRUE  == discrete compounding        */
+	                    /* FALSE == continuous compounding      */
+	
+	/* precision of roundoff for pv, pmt and fv.
+	 * i, Interest not rounded
+	 * n, number of periods rounded to integer value,
+         *    implicit value of zero, 0
+	 *
+	 * 2 for US Dollars
+	 */
+	unsigned prec;
+} financial_info;
+
+to contain all information used in the financial calculations. The
+structure is created by the calling function and the variables set by
+the calling function. The appropriate financial function is called to
+compute the desired quantity with a pointer to the structure.
+
+
+The following functions are contained in the financial calculator:
+
+unsigned N(fi_ptr fi) -- solves for number of payment periods rounded to an
+                         integer value. Sets the variable 'npp' in the passed
+                         structure and returns the same value.
+
+double I(fi_ptr fi) -- solves for the nominal interest rate rounded to
+                       the precision specified in the structure passed.
+                       Sets the variable 'ir' in the passed structure
+                       and returns the same value.
+
+double PV(fi_ptr fi) -- solves for the present value rounded to the precision
+                        specified. Sets the variable 'pv' in the passed
+                        structure and returns the same value.
+
+double PMT(fi_ptr fi) -- solves for the periodic payment rounded to the
+                         precision specified. Sets the variable 'pmt' in
+                         the passed structure and returns the same value.
+
+double FV(fi_ptr fi) -- solves for the future value rounded to the precision
+                        specified. Sets the variable 'fv' in the passed
+                        structure and returns the same value.
+
+The above functions use the following functions for the calculation
+and round the answer as indicated. The above functions are the
+"normal" functions called to calculate the corresponding values. I
+left the following functions as "global" in case there is a need for
+unrounded, full floating point accuracy answers. They could be
+converted to "static" functions if there is any conflict or the full
+accuracy is not needed elsewhere in gnucash. Also these function do
+not use the financial calculator structure, but rather the variables
+must be passed as arguments with the desired value returned.
+
+double _N(ir,pv,pmt,fv,CF,PF,disc,bep) - compute number of payment periods
+                                         and return value
+
+double _I(npp,pv,pmt,fv,CF,PF,disc,bep) - compute nominal interest rate and
+                                          return value
+
+double _PV(npp,ir,pmt,fv,CF,PF,disc,bep) - compute present value and return
+                                           value
+
+double _PMT(npp,ir,pv,fv,CF,PF,disc,bep) - compute periodic payment and
+                                           return value
+
+double _FV(npp,ir,pv,pmt,CF,PF,disc,bep) - compute future value and return
+                                           value
+
+Note, the return value of '_N' should always be rounded (or truncated,
+probably rounded) since a fractional payment period is a practical
+impossibility.
+
+The financial calculator functions do no "value checking". That is,
+there is no checking for erroneous values or any "reasonable value
+testing". The only values that absolutely have to be checked by the
+calling functions are:
+
+1: nominal interest rate when calculating one of the other variables.
+   If this value is zero a "divide by zero" error may occur. If the
+   divide by zero error does not occur, then the value calculated
+   will more than likely be returned as 'nan'. Always check this value
+   for non-zero if it is not the value to be computed. A non-zero value
+   is only common sense also, since a zero interest rate is probably
+   meaningless.
+
+2: number of payment periods. When calculating the nominal interest rate,
+   if the number of payment periods is zero, again a "divide by zero" error
+   may occur. Always check this value for non-zero if it is not the value to
+   be computed. Again, a zero number of payment periods is meaningless.
+   At least one payment must be made or one party to the transaction is
+   making a free gift to the other party - in which case the calculator
+   is not needed.
+
+Note: I have violated both of these rules in the two demo executables
+provided. For the 'financial' executable, such a check is not
+necessary since all of the examples are set statically and it is known
+that neither interest or number of periods is zero.  For the 'fini'
+executable, they should be checked, but for demo purposes I didn't
+think it necessary.
+
+A good user interface would check that the values of CF, PF, disc and
+bep are set (at least to the default values) and that at least 4 of
+the remaining variables have been set and the user asked for the fifth
+value to be computed. Leaving the value of 'fv' to zero would be the
+normal in most cases.
+
+I decided that the financial functions should do no value checking,
+since they are far enough down the call chain that returning in the
+case of erroneous values is problamatic and adds excessive structure
+to otherwise extremely simple functions. Also since the value checking
+that does need to be accomplished is minimal and should optimally be
+done as close to the user interface as possible.
+
+
+My first take on a possible user interface would look something like
+(or as close as I can get in an ASCII text file):
+
+NOTE: ==xxxxxxxxx==  means a GUI box for displaying/entering a value
+
+      ((compute))    means a GUI button with the title "compute"
+
+      <<Monthly>>    means a GUI box with dropdown values that the user selects
+                     there is a name for such a box in GUI nomenclature,
+                     but I forget the name
+
+      ||             means a GUI check box button (either on or off).
+                     The Title for the button would change to reflect
+                     the on/off, TRUE/FALSE value
+
+      |**********|   means a single line text box that the user could
+                     use to enter a string. This box could be used by
+                     the user to enter expressions, with named variables,
+                     to be evaluated. This box is probably he same kind
+                     of GUI box as I have indicated above with == xxxx==
+
+Possible Financial Calculator GUI:
+|-------------------------------------------------------------------------|
+
+        Number of
+        Payment Periods     ((Compute))
+        ==xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx==
+
+        Interest Rate       ((Compute))
+        ==xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx==
+
+        Present Value       ((Compute))
+        ==xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx==
+
+        Periodic Payment    ((Compute))
+        ==xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx==
+
+        Future Value        ((Compute))
+        ==xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx==
+
+
+        Compounding     Payment             || End of Period Payments
+        Frequency       Frequency
+        <<Monthly>>     <<Monthly>>         || Discrete Compounding
+
+        Expression
+        |************************************************************|
+
+        User Defined Variables
+            Some kind of GUI box displaying both the names and values of
+            variables that the user has defined using the expression box
+            above or the financial variables entry boxes. The variables
+            are used to store values for future use/reference
+
+
+        Effective Date:       ==mm/dd/yyyy==
+        Initial Payment date: ==mm/dd/yyyy==
+|------------------------------------------------------------------------|
+
+Note: the drop down boxes for Compounding Frequency and Payment
+Frequency should contain the following selectable values:
+
+        annual              1
+        semi-annual         2
+        tri-annual          3
+        quarterly           4
+        bi-monthly          6
+        monthly             12
+        semi-monthly        24
+        bi-weekly           26
+        weekly              52
+        daily (360)         360
+        daily (365)         365
+
+with the corresponding values used for CF and PF as indicated.
+
+Clicking on "Discrete Compounding" switches back and forth between
+"Discrete Compounding" and "Continuous Compounding". "Discrete
+Compounding" should be the default since it is by far the most common.
+
+Clicking on "End of Period Payments" switches back and forth between
+"End of Period Payments" and "Beginning of Period Payments". "End of
+Period Payments" should probably be the default since it is by far the
+most common.
+
+The user could click on the entry box under "Number of Payment
+Periods", "Interest rate", "Present Value", "Periodic Payment"
+and "Future Value" and enter a value or expression string to be
+evaluated. Clicking on the corresponding "Compute" button would
+compute that financial variable. I have made the entry boxes long so
+that a user could enter a fairly long string. The boxes could also be
+made scrollable. The entry function could be made simple and always
+regard the entry as a string and pass the string to the
+parser/evaluator to return the appropriate value.
+
+The titles for the boxes, especially "Present Value" and "Future
+Value", may need to be changed depending on the feedback from the
+gnucash community. I have always used those names since they are
+"generic" and represent all of the possible uses for the financial
+calculator. In this way a single calculator GUI could be used instead
+of inventing a GUI for mortgages, another for CDs, another for saving
+accounts, another for annuities, another for sinking funds, etc.
+
+The next question is the Amortization Schedule Interface. This
+interface should not be available until all of the financial variables
+are known. Once they are, the user should be able to click on a "tab"
+or something to get the Amortization Schedule Interface. A first stab
+at such an interface could be as shown below. Once the financial
+variables are known - either all entered by the user or one computed
+as indicated by the user, the function "Amortization_init" would be
+called to compute the quatities needed for the user to choose which
+amortization schedule is desired.  The function "amort_opt" in the
+file amort_opt.c contains all of the information that the user must
+have to decide which of the six schedules is desired.
+
+Note that the function "Amortization_init" needs two dates:
+    Effective Date of Transaction -- the date the papers were signed, etc.
+    Initial Payment Date -- self explanatory
+
+Both dates could be initially filled in by the interface with default
+values. For the Effective Date, the current date would probably be the
+most likely candidate. The default Initial Payment Date would depend
+on whether the payments were being made at the beginning or end of the
+payment periods, i.e., bep in the financial information structure
+above.
+
+    bep == TRUE, use the first day of the next month for the default
+           Initial Payment Date, e.g., if current day is August 6, 2000,
+           then the default Initial Payment Date would be September 1, 2000
+    bep == FALSE, use if the first day of the month after the next month,
+           e.g., if current day is August 6, 2000, then the default Initial
+           Payment Date would be October 1, 2000
+
+The user could then change or accept the default dates as desired.
+
+The only real checking that would need to be done on either date is to
+insure that the Effective Date preceeds the Initial Payment Date.
+
+
+The following functions are used for amortization schedules. All
+functions use the amortization structure defined in "finvar.h",
+"amort_sched".
+
+Notice that some of the information is duplication of the infomation
+used by the financial calculator structure. I thought this best in
+order to "separate" these two functions so that if a new set of
+financial variables is desired by the user, the old set used by the
+amortization computation functions would still be available. The
+amount of storage is minimal.
+
+Note that the amortization schedule structure, "amort_sched" is
+divided into three parts.
+
+The first part is information set by the calling function(s) and is
+the financial information from the financial information structure
+supplemented with the Effective Date and Initial Payment Date
+information.
+
+The second part is also set by the calling function(s) and sets which
+schedule and type of schedule is computed.
+
+The third part is information set by the amortization functions. Some
+of the information is needed for the GUI below for selecting which
+amortization option to compute.
+
+
+Amortization Schedule Selection GUI:
+|----------------------------------------------------------------------------|
+        Amortization Schedule
+
+        Effective Date:       mm/dd/yyyy
+        Initial Payment date: mm/dd/yyyy
+
+        The Original Present Value    is: xxxxxx.xx  (pv)
+        The Original Periodic Payment is: xxxx.xx    (pmt)
+        The Original Future  Value    is: xxxx.xx    (fv)
+
+        The Delayed Present Value     is: xxxxxx.xx  (pve)
+        The New Periodic Payment      is: xxxx.xx    (new_pmt)
+
+        The amortization options are:
+
+        || Amortize with Original Present Value
+            Constant Payment to Principal: xxxxx.xx  (cmpt1)
+            and final payment: xxxxx.xx              (final_pmt_opt_1)
+
+        || Amortize with Delayed Present Value
+            Constant Payment to Principal: xxxxx.xx  (cmpt2)
+            and final payment: xxxxx.xx              (final_pmt_opt_2)
+
+        || Amortize with Original Transaction Values
+            and final payment: xxxxx.xx              (final_pmt_opt_3)
+
+        || Amortize with Delayed Present Value, Original Periodic Payment
+            and final payment: xxxxx.xx              (final_pmt_opt_4)
+
+        || Amortize with Delayed Present Value, New Periodic Payment
+            and final payment: xxxxx.xx              (final_pmt_opt_5)
+
+    	|| Amortize with Original Present Value, Original Periodic Payment
+    	    new number of total payments: xxx        (new_n)
+    	    and final payment: xxxxx.xx              (final_pmt_opt_6)
+
+|----------------------------------------------------------------------------|
+
+Note: I have included in parenthesis above the names of the variables
+in the amortization structure, amort_sched, to be used in filling in
+the appropriate values. Do not include the parenthesized infomation in
+the GUI.
+
+Note: the last option is available ONLY IF the variable "new_n" in the
+amortization schedule structure is non-zero. If "new_n" is zero, the
+last option could be "faded out" or left out completely.
+
+Note that the options are mutually exclusive, picking one turns the
+others off. Initially all should probably be off, thus forcing the
+user to pick one.
+
+Option 3 above is probably the one most likely to be selected by most
+people. The others are more likely to be choosen as comparisons to
+what is likely to be dictated by their lending institution which would
+more than likely be option 3 (at least in the US).
+
+I have laid out the above options to correspond to the values for the
+variable "option" in the "amort_sched" structure. Any other sequence
+could be used so long as the proper numbering is maintained for
+"option".
+
+Once a particular option, 1 to 6 inclusive, has been choosen above by
+the user, they have one more choice to make: namely whether they want
+an annual summary or a schedule of each payment.  Also if "option" is
+3, 4, 5 or 6 they also have the additional choices of whether they
+want a fixed prepayment to principal or a variable prepayment to
+principal schedule. If they choose a fixed prepayment schedule, then
+they must enter the amount of the fixed prepayment. It's not as
+complicated as it sounds. The dialog for these choices could look
+something like:
+
+|----------------------------------------------------------------------------|
+
+        Type of Amortization Schedule
+
+        || Annual Summary
+
+        || Per Payment Schedule
+
+        || Variable Prepayment to Principal
+
+        || Fixed Prepayment to Principal Schedule
+        ==xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx==
+
+|----------------------------------------------------------------------------|
+
+Note that zero for the fixed prepayment is valid. The value entered
+(or not entered as the case may be) should be set into the variable,
+"fixed_pmt" in the amortization schedule structure. If a value for the
+fixed prepayment is entered by the user, this value should probably be
+set into "fixed_pmt", irregardless of whether the user selects the
+fixed prepayment option.
+
+Note that the options are mutually exclusive, picking one turns the
+others off. Initially all should probably be off, thus forcing the
+user to pick one.
+
+The last two options would only be available if they had selected
+options 3, 4, 5 or 6 from the amortization options dialog. The
+information from this dialog would be used to set the variable
+"summary" in the "amort_sched" structure. The permissable values are:
+
+    'y' -- indicates an annual summary schedule, first option above
+    'p' -- indicates a per payment schedule, option 2 above
+    'a' -- indicates a variable prepayment schedule, option 3 above
+    'f' -- indicates a fixed prepayment schedule, option four above.
+
+I have provided a function, "amort_opt", in the file "amort_opt.c" to
+demonstrate which information is used to fill in the appropriate
+places in the above two GUIs. You can use this function as a guide.
+
+Once all of that information has been gathered from the user,
+the amortization schedule can be computed. The function
+"Amortization_Schedule" is called and does the computation, but not
+the display/output of the schedule. I orginally had the output of the
+schedule integrated in this function, but decided that was a dumb
+idea. Passing back a pointer in the "amort_sched" structure for
+all of the computed values was a better idea. This way the actual
+output/display of the schedule can be tailered as desired.
+
+I have provided the function "amort_prt" in the file "amort_prt.c" as
+a guide on how to use the structures and the information they contain
+to display/output the desired schedule. Currently, the function
+"prints" the information to a specified file. I could alter the
+function to output HTML tables if desired. The changes would not be
+very great. Also, a flag could be passed to indicate whether HTML or
+plain text was desired. Or the function could be completely rewritten
+to output some completely different format as desired.
+
+The functions used for the amortization schedule are:
+
+Amortization_init -- this functions initializes the information for
+                     the schedule so that the user can decide which
+                     schedule and which type is desired.
+
+Amortization_Schedule -- this function computes the desired
+                         amortization schedule.
+
+Amortization_free -- this function is called to free the dynamically
+                     allocated memory in the amortization schedule - it
+                     does not free the amortization schedule structure passed,
+                     but the schedule structures allocated by the call to
+                     "Amortization_Schedule" and pointed to in the union
+                     in the amortization schedule structure.
+
+amort_opt - a function to display the options to the user and input which
+            schedule and which type is desired. Uses a text display - for
+            guidance in designing the eventual GUI used.
+
+amort_prt - a function to print the desired schedule, again for guidance
+            in how to use the information computed for each type of schedule.
+
+
+A typical sequence would be:
+
+1: use the financial calculator functions to enter/calculate the
+   financial variables
+
+2: copy the financial information from the financial information
+   structure to the amortization schedule structure
+
+3: call the "Amortization_init" function to initialize the amortization
+   schedule
+
+4: obtain from the user, schedule option and type -- "amort_opt" function
+   for command line version
+
+5: call the "Amortization_Schedule" function to compute the desired
+   amortization schedule
+
+6: display/output the desired amortization schedule -- "amort_prt"
+   function for the command line version
+
+7: call the "Amortization_free" function to free memory in computed schedule
+
+8: loop back to step 4 above for another schedule using same financial
+   data and dates
+
+9: loop back to step 1 above for new financial data
+
+
+Right now the documentation is written around the use of the financial
+calculator in QTAwk, my personal implementation of a superset of awk,
+nawk and gawk. The document, especially the examples section, will
+have to be rewritten to a small extent for gnucash. I would like to
+defer this until we have settled on the GUI since that will determine
+the end document.
+
+The examples illustrate the general nature of the calculator and the
+many "seemingly" unrelated uses for it. I used CA Simply Money under
+OS/2 for many years. They had several "calculators". At first I
+thought that was great. Then I really looked at what they had - it was
+really just many different GUIs for the same calculator, The same
+calculator under different guises. I stopped using all of theirs very
+quickly and developed my own since having it all in one was much
+easier to understand. It also underscored the power of the finanacial
+functions in everyday life.
+
+<<<<<<<<<<------------------------------------------------------------>>>>>>>>
+
+The only thing left to describe is the expression parser/evaluator.
+The expression parser/evaluator is contained in the file
+"expression_parser.c".
+
+Before describing the parser per se, I want to describe the structures
+used to contain the results returned from the parser. The structure is
+defined in "finvar.h":
+
+typedef struct var_store *var_store_ptr;
+
+typedef struct var_store {
+    unsigned char *variable_name;   /* variable name if variable,
+                                       NULL otherwise                        */
+    unsigned char  use_flag;        /* flag if variable has been assigned to */
+    unsigned char  assign_flag;     /* flag if variable is used              */
+    void          *value;           /* pointer to imp[lementation defined
+                                       numeric value                         */
+    var_store_ptr  next_var;        /* pointer to next variable in linked
+                                       list                                  */
+} var_store;
+
+The "use_flag" variable is for internal use of the parser and can be
+ignored by the user. The "variable_name" variable possibly points to
+a string containing the name of the value returned, a "variable
+name". If NULL, then this is a temporary value. The "value" variable
+points to a user defined structure containing the numeric value of the
+variable.
+
+In designing and writing the parser, I decided early on that the
+parser should be an "expression parser/evaluator" and that the actual
+arithmetic was the responsibility of the caller/user. In reading the
+debate on "gnucash-devel" and realizing that the exact numeric
+representation used in gnucash was very probably going to be changing
+in the future, I decided that the parser should be totally independent
+of the numeric representation used, and thus the exact details of how
+the arithmetic was performed. To accomplish this, four functions are
+supplied by the user/caller:
+
+1: trans_numeric - this function translates the text string into a
+   numeric in the desired representation and returns a pointer to
+   the representation as a (void *) this function has three parameters
+   passed:
+     1: digit_str -- the actual text string of the numeric to be converted
+                     to the internal representation
+     2: radix_point -- the ASCII character used to represent the radix point
+     3: rstr -- a pointer to a location in which to return a pointer to the
+                first character not part of the numeric string translated
+                If this pointer is NULL, do not return a value. This parameter
+                is the same as the second parameter of the standard C library
+                functions "strtod" or "strtol"
+
+2: numeric_ops - this function does the actual arithmetic on two numeric
+                 quantities in internal representation. It has three
+                 parameters passed:
+     1: op_sym -- the numeric operation to be performed. The possible
+                  values are defined in "finvar.h" and are:
+                    ADD_OP - addition
+                    SUB_OP - subtraction
+                    DIV_OP - division
+                    MUL_OP - multiplication
+                    ASN_OP - assignment
+     2: left_value - the left hand operand of the binary operator
+     3: right_value - the right hand operand of the binary operator
+                      Note: left_value and right_value are passed as
+                      (void *). This function is responsible for casting
+                      to the proper type to use.
+
+                      Note: this function should make no assumptions about
+                      overwriting or re-using either left_value or
+                      right_value, except for ASN_OP. Both values passed
+                      must be left unchanged by any operation except ASN_OP.
+                      This function is also responsible for allocating/freeing
+                      memory as necessary to perform the designated function
+                      and returning the result.
+
+                      I STRONGLY suggest that the result be returned in
+                      dynamically allocated memory. If static memory is used,
+                      the parser has no means of copying the returned result
+                      or managing static memory to prevent overwriting
+                      the result and invalidating the result.
+
+3: negate_numeric - this function negates the value passed (as a (void *))
+
+4: free_numeric - this function is responsible for freeing memory used by
+                  the internal numeric representation.
+
+I have included the file "numeric_ops.c" containing the above
+functions for the usual "double" and "int" representation of
+numerics. The functions perform integer or floating point operations
+as appropriate for the string entered by the user. The division
+operation is done in "double" since I do not think that anybody really
+wants (9 / 2) to equal 4 instead of 4.5 for financial operations.
+These functions use the structure defined in finvar.h:
+
+typedef struct numeric *numeric_ptr;
+typedef struct numeric {
+    unsigned char  type;            /* designates type of value                  */
+    union {
+        long int  int_value;        /* long integer value   */
+        double    dbl_value;        /* double value         */
+    } value;
+} numeric;
+
+to contain all numeric values. The variable "type" in this structure
+can have the values:
+    INT_TYPE
+    DBL_TYPE
+which are defined in "finvar.h".
+
+All "named variables", variables defined by the user for storing
+intermediate results for future reference/use, and temporary variables
+used by the parser use the variable storage structure, var_store,
+defined above. The result of parsing and evaluating the string passed
+are returned in a variable storage structure specified by the caller.
+
+If the returned variable value is not named, i.e., "variable_name ==
+NULL", then the user/caller is responsible for freeing the memory used
+by the internal representation of the numeric value.  If, however,
+"variable_name != NULL", freeing the memory used by the internal
+numeric representation will cause a segmentation fault later, when
+parser attempts to free the memory through a call to
+the "free_numeric". In addition, freeing the memory will probably
+invalidate the numeric value contained therein and lead to pernicuous
+results when the value is used.
+
+If "variable_name != NULL", the user/caller should never attempt to
+free this memory, that is the sole responsibility of the parser.
+
+It may be that the calling function has certain "variables" that need
+to be "pre-defined" for the user to manipulate. The demo financial
+calculator "pre-defines" the financial variables, "n, i, pv, pmt, fv,
+CF, PF, disc and bep". I would suggest that the gnucash financial
+calculator also pre-define these for direct manipulation by the user
+if they so desire. Other modules of gnucash could pre-define other
+variables with common names used in accounting if they so desire. This
+would allow knowledgable users quick access to such values and to be
+able to easly manipulate the values to obtain desired results. One
+method of "pre-defining" variables is illustrated in the
+"fin-interactive.c" file for the demo interactive financial
+calculator.  In essence the function "pre-defining" variables sets up
+a linked list of variable storage structures with the proper "names"
+and numeric values. The number of "pre-defined" variables and a
+pointer to the structure array is passed to the parser in the
+initialization call. After the parser is eventually exited, the
+calling function is responsible for freeing any memory used by the
+"pre-defined" variables and their final numeric representation.
+
+I think the use of "named variables" and "pre-defined" variables could
+become very useful in gnucash eventually as people get used to the
+idea. It may be useful to allow users to define variables with values
+convienent to them and that are persistent across invocations of
+gnucash.
+
+A second design goal of the parser was that it should be callable
+concurrently by multiple modules within gnucash independently. That
+each module should be capable of using differing "pre-defined"
+variables and user defined variables and even internal numeric
+representations.  To that end the calling module must first initialize
+the parser with a call to "init_parser".  This call creates the parser
+internal structure for subsequent calls to the parser proper.  The
+structure created and returned must then be passed to subsequent calls
+to the parser.  When no further calls to the parser are to be made,
+the module then calls "exit_parser" with the pointer returned by
+"init_parser", so that the parser may release dynamically allocated
+memory.
+
+The parser recognizes the following binary operators:
+     +
+     -
+     /
+     *
+     =
+     +=
+     -=
+     /=
+     *=
+
+In addition, the unary operators
+ +
+ -
+
+are recognized. All numerics are initially recognized as positive
+numbers. If negative, the unary '-' operator is applied. This saves
+the logic of having to recogize strings as
+
+  -123
+
+The logic recognizes "-" and "123" separately. The '-' unary operator
+is then applied to negate the numeric. This also has the advanatge
+that the same logic can be used for
+
+ -123
+ +123.45
+ +uvar
+ -uvar
+
+In each case, the appropriate unary operator is applied to obtain the
+desired result with no increase in the parsing logic. Thus keeping
+things as simple as possible.
+
+The parser also follows the C practice that the assignment operators
+return a value. Thus, allowing multiple assignments and assignment
+within expressions. The following expressions are all valid:
+ nni = 123
+ hnk = nni = 23.45
+ jkl = 5 * (nj = 68.9)
+
+The first time variables are used in an expression, they are
+initialized to zero, 0. Thus, even if the following variables have not
+been assigned a value previously, the following expressions are valid:
+
+nni *= 123
+  above results in zero in nni
+jk += 45.6
+  above results in 45.6 in jk
+56.8 - tyh
+  result of above is 56.8
+tgh - 45.7
+  above the same as
+-45.7
+
+After parsing the above expressions the variables nni, jk, tyh and tgh
+would all be defined.
+
+There are six functions needed to use the parser/evaluator:
+
+Note: in the last five functions, in the function paramter (parse_env_ptr pe),
+"pe" is the pointer returned by the "init_parser" function.
+
+parser_env_ptr
+init_parser(var_store_ptr  predefined_vars,
+            unsigned char  radix_point,
+            void                  *trans_numeric(unsigned char  *digit_str,
+                                                 unsigned char   radix_point,
+                                                 unsigned char **rstr),
+            void          *numeric_ops(unsigned char  op_sym,
+                                       void          *left_value,
+                                       void          *right_value),
+            void          *negate_numeric(void *value),
+            void           free_numeric(void *numeric_value));
+
+This function is called by the gnucash module/function/whatever to
+initialize the parser. The parser returns a pointer to a structure
+that contains all relevant information for parsering strings. The
+pointer is returned as (void *) since all information is and should
+remain pertinent only to the parser. The calling function(s) should
+never rely on manipulating any information inside this structure
+directly, since it may and could change in the future.
+
+        -- The first parameter is a pointer to an array of "pre-defined"
+           variables the caller wishes to use with subsequent calls to
+           the parser.
+        -- The second parameter is the radix character to use in numeric
+           strings in subsequent calls to the parser. The parser needs this
+           information to recognize numeric strings of the form
+           ".123", where '.' is the radix.
+        -- The third, fourth, fifth, and sixth parameters are the functions
+           I descibed above for the internal numeric representation desired
+           by the calling function(s).
+
+void exit_parser(parser_env_ptr pe);
+
+This function is called to exit the parser and free all dynamically
+allocated memory used by the parser for an internal stack and user
+defined variables.
+
+unsigned get_parse_error(parser_env_ptr pe);
+
+Whenever the parser encounters an error in parsing/evaluating a
+string, it returns a NULL pointer instead of a valid pointer to a
+variable storage structure. This call returns an unsigned integer
+designating the error encountered. The possible values are defined in
+the "finvar.h" file. A function "parse_error" has been defined in the
+file "fin-interactive.c" illustrating how to use this function and
+pin-point for the user the exact location of the error.
+
+var_store_ptr get_vars(parser_env_ptr pe)
+
+This function returns a pointer to a linked list of variable storage
+structures containing the user defined named variables if any
+exist. NULL is returned if none exist.  An illustration of using this
+function is contained in the "main" function in the
+"fin-interactive.c" file. The calling function should not alter the
+variable names. The numeric values may be altered if the calling
+function really knows what it is doing.
+
+unsigned delete_var(unsigned char *var_name,
+                    parse_env_ptr pe);
+
+This function will delete the user defined named variable with a name
+identical to the name string passed in the first parameter. If no user
+defined variable exists with an identical name, zero, 0, returned. If
+the delete operation is successful, one, 1, is returned.
+
+unsigned char *parse_string(var_store_ptr value,
+                            unsigned char *string,
+                            parser_env_ptr pe);
+
+This function parses the string passed in the second parameter and
+returns a pointer to the last character not recognized upon a parsing
+error. If no error occurred, NULL is returned. The first parameter
+specifies a variable storage structure to contain the result of the
+parser/evaluator.
+
+Note: The parser/evaluator uses a simple recursive descent parser.
+I decided on this type for the simple reason that for a simple four
+function calculator a recursive descent parser is, in my opnion, the
+easiest to construct. I also think that recursive descent parsers are
+easier for the human to understand and thus maintain. Since gnucash is
+open source and will probably have many maintainers in its history,
+the later point is probably the more relevant.
+
+Also, the parser uses a stack which is dynamically allocated in memory
+and can grow as needed.  I have not provided any mechanism for
+shrinking the stack. The initial stack size is set at 50. I really do
+not anticipate that under normal and even most extreme cases, that it
+will ever approach that size in actual use. Under "normal" operation,
+the stack will probably never exceed 3 or 4 in size and 50 is probably
+an overkill for normal use. However, since the stack is pointers and
+not entire structures, a stack size of 50 is not that much memory and
+can be tolerated by most users. Thus, a mechanism for shrinking the
+stack will probably never be needed.

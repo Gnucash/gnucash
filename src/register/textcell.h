@@ -29,18 +29,19 @@
  *
  * HISTORY:
  * Copyright (c) 1998 Linas Vepstas
+ * Copyright (c) 2000 Dave Peticolas
  */
 
-#ifndef __XACC_TEXT_CELL_H__
-#define __XACC_TEXT_CELL_H__
+#ifndef __TEXT_CELL_H__
+#define __TEXT_CELL_H__
 
 #include "basiccell.h"
 
 /* installs a callback to handle text recording */
 BasicCell * xaccMallocTextCell (void);
-void         xaccInitTextCell (BasicCell *);
-void         xaccDestroyTextCell (BasicCell *);
+void        xaccInitTextCell (BasicCell *);
+void        xaccDestroyTextCell (BasicCell *);
 
-#endif /* __XACC_TEXT_CELL_H__ */
+#endif /* __TEXT_CELL_H__ */
 
 /* --------------- end of file ---------------------- */

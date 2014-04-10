@@ -36,7 +36,7 @@
  * The xaccConfigSplitRegister() subroutine allows the configuration 
  * of the register to be changed on the fly (dynamically).  In particular,
  * the register type, and/or the flags controlling the register display
- * can be changed on the fly ... 
+ * can be changed on the fly. 
  *
  * DESIGN HOPES:
  * Should probably move at least some of the layout to a config 
@@ -56,6 +56,7 @@
 #include "quickfillcell.h"
 #include "pricecell.h"
 #include "numcell.h"
+#include "recncell.h"
 #include "table-allgui.h"
 
 /* defined register types */
@@ -79,8 +80,6 @@ typedef enum
   PORTFOLIO_LEDGER    = 13,
   SEARCH_LEDGER       = 14
 } SplitRegisterType;
-
-#define REG_TYPE_MASK       0xff
 
 /* These values are used to identify the cells in the register. */
 typedef enum
@@ -119,12 +118,14 @@ typedef enum
  * REG_DOUBLE_DYNAMIC -- dynamically expand edited transaction,
  *                       all other transactions on two lines
  */
-#define REG_SINGLE_LINE        (1 << 8)
-#define REG_DOUBLE_LINE        (2 << 8)
-#define REG_MULTI_LINE         (3 << 8)
-#define REG_SINGLE_DYNAMIC     (4 << 8)
-#define REG_DOUBLE_DYNAMIC     (5 << 8) 
-#define REG_STYLE_MASK      (0xff << 8) 
+typedef enum
+{
+  REG_SINGLE_LINE    = 1,
+  REG_DOUBLE_LINE    = 2,
+  REG_MULTI_LINE     = 3,
+  REG_SINGLE_DYNAMIC = 4,
+  REG_DOUBLE_DYNAMIC = 5
+} SplitRegisterStyle;
 
 /* modified flags -- indicate which cell values have been modified by user */
 #define MOD_NONE   0x0000
@@ -175,7 +176,7 @@ struct _SplitRegister {
    DateCell      * dateCell;
    NumCell       * numCell;
    QuickFillCell * descCell;
-   BasicCell     * recnCell;   /* main transaction line reconcile */
+   RecnCell      * recnCell;   /* main transaction line reconcile */
    PriceCell     * shrsCell;
    PriceCell     * balanceCell;
    BasicCell     * nullCell;
@@ -193,9 +194,11 @@ struct _SplitRegister {
    PriceCell     * ncreditCell;
    PriceCell     * ndebitCell;
 
-   /* the type of the register, must be one of the enumerated types
-    * above *_REGISTER, *_LEDGER, above */
-   int type;
+   /* The type of the register, must be one of the enumerated types
+    * named *_REGISTER, *_LEDGER, above */
+   SplitRegisterType type;
+
+   SplitRegisterStyle style;
 
    /* some private data; outsiders should not access this */
    int num_cols;
@@ -231,7 +234,7 @@ struct _SplitRegisterColors
   guint32 double_cursor_passive_bg_color;
   guint32 double_cursor_passive_bg_color2;
 
-  gncBoolean double_alternate_virt;
+  gboolean double_alternate_virt;
 
   guint32 trans_cursor_active_bg_color;
   guint32 trans_cursor_passive_bg_color;
@@ -247,16 +250,21 @@ typedef char* (*SRStringGetter) (SplitRegisterType);
 void            xaccSplitRegisterSetDebitStringGetter(SRStringGetter getter);
 void            xaccSplitRegisterSetCreditStringGetter(SRStringGetter getter);
 
-SplitRegister * xaccMallocSplitRegister (int type);
-void            xaccInitSplitRegister (SplitRegister *, int type);
-void            xaccConfigSplitRegister (SplitRegister *, int type);
-void            xaccDestroySplitRegister (SplitRegister *);
+SplitRegister * xaccMallocSplitRegister (SplitRegisterType type,
+                                         SplitRegisterStyle style);
+void            xaccInitSplitRegister (SplitRegister *reg,
+                                       SplitRegisterType type,
+                                       SplitRegisterStyle style);
+void            xaccConfigSplitRegister (SplitRegister *reg,
+                                         SplitRegisterType type,
+                                         SplitRegisterStyle style);
+void            xaccDestroySplitRegister (SplitRegister *reg);
 
 void            xaccSetSplitRegisterColors (SplitRegisterColors reg_colors);
 void            xaccSplitRegisterConfigColors (SplitRegister *reg);
 
 /* returns non-zero value if updates have been made to data */
-unsigned int    xaccSplitRegisterGetChangeFlag (SplitRegister *);
+guint32         xaccSplitRegisterGetChangeFlag (SplitRegister *reg);
 
 /* Clears all change flags in the register. Does not alter values */
 void            xaccSplitRegisterClearChangeFlag (SplitRegister *reg);
@@ -279,7 +287,7 @@ CellType        xaccSplitRegisterGetCellTypeRowCol (SplitRegister *reg,
 /* Returns the physical row and column in the current cursor of the
  * given cell using the pointer values. The function returns true if
  * the given cell type is in the current cursor, false otherwise. */
-gncBoolean      xaccSplitRegisterGetCellRowCol (SplitRegister *reg,
+gboolean        xaccSplitRegisterGetCellRowCol (SplitRegister *reg,
                                                 CellType cell_type,
                                                 int *p_phys_row,
                                                 int *p_phys_col);

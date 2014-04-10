@@ -811,6 +811,8 @@ entry_down_button_clicked(GtkButton *button, BudgetDialog *bd)
   if (sibling == NULL)
     return;
 
+  sibling = get_next_sibling_node(bd, sibling);
+
   gtk_ctree_move(ctree, node, parent, sibling);
   if (gtk_ctree_node_is_visible(ctree, node) != GTK_VISIBILITY_FULL)
     gtk_ctree_node_moveto(ctree, node, 0, 0.5, 0);
@@ -862,7 +864,7 @@ subentry_amount_entry_focus_out(GtkWidget *widget, GdkEventFocus *event,
   if ((string == NULL) || (*string == '\0'))
     return FALSE;
 
-  value = xaccParseAmount(string, GNC_T);
+  value = xaccParseAmount(string, TRUE);
 
   new_string = xaccPrintAmount(value, PRTSEP, NULL);
 

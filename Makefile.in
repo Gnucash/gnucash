@@ -81,7 +81,6 @@ GNOME_CONFIG_BIN = @GNOME_CONFIG_BIN@
 GNOME_LIBS = @GNOME_LIBS@
 GNOME_STATIC_TARGET = @GNOME_STATIC_TARGET@
 GNOME_TARGET = @GNOME_TARGET@
-GTK_XMHTML = @GTK_XMHTML@
 GT_NO = @GT_NO@
 GT_YES = @GT_YES@
 GUILE = @GUILE@
@@ -122,7 +121,7 @@ docdir = ${GNC_DOC_INSTALL_DIR}
 
 noinst_DATA = make-gnucash-patch
 
-doc_DATA =    AUTHORS   COPYING   ChangeLog   INSTALL   NEWS   README
+doc_DATA =    AUTHORS   COPYING   ChangeLog   HACKING   INSTALL   NEWS   README
 
 
 # All the other files that go in the distribution tarfile that aren't

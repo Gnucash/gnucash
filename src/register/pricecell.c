@@ -27,6 +27,7 @@
  *
  * HISTORY:
  * Copyright (c) 1998, 1999, 2000 Linas Vepstas
+ * Copyright (c) 2000 Dave Peticolas
  */
 
 #include <ctype.h>
@@ -56,8 +57,8 @@ static char * xaccPriceCellPrintValue (PriceCell *cell);
 }
 
 #define SET(cell,str) { 			\
-   if ((cell)->value) free ((cell)->value);	\
-   (cell)->value = strdup (str);		\
+   g_free ((cell)->value);	                \
+   (cell)->value = g_strdup (str);		\
 }
 
 #define PRTBUF 40
@@ -109,7 +110,7 @@ PriceMV (BasicCell *_cell,
    /* accept the newval string if user action was delete, etc. */
    if (change != NULL)
    {
-      int i, count=0;
+      int i, count = 0;
 
       for (i = 0; 0 != change[i]; i++)
       {
@@ -152,13 +153,14 @@ PriceLeave (BasicCell *_cell, const char *val)
 
    /* Otherwise, return the new one. */
    SET ((&(cell->cell)), newval);
-   return strdup(newval);
+
+   return g_strdup(newval);
 }
 
 /* ================================================ */
 
 static char *
-PriceHelp(BasicCell *bcell)
+PriceHelp (BasicCell *bcell)
 {
   PriceCell *cell = (PriceCell *) bcell;
 
@@ -168,11 +170,11 @@ PriceHelp(BasicCell *bcell)
 
     help_str = xaccPriceCellPrintValue(cell);
 
-    return strdup(help_str);
+    return g_strdup(help_str);
   }
 
   if (bcell->blank_help != NULL)
-    return strdup(bcell->blank_help);
+    return g_strdup(bcell->blank_help);
 
   return NULL;
 }
@@ -183,8 +185,11 @@ PriceCell *
 xaccMallocPriceCell (void)
 {
    PriceCell *cell;
-   cell = (PriceCell *) malloc (sizeof (PriceCell));
+
+   cell = g_new(PriceCell, 1);
+
    xaccInitPriceCell (cell);
+
    return cell;
 }
 
@@ -193,18 +198,18 @@ xaccMallocPriceCell (void)
 void
 xaccInitPriceCell (PriceCell *cell)
 {
-   xaccInitBasicCell( &(cell->cell));
+   xaccInitBasicCell (&(cell->cell));
 
    cell->amount = 0.0;
-   cell->blank_zero = GNC_T;
-   cell->monetary = GNC_T;
-   cell->is_currency = GNC_F;
-   cell->shares_value = GNC_F;
+   cell->blank_zero = TRUE;
+   cell->monetary = TRUE;
+   cell->is_currency = FALSE;
+   cell->shares_value = FALSE;
 
    SET (&(cell->cell), "");
    COLORIZE (cell, 0.0);
 
-   cell->cell.use_fg_color = GNC_T;
+   cell->cell.use_fg_color = TRUE;
    cell->cell.enter_cell = PriceEnter;
    cell->cell.modify_verify = PriceMV;
    cell->cell.leave_cell = PriceLeave;
@@ -267,7 +272,7 @@ xaccSetPriceCellValue (PriceCell * cell, double amount)
    cell->amount = amount;
    buff = xaccPriceCellPrintValue (cell);
 
-   SET ( &(cell->cell), buff);
+   SET (&(cell->cell), buff);
 
    /* set the cell color to red if the value is negative */
    COLORIZE (cell, amount);
@@ -281,7 +286,7 @@ xaccSetPriceCellBlank (PriceCell *cell)
 
   cell->amount = 0.0;
 
-  SET ( &(cell->cell), "");
+  SET (&(cell->cell), "");
 
   COLORIZE (cell, 0.0);
 }
@@ -289,7 +294,7 @@ xaccSetPriceCellBlank (PriceCell *cell)
 /* ================================================ */
 
 void
-xaccSetPriceCellSharesValue (PriceCell * cell, gncBoolean shares_value)
+xaccSetPriceCellSharesValue (PriceCell * cell, gboolean shares_value)
 {
   if (cell == NULL)
     return;
@@ -300,7 +305,7 @@ xaccSetPriceCellSharesValue (PriceCell * cell, gncBoolean shares_value)
 /* ================================================ */
 
 void
-xaccSetPriceCellMonetary (PriceCell * cell, gncBoolean monetary)
+xaccSetPriceCellMonetary (PriceCell * cell, gboolean monetary)
 {
   if (cell == NULL)
     return;
@@ -311,7 +316,7 @@ xaccSetPriceCellMonetary (PriceCell * cell, gncBoolean monetary)
 /* ================================================ */
 
 void
-xaccSetPriceCellIsCurrency (PriceCell *cell, gncBoolean is_currency)
+xaccSetPriceCellIsCurrency (PriceCell *cell, gboolean is_currency)
 {
   if (cell == NULL)
     return;
@@ -322,7 +327,7 @@ xaccSetPriceCellIsCurrency (PriceCell *cell, gncBoolean is_currency)
 /* ================================================ */
 
 void
-xaccSetPriceCellBlankZero (PriceCell *cell, gncBoolean blank_zero)
+xaccSetPriceCellBlankZero (PriceCell *cell, gboolean blank_zero)
 {
   if (cell == NULL)
     return;

@@ -1,8 +1,7 @@
 /********************************************************************\
- * dialog-edit.h -- window for editing account information          *
- *                  (GnuCash)                                       *
- * Copyright (C) 1999 Linas Vepstas                                 *
- * Copyright (C) 2000 Dave Peticolas <peticola@cs.ucdavis.edu>      *
+ * dialog-account.h -- window for creating and editing accounts for *
+ *                     GnuCash                                      *
+ * Copyright (C) 2000 Dave Peticolas <petcola@cs.ucdavis.edu>       *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -22,10 +21,13 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-#ifndef __DIALOG_EDIT_H_
-#define __DIALOG_EDIT_H_
+#ifndef __DIALOG_ACCOUNT_H__
+#define __DIALOG_ACCOUNT_H__
 
-void gnc_ui_edit_account_window_raise(EditAccWindow * editAcccData);
+#include "AccWindow.h"
+
+void gnc_ui_destroy_account_add_windows();
+void gnc_ui_edit_account_window_raise(AccountWindow * winData);
 
 
 #endif

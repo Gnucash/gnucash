@@ -7,4 +7,4 @@
 (gnc:depend "report/hello-world.scm")
 (gnc:depend "report/transaction-report.scm")
 (gnc:depend "report/budget-report.scm")
-
+(gnc:depend "report/account-summary.scm")

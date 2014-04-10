@@ -33,8 +33,8 @@ enum
 };
 
 
-gncBoolean gnc_verify_dialog_parented(GtkWindow *parent, const char *message,
-                                      gncBoolean yes_is_default);
+gboolean gnc_verify_dialog_parented(GtkWindow *parent, const char *message,
+                                    gboolean yes_is_default);
 
 void gnc_info_dialog(const char *message);
 void gnc_info_dialog_parented(GtkWindow *parent, const char *message);

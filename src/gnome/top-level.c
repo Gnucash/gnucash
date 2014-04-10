@@ -27,13 +27,18 @@
 #include <stdlib.h>
 #include <guile/gh.h>
 #include <gnome.h>
+#include <gtk/gtk.h>
+#include <gtkhtml/gtkhtml.h>
 
 #include "gnome-top-level.h"
 #include "window-main.h"
+#include "dialog-account.h"
+#include "dialog-transfer.h"
 #include "global-options.h"
 #include "gnucash-sheet.h"
 #include "gnucash-color.h"
 #include "gnucash-style.h"
+#include "ui-callbacks.h"
 #include "extensions.h"
 #include "window-help.h"
 #include "window-report.h"
@@ -52,6 +57,8 @@
 #include "SplitLedger.h"
 #include "guile-util.h"
 #include "splitreg.h"
+#include "combocell.h"
+#include "recncell.h"
 
 
 /** PROTOTYPES ******************************************************/
@@ -68,6 +75,14 @@ static void gnc_configure_register_borders(void);
 static void gnc_configure_reverse_balance_cb(void *);
 static void gnc_configure_reverse_balance(void);
 static void gnc_configure_sr_label_callbacks();
+static void gnc_configure_auto_raise_cb(void * foo) { }
+static void gnc_configure_auto_raise(void) { }
+static void gnc_configure_auto_decimal_cb(void *);
+static void gnc_configure_auto_decimal(void);
+static void gnc_configure_register_font_cb(void *);
+static void gnc_configure_register_font(void);
+static void gnc_configure_register_hint_font_cb(void *);
+static void gnc_configure_register_hint_font(void);
 
 /** GLOBALS *********************************************************/
 /* This static indicates the debugging module that this .o belongs to.  */
@@ -85,6 +100,10 @@ static SCM account_separator_callback_id = SCM_UNDEFINED;
 static SCM register_colors_callback_id = SCM_UNDEFINED;
 static SCM register_borders_callback_id = SCM_UNDEFINED;
 static SCM reverse_balance_callback_id = SCM_UNDEFINED;
+static SCM auto_raise_callback_id = SCM_UNDEFINED;
+static SCM auto_decimal_callback_id = SCM_UNDEFINED;
+static SCM register_font_callback_id = SCM_UNDEFINED;
+static SCM register_hint_font_callback_id = SCM_UNDEFINED;
 
 /* ============================================================== */
 
@@ -131,7 +150,12 @@ gnucash_ui_init()
   {
     gnome_init("GnuCash", NULL, fake_argc, fake_argv);
     gnome_is_initialized = TRUE;
-
+    
+    /* initialization required for gtkhtml */
+    gdk_rgb_init ();    
+    gtk_widget_set_default_colormap (gdk_rgb_get_cmap ());
+    gtk_widget_set_default_visual (gdk_rgb_get_visual ());
+    
     app = gnome_app_new("GnuCash", "GnuCash");
 
     gnc_options_init();
@@ -169,7 +193,32 @@ gnucash_ui_init()
                                           NULL, "General",
                                           "Reversed-balance account types");
 
+    gnc_configure_auto_raise();
+    auto_raise_callback_id = 
+      gnc_register_option_change_callback(gnc_configure_auto_raise_cb,
+                                          NULL, "Register",
+                                          "Auto-Raise Lists");
+
+    gnc_configure_auto_decimal();
+    auto_decimal_callback_id =
+      gnc_register_option_change_callback(gnc_configure_auto_decimal_cb,
+                                          NULL, "General",
+                                         "Automatic Decimal Point");
+
+    gnc_configure_register_font();
+    register_font_callback_id =
+      gnc_register_option_change_callback(gnc_configure_register_font_cb,
+                                          NULL, "Register", "Register font");
+
+    gnc_configure_register_hint_font();
+    register_hint_font_callback_id =
+      gnc_register_option_change_callback(gnc_configure_register_hint_font_cb,
+                                          NULL, "Register",
+                                          "Register hint font");
+
     gnc_configure_sr_label_callbacks();
+
+    xaccRecnCellSetStringGetter(gnc_get_reconcile_str);
 
     mainWindow();
 
@@ -205,6 +254,8 @@ gnc_ui_destroy_all_subwindows (void)
   xaccGroupWindowDestroy(gncGetCurrentGroup());
   gnc_ui_destroy_help_windows();
   gnc_ui_destroy_report_windows();
+  gnc_ui_destroy_account_add_windows();
+  gnc_ui_destroy_xfer_windows();
 }
 
 /* ============================================================== */
@@ -219,8 +270,11 @@ gnc_ui_destroy (void)
   gnc_unregister_option_change_callback_id(currency_callback_id);
   gnc_unregister_option_change_callback_id(account_separator_callback_id);
   gnc_unregister_option_change_callback_id(register_colors_callback_id);
-  gnc_unregister_option_change_callback_id(register_borders_callback_id);  
-  gnc_unregister_option_change_callback_id(reverse_balance_callback_id);  
+  gnc_unregister_option_change_callback_id(register_borders_callback_id);
+  gnc_unregister_option_change_callback_id(reverse_balance_callback_id);
+  gnc_unregister_option_change_callback_id(auto_raise_callback_id);
+  gnc_unregister_option_change_callback_id(register_font_callback_id);
+  gnc_unregister_option_change_callback_id(register_hint_font_callback_id);
 
   if (app != NULL)
   {
@@ -254,7 +308,6 @@ gnc_ui_main()
   return 0;
 }
 
-/* hack alert -- all we do below is rename some functions. fix this someday */
 /* ============================================================== */
 
 int
@@ -271,6 +324,22 @@ gnucash_ui_select_file()
 {
   gncFileOpen();
   return 1;
+}
+
+/* ============================================================== */
+
+const char *
+gnc_register_default_font()
+{
+  return gnucash_style_get_default_register_font_name();
+}
+
+/* ============================================================== */
+
+const char *
+gnc_register_default_hint_font()
+{
+  return gnucash_style_get_default_register_hint_font_name();
 }
 
 /* ============================================================== */
@@ -424,7 +493,8 @@ gnc_configure_newacc_currency(void)
     gnc_lookup_string_option("International",
                              "Default Currency",
                              "USD");
-  xaccSetDefaultNewaccountCurrency(newacc_def_currency);
+
+  gnc_ui_set_default_new_account_currency (newacc_def_currency);
 
   if (newacc_def_currency != NULL)
     free(newacc_def_currency);
@@ -575,12 +645,12 @@ gnc_configure_register_borders(void)
 
   if (gnc_lookup_boolean_option("Register",
                                 "Show Vertical Borders",
-                                GNC_T))
+                                TRUE))
     reg_borders |= STYLE_BORDER_LEFT | STYLE_BORDER_RIGHT;
   
   if (gnc_lookup_boolean_option("Register",
                                 "Show Horizontal Borders",
-                                GNC_T))
+                                TRUE))
     reg_borders |= STYLE_BORDER_TOP | STYLE_BORDER_BOTTOM;
   
   gnucash_style_set_register_borders (reg_borders);
@@ -601,28 +671,28 @@ gnc_configure_reverse_balance_cb(void *not_used)
   gnc_refresh_main_window();
 }
 
-static gncBoolean reverse_type[NUM_ACCOUNT_TYPES];
+static gboolean reverse_type[NUM_ACCOUNT_TYPES];
 
-gncBoolean
+gboolean
 gnc_reverse_balance_type(int type)
 {
   if ((type < 0) || (type >= NUM_ACCOUNT_TYPES))
-    return GNC_F;
+    return FALSE;
 
   return reverse_type[type];
 }
 
-gncBoolean
+gboolean
 gnc_reverse_balance(Account *account)
 {
   int type;
 
   if (account == NULL)
-    return GNC_F;
+    return FALSE;
 
   type = xaccAccountGetType(account);
   if ((type < 0) || (type >= NUM_ACCOUNT_TYPES))
-    return GNC_F;
+    return FALSE;
 
   return reverse_type[type];
 }
@@ -642,7 +712,7 @@ gnc_configure_reverse_balance(void)
   xaccSRSetReverseBalanceCallback(gnc_reverse_balance);
 
   for (i = 0; i < NUM_ACCOUNT_TYPES; i++)
-    reverse_type[i] = GNC_F;
+    reverse_type[i] = FALSE;
 
   choice = gnc_lookup_multichoice_option("General",
                                          "Reversed-balance account types",
@@ -650,15 +720,15 @@ gnc_configure_reverse_balance(void)
 
   if (safe_strcmp(choice, "default") == 0)
   {
-    reverse_type[INCOME]  = GNC_T;
-    reverse_type[EXPENSE] = GNC_T;
+    reverse_type[INCOME]  = TRUE;
+    reverse_type[EXPENSE] = TRUE;
   }
   else if (safe_strcmp(choice, "credit") == 0)
   {
-    reverse_type[LIABILITY] = GNC_T;
-    reverse_type[EQUITY]    = GNC_T;
-    reverse_type[INCOME]    = GNC_T;
-    reverse_type[CREDIT]    = GNC_T;
+    reverse_type[LIABILITY] = TRUE;
+    reverse_type[EQUITY]    = TRUE;
+    reverse_type[INCOME]    = TRUE;
+    reverse_type[CREDIT]    = TRUE;
   }
   else if (safe_strcmp(choice, "none") == 0)
   {
@@ -667,12 +737,107 @@ gnc_configure_reverse_balance(void)
   {
     PERR("bad value\n");
 
-    reverse_type[INCOME]  = GNC_T;
-    reverse_type[EXPENSE] = GNC_T;
+    reverse_type[INCOME]  = TRUE;
+    reverse_type[EXPENSE] = TRUE;
   }
 
   if (choice != NULL)
     free(choice);
+}
+
+/* gnc_configure_auto_decimal_cb
+ *     Callback called when options change -
+ *     sets auto decimal option and refreshes the UI
+ * 
+ *  Args: Nothing
+ *  Returns: Nothing
+ */
+static void
+gnc_configure_auto_decimal_cb(void *not_used)
+{
+  gnc_configure_auto_decimal();
+}
+
+/* gnc_configure_auto_decimal
+ *     Pass the global value for the auto decimal field to the engine.
+ * 
+ * Args: Nothing
+ * Returns: Nothing
+ */
+static void
+gnc_configure_auto_decimal(void)
+{
+  gboolean enabled;
+
+  enabled = gnc_lookup_boolean_option("General",
+                                      "Automatic Decimal Point",
+                                      FALSE);
+
+  gnc_set_auto_decimal_enabled(enabled);
+}
+
+/* gnc_configure_register_font_cb
+ *     Callback called when options change -
+ *     sets register font
+ * 
+ *  Args: unused data
+ *  Returns: Nothing
+ */
+static void
+gnc_configure_register_font_cb(void *not_used)
+{
+  gnc_configure_register_font();
+}
+
+/* gnc_configure_register_font
+ *     Set up the register font
+ * 
+ *  Args: Nothing
+ *  Returns: Nothing
+ */
+static void
+gnc_configure_register_font(void)
+{
+  char *font_name;
+
+  font_name = gnc_lookup_font_option("Register", "Register font", NULL);
+
+  gnucash_style_set_register_font_name(font_name);
+
+  if (font_name != NULL)
+    free(font_name);
+}
+
+/* gnc_configure_register_hint_font_cb
+ *     Callback called when options change -
+ *     sets register hint font
+ * 
+ *  Args: unused data
+ *  Returns: Nothing
+ */
+static void
+gnc_configure_register_hint_font_cb(void *not_used)
+{
+  gnc_configure_register_hint_font();
+}
+
+/* gnc_configure_register_hint_font
+ *     Set up the register hint font
+ * 
+ *  Args: Nothing
+ *  Returns: Nothing
+ */
+static void
+gnc_configure_register_hint_font(void)
+{
+  char *font_name;
+
+  font_name = gnc_lookup_font_option("Register", "Register hint font", NULL);
+
+  gnucash_style_set_register_hint_font_name(font_name);
+
+  if (font_name != NULL)
+    free(font_name);
 }
 
 /****************** END OF FILE **********************/

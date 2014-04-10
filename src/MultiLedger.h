@@ -46,8 +46,9 @@ struct _xaccLedgerDisplay {
   short   numAcc;                /* number of accounts in list              */
   Query   *query;                /* query engine & filter for displaying    */
 
-  short type;                    /* register display type, usually equal to *
+  SplitRegisterType type;        /* register display type, usually equal to *
                                   * account type, but not always.           */
+
   double balance;                /* balance */
   double clearedBalance;
   double reconciledBalance;
@@ -81,7 +82,8 @@ xaccLedgerDisplay * xaccLedgerDisplayAccGroup (Account *acc);
  */
 xaccLedgerDisplay * xaccLedgerDisplayGeneral (Account *lead_acc,
                                               Account **acclist,
-                                              int ledger_type);
+                                              SplitRegisterType type,
+                                              SplitRegisterStyle style);
 
 /*
  * redisplay/redraw all windows that contain any transactions

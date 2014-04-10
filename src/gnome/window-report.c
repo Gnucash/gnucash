@@ -177,21 +177,16 @@ report_data_set_guile_options(ReportData *report_data, const SCM guile_options)
 
 
 static HTMLData *
-reportAnchorCB(XmHTMLAnchorCallbackStruct *acbs,
+reportAnchorCB(URLType url_type, char * location, char * label,
                HTMLUserData user_data)
 {
-  switch(acbs->url_type)
-  {
-    case ANCHOR_FILE_LOCAL:
-    case ANCHOR_FTP:
-    case ANCHOR_HTTP:
-    case ANCHOR_MAILTO:
-    case ANCHOR_UNKNOWN:
-    default:
-      gnome_url_show(acbs->href);
-      break;
+  /* this isn't called for "jump to anchor" clicks.  That's */
+  /* handled internally in the HTML widget. */
+  switch(url_type) {
+  default:
+    gnc_url_show(url_type, location, label);
+    break;
   }
-
   return NULL;
 }
 
@@ -327,10 +322,10 @@ gnc_report_export(ReportData *report_data)
   /* See if the file exists */
   if ((stat(export_filename, &file_status) == 0))
   {
-    gncBoolean result;
+    gboolean result;
 
     message = g_strdup_printf(FMB_EEXIST_MSG, export_filename);
-    result = gnc_verify_dialog_parented(parent, message, GNC_F);
+    result = gnc_verify_dialog_parented(parent, message, FALSE);
     g_free(message);
 
     if (!result)

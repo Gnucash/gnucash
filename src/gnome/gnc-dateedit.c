@@ -58,6 +58,11 @@ static void gnc_date_edit_forall       (GtkContainer       *container,
                                         gboolean	    include_internals,
                                         GtkCallback	    callback,
                                         gpointer	    callbabck_data);
+static struct tm gnc_date_edit_get_date_internal (GNCDateEdit *gde);
+static int date_accel_key_press(GtkWidget *widget,
+                                GdkEventKey *event,
+                                gpointer data);
+
 
 static GtkHBoxClass *parent_class;
 
@@ -133,7 +138,7 @@ key_press_popup (GtkWidget *widget, GdkEventKey *event, gpointer data)
 	GNCDateEdit *gde;
 
 	if (event->keyval != GDK_Escape)
-		return FALSE;
+		return date_accel_key_press(widget, event, data);
 
 	gde = data;
 	gtk_signal_emit_stop_by_name (GTK_OBJECT (widget), "key_press_event");
@@ -473,6 +478,123 @@ gnc_date_edit_set_popup_range (GNCDateEdit *gde, int low_hour, int up_hour)
         fill_time_popup(NULL, gde);
 }
 
+/* This code should be kept in sync with src/register/datecell.c */
+static int
+date_accel_key_press(GtkWidget *widget, GdkEventKey *event, gpointer data)
+{
+	GNCDateEdit *gde = data;
+        struct tm tm;
+
+        switch (event->keyval) {
+                case GDK_plus:
+                case GDK_KP_Add:
+                case GDK_equal:
+                case GDK_KP_Equal:
+                case GDK_underscore:
+                case GDK_minus:
+                case GDK_KP_Subtract:
+                case GDK_bracketright:
+                case GDK_braceright:
+                case GDK_bracketleft:
+                case GDK_braceleft:
+                case GDK_M:
+                case GDK_m:
+                case GDK_H:
+                case GDK_h:
+                case GDK_Y:
+                case GDK_y:
+                case GDK_R:
+                case GDK_r:
+                case GDK_T:
+                case GDK_t:
+                        break;
+                default:
+                        return FALSE;
+        }
+
+        gtk_signal_emit_stop_by_name (GTK_OBJECT (widget), "key_press_event");
+
+        tm = gnc_date_edit_get_date_internal (gde);
+
+        switch (event->keyval) {
+                case GDK_plus:
+                case GDK_KP_Add:
+                case GDK_equal:
+                case GDK_KP_Equal:
+                        /* increment day */
+                        tm.tm_mday ++;
+                        break;
+
+                case GDK_underscore:
+                case GDK_minus:
+                case GDK_KP_Subtract:
+                        /* decrement day */
+                        tm.tm_mday --;
+                        break;
+
+                case GDK_bracketright:
+                case GDK_braceright:
+                        /* increment month */
+                        tm.tm_mon ++;
+                        break;
+
+                case GDK_bracketleft:
+                case GDK_braceleft:
+                        /* decrement month */
+                        tm.tm_mon --;
+                        break;
+
+                case GDK_M:
+                case GDK_m:
+                        /* beginning of month */
+                        tm.tm_mday = 1;
+                        break;
+
+                case GDK_H:
+                case GDK_h:
+                        /* end of month */
+                        tm.tm_mon ++;
+                        tm.tm_mday = 0;
+                        break;
+
+                case GDK_Y:
+                case GDK_y:
+                        /* beginning of year */
+                        tm.tm_mday = 1;
+                        tm.tm_mon = 0;
+                        break;
+
+                case GDK_R:
+                case GDK_r:
+                        /* end of year */
+                        tm.tm_mday = 31;
+                        tm.tm_mon = 11;
+                        break;
+
+                case GDK_T:
+                case GDK_t: {
+                        /* today */
+                        time_t secs;
+                        struct tm *now;
+
+                        time (&secs);
+                        now = localtime (&secs);
+                        tm = *now;
+                        break;
+                }
+        }
+
+        xaccValidateDate(&tm);
+
+        gnc_date_edit_set_time(gde, mktime(&tm));
+
+	gtk_calendar_select_month (GTK_CALENDAR (gde->calendar), tm.tm_mon,
+                                   1900 + tm.tm_year);
+        gtk_calendar_select_day (GTK_CALENDAR (gde->calendar), tm.tm_mday);
+
+        return TRUE;
+}
+
 static void
 create_children (GNCDateEdit *gde)
 {
@@ -484,7 +606,9 @@ create_children (GNCDateEdit *gde)
 	gtk_widget_set_usize (gde->date_entry, 90, 0);
 	gtk_box_pack_start (GTK_BOX (gde), gde->date_entry, TRUE, TRUE, 0);
 	gtk_widget_show (gde->date_entry);
-	
+	gtk_signal_connect (GTK_OBJECT (gde->date_entry), "key_press_event",
+			    GTK_SIGNAL_FUNC(date_accel_key_press), gde);
+
 	gde->date_button = gtk_button_new ();
 	gtk_signal_connect (GTK_OBJECT (gde->date_button), "clicked",
 			    GTK_SIGNAL_FUNC (select_clicked), gde);
@@ -607,14 +731,8 @@ gnc_date_edit_new_flags (time_t the_time, GNCDateEditFlags flags)
 	return GTK_WIDGET (gde);
 }
 
-/**
- * gnc_date_edit_get_date:
- * @gde: The GNCDateEdit widget
- *
- * Returns the time entered in the GNCDateEdit widget
- */
-time_t
-gnc_date_edit_get_date (GNCDateEdit *gde)
+static struct tm
+gnc_date_edit_get_date_internal (GNCDateEdit *gde)
 {
 	struct tm tm = {0};
 	char *str, *flags = NULL;
@@ -665,6 +783,22 @@ gnc_date_edit_get_date (GNCDateEdit *gde)
 	}
 
 	tm.tm_isdst = -1;
+
+        return tm;
+}
+
+/**
+ * gnc_date_edit_get_date:
+ * @gde: The GNCDateEdit widget
+ *
+ * Returns the time entered in the GNCDateEdit widget
+ */
+time_t
+gnc_date_edit_get_date (GNCDateEdit *gde)
+{
+ 	struct tm tm;
+
+        tm = gnc_date_edit_get_date_internal (gde);
 
 	return mktime (&tm);
 }

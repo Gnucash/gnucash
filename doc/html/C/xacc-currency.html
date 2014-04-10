@@ -63,6 +63,65 @@
     "xacc-double.html#IDENTITY">double entry accounting
     identity.</a></p>
 
+    <h1>
+    How to set up a foreign-currency account
+    </h1>
+    <p>All of the above may sound straightforward, but you may get
+    stumped when you first try to represent some foreign money.  Let's
+    demonstrate how you'd go about setting up an account to represent,
+    say, French Francs.</p>
+
+    <p>Let's say you have an account that holds cash in US dollars,
+    and it has $1,000 in it.  You want to buy about $100 worth of
+    Francs, and naturally you'd like to represent those Francs in
+    their own account.  Here's what you need to do:</p>
+    <ol>
+      <li>
+	Create a new account (name it "Francs") of type Cash, with a
+	currency of FRF (that's the ISO code for French Francs; see <a
+	href="#ISOCURR">ISO Currency Codes</a>, below).
+      </li>
+      <li>
+	Create <em>another</em> account (name it "Trading"), of type
+	Currency, with a currency of USD, and a <em>security</em> of
+	FRF.  This account will represent <em>trades</em> between the
+	two currencies, or to be more precise, purchases of Francs
+	with dollars.
+      </li>
+      <li>
+	Now open the "Trading" account, and enter a transaction that
+	transfers from your cash account.  Put 555 in the "Bought"
+	column, and .18 in the Price column.  You've now bought 555
+	Francs for $0.18 apiece.
+      </li>
+      <li>
+	Last step: transfer the $99.90 that is now in your trading
+	account into the "Francs" account.  Note that you could not
+	have transferred anything directly from cash to Francs (try
+	it); those two accounts do not have a currency in common.
+      </li>
+    </ol>
+    <p>A few unpleasant things you may have noticed about the above
+    procedure:</p>
+    <ul>
+      <li>
+	All the numbers you see in the "Balance" column of your main
+	window are in dollars, even the "Francs" account.  This is a
+	bug.  Worse, the "Assets" figure at the bottom is simply
+	wrong: it should read $1,000, but instead reads $1,455.10,
+	having apparently added your 555 Francs directly to your 900.1
+	remaining dollars.
+      </li>
+      <li>
+      It's confusing.  This could also be considered a bug.
+      </li>
+    </ul>
+    <p>Notwithstanding the above unpleasantness, this is how you deal
+    with foreign currencies in GnuCash.  The key is that you need a
+    trading account whose Security field names a different currency
+    than its Currency field, and your trades must go "through" this
+    trading account.</p>
+
     <h1>ISO Currency Codes</h1>
     <a name="ISOCURR"></a> 
 

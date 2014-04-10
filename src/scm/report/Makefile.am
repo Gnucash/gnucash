@@ -2,6 +2,7 @@
 gncscmdir = ${GNC_SCM_INSTALL_DIR}/report
 
 gncscm_DATA = \
+  account-summary.scm \
   average-balance.scm \
   balance-and-pnl.scm \
   budget-report.scm \

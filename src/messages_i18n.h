@@ -65,6 +65,7 @@
 #define ACC_ADJUST_MSG    _("To adjust an account's balance, you must "\
                             "first\nchoose an account to adjust.\n")
 #define ACC_BAD_PARENT_MSG _("You must choose a valid parent account.")
+#define ACC_DUP_NAME_MSG  _("There is already an account with that name.")
 #define ACC_NEW_MSG       _("Do you want to create a new account?\n"\
                             "If not, then please select an account\n"\
                             "to open in the main window.\n")
@@ -82,6 +83,9 @@
                             "choose an account to reconcile.\n")
 #define AMOUNT_NUM_MSG    _("The amount must be a number.")
 #define BALANCE_NUM_MSG   _("The balance must be a number.")
+#define CALC_INTEREST_MSG _("The interest rate cannot be zero.")
+#define CALC_MISSING_MSG  _("You must enter values for the other quantities.")
+#define CALC_PAYMENTS_MSG _("The number of payments cannot be zero.")
 #define CHANGE_RECN_MSG   _("Do you really want to mark this transaction "\
                             "not reconciled?\nDoing so might make future "\
                             "reconciliation difficult!")
@@ -138,9 +142,16 @@
                             "window.\nAre you sure you want to cancel?")
 #define RECN_TRANS_WARN   _("Warning! This is a reconciled transaction. " \
                             "Do you want do continue?")
+
+#define REENABLE_TIPS_MSG _("You have disabled \"Tip of the Day\"\n" \
+                            "You can re-enable tips from the General\n" \
+                            "section of the Preferences menu")
 #define REG_CURR_MSG      _("You cannot transfer funds from the %s " \
                             "account.\nIt does not have a matching " \
-                            "currency.")
+                            "currency.\nTo transfer funds between " \
+                            "accounts with different currencies\n you" \
+                            "need an intermediate currency account.\n" \
+                            "Please see the GnuCash online manual")
 #define REPORT_ERR_MSG    _("Error executing scheme report.")
 #define REPORT_NOPARM_MSG _("This report has no parameters.")
 #define SHOW_INC_EXP_MSG  _("Show the income and expense accounts.")
@@ -163,7 +174,11 @@
 #define XFER_NSF_MSG      _("There must be at least two accounts\n"\
                             "created before you can transfer funds.")
 #define XFER_CURR_MSG     _("You cannot transfer between those accounts.\n" \
-                            "They do not have a common currency.")
+                            "They do not have a common currency.\n" \
+                            "To transfer funds between " \
+                            "accounts with different currencies you\n" \
+                            "need an intermediate currency account.\n" \
+                            "Please see the GnuCash online manual")
 #define XFER_DIFF_MSG     _("The \"From\" and \"To\" accounts\n must be " \
                             "different!")
 #define XFER_SAME_MSG     _("You can't transfer from and to the same " \
@@ -223,7 +238,8 @@
 #define TOOLTIP_EXIT_N         N_("Exit GnuCash")
 #define TOOLTIP_EXIT	        _(TOOLTIP_EXIT_N)
 #define TOOLTIP_EXPORT_REPORT   _("Export HTML-formatted report to file")
-#define TOOLTIP_FIND_N         N_("Find transactions with a search.")
+#define TOOLTIP_FIN_CALC_N     N_("Use the financial calculator")
+#define TOOLTIP_FIND_N         N_("Find transactions with a search")
 #define TOOLTIP_FIND            _(TOOLTIP_FIND_N)
 #define TOOLTIP_HELP_N         N_("Open the GnuCash help window")
 #define TOOLTIP_HELP            _(TOOLTIP_HELP_N)
@@ -313,6 +329,8 @@
 #define TOOLTIP_SORT_BY_STMT    _(TOOLTIP_SORT_BY_STMT_N)
 #define TOOLTIP_STANDARD_ORD_N N_("Keep normal account order")
 #define TOOLTIP_STANDARD_ORD    _(TOOLTIP_STANDARD_ORD_N)
+#define TOOLTIP_TOTD_N         N_("Tips of the Day")
+#define TOOLTIP_TOTD            _(TOOLTIP_TOTD_N)
 #define TOOLTIP_TRANSFER_N     N_("Transfer funds from one account to "\
                                   "another")
 #define TOOLTIP_TRANSFER        _(TOOLTIP_TRANSFER_N)
@@ -408,6 +426,10 @@
 #define SORT_ORDER_MENU_STR       _(SORT_ORDER_MENU_STR_N)
 #define STYLE_MENU_STR_N         N_("_Style")
 #define STYLE_MENU_STR            _(STYLE_MENU_STR_N)
+#define TOOLS_MENU_STR_N         N_("_Tools")
+#define TOOLS_MENU_STR            _(TOOLS_MENU_STR_N)
+#define TOTD_MENU_STR_N          N_("_Tips Of The Day")
+#define TOTD_MENU_STR             _(TOTD_MENU_STR_N)
 #define TRANSACTION_MENU_STR_N   N_("_Transaction")
 #define TRANSACTION_MENU_STR      _(TRANSACTION_MENU_STR_N)
 #define TRANSFER_MENU_STR         _("_Transfer")
@@ -432,12 +454,15 @@
 #define DATE_RANGE_STR      _("Date Range")
 #define DEL_ACC_STR         _("Delete Account")
 #define DEL_TRANS_STR       _("Delete Transaction")
+#define DISPLAY_NEXT_TIME_STR _("Display this dialog next time")
 #define DOUBLE_LINE_STR_N  N_("Double Line")
 #define DOUBLE_LINE_STR     _(DOUBLE_LINE_STR_N)
 #define EDIT_ACCT_STR       _("Edit Account")
 #define END_BALN_STR        _("Ending Balance")
 #define END_DATE_STR        _("End date")
 #define EXPORT_TO_STR       _("Export To")
+#define FIN_CALC_STR_N     N_("Financial Calculator")
+#define FIN_CALC_STR        _("FIN_CALC_STR_N")
 #define FINISH_STR          _("Finish")
 #define FROM_NOW_STR        _("From Now")
 #define GENERAL_LEDGER_STR  _("General Ledger")
@@ -506,6 +531,7 @@
 #define STANDARD_ORDER_STR_N N_("Standard order")
 #define STANDARD_ORDER_STR    _(STANDARD_ORDER_STR_N)
 #define STATEMENT_DATE_C_STR _("Statement Date:")
+#define TOTD_STR            _("Tip of the Day:")
 #define TOP_ACCT_STR        _("Top level account")
 #define TOTAL_SHARES_STR    _("Total Shares")
 #define VERIFY_CHANGES_STR  _("Verify Changes")
@@ -574,6 +600,7 @@
 #define EDIT_STR_N         N_("Edit")
 #define EDIT_STR            _(EDIT_STR_N)
 #define EQUITY_STR          _("Equity")
+#define EURO_TOTAL_STR      _("EUR (total)")
 #define EXIT_STR_N         N_("Exit")
 #define EXIT_STR            _(EXIT_STR_N)
 #define EXPENSE_STR         _("Expense")
@@ -655,6 +682,7 @@
 #define TRANSACTION_STR     _("Transaction")
 #define TRANSFER_STR_N     N_("Transfer")
 #define TRANSFER_STR        _(TRANSFER_STR_N)
+#define UNTITLED_STR        _("Untitled")
 #define VALUE_STR           _("Value")
 #define WARN_STR            _("WARNING")
 #define WEEKS_STR           _("Weeks")
@@ -663,6 +691,13 @@
 #define WITHDRAWAL_STR      _("Withdrawal")
 #define YEARS_STR           _("Years")
 #define YES_STR             _("Yes")
+
+/* single letters */
+#define CLEARED_ABBREV      _("cleared:c"+8)
+#define FROZEN_ABBREV       _("frozen:f"+7)
+#define NOT_CLEARED_ABBREV  _("not cleared:n"+12)
+#define RECONCILE_ABBREV    _("Reconciled:R"+11)
+#define RECONCILED_ABBREV   _("reconciled:y"+11)
 
 
 #endif /* __XACC_MESSAGES_I18N_H__ */

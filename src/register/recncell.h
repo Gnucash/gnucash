@@ -24,26 +24,41 @@
  *
  * FUNCTION:
  * The RecnCell object implements a cell handler
- * that will cycle throguh a series of single-character
+ * that will cycle through a series of single-character
  * values when clicked upon by the mouse.
  *
- * hack alert -- ther should be a way of specifying what these values
+ * hack alert -- there should be a way of specifying what these values
  * are, instead of having them hard coded as they currently are.
  *
  * HISTORY:
  * Copyright (c) 1998 Linas Vepstas
+ * Copyright (c) 2000 Dave Peticolas
  */
 
-#ifndef __XACC_RECN_CELL_C__
-#define __XACC_RECN_CELL_C__
+#ifndef __RECN_CELL_C__
+#define __RECN_CELL_C__
 
 #include "basiccell.h"
 
-/* installs a callback to handle reconcile flag */
-BasicCell * xaccMallocRecnCell (void);
-void         xaccInitRecnCell (BasicCell *);
-void         xaccDestroyRecnCell (BasicCell *);
+typedef const char * (*RecnCellStringGetter)(char);
 
-#endif /* __XACC_RECN_CELL_C__ */
+typedef struct _RecnCell
+{
+  BasicCell cell;
+
+  char reconciled_flag; /* The actual flag value */
+} RecnCell;
+
+RecnCell * xaccMallocRecnCell (void);
+void       xaccInitRecnCell (RecnCell *);
+void       xaccDestroyRecnCell (RecnCell *);
+
+void       xaccRecnCellSetFlag (RecnCell *, char reconciled_flag);
+char       xaccRecnCellGetFlag (RecnCell *);
+ 
+void       xaccRecnCellSetStringGetter (RecnCellStringGetter getter);
+
+
+#endif /* __RECN_CELL_C__ */
 
 /* --------------- end of file ---------------------- */

@@ -1,7 +1,7 @@
 /********************************************************************\
- * AccWindow.h -- window for creating new accounts for xacc         *
- *                (X-Accountant)                                    *
+ * AccWindow.h -- window for creating new accounts for GnuCash      *
  * Copyright (C) 1997 Robin D. Clark                                *
+ * Copyright (C) 2000 Dave Peticolas                                *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -23,34 +23,29 @@
  *           Huntington Beach, CA 92648-4632                        *
 \********************************************************************/
 
-#ifndef __XACC_NEWACCWINDOW_H__
-#define __XACC_NEWACCWINDOW_H__
+#ifndef __ACC_WINDOW_H__
+#define __ACC_WINDOW_H__
 
 #include "config.h"
 
 #include "Account.h"
 #include "Group.h"
 
+
 /** PROTOTYPES ******************************************************/
-typedef struct _accwindow       AccWindow;
-typedef struct _editaccwindow   EditAccWindow;
-typedef struct _editnoteswindow EditNotesWindow;
+typedef struct _AccountWindow  AccountWindow;
 
-AccWindow       * accWindow( AccountGroup *grp);
-EditAccWindow   * editAccWindow( Account *account );
-EditNotesWindow * editNotesWindow (Account *acc);
+AccountWindow * gnc_ui_new_account_window (AccountGroup *group);
+AccountWindow * gnc_ui_edit_account_window (Account *account);
+
+/* The xaccDestroyEditAccWindow() subroutine can be called from
+ *   anywhere to shut down the Register window. Used primarily when
+ *   destroying the underlying account.  */
+void gnc_ui_destroy_edit_account_window (Account *account);
+
+void gnc_ui_refresh_edit_account_window (Account *account);
+
+void gnc_ui_set_default_new_account_currency (const char *currency);
 
 
-/*
- * The xaccDestroyEditAccWindow() subroutine can be called from 
- * anywhere to shut down the Register window.  Used primarily when
- * destroying the underlying account.
- */
-void xaccDestroyEditAccWindow (Account *);
-void xaccDestroyEditNotesWindow (Account *);
-
-void editAccountRefresh(Account *);
-
-void xaccSetDefaultNewaccountCurrency(char *new_default_currency);
-
-#endif /* __XACC_NEWACCWINDOW_H__ */
+#endif /* __ACC_WINDOW_H__ */

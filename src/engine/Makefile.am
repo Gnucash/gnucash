@@ -24,7 +24,8 @@ libgncengine_la_SOURCES = \
   util.c \
   GNCId.c \
   guid.c \
-  md5.c
+  md5.c \
+  kvp_frame.c
 
 libgncengine_la_LDFLAGS = -version-info 1:1:1
 
@@ -53,7 +54,8 @@ noinst_HEADERS = \
   gnc-common.h \
   guid.h \
   md5.h \
-  util.h
+  util.h \
+  kvp_frame.h
 
 EXTRA_DIST = \
   .cvsignore \

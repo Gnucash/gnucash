@@ -49,9 +49,9 @@
  *    NULL if there is none.
  *
  * The xaccSRGetSplitRowCol() method searches the split register for
- *    the given split. If found, it returns GNC_T and the virt_row
+ *    the given split. If found, it returns TRUE and the virt_row
  *    and virt_col arguments are set to the location of the split.
- *    Otherwise, the method returns GNC_F.
+ *    Otherwise, the method returns FALSE.
  *
  * The xaccSRGetTransSplitRowCol() method works as above, but searches
  *    first for the first split (the transaction split) and then the
@@ -100,7 +100,7 @@
  *    is set, the transaction will also be committed. If it is
  *    the blank transaction, and the do_commit flag is set,
  *    a refresh will result in a new blank transaction.
- *    The method returns GNC_T if something was changed.
+ *    The method returns TRUE if something was changed.
  *
  * The xaccSRRedrawRegEntry() method should be called soon 
  *    after the xaccSRSaveRegEntry() method.  It checks the 
@@ -122,10 +122,11 @@
 #include "splitreg.h"
 #include "Transaction.h"
 
+
 /* Callback function type */
 typedef gncUIWidget (*SRGetParentCallback) (void *user_data);
 typedef void (*SRSetHelpCallback) (void *user_data, const char *help_str);
-typedef gncBoolean (*SRReverseBalanceCallback) (Account *account);
+typedef gboolean (*SRReverseBalanceCallback) (Account *account);
 
 void xaccSRSetData(SplitRegister *reg, void *user_data,
                    SRGetParentCallback get_parent,
@@ -139,11 +140,11 @@ Transaction * xaccSRGetCurrentTrans (SplitRegister *reg);
 Split * xaccSRGetCurrentSplit (SplitRegister *reg);
 Split * xaccSRGetBlankSplit (SplitRegister *reg);
 
-gncBoolean xaccSRGetSplitRowCol (SplitRegister *reg, Split *split,
-                                 int *virt_row, int *virt_col);
-gncBoolean xaccSRGetTransSplitRowCol (SplitRegister *reg, Transaction *trans,
-                                      Split *trans_split, Split *split,
-                                      int *virt_row, int *virt_col);
+gboolean xaccSRGetSplitRowCol (SplitRegister *reg, Split *split,
+                               int *virt_row, int *virt_col);
+gboolean xaccSRGetTransSplitRowCol (SplitRegister *reg, Transaction *trans,
+                                    Split *trans_split, Split *split,
+                                    int *virt_row, int *virt_col);
 
 Split * xaccSRDuplicateCurrent (SplitRegister *reg);
 
@@ -161,11 +162,11 @@ void    xaccSRCancelCursorTransChanges (SplitRegister *reg);
 void    xaccSRLoadRegister (SplitRegister *reg, Split **slist,
                             Account *default_source_acc);
 
-gncBoolean xaccSRSaveRegEntry (SplitRegister *reg, gncBoolean do_commit);
-void       xaccSRRedrawRegEntry (SplitRegister *reg);
+gboolean xaccSRSaveRegEntry (SplitRegister *reg, gboolean do_commit);
+void     xaccSRRedrawRegEntry (SplitRegister *reg);
 
 void    xaccSRLoadXferCells (SplitRegister *reg, Account *base_account);
 
-gncBoolean xaccSRHasPendingChanges (SplitRegister *reg);
+gboolean xaccSRHasPendingChanges (SplitRegister *reg);
 
 #endif /* __XACC_SPLIT_LEDGER_H__ */

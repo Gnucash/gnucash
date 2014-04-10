@@ -1,0 +1,49 @@
+# qtgrep makefile
+# created by Terry Boldt 3-16-2000
+#
+
+GLIB_CFLAGS = `glib-config --cflags`
+CFLAGS = -O3 $(GLIB_CFLAGS)
+#CFLAGS = -g
+
+CC = gcc
+
+all: financial fini
+
+HDRS = finproto.h \
+	fin_static_proto.h\
+	fin_spl_protos.h\
+	finvar.h
+
+OBJSM = fin.o\
+	amort_prt.o\
+        fin-main.o
+
+OBJSI = fin.o \
+	expression_parser.o\
+	numeric_ops.o\
+	amort_prt.o\
+	amort_opt.o\
+	fin-interactive.o
+
+financial:  $(OBJSM)
+		@echo "linking"
+		$(CC) `glib-config --libs` -o $@ $(OBJSM)
+
+fini:	$(OBJSI)
+		@echo "linking"
+		$(CC) `glib-config --libs` -o $@ $(OBJSI)
+
+fin.o:	fin.c $(HDRS)
+
+expression_parser.o:	expression_parser.c $(HDRS)
+
+fin-interactive.o:	fin-interactive.c $(HDRS)
+
+fin-main.o:	fin-main.c $(HDRS)
+
+numeric_ops.o:	numeric_ops.c $(HDRS)
+
+amort_prt.o:	amort_prt.c $(HDRS)
+
+amort_opt.o:	amort_opt.c $(HDRS)

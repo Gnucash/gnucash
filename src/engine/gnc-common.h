@@ -26,9 +26,6 @@
 #define __GNC_COMMON_H__
 
 #include "config.h"
-
-typedef char gncBoolean;
-#define GNC_F 0
-#define GNC_T (! GNC_F)
+#include <glib.h>
 
 #endif

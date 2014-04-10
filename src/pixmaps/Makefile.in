@@ -81,7 +81,6 @@ GNOME_CONFIG_BIN = @GNOME_CONFIG_BIN@
 GNOME_LIBS = @GNOME_LIBS@
 GNOME_STATIC_TARGET = @GNOME_STATIC_TARGET@
 GNOME_TARGET = @GNOME_TARGET@
-GTK_XMHTML = @GTK_XMHTML@
 GT_NO = @GT_NO@
 GT_YES = @GT_YES@
 GUILE = @GUILE@
@@ -116,7 +115,8 @@ USE_NLS = @USE_NLS@
 VERSION = @VERSION@
 l = @l@
 
-EXTRA_DIST =    .cvsignore 
+EXTRA_DIST =    .cvsignore
+
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = ../../config.h
 CONFIG_CLEAN_FILES = 

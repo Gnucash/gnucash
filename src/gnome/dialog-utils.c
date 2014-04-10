@@ -38,159 +38,7 @@
 static short module = MOD_GUI;
 
 
-/********************************************************************\
- * gnc_ui_notes_frame_create                                        *
- *   create the frame holding the 'notes' entry                     *
- *                                                                  *
- * Args: notes_entry - pointer to notes widget filled in by function*
- * Returns: notes in a box                                          *
- \*******************************************************************/
-GtkWidget *
-gnc_ui_notes_frame_create(GtkEditable **notes_entry)
-{
-  GtkWidget *frame, *text, *table, *vscr;
-    
-  frame = gtk_frame_new(NOTES_STR);
-  gtk_container_border_width(GTK_CONTAINER(frame), 5);
-  gtk_widget_show(frame);
-
-  table = gtk_table_new(1, 2, FALSE);
-  gtk_widget_show(table);
-  gtk_container_add(GTK_CONTAINER(frame), table);
-  gtk_container_border_width (GTK_CONTAINER (table), 3);
-
-  text = gtk_text_new(NULL, NULL);
-  *notes_entry = GTK_EDITABLE(text);
-  gtk_widget_set_usize(text, 300, 50);
-  gtk_widget_show(text);
-  gtk_text_set_editable(GTK_TEXT(text), TRUE);
-
-  gtk_table_attach (GTK_TABLE (table), text, 0, 1, 0, 1,
-		    GTK_FILL | GTK_EXPAND,
- 		    GTK_FILL | GTK_EXPAND | GTK_SHRINK, 0, 0);
-
-  vscr = gtk_vscrollbar_new(GTK_TEXT(text)->vadj);
-  gtk_table_attach(GTK_TABLE(table), vscr, 1, 2, 0, 1,
-		   GTK_FILL, GTK_EXPAND | GTK_FILL | GTK_SHRINK, 0, 0);
-  gtk_widget_show(vscr);
-
-  return frame;
-}
-
-
-/********************************************************************\
- * gnc_ui_create_account_label                                      *
- *   creates an account label from an account field                 *
- *                                                                  *
- * Args: type - the field type to create the label for              *
- * Return: the label widget                                         *
-\********************************************************************/
-GtkWidget *
-gnc_ui_create_account_label(int field_type)
-{
-  GtkWidget *label;
-  gchar *label_string;
-  const gchar *l = gnc_ui_get_account_field_name(field_type);
-
-  label_string = g_strconcat(l, ":", NULL);
-
-  label = gtk_label_new (label_string);
-  gtk_misc_set_alignment (GTK_MISC(label), 1.0, 0.5);
-  gtk_widget_show(label);
-
-  g_free(label_string);
-
-  return label;
-}
-
-
-/********************************************************************\
- * gnc_ui_account_field_box_create                                  *
- *   create the frame holding the edit fields for an account        *
- *                                                                  *
- * Args: info - info structure that is filled in by the function    *
- *       include_type - whether to include an account type entry    *
- * Returns: the box                                                 *
- \*******************************************************************/
-GtkWidget *
-gnc_ui_account_field_box_create(AccountEditInfo * info,
-				gboolean include_type)
-{
-  GtkWidget *frame, *vbox, *hbox, *widget;
-
-  frame = gtk_frame_new(ACC_INFO_STR);
-  gtk_container_border_width(GTK_CONTAINER(frame), 5);
-  gtk_widget_show(frame);
-
-  hbox = gtk_hbox_new(FALSE, 5);
-  gtk_container_border_width(GTK_CONTAINER(hbox), 5);
-  gtk_container_add(GTK_CONTAINER(frame), hbox);
-  gtk_widget_show(hbox);
-
-  vbox = gtk_vbox_new(TRUE, 3);
-  widget = gnc_ui_create_account_label(ACCOUNT_NAME);
-  gtk_box_pack_start(GTK_BOX(vbox), widget, FALSE, FALSE, 0);
-  if (include_type)
-  {
-    widget = gnc_ui_create_account_label(ACCOUNT_TYPE);
-    gtk_box_pack_start(GTK_BOX(vbox), widget, FALSE, FALSE, 0);
-  }
-  widget = gnc_ui_create_account_label(ACCOUNT_DESCRIPTION);
-  gtk_box_pack_start(GTK_BOX(vbox), widget, FALSE, FALSE, 0);
-  widget = gnc_ui_create_account_label(ACCOUNT_CURRENCY);
-  gtk_box_pack_start(GTK_BOX(vbox), widget, FALSE, FALSE, 0);
-  widget = gnc_ui_create_account_label(ACCOUNT_SECURITY);
-  gtk_box_pack_start(GTK_BOX(vbox), widget, FALSE, FALSE, 0);
-  widget = gnc_ui_create_account_label(ACCOUNT_CODE);
-  gtk_box_pack_start(GTK_BOX(vbox), widget, FALSE, FALSE, 0);
-  gtk_box_pack_start(GTK_BOX(hbox), vbox, FALSE, FALSE, 0);
-  gtk_widget_show(vbox);
-
-  vbox = gtk_vbox_new(TRUE, 3);
-
-  widget = gtk_entry_new();
-  info->name_entry = GTK_EDITABLE(widget);
-  gtk_box_pack_start(GTK_BOX(vbox), widget, TRUE, TRUE, 0);
-  gtk_widget_show(widget);
-
-  if (include_type)
-  {
-    widget = gtk_entry_new();
-    info->type_entry = GTK_EDITABLE(widget);
-    /* Set the type entry box to insensitive by default */
-    gtk_widget_set_sensitive(GTK_WIDGET(widget), FALSE);
-    gtk_box_pack_start(GTK_BOX(vbox), widget, TRUE, TRUE, 0);
-    gtk_widget_show(widget);
-  }
-
-  widget = gtk_entry_new();
-  info->description_entry = GTK_EDITABLE(widget);
-  gtk_box_pack_start(GTK_BOX(vbox), widget, TRUE, TRUE, 0);
-  gtk_widget_show(widget);
-
-  widget = gnc_currency_edit_new();
-  info->currency_entry = GTK_EDITABLE(GTK_COMBO(widget)->entry);
-  gtk_box_pack_start(GTK_BOX(vbox), widget, TRUE, TRUE, 0);
-  gtk_widget_show(widget);
-    
-  widget = gtk_entry_new();
-  info->security_entry = GTK_EDITABLE(widget);
-  gtk_box_pack_start(GTK_BOX(vbox), widget, TRUE, TRUE, 0);
-  gtk_widget_show(widget);
-
-  widget = gtk_entry_new();
-  info->code_entry = GTK_EDITABLE(widget);
-  gtk_box_pack_start(GTK_BOX(vbox), widget, TRUE, TRUE, 0);
-  gtk_widget_show(widget);
-
-  gtk_box_pack_start(GTK_BOX(hbox), vbox, TRUE, TRUE, 0);
-  gtk_widget_show(vbox);
-
-  return frame;
-}
-
-
-/* Get the full name of a source */
+/* Get the full name of a quote source */
 gchar *
 gnc_get_source_name(gint source)
 {
@@ -218,7 +66,7 @@ gnc_get_source_name(gint source)
   return NULL;
 }
 
-/* Get the codename string of a source */
+/* Get the codename string of a quote source */
 gchar *
 gnc_get_source_code_name(gint source)
 {
@@ -248,7 +96,7 @@ gnc_get_source_code_name(gint source)
 
 /* Get the codename string of a source */
 gint
-gnc_get_source_code(gchar * codename)
+gnc_get_source_code(const char * codename)
 {
   gint i;
 
@@ -267,27 +115,24 @@ gnc_get_source_code(gchar * codename)
 }
 
 
-static void
-gnc_source_menu_cb(GtkMenuItem *item, gpointer data)
-{
-  AccountEditInfo *info = (AccountEditInfo *) data;
-
-  info->source = GPOINTER_TO_INT(gtk_object_get_user_data(GTK_OBJECT(item)));
-}
-
 /********************************************************************\
  * gnc_ui_source_menu_create                                        *
  *   create the menu of stock quote sources                         *
  *                                                                  *
- * Args: info - the structure to fill in on callback                *
+ * Args:    account - account to use to set default choice          *
  * Returns: the menu                                                *
  \*******************************************************************/
 GtkWidget *
-gnc_ui_account_menu_create(AccountEditInfo * info)
+gnc_ui_source_menu_create(Account *account)
 {
   gint i;
   GtkMenu   *menu;
   GtkWidget *item;
+  GtkWidget *omenu;
+  gchar *codename;
+  AccInfo *accinfo;
+  InvAcct *invacct;
+  GNCAccountType type;
 
   menu = GTK_MENU(gtk_menu_new());
   gtk_widget_show(GTK_WIDGET(menu));
@@ -296,275 +141,30 @@ gnc_ui_account_menu_create(AccountEditInfo * info)
   {
     item = gtk_menu_item_new_with_label(gnc_get_source_name(i));
     gtk_widget_show(item);
-    gtk_object_set_user_data(GTK_OBJECT(item), GINT_TO_POINTER(i));
-    gtk_signal_connect(GTK_OBJECT(item), "activate",
-		       GTK_SIGNAL_FUNC(gnc_source_menu_cb), info);
     gtk_menu_append(menu, item);
   }
 
-  return GTK_WIDGET(menu);
-}
-
-/********************************************************************\
- * gnc_ui_account_source_box_create                                 *
- *   create the frame holding the source menu picker                *
- *                                                                  *
- * Args: info - info structure that is filled in by the function    *
- * Returns: the box                                                 *
- \*******************************************************************/
-GtkWidget *
-gnc_ui_account_source_box_create(AccountEditInfo * info)
-{
-  GtkWidget *frame, *hbox, *widget, *omenu;
-
-  frame = gtk_frame_new(QUOTE_SRC_STR);
-  gtk_container_border_width(GTK_CONTAINER(frame), 5);
-  gtk_widget_show(frame);
-
-  hbox = gtk_hbox_new(FALSE, 5);
-  gtk_container_border_width(GTK_CONTAINER(hbox), 5);
-  gtk_widget_show(hbox);
-
-  widget = gtk_label_new(QUOTE_SRC_MSG);
-  gtk_misc_set_alignment (GTK_MISC(widget), 1.0, 0.5);
-  gtk_widget_show(widget);
-
-  gtk_box_pack_start(GTK_BOX(hbox), widget, FALSE, FALSE, 5);
-
   omenu = gtk_option_menu_new();
   gtk_widget_show(omenu);
-  gtk_option_menu_set_menu(GTK_OPTION_MENU(omenu),
-			   gnc_ui_account_menu_create(info));
-  gtk_option_menu_set_history(GTK_OPTION_MENU(omenu), 0);
-  info->source_menu = GTK_OPTION_MENU(omenu);
-  info->source = 0;
+  gtk_option_menu_set_menu(GTK_OPTION_MENU(omenu), GTK_WIDGET(menu));
+  gnc_option_menu_init(omenu);
 
-  gtk_box_pack_start(GTK_BOX(hbox), omenu, TRUE, TRUE, 5);
+  if (account == NULL)
+    return omenu;
 
-  gtk_container_add(GTK_CONTAINER(frame), hbox);
-
-  return frame;
-}
-
-
-/********************************************************************\
- * gnc_ui_account_source_box_create_from_account                    *
- *   create the frame holding the source menu from an account       *
- *                                                                  *
- * Args: account - the account to use                               *
- *       info - info structure that is filled in by the function    *
- * Returns: void                                                    *
- \*******************************************************************/
-GtkWidget *
-gnc_ui_account_source_box_create_from_account(Account * account,
-					      AccountEditInfo * info)
-{
-  GtkWidget * box = gnc_ui_account_source_box_create(info);
-  gchar *codename;
-  AccInfo *accinfo;
-  InvAcct *invacct;
-  int accType;
-
-  accType = xaccAccountGetType(account);
-  if ((STOCK != accType) && (MUTUAL != accType) && (CURRENCY != accType))
-    return box;
+  type = xaccAccountGetType(account);
+  if ((STOCK != type) && (MUTUAL != type) && (CURRENCY != type))
+    return omenu;
 
   accinfo = xaccAccountGetAccInfo(account);
   invacct = xaccCastToInvAcct(accinfo);
   if (invacct == NULL)
-    return box;
+    return omenu;
 
   codename = xaccInvAcctGetPriceSrc(invacct);
 
-  info->source = gnc_get_source_code(codename);
-  gtk_option_menu_set_history(info->source_menu, info->source);
-
-  return box;
+  return omenu;
 }
-
-
-static void
-gnc_extract_string(GtkEditable *e, gchar **s)
-{
-  gchar * string;
-
-  /* check for null widget */
-  if (e == NULL)
-  {
-    *s = NULL;
-    return;
-  }
-
-  /* get the string, it is g_malloc'ed */
-  string = gtk_editable_get_chars(e, 0, -1);
-
-  /* strip off whitespace */
-  g_strstrip(string);
-
-  *s = string;
-}
-
-
-/********************************************************************\
- * gnc_ui_extract_field_strings                                     *
- *   extract the field strings from the various editing widgets     *
- *   the strings are stripped of leading and trailing whitespaces   *
- *                                                                  *
- * Args: strings    - the string structure                          *
- *       edit_info  - the name, currency, etc. structure            *
- *       notes_info - the notes structure                           *
- * Returns: void                                                    *
- \*******************************************************************/
-void gnc_ui_extract_field_strings(AccountFieldStrings *strings,
-				  AccountEditInfo *edit_info)
-{
-  gnc_extract_string(edit_info->name_entry, &strings->name);
-  gnc_extract_string(edit_info->description_entry, &strings->description);
-  gnc_extract_string(edit_info->currency_entry, &strings->currency);
-  gnc_extract_string(edit_info->security_entry, &strings->security);
-  gnc_extract_string(edit_info->code_entry, &strings->code);
-  gnc_extract_string(edit_info->notes_entry, &strings->notes);
-
-  if (edit_info->source_menu != NULL)
-    strings->source = gnc_get_source_code_name(edit_info->source);
-  else
-    strings->source = NULL;
-}
-
-
-/********************************************************************\
- * gnc_ui_free_field_strings                                        *
- *   frees the fields strings in a string structure                 *
- *                                                                  *
- * Args: strings    - the string structure                          *
- * Returns: void                                                    *
- \*******************************************************************/
-void
-gnc_ui_free_field_strings(AccountFieldStrings *strings)
-{
-  if (strings->name != NULL)
-  {
-    g_free(strings->name);
-    strings->name = NULL;
-  }
-
-  if (strings->description != NULL)
-  {
-    g_free(strings->description);
-    strings->description = NULL;
-  }
-
-  if (strings->currency != NULL)
-  {
-    g_free(strings->currency);
-    strings->currency = NULL;
-  }
-
-  if (strings->security != NULL)
-  {
-    g_free(strings->security);
-    strings->security = NULL;
-  }
-
-  if (strings->code != NULL)
-  {
-    g_free(strings->code);
-    strings->code = NULL;
-  }
-
-  if (strings->notes != NULL)
-  {
-    g_free(strings->notes);
-    strings->notes = NULL;
-  }
-}
-
-
-/********************************************************************\
- * gnc_ui_account_field_box_create_from_account                     *
- *   create the frame holding the edit fields for an account        *
- *                                                                  *
- * Args: account - the account to use                               *
- *       info - info structure that is filled in by the function    *
- * Returns: void                                                    *
- \*******************************************************************/
-GtkWidget *
-gnc_ui_account_field_box_create_from_account(Account * account,
-					     AccountEditInfo * info)
-{
-  GtkWidget * box = gnc_ui_account_field_box_create(info, FALSE);
-  gboolean sensitive;
-  int accType;
-
-  gtk_entry_set_text(GTK_ENTRY(info->name_entry),
-		     xaccAccountGetName(account));
-  gtk_entry_set_text(GTK_ENTRY(info->description_entry),
-		     xaccAccountGetDescription(account));
-  gtk_entry_set_text(GTK_ENTRY(info->currency_entry),
-		     xaccAccountGetCurrency(account));
-  gtk_entry_set_text(GTK_ENTRY(info->security_entry),
-		     xaccAccountGetSecurity(account));
-  gtk_entry_set_text(GTK_ENTRY(info->code_entry),
-		     xaccAccountGetCode(account));
-
-  accType = xaccAccountGetType(account);
-
-  sensitive = (STOCK == accType) ||
-              (MUTUAL == accType) ||
-              (CURRENCY == accType);
-
-  gtk_widget_set_sensitive(GTK_WIDGET(info->security_entry), sensitive);
-
- return box;
-}
-
-
-/********************************************************************\
- * gnc_ui_install_field_strings                                     *
- *   installs the field strings in an account                       *
- *   does not do a begin or end edit                                *
- *                                                                  *
- * Args: account - the account to install into                      *
- *       strings - the strings to use                               *
- *       new_code - if code is blank, make new one                  *
- * Returns: void                                                    *
- \*******************************************************************/
-void
-gnc_ui_install_field_strings(Account * account,
-			     AccountFieldStrings *strings,
-			     gboolean new_code)
-{
-  int accType;
-  const char * old;
-
-  xaccAccountSetName(account, strings->name);
-  xaccAccountSetDescription(account, strings->description);
-
-  old = xaccAccountGetCurrency(account);
-  if (safe_strcmp(old, strings->currency) != 0)
-    xaccAccountSetCurrency(account, strings->currency);
-
-  xaccAccountSetCode(account, strings->code);
-
-  xaccAccountSetNotes(account, strings->notes);
-
-  accType = xaccAccountGetType(account);
-  if ((STOCK == accType) || (MUTUAL == accType) || (CURRENCY == accType))
-  {
-    AccInfo *accinfo;
-    InvAcct *invacct;
-
-    old = xaccAccountGetSecurity(account);
-    if (safe_strcmp(old, strings->security) != 0)
-      xaccAccountSetSecurity(account, strings->security);
-
-    accinfo = xaccAccountGetAccInfo(account);
-    invacct = xaccCastToInvAcct(accinfo);
-    if (invacct != NULL)
-      xaccInvAcctSetPriceSrc(invacct, strings->source);
-  }
-}
-
 
 /* =========================================================== */
 
@@ -940,6 +540,17 @@ gnc_get_window_size(const char *prefix, int *width, int *height)
     *height = h;
 }
 
+
+/********************************************************************\
+ * gnc_save_window_size                                             *
+ *   save the window size into options whose names are determined   *
+ *   by the string prefix.                                          *
+ *                                                                  *
+ * Args: prefix - determines the options used to save the values    *
+ *       width  - width of the window to save                       *
+ *       height - height of the window to save                      *
+ * Returns: nothing                                                 *
+\********************************************************************/
 void
 gnc_save_window_size(const char *prefix, int width, int height)
 {
@@ -963,6 +574,16 @@ gnc_save_window_size(const char *prefix, int width, int height)
   g_free(name);
 }
 
+
+/********************************************************************\
+ * gnc_fill_menu_with_data                                          *
+ *   fill the user data values in the menu structure with the given *
+ *   value. The filling is done recursively.                        *
+ *                                                                  *
+ * Args: info - the menu to fill                                    *
+ *       data - the value to fill with                              *
+ * Returns: nothing                                                 *
+\********************************************************************/
 void
 gnc_fill_menu_with_data(GnomeUIInfo *info, gpointer data)
 {
@@ -989,6 +610,7 @@ gnc_fill_menu_with_data(GnomeUIInfo *info, gpointer data)
   }
 }
 
+
 void
 gnc_option_menu_init(GtkWidget * w)
 {
@@ -1010,6 +632,7 @@ gnc_option_menu_init(GtkWidget * w)
   gtk_option_menu_set_history(GTK_OPTION_MENU(w), 0);
 }
 
+
 int
 gnc_option_menu_get_active(GtkWidget * w)
 {
@@ -1018,6 +641,70 @@ gnc_option_menu_get_active(GtkWidget * w)
 
   menu     = gtk_option_menu_get_menu(GTK_OPTION_MENU(w));
   menuitem = gtk_menu_get_active(GTK_MENU(menu));
+
   return GPOINTER_TO_INT(gtk_object_get_data(GTK_OBJECT(menuitem),
                                              "option_index"));
+}
+
+
+/********************************************************************\
+ * gnc_window_adjust_for_screen                                     *
+ *   adjust the window size if it is bigger than the screen size.   *
+ *                                                                  *
+ * Args: window - the window to adjust                              *
+ * Returns: nothing                                                 *
+\********************************************************************/
+void
+gnc_window_adjust_for_screen(GtkWindow * window)
+{
+  gint screen_width;
+  gint screen_height;
+  gint width;
+  gint height;
+
+  if (window == NULL)
+    return;
+
+  g_return_if_fail(GTK_IS_WINDOW(window));
+  if (GTK_WIDGET(window)->window == NULL)
+    return;
+
+  screen_width = gdk_screen_width();
+  screen_height = gdk_screen_height();
+  gdk_window_get_size(GTK_WIDGET(window)->window, &width, &height);
+
+  if ((width <= screen_width) && (height <= screen_height))
+    return;
+
+  width = MIN(width, screen_width - 10);
+  width = MAX(width, 0);
+
+  height = MIN(height, screen_height - 10);
+  height = MAX(height, 0);
+
+  gdk_window_resize(GTK_WIDGET(window)->window, width, height);
+  gtk_widget_queue_resize(GTK_WIDGET(window));
+}
+
+
+/********************************************************************\
+ * gnc_get_reconcile_str                                            *
+ *   return the i18n'd string for the given reconciled flag         *
+ *                                                                  *
+ * Args: reconciled_flag - the flag to stringize                    *
+ * Returns: the i18n'd reconciled string                            *
+\********************************************************************/
+const char *
+gnc_get_reconcile_str(char reconciled_flag)
+{
+  switch (reconciled_flag)
+  {
+    case NREC: return NOT_CLEARED_ABBREV;
+    case CREC: return CLEARED_ABBREV;
+    case YREC: return RECONCILED_ABBREV;
+    case FREC: return FROZEN_ABBREV;
+    default:
+      PERR("Bad reconciled flag\n");
+      return NULL;
+  }
 }

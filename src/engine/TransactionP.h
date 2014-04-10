@@ -2,6 +2,7 @@
  * TransactionP.h -- defines transaction for xacc (X-Accountant)    *
  * Copyright (C) 1997 Robin D. Clark                                *
  * Copyright (C) 1997, 1998, 1999, 2000 Linas Vepstas               *
+ * Copyright (C) 2000 Bill Gribble                                  *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -45,8 +46,10 @@
 #define __XACC_TRANSACTION_P_H__
 
 #include <time.h>
+#include <glib.h>
 
 #include "config.h"
+#include "kvp_frame.h"
 #include "Transaction.h"   /* for typedefs */
 #include "GNCId.h"
 
@@ -98,6 +101,11 @@ struct _split
    * form, which any key-value pairs being URL-encoded.
    */
   char * docref;
+
+  /* kvp_data is a key-value pair database for storing simple 
+   * "extra" information in splits, transactions, and accounts. 
+   * it's NULL until accessed. */
+  kvp_frame * kvp_data;
 
   /* The reconciled field ...
    */
@@ -157,6 +165,11 @@ struct _transaction
    * form, which any key-value pairs being URL-encoded.
    */
   char * docref;
+
+  /* kvp_data is a key-value pair database for storing simple 
+   * "extra" information in splits, transactions, and accounts. 
+   * it's NULL until accessed. */
+  kvp_frame * kvp_data;
 
   Split   **splits;          /* list of splits, null terminated           */
 

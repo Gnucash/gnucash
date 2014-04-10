@@ -33,6 +33,8 @@ gnc_regular_scm_files = \
   substring-search.scm \
   testbed.scm \
   text-export.scm \
+  tip-of-the-day.scm \
+  tip-list.scm \
   utilities.scm \
   xml-generator.scm
 

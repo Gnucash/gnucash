@@ -26,11 +26,11 @@
 
 /* This file defines an API for using gnucash entity identifiers.
  *
- * Identifiers can be used to reference Account Groups, Accounts,
- * Transactions, and Splits. These four Gnucash types are referred to
- * as Gnucash entities. Identifiers are globally-unique and permanent,
- * i.e., once an entity has been assigned an identifier, it retains
- * that same identifier for its lifetime.
+ * Identifiers can be used to reference Accounts, Transactions, and
+ * Splits. These four Gnucash types are referred to as Gnucash
+ * entities. Identifiers are globally-unique and permanent, i.e., once
+ * an entity has been assigned an identifier, it retains that same
+ * identifier for its lifetime.
  *
  * Identifiers can be encoded as hex strings. */
 
@@ -52,7 +52,6 @@ typedef enum
 {
   GNC_ID_NONE = 0,
   GNC_ID_NULL,
-  GNC_ID_GROUP,
   GNC_ID_ACCOUNT,
   GNC_ID_TRANS,
   GNC_ID_SPLIT,

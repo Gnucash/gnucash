@@ -1,28 +1,31 @@
-###########################################################################
-                       DEVELOPMENT  RELEASE
+############################################################
+          Gnucash 1.5.x README file.
 
-The version 1.3.x series of GnuCash are experimental development
-releases.  They may or may not work. Use at your own risk.
+NOTE: THIS IS A DEVELOPMENT RELEASE!!! THIS VERSION HAS NOT
+BEEN TESTED PROPERLY AND MAY DO ABSOLUTELY ANYTHING!  
 
-The last stable, production version was gnucash-1.2.5.
-The next stable, production version will be gnucash-1.4.x
+USE AT YOUR OWN RISK (AND KEEP *LOTS* OF BACKUPS)
 
-###########################################################################
+If you want something a bit more tested, please use the
+1.4 stable series.
+------------------------------------------------------------
 
+##################
 Table of Contents:
+------------------
 
   - Overview
   - Upgrading from 1.2.x
   - Dependencies
   - Invocation/running
   - Internationalization
-  - Building and Installing
-  - Supported OSes
+  - Building & Installing
+  - Supported Platforms
   - Additional Download Sites
   - Getting the Source via CVS
   - Developing GnuCash
 
-========
+########
 Overview
 --------
 
@@ -94,8 +97,8 @@ Features include:
   - Provides a byte-stream format, which allows accounts and
     account groups to be transmitted to other processes
     via pipes or sockets.
-  - European date handling, French, German, Swedish, and Great
-    Britain translations.
+  - European date handling, French, German, Swedish,
+    and Great Britain translations.
 
 
 Home Page:
@@ -107,7 +110,7 @@ http://www.gnucash.org/pub/gnucash/
 Development versions:
 http://www.gnucash.org/source_code.php3
 
-====================
+####################
 Upgrading from 1.2.x
 --------------------
 
@@ -121,7 +124,7 @@ section of this file for more detail.  The file format hasn't changed
 We hope you enjoy all the new features!
 
 
-============
+############
 Dependencies
 ------------
 
@@ -144,9 +147,15 @@ The following packages are required to be installed to run gnucash:
   gnome-libs: version 1.0.40 or higher should work. These libraries
     require numerous other supporting libraries, such as gtk and glib.
 
+  gnome-print: any recent version should work.
+
+  gtkhtml: version 0.4 and later should work. You can obtain the latest
+    version of gtkhtml from Helix Code.
+
 To be able to use certain features of GnuCash, such as reports and
 network stock price downloads, you must have the following packages
 below installed (in addition to those listed above).
+
 RPM's for most of these can be found at http://rufus.w3.org/linux/
 
   perl: Almost any version of perl5 should work.  I run perl-5.004 
@@ -173,7 +182,7 @@ you will need to install:
              http://www.gnuplot.vt.edu/ 
 
 
-=======
+#######
 Running
 -------
 
@@ -233,7 +242,7 @@ to run gnucash from a local directory:
     "$@"
 
 
-====================
+####################
 Internationalization
 --------------------
 Message catalogues exist for French and German.  These are enabled with 
@@ -257,7 +266,7 @@ fr_CH
 de_CH
 
 
-=====================
+#####################
 Building & Installing
 ---------------------
 
@@ -276,8 +285,30 @@ following packages:
   SWIG: Used to autogenerate perl wrappers - available at www.swig.org
     need 1.1p5 or later ...
 
+  gnome development system: headers, libraries, etc.
+
+  libxml: available from ftp.gnome.org
+
   g-wrap: RPM's, debs, and source available at 
           ftp://ftp.gnucash.org/pub/g-wrap.
+
+What you'll need to get and install in order to make sure you have all
+of these pieces properly installed for your particular operating
+system flavor will vary, but here's at least a partial list of what
+you'll need for the systems we know about:
+
+  Debian/GNU/Linux:
+    current:
+      libgnome-dev
+      libxml-dev
+      libgtkxmhtml-dev
+      guile1.3
+      libguile6-dev
+      libguile6-slib
+
+  RedHat:
+    ???
+
 
 GnuCash understands a few non-standard ./configure options.  You
 should run ./configure --help for the most up to date summary of the
@@ -336,20 +367,16 @@ to be installed, the above command would install
 DESTDIR can be helpful when trying to build install images and
 packages.
 
-==============
-Supported OS's
---------------
+###################
+Supported Platforms
+-------------------
 
-GnuCash 1.3.x is known to work with the following operating systems:
+GnuCash 1.5.x is known to work with the following operating systems:
 
-GNU/Linux             -- x86 & Alpha
+GNU/Linux             -- x86, Sparc, Alpha
 Solaris		      -- Sparc
 FreeBSD               -- x86
-
-It probably works with the following :
-
-OpenBSD               -- x86 (needs to be confirmed one way or another)
-
+OpenBSD               -- x86
 
 Previous versions have been known to work on the following platforms, but
 their current status is unknown:
@@ -366,13 +393,25 @@ for precompiled (but *very old*) binaries for these platforms
 Gnucash can probably be made to work with most POSIX-ish platforms, 
 provided the libraries and toolchain are available.
 
-=========================
+#########################
 Additional Download Sites
 -------------------------
 
+You can also download gnucash from:
+
+  - http://download.sourceforge.net/gnucash
+  - ftp://ftp.krondo.com
+
+You can dowload GnuCash Solaris packages from:
+
+  - http://www.unixrealm.com/downloads/
+
+You can get GnuCash Mandrake packages on Mandrake Cooker sites.
+
+
 Precompiled binaries & pre-requisite packages can be found at the
-following sites.  The gnucash versions here are all *extremely*
-old, and were indeed from gnucash's ancestor "xacc".
+following sites. The GnuCash versions here are all *extremely*
+old, and were indeed from GnuCash's ancestor "x-accountant".
 
 IBM AIX 4.1.5 
       -- SMIT-installable images 
@@ -380,7 +419,6 @@ IBM AIX 4.1.5
       http://www.bull.de/pub/
       see also http://www-frec.bull.com/
       
-
 SCO OpenServer 5.0.4 
       http://www.sco.com/skunkware/osr5/x11/apps/xacc/VOLS.tar
       -- this is from the 1.0 series of xacc
@@ -395,7 +433,7 @@ SGI Irix
       http://linas.org/linux/xacc/xacc-1.0b7-sgi-irix.inst.tar
 
 
-=======================
+#######################
 Getting Source with CVS
 -----------------------
 A read-only version of the cvs tree is available on the net.
@@ -414,7 +452,7 @@ To get a copy of the source in the gnucash-1.2 stable production tree do a
   cvs -z3 -Pd :pserver:cvs@cvs.gnucash.org:/home/cvs/cvsroot checkout -rxacc-12-patch gnucash
 
 
-==================
+##################
 Developing GnuCash
 ------------------
 Before you start developing GnuCash, you should do the following:
@@ -498,3 +536,6 @@ Submitting a Patch:
 
   Thanks in advance for your contribution!
 
+Local Variables:
+mode: text
+End:

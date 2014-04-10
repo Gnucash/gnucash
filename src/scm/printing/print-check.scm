@@ -23,32 +23,32 @@
      date-format
      custom-info)))
 
-(define (print-check-format? self)
-  (eq? (simple-obj-type self) 'print-check-format))
+(define print-check-format?
+  (record-predicate <print-check-format>))
 
-(define (print-check-format:format self)
-  (simple-obj-getter self <print-check-format> 'format))
+(define print-check-format:format
+  (simple-obj-getter <print-check-format> 'format))
 
-(define (print-check-format:set-format! self value)
-  (simple-obj-setter self <print-check-format> 'format value))
+(define print-check-format:set-format!
+  (simple-obj-setter <print-check-format> 'format))
 
-(define (print-check-format:position self)
-  (simple-obj-getter self <print-check-format> 'position))
+(define print-check-format:position
+  (simple-obj-getter <print-check-format> 'position))
 
-(define (print-check-format:set-position! self value)
-  (simple-obj-setter self <print-check-format> 'position value))
+(define print-check-format:set-position!
+  (simple-obj-setter <print-check-format> 'position))
 
-(define (print-check-format:date-format self)
-  (simple-obj-getter self <print-check-format> 'date-format))
+(define print-check-format:date-format
+  (simple-obj-getter <print-check-format> 'date-format))
 
-(define (print-check-format:set-date-format! self value)
-  (simple-obj-setter self <print-check-format> 'date-format value))
+(define print-check-format:set-date-format!
+  (simple-obj-setter <print-check-format> 'date-format))
 
-(define (print-check-format:custom-info self)
-  (simple-obj-getter self <print-check-format> 'custom-info))
+(define print-check-format:custom-info
+  (simple-obj-getter <print-check-format> 'custom-info))
 
-(define (print-check-format:set-custom-info! self value)
-  (simple-obj-setter self <print-check-format> 'custom-info value))
+(define print-check-format:set-custom-info!
+  (simple-obj-setter <print-check-format> 'custom-info))
    
 (define (make-print-check-format fmt pos dateformat cust)
   (let ((retval (make-simple-obj <print-check-format>)))

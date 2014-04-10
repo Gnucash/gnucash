@@ -61,7 +61,7 @@ gnc_account_ui_refresh(Account *account)
    xaccAccountDisplayRefresh(account);
    recnRefresh(account);
    adjBRefresh(account);
-   editAccountRefresh(account);
+   gnc_ui_refresh_edit_account_window(account);
 }
 
 

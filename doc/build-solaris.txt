@@ -1,7 +1,10 @@
 Solaris hints:
 ------------- 
 
-Use bash when running configure and GNU make 'gmake' to build:
+Provide the --with-included-gettext argument to configure:
 
-bash ./configure
-gmake SHELL=/bin/bash
+  ./configure --use-included-gettext
+
+Use GNU gmake to build:
+
+  gmake

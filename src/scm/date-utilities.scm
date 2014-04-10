@@ -22,35 +22,46 @@
 (gnc:support "dateutils.scm")
 (gnc:depend "srfi/srfi-19.scm")
 
+(define (gnc:timepair->secs tp)
+  (inexact->exact
+   (+ (car tp)
+      (/ (cdr tp) 1000000000))))
+
+(define (gnc:timepair->date tp)
+  (localtime (gnc:timepair->secs tp)))
+
 ;; get stuff from localtime date vector
 (define (gnc:date-get-year datevec)
-  (+ 1900 (vector-ref datevec 5)))
+  (+ 1900 (tm:year datevec)))
 (define (gnc:date-get-month-day datevec)
-  (vector-ref datevec 3))
+  (tm:mday datevec))
 ;; get month with january==1
 (define (gnc:date-get-month datevec)
-  (+ (vector-ref datevec 4) 1))
+  (+ (tm:mon datevec) 1))
 (define (gnc:date-get-week-day datevec)
-  (+ (vector-ref datevec 6) 1))
+  (+ (tm:wday datevec) 1))
 ;; jan 1 == 1
-(define (gnc:date-get-year-day datevec)
-  (+ (vector-ref datevec 7) 1))
 
-;; fixme: internationalize
+(define (gnc:date-get-year-day datevec)
+  (+ (tm:yday datevec) 1))
+
+(define (gnc:timepair-get-year tp)
+  (gnc:date-get-year (gnc:timepair->date tp)))
+
+(define (gnc:timepair-get-month-day tp)
+  (gnc:date-get-month (gnc:timepair->date tp)))
+
+(define (gnc:timepair-get-month tp)
+  (gnc:date-get-month (gnc:timepair->date tp)))
+
+(define (gnc:timepair-get-week-day tp)
+  (gnc:date-get-week-day (gnc:timepair->date tp)))
+
+(define (gnc:timepair-get-year-day tp)
+  (gnc:date-get-year-day (gnc:timepair->date tp)))
+
 (define (gnc:date-get-month-string datevec)
-  (case (gnc:date-get-month datevec)
-    ((1) "January")
-    ((2) "February")
-    ((3) "March")
-    ((4) "April")
-    ((5) "May")
-    ((6) "June")
-    ((7) "July")
-    ((8) "August")
-    ((9) "September")
-    ((10) "October")
-    ((11) "November")
-    ((12) "December")))
+  (strftime "%B" datevec))
 
 ;; is leap year?
 (define (gnc:leap-year? year)
@@ -120,7 +131,7 @@
 
 ;; Modify a date
 (define (moddate op adate delta)
-  (let ((newtm (localtime (car adate))))
+  (let ((newtm (gnc:timepair->date adate)))
     (begin
       (set-tm:sec newtm (op (tm:sec newtm) (tm:sec delta)))
       (set-tm:min newtm (op (tm:min newtm) (tm:min delta)))
@@ -144,11 +155,40 @@
 
 (define gnc:timepair-lt gnc:timepair-later)
 
+(define (gnc:timepair-earlier t1 t2)
+  (gnc:timepair-later t2 t1))
+
 ;; t1 <= t2
 (define (gnc:timepair-le t1 t2)
   (cond ((< (car t1) (car t2)) #t)
         ((= (car t1) (car t2)) (<= (cdr t2) (cdr t2)))
         (else #f)))
+
+(define (gnc:timepair-ge t1 t2)
+  (gnc:timepair-le t2 t1))
+
+(define (gnc:timepair-eq t1 t2)
+  (and (= (car t1) (car t2)) (= (cdr t1) (cdr t2))))
+
+;; date-granularity comparison functions.
+
+(define (gnc:timepair-earlier-date t1 t2)
+  (gnc:timepair-earlier (gnc:timepair-canonical-day-time t1)
+			(gnc:timepair-canonical-day-time t2)))
+
+(define (gnc:timepair-later-date t1 t2)
+  (gnc:timepair-earlier-date t2 t1))
+
+(define (gnc:timepair-le-date t1 t2)
+  (gnc:timepair-le (gnc:timepair-canonical-day-time t1)
+		   (gnc:timepair-canonical-day-time t2)))
+
+(define (gnc:timepair-ge-date t1 t2)
+  (gnc:timepair-le t2 t1))
+
+(define (gnc:timepair-eq-date t1 t2)
+  (gnc:timepair-eq (gnc:timepair-canonical-day-time t1)
+		   (gnc:timepair-canonical-day-time t2)))
 
 ;; Build a list of time intervals 
 (define (dateloop curd endd incr) 
@@ -203,10 +243,6 @@
     (set-tm:mon ddt 1)
     ddt))
 
-(define (gnc:timepair->secs tp)
-  (inexact->exact
-   (+ (car tp)
-      (/ (cdr tp) 1000000000))))
 
 ;; Find difference in seconds time 1 and time2
 (define (gnc:timepair-delta t1 t2)
@@ -218,37 +254,22 @@
 ;;; Added from transaction-report.scm
 
 (define (gnc:timepair-to-datestring tp)
-  (let ((bdtime (localtime (car tp))))
+  (let ((bdtime (gnc:timepair->date tp)))
     (strftime "%x" bdtime)))
 
 ;; given a timepair contains any time on a certain day (local time)
 ;; converts it to be midday that day.
 
 (define (gnc:timepair-canonical-day-time tp)
-  (let ((bdt (localtime (car tp))))
+  (let ((bdt (gnc:timepair->date tp)))
     (set-tm:sec bdt 0)
     (set-tm:min bdt 0)
     (set-tm:hour bdt 12)
     (let ((newtime (car (mktime bdt))))
-      ; alert - blarsen@ada-works.com fixed this.  you may want to
-      ; revert if I'm wrong.
       (cons newtime 0))))
 
-(define (gnc:timepair-earlier-or-eq-date t1 t2)
-  (let ((time1 (car (gnc:timepair-canonical-day-time t1)))
-        (time2 (car (gnc:timepair-canonical-day-time t2))))
-    (<= time1 time2)))
-
-(define (gnc:timepair-later-date t1 t2)
-  (let ((time1 (car (gnc:timepair-canonical-day-time t1))) 
-        (time2 (car (gnc:timepair-canonical-day-time t2))))
-    (< time1 time2)))
-
-(define (gnc:timepair-later-or-eq-date t1 t2)
-  (gnc:timepair-earlier-or-eq-date t2 t1))
-
 (define (gnc:timepair-start-day-time tp)
-  (let ((bdt (localtime (gnc:timepair->secs tp))))
+  (let ((bdt (gnc:timepair->date tp)))
     (set-tm:sec bdt 0)
     (set-tm:min bdt 0)
     (set-tm:hour bdt 0)
@@ -256,7 +277,7 @@
       (cons newtime 0))))
 
 (define (gnc:timepair-end-day-time tp)
-  (let ((bdt (localtime (gnc:timepair->secs tp))))
+  (let ((bdt (gnc:timepair->date tp)))
     (set-tm:sec bdt 59)
     (set-tm:min bdt 59)
     (set-tm:hour bdt 23)

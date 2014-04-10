@@ -43,7 +43,7 @@
 char * stpcpy (char *dest, const char *src);
 
 /** GLOBALS *********************************************************/
-gncLogLevel loglevel[MOD_NUM] =
+gncLogLevel loglevel[MOD_LAST + 1] =
 {
   GNC_LOG_NOTHING,      /* DUMMY */
   GNC_LOG_WARNING,      /* ENGINE */
@@ -75,8 +75,19 @@ gnc_set_log_level_global(gncLogLevel level)
 {
   gncModuleType module;
 
-  for (module = GNC_LOG_NOTHING; module < MOD_NUM; module++)
+  for (module = GNC_LOG_NOTHING; module <= MOD_LAST; module++)
     loglevel[module] = level;
+}
+
+
+/* xaccParseAmount configuration */
+static gboolean auto_decimal_enabled = FALSE;
+
+/* enable/disable the auto_decimal_enabled option */
+void
+gnc_set_auto_decimal_enabled(gboolean enabled)
+{
+   auto_decimal_enabled = enabled;
 }
 
 
@@ -340,32 +351,32 @@ util_fptostr(char *buf, double val, int prec)
 }
 
 /********************************************************************\
- * returns GNC_T if the string is a number, possibly with whitespace
+ * returns TRUE if the string is a number, possibly with whitespace
 \********************************************************************/
 
-gncBoolean
+gboolean
 gnc_strisnum(const char *s)
 {
-  if (s == NULL) return GNC_F;
-  if (*s == 0) return GNC_F;
+  if (s == NULL) return FALSE;
+  if (*s == 0) return FALSE;
 
   while (*s && isspace(*s))
     s++;
 
-  if (*s == 0) return GNC_F;
-  if (!isdigit(*s)) return GNC_F;
+  if (*s == 0) return FALSE;
+  if (!isdigit(*s)) return FALSE;
 
   while (*s && isdigit(*s))
     s++;
 
-  if (*s == 0) return GNC_T;
+  if (*s == 0) return TRUE;
 
   while (*s && isspace(*s))
     s++;
 
-  if (*s == 0) return GNC_T;
+  if (*s == 0) return TRUE;
 
-  return GNC_F;
+  return FALSE;
 }
 
 /********************************************************************\
@@ -406,7 +417,7 @@ struct lconv *
 gnc_localeconv()
 {
   static struct lconv lc;
-  static gncBoolean lc_set = GNC_F;
+  static gboolean lc_set = FALSE;
 
   if (lc_set)
     return &lc;
@@ -430,16 +441,16 @@ gnc_localeconv()
   gnc_lconv_set_char(&lc.p_sign_posn, 1);
   gnc_lconv_set_char(&lc.n_sign_posn, 1);
 
-  lc_set = GNC_T;
+  lc_set = TRUE;
 
   return &lc;
 }
 
-char *
+const char *
 gnc_locale_default_currency()
 {
   static char currency[4];
-  gncBoolean got_it = GNC_F;
+  gboolean got_it = FALSE;
   struct lconv *lc;
   int i;
 
@@ -453,7 +464,7 @@ gnc_locale_default_currency()
 
   strncpy(currency, lc->int_curr_symbol, 3);
 
-  got_it = GNC_T;
+  got_it = TRUE;
 
   return currency;
 }
@@ -461,8 +472,8 @@ gnc_locale_default_currency()
 /* Utility function for printing non-negative amounts */
 static int
 PrintAmt(char *buf, double val, int prec,
-         gncBoolean use_separators,
-         gncBoolean monetary,
+         gboolean use_separators,
+         gboolean monetary,
          int min_trailing_zeros)
 {
   int i, stringLength, numWholeDigits, sepCount;
@@ -578,7 +589,7 @@ xaccSPrintAmountGeneral (char * bufp, double val,
    char sep_by_space;
    char sign_posn;
 
-   gncBoolean print_sign = GNC_T;
+   gboolean print_sign = TRUE;
 
    if (!bufp) return 0;
 
@@ -634,7 +645,7 @@ xaccSPrintAmountGeneral (char * bufp, double val,
    }
 
    if ((val == 0.0) || (sign == NULL) || (sign[0] == 0))
-     print_sign = GNC_F;
+     print_sign = FALSE;
 
    /* See if we print sign now */
    if (print_sign && (sign_posn == 1))
@@ -747,7 +758,7 @@ xaccSPrintAmount (char * bufp, double val, GNCPrintAmountFlags flags,
                                   min_trailing_zeros, curr_code);
 }
 
-char *
+const char *
 xaccPrintAmount (double val, GNCPrintAmountFlags flags, const char *curr_code) 
 {
    /* hack alert -- this is not thread safe ... */
@@ -759,9 +770,9 @@ xaccPrintAmount (double val, GNCPrintAmountFlags flags, const char *curr_code)
    return buf;
 }
 
-char *
-xaccPrintAmountArgs (double val, gncBoolean print_currency_symbol,
-                     gncBoolean print_separators, gncBoolean is_shares_value,
+const char *
+xaccPrintAmountArgs (double val, gboolean print_currency_symbol,
+                     gboolean print_separators, gboolean is_shares_value,
                      const char *curr_code)
 {
   GNCPrintAmountFlags flags = 0;
@@ -783,10 +794,10 @@ xaccPrintAmountArgs (double val, gncBoolean print_currency_symbol,
  * Return: double -- the parsed amount                              *
 \********************************************************************/
 
-double xaccParseAmount (const char * instr, gncBoolean monetary)
+double xaccParseAmount (const char * instr, gboolean monetary)
 {
    struct lconv *lc = gnc_localeconv();
-   gncBoolean isneg = GNC_F;
+   gboolean isneg = FALSE;
    char *mstr, *str, *tok;
    double amount = 0.0;
    char negative_sign;
@@ -831,7 +842,7 @@ double xaccParseAmount (const char * instr, gncBoolean monetary)
 
    /* look for a negative sign */
    if (*str == negative_sign) {
-      isneg = GNC_T;
+      isneg = TRUE;
       str++;
    }
 
@@ -860,7 +871,7 @@ double xaccParseAmount (const char * instr, gncBoolean monetary)
    /* look for a negative sign at the end, some locales allow it,
     * we'll just allow it everywhere. */
    if (*tok == negative_sign) {
-      isneg = GNC_T;
+      isneg = TRUE;
       *tok = '\0';
    }
 
@@ -890,9 +901,22 @@ double xaccParseAmount (const char * instr, gncBoolean monetary)
          /* strip off garbage at end of the line */
          tok = strchr (str, ' ');
          if (tok) *tok = '\0';
-   
+
          /* adjust for number of decimal places */
          len = strlen(str);
+
+         if (len > 8)
+         {
+           str[8] = '\0';
+           len = 8;
+         }
+
+         if (8 == len) {
+            amount += 0.00000001 * ((double) atoi (str));
+         } else
+         if (7 == len) {
+            amount += 0.0000001 * ((double) atoi (str));
+         } else
          if (6 == len) {
             amount += 0.000001 * ((double) atoi (str));
          } else
@@ -912,6 +936,17 @@ double xaccParseAmount (const char * instr, gncBoolean monetary)
             amount += 0.1 * ((double) atoi (str));
          } 
       }
+
+   } else if( auto_decimal_enabled ) {
+      /* no decimal point and auto decimal point enabled, so assume that
+       * the value is an integer number of cents.
+       */
+      amount += ((double) (atoi (str)));
+      amount *= 0.01;    /* temporarily assume two decimal points */
+
+      /* Note: further additions to amount after this point will
+       * generate incorrect results.
+       */
 
    } else {
       amount += ((double) (atoi (str)));

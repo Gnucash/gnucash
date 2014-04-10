@@ -112,8 +112,8 @@ gnucash_grid_update (GnomeCanvasItem *item, double *affine,
 
         item->x1 = 0;
         item->y1 = 0;
-        item->x2 = INT_MAX;
-        item->y2 = INT_MAX;
+        item->x2 = INT_MAX/2 -1;
+        item->y2 = INT_MAX/2 -1;
 
         gnome_canvas_group_child_bounds (GNOME_CANVAS_GROUP (item->parent),
 					 item);
@@ -457,8 +457,8 @@ gnucash_grid_init (GnucashGrid *grid)
         grid->top_offset = 0;
         grid->left_offset = 0;
 
-        grid->normal_font = gnucash_default_font;
-        grid->italic_font = gnucash_italic_font;
+        grid->normal_font = gnucash_register_font;
+        grid->italic_font = gnucash_register_hint_font;
 }
 
 

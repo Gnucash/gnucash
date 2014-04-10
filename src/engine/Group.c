@@ -52,7 +52,7 @@
 void
 xaccInitializeAccountGroup (AccountGroup *grp)
 {
-  grp->saved       = GNC_T;
+  grp->saved       = TRUE;
 
   grp->parent      = NULL;
   grp->numAcc      = 0;
@@ -60,9 +60,6 @@ xaccInitializeAccountGroup (AccountGroup *grp)
   grp->account[0]  = NULL;   /* null-terminated array */
 
   grp->balance     = 0.0;
-
-  xaccGUIDNew(&grp->guid);
-  xaccStoreEntity(grp, &grp->guid, GNC_ID_GROUP);
 
   grp->backend     = NULL;
 
@@ -84,6 +81,23 @@ xaccMallocAccountGroup( void )
 /********************************************************************\
 \********************************************************************/
 
+static void
+xaccAccountGroupBeginEdit( AccountGroup *grp, int defer )
+{
+  int i;
+
+  if (NULL == grp) return;
+
+  for(i = 0; i < grp->numAcc; i++ )
+  {
+    xaccAccountBeginEdit(grp->account[i], defer);
+    xaccAccountGroupBeginEdit (grp->account[i]->children, defer);
+  }
+}  
+
+/********************************************************************\
+\********************************************************************/
+
 void
 xaccFreeAccountGroup( AccountGroup *grp )
 {
@@ -91,7 +105,7 @@ xaccFreeAccountGroup( AccountGroup *grp )
 
   if (NULL == grp) return;
 
-  xaccRemoveEntity(&grp->guid);
+  xaccAccountGroupBeginEdit (grp, 1);
 
   for( i=0; i<grp->numAcc; i++ )
     xaccFreeAccount( grp->account[i] );
@@ -117,7 +131,7 @@ xaccGroupMarkSaved (AccountGroup *grp)
    int i;
 
    if (!grp) return;
-   grp->saved = GNC_T;
+   grp->saved = TRUE;
 
    for (i=0; i<grp->numAcc; i++) {
       xaccGroupMarkSaved (grp->account[i]->children); 
@@ -131,7 +145,7 @@ void
 xaccGroupMarkNotSaved (AccountGroup *grp)
 {
    if (!grp) return;
-   grp->saved = GNC_F;
+   grp->saved = FALSE;
 }
 
 /********************************************************************\
@@ -144,51 +158,13 @@ xaccGroupNotSaved (AccountGroup *grp)
    int i;
 
    if (!grp) return 0;
-   if (GNC_F == grp->saved) return 1;
+   if (FALSE == grp->saved) return 1;
 
    for (i=0; i<grp->numAcc; i++) {
       not_saved = xaccGroupNotSaved (grp->account[i]->children); 
       if (not_saved) return 1;
    }
    return 0;
-}
-
-/********************************************************************\
-\********************************************************************/
-
-const GUID *
-xaccGroupGetGUID (AccountGroup *group)
-{
-  if (!group)
-    return xaccGUIDNULL();
-
-  return &group->guid;
-}
-
-/********************************************************************\
-\********************************************************************/
-
-void 
-xaccGroupSetGUID (AccountGroup *group, GUID *guid)
-{
-  if (!group || !guid) return;
-
-  xaccRemoveEntity(&group->guid);
-
-  group->guid = *guid;
-
-  xaccStoreEntity(group, &group->guid, GNC_ID_GROUP);
-}
-
-/********************************************************************\
-\********************************************************************/
-
-AccountGroup *
-xaccGroupLookup (const GUID *guid)
-{
-  if (!guid) return NULL;
-
-  return xaccLookupEntity(guid, GNC_ID_GROUP);
 }
 
 /********************************************************************\
@@ -503,7 +479,7 @@ xaccRemoveGroup (AccountGroup *grp)
    grp = acc -> parent;
    if (!grp) return;
 
-   grp->saved = GNC_F;
+   grp->saved = FALSE;
 }
 
 /********************************************************************\
@@ -536,7 +512,7 @@ xaccRemoveAccount (Account *acc)
    nacc --;
    arr[nacc] = NULL;
    grp->numAcc = nacc;
-   grp->saved = GNC_F;
+   grp->saved = FALSE;
 
    /* if this was the last account in a group, delete
     * the group as well (unless its a root group) */
@@ -590,7 +566,7 @@ xaccGroupInsertAccount( AccountGroup *grp, Account *acc )
     if (grp == acc->parent) ralo = 0;
     xaccRemoveAccount (acc);
   }
-  grp->saved = GNC_F;
+  grp->saved = FALSE;
 
   /* set back-pointer to the account's parent */
   acc->parent = grp;
@@ -978,24 +954,24 @@ xaccAccountsBeginStagedTransactionTraversals (Account **accounts)
     xaccAccountBeginStagedTransactionTraversals(*aptr);
 }
 
-gncBoolean
+gboolean
 xaccTransactionTraverse(Transaction *trans, int stage)
 {
-  if (trans == NULL) return GNC_F;
+  if (trans == NULL) return FALSE;
 
   if (trans->marker < stage)
   {
     trans->marker = stage;
-    return GNC_T;
+    return TRUE;
   }
 
-  return GNC_F;
+  return FALSE;
 }
 
-gncBoolean
+gboolean
 xaccSplitTransactionTraverse(Split *split, int stage)
 {
-  if (split == NULL) return GNC_F;
+  if (split == NULL) return FALSE;
 
   return xaccTransactionTraverse(split->parent, stage);
 }

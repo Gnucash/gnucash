@@ -49,11 +49,13 @@ struct _AdjBWindow
   GtkWidget * date_entry;    /* Date field, the date for the balance */
 };
 
+
 /** GLOBALS *********************************************************/
 static AdjBWindow **adjBList = NULL;
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_GUI;
+
 
 /** Prototypes ******************************************************/
 static void gnc_adjb_set_window_name(AdjBWindow *adjBData);
@@ -116,7 +118,7 @@ gnc_ui_AdjBWindow_ok_cb(GtkWidget * widget, gpointer data)
   gchar * string;
 
   string = gtk_entry_get_text(GTK_ENTRY(adjBData->balance_entry));
-  new_balance = xaccParseAmount(string, GNC_T);
+  new_balance = xaccParseAmount(string, TRUE);
   if (gnc_reverse_balance(adjBData->account))
     new_balance = -new_balance;
 
@@ -155,14 +157,14 @@ gnc_adjust_update_cb(GtkWidget *widget, GdkEventFocus *event, gpointer data)
 {
   GtkEntry *entry = GTK_ENTRY(widget);
   Account *account = data;
-  gchar *new_string;
+  const char *new_string;
   const char *currency;
-  gchar *string;
+  const char *string;
   double value;
 
   string = gtk_entry_get_text(entry);
 
-  value = xaccParseAmount(string, GNC_T);
+  value = xaccParseAmount(string, TRUE);
 
   currency = xaccAccountGetCurrency(account);
 
@@ -249,8 +251,9 @@ adjBWindow(Account *account)
     GtkWidget *hbox, *vbox;
     GtkWidget *amount, *date;
     GtkWidget *label, *entry;
+    const char *amount_str;
     const char *currency;
-    gchar *string;
+    char *string;
 
     tooltips = gtk_tooltips_new();
 
@@ -294,8 +297,8 @@ adjBWindow(Account *account)
     gtk_tooltips_set_tip(tooltips, amount, TOOLTIP_ADJUST_AMOUNT, NULL);
 
     currency = xaccAccountGetCurrency(account);
-    string = xaccPrintAmount(0.0, PRTSEP, currency);
-    gtk_entry_set_text(GTK_ENTRY(amount), string);
+    amount_str = xaccPrintAmount(0.0, PRTSEP, currency);
+    gtk_entry_set_text(GTK_ENTRY(amount), amount_str);
     gtk_entry_select_region(GTK_ENTRY(amount), 0, -1);
 
     gtk_signal_connect(GTK_OBJECT(amount), "focus-out-event",

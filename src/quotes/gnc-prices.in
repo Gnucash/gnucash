@@ -11,12 +11,17 @@
 # Created by Linas Vepstas January 1999
 # Updated by Paul Fenwick <pjf@cpan.org> to take advantage of
 #   new Finance::Quote features. (June 2000)
+# Updated by Steven Murdoch <sjmurdoch@linuxfan.com> to take
+#   account of London stock prices being quoted in pence
+#   by Yahoo Europe and improve behaviour in the case of no
+#   Internet connection (July 2000)
 #
 # Copyright (c) 1999-2000 Linas Vepstas
 
 use lib '@-GNC_PERLSHAREDIR-@';
-use Quote;
 use lib '@-GNC_PERLLIBDIR-@';
+
+use Finance::Quote;
 use gnucash;
 
 # --------------------------------------------------
@@ -129,6 +134,10 @@ $grp = gnucash::xaccSessionBeginFile ($sess,$ARGV[0]);
 
 die "failed to read file $ARGV[0], maybe its locked? " if (! $grp);
 
+# Create our quote object
+
+my $quote = Finance::Quote->new();
+
 # get a flat list of accounts in the file
 @acctlist = &account_flatlist ($grp);
 
@@ -163,25 +172,26 @@ foreach $acct (@acctlist)
 
       undef $price;  # undef to make sure later if($price) not broken
 
-      %quotes = &Quote::fetch($quotesrc, $security);
+      %quotes = $quote->fetch($quotesrc, $security);
+
       unless ($quotes{$security,'success'})
       {
-      	print "Lookup of $quotesrc/$security failed: ",
-	      $quotes{$security,'errormsg'}."\n";
-        next;
+      	print "Lookup of $quotesrc/$security failed";
+	# Show the error if and only if there is an error message
+	print ": $quotes{$security,'errormsg'}" if ($quotes{$security,'errormsg'});
+        print "\n";
+	next;
       }
 
+      print "using $quotesrc\n";      
+      
       $price = $quotes{$security,'price'};
-
-      print "using $quotesrc\n";
-      print "$name: ";
-
       $dayte = $quotes {$security, "date"};
       $prodname = $quotes {$security, "name"};
 
       if ($price)
       {
-        print "$security $prodname last price = $price at $dayte\n";
+        print "$name: $security $prodname last price = $price at $dayte\n";
         # This || construction will store the price if its not already 
         # stored (in the 28 hour period surrounding "dayte")
         &checkprice ($acct, $dayte, $price) ||

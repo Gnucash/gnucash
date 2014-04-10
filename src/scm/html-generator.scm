@@ -20,7 +20,6 @@
 ;; Boston, MA  02111-1307,  USA       gnu@gnu.org
 
 (gnc:support "html-generator.scm")
-
  
 ;; How this mechanism works:
 ;;
@@ -50,7 +49,6 @@
 ;; to the spec list that sets html-proc to #f, but sets
 ;; total-html-proc and subtotal-html-proc.  This way, subtotals really
 ;; stand out.
-;;
 ;; 
 ;; report-spec-structure 
 ;;  header: string describing the column
@@ -66,6 +64,13 @@
 ;;                         style chosen.
 ;;  subs-list-proc: a procedure that returns a list of subentry values
 ;;  subentry-html-proc: converts a subentry value into html
+
+(define NBSP "&nbsp;")  ;;; Non-breaking space
+;;; <http://www.sightspecific.com/~mosh/WWW_FAQ/nbsp.html>
+;;; Primarily "correctly" used in order to put _something_ into an
+;;; otherwise blank table cell because some web browsers do not cope
+;;; well with truly empty table cells
+
 (define report-spec-structure
   (make-record-type
    "report-spec-structure"
@@ -386,30 +391,41 @@
 (define html-table-group-color "#f6ffdb")
 
 (define (html-table-row-group row)
-  (if (string=? html-table-group-color "#f6ffdb")
-      (set! html-table-group-color "#ffffff")
-      (set! html-table-group-color "#f6ffdb"))
+  (set! html-table-group-color 
+	(if (string=? html-table-group-color "#f6ffdb")
+	    "#ffffff"
+	    "#f6ffdb"))
   row)
+
+(define (string-html-strong html)
+  (if html 
+      (string-append "<STRONG>" html "</STRONG>")
+      #f))
 
 (define (html-strong html)
   (if html 
-      (string-append "<STRONG>" html "</STRONG>")
+      (list "<STRONG>" html "</STRONG>")
       #f))
 
 (define (html-make-strong proc)
   (lambda (val)
     (html-strong (proc val))))
 
-(define (html-ital html)
+(define (string-html-ital html)
   (if html
       (string-append  "<i>"  html "</i>")
+      #f))
+
+(define (html-ital html)
+  (if html
+      (list "<I>" html "</I>")
       #f))
 
 (define (html-make-ital proc)
   (lambda (val)
     (html-ital (proc val))))
 
-(define (html-currency amount)
+(define (string-html-currency amount)
   (if amount
       (string-append
        "<font face=\"Courier\""
@@ -425,9 +441,36 @@
        "</font>")
       #f))
 
+(define (html-font-and-color face color contents)
+  (list
+   "<font"
+   (if face
+       (list "face=\"" face "\"")
+       #f)
+   (if color
+       (list "color=#" color)
+       #f)
+   ">"
+   contents
+   "</font>"))
+
+(define (html-currency amount)
+  (if amount
+      (let* 
+	  ((neg (< amount 0))
+	   (absamt (if neg (- amount) amount))
+	   (color (if neg "ff0000" #f))
+	   (prefix (if neg "(" NBSP))
+	   (suffix (if neg ")" NBSP))
+	   (displayamt (gnc:amount->string absamt #f #t #f)))
+	
+	(html-font-and-color "Courier" color
+			     (list prefix displayamt suffix)))
+      #f))
+
 (define (html-left-cell item)
   (if item
-      (string-append "<TD>" item "</TD>")
+      (html-table-col-align item #f)
       #f))
 
 (define (html-make-left-cell proc)
@@ -436,18 +479,21 @@
 
 (define (html-right-cell item)
   (if item
-      (string-append "<TD align=right>" item "</TD>")
+      (html-table-col-align item "right")
       #f))
 
 (define html-blank-cell
-  "<TD></TD>")
+  (list "<TD>" NBSP "</TD>"))
 
 (define (html-make-right-cell proc)
   (lambda (val)
     (html-right-cell (proc val))))
 
-(define (html-header-cell item)
+(define (string-html-header-cell item)
   (string-append "<TH justify=left>" item "</TH>"))
+
+(define (html-header-cell item)
+  (html-table-headcol-justified item "left"))
 
 (define (html-string string)
   (if string string #f))
@@ -455,8 +501,11 @@
 (define (html-number format number)
   (if number (sprintf #f format number) #f))
 
-(define (html-para text)
+(define (string-html-para text)
   (string-append "<P>" text "</P>\n"))
+
+(define (html-para text)
+  (list "<P>" text "</P>\n"))
 
 (define (html-start-document-title title color)
   (list 
@@ -465,11 +514,11 @@
    "<TITLE>" title "</TITLE>"
    "</HEAD>"
    (if color
-       (string-append "<BODY bgcolor=" color ">")
+       (list "<BODY bgcolor=" color ">")
        "<BODY>")))
 
 (define (html-start-document-color color)
-  (list 
+  (list
    "<HTML>"
    "<BODY bgcolor=" color ">"))
 
@@ -505,13 +554,21 @@
 
 ; Create a column entry
 (define (html-table-col val)
-  (string-append "<TD align=right>" (tostring val) "</TD>"))
+  (html-table-col-align "right" val))
 
-(define (html-table-col-align val align)
+(define (string-html-table-col-align val align)
   (string-append "<TD align=" align ">" (tostring val) "</TD>"))
 
+(define (html-table-col-align val align)
+  (list "<TD"
+	(if align
+	    (list "align=" align)
+	    #f)
+	">" 
+	(tostring val) "</TD>"))
+
 ; Create an html table row from a list of entries
-(define (html-table-row lst)
+(define (string-html-table-row lst)
   (cond ((string? lst) lst)
 	(else
 	 (string-append
@@ -519,8 +576,15 @@
 	  (apply string-append (map html-table-col lst))
 	  "</TR>"))))
 
+(define (html-table-row lst)
+  (if (string? lst)
+      lst
+      (list "<TR>"
+	    (map html-table-col lst)
+	    "</TR>")))
+
 ; Create an html table row from a list of entries
-(define (html-table-row-align lst align-list)
+(define (string-html-table-row-align lst align-list)
   (cond ((string? lst) lst)
 	(else
 	 (string-append
@@ -528,24 +592,57 @@
 	  (apply string-append (map html-table-col-align lst align-list))
 	  "</TR>"))))
 
+(define (html-table-row-align lst align-list)
+  (if (string? lst) 
+      lst
+      (list "<TR>"
+	    (map html-table-col-align lst align-list)
+	    "</TR>")))
+
 ; Create an html table from a list of rows, each containing 
 ;   a list of column entries
-(define (html-table caption hdrlst llst)
+(define (string-html-table caption hdrlst llst)
   (string-append
    (html-table-header caption hdrlst)
    (apply string-append (map html-table-row llst))
    (html-table-footer)))
 
-(define (html-table-headcol val)
+(define (html-table caption hdrlst llst)
+  (list
+   (html-table-header caption hdrlst)
+   (map html-table-row llst)
+   (html-table-footer)))
+
+(define (string-html-table-headcol val)
   (string-append "<TH justify=center>" (tostring val) "</TH>"))
 
-(define (html-table-header caption vec)
+(define (html-table-headcol-justified val justification)
+  (list "<TH"
+	(if justification
+	    (list "justify=" justification)
+	    #f)
+	">"
+	(tostring val)
+	"</TH">))
+
+(define (html-table-headcol val)
+  (html-table-headcol-justified val "center"))
+
+(define (string-html-table-header caption vec)
    (apply string-append
           "<TABLE cellspacing=10 rules=\"rows\">\n"
           (if caption
               (string-append "<caption><b>" caption "</b></caption>")
               "")
           (map html-table-headcol vec)))
+
+(define (html-table-header caption vec)
+   (list
+    "<TABLE cellspacing=10 rules=\"rows\">\n"
+    (if caption
+	(list "<caption><b>" caption "</b></caption>")
+	"")
+    (map html-table-headcol vec)))
 
 (define (html-table-footer)
   "</TABLE>")

@@ -83,7 +83,6 @@ GNOME_CONFIG_BIN = @GNOME_CONFIG_BIN@
 GNOME_LIBS = @GNOME_LIBS@
 GNOME_STATIC_TARGET = @GNOME_STATIC_TARGET@
 GNOME_TARGET = @GNOME_TARGET@
-GTK_XMHTML = @GTK_XMHTML@
 GT_NO = @GT_NO@
 GT_YES = @GT_YES@
 GUILE = @GUILE@
@@ -124,12 +123,12 @@ SUBDIRS = sql
 lib_LTLIBRARIES = libgncengine.la
 
 # Build hell from main.c and libhello.la
-libgncengine_la_SOURCES =    AccInfo.c   Account.c   Backend.c   DateUtils.c   FileIO.c   Group.c   LedgerUtils.c   Query.c   Queue.c   Scrub.c   Session.c   Transaction.c   TransLog.c   date.c   util.c   GNCId.c   guid.c   md5.c
+libgncengine_la_SOURCES =    AccInfo.c   Account.c   Backend.c   DateUtils.c   FileIO.c   Group.c   LedgerUtils.c   Query.c   Queue.c   Scrub.c   Session.c   Transaction.c   TransLog.c   date.c   util.c   GNCId.c   guid.c   md5.c   kvp_frame.c
 
 
 libgncengine_la_LDFLAGS = -version-info 1:1:1
 
-noinst_HEADERS =    AccInfo.h   AccInfoP.h   Account.h   AccountP.h   BackendP.h   DateUtils.h   FileIO.h   FileIOP.h   GNCId.h   GNCIdP.h   Group.h   GroupP.h   LedgerUtils.h   Query.h   Queue.h   Scrub.h   Session.h   TransLog.h   Transaction.h   TransactionP.h   date.h   gnc-common.h   guid.h   md5.h   util.h
+noinst_HEADERS =    AccInfo.h   AccInfoP.h   Account.h   AccountP.h   BackendP.h   DateUtils.h   FileIO.h   FileIOP.h   GNCId.h   GNCIdP.h   Group.h   GroupP.h   LedgerUtils.h   Query.h   Queue.h   Scrub.h   Session.h   TransLog.h   Transaction.h   TransactionP.h   date.h   gnc-common.h   guid.h   md5.h   util.h   kvp_frame.h
 
 
 EXTRA_DIST =    .cvsignore   README.query-api   design.txt   extensions.txt
@@ -155,7 +154,8 @@ X_PRE_LIBS = @X_PRE_LIBS@
 libgncengine_la_LIBADD = 
 libgncengine_la_OBJECTS =  AccInfo.lo Account.lo Backend.lo DateUtils.lo \
 FileIO.lo Group.lo LedgerUtils.lo Query.lo Queue.lo Scrub.lo Session.lo \
-Transaction.lo TransLog.lo date.lo util.lo GNCId.lo guid.lo md5.lo
+Transaction.lo TransLog.lo date.lo util.lo GNCId.lo guid.lo md5.lo \
+kvp_frame.lo
 COMPILE = $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 CCLD = $(CC)
@@ -173,7 +173,7 @@ DEP_FILES =  .deps/AccInfo.P .deps/Account.P .deps/Backend.P \
 .deps/DateUtils.P .deps/FileIO.P .deps/GNCId.P .deps/Group.P \
 .deps/LedgerUtils.P .deps/Query.P .deps/Queue.P .deps/Scrub.P \
 .deps/Session.P .deps/TransLog.P .deps/Transaction.P .deps/date.P \
-.deps/guid.P .deps/md5.P .deps/util.P
+.deps/guid.P .deps/kvp_frame.P .deps/md5.P .deps/util.P
 SOURCES = $(libgncengine_la_SOURCES)
 OBJECTS = $(libgncengine_la_OBJECTS)
 

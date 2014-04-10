@@ -2,6 +2,7 @@
 SUBDIRS = \
   doc \
   engine \
+  calculation \
   experimental \
   register \
   guile \
@@ -25,6 +26,7 @@ LDADD = \
   register/gnome/libgncregistergnome.a \
   guile/libgncguile.a \
   gnome/libgncgnome.a \
+  calculation/libgnccalc.a \
   engine/libgncengine.la \
   @GNOME_LIBS@ \
   @G_WRAP_LINK_ARGS@ \

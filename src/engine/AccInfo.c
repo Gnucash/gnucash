@@ -95,10 +95,10 @@ char * xaccAccountGetTypeStr (int type)
 }
 
 /* =========================================================== */
-gncBoolean
+gboolean
 xaccAccountTypesCompatible (int parent_type, int child_type)
 {
-  gncBoolean compatible = GNC_F;
+  gboolean compatible = FALSE;
 
   switch(parent_type)
   {

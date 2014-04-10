@@ -21,6 +21,8 @@
 
 ;;;; This is not functional yet, but it should be close...
 
+(gnc:support "hooks.scm")
+
 ;;; Private
 
 ;; Central repository for all hooks -- so we can look them up later by name.

@@ -129,9 +129,9 @@ void gnc_account_tree_remove_account (GNCAccountTree *tree,
 
 void gnc_account_tree_remove_account_all(Account *account);
 
-void gnc_account_tree_show_categories (GNCAccountTree *tree);
+void gnc_account_tree_show_income_expense (GNCAccountTree *tree);
 
-void gnc_account_tree_hide_categories (GNCAccountTree *tree);
+void gnc_account_tree_hide_income_expense (GNCAccountTree *tree);
 
 Account * gnc_account_tree_get_current_account (GNCAccountTree *tree);
 GList *   gnc_account_tree_get_current_accounts (GNCAccountTree *tree);

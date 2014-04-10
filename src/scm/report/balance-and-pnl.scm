@@ -1,8 +1,24 @@
-;; -*-scheme-*-
-;; $Id$
+;; This program is free software; you can redistribute it and/or    
+;; modify it under the terms of the GNU General Public License as   
+;; published by the Free Software Foundation; either version 2 of   
+;; the License, or (at your option) any later version.              
+;;                                                                  
+;; This program is distributed in the hope that it will be useful,  
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of   
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    
+;; GNU General Public License for more details.                     
+;;                                                                  
+;; You should have received a copy of the GNU General Public License
+;; along with this program; if not, contact:
+;;
+;; Free Software Foundation           Voice:  +1-617-542-5942
+;; 59 Temple Place - Suite 330        Fax:    +1-617-542-2652
+;; Boston, MA  02111-1307,  USA       gnu@gnu.org
+
 ;; Balance and Profit/Loss Reports
 
 (gnc:support "report/balance-and-pnl.scm")
+(gnc:depend "html-generator.scm")
 (gnc:depend "text-export.scm")
 (gnc:depend "report-utilities.scm")
 (gnc:depend "options.scm")
@@ -13,7 +29,7 @@
     ((l0-collector (make-stats-collector))
      (l1-collector (make-stats-collector))
      (l2-collector (make-stats-collector)))
-  
+
   (define string-db (gnc:make-string-database))
 
   (define (balsht-options-generator)
@@ -70,9 +86,9 @@
     gnc:*pnl-report-options*)
 
   (define (render-level-2-account level-2-account l2-value)
-    (let ((account-name (string-append "&nbsp;&nbsp;&nbsp;&nbsp;"
-                                       (gnc:account-get-full-name
-                                        level-2-account)))
+    (let ((account-name (list NBSP NBSP NBSP NBSP 
+					(gnc:account-get-full-name
+					 level-2-account)))
           (type-name (gnc:account-get-type-string
                       (gnc:account-get-type level-2-account))))
       (html-table-row-align
@@ -84,17 +100,18 @@
     (let ((name (gnc:account-get-full-name account))
           (type (gnc:account-get-type-string (gnc:account-get-type account))))
       (html-table-row-align
-       (list name type "&nbsp;"
+       (list name type NBSP 
              (gnc:amount->formatted-string l1-value #f)
-	     "&nbsp;" "&nbsp;")
+	     NBSP NBSP)
        (list "left" "center" "right" "right" "right" "right"))))
 
   (define (render-total l0-value)
     (html-table-row-align
-     (list "&nbsp;" "&nbsp;" "&nbsp;"
-           (html-strong (string-db 'lookup 'net))
-           "&nbsp;"
-           (gnc:amount->formatted-string l0-value #f))
+     (list (html-strong (string-db 'lookup 'net))
+           NBSP NBSP 
+           (gnc:amount->formatted-string l0-value #f)
+	   NBSP NBSP 
+	   )
      (list "left" "center" "right" "right" "right" "right")))
 
   (define blank-line

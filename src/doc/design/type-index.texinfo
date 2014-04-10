@@ -1,0 +1,4 @@
+@node Data Type Index, Concept Index, Reports, Top
+@unnumbered Date Type Index
+
+@printindex tp

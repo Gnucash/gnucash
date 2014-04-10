@@ -23,6 +23,25 @@
 
 (gnc:support "engine-utilities.scm")
 
+(define (gnc:transaction-map-splits thunk transaction)
+  (let loop ((num-splits (gnc:transaction-get-split-count transaction))
+             (i 0))
+    (if (< i num-splits)
+        (cons
+         (thunk (gnc:transaction-get-split transaction i))
+         (loop num-splits (+ i 1)))
+        '())))
+
+(define (gnc:group-map-accounts thunk group)
+  "Call thunk for each account in group, returning the results as a
+list.  Return '() for a null group."
+  (let loop ((i 0)
+             (num-accounts (gnc:group-get-num-accounts group)))
+    (if (< i num-accounts)
+        (cons (thunk (gnc:group-get-account group i))
+              (loop (+ i 1) num-accounts))
+        '())))
+
 ;; Pull a scheme list of accounts (including subaccounts) from group grp
 (define (gnc:group-get-account-list grp)
   "Return a flat list of all the accounts in grp, or #f if there's a problem."

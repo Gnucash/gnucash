@@ -29,8 +29,8 @@ typedef struct _GNCMainInfo GNCMainInfo;
 struct _GNCMainInfo
 {
   GtkWidget *account_tree;
-  GtkWidget *assets_label;
-  GtkWidget *profits_label;
+  GtkWidget *totals_combo;
+  GList *totals_list;
 
   SCM main_window_change_callback_id;
   SCM euro_change_callback_id;

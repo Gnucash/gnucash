@@ -1,0 +1,44 @@
+@node Introduction, Top Level, Top, Top
+@unnumbered Introduction
+
+This document defines the design and architecture of the GnuCash
+program, an application for tracking finances. GnuCash is composed
+of several subsystems or modules. This document describes each module,
+specifying its interface and, where appropriate, its implementation,
+as well as describing the interactions between each module.
+
+@unnumberedsec Who Should Read This Document?
+
+Anyone who plans on making a significant change or addition to GnuCash's
+functionality should read this document. By adhering to the structure
+presented here, your contribution will be more likely to work correctly
+with existing and future features.
+
+@unnumberedsec Goals
+
+GnuCash is intended to be a finance and accounting program for
+individuals and small businesses. As such, it should have the
+following primary features:
+
+@itemize
+
+@item
+A sound underlying model for financial entities such as currencies,
+transactions, and accounts.
+
+@item
+A user interface which provides an efficient way to accomplish
+common tasks, such as transaction entry, account reconciliation,
+etc.
+
+@item
+The ability to generate and print standard financial reports
+such as Income Statements, Balance Sheets, etc.
+
+@item
+The ability to generate and print graphs of financial information.
+
+@end itemize
+
+A more comprehensive list of current and planned features for GnuCash
+is at @uref{http://cvs.gnucash.org/linux/gnucash/projects.html}.

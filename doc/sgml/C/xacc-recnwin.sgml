@@ -1,0 +1,118 @@
+
+<ARTICLE ID="XACC-RECNWIN">
+<ARTHEADER>
+<TITLE>Reconciliation Window</TITLE>
+</ARTHEADER>
+<SECT1>
+<TITLE> Reconciliation Window</TITLE>
+<PARA>The Reconciliation window is used to reconcile cleared
+    transactions from a bank statement. Enter a dollar amount from
+    your last bank statement in the box, and then click <GUIMENU>OK</GUIMENU>
+    . The window will then show all unreconciled transactions since
+    your last bank statement. The reconcile window looks like
+    this:
+
+    </PARA>
+<PARA>     <INLINEMEDIAOBJECT>
+<IMAGEOBJECT>
+<IMAGEDATA FILEREF="recnwin.gif">
+</IMAGEOBJECT>
+</INLINEMEDIAOBJECT>
+    
+
+    </PARA>
+<PARA>The Reconciliation window is used to reconcile the user's
+    records at the end of the month. This involves validating the
+    transactions in GnuCash against the transactions indicated on
+    your bank statement.
+
+    </PARA>
+<PARA>For example, when you write a check for something, you
+    should enter the transaction into GnuCash.
+
+    </PARA>
+<PARA>At the end of the month, you receive your bank statement,
+    perhaps including canceled checks. At <EMPHASIS>that</EMPHASIS> point, you
+    should "reconcile" the account, that is, agree your personal
+    records to the documentation provided by the bank.
+
+    <ITEMIZEDLIST>
+<LISTITEM>
+<PARA>Open the reconcile window, and GnuCash will prompt you to
+      enter the ending balance from the bank statement.
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Then the reconcile window will pop-up, and you will see a
+      credit and a debit column that lists all the non-reconciled
+      transactions.
+      
+      
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>        Now, examine each item on the bank statement. 
+
+        </PARA>
+<PARA>If a check has cleared, as indicated by your bank
+        statement, you should click the field between the
+        description and payment fields, and it will then change
+        from <ENVAR>n</ENVAR> to <ENVAR>c</ENVAR>, indicating the
+transaction
+        has <EMPHASIS>c</EMPHASIS>cleared.
+
+        </PARA>
+<PARA>You then repeat this for each item that appears on the
+        bank statement, verifying that the amounts match with the
+        amounts in GnuCash, and marking off transactions in GnuCash
+        as they are reconciled.
+      
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>At the bottom of the window is a difference field, which
+      should be $0.00 when you are done reconciling. If it isn't,
+      then you have either missed transactions, or some amounts may
+      be incorrect in GnuCash. (Or, probably rather less likely,
+      the bank may have made an error.)
+      
+      
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>When you have completed marking off all the items on the
+      bank statement, and when the difference heads to $0.00, you
+      should press <GUIMENU>Ok</GUIMENU>, then the <ENVAR>n</ENVAR> or <ENVAR>c</ENVAR>
+      in the transactions that were checked off will change to a
+      <ENVAR>y</ENVAR>, indicating that they have been validated to agree
+      between the bank statement and your own records.
+      
+      
+    </PARA>
+</LISTITEM>
+</ITEMIZEDLIST>
+
+    </PARA>
+<PARA>When you change anything in a transaction that has been
+    reconciled, a dialog box warning you that such changes are
+    unwise should pop up, but this doesn't seem to happen
+    anymore.
+
+    </PARA>
+<PARA>Also, the "cleared" total at the bottom seems to display
+    <SCREEN>$0.00</SCREEN> regardless of what transactions are cleared or
+    reconciled.
+
+    </PARA>
+<PARA>The "cleared" total should display the total of only the
+    transactions that have been cleared (<ENVAR>c</ENVAR>) or reconciled
+    (<ENVAR>y</ENVAR>).
+
+
+</PARA>
+</SECT1>
+</ARTICLE>

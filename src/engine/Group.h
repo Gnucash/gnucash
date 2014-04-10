@@ -37,17 +37,6 @@ AccountGroup *xaccMallocAccountGroup( void );
 void          xaccFreeAccountGroup( AccountGroup *account_group );
 
 /*
- * The xaccGroupGetGUID() subroutine will return the
- *    globally unique id associated with that group.
- *
- * The xaccGroupLookup() subroutine will return the
- *    group associated with the given id, or NULL
- *    if there is no such group.
- */
-const GUID   * xaccGroupGetGUID (AccountGroup *group);
-AccountGroup * xaccGroupLookup (const GUID *guid);
-
-/*
  * The xaccConcatGroups() subroutine will move all accounts
  *    from the "from" group to the "to" group
  *
@@ -279,15 +268,15 @@ void xaccAccountsBeginStagedTransactionTraversals (Account **accounts);
 
 /* xaccTransactionTraverse() checks the stage of the given transaction.
  *    If the transaction hasn't reached the given stage, the transaction
- *    is updated to that stage and the function returns GNC_T. Otherwise
- *    no change is made and the function returns GNC_F.
+ *    is updated to that stage and the function returns TRUE. Otherwise
+ *    no change is made and the function returns FALSE.
  *
  * xaccSplitTransactionTraverse() behaves as above using the parent of
  *    the given split.
  */
 
-gncBoolean xaccTransactionTraverse(Transaction *trans, int stage);
-gncBoolean xaccSplitTransactionTraverse(Split *split, int stage);
+gboolean xaccTransactionTraverse(Transaction *trans, int stage);
+gboolean xaccSplitTransactionTraverse(Split *split, int stage);
 
 /* xaccGroupStagedTransactionTraversal() calls thunk on each
  *    transaction in the group whose current marker is less than the

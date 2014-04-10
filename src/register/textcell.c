@@ -27,6 +27,7 @@
  *
  * HISTORY:
  * Copyright (c) 1998 Linas Vepstas
+ * Copyright (c) 2000 Dave Peticolas
  */
 
 #include <stdlib.h>
@@ -72,8 +73,8 @@ xaccInitTextCell (BasicCell *cell)
 {
    xaccInitBasicCell (cell);
 
-   if (cell->value) free (cell->value);
-   cell->value = strdup ("");
+   g_free (cell->value);
+   cell->value = g_strdup ("");
 
    cell->modify_verify = TextMV;
 }

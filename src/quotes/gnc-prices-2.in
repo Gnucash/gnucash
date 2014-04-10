@@ -2,7 +2,7 @@
 
 use strict;
 use English;
-use Quote;
+use Finance::Quote;
 
 ## Simple program to get quotes and feed them back to gnucash.
 
@@ -45,6 +45,9 @@ use Quote;
 # source.  Perhaps later...
 
 my $exit_status = 0;
+
+# Create a stockquote object.
+my $quoter = Finance::Quote->new();
 
 sub schemify_str {
   my($str) = @_;
@@ -92,7 +95,7 @@ while(<>) {
     next;
   }
 
-  my %quote_data = &Quote::fetch($quote_source_name,$security_name);
+  my %quote_data = $quoter->fetch($quote_source_name,$security_name);
 
   unless($quote_data{$quote_source_name,'success'}) {
     # We don't have to schemify the source or name - the regexp filtered it.

@@ -30,8 +30,8 @@
  * Copyright (c) 2000 Dave Peticolas <peticola@cs.ucdavis.edu>
  */
  
-#ifndef __GNC_NUM_CELL_H__
-#define __GNC_NUM_CELL_H__
+#ifndef __NUM_CELL_H__
+#define __NUM_CELL_H__
 
 #include "basiccell.h"
 
@@ -39,7 +39,7 @@ typedef struct _NumCell
 {
   BasicCell cell;
   long int next_num;
-  gncBoolean next_num_set;
+  gboolean next_num_set;
 } NumCell;
 
 NumCell * xaccMallocNumCell (void);
@@ -49,4 +49,4 @@ void      xaccDestroyNumCell (NumCell *);
 void      xaccSetNumCellValue (NumCell *cell, const char *str);
 void      xaccSetNumCellLastNum (NumCell *cell, const char *str);
 
-#endif /* __GNC_NUM_CELL_H__ */
+#endif /* __NUM_CELL_H__ */

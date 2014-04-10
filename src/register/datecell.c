@@ -28,6 +28,7 @@
  * HISTORY:
  * Copyright (C) 1997 Robin D. Clark
  * Copyright (c) 1998, 1999, 2000 Linas Vepstas
+ * Copyright (c) 2000 Dave Peticolas
  */
 
 #include <ctype.h>
@@ -36,21 +37,18 @@
 #include <string.h>
 #include <time.h>
 
-#include "../engine/date.h"  /* hack alert -- don't include from engine directory */
+#include "date.h"  /* hack alert -- don't include from engine directory */
+#include "util.h"
 
 #include "basiccell.h"
 #include "datecell.h"
-#include "util.h"
+
 
 static void setDateCellValue (BasicCell *, const char *);
 
-#define SET(cell,str) { 			\
-   if ((cell)->value) free ((cell)->value);	\
-   (cell)->value = strdup (str);		\
-}
-
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_REGISTER;
+
 
 /* ================================================ */
 
@@ -58,68 +56,16 @@ static void
 xaccParseDate (struct tm *parsed, const char * datestr)
 {
    int iday, imonth, iyear;
+
    if (!parsed) return;
    if (!datestr) return;
 
    scanDate(datestr, &iday, &imonth, &iyear);
+
    parsed->tm_mday = iday;
    parsed->tm_mon = imonth-1;
    parsed->tm_year = iyear-1900;
 }
-
-/* ================================================ */
-/* february default is 28, and patched below */
-static
-char days_in_month[12] = { 31,28,31,30,31,30,31,31,30,31,30,31 };
-
-/* ================================================ */
-
-static void
-xaccValidateDate (struct tm *date, int recur)
-{
-   int day, month, year;
-
-   /* avoid infinite recursion */
-   if (1 < recur) return;
-
-   day = date->tm_mday;
-   month = date->tm_mon + 1;
-   year = date->tm_year + 1900;
-
-   /* adjust days in february for leap year */
-   if (((year % 4 == 0) && (year % 100 != 0)) || (year % 400 == 0)) {
-      days_in_month[1] = 29;
-   } else {
-      days_in_month[1] = 28;
-   }
-  
-   /* the "% 12" business is because month might not be valid!*/
-
-   while (day > days_in_month[(month+11) % 12]) {
-      day -= days_in_month[(month+11) % 12];
-      month++;
-   }
-   while (day < 1) {
-      month--;
-      day += days_in_month[(month+11) % 12];
-   }
-   while (month > 12) {
-      month -= 12;
-      year++;
-   }
-   while (month < 1) {
-      month += 12;
-      year--;
-   }
-
-   date->tm_mday = day;
-   date->tm_mon = month - 1;
-   date->tm_year = year - 1900;
-
-   /* do it again, in case leap-year scrolling messed things up */
-   xaccValidateDate (date, ++recur);
-}
-
 
 /* ================================================ */
 
@@ -144,16 +90,16 @@ DateCellHelpValue(BasicCell *bcell)
       time.tm_year = cell->date.tm_year;
     }
 
-    xaccValidateDate(&time, GNC_F);
+    xaccValidateDate(&time);
     mktime(&time);
 
     strftime(string, sizeof(string), "%A %d %B %Y", &time);
 
-    return strdup(string);
+    return g_strdup(string);
   }
 
   if (bcell->blank_help != NULL)
-    return strdup(bcell->blank_help);
+    return g_strdup(bcell->blank_help);
 
   return NULL;
 }
@@ -161,15 +107,16 @@ DateCellHelpValue(BasicCell *bcell)
 /* ================================================ */
 
 static const char * 
-DateEnter (BasicCell *_cell, const char * curr,
+DateEnter (BasicCell *_cell,
+           const char * curr,
            int *cursor_position,
            int *start_selection,
            int *end_selection)
 {
    DateCell *cell = (DateCell *) _cell;
 
-   /* OK, we just entered a new cell.  Find out
-    * what date that cell thinks it has.   */
+   /* OK, we just entered a new cell. Find out
+    * what date that cell thinks it has. */
    xaccParseDate (&(cell->date), curr);
 
    return curr;
@@ -177,6 +124,7 @@ DateEnter (BasicCell *_cell, const char * curr,
 
 /* ================================================ */
 
+/* This code should be kept in sync with src/gnome/gnc-dateedit.c */
 static const char * 
 DateMV (BasicCell *_cell, 
         const char *oldval, 
@@ -187,28 +135,26 @@ DateMV (BasicCell *_cell,
         int *end_selection)
 {
    DateCell *cell = (DateCell *) _cell;
-   gncBoolean accept = GNC_F;
-   gncBoolean accel = GNC_F;
+   gboolean accept = FALSE;
    struct tm *date;
    char buff[30];
-   char *datestr;
 
    /* if user hit backspace, accept the change */
-   if (change == NULL) accept = GNC_T;
-   else if (0x0 == change[0]) accept = GNC_T;
+   if (change == NULL) accept = TRUE;
+   else if (0x0 == change[0]) accept = TRUE;
    else
    {
       int i, count = 0;
       char separator = dateSeparator();
-      gncBoolean ok = GNC_T;
+      gboolean ok = TRUE;
 
-      for (i=0; 0 != change[i]; i++)
+      for (i = 0; 0 != change[i]; i++)
       {
         /* accept only numbers or a date separator. Note that the
          * separator of '-' (for DATE_FORMAT_ISO) takes precedence
          * over the accelerator below! */
         if (!isdigit(change[i]) && (separator != change[i]))
-          ok = GNC_F;
+          ok = FALSE;
 
         if (separator == change[i])
           count++;
@@ -219,16 +165,16 @@ DateMV (BasicCell *_cell,
           count++;
 
       if (2 < count)
-        ok = GNC_F;
+        ok = FALSE;
 
       if (ok)
-        accept = GNC_T;
+        accept = TRUE;
    }
 
    /* keep a copy of the new value */
    if (accept) {
-      if (cell->cell.value) free (cell->cell.value);
-      cell->cell.value = strdup (newval);
+      g_free (cell->cell.value);
+      cell->cell.value = g_strdup (newval);
       xaccParseDate (&(cell->date), newval);
       return newval;
    }
@@ -245,45 +191,42 @@ DateMV (BasicCell *_cell,
       case '=':
          /* increment day */
          date->tm_mday ++;
-         accel = GNC_T;
          break;
 
       case '_':
       case '-':
          /* decrement day */
          date->tm_mday --;
-         accel = GNC_T;
          break;
 
       case '}':
       case ']':
          /* increment month */
          date->tm_mon ++;
-         accel = GNC_T;
          break;
 
       case '{':
       case '[':
-         /* decrment month */
+         /* decrement month */
          date->tm_mon --;
-         accel = GNC_T;
          break;
 
       case 'M':
       case 'm':
-         /* begining of month */
+         /* beginning of month */
          date->tm_mday = 1;
          break;
 
       case 'H':
       case 'h':
          /* end of month */
-         date->tm_mday = days_in_month[date->tm_mon];
+         date->tm_mon ++;
+         date->tm_mday = 0;
          break;
 
       case 'Y':
       case 'y':
-         /* begining of year */
+         /* beginning of year */
          date->tm_mday = 1;
          date->tm_mon = 0;
          break;
@@ -312,18 +255,14 @@ DateMV (BasicCell *_cell,
          return NULL;
    }
 
-   if (accel) {
-      xaccValidateDate (date, 0);
-   }
+   xaccValidateDate (date);
 
    printDate (buff, date->tm_mday, date->tm_mon+1, date->tm_year+1900);
 
-   if (cell->cell.value) free (cell->cell.value);
-   cell->cell.value = strdup (buff);
+   g_free (cell->cell.value);
+   cell->cell.value = g_strdup (buff);
 
-   datestr = strdup (buff);
-
-   return datestr;
+   return g_strdup (buff);
 }
 
 /* ================================================ */
@@ -333,7 +272,6 @@ DateLeave (BasicCell *_cell, const char * curr)
 {
    DateCell *cell = (DateCell *) _cell;
    char buff[30];
-   char * retval;
 
    /* OK, we are leaving the cell.  Find out
     * what date that cell thinks it has.   */
@@ -343,17 +281,16 @@ DateLeave (BasicCell *_cell, const char * curr)
                     cell->date.tm_mon+1, 
                     cell->date.tm_year+1900);
 
-   if (cell->cell.value) free (cell->cell.value);
-   cell->cell.value = strdup (buff);
+   g_free (cell->cell.value);
+   cell->cell.value = g_strdup (buff);
 
-   retval = strdup (buff);
-   return retval;
+   return g_strdup (buff);
 }
 
 /* ================================================ */
 /* for most practical purposes, the commit function
  * is identical to the DateLeave function, except that
- * it returns no value (and is publically visible)
+ * it returns no value (and is publicly visible)
  */
 
 void
@@ -362,14 +299,17 @@ xaccCommitDateCell (DateCell *cell)
    char buff[30];
 
    if (!cell) return;
+
    ENTER ("value is %s \n", cell->cell.value);
+
    xaccParseDate (&(cell->date), cell->cell.value);
    printDate (buff, cell->date.tm_mday, 
                     cell->date.tm_mon+1, 
                     cell->date.tm_year+1900);
 
-   if (cell->cell.value) free (cell->cell.value);
-   cell->cell.value = strdup (buff);
+   g_free (cell->cell.value);
+   cell->cell.value = g_strdup (buff);
+
    LEAVE ("value is %s \n", cell->cell.value);
 }
 
@@ -392,8 +332,11 @@ DateCell *
 xaccMallocDateCell (void)
 {
    DateCell *cell;
-   cell = (DateCell *) malloc (sizeof (DateCell));
+
+   cell = g_new(DateCell, 1);
+
    xaccInitDateCell (cell);
+
    return cell;
 }
 
@@ -414,7 +357,8 @@ xaccInitDateCell (DateCell *cell)
    cell->date = *now;
    printDate (buff, now->tm_mday, now->tm_mon+1, now->tm_year+1900);
  
-   SET (&(cell->cell), buff);
+   g_free (cell->cell.value);
+   cell->cell.value = g_strdup (buff);
  
    cell->cell.enter_cell = DateEnter;
    cell->cell.modify_verify = DateMV;
@@ -431,7 +375,8 @@ xaccDestroyDateCell (DateCell *cell)
    cell->date.tm_mday = 0;
    cell->date.tm_mon = 0;
    cell->date.tm_year = 0;
-   xaccDestroyBasicCell ( &(cell->cell));
+
+   xaccDestroyBasicCell (&(cell->cell));
 }
 
 /* ================================================ */
@@ -446,15 +391,16 @@ xaccSetDateCellValue (DateCell *cell, int day, int mon, int year)
    dada.tm_mon = mon-1;
    dada.tm_year = year - 1900;
 
-   xaccValidateDate (&dada, 0);
+   xaccValidateDate (&dada);
+
    cell->date.tm_mday = dada.tm_mday;
    cell->date.tm_mon = dada.tm_mon;
    cell->date.tm_year = dada.tm_year;
 
    printDate (buff, dada.tm_mday, dada.tm_mon+1, dada.tm_year+1900);
 
-   if (cell->cell.value) free (cell->cell.value);
-   cell->cell.value = strdup (buff);
+   g_free (cell->cell.value);
+   cell->cell.value = g_strdup (buff);
 }
 
 /* ================================================ */
@@ -472,9 +418,8 @@ xaccSetDateCellValueSecs (DateCell *cell, time_t secs)
                     cell->date.tm_mon+1, 
                     cell->date.tm_year+1900);
 
-   if (cell->cell.value) free (cell->cell.value);
-   cell->cell.value = strdup (buff);
-
+   g_free (cell->cell.value);
+   cell->cell.value = g_strdup (buff);
 }
 
 /* ================================================ */
@@ -502,7 +447,7 @@ xaccSetDateCellValueSecsL (DateCell *cell, long long secs)
       stm = localtime (&rem);
       cell->date = *stm;
       cell->date.tm_year += 32 * yrs;
-      xaccValidateDate (&(cell->date), 0);
+      xaccValidateDate (&(cell->date));
    } else {
       /* OK, time value is an unsigned 32-bit int */
       time_t sicko;
@@ -515,8 +460,8 @@ xaccSetDateCellValueSecsL (DateCell *cell, long long secs)
                     cell->date.tm_mon+1, 
                     cell->date.tm_year+1900);
 
-   if (cell->cell.value) free (cell->cell.value);
-   cell->cell.value = strdup (buff);
+   g_free (cell->cell.value);
+   cell->cell.value = g_strdup (buff);
 
 }
 
@@ -534,8 +479,8 @@ setDateCellValue (BasicCell *_cell, const char *str)
               cell->date.tm_mon+1, 
               cell->date.tm_year+1900);
 
-   if (cell->cell.value) free (cell->cell.value);
-   cell->cell.value = strdup (buff);
+   g_free (cell->cell.value);
+   cell->cell.value = g_strdup (buff);
 }
 
 /* ============== END OF FILE ===================== */

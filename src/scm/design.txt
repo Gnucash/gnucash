@@ -51,7 +51,7 @@ Current notes:
    file supports, generate the usage message, and annotate the config
    file.
 
-   I propose that each subdir in the xacc tree be allowed to contain
+   I propose that each subdir in the gnucash tree be allowed to contain
    an ./prefs.def.scm file which will look like this:
 
    (gnucash:describe-pref name value-name type description
@@ -85,14 +85,14 @@ Current notes:
   be available:
 
     guile-level:
-      (xacc:preference-list) => list of prefs
-      (xacc:preference-exists?) => list of prefs
-      (xacc:preference-lookup-by-name name) => pref
-      (xacc:preference-get-name pref) => name
-      (xacc:preference-get-type pref) => type
-      (xacc:preference-get-value pref) => value
-      (xacc:preference-set-value! pref value) => <undefined>
-      (xacc:preference-get-documentation! pref) => documentation
+      (gnucash:preference-list) => list of prefs
+      (gnucash:preference-exists?) => list of prefs
+      (gnucash:preference-lookup-by-name name) => pref
+      (gnucash:preference-get-name pref) => name
+      (gnucash:preference-get-type pref) => type
+      (gnucash:preference-get-value pref) => value
+      (gnucash:preference-set-value! pref value) => <undefined>
+      (gnucash:preference-get-documentation! pref) => documentation
 
     c-level: There will be an equivalent set of functions for querying
       the state of the preference engine, and there will be some
@@ -106,9 +106,9 @@ Current notes:
       Linas' primary concerns).
 
    --name="value" on the command line will be handled identically to
-   (xacc:preference-set-value! name value) in a config file, and will 
+   (gnucash:preference-set-value! name value) in a config file, and will 
 
-   xacc --help" will display a list of all options, their types, their
+   gnucash --help" will display a list of all options, their types, their
    default values, and their documentation strings, all gathered from
    the config files.
 
@@ -117,28 +117,28 @@ Current notes:
    more sophisticated later to handle UI selected options vs. user
    config-file options more intelligently, but this will do for now.)
 
-   By default, xacc (or whatever we call it) writes all automatically
+   By default, gnucash (or whatever we call it) writes all automatically
    generated (by user interaction in the GUI or whatever) config info
-   to a file ~/.xacc/config.auto in the form of guile code.  Then at
-   startup, xacc *first* tries to read ~/.xacc/config.user.  If it
-   can't, it falls back to ~/.xacc/config.auto, but only if
-   ~/.xacc/config.user doesn't exist.
+   to a file ~/.gnucash/config.auto in the form of guile code. Then at
+   startup, gnucash *first* tries to read ~/.gnucash/config.user. If it
+   can't, it falls back to ~/.gnucash/config.auto, but only if
+   ~/.gnucash/config.user doesn't exist.
 
-   Normal users will only have a ~/.xacc/config.auto file, and they'll
-   be happy.  Users who want to tweak things manually will be able to
-   create an ~/.xacc/config.user file and go nuts in there, loading
-   ~/.xacc/config.auto whenever they feel like it (or not at all).
+   Normal users will only have a ~/.gnucash/config.auto file, and they'll
+   be happy. Users who want to tweak things manually will be able to
+   create an ~/.gnucash/config.user file and go nuts in there, loading
+   ~/.gnucash/config.auto whenever they feel like it (or not at all).
 
    Justification for guile code as the config file format rather than
    something less complex:
 
-     Want a particular set of accounts to open on startup?  Put
+   Want a to run a particular set of functions on startup? Put
 
-       (load "~/.xacc.auto")
-       (my-personally-coded-run-automated-transactions-function today)
-       (xacc-open-account "foo")
-       (xacc-open-account "bar")
-       (xacc-open-account "baz")
+       (gnc:load "config.auto")
+
+       (my-first-function)
+       (my-second-function)
+       ...
 
      Also this makes hook functions possible (essentially callbacks on
      certain events into user provided guile functions).

@@ -207,6 +207,21 @@ gnc_option_set_ui_value(GNCOption *option, gboolean use_default)
       bad_value = TRUE;
 
   }
+  else if (safe_strcmp(type, "font") == 0)
+  {
+    if (gh_string_p(value))
+    {
+      char *string = gh_scm2newstr(value, NULL);
+      if ((string != NULL) && (*string != '\0'))
+      {
+        GnomeFontPicker *picker = GNOME_FONT_PICKER(option->widget);
+        gnome_font_picker_set_font_name(picker, string);
+        free(string);
+      }
+    }
+    else
+      bad_value = TRUE;
+  }
   else
   {
     PERR("Unknown type. Ignoring.\n");
@@ -345,6 +360,14 @@ gnc_option_get_ui_value(GNCOption *option)
     result = gh_cons(gh_double2scm(green * scale), result);
     result = gh_cons(gh_double2scm(red * scale), result);
   }
+  else if (safe_strcmp(type, "font") == 0)
+  {
+    GnomeFontPicker *picker = GNOME_FONT_PICKER(option->widget);
+    char * string;
+
+    string = gnome_font_picker_get_font_name(picker);
+    result = gh_str02scm(string);
+  }
   else
   {
     PERR("Unknown type for refresh. Ignoring.\n");
@@ -354,6 +377,36 @@ gnc_option_get_ui_value(GNCOption *option)
 
   return result;
 }
+
+
+/********************************************************************\
+ * gnc_set_option_selectable_by_name                                *
+ *   Change the selectable state of the widget that represents a    *
+ *   GUI option.                                                    *
+ *                                                                  *
+ * Args: section     - section of option                            *
+ *       name        - name of option
+ *       selectable  - if false, update the widget so that it       *
+ *                     cannot be selected by the user.  If true,    *
+ *                     update the widget so that it can be selected.*
+ * Return: nothing                                                  *
+\********************************************************************/
+void
+gnc_set_option_selectable_by_name( const char *section,
+                                   const char *name,
+                                   gboolean selectable)
+{
+  GNCOption *option = gnc_get_option_by_name( section, name );
+
+  if ((option == NULL) || (option->widget == NULL))
+    return;
+
+  gtk_widget_set_sensitive( GTK_WIDGET(option->widget),
+                            selectable                  );
+
+  return;
+} /* gnc_set_option_selectable_by_name */
+
 
 static void
 default_button_cb(GtkButton *button, gpointer data)
@@ -392,6 +445,8 @@ gnc_option_toggled_cb(GtkToggleButton *button, gpointer data)
 
   option->changed = TRUE;
 
+  gnc_option_call_option_widget_changed_proc(option);
+
   pbox = gtk_widget_get_toplevel(GTK_WIDGET(button));
   gnome_property_box_changed(GNOME_PROPERTY_BOX(pbox));
 }
@@ -403,6 +458,8 @@ gnc_option_changed_cb(GtkEditable *editable, gpointer data)
   GNCOption *option = data;
 
   option->changed = TRUE;
+
+  gnc_option_call_option_widget_changed_proc(option);
 
   pbox = gtk_widget_get_toplevel(GTK_WIDGET(editable));
   gnome_property_box_changed(GNOME_PROPERTY_BOX(pbox));
@@ -428,6 +485,8 @@ gnc_option_multichoice_cb(GtkWidget *w, gint index, gpointer data)
                       GINT_TO_POINTER(index));
 
   option->changed = TRUE;
+
+  gnc_option_call_option_widget_changed_proc(option);
 
   omenu = gtk_object_get_data(GTK_OBJECT(w), "gnc_option_menu");
   pbox = gtk_widget_get_toplevel(omenu);
@@ -492,6 +551,8 @@ gnc_option_account_cb(GNCAccountTree *tree, Account * account, gpointer data)
 
   option->changed = TRUE;
 
+  gnc_option_call_option_widget_changed_proc(option);
+
   pbox = gtk_widget_get_toplevel(GTK_WIDGET(tree));
   gnome_property_box_changed(GNOME_PROPERTY_BOX(pbox));
 }
@@ -506,6 +567,8 @@ gnc_option_account_select_all_cb(GtkWidget *widget, gpointer data)
 
   option->changed = TRUE;
 
+  gnc_option_call_option_widget_changed_proc(option);
+
   pbox = gtk_widget_get_toplevel(GTK_WIDGET(widget));
   gnome_property_box_changed(GNOME_PROPERTY_BOX(pbox));
 }
@@ -519,6 +582,8 @@ gnc_option_account_clear_all_cb(GtkWidget *widget, gpointer data)
   gtk_clist_unselect_all(GTK_CLIST(option->widget));
 
   option->changed = TRUE;
+
+  gnc_option_call_option_widget_changed_proc(option);
 
   pbox = gtk_widget_get_toplevel(GTK_WIDGET(widget));
   gnome_property_box_changed(GNOME_PROPERTY_BOX(pbox));
@@ -602,6 +667,8 @@ gnc_option_list_select_cb(GtkCList *clist, gint row, gint column,
 
   option->changed = TRUE;
 
+  gnc_option_call_option_widget_changed_proc(option);
+
   gtk_clist_set_row_data(clist, row, GINT_TO_POINTER(TRUE));
 
   pbox = gtk_widget_get_toplevel(GTK_WIDGET(clist));
@@ -616,6 +683,8 @@ gnc_option_list_unselect_cb(GtkCList *clist, gint row, gint column,
   GtkWidget *pbox;
 
   option->changed = TRUE;
+
+  gnc_option_call_option_widget_changed_proc(option);
 
   gtk_clist_set_row_data(clist, row, GINT_TO_POINTER(FALSE));
 
@@ -633,6 +702,8 @@ gnc_option_list_select_all_cb(GtkWidget *widget, gpointer data)
 
   option->changed = TRUE;
 
+  gnc_option_call_option_widget_changed_proc(option);
+
   pbox = gtk_widget_get_toplevel(GTK_WIDGET(widget));
   gnome_property_box_changed(GNOME_PROPERTY_BOX(pbox));
 }
@@ -646,6 +717,8 @@ gnc_option_list_clear_all_cb(GtkWidget *widget, gpointer data)
   gtk_clist_unselect_all(GTK_CLIST(option->widget));
 
   option->changed = TRUE;
+
+  gnc_option_call_option_widget_changed_proc(option);
 
   pbox = gtk_widget_get_toplevel(GTK_WIDGET(widget));
   gnome_property_box_changed(GNOME_PROPERTY_BOX(pbox));
@@ -746,6 +819,23 @@ gnc_option_color_changed_cb(GnomeColorPicker *picker, guint arg1, guint arg2,
   GNCOption *option = data;
 
   option->changed = TRUE;
+
+  gnc_option_call_option_widget_changed_proc(option);
+
+  pbox = gtk_widget_get_toplevel(GTK_WIDGET(picker));
+  gnome_property_box_changed(GNOME_PROPERTY_BOX(pbox));
+}
+
+static void
+gnc_option_font_changed_cb(GnomeFontPicker *picker, gchar *font_name,
+                           gpointer data)
+{
+  GtkWidget *pbox;
+  GNCOption *option = data;
+
+  option->changed = TRUE;
+
+  gnc_option_call_option_widget_changed_proc(option);
 
   pbox = gtk_widget_get_toplevel(GTK_WIDGET(picker));
   gnome_property_box_changed(GNOME_PROPERTY_BOX(pbox));
@@ -1070,6 +1160,34 @@ gnc_option_set_ui_widget(GNCOption *option,
 		     gnc_option_create_default_button(option, tooltips),
 		     FALSE, FALSE, 0);
   }
+  else if (safe_strcmp(type, "font") == 0)
+  {
+    GtkWidget *label;
+    gchar *colon_name;
+
+    colon_name = g_strconcat(name, ":", NULL);
+    label = gtk_label_new(colon_name);
+    gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
+    g_free(colon_name);
+
+    enclosing = gtk_hbox_new(FALSE, 5);
+    value = gnome_font_picker_new();
+    gnome_font_picker_set_mode(GNOME_FONT_PICKER(value),
+                               GNOME_FONT_PICKER_MODE_FONT_INFO);
+
+    option->widget = value;
+
+    gnc_option_set_ui_value(option, FALSE);
+
+    gtk_signal_connect(GTK_OBJECT(value), "font-set",
+		       GTK_SIGNAL_FUNC(gnc_option_font_changed_cb), option);
+
+    gtk_box_pack_start(GTK_BOX(enclosing), label, FALSE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(enclosing), value, FALSE, FALSE, 0);
+    gtk_box_pack_end(GTK_BOX(enclosing),
+		     gnc_option_create_default_button(option, tooltips),
+		     FALSE, FALSE, 0);
+  }
   else
   {
     PERR("Unknown type. Ignoring.\n");
@@ -1156,7 +1274,7 @@ gnc_build_options_dialog_contents(GnomePropertyBox *propertybox,
   gint default_page = -1;
   gint num_sections;
   gint page;
-  gint i;
+  gint i, j;
 
   tooltips = gtk_tooltips_new();
 
@@ -1180,6 +1298,21 @@ gnc_build_options_dialog_contents(GnomePropertyBox *propertybox,
 
   if (default_section_name != NULL)
     free(default_section_name);
+
+  /* call each option widget changed callbacks once at this point,
+   * now that all options widgets exist.
+   */
+  for (i = 0; i < num_sections; i++)
+  {
+    section = gnc_option_db_get_section(odb, i);
+
+    for (j = 0; j < gnc_option_section_num_options(section); j++)
+    {
+      gnc_option_call_option_widget_changed_proc(
+              gnc_get_option_section_option(section, j) );
+    }
+  }
+
 }
 
 

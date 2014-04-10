@@ -1,8 +1,12 @@
 
+SUBDIRS = \
+  design
+
 EXTRA_DIST = \
-  architecture.txt \
   backup.txt \
   budget.txt \
-  coding-style.txt \
+  constderv.html \
+  finderv.html \
+  finutil.html \
   plugin.txt \
   tax.txt

@@ -24,6 +24,7 @@ doc_DATA = \
   newaccwin-code.gif \
   newaccwin-trade.gif \
   recnwin.gif \
+  recninfo.gif \
   regwin-double.gif \
   regwin-multi.gif \
   regwin-single.gif \

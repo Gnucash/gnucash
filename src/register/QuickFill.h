@@ -2,6 +2,7 @@
  * QuickFill.h -- the quickfill tree data structure                 *
  * Copyright (C) 1997 Robin D. Clark                                *
  * Copyright (C) 1998 Linas Vepstas                                 *
+ * Copyright (C) 2000 Dave Peticolas                                *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -22,8 +23,8 @@
  *                                                                  *
 \********************************************************************/
 
-#ifndef __XACC_QUICKFILL_H__
-#define __XACC_QUICKFILL_H__
+#ifndef __QUICKFILL_H__
+#define __QUICKFILL_H__
 
 #include "config.h"
 
@@ -59,6 +60,7 @@ typedef struct _quickfill {
   struct _quickfill *qf[QFNUM];    /* array of children in the tree      */
 } QuickFill;
 
+
 /** PROTOTYPES ******************************************************/
 
 QuickFill *xaccMallocQuickFill( void );
@@ -69,6 +71,5 @@ QuickFill *xaccGetQuickFillStrLen( QuickFill *qf, const char *str, int len );
 QuickFill *xaccGetQuickFillUniqueLen( QuickFill *qf, int *len );
 void       xaccQFInsertText( QuickFill *qf, const char *text, QuickFillSort );
 
-/** GLOBALS *********************************************************/
 
-#endif /* __XACC_QUICKFILL_H__ */
+#endif /* __QUICKFILL_H__ */

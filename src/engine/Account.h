@@ -28,6 +28,7 @@
 #include "config.h"
 #include "AccInfo.h"
 #include "Transaction.h"
+#include "kvp_frame.h"
 #include "GNCId.h"
 
 
@@ -49,6 +50,10 @@ void         xaccFreeAccount( Account * );
  */
 void         xaccAccountBeginEdit (Account *, int defer);
 void         xaccAccountCommitEdit (Account *);
+
+kvp_value * xaccAccountGetSlot(Account * account, const char * key);
+void      xaccAccountSetSlot(Account * account, const char * key, 
+                             const kvp_value * value);
 
 /*
  * The xaccAccountGetGUID() subroutine will return the
@@ -179,19 +184,18 @@ char *         xaccAccountGetFullName (Account *, const char separator);
  *    value is just list[i].  This routine is needed for the perl 
  *    swig wrappers, which cannot dereference a list.
  */
-
 Account *      IthAccount (Account **list, int i);
 
 /* xaccAccountsHaveCommonCurrency returns true if the two given accounts
  * have a currency in common, i.e., if they can have common transactions.
  * Useful for UI sanity checks.
  */
-gncBoolean xaccAccountsHaveCommonCurrency(Account *account_1,
-					  Account *account_2);
+gboolean       xaccAccountsHaveCommonCurrency(Account *account_1,
+                                              Account *account_2);
 
 /* Returns true if the account has 'ancestor' as an ancestor.
  * Returns false if either is NULL. */
-gncBoolean     xaccAccountHasAncestor (Account *, Account * ancestor);
+gboolean       xaccAccountHasAncestor (Account *, Account * ancestor);
 
 /* Get and Set a mark on the account.  The meaning of this mark is
  * completely undefined. Its presented here as a utility for the

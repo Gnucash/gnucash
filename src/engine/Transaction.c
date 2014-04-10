@@ -64,6 +64,9 @@ int force_double_entry = 0;
 #define DEFER_REBALANCE 0x2
 #define BEING_DESTROYED 0x4
 
+/* a very small number */
+#define ZERO_THRESH_VALUE 0.0000000000001
+
 /********************************************************************\
  * Because I can't use C++ for this project, doesn't mean that I    *
  * can't pretend too!  These functions perform actions on the       *
@@ -104,6 +107,8 @@ xaccInitSplit(Split * split)
   split->share_reconciled_balance  = 0.0;
   split->cost_basis                = 0.0;
   split->ticket = 0;
+
+  split->kvp_data = NULL;
 
   xaccGUIDNew(&split->guid);
   xaccStoreEntity(split, &split->guid, GNC_ID_SPLIT);
@@ -188,6 +193,37 @@ xaccFreeSplit( Split *split )
   split->date_reconciled.tv_nsec = 0;
 
   _free(split);
+}
+
+/********************************************************************
+ * xaccSplitGetSlot
+ ********************************************************************/
+
+kvp_value * 
+xaccSplitGetSlot(Split * split, const char * key) {
+  if(!split || !key || !(split->kvp_data)) {
+    return NULL;
+  }
+  else {
+    return kvp_frame_get_slot(split->kvp_data, key);
+  }
+}
+
+/********************************************************************
+ * xaccSplitSetSlot 
+ ********************************************************************/
+
+void
+xaccSplitSetSlot(Split * split, const char * key, const kvp_value * value) {
+  if(!split || !key || !value) {
+    return;
+  }
+  else {
+    if(!split->kvp_data) {
+      split->kvp_data = kvp_frame_new();
+    }
+    kvp_frame_set_slot(split->kvp_data, key, value);
+  }
 }
 
 /********************************************************************\
@@ -407,6 +443,8 @@ xaccInitTransaction( Transaction * trans )
   trans->open = 0;
   trans->orig = NULL;
 
+  trans->kvp_data = NULL;
+
   xaccGUIDNew(&trans->guid);
   xaccStoreEntity(trans, &trans->guid, GNC_ID_TRANS);
 }
@@ -523,6 +561,38 @@ xaccFreeTransaction( Transaction *trans )
   LEAVE ("addr=%p\n", trans);
 }
 
+/********************************************************************
+ * xaccTransGetSlot
+ ********************************************************************/
+
+kvp_value * 
+xaccTransGetSlot(Transaction * trans, const char * key) {
+  if(!trans || !key || !(trans->kvp_data)) {
+    return NULL;
+  }
+  else {
+    return kvp_frame_get_slot(trans->kvp_data, key);
+  }
+}
+
+/********************************************************************
+ * xaccTransSetSlot 
+ ********************************************************************/
+
+void
+xaccTransSetSlot(Transaction * trans, const char * key, 
+                 const kvp_value * value) {
+  if(!trans || !key || !value) {
+    return;
+  }
+  else {
+    if(!trans->kvp_data) {
+      trans->kvp_data = kvp_frame_new();
+    }
+    kvp_frame_set_slot(trans->kvp_data, key, value);
+  }
+}
+
 /********************************************************************\
 \********************************************************************/
 
@@ -576,6 +646,7 @@ xaccTransLookup (const GUID *guid)
 void
 xaccSplitSetBaseValue (Split *s, double value, const char * base_currency)
 {
+   int adjust_price = 0; 
    if (!s) return;
 
    MARK_SPLIT(s);
@@ -589,29 +660,54 @@ xaccSplitSetBaseValue (Split *s, double value, const char * base_currency)
       if (force_double_entry) {
          PERR ("split must have a parent\n");
          assert (s->acc);
-      } else { 
-         DEVIDE (s -> damount, value, s->share_price);
-         return;
+      } 
+      else { 
+        /* if there's already a share-amount set, we need to respect 
+         * that and adjust the price to make this balance. */
+        if (!DEQEPS(s->damount, 0.0, ZERO_THRESH_VALUE)) {
+          DEVIDE(s->share_price, value, s->damount);
+        }
+        else {
+          DEVIDE(s->damount, value, s->share_price);
+        }
+        return;
       }
    }
+
+   if (s->acc &&
+       s->acc->security &&
+       *s->acc->security &&
+       safe_strcmp(s->acc->security, s->acc->currency) &&
+       !DEQEPS(s->damount, 0.0, ZERO_THRESH_VALUE))
+     adjust_price = 1;
 
    /* The value of a split depends on the currency we express the
     * value in.  This may or may not require a divide.
     */
    if (!safe_strcmp(s->acc->currency, base_currency)) {
-      DEVIDE (s -> damount, value, s->share_price);
-   } else 
-   if (!safe_strcmp(s->acc->security, base_currency)) {
-      s -> damount = value;   
-   } else 
-   if ((0x0==base_currency) && (0 == force_double_entry)) {
-      DEVIDE (s -> damount, value, s->share_price);
-   } else 
-   {
-      PERR ("inappropriate base currency %s "
-            "given split currency=%s and security=%s\n",
-             base_currency, s->acc->currency, s->acc->security);
-      return;
+     if (adjust_price) {
+       DEVIDE(s->share_price, value, s->damount);
+     }
+     else {
+       DEVIDE(s->damount, value, s->share_price);
+     }
+   } 
+   else if (!safe_strcmp(s->acc->security, base_currency)) {
+     s->damount = value;   
+   } 
+   else if ((0x0==base_currency) && (0 == force_double_entry)) {
+     if (adjust_price) {
+       DEVIDE(s->share_price, value, s->damount);
+     }
+     else {
+       DEVIDE(s->damount, value, s->share_price);
+     }
+   }
+   else {
+     PERR ("inappropriate base currency %s "
+           "given split currency=%s and security=%s\n",
+           base_currency, s->acc->currency, s->acc->security);
+     return;
    }
 }
 
@@ -717,14 +813,14 @@ xaccTransGetImbalance (Transaction * trans)
 
 /********************************************************************\
 \********************************************************************/
-gncBoolean
+gboolean
 xaccIsCommonCurrency(const char *currency_1, const char *security_1,
                      const char *currency_2, const char *security_2)
 {
   int c1c2, c1s2, s1c2, s1s2;
 
   if ((currency_1 == NULL) || (currency_2 == NULL))
-    return GNC_F;
+    return FALSE;
 
   if ((security_1 != NULL) && (security_1[0] == 0x0))
     security_1 = NULL;
@@ -1249,10 +1345,10 @@ xaccTransRollbackEdit (Transaction *trans)
    LEAVE ("trans addr=%p\n", trans);
 }
 
-gncBoolean
+gboolean
 xaccTransIsOpen (Transaction *trans)
 {
-  if (!trans) return GNC_F;
+  if (!trans) return FALSE;
   return (0 != (trans->open & BEGIN_EDIT));
 }
 
@@ -1769,6 +1865,22 @@ xaccTransSetDateTS (Transaction *trans, const Timespec *ts)
    trans->date_posted.tv_nsec = ts->tv_nsec;
 }
 
+char *
+xaccTransGetDateStr (Transaction *trans)
+{
+   char buf [MAX_DATE_LENGTH];
+   struct tm *date;
+   time_t secs;
+
+   secs = xaccTransGetDate (trans);
+
+   date = localtime (&secs);
+
+   printDate(buf, date->tm_mday, date->tm_mon+1, date->tm_year +1900);
+
+   return strdup (buf);
+}
+
 void
 xaccTransSetDateEnteredTS (Transaction *trans, const Timespec *ts)
 {
@@ -2040,6 +2152,18 @@ void
 xaccSplitSetReconcile (Split *split, char recn)
 {
    if (!split) return;
+
+   switch (recn)
+   {
+     case NREC:
+     case CREC:
+     case YREC:
+     case FREC:
+       break;
+     default:
+       PERR("Bad reconciled flag");
+       return;
+   }
 
    split->reconciled = recn;
    MARK_SPLIT (split);

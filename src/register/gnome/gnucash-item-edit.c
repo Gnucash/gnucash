@@ -461,16 +461,21 @@ item_edit_set_cursor_pos (ItemEdit *item_edit, int p_row, int p_col, int x,
         gint o_x, o_y;
         gint virt_row, virt_col, cell_row, cell_col;
         SheetBlockStyle *style;
+        PhysicalCell *pcell;
         char *text;
 
         g_return_val_if_fail (IS_ITEM_EDIT(item_edit), FALSE);
 
         table = item_edit->sheet->table;
 
-	virt_row = table->locators[p_row][p_col]->virt_row;
-	virt_col = table->locators[p_row][p_col]->virt_col;
-	cell_row = table->locators[p_row][p_col]->phys_row_offset;
-	cell_col = table->locators[p_row][p_col]->phys_col_offset;
+        pcell = gnc_table_get_physical_cell (table, p_row, p_col);
+        if (pcell == NULL)
+                return FALSE;
+
+	virt_row = pcell->virt_loc.virt_row;
+	virt_col = pcell->virt_loc.virt_col;
+	cell_row = pcell->virt_loc.phys_row_offset;
+	cell_col = pcell->virt_loc.phys_col_offset;
 
         style = gnucash_sheet_get_style (item_edit->sheet, virt_row, 0);
 

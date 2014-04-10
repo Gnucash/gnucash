@@ -27,6 +27,7 @@
 
 #define _GNU_SOURCE
 
+#include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -114,10 +115,10 @@ printDate (char * buff, int day, int month, int year)
       {
         struct tm tm_str;
         tm_str.tm_mday = day;
-        tm_str.tm_mon = month - 1; /*tm_mon = 0 through 11 */
+        tm_str.tm_mon = month - 1;    /* tm_mon = 0 through 11 */
         tm_str.tm_year = year - 1900; /* this is what the standard 
-                                       * says, it's not a Y2K thing
-                                       */
+                                       * says, it's not a Y2K thing */
+
         strftime(buff, MAX_DATE_LENGTH, "%x", &tm_str);
       }
       break;
@@ -133,6 +134,7 @@ void
 printDateSecs (char * buff, time_t t)
 {
   struct tm *theTime;
+
   if (!buff) return;
   
   theTime = localtime(&t);
@@ -150,10 +152,10 @@ xaccPrintDateSecs (time_t t)
    return strdup (buff);
 }
 
-char *
+const char *
 gnc_print_date(Timespec ts)
 {
-  static char buff[256];
+  static char buff[MAX_DATE_LENGTH];
   time_t t;
 
   t = ts.tv_sec + (ts.tv_nsec / 1000000000.0);
@@ -182,15 +184,17 @@ scanDate(const char *buff, int *day, int *month, int *year)
 {
    char *dupe, *tmp, *first_field, *second_field, *third_field;
    int iday, imonth, iyear;
-   time_t secs;
    struct tm *now;
+   time_t secs;
 
    if (!buff) return;
-   dupe = strdup (buff);
+
+   dupe = g_strdup (buff);
+
    tmp = dupe;
-   first_field = 0x0;
-   second_field = 0x0;
-   third_field = 0x0;
+   first_field = NULL;
+   second_field = NULL;
+   third_field = NULL;
 
    /* use strtok to find delimiters */
    if (tmp) {
@@ -202,7 +206,7 @@ scanDate(const char *buff, int *day, int *month, int *year)
          }
       }
    }
-   
+
    /* if any fields appear blank, use today's date */
    time (&secs);
    now = localtime (&secs);
@@ -211,11 +215,10 @@ scanDate(const char *buff, int *day, int *month, int *year)
    iyear = now->tm_year+1900;
 
    /* get numeric values */
-   switch(dateFormat)
+   switch (dateFormat)
    {
-#if 0 /* strptime broken in glibc <= 2.1.2 */
      case DATE_FORMAT_LOCALE:
-       if (buff[0] != 0)
+       if (buff[0] != '\0')
        {
          struct tm thetime;
 
@@ -226,7 +229,6 @@ scanDate(const char *buff, int *day, int *month, int *year)
          iyear = thetime.tm_year + 1900;
        }
        break;
-#endif
      case DATE_FORMAT_UK:
      case DATE_FORMAT_CE:
        if (first_field) iday = atoi (first_field);
@@ -246,13 +248,12 @@ scanDate(const char *buff, int *day, int *month, int *year)
        break;
    }
 
-   free (dupe);
+   g_free (dupe);
 
    /* if the year entered is smaller than 100, assume we mean the current
       century (and are not revising some roman emperor's books) */
-   if(iyear<100) {
+   if (iyear < 100)
      iyear += ((int) ((now->tm_year+1950-iyear)/100)) * 100;
-   }
 
    if (year) *year=iyear;
    if (month) *month=imonth;
@@ -271,53 +272,43 @@ scanDate(const char *buff, int *day, int *month, int *year)
  */
 char dateSeparator()
 {
-  char separator;
+  static char locale_separator = '\0';
+
   switch(dateFormat)
   {
     case DATE_FORMAT_CE:
-      separator='.';
-      break;
+      return '.';
     case DATE_FORMAT_ISO:
-      separator='-';
-      break;
+      return '-';
     case DATE_FORMAT_US:
     case DATE_FORMAT_UK:
     default:
-      separator='/';
-      break;
+      return '/';
+    case DATE_FORMAT_LOCALE:
+      if (locale_separator != '\0')
+        return locale_separator;
+      else
+      { /* Make a guess */
+        char string[256];
+        struct tm *tm;
+        time_t secs;
+        char *s;
+
+        secs = time(NULL);
+        tm = localtime(&secs);
+        strftime(string, sizeof(string), "%x", tm);
+
+        for (s = string; s != '\0'; s++)
+          if (!isdigit(*s))
+            return (locale_separator = *s);
+      }
   }
-  return separator;
+
+  return '\0';
 }
 
 /********************************************************************\
 \********************************************************************/
-
-char *
-xaccTransGetDateStr (Transaction *trans)
-{
-   char buf [MAX_DATE_LENGTH];
-   time_t secs;
-   struct tm *date;
-
-   secs = xaccTransGetDate (trans);
-
-   date = localtime (&secs);
-
-   printDate(buf, date->tm_mday, date->tm_mon+1, date->tm_year +1900);
-   return strdup (buf);
-}
-
-void
-xaccTransSetDateStr (Transaction *trans, char *str)
-{
-   int day, month, year;
-
-   /* hack alert -- the date string should be parsed for time values */
-   /* cvs has some cool date parsing/guessing code .. maybe steal 
-    * that code from there ...  */
-   scanDate(str, &day, &month, &year);
-   xaccTransSetDate (trans, day, month, year);
-}
 
 time_t 
 xaccDMYToSec (int day, int month, int year)
@@ -346,17 +337,61 @@ xaccScanDateS (const char *str)
    return (xaccDMYToSec (day,month,year));
 }
 
+/* ================================================ */
+/* february default is 28, and patched below */
+static char days_in_month[12] = { 31,28,31,30,31,30,31,31,30,31,30,31 };
+
+static void
+xaccValidateDateInternal (struct tm *date, int recur)
+{
+   int day, month, year;
+
+   /* avoid infinite recursion */
+   if (1 < recur) return;
+
+   day = date->tm_mday;
+   month = date->tm_mon + 1;
+   year = date->tm_year + 1900;
+
+   /* adjust days in february for leap year */
+   if (((year % 4 == 0) && (year % 100 != 0)) || (year % 400 == 0)) {
+      days_in_month[1] = 29;
+   } else {
+      days_in_month[1] = 28;
+   }
+
+   /* the "% 12" business is because month might not be valid!*/
+
+   while (day > days_in_month[(month+11) % 12]) {
+      day -= days_in_month[(month+11) % 12];
+      month++;
+   }
+   while (day < 1) {
+      month--;
+      day += days_in_month[(month+11) % 12];
+   }
+   while (month > 12) {
+      month -= 12;
+      year++;
+   }
+   while (month < 1) {
+      month += 12;
+      year--;
+   }
+
+   date->tm_mday = day;
+   date->tm_mon = month - 1;
+   date->tm_year = year - 1900;
+
+   /* do it again, in case leap-year scrolling messed things up */
+   xaccValidateDateInternal (date, ++recur);
+}
+
+void
+xaccValidateDate (struct tm *date)
+{
+  xaccValidateDateInternal (date, 0);
+}
+
 /********************** END OF FILE *********************************\
 \********************************************************************/
-
-      
-/*
-  Local Variables:
-  tab-width: 2
-  indent-tabs-mode: nil
-  mode: c-mode
-  c-indentation-style: gnu
-  eval: (c-set-offset 'block-open '-)
-  End:
-*/
-      

@@ -56,6 +56,7 @@
 ;;    eq?
 ;;    #f))
 
+(gnc:support "prefs.scm")
 
 (define gnc:*options-entries* (gnc:new-options))
 
@@ -172,11 +173,11 @@ the account instead of opening a register." #f))
  (gnc:make-multichoice-option
   "International" "Date Format"
   "a" "Date Format Display" 'us
-  (list #(us "US" "US-style: mm/dd/yyyy")
-        #(uk "UK" "UK-style dd/mm/yyyy")
-	#(ce "Europe" "Continental Europe: dd.mm.yyyy")
-	#(iso "ISO" "ISO Standard: yyyy-mm-dd"))))
-;	#(locale "Locale" "Take from system locale"))))
+  (list #(us     "US"     "US-style: mm/dd/yyyy")
+        #(uk     "UK"     "UK-style dd/mm/yyyy")
+	#(ce     "Europe" "Continental Europe: dd.mm.yyyy")
+	#(iso    "ISO"    "ISO Standard: yyyy-mm-dd")
+	#(locale "Locale" "Default system locale format"))))
 
 (gnc:register-configuration-option
  (gnc:make-currency-option
@@ -207,9 +208,12 @@ the account instead of opening a register." #f))
   (list #(single_line "Single Line" "Show transactions on single lines")
         #(double_line "Double Line"
                       "Show transactions on two lines with more information")
-        #(multi_line  "Multi Line" "Show transactions on multiple lines with one line for each split in the transaction")
-        #(auto_single "Auto Single" "Single line mode with a multi-line cursor")
-        #(auto_double "Auto Double" "Double line mode with a multi-line cursor")
+        #(multi_line  "Multi Line"
+                      "Show transactions on multiple lines with one line for each split in the transaction")
+        #(auto_single "Auto Single"
+                      "Single line mode with a multi-line cursor")
+        #(auto_double "Auto Double"
+                      "Double line mode with a multi-line cursor")
         )))
 
 (gnc:register-configuration-option
@@ -242,6 +246,23 @@ the account instead of opening a register." #f))
  (gnc:make-simple-boolean-option
   "Register" "Show Horizontal Borders"
   "f" "By default, show horizontal borders on the cells." #t))
+
+(gnc:register-configuration-option
+ (gnc:make-simple-boolean-option
+  "Register" "'Enter' moves to blank transaction"
+  "g" "If selected, move to the blank transaction after the user presses \
+'Enter'. Otherwise, move down one row." #f))
+
+(gnc:register-configuration-option
+ (gnc:make-font-option
+  "Register" "Register font"
+  "h" "The font to use in the register" (gnc:register-default-font)))
+
+(gnc:register-configuration-option
+ (gnc:make-font-option
+  "Register" "Register hint font"
+  "i" "The font used to show hints in the register"
+  (gnc:register-default-hint-font)))
 
 
 ;; Register Color options
@@ -341,6 +362,15 @@ the account instead of opening a register." #f))
   #f))
 
 
+;; Reconcile Options
+
+(gnc:register-configuration-option
+ (gnc:make-simple-boolean-option
+  "Reconcile" "Automatic credit card payments"
+  "a" "After reconciling a credit card statement, prompt the user to enter a credit card payment"
+  #t))
+
+
 ;; General Options
 
 (gnc:register-configuration-option
@@ -381,6 +411,23 @@ the account instead of opening a register." #f))
  (gnc:make-simple-boolean-option
   "General" "Use accounting labels"
   "e" "Only use 'debit' and 'credit' instead of informal synonyms" #f))
+
+(gnc:register-configuration-option
+ (gnc:make-simple-boolean-option
+  "General" "Display \"Tip of the Day\""
+  "f" "Display hints for using GnuCash at startup" #t))
+
+(gnc:register-configuration-option
+ (gnc:make-simple-boolean-option
+  "General" "Automatic Decimal Point"
+  "g" "Automatically insert a decimal point into values that are entered without one.  Example:  '2000' is changed to '20.00'." #f))
+
+;(gnc:register-configuration-option
+; (gnc:make-complex-boolean-option
+;  "General" "complex boolean test"
+;  "h" "some random text" #f
+;  (lambda (x) (gnc:warn "setter cb function"))
+;  (lambda (x) (gnc:warn "widget cb function"))))
 
 ;(gnc:register-configuration-option
 ; (gnc:make-number-range-option
@@ -494,19 +541,11 @@ the current value of the path."
 
 (gnc:register-configuration-option
  (gnc:make-internal-option
-  "__gui" "account_add_win_width" 0))
+  "__gui" "account_win_width" 0))
 
 (gnc:register-configuration-option
  (gnc:make-internal-option
-  "__gui" "account_add_win_height" 0))
-
-(gnc:register-configuration-option
- (gnc:make-internal-option
-  "__gui" "account_edit_win_width" 0))
-
-(gnc:register-configuration-option
- (gnc:make-internal-option
-  "__gui" "account_edit_win_height" 0))
+  "__gui" "account_win_height" 0))
 
 (gnc:register-configuration-option
  (gnc:make-internal-option

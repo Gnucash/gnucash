@@ -1,3 +1,323 @@
+2000-08-23  Dave Peticolas  <dave@krondo.com>
+
+	* src/engine/kvp_frame.c: use g_strdup, not strdup.
+
+	* src/calculation/expression_parser.c: use glib memory routines.
+	(exit_parser): fix a bug where pe->named_vars was freed twice.
+
+2000-08-22  Dave Peticolas  <dave@krondo.com>
+
+	* src/engine/Transaction.c (xaccSplitSetBaseValue): check to
+	make sure the security is not "" before allowing price changes.
+
+	* src/gnome/window-register.c (gnc_register_check_close): use
+	xaccSRCancelCursorTransChanges to cancel any pending changes.
+
+2000-08-21  Dave Peticolas  <dave@krondo.com>
+
+	* src/gnome/reconcile-list.c (gnc_reconcile_list_fill): fix
+	a memory leak. xaccTransGetDateStr returns a malloc'd string.
+
+	* src/engine/: Move transaction date routines from date.c to
+	Transaction.c. Move definition of Timespec from Transaction.h
+	to date.h. Some code cleanup in date.c.
+
+	* src/register/QuickFill.c (qfInsertTextRec): When inserting new
+	strings, don't replace older strings that are prefixes of the new
+	string.
+
+	* src/engine/gnc-common.h: remove gncBoolean type and constants.
+	Replace all uses with glib versions.
+
+2000-08-12  Dave Peticolas  <dave@krondo.com>
+
+	* src/engine/Transaction.c (xaccSplitSetBaseValue): don't adjust
+	the price when the base currency is the security of the account.
+
+2000-08-10  Dave Peticolas  <dave@krondo.com>
+
+	* src/register/table-allgui.c (gnc_table_physical_cell_valid): bug
+	fix -- get the virtual cell of the target location before getting
+	the cellblock.
+
+2000-08-09  Dave Peticolas  <dave@krondo.com>
+
+	* src/gnome/dialog-utils.c: remove unused code
+
+	* src/gnome/dialog-account.c: new file implementing the
+	consolidated account add and account edit windows using glade.
+
+2000-08-07  Dave Peticolas  <dave@krondo.com>
+
+	* src/register/*.c: Use glib memory allocation routines.
+
+	* src/register/cellblock.c: fix memory leaks and use glib memory
+	allocation routines.
+
+	* src/register/table-allgui.c: reimplement the Table code using
+	glib's dynamic arrays. Clean up the code and homogenize the
+	function naming convention.
+
+2000-08-04  Dave Peticolas  <dave@krondo.com>
+
+	* src/register/table-gnome.h: remove unused data members
+
+	* src/register/basiccell.h: remove the pixel_width argument
+	to the realize callback, it is no longer used.
+
+	* src/register/table-allgui.c: remove the gnc_table_column_width
+	call.
+
+2000-08-07  Rob Browning  <rlb@cs.utexas.edu>
+
+	* src/scm/tip-of-the-day.scm: don't initialize at startup.
+
+	* src/scm/main.scm (gnc:*batch-mode-forms-to-evaluate*): new
+	global to hold forms added by --evaluate for execution after
+	startup.
+	(gnc:main): support --evalutate properly.
+
+	* src/scm/engine-utilities.scm (gnc:transaction-map-splits): moved here.
+	(gnc:group-map-accounts): moved here.
+
+	* src/scm/command-line.scm (gnc:*arg-defs*): add --evaluate
+	option.  This should be considered beta, and it's not documented
+	yet, but it's useful for me right now, we need something like it,
+	and I'd like others to see what they think.  Also, this will only
+	work right when I finish fixing up tip-of-the-day to not
+	initialize when the file loads.
+
+	* src/pixmaps/Makefile.am: minor typo.
+
+	* src/guile/option-util.c: include string.h
+
+	* src/guile/guile-util.c: include string.h
+
+	* src/guile/gfec.c: include string.h
+
+	* doc/gnucash.1: change filename extension in example to .gnc
+
+	* configure.in: always report missing templates as an error.
+
+	* README: updates (also change = to # for section seps (helps CVS))
+
+2000-07-22  Dave Peticolas  <dave@krondo.com>
+
+	* src/gnome/window-reconcile.c: After reconciliation, if the
+	account is a credit card account, automatically pop up a transfer
+	window with the appropriate amount and accounts.
+
+2000-07-21  Dave Peticolas  <dave@krondo.com>
+
+	* src/calculation/fin.c: Some cleanup and renaming of function
+	names to be longer and more descriptive.
+
+	* src/gnome/dialog-transfer.c: Add Num field to the transfer
+	dialog. Add APIs to change the amount, the description, and the
+	accounts. Fix a bug in the default sense of the show/hide buttons.
+
+2000-07-20  Dave Peticolas  <dave@krondo.com>
+
+	* src/gnome/top-level.c (gnc_ui_destroy_all_subwindows): destroy
+	open transfer windows.
+
+	* src/Destroy.c: remove notes window functions.
+
+	* src/AccWindow.h: remove notes window functions.
+
+	* src/gnome/dialog-transfer.c: Make transfer dialog modeless.
+
+2000-07-19  Dave Peticolas  <dave@krondo.com>
+
+	* src/gnome/account-tree.c: Use income_expense instead of
+	category for names.
+
+2000-07-12  Dave Peticolas  <dave@krondo.com>
+
+	* src/SplitLedger.c (LedgerAutoCompletion): simplify, and fix a
+	bug with split auto-completion.
+
+	* src/scm/bootstrap.scm.in: add HOME/.gnucash to scm search path.
+
+2000-07-04  Dave Peticolas  <dave@krondo.com>
+
+	* src/scm/bootstrap.scm.in: bump up the stack limit
+
+	* src/engine/date.c (xaccValidateDate): move this function from
+	src/register/datecell.c to here, so it can be used elsewhere.
+
+	* src/gnome/gnc-dateedit.c: make the widget respond to the same
+	accelerators as the register date cell.
+
+2000-07-03  Robert Graham Merkel  <rgmerk@mira.net>
+
+	* src/scm/c-interface.scm: Added scheme definition for
+	pointer-token-null? if not already defined by g-wrap. Fixes bug
+	when compiling with g-wrap >= 0.9.4.
+
+2000-06-28  Dave Peticolas  <dave@krondo.com>
+
+	* src/gnome/dialog-budget.c (entry_down_button_clicked): bug fix.
+
+	* src/gnome/dialog-options.c: implement font options.
+
+	* src/scm/prefs.scm: add options for the register fonts.
+
+	* src/gnome/top-level.c: configure the register fonts from
+	callbacks.
+
+	* src/register/gnome/gnucash-style.c: make the register font and
+	hint fonts configurable outside the register.
+
+2000-06-28  Robert Graham Merkel  <rgmerk@mira.net>
+
+	* src/gnome/dialog-totd.c: If somebody tries to open a second
+	tip of the day window, just raise the original.  Fixes a crash
+	when somebody tried to do this before.
+
+2000-06-27  Robert Graham Merkel  <rgmerk@mira.net>
+
+	* src/gnome/dialog-totd.c: Added code to make "Tip of the day"
+	dialog modeless
+
+2000-06-27  Dave Peticolas  <dave@krondo.com>
+
+	* src/gnome/top-level.c (gnucash_ui_init): set the reconciled cell
+	string getter to the dialog-utils function for i18ning the reconcile
+	flag value.
+
+	* src/engine/Transaction.c (xaccSplitSetReconcile): make sure the
+	reconciled flag given is good.
+
+	* src/register/splitreg.c: modify for the changes in the reconcile
+	cell.
+
+	* src/SplitLedger.c: modify for the changes in the reconcile cell.
+
+	* src/register/recncell.c: make the reconcile cell a real object,
+	not just a BasicCell with some extra functions. Add functionality
+	for distinguishing between the flag value and the displayed value.
+
+2000-06-26  Dave Peticolas  <dave@krondo.com>
+
+	* src/gnome/dialog-utils.c (gnc_get_reconcile_str): new function.
+	Return i18n'd string for reconciled flag.
+
+	* src/gnome/reconcile-list.c: use i18n'd reconciled flag string.
+
+	* src/scm/tip-of-the-day.scm: put the check for whether tips
+	should be shown or not inside the hook. We can't do the check
+	here because the options haven't been loaded yet.
+
+	* src/scm/options.scm: fix bug in writing options. Use 'write'
+	to output section and option names for proper escaping.
+
+2000-06-27  Robert Graham Merkel  <rgmerk@mira.net>
+
+	* src/scm/date-utilities.scm: Added date-granularity timepair
+	comparison functions. Removed direct access functions to the time
+	structures in various functions (Dave also worked on this).
+
+	* src/scm/report/transaction-report.scm: Changed to use date
+	comparison functions in date-utilities.scm.
+
+2000-06-26  Robert Graham Merkel  <rgmerk@mira.net>
+
+	* src/guile/global-options.[ch] (gnc_option_refresh_ui_by_name):
+	New function to make refreshing the GUI options possible from C as
+	well as scheme.
+	(gnc_set_boolean_option): C function to set boolean options from
+	outside the options dialog.
+
+	* src/gnome/dialog-totd.[ch]: New files containing the GUI
+	functions for doing tips of the day.
+
+	* src/guile/tip-of-the-day.[ch]: New files with a C interface for
+	the scheme tip of the day engine.
+
+	* src/guile/option-util.[ch] (gnc_option_db_set_boolean_option):
+	New function to set a boolean option.
+	
+	* src/scm/tip-of-the-day.scm: New file: an interface for reading
+	in and passing tips to the gui in text form.
+
+	* src/scm/tip-list.scm: A list of tips as a Scheme list.  File
+	should probably be shifted somewhere else.
+
+	* src/scm/startup.scm: Loads tip-of-the-day.scm
+
+	* src/scm/prefs.scm: Add an option for displaying tips of the day
+	at startup.  Also added gnc:support line.
+
+	* src/gnome/window-main.c (gnc_ui_totd_cb): Added menu entries and
+	callbacks to add "tips of the day" to help menu.
+
+2000-06-23  Dave Peticolas  <dave@krondo.com>
+
+	* src/gnome/dialog-utils.c (gnc_window_adjust_for_screen): new
+	function. if the window size is bigger than the screen, adjust
+	it down. Use this for the account add and edit, reconcile, and
+	register windows.
+
+	* doc/html/C/projects.html: update last version info
+
+	* doc/html/C/xacc-about.html: update last version info
+
+	* src/guile/gnucash.c.in: update last version info
+
+2000-06-21  Dave Peticolas  <dave@krondo.com>
+
+	* src/register/splitreg.h: break out the register type and the
+	register style into two separate struct members, instead of using
+	bitmasks. This is much, much simpler.
+
+	* src/optional/swig/Makefile.am (gnucash-engine-perl5_wrap.c):
+	remove the -stat argument, it's no longer support in later swig
+	versions.
+
+	* src/register/Makefile.am: don't compile table-html.c, it is
+	not needed for linking.
+
+	* src/gnome/window-register.c: remove include of table-html.c
+
+	* src/engine/gnc-common.h: use 'gboolean' to typedef gncBoolean.
+	We should probably just phase out the use of gncBoolean.
+
+2000-06-20  Dave Peticolas  <dave@krondo.com>
+
+	* src/engine/util.c (xaccParseAmount): accept 8 decimal places
+	instead of 6, and trucate if more than 8.
+
+	* src/gnome/dialog-add.c: make this window modeless.
+	(gnc_ui_accWindow_ok_cb): don't let the user add an account with
+	the same fully-qualified name as another account.
+
+	* src/gnome/top-level.c (gnc_ui_destroy_all_subwindows): destroy
+	all the account add windows, too.
+
+	* src/gnome/window-main.c (gnc_refresh_main_window_title): new
+	function to put the current filename in the main window title.
+	(gnc_refresh_main_window): use the above when refreshing.
+
+	* src/FileDialog.c (gncFileSaveAs): refresh the main window after
+	'saving as' to update the filename in the main window.
+
+2000-06-19  Dave Peticolas  <dave@krondo.com>
+
+	* src/guile/gnc.gwp: take out GUIDs for Groups.
+
+	* src/engine/Group.c: take out GUIDs for Groups. Groups are really
+	just lists with no additional structure, and giving them GUIDs
+	complicates matters without adding any utility. You can always use
+	the parent account GUID instead.
+
+	* src/gnome/top-level.c: configure list auto-popping from here.
+
+	* src/register/gnome/combocell-gnome.c: determine whether or not
+	to auto-pop lists based on a class variable, and not by looking
+	up the guile function. This removes a src/guile dependency from
+	src/register/gnome.
+
 2000-06-14  Dave Peticolas  <dave@krondo.com>
 
 	* src/register/gnome/gnucash-item-edit.c (item_edit_show_list):

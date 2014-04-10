@@ -53,18 +53,10 @@ struct _account_group {
   int      numAcc;                 /* number of accounts in array */
   Account  **account;              /* array of account pointers   */
 
-  GUID     guid;                   /* globally unique id */
-
   Backend *backend;                /* persistant storage backend */
 
   /* cached parameters */
   double balance;
 };
-
-
-/* Set the group's GUID. This should only be done when reading
- * a group from a datafile, or some other external source. Never
- * call this on an existing group! */
-void xaccGroupSetGUID (AccountGroup *group, GUID *guid);
 
 #endif /* __XACC_ACCOUNT_GROUP_P_H__ */

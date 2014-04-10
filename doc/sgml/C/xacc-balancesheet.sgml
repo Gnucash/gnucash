@@ -1,0 +1,25 @@
+
+<ARTICLE ID="XACC-BALANCESHEET">
+<ARTHEADER>
+<TITLE>Balance Sheet</TITLE>
+</ARTHEADER>
+<SECT1>
+<TITLE> Balance Sheet</TITLE>
+<PARA>    <INLINEMEDIAOBJECT>
+<IMAGEOBJECT>
+<IMAGEDATA FILEREF="report-baln.gif">
+</IMAGEOBJECT>
+</INLINEMEDIAOBJECT> 
+
+    </PARA>
+<PARA>This report summarizes your assets, liabilities, and
+    equity.
+
+    </PARA>
+<PARA>You can select the date for which the balance sheet is to be
+    calculated up to using the "preferences" toolbar button. The
+    default is today.
+
+</PARA>
+</SECT1>
+</ARTICLE>

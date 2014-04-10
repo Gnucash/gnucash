@@ -18,16 +18,16 @@
 ;; Boston, MA  02111-1307,  USA       gnu@gnu.org
 
 (define (gnc:make-option
-	 ;; The category of this option
+         ;; The category of this option
          section
          name
-	 ;; The sort-tag determines the relative ordering of options in
-	 ;; this category. It is used by the gui for display.
+         ;; The sort-tag determines the relative ordering of options in
+         ;; this category. It is used by the gui for display.
          sort-tag
          type
          documentation-string
          getter
-	 ;; The setter is responsible for ensuring that the value is valid.
+         ;; The setter is responsible for ensuring that the value is valid.
          setter
          default-getter
          ;; Restore form generator should generate an ascii representation
@@ -35,16 +35,23 @@
          ;; option. The function should restore the option to the original
          ;; value.
          generate-restore-form
-	 ;; Validation func should accept a value and return (#t value)
-	 ;; on success, and (#f "failure-message") on failure. If #t,
-	 ;; the supplied value will be used by the gui to set the option.
+         ;; Validation func should accept a value and return (#t value)
+         ;; on success, and (#f "failure-message") on failure. If #t,
+         ;; the supplied value will be used by the gui to set the option.
          value-validator
-	 option-data
+         option-data
          ;; This function should return a list of all the strings in the
          ;; option other than the section, name, and documentation-string
          ;; that might be displayed to the user (and thus should be
          ;; translated).
-         strings-getter)
+         strings-getter
+         ;; This function will be called when the GUI representation
+         ;; of the option is changed.  This will normally occure before
+         ;; the setter is called, because setters are only called when
+         ;; the user selects "OK" or "Apply".  Therefore, this callback
+         ;; shouldn't be used to make changes to the actual options
+         ;; database.
+         option-widget-changed-proc)
   (let ((changed-callback #f))
     (vector section
             name
@@ -60,7 +67,8 @@
             value-validator
             option-data
             (lambda (callback) (set! changed-callback callback))
-            strings-getter)))
+            strings-getter
+            option-widget-changed-proc)))
 
 (define (gnc:option-section option)
   (vector-ref option 0))
@@ -89,6 +97,8 @@
     (cb-setter callback)))
 (define (gnc:option-strings-getter option)
   (vector-ref option 12))
+(define (gnc:option-widget-changed-proc option)
+  (vector-ref option 13))
 
 (define (gnc:option-value option)
   (let ((getter (gnc:option-getter option)))
@@ -127,11 +137,34 @@
      (lambda (x)
        (cond ((string? x)(list #t x))
              (else (list #f "string-option: not a string"))))
-     #f #f )))
+     #f #f #f)))
+
+;; font options store fonts as strings a la the X Logical
+;; Font Description. You should always provide a default
+;; value, as currently there seems to be no way to go from
+;; an actual font to a logical font description, and thus
+;; there is no way for the gui to pick a default value.
+(define (gnc:make-font-option
+	 section
+	 name
+	 sort-tag
+	 documentation-string
+	 default-value)
+  (let* ((value default-value)
+         (value->string (lambda () (gnc:value->string value))))
+    (gnc:make-option
+     section name sort-tag 'font documentation-string
+     (lambda () value)
+     (lambda (x) (set! value x))
+     (lambda () default-value)
+     (gnc:restore-form-generator value->string)
+     (lambda (x)
+       (cond ((string? x)(list #t x))
+             (else (list #f "font-option: not a string"))))
+     #f #f #f)))
 
 ;; currency options use a specialized widget for entering currencies
-;; in the GUI implementation. Currencies must be 3-letter ISO codes
-;; represented as strings.
+;; in the GUI implementation.
 (define (gnc:make-currency-option
 	 section
 	 name
@@ -149,7 +182,7 @@
      (lambda (x)
        (cond ((string? x)(list #t x))
              (else (list #f "currency-option: not a currency code"))))
-     #f #f )))
+     #f #f #f)))
 
 (define (gnc:make-simple-boolean-option
 	 section
@@ -169,7 +202,40 @@
        (if (boolean? x)
            (list #t x)
            (list #f "boolean-option: not a boolean")))
-     #f #f )))
+     #f #f #f)))
+
+
+;; Complex boolean options are the same as simple boolean options,
+;; with the addition of two function arguments.  Both functions should
+;; expect one boolean argument.  When the option's value is changed,
+;; one function will be called with the new option value at the time
+;; that the GUI widget representing the option is changed, and the
+;; other function will be called when the option's setter is called
+;; (that is, when the user selects "OK" or "Apply").
+
+(define (gnc:make-complex-boolean-option
+	 section
+	 name
+	 sort-tag
+	 documentation-string
+	 default-value
+    setter-function-called-cb
+    option-widget-changed-cb)
+  (let* ((value default-value)
+         (value->string (lambda () (gnc:value->string value))))
+    (gnc:make-option
+     section name sort-tag 'boolean documentation-string
+     (lambda () value)
+     (lambda (x) (set! value x)
+                 (setter-function-called-cb x))
+     (lambda () default-value)
+     (gnc:restore-form-generator value->string)
+     (lambda (x)
+       (if (boolean? x)
+           (list #t x)
+           (list #f "boolean-option: not a boolean")))
+     #f #f (lambda (x) (option-widget-changed-cb x)))))
+
 
 ;; date options use the option-data as a boolean value. If true,
 ;; the gui should allow the time to be entered as well.
@@ -200,7 +266,7 @@
        (if (date-legal date)
            (list #t date)
            (list #f "date-option: illegal date")))
-     show-time #f)))
+     show-time #f #f)))
 
 ;; account-list options use the option-data as a boolean value.  If
 ;; true, the gui should allow the user to select multiple accounts.
@@ -248,7 +314,7 @@
      (lambda () (map convert-to-account (default-getter)))
      #f
      validator
-     multiple-selection #f)))
+     multiple-selection #f #f)))
 
 ;; multichoice options use the option-data as a list of vectors.
 ;; Each vector contains a permissible value (scheme symbol), a
@@ -290,7 +356,7 @@
            (list #t x)
            (list #f "multichoice-option: illegal choice")))
      ok-values
-     (lambda () (multichoice-strings ok-values)))))
+     (lambda () (multichoice-strings ok-values)) #f)))
 
 ;; list options use the option-data in the same way as multichoice
 ;; options. List options allow the user to select more than one option.
@@ -338,7 +404,7 @@
            (list #t x)
            (list #f "list-option: illegal value")))
      ok-values
-     (lambda () (list-strings ok-values)))))
+     (lambda () (list-strings ok-values)) #f)))
 
 ;; number range options use the option-data as a list whose
 ;; elements are: (lower-bound upper-bound num-decimals step-size)
@@ -367,7 +433,7 @@
               (list #t x))
              (else (list #f "number-range-option: out of range"))))
      (list lower-bound upper-bound num-decimals step-size)
-     #f)))
+     #f #f)))
 
 (define (gnc:make-internal-option
          section
@@ -382,7 +448,7 @@
      (lambda () default-value)
      (gnc:restore-form-generator value->string)
      (lambda (x) (list #t x))
-     #f #f)))
+     #f #f #f)))
 
 ;; Color options store rgba values in a list.
 ;; The option-data is a list, whose first element
@@ -428,7 +494,7 @@
      (gnc:restore-form-generator value->string)
      validate-color
      (list range use-alpha)
-     #f)))
+     #f #f)))
 
 (define (gnc:color->html color range)
 
@@ -527,8 +593,8 @@
              (name (gnc:option-name option)))
         (string-append
          "(let ((option (gnc:lookup-option " options-string "\n"
-         "                                 \"" section "\"\n"
-         "                                 \"" name "\")))\n"
+         "                                 " (gnc:value->string section) "\n"
+         "                                 " (gnc:value->string name) ")))\n"
          "  (" restore-code " option))\n\n")))
 
     (define (generate-forms port)

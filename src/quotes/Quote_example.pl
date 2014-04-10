@@ -3,11 +3,14 @@
 # example script showing how to use the Quote perl module.
 # gets prices for some stocks, for some mutual funds
 
-use Quote;
+use Finance::Quote;
+
+# Create a quote object.
+my $quoter = Finance::Quote->new();
 
 # -----------------------------------
 # get quotes for two stocks ...
-%quotes = Quote::yahoo ("IBM", "SGI"); 
+%quotes = $quoter->fetch("yahoo","IBM", "SGI"); 
 
 # print some selected values 
 print "NYSE by Yahoo: ", $quotes {"IBM", "name"},  
@@ -28,7 +31,7 @@ print "\n\n";
 # -----------------------------------
 # get quotes from Fidelity Investments
 @funds = ("FGRIX", "FNMIX", "FASGX", "FCONX");
-%quotes = Quote::fidelity (@funds);
+%quotes = $quoter->fetch("fidelity",@funds);
 
 foreach $f (@funds) {
      $name = $quotes {$f, "name"};
@@ -39,7 +42,7 @@ print "\n\n";
 
 # -----------------------------------
 @funds = ("FGRXX");
-%quotes = Quote::fidelity (@funds);
+%quotes = $quoter->fetch("fidelity",@funds);
 
 print "Not all funds have a NAV; some have Yeilds:\n";
 foreach $f (@funds) {
@@ -52,7 +55,7 @@ print "\n\n";
 # -----------------------------------
 # demo T. Rowe Price -- same as above
 @funds = ("PRFDX", "PRIDX");
-%quotes = Quote::troweprice (@funds);
+%quotes = $quoter->fetch("troweprice",@funds);
 
 foreach $f (@funds) {
      $nav = $quotes {$f, "nav"};
@@ -66,7 +69,7 @@ print "\n\n";
 
 # demo for ASX.  Grab the price of Coles-Myer and Telstra
 @funds = ("CML","TLS");
-%quotes = Quote::asx(@funds);
+%quotes = $quoter->fetch("australia",@funds);
 foreach $f (@funds) {
 	print "ASX Price of $f is ".$quotes{$f,"last"}." at ".
 	      $quotes{$f,"date"}."\n";

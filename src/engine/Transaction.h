@@ -30,7 +30,9 @@
 #include <time.h>
 
 #include "gnc-common.h"
+#include "kvp_frame.h"
 #include "GNCId.h"
+#include "date.h"
 
 
 /* Values for the reconciled field in Transaction: */
@@ -57,22 +59,6 @@ typedef struct _account_group AccountGroup;
 typedef struct _split         Split;
 typedef struct _transaction   Transaction;
 
-/* struct timespec64 is just like timespec except that we use 
- * a 64-bit signed int to store the seconds.  This should adequately
- * cover dates in the distant future as well as the distant past, as long
- * as they're not more than a couple dozen times the age of the universe.
- * Note that both gcc and the IBM Toronto xlC compiler (aka CSet,
- * VisualAge, etc) correctly handle long long as a 64 bit quantity,
- * even on the 32-bit Intel x86 and PowerPC architectures.  I'm assuming
- * that all the other modern compilers are clean on this issue too ...
- */
-#ifndef SWIG   /* swig 1.1p5 can't hack the long long type */
-struct timespec64 {
-   long long int tv_sec;     
-   long int tv_nsec;
-};
-#endif /* SWIG */
-typedef struct timespec64 Timespec;
 
 /** PROTOTYPES ******************************************************/
 
@@ -139,14 +125,14 @@ void          xaccTransDestroy (Transaction *);
  *    any added splits, and undoing the effects of xaccTransDestroy,
  *    as well as restoring prices, memo's descriptions, etc.
  *
- * The xaccTransIsOpen() method returns GNC_T if the transaction
+ * The xaccTransIsOpen() method returns TRUE if the transaction
  *    is open for editing. Otherwise, it returns false.
  */
 void          xaccTransBeginEdit (Transaction *, int defer);
 void          xaccTransCommitEdit (Transaction *);
 void          xaccTransRollbackEdit (Transaction *);
 
-gncBoolean    xaccTransIsOpen (Transaction *trans);
+gboolean      xaccTransIsOpen (Transaction *trans);
 
 /*
  * The xaccTransGetGUID() subroutine will return the
@@ -159,11 +145,20 @@ gncBoolean    xaccTransIsOpen (Transaction *trans);
 const GUID  * xaccTransGetGUID (Transaction *trans);
 Transaction * xaccTransLookup (const GUID *guid);
 
+
+/* xaccTransGetSlot and xaccTransSetSlot reference the kvp_data 
+ * field of the transaction.  kvp_data is used to store arbitrary 
+ * strings, numbers, and structures which aren't "official" members
+ * of the transaction structure. */
+
+kvp_value   * xaccTransGetSlot(Transaction * trans, const char * key);
+void          xaccTransSetSlot(Transaction * trans, const char * key, 
+                               const kvp_value * value);
+
 /* Convert a day, month, and year to a Timespec */
 Timespec      gnc_dmy2timespec(int day, int month, int year);
 
-/*
- * The xaccTransSetDateSecs() method will modify the posted date 
+/* The xaccTransSetDateSecs() method will modify the posted date 
  *    of the transaction.  (Footnote: this shouldn't matter to a user,
  *    but anyone modifying the engine should understand that when
  *    xaccTransCommitEdit() is called, the date order of each of the 
@@ -253,7 +248,15 @@ long long     xaccTransGetDateL (Transaction *);
 void          xaccTransGetDateTS (Transaction *, Timespec *);
 void          xaccTransGetDateEnteredTS (Transaction *, Timespec *);
 
-/* return the number of splits */
+/* The xaccTransGetDateStr() method will return a malloc'ed string
+ *    representing the posted date of the transaction, or NULL if
+ *    the argument is NULL.
+ */
+char *        xaccTransGetDateStr (Transaction *trans);
+
+/* The xaccTransCountSplits() method returns the number of splits
+ * in a transaction.
+ */
 int           xaccTransCountSplits (Transaction *trans);
 
 
@@ -262,8 +265,8 @@ int           xaccTransCountSplits (Transaction *trans);
  * xaccTransFindCommonCurrency. This method is useful for determining
  * whether two accounts can have transactions in common.
  */
-gncBoolean xaccIsCommonCurrency(const char *currency_1, const char *security_1,
-				const char *currency_2, const char *security_2);
+gboolean xaccIsCommonCurrency(const char *currency_1, const char *security_1,
+                              const char *currency_2, const char *security_2);
 
 /* The xaccTransFindCommonCurrency () method returns a string value 
  *    indicating a currency denomination that all of the splits in this
@@ -311,6 +314,16 @@ double xaccTransGetImbalance (Transaction * trans);
 /* ------------- splits --------------- */
 Split       * xaccMallocSplit (void);
 void          xaccInitSplit   (Split *);    /* clears a split struct */
+
+
+/* xaccSplitGetSlot and xaccSplitSetSlot reference the kvp_data field
+ * of the split.  kvp_data is used to store arbitrary strings,
+ * numbers, and structures which aren't "official" members of the
+ * split structure. */
+
+kvp_value * xaccSplitGetSlot(Split * split, const char * key);
+void      xaccSplitSetSlot(Split * split, const char * key, 
+                           const kvp_value * value);
 
 /*
  * The xaccSplitGetGUID() subroutine will return the
