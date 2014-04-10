@@ -1,3 +1,22 @@
+;; utilities.scm
+;; These utilities are loaded straight off
+;;
+;; This program is free software; you can redistribute it and/or    
+;; modify it under the terms of the GNU General Public License as   
+;; published by the Free Software Foundation; either version 2 of   
+;; the License, or (at your option) any later version.              
+;;                                                                  
+;; This program is distributed in the hope that it will be useful,  
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of   
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    
+;; GNU General Public License for more details.                     
+;;                                                                  
+;; You should have received a copy of the GNU General Public License
+;; along with this program; if not, contact:
+;;
+;; Free Software Foundation           Voice:  +1-617-542-5942
+;; 59 Temple Place - Suite 330        Fax:    +1-617-542-2652
+;; Boston, MA  02111-1307,  USA       gnu@gnu.org
 
 (define (directory? path)
   ;; This follows symlinks normally.
@@ -7,8 +26,7 @@
 
 (define (gnc:directory-subdirectories dir-name)
   ;; Return a recursive list of the subdirs of dir-name, including
-  ;; dir-name.  Follow symlinks.
-  
+  ;; dir-name.  Follow symlinks.  
   (let ((dir-port (opendir dir-name)))
     (if (not dir-port)
         #f
@@ -18,7 +36,7 @@
 
           (if (not (or (string=? item ".")
                        (string=? item "..")))
-              (let* ((full-path (string-append dir-name "/" item)))
+              (let* ((full-path (build-path dir-name item)))
                 ;; ignore symlinks, etc.
                 (if (access? full-path F_OK)
                     (let* ((status (lstat full-path))
@@ -35,16 +53,59 @@
 string and 'directories' must be a list of strings."
 
   (gnc:debug "gnc:find-in-directories looking for " file " in " directories)
-  
+
   (do ((rest directories (cdr rest))
        (finished? #f)
        (result #f))
       ((or (null? rest) finished?) result)
-    
-    (let ((file-name (string-append (car rest) "/" file)))
+
+    (let ((file-name (build-path (car rest) file)))
       (gnc:debug "  checking for " file-name)
       (if (access? file-name F_OK)
           (begin
             (gnc:debug "found file " file-name)
             (set! finished? #t)
             (set! result file-name))))))
+
+(define (filteroutnulls lst)
+  (cond
+   ((null? lst) '())
+   ((eq? (car lst) #f) (filteroutnulls (cdr lst)))
+   (else
+    (cons (car lst) (filteroutnulls (cdr lst))))))
+
+(define (atom? x)
+  (and
+   (not (pair? x))
+   (not (null? x))))
+
+(define (flatten lst)
+  (cond
+   ((null? lst) '())
+   ((atom? lst) (list lst))
+   ((list? lst) 
+    (append (flatten (car lst)) 
+	    (flatten (cdr lst))))
+   (else lst)))
+
+(define (striptrailingwhitespace line)
+  (let
+      ((stringsize (string-length line)))
+    (if
+     (< stringsize 1)
+     ""
+     (let ((lastchar (string-ref line (- stringsize 1))))
+       (if
+	(char-whitespace? lastchar)
+	(striptrailingwhitespace (substring line 0  (- stringsize 1)))
+	line)))))
+
+(define (string-join lst joinstr)
+  (let ((len (length lst)))
+    (cond 
+     ((< 1 len)
+      (string-append (car lst) joinstr (string-join (cdr lst) joinstr)))
+     ((= 1 len)
+      (car lst))
+     (else
+      ""))))

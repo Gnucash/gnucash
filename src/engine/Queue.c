@@ -1,3 +1,22 @@
+/********************************************************************\
+ * This program is free software; you can redistribute it and/or    *
+ * modify it under the terms of the GNU General Public License as   *
+ * published by the Free Software Foundation; either version 2 of   *
+ * the License, or (at your option) any later version.              *
+ *                                                                  *
+ * This program is distributed in the hope that it will be useful,  *
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of   *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    *
+ * GNU General Public License for more details.                     *
+ *                                                                  *
+ * You should have received a copy of the GNU General Public License*
+ * along with this program; if not, contact:                        *
+ *                                                                  *
+ * Free Software Foundation           Voice:  +1-617-542-5942       *
+ * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
+ * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+\********************************************************************/
+
 /*
  * FILE:
  * Queue.c
@@ -12,23 +31,8 @@
  *
  * HISTORY:
  * created by Linas Vepstas January 1999
- * Copyright (c) 1999 Linas Vepstas
+ * Copyright (c) 1999, 2000 Linas Vepstas
  */
-/********************************************************************\
- * This program is free software; you can redistribute it and/or    *
- * modify it under the terms of the GNU General Public License as   *
- * published by the Free Software Foundation; either version 2 of   *
- * the License, or (at your option) any later version.              *
- *                                                                  *
- * This program is distributed in the hope that it will be useful,  *
- * but WITHOUT ANY WARRANTY; without even the implied warranty of   *
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    *
- * GNU General Public License for more details.                     *
- *                                                                  *
- * You should have received a copy of the GNU General Public License*
- * along with this program; if not, write to the Free Software      *
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
-\********************************************************************/
 
 #include <limits.h>
 #include <stdlib.h>
@@ -157,7 +161,6 @@ ExtendHead (Queue * q)
 
    q->split_list = newlist;
    free(list);
-   return;
 }
 
 /* ================================================== */
@@ -170,7 +173,7 @@ xaccQueuePushHead (Queue *q, Split *s)
   /* I'm too lazy to code up a more complex feature that no one will use ... */
   /* If you are reading this, you are invited to do so yourself :-) */
   if ( !DEQ (q->head_amount, 0.0)) {
-    PERR ("xaccQueuePushHead(): The current implementation does not\n"
+    PERR ("The current implementation does not\n"
           "\tsupport pushing onto a queue that has been popped \n");
     return;
   }
@@ -339,14 +342,14 @@ xaccQueuePopTailValue (Queue *q, double val)
 double 
 xaccQueuePopHeadValue (Queue *q, double val)
 {
-   PERR("xaccQueuePopHeadValue(): not implemented\n");
+   PERR("not implemented\n");
    return 0.0;
 }
 
 double 
 xaccQueuePopHeadShares (Queue *q, double val)
 {
-   PERR("xaccQueuePopHeadsahres(): not implemented\n");
+   PERR("not implemented\n");
    return 0.0;
 }
 
@@ -357,18 +360,18 @@ xaccQueueGetShares (Queue *q)
 {
    Split **list;
    double shrs = 0.0;
-   int i, len, tail;
+   int i;
+
    if (!q) return 0.0;
 
    shrs += q->head_amount;
    shrs += q->tail_amount;
-   
-   len = q->head_split - q->tail_split + 1;
+
    list = q->split_list;
-   tail = q->tail_split;
-   for (i=0; i<len; i++) {
+
+   for (i = q->tail_split; i <= q->head_split; i++)
       shrs += list[i]->damount;
-   }
+
    return shrs;
 }
 
@@ -377,18 +380,18 @@ xaccQueueGetValue (Queue *q)
 {
    Split **list;
    double val = 0.0;
-   int i, len, tail;
+   int i;
+
    if (!q) return 0.0;
 
    val += q->head_amount * q->head_price;
    val += q->tail_amount * q->tail_price;
-   
-   len = q->head_split - q->tail_split + 1;
+
    list = q->split_list;
-   tail = q->tail_split;
-   for (i=0; i<len; i++) {
+
+   for (i = q->tail_split; i <= q->head_split; i++)
       val += list[i]->damount * list[i]->share_price;
-   }
+
    return val;
 }
 

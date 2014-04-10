@@ -1,8 +1,8 @@
 /********************************************************************\
- * MainWindow.c -- the main window, and associated helper functions * 
- *                 and callback functions for xacc (X-Accountant)   *
- * Copyright (C) 1998,1999 Jeremy Collins	                        *
- * Copyright (C) 1998      Linas Vepstas                            *
+ * window-main.c -- the main window, and associated helper functions* 
+ *                  and callback functions for GnuCash              *
+ * Copyright (C) 1998,1999 Jeremy Collins	                    *
+ * Copyright (C) 1998,1999,2000 Linas Vepstas                       *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -15,634 +15,1106 @@
  * GNU General Public License for more details.                     *
  *                                                                  *
  * You should have received a copy of the GNU General Public License*
- * along with this program; if not, write to the Free Software      *
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
+ * along with this program; if not, contact:                        *
+ *                                                                  *
+ * Free Software Foundation           Voice:  +1-617-542-5942       *
+ * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
+ * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
+
+#include "top-level.h"
 
 #include <gnome.h>
 #include <guile/gh.h>
+#include <string.h>
 
-#include "config.h"
-
-#include "gnucash.h"
-#include "top-level.h"
-#include "messages.h"
-#include "version.h"
-#include "util.h"
-
-#include "MainWindow.h"
-#include "RegWindow.h"
-#include "window-main-menu.h"
-#include "window-mainP.h"
-#include "window-help.h"
-#include "dialog-options.h"
+#include "gnome-top-level.h"
 #include "AccWindow.h"
-
+#include "AdjBWindow.h"
+#include "global-options.h"
+#include "dialog-options.h"
+#include "FileDialog.h"
 #include "g-wrap.h"
+#include "gnucash.h"
+#include "MainWindow.h"
+#include "Destroy.h"
+#include "ui-callbacks.h"
+#include "enriched-messages.h"
+#include "RegWindow.h"
+#include "Refresh.h"
+#include "window-main.h"
+#include "window-mainP.h"
+#include "window-reconcile.h"
+#include "window-register.h"
+#include "window-help.h"
+#include "account-tree.h"
+#include "dialog-transfer.h"
+#include "dialog-edit.h"
+#include "dialog-qif-import.h"
+#include "dialog-find-transactions.h"
+#include "file-history.h"
+#include "EuroUtils.h"
+#include "Scrub.h"
+#include "util.h"
+#include "gnc.h"
+
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_GUI;
 
-#include "util.h"
-
-/** STRUCTURES ******************************************************/
-
-/** PROTOTYPES ******************************************************/
-static void gnc_ui_options_cb( GtkWidget *, gpointer );
-static void gnc_ui_add_account( GtkWidget *, gpointer );
-static void gnc_ui_delete_account_cb( GtkWidget *, gpointer );
-static void gnc_ui_about_cb( GtkWidget *, gpointer );
-static void gnc_ui_help_cb( GtkWidget *, gpointer );
-static void gnc_ui_reports_cb( GtkWidget *, gchar * );
-static void gnc_ui_mainWindow_toolbar_open( GtkWidget *, gpointer );
-static void gnc_ui_mainWindow_toolbar_edit( GtkWidget *, gpointer );
-static void gnc_ui_refresh_statusbar();
-
-/** GLOBALS *********************************************************/
-char	    *HELP_ROOT = "";
-
-/** Menus ***********************************************************/
-static GnomeUIInfo filemenu[] = {
-       {GNOME_APP_UI_ITEM, 
-       N_("New"), N_("Create New File."),
-       NULL, NULL, NULL, 
-       GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_MENU_NEW,
-       0, 0, NULL},
-       {GNOME_APP_UI_ITEM,
-       N_("Open"), N_("Open File."),
-       file_cmd_open, NULL, NULL,
-       GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_MENU_OPEN,
-       0,0, NULL},
-       {GNOME_APP_UI_ITEM,
-       N_("Save"), N_("Save File."),
-       file_cmd_save, NULL, NULL,
-       GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_MENU_SAVE,
-       0, 0, NULL},
-       {GNOME_APP_UI_ITEM,
-       N_("Import"), N_("Import QIF File."),
-       file_cmd_import, NULL, NULL,
-       GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_MENU_CONVERT,
-       0, 0, NULL},
-       GNOMEUIINFO_SEPARATOR,
-       {GNOME_APP_UI_ITEM,
-       N_("Exit"), N_("Exit Gnucash."),
-       gnc_shutdown, NULL, NULL,
-       GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_MENU_QUIT,
-       0, 0, NULL},       
-       GNOMEUIINFO_END             
+/* Codes for the file menu */
+enum {
+  FMB_NEW,
+  FMB_OPEN,
+  FMB_IMPORT,
+  FMB_SAVE,
+  FMB_SAVEAS,
+  FMB_QUIT,
 };
 
-static GnomeUIInfo reportsmenu[] = {
-	{GNOME_APP_UI_ITEM,
-	 N_("Balance"), N_("BalanceReport"),
-	 gnc_ui_reports_cb, "report-baln.phtml", NULL,
-	 GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_MENU_PREF,
-	 0, 0, NULL},
-	{GNOME_APP_UI_ITEM,
-	 N_("Profit & Loss"), N_("ProfitLoss"),
-	 gnc_ui_reports_cb, "report-pnl.phtml", NULL,
-	 GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_MENU_PREF,
-	 0, 0, NULL},
-	 
-	 GNOMEUIINFO_END
-};
+/* The gnc_ui_refresh_statusbar() subroutine redraws 
+ *    the statusbar at the bottom of the main window. The statusbar
+ *    includes two fields, titled 'profits' and 'assets'.  The total
+ *    assets equal the sum of all of the non-equity, non-income
+ *    accounts.  In theory, assets also equals the grand total
+ *    value of the equity accounts, but that assumes that folks are
+ *    using the equity account type correctly (which is not likely).
+ *    Thus we show the sum of assets, rather than the sum of equities.
+ *
+ * hack alert XXX this routine rather incorrectly sums together 
+ * account types even if they are of different currencies.  In fact,
+ * it should check the currency types, and keep separate, distinct
+ * balances for each currency, and report each of those indivudually.
+ * Or something like that. 
+ *
+ * Note the 'convert-to-euro' is a kind of a hack to work around this
+ * bug: basically, any/all currencies are converted to the euro, and 
+ * that is the sum that is reported.  It should probably be replaced by
+ * a generic 'convert-to-common-currency' routine.
+ */
 
-static GnomeUIInfo optionsmenu[] = {
-	{GNOME_APP_UI_ITEM,
-	 N_("Preferences"), N_("Preferences"),
-	 gnc_ui_options_cb, NULL, NULL,
-	 GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_MENU_PREF,
-	 0, 0, NULL},
-	 GNOMEUIINFO_END
-};
-  
-static GnomeUIInfo accountsmenu[] = {
-	{GNOME_APP_UI_ITEM,
-	 N_("View"), N_("View Account"),
-	 gnc_ui_mainWindow_toolbar_open, NULL, NULL,
-	 GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_MENU_OPEN,
-	 0, 0, NULL},
-	{GNOME_APP_UI_ITEM,
-	 N_("Edit"), N_("Edit Account"),
-	 gnc_ui_mainWindow_toolbar_edit, NULL, NULL,
-	 GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_MENU_PROP,
-	 0, 0, NULL},
-	GNOMEUIINFO_SEPARATOR,
-	{GNOME_APP_UI_ITEM,
-	 N_("Add"), N_("Add Account"),
-	 gnc_ui_add_account, NULL, NULL,
-	 GNOME_APP_PIXMAP_NONE, NULL,
-	 0, 0, NULL},
-	{GNOME_APP_UI_ITEM,
-	 N_("Remove"), N_("Remove Account"),
-	 gnc_ui_delete_account_cb, NULL, NULL,
-	 GNOME_APP_PIXMAP_NONE, NULL,
-	 0, 0, NULL},
-	 GNOMEUIINFO_END
-};  
-  
-static GnomeUIInfo helpmenu[] = {
-    {GNOME_APP_UI_ITEM, 
-     N_("About"), N_("About Gnucash."),
-     gnc_ui_about_cb, NULL, NULL, 
-     GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_MENU_ABOUT, 0, 0, NULL},
-     GNOMEUIINFO_SEPARATOR,
-    {GNOME_APP_UI_ITEM,
-     N_("Help"), N_("Gnucash Help."),
-     gnc_ui_help_cb, NULL, NULL,
-     GNOME_APP_PIXMAP_NONE, NULL,
-     0, 0, NULL},
-     GNOMEUIINFO_END
-};
-
-static GnomeUIInfo scriptsmenu[] = {
-  GNOMEUIINFO_END
-};
-
-static GnomeUIInfo mainmenu[] = {
-    GNOMEUIINFO_SUBTREE(N_("File"), filemenu),
-    GNOMEUIINFO_SUBTREE(N_("Accounts"), accountsmenu),
-    GNOMEUIINFO_SUBTREE(N_("Reports"), reportsmenu),
-    GNOMEUIINFO_SUBTREE(N_("Options"), optionsmenu),
-    GNOMEUIINFO_SUBTREE(N_("Extensions"), scriptsmenu),
-    GNOMEUIINFO_SUBTREE(N_("Help"), helpmenu),
-    GNOMEUIINFO_END
-};
-
-/** TOOLBAR ************************************************************/
-GnomeUIInfo toolbar[] = 
+static void
+gnc_ui_refresh_statusbar (void)
 {
-  { GNOME_APP_UI_ITEM,
-    N_("Open"), 
-    N_("Open File."),
-    file_cmd_open, 
-    NULL, 
-    NULL,
-    GNOME_APP_PIXMAP_STOCK, 
-    GNOME_STOCK_PIXMAP_OPEN, 'o', (GDK_CONTROL_MASK), NULL
-  },
-  { GNOME_APP_UI_ITEM,
-    N_("Save"), 
-    N_("Save File."),
-    file_cmd_save, 
-    NULL, 
-    NULL,
-    GNOME_APP_PIXMAP_STOCK, 
-    GNOME_STOCK_PIXMAP_SAVE, 's', (GDK_CONTROL_MASK), NULL
-  },
-  { GNOME_APP_UI_ITEM,
-    N_("Import"), 
-    N_("Import QIF File."),
-    file_cmd_import, 
-    NULL, 
-    NULL,
-    GNOME_APP_PIXMAP_STOCK, 
-    GNOME_STOCK_PIXMAP_CONVERT, 'i', (GDK_CONTROL_MASK), NULL
-  },
-  GNOMEUIINFO_SEPARATOR,
-  { GNOME_APP_UI_ITEM, 
-    N_("View"), 
-    N_("View selected account."),
-    gnc_ui_mainWindow_toolbar_open, 
-    NULL,
-    NULL,
-    GNOME_APP_PIXMAP_STOCK,
-    GNOME_STOCK_PIXMAP_OPEN, 'v', (GDK_CONTROL_MASK), NULL 
-  },
-  { GNOME_APP_UI_ITEM,
-    N_("Edit"), 
-    N_("Edit account information."), 
-    gnc_ui_mainWindow_toolbar_edit, 
-    NULL,
-    NULL,
-    GNOME_APP_PIXMAP_STOCK,
-    GNOME_STOCK_PIXMAP_PROPERTIES, 'e', (GDK_CONTROL_MASK), NULL
-  },
-  GNOMEUIINFO_SEPARATOR,
-  { GNOME_APP_UI_ITEM,
-    N_("Add"),
-    N_("Add a new account."),
-    gnc_ui_add_account, 
-    NULL,
-    NULL,
-    GNOME_APP_PIXMAP_STOCK,
-    GNOME_STOCK_PIXMAP_ADD, 'a', (GDK_CONTROL_MASK), NULL
-  },
-  { GNOME_APP_UI_ITEM,
-    N_("Remove"), 
-    N_("Remove selected account."), 
-    gnc_ui_delete_account_cb, 
-    NULL,
-    NULL,
-    GNOME_APP_PIXMAP_STOCK,
-    GNOME_STOCK_PIXMAP_REMOVE, 'r', (GDK_CONTROL_MASK), NULL
-  },
-  GNOMEUIINFO_SEPARATOR,
-  { GNOME_APP_UI_ITEM,
-    N_("Exit"), 
-    N_("Exit GnuCash."),
-    gnc_shutdown, 
-    NULL,
-    NULL,
-    GNOME_APP_PIXMAP_STOCK,
-    GNOME_STOCK_PIXMAP_QUIT, 'q', (GDK_CONTROL_MASK), NULL
-  },
-  GNOMEUIINFO_END
-};
-
-static gint
-acct_ctree_select(GtkWidget *widget, GtkCTreeNode *row, gint column) 
-{
+  GNCMainInfo *main_info;
+  double assets  = 0.0;
+  double profits = 0.0;
+  double euro_assets  = 0.0;
+  double euro_profits = 0.0;
+  double amount;
+  AccountGroup *group;
+  AccountGroup *children;
   Account *account;
-  
-  account = (Account *)gtk_ctree_node_get_row_data(GTK_CTREE(widget), GTK_CTREE_NODE(row));
-  gtk_object_set_data(GTK_OBJECT(app), "selected_account", account);
-  
-  return TRUE;
+  char asset_string[256];
+  char profit_string[256];
+  int num_accounts;
+  int account_type;
+  const char *account_currency;
+  gboolean euro;
+  int i;
+
+  euro = gnc_lookup_boolean_option("International",
+				   "Enable EURO support",
+				   FALSE);
+
+  main_info = gnc_get_main_info();
+  if (main_info == NULL)
+    return;
+
+  group = gncGetCurrentGroup ();
+  num_accounts = xaccGroupGetNumAccounts(group);
+  for (i = 0; i < num_accounts; i++)
+  {
+    account = xaccGroupGetAccount(group, i);
+
+    account_type = xaccAccountGetType(account);
+    account_currency = xaccAccountGetCurrency(account);
+    children = xaccAccountGetChildren(account);
+
+    switch (account_type)
+    {
+      case BANK:
+      case CASH:
+      case ASSET:
+      case STOCK:
+      case MUTUAL:
+      case CREDIT:
+      case LIABILITY:
+	amount = xaccAccountGetBalance(account);
+	if (children != NULL)
+	  amount += xaccGroupGetBalance(children);
+
+        assets += amount;
+	if(euro)
+	{
+	  euro_assets += gnc_convert_to_euro(account_currency, amount);
+	}
+	break;
+      case INCOME:
+      case EXPENSE:
+	amount = xaccAccountGetBalance(account);
+	if (children != NULL)
+	  amount += xaccGroupGetBalance(children);
+
+        profits -= amount;
+	if(euro)
+	{
+	  euro_profits -= gnc_convert_to_euro(account_currency, amount);
+	}
+	break;
+      case EQUITY:
+        /* no-op, see comments at top about summing assets */
+	break;
+      case CURRENCY:
+      default:
+	break;
+    }
+  }
+
+  xaccSPrintAmount(asset_string, assets, PRTSYM | PRTSEP, NULL);
+  if(euro)
+  {
+    strcat(asset_string, " / ");
+    xaccSPrintAmount(asset_string + strlen(asset_string), euro_assets,
+		     PRTSYM | PRTSEP | PRTEUR, NULL);
+  }
+  gtk_label_set_text(GTK_LABEL(main_info->assets_label), asset_string);
+  gnc_set_label_color(main_info->assets_label, assets);
+
+  xaccSPrintAmount(profit_string, profits, PRTSYM | PRTSEP, NULL);
+  if(euro)
+  {
+    strcat(profit_string, " / ");
+    xaccSPrintAmount(profit_string + strlen(profit_string), euro_profits,
+		     PRTSYM | PRTSEP | PRTEUR, NULL);
+  }
+  gtk_label_set_text(GTK_LABEL(main_info->profits_label), profit_string);
+  gnc_set_label_color(main_info->profits_label, profits);
 }
 
-static gint
-acct_ctree_unselect(GtkWidget *widget, GtkCTreeNode *row, gint column)
+void
+gnc_refresh_main_window()
 {
-  gtk_object_set_data(GTK_OBJECT(app), "selected_account", NULL);
-  
-  return TRUE; 
-}
-
-Session *
-gnc_main_window_get_session(gncUIWidget w) {
-  /* FIXME: right now there's only one session.  Eventually we might
-     allow multiple windows open. */
-  return(current_session);
+  xaccRecomputeGroupBalance(gncGetCurrentGroup());
+  gnc_ui_refresh_statusbar();
+  gnc_history_update_menu(GNOME_APP(gnc_get_ui_data()));
+  gnc_account_tree_refresh_all();
 }
 
 static void
-gnc_ui_refresh_statusbar()
+gnc_ui_find_transactions_cb ( GtkWidget *widget, gpointer data )
 {
-  GtkWidget *statusbar;
-  guint     context_id;
-  int i;
-  double  assets  = 0.0;
-  double  profits = 0.0;
-  char buf[BUFSIZE];
-  char *amt;
-  AccountGroup *grp;
-  Account *acc;
-  int nacc;
-   
-  grp = xaccSessionGetGroup (current_session);
-  //if (!grp) grp = topgroup;
-  nacc = xaccGroupGetNumAccounts (grp);
-  for (i=0; i<nacc; i++) {
-     int acc_type;
-     AccountGroup *acc_children;
-
-     acc = xaccGroupGetAccount (grp,i);
- 
-     acc_type = xaccAccountGetType (acc);
-     acc_children = xaccAccountGetChildren (acc);
-
-     switch (acc_type) {
-        case BANK:
-        case CASH:
-        case ASSET:
-        case STOCK:
-        case MUTUAL:
-        case CREDIT:
-        case LIABILITY:
-           assets += xaccAccountGetBalance (acc);
-           if (acc_children) {
-              assets += xaccGroupGetBalance (acc_children);
-           }
-           break;
-        case INCOME:
-        case EXPENSE:
-           profits -= xaccAccountGetBalance (acc); /* flip the sign !! */
-           if (acc_children) {
-              profits -= xaccGroupGetBalance (acc_children); /* flip the sign !! */
-           }
-           break;
-        case EQUITY:
-        default:
-           break;
-     }
-  }
-  
-  amt = xaccPrintAmount (assets, PRTSYM | PRTSEP);
-  strcpy (buf, " [ Assets: ");
-  strcat (buf, amt);
-  strcat (buf, " ] [ Profits: ");
-  amt = xaccPrintAmount (profits, PRTSYM | PRTSEP);
-  strcat (buf, amt);
-  strcat (buf, "]");
-   
-  statusbar = gtk_object_get_data(GTK_OBJECT(app), "statusbar");
-
-  context_id = gtk_statusbar_get_context_id( GTK_STATUSBAR(statusbar), 
-                                            "Statusbar");
-  
-  gtk_statusbar_push( GTK_STATUSBAR(statusbar), context_id, buf);
-  
+  gnc_ui_find_transactions_dialog_create(NULL);
 }
 
-/* Required for compatibility with Motif code... */
-void
-refreshMainWindow()
+
+static void
+gnc_ui_exit_cb ( GtkWidget *widget, gpointer data )
 {
-  gnc_ui_refresh_statusbar();
-  gnc_ui_refresh_tree();
-}
-
-void
-gnc_ui_acct_ctree_fill(GtkCTree *ctree, GtkCTreeNode *parent, AccountGroup *accts)
-{
-  GtkCTreeNode *sibling;
-  gint          totalAccounts = xaccGroupGetNumAccounts(accts);
-  gint          currentAccount;
-  gchar        *text[3];
-  
-  sibling = NULL;
-  
-  /* Add each account to the tree */  
-  for ( currentAccount = 0;
-        currentAccount < totalAccounts;
-        currentAccount++ )
-  {
-    Account      *acc = xaccGroupGetAccount(accts, currentAccount);
-    AccountGroup *hasChildren;
-    gchar         buf[BUFSIZE];
-    GtkWidget    *popup;
-        
-    sprintf(buf, "%s%.2f", CURRENCY_SYMBOL, xaccAccountGetBalance(acc));
-    
-    text[0] = xaccAccountGetName(acc);
-    text[1] = xaccAccountGetDescription(acc);
-    text[2] = buf;
-    
-    sibling = gtk_ctree_insert_node (ctree, parent, sibling, text, 0,
-                                     NULL, NULL, NULL, NULL,
-				     FALSE, FALSE);
-				           
-    /* Set the user_data for the tree item to the account it */
-    /* represents.                                           */
-    gtk_ctree_node_set_row_data(GTK_CTREE(ctree), sibling, acc);
-    
-    popup = gnome_popup_menu_new(accountsmenu);
-    gnome_popup_menu_attach (GTK_WIDGET(popup), GTK_WIDGET(ctree), NULL);
-
-//    gtk_ctree_toggle_expansion(GTK_CTREE(ctree), GTK_CTREE_NODE(sibling));
-
-    /* Connect the signal to the tree_select_row event */
-    gtk_signal_connect (GTK_OBJECT(ctree), 
-                        "tree_select_row",
-                        GTK_SIGNAL_FUNC(acct_ctree_select), 
-                        NULL);
-
-    gtk_signal_connect (GTK_OBJECT(ctree), 
-                        "tree_unselect_row",
-                        GTK_SIGNAL_FUNC(acct_ctree_unselect), 
-                        NULL);                        
-    
-    /* Check to see if this account has any children. If it
-     * does then we need to build a subtree and fill it 
-     */
-    hasChildren = xaccAccountGetChildren(acc); 
-     
-    if(hasChildren)
-    {
-      /* Call gnc_ui_accWindow_tree_fill to fill this new subtree */
-      gnc_ui_acct_ctree_fill(ctree, sibling, hasChildren );  
-    }
-  }
-  				       
-}
-
-/********************************************************************\
- * refresh_tree                                                     *
- *   refreshes the main window                                      *
- *                                                                  *
- * Args:    tree - the tree that will get destroyed..               *
- * Returns: nothing                                                 *
-\********************************************************************/
-void
-gnc_ui_refresh_tree() 
-{
-  GtkCTree     *ctree;
-  GtkCTreeNode *parent;
-  AccountGroup *accts;
-  
-  parent = gtk_object_get_data(GTK_OBJECT(app), "ctree_parent");
-  ctree  = gtk_object_get_data(GTK_OBJECT(app), "ctree");
-  
-  accts  = xaccSessionGetGroup(current_session);
-  
-  gtk_ctree_remove_node(ctree, parent);
-
-  free(parent);
-  
-  parent = NULL;
-  
-  gtk_clist_freeze(GTK_CLIST(ctree));
-  gnc_ui_acct_ctree_fill(ctree, parent, accts);
-  gtk_clist_thaw(GTK_CLIST(ctree));
-  gtk_clist_columns_autosize(GTK_CLIST(ctree));  
- 
+  gnc_shutdown(0);
 }
 
 static void
 gnc_ui_about_cb (GtkWidget *widget, gpointer data)
 {
-  helpWindow( GTK_WIDGET(app), ABOUT_STR, HH_ABOUT ); 
-}                          
+  GtkWidget *about;
+  const gchar *copyright = "(C) 1998-2000 Linas Vepstas";
+  const gchar *authors[] = {
+    "Linas Vepstas <linas@linas.org>",
+    NULL
+  };
+
+  about = gnome_about_new("GnuCash", VERSION, copyright,
+                          authors, ABOUT_MSG, NULL);
+
+  gnome_dialog_run_and_close(GNOME_DIALOG(about));
+}
 
 static void
 gnc_ui_help_cb ( GtkWidget *widget, gpointer data )
 {
-  helpWindow( GTK_WIDGET(app), HELP_STR, HH_MAIN );
-}
-
-static void
-gnc_ui_reports_cb(GtkWidget *widget, gchar *report)
-{
-  reportWindow (widget, "duuuude", report);  
+  helpWindow(NULL, HELP_STR, HH_MAIN);
 }
 
 static void
 gnc_ui_add_account ( GtkWidget *widget, gpointer data )
 {
-  GtkWidget *toplevel;
-  Account   *account;
-  
-  toplevel = gtk_widget_get_toplevel(GTK_WIDGET(widget));
-  account  = gtk_object_get_data(GTK_OBJECT(app), "selected_account");
-
-  /* FIXME: Right now this really is not doing anything        */
-  /*        The new account dialog should use this information */  
-  /*        to set the parent account...                       */
-  if (account)
-  {
-    accWindow((AccountGroup *)account);
-  }
-  else
-  {
-    accWindow(NULL);
-  }
-  
+  accWindow(NULL);
 }
 
 static void
-gnc_ui_delete_account_finish_cb ( GtkWidget *widget, gpointer data )
+gnc_ui_delete_account ( Account *account )
 {
-  GtkCTreeNode *deleteRow;
-  GtkCTreeNode *parentRow;
-  GtkCTree     *ctree;
-  Account      *account = data;
+  /* Step 1: Delete associated windows */
+  xaccAccountWindowDestroy(account);
 
-  ctree      = gtk_object_get_data(GTK_OBJECT(app), "ctree");
-  parentRow  = gtk_object_get_data(GTK_OBJECT(app), "ctree_parent");
+  /* Step 2: Remove the account from all trees */
+  gnc_account_tree_remove_account_all(account);
 
-  /* Step 1: Delete the actual account */  
-  xaccRemoveAccount ( account );
-  xaccFreeAccount ( account );
+  /* Step 3: Delete the actual account */  
+  xaccRemoveAccount(account);
+  xaccFreeAccount(account);
 
-  /* Step 2: Find the GtkCTreeNode that matches this account */
-  deleteRow = gtk_ctree_find_by_row_data(GTK_CTREE(ctree), parentRow, account);
-  
-  /* Step 3: Delete the GtkCTreeNode we just found */
-  gtk_ctree_remove_node(GTK_CTREE(ctree), deleteRow);
-  
-  /* Step 4: Refresh the toolbar */
-  gnc_ui_refresh_statusbar();
+  /* Step 4: Refresh things */
+  gnc_refresh_main_window();
+  gnc_group_ui_refresh(gncGetCurrentGroup());
 }
 
 static void
 gnc_ui_delete_account_cb ( GtkWidget *widget, gpointer data )
 {
-  GtkWidget *toplevel;
-  Account   *account;
-  
-  toplevel = gtk_widget_get_toplevel(GTK_WIDGET(widget));
-  account  = gtk_object_get_data(GTK_OBJECT(app), "selected_account");
-  
+  Account *account = gnc_get_current_account();
 
   if (account)
   {
-    GtkWidget *msgbox;
-      
-     msgbox = gnome_message_box_new ( " Are you sure you want to delete this account. ",
-                                       GNOME_MESSAGE_BOX_WARNING, 
-                                       GNOME_STOCK_BUTTON_OK,
-                                       GNOME_STOCK_BUTTON_CANCEL, NULL );
-     gnome_dialog_button_connect (GNOME_DIALOG (msgbox), 0,
-                                  GTK_SIGNAL_FUNC (gnc_ui_delete_account_finish_cb), 
-                                  account);
-     gtk_widget_show ( msgbox );
+    const gchar *name;
+    gchar *message;
+
+    name = xaccAccountGetName(account);
+    message = g_strdup_printf(ACC_DEL_SURE_MSG, name);
+
+    if (gnc_verify_dialog(message, GNC_F))
+      gnc_ui_delete_account(account);
+
+    g_free(message);
   }
   else
-  {
-    GtkWidget *msgbox;
-    msgbox = gnome_message_box_new(ACC_DEL_MSG, GNOME_MESSAGE_BOX_ERROR, "Ok", NULL);
-    gtk_widget_show ( msgbox );    
-  }
+    gnc_error_dialog(ACC_DEL_MSG);
 }
 
 static void
 gnc_ui_mainWindow_toolbar_open ( GtkWidget *widget, gpointer data )
 {
-  Account   *account;
-  GtkWidget *toplevel;
+  RegWindow *regData;
+  Account *account = gnc_get_current_account();
   
-  toplevel = gtk_widget_get_toplevel(GTK_WIDGET(widget));
-  account  = gtk_object_get_data(GTK_OBJECT(app), "selected_account");
-  
-  if(account)
+  if (account == NULL)
   {
-   fprintf(stderr, "calling regWindowSimple(%p)\n", account);
-   regWindowSimple ( account );
+    gnc_error_dialog(ACC_OPEN_MSG);
+    return;
   }
-  else
+
+  PINFO ("calling regWindowSimple(%p)\n", account);
+
+  regData = regWindowSimple(account);
+  gnc_register_raise(regData);
+}
+
+static void
+gnc_ui_mainWindow_toolbar_open_subs(GtkWidget *widget, gpointer data)
+{
+  RegWindow *regData;
+  Account *account = gnc_get_current_account();
+  
+  if (account == NULL)
   {
-    GtkWidget *msgbox;
-    msgbox = gnome_message_box_new ( " You must select an account to open first. ",
-                                     GNOME_MESSAGE_BOX_ERROR, "Ok", NULL );
-    gtk_widget_show ( msgbox );    
-  }  
+    gnc_error_dialog(ACC_OPEN_MSG);
+    return;
+  }
+
+  PINFO ("calling regWindowAccGroup(%p)\n", account);
+
+  regData = regWindowAccGroup(account);
+  gnc_register_raise(regData);
 }
 
 static void
 gnc_ui_mainWindow_toolbar_edit ( GtkWidget *widget, gpointer data )
 {
-  GtkWidget *toplevel;
-  Account   *account;
+  Account *account = gnc_get_current_account();
+  EditAccWindow *edit_window_data;
   
-  toplevel = gtk_widget_get_toplevel(GTK_WIDGET(widget));
-  account  = gtk_object_get_data(GTK_OBJECT(app), "selected_account");
-  
-  if (account)
+  if (account != NULL)
   {
-    editAccWindow( account );
+    edit_window_data = editAccWindow(account);
+    gnc_ui_edit_account_window_raise(edit_window_data);
   }
   else
-  {
-    GtkWidget *msgbox;
-    msgbox = gnome_message_box_new(ACC_EDIT_MSG, GNOME_MESSAGE_BOX_ERROR, "Ok", NULL);
-    gtk_widget_show ( msgbox );    
-  }  
+    gnc_error_dialog(ACC_EDIT_MSG);
 }
 
 static void
-gnc_ui_options_cb ( GtkWidget *widget, gpointer data ) {
+gnc_ui_mainWindow_reconcile(GtkWidget *widget, gpointer data)
+{
+  Account *account = gnc_get_current_account();
+  RecnWindow *recnData;
+
+  if (account != NULL)
+  {
+    recnData = recnWindow(gnc_get_ui_data(), account);
+    gnc_ui_reconcile_window_raise(recnData);
+  }
+  else
+    gnc_error_dialog(ACC_RECONCILE_MSG);
+}
+
+static void
+gnc_ui_mainWindow_transfer(GtkWidget *widget, gpointer data)
+{
+  gnc_xfer_dialog(gnc_get_ui_data(), gnc_get_current_account());
+}
+
+static void
+gnc_ui_mainWindow_adjust_balance(GtkWidget *widget, gpointer data)
+{
+  Account *account = gnc_get_current_account();
+
+  if (account != NULL)
+    adjBWindow(account);
+  else
+    gnc_error_dialog(ACC_ADJUST_MSG);
+}
+
+static void
+gnc_ui_mainWindow_scrub(GtkWidget *widget, gpointer data)
+{
+  Account *account = gnc_get_current_account();
+
+  if (account == NULL)
+  {
+    gnc_error_dialog(ACC_SCRUB_MSG);
+    return;
+  }
+
+  xaccAccountScrubOrphans(account);
+  xaccAccountScrubImbalance(account);
+
+  gnc_account_ui_refresh(account);
+  gnc_refresh_main_window();
+}
+
+static void
+gnc_ui_mainWindow_scrub_sub(GtkWidget *widget, gpointer data)
+{
+  Account *account = gnc_get_current_account();
+
+  if (account == NULL)
+  {
+    gnc_error_dialog(ACC_SCRUB_MSG);
+    return;
+  }
+
+  xaccAccountTreeScrubOrphans(account);
+  xaccAccountTreeScrubImbalance(account);
+
+  gnc_account_ui_refresh(account);
+  gnc_refresh_main_window();
+}
+
+static void
+gnc_ui_mainWindow_scrub_all(GtkWidget *widget, gpointer data)
+{
+  AccountGroup *group = gncGetCurrentGroup();
+
+  xaccGroupScrubOrphans(group);
+  xaccGroupScrubImbalance(group);
+
+  gnc_group_ui_refresh(group);
+  gnc_refresh_main_window();
+}
+
+static void
+gnc_ui_options_cb(GtkWidget *widget, gpointer data)
+{
   gnc_show_options_dialog();
 }
 
+static void
+gnc_ui_filemenu_cb(GtkWidget *widget, gpointer menuItem)
+{
+  switch(GPOINTER_TO_INT(menuItem))
+  {
+    case FMB_NEW:
+      gncFileNew();
+      gnc_refresh_main_window();
+      break;
+    case FMB_OPEN:
+      gncFileOpen();
+      gnc_refresh_main_window();
+      break;
+    case FMB_SAVE:
+      gncFileSave();
+      break;
+    case FMB_SAVEAS:
+      gncFileSaveAs();
+      break;
+    case FMB_IMPORT:
+      gncFileQIFImport();
+      gnc_refresh_main_window();
+      break;
+    case FMB_QUIT:
+      gnc_shutdown(0);
+      break;
+    default:
+      break;  
+  }  
+}
+
+static gboolean
+gnc_ui_mainWindow_delete_cb(GtkWidget *widget,
+			    GdkEvent  *event,
+			    gpointer  user_data)
+{
+  /* Don't allow deletes if we're in a modal dialog */
+  if (gtk_main_level() == 1)
+    gnc_shutdown(0);
+
+  /* Don't delete the window, we'll handle things ourselves. */
+  return TRUE;
+}
+
+
+static gboolean
+gnc_ui_mainWindow_destroy_event_cb(GtkWidget *widget,
+                                   GdkEvent  *event,
+                                   gpointer   user_data)
+{
+  return FALSE;
+}
+
 void
-mainWindow() {
-  GtkWidget    *scrolled_win;
-  GtkWidget    *main_vbox;
-  GtkWidget    *statusbar;
-  GtkWidget    *ctree;
-  GtkCTreeNode *parent = NULL;
-  AccountGroup *accts = xaccSessionGetGroup(current_session);
-  gchar        *ctitles[] = {ACC_NAME_STR, DESC_STR, BALN_STR};
+gnc_ui_mainWindow_save_size()
+{
+  GtkWidget *app;
+  int width = 0;
+  int height = 0;
 
-  /* Create ctree */
-  ctree = gtk_ctree_new_with_titles(3, 0, ctitles);
+  app = gnc_get_ui_data();
 
-  gtk_object_set_data(GTK_OBJECT(app), "ctree", ctree);
-  gtk_object_set_data(GTK_OBJECT(app), "ctree_parent", parent);
+  gdk_window_get_geometry(GTK_WIDGET(app)->window, NULL, NULL,
+                          &width, &height, NULL);
 
-  gnome_app_create_toolbar(GNOME_APP(app), toolbar);
-  gnome_app_create_menus  (GNOME_APP(app), mainmenu);
+  gnc_save_window_size("main_win", width, height);
+}
 
-  /* Cram accounts into the ctree widget & make sure the columns are sized correctly */
-  gtk_clist_freeze(GTK_CLIST(ctree));
-  gnc_ui_acct_ctree_fill(GTK_CTREE(ctree), parent, accts);
-  gtk_clist_thaw(GTK_CLIST(ctree));
+static void
+gnc_ui_mainWindow_destroy_cb(GtkObject *object, gpointer user_data)
+{
+  GNCMainInfo *main_info = user_data;
 
-  gtk_clist_columns_autosize(GTK_CLIST(ctree));
-  gtk_clist_set_shadow_type (GTK_CLIST(ctree), GTK_SHADOW_IN);
+  gnc_unregister_option_change_callback_id
+    (main_info->main_window_change_callback_id);
 
-  /* Create main vbox */
-  main_vbox = gtk_vbox_new( FALSE, 0 );
-  gnome_app_set_contents ( GNOME_APP ( app ), main_vbox );
+  gnc_unregister_option_change_callback_id
+    (main_info->euro_change_callback_id);
+
+  gnc_unregister_option_change_callback_id
+    (main_info->toolbar_change_callback_id);
+
+  g_slist_free(main_info->account_sensitives);
+  main_info->account_sensitives = NULL;
+
+  g_free(main_info);
+}
+
+GNCAccountTree *
+gnc_get_current_account_tree()
+{
+  GNCMainInfo *main_info;
+
+  main_info = gnc_get_main_info();
+  if (main_info == NULL)
+    return NULL;
+
+  return GNC_ACCOUNT_TREE(main_info->account_tree);
+}
+
+Account *
+gnc_get_current_account()
+{
+  GNCAccountTree * tree = gnc_get_current_account_tree();
+  return gnc_account_tree_get_current_account(tree);
+}
+
+GList *
+gnc_get_current_accounts()
+{
+  GNCAccountTree * tree = gnc_get_current_account_tree();
+  return gnc_account_tree_get_current_accounts(tree);
+}
+
+static void
+gnc_account_tree_activate_cb(GNCAccountTree *tree,
+                             Account *account,
+                             gpointer user_data)
+{
+  RegWindow *regData;
+  gboolean expand;
+
+  expand = gnc_lookup_boolean_option("Main Window",
+                                     "Double click expands parent accounts",
+                                     FALSE);
+
+  if (expand)
+  {
+    AccountGroup *group;
+
+    group = xaccAccountGetChildren(account);
+    if (xaccGroupGetNumAccounts(group) > 0)
+    {
+      gnc_account_tree_toggle_account_expansion(tree, account);
+      return;
+    }
+  }
+
+  regData = regWindowSimple(account);
+  gnc_register_raise(regData);
+}
+
+static void
+gnc_configure_account_tree(void *data)
+{
+  GtkObject *app;
+  GNCAccountTree *tree;
+  AccountViewInfo new_avi;
+  AccountViewInfo old_avi;
+  GSList *list, *node;
+
+  memset(&new_avi, 0, sizeof(new_avi));
+
+  app = GTK_OBJECT(gnc_get_ui_data());
+
+  tree = gnc_get_current_account_tree();
+  if (tree == NULL)
+    return;
+
+  list = gnc_lookup_list_option("Main Window",
+                                "Account types to display",
+                                NULL);
+
+  for (node = list; node != NULL; node = node->next)
+  {
+    if (safe_strcmp(node->data, "bank") == 0)
+      new_avi.include_type[BANK] = TRUE;
+
+    else if (safe_strcmp(node->data, "cash") == 0)
+      new_avi.include_type[CASH] = TRUE;
+
+    else if (safe_strcmp(node->data, "credit") == 0)
+      new_avi.include_type[CREDIT] = TRUE;
+
+    else if (safe_strcmp(node->data, "asset") == 0)
+      new_avi.include_type[ASSET] = TRUE;
+
+    else if (safe_strcmp(node->data, "liability") == 0)
+      new_avi.include_type[LIABILITY] = TRUE;
+
+    else if (safe_strcmp(node->data, "stock") == 0)
+      new_avi.include_type[STOCK] = TRUE;
+
+    else if (safe_strcmp(node->data, "mutual") == 0)
+      new_avi.include_type[MUTUAL] = TRUE;
+
+    else if (safe_strcmp(node->data, "currency") == 0)
+      new_avi.include_type[CURRENCY] = TRUE;
+
+    else if (safe_strcmp(node->data, "income") == 0)
+      new_avi.include_type[INCOME] = TRUE;
+
+    else if (safe_strcmp(node->data, "expense") == 0)
+      new_avi.include_type[EXPENSE] = TRUE;
+
+    else if (safe_strcmp(node->data, "equity") == 0)
+      new_avi.include_type[EQUITY] = TRUE;
+  }
+
+  gnc_free_list_option_value(list);
+
+  list = gnc_lookup_list_option("Main Window",
+                                "Account fields to display",
+                                NULL);
+
+  for (node = list; node != NULL; node = node->next)
+  {
+    if (safe_strcmp(node->data, "type") == 0)
+      new_avi.show_field[ACCOUNT_TYPE] = TRUE;
+
+    else if (safe_strcmp(node->data, "code") == 0)
+      new_avi.show_field[ACCOUNT_CODE] = TRUE;
+
+    else if (safe_strcmp(node->data, "description") == 0)
+      new_avi.show_field[ACCOUNT_DESCRIPTION] = TRUE;
+
+    else if (safe_strcmp(node->data, "notes") == 0)
+      new_avi.show_field[ACCOUNT_NOTES] = TRUE;
+
+    else if (safe_strcmp(node->data, "currency") == 0)
+      new_avi.show_field[ACCOUNT_CURRENCY] = TRUE;
+
+    else if (safe_strcmp(node->data, "security") == 0)
+      new_avi.show_field[ACCOUNT_SECURITY] = TRUE;
+
+    else if (safe_strcmp(node->data, "balance") == 0)
+    {
+      new_avi.show_field[ACCOUNT_BALANCE] = TRUE;
+      if(gnc_lookup_boolean_option("International", "Enable EURO support", FALSE))
+	new_avi.show_field[ACCOUNT_BALANCE_EURO] = TRUE;
+    }
+
+    else if (safe_strcmp(node->data, "total") == 0)
+    {
+      new_avi.show_field[ACCOUNT_TOTAL] = TRUE;
+      if(gnc_lookup_boolean_option("International", "Enable EURO support", FALSE))
+	new_avi.show_field[ACCOUNT_TOTAL_EURO] = TRUE;
+    }
+  }
+
+  gnc_free_list_option_value(list);
+
+  new_avi.show_field[ACCOUNT_NAME] = TRUE;
+
+  gnc_account_tree_get_view_info(tree, &old_avi);
+
+  if (memcmp(&old_avi, &new_avi, sizeof(AccountViewInfo)) != 0)
+    gnc_account_tree_set_view_info(tree, &new_avi);
+}
+
+static void
+gnc_euro_change(void *data)
+{
+  gnc_ui_refresh_statusbar();
+  gnc_configure_account_tree(data);
+  gnc_group_ui_refresh(gncGetCurrentGroup());
+}
+
+static void
+gnc_main_create_toolbar(GnomeApp *app, GNCMainInfo *main_info)
+{
+  GSList *list;
+
+  static GnomeUIInfo toolbar[] = 
+  {
+    { GNOME_APP_UI_ITEM,
+      SAVE_STR_N,
+      TOOLTIP_SAVE_FILE_N,
+      gnc_ui_filemenu_cb, 
+      GINT_TO_POINTER(FMB_SAVE),
+      NULL,
+      GNOME_APP_PIXMAP_STOCK, 
+      GNOME_STOCK_PIXMAP_SAVE,
+      0, 0, NULL
+    },
+    { GNOME_APP_UI_ITEM,
+      IMPORT_STR_N,
+      TOOLTIP_IMPORT_QIF_N,
+      gnc_ui_filemenu_cb, 
+      GINT_TO_POINTER(FMB_IMPORT),
+      NULL,
+      GNOME_APP_PIXMAP_STOCK, 
+      GNOME_STOCK_PIXMAP_CONVERT,
+      0, 0, NULL
+    },
+    GNOMEUIINFO_SEPARATOR,
+    { GNOME_APP_UI_ITEM, 
+      OPEN_STR_N,
+      TOOLTIP_OPEN_N,
+      gnc_ui_mainWindow_toolbar_open, 
+      NULL,
+      NULL,
+      GNOME_APP_PIXMAP_STOCK,
+      GNOME_STOCK_PIXMAP_JUMP_TO,
+      0, 0, NULL 
+    },
+    { GNOME_APP_UI_ITEM,
+      EDIT_STR_N,
+      TOOLTIP_EDIT_N,
+      gnc_ui_mainWindow_toolbar_edit, 
+      NULL,
+      NULL,
+      GNOME_APP_PIXMAP_STOCK,
+      GNOME_STOCK_PIXMAP_PROPERTIES,
+      0, 0, NULL
+    },
+    GNOMEUIINFO_SEPARATOR,
+    { GNOME_APP_UI_ITEM,
+      NEW_STR_N,
+      TOOLTIP_NEW_N,
+      gnc_ui_add_account, 
+      NULL,
+      NULL,
+      GNOME_APP_PIXMAP_STOCK,
+      GNOME_STOCK_PIXMAP_ADD,
+      0, 0, NULL
+    },
+    { GNOME_APP_UI_ITEM,
+      DELETE_STR_N,
+      TOOLTIP_DELETE_N,
+      gnc_ui_delete_account_cb, 
+      NULL,
+      NULL,
+      GNOME_APP_PIXMAP_STOCK,
+      GNOME_STOCK_PIXMAP_REMOVE,
+      0, 0, NULL
+    },
+    GNOMEUIINFO_SEPARATOR,
+    { GNOME_APP_UI_ITEM,
+      FIND_STR_N,
+      TOOLTIP_FIND_N,
+      gnc_ui_find_transactions_cb, 
+      NULL,
+      NULL,
+      GNOME_APP_PIXMAP_STOCK,
+      GNOME_STOCK_PIXMAP_SEARCH,
+      0, 0, NULL
+    },
+    GNOMEUIINFO_SEPARATOR,
+    { GNOME_APP_UI_ITEM,
+      EXIT_STR_N,
+      TOOLTIP_EXIT_N,
+      gnc_ui_exit_cb, 
+      NULL,
+      NULL,
+      GNOME_APP_PIXMAP_STOCK,
+      GNOME_STOCK_PIXMAP_QUIT,
+      0, 0, NULL
+    },
+    GNOMEUIINFO_END
+  };
+
+  gnome_app_create_toolbar(app, toolbar);
+
+  list = main_info->account_sensitives;
+
+  list = g_slist_prepend(list, toolbar[3].widget);
+  list = g_slist_prepend(list, toolbar[4].widget);
+  list = g_slist_prepend(list, toolbar[7].widget);
+
+  main_info->account_sensitives = list;
+}
+
+static void
+gnc_main_create_menus(GnomeApp *app, GtkWidget *account_tree,
+                      GNCMainInfo *main_info)
+{
+  GtkWidget *popup;
+  GSList *list;
+
+  static GnomeUIInfo filemenu[] = {
+    GNOMEUIINFO_MENU_NEW_ITEM(NEW_FILE_STR_N,
+                              TOOLTIP_NEW_FILE_N,
+                              gnc_ui_filemenu_cb,
+                              GINT_TO_POINTER(FMB_NEW)),
+    GNOMEUIINFO_MENU_OPEN_ITEM(gnc_ui_filemenu_cb,
+                               GINT_TO_POINTER(FMB_OPEN)),
+    GNOMEUIINFO_MENU_SAVE_ITEM(gnc_ui_filemenu_cb,
+                               GINT_TO_POINTER(FMB_SAVE)),
+    GNOMEUIINFO_MENU_SAVE_AS_ITEM(gnc_ui_filemenu_cb,
+                                  GINT_TO_POINTER(FMB_SAVEAS)),
+    GNOMEUIINFO_SEPARATOR,
+    {
+      GNOME_APP_UI_ITEM,
+      IMPORT_QIF_E_STR_N, TOOLTIP_IMPORT_QIF_N,
+      gnc_ui_filemenu_cb, GINT_TO_POINTER(FMB_IMPORT), NULL,
+      GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_MENU_CONVERT,
+      'i', GDK_CONTROL_MASK, NULL
+    },
+    GNOMEUIINFO_SEPARATOR,
+    GNOMEUIINFO_MENU_EXIT_ITEM(gnc_ui_filemenu_cb,
+                               GINT_TO_POINTER(FMB_QUIT)),
+    GNOMEUIINFO_END
+  };
+
+  static GnomeUIInfo optionsmenu[] = {
+    {
+      GNOME_APP_UI_ITEM,
+      PREFERENCES_MENU_E_STR_N, TOOLTIP_PREFERENCES_N,
+      gnc_ui_options_cb, NULL, NULL,
+      GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_MENU_PREF,
+      0, 0, NULL
+    },
+    GNOMEUIINFO_END
+  };
+
+  static GnomeUIInfo scrubmenu[] = {
+    {
+      GNOME_APP_UI_ITEM,
+      SCRUB_ACC_MENU_STR_N, TOOLTIP_SCRUB_ACCT_N,
+      gnc_ui_mainWindow_scrub, NULL, NULL,
+      GNOME_APP_PIXMAP_NONE, NULL,
+      0, 0, NULL
+    },
+    {
+      GNOME_APP_UI_ITEM,
+      SCRUB_SUB_MENU_STR_N, TOOLTIP_SCRUB_SUB_N,
+      gnc_ui_mainWindow_scrub_sub, NULL, NULL,
+      GNOME_APP_PIXMAP_NONE, NULL,
+      0, 0, NULL
+    },
+    {
+      GNOME_APP_UI_ITEM,
+      SCRUB_ALL_MENU_STR_N, TOOLTIP_SCRUB_ALL_N,
+      gnc_ui_mainWindow_scrub_all, NULL, NULL,
+      GNOME_APP_PIXMAP_NONE, NULL,
+      0, 0, NULL
+    },
+    GNOMEUIINFO_END
+  };
+
+  static GnomeUIInfo accountsmenu[] = {
+    {
+      GNOME_APP_UI_ITEM,
+      OPEN_ACC_MENU_STR_N, TOOLTIP_OPEN_N,
+      gnc_ui_mainWindow_toolbar_open, NULL, NULL,
+      GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_MENU_OPEN,
+      'o', GDK_CONTROL_MASK, NULL
+    },
+    {
+      GNOME_APP_UI_ITEM,
+      OPEN_SUB_MENU_STR_N, TOOLTIP_OPEN_SUB_N,
+      gnc_ui_mainWindow_toolbar_open_subs, NULL, NULL,
+      GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_MENU_OPEN,
+      0, 0, NULL
+    },
+    {
+      GNOME_APP_UI_ITEM,
+      EDIT_ACC_MENU_STR_N, TOOLTIP_EDIT_N,
+      gnc_ui_mainWindow_toolbar_edit, NULL, NULL,
+      GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_MENU_PROP,
+      'e', GDK_CONTROL_MASK, NULL
+    },
+    GNOMEUIINFO_SEPARATOR,
+    {
+      GNOME_APP_UI_ITEM,
+      RECONCILE_MENU_E_STR_N, TOOLTIP_RECONCILE_N,
+      gnc_ui_mainWindow_reconcile, NULL, NULL,
+      GNOME_APP_PIXMAP_NONE, NULL,
+      'r', GDK_CONTROL_MASK, NULL
+    },
+    {
+      GNOME_APP_UI_ITEM,
+      TRANSFER_MENU_E_STR_N, TOOLTIP_TRANSFER_N,
+      gnc_ui_mainWindow_transfer, NULL, NULL,
+      GNOME_APP_PIXMAP_NONE, NULL,
+      't', GDK_CONTROL_MASK, NULL
+    },
+    {
+      GNOME_APP_UI_ITEM,
+      ADJ_BALN_MENU_E_STR_N, TOOLTIP_ADJUST_N,
+      gnc_ui_mainWindow_adjust_balance, NULL, NULL,
+      GNOME_APP_PIXMAP_NONE, NULL,
+      'b', GDK_CONTROL_MASK, NULL
+    },
+    GNOMEUIINFO_SEPARATOR,
+    {
+      GNOME_APP_UI_ITEM,
+      NEW_ACC_MENU_E_STR_N, TOOLTIP_NEW_N,
+      gnc_ui_add_account, NULL, NULL,
+      GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_ADD,
+      0, 0, NULL
+    },
+    {
+      GNOME_APP_UI_ITEM,
+      DEL_ACC_MENU_STR_N, TOOLTIP_DELETE_N,
+      gnc_ui_delete_account_cb, NULL, NULL,
+      GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_REMOVE,
+      0, 0, NULL
+    },
+    GNOMEUIINFO_SEPARATOR,
+    GNOMEUIINFO_SUBTREE(SCRUB_MENU_STR_N, scrubmenu),
+    GNOMEUIINFO_END
+  };  
+
+  static GnomeUIInfo helpmenu[] = {
+    {
+      GNOME_APP_UI_ITEM,
+      MAN_MENU_STR_N, TOOLTIP_MAN_N,
+      gnc_ui_help_cb, NULL, NULL,
+      GNOME_APP_PIXMAP_NONE, NULL,
+      0, 0, NULL
+    },
+    GNOMEUIINFO_MENU_ABOUT_ITEM(gnc_ui_about_cb, NULL),
+    GNOMEUIINFO_END
+  };
+
+  static GnomeUIInfo mainmenu[] = {
+    GNOMEUIINFO_MENU_FILE_TREE(filemenu),
+    GNOMEUIINFO_SUBTREE(ACCOUNTS_MENU_STR_N, accountsmenu),
+    GNOMEUIINFO_MENU_SETTINGS_TREE(optionsmenu),
+    GNOMEUIINFO_MENU_HELP_TREE(helpmenu),
+    GNOMEUIINFO_END
+  };
+
+  gnome_app_create_menus(app, mainmenu);
+  gnome_app_install_menu_hints(app, mainmenu);
+
+  list = main_info->account_sensitives;
+
+  list = g_slist_prepend(list, scrubmenu[0].widget);
+  list = g_slist_prepend(list, scrubmenu[1].widget);
+
+  list = g_slist_prepend(list, accountsmenu[0].widget);
+  list = g_slist_prepend(list, accountsmenu[1].widget);
+  list = g_slist_prepend(list, accountsmenu[2].widget);
+  list = g_slist_prepend(list, accountsmenu[4].widget);
+  list = g_slist_prepend(list, accountsmenu[6].widget);
+  list = g_slist_prepend(list, accountsmenu[9].widget);
+
+  popup = gnome_popup_menu_new(accountsmenu);
+  gnome_popup_menu_attach(popup, account_tree, NULL);
+
+  list = g_slist_prepend(list, scrubmenu[0].widget);
+  list = g_slist_prepend(list, scrubmenu[1].widget);
+
+  list = g_slist_prepend(list, accountsmenu[0].widget);
+  list = g_slist_prepend(list, accountsmenu[1].widget);
+  list = g_slist_prepend(list, accountsmenu[2].widget);
+  list = g_slist_prepend(list, accountsmenu[4].widget);
+  list = g_slist_prepend(list, accountsmenu[6].widget);
+  list = g_slist_prepend(list, accountsmenu[9].widget);
+
+  main_info->account_sensitives = list;
+}
+
+static GNCMainInfo *
+gnc_get_main_info()
+{
+  GtkObject *app = GTK_OBJECT(gnc_get_ui_data());
+
+  return gtk_object_get_data(app, "gnc_main_info");
+}
+
+static void
+gnc_configure_toolbar(void *data)
+{
+  GnomeApp *app = GNOME_APP(gnc_get_ui_data());
+  GnomeDockItem *di;
+  GtkWidget *toolbar;
+  GtkToolbarStyle tbstyle;
+
+  di = gnome_app_get_dock_item_by_name(app, GNOME_APP_TOOLBAR_NAME);
+  if (di == NULL)
+    return;
+
+  toolbar = gnome_dock_item_get_child(di);
+  if (toolbar == NULL)
+    return;
+
+  tbstyle = gnc_get_toolbar_style();
+
+  gtk_toolbar_set_style(GTK_TOOLBAR(toolbar), tbstyle);
+}
+
+static void
+gnc_account_foreach_cb(gpointer widget, gpointer sensitive)
+{
+  gtk_widget_set_sensitive(GTK_WIDGET(widget), GPOINTER_TO_INT(sensitive));
+}
+
+static void
+gnc_account_set_sensititives(GNCMainInfo *main_info, gboolean sensitive)
+{
+  if (main_info == NULL)
+    return;
+
+  g_slist_foreach(main_info->account_sensitives,
+                  gnc_account_foreach_cb,
+                  GINT_TO_POINTER(sensitive));
+}
+
+static void
+gnc_account_cb(GNCAccountTree *tree, Account *account, gpointer data)
+{
+  gboolean sensitive;
+
+  account = gnc_account_tree_get_current_account(tree);
+  sensitive = account != NULL;
+
+  gnc_account_set_sensititives(gnc_get_main_info(), sensitive);
+}
+
+void
+mainWindow()
+{
+  GNCMainInfo *main_info;
+  GtkWidget *app = gnc_get_ui_data();
+  GtkWidget *scrolled_win;
+  GtkWidget *statusbar;
+  int width = 0;
+  int height = 0;
+
+  gnc_get_window_size("main_win", &width, &height);
+  if (height == 0)
+    height = 400;
+  gtk_window_set_default_size(GTK_WINDOW(app), width, height);
+
+  main_info = g_new0(GNCMainInfo, 1);
+  gtk_object_set_data(GTK_OBJECT(app), "gnc_main_info", main_info);
+
+  main_info->account_tree = gnc_account_tree_new();
+
+  main_info->main_window_change_callback_id =
+    gnc_register_option_change_callback(gnc_configure_account_tree, NULL,
+                                        "Main Window", NULL);
+
+  main_info->euro_change_callback_id =
+    gnc_register_option_change_callback(gnc_euro_change, NULL,
+                                        "International",
+                                        "Enable EURO support");
+
+  gtk_signal_connect(GTK_OBJECT(main_info->account_tree), "activate_account",
+		     GTK_SIGNAL_FUNC (gnc_account_tree_activate_cb), NULL);
+
+  gtk_signal_connect(GTK_OBJECT(main_info->account_tree), "select_account",
+                     GTK_SIGNAL_FUNC(gnc_account_cb), NULL);
+
+  gtk_signal_connect(GTK_OBJECT(main_info->account_tree), "unselect_account",
+                     GTK_SIGNAL_FUNC(gnc_account_cb), NULL);
+
+  /* create statusbar and add it to the application. */
+  statusbar = gnome_appbar_new(GNC_F, /* no progress bar, maybe later? */
+			       GNC_T, /* has status area */
+			       GNOME_PREFERENCES_USER /* recommended */);
+
+  gnome_app_set_statusbar(GNOME_APP(app), GTK_WIDGET(statusbar));
+
+  gnc_main_create_menus(GNOME_APP(app), main_info->account_tree, main_info);
+
+  gnc_main_create_toolbar(GNOME_APP(app), main_info);
+  gnc_configure_toolbar(NULL);
+  main_info->toolbar_change_callback_id =
+    gnc_register_option_change_callback(gnc_configure_toolbar, NULL,
+                                        "General", "Toolbar Buttons");
+
+  /* create the label containing the account balances */
+  {
+    GtkWidget *label;
+    GtkWidget *hbox;
+
+    hbox = gtk_hbox_new(FALSE, 2);
+    gtk_box_pack_end(GTK_BOX(statusbar), hbox, FALSE, FALSE, 5);
+
+    label = gtk_label_new(ASSETS_C_STR);
+    gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
+    gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
+
+    label = gtk_label_new("");
+    gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
+    gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
+    main_info->assets_label = label;
+
+    hbox = gtk_hbox_new(FALSE, 2);
+    gtk_box_pack_end(GTK_BOX(statusbar), hbox, FALSE, FALSE, 5);
+
+    label = gtk_label_new(PROFITS_C_STR);
+    gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
+    gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
+
+    label = gtk_label_new("");
+    gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
+    gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
+    main_info->profits_label = label;
+  }
 
   /* create scrolled window */
   scrolled_win = gtk_scrolled_window_new (NULL, NULL);
+  gnome_app_set_contents(GNOME_APP(app), scrolled_win);
+
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_win),
                                   GTK_POLICY_AUTOMATIC, 
                                   GTK_POLICY_AUTOMATIC);
-  gtk_widget_show (scrolled_win);
 
-  gtk_container_add(GTK_CONTAINER(scrolled_win), GTK_WIDGET(ctree));
-  gtk_box_pack_start(GTK_BOX(main_vbox), scrolled_win, TRUE, TRUE, 0);
-
-  /* create statusbar and pack it into the main_vbox */
-  statusbar = gtk_statusbar_new ();
-  gtk_object_set_data (GTK_OBJECT (app), "statusbar", statusbar);
-  gtk_widget_show (statusbar);
-  gtk_box_pack_start (GTK_BOX (main_vbox), statusbar, FALSE, FALSE, 0); 
-
-  gtk_widget_set_usize ( GTK_WIDGET(app), 500, 400 );		      
+  gtk_container_add(GTK_CONTAINER(scrolled_win),
+                    GTK_WIDGET(main_info->account_tree));
 
   {
     SCM run_danglers = gh_eval_str("gnc:hook-run-danglers");
@@ -650,33 +1122,32 @@ mainWindow() {
     SCM window = POINTER_TOKEN_to_SCM(make_POINTER_TOKEN("gncUIWidget", app));
     gh_call2(run_danglers, hook, window); 
   }
-  
+
+  /* Attach delete and destroy signals to the main window */  
+  gtk_signal_connect (GTK_OBJECT (app), "delete_event",
+                      GTK_SIGNAL_FUNC (gnc_ui_mainWindow_delete_cb),
+                      NULL);
+
+  gtk_signal_connect (GTK_OBJECT (app), "destroy_event",
+                      GTK_SIGNAL_FUNC (gnc_ui_mainWindow_destroy_event_cb),
+                      NULL);
+
+  gtk_signal_connect (GTK_OBJECT (app), "destroy",
+                      GTK_SIGNAL_FUNC (gnc_ui_mainWindow_destroy_cb),
+                      main_info);
+
   /* Show everything now that it is created */
+  gtk_widget_show_all(statusbar);
+  gtk_widget_show(main_info->account_tree);
+  gtk_widget_show(scrolled_win);
 
-  gtk_widget_show(main_vbox);
-  gtk_widget_show(ctree);
-  gtk_widget_show(app);
+  gnc_configure_account_tree(NULL);
 
-  refreshMainWindow();
+  gnc_refresh_main_window();
 
+  gnc_account_set_sensititives(main_info, FALSE);
+
+  gtk_widget_grab_focus(main_info->account_tree);
 } 
 
-/* OLD_GNOME_CODE */
-
-void
-gnc_ui_shutdown (GtkWidget *widget, gpointer *data) 
-{
-  gtk_main_quit ();
-}
-    
 /********************* END OF FILE **********************************/
-
-/*
-  Local Variables:
-  tab-width: 2
-  indent-tabs-mode: nil
-  mode: c-mode
-  c-indentation-style: gnu
-  eval: (c-set-offset 'block-open '-)
-  End:
-*/

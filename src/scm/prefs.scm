@@ -1,7 +1,24 @@
-;;;; Preferences...
+;; Preferences...
+;;
+;; This program is free software; you can redistribute it and/or    
+;; modify it under the terms of the GNU General Public License as   
+;; published by the Free Software Foundation; either version 2 of   
+;; the License, or (at your option) any later version.              
+;;                                                                  
+;; This program is distributed in the hope that it will be useful,  
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of   
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    
+;; GNU General Public License for more details.                     
+;;                                                                  
+;; You should have received a copy of the GNU General Public License
+;; along with this program; if not, contact:
+;;
+;; Free Software Foundation           Voice:  +1-617-542-5942
+;; 59 Temple Place - Suite 330        Fax:    +1-617-542-2652
+;; Boston, MA  02111-1307,  USA       gnu@gnu.org
 
-(use-modules (ice-9 slib))
 (require 'sort)
+(require 'hash-table)
 
 ;; (define gnc:*double-entry-restriction*
 ;;   (gnc:make-config-var
@@ -39,257 +56,352 @@
 ;;    eq?
 ;;    #f))
 
-;; We'd rather use a hash table for this, but until hash-for-each or
-;; hash-keys is generally available, we can't...
-(define gnc_:*options-dialog-entries* '())
 
-;; This will be an alist
-;;   (k v) -> (section-name list-of-option-items)
+(define gnc:*options-entries* (gnc:new-options))
 
-;; For now all the setters need to be idempotent.  We may call them
-;; more than once per value change.  This is because of the way we
-;; handle cancel and apply.
+(define (gnc:register-configuration-option new-option)
+  (gnc:register-option gnc:*options-entries* new-option))
 
-(define (gnc:make-configuration-option
-         section
-         name
-         sort-tag
-         type
-         documentation-string
-         getter
-         setter
-         default-getter
-         generate-restore-form
-         ui-value-validator)
-  (vector section
-          name
-          sort-tag
-          type
-          documentation-string
-          getter
-          setter
-          default-getter
-          generate-restore-form
-          #f
-          ui-value-validator))
+(define (gnc:lookup-global-option section name)
+  (gnc:lookup-option gnc:*options-entries* section name))
 
-(define (gnc:configuration-option-section option)
-  (vector-ref option 0))
-(define (gnc:configuration-option-name option)
-  (vector-ref option 1))
-(define (gnc:configuration-option-sort-tag option)
-  (vector-ref option 2))
-(define (gnc:configuration-option-type option)
-  (vector-ref option 3))
-(define (gnc:configuration-option-documentation option)
-  (vector-ref option 4))
-(define (gnc:configuration-option-getter option)
-  (vector-ref option 5))
-(define (gnc:configuration-option-setter option)
-  (vector-ref option 6))
-(define (gnc:configuration-option-default-getter option)
-  (vector-ref option 7))
-(define (gnc:configuration-option-generate-restore-form option)
-  (vector-ref option 8))
+(define (gnc:send-global-options) gnc:*options-entries*)
 
-(define (gnc:configuration-option-widget-get option)
-  (vector-ref option 9))
-(define (gnc:configuration-option-widget-set! option widget)
-  (vector-set! option 9 widget))
+(define (gnc:global-options-clear-changes)
+  (gnc:options-clear-changes gnc:*options-entries*))
 
-;; Validation func should return (#t value) on success, and
-;; (#f "failure-message") on failure.
-(define (gnc:configuration-option-ui-value-validator option)
-  (vector-ref option 10))
+(define (gnc:save-global-options)
+  (gnc:make-home-dir)
+  (gnc:save-options gnc:*options-entries*
+                    (symbol->string 'gnc:*options-entries*)
+                    (build-path (getenv "HOME") ".gnucash" "config.auto")
+                    (string-append
+                     "(gnc:config-file-format-version 1)\n\n"
+                     "; GnuCash Configuration Options\n")))
+
+(define (gnc:config-file-format-version version) #t)
 
 
-(define (gnc:register-configuration-option new-item)
-  
-  (let* ((section (gnc:configuration-option-section new-item))
-         (existing-entry (assoc-ref gnc_:*options-dialog-entries* section)))
-    (if existing-entry
-        (set! gnc_:*options-dialog-entries*
-              (assoc-set! gnc_:*options-dialog-entries*
-                          section 
-                          (cons new-item existing-entry)))
-        (set! gnc_:*options-dialog-entries*
-              (assoc-set! gnc_:*options-dialog-entries*
-                          section 
-                          (list new-item))))))
+;;;;;; Create default options and config vars
 
-;; Cancel checkpoint actions.
+(define gnc:*debit-strings*
+  (list '(NO_TYPE   . "Funds In")
+        '(BANK      . "Deposit")
+        '(CASH      . "Receive")
+        '(CREDIT    . "Payment")
+        '(ASSET     . "Appreciation")
+        '(LIABILITY . "Debit")
+        '(STOCK     . "Bought")
+        '(MUTUAL    . "Bought")
+        '(CURRENCY  . "Bought")
+        '(INCOME    . "Charge")
+        '(EXPENSE   . "Expense")
+        '(EQUITY    . "Debit")))
 
-(define (gnc:options-dialog-clear-cancel-actions) #f)
-(define (gnc:options-dialog-apply-cancel-actions) #f)
-(define (gnc:options-dialog-add-cancel-action action) #f)
+(define gnc:*credit-strings*
+  (list '(NO_TYPE   . "Funds Out")
+        '(BANK      . "Withdrawal")
+        '(CASH      . "Spend")
+        '(CREDIT    . "Charge")
+        '(ASSET     . "Depreciation")
+        '(LIABILITY . "Credit")
+        '(STOCK     . "Sold")
+        '(MUTUAL    . "Sold")
+        '(CURRENCY  . "Sold")
+        '(INCOME    . "Income")
+        '(EXPENSE   . "Rebate")
+        '(EQUITY    . "Credit")))
 
-(let ((cancel-actions '()))
-  (set! gnc:options-dialog-clear-cancel-actions
-        (lambda () (set! cancel-actions '())))
-  (set! gnc:options-dialog-apply-cancel-actions
-        (lambda ()
-          (for-each (lambda (a) (a)) (reverse cancel-actions))))
-  (set! gnc:options-dialog-add-cancel-action
-        (lambda (action)
-          (set! cancel-actions (cons action cancel-actions)))))
+(if (gnc:debugging?)
+    (let ((thunk (lambda (pair)
+                   (gnc:register-translatable-strings (cdr pair)))))
+      (map thunk gnc:*debit-strings*)
+      (map thunk gnc:*credit-strings*)))
 
-(define (gnc:options-dialog-cancel-clicked)
-  (gnc:options-dialog-apply-cancel-actions))
+(define (gnc:get-debit-string type)
+  (gnc:_ (assoc-ref gnc:*debit-strings* type)))
 
-;; Apply checkpoint actions.
-
-(define (gnc:options-dialog-clear-ok-actions) #f)
-(define (gnc:options-dialog-get-ok-actions) #f)
-(define (gnc:options-dialog-add-ok-action action) #f)
-
-(let ((ok-actions '()))
-  (set! gnc:options-dialog-clear-ok-actions
-        (lambda () (set! ok-actions '())))
-  (set! gnc:options-dialog-get-ok-actions
-        (lambda ()
-          ok-actions))
-  (set! gnc:options-dialog-add-ok-action
-        (lambda (action)
-          (set! ok-actions (cons action ok-actions)))))
-
-(define (gnc:options-dialog-ok-clicked)
-  (let ((actions (reverse (gnc:options-dialog-get-ok-actions))))
-    (let execute-actions ((remainder actions))
-      (cond ((null? remainder) #t)
-            (else (if ((car remainder))
-                      (execute-actions (cdr remainder))
-                      #f))))))
-
-(define (gnc_warning_dialog message)
-  (gnc:warn message)
-  (gnc:warn "This function needs to be replaced by a real UI."))
-
-(define (gnc:options-dialog-item-apply-new-ui-value item)
-  (let ((current-ui-value (_gnc_options_dialog_item_get_ui_value_ item))
-        (validation-func (gnc:configuration-option-ui-value-validator item))
-        (verification-result #f))
-    
-    (if validation-func
-        (set! verification-result (validation-func current-ui-value))
-        (set! verification-result (list current-ui-value)))
-    
-    (if (car verification-result)
-        (begin
-          ;; if it's OK then update item, refresh UI, and return #t
-          ((gnc:configuration-option-setter item) (cadr verification-result))
-          (_gnc_options_dialog_item_refresh_ui_ item)
-          #t)
-        (begin
-          (gnc_warning_dialog (cadr verification-result))
-          #f))))
-
-(define (gnc_:insert-options-dialog-item gnome-widget configuration-item)
-
-  ;; Set things up so that we can revert to the current value if the
-  ;; user hits cancel (elegant method, no?).
-  (gnc:options-dialog-add-cancel-action
-   (let ((current-value ((gnc:configuration-option-getter configuration-item)))
-         (setter (gnc:configuration-option-setter configuration-item)))
-     (lambda ()
-       (setter current-value))))
-
-  (gnc:options-dialog-add-ok-action
-   (lambda ()
-     (gnc:options-dialog-item-apply-new-ui-value configuration-item)))
-
-  (_gnc_options_dialog_add_item_ gnome-widget configuration-item))
+(define (gnc:get-credit-string type)
+  (gnc:_ (assoc-ref gnc:*credit-strings* type)))
 
 
-(define (gnc_:build-options-dialog-page section-info)
-  ;; section-info is a pair (section-name . list-of-options)
-  (let ((gtk-page-widget (_gnc_options_dialog_add_page_ (car section-info)))
-        (sorted-section-items
-         (sort (cdr section-info)
-               (lambda (x y)
-                 (string<? (gnc:configuration-option-sort-tag x)
-                           (gnc:configuration-option-sort-tag y))))))
-    (for-each (lambda (item)
-                (gnc_:insert-options-dialog-item gtk-page-widget item))
-              sorted-section-items)))
-
-(define (gnc_:build-options-dialog)
-  (for-each gnc_:build-options-dialog-page
-            (sort gnc_:*options-dialog-entries*
-                  (lambda (x y)
-                    (string<? (car x)
-                              (car y))))))
-
-
-(define (set-background-color! c) #f)
-(define (get-background-color) #f)
-(define (default-background-color) "grey")
-
-(let ((color (default-background-color)))
-  (set! set-background-color! (lambda (c) (set! color c)))
-  (set! get-background-color (lambda () color)))
+;; Main Window options
 
 (gnc:register-configuration-option
- (gnc:make-configuration-option "Appearance"
-                                "Default background color"
-                                "50-background-color"
-                                'string
-                                "Set the default background color."
-                                get-background-color
-                                set-background-color!
-                                default-background-color
-                                #f
-                                #f))
-(gnc:register-configuration-option
- (gnc:make-configuration-option "Appearance"
-                                "foo2"
-                                "50-foo2"
-                                'boolean
-                                "foo2 something"
-                                (lambda ()
-                                  (display "getting\n")
-                                  #f)
-                                (lambda (x)
-                                  (display "setting\n")
-                                  #f)
-                                #f
-                                #f
-                                #f))
-(gnc:register-configuration-option
- (gnc:make-configuration-option "Security"
-                                "foo"
-                                "50-foo"
-                                'string
-                                "foo something"
-                                (lambda ()
-                                  (display "getting\n")
-                                  #f)
-                                (lambda (x)
-                                  (display "setting\n")
-                                  #f)
-                                #f
-                                #f
-                                #f))
-(gnc:register-configuration-option
- (gnc:make-configuration-option "Register"
-                                "foo"
-                                "50-foo"
-                                'boolean
-                                "foo something"
-                                (lambda ()
-                                  (display "getting\n")
-                                  #f)
-                                (lambda (x)
-                                  (display "setting\n")
-                                  #f)
-                                #f
-                                #f
-                                #f))
+ (gnc:make-simple-boolean-option
+  "Main Window" "Double click expands parent accounts"
+  "a" "Double clicking on an account with children expands \
+the account instead of opening a register." #f))
 
-(for-each
- (lambda (x) (display x) (newline))
- gnc_:*options-dialog-entries*)
-(newline)
+(gnc:register-configuration-option
+ (gnc:make-list-option
+  "Main Window" "Account types to display"
+  "b" ""
+  (list 'bank 'cash 'credit 'asset 'liability 'stock
+        'mutual 'currency 'income 'expense 'equity)
+  (list #(bank "Bank" "")
+        #(cash "Cash" "")
+        #(credit "Credit" "")
+        #(asset "Asset" "")
+        #(liability "Liability" "")
+        #(stock "Stock" "")
+        #(mutual "Mutual Fund" "")
+        #(currency "Currency" "")
+        #(income "Income" "")
+        #(expense "Expense" "")
+        #(equity "Equity" ""))))
 
+(gnc:register-configuration-option
+ (gnc:make-list-option
+  "Main Window" "Account fields to display"
+  "c" ""
+  (list 'description 'total)
+  (list #(type "Type" "")
+        #(code "Code" "")
+        #(description "Description" "")
+        #(notes "Notes" "")
+        #(currency "Currency" "")
+        #(security "Security" "")
+        #(balance "Balance" "")
+        #(total "Total" ""))))
+
+
+;; International options
+
+(gnc:register-configuration-option
+ (gnc:make-multichoice-option
+  "International" "Date Format"
+  "a" "Date Format Display" 'us
+  (list #(us "US" "US-style: mm/dd/yyyy")
+        #(uk "UK" "UK-style dd/mm/yyyy")
+	#(ce "Europe" "Continental Europe: dd.mm.yyyy")
+	#(iso "ISO" "ISO Standard: yyyy-mm-dd"))))
+;	#(locale "Locale" "Take from system locale"))))
+
+(gnc:register-configuration-option
+ (gnc:make-currency-option
+  "International" "Default Currency"
+  "b" "Default Currency For New Accounts"
+  (gnc:locale-default-currency)))
+
+(gnc:register-configuration-option
+ (gnc:make-simple-boolean-option
+  "International" "Use 24-hour time format"
+  "c" "Use a 24 hour (instead of a 12 hour) time format." #f))
+
+(gnc:register-configuration-option
+ (gnc:make-simple-boolean-option
+  "International" "Enable EURO support"
+  "d" "Enables support for the European Union EURO currency" 
+  (gnc:is-euro-currency
+   (gnc:locale-default-currency))))
+
+
+;; Register options
+
+(gnc:register-configuration-option
+ (gnc:make-multichoice-option
+  "Register" "Default Register Mode"
+  "a" "Choose the default mode for register windows"
+  'single_line
+  (list #(single_line "Single Line" "Show transactions on single lines")
+        #(double_line "Double Line"
+                      "Show transactions on two lines with more information")
+        #(multi_line  "Multi Line" "Show transactions on multiple lines with one line for each split in the transaction")
+        #(auto_single "Auto Single" "Single line mode with a multi-line cursor")
+        #(auto_double "Auto Double" "Double line mode with a multi-line cursor")
+        )))
+
+(gnc:register-configuration-option
+ (gnc:make-simple-boolean-option
+  "Register" "Auto-Raise Lists"
+  "b" "Automatically raise the list of accounts or actions during input." #t))
+
+(gnc:register-configuration-option
+ (gnc:make-simple-boolean-option
+  "Register" "Show All Transactions"
+  "c" "By default, show every transaction in an account." #t))
+
+(gnc:register-configuration-option
+ (gnc:make-number-range-option
+  "Register" "Number of Rows"
+  "d" "Default number of register rows to display."
+   15.0 ;; default
+    1.0 ;; lower bound
+  200.0 ;; upper bound
+    0.0 ;; number of decimals
+    1.0 ;; step size
+  ))
+
+(gnc:register-configuration-option
+ (gnc:make-simple-boolean-option
+  "Register" "Show Vertical Borders"
+  "e" "By default, show vertical borders on the cells." #t))
+
+(gnc:register-configuration-option
+ (gnc:make-simple-boolean-option
+  "Register" "Show Horizontal Borders"
+  "f" "By default, show horizontal borders on the cells." #t))
+
+
+;; Register Color options
+
+(gnc:register-configuration-option
+ (gnc:make-color-option
+  "Register Colors" "Header background"
+  "a" "The header background color"
+  (list #x96 #xb2 #x84 0)
+  255
+  #f))
+
+(gnc:register-configuration-option
+ (gnc:make-color-option
+  "Register Colors" "Single mode default even row background"
+  "b" "The default background color for even rows in single mode"
+  (list #xf6 #xff #xdb 0)
+  255
+  #f))
+
+(gnc:register-configuration-option
+ (gnc:make-color-option
+  "Register Colors" "Single mode default odd row background"
+  "bb" "The default background color for odd rows in single mode"
+  (list #xbf #xde #xba 0)
+  255
+  #f))
+
+(gnc:register-configuration-option
+ (gnc:make-color-option
+  "Register Colors" "Single mode active background"
+  "c" "The background color for the active transaction in single mode"
+  (list #xff #xf7 #xba 0)
+  255
+  #f))
+
+(gnc:register-configuration-option
+ (gnc:make-color-option
+  "Register Colors" "Double mode default even row background"
+  "d" "The default background color for even rows in double mode"
+  (list #xf6 #xff #xdb 0)
+  255
+  #f))
+
+(gnc:register-configuration-option
+ (gnc:make-color-option
+  "Register Colors" "Double mode default odd row background"
+  "e" "The default background color for odd rows in double mode"
+  (list #xbf #xde #xba 0)
+  255
+  #f))
+
+(gnc:register-configuration-option
+ (gnc:make-simple-boolean-option
+  "Register Colors" "Double mode colors alternate with transactions"
+  "ee" "Alternate the even and odd colors with each transaction, not each row"
+  #f))
+
+(gnc:register-configuration-option
+ (gnc:make-color-option
+  "Register Colors" "Double mode active background"
+  "f" "The background color for the active transaction in double mode"
+  (list #xff #xf7 #xba 0)
+  255
+  #f))
+
+(gnc:register-configuration-option
+ (gnc:make-color-option
+  "Register Colors" "Multi mode default transaction background"
+  "g" "The default background color for transactions in multi-line mode and the auto modes"
+  (list #xbf #xde #xba 0)
+  255
+  #f))
+
+(gnc:register-configuration-option
+ (gnc:make-color-option
+  "Register Colors" "Multi mode active transaction background"
+  "h" "The background color for an active transaction in multi-line mode and the auto modes"
+  (list #xff #xf0 #x99 0)
+  255
+  #f))
+
+(gnc:register-configuration-option
+ (gnc:make-color-option
+  "Register Colors" "Multi mode default split background"
+  "i" "The default background color for splits in multi-line mode and the auto modes"
+  (list #xff #xfa #xd9 0)
+  255
+  #f))
+
+(gnc:register-configuration-option
+ (gnc:make-color-option
+  "Register Colors" "Multi mode active split background"
+  "j" "The background color for an active split in multi-line mode and the auto modes"
+  (list #xff #xf2 #xab 0)
+  255
+  #f))
+
+
+;; General Options
+
+(gnc:register-configuration-option
+ (gnc:make-simple-boolean-option
+  "General" "Save Window Geometry"
+  "a" "Save window sizes and positions." #t))
+
+(gnc:register-configuration-option
+ (gnc:make-multichoice-option
+  "General" "Toolbar Buttons"
+  "b" "Choose whether to display icons, text, or both for toolbar buttons"
+  'icons_and_text
+  (list #(icons_and_text "Icons and Text" "Show both icons and text")
+        #(icons_only "Icons only" "Show icons only")
+        #(text_only "Text only" "Show text only"))))
+
+(gnc:register-configuration-option
+ (gnc:make-multichoice-option
+  "General" "Account Separator"
+  "c" "The character used to separate fully-qualified account names"
+  'colon
+  (list #(colon ": (Colon)" "Income:Salary:Taxable")
+        #(slash "/ (Slash)" "Income/Salary/Taxable")
+        #(backslash "\\ (Backslash)" "Income\\Salary\\Taxable")
+        #(dash "- (Dash)" "Income-Salary-Taxable")
+        #(period ". (Period)" "Income.Salary.Taxable"))))
+
+(gnc:register-configuration-option
+ (gnc:make-multichoice-option
+  "General" "Reversed-balance account types"
+  "d" "The types of accounts for which balances are sign-reversed"
+  'default
+  (list #(default "Income & Expense" "Reverse Income and Expense Accounts")
+        #(credit "Credit Accounts" "Reverse Credit Card, Liability, Equity, and Income Accounts")
+        #(none "None" "Don't reverse any accounts"))))
+
+(gnc:register-configuration-option
+ (gnc:make-simple-boolean-option
+  "General" "Use accounting labels"
+  "e" "Only use 'debit' and 'credit' instead of informal synonyms" #f))
+
+;(gnc:register-configuration-option
+; (gnc:make-number-range-option
+;  "General" "Default precision"
+;  "f" "Default number of decimal places to display"
+;   15.0 ;; default
+;    1.0 ;; lower bound
+;  200.0 ;; upper bound
+;    0.0 ;; number of decimals
+;    1.0 ;; step size
+;  ))
+
+
+;; Configuation variables
+
+(define gnc:*arg-show-version*
+  (gnc:make-config-var
+   "Show version."
+   (lambda (var value) (if (boolean? value) (list value) #f))
+   eq?
+   #f))
 
 (define gnc:*arg-show-usage*
   (gnc:make-config-var
@@ -301,6 +413,13 @@
 (define gnc:*arg-show-help*
   (gnc:make-config-var
    "Generate an argument summary."
+   (lambda (var value) (if (boolean? value) (list value) #f))
+   eq?
+   #f))
+
+(define gnc:*arg-no-file*
+  (gnc:make-config-var
+   "Don't load any file, including autoloading the last file."
    (lambda (var value) (if (boolean? value) (list value) #f))
    eq?
    #f))
@@ -329,6 +448,13 @@
     eq?
     #f))
   (gnc:config-var-value-set! gnc:*debugging?* #f current-value))
+
+(define gnc:*loglevel*
+  (gnc:make-config-var
+   "Logging level from 0 (least logging) to 5 (most logging)."
+   (lambda (var value) (if (exact? value) (list value) #f))
+   eq?
+   #f))
 
 ;; Convert the temporary startup value into a config var.
 (let ((current-load-path gnc:*load-path*))
@@ -362,3 +488,43 @@ the current value of the path."
    equal?
    '(default)))
 
+
+;; Internal options -- Section names that start with "__" are not
+;; displayed in option dialogs.
+
+(gnc:register-configuration-option
+ (gnc:make-internal-option
+  "__gui" "account_add_win_width" 0))
+
+(gnc:register-configuration-option
+ (gnc:make-internal-option
+  "__gui" "account_add_win_height" 0))
+
+(gnc:register-configuration-option
+ (gnc:make-internal-option
+  "__gui" "account_edit_win_width" 0))
+
+(gnc:register-configuration-option
+ (gnc:make-internal-option
+  "__gui" "account_edit_win_height" 0))
+
+(gnc:register-configuration-option
+ (gnc:make-internal-option
+  "__gui" "main_win_width" 0))
+
+(gnc:register-configuration-option
+ (gnc:make-internal-option
+  "__gui" "main_win_height" 0))
+
+(gnc:register-configuration-option
+ (gnc:make-internal-option
+  "__gui" "reg_win_width" 0))
+
+(gnc:register-configuration-option
+ (gnc:make-internal-option
+  "__gui" "reg_stock_win_width" 0))
+
+
+;; This needs to be after all the global options definitions
+(if (gnc:debugging?)
+    (gnc:options-register-translatable-strings gnc:*options-entries*))

@@ -1,14 +1,3 @@
-/*
- * FILE:
- * pricecell.c
- *
- * FUNCTION:
- * Implements the price cell
- *
- * HISTORY:
- * Copyright (c) 1998 Linas Vepstas
- */
-
 /********************************************************************\
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -21,28 +10,43 @@
  * GNU General Public License for more details.                     *
  *                                                                  *
  * You should have received a copy of the GNU General Public License*
- * along with this program; if not, write to the Free Software      *
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
+ * along with this program; if not, contact:                        *
+ *                                                                  *
+ * Free Software Foundation           Voice:  +1-617-542-5942       *
+ * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
+ * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ *                                                                  *
 \********************************************************************/
+
+/*
+ * FILE:
+ * pricecell.c
+ *
+ * FUNCTION:
+ * Implements the price cell
+ *
+ * HISTORY:
+ * Copyright (c) 1998, 1999, 2000 Linas Vepstas
+ */
 
 #include <ctype.h>
 #include <string.h>
+#include <locale.h>
 
+#include "gnc-common.h"
 #include "util.h"
 
 #include "basiccell.h"
 #include "pricecell.h"
 
-#define DECIMAL_PT  '.'
-
-#define VERY_SMALL (1.0e-20)
 
 static void PriceSetValue (BasicCell *, const char *);
+static char * xaccPriceCellPrintValue (PriceCell *cell);
 
-/* set the color of the text to red, if teh value is negative */
+/* set the color of the text to red, if the value is negative */
 /* hack alert -- the actual color should probably be configurable */
-#define COLORIZE(cell,amt) {			\
-   if (0.0 > amt) {				\
+#define COLORIZE(cell,amount) {			\
+   if ((0.0 > amount) && !DEQ(amount, 0.0)) {	\
       /* red */					\
       cell->cell.fg_color = 0xff0000;		\
    } else {					\
@@ -59,36 +63,118 @@ static void PriceSetValue (BasicCell *, const char *);
 #define PRTBUF 40
 
 /* ================================================ */
+
+static const char * 
+PriceEnter (BasicCell *_cell,
+            const char *val,
+            int *cursor_position,
+            int *start_selection,
+            int *end_selection)
+{
+  *cursor_position = -1;
+  *start_selection = 0;
+  *end_selection   = -1;
+
+  return val;
+}
+
+/* ================================================ */
 /* This callback only allows numbers with a single
  * decimal point in them */
 
 static const char * 
 PriceMV (BasicCell *_cell, 
-         const char * oldval, 
+         const char *oldval, 
          const char *change, 
-         const char *newval)
+         const char *newval,
+         int *cursor_position,
+         int *start_selection,
+         int *end_selection)
 {
    PriceCell *cell = (PriceCell *) _cell;
+   struct lconv *lc = gnc_localeconv();
+   char decimal_point;
+   char thousands_sep;
+
+   if (cell->monetary)
+     decimal_point = lc->mon_decimal_point[0];
+   else
+     decimal_point = lc->decimal_point[0];
+
+   if (cell->monetary)
+     thousands_sep = lc->mon_thousands_sep[0];
+   else
+     thousands_sep = lc->thousands_sep[0];
 
    /* accept the newval string if user action was delete, etc. */
-   if (change) {
-      /* if change is a decimal point, then count decimal points */
-      if (DECIMAL_PT == change[0]) {
-         int i, count=0;
-         for (i=0; 0 != newval[i]; i++) {
-            if (DECIMAL_PT == newval[i]) count ++;
-         }
-         if (1 < count) return NULL;
-      } else {
-         /* accept numeric, reject non-alpha edits */
-         if (! (isdigit (change[0]))) return NULL;
+   if (change != NULL)
+   {
+      int i, count=0;
+
+      for (i = 0; 0 != change[i]; i++)
+      {
+        /* accept only numbers or a decimal point or a thousands sep */
+        if (!isdigit(change[i]) &&
+            (decimal_point != change[i]) &&
+            (thousands_sep != change[i]))
+          return NULL;
+
+        if (decimal_point == change[i])
+          count++;
       }
+
+      for (i = 0; 0 != oldval[i]; i++)
+        if (decimal_point == oldval[i])
+          count++;
+
+      if (1 < count) return NULL;
    }
 
-   /* parse the float pt value  and store it */
-   cell->amount = xaccParseUSAmount (newval);
+   /* parse the float pt value and store it */
+   cell->amount = xaccParseAmount (newval, cell->monetary);
    SET ((&(cell->cell)), newval);
    return newval; 
+}
+
+/* ================================================ */
+
+static const char * 
+PriceLeave (BasicCell *_cell, const char *val) 
+{
+   PriceCell *cell = (PriceCell *) _cell;
+   char *newval;
+
+   newval = xaccPriceCellPrintValue(cell);
+
+   /* If they are identical, return the original */
+   if (strcmp(newval, val) == 0)
+     return val;
+
+   /* Otherwise, return the new one. */
+   SET ((&(cell->cell)), newval);
+   return strdup(newval);
+}
+
+/* ================================================ */
+
+static char *
+PriceHelp(BasicCell *bcell)
+{
+  PriceCell *cell = (PriceCell *) bcell;
+
+  if ((bcell->value != NULL) && (bcell->value[0] != 0))
+  {
+    char *help_str;
+
+    help_str = xaccPriceCellPrintValue(cell);
+
+    return strdup(help_str);
+  }
+
+  if (bcell->blank_help != NULL)
+    return strdup(bcell->blank_help);
+
+  return NULL;
 }
 
 /* ================================================ */
@@ -108,16 +194,22 @@ void
 xaccInitPriceCell (PriceCell *cell)
 {
    xaccInitBasicCell( &(cell->cell));
+
    cell->amount = 0.0;
-   cell->blank_zero = 1;
-   // cell->prt_format = strdup ("%.2f");
-   cell->prt_format = strdup ("%m");
+   cell->blank_zero = GNC_T;
+   cell->monetary = GNC_T;
+   cell->is_currency = GNC_F;
+   cell->shares_value = GNC_F;
 
-   SET ( &(cell->cell), "");
+   SET (&(cell->cell), "");
+   COLORIZE (cell, 0.0);
 
-   cell->cell.use_fg_color = 1;
+   cell->cell.use_fg_color = GNC_T;
+   cell->cell.enter_cell = PriceEnter;
    cell->cell.modify_verify = PriceMV;
+   cell->cell.leave_cell = PriceLeave;
    cell->cell.set_value = PriceSetValue;
+   cell->cell.get_help_value = PriceHelp;
 }
 
 /* ================================================ */
@@ -125,80 +217,141 @@ xaccInitPriceCell (PriceCell *cell)
 void
 xaccDestroyPriceCell (PriceCell *cell)
 {
-   cell->amount = 0.0;
-   free (cell->prt_format); cell->prt_format = 0x0;
-   xaccDestroyBasicCell ( &(cell->cell));
+  cell->amount = 0.0;
+  xaccDestroyBasicCell (&(cell->cell));
 }
 
 /* ================================================ */
 
-void xaccSetPriceCellValue (PriceCell * cell, double amt)
+static char *
+xaccPriceCellPrintValue (PriceCell *cell)
 {
-   char buff[PRTBUF];
-   cell->amount = amt;
+  static char buff[PRTBUF];
+  GNCPrintAmountFlags flags = PRTSEP;
 
-   /* if amount is zero, and blanking is set, then print blank */
-   if (cell->blank_zero && (VERY_SMALL > amt) && ((-VERY_SMALL) < amt)) {
-      buff[0] = 0x0;
-   } else {
-      char *monet;
+  if (cell->blank_zero && DEQ(cell->amount, 0.0)) {
+     strcpy(buff, "");
+     return buff;
+  }
 
-      /* check for monetary-style format not natively supported by printf */
-      /* hack alert -- this type of extended function should be abstracted
-       * out to a gnc_sprintf type function, however, this is much
-       * easier said than done */
-      monet = strstr (cell->prt_format, "%m");
-      if (monet) {
-         char tmpfmt[PRTBUF];
-         char tmpval[PRTBUF];
-         strcpy (tmpfmt, cell->prt_format);
-         monet = strstr (tmpfmt, "%m");
-         *(monet+1) = 's';
-         xaccSPrintAmount (tmpval, amt, PRTSEP);
+  if (cell->shares_value)
+    flags |= PRTSHR;
 
-         snprintf (buff, PRTBUF, tmpfmt, tmpval);
-      } else {
-         snprintf (buff, PRTBUF, cell->prt_format, amt);
-      }
-   }
+  if (cell->is_currency)
+    flags |= PRTCUR;
+
+  xaccSPrintAmount(buff, cell->amount, flags, NULL);
+
+  return buff;
+}
+
+/* ================================================ */
+
+double
+xaccGetPriceCellValue (PriceCell *cell)
+{
+  if (cell == NULL)
+    return 0.0;
+
+  return cell->amount;
+}
+
+void
+xaccSetPriceCellValue (PriceCell * cell, double amount)
+{
+   char *buff;
+
+   if (cell == NULL)
+     return;
+
+   cell->amount = amount;
+   buff = xaccPriceCellPrintValue (cell);
+
    SET ( &(cell->cell), buff);
 
    /* set the cell color to red if the value is negative */
-   COLORIZE (cell, amt);
+   COLORIZE (cell, amount);
+}
+
+void
+xaccSetPriceCellBlank (PriceCell *cell)
+{
+  if (cell == NULL)
+    return;
+
+  cell->amount = 0.0;
+
+  SET ( &(cell->cell), "");
+
+  COLORIZE (cell, 0.0);
 }
 
 /* ================================================ */
 
-void xaccSetPriceCellFormat (PriceCell * cell, char * fmt)
+void
+xaccSetPriceCellSharesValue (PriceCell * cell, gncBoolean shares_value)
 {
-   if (cell->prt_format) free (cell->prt_format);
-   cell->prt_format = strdup (fmt);
+  if (cell == NULL)
+    return;
 
-   /* make sure that the cell is updated with the new format */
-   xaccSetPriceCellValue (cell, cell->amount);
+  cell->shares_value = shares_value;
 }
 
 /* ================================================ */
 
-void xaccSetDebCredCellValue (PriceCell * deb, 
-                              PriceCell * cred, double amt)
+void
+xaccSetPriceCellMonetary (PriceCell * cell, gncBoolean monetary)
 {
-   deb->amount = -amt;
-   cred->amount = amt;
+  if (cell == NULL)
+    return;
 
-   deb->cell.fg_color = 0xff0000;
-   cred->cell.fg_color = 0x0;
+  cell->monetary = monetary;
+}
 
-   if (cred->blank_zero && (VERY_SMALL > amt) && ((-VERY_SMALL) < amt)) {
-      SET ( &(cred->cell), "");
-      SET ( &(deb->cell), "");
-   } else
-   if (0.0 < amt) {
-      xaccSetPriceCellValue (cred, amt);
-      SET ( &(deb->cell), "");
+/* ================================================ */
+
+void
+xaccSetPriceCellIsCurrency (PriceCell *cell, gncBoolean is_currency)
+{
+  if (cell == NULL)
+    return;
+
+  cell->is_currency = is_currency;
+}
+
+/* ================================================ */
+
+void
+xaccSetPriceCellBlankZero (PriceCell *cell, gncBoolean blank_zero)
+{
+  if (cell == NULL)
+    return;
+
+  cell->blank_zero = blank_zero;
+}
+
+/* ================================================ */
+
+void xaccSetDebCredCellValue (PriceCell * debit,
+                              PriceCell * credit,
+                              double amount)
+{
+   debit->cell.fg_color = 0xff0000;
+   credit->cell.fg_color = 0x0;
+
+   /* debits are positive, credits are negative */
+   if (amount > 0.0) {
+      xaccSetPriceCellValue (debit, amount);
+      xaccSetPriceCellValue (credit, 0.0);
+      if (!credit->blank_zero) {
+        SET(&credit->cell, "");
+      }
    } else {
-      SET ( &(cred->cell), "");
-      xaccSetPriceCellValue (deb, -amt);
+      xaccSetPriceCellValue (debit, 0.0);
+      if (!debit->blank_zero) {
+        SET(&debit->cell, "");
+      }
+      xaccSetPriceCellValue (credit, -amount);
    }
 }
 
@@ -208,9 +361,17 @@ static void
 PriceSetValue (BasicCell *_cell, const char *str)
 {
    PriceCell *cell = (PriceCell *) _cell;
-   double amt = xaccParseUSAmount (str);
+   double amount;
 
-   xaccSetPriceCellValue (cell, amt);
+   if (str == NULL)
+     str = "";
+
+   if (!cell->blank_zero && (*str == '\0'))
+     xaccSetPriceCellBlank(cell);
+   else {
+     amount = xaccParseAmount (str, cell->monetary);
+     xaccSetPriceCellValue (cell, amount);
+   }
 }
 
 /* --------------- end of file ---------------------- */

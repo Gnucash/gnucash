@@ -1,0 +1,94 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="GENERATOR" content="Mozilla/4.7 [fr] (Win98; I) [Netscape]">
+   <title>Rapports</title>
+<link rel="stylesheet" title="normal" type="text/css" href="gnucash.css">
+</head>
+<body bgcolor="#EEEEEE">
+
+<h1>
+Rapports</h1>
+Une vari&eacute;t&eacute; de rapports financiers peut &ecirc;tre s&eacute;lectionn&eacute;s
+sur le menu "Rapports" :
+<ul>
+<div STYLE="margin-bottom: 0cm"><a href="xacc-balsheet.html">Feuille du
+solde/bilan</a> : montre les avoirs/biens(Actif), dettes(Passif) et capitaux
+propres.</div>
+
+
+<p STYLE="margin-bottom: 0cm"><a href="xacc-pnl.html">&Eacute;tats des
+pertes et profits</a> : montrent les revenus et d&eacute;penses sur une
+p&eacute;riode s&eacute;lectionnable <i>bien, il le sera quand je comprendrai
+(get around) comment ajouter le support de la p&eacute;riode.</i>
+
+<p STYLE="margin-bottom: 0cm"><a href="xacc-trans_report.html">Rapport
+de transaction</a> montre les transactions dans un compte, pr&eacute;sent&eacute;
+de diff&eacute;rentes fa&ccedil;ons.
+<p><a href="xacc-bal_tracker.html">Suivi du solde</a> suit le solde d'un
+ou plusieurs comptes dans le temps, et supporte une sortie graphique (si
+vous avez install&eacute; gnuplot).</ul>
+
+<h1>
+La fen&ecirc;tre de rapports</h1>
+D&egrave;s que vous s&eacute;lectionnez un rapport, une fen&ecirc;tre de
+rapports appara&icirc;tra :
+<p><img SRC="pix/reportwin.gif" NAME="Image1" NOSAVE BORDER=0 height=372 width=425>
+<p>Le rapport est affich&eacute; dans une fen&ecirc;tre redimensionnable
+et d&eacute;roulante. Pour contr&ocirc;ler le rapport, vous pouvez utiliser
+les boutons de la barre d'outils en haut de la fen&ecirc;tre :
+<ul>
+<div STYLE="margin-bottom: 0cm"><b>Pr&eacute;c&eacute;dent</b> et <b>Suivant</b>
+vous permettent de voir les pr&eacute;c&eacute;dents contenus de la fen&ecirc;tre,
+juste comme un navigateur internet.</div>
+
+<p><b>Param&egrave;tres</b> affiche une bo&icirc;te de dialogue vous permettant
+de changer l'information pr&eacute;sent&eacute;e dans le rapport :
+<br>&nbsp;
+<br>&nbsp;
+<p><img SRC="pix/report-option.gif" NAME="Image2" NOSAVE BORDER=0 height=372 width=508>
+
+<p STYLE="margin-bottom: 0cm">Voyez l'aide pour les rapports individuels
+pour les d&eacute;tails des options disponibles.
+
+<p STYLE="margin-bottom: 0cm"><b>Exporter</b> vous permet d'exporter le
+contenu du rapport comme un fichier HTML pour une visualisation ou impression
+ult&eacute;rieure.
+<p><b>Fermer</b> : ferme la fen&ecirc;tre du rapport.</ul>
+
+<h1>
+Construction de rapports personnalis&eacute;s</h1>
+Il est possible d'&eacute;crire votre propres rapports pour r&eacute;pondre
+&agrave; vos propres besoins, si vous savez programmer un peu. Vous aurez
+besoin de conna&icirc;tre Scheme (un langage de programmation ressemblant
+&agrave; LISP), et c'est une excellente id&eacute;e d'avoir une copie du
+code source de GnuCash disponible.
+<p>L'interface de rapport est actuellement non document&eacute;e, mais
+vous pouvez obtenir une bonne id&eacute;e de son fonctionnement en examinant
+le fichier src/scm/report/hello-world.scm dans la distribution du source
+de GnuCash.
+<p>Vous aurez aussi besoin pour acc&eacute;dez aux donn&eacute;es du "moteur"
+d'obtenir de l'information pour votre rapport. Cela est accompli par un
+ensemble de fonctions d'encapsulage Scheme qui sont document&eacute;es
+dans le fichier src/g-wrap/gnc.html. Vous pouvez souhaiter examiner quelques-uns
+des autres rapports dans src/scm/report pour comprendre comment ils sont
+utilis&eacute;s.
+<p>A pr&eacute;sent, les rapports sont produit int&eacute;rieurement en
+cr&eacute;ant du HTML et en pr&eacute;sentant cela avec un widget HTML.
+(Les futures versions de GnuCash supporteront si tout va bien un syst&egrave;me
+plus flexible).
+
+<p STYLE="margin-bottom: 0cm">Si vous avez besoin de plus d'information,
+ou avez d&eacute;velopp&eacute; un nouveau rapport qui peut &ecirc;tre
+utilis&eacute; par les autres, s'il vous pla&icirc;t contactez la liste
+de courriers de d&eacute;veloppement de GnuCash (mailing list) &agrave;
+<a href="mailto:gnucash-devel@gnucash.org">gnucash-devel@gnucash.org</a>.
+<br>&nbsp;
+<div STYLE="margin-bottom: 0cm"></div>
+
+<p>
+<hr>
+<p>Retour &agrave; la <a href="xacc-main.html">Page principale de la documentation.</a>
+</body>
+</html>

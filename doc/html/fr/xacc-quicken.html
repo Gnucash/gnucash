@@ -1,0 +1,170 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+	<TITLE>Guide de l'utilisateur de Quicken</TITLE>
+	<link rel="stylesheet" title="normal" type="text/css" href="gnucash.css">
+	<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+</HEAD>
+<BODY BGCOLOR="#eeeeee">
+<H1>Guide de l'utilisateur de Quicken (TM)</H1>
+<P>Tous les syst&egrave;mes de comptabilit&eacute; n'utilisent pas
+les m&ecirc;mes mots pour les m&ecirc;mes concepts. Ci-dessous se
+trouve quelques notes qui peuvent &ecirc;tre utile pour les
+utilisateurs habitu&eacute;s aux produits Intuit . 
+</P>
+<H2><FONT SIZE=6>Cat&eacute;gories Quicken</FONT></H2>
+<P><A NAME="QUICKENCATS"></A>Ce que Quicken appelle &quot;<I>Cat&eacute;gories</I>&quot;
+sont des <A HREF="xacc-expense.html">comptes Revenus/D&eacute;penses</A>.
+Ainsi, si vous utilisez les sp&eacute;cifications d'une cat&eacute;gorie
+dans Quicken, cr&eacute;ez juste un compte revenus/d&eacute;penses du
+m&ecirc;me nom dans GnuCash, et utilisez-le comme le nom du compte. 
+</P>
+<H2><FONT SIZE=6>Importation des fichiers QIF de Quicken</FONT></H2>
+<P><A NAME="QIF"></A>GnuCash supporte l'importation des Quicken
+Import Fichiers (QIF). (Note : seuls les fichiers QIF de la version
+3.0 de Quicken ont &eacute;t&eacute; test&eacute;s formellement
+jusqu'&agrave; pr&eacute;sent). 
+</P>
+<P>Notez que le format QIF est repr&eacute;sentatif, dans une
+certaine mesure, d'un mod&egrave;le de donn&eacute;es particulier qui
+n'est pas aussi expressif/adapt&eacute; que l'on aurait voulu. Il
+requiert pour chaque compte de se faire enregistrer dans un fichier
+de donn&eacute;es s&eacute;par&eacute;, plut&ocirc;t que de vous
+permettre d'avoir un fichier qui repr&eacute;sente <I>tous</I> les
+comptes que vous pouvez avoir eu dans Quicken. 
+</P>
+<P>De plus, alors qu'il y a des plans pour le faire dans le futur, il
+n'y a pas, actuellement, de solution pour organiser les noms de
+cat&eacute;gories ou comptes utilis&eacute;s dans Quicken vers un
+ensemble <I>diff&eacute;rent</I> de noms de compte que vous puissiez
+utiliser dans GnuCash. 
+</P>
+<P>En cons&eacute;quence, lisez cette section avec attention. Il se
+peut que vous soyez d&eacute;&ccedil;u par les r&eacute;sultats d'une
+importation de fichier QIF; cela vous donnera au moins quelques
+esp&eacute;rances plus pr&eacute;cises quant &agrave; ce qui se
+passera. 
+</P>
+<H2><FONT SIZE=5><B>Cr&eacute;ation de fichiers QIF</B></FONT></H2>
+<P>Pour cr&eacute;er un ensemble de fichiers QIF de Quicken, ex&eacute;cutez
+la proc&eacute;dure suivante : 
+</P>
+<UL>
+	<LI><P>D&eacute;marrez Quicken. 
+	</P>
+	<P STYLE="margin-bottom: 0cm">Il fonctionne avec <A HREF="http://www.winehq.com/">Wine,</A>
+	Wabi de Caldera, et sans doute sur VMWare, ainsi il n'est pas requis
+	que vous d&eacute;marriez Windows. 
+	</P>
+</UL>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<UL>
+	<LI><P>S&eacute;lectionnez le compte que vous souhaitez exporter. 
+	</P>
+	<P STYLE="margin-bottom: 0cm">Quicken ne peut exporter qu'un compte
+	pour chaque fichier de donn&eacute;es, ce qui veut dire que si vous
+	avez plusieurs comptes, cela se r&eacute;v&eacute;lera &ecirc;tre un
+	processus quelques peu p&eacute;nible. (D'un autre c&ocirc;t&eacute;,
+	il devrait &ecirc;tre <I>moins</I> p&eacute;nible que d'entrer les
+	donn&eacute;es depuis z&eacute;ro.)</P>
+</UL>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<UL>
+	<LI><P>Choisissez le menu &quot;Fichier&quot; et s&eacute;lectionnez
+	l'entr&eacute;e du menu &quot;Exporter...&quot; . 
+	</P>
+	<P>Cela fournira une boite de dialogue qui demandera un nom de
+	fichier, les dates effectives, en plus d'une s&eacute;rie de boite &agrave;
+	cocher, incluant <TT>Transactions</TT>, <TT>Liste de comptes</TT>,
+	<TT>Liste de cat&eacute;gories</TT>, etc. 
+	</P>
+	<P>Pour de meilleurs r&eacute;sultats, vous devrez &ecirc;tre s&ucirc;r
+	d'avoir ces trois derni&egrave;res qui soit v&eacute;rifi&eacute;es/activ&eacute;es.
+		</P>
+	<P>Si vous <I>ne v&eacute;rifiez pas</I> la boite <I>Listes de
+	Comptes</I>, alors le nom de votre compte sera probablement perdu,
+	et cela causera des probl&egrave;mes quand vous essaierez d'importer
+	des donn&eacute;es dans GnuCash plus tard.</P>
+</UL>
+<P>Maintenant vous avez un ensemble de fichiers <TT>.QIF</TT>, et
+pouvez lancer GnuCash. 
+</P>
+<H2>Chargement des fichiers QIF dans GnuCash</H2>
+<UL>
+	<LI><P STYLE="margin-bottom: 0cm">Pour importer un fichier QIF de
+	Quicken, choisissez le menu Fichier et s&eacute;lectionnez l'entr&eacute;e
+	<TT><I>Importer QIF</I></TT>. 
+	</P>
+	<LI><P>Le fichier import&eacute; quel qu'il soit sera fusionn&eacute;
+	avec les autres donn&eacute;es que vous avez actuellement dans
+	GnuCash. Cette fusion permet aux multiples comptes Quicken d'&ecirc;tre
+	import&eacute;s et fusionn&eacute;s dans un groupe de compte.</P>
+</UL>
+<H2>A noter &agrave; propos de l'importation de QIF</H2>
+<UL>
+	<LI><P><B>Recherche des entr&eacute;es dupliqu&eacute;es</B> 
+	</P>
+	<P>Notez que durant la fusion, une analyse est effectu&eacute;e pour
+	rechercher les transactions dupliqu&eacute;es, et enlever les
+	doubles. Une transaction dupliqu&eacute;e est une transaction o&ugrave;
+	la date, la description (b&eacute;n&eacute;ficiaire), m&eacute;mo,
+	quantit&eacute;, prix du titre, et les comptes ou cat&eacute;gories
+	d&eacute;bit&eacute;s/cr&eacute;dit&eacute;s se retrouvent
+	<I>exactement</I>. Ainsi, la fusion <I>devrait</I> &ecirc;tre s&ucirc;re,
+	&agrave; moins que vous n'ayez de multiples transactions &agrave; la
+	m&ecirc;me date, au m&ecirc;me compte, pour le m&ecirc;me montant,
+	avec la m&ecirc;me description et m&eacute;mo. Cela <I>peut
+	</I>malheureusement se produire, le sc&eacute;nario typique se
+	produit quand vous faites de multiples retraits d'argent liquide de
+	montants identiques &agrave; partir de DAB (distributeur automatique
+	de billets) le m&ecirc;me jour. 
+	</P>
+	<LI><P><B>Comptes vides</B> 
+	</P>
+	<P STYLE="margin-bottom: 0cm">Notez que quand la &quot;Liste des
+	Comptes &quot; et la &quot;Liste de Cat&eacute;gories&quot; sont
+	export&eacute;es depuis Quicken, <B>tous</B> les comptes et
+	cat&eacute;gories sont export&eacute;s, m&ecirc;me s'ils sont vides
+	et ne contiennent pas de transactions. Quand ceux-ci sont import&eacute;s,
+	ils apparaissent comme des comptes avec un solde nul. Si vous n'avez
+	pas besoin ou n'utilisez pas ces comptes, vous &ecirc;tes libre de
+	les supprimer. Les futures am&eacute;liorations de Gnucash vous
+	permettront de les supprimer &quot;en-masse&quot;, ou de les rendre
+	invisible sans les supprimer.</P>
+</UL>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<UL>
+	<LI><P><B>QIF extension (mark) II</B> 
+	</P>
+	<P>Un projet en cours est de construire un utilitaire d'importation
+	alternatif en Guile qui sera plus flexible, et qui, &eacute;tant
+	stock&eacute; comme un ensemble de scripts Scheme, pourra &ecirc;tre
+	modifi&eacute; sans avoir besoin de recompiler l'application
+	enti&egrave;re. 
+	</P>
+</UL>
+<UL>
+	<P STYLE="margin-bottom: 0cm">En ce moment, il analyse/traite les
+	fichiers QIF avec succ&egrave;s; ce qui reste est (plut&ocirc;t la
+	t&acirc;che complexe) de d&eacute;terminer les correspondances
+	appropri&eacute;es entre les <B>Cat&eacute;gories</B> de Quicken, et
+	les &eacute;quivalents de Gnucash. C'est un des plus significatif
+	d&eacute;faut de la pr&eacute;sente importation des QIF. 
+	</P>
+	<P STYLE="margin-bottom: 0cm"></P>
+	<LI><P STYLE="margin-bottom: 0cm"><B>Plus &agrave; propos de QIF</B>
+		</P>
+	<P><BR>Plus de d&eacute;tails &agrave; propos du format d'&eacute;change
+	QIF peuvent &ecirc;tre trouv&eacute;s <A HREF="http://www.ntlug.org/~cbbrowne/financeformats.html#QIF">ici.</A>
+		</P>
+	<HR>
+	<P>Retour &agrave; la <A HREF="xacc-main.html">Page principale de la
+	documentation.</A></P>
+</UL>
+<P><BR>&nbsp; 
+</P>
+</BODY>
+</HTML>

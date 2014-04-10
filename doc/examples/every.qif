@@ -1,0 +1,1617 @@
+!Type:Class
+Ntest
+Dtesty thing
+^^
+!Type:Cat
+NDiv Income
+DDividend Income
+T
+R4576
+I
+^^
+NGift Received
+DGift Received
+T
+I
+^^
+NInt Inc
+DInterest Income
+T
+R4592
+I
+^^
+NInvest Inc
+DInvestment Income
+T
+I
+^^
+NOther Inc
+DOther Income
+T
+I
+^^
+NSalary
+DPQR Net Pay
+T
+R7360
+I
+^^
+NWages
+DZSTC/Shear Madness
+I
+^^
+N_DivInc
+DDividend
+T
+R4576
+I
+^^
+N_IntInc
+DInvestment Interest Inc
+T
+R4592
+I
+^^
+N_LT CapGnDst
+DLong Term Cap Gain Dist
+T
+R7808
+I
+^^
+N_RlzdGain
+DRealized Gain/Loss
+T
+I
+^^
+N_ST CapGnDst
+DShort Term Cap Gain Dist
+T
+R4576
+I
+^^
+N_UnrlzdGain
+DUnrealized Gain/Loss
+I
+^^
+NATM Charges
+E
+^^
+NAuto
+DAutomobile Expenses
+E
+^^
+NAuto:Fuel
+DAuto Fuel
+E
+^^
+NAuto:Service
+DAuto Service
+E
+^^
+NCash
+DCash Withdrawal/Misc.
+E
+^^
+NCharity
+DCharitable Donations
+T
+R4480
+E
+^^
+NCharity:Cash
+DCash Contributions
+T
+R4480
+E
+^^
+NCharity:Non-Cash
+DNon-Cash Contributions
+T
+R7760
+E
+^^
+NChildcare
+DChildcare Expense
+E
+^^
+NChristmas
+DChristmas Expenses
+E
+^^
+NClothing
+DClothing
+E
+^^
+NDining
+DDining Out
+E
+^^
+NDues
+DDues
+E
+^^
+NEducation
+DEducation
+E
+^^
+NEntertain
+DEntertainment
+E
+^^
+NGifts
+DGift Expenses
+T
+R4480
+E
+^^
+NGroceries
+DGroceries
+E
+^^
+NHome Rpair
+DHome Repair & Maint.
+E
+^^
+NHousehold
+DHousehold Misc. Exp
+E
+^^
+NInsurance
+DInsurance
+E
+^^
+NInsurance:State Farm Auto
+E
+^^
+NInsurance:State Farm Home
+E
+^^
+NInsurance:State Farm Life
+E
+^^
+NInt Exp
+DInterest Expense
+T
+E
+^^
+NInvest Exp
+DInvestment Expense
+T
+R4512
+E
+^^
+NMedical
+DMedical Expense
+T
+R4368
+E
+^^
+NMedical:Doctor
+DDoctor & Dental Visits
+T
+R7744
+E
+^^
+NMedical:Medicine
+DMedicine & Drugs
+T
+R4368
+E
+^^
+NMisc
+DMiscellaneous
+E
+^^
+NMort Int
+DMortgage Interest Exp
+T
+R4528
+E
+^^
+NOther Exp
+DOther Expenses
+T
+E
+^^
+NPets
+E
+^^
+NPets:Food
+E
+^^
+NPets:Miscellaneous
+E
+^^
+NPets:Veterinary
+DMedical Expenses
+E
+^^
+NRecreation
+DRecreation Expense
+E
+^^
+NSubscriptions
+DSubscriptions
+E
+^^
+NSupplies
+DSupplies
+E
+^^
+NTax
+DTaxes
+T
+E
+^^
+NTax:Fed
+DFederal Tax
+T
+R7376
+E
+^^
+NTax:Other
+DMisc. Taxes
+T
+E
+^^
+NTax:Prop
+DProperty Tax
+T
+R4416
+E
+^^
+NTax:Soc Sec
+DSoc Sec Tax
+T
+R7392
+E
+^^
+NTax Spouse
+DSpouse's Taxes
+T
+E
+^^
+NTelephone
+DTelephone Expense
+E
+^^
+NTraffic Ticket
+E
+^^
+NUIC
+DUnemploy. Ins. Commission
+T
+E
+^^
+NUtilities
+E
+^^
+NUtilities:City of Austin
+E
+^^
+NUtilities:So. Union Gas
+DGas #16-02417-0 House
+E
+^^
+NUtilities:Southern Un.
+DGas #16-74614-5  GR
+E
+^^
+N_Accrued Int
+DAccrued Interest
+T
+E
+^^
+N_IntExp
+DInvestment Interest Exp
+T
+R6816
+E
+^^
+!Option:AutoSwitch
+!Account
+NJoint Savings
+TBank
+DNationsBank
+^^
+NLinas Checking
+TBank
+DFirst Nat'l Bank of C
+^^
+NCharles Schwab
+TInvst
+DBrokerage
+^^
+NVanguard
+TInvst
+DMutual Fund Family
+^^
+NWarburg Pincus
+TInvst
+DMutual Fund Family
+^^
+NPatty's SVGS
+TBank
+DNBD Bank Evanston
+^^
+NFidelity Inv
+TInvst
+DMutual Fund Family
+^^
+NAda
+TInvst
+D2/5/92
+^^
+NDummy Cash
+TCash
+DReconcile Accounts
+^^
+NPatty's CHKG
+TBank
+DNBD Bank Evanston
+^^
+NIRA Fidelity
+TInvst
+DAsset Manager Growth
+^^
+NState Farm Annu
+TInvst
+DState Farm Annuity
+^^
+NTRP Inv
+TInvst
+DMutual Fund Family
+^^
+NHouse
+TOth A
+Dhouse appraisal
+^^
+NTRP RIF I
+TInvst
+^^
+NIRA Chas Schwab
+TInvst
+DSchwab Money Market
+^^
+!Clear:AutoSwitch
+!Account
+NFidelity Inv
+DMutual Fund Family
+TInvst
+^^
+!Type:Invst
+D1/ 1/89
+NShrsIn  
+YFID Growth & Inc
+I15.330    
+Q3.049    
+T46.74
+MOpen account in Quicken
+^^
+D1/ 1/89
+NShrsIn  
+YFID Govt Res
+I1         
+Q1,035.34 
+T1,035.34
+MBegining balance
+^^
+D1/ 6/89
+NBuyX    
+YFID Growth & Inc
+I15.330    
+Q32.616   
+T500.00
+MCash purchase of shares
+L[Dummy Cash]
+$500.00
+^^
+D1/31/89
+NReinvDiv
+YFID Govt Res
+I1         
+Q7.15     
+T7.15
+^^
+D2/ 3/89
+NBuyX    
+YFID Govt Res
+I1         
+Q1,090.66 
+T1,090.66
+Mpurchase shares
+L[Dummy Cash]
+$1,090.66
+^^
+D2/28/89
+NReinvDiv
+YFID Govt Res
+I1         
+Q12.78    
+T12.78
+^^
+D3/22/89
+NReinvDiv
+YFID Growth & Inc
+I15.680    
+Q0.318    
+T4.99
+^^
+D3/22/89
+NBuyX    
+YFID Govt Res
+I1         
+Q5,665.89 
+T5,665.89
+L[Dummy Cash]
+$5,665.89
+^^
+D3/31/89
+NReinvDiv
+YFID Govt Res
+I1         
+Q28.56    
+T28.56
+^^
+D4/30/89
+NReinvDiv
+YFID Govt Res
+I1         
+Q58.18    
+T58.18
+^^
+D5/31/89
+NReinvDiv
+YFID Govt Res
+I1         
+Q60.98    
+T60.98
+^^
+D6/21/89
+NReinvDiv
+YFID Growth & Inc
+I17.430    
+Q0.289    
+T5.04
+^^
+D6/30/89
+NReinvDiv
+YFID Govt Res
+I1         
+Q57.88    
+T57.88
+^^
+D7/31/89
+NReinvDiv
+YFID Govt Res
+I1         
+Q58.54    
+T58.54
+^^
+D8/31/89
+NReinvDiv
+YFID Govt Res
+I1         
+Q56.01    
+T56.01
+^^
+D9/ 7/89
+NReinvSh 
+YFID Growth & Inc
+I18.080    
+Q1.364    
+T24.66
+^^
+D9/ 7/89
+NReinvDiv
+YFID Growth & Inc
+I18.080    
+Q0.281    
+T5.08
+^^
+D9/30/89
+NReinvDiv
+YFID Govt Res
+I1         
+Q56.53    
+T56.53
+^^
+D10/31/89
+NReinvDiv
+YFID Govt Res
+I1         
+Q54.43    
+T54.43
+^^
+D11/10/89
+NBuyX    
+YFID Growth & Inc
+I17.480    
+Q400.458  
+T7,000.00
+MCash purchase shares
+O-0.01
+L[Dummy Cash]
+$7,000.00
+^^
+D11/30/89
+NReinvDiv
+YFID Govt Res
+I1         
+Q53.6     
+T53.60
+^^
+D12/ 7/89
+NReinvLg 
+YFID Growth & Inc
+I16.940    
+Q12.939   
+T219.19
+^^
+D12/ 7/89
+NReinvSh 
+YFID Growth & Inc
+I16.940    
+Q2.329    
+T39.45
+^^
+D12/ 7/89
+NReinvDiv
+YFID Growth & Inc
+I16.940    
+Q8.54     
+T144.67
+^^
+D12/31/89
+NReinvDiv
+YFID Govt Res
+I1         
+Q56.91    
+T56.91
+^^
+D1/31/90
+NReinvDiv
+YFID Govt Res
+I1         
+Q51.59    
+T51.59
+^^
+D2/28/90
+NReinvDiv
+YFID Govt Res
+I1         
+Q47.91    
+T47.91
+^^
+D3/ 9/90
+NReinvDiv
+YFID Growth & Inc
+I16.650    
+Q3.886    
+T64.70
+^^
+D3/12/90
+NBuyX    
+YFID Govt Res
+I1         
+Q5,396.75 
+T5,396.75
+Mtransfer from fido cash res
+L[Dummy Cash]
+$5,396.75
+^^
+D3/16/90
+NSellX   
+YFID Govt Res
+I1         
+Q7,500    
+T7,500.00
+Mtake cash out (buy house)
+L[Dummy Cash]
+$7,500.00
+^^
+D3/31/90
+NReinvDiv
+YFID Govt Res
+I1         
+Q55.97    
+T55.97
+^^
+D4/30/90
+NReinvDiv
+YFID Govt Res
+I1         
+Q38.37    
+T38.37
+^^
+D5/31/90
+NReinvDiv
+YFID Govt Res
+I1         
+Q41.29    
+T41.29
+^^
+D6/15/90
+NReinvDiv
+YFID Growth & Inc
+I17.350    
+Q3.761    
+T65.25
+^^
+D6/30/90
+NReinvDiv
+YFID Govt Res
+I1         
+Q40.42    
+T40.42
+^^
+D7/ 6/90
+NSellX   
+YFID Growth & Inc
+I17.290    
+Q200      
+T3,458.00
+MExch to Gov't Res
+L[Fidelity Inv]
+$3,458.00
+^^
+D7/ 6/90
+NBuyX    
+YFID Govt Res
+I1         
+Q3,458    
+T3,458.00
+MExch from Growth & Inc
+L[Fidelity Inv]
+$3,458.00
+^^
+D7/ 9/90
+NSellX   
+YFID Govt Res
+I1         
+Q8,432.95 
+T8,427.95
+Mcash out (buy House)
+O5.00
+L[Dummy Cash]
+$8,427.95
+^^
+D7/31/90
+NReinvDiv
+YFID Govt Res
+I1         
+Q19.97    
+T19.97
+^^
+D8/27/90
+NSellX   
+YFID Govt Res
+I1         
+Q1,000    
+T1,000.00
+Mcash out (buy House)
+L[Dummy Cash]
+$1,000.00
+^^
+D8/31/90
+NReinvDiv
+YFID Govt Res
+I1         
+Q9.09     
+T9.09
+^^
+D9/ 7/90
+NReinvLg 
+YFID Growth & Inc
+I15.330    
+Q3.872    
+T59.36
+^^
+D9/ 7/90
+NReinvDiv
+YFID Growth & Inc
+I15.330    
+Q2.464    
+T37.78
+O0.01
+^^
+D9/30/90
+NReinvDiv
+YFID Govt Res
+I1         
+Q3.54     
+T3.54
+^^
+D10/31/90
+NReinvDiv
+YFID Govt Res
+I1         
+Q3.66     
+T3.66
+^^
+D11/16/90
+NBuyX    
+YFID Govt Res
+I1         
+Q425      
+T425.00
+Mpurchase shares
+L[Dummy Cash]
+$425.00
+^^
+D11/30/90
+NReinvDiv
+YFID Govt Res
+I1         
+Q4.47     
+T4.47
+^^
+D12/14/90
+NReinvDiv
+YFID Growth & Inc
+I15.090    
+Q2.928    
+T44.19
+O0.01
+^^
+D12/31/90
+NReinvDiv
+YFID Govt Res
+I1         
+Q6.05     
+T6.05
+^^
+D1/31/91
+NReinvDiv
+YFID Govt Res
+I1         
+Q5.85     
+T5.85
+^^
+D2/28/91
+NReinvDiv
+YFID Govt Res
+I1         
+Q4.97     
+T4.97
+^^
+D3/ 8/91
+NReinvDiv
+YFID Growth & Inc
+I18.560    
+Q1.804    
+T33.48
+^^
+D3/31/91
+NReinvDiv
+YFID Govt Res
+I1         
+Q5.25     
+T5.25
+^^
+D4/16/91
+NSellX   
+YFID Growth & Inc
+I19.900    
+Q100      
+T1,990.00
+MExch To Gov't Reserves
+L[Fidelity Inv]
+$1,990.00
+^^
+D4/16/91
+NBuyX    
+YFID Govt Res
+I1         
+Q1,990    
+T1,990.00
+MExch from Growth & Inc
+L[Fidelity Inv]
+$1,990.00
+^^
+D4/30/91
+NReinvDiv
+YFID Govt Res
+I1         
+Q9.2      
+T9.20
+^^
+D5/31/91
+NReinvDiv
+YFID Govt Res
+I1         
+Q14.32    
+T14.32
+^^
+D6/14/91
+NReinvDiv
+YFID Growth & Inc
+I19.690    
+Q0.919    
+T18.09
+O-0.01
+^^
+D6/30/91
+NReinvDiv
+YFID Govt Res
+I1         
+Q13.79    
+T13.79
+^^
+D7/31/91
+NReinvDiv
+YFID Govt Res
+I1         
+Q14.26    
+T14.26
+^^
+D8/31/91
+NReinvDiv
+YFID Govt Res
+I1         
+Q14.02    
+T14.02
+^^
+D9/ 6/91
+NReinvSh 
+YFID Growth & Inc
+I19.330    
+Q3.574    
+T69.09
+^^
+D9/ 6/91
+NReinvDiv
+YFID Growth & Inc
+I19.330    
+Q0.941    
+T18.18
+O-0.01
+^^
+D9/ 6/91
+NReinvDiv
+YFID Growth & Inc
+I19.330    
+Q2.445    
+T47.26
+^^
+D9/30/91
+NReinvDiv
+YFID Govt Res
+I1         
+Q13.28    
+T13.28
+^^
+D10/31/91
+NReinvDiv
+YFID Govt Res
+I1         
+Q13.28    
+T13.28
+^^
+D11/30/91
+NReinvDiv
+YFID Govt Res
+I1         
+Q12.06    
+T12.06
+^^
+D12/ 6/91
+NReinvDiv
+YFID Growth & Inc
+I19.100    
+Q0.593    
+T11.33
+^^
+D12/31/91
+NReinvDiv
+YFID Govt Res
+I1         
+Q12.09    
+T12.09
+^^
+D1/31/92
+NReinvDiv
+YFID Govt Res
+I1         
+Q11.37    
+T11.37
+^^
+D2/29/92
+NReinvDiv
+YFID Govt Res
+I1         
+Q9.9      
+T9.90
+^^
+D3/13/92
+NReinvDiv
+YFID Growth & Inc
+I20.980    
+Q0.903    
+T18.94
+^^
+D3/31/92
+NReinvDiv
+YFID Govt Res
+I1         
+Q10.16    
+T10.16
+^^
+D4/30/92
+NReinvDiv
+YFID Govt Res
+I1         
+Q9.64     
+T9.64
+^^
+D5/31/92
+NReinvDiv
+YFID Govt Res
+I1         
+Q9.77     
+T9.77
+^^
+D6/12/92
+NReinvDiv
+YFID Growth & Inc
+I21.180    
+Q1.078    
+T22.83
+^^
+D6/30/92
+NReinvDiv
+YFID Govt Res
+I1         
+Q9.41     
+T9.41
+^^
+D7/31/92
+NReinvDiv
+YFID Govt Res
+I1         
+Q8.83     
+T8.83
+^^
+D8/31/92
+NReinvDiv
+YFID Govt Res
+I1         
+Q8.53     
+T8.53
+^^
+D9/ 4/92
+NReinvLg 
+YFID Growth & Inc
+I18.890    
+Q10.434   
+T197.09
+^^
+D9/ 4/92
+NReinvSh 
+YFID Growth & Inc
+I18.890    
+Q12.561   
+T237.28
+^^
+D9/ 4/92
+NReinvDiv
+YFID Growth & Inc
+I18.890    
+Q1.215    
+T22.96
+^^
+D9/30/92
+NReinvDiv
+YFID Govt Res
+I1         
+Q7.79     
+T7.79
+^^
+D10/31/92
+NReinvDiv
+YFID Govt Res
+I1         
+Q7.45     
+T7.45
+^^
+D11/13/92
+NBuyX    
+YFID Growth & Inc
+I19.310    
+Q103.573  
+T2,000.00
+MExch From Gov't Reserves
+O0.01
+L[Fidelity Inv]
+$2,000.00
+^^
+D11/13/92
+NSellX   
+YFID Govt Res
+I1         
+Q2,000    
+T2,000.00
+MExch to Growth & Inc
+L[Fidelity Inv]
+$2,000.00
+^^
+D11/16/92
+NBuyX    
+YFID Growth & Inc
+I19.620    
+Q25.484   
+T500.00
+MCash purchase
+L[Dummy Cash]
+$500.00
+^^
+D11/30/92
+NReinvDiv
+YFID Govt Res
+I1         
+Q4.8      
+T4.80
+^^
+D12/ 4/92
+NReinvLg 
+YFID Growth & Inc
+I19.330    
+Q1.961    
+T37.91
+^^
+D12/ 4/92
+NReinvSh 
+YFID Growth & Inc
+I19.330    
+Q0.356    
+T6.88
+^^
+D12/ 4/92
+NReinvDiv
+YFID Growth & Inc
+I19.330    
+Q4.1      
+T79.26
+O0.01
+^^
+D12/31/92
+NReinvDiv
+YFID Govt Res
+I1         
+Q2.78     
+T2.78
+^^
+D1/31/93
+NReinvDiv
+YFID Govt Res
+I1         
+Q2.72     
+T2.72
+^^
+D2/28/93
+NReinvDiv
+YFID Govt Res
+I1         
+Q2.33     
+T2.33
+^^
+D3/12/93
+NReinvDiv
+YFID Growth & Inc
+I20.770    
+Q2.028    
+T42.12
+^^
+D3/24/93
+NBuyX    
+YFID Growth & Inc
+I21.290    
+Q234.852  
+T5,000.00
+Mcash purchase of new shares
+L[Dummy Cash]
+$5,000.00
+^^
+D3/24/93
+NBuyX    
+YFID Cap & Income
+I9.250     
+Q1,081.081
+T10,000.00
+Mcash purchase of new shares
+L[Dummy Cash]
+$10,000.00
+^^
+D3/26/93
+NReinvDiv
+YFID Govt Res
+I1         
+Q2.34     
+T2.34
+^^
+D3/31/93
+NReinvDiv
+YFID Cap & Income
+I9.270     
+Q1.278    
+T11.85
+^^
+D3/31/93
+NReinvDiv
+YFID Govt Res
+I1         
+Q0.26     
+T0.26
+^^
+D3/31/93
+NReinvDiv
+YFID Govt Res
+I1         
+Q2.49     
+T2.49
+^^
+D4/28/93
+NBuyX    
+YFID Eq Inc II
+I17.730    
+Q846.024  
+T15,000.00
+MCash Purchase Shares
+O-0.01
+L[Dummy Cash]
+$15,000.00
+^^
+D4/30/93
+NReinvDiv
+YFID Cap & Income
+I9.300     
+Q5.13     
+T47.71
+^^
+D5/31/93
+NReinvDiv
+YFID Cap & Income
+I9.440     
+Q5.344    
+T50.45
+^^
+D5/31/93
+NReinvDiv
+YFID Govt Res
+I1         
+Q2.57     
+T2.57
+^^
+D6/11/93
+NReinvDiv
+YFID Eq Inc II
+I17.840    
+Q4.268    
+T76.14
+^^
+D6/25/93
+NReinvDiv
+YFID Growth & Inc
+I21.470    
+Q3.286    
+T70.55
+^^
+D6/30/93
+NReinvDiv
+YFID Cap & Income
+I9.600     
+Q23.545   
+T226.03
+^^
+D6/30/93
+NReinvDiv
+YFID Govt Res
+I1         
+Q2.53     
+T2.53
+^^
+D7/31/93
+NReinvDiv
+YFID Cap & Income
+I9.640     
+Q5.689    
+T54.84
+^^
+D7/31/93
+NReinvDiv
+YFID Govt Res
+I1         
+Q2.62     
+T2.62
+^^
+D8/31/93
+NReinvDiv
+YFID Cap & Income
+I9.670     
+Q5.693    
+T55.05
+^^
+D8/31/93
+NReinvDiv
+YFID Govt Res
+I1         
+Q2.67     
+T2.67
+^^
+D9/ 3/93
+NReinvLg 
+YFID Growth & Inc
+I22.180    
+Q6.93     
+T153.71
+^^
+D9/ 3/93
+NReinvSh 
+YFID Growth & Inc
+I22.180    
+Q4.265    
+T94.59
+O-0.01
+^^
+D9/ 3/93
+NReinvDiv
+YFID Growth & Inc
+I22.180    
+Q3.198    
+T70.93
+^^
+D9/10/93
+NReinvDiv
+YFID Eq Inc II
+I18.770    
+Q4.077    
+T76.53
+^^
+D9/16/93
+NBuyX    
+YFID NewMkt Inc
+I11.630    
+Q429.923  
+T5,000.00
+MCash Purchase Shares
+L[Dummy Cash]
+$5,000.00
+^^
+D9/30/93
+NReinvDiv
+YFID Cap & Income
+I9.670     
+Q6.062    
+T58.62
+^^
+D9/30/93
+NReinvDiv
+YFID NewMkt Inc
+I11.600    
+Q1.03     
+T11.95
+^^
+D9/30/93
+NReinvDiv
+YFID Govt Res
+I1         
+Q2.94     
+T2.94
+^^
+D10/31/93
+NReinvDiv
+YFID Cap & Income
+I9.810     
+Q6.287    
+T61.68
+^^
+D10/31/93
+NReinvDiv
+YFID NewMkt Inc
+I12.460    
+Q1.953    
+T24.33
+^^
+D10/31/93
+NReinvDiv
+YFID Govt Res
+I1         
+Q3.03     
+T3.03
+^^
+D11/30/93
+NReinvDiv
+YFID Cap & Income
+I9.860     
+Q6.323    
+T62.34
+^^
+D11/30/93
+NReinvDiv
+YFID NewMkt Inc
+I12.540    
+Q1.955    
+T24.52
+^^
+D11/30/93
+NReinvDiv
+YFID Govt Res
+I1         
+Q2.99     
+T2.99
+^^
+D12/ 3/93
+NReinvDiv
+YFID Growth & Inc
+I21.790    
+Q4.447    
+T96.90
+^^
+D12/ 3/93
+NReinvSh 
+YFID Growth & Inc
+I21.790    
+Q4.447    
+T96.90
+^^
+D12/ 3/93
+NReinvLg 
+YFID Growth & Inc
+I21.790    
+Q5.28     
+T115.06
+O0.01
+^^
+D12/17/93
+NReinvDiv
+YFID Eq Inc II
+I18.240    
+Q8.431    
+T153.79
+O0.01
+^^
+D12/17/93
+NReinvSh 
+YFID Eq Inc II
+I18.240    
+Q20.141   
+T367.38
+O0.01
+^^
+D12/17/93
+NReinvLg 
+YFID Eq Inc II
+I18.240    
+Q11.71    
+T213.59
+^^
+D12/17/93
+NReinvSh 
+YFID NewMkt Inc
+I12.710    
+Q5.817    
+T73.93
+^^
+D12/31/93
+NReinvDiv
+YFID Cap & Income
+I9.860     
+Q15.973   
+T157.49
+^^
+D12/31/93
+NReinvDiv
+YFID NewMkt Inc
+I13.070    
+Q3.461    
+T45.24
+^^
+D12/31/93
+NReinvDiv
+YFID Govt Res
+I1         
+Q3.15     
+T3.15
+^^
+D1/ 7/94
+NReinvSh 
+YFID Eq Inc II
+I18.690    
+Q1.436    
+T26.84
+^^
+D1/31/94
+NReinvDiv
+YFID Cap & Income
+I10.100    
+Q6.457    
+T65.22
+^^
+D1/31/94
+NReinvDiv
+YFID NewMkt Inc
+I13.510    
+Q1.64     
+T22.16
+^^
+D1/31/94
+NReinvDiv
+YFID Govt Res
+I1         
+Q3.09     
+T3.09
+^^
+D2/ 4/94
+NReinvSh 
+YFID NewMkt Inc
+I13.310    
+Q6.699    
+T89.16
+^^
+D2/28/94
+NReinvDiv
+YFID Cap & Income
+I10.050    
+Q5.247    
+T52.73
+^^
+D2/28/94
+NReinvDiv
+YFID NewMkt Inc
+I11.910    
+Q1.903    
+T22.66
+^^
+D2/28/94
+NReinvDiv
+YFID Govt Res
+I1         
+Q2.77     
+T2.77
+^^
+D3/11/94
+NReinvDiv
+YFID Eq Inc II
+I18.680    
+Q4.317    
+T80.64
+^^
+D3/18/94
+NReinvDiv
+YFID Growth & Inc
+I22.680    
+Q2.733    
+T61.98
+^^
+D3/31/94
+NReinvDiv
+YFID Cap & Income
+I9.740     
+Q6.054    
+T58.97
+^^
+D3/31/94
+NReinvDiv
+YFID NewMkt Inc
+I10.080    
+Q2.166    
+T21.83
+^^
+D3/31/94
+NReinvDiv
+YFID Govt Res
+I1         
+Q3.17     
+T3.17
+^^
+D4/30/94
+NReinvDiv
+YFID Cap & Income
+I9.590     
+Q5.837    
+T55.98
+^^
+D4/30/94
+NReinvDiv
+YFID NewMkt Inc
+I9.620     
+Q1.669    
+T16.06
+^^
+D4/30/94
+NReinvDiv
+YFID Govt Res
+I1         
+Q3.29     
+T3.29
+^^
+D5/31/94
+NReinvDiv
+YFID Cap & Income
+I9.530     
+Q6.05     
+T57.66
+^^
+D5/31/94
+NReinvDiv
+YFID NewMkt Inc
+I10.090    
+Q1.567    
+T15.81
+^^
+D5/31/94
+NReinvDiv
+YFID Govt Res
+I1         
+Q3.67     
+T3.67
+^^
+D6/17/94
+NReinvDiv
+YFID Growth & Inc
+I22.070    
+Q2.821    
+T62.26
+^^
+D6/17/94
+NReinvDiv
+YFID Eq Inc II
+I18.920    
+Q4.759    
+T90.04
+^^
+D6/30/94
+NReinvDiv
+YFID Cap & Income
+I9.180     
+Q29.521   
+T271.00
+^^
+D6/30/94
+NReinvDiv
+YFID NewMkt Inc
+I9.490     
+Q2.224    
+T21.11
+^^
+D6/30/94
+NReinvDiv
+YFID Govt Res
+I1         
+Q3.82     
+T3.82
+^^
+D7/31/94
+NReinvDiv
+YFID Cap & Income
+I9.190     
+Q6.766    
+T62.18
+^^
+D7/31/94
+NReinvDiv
+YFID NewMkt Inc
+I9.680     
+Q2.405    
+T23.28
+^^
+D7/31/94
+NReinvDiv
+YFID Govt Res
+I1         
+Q4.18     
+T4.18
+^^
+!Type:Memorized
+T-200.00
+C*
+PCash Withdrawal
+LCash
+KP
+^^
+T1,458.34
+C*
+PPQR Net Pay
+LSalary
+KD
+^^

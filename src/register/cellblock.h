@@ -1,3 +1,23 @@
+/********************************************************************\
+ * This program is free software; you can redistribute it and/or    *
+ * modify it under the terms of the GNU General Public License as   *
+ * published by the Free Software Foundation; either version 2 of   *
+ * the License, or (at your option) any later version.              *
+ *                                                                  *
+ * This program is distributed in the hope that it will be useful,  *
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of   *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    *
+ * GNU General Public License for more details.                     *
+ *                                                                  *
+ * You should have received a copy of the GNU General Public License*
+ * along with this program; if not, contact:                        *
+ *                                                                  *
+ * Free Software Foundation           Voice:  +1-617-542-5942       *
+ * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
+ * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ *                                                                  *
+\********************************************************************/
+
 /* 
  * FILE:
  * cellblock.h
@@ -34,26 +54,24 @@
  * HISTORY:
  * Copyright (c) 1988 Linas Vepstas
  */
-/********************************************************************\
- * This program is free software; you can redistribute it and/or    *
- * modify it under the terms of the GNU General Public License as   *
- * published by the Free Software Foundation; either version 2 of   *
- * the License, or (at your option) any later version.              *
- *                                                                  *
- * This program is distributed in the hope that it will be useful,  *
- * but WITHOUT ANY WARRANTY; without even the implied warranty of   *
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    *
- * GNU General Public License for more details.                     *
- *                                                                  *
- * You should have received a copy of the GNU General Public License*
- * along with this program; if not, write to the Free Software      *
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
-\********************************************************************/
 
 #ifndef __XACC_CELL_BLOCK_H__
 #define __XACC_CELL_BLOCK_H__
 
 #include "basiccell.h"
+
+enum _Alignments {
+  ALIGN_RIGHT,
+  ALIGN_CENTER,
+  ALIGN_LEFT,
+  ALIGN_FILL,
+};
+
+#ifdef MOTIF
+typedef unsigned char Alignments;
+#else
+typedef enum _Alignments Alignments;
+#endif
 
 struct _CellBlock {
 
@@ -67,23 +85,35 @@ struct _CellBlock {
    */
   BasicCell ***cells;  /* row-col array */
 
+  short **cell_types;  /* row-col array of the cell types in splitreg.h */
+  
   /* The active_bg_color is the default color (in argb) for the cell
    * backgrounds when this cell block needs to be "highlighted" in 
    * some way (typically, when this cellblock represents the
    * the currently active cursor).
    *
    * The passive_bg_color is the default color for the cell background
-   * (in argb format) when the cell block is not highlighted.
+   * (in argb format) of the first row when the cell block is not highlighted.
+   *
+   * The passive_bg_color2 is the default color for cell backgrounds
+   * in other rows of the cellblock when it is not highlighted.
    */
-  uint32 active_bg_color;
-  uint32 passive_bg_color;
+  guint32 active_bg_color;
+  guint32 passive_bg_color;
+  guint32 passive_bg_color2;
 
   /* other attributes */
   short         *widths;        /* column widths */
-  unsigned char *alignments;    /* column text alignments */
+  Alignments *alignments;    /* column text alignments */
 
   short     **right_traverse_r;
   short     **right_traverse_c;
+  short     **left_traverse_r;
+  short     **left_traverse_c;
+  short     right_exit_r;
+  short     right_exit_c;
+  short     left_exit_r;
+  short     left_exit_c;
   /* the above arrays have dimension of numRows*numCols.
    * the are automatically created and managed by the routines below.
    * The control the tab-traversal order through this cell block.
@@ -91,17 +121,19 @@ struct _CellBlock {
    * on the keyboard will take input-focus to cell (inext,jnext), where
    * inext = right_traverse_r[i][j] and jnext = right_traverse_c[i][j].
    *
-   * Note that left-traversing arrays could be defined (for when
-   * shift-tab is hit), but we haven't (yet) done so.
+   *  (exit_r, exit_c) is the last cell of this tab group.
    */
 
-  /* the last-reneter row and column should contain the very last
+  /* the last-reenter row and column should contain the very last
    * cell when the cursor was traversed out of.  They determine 
    * the first cell that will be entered (since the first follows 
    * the last).
    */
   short last_reenter_traverse_row;
   short last_reenter_traverse_col;
+
+  short last_left_reenter_traverse_row;
+  short last_left_reenter_traverse_col;
 
   void * user_data;
   /* above is a pointer to anything the programmer-user of this struct
@@ -117,7 +149,10 @@ void        xaccInitCellBlock (CellBlock *, int numrows, int numcols);
 void        xaccDestroyCellBlock (CellBlock *);
 
 /* define next cell to traverse to */
-void        xaccNextRight (CellBlock *, int row,      int col, 
+void        xaccNextRight (CellBlock *, int row,      int col,
                                         int next_row, int next_col);
+
+void        xaccNextLeft (CellBlock *arr, int row,      int col,
+                                          int next_row, int next_col);
 
 #endif /* __XACC_CELL_BLOCK_H__ */

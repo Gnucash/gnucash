@@ -1,40 +1,3 @@
-/*
- * FILE:
- * table-allgui.h
- *
- * FUNCTION:
- * The Table object defines the structure and the GUI required
- * to display a two-dimensional grid.  It provides several 
- * important functions:
- * -- an array of strings, one for each cell of the displayed table.
- *    These strings are kept in sync with what the user sees in 
- *    the GUI (although they may be out of sync in  currently 
- *    edited row(s)).
- * -- an array of cell-block handlers.  The handlers provide
- *    the actual GUI editing infrastructure: the handlers 
- *    ake sure that only allowed edits are made to a block
- *    of cells.
- * -- The "cursor", which defines the region of cells that 
- *    are currently being edited.
- * -- A lookup table that maps physical row/column addresses
- *    to the cellblock handlers that know how to handle edits
- *    to the physical, display cells.
- * -- A table of user-defined data hooks that can be associated 
- *    with each cell block.  By "user" we ean the prograer who
- *    makes use of this object.
- * -- Tab-traversing mechanism so that operator can tab in a
- *    predefined order between cells.
- *
- * Please see the file "design.txt" for additional information.
- *
- * This implements the gui-independent parts of the table 
- * infrastructure.  Additional, GUI-dependent parts are implemented
- * in table-gtk.c and table-motif.c
- *
- * HISTORY:
- * Copyright (c) 1998 Linas Vepstas
- */
-
 /********************************************************************\
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -47,19 +10,103 @@
  * GNU General Public License for more details.                     *
  *                                                                  *
  * You should have received a copy of the GNU General Public License*
- * along with this program; if not, write to the Free Software      *
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
+ * along with this program; if not, contact:                        *
+ *                                                                  *
+ * Free Software Foundation           Voice:  +1-617-542-5942       *
+ * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
+ * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ *                                                                  *
 \********************************************************************/
+
+/*
+ * FILE:
+ * table-allgui.h
+ *
+ * FUNCTION:
+ * The Table object defines the structure and the GUI required
+ * to display a two-dimensional grid.  It provides several 
+ * important functions:
+ * -- an array of strings, one for each cell of the displayed table.
+ *    These strings are kept in sync with what the user sees in 
+ *    the GUI (although they may be out of sync in currently 
+ *    edited row(s)).
+ * -- an array of cell-block handlers.  The handlers provide
+ *    the actual GUI editing infrastructure: the handlers 
+ *    make sure that only allowed edits are made to a block
+ *    of cells.
+ * -- The "cursor", which defines the region of cells that 
+ *    are currently being edited.
+ * -- A lookup table that maps physical row/column addresses
+ *    to the cellblock handlers that know how to handle edits
+ *    to the physical, display cells.
+ * -- A table of user-defined data hooks that can be associated 
+ *    with each cell block.  By "user" we mean the programmer who
+ *    makes use of this object.
+ * -- Tab-traversing mechanism so that operator can tab in a
+ *    predefined order between cells.
+ *
+ * Please see the file "design.txt" for additional information.
+ *
+ * This implements the gui-independent parts of the table 
+ * infrastructure.  Additional, GUI-dependent parts are implemented
+ * in table-gtk.c and table-motif.c
+ *
+ * CONCEPTS:
+ * The following apply to the rows in a table:
+ * -- a phys row can belong to only one virt row at a time.
+ * -- a cursor is always the same size as the virt row its on,
+ * -- there is only one cursor for a given virt row.
+ * -- there is no overlap; a phys row can only belong to one virt row.
+ *
+ * Lets say there are three cursors T(rans),S(plit), and B(lank).  
+ * Lets say that these are used to 'print' the following table layout:
+ * 
+ *       virt row 1   T
+ *       virt row 2   S
+ *       virt row 3   B
+ *       virt row 4   T
+ *       virt row 5   S
+ *       virt row 6   S
+ *       virt row 7   S
+ *       virt row 8   S
+ *       virt row 9   B
+ *
+ * You can see there is only one cursor per virt row.  There is no overlap
+ * between cursors and virt rows, the correspondence is one to one.  Note
+ * that the three cursors T,S and B may consist of one, or more phys rows,
+ * e.g. B and S may be one line each, but T may be two lines.  Thus, we 
+ * have the following physical layout:
+ *
+ *      phys row 1    virt row 1   T
+ *      phys row 2    virt row 1   T
+ *      phys row 3    virt row 2   S
+ *      phys row 4    virt row 3   B
+ *      phys row 5    virt row 4   T
+ *      phys row 6    virt row 4   T
+ *      phys row 7    virt row 5   S
+ *      phys row 8    virt row 6   S
+ *      phys row 9    virt row 7   S
+ *      phys row 10   virt row 8   S
+ *      phys row 11   virt row 9   B
+ *
+ * This layout remains static until the next time that the table is 
+ * re-'printed'.
+ *
+ * HISTORY:
+ * Copyright (c) 1998,1999,2000 Linas Vepstas
+ */
 
 #ifndef __XACC_TABLE_ALLGUI_H__
 #define __XACC_TABLE_ALLGUI_H__
+
+#include <glib.h>
 
 #ifdef MOTIF
 #include "table-motif.h"
 #endif 
 
 #ifdef GNOME
-#include "table-gtk.h"
+#include "table-gnome.h"
 #endif 
 
 #ifdef KDE
@@ -79,7 +126,7 @@ typedef enum {
   GNC_TABLE_TRAVERSE_DOWN
 } gncTableTraversalDir;
 
-/* the Locator structure is used provide a mapping from
+/* The Locator structure is used provide a mapping from
  * the physical array of cells to the logical array of 
  * virtual cell blocks.
  *
@@ -99,6 +146,24 @@ struct _Locator {
 };
 
 typedef struct _Locator Locator;
+
+/*  The RevLocator gives a reverse mapping from a virtual
+ *  cell block to the origin of the block in physical coordinates.
+ *
+ *  There is one instance of a RevLocator for each virtual cell.
+ */
+
+struct _RevLocator {
+  short phys_row;
+  short phys_col;
+};
+
+typedef struct _RevLocator RevLocator;
+
+typedef void (*TableSetHelpFunc) (Table *table,
+                                  const char *help_str,
+                                  void *client_data);
+
 
 /* The number of "physical" rows/cols is the number
  * of displayed one-line gui rows/cols in the table.
@@ -138,13 +203,18 @@ struct _Table {
 
   /* callback that is called when the cursor is moved */
   /* hack alert -- this should be a callback list, actually */
-  void (*move_cursor) (Table *, int *p_new_phys_row, 
-                                int *p_new_phys_col, 
+  void (*move_cursor) (Table *, int *p_new_phys_row,
+                                int *p_new_phys_col,
                                 void *client_data);
+
   /* callback that is called to determine traversal */
-  void  (*traverse)  (Table *,  int *p_new_phys_row, 
-                                int *p_new_phys_col, 
+  void  (*traverse)  (Table *,  int *p_new_phys_row,
+                                int *p_new_phys_col,
+                                gncTableTraversalDir dir,
                                 void *client_data);
+
+  TableSetHelpFunc set_help;
+
   void * client_data;
 
   /* string values for each cell, 
@@ -154,12 +224,22 @@ struct _Table {
   /* background colors for each cell, format ARGB, 
    * and foreground (text) colors, format ARGB,
    * of dimension num_phys_rows * num_phys_cols */
-  uint32 **bg_colors;
-  uint32 **fg_colors;
+  guint32 **bg_colors;
+  guint32 **fg_colors;
+
+  /* Determines whether the passive background
+   * colors alternate between odd and even virt
+   * rows, or between the first and non-first
+   * physical rows within cellblocks. */
+  gncBoolean alternate_bg_colors;
 
   /* handler locators for each cell, 
    * of dimension num_phys_rows * num_phys_cols */
   Locator ***locators;
+
+  /* reverse locators for each cell,
+     of dimension num_virt_rows * num_virt_cols */
+  RevLocator ***rev_locators;
 
   /* user hooks, of dimension num_virt_rows * num_virt_cols */
   void ***user_data;
@@ -180,9 +260,6 @@ struct _Table {
   int prev_phys_traverse_row;
   int prev_phys_traverse_col;
 
-  int reverify_phys_row;
-  int reverify_phys_col;
-   
   /* Since we are using C not C++, but we need inheritance, 
    * cock it up with a #defined thingy that the "derived class" 
    * can specify.
@@ -249,10 +326,11 @@ void        xaccRefreshHeader (Table *);
  *    the cursor with respect to a physical row/column position, 
  *    and if the resulting virtual position has changed, commits 
  *    the changes in the old position, and the repositions the 
- *    cursor & gui to the new position.
+ *    cursor & gui to the new position. Returns true if the
+ *    cursor was repositioned.
  */
 
-void
+gncBoolean
 xaccVerifyCursorPosition (Table *table, int phys_row, int phys_col);
 
 /*
@@ -268,17 +346,6 @@ void * xaccGetUserData (Table *table, int phys_row, int phys_col);
 /* ==================================================== */
 /* these are used internally by table-{motif,gtk}.c
    perhaps these should go in a table-allguiP.h  
-
-   They were also ripped more or less straight out of table-motif.c
-   and just made UI independent.  In the long run, they should
-   probably be rewritten to have even clearer interfaces/semantics.
-   For now, though, this will do.
-
-   Function bodies may also be a little contorted, but that's because
-   I had to be careful to only make changes that preserved all the
-   previous invariants.  Sometimes the most careful change may not
-   have been the clearest.
-   
 */
 
 int
@@ -286,34 +353,80 @@ gnc_table_column_width(Table *table, int col);
 
 void 
 wrapVerifyCursorPosition (Table *table, int row, int col);
- 
-int
-gnc_register_cell_valid(Table *table, int row, int col);
+
+gncBoolean
+gnc_register_cell_valid(Table *table, int row, int col,
+                        gncBoolean exact_pointer);
 
 void        
-doRefreshCursorGUI (Table * table, CellBlock *curs, int from_row, int from_col);
+doRefreshCursorGUI (Table * table, CellBlock *curs,
+                    int from_row, int from_col, gncBoolean do_scroll);
 
 void        
-xaccRefreshCursorGUI (Table * table);
+xaccRefreshCursorGUI (Table * table, gncBoolean do_scroll);
 
-void
-gnc_table_enter_update(Table *table, int row, int col, char **new_text);
-
-void
-gnc_table_leave_update(Table *table, int row, int col,
-                       const char* old_text,
-                       char **new_text);
+/* 
+ * gnc_table_enter_update() is a utility function used to determine
+ * how the gui will respond.  If it returns NULL, then the GUI will
+ * map an editing widget onto this cell, and allow user input. If 
+ * it returns non-null, then the returned value will be used as the 
+ * new cell value, and an editor for the cell will not be mapped
+ * (viz, the user will be prevented from updating the cell).
+ * The function is also passed pointers to the current cursor
+ * position, start selection position, and end selection position.
+ * If the function returns NULL, then it may change any of those
+ * values and the mapped editing widget will be modified accordingly.
+ *
+ * Note: since this is an internal-use-only routine, if you do not 
+ * like this semantic, cut&paste this code and change it to suit you. 
+ * However, don't just change it, because it will break functional code.
+ */
+const char *
+gnc_table_enter_update(Table *table,
+                       int row, int col,
+                       int *cursor_position,
+                       int *start_selection,
+                       int *end_selection);
 
 const char *
-gnc_table_modify_update(Table *table, int row, int col,
+gnc_table_leave_update(Table *table,
+                       int row, int col,
+                       const char* old_text);
+
+const char *
+gnc_table_modify_update(Table *table,
+                        int row, int col,
                         const char *oldval,
                         const char *change,
-                        char *newval);
+                        char *newval,
+                        int *cursor_position,
+                        int *start_selection,
+                        int *end_selection);
+
 gncBoolean
-gnc_table_traverse_update(Table *table, int row, int col,
+gnc_table_direct_update(Table *table,
+                        int row, int col,
+                        const char *oldval,
+                        char **newval_ptr,
+                        int *cursor_position,
+                        int *start_selection,
+                        int *end_selection,
+                        void *gui_data);
+
+gncBoolean
+gnc_table_traverse_update(Table *table,
+                          int row, int col,
                           gncTableTraversalDir dir,
                           int *dest_row,
                           int *dest_col);
+
+/* Find the closest valid horizontal cell. If exact_cell is true,
+ * cells that must be explicitly selected by the user (as opposed
+ * to just tabbing into), are considered valid cells. */
+gncBoolean
+gnc_table_find_valid_cell_horiz(Table *table, int *row, int *col,
+                                gncBoolean exact_cell);
+
 
 /* ==================================================== */
 /* 

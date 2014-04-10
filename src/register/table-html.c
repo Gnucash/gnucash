@@ -1,3 +1,23 @@
+/********************************************************************\
+ * This program is free software; you can redistribute it and/or    *
+ * modify it under the terms of the GNU General Public License as   *
+ * published by the Free Software Foundation; either version 2 of   *
+ * the License, or (at your option) any later version.              *
+ *                                                                  *
+ * This program is distributed in the hope that it will be useful,  *
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of   *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    *
+ * GNU General Public License for more details.                     *
+ *                                                                  *
+ * You should have received a copy of the GNU General Public License*
+ * along with this program; if not, contact:                        *
+ *                                                                  *
+ * Free Software Foundation           Voice:  +1-617-542-5942       *
+ * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
+ * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ *                                                                  *
+\********************************************************************/
+
 /*
  * FILE:
  * table-html.c
@@ -27,22 +47,6 @@
  * HISTORY:
  * Copyright (c) 1998 Linas Vepstas
  */
-
-/********************************************************************\
- * This program is free software; you can redistribute it and/or    *
- * modify it under the terms of the GNU General Public License as   *
- * published by the Free Software Foundation; either version 2 of   *
- * the License, or (at your option) any later version.              *
- *                                                                  *
- * This program is distributed in the hope that it will be useful,  *
- * but WITHOUT ANY WARRANTY; without even the implied warranty of   *
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    *
- * GNU General Public License for more details.                     *
- *                                                                  *
- * You should have received a copy of the GNU General Public License*
- * along with this program; if not, write to the Free Software      *
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
-\********************************************************************/
 
 #include <errno.h>
 #include <fcntl.h>
@@ -89,7 +93,7 @@ xaccTableDumpHTML (Table * table, int fd)
    fh = fdopen (fd, "a");
    if (!fh) {
       int norr = errno;
-      PERR ("xaccTableDumpHTML(): can't open fd=%d \n"
+      PERR ("can't open fd=%d \n"
             "\t(%d) %s \n", fd, norr, strerror (norr));
       return 0;
    }
@@ -156,7 +160,7 @@ xaccTablePrintHTML (Table * table, char *filename)
    fd = open (filename, O_CREAT | O_APPEND | O_WRONLY, S_IRUSR | S_IWUSR);
    if (0 > fd) {
       int norr = errno;
-      PERR ("xaccTablePrintHTML(): can't open file %s\n"
+      PERR ("can't open file %s\n"
             "\t(%d) %s\n", filename, norr, strerror (norr));
       return 0;
    }
@@ -172,7 +176,7 @@ xaccTablePrintHTML (Table * table, char *filename)
 #define CHKERR(val, msg) {						\
    if (0 > val) {							\
       int norr = errno;							\
-      PERR ("Error: xaccTableWebServeHTML(): " msg "\n"			\
+      PERR ( msg "\n"							\
             "(%d) %s \n", norr, strerror (norr));			\
       if (pid) return;							\
       exit (0);								\

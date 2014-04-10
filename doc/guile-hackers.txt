@@ -1,0 +1,118 @@
+-*-text-*-
+
+This file is intended to contain information for those interested in
+working on the guile bits of GnuCash.
+
+I've recently added some GUI functions callable from scheme.  This is
+generally pretty straightforward, and you can look in the code to see
+how I did it, but there are a few bits you have to be careful about.
+
+One of the main sources of useful information is "info guile-ref".
+This contains the documentation for all the guile C-side functions
+like gh_car(), gh_append(), etc. that manipulate opaque SCM objects
+from the guile side.
+
+Given that and a reasonable understanding of GTK/GNOME, you should be
+able to follow what I've done.
+
+Introduction To Scheme and guile(rgmerk)
+--------------------------------
+Please skip this if you already know what Scheme is and why it's
+so cool . . . 
+
+Scheme is a dialect of LISP (List Programming), one of the earliest
+programming languages.  It makes so many things easy it's just not
+funny.  It can be a little confusing for people raised on C and Java, 
+but any time taken to learn it is made up for with easier-to-write,
+easier-to-debug, more reusable,  and more robust code.
+
+Guile is an implementation of standard Scheme which is easily
+embeddable in C, making multi-language development relatively
+straightforward.  You can easily access data and procedures from
+either end.  Guile supports a superset of R4RS (the Scheme standard).  
+For initial experimentation, you can  use Guile as an interactive Scheme 
+shell to play around with the system.  
+
+SLIB is a a library for Scheme implementations (including guile)
+that implements a large collection of useful data structures
+and algorithms.
+
+FIXME: Starting gnucash as a guile shell. .. 
+
+While the Guile documentation (in info format) explains
+Guile specifics, it doesn't have much information about Scheme,
+the language.  The Internet Scheme Repository:
+
+http://www.cs.indiana.edu/scheme-repository/home.html
+
+has quite a useful collection of information, including 
+FAQs, online copies of the Scheme standard (which is actually
+quite readable and useful), and pointers to web tutorials
+and other resources.   
+
+g-wrap
+------
+
+g-wrap is the tool used to automate the wrapping of C functions to
+make them callable from the guile code.  g-wrap is now maintained by
+Rob Browning and is available from ftp://ftp.gnucash.org/pub/g-wrap,
+or as a Debian package from http://www.cs.mu.oz.au/~rgmerk/software.
+Documentation in info format is distributed as part of the package.
+Available C functions are wrapped in gnucash/src/g-wrap/gnc.gwp.
+Pointers are wrapped using some stuff in
+gnucash/lib/g-wrap/guile/pointer.scm which is not documented but looks
+reasonably straightforward.
+
+
+Garbage collection:
+-------------------
+
+One issue to keep in mind is that of garbage collection.  You cannot
+pass a scheme side item to the C side (through a SCM) and then store
+that object off somewhere on the C side such that it lives longer than
+all of it's guile side references.  If you do, you're likely to get a
+crash.  The problem is that guile's garbage collector only knows to
+save guile items that still have guile side pointers, or that are
+found somewhere on the current C side stack.  If you store a SCM item
+off in a C data structure (say a callback pointer), and then return to
+the guile side and drop the guile-side reference to the item, guile
+may garbage collect it before it's used by the C side.
+
+For example, this psudeo-code is a problem:
+
+  void gnc_some_function(SCM scm_thunk) {
+    gnc_set_push_button_callback(some_button, scm_thunk);
+  }
+
+  (define (unsafe-guile-function)
+    (let ((my-callback (lambda () (display "Hello\n"))))
+      (gnc:some-function my-callback)))
+
+The problem here is that if you call unsafe-guile-function, it
+registers the pointer to the anonymous lambda created in the let
+construct with the button on the C-side and then returns.  As soon as
+it returns, guile has no more references to the anonymous lambda, and
+it's not on the C stack, so guile thinks it's OK to garbage collect
+the function even though the C side has a pointer to it and may still
+use it.
+
+The moral of this story is that if you need to have the C side ferret
+away a scheme item for later, you must also keep at least one
+reference to that item on the guile side until the C side is finished
+with it.  I believe that the guile people have recently come up with a
+nice general solution to this problem, but until that's generally
+available, there are a number of ways you can solve this.
+
+If nothing else, you can just create a global hash on the guile side,
+place the object in question in the hash table, and then have the
+C-side delete that item from the hash when it's finished with it.
+
+
+Guile Interrupts:
+-----------------
+
+Another issue that I'm not quite sure of myself yet is that of
+interrupts.  Guile has the ability to protect certain segments of code
+with SCM_DEFER_INTS/SCM_ALLOW_INTS, but at the moment I'm not sure
+when this is required.  If anyone gets the chance to check this out
+before I do, then please edit this file and put your findings here.

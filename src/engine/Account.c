@@ -1,7 +1,7 @@
 /********************************************************************\
  * Account.c -- the Account data structure                          *
  * Copyright (C) 1997 Robin D. Clark                                *
- * Copyright (C) 1997, 1998, 1999 Linas Vepstas                     *
+ * Copyright (C) 1997, 1998, 1999, 2000 Linas Vepstas               *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -14,13 +14,12 @@
  * GNU General Public License for more details.                     *
  *                                                                  *
  * You should have received a copy of the GNU General Public License*
- * along with this program; if not, write to the Free Software      *
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
+ * along with this program; if not, contact:                        *
  *                                                                  *
- *   Author: Rob Clark                                              *
- * Internet: rclark@cs.hmc.edu                                      *
- *  Address: 609 8th Street                                         *
- *           Huntington Beach, CA 92648-4632                        *
+ * Free Software Foundation           Voice:  +1-617-542-5942       *
+ * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
+ * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ *                                                                  *
 \********************************************************************/
 
 #include <assert.h>
@@ -30,9 +29,10 @@
 
 #include "Account.h"
 #include "AccountP.h"
+#include "date.h"
+#include "GNCIdP.h"
 #include "Group.h"
 #include "GroupP.h"
-#include "date.h"
 #include "messages.h"
 #include "Queue.h"
 #include "Transaction.h"
@@ -60,13 +60,14 @@ static short module = MOD_ENGINE;
 
 /********************************************************************\
  * Because I can't use C++ for this project, doesn't mean that I    *
- * can't pretend too!  These functions perform actions on the       *
+ * can't pretend to!  These functions perform actions on the        *
  * account data structure, in order to encapsulate the knowledge    *
  * of the internals of the Account in one file.                     *
 \********************************************************************/
 
 /********************************************************************\
 \********************************************************************/
+
 void
 xaccInitAccount (Account * acc)
 {
@@ -76,30 +77,35 @@ xaccInitAccount (Account * acc)
   acc->parent   = NULL;
   acc->children = NULL;
 
-  acc->balance  = 0.0;
+  acc->balance = 0.0;
   acc->cleared_balance = 0.0;
   acc->reconciled_balance = 0.0;
-  acc->running_balance  = 0.0;
-  acc->running_cleared_balance = 0.0;
-  acc->running_reconciled_balance = 0.0;
+
+  acc->share_balance = 0.0;
+  acc->share_cleared_balance = 0.0;
+  acc->share_reconciled_balance = 0.0;
 
   acc->flags = 0;
   acc->type  = -1;
   acc->accInfo = NULL;
-  
-  acc->accountName = NULL;
-  acc->accountCode = NULL;
-  acc->description = NULL;
-  acc->notes       = NULL;
-  acc->currency    = NULL;
-  acc->security    = NULL;
-  
+
+  acc->accountName = strdup("");
+  acc->accountCode = strdup("");
+  acc->description = strdup("");
+  acc->notes       = strdup("");
+  acc->currency    = strdup("");
+  acc->security    = strdup("");
+
   acc->numSplits   = 0;
   acc->splits      = (Split **) _malloc (sizeof (Split *));
   acc->splits[0]   = NULL;
-  
+
   acc->changed     = 0;
   acc->open        = 0;
+  acc->mark        = 0;
+
+  xaccGUIDNew(&acc->guid);
+  xaccStoreEntity(acc, &acc->guid, GNC_ID_ACCOUNT);
 }
 
 /********************************************************************\
@@ -124,10 +130,12 @@ xaccFreeAccount( Account *acc )
   Transaction *t;
 
   if (NULL == acc) return;
-    
+
+  xaccRemoveEntity(&acc->guid);
+
   /* First, recursively free children */
   xaccFreeAccountGroup (acc->children);
-  
+
   /* Next, clean up the splits */
   /* any split pointing at this account needs to be unmarked */
   for (i=0; i<acc->numSplits; i++) {
@@ -152,7 +160,7 @@ xaccFreeAccount( Account *acc )
   _free (acc->splits);
   acc->splits = NULL;
   acc->numSplits = 0;
-  
+
   /* Finally, clean up the account info */
   if (acc->accInfo) xaccFreeAccInfo (acc->accInfo); 
   acc->accInfo = NULL;
@@ -174,17 +182,22 @@ xaccFreeAccount( Account *acc )
   acc->cleared_balance = 0.0;
   acc->reconciled_balance = 0.0;
 
+  acc->share_balance = 0.0;
+  acc->share_cleared_balance = 0.0;
+  acc->share_reconciled_balance = 0.0;
+
   acc->flags = 0;
   acc->type  = -1;
-  
+
   acc->accountName = NULL;
   acc->description = NULL;
   acc->notes       = NULL;
   acc->currency    = NULL;
   acc->security    = NULL;
-  
+
   acc->changed     = 0;
   acc->open        = 0;
+  acc->mark        = 0;
 
   _free(acc);
 }
@@ -211,6 +224,43 @@ xaccAccountCommitEdit (Account *acc)
 /********************************************************************\
 \********************************************************************/
 
+const GUID *
+xaccAccountGetGUID (Account *account)
+{
+  if (!account)
+    return xaccGUIDNULL();
+
+  return &account->guid;
+}
+
+/********************************************************************\
+\********************************************************************/
+
+void 
+xaccAccountSetGUID (Account *account, GUID *guid)
+{
+  if (!account || !guid) return;
+
+  xaccRemoveEntity(&account->guid);
+
+  account->guid = *guid;
+
+  xaccStoreEntity(account, &account->guid, GNC_ID_ACCOUNT);
+}
+
+/********************************************************************\
+\********************************************************************/
+
+Account *
+xaccAccountLookup (const GUID *guid)
+{
+  if (!guid) return NULL;
+  return xaccLookupEntity(guid, GNC_ID_ACCOUNT);
+}
+
+/********************************************************************\
+\********************************************************************/
+
 int
 xaccGetAccountID (Account *acc)
 {
@@ -231,10 +281,72 @@ xaccGetAccountFlags (Account *acc)
 /********************************************************************\
 \********************************************************************/
 
+short
+xaccAccountGetMark (Account *acc)
+{
+  if (!acc) return 0;
+  return acc->mark;
+}
+
+void
+xaccAccountSetMark (Account *acc, short m)
+{
+  if (!acc) return;
+  acc->mark = m;
+}
+
+void
+xaccClearMark (Account *acc, short val)
+{
+   AccountGroup *topgrp;
+
+   if (!acc) return;
+   topgrp = xaccGetAccountRoot (acc);
+   if (topgrp) {
+      int i, nacc = topgrp->numAcc;
+      for (i=0; i<nacc; i++) {
+         xaccClearMarkDown (topgrp->account[i], val);
+      }
+   } else {
+      xaccClearMarkDown (acc, val);
+   }
+}
+
+void
+xaccClearMarkDown (Account *acc, short val)
+{
+   AccountGroup *chillin;
+   if (!acc) return;
+   acc->mark = val;
+
+   chillin = acc->children;
+   if (chillin) {
+      int i, nacc = chillin->numAcc;
+      for (i=0; i<nacc; i++) {
+         xaccClearMarkDown (chillin->account[i], val);
+      }
+   }
+}
+
+void
+xaccClearMarkDownGr (AccountGroup *grp, short val)
+{
+   int i, nacc;
+   if (!grp) return;
+   nacc = grp->numAcc;
+   for (i=0; i<nacc; i++) {
+      xaccClearMarkDown (grp->account[i], val);
+   }
+}
+
+
+/********************************************************************\
+\********************************************************************/
+
 #define CHECK(acc) {					\
    if (0 == acc->open) {				\
       /* not today, some day in the future ... */	\
-      /* printf ("Error: Account not open for editing\n"); */	\
+      /* PERR ("Account not open for editing\n"); */	\
       /* assert (0); */					\
       /* return; */					\
    }							\
@@ -247,49 +359,44 @@ xaccGetAccountFlags (Account *acc)
 void
 xaccAccountInsertSplit ( Account *acc, Split *split )
 {
-  int  i,j;
+  int i,j;
   Split **oldsplits;
   Account *oldacc;
 
   if (!acc) return;
   if (!split) return;
-  CHECK (acc);
 
-  /* if this split belongs to another account, make sure that
-   * the moving it is allowed by the currency denominations of 
-   * the old and new accounts. Basically, both old and new accounts
-   * must be denominated in the same currency.
-   */
-/*
-hack alert -- in fact this logic is wildly incorrect;
-disable for now till we figure out what the right thing is.
-  if (split->acc) {
-    if (acc->currency) {
-       if (!(split->acc->currency)) return;
-       if (strcmp (acc->currency, split->acc->currency)) return;
-    }  else { 
-       if (split->acc->currency) return;
-    }
+  /* Make sure the currencies in the transaction will still
+   * be acceptable. This means either the currency or the security
+   * of the new account must be 'in common' with the currencies used
+   * in the transaction. */
+#if 0
+  if (xaccTransCountSplits(split->parent) > 1) {
+    if (!xaccTransIsCommonCurrency(split->parent, acc->currency) &&
+        !xaccTransIsCommonCurrency(split->parent, acc->security))
+      return;
   }
-*/
+#endif
+
+  CHECK (acc);
 
   /* mark the account as having changed */
   acc -> changed |= ACC_INVALIDATE_ALL;
 
-  /* if this split belongs to another acount, remove it from 
+  /* if this split belongs to another account, remove it from 
    * there first.  We don't want to ever leave the system
    * in an inconsistent state.
    */
   oldacc = split->acc;
   if (split->acc) xaccAccountRemoveSplit (split->acc, split);
   split->acc = acc;
-    
-  /* enlarge the size of the split array to accomadate the new split,
-   * and copy all the splits over to the new array. 
+
+  /* enlarge the size of the split array to accomodate the
+   * new split and copy all the splits over to the new array. 
    * If the old and new accounts are the same account, then we
-   * are just shuffling around the split, resumably due to a 
-   * date reordering.  In this case, most of the malloc/copy/free bit
-   * can be avoided.
+   * are just shuffling around the split, presumably due to a 
+   * date reordering. In this case, most of the malloc/copy/free
+   * bit can be avoided.
    */
   if (oldacc != acc) {
      oldsplits = acc->splits;
@@ -309,7 +416,7 @@ disable for now till we figure out what the right thing is.
      }
      /* Insertion point is now i */
    
-     //fprintf(stderr, "Insertion position is: %d\n", i);
+     PINFO ("Insertion position is: %d\n", i);
    
      /* Move all the other splits down (this could be done faster with memmove)*/
      for( j = acc->numSplits; j > i; j--) {
@@ -357,8 +464,8 @@ disable for now till we figure out what the right thing is.
 
 void
 xaccAccountRemoveSplit ( Account *acc, Split *split )
-  {
-  int  i,j;
+{
+  int i,j;
 
   if (!acc) return;
   if (!split) return;
@@ -369,19 +476,18 @@ xaccAccountRemoveSplit ( Account *acc, Split *split )
 
   /* mark the account as having changed */
   acc -> changed |= ACC_INVALIDATE_ALL;
-  
+
   for( i=0,j=0; j<acc->numSplits; i++,j++ ) {
     acc->splits[i] = acc->splits[j];
     if (split == acc->splits[i]) i--;
   }
-  
+
   split->acc = NULL;
 
   acc->numSplits --;
 
   /* make sure the array is NULL terminated */
   acc->splits[acc->numSplits] = NULL;
-
 }
 
 
@@ -389,25 +495,25 @@ xaccAccountRemoveSplit ( Account *acc, Split *split )
  * xaccAccountRecomputeBalance                                      *
  *   recomputes the partial balances and the current balance for    *
  *   this account.                                                  *
- * 
- * The way the computation is done depends on whether the partial
- * balances are for a monetary account (bank, cash, etc.) or a 
- * certificate account (stock portfolio, mutual fund).  For bank
- * accounts, the invarient amount is the dollar amount. For share
- * accounts, the invarient amount is the number of shares. For
- * share accounts, the share price fluctuates, and the current 
- * value of such an account is the number of shares times the current 
- * share price.
- * 
- * Part of the complexity of this computatation stems from the fact 
- * xacc uses a double-entry system, meaning that one transaction
- * appears in two accounts: one account is debited, and the other 
- * is credited.  When the transaction represents a sale of shares,
- * or a purchase of shares, some care must be taken to compute 
- * balances correctly.  For a sale of shares, the stock account must
- * be debited in shares, but the bank account must be credited 
- * in dollars.  Thus, two different mechanisms must be used to
- * compute balances, depending on account type.
+ *                                                                  *
+ * The way the computation is done depends on whether the partial   *
+ * balances are for a monetary account (bank, cash, etc.) or a      *
+ * certificate account (stock portfolio, mutual fund).  For bank    *
+ * accounts, the invariant amount is the dollar amount. For share   *
+ * accounts, the invariant amount is the number of shares. For      *
+ * share accounts, the share price fluctuates, and the current      *
+ * value of such an account is the number of shares times the       *
+ * current share price.                                             *
+ *                                                                  *
+ * Part of the complexity of this computatation stems from the fact *
+ * xacc uses a double-entry system, meaning that one transaction    *
+ * appears in two accounts: one account is debited, and the other   *
+ * is credited.  When the transaction represents a sale of shares,  *
+ * or a purchase of shares, some care must be taken to compute      *
+ * balances correctly.  For a sale of shares, the stock account must*
+ * be debited in shares, but the bank account must be credited      *
+ * in dollars.  Thus, two different mechanisms must be used to      *
+ * compute balances, depending on account type.                     *
  *                                                                  *
  * Args:   account -- the account for which to recompute balances   *
  * Return: void                                                     *
@@ -425,7 +531,7 @@ xaccAccountRecomputeBalance( Account * acc )
   double  share_reconciled_balance = 0.0;
   double  amt = 0.0;
   Split *split, *last_split = NULL;
-  
+
   if( NULL == acc ) return;
   if (0x0 == (ACC_INVALID_BALN & acc->changed)) return;
   acc->changed &= ~ACC_INVALID_BALN;
@@ -448,15 +554,16 @@ xaccAccountRecomputeBalance( Account * acc )
       dreconciled_balance += amt * (split->share_price);
     }
 
-    /* For bank accounts, the invarient subtotal is the dollar
-     * amount.  For stock accoounts, the invarient is the share amount */
+    /* For bank accounts, the invariant subtotal is the dollar
+     * amount.  For stock accounts, the invariant is the share amount */
     if ( (STOCK == acc->type) || ( MUTUAL == acc->type) ) {
       split -> share_balance = share_balance;
       split -> share_cleared_balance = share_cleared_balance;
       split -> share_reconciled_balance = share_reconciled_balance;
       split -> balance = split->share_price * share_balance;
       split -> cleared_balance = split->share_price * share_cleared_balance;
-      split -> reconciled_balance = split->share_price * share_reconciled_balance;
+      split -> reconciled_balance = (split->share_price *
+                                     share_reconciled_balance);
     } else {
       split -> share_balance = dbalance;
       split -> share_cleared_balance = dcleared_balance;
@@ -475,20 +582,31 @@ xaccAccountRecomputeBalance( Account * acc )
 
   if ( (STOCK == acc->type) || ( MUTUAL == acc->type) ) {
     if (last_split) {
+       acc -> share_balance = share_balance;
+       acc -> share_cleared_balance = share_cleared_balance;
+       acc -> share_reconciled_balance = share_reconciled_balance;
        acc -> balance = share_balance * (last_split->share_price);
-       acc -> cleared_balance = share_cleared_balance * (last_split->share_price);
-       acc -> reconciled_balance = share_reconciled_balance * (last_split->share_price);
+       acc -> cleared_balance = (share_cleared_balance *
+                                 last_split->share_price);
+       acc -> reconciled_balance = (share_reconciled_balance *
+                                    last_split->share_price);
     } else {
+       acc -> share_balance = 0.0;
+       acc -> share_cleared_balance = 0.0;
+       acc -> share_reconciled_balance = 0.0;
        acc -> balance = 0.0;
        acc -> cleared_balance = 0.0;
        acc -> reconciled_balance = 0.0;
     }
   } else {
+    acc -> share_balance = dbalance;
+    acc -> share_cleared_balance = dcleared_balance;
+    acc -> share_reconciled_balance = dreconciled_balance;
     acc -> balance = dbalance;
     acc -> cleared_balance = dcleared_balance;
     acc -> reconciled_balance = dreconciled_balance;
   }
-    
+
   return;
 }
 
@@ -565,8 +683,7 @@ xaccCheckDateOrder (Account * acc, Split *split )
   }
 
   if (!s) {
-     printf ("Internal Error: xaccCheckDateOrder(): ");
-     printf (" split %p not present in account \n", split);
+     PERR ("split %p not present in account \n", split);
      return 0;
   }
 
@@ -578,10 +695,10 @@ xaccCheckDateOrder (Account * acc, Split *split )
 
   /* figure out if the transactions are out of order */
   if (NULL != prevSplit) {
-    if( xaccTransOrder (&(prevSplit->parent), &(split->parent)) >0 ) outOfOrder = TRUE;
+    if( xaccSplitDateOrder (&prevSplit, &split) > 0 ) outOfOrder = TRUE;
   }
   if (NULL != nextSplit) {
-    if( xaccTransOrder (&(split->parent), &(nextSplit->parent)) >0 ) outOfOrder = TRUE;
+    if( xaccSplitDateOrder (&split, &nextSplit) > 0 ) outOfOrder = TRUE;
   }
 
   /* take care of re-ordering, if necessary */
@@ -643,8 +760,10 @@ static int revorder[NUM_ACCOUNT_TYPES] = {
 int
 xaccAccountOrder (Account **aa, Account **ab)
 {
-  char *da, *db; 
+  char *da, *db;
+  char *endptr = NULL;
   int ta, tb;
+  long la, lb;
 
   if ( (*aa) && !(*ab) ) return -1;
   if ( !(*aa) && (*ab) ) return +1;
@@ -653,6 +772,18 @@ xaccAccountOrder (Account **aa, Account **ab)
   /* sort on accountCode strings */
   da = (*aa)->accountCode;
   db = (*ab)->accountCode;
+
+  /* If accountCodes are both base 36 integers do an integer sort */
+  la = strtoul (da, &endptr, 36);
+  if((*da != '\0') && (*endptr == '\0')) {
+    lb = strtoul (db, &endptr, 36);
+    if((*db != '\0') && (*endptr == '\0')) {
+      if (la < lb) return -1;
+      if (la > lb) return +1;
+    }
+  }
+
+  /* Otherwise do a string sort */
   SAFE_STRCMP (da, db);
 
   /* if acccount-type-order array not initialized, initialize it */
@@ -750,25 +881,6 @@ xaccAccountRecomputeBalances( Account **list )
 \********************************************************************/
 
 void
-xaccZeroRunningBalances( Account **list )
-{
-   Account * acc;
-   int nacc = 0;
-   if (!list) return;
-
-   acc = list[0];
-   while (acc) {
-      acc -> running_balance = 0.0;
-      acc -> running_cleared_balance = 0.0;
-      nacc++;
-      acc = list[nacc];
-   }
-}
-
-/********************************************************************\
-\********************************************************************/
-
-void
 xaccMoveFarEnd (Split *split, Account *new_acc)
 {
    Split *partner_split = 0x0;
@@ -835,78 +947,30 @@ xaccMoveFarEndByName (Split *split, const char *new_acc_name)
 /********************************************************************\
 \********************************************************************/
 
-void
-xaccConsolidateTransactions (Account * acc)
-{
-   Split *sa, *sb;
-   Transaction *ta, *tb;
-   int i,j;
-   int retval;
-
-   if (!acc) return;
-   CHECK (acc);
-
-   for (i=0; i<acc->numSplits; i++) {
-      sa = acc->splits[i];
-      ta = sa->parent;
-      for (j=i+1; j<acc->numSplits; j++) {
-         sb = acc->splits[j];
-         tb = sb->parent;
-
-         /* if no match, then continue on in the loop.
-          * we really must match everything to get a duplicate */
-         retval = xaccTransMatch (&ta, &tb);
-         if (retval) continue;
-
-         /* OK, looks like the two splits are a matching pair. 
-          * Blow one of them, and its entie associated transaction, away. 
-          * (We blow away the trasnaction because not only do the splits 
-          * match, but so do all of thier partner-splits. )
-          */
-
-          xaccTransBeginEdit (tb, 1);
-          xaccTransDestroy (tb);
-          xaccTransCommitEdit (tb);
-
-          /* It should be safe to just "break" here, as all splits
-           * wwith index i or less have been checked already and couldn't
-           * have been dupes.  So index i is still valid, although j is 
-           * not.  Note that numSplits changed ...
-           */
-          break;
-      }
-   }
-}
-
-/********************************************************************\
-\********************************************************************/
-
 void 
 xaccAccountSetType (Account *acc, int tip)
 {
    if (!acc) return;
    CHECK (acc);
 
-   /* After an account type has been set, it cannot be changed */
-   if (-1 < acc->type) {
-      PERR ("xaccAccountSetType(): "
-            "the type of the account cannot be changed "
-            "after its been set! \n"
-           );
-      return;
-   }
-
    /* refuse invalid account types */
    if (NUM_ACCOUNT_TYPES <= tip) return;
+
+   /* Don't bother if it already is. */
+   if (acc->type == tip) return;
+
    acc->type = tip;
 
    /* initialize the auxilliary account info as well */
    if (acc->accInfo) xaccFreeAccInfo (acc->accInfo); 
    acc->accInfo = xaccMallocAccInfo (tip);
+
+   /* Changing the type can change the way the balances are computed. */
+   xaccAccountRecomputeBalance(acc);
 }
 
 void 
-xaccAccountSetName (Account *acc, char *str)
+xaccAccountSetName (Account *acc, const char *str)
 {
    char * tmp;
    if ((!acc) || (!str)) return;
@@ -919,7 +983,7 @@ xaccAccountSetName (Account *acc, char *str)
 }
 
 void 
-xaccAccountSetCode (Account *acc, char *str)
+xaccAccountSetCode (Account *acc, const char *str)
 {
    char * tmp;
    if ((!acc) || (!str)) return;
@@ -932,7 +996,7 @@ xaccAccountSetCode (Account *acc, char *str)
 }
 
 void 
-xaccAccountSetDescription (Account *acc, char *str)
+xaccAccountSetDescription (Account *acc, const char *str)
 {
    char * tmp;
    if ((!acc) || (!str)) return;
@@ -945,7 +1009,7 @@ xaccAccountSetDescription (Account *acc, char *str)
 }
 
 void 
-xaccAccountSetNotes (Account *acc, char *str)
+xaccAccountSetNotes (Account *acc, const char *str)
 {
    char * tmp;
    if ((!acc) || (!str)) return;
@@ -958,20 +1022,18 @@ xaccAccountSetNotes (Account *acc, char *str)
 }
 
 void 
-xaccAccountSetCurrency (Account *acc, char *str)
+xaccAccountSetCurrency (Account *acc, const char *str)
 {
    if ((!acc) || (!str)) return;
    CHECK (acc);
 
    if (acc->currency && (0x0 != acc->currency[0])) {
       if (unsafe_ops) {
-         PWARN ("xaccAccountSetCurrency(): "
-                "it is dangerous to change the currency denomination of an account! \n"
+         PWARN ( "it is dangerous to change the currency denomination of an account! \n"
                 "\tAccount=%s old currency=%s new currency=%s \n",
                 acc->accountName, acc->currency, str);
       } else {
-         PERR ("xaccAccountSetCurrency(): "
-               "the currency denomination of an account cannot be changed!\n"
+         PERR ("the currency denomination of an account cannot be changed!\n"
                 "\tAccount=%s \n", acc->accountName);
          return;
       }
@@ -982,21 +1044,19 @@ xaccAccountSetCurrency (Account *acc, char *str)
 }
 
 void 
-xaccAccountSetSecurity (Account *acc, char *str)
+xaccAccountSetSecurity (Account *acc, const char *str)
 {
    if ((!acc) || (!str)) return;
    CHECK (acc);
 
    if (acc->security && (0x0 != acc->security[0])) {
       if (unsafe_ops) {
-         PWARN ("xaccAccountSetSecurity(): "
-                "it is dangerous to change the security denomination of an account! \n"
+         PWARN ("it is dangerous to change the security denomination of an account! \n"
                 "\tAccount=%s old security=%s new security=%s \n",
                 acc->accountName, acc->security, str);
       } else {
-         PERR ("xaccAccountSetSecurity(): "
-               "the security denomination of an account cannot be changed!\n"
-                "\tAccount=%s \n", acc->accountName);
+         PERR ("the security denomination of an account cannot be changed!\n"
+               "\tAccount=%s \n", acc->accountName);
          return;
       }
    }
@@ -1029,14 +1089,21 @@ xaccAccountGetParent (Account *acc)
    return (acc->parent);
 }
 
-int
+Account *
+xaccAccountGetParentAccount (Account * acc)
+{
+  if (!acc) return NULL;
+  return xaccGroupGetParentAccount(acc->parent);
+}
+
+GNCAccountType
 xaccAccountGetType (Account *acc)
 {
-   if (!acc) return 0;
+   if (!acc) return NO_TYPE;
    return (acc->type);
 }
 
-char *
+const char *
 xaccAccountGetName (Account *acc)
 {
    if (!acc) return NULL;
@@ -1044,34 +1111,95 @@ xaccAccountGetName (Account *acc)
 }
 
 char *
+xaccAccountGetFullName(Account *account, const char separator)
+{
+  Account *a;
+  char *fullname;
+  const char *name;
+  char *p;
+  int length;
+
+  if (account == NULL)
+  {
+    fullname = strdup("");
+    assert(fullname != NULL);
+    return fullname;
+  }
+
+  /* Figure out how much space is needed */
+  length = 0;
+  a = account;
+  while (a != NULL)
+  {
+    name = xaccAccountGetName(a);
+
+    length += strlen(name) + 1; /* plus one for the separator */
+
+    a = xaccAccountGetParentAccount(a);
+  }
+
+  /* length has one extra separator in it, that's ok, because it will
+   * hold the null character at the end. */
+
+  /* allocate the memory */
+  fullname = malloc(length * sizeof(char));
+  assert(fullname != 0);
+
+  /* go to end of string */
+  p = fullname + length - 1;
+
+  /* put in the null character and move to the previous char */
+  *p-- = 0;
+
+  a = account;
+  while (a != NULL)
+  {
+    name = xaccAccountGetName(a);
+    length = strlen(name);
+
+    /* copy the characters going backwards */
+    while (length > 0)
+      *p-- = name[--length];
+
+    a = xaccAccountGetParentAccount(a);
+
+    /* if we're not at the root, add another separator */
+    if (a != NULL)
+      *p-- = separator;
+  }
+
+  return fullname;
+}
+
+const char *
 xaccAccountGetCode (Account *acc)
 {
    if (!acc) return NULL;
    return (acc->accountCode);
 }
 
-char * 
+const char * 
 xaccAccountGetDescription (Account *acc)
 {
    if (!acc) return NULL;
    return (acc->description);
 }
 
-char * 
+const char * 
 xaccAccountGetNotes (Account *acc)
 {
    if (!acc) return NULL;
    return (acc->notes);
 }
 
-char * 
+const char * 
 xaccAccountGetCurrency (Account *acc)
 {
    if (!acc) return NULL;
    return (acc->currency);
 }
 
-char * 
+const char * 
 xaccAccountGetSecurity (Account *acc)
 {
    if (!acc) return NULL;
@@ -1097,6 +1225,27 @@ xaccAccountGetReconciledBalance (Account *acc)
 {
    if (!acc) return 0.0;
    return (acc->reconciled_balance);
+}
+
+double
+xaccAccountGetShareBalance (Account *acc)
+{
+   if (!acc) return 0.0;
+   return (acc->share_balance);
+}
+
+double
+xaccAccountGetShareClearedBalance (Account *acc)
+{
+   if (!acc) return 0.0;
+   return (acc->share_cleared_balance);
+}
+
+double
+xaccAccountGetShareReconciledBalance (Account *acc)
+{
+   if (!acc) return 0.0;
+   return (acc->share_reconciled_balance);
 }
 
 Split *
@@ -1131,5 +1280,41 @@ IthAccount (Account **list, int i)
    if (!list || 0 > i) return NULL;
    return list[i];
 }
-   
+
+/********************************************************************\
+\********************************************************************/
+
+gncBoolean
+xaccAccountsHaveCommonCurrency(Account *account_1, Account *account_2)
+{
+  if ((account_1 == NULL) || (account_2 == NULL))
+    return GNC_F;
+
+  return xaccIsCommonCurrency(account_1->currency, account_1->security,
+			      account_2->currency, account_2->security);
+}
+
+/********************************************************************\
+\********************************************************************/
+
+gncBoolean
+xaccAccountHasAncestor (Account *account, Account * ancestor)
+{
+  Account *parent;
+
+  if ((account == NULL) || (ancestor == NULL))
+    return GNC_F;
+
+  parent = xaccAccountGetParentAccount(account);
+  while (parent != NULL)
+  {
+    if (parent == ancestor)
+      return GNC_T;
+
+    parent = xaccAccountGetParentAccount(parent);
+  }
+
+  return GNC_F;
+}
+
 /*************************** END OF FILE **************************** */

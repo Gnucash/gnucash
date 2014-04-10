@@ -1,6 +1,6 @@
 /********************************************************************\
  * AccInfo.h -- the Account Info data structures                    *
- * Copyright (C) 1998, 1999 Linas Vepstas                           *
+ * Copyright (C) 1998-2000 Linas Vepstas                            *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -13,8 +13,11 @@
  * GNU General Public License for more details.                     *
  *                                                                  *
  * You should have received a copy of the GNU General Public License*
- * along with this program; if not, write to the Free Software      *
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
+ * along with this program; if not, contact:                        *
+ *                                                                  *
+ * Free Software Foundation           Voice:  +1-617-542-5942       *
+ * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
+ * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
 /*
@@ -27,6 +30,8 @@
 #define __ACCINFO_H__
 
 #include "config.h"
+#include "gnc-common.h"
+
 
 /*
  * The account types are used to determine how the transaction data
@@ -39,8 +44,12 @@
  * to update xaccAccountTypeEnumAsString --- used for text file exports
  */
 
-enum 
+typedef enum 
 {
+  BAD_TYPE = -1,
+  NO_TYPE = -1,
+  /* Not a type */
+
   BANK = 0,
   /* The bank account type denotes a savings or checking account
    * held at a bank.  Often interest bearing.
@@ -69,9 +78,10 @@ enum
    */
 
   CURRENCY = 7, 
-  /* The currency account type indicates that the account is a currency trading 
-   * account.  In many ways, a currency trading account is like a stock trading
-   * account, where both quantities and prices are set.
+  /* The currency account type indicates that the account is a
+   * currency trading account.  In many ways, a currency trading
+   * account is like a stock trading account, where both quantities
+   * and prices are set.
    */
 
   INCOME = 8,
@@ -92,15 +102,16 @@ enum
   SAVINGS = 12,
   MONEYMRKT = 13,
   CREDITLINE = 14,     /* line of credit */
-
-
-};
+} GNCAccountType;
 
 char * xaccAccountGetTypeStr (int type); /* GUI names */
 
 /* Just the name of the enum as a string.  i.e. INCOME -> "INCOME".
    Used for text exports */
 char * xaccAccountTypeEnumAsString (int type); 
+
+gncBoolean xaccAccountTypesCompatible (int parent_type, int child_type);
+
 
 typedef struct _BankAcct BankAcct;
 typedef struct _InvAcct  InvAcct;

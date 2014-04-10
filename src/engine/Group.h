@@ -1,7 +1,7 @@
 /********************************************************************\
  * Group.h -- the main data structure of the program                *
  * Copyright (C) 1997 Robin D. Clark                                *
- * Copyright (C) 1997, 1998 Linas Vepstas                           *
+ * Copyright (C) 1997, 1998, 1999, 2000 Linas Vepstas               *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -14,13 +14,12 @@
  * GNU General Public License for more details.                     *
  *                                                                  *
  * You should have received a copy of the GNU General Public License*
- * along with this program; if not, write to the Free Software      *
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
+ * along with this program; if not, contact:                        *
  *                                                                  *
- *   Author: Rob Clark                                              *
- * Internet: rclark@cs.hmc.edu                                      *
- *  Address: 609 8th Street                                         *
- *           Huntington Beach, CA 92648-4632                        *
+ * Free Software Foundation           Voice:  +1-617-542-5942       *
+ * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
+ * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ *                                                                  *
 \********************************************************************/
 
 #ifndef __XACC_ACCOUNT_GROUP_H__
@@ -30,10 +29,23 @@
 #include "gnc-common.h"
 
 #include "Account.h"
+#include "GNCId.h"
+
 
 /** PROTOTYPES ******************************************************/
-AccountGroup    *xaccMallocAccountGroup( void );
-void    xaccFreeAccountGroup( AccountGroup *account_group );
+AccountGroup *xaccMallocAccountGroup( void );
+void          xaccFreeAccountGroup( AccountGroup *account_group );
+
+/*
+ * The xaccGroupGetGUID() subroutine will return the
+ *    globally unique id associated with that group.
+ *
+ * The xaccGroupLookup() subroutine will return the
+ *    group associated with the given id, or NULL
+ *    if there is no such group.
+ */
+const GUID   * xaccGroupGetGUID (AccountGroup *group);
+AccountGroup * xaccGroupLookup (const GUID *guid);
 
 /*
  * The xaccConcatGroups() subroutine will move all accounts
@@ -47,16 +59,20 @@ void    xaccConcatGroups (AccountGroup *to, AccountGroup *from);
 void    xaccMergeAccounts (AccountGroup *grp);
 
 /*
- * The xaccAccountGroupNotSaved() subroutine will return 
+ * The xaccGroupNotSaved() subroutine will return 
  *    a non-zero value if any account in the group or in
  *    any subgroup hasn't been saved.
  *
- * The xaccAccountGroupMarkSaved() subroutine will mark
+ * The xaccGroupMarkSaved() subroutine will mark
  *    the entire group as having been saved, including 
  *    all of the child accounts.
+ *
+ * The xaccGroupMarkNotSaved() subroutine will mark
+ *    the given group as not having been saved.
  */
-int     xaccAccountGroupNotSaved  (AccountGroup *grp);
-void    xaccAccountGroupMarkSaved (AccountGroup *grp);
+int     xaccGroupNotSaved  (AccountGroup *grp);
+void    xaccGroupMarkSaved (AccountGroup *grp);
+void    xaccGroupMarkNotSaved (AccountGroup *grp);
 
 /*
  * The xaccRemoveAccount() subroutine will remove the indicated
@@ -92,6 +108,7 @@ void    xaccInsertSubAccount( Account *parent, Account *child );
 int     xaccGetNumAccounts (AccountGroup *grp);
 int     xaccGroupGetNumAccounts (AccountGroup *grp);
 int     xaccGroupGetDepth (AccountGroup *grp);
+Account * xaccGroupGetAccount (AccountGroup *, int);
 
 /*
  * The xaccGetAccounts() subroutine returns an array containing 
@@ -100,7 +117,7 @@ int     xaccGroupGetDepth (AccountGroup *grp);
  *
  * The xaccFillInAccounts() routine performs the same function as the
  *    above routine, except that it fills in the array provided by the
- *    user.  The array provioded by the user *must* be large enough,
+ *    user.  The array provided by the user *must* be large enough,
  *    including a terminating NULL pointer.
  */
 Account ** xaccGetAccounts (AccountGroup *grp);
@@ -122,16 +139,30 @@ int        xaccFillInAccounts ( AccountGroup *root, Account **arr );
  *    in the indicated AccountGroup group.  It returns NULL if the
  *    account was not found.
  *
+ * The xaccGetAccountFromFullName() subroutine works like
+ *    xaccGetAccountFromName, but uses fully-qualified names
+ *    using the given separator.
+ *
  * The xaccGetPeerAccountFromName() subroutine fetches the
  *    account by name from the collection of accounts
  *    in the same AccountGroup anchor group. It returns NULL if the
  *    account was not found.
+ *
+ * The xaccGetPeerAccountFromFullName() subroutine works like
+ *     xaccGetPeerAccountFromName, but uses fully-qualified
+ *     names using the given separator.
  */
 
 Account *xaccGetAccountFromID       (AccountGroup *, int);
 Account *xaccGetPeerAccountFromID   (Account *, int);
 Account *xaccGetAccountFromName     (AccountGroup *, const char *);
+Account *xaccGetAccountFromFullName (AccountGroup *,
+                                     const char *name,
+                                     const char separator);
 Account *xaccGetPeerAccountFromName (Account *, const char *);
+Account *xaccGetPeerAccountFromFullName (Account *acc,
+                                         const char * name,
+                                         const char separator);
 
 /*
  * The xaccRecomputeGroupBalance() subroutine recursively totals
@@ -154,34 +185,29 @@ double    xaccGroupGetBalance (AccountGroup *);
 
 AccountGroup * xaccGetAccountRoot (Account *);
 
-/* The xaccConsolidateGrpTrans() subroutine scans through
- *    all of the transactions in an account, and compares them.
- *    if any of them are exact duplicates, the duplicates are removed.
- *    duplicates may occur when accounts from multiple sources are 
- *    merged.  Note that this can be a dangerous operation to perform 
- *
- *    Note that this suborutine merely walks the acount group
- *    tree, and calls ConsolidateTransacations on each account
+/* The xaccGroupGetParentAccount() subroutine returns the parent
+ * account of the group, or NULL.
  */
-
-void xaccConsolidateGrpTransactions (AccountGroup *);
-
-Account * xaccGroupGetAccount (AccountGroup *, int);
+Account * xaccGroupGetParentAccount (AccountGroup *);
 
 /*
  * The xaccGroupGetNextFreeCode() method will try to guess a reasonable 
  *    candidate for the next unused account code in this group.
+ *    The returned string is malloced, you must free the returned 
+ *    pointer when done.
  *
  * The xaccAccountGetNextChildCode() method does same as above,
  *    except that it returns a value appropriate for a child account.
+ *    The returned string is malloced, you must free the returned 
+ *    pointer when done.
  *
  * The xaccGroupAutoCode() method will traverse the group, automatically
  *    inserting account codes into those accounts whose account codes 
  *    are blank.  It uses the algorithm used in xaccAccountAutoCode()
  *    to pick an account code.
  *
- * The xaccGroupDepthAutoCode() first measures teh depth of the account
- *    tree, and uses that depth to pck the number of digits in the account
+ * The xaccGroupDepthAutoCode() first measures the depth of the account
+ *    tree, and uses that depth to pick the number of digits in the account
  *    code.
  */
 
@@ -190,17 +216,19 @@ char * xaccAccountGetNextChildCode (Account *acc, int num_digits);
 void   xaccGroupAutoCode (AccountGroup *grp, int num_digits);
 void   xaccGroupDepthAutoCode (AccountGroup *grp);
 
+
 #ifndef SWIG
 
 /*
  * The following functions provide support for "staged traversals"
- * over all of the transactions in and account or group.  The idea
+ * over all of the transactions in an account or group.  The idea
  * is to be able to perform a sequence of traversals ("stages"),
  * and perform an operation on each transaction exactly once 
  * for that stage.  
+ *
  * Only transactions whose current "stage" is less than the
- * stage of the current traversal will be affected, and they will be
- * "brought up" to the current stage when they are processed.
+ * stage of the current traversal will be affected, and they will
+ * be "brought up" to the current stage when they are processed.
  *
  * For example, you could perform a stage 1 traversal of all the
  * transactions in an account, and then perform a stage 1 traversal of
@@ -214,25 +242,52 @@ void   xaccGroupDepthAutoCode (AccountGroup *grp);
  * of 2, then all the transactions in the second account would have 
  * been processed.
  *
- * Traversal can be aborted by having the callback function return a
- * non-zero value.  The traversal is aborted immediately, and the 
+ * Traversal can be aborted by having the callback function return
+ * a non-zero value.  The traversal is aborted immediately, and the 
  * non-zero value is returned.  Note that an aborted traversal can 
  * be restarted; no information is lost due to an abort.
  *
  * The initial impetus for this particular approach came from
- * generalizing a mark/sweep practice that was already being used in
- * FileIO.c.
+ * generalizing a mark/sweep practice that was already being
+ * used in FileIO.c.
  *
  * Note that currently, there is a hard limit of 256 stages, which
- * can be changed by enlarging "marker" in the tranaction struct.
+ * can be changed by enlarging "marker" in the transaction struct.
  * */
 
 /* xaccGroupBeginStagedTransactionTraversals() resets the traversal
- *    marker inside each of all the transactions in the group so that a
- *    new sequence of staged traversals can begin. 
+ *    marker inside each of all the transactions in the group so that
+ *    a new sequence of staged traversals can begin.
+ *
+ * xaccSplitsBeginStagedTransactionTraversals() resets the traversal
+ *    marker for each transaction which is a parent of one of the
+ *    splits in the list.
+ *
+ * xaccAccountBeginStagedTransactionTraversals() resets the traversal
+ *    marker for each transaction which is a parent of one of the
+ *    splits in the account.
+ *
+ * xaccAccountsBeginStagedTransactionTraversals() resets the traversal
+ *    marker for each transaction which is a parent of one of the
+ *    splits in any of the accounts in the list.
  */
 
 void xaccGroupBeginStagedTransactionTraversals(AccountGroup *grp);
+void xaccSplitsBeginStagedTransactionTraversals(Split **splits);
+void xaccAccountBeginStagedTransactionTraversals(Account *account);
+void xaccAccountsBeginStagedTransactionTraversals (Account **accounts);
+
+/* xaccTransactionTraverse() checks the stage of the given transaction.
+ *    If the transaction hasn't reached the given stage, the transaction
+ *    is updated to that stage and the function returns GNC_T. Otherwise
+ *    no change is made and the function returns GNC_F.
+ *
+ * xaccSplitTransactionTraverse() behaves as above using the parent of
+ *    the given split.
+ */
+
+gncBoolean xaccTransactionTraverse(Transaction *trans, int stage);
+gncBoolean xaccSplitTransactionTraverse(Split *split, int stage);
 
 /* xaccGroupStagedTransactionTraversal() calls thunk on each
  *    transaction in the group whose current marker is less than the
@@ -242,8 +297,8 @@ void xaccGroupBeginStagedTransactionTraversals(AccountGroup *grp);
  *    or the non-zero value returned by thunk().  This
  *    API does not handle handle recursive traversals.
  *
- *    Currently the result of adding or removing transactions during a
- *    traversal is undefined, so don't do that.
+ *    Currently the result of adding or removing transactions during
+ *    a traversal is undefined, so don't do that.
  */
 
 int 
@@ -260,13 +315,14 @@ xaccGroupStagedTransactionTraversal(AccountGroup *grp,
  *    or the non-zero value returned by thunk().
  *    This API does not handle handle recursive traversals.
  *
- *    Currently the result of adding or removing transactions during a
- *    traversal is undefined, so don't do that. 
+ *    Currently the result of adding or removing transactions during
+ *    a traversal is undefined, so don't do that. 
  */
 
 int xaccAccountStagedTransactionTraversal(Account *a,
                                           unsigned int stage,
-                                          int (*thunk)(Transaction *t, void *data),
+                                          int (*thunk)(Transaction *t,
+                                                       void *data),
                                           void *data);
 
 #endif

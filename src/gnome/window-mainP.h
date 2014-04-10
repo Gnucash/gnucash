@@ -1,5 +1,5 @@
 /*******************************************************************\
- * MainWindowP.h -- private GNOME main window functions             *
+ * window-main.h -- private GNOME main window functions             *
  * Copyright (C) 1997 Robin D. Clark                                *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
@@ -12,71 +12,65 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    *
  * GNU General Public License for more details.                     *
  *                                                                  *
+
  * You should have received a copy of the GNU General Public License*
- * along with this program; if not, write to the Free Software      *
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
+ * along with this program; if not, contact:                        *
  *                                                                  *
- *   Author: Rob Clark                                              *
- * Internet: rclark@cs.hmc.edu                                      *
- *  Address: 609 8th Street                                         *
- *           Huntington Beach, CA 92648-4632                        *
+ * Free Software Foundation           Voice:  +1-617-542-5942       *
+ * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
+ * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
 #ifndef __WINDOW_MAINP_H__
 #define __WINDOW_MAINP_H__
 
-#include <gtk/gtk.h>
-#include "Group.h"
-#include "config.h"
+
+typedef struct _GNCMainInfo GNCMainInfo;
+struct _GNCMainInfo
+{
+  GtkWidget *account_tree;
+  GtkWidget *assets_label;
+  GtkWidget *profits_label;
+
+  SCM main_window_change_callback_id;
+  SCM euro_change_callback_id;
+  SCM toolbar_change_callback_id;
+
+  GSList *account_sensitives;
+};
+
 
 /** PROTOTYPES ******************************************************/
-void gnc_ui_refreshMainWindow( void );
-void gnc_ui_mainWindow(AccountGroup *);
-void gnc_ui_refresh_tree ( void );
-void gnc_ui_acct_tree_fill ( GtkTree *, AccountGroup *);
+static void gnc_ui_refresh_statusbar(void);
+static void gnc_ui_exit_cb(GtkWidget *widget, gpointer data);
+static void gnc_ui_about_cb(GtkWidget *widget, gpointer data);
+static void gnc_ui_help_cb(GtkWidget *widget, gpointer data);
+static void gnc_ui_add_account(GtkWidget *widget, gpointer data);
+static void gnc_ui_delete_account_cb(GtkWidget *widget, gpointer data);
+static void gnc_ui_mainWindow_toolbar_open(GtkWidget *widget, gpointer data);
+static void gnc_ui_mainWindow_toolbar_open_subs(GtkWidget *widget,
+                                                gpointer data);
+static void gnc_ui_mainWindow_toolbar_edit(GtkWidget *widget, gpointer data);
+static void gnc_ui_mainWindow_reconcile(GtkWidget *widget, gpointer data);
+static void gnc_ui_mainWindow_transfer(GtkWidget *widget, gpointer data);
+static void gnc_ui_mainWindow_adjust_balance(GtkWidget *widget, gpointer data);
+static void gnc_ui_mainWindow_scrub(GtkWidget *widget, gpointer data);
+static void gnc_ui_mainWindow_scrub_sub(GtkWidget *widget, gpointer data);
+static void gnc_ui_mainWindow_scrub_all(GtkWidget *widget, gpointer data);
+static void gnc_ui_options_cb(GtkWidget *widget, gpointer data);
+static void gnc_ui_filemenu_cb(GtkWidget *widget, gpointer menuItem);
 
-#if 0
+static GNCMainInfo * gnc_get_main_info();
 
-/** GLOBALS *********************************************************/
-enum {
-  FMB_NEW,
-  FMB_OPEN,
-  FMB_IMPORT,
-  FMB_SAVE,
-  FMB_SAVEAS,
-  FMB_QUIT,
-};
-enum {
-  AMB_NEW,
-  AMB_OPEN,
-  AMB_LEDGER,
-  AMB_EDIT,
-  AMB_DEL,
-  AMB_TRNS,
-  AMB_RPRT,
-  AMB_SHOW,
-  AMB_CAT,
-};
-enum {
-  HMB_ABOUT,
-  HMB_ACC,
-  HMB_REGWIN,
-  HMB_RECNWIN,
-  HMB_ADJBWIN,
-  HMB_MAIN,
-  HMB_LIC,
-};
+static gboolean gnc_ui_mainWindow_delete_cb(GtkWidget *widget,
+                                            GdkEvent *event,
+                                            gpointer user_data);
+
+static gboolean gnc_ui_mainWindow_destroy_event_cb(GtkWidget *widget,
+                                                   GdkEvent *event,
+                                                   gpointer user_data);
+
+static void gnc_ui_mainWindow_destroy_cb(GtkObject *object,
+                                         gpointer user_data);
 
 #endif
-
-#endif
-
-/*
-  Local Variables:
-  tab-width: 2
-  indent-tabs-mode: nil
-  mode: c-mode
-  c-indentation-style: gnu
-  eval: (c-set-offset 'block-open '-)
-  End:
-*/

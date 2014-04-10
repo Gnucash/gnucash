@@ -1,3 +1,23 @@
+/********************************************************************\
+ * This program is free software; you can redistribute it and/or    *
+ * modify it under the terms of the GNU General Public License as   *
+ * published by the Free Software Foundation; either version 2 of   *
+ * the License, or (at your option) any later version.              *
+ *                                                                  *
+ * This program is distributed in the hope that it will be useful,  *
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of   *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    *
+ * GNU General Public License for more details.                     *
+ *                                                                  *
+ * You should have received a copy of the GNU General Public License*
+ * along with this program; if not, contact:                        *
+ *                                                                  *
+ * Free Software Foundation           Voice:  +1-617-542-5942       *
+ * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
+ * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ *                                                                  *
+\********************************************************************/
+
 /*
  * FILE:
  * basiccell.h
@@ -13,7 +33,7 @@
  * by the "user".  In the text below, the "user" is the 
  * person controlling the mouse and keyboard.  Thus, when 
  * the user makes a move, it means that they have somehow 
- * intereacted with the cell, by clikcing with mouse or by 
+ * interacted with the cell, by clicking with mouse or by 
  * typing at the keyboard.  This class provides three 
  * callbacks which allow the programmer to understand what 
  * the user is doing.
@@ -44,8 +64,8 @@
  *     XACC_CELL_ALLOW_SHADOW copy ("shadow") the contents
  *       of register cells.   
  *
- *   If ALLOW_INPUT is not set, the cell is supposed  to
- *   to only display values, but not accept user input.  If
+ *   If ALLOW_INPUT is not set, the cell is supposed to
+ *   to only display values, but not accept user input. If
  *   set, then the callbacks below are used to when the
  *   cell is entered.
  *
@@ -71,6 +91,11 @@
  *    If a string is returned, the string must be as the result 
  *    of a malloc.
  *
+ *    The callback is also passed pointers to the cursor position
+ *    and the start and end of the highlited region. If the callback
+ *    returns NULL, it may also change these values and the GUI will
+ *    update appropriately.
+ *
  * The leave_cell() callback is called when the user exits
  *    a cell.  This can be by tabbing or arrow-keying away 
  *    from it, or by using the mouse to specify a different 
@@ -87,14 +112,35 @@
  *    so that ctrl-alt-etc modifier keys are pre-processed in 
  *    the usual X11 fashion).
  *    
- *    The three arguments passed in are :
+ *    The arguments passed in are :
  *    "old", the string prior to user's attempted modification,
- *    "add", the string the user is attemptiong to add
+ *    "add", the string the user is attempting to add
  *           (will be null if text is being deleted).
  *    "new", the string that would result is user's changes
  *           are accepted.
+ *    "cursor_position", the position of the editing cursor
+ *                       in the text. This may be modified by
+ *                       the callback, in which case the GUI
+ *                       will reflect the change. Set to -1
+ *                       to make the cursor go to the end of
+ *                       the text.
+ *    "start_selection", the starting character of the highlited
+ *                       selection.
+ *    "end_selection",   the index immediately after the last
+ *                       character in the selection. Set both
+ *                       start and end to 0 for no selection.
+ *                       Set the end to -1 to make the selection
+ *                       go to the end of the text.
  *    It must return a string, or void if it rejects the change.
  *    The returned string will be used to update the cell value.
+ *
+ * The direct_update() callback is called to pass raw gui data
+ *    to the cell. The exact format of the data is determined
+ *    by the gui. The callback should return TRUE if the event
+ *    was handled, i.e., there is no need to call the modify
+ *    update. If the value needs to be changed, the newval_ptr
+ *    should be set to a malloc'd new value. The other arguments
+ *    work as above.
  *
  * Some memory management rules:
  * (1) the callback must not modify the values of old, change, new
@@ -113,7 +159,7 @@
  * initialization & changes.
  *
  * The realize() callback will be called when GUI-specific 
- *    initalization needs to be done.  For Xt/Motif, the second
+ *    initialization needs to be done.  For Xt/Motif, the second
  *    argument will be cast to the parent widget.  The third
  *    argument passes in the desired pixel-width for the GUI 
  *    element.  (Yes, the pixel-size thing is a hack that we
@@ -125,7 +171,7 @@
  * The move() callback will be called when the GUI element needs
  *    to be positioned to a new location within the table grid.
  *    The second and third arguments are the physical (not virtual)
- *    row and column that the GUI elemnt should be moved to.
+ *    row and column that the GUI element should be moved to.
  *
  * The gui_private member may be used by the derived class to 
  *    store any additional GUI-specific data.
@@ -140,40 +186,29 @@
  * Copyright (c) 1998 Linas Vepstas
  */
 
-/********************************************************************\
- * This program is free software; you can redistribute it and/or    *
- * modify it under the terms of the GNU General Public License as   *
- * published by the Free Software Foundation; either version 2 of   *
- * the License, or (at your option) any later version.              *
- *                                                                  *
- * This program is distributed in the hope that it will be useful,  *
- * but WITHOUT ANY WARRANTY; without even the implied warranty of   *
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    *
- * GNU General Public License for more details.                     *
- *                                                                  *
- * You should have received a copy of the GNU General Public License*
- * along with this program; if not, write to the Free Software      *
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
-\********************************************************************/
-
 #ifndef __XACC_BASIC_CELL_H__
 #define __XACC_BASIC_CELL_H__
 
+#include <glib.h>
+
+#include "gnc-common.h"
+#include "gnc-ui-common.h"
+
 /* define a bitmask */
-#define XACC_CELL_ALLOW_NONE     0x0
-#define XACC_CELL_ALLOW_SHADOW   0x1
-#define XACC_CELL_ALLOW_INPUT    0x2
-#define XACC_CELL_ALLOW_ALL      0x3
+#define XACC_CELL_ALLOW_NONE       0x0
+#define XACC_CELL_ALLOW_SHADOW     0x1
+#define XACC_CELL_ALLOW_INPUT      0x2
+#define XACC_CELL_ALLOW_ALL        0x3
+#define XACC_CELL_ALLOW_EXACT_ONLY 0x4
 
 typedef struct _BasicCell BasicCell;
-typedef unsigned int uint32;
 
 struct _BasicCell {
 
   /* cell attributes */
   /* hack alert -- may want to redesign color to use named color strings. */
-  uint32 bg_color;        /* background color, ARGB format */
-  uint32 fg_color;        /* forground (text) color ARGB format */
+  guint32 bg_color;       /* background color, ARGB format */
+  guint32 fg_color;       /* forground (text) color ARGB format */
   short use_fg_color;     /* if 0, above is ignored */
   short use_bg_color;     /* if 0, above is ignored */
 
@@ -181,6 +216,7 @@ struct _BasicCell {
 
   /* ==================================================== */
   char * value;          /* current value */
+  char *blank_help;      /* help when value is blank */
   unsigned int changed;  /* 2^32-1 if value modified */
 
   char   input_output;    /* zero if output-only */
@@ -191,11 +227,24 @@ struct _BasicCell {
 
   /* cell-editing callbacks */
   const char * (*enter_cell)    (BasicCell *,
-                                 const char * current);
+                                 const char * current,
+                                 int *cursor_position,
+                                 int *start_selection,
+                                 int *end_selection);
   const char * (*modify_verify) (BasicCell *,
                                  const char *old_value, 
                                  const char *add_str, 
-                                 const char *new_value); 
+                                 const char *new_value,
+                                 int *cursor_position,
+                                 int *start_selection,
+                                 int *end_selection);
+  gncBoolean   (*direct_update) (BasicCell *,
+                                 const char *oldval,
+                                 char **newval_ptr,
+                                 int *cursor_position,
+                                 int *start_selection,
+                                 int *end_selection,
+                                 void *gui_data);
   const char * (*leave_cell)    (BasicCell *,
                                  const char * current);
 
@@ -207,16 +256,22 @@ struct _BasicCell {
                             int phys_row, int phys_col);
   void         (* destroy) (BasicCell *);
 
+  char * (*get_help_value) (BasicCell *);
+
   /* general hook for gui-private data */
   void * gui_private;
 };
 
 
-BasicCell * xaccMallocBasicCell (void);
+BasicCell *  xaccMallocBasicCell (void);
 void         xaccInitBasicCell (BasicCell *);
 void         xaccDestroyBasicCell (BasicCell *);
 
 void         xaccSetBasicCellValue (BasicCell *, const char *);
+void         xaccSetBasicCellBlankHelp (BasicCell *, const char *);
+char *       xaccBasicCellGetHelp (BasicCell *);
+
+void         xaccBasicCellSetChanged (BasicCell *, gncBoolean);
 
 #endif /* __XACC_BASIC_CELL_H__ */
 /* ------------------ end of file ---------------------- */

@@ -1,0 +1,118 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+	<TITLE>Codes/symboles des actions</TITLE>
+	<link rel="stylesheet" title="normal" type="text/css" href="gnucash.css">
+	<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+</HEAD>
+<BODY BGCOLOR="#eeeeee">
+<H1>Cours des actions et codes des titres</H1>
+<P>GnuCash fournit actuellement dans une certaine mesure un syst&egrave;me
+rudimentaire de r&eacute;cup&eacute;ration automatis&eacute;e des
+cours d'actions. 
+</P>
+<P>Si un <A HREF="xacc-acctypes.html#stockacct">compte d'actions</A>
+de GnuCash est convenablement configur&eacute;, et l'ordinateur h&ocirc;te
+est connect&eacute; sur internet, le programme <TT>gnc-prices</TT>
+peut &ecirc;tre utilis&eacute; pour r&eacute;cup&eacute;rer les
+cotations des cours d'actions et de fonds communs (pas de FCP et de
+SICAV pour la france) &agrave; partir de divers sites web directement
+dans GnuCash. 
+</P>
+<P>Pour utiliser cette fonctionnalit&eacute;, ce qui suit doit &ecirc;tre
+fait : 
+</P>
+<UL>
+	<LI><P STYLE="margin-bottom: 0cm">Cr&eacute;ez un compte et marquez
+	le comme &eacute;tant du type &quot;Fonds communs&quot; ou
+	&quot;Actions&quot;. 
+	</P>
+	<LI><P STYLE="margin-bottom: 0cm">Entrer un code de titre valide
+	(n.d.t : code SICOVAM en france) dans le champ marqu&eacute;
+	&quot;Valeur:&quot; 
+	</P>
+	<LI><P STYLE="margin-bottom: 0cm">S&eacute;lectionnez une source de
+	cotations depuis le menu d&eacute;roulant. Actuellement les sources
+	de cotations support&eacute;es incluent <B>Yahoo</B>, <B>Yahoo
+	Europe</B>, <B>Fidelity Investments</B>, <B>T. Rowe Price</B> et le
+	<B>Vanguard Group</B>. Noter que Yahoo fournira le cours des valeurs
+	pour la plupart des fonds communs, <I>incluant</I> Fidelity, T. Rowe
+	Price and Vanguard, et que les cours des valeurs cot&eacute;es sur
+	Yahoo devraient &ecirc;tre identique &agrave; ceux qui sont sur les
+	sites sources. (Autrement, quelqu'un rapportera une mauvaise
+	information!). Si vous choisissez Yahoo Europe, vous devrez accoler
+	le code du march&eacute; pour la valeur, tel que PA pour Paris, BE
+	pour Berlin, etc. Exemple : 12150.PA (la valeur Peugeot au march&eacute;
+	de Paris). 
+	</P>
+	<LI><P>Liste des codes de march&eacute;s europ&eacute;ens : 
+	</P>
+</UL>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+value=PA&gt;Paris <BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+value=BC&gt;Barcelone <BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+value=BE&gt;Berlin <BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+value=BI&gt;Bilbao <BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+value=BM&gt;Br&ecirc;me <BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+value=CO&gt;Copenhague <BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+value=D&gt;Dusseldorf <BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+value=F&gt;Francfort <BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+value=H&gt;Hambourg <BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+value=HA&gt;Hanovre <BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+value=L&gt;London <BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+value=MA&gt;Madrid <BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+value=MC&gt;Madrid (M.C.) <BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+value=MI&gt;Milan <BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+value=MU&gt;Munich <BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+value=O&gt;Oslo <BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+value=ST&gt;Stockholm <BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+value=SG&gt;Stuttgart <BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+value=VA&gt;Valence <BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+value=FX&gt;Xetra 
+</P>
+<P>Un exemple d'image est montr&eacute; ci-dessous : 
+</P>
+<P><IMG SRC="pix/TICKER-A.GIF" NAME="Image1" ALIGN=BOTTOM WIDTH=405 HEIGHT=347 BORDER=0>
+</P>
+<P>Pour mettre &agrave; jour les cours stock&eacute;s dans un fichier
+de compte de GnuCash, lancez en ligne de commande <TT>gnc-price</TT>,
+en sp&eacute;cifiant le nom du fichier; par exemple : 
+</P>
+<PRE STYLE="margin-bottom: 0.5cm"> gnc-prices myaccts.xac</PRE><P>
+En lan&ccedil;ant cette commande, elle affichera divers messages de
+diagnostic &agrave; l'&eacute;cran tandis qu'elle chargera les
+donn&eacute;es. Elle fonctionnera seulement quand l'ordinateur h&ocirc;te
+est connect&eacute; &agrave; internet. Elle <I>peut</I> fonctionner
+ensemble avec un pare-feu/firewall de style masqu&eacute;. Elle ne
+fonctionne pas actuellement depuis un r&eacute;seau situ&eacute;
+derri&egrave;re des pare-feu de style socks. 
+</P>
+<P>La commande peut &ecirc;tre lanc&eacute;e plusieurs fois dans une
+journ&eacute;e; pourtant, elle mettra les comptes &agrave; jour au
+maximum une fois avec les plus r&eacute;centes donn&eacute;es du
+cours des &eacute;changes de la journ&eacute;e. 
+</P>
+<P>Ainsi, si <TT>gnc-prices</TT> est lanc&eacute; le vendredi,
+samedi, dimanche et lundi, seuls deux chargements de cours seront
+effectu&eacute;s : un contenant les donn&eacute;es du vendredi, et un
+contenant les donn&eacute;es du lundi, tandis que celui lanc&eacute;
+le samedi et dimanche retrouvera seulement les cours de cl&ocirc;ture
+du vendredi. 
+</P>
+<P>Pour emp&ecirc;cher gnc-prices de mettre &agrave; jour un compte,
+tandis que vous lui permettez de mettre &agrave; jour un autre
+compte, marquez simplement les donn&eacute;es source pour ce compte
+comme &quot;(aucun)&quot;. Vous pouvez le faire depuis la fen&ecirc;tre
+&quot;<TT>Afficher un compte</TT>&quot;. 
+</P>
+<P>Apr&egrave;s avoir lanc&eacute; gnc-prices pendant quelques jours,
+vos comptes commenceront &agrave; ressembler &agrave; ce qui suit : 
+</P>
+<P STYLE="margin-bottom: 0cm"><IMG SRC="pix/TICKER-B.GIF" NAME="Image2" ALIGN=BOTTOM WIDTH=881 HEIGHT=372 BORDER=0>
+</P>
+<HR>
+<P><BR>Retour &agrave; la <A HREF="xacc-main.html">Page principale de
+la documentation.</A> 
+</P>
+</BODY>
+</HTML>

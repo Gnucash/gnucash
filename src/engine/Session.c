@@ -7,7 +7,7 @@
  *
  * HISTORY:
  * Created by Linas Vepstas December 1998
- * Copyright (c) 1998 Linas Vepstas
+ * Copyright (c) 1998-2000 Linas Vepstas
  */
 
 /********************************************************************\
@@ -22,8 +22,11 @@
  * GNU General Public License for more details.                     *
  *                                                                  *
  * You should have received a copy of the GNU General Public License*
- * along with this program; if not, write to the Free Software      *
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
+ * along with this program; if not, contact:                        *
+ *                                                                  *
+ * Free Software Foundation           Voice:  +1-617-542-5942       *
+ * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
+ * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
 #include <errno.h>
@@ -35,6 +38,7 @@
 #include <sys/types.h>
 #include <unistd.h>
 
+#include "BackendP.h"
 #include "FileIO.h"
 #include "FileIOP.h"
 #include "Group.h"
@@ -45,10 +49,18 @@ struct _session {
    AccountGroup *topgroup;
 
    /* the requested session id, in the form or a URI, such as
-    * file:/some/where
+    * file:/some/where, or sql:server.host.com:555
     */
    char *sessionid;
 
+   /* if session failed, this records the failure reason 
+    * (file not found, etc).
+    * the standard errno values are used.
+    */
+   int errtype;
+
+   /* ---------------------------------------------------- */
+   /* teh following struct members apply only for file-io */
    /* the fully-resolved path to the file */
    char *fullpath;
 
@@ -57,11 +69,10 @@ struct _session {
    char * linkfile;
    int lockfd;
 
-   /* if session failed, this records the failure reason 
-    * (file not found, etc).
-    * the standard errno values are used.
-    */
-   int errtype;
+   /* ---------------------------------------------------- */
+   /* this struct member applies only for SQL i/o */
+   Backend *backend;
+
 };
 
 /* ============================================================== */
@@ -87,6 +98,7 @@ xaccInitSession (Session *sess)
   sess->lockfile = NULL;
   sess->linkfile = NULL;
   sess->lockfd = -1;
+  sess->backend = NULL;
 };
   
 /* ============================================================== */
@@ -116,6 +128,15 @@ xaccSessionSetGroup (Session *sess, AccountGroup *grp)
 {
    if (!sess) return;
    sess->topgroup = grp;
+}
+
+/* ============================================================== */
+
+Backend * 
+xaccSessionGetBackend (Session *sess)
+{
+   if (!sess) return NULL;
+   return (sess->backend);
 }
 
 /* ============================================================== */
@@ -162,6 +183,39 @@ xaccSessionBegin (Session *sess, const char * sid)
 
    return retval;
 }
+
+/* ============================================================== */
+
+AccountGroup *
+xaccSessionBeginSQL (Session *sess, const char * dbname)
+{
+   Backend *be = NULL;
+   AccountGroup *grp = NULL;
+
+   if (!sess) return NULL;
+
+// #define SQLHACK
+#ifdef SQLHACK
+   {
+     /* for testing the sql, just a hack, remove later ... */
+extern Backend * pgendNew (void);
+     be = pgendNew ();
+   }
+#endif
+
+   sess->backend = be;
+
+   if (be && be->session_begin) {
+      grp = (be->session_begin) (sess, dbname);
+   }
+   // comment out until testing done, else clobber file ...
+   // sess->topgroup = grp;
+   xaccGroupSetBackend (sess->topgroup, be);
+
+   return (sess->topgroup);
+}
+
+/* ============================================================== */
 
 AccountGroup *
 xaccSessionBeginFile (Session *sess, const char * filefrag)
@@ -229,7 +283,7 @@ xaccSessionBeginFile (Session *sess, const char * filefrag)
       free (sess->lockfile);  sess->lockfile = NULL;
       return NULL;    
    }
-   
+
    /* OK, now work around some NFS atomic lock race condition 
     * mumbo-jumbo.  We do this by linking a unique file, and 
     * then examing the link count.  At least that's what the 
@@ -287,6 +341,12 @@ xaccSessionBeginFile (Session *sess, const char * filefrag)
       sess->topgroup = xaccReadAccountGroupFile (sess->fullpath);
    }
 
+#ifdef SQLHACK
+/* for testing the sql, just a hack, remove later ... */
+/* this should never ever appear here ...  */
+xaccSessionBeginSQL (sess, "postgres://localhost/gnc_bogus");
+#endif
+
    return (sess->topgroup);
 }
 
@@ -300,12 +360,16 @@ xaccSessionSave (Session *sess)
    /* if the fullpath doesn't exist, either the user failed to initialize,
     * or the lockfile was never obtained ... either way, we can't write. */
    sess->errtype = 0;
+
    if (!(sess->fullpath)) {
       sess->errtype = ENOLCK;
       return;
    }
+
    if (sess->topgroup) {
-      xaccWriteAccountGroupFile (sess->fullpath, sess->topgroup);
+      int error = xaccWriteAccountGroupFile (sess->fullpath, sess->topgroup);
+      if (error < 0)
+        sess->errtype = errno;
    } else {
       /* hmm ... no topgroup means delete file */
       unlink (sess->fullpath);
@@ -368,14 +432,17 @@ MakeHomeDir (void)
        * Go ahead and make it. Don't bother much with checking mkdir 
        * for errors; seems pointless ...  */
       mkdir (path, S_IRWXU);   /* perms = S_IRWXU = 0700 */
-      strcat (path, "/data");
-      mkdir (path, S_IRWXU);
    }
+
+   strcat (path, "/data");
+   rc = stat (path, &statbuf);
+   if (rc)
+      mkdir (path, S_IRWXU);
 }
 
 /* ============================================================== */
 
-/* hack alert -- we should be yanking this out of 
+/* XXX hack alert -- we should be yanking this out of 
  * some config file 
  */
 static char * searchpaths[] = {
@@ -457,7 +524,15 @@ xaccResolveFilePath (const char * filefrag)
    /* make sure that the gnucash home dir exists. */
    MakeHomeDir();
 
-   /* OK, we didn't find the file */
+   /* OK, we didn't find the file. */
+   /* If the user specified a simple filename (i.e. no slashes in it)
+    * then create the file.  But if it has slashes in it, then creating
+    * a bnuch of directories seems like a bad idea; more likely, the user
+    * specified a bad filename.  So return with error. */
+   if (strchr (filefrag, '/')) {
+      return NULL;
+   }
+   
    /* Lets try creating a new file in $HOME/.gnucash/data */
    path = getenv ("HOME");
    if (path) {

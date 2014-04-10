@@ -1,0 +1,9 @@
+Makefile
+.deps
+.libs
+*.lo
+*.la
+gnucash.engine.i
+gnucash-engine-perl5_wrap.c
+gnucash.engine_wrap.doc
+gnucash.pm

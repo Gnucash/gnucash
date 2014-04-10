@@ -1,0 +1,165 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+	<TITLE>Utilisation de la fonction de la double entr&eacute;e</TITLE>
+	<link rel="stylesheet" title="normal" type="text/css" href="gnucash.css">
+	<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+</HEAD>
+<BODY BGCOLOR="#eeeeee">
+<H1><FONT SIZE=6>Qu'est-ce que la comptabilit&eacute; en double
+livret/double entr&eacute;e?</FONT></H1>
+<P>La comptabilit&eacute; en double livret est une m&eacute;thodologie
+comptable introduite au 13&egrave;me si&egrave;cle pour s'assurer que
+chaque transaction est correctement &eacute;quilibr&eacute;e/&eacute;gale.
+</P>
+<P>Comme celles-ci sont toutes requises pour s'&eacute;quilibrer, la
+probabilit&eacute; qu'une erreur sur les donn&eacute;es entr&eacute;es
+aie &eacute;t&eacute; faite est bien moindre. Pour les grands et
+complexes ensembles de comptes avec beaucoup de transactions, il est
+facile de faire des erreurs qui peuvent continuer &agrave; rester
+ind&eacute;tect&eacute;es pendant longtemps, et &ecirc;tre
+&eacute;pouvantablement difficile &agrave; localiser, m&ecirc;me
+quand la comptabilit&eacute; en double livret est utilis&eacute;e. 
+</P>
+<P>Une transaction &agrave; double entr&eacute;e est une transaction
+qui contient des entr&eacute;es pour deux comptes (ou plus), qui
+s'annulent l'une et l'autre. Un compte est <I>d&eacute;bit&eacute;</I>
+d'un montant exactement &eacute;gal &agrave; celui dont l'autre <I>est
+cr&eacute;dit&eacute;. </I><SPAN STYLE="font-style: normal">En</SPAN>
+s'assurant que chaque transaction s'&eacute;quilibre/s'annule, un
+ensemble &eacute;quilibr&eacute; de comptes est garanti. Cela ne vous
+emp&ecirc;che pas d'avoir des erreurs, mais &eacute;limine
+certainement le grand type d'erreurs du genre : <B>J'ai oubli&eacute;
+d'entrer cette partie de la transaction</B>. 
+</P>
+<P>La double entr&eacute;e peut &ecirc;tre introduite d'une fa&ccedil;on
+plus intuitive gr&acirc;ce &agrave; la notion de transfert d'un
+compte bancaire vers un autre, o&ugrave; un montant est retir&eacute;
+d'un compte et d&eacute;pos&eacute; dans un autre. C'est
+effectivement le &quot;r&ocirc;le&quot; de la comptabilit&eacute; en
+double livret; si vous avez ajout&eacute; quelque chose dans un
+compte, vous <I>devez</I> avoir un autre composant de cette
+transaction pour &eacute;quilibrer cela. 
+</P>
+<P><B>Pas forc&eacute;ment un apart&eacute; :</B> Si vous regardez
+votre relev&eacute; de compte, il est typiquement d&eacute;crit en
+d&eacute;tail &agrave; partir du <B>point de vue de la banque</B>,
+qui est exactement l'<I>oppos&eacute;</I> du v&ocirc;tre. Par
+exemple, quand vous y mettez de l'argent, effectuant un d&eacute;p&ocirc;t,
+qui &eacute;tablit un <B>D&Eacute;BIT</B> de leur part/pour eux. 
+</P>
+<P>Peut-&ecirc;tre moins &eacute;vident est le fait que la double
+entr&eacute;e peut &ecirc;tre utilis&eacute;e pour repr&eacute;senter
+les revenus et d&eacute;penses aussi bien que les transferts
+bancaires. Regardez la fen&ecirc;tre d'aide &quot;<A HREF="xacc-expense.html">Revenu/D&eacute;pense</A>&quot;
+pour plus d'informations. 
+</P>
+<P><A NAME="IDENTITY"></A>Dans un syst&egrave;me traditionnel qui
+enregistre les d&eacute;bits et cr&eacute;dits s&eacute;par&eacute;ment,
+l'identit&eacute; de toutes les transactions sont requises pour
+satisfaire que : <TT>Total de d&eacute;bits = Total de cr&eacute;dits.</TT>
+</P>
+<P>Le fait que l'identit&eacute; requiert seulement que le <I>total</I>
+des soldes s'&eacute;quilibre montre que c'est un petit peu trompeur
+d'appeler celle-ci comptabilit&eacute; de la <I>double</I>-ent&eacute;e;
+il serait plus exact de l'appeler comptabilit&eacute;
+<I>multiple-</I>entr&eacute;e. Malheureusement, il y a 700 ans
+d'histoire d'utilisation de ce terme, ce qui est suffisamment
+d&eacute;courageant pour le changer. (Et certains pensent qu'UNIX a
+quelques croustillants et vieux morceaux d'&eacute;tranget&eacute;.
+Ah!) 
+</P>
+<P>GnuCash traite les &quot;D&eacute;bits&quot; comme valeurs
+positives, et &quot;Cr&eacute;dits&quot; comme valeurs n&eacute;gatives,
+de telle fa&ccedil;on que cette identit&eacute; est simplifi&eacute;e
+en : <TT>valeur<SUB>1</SUB> + valeur<SUB>2</SUB> + valeur<SUB>3</SUB>
++ ... = 0</TT>. 
+</P>
+<H1>Utiliser la double entr&eacute;e/double livret</H1>
+<H2>Cr&eacute;ation de transactions</H2>
+<P>Pour cr&eacute;er une transaction &agrave; double-entr&eacute;e : 
+</P>
+<UL>
+	<LI><P>Cliquez sur une bo&icirc;te dans la colonne marqu&eacute;e
+	<TT>Transfert depuis</TT> sur le c&ocirc;t&eacute; gauche du
+	registre. 
+	</P>
+	<P STYLE="margin-bottom: 0cm">Un menu se d&eacute;roulera, listant
+	tous les comptes depuis lequel un transfert peut &ecirc;tre r&eacute;alis&eacute;.</P>
+	<P STYLE="margin-bottom: 0cm"></P>
+	<LI><P>S&eacute;lectionnez-en un. 
+	</P>
+	<P>Quand vous enregistrez la transaction, la double entr&eacute;e
+	sera automatiquement r&eacute;alis&eacute;e, et la transaction
+	appara&icirc;tra automatiquement dans toutes les fen&ecirc;tres
+	montrant les comptes transf&eacute;r&eacute;-depuis et
+	transf&eacute;r&eacute;-vers.</P>
+</UL>
+<H2>Changement des transactions</H2>
+<P>Pour <I>changer</I> une transaction &agrave; double entr&eacute;e
+: 
+</P>
+<P>Afficher simplement la transaction dans n'importe quelle fen&ecirc;tre
+dans laquelle elle appara&icirc;t.</P>
+<P>Tout changement effectu&eacute; sera automatiquement refl&eacute;t&eacute;
+dans l'ensemble des comptes et dans toutes les fen&ecirc;tres
+affichant la transaction. 
+</P>
+<P>De la m&ecirc;me mani&egrave;re, quand une transaction &agrave;
+double entr&eacute;e est supprim&eacute;e, les r&eacute;partitions
+seront supprim&eacute;s depuis l'ensemble des comptes; et les soldes
+seront automatiquement recalcul&eacute;s pour l'<I>ensemble</I> des
+comptes. 
+</P>
+<P>Pour changer le compte de transfert, s&eacute;lectionnez
+simplement un nouveau compte depuis le menu d&eacute;roulant. Quand
+vous enregistrez la transaction, elle sera automatiquement
+s&eacute;lectionn&eacute;e depuis le vieux compte, et ins&eacute;r&eacute;e
+dans le nouveau compte. 
+</P>
+<H1>Nettoyage impeccable</H1>
+<P>GnuCash peut &ecirc;tre configur&eacute; pour &ecirc;tre strict ou
+&quot;rel&acirc;ch&eacute;&quot; &agrave; propos de la double entr&eacute;e.
+</P>
+<P>En mode &quot;rel&acirc;ch&eacute;&quot;, vous pouvez cr&eacute;er
+des <I>transactions anormales/non &eacute;quilibr&eacute;es</I>,
+c'est &agrave; dire, des transactions o&ugrave; les r&eacute;partitions
+ne s'&eacute;quilibrent pas pour faire z&eacute;ro. Cela met de c&ocirc;t&eacute;
+la validation qui vient en utilisant le sch&eacute;ma le plus strict
+de la double entr&eacute;e, qui n'est probablement pas r&eacute;ellement
+une prudente modification. En effet : 
+</P>
+<UL>
+	<LI><P STYLE="margin-bottom: 0cm">Si vous n'&ecirc;tes pas s&ucirc;r
+	de ce que vous faites, vous ne voulez probablement pas mettre de
+	c&ocirc;t&eacute; la validation de la <B>double entr&eacute;e,</B>
+	comme cela vous aide &agrave; garder vos comptes &eacute;quilibr&eacute;s
+	m&ecirc;me quand tout cela n'est pas clair. 
+	</P>
+	<LI><P>Si vous &ecirc;tes une <I>&quot;b&ecirc;te&quot;/expert de la
+	comptabilit&eacute;,</I> vous savez ce qui est <I>r&eacute;ellement
+	important</I> de garder en &eacute;quilibre et pr&eacute;f&eacute;rerez
+	encore la <B>double entr&eacute;e.</B> 
+	</P>
+</UL>
+<P STYLE="margin-bottom: 0cm">Mais si vous d&eacute;cidez de
+&quot;d&eacute;passer le syst&egrave;me&quot;, et d'avoir un nombre
+de transactions non &eacute;quilibr&eacute;es, vous voudrez
+probablement nettoyer ce travail &agrave; un certain point. Pour
+nettoyer ces transactions anormales/non &eacute;quilibr&eacute;es,
+vous pouvez choisir &quot;Nettoyage&quot; &agrave; partir de la
+fen&ecirc;tre du menu. Cela examinera chaque transaction; si la
+transaction ne s'&eacute;quilibre pas, une entr&eacute;e
+divis&eacute;e/r&eacute;partie sera cr&eacute;&eacute;e et plac&eacute;e
+dans un compte nomm&eacute; &quot;<B>Anormal/Unbalanced</B>&quot;.
+Vous pouvez alors revoir ces divisions/r&eacute;partitions et les
+d&eacute;placer vers leurs comptes appropri&eacute;s. 
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<HR>
+<P>Retour &agrave; la <A HREF="xacc-main.html">Page principale de la
+documentation.</A> <BR>&nbsp; 
+</P>
+</BODY>
+</HTML>

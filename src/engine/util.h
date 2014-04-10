@@ -2,7 +2,7 @@
  * util.h -- utility functions that are used everywhere for         *
  *           gnucash (ex-xacc (X-Accountant))                       *
  * Copyright (C) 1997 Robin D. Clark                                *
- * Copyright (C) 1998, 1999 Linas Vepstas                           *
+ * Copyright (C) 1998-2000 Linas Vepstas <linas@linas.org>          *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -15,52 +15,64 @@
  * GNU General Public License for more details.                     *
  *                                                                  *
  * You should have received a copy of the GNU General Public License*
- * along with this program; if not, write to the Free Software      *
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
+ * along with this program; if not, contact:                        *
  *                                                                  *
- *   Author: Rob Clark                                              *
- * Internet: rclark@cs.hmc.edu                                      *
- *  Address: 609 8th Street                                         *
- *           Huntington Beach, CA 92648-4632                        *
+ * Free Software Foundation           Voice:  +1-617-542-5942       *
+ * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
+ * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ *                                                                  *
+ *   Author: Rob Clark (rclark@cs.hmc.edu)                          *
+ *   Author: Linas Vepstas (linas@linas.org)                        *
 \********************************************************************/
 
 #ifndef __XACC_UTIL_H__
 #define __XACC_UTIL_H__
 
-#include <stdlib.h>
 #include "config.h"
+
+#include <assert.h>
+#include <errno.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+#include "gnc-common.h"
 
 #define BUFSIZE   1024
 
 /** DEBUGGING MACROS ************************************************/
 /* The debuging macros enable the setting of trace messages */
-#include <stdio.h>
 
-#if HAVE_NANA_H
-#include <nana.h>
-
-/* override standard system assert with nana I assertion */
-#ifdef assert 
-#undef assert
-#endif 
-#define assert I
-#else	/* HAVE_NANA_H */
-/* if there is no nana, use he system assert and mush up LG */
-#include <assert.h>
 #define LG(condition,args...)	if (condition) fprintf(stderr, ##args)
-#endif	/* HAVE_NANA_H */
 
-#define MOD_ENGINE     1
-#define MOD_IO         2
-#define MOD_REGISTER   3
-#define MOD_LEDGER     4
-#define MOD_HTML       5
-#define MOD_GUI        6
-#define MOD_SCRUB      7
-#define MOD_GTK_REG    8
-#define MODULE_MAX     9
+typedef enum
+{
+  MOD_DUMMY   =  0,
+  MOD_ENGINE  =  1,
+  MOD_IO      =  2,
+  MOD_REGISTER=  3,
+  MOD_LEDGER  =  4,
+  MOD_HTML    =  5,
+  MOD_GUI     =  6,
+  MOD_SCRUB   =  7,
+  MOD_GTK_REG =  8,
+  MOD_GUILE   =  9,
+  MOD_BACKEND = 10,
+  MOD_QUERY   = 11,
+  MOD_LAST    = 11,
+  MOD_NUM     = MOD_LAST + 1
+} gncModuleType;
 
-extern int loglevel[MODULE_MAX];
+typedef enum
+{
+  GNC_LOG_NOTHING    = 0,
+  GNC_LOG_ERROR      = 1,
+  GNC_LOG_WARNING    = 2,
+  GNC_LOG_INFO       = 3,
+  GNC_LOG_DEBUG      = 4,
+  GNC_LOG_EVERYTHING = 5
+} gncLogLevel;
+
+extern gncLogLevel loglevel[MOD_NUM];
 
 #define LERR    (1 <= loglevel[module])
 #define LWARN   (2 <= loglevel[module])
@@ -72,23 +84,25 @@ extern int loglevel[MODULE_MAX];
 #undef DEBUG
 #endif
 
+/* some preprocessors use ugly __FUNCTION__ substitution ... */
+char * prettify (const char *); 
+
 /* utility macros  */
-#define FATAL(x...)    LG(1, "Fatal Error: ");   LG(1,       ##x);
-#define PERR(x...)     LG(LERR,    "Error: ");   LG(LERR,    ##x);
-#define PWARN(x...)    LG(LWARN,   "Waring: ");  LG(LWARN,   ##x);
-#define PINFO(x...)    LG(LINFO,   "Info: ");    LG(LINFO,   ##x);
-#define DEBUG(x...)    LG(LDEBUG,  "Debug: ");   LG(LDEBUG,  ##x);
-#define ENTER(x...)    LG(LDEBUG,  "Enter: ");   LG(LDEBUG,  ##x);
-#define LEAVE(x...)    LG(LDEBUG,  "Leave: ");   LG(LDEBUG,  ##x);
-#define DETAIL(x...)   LG(LDETAIL, "Detail: ");  LG(LDETAIL, ##x);
+#define FATAL(x...)    LG(1, "Fatal Error: %s: ",  prettify(__FUNCTION__));  LG(1,       ##x);
+#define PERR(x...)     LG(LERR,    "Error: %s: ",  prettify(__FUNCTION__));  LG(LERR,    ##x);
+#define PWARN(x...)    LG(LWARN,   "Waring: %s: ", prettify(__FUNCTION__));  LG(LWARN,   ##x);
+#define PINFO(x...)    LG(LINFO,   "Info: %s: ",   prettify(__FUNCTION__));  LG(LINFO,   ##x);
+#define DEBUG(x...)    LG(LDEBUG,  "Debug: %s: ",  prettify(__FUNCTION__));  LG(LDEBUG,  ##x);
+#define ENTER(x...)    LG(LDEBUG,  "Enter: %s: ",  prettify(__FUNCTION__));  LG(LDEBUG,  ##x);
+#define LEAVE(x...)    LG(LDEBUG,  "Leave: %s: ",  prettify(__FUNCTION__));  LG(LDEBUG,  ##x);
+#define DETAIL(x...)   LG(LDETAIL, "Detail: %s: ", prettify(__FUNCTION__));  LG(LDETAIL, ##x);
 
 #define DEBUGCMD(x) { if (LINFO) { x; }}
 
-#include <errno.h>
 #define ERROR()     fprintf(stderr,"%s: Line %d, error = %s\n", \
 			    __FILE__, __LINE__, strerror(errno));
 
-#ifdef DEBUGMEMORY
+#if DEBUG_MEMORY
 void   *dmalloc( size_t size );
 void   dfree( void *ptr );
 size_t dcoresize();
@@ -110,7 +124,8 @@ size_t dcoresize();
 #define isNum(x) (((x)-0x30) < 0) ? 0 : (((x)-0x30) > 9) ? 0 : 1
 
 #define EPS  (1.0e-6)
-#define DEQ(x,y) (((((x)+EPS)>(y)) ? 1 : 0) && ((((x)-EPS)<(y)) ? 1 : 0))
+#define DEQEPS(x,y,eps) (((((x)+(eps))>(y)) ? 1 : 0) && ((((x)-(eps))<(y)) ? 1 : 0))
+#define DEQ(x,y) DEQEPS(x,y,EPS)
 
 
 #define SAFE_STRCMP(da,db) {		\
@@ -127,48 +142,126 @@ size_t dcoresize();
   }					\
 }
 
+/** PROTOTYPES ******************************************************/
+
 int safe_strcmp (const char * da, const char * db);
 
+/* Set the logging level of the given module. */
+void gnc_set_log_level(gncModuleType module, gncLogLevel level);
+
+/* Set the logging level for all modules. */
+void gnc_set_log_level_global(gncLogLevel level);
+
+
 /********************************************************/
-/* the ultostr() subroutihne is the inverse of strtoul().
+/* libc 'enhancements' */
+
+/* Search for needle in haystack, from the back of the haystack. 
+ * This is a reversed version of strstr() 
+ */
+extern char * rstrstr (const char *, const char *);
+
+/* Search for str2 in first nchar chars of str1, ignore case.. 
+ * Return pointer to first match, or null.
+ * These are just like that strnstr and the strstr functions, except 
+ * that they ignore the case. 
+ */
+extern char *strncasestr(const char *str1, const char *str2, size_t len);
+extern char *strcasestr(const char *str1, const char *str2);
+
+/* The strpskip() function locates the first occurrence in the
+ * string s that does not match any of the characters in "reject".
+ * This is the opposite of strpbrk().
+ * An alernate (better??) implementation might be  
+ * #define strpskip(s,r) (s+strspn(s,r))
+ */
+
+extern char * strpskip (const char * s, const char *reject);
+
+/********************************************************/
+/* the ultostr() subroutine is the inverse of strtoul().
  *    It accepts a number and prints it in the indicated base.
  *    The returned string should be freed when done.
  */
 
 char * ultostr (unsigned long val, int base);
 
-/** PROTOTYPES ******************************************************/
+/* Returns true if string s is a number, possibly
+ * surrounded by whitespace. */
+gncBoolean gnc_strisnum(const char *s);
 
-#define PRTSYM 0x1
-#define PRTSHR 0x2
-#define PRTSEP 0x4
+/* The gnc_localeconv() subroutine returns an lconv structure
+ * containing locale information. If no locale is set, the
+ * structure is given default (en_US) values.
+ */
+struct lconv * gnc_localeconv();
+
+/* Returns the 3 character currency code of the current locale. */
+char * gnc_locale_default_currency();
+
+
 /*
- * The xaccPrintAmount() subroutine converts a double amount
- * to a printable string, depending on the argument shrs:
- * 0 -- print two decimal places
- * 1 -- print currency symbol & two decimal places
- * 2 -- print three decimal places
- * 3 -- prints three decimal places followed by string "shrs"
- * 4-7 as above, but comma separated
+ * The xaccPrintAmount() and xaccSPrintAmount() routines provide
+ *    i18n'ed convenience routines for printing share and currency
+ *    amounts.  Both routines take a double argument, and print
+ *    into a string.  The argument 'shrs' is a bitflag that controls
+ *    the format.  If it is zero, two decimal places and no currency
+ *    symbol will be printed.  If non-zero, it must be a bitwise-or
+ *    of the following:
  *
- * shrs must be bitwise-OR of PRTSYM, PRTSHR and PRTSEP
+ *    PRTSYM -- also print currency symbol.
+ *    PRTSHR -- print four decimal places
+ *    PRTSYM | PRTSHR -- prints four decimal places followed by "shrs"
+ *    PRTSEP -- print comma-separated K's
+ *    PRTNMN -- print as non-monetary value
+ *    PRTEUR -- print as EURO value (2 decimal places, EUR as currency
+ *              symbol if PRTSYM is specified, mutually exclisive with PRTSHR)
+ *    PRTCUR -- print as a currency price, with 5 decimals, overides PRTSHR
+ *
+ *    If non-NULL, the curr_code argument overrides the default currency
+ *    code.
  *
  * The xaccPrintAmount() routine returns a pointer to a statically
  *    allocated buffer, and is therefore not thread-safe.
  *
  * The xaccSPrintAmount() routine accepts a pointer to the buffer to be
  *    printed to.  It returns the length of the printed string.
+ *
+ * The xaccSPrintAmountGeneral() routine is a more general version that
+ *    allows the user to set the precision, the minimum trailing zeros,
+ *    and the currency symbol.
+ *
+ * The xaccPrintAmountArgs() routine is identical to xaccPrintAmount,
+ *    except that the arguments are given as boolean values intead of
+ *    a bitfield. This is primarily intended for guile use.
  */
-char * xaccPrintAmount (double val, short shrs);
-int xaccSPrintAmount (char *buf, double val, short shrs);
 
-/********************************************************************\
- * xaccParseUSAmount                                                * 
- *   parses U.S. style monetary strings                             *
- *   (strings of the form DDD,DDD,DDD.CC                            *
- *                                                                  * 
-\********************************************************************/
-double xaccParseUSAmount (const char * str);
+#define PRTSYM 0x1
+#define PRTSHR 0x2
+#define PRTSEP 0x4
+#define PRTNMN 0x8
+#define PRTEUR 0x10
+#define PRTCUR 0x20
+
+typedef unsigned int GNCPrintAmountFlags;
+
+char * xaccPrintAmount (double val, GNCPrintAmountFlags flags,
+                        const char *curr_code);
+int xaccSPrintAmount (char *buf, double val, GNCPrintAmountFlags flags,
+                      const char *curr_code);
+int xaccSPrintAmountGeneral (char * bufp, double val,
+                             GNCPrintAmountFlags flags,
+                             int precision,
+                             int min_trailing_zeros,
+                             const char *curr_sym);
+char * xaccPrintAmountArgs (double val,
+                            gncBoolean print_currency_symbol,
+                            gncBoolean print_separators,
+                            gncBoolean is_shares_value,
+                            const char *curr_code);
+
+/* Parse i18n amount strings */
+double xaccParseAmount (const char * instr, gncBoolean monetary);
 
 
 /** TEMPLATES ******************************************************/

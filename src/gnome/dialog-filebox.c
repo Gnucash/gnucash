@@ -1,7 +1,8 @@
 /********************************************************************\
- * FileBox.c -- the file dialog box                                 *
- * Copyright (C) 1997 Robin D. Clark                                *
- * Copyright (C) 1998 Rob Browning <rlb@cs.utexas.edu>              *
+ * dialog-filebox.c -- the file dialog box                          *
+ * Copyright (C) 1997 Robin D. Clark <rclark@cs.hmc.edu>            *
+ * Copyright (C) 1998-99 Rob Browning <rlb@cs.utexas.edu>           *
+ * Copyright (C) 2000 Linas Vepstas  <linas@linas.org>              *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -14,173 +15,147 @@
  * GNU General Public License for more details.                     *
  *                                                                  *
  * You should have received a copy of the GNU General Public License*
- * along with this program; if not, write to the Free Software      *
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
+ * along with this program; if not, contact:                        *
  *                                                                  *
- *   Author: Rob Clark                                              *
- * Internet: rclark@cs.hmc.edu                                      *
- *  Address: 609 8th Street                                         *
- *           Huntington Beach, CA 92648-4632                        *
+ * Free Software Foundation           Voice:  +1-617-542-5942       *
+ * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
+ * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-#include <gnome.h>
+#include "top-level.h"
 
-#include "config.h"
+#include <gnome.h>
 
 #include "FileBox.h"
 #include "messages.h"
 #include "util.h"
-#include "gtkfilesel2.h"
 
-/** GLOBALS *********************************************************/
-#define CLOSED    1
-#define DESTROYED 2
-gint    done = CLOSED;
 
-/** GLOBALS FOR FILEBOX FILTERS *************************************/
-gchar *xac_suffs[] = {".xac", ".gnc", NULL};
-gchar *qif_suffs[] = {".qif", NULL};
-gchar *all_suffs[] = {"", NULL};
+typedef struct _FileBoxInfo FileBoxInfo;
+struct _FileBoxInfo
+{
+  GtkFileSelection *file_box;
+  char *file_name;
+};
 
-GtkFileSelection2FileType 
-  xfiles = {"Gnucash files (*.xac; *.gnc)", xac_suffs},
-  qfiles = {"QIF files (*.qif)", qif_suffs},
-  allfiles = {"All files (*)", all_suffs};
-
-GtkFileSelection2FileType 
-  *gnucash_types[] = {&xfiles, &qfiles, &allfiles, NULL},
-  *qif_types[] = {&qfiles, &allfiles, NULL};
+/* Global filebox information */
+static FileBoxInfo fb_info = {NULL, NULL};
 
 /* This static indicates the debugging module that this .o belongs to.   */
 static short module = MOD_GUI;
 
+
 /** PROTOTYPES ******************************************************/
-void fileBoxCB ( GtkWidget *mw, gpointer data );
-void closeBoxCB( GtkWidget *mw, gpointer data );
+static void store_filename(GtkWidget *w, gpointer data);
+static void gnc_file_box_close_cb(GtkWidget *w, gpointer data);
+static gboolean gnc_file_box_delete_cb(GtkWidget *widget, GdkEvent *event,
+				       gpointer user_data);
+
 
 /********************************************************************\
  * fileBox                                                          * 
- *   pops up a file selection dialog (either a "Save As" or an      * 
- *   "Open"), and returns the name of the file the users selected.  * 
+ *   Pops up a file selection dialog (either a "Save As" or an      * 
+ *   "Open"), and returns the name of the file the user selected.   *
  *   (This function does not return until the user selects a file   * 
- *   or pressed "Cancel")                                           * 
+ *   or presses "Cancel" or the window manager destroy button)      * 
  *                                                                  * 
- *   NOTE: fileBox is not re-entrant... if an instance of fileBox   * 
- *         already exists, the latter call will return NULL         * 
- *                                                                  * 
- * Args:   parent  - the parent of this window                      *
- *         type    - either OPEN or SAVE                            * 
- * Return: none                                                     * 
- * Global: app     - the XtAppContext                               * 
- *         done    - whether fileBox should return                  * 
+ * Args:   title - the title of the window                          *
+ *         filter - the file filter to use                          * 
+ * Return: char * containing the name of the file the user selected *
 \********************************************************************/
 char *
 fileBox(const char * title, const char * filter) 
 {
-  GtkWidget *fileBox;
-  gchar     *fileName = NULL;
-
-  if ( !done )
-    return NULL;
+  ENTER("\n");
 
   /* Set a default title if nothing was passed in */  
   if (title == NULL)
-  {
     title = OPEN_STR;
-  }
 
-  done = 0;
-                          
-  ENTER("filebox");
+  if (fb_info.file_name != NULL)
+    g_free(fb_info.file_name);
 
-  fileBox = gtk_file_selection2_new (title);
+  fb_info.file_box = GTK_FILE_SELECTION(gtk_file_selection_new(title));
+  fb_info.file_name = NULL;
 
-  /* hack alert -- this is hard coding the filter... BAD very BAD */
-  gtk_file_selection2_show_file_types(GTK_FILE_SELECTION2(fileBox));
-  gtk_file_selection2_set_file_types (GTK_FILE_SELECTION2(fileBox), gnucash_types);
-  
-  gtk_object_set_data(GTK_OBJECT(fileBox), "done", &done);
+  /* hack alert - this was filtering directory names as well as file 
+   * names, so I think we should not do this by default (rgmerk) */
+#if 0
+  if (filter != NULL)
+    gtk_file_selection_complete(fb_info.file_box, filter);
+#endif
 
-  /* Connect the dialog to the destroy even */  
-  gtk_signal_connect (GTK_OBJECT (fileBox), "destroy",
-                      (GtkSignalFunc) closeBoxCB, fileBox);
-                             
-  /* Connect the ok_button to file_ok_sel function */
-  gtk_signal_connect (GTK_OBJECT (GTK_FILE_SELECTION2(fileBox)->ok_button),
-                      "clicked", (GtkSignalFunc) fileBoxCB, fileBox );
-         
-  /* Connect the cancel_button to destroy the widget */
-  gtk_signal_connect (GTK_OBJECT (GTK_FILE_SELECTION2(fileBox)->cancel_button),
-                      "clicked", (GtkSignalFunc) closeBoxCB,
-                       fileBox);
+  gtk_window_set_modal(GTK_WINDOW(fb_info.file_box), TRUE);
+  gtk_window_set_transient_for(GTK_WINDOW(fb_info.file_box),
+			       GTK_WINDOW(gnc_get_ui_data()));
 
-  gtk_widget_show(GTK_WIDGET(fileBox));
+  gtk_signal_connect(GTK_OBJECT(fb_info.file_box->ok_button),
+		     "clicked", GTK_SIGNAL_FUNC(store_filename),
+		     (gpointer) &fb_info);
 
-  while ( !done )
-  {
-    gtk_main_iteration(); 
-  }
+  /* Ensure that the dialog box is destroyed when the user clicks a button. */
+  gtk_signal_connect(GTK_OBJECT(fb_info.file_box->ok_button),
+		     "clicked", GTK_SIGNAL_FUNC(gnc_file_box_close_cb),
+		     (gpointer) &fb_info);
 
-  LEAVE("fileBox");
+  gtk_signal_connect(GTK_OBJECT(fb_info.file_box->cancel_button),
+		     "clicked", GTK_SIGNAL_FUNC(gnc_file_box_close_cb),
+		     (gpointer) &fb_info);
 
-  if ( done == CLOSED )
-  {
-    fileName = gtk_file_selection2_get_filename(GTK_FILE_SELECTION2(fileBox));  
-  }
-  if ( done == DESTROYED )
-  {
-    fileName = NULL;
-  }
+  gtk_signal_connect(GTK_OBJECT(fb_info.file_box), "delete_event",
+		     GTK_SIGNAL_FUNC(gnc_file_box_delete_cb), NULL);
 
-  /* Check validity of file here */
+  gtk_signal_connect(GTK_OBJECT(fb_info.file_box), "destroy_event",
+		     GTK_SIGNAL_FUNC(gnc_file_box_delete_cb), NULL);
 
-  return fileName;
+  gtk_widget_show(GTK_WIDGET(fb_info.file_box));
+
+  gtk_main();
+
+  gtk_widget_destroy(GTK_WIDGET(fb_info.file_box));
+
+  LEAVE("\n");
+
+  return fb_info.file_name;
 }
+
 
 /********************************************************************\
- * fileBoxCB                                                        * 
- *   callback that saves the name of the file so that fileBox       * 
- *   can return                                                     * 
+ * store_filename                                                   * 
+ *   callback that saves the name of the file                       * 
  *                                                                  * 
- * Args:   mw - the widget that called us                           * 
- *         data - fileName                                            * 
- *         cb -                                                     * 
+ * Args:   w - the widget that called us                            * 
+ *         data - pointer to filebox info structure                 * 
  * Return: none                                                     * 
- * Global: done    - whether fileBox should return                  * 
 \********************************************************************/
-void
-fileBoxCB( GtkWidget *mw, gpointer data )
+static void
+store_filename(GtkWidget *w, gpointer data)
 {
-  gint      *done;
-  GtkWidget *fileBox;
-    
-  ENTER("fileBoxCB");
+  FileBoxInfo *fb_info = (FileBoxInfo *) data;
+  char *file_name;
 
-  fileBox = data;
-  done    = gtk_object_get_data(GTK_OBJECT(fileBox), "done");
-  *done   = CLOSED;
+  file_name = gtk_file_selection_get_filename(fb_info->file_box);
 
-  gtk_widget_hide(fileBox);
-
-  LEAVE("fileBoxCB");
+  fb_info->file_name = g_strdup(file_name);
 }
 
-void
-closeBoxCB( GtkWidget *mw, gpointer data )
+static void
+gnc_file_box_close_cb(GtkWidget *w, gpointer data)
 {
-  gint      *done;
-  GtkWidget *fileBox;
-    
-  ENTER("fileBoxCB");
+  gtk_widget_hide(GTK_WIDGET(fb_info.file_box));
 
-  fileBox = data;
-  done    = gtk_object_get_data(GTK_OBJECT(fileBox), "done");
-  *done   = DESTROYED;
+  gtk_main_quit();
+}
 
-  gtk_widget_destroy(fileBox);
+static gboolean
+gnc_file_box_delete_cb(GtkWidget *widget, GdkEvent *event, gpointer user_data)
+{
+  gtk_widget_hide(GTK_WIDGET(fb_info.file_box));
 
-  LEAVE("fileBoxCB");
+  gtk_main_quit();
+
+  /* Don't delete the window, we'll handle things ourselves. */
+  return TRUE;
 }
 
 /* ======================== END OF FILE ======================== */
-

@@ -1,8 +1,0 @@
--*-text-*-
-
-Need to centralize shutdown.  *everyone* should be calling either
-gnc:shutdown or gnc_shutdown, and that function should be smart enough
-to DTRT (like gncQuerySave, closing the GUI through a common
-gnc_ui_shutdown function, etc.).  We also have to decide at what point
-the user's hooks should be called...
-

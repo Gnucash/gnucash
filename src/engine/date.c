@@ -2,7 +2,7 @@
  * date.c -- utility functions to handle the date (adjusting, get   * 
  *           current date, etc.) for xacc (X-Accountant)            *
  * Copyright (C) 1997 Robin D. Clark                                *
- * Copyright (C) 1998 Linas Vepstas                                 *
+ * Copyright (C) 1998, 1999, 2000 Linas Vepstas                     *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -15,18 +15,17 @@
  * GNU General Public License for more details.                     *
  *                                                                  *
  * You should have received a copy of the GNU General Public License*
- * along with this program; if not, write to the Free Software      *
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
+ * along with this program; if not, contact:                        *
  *                                                                  *
- *   Author: Rob Clark                                              *
- * Internet: rclark@cs.hmc.edu                                      *
- *  Address: 609 8th Street                                         *
- *           Huntington Beach, CA 92648-4632                        *
+ * Free Software Foundation           Voice:  +1-617-542-5942       *
+ * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
+ * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
  *                                                                  *
- *                                                                  * 
- * TODO: - for now, every year is leap year                         * 
+ *   Author: Rob Clark rclark@cs.hmc.edu                            *
  *                                                                  * 
 \********************************************************************/
+
+#define _GNU_SOURCE
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -35,12 +34,42 @@
 
 #include "config.h"
 #include "date.h"
+#include "util.h"
 
-/* hack alert -- this should be turned into user-configurable parameter .. */
-DateFormat dateFormat = DATE_FORMAT_US;
+/* This is now user configured through the gnome options system() */
+static DateFormat dateFormat = DATE_FORMAT_US;
+
+/* This static indicates the debugging module that this .o belongs to. */
+static short module = MOD_ENGINE;
+
 
 /********************************************************************\
 \********************************************************************/
+
+
+/**
+ * setDateFormat
+ * set date format to one of US, UK, CE, OR ISO
+ * checks to make sure it's a legal value
+ * Args: DateFormat: enumeration indicating preferred format
+ * returns: nothing
+ *
+ * Globals: dateFormat
+ **/
+
+void setDateFormat(DateFormat df)
+{
+  if(df >= DATE_FORMAT_FIRST && df <= DATE_FORMAT_LAST)
+  {
+    dateFormat = df;
+  }
+  else
+  {    /* hack alert - is this what we should be doing here? */
+    PERR("non-existent date format set");
+  }
+
+  return;
+}
 
 /**
  * printDate
@@ -71,7 +100,7 @@ printDate (char * buff, int day, int month, int year)
    * right.
    */
   switch(dateFormat)
-    {
+  {
     case DATE_FORMAT_UK:
       sprintf (buff, "%2d/%2d/%-4d", day, month, year);
       break;
@@ -81,11 +110,23 @@ printDate (char * buff, int day, int month, int year)
     case DATE_FORMAT_ISO:
       sprintf (buff, "%04d-%02d-%02d", year, month, day);
       break;
+    case DATE_FORMAT_LOCALE:
+      {
+        struct tm tm_str;
+        tm_str.tm_mday = day;
+        tm_str.tm_mon = month - 1; /*tm_mon = 0 through 11 */
+        tm_str.tm_year = year - 1900; /* this is what the standard 
+                                       * says, it's not a Y2K thing
+                                       */
+        strftime(buff, MAX_DATE_LENGTH, "%x", &tm_str);
+      }
+      break;
+
     case DATE_FORMAT_US:
     default:
       sprintf (buff, "%2d/%2d/%-4d", month, day, year);
       break;
-    }
+  }
 }
 
 void 
@@ -101,13 +142,25 @@ printDateSecs (char * buff, time_t t)
                    theTime->tm_year + 1900);
 }
 
-
 char * 
 xaccPrintDateSecs (time_t t)
 {
    char buff[100];
    printDateSecs (buff, t);
    return strdup (buff);
+}
+
+char *
+gnc_print_date(Timespec ts)
+{
+  static char buff[256];
+  time_t t;
+
+  t = ts.tv_sec + (ts.tv_nsec / 1000000000.0);
+
+  printDateSecs(buff, t);
+
+  return buff;
 }
 
 /**
@@ -160,6 +213,20 @@ scanDate(const char *buff, int *day, int *month, int *year)
    /* get numeric values */
    switch(dateFormat)
    {
+#if 0 /* strptime broken in glibc <= 2.1.2 */
+     case DATE_FORMAT_LOCALE:
+       if (buff[0] != 0)
+       {
+         struct tm thetime;
+
+         strptime(buff, "%x", &thetime);
+
+         iday = thetime.tm_mday;
+         imonth = thetime.tm_mon + 1;
+         iyear = thetime.tm_year + 1900;
+       }
+       break;
+#endif
      case DATE_FORMAT_UK:
      case DATE_FORMAT_CE:
        if (first_field) iday = atoi (first_field);
@@ -184,7 +251,7 @@ scanDate(const char *buff, int *day, int *month, int *year)
    /* if the year entered is smaller than 100, assume we mean the current
       century (and are not revising some roman emperor's books) */
    if(iyear<100) {
-     iyear += ((int) ((now->tm_year+1900)/100)) * 100;
+     iyear += ((int) ((now->tm_year+1950-iyear)/100)) * 100;
    }
 
    if (year) *year=iyear;

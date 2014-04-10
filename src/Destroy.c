@@ -27,22 +27,22 @@
 #include "Group.h"
 #include "LedgerUtils.h"
 #include "MultiLedger.h"
-
-#ifdef KDE
-#include "qt/reconciledlg.h"
-#endif
-
-#ifdef GNOME
-#include "window-reconcile.h"
-#endif
-
-#ifdef MOTIF
 #include "RecnWindow.h"
-#endif
 
 #include "util.h"
 
    
+/* ------------------------------------------------------ */
+void
+xaccAccountWindowDestroySimple (Account *acc)
+{
+  xaccDestroyLedgerDisplay (acc);
+  xaccDestroyRecnWindow (acc);
+  xaccDestroyAdjBWindow (acc);
+  xaccDestroyEditAccWindow (acc);
+  xaccDestroyEditNotesWindow (acc);
+}
+
 /* ------------------------------------------------------ */
 void
 xaccAccountWindowDestroy (Account *acc)
@@ -62,11 +62,7 @@ xaccAccountWindowDestroy (Account *acc)
       }
    }
 
-   xaccDestroyLedgerDisplay (acc);
-   xaccDestroyRecnWindow (acc);
-   xaccDestroyAdjBWindow (acc);
-   xaccDestroyEditAccWindow (acc);
-   xaccDestroyEditNotesWindow (acc);
+   xaccAccountWindowDestroySimple(acc);
 }
 
 /* ------------------------------------------------------ */

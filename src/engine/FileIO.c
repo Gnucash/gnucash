@@ -2,7 +2,7 @@
  * FileIO.c -- read from and writing to a datafile for gnucash      *
  *             (GnuCash/X-Accountant)                               *
  * Copyright (C) 1997 Robin D. Clark                                *
- * Copyright (C) 1997, 1998, 1999 Linas Vepstas                     *
+ * Copyright (C) 1997-2000 Linas Vepstas <linas@linas.org>          *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -15,9 +15,13 @@
  * GNU General Public License for more details.                     *
  *                                                                  *
  * You should have received a copy of the GNU General Public License*
- * along with this program; if not, write to the Free Software      *
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
+ * along with this program; if not, contact:                        *
  *                                                                  *
+ * Free Software Foundation           Voice:  +1-617-542-5942       *
+ * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
+ * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ *                                                                  *
+ ********************************************************************
  * NOTE: the readxxxx/writexxxx functions changed the current       *
  *       position in the file, and so the order which these         *
  *       functions are called in important                          *
@@ -82,6 +86,7 @@
 #include <fcntl.h>
 #include <string.h>
 #include <unistd.h>
+#include <glib.h>
 
 #include "config.h"
 
@@ -97,11 +102,14 @@
 #include "Transaction.h"
 #include "TransactionP.h"
 #include "TransLog.h"
+#include "GNCIdP.h"
 #include "util.h"
 
 #define PERMS   0666
 #define WFLAGS  (O_WRONLY | O_CREAT | O_TRUNC)
 #define RFLAGS  O_RDONLY
+
+#undef VERSION
 #define VERSION 10
 
 
@@ -147,16 +155,16 @@ static int writeAccount( int fd, Account *account );
 static int writeAccInfo( int fd, AccInfo *accinfo );
 static int writeTransaction( int fd, Transaction *trans );
 static int writeSplit( int fd, Split *split);
-static int writeString( int fd, char *str );
+static int writeString( int fd, const char *str );
 static int writeTSDate( int fd, Timespec *);
 
 /*******************************************************/
 /* backwards compatibility definitions for numeric value 
  * of account type.  These numbers are used (are to be
- * used) no where else but here, precisely because they
+ * used) nowhere else but here, precisely because they
  * are non-portable.  The values of these defines MUST
- * NOT BE CHANGED; andy changes WILL BREAK FILE COMPATIBILITY.
- * YOu HAve BEen WARNed!!!!
+ * NOT BE CHANGED; ANY CHANGES WILL BREAK FILE COMPATIBILITY.
+ * YOU HAVE BEEN WARNED!!!!
  */
 
 #define FF_BANK 	0
@@ -192,7 +200,7 @@ xaccGetFileIOError (void)
 /* flip endianness of int, short, etc */
 int xaccFlipInt (int val) 
   {
-  unsigned int flip;
+  guint32 flip;
   flip = (val & 0xff000000) >> 24;
   flip |= (val & 0xff0000) >> 8;
   flip |= (val & 0xff00) << 8;
@@ -207,14 +215,14 @@ short xaccFlipShort (short val)
   flip |= (val & 0xff) << 8;
   return (short) flip;
 }
-  
+
 double xaccFlipDouble (double val) 
   {
   union {
-     unsigned int i[2];
+     guint32 i[2];
      double d;
   } u;
-  unsigned int w0, w1;
+  guint32 w0, w1;
   u.d = val;
   w0 = xaccFlipInt (u.i[0]);
   w1 = xaccFlipInt (u.i[1]);
@@ -224,13 +232,13 @@ double xaccFlipDouble (double val)
   return u.d;
 }
 
-long long xaccFlipLongLong (long long val) 
+gint64 xaccFlipLongLong (gint64 val) 
   {
   union {
-     unsigned int i[2];
-     long long d;
+     guint32 i[2];
+     gint64 d;
   } u;
-  unsigned int w0, w1;
+  guint32 w0, w1;
   u.d = val;
   w0 = xaccFlipInt (u.i[0]);
   w1 = xaccFlipInt (u.i[1]);
@@ -305,14 +313,14 @@ xaccReadAccountGroup( int fd )
 
   maingrp = 0x0;
   error_code = ERR_FILEIO_NO_ERROR;
-  
+
   /* check for valid file descriptor */
   if( 0 > fd ) 
     {
     error_code = ERR_FILEIO_FILE_NOT_FOUND;
     return NULL;
     }
-  
+
   /* Read in the file format token */
   err = read( fd, &token, sizeof(int) );
   if( sizeof(int) != err ) 
@@ -343,7 +351,7 @@ xaccReadAccountGroup( int fd )
   /* mark the newly read group as saved, since the act of putting 
    * it together will have caused it to be marked up as not-saved. 
    */
-  xaccAccountGroupMarkSaved (grp);
+  xaccGroupMarkSaved (grp);
 
   /* auto-number the accounts, if they are not already numbered */
   xaccGroupDepthAutoCode (grp);
@@ -378,7 +386,7 @@ xaccReadAccountGroup( int fd )
 }
 
 /********************************************************************\
- * readGroup                                                 * 
+ * readGroup                                                        * 
  *   reads in a group of accounts                                   *
  *                                                                  * 
  * Args:                                                            * 
@@ -392,7 +400,7 @@ readGroup (int fd, Account *aparent, int token)
   int  i;
   AccountGroup *grp = xaccMallocAccountGroup();
   
-  ENTER ("readGroup");
+  ENTER ("\n");
 
   if (NULL == aparent) {
     maingrp = grp;
@@ -407,15 +415,15 @@ readGroup (int fd, Account *aparent, int token)
     }
   XACC_FLIP_INT (numAcc);
   
-  DEBUG ("readGroup(): expecting %d accounts \n", numAcc);
+  DEBUG ("expecting %d accounts \n", numAcc);
 
   /* read in the accounts */
   for( i=0; i<numAcc; i++ )
     {
     Account * acc = readAccount( fd, grp, token );
     if( NULL == acc ) {
-      printf("Error: readGroup(): Short group read: \n");
-      printf("expected %d, got %d accounts\n",numAcc,i);
+      PERR("Short group read: \n"
+           "\texpected %d, got %d accounts\n",numAcc,i);
       break;
       }
     }
@@ -447,7 +455,7 @@ readAccount( int fd, AccountGroup *grp, int token )
   Account *acc;
   char * tmp;
 
-  ENTER ("readAccount");
+  ENTER ("\n");
   
   /* version 1 does not store the account number */
   if (1 < token) {
@@ -492,25 +500,25 @@ readAccount( int fd, AccountGroup *grp, int token )
   }
   
   tmp = readString( fd, token );
-  if( NULL == tmp)  { free (tmp);  return NULL; }
-  DEBUG ("readAccount(): reading acct %s \n", tmp);
+  if( NULL == tmp) return NULL;
+  DEBUG ("reading acct %s \n", tmp);
   xaccAccountSetName (acc, tmp);
   free (tmp);
   
   if (8 <= token) {
      tmp = readString( fd, token );
-     if( NULL == tmp)  { free (tmp);  return NULL; }
+     if( NULL == tmp) return NULL;
      xaccAccountSetCode (acc, tmp);
      free (tmp);
   }
   
   tmp = readString( fd, token );
-  if( NULL == tmp ) { free (tmp); return NULL; }
+  if( NULL == tmp ) return NULL;
   xaccAccountSetDescription (acc, tmp);
   free (tmp);
   
   tmp = readString( fd, token );
-  if( NULL == tmp ) { free (tmp); return NULL; }
+  if( NULL == tmp ) return NULL;
   xaccAccountSetNotes (acc, tmp);
   free (tmp);
   
@@ -518,13 +526,13 @@ readAccount( int fd, AccountGroup *grp, int token )
    * in version 7 of the file format */
   if (7 <= token) {
      tmp = readString( fd, token );
-     if( NULL == tmp ) { free (tmp); return NULL; }
+     if( NULL == tmp ) return NULL;
      xaccAccountSetCurrency (acc, tmp);
      if (0x0 == tmp[0]) xaccAccountSetCurrency (acc, DEFAULT_CURRENCY);
      free (tmp);
 
      tmp = readString( fd, token );
-     if( NULL == tmp ) { free (tmp); return NULL; }
+     if( NULL == tmp ) return NULL;
      xaccAccountSetSecurity (acc, tmp);
      free (tmp);
   } else {
@@ -532,7 +540,7 @@ readAccount( int fd, AccountGroup *grp, int token )
      xaccAccountSetCurrency (acc, DEFAULT_CURRENCY);
   }
 
-  /* aux account info first appears in versin ten files */
+  /* aux account info first appears in version ten files */
   if (10 <= token) {
      readAccInfo( fd, acc, token );
   }
@@ -541,7 +549,7 @@ readAccount( int fd, AccountGroup *grp, int token )
   if( err != sizeof(int) ) { return NULL; }
   XACC_FLIP_INT (numTrans);
   
-  DEBUG ("Info: readAccount(): expecting %d transactions \n", numTrans);
+  DEBUG ("expecting %d transactions \n", numTrans);
   /* read the transactions */
   for( i=0; i<numTrans; i++ )
     {
@@ -549,8 +557,8 @@ readAccount( int fd, AccountGroup *grp, int token )
     trans = readTransaction( fd, acc, token );
     if( trans == NULL )
       {
-      PERR ("readAccount(): Short Transaction Read: \n");
-      printf (" expected %d got %d transactions \n",numTrans,i);
+      PERR ("Short Transaction Read: \n"
+            "\texpected %d got %d transactions \n",numTrans,i);
       break;
       }
 #ifdef DELINT_BLANK_SPLITS_HACK
@@ -598,7 +606,7 @@ readAccount( int fd, AccountGroup *grp, int token )
  * With the double-entry system, the file may reference accounts 
  * that have not yet been read or properly parented.  Thus, we need 
  * a way of dealing with this, and this routine performs this
- * work. Basically, accounts are requested by thier id.  If an
+ * work. Basically, accounts are requested by their id.  If an
  * account with the indicated ID does not exist, it is created
  * and placed in a temporary holding cell.  Accounts in the
  * holding cell can be located, (so that transactions can be
@@ -630,24 +638,23 @@ locateAccount (int acc_id)
 
    /* normalize the account numbers -- positive-definite.
     * That is, the unique id must never decrease,
-    * nor must it overalp any existing account id */
+    * nor must it overlap any existing account id */
    if (next_free_unique_account_id <= acc_id) {
       next_free_unique_account_id = acc_id+1;
    }
 
    return acc;
 }
- 
+
 static Account *
 springAccount (int acc_id) 
 {
    Account * acc;
-   
+
    /* first, see if we're confused about the account */
    acc = xaccGetAccountFromID (maingrp, acc_id);
    if (acc) {
-      printf ("Internal Error: springAccount(): \n");
-      printf ("account already parented \n");
+      PERR ("account already parented \n");
       return NULL;
    }
 
@@ -659,11 +666,10 @@ springAccount (int acc_id)
    }
 
    /* if we got to here, its an error */
-   printf ("Internal Error: springAccount(): \n");
-   printf ("Couldn't find account \n");
+   PERR ("Couldn't find account \n");
    return NULL;
 }
- 
+
 /********************************************************************\
  * readInvAcct                                                      * 
  *   reads in the auxilliary account info                           *
@@ -679,7 +685,7 @@ readInvAcct( int fd, InvAcct *invacct, int token )
   char * tmp;
 
   tmp = readString( fd, token );
-  if( NULL == tmp ) { free (tmp); return; }
+  if( NULL == tmp ) return;
   xaccInvAcctSetPriceSrc (invacct, tmp);
   free (tmp);
 }
@@ -731,7 +737,7 @@ readTransaction( int fd, Account *acc, int token )
   double num_shares = 0.0;
   double share_price = 0.0;
 
-  ENTER ("readTransaction");
+  ENTER ("\n");
 
   /* create a transaction structure */
   trans = xaccMallocTransaction();
@@ -937,7 +943,7 @@ readTransaction( int fd, Account *acc, int token )
       xaccSplitSetSharePriceAndAmount (s, share_price, num_shares);
     }  
   
-    DEBUG ("readTransaction(): num_shares %f \n", num_shares);
+    DEBUG ("num_shares %f \n", num_shares);
   
     /* Read the account numbers for double-entry */
     /* These are first used in Version 2 of the file format */
@@ -953,7 +959,7 @@ readTransaction( int fd, Account *acc, int token )
         return NULL;
         }
       XACC_FLIP_INT (acc_id);
-      DEBUG ("readTransaction(): credit %d\n", acc_id);
+      DEBUG ("credit %d\n", acc_id);
       peer_acc = locateAccount (acc_id);
   
       /* insert the split part of the transaction into 
@@ -971,7 +977,7 @@ readTransaction( int fd, Account *acc, int token )
         return NULL;
         }
       XACC_FLIP_INT (acc_id);
-      DEBUG ("readTransaction(): debit %d\n", acc_id);
+      DEBUG ("debit %d\n", acc_id);
       peer_acc = locateAccount (acc_id);
       if (peer_acc) {
          Split *split;
@@ -1003,6 +1009,7 @@ readTransaction( int fd, Account *acc, int token )
        * Later versions don't have this. */
       offset = 1;
       split = readSplit (fd, token);
+      xaccRemoveEntity(&trans->splits[0]->guid);
       xaccFreeSplit (trans->splits[0]);
       trans->splits[0] = split;
       split->parent = trans;
@@ -1022,6 +1029,7 @@ readTransaction( int fd, Account *acc, int token )
         split = readSplit (fd, token);
         if (0 == i+offset) {
            /* the first split has been malloced. just replace it */
+           xaccRemoveEntity (&trans->splits[i+offset]->guid);
            xaccFreeSplit (trans->splits[i+offset]);
            trans->splits[i+offset] = split;
            split->parent = trans;
@@ -1058,7 +1066,7 @@ readSplit ( int fd, int token )
   /* create a split structure */
   split = xaccMallocSplit();
   
-  ENTER ("readSplit");
+  ENTER ("\n");
 
   tmp = readString( fd, token );
   if( NULL == tmp )
@@ -1152,7 +1160,7 @@ readSplit ( int fd, int token )
   XACC_FLIP_DOUBLE (share_price);
   xaccSplitSetSharePriceAndAmount (split, share_price, num_shares);
 
-  DEBUG ("readSplit(): num_shares %f \n", num_shares);
+  DEBUG ("num_shares %f \n", num_shares);
 
   /* Read the account number */
 
@@ -1164,7 +1172,7 @@ readSplit ( int fd, int token )
     return NULL;
   }
   XACC_FLIP_INT (acc_id);
-  DEBUG ("readSplit(): account id %d\n", acc_id);
+  DEBUG ("account id %d\n", acc_id);
   peer_acc = locateAccount (acc_id);
   xaccAccountInsertSplit (peer_acc, split);
 
@@ -1192,10 +1200,15 @@ readString( int fd, int token )
   XACC_FLIP_INT (size);
   
   str = (char *) malloc (size);
+  if (!str) {
+    PERR("malloc failed on size %d bytes at position %ld\n", size,
+         (long int) lseek(fd, 0, SEEK_CUR));
+    return NULL;
+  }
   err = read( fd, str, size );
   if( err != size )
     {
-    printf( "Error: readString: size = %d err = %d str = %s\n", size, err, str );
+    PERR("size = %d err = %d str = %s\n", size, err, str );
     free(str);
     return NULL;
     }
@@ -1215,16 +1228,16 @@ static int
 readTSDate( int fd, Timespec *ts, int token )
   {
   int  err=0;
-  long long int secs = 0;   /* 64-bit int */
-  long int nsecs = 0;
+  gint64 secs = 0;   /* 64-bit int */
+  gint32 nsecs = 0;
   
   /* secs is a 32-bit in in version 8 & earlier files, 
    * and goes 64-bit in the later files */
   if (8 >= token) 
     {
-    long int sicks;
-    err = read( fd, &sicks, sizeof(long int) );
-    if( err != sizeof(long int) )
+    gint32 sicks;
+    err = read( fd, &sicks, sizeof(gint32) );
+    if( err != sizeof(gint32) )
       {
       return -1;
       }
@@ -1233,16 +1246,16 @@ readTSDate( int fd, Timespec *ts, int token )
     } 
   else 
     {
-    err = read( fd, &secs, sizeof(long long int) );
-    if( err != sizeof(long long int) )
+    err = read( fd, &secs, sizeof(gint64) );
+    if( err != sizeof(gint64) )
       {
       return -1;
       }
     XACC_FLIP_LONG_LONG (secs);
     }
   
-  err = read( fd, &nsecs, sizeof(long int) );
-  if( err != sizeof(long int) )
+  err = read( fd, &nsecs, sizeof(gint32) );
+  if( err != sizeof(gint32) )
     {
     return -1;
     }
@@ -1361,8 +1374,24 @@ writeAccountGroupToFile( const char *datafile, AccountGroup *grp )
     }
   
   err = xaccWriteAccountGroup (fd, grp);
+  if(0 != err)
+    {
+    /* Just close it and return the earlier error. */
+    close(fd);
+    return err;
+    }
 
-  close(fd);
+  /* from the close(2) manpage:
+   *   Not checking the return value of close is a common but nevertheless
+   *   serious programming error.  File system implementations which use
+   *   techniques as ``write-behind'' to increase performance may lead to
+   *   write(2) succeeding, although the data has not been written yet.
+   *   The error status may be reported at a later write operation, but it
+   *   is guaranteed to be reported on closing the file.  Not checking the
+   *   return value when closing the file may lead to silent loss of data.
+   *   This can especially be observed with NFS and disk quotas.
+   */
+  err = close(fd);
 
   return err;
   }
@@ -1383,7 +1412,7 @@ xaccWriteAccountGroup (int fd, AccountGroup *grp )
   int token = VERSION;    /* The file format version */
   int err = 0;
 
-  ENTER ("xaccWriteAccountGroup");
+  ENTER ("\n");
   
   if( 0 > fd )
     {
@@ -1450,7 +1479,7 @@ writeGroup (int fd, AccountGroup *grp )
   int i,numAcc;
   int err = 0;
 
-  ENTER ("writeGroup");
+  ENTER ("\n");
   
   if (NULL == grp) return 0;
 
@@ -1496,15 +1525,13 @@ _write_transaction_wrapper_(Transaction *t, void *data)
 static int
 writeAccount( int fd, Account *acc )
   {
-  Transaction *trans = NULL;
-  Split *s = NULL;
   int err=0;
-  int i, numUnwrittenTrans, ntrans;
+  int numUnwrittenTrans, ntrans;
   int acc_id;
   int numChildren = 0;
-  char * tmp;
+  const char * tmp;
   
-  DEBUG ("writeAccount(): writing acct %s \n", xaccAccountGetName (acc));
+  DEBUG ("writing acct %s \n", xaccAccountGetName (acc));
 
   acc_id = acc->id;
   XACC_FLIP_INT (acc_id);
@@ -1596,7 +1623,7 @@ writeAccount( int fd, Account *acc )
   if( err != sizeof(int) )
     return -1;
   
-  DEBUG ("writeAccount(): will write %d trans\n", numUnwrittenTrans);
+  DEBUG ("will write %d trans\n", numUnwrittenTrans);
 
   if (0 != xaccAccountStagedTransactionTraversal(acc, 2,
                                             _write_transaction_wrapper_, &fd)) {
@@ -1636,7 +1663,7 @@ writeTransaction( int fd, Transaction *trans )
   int i=0;
   Timespec ts;
 
-  ENTER ("writeTransaction");
+  ENTER ("\n");
   
   err = writeString( fd, xaccTransGetNum (trans) );
   if( -1 == err ) return err;
@@ -1692,7 +1719,7 @@ writeSplit ( int fd, Split *split )
   Account *xfer_acc = NULL;
   char recn;
 
-  ENTER ("writeSplit");
+  ENTER ("\n");
   
   err = writeString( fd, xaccSplitGetMemo (split) );
   if( -1 == err )
@@ -1715,7 +1742,7 @@ writeSplit ( int fd, Split *split )
   if( -1 == err ) return err;
   
   damount = xaccSplitGetShareAmount (split);
-  DEBUG ("writeSplit: amount=%f \n", damount);
+  DEBUG ("amount=%f \n", damount);
   XACC_FLIP_DOUBLE (damount);
   err = write( fd, &damount, sizeof(double) );
   if( err != sizeof(double) )
@@ -1731,7 +1758,7 @@ writeSplit ( int fd, Split *split )
   xfer_acc = split->acc;
   acc_id = -1;
   if (xfer_acc) acc_id = xfer_acc -> id;
-  DEBUG ("writeSplit: credit %d \n", acc_id);
+  DEBUG ("credit %d \n", acc_id);
   XACC_FLIP_INT (acc_id);
   err = write( fd, &acc_id, sizeof(int) );
   if( err != sizeof(int) )
@@ -1753,7 +1780,7 @@ writeInvAcct ( int fd, InvAcct * invacct )
   {
   int err=0;
 
-  ENTER ("writeInvAcct");
+  ENTER ("\n");
   if (!invacct) return 0;
   
   err = writeString( fd, xaccInvAcctGetPriceSrc (invacct) );
@@ -1777,7 +1804,7 @@ writeAccInfo ( int fd, AccInfo *accinfo )
   int err=0;
   InvAcct *invacct=NULL;
 
-  ENTER ("writeAccInfo");
+  ENTER ("\n");
   if (!accinfo) return err;
 
   invacct = xaccCastToInvAcct (accinfo);
@@ -1797,7 +1824,7 @@ writeAccInfo ( int fd, AccInfo *accinfo )
  * Return: -1 on failure                                            * 
 \********************************************************************/
 static int
-writeString( int fd, char *str )
+writeString( int fd, const char *str )
   {
   int err=0;
   int size;
@@ -1832,13 +1859,13 @@ writeTSDate( int fd, Timespec *ts)
   {
   int err=0;
   int tmp;
-  long long longtmp;
+  gint64 longtmp;
 
   /* write 64 bits to file format */
   longtmp = ts->tv_sec;
   XACC_FLIP_LONG_LONG (longtmp);
-  err = write( fd, &longtmp, sizeof(long long int) );
-  if( err != sizeof(long long int) )
+  err = write( fd, &longtmp, sizeof(gint64) );
+  if( err != sizeof(gint64) )
     return -1;
   
   tmp = ts->tv_nsec;

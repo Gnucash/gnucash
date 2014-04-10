@@ -1,7 +1,7 @@
 /********************************************************************\
  * Account.h -- the Account data structure                          *
  * Copyright (C) 1997 Robin D. Clark                                *
- * Copyright (C) 1997, 1998, 1999 Linas Vepstas                     *
+ * Copyright (C) 1997-2000 Linas Vepstas <linas@linas.org>          *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -14,13 +14,12 @@
  * GNU General Public License for more details.                     *
  *                                                                  *
  * You should have received a copy of the GNU General Public License*
- * along with this program; if not, write to the Free Software      *
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
+ * along with this program; if not, contact:                        *
  *                                                                  *
- *   Author: Rob Clark                                              *
- * Internet: rclark@cs.hmc.edu                                      *
- *  Address: 609 8th Street                                         *
- *           Huntington Beach, CA 92648-4632                        *
+ * Free Software Foundation           Voice:  +1-617-542-5942       *
+ * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
+ * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ *                                                                  *
 \********************************************************************/
 
 #ifndef __XACC_ACCOUNT_H__
@@ -29,6 +28,7 @@
 #include "config.h"
 #include "AccInfo.h"
 #include "Transaction.h"
+#include "GNCId.h"
 
 
 /** PROTOTYPES ******************************************************/
@@ -39,29 +39,47 @@ void         xaccFreeAccount( Account * );
 
 /* 
  * The xaccAccountBeginEdit() and xaccAccountCommitEdit() subroutines
- * provide a psuedo-two-phase-commit wrapper for account updates. 
+ * provide a pseudo-two-phase-commit wrapper for account updates. 
  * They are mildly useful for detecting attempted updates outside
- * of thier scope. However, they do not provide any true two-phase-anything
+ * of their scope. However, they do not provide any true two-phase-anything
  * in the current implementation.
  *
- * The defer flag, if sett, will defer all attempts at rebalancing 
+ * The defer flag, if set, will defer all attempts at rebalancing 
  * of accounts until the commit.
  */
 void         xaccAccountBeginEdit (Account *, int defer);
 void         xaccAccountCommitEdit (Account *);
 
+/*
+ * The xaccAccountGetGUID() subroutine will return the
+ *    globally unique id associated with that account.
+ *    User code should use this id to reference accounts
+ *    and *not* the integer account id below.
+ *
+ * The xaccAccountLookup() subroutine will return the
+ *    account associated with the given id, or NULL
+ *    if there is no such account.
+ */
+const GUID * xaccAccountGetGUID (Account *account);
+Account    * xaccAccountLookup (const GUID *guid);
+
 int          xaccGetAccountID (Account *);
+
+/* AccountFlags is currently not used for anything.
+ * If you need to add a bitflag, this may not be a bad 
+ * way to go.  This flag *is* stored in the file-file DB.
+ */
 char         xaccGetAccountFlags (Account *);
 
 /*
  * The xaccAccountInsertSplit() method will insert the indicated
  *    split into the indicated account.  If the split already 
  *    belongs to another account, it will be removed from that
- *    account first. 
+ *    account first.
  */
 void         xaccAccountInsertSplit (Account *, Split *);
 
-/* The xaccCheckDateOrder() surboutine checks to see if 
+/* The xaccCheckDateOrder() subroutine checks to see if 
  *    a split is in proper sorted date order with respect 
  *    to the other splits in this account.
  *
@@ -69,14 +87,13 @@ void         xaccAccountInsertSplit (Account *, Split *);
  *    all of the splits in this transaction are in
  *    proper date order.
  */
-int          xaccCheckDateOrder   (Account *, Split *);
+int          xaccCheckDateOrder (Account *, Split *);
 int          xaccCheckTransDateOrder (Transaction *);
 
 /* The xaccIsAccountInList() subroutine returns the number of times
  *    that an account appears in the account list. 
  */
 int          xaccIsAccountInList (Account * acc, Account **list);
-void         xaccZeroRunningBalances (Account **list);
 
 /* The xaccAccountOrder() subroutine defines a sorting order 
  *    on accounts.  It takes pointers to two accounts, and
@@ -84,7 +101,7 @@ void         xaccZeroRunningBalances (Account **list);
  *    returns +1 if the first is "greater than" the second, and
  *    0 if they are equal.  To determine the sort order, first
  *    the account codes are compared, and if these are equal, then 
- *    account types, and, if these are queal, the account names.
+ *    account types, and, if these are equal, the account names.
  */
 int          xaccAccountOrder (Account**, Account **);
 
@@ -98,25 +115,15 @@ int          xaccAccountOrder (Account**, Account **);
  */
 void         xaccAccountAutoCode (Account *, int digits);
 
-/* The xaccConsolidateTransactions() subroutine scans through
- *    all of the transactions in an account, and compares them.
- *    If any of them are exact duplicates, the duplicates are removed.
- *    duplicates may occur when accounts from multiple sources are 
- *    merged.  Note that this can be a dangerous operation to perform,
- *    as it may remove transactions that were not true duplicatees ...
- */
-
-void         xaccConsolidateTransactions (Account *);
-
 /* The xaccMoveFarEnd() method changes the account to which the 
  *    "far end" of the split belongs.  The "far end" is as follows:
- *    Double-entry transactions by thier nature consist of a set of 
+ *    Double-entry transactions by their nature consist of a set of 
  *    two or more splits. If the transaction has precisely two splits,
  *    then the "far end" is the "other split" of the pair.  If
  *    the transaction consists of three or more splits, then the 
  *    "far end" is undefined.  All that the xaccMoveFareEnd() method
  *    does is reparent the "other split" to the indicated account.
- *    The first argument is the split whose fare end will be changed,
+ *    The first argument is the split whose far end will be changed,
  *    the second argument is the new far-end account.
  */
 
@@ -124,30 +131,49 @@ void xaccMoveFarEnd (Split *, Account *);
 void xaccMoveFarEndByName (Split *, const char *);
 
 void xaccAccountSetType (Account *, int);
-void xaccAccountSetName (Account *, char *);
-void xaccAccountSetCode (Account *, char *);
-void xaccAccountSetDescription (Account *, char *);
-void xaccAccountSetNotes (Account *, char *);
-void xaccAccountSetCurrency (Account *, char *);
-void xaccAccountSetSecurity (Account *, char *);
+void xaccAccountSetName (Account *, const char *);
+void xaccAccountSetCode (Account *, const char *);
+void xaccAccountSetDescription (Account *, const char *);
+void xaccAccountSetNotes (Account *, const char *);
+void xaccAccountSetCurrency (Account *, const char *);
+void xaccAccountSetSecurity (Account *, const char *);
 
-int            xaccAccountGetType (Account *);
-char *         xaccAccountGetName (Account *);
-char *         xaccAccountGetCode (Account *);
-char *         xaccAccountGetDescription (Account *);
-char *         xaccAccountGetNotes (Account *);
-char *         xaccAccountGetCurrency (Account *);
-char *         xaccAccountGetSecurity (Account *);
+GNCAccountType xaccAccountGetType (Account *);
+const char *   xaccAccountGetName (Account *);
+const char *   xaccAccountGetCode (Account *);
+const char *   xaccAccountGetDescription (Account *);
+const char *   xaccAccountGetNotes (Account *);
+const char *   xaccAccountGetCurrency (Account *);
+const char *   xaccAccountGetSecurity (Account *);
 AccountGroup * xaccAccountGetChildren (Account *);
 AccountGroup * xaccAccountGetParent (Account *);
+Account *      xaccAccountGetParentAccount (Account *);
 AccInfo *      xaccAccountGetAccInfo (Account *);
 
 double         xaccAccountGetBalance (Account *);
 double         xaccAccountGetClearedBalance (Account *);
 double         xaccAccountGetReconciledBalance (Account *);
+double         xaccAccountGetShareBalance (Account *);
+double         xaccAccountGetShareClearedBalance (Account *);
+double         xaccAccountGetShareReconciledBalance (Account *);
 Split *        xaccAccountGetSplit (Account *acc, int i);
 Split **       xaccAccountGetSplitList (Account *acc);
 int            xaccAccountGetNumSplits (Account *acc);
+
+/* The xaccAccountGetFullName routine returns the fully qualified name
+ * of the account using the given separator char. The name must be freed
+ * after use. The fully qualified name of an account is the concatenation
+ * of the names of the account and all its ancestor accounts starting with
+ * the topmost account and ending with the given account. Each name is
+ * separated by the given character.
+ *
+ * WAKE UP!
+ * Unlike all other gets, the string returned by xaccAccountGetFullName() 
+ * must be freed by you the user !!!
+ * hack alert -- since it breaks the rule of string allocation, maybe this
+ * routine should not be in this library, but some utility library?
+ */
+char *         xaccAccountGetFullName (Account *, const char separator);
 
 /* The IthAccount() routine merely dereferences: the returned
  *    value is just list[i].  This routine is needed for the perl 
@@ -155,5 +181,33 @@ int            xaccAccountGetNumSplits (Account *acc);
  */
 
 Account *      IthAccount (Account **list, int i);
+
+/* xaccAccountsHaveCommonCurrency returns true if the two given accounts
+ * have a currency in common, i.e., if they can have common transactions.
+ * Useful for UI sanity checks.
+ */
+gncBoolean xaccAccountsHaveCommonCurrency(Account *account_1,
+					  Account *account_2);
+
+/* Returns true if the account has 'ancestor' as an ancestor.
+ * Returns false if either is NULL. */
+gncBoolean     xaccAccountHasAncestor (Account *, Account * ancestor);
+
+/* Get and Set a mark on the account.  The meaning of this mark is
+ * completely undefined. Its presented here as a utility for the
+ * programmer, to use as desired.  Handy for performing customer traversals
+ * over the account tree.  The mark is *not* stored in the database/file
+ * format.  When accounts are newly created, the mark is set to zero.
+ *
+ * The xaccClearMark will find the topmost group, and clear the mark in
+ * the entire group tree.  
+ * The xaccClearMarkDown will clear the mark only in this and in
+ * sub-accounts.
+ */
+short          xaccAccountGetMark (Account *acc); 
+void           xaccAccountSetMark (Account *acc, short mark); 
+void           xaccClearMark (Account *, short val);
+void           xaccClearMarkDown (Account *, short val);
+void           xaccClearMarkDownGr (AccountGroup *, short val);
 
 #endif /* __XACC_ACCOUNT_H__ */

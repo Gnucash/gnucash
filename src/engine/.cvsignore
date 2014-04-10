@@ -1,3 +1,5 @@
 Makefile
-tmp
-obj
+.deps
+.libs
+*.lo
+*.la

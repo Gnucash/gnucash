@@ -26,30 +26,17 @@
 
 #include "config.h"
 
+#include <glib.h>
+
 #include "Account.h"
 #include "Query.h"
 #include "splitreg.h"
 #include "SplitLedger.h"
 #include "Transaction.h"
 
-/* the MAX_QUERY_SPLITS define determines how many transactions should be shown
- * in the register.  Its set to a default of 30.  But this should be converted
- * into a user-configurable value.  So hack-alert on the configuration aspect.
- */
-#define MAX_QUERY_SPLITS 30
-
-/* the MAX_QUERY_SPLITS_UNCLAMP define determines cap on how many transactions 
- * should be shown in the register when uiser is browsing with dates.  Its set 
- * to a default of 1000, which should give user plenty of elbow room to browse,
- * and is still small enough to keep em out of trouble.  This should be converted
- * into a user-configurable value.  So hack-alert on the configuration aspect.
- */
-#define MAX_QUERY_SPLITS_UNCLAMP 1000
-
 
 /** STRUCTS *********************************************************/
-/* The xaccLedgerDisplay struct describes a single register/ledger instance.
- */
+/* The xaccLedgerDisplay struct describes a single register/ledger instance. */
 
 typedef struct _xaccLedgerDisplay xaccLedgerDisplay;
 
@@ -71,6 +58,8 @@ struct _xaccLedgerDisplay {
   void *gui_hook;                /* GUI-specific state                      */
   void (*redraw) (xaccLedgerDisplay *); /* redraw callback                  */
   void (*destroy) (xaccLedgerDisplay *); /* destroy callback                */
+  gncUIWidget (*get_parent) (xaccLedgerDisplay *); /* get parent widget     */
+  void (*set_help) (xaccLedgerDisplay *, const char *); /* help string      */
 };
 
 
@@ -79,53 +68,64 @@ struct _xaccLedgerDisplay {
 /*
  * opens up a register window to display a single account  
  */
-extern xaccLedgerDisplay * xaccLedgerDisplaySimple (Account *acc); 
+xaccLedgerDisplay * xaccLedgerDisplaySimple (Account *acc); 
 
 /*
  * opens up a register window to display the parent account
  * and all of its children.
  */
-extern xaccLedgerDisplay * xaccLedgerDisplayAccGroup (Account *acc); 
+xaccLedgerDisplay * xaccLedgerDisplayAccGroup (Account *acc); 
 
 /*
  * display list of accounts in a general ledger.
  */
-extern xaccLedgerDisplay * xaccLedgerDisplayGeneral 
-      (Account *lead_acc, Account **acclist, int ledger_type);
+xaccLedgerDisplay * xaccLedgerDisplayGeneral (Account *lead_acc,
+                                              Account **acclist,
+                                              int ledger_type);
 
 /*
  * redisplay/redraw all windows that contain any transactions
  * that are associated with the indicated account.
  */
-extern void        xaccAccountDisplayRefresh (Account *acc);
-extern void        xaccAccListDisplayRefresh (Account **acc);
+void        xaccAccountDisplayRefresh (Account *acc);
+void        xaccAccListDisplayRefresh (Account **acc);
+void        xaccAccGListDisplayRefresh (GList *accounts);
 
 /* 
  * redisplay/redraw all windows that contain this transaction
  * (or any of its member splits).
  */
-extern void        xaccTransDisplayRefresh (Transaction *trans);
+void        xaccTransDisplayRefresh (Transaction *trans);
 
 /* 
  * redisplay/redraw only the indicated window.
  * both routines do same thing, they differ only by the argument they
  * take.
  */
-extern void        xaccLedgerDisplayRefresh (xaccLedgerDisplay *);
-extern void        xaccRegisterRefresh (SplitRegister *);
+void        xaccLedgerDisplayRefresh (xaccLedgerDisplay *);
+void        xaccRegisterRefresh (SplitRegister *);
+
+/*
+ * Call the user refresh callback for all registers. This does not
+ * perform a full refresh, i.e., it does not reload transactions.
+ * This is just for updating gui controls.
+ */
+void        xaccRegisterRefreshAllGUI (void);
+
+/*
+ * return true if acc is a member of the ledger.
+ */
+int         ledgerIsMember (xaccLedgerDisplay *reg, Account * acc);
 
 /* 
  * close the window 
  */
-extern void        xaccLedgerDisplayClose (xaccLedgerDisplay *);
+void        xaccLedgerDisplayClose (xaccLedgerDisplay *);
 
-/********************************************************************\
- * sort of a quick hack involving the layout of the register.
-\********************************************************************/
-
-extern void        xaccRegisterCountHack (SplitRegister *splitreg);
-
-extern void xaccDestroyLedgerDisplay (Account *acc);
+/*
+ * close all ledger windows containing this account.
+ */
+void        xaccDestroyLedgerDisplay (Account *acc);
 
 #endif /* __MULTI_LEDGER_H__ */
 

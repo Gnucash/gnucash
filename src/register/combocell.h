@@ -1,3 +1,23 @@
+/********************************************************************\
+ * This program is free software; you can redistribute it and/or    *
+ * modify it under the terms of the GNU General Public License as   *
+ * published by the Free Software Foundation; either version 2 of   *
+ * the License, or (at your option) any later version.              *
+ *                                                                  *
+ * This program is distributed in the hope that it will be useful,  *
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of   *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    *
+ * GNU General Public License for more details.                     *
+ *                                                                  *
+ * You should have received a copy of the GNU General Public License*
+ * along with this program; if not, contact:                        *
+ *                                                                  *
+ * Free Software Foundation           Voice:  +1-617-542-5942       *
+ * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
+ * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ *                                                                  *
+\********************************************************************/
+
 /*
  * FILE:
  * combocell.h
@@ -20,30 +40,15 @@
  * Created Jan 1998 Linas Vepstas 
  * Copyright (c) 1998 Linas Vepstas 
  */
-/********************************************************************\
- * This program is free software; you can redistribute it and/or    *
- * modify it under the terms of the GNU General Public License as   *
- * published by the Free Software Foundation; either version 2 of   *
- * the License, or (at your option) any later version.              *
- *                                                                  *
- * This program is distributed in the hope that it will be useful,  *
- * but WITHOUT ANY WARRANTY; without even the implied warranty of   *
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    *
- * GNU General Public License for more details.                     *
- *                                                                  *
- * You should have received a copy of the GNU General Public License*
- * along with this program; if not, write to the Free Software      *
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
-\********************************************************************/
 
 #ifndef __XACC_COMBO_CELL_H__
 #define __XACC_COMBO_CELL_H__
 
 #include "basiccell.h"
+#include "gnc-common.h"
 
 typedef struct _ComboCell {
-   BasicCell cell;
-   char **   menuitems;         /* not used in the gnome version */
+   BasicCell  cell;
 } ComboCell;
 
 ComboCell *  xaccMallocComboCell (void);
@@ -52,7 +57,28 @@ void         xaccDestroyComboCell (ComboCell *);
 
 void         xaccSetComboCellValue (ComboCell *, const char *);
 
+void         xaccClearComboCellMenu (ComboCell *);
 void         xaccAddComboCellMenuItem (ComboCell *, char * menustr);
+
+/* Only functional in Gnome, right now. Determines whether
+ * the cell will accept strings not in the menu. Defaults
+ * to strict, i.e., only menu items are accepted. */
+void         xaccComboCellSetStrict (ComboCell *, gncBoolean);
+
+/* Only functional in Gnome, right now. Sets a character used
+ * for special completion processing. */
+void         xaccComboCellSetCompleteChar (ComboCell *, char);
+
+/* Only functional in Gnome, right now. Sets a string which,
+ * if the cell has that value, will be returned on an enter,
+ * thus preventing the cell from being edited. This is used
+ * for transactions with multiple splits. */
+void         xaccComboCellSetIgnoreString (ComboCell *, const char *);
+
+/* Only functional in Gnome, right now. Sets a string which,
+ * if the cell has the ignore value, will be returned as the
+ * help string. */
+void         xaccComboCellSetIgnoreHelp (ComboCell *, const char *);
 
 #endif /* __XACC_COMBO_CELL_H__ */
 

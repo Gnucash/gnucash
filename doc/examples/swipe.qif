@@ -1,0 +1,78 @@
+!Type:Invst
+D9/12/97
+NXIn     
+T5,000.00
+MMemo: open brokerage acct.
+L[ABC Bank]
+$5,000.00
+^^
+D10/16/97
+NBuy     
+YHALCorp.
+I35        
+Q100      
+T3,500.00
+Mthis is the first stock purch
+^^
+D10/16/97
+NDiv     
+YHALCorp.
+T120.00
+^^
+D10/28/97
+NBuy     
+YTHJ Inc
+I2.340     
+Q100      
+T234.00
+Mpurchase thj shares
+^^
+D11/11/97
+NCGLong  
+YHALCorp.
+T33.45
+^^
+D11/11/97
+NDiv     
+YTHJ Inc
+T34.00
+Mmemo-- income I think
+^^
+D11/11/97
+NIntInc  
+YHALCorp.
+T345.00
+Mincome
+^^
+D11/11/97
+NCGShortX
+YHALCorp.
+T12.00
+Mincome
+L[ABC Bank]
+$12.00
+^^
+D11/11/97
+NCGLongX 
+YHALCorp.
+T11.00
+Mincome
+L[ABC Bank]
+$11.00
+^^
+D11/11/97
+NBuy     
+YTHJ Inc
+I2         
+Q100      
+T200.00
+^^
+D11/12/97
+NSellX   
+YHALCorp.
+I50        
+Q10       
+T500.00
+L[ABC Bank]
+$500.00
+^^

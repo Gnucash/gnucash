@@ -1,0 +1,35 @@
+/* Style Sheet */
+/* $Id$ */
+
+BODY{ background-color:#EEFFEE; 
+/* background-image: url(http://www.isomedia.com/homes/tboyle/greenpaper.gif);  */
+    background-repeat: repeat-y;}
+
+SPAN.indent{margin-left:0.4in;}
+
+/* This may be a bit excessively loud... */
+H1, H2, H3, H4 {font-family: Optima, Lucida, Helvetica, sans-serif; 
+                color: green; background-color: transparent; 
+		font-weight: bolder; }
+
+/* Utopia, Helvetica, Optima, Lucida Typewriter */
+
+H1{ font-size: 18pt;}
+H2{ font-size: 16pt;}
+H3{ font-size: 14pt;}
+H4{ font-size: 12pt;}
+
+/* And make the main title big, centre it */ 
+
+H1.title {font-size: 24pt; text-align: center; color: maroon;
+background-color: transparent; font-family: Optima, Lucida, Helvetica,
+sans-serif;}
+
+DEL {font-weight: bold}
+INS {background-color: white}
+
+/* Zowie way of presenting PRE stuff */
+
+PRE,TT.LITERAL,P.LITERALLAYOUT{ font-family:Lucida Typewriter, Courier,
+monospace; font-weight: normal; background-color: gray; color: white;
+border-width: thin; white-space:pre; }

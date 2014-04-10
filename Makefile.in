@@ -1,201 +1,466 @@
-# Makefile -- makefile for gnucash
-# @configure_input@
-# Copyright (C) 1997 Robin Clark                                   
-# Copyright (C) 1998 Rob Browning <rlb@cs.utexas.edu>
-#                                                                  
-# This program is free software; you can redistribute it and/or    
-# modify it under the terms of the GNU General Public License as   
-# published by the Free Software Foundation; either version 2 of   
-# the License, or (at your option) any later version.              
-#                                                                  
-# This program is distributed in the hope that it will be useful,  
-# but WITHOUT ANY WARRANTY; without even the implied warranty of   
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    
-# GNU General Public License for more details.                     
-#                                                                  
-# You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software      
-# Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        
-#                                                                  
-#   Author: Robin Clark                                            
-# Internet: rclark@rush.aero.org                                   
-#  Address: 609 8th Street                                         
-#           Huntington Beach, CA 92648-4632                        
+# Makefile.in generated automatically by automake 1.4 from Makefile.am
 
-include @top_srcdir@/Makefile.init
+# Copyright (C) 1994, 1995-8, 1999 Free Software Foundation, Inc.
+# This Makefile.in is free software; the Free Software Foundation
+# gives unlimited permission to copy and/or distribute it,
+# with or without modifications, as long as this notice is preserved.
 
-######################################################################
-# Description of targets:
-#
-#   default      -- make the application
-#   depend       -- generate the dependencies
-#   clean        -- remove *.a, *.o, *.bak, and *~
-#   distclean    -- get rid of config files too...
-#   install      -- installs everything
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY, to the extent permitted by law; without
+# even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE.
 
-default:
-	@echo " "
-	@echo "Please choose one of the following targets:"
-	@echo "motif           dynamically linked motif version"
-	@echo "motif-static    statically linked motif version"
-	@echo "gnome           gnome/gtk version"
-	@echo "gnome-static    gnome/gtk statically linked version"
-	@echo "qt              kde/qt version"
-	@echo " "
 
-# This inclusion must come after the first target, and after the
-# definitions of *_SRCS, etc., but before the usage of *_OBJS.
-include @top_srcdir@/Makefile.common
+SHELL = @SHELL@
 
-# Aliases
-motif-static: motif.static
-gnome-static: gnome.static
+srcdir = @srcdir@
+top_srcdir = @top_srcdir@
+VPATH = @srcdir@
+prefix = @prefix@
+exec_prefix = @exec_prefix@
 
-build-flavor:
-	@cd lib;    $(MAKE) ${FLAVOR}
-	@cd src;    $(MAKE) ${FLAVOR}
-	ln -sf gnucash.${FLAVOR} gnucash.bin
-	(cd share && rm -f scm && ln -sf ../src/scm scm)
+bindir = @bindir@
+sbindir = @sbindir@
+libexecdir = @libexecdir@
+datadir = @datadir@
+sysconfdir = @sysconfdir@
+sharedstatedir = @sharedstatedir@
+localstatedir = @localstatedir@
+libdir = @libdir@
+infodir = @infodir@
+mandir = @mandir@
+includedir = @includedir@
+oldincludedir = /usr/include
 
-motif:
-	${MAKE} FLAVOR=motif build-flavor
+DESTDIR =
 
-motif.static:
-	${MAKE} FLAVOR=motif.static build-flavor
+pkgdatadir = $(datadir)/@PACKAGE@
+pkglibdir = $(libdir)/@PACKAGE@
+pkgincludedir = $(includedir)/@PACKAGE@
 
-gnome:
-	${MAKE} FLAVOR=gnome build-flavor
+top_builddir = .
 
-gnome.static:
-	${MAKE} FLAVOR=gnome.static build-flavor
+ACLOCAL = @ACLOCAL@
+AUTOCONF = @AUTOCONF@
+AUTOMAKE = @AUTOMAKE@
+AUTOHEADER = @AUTOHEADER@
 
-qt:
-	${MAKE} FLAVOR=qt build-flavor
+INSTALL = @INSTALL@
+INSTALL_PROGRAM = @INSTALL_PROGRAM@ $(AM_INSTALL_PROGRAM_FLAGS)
+INSTALL_DATA = @INSTALL_DATA@
+INSTALL_SCRIPT = @INSTALL_SCRIPT@
+transform = @program_transform_name@
 
-depend:
-	@echo make depend is now superfluous.
+NORMAL_INSTALL = :
+PRE_INSTALL = :
+POST_INSTALL = :
+NORMAL_UNINSTALL = :
+PRE_UNINSTALL = :
+POST_UNINSTALL = :
+host_alias = @host_alias@
+host_triplet = @host@
+AS = @AS@
+CATALOGS = @CATALOGS@
+CATOBJEXT = @CATOBJEXT@
+CC = @CC@
+DATADIRNAME = @DATADIRNAME@
+DLLTOOL = @DLLTOOL@
+GENCAT = @GENCAT@
+GLIB_CFLAGS = @GLIB_CFLAGS@
+GLIB_CONFIG_BIN = @GLIB_CONFIG_BIN@
+GLIB_LIBS = @GLIB_LIBS@
+GMOFILES = @GMOFILES@
+GMSGFMT = @GMSGFMT@
+GNC_CONFIGDIR = @GNC_CONFIGDIR@
+GNC_DOC_INSTALL_DIR = @GNC_DOC_INSTALL_DIR@
+GNC_LIBDIR = @GNC_LIBDIR@
+GNC_SCM_INSTALL_DIR = @GNC_SCM_INSTALL_DIR@
+GNC_SHAREDIR = @GNC_SHAREDIR@
+GNOME_CFLAGS = @GNOME_CFLAGS@
+GNOME_CONFIG_BIN = @GNOME_CONFIG_BIN@
+GNOME_LIBS = @GNOME_LIBS@
+GNOME_STATIC_TARGET = @GNOME_STATIC_TARGET@
+GNOME_TARGET = @GNOME_TARGET@
+GTK_XMHTML = @GTK_XMHTML@
+GT_NO = @GT_NO@
+GT_YES = @GT_YES@
+GUILE = @GUILE@
+GUILE_COMPILE_ARGS = @GUILE_COMPILE_ARGS@
+GUILE_CONFIG = @GUILE_CONFIG@
+GUILE_LINK_ARGS = @GUILE_LINK_ARGS@
+G_WRAP = @G_WRAP@
+G_WRAP_COMPILE_ARGS = @G_WRAP_COMPILE_ARGS@
+G_WRAP_CONFIG = @G_WRAP_CONFIG@
+G_WRAP_LINK_ARGS = @G_WRAP_LINK_ARGS@
+INCLUDE_LOCALE_H = @INCLUDE_LOCALE_H@
+INSTOBJEXT = @INSTOBJEXT@
+INTLDEPS = @INTLDEPS@
+INTLLIBS = @INTLLIBS@
+INTLOBJS = @INTLOBJS@
+LIBTOOL = @LIBTOOL@
+LN_S = @LN_S@
+LOCALE_DIR = @LOCALE_DIR@
+MAKEINFO = @MAKEINFO@
+MKINSTALLDIRS = @MKINSTALLDIRS@
+MSGFMT = @MSGFMT@
+OBJDUMP = @OBJDUMP@
+PACKAGE = @PACKAGE@
+PERL = @PERL@
+PERLINCL = @PERLINCL@
+POFILES = @POFILES@
+POSUB = @POSUB@
+RANLIB = @RANLIB@
+SWIG = @SWIG@
+USE_INCLUDED_LIBINTL = @USE_INCLUDED_LIBINTL@
+USE_NLS = @USE_NLS@
+VERSION = @VERSION@
+l = @l@
 
-CLEAN_SUBDIRS += lib src
-TRASH += *~ *.o *.bak
+SUBDIRS = debian doc intl lib po rpm src
 
-DIST_TRASH += Makefile *~ *.o *.bak share/scm gnucash.bin
-DIST_TRASH += gnucash.motif gnucash.motif.static
-DIST_TRASH += gnucash.gnome gnucash.gnome.static gnucash.qt gnucash-shell
-DIST_TRASH += config.cache config.log config.status config.h
+docdir = ${GNC_DOC_INSTALL_DIR}
 
-tagsfiles := $(shell find . -name "*.[ch]" -print)
+noinst_DATA = make-gnucash-patch
 
-TAGS: ${tagsfiles}
-	etags ${tagsfiles}    
+doc_DATA =    AUTHORS   COPYING   ChangeLog   INSTALL   NEWS   README
 
-install-bin: gnucash.${FLAVOR}
-	$(INSTALL) gnucash.${FLAVOR} ${GNC_BINDIR}/gnucash.${FLAVOR}
-	(cd ${GNC_BINDIR} && ln -sf gnucash.${FLAVOR} gnucash)
 
-install:
-	$(INSTALL) -d ${GNC_BINDIR} ${GNC_LIBDIR} ${GNC_DOCDIR} ${GNC_SHAREDIR}
+# All the other files that go in the distribution tarfile that aren't
+# included some other way...
 
-  # Put these in the opposite order of precedence.  Final bin/gnucash link will
-  # point to the last one that exists...
-	-[ -e gnucash.qt ] && ${MAKE} FLAVOR=qt GNC_BINDIR=${GNC_BINDIR} install-bin
-	-[ -e gnucash.gnome.static ] && \
-     ${MAKE} FLAVOR=gnome.static GNC_BINDIR=${GNC_BINDIR} install-bin
-	-[ -e gnucash.gnome ] && ${MAKE} FLAVOR=gnome GNC_BINDIR=${GNC_BINDIR} install-bin
-	-[ -e gnucash.motif.static ] && \
-     ${MAKE} FLAVOR=motif.static GNC_BINDIR=${GNC_BINDIR} install-bin
-	-[ -e gnucash.motif ] && ${MAKE} FLAVOR=motif GNC_BINDIR=${GNC_BINDIR} install-bin
+# Most directories handle their own EXTRA_DIST setting, but for some,
+# it's not worth the trouble (i.e ./old), and for others, there's no
+# Makefile.am (i.e. ./intl and ./po -- these handle their own
+# Makefile.in and Makefile.in.in files...), so we list their files
+# here.
 
-  # Make sure at least one succeeded
-	[ \
-    -e ${GNC_BINDIR}/gnucash.motif -o \
-    -e ${GNC_BINDIR}/gnucash.motif.static -o \
-    -e ${GNC_BINDIR}/gnucash.gnome -o \
-    -e ${GNC_BINDIR}/gnucash.gnome.static -o \
-    -e ${GNC_BINDIR}/gnucash.qt \
-  ]
-	$(INSTALL) src/quotes/gnc-prices ${GNC_BINDIR}
+# Don't list any directories or you'll get *everything*, including the
+# CVS dirs.
 
-	$(INSTALL_DATA) src/swig/perl5/gnucash.pm ${GNC_LIBDIR}
-	$(INSTALL_DATA) src/swig/perl5/gnucash.so ${GNC_LIBDIR}
-	$(INSTALL_DATA) src/quotes/Quote.pm ${GNC_LIBDIR}
+EXTRA_DIST =    .cvsignore   gnucash.lsm   intl/.cvsignore   make-gnucash-patch.in   old/country.sql   old/currencynames   old/Gnucash.app-defaults   old/gnome/graph/Makefile   old/gnome/graph/colors.c   old/gnome/graph/design.txt   old/gnome/graph/plot-test.c   old/perl-reports/report-baln.phtml   old/perl-reports/report-folio.phtml   old/perl-reports/report-formtest.html   old/perl-reports/report-main.html   old/perl-reports/report-menu.html   old/perl-reports/report-null.html   old/perl-reports/report-pnl.phtml   old/xacc-shell.c   po/.cvsignore   po/extract-macros.perl.in   po/guile_strings.txt
 
-	$(INSTALL_DATA) README* ${GNC_DOCDIR}
-	$(INSTALL_DATA) TODO ${GNC_DOCDIR}
-	$(INSTALL_DATA) CHANGES ${GNC_DOCDIR}
 
-# 	@mkdir -p $(prefix)/toolbar
-# 	$(INSTALL_DATA) toolbar/*.xpm $(prefix)/toolbar
+CLEANFILES =  make-gnucash-patch
+ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
+mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
+CONFIG_HEADER = config.h
+CONFIG_CLEAN_FILES = 
+DATA =  $(doc_DATA) $(noinst_DATA)
 
-  # Share directory
-  # Try to do this in a platform independent way...
-  # Directories
-	for dir in `find share/scm/ -type d`; do \
-    dest=`echo $$dir | cut -c 11-` ;\
-		mkdir -p ${GNC_SHAREDIR}/scm/$$dest; \
-  done
+DIST_COMMON =  README ./stamp-h.in ABOUT-NLS AUTHORS COPYING ChangeLog \
+INSTALL Makefile.am Makefile.in NEWS TODO acconfig.h acinclude.m4 \
+aclocal.m4 config.guess config.h.in config.sub configure configure.in \
+install-sh ltconfig ltmain.sh missing mkinstalldirs
 
-  # Files
-	for file in `find share/scm/ -name "*.scm"`; do \
-    dest=`echo $$file | cut -c 11-` ;\
-		${INSTALL_DATA} $$file ${GNC_SHAREDIR}/scm/$$dest; \
-  done
 
-	@mkdir -p ${GNC_SHAREDIR}/data
-	$(INSTALL_DATA) data/*.xac ${GNC_SHAREDIR}/data
+DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 
-	@mkdir -p ${GNC_SHAREDIR}/Docs
-	@mkdir -p ${GNC_SHAREDIR}/Docs/En
-	@mkdir -p ${GNC_SHAREDIR}/Docs/Fn
-	$(INSTALL_DATA) Docs/*.html ${GNC_SHAREDIR}/Docs
-	$(INSTALL_DATA) Docs/En/*.html ${GNC_SHAREDIR}/Docs/En
-	$(INSTALL_DATA) Docs/Fr/*.html ${GNC_SHAREDIR}/Docs/Fr
-# XXX hack alert -- should fix scheme paths to find language directories.
-	$(INSTALL_DATA) Docs/En/*.html ${GNC_SHAREDIR}/Docs
-  #	$(INSTALL_DATA) Docs/*.phtml ${GNC_SHAREDIR}/Docs
-	$(INSTALL_DATA) Docs/*.gif ${GNC_SHAREDIR}/Docs
-  #	$(INSTALL_DATA) Docs/*.jpg ${GNC_SHAREDIR}/Docs
-	$(INSTALL_DATA) Docs/*.xpm ${GNC_SHAREDIR}/Docs
-	@mkdir -p ${GNC_SHAREDIR}/Docs/images
-  # 	$(INSTALL_DATA) Docs/logos/*.* ${GNC_SHAREDIR}/Docs/images
-	@mkdir -p ${GNC_SHAREDIR}/Docs/logos
-	$(INSTALL_DATA) Docs/logos/*.* ${GNC_SHAREDIR}/Docs/logos
+TAR = gtar
+GZIP_ENV = --best
+all: all-redirect
+.SUFFIXES:
+$(srcdir)/Makefile.in: Makefile.am $(top_srcdir)/configure.in $(ACLOCAL_M4) 
+	cd $(top_srcdir) && $(AUTOMAKE) --gnu Makefile
 
-	@mkdir -p ${GNC_SHAREDIR}/Reports
-	$(INSTALL_DATA) Reports/*.html ${GNC_SHAREDIR}/Reports
-	$(INSTALL_DATA) Reports/*.phtml ${GNC_SHAREDIR}/Reports
-  #	$(INSTALL_DATA) Reports/*.gif ${GNC_SHAREDIR}/Reports
-  #	$(INSTALL_DATA) Reports/*.jpg ${GNC_SHAREDIR}/Reports
-  #	$(INSTALL_DATA) Reports/*.xpm ${GNC_SHAREDIR}/Reports
-	@mkdir -p ${GNC_SHAREDIR}/Reports/images
-  # 	$(INSTALL_DATA) Reports/logos/*.* ${GNC_SHAREDIR}/Reports/images
+Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status $(BUILT_SOURCES)
+	cd $(top_builddir) \
+	  && CONFIG_FILES=$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
-  # ------------------------------------------------------------------
-  # hack alert -- the config dir stuff is messed up in configure.in as well 
-  # as in the scheme search paths.  For example, the configure script tries
-  # to put config files into /usr/etc/gnucash/config which is a butt-stupid 
-  # place for this stuff ...  For now, we will simply touch the one file that
-  # the scheme initialization is looking for, and punt on the rest ...
+$(ACLOCAL_M4):  configure.in  acinclude.m4
+	cd $(srcdir) && $(ACLOCAL)
 
-	$(INSTALL_DATA) etc/conf* ${GNC_SHAREDIR}
+config.status: $(srcdir)/configure $(CONFIG_STATUS_DEPENDENCIES)
+	$(SHELL) ./config.status --recheck
+$(srcdir)/configure: $(srcdir)/configure.in $(ACLOCAL_M4) $(CONFIGURE_DEPENDENCIES)
+	cd $(srcdir) && $(AUTOCONF)
 
-#  # Config directory
-#	@mkdir -p ${GNC_CONFIGDIR}
-#
-#  # Directories
-# 	for dir in `find etc/ -type d`; do \
-#    dest=`echo $$dir | cut -c 5-` ; \
-#		mkdir -p ${GNC_CONFIGDIR}/$$dest; \
-#  done
-#
-#  # Files
-#	for file in `find etc/ -type f`; do \
-#    dest=`echo $$file | cut -c 5-` ; \
-#		${INSTALL_DATA} $$file ${GNC_CONFIGDIR}/$$dest; \
-#  done
+config.h: stamp-h
+	@if test ! -f $@; then \
+		rm -f stamp-h; \
+		$(MAKE) stamp-h; \
+	else :; fi
+stamp-h: $(srcdir)/config.h.in $(top_builddir)/config.status
+	cd $(top_builddir) \
+	  && CONFIG_FILES= CONFIG_HEADERS=config.h \
+	     $(SHELL) ./config.status
+	@echo timestamp > stamp-h 2> /dev/null
+$(srcdir)/config.h.in: $(srcdir)/stamp-h.in
+	@if test ! -f $@; then \
+		rm -f $(srcdir)/stamp-h.in; \
+		$(MAKE) $(srcdir)/stamp-h.in; \
+	else :; fi
+$(srcdir)/stamp-h.in: $(top_srcdir)/configure.in $(ACLOCAL_M4) acconfig.h
+	cd $(top_srcdir) && $(AUTOHEADER)
+	@echo timestamp > $(srcdir)/stamp-h.in 2> /dev/null
 
-.PHONY: default install-private install motif motif-static gnome gnome-static qt
-.PHONY: depend clean distclean
+mostlyclean-hdr:
 
-# Local Variables:
-# tab-width: 2
-# End:
+clean-hdr:
+
+distclean-hdr:
+	-rm -f config.h
+
+maintainer-clean-hdr:
+
+install-docDATA: $(doc_DATA)
+	@$(NORMAL_INSTALL)
+	$(mkinstalldirs) $(DESTDIR)$(docdir)
+	@list='$(doc_DATA)'; for p in $$list; do \
+	  if test -f $(srcdir)/$$p; then \
+	    echo " $(INSTALL_DATA) $(srcdir)/$$p $(DESTDIR)$(docdir)/$$p"; \
+	    $(INSTALL_DATA) $(srcdir)/$$p $(DESTDIR)$(docdir)/$$p; \
+	  else if test -f $$p; then \
+	    echo " $(INSTALL_DATA) $$p $(DESTDIR)$(docdir)/$$p"; \
+	    $(INSTALL_DATA) $$p $(DESTDIR)$(docdir)/$$p; \
+	  fi; fi; \
+	done
+
+uninstall-docDATA:
+	@$(NORMAL_UNINSTALL)
+	list='$(doc_DATA)'; for p in $$list; do \
+	  rm -f $(DESTDIR)$(docdir)/$$p; \
+	done
+
+# This directory's subdirectories are mostly independent; you can cd
+# into them and run `make' without going through this Makefile.
+# To change the values of `make' variables: instead of editing Makefiles,
+# (1) if the variable is set in `config.status', edit `config.status'
+#     (which will cause the Makefiles to be regenerated when you run `make');
+# (2) otherwise, pass the desired values on the `make' command line.
+
+@SET_MAKE@
+
+all-recursive install-data-recursive install-exec-recursive \
+installdirs-recursive install-recursive uninstall-recursive  \
+check-recursive installcheck-recursive info-recursive dvi-recursive:
+	@set fnord $(MAKEFLAGS); amf=$$2; \
+	dot_seen=no; \
+	target=`echo $@ | sed s/-recursive//`; \
+	list='$(SUBDIRS)'; for subdir in $$list; do \
+	  echo "Making $$target in $$subdir"; \
+	  if test "$$subdir" = "."; then \
+	    dot_seen=yes; \
+	    local_target="$$target-am"; \
+	  else \
+	    local_target="$$target"; \
+	  fi; \
+	  (cd $$subdir && $(MAKE) $(AM_MAKEFLAGS) $$local_target) \
+	   || case "$$amf" in *=*) exit 1;; *k*) fail=yes;; *) exit 1;; esac; \
+	done; \
+	if test "$$dot_seen" = "no"; then \
+	  $(MAKE) $(AM_MAKEFLAGS) "$$target-am" || exit 1; \
+	fi; test -z "$$fail"
+
+mostlyclean-recursive clean-recursive distclean-recursive \
+maintainer-clean-recursive:
+	@set fnord $(MAKEFLAGS); amf=$$2; \
+	dot_seen=no; \
+	rev=''; list='$(SUBDIRS)'; for subdir in $$list; do \
+	  rev="$$subdir $$rev"; \
+	  test "$$subdir" = "." && dot_seen=yes; \
+	done; \
+	test "$$dot_seen" = "no" && rev=". $$rev"; \
+	target=`echo $@ | sed s/-recursive//`; \
+	for subdir in $$rev; do \
+	  echo "Making $$target in $$subdir"; \
+	  if test "$$subdir" = "."; then \
+	    local_target="$$target-am"; \
+	  else \
+	    local_target="$$target"; \
+	  fi; \
+	  (cd $$subdir && $(MAKE) $(AM_MAKEFLAGS) $$local_target) \
+	   || case "$$amf" in *=*) exit 1;; *k*) fail=yes;; *) exit 1;; esac; \
+	done && test -z "$$fail"
+tags-recursive:
+	list='$(SUBDIRS)'; for subdir in $$list; do \
+	  test "$$subdir" = . || (cd $$subdir && $(MAKE) $(AM_MAKEFLAGS) tags); \
+	done
+
+tags: TAGS
+
+ID: $(HEADERS) $(SOURCES) $(LISP)
+	list='$(SOURCES) $(HEADERS)'; \
+	unique=`for i in $$list; do echo $$i; done | \
+	  awk '    { files[$$0] = 1; } \
+	       END { for (i in files) print i; }'`; \
+	here=`pwd` && cd $(srcdir) \
+	  && mkid -f$$here/ID $$unique $(LISP)
+
+TAGS: tags-recursive $(HEADERS) $(SOURCES) config.h.in $(TAGS_DEPENDENCIES) $(LISP)
+	tags=; \
+	here=`pwd`; \
+	list='$(SUBDIRS)'; for subdir in $$list; do \
+   if test "$$subdir" = .; then :; else \
+	    test -f $$subdir/TAGS && tags="$$tags -i $$here/$$subdir/TAGS"; \
+   fi; \
+	done; \
+	list='$(SOURCES) $(HEADERS)'; \
+	unique=`for i in $$list; do echo $$i; done | \
+	  awk '    { files[$$0] = 1; } \
+	       END { for (i in files) print i; }'`; \
+	test -z "$(ETAGS_ARGS)config.h.in$$unique$(LISP)$$tags" \
+	  || (cd $(srcdir) && etags $(ETAGS_ARGS) $$tags config.h.in $$unique $(LISP) -o $$here/TAGS)
+
+mostlyclean-tags:
+
+clean-tags:
+
+distclean-tags:
+	-rm -f TAGS ID
+
+maintainer-clean-tags:
+
+distdir = $(PACKAGE)-$(VERSION)
+top_distdir = $(distdir)
+
+# This target untars the dist file and tries a VPATH configuration.  Then
+# it guarantees that the distribution is self-contained by making another
+# tarfile.
+distcheck: dist
+	-rm -rf $(distdir)
+	GZIP=$(GZIP_ENV) $(TAR) zxf $(distdir).tar.gz
+	mkdir $(distdir)/=build
+	mkdir $(distdir)/=inst
+	dc_install_base=`cd $(distdir)/=inst && pwd`; \
+	cd $(distdir)/=build \
+	  && ../configure --with-included-gettext --srcdir=.. --prefix=$$dc_install_base \
+	  && $(MAKE) $(AM_MAKEFLAGS) \
+	  && $(MAKE) $(AM_MAKEFLAGS) dvi \
+	  && $(MAKE) $(AM_MAKEFLAGS) check \
+	  && $(MAKE) $(AM_MAKEFLAGS) install \
+	  && $(MAKE) $(AM_MAKEFLAGS) installcheck \
+	  && $(MAKE) $(AM_MAKEFLAGS) dist
+	-rm -rf $(distdir)
+	@banner="$(distdir).tar.gz is ready for distribution"; \
+	dashes=`echo "$$banner" | sed s/./=/g`; \
+	echo "$$dashes"; \
+	echo "$$banner"; \
+	echo "$$dashes"
+dist: distdir
+	-chmod -R a+r $(distdir)
+	GZIP=$(GZIP_ENV) $(TAR) chozf $(distdir).tar.gz $(distdir)
+	-rm -rf $(distdir)
+dist-all: distdir
+	-chmod -R a+r $(distdir)
+	GZIP=$(GZIP_ENV) $(TAR) chozf $(distdir).tar.gz $(distdir)
+	-rm -rf $(distdir)
+distdir: $(DISTFILES)
+	-rm -rf $(distdir)
+	mkdir $(distdir)
+	-chmod 777 $(distdir)
+	here=`cd $(top_builddir) && pwd`; \
+	top_distdir=`cd $(distdir) && pwd`; \
+	distdir=`cd $(distdir) && pwd`; \
+	cd $(top_srcdir) \
+	  && $(AUTOMAKE) --include-deps --build-dir=$$here --srcdir-name=$(top_srcdir) --output-dir=$$top_distdir --gnu Makefile
+	$(mkinstalldirs) $(distdir)/intl $(distdir)/old \
+	   $(distdir)/old/gnome/graph $(distdir)/old/perl-reports \
+	   $(distdir)/po
+	@for file in $(DISTFILES); do \
+	  d=$(srcdir); \
+	  if test -d $$d/$$file; then \
+	    cp -pr $$d/$$file $(distdir)/$$file; \
+	  else \
+	    test -f $(distdir)/$$file \
+	    || ln $$d/$$file $(distdir)/$$file 2> /dev/null \
+	    || cp -p $$d/$$file $(distdir)/$$file || :; \
+	  fi; \
+	done
+	for subdir in $(SUBDIRS); do \
+	  if test "$$subdir" = .; then :; else \
+	    test -d $(distdir)/$$subdir \
+	    || mkdir $(distdir)/$$subdir \
+	    || exit 1; \
+	    chmod 777 $(distdir)/$$subdir; \
+	    (cd $$subdir && $(MAKE) $(AM_MAKEFLAGS) top_distdir=../$(distdir) distdir=../$(distdir)/$$subdir distdir) \
+	      || exit 1; \
+	  fi; \
+	done
+info-am:
+info: info-recursive
+dvi-am:
+dvi: dvi-recursive
+check-am: all-am
+check: check-recursive
+installcheck-am:
+installcheck: installcheck-recursive
+all-recursive-am: config.h
+	$(MAKE) $(AM_MAKEFLAGS) all-recursive
+
+install-exec-am:
+install-exec: install-exec-recursive
+
+install-data-am: install-docDATA
+install-data: install-data-recursive
+
+install-am: all-am
+	@$(MAKE) $(AM_MAKEFLAGS) install-exec-am install-data-am
+install: install-recursive
+uninstall-am: uninstall-docDATA
+uninstall: uninstall-recursive
+all-am: Makefile $(DATA) config.h
+all-redirect: all-recursive-am
+install-strip:
+	$(MAKE) $(AM_MAKEFLAGS) AM_INSTALL_PROGRAM_FLAGS=-s install
+installdirs: installdirs-recursive
+installdirs-am:
+	$(mkinstalldirs)  $(DESTDIR)$(docdir)
+
+
+mostlyclean-generic:
+
+clean-generic:
+	-test -z "$(CLEANFILES)" || rm -f $(CLEANFILES)
+
+distclean-generic:
+	-rm -f Makefile $(CONFIG_CLEAN_FILES)
+	-rm -f config.cache config.log stamp-h stamp-h[0-9]*
+
+maintainer-clean-generic:
+mostlyclean-am:  mostlyclean-hdr mostlyclean-tags mostlyclean-generic
+
+mostlyclean: mostlyclean-recursive
+
+clean-am:  clean-hdr clean-tags clean-generic mostlyclean-am
+
+clean: clean-recursive
+
+distclean-am:  distclean-hdr distclean-tags distclean-generic clean-am
+	-rm -f libtool
+
+distclean: distclean-recursive
+	-rm -f config.status
+
+maintainer-clean-am:  maintainer-clean-hdr maintainer-clean-tags \
+		maintainer-clean-generic distclean-am
+	@echo "This command is intended for maintainers to use;"
+	@echo "it deletes files that may require special tools to rebuild."
+
+maintainer-clean: maintainer-clean-recursive
+	-rm -f config.status
+
+.PHONY: mostlyclean-hdr distclean-hdr clean-hdr maintainer-clean-hdr \
+uninstall-docDATA install-docDATA install-data-recursive \
+uninstall-data-recursive install-exec-recursive \
+uninstall-exec-recursive installdirs-recursive uninstalldirs-recursive \
+all-recursive check-recursive installcheck-recursive info-recursive \
+dvi-recursive mostlyclean-recursive distclean-recursive clean-recursive \
+maintainer-clean-recursive tags tags-recursive mostlyclean-tags \
+distclean-tags clean-tags maintainer-clean-tags distdir info-am info \
+dvi-am dvi check check-am installcheck-am installcheck all-recursive-am \
+install-exec-am install-exec install-data-am install-data install-am \
+install uninstall-am uninstall all-redirect all-am all installdirs-am \
+installdirs mostlyclean-generic distclean-generic clean-generic \
+maintainer-clean-generic clean mostlyclean distclean maintainer-clean
+
+
+make-gnucash-patch: make-gnucash-patch.in
+	rm -f $@.tmp
+	sed < $@.in > $@.tmp \
+            -e 's:@-PERL-@:${PERL}:g'
+	chmod +x $@.tmp
+	mv $@.tmp $@
+
+# Tell versions [3.59,3.63) of GNU make to not export all variables.
+# Otherwise a system limit (for SysV at least) may be exceeded.
+.NOEXPORT:

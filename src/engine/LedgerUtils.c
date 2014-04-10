@@ -13,8 +13,11 @@
  * GNU General Public License for more details.                     *
  *                                                                  *
  * You should have received a copy of the GNU General Public License*
- * along with this program; if not, write to the Free Software      *
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
+ * along with this program; if not, contact:                        *
+ *                                                                  *
+ * Free Software Foundation           Voice:  +1-617-542-5942       *
+ * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
+ * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
  *                                                                  *
 \********************************************************************/
 
@@ -27,6 +30,27 @@
 #include "Transaction.h"
 #include "util.h"
 
+/* This static indicates the debugging module that this .o belongs to.  */
+static short module = MOD_ENGINE;
+
+/* ------------------------------------------------------ */
+
+gncBoolean accListHasAccount (Account **list, Account *findme)
+{
+   Account *acc;
+   int nacc = 0;
+   if (!list || !findme) return GNC_F;
+
+   acc = list[0];
+   while (acc) {
+      if (acc == findme)
+        return GNC_T;
+      nacc++;
+      acc = list[nacc];
+   }
+   return GNC_F;
+}   
+   
 /* ------------------------------------------------------ */
 
 int accListCount (Account **list)
@@ -73,6 +97,7 @@ xaccGroupToList (Account *acc)
 
    if (!acc) return NULL;
 
+   ENTER ("acc=%p \n", acc);
    nacc = xaccGetNumAccounts (acc->children);
    nacc ++;  /* add one for this account */
 
@@ -88,18 +113,18 @@ xaccGroupToList (Account *acc)
          if (acc->children->account[i]->children) {
             Account **childlist;
             Account *childacc;
-            int ic = 0;
+            int ic = 1;
 
             /* get the children */
             childlist = xaccGroupToList (acc->children->account[i]);
 
             /* copy them over */
-            childacc = childlist[0];
+            childacc = childlist[1];
             while (childacc) {
-              n++;
+              n ++;
               list[n] = childacc;
-              childacc = childlist[ic];
               ic ++;
+              childacc = childlist[ic];
             }
             _free(childlist);
          }
@@ -107,6 +132,8 @@ xaccGroupToList (Account *acc)
       }
    }
    list[n] = NULL;
+   LEAVE ("n=%d nacc=%d \n", n, nacc);
+   assert (n==nacc);
 
    return list;
 }

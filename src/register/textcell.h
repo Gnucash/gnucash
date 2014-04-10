@@ -1,15 +1,3 @@
-/*
- * FILE:
- * textcell.h
- *
- * FUNCTION:
- * The TextCell object implements the simplest possible cell -- 
- * a text cell. The text cell simply accepts any and all typed
- * data from the keyboard, and displays in in the cell.
- *
- * HISTORY:
- * Copyright (c) 1998 Linas Vepstas
- */
 /********************************************************************\
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -22,9 +10,26 @@
  * GNU General Public License for more details.                     *
  *                                                                  *
  * You should have received a copy of the GNU General Public License*
- * along with this program; if not, write to the Free Software      *
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
+ * along with this program; if not, contact:                        *
+ *                                                                  *
+ * Free Software Foundation           Voice:  +1-617-542-5942       *
+ * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
+ * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ *                                                                  *
 \********************************************************************/
+
+/*
+ * FILE:
+ * textcell.h
+ *
+ * FUNCTION:
+ * The TextCell object implements the simplest possible cell -- 
+ * a text cell. The text cell simply accepts any and all typed
+ * data from the keyboard, and displays in in the cell.
+ *
+ * HISTORY:
+ * Copyright (c) 1998 Linas Vepstas
+ */
 
 #ifndef __XACC_TEXT_CELL_H__
 #define __XACC_TEXT_CELL_H__

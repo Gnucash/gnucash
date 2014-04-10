@@ -1,0 +1,789 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <link rel="stylesheet" title="normal" type="text/css" href="gnucash.css">
+   <title>A propos de Gnucash</title>
+</head>
+<body bgcolor="#EEEEEE">
+
+<h1>
+A propos de GnuCash</h1>
+GnuCash est un programme de suivi de vos finances personnelles. Quelques-unes
+de ses fonctions sont :
+<ul>
+<div STYLE="margin-bottom: 0cm"><b>Des comptes multiples</b>, qui peuvent
+&ecirc;tre ouverts en m&ecirc;me temps. Cr&eacute;ez un compte GnuCash
+pour chacun de vos comptes bancaires.</div>
+
+
+<p STYLE="margin-bottom: 0cm">Chaque compte garde un solde actuel en plus
+d'un solde de rapprochement, alors vous pouvez suivre les transactions
+qui n'ont pas encore &eacute;t&eacute; point&eacute;es, comme les ch&egrave;ques
+en cours de r&egrave;glement qui n'ont pas encore &eacute;t&eacute; d&eacute;bit&eacute;s
+de votre compte.
+<p><b>Interface facile &agrave; utiliser</b>.</ul>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Si vous savez utiliser
+le talon de votre carnet de ch&egrave;ques, vous savez utiliser GnuCash.
+<ul><b><a href="xacc-recnwin.html">Rapprochement automatique du compte</a></b>.</ul>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; A la fin du mois,
+ouvrez la fen&ecirc;tre de <b>rapprochement</b>, entrez le solde final
+de votre relev&eacute; bancaire, et pointez les transactions qui apparaissent
+sur celui-ci. Cela permet de faire concorder ce que vous avez enregistr&eacute;
+dans GnuCash avec ce que votre banque vous a rendu-compte, cela rend facile
+le d&eacute;pistage de n'importe quel &eacute;cart ou erreurs.
+<ul><b>QuickFill</b> (saisie rapide)...</ul>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Lorsque vous
+commencez une saisie dans les champs de description, s'il retrouve une
+pr&eacute;c&eacute;dente transaction, il vous la propose, frappez &lt;TAB>
+copiera alors la pr&eacute;c&eacute;dente transaction. C'est commode si
+vous avez des transactions semblables assez r&eacute;guli&egrave;rement.
+<ul><b>Portefeuille d'actions/de soci&eacute;t&eacute;s d'investissements</b>
+(n.d.t: pour ces derni&egrave;res : FCP et SICAV en France).</ul>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Suivis d'actions
+individuellement (une par compte) ou dans un portefeuille de comptes (un
+groupe de comptes qui peuvent &ecirc;tre affich&eacute;s ensemble).
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Il y a
+des outils pour <a href="xacc-ticker.html">automatiser la collecte des
+cours des actions</a>.
+<ul>Support pour de <b><a href="xacc-currency.html">multiples monnaies</a></b>
+et <b>comptes de<i> </i>march&eacute; des changes/devises</b>. (partiel,
+toujours d&eacute;faillant)</ul>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Les comptes
+bancaires peuvent &ecirc;tre &eacute;tablis dans diff&eacute;rentes monnaies,
+et des ventes/achats &agrave; des taux de change variables peuvent &ecirc;tre
+fait, comme les actions peuvent vendues/achet&eacute;es &agrave; des prix
+variables.
+<ul><a href="xacc-quicken.html">Importation des fichiers de Quicken</a>.</ul>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Importation
+des fichiers Quicken au format QIF.
+<ul><a href="xacc-reports.html">Rapports</a>. Affiche ou produit en HTML
+les rapports du solde, transaction et pertes/profits, ainsi qu'un suivi
+du solde du compte de mani&egrave;re graphique (requiert gnuplot).</ul>
+
+<h2>
+Fonctions Avanc&eacute;es</h2>
+X-Accountant poss&egrave;de quelques-unes des fonctions qui ne se trouvent
+pas habituellement dans un simple logiciel de gestion de finances personnelles
+:
+<ul><a href="xacc-groups.html">Une hi&eacute;rarchie de comptes</a></ul>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Un compte principal
+peut avoir un classement de petits comptes ou de comptes sp&eacute;cialis&eacute;s
+au-dessous de lui. Cela permet d'avoir des types de comptes semblables
+(par exemple : Esp&egrave;ces, Banque, Actions) qui peuvent &ecirc;tre
+group&eacute;s dans un compte principal (par exemple: Possessions ou Avoirs).
+<ul><a href="xacc-double.html">Double livret</a></ul>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Chaque transaction
+implique deux comptes, et <i>chaque transaction</i> est requise pour &eacute;quilibrer.
+Cela donne l'assurance que l'ensemble total des livres sera li&eacute;
+correctement, et pr&eacute;vient enti&egrave;rement les erreurs de d&eacute;s&eacute;quilibre
+de soldes.
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (Chaque
+transaction appara&icirc;t dans deux comptes; un compte est d&eacute;bit&eacute;
+et l'autre est cr&eacute;dit&eacute; avec exactement le m&ecirc;me montant.
+Avec le double livret, une transaction affich&eacute;e dans une fen&ecirc;tre
+sera automatiquement mise &agrave; jour dans toutes les autres fen&ecirc;tres
+montrant cette transaction, et dans les deux comptes.)
+<ul><a href="xacc-expense.html">Types de comptes revenus/d&eacute;penses
+(Cat&eacute;gories)</a>.</ul>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Le produit
+<a href="xacc-quicken.html">Quicken</a>
+d'Intuit a ce qu'ils appellent des "cat&eacute;gories", qui sont utilis&eacute;es
+pour suivre les revenus et d&eacute;penses. Celles-ci devraient &ecirc;tre
+utilis&eacute;es pour cr&eacute;er des rapports Profits/Pertes. Correctement
+utilis&eacute;es avec la fonction du double livret, elles peuvent &ecirc;tre
+utilis&eacute;es pour cr&eacute;er un Bilan et un rapport des Profits et
+des Pertes. Par exemple, l'&eacute;pargne des int&eacute;r&ecirc;ts du
+compte, les dividendes d'actions, ou la feuille de paie peuvent &ecirc;tre
+marqu&eacute;s l'un et l'autre comme d&eacute;p&ocirc;t dans un compte
+bancaire, et comme gains/revenus dans un compte de type Revenus, utilisant
+la fonction du double livret (transfert). De la m&ecirc;me mani&egrave;re,
+les paiements par la carte de cr&eacute;dit peuvent &ecirc;tre not&eacute;s
+dans un compte de carte de cr&eacute;dit, en plus du compte correspondant
+aux d&eacute;penses.
+<ul><b>Registre g&eacute;n&eacute;ral/Grand livre</b></ul>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Des comptes multiples
+peuvent &ecirc;tre affich&eacute;s dans une fen&ecirc;tre registre au m&ecirc;me
+moment. Cela peut soulager de l'ennui du d&eacute;pistage d'erreurs de
+saisie ou d'enregistrement .Il permet aussi une vision pratique d'un portefeuille
+contenant beaucoup d'actions, en y montrant toutes les transactions de
+ce portefeuille.
+<br>&nbsp;
+<br>&nbsp;
+<ul><b>Traitement de <a href="xacc-currency.html">multiples monnaies/devises</a></b></ul>
+
+<h2>
+Version</h2>
+Le sch&eacute;ma de num&eacute;rotage pour GnuCash est semblable &agrave;
+celui du noyau Linux, o&ugrave; les sous-versions "paires" indiquent des
+versions qui sont pr&eacute;vues pour &ecirc;tre stable, seulement modifi&eacute;es
+pour corriger les bugs, et les sous-versions "impaires" indiquent un flux
+"exp&eacute;rimental" qui poursuit le but d'ajout d'am&eacute;liorations
+et d'extensions.
+<p>Le courant "exp&eacute;rimental" actuel est gnucash-1.3.x, qui est consid&eacute;r&eacute;
+comme &eacute;tant instable.
+<p>La derni&egrave;re version stable est la 1.2.x; si vous n'avez pas l'intention
+de participer au travail de d&eacute;veloppement, vous ne devriez utiliser
+que cette version, ou une ancienne version 1.0.x.
+Ces versions sont assez
+stable, avec tous les bugs actuellement connus corrig&eacute;s.
+<p>Une fois le s&eacute;rie 1.3.x stabilis&eacute;e, la prochaine s&eacute;rie
+stable sera la 1.4.x, et l'exp&eacute;rimentation devrait probablement
+continuer avec les 1.5.x.
+<p>Si tu es int&eacute;ress&eacute; pour "hacker" sur la version exp&eacute;rimentale,
+tu devrais d'abord commencer par lire de bout en bout le document <a href="projects.html">GnuCash
+Project Goals(buts du projet Gnucash)</a> afin d'acqu&eacute;rir quelques
+perspectives sur la conception globale.
+<h2>
+D&eacute;veloppeurs principaux</h2>
+
+<dl>
+<dt>
+<a href="mailto:rclark@hmc.edu">Robin Clark</a></dt>
+
+<dd>
+a &eacute;crit le X-Accountant originel en Motif comme un projet scolaire,
+l'amenant jusqu'&agrave; la version 0.9 en Octobre 1997.</dd>
+
+<dt>
+<a href="mailto:linas@linas.org">Linas Vepstas</a></dt>
+
+<dd>
+comme il le dit: le GUI &eacute;tait l&eacute;ger, le code &eacute;tait
+document&eacute; et bien structur&eacute;, et il &eacute;tait enti&egrave;rement
+sous GPL. Aussi, il le r&eacute;-&eacute;crit : ajoutant des widgets de
+cellules avec XbaeMatrix, alors que les combobox et fl&egrave;ches devaient
+faire de nouveau une m&ecirc;me GUI l&eacute;g&egrave;re, r&eacute;&eacute;crivant
+le code interne de X-Accountant pour lui ajouter la double-entr&eacute;e,
+une hi&eacute;rarchie de comptes, l'augmenta d'un mini-moteur de transaction,
+ajouta le support pour les actions, et ajouta les menus d'aide. C'&eacute;tait
+la version 1.0 de Janvier 1998. Depuis lors, pour la version 1.1, le moteur
+fut &eacute;tendu et red&eacute;fini, et le code de la fen&ecirc;tre d'enregistrement
+fut compl&egrave;tement recon&ccedil;u et fait pour la plupart en Motif
+et ind&eacute;pendant du GUI. Pr&eacute;sentant un certain prototype de
+OFX fonctionnant.</dd>
+
+<dt>
+<a href="mailto:jcollins@gnucash.org">Jeremy Collins</a></dt>
+
+<dd>
+fit conna&icirc;tre au public largement et grandement le projet GnoMoney,
+et alors changea son nom en GnuCash. Jeremy cr&eacute;a le site web de
+gnucash.org, enregistra le domaine, fit fonctionner le code initial en
+GTK/gnome.</dd>
+
+<dt>
+<a href="mailto:rlb@cs.utexas.edu">Rob Browning</a></dt>
+
+<dd>
+abusa tout le monde pour ne pas utiliser perl, et alors ajouta le support
+guile/scheme. Rob maintient l'infrastructure de construction, traite de
+toute chose qui touche au langage d'extension guile/perl, et traite de
+configuration et configurabilit&eacute;.</dd>
+
+<dt>
+<a href="mailto:schoenberger@signsoft.com">Dirk Schoenberger</a></dt>
+
+<dd>
+travaille sur le portage en Qt/KDE</dd>
+
+<dt>
+<a href="mailto:peticola@cs.ucdavis.edu">Dave Peticolas</a></dt>
+
+<dd>
+travaille d'une mani&egrave;re obs&eacute;dante sur GnuCash. Mais il peut
+s'arr&ecirc;ter &agrave; tout moment s'il le veut . Vraiment.</dd>
+
+<dt>
+<a href="mailto:y-le-ny@ifrance.com">Yannick Le Ny</a></dt>
+
+<dd>
+Localise (traduction et adaptation) Xacc et Gnucash pour la France et les
+pays francophones.</dd>
+
+<br>Travail effectu&eacute; : traduction du Readme, des messages et de
+l'aide en ligne de Gnucash en fran&ccedil;ais.
+<br>A fini de traduire tout le site web de Gnucash en fran&ccedil;ais sauf
+la liste de courriers, et le maintient &agrave; jour.</dl>
+
+<h2>
+Correctifs et patches</h2>
+L<i>'&eacute;quipe des milliers</i> inclut :
+<br>&nbsp;
+<br>&nbsp;
+<dl>
+<dt>
+<a href="mailto:arensb@cfar.umd.edu">Andrew Arensburger</a></dt>
+
+<dd>
+pour FreeBSD et d'autres patch</dd>
+
+<dt>
+<a href="mailto:matt_armstrong@bigfoot.com">Matt Armstrong</a></dt>
+
+<dd>
+pour diff&eacute;rentes corrections</dd>
+
+<dt>
+<a href="mailto:fred@moremagic.com">Fred Baube</a></dt>
+
+<dd>
+pour l'essai de port de Java/MoneyDance</dd>
+
+<dt>
+<a href="http://www.hex.net/~cbbrowne">Christopher B. Browne</a></dt>
+
+<dd>
+pour les scripts des actions en perl, code d'importation des fichiers QIF
+en Guile, beaucoup de changements dans la documentation anglaise</dd>
+
+<dt>
+<a href="mailto:grahamc@zeta.org.au">Graham Chapman</a></dt>
+
+<dd>
+pour l'ajout du package xacc-rpts</dd>
+
+<dt>
+<a href="mailto:georgec@sco.com">George Chen</a></dt>
+
+<dd>
+pour le support des QIF de MS-Money</dd>
+
+<dt>
+<a href="mailtochina@thewrittenword.com">Albert Chin-A-Young</a></dt>
+
+<dd>
+patch configure.in</dd>
+
+<dt>
+<a href="mailto:jcollins@gnucash.org">Jeremey Collins</a></dt>
+
+<dd>
+pour le port de GnoMoney et de GTK</dd>
+
+<dt>
+<a href="mailto:pcondon@rackspace.com">Patrick Condron</a></dt>
+
+<dd>
+pour le serveur web et la connection T1</dd>
+
+<dt>
+<a href="mailto:Ciaran.Deignan@bull.net">Ciaran Deignan</a></dt>
+
+<dd>
+pour la version AIX du binaire</dd>
+
+<dt>
+<a href="mailto:tyson@tyse.net">Tyson Dowd</a></dt>
+
+<dd>
+pour les patch de config/make et la maintenance de debian</dd>
+
+<dt>
+<a href="mailto:ripley@xs4all.nl">Koen D'Hondt</a></dt>
+
+<dd>
+pour les patch de Solaris patches vers XmHTML</dd>
+
+<dt>
+<a href="mailto:bob@mostly.com">Bob Drzyzgula</a></dt>
+
+<dd>
+pour la conception budg&eacute;taire</dd>
+
+<dt>
+<a href="mailto:ju_finck@mail.netwave.de">Jan-Uwe Finck</a></dt>
+
+<dd>
+pour la traduction des messages en allemand</dd>
+
+<dt>
+<a href="mailto:rjf@aracnet.com">Ron Forrester</a></dt>
+
+<dd>
+pour des patch de gnome</dd>
+
+<dt>
+<a href="mailto:DFreese@osc.uscg.mil">Dave Freese</a></dt>
+
+<dd>
+pour les corrections des ann&eacute;es bissextiles</dd>
+
+<dt>
+<a href="mailto:otto@bug.redhat.com">Otto Hammersmith</a></dt>
+
+<dd>
+pour le packaging RedHat RPM</dd>
+
+<dt>
+<a href="mailto:haral@codec.ro">Alexandru Harsanyi</a></dt>
+
+<dd>
+pour la correction de diff&eacute;rents core dumps et lockups</dd>
+
+<dt>
+<a href="mailto:hellan@acm.org">Jon K&aring;re Hellan</a></dt>
+
+<dd>
+pour la correction de diff&eacute;rents core dumps et lockups</dd>
+
+<dt>
+<a href="mailto:PrakashK@bigfoot.com">Prakash Kailasa</a></dt>
+
+<dd>
+pour des correction de gnome</dd>
+
+<dt>
+<a href="mailto:tkludy@csd.sgi.com">Tom Kludy</a></dt>
+
+<dd>
+pour le port SGI Irix</dd>
+
+<dt>
+<a href="mailto:sk@xgm.de">Sven Kuenzler</a></dt>
+
+<dd>
+pour le fichier README de SuSE</dd>
+
+<dt>
+<a href="mailto:mellon@andare.fugue.com">Ted Lemon</a></dt>
+
+<dd>
+pour le port NetBSD</dd>
+
+<dt>
+<a href="mailto:y-le-ny@ifrance.com">Yannick Le Ny</a></dt>
+
+<dd>
+pour la traduction en fran&ccedil;ais</dd>
+
+<dt>
+<a href="mailto:glikely@nortelnetworks.com">Grant Likely</a></dt>
+
+<dd>
+pour des patch de gnome et du moteur</dd>
+
+<dt>
+<a href="mailto:martinh@pegasus.cc.ucf.edu">Heath Martin</a></dt>
+
+<dd>
+pour des patch de gnome et du registre</dd>
+
+<dt>
+<a href="mailto:mgmartin@abacusnet.net">Matt Martin</a></dt>
+
+<dd>
+correction des erreurs de code guile</dd>
+
+<dt>
+<a href="mailto:rgmerk@mira.net">Robert Graham Merkel</a></dt>
+
+<dd>
+rapport, patch gnome et de configuration</dd>
+
+<dt>
+<a href="mailto:mooney@dogbert.cc.ndsu.NoDak.edu">Tim Mooney</a></dt>
+
+<dd>
+port vers alpha-dec-osf4.0f</dd>
+
+<dt>
+<a href="mailto:gam3@ann.softgams.com">G. Allen Morris III</a></dt>
+
+<dd>
+pour des corrections de core dump de QIF</dd>
+
+<dt>
+<a href="mailto:spacey@inch.com">Peter Norton</a></dt>
+
+<dd>
+pour un valeureux effort de port vers GTK</dd>
+
+<dt>
+<a href="mailto:webmaster@obsidian.uia.net">OmNiBuS</a></dt>
+
+<dd>
+contenu et graphiques du site web</dd>
+
+<dt>
+<a href="mailto:mopyr@IPM.Lviv.UA">Myroslav Opyr</a></dt>
+
+<dd>
+pour diff&eacute;rents patch</dd>
+
+<dt>
+<a href="mailto:laurent.pelecq@wanadoo.fr">Laurent P&eacute;lecq</a></dt>
+
+<dd>
+patch d'i18n avec gettext</dd>
+
+<dt>
+<a href="mailto:Alain.Peyrat@nmu.alcatel.fr">Alain Peyrat</a></dt>
+
+<dd>
+pour des patch <tt>configure.in</tt></dd>
+
+<dt>
+<a href="mailto:peter@wuzel.m.isar.de">Peter Pointner</a></dt>
+
+<dd>
+patch motif et de configuration</dd>
+
+<dt>
+<a href="mailto:maufk@csv.warwick.ac.uk">Gavin Porter</a></dt>
+
+<dd>
+pour les styles de date europ&eacute;ens</dd>
+
+<dt>
+<a href="mailto:rr@sco.com">Ron Record</a></dt>
+
+<dd>
+pour les binaires de SCO Unixware et OpenServer</dd>
+
+<dt>
+<a href="mailto:jan.schrage@urz.uni-heidelberg.de">Jan Schrage</a></dt>
+
+<dd>
+patch de documentation</dd>
+
+<dt>
+<a href="mailto:cls@seawood.org">Christopher Seawood</a></dt>
+
+<dd>
+pour des core dump de XbaeMatrix</dd>
+
+<dt>
+<a href="mailto:msimons@fsimons01.erols.com">Mike Simons</a></dt>
+
+<dd>
+pour des patch <tt>configure.in</tt></dd>
+
+<dt>
+<a href="mailto:rich@brake.demon.co.uk">Richard Skelton</a></dt>
+
+<dd>
+pour des nettoyages de Solaris</dd>
+
+<dt>
+<a href="mailto:spruth@bigfoot.com">Henning Spruth</a></dt>
+
+<dd>
+pour des r&eacute;visions des textes allemand et des formats de date europ&eacute;ens</dd>
+
+<dt>
+<a href="mailto:detrout@earthlink.net">Diane Trout</a></dt>
+
+<dd>
+patch d'importation en scheme de QIF</dd>
+
+<dt>
+<a href="mailto:rob@valinux.com">Rob Walker</a></dt>
+
+<dd>
+patch de guile et du registre</dd>
+
+<dt>
+<a href="mailto:gooch@ic.EECS.Berkeley.EDU">Ken Yamaguchi</a></dt>
+
+<dd STYLE="margin-bottom: 0.5cm">
+correction d'importation de QIF; import de MYM</dd>
+</dl>
+
+<h2>
+Syst&egrave;mes d'exploitation support&eacute;s</h2>
+gnucash-1.0.18 (ex xacc-1.0.18) est connu pour fonctionner dans ces diff&eacute;rentes
+configurations :
+<br>Linux 2.0.x -- Intel w/ RedHat Motif
+<br>Linux 2.0.x -- Intel w/ Lesstif v0.81
+<br>Linux Debian -- Intel w/ Lesstif v0.81
+<br>SGI IRIX -- MIPS
+<br>IBM AIX 4.1.5 -- RS/6000
+<br>SCO Unixware 7 -- Intel
+<br>SCO OpenServer 5.0.4 -- Intel
+<br>NetBSD -- Intel
+<br>&nbsp;
+<br>&nbsp;
+<p><a href="http://www.gnucash.org/"><img SRC="../logos/linux.gif" NAME="Image1" NOSAVE BORDER=1 height=102 width=121></a><a href="http://www.sco.com/skunkware"><img SRC="skunkware.gif" NAME="Image2" BORDER=1 height=80 width=108 align=BOTTOM></a><a href="http://www.bull.de/pub/"><img SRC="bullogogross.gif" NAME="Image3" BORDER=1 height=75 width=75 align=BOTTOM></a><a href="http://www.bull.de/pub/"><img SRC="ibm.gif" NAME="Image4" BORDER=1 height=54 width=93 align=BOTTOM></a><a href="http://www.sgi.com/"><img SRC="sgi.gif" NAME="Image5" BORDER=1 height=43 width=151 align=BOTTOM></a><a href="http://www.debian.org/"><img SRC="debian.jpg" NAME="Image6" BORDER=1 height=140 width=114 align=BOTTOM></a><img SRC="NetBSD-banner.gif" NAME="Image7" BORDER=0 height=44 width=98 align=BOTTOM>
+<h2>
+Historique</h2>
+
+<div STYLE="margin-bottom: 0cm">Le tableau ci-dessous montre quelques historiques
+de lignes de code et le nombre de fichiers compt&eacute;s pour le d&eacute;veloppement
+du projet X-Accountant/GnuCash</div>
+
+<center>
+<p>Statistiques de l'historique du d&eacute;veloppement</center>
+
+<br>&nbsp;
+<table BORDER CELLSPACING=2 CELLPADDING=2 >
+<tr>
+<th>
+<center>Version&nbsp;</center>
+</th>
+
+<th>
+<center>moteur&nbsp;</center>
+</th>
+
+<th>
+<center>registre&nbsp;</center>
+</th>
+
+<th>
+<center>grand livre&nbsp;</center>
+</th>
+
+<th>
+<center>motif&nbsp;</center>
+</th>
+
+<th>
+<center>prefs (scm)&nbsp;</center>
+</th>
+
+<th>
+<center>docs (html)&nbsp;</center>
+</th>
+
+<th>
+<center>divers&nbsp;</center>
+</th>
+
+<th>
+<center>Total&nbsp;</center>
+</th>
+</tr>
+
+<tr>
+<td>
+<center>xacc-0.9&nbsp;
+<br>Sept 97&nbsp;</center>
+</td>
+
+<td>
+<center>-&nbsp;</center>
+</td>
+
+<td>
+<center>-&nbsp;</center>
+</td>
+
+<td>
+<center>-&nbsp;</center>
+</td>
+
+<td>
+<center>34 fichiers&nbsp;
+<br>(7.5+0.9)&nbsp;</center>
+</td>
+
+<td>
+<center>-&nbsp;</center>
+</td>
+
+<td>
+<center>5 fichiers&nbsp;
+<br>(0.4)&nbsp;</center>
+</td>
+
+<td>
+<center>-&nbsp;</center>
+</td>
+
+<td>
+<center>39 fichiers&nbsp;
+<br>(8.8)&nbsp;</center>
+</td>
+</tr>
+
+<tr>
+<td>
+<center>xacc-0.9w&nbsp;
+<br>Dec 97&nbsp;</center>
+</td>
+
+<td>
+<center>-&nbsp;</center>
+</td>
+
+<td>
+<center>-&nbsp;</center>
+</td>
+
+<td>
+<center>-&nbsp;</center>
+</td>
+
+<td>
+<center>51 fichiers&nbsp;
+<br>(13.8+1.5)&nbsp;</center>
+</td>
+
+<td>
+<center>-&nbsp;</center>
+</td>
+
+<td>
+<center>9 fichiers&nbsp;
+<br>(0.8)&nbsp;</center>
+</td>
+
+<td>
+<center>-&nbsp;</center>
+</td>
+
+<td>
+<center>60 fichiers&nbsp;
+<br>(16.1)&nbsp;</center>
+</td>
+</tr>
+
+<tr>
+<td>
+<center>xacc-1.0.17&nbsp;
+<br>Fev 98</center>
+</td>
+
+<td>
+<center>-&nbsp;</center>
+</td>
+
+<td>
+<center>-&nbsp;</center>
+</td>
+
+<td>
+<center>-&nbsp;</center>
+</td>
+
+<td>
+<center>52 files&nbsp;
+<br>(14.8+1.8)&nbsp;</center>
+</td>
+
+<td>
+<center>-&nbsp;</center>
+</td>
+
+<td>
+<center>12 files&nbsp;
+<br>(1.4)&nbsp;</center>
+</td>
+
+<td>
+<center>-&nbsp;</center>
+</td>
+
+<td>
+<center>64 files&nbsp;
+<br>(18.0)&nbsp;</center>
+</td>
+</tr>
+
+<tr>
+<td>
+<center>gnucash-1.1.15&nbsp;
+<br>Aou 98&nbsp;</center>
+</td>
+
+<td>
+<center>24 fichiers&nbsp;
+<br>(6.2+1.5)&nbsp;</center>
+</td>
+
+<td>
+<center>31 fichiers&nbsp;
+<br>(6.1+1.7)&nbsp;</center>
+</td>
+
+<td>
+<center>5 fichiers&nbsp;
+<br>(1.4+0.4)&nbsp;</center>
+</td>
+
+<td>
+<center>30 fichiers&nbsp;
+<br>(7.4+0.7)&nbsp;</center>
+</td>
+
+<td>
+<center>3 fichiers&nbsp;
+<br>(0.3)&nbsp;</center>
+</td>
+
+<td>
+<center>16 fichiers&nbsp;
+<br>(1.9)&nbsp;</center>
+</td>
+
+<td>
+<center>non compt&eacute;&nbsp;
+<br>(>1.0)&nbsp;</center>
+</td>
+
+<td>
+<center>109 fichiers&nbsp;
+<br>(32.9)&nbsp;</center>
+</td>
+</tr>
+
+<tr>
+<td>
+<center>gnucash-1.2.2&nbsp;
+<br>Aou 99&nbsp;</center>
+</td>
+
+<td>
+<center>41 fichiers&nbsp;
+<br>(10.2+3.6)&nbsp;</center>
+</td>
+
+<td>
+<center>28 fichiers&nbsp;
+<br>(5.5+1.7)&nbsp;</center>
+</td>
+
+<td>
+<center>14 fichiers&nbsp;
+<br>(2.4+0.6)&nbsp;</center>
+</td>
+
+<td>
+<center>26 fichiers&nbsp;
+<br>(8.7+0.5)&nbsp;</center>
+</td>
+
+<td>
+<center>14 fichiers&nbsp;
+<br>(1.4)&nbsp;</center>
+</td>
+
+<td>
+<center>30 fichiers&nbsp;
+<br>(2.6)&nbsp;</center>
+</td>
+
+<td>
+<center>non compt&eacute;&nbsp;
+<br>(>1.0)&nbsp;</center>
+</td>
+
+<td>
+<center>153 fichiers&nbsp;
+<br>(37.2)&nbsp;</center>
+</td>
+</tr>
+</table>
+
+<p>Chaque cellule contient:
+<p>nombre de fichiers *c et *.h
+<br>(KLOCS dans *.c + KLOCS dans *.h),
+<p>o&ugrave; KLOC == kilo-lignes-de-code, comme rapport&eacute; par
+<tt>wc</tt>.
+<br>
+<hr>
+<br>&nbsp;
+<p>Retour &agrave; la <a href="xacc-main.html">Page principale de la documentation.</a>
+</body>
+</html>

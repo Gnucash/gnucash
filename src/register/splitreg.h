@@ -1,33 +1,3 @@
-/*
- * FILE:
- * splitreg.h
- *
- * FUNCTION:
- * Implements a basic display register/ledger.
- * This object makes specific cell have specific properties
- * (price, text, date, etc).  and specific names that correspond.
- * it also determines the actual phyisical layout, arrengement
- * of columns, etc.
- *
- * Handles splits
- *
- * If the SHOW_TDETAIL flag is set, then transaction blah blah is shown.
- * Otherwise it is not (useful when not displaying splits, gives old-styule reg).
- * Hack alert -- finish documenting this
- *
- * The xaccConfigSplitRegister() subroutine allows the configuration 
- * of the register to be changed on the fly (dynamically).  In particular,
- * the register type, and/or the flags controlling the register display
- * can be changed on the fly ... 
- *
- * DESIGN HOPES:
- * Should probably move at least some of the layout to a config 
- * file.  Might make good sense to use scheme/guile for the layout.
- *
- * HISTORY:
- * Copyright (c) 1998 Linas Vepstas
- */
-
 /********************************************************************\
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -40,9 +10,41 @@
  * GNU General Public License for more details.                     *
  *                                                                  *
  * You should have received a copy of the GNU General Public License*
- * along with this program; if not, write to the Free Software      *
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
+ * along with this program; if not, contact:                        *
+ *                                                                  *
+ * Free Software Foundation           Voice:  +1-617-542-5942       *
+ * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
+ * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ *                                                                  *
 \********************************************************************/
+
+/*
+ * FILE:
+ * splitreg.h
+ *
+ * FUNCTION:
+ * Implements a basic display register/ledger.
+ * This object makes specific cells have specific properties
+ * (price, text, date, etc.) and specific names that correspond.
+ * It also determines the actual physical layout, arrangement
+ * of columns, etc.
+ *
+ * Handles splits
+ *
+ * Hack alert -- finish documenting this
+ *
+ * The xaccConfigSplitRegister() subroutine allows the configuration 
+ * of the register to be changed on the fly (dynamically).  In particular,
+ * the register type, and/or the flags controlling the register display
+ * can be changed on the fly ... 
+ *
+ * DESIGN HOPES:
+ * Should probably move at least some of the layout to a config 
+ * file.  Might make good sense to use scheme/guile for the layout.
+ *
+ * HISTORY:
+ * Copyright (c) 1998, 1999, 2000 Linas Vepstas
+ */
 
 #ifndef __XACC_SPLITREG_H__
 #define __XACC_SPLITREG_H__
@@ -53,34 +55,70 @@
 #include "datecell.h"
 #include "quickfillcell.h"
 #include "pricecell.h"
+#include "numcell.h"
 #include "table-allgui.h"
 
 /* defined register types */
 /* "registers" are single-account display windows.
  * "ledgers" are multiple-account display windows */
-#define BANK_REGISTER       1
-#define CASH_REGISTER       2
-#define ASSET_REGISTER      3
-#define CREDIT_REGISTER     4
-#define LIABILITY_REGISTER  5
-#define INCOME_REGISTER     6
-#define EXPENSE_REGISTER    7
-#define EQUITY_REGISTER     8
-#define STOCK_REGISTER      9
-#define CURRENCY_REGISTER   10
+typedef enum
+{
+  BANK_REGISTER       =  1,
+  CASH_REGISTER       =  2,
+  ASSET_REGISTER      =  3,
+  CREDIT_REGISTER     =  4,
+  LIABILITY_REGISTER  =  5,
+  INCOME_REGISTER     =  6,
+  EXPENSE_REGISTER    =  7,
+  EQUITY_REGISTER     =  8,
+  STOCK_REGISTER      =  9,
+  CURRENCY_REGISTER   = 10,
 
-#define GENERAL_LEDGER      11
-#define INCOME_LEDGER       12
-#define PORTFOLIO           13
+  GENERAL_LEDGER      = 11,
+  INCOME_LEDGER       = 12,
+  PORTFOLIO_LEDGER    = 13,
+  SEARCH_LEDGER       = 14
+} SplitRegisterType;
+
 #define REG_TYPE_MASK       0xff
 
-/* 
+/* These values are used to identify the cells in the register. */
+typedef enum
+{
+  NO_CELL    = -1,
+  DATE_CELL  =  0,
+  NUM_CELL   =  1,
+  DESC_CELL  =  2,
+  RECN_CELL  =  3,
+  SHRS_CELL  =  4,
+  BALN_CELL  =  5,
+  ACTN_CELL  =  6,
+  XFRM_CELL  =  7,
+  XTO_CELL   =  8,
+  MEMO_CELL  =  9,
+  CRED_CELL  = 10,
+  DEBT_CELL  = 11,
+  PRIC_CELL  = 12,
+  VALU_CELL  = 13,
+
+  /* NCRED & NDEBT handle minus the usual quantities */
+  NCRED_CELL = 14,
+  NDEBT_CELL = 15,
+
+  /* MXFRM is the "mirrored" transfer-from account */
+  MXFRM_CELL = 16
+} CellType;
+
+/*
  * enumerated display styles 
- * REG_DOUBLE_LINE  -- show two lines per transaction
- * REG_MULTI_LINE   -- show multiple lines per transaction
- * REG_DYNAMIC      -- dynamically expand edited transaction
+ * REG_SINGLE_LINE    -- show one line per transaction
+ * REG_DOUBLE_LINE    -- show two lines per transaction
+ * REG_MULTI_LINE     -- show multiple lines per transaction
+ * REG_SINGLE_DYNAMIC -- dynamically expand edited transaction,
+ *                       all other transactions on one line
+ * REG_DOUBLE_DYNAMIC -- dynamically expand edited transaction,
+ *                       all other transactions on two lines
  */
- 
 #define REG_SINGLE_LINE        (1 << 8)
 #define REG_DOUBLE_LINE        (2 << 8)
 #define REG_MULTI_LINE         (3 << 8)
@@ -107,11 +145,20 @@
 #define MOD_NEW    0x2000
 #define MOD_ALL    0x3fff
 
+/* Types of cursors */
+typedef enum
+{
+  CURSOR_SPLIT,
+  CURSOR_TRANS,
+  CURSOR_NONE
+} CursorType;
+
 /* The value of NUM_CELLS should be larger than the number of 
  * cells defined in the structure below!
  */
 #define NUM_CELLS 25
 
+typedef struct _SplitRegisterBuffer SplitRegisterBuffer;
 typedef struct _SplitRegister SplitRegister;
 
 struct _SplitRegister {
@@ -126,7 +173,7 @@ struct _SplitRegister {
    CellBlock     * header;
 
    DateCell      * dateCell;
-   BasicCell     * numCell;
+   NumCell       * numCell;
    QuickFillCell * descCell;
    BasicCell     * recnCell;   /* main transaction line reconcile */
    PriceCell     * shrsCell;
@@ -137,7 +184,7 @@ struct _SplitRegister {
    ComboCell     * xfrmCell;
    ComboCell     * mxfrmCell;
    ComboCell     * xtoCell;
-   BasicCell     * memoCell;
+   QuickFillCell * memoCell;
    PriceCell     * creditCell;
    PriceCell     * debitCell;
    PriceCell     * priceCell;
@@ -151,35 +198,100 @@ struct _SplitRegister {
    int type;
 
    /* some private data; outsiders should not access this */
-   short num_cols;
-   short num_header_rows;
+   int num_cols;
+   int num_header_rows;
 
-   short num_phys_rows;
-   short num_virt_rows;
-   short cursor_phys_row;
-   short cursor_virt_row;
+   int num_phys_rows;
+   int num_virt_rows;
+
+   int cursor_phys_row;
+   int cursor_virt_row;
 
    BasicCell *header_label_cells[NUM_CELLS];
 
-   /* user_hook allows users of this object to hang
+   /* user_data allows users of this object to hang
     * private data onto it */
-   void *user_hook;
-   void *user_hack;
-   void *user_huck;
+   void *user_data;
 
    /* The destroy callback gives user's a chance 
     * to free up any associated user_hook data */
    void (* destroy) (SplitRegister *);
-
 };
+
+
+typedef struct _SplitRegisterColors SplitRegisterColors;
+
+struct _SplitRegisterColors
+{
+  guint32 single_cursor_active_bg_color;
+  guint32 single_cursor_passive_bg_color;
+  guint32 single_cursor_passive_bg_color2;
+
+  guint32 double_cursor_active_bg_color;
+  guint32 double_cursor_passive_bg_color;
+  guint32 double_cursor_passive_bg_color2;
+
+  gncBoolean double_alternate_virt;
+
+  guint32 trans_cursor_active_bg_color;
+  guint32 trans_cursor_passive_bg_color;
+
+  guint32 split_cursor_active_bg_color;
+  guint32 split_cursor_passive_bg_color;
+
+  guint32 header_bg_color;
+};
+
+typedef char* (*SRStringGetter) (SplitRegisterType);
+
+void            xaccSplitRegisterSetDebitStringGetter(SRStringGetter getter);
+void            xaccSplitRegisterSetCreditStringGetter(SRStringGetter getter);
 
 SplitRegister * xaccMallocSplitRegister (int type);
 void            xaccInitSplitRegister (SplitRegister *, int type);
 void            xaccConfigSplitRegister (SplitRegister *, int type);
 void            xaccDestroySplitRegister (SplitRegister *);
 
+void            xaccSetSplitRegisterColors (SplitRegisterColors reg_colors);
+void            xaccSplitRegisterConfigColors (SplitRegister *reg);
+
 /* returns non-zero value if updates have been made to data */
 unsigned int    xaccSplitRegisterGetChangeFlag (SplitRegister *);
+
+/* Clears all change flags in the register. Does not alter values */
+void            xaccSplitRegisterClearChangeFlag (SplitRegister *reg);
+
+/* Returns the type of the current cursor */
+CursorType      xaccSplitRegisterGetCursorType (SplitRegister *reg);
+
+/* Returns the type of the cursor at the given virtual row and column. */
+CursorType      xaccSplitRegisterGetCursorTypeRowCol (SplitRegister *reg,
+                                                      int virt_row,
+                                                      int virt_col);
+/* Returns the type of the current cell */
+CellType        xaccSplitRegisterGetCellType (SplitRegister *reg);
+
+/* Returns the type of the cell at the given physical row and column. */
+CellType        xaccSplitRegisterGetCellTypeRowCol (SplitRegister *reg,
+                                                    int phys_row,
+                                                    int phys_col);
+
+/* Returns the physical row and column in the current cursor of the
+ * given cell using the pointer values. The function returns true if
+ * the given cell type is in the current cursor, false otherwise. */
+gncBoolean      xaccSplitRegisterGetCellRowCol (SplitRegister *reg,
+                                                CellType cell_type,
+                                                int *p_phys_row,
+                                                int *p_phys_col);
+
+/* Functions for working with split register buffers */
+SplitRegisterBuffer * xaccMallocSplitRegisterBuffer ();
+void xaccDestroySplitRegisterBuffer (SplitRegisterBuffer *srb);
+
+void xaccSplitRegisterSaveCursor(SplitRegister *sr, SplitRegisterBuffer *srb);
+void xaccSplitRegisterRestoreCursorChanged(SplitRegister *sr,
+                                           SplitRegisterBuffer *srb);
+
 
 #endif /* __XACC_SPLITREG_H__ */
 

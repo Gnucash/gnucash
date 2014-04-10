@@ -14,13 +14,12 @@
  * GNU General Public License for more details.                     *
  *                                                                  *
  * You should have received a copy of the GNU General Public License*
- * along with this program; if not, write to the Free Software      *
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
+ * along with this program; if not, contact:                        *
  *                                                                  *
- *   Author: Rob Clark                                              *
- * Internet: rclark@cs.hmc.edu                                      *
- *  Address: 609 8th Street                                         *
- *           Huntington Beach, CA 92648-4632                        *
+ * Free Software Foundation           Voice:  +1-617-542-5942       *
+ * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
+ * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ *                                                                  *
 \********************************************************************/
 
 #ifndef __XACC_QUICKFILL_H__
@@ -47,7 +46,13 @@
  * when the end of the descriptions string is reached.
  */
 
-#define QFNUM 27     /* 26+1 letters in the alphabet */
+#define QFNUM 129     /* 128 characters + 1 */
+
+typedef enum
+{
+  QUICKFILL_LIFO,
+  QUICKFILL_ALPHA
+} QuickFillSort;
 
 typedef struct _quickfill {
   char * text;                     /* the first matching text string     */
@@ -59,7 +64,10 @@ typedef struct _quickfill {
 QuickFill *xaccMallocQuickFill( void );
 void       xaccFreeQuickFill( QuickFill *qf );
 QuickFill *xaccGetQuickFill( QuickFill *qf, char c );
-void       xaccQFInsertText( QuickFill *qf, const char *text );
+QuickFill *xaccGetQuickFillStr( QuickFill *qf, const char *str );
+QuickFill *xaccGetQuickFillStrLen( QuickFill *qf, const char *str, int len );
+QuickFill *xaccGetQuickFillUniqueLen( QuickFill *qf, int *len );
+void       xaccQFInsertText( QuickFill *qf, const char *text, QuickFillSort );
 
 /** GLOBALS *********************************************************/
 

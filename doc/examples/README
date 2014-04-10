@@ -1,0 +1,34 @@
+
+Guide to *.xac Files:
+---------------------
+Many of the *.xac files are from older versions of X-Accountant,
+and will cause a warning message to be displayed.  They are
+here to help ensure backwards-compatibility with older
+versions of GnuCash.  They should otherwise work just fine.
+
+splitdemo.xac
+    A very simple demo showing a paycheck split into a bank deposit,
+    and a variety of taxes.
+
+trading.xac
+    A more complex demo showing a bank account, several stocks, 
+    and a margin account.
+
+trading2.xac
+    A demo, similar to the above, but also includes accounts showing
+    income taxes.  In particular, a paycheck is split up into several
+    pieces.
+
+Guide to QIF Files:
+-------------------
+
+cbb-export.qif
+    QIF file that is exported by Olsen's CBB version 0.73
+
+abc-all.qif
+abc.qif
+bogus.qif
+every.qif
+quicktest.qif
+swipe.qif
+    QIF files exported by Quicken(TM) Version 3.0

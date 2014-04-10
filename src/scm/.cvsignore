@@ -1,7 +1,2 @@
 bootstrap.scm
 Makefile
-tmp
-obj
-*.diff
-*.diffs
-*.patch

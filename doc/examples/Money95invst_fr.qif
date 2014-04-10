@@ -1,0 +1,61 @@
+!Type:Bank
+D01/01/95
+T145,608.32
+CX
+POpening Balance
+L[Livret bleu]
+^
+D01/26/95
+CX
+MEconomies
+T2,500.00
+L[Compte courant]
+^
+D02/26/95
+CX
+MEconomies
+T3,000.00
+L[Compte courant]
+^
+D03/26/95
+CX
+MEconomies
+T3,000.00
+L[Compte courant]
+^
+D04/26/95
+CX
+MEconomies
+T3,000.00
+L[Compte courant]
+^
+D05/26/95
+CX
+MEconomies
+T3,000.00
+L[Compte courant]
+^
+D06/26/95
+CX
+MEconomies
+T3,000.00
+L[Compte courant]
+^
+D07/26/95
+CX
+MEconomies
+T2,500.00
+L[Compte courant]
+^
+D11/12/95
+CX
+MPour équilibrage
+T-4,500.00
+L[Compte courant]
+^
+D12/26/95
+CX
+MEconomies
+T3,500.00
+L[Compte courant]
+^

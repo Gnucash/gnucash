@@ -1,0 +1,50 @@
+!Type:Bank 
+D6/17/97
+T2,345.00
+NDEP
+Pfrom my pillow case
+Mmy memo
+LOther Inc
+^^
+D8/ 1/97
+T3,300.00
+NDEP
+Pput in more money
+Mthis came out of my pillowcas
+LOther Inc
+^^
+D8/ 1/97
+T543.00
+N101
+Ppaycheck
+Mthe boss paid me today!
+LGift Received
+^^
+D9/12/97
+T-5,000.00
+NTXFR
+Pmove a pile of money to trading acct
+Manother memo
+L[Swipe Brokers]
+^^
+D11/11/97
+T12.00
+NTXFR
+Phal stock
+Mincome
+L[Swipe Brokers]
+^^
+D11/11/97
+T11.00
+NTXFR
+Phal stock
+Mincome
+L[Swipe Brokers]
+^^
+D11/12/97
+T500.00
+NTXFR
+Phal stock
+Msold some stock!
+L[Swipe Brokers]
+^^

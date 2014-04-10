@@ -1,3 +1,27 @@
+/********************************************************************\
+ * TransactionP.h -- defines transaction for xacc (X-Accountant)    *
+ * Copyright (C) 1997 Robin D. Clark                                *
+ * Copyright (C) 1997, 1998, 1999, 2000 Linas Vepstas               *
+ *                                                                  *
+ * This program is free software; you can redistribute it and/or    *
+ * modify it under the terms of the GNU General Public License as   *
+ * published by the Free Software Foundation; either version 2 of   *
+ * the License, or (at your option) any later version.              *
+ *                                                                  *
+ * This program is distributed in the hope that it will be useful,  *
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of   *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    *
+ * GNU General Public License for more details.                     *
+ *                                                                  *
+ * You should have received a copy of the GNU General Public License*
+ * along with this program; if not, contact:                        *
+ *                                                                  *
+ * Free Software Foundation           Voice:  +1-617-542-5942       *
+ * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
+ * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ *                                                                  *
+\********************************************************************/
+
 /*
  * FILE:
  * TransactionP.h
@@ -12,35 +36,10 @@
  * routines that perform sub-atomic updates of the accounting
  * structures.  If these routines are not used properly, they
  * can result in inconsistent, unbalanced accounting structures.
- * In other words, thier use is dangerous, and thier use outside
+ * In other words, their use is dangerous, and their use outside
  * of the scope of the engine is forbidden.
  *
  */
-
-/********************************************************************\
- * TransactionP.h -- defines transaction for xacc (X-Accountant)    *
- * Copyright (C) 1997 Robin D. Clark                                *
- * Copyright (C) 1997, 1998 Linas Vepstas                           *
- *                                                                  *
- * This program is free software; you can redistribute it and/or    *
- * modify it under the terms of the GNU General Public License as   *
- * published by the Free Software Foundation; either version 2 of   *
- * the License, or (at your option) any later version.              *
- *                                                                  *
- * This program is distributed in the hope that it will be useful,  *
- * but WITHOUT ANY WARRANTY; without even the implied warranty of   *
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    *
- * GNU General Public License for more details.                     *
- *                                                                  *
- * You should have received a copy of the GNU General Public License*
- * along with this program; if not, write to the Free Software      *
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
- *                                                                  *
- *   Author: Rob Clark                                              *
- * Internet: rclark@cs.hmc.edu                                      *
- *  Address: 609 8th Street                                         *
- *           Huntington Beach, CA 92648-4632                        *
-\********************************************************************/
 
 #ifndef __XACC_TRANSACTION_P_H__
 #define __XACC_TRANSACTION_P_H__
@@ -49,12 +48,14 @@
 
 #include "config.h"
 #include "Transaction.h"   /* for typedefs */
+#include "GNCId.h"
+
 
 /** STRUCTS *********************************************************/
 /* 
  * Double-entry is forced by having at least two splits in every
  * transaction.  By convention, (and only by convention, not by
- * any inate requirement), the first split is considered to be
+ * any innate requirement), the first split is considered to be
  * the source split or the crediting split, and the others are
  * the destination, or debiting splits.  The grand total of all
  * of the splits must always be kept zero.
@@ -71,17 +72,19 @@
 
 struct _split 
 {
+  GUID guid;  /* globally unique id */
+
   Account *acc;              /* back-pointer to debited/credited account  */
   Transaction *parent;       /* parent of split                           */
 
   /* The memo field is an arbitrary user-assiged value. 
-   * It is intended to hold a short (zero to forty cahracter) string 
+   * It is intended to hold a short (zero to forty character) string 
    * that is displayed by the GUI along with this split. 
    */
   char  * memo;
 
   /* The action field is an arbitrary user-assigned value.
-   * It is meant to be a very short (oen to ten cahracter) string that
+   * It is meant to be a very short (one to ten cahracter) string that
    * signifies the "type" of this split, such as e.g. Buy, Sell, Div,
    * Withdraw, Deposit, ATM, Check, etc. The idea is that this field
    * can be used to create custom reports or graphs of data.
@@ -104,9 +107,12 @@ struct _split
   double  damount;           /* num-shares; if > 0.0, deposit, else paymt */
   double  share_price;       /* the share price, ==1.0 for bank account   */
 
+  /* -------------------------------------------------------------- */
+  /* Below follow some 'temporary' fields */
+
   /* The various "balances" are the sum of all of the values of 
    * all the splits in the account, up to and including this split.
-   * These belances apply to a sorting order by date posted
+   * These balances apply to a sorting order by date posted
    * (not by date entered). */
   double  balance;
   double  cleared_balance;
@@ -117,19 +123,25 @@ struct _split
   double  share_reconciled_balance;
 
   double cost_basis;
-  /* no tickee no washee */
-  int tickee;
+
+
+  int ticket; /* used for matching up splits for QIFIO.c */
 };
 
 
 struct _transaction 
 {
+  /* guid is a globally unique identifier which can be used to
+   * reference the transaction.
+   */
+  GUID guid;
+
   Timespec date_entered;     /* date register entry was made              */
   Timespec date_posted;      /* date transaction was posted at bank       */
 
   /* The num field is a arbitrary user-assigned field.  
    * It is intended to store a short id number, typically the check number,
-   * deposit number, invoice number or other tracking number
+   * deposit number, invoice number or other tracking number.
    */
   char  * num;  
 
@@ -149,10 +161,10 @@ struct _transaction
   Split   **splits;          /* list of splits, null terminated           */
 
   /* marker is used to track the progress of transaction traversals. 
-   * 0 is never a legitimate marker value, so we can tell is we hit a
-   * new transaction in the middle of a traversal.  All each new
-   * traversal cares about is whether or not the marker stored in a
-   * transaction is the same as or different than the one
+   * 0 is never a legitimate marker value, so we can tell is we hit
+   * a new transaction in the middle of a traversal. All each new
+   * traversal cares about is whether or not the marker stored in
+   * a transaction is the same as or different than the one
    * corresponding to the current traversal. */
   unsigned char  marker;      
 
@@ -167,6 +179,16 @@ struct _transaction
   Transaction *orig;
 };
 
+
+/* Set the transaction's GUID. This should only be done when reading
+ * a transaction from a datafile, or some other external source. Never
+ * call this on an existing transaction! */
+void xaccTransSetGUID (Transaction *trans, GUID *guid);
+
+/* Set the split's GUID. This should only be done when reading
+ * a split from a datafile, or some other external source. Never
+ * call this on an existing split! */
+void xaccSplitSetGUID (Split *split, GUID *guid);
 
 /* The xaccFreeTransaction() method simply frees all memory associated
  * with the transaction.  It does not perform any consistency checks 
@@ -206,7 +228,7 @@ void  xaccTransRemoveSplit (Transaction*, Split *);
  * (the share price of the source split is not changed).
  * If the indicated split is the source split, then the value
  * of the very first destination split is adjusted so that
- * the blanace is zero.   If there is not destination split,
+ * the balance is zero.  If there is not destination split,
  * one of two outcomes are possible, depending on whether
  * "forced_double_entry" is enabled or disabled.
  * (1) if forced-double-entry is disabled, the fact that

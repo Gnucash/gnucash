@@ -1,3 +1,19 @@
+;; This program is free software; you can redistribute it and/or    
+;; modify it under the terms of the GNU General Public License as   
+;; published by the Free Software Foundation; either version 2 of   
+;; the License, or (at your option) any later version.              
+;;                                                                  
+;; This program is distributed in the hope that it will be useful,  
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of   
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    
+;; GNU General Public License for more details.                     
+;;                                                                  
+;; You should have received a copy of the GNU General Public License
+;; along with this program; if not, contact:
+;;
+;; Free Software Foundation           Voice:  +1-617-542-5942
+;; 59 Temple Place - Suite 330        Fax:    +1-617-542-2652
+;; Boston, MA  02111-1307,  USA       gnu@gnu.org
 
 ;;; 
 ;;; Code to support emacs-inspired hooks.
@@ -31,7 +47,11 @@
 
 (define (gnc:hook-run-danglers hook . args)
   (gnc:debug "Running functions on hook " (gnc:hook-name-get hook))
-  (for-each (lambda (dangler) (apply dangler args))
+  (for-each (lambda (dangler)
+              (if (gnc:debugging?)
+                  (begin
+                    (display "  ") (display dangler) (newline)))
+              (apply dangler args))
             (gnc:hook-danglers-get hook)))
 
 ;;; Public
@@ -61,7 +81,12 @@
 (define gnc:*shutdown-hook*
   (gnc:hook-define 
    'shutdown-hook
-   "Functions to run at shutdown.  Hook args: ()"))
+   "Functions to run at guile shutdown.  Hook args: ()"))
+
+(define gnc:*ui-shutdown-hook*
+  (gnc:hook-define 
+   'ui-shutdown-hook
+   "Functions to run at ui shutdown.  Hook args: ()"))
 
 (define gnc:*main-window-opened-hook*
   (gnc:hook-define

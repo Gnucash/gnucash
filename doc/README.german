@@ -1,0 +1,638 @@
+************ Unstabile Version ******************
+Alle Versionen der  1.3.x Serie von GnuCash sind experimentelle
+Entwicklungsversionen. Sie koennen normal funktionieren, muessen aber
+nicht. Benutzung auf eigene Gefahr !
+
+Die letzte stabile Version war gnucash-1.2.5.
+Die naechste stabile Version wird gnucash-1.4.x sein.
+
+##############################################
+
+GnuCash
+-------
+
+GnuCash ist ein Programm zur Verwaltung persönlicher Finanzen.
+Eine Scheck-Buch aehnliche Oberflaeche erlaubt die Eingabe und
+das Verfolgen von Bankkonten, Aktien und sogar Waehrungshandel.
+Die Oberflaeche ist einfach und leicht zu bedienen, aber wird
+von einem Doppel-Buchungs Prinzip unterstuetzt, um 
+ausgeglichene Konten zu ermoeglichen.
+ 
+Funktionen von GnuCash sind :
+
+  - Für jedes Konto wird sowohl der aktuelle Stand als
+    auch der Stand nicht bestätigter Buchungen gehalten.
+  - Ein einfaches Benutzerinterface: wer einen Kontoauszug
+    versteht, kann GnuCash verwenden.
+  - QuickFill: wenn ein Beschreibungstext für eine Buchung
+    mit einem vorangehenden Text identisch ist, kann er
+    mit <TAB> automatisch komplettiert werden (z.B. für
+    regelmäßige Buchungen wie das Gehalt).
+  - Handhabung von Aktien- und Fondsportfolios: der 
+    aktuelle Stand kann einzeln (eine Aktie = ein Konto)
+    oder als Portfolio (alle Aktien = ein Konto)
+    verwaltet werden.
+  - Verschiedene Waehrungen und Devisenhandel :
+    Mehrere Waehrungen werden unterstuetzt und koennen
+    ge- und verkauft werden. Waehrungsbewegungen auf
+    den Konten werden ausgeglichen.(Einige Teile von 
+    Devisenhandel sind aber noch nicht vollstaendig 
+    implementiert)
+  - Import von Dateien im Quicken Interchange Format 
+    (QIF).
+  - Berichte : Anzeigen von Gewinn&Verlust oder Portfolios
+    , auch in HTML
+  - Hierarchie von Konten : Ein Haupt-Konto kann eine Hierarchie
+    von Unter-Konten haben. Das macht es moeglich, aehnliche 
+    Konten (Bargeld,Spar-,Aktien-Konten)in einem Hauptkonto
+    zusammenzufassen.
+  - Split-Buchungen : Eine einzelne Buchung kann in mehrere Teile
+    zerlegt werden, wie z.B. Steuern, Gebuehren, usw.
+  - Doppelte Eintraege : Wenn aktiviert, muss jede Transaktion
+    ein Konto be- und ein anderes um den gleichen Betrag entlasten.
+  - Eingaben- / Ausgaben- Konten-Typen : Zusammen mit dem Doppel-
+    Eintrag genutzt , fuehren sie zu sauberen Gewinn- & Verlust-
+    Rechnungen, aber natuerlich dienen sie auch der einfachen 
+    Kategorisierung ihrer Einnahmen und Ausgaben.  
+  - Hauptbuch : Mehrere Konten koennen in einem Register darge-
+    stellt werden um Tipp- oder Eingabefehler zu finden.Genauso 
+    koennen Portfolios aus mehreren Aktien betrachtet werden, indem
+    man alle Transaktionen in diesem Portfolio anzeigt.
+  - Geschrieben in "C" mit eingebetteter Unterstuetzung von Scheme 
+    durch "guile".
+  - "Perl"-Unterstuetzung ist optinal moeglich fuer Skripting via SWIG.
+  - Der Datei-Zugriff ist Netzwerk-sicher, das Beschaedigen von Dateien
+    durch Zugriff mehrerer User auch ueber ein Netzwerk wird verhindert, 
+    auch bei Zugriff ueber NFS.
+  - Bietet ein Byte-Stream-Format, das den Transport von Konten
+    und -gruppen an andere Prozesse via Sockets oder Pipes erlaubt.
+  - Erlaubt das Aktualisieren von Aktien- und Fonds-Kursen ueber das
+    Internet, auch automatisch.
+  - Europaesiches Datum moeglich (xx.xx.xx), deutsche und franzoesische 
+    Versionen moeglich.  
+
+Home Page:
+----------
+http://gnucash.org
+
+Original X-Accountant Homepage:
+http://www.cs.hmc.edu/~rclark/xacc
+
+Fertig ausfuehrbare Dateien:
+http://www.gnucash.org/pub/gnucash/redhat-6.x/1.2.5/
+
+Entwicklungs Versionen:
+http://www.gnucash.org/source_code.php3
+
+Ausführen von GnuCash:
+----------------------
+
+Die Motif-Version von GnuCash ist die letzte stabile Version, wird zur Zeit 
+aber nicht mehr aktiv weitentwickelt.
+Die Gnome Version dagegen schon ;-) Allerdings ist sie noch nicht so stabil, wie es 
+wuenschenswert waere.
+Die qt-Version kann zur Zeit nicht uebersetzt werden, die meisten 
+Funktionen fehlen. Weiter unten sind Hinweise fuer andere Betriebssysteme
+als Linux/*BSD .
+
+
+Die folgenden Pakete muessen installiert sein, um die Motif-Version starten 
+zu koennen :
+
+guile   -- Ist die Haupterweiterungs- und Skriptsprache.
+           Wird extensiv bei Initialisierung und Start benutzt.
+	   Version 1.3 oder hoeher wird benoetigt. Guile-1.3-7.rpm 
+	   funktioniert. 
+
+Motif oder Lesstif  --
+           Entweder ein kommerzielles Motif oder die freie Software-Variante
+	   Lesstif.  Bei Benutzung der kommerziellen Variante achten sie darauf,
+           eine Version zu bekommen, die mit ihrer glibc und libXt-Version 
+           kompatibel ist.
+           Lesstif arbeitet meist, aber eben nicht immer. Hier unsere Erfahrungen :
+
+           Lesstif 0.81    funktioniert   
+           Lesstif 0.82    funktioniert nicht    
+           Lesstif 0.83    funktioniert ... aber produziert einen schnell blinkenden 
+			   Cursor ...
+           Lesstif 0.86.0  soll angeblich funktionieren..     
+           Lesstif 0.86.5  funktioniert nicht -> Crash.   
+           Lesstif 0.86.9  funktioniert... aber einige Menues werden nur 2 Pixel hoch.
+           Lesstif 0.87.0: f. nicht. (missing symbols for XmeDrawShadows, etc.)
+           Lesstif 0.88.1  funktioniert
+           Lesstif 0.89.0  funktioniert
+
+XmHTML  -- Stellt HTML-Anzeigefaehigkeit bereit.
+           Wird fuer Hilfe-Funktionen und Berihte gebraucht.
+
+           Version 1.1.4 oder hoeher.
+           http://www.llp.fu-berlin.de/lsoft/F/5/XMHTML.html
+           http://www.xs4all.nl/~ripley/XmHTML/XmHTML.html
+           ftp://ftp.ultra.net/pub/eugene/RPMS/i386/XmHTML-1.1.5-1.i386.rpm
+           ftp://ftp.ultra.net/pub/eugene/SRPMS/XmHTML-1.1.5-1.src.rpm
+
+           Hinweis: Einige Versionen wurden mit Motif kompiliert. Wenn sie
+	   mit Lesstif benutzt werden, kann es zu einem 
+           "undefined symbol XmeDrawShadows" Fehler kommen. Es gibt mehrere
+	   Loesungen, die einfachste ist, den XmHTML-Quellcode selber zu 
+	   kompilieren.
+
+
+slib    -- scheme Bibliotheken fuer guile. Version slib2c4 oder hoeher.
+
+libpng  -- portable network graphics Bibliothek. Alle Versionen.
+libjpeg -- JPEG image handling Bibliothek. Alle Versionen.
+libz    -- Pack-Bibliothek. Alle Versionen.
+xpm     -- X Pixmap Erweiterung. Alle Versionen.
+
+
+
+Um einige der Funktionen wie Berichte und Herunterladen von Aktienkursen 
+nutzen zu koennen, muessen die folgenden Pakete installiert sein :
+(Natuerlich zusaetzlich zu den Paketen, die benoetigt werden ,um GnuCash
+kompilieren/uebersetzen zu koennen)
+Hinweise zu "Uebersetzen und Installieren" weiter unten !
+RPM's sind teilweise hier erhaeltlich :
+http://rufus.w3.org/linux/
+
+slib    -- scheme Bibliotheken fuer guile.  Version slib2c4 oder hoeher .
+perl    -- Fast jede Version von perl5 sollte funktionieren.  Ich habe perl-5.004 
+eperl   -- Fast jede Version von eperl sollte funktionieren.  Ich habe eperl-2.2.14
+  
+Zusaetzlich werden zum Installieren einige Perl-Module benoetigt :
+
+perl-LWP/libwww-perl-5.36
+perl-HTML/HTML-0.6
+perl-HTML/HTML-Parser-2.20
+        -- Diese Perl Module werden benutzt um Aktien- und Fondskurse aus dem
+           Internet zu laden.
+           RPMS bei :
+           ftp://ftp.gnucash.org/pub/gnucash/binaries/RPMS
+           http://rufus.w3.org/linux/RPM/PByName.html
+           http://linas.org/linux/xacc (last resort)
+           oder Quelldateien bei :
+           http://www.cpan.org/CPAN.html
+
+
+
+Folgende Pakete muessen installiert sein, um GnuCash Gnome Version 
+zu starten:
+
+gnome-libs -- Version 1.0.40 oder hoeher. Diese Bibliotheken brauchen
+              viele andere Bibliotheken zur Unterstuetzung, z.B.:
+              gtk und glib.
+
+guile  -- wie bei Motif
+slib   -- wie bei Motif
+
+Starten von GnuCash:
+--------------------
+
+GnuCash kann von der Kommandozeile aus gestartet werden, und zwar einfach
+mit "gnucash" oder mit "gnucash <filename>", wobei filename der Name eines
+gespeicherten Gnucash-Daten-Files sein muss.
+*.dat-Dateien koennen mit "Datei oeffnen" eingelesen werden.
+*.qif-Dateien muessen mit "QIF-Datei importieren" eingelesen werden.
+
+
+GnuCash reagiert auf folgende Umgebungs-Variablen :
+
+GNC_RUN_AS_SHELL - GnuCash startet in eine guile-shell, alle 
+  gnuCash-Funktionen sind geladen. Von hier koennen sie normal 
+  starten :
+
+    GNC_RUN_AS_SHELL=t ./gnucash
+    guile> (primitive-load (getenv "GNC_BOOTSTRAP_SCM"))
+    guile> (gnc:load "startup.scm")
+    guile> (gnc:main)
+
+  Das ist das selbe, als ob man keine Umgebungs-Variablen benutzt.
+  Nuetzlich, wenn man neue .scm-Dateien schreibt und testet.
+ 	
+  GNC_BOOTSTRAP_SCM - Der Ort der beim Start benutzten Scheme Algorithmen.
+
+  GNC_SCM_LOAD_PATH - Enthaelt den Pfad zu Scheme und ueberstimmt den
+  Standard-Pfad. Sollte eine saubere Scheme Zeichenkette sein. Jedes Element
+  kann eine Zeichenkette sein, die ein Verzeichnis repraesentiert,
+  das Symbol 'standard , das zum vollen Pfad wird, oder 'current.
+
+  GNC_DEBUG - Debugging einschalten. Dadurch wird das Debugging eher gestartet,
+  als beim normalen Start-Prozess 
+  
+
+Internationalization:
+---------------------
+Es gibt Ausgabe-Files fuer Franzoesisch und Deutsch.
+Diese werden ueber Umgebungsvariablen aktiviert.
+Z.B.:
+
+Francais, en bash:
+    export LANG=fr_FR
+    export LC_ALL=fr_FR
+    export LINGUAS=fr_FR
+
+Francais, en tcsh:
+    setenv LANG fr_FR
+    setenv LC_ALL fr_FR
+    setenv LINGUAS fr_FR
+
+Deutsche Version:
+    export LANG=de_DE
+    export LC_ALL=de_DE
+    export LINGUAS=de_DE
+
+
+Weitere Moeglichekiten, die eigentlich funktionieren, 
+obwohl noch dran gearbeitet wird :
+
+en_US
+en_GB
+fr_CH
+de_CH
+
+
+
+
+Weitere Werkzeuge :
+-------------------
+
+Ein Tool, um Ascii-Berichte aus gnucash/xacc Dateien zu extrahieren
+kann man hier herunterladen :  
+http://www.zeta.org.au/~grahamc/xacc_rpts.html.
+
+Ein Tool um Quicken Dateien aufzuraeumen und zu importieren : 
+(noch nicht da..).
+
+
+
+Übersetzung und Installation
+----------------------------
+
+Diese Schritte sind nur für die Sourcedistribution erforderlich, nicht
+für die Binärdistribution.
+
+
+Nur beim Uebersetzen von GnuCash braucht man zusaetzlich die folgenden 
+Pakete: 
+
+
+libtool -- Um unsere interne Version von g-wrap zu uebersetzen, die 
+           unsere guile-C 'wrappers' enthaelt.
+           Erhaeltlich bei ftp://ftp.gnu.org/gnu.
+           RPM's und deb's sind in ihrer Betriebssystem-Distribution.
+SWIG    -- Um perl 'wrapper' automatisch zu generieren.
+           Erhaeltlich bei : www.swig.org. Version 1.1p5 oder hoeher
+
+Normalerweise wird GnuCash wie folgt übersetzt und installiert:
+
+  # ./configure
+  # make
+  # make install
+
+Um deutsche oder franzoesische Versionen zu uebersetzen, muss die 
+Umgebungsvariable entsprechend gesetzt sein.
+
+Es koennen Motif, Gnome, oder Qt Versionen erzeugt werden. Zur Zeit ist die 
+Motif Version die stabilste, fehleraermste, korrekteste. 
+Die gtk/gnome-Version kann uebersetzt werden, und wird aktiv weiterentwickelt, sie 
+reicht aber noch nicht an die Stabilitaet der Motif-Version heran. Sie hat 
+aber bedeutend mehr Features.
+Die Qt Version ist vermutlich nicht uebersetzbar.
+
+
+Je nach make target, kommt danach folgendes heraus :
+
+  gnucash.motif
+  gnucash.motif.static
+  gnucash.gnome
+  gnucash.gnome.static
+  gnucash.qt
+
+Die 'static' Version linkt die benoetigten Bibliotheken statisch.
+gnucash.motif.static ist zum Beispiel praktisch, wenn man gegen 
+eine kommerzielle Version von Motif uebersetzt und diese Version 
+der Allgemeinheit zur Verfuegung stellt.
+
+
+Welche Version erzeugt wird, haengt letzlich vom lokalen 
+gnucash.bin-Link ab, so dass man mit Hilfe des lokalen .gnucash -Skripts
+immer pruefen kann, welche Version zuletzt erzeugt wurde.
+Dieser Link stellt auch sicher, dass die Files aus dem Source-Verzeichnis
+genutzt werdden.
+  
+The ./gnucash script
+also handles making sure that you're using files from the source dir
+rather than an install tree just like the old ./xacc script did.
+
+
+"make install" fuehrt zu einer normalen FSSTND /usr/ oder /usr/local/
+Installation bei der alles andere sich in /foo/gnucash/*-Verzeichnissen
+verteilt. Alternativ koennen sie "make install-opt" nehmen, bei dem alles
+in /opt/gnucash/bin, /opt/gnucash/doc ,usw. landet.
+
+Die meistgebraeuchlichen Versionen waeren also :
+Fuer eine normale System-Installation:
+	
+    ./configure --prefix=/usr --sysconfdir=/etc
+    make motif
+    make install
+
+ Fuer eine /opt Installation :
+
+    ./configure --prefix=/usr/local/opt/gnucash
+    make motif
+    make install-opt
+
+
+Beispiele einiger weiterer Konfigurations-Optionen:
+    configure --with-motif=/usr/local/opt/mootif \
+              --prefix=/usr/local/opt/gnucash \
+              --with-xmhtml-includes=/home/rlb/XmHTML-1.1.5/include\
+              --with-xmhtml-libraries=/home/rlb/XmHTML-1.1.5/src
+
+Flag --with-gtk-config : Wegen der GTK-Philosophie am besten *nur*
+den Ort des Config-Programms angeben, und es dem Programm ueberlassen,
+die richtigen CFLAG und XLIBS-Werte auszugeben.
+
+Runtime und Installations-Orte sind verschieden . Der --prefix
+, den sie angeben legt fest, wo das lauffaehige Programm waehrend
+der Laufzeit nach anderen Dingen sucht. Der prefix, den sie bei
+make install angeben(z.B. make prefix=foo install) legt nur fest
+wo die Dateien angelegt werden.Wenn das vom Konfigurations --prefix
+abweicht, wird GnuCash nicht funktionieren, bis es zu diesem 
+Verzeichnis verschoben wurde. Dieses Features ist fuer Leute von
+Bedeutung , die daraus gleich fertige RPM's oder .deb-Pakete daraus
+bauen wollen.
+
+Nur der Ort von startup.scm ist fest in der ausfuehrbaren Datei drin,
+und sogar das kann mit --startup-file in der Kommandozeile uebergangen
+werden.Die anderen Einstellungen sind jetzt in startup.scm, path-defaults.h
+gibt es nicht mehr. Das startup-file-Setting ist in gnucash.h, generiert 
+von gnucash.h.in .
+
+
+Quick translation table for financial terms:
+
+English				German
+account				Konto
+reconcile an account		Konto ausgleichen
+stock				Aktien
+mutual funds			Aktienfonds 
+assets				Haben/Aktiva 
+debits				Verbindlichkeiten/Soll/Passiva
+double entry			doppelte Buchführung
+general ledger			Hauptbuch
+
+
+Unterstuetzte Betriebssysteme :
+-------------------------------
+GnuCash Version 1.3.x arbeitet unter folgenden Systemen :
+
+GNU/Linux             -- Intel  
+FreeBSD               -- Intel
+OpenBSD               -- Intel
+
+
+
+Xacc-1.0.18, der Vorgaenger arbeitet mit diesen Systemen :
+
+Slackware 3.4         -- Intel  w/ Mootif (OSF Motif 2.0.1)
+SGI IRIX              -- MIPS 
+IBM AIX 4.1.5         -- RS/6000   http://www-frec.bull.com/
+Unixware 7            -- Intel
+SCO OpenServer 5.0.4  -- Intel
+Solaris               -- Sparc  
+
+Siehe ftp://ftp.gnucash.org/pub/xacc (high-bandwidth)
+oder  http://linas.org/linux/gnucash (slow-www ) 
+fuer fertig kompilierte Versionen.
+
+
+Weitere Download Sites:
+-----------------------
+
+Fertige Versionen und Packete unter :
+
+
+IBM AIX 4.1.5 
+      -- SMIT-installable images 
+      http://www.bull.de/pub/
+      see also http://www-frec.bull.com/
+
+SCO OpenServer 5.0.4 
+      http://www.sco.com/skunkware/osr5/x11/apps/xacc/VOLS.tar
+
+Unixware 7
+      -- nehmen sie pkgadd zum Installieren
+      http://www.sco.com/skunkware/uw7/x11/apps/xacc/xacc.pkg.gz
+
+SGI Irix
+      -- im SGI install format
+      -- Warnung, dies ist eine down-level Version !
+      http://linas.org/linux/xacc/xacc-1.0b7-sgi-irix.inst.tar
+
+Quellcode mit CVS:
+------------------
+Eine read-only (Nur-Lese) Version des CVS-Baums ist hier erhaeltlich :
+Fuer den Zugriff erst wie folgt einloggen :
+
+cvs -d :pserver:cvs@cvs.gnucash.org:/home/cvs/cvsroot login
+Das Passwort ist "guest"
+
+Um eine Kopie des Quellcodes aus dem gnucash-1.2 stable production 
+Baum zu bekommen (stabile Version):
+
+cvs -z3 -Pd :pserver:cvs@cvs.gnucash.org:/home/cvs/cvsroot checkout -P -rxacc-12-patch gnucash
+
+Um eine Kopie des Quellcodes aus dem experimentellen Entwickler-Baum
+zu bekommen (unstabile Version):
+
+cvs -z3 -Pd :pserver:cvs@cvs.gnucash.org:/home/cvs/cvsroot checkout -P -rHEAD gnucash
+
+
+An GnuCash mitentwickeln :
+--------------------------
+
+Bevor Sie an GnuCash mitentickeln , sollten sie folgendes tun:
+
+1. Lesen von : src/coding-style.txt ,um die Richtlinien kennzulernen.
+
+2. Viele der Verzeichnisse unter 'src' enthalten desing.txt-Dateien,
+   die viele Aspekte des GnuCash-Designs erklaeren. Auch lesen.
+
+3. Die Gnucash development mailing Liste ueberfliegen, das Archiv ist 
+   auf der GnuCash-Website.
+
+4. Abonnieren der GnuCash development mailing Liste. Details dazu auf 
+   der Website. 
+
+
+Einen Patch einsenden
+---------------------
+
+Wenn sie etwas Arebit geleistet haben, wollen sie ihr Ergebnis 
+anderen zur Verfuegung stellen. Dazu senden sie einen Patch ein.
+Es gibt ein Perl-Skript in Gnucash, das diesen Patch fuer sie
+erzeugen kann.
+'make-gnucash-patch' wird so benutzt:
+
+Als erstes die Entwicklungsverzeichnisse wie folgt aufsetzen :
+
+< GnuCash home development directory >
+    |
+    |---- < directory containing original GnuCash sources >
+    |
+    |---- < directory containing your modified GnuCash sources >
+
+Ein konkrete Beispiel koennte wie folgt aussehen :
+
+/home/me/gnucash
+    |
+    |---- /home/me/gnucash/gnucash.pristine (original sources)
+    |
+    |---- /home/me/gnucash/gnucash.mywork (original sources + my edits)
+
+Kopieren des 'make-gnucash-patch'-Skripts in das Haupt-Entwicklungsverzeichnis.
+Danach die folgenden Variablen veraendern, damit diese die Namen ihrer 
+Verzeichnisse enthalten :(am obigen Beispiel orientiert)
+
+my $old = 'gnucash.pristine';
+my $new = 'gnucash.mywork';
+my $gnc_home = '/home/me/gnucash';
+
+Jetzt das Skript in Gang setzen. Hinweis: Das Skript benoetigt die
+Programme 'makepatch', 'gzip', 'diff', und 'uuencode' 
+(und natuerlich 'perl') um zu funktionieren. 
+
+Drei Dateien werden erzeugt, wenn man das Skript laufen laesst :
+
+  gnc.diff - Eine Ascii Text-DAtei, die die Unterschiede zwischen 
+             den Original Sourcen und den von ihnen bearbeiteten enthaelt.  
+             Am Schluss ist eine Liste, die die Files enthaelt, die 
+             hinzugefuegt, veraendert oder geloescht wurden.
+
+             Bitte untersuchen sie dieses File !(insbesondere die Liste 
+             am Schluss) um sicherzustellen, dass alle Aenderungen in der
+             Datei vorhanden sind.
+
+             Diese Datei nicht einschicken !
+
+  gnucash.diff.gz - Die gzipp'te Version der obigen Datei.
+
+                    Nicht einschicken!
+
+  gnucash.diff.gz.uue - Die uuencoded (ascii-encoded) Version
+                        der obigen Datei.
+
+                        Dies ist die Datei, die eingeschickt werden muss.
+
+gnucash.diff.gz.uue an gnucash-patches@gnucash.org per E-Mail schicken.
+Wie sonst.. :-)
+
+Vielen Dank schon mal im Vorraus !
+
+
+Haupt-Entwickler:
+-----------------
+
+Robin Clark <rclark@hmc.edu> fuer das urspruengliche X-Accountant in
+Motif , das als Schul-Pojekt begann, bis hin zur Version 0.9 im 
+Oktober 1997.
+
+Linas Vepstas <linas@lins.org> gefiel , was er sah : Die grafische Ober-
+flaeche (GUI) was schlank, der Quellcode war dokumentiert und gut 
+strukturiert, alles stand unter der GnuPublicLicense. Und so erweiterte er
+alles und fuehrte es fort : hinzufuegen von Zellen zu XbaeMatrix, so dass die 
+Combobox und die Pfeile eine noch schlankere GUI daraus machten, schrieb die
+X-Accountant-"Innereien" neu, so dass Doppel-Eintraege, eine Konten-Hierarchie,
+eine Mini-Transaktions-Maschine und Unterstuetzung fuer Aktien hinzukam, 
+desweiteren brachte er die Help-Files auf Vordermann.
+Soweit zur Version 1.0 im Januar 1998.
+Seitdem wurden fuer die Version 1.1 die Maschine erweitert und verfeinert,
+das Register-Fenster neu designed, und groesstenteils Motif- (und GUI-)
+unabhanegig gemacht. Er hat auch OFX-Prototypen-Arbeit gemacht.
+
+Jeremy Collins <jcollins@gnucash.org> hat das GnoMoney-Prjekt
+weit und breit publiziert, und dann den Namen zu GnuCash geaendert.
+Jeremy hat die gnucash.org-Webseite kreiert, die Domain registriert,
+und den ersten GTK/Gnome-Code zum Laufen gebracht.
+
+Rob Browning <rlb@cs.utexas.edu> hat jeden beschimpft, wenn er nicht
+Perl benutzt hat, und dann doch guile/scheme -Unterstuetzung implementiert.   
+Rob wartet die Uebersetzungs-Bereiche, und keummert sich um die ganze
+guile/perl -Erweiterungssprachen-Sache, zuletzt ist die Konfiguration
+und Konfigurierbarkeit auch seine Sache.
+
+Dirk Schoenberger <schoenberger@signsoft.com> arbeitet an der Qt/KDE Version
+
+
+Fixes & Patches:
+----------------
+Andrew Arensburger <arensb@cfar.umd.edu> for FreeBSD & other patches
+Matt Armstrong <matt_armstrong@bigfoot.com> for misc fixes
+Fred Baube <fred@moremagic.com> for attempted Java port/MoneyDance
+Per Bojsen <bojsen@worldnet.att.net> several core dump fixes
+Christopher B. Browne <cbbrowne@hex.net> for perl, scheme scripts
+Graham Chapman <grahamc@zeta.org.au> for the xacc-rpts addon package
+George Chen <georgec@sco.com> for MS-Money QIF's & fixes
+Albert Chin-A-Young <china@thewrittenword.com> configure.in patch
+Jeremey Collins <jcollins@gnucash.org> for GnoMoney & GTK port
+Patrick Condron <pcondon@rackspace.com> for webserver and T1 connection.
+Ciaran Deignan <Ciaran.Deignan@bull.net> for AIX binary version
+Tyson Dowd   <tyson@tyse.net> for config/make patches & debian maint.
+Koen D'Hondt <ripley@xs4all.nl> for Solaris patches to XmHTML
+Bob Drzyzgula <bob@mostly.com> for budgeting design notes
+Jan-Uwe Finck <Jan-Uwe.Finck@bigfoot.de> for German message translation
+Ron Forrester <rjf@aracnet.com> for gnome patches
+Dave Freese <DFreese@osc.uscg.mil> for leap-year fix
+Otto Hammersmith <otto@bug.redhat.com> for RedHat RPM version
+Alexandru Harsanyi <haral@codec.ro> for core dumps, lockups, gtk work.
+Jon Kåre Hellan <hellan@acm.org> misc core dump fixes
+Prakash Kailasa <PrakashK@bigfoot.com> for gnome build fixes
+Ben Kelly <ben.kelly@ieee.org> for motif menu bug fix, core dump fixes
+Tom Kludy <tkludy@csd.sgi.com> for SGI Irix port
+Sven Kuenzler <sk@xgm.de> for SuSE README file
+Graham Leggett <minfrin@sharp.fm> for fixing a hang
+Ted Lemon <mellon@andare.fugue.com> for NetBSD port
+Yannick Le Ny <y-le-ny@ifrance.com> pour la traduction en francais 
+Grant Likely <glikely@nortelnetworks.com> gnome and engine patches
+Heath Martin <martinh@pegasus.cc.ucf.edu> gnome and register patches
+Matt Martin <mgmartin@abacusnet.net> guile error handling code
+Robert Graham Merkel <rgmerk@mira.net> reporting, gnome, and config patches.
+Tim Mooney <mooney@dogbert.cc.ndsu.NoDak.edu> port to alpha-dec-osf4.0f
+G. Allen Morris III  <gam3@ann.softgams.com> for QIF core dump 
+Peter Norton <spacey@inch.com> for a valiant attempt at a GTK port
+OmNiBuS <webmaster@obsidian.uia.net> web site graphics & content
+Myroslav Opyr <mopyr@IPM.Lviv.UA> for misc patches
+Dave Peticolas <peticola@morpheus.cs.ucdavis.edu> extensive intelligent patches
+Laurent P{'e}lecq <laurent.pelecq@wanadoo.fr> i18n patches with gettext
+Alain Peyrat <Alain.Peyrat@nmu.alcatel.fr> for configure.in patches
+Peter Pointner <peter@wuzel.m.isar.de> QIF import fixes, Qt patches
+Gavin Porter <maufk@csv.warwick.ac.uk> for euro style dates
+Ron Record <rr@sco.com> for SCO Unixware & OpenServer binaries
+Jan Schrage <jan.schrage@urz.uni-heidelberg.de> documentation patches
+Christopher Seawood <cls@seawood.org> for XbaeMatrix core dump
+Mike Simons <msimons@fsimons01.erols.com> misc configure.in patches
+Richard Skelton <rich@brake.demon.co.uk> for Solaris cleanup
+Henning Spruth <spruth@bigfoot.com> for German text & euro date rework
+Diane Trout <detrout@earthlink.net> scheme qif import patch
+Rob Walker <rob@valinux.com> guile and register patches
+Ken Yamaguchi <gooch@ic.EECS.Berkeley.EDU> QIF import fixes; MYM import
+
+... and I am sure that I have missed many others ...
+
+
+
+Stand : 05.03.2000
+
+
+P.S.: Dieses README ist eine Uebersetzung der englischen Version, und ist 
+damit eher selten auf aktuellem Stand, da diese den aktuellen Entwicklungen 
+angepasst wird.
+Im Zweifel also bitte die englische Original-Version zu Rate ziehen.
+Was Richtigkeit, Eleganz und Anwendbarkeit angeht, uebernehme ich keine Gewaehr.
+
+Flames an /dev/null, 'Bug'-Reports, Vorschlaege und 'Patches' fuer dieses
+README an Jan-Uwe.Finck@bigfoot.de und/oder an patch@gnucash.org.
+
+Viel Spass !  

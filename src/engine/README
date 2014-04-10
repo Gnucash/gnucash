@@ -9,6 +9,6 @@ any GUI elements or assumptions.
 
 For design documentation, please see the file "design.txt",
 and also, look at the header files carefully.  The documentation
-for each royutine is in the header files for that routine.
+for each routine is in the header files for that routine.
 
 September 1998

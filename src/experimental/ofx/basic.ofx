@@ -1,0 +1,16 @@
+<ofx>
+<!-- this is a simple, basic ofx document. -->
+<!-- its is a request to log in -->
+<signonmsgsrqv1>
+<sonrq>
+<dtclient> 19980311233000.000 </dtclient>
+<userid>linas</userid>
+<userpass>r00tsh3ll</userpass>
+<language>en</language>
+<appid>xacc</appid>
+<appver>0116</appver>
+
+</sonrq>
+</signonmsgsrqv1>
+
+</ofx>

@@ -31,7 +31,10 @@
 #include "Query.h"
 #include "SplitLedger.h"
 #include "Transaction.h"
+#include "FileDialog.h"
+#include "global-options.h"
 #include "util.h"
+
 
 /** GLOBALS *********************************************************/
 /* These are globals because they describe the state of the entire session.
@@ -54,7 +57,7 @@ static short module = MOD_LEDGER;
  * present a rather natural place for the locks to be placed.       *
 \********************************************************************/
 
-int 
+static int 
 ledgerListCount (xaccLedgerDisplay **list)
 {
    int n = 0;
@@ -65,7 +68,7 @@ ledgerListCount (xaccLedgerDisplay **list)
 
 /* ------------------------------------------------------ */
 
-xaccLedgerDisplay ** 
+static xaccLedgerDisplay ** 
 ledgerListAdd (xaccLedgerDisplay **oldlist, xaccLedgerDisplay *addreg)
 {
    xaccLedgerDisplay **newlist;
@@ -95,7 +98,7 @@ ledgerListAdd (xaccLedgerDisplay **oldlist, xaccLedgerDisplay *addreg)
 
 /* ------------------------------------------------------ */
 
-void
+static void
 ledgerListRemove (xaccLedgerDisplay **list, xaccLedgerDisplay *delreg)
 {
    int n, i;
@@ -126,6 +129,9 @@ ledgerIsMember (xaccLedgerDisplay *reg, Account * acc)
 
    if (acc == reg->leader) return 1;
 
+   /* Simple hack. Always return true for search registers. */
+   if (reg->type == SEARCH_LEDGER) return 1;
+
    if (! (reg->displayed_accounts)) return 0; 
 
    n = 0;
@@ -146,7 +152,7 @@ ledgerIsMember (xaccLedgerDisplay *reg, Account * acc)
 
 xaccLedgerDisplay *
 xaccLedgerDisplaySimple (Account *acc)
-  {
+{
   xaccLedgerDisplay *retval;
   int acc_type;
   int reg_type = -1;
@@ -187,7 +193,7 @@ xaccLedgerDisplaySimple (Account *acc)
       reg_type = CURRENCY_REGISTER;
       break;
     default:
-      PERR ("xaccLedgerDisplaySimple(): unknown account type %d\n", acc_type);
+      PERR ("unknown account type %d\n", acc_type);
       return NULL;
   }
 
@@ -196,7 +202,7 @@ xaccLedgerDisplaySimple (Account *acc)
 
   retval = xaccLedgerDisplayGeneral (acc, NULL, reg_type);
   return retval;
-  }
+}
 
 /********************************************************************\
  * xaccLedgerDisplayAccGroup                                        *
@@ -209,7 +215,7 @@ xaccLedgerDisplaySimple (Account *acc)
 
 xaccLedgerDisplay *
 xaccLedgerDisplayAccGroup (Account *acc)
-  {
+{
   xaccLedgerDisplay *retval;
   Account **list;
   int ledger_type;
@@ -228,8 +234,8 @@ xaccLedgerDisplayAccGroup (Account *acc)
     case CREDIT:
     case LIABILITY:
        /* if any of the sub-accounts have STOCK or MUTUAL types,
-        * then we must use the PORTFOLIO type ledger.  Otherise,
-        * a plain old GEN_LEDGER will do. */
+        * then we must use the PORTFOLIO_LEDGER ledger. Otherwise,
+        * a plain old GENERAL_LEDGER will do. */
        ledger_type = GENERAL_LEDGER;
 
        le = list[0];
@@ -237,7 +243,7 @@ xaccLedgerDisplayAccGroup (Account *acc)
        while (le) {
           le_type = xaccAccountGetType (le);
           if ((STOCK == le_type) || (MUTUAL == le_type)) {
-             ledger_type = PORTFOLIO;
+             ledger_type = PORTFOLIO_LEDGER;
           }
           n++;
           le = list[n];
@@ -246,9 +252,9 @@ xaccLedgerDisplayAccGroup (Account *acc)
 
     case STOCK:
     case MUTUAL:
-       ledger_type = PORTFOLIO;
+       ledger_type = PORTFOLIO_LEDGER;
        break;
-    
+
     case INCOME:
     case EXPENSE:
        ledger_type = INCOME_LEDGER;
@@ -259,7 +265,7 @@ xaccLedgerDisplayAccGroup (Account *acc)
        break;
 
     default:
-      PERR ("xaccLedgerDisplayAccGroup(): unknown account type \n");
+      PERR ("unknown account type \n");
       _free (list);
       return NULL;
   }
@@ -271,10 +277,38 @@ xaccLedgerDisplayAccGroup (Account *acc)
 
   if (list) _free (list);
   return retval;
-  }
+}
+
+static gncUIWidget
+xaccLedgerDisplayParent(void *user_data)
+{
+  xaccLedgerDisplay *regData = user_data;
+
+  if (regData == NULL)
+    return NULL;
+
+  if (regData->get_parent == NULL)
+    return NULL;
+
+  return (regData->get_parent)(regData);
+}
+
+static void
+xaccLedgerDisplaySetHelp(void *user_data, const char *help_str)
+{
+  xaccLedgerDisplay *regData = user_data;
+
+  if (regData == NULL)
+    return;
+
+  if (regData->set_help == NULL)
+    return;
+
+  (regData->set_help)(regData, help_str);
+}
 
 /********************************************************************\
- * xaccLedgerDisplayLedger                                          *
+ * xaccLedgerDisplayGeneral                                         *
  *   opens up a ledger window for a list of accounts                *
  *                                                                  *
  * Args:   lead_acc - the account associated with this register     *
@@ -285,9 +319,11 @@ xaccLedgerDisplayAccGroup (Account *acc)
 \********************************************************************/
 
 xaccLedgerDisplay *
-xaccLedgerDisplayGeneral (Account *lead_acc, Account **acclist, int ledger_type)
-  {
-  xaccLedgerDisplay   *regData = NULL;
+xaccLedgerDisplayGeneral (Account *lead_acc, Account **acclist,
+                          int ledger_type)
+{
+  xaccLedgerDisplay *regData = NULL;
+  gboolean show_all;
 
   /******************************************************************\
   \******************************************************************/
@@ -304,7 +340,7 @@ xaccLedgerDisplayGeneral (Account *lead_acc, Account **acclist, int ledger_type)
    *
    * A third possibility exists: a multiple-account register, with
    * no leader account.  In such a case, the list of accounts being
-   * displayed have no particular relationshp to each other.  There
+   * displayed have no particular relationship to each other.  There
    * can be an arbitrary number of multiple-account leader-less
    * registers.
    */
@@ -316,7 +352,7 @@ xaccLedgerDisplayGeneral (Account *lead_acc, Account **acclist, int ledger_type)
        FETCH_FROM_LIST (xaccLedgerDisplay, ledgerList, lead_acc, leader, regData);
      }
   }
-  
+
   /* if regData is null, then no leader account was specified */
   if (!regData) {
     regData = (xaccLedgerDisplay *) malloc (sizeof (xaccLedgerDisplay));
@@ -325,6 +361,8 @@ xaccLedgerDisplayGeneral (Account *lead_acc, Account **acclist, int ledger_type)
   regData->leader = lead_acc;
   regData->redraw = NULL;
   regData->destroy = NULL;
+  regData->get_parent = NULL;
+  regData->set_help = NULL;
   regData->gui_hook = NULL;
   regData->dirty = 0;
   regData->balance = 0.0;
@@ -337,14 +375,32 @@ xaccLedgerDisplayGeneral (Account *lead_acc, Account **acclist, int ledger_type)
   regData->displayed_accounts = accListCopy (acclist);
   regData->type = ledger_type;
 
+  show_all = gnc_lookup_boolean_option("Register",
+                                       "Show All Transactions",
+                                       TRUE);
+
   /* set up the query filter */
   regData->query = xaccMallocQuery();
-  xaccQuerySetAccounts (regData->query, regData->displayed_accounts);
-  xaccQueryAddAccount (regData->query, regData->leader);
 
-  /* by default, display only thirty transactions */
-  xaccQuerySetMaxSplits (regData->query, MAX_QUERY_SPLITS);
+  /* This is a bit of a hack. The number of splits should be
+   * configurable, or maybe we should go back a time range instead
+   * of picking a number, or maybe we should be able to exclude
+   * based on reconciled status. Anyway, this works for now. */
+  if (!show_all && ((ledger_type & REG_TYPE_MASK) != SEARCH_LEDGER))
+    xaccQuerySetMaxSplits(regData->query, 30);
 
+  xaccQuerySetGroup(regData->query, gncGetCurrentGroup());
+  if(regData->displayed_accounts) {
+    xaccQueryAddAccountMatch(regData->query, 
+                             regData->displayed_accounts,
+                             ACCT_MATCH_ANY, QUERY_OR);
+  }
+  if ((regData->leader != NULL) &&
+      !accListHasAccount(regData->displayed_accounts, regData->leader)) {
+    xaccQueryAddSingleAccountMatch(regData->query, regData->leader,
+                                   QUERY_OR);
+  }
+  
   /* add this register to the list of registers */
   fullList = ledgerListAdd (fullList, regData);
 
@@ -352,13 +408,17 @@ xaccLedgerDisplayGeneral (Account *lead_acc, Account **acclist, int ledger_type)
    * The main register window itself                                *
   \******************************************************************/
 
-  /* MallocBasicRegister will malloc & initialize the register,
+  /* xaccMallocSplitRegister will malloc & initialize the register,
    * but will not do the gui init */
   regData->ledger = xaccMallocSplitRegister (ledger_type);
-  
+
+  xaccSRSetData(regData->ledger, regData,
+                xaccLedgerDisplayParent,
+                xaccLedgerDisplaySetHelp);
+
   regData->dirty = 1;
   xaccLedgerDisplayRefresh (regData);
-  
+
   return regData;
 }
 
@@ -369,8 +429,6 @@ xaccLedgerDisplayGeneral (Account *lead_acc, Account **acclist, int ledger_type)
 void 
 xaccLedgerDisplayRefresh (xaccLedgerDisplay *regData)
 {
-   int typo;
-
    /* If we don't really need the redraw, don't do it. */
    if (!(regData->dirty)) return;
    regData->dirty = 0;  /* mark clean */
@@ -379,42 +437,44 @@ xaccLedgerDisplayRefresh (xaccLedgerDisplay *regData)
     * assign a default source account for a "blank split"
     * that is attached to the bottom of the register.
     * The "blank split" is what the user edits to create 
-    * new splits and get them into the system.
-    */
+    * new splits and get them into the system. */
    xaccSRLoadRegister (regData->ledger, 
-                     xaccQueryGetSplits (regData->query),
-                     regData->leader);
-
+                       xaccQueryGetSplits (regData->query),
+                       regData->leader);
 
   /* hack alert -- this computation of totals is incorrect 
    * for multi-account ledgers */
 
-  /* provide some convenience data for the ture GUI window.
-   * If the GUI wants to display yet other stuff, its on its own.
-   */
-  /* xaccAccountRecomputeBalance(regData->leader); */
+  /* provide some convenience data for the the GUI window.
+   * If the GUI wants to display yet other stuff, it's on its own. */
   regData->balance = xaccAccountGetBalance (regData->leader);
   regData->clearedBalance = xaccAccountGetClearedBalance (regData->leader);
-  regData->reconciledBalance = xaccAccountGetReconciledBalance (regData->leader);
-
-  /* for income and expense acounts, we have to reverse
-   * the meaning of balance, since, in a dual entry
-   * system, income will show up as a credit to a
-   * bank account, and a debit to the income account.
-   * Thus, positive and negative are interchanged */
-  typo = regData->type & REG_TYPE_MASK;
-  if ((INCOME_REGISTER == typo) ||
-      (EXPENSE_REGISTER == typo)) { 
-    regData->balance = - (regData->balance);
-    regData->clearedBalance = - (regData->clearedBalance);
-    regData->reconciledBalance = - (regData->reconciledBalance);
-  }
+  regData->reconciledBalance = 
+    xaccAccountGetReconciledBalance(regData->leader);
 
   /* OK, now tell this specific GUI window to redraw itself ... */
-  if (regData->redraw) {
-     (regData->redraw) (regData);
-   }
+  if (regData->redraw)
+    (regData->redraw) (regData);
+}
 
+/********************************************************************\
+ * refresh all the register windows, but only with the gui callback *
+\********************************************************************/
+
+void 
+xaccRegisterRefreshAllGUI (void)
+{
+   xaccLedgerDisplay *regData;
+   int n;
+
+   if (!fullList) return;
+
+   n = 0; regData = fullList[n];
+   while (regData) {
+     if (regData->redraw)
+       (regData->redraw) (regData);
+      n++; regData = fullList[n];
+   }
 }
 
 /********************************************************************\
@@ -435,31 +495,6 @@ xaccRegisterRefresh (SplitRegister *splitreg)
       if (splitreg == regData->ledger) {
         regData->dirty = 1;
         xaccLedgerDisplayRefresh (regData);
-        return;
-      }
-      n++; regData = fullList[n];
-   }
-}
-
-/********************************************************************\
- * sort of a quick hack involving the layout of the register.
-\********************************************************************/
-
-void 
-xaccRegisterCountHack (SplitRegister *splitreg)
-{
-   xaccLedgerDisplay *regData;
-   int n;
-
-   if (!fullList) return;
-
-   /* find the ledger which contains this register */
-   n = 0; regData = fullList[n];
-   while (regData) {
-      if (splitreg == regData->ledger) {
-        xaccSRCountRows (splitreg, 
-                      xaccAccountGetSplitList (regData->leader),
-                      regData->leader);      
         return;
       }
       n++; regData = fullList[n];
@@ -546,6 +581,26 @@ xaccAccListDisplayRefresh (Account **acc_list)
 /********************************************************************\
 \********************************************************************/
 
+void
+xaccAccGListDisplayRefresh (GList *accounts)
+{
+  GList *node;
+
+  node = accounts;
+  while (node) {
+    MarkDirtyAllRegs (node->data);
+    node = node->next;
+  }
+  node = accounts;
+  while (node) {
+    RefreshAllRegs (node->data);
+    node = node->next;
+  }
+}
+
+/********************************************************************\
+\********************************************************************/
+
 void 
 xaccTransDisplayRefresh (Transaction *trans)
 {
@@ -614,9 +669,7 @@ xaccDestroyLedgerDisplay (Account *acc)
  *   frees memory allocated for an regWindow, and other cleanup     *
  *   stuff                                                          *
  *                                                                  *
- * Args:   mw - the widget that called us                           *
- *         cd - regData - the data struct for this register         *
- *         cb -                                                     *
+ * Args:   regData - ledger display structure                       *
  * Return: none                                                     *
 \********************************************************************/
 void 
@@ -627,14 +680,8 @@ xaccLedgerDisplayClose (xaccLedgerDisplay *regData)
   if (!regData) return;
   acc = regData->leader;
 
-  /* Save any unsaved changes */
-  xaccSRSaveRegEntry (regData->ledger);
-
-  /* refresh the register windows if there were changes */
-  xaccSRRedrawRegEntry (regData->ledger);
-
   xaccDestroySplitRegister (regData->ledger);
-  
+
   /* whether this is a single or multi-account window, remove it */
   REMOVE_FROM_LIST (xaccLedgerDisplay, regList, acc, leader);
   REMOVE_FROM_LIST (xaccLedgerDisplay, ledgerList, acc, leader);

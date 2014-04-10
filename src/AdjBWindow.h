@@ -1,6 +1,7 @@
 /********************************************************************\
  * AdjBWindow.h -- the adjust balance window                        *
  * Copyright (C) 1997 Robin D. Clark                                *
+ * Copyright (C) 1998-2000 Linas Vepstas                            *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -34,6 +35,8 @@
  * for the indicated account, if that dialog is not already mapped.
  * If the dialog already esits, it returns with a no-op.
  *
+ * The adjBRefresh() subroutine refreshes the associated window.
+ *
  * The xaccDestroyAdjBWindow() subroutine can be called from 
  * anywhere to shut down the Register window.  Used primarily when
  * destroying the underlying account.
@@ -42,6 +45,7 @@
 typedef struct _AdjBWindow AdjBWindow;
 
 AdjBWindow *adjBWindow(Account *account);
+void       adjBRefresh(Account *account);
 void       xaccDestroyAdjBWindow (Account *);
 
 #endif /* __XACC_ADJBWINDOW_H__ */

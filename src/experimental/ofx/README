@@ -1,0 +1,45 @@
+
+This directory contains some experimental code to handle
+OFX (Open Financial Exchange) messages. 
+
+The most interesting thing here is the DTD parser "parseOfx"
+which attempts to build a C++ interface that models the 
+structure of the OFX DTD's.   It *almost* works.  
+Its in the parser directory.
+
+--------------------------------------------------------------
+Ueli has some exploratory scripts in "explore"
+
+--------------------------------------------------------------
+
+OFX Specs:
+http://www.ofx.net
+http://www.ofx.net/ofx/de_spec.asp
+
+HTTP tool:
+http://www.inf.ufrgs.br/~sagula/urlget.html
+can be found in this tree, at xacc/src/lib/urlget
+
+OFX financicial institution list:
+https://ofx-prod-filist.intuit.com/qw0700/filist.asp
+
+SSLeay rpm's:
+http://www.sabotage.net/redhat/ssl.html
+http://ftp.tu-clausthal.de/pub/TEXT/EXPERT/linux/redhat-security/i386
+http://ftp.tu-clausthal.de/pub/TEXT/EXPERT/linux/redhat-security/SRPMS
+
+SGML tutorials:
+http://www.hex.net/~cbbrowne/sgml.html
+
+--------------------------------------------------------------
+
+dtd/ofxmain.dtd: a hacked version of the original dtd, with 
+      the intent of exposing the base types.
+
+
+TBD:
+get new version 1.5 ofx dtd's from www.ofx.org
+
+
+--linas
+March 1998

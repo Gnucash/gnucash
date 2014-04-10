@@ -1,0 +1,440 @@
+<!DOCTYPE OFX [
+
+<!--
+    $Revision$
+    $Date$
+    
+ Open Financial Exchange DTD - main module
+ Defines common types and overall OFX structure
+ Includes (via entity refs) all other service modules
+ Copyright 1997 CheckFree Corp., Intuit Inc., Microsoft Corp.  All rights reserved
+
+------------------------
+This is not the original source.  I've been hacking on it!
+Hacked upon by Linas Vepstas March 1998
+
+-->
+
+<!-- ============================================================================= -->
+<!-- ENTITIES - Extensions
+    This entity allows users of this DTD to add new message sets
+    to the DTD.
+-->
+<!-- ============================================================================= -->
+
+<!-- Add extra xxxMSGSETRQVn here -->
+<!ENTITY % EXTRARQMSGSETS "">
+
+<!-- Add extra xxxMSGSETRSVn here -->
+<!ENTITY % EXTRARSMSGSETS "">
+
+<!-- Add extra XXXMSGSET here -->
+<!ENTITY % EXTRAMSGSETS   "">
+
+<!-- ============================================================================= -->
+<!-- ENTITIES - types
+    This section defines entities as 'types' for all 
+    primitive element values.  This is the only place
+    that #PCDATA should appear.  
+-->
+<!-- ============================================================================= -->
+
+
+<!-- Server ID : encoding for <TOKEN>'s, <SERVERTID>'s, etc -->
+<!ENTITY % SRVRIDTYPE "(xacc-srvrid)" >
+
+<!-- UUID : a universal ID , up to 36 char hexadecimal -->
+<!ENTITY % UUIDTYPE "(xacc-uuid)" >
+
+<!-- Character string data -->
+<!ENTITY % STRTYPE 	"(xacc-str)">
+
+<!-- URL -->
+<!ENTITY % URLTYPE  "(xacc-url)">
+
+<!-- Integer -->
+<!ENTITY % INTTYPE 	"(xacc-int)">
+
+<!-- Rate, percentage -->
+<!ENTITY % RATETYPE "(xacc-rate)">
+
+
+<!-- Current Amount: Used for specifying an amount.
+	may be signed; comma or period for decimal point
+-->
+<!ENTITY % AMTTYPE 	"(xacc-amount)">
+<!ENTITY % UNITPRICETYPE "(xacc-price)">
+
+<!--  Date and Time: Used for specifying
+	the date and time. All date-time pairs
+	are based on local time of the server or client.
+
+-->
+<!ENTITY % DTTMTYPE	"(xacc-dttm)">
+
+<!--
+	Boolean : Y/N
+-->
+<!ENTITY % BOOLTYPE	"(xacc-bool)">
+
+<!--
+	a general purpose identifier type
+-->
+<!ENTITY % IDTYPE	"(xacc-id)">
+
+<!-- ============================================================================= -->
+<!-- ENTITIES - macros
+    This section defines macros used in one or more modules
+    where a new level of aggregation was not desired but
+    common structure is present
+-->
+<!-- ============================================================================= -->
+
+<!-- Sync macros: all sync requests/responses have same form, but
+     have own name.  Although we could use the multiple-element syntax and put
+     them all here, we'd rather keep service-specific names in the service files.
+     Thus, we have a macro here that is trivially referenced in each service module -->
+
+<!ENTITY % SYNCRQMACRO "((TOKEN | TOKENONLY | REFRESH ) 
+    , REJECTIFMISSING)" >
+
+<!ENTITY % SYNCRSMACRO "(TOKEN, LOSTSYNC?)">
+
+<!-- Transaction Macro: all transaction requests have same form
+     but own name.  Didn't want to create a new sub-aggregate
+     to hold these elements so use a macro to incorporate them
+     into each XXXTRNRQ and XXXTRNRS -->
+<!ENTITY % TRNRQMACRO "(TRNUID , CLTCOOKIE?, TAN?)">
+<!ENTITY % TRNRSMACRO "(TRNUID , STATUS , CLTCOOKIE?)">
+
+<!-- Account from and account info: if you add a new service and it adds
+     a specific account from or account info aggregate, add it here so it will be
+     known to aggregates such as the account info request -->
+<!ENTITY % ACCTFROMMACRO "(BANKACCTFROM | CCACCTFROM | INVACCTFROM)">
+<!ENTITY % ACCTTOMACRO "(BANKACCTTO | CCACCTTO | INVACCTTO)">
+<!ENTITY % ACCTINFOMACRO "(BANKACCTINFO | CCACCTINFO | BPACCTINFO | INVACCTINFO)">
+
+<!-- Profile message set macro 
+     Each of the XXXMSGSET tags need to be listed here
+     Referenced in oxprof MSGSETLIST element -->
+<!ENTITY % MSGSETMACRO "
+                     (SIGNONMSGSET?,
+                      SIGNUPMSGSET?,
+                      BANKMSGSET?,
+                      CREDITCARDMSGSET?,
+                      INVSTMTMSGSET?,
+                      INTERXFERMSGSET?,
+                      WIREXFERMSGSET?,
+                      BILLPAYMSGSET?,
+                      EMAILMSGSET?,
+                      SECLISTMSGSET?,
+                      PROFMSGSET?
+                      %EXTRAMSGSETS
+                      )">
+                      
+<!-- ============================================================================= -->
+<!-- 'INCLUDES'
+    This section incorporates each service dtd by
+    defining a system entity that points to that file,
+    then referencing it.
+    Note: this must come after all ENTITY declarations used by
+    the service module have been defined.
+-->
+<!-- ============================================================================= -->
+
+<!ENTITY % signon-dtd SYSTEM "ofxsign.dtd">
+%signon-dtd;
+
+<!ENTITY % banking-dtd SYSTEM "ofxbank.dtd">
+%banking-dtd;
+
+<!ENTITY % billpay-dtd SYSTEM "ofxbill.dtd">
+%billpay-dtd;
+
+<!ENTITY % activate-dtd SYSTEM "ofxact.dtd">
+%activate-dtd;
+
+<!ENTITY % invest-dtd SYSTEM "ofxinv.dtd">
+%invest-dtd;
+
+<!ENTITY % mail-dtd SYSTEM "ofxmail.dtd">
+%mail-dtd;
+
+<!ENTITY % prof-dtd SYSTEM "ofxprof.dtd">
+%prof-dtd;
+
+<!-- ============================================================================= -->
+<!--
+    OpenExchange Element Structure
+    This file defines common and high-level elements.
+    New requests and responses need to be added to the TRNRQ/TRNRS elements here
+-->
+<!-- ============================================================================= -->
+
+<!-- Top-level -->
+<!-- Add the 'meta-token' for sync requests from each
+     service module here -->
+
+<!ENTITY % OFXRQMSGSETS 
+                     "SIGNONMSGSRQV1,
+                      SIGNUPMSGSRQV1?,
+                      BANKMSGSRQV1?,
+                      CREDITCARDMSGSRQV1?,
+                      INVSTMTMSGSRQV1?,
+                      INTERXFERMSGSRQV1?,
+                      WIREXFERMSGSRQV1?,
+                      BILLPAYMSGSRQV1?,
+                      EMAILMSGSRQV1?,
+                      SECLISTMSGSRQV1?,
+                      PROFMSGSRQV1?
+                      %EXTRARQMSGSETS">
+
+<!ENTITY % OFXRSMSGSETS                      
+                     "SIGNONMSGSRSV1,
+                      SIGNUPMSGSRSV1?,
+                      BANKMSGSRSV1?,
+                      CREDITCARDMSGSRSV1?,
+                      INVSTMTMSGSRSV1?,
+                      INTERXFERMSGSRSV1?,
+                      WIREXFERMSGSRSV1?,
+                      BILLPAYMSGSRSV1?,
+                      EMAILMSGSRSV1?,
+                      SECLISTMSGSRSV1?,
+                      PROFMSGSRSV1?
+                      %EXTRARSMSGSETS">                
+                      
+<!ELEMENT OFX   - - ((%OFXRQMSGSETS) | (%OFXRSMSGSETS))>
+
+
+<!-- Generic Elements and Common Aggregates -->
+
+<!ELEMENT DTCLIENT	- o	%DTTMTYPE>
+<!ELEMENT USERID	- o %IDTYPE>
+<!ELEMENT USERPASS	- o %STRTYPE>
+<!ELEMENT USERKEY	- o %STRTYPE>
+<!ELEMENT GENUSERKEY	- o %BOOLTYPE>
+<!ELEMENT APPID	- o %IDTYPE>
+<!ELEMENT APPVER	- o %INTTYPE>
+<!ELEMENT DTSERVER	- o	%DTTMTYPE>
+<!ELEMENT TSKEYEXPIRE	- o	%DTTMTYPE>
+<!ELEMENT CLTCOOKIE     - o %STRTYPE>
+<!ELEMENT TAN           - o %STRTYPE>
+
+<!ELEMENT DESC          - o %STRTYPE>
+<!ELEMENT PHONE         - o %STRTYPE>
+
+
+<!-- general error reporting aggregate -->
+<!ELEMENT STATUS	- -	(CODE , SEVERITY , MESSAGE?)>
+
+<!ELEMENT CODE		- o	%INTTYPE>
+<!ELEMENT SEVERITY	- o	%STRTYPE>	<!-- TODO: enum? -->
+<!ELEMENT MESSAGE	- o	%STRTYPE>
+
+
+<!-- Balance record -->
+<!ELEMENT BAL		- -	(NAME , DESC , BALTYPE , VALUE , 
+                         DTASOF? , CURRENCY?)>
+<!ELEMENT BALTYPE	- o %STRTYPE>	<!-- TODO: enum? -->
+<!ELEMENT VALUE		- o %AMTTYPE>
+
+
+<!--
+	TRNUID - a UUID that uniquely identifies transactions
+-->
+<!ELEMENT TRNUID			- o	%UUIDTYPE>
+
+
+<!-- Server ID -->
+<!ELEMENT SRVRTID	- o %SRVRIDTYPE>
+
+<!-- Transaction ID issued by financial institution.This ID is used to detect duplicate downloads -->
+<!ELEMENT FITID		- o	%IDTYPE>
+
+<!-- starting date -->
+<!ELEMENT DTSTART		- o	%DTTMTYPE>
+
+<!-- ending date -->
+<!ELEMENT DTEND			- o	%DTTMTYPE>
+
+<!ELEMENT DTPROFUP      - o %DTTMTYPE>
+<!ELEMENT DTACCTUP      - o %DTTMTYPE>
+
+<!-- Sync-related -->
+<!ELEMENT TOKENONLY         - o %BOOLTYPE>
+<!ELEMENT TOKEN	            - o	%SRVRIDTYPE>
+<!ELEMENT REFRESH           - o %BOOLTYPE>
+<!ELEMENT REJECTIFMISSING   - o %BOOLTYPE>
+<!ELEMENT LOSTSYNC          - o %BOOLTYPE>
+
+<!ELEMENT URL               - o %URLTYPE>
+<!ELEMENT INCIMAGES     - o %BOOLTYPE>
+
+
+<!-- Name & Address-related fields used in several messages -->
+
+<!ELEMENT FIRSTNAME     - o %STRTYPE>
+<!ELEMENT MIDDLENAME    - o %STRTYPE>
+<!ELEMENT LASTNAME      - o %STRTYPE>
+
+<!--  Payees address lines (1 or more) -->
+<!ELEMENT ADDR1	- o %STRTYPE>		
+<!ELEMENT ADDR2	- o %STRTYPE>		
+<!ELEMENT ADDR3	- o %STRTYPE>		
+
+<!--  Payees city  -->
+<!ELEMENT CITY	- o %STRTYPE>		
+
+<!--  Payees state -->
+<!ELEMENT STATE	- o %STRTYPE>		
+
+<!--  Zip code -->
+<!ELEMENT POSTALCODE	- o %STRTYPE>		
+
+<!--  Payees country -->
+<!ELEMENT COUNTRY	- o %STRTYPE>	
+	
+<!ELEMENT DAYPHONE      - o %STRTYPE>
+<!ELEMENT EVEPHONE      - o %STRTYPE>
+<!ELEMENT EMAIL         - o %STRTYPE>
+
+
+<!-- ============================================================================= -->
+<!--            Common between banking, billpay and/or investments                 -->
+<!-- ============================================================================= -->
+
+<!-- Bank account -->
+
+<!ELEMENT (BANKACCTFROM,BANKACCTTO) - - (BANKID , BRANCHID? , ACCTID ,
+                                        ACCTTYPE , ACCTKEY?)>
+
+<!-- Credit card account -->
+
+<!ELEMENT (CCACCTFROM,CCACCTTO) - - (ACCTID , ACCTKEY?)>
+
+
+<!-- Routing & transit number -->
+<!ELEMENT BANKID		- o	%IDTYPE>
+
+<!-- Bank identifier for international banks -->
+<!ELEMENT BRANCHID		- o	%IDTYPE>
+
+<!-- Account number -->
+<!ELEMENT ACCTID		- o %IDTYPE>
+
+<!-- Type of account.  -->
+<!ELEMENT ACCTTYPE		- o %IDTYPE>
+
+<!-- Checksum for international banks -->
+<!ELEMENT ACCTKEY		- o %IDTYPE>
+
+<!-- User account number for a merchant -->
+<!ELEMENT PAYACCT		- o %IDTYPE>
+
+<!--
+	 If present, this is the FITID of a previously sent transaction that is corrected by this record.
+	 This transaction replaces or deletes the transaction that it corrects.
+-->
+<!ELEMENT CORRECTFITID	- o %IDTYPE>
+
+
+<!--
+	Actions can be REPLACE or DELETE.
+	REPLACE replaces the transaction referenced by CORRECTFITID; DELETE deletes it.
+-->
+<!ELEMENT CORRECTACTION	- o	%STRTYPE>	<!-- TODO: attribute? -->
+
+<!-- Payee name or description -->
+<!ELEMENT NAME		- o %STRTYPE>
+
+<!-- Extra information (not in <NAME>), A-255 -->
+<!ELEMENT MEMO	- o	%STRTYPE>	
+
+<!-- Marketing information -->
+<!ELEMENT MKTGINFO	- o %STRTYPE>
+
+<!-- Include flag -->
+<!ELEMENT INCLUDE  - o %BOOLTYPE>
+
+
+<!-- ============================================================================= -->
+<!--            Common amounts                                                     -->
+<!-- ============================================================================= -->
+
+<!-- Balance amount -->
+<!ELEMENT BALAMT - o	%AMTTYPE>
+
+<!-- Amount of transaction -->
+<!ELEMENT TRNAMT	- o	%AMTTYPE>
+
+<!-- ============================================================================= -->
+<!--            Common dates                                                       -->
+<!-- ============================================================================= -->
+
+<!-- 	Date funds are available -->
+<!ELEMENT DTDUE	- o %DTTMTYPE>
+
+<!-- Balance date -->
+<!ELEMENT DTASOF	- o	%DTTMTYPE>
+
+<!-- ============================================================================= -->
+<!--        Recurring models and instances                                         -->
+<!-- ============================================================================= -->
+
+<!-- If the response is generated by a recurring model, this ID references it -->
+<!ELEMENT RECSRVRTID	- o	%SRVRIDTYPE>	
+
+<!-- Recurring Instructions aggregate -->
+<!ELEMENT RECURRINST - - (NINSTS? , FREQ)>
+
+<!-- Number of instructions. If this tag is omitted, the schedule is open-ended -->
+<!ELEMENT NINSTS	- o	%INTTYPE>
+
+<!-- Frequency -->
+<!ELEMENT FREQ	- o	%STRTYPE>	<!-- TODO: attribute?? -->
+
+<!--
+	Modify pending flag, boolean
+	Note: if this flag is set, the server should modify pending as well as future transfers.
+-->
+<!ELEMENT MODPENDING	- o	%BOOLTYPE>
+
+
+<!--
+	Cancel pending flag, boolean
+	Note: if this flag is set, the server should cancel pending as well as future transfers.
+-->
+<!ELEMENT CANPENDING	- o	%BOOLTYPE>
+
+
+<!-- International -->
+<!ELEMENT LANGUAGE	- o %STRTYPE>	<!-- TODO: enum? -->
+
+<!ELEMENT (CURRENCY, ORIGCURRENCY)  - - (CURRATE , CURSYM)>
+<!ELEMENT CURSYM        - o %STRTYPE>
+<!ELEMENT CURRATE       - o %RATETYPE>
+<!ELEMENT CURDEF        - o %STRTYPE>
+
+<!-- ============================================================================= -->
+<!--            Common Profile Stuff                                               -->
+<!-- ============================================================================= -->
+
+<!--    Recurring transfers and payments -->
+
+<!--    Supports recurring -->
+<!ELEMENT CANRECUR	- o %BOOLTYPE>
+
+<!--    Can modify recurring models -->
+<!ELEMENT CANMODMDLS	- o %BOOLTYPE>
+
+<!-- Number of days prior to processing that server makes a recurring transaction available to the client -->
+<!ELEMENT MODELWND	- o	%INTTYPE>	
+
+
+<!-- Day where processing is unavailable (MONDAY, TUESDAY, etc) -->
+<!ELEMENT PROCDAYSOFF	- o	%STRTYPE>	
+
+<!-- Cut off time for days's processing TODO: should just be time -->
+<!ELEMENT PROCENDTM 	- o	%DTTMTYPE>	
+
+]>

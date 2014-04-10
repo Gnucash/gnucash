@@ -1,6 +1,6 @@
 /********************************************************************\
  * AccInfo.c -- the Account Info data structures                    *
- * Copyright (C) 1998, 1999 Linas Vepstas                           *
+ * Copyright (C) 1998, 1999, 2000 Linas Vepstas                     *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -13,8 +13,11 @@
  * GNU General Public License for more details.                     *
  *                                                                  *
  * You should have received a copy of the GNU General Public License*
- * along with this program; if not, write to the Free Software      *
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
+ * along with this program; if not, contact:                        *
+ *                                                                  *
+ * Free Software Foundation           Voice:  +1-617-542-5942       *
+ * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
+ * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
 #include <stdlib.h>
@@ -22,8 +25,14 @@
 
 #include "AccInfo.h"
 #include "AccInfoP.h"
+#define DISABLE_GETTEXT_UNDERSCORE /* required to include messages.h */
 #include "messages.h"
 #include "util.h"
+
+
+/* This static indicates the debugging module that this .o belongs to.  */
+static short module = MOD_ENGINE;
+
 
 /* =========================================================== */
 
@@ -32,6 +41,7 @@
 char *
 xaccAccountTypeEnumAsString(int type) {
   switch(type) {
+    GNC_RETURN_ENUM_AS_STRING(NO_TYPE);
     GNC_RETURN_ENUM_AS_STRING(BANK);
     GNC_RETURN_ENUM_AS_STRING(CASH);
     GNC_RETURN_ENUM_AS_STRING(CREDIT);
@@ -48,8 +58,7 @@ xaccAccountTypeEnumAsString(int type) {
     GNC_RETURN_ENUM_AS_STRING(MONEYMRKT);
     GNC_RETURN_ENUM_AS_STRING(CREDITLINE);
     default:
-      fprintf(stderr,
-              "Big problem asked to translate unknown account type %d.\n", type);
+      PERR ("asked to translate unknown account type %d.\n", type);
       break;
   };
   return(NULL);
@@ -82,7 +91,48 @@ char * xaccAccountGetTypeStr (int type)
 {
    if (0 > type) return "";
    if (NUM_ACCOUNT_TYPES <= type) return "";
-   return (account_type_name [type]);
+   return gettext (account_type_name [type]);
+}
+
+/* =========================================================== */
+gncBoolean
+xaccAccountTypesCompatible (int parent_type, int child_type)
+{
+  gncBoolean compatible = GNC_F;
+
+  switch(parent_type)
+  {
+    case BANK:
+    case CASH: 
+    case ASSET:
+    case STOCK:
+    case MUTUAL:
+    case CURRENCY:
+    case CREDIT:
+    case LIABILITY:
+      compatible = ((child_type == BANK)     ||
+		    (child_type == CASH)     ||
+		    (child_type == ASSET)    ||
+		    (child_type == STOCK)    ||
+		    (child_type == MUTUAL)   ||
+		    (child_type == CURRENCY) ||
+                    (child_type == CREDIT)   ||
+                    (child_type == LIABILITY));
+      break;
+    case INCOME:
+    case EXPENSE:
+      compatible = ((child_type == INCOME) ||
+                    (child_type == EXPENSE));
+      break;
+    case EQUITY:
+      compatible = (child_type == EQUITY);
+      break;
+    default:
+      PERR("bad account type: %d", parent_type);
+      break;
+  }
+
+  return compatible;
 }
 
 /* =========================================================== */
@@ -165,9 +215,12 @@ xaccFreeInvAcct (InvAcct *iacc)
 void 
 xaccInvAcctSetPriceSrc (InvAcct *iacc, const char *src)
 {
-   if (!iacc || !src) return;
+   if (!iacc) return;
    if (iacc->pricesrc) { free(iacc->pricesrc); }
-   iacc->pricesrc = strdup (src);
+   if (src)
+     iacc->pricesrc = strdup (src);
+   else
+     iacc->pricesrc = NULL;
 }
 
 char * 

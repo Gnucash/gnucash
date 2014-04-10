@@ -1,0 +1,82 @@
+
+I have this nutty idea that maybe SGML/XML DTD's can be used as a
+kind-of corba-like IDL of sorts.  Has anyone pondered this, or know 
+of any resources?
+
+----------
+
+To be concrete, here's an example:
+OFX (Open Financial Exchange) defines some SGML DTD's that describe a
+document that contains financial data.  An OFX document would look
+vaguely like this:
+
+<transaction>
+   <date>March 10, 1998</date>
+   <amount>$300.00</amount>
+   <description>Buy new microwave oven</description>
+</transaction>
+
+Quicken and bank web sites send these things to each other to do on-line
+banking.
+
+I am involved in a project to create a GPL'ed Quicken look-alike /
+work-alike personal-finance package.  Currently, our C++ classes 
+look vaguely like:
+
+class Transaction {
+   public:
+      void SetDate (time_t date);
+      time_t GetDate (void);
+      void SetAmount (double amt);
+      double GetAmount (void);
+      void SetDescription (char *);
+      char * GetDescription (void);
+   private:
+      time_t date;
+      double amount;
+      char * description;
+};
+
+Lists of transactions form an account, etc.
+
+I hope it is now obvious to the casual reader that our in-memory layout
+of accounts and transactions vaguely resembles the ASCII layout of an
+OFX document.  In order to provide on-line banking features in our app,
+I'd like to get the in-memory layout resemble the ofx document as much
+as possible.  Thus, the obvious should now be obvious:
+
+Are there any packages that can
+(a) take SGML/XML DTD's and turn them into C/C++ structs/classes?
+(b) parse the incoming text document, and build the corresponding 
+    C/C++ linked-lists/trees in memory?
+
+---------------------------------------------------------------
+
+More specifically, given the DTD
+
+<!ELEMENT transaction - - (date, amount, description) >
+<!ELEMENT date        - - %datetype >
+<!ELEMENT amount      - - %numerictype >
+<!ELEMENT description - - %stringtype >
+
+I want something that will read this, and *automatically* spit out the
+following ascii stream:
+
+class Transaction {
+    time_t date;
+    double amount;
+    char * description;
+};
+
+---------------------------------------------------------------
+James Clark's SGML/Parser (SP)  http://www.jclark.com/sp/index.htm
+Jade
+
+dssslist@mulberrytech.com
+
+--------------------------------------------------------------
+--linas
+
+10 March 1998
+
+

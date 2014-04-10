@@ -1,14 +1,3 @@
-/*
- * FILE:
- * quickfillcell.c
- *
- * FUNCTION:
- * Implements a text cell with automatic typed-phrase
- * completion.
- *
- * HISTORY:
- * Copyright (c) 1998  Linas Vepstas
- */
 /********************************************************************\
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -21,12 +10,30 @@
  * GNU General Public License for more details.                     *
  *                                                                  *
  * You should have received a copy of the GNU General Public License*
- * along with this program; if not, write to the Free Software      *
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
+ * along with this program; if not, contact:                        *
+ *                                                                  *
+ * Free Software Foundation           Voice:  +1-617-542-5942       *
+ * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
+ * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ *                                                                  *
 \********************************************************************/
 
+/*
+ * FILE:
+ * quickfillcell.c
+ *
+ * FUNCTION:
+ * Implements a text cell with automatic typed-phrase
+ * completion.
+ *
+ * HISTORY:
+ * Copyright (c) 1998-2000 Linas Vepstas
+ */
+
 #include <stdlib.h>
+#include <stdio.h>
 #include <string.h>
+#include <glib.h>
 
 #include "basiccell.h"
 #include "quickfillcell.h"
@@ -47,14 +54,24 @@ quick_set (BasicCell *_cell,
 }
 
 /* ================================================ */
-/* when entering new cell, reset pointer to root    */
+/* when entering new cell, put cursor at end and select everything */
 
 static const char * 
-quick_enter (BasicCell *_cell, const char *val) 
+quick_enter (BasicCell *_cell, const char *val,
+             int *cursor_position,
+             int *start_selection,
+             int *end_selection)
 {
    QuickFillCell *cell = (QuickFillCell *) _cell;
 
    cell->qf = cell->qfRoot;
+
+   *cursor_position = -1;
+   *start_selection = 0;
+   *end_selection = -1;
+
+   xaccSetQuickFillOriginal(cell, NULL);
+
    return val;
 }
 
@@ -64,50 +81,84 @@ quick_enter (BasicCell *_cell, const char *val)
 
 static const char * 
 quick_modify (BasicCell *_cell,
-        const char *oldval, 
-        const char *change, 
-        const char *newval)
+              const char *oldval, 
+              const char *change, 
+              const char *newval,
+              int *cursor_position,
+              int *start_selection,
+              int *end_selection)
 {
    QuickFillCell *cell = (QuickFillCell *) _cell;
-   char * retval = (char *) newval;
+   const char *retval;
+   QuickFill *match;
 
-   /* if user typed the very first letter into this
-    * cell, then make sure that the quick-fill is set to 
-    * the root.  Alternately, if user erased all of the 
-    * text in the cell, and has just started typing,
-    * then make sure that the quick-fill root is also reset
-    */
-   if (newval) {
-      if ((0x0 != newval[0]) && (0x0 == newval[1])) {
-         cell->qf = cell->qfRoot;
-      }
+   /* If deleting, just accept */
+   if (change == NULL)
+   {
+     /* if the new value is a prefix of the original modulo case,
+      * just truncate the end of the original. Otherwise, set it
+      * to NULL */
+     if ((*cursor_position >= strlen(newval)) &&
+         (cell->original != NULL) &&
+         (strlen(cell->original) >= strlen(newval)) &&
+         (strncasecmp(cell->original, newval, strlen(newval)) == 0))
+       cell->original[strlen(newval)] = '\0';
+     else
+       xaccSetQuickFillOriginal(cell, NULL);
+
+     SET (&(cell->cell), newval);
+     return newval;
    }
 
-   /* if change is null, then user is deleting text;
-    * otehrwise, they are inserting text. */
-   if (change) {
-      int i;
-      char c;
-      
-      /* search for best-matching quick-fill string */
-      i=0;
-      c = change[i];
-      while (c) {
-         cell->qf = xaccGetQuickFill (cell->qf, c);
-         i++;
-         c = change[i];
-      }
-
-      /* if a match found, return it */
-      if (cell->qf) retval = strdup (cell->qf->text);
+   /* If we are inserting in the middle, just accept */
+   if (*cursor_position < strlen(oldval))
+   {
+     SET (&(cell->cell), newval);
+     xaccSetQuickFillOriginal(cell, NULL);
+     return newval;
    }
+
+   if (cell->original == NULL)
+     cell->original = g_strdup(newval);
+   else if (strcasecmp(cell->original, oldval) == 0)
+   {
+     char *original = g_strconcat(cell->original, change, NULL);
+     g_free(cell->original);
+     cell->original = original;
+   }
+   else
+   {
+     g_free(cell->original);
+     cell->original = NULL;
+   }
+
+   match = xaccGetQuickFillStr(cell->qfRoot, newval);
+
+   if ((match == NULL) || (match->text == NULL))
+   {
+     if (cell->original != NULL)
+       retval = strdup(cell->original);
+     else
+       retval = newval;
+
+     *cursor_position = -1;
+
+     SET (&(cell->cell), retval);
+     return retval;
+   }
+
+   retval = strdup(match->text);
+
+   *start_selection = strlen(newval);
+   *end_selection = -1;
+   *cursor_position += strlen(change);
 
    SET (&(cell->cell), retval);
    return retval;
 }
 
 /* ================================================ */
-/* when leaving cell, make sure that text was put into the qf    */
+/* when leaving cell, make sure that text was put into the qf */
 
 static const char * 
 quick_leave (BasicCell *_cell, const char *val) 
@@ -115,7 +166,7 @@ quick_leave (BasicCell *_cell, const char *val)
    QuickFillCell *cell = (QuickFillCell *) _cell;
 
    cell->qf = cell->qfRoot;
-   xaccQFInsertText (cell->qfRoot, val);
+   xaccQFInsertText (cell->qfRoot, val, cell->sort);
    return val;
 }
 
@@ -140,11 +191,15 @@ xaccInitQuickFillCell (QuickFillCell *cell)
 
    cell->qfRoot = xaccMallocQuickFill();
    cell->qf = cell->qfRoot;
+   cell->sort = QUICKFILL_LIFO;
+   cell->original = NULL;
 
    cell->cell.enter_cell    = quick_enter;
    cell->cell.modify_verify = quick_modify;
    cell->cell.leave_cell    = quick_leave;
    cell->cell.set_value     = quick_set;
+
+   xaccQuickFillGUIInit (cell);
 }
 
 /* ================================================ */
@@ -155,6 +210,9 @@ xaccDestroyQuickFillCell (QuickFillCell *cell)
    xaccFreeQuickFill (cell->qfRoot);
    cell->qfRoot = NULL;
    cell->qf = NULL;
+
+   g_free(cell->original);
+   cell->original = NULL;
 
    cell->cell.enter_cell    = NULL;
    cell->cell.modify_verify = NULL;
@@ -169,8 +227,35 @@ xaccDestroyQuickFillCell (QuickFillCell *cell)
 void
 xaccSetQuickFillCellValue (QuickFillCell *cell, const char * value)
 {
-   xaccQFInsertText (cell->qfRoot, value);
+   xaccQFInsertText (cell->qfRoot, value, cell->sort);
    SET (&(cell->cell), value);
+}
+
+/* ================================================ */
+
+void
+xaccSetQuickFillSort (QuickFillCell *cell, QuickFillSort sort)
+{
+  if (cell == NULL)
+    return;
+
+  cell->sort = sort;
+}
+
+/* ================================================ */
+
+void
+xaccSetQuickFillOriginal (QuickFillCell *cell, const char *original)
+{
+  if (cell == NULL)
+    return;
+
+  g_free(cell->original);
+
+  if ((original != NULL) && (*original != '\0'))
+    cell->original = g_strdup(original);
+  else
+    cell->original = NULL;
 }
 
 /* =============== END OF FILE ==================== */

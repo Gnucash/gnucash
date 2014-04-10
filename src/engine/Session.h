@@ -1,15 +1,3 @@
-/*
- * FILE:
- * Session.h
- *
- * FUNCTION:
- * Provide wrappers for initiating/concluding a file-editing session.
- *
- * HISTORY:
- * Created by Linas Vepstas December 1998
- * Copyright (c) 1998 Linas Vepstas
- */
-
 /********************************************************************\
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -22,9 +10,40 @@
  * GNU General Public License for more details.                     *
  *                                                                  *
  * You should have received a copy of the GNU General Public License*
- * along with this program; if not, write to the Free Software      *
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
+ * along with this program; if not, contact:                        *
+ *                                                                  *
+ * Free Software Foundation           Voice:  +1-617-542-5942       *
+ * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
+ * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ *                                                                  *
 \********************************************************************/
+
+/*
+ * FILE:
+ * Session.h
+ *
+ * FUNCTION:
+ * Provide wrappers for initiating/concluding a file-editing session.
+ * This class provides several important services:
+ *
+ * 1) Prevents multiple users from editing the same file at the same
+ *    time, thus avoiding lost data due to race conditions.  Thus
+ *    an open session implies that the associated file is locked.
+ *
+ * 2) Provides a search path for the file to be edited.  This should 
+ *    simplify install & maintenance problems for naive users who
+ *    may not have a good grasp on what a file ssytem is, or where
+ *    they want to keep their data files.
+ *
+ * The current implementations assumes the use of files and file
+ * locks; however, the API was designed to be general enough to
+ * allow the use of generic URL's, and/or implementation on top
+ * of SQL or other database/persistant object technology.
+ *
+ * HISTORY:
+ * Created by Linas Vepstas December 1998
+ * Copyright (c) 1998, 1999 Linas Vepstas
+ */
 
 #ifndef __XACC_SESSION_H__
 #define __XACC_SESSION_H__
@@ -37,7 +56,7 @@ typedef struct _session Session;
 /** PROTOTYPES ******************************************************/
 /*
  * The xaccMallocSession() routine simply mallocs memory for a session object.
- * The xaccInitSession() routine initializes memry for a session object.
+ * The xaccInitSession() routine initializes memory for a session object.
  * The xaccSessionDestroy() routine frees the associated memory.
  *    Note that this routine does *not* free the account group!
  */
@@ -103,8 +122,8 @@ void       xaccSessionDestroy (Session *);
  *    circustances. 
  *
  * The xaccSessionEnd() method will release the session lock. It will *not*
- *    save the account group to a file.  Thus, this method acts as an "abort" or
- *    "rollback" primitive.
+ *    save the account group to a file.  Thus, this method acts as an "abort"
+ *    or "rollback" primitive.
  *
  * The xaccResolveFilePath() routine is a utility that will accept a
  *    fragmentary filename as input, and resolve it into a fully-qualified path

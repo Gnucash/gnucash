@@ -1,0 +1,61 @@
+<!--
+    $Revision$
+    $Date$
+    
+ Open Financial Exchange DTD - signon module
+ Copyright 1997 CheckFree Corp., Intuit Inc., Microsoft Corp.  All rights reserved
+
+-->
+
+<!-- Message set -->
+<!-- Different from most: only one sonrq and at most one
+     pin change allowed -->
+<!ELEMENT SIGNONMSGSRQV1    - - (SONRQ , PINCHTRNRQ?, CHALLENGETRNRQ?)>
+<!ELEMENT SIGNONMSGSRSV1    - - (SONRS , PINCHTRNRS?, CHALLENGETRNRS?)>
+
+<!-- Signon message set profile entry -->
+<!ELEMENT SIGNONMSGSET      - - (SIGNONMSGSETV1)>
+<!ELEMENT SIGNONMSGSETV1    - - (MSGSETCORE )>
+
+
+<!-- Transactions -->
+<!ELEMENT PINCHTRNRQ    - - (%TRNRQMACRO , PINCHRQ)>
+<!ELEMENT CHALLENGETRNRQ    - - (%TRNRQMACRO , CHALLENGERQ)>
+<!ELEMENT PINCHTRNRS    - - (%TRNRSMACRO , PINCHRS?)>
+<!ELEMENT CHALLENGETRNRS    - - (%TRNRSMACRO , CHALLENGERS?)>
+
+
+<!-- Signon Request and Response -->
+
+<!ELEMENT SONRQ 	- - (DTCLIENT , 
+                         ((USERID , USERPASS) | USERKEY),
+                         GENUSERKEY? , LANGUAGE , 
+                        FI? , SESSCOOKIE? , APPID , APPVER)>
+
+<!ELEMENT FI            - - (ORG , FID?)>
+<!ELEMENT ORG           - o %STRTYPE>
+<!ELEMENT FID           - o %STRTYPE>
+
+<!ELEMENT SESSCOOKIE    - o %STRTYPE>
+
+<!ELEMENT SONRS		- - (STATUS , DTSERVER , USERKEY? , 
+                         TSKEYEXPIRE? , LANGUAGE ,
+                        DTPROFUP? , DTACCTUP? , FI?, SESSCOOKIE?)>
+
+<!-- Pin Change request and response -->
+
+<!ELEMENT PINCHRQ   - - (USERID , NEWUSERPASS)>
+
+<!ELEMENT PINCHRS   - - (USERID , DTCHANGED?)>
+
+<!ELEMENT NEWUSERPASS	- o %STRTYPE>
+<!ELEMENT DTCHANGED     - o %DTTMTYPE>
+
+<!-- Challenge request and response -->
+
+<!ELEMENT CHALLENGERQ   - - (USERID, FICERTID?)>
+
+<!ELEMENT CHALLENGERS   - - (USERID , NONCE, FICERTID)>
+
+<!ELEMENT NONCE 	- o %STRTYPE>
+<!ELEMENT FICERTID 	- o %STRTYPE>

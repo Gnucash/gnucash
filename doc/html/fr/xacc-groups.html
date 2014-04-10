@@ -1,0 +1,347 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+	<TITLE>Tableau de comptes et num&eacute;rotation des comptes</TITLE>
+	<link rel="stylesheet" title="normal" type="text/css" href="gnucash.css">
+	<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+</HEAD>
+<BODY BGCOLOR="#eeeeee">
+<H1>Tableau de comptes</H1>
+<P>Typiquement les comptes sont arrang&eacute;s comme un arbre, de
+fa&ccedil;on hi&eacute;rarchique. 
+</P>
+<P>Le tronc principal repr&eacute;sente les cat&eacute;gories ou
+groupes en entier, tandis que les feuilles de l'arbre contiennent des
+comptes bancaires individuels ou des cat&eacute;gories de d&eacute;penses.
+</P>
+<P>Quand un rapport sommaire est demand&eacute;, habituellement,
+seules les branches principales sont montr&eacute;es, plut&ocirc;t
+que les comptes individuels. Un tableau de comptes devrait ressembler
+&agrave; ce qui suit : 
+</P>
+<PRE> 300 D&eacute;penses
+ |
+ +--310 D&eacute;penses en cours
+ | |
+ | +--311 Bi&egrave;re
+ | |
+ | +--312 C&acirc;ble
+ |
+ +--320 D&eacute;penses commerciales
+ | |
+ | +--321 Disquettes 8 pouces
+ | |
+ : :</PRE><P>
+Notez que les comptes n'ont pas seulement des noms; ils ont des
+<B>codes</B><SPAN STYLE="font-weight: medium">, </SPAN>afin de
+fournir un <I>ordre</I>. Quand un rapport est g&eacute;n&eacute;r&eacute;,
+l'ordre de tri est d&eacute;termin&eacute; enti&egrave;rement par la
+num&eacute;rotation. 
+</P>
+<P>Une arborescence logique aura g&eacute;n&eacute;ralement des
+comptes &quot;feuilles&quot; dont le chiffre final est non nul,
+tandis que les noeuds parents ont des nombres sup&eacute;rieurs &agrave;
+z&eacute;ro. Par exemple, les comptes &quot;liquidit&eacute;s&quot;
+devraient logiquement &ecirc;tre arrang&eacute;s ainsi : 
+</P>
+<UL>
+	<LI><P STYLE="margin-bottom: 0cm">Avoirs globaux: <TT>100</TT> 
+	</P>
+	<UL>
+		<LI><P STYLE="margin-bottom: 0cm">Liquidit&eacute;s globales: <TT>110</TT>
+				</P>
+		<UL>
+			<LI><P STYLE="margin-bottom: 0cm">Esp&egrave;ces dans le
+			portefeuille: <TT>111</TT> 
+			</P>
+			<LI><P STYLE="margin-bottom: 0cm">Esp&egrave;ces dans la
+			chaussette dans le placard: <TT>112</TT> 
+			</P>
+			<LI><P STYLE="margin-bottom: 0cm">Esp&egrave;ces dans le matelas:
+			<TT>113</TT> 
+			</P>
+			<LI><P STYLE="margin-bottom: 0cm">Boite &agrave; petits frais: <TT>114</TT>
+						</P>
+		</UL>
+		<LI><P STYLE="margin-bottom: 0cm">Avoirs bancaires globaux: <TT>120</TT>
+				</P>
+		<UL>
+			<LI><P STYLE="margin-bottom: 0cm">Compte ch&egrave;ques: <TT>121</TT>
+						</P>
+			<LI><P>Compte d'&eacute;pargne: <TT>122</TT> 
+			</P>
+		</UL>
+	</UL>
+</UL>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Quand vous faites une <A HREF="xacc-accwin.html">cr&eacute;ation d'un
+nouveau compte</A>, GnuCash offre une possibilit&eacute; de deviner &agrave;
+quoi il pense que le code du compte devrait &ecirc;tre; vous &ecirc;tes
+libre de le changer. GnuCash ne pr&eacute;vient pas la duplication de
+num&eacute;rotation, bien que vous &ecirc;tes encourag&eacute;s &agrave;
+l'&eacute;viter. Les codes de compte sont trait&eacute;s comme des
+num&eacute;ros, base-36, ainsi, s'il n'y a plus de num&eacute;ros,
+vous pouvez utiliser les lettres, de a jusqu'&agrave; z. 
+</P>
+<P><B><FONT SIZE=6>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Un exemple de
+tableaux de comptes</FONT></B> 
+</P>
+<P><A NAME="SAMPLECHART"></A>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Un tableau &quot;typique&quot; de comptes est montr&eacute;
+ci-dessous. Chaque compte est un <A HREF="xacc-acctypes.html">type de
+compte donn&eacute;</A>. C'est une combinaison de quelques comptes
+commerciaux et personnels typiques. 
+</P>
+<P>&gt;&gt;&gt;&gt;&gt;&gt;&gt; 1.2 
+</P>
+<UL>
+	<LI><P STYLE="margin-bottom: 0cm">Actifs 
+	</P>
+	<UL>
+		<LI><P STYLE="margin-bottom: 0cm">Argent &agrave; port&eacute;e de
+		main / Liquidit&eacute;s 
+		</P>
+		<UL>
+			<LI><P STYLE="margin-bottom: 0cm">Compte ch&egrave;ques ou courant
+						</P>
+			<LI><P STYLE="margin-bottom: 0cm">Compte de march&eacute;
+			mon&eacute;taire 
+			</P>
+			<LI><P STYLE="margin-bottom: 0cm">Certificat de d&eacute;p&ocirc;t
+						</P>
+		</UL>
+		<LI><P STYLE="margin-bottom: 0cm">Actifs fixes / Immobilisations 
+		</P>
+		<UL>
+			<LI><P STYLE="margin-bottom: 0cm">Meubles 
+			</P>
+			<LI><P STYLE="margin-bottom: 0cm">Ordinateurs 
+			</P>
+			<LI><P STYLE="margin-bottom: 0cm">Bijoux, articles de collection 
+			</P>
+			<LI><P STYLE="margin-bottom: 0cm">Outils, machines 
+			</P>
+		</UL>
+		<LI><P STYLE="margin-bottom: 0cm">Investissements 
+		</P>
+		<UL>
+			<LI><P STYLE="margin-bottom: 0cm">Actions 
+			</P>
+			<LI><P STYLE="margin-bottom: 0cm">Obligations 
+			</P>
+			<LI><P STYLE="margin-bottom: 0cm">Soci&eacute;t&eacute;s
+			d'investissements (n.d.t.: SICAV, FCP, OPCVM, SCPI en France) 
+			</P>
+			<LI><P STYLE="margin-bottom: 0cm">Biens immobiliers 
+			</P>
+		</UL>
+	</UL>
+	<LI><P STYLE="margin-bottom: 0cm">Passifs 
+	</P>
+	<UL>
+		<LI><P STYLE="margin-bottom: 0cm">Imp&ocirc;t/Taxes 
+		</P>
+		<UL>
+			<LI><P STYLE="margin-bottom: 0cm">S&eacute;curit&eacute; sociale 
+			</P>
+			<LI><P STYLE="margin-bottom: 0cm">Imp&ocirc;t sur le revenu 
+			</P>
+			<LI><P STYLE="margin-bottom: 0cm">Taxe d'habitation 
+			</P>
+			<LI><P STYLE="margin-bottom: 0cm">Imp&ocirc;t foncier 
+			</P>
+			<LI><P STYLE="margin-bottom: 0cm">Vignette automobile 
+			</P>
+		</UL>
+		<LI><P STYLE="margin-bottom: 0cm">Carte de cr&eacute;dit et carte &agrave;
+		d&eacute;bit diff&eacute;r&eacute; 
+		</P>
+		<UL>
+			<LI><P STYLE="margin-bottom: 0cm">Eurocard/MasterCard 
+			</P>
+			<LI><P STYLE="margin-bottom: 0cm">Visa 
+			</P>
+			<LI><P STYLE="margin-bottom: 0cm">American Express 
+			</P>
+			<LI><P STYLE="margin-bottom: 0cm">Diner's Club 
+			</P>
+		</UL>
+		<LI><P STYLE="margin-bottom: 0cm">Emprunts 
+		</P>
+		<UL>
+			<LI><P STYLE="margin-bottom: 0cm">Obligations(bourse) 
+			</P>
+			<LI><P STYLE="margin-bottom: 0cm">Pr&ecirc;t &eacute;tudiant 
+			</P>
+			<LI><P STYLE="margin-bottom: 0cm">Pr&ecirc;t personnel d'oncle
+			Jean 
+			</P>
+			<LI><P STYLE="margin-bottom: 0cm">Pr&ecirc;t immobilier 
+			</P>
+		</UL>
+	</UL>
+	<LI><P STYLE="margin-bottom: 0cm">Capitaux propres 
+	</P>
+	<UL>
+		<LI><P STYLE="margin-bottom: 0cm">Reste de profits 
+		</P>
+		<LI><P STYLE="margin-bottom: 0cm">Primes et profits de l'ann&eacute;e
+		en cours 
+		</P>
+		<LI><P STYLE="margin-bottom: 0cm">R&egrave;glement d'une demande
+		(justice) 
+		</P>
+	</UL>
+	<LI><P STYLE="margin-bottom: 0cm">Revenus 
+	</P>
+	<UL>
+		<LI><P STYLE="margin-bottom: 0cm">Revenus d'int&eacute;r&ecirc;ts 
+		</P>
+		<UL>
+			<LI><P STYLE="margin-bottom: 0cm">Int&eacute;r&ecirc;t du compte
+			bancaire (compte r&eacute;mun&eacute;r&eacute;) 
+			</P>
+			<LI><P STYLE="margin-bottom: 0cm">Certificat de d&eacute;p&ocirc;t
+						</P>
+			<LI><P STYLE="margin-bottom: 0cm">Int&eacute;r&ecirc;ts
+			d'obligations 
+			</P>
+		</UL>
+		<LI><P STYLE="margin-bottom: 0cm">Dividendes 
+		</P>
+		<UL>
+			<LI><P STYLE="margin-bottom: 0cm">Actions 
+			</P>
+			<LI><P STYLE="margin-bottom: 0cm">Soci&eacute;t&eacute;s
+			d'investissements (n.d.t.: SICAV, FCP, OPCVM, SCPI en France) 
+			</P>
+		</UL>
+		<LI><P STYLE="margin-bottom: 0cm">Consultant 
+		</P>
+		<UL>
+			<LI><P STYLE="margin-bottom: 0cm">ABC Design 
+			</P>
+			<LI><P STYLE="margin-bottom: 0cm">PQR Infomatics 
+			</P>
+		</UL>
+		<LI><P STYLE="margin-bottom: 0cm">Salaire 
+		</P>
+		<UL>
+			<LI><P STYLE="margin-bottom: 0cm">Mon travail de jour 
+			</P>
+		</UL>
+		<LI><P STYLE="margin-bottom: 0cm">Commissions 
+		</P>
+		<UL>
+			<LI><P STYLE="margin-bottom: 0cm">Royalties 
+			</P>
+		</UL>
+	</UL>
+	<LI><P STYLE="margin-bottom: 0cm">D&eacute;penses 
+	</P>
+	<UL>
+		<LI><P STYLE="margin-bottom: 0cm">Loyer and Services 
+		</P>
+		<UL>
+			<LI><P STYLE="margin-bottom: 0cm">Loyer 
+			</P>
+			<LI><P STYLE="margin-bottom: 0cm">Int&eacute;r&ecirc;ts sur le
+			loyer en retard 
+			</P>
+			<LI><P STYLE="margin-bottom: 0cm">&Eacute;lectricit&eacute; 
+			</P>
+			<LI><P STYLE="margin-bottom: 0cm">Gaz 
+			</P>
+			<LI><P STYLE="margin-bottom: 0cm">T&eacute;l&eacute;phone 
+			</P>
+			<LI><P STYLE="margin-bottom: 0cm">Internet 
+			</P>
+			<LI><P STYLE="margin-bottom: 0cm">TV par c&acirc;ble 
+			</P>
+		</UL>
+		<LI><P STYLE="margin-bottom: 0cm">D&eacute;penses de bureau 
+		</P>
+		<UL>
+			<LI><P STYLE="margin-bottom: 0cm">Comptabilit&eacute; 
+			</P>
+			<LI><P STYLE="margin-bottom: 0cm">Avocat (pour les USA) 
+			</P>
+			<LI><P STYLE="margin-bottom: 0cm">Logiciels 
+			</P>
+			<LI><P STYLE="margin-bottom: 0cm">Poste 
+			</P>
+			<LI><P STYLE="margin-bottom: 0cm">Frais bancaires 
+			</P>
+			<LI><P STYLE="margin-bottom: 0cm">Frais de cartes de cr&eacute;dit
+						</P>
+			<LI><P STYLE="margin-bottom: 0cm">Toner, Papier, Paper Clips 
+			</P>
+		</UL>
+		<LI><P STYLE="margin-bottom: 0cm">D&eacute;penses automobiles 
+		</P>
+		<UL>
+			<LI><P STYLE="margin-bottom: 0cm">Carburant 
+			</P>
+			<LI><P STYLE="margin-bottom: 0cm">Assurance 
+			</P>
+			<LI><P STYLE="margin-bottom: 0cm">R&eacute;paration 
+			</P>
+			<LI><P STYLE="margin-bottom: 0cm">Location 
+			</P>
+		</UL>
+		<LI><P STYLE="margin-bottom: 0cm">Taxes 
+		</P>
+		<UL>
+			<LI><P STYLE="margin-bottom: 0cm">S&eacute;curit&eacute; sociale 
+			</P>
+			<LI><P STYLE="margin-bottom: 0cm">Assurance ch&ocirc;mage 
+			</P>
+			<LI><P STYLE="margin-bottom: 0cm">Amende des imp&ocirc;ts 
+			</P>
+		</UL>
+		<LI><P STYLE="margin-bottom: 0cm">Salaires et primes 
+		</P>
+		<UL>
+			<LI><P STYLE="margin-bottom: 0cm">Consultant 
+			</P>
+			<LI><P STYLE="margin-bottom: 0cm">Primes 
+			</P>
+			<LI><P STYLE="margin-bottom: 0cm">Assurance sant&eacute; 
+			</P>
+		</UL>
+		<LI><P STYLE="margin-bottom: 0cm">Voyage 
+		</P>
+		<UL>
+			<LI><P STYLE="margin-bottom: 0cm">Avion 
+			</P>
+			<LI><P STYLE="margin-bottom: 0cm">H&ocirc;tel 
+			</P>
+			<LI><P STYLE="margin-bottom: 0cm">Repas 
+			</P>
+			<LI><P STYLE="margin-bottom: 0cm">Auto 
+			</P>
+		</UL>
+		<LI><P STYLE="margin-bottom: 0cm">Marketing/Mercatique 
+		</P>
+		<UL>
+			<LI><P STYLE="margin-bottom: 0cm">Publicit&eacute; 
+			</P>
+			<LI><P STYLE="margin-bottom: 0cm">Salon professionnel / Foire
+			commerciale 
+			</P>
+			<LI><P STYLE="margin-bottom: 0cm">Donations/Gadgets 
+			</P>
+		</UL>
+	</UL>
+</UL>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<HR>
+<UL>
+	<UL>
+		<P>Retour &agrave; la <A HREF="xacc-main.html">Page principale de
+		la documentation.</A></P>
+	</UL>
+</UL>
+</BODY>
+</HTML>

@@ -1,14 +1,3 @@
-/*
- * FILE:
- * recncell.c
- * 
- * FUNCTION:
- * Implements a mouse-click cell that allows a series
- * of values to be clicked through.
- *
- * HISTORY:
- * Copyright (c) 1998 Linas Vepstas
- */
 /********************************************************************\
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -21,9 +10,25 @@
  * GNU General Public License for more details.                     *
  *                                                                  *
  * You should have received a copy of the GNU General Public License*
- * along with this program; if not, write to the Free Software      *
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
+ * along with this program; if not, contact:                        *
+ *                                                                  *
+ * Free Software Foundation           Voice:  +1-617-542-5942       *
+ * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
+ * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ *                                                                  *
 \********************************************************************/
+
+/*
+ * FILE:
+ * recncell.c
+ * 
+ * FUNCTION:
+ * Implements a mouse-click cell that allows a series
+ * of values to be clicked through.
+ *
+ * HISTORY:
+ * Copyright (c) 1998 Linas Vepstas
+ */
 
 #include <stdlib.h>
 #include <string.h>
@@ -32,6 +37,7 @@
 #include "basiccell.h"
 #include "recncell.h"
 #include "ui-callbacks.h"
+#include "messages.h"
 
 /* hack alert -- I am uncomfortable with including engine
  * stuff here; all code in this directory should really be 
@@ -41,22 +47,26 @@
  */
 #include "Transaction.h"
 
+
 /* ================================================ */
 
 static const char * 
-ToggleRecn (BasicCell *_cell, const char *cur_val)
+ToggleRecn (BasicCell *_cell, const char *cur_val,
+            int *cursor_position,
+            int *start_selection,
+            int *end_selection)
 {
    BasicCell *cell = (BasicCell *) _cell;
    char buff[2];
 
-   /* throw up a popup if the user tries to undo a reconciled transcation
-      hack alert -- this sets a new precedent ... verifyBox is defined in
-      both the motif and the gtk subdirs; I don't think I like it that way.
+   /* throw up a popup if the user tries to undo a reconciled transaction
+      hack alert -- this sets a new precedent ... gnc_verify_dialog is 
+      defined in both the motif and the gnome subdirs; I don't think I like 
+      it that way. Now it's in ui-callbacks.h which is UI independent, 
+      but that's still perhaps not optimal...  */
 
-      Now it's in ui-callbacks.h which is UI independent, but that's
-      still perhaps not optimal...  */
-   if(cur_val[0] == YREC) {
-     if(!verifyBox("Really change state of reconciled transaction?")) {
+   if (cur_val[0] == YREC) {
+     if(!gnc_verify_dialog(CHANGE_RECN_MSG, GNC_T)) {
        return strdup(cur_val);
      }
    }
@@ -67,7 +77,7 @@ ToggleRecn (BasicCell *_cell, const char *cur_val)
      buff[0] = NREC;
    }
    buff[1] = 0x0;
-   
+
    xaccSetBasicCellValue (cell, buff);
    return strdup (buff);
 }

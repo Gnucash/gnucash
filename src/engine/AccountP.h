@@ -1,3 +1,27 @@
+/********************************************************************\
+ * AccountP.h -- the Account data structure                         *
+ * Copyright (C) 1997 Robin D. Clark                                *
+ * Copyright (C) 1997-2000, Linas Vepstas <linas@linas.org>         *
+ *                                                                  *
+ * This program is free software; you can redistribute it and/or    *
+ * modify it under the terms of the GNU General Public License as   *
+ * published by the Free Software Foundation; either version 2 of   *
+ * the License, or (at your option) any later version.              *
+ *                                                                  *
+ * This program is distributed in the hope that it will be useful,  *
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of   *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    *
+ * GNU General Public License for more details.                     *
+ *                                                                  *
+ * You should have received a copy of the GNU General Public License*
+ * along with this program; if not, contact:                        *
+ *                                                                  *
+ * Free Software Foundation           Voice:  +1-617-542-5942       *
+ * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
+ * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ *                                                                  *
+\********************************************************************/
+
 /*
  * FILE:
  * AccountP.h
@@ -15,41 +39,19 @@
  *
  */
 
-/********************************************************************\
- * Account.h -- the Account data structure                          *
- * Copyright (C) 1997 Robin D. Clark                                *
- * Copyright (C) 1997, 1998, 1999 Linas Vepstas                     *
- *                                                                  *
- * This program is free software; you can redistribute it and/or    *
- * modify it under the terms of the GNU General Public License as   *
- * published by the Free Software Foundation; either version 2 of   *
- * the License, or (at your option) any later version.              *
- *                                                                  *
- * This program is distributed in the hope that it will be useful,  *
- * but WITHOUT ANY WARRANTY; without even the implied warranty of   *
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    *
- * GNU General Public License for more details.                     *
- *                                                                  *
- * You should have received a copy of the GNU General Public License*
- * along with this program; if not, write to the Free Software      *
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
- *                                                                  *
- *   Author: Rob Clark                                              *
- * Internet: rclark@cs.hmc.edu                                      *
- *  Address: 609 8th Street                                         *
- *           Huntington Beach, CA 92648-4632                        *
-\********************************************************************/
-
 #ifndef __XACC_ACCOUNT_P_H__
 #define __XACC_ACCOUNT_P_H__
 
 #include "config.h"
 #include "AccInfo.h"
+#include "GNCId.h"
 #include "Transaction.h"
+
 
 /** STRUCTS *********************************************************/
 struct _account {
   /* public data, describes account */
+  GUID      guid;          /* globally unique account id */
 
   /* The accountName is an arbitrary string assinged by the user. 
    * It is intended to a short, 5 to 30 character long string that
@@ -106,7 +108,7 @@ struct _account {
   char    *security;
 
   /* The parent and children pointers are used to implement an account
-   * heirarchy, of accounts that have sub-accounts ("detail accounts").
+   * hierarchy, of accounts that have sub-accounts ("detail accounts").
    */
   AccountGroup *parent;    /* back-pointer to parent */
   AccountGroup *children;  /* pointer to sub-accounts */
@@ -115,6 +117,10 @@ struct _account {
    * various housekeeping operations by the engine.
    */
   int       id;            /* unique account id, internally assigned */
+
+  /* the 'flags' field is currently unused.  If you need some
+   * persistant flags, this is it.  It *is* stored in the flat-file DB.
+   */
   char      flags;
 
   /* protected data, cached parameters */
@@ -122,21 +128,26 @@ struct _account {
   double cleared_balance;
   double reconciled_balance;
 
-  double running_balance;
-  double running_cleared_balance;
-  double running_reconciled_balance;
+  double share_balance;
+  double share_cleared_balance;
+  double share_reconciled_balance;
 
   int numSplits;                /* length of splits array below   */
   Split **splits;               /* ptr to array of ptrs to splits */
 
   /* The "changed" flag is used to invalidate cached values in this structure.
-   * currently, the balances and the cost basis are cached.
+   * Currently, the balances and the cost basis are cached.
    */
   short changed;
 
-  /* the "open" flag indicates if the account has been 
+  /* The "open" flag indicates if the account has been 
    * opened for editing. */
   short open;
+
+  /* The "mark" flag can be used by the user to mark this account
+   * in any way desired.  Handy for specialty traversals of the 
+   * account tree. */
+  short mark;
 };
 
 /* bitfields for the changed flag */
@@ -157,7 +168,6 @@ struct _account {
  *    it should be immediately destroyed, or it should be inserted into  
  *    an account.
  */
-
 void         xaccAccountRemoveSplit (Account *, Split *);
 
 /* the following recompute the partial balances (stored with the
@@ -170,6 +180,12 @@ void         xaccAccountRecomputeBalances (Account **);
  * recomputes the cost basis 
  */
 void         xaccAccountRecomputeCostBasis (Account *);
+
+
+/* Set the account's GUID. This should only be done when reading
+ * an account from a datafile, or some other external source. Never
+ * call this on an existing account! */
+void xaccAccountSetGUID (Account *account, GUID *guid);
 
 
 /** GLOBALS *********************************************************/

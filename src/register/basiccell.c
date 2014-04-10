@@ -1,15 +1,3 @@
-/*
- * FILE:
- * basiccell.c
- *
- * FUNCTION: 
- * Implements the base class for the cell handler object.
- * See the header file for additional documentation.
- *
- * HISTORY:
- * Copyright (c) 1998 Linas Vepstas
- */
-
 /********************************************************************\
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -22,9 +10,25 @@
  * GNU General Public License for more details.                     *
  *                                                                  *
  * You should have received a copy of the GNU General Public License*
- * along with this program; if not, write to the Free Software      *
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
+ * along with this program; if not, contact:                        *
+ *                                                                  *
+ * Free Software Foundation           Voice:  +1-617-542-5942       *
+ * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
+ * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ *                                                                  *
 \********************************************************************/
+
+/*
+ * FILE:
+ * basiccell.c
+ *
+ * FUNCTION: 
+ * Implements the base class for the cell handler object.
+ * See the header file for additional documentation.
+ *
+ * HISTORY:
+ * Copyright (c) 1998 Linas Vepstas
+ */
 
 #include <stdlib.h>
 #include <string.h>
@@ -43,6 +47,20 @@ BasicCell * xaccMallocBasicCell (void)
 
 /* ===================================================== */
 
+static char *
+BasicCellHelpValue(BasicCell *cell)
+{
+  if ((cell->value != NULL) && (cell->value[0] != 0))
+    return strdup(cell->value);
+
+  if (cell->blank_help != NULL)
+    return strdup(cell->blank_help);
+
+  return NULL;
+}
+
+/* ===================================================== */
+
 void xaccInitBasicCell (BasicCell *cell)
 {
    cell->input_output = XACC_CELL_ALLOW_ALL;
@@ -50,15 +68,18 @@ void xaccInitBasicCell (BasicCell *cell)
    cell->fg_color = 0x0;       /* black */
    cell->use_bg_color = 0;     /* ignore the color */
    cell->use_fg_color = 0;     /* ignore the color */
-   cell->value = 0x0;
+   cell->value = NULL;
+   cell->blank_help = NULL;
    cell->changed = 0;
    cell->set_value = NULL;
    cell->enter_cell = NULL;
    cell->modify_verify = NULL;
+   cell->direct_update = NULL;
    cell->leave_cell = NULL;
    cell->realize = NULL;
    cell->move = NULL;
    cell->destroy = NULL;
+   cell->get_help_value = BasicCellHelpValue;
    cell->gui_private = NULL;
 }
 
@@ -74,6 +95,10 @@ void xaccDestroyBasicCell (BasicCell *cell)
    /* free up data strings */
    if (cell->value) {
       free (cell->value);
+   }
+
+   if (cell->blank_help) {
+     free (cell->blank_help);
    }
 
    /* help prevent access to freed memory */
@@ -98,8 +123,54 @@ void xaccSetBasicCellValue (BasicCell *cell, const char *val)
       cell->set_value = cb;
    } else {
       if (cell->value) free (cell->value);
-      cell->value = strdup (val);
+      if (val) {
+        cell->value = strdup (val);
+      } else {
+        cell->value = strdup("");
+      }
    }
+}
+
+/* ===================================================== */
+
+void
+xaccSetBasicCellBlankHelp (BasicCell *cell, const char *blank_help)
+{
+  if (cell == NULL)
+    return;
+
+  if (cell->blank_help != NULL)
+    free(cell->blank_help);
+
+  if (blank_help == NULL)
+    cell->blank_help = NULL;
+  else
+    cell->blank_help = strdup(blank_help);
+}
+
+/* ===================================================== */
+
+char *
+xaccBasicCellGetHelp (BasicCell *cell)
+{
+  if (cell == NULL)
+    return NULL;
+
+  if (cell->get_help_value == NULL)
+    return NULL;
+
+  return cell->get_help_value(cell);
+}
+
+/* ===================================================== */
+
+void
+xaccBasicCellSetChanged (BasicCell *cell, gncBoolean changed)
+{
+  if (cell == NULL)
+    return;
+
+  cell->changed = changed ? 0xffffffff : 0;
 }
 
 /* ================== end of file ====================== */

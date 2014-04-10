@@ -13,8 +13,11 @@
  * GNU General Public License for more details.                     *
  *                                                                  *
  * You should have received a copy of the GNU General Public License*
- * along with this program; if not, write to the Free Software      *
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
+ * along with this program; if not, contact:                        *
+ *                                                                  *
+ * Free Software Foundation           Voice:  +1-617-542-5942       *
+ * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
+ * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
  *                                                                  *
 \********************************************************************/
 
@@ -23,10 +26,12 @@
 
 #include "config.h"
 
+#include "gnc-common.h"
 #include "Account.h"
 
 /** PROTOTYPES ******************************************************/
 
+gncBoolean accListHasAccount (Account **list, Account *findme);
 int        accListCount (Account **list);
 Account ** accListCopy (Account **list);
 Account ** xaccGroupToList (Account *);

@@ -1,17 +1,3 @@
-/*
- * FILE:
- * Scrub.c
- *
- * FUNCTION:
- * Provides a set of functions and utilities for scrubbing clean 
- * single-entry accounts so that they can be promoted into 
- * self-consistent, clean double-entry accounts.
- *
- * HISTORY:
- * Created by Linas Vepstas December 1998
- * Copyright (c) 1998 Linas Vepstas
- */
-
 /********************************************************************\
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -24,9 +10,27 @@
  * GNU General Public License for more details.                     *
  *                                                                  *
  * You should have received a copy of the GNU General Public License*
- * along with this program; if not, write to the Free Software      *
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
+ * along with this program; if not, contact:                        *
+ *                                                                  *
+ * Free Software Foundation           Voice:  +1-617-542-5942       *
+ * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
+ * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ *                                                                  *
 \********************************************************************/
+
+/*
+ * FILE:
+ * Scrub.c
+ *
+ * FUNCTION:
+ * Provides a set of functions and utilities for scrubbing clean 
+ * single-entry accounts so that they can be promoted into 
+ * self-consistent, clean double-entry accounts.
+ *
+ * HISTORY:
+ * Created by Linas Vepstas December 1998
+ * Copyright (c) 1998, 1999, 2000 Linas Vepstas
+ */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -37,6 +41,7 @@
 #include "GroupP.h"
 #include "Scrub.h"
 #include "Transaction.h"
+#include "messages.h"
 #include "util.h"
 
 static short module = MOD_SCRUB;
@@ -70,8 +75,9 @@ xaccAccountTreeScrubOrphans (Account *acc)
    xaccAccountScrubOrphans (acc);
 }
 
-/* hack alert -- this string should probably be i18n'ed */
-#define ORPHAN_STR "Orphan-"
+#ifndef ORPHAN_STR
+#  define ORPHAN_STR "Orphan"
+#endif
 
 void
 xaccAccountScrubOrphans (Account *acc)
@@ -81,8 +87,7 @@ xaccAccountScrubOrphans (Account *acc)
    Transaction *trans;
    Account * parent;
 
-   PINFO ("xaccAccountScrubOrphans(): "
-          "Looking for orphans in account %s \n", xaccAccountGetName(acc));
+   PINFO ("Looking for orphans in account %s \n", xaccAccountGetName(acc));
 
    slist = xaccAccountGetSplitList (acc);
    split = slist[0];
@@ -96,7 +101,7 @@ xaccAccountScrubOrphans (Account *acc)
          parent = xaccSplitGetAccount (s);
          if (!parent) {
             Account *orph;
-            DEBUG ("xaccAccountScrubOrphans(): Found an orphan \n");
+            DEBUG ("Found an orphan \n");
             /* OK, we found an orphan.  Put it in an orphan account. */
             orph = GetOrMakeAccount (acc, trans, ORPHAN_STR);
             xaccAccountBeginEdit (orph, 1);
@@ -131,8 +136,9 @@ xaccAccountTreeScrubImbalance (Account *acc)
    xaccAccountScrubImbalance (acc);
 }
 
-/* hack alert -- this string should probably be i18n'ed */
-#define IMBALANCE_STR "Imbalance-"
+#ifndef IMBALANCE_STR
+#  define IMBALANCE_STR "Imbalance"
+#endif
 
 void
 xaccAccountScrubImbalance (Account *acc)
@@ -141,8 +147,7 @@ xaccAccountScrubImbalance (Account *acc)
    Split *split, **slist;
    Transaction *trans;
 
-   PINFO ("xaccAccountScrubImbalance(): "
-          "Looking for imbalance in account %s \n", xaccAccountGetName(acc));
+   PINFO ("Looking for imbalance in account %s \n", xaccAccountGetName(acc));
 
    slist = xaccAccountGetSplitList (acc);
    split = slist[0];
@@ -154,8 +159,7 @@ xaccAccountScrubImbalance (Account *acc)
       if (!(DEQ (imbalance, 0.0))) {
          Split *splat;
          Account *orph;
-         DEBUG ("xaccAccountScrubImbalance(): "
-                "Found imbalance of %g\n", imbalance);
+         DEBUG ("Found imbalance of %g\n", imbalance);
          /* OK, we found an imbalanced trans.  Put it in the imbal account. */
          orph = GetOrMakeAccount (acc, trans, IMBALANCE_STR);
          
@@ -180,14 +184,15 @@ static Account *
 GetOrMakeAccount (Account *peer, Transaction *trans, const char *name_root)
 {
    char * accname;
-   char * currency;
+   const char * currency;
    Account * acc;
    AccountGroup *root;
 
    /* build the account name */
    currency = xaccTransFindCommonCurrency (trans);
-   accname = alloca (strlen (name_root) + strlen (currency) + 1);
+   accname = alloca (strlen (name_root) + strlen (currency) + 2);
    strcpy (accname, name_root);
+   strcat (accname, "-");
    strcat (accname, currency); 
 
    /* see if we've got one of these going already ... */
