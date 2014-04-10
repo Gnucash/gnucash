@@ -389,7 +389,7 @@ stock_split_finish (GnomeDruidPage *druidpage,
   xaccTransSetCurrency (trans, gnc_default_currency ());
 
   date = gnc_date_edit_get_date (GNC_DATE_EDIT (info->date_edit));
-  xaccTransSetDateSecs (trans, date);
+  xaccTransSetDatePostedSecs (trans, date);
 
   {
     const char *description;
