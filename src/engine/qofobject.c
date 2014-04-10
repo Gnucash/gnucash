@@ -29,8 +29,8 @@
 #include <glib.h>
 
 #include "gnc-engine-util.h"
-#include "gncObject.h"
-#include "gncObjectP.h"
+#include "qofobject.h"
+#include "qofobject-p.h"
 #include "qofbook.h"
 
 static gboolean object_is_initialized = FALSE;
@@ -38,13 +38,13 @@ static GList *object_modules = NULL;
 static GList *book_list = NULL;
 static GHashTable *backend_data = NULL;
 
-void gncObjectBookBegin (QofBook *book)
+void qof_object_book_begin (QofBook *book)
 {
   GList *l;
 
   if (!book) return;
   for (l = object_modules; l; l = l->next) {
-    GncObject_t *obj = l->data;
+    QofObject *obj = l->data;
     if (obj->book_begin)
       obj->book_begin (book);
   }
@@ -53,13 +53,13 @@ void gncObjectBookBegin (QofBook *book)
   book_list = g_list_prepend (book_list, book);
 }
 
-void gncObjectBookEnd (QofBook *book)
+void qof_object_book_end (QofBook *book)
 {
   GList *l;
 
   if (!book) return;
   for (l = object_modules; l; l = l->next) {
-    GncObject_t *obj = l->data;
+    QofObject *obj = l->data;
     if (obj->book_end)
       obj->book_end (book);
   }
@@ -68,13 +68,13 @@ void gncObjectBookEnd (QofBook *book)
   book_list = g_list_remove (book_list, book);
 }
 
-gboolean gncObjectIsDirty (QofBook *book)
+gboolean qof_object_is_dirty (QofBook *book)
 {
   GList *l;
 
   if (!book) return FALSE;
   for (l = object_modules; l; l = l->next) {
-    GncObject_t *obj = l->data;
+    QofObject *obj = l->data;
     if (obj->is_dirty)
       if (obj->is_dirty (book))
 	return TRUE;
@@ -82,13 +82,13 @@ gboolean gncObjectIsDirty (QofBook *book)
   return FALSE;
 }
 
-void gncObjectMarkClean (QofBook *book)
+void qof_object_mark_clean (QofBook *book)
 {
   GList *l;
 
   if (!book) return;
   for (l = object_modules; l; l = l->next) {
-    GncObject_t *obj = l->data;
+    QofObject *obj = l->data;
     if (obj->mark_clean)
       (obj->mark_clean) (book);
   }
@@ -101,7 +101,7 @@ void gncObjectForeachType (foreachTypeCB cb, gpointer user_data)
   if (!cb) return;
 
   for (l = object_modules; l; l = l->next) {
-    GncObject_t *obj = l->data;
+    QofObject *obj = l->data;
     (cb) (obj, user_data);
   }
 }
@@ -109,11 +109,11 @@ void gncObjectForeachType (foreachTypeCB cb, gpointer user_data)
 void gncObjectForeach (GNCIdTypeConst type_name, QofBook *book, 
 		       foreachObjectCB cb, gpointer user_data)
 {
-  const GncObject_t *obj;
+  const QofObject *obj;
 
   if (!book || !type_name) return;
 
-  obj = gncObjectLookup (type_name);
+  obj = qof_object_lookup (type_name);
   if (!obj) return;
 
   if (obj->foreach)
@@ -125,11 +125,11 @@ void gncObjectForeach (GNCIdTypeConst type_name, QofBook *book,
 const char *
 gncObjectPrintable (GNCIdTypeConst type_name, gpointer obj)
 {
-  const GncObject_t *b_obj;
+  const QofObject *b_obj;
 
   if (!type_name || !obj) return NULL;
 
-  b_obj = gncObjectLookup (type_name);
+  b_obj = qof_object_lookup (type_name);
   if (!b_obj) return NULL;
 
   if (b_obj->printable)
@@ -138,13 +138,13 @@ gncObjectPrintable (GNCIdTypeConst type_name, gpointer obj)
   return NULL;	    
 }
 
-const char * gncObjectGetTypeLabel (GNCIdTypeConst type_name)
+const char * qof_object_get_type_label (GNCIdTypeConst type_name)
 {
-  const GncObject_t *obj;
+  const QofObject *obj;
 
   if (!type_name) return NULL;
 
-  obj = gncObjectLookup (type_name);
+  obj = qof_object_lookup (type_name);
   if (!obj) return NULL;
 
   return (obj->type_label);
@@ -158,14 +158,14 @@ static gboolean clear_table (gpointer key, gpointer value, gpointer user_data)
 
 /* INITIALIZATION and PRIVATE FUNCTIONS */
 
-void gncObjectInitialize (void)
+void qof_object_initialize (void)
 {
   if (object_is_initialized) return;
   backend_data = g_hash_table_new (g_str_hash, g_str_equal);
   object_is_initialized = TRUE;
 }
 
-void gncObjectShutdown (void)
+void qof_object_shutdown (void)
 {
   g_return_if_fail (object_is_initialized == TRUE);
 
@@ -185,7 +185,7 @@ void gncObjectShutdown (void)
  * return FALSE if it fails, invalid arguments, or if the object
  * already exists
  */
-gboolean gncObjectRegister (const GncObject_t *object)
+gboolean qof_object_register (const QofObject *object)
 {
   g_return_val_if_fail (object_is_initialized, FALSE);
 
@@ -207,10 +207,10 @@ gboolean gncObjectRegister (const GncObject_t *object)
   return TRUE;
 }
 
-const GncObject_t * gncObjectLookup (GNCIdTypeConst name)
+const QofObject * qof_object_lookup (GNCIdTypeConst name)
 {
   GList *iter;
-  const GncObject_t *obj;
+  const QofObject *obj;
 
   g_return_val_if_fail (object_is_initialized, NULL);
 
@@ -224,7 +224,7 @@ const GncObject_t * gncObjectLookup (GNCIdTypeConst name)
   return NULL;
 }
 
-gboolean gncObjectRegisterBackend (GNCIdTypeConst type_name,
+gboolean qof_object_registerBackend (GNCIdTypeConst type_name,
 				   const char *backend_name,
 				   gpointer be_data)
 {
@@ -250,7 +250,7 @@ gboolean gncObjectRegisterBackend (GNCIdTypeConst type_name,
   return TRUE;
 }
 
-gpointer gncObjectLookupBackend (GNCIdTypeConst type_name,
+gpointer qof_object_lookupBackend (GNCIdTypeConst type_name,
 				 const char *backend_name)
 {
   GHashTable *ht;
@@ -282,7 +282,7 @@ static void foreach_backend (gpointer key, gpointer be_item, gpointer arg)
   (cb_data->cb) (data_type, be_item, cb_data->user_data);
 }
 
-void gncObjectForeachBackend (const char *backend_name,
+void qof_object_foreach_backend (const char *backend_name,
 			      foreachBackendTypeCB cb,
 			      gpointer user_data)
 {

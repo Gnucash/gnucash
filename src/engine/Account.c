@@ -46,10 +46,10 @@
 #include "kvp-util-p.h"
 #include "messages.h"
 
-#include "gncObject.h"
 #include "QueryObject.h"
 #include "qofbook.h"
 #include "qofbook-p.h"
+#include "qofobject.h"
 
 static short module = MOD_ACCOUNT; 
 
@@ -3175,7 +3175,7 @@ account_foreach (QofBook *book, foreachObjectCB cb, gpointer ud)
   xaccForeachEntity (et, GNC_ID_ACCOUNT, cb, ud);
 }
 
-static GncObject_t account_object_def = {
+static QofObject account_object_def = {
   GNC_OBJECT_VERSION,
   GNC_ID_ACCOUNT,
   "Account",
@@ -3208,7 +3208,7 @@ gboolean xaccAccountRegister (void)
 
   gncQueryObjectRegister (GNC_ID_ACCOUNT, (QuerySort)xaccAccountOrder, params);
 
-  return gncObjectRegister (&account_object_def);
+  return qof_object_register (&account_object_def);
 }
 
 /* ======================= END OF FILE =========================== */

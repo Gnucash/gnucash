@@ -27,7 +27,6 @@
 
 #include "GNCIdP.h"
 #include "QueryNewP.h" 
-#include "gncObjectP.h"
 #include "gnc-engine.h"
 #include "gnc-engine-util.h"
 
@@ -40,6 +39,7 @@
 #include "gnc-pricedb-p.h"
 #include "qofbook.h"
 #include "qofbook-p.h"
+#include "qofobject-p.h"
 
 static GList * engine_init_hooks = NULL;
 static int engine_is_initialized = 0;
@@ -81,7 +81,7 @@ gnc_engine_init(int argc, char ** argv)
   gnc_engine_get_string_cache();
   
   xaccGUIDInit ();
-  gncObjectInitialize ();
+  qof_object_initialize ();
   gncQueryNewInit ();
 
   /* Now register our core types */
@@ -117,7 +117,7 @@ gnc_engine_shutdown (void)
 
   gnc_engine_string_cache_destroy ();
 
-  gncObjectShutdown ();
+  qof_object_shutdown ();
   xaccGUIDShutdown ();
 }
 

@@ -29,7 +29,6 @@
 
 #include "BackendP.h"
 #include "GNCIdP.h"
-#include "gncObject.h"
 #include "gnc-engine.h"
 #include "gnc-engine-util.h"
 #include "gnc-event-p.h"
@@ -38,6 +37,7 @@
 #include "kvp-util.h"
 #include "qofbook.h"
 #include "qofbook-p.h"
+#include "qofobject.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_PRICE;
@@ -1949,7 +1949,7 @@ pricedb_mark_clean(QofBook *book)
   gnc_pricedb_mark_clean(gnc_pricedb_get_db(book));
 }
 
-static GncObject_t pricedb_object_def = 
+static QofObject pricedb_object_def = 
 {
   interface_version: GNC_OBJECT_VERSION,
   name:              GNC_ID_PRICEDB,
@@ -1965,7 +1965,7 @@ static GncObject_t pricedb_object_def =
 gboolean 
 gnc_pricedb_register (void)
 {
-  return gncObjectRegister (&pricedb_object_def);
+  return qof_object_register (&pricedb_object_def);
 }
 
 /* ========================= END OF FILE ============================== */
