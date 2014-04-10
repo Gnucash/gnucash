@@ -1,6 +1,27 @@
+/*
+ * FILE:
+ * FileDialog.h
+ *
+ * FUNCTION:
+ * A set of file-handling utility dialogs for GUI menubars and menubuttons.
+ * These utilities will "do the right thing" when used in the "File..."
+ * pulldown menu, for the "New", "Open", "Save", "SaveAs", etc. menu entires.
+ * In particular, they will verify that old files don't get clobbered,
+ * they'll put up dialogue boxes to ask the user to confirm thier actions,
+ * etc. 
+ * 
+ * These utilities are written in a GUI-independent fashion, and should
+ * work just fine with the Motif, gnome/gtk and Qt interfaces.
+ * These utilities are appropriate for direct invocation from guile.
+ * (they should be wrapped by swig).
+ *
+ * HISTORY:
+ * Derived from Rob Clark's original MainWindow.c code, Dec 1998
+ */
+
 /********************************************************************\
- * top-level.h -- main for xacc (X-Accountant)                      *
  * Copyright (C) 1997 Robin D. Clark                                *
+ * Copyright (C) 1998 Linas Vepstas                                 *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -15,36 +36,26 @@
  * You should have received a copy of the GNU General Public License*
  * along with this program; if not, write to the Free Software      *
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
- *                                                                  *
- *   Author: Rob Clark                                              *
- * Internet: rclark@cs.hmc.edu                                      *
- *  Address: 609 8th Street                                         *
- *           Huntington Beach, CA 92648-4632                        *
 \********************************************************************/
 
-#ifndef __TOP_LEVEL_H__
-#define __TOP_LEVEL_H__
+#ifndef __GNC_FILE_DIALOG_H__
+#define __GNC_FILE_DIALOG_H__
 
-#include <gtk/gtk.h>
-
-#include "config.h"
 #include "Group.h"
+#include "Session.h"
+      
+void gncFileNew (void);
+void gncFileOpen (void);
+void gncFileQIFImport (void);
+void gncFileSave (void);
+void gncFileSaveAs (void);
 
-/** STRUCTS *********************************************************/
+void gncFileOpenFile (const char *);
 
-/** PROTOTYPES ******************************************************/
+void gncFileQuerySave (void);
+void gncFileQuit (void);
 
-/** GLOBALS *********************************************************/
+extern Session *current_session;
 extern AccountGroup *topgroup;
 
-#endif
-
-/*
-  Local Variables:
-  tab-width: 2
-  indent-tabs-mode: nil
-  mode: c-mode
-  c-indentation-style: gnu
-  eval: (c-set-offset 'block-open '-)
-  End:
-*/
+#endif /* __GNC_FILE_DIALOG_H__ */

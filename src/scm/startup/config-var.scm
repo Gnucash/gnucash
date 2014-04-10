@@ -45,7 +45,7 @@
     (if set-action (set! result (set-action var value)))
     (if result
         (begin
-          (if is-config-mod? (gnc:config-var-modified?-set var #t))
+          (if is-config-mod? (gnc:config-var-modified?-set! var #t))
           (vector-set! var 5 (car result))))))
 
 (define (gnc:config-var-value-is-default? var)

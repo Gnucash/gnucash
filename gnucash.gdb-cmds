@@ -1,0 +1,14 @@
+# You can debug gnucash by running gdb as "gdb -x gnucash.gdb-cmds"
+# and then executing "run-gnucash somefile".
+
+file gnucash.bin
+
+define run-gnucash
+  set args --debug \
+           --startup-dir ./share/scm/startup \
+           --share-dir ./share \
+           --config-dir ./etc \
+           --load-path \
+   "(\"(./share/scm)\")" --doc-path  "(\"(./Docs)\"\"(./Reports)\")" $arg0
+  run
+end

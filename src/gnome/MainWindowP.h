@@ -1,6 +1,5 @@
-/********************************************************************\
- * MainWindow.h -- the main window, and associated helper functions * 
- *                 and callback functions for xacc (X-Accountant    *
+/*******************************************************************\
+ * MainWindowP.h -- private GNOME main window functions             *
  * Copyright (C) 1997 Robin D. Clark                                *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
@@ -23,39 +22,52 @@
  *           Huntington Beach, CA 92648-4632                        *
 \********************************************************************/
 
-#ifndef __ADD_DIALOG_H__
-#define __ADD_DIALOG_H__
+#ifndef __MAINWINDOWP_H__
+#define __MAINWINDOWP_H__
 
+#include <gtk/gtk.h>
 #include "Group.h"
-#include "MainWindow.h"
+#include "config.h"
 
-struct _add_account_dialog 
-{
-  GnomeDialog 	*dialog;
-  GtkWidget 	*main_vbox;
-  GtkWidget 	*box2;
-  GtkWidget	*box3;
-  GtkWidget	*box4;
-  GtkWidget 	*frame;
-  
-  GSList 	*group;
+/** PROTOTYPES ******************************************************/
+void gnc_ui_refreshMainWindow( void );
+void gnc_ui_mainWindow(AccountGroup *);
+void gnc_ui_refresh_tree ( void );
+void gnc_ui_acct_tree_fill ( GtkTree *, AccountGroup *, int );
 
-  GtkWidget 	*label;
-  GtkWidget 	*textbox_name;
-  GtkWidget	*textbox_description;
+#if 0
 
-  GtkWidget	*separator;
-
-  Account	*parent_account;
-  gint		type;
-
+/** GLOBALS *********************************************************/
+enum {
+  FMB_NEW,
+  FMB_OPEN,
+  FMB_IMPORT,
+  FMB_SAVE,
+  FMB_SAVEAS,
+  FMB_QUIT,
+};
+enum {
+  AMB_NEW,
+  AMB_OPEN,
+  AMB_LEDGER,
+  AMB_EDIT,
+  AMB_DEL,
+  AMB_TRNS,
+  AMB_RPRT,
+  AMB_SHOW,
+  AMB_CAT,
+};
+enum {
+  HMB_ABOUT,
+  HMB_ACC,
+  HMB_REGWIN,
+  HMB_RECNWIN,
+  HMB_ADJBWIN,
+  HMB_MAIN,
+  HMB_LIC,
 };
 
-typedef struct _add_account_dialog add_account_dialog;
-
-void 			create_add_account_dialog ( Account * );
-add_account_dialog 	*add_account_dialog_init ( void );
-void	 		add_account_dialog_destroy ( GtkWidget *, GnomeDialog * );
+#endif
 
 #endif
 

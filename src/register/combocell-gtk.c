@@ -98,6 +98,7 @@ void xaccInitComboCell (ComboCell *cell)
 static
 void destroyCombo (BasicCell *bcell)
 {
+#if OLD_CLIST_REG
   ComboCell *cell = (ComboCell *) bcell;
   PopBox *box = (PopBox *) (cell->cell.gui_private);
   
@@ -109,12 +110,13 @@ void destroyCombo (BasicCell *bcell)
      matter) code is an ugly hack that should go away when we have a
      real table widget... */
 
+
   if (!(cell->cell.realize) && box && box->table && box->table->entry_frame) {
     gtk_container_remove(GTK_CONTAINER(box->table->entry_frame),
                          GTK_WIDGET(box->combobox));
     gtk_container_add(GTK_CONTAINER(box->table->entry_frame),
                       GTK_WIDGET(box->table->entry_widget));
-    
+
     /* allow the widget to be shown again */
     cell->cell.realize = realizeCombo;
     cell->cell.move = NULL;
@@ -122,6 +124,7 @@ void destroyCombo (BasicCell *bcell)
     cell->cell.leave_cell = NULL;
     cell->cell.destroy = NULL;
   }  
+#endif
 }
 
 /* =============================================== */
@@ -154,8 +157,11 @@ void
 xaccAddComboCellMenuItem (ComboCell *cell, char * menustr)
 {
   PopBox *box = (PopBox *) cell->cell.gui_private;
-  GtkList *comboitems = GTK_LIST(box->combobox->list); 
 
+  /*
+  GtkList *comboitems = GTK_LIST(box->combobox->list); 
+  */
+  
   if (!cell) return;
   if (!menustr) return;
 
@@ -250,6 +256,7 @@ const char * enterCombo (BasicCell *bcell, const char *value)
     
     if(!choice) choice = "";
     
+#if OLD_CLIST_REG
     if(GTK_WIDGET(box->table->entry_widget)->parent == 
        box->table->entry_frame) {
       gtk_container_remove(GTK_CONTAINER(box->table->entry_frame),
@@ -259,11 +266,14 @@ const char * enterCombo (BasicCell *bcell, const char *value)
                       GTK_WIDGET(box->combobox));
     
     gtk_entry_set_text(GTK_ENTRY(box->combobox->entry), choice);
+#endif
   }  else {
+#if OLD_CLIST_REG
     gtk_container_remove(GTK_CONTAINER(box->table->entry_frame),
                          GTK_WIDGET(box->combobox));
     gtk_container_add(GTK_CONTAINER(box->table->entry_frame),
                       GTK_WIDGET(box->table->entry_widget));
+#endif
   }
   
   return NULL;
@@ -276,7 +286,10 @@ const char * leaveCombo (BasicCell *bcell, const char *value)
 {
   ComboCell *cell = (ComboCell *) bcell;
   PopBox *box = (PopBox *) (cell->cell.gui_private);
+
+#if OLD_CLIST_REG
   gchar *text;
+#endif
   
   /* check for a valid mapping of the widget.  
      Note that if the combo box value is set to 
@@ -287,6 +300,7 @@ const char * leaveCombo (BasicCell *bcell, const char *value)
      We want to ignore these. */
   if ((0 > box->currow) || (0 > box->curcol)) return NULL;
   
+#if OLD_CLIST_REG
   text = gtk_entry_get_text(GTK_ENTRY(box->combobox->entry));
   
   /* be sure to set the string into the matrix widget as well,
@@ -303,7 +317,7 @@ const char * leaveCombo (BasicCell *bcell, const char *value)
                        GTK_WIDGET(box->combobox));
   gtk_container_add(GTK_CONTAINER(box->table->entry_frame),
                     GTK_WIDGET(box->table->entry_widget));
-  
+#endif  
   return NULL;
 }
 

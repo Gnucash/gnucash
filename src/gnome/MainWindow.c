@@ -18,16 +18,30 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
 \********************************************************************/
 
+#include <nana.h>
 #include <gnome.h>
 
+#include "config.h"
+
+#include "gnucash.h"
+#include "options-dialog.h"
 #include "Add_Dialog.h"
-#include "MainWindow.h"
 #include "MenuBar.h"
 #include "MenuCommands.h"
 #include "messages.h"
 #include "RegWindow.h"
 #include "top-level.h"
 #include "version.h"
+#include "MainWindow.h"
+#include "MainWindowP.h"
+
+/** STRUCTURES ******************************************************/
+struct _main_window {
+  GtkTree *maintree;
+  GtkTree *root_item;
+};
+
+typedef struct _main_window main_window;
 
 /** GLOBALS **********************************************************/
 main_window    *mwindow;
@@ -70,33 +84,6 @@ refreshMainWindow()
 
 
 /********************************************************************\
- * refresh_tree                                                     *
- *   refreshes the main window                                      *
- *                                                                  *
- * Args:    tree - the tree that will get destroyed..               *
- * Returns: nothing                                                 *
-\********************************************************************/
-void
-gnc_ui_refresh_tree()
-{
-  /** This is ugly... how do we do this nicer? */
-  GList *items;
-  
-  mwindow->maintree = GTK_TREE_ROOT_TREE ( mwindow->maintree );
-  
-  items = GTK_TREE_SELECTION ( mwindow->maintree );
-  
-  gtk_tree_clear_items ( mwindow->maintree, 0, g_list_length(items) );  
-  
-  mwindow->root_item = mwindow->maintree;  
-    
-  gnc_ui_acct_tree_fill(GTK_TREE_ITEM(mwindow->root_item), topgroup, -1);    
-
-}
-
-
-
-/********************************************************************\
  * acct_tree_fill                                                   *
  *   fills the tree with accounts, name ($balance)                  *
  *                                                                  *
@@ -106,25 +93,22 @@ gnc_ui_refresh_tree()
  * Returns: nothing                                                 *
 \********************************************************************/
 void
-gnc_ui_acct_tree_fill(GtkWidget *item, AccountGroup *accts, int subtree) 
+gnc_ui_acct_tree_fill(GtkTree *item, AccountGroup *accts, int subtree) 
 {
   int accounts_in_group = xaccGroupGetNumAccounts(accts);
   int current_account;
-  GtkWidget* item_subtree;
-  GtkWidget* tree_item;
+  GtkTree* item_subtree;
+  GtkTreeItem* tree_item;
   int no_root_item;
-  
-  if ( subtree == -1 )
-  {
+
+  if ( subtree == -1 ) {
     item_subtree = item;
     no_root_item = 1;
-  }
-  else 
-  {
-    item_subtree = gtk_tree_new();
+  } else {
+    item_subtree = GTK_TREE(gtk_tree_new());
     no_root_item = 0;
   }
-
+  
   for( current_account=0; 
        current_account < accounts_in_group; 
        current_account++ )
@@ -140,13 +124,13 @@ gnc_ui_acct_tree_fill(GtkWidget *item, AccountGroup *accts, int subtree)
 
     sprintf (buffer, "%s ($%.2f)", rowstrs[0], xaccAccountGetBalance(acc));
 
-    tree_item = gtk_tree_item_new_with_label( buffer );
+    tree_item = GTK_TREE_ITEM(gtk_tree_item_new_with_label( buffer ));
     /* Set the tree item to point to the actual account so we can reach it
        trivially when the user selects the row.  (Should we use
        gtk_*_data_full and have a destroy notify?) */
     gtk_object_set_user_data(GTK_OBJECT(tree_item), acc); 
 
-    gtk_tree_append(GTK_TREE(item_subtree), tree_item ); 
+    gtk_tree_append(GTK_TREE(item_subtree), GTK_WIDGET(tree_item)); 
 
     gtk_signal_connect (GTK_OBJECT (tree_item), 
                         "button_press_event",
@@ -159,14 +143,40 @@ gnc_ui_acct_tree_fill(GtkWidget *item, AccountGroup *accts, int subtree)
       gnc_ui_acct_tree_fill ( GTK_TREE(tree_item), acc_children, 1 );
     }
   
-    gtk_widget_show ( tree_item );
+    gtk_widget_show(GTK_WIDGET(tree_item));
 
   }
   
-  if(!no_root_item)
-  {
-    gtk_tree_item_set_subtree(GTK_TREE_ITEM(item), item_subtree);     
+  if(!no_root_item) {
+    gtk_tree_item_set_subtree(GTK_TREE_ITEM(item), GTK_WIDGET(item_subtree));
   }
+  
+}
+
+/********************************************************************\
+ * refresh_tree                                                     *
+ *   refreshes the main window                                      *
+ *                                                                  *
+ * Args:    tree - the tree that will get destroyed..               *
+ * Returns: nothing                                                 *
+\********************************************************************/
+void
+gnc_ui_refresh_tree() {
+
+  /** This is ugly... how do we do this nicer? */
+  GList *items;
+  
+  mwindow->maintree = GTK_TREE_ROOT_TREE ( mwindow->maintree );
+  
+  items = GTK_TREE_SELECTION ( mwindow->maintree );
+  
+  gtk_tree_clear_items ( mwindow->maintree, 0, g_list_length(items) );  
+  
+  mwindow->root_item = mwindow->maintree;  
+    
+  gnc_ui_acct_tree_fill(mwindow->root_item,
+                        xaccSessionGetGroup(current_session),
+                        -1); 
 
 }
 
@@ -176,7 +186,7 @@ static void
 gnc_ui_about_cb (GtkWidget *widget, gpointer data)
 {
   GtkWidget *about;
-  gchar *authors[] = {
+  const gchar *authors[] = {
   /* Here should be your names */
           "Rob Clark",
           "Linas Vepstas",
@@ -211,6 +221,8 @@ gnc_ui_help_cb ( GtkWidget *widget, gpointer data )
 
 }
 
+#if 0
+
 /* Some dialog stubs to be worked on */
 /* We might want to move these to there own file =\ */
 
@@ -220,40 +232,7 @@ gnc_ui_file_new_cb ( GtkWidget *widget, gpointer data )
 
 }
 
-/* Options dialog... this should house all of the config options     */
-/* like where the docs reside, and whatever else is deemed necessary */
-static void
-gnc_ui_options_cb ( GtkWidget *widget, gpointer data )
-{
-  GnomePropertyBox *box;
-  GtkWidget *w, *label, *box2;
-
-  box = GNOME_PROPERTY_BOX(gnome_property_box_new());
-  w = gtk_button_new_with_label("Click me (Page #1)");
-
-  box2 = gtk_vbox_new ( FALSE, 1 );
-  gtk_box_pack_start(GTK_BOX(box2), w, FALSE, FALSE, 0);    
-  
-  gtk_widget_show ( box2 );
-  
-  gtk_widget_show(w);
-  label = gtk_label_new("Config Box 1");
-  gtk_widget_show(label);
-  
-  gnome_property_box_append_page(box, box2, label);
-  w = gtk_button_new_with_label("Click me (Page #2)");
-  gtk_widget_show(w);
-  
-  label = gtk_label_new("Config Box 2");
-  gtk_widget_show(label);
-  
-  gnome_property_box_append_page(box, w, label);
-  
-  gtk_widget_set_usize ( GTK_WIDGET(box), 500, 400 );
-  gtk_widget_set_usize ( GTK_WIDGET(box2), 225, 225 ); 
-  
-  gtk_widget_show(GTK_WIDGET(box));
-}
+#endif
 
 static void
 gnc_ui_add_account ( GtkWidget *widget, gpointer data )
@@ -266,7 +245,7 @@ gnc_ui_add_account ( GtkWidget *widget, gpointer data )
   {
     if ( selection->data != NULL )
     {
-      AccountGroup *acc = gtk_object_get_user_data(GTK_OBJECT(selection->data));
+      Account *acc = gtk_object_get_user_data(GTK_OBJECT(selection->data));
       create_add_account_dialog(acc);  
     }
    
@@ -349,9 +328,18 @@ gnc_ui_mainWindow_toolbar_open ( GtkWidget *widget, gpointer data )
   }  
 }
 
+static void
+quit_menu_item_helper() {
+  gnc_shutdown(0);
+}
+
+static void
+gnc_ui_options_cb ( GtkWidget *widget, gpointer data ) {
+  gnc_show_options_dialog();
+}
+
 void
-gnc_ui_mainWindow(AccountGroup *accts)
-{
+mainWindow() {
 
   GtkWidget 	*scrolled_win;
   GtkWidget 	*main_vbox;
@@ -359,6 +347,7 @@ gnc_ui_mainWindow(AccountGroup *accts)
   GtkWidget	  *menubar;
   GtkWidget 	*clist;
   GtkWidget 	*notebook;
+  AccountGroup *accts = xaccSessionGetGroup(current_session);
   int nmenu_items;
   /*GtkAcceleratorTable *accel;*/
 
@@ -378,7 +367,7 @@ gnc_ui_mainWindow(AccountGroup *accts)
     {"<Main>/File/Save", "<control>S", file_cmd_save, NULL},
     {"<Main>/File/Save as", NULL, NULL, NULL},
     {"<Main>/File/<separator>", NULL, NULL, NULL},
-    {"<Main>/File/Quit", "<control>Q", gnucash_shutdown, NULL },
+    {"<Main>/File/Quit", "<control>Q", quit_menu_item_helper, NULL },
     {"<Main>/Options/Preferences..", "<control>A", gnc_ui_options_cb, NULL},
     {"<Main>/Help/Help", NULL, gnc_ui_help_cb, NULL},
     {"<Main>/Help/<separator>", NULL, NULL, NULL},
@@ -388,9 +377,9 @@ gnc_ui_mainWindow(AccountGroup *accts)
   MenuBar *main_menu_bar;
 
   mwindow = g_malloc ( sizeof ( main_window ) );
-  mwindow->maintree = gtk_tree_new ( );
+  mwindow->maintree = GTK_TREE(gtk_tree_new());
 
-  mwindow->root_item = GTK_WIDGET ( mwindow->maintree );
+  mwindow->root_item = mwindow->maintree;
 
   /* Create the toolbar, and hook up the buttons to the tree widget */
   {
@@ -410,7 +399,7 @@ gnc_ui_mainWindow(AccountGroup *accts)
       GNOMEUIINFO_ITEM_DATA(N_("Delete"), N_("Delete selected account."), 
                        gnc_ui_delete_account_cb, mwindow->root_item, GNOME_APP_PIXMAP_NONE),
       GNOMEUIINFO_ITEM(N_("Exit"), N_("Exit GnuCash."),
-                       gnucash_shutdown, GNOME_APP_PIXMAP_NONE),
+                       gnc_shutdown, GNOME_APP_PIXMAP_NONE),
       GNOMEUIINFO_END
      };
 
@@ -464,7 +453,8 @@ gnc_ui_mainWindow(AccountGroup *accts)
 //gtk_window_add_accelerator_table(GTK_WINDOW(window), accel);
   gnome_app_set_menus ( GNOME_APP (app), GTK_MENU_BAR (menubar));
   gtk_container_add( GTK_CONTAINER( main_vbox ), notebook );
-  gtk_container_add(GTK_CONTAINER(scrolled_win), mwindow->maintree);
+  gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(scrolled_win),
+                                        GTK_WIDGET(mwindow->maintree));
 
   /* Append some pages to notebook */
   {
@@ -478,7 +468,7 @@ gnc_ui_mainWindow(AccountGroup *accts)
   
   //gtk_widget_show(clist_vbox);
   gtk_widget_show(menubar);
-  gtk_widget_show(mwindow->maintree);
+  gtk_widget_show(GTK_WIDGET(mwindow->maintree));
 
   /* Setup some callbacks */
 	
@@ -501,32 +491,34 @@ gnc_ui_mainWindow(AccountGroup *accts)
 /* OLD_GNOME_CODE */
 
 void
-gnucash_shutdown (GtkWidget *widget, gpointer *data)
-{
-  if ( xaccAccountGroupNotSaved(topgroup) )
-  {
-    GtkWidget *msgbox;
-    msgbox = gnome_message_box_new ( FMB_SAVE_MSG,
-                                     GNOME_MESSAGE_BOX_ERROR, 
-                                     GNOME_STOCK_BUTTON_OK,
-                                     GNOME_STOCK_BUTTON_CANCEL, NULL );
-    gnome_dialog_button_connect (GNOME_DIALOG (msgbox), 0,
-                                 GTK_SIGNAL_FUNC (file_cmd_save), 
-                                 NULL);
-    gnome_dialog_button_connect (GNOME_DIALOG (msgbox), 0,
-                                 GTK_SIGNAL_FUNC (file_cmd_quit), 
-                                 NULL);                                 
-    gnome_dialog_button_connect (GNOME_DIALOG (msgbox), 1,
-                                 GTK_SIGNAL_FUNC (file_cmd_quit), 
-                                 NULL);                                                    
-    gtk_widget_show ( msgbox );   
-  }
-  else
-  {
-    gtk_main_quit ();
-  }
-
+gnc_ui_shutdown (GtkWidget *widget, gpointer *data) {
+  gtk_main_quit ();
 }
+    
+#if 0
+
+/* FIXME: This was the old shutdown code.  It probably needs to be
+   migrated to whatever function is being called by gncFileQuerySave() */
+
+  GtkWidget *msgbox;
+  msgbox = gnome_message_box_new ( FMB_SAVE_MSG,
+                                   GNOME_MESSAGE_BOX_ERROR, 
+                                   GNOME_STOCK_BUTTON_OK,
+                                   GNOME_STOCK_BUTTON_CANCEL, NULL );
+  gnome_dialog_button_connect (GNOME_DIALOG (msgbox), 0,
+                               GTK_SIGNAL_FUNC (file_cmd_save), 
+                               NULL);
+  gnome_dialog_button_connect (GNOME_DIALOG (msgbox), 0,
+                               GTK_SIGNAL_FUNC (file_cmd_quit), 
+                               NULL);                                 
+  gnome_dialog_button_connect (GNOME_DIALOG (msgbox), 1,
+                               GTK_SIGNAL_FUNC (file_cmd_quit), 
+                               NULL);                                                    
+    gtk_widget_show ( msgbox );   
+
+#endif
+
+
 
 /********************* END OF FILE **********************************/
 

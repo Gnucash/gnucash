@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/usr/bin/perl -w
 #######################################################################
 # $Id$
 # Looks up investment prices on the web, and builds a report

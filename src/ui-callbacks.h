@@ -1,7 +1,7 @@
 /********************************************************************\
- * MainWindow.h -- the main window, and associated helper functions * 
- *                 and callback functions for xacc (X-Accountant    *
+ * ui-callbacks.h                                                   *
  * Copyright (C) 1997 Robin D. Clark                                *
+ * Copyright (C) 1999 Rob Browning <rlb@cs.utexas.edu>              *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -23,48 +23,17 @@
  *           Huntington Beach, CA 92648-4632                        *
 \********************************************************************/
 
-#ifndef __ADD_DIALOG_H__
-#define __ADD_DIALOG_H__
+#ifndef __UI_CALLBACKS_H__
+#define __UI_CALLBACKS_H__
 
-#include "Group.h"
-#include "MainWindow.h"
+#include <gnc-common.h>
 
-struct _add_account_dialog 
-{
-  GnomeDialog 	*dialog;
-  GtkWidget 	*main_vbox;
-  GtkWidget 	*box2;
-  GtkWidget	*box3;
-  GtkWidget	*box4;
-  GtkWidget 	*frame;
-  
-  GSList 	*group;
+void refreshMainWindow( void );
 
-  GtkWidget 	*label;
-  GtkWidget 	*textbox_name;
-  GtkWidget	*textbox_description;
-
-  GtkWidget	*separator;
-
-  Account	*parent_account;
-  gint		type;
-
-};
-
-typedef struct _add_account_dialog add_account_dialog;
-
-void 			create_add_account_dialog ( Account * );
-add_account_dialog 	*add_account_dialog_init ( void );
-void	 		add_account_dialog_destroy ( GtkWidget *, GnomeDialog * );
+gncBool  verifyBox( const char *text );
+void     errorBox( const char *message );
+void     setBusyCursor( gncUIWidget w );
+void     unsetBusyCursor( gncUIWidget w );
 
 #endif
 
-/*
-  Local Variables:
-  tab-width: 2
-  indent-tabs-mode: nil
-  mode: c-mode
-  c-indentation-style: gnu
-  eval: (c-set-offset 'block-open '-)
-  End:
-*/

@@ -1,4 +1,4 @@
-#! /usr/bin/perl -w
+#!/usr/bin/perl -w
 #
 #    Copyright (C) 1998, Dj Padzensky <djpadz@padz.net>
 #    Copyright (C) 1998, 1999 Linas Vepstas <linas@linas.org>

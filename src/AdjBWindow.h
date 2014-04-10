@@ -1,6 +1,5 @@
 /********************************************************************\
- * MainWindow.h -- the main window, and associated helper functions * 
- *                 and callback functions for xacc (X-Accountant    *
+ * AdjBWindow.h -- the adjust balance window                        *
  * Copyright (C) 1997 Robin D. Clark                                *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
@@ -23,48 +22,26 @@
  *           Huntington Beach, CA 92648-4632                        *
 \********************************************************************/
 
-#ifndef __ADD_DIALOG_H__
-#define __ADD_DIALOG_H__
+#ifndef __XACC_ADJBWINDOW_H__
+#define __XACC_ADJBWINDOW_H__
 
-#include "Group.h"
-#include "MainWindow.h"
+#include "config.h"
 
-struct _add_account_dialog 
-{
-  GnomeDialog 	*dialog;
-  GtkWidget 	*main_vbox;
-  GtkWidget 	*box2;
-  GtkWidget	*box3;
-  GtkWidget	*box4;
-  GtkWidget 	*frame;
-  
-  GSList 	*group;
-
-  GtkWidget 	*label;
-  GtkWidget 	*textbox_name;
-  GtkWidget	*textbox_description;
-
-  GtkWidget	*separator;
-
-  Account	*parent_account;
-  gint		type;
-
-};
-
-typedef struct _add_account_dialog add_account_dialog;
-
-void 			create_add_account_dialog ( Account * );
-add_account_dialog 	*add_account_dialog_init ( void );
-void	 		add_account_dialog_destroy ( GtkWidget *, GnomeDialog * );
-
-#endif
+#include "Account.h"
 
 /*
-  Local Variables:
-  tab-width: 2
-  indent-tabs-mode: nil
-  mode: c-mode
-  c-indentation-style: gnu
-  eval: (c-set-offset 'block-open '-)
-  End:
-*/
+ * The adjBWindow() subroutine creates the "adjust-balance" dialog
+ * for the indicated account, if that dialog is not already mapped.
+ * If the dialog already esits, it returns with a no-op.
+ *
+ * The xaccDestroyAdjBWindow() subroutine can be called from 
+ * anywhere to shut down the Register window.  Used primarily when
+ * destroying the underlying account.
+ */
+
+typedef struct _AdjBWindow AdjBWindow;
+
+AdjBWindow *adjBWindow(Account *account);
+void       xaccDestroyAdjBWindow (Account *);
+
+#endif /* __XACC_ADJBWINDOW_H__ */

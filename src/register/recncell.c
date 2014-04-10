@@ -31,6 +31,7 @@
 
 #include "basiccell.h"
 #include "recncell.h"
+#include "ui-callbacks.h"
 
 /* hack alert -- I am uncomfortable with including engine
  * stuff here; all code in this directory should really be 
@@ -48,14 +49,14 @@ ToggleRecn (BasicCell *_cell, const char *cur_val)
    BasicCell *cell = (BasicCell *) _cell;
    char buff[2];
 
-   /* throw up a popup if the user tries to undo a reconciled transcation */
-   /* hack alert -- this sets a new precedent ... verifyBox is defined in
-    * both the motif and the gtk subdirs; I don't think I like it that way.
-    * anyway, that's why we don't have a prototype for this ... let the compiler
-    * warn us, remind us to deal with this ...
-    */
+   /* throw up a popup if the user tries to undo a reconciled transcation
+      hack alert -- this sets a new precedent ... verifyBox is defined in
+      both the motif and the gtk subdirs; I don't think I like it that way.
+
+      Now it's in ui-callbacks.h which is UI independent, but that's
+      still perhaps not optimal...  */
    if(cur_val[0] == YREC) {
-     if(!verifyBox(NULL, "Really change state of reconciled transaction?")) {
+     if(!verifyBox("Really change state of reconciled transaction?")) {
        return strdup(cur_val);
      }
    }

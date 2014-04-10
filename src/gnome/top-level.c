@@ -1,5 +1,5 @@
-/*-*-top-level-c-*-**************************************************\
- * main.c -- main for xacc (X-Accountant)                           *
+/********************************************************************\
+ * top-level.c -- main for xacc (X-Accountant)                           *
  * Copyright (C) 1997 Robin D. Clark                                *
  * Copyright (C) 1998 Linas Vepstas                                 *
  *                                                                  *
@@ -27,28 +27,29 @@
 
 #include "Account.h"
 #include "FileIO.h"
+#include "FileBox.h"
+#include "FileDialog.h"
 #include "Group.h"
-#include "top-level.h"
 #include "MainWindow.h"
 #include "messages.h"
 #include "Transaction.h"
+#include "TransLog.h"
 #include "util.h"
-#include "xtutil.h"
+#include "top-level.h"
 
 /** PROTOTYPES ******************************************************/
 
 /** GLOBALS *********************************************************/
 
-char    *datafile = NULL;
-AccountGroup   *toplevel;
-//Boolean  realized = False;   /* Has the toplevel been realized? */
 GtkWidget *app;
 
-AccountGroup *topgroup = NULL;
+gncUIWidget gnc_get_ui_data() {
+  return app;
+}
 
 /* These gnucash_lowlev and gnucash_ui functions are just hacks to get
    the guile stuff up and running.  Expect a more formal definition of
-   what they should do soo, and expect that the open/select functions
+   what they should do soon, and expect that the open/select functions
    will be merged with the code in FMB_OPEN in MainWindow.c */
 
 int
@@ -75,14 +76,13 @@ gnucash_lowlev_app_init()
   {
     int fake_argc = 1;
     char *fake_argv[] = {"gnucash"};
-    int fake_index;
    
     /* We're going to have to have other ways to handle X and GUI
        specific args...
 
        For now, use fake_argv and fake_argc...
     */
-    gnome_init("GnuCash", NULL, fake_argc, fake_argv, 0, &fake_index);  
+    gnome_init("GnuCash", NULL, fake_argc, fake_argv);  
     app = gnome_app_new ( "gnucash", "GnuCash" );
     
     {
@@ -104,11 +104,9 @@ int
 gnucash_lowlev_app_main()
 {  
   /* Make main window */
-  gnc_ui_mainWindow(topgroup);
+  mainWindow();
   
-  /* Draw toplevel */
   gtk_widget_realize (app);
-  //realized = TRUE;
   
   /* Enter gnome event loop */
   gtk_main();
@@ -116,46 +114,18 @@ gnucash_lowlev_app_main()
   return 0;
 }
 
+/* hack alert -- all we do below is rename some functions ... fix this someday */
+
 int
 gnucash_ui_open_file(const char name[]) {
-  /* FIXME: This should really be calling gncFileOpenFile from 
-     FileDialog.c  */
-  /* FIXME: This code looks gui-independent to me ...
-   *  (nothing in thisroutine depends on motif/gtk/etc.)
-   */
-  
-  datafile = name;
-  
-  if( NULL != datafile ) 
-  {
-    xaccLogSetBaseName (datafile);
-    topgroup = xaccReadAccountGroup (datafile); /* load accounts from file */
-  }
-  
-  /* FIXME: this should not really be here.  We should make
-     gnc_ui_select_file more independent.  You should be able to call
-     it at any time and have it DTRT.  Code should be stolen from
-     MainWindow.c FMB_OPEN.  In fact, that whole callback routine
-     should probably be broken up into sub-functions that we can use
-     from the Guile level. 
-In fact, this has lready been done for the motif version,
-and some minor makefile cleaup will allow the same fixes to be used here.
-Take a good look at FileDialog.c for the actual code ... 
-   */
-  if( NULL == topgroup )
-  {
-    topgroup = xaccMallocAccountGroup();   /* the file could not be found */
-  }
-  return (topgroup != NULL);
-  
+  gncFileOpenFile(name);
+  return (1);
 }
 
 int
 gnucash_ui_select_file() {
-
-  datafile = fileBox( toplevel, OPEN_STR, "*.xac" );
-  gnucash_ui_open_file(datafile);
-  return (topgroup != NULL);
+  gncFileOpen();
+  return (1);
 }
 
 /****************** END OF FILE **********************/

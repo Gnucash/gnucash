@@ -1,4 +1,4 @@
-#! /usr/bin/perl -w
+#!/usr/bin/perl -w
 #
 # example script showing how to use the Quote perl module.
 # gets prices for some stocks, for some mutual funds
