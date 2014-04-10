@@ -20,8 +20,8 @@
  * along with this program; if not, contact:                        *
  *                                                                  *
  * Free Software Foundation           Voice:  +1-617-542-5942       *
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
- * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  *                                                                  *
  *******************************************************************/
 
@@ -407,7 +407,7 @@ gnc_is_xml_data_file(const gchar *filename)
 }
 
 /* ================================================================== */
-#include "kvp_frame.h"
+#include "qof.h"
 
 /****************************************************************************/
 /* <kvp-frame>
@@ -1142,7 +1142,6 @@ ledger_data_after_child_handler(gpointer data_for_children,
       return FALSE;
     }
     status->pricedb = pdb;
-    gnc_pricedb_mark_clean(pdb);
     child_result->should_cleanup = FALSE;
   }
   return(TRUE);
@@ -3704,7 +3703,7 @@ pricedb_start_handler(GSList* sibling_data,
                       gchar **attrs)
 {
   GNCParseStatus *pstatus = (GNCParseStatus *) global_data;
-  GNCPriceDB *db = gnc_pricedb_create(pstatus->book);
+  GNCPriceDB *db = gnc_book_get_pricedb(pstatus->book);
   g_return_val_if_fail(db, FALSE);
   *result = db;
   return(TRUE);

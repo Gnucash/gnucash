@@ -16,8 +16,8 @@
  * along with this program; if not, contact:                        *
  *                                                                  *
  * Free Software Foundation           Voice:  +1-617-542-5942       *
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
- * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  *                                                                  *
 \********************************************************************/
 
@@ -28,8 +28,7 @@
 #include <libguile.h>
 
 #include "gnc-book.h"
-#include "gnc-date.h"
-#include "gnc-numeric.h"
+#include "qof.h"
 #include "Group.h"
 
 
@@ -94,5 +93,14 @@ int    gnc_trans_scm_get_num_splits(SCM trans_scm);
  * They should be g_freed when no longer needed. */
 char * gnc_get_debit_string(GNCAccountType account_type);
 char * gnc_get_credit_string(GNCAccountType account_type);
+
+/** Clean up a scheme options string for use in a key/value file.
+ *  This function removes all full line comments, removes all blank
+ *  lines, and removes all leading/trailing white space.
+ *
+ *  @note: This function does not correctly handle comments that occur
+ *  at the end of a line. Fortunately there aren't any such
+ *  comments. */
+gchar *gnc_guile_strip_comments (const gchar *text);
 
 #endif

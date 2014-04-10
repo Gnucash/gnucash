@@ -15,8 +15,8 @@
  * along with this program; if not, contact:                        *
  *                                                                  *
  * Free Software Foundation           Voice:  +1-617-542-5942       *
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
- * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  *                                                                  *
  ********************************************************************
  * @file io-gncbin-r.c
@@ -86,10 +86,11 @@
  *   nanoseconds ::== signed 32 bit int                             * 
 \********************************************************************/
 
+#include <glib.h>
+#include <glib/gi18n.h>
 #include <fcntl.h>
 #include <string.h>
 #include <unistd.h>
-#include <glib.h>
 
 #include "config.h"
 
@@ -98,7 +99,6 @@
 #include "io-gncbin.h"
 #include "Group.h"
 #include "GroupP.h"
-#include "messages.h"
 #include "Transaction.h"
 #include "TransactionP.h"
 #include "TransLog.h"
@@ -199,7 +199,7 @@ cvt_potential_prices_to_pricedb_and_cleanup(GNCPriceDB **prices,
 {
   GSList *item = potential_quotes;
 
-  *prices = gnc_pricedb_create(book);
+  *prices = gnc_book_get_pricedb(book);
   if (!*prices) return FALSE;
 
   while(item)
@@ -505,6 +505,8 @@ gnc_load_financials_from_fd(QofBook *book, int fd)
     /* create a lost account, put the missing accounts there */
     acc = xaccMallocAccount(book);
     xaccAccountBeginEdit (acc);
+    /* Translators: Name of the account where all the missing accounts
+       are put into. (FIXME: is this correct?) */
     xaccAccountSetName (acc, _("Lost Accounts"));
     acc -> children = holder;
     xaccAccountCommitEdit (acc);

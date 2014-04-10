@@ -44,5 +44,4 @@ gladedir = $(GNC_GLADE_DIR)
 glade_DATA = binary-import.glade
 
 EXTRA_DIST = \
-  .cvsignore \
   ${glade_DATA}

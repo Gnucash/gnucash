@@ -8,7 +8,6 @@
 
 #include "gnc-basic-gobject.h"
 #include "dialog-utils.h"
-#include "messages.h"
 #include "gnc-ui.h"
 #include "gnc-gui-query.h"
 

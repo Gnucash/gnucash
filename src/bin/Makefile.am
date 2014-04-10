@@ -25,7 +25,7 @@ bin_SCRIPTS = ${gnc_common_scripts} update-gnucash-gconf
 # if you change gncoverridedir, make sure you change ./overrides/Makefile.am too.
 gncoverridesdir = ${GNC_LIBEXECDIR}/overrides
 
-EXTRA_DIST = .cvsignore generate-gnc-script update-gnucash-gconf.in
+EXTRA_DIST = generate-gnc-script update-gnucash-gconf.in
 
 ## Gnucash scripts -- real code is in overrides, these just get you there.
 ${gnc_common_scripts}: generate-gnc-script

@@ -768,7 +768,7 @@
 	  <child>
 	    <widget class="GtkLabel" id="label815">
 	      <property name="visible">True</property>
-	      <property name="label" translatable="yes">Commodity Incormation</property>
+	      <property name="label" translatable="yes">Commodity Information</property>
 	      <property name="use_underline">False</property>
 	      <property name="use_markup">False</property>
 	      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -928,7 +928,7 @@
 		    <widget class="GtkRadioButton" id="multi_source_button">
 		      <property name="visible">True</property>
 		      <property name="can_focus">True</property>
-		      <property name="label" translatable="yes">multiple sources</property>
+		      <property name="label" translatable="yes">Multiple Sources</property>
 		      <property name="use_underline">True</property>
 		      <property name="relief">GTK_RELIEF_NORMAL</property>
 		      <property name="focus_on_click">True</property>
@@ -952,7 +952,7 @@
 		    <widget class="GtkRadioButton" id="unknown_source_button">
 		      <property name="visible">True</property>
 		      <property name="can_focus">True</property>
-		      <property name="label" translatable="yes">unknown sources</property>
+		      <property name="label" translatable="yes">Unknown Sources</property>
 		      <property name="use_underline">True</property>
 		      <property name="relief">GTK_RELIEF_NORMAL</property>
 		      <property name="focus_on_click">True</property>

@@ -16,13 +16,14 @@
  * along with this program; if not, contact:                        *
  *                                                                  *
  * Free Software Foundation           Voice:  +1-617-542-5942       *
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
- * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
 #include "config.h"
 
 #include <gnome.h>
+#include <glib/gi18n.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <sys/wait.h>
@@ -45,6 +46,7 @@
 
 #include <aqbanking/banking.h>
 #include <gwenhywfar/stringlist.h>
+#include <gwenhywfar/version.h>
 
 /* #define DEFAULT_HBCI_VERSION 201 */
 
@@ -216,7 +218,6 @@ update_accountlist (HBCIInitialInfo *info)
   /* Delete old hash with row_number -> hbci_account */
   delete_hash (info->hbci_hash);
   info->hbci_hash = g_hash_table_new (&g_int_hash, &g_int_equal);
-  g_hash_table_freeze (info->hbci_hash);
   
   /* Go through all HBCI accounts */
   acclist = AB_Banking_GetAccounts(banking);
@@ -230,7 +231,6 @@ update_accountlist (HBCIInitialInfo *info)
   /* printf("update_accountlist: HBCI hash has %d entries.\n", g_hash_table_size(info->hbci_hash)); */
   /* printf("update_accountlist: GNC hash has %d entries.\n", g_hash_table_size(info->gnc_hash)); */
   
-  g_hash_table_thaw (info->hbci_hash);
   gtk_clist_thaw (GTK_CLIST (info->accountlist));
 
   /* move to the old selected row */
@@ -512,7 +512,13 @@ on_aqhbci_button (GtkButton *button,
       /* User pressed cancel in choice dialog */
       if (x == -1) {
 	GWEN_PluginDescription_List2_freeAll(pluginlist);
+#if ((GWENHYWFAR_VERSION_MAJOR < 1) || \
+     ((GWENHYWFAR_VERSION_MAJOR == 1) && \
+      ((GWENHYWFAR_VERSION_MINOR < 98))))
+	/* Memory cleanup needed for gwenhywfar<1.98.x but not for
+	   gwenhywfar>=1.98.x */
 	GWEN_PluginDescription_List2_free(pluginlist);
+#endif
 	return;
       }
 
@@ -531,7 +537,13 @@ on_aqhbci_button (GtkButton *button,
      be freed */
   backend_name = g_strdup (backend_name_nc);
   GWEN_PluginDescription_List2_freeAll (pluginlist);
+#if ((GWENHYWFAR_VERSION_MAJOR < 1) || \
+     ((GWENHYWFAR_VERSION_MAJOR == 1) && \
+      ((GWENHYWFAR_VERSION_MINOR < 98))))
+  /* Memory cleanup needed for gwenhywfar<1.98.x but not for
+     gwenhywfar>=1.98.x */
   GWEN_PluginDescription_List2_free (pluginlist);
+#endif
 
   /* ***** */
 
@@ -646,9 +658,9 @@ void gnc_hbci_initial_druid (void)
   gnc_druid_set_colors (GNOME_DRUID (info->druid));
   
   glade_xml_signal_connect_data (xml, "on_finish", 
-				 GTK_SIGNAL_FUNC (on_finish), info);
+				 G_CALLBACK (on_finish), info);
   glade_xml_signal_connect_data (xml, "on_cancel", 
-				 GTK_SIGNAL_FUNC (on_cancel), info);
+				 G_CALLBACK (on_cancel), info);
   
   info->api = gnc_AB_BANKING_new_currentbook(info->window, &(info->interactor));
   g_assert(info->api);
@@ -657,36 +669,33 @@ void gnc_hbci_initial_druid (void)
     /* Page with config file entry widget */
     page = glade_xml_get_widget(xml, "configfile_page");
     info->filepage = page;
-    gtk_signal_connect (GTK_OBJECT (page), "prepare",
-			GTK_SIGNAL_FUNC (on_aqbutton_prepare), info);
-    gtk_signal_connect (GTK_OBJECT 
-			(glade_xml_get_widget (xml, "aqhbci_button")), 
-			"clicked",
-			GTK_SIGNAL_FUNC (on_aqhbci_button), info);
+    g_signal_connect (page, "prepare",
+		      G_CALLBACK (on_aqbutton_prepare), info);
+    g_signal_connect (glade_xml_get_widget (xml, "aqhbci_button"),
+		      "clicked",
+		      G_CALLBACK (on_aqhbci_button), info);
   }
   {
     page = glade_xml_get_widget(xml, "account_match_page");
     info->accountpage = page;
     info->accountlist = glade_xml_get_widget(xml, "account_page_list");
-    gtk_signal_connect (GTK_OBJECT (info->accountlist), "select_row",
-			GTK_SIGNAL_FUNC (on_accountlist_select_row), info);
-    gtk_signal_connect (GTK_OBJECT 
-			(glade_xml_get_widget (xml, "aqhbci_again_button")), 
-			"clicked",
-			GTK_SIGNAL_FUNC (on_aqhbci_button), info);
-    gtk_signal_connect (GTK_OBJECT 
-			(glade_xml_get_widget (xml, "updatelist_button")), 
-			"clicked",
-			GTK_SIGNAL_FUNC (on_button_clicked), info);
-    gtk_signal_connect (GTK_OBJECT (page), "prepare", 
-			GTK_SIGNAL_FUNC (on_accountlist_prepare), info);
-    gtk_signal_connect (GTK_OBJECT (page), "back", 
-			GTK_SIGNAL_FUNC (on_accountlist_back), info);
+    g_signal_connect (info->accountlist, "select_row",
+		      G_CALLBACK (on_accountlist_select_row), info);
+    g_signal_connect (glade_xml_get_widget (xml, "aqhbci_again_button"), 
+		      "clicked",
+		      G_CALLBACK (on_aqhbci_button), info);
+    g_signal_connect (glade_xml_get_widget (xml, "updatelist_button"),
+		      "clicked",
+		      G_CALLBACK (on_button_clicked), info);
+    g_signal_connect (page, "prepare", 
+		      G_CALLBACK (on_accountlist_prepare), info);
+    g_signal_connect (page, "back", 
+		      G_CALLBACK (on_accountlist_back), info);
   }
 
 
-  /*gtk_signal_connect (GTK_OBJECT(dialog), "destroy",*/
-  /*                   GTK_SIGNAL_FUNC(gnc_hierarchy_destroy_cb), NULL);*/
+  /*g_signal_connect (dialog, "destroy",*/
+  /*                  G_CALLBACK(gnc_hierarchy_destroy_cb), NULL);*/
 
   gtk_widget_show_all (info->window);
 }

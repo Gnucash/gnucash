@@ -18,8 +18,8 @@
  * along with this program; if not, contact:                        *
  *                                                                  *
  * Free Software Foundation           Voice:  +1-617-542-5942       *
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
- * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  *                                                                  *
  *   Author: Rob Clark                                              *
  * Internet: rclark@cs.hmc.edu                                      *
@@ -32,33 +32,24 @@
 #include "config.h"
 
 #include <gnome.h>
-#include <stdio.h>
-#include <time.h>
-#include <libgnomeui/gnome-window-icon.h>
-
+#include <glib/gi18n.h>
+//#include <stdio.h>
+//#include <time.h>
+//
 #include "Scrub.h"
 #include "dialog-account.h"
 #include "dialog-transfer.h"
 #include "dialog-utils.h"
-#include "dialog-transfer.h"
 #include "gnc-amount-edit.h"
 #include "gnc-component-manager.h"
-#include "gnc-date.h"
 #include "gnc-date-edit.h"
-#include "gnc-engine-util.h"
 #include "gnc-gconf-utils.h"
-#include "gnc-gui-query.h"
-#include "gnc-ledger-display.h"
 #include "gnc-main-window.h"
-#include "gnc-plugin-page.h"
 #include "gnc-plugin-page-register.h"
-#include "gnc-ui-util.h"
 #include "gnc-ui.h"
 #include "guile-util.h"
-#include "messages.h"
 #include "reconcile-list.h"
 #include "window-reconcile.h"
-#include "top-level.h"
 
 #define WINDOW_RECONCILE_CM_CLASS "window-reconcile"
 
@@ -488,7 +479,7 @@ recnInterestXferWindow( startRecnWindowData *data)
     ( account_type_has_auto_interest_payment( data->account_type ) ?
         _("No Auto Interest Payments for this Account")
        : _("No Auto Interest Charges for this Account") ),
-    GTK_SIGNAL_FUNC(gnc_recn_interest_xfer_no_auto_clicked_cb),
+    G_CALLBACK(gnc_recn_interest_xfer_no_auto_clicked_cb),
     (gpointer) data );
 
   /* no currency frame */
@@ -537,7 +528,7 @@ gnc_reconcile_interest_xfer_run(startRecnWindowData *data)
 
     gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (data->end_value), after);
     gtk_widget_grab_focus(GTK_WIDGET(entry));
-    gtk_entry_select_region (GTK_ENTRY(entry), 0, -1);
+    gtk_editable_select_region (GTK_EDITABLE(entry), 0, -1);
     data->original_value = after;
     data->user_set_value = FALSE;
   }
@@ -698,7 +689,7 @@ startRecnWindow(GtkWidget *parent, Account *account,
     /* need to get a callback on date changes to update the recn balance */
     g_signal_connect ( G_OBJECT (date_value), "date_changed",
           G_CALLBACK (gnc_start_recn_date_changed), (gpointer) &data );
-    gnc_date_editable_enters(GNC_DATE_EDIT(date_value), TRUE);
+    gnc_date_activates_default(GNC_DATE_EDIT(date_value), TRUE);
 
     print_info.use_symbol = 0;
     gnc_amount_edit_set_print_info (GNC_AMOUNT_EDIT (end_value), print_info);
@@ -708,7 +699,7 @@ startRecnWindow(GtkWidget *parent, Account *account,
     gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (end_value), *new_ending);
 
     entry = gnc_amount_edit_gtk_entry (GNC_AMOUNT_EDIT (end_value));
-    gtk_entry_select_region (GTK_ENTRY(entry), 0, -1);
+    gtk_editable_select_region (GTK_EDITABLE(entry), 0, -1);
     g_signal_connect(G_OBJECT(entry), "focus-out-event",
 		     G_CALLBACK(gnc_start_recn_update_cb), (gpointer) &data);
     gtk_entry_set_activates_default(GTK_ENTRY(entry), TRUE);
@@ -876,7 +867,7 @@ gnc_reconcile_key_press_cb (GtkWidget *widget, GdkEventKey *event,
       return FALSE;
   }
 
-  gtk_signal_emit_stop_by_name (GTK_OBJECT (widget), "key_press_event");
+  g_signal_stop_emission_by_name (widget, "key_press_event");
 
   this_list = widget;
 
@@ -940,18 +931,18 @@ gnc_reconcile_window_create_list_box(Account *account,
   list = gnc_reconcile_list_new(account, type);
   *list_save = list;
 
-  gtk_signal_connect(GTK_OBJECT(list), "toggle_reconciled",
-                     GTK_SIGNAL_FUNC(gnc_reconcile_window_list_cb),
-                     recnData);
-  gtk_signal_connect(GTK_OBJECT(list), "double_click_split",
-                     GTK_SIGNAL_FUNC(gnc_reconcile_window_double_click_cb),
-                     recnData);
-  gtk_signal_connect(GTK_OBJECT(list), "focus_in_event",
-                     GTK_SIGNAL_FUNC(gnc_reconcile_window_focus_cb),
-                     recnData);
-  gtk_signal_connect(GTK_OBJECT(list), "key_press_event",
-                     GTK_SIGNAL_FUNC(gnc_reconcile_key_press_cb),
-                     recnData);
+  g_signal_connect(list, "toggle_reconciled",
+                   G_CALLBACK(gnc_reconcile_window_list_cb),
+                   recnData);
+  g_signal_connect(list, "double_click_split",
+                   G_CALLBACK(gnc_reconcile_window_double_click_cb),
+                   recnData);
+  g_signal_connect(list, "focus_in_event",
+                   G_CALLBACK(gnc_reconcile_window_focus_cb),
+                   recnData);
+  g_signal_connect(list, "key_press_event",
+                   G_CALLBACK(gnc_reconcile_key_press_cb),
+                   recnData);
 
   scrollWin = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW (scrollWin),
@@ -1697,7 +1688,6 @@ recnWindowWithBalance (GtkWidget *parent, Account *account,
   recnData->window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
   recnData->delete_refresh = FALSE;
 
-  gnome_window_icon_set_from_default (GTK_WINDOW (recnData->window));
   gnc_recn_set_window_name(recnData);
 
   vbox = gtk_vbox_new(FALSE, 0);
@@ -1709,8 +1699,8 @@ recnWindowWithBalance (GtkWidget *parent, Account *account,
   statusbar = gnc_recn_create_status_bar(recnData);
   gtk_box_pack_start(GTK_BOX(vbox), statusbar, FALSE, FALSE, 0);
 
-  gtk_signal_connect (GTK_OBJECT (recnData->window), "destroy",
-                      GTK_SIGNAL_FUNC(recn_destroy_cb), recnData);
+  g_signal_connect (recnData->window, "destroy",
+                    G_CALLBACK(recn_destroy_cb), recnData);
 
   /* The menu bar */
   {
@@ -1771,7 +1761,7 @@ recnWindowWithBalance (GtkWidget *parent, Account *account,
     bonobo_dock_set_client_area(BONOBO_DOCK(dock), frame);
 
     /* Force a reasonable starting size */
-    gtk_widget_set_usize(GTK_WIDGET(recnData->window), 800, 600);
+    gtk_window_set_default_size(GTK_WINDOW(recnData->window), 800, 600);
 
     gtk_container_add(GTK_CONTAINER(frame), main_area);
     gtk_container_set_border_width(GTK_CONTAINER(main_area), 10);
@@ -1882,13 +1872,13 @@ recnWindowWithBalance (GtkWidget *parent, Account *account,
       rlist = GNC_RECONCILE_LIST(recnData->credit);
       height = gnc_reconcile_list_get_needed_height(rlist, num_show);
 
-      gtk_widget_set_usize(recnData->credit, 0, height);
-      gtk_widget_set_usize(recnData->debit, 0, height);
+      gtk_widget_set_size_request(recnData->credit, -1, height);
+      gtk_widget_set_size_request(recnData->debit, -1, height);
     }
   }
 
-  /* Allow grow, allow shrink, auto-shrink */
-  gtk_window_set_policy(GTK_WINDOW(recnData->window), TRUE, TRUE, TRUE);
+  /* Allow resize */
+  gtk_window_set_resizable(GTK_WINDOW(recnData->window), TRUE);
 
   gtk_widget_show_all(recnData->window);
 

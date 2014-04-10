@@ -17,8 +17,8 @@
  * along with this program; if not, contact:
  *
  * Free Software Foundation           Voice:  +1-617-542-5942
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652
- * Boston, MA  02111-1307,  USA       gnu@gnu.org
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org
  */
 
 
@@ -27,8 +27,7 @@
 
 typedef struct _invoice_window InvoiceWindow;
 
-#include "qofbook.h"
-#include "qofsession.h"
+#include "qof.h"
 #include "gncInvoice.h"
 #include "gncOwner.h"
 #include "dialog-search.h"

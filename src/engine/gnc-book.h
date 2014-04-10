@@ -1,4 +1,4 @@
-#include "qofbook.h"
+#include "qof.h"
 
 #define GNCBook  QofBook
 

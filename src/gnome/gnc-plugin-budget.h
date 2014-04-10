@@ -45,15 +45,12 @@ G_BEGIN_DECLS
 #define GNC_BUDGET_GUI_FILE    "budget.glade"
 
 /* typedefs & structures */
-typedef struct GncPluginBudgetPrivate GncPluginBudgetPrivate;
-
 typedef struct {
-  GncPlugin parent;
-  GncPluginBudgetPrivate *priv;
+  GncPlugin gnc_plugin;
 } GncPluginBudget;
 
 typedef struct {
-  GncPluginClass parent;
+  GncPluginClass gnc_plugin;
 } GncPluginBudgetClass;
 
 /* function prototypes */

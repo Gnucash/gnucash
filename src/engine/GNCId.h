@@ -1,5 +1,5 @@
 
-#include "qofid.h"
+#include "qof.h"
 
 /* Equivalent function prototype:
  * void xaccGUIDNew (GUID *guid, QofBook *book)

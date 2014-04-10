@@ -54,8 +54,7 @@
            (set! progress-dialog (gnc:progress-dialog-new #f #f))
            (gnc:progress-dialog-set-title progress-dialog (_ "Progress"))
            (gnc:progress-dialog-set-heading progress-dialog
-                                            (_ "Loading QIF file..."))
-           (gnc:progress-dialog-set-limits progress-dialog 0.0 100.0)))
+                                            (_ "Loading QIF file..."))))
 
      (with-input-from-file path
        (lambda ()
@@ -377,8 +376,7 @@
 		 (if progress-dialog 
 		     (begin 
 		       (gnc:progress-dialog-set-value 
-			progress-dialog
-			(* 100 (/ bytes-read file-size)))
+			progress-dialog (/ bytes-read file-size))
 		       (gnc:progress-dialog-update progress-dialog)))
                  
                  ;; this is if we read a normal (non-null, non-eof) line...

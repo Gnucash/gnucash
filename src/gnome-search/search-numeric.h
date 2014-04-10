@@ -14,20 +14,21 @@
  *
  * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the
- * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
- * Boston, MA 02111-1307, USA.
+ * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA 02110-1301, USA.
  */
 
 #ifndef _GNCSEARCH_NUMERIC_H
 #define _GNCSEARCH_NUMERIC_H
 
 #include "search-core-type.h"
-#include "gnc-numeric.h"
+#include "qof.h"
 #include "QueryNew.h"
 
-#define GNCSEARCH_NUMERIC(obj)	GTK_CHECK_CAST (obj, gnc_search_numeric_get_type (), GNCSearchNumeric)
-#define GNCSEARCH_NUMERIC_CLASS(klass)	GTK_CHECK_CLASS_CAST (klass, gnc_search_numeric_get_type (), GNCSearchNumericClass)
-#define IS_GNCSEARCH_NUMERIC(obj)      GTK_CHECK_TYPE (obj, gnc_search_numeric_get_type ())
+#define GNC_TYPE_SEARCH_NUMERIC		(gnc_search_numeric_get_type ())
+#define GNCSEARCH_NUMERIC(obj)		GTK_CHECK_CAST (obj, GNC_TYPE_SEARCH_NUMERIC, GNCSearchNumeric)
+#define GNCSEARCH_NUMERIC_CLASS(klass)	GTK_CHECK_CLASS_CAST (klass, GNC_TYPE_SEARCH_NUMERIC, GNCSearchNumericClass)
+#define IS_GNCSEARCH_NUMERIC(obj)	GTK_CHECK_TYPE (obj, GNC_TYPE_SEARCH_NUMERIC)
 
 typedef struct _GNCSearchNumeric	GNCSearchNumeric;
 typedef struct _GNCSearchNumericClass	GNCSearchNumericClass;

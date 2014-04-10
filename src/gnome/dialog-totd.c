@@ -17,13 +17,14 @@
  * along with this program; if not, contact:
  *
  * Free Software Foundation           Voice:  +1-617-542-5942
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652
- * Boston, MA  02111-1307,  USA       gnu@gnu.org
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org
  */ 
 
 #include "config.h"
 
 #include <gtk/gtk.h>
+#include <glib/gi18n.h>
 #include <glade/glade-xml.h>
 
 #include "dialog-totd.h"
@@ -31,7 +32,6 @@
 #include "gnc-gconf-utils.h"
 #include "gnc-gnome-utils.h"
 #include "gnc-engine.h"
-#include "messages.h"
 
 
 #define GCONF_SECTION   "dialogs/tip_of_the_day"

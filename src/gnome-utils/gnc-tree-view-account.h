@@ -17,8 +17,8 @@
  * along with this program; if not, contact:                        *
  *                                                                  *
  * Free Software Foundation           Voice:  +1-617-542-5942       *
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
- * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  *                                                                  *
 \********************************************************************/
 
@@ -52,7 +52,6 @@ G_BEGIN_DECLS
 #define GNC_TREE_VIEW_ACCOUNT_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GNC_TYPE_TREE_VIEW_ACCOUNT, GncTreeViewAccountClass))
 
 /* typedefs & structures */
-typedef struct GncTreeViewAccountPrivate GncTreeViewAccountPrivate;
 typedef struct AccountViewInfo_s     AccountViewInfo;
 
 
@@ -63,15 +62,12 @@ struct AccountViewInfo_s
 
 
 typedef struct {
-	GncTreeView parent;
-
-	GncTreeViewAccountPrivate *priv;
-
+	GncTreeView gnc_tree_view;
 	int stamp;
 } GncTreeViewAccount;
 
 typedef struct {
-	GncTreeViewClass parent;
+	GncTreeViewClass gnc_tree_view;
 } GncTreeViewAccountClass;
 
 
@@ -431,6 +427,16 @@ void gnc_tree_view_account_set_selected_accounts (GncTreeViewAccount *view,
  */
 void gnc_tree_view_account_select_subaccounts (GncTreeViewAccount *view,
 					       Account *account);
+
+/** This function forces the account tree expand whatever levels are
+ *  necessary to make the specified account visible.
+ *
+ *  @param view A pointer to an account tree view.
+ *
+ *  @param account A pointer to the account to show.
+ */
+void gnc_tree_view_account_expand_to_account (GncTreeViewAccount *view, Account *account);
+
 
 /** @} */
 

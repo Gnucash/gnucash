@@ -3,6 +3,35 @@
   <schemalist>
 
     <schema>
+      <key>/schemas/apps/gnucash/dialogs/import/hbci/position</key>
+      <applyto>/apps/gnucash/dialogs/import/hbci/connection_dialog/window_position</applyto>
+      <owner>gnucash</owner>
+      <type>list</type>
+      <list_type>int</list_type>
+      <locale name="C">
+        <short>Window position</short>
+        <long>
+	  The X,Y coordinates of the top left corner of the dialog
+	  when it was last closed.
+	</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnucash/dialogs/import/hbci/geometry</key>
+      <applyto>/apps/gnucash/dialogs/import/hbci/connection_dialog/window_geometry</applyto>
+      <owner>gnucash</owner>
+      <type>list</type>
+      <list_type>int</list_type>
+      <locale name="C">
+        <short>Window geometry</short>
+        <long>
+	  The width and size of the dialog when it was last closed.
+	</long>
+      </locale>
+    </schema>
+
+    <schema>
       <key>/schemas/apps/gnucash/dialogs/import/hbci/close_on_finish</key>
       <applyto>/apps/gnucash/dialogs/import/hbci/close_on_finish</applyto>
       <owner>gnucash</owner>

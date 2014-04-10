@@ -28,7 +28,7 @@ noinst_HEADERS = \
   gnc-gobject-utils.h \
   gw-core-utils.h
 
-EXTRA_DIST = .cvsignore ${gwmod_DATA}
+EXTRA_DIST = ${gwmod_DATA}
 
 AM_CFLAGS = \
   -I${top_srcdir}/lib/glib26 \
@@ -59,7 +59,7 @@ endif
 
 gw-core-utils.scm gw-core-utils.h gw-core-utils.c gw-core-utils.html: \
   gw-core-utils-spec.scm .scm-links ${top_builddir}/config.status
-	FLAVOR=gnome guile -c \
+	FLAVOR=gnome $(GUILE) -c \
           "(set! %load-path (cons \"${G_WRAP_MODULE_DIR}\" %load-path)) \
            (primitive-load \"./gw-core-utils-spec.scm\") \
            (gw:generate-wrapset \"gw-core-utils\")"

@@ -28,5 +28,3 @@ libgncmod_network_utils_la_LIBADD = \
   ${top_builddir}/src/gnc-module/libgncmodule.la \
   ${GNOME_LIBS} ${QOF_LIBS}
 
-EXTRA_DIST = \
-  .cvsignore

@@ -20,25 +20,23 @@
  * along with this program; if not, contact:
  *
  * Free Software Foundation           Voice:  +1-617-542-5942
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652
- * Boston, MA  02111-1307,  USA       gnu@gnu.org
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org
  */
 
 /** @addtogroup MenuPlugins
     @{ */
 /** @addtogroup PluginMenuAdditions Non-GtkAction Menu Support
     @{ */
-/** @internal
-    @file gnc-plugin-menu-additions.c
-    @brief Utility functions for writing import modules.
-    @author Copyright (C) 2002 David Hampton <hampton@employees.org>
+/** @file gnc-plugin-menu-additions.c
+    @brief Functions providing menu items from scheme code.
+    @author Copyright (C) 2005 David Hampton <hampton@employees.org>
 */
 
 #include "config.h"
 
+#include <gtk/gtk.h>
 #include <string.h>
-#include <glib/gprintf.h>
-#include <libgnome/libgnome.h>
 #include <g-wrap-wct.h>
 
 #include "guile-util.h"
@@ -46,8 +44,6 @@
 #include "gnc-main-window.h"
 #include "gnc-plugin-menu-additions.h"
 #include "gnc-window.h"
-#include "gnc-trace.h"
-#include "messages.h"
 #include "gnc-gconf-utils.h"
 #include "gnc-ui.h"
 #include "gnc-menu-extensions.h"
@@ -61,25 +57,30 @@ static void gnc_plugin_menu_additions_finalize (GObject *object);
 static void gnc_plugin_menu_additions_add_to_window (GncPlugin *plugin, GncMainWindow *window, GQuark type);
 static void gnc_plugin_menu_additions_remove_from_window (GncPlugin *plugin, GncMainWindow *window, GQuark type);
 
-/* Callbacks on other objects */
-static void gnc_plugin_menu_additions_main_window_page_changed (GncMainWindow *window,
-								GncPluginPage *page);
-
 /* Command callbacks */
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_GUI;
 
-
 #define PLUGIN_ACTIONS_NAME "gnc-plugin-menu-additions-actions"
 
-struct GncPluginMenuAdditionsPrivate
+/** Private data for this plugin.  This data structure is unused. */
+typedef struct GncPluginMenuAdditionsPrivate
 {
   gpointer dummy;
-};
+} GncPluginMenuAdditionsPrivate;
 
+#define GNC_PLUGIN_MENU_ADDITIONS_GET_PRIVATE(o)  \
+   (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_PLUGIN_MENU_ADDITIONS, GncPluginMenuAdditionsPrivate))
+
+
+/** Per-window private data for this plugin.  This plugin is unique in
+ *  that it manages its own menu items. */
 typedef struct _GncPluginMenuAdditionsPerWindow
 {
+  /** The menu/toolbar action information associated with a specific
+      window.  This plugin must maintain its own data because of the
+      way the menus are currently built. */
   GncMainWindow  *window;
   GtkUIManager   *ui_manager;
   GtkActionGroup *group;
@@ -132,13 +133,14 @@ gnc_plugin_menu_additions_class_init (GncPluginMenuAdditionsClass *klass)
   /* function overrides */
   plugin_class->add_to_window = gnc_plugin_menu_additions_add_to_window;
   plugin_class->remove_from_window = gnc_plugin_menu_additions_remove_from_window;
+
+  g_type_class_add_private(klass, sizeof(GncPluginMenuAdditionsPrivate));
 }
 
 static void
 gnc_plugin_menu_additions_init (GncPluginMenuAdditions *plugin)
 {
   ENTER("plugin %p", plugin);
-  plugin->priv = g_new0 (GncPluginMenuAdditionsPrivate, 1);
   LEAVE("");
 }
 
@@ -146,19 +148,24 @@ static void
 gnc_plugin_menu_additions_finalize (GObject *object)
 {
   GncPluginMenuAdditions *plugin;
+  GncPluginMenuAdditionsPrivate *priv;
 
   g_return_if_fail (GNC_IS_PLUGIN_MENU_ADDITIONS (object));
 
+  ENTER("plugin %p", object);
   plugin = GNC_PLUGIN_MENU_ADDITIONS (object);
-  ENTER("plugin %p", plugin);
-
-  g_return_if_fail (plugin->priv != NULL);
-  g_free (plugin->priv);
+  priv = GNC_PLUGIN_MENU_ADDITIONS_GET_PRIVATE (plugin);
 
   G_OBJECT_CLASS (parent_class)->finalize (object);
   LEAVE("");
 }
 
+
+/*  Create a new menu_additions plugin.  This plugin attaches the menu
+ *  items from Scheme code to any window that is opened.
+ *
+ *  @return A pointer to the new object.
+ */
 GncPlugin *
 gnc_plugin_menu_additions_new (void)
 {
@@ -194,17 +201,17 @@ gnc_main_window_to_scm (GncMainWindow *window)
   return gw_wcp_assimilate_ptr ((void *)window, main_window_type);
 }
 
-/** The user has selected one of the items in the File History menu.
- *  Close down the current session and start up a new one with the
- *  requested file.
+
+/** The user has selected one of the items added by this plugin.
+ *  Invoke the callback function that was registered along with the
+ *  menu item.
  *
  *  @param action A pointer to the action selected by the user.  This
  *  action represents one of the items in the file history menu.
  *
  *  @param data A pointer to the gnc-main-window data to be used by
  *  this function.  This is mainly to find out which window it was
- *  that had a menu selected.  That's not really important for this
- *  function and we're about to close all the windows anyway.
+ *  that had a menu selected.
  */
 static void
 gnc_plugin_menu_additions_action_cb (GtkAction *action,
@@ -217,13 +224,175 @@ gnc_plugin_menu_additions_action_cb (GtkAction *action,
   gnc_extension_invoke_cb(data->data, gnc_main_window_to_scm(data->window));
 }
 
+
+/** Compare two extension menu item and indicate which should appear
+ *  first in the menu listings.  The strings being compared are
+ *  collation keys produced by g_utf8_collate_key(), so this function
+ *  doesn't have to be anything more than a wrapper around strcmp,
+ *
+ *  @param a A menu extension.
+ *
+ *  @param b A second menu extension.
+ *
+ *  @return -1 if extension 'a' should appear first. 1 if extension
+ *  'b' should appear first. */
+static gint
+gnc_menu_additions_alpha_sort (ExtensionInfo *a, ExtensionInfo *b)
+{
+  return strcmp(a->sort_key, b->sort_key);
+}
+
+
+/** Initialize the hash table of accelerator key maps.
+ *
+ *  @param unused Unused.
+ *
+ *  @return an empty hash table. */
+static gpointer
+gnc_menu_additions_init_accel_table (gpointer unused)
+{
+  return g_hash_table_new_full(g_str_hash, g_str_equal, NULL, g_free);
+}
+
+
+/** Examine an extension menu item and see if it already has an
+ *  accelerator key defined (in the source).  If so, add this key to
+ *  the map of already used accelerator keys.  These maps are
+ *  maintained per path, so accelerator keys may be duplicated across
+ *  different menus but are guaranteed to be unique within any given
+ *  menu.
+ *
+ *  @param info A menu extension.
+ *
+ *  @param table A hash table of accelerator maps. */
+static void
+gnc_menu_additions_do_preassigned_accel (ExtensionInfo *info, GHashTable *table)
+{
+  gchar *map, *new_map, *accel_key;
+  const gchar *ptr;
+
+  ENTER("Checking %s/%s [%s]", info->path, info->ae.label, info->ae.name);
+  if (info->accel_assigned) {
+    LEAVE("Already processed");
+    return;
+  }
+
+  if (!g_utf8_validate(info->ae.label, -1, NULL)) {
+    g_warning("Extension menu label '%s' is not valid utf8.", info->ae.label);
+    info->accel_assigned = TRUE;
+    LEAVE("Label is invalid utf8");
+    return;
+  }
+
+  /* Was an accelerator pre-assigned in the source? */
+  ptr = g_utf8_strchr(info->ae.label, -1, '_');
+  if (ptr == NULL) {
+    LEAVE("not preassigned");
+    return;
+  }
+
+  accel_key = g_utf8_strdown(g_utf8_next_char(ptr), 1);
+  DEBUG("Accelerator preassigned: '%s'", accel_key);
+
+  /* Now build a new map. Old one freed automatically. */
+  map = g_hash_table_lookup(table, info->path);
+  if (map == NULL)
+    map = "";
+  new_map = g_strconcat(map, accel_key, (gchar *)NULL);
+  DEBUG("path '%s', map '%s' -> '%s'", info->path, map, new_map);
+  g_hash_table_replace(table, info->path, new_map);
+
+  info->accel_assigned = TRUE;
+  g_free(accel_key);
+  LEAVE("preassigned");
+}
+
+
+/** Examine an extension menu item and see if it needs to have an
+ *  accelerator key assigned to it.  If so, find the first character
+ *  in the menu name that isn't already assigned as an accelerator in
+ *  the same menu, assign it to this item, and add it to the map of
+ *  already used accelerator keys.  These maps are maintained per
+ *  path, so accelerator keys may be duplicated across different menus
+ *  but are guaranteed to be unique within any given menu.
+ *
+ *  @param info A menu extension.
+ *
+ *  @param table A hash table of accelerator maps. */
+static void
+gnc_menu_additions_assign_accel (ExtensionInfo *info, GHashTable *table)
+{
+  gchar *map, *new_map, *new_label, *start, buf[16];
+  const gchar *ptr;
+  gunichar uni;
+  gint len;
+
+  ENTER("Checking %s/%s [%s]", info->path, info->ae.label, info->ae.name);
+  if (info->accel_assigned) {
+    LEAVE("Already processed");
+    return;
+  }
+
+  /* Get map of used keys */
+  map = g_hash_table_lookup(table, info->path);
+  if (map == NULL)
+    map = g_strdup("");
+  DEBUG("map '%s', path %s", map, info->path);
+
+  for (ptr = info->ae.label; *ptr; ptr = g_utf8_next_char(ptr)) {
+    uni = g_utf8_get_char(ptr);
+    if (!g_unichar_isalpha(uni))
+      continue;
+    uni = g_unichar_tolower(uni);
+    len = g_unichar_to_utf8(uni, buf);
+    buf[len] = '\0';
+    DEBUG("Testing character '%s'", buf);
+    if (!g_utf8_strchr(map, -1, uni))
+      break;
+  }
+
+  if (ptr == NULL) {
+    /* Ran out of characters. Nothing to do. */
+    info->accel_assigned = TRUE;
+    LEAVE("All characters already assigned");
+    return;
+  }
+
+  /* Now build a new string in the form "<start>_<end>". */
+  start = g_strndup(info->ae.label, ptr - info->ae.label);
+  DEBUG("start %p, len %ld, text '%s'", start, g_utf8_strlen(start, -1), start);
+  new_label = g_strconcat(start, "_", ptr, (gchar *)NULL);
+  g_free(start);
+  DEBUG("label '%s' -> '%s'", info->ae.label, new_label);
+  g_free((gchar *)info->ae.label);
+  info->ae.label = new_label;
+
+  /* Now build a new map. Old one freed automatically. */
+  new_map = g_strconcat(map, buf, (gchar *)NULL);
+  DEBUG("map '%s' -> '%s'", map, new_map);
+  g_hash_table_replace(table, info->path, new_map);
+
+  info->accel_assigned = TRUE;
+  LEAVE("assigned");
+}
+
+
+/** Add one extension item to the UI manager.  This function creates a
+ *  per-callback data structure for easy access to the opaque Scheme
+ *  data block in the callback.  It then adds the action to the UI
+ *  manager.
+ *
+ *  @param ext_info The extension info data block.
+ *
+ *  @param per_window The per-window data block maintained by the
+ *  plugin. */
 static void
 gnc_menu_additions_menu_setup_one (ExtensionInfo *ext_info,
 				   GncPluginMenuAdditionsPerWindow *per_window)
 {
   GncMainWindowActionData *cb_data;
 
-  DEBUG( "Adding %s/%s [%s] as [%s]\n", ext_info->path, ext_info->ae.label,
+  DEBUG( "Adding %s/%s [%s] as [%s]", ext_info->path, ext_info->ae.label,
 	 ext_info->ae.name, ext_info->typeStr );
 
   cb_data = g_new0 (GncMainWindowActionData, 1);
@@ -241,19 +410,16 @@ gnc_menu_additions_menu_setup_one (ExtensionInfo *ext_info,
   gtk_ui_manager_ensure_update(per_window->ui_manager);
 }
 
-/** Initialize the file history menu for a window.  This function is
- *  called as part of the initialization of a window, after all the
- *  plugin menu items have been added to the menu structure.  Its job
- *  is to correctly initialize the file history menu.  It does this by
- *  first calling a function that initializes the menu to the current
- *  as maintained in gconf.  It then creates a gconf client that will
- *  listens for any changes to the file history menu, and will update
- *  the meny when they are signalled.
+
+/** Initialize the report menu and other additional menus.  This
+ *  function is called as part of the initialization of a window, when
+ *  the plugin menu items are being added to the menu structure.
  *
  *  @param plugin A pointer to the gnc-plugin object responsible for
- *  adding/removing the file history menu.
+ *  adding/removing the additional menu items.
  *
- *  @param window A pointer the gnc-main-window that is being initialized.
+ *  @param window A pointer the gnc-main-window where this plugin
+ *  should add its actions.
  *
  *  @param type Unused
  */
@@ -263,21 +429,29 @@ gnc_plugin_menu_additions_add_to_window (GncPlugin *plugin,
 					 GQuark type)
 {
   GncPluginMenuAdditionsPerWindow per_window;
+  static GOnce accel_table_init = G_ONCE_INIT;
+  static GHashTable *table;
   GSList *menu_list;
 
   ENTER(" ");
 
-  g_signal_connect (G_OBJECT(window), "page_changed",
-		    G_CALLBACK (gnc_plugin_menu_additions_main_window_page_changed),
-		    plugin);
-
   per_window.window = window;
   per_window.ui_manager = window->ui_merge;
   per_window.group = gtk_action_group_new ("MenuAdditions" );
+  gtk_action_group_set_translation_domain (per_window.group, GETTEXT_PACKAGE);
   per_window.merge_id = gtk_ui_manager_new_merge_id(window->ui_merge);
   gtk_ui_manager_insert_action_group(window->ui_merge, per_window.group, 0);
 
-  menu_list = gnc_extensions_get_menu_list();
+  menu_list = g_slist_sort(gnc_extensions_get_menu_list(),
+			   (GCompareFunc)gnc_menu_additions_alpha_sort);
+
+  /* Assign accelerators */
+  table = g_once(&accel_table_init, gnc_menu_additions_init_accel_table, NULL);
+  g_slist_foreach(menu_list,
+		  (GFunc)gnc_menu_additions_do_preassigned_accel, table);
+  g_slist_foreach(menu_list, (GFunc)gnc_menu_additions_assign_accel, table);
+
+  /* Add to window. */
   g_slist_foreach(menu_list, (GFunc)gnc_menu_additions_menu_setup_one,
 		  &per_window);
 
@@ -290,13 +464,12 @@ gnc_plugin_menu_additions_add_to_window (GncPlugin *plugin,
 }
 
 
-/** Finalize the file history menu for this window.  This function is
- *  called as part of the destruction of a window.
+/** Tear down the report menu and other additional menus.  This
+ *  function is called as part of the cleanup of a window, while the
+ *  plugin menu items are being removed from the menu structure.
  *
  *  @param plugin A pointer to the gnc-plugin object responsible for
- *  adding/removing the file history menu.  It stops the gconf
- *  notifications for this window, and destroys the gconf client
- *  object.
+ *  adding/removing the additional menu items.
  *
  *  @param window A pointer the gnc-main-window that is being destroyed.
  *
@@ -311,62 +484,15 @@ gnc_plugin_menu_additions_remove_from_window (GncPlugin *plugin,
 
   ENTER(" ");
 
-  g_signal_handlers_disconnect_by_func(G_OBJECT(window),
-				       G_CALLBACK (gnc_plugin_menu_additions_main_window_page_changed),
-				       plugin);
-
   /* Have to remove our actions manually. Its only automatic if the
    * actions name is installed into the plugin class. */
   group = gnc_main_window_get_action_group(window, PLUGIN_ACTIONS_NAME);
   if (group)
     gtk_ui_manager_remove_action_group(window->ui_merge, group);
 
-  LEAVE(" ");
-}
-
-/************************************************************
- *                     Object Callbacks                     *
- ************************************************************/
-
-static void
-our_gtk_action_set_visible(GtkAction *action, gboolean visible)
-{
-  g_object_set(G_OBJECT(action), "visible", visible, NULL);
-}
-
-
-/** Whenever the current page has changed, update the reports menus based
- *  upon the page that is currently selected. */
-static void
-gnc_plugin_menu_additions_main_window_page_changed (GncMainWindow *window,
-						    GncPluginPage *page)
-{
-  GtkActionGroup *action_group;
-  GList *action_list;
-  gboolean visible;
-  gpointer tmp;
-
-  ENTER("main window %p, page %p", window, page);
-  action_group = gnc_main_window_get_action_group(window,PLUGIN_ACTIONS_NAME);
-  if (action_group == NULL) {
-    LEAVE("Can't find action group");
-    return;
-  }
-
-  /* Does the now-visible page want menu-extensions to be visible? */
-  if (page) {
-    tmp = g_object_get_data(G_OBJECT(page),GNC_PLUGIN_HIDE_MENU_ADDITIONS_NAME);
-    visible = !GPOINTER_TO_INT(tmp);
-  } else {
-    visible = TRUE;
-  }
-
-  action_list = gtk_action_group_list_actions(action_group);
-  // Use the following line for gtk2.6
-  // g_list_foreach(action_list, (GFunc)gtk_action_set_visible, (gpointer)visible);
-  g_list_foreach(action_list, (GFunc)our_gtk_action_set_visible,
-		 GINT_TO_POINTER(visible));
-  g_list_free(action_list);
+  /* Note: This code does not clean up the per-callback data structures
+   * that are created by the gnc_menu_additions_menu_setup_one()
+   * function. Its not much memory and shouldn't be a problem. */
 
   LEAVE(" ");
 }

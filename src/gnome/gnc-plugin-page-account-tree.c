@@ -2,7 +2,7 @@
  * gnc-plugin-page-account-tree.c -- 
  *
  * Copyright (C) 2003 Jan Arne Petersen <jpetersen@uni-bonn.de>
- * Copyright (C) 2003 David Hampton <hampton@employees.org>
+ * Copyright (C) 2003,2005 David Hampton <hampton@employees.org>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -18,14 +18,27 @@
  * along with this program; if not, contact:
  *
  * Free Software Foundation           Voice:  +1-617-542-5942
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652
- * Boston, MA  02111-1307,  USA       gnu@gnu.org
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org
  */
+
+/** @addtogroup ContentPlugins
+    @{ */
+/** @addtogroup GncPluginPageAccountTree An Account Tree Plugin
+    @{ */
+/** @file gnc-plugin-page-account-tree.c
+    @brief Functions providing a chart of account page.
+    @author Copyright (C) 2003 Jan Arne Petersen <jpetersen@uni-bonn.de>
+            Copyright (C) 2003,2005 David Hampton <hampton@employees.org>
+*/
 
 #include "config.h"
 
 #include <gtk/gtk.h>
-
+#include <glib/gi18n.h>
+#ifndef HAVE_GLIB26
+#include "gkeyfile.h"
+#endif
 #include "gnc-plugin-page-account-tree.h"
 #include "gnc-plugin-page-register.h"
 
@@ -36,6 +49,7 @@
 #include "dialog-transfer.h"
 #include "druid-merge.h"
 #include "gnc-component-manager.h"
+#include "gnc-engine.h"
 #include "gnc-gnome-utils.h"
 #include "gnc-html.h"
 #include "gnc-icons.h"
@@ -50,9 +64,6 @@
 #include "window-reconcile.h"
 #include "window-main-summarybar.h"
 
-#include "messages.h"
-#include "gnc-engine.h"
-
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_GUI;
 
@@ -64,6 +75,24 @@ enum {
   LAST_SIGNAL
 };
 
+typedef struct GncPluginPageAccountTreePrivate
+{
+	GtkWidget *widget;
+	GtkTreeView *tree_view;
+
+	GNCOptionDB * odb;
+	SCM         options; 
+	int         options_id;
+	GNCOptionWin * editor_dialog;
+
+	GtkWidget *options_db;
+	gint       component_id;
+} GncPluginPageAccountTreePrivate;
+
+#define GNC_PLUGIN_PAGE_ACCOUNT_TREE_GET_PRIVATE(o)  \
+   (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_PLUGIN_PAGE_ACCOUNT_TREE, GncPluginPageAccountTreePrivate))
+
+static GObjectClass *parent_class = NULL;
 
 /************************************************************
  *                        Prototypes                        *
@@ -75,6 +104,8 @@ static void gnc_plugin_page_account_tree_finalize (GObject *object);
 
 static GtkWidget *gnc_plugin_page_account_tree_create_widget (GncPluginPage *plugin_page);
 static void gnc_plugin_page_account_tree_destroy_widget (GncPluginPage *plugin_page);
+static void gnc_plugin_page_account_tree_save_page (GncPluginPage *plugin_page, GKeyFile *file, const gchar *group);
+static GncPluginPage *gnc_plugin_page_account_tree_recreate_page (GtkWidget *window, GKeyFile *file, const gchar *group);
 
 /* Callbacks */
 static gboolean gnc_plugin_page_account_tree_button_press_cb (GtkWidget *widget,
@@ -136,12 +167,12 @@ static GtkActionEntry gnc_plugin_page_account_tree_actions [] = {
 	{ "EditDeleteAccountAction", GNC_STOCK_DELETE_ACCOUNT, N_("_Delete Account"), NULL,
 	  N_("Delete selected account"),
 	  G_CALLBACK (gnc_plugin_page_account_tree_cmd_delete_account) },
-	{ "EditAccountViewOptionsAction", GTK_STOCK_PROPERTIES, N_("Account Tree _Options"), NULL,
+	{ "EditAccountViewOptionsAction", GTK_STOCK_PROPERTIES, N_("Account Tree _Options..."), NULL,
 	  N_("Edit the account view options"),
 	  G_CALLBACK (gnc_plugin_page_account_tree_cmd_view_options) },
 
 	/* Actions menu */
-	{ "ActionsReconcileAction", NULL, N_("_Reconcile..."), "<control>r",
+	{ "ActionsReconcileAction", NULL, N_("_Reconcile..."), NULL,
 	  N_("Reconcile the selected account"),
 	  G_CALLBACK (gnc_plugin_page_account_tree_cmd_reconcile) },
 	{ "ActionsTransferAction", NULL, N_("_Transfer..."), "<control>t",
@@ -170,8 +201,12 @@ static GtkActionEntry gnc_plugin_page_account_tree_actions [] = {
 	  N_("Edit the account view options"),
 	  G_CALLBACK (gnc_plugin_page_account_tree_cmd_view_options) },
 };
+/** The number of actions provided by this plugin. */
 static guint gnc_plugin_page_account_tree_n_actions = G_N_ELEMENTS (gnc_plugin_page_account_tree_actions);
 
+
+/** Actions that require an account to be selected before they are
+ *  enabled. */
 static const gchar *actions_requiring_account[] = {
 	"FileOpenAccountAction",
 	"FileOpenSubaccountsAction",
@@ -182,8 +217,9 @@ static const gchar *actions_requiring_account[] = {
 	NULL
 };
 
-/* DRH - Suggest short_labels be added to libegg */
-static action_short_labels short_labels[] = {
+
+/** Short labels for use on the toolbar buttons. */
+static action_toolbar_labels toolbar_labels[] = {
   { "FileOpenAccountAction", 	    N_("Open") },
   { "EditEditAccountAction", 	    N_("Edit") },
   { "EditAccountViewOptionsAction", N_("Options") },
@@ -191,24 +227,6 @@ static action_short_labels short_labels[] = {
   { "EditDeleteAccountAction", 	    N_("Delete") },
   { NULL, NULL },
 };
-
-struct GncPluginPageAccountTreePrivate
-{
-	GtkWidget *widget;
-	GtkTreeView *tree_view;
-
-	SCM         name_change_callback_id;
-
-	GNCOptionDB * odb;
-	SCM         options; 
-	int         options_id;
-	GNCOptionWin * editor_dialog;
-
-	GtkWidget *options_db;
-	gint       component_id;
-};
-
-static GObjectClass *parent_class = NULL;
 
 
 GType
@@ -230,7 +248,7 @@ gnc_plugin_page_account_tree_get_type (void)
 		};
 		
 		gnc_plugin_page_account_tree_type = g_type_register_static (GNC_TYPE_PLUGIN_PAGE,
-								            "GncPluginPageAccountTree",
+								            GNC_PLUGIN_PAGE_ACCOUNT_TREE_NAME,
 								            &our_info, 0);
 	}
 
@@ -264,6 +282,10 @@ gnc_plugin_page_account_tree_class_init (GncPluginPageAccountTreeClass *klass)
 	gnc_plugin_class->plugin_name     = GNC_PLUGIN_PAGE_ACCOUNT_TREE_NAME;
 	gnc_plugin_class->create_widget   = gnc_plugin_page_account_tree_create_widget;
 	gnc_plugin_class->destroy_widget  = gnc_plugin_page_account_tree_destroy_widget;
+	gnc_plugin_class->save_page       = gnc_plugin_page_account_tree_save_page;
+	gnc_plugin_class->recreate_page   = gnc_plugin_page_account_tree_recreate_page;
+
+	g_type_class_add_private(klass, sizeof(GncPluginPageAccountTreePrivate));
 
 	plugin_page_signals[ACCOUNT_SELECTED] =
 	  g_signal_new ("account_selected",
@@ -274,11 +296,6 @@ gnc_plugin_page_account_tree_class_init (GncPluginPageAccountTreeClass *klass)
 			g_cclosure_marshal_VOID__POINTER,
 			G_TYPE_NONE, 1,
 			G_TYPE_POINTER);
-}
-
-static void
-gnc_plugin_page_acct_tree_view_refresh (gpointer data)
-{
 }
 
 static void
@@ -294,7 +311,7 @@ gnc_plugin_page_account_tree_init (GncPluginPageAccountTree *plugin_page)
 	URLType type;
 
 	ENTER("page %p", plugin_page);
-	priv = plugin_page->priv = g_new0 (GncPluginPageAccountTreePrivate, 1);
+	priv = GNC_PLUGIN_PAGE_ACCOUNT_TREE_GET_PRIVATE(plugin_page);
 
 	/* Init parent declared variables */
 	parent = GNC_PLUGIN_PAGE(plugin_page);
@@ -315,7 +332,7 @@ gnc_plugin_page_account_tree_init (GncPluginPageAccountTree *plugin_page)
 				     gnc_plugin_page_account_tree_actions,
 				     gnc_plugin_page_account_tree_n_actions,
 				     plugin_page);
-	gnc_plugin_init_short_names (action_group, short_labels);
+	gnc_plugin_init_short_names (action_group, toolbar_labels);
 
 	
 	/* get the options and the window ID */ 
@@ -358,16 +375,8 @@ gnc_plugin_page_account_tree_init (GncPluginPageAccountTree *plugin_page)
 
 	priv->odb     = gnc_option_db_new(priv->options);
 
-	priv->name_change_callback_id = 
-	  gnc_option_db_register_change_callback(priv->odb, 
-						 gnc_plugin_page_acct_tree_view_refresh,
-						 priv, 
-						 N_("Account Tree"),
-						 N_("Name of account view"));
-	scm_gc_protect_object(priv->name_change_callback_id);
-
 	LEAVE("page %p, priv %p, action group %p",
-	      plugin_page, plugin_page->priv, action_group);
+	      plugin_page, priv, action_group);
 }
 
 static void
@@ -380,7 +389,7 @@ gnc_plugin_page_account_tree_finalize (GObject *object)
 	ENTER("object %p", object);
 	page = GNC_PLUGIN_PAGE_ACCOUNT_TREE (object);
 	g_return_if_fail (GNC_IS_PLUGIN_PAGE_ACCOUNT_TREE (page));
-	priv = page->priv;
+	priv = GNC_PLUGIN_PAGE_ACCOUNT_TREE_GET_PRIVATE(page);
 	g_return_if_fail (priv != NULL);
 
 	if (priv->editor_dialog) {
@@ -396,8 +405,6 @@ gnc_plugin_page_account_tree_finalize (GObject *object)
 
 	scm_gc_unprotect_object(priv->options);
 
-	g_free (priv);
-
 	G_OBJECT_CLASS (parent_class)->finalize (object);
 	LEAVE(" ");
 }
@@ -405,10 +412,12 @@ gnc_plugin_page_account_tree_finalize (GObject *object)
 Account *
 gnc_plugin_page_account_tree_get_current_account (GncPluginPageAccountTree *page)
 {
+	GncPluginPageAccountTreePrivate *priv;
 	Account *account;
 
-	ENTER("page %p (tree view %p)", page, page->priv->tree_view);
-	account = gnc_tree_view_account_get_selected_account (GNC_TREE_VIEW_ACCOUNT(page->priv->tree_view));
+	priv = GNC_PLUGIN_PAGE_ACCOUNT_TREE_GET_PRIVATE(page);
+	ENTER("page %p (tree view %p)", page, priv->tree_view);
+	account = gnc_tree_view_account_get_selected_account (GNC_TREE_VIEW_ACCOUNT(priv->tree_view));
 	if (account == NULL) {
 		LEAVE("no account");
 		return NULL;
@@ -425,6 +434,7 @@ static void
 gnc_plugin_page_account_refresh_cb (GHashTable *changes, gpointer user_data)
 {
   GncPluginPageAccountTree *page = user_data;
+  GncPluginPageAccountTreePrivate *priv;
 
   g_return_if_fail(GNC_IS_PLUGIN_PAGE_ACCOUNT_TREE(page));
 
@@ -432,7 +442,8 @@ gnc_plugin_page_account_refresh_cb (GHashTable *changes, gpointer user_data)
   if (changes)
     return;
 
-  gtk_widget_queue_draw(page->priv->widget);
+  priv = GNC_PLUGIN_PAGE_ACCOUNT_TREE_GET_PRIVATE(page);
+  gtk_widget_queue_draw(priv->widget);
 }
 
 static void
@@ -450,25 +461,27 @@ static GtkWidget *
 gnc_plugin_page_account_tree_create_widget (GncPluginPage *plugin_page)
 {
 	GncPluginPageAccountTree *page;
+	GncPluginPageAccountTreePrivate *priv;
 	GtkTreeSelection *selection;
 	GtkTreeView *tree_view;
 	GtkWidget *scrolled_window;
 
 	ENTER("page %p", plugin_page);
 	page = GNC_PLUGIN_PAGE_ACCOUNT_TREE (plugin_page);
-	if (page->priv->widget != NULL) {
-		LEAVE("widget = %p", page->priv->widget);
-		return page->priv->widget;
+	priv = GNC_PLUGIN_PAGE_ACCOUNT_TREE_GET_PRIVATE(page);
+	if (priv->widget != NULL) {
+		LEAVE("widget = %p", priv->widget);
+		return priv->widget;
 	}
 
-	page->priv->widget = gtk_vbox_new (FALSE, 0);
-	gtk_widget_show (page->priv->widget);
+	priv->widget = gtk_vbox_new (FALSE, 0);
+	gtk_widget_show (priv->widget);
 
 	scrolled_window = gtk_scrolled_window_new (NULL, NULL);
 	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window),
 					GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 	gtk_widget_show (scrolled_window);
-	gtk_box_pack_start (GTK_BOX (page->priv->widget), scrolled_window,
+	gtk_box_pack_start (GTK_BOX (priv->widget), scrolled_window,
 			    TRUE, TRUE, 0);
 
 	tree_view = gnc_tree_view_account_new(FALSE);
@@ -477,7 +490,7 @@ gnc_plugin_page_account_tree_create_widget (GncPluginPage *plugin_page)
 		     "show-column-menu", TRUE,
 		     NULL);
 
-	page->priv->tree_view = tree_view;
+	priv->tree_view = tree_view;
 	selection = gtk_tree_view_get_selection(tree_view);
 	g_signal_connect (G_OBJECT (selection), "changed",
 			  G_CALLBACK (gnc_plugin_page_account_tree_selection_changed_cb), page);
@@ -491,45 +504,278 @@ gnc_plugin_page_account_tree_create_widget (GncPluginPage *plugin_page)
 	gtk_widget_show (GTK_WIDGET (tree_view));
 	gtk_container_add (GTK_CONTAINER (scrolled_window), GTK_WIDGET(tree_view));
 
-	page->priv->component_id =
+	priv->component_id =
 	  gnc_register_gui_component(PLUGIN_PAGE_ACCT_TREE_CM_CLASS,
 				     gnc_plugin_page_account_refresh_cb,
 				     gnc_plugin_page_account_tree_close_cb,
 				     page);
-	gnc_gui_component_set_session (page->priv->component_id,
+	gnc_gui_component_set_session (priv->component_id,
 				       gnc_get_current_session());
 
 	plugin_page->summarybar = gnc_main_window_summary_new();
+	gtk_box_pack_end (GTK_BOX (priv->widget), plugin_page->summarybar,
+			  FALSE, FALSE, 0);
 	gtk_widget_show(plugin_page->summarybar);
 
-	LEAVE("widget = %p", page->priv->widget);
-	return page->priv->widget;
+	LEAVE("widget = %p", priv->widget);
+	return priv->widget;
 }
 
 static void
 gnc_plugin_page_account_tree_destroy_widget (GncPluginPage *plugin_page)
 {
 	GncPluginPageAccountTree *page;
+	GncPluginPageAccountTreePrivate *priv;
 
 	ENTER("page %p", plugin_page);
 	page = GNC_PLUGIN_PAGE_ACCOUNT_TREE (plugin_page);
+	priv = GNC_PLUGIN_PAGE_ACCOUNT_TREE_GET_PRIVATE(page);
 
-	if (page->priv->widget) {
-	  g_object_unref(G_OBJECT(page->priv->widget));
-	  page->priv->widget = NULL;
+	if (priv->widget) {
+	  g_object_unref(G_OBJECT(priv->widget));
+	  priv->widget = NULL;
 	}
 
-	if (page->priv->component_id) {
-	  gnc_unregister_gui_component(page->priv->component_id);
-	  page->priv->component_id = 0;
-	}
-
-	if (plugin_page->summarybar) {
-	  g_object_unref(G_OBJECT(plugin_page->summarybar));
-	  plugin_page->summarybar = NULL;
+	if (priv->component_id) {
+	  gnc_unregister_gui_component(priv->component_id);
+	  priv->component_id = 0;
 	}
 
 	LEAVE("widget destroyed");
+}
+
+#define ACCT_COUNT "Number of Open Accounts"
+#define ACCT_OPEN  "Open Account %d"
+#define ACCT_SELECTED  "Selected Account"
+
+typedef struct foo {
+  GKeyFile *key_file;
+  const gchar *group_name;
+  int count;
+} bar_t;
+
+
+/** Save information about an expanded row.  This function is called
+ *  via a gtk_tree_view_map_expanded_rows, which calls it once per
+ *  expanded row.  Its job is to write the full account name of the
+ *  row out to the state file.
+ *
+ *  @param tree_view A pointer to the GtkTreeView embedded in an
+ *  account tree page.
+ *
+ *  @param path A pointer to a particular entry in the tree.
+ *
+ *  @param data A pointer to a data structure holding the information
+ *  related to the state file. */
+static void
+tree_save_expanded_row (GtkTreeView *tree_view,
+			GtkTreePath *path,
+			gpointer user_data)
+{
+	Account *account;
+	bar_t *bar = user_data;
+	gchar *key;
+	gchar *account_name;
+
+	account = gnc_tree_view_account_get_account_from_path (GNC_TREE_VIEW_ACCOUNT(tree_view), path);
+	if (account == NULL)
+	  return;
+
+	account_name = xaccAccountGetFullName (account, gnc_get_account_separator ());
+	if (account_name == NULL)
+	  return;
+
+	key = g_strdup_printf(ACCT_OPEN, ++bar->count);
+	g_key_file_set_string(bar->key_file, bar->group_name, key, account_name);
+	g_free(key);
+	g_free(account_name);
+}
+
+
+/** Save information about the selected row.  Its job is to write the
+ *  full account name of the row out to the state file.
+ *
+ *  @param tree_view A pointer to the GtkTreeView embedded in an
+ *  account tree page.
+ *
+ *  @param path A pointer to a particular entry in the tree.
+ *
+ *  @param data A pointer to a data structure holding the information
+ *  related to the state file. */
+static void
+tree_save_selected_row (GncTreeViewAccount *view,
+			gpointer user_data)
+{
+	Account *account;
+	bar_t *bar = user_data;
+	gchar *account_name;
+
+	account = gnc_tree_view_account_get_selected_account(view);
+	if (account == NULL)
+	  return;
+
+	account_name = xaccAccountGetFullName (account, gnc_get_account_separator ());
+	if (account_name == NULL)
+	  return;
+
+	g_key_file_set_string(bar->key_file, bar->group_name, ACCT_SELECTED, account_name);
+	g_free(account_name);
+}
+
+
+/** Save enough information about this account tree page that it can
+ *  be recreated next time the user starts gnucash.
+ *
+ *  @param page The page to save.
+ *
+ *  @param key_file A pointer to the GKeyFile data structure where the
+ *  page information should be written.
+ *
+ *  @param group_name The group name to use when saving data. */
+static void
+gnc_plugin_page_account_tree_save_page (GncPluginPage *plugin_page,
+					GKeyFile *key_file,
+					const gchar *group_name)
+{
+	GncPluginPageAccountTree *account_page;
+	GncPluginPageAccountTreePrivate *priv;
+	bar_t bar;
+	
+	g_return_if_fail (GNC_IS_PLUGIN_PAGE_ACCOUNT_TREE(plugin_page));
+	g_return_if_fail (key_file != NULL);
+	g_return_if_fail (group_name != NULL);
+
+	ENTER("page %p, key_file %p, group_name %s", plugin_page, key_file,
+	      group_name);
+
+	account_page = GNC_PLUGIN_PAGE_ACCOUNT_TREE(plugin_page);
+	priv = GNC_PLUGIN_PAGE_ACCOUNT_TREE_GET_PRIVATE(account_page);
+
+	bar.key_file = key_file;
+	bar.group_name = group_name;
+	bar.count = 0;
+	tree_save_selected_row(GNC_TREE_VIEW_ACCOUNT(priv->tree_view), &bar);
+	gtk_tree_view_map_expanded_rows(priv->tree_view,
+					tree_save_expanded_row, &bar);
+	g_key_file_set_integer(key_file, group_name, ACCT_COUNT, bar.count);
+	LEAVE(" ");
+}
+
+
+/** Expand a row in the tree that was expanded when the user last quit
+ *  gnucash.  Its job is to map from account name to tree row and
+ *  expand the row.
+ *
+ *  @param tree_view A pointer to the GtkTreeView embedded in an
+ *  account tree page.
+ *
+ *  @param account_name A pointer to the full account name. */
+static void
+tree_restore_expanded_row (GtkTreeView *tree_view,
+			   const gchar *account_name)
+{
+  Account *account;
+  QofBook *book;
+
+  book = qof_session_get_book(qof_session_get_current_session());
+  account = xaccGetAccountFromFullName(xaccGetAccountGroup(book),
+				       account_name,
+				       gnc_get_account_separator());
+  if (account)
+    gnc_tree_view_account_expand_to_account(GNC_TREE_VIEW_ACCOUNT(tree_view),
+					    account);
+}
+
+
+/** Select the row in the tree that was selected when the user last
+ *  quit gnucash.  Its job is to map from account name to tree row and
+ *  select the row.
+ *
+ *  @param tree_view A pointer to the GtkTreeView embedded in an
+ *  account tree page.
+ *
+ *  @param account_name A pointer to the full account name. */
+static void
+tree_restore_selected_row (GtkTreeView *tree_view,
+			   const gchar *account_name)
+{
+  Account *account;
+  QofBook *book;
+
+  book = qof_session_get_book(qof_session_get_current_session());
+  account = xaccGetAccountFromFullName(xaccGetAccountGroup(book),
+				       account_name,
+				       gnc_get_account_separator());
+  if (account)
+    gnc_tree_view_account_set_selected_account(GNC_TREE_VIEW_ACCOUNT(tree_view),
+					       account);
+}
+
+
+/** Create a new account tree page based on the information saved
+ *  during a previous instantiation of gnucash.
+ *
+ *  @param window The window where this page should be installed.
+ *
+ *  @param key_file A pointer to the GKeyFile data structure where the
+ *  page information should be read.
+ *
+ *  @param group_name The group name to use when restoring data. */
+static GncPluginPage *
+gnc_plugin_page_account_tree_recreate_page (GtkWidget *window,
+					    GKeyFile *key_file,
+					    const gchar *group_name)
+{
+	GncPluginPageAccountTree *account_page;
+	GncPluginPageAccountTreePrivate *priv;
+	GncPluginPage *page;
+	GError *error = NULL;
+	gchar *key, *value;
+	gint i, count;
+	
+	g_return_val_if_fail(key_file, NULL);
+	g_return_val_if_fail(group_name, NULL);
+	ENTER("key_file %p, group_name %s", key_file, group_name);
+
+	/* Create the new page. */
+	page = gnc_plugin_page_account_tree_new();
+	account_page = GNC_PLUGIN_PAGE_ACCOUNT_TREE(page);
+	priv = GNC_PLUGIN_PAGE_ACCOUNT_TREE_GET_PRIVATE(account_page);
+
+	/* Install it now so we can them manipulate the created widget */
+	gnc_main_window_open_page(GNC_MAIN_WINDOW(window), page);
+
+	/* Expanded accounts */
+	count = g_key_file_get_integer(key_file, group_name, ACCT_COUNT, &error);
+	if (error) {
+	  g_warning("error reading group %s key %s: %s",
+		    group_name, ACCT_COUNT, error->message);
+	  g_error_free(error);
+	  LEAVE("bad value");
+	  return page;
+	}
+	for (i = 1; i <= count; i++) {
+	  key = g_strdup_printf(ACCT_OPEN, i);
+	  value = g_key_file_get_string(key_file, group_name, key, &error);
+	  if (error) {
+	    g_warning("error reading group %s key %s: %s",
+		      group_name, key, error->message);
+	    g_error_free(error);
+	    error = NULL;
+	  } else {
+	    tree_restore_expanded_row(priv->tree_view, value);
+	    g_free(value);
+	  }
+	}
+
+	/* Selected account (if any) */
+	value = g_key_file_get_string(key_file, group_name, ACCT_SELECTED, NULL);
+	if (value) {
+	  tree_restore_selected_row(priv->tree_view, value);
+	  g_free(value);
+	}
+	LEAVE(" ");
+	return page;
 }
 
 
@@ -842,7 +1088,7 @@ gnc_plugin_page_account_tree_cmd_view_options (GtkAction *action, GncPluginPageA
   GncPluginPageAccountTreePrivate *priv;
 
   g_return_if_fail (GNC_IS_PLUGIN_PAGE_ACCOUNT_TREE (page));
-  priv = page->priv;
+  priv = GNC_PLUGIN_PAGE_ACCOUNT_TREE_GET_PRIVATE(page);
 
   if (!priv->editor_dialog) {
     priv->editor_dialog = gnc_options_dialog_new(_("Account Tree Options"));
@@ -952,3 +1198,6 @@ gnc_plugin_page_account_tree_cmd_scrub_all (GtkAction *action, GncPluginPageAcco
 	xaccGroupScrubOrphans (group);
 	xaccGroupScrubImbalance (group);
 }
+
+/** @} */
+/** @} */

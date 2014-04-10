@@ -18,26 +18,24 @@
  * along with this program; if not, contact:
  *
  * Free Software Foundation           Voice:  +1-617-542-5942
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652
- * Boston, MA  02111-1307,  USA       gnu@gnu.org
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org
  */
 
 #include "config.h"
 
+#include <gtk/gtk.h>
+#include <glib/gi18n.h>
 #include <string.h>
 
 #include "gnc-component-manager.h"
 #include "gnc-plugin-register.h"
 #include "gnc-plugin-page-register.h"
 
-#include "messages.h"
 
 static void gnc_plugin_register_class_init (GncPluginRegisterClass *klass);
 static void gnc_plugin_register_init (GncPluginRegister *plugin);
 static void gnc_plugin_register_finalize (GObject *object);
-
-/* plugin window interface */
-static GncPluginPage *gnc_plugin_register_create_page (GncPlugin *plugin, const gchar *uri);
 
 /* Command callbacks */
 static void gnc_plugin_register_cmd_general_ledger (GtkAction *action, GncMainWindowActionData *data);
@@ -53,10 +51,13 @@ static GtkActionEntry gnc_plugin_actions [] = {
 };
 static guint gnc_plugin_n_actions = G_N_ELEMENTS (gnc_plugin_actions);
 
-struct GncPluginRegisterPrivate
+typedef struct GncPluginRegisterPrivate
 {
 	gpointer dummy;
-};
+} GncPluginRegisterPrivate;
+
+#define GNC_PLUGIN_REGISTER_GET_PRIVATE(o)  \
+   (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_PLUGIN_REGISTER, GncPluginRegisterPrivate))
 
 static GObjectClass *parent_class = NULL;
 static QofLogModule log_module = GNC_MOD_GUI;
@@ -125,6 +126,10 @@ gnc_plugin_register_new (void)
 {
 	GncPluginRegister *plugin;
 
+	/* Reference the register page plugin to ensure it exists in
+	 * the gtk type system. */
+	GNC_TYPE_PLUGIN_PAGE_REGISTER;
+
 	plugin = g_object_new (GNC_TYPE_PLUGIN_REGISTER,
 			      NULL);
 
@@ -144,9 +149,6 @@ gnc_plugin_register_class_init (GncPluginRegisterClass *klass)
 	/* plugin info */
 	plugin_class->plugin_name  = GNC_PLUGIN_REGISTER_NAME;
 
-	/* function overrides */
-	plugin_class->create_page  = gnc_plugin_register_create_page;
-
 	/* widget addition/removal */
 	plugin_class->actions_name = PLUGIN_ACTIONS_NAME;
 	plugin_class->actions      = gnc_plugin_actions;
@@ -155,47 +157,27 @@ gnc_plugin_register_class_init (GncPluginRegisterClass *klass)
 
 	plugin_class->gconf_section = GCONF_REGISTER_SECTION;
 	plugin_class->gconf_notifications = gnc_plugin_register_gconf_changed;
+
+	g_type_class_add_private(klass, sizeof(GncPluginRegisterPrivate));
 }
 
 static void
 gnc_plugin_register_init (GncPluginRegister *plugin)
 {
-	plugin->priv = g_new0 (GncPluginRegisterPrivate, 1);
 }
 
 static void
 gnc_plugin_register_finalize (GObject *object)
 {
 	GncPluginRegister *plugin;
+	GncPluginRegisterPrivate *priv;
 
 	g_return_if_fail (GNC_IS_PLUGIN_REGISTER (object));
 
 	plugin = GNC_PLUGIN_REGISTER (object);
-
-	g_return_if_fail (plugin->priv != NULL);
-
-	g_free (plugin->priv);
+	priv = GNC_PLUGIN_REGISTER_GET_PRIVATE(plugin);
 
 	G_OBJECT_CLASS (parent_class)->finalize (object);
-}
-
-/************************************************************
- *              Plugin Function Implementation              *
- ************************************************************/
-
-static GncPluginPage *
-gnc_plugin_register_create_page (GncPlugin *plugin,
-				 const gchar *uri)
-{
-	g_return_val_if_fail (GNC_IS_PLUGIN_REGISTER (plugin), NULL);
-	g_return_val_if_fail (uri != NULL, NULL);
-
-	/* FIXME add better URI handling */
-	if (strcmp ("default:", uri)) {
-		return NULL;
-	}
-	
-	return NULL;
 }
 
 /************************************************************

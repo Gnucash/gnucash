@@ -8,5 +8,4 @@ account_DATA = \
   acctchrt_homeown.gnucash-xea
 
 EXTRA_DIST = \
-  ${account_DATA} \
-  .cvsignore
+  ${account_DATA}

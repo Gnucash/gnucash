@@ -18,8 +18,8 @@
  * along with this program; if not, contact:
  *
  * Free Software Foundation           Voice:  +1-617-542-5942
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652
- * Boston, MA  02111-1307,  USA       gnu@gnu.org
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org
  */
 
 #ifdef HAVE_CONFIG_H
@@ -27,6 +27,7 @@
 #endif
 
 #include <glib.h>
+#include <glib/gi18n.h>
 #include <string.h>
 
 /* For regex */
@@ -35,7 +36,6 @@
 
 #include <stdarg.h>
 
-#include "messages.h"
 #include "gnc-engine.h"
 #include "gnc-ui-util.h"
 
@@ -97,6 +97,8 @@ build_bangtype_map()
   qif_bangtype_map = g_hash_table_new(g_str_hash, g_str_equal);
   g_assert(qif_bangtype_map);
 
+  /* Translators FIXME: It is unclear whether these strings should
+     really be translated, and if yes, into which translation. */
   QIF_ADD_TYPE(N_("type:bank"), QIF_TYPE_BANK);
   QIF_ADD_TYPE(N_("type:cash"), QIF_TYPE_CASH);
   QIF_ADD_TYPE(N_("type:ccard"), QIF_TYPE_CCARD);
@@ -254,9 +256,8 @@ qif_parse_bangtype(QifContext ctx, const char *line)
    * - strip off leading/trailing whitespace
    * - make it all lower case
    */
-  bangtype = g_strdup(line+1);
+  bangtype = g_utf8_strdown(line+1, -1);
   g_strstrip(bangtype);
-  g_strdown(bangtype);
 
   /* In some cases we get "!Type Bank" -- change the space to a colon */
   if (!strncmp(bangtype, "type ", 5))
@@ -403,9 +404,8 @@ QifAction qif_parse_action(QifLine line)
     build_action_map();
 
   /* Duplicate the action and force it to lower case and strip any spaces */
-  action = g_strdup(line->line);
+  action = g_utf8_strdown(line->line, -1);
   g_strstrip(action);
-  g_strdown(action);
 
   result = g_hash_table_lookup(qif_action_map, action);
   g_free(action);
@@ -430,9 +430,8 @@ GList * qif_parse_acct_type(const char *str, gint lineno)
     build_atype_map();
 
   /* Duplicate the type and force it to lower case and strip any spaces */
-  type = g_strdup(str);
+  type = g_utf8_strdown(str, -1);
   g_strstrip(type);
-  g_strdown(type);
 
   result = g_hash_table_lookup(qif_atype_map, type);
   g_free(type);

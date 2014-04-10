@@ -16,8 +16,8 @@
  * along with this program; if not, contact:
  *
  * Free Software Foundation           Voice:  +1-617-542-5942
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652
- * Boston, MA  02111-1307,  USA       gnu@gnu.org
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org
  */
 
 /** @addtogroup MenuPlugins
@@ -25,14 +25,19 @@
 /** @addtogroup PluginMenuAdditions Non-GtkAction Menu Support
     @{ */
 /** @file gnc-plugin-menu-additions.h
-    @brief Utility functions for writing import modules.
-    @author Copyright (C) 2002 David Hampton <hampton@employees.org>
+    @brief Functions providing menu items from scheme code.
+    @author Copyright (C) 2005 David Hampton <hampton@employees.org>
+
+    The GncPluginMenuAdditions code handles menu/toolbar actions that
+    come from the Scheme side of Gnucash.  It is responsible for
+    adding these actions to any new window that is opened.  This code
+    does not use the base object code to automatically handle these
+    functions, but performs them manually.
 */
 
 #ifndef __GNC_PLUGIN_MENU_ADDITIONS_H
 #define __GNC_PLUGIN_MENU_ADDITIONS_H
 
-#include <gtk/gtk.h>
 #include "gnc-plugin.h"
 
 G_BEGIN_DECLS
@@ -46,18 +51,14 @@ G_BEGIN_DECLS
 #define GNC_PLUGIN_MENU_ADDITIONS_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GNC_TYPE_PLUGIN_MENU_ADDITIONS, GncPluginMenuAdditionsClass))
 
 #define GNC_PLUGIN_MENU_ADDITIONS_NAME "gnc-plugin-menu-additions"
-#define GNC_PLUGIN_HIDE_MENU_ADDITIONS_NAME "gnc-plugin-hide-menu-additions"
 
 /* typedefs & structures */
-typedef struct GncPluginMenuAdditionsPrivate GncPluginMenuAdditionsPrivate;
-
 typedef struct {
-	GncPlugin parent;
-	GncPluginMenuAdditionsPrivate *priv;
+	GncPlugin gnc_plugin;
 } GncPluginMenuAdditions;
 
 typedef struct {
-	GncPluginClass parent;
+	GncPluginClass gnc_plugin;
 } GncPluginMenuAdditionsClass;
 
 /* function prototypes */

@@ -16,13 +16,14 @@
  * along with this program; if not, contact:                        *
  *                                                                  *
  * Free Software Foundation           Voice:  +1-617-542-5942       *
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
- * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
 #include "config.h"
 
-#include <gnome.h>
+#include <gtk/gtk.h>
+#include <glib/gi18n.h>
 #include <locale.h>
 #include <time.h>
 
@@ -36,7 +37,6 @@
 #include "gnc-date-edit.h"
 #include "gnc-engine.h"
 #include "gnc-gui-query.h"
-#include "messages.h"
 
 
 #define DIALOG_FINCALC_CM_CLASS "dialog-fincalc"

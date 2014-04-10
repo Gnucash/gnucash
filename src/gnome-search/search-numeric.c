@@ -14,8 +14,8 @@
  *
  * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the
- * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
- * Boston, MA 02111-1307, USA.
+ * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA 02110-1301, USA.
  */
 
 #ifdef HAVE_CONFIG_H
@@ -23,6 +23,7 @@
 #endif
 
 #include <gtk/gtk.h>
+#include <glib/gi18n.h>
 
 #include "gnc-amount-edit.h"
 #include "QueryCore.h"
@@ -42,13 +43,16 @@ static void gnc_search_numeric_class_init	(GNCSearchNumericClass *class);
 static void gnc_search_numeric_init	(GNCSearchNumeric *gspaper);
 static void gnc_search_numeric_finalize	(GObject *obj);
 
-#define _PRIVATE(x) (((GNCSearchNumeric *)(x))->priv)
+typedef struct _GNCSearchNumericPrivate GNCSearchNumericPrivate;
 
 struct _GNCSearchNumericPrivate {
   gboolean	is_debcred;
   GtkWidget * 	entry;
   GNCAmountEdit *gae;
 };
+
+#define _PRIVATE(o) \
+   (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_SEARCH_NUMERIC, GNCSearchNumericPrivate))
 
 static GNCSearchCoreTypeClass *parent_class;
 
@@ -96,12 +100,13 @@ gnc_search_numeric_class_init (GNCSearchNumericClass *class)
   gnc_search_core_type->get_widget = gncs_get_widget;
   gnc_search_core_type->get_predicate = gncs_get_predicate;
   gnc_search_core_type->clone = gncs_clone;
+
+  g_type_class_add_private(class, sizeof(GNCSearchNumericPrivate));
 }
 
 static void
 gnc_search_numeric_init (GNCSearchNumeric *o)
 {
-  o->priv = g_malloc0 (sizeof (*o->priv));
   o->value = gnc_numeric_zero ();
   o->how = COMPARE_EQUAL;
   o->option = NUMERIC_MATCH_ANY;
@@ -113,8 +118,6 @@ gnc_search_numeric_finalize (GObject *obj)
   GNCSearchNumeric *o = (GNCSearchNumeric *)obj;
   g_assert (IS_GNCSEARCH_NUMERIC (o));
 
-  g_free(o->priv);
-	
   G_OBJECT_CLASS (parent_class)->finalize(obj);
 }
 
@@ -128,7 +131,7 @@ gnc_search_numeric_finalize (GObject *obj)
 GNCSearchNumeric *
 gnc_search_numeric_new (void)
 {
-  GNCSearchNumeric *o = g_object_new(gnc_search_numeric_get_type (), NULL);
+  GNCSearchNumeric *o = g_object_new(GNC_TYPE_SEARCH_NUMERIC, NULL);
   return o;
 }
 
@@ -142,8 +145,12 @@ gnc_search_numeric_new (void)
 GNCSearchNumeric *
 gnc_search_numeric_debcred_new (void)
 {
-  GNCSearchNumeric *o = g_object_new(gnc_search_numeric_get_type (), NULL);
-  o->priv->is_debcred = TRUE;
+  GNCSearchNumeric *o;
+  GNCSearchNumericPrivate *priv;
+
+  o = g_object_new(GNC_TYPE_SEARCH_NUMERIC, NULL);
+  priv = _PRIVATE(o);
+  priv->is_debcred = TRUE;
   return o;
 }
 
@@ -213,7 +220,7 @@ add_menu_item (GtkWidget *menu, gpointer user_data, char *label,
   GtkWidget *item = gtk_menu_item_new_with_label (label);
   g_object_set_data (G_OBJECT (item), "option", (gpointer) option);
   g_signal_connect (G_OBJECT (item), "activate", fcn, user_data);
-  gtk_menu_append (GTK_MENU (menu), item);
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
   gtk_widget_show (item);
   return item;
 }
@@ -228,29 +235,31 @@ static GtkWidget *
 make_how_menu (GNCSearchCoreType *fe)
 {
   GNCSearchNumeric *fi = (GNCSearchNumeric *)fe;
+  GNCSearchNumericPrivate *priv;
   GtkWidget *menu, *item, *first = NULL, *opmenu;
   int current = 0, index = 0;
 
   menu = gtk_menu_new ();
 
-  ADD_MENU_ITEM (fi->how, (fi->priv->is_debcred ?
+  priv = _PRIVATE(fi);
+  ADD_MENU_ITEM (fi->how, (priv->is_debcred ?
 			   _("less than") : _("is less than")),
 		 COMPARE_LT, G_CALLBACK (how_option_changed));
   first = item;			/* Force one */
-  ADD_MENU_ITEM (fi->how, (fi->priv->is_debcred ?
+  ADD_MENU_ITEM (fi->how, (priv->is_debcred ?
 			   _("less than or equal to") :
 			   _("is less than or equal to")),
 		 COMPARE_LTE, G_CALLBACK (how_option_changed));
-  ADD_MENU_ITEM (fi->how, (fi->priv->is_debcred ?
+  ADD_MENU_ITEM (fi->how, (priv->is_debcred ?
 			   _("equal to") : _("equals")),
 		 COMPARE_EQUAL, G_CALLBACK (how_option_changed));
-  ADD_MENU_ITEM (fi->how, (fi->priv->is_debcred ?
+  ADD_MENU_ITEM (fi->how, (priv->is_debcred ?
 			   _("not equal to") : _("does not equal")),
 		 COMPARE_NEQ, G_CALLBACK (how_option_changed));
-  ADD_MENU_ITEM (fi->how, (fi->priv->is_debcred ?
+  ADD_MENU_ITEM (fi->how, (priv->is_debcred ?
 			   _("greater than") : _("is greater than")),
 		 COMPARE_GT, G_CALLBACK (how_option_changed));
-  ADD_MENU_ITEM (fi->how, (fi->priv->is_debcred ?
+  ADD_MENU_ITEM (fi->how, (priv->is_debcred ?
 			   _("greater than or equal to") :
 			   _("is greater than or equal to")),
 		 COMPARE_GTE, G_CALLBACK (how_option_changed));
@@ -294,24 +303,28 @@ static void
 grab_focus (GNCSearchCoreType *fe)
 {
   GNCSearchNumeric *fi = (GNCSearchNumeric *)fe;
+  GNCSearchNumericPrivate *priv;
 
   g_return_if_fail (fi);
   g_return_if_fail (IS_GNCSEARCH_NUMERIC (fi));
 
-  if (fi->priv->entry)
-    gtk_widget_grab_focus (fi->priv->entry);
+  priv = _PRIVATE(fi);
+  if (priv->entry)
+    gtk_widget_grab_focus (priv->entry);
 }
 
 static void
 editable_enters (GNCSearchCoreType *fe)
 {
   GNCSearchNumeric *fi = (GNCSearchNumeric *)fe;
+  GNCSearchNumericPrivate *priv;
 
   g_return_if_fail (fi);
   g_return_if_fail (IS_GNCSEARCH_NUMERIC (fi));
 
-  if (fi->priv->entry)
-    gtk_entry_set_activates_default(GTK_ENTRY (fi->priv->entry), TRUE);
+  priv = _PRIVATE(fi);
+  if (priv->entry)
+    gtk_entry_set_activates_default(GTK_ENTRY (priv->entry), TRUE);
 }
 
 static GtkWidget *
@@ -319,14 +332,16 @@ gncs_get_widget (GNCSearchCoreType *fe)
 {
   GtkWidget *entry, *menu, *box;
   GNCSearchNumeric *fi = (GNCSearchNumeric *)fe;
-	
+  GNCSearchNumericPrivate *priv;
+
   g_return_val_if_fail (fi, NULL);
   g_return_val_if_fail (IS_GNCSEARCH_NUMERIC (fi), NULL);
 
+  priv = _PRIVATE(fi);
   box = gtk_hbox_new (FALSE, 3);
 
   /* Build and connect the option menu(s) */
-  if (fi->priv->is_debcred) {
+  if (priv->is_debcred) {
     menu = make_option_menu (fe);
     gtk_box_pack_start (GTK_BOX (box), menu, FALSE, FALSE, 3);
   }
@@ -339,8 +354,8 @@ gncs_get_widget (GNCSearchCoreType *fe)
   gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (entry), fi->value);
   g_signal_connect (G_OBJECT (entry), "amount_changed", G_CALLBACK (entry_changed), fe);
   gtk_box_pack_start (GTK_BOX (box), entry, FALSE, FALSE, 3);
-  fi->priv->gae = GNC_AMOUNT_EDIT (entry);
-  fi->priv->entry = gnc_amount_edit_gtk_entry (GNC_AMOUNT_EDIT (entry));
+  priv->gae = GNC_AMOUNT_EDIT (entry);
+  priv->entry = gnc_amount_edit_gtk_entry (GNC_AMOUNT_EDIT (entry));
 
   /* And return the box */
   return box;
@@ -349,12 +364,14 @@ gncs_get_widget (GNCSearchCoreType *fe)
 static QueryPredData_t gncs_get_predicate (GNCSearchCoreType *fe)
 {
   GNCSearchNumeric *fi = (GNCSearchNumeric *)fe;
+  GNCSearchNumericPrivate *priv;
 
   g_return_val_if_fail (fi, NULL);
   g_return_val_if_fail (IS_GNCSEARCH_NUMERIC (fi), NULL);
 
   /* force the computation of the entry, because we may not get the signal */
-  entry_changed (fi->priv->gae, fi);
+  priv = _PRIVATE(fi);
+  entry_changed (priv->gae, fi);
 
   return gncQueryNumericPredicate (fi->how, fi->option, fi->value);
 }
@@ -362,15 +379,18 @@ static QueryPredData_t gncs_get_predicate (GNCSearchCoreType *fe)
 static GNCSearchCoreType *gncs_clone(GNCSearchCoreType *fe)
 {
   GNCSearchNumeric *se, *fse = (GNCSearchNumeric *)fe;
+  GNCSearchNumericPrivate *se_priv, *fse_priv;
 
   g_return_val_if_fail (fse, NULL);
   g_return_val_if_fail (IS_GNCSEARCH_NUMERIC (fse), NULL);
+  fse_priv = _PRIVATE(fse);
 
   se = gnc_search_numeric_new ();
   gnc_search_numeric_set_value (se, fse->value);
   gnc_search_numeric_set_how (se, fse->how);
+  se_priv = _PRIVATE(se);
   gnc_search_numeric_set_option (se, fse->option);
-  se->priv->is_debcred = fse->priv->is_debcred;
+  se_priv->is_debcred = fse_priv->is_debcred;
 
   return (GNCSearchCoreType *)se;
 }

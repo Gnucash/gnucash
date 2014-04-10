@@ -13,8 +13,8 @@
  * along with this program; if not, contact:                        *
  *                                                                  *
  * Free Software Foundation           Voice:  +1-617-542-5942       *
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
- * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
 /** @addtogroup Import_Export
     @{ */
@@ -29,18 +29,20 @@
 
 #include "config.h"
 
-#include <glib.h>
+#include <gtk/gtk.h>
 
 #include "import-backend.h"
 #include "import-match-picker.h"
 
-#include "gnc-engine-util.h"
+#include "qof.h"
 #include "gnc-ui-util.h"
 #include <glade/glade.h>
 #include "dialog-utils.h"
 /********************************************************************\
  *   Constants   *
 \********************************************************************/
+
+#define GCONF_SECTION "dialogs/import/generic_matcher/match_picker"
 
 #define NUM_COLUMNS_DOWNLOADED_CLIST 6
 static const int DOWNLOADED_CLIST_ACCOUNT = 0;
@@ -282,11 +284,11 @@ init_match_picker_gui(GNCImportMatchPicker * matcher)
   /* connect the signals in the interface */
   glade_xml_signal_connect_data(xml,
 				"match_transaction_select_cb", 
-				GTK_SIGNAL_FUNC(match_transaction_select_cb),
+				G_CALLBACK(match_transaction_select_cb),
 				matcher);
   glade_xml_signal_connect_data(xml,
 				"match_transaction_unselect_cb", 
-				GTK_SIGNAL_FUNC(match_transaction_unselect_cb),
+				G_CALLBACK(match_transaction_unselect_cb),
 				matcher);
   
   matcher->transaction_matcher = glade_xml_get_widget (xml, "match_picker");
@@ -322,6 +324,8 @@ init_match_picker_gui(GNCImportMatchPicker * matcher)
      ", add_threshold:",matcher->add_threshold,
      ", display_threshold:",matcher->display_threshold); */
   
+  gnc_restore_window_size(GCONF_SECTION,
+			  GTK_WINDOW (matcher->transaction_matcher));
   gtk_widget_show(matcher->transaction_matcher);  
   
 }/* end init_match_picker_gui */
@@ -363,6 +367,8 @@ gnc_import_match_picker_run_and_close (GNCImportTransInfo *transaction_info)
   /*DEBUG("Right before run and close");*/
   gtk_window_set_modal(GTK_WINDOW(matcher->transaction_matcher), TRUE);
   response = gtk_dialog_run (GTK_DIALOG (matcher->transaction_matcher));
+  gnc_save_window_size(GCONF_SECTION,
+		       GTK_WINDOW (matcher->transaction_matcher));
   gtk_widget_destroy (matcher->transaction_matcher);
   /*DEBUG("Right after run and close");*/
   /* DEBUG("Response was %d.", response); */

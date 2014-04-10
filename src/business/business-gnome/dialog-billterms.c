@@ -17,13 +17,14 @@
  * along with this program; if not, contact:
  *
  * Free Software Foundation           Voice:  +1-617-542-5942
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652
- * Boston, MA  02111-1307,  USA       gnu@gnu.org
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org
  */
 
 #include "config.h"
 
-#include <gnome.h>
+#include <gtk/gtk.h>
+#include <glib/gi18n.h>
 
 #include "dialog-utils.h"
 #include "gnc-component-manager.h"
@@ -31,8 +32,7 @@
 #include "gnc-gui-query.h"
 #include "gnc-gconf-utils.h"
 #include "gnc-ui-util.h"
-#include "gnc-engine-util.h"
-#include "gnc-numeric.h"
+#include "qof.h"
 
 #include "gncBillTerm.h"
 #include "dialog-billterms.h"
@@ -148,7 +148,7 @@ set_numeric (GtkWidget *widget, GncBillTerm *term,
   gnc_numeric val;
   gdouble fl = 0.0;
 
-  fl = gtk_spin_button_get_value_as_float (GTK_SPIN_BUTTON (widget));
+  fl = gtk_spin_button_get_value (GTK_SPIN_BUTTON (widget));
   val = double_to_gnc_numeric (fl, 100000, GNC_RND_ROUND);
   func (term, val);
 }
@@ -326,7 +326,8 @@ static void
 show_notebook (BillTermNB *notebook)
 {
   g_return_if_fail (notebook->type > 0);
-  gtk_notebook_set_page (GTK_NOTEBOOK (notebook->notebook), notebook->type-1);
+  gtk_notebook_set_current_page (GTK_NOTEBOOK (notebook->notebook),
+				 notebook->type-1);
 }
 
 static void

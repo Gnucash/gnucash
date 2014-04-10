@@ -17,16 +17,17 @@
  * along with this program; if not, contact:
  *
  * Free Software Foundation           Voice:  +1-617-542-5942
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652
- * Boston, MA  02111-1307,  USA       gnu@gnu.org
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org
  */
 
 #include "config.h"
 
 #include <gnome.h>
+#include <glib/gi18n.h>
 
 #include "dialog-utils.h"
-#include "gnc-engine-util.h"
+#include "qof.h"
 #include "gnc-gui-query.h"
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"
@@ -140,7 +141,7 @@ build_date_close_window (GtkWidget *hbox, const char *message)
   /* Add some extra space on the right to balance the pixmap */
   if (pixmap) {
     alignment = gtk_alignment_new (0., 0., 0., 0.);
-    gtk_widget_set_usize (alignment, GNOME_PAD, -1);
+    gtk_widget_set_size_request (alignment, GNOME_PAD, -1);
     gtk_widget_show (alignment);
     
     gtk_box_pack_start (GTK_BOX (hbox), alignment, FALSE, FALSE, 0);

@@ -18,25 +18,31 @@
  * along with this program; if not, contact:
  *
  * Free Software Foundation           Voice:  +1-617-542-5942
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652
- * Boston, MA  02111-1307,  USA       gnu@gnu.org
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org
  */
+
+/** @addtogroup MenuPlugins
+    @{ */
+/** @addtogroup GncPluginAccountTree An Account Tree Plugin
+    @{ */
+/** @file gnc-plugin-account-tree.c
+    @brief Provide the menus to create a chart of account page.
+    @author Copyright (C) 2003 Jan Arne Petersen <jpetersen@uni-bonn.de>
+*/
 
 #include "config.h"
 
+#include <gtk/gtk.h>
+#include <glib/gi18n.h>
 #include <string.h>
 
 #include "gnc-plugin-account-tree.h"
 #include "gnc-plugin-page-account-tree.h"
 
-#include "messages.h"
-
 static void gnc_plugin_account_tree_class_init (GncPluginAccountTreeClass *klass);
 static void gnc_plugin_account_tree_init (GncPluginAccountTree *plugin);
 static void gnc_plugin_account_tree_finalize (GObject *object);
-
-/* plugin window interface */
-static GncPluginPage *gnc_plugin_account_tree_create_page (GncPlugin *plugin, const gchar *uri);
 
 /* Command callbacks */
 static void gnc_plugin_account_tree_cmd_new_account_tree (GtkAction *action, GncMainWindowActionData *data);
@@ -45,21 +51,31 @@ static void gnc_plugin_account_tree_cmd_new_account_tree (GtkAction *action, Gnc
 #define PLUGIN_ACTIONS_NAME "gnc-plugin-account-tree-actions"
 #define PLUGIN_UI_FILENAME  "gnc-plugin-account-tree-ui.xml"
 
+/** An array of all of the actions provided by the account tree
+ *  plugin. */
 static GtkActionEntry gnc_plugin_actions [] = {
 	{ "FileNewAccountTreeAction", NULL, N_("New Accounts _Page"), NULL,
 	  N_("Open a new Account Tree page"),
 	  G_CALLBACK (gnc_plugin_account_tree_cmd_new_account_tree) },
 };
+/** The number of actions provided by this plugin. */
 static guint gnc_plugin_n_actions = G_N_ELEMENTS (gnc_plugin_actions);
 
 
-struct GncPluginAccountTreePrivate
+/** The instance private data structure for an account tree plugin. */
+typedef struct GncPluginAccountTreePrivate
 {
 	gpointer dummy;
-};
+} GncPluginAccountTreePrivate;
 
+#define GNC_PLUGIN_ACCOUNT_TREE_GET_PRIVATE(o)  \
+   (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_PLUGIN_ACCOUNT_TREE, GncPluginAccountTreePrivate))
+
+/** A pointer to the parent class of a plugin page. */
 static GObjectClass *parent_class = NULL;
 
+
+/*  Get the type of the account tree menu plugin. */
 GType
 gnc_plugin_account_tree_get_type (void)
 {
@@ -86,10 +102,16 @@ gnc_plugin_account_tree_get_type (void)
 	return gnc_plugin_account_tree_type;
 }
 
+
+/*  Create a new account tree menu plugin. */
 GncPlugin *
 gnc_plugin_account_tree_new (void)
 {
 	GncPluginAccountTree *plugin;
+
+	/* Reference the account tree page plugin to ensure it exists
+	 * in the gtk type system. */
+	GNC_TYPE_PLUGIN_PAGE_ACCOUNT_TREE;
 
 	plugin = g_object_new (GNC_TYPE_PLUGIN_ACCOUNT_TREE,
 			      NULL);
@@ -97,6 +119,14 @@ gnc_plugin_account_tree_new (void)
 	return GNC_PLUGIN (plugin);
 }
 
+
+/** Initialize the class for a new account tree plugin.  This will set
+ *  up any function pointers that override functions in the parent
+ *  class, and also configure the private data storage for this
+ *  widget.
+ *
+ *  @param klass The new class structure created by the object system.
+ */
 static void
 gnc_plugin_account_tree_class_init (GncPluginAccountTreeClass *klass)
 {
@@ -110,55 +140,47 @@ gnc_plugin_account_tree_class_init (GncPluginAccountTreeClass *klass)
 	/* plugin info */
 	plugin_class->plugin_name  = GNC_PLUGIN_ACCOUNT_TREE_NAME;
 
-	/* function overrides */
-	plugin_class->create_page  = gnc_plugin_account_tree_create_page;
-
 	/* widget addition/removal */
 	plugin_class->actions_name = PLUGIN_ACTIONS_NAME;
 	plugin_class->actions      = gnc_plugin_actions;
 	plugin_class->n_actions    = gnc_plugin_n_actions;
 	plugin_class->ui_filename  = PLUGIN_UI_FILENAME;
+
+	g_type_class_add_private(klass, sizeof(GncPluginAccountTreePrivate));
 }
 
+
+/** Initialize a new instance of a gnucash content plugin.  This
+ *  function currently does nothing.
+ *
+ *  @param page The new object instance created by the object
+ *  system. */
 static void
 gnc_plugin_account_tree_init (GncPluginAccountTree *plugin)
 {
-	plugin->priv = g_new0 (GncPluginAccountTreePrivate, 1);
 }
 
+
+/** Finalize the account tree plugin object.  This function is called
+ *  from the G_Object level to complete the destruction of the object.
+ *  It should release any memory not previously released by the
+ *  destroy function (i.e. the private data structure), then chain up
+ *  to the parent's destroy function.  This function currently does
+ *  nothing.
+ *
+ *  @param object The object being destroyed. */
 static void
 gnc_plugin_account_tree_finalize (GObject *object)
 {
 	GncPluginAccountTree *plugin;
+	GncPluginAccountTreePrivate *priv;
 
 	g_return_if_fail (GNC_IS_PLUGIN_ACCOUNT_TREE (object));
 
 	plugin = GNC_PLUGIN_ACCOUNT_TREE (object);
-
-	g_return_if_fail (plugin->priv != NULL);
-
-	g_free (plugin->priv);
+	priv = GNC_PLUGIN_ACCOUNT_TREE_GET_PRIVATE (object);
 
 	G_OBJECT_CLASS (parent_class)->finalize (object);
-}
-
-/************************************************************
- *              Plugin Function Implementation              *
- ************************************************************/
-
-static GncPluginPage *
-gnc_plugin_account_tree_create_page (GncPlugin *plugin,
-				     const gchar *uri)
-{
-	g_return_val_if_fail (GNC_IS_PLUGIN_ACCOUNT_TREE (plugin), NULL);
-	g_return_val_if_fail (uri != NULL, NULL);
-
-	/* FIXME add better URI handling */
-	if (strcmp ("default:", uri)) {
-		return NULL;
-	}
-	
-	return gnc_plugin_page_account_tree_new ();
 }
 
 /************************************************************
@@ -169,19 +191,13 @@ static void
 gnc_plugin_account_tree_cmd_new_account_tree (GtkAction *action,
 					      GncMainWindowActionData *data)
 {
-	g_return_if_fail (data != NULL);
-	gnc_new_account_tree (data->window);
-}
-
-/************************************************************
- *                     Other Functions                      *
- ************************************************************/
-
-void
-gnc_new_account_tree (GncMainWindow *window)
-{
 	GncPluginPage *page;
 
+	g_return_if_fail (data != NULL);
+
 	page = gnc_plugin_page_account_tree_new ();
-	gnc_main_window_open_page (window, page);
+	gnc_main_window_open_page (data->window, page);
 }
+
+/** @} */
+/** @} */

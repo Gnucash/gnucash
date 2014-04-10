@@ -18,9 +18,18 @@
  * along with this program; if not, contact:
  *
  * Free Software Foundation           Voice:  +1-617-542-5942
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652
- * Boston, MA  02111-1307,  USA       gnu@gnu.org
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org
  */
+
+/** @addtogroup MenuPlugins
+    @{ */
+/** @addtogroup GncPluginAccountTree An Account Tree Plugin
+    @{ */
+/** @file gnc-plugin-account-tree.h
+    @brief Provide the menus to create a chart of account page.
+    @author Copyright (C) 2003 Jan Arne Petersen <jpetersen@uni-bonn.de>
+*/
 
 #ifndef __GNC_PLUGIN_ACCOUNT_TREE_H
 #define __GNC_PLUGIN_ACCOUNT_TREE_H
@@ -42,25 +51,36 @@ G_BEGIN_DECLS
 #define GNC_PLUGIN_ACCOUNT_TREE_NAME "gnc-plugin-account-tree"
 
 /* typedefs & structures */
-typedef struct GncPluginAccountTreePrivate GncPluginAccountTreePrivate;
 
+/** The instance data structure for an account tree menu plugin. */
 typedef struct {
-	GncPlugin parent;
-
-	GncPluginAccountTreePrivate *priv;
+	/** The parent object for this widget */
+	GncPlugin gnc_plugin;
 } GncPluginAccountTree;
 
+/** The class data structure for an account tree menu plugin. */
 typedef struct {
-	GncPluginClass parent;
+	/** The parent class for this widget. */
+	GncPluginClass gnc_plugin;
 } GncPluginAccountTreeClass;
 
-/* function prototypes */
-GType      gnc_plugin_account_tree_get_type (void);
 
-GncPlugin *gnc_plugin_account_tree_new      (void);
+/** Get the type of the account tree menu plugin.
+ *
+ *  @return A GType.
+ */
+GType gnc_plugin_account_tree_get_type (void);
 
-void       gnc_new_account_tree             (GncMainWindow *window);
+
+/** Create a new account tree menu plugin.
+ *
+ *  @return A pointer to the new object.
+ */
+GncPlugin *gnc_plugin_account_tree_new (void);
 
 G_END_DECLS
 
 #endif /* __GNC_PLUGIN_ACCOUNT_TREE_H */
+
+/** @} */
+/** @} */

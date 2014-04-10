@@ -19,29 +19,23 @@
  * along with this program; if not, contact:                        *
  *                                                                  *
  * Free Software Foundation           Voice:  +1-617-542-5942       *
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
- * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  ********************************************************************/
 
 #include "config.h"
 
-#include <gnome.h>
-#include <string.h>
+#include <gtk/gtk.h>
+#include <glib/gi18n.h>
 
 #include "Account.h"
 #include "Group.h"
-#include "dialog-utils.h"
 #include "gnc-accounting-period.h"
 #include "gnc-component-manager.h"
-#include "gnc-engine-util.h"
 #include "gnc-euro.h"
 #include "gnc-gconf-utils.h"
 #include "gnc-ui-util.h"
-#include "gnc-ui.h"
-#include "messages.h"
-#include "option-util.h"
-#include "qofbook.h"
-#include "top-level.h"
+#include "qof.h"
 #include "window-main-summarybar.h"
 
 typedef struct {

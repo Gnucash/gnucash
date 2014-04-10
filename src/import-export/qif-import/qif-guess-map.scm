@@ -63,15 +63,12 @@
   ;;    (older saved prefs may not have this one)
   ;;  - a hash of QIF stock name to gnc-commodity*
   ;;    (older saved prefs may not have this one)
-  (let* ((pref-dir (build-path (getenv "HOME") ".gnucash"))
-         (pref-filename (build-path pref-dir "qif-accounts-map"))
+  (let* ((pref-filename (gnc:build-dotgnucash-path "qif-accounts-map"))
          (results '()))
     
     ;; first, read the account map and category map from the 
     ;; user's qif-accounts-map file.     
-    (if (and (access? pref-dir F_OK)
-             (access? pref-dir X_OK) 
-             (access? pref-filename R_OK))
+    (if (access? pref-filename R_OK)
         (with-input-from-file pref-filename
           (lambda ()
             (let ((qif-account-list #f)
@@ -178,22 +175,10 @@
 
 
 (define (qif-import:save-map-prefs acct-map cat-map memo-map stock-map)
-  (let* ((pref-dir (build-path (getenv "HOME") ".gnucash"))
-         (pref-filename (build-path pref-dir "qif-accounts-map"))
-         (save-ok #f))
+  (let* ((pref-filename (gnc:build-dotgnucash-path "qif-accounts-map")))
     ;; does the file exist? if not, create it; in either case,
     ;; make sure it's a directory and we have write and execute 
     ;; permission. 
-    (let ((perm (access? pref-dir F_OK)))
-      (if (not perm)
-          (mkdir pref-dir))
-      (let ((stats (stat pref-dir)))
-        (if (and (eq? (stat:type stats) 'directory)
-                 (access? pref-dir X_OK)
-                 (access? pref-dir W_OK))
-            (set! save-ok #t))))        
-    
-    (if save-ok 
         (with-output-to-file pref-filename
           (lambda ()
             (display ";;; qif-accounts-map\n")
@@ -214,7 +199,7 @@
 
             (display ";;; map from QIF stock name to GNC commodity") (newline)
             (qif-import:write-commodities stock-map)           
-            (newline))))))
+            (newline)))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

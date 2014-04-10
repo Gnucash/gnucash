@@ -11,7 +11,8 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+ *  02110-1301, USA.
  */
  
 #include <glib.h>
@@ -92,8 +93,8 @@ db_file_url(DbInfo *dbinfo)
 
     g_return_val_if_fail(dbinfo->dbname && dbinfo->mode, NULL);
 
-    if ((!g_strncasecmp(dbinfo->port, "7777", 4)) &&
-        (!g_strncasecmp(dbinfo->host, "localhost", 8))) {
+    if ((!g_ascii_strncasecmp(dbinfo->port, "7777", 4)) &&
+        (!g_ascii_strncasecmp(dbinfo->host, "localhost", 8))) {
         /* TEST_DB_SOCKET_DIR must be an absolute path */
         db_socket_dir = getenv("TEST_DB_SOCKET_DIR");
         if (!db_socket_dir)
@@ -792,7 +793,7 @@ drop_database(DbInfo *dbinfo)
     gchar *dropdb = NULL;
     int rc;
 
-    if (!g_strncasecmp(dbinfo->port, "7777", 4)) {
+    if (!g_ascii_strncasecmp(dbinfo->port, "7777", 4)) {
         dropdb = g_strdup_printf("dropdb -p %s %s",
                                  dbinfo->port, dbinfo->dbname);
     } else {

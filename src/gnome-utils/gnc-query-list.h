@@ -16,8 +16,8 @@
  * along with this program; if not, contact:                        *
  *                                                                  *
  * Free Software Foundation           Voice:  +1-617-542-5942       *
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
- * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
 #ifndef GNC_QUERY_LIST_H
@@ -31,14 +31,13 @@
 extern "C" {
 #endif				/* __cplusplus */
 
-#define GTK_TYPE_GNC_QUERY_LIST (gnc_query_list_get_type ())
-#define GNC_QUERY_LIST(obj) (GTK_CHECK_CAST ((obj), GTK_TYPE_GNC_QUERY_LIST, GNCQueryList))
-#define GNC_QUERY_LIST_CLASS(klass) (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_GNC_QUERY_LIST, GNCQueryListClass))
-#define IS_GNC_QUERY_LIST(obj) (GTK_CHECK_TYPE ((obj), GTK_TYPE_GNC_QUERY_LIST))
-#define IS_GNC_QUERY_LIST_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_GNC_QUERY_LIST))
+#define GNC_TYPE_QUERY_LIST (gnc_query_list_get_type ())
+#define GNC_QUERY_LIST(obj) (GTK_CHECK_CAST ((obj), GNC_TYPE_QUERY_LIST, GNCQueryList))
+#define GNC_QUERY_LIST_CLASS(klass) (GTK_CHECK_CLASS_CAST ((klass), GNC_TYPE_QUERY_LIST, GNCQueryListClass))
+#define IS_GNC_QUERY_LIST(obj) (GTK_CHECK_TYPE ((obj), GNC_TYPE_QUERY_LIST))
+#define IS_GNC_QUERY_LIST_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), GNC_TYPE_QUERY_LIST))
 
 typedef struct _GNCQueryList      GNCQueryList;
-typedef struct _GNCQueryListPriv  GNCQueryListPriv;
 typedef struct _GNCQueryListClass GNCQueryListClass;
 
 struct _GNCQueryList
@@ -69,14 +68,11 @@ struct _GNCQueryList
   /* Column resizing */
   gint prev_allocation;
   gint *title_widths;
-
-  /* Private data */
-  GNCQueryListPriv *priv;
 };
 
 struct _GNCQueryListClass
 {
-  GtkCListClass parent_class;
+  GtkCListClass clist_class;
 
   void (*line_toggled) (GNCQueryList *list, gpointer entry);
   void (*double_click_entry) (GNCQueryList *list, gpointer entry);

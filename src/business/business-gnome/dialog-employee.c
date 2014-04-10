@@ -17,13 +17,14 @@
  * along with this program; if not, contact:
  *
  * Free Software Foundation           Voice:  +1-617-542-5942
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652
- * Boston, MA  02111-1307,  USA       gnu@gnu.org
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org
  */
 
 #include "config.h"
 
 #include <gtk/gtk.h>
+#include <glib/gi18n.h>
 
 #include "dialog-utils.h"
 #include "gnc-amount-edit.h"
@@ -32,7 +33,7 @@
 #include "gnc-ui.h"
 #include "gnc-gui-query.h"
 #include "gnc-ui-util.h"
-#include "gnc-engine-util.h"
+#include "qof.h"
 #include "dialog-search.h"
 #include "search-param.h"
 #include "gnc-account-sel.h"
@@ -301,12 +302,12 @@ gnc_employee_name_changed_cb (GtkWidget *widget, gpointer data)
 
   id = gtk_entry_get_text (GTK_ENTRY (ew->id_entry));
 
-  fullname = g_strconcat (name, " (", id, ")", NULL);
+  fullname = g_strconcat (name, " (", id, ")", (char *)NULL);
 
   if (ew->dialog_type == EDIT_EMPLOYEE)
-    title = g_strconcat (_("Edit Employee"), " - ", fullname, NULL);
+    title = g_strconcat (_("Edit Employee"), " - ", fullname, (char *)NULL);
   else
-    title = g_strconcat (_("New Employee"), " - ", fullname, NULL);
+    title = g_strconcat (_("New Employee"), " - ", fullname, (char *)NULL);
 
   gtk_window_set_title (GTK_WINDOW (ew->dialog), title);
 
@@ -416,7 +417,7 @@ gnc_employee_new_window (GNCBook *bookp,
   xml = gnc_glade_xml_new ("employee.glade", "Employee Dialog");
   ew->dialog = glade_xml_get_widget (xml, "Employee Dialog");
 
-  gtk_object_set_data (GTK_OBJECT (ew->dialog), "dialog_info", ew);
+  g_object_set_data (G_OBJECT (ew->dialog), "dialog_info", ew);
 
   /* Get entry points */
   ew->id_entry = glade_xml_get_widget (xml, "id_entry");

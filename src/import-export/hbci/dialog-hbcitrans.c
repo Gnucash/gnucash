@@ -18,8 +18,8 @@
  * along with this program; if not, contact:                        *
  *                                                                  *
  * Free Software Foundation           Voice:  +1-617-542-5942       *
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
- * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
 #ifdef HAVE_CONFIG_H
@@ -27,6 +27,7 @@
 #endif
 
 #include <gnome.h>
+#include <glib/gi18n.h>
 #include <aqbanking/version.h>
 #include <aqbanking/account.h>
 #include <aqbanking/jobsingletransfer.h>
@@ -52,6 +53,8 @@
 #if HAVE_KTOBLZCHECK_H
 #  include <ktoblzcheck.h>
 #endif
+
+#define TEMPLATE_LABEL "template"
 
 /* -------------------------------------- */
 /* Data structure */
@@ -212,7 +215,7 @@ static void fill_template_list_func(gpointer data, gpointer user_data)
   item = gtk_list_item_new_with_label(gnc_trans_templ_get_name(templ));
   g_assert(item);
   
-  gtk_object_set_user_data(GTK_OBJECT(item), templ);
+  g_object_set_data(G_OBJECT(item), TEMPLATE_LABEL, templ);
   gtk_container_add(GTK_CONTAINER(list), item );
 }
 
@@ -402,36 +405,36 @@ gnc_hbci_dialog_new (GtkWidget *parent,
     
     /* Connect signals */
 /*    gnc_option_menu_init_w_signal (td->template_option, 
-				   GTK_SIGNAL_FUNC(template_selection_cb),
+				   G_CALLBACK(template_selection_cb),
 				   td);   */
     /* FIXME: commented out until the GTK_TREE_VIEW is implemented! */
     /*
-    gtk_signal_connect (GTK_OBJECT (td->template_gtktreeview), "select_child",
-                      GTK_SIGNAL_FUNC (on_template_list_select_child),
+    g_signal_connect (td->template_gtktreeview, "select_child",
+                      G_CALLBACK (on_template_list_select_child),
                       td);
                       
-    gtk_signal_connect(GTK_OBJECT (add_templ_button), "clicked",
-		       GTK_SIGNAL_FUNC(add_template_cb), td);
+    g_signal_connect (add_templ_button, "clicked",
+		      G_CALLBACK(add_template_cb), td);
 
-    gtk_signal_connect (GTK_OBJECT (moveup_templ_button), "clicked",
-                      GTK_SIGNAL_FUNC (moveup_template_cb),
+    g_signal_connect (moveup_templ_button, "clicked",
+                      G_CALLBACK (moveup_template_cb),
                       td);
                       
-    gtk_signal_connect (GTK_OBJECT (movedown_templ_button), "clicked",
-                      GTK_SIGNAL_FUNC (movedown_template_cb),
+    g_signal_connect (movedown_templ_button, "clicked",
+                      G_CALLBACK (movedown_template_cb),
                       td);
 
-     gtk_signal_connect (GTK_OBJECT (sort_templ_button), "clicked",
-                      GTK_SIGNAL_FUNC (sort_template_cb),
+     g_signal_connect (sort_templ_button, "clicked",
+                      G_CALLBACK (sort_template_cb),
                       td);
 
-     gtk_signal_connect (GTK_OBJECT (del_templ_button), "clicked",
-                      GTK_SIGNAL_FUNC (del_template_cb),
+     g_signal_connect (del_templ_button, "clicked",
+                      G_CALLBACK (del_template_cb),
                       td);
     */
 
-    gtk_signal_connect(GTK_OBJECT (td->recp_bankcode_entry), "changed",
-		       GTK_SIGNAL_FUNC(blz_changed_cb), td);
+    g_signal_connect (td->recp_bankcode_entry, "changed",
+		      G_CALLBACK(blz_changed_cb), td);
 
     /* Default button */
     gtk_dialog_set_default_response (GTK_DIALOG (td->dialog), GTK_RESPONSE_OK);
@@ -813,7 +816,7 @@ on_template_list_select_child          (GtkList         *list,
                                         gpointer         user_data)
 {
   HBCITransDialog *td = user_data;
-  GNCTransTempl *templ = gtk_object_get_user_data (GTK_OBJECT(widget)) ;
+  GNCTransTempl *templ = g_object_get_data (G_OBJECT(widget), TEMPLATE_LABEL);
 
   g_assert(td);
 
@@ -936,7 +939,7 @@ void add_template_cb(GtkButton *b,
        gtk_entry_get_text (GTK_ENTRY (td->purpose_cont_entry)));
 
   if (td->selected_template) {
-    t = gtk_object_get_user_data(GTK_OBJECT(td->selected_template));
+    t = g_object_get_data(G_OBJECT(td->selected_template), TEMPLATE_LABEL);
 
     index = 1+gtk_list_child_position(GTK_LIST(td->template_gtktreeview), td->selected_template);
     }
@@ -970,7 +973,7 @@ moveup_template_cb(GtkButton       *button,
   g_assert(td);
 
   if (td->selected_template) {
-    t = gtk_object_get_user_data(GTK_OBJECT(td->selected_template));
+    t = g_object_get_data(G_OBJECT(td->selected_template), TEMPLATE_LABEL);
 
     index = gtk_list_child_position(GTK_LIST(td->template_gtktreeview), td->selected_template);
 
@@ -1003,7 +1006,7 @@ movedown_template_cb(GtkButton       *button,
   g_assert(td);
 
   if (td->selected_template) {
-    t = gtk_object_get_user_data(GTK_OBJECT(td->selected_template));
+    t = g_object_get_data(G_OBJECT(td->selected_template), TEMPLATE_LABEL);
 
     index = gtk_list_child_position(GTK_LIST(td->template_gtktreeview), td->selected_template);
 
@@ -1028,8 +1031,8 @@ movedown_template_cb(GtkButton       *button,
 static gint comparefunc(const gconstpointer e1,
                  const gconstpointer e2)
 {
-  return g_strcasecmp(gnc_trans_templ_get_name((GNCTransTempl*)e1),
-        gnc_trans_templ_get_name((GNCTransTempl*)e2));
+  return strcmp(gnc_trans_templ_get_name_key((GNCTransTempl*)e1),
+        gnc_trans_templ_get_name_key((GNCTransTempl*)e2));
   
 }  
                  
@@ -1072,7 +1075,7 @@ del_template_cb(GtkButton       *button,
 
   if (td->selected_template) {
 
-    t = gtk_object_get_user_data(GTK_OBJECT(td->selected_template));
+    t = g_object_get_data(G_OBJECT(td->selected_template), TEMPLATE_LABEL);
 
     index = gtk_list_child_position(GTK_LIST(td->template_gtktreeview), td->selected_template);
 

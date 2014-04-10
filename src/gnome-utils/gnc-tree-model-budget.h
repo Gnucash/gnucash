@@ -29,7 +29,6 @@
 #ifndef __GNC_TREE_MODEL_BUDGET_H__
 #define __GNC_TREE_MODEL_BUDGET_H__
 
-#include <gtk/gtk.h>
 #include "gnc-budget.h"
 
 /* The budget list columns. */

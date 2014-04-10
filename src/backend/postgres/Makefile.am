@@ -57,7 +57,6 @@ noinst_HEADERS = \
   newtables.h
 
 EXTRA_DIST = \
-  .cvsignore \
   README \
   design.txt \
   functions.sql \

@@ -1,4 +1,4 @@
-#include "qofobject.h"
+#include "qof.h"
 
 
 		#define GncObject_t QofObject

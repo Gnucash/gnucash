@@ -20,15 +20,18 @@
  * along with this program; if not, contact:
  *
  * Free Software Foundation           Voice:  +1-617-542-5942
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652
- * Boston, MA  02111-1307,  USA       gnu@gnu.org
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org
  *
  */
 /*
   @NOTATION@
  */
 
-#include <config.h>
+#include "config.h"
+
+#include <gtk/gtk.h>
+#include <glib/gi18n.h>
 #include <string.h>
 #include <ctype.h>
 #include <stdio.h>
@@ -206,7 +209,7 @@ static void
 create_children (GNCGeneralSelect *gsl, GNCGeneralSelectType type)
 {
         gsl->entry = gtk_entry_new ();
-        gtk_entry_set_editable (GTK_ENTRY (gsl->entry), FALSE);
+        gtk_editable_set_editable (GTK_EDITABLE (gsl->entry), FALSE);
 	gtk_box_pack_start (GTK_BOX (gsl), gsl->entry, TRUE, TRUE, 0);
         gtk_widget_show (gsl->entry);
 
@@ -293,8 +296,7 @@ gnc_general_select_set_selected (GNCGeneralSelect *gsl, gpointer selection)
 
         gtk_entry_set_text(GTK_ENTRY(gsl->entry), text);
 
-        gtk_signal_emit(GTK_OBJECT(gsl),
-                        general_select_signals[SELECTION_CHANGED]);
+        g_signal_emit(gsl, general_select_signals[SELECTION_CHANGED], 0);
 }
 
 /**

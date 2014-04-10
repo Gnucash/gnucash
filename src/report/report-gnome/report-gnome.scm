@@ -46,7 +46,6 @@
               (gnc:warning-dialog #f (_ "This report has no options.")))))))
 
 (define (gnc:add-report-template-menu-items)
-  (define menu-namer (gnc:new-menu-namer))
   (define *template-items* '())
 
   (define (add-template-menu-item name template)
@@ -72,7 +71,7 @@
 
           (set! item
                 (gnc:make-menu-item
-                 ((menu-namer 'add-name) name)
+                 name
                  menu-tip
                  menu-path
                  (lambda (window)
@@ -96,7 +95,6 @@
    (sort *template-items* sort-templates)))
 
 (define (gnc:report-menu-setup)
-  (define menu-namer (gnc:new-menu-namer))
   (define asset-liability-menu
     (gnc:make-menu gnc:menuname-asset-liability (list gnc:menuname-reports)))
   (define income-expense-menu

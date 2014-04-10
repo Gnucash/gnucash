@@ -16,20 +16,20 @@
  * along with this program; if not, contact:                        *
  *                                                                  *
  * Free Software Foundation           Voice:  +1-617-542-5942       *
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
- * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  ********************************************************************/
 
 #include "config.h"
 
 #include <gnome.h>
+#include <glib/gi18n.h>
 #include <libguile.h>
 #include <g-wrap-wct.h>
 
 #include "dialog-column-view.h"
 #include "dialog-options.h"
 #include "dialog-utils.h"
-#include "messages.h"
 #include "option-util.h"
 #include "window-report.h"
 #include "guile-mappings.h"
@@ -169,9 +169,6 @@ update_display_lists(gnc_column_view_edit * view) {
   }
   gtk_clist_select_row(view->contents, row, 0);
   gtk_clist_thaw(view->contents);
-
-  gnc_clist_columns_autosize (view->available);
-  gnc_clist_columns_autosize (view->contents);
 }
 
 static void
@@ -231,29 +228,38 @@ gnc_column_view_edit_options(SCM options, SCM view) {
 
     r->optwin = gnc_options_dialog_new(NULL);
 
-    xml = gnc_glade_xml_new ("report.glade", "view_contents_hbox");
+    /* Hide the generic dialog page list. */
+    {
+      GtkWidget *dialog, *page_list;
+
+      dialog = gnc_options_dialog_widget(r->optwin);
+      page_list = gnc_glade_lookup_widget (dialog, "page_list");
+      gtk_widget_hide(page_list);
+    }
+
+    xml = gnc_glade_xml_new ("report.glade", "view_contents_table");
 
     glade_xml_signal_connect_data
       (xml, "gnc_column_view_edit_add_cb",
-       GTK_SIGNAL_FUNC (gnc_column_view_edit_add_cb), r);
+       G_CALLBACK (gnc_column_view_edit_add_cb), r);
 
     glade_xml_signal_connect_data
       (xml, "gnc_column_view_edit_remove_cb",
-       GTK_SIGNAL_FUNC (gnc_column_view_edit_remove_cb), r);
+       G_CALLBACK (gnc_column_view_edit_remove_cb), r);
 
     glade_xml_signal_connect_data
       (xml, "gnc_edit_column_view_move_up_cb",
-       GTK_SIGNAL_FUNC (gnc_edit_column_view_move_up_cb), r);
+       G_CALLBACK (gnc_edit_column_view_move_up_cb), r);
 
     glade_xml_signal_connect_data
       (xml, "gnc_edit_column_view_move_down_cb",
-       GTK_SIGNAL_FUNC (gnc_edit_column_view_move_down_cb), r);
+       G_CALLBACK (gnc_edit_column_view_move_down_cb), r);
 
     glade_xml_signal_connect_data
       (xml, "gnc_column_view_edit_size_cb",
-       GTK_SIGNAL_FUNC (gnc_column_view_edit_size_cb), r);
+       G_CALLBACK (gnc_column_view_edit_size_cb), r);
 
-    editor       = glade_xml_get_widget (xml, "view_contents_hbox");
+    editor       = glade_xml_get_widget (xml, "view_contents_table");
     r->available = GTK_CLIST (glade_xml_get_widget (xml, "available_list"));
     r->contents  = GTK_CLIST (glade_xml_get_widget (xml, "contents_list"));
     r->options   = options;
@@ -263,6 +269,11 @@ gnc_column_view_edit_options(SCM options, SCM view) {
     r->contents_selected = 0;
     r->contents_list = SCM_EOL;
     r->odb       = gnc_option_db_new(r->options);
+
+    gtk_clist_set_column_auto_resize(r->available, 0, TRUE);
+    gtk_clist_set_column_auto_resize(r->contents, 0, TRUE);
+    gtk_clist_set_column_auto_resize(r->contents, 1, TRUE);
+    gtk_clist_set_column_auto_resize(r->contents, 2, TRUE);
 
     gnc_build_options_dialog_contents(r->optwin, r->odb);
 
@@ -291,7 +302,7 @@ gnc_column_view_edit_options(SCM options, SCM view) {
     gnc_options_dialog_set_close_cb(r->optwin, 
                                     gnc_column_view_edit_close_cb, r);
 
-    gtk_widget_show_all(gnc_options_dialog_widget(r->optwin));
+    gtk_widget_show(gnc_options_dialog_widget(r->optwin));
     return gnc_options_dialog_widget(r->optwin);
   }
 }
@@ -490,9 +501,10 @@ gnc_column_view_edit_size_cb(GtkButton * button, gpointer user_data) {
                               (float)scm_num2int(SCM_CADDR(current),
 						 SCM_ARG1, __FUNCTION__));
   
-    dlg_ret = gnome_dialog_run_and_close(GNOME_DIALOG(dlg));
+    dlg_ret = gtk_dialog_run(GTK_DIALOG(dlg));
+    gtk_widget_hide(dlg);
 
-    if(dlg_ret == 0) {
+    if(dlg_ret == GTK_RESPONSE_OK) {
       current = SCM_LIST4(SCM_CAR(current),
                           scm_int2num(gtk_spin_button_get_value_as_int
                                      (GTK_SPIN_BUTTON(colspin))),
@@ -507,5 +519,6 @@ gnc_column_view_edit_size_cb(GtkButton * button, gpointer user_data) {
       gnc_options_dialog_changed (r->optwin);
       update_display_lists(r);
     }
+    gtk_widget_destroy(dlg);
   }
 }

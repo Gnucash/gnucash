@@ -18,8 +18,8 @@
  * along with this program; if not, contact:                        *
  *                                                                  *
  * Free Software Foundation           Voice:  +1-617-542-5942       *
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
- * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  *                                                                  *
 \********************************************************************/
 
@@ -27,9 +27,7 @@
 #define DIALOG_UTILS_H
 
 #include <glade/glade.h>
-#include <gnome.h> 
-#include "Account.h"
-
+#include "qof.h"
 
 /* option button callback function */
 typedef void (*GNCOptionCallback) (GtkWidget *, gint index,
@@ -88,7 +86,9 @@ void gnc_save_window_size (const char *section, GtkWindow *window);
  *       data - the value to fill with                              *
  * Returns: nothing                                                 *
 \********************************************************************/
+#ifdef LIBGNOME_H
 void gnc_fill_menu_with_data (GnomeUIInfo *info, gpointer data);
+#endif
 
 void gnc_option_menu_init (GtkWidget * option_menu);
 void gnc_option_menu_init_w_signal(GtkWidget * w,
@@ -122,10 +122,6 @@ gboolean gnc_handle_date_accelerator (GdkEventKey *event,
 void gnc_clist_set_check (GtkCList *list, int row, int col, 
 			  gboolean checked);
 
-/* This function is similar to gtk_clist_columns_autosize, but
- * also takes into account the column titles. */
-void gnc_clist_columns_autosize (GtkCList *list);
-
 GladeXML * gnc_glade_xml_new (const char *filename, const char *root);
 GtkWidget * gnc_glade_lookup_widget (GtkWidget *widget, const char *name);
 void gnc_glade_autoconnect_full_func(const gchar *handler_name,
@@ -136,5 +132,22 @@ void gnc_glade_autoconnect_full_func(const gchar *handler_name,
 				     gboolean after,
 				     gpointer user_data);
 
+/** This function generates a button with icon and adds it to a
+ *  GtkDialog.  This is similar to just adding a stock button to the
+ *  dialog, only you can add an arbitrary pairing of button and label,
+ *  which the stock system doesn't provide.
+ *
+ *  @param dialog The dialog where the button should be added.
+ *
+ *  @param label The text of the button.
+ * 
+ *  @param stock_id The name of the stock button to use.
+ *
+ *  @param response The response id to return if this button is
+ *  clicked.*/
+void gnc_gtk_dialog_add_button (GtkWidget *dialog,
+				const gchar *label,
+				const gchar *stock_id,
+				guint response);
 
 #endif

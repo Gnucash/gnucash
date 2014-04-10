@@ -301,7 +301,7 @@ worry if your data is in multiple files.
 		      <property name="max_length">0</property>
 		      <property name="text" translatable="yes"></property>
 		      <property name="has_frame">True</property>
-		      <property name="invisible_char" translatable="yes">*</property>
+		      <property name="invisible_char">*</property>
 		      <property name="activates_default">False</property>
 		    </widget>
 		    <packing>
@@ -402,7 +402,7 @@ US QIF files are likely to be &quot;m-d-y&quot; or month-year-day.
 		      <property name="max_length">0</property>
 		      <property name="text" translatable="yes"></property>
 		      <property name="has_frame">True</property>
-		      <property name="invisible_char" translatable="yes">*</property>
+		      <property name="invisible_char">*</property>
 		      <property name="activates_default">False</property>
 		    </widget>
 		  </child>
@@ -547,7 +547,7 @@ in that program.
 		      <property name="max_length">0</property>
 		      <property name="text" translatable="yes"></property>
 		      <property name="has_frame">True</property>
-		      <property name="invisible_char" translatable="yes">*</property>
+		      <property name="invisible_char">*</property>
 		      <property name="activates_default">False</property>
 		    </widget>
 		    <packing>
@@ -1283,7 +1283,7 @@ Select the currency to use for transactions imported from your QIF files:
 		      <property name="max_length">0</property>
 		      <property name="text" translatable="yes"></property>
 		      <property name="has_frame">True</property>
-		      <property name="invisible_char" translatable="yes">*</property>
+		      <property name="invisible_char">*</property>
 		      <property name="activates_default">False</property>
 		    </widget>
 		  </child>
@@ -1783,7 +1783,7 @@ Click &quot;Cancel&quot; to abort the QIF import process.</property>
 	  <property name="visible">True</property>
 	  <property name="tooltip" translatable="yes">Show some documentation-only pages in QIF Import druid.</property>
 	  <property name="can_focus">True</property>
-	  <property name="label" translatable="yes">Show documentation</property>
+	  <property name="label" translatable="yes">_Show documentation</property>
 	  <property name="use_underline">True</property>
 	  <property name="relief">GTK_RELIEF_NORMAL</property>
 	  <property name="focus_on_click">True</property>

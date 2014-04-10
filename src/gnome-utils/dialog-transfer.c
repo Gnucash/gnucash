@@ -18,13 +18,15 @@
  * along with this program; if not, contact:                        *
  *                                                                  *
  * Free Software Foundation           Voice:  +1-617-542-5942       *
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
- * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
 #include "config.h"
 
 #include <gtk/gtk.h>
+#include <gdk/gdkkeysyms.h>
+#include <glib/gi18n.h>
 
 #include "dialog-transfer.h"
 #include "dialog-utils.h"
@@ -40,7 +42,6 @@
 #include "gnc-pricedb.h"
 #include "gnc-tree-view-account.h"
 #include "gnc-ui.h"
-#include "messages.h"
 #include "Transaction.h"
 #include "Account.h"
 
@@ -755,8 +756,9 @@ common_post_quickfill_handler(guint32 time, XferDialog *xferData )
       ( xferData->desc_start_selection != xferData->desc_end_selection ||
         xferData->desc_start_selection == 0 ) )
   {
-    gtk_entry_select_region( entry, xferData->desc_start_selection,
-                                    xferData->desc_end_selection );
+    gtk_editable_select_region( GTK_EDITABLE(entry),
+				xferData->desc_start_selection,
+				xferData->desc_end_selection );
 #if DRH_NEEDS_INVESTIGATION
     gtk_old_editable_claim_selection( GTK_OLD_EDITABLE(entry), TRUE, time );
 #endif
@@ -821,7 +823,8 @@ gnc_xfer_description_key_press_cb( GtkEntry *entry,
         /* NOT done with input, though, since we need to focus to the next
          * field.  Unselect the current field, though.
          */
-        gtk_entry_select_region( GTK_ENTRY(xferData->description_entry), 0, 0 );
+        gtk_editable_select_region( GTK_EDITABLE(xferData->description_entry),
+				    0, 0 );
 #if DRH_NEEDS_INVESTIGATION
         gtk_old_editable_claim_selection( GTK_OLD_EDITABLE(xferData->description_entry),
                                           FALSE, event->time );
@@ -1961,7 +1964,7 @@ gnc_xfer_dialog_set_to_show_button_active( XferDialog *xferData,
 /* Add a button with a user-specified label and "clicked" callback */
 void gnc_xfer_dialog_add_user_specified_button( XferDialog *xferData,
                                                 const gchar *label,
-                                                GtkSignalFunc callback,
+                                                GCallback callback,
                                                 gpointer user_data )
 {
   if( xferData && label && callback )

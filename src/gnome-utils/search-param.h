@@ -16,8 +16,8 @@
  * along with this program; if not, contact:
  *
  * Free Software Foundation           Voice:  +1-617-542-5942
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652
- * Boston, MA  02111-1307,  USA       gnu@gnu.org
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org
  */
 
 #ifndef _GNCSEARCH_PARAM_H
@@ -34,8 +34,7 @@ typedef struct _GNCSearchParam	GNCSearchParam;
 typedef struct _GNCSearchParamClass	GNCSearchParamClass;
 
 struct _GNCSearchParam {
-  GObject parent;
-  struct _GNCSearchParamPrivate *priv;
+  GObject gobject;
 
   const char *		title;
   GtkJustification	justify;
@@ -44,7 +43,7 @@ struct _GNCSearchParam {
 };
 
 struct _GNCSearchParamClass {
-  GObjectClass parent_class;
+  GObjectClass gobject_class;
 
   /* virtual methods */
 

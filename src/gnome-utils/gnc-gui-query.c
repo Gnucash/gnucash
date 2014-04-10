@@ -16,21 +16,22 @@
  * along with this program; if not, contact:                        *
  *                                                                  *
  * Free Software Foundation           Voice:  +1-617-542-5942       *
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
- * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
 #include "config.h"
 
 #include <gnome.h>
+#include <glib/gi18n.h>
  
 #include "dialog-utils.h"
 #include "gnc-gconf-utils.h"
-#include "gnc-engine-util.h"
+#include "qof.h"
 #include "gnc-gui-query.h"
 #include "gnc-ui.h"
-#include "messages.h"
 
+#define INDEX_LABEL "index"
 
 /* This static indicates the debugging module that this .o belongs to.  */
 /* static short module = MOD_GUI; */
@@ -159,6 +160,7 @@ gnc_ok_cancel_dialog(gncUIWidget parent,
 				   GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
 				   GTK_MESSAGE_QUESTION,
 				   GTK_BUTTONS_OK_CANCEL,
+				   "%s",
 				   buffer);
   g_free(buffer);
   va_end(args);
@@ -206,6 +208,7 @@ gnc_verify_cancel_dialog(GtkWidget *parent,
 				   GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
 				   GTK_MESSAGE_QUESTION,
 				   GTK_BUTTONS_NONE,
+				   "%s",
 				   buffer);
   g_free(buffer);
   va_end(args);
@@ -255,6 +258,7 @@ gnc_verify_dialog(gncUIWidget parent, gboolean yes_is_default,
 				   GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
 				   GTK_MESSAGE_QUESTION,
 				   GTK_BUTTONS_YES_NO,
+				   "%s",
 				   buffer);
   g_free(buffer);
   va_end(args);
@@ -315,6 +319,7 @@ gnc_info_dialog(GtkWidget *parent, const gchar *format, ...)
 				   GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
 				   GTK_MESSAGE_INFO,
 				   GTK_BUTTONS_CLOSE,
+				   "%s",
 				   buffer);
   va_end(args);
 
@@ -349,6 +354,7 @@ gnc_warning_dialog_common(GtkWidget *parent, const gchar *format, va_list args)
 				   GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
 				   GTK_MESSAGE_WARNING,
 				   GTK_BUTTONS_CLOSE,
+				   "%s",
 				   buffer);
   g_free(buffer);
 
@@ -420,6 +426,7 @@ gnc_error_dialog_common(GtkWidget *parent, const gchar *format, va_list args)
 				   GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
 				   GTK_MESSAGE_ERROR,
 				   GTK_BUTTONS_CLOSE,
+				   "%s",
 				   buffer);
   g_free(buffer);
 
@@ -443,89 +450,13 @@ gnc_error_dialog(GtkWidget *parent, const gchar *format, ...)
   va_end(args);
 }
 
-
-/********************************************************************\
- * gnc_generic_dialog_common                                        *
- *   display a message, and asks the user to choose from a          *
- *    number of selections.                                         *
- *                                                                  *
- * NOTE: This function does not return until the dialog is closed   *
- *                                                                  *
- * Args:   parent  - the parent window                              *
- *         type - type of dialog to display (use gnome constants)   *
- *         buttons - Names of the buttons to display                *
- *         format - the format string for the message to display    *
- *                   This is a standard 'printf' style string.      *
- *         args - a pointer to the first argument for the format    *
- *                string.                                           *
-\********************************************************************/
-#define MAX_BUTTONS 5
-static int
-gnc_generic_dialog_common(gncUIWidget parent, const char *type,
-			  const char **buttons_in,
-			  const gchar *format, va_list args)
-{
-  GtkWidget *verify_box = NULL;
-  const gchar *buttons[MAX_BUTTONS+1];
-  gchar *buffer;
-  gint i;
-
-  /* Translate the buttons */
-  for (i = 0; (i < MAX_BUTTONS) && buttons_in[i]; i++) {
-    buttons[i] = gettext(buttons_in[i]);
-  }
-  g_assert(i < MAX_BUTTONS);
-  buttons[i] = NULL;
-
-  buffer = g_strdup_vprintf(format, args);
-  verify_box = gnome_message_box_newv(buffer, type, buttons);
-  g_free(buffer);
-
-  if (parent != NULL)
-    gnome_dialog_set_parent(GNOME_DIALOG(verify_box), GTK_WINDOW(parent));
-  
-  gnome_dialog_set_default(GNOME_DIALOG(verify_box), 0);
-
-  return (gnome_dialog_run_and_close(GNOME_DIALOG(verify_box)));
-}
-
-int
-gnc_generic_question_dialog(GtkWidget *parent, const char **buttons,
-			    const gchar *format, ...)
-{
-  int result;
-  va_list args;
-
-  va_start(args, format);
-  result = gnc_generic_dialog_common(parent,
-				     GNOME_MESSAGE_BOX_QUESTION,
-				     buttons, format, args);
-  va_end(args);
-  return(result);
-}
-
-int
-gnc_generic_warning_dialog(GtkWidget *parent, const char **buttons,
-			   const char *format, ...)
-{
-  int result;
-  va_list args;
-
-  va_start(args, format);
-  result = gnc_generic_dialog_common(parent,
-				     GNOME_MESSAGE_BOX_WARNING,
-				     buttons, format, args);
-  va_end(args);
-  return(result);
-}
-
 static void
 gnc_choose_radio_button_cb(GtkWidget *w, gpointer data)
 {
   int *result = data;
 
   if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(w)))
-    *result = GPOINTER_TO_INT(gtk_object_get_user_data(GTK_OBJECT(w)));
+    *result = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(w), INDEX_LABEL));
 }
 
 /********************************************************************
@@ -555,7 +486,7 @@ gnc_choose_radio_option_dialog(gncUIWidget parent,
   int i;
 
   main_vbox = gtk_vbox_new(FALSE, 3);
-  gtk_container_border_width(GTK_CONTAINER(main_vbox), 5);
+  gtk_container_set_border_width(GTK_CONTAINER(main_vbox), 5);
   gtk_widget_show(main_vbox);
 
   label = gtk_label_new(msg);
@@ -564,19 +495,19 @@ gnc_choose_radio_option_dialog(gncUIWidget parent,
   gtk_widget_show(label);
 
   frame = gtk_frame_new(NULL);
-  gtk_container_border_width(GTK_CONTAINER(frame), 5);
+  gtk_container_set_border_width(GTK_CONTAINER(frame), 5);
   gtk_box_pack_start(GTK_BOX(main_vbox), frame, FALSE, FALSE, 0);
   gtk_widget_show(frame);
 
   vbox = gtk_vbox_new(TRUE, 3);
-  gtk_container_border_width(GTK_CONTAINER(vbox), 5);
+  gtk_container_set_border_width(GTK_CONTAINER(vbox), 5);
   gtk_container_add(GTK_CONTAINER(frame), vbox);
   gtk_widget_show(vbox);
 
   for (node = radio_list, i = 0; node; node = node->next, i++)
   {
     radio_button = gtk_radio_button_new_with_label(group, node->data);
-    group = gtk_radio_button_group(GTK_RADIO_BUTTON(radio_button));
+    group = gtk_radio_button_get_group(GTK_RADIO_BUTTON(radio_button));
 
     if (i == default_value) /* default is first radio button */
     {
@@ -586,10 +517,10 @@ gnc_choose_radio_option_dialog(gncUIWidget parent,
 
     gtk_widget_show(radio_button);
     gtk_box_pack_start(GTK_BOX(vbox), radio_button, FALSE, FALSE, 0);
-    gtk_object_set_user_data(GTK_OBJECT(radio_button), GINT_TO_POINTER(i));
-    gtk_signal_connect(GTK_OBJECT(radio_button), "clicked",
-		       GTK_SIGNAL_FUNC(gnc_choose_radio_button_cb),
-		       &radio_result);
+    g_object_set_data(G_OBJECT(radio_button), INDEX_LABEL, GINT_TO_POINTER(i));
+    g_signal_connect(radio_button, "clicked",
+		     G_CALLBACK(gnc_choose_radio_button_cb),
+		     &radio_result);
   }
 
   dialog = gtk_dialog_new_with_buttons (title, GTK_WINDOW(parent),

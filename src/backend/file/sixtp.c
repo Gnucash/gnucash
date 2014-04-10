@@ -16,8 +16,8 @@
  * along with this program; if not, contact:                        *
  *                                                                  *
  * Free Software Foundation           Voice:  +1-617-542-5942       *
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
- * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  *                                                                  *
  ********************************************************************/
 
@@ -434,8 +434,8 @@ sixtp_sax_start_handler(void *user_data,
   /* now allocate the new stack frame and shift to it */
   new_frame = sixtp_stack_frame_new( next_parser, g_strdup((char*) name));
 
-  new_frame->line = getLineNumber( pdata->saxParserCtxt );
-  new_frame->col  = getColumnNumber( pdata->saxParserCtxt );
+  new_frame->line = xmlSAX2GetLineNumber( pdata->saxParserCtxt );
+  new_frame->col  = xmlSAX2GetColumnNumber( pdata->saxParserCtxt );
   
   pdata->stack = g_slist_prepend(pdata->stack, (gpointer) new_frame);
   

@@ -48,7 +48,10 @@ The GNU Translation Project is another way to submit translations:
 http://www.iro.umontreal.ca/contrib/po/HTML/
 
 ==============================================================================
-2) Get the source from CVS
+2) Get the source from CVS/SVN
+
+  FIXME: This section is now outdated since the source is now in SVN
+  instead of CVS. Please check the website.
 
 The first thing to do is to download the latest STABLE branch of gnucash
 from CVS and get it to compile.  Do not use the HEAD branch, since the text
@@ -117,14 +120,16 @@ correctly with all the development packages you need.  It is a good idea
 to actually run gnucash with your new translations because it is quite 
 helpful to see the phrases in the context of the running program.
 
-Enter the gnucash directory and run the autogen.sh script.  There are many 
-options available when compiling gnucash, see the README.cvs file for more
-information on the options.  For now, we will just enable debugging and 
-change the default prefix because these two changes will be handly later 
-for tracking down problems and installing multiple versions.
+Enter the gnucash directory. Run the autogen.sh script.  Then run the
+./configure script, as described in README.svn. There are many options
+available when compiling gnucash.  For now, we will just enable
+debugging and change the default prefix because these two changes will
+be handly later for tracking down problems and installing multiple
+versions.
 
 cd gnucash
-./autogen.sh --enable-debug --prefix=/opt/gnucash-1.8
+./autogen.sh
+./configure  --enable-debug --prefix=/opt/gnucash-1.8
 
 If autogen complains about missing development packages, find them on your
 favorite OS distribution, install it, and try to re-run the autogen command.
@@ -138,12 +143,6 @@ Next, compile gnucash:
 
 make
 
-Note: when you are configuring and building gnucash, do *not* run the 
-configure script, aclocal, autoconf, or any other programs.  EVEN IF THE 
-AUTOGEN OUTPUT SUGGESTS THAT THEY DO.  This is important, and has caused a 
-lot of confusion.  Unfortunately the auto tools complain and cause bogus 
-warnings.
-
 To install (assuming "make" completed without any problems) you must be 
 root.  
 
@@ -153,7 +152,8 @@ make install
 To compile the documentation, enter the gnucash-doc directory and go 
 through the same process:
 
-./autogen.sh --prefix=/opt/gnucash-1.8
+./autogen.sh
+./configure --prefix=/opt/gnucash-1.8
 make
 su -
 make install
@@ -310,7 +310,7 @@ that there are no unclosed quotes, etc).  To do this, use the msgfmt program
 This will report any errors in your .po file if it finds them.
 
 If you want to see your translations within a running version of gnucash,
-simply place your .po file in you CVS copy of the gnucash source code (which
+simply place your .po file in you SVN copy of the gnucash source code (which
 you have previously installed) and from within the po/ directory type (you
 may nee to be root to do this):
 
@@ -340,7 +340,7 @@ autoheader: /usr/bin/autom4te failed with exit status: 1
 **Error**: autoheader failed.
 
 Reload the configure.in script:
-cvs up -C configure.in
+svn revert configure.in
 
 ---------------------------------
 If you see any "Gtk-CRITICAL" messages while running gnucash, it is probably
@@ -399,6 +399,7 @@ First, you must *have* the gnucash-doc package installed:
 1) Checkout the documentation
 cvs -z3 -d :pserver:cvs@cvs.gnucash.org:/home/cvs/cvsroot checkout \
 	gnucash-docs
+  FIXME: change the cvs command to svn here
 2) Create a new directory (if it doesn't already exist) in guide/<locale> 
    where <locale> is something like es, en_GB, or pt_PT.
 3) Copy the files from guide/C into this directory.

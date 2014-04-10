@@ -24,7 +24,6 @@ engine                      The engine module, without any backends
 
 backend/file                Binary and XML (v1 and v2) backends
 backend/postgres            Postgres backend
-backend/rpc                 RPC backend 
 
 register/ledger-core        The xacc SplitLedger and MultiLedger parts formerly
                             in src/
@@ -57,3 +56,6 @@ gnome-utils                 Extensions and utilities for using Gnome/Gtk
 network-utils               Utils for network communication.
 
 tax/us                      US tax information
+
+(RPC was removed in v.1.9.0, subversion release: 12018)
+

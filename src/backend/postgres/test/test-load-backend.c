@@ -21,7 +21,8 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+ *  02110-1301, USA.
  */
  
 #include "qof.h"
@@ -35,8 +36,10 @@ int main (int argc, char ** argv)
 {
 	qof_init();
 	cashobjects_register();
+	/* the test needs to run locally in case make install
+	 * has not yet been run. Use GNC_LIBDIR usually. */
 	do_test(
-		qof_load_backend_library (QOF_LIB_DIR, PG_LIB_NAME, PG_LIB_INIT),
+		qof_load_backend_library ("../", PG_LIB_NAME, PG_LIB_INIT),
 		" loading gnc-backend-postgres GModule failed");
 	print_test_results();
 	qof_close();

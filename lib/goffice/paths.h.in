@@ -1,6 +1,0 @@
-#ifndef PATHS_H
-#define PATHS_H
-
-#define DATA_DIR "@-GNC_LIBDIR-@"
-
-#endif // PATHS_H

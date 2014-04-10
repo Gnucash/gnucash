@@ -17,8 +17,8 @@
  * along with this program; if not, contact:
  *
  * Free Software Foundation           Voice:  +1-617-542-5942
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652
- * Boston, MA  02111-1307,  USA       gnu@gnu.org
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org
  */
 
 #include "config.h"
@@ -46,9 +46,9 @@ g_date_equals( gconstpointer gda, gconstpointer gdb )
 guint
 g_date_hash( gconstpointer gd )
 {
-  gint val = (g_date_year( (GDate*)gd ) * 10000)
-    + (g_date_month( (GDate*)gd ) * 100)
-    + g_date_day( (GDate*)gd );
+  gint val = (g_date_get_year( (GDate*)gd ) * 10000)
+    + (g_date_get_month( (GDate*)gd ) * 100)
+    + g_date_get_day( (GDate*)gd );
   return g_int_hash( &val );
 }
 

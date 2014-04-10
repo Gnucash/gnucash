@@ -17,8 +17,8 @@
  * along with this program; if not, contact:
  *
  * Free Software Foundation           Voice:  +1-617-542-5942
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652
- * Boston, MA  02111-1307,  USA       gnu@gnu.org
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org
  */
 
 /** @addtogroup Druids
@@ -32,9 +32,10 @@
 
 #include "config.h"
 
+#include <gnome.h>
+#include <glib/gi18n.h>
 #include <stdlib.h>
 #include <errno.h>
-#include <gnome.h>
 #include <sys/types.h>
 #include <sys/wait.h>
 
@@ -46,7 +47,6 @@
 #include "gnc-gui-query.h"
 #include "gnc-gnome-utils.h"
 #include "gnc-ui.h"
-#include "messages.h"
 
 #define WHO_DOES		"who_does"
 #define WHO_GNUCASH		1
@@ -115,8 +115,8 @@ druid_gconf_update_path (GError **error)
   gboolean found_user_dir = FALSE;
   FILE *output;
 
-  data_filename = g_strjoin("/", g_getenv("HOME"), ".gconf", NULL);
-  path_filename = g_strjoin("/", g_getenv("HOME"), ".gconf.path", NULL);
+  data_filename = g_build_filename(g_get_home_dir(), ".gconf", (char *)NULL);
+  path_filename = g_build_filename(g_get_home_dir(), ".gconf.path", (char *)NULL);
   if (g_file_test(path_filename, G_FILE_TEST_EXISTS)) {
     if (!g_file_get_contents(path_filename, &contents, NULL, error)) {
       g_free(path_filename);

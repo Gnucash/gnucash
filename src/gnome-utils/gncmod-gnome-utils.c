@@ -16,7 +16,7 @@
 
 #include "dialog-options.h"
 #include "gnc-html.h"
-#include "gnc-engine-util.h"
+#include "qof.h"
 #include "gnc-err-popup.h"
 #include "gnc-gui-query.h"
 

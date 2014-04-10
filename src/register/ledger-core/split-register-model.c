@@ -15,14 +15,15 @@
  * along with this program; if not, contact:                        *
  *                                                                  *
  * Free Software Foundation           Voice:  +1-617-542-5942       *
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
- * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  *                                                                  *
 \********************************************************************/
 
 #include "config.h"
 
 #include <glib.h>
+#include <glib/gi18n.h>
 
 #include "Group.h"
 #include "datecell.h"
@@ -30,7 +31,6 @@
 #include "gnc-gconf-utils.h"
 #include "gnc-err-popup.h"
 #include "gnc-ui.h"
-#include "messages.h"
 #include "pricecell.h"
 #include "recncell.h"
 #include "split-register.h"
@@ -1828,16 +1828,15 @@ gnc_split_register_confirm (VirtualLocation virt_loc, gpointer user_data)
   if (recn == YREC)
   {
     gint response;
-    const gchar *message =
-      _("<b>Change reconciled split?</b>\n\n"
-	"You are about to change a reconciled split.  Doing so might make "
-	"future reconciliation difficult!  Continue with this change?\n");
   
     /* Does the user want to be warned? */
     response = gnc_warning_remember_dialog(gnc_split_register_get_parent(reg),
 					   "change_reconciled_split",
-					   "Change _Split", GTK_STOCK_CANCEL,
-					   message);
+					   _("Change _Split"), GTK_STOCK_CANCEL,
+					   "<b>%s</b>\n\n%s\n",
+					   _("Change reconciled split?"),
+					   _("You are about to change a reconciled split.  Doing so might make "
+					     "future reconciliation difficult!  Continue with this change?"));
 
     if (response != GTK_RESPONSE_YES)
       return FALSE;

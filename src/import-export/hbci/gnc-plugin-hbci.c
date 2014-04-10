@@ -17,12 +17,16 @@
  * along with this program; if not, contact:
  *
  * Free Software Foundation           Voice:  +1-617-542-5942
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652
- * Boston, MA  02111-1307,  USA       gnu@gnu.org
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org
  */
 
 #include "config.h"
 
+#include <gtk/gtk.h>
+#include <glib/gi18n.h>
+
+#include "gnc-engine.h"
 #include "druid-hbci-initial.h"
 #include "gnc-plugin-manager.h"
 #include "gnc-gnome-utils.h"
@@ -33,9 +37,6 @@
 #include "gnc-plugin-manager.h"
 #include "gnc-plugin-page-account-tree.h"
 #include "gnc-plugin-page-register.h"
-#include "gnc-trace.h"
-#include "gnc-engine.h"
-#include "messages.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = "gnucash-hbci";
@@ -85,15 +86,15 @@ static GtkActionEntry gnc_plugin_actions [] = {
 
   /* Menu Items */
   { "HbciSetupAction", NULL, N_("_HBCI Setup..."), NULL,
-    N_("Gather initial HBCI information"),
+    N_("Initial setup of HBCI/AqBanking access"),
     G_CALLBACK (gnc_plugin_hbci_cmd_setup) },
-  { "HbciGetBalanceAction", NULL, N_("HBCI Get _Balance"), NULL,
-    N_("Get the account balance online through HBCI"),
+  { "HbciGetBalanceAction", NULL, N_("Get _Balance"), NULL,
+    N_("Get the account balance online through HBCI/AqBanking"),
     G_CALLBACK (gnc_plugin_hbci_cmd_get_balance) },
-  { "HbciGetTransAction", NULL, N_("HBCI Get _Transactions"), NULL,
-    N_("Get the transactions online through HBCI"),
+  { "HbciGetTransAction", NULL, N_("Get _Transactions..."), NULL,
+    N_("Get the transactions online through HBCI/AqBanking"),
     G_CALLBACK (gnc_plugin_hbci_cmd_get_transactions) },
-  { "HbciIssueTransAction", NULL, N_("HBCI _Issue Transaction"), NULL,
+  { "HbciIssueTransAction", NULL, N_("_Issue Transaction..."), NULL,
     N_("Issue a new transaction online through HBCI"),
     G_CALLBACK (gnc_plugin_hbci_cmd_issue_transaction) },
 #if ((AQBANKING_VERSION_MAJOR > 1) || \
@@ -102,12 +103,12 @@ static GtkActionEntry gnc_plugin_actions [] = {
        ((AQBANKING_VERSION_MINOR == 6) && \
         ((AQBANKING_VERSION_PATCHLEVEL > 0) || \
 	 (AQBANKING_VERSION_BUILD > 2))))))
-  { "HbciIssueIntTransAction", NULL, N_("HBCI Issue Internal Transaction"), NULL,
-    N_("Issue a new bank-internal transaction online through HBCI"),
+  { "HbciIssueIntTransAction", NULL, N_("I_nternal Transaction..."), NULL,
+    N_("Issue a new bank-internal transaction online through HBCI/AqBanking"),
     G_CALLBACK (gnc_plugin_hbci_cmd_issue_inttransaction) },
 #endif
-  { "HbciIssueDirectDebitAction", NULL, N_("HBCI Issue _Direct Debit"), NULL,
-    N_("Issue a new direct debit note online through HBCI"),
+  { "HbciIssueDirectDebitAction", NULL, N_("_Direct Debit..."), NULL,
+    N_("Issue a new direct debit note online through HBCI/AqBanking"),
     G_CALLBACK (gnc_plugin_hbci_cmd_issue_direct_debit) },
 };
 static guint gnc_plugin_n_actions = G_N_ELEMENTS (gnc_plugin_actions);
@@ -151,10 +152,13 @@ static const gchar *need_account_actions[] = {
   NULL
 };
 
-struct GncPluginHbciPrivate
+typedef struct GncPluginHbciPrivate
 {
   gpointer dummy;
-};
+} GncPluginHbciPrivate;
+
+#define GNC_PLUGIN_HBCI_GET_PRIVATE(o)  \
+   (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_PLUGIN_HBCI, GncPluginHbciPrivate))
 
 static GObjectClass *parent_class = NULL;
 
@@ -214,26 +218,25 @@ gnc_plugin_hbci_class_init (GncPluginHbciClass *klass)
   plugin_class->ui_filename   	   = PLUGIN_UI_FILENAME;
   plugin_class->add_to_window 	   = gnc_plugin_hbci_add_to_window;
   plugin_class->remove_from_window = gnc_plugin_hbci_remove_from_window;
+
+  g_type_class_add_private(klass, sizeof(GncPluginHbciPrivate));
 }
 
 static void
 gnc_plugin_hbci_init (GncPluginHbci *plugin)
 {
-  plugin->priv = g_new0 (GncPluginHbciPrivate, 1);
 }
 
 static void
 gnc_plugin_hbci_finalize (GObject *object)
 {
   GncPluginHbci *plugin;
+  GncPluginHbciPrivate *priv;
 
   g_return_if_fail (GNC_IS_PLUGIN_HBCI (object));
 
   plugin = GNC_PLUGIN_HBCI (object);
-
-  g_return_if_fail (plugin->priv != NULL);
-
-  g_free (plugin->priv);
+  priv = GNC_PLUGIN_HBCI_GET_PRIVATE(plugin);
 
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
@@ -297,7 +300,7 @@ main_window_to_account (GncMainWindow *window)
 
   /* Ensure we are called from a register page. */
   page = gnc_main_window_get_current_page(window);
-  page_name = gnc_plugin_page_get_name(page);
+  page_name = gnc_plugin_page_get_plugin_name(page);
 
   if (strcmp(page_name, GNC_PLUGIN_PAGE_REGISTER_NAME) == 0) {
     DEBUG("register page");
@@ -343,7 +346,7 @@ gnc_plugin_hbci_main_window_page_added (GncMainWindow *window,
   const gchar    *page_name;
 
   ENTER("main window %p, page %p", window, page);
-  page_name = gnc_plugin_page_get_name(page);
+  page_name = gnc_plugin_page_get_plugin_name(page);
   if (strcmp(page_name, GNC_PLUGIN_PAGE_ACCOUNT_TREE_NAME) == 0) {
     DEBUG("account tree page, adding signal");
     g_signal_connect (G_OBJECT(page),
@@ -384,7 +387,7 @@ gnc_plugin_hbci_main_window_page_changed (GncMainWindow *window,
   }
 
   /* Selectively make items visible */
-  page_name = gnc_plugin_page_get_name(page);
+  page_name = gnc_plugin_page_get_plugin_name(page);
   if (strcmp(page_name, GNC_PLUGIN_PAGE_ACCOUNT_TREE_NAME) == 0) {
     DEBUG("account tree page");
     gnc_plugin_update_actions(action_group, account_tree_actions,

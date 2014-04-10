@@ -16,8 +16,8 @@
  * along with this program; if not, contact:                        *
  *                                                                  *
  * Free Software Foundation           Voice:  +1-617-542-5942       *
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
- * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  *                                                                  *
 \********************************************************************/
 
@@ -25,12 +25,7 @@
 
 #include <gnome.h>
 #include <libguile.h>
-
 #include <gconf/gconf.h>
-
-#ifdef USE_GUPPI
-#include "gnc-html-guppi.h"
-#endif
 
 #include "gnc-html-graph-gog.h"
 
@@ -42,7 +37,6 @@
 #include "gnc-engine.h"
 #include "gnc-ui.h"
 
-#include <libgnomeui/gnome-window-icon.h>
 #include <gnc-dir.h>
 
 static QofLogModule log_module = GNC_MOD_GUI;
@@ -127,7 +121,7 @@ gnc_gtk_add_rc_file (void)
 
   var = g_get_home_dir ();
   if (var) {
-    str = g_build_filename (var, ".gtkrc-2.0.gnucash", NULL);
+    str = g_build_filename (var, ".gtkrc-2.0.gnucash", (char *)NULL);
     gtk_rc_add_default_file (str);
     g_free (str);
   }
@@ -181,7 +175,6 @@ gnc_gnome_init (const char * arg0,
   /* initialization required for gtkhtml */
   gdk_rgb_init ();    
   gtk_widget_set_default_colormap (gdk_rgb_get_cmap ());
-  gtk_widget_set_default_visual (gdk_rgb_get_visual ());
 
   /* use custom icon */
   fullname = gnc_gnome_locate_pixmap ("gnucash-icon.png");
@@ -194,11 +187,6 @@ gnc_gnome_init (const char * arg0,
     }
   }
 
-#ifdef USE_GUPPI    
-  /* initialize guppi handling in gnc-html */
-  gnc_html_guppi_init ();
-#endif
-
   druid_gconf_install_check_schemas();
 
   return ret;
@@ -207,9 +195,6 @@ gnc_gnome_init (const char * arg0,
 void
 gnc_gnome_shutdown (void)
 {
-#ifdef USE_GUPPI    
-  gnc_html_guppi_shutdown();
-#endif
 }
 
 void

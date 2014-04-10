@@ -17,20 +17,21 @@
  * along with this program; if not, contact:                        *
  *                                                                  *
  * Free Software Foundation           Voice:  +1-617-542-5942       *
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
- * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
 #include "config.h"
 
-#include <gnome.h>
+#include <gtk/gtk.h>
+#include <glib/gi18n.h>
 #include <time.h>
+#include <stdlib.h>
 
 #include "dialog-utils.h"
 #include "gnc-date-edit.h"
-#include "gnc-engine-util.h"
+#include "qof.h"
 #include "gnc-ui.h"
-#include "messages.h"
 
 
 /* This static indicates the debugging module that this .o belongs to.  */
@@ -111,6 +112,7 @@ gnc_dup_trans_dialog_create (GtkWidget * parent, DupTransDialog *dt_dialog,
     GtkWidget *hbox;
 
     date_edit = gnc_date_edit_new (date, FALSE, FALSE);
+    gnc_date_activates_default(GNC_DATE_EDIT(date_edit), TRUE);
     hbox = glade_xml_get_widget (xml, "date_hbox");
     gtk_widget_show (date_edit);
 
@@ -125,8 +127,9 @@ gnc_dup_trans_dialog_create (GtkWidget * parent, DupTransDialog *dt_dialog,
     num_spin = glade_xml_get_widget (xml, "num_spin");
     dt_dialog->num_edit = num_spin;
 
-    gtk_signal_connect(GTK_OBJECT(num_spin), "output",
-                       GTK_SIGNAL_FUNC(gnc_dup_trans_output_cb), dt_dialog);
+    gtk_entry_set_activates_default(GTK_ENTRY(num_spin), TRUE);
+    g_signal_connect(num_spin, "output",
+		     G_CALLBACK(gnc_dup_trans_output_cb), dt_dialog);
 
     if (num_str && parse_num (num_str, &num))
       gtk_spin_button_set_value (GTK_SPIN_BUTTON (num_spin), num + 1);

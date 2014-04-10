@@ -17,14 +17,14 @@
  * along with this program; if not, contact:
  *
  * Free Software Foundation           Voice:  +1-617-542-5942
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652
- * Boston, MA  02111-1307,  USA       gnu@gnu.org
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org
  */
 
 #include "config.h"
 
-#include <glib.h>
 #include <gtk/gtk.h>
+#include <glib/gi18n.h>
 
 #include "dialog-utils.h"
 #include "gnc-component-manager.h"
@@ -250,7 +250,7 @@ gnc_search_dialog_display_results (GNCSearchWindow *sw)
     gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scroller),
 				    GTK_POLICY_AUTOMATIC,
 				    GTK_POLICY_AUTOMATIC);
-    gtk_widget_set_usize(GTK_WIDGET(scroller), 300, 100);
+    gtk_widget_set_size_request(GTK_WIDGET(scroller), 300, 100);
     gtk_container_add (GTK_CONTAINER (scroller), sw->result_list);
 
     /* Create the button_box */
@@ -311,7 +311,7 @@ match_any (GtkWidget *widget, GNCSearchWindow *sw)
 static void
 search_type_cb (GtkToggleButton *button, GNCSearchWindow *sw)
 {
-  GSList * buttongroup = gtk_radio_button_group (GTK_RADIO_BUTTON (button));
+  GSList * buttongroup = gtk_radio_button_get_group (GTK_RADIO_BUTTON(button));
 
   if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button))) {
     sw->search_type =
@@ -637,7 +637,7 @@ get_element_widget (GNCSearchWindow *sw, GNCSearchCoreType *element)
     item = gtk_menu_item_new_with_label (_(param->title));
     g_object_set_data (G_OBJECT (item), "param", param);
     g_signal_connect (G_OBJECT (item), "activate", G_CALLBACK (option_activate), data);
-    gtk_menu_append (GTK_MENU (menu), item);
+    gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
     gtk_widget_show (item);
 
     if (param == sw->last_param) /* is this the right parameter to start? */
@@ -781,12 +781,12 @@ gnc_search_dialog_init_widgets (GNCSearchWindow *sw)
 
   item = gtk_menu_item_new_with_label (_("all criteria are met"));
   g_signal_connect (G_OBJECT (item), "activate", G_CALLBACK (match_all), sw);
-  gtk_menu_append (GTK_MENU (menu), item);
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
   gtk_widget_show (item);
 	
   item = gtk_menu_item_new_with_label (_("any criteria are met"));
   g_signal_connect (G_OBJECT (item), "activate", G_CALLBACK (match_any), sw);
-  gtk_menu_append (GTK_MENU (menu), item);
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
   gtk_widget_show (item);
 	
   omenu = gtk_option_menu_new ();
@@ -842,25 +842,25 @@ gnc_search_dialog_init_widgets (GNCSearchWindow *sw)
   /* Connect XML signals */
 
   glade_xml_signal_connect_data (xml, "gnc_ui_search_type_cb",
-				 GTK_SIGNAL_FUNC (search_type_cb), sw);
+				 G_CALLBACK (search_type_cb), sw);
   
   glade_xml_signal_connect_data (xml, "gnc_ui_search_active_cb",
-				 GTK_SIGNAL_FUNC (search_active_only_cb), sw);
+				 G_CALLBACK (search_active_only_cb), sw);
 
   glade_xml_signal_connect_data (xml, "gnc_ui_search_new_cb",
-				 GTK_SIGNAL_FUNC (search_new_item_cb), sw);
+				 G_CALLBACK (search_new_item_cb), sw);
   
   glade_xml_signal_connect_data (xml, "gnc_ui_search_find_cb",
-				 GTK_SIGNAL_FUNC (search_find_cb), sw);
+				 G_CALLBACK (search_find_cb), sw);
   
   glade_xml_signal_connect_data (xml, "gnc_ui_search_cancel_cb",
-				 GTK_SIGNAL_FUNC (search_cancel_cb), sw);
+				 G_CALLBACK (search_cancel_cb), sw);
 
   glade_xml_signal_connect_data (xml, "gnc_ui_search_close_cb",
-				 GTK_SIGNAL_FUNC (search_cancel_cb), sw);
+				 G_CALLBACK (search_cancel_cb), sw);
   
   glade_xml_signal_connect_data (xml, "gnc_ui_search_help_cb",
-				 GTK_SIGNAL_FUNC (search_help_cb), sw);
+				 G_CALLBACK (search_help_cb), sw);
 
   /* Register ourselves */
   sw->component_id = gnc_register_gui_component (DIALOG_SEARCH_CM_CLASS,
@@ -963,7 +963,8 @@ void gnc_search_dialog_disconnect (GNCSearchWindow *sw, gpointer user_data)
   g_return_if_fail (sw);
   g_return_if_fail (user_data);
 
-  gtk_signal_disconnect_by_data (GTK_OBJECT (sw->dialog), user_data);  
+  g_signal_handlers_disconnect_matched (sw->dialog, G_SIGNAL_MATCH_DATA,
+					0, 0, NULL, NULL, user_data);  
 }
 
 /* Clear all callbacks with this Search Window */

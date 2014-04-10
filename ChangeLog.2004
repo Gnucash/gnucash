@@ -1,0 +1,591 @@
+2004-12-23  Derek Atkins  <derek@ihtfp.com>
+
+	Chris Shoemaker's patch to silence gtk errors in dialog-budget-category.c:
+	* we don't need to get our own account TreeModel and set it to our
+	  new account TreeView, because gnc_tree_view_account_new gives us
+	  a TreeView with the global account TreeModel already set.  Plus,
+	  it already has the right TreeModelSort interface, which we are
+	  counting on.
+	* check for NULL before trying to gtk_entry_set_text().
+
+2004-12-20  Derek Atkins  <derek@ihtfp.com>
+
+	Stephen Evanchik's Double free bug in GncDenseCal:
+        * src/gnome-utils/gnc-dense-cal.c:
+          Remove double calls to gdc_free_all_mark_data
+          in object cleanup,
+
+	Stephen Evanchik's patch to Update scheduled transaction dialog:
+        * src/gnome/dialog-sx-from-trans.c:
+          - Removed per-button callbacks in favor of a
+            dialog response callback
+	  - Changed per-button callback functions to
+	    simple 'action' functions that are called
+	    in the response handler.
+          - Migrated away from gtk_signal_connect
+          - Removed references to GNOME 1.x dialog
+          - C Style changes: 'open curly brace on same line'
+          - Moved 'public' function gnc_sx_create_from_trans
+	    to the bottom of the file
+
+2004-12-19  Derek Atkins  <derek@ihtfp.com>
+
+	Stephen Evanchik's Minor touch-ups to GNCCurrencyEdit:
+        * src/gnome-utils/gnc-currency-edit.c:
+          In gnc_currency_edit_get_type added 'const' keyword and
+          final NULL entry in currency_edit_info declaration
+
+          In gnc_currency_edit_new use g_type_class_ref and
+          GNC_TYPE_CURRENCY_EDIT macro; move gtk_type_new to
+          g_object_new
+
+	Stephen Evanchik's patch to remove references to gtk_type_new
+	in converted widgets:
+        * src/gnome-utils/gnc-date-edit.h:
+          Added GNC_TYPE_DATE_EDIT macro
+        * src/gnome-utils/gnc-general-select.h:
+          Added GNC_TYPE_GENERAL_SELECT macro
+        * src/gnome-utils/gnc-date-edit.c:
+        * src/gnome-utils/gnc-general-select.c:
+        * src/gnome-utils/gnc-dense-cal.c:
+          gtk_type_new -> g_object_new
+
+2004-12-18  Derek Atkins  <derek@ihtfp.com>
+
+	Stephen Evanchik's GncDenseCal GObject patch:
+        * src/gnome-utils/gnc-dense-cal.h:
+          Added #include <glib.h>
+          Added private member 'disposed' to GncDenseCal struct
+          Added GNC_TYPE_DENSE_CAL macro
+        * src/gnome-utils/gnc-dense-cal.c:
+          Converted the following functions to use GObject:
+                gnc_dense_cal_get_type,
+                gnc_dense_cal_class_init
+          Renamed gnc_dense_cal_destroy to gnc_dense_cal_dispose
+
+2004-12-17  Derek Atkins  <derek@ihtfp.com>
+
+	Stephen Evanchik's GNCDateEdit GObject patch:
+        * src/gnome-utils/gnc-date-edit.h:
+          Removed #include <gnome.h>
+          Added #include <glib.h>
+          Added private member 'disposed' to GNCDateEdit struct
+        * src/gnome-utils/gnc-date-edit.c:
+          Converted the following functions to use GObject:
+                gnc_date_edit_get_type,
+                gnc_date_edit_class_init
+          Renamed gnc_date_edit_destroy to gnc_date_edit_finalize
+          Added gnc_date_edit_dispose function that handles
+          child widget destruction
+          Explicit casts to GTK_WIDGET in create_children
+
+2004-12-16  Joshua Sled  <jsled@asynchronous.org>
+
+	Stephen Evanchik's GncGeneralSelect GObject cleanup patch:
+	* src/gnome-utils/gnc-general-select.h:
+          Removed #include <glib-object.h>
+          Added #include <glib.h>
+          Added private member 'disposed' to GNCGeneralSelect
+	* src/gnome-utils/gnc-general-select.c:
+          Converted the following functions to use GObject:
+                gnc_general_select_get_type,
+                gnc_general_select_class_init
+          Added gnc_general_select_dispose function that handles
+          child widget destruction
+
+2004-12-15  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/register/register-gnome/gnucash-item-edit.c
+	(create_popup_toggle): realize popup-arrow widget so it gets
+	displayed; correct tyop in "field" name.
+
+2004-12-15  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/register/register-gnome/gnucash-item-edit.c
+	(gnc_item_edit_set_cursor_pos): Re-add
+	text-selection-via-mouse-drag support [still buggy in multiple
+	ways; see GNOME2_STATUS for updates].
+
+	* GNOME2_STATUS: Update status.
+
+2004-12-14  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/business/business-gnome/business-gnome.scm
+	(business-report-function): Change business-report menu path for
+	reporting ui updates.
+
+2004-12-05  Derek Atkins  <derek@ihtfp.com>
+
+	New Account Dialog bug fix from Stephen Evanchik:
+	* src/gnome/glade/account.glade:
+	  - Made Accounts h-scroll box policy automatic.
+	  - Reordered the containing table to two rows, one column
+
+	* configure.in:
+	  change the version number to 1.99 to make it different than HEAD.
+
+2004-12-04  Derek Atkins  <derek@ihtfp.com>
+
+	Fix some deprecated functions:
+	* src/gnome-utils/gnc-gnome-utils.c:
+	  gnome_pixmap_new_from_file -> gtk_image_new_from_file
+	* src/business/business-gnome/dialog-date-close.c:
+	  gnome_pixmap_new_from_file -> gtk_image_new_from_file
+	  gnome_unconditional_pixmap_file -> gnome_program_locate_file
+	* src/business/business-gnome/dialog-invoice.c:
+	  gnome_unconditional_pixmap_file -> gnome_program_locate_file
+	  gnome_pixmap_load_file -> gtk_image_new_from_file
+
+2004-11-30  Derek Atkins  <derek@ihtfp.com>
+
+	* src/gnome-utils/Makefile.am:
+	  Add DESTDIR to the install hooks
+	* src/gnome/gnc-plugin-page-account-tree.c: Fix spelling of "Account"
+
+2004-10-31  Derek Atkins  <derek@ihtfp.com>
+
+	Heath Martin's x86_64 patch:
+	* lib/egg/egg-menu-merge.c:
+	  change a gint to a gsize
+	* src/gnome/gnc-plugin-page-account-tree.c:
+	  use GINT_TO_POINTER() instead of a direct cast.
+
+	* src/engine/gnc-budget-cat.c:
+	* src/gnome/dialog-budget-workbench.c:
+	  Fixes for ISO C90.  Fixes bug #153472.
+
+2004-08-05  Derek Atkins  <derek@ihtfp.com>
+
+	* src/engine/gnc-budget*:
+	* src/gnome/*budget*:
+	* src/gnome/glade/budget.glade:
+	* src/gnome-utils/gnc-budget*:
+	  Darin Willits' initial budget code.  Still not fully functional
+	  but the basic UI is there.  See the GNOME2_STATUS for additional
+	  information.
+
+2004-07-20  Derek Atkins <derek@ihtfp.com>
+
+	* lib/egg/eggtoolbar.c
+	  Priit Laes' patch for C90 compliance (only the g2 portion).
+
+2004-07-06  David Hampton  <hampton@employees.org>
+
+	* various files: Merge in changes to HEAD from 2004-05-02
+	  (gnome2-merge-8) through yesterday (gnome2-merge-9).
+
+2004-06-13  Derek Atkins  <derek@ihtfp.com>
+
+	* configure.in: add support for gtkhtml-3.1, remove src/experimental
+	* src/Makefile.am: remove experimental subtree
+	* src/app-file/gncmod-app-file.c: don't need gnc-mdi-utils.h
+	* src/gnome/gnc-window.c: register the gnc-mdi progress handler
+	* src/gnome-utils/gnc-mdi-utils.[ch]: add a progress handler
+	  that gets set by the gnc-window code (just like in gnc-file)
+	  to remove a circular dependency.
+
+2004-05-31  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/report/report-gnome/gnc-plugin-page-report.c
+	(gnc_plugin_page_report_set_fwd_button),
+	(gnc_plugin_page_report_set_back_button): forw/back action sensitivity
+	(gnc_plugin_page_report_*_cb): Provide functional backing
+	[forw/back/reload/stop/export/options/print].
+
+2004-05-31  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/report/report-gnome/gnc-plugin-page-report-ui.xml: Add
+	report UI decl.
+
+	* src/report/report-gnome/gnc-plugin-page-report.c
+	(gnc_plugin_page_report_init),
+	(gnc_plugin_page_report_merge_actions),
+	(gnc_plugin_page_report_unmerge_actions): Create and [un]merge report
+	Actions + toolbar items on page-transitions.
+
+2004-05-31  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/gnome/top-level.c (gnc_html_register_url_cb): Modify to
+	handle hyperlinks better.
+
+	* src/engine/qofbook.c (qof_book_get_entity_by_guid): Add generic
+	GUID lookup [without entity-type being known] to handle historical
+	code.
+
+2004-05-30  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/gnome-utils/gnc-mdi-utils.c (gnc_mdi_show_progress): Proxy
+	progress-display call through to gnc-window code.
+	(gnc_ui_get_toplevel): Re-implement gnc_ui_get_toplevel in a
+	less-correct but valid way.
+	* src/report/report-gnome/gnc-plugin-page-report.c
+	(gnc_plugin_page_report_create_widget): Set the top-level window
+	so progress-render calls work during report render-time.
+
+2004-05-24  Derek Atkins  <derek@ihtfp.com>
+
+	* src/gnome/dialog-new-user.c:
+	* src/gnome/gnc-embedded-window.c:
+	* src/gnome/gnc-main-window.c:
+	* src/gnome/gnc-plugin-page-account-tree.c:
+	* src/gnome-utils/dialog-transfer.c:
+	* src/gnome-utils/gnc-query-list.c:
+	  Vitaly Lipatov's C-construct patch --
+	  During compiling CVS version of gnucash (tag gnucash-gnome2-dev)
+	  I have found some mistakes makes error with GCC compiler.
+
+	* lib/egg/Makefile.am: don't define *_DISABLE_DEPRECATED when
+	  building libegg.  It causes a build failure on FC2 with
+	  Gnome-2.6/Gtk-2.4 because some Gtk-2.2 functions have been
+	  deprecated.  Oops!
+
+2004-05-15  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/report/report-gnome/gnc-plugin-page-report.c
+	(gnc_plugin_page_report_class_init): Add 'report_id'
+	object-property for page-c'tor.
+	(gnc_plugin_page_report_setup): Setup the page's report at creation time so
+	we can get the correct tab labels.
+
+	* src/gnome-utils/gnc-mdi-utils.c (gnc_mdi_show_progress): Weaken
+	assertion while code isn't fully changed over, yet.
+	(gnc_ui_get_toplevel): Comment out b0rken MDI-related code.
+
+2004-05-05  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/report/report-gnome/window-report.h: Comment interface with
+	recon about usage in the source tree.
+
+	* src/report/report-gnome/gnc-plugin-page-report.c: Copy
+	window-report.c implementation over to here, rename, and get
+	somewhat working again. At this point, report-menu invocations
+	result in a tab being created, and displaying the error message.
+
+2004-05-05  David Hampton  <hampton@employees.org>
+
+	Fixes from Christian Neumair <chris@gnome-de.org>.
+
+	* src/gnome/dialog-new-user.c:
+	* src/gnome/window-reconcile.c:
+	* src/gnome/glade/account.glade:
+	* src/gnome/glade/newuser.glade:
+	* src/gnome-utils/dialog-transfer.[ch]:
+	* src/gnome-utils/transfer.glade: HIGify several dialogs.
+
+2004-05-05  Derek Atkins  <derek@ihtfp.com>
+
+	* lib/egg/egg-menu-merge.c:
+	  we don't have a "ui" so dont notify ourself when merging.
+	* src/gnome-utils/gnc-menu-extensions.scm:
+	  Use empty strings instead of #f for menu items so we don't
+	  cause problems later where we expect to get an actual string.
+	* src/report/report-gnome/report-gnome.scm:
+	  Make sure we actually have a menu-path list!
+
+2004-05-03  David Hampton  <hampton@employees.org>
+
+	Fixes from Christian Neumair <chris@gnome-de.org>.
+
+	* src/gnome-search/search-date.c: Fix a crash.
+
+	* src/gnome-utils/gnc-tree-model-account.c: Fix memory leaks.
+
+	* src/register/register-gnome/gnucash-sheet.c: Fix popup menu.
+
+2004-05-02  David Hampton  <hampton@employees.org>
+
+	* various files: Merge in changes to HEAD from 2004-03-03
+	  (gnome2-merge-7) through today (gnome2-merge-8).
+
+	* src/business/business-core/Makefile.am:
+	* src/business/business-gnome/Makefile.am:
+	* src/import-export/binary-import/Makefile.am: Work around
+	  problems with libltdl3.
+
+	* src/import-export/hbci/druid-hbci-initial.c: Eliminate a couple
+	  of compiler warning messages.
+
+2004-05-02  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/report/report-gnome/gnc-plugin-page-report.[ch]: Plugin-Page
+	  for a report instance; yet to be finished.
+
+	* src/report/report-gnome/report-gnome.scm
+	  (gnc:add-report-template-menu-items): Update menu path
+	  constructors to have the correct gnome2-ui-merging menu path
+	  value.
+
+	* src/gnome-utils/gnc-menu-extensions.[ch]: Partially-completed
+	  changes for using the menu/UI merging code for setting up
+	  extensions menu.
+
+	* src/gnome-utils/gnc-html.[ch]: Revert gtkhtml2 changes; restoring
+	  gtkhtml1 version of the gnc-html.c code allows compatability
+	  with gtkhtml3.
+
+	* src/gnome/ui/gnc-main-window-ui.xml: Add testing MiscAction,
+	  MiscTestAction.
+
+	* src/gnome/gnc-main-window.c (gnc_main_window_cmd_test): Add test
+	  menu item for GtkHtml3-window display.
+	* src/gnome/gnc-main-window.c (gnc_main_window_setup_window): Add
+	  testing code to merge/display menu item, call the
+	  extensions_menu setup routine.
+
+	* configure.in (DB_LIBS): move from gtkhtml2 to gtkhtml3.
+
+	* lib/egg/egg-menu-merge.c (egg_menu_merge_add_ui):
+	  Merge egg_menu_merge_add_ui from gtk-2.4.0 GtkUIManager.
+
+2004-04-10  Derek Atkins  <derek@ihtfp.com>
+
+	* src/app-utils/gnc-druid-provider-desc.h: add a comment about
+	  the callback functions.
+	* src/import-export/Makefile.am: remove duplicate files, add
+	  import format gnome provider.
+	* src/import-export/gnc-import-format-gnome.c: add a new format
+	  provider to let the user choose a date or numeric format.
+	* src/import-export/import-provider-format.glade:  glade file
+	  for the format provider
+
+	* src/import-export/Makefile.am: add missing header file to noinst list
+	* src/import-export/gnc-import-desc-format.[ch]: callbacks should
+	  take a GNCImportFormatCB*.
+	* src/import-export/gnc-import-format-gnome.c: fix a couple bugs.
+	  - make sure we only include available choices.
+	  - send the right callback.
+	* src/import-export/gncmod-generic-import.c: register the format provider
+	* src/import-export/qif-import/Makefile.am: include and link against
+	  generic import library (for test druid)
+	* src/import-export/qif-import/gnc-druid-test.c: add "format" provider
+	  to druid test
+
+2004-03-05  Tomas Cernaj  <tcernaj@gmx.de>
+
+	* src/register/register-gnome/gnucash-grid.c:
+	  Fix bug in the grid's update method: Called
+	  gnome_canvas_item_request_update() while updating.
+
+2004-03-04  Tomas Cernaj  <tcernaj@gmx.de>
+
+	* src/register/register-gnome/gnucash-cursor.c:
+	* src/register/register-gnome/gnucash-cursor.h:
+	* src/register/register-gnome/gnucash-grid.c:
+	* src/register/register-gnome/gnucash-grid.h:
+	* src/register/register-gnome/gnucash-header.h:
+	* src/register/register-gnome/gnucash-sheet.c:
+	* src/register/register-gnome/gnucash-sheet.h:
+	  Convert to new GType-/GObject-System.
+
+2004-02-09  Derek Atkins  <derek@ihtfp.com>
+
+	* src/import-export/Makefile.am: added new 'format' provider desc
+	* src/import-export/gnc-import-format-cb.[ch]:
+	  Callback object for the import format provider
+	* src/import-export/gnc-import-desc-format.[ch]:
+	  Descriptor for the Import Format Provider, used to choose
+	  Date and Number formats.
+
+2004-02-08  Derek Atkins  <derek@ihtfp.com>
+
+	* src/app-utils/gnc-druid-provider-desc-file.c:
+	* src/app-utils/gnc-druid-provider-desc-multifile.c:
+	  don't need to cast to the superclass -- just use it directly
+	* src/gnome-utils/Makefile.am:
+	  add multifile sources and glade file
+	* src/gnome-utils/gnc-druid-provider-file-gnome.c:
+	  Call the next_cb with the proper argument (no clue why the compiler
+	  didn't catch this before)
+	* src/gnome-utils/gnc-druid-provider-multifile-gnome.[ch]:
+	* src/gnome-utils/druid-provider-multifile.glade:
+	  Added code and glade file to implement the multifile provider
+	* src/gnome-utils/gncmod-gnome-utils.c:
+	  Register the file and multifile providers
+	* src/import-export/qif-import/gnc-druid-test.c:
+	  Add the file and multifile providers to the druid test
+
+	* src/app-utils/gnc-druid-provider-desc-edge.c:
+	  don't need to cast to the cuperclass -- just use it directly.
+
+	* src/app-utils/gnc-druid-provider-desc/file.[ch]:
+	  add a history_id as a separate member for where to store
+	  file choice history
+	* src/gnome-utils/gnc-druid-provider-file-gnome.c:
+	  use new history_id member
+	* src/import-export/qif-import/gnc-druid-test.c:
+	  set file history_id
+
+	* src/gnome-utils/gnc-druid-gnome.c: remove debugging printfs
+
+	* src/app-utils/gnc-druid.[ch]:
+	  Make sure the jump code CAN allow a recursive jump originating
+	  and ending in the same provider.  Put a counter around the
+	  jump function to make sure we don't walk the tree while we're
+	  jumping.  This will let the last jump win correctly.
+	* src/gnome-utils/gnc-druid-provider-multifile-gnome.c
+	  handle prev-page properly by not allowing you to jump
+	  back while you have any files in the list.
+
+2004-02-07  Derek Atkins  <derek@ihtfp.com>
+
+	* src/app-utils/gnc-druid-provider-desc-file.[ch]:
+	  Add 'glob' option (should we glob the filename?)
+	  Add a forward pointer to the multifile if we allow multiple file selection
+	* src/app-utils/gnc-druid-provider.c:
+	  Change the class functions so that children don't need to override
+	  all the page-movement functions if they don't need to do so.
+	* src/app-utils/gnc-druid.c:  handle jump_to_provider properly
+	* src/gnome-utils/Makefile.am: added file-chooser provider
+	* src/gnome-utils/gnc-druid-provider-edge-gnome.[ch]:
+	  use basic-gobject framework to reduce the code size
+	  remove non-necessary overrides
+	  remove non-ncessary definitions
+	* src/gnome-utils/gnc-druid-provider-file-gnome.[ch]:
+	  Add a new provider that allows the user to select a file.
+
+2004-01-29  Derek Atkins  <derek@ihtfp.com>
+
+	* src/app-utils/gnc-druid-provider-*.[ch]:
+	  - move the remove_file() method from the MultiFile to the File Provider
+	  - add a returned gpointer this_file to the file provider callback.
+
+2004-01-23  Derek Atkins  <derek@ihtfp.com>
+
+	* src/app-utils/Makefile.am:
+	  Add new multifile provider descriptor
+	* src/app-utils/gnc-druid-provider-desc-multifile.[ch]:
+	  New multi-file provider descriptor
+
+2004-01-22  Derek Atkins  <derek@ihtfp.com>
+
+	* src/app-utils/Makefile.am:
+	  Add basic gobject header.
+	* src/app-utils/gnc-basic-gobject.h: provide some macros to
+	  simplify some general gobject creation, for example simple
+	  objects with just a get_type() and new() methods.
+	* src/app-utils/gnc-druid-cb.h:
+	  need to include gnc-druid-provider.h directly
+	* src/app-utils/gnc-druid-cb.c:
+	  implement in terms of the new gnc-gobject macros
+	* src/app-utils/gnc-druid-provider.c:
+	* src/app-utils/gnc-druid-provider-desc.c:
+	* src/app-utils/gnc-druid-provider-desc-edge.c:
+	  implement in terms of the new gnc-gobject macros
+	* src/app-utils/gnc-druid-provider-desc.h:
+	  re-add the various callback routines in terms of a new typedef
+	* src/app-utils/gnc-druid-provider.h:
+	  need to include gnc-druid-provider-desc.h directly
+	* src/import-export/Makefile.am:
+	  Add new files to implement the format-chooser provider framework.
+	* src/import-export/import-prov-desc-format.[ch]:
+	* src/import-export/import-prov-format-cb.[ch]:
+
+	* src/app-utils/Makefile.am:
+	  add new-file druid provider (and callback)
+	* src/app-utils/gnc-druid-provider-desc-file.[ch]:
+	  provider descriptor for enter-file provider
+	* src/app-utils/gnc-druid-provider-file-cb.[ch]:
+	  provider callback for enter-file provider
+
+2004-01-20  Derek Atkins  <derek@ihtfp.com>
+
+	* src/app-utils/gnc-druid-provider-desc.h: add a pointer to the
+	  provider created from this descriptor.
+	* src/app-utils/gnc-druid-provider.c: set the provider pointer
+	  in the descriptor object.
+	* src/app-utils/gnc-druid.[ch]:
+	  - add pointer to the current provider list node.
+	  - add API to specifically jump to a particular provider
+	  - restructure code to reduce duplication
+	* src/import-export/import-parse.h: add GNCIF_NONE
+
+2004-01-16  Derek Atkins  <derek@ihtfp.com>
+
+	* src/gnome-utils/gnc-druid-gnome.[ch]: move the next/prev signals to
+	  the pages.  Add a cancel callback to the pages (the druid's main
+	  cancel callback is never called).  Now we get our signals
+	  correct.  Save a reference to the window so we can destroy it..
+	  Use gtk_widget_destroy() instead of g_object_unref().
+	* src/import-export/qif-import/gnc-druid-test.[ch]: add some code
+	  to test the new druid framework.  Build's a test druid.
+	* src/import-export/qif-import/Makefile.am: build new test code
+	* src/import-export/qif-import/gnc-plugin-qif-import*: hook in
+	  the new druid test code; add a new menu item to test the druid.
+
+2004-01-14  Derek Atkins  <derek@ihtfp.com>
+
+	* src/app-utils/gnc-druid-provider-desc-edge.[ch]: add api to
+	  build the provider-desc in one function.
+	* src/app-utils/gnc-druid-provider.[ch]: remove get_pages API;
+	  the sub-class should just insert the list of pages and let
+	  us deal with it.  Also added a last_page() method.
+	* src/app-utils/gnc-druid.c: make sure to delete the providers
+	  when we shut down.
+	* src/gnome-utils/gnc-druid-gnome*.h: move the definition of the
+	  gnome UI to a header that actually get's installed as opposed to
+	  an internal header.
+	* src/gnome-utils/gnc-druid-provider-edge-gnome.[ch]: Implement
+	  a gnome-druid edge-page (first/last page in the druid).  Probably
+	  still need to hook into the next/prev buttons.
+
+	* gnc-druid.[ch]: add gnc_druid_{next,prev}_page() APIs to choose the
+	  default next/previous page in the druid.  This will automatically
+	  walk through the providers to find the next real page.
+	* gnc-druid-gnome.c: hook in handlers for "next" and "back" signals
+	  for default page moves.  This should allow us to constantly keep
+	  track of the current provider.
+
+2004-01-13  Derek Atkins  <derek@ihtfp.com>
+
+	* configure.in: pull in gobject with glib
+	* src/app-utils/Makefile.am: add the gnc-druid files
+	* src/app-utils/gnc-druid*: an abstract druid creation framework.
+
+	* src/app-utils/Makefile.am: add the edge provider description.
+	* src/app-utils/gnc-druid-provider-desc-edge.*: provider descriptor
+	  for edge pages (the first and last page of the druid).
+	* src/app-utils/gnc-druid*:
+	  - add class macros
+	  - add a title to the basic provider desc and clean it up.
+
+	* src/gnome-utils/Makefile.am: add preliminary gnome gnc-druid impl.
+	* src/gnome-utils/gnc-druid-gnome.[ch]:  gnome implementation of gnc-druid
+	* src/app-utils/gnc-druid*:
+	  - move the provider-building into the generic class and add an
+	    "append_provider" method to the druid class.  Use that when
+	    building the druid.
+	  - add a ui_type to the druid class and use that when building providers.
+
+	* src/app-utils/gnc-druid-provider.[ch]: add get_pages() class method.
+	  (I decided I don't need a special gnc-druid-provider-gnome just to
+	   add a get_pages method, as everything would need it anyways).
+	* src/gnome-utils/gnc-druid-gnome.c: use the get_pages() method
+	  to actually build the druid.
+
+	* src/gnome-utils/gncmod-gnome-utils.c: register the gnome-druid and
+	  edge provider.
+
+2004-01-06  Derek Atkins  <derek@ihtfp.com>
+
+	* src/engine/qofinstance.c: revert fix from 01-01, because it's wrong.
+	  Fix the actual problem, all the ...ReturnGUID() #define's which
+	  don't check that it's passed a NULL value.
+	* src/engine/Transaction.h:
+	* src/engine/Account.h:
+	  Fix ...ReturnGUID() to check whether it was passed a NULL object
+	  and, if so, return the null GUID instead of crashing.
+	* src/business/business-core/gncCustomer.h:
+	* src/business/business-core/gncEmployee.h:
+	* src/business/business-core/gncInvoice.h:
+	* src/business/business-core/gncJob.h:
+	* src/business/business-core/gncTaxTable.h:
+	* src/business/business-core/gncVendor.h:
+	  Fix ...RetGUID() to check whether it was passed a NULL object
+	  and, if so, return the null GUID instead of crashing.
+
+2004-01-01  Derek Atkins  <derek@ihtfp.com>
+
+	* src/engine/qofinstance.c: return a "valid" GUID even if passed a NULL
+	  object, because lots of code assumes you can get a guid all the time.
+	  So, just return guid_null() instead of NULL.  Fixes a SEGV.
+

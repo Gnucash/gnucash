@@ -20,17 +20,17 @@
 
 #include "config.h"
 
+#include <glib.h>
+#include <glib/gi18n.h>
 #include <string.h>
+#include <g-wrap-wct.h>
+#include <libguile.h>
 
 #include "qof.h"
 #include "engine-helpers.h"
 #include "glib-helpers.h"
 #include "gnc-gconf-utils.h"
 #include "guile-util.h"
-#include "messages.h"
-
-#include <g-wrap-wct.h>
-#include <libguile.h>
 #include "guile-mappings.h"
 
 /* This static indicates the debugging module this .o belongs to.  */
@@ -1151,4 +1151,28 @@ gnc_get_credit_string(GNCAccountType account_type)
   if (string)
     return g_strdup(string);
   return NULL;
+}
+
+
+/*  Clean up a scheme options string for use in a key/value file.
+ *  This function removes all full line comments, removes all blank
+ *  lines, and removes all leading/trailing white space. */
+gchar *gnc_guile_strip_comments (const gchar *raw_text)
+{
+  gchar *text, **splits;
+  gint i, j;
+
+  splits = g_strsplit(raw_text, "\n", -1);
+  for (i = j = 0; splits[i]; i++) {
+    if ((splits[i][0] == ';') || (splits[i][0] == '\0')) {
+      g_free(splits[i]);
+      continue;
+    }
+    splits[j++] = g_strstrip(splits[i]);
+  }
+  splits[j] = NULL;
+
+  text = g_strjoinv(" ", splits);
+  g_strfreev(splits);
+  return text;
 }

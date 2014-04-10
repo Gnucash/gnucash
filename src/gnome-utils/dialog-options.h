@@ -16,18 +16,13 @@
  * along with this program; if not, contact:                        *
  *                                                                  *
  * Free Software Foundation           Voice:  +1-617-542-5942       *
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
- * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
 #ifndef OPTIONS_DIALOG_H
 #define OPTIONS_DIALOG_H
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
-#include <gnome.h>
 #include <libguile.h>
 
 #include "option-util.h"

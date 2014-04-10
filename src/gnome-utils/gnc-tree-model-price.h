@@ -19,8 +19,8 @@
  * along with this program; if not, contact:
  *
  * Free Software Foundation           Voice:  +1-617-542-5942
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652
- * Boston, MA  02111-1307,  USA       gnu@gnu.org
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org
  */
 
 /** @addtogroup GUI
@@ -69,27 +69,32 @@ typedef enum {
 } GncTreeModelPriceColumn;
 
 /* typedefs & structures */
-typedef struct GncTreeModelPricePrivate GncTreeModelPricePrivate;
 
+/** The instance data structure for a price tree model. */
 typedef struct {
-	GncTreeModel gnc_tree_model;
-
-	GncTreeModelPricePrivate *priv;
-
-	int stamp;
+	GncTreeModel gnc_tree_model;	/**< The parent object data. */
+	int stamp;			/**< The state of the model. Any state
+					 *   change increments this number. */
 } GncTreeModelPrice;
 
+
+/** The class data structure for a price tree model. */
 typedef struct {
-	GncTreeModelClass gnc_tree_model;
+	GncTreeModelClass gnc_tree_model;/**< The parent object data. */
 } GncTreeModelPriceClass;
 
-/* function prototypes */
-GType         gnc_tree_model_price_get_type   (void);
+
+/** Get the type of a price tree plugin.
+ *
+ *  @return A GType.
+ */
+GType gnc_tree_model_price_get_type (void);
+
 
 /** @name Account Tree Model Constructors 
  @{ */
 
-/** Create a new GtkTreeModel for manipulating gnucash commodities.
+/** Create a new GtkTreeModel for manipulating gnucash commodity prices.
  *
  *  @param book The book that holds these prices.
  *
@@ -104,9 +109,9 @@ GtkTreeModel *gnc_tree_model_price_new (QofBook *book, GNCPriceDB *price_db);
  @{ */
 
 /** Determine whether or not the specified GtkTreeIter points to a
- *  commodity namespace.  This routine should only be called from a
- *  price tree view filter function.  The model and iter values
- *  will be provided as part of the call to the filter.
+ *  "commodity namespace".  This routine should only be called from a
+ *  price tree view filter function.  The model and iter values will
+ *  be provided as part of the call to the filter.
  *
  *  @param model A pointer to the price tree model.
  *
@@ -253,8 +258,8 @@ gboolean gnc_tree_model_price_get_iter_from_price (GncTreeModelPrice *model,
  *  namespace.  This pointer must be freed by the caller when no
  *  longer needed.  This routine will return NULL if the namespace
  *  does not exist in the tree. */
-GtkTreePath * gnc_tree_model_price_get_path_from_namespace (GncTreeModelPrice *model,
-							    gnc_commodity_namespace *namespace);
+GtkTreePath *gnc_tree_model_price_get_path_from_namespace (GncTreeModelPrice *model,
+							   gnc_commodity_namespace *namespace);
 
 /** Convert a commodity pointer into a GtkTreePath.
  *
@@ -266,8 +271,8 @@ GtkTreePath * gnc_tree_model_price_get_path_from_namespace (GncTreeModelPrice *m
  *  commodity.  This pointer must be freed by the caller when no
  *  longer needed.  This routine will return NULL if the commodity
  *  does not exist in the tree. */
-GtkTreePath * gnc_tree_model_price_get_path_from_commodity (GncTreeModelPrice *model,
-							    gnc_commodity *commodity);
+GtkTreePath *gnc_tree_model_price_get_path_from_commodity (GncTreeModelPrice *model,
+							   gnc_commodity *commodity);
 
 /** Convert a price pointer into a GtkTreePath.
  *
@@ -279,8 +284,8 @@ GtkTreePath * gnc_tree_model_price_get_path_from_commodity (GncTreeModelPrice *m
  *  price.  This pointer must be freed by the caller when no longer
  *  needed.  This routine will return NULL if the price does not exist
  *  in the tree. */
-GtkTreePath * gnc_tree_model_price_get_path_from_price (GncTreeModelPrice *model,
-							GNCPrice *price);
+GtkTreePath *gnc_tree_model_price_get_path_from_price (GncTreeModelPrice *model,
+						       GNCPrice *price);
 /** @} */
 
 

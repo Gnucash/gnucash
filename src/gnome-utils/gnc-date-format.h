@@ -18,8 +18,8 @@
  * along with this program; if not, contact:
  *
  * Free Software Foundation           Voice:  +1-617-542-5942
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652
- * Boston, MA  02111-1307,  USA       gnu@gnu.org
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org
  * */
 /*
   @NOTATION@
@@ -29,22 +29,17 @@
 #ifndef GNC_DATE_FORMAT_H
 #define GNC_DATE_FORMAT_H 
 
-#include <gnome.h>
-#include <glib.h>
-#include "gnc-date.h"
+#include "qof.h"
 
 #define GNC_TYPE_DATE_FORMAT         (gnc_date_format_get_type ())
 #define GNC_DATE_FORMAT(obj)          GTK_CHECK_CAST (obj, gnc_date_format_get_type(), GNCDateFormat)
 #define GNC_DATE_FORMAT_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass, gnc_date_format_get_type(), GNCDateFormatClass)
 #define GNC_IS_DATE_FORMAT(obj)       GTK_CHECK_TYPE (obj, gnc_date_format_get_type ())
 
-typedef struct _GNCDateFormatPriv GNCDateFormatPriv;
-
 /**
  **/
 typedef struct {
 	GtkHBox hbox;
-	GNCDateFormatPriv *priv;
 } GNCDateFormat;
 
 typedef struct {
@@ -71,8 +66,6 @@ gboolean  gnc_date_format_get_years       (GNCDateFormat *gdf);
 
 void      gnc_date_format_set_custom      (GNCDateFormat *gdf, const char *format);
 const char* gnc_date_format_get_custom    (GNCDateFormat *gdf);
-
-void      gnc_date_format_editable_enters (GnomeDialog *dialog, GNCDateFormat *gdf);
 
 void      gnc_date_format_refresh         (GNCDateFormat *gdf);
 

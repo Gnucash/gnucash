@@ -100,7 +100,6 @@ gwmod_DATA = gw-app-utils.scm gw-app-utils-spec.scm
 noinst_DATA = .scm-links
 
 EXTRA_DIST = \
-  .cvsignore \
   ${gncmod_DATA} \
   ${gncscm_DATA} \
   ${gwmod_DATA} \
@@ -141,7 +140,7 @@ endif
 
 gw-app-utils.scm gw-app-utils.c gw-app-utils.h: \
   .scm-links gw-app-utils-spec.scm ${top_builddir}/config.status
-	FLAVOR=gnome guile -c \
+	FLAVOR=gnome $(GUILE) -c \
 	 "(set! %load-path (cons \"${G_WRAP_MODULE_DIR}\" %load-path)) \
 	  (set! %load-path (cons \"${PWD}\" %load-path)) \
 	  (set! %load-path (cons \"${top_builddir}/src/engine\" %load-path)) \

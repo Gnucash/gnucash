@@ -3,6 +3,37 @@
   <schemalist>
 
     <schema>
+      <key>/schemas/apps/gnucash/dialogs/import/generic_matcher/position</key>
+      <applyto>/apps/gnucash/dialogs/import/generic_matcher/match_picker/window_position</applyto>
+      <applyto>/apps/gnucash/dialogs/import/generic_matcher/transaction_list/window_position</applyto>
+      <owner>gnucash</owner>
+      <type>list</type>
+      <list_type>int</list_type>
+      <locale name="C">
+        <short>Window position</short>
+        <long>
+	  The X,Y coordinates of the top left corner of the dialog
+	  when it was last closed.
+	</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnucash/dialogs/import/generic_matcher/geometry</key>
+      <applyto>/apps/gnucash/dialogs/import/generic_matcher/match_picker/window_geometry</applyto>
+      <applyto>/apps/gnucash/dialogs/import/generic_matcher/transaction_list/window_geometry</applyto>
+      <owner>gnucash</owner>
+      <type>list</type>
+      <list_type>int</list_type>
+      <locale name="C">
+        <short>Window geometry</short>
+        <long>
+	  The width and size of the dialog when it was last closed.
+	</long>
+      </locale>
+    </schema>
+
+    <schema>
       <key>/schemas/apps/gnucash/dialogs/import/generic_matcher/enable_skip</key>
       <applyto>/apps/gnucash/dialogs/import/generic_matcher/enable_skip</applyto>
       <owner>gnucash</owner>

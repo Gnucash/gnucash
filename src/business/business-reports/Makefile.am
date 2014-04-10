@@ -18,7 +18,6 @@ gncscmmod_DATA = \
    owner-report.scm
 
 EXTRA_DIST = \
-  .cvsignore \
   ${gncscmmod_DATA}
 
 CLEANFILES = gnucash report .scm-links

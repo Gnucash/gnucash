@@ -13,8 +13,8 @@
  * along with this program; if not, contact:                        *
  *                                                                  *
  * Free Software Foundation           Voice:  +1-617-542-5942       *
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
- * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
 /** @addtogroup Import_Export
     @{ */
@@ -29,20 +29,17 @@
 
 #include "config.h"
 
-
-#include <glib.h>
-
+#include <gtk/gtk.h>
+#include <glib/gi18n.h>
 #include <stdlib.h> 
 #include <math.h>
+
 #include "gnc-gconf-utils.h"
 #include "import-backend.h"
 #include "import-utilities.h"
 #include "Account.h"
-#include "dialog-utils.h"
 #include "Query.h"
-
 #include "gnc-engine.h"
-
 #include "gnc-ui-util.h"
 
 #define GCONF_SECTION "dialogs/import/generic_matcher"

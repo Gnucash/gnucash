@@ -18,13 +18,14 @@
  * along with this program; if not, contact:                        *
  *                                                                  *
  * Free Software Foundation           Voice:  +1-617-542-5942       *
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
- * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
 #include "config.h"
 
 #include <gnome.h>
+#include <glib/gi18n.h>
 #include <math.h>
 #include <string.h>
 
@@ -43,7 +44,6 @@
 #include "gnc-tree-view-account.h"
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"
-#include "messages.h"
 
 
 #define DIALOG_NEW_ACCOUNT_CM_CLASS "dialog-new-account"
@@ -677,7 +677,7 @@ extra_change_verify (AccountWindow *aw,
                                    GTK_POLICY_AUTOMATIC);
 
     gtk_container_add(GTK_CONTAINER(frame), scroll);
-    gtk_container_border_width(GTK_CONTAINER(scroll), 5);
+    gtk_container_set_border_width(GTK_CONTAINER(scroll), 5);
     gtk_container_add(GTK_CONTAINER(scroll), GTK_WIDGET(list));
 
     gtk_widget_show_all(vbox);
@@ -1107,7 +1107,7 @@ gnc_type_list_select_cb(GtkCList * type_list, gint row, gint column,
   gtk_widget_set_sensitive(aw->opening_balance_page, sensitive);
   if (!sensitive)
   {
-    gtk_notebook_set_page (GTK_NOTEBOOK (aw->notebook), 0);
+    gtk_notebook_set_current_page (GTK_NOTEBOOK (aw->notebook), 0);
     gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (aw->opening_balance_edit),
                                 gnc_numeric_zero ());
   }
@@ -1837,8 +1837,8 @@ gnc_ui_new_account_with_types( AccountGroup *unused,
   if ( validTypesCopy != NULL ) {
     /* Attach it with "[...]_full" so we can set the appropriate
      * GtkDestroyNotify func. */
-    gtk_object_set_data_full( GTK_OBJECT(aw->dialog), "validTypesListCopy",
-                              validTypesCopy, (GDestroyNotify)g_list_free );
+    g_object_set_data_full( G_OBJECT(aw->dialog), "validTypesListCopy",
+			    validTypesCopy, (GDestroyNotify)g_list_free );
   }
 }
 

@@ -461,8 +461,12 @@ gnc_ledger_display_gl (void)
 }
 
 /**
- * id is some identifier that can be:
- * FIXME: what's the correct description of 'id'?
+ * @param id: The string version of the GUID of the context of template
+ * transaction being edited in this template GL.  As used by scheduled
+ * transactions, this is the GUID of the SX itself which is magically the
+ * *name* of the (template) account which contains the transactions for this
+ * scheduled transaction.  That's right.  The stringified GUID of the SX is
+ * the name of the SX'es template account.
  **/
 GNCLedgerDisplay *
 gnc_ledger_display_template_gl (char *id)
@@ -473,8 +477,10 @@ gnc_ledger_display_template_gl (char *id)
   SplitRegister *sr;
   AccountGroup *ag;
   Account *acct;
+  gboolean isTemplateModeTrue;
 
   acct = NULL;
+  isTemplateModeTrue = TRUE;
 
   q = xaccMallocQuery ();
 
@@ -491,7 +497,8 @@ gnc_ledger_display_template_gl (char *id)
   ld = gnc_ledger_display_internal (NULL, q, LD_GL,
                                     SEARCH_LEDGER,
                                     REG_STYLE_JOURNAL,
-                                    FALSE, TRUE); /* TRUE : template mode */
+                                    FALSE,
+                                    isTemplateModeTrue);
 
   sr = gnc_ledger_display_get_split_register (ld);
   if ( acct ) {

@@ -1,6 +1,5 @@
 
 EXTRA_DIST = \
-  .cvsignore \
   gnucash.spec.in \
   gnucash.spec
 

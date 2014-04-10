@@ -300,8 +300,7 @@
              (set! progress-dialog (gnc:progress-dialog-new #f #f))
              (gnc:progress-dialog-set-title progress-dialog (_ "Progress"))
              (gnc:progress-dialog-set-heading progress-dialog
-                                              (_ "Importing transactions..."))
-             (gnc:progress-dialog-set-limits progress-dialog 0.0 100.0)))
+                                              (_ "Importing transactions..."))))
        
 
        ;; now run through the markable transactions marking any
@@ -313,7 +312,7 @@
              (if progress-dialog 
                  (begin 
                    (gnc:progress-dialog-set-value 
-                    progress-dialog (* 100 (/ work-done work-to-do)))
+                    progress-dialog (/ work-done work-to-do))
                    (gnc:progress-dialog-update progress-dialog))) 
              (if (not (qif-xtn:mark xtn))
                  (qif-import:mark-matching-xtns xtn rest))
@@ -330,7 +329,7 @@
              (if progress-dialog 
                  (begin 
                    (gnc:progress-dialog-set-value 
-                    progress-dialog (* 100 (/ work-done work-to-do)))
+                    progress-dialog (/ work-done work-to-do))
                    (gnc:progress-dialog-update progress-dialog))) 
              (if (not (qif-xtn:mark xtn))
                  (begin 

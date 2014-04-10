@@ -1,6 +1,5 @@
 
 EXTRA_DIST = \
-  .cvsignore \
   README.OFX \
   length.cc \
   parse_error \

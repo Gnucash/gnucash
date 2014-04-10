@@ -17,8 +17,8 @@
  * along with this program; if not, contact:                        *
  *                                                                  *
  * Free Software Foundation           Voice:  +1-617-542-5942       *
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
- * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  *                                                                  *
 \********************************************************************/
 
@@ -34,7 +34,7 @@
 #define IO_GNCXML_H
 
 #include <glib.h>
-#include "qofbook.h"
+#include "qof.h"
 
 /* FIXME: eventually, we probably need to add an error stack
    accessable via gnc_book_get_xml_io_error() a la binfile. */

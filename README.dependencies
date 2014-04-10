@@ -19,18 +19,19 @@ Libraries/Deps
 --------------
 aqbanking
 cairo
-gconf-2
-glib[+gobject,module]-2
-gtk+-2
+gconf2
+glib2
+gtk+2
 guile
 gwrap
-libart-2
-libglade-2
-libgnomeprint-2.2
-libgnomeui-2
-libgsf-1
+libart2
+libglade2
+libgnomeprint2.2
+libgnomeui2
+libgsf1
+[lib]gtkhtml3
 libofx
-libxml-2
+libxml2
 pango
 
 
@@ -58,17 +59,114 @@ libgoffice/libgsf details
   - libgnomeui-2.0 >= 2.0.0
   - libgsf-gnome-1 >= 1.12.2
 
-Status, 2005-10-15
-------------------
+- libgoffice-0.4.0
+  - glib-2.0		>= 2.6.4
+  - gobject-2.0		>= 2.6.4
+  - gmodule-2.0		>= 2.6.4
+  - libgsf-1		>= 1.12.2
+    - gobject-2.0 >= 2.6.0
+    - glib-2.0 >= 2.6.0
+    - libxml-2.0 >= 2.4.16
+    - libbonobo-2.0 >= 2.0.0
+    - gnome-vfs-2.0 >= 2.2.0
+    - gnome-vfs-module-2.0 >= 2.2.0
+  - libxml-2.0		>= 2.4.12
+  - pango		>= 1.8.1
+  - pangoft2		>= 1.8.1
+  - cairo		>= 0.5.0 [optional]
+  - gtk+-2.0		>= 2.6.0
+  - libglade-2.0	>= 2.3.6
+  - libgnomeprint-2.2	>= 2.8.2
+  - libart-2.0		>= 2.3.11
+  - gconf-2.0
+  - libgnomeui-2.0	>= 2.0.0
+  - libgsf-gnome-1	>= 1.12.2
 
+
+Status, 2005-11-06
+------------------
 The major distributions, as defined by http://distrowatch.com/dwres.php?resource=major, are:
 
 - Ubuntu - http://www.ubuntu.com/
   -  5.10 = 2005-10-13 - http://www.ubuntu.com/newsitems/release510
+    [from the {main,multiverse,universe}/binary-i386/Packages.gz files at
+     http://archive.ubuntu.com/ubuntu/dists/breezy/]
+    - aqbanking: libaqbanking0c2-1.5.99+1.6.0beta-1ubuntu1
+    - libcairo-1.0.2-0ubuntu1
+    - gconf2-2.12.0-0ubuntu1
+    - glib2-2.8.3-0ubuntu1
+    - gtk+2-2.8.6-0ubuntu2
+    - guile-1.6.7-1ubuntu3
+    - g-wrap-1.9.6-2ubuntu2
+    - libart2-2.3.17-1
+    - libglade2-2.5.1-2ubuntu1
+    - libgnomeprint2.2-2.12.1-0ubuntu1
+    - libgnomeui2-2.12.0-0ubuntu1
+    - libgtkhtml3
+      - libgtkhtml3.6-18-3.6.2-1
+      - gtkhtml3.8-15-3.8.1-0ubuntu1
+    - libgsf1-1.12.3-3ubuntu3
+    - libofx2-0.8.0-3ubuntu8
+    - libxml2-2.6.21-0ubuntu1
+    - pango-1.10.1-0ubuntu1
   - *5.04 = 2005-04-08 - http://www.ubuntu.com/504Released
+    [from the {main,multiverse,universe}/binary-i386/Packages.gz files at
+     http://archive.ubuntu.com/ubuntu/dists/hoary/]
+    - aqbanking ??
+    - cairo 0.3.0-1
+    - gconf-2 gconf2_2.10.0-0ubuntu1_i386.deb
+    - glib-2 libglib2.0-0_2.6.3-1_i386.deb
+    - gtk+-2 libgtk2.0-0_2.6.4-0ubuntu3_i386.deb
+    - guile guile-1.6-libs_1.6.7-1ubuntu1_i386.deb
+    - gwrap
+      - gwrapguile-1.3.4
+      - g-wrap-1.9.6
+    - libart-2 libart-2.0-2_2.3.17-1_i386.deb
+    - libglade-2 libglade2-0_2.5.1-0ubuntu1_i386.deb
+    - libgnomeprint-2.2 libgnomeprint2.2-0_2.10.3-0ubuntu1_i386.deb
+    - libgnomeui-2  libgnomeui-0_2.10.0-0ubuntu1_i386.deb
+    - libgsf-1 libgsf-1_1.11.1-1ubuntu1_i386.deb
+    - libofx: none
+    - libxml-2 libxml2_2.6.17-0ubuntu1_i386.deb
+    - pango libpango1.0-0_1.8.1-0ubuntu2
 - Mandriva
   -  2006 = 2005-10-06
+    [from ftp://ftp.rutgers.edu/pub/Mandrakelinux/devel/2006.0/i586/media/main/]
+    - aqbanking-1.2.0
+    - libcairo2-1.0.0
+    - gconf-2.10.1
+    - glib-2.8.1
+    - gtk+-2.8.3
+    - guile-1.6.7
+    - g-wrap-1.3.4
+    - libart-2.3.17
+    - libglade-2.5.1
+    - libgnomeprint-2.2-2.10.3
+    - libgnomeui-2.10.2
+    - libgsf-1.12.2
+    - libofx-0.7.0
+    - libxml-2.6.21
+    - pango-1.10.0
+    - libgtkhtml-3.1-3.2.5
+    - libgtkhtml-3.6-3.6.2
   - *2005 = 2005-04-14
+    [from ftp://ftp.rutgers.edu/pub/Mandrakelinux/devel/2005/i586/media/main/]
+    - aqbanking-1.0.7
+    - libcairo-0.3.0
+    - gconf-2.8.1
+    - glib-2.6.3
+    - gtk+-2.6.4
+    - guile-1.6.7
+    - g-wrap-1.3.4
+    - libart-2.3.17
+    - libglade-2.4.2
+    - libgnomeprint-2.2-2.8.2
+    - libgnomeui-2.8.2
+    - libgsf-1.11.1
+    - libofx-0.7.0
+    - libxml-2.6.17
+    - pango-1.8.1
+    - libgtkhtml-3.1.11
 - SUSE
   -  10.0 = 2005-10-06
     - aqbanking: not included; binary aqbanking-1.6.0 available at ftp://ftp.gwdg.de/linux/misc/suser-crauch/10.0/
@@ -104,21 +202,73 @@ The major distributions, as defined by http://distrowatch.com/dwres.php?resource
     - pango-1.8.1
 - Fedora Core
   - *FC4 = 2005-06-13
+    - aqbanking-1.0.4beta
+    - cairo: not included
     - g-wrap-1.3.4
     - gconf2-2.10.0
-    - glib-2.6.6
+    - glib2-2.6.6
+    - gtk2-2.6.10
     - guile-1.6.7
     - libart_lgpl-2.3.17
     - libglade2-2.5.1
     - libgnomeprint22-2.10.3
     - libgnomeui-2.10.0
     - libgsf-1.11.1
+    - libofx-0.7.0
     - libxml2-2.6.20
     - pango-1.8.1
   -  FC3 = 2004-11-08
+    - aqbanking: not included
+    - cairo: not included
+    - g-wrap-1.3.4
+    - gconf2-2.8.1
+    - glib2-2.4.8
+    - gtk2-2.4.14
+    - guile-1.6.4
+    - libart_lgpl-2.3.16
+    - libglade2-2.4.0
+    - libgnomeprint22-2.8.0
+    - libgnomeui-2.8.0
+    - libgsf-1.10.1
+    - libofx-0.7.0
+    - libxml2-2.6.16
+    - pango-1.6.0
 - Debian GNU/Linux
-  - unstable4
+  - 4.x unstable
     (already includes goffice and will include libqof1)
+    - aqbanking-1.5.99
+    - cairo-1.0.0
+    - gconf2-2.10.1
+    - glib2-2.8.3
+    - gtk2-2.6.10
+    - guile-1.6.7
+    - libart2-2.3.17
+    - libglade2-??
+    - libgnomeprint2.2-2.10.3
+    - libgnomeui2-2.10.1
+    - libgsf1-1.12.3
+    - libofx-0.8.0
+    - libxml2-2.6.22
+    - pango-1.8.2
+    - gwrapguile-1.3.4
+    - g-wrap-1.9.6
+  - *3.1 sarge = 2005-06-06  
+    - aqbanking: no
+    - cairo: no
+    - gconf2-2.8.1
+    - glib2-2.6.4
+    - gtk2-2.6.4
+    - guile-1.6.7
+    - libart2-2.3.17
+    - libglade2-??
+    - libgnomeprint2.2-2.8.2
+    - libgnomeui2-2.8.1
+    - libgsf1-1.11.1
+    - libofx-0.7.0
+    - libxml2-2.6.16
+    - pango-1.8.1
+    - gwrapguile-1.3.4
+    - g-wrap-1.9.5
 - Knoppix
   -  4.0.2 = 2005-09-24
   - *3.9   = 2005-06-01
@@ -160,40 +310,140 @@ The major distributions, as defined by http://distrowatch.com/dwres.php?resource
     - libxml2-2.6.16
     - pango-1.8.0
 - Slackware
+  [Need to check for gnome packages at...
+   - http://dropline-gnome.sourceforge.net/
+   - http://gsb.freerock.org/
+   - http://www.gware.org/]
   -  10.2 = 2005-09-14
+    [from http://slackware.it/en/pb/]
+    - aqbanking: no
+    - cairo: no
+    - gconf2: no
+    - glib2-2.6.6
+    - gtk+2-2.6.10
+    - guile-1.6.7
+    - gwrap: no
+    - libart2-2.3.17
+    - libglade2-2.4.2
+    - libgnomeprint2.2: no
+    - libgnomeui2: no
+    - libgsf1-1.12.1
+    - [lib]gtkhtml3: no
+    - libofx: no
+    - libxml2-2.6.22
+    - pango-1.8.2
   - *10.1 = 2005-02-07
-  -  10.0 = 2004-06-21
+    [from http://slackware.it/en/pb/]
+    - aqbanking: no
+    - cairo: no
+    - gconf2-2.6.2
+    - glib2-2.6.4
+    - gtk+2-2.6.7
+    - guile-1.6.5
+    - gwrap: no
+    - libart2-2.3.16
+    - libglade2-2.6.0
+    - libgnomeprint2.2-2.6.1
+    - libgnomeui2-2.6.1
+    - libgsf1-1.9.1
+    - [lib]gtkhtml3: no
+      - libgtkhtml-2.6.2
+    - libofx: no
+    - libxml2-2.6.16
+    - pango-1.8.1
 - Xandros Desktop
   - *3.0 = 2004-12
   -  2.5 = 2004-07
   - ftp://ftp2.xandros.com/src/dists/
 - FreeBSD
   - *5.4  = 2005-05-09 - http://www.freebsd.org/releases/5.4R/announce.html
+    [from ftp://ftp.freebsd.org/pub/FreeBSD/releases/i386/5.4-RELEASE/packages/INDEX]
+    - aqbanking: not included
+    - cairo-0.4.0
+    - gconf2-2.10.0
+    - glib-2.6.3_1
+    - gtk-2.6.4_1
+    - guile-1.6.5
+    - g-wrap-1.3.4_6
+    - libart_lgpl2-2.3.17
+    - libglade2-2.5.1_2
+    - libgnomeprint-2.10.1
+    - libgnomeui-2.10.0_1
+    - libgsf-1.11.1
+    - [lib]gtkhtml3-3.6.1
+    - libofx-0.7.0
+    - libxml2-2.6.18
+    - pango-1.8.1
   -  4.11 = 2005-01-25 - http://www.freebsd.org/releases/4.11R/announce.html
 - Fink/OSX
   - ??
 - RHEL
   - *RHEL 4 = 2005-02-15
     [from http://ftp.redhat.com/pub/redhat/linux/enterprise/4/en/]
-    - aqbanking no
-    - cairo no
-    - gconf2-2.8.1-1
-    - glib[+gobject,module]-2-2.4.7-1
-    - gtk+-2.4.13-12
-    - guile-1.6.4-14
-    - gwrap no
-    - libart-2.3.16-3
-    - libglade-2-4.0-5
-    - libgnomeprint-2.2-2.8.0-3
-    - libgnomeui-2.8.0-1
-    - libgsf-1.10.1-1
-    - libofx no
-    - libxml-2-2.6.16-6
-    - pango-1.6.0-7
+    - aqbanking: not included
+    - cairo: not included
+    - gconf2-2.8.1
+    - glib2-2.4.7
+    - gtk2-2.4.13
+    - guile-1.6.4
+    - gwrap: not included
+    - libart_lgpl-2.3.16
+    - libglade2-2.4.0
+    - libgnomeprint22-2.8.0
+    - libgnomeui-2.8.0
+    - libgsf-1.10.1
+    - libofx: not included
+    - libxml2-2.6.16
+    - pango-1.6.0
   -  RHEL 3 = 2003-10-22
+    - aqbanking: not included
+    - cairo: not included
+    - gconf2-2.2.1
+    - glib2-2.2.3
+    - gtk2-2.2.4
+    - guile-1.6.4
+    - g-wrap: not included
+    - libart_lgpl-2.3.11
+    - libglade2-2.0.1
+    - libgnomeprint22-2.2.1.3
+    - libgnomeui-2.2.1
+    - libgsf-1.6.0
+    - libofx: not included
+    - libxml2-2.5.10
+    - pango-1.2.5
 - CentOS
+  [from http://vault.centos.org/]
   -  4.2 = 2005-10-12
+    - aqbanking: no
+    - cairo: no 
+    - gconf2-2.8.1
+    - glib2-2.4.7
+    - gtk2-2.4.13
+    - guile-1.6.4
+    - gwrap: no
+    - libart2-2.3.16
+    - libglade2-2.4.0
+    - libgnomeprint2.2-2.8.0
+    - libgnomeui2-2.8.0
+    - libgsf1-1.10.1
+    - [lib]gtkhtml3-3.3.2
+    - libofx: no 
+    - libxml2-2.6.16
+    - pango-1.6.0
   - *4.1 = 2005-06-12
-  -  3.6 = 2005-10-12
-  -  3.5 = 2005-06-10
-  -  2.0 = 2004-05-24
+    - aqbanking: no
+    - cairo: no
+    - gconf2-2.8.1
+    - glib2-2.4.7
+    - gtk2-2.4.13
+    - guile-1.6.4
+    - gwrap: no
+    - libart2-2.3.16
+    - libglade2-2.4.0
+    - libgnomeprint2.2-2.8.0
+    - libgnomeui2-2.8.0
+    - libgsf1-1.10.1
+    - [lib]gtkhtml3-3.3.2
+    - libofx: no
+    - libxml2-2.6.16
+    - pango-1.6.0

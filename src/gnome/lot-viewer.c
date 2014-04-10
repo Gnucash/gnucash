@@ -16,8 +16,8 @@
  * along with this program; if not, contact:                        *
  *                                                                  *
  * Free Software Foundation           Voice:  +1-617-542-5942       *
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
- * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  *                                                                  *
 \********************************************************************/
 
@@ -39,9 +39,8 @@
 
 #include "config.h"
 
-#include <glib.h>
-#include <gnome.h>
-#include <libgnomeui/gnome-window-icon.h>
+#include <gtk/gtk.h>
+#include <glib/gi18n.h>
 
 #include "Account.h"
 #include "cap-gains.h"
@@ -49,7 +48,6 @@
 #include "gnc-date.h"
 #include "gnc-event.h"
 #include "gnc-lot.h"
-#include "messages.h"
 #include "Scrub3.h"
 #include "Transaction.h"
 
@@ -246,7 +244,7 @@ lv_select_row_cb (GtkCList       *clist,
    str = gnc_lot_get_title (lot);
    if (!str) str = "";
    gtk_entry_set_text (lv->title_entry, str);
-   gtk_entry_set_editable (lv->title_entry, TRUE);
+   gtk_editable_set_editable (GTK_EDITABLE(lv->title_entry), TRUE);
    
    /* Set the notes field */
    str = gnc_lot_get_notes (lot);
@@ -276,7 +274,7 @@ lv_unset_lot (GNCLotViewer *lv)
 
    /* Blank the title widget */
    gtk_entry_set_text (lv->title_entry, "");
-   gtk_entry_set_editable (lv->title_entry, FALSE);
+   gtk_editable_set_editable (GTK_EDITABLE(lv->title_entry), FALSE);
 
    /* Blank the notes area */
    xxxgtk_textview_set_text (lv->lot_notes, "");
@@ -621,11 +619,11 @@ lv_create (GNCLotViewer *lv)
                                      gnc_glade_autoconnect_full_func,
                                      lv);
 
-   gtk_signal_connect (GTK_OBJECT (lv->lot_clist), "select_row",
-                      GTK_SIGNAL_FUNC (lv_select_row_cb), lv);
+   g_signal_connect (lv->lot_clist, "select_row",
+                     G_CALLBACK (lv_select_row_cb), lv);
 
-   gtk_signal_connect (GTK_OBJECT (lv->lot_clist), "unselect_row",
-                      GTK_SIGNAL_FUNC (lv_unselect_row_cb), lv);
+   g_signal_connect (lv->lot_clist, "unselect_row",
+                     G_CALLBACK (lv_unselect_row_cb), lv);
 
    gnc_restore_window_size(GCONF_SECTION, GTK_WINDOW(lv->window));
 }
@@ -654,7 +652,6 @@ gnc_lot_viewer_dialog (Account *account)
                GNC_ID_LOT,
                GNC_EVENT_CREATE | GNC_EVENT_MODIFY | GNC_EVENT_DESTROY);
 
-   gnome_window_icon_set_from_default(GTK_WINDOW(lv->window));
    gtk_widget_show_all (lv->window);
    gnc_window_adjust_for_screen (GTK_WINDOW(lv->window));
 

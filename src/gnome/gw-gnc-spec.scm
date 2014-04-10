@@ -30,11 +30,9 @@
       "#include <gnc-ui.h>\n"
       "#include <gnc-ui-util.h>\n"
       "#include <gnc-menu-extensions.h>\n"
-      "#include <gnc-date.h>\n"
       "#include <guile-util.h>\n"
       "#include <gnc-engine.h>\n"
       "#include <gnc-commodity.h>\n"
-      "#include <gnc-numeric.h>\n"
       "#include <dialog-totd.h>\n"
       "#include <gnc-gui-query.h>\n"
       "#include <dialog-new-user.h>\n"
@@ -130,14 +128,6 @@
    '()
    "Destroy the UI.")
 
-  (gw:wrap-function
-   ws
-   'gnc:new-account-tree
-   '<gw:void>
-   "gnc_new_account_tree"
-   '((<gnc:MainWindow*> window))
-   "Create a new account tree window.")
-
   (gw:wrap-as-wct ws
                   '<gnc:ProgressDialog*>
                   "GNCProgressDialog *" "const GNCProgressDialog *")
@@ -170,25 +160,6 @@
 
   (gw:wrap-function
    ws
-   'gnc:progress-dialog-set-limits
-   '<gw:void>
-   "gnc_progress_dialog_set_limits"
-   '((<gnc:ProgressDialog*> progress)
-     (<gw:float> min)
-     (<gw:float> max))
-   "Set the mininum and maximum range of 'progress'.")
-
-  (gw:wrap-function
-   ws
-   'gnc:progress-dialog-set-activity-mode
-   '<gw:void>
-   "gnc_progress_dialog_set_activity_mode"
-   '((<gnc:ProgressDialog*> progress)
-     (<gw:bool> activity-mode))
-   "Set the mininum and maximum range of 'progress'.")
-
-  (gw:wrap-function
-   ws
    'gnc:progress-dialog-set-cancel-scm-func
    '<gw:void>
    "gnc_progress_dialog_set_cancel_scm_func"
@@ -203,7 +174,7 @@ returns #t, the dialog is closed, but not destroyed.")
    'gnc:progress-dialog-set-value
    '<gw:void>
    "gnc_progress_dialog_set_value"
-   '((<gnc:ProgressDialog*> progress) (<gw:float> value))
+   '((<gnc:ProgressDialog*> progress) (<gw:double> value))
    "Set the value of the progress dialog to 'value'.")
 
   (gw:wrap-function

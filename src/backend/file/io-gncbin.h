@@ -14,8 +14,8 @@
  * along with this program; if not, contact:                        *
  *                                                                  *
  * Free Software Foundation           Voice:  +1-617-542-5942       *
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
- * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  *                                                                  *
  *   Author: Rob Clark                                              *
  * Internet: rclark@cs.hmc.edu                                      *
@@ -26,8 +26,7 @@
 #ifndef IO_GNCBIN_H
 #define IO_GNCBIN_H
 
-#include "qofbackend.h"
-#include "qofbook.h"
+#include "qof.h"
 
 /* @file io-gncbin.h
  * @brief read (old X-Accountant format) binary datafile

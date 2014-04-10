@@ -19,8 +19,8 @@
  * along with this program; if not, contact:
  *
  * Free Software Foundation           Voice:  +1-617-542-5942
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652
- * Boston, MA  02111-1307,  USA       gnu@gnu.org
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org
  */
 
 /** @addtogroup GUI
@@ -90,24 +90,27 @@ typedef enum {
 } GncTreeModelAccountColumn;
 
 /* typedefs & structures */
-typedef struct GncTreeModelAccountPrivate GncTreeModelAccountPrivate;
 
+/** The instance data structure for an account tree model. */
 typedef struct {
-	GncTreeModel gnc_tree_model;
-
-	GncTreeModelAccountPrivate *priv;
-
-	int stamp;
+	GncTreeModel gnc_tree_model;	/**< The parent object data. */
+	int stamp;			/**< The state of the model. Any state
+					 *   change increments this number. */
 } GncTreeModelAccount;
 
+
+/** The class data structure for an account tree model. */
 typedef struct {
-	GncTreeModelClass gnc_tree_model;
+	GncTreeModelClass gnc_tree_model;/**< The parent object data. */
 } GncTreeModelAccountClass;
 
 
 
-/* Standard g_object type */
-GType         gnc_tree_model_account_get_type              (void);
+/** Get the type of an account tree plugin.
+ *
+ *  @return A GType.
+ */
+GType gnc_tree_model_account_get_type (void);
 
 
 /** @name Account Tree Model Constructors 
@@ -116,7 +119,7 @@ GType         gnc_tree_model_account_get_type              (void);
 /** Create a new GtkTreeModel for manipulating gnucash accounts.
  *
  *  @param group The account group to put at the top level of the tree hierarchy. */
-GtkTreeModel *gnc_tree_model_account_new                   (AccountGroup *group);
+GtkTreeModel *gnc_tree_model_account_new (AccountGroup *group);
 /** @} */
 
 
@@ -135,7 +138,7 @@ GtkTreeModel *gnc_tree_model_account_new                   (AccountGroup *group)
  *
  *  @return The top-level pseudo-account.
  */
-Account      *gnc_tree_model_account_get_toplevel (GncTreeModelAccount *model);
+Account *gnc_tree_model_account_get_toplevel (GncTreeModelAccount *model);
 
 
 /** Convert a model/iter pair to a gnucash account.  This routine should
@@ -150,8 +153,8 @@ Account      *gnc_tree_model_account_get_toplevel (GncTreeModelAccount *model);
  *
  *  @return A pointer to the corresponding account.
  */
-Account      *gnc_tree_model_account_get_account           (GncTreeModelAccount *model,
-                                                            GtkTreeIter *iter);
+Account *gnc_tree_model_account_get_account (GncTreeModelAccount *model,
+					     GtkTreeIter *iter);
 
 
 /** Convert a model/account pair into a gtk_tree_model_iter.  This
@@ -170,9 +173,9 @@ Account      *gnc_tree_model_account_get_account           (GncTreeModelAccount 
  *  @return TRUE if the account was found and the iter filled
  *  in. FALSE otherwise.
  */
-gboolean      gnc_tree_model_account_get_iter_from_account (GncTreeModelAccount *model,
-                                                            Account *account,
-                                                            GtkTreeIter *iter);
+gboolean gnc_tree_model_account_get_iter_from_account (GncTreeModelAccount *model,
+						       Account *account,
+						       GtkTreeIter *iter);
 
 
 /** Convert a model/account pair into a gtk_tree_model_path.  This
@@ -188,8 +191,8 @@ gboolean      gnc_tree_model_account_get_iter_from_account (GncTreeModelAccount 
  *  @return A pointer to a path describing the account.  It is the
  *  responsibility of the caller to free this path when done.
  */
-GtkTreePath  *gnc_tree_model_account_get_path_from_account (GncTreeModelAccount *model,
-                                                            Account *account);
+GtkTreePath *gnc_tree_model_account_get_path_from_account (GncTreeModelAccount *model,
+							   Account *account);
 /** @} */
 
 G_END_DECLS

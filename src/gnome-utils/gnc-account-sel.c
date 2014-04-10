@@ -18,20 +18,21 @@
  * along with this program; if not, contact:
  *
  * Free Software Foundation           Voice:  +1-617-542-5942
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652
- * Boston, MA  02111-1307,  USA       gnu@gnu.org
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org
  **/
 
 #include "config.h"
+
+#include <gtk/gtk.h>
+#include <glib/gi18n.h>
 
 #include "dialog-account.h"
 #include "GNCId.h"
 #include "gnc-account-sel.h"
 #include "gnc-exp-parser.h"
-#include "messages.h"
 #include "gnc-ui-util.h"
-#include "gnc-engine-util.h"
-#include "gnc-event.h"
+#include "qof.h"
 
 #define ACCT_DATA_TAG "gnc-account-sel_acct"
 
@@ -147,9 +148,9 @@ gnc_account_sel_init (GNCAccountSel *gas)
         gtk_editable_set_editable( GTK_EDITABLE(gas->combo->entry), FALSE );
 
 #if 0 /* completion not implemented. */
-        gtk_signal_connect( GTK_OBJECT(gas->combo->entry), "changed",
-                            GTK_SIGNAL_FUNC( gnc_account_sel_changed ),
-                            gas );
+        g_signal_connect( gas->combo->entry, "changed",
+			  G_CALLBACK( gnc_account_sel_changed ),
+			  gas );
 #endif /* 0 -- completion not implemented. */
 
         /* Get the accounts, place into combo list */
@@ -289,9 +290,9 @@ gnc_account_sel_changed( GtkEditable *entry, gpointer ud )
         g_completion_complete( gas->completion, s, &prefix );
         if ( prefix && (strlen(prefix) > 0) ) {
                 printf( "changed into \"%s\"; longest completion: \"%s\"\n", s, prefix );
-                gtk_signal_handler_block_by_func( GTK_OBJECT(gas->combo->entry),
-                                                  GTK_SIGNAL_FUNC(gnc_account_sel_changed),
-                                                  ud );
+                g_signal_handlers_block_by_func( gas->combo->entry,
+						 gnc_account_sel_changed,
+						 ud );
                 gtk_entry_set_text( GTK_ENTRY(gas->combo->entry), prefix );
                 gtk_editable_select_region( GTK_EDITABLE(gas->combo->entry),
                                             strlen(s), -1 );
@@ -307,16 +308,16 @@ gnc_account_sel_changed( GtkEditable *entry, gpointer ud )
                         k.string = "";
                         printf( "foo [%d : \"%s\"]\n", k.length, k.string );
                         //gtk_widget_event( GTK_WIDGET(gas->combo->entry), &e );
-                        gtk_signal_emit_by_name( GTK_OBJECT(gas->combo->entry),
-                                                 "key-press-event",
-                                                 gas->combo->entry, &k, NULL, &ret );
+                        g_signal_emit_by_name( gas->combo->entry,
+					       "key-press-event",
+					       gas->combo->entry, &k, NULL, &ret );
                         printf( "bar\n" );
                 }
                 gtk_editable_set_position( GTK_EDITABLE(gas->combo->entry),
                                            strlen(s) );
-                gtk_signal_handler_unblock_by_func( GTK_OBJECT(gas->combo->entry),
-                                                    GTK_SIGNAL_FUNC(gnc_account_sel_changed),
-                                                    ud );
+                g_signal_handlers_unblock_by_func( gas->combo->entry,
+						   gnc_account_sel_changed,
+						   ud );
                 g_free( prefix );
         }
         g_free( s );
@@ -479,10 +480,10 @@ gnc_account_sel_set_new_account_ability( GNCAccountSel *gas,
         
         /* create the button. */
         gas->newAccountButton = gtk_button_new_with_label( _("New...") );
-        gtk_signal_connect( GTK_OBJECT(gas->newAccountButton),
-                            "clicked",
-                            GTK_SIGNAL_FUNC( gas_new_account_click ),
-                            gas );
+        g_signal_connect( gas->newAccountButton,
+			  "clicked",
+			  G_CALLBACK( gas_new_account_click ),
+			  gas );
         gtk_box_pack_start( GTK_BOX(gas), gas->newAccountButton,
                             TRUE, FALSE, 2 );
 }

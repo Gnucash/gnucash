@@ -114,7 +114,7 @@
 #define GNC_FILE_H
 
 #include <glib.h>
-#include "qofbackend.h"
+#include "qof.h"
 
 typedef enum
 {

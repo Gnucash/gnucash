@@ -16,14 +16,14 @@
  * along with this program; if not, contact:                        *
  *                                                                  *
  * Free Software Foundation           Voice:  +1-617-542-5942       *
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
- * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  ********************************************************************/
 
 /********************************************************************
  * 3/11/03 TomF Gnome2 changes for Gnome2                           * 
  * gnc_http.c Disable all functions to bypass missing ghttp	    *
- *   include "gnc-engine-util.h" to allow PERR warnings		    *
+ *   include "qof.h" to allow PERR warnings		    *
  *   Use long if 0 to make it easy to go back to the original to    *
  *   start developing a ghttp replacement.                          *
 *********************************************************************/
@@ -122,7 +122,7 @@ gnc_http_cancel_requests(gnc_http * http) {
   }  
 }
 
-static gint
+static gboolean
 ghttp_check_callback(gpointer data) {
   gnc_http            * http = data;
   GList               * current = NULL; 
@@ -241,7 +241,7 @@ gnc_http_start_request(gnc_http * http, const gchar * uri,
   if(!http->callback_enabled) {
     
     http->callback_tag = 
-      gtk_timeout_add(100, ghttp_check_callback, (gpointer)http);
+      g_timeout_add(100, ghttp_check_callback, http);
     http->callback_enabled = TRUE;
   }
 }
@@ -281,7 +281,7 @@ gnc_http_start_post(gnc_http * http, const char * uri,
   /* start the gtk timeout if not started */
   if(!http->callback_enabled) {
     http->callback_tag = 
-      gtk_timeout_add(100, ghttp_check_callback, (gpointer)http);
+      g_timeout_add(100, ghttp_check_callback, http);
     http->callback_enabled = TRUE;
   }  
 }

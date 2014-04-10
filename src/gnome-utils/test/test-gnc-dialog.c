@@ -6,7 +6,7 @@
 #include <stdio.h>
 #include "gnc-recurrence.h"
 #include "Recurrence.h"
-#include "qofbook.h"
+#include "qof.h"
 #include "gnc-dialog.h"
 #include "gnc-tree-view-account.h"
 

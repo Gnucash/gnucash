@@ -18,13 +18,13 @@
  * along with this program; if not, contact:
  *
  * Free Software Foundation           Voice:  +1-617-542-5942
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652
- * Boston, MA  02111-1307,  USA       gnu@gnu.org
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org
  */
 
 /** @addtogroup Windows
     @{ */
-/** @addtogroup GncWindow Basic Window Functions
+/** @addtogroup GncWindow Common Window Functions
     @{ */
 /** @file gnc-window.h
     @brief Functions that are supported by all types of windows.
@@ -45,8 +45,6 @@
 #include "gnc-plugin-page.h"
 
 G_BEGIN_DECLS
-
-#define PLUGIN_PAGE_LABEL "plugin-page"
 
 /* type macros */
 #define GNC_TYPE_WINDOW            (gnc_window_get_type ())

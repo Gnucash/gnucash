@@ -18,8 +18,8 @@
  * along with this program; if not, contact:
  *
  * Free Software Foundation           Voice:  +1-617-542-5942
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652
- * Boston, MA  02111-1307,  USA       gnu@gnu.org
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org
  */
 
 /** @addtogroup Plugins
@@ -30,11 +30,11 @@
     @brief  Plugin management functions for the GnuCash UI
     @author Copyright (C) 2003 Jan Arne Petersen <jpetersen@uni-bonn.de>
 
-    The plugin manager maintains a list of all plugins that have been
-    instantiated by various parts of Gnucash.  The manager will
-    provide this list upon request, it will also look up individual
-    plugins on request.  The main client of this manager is the main
-    gnucash window code.  All plugins registered here will
+    The plugin manager maintains a list of all non-content plugins
+    that have been instantiated by various parts of Gnucash.  The
+    manager will provide this list upon request, it will also look up
+    individual plugins on request.  The main client of this manager is
+    the main gnucash window code.  All plugins registered here will
     automatically be installed in each top level gnucash window that
     is created.
 
@@ -66,16 +66,12 @@ G_BEGIN_DECLS
 #define GNC_PLUGIN_MANAGER_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GNC_TYPE_PLUGIN_MANAGER, GncPluginManagerClass))
 
 /* typedefs & structures */
-typedef struct GncPluginManagerPrivate GncPluginManagerPrivate;
-
 typedef struct {
-	GObject object;
-
-	GncPluginManagerPrivate *priv;
+	GObject gobject;
 } GncPluginManager;
 
 typedef struct {
-	GObjectClass object;
+	GObjectClass gobject;
 
 	/* Signals */
 	void (* plugin_added)

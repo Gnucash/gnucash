@@ -14,14 +14,13 @@
  *
  * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the
- * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
- * Boston, MA 02111-1307, USA.
+ * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA 02110-1301, USA.
  */
 
 #ifndef _GNCSEARCH_CORE_TYPE_H
 #define _GNCSEARCH_CORE_TYPE_H
 
-#include <gnome.h>
 #include "QueryCore.h"
 #include "QueryNew.h"
 #include "search-param.h"
@@ -29,12 +28,11 @@
 #define GNC_TYPE_SEARCH_CORE_TYPE		(gnc_search_core_type_get_type ())
 #define GNC_SEARCH_CORE_TYPE(o)			(G_TYPE_CHECK_INSTANCE_CAST ((o), GNC_TYPE_SEARCH_CORE_TYPE, GNCSearchCoreType))
 #define GNC_SEARCH_CORE_TYPE_CLASS(k)		(G_TYPE_CHECK_CLASS_CAST ((k), GNC_TYPE_SEARCH_CORE_TYPE, GNCSearchCoreTypeClass))
-#define GNC_IS_SEARCH_CORE_TYPE(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), GNC_TYPE_SEARCH_CORE_TYPE)
+#define GNC_IS_SEARCH_CORE_TYPE(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), GNC_TYPE_SEARCH_CORE_TYPE))
 #define GNC_SEARCH_CORE_TYPE_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), GNC_TYPE_SEARCH_CORE_TYPE, GNCSearchCoreTypeClass))
 
 typedef struct {
   GtkObject parent;
-  struct _GNCSearchCoreTypePrivate *priv;
 
   GNCSearchParam *	param;
 } GNCSearchCoreType;

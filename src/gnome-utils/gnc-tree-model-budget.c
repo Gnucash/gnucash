@@ -22,6 +22,10 @@
 /** @addtogroup gnome-util
  *     @{ */
 
+#include "config.h"
+
+#include <gtk/gtk.h>
+
 #include "gnc-tree-model-budget.h"
 #include "gnc-budget.h"
 #include "gnc-ui-util.h"

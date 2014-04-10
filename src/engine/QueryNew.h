@@ -1,4 +1,4 @@
-#include "qofquery.h"
+#include "qof.h"
 
 
 		#define QUERY_AND QOF_QUERY_AND

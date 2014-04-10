@@ -40,7 +40,6 @@ noinst_HEADERS = \
 bin_SCRIPTS = gnc-test-env
 
 EXTRA_DIST = \
-  .cvsignore \
   README.modules \
   gnc-test-env \
   valgrind-gnucash.supp \

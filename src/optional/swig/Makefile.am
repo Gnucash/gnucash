@@ -24,7 +24,6 @@ noinst_HEADERS = \
   helperfuncs.h
 
 EXTRA_DIST = \
-  .cvsignore \
   examples/scan-acct.pl \
   perl5_typemaps.i \
   gnucash-swig-defines.c

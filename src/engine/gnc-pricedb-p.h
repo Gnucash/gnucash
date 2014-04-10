@@ -17,8 +17,8 @@
  * along with this program; if not, contact:                        *
  *                                                                  *
  * Free Software Foundation           Voice:  +1-617-542-5942       *
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
- * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  *                                                                  *
  *******************************************************************/
 
@@ -89,7 +89,6 @@ typedef struct gnc_price_lookup_helper_s
 } GNCPriceLookupHelper;
 
 #define  gnc_price_set_guid(P,G)  qof_entity_set_guid(QOF_ENTITY(P),(G))
-#define  gnc_pricedb_mark_clean(db) qof_instance_mark_clean(QOF_INSTANCE(db))
 void     gnc_pricedb_substitute_commodity(GNCPriceDB *db,
                                           gnc_commodity *old_c,
                                           gnc_commodity *new_c);

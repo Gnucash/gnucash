@@ -12,8 +12,8 @@
 ;; along with this program; if not, contact:
 ;;
 ;; Free Software Foundation           Voice:  +1-617-542-5942
-;; 59 Temple Place - Suite 330        Fax:    +1-617-542-2652
-;; Boston, MA  02111-1307,  USA       gnu@gnu.org
+;; 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
+;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 
 (define (gnc:expand-path new-list current-list default-generator)
   (define (expand-path-item item)
@@ -35,24 +35,20 @@
       #t
       (false-if-exception (mkdir dir #o700))))
 
-(define (gnc:make-home-dir)
-  (let ((home-dir (build-path (getenv "HOME") ".gnucash")))
-    (gnc:make-dir home-dir)))
-
 (define gnc:current-config-auto
-  (build-path (getenv "HOME") ".gnucash" "config-2.0.auto"))
+  (gnc:build-dotgnucash-path "config-2.0.auto"))
 
 (define gnc:current-saved-reports
-  (build-path (getenv "HOME") ".gnucash" "saved-reports-2.0"))
+  (gnc:build-dotgnucash-path "saved-reports-2.0"))
 
 (define gnc:current-saved-stylesheets
-  (build-path (getenv "HOME") ".gnucash" "stylesheets-2.0"))
+  (gnc:build-dotgnucash-path "stylesheets-2.0"))
 
 (define gnc:load-user-config-if-needed
   (let ((user-config-loaded? #f))
 
     (define (try-load-no-set file-suffix)
-      (let ((file (build-path (getenv "HOME") ".gnucash" file-suffix)))
+      (let ((file (gnc:build-dotgnucash-path file-suffix)))
 	(gnc:debug "trying to load " file)
         (if (access? file F_OK)
             (if (false-if-exception (primitive-load file))

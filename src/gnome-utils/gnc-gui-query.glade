@@ -85,7 +85,7 @@
 		<widget class="GtkLabel" id="label">
 		  <property name="visible">True</property>
 		  <property name="can_focus">True</property>
-		  <property name="label" translatable="yes">&lt;b&gt;Primary text&lt;/b&gt;
+		  <property name="label">&lt;b&gt;Primary text&lt;/b&gt;
 
 Secondary text.  Multiple
 lines are acceptable</property>
@@ -265,7 +265,7 @@ lines are acceptable</property>
 		<widget class="GtkLabel" id="label">
 		  <property name="visible">True</property>
 		  <property name="can_focus">True</property>
-		  <property name="label" translatable="yes">&lt;b&gt;Primary text&lt;/b&gt;
+		  <property name="label">&lt;b&gt;Primary text&lt;/b&gt;
 
 Secondary text.  Multiple
 lines are acceptable</property>
@@ -445,7 +445,7 @@ lines are acceptable</property>
 		<widget class="GtkLabel" id="label">
 		  <property name="visible">True</property>
 		  <property name="can_focus">True</property>
-		  <property name="label" translatable="yes">&lt;b&gt;Primary text&lt;/b&gt;
+		  <property name="label">&lt;b&gt;Primary text&lt;/b&gt;
 
 Secondary text.  Multiple
 lines are acceptable</property>

@@ -54,7 +54,6 @@ gladedir = $(GNC_GLADE_DIR)
 glade_DATA = tax-tables.glade
 
 EXTRA_DIST = \
-  .cvsignore \
   ${glade_DATA} \
   ${gwmod_DATA} \
   ${gncmod_DATA}
@@ -77,7 +76,7 @@ endif
 
 gw-dialog-tax-table.scm gw-dialog-tax-table.c gw-dialog-tax-table.h: \
   .scm-links gw-dialog-tax-table-spec.scm ${top_builddir}/config.status
-	FLAVOR=gnome guile -c \
+	FLAVOR=gnome $(GUILE) -c \
 	 "(set! %load-path (cons \"${G_WRAP_MODULE_DIR}\" %load-path)) \
 	 (set! %load-path (cons \"${PWD}\" %load-path)) \
 	 (set! %load-path (cons \"../business-core\" %load-path)) \

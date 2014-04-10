@@ -17,8 +17,8 @@
  * along with this program; if not, contact:                        *
  *                                                                  *
  * Free Software Foundation           Voice:  +1-617-542-5942       *
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
- * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  *                                                                  *
 \********************************************************************/
 
@@ -52,19 +52,13 @@ G_BEGIN_DECLS
 #define GNC_TREE_VIEW_COMMODITY_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GNC_TYPE_TREE_VIEW_COMMODITY, GncTreeViewCommodityClass))
 
 /* typedefs & structures */
-typedef struct GncTreeViewCommodityPrivate GncTreeViewCommodityPrivate;
-
-
 typedef struct {
-	GncTreeView parent;
-
-	GncTreeViewCommodityPrivate *priv;
-
+	GncTreeView gnc_tree_view;
 	int stamp;
 } GncTreeViewCommodity;
 
 typedef struct {
-	GncTreeViewClass parent;
+	GncTreeViewClass gnc_tree_view;
 } GncTreeViewCommodityClass;
 
 

@@ -25,7 +25,7 @@
 #include <glib.h>
 
 #include "gnc-commodity.h"
-#include "gnc-numeric.h"
+#include "qof.h"
 
 gboolean    gnc_is_euro_currency (const gnc_commodity * currency);
 gboolean    gnc_is_euro_currency_code (const char *code);

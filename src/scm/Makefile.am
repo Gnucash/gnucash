@@ -32,7 +32,6 @@ config_DATA = config
 SCM_FILES = ${gncscm_DATA} ${gncscmmod_DATA}
 
 EXTRA_DIST = \
-  .cvsignore \
   build-config.scm.in \
   config \
   startup-design.txt \

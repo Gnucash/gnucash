@@ -1,0 +1,77 @@
+<gconfschemafile>
+    <schemalist>
+
+        <schema>
+            <key>/schemas/desktop/gnome/thumbnailers/application@vnd.ms-powerpoint/enable</key>
+            <applyto>/desktop/gnome/thumbnailers/application@vnd.ms-powerpoint/enable</applyto>
+            <owner>libgsf</owner>
+            <type>bool</type>
+            <default>true</default>
+            <locale name="C">
+                <short>Enable thumbnailing of Microsoft PowerPoint documents</short>
+                <long>Boolean options available, true enables thumbnailing and false disables the creation of new thumbnails</long>
+            </locale>
+        </schema>
+
+        <schema>
+            <key>/schemas/desktop/gnome/thumbnailers/application@vnd.ms-powerpoint/command</key>
+            <applyto>/desktop/gnome/thumbnailers/application@vnd.ms-powerpoint/command</applyto>
+            <owner>libgsf</owner>
+            <type>string</type>
+            <default>gsf-office-thumbnailer -i %i -o %o -s %s</default>
+            <locale name="C">
+                <short>Thumbnail command for Microsoft PowerPoint documents</short>
+                <long>Valid command plus arguments for the Microsoft PowerPoint thumbnailer.</long>
+            </locale>
+        </schema>
+
+        <schema>
+            <key>/schemas/desktop/gnome/thumbnailers/application@vnd.ms-excel/enable</key>
+            <applyto>/desktop/gnome/thumbnailers/application@vnd.ms-excel/enable</applyto>
+            <owner>libgsf</owner>
+            <type>bool</type>
+            <default>true</default>
+            <locale name="C">
+                <short>Enable thumbnailing of Microsoft Excel documents</short>
+                <long>Boolean options available, true enables thumbnailing and false disables the creation of new thumbnails</long>
+            </locale>
+        </schema>
+
+        <schema>
+            <key>/schemas/desktop/gnome/thumbnailers/application@vnd.ms-excel/command</key>
+            <applyto>/desktop/gnome/thumbnailers/application@vnd.ms-excel/command</applyto>
+            <owner>libgsf</owner>
+            <type>string</type>
+            <default>gsf-office-thumbnailer -i %i -o %o -s %s</default>
+            <locale name="C">
+                <short>Thumbnail command for Microsoft Excel documents</short>
+                <long>Valid command plus arguments for the Microsoft Excel thumbnailer.</long>
+            </locale>
+        </schema>
+
+        <schema>
+            <key>/schemas/desktop/gnome/thumbnailers/application@msword/enable</key>
+            <applyto>/desktop/gnome/thumbnailers/application@msword/enable</applyto>
+            <owner>libgsf</owner>
+            <type>bool</type>
+            <default>true</default>
+            <locale name="C">
+                <short>Enable thumbnailing of Microsoft Word documents</short>
+                <long>Boolean options available, true enables thumbnailing and false disables the creation of new thumbnails</long>
+            </locale>
+        </schema>
+
+        <schema>
+            <key>/schemas/desktop/gnome/thumbnailers/application@msword/command</key>
+            <applyto>/desktop/gnome/thumbnailers/application@msword/command</applyto>
+            <owner>libgsf</owner>
+            <type>string</type>
+            <default>gsf-office-thumbnailer -i %i -o %o -s %s</default>
+            <locale name="C">
+                <short>Thumbnail command for Microsoft Word documents</short>
+                <long>Valid command plus arguments for the Microsoft Word thumbnailer.</long>
+            </locale>
+        </schema>
+
+    </schemalist>
+</gconfschemafile>

@@ -18,8 +18,8 @@
  * along with this program; if not, contact:
  *
  * Free Software Foundation           Voice:  +1-617-542-5942
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652
- * Boston, MA  02111-1307,  USA       gnu@gnu.org
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org
  **/
   
 /** @addtogroup GUI
@@ -47,19 +47,15 @@ G_BEGIN_DECLS
 #define GNC_IS_PLUGIN_PAGE_REPORT_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GNC_TYPE_PLUGIN_PAGE_REPORT))
 #define GNC_PLUGIN_PAGE_REPORT_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GNC_TYPE_PLUGIN_PAGE_REPORT, GncPluginPageReportClass))
 
-#define GNC_PLUGIN_PAGE_REPORT_NAME "gnc-plugin-page-report"
+#define GNC_PLUGIN_PAGE_REPORT_NAME "GncPluginPageReport"
 
 /* typedefs & structures */
-typedef struct GncPluginPageReportPrivate GncPluginPageReportPrivate;
-
 typedef struct {
-	GncPluginPage parent;
-        
-	GncPluginPageReportPrivate *priv;
+	GncPluginPage gnc_plugin;
 } GncPluginPageReport;
 
 typedef struct {
-        GncPluginPageClass parent;
+        GncPluginPageClass gnc_plugin;
 
 	/* callbacks */
 } GncPluginPageReportClass;

@@ -14,8 +14,8 @@
  *
  * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the
- * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
- * Boston, MA 02111-1307, USA.
+ * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA 02110-1301, USA.
  */
 
 #ifndef _GNCSEARCH_STRING_H
@@ -23,9 +23,10 @@
 
 #include "search-core-type.h"
 
-#define GNCSEARCH_STRING(obj)	GTK_CHECK_CAST (obj, gnc_search_string_get_type (), GNCSearchString)
-#define GNCSEARCH_STRING_CLASS(klass)	GTK_CHECK_CLASS_CAST (klass, gnc_search_string_get_type (), GNCSearchStringClass)
-#define IS_GNCSEARCH_STRING(obj)      GTK_CHECK_TYPE (obj, gnc_search_string_get_type ())
+#define GNC_TYPE_SEARCH_STRING		(gnc_search_string_get_type ())
+#define GNCSEARCH_STRING(obj)		GTK_CHECK_CAST (obj, GNC_TYPE_SEARCH_STRING, GNCSearchString)
+#define GNCSEARCH_STRING_CLASS(klass)	GTK_CHECK_CLASS_CAST (klass, GNC_TYPE_SEARCH_STRING, GNCSearchStringClass)
+#define IS_GNCSEARCH_STRING(obj)	GTK_CHECK_TYPE (obj, GNC_TYPE_SEARCH_STRING)
 
 typedef struct _GNCSearchString	GNCSearchString;
 typedef struct _GNCSearchStringClass	GNCSearchStringClass;
@@ -39,7 +40,6 @@ typedef enum _search_string_how {
 
 struct _GNCSearchString {
   GNCSearchCoreType parent;
-  struct _GNCSearchStringPrivate *priv;
 
   GNCSearchString_Type	how;
   gboolean		ign_case;

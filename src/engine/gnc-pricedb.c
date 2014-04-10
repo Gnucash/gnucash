@@ -17,8 +17,8 @@
  * along with this program; if not, contact:                        *
  *                                                                  *
  * Free Software Foundation           Voice:  +1-617-542-5942       *
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
- * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  *                                                                  *
  *******************************************************************/
 
@@ -177,6 +177,21 @@ gnc_pricedb_commit_edit (GNCPriceDB *pdb)
 /* ==================================================================== */
 /* setters */
 
+static void
+gnc_price_set_dirty (GNCPrice *p)
+{
+  if (p->db) {
+    qof_instance_set_dirty(&p->inst);
+    return;
+  }
+
+  /* This is a transient price structure, probably for the add new
+   * price dialog.  The user may end up cancelling it instead of
+   * saving it, so don't mark the collection dirty. We'll mark it
+   * dirty later if the price is ever saved to the db. */
+  p->inst.dirty = TRUE;
+}
+
 void
 gnc_price_set_commodity(GNCPrice *p, gnc_commodity *c)
 {
@@ -191,7 +206,7 @@ gnc_price_set_commodity(GNCPrice *p, gnc_commodity *c)
     remove_price (p->db, p, TRUE);
     gnc_price_begin_edit (p);
     p->commodity = c;
-    if(p->db) p->db->inst.dirty = TRUE;
+    gnc_price_set_dirty(p);
     gnc_price_commit_edit (p);
     add_price (p->db, p);
     gnc_price_unref (p);
@@ -213,7 +228,7 @@ gnc_price_set_currency(GNCPrice *p, gnc_commodity *c)
     remove_price (p->db, p, TRUE);
     gnc_price_begin_edit (p);
     p->currency = c;
-    if(p->db) p->db->inst.dirty = TRUE;
+    gnc_price_set_dirty(p);
     gnc_price_commit_edit (p);
     add_price (p->db, p);
     gnc_price_unref (p);
@@ -233,7 +248,7 @@ gnc_price_set_time(GNCPrice *p, Timespec t)
     remove_price (p->db, p, FALSE);
     gnc_price_begin_edit (p);
     p->tmspec = t;
-    if(p->db) p->db->inst.dirty = TRUE;
+    gnc_price_set_dirty(p);
     gnc_price_commit_edit (p);
     add_price (p->db, p);
     gnc_price_unref (p);
@@ -252,7 +267,7 @@ gnc_price_set_source(GNCPrice *p, const char *s)
     tmp = gnc_string_cache_insert((gpointer) s);
     if(p->source) gnc_string_cache_remove(p->source);
     p->source = tmp;
-    if(p->db) p->db->inst.dirty = TRUE;
+    gnc_price_set_dirty(p);
     gnc_price_commit_edit (p);
   }
 }
@@ -269,7 +284,7 @@ gnc_price_set_type(GNCPrice *p, const char* type)
     tmp = gnc_string_cache_insert((gpointer) type);
     if(p->type) gnc_string_cache_remove(p->type);
     p->type = tmp;
-    if(p->db) p->db->inst.dirty = TRUE;
+    gnc_price_set_dirty(p);
     gnc_price_commit_edit (p);
   }
 }
@@ -282,7 +297,7 @@ gnc_price_set_value(GNCPrice *p, gnc_numeric value)
   {
     gnc_price_begin_edit (p);
     p->value = value;
-    if(p->db) p->db->inst.dirty = TRUE;
+    gnc_price_set_dirty(p);
     gnc_price_commit_edit (p);
   }
 }
@@ -574,7 +589,7 @@ commodity_equal (gconstpointer a, gconstpointer b)
   return gnc_commodity_equiv (ca, cb);
 }
 
-GNCPriceDB *
+static GNCPriceDB *
 gnc_pricedb_create(QofBook * book)
 {
   GNCPriceDB * result;
@@ -676,6 +691,7 @@ destroy and recreate the book. Yuk.
 GNCPriceDB *
 gnc_collection_get_pricedb(QofCollection *col)
 {
+  if (!col) return NULL;
   return qof_collection_get_data (col);
 }
 
@@ -683,6 +699,7 @@ GNCPriceDB *
 gnc_pricedb_get_db(QofBook *book)
 {
   QofCollection *col;
+
   if (!book) return NULL;
   col = qof_book_get_collection (book, GNC_ID_PRICEDB);
   return gnc_collection_get_pricedb (col);
@@ -862,13 +879,9 @@ gnc_pricedb_add_price(GNCPriceDB *db, GNCPrice *p)
 	  return FALSE;
   }
 
-  /* If we haven't been able to call the backend before, call it now */
-  if (TRUE == p->inst.dirty)
-  {
-    gnc_price_begin_edit(p);
-    db->inst.dirty = TRUE;
-    gnc_price_commit_edit(p);
-  }
+  gnc_pricedb_begin_edit(db);
+  qof_instance_set_dirty(&db->inst);
+  gnc_pricedb_commit_edit(db);
 
   LEAVE ("db=%p, pr=%p dirty=%d do-free=%d",
          db, p, p->inst.dirty, p->inst.do_free);
@@ -948,13 +961,14 @@ gnc_pricedb_remove_price(GNCPriceDB *db, GNCPrice *p)
 
   gnc_price_ref(p);
   rc = remove_price (db, p, TRUE);
+  gnc_pricedb_begin_edit(db);
+  qof_instance_set_dirty(&db->inst);
+  gnc_pricedb_commit_edit(db);
 
   /* invoke the backend to delete this price */
   gnc_price_begin_edit (p);
-  db->inst.dirty = TRUE;
   p->inst.do_free = TRUE;
   gnc_price_commit_edit (p);
-
   p->db = NULL;
   gnc_price_unref(p);
   LEAVE ("db=%p, pr=%p", db, p);
@@ -964,6 +978,8 @@ gnc_pricedb_remove_price(GNCPriceDB *db, GNCPrice *p)
 typedef struct {
   GNCPriceDB *db;
   Timespec cutoff;
+  gboolean delete_user;
+  gboolean delete_last;
   GSList *list;
 } remove_info;
 
@@ -971,27 +987,96 @@ static gboolean
 check_one_price_date (GNCPrice *price, gpointer user_data)
 {
   remove_info *data = user_data;
+  const gchar *source;
   Timespec pt;
 
+  ENTER("price %p (%s), data %p", price,
+	gnc_commodity_get_mnemonic(gnc_price_get_commodity(price)),
+	user_data);
+  if (!data->delete_user) {
+    source = gnc_price_get_source (price);
+    if (strcmp(source, "Finance::Quote") != 0) {
+      LEAVE("Not an automatic quote");
+      return TRUE;
+    }
+  }
+
   pt = gnc_price_get_time (price);
-  if (timespec_cmp (&pt, &data->cutoff) < 0)
+  {
+    gchar buf[40];
+    gnc_timespec_to_iso8601_buff(pt , buf);
+    DEBUG("checking date %s", buf);
+  }
+  if (timespec_cmp (&pt, &data->cutoff) < 0) {
     data->list = g_slist_prepend(data->list, price);
+    DEBUG("will delete");
+  }
+  LEAVE(" ");
   return TRUE;
 }
 
+static void
+pricedb_remove_foreach_pricelist (gpointer key,
+				  gpointer val,
+				  gpointer user_data)
+{
+  GList *price_list = (GList *) val;
+  GList *node = price_list;
+  remove_info *data = (remove_info *) user_data;
+
+  ENTER("key %p, value %p, data %p", key, val, user_data);
+
+  /* The most recent price is the first in the list */
+  if (!data->delete_last)
+    node = g_list_next(node);
+
+  /* now check each item in the list */
+  g_list_foreach(node, (GFunc)check_one_price_date, data);
+
+  LEAVE(" ");
+}
+
+static void
+pricedb_remove_foreach_currencies_hash (gpointer key,
+					gpointer val,
+					gpointer user_data)
+{
+  GHashTable *currencies_hash = (GHashTable *) val;
+
+  ENTER("key %p, value %p, data %p", key, val, user_data);
+  g_hash_table_foreach(currencies_hash,
+		       pricedb_remove_foreach_pricelist, user_data);
+  LEAVE(" ");
+}
+
+
 gboolean
-gnc_pricedb_remove_old_prices(GNCPriceDB *db, Timespec cutoff)
+gnc_pricedb_remove_old_prices(GNCPriceDB *db,
+			      Timespec cutoff,
+			      gboolean delete_user,
+			      gboolean delete_last)
 {
   remove_info data;
   GSList *item;
 
   data.db = db;
   data.cutoff = cutoff;
+  data.delete_user = delete_user;
+  data.delete_last = delete_last;
   data.list = NULL;
+
+  ENTER("db %p, delet_user %d, delete_last %d", db, delete_user, delete_last);
+  {
+    gchar buf[40];
+    gnc_timespec_to_iso8601_buff(cutoff, buf);
+    DEBUG("checking date %s", buf);
+  }
 
   /* Traverse the database once building up an external list of prices
    * to be deleted */
-  gnc_pricedb_foreach_price(db, check_one_price_date, &data, FALSE);
+  g_hash_table_foreach(db->commodity_hash,
+                       pricedb_remove_foreach_currencies_hash,
+                       &data);
 
   if (data.list == NULL)
     return FALSE;
@@ -1002,6 +1087,7 @@ gnc_pricedb_remove_old_prices(GNCPriceDB *db, Timespec cutoff)
   }
 
   g_slist_free(data.list);
+  LEAVE(" ");
   return TRUE;
 }
 
@@ -2041,25 +2127,29 @@ gnc_pricedb_print_contents(GNCPriceDB *db, FILE *f)
 static void
 pricedb_book_begin (QofBook *book)
 {
-  gnc_pricedb_create(book);
+  GNCPriceDB *db;
+
+  db = gnc_pricedb_create(book);
 }
 
 static void
 pricedb_book_end (QofBook *book)
 {
-  /* ????? */
+  GNCPriceDB *db;
+  QofCollection *col;
+
+  if (!book)
+    return;
+  col = qof_book_get_collection(book, GNC_ID_PRICEDB);
+  db = qof_collection_get_data(col);
+  qof_collection_set_data(col, NULL);
+  gnc_pricedb_destroy(db);
 }
 
-static gboolean
-pricedb_is_dirty (QofCollection *col)
+static gpointer
+price_create (QofBook *book)
 {
-  return gnc_pricedb_dirty(gnc_collection_get_pricedb(col));
-}
-
-static void
-pricedb_mark_clean(QofCollection *col)
-{
-  gnc_pricedb_mark_clean(gnc_collection_get_pricedb(col));
+  return gnc_price_create(book);
 }
 
 /* ==================================================================== */
@@ -2111,9 +2201,11 @@ void_unstable_price_traversal(GNCPriceDB *db,
 }
 
 static void
-pricedb_foreach(QofCollection *col, QofEntityForeachCB cb, gpointer data)
+price_foreach(QofCollection *col, QofEntityForeachCB cb, gpointer data)
 {
-  GNCPriceDB *db = gnc_collection_get_pricedb(col);
+  GNCPriceDB *db;
+
+  db = qof_collection_get_data(col);
   void_unstable_price_traversal(db,
                        (void (*)(GNCPrice *, gpointer)) cb,
                        data);
@@ -2122,7 +2214,7 @@ pricedb_foreach(QofCollection *col, QofEntityForeachCB cb, gpointer data)
 /* ==================================================================== */
 
 static const char *
-pricedb_printable(gpointer obj)
+price_printable(gpointer obj)
 {
   GNCPrice *pr = obj;
   gnc_commodity *commodity;
@@ -2147,18 +2239,33 @@ pricedb_printable(gpointer obj)
   return buff;
 }
 
-static QofObject pricedb_object_def =
+static QofObject price_object_def =
 {
   interface_version: QOF_OBJECT_VERSION,
   e_type:            GNC_ID_PRICE,
   type_label:        "Price",
-  create:            (gpointer)gnc_price_create,
+  create:            price_create,
+  book_begin:        NULL,
+  book_end:          NULL,
+  is_dirty:          qof_collection_is_dirty,
+  mark_clean:        qof_collection_mark_clean,
+  foreach:           price_foreach,
+  printable:         price_printable,
+  version_cmp:       NULL,
+};
+
+static QofObject pricedb_object_def =
+{
+  interface_version: QOF_OBJECT_VERSION,
+  e_type:            GNC_ID_PRICEDB,
+  type_label:        "PriceDB",
+  create:            NULL,
   book_begin:        pricedb_book_begin,
   book_end:          pricedb_book_end,
-  is_dirty:          pricedb_is_dirty,
-  mark_clean:        pricedb_mark_clean,
-  foreach:           pricedb_foreach,
-  printable:         pricedb_printable,
+  is_dirty:          qof_collection_is_dirty,
+  mark_clean:        qof_collection_mark_clean,
+  foreach:           NULL,
+  printable:         NULL,
   version_cmp:       NULL,
 };
 
@@ -2177,6 +2284,8 @@ gnc_pricedb_register (void)
 
   qof_class_register (GNC_ID_PRICE, NULL, params);
 
+  if (!qof_object_register (&price_object_def))
+    return FALSE;
   return qof_object_register (&pricedb_object_def);
 }
 

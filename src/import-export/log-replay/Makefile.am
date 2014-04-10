@@ -38,7 +38,4 @@ uidir = $(GNC_UI_DIR)
 dist_ui_DATA = \
 	gnc-plugin-log-replay-ui.xml
 
-EXTRA_DIST = \
-  .cvsignore
-
 CLEANFILES = g-wrapped

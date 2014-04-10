@@ -18,5 +18,4 @@ account_DATA = \
 EXTRA_DIST = \
   ${account_DATA} \
   acctlist_full.gnucash \
-  acctchrt_full.gnucash-xea \
-  .cvsignore
+  acctchrt_full.gnucash-xea 

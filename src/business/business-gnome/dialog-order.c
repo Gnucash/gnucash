@@ -17,20 +17,21 @@
  * along with this program; if not, contact:
  *
  * Free Software Foundation           Voice:  +1-617-542-5942
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652
- * Boston, MA  02111-1307,  USA       gnu@gnu.org
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org
  */
 
 #include "config.h"
 
 #include <gtk/gtk.h>
+#include <glib/gi18n.h>
 
 #include "dialog-utils.h"
 #include "gnc-component-manager.h"
 #include "gnc-ui.h"
 #include "gnc-gui-query.h"
 #include "gnc-ui-util.h"
-#include "gnc-engine-util.h"
+#include "qof.h"
 #include "gnucash-sheet.h"
 #include "dialog-search.h"
 #include "search-param.h"
@@ -431,9 +432,9 @@ gnc_order_update_window (OrderWindow *ow)
       break;
     }
 
-  gtk_signal_connect (GTK_OBJECT (ow->owner_choice), "changed",
-		      GTK_SIGNAL_FUNC (gnc_order_owner_changed_cb),
-		      ow);
+  g_signal_connect (ow->owner_choice, "changed",
+		    G_CALLBACK (gnc_order_owner_changed_cb),
+		    ow);
 
   gtk_widget_show_all (ow->dialog);
 
@@ -661,7 +662,7 @@ gnc_order_window_new_order (GNCBook *bookp, GncOwner *owner)
   xml = gnc_glade_xml_new ("order.glade", "New Order Dialog");
   ow->dialog = glade_xml_get_widget (xml, "New Order Dialog");
 
-  gtk_object_set_data (GTK_OBJECT (ow->dialog), "dialog_info", ow);
+  g_object_set_data (G_OBJECT (ow->dialog), "dialog_info", ow);
 
   /* Grab the widgets */
   ow->id_entry = glade_xml_get_widget (xml, "id_entry");

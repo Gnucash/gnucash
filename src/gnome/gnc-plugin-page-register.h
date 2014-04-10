@@ -18,8 +18,8 @@
  * along with this program; if not, contact:
  *
  * Free Software Foundation           Voice:  +1-617-542-5942
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652
- * Boston, MA  02111-1307,  USA       gnu@gnu.org
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org
  */
 
 /** @addtogroup ContentPlugins
@@ -27,7 +27,7 @@
 /** @addtogroup RegisterPlugin Register Page
     @{ */
 /** @file gnc-plugin-page-register.h 
-    @brief  utility functions for the GnuCash UI
+    @brief  Functions providing a register page for the GnuCash UI
     @author Copyright (C) 2003 Jan Arne Petersen <jpetersen@uni-bonn.de>
     @author Copyright (C) 2003 David Hampton <hampton@employees.org>
 */
@@ -54,16 +54,12 @@ G_BEGIN_DECLS
 #define GNC_PLUGIN_PAGE_REGISTER_NAME "GncPluginPageRegister"
 
 /* typedefs & structures */
-typedef struct GncPluginPageRegisterPrivate GncPluginPageRegisterPrivate;
-
 typedef struct {
-	GncPluginPage parent;
-
-	GncPluginPageRegisterPrivate *priv;
+	GncPluginPage gnc_plugin_page;
 } GncPluginPageRegister;
 
 typedef struct {
-	GncPluginPageClass parent;
+	GncPluginPageClass gnc_plugin_page;
 } GncPluginPageRegisterClass;
 
 /* function prototypes */
@@ -144,7 +140,7 @@ GNCSplitReg * gnc_plugin_page_register_get_gsr (GncPluginPage *plugin_page);
  *
  *  @param page A "register" page.
  *
- *  @return The account if the register contsins only a single
+ *  @return The account if the register contains only a single
  *  account, or an account and its sub-accounts.  NULL otherwise.
  */
 Account *gnc_plugin_page_register_get_account (GncPluginPageRegister *page);

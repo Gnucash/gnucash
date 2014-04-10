@@ -7,5 +7,4 @@ account_DATA = \
   acctchrt_brokerage.gnucash-xea
 
 EXTRA_DIST = \
-  ${account_DATA} \
-  .cvsignore
+  ${account_DATA}

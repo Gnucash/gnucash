@@ -1,8 +1,0 @@
-Makefile
-Makefile.in
-.deps
-.libs
-*.lo
-*.la
-*.diff
-gnc-dir.h

@@ -12,5 +12,4 @@ glade_DATA = \
   vendor.glade
 
 EXTRA_DIST = \
-  .cvsignore \
   ${glade_DATA}

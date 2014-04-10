@@ -14,8 +14,8 @@
  *
  * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the
- * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
- * Boston, MA 02111-1307, USA.
+ * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA 02110-1301, USA.
  */
 
 #ifdef HAVE_CONFIG_H
@@ -48,9 +48,14 @@ static void gnc_search_core_type_class_init	(GNCSearchCoreTypeClass *class);
 static void gnc_search_core_type_init	(GNCSearchCoreType *gspaper);
 static void gnc_search_core_type_finalize	(GObject *obj);
 
-#define _PRIVATE(x) (((GNCSearchCoreType *)(x))->priv)
+typedef struct _GNCSearchCoreTypePrivate GNCSearchCoreTypePrivate;
+
 struct _GNCSearchCoreTypePrivate {
+  gpointer dummy;
 };
+
+#define _PRIVATE(o) \
+   (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_SEARCH_CORE_TYPE, GNCSearchCoreTypePrivate))
 
 static GtkObjectClass *parent_class;
 
@@ -94,19 +99,20 @@ gnc_search_core_type_class_init (GNCSearchCoreTypeClass *klass)
   klass->validate = validate;
   klass->grab_focus = grab_focus;
   klass->editable_enters = editable_enters;
+
+  g_type_class_add_private(klass, sizeof(GNCSearchCoreTypePrivate));
 }
 
 static void
 gnc_search_core_type_init (GNCSearchCoreType *o)
 {
-  o->priv = g_malloc0 (sizeof (*o->priv));
 }
 
 static void
 gnc_search_core_type_finalize (GObject *obj)
 {
   GNCSearchCoreType *o = (GNCSearchCoreType *)obj;
-  g_free(o->priv);
+  g_assert (GNC_IS_SEARCH_CORE_TYPE (o));
 
   G_OBJECT_CLASS (parent_class)->finalize(obj);
 }

@@ -16,20 +16,20 @@
  * along with this program; if not, contact:                        *
  *                                                                  *
  * Free Software Foundation           Voice:  +1-617-542-5942       *
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
- * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  *                                                                  *
 \********************************************************************/
 
 #include "config.h"
 
-#include <gnome.h>
+#include <gtk/gtk.h>
+#include <glib/gi18n.h>
 #include <libguile.h>
 #include "guile-mappings.h"
 
 #include "dialog-progress.h"
 #include "dialog-utils.h"
-#include "messages.h"
 
 
 struct _GNCProgressDialog
@@ -171,31 +171,28 @@ gnc_progress_dialog_create(GtkWidget * parent, GNCProgressDialog *progress)
   if (parent != NULL)
     gtk_window_set_transient_for(GTK_WINDOW(dialog), GTK_WINDOW(parent));
 
-  gtk_signal_connect (tdo, "delete_event",
-                      GTK_SIGNAL_FUNC (delete_cb), progress);
+  g_signal_connect (tdo, "delete_event",
+		    G_CALLBACK (delete_cb), progress);
 
-  gtk_signal_connect (tdo, "destroy", GTK_SIGNAL_FUNC (destroy_cb), progress);
+  g_signal_connect (tdo, "destroy", G_CALLBACK (destroy_cb), progress);
 
   progress->heading_label = glade_xml_get_widget (xml, "heading_label");
   gtk_widget_hide(progress->heading_label);
 
   progress->progress_bar = glade_xml_get_widget (xml, "progress_bar");
-  gtk_progress_set_show_text (GTK_PROGRESS(progress->progress_bar), TRUE);
-  gtk_progress_configure (GTK_PROGRESS(progress->progress_bar),
-                          0.0, 0.0, 100.0);
 
   progress->ok_button = glade_xml_get_widget (xml, "ok_button");
 
-  gtk_signal_connect(GTK_OBJECT(progress->ok_button), "clicked",
-                     GTK_SIGNAL_FUNC(ok_cb), progress);
+  g_signal_connect(progress->ok_button, "clicked",
+		   G_CALLBACK(ok_cb), progress);
 
   if (!progress->use_ok_button)
     gtk_widget_hide (progress->ok_button);
 
   progress->cancel_button = glade_xml_get_widget (xml, "cancel_button");
 
-  gtk_signal_connect(GTK_OBJECT(progress->cancel_button), "clicked",
-                     GTK_SIGNAL_FUNC(cancel_cb), progress);
+  g_signal_connect(progress->cancel_button, "clicked",
+		   G_CALLBACK(cancel_cb), progress);
 
   progress->cancel_func = NULL;
   progress->user_data = NULL;
@@ -261,32 +258,6 @@ gnc_progress_dialog_set_heading (GNCProgressDialog *progress,
 }
 
 void
-gnc_progress_dialog_set_limits (GNCProgressDialog *progress,
-                                gfloat min, gfloat max)
-{
-  if (progress == NULL)
-    return;
-
-  gtk_progress_configure (GTK_PROGRESS (progress->progress_bar),
-                          min, min, max);
-
-  gnc_progress_dialog_update (progress);
-}
-
-void
-gnc_progress_dialog_set_activity_mode (GNCProgressDialog *progress,
-                                       gboolean activity_mode)
-{
-  if (progress == NULL)
-    return;
-
-  gtk_progress_set_activity_mode (GTK_PROGRESS (progress->progress_bar),
-                                  activity_mode);
-
-  gnc_progress_dialog_update (progress);
-}
-
-void
 gnc_progress_dialog_set_cancel_func (GNCProgressDialog *progress,
                                      GNCProgressCancelFunc cancel_func,
                                      gpointer user_data)
@@ -322,12 +293,12 @@ gnc_progress_dialog_set_cancel_scm_func (GNCProgressDialog *progress,
 }
 
 void
-gnc_progress_dialog_set_value (GNCProgressDialog *progress, gfloat value)
+gnc_progress_dialog_set_value (GNCProgressDialog *progress, gdouble value)
 {
   if (progress == NULL)
     return;
 
-  gtk_progress_set_value (GTK_PROGRESS (progress->progress_bar), value);
+  gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (progress->progress_bar), value);
 
   gnc_progress_dialog_update (progress);
 }
@@ -351,7 +322,7 @@ gnc_progress_dialog_finish (GNCProgressDialog *progress)
     progress->closed = TRUE;
   }
 
-  gtk_progress_set_percentage (GTK_PROGRESS (progress->progress_bar), 1.0);
+  gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR(progress->progress_bar), 1.0);
 
   gtk_widget_set_sensitive (progress->ok_button, TRUE);
   gtk_widget_set_sensitive (progress->cancel_button, FALSE);
