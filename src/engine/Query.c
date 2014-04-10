@@ -224,7 +224,7 @@ xaccQueryGetLots (Query * q, query_txn_match_t runtype)
 
 void
 xaccQueryAddAccountMatch(Query *q, AccountList *acct_list,
-			 guid_match_t how, QueryOp op)
+			 QofGuidMatch how, QueryOp op)
 {
   GList *list = NULL;
 
@@ -252,23 +252,23 @@ xaccQueryAddAccountMatch(Query *q, AccountList *acct_list,
 
 void
 xaccQueryAddAccountGUIDMatch(Query *q, AccountGUIDList *guid_list,
-			     guid_match_t how, QueryOp op)
+			     QofGuidMatch how, QueryOp op)
 {
-  QueryPredData_t pred_data;
+  QofQueryPredData *pred_data;
   GSList *param_list = NULL;
 
   if (!q) return;
 
-  pred_data = gncQueryGUIDPredicate (how, guid_list);
+  pred_data = qof_query_guid_predicate (how, guid_list);
   if (!pred_data)
     return;
 
   switch (how) {
-  case GUID_MATCH_ANY:
-  case GUID_MATCH_NONE:
+  case QOF_GUID_MATCH_ANY:
+  case QOF_GUID_MATCH_NONE:
     param_list = gncQueryBuildParamList (SPLIT_ACCOUNT, QUERY_PARAM_GUID, NULL);
     break;
-  case GUID_MATCH_ALL:
+  case QOF_GUID_MATCH_ALL:
     param_list = gncQueryBuildParamList (SPLIT_TRANS, TRANS_SPLITLIST,
 					 SPLIT_ACCOUNT_GUID, NULL);
     break;
@@ -292,7 +292,7 @@ xaccQueryAddSingleAccountMatch(Query *q, Account *acc, QueryOp op)
   g_return_if_fail (guid);
 
   list = g_list_prepend (NULL, (gpointer)guid);
-  xaccQueryAddAccountGUIDMatch (q, list, GUID_MATCH_ANY, op);
+  xaccQueryAddAccountGUIDMatch (q, list, QOF_GUID_MATCH_ANY, op);
   g_list_free (list);
 }
 
@@ -301,16 +301,16 @@ xaccQueryAddStringMatch (Query* q, const char *matchstring,
 			 int case_sens, int use_regexp, QueryOp op,
 			 const char * path, ...)
 {
-  QueryPredData_t pred_data;
+  QofQueryPredData *pred_data;
   GSList *param_list;
   va_list ap;
 
   if (!path || !q)
     return;
 
-  pred_data = gncQueryStringPredicate (COMPARE_EQUAL, (char *)matchstring,
-				       (case_sens ? STRING_MATCH_NORMAL :
-					STRING_MATCH_CASEINSENSITIVE),
+  pred_data = qof_query_string_predicate (QOF_COMPARE_EQUAL, (char *)matchstring,
+				       (case_sens ? QOF_STRING_MATCH_NORMAL :
+					QOF_STRING_MATCH_CASEINSENSITIVE),
 				       use_regexp);
   if (!pred_data)
     return;
@@ -323,18 +323,18 @@ xaccQueryAddStringMatch (Query* q, const char *matchstring,
 }
 
 void
-xaccQueryAddNumericMatch (Query *q, gnc_numeric amount, numeric_match_t sign,
-			  query_compare_t how, QueryOp op,
+xaccQueryAddNumericMatch (Query *q, gnc_numeric amount, QofNumericMatch sign,
+			  QofQueryCompare how, QueryOp op,
 			  const char * path, ...)
 {
-  QueryPredData_t pred_data;
+  QofQueryPredData *pred_data;
   GSList *param_list;
   va_list ap;
 
   if (!q || !path)
     return;
 
-  pred_data = gncQueryNumericPredicate (how, sign, amount);
+  pred_data = qof_query_numeric_predicate (how, sign, amount);
   if (!pred_data)
     return;
 
@@ -361,7 +361,7 @@ xaccQueryAddDateMatchTS (Query * q,
 			 QueryOp op)
 {
   Query *tmp_q = NULL;
-  QueryPredData_t pred_data;
+  QofQueryPredData *pred_data;
   GSList *param_list;
 
   if (!q || (!use_start && !use_end))
@@ -370,7 +370,7 @@ xaccQueryAddDateMatchTS (Query * q,
   tmp_q = gncQueryCreate ();
 
   if (use_start) {
-    pred_data = gncQueryDatePredicate (COMPARE_GTE, DATE_MATCH_NORMAL, sts);
+    pred_data = qof_query_date_predicate (QOF_QOF_COMPARE_GTE, QOF_DATE_MATCH_NORMAL, sts);
     if (!pred_data) {
       gncQueryDestroy (tmp_q);
       return;
@@ -381,7 +381,7 @@ xaccQueryAddDateMatchTS (Query * q,
   }
 
   if (use_end) {
-    pred_data = gncQueryDatePredicate (COMPARE_LTE, DATE_MATCH_NORMAL, ets);
+    pred_data = qof_query_date_predicate (QOF_QOF_COMPARE_LTE, QOF_DATE_MATCH_NORMAL, ets);
     if (!pred_data) {
       gncQueryDestroy (tmp_q);
       return;
@@ -445,7 +445,7 @@ xaccQueryAddDateMatchTT(Query * q,
 void
 xaccQueryAddClearedMatch(Query * q, cleared_match_t how, QueryOp op)
 {
-  QueryPredData_t pred_data;
+  QofQueryPredData *pred_data;
   GSList *param_list;
   char chars[6];
   int i = 0;
@@ -465,7 +465,7 @@ xaccQueryAddClearedMatch(Query * q, cleared_match_t how, QueryOp op)
     chars[i++] = VREC;
   chars[i] = '\0';
 
-  pred_data = gncQueryCharPredicate (CHAR_MATCH_ANY, chars);
+  pred_data = qof_query_char_predicate (QOF_CHAR_MATCH_ANY, chars);
   if (!pred_data)
     return;
 
@@ -513,16 +513,16 @@ xaccQueryAddGUIDMatchGL (QueryNew *q, GList *param_list,
 
 void
 xaccQueryAddKVPMatch(Query *q, GSList *path, const kvp_value *value,
-		     query_compare_t how, GNCIdType id_type,
+		     QofQueryCompare how, GNCIdType id_type,
 		     QueryOp op)
 {
   GSList *param_list = NULL;
-  QueryPredData_t pred_data;
+  QofQueryPredData *pred_data;
 
   if (!q || !path || !value || !id_type)
     return;
 
-  pred_data = gncQueryKVPPredicate (how, path, value);
+  pred_data = qof_query_kvp_predicate (how, path, value);
   if (!pred_data)
     return;
 

@@ -50,7 +50,7 @@ int gncQueryGetMaxResults (QueryNew *q);
 GList * gncQueryGetTerms (QueryNew *q);
 
 GSList * gncQueryTermGetParamPath (QueryNewTerm_t queryterm);
-QueryPredData_t gncQueryTermGetPredData (QueryNewTerm_t queryterm);
+QofQueryPredData *gncQueryTermGetPredData (QueryNewTerm_t queryterm);
 gboolean gncQueryTermIsInverted (QueryNewTerm_t queryterm);
 
 

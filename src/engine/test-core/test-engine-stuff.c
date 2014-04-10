@@ -15,6 +15,7 @@
 #include "gnc-engine.h"
 #include "gnc-engine-util.h"
 #include "Transaction.h"
+#include "qofquerycore.h"
 
 #include "test-engine-stuff.h"
 #include "test-stuff.h"
@@ -1377,7 +1378,7 @@ get_random_query(void)
         xaccQueryAddAccountGUIDMatch
           (q,
            guids,
-           get_random_int_in_range (1, GUID_MATCH_NONE),
+           get_random_int_in_range (1, QOF_GUID_MATCH_NONE),
            get_random_queryop ());
         free_random_guids (guids);
         break;
@@ -1452,7 +1453,7 @@ get_random_query(void)
         xaccQueryAddKVPMatch (q,
                               path,
                               value,
-                              get_random_int_in_range (1, COMPARE_NEQ),
+                              get_random_int_in_range (1, QOF_COMPARE_NEQ),
                               get_random_id_type (),
                               get_random_queryop ());
         kvp_value_delete (value);
@@ -1483,7 +1484,7 @@ get_random_query(void)
         xaccQueryAddSharePriceMatch
           (q,
            get_random_gnc_numeric (), 
-           get_random_int_in_range (1, COMPARE_NEQ),
+           get_random_int_in_range (1, QOF_COMPARE_NEQ),
            get_random_queryop ());
         break;
 
@@ -1491,7 +1492,7 @@ get_random_query(void)
         xaccQueryAddSharesMatch
           (q,
            get_random_gnc_numeric (), 
-           get_random_int_in_range (1, COMPARE_NEQ),
+           get_random_int_in_range (1, QOF_COMPARE_NEQ),
            get_random_queryop ());
         break;
 
@@ -1499,8 +1500,8 @@ get_random_query(void)
         xaccQueryAddValueMatch
           (q,
            get_random_gnc_numeric (),
-           get_random_int_in_range (1, NUMERIC_MATCH_ANY),
-           get_random_int_in_range (1, COMPARE_NEQ),
+           get_random_int_in_range (1, QOF_NUMERIC_MATCH_ANY),
+           get_random_int_in_range (1, QOF_COMPARE_NEQ),
            get_random_queryop ());
         break;
 
@@ -1638,7 +1639,7 @@ add_kvp_value_query (const char *key, kvp_value *value, gpointer data)
                              add_kvp_value_query, data);
   else
     xaccQueryAddKVPMatch (kqd->q, kqd->path, value,
-                          COMPARE_EQUAL, kqd->where,
+                          QOF_COMPARE_EQUAL, kqd->where,
                           QUERY_AND);
 
   node = g_slist_last (kqd->path);
@@ -1710,16 +1711,16 @@ make_trans_query (Transaction *trans, TestQueryTypes query_types)
                              TRUE, FALSE, QUERY_AND);
 
     n = xaccSplitGetValue (s);
-    xaccQueryAddValueMatch (q, n, NUMERIC_MATCH_ANY,
-                              COMPARE_EQUAL, QUERY_AND);
+    xaccQueryAddValueMatch (q, n, QOF_NUMERIC_MATCH_ANY,
+                              QOF_COMPARE_EQUAL, QUERY_AND);
 
     n = xaccSplitGetAmount (s);
-    xaccQueryAddSharesMatch (q, n, COMPARE_EQUAL, QUERY_AND);
+    xaccQueryAddSharesMatch (q, n, QOF_COMPARE_EQUAL, QUERY_AND);
 
     if (include_price)
     {
       n = xaccSplitGetSharePrice (s);
-      xaccQueryAddSharePriceMatch (q, n, COMPARE_EQUAL, QUERY_AND);
+      xaccQueryAddSharePriceMatch (q, n, QOF_COMPARE_EQUAL, QUERY_AND);
     }
 
     {
@@ -1773,7 +1774,7 @@ make_trans_query (Transaction *trans, TestQueryTypes query_types)
       Split * split = node->data;
       list = g_list_prepend (list, xaccSplitGetAccount (split));
     }
-    xaccQueryAddAccountMatch (q, list, GUID_MATCH_ALL, QUERY_AND);
+    xaccQueryAddAccountMatch (q, list, QOF_GUID_MATCH_ALL, QUERY_AND);
     g_list_free (list);
 
     /* GUID_MATCH_NONE */
@@ -1781,7 +1782,7 @@ make_trans_query (Transaction *trans, TestQueryTypes query_types)
     list = g_list_prepend (list, get_random_guid ());
     list = g_list_prepend (list, get_random_guid ());
     list = g_list_prepend (list, get_random_guid ());
-    xaccQueryAddAccountGUIDMatch (q, list, GUID_MATCH_NONE, QUERY_AND);
+    xaccQueryAddAccountGUIDMatch (q, list, QOF_GUID_MATCH_NONE, QUERY_AND);
 
     /* GUID_MATCH_ANY */
     {
@@ -1789,7 +1790,7 @@ make_trans_query (Transaction *trans, TestQueryTypes query_types)
       *guid = *xaccAccountGetGUID (a);
       list = g_list_prepend (list, guid);
     }
-    xaccQueryAddAccountGUIDMatch (q, list, GUID_MATCH_ANY, QUERY_AND);
+    xaccQueryAddAccountGUIDMatch (q, list, QOF_GUID_MATCH_ANY, QUERY_AND);
 
     for (node = list; node; node = node->next)
       g_free (node->data);

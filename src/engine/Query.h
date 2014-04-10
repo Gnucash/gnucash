@@ -35,7 +35,7 @@
 #include "kvp_frame.h" 
 
 #include "QueryNew.h"
-#include "QueryCore.h"
+#include "qofquerycore.h"
 
 /*
  * This function defines a compatibility API from the old Query API to
@@ -124,10 +124,10 @@ LotList     * xaccQueryGetLots(Query * q, query_txn_match_t type);
  *******************************************************************/
 
 void xaccQueryAddAccountMatch(Query *, AccountList *,
-                              guid_match_t how, QueryOp op);
+                              QofGuidMatch how, QueryOp op);
 
 void xaccQueryAddAccountGUIDMatch(Query *, AccountGUIDList *,
-                                  guid_match_t, QueryOp);
+                                  QofGuidMatch, QueryOp);
 
 void xaccQueryAddSingleAccountMatch(Query *, Account *, QueryOp);
 
@@ -149,7 +149,7 @@ void xaccQueryAddStringMatch (Query* q, const char *matchstring,
 				NULL)
 
 void xaccQueryAddNumericMatch (Query *q, gnc_numeric amount,
-			       numeric_match_t sign, query_compare_t how,
+			       QofNumericMatch sign, QofQueryCompare how,
 			       QueryOp op, const char * path, ...);
 
 #define xaccQueryAddValueMatch(q,amt,sgn,how,op) \
@@ -157,16 +157,16 @@ void xaccQueryAddNumericMatch (Query *q, gnc_numeric amount,
 				SPLIT_VALUE, NULL)
 
 #define xaccQueryAddSharePriceMatch(q,amt,how,op) \
-	xaccQueryAddNumericMatch ((q), (amt), NUMERIC_MATCH_ANY, (how), (op), \
+	xaccQueryAddNumericMatch ((q), (amt), QOF_NUMERIC_MATCH_ANY, (how), (op), \
 				SPLIT_SHARE_PRICE, NULL)
  
 #define xaccQueryAddSharesMatch(q,amt,how,op) \
-	xaccQueryAddNumericMatch ((q), (amt), NUMERIC_MATCH_ANY, (how), (op), \
+	xaccQueryAddNumericMatch ((q), (amt), QOF_NUMERIC_MATCH_ANY, (how), (op), \
 				SPLIT_AMOUNT, NULL)
 
 #define xaccQueryAddBalanceMatch(q,bal,op) \
-	xaccQueryAddNumericMatch ((q), gnc_numeric_zero(), NUMERIC_MATCH_ANY, \
-				((bal) ? COMPARE_EQUAL : COMPARE_NEQ), (op), \
+	xaccQueryAddNumericMatch ((q), gnc_numeric_zero(), QOF_NUMERIC_MATCH_ANY, \
+				((bal) ? QOF_COMPARE_EQUAL : QOF_COMPARE_NEQ), (op), \
 				SPLIT_TRANS, TRANS_IMBALANCE, NULL)
 
 /* The DateMatch queries match transactions whose posted date
@@ -208,7 +208,7 @@ void xaccQueryAddGUIDMatchGL (QueryNew *q, GList *param_list,
 
 /* given kvp value is on right side of comparison */
 void xaccQueryAddKVPMatch(Query *q, GSList *path, const kvp_value *value,
-                          query_compare_t how, GNCIdType id_type,
+                          QofQueryCompare how, GNCIdType id_type,
                           QueryOp op);
 
 void xaccQuerySetSortOrder(Query *q, GList *p1, GList *p2, GList *p3);

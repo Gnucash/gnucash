@@ -7,8 +7,9 @@
 #include "messages.h"
 
 #include "QueryObjectP.h"
-#include "QueryCoreP.h"
 #include "QueryNew.h"
+#include "qofquerycore.h"
+#include "qofquerycore-p.h"
 
 #include "test-stuff.h"
 
@@ -30,7 +31,7 @@ static int test_core_param (gpointer a)
 static void test_query_object (void)
 {
   static QueryObjectDef params[] = {
-    { TEST_PARAM, TEST_CORE, (QueryAccess)test_core_param },
+    { TEST_PARAM, TEST_CORE, (QofQueryAccess)test_core_param },
     { NULL },
   };
 
@@ -51,7 +52,7 @@ static void test_query_object (void)
 	   "gncQueryObjectGetParamter (NULL, TEST_PARAM)");
 
   do_test (gncQueryObjectGetParameterGetter (TEST_MODULE_NAME, TEST_PARAM)
-	   == (QueryAccess)test_core_param,
+	   == (QofQueryAccess)test_core_param,
 	   "gncQueryObjectGetParameterGetter");
 
   do_test (safe_strcmp (gncQueryObjectParameterType (TEST_MODULE_NAME,
