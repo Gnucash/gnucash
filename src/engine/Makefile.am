@@ -16,8 +16,6 @@ libgncmod_engine_la_SOURCES = \
   Group.c \
   Period.c \
   Query.c \
-  QueryNew.c \
-  QueryObject.c \
   SchedXaction.c \
   SX-book.c \
   SX-ttinfo.c \
@@ -45,6 +43,7 @@ libgncmod_engine_la_SOURCES = \
   messages.c \
   qofbook.c \
   qofquerycore.c \
+  qofqueryobject.c \
   qofobject.c
 
 EXTRA_libgncmod_engine_la_SOURCES = iso-4217-currencies.c
@@ -91,6 +90,7 @@ gncinclude_HEADERS = \
   messages.h \
   qofbook.h \
   qofquerycore.h \
+  qofqueryobject.h \
   qofobject.h
 
 noinst_HEADERS = \
@@ -100,8 +100,6 @@ noinst_HEADERS = \
   GNCIdP.h \
   GroupP.h \
   QueryP.h \
-  QueryNewP.h \
-  QueryObjectP.h \
   SchedXactionP.h \
   ScrubP.h \
   SX-book.h \
@@ -118,6 +116,7 @@ noinst_HEADERS = \
   gw-kvp.h \
   qofbook-p.h \
   qofquerycore-p.h \
+  qofqueryobject-p.h \
   qofobject-p.h
 
 noinst_SCRIPTS = iso-currencies-to-c

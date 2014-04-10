@@ -1625,7 +1625,7 @@ gnc_scm2query_or_terms (SCM or_terms, query_version_t vers)
 }
 
 static SCM
-gnc_query_sort2scm (QueryNewSort_t qs)
+gnc_query_sort2scm (QofQofQuerySort_t qs)
 {
   SCM sort_scm = SCM_EOL;
   GSList *path;
@@ -1702,7 +1702,7 @@ gnc_query2scm (Query *q)
 {
   SCM query_scm = SCM_EOL;
   SCM pair;
-  QueryNewSort_t s1, s2, s3;
+  QofQofQuerySort_t s1, s2, s3;
 
   if (!q) return SCM_BOOL_F;
 

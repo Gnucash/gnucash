@@ -46,10 +46,10 @@
 #include "kvp-util-p.h"
 #include "messages.h"
 
-#include "QueryObject.h"
 #include "qofbook.h"
 #include "qofbook-p.h"
 #include "qofobject.h"
+#include "qofqueryobject.h"
 
 static short module = MOD_ACCOUNT; 
 
@@ -3189,7 +3189,7 @@ static QofObject account_object_def = {
 
 gboolean xaccAccountRegister (void)
 {
-  static QueryObjectDef params[] = {
+  static QofQueryObject params[] = {
     { ACCOUNT_KVP, QOF_QUERYCORE_KVP, (QofQueryAccess)xaccAccountGetSlots },
     { ACCOUNT_NAME_, QOF_QUERYCORE_STRING, (QofQueryAccess)xaccAccountGetName },
     { ACCOUNT_CODE_, QOF_QUERYCORE_STRING, (QofQueryAccess)xaccAccountGetCode },
@@ -3206,7 +3206,7 @@ gboolean xaccAccountRegister (void)
     { NULL },
   };
 
-  gncQueryObjectRegister (GNC_ID_ACCOUNT, (QuerySort)xaccAccountOrder, params);
+  qof_query_object_register (GNC_ID_ACCOUNT, (QofQuerySort)xaccAccountOrder, params);
 
   return qof_object_register (&account_object_def);
 }

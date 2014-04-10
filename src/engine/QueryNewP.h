@@ -26,8 +26,8 @@
 
 #include "QueryNew.h"
 
-typedef struct query_new_term *QueryNewTerm_t;
-typedef struct query_new_sort *QueryNewSort_t;
+typedef struct _QofQueryTerm *QofQueryTerm_t;
+typedef struct _QofQofQuerySort *QofQofQuerySort_t;
 
 /* Initialize/Shutdown */
 void gncQueryNewInit (void);
@@ -54,16 +54,16 @@ QofQueryPredData *gncQueryTermGetPredData (QueryNewTerm_t queryterm);
 gboolean gncQueryTermIsInverted (QueryNewTerm_t queryterm);
 
 
-/* Functions to get and look at QuerySorts */
+/* Functions to get and look at QofQuerySorts */
 
 /* This function returns the primary, secondary, and tertiary sorts.
  * These are part of the query and should NOT be changed!
  */
-void gncQueryGetSorts (QueryNew *q, QueryNewSort_t *primary,
-		       QueryNewSort_t *secondary, QueryNewSort_t *tertiary);
+void qof_query_get_sorts (QofQuery *q, QofQofQuerySort_t *primary,
+		       QofQofQuerySort_t *secondary, QofQofQuerySort_t *tertiary);
 
-GSList * gncQuerySortGetParamPath (QueryNewSort_t querysort);
-gint gncQuerySortGetSortOptions (QueryNewSort_t querysort);
-gboolean gncQuerySortGetIncreasing (QueryNewSort_t querysort);
+GSList * qof_query_sort_get_param_path (QofQofQuerySort_t querysort);
+gint qof_query_sort_get_sort_options (QofQofQuerySort_t querysort);
+gboolean qof_query_sort_get_increasing (QofQofQuerySort_t querysort);
 
 #endif /* GNC_QUERYNEWP_H */

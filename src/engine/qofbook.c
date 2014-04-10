@@ -292,13 +292,13 @@ qof_book_get_counter (QofBook *book, const char *counter_name)
 /* gncObject function implementation and registration */
 gboolean qof_book_register (void)
 {
-  static QueryObjectDef params[] = {
+  static QofQueryObject params[] = {
     { QOF_BOOK_KVP, QOF_QUERYCORE_KVP, (QofQueryAccess)qof_book_get_slots },
     { QUERY_PARAM_GUID, QOF_QUERYCORE_GUID, (QofQueryAccess)qof_book_get_guid },
     { NULL },
   };
 
-  gncQueryObjectRegister (GNC_ID_BOOK, NULL, params);
+  qof_query_object_register (GNC_ID_BOOK, NULL, params);
 
   return TRUE;
 }

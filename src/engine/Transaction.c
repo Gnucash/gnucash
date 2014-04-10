@@ -3591,7 +3591,7 @@ static gpointer no_op (gpointer obj)
 
 gboolean xaccSplitRegister (void)
 {
-  static const QueryObjectDef params[] = {
+  static const QofQueryObject params[] = {
     { SPLIT_KVP, QOF_QUERYCORE_KVP, (QofQueryAccess)xaccSplitGetSlots },
     { SPLIT_DATE_RECONCILED, QOF_QUERYCORE_DATE,
       (QofQueryAccess)xaccSplitRetDateReconciledTS },
@@ -3627,15 +3627,15 @@ gboolean xaccSplitRegister (void)
     { NULL },
   };
 
-  gncQueryObjectRegister (GNC_ID_SPLIT, (QuerySort)xaccSplitDateOrder, params);
-  gncQueryObjectRegister (SPLIT_ACCT_FULLNAME,
-			  (QuerySort)xaccSplitCompareAccountFullNames,
+  qof_query_object_register (GNC_ID_SPLIT, (QofQuerySort)xaccSplitDateOrder, params);
+  qof_query_object_register (SPLIT_ACCT_FULLNAME,
+			  (QofQuerySort)xaccSplitCompareAccountFullNames,
 			  NULL);
-  gncQueryObjectRegister (SPLIT_CORR_ACCT_NAME,
-			  (QuerySort)xaccSplitCompareOtherAccountFullNames,
+  qof_query_object_register (SPLIT_CORR_ACCT_NAME,
+			  (QofQuerySort)xaccSplitCompareOtherAccountFullNames,
 			  NULL);
-  gncQueryObjectRegister (SPLIT_CORR_ACCT_CODE,
-			  (QuerySort)xaccSplitCompareOtherAccountCodes,
+  qof_query_object_register (SPLIT_CORR_ACCT_CODE,
+			  (QofQuerySort)xaccSplitCompareOtherAccountCodes,
 			  NULL);
 
   return qof_object_register (&split_object_def);
@@ -3669,7 +3669,7 @@ trans_is_balanced_p (const Transaction *txn)
 
 gboolean xaccTransRegister (void)
 {
-  static QueryObjectDef params[] = {
+  static QofQueryObject params[] = {
     { TRANS_KVP, QOF_QUERYCORE_KVP, (QofQueryAccess)xaccTransGetSlots },
     { TRANS_NUM, QOF_QUERYCORE_STRING, (QofQueryAccess)xaccTransGetNum },
     { TRANS_DESCRIPTION, QOF_QUERYCORE_STRING, (QofQueryAccess)xaccTransGetDescription },
@@ -3689,7 +3689,7 @@ gboolean xaccTransRegister (void)
     { NULL },
   };
 
-  gncQueryObjectRegister (GNC_ID_TRANS, (QuerySort)xaccTransOrder, params);
+  qof_query_object_register (GNC_ID_TRANS, (QofQuerySort)xaccTransOrder, params);
 
   return qof_object_register (&trans_object_def);
 }
