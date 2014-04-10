@@ -400,7 +400,7 @@ gnc_copy_split(Split *split, gboolean use_cut_semantics)
 \********************************************************************/
 void
 gnc_copy_split_scm_onto_split(SCM split_scm, Split *split,
-                              GNCBook * book)
+                              QofBook * book)
 {
   static SCM split_type = SCM_UNDEFINED;
   SCM result;
@@ -772,7 +772,7 @@ gnc_copy_trans(Transaction *trans, gboolean use_cut_semantics)
 \********************************************************************/
 void
 gnc_copy_trans_scm_onto_trans(SCM trans_scm, Transaction *trans,
-                              gboolean do_commit, GNCBook *book)
+                              gboolean do_commit, QofBook *book)
 {
   gnc_copy_trans_scm_onto_trans_swap_accounts(trans_scm, trans, NULL, NULL,
                                               do_commit, book);
@@ -798,7 +798,7 @@ gnc_copy_trans_scm_onto_trans_swap_accounts(SCM trans_scm,
                                             const GUID *guid_1,
                                             const GUID *guid_2,
                                             gboolean do_commit,
-                                            GNCBook *book)
+                                            QofBook *book)
 {
   static SCM trans_type = SCM_UNDEFINED;
   SCM result;

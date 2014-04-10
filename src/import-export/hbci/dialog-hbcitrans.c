@@ -206,7 +206,14 @@ static void fill_template_menu_func(gpointer data, gpointer user_data)
 {
   GNCTransTempl *templ = data;
   GtkMenu *menu = user_data;
-  GtkWidget *item = gtk_menu_item_new_with_label(gnc_trans_templ_get_name(templ));
+  GtkWidget *item;
+
+  g_assert(templ);
+  g_assert(menu);
+  
+  item = gtk_menu_item_new_with_label(gnc_trans_templ_get_name(templ));
+  g_assert(item);
+  
   gtk_object_set_user_data(GTK_OBJECT(item), templ);
   gtk_menu_append(menu, item);
 }
@@ -370,11 +377,11 @@ gnc_hbci_dialog_new (GtkWidget *parent,
     /* Connect signals */
     gnc_option_menu_init_w_signal (td->template_option, 
 				   GTK_SIGNAL_FUNC(template_selection_cb),
-				   &td);
+				   td);
     gtk_signal_connect(GTK_OBJECT (add_templ_button), "clicked",
-		       GTK_SIGNAL_FUNC(add_template_cb), &td);
+		       GTK_SIGNAL_FUNC(add_template_cb), td);
     gtk_signal_connect(GTK_OBJECT (td->recp_bankcode_entry), "changed",
-		       GTK_SIGNAL_FUNC(blz_changed_cb), &td);
+		       GTK_SIGNAL_FUNC(blz_changed_cb), td);
 
     /* Default button */
     gnome_dialog_set_default (GNOME_DIALOG (td->dialog), 0);
@@ -644,8 +651,9 @@ void template_selection_cb(GtkButton *b,
 			   gpointer user_data)
 {
   HBCITransDialog *td = user_data;
+  unsigned index;
   g_assert(td);
-  unsigned index = gnc_option_menu_get_active (td->template_option);
+  index = gnc_option_menu_get_active (td->template_option);
   /*printf("template_selection_cd: %d is active \n", index);*/
   if ((index > 0) && (index <= g_list_length(td->templ)))
     {

@@ -29,13 +29,13 @@
 #include <libguile.h>
 
 #include "gnc-engine.h"
-#include "gnc-session.h"
 #include "Account.h"
 #include "Query.h"
 #include "Transaction.h"
 #include "guid.h"
 #include "guile-mappings.h"
 #include "qofbook.h"
+#include "qofsession.h"
 
 Timespec gnc_transaction_get_date_posted(Transaction *t);
 Timespec gnc_transaction_get_date_entered(Transaction *t);
@@ -82,6 +82,6 @@ int gnc_numeric_p(SCM arg);
 gnc_commodity * gnc_scm_to_commodity(SCM scm);
 SCM gnc_commodity_to_scm (const gnc_commodity *commodity);
 SCM gnc_book_to_scm (QofBook *book);
-SCM gnc_session_to_scm (GNCSession *session);
+SCM qof_session_to_scm (QofSession *session);
 
 #endif

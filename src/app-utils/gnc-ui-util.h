@@ -38,11 +38,11 @@
 #include "Account.h"
 #include "gnc-engine.h"
 #include "Group.h"
-#include "gnc-book.h"
-#include "gnc-session.h"
+#include "qofbook.h"
+#include "qofsession.h"
 
 
-typedef GNCSession * (*GNCSessionCB) (void);
+typedef QofSession * (*QofSessionCB) (void);
 
 
 /* User Settings ****************************************************/
@@ -61,7 +61,7 @@ void gnc_extract_directory (char **dirname, const char *filename);
 
 
 /* Engine enhancements & i18n ***************************************/
-GNCBook * gnc_get_current_book (void);
+QofBook * gnc_get_current_book (void);
 AccountGroup * gnc_get_current_group (void);
 gnc_commodity_table * gnc_get_current_commodities (void);
 
@@ -152,11 +152,11 @@ typedef enum
 Account * gnc_find_or_create_equity_account (AccountGroup *group,
                                              GNCEquityType equity_type,
                                              gnc_commodity *currency,
-                                             GNCBook *book);
+                                             QofBook *book);
 gboolean gnc_account_create_opening_balance (Account *account,
                                              gnc_numeric balance,
                                              time_t date,
-                                             GNCBook *book);
+                                             QofBook *book);
 
 char * gnc_account_get_full_name (Account *account);
 

@@ -106,7 +106,7 @@ test_commodity(void)
         int j;
         gnc_commodity_table *tbl;
         gnc_commodity *coms[20];
-        GNCBook *book;
+        QofBook *book;
 
         book = gnc_book_new ();
         tbl = gnc_commodity_table_new ();

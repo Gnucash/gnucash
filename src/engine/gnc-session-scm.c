@@ -40,7 +40,7 @@
 #include <glib.h>
 
 #include "gnc-engine.h"
-#include "gnc-session.h"
+#include "qofsession.h"
 #include "gnc-session-scm.h"
 
 //static short module = MOD_IO;
@@ -58,21 +58,21 @@ gnc_session_scm_gui_cb_helper (const char *message, double percent)
 }
 
 void
-gnc_session_scm_load (GNCSession *session)
+gnc_session_scm_load (QofSession *session)
 {
-  gnc_session_load (session, gnc_session_scm_gui_cb_helper);
+  qof_session_load (session, gnc_session_scm_gui_cb_helper);
 }
 
 void
-gnc_session_scm_save (GNCSession *session)
+gnc_session_scm_save (QofSession *session)
 {
-  gnc_session_save (session, gnc_session_scm_gui_cb_helper);
+  qof_session_save (session, gnc_session_scm_gui_cb_helper);
 }
 
 gboolean
-gnc_session_scm_export (GNCSession *tmp_session, GNCSession *real_session)
+gnc_session_scm_export (QofSession *tmp_session, QofSession *real_session)
 {
-  return gnc_session_export(tmp_session, real_session,
+  return qof_session_export(tmp_session, real_session,
 			    gnc_session_scm_gui_cb_helper);
 }
 

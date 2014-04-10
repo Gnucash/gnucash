@@ -297,7 +297,7 @@ gnc_titse_sixtp_parser_create(void)
 
 
 GncExampleAccount*
-gnc_read_example_account(GNCBook *book, const gchar *filename)
+gnc_read_example_account(QofBook *book, const gchar *filename)
 {
     GncExampleAccount *gea;
     sixtp *top_parser;
@@ -442,7 +442,7 @@ is_directory(const gchar *filename)
 }
     
 GSList*
-gnc_load_example_account_list(GNCBook *book, const char *dirname)
+gnc_load_example_account_list(QofBook *book, const char *dirname)
 {
     GSList *ret;
     DIR *dir;

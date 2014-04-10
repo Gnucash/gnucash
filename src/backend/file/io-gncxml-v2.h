@@ -34,14 +34,15 @@
 #include <glib.h>
 
 #include "Account.h"
-#include "Backend.h"
 #include "Transaction.h"
-#include "gnc-book.h"
 #include "gnc-commodity.h"
 #include "gnc-engine.h"
 #include "gnc-pricedb.h"
-#include "gnc-session.h"
 #include "SchedXaction.h"
+
+#include "qofbook.h"
+#include "qofsession.h"
+#include "qofbackend.h"
 
 #include "sixtp.h"
 
@@ -70,10 +71,10 @@ typedef struct sixtp_gdv2 sixtp_gdv2;
 typedef void (*countCallbackFn)(sixtp_gdv2 *gd, const char *type);
 struct sixtp_gdv2
 {
-    GNCBook *book;
+    QofBook *book;
     load_counter counter;
     countCallbackFn countCallback;
-    GNCBePercentageFunc gui_display_fn;
+    QofBePercentageFunc gui_display_fn;
     gboolean exporting;
 };
 
@@ -94,7 +95,7 @@ struct sixtp_gdv2
  * The write() method writes out all the objects of this particular type
  *   in the book and stores the XML in the FILE.
  *
- * The scrub() method will take a completed, parsed GNCBook* and post process
+ * The scrub() method will take a completed, parsed QofBook* and post process
  *   the data, allowing you to 'scrub' the data.
  */
 #define GNC_FILE_BACKEND	"gnc:file:2"
@@ -106,9 +107,9 @@ typedef struct
 
   sixtp *	(*create_parser) (void);
   gboolean	(*add_item)(sixtp_gdv2 *, gpointer obj);
-  int		(*get_count) (GNCBook *);
-  void		(*write) (FILE*, GNCBook*);
-  void		(*scrub) (GNCBook *);
+  int		(*get_count) (QofBook *);
+  void		(*write) (FILE*, QofBook*);
+  void		(*scrub) (QofBook *);
 } GncXmlDataType_t;
 
 /**
@@ -121,22 +122,22 @@ typedef struct
 {
 	AccountList	*accts;
 	TransList	*transactions;
-        GNCBook *book;
+        QofBook *book;
 } gnc_template_xaction_data;
 
 /* Call after loading each record */
 void run_callback(sixtp_gdv2 *data, const char *type);
 
 /* read in an account group from a file */
-gboolean gnc_session_load_from_xml_file_v2(GNCSession *session);
+gboolean qof_session_load_from_xml_file_v2(QofSession *session);
 
 /* write all book info to a file */
-gboolean gnc_book_write_to_xml_filehandle_v2(GNCBook *book, FILE *fh);
-gboolean gnc_book_write_to_xml_file_v2(GNCBook *book, const char *filename, gboolean compress);
+gboolean gnc_book_write_to_xml_filehandle_v2(QofBook *book, FILE *fh);
+gboolean gnc_book_write_to_xml_file_v2(QofBook *book, const char *filename, gboolean compress);
 
 /* write just the commodities and accounts to a file */
-gboolean gnc_book_write_accounts_to_xml_filehandle_v2(Backend *be, GNCBook *book, FILE *fh);
-gboolean gnc_book_write_accounts_to_xml_file_v2(Backend * be, GNCBook *book,
+gboolean gnc_book_write_accounts_to_xml_filehandle_v2(QofBackend *be, QofBook *book, FILE *fh);
+gboolean gnc_book_write_accounts_to_xml_file_v2(QofBackend * be, QofBook *book,
 						const char *filename);
 
 /* The is_gncxml_file() routine checks to see if the first few 

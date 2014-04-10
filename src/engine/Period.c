@@ -36,7 +36,6 @@ Open questions: how do we deal with the backends ???
  */
 
 #include "AccountP.h"
-#include "BackendP.h"
 #include "gnc-engine-util.h"
 #include "gnc-event-p.h"
 #include "Group.h"
@@ -44,6 +43,7 @@ Open questions: how do we deal with the backends ???
 #include "kvp-util-p.h"
 #include "Period.h"
 #include "TransactionP.h"
+#include "qofbackend-p.h"
 #include "qofbook.h"
 #include "qofbook-p.h"
 #include "qofid-p.h"
@@ -181,7 +181,7 @@ void
 gnc_book_partition (QofBook *dest_book, QofBook *src_book, Query *query)
 {
    AccountGroup *src_grp, *dst_grp;
-   Backend *be;
+   QofBackend *be;
    time_t now;
    GList *split_list, *snode;
 

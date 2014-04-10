@@ -73,7 +73,7 @@
    ws
    'gnc:get-current-session
    '<gnc:Session*>
-   "gnc_get_current_session"
+   "qof_session_get_current_session"
    '()
    "Get the current session.")
 

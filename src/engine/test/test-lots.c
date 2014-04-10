@@ -22,8 +22,8 @@
 static void
 run_test (void)
 {
-  GNCSession *sess;
-  GNCBook *book;
+  QofSession *sess;
+  QofBook *book;
   AccountGroup *grp;
 
   if(!gnc_module_load("gnucash/engine", 0))
@@ -36,7 +36,7 @@ run_test (void)
   /* In the first test, we will merely try to see if we can run
    * without crashing.  We don't check to see if data is good. */
   sess = get_random_session ();
-  book = gnc_session_get_book (sess);
+  book = qof_session_get_book (sess);
   if (!book)
   {
     failure("book not created");

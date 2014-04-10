@@ -30,7 +30,6 @@
 #include "gnc-engine.h"
 #include "gnc-engine-util.h"
 #include "gnc-pricedb-p.h"
-#include "gnc-session.h"
 #include "gncObject.h"
 #include "Group.h"
 #include "GroupP.h"
@@ -39,8 +38,10 @@
 #include "SX-book-p.h"
 #include "Transaction.h"
 #include "TransLog.h"
+#include "qofbackend-p.h"
 #include "qofbook.h"
 #include "qofbook-p.h"
+#include "qofsession.h"
 
 #include "sixtp-dom-parsers.h"
 #include "io-gncxml-v2.h"
@@ -611,7 +612,7 @@ gnc_sixtp_gdv2_new (
     QofBook *book,
     gboolean exporting,
     countCallbackFn countcallback,
-    GNCBePercentageFunc gui_display_fn)
+    QofBePercentageFunc gui_display_fn)
 {
     sixtp_gdv2 *gd = g_new0(sixtp_gdv2, 1);
 
@@ -637,19 +638,19 @@ gnc_sixtp_gdv2_new (
 }
 
 gboolean
-gnc_session_load_from_xml_file_v2(GNCSession *session)
+qof_session_load_from_xml_file_v2(QofSession *session)
 {
     QofBook *book;
 	 AccountGroup *grp;
-    Backend *be;
+    QofBackend *be;
     sixtp_gdv2 *gd;
     sixtp *top_parser;
     sixtp *main_parser;
     sixtp *book_parser;
     struct file_backend be_data;
 
-    book = gnc_session_get_book (session);
-    be = (Backend *)qof_book_get_backend(book);
+    book = qof_session_get_book (session);
+    be = (QofBackend *)qof_book_get_backend(book);
     gd = gnc_sixtp_gdv2_new(book, FALSE, file_rw_feedback, be->percentage);
 
     top_parser = sixtp_new();
@@ -708,7 +709,7 @@ gnc_session_load_from_xml_file_v2(GNCSession *session)
     /* stop logging while we load */
     xaccLogDisable ();
 
-    if(!gnc_xml_parse_file(top_parser, gnc_session_get_file_path(session),
+    if(!gnc_xml_parse_file(top_parser, qof_session_get_file_path(session),
                            generic_callback, gd, book))
     {
         sixtp_destroy(top_parser);
@@ -1069,7 +1070,7 @@ write_v2_header (FILE *out)
 gboolean
 gnc_book_write_to_xml_filehandle_v2(QofBook *book, FILE *out)
 {
-    Backend *be;
+    QofBackend *be;
     sixtp_gdv2 *gd;
 
     if (!out) return FALSE;
@@ -1080,7 +1081,7 @@ gnc_book_write_to_xml_filehandle_v2(QofBook *book, FILE *out)
                  "book", 1,
                  NULL);
 
-    be = (Backend *)qof_book_get_backend(book);
+    be = (QofBackend *)qof_book_get_backend(book);
     gd = gnc_sixtp_gdv2_new(book, FALSE, file_rw_feedback, be->percentage);
     gd->counter.commodities_total =
       gnc_commodity_table_get_size(gnc_book_get_commodity_table(book));
@@ -1102,7 +1103,7 @@ gnc_book_write_to_xml_filehandle_v2(QofBook *book, FILE *out)
  * This function is called by the "export" code.
  */
 gboolean
-gnc_book_write_accounts_to_xml_filehandle_v2(Backend *be, QofBook *book, FILE *out)
+gnc_book_write_accounts_to_xml_filehandle_v2(QofBackend *be, QofBook *book, FILE *out)
 {
     gnc_commodity_table *table;
     AccountGroup *grp;
@@ -1224,7 +1225,7 @@ gnc_book_write_to_xml_file_v2(
  */
 gboolean
 gnc_book_write_accounts_to_xml_file_v2(
-    Backend *be,
+    QofBackend *be,
     QofBook *book,
     const char *filename)
 {

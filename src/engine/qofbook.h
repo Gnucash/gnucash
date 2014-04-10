@@ -36,6 +36,7 @@
 #include <glib.h>
 
 #include "qofid.h"
+#include "qofbackend.h"
 #include "kvp_frame.h"
 
 /** @brief Encapsulates all the information about a dataset
@@ -75,7 +76,8 @@ void qof_book_set_data (QofBook *book, const char *key, gpointer data);
 gpointer qof_book_get_data (QofBook *book, const char *key);
 
 /** DOCUMENT ME! */
-gpointer qof_book_get_backend (QofBook *book);
+QofBackend *qof_book_get_backend (QofBook *book);
+void qof_book_set_backend (QofBook *book, QofBackend *);
 
 /** qof_book_not_saved() will return TRUE if any 
  *    data in the book hasn't been saved to long-term storage.

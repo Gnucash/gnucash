@@ -273,10 +273,10 @@ gnc_extract_directory (char **dirname, const char *filename)
   *(tmp+1) = '\0';
 }
 
-GNCBook *
+QofBook *
 gnc_get_current_book (void)
 {
-  return gnc_session_get_book (gnc_get_current_session ());
+  return qof_session_get_book (qof_session_get_current_session ());
 }
 
 AccountGroup *
@@ -848,7 +848,7 @@ Account *
 gnc_find_or_create_equity_account (AccountGroup *group,
                                    GNCEquityType equity_type,
                                    gnc_commodity *currency,
-                                   GNCBook *book)
+                                   QofBook *book)
 {
   Account *parent;
   Account *account;
@@ -942,7 +942,7 @@ gboolean
 gnc_account_create_opening_balance (Account *account,
                                     gnc_numeric balance,
                                     time_t date,
-                                    GNCBook *book)
+                                    QofBook *book)
 {
   Account *equity_account;
   Transaction *trans;

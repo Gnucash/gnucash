@@ -10,7 +10,6 @@ AM_CFLAGS = \
 
 libgncmod_engine_la_SOURCES = \
   Account.c \
-  Backend.c \
   FreqSpec.c \
   Group.c \
   Period.c \
@@ -31,7 +30,6 @@ libgncmod_engine_la_SOURCES = \
   gnc-lot.c \
   gnc-numeric.c \
   gnc-pricedb.c \
-  gnc-session.c \
   gnc-session-scm.c \
   gnc-trace.c \
   gncmod-engine.c \
@@ -40,19 +38,20 @@ libgncmod_engine_la_SOURCES = \
   kvp-util.c \
   md5.c \
   messages.c \
+  qofbackend.c \
   qofbook.c \
   qofid.c \
+  qofobject.c \
   qofquery.c \
   qofquerycore.c \
   qofqueryobject.c \
-  qofobject.c
+  qofsession.c
 
 EXTRA_libgncmod_engine_la_SOURCES = iso-4217-currencies.c
 
 gncincludedir = ${GNC_INCLUDE_DIR}
 gncinclude_HEADERS = \
   Account.h \
-  Backend.h \
   FreqSpec.h \
   GNCId.h \
   Group.h \
@@ -89,16 +88,17 @@ gncinclude_HEADERS = \
   kvp-scm.h \
   kvp-util.h \
   messages.h \
+  qofbackend.h \
   qofbook.h \
   qofid.h \
+  qofobject.h \
   qofquery.h \
   qofquerycore.h \
   qofqueryobject.h \
-  qofobject.h
+  qofsession.h
 
 noinst_HEADERS = \
   AccountP.h \
-  BackendP.h \
   FreqSpecP.h \
   GroupP.h \
   QueryP.h \
@@ -111,17 +111,18 @@ noinst_HEADERS = \
   gnc-lot.h \
   gnc-lot-p.h \
   gnc-pricedb-p.h \
-  gnc-session-p.h \
   kvp-util-p.h \
   md5.h \
   gw-engine.h \
   gw-kvp.h \
+  qofbackend-p.h \
   qofbook-p.h \
   qofid-p.h \
+  qofobject-p.h \
   qofquery-p.h \
   qofquerycore-p.h \
   qofqueryobject-p.h \
-  qofobject-p.h
+  qofsession-p.h
 
 noinst_SCRIPTS = iso-currencies-to-c
 

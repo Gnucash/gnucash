@@ -28,8 +28,8 @@
     @author Copyright (C) 1997-2002 Linas Vepstas <linas@linas.org>
 */
 
-#ifndef GNC_ENGINE_UTIL_H
-#define GNC_ENGINE_UTIL_H
+#ifndef QOF_UTIL_H
+#define QOF_UTIL_H
 
 #include "config.h"
 
@@ -40,18 +40,18 @@
 
 /** Macros *****************************************************/
 
-#define SAFE_STRCMP_REAL(fcn,da,db) {	\
-  if ((da) && (db)) {			\
-    int retval = fcn ((da), (db));	\
-    /* if strings differ, return */	\
-    if (retval) return retval;		\
-  } else 				\
-  if ((!(da)) && (db)) {		\
-    return -1;				\
-  } else 				\
-  if ((da) && (!(db))) {		\
-    return +1;				\
-  }					\
+#define SAFE_STRCMP_REAL(fcn,da,db) {    \
+  if ((da) && (db)) {                    \
+    int retval = fcn ((da), (db));       \
+    /* if strings differ, return */      \
+    if (retval) return retval;           \
+  } else                                 \
+  if ((!(da)) && (db)) {                 \
+    return -1;                           \
+  } else                                 \
+  if ((da) && (!(db))) {                 \
+    return +1;                           \
+  }                                      \
 }
 
 #define SAFE_STRCMP(da,db) SAFE_STRCMP_REAL(strcmp,(da),(db))
@@ -127,5 +127,5 @@ GCache* gnc_engine_get_string_cache(void);
 
 void gnc_engine_string_cache_destroy (void);
 
-#endif
+#endif /* QOF_UTIL_H */
 /** @} */

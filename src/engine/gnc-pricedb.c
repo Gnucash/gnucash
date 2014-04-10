@@ -27,13 +27,13 @@
 #include <glib.h>
 #include <string.h>
 
-#include "BackendP.h"
 #include "gnc-engine.h"
 #include "gnc-engine-util.h"
 #include "gnc-event-p.h"
 #include "gnc-pricedb-p.h"
 #include "guid.h"
 #include "kvp-util.h"
+#include "qofbackend-p.h"
 #include "qofbook.h"
 #include "qofbook-p.h"
 #include "qofid-p.h"
@@ -169,7 +169,7 @@ gnc_price_begin_edit (GNCPrice *p)
   /* See if there's a backend.  If there is, invoke it. */
   /* We may not be able to find the backend, so make not of that .. */
   if (p->db) {
-    Backend *be;
+    QofBackend *be;
     be = xaccPriceDBGetBackend (p->db);
     if (be && be->begin) {
        (be->begin) (be, GNC_ID_PRICE, p);
@@ -200,14 +200,14 @@ gnc_price_commit_edit (GNCPrice *p)
   /* See if there's a backend.  If there is, invoke it. */
   /* We may not be able to find the backend, so make not of that .. */
   if (p->db) {
-    Backend *be;
+    QofBackend *be;
     be = xaccPriceDBGetBackend (p->db);
     if (be && be->commit) {
-      GNCBackendError errcode;
+      QofBackendError errcode;
 
       /* clear errors */
       do {
-        errcode = xaccBackendGetError (be);
+        errcode = qof_backend_get_error (be);
       } while (ERR_BACKEND_NO_ERR != errcode);
 
       /* if we haven't been able to call begin edit before, call it now */
@@ -218,7 +218,7 @@ gnc_price_commit_edit (GNCPrice *p)
       }
 
       (be->commit) (be, GNC_ID_PRICE, p);
-      errcode = xaccBackendGetError (be);
+      errcode = qof_backend_get_error (be);
       if (ERR_BACKEND_NO_ERR != errcode) 
       {
         /* XXX hack alert FIXME implement price rollback */
@@ -226,7 +226,7 @@ gnc_price_commit_edit (GNCPrice *p)
               " handled yet. Return code=%d", errcode);
 
         /* push error back onto the stack */
-        xaccBackendSetError (be, errcode);
+        qof_backend_set_error (be, errcode);
       }
     }
     p->not_saved = FALSE;
@@ -1914,7 +1914,7 @@ gnc_pricedb_print_contents(GNCPriceDB *db, FILE *f)
 
 /* ==================================================================== */
 
-Backend *
+QofBackend *
 xaccPriceDBGetBackend (GNCPriceDB *prdb)
 {
   if (!prdb || !prdb->book) return NULL;
@@ -1951,7 +1951,7 @@ pricedb_mark_clean(QofBook *book)
 
 static QofObject pricedb_object_def = 
 {
-  interface_version: GNC_OBJECT_VERSION,
+  interface_version: QOF_OBJECT_VERSION,
   name:              GNC_ID_PRICEDB,
   type_label:        "PriceDB",
   book_begin:        pricedb_book_begin,

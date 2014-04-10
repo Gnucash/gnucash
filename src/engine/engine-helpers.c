@@ -29,7 +29,6 @@
 #include <string.h>
 
 #include "Account.h"
-#include "Backend.h"
 #include "Group.h"
 #include "engine-helpers.h"
 #include "glib-helpers.h"
@@ -2365,10 +2364,10 @@ gnc_book_to_scm (QofBook *book)
 }
 
 /********************************************************************
- * gnc_session_to_scm
+ * qof_session_to_scm
  ********************************************************************/
 SCM
-gnc_session_to_scm (GNCSession *session)
+qof_session_to_scm (QofSession *session)
 {
   static SCM session_type = SCM_UNDEFINED;
 
