@@ -27,13 +27,6 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
 \********************************************************************/
 
-/*
-  TODO:
-  
-  Everywhere I use row + 1, it should be row + num_header_rows
-
-*/
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -49,7 +42,7 @@
 #include "util.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */
-static short module = MOD_REGISTER;
+static short module = MOD_GTK_REG;
 
 /* ==================================================== */
 
@@ -418,81 +411,111 @@ cell_left(Table *table, const int row, const int col) {
 
 static void
 traverseCB (GtkWidget * mw, gpointer cd, gpointer cb) {
-
-  Table *table;
-   CellBlock *arr;
-   XbaeMatrixTraverseCellCallbackStruct *cbs;
-   int row, col;
-   int rel_row, rel_col;
-
-   table = (Table *) cd;
-   arr = table->current_cursor;
-   cbs = (XbaeMatrixTraverseCellCallbackStruct *) cb;
-
-   row = cbs->row;
-   col = cbs->column;
-
-   /* If the quark is zero, then it is likely that we are
-    * here because we traversed out of a cell that had a 
-    * ComboBox in it.  The ComboCell is clever enough to put
-    * us back into the register after tabing out of it.
-    * However, its not (cannot be) clever enough to pretend
-    * that it was a tab group in the register.  Thus,
-    * we will emulate that we left a tab group in the register
-    * to get here.  To put it more simply, we just set the 
-    * row and column to that of the ComboCell, which we had
-    * previously recorded, and continue on as if nothing 
-    * happened.  
-    * BTW -- note that we are emulating a normal, right-moving tab. 
-    * Backwards tabs are broken. 
-    */
-   if (NULLQUARK == cbs->qparam) {
-      if ((0==row) && (0==col)) {
-        if ((0 <= table->prev_phys_traverse_row) && 
-            (0 <= table->prev_phys_traverse_col)) {
-          cbs->qparam = QRight;
-          row = table->prev_phys_traverse_row;
-          col = table->prev_phys_traverse_col;
-        }
-      }
-   }
-
-   xaccVerifyCursorPosition (table, row, col);
-
-   /* compute the cell location */
-   rel_row = table->locators[row][col]->phys_row_offset;
-   rel_col = table->locators[row][col]->phys_col_offset;
-
-   /* process right-moving traversals */
-   if (QRight == cbs->qparam) {
-      int next_row = arr->right_traverse_r[rel_row][rel_col];
-      int next_col = arr->right_traverse_c[rel_row][rel_col];
-
-      /* if we are at the end of the traversal chain,
-       * hop out of this tab group, and into the next.
-       */
-      if ((0 > next_row) || (0 > next_col)) {
-         /* reverse the sign of next_row, col to be positive. */
-         cbs->next_row    = row - rel_row - next_row -1; 
-         cbs->next_column = col - rel_col - next_col -1;
-         cbs->qparam      = NULLQUARK; 
-         if (table->next_tab_group) {
-            XmProcessTraversal (table->next_tab_group, 
-                                XmTRAVERSE_CURRENT); 
-         }
-      } else {
-         cbs->next_row    = row - rel_row + next_row; 
-         cbs->next_column = col - rel_col + next_col;
-      }
-   } 
-
-   table->prev_phys_traverse_row = cbs->next_row;
-   table->prev_phys_traverse_col = cbs->next_column;
+  /* see table-motif.c for appropriate code... */
 }
 
 #endif
 
 /* ==================================================== */
+
+static void
+table_deactivate_cell_cb(GtkSheet *s,
+                         const gint row,
+                         const gint column,
+                         gpointer data) {
+  Table *table = (Table *) data;
+  int valid_cell = gnc_register_cell_valid(table, row, column);
+  
+  if(!valid_cell) {
+    /* Undo anything that wasn't OK */
+    return;
+  }
+
+  PINFO("deactivate_cell %d %d\n", row, column);
+
+  /* stuff */
+  
+  wrapVerifyCursorPosition (table,
+                            table->reverify_phys_row,
+                            table->reverify_phys_col);
+}
+
+static void
+table_activate_cell_cb(GtkSheet *s,
+                       const gint row,
+                       const gint column,
+                       gpointer data) {
+  Table *table = (Table *) data;
+  int valid_cell;
+
+  /* If we are entering this cell, make sure that we've moved the
+   * cursor, and that any subsidiary GUI elements are properly
+   * positioned.  Do this *before* we examine the value of the
+   * "current cursor".  Note that this check could suck up massive
+   * cpu, as potentially it may trigger a redraw of the entire
+   * register.
+   *
+   * Hmmm ... actually, theoretically, this is not neeeded.  Before
+   * we get to here, we *should* have gone through a traverse
+   * callback the determine which cell to enter, and then, after the
+   * leavecell, the cursor should have been automagically
+   * repositioned.  This, the call below should always no-op out.
+   * However, if/when things go berzerk, the call below does at least
+   * a partial butt-save for us, so lets leave it in for now.  */
+
+  /* Actually it seems to be necessary for the GNOME register, at
+     least right now. Try taking it out, and see if it's fixed. */
+  
+  wrapVerifyCursorPosition (table, row, column);
+  
+  valid_cell = gnc_register_cell_valid(table, row, column);
+
+  if(!valid_cell) {
+    /* Undo anything that wasn't OK */
+    return;
+  }
+    
+  if(table->current_col != -1) {
+    table_deactivate_cell_cb(s, table->current_row, table->current_col,
+                             (gpointer) table);
+  }
+  
+  PINFO("activate_cell %d %d\n", row, column);
+
+  table->current_col = column;
+  table->current_row = row;
+  
+  /* Stuff */
+
+}
+
+static void
+table_set_cell_cb(GtkSheet *s, gint row, gint column, gpointer data) {
+  Table *table = (Table *) data;
+  int valid_cell = gnc_register_cell_valid(table, row, column);
+
+  if(!valid_cell) {
+    /* Undo anything that wasn't OK */
+    return;
+  }
+    
+  PINFO("set_cell %d %d\n", row, column);
+}
+
+static void
+table_changed_cb(GtkSheet *s, gint row, gint column, gpointer data) {
+  Table *table = (Table *) data;
+  int valid_cell = gnc_register_cell_valid(table, row, column);
+
+  if(!valid_cell) {
+    /* Undo anything that wasn't OK */
+    return;
+  }
+
+  PINFO("changed %d %d\n", row, column);
+}
+
+#if 0
 
 static void
 table_activate_cell_cb(GtkSheet *s, gint row, gint column, gpointer data) {
@@ -547,39 +570,6 @@ table_edit_entry_cb(GtkEntry *entry, gpointer user_data) {
 
 }
 
-/* ==================================================== */
-
-static void
-table_select_row_cb(GtkCList *cl, gint row, gint column, GdkEventButton *e,
-                    gpointer user_data) {
-
-#if OLD_CLIST_REG
-
-  Table *table = (Table *) user_data;
-
-  fprintf(stderr, "table_select_row_cb: %d %d\n", row, column);
-
-  //gtk_clist_unselect_row(cl, row, column);
-
-  if(!verify_cell_interaction_OK(table, row + 1, column)) return;
-
-  if(table->current_col != -1) {
-    cell_left(table, table->current_row + 1, table->current_col);
-  }
-
-  table->current_col = column;
-  table->current_row = row;
-
-  {
-    const int xxx = counter++;
-    printf("  ce: in %d\n", xxx);
-    cell_entered(table, row + 1, column);
-    printf("  ce: out %d\n", xxx);
-  }
-
-#endif
-}
-
 #endif
 
 /* ==================================================== */
@@ -590,7 +580,6 @@ xaccCreateTable (Table *table, GtkWidget *parent)  {
   CellBlock *curs;
   unsigned char * alignments;
   short * widths;
-  int num_header_rows = 0;
   
   if (!table) return 0;
 
@@ -602,22 +591,12 @@ xaccCreateTable (Table *table, GtkWidget *parent)  {
   }
 
   /* The 0'th row of the handlers is defined as the header */
-  alignments = NULL;
-  widths = NULL;
   curs = table->handlers[0][0];
   alignments = curs->alignments;
   widths = curs->widths;
-  num_header_rows = curs->numRows;
-  
+
   /* copy header data into entries cache */
   xaccRefreshHeader (table);
-  
-  /* create the matrix widget */
-  if(num_header_rows > 1) {
-    fprintf(stderr,
-            "gnucash: GTK implementation only supports one header row.\n");
-    num_header_rows = 1;
-  }
   
   {
     /* TODO: Handle unrefs in destructor */
@@ -629,21 +608,27 @@ xaccCreateTable (Table *table, GtkWidget *parent)  {
     vbox = gtk_vbox_new(FALSE, 0);
     gtk_container_add(GTK_CONTAINER(parent), vbox);
 
-    reg = gtk_sheet_new(table->num_phys_rows - num_header_rows,
+    reg = gtk_sheet_new(table->num_phys_rows,
                         table->num_phys_cols,
                         "THE REGISTER");
     gtk_sheet_hide_row_titles(GTK_SHEET(reg));
-    gtk_sheet_show_column_titles(GTK_SHEET(reg));    
+    gtk_sheet_hide_column_titles(GTK_SHEET(reg));    
     gtk_widget_ref(reg);
 
     gtk_sheet_freeze(GTK_SHEET(reg));
-
-    /* Set the column titles */
-    if(num_header_rows == 1) {
-      int col;
-      for(col = 0; col < table->num_phys_cols; col++) {
-        gtk_sheet_set_column_title(GTK_SHEET(reg), col, table->entries[0][col]);
-      }
+    {
+      /* Set the column titles as read-only */
+      /* The 0'th row of the handlers is defined as the header */
+      const int num_header_rows = curs->numRows;
+      const int num_header_cols = curs->numCols;
+      GtkSheetRange r;
+      
+      r.row0 = 0;
+      r.col0 = 0;
+      r.rowi = num_header_rows - 1;
+      r.coli = num_header_cols - 1;
+      
+      gtk_sheet_range_set_editable(GTK_SHEET(reg), r, FALSE);
     }
 
     {
@@ -665,7 +650,7 @@ xaccCreateTable (Table *table, GtkWidget *parent)  {
       /* GTK_SHEET_SET_FLAGS(reg, GTK_SHEET_FLAGS(reg) & SHEET_AUTORESIZE); */
 
       /* Set the cell contents */
-      for(row = num_header_rows; row < table->num_phys_rows; row++) {
+      for(row = 0; row < table->num_phys_rows; row++) {
         for(col = 0; col < table->num_phys_cols; col++) {
           gtk_sheet_set_cell(GTK_SHEET(reg),
                              row, col,
@@ -683,16 +668,249 @@ xaccCreateTable (Table *table, GtkWidget *parent)  {
     table->table_widget = reg;
 
 
+    /* Supposed to be: enter, leave, modify, and traverse */
+    
     gtk_signal_connect (GTK_OBJECT (reg), "activate_cell",
                         GTK_SIGNAL_FUNC (table_activate_cell_cb),
                         (gpointer) table);
+    /* For now we'll fake deactivate ourselves... */
+
     gtk_signal_connect (GTK_OBJECT (reg), "set_cell",
                         GTK_SIGNAL_FUNC (table_set_cell_cb),
                         (gpointer) table);
     gtk_signal_connect (GTK_OBJECT (reg), "changed",
                         GTK_SIGNAL_FUNC (table_changed_cb),
-                        (gpointer) table);
+                        (gpointer) table);    
+  }
+  
+  /* initialize any cell gui elements now, if any */
+  xaccCreateCursor (table, table->current_cursor);
+
+  return (table->table_widget);
+}
+
+/* ==================================================== */
+/* if any of the cells have GUI specific components that 
+ * need initialization, initialize them now. 
+ * The cell realize method, if present on a cell,
+ * is how that cell can find out that now is the time to 
+ * initialize that GUI.
+ */
+
+void        
+xaccCreateCursor (Table * table, CellBlock *curs) { 
+  int i,j;
+  GtkWidget *reg;
+  if (!curs || !table) return;
+  
+  reg = table->table_widget;
+  if (!reg) return;
+  
+  for (i=0; i<curs->numRows; i++) {
+    for (j=0; j<curs->numCols; j++) {
+      BasicCell *cell;
+      cell = curs->cells[i][j];
+      if (cell) {
+        void (*gtk_realize) (BasicCell *, void *gui, int pixel_width);
+        gtk_realize = cell->realize;
+        if (gtk_realize) {
+          int pixel_width = GTK_SHEET(reg)->column[j].width;
+          gtk_realize (cell, ((void *) table), pixel_width);
+        }
+      }
+    }
+  }
+}
+
+/* ==================================================== */
+
+static inline void
+set_cell_color(GtkSheet *reg, Table *table, guint row, guint col,
+               const uint32 argb,
+               void (*setter)(GtkSheet *s, GtkSheetRange r, GdkColor *c)) {
+
+  /* You might be able to make this much faster by caching colors
+     rather than re-allocating them every time, but this is much
+     quicker to implement, and it's easier to check for correctness.
+     See the motif code for the other approach.  Also, note that
+     *both* implementations could be sped up if there was a finer
+     grained interface where the engine would just tell the UI to
+     change the color on particular items when appropriate, but at the
+     cost of added complexity. */
+
+  gboolean success;
+  GdkColor color;
+  GdkColormap *cmap;
+  
+  color.red = (argb & 0xff0000) >> 8;
+  color.green = argb & 0xff00;
+  color.blue = (argb & 0xff) << 8;
+  
+  cmap = gtk_widget_get_colormap(GTK_WIDGET(reg));
+  assert(cmap);
+  
+  success = gdk_color_alloc(cmap, &color);
+  assert(success);
+  
+  {
+    GtkSheetRange range;
+    range.row0 = range.rowi = row;
+    range.col0 = range.coli = col;
+    setter(reg, range, &color);
+    /* HACK: I need to figure out the color allocation semantics...*/
+    /* gdk_color_free(&color); */
+  }
+}
+
+static void
+update_cell(GtkSheet *reg, Table *table, const gint row, const gint col) {
+  
+  gtk_sheet_set_cell(reg, row, col, GTK_JUSTIFY_LEFT,
+                     table->entries[row][col]);
+  
+  
+  /* You might be able to make this *much* faster by caching
+     colors. */
+  set_cell_color(reg, table, row, col,
+                 table->bg_colors[row][col],
+                 gtk_sheet_range_set_background);
+  
+  set_cell_color(reg, table, row, col,
+                 table->fg_colors[row][col],
+                 gtk_sheet_range_set_foreground);
+  
+  set_cell_color(reg, table, row, col,
+                 /* this really should be win->default_style->black */
+                 0,
+                 gtk_sheet_range_set_border_color);
+  
+  /* Turn on all the borders */
+  {
+    GtkSheetRange r;
+    r.row0 = row;
+    r.rowi = row + 1;
+    r.col0 = col;
+    r.coli = col + 1;
     
+    gtk_sheet_range_set_border(reg, r,
+                               CELL_TOP_BORDER | CELL_BOTTOM_BORDER |
+                               CELL_LEFT_BORDER | CELL_RIGHT_BORDER,
+                               1, GDK_LINE_SOLID);
+  }
+  
+#if 0
+  /* This is more efficient than the above, but it won't work
+     unless gtksheet changes its semantics */
+  
+  /* Turn on all the borders */
+  for(row = 0; row <= reg->maxrow; row++) {
+    GtkSheetRange r;
+    r.row0 = row;
+    r.rowi = row + 1;
+    r.col0 = 0;
+    r.coli = reg->maxcol;
+    
+    PINFO("Setting border for (%d %d) (%d %d)\n",
+      r.row0, r.rowi, r.col0, r.coli);
+    gtk_sheet_range_set_border(reg, r, CELL_TOP_BORDER, 1, GDK_LINE_SOLID);
+  }
+  for(col = 0; col <= reg->maxcol; col++) {
+    GtkSheetRange r;
+    r.row0 = 0;
+    r.rowi = reg->maxrow;
+    r.col0 = col;
+    r.coli = col + 1;
+    
+    gtk_sheet_range_set_border(reg, r, CELL_LEFT_BORDER, 1, GDK_LINE_SOLID);
+  }
+#endif
+}
+
+void        
+xaccRefreshTableGUI (Table * table) {
+  
+  if (!table) return;
+  if (!(table->table_widget)) return;
+
+  DEBUGCMD ({int i;
+  printf (" refresh numphysrows=%d numphyscols=%d =========================\n", 
+     table->num_phys_rows,table->num_phys_cols);
+     for (i=0; i<table->num_phys_rows; i++) {
+     printf ("cell %d\tcolor: 0x%x\tact:%s\tdescr: %s\tpay: %s\n", i, 
+     table->bg_colors[i][3], 
+     table->entries[i][2],
+     table->entries[i][3],
+     table->entries[i][5]);
+     }});
+
+  {
+    /* The 0'th row of the handlers is defined as the header */
+    GtkSheet *reg = GTK_SHEET(table->table_widget);    
+    
+    gtk_sheet_freeze(reg);
+    
+    /* Adjust table to have the right number of rows */
+    {
+      /* maxrow is actually the maximum index, not the total number of rows */
+      const glong diffrows = (reg->maxrow + 1) - table->num_phys_rows;
+      gint row, col;
+      
+      if(diffrows > 0) {
+        gtk_sheet_add_row(reg, diffrows);
+      } else if(diffrows < 0) {
+        gtk_sheet_delete_rows(reg, 0, diffrows);
+      }
+      
+      /* Set the per-cell contents, colors, etc. */
+      for(row = 0; row < table->num_phys_rows; row++) {
+        for(col = 0; col < table->num_phys_cols; col++) {
+          update_cell(reg, table, row, col);
+        }
+      }
+    }
+    gtk_sheet_thaw(reg); 
+  }
+}
+
+/* ==================================================== */
+
+void        
+doRefreshCursorGUI (Table * table, CellBlock *curs, int from_row, int from_col)
+{
+  int phys_row, phys_col;
+  int to_row, to_col;
+  int i,j;
+  
+  /* if the current cursor is undefined, there is nothing to do. */
+  if (!curs) return;
+  if ((0 > from_row) || (0 > from_col)) return;
+  
+  /* compute the physical bounds of the current cursor */
+  phys_row = from_row;
+  phys_col = from_col;
+  from_row -= table->locators[phys_row][phys_col]->phys_row_offset;
+  from_col -= table->locators[phys_row][phys_col]->phys_col_offset;
+  to_row = from_row + curs->numRows;
+  to_col = from_col + curs->numCols;
+  
+  {
+    GtkSheet *reg = GTK_SHEET(table->table_widget);    
+
+    gtk_sheet_freeze(reg);
+    
+    /* cycle through, cell by cell, copying our values to the widget */
+    for (i=from_row; i<to_row; i++) {
+      for (j=from_col; j<to_col; j++) {
+        update_cell(reg, table, i, j);
+      }
+    }
+    gtk_sheet_thaw(reg);
+  }
+}
+
+/* ================== end of file ======================= */
+
+
 #if OLD_CLIST_REG    
     
     gtk_signal_connect (GTK_OBJECT (reg), "select_row",
@@ -735,209 +953,3 @@ xaccCreateTable (Table *table, GtkWidget *parent)  {
       table->entry_widget = entry_widget;
     }
 #endif
-  }
-  
-  /* initialize any cell gui elements now, if any */
-  xaccCreateCursor (table, table->current_cursor);
-
-  return (table->table_widget);
-}
-
-/* ==================================================== */
-/* if any of the cells have GUI specific components that 
- * need initialization, initialize them now. 
- * The cell realize method, if present on a cell,
- * is how that cell can find out that now is the time to 
- * initialize that GUI.
- */
-
-void        
-xaccCreateCursor (Table * table, CellBlock *curs)
-{ 
-  int i,j;
-
-  if (!curs || !table) return;
-    
-  for (i=0; i<curs->numRows; i++) {
-    for (j=0; j<curs->numCols; j++) {
-      BasicCell *cell;
-      cell = curs->cells[i][j];
-      if (cell) {
-        void (*gtk_realize) (BasicCell *,  void *gui, int pixel_width);
-        gtk_realize = cell->realize;
-        if (gtk_realize) {
-          /* int pixel_width; */
-          /* cl->column[col].width */
-          /*pixel_width = XbaeMatrixGetColumnPixelWidth (reg, j);*/
-          /*gtk_realize (cell, ((void *) reg), pixel_width);*/
-          gtk_realize (cell, ((void *) table), 0);
-        }
-      }
-    }
-  }
-}
-
-/* ==================================================== */
-
-static inline void
-set_cell_color(GtkSheet *reg, Table *table, guint row, guint col,
-               const uint32 argb,
-               void (*setter)(GtkSheet *s, GtkSheetRange r, GdkColor *c)) {
-
-  /* You might be able to make this much faster by caching colors
-     rather than re-allocating them every time, but this is much
-     quicker to implement, and it's easier to check for correctness.
-     See the motif code for the other approach.  Also, note that
-     *both* implementations could be sped up if there was a finer
-     grained interface where the engine would just tell the UI to
-     change the color on particular items when appropriate, but at the
-     cost of added complexity. */
-
-  gboolean success;
-  GdkColor color;
-  GdkColormap *cmap;
-  
-  color.red = (argb & 0xff0000) >> 8;
-  color.green = argb & 0xff00;
-  color.blue = (argb & 0xff) << 8;
-  
-  cmap = gtk_widget_get_colormap(GTK_WIDGET(reg));
-  I(cmap);
-  
-  success = gdk_color_alloc(cmap, &color);
-  I(success);
-  
-  {
-    GtkSheetRange range;
-    range.row0 = range.rowi = row;
-    range.col0 = range.coli = col;
-    setter(reg, range, &color);
-    /* HACK: I need to figure out the color allocation semantics...*/
-    /* gdk_color_free(&color); */
-  }
-}
-
-
-
-
-void        
-xaccRefreshTableGUI (Table * table) {
-  
-  if (!table) return;
-  if (!(table->table_widget)) return;
-
-  DEBUGCMD ({int i;
-  printf (" refresh numphysrows=%d numphyscols=%d =========================\n", 
-     table->num_phys_rows,table->num_phys_cols);
-     for (i=0; i<table->num_phys_rows; i++) {
-     printf ("cell %d\tcolor: 0x%x\tact:%s\tdescr: %s\tpay: %s\n", i, 
-     table->bg_colors[i][3], 
-     table->entries[i][2],
-     table->entries[i][3],
-     table->entries[i][5]);
-     }});
-
-  {
-    /* The 0'th row of the handlers is defined as the header */
-    GtkSheet *reg = GTK_SHEET(table->table_widget);    
-    CellBlock *curs = table->handlers[0][0];
-    int num_header_rows = curs->numRows;
-    
-    gtk_sheet_freeze(reg);
-    
-    /* Adjust table to have the right number of rows */
-    {
-      /* maxrow is actually the maximum index, not the total number of rows */
-      glong diffrows =
-        (reg->maxrow + 1) - (table->num_phys_rows - num_header_rows);
-      gint table_row, row, col;
-      
-      if(diffrows > 0) {
-        gtk_sheet_add_row(reg, diffrows);
-      } else if(diffrows < 0) {
-        gtk_sheet_delete_rows(reg, 0, diffrows);
-      }
-      
-      /* Set the per-cell contents, colors, etc. */
-      for(table_row = num_header_rows, row = 0;
-          table_row < table->num_phys_rows;
-          table_row++, row++) {
-        for(col = 0; col < table->num_phys_cols; col++) {
-          
-          gtk_sheet_set_cell(reg, row, col, GTK_JUSTIFY_LEFT,
-                             table->entries[table_row][col]);
-
-
-          /* You might be able to make this *much* faster by caching
-             colors. */
-          set_cell_color(reg, table, row, col,
-                         table->bg_colors[table_row][col],
-                         gtk_sheet_range_set_background);
-
-          set_cell_color(reg, table, row, col,
-                         table->fg_colors[table_row][col],
-                         gtk_sheet_range_set_foreground);
-
-          set_cell_color(reg, table, row, col,
-                         /* this really should be win->default_style->black */
-                         0,
-                         gtk_sheet_range_set_border_color);
-
-          /* Turn on all the borders */
-          {
-            GtkSheetRange r;
-            r.row0 = row;
-            r.rowi = row + 1;
-            r.col0 = col;
-            r.coli = col + 1;
-            
-            gtk_sheet_range_set_border(reg, r,
-                                       CELL_TOP_BORDER | CELL_BOTTOM_BORDER |
-                                       CELL_LEFT_BORDER | CELL_RIGHT_BORDER,
-                                       1, GDK_LINE_SOLID);
-          }
-        }
-      }
-
-#if 0
-      /* This is more efficient than the above, but it won't work
-         unless gtksheet changes its semantics */
-      
-      /* Turn on all the borders */
-      for(row = 0; row <= reg->maxrow; row++) {
-        GtkSheetRange r;
-        r.row0 = row;
-        r.rowi = row + 1;
-        r.col0 = 0;
-        r.coli = reg->maxcol;
-
-        L("Setting border for (%d %d) (%d %d)\n",
-          r.row0, r.rowi, r.col0, r.coli);
-        gtk_sheet_range_set_border(reg, r, CELL_TOP_BORDER, 1, GDK_LINE_SOLID);
-      }
-      for(col = 0; col <= reg->maxcol; col++) {
-        GtkSheetRange r;
-        r.row0 = 0;
-        r.rowi = reg->maxrow;
-        r.col0 = col;
-        r.coli = col + 1;
-        
-        gtk_sheet_range_set_border(reg, r, CELL_LEFT_BORDER, 1, GDK_LINE_SOLID);
-      }
-#endif
-    }
-    gtk_sheet_thaw(reg); 
-  }
-}
-
-/* ================== end of file ======================= */
-
-/*
-  Local Variables:
-  tab-width: 2
-  indent-tabs-mode: nil
-  mode: c
-  c-indentation-style: gnu
-  eval: (c-set-offset 'substatement-open 0)
-  End:
-*/

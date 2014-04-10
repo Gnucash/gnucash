@@ -23,6 +23,7 @@ INCLPATH = \
            -I. \
            -I@top_srcdir@/ \
            -I@top_srcdir@/src \
+           -I@top_srcdir@/src/gnome \
            -I@top_srcdir@/src/swig\
            -I@top_srcdir@/src/engine \
            -I@top_srcdir@/src/register \
@@ -32,14 +33,15 @@ INCLPATH = \
            -I@top_srcdir@/lib/Xbae-4.6.2-linas \
            -I$(prefix)/include
 
-CFLAGS   = @CFLAGS@ @X_CFLAGS@ -DCELL_WIDGETS=1 ${INCLPATH} -Wno-unused
+CFLAGS := @CFLAGS@ @X_CFLAGS@ -DCELL_WIDGETS=1 ${INCLPATH} -Wno-unused
+CFLAGS := $(filter-out -Werror,${CFLAGS})
 
-SWIG_FLAGS := -stat -guile \
-              -I.. -I@top_srcdir@/src/engine -I@top_srcdir@/src/guile
+SWIG_FLAGS := -stat -guile ${INCLPATH}
 
 ######################################################################
 # SEE Makefile.common for information about these variables.
-INDEP_SRCS = gnucash-all-guile_wrap.c gnucash-engine-guile_wrap.c
+INDEP_SRCS := gnucash-all-guile_wrap.c
+GNOME_SRCS := gnucash-gnome-guile_wrap.c
 ######################################################################
 
 # This inclusion must come after the first target, and after the
@@ -49,9 +51,15 @@ include @top_srcdir@/Makefile.common
 default: ${OBJS}
 .PHONY: default
 
+gnome: default ${GNOME_OBJS}
+
+motif: default
+
 SWIG_FILTER    := %P.h %/util.h
+
 SWIG_ENGINE_HDRS := \
   $(filter-out ${SWIG_FILTER},$(wildcard @top_srcdir@/src/engine/*.h))
+
 SWIG_ALL_HDRS := \
   ${SWIG_ENGINE_HDRS} \
 	../helperfuncs.h \
@@ -61,9 +69,13 @@ ifeq (${HAVE_PLOTUTILS},1)
   SWIG_ALL_HDRS += ../plot.preproc.h
 endif
 
+SWIG_GNOME_HDRS := ${SWIG_ALL_HDRS} \
+                   $(wildcard @top_srcdir@/src/gnome/options-dialog.h)
+
 # Because Swig's include mechanism is not too smart.
 SWIG_ENGINE_BASENAMES := $(notdir ${SWIG_ENGINE_HDRS})
 SWIG_ALL_BASENAMES := $(notdir ${SWIG_ALL_HDRS})
+SWIG_GNOME_BASENAMES := $(notdir ${SWIG_GNOME_HDRS})
 
 # This is .PHONY because it has to be re-generated *every* time.  Who
 # knows when headers are added to the engine dir?
@@ -85,6 +97,15 @@ gnucash.all.i: guile_swig_annotations.i ${SWIG_ALL_HDRS}
 	@($(foreach hdr,${SWIG_ALL_BASENAMES},echo %include ${hdr}; )) >> $@
 TRASH += gnucash.all.i gnucash.all_wrap.doc
 
+gnucash.gnome.i: guile_swig_annotations.i ${SWIG_GNOME_HDRS}
+	@echo "%module gnucash" > $@
+	@echo "%include \"guile_swig_annotations.i\"" >> $@
+	@echo "%{" >> $@
+	@($(foreach hdr,${SWIG_GNOME_BASENAMES},echo "#include <${hdr}>"; )) >> $@
+	@echo "%}" >> $@
+	@($(foreach hdr,${SWIG_GNOME_BASENAMES},echo %include \"${hdr}\"; )) >> $@
+TRASH += gnucash.gnome.i gnucash.gnome_wrap.doc
+
 gnucash-engine-guile_wrap.c: gnucash.engine.i
 	${SWIG} ${SWIG_FLAGS} -o $@ $< 
 	${PERL} -pi -e 's/^void gnucash\(\)/void gnucash_swig_init\(\)/' $@
@@ -94,6 +115,11 @@ gnucash-all-guile_wrap.c: gnucash.all.i
 	${SWIG} ${SWIG_FLAGS} -o $@ $< 
 	${PERL} -pi -e 's/^void gnucash\(\)/void gnucash_swig_init\(\)/' $@
 TRASH += gnucash-all-guile_wrap.c
+
+gnucash-gnome-guile_wrap.c: gnucash.gnome.i
+	swig ${SWIG_FLAGS} -o $@ $< 
+	perl -pi -e 's/^void gnucash\(\)/void gnucash_swig_init\(\)/' $@
+TRASH += gnucash-gnome-guile_wrap.c
 
 # Local Variables:
 # tab-width: 2

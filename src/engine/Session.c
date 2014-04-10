@@ -238,6 +238,12 @@ xaccSessionBeginFile (Session *sess, const char * filefrag)
     * triplet filename-host-process, otherwise accidental 
     * aliases can occur.
     */
+   /* appearently, even this code may not work for some NFS
+    * implementations.  In the long run, I am told that 
+    *  ftp.debian.org
+    * /pub/debian/dists/unstable/main/source/libs/liblockfile_0.1-6.tar.gz
+    * provides a better long-term solution.
+    */
    strcpy (pathbuf, sess->lockfile);
    path = strrchr (pathbuf, '.');
    sprintf (path, ".%lx.%d.LNK", gethostid(), getpid());

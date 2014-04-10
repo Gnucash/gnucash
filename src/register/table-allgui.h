@@ -250,6 +250,24 @@ xaccVerifyCursorPosition (Table *table, int phys_row, int phys_col);
 
 void * xaccGetUserData (Table *table, int phys_row, int phys_col);
 
+
+/* ==================================================== */
+/* these are used internally by table-{motif,gtk}.c
+   perhaps these should go in a table-allguiP.h  
+*/
+void 
+wrapVerifyCursorPosition (Table *table, int row, int col);
+ 
+int
+gnc_register_cell_valid(Table *table, const int row, const int col);
+
+void        
+doRefreshCursorGUI (Table * table, CellBlock *curs, int from_row, int from_col);
+
+void        
+xaccRefreshCursorGUI (Table * table);
+
+
 /* ==================================================== */
 /* 
  * In C, we don't have things like C++ templates. 

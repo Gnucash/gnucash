@@ -705,4 +705,92 @@ xaccGetUserData (Table *table, int phys_row, int phys_col)
    return (table->user_data[virt_row][virt_col]);
 }
 
+/* ==================================================== */
+
+void 
+wrapVerifyCursorPosition (Table *table, int row, int col)
+{
+   CellBlock *save_curs = table->current_cursor;
+   int save_phys_row = table->current_cursor_phys_row;
+   int save_phys_col = table->current_cursor_phys_col;
+
+   /* VerifyCursor will do all sorts of gui-independent machinations */
+   xaccVerifyCursorPosition (table, row, col);
+
+   if ((save_phys_row != table->current_cursor_phys_row) ||
+       (save_phys_col != table->current_cursor_phys_col))
+   {
+      /* make sure *both* the old and the new cursor rows get redrawn */
+      xaccRefreshCursorGUI (table);  
+      doRefreshCursorGUI (table, save_curs, save_phys_row, save_phys_col);
+   }
+}
+
+/* ==================================================== */
+
+void        
+xaccRefreshCursorGUI (Table * table)
+{
+   doRefreshCursorGUI (table, table->current_cursor,
+      table->current_cursor_phys_row,
+      table->current_cursor_phys_col);
+}
+
+int
+gnc_register_cell_valid(Table *table, const int row, const int col) {
+  int invalid = 0;
+  int rel_row, rel_col;
+  CellBlock *arr, *header;
+  
+  /* can't edit outside of the physical space */
+  invalid = (0 > row) || (0 > col) ;
+  invalid = invalid || (row >= table->num_phys_rows);
+  invalid = invalid || (col >= table->num_phys_cols);
+  
+  /* gtksheet may call cell_changed after table has been destroyed.
+     Are we papering over a real bug here?
+     This is probably a good check anyway. */
+  if(!table->handlers) return TRUE;
+
+  /* header rows cannot be modified */
+  /* hack alert -- assumes that header is first cell */
+  /* if 0,0 is not a headr  row, then trouble ... */
+  header = table->handlers[0][0];
+  invalid = invalid || (row < header->numRows);
+
+  /* If row or col is invalid, then the next bits could segfault... */
+  if(invalid) return TRUE;
+  
+  /* compute the cell location */
+  rel_row = table->locators[row][col]->phys_row_offset;
+  rel_col = table->locators[row][col]->phys_col_offset;
+  
+  /* verify that cursor offsets are valid.  This may occur if
+   * the app that is using the table has a paritally initialized
+   * cursor. (probably due to a prograing error, but maybe they
+   * meant to do this). */
+  invalid = invalid || (0 > rel_row);
+  invalid = invalid || (0 > rel_col);
+  
+  /* check for a cell handler, but only if cell adress is valid */
+  arr = table->current_cursor;
+  if (arr && !invalid) {
+    if (! (arr->cells[rel_row][rel_col])) {
+      invalid = TRUE;
+    } else {
+      /* if cell is marked as output-only,
+       * then don't call callbacks */
+      if (0 == (XACC_CELL_ALLOW_INPUT &
+                ((arr->cells[rel_row][rel_col])->input_output))) 
+        {
+          invalid = TRUE;
+        }
+    }
+    
+  } else {
+    invalid = TRUE;
+  }
+  return(!invalid);
+}
+
 /* ================== end of file ======================= */

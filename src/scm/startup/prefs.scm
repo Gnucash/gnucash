@@ -327,7 +327,6 @@
 ;        #f)))
 ;    eq?
 ;    #f))
-; >>>>>>> 1.5
 
 (define gnc:*arg-show-usage*
   (gnc:make-config-var

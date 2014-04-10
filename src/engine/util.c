@@ -46,6 +46,7 @@ int loglevel[MODULE_MAX] =
  2,      /* LEDGER */
  2,      /* GUI */
  4,      /* SCRUB */
+ 4,      /* GTK_REG */
 };
 
 /********************************************************************\
@@ -53,8 +54,10 @@ int loglevel[MODULE_MAX] =
 \********************************************************************/
 #if DEBUG_MEMORY
 
-#if defined (__NetBSD__) || defined(__FreeBSD__)
-# define malloc_usable_size(ptr) 0
+// #if defined (__NetBSD__) || defined(__FreeBSD__)
+
+#if !HAVE_MALLOC_USABLE_SIZE
+#define malloc_usable_size(ptr) 0
 #endif
 
 size_t core=0;

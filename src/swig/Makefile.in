@@ -25,20 +25,24 @@ INDEP_SRCS := helperfuncs.c
 CLEAN_SUBDIRS := guile perl5
 ######################################################################
 
-all: default
-
 # This inclusion must come after the first target, and after the
 # definitions of *_SRCS, etc., but before the usage of *_OBJS.
 include @top_srcdir@/Makefile.common
 
-default: guile perl5
-
 ifeq (${HAVE_PLOTUTILS},1)
-guile: plot.preproc.h ${OBJS}
+plotutils: plot.preproc.h
 else
-guile: ${OBJS}
+plotutils:
 endif
+
+guile: plotutils ${OBJS}
 	@cd guile && $(MAKE) default
+
+gnome: plotutils ${OBJS} perl5
+	@cd guile && $(MAKE) gnome
+
+motif: plotutils ${OBJS} perl5
+	@cd guile && $(MAKE) motif
 
 DIST_TRASH += plot.preproc.h
 
@@ -49,7 +53,7 @@ plot.preproc.h: /usr/include/plot.h
 perl5: ${OBJS} ../engine/libengine.a
 	@cd perl5 && $(MAKE) default
 
-.PHONY: default guile perl5
+.PHONY: guile motif
 
 # Local Variables:
 # tab-width: 2
