@@ -20,7 +20,7 @@
 \********************************************************************/
 
 /** @file Scrub3.c
- *  @breif Constrain Cap Gains to Track Sources of Gains
+ *  @brief Constrain Cap Gains to Track Sources of Gains
  *  @author Created by Linas Vepstas Sept 2003
  *  @author Copyright (c) 2003,2004 Linas Vepstas <linas@linas.org>
  *
@@ -37,10 +37,6 @@
 #include "gnc-commodity.h"
 #include "gnc-engine.h"
 #include "gnc-lot.h"
-#include "gnc-numeric.h"
-#include "gnc-trace.h"
-#include "kvp_frame.h"
-#include "kvp-util-p.h"
 #include "policy-p.h"
 #include "Account.h"
 #include "AccountP.h"
@@ -50,7 +46,7 @@
 #include "Transaction.h"
 #include "TransactionP.h"
 
-static short module = MOD_LOT;
+static QofLogModule log_module = GNC_MOD_LOT;
 
 /* ================================================================= */
 /** Cap gains are possible only if the lot commodity is not the same
@@ -94,7 +90,7 @@ xaccScrubLot (GNCLot *lot)
   GNCPolicy *pcy;
 
   if (!lot) return FALSE;
-  ENTER (" ");
+  ENTER ("(lot=%p) %s", lot, gnc_lot_get_title(lot));
 
   acc = gnc_lot_get_account (lot);
   pcy = acc->policy;
@@ -103,6 +99,8 @@ xaccScrubLot (GNCLot *lot)
 
   /* If the lot balance is zero, we don't need to rebalance */
   lot_baln = gnc_lot_get_balance (lot);
+  PINFO ("lot baln=%s for %s", gnc_num_dbg_to_string (lot_baln), 
+                               gnc_lot_get_title(lot));
   if (! gnc_numeric_zero_p (lot_baln))
   {
     SplitList *node;
@@ -110,6 +108,7 @@ xaccScrubLot (GNCLot *lot)
 
     /* Get the opening balance for this lot */
     pcy->PolicyGetLotOpening (pcy, lot, &opening_baln, NULL, NULL);
+    PINFO ("lot opener baln=%s", gnc_num_dbg_to_string (opening_baln));
 
     /* If the lot is fat, give the boot to all the non-opening 
      * splits, and refill it */
@@ -149,7 +148,7 @@ rethin:
   }
   xaccAccountCommitEdit(acc);
 
-  LEAVE (" deleted=%d", splits_deleted);
+  LEAVE ("(lot=%s, deleted=%d)", gnc_lot_get_title(lot), splits_deleted);
   return splits_deleted;
 }
 
@@ -162,7 +161,7 @@ xaccAccountScrubLots (Account *acc)
   if (!acc) return;
   if (FALSE == xaccAccountHasTrades (acc)) return;
                                                                                 
-  ENTER ("acc=%s", acc->accountName);
+  ENTER ("(acc=%s)", acc->accountName);
   xaccAccountBeginEdit(acc);
   xaccAccountAssignLots (acc);
 
@@ -172,7 +171,7 @@ xaccAccountScrubLots (Account *acc)
     xaccScrubLot (lot);
   }
   xaccAccountCommitEdit(acc);
-  LEAVE ("acc=%s", acc->accountName);
+  LEAVE ("(acc=%s)", acc->accountName);
 }
 
 /* ============================================================== */

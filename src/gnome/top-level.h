@@ -26,8 +26,6 @@
 #include <glib.h>
 #include <libguile.h>
 
-#include "window-main.h"
-
 gboolean      gnucash_ui_is_running (void);
 gboolean      gnucash_ui_is_terminating (void);
 SCM           gnc_gui_init_splash (SCM command_line);

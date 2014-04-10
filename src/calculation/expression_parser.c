@@ -387,7 +387,7 @@
 
 #include <glib.h>
 
-#include "../engine/gnc-numeric.h"
+#include "qof.h"
 
 #define EXPRESSION_PARSER_STATICS
 #include "finvar.h"

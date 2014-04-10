@@ -24,54 +24,53 @@
 #define GNUCASH_ITEM_LIST_H
 
 
-#define GNC_ITEM_LIST(obj) (GTK_CHECK_CAST((obj), gnc_item_list_get_type (), GNCItemList))
-#define GNC_ITEM_LIST_CLASS(k) (GTK_CHECK_CLASS_CAST ((k), gnc_item_list_get_type (), GNCItemListClass))
-#define IS_GNC_ITEM_LIST(o) (GTK_CHECK_TYPE((o), gnc_item_list_get_type ()))
-
+#define GNC_TYPE_ITEM_LIST     (gnc_item_list_get_type ())
+#define GNC_ITEM_LIST(o)       (G_TYPE_CHECK_INSTANCE_CAST((o), GNC_TYPE_ITEM_LIST, GncItemList))
+#define GNC_ITEM_LIST_CLASS(k) (G_TYPE_CHECK_CLASS_CAST ((k), GNC_TYPE_ITEM_LIST, GncItemListClass))
+#define IS_GNC_ITEM_LIST(o)    (G_TYPE_CHECK_INSTANCE_TYPE((o), GNC_TYPE_ITEM_LIST))
 
 typedef struct 
 {
         GnomeCanvasWidget canvas_widget;
 
-        GtkCList *clist;  /* Contains the list items */
-        GtkWidget *frame; /* frame around everything */
-} GNCItemList;
-
-
-GtkType gnc_item_list_get_type (void);
-
-GnomeCanvasItem *gnc_item_list_new (GnomeCanvasGroup *parent);
-
-void gnc_item_list_clear (GNCItemList *item_list);
-
-void gnc_item_list_append (GNCItemList *item_list, char *string);
-
-void gnc_item_list_select (GNCItemList *item_list, const char *string);
-
-void gnc_item_list_show_selected (GNCItemList *item_list);
-
-void gnc_item_list_sort (GNCItemList *item_list);
-
-int gnc_item_list_autosize (GNCItemList *item_list);
-
+        GtkTreeView *tree_view;
+	GtkListStore *list_store; /* Contains the list items */
+        GtkWidget *frame;         /* frame around everything */
+} GncItemList;
 
 typedef struct
 {
         GnomeCanvasWidgetClass parent_class;
 
-	void (*select_item) (GNCItemList *item_list,
+	void (*select_item) (GncItemList *item_list,
 			     char        *item_string);
 
-        void (*change_item) (GNCItemList *item_list,
+        void (*change_item) (GncItemList *item_list,
                              char        *item_string);
 
-        void (*activate_item) (GNCItemList *item_list,
+        void (*activate_item) (GncItemList *item_list,
                                char        *item_string);
 
-	void (*key_press_event) (GNCItemList *item_list,
+	void (*key_press_event) (GncItemList *item_list,
 				 GdkEventKey *event);
 
-} GNCItemListClass;
+} GncItemListClass;
+
+
+GType gnc_item_list_get_type (void);
+
+GnomeCanvasItem *gnc_item_list_new (GnomeCanvasGroup *parent);
+
+void gnc_item_list_clear (GncItemList *item_list);
+
+void gnc_item_list_append (GncItemList *item_list, char *string);
+
+void gnc_item_list_select (GncItemList *item_list, const char *string);
+
+void gnc_item_list_show_selected (GncItemList *item_list);
+
+int gnc_item_list_autosize (GncItemList *item_list);
+
 
 
 #endif /* GNUCASH_ITEM_LIST_H */

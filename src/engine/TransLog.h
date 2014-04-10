@@ -51,7 +51,8 @@
 void    xaccOpenLog (void);
 void    xaccCloseLog (void);
 /**
- \param char The engine currently uses the log mechanism with flag char set as
+ * @param trans The transaction to write out to the log
+ * @param flag The engine currently uses the log mechanism with flag char set as
  * follows:
  * 'B' for 'begin edit' (followed by the transaction as it looks
  *     before any changes, i.e. the 'old value')
@@ -62,7 +63,7 @@ void    xaccCloseLog (void);
  * 'R' for rollback (i.e. revert to previous B; data that follows should
  *     be identical to old B)
  */
-void    xaccTransWriteLog (Transaction *, char);
+void    xaccTransWriteLog (Transaction *trans, char flag);
 
 /** document me */
 void    xaccLogEnable (void);

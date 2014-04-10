@@ -46,19 +46,20 @@
 #include "Group.h"
 #include "dialog-utils.h"
 #include "print-session.h"
-#include "global-options.h"
-#include "gnc-engine-util.h"
+#include "gnc-engine.h"
 #include "gnc-gpg.h"
 #include "gnc-gui-query.h"
 #include "gnc-html.h"
 #include "gnc-http.h"
 #include "gnc-html-history.h"
+#include "gnc-html-graph-gog.h"
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"
 #include "messages.h"
 
 
 struct gnc_html_struct {
+  GtkWidget   * window;            /* window this html goes into */
   GtkWidget   * container;         /* parent of the gtkhtml widget */
   GtkWidget   * html;              /* gtkhtml widget itself */
   gchar       * current_link;      /* link under mouse pointer */
@@ -84,7 +85,7 @@ struct gnc_html_struct {
 
 
 /* indicates the debugging module that this .o belongs to.  */
-static short module = MOD_HTML;
+static QofLogModule log_module = GNC_MOD_HTML;
 
 /* hashes for URLType -> protocol and protocol -> URLType */
 static GHashTable * gnc_html_type_to_proto_hash = NULL;
@@ -374,13 +375,19 @@ gnc_html_initialize (void)
     { URL_TYPE_SCHEME, "gnc-scm" },
     { URL_TYPE_HELP, "gnc-help" },
     { URL_TYPE_XMLDATA, "gnc-xml" },
-    { URL_TYPE_ACTION, "gnc-action" },
     { URL_TYPE_PRICE, "gnc-price" },
+    { URL_TYPE_BUDGET, "gnc-budget" },
     { URL_TYPE_OTHER, "" },
     { NULL, NULL }};
 
+  PINFO( "initializing gnc_html..." );
+  printf( "initializing gnc_html...\n" );
+
   for (i = 0; types[i].type; i++)
     gnc_html_register_urltype (types[i].type, types[i].protocol);
+
+  // initialize graphing support
+  gnc_html_graph_gog_init();
 }
 
 
@@ -409,24 +416,12 @@ static gboolean
 http_allowed()
 {
   return TRUE;
-//return gnc_lookup_boolean_option("Network", "Allow http network access", 
-//                                 TRUE);
 }
 
 static gboolean
 https_allowed()
 {
   return TRUE;
-//return gnc_lookup_boolean_option("Network", "Allow https network access using OpenSSL", 
-//                                 TRUE);
-}
-
-static gboolean
-gnc_network_allowed()
-{
-  return FALSE;
-//return gnc_lookup_boolean_option("Network", "Enable GnuCash Network", 
-//                                 TRUE);
 }
 
 
@@ -444,16 +439,17 @@ gnc_html_http_request_cb(const gchar * uri, int completed_ok,
   gnc_html * html = user_data; 
   URLType  type;
   char     * location = NULL;
-  char    ** p_location = &location;
   char     * label    = NULL;
   GList    * handles  = NULL;
-  GList   ** p_handles = &handles;
   GList    * current;
+  gpointer loc_tmp, handles_tmp;
   
   DEBUG("uri %s, ok %d, body %10.10s, body len %d", uri, completed_ok, body, body_len);
   g_hash_table_lookup_extended(html->request_info, uri, 
-                               (gpointer *)p_location, 
-                               (gpointer *)p_handles);
+                               &loc_tmp, &handles_tmp );
+
+  location = loc_tmp;
+  handles  = handles_tmp;
   
   /* handles will be NULL for an HTTP POST transaction, where we are
    * displaying the reply data. */
@@ -611,17 +607,19 @@ gnc_html_load_to_stream(gnc_html * html, GtkHTMLStream * handle,
 
       if (!safe_strcmp (type, URL_TYPE_SECURE)) {
 	if(!https_allowed()) {
-	  gnc_error_dialog(NULL, _("Secure HTTP access is disabled.\n"
-			     "You can enable it in the Network section of\n"
-			     "the Preferences dialog."));
+	  gnc_error_dialog( html->window,
+                            _("Secure HTTP access is disabled.\n"
+                              "You can enable it in the Network section of\n"
+                              "the Preferences dialog."));
 	  break;
 	}
       }
 
       if(!http_allowed()) {
-	gnc_error_dialog(NULL, _("Network HTTP access is disabled.\n"
-			   "You can enable it in the Network section of\n"
-			   "the Preferences dialog."));
+	gnc_error_dialog( html->window,
+                          _("Network HTTP access is disabled.\n"
+                            "You can enable it in the Network section of\n"
+                            "the Preferences dialog."));
       } else {
 	char *fullurl;
       
@@ -895,49 +893,18 @@ gnc_html_submit_cb(GtkHTML * html, const gchar * method,
   char     * location = NULL;
   char     * new_loc = NULL;
   char     * label = NULL;
-  char     ** action_parts;
   GHashTable * form_data;
   URLType  type;
-  GncHTMLActionCB cb;
 
   DEBUG(" ");
   form_data = gnc_html_unpack_form_data(encoded_form_data);
   type = gnc_html_parse_url(gnchtml, action, &location, &label);
   
-  if(!safe_strcmp (type, URL_TYPE_ACTION)) {
-    if(gnc_network_allowed()) {
-      if(gnc_html_action_handlers) {
-        action_parts = g_strsplit(location, "?", 2);
-        if(action_parts && action_parts[0]) {
-          gnc_html_merge_form_data(form_data, action_parts[1]);
-          cb = g_hash_table_lookup(gnc_html_action_handlers, action_parts[0]);
-          if(cb) {
-            cb(gnchtml, method, action_parts[0], form_data);
-          }
-          else {
-            PWARN ("no handler for gnc-network action '%s'\n",
-                   action ? action : "(null)");
-          }
-        }
-        else {
-          PWARN ("tried to split on ? but failed...\n");
-        }
-      }
-    }
-    else {
-      gnc_error_dialog(NULL, _("GnuCash Network is disabled and the link "
-                         "you have clicked requires it.\n"
-                         "You can enable it in the Network section\n"
-                         "of the Preferences dialog."));
-    }
+  if(!strcasecmp(method, "get")) {
+    gnc_html_generic_get_submit(gnchtml, action, form_data);
   }
-  else {
-    if(!strcasecmp(method, "get")) {
-      gnc_html_generic_get_submit(gnchtml, action, form_data);
-    }
-    else if(!strcasecmp(method, "post")) {
-      gnc_html_generic_post_submit(gnchtml, action, form_data);
-    }
+  else if(!strcasecmp(method, "post")) {
+    gnc_html_generic_post_submit(gnchtml, action, form_data);
   }
   
   g_free(location);
@@ -1038,11 +1005,10 @@ gnc_html_show_url(gnc_html * html, URLType type,
     if (!ok)
     {
       if (result.error_message)
-        gnc_error_dialog(NULL, result.error_message);
+        gnc_error_dialog( html->window, result.error_message);
       else
 	/* %s is a URL (some location somewhere). */
-        gnc_error_dialog(NULL,
-			 _("There was an error accessing %s."), location);
+        gnc_error_dialog( html->window, _("There was an error accessing %s."), location);
 
       if (html->load_cb)
         html->load_cb (html, result.url_type,
@@ -1100,18 +1066,20 @@ gnc_html_show_url(gnc_html * html, URLType type,
     do {
       if (!safe_strcmp (type, URL_TYPE_SECURE)) {
 	if(!https_allowed()) {
-	  gnc_error_dialog(NULL, _("Secure HTTP access is disabled.\n"
-			     "You can enable it in the Network section of\n"
-			     "the Preferences dialog."));
+	  gnc_error_dialog( html->window,
+                            _("Secure HTTP access is disabled.\n"
+                              "You can enable it in the Network section of\n"
+                              "the Preferences dialog."));
 	  break;
 	}
       }
 
       if (safe_strcmp (type, URL_TYPE_FILE)) {
 	if(!http_allowed()) {
-	  gnc_error_dialog(NULL, _("Network HTTP access is disabled.\n"
-			     "You can enable it in the Network section of\n"
-			     "the Preferences dialog."));
+	  gnc_error_dialog( html->window,
+                            _("Network HTTP access is disabled.\n"
+                              "You can enable it in the Network section of\n"
+                              "the Preferences dialog."));
 	  break;
 	}
       }
@@ -1128,13 +1096,6 @@ gnc_html_show_url(gnc_html * html, URLType type,
       gnc_html_load_to_stream(html, handle, type, location, label);
 
     } while (FALSE);
-
-  } else if (!safe_strcmp (type, URL_TYPE_ACTION)) {
-    gnc_html_history_append(html->history,
-                            gnc_html_history_node_new(type, location, label));
-    gnc_html_submit_cb(GTK_HTML(html->html), "get", 
-                       gnc_build_url(type, location, label), NULL,
-                       (gpointer)html);
 
   } else {
     PERR ("URLType %s not supported.", type);
@@ -1170,10 +1131,11 @@ gnc_html_reload(gnc_html * html)
  ********************************************************************/
 
 gnc_html * 
-gnc_html_new(void)
+gnc_html_new( GtkWindow *parent )
 {
   gnc_html * retval = g_new0(gnc_html, 1);
   
+  retval->window    = GTK_WIDGET(parent);
   retval->container = gtk_scrolled_window_new(NULL, NULL);
   retval->html      = gtk_html_new();
 
@@ -1188,7 +1150,7 @@ gnc_html_new(void)
   retval->http         = gnc_http_new();
   retval->history      = gnc_html_history_new();
 
-  gtk_widget_ref (retval->container);
+  g_object_ref (retval->container);
   gtk_object_sink (GTK_OBJECT (retval->container));
 
   /* signals */
@@ -1265,11 +1227,12 @@ gnc_html_destroy(gnc_html * html)
   gnc_html_history_destroy(html->history);
 
   gtk_widget_destroy(html->container);
-  gtk_widget_unref(html->container);
+  g_object_unref(html->container);
 
   g_free(html->current_link);
   g_free(html->base_location);
 
+  html->window        = NULL;
   html->container     = NULL;
   html->html          = NULL;
   html->history       = NULL;
@@ -1336,7 +1299,7 @@ gnc_html_export(gnc_html * html, const char *filepath)
   if (!fh)
     return FALSE;
 
-  gtk_html_save (GTK_HTML(html->html), raw_html_receiver, fh);
+  gtk_html_save (GTK_HTML(html->html), GINT_TO_POINTER(raw_html_receiver), fh);
 
   fclose (fh);
 
@@ -1346,12 +1309,16 @@ gnc_html_export(gnc_html * html, const char *filepath)
 void
 gnc_html_print(gnc_html * html)
 {
-  PrintSession * ps = gnc_print_session_create(FALSE);
-  
-  gtk_html_print(GTK_HTML(html->html),
-                 GNOME_PRINT_CONTEXT(ps->meta));
-  gnc_print_session_done(ps, FALSE);
-  gnc_print_session_print(ps);
+  PrintSession *ps;
+
+  ps = gnc_print_session_create(FALSE);
+  if (ps == NULL) {
+    /* user cancelled */
+    return;
+  }
+
+  gtk_html_print(GTK_HTML(html->html), ps->context);
+  gnc_print_session_done(ps);
 }
 
 gnc_html_history * 
@@ -1396,7 +1363,7 @@ gnc_html_unregister_object_handler(const char * classid)
 
   if (!g_hash_table_lookup_extended(gnc_html_object_handlers,
                                     classid, 
-                                    (gpointer *)p_keyptr, 
+                                    (gpointer *)p_keyptr,
                                     (gpointer *)p_valptr))
     return;
 

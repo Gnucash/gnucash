@@ -8,3 +8,5 @@ Makefile.in
 .deps
 .libs
 gnc-dir.h
+.DS_Store
+

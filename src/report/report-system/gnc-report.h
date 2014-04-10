@@ -27,4 +27,11 @@
 gboolean gnc_run_report (int report_id, char ** data);
 gboolean gnc_run_report_id_string (const char * id_string, char **data);
 
+/**
+ * @param report The SCM version of the report.
+ * @return a caller-owned copy of the name of the report, or NULL if report
+ * is invalid.
+ **/
+gchar* gnc_report_name( SCM report );
+
 #endif

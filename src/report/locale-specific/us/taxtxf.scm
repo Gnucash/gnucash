@@ -632,7 +632,9 @@
                    (gnc:account-get-type account) #f)))
 
 	(set! work-done (+ 1 work-done))
-	(gnc:report-percent-done (* 100 (/ work-done work-to-do)))
+	(gnc:report-percent-done (* 100 (if (> work-to-do 0)
+					    (/ work-done work-to-do)
+					    1)))
         (if (gnc:account-is-inc-exp? account)
             (let* ((children (gnc:account-get-children account))
                    (to-special #f)	; clear special-splits-period

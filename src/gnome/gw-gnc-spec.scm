@@ -35,28 +35,20 @@
       "#include <gnc-engine.h>\n"
       "#include <gnc-commodity.h>\n"
       "#include <gnc-numeric.h>\n"
-      "#include <window-main.h>\n"
+      "#include <dialog-totd.h>\n"
       "#include <gnc-gui-query.h>\n"
       "#include <dialog-new-user.h>\n"
       "#include <dialog-progress.h>\n"
-      "#include <dialog-totd.h>\n"
       "#include <dialog-commodity.h>\n"
       "#include <druid-hierarchy.h>\n"
       "#include <top-level.h>\n"
-      "#include <window-help.h>\n"
       "#include <gnc-html.h>\n"
+      "#include <gnc-main-window.h>\n"
+      "#include <gnc-window.h>\n"
+      "#include <gnc-plugin-account-tree.h>\n"
       "#include <gnc-splash.h>\n"
-      "#include <dialog-find-transactions.h>\n"
       "#include <dialog-scheduledxaction.h>\n"
       "#include <dialog-sxsincelast.h>\n" )))
-
-  (gw:wrap-function
-   ws
-   'gnc:ui-hierarchy-druid
-   '<gw:void>
-   "gnc_ui_hierarchy_druid"
-   '()
-   "Open the hierarchy druid for importing an account hierarchy.")
 
   (gw:wrap-function
    ws
@@ -96,7 +88,7 @@
    '<gw:scm>
    "gnc_gui_init"
    '((<gw:scm> command-line))
-   "Initialize the remaining parts of the lower level ui. Returns remaining command line.")
+   "Initialize the remaining parts of the lower level ui. Returns main-window and remaining command line.")
 
   (gw:wrap-function
    ws
@@ -140,11 +132,11 @@
 
   (gw:wrap-function
    ws
-   'gnc:ui-totd-dialog-create-and-run
+   'gnc:new-account-tree
    '<gw:void>
-   "gnc_ui_totd_dialog_create_and_run"
-   '()
-   "Create and run the \"Tip Of The Day\" dialog")
+   "gnc_new_account_tree"
+   '((<gnc:MainWindow*> window))
+   "Create a new account tree window.")
 
   (gw:wrap-as-wct ws
                   '<gnc:ProgressDialog*>
@@ -241,16 +233,4 @@ sensitive and the dialog closes after the user clicks it.")
 order to destroy the dialog. The dialog will not be destroyed
 by the user closing the window.")
 
-  (gw:wrap-function
-   ws
-   'gnc:sx-editor
-   '<gw:void>
-   "gnc_ui_scheduled_xaction_dialog_create" '()
-   "Open the Scheduled Transaction Editor" )
-
-  (gw:wrap-function
-   ws
-   'gnc:sx-since-last-run-wrapper
-   '<gw:void>
-   "gnc_ui_sxsincelast_guile_wrapper" '(((<gw:mchars> caller-owned) bookfile))
-   "Wrapper to open the since-last-run dialog from a book-open hook." ))
+)

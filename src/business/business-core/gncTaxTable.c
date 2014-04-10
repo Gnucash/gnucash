@@ -31,24 +31,7 @@
 #include <glib.h>
 
 #include "messages.h"
-#include "gnc-numeric.h"
-#include "gnc-engine-util.h"
-#include "gnc-event-p.h"
-
-#include "qof-be-utils.h"
-#include "qofbook.h"
-#include "qofclass.h"
-#include "qofid.h"
-#include "qofid-p.h"
-#include "qofinstance.h"
-#include "qofinstance-p.h"
-#include "qofobject.h"
-#include "qofquery.h"
-#include "qofquerycore.h"
-
-#include "gncBusiness.h"
 #include "gncTaxTableP.h"
-
 
 struct _gncTaxTable 
 {
@@ -81,7 +64,7 @@ struct _book_info
 
 static GncTaxTableEntry * CloneTaxEntry (GncTaxTableEntry*, QofBook *);
 
-static short        module = MOD_BUSINESS;
+static QofLogModule log_module = GNC_MOD_BUSINESS;
 
 /* =============================================================== */
 /* You must edit the functions in this block in tandem.  KEEP THEM IN
@@ -147,9 +130,6 @@ gncTaxIncludedStringToType (const char *str, GncTaxIncluded *type)
 /* Misc inline functions */
 
 #define _GNC_MOD_NAME        GNC_ID_TAXTABLE
-
-#define CACHE_INSERT(str) g_cache_insert(gnc_engine_get_string_cache(), (gpointer)(str));
-#define CACHE_REMOVE(str) g_cache_remove(gnc_engine_get_string_cache(), (str));
 
 #define SET_STR(obj, member, str) { \
         char * tmp; \
@@ -799,7 +779,7 @@ static QofObject gncTaxTableDesc =
   interface_version:  QOF_OBJECT_VERSION,
   e_type:             _GNC_MOD_NAME,
   type_label:         "Tax Table",
-  create:             NULL,
+  create:             (gpointer)gncTaxTableCreate,
   book_begin:         _gncTaxTableCreate,
   book_end:           _gncTaxTableDestroy,
   is_dirty:           qof_collection_is_dirty,
@@ -812,8 +792,10 @@ static QofObject gncTaxTableDesc =
 gboolean gncTaxTableRegister (void)
 {
   static QofParam params[] = {
-    { QOF_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)qof_instance_get_book, NULL },
-    { QOF_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)qof_instance_get_guid, NULL },
+	{ GNC_TT_NAME, 		QOF_TYPE_STRING, 	(QofAccessFunc)gncTaxTableGetName, 		(QofSetterFunc)gncTaxTableSetName },
+	{ GNC_TT_REFCOUNT, 	QOF_TYPE_INT64, 	(QofAccessFunc)gncTaxTableGetRefcount, 	(QofSetterFunc)gncTaxTableSetRefcount },
+    { QOF_PARAM_BOOK, 	QOF_ID_BOOK, 		(QofAccessFunc)qof_instance_get_book, 	NULL },
+    { QOF_PARAM_GUID, 	QOF_TYPE_GUID, 		(QofAccessFunc)qof_instance_get_guid, 	NULL },
     { NULL },
   };
 
@@ -821,3 +803,7 @@ gboolean gncTaxTableRegister (void)
 
   return qof_object_register (&gncTaxTableDesc);
 }
+
+/* need a QOF tax table entry object */
+//gncTaxTableEntrySetType_q int32
+//gint gncTaxTableEntryGetType_q (GncTaxTableEntry *entry);

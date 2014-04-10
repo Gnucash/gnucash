@@ -40,12 +40,12 @@
 
 static GncEntryLedgerColors reg_colors =
 {
-  0xffffff, /* white */
-  0xffffff,
-  0xffffff,
+  0x96B183,
+  0xBFDEB9,
+  0xF6FFDA,
 
-  0xffffff,
-  0xffffff
+  0xFFEF98,
+  0xFFEF98,
 };
 
 /** Private Interfaces ***********************************************/
@@ -1196,9 +1196,4 @@ TableModel * gnc_entry_ledger_model_new (GncEntryLedgerType type)
   gnc_entry_ledger_model_new_handlers (model, type);
 
   return model;
-}
-
-void gnc_entry_ledger_set_colors (GncEntryLedgerColors reg_colors_new)
-{
-  reg_colors = reg_colors_new;
 }

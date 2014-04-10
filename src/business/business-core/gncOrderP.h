@@ -30,7 +30,6 @@
 #define GNC_ORDERP_H_
 
 #include "gncOrder.h"
-#include "qofid-p.h"
 
 gboolean gncOrderRegister (void);
 gint64 gncOrderNextID (QofBook *book);

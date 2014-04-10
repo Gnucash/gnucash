@@ -1,3 +1,4 @@
+*.gladep
 *.la
 *.lo
 .deps

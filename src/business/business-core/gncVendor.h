@@ -37,9 +37,6 @@ typedef struct _gncVendor GncVendor;
 #include "gncBillTerm.h"
 #include "gncTaxTable.h"
 #include "gncJob.h"
-#include "qofbook.h"
-#include "qofid.h"
-#include "qofinstance.h"
 
 #define GNC_ID_VENDOR       "gncVendor"
 #define GNC_IS_VENDOR(obj)  (QOF_CHECK_TYPE((obj), GNC_ID_VENDOR))
@@ -50,7 +47,9 @@ typedef struct _gncVendor GncVendor;
 GncVendor *gncVendorCreate (QofBook *book);
 void gncVendorDestroy (GncVendor *vendor);
 
-/* Set Functions */
+/** @name Set Functions
+ @{
+*/
 
 void gncVendorSetID (GncVendor *vendor, const char *id);
 void gncVendorSetName (GncVendor *vendor, const char *name);
@@ -59,9 +58,10 @@ void gncVendorSetTerms (GncVendor *vendor, GncBillTerm *terms);
 void gncVendorSetTaxIncluded (GncVendor *vendor, GncTaxIncluded taxincl);
 void gncVendorSetCurrency (GncVendor *vendor, gnc_commodity *currency);
 void gncVendorSetActive (GncVendor *vendor, gboolean active);
-
 void gncVendorSetTaxTableOverride (GncVendor *vendor, gboolean override);
 void gncVendorSetTaxTable (GncVendor *vendor, GncTaxTable *table);
+
+/** @} */
 
 void gncVendorAddJob (GncVendor *vendor, GncJob *job);
 void gncVendorRemoveJob (GncVendor *vendor, GncJob *job);
@@ -69,7 +69,9 @@ void gncVendorRemoveJob (GncVendor *vendor, GncJob *job);
 void gncVendorBeginEdit (GncVendor *vendor);
 void gncVendorCommitEdit (GncVendor *vendor);
 
-/* Get Functions */
+/** @name Get Functions
+@{
+*/
 
 const char * gncVendorGetID (GncVendor *vendor);
 const char * gncVendorGetName (GncVendor *vendor);
@@ -83,6 +85,7 @@ gboolean gncVendorGetActive (GncVendor *vendor);
 gboolean gncVendorGetTaxTableOverride (GncVendor *vendor);
 GncTaxTable* gncVendorGetTaxTable (GncVendor *vendor);
 
+/** @} */
 /** XXX should be renamed to RetJobList to be consistent with
  * other usage, since caller must free the copied list 
  */
@@ -102,6 +105,12 @@ int gncVendorCompare (GncVendor *a, GncVendor *b);
 #define VENDOR_ID	"id"
 #define VENDOR_NAME	"name"
 #define VENDOR_ADDR	"addr"
+#define VENDOR_NOTES "vendor_notes"
+#define VENDOR_TERMS "vendor_terms"
+#define VENDOR_TAX_INC "vendor_tax_included"
+#define VENDOR_ACTIVE "vendor_is_active"
+#define VENDOR_TAX_OVERRIDE "override_tax_table"
+#define VENDOR_TAX_TABLE "vendor_tax_table"
 
 /** deprecated functions */
 #define gncVendorGetBook(X) qof_instance_get_book (QOF_INSTANCE(X))

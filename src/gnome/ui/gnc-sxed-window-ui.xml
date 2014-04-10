@@ -1,0 +1,28 @@
+<ui>
+  <menubar>
+    <menu name="Edit" action="EditAction">
+      <menuitem name="EditCut" action="EditCutAction"/>
+      <menuitem name="EditCopy" action="EditCopyAction"/>
+      <menuitem name="EditPaste" action="EditPasteAction"/>
+      <placeholder name="EditPlaceholder"/>
+    </menu>
+  
+    <menu name="View" action="ViewAction">
+      <placeholder name="ViewPlaceholder"/>
+    </menu>
+
+    <menu name="Transaction" action="TransactionAction">
+    </menu>
+
+    <menu name="Actions" action="ActionsAction">
+      <placeholder name="ActionsPlaceholder"/>
+    </menu>
+  
+    <placeholder name="AdditionalMenusPlaceholder"/>
+  </menubar>
+
+  <toolbar name="DefaultToolbar">
+    <placeholder name="DefaultToolbarPlaceholder"/>
+    <separator name="ToolbarSep1"/>
+  </toolbar>
+</ui>

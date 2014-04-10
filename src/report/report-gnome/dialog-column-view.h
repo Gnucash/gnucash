@@ -20,8 +20,14 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
  ********************************************************************/
 
+#ifndef GNC_DIALOG_COLUMN_VIEW_H
+#define GNC_DIALOG_COLUMN_VIEW_H
+
 #include <libguile.h>
+#include <gtk/gtk.h>
 
 typedef struct gncp_column_view_edit gnc_column_view_edit;
 
 GtkWidget * gnc_column_view_edit_options(SCM options, SCM view);
+
+#endif

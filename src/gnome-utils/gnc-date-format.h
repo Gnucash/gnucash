@@ -30,8 +30,10 @@
 #define GNC_DATE_FORMAT_H 
 
 #include <gnome.h>
+#include <glib.h>
 #include "gnc-date.h"
 
+#define GNC_TYPE_DATE_FORMAT         (gnc_date_format_get_type ())
 #define GNC_DATE_FORMAT(obj)          GTK_CHECK_CAST (obj, gnc_date_format_get_type(), GNCDateFormat)
 #define GNC_DATE_FORMAT_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass, gnc_date_format_get_type(), GNCDateFormatClass)
 #define GNC_IS_DATE_FORMAT(obj)       GTK_CHECK_TYPE (obj, gnc_date_format_get_type ())
@@ -42,25 +44,22 @@ typedef struct _GNCDateFormatPriv GNCDateFormatPriv;
  **/
 typedef struct {
 	GtkHBox hbox;
-
-	GtkWidget *label;
-
 	GNCDateFormatPriv *priv;
 } GNCDateFormat;
 
 typedef struct {
-	GtkHBoxClass parent_class;
+	GtkHBoxClass hbox_class;
 	void (*format_changed) (GNCDateFormat *gdf);
 } GNCDateFormatClass;
 
-guint     gnc_date_format_get_type        (void);
+GType     gnc_date_format_get_type        (void);
 
 GtkWidget *gnc_date_format_new            (void);
 GtkWidget *gnc_date_format_new_without_label (void);
 GtkWidget *gnc_date_format_new_with_label (const char *label);
 
-void      gnc_date_format_set_format      (GNCDateFormat *gdf, DateFormat format);
-DateFormat gnc_date_format_get_format     (GNCDateFormat *gdf);
+void      gnc_date_format_set_format      (GNCDateFormat *gdf, QofDateFormat format);
+QofDateFormat gnc_date_format_get_format     (GNCDateFormat *gdf);
 
 void      gnc_date_format_set_months      (GNCDateFormat *gdf,
 					   GNCDateMonthFormat months);

@@ -139,7 +139,7 @@ do_test_call(
 		failure_args( test_title, filename, line, "" );
 	}
 
-        return result;
+	return result;
 }
 
 gboolean
@@ -161,7 +161,7 @@ do_test_args(
 	}
 	va_end(ap);
 
-        return result;
+	return result;
 }
 
 void
@@ -321,22 +321,11 @@ const char*
 get_random_string_in_array(const char* str_list[])
 {
     int num;
-    const char *to_ret = NULL;
 
+	 /* count number of items in list */
     for(num = 0; str_list[num] != NULL; num++)
-    {
-        switch(get_random_int_in_range(0, num + 1))
-        {
-        case 0:
-            to_ret = str_list[num];
-        default:
-            if(str_list[num + 1] == NULL)
-            {
-                return to_ret;
-            }
-            to_ret = str_list[num + 1];
-        }
-    }
-
-    return to_ret;
+        ;
+	 
+	 num = get_random_int_in_range(0, num-1);
+	 return str_list[num];
 }

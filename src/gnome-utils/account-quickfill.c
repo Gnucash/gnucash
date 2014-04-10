@@ -23,13 +23,14 @@
 
 #include "config.h"
 #include "account-quickfill.h"
-#include "gnc-engine-util.h"
-#include "gnc-event.h"
-#include "gnc-trace.h"
+#include "gnc-gconf-utils.h"
+#include "gnc-engine.h"
 #include "gnc-ui-util.h"
 
 /* This static indicates the debugging module that this .o belongs to. */
-static short module = MOD_REGISTER;
+static QofLogModule log_module = GNC_MOD_REGISTER;
+
+static void shared_quickfill_gconf_changed (GConfEntry *entry, gpointer qfb);
 
 /* ===================================================================== */
 /* In order to speed up register starts for registers htat have a huge
@@ -44,6 +45,7 @@ static short module = MOD_REGISTER;
 typedef struct {
   QuickFill *qf;
   QofBook *book;
+  AccountGroup *group;
   gint  listener;
   AccountBoolCB dont_add_cb;
   gpointer dont_add_data;
@@ -53,6 +55,9 @@ static void
 shared_quickfill_destroy (QofBook *book, gpointer key, gpointer user_data)
 {
   QFB *qfb = user_data;
+  gnc_gconf_general_remove_cb(KEY_ACCOUNT_SEPARATOR,
+			      shared_quickfill_gconf_changed,
+			      qfb);
   gnc_quickfill_destroy (qfb->qf);
   gnc_engine_unregister_event_handler (qfb->listener);
   g_free (qfb);
@@ -91,7 +96,7 @@ listen_for_account_events (GUID *guid, QofIdType type,
   name = xaccAccountGetFullName (account, gnc_get_account_separator ());
   if (NULL == name) return;
 
-  match = gnc_quickfill_get_string_match_mb (qf, name);
+  match = gnc_quickfill_get_string_match (qf, name);
   if (!match) goto add_string;
   match_str = gnc_quickfill_string (match);
   if (!match_str) goto add_string;
@@ -128,6 +133,17 @@ load_shared_qf_cb (Account *account, gpointer data)
   return NULL;
 }
 
+static void
+shared_quickfill_gconf_changed (GConfEntry *entry, gpointer user_data)
+{
+  QFB *qfb = user_data;
+
+  /* Reload the quickfill */
+  gnc_quickfill_purge(qfb->qf);
+  xaccGroupForEachAccount (qfb->group, load_shared_qf_cb, qfb, TRUE);
+}
+
+
 /* Build the quickfill list out of account names. 
  * Essentially same loop as in gnc_load_xfer_cell() above.
  */
@@ -140,9 +156,14 @@ build_shared_quickfill (QofBook *book, AccountGroup *group, const char * key,
   qfb = g_new0(QFB, 1);
   qfb->qf = gnc_quickfill_new ();
   qfb->book = book;
+  qfb->group = group;
   qfb->listener = 0;
   qfb->dont_add_cb = cb;
   qfb->dont_add_data = data;
+
+  gnc_gconf_general_register_cb(KEY_ACCOUNT_SEPARATOR,
+				shared_quickfill_gconf_changed,
+				qfb);
 
   xaccGroupForEachAccount (group, load_shared_qf_cb, qfb, TRUE);
 

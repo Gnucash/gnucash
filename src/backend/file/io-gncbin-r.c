@@ -20,7 +20,7 @@
  *                                                                  *
  ********************************************************************
  * @file io-gncbin-r.c
- * @breif read (old X-Accountant format) binary datafile 
+ * @brief read (old X-Accountant format) binary datafile 
  * @author Copyright (C) 1997 Robin D. Clark
  * @author Copyright (C) 1997-2001 Linas Vepstas <linas@linas.org>
  * @author Copyright (C) 1999-2000 Rob Browning
@@ -93,7 +93,6 @@
 
 #include "config.h"
 
-#include "kvp_frame.h"
 #include "Account.h"
 #include "AccountP.h"
 #include "io-gncbin.h"
@@ -103,13 +102,7 @@
 #include "Transaction.h"
 #include "TransactionP.h"
 #include "TransLog.h"
-#include "qofbackend.h"
-#include "qofbook.h"
-#include "qofbook-p.h"
-#include "gnc-commodity.h"
-#include "gnc-date.h"
 #include "gnc-engine.h"
-#include "gnc-engine-util.h"
 #include "gnc-pricedb.h"
 #include "gnc-pricedb-p.h"
 
@@ -126,7 +119,7 @@
  */
 
 /* This static indicates the debugging module that this .o belongs to.  */
-static short module = MOD_IO;
+static QofLogModule log_module = GNC_MOD_IO;
 
 /** GLOBALS *********************************************************/
 
@@ -392,7 +385,7 @@ gnc_commodity_import_legacy(QofBook *book, const char * currency_name)
                                      currency_name);
     
     if(!old) {
-      old = gnc_commodity_new(currency_name, 
+      old = gnc_commodity_new(book, currency_name,
                               GNC_COMMODITY_NS_LEGACY, currency_name,
                               0, 100000);
       old = gnc_commodity_table_insert(table, old);
@@ -408,6 +401,26 @@ gnc_commodity_import_legacy(QofBook *book, const char * currency_name)
 /********************************************************************\
  ********************** LOAD DATA ***********************************
 \********************************************************************/
+
+gboolean gnc_is_bin_file (const gchar *name)
+{
+  int  fd, err, token;
+
+  err = 0;
+  token = 0;
+  fd = open( name, RFLAGS, 0 );
+
+  /* check for valid file descriptor */
+  if( 0 > fd ) { return FALSE; }
+
+  /* Read in the file format token */
+  err = read( fd, &token, sizeof(int) );
+  if( sizeof(int) != err ) { return FALSE; }
+  XACC_FLIP_INT (token);
+  close(fd);
+  if(token == VERSION ) { return TRUE; }
+  return FALSE;
+}
 
 /********************************************************************\
  *   reads in the data from file descriptor                         *
@@ -826,12 +839,12 @@ locateAccount (int acc_id, QofBook *book)
 
    /* first, see if we've already created the account */
    acc = (Account *) g_hash_table_lookup(ids_to_finished_accounts,
-                                         (gconstpointer) acc_id);
+                                         GINT_TO_POINTER(acc_id));
    if (acc) return acc;
 
    /* next, see if its an unclaimed account */
    acc = (Account *) g_hash_table_lookup(ids_to_unfinished_accounts,
-                                         (gconstpointer) acc_id);
+                                         GINT_TO_POINTER(acc_id));
    if (acc) return acc;
 
    /* if neither, then it does not yet exist.  Create it.
@@ -839,7 +852,7 @@ locateAccount (int acc_id, QofBook *book)
    acc = xaccMallocAccount (book);
    xaccAccountBeginEdit(acc);
    g_hash_table_insert(ids_to_unfinished_accounts,
-                       (gpointer) acc_id,
+                       GINT_TO_POINTER(acc_id),
                        (gpointer) acc);
    return acc;
 }

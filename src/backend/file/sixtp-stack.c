@@ -181,5 +181,9 @@ sixtp_context_destroy(sixtp_parser_context* context)
 {
     sixtp_stack_frame_destroy(context->top_frame);
     g_slist_free(context->data.stack);
+    context->data.saxParserCtxt->userData = NULL;
+    context->data.saxParserCtxt->sax = NULL;    
+    xmlFreeParserCtxt(context->data.saxParserCtxt);
+    context->data.saxParserCtxt = NULL;
     g_free(context);
 }

@@ -1,5 +1,30 @@
 <?xml version="1.0"?>
-<gnc-v2>
+<gnc-v2
+     xmlns:gnc="http://www.gnucash.org/XML/gnc"
+     xmlns:act="http://www.gnucash.org/XML/act"
+     xmlns:book="http://www.gnucash.org/XML/book"
+     xmlns:cd="http://www.gnucash.org/XML/cd"
+     xmlns:cmdty="http://www.gnucash.org/XML/cmdty"
+     xmlns:price="http://www.gnucash.org/XML/price"
+     xmlns:slot="http://www.gnucash.org/XML/slot"
+     xmlns:split="http://www.gnucash.org/XML/split"
+     xmlns:sx="http://www.gnucash.org/XML/sx"
+     xmlns:trn="http://www.gnucash.org/XML/trn"
+     xmlns:ts="http://www.gnucash.org/XML/ts"
+     xmlns:cust="http://www.gnucash.org/XML/cust"
+     xmlns:job="http://www.gnucash.org/XML/job"
+     xmlns:addr="http://www.gnucash.org/XML/addr"
+     xmlns:owner="http://www.gnucash.org/XML/owner"
+     xmlns:taxtable="http://www.gnucash.org/XML/taxtable"
+     xmlns:tte="http://www.gnucash.org/XML/tte"
+     xmlns:employee="http://www.gnucash.org/XML/employee"
+     xmlns:order="http://www.gnucash.org/XML/order"
+     xmlns:billterm="http://www.gnucash.org/XML/billterm"
+     xmlns:bt-days="http://www.gnucash.org/XML/bt-days"
+     xmlns:bt-prox="http://www.gnucash.org/XML/bt-prox"
+     xmlns:invoice="http://www.gnucash.org/XML/invoice"
+     xmlns:entry="http://www.gnucash.org/XML/entry"
+     xmlns:vendor="http://www.gnucash.org/XML/vendor">
 <gnc:count-data cd:type="commodity">40</gnc:count-data>
 <gnc:count-data cd:type="account">18</gnc:count-data>
 <gnc:count-data cd:type="transaction">19</gnc:count-data>
@@ -247,11 +272,11 @@
   <act:name>Checking</act:name>
   <act:id type="guid">7cce1d8ee29f0e4c30c949f77bb2a447</act:id>
   <act:type>BANK</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
-  <act:currency-scu>100</act:currency-scu>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
   <act:slots>
     <slot>
       <slot:key>notes</slot:key>
@@ -276,11 +301,11 @@
   <act:name>Savings</act:name>
   <act:id type="guid">7117b00944ea5def8959751832990c9e</act:id>
   <act:type>BANK</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
-  <act:currency-scu>100</act:currency-scu>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
   <act:slots>
     <slot>
       <slot:key>notes</slot:key>
@@ -292,11 +317,11 @@
   <act:name>Cash</act:name>
   <act:id type="guid">15468df1e7097e7c317fb7a541010d69</act:id>
   <act:type>CASH</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
-  <act:currency-scu>100</act:currency-scu>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
   <act:slots>
     <slot>
       <slot:key>notes</slot:key>
@@ -308,11 +333,11 @@
   <act:name>Credit Card</act:name>
   <act:id type="guid">bdc5ed7168216d6df0f8d00767299bc7</act:id>
   <act:type>CREDIT</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
-  <act:currency-scu>100</act:currency-scu>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
   <act:slots>
     <slot>
       <slot:key>notes</slot:key>
@@ -333,11 +358,11 @@
   <act:name>Salary</act:name>
   <act:id type="guid">d77f5ecb0a800748fdbae42e98908a85</act:id>
   <act:type>INCOME</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
-  <act:currency-scu>100</act:currency-scu>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
   <act:slots>
     <slot>
       <slot:key>notes</slot:key>
@@ -349,11 +374,11 @@
   <act:name>Clothes</act:name>
   <act:id type="guid">52c89f4b1d0b7b445e0793278fd5ff62</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
-  <act:currency-scu>100</act:currency-scu>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
   <act:slots>
     <slot>
       <slot:key>notes</slot:key>
@@ -365,11 +390,11 @@
   <act:name>Dining</act:name>
   <act:id type="guid">f4472ff237862ece69a1d3a58f293220</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
-  <act:currency-scu>100</act:currency-scu>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
   <act:slots>
     <slot>
       <slot:key>notes</slot:key>
@@ -381,11 +406,11 @@
   <act:name>FICA</act:name>
   <act:id type="guid">1b211cffcf23b31e80666dadf57a37b0</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
-  <act:currency-scu>100</act:currency-scu>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
   <act:slots>
     <slot>
       <slot:key>notes</slot:key>
@@ -397,11 +422,11 @@
   <act:name>FedTax</act:name>
   <act:id type="guid">9372c7685bfaf9086cb3cb53190b2ce2</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
-  <act:currency-scu>100</act:currency-scu>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
   <act:slots>
     <slot>
       <slot:key>notes</slot:key>
@@ -413,11 +438,11 @@
   <act:name>Finance Charge</act:name>
   <act:id type="guid">4ca91a8240c1df8068fa4dc7c1da147e</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
-  <act:currency-scu>100</act:currency-scu>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
   <act:slots>
     <slot>
       <slot:key>notes</slot:key>
@@ -429,11 +454,11 @@
   <act:name>Fuel</act:name>
   <act:id type="guid">a13c10f2c32dc74c2e70f894351ef209</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
-  <act:currency-scu>100</act:currency-scu>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
   <act:slots>
     <slot>
       <slot:key>notes</slot:key>
@@ -445,11 +470,11 @@
   <act:name>Groceries</act:name>
   <act:id type="guid">17e25505b81c735adec6d10aa1536a0a</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
-  <act:currency-scu>100</act:currency-scu>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
   <act:slots>
     <slot>
       <slot:key>notes</slot:key>
@@ -461,11 +486,11 @@
   <act:name>Household</act:name>
   <act:id type="guid">62479a9add5ae8bb253da6ab3d713083</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
-  <act:currency-scu>100</act:currency-scu>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
   <act:slots>
     <slot>
       <slot:key>notes</slot:key>
@@ -477,11 +502,11 @@
   <act:name>Service Charges</act:name>
   <act:id type="guid">630a8066fdf69ac977808b2295ed9f68</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
-  <act:currency-scu>100</act:currency-scu>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
   <act:slots>
     <slot>
       <slot:key>notes</slot:key>
@@ -493,11 +518,11 @@
   <act:name>Tools</act:name>
   <act:id type="guid">126f38b941cfe865f811e1c011e5bc51</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
-  <act:currency-scu>100</act:currency-scu>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
   <act:slots>
     <slot>
       <slot:key>notes</slot:key>
@@ -509,11 +534,11 @@
   <act:name>Utilities</act:name>
   <act:id type="guid">00adc8fb6cc29e7ae5de56d6f8624ac5</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
-  <act:currency-scu>100</act:currency-scu>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
   <act:slots>
     <slot>
       <slot:key>notes</slot:key>
@@ -525,11 +550,11 @@
   <act:name>Electric</act:name>
   <act:id type="guid">554b4134fc4a9c0361e9c8ca8f744229</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
-  <act:currency-scu>100</act:currency-scu>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
   <act:slots>
     <slot>
       <slot:key>notes</slot:key>
@@ -542,11 +567,11 @@
   <act:name>Opening Balances</act:name>
   <act:id type="guid">f61553abd3d8029455441267f6530f3d</act:id>
   <act:type>EQUITY</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
-  <act:currency-scu>100</act:currency-scu>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
   <act:slots>
     <slot>
       <slot:key>notes</slot:key>

@@ -31,22 +31,12 @@
 #include "gnucash-item-edit.h"
 #include "gnucash-style.h"
 #include "messages.h"
-#include "gnc-engine-util.h"
+#include "gnc-gconf-utils.h"
+#include "gnc-engine.h"
 
 /** GLOBALS *********************************************************/
 /* This static indicates the debugging module that this .o belongs to.  */
-static short module = MOD_GUI;
-
 #define DEFAULT_STYLE_WIDTH 680
-
-GdkFont *gnucash_register_font = NULL;
-GdkFont *gnucash_register_hint_font = NULL;
-
-static char *register_font_name = NULL;
-static char *register_hint_font_name = NULL;
-
-static gboolean use_vertical_lines = TRUE;
-static gboolean use_horizontal_lines = TRUE;
 
 
 static gpointer
@@ -160,11 +150,13 @@ static void
 set_dimensions_pass_one (GnucashSheet *sheet, CellBlock *cursor,
                          BlockDimensions *dimensions)
 {
-        GdkFont *font = GNUCASH_GRID(sheet->grid)->normal_font;
+        /* GdkFont *font = GNUCASH_GRID(sheet->grid)->normal_font; */
         CellDimensions *cd;
         int row, col;
+	gint default_height = 0, max_height = -1;
+	PangoLayout *layout;
 
-        g_return_if_fail (font != NULL);
+        /* g_return_if_fail (font != NULL); */
 
         for (row = 0; row < cursor->num_rows; row++)
         {
@@ -177,11 +169,10 @@ set_dimensions_pass_one (GnucashSheet *sheet, CellBlock *cursor,
                         cd = g_table_index (dimensions->cell_dimensions,
                                             row, col);
 
-                        cd->pixel_height = (font->ascent + font->descent +
-                                            (2 * CELL_VPADDING));
+                        /*cd->pixel_height = (font->ascent + font->descent +
+                                            (2 * CELL_VPADDING));*/
+			/* cd->pixel_height = (2 * CELL_VPADDING); */
 
-                        if (cd->pixel_width > 0)
-                                continue;
 
                         cell = gnc_cellblock_get_cell (cursor, row, col);
                         if (!cell)
@@ -193,22 +184,49 @@ set_dimensions_pass_one (GnucashSheet *sheet, CellBlock *cursor,
 
                         if (text)
                         {
-                                width = gdk_string_width (font, text);
+				layout = gtk_widget_create_pango_layout (GTK_WIDGET (sheet), text);
+                                /* width = gdk_string_width (font, text); */
+				cd->pixel_height = 0;
+				pango_layout_get_pixel_size (layout, &width, &cd->pixel_height);
+				g_object_unref (layout);
                                 width += 2 * CELL_HPADDING;
                         }
                         else
+			{
                                 width = 0;
+				cd->pixel_height = (2 * CELL_VPADDING);
+			}
+
+			if (default_height == 0)
+				default_height = cd->pixel_height;
+			if (max_height < 0)
+				max_height = cd->pixel_height;
+			else
+				max_height = MAX(max_height, cd->pixel_height);
+
+                        if (cd->pixel_width > 0)
+                                continue;
 
                         if (cell && cell->is_popup)
-                                width += item_edit_get_toggle_offset
+                                width += gnc_item_edit_get_toggle_offset
                                         (cd->pixel_height);
 
                         cd->pixel_width = MAX (cd->pixel_width, width);
                 }
 
                 cd = g_table_index (dimensions->cell_dimensions, row, 0);
-                dimensions->height += cd->pixel_height;
+                dimensions->height += max_height;
         }
+
+        for (row = 0; row < cursor->num_rows; row++)
+        {
+                for (col = 0; col < cursor->num_cols; col++)
+                {
+                        cd = g_table_index (dimensions->cell_dimensions,
+                                            row, col);
+			cd->pixel_height = max_height;
+		}
+	}
 }
 
 
@@ -268,7 +286,7 @@ set_dimensions_pass_two (GnucashSheet *sheet, int default_width)
                 }
         else if (width > default_width && width == sheet->window_width)
         {
-                GdkFont *font = GNUCASH_GRID(sheet->grid)->normal_font;
+                /*GdkFont *font = GNUCASH_GRID(sheet->grid)->normal_font;*/
 
                 for (col = 0; col < num_cols; col++)
                 {
@@ -276,6 +294,7 @@ set_dimensions_pass_two (GnucashSheet *sheet, int default_width)
                         const char *text;
                         int sample_width;
                         int old_width;
+			PangoLayout *layout;
 
                         cell = gnc_cellblock_get_cell (cursor, 0, col);
 
@@ -291,7 +310,10 @@ set_dimensions_pass_two (GnucashSheet *sheet, int default_width)
                         text = cell->sample_text;
                         if (text)
                         {
-                                sample_width = gdk_string_width (font, text);
+				layout = gtk_widget_create_pango_layout (GTK_WIDGET (sheet), text);
+				pango_layout_get_pixel_size (layout, &sample_width, NULL);
+				g_object_unref (layout);
+                                /*sample_width = gdk_string_width (font, text);*/
                                 sample_width += 2 * CELL_HPADDING;
                         }
                         else
@@ -544,15 +566,6 @@ gnucash_sheet_styles_recompile(GnucashSheet *sheet)
 
 
 void
-gnucash_style_config_register_borders (gboolean use_vertical_lines_in,
-                                       gboolean use_horizontal_lines_in)
-{
-        use_vertical_lines = use_vertical_lines_in;
-        use_horizontal_lines = use_horizontal_lines_in;
-}
-
-
-void
 gnucash_sheet_get_borders (GnucashSheet *sheet, VirtualLocation virt_loc,
                            PhysicalCellBorders *borders)
 {
@@ -562,13 +575,13 @@ gnucash_sheet_get_borders (GnucashSheet *sheet, VirtualLocation virt_loc,
         g_return_if_fail (sheet != NULL);
         g_return_if_fail (GNUCASH_IS_SHEET (sheet));
 
-        line_style = use_horizontal_lines ?
+        line_style = sheet->use_horizontal_lines ?
                 CELL_BORDER_LINE_NORMAL : CELL_BORDER_LINE_NONE;
 
         borders->top    = line_style;
         borders->bottom = line_style;
 
-        line_style = use_vertical_lines ?
+        line_style = sheet->use_vertical_lines ?
                 CELL_BORDER_LINE_NORMAL : CELL_BORDER_LINE_NONE;
 
         borders->left  = line_style;
@@ -789,97 +802,6 @@ gnucash_style_unref (SheetBlockStyle *style)
                 g_warning ("Unbalanced Style ref/unref");
 }
 
-static GdkFont *
-gnucash_font_load (const char *name)
-{
-        GdkFont *font;
-
-        font = gdk_fontset_load (name);
-        if (font) return font;
-
-        return gdk_font_load (name);
-}
-
-static const char *
-gnucash_style_get_default_register_font_name (void)
-{
-        return _("register-default-font:-adobe-helvetica-medium-r-normal--*-120-*-*-*-*-*-*") + 22;
-}
-
-static const char *
-gnucash_style_get_default_register_hint_font_name (void)
-{
-        return _("register-hint-font:-adobe-helvetica-medium-o-normal--*-120-*-*-*-*-*-*") + 19;
-}
-
-void
-gnucash_style_set_register_font_name (const char *name)
-{
-	GdkFont *new_font = NULL;
-
-	if (name != NULL) {
-		new_font = gnucash_font_load (name);
-		if (new_font == NULL) {
-			PWARN("Cannot load font: %s\n", name);
-		}
-	}
-
-	if (new_font == NULL)
-	{
-		name = gnucash_style_get_default_register_font_name ();
-		new_font = gnucash_font_load (name);
-		if (new_font == NULL) {
-			FATAL("Cannot load fallback font: %s\n", name);
-			return;
-		}
-	}
-
-	if (gnucash_register_font != NULL)
-		gdk_font_unref (gnucash_register_font);
-	if (register_font_name != NULL)
-		g_free (register_font_name);
-
-	gnucash_register_font = new_font;
-	gdk_font_ref (gnucash_register_font);
-	register_font_name = g_strdup (name);
-
-	g_assert (gnucash_register_font != NULL);
-}
-
-void
-gnucash_style_set_register_hint_font_name (const char *name)
-{
-	GdkFont *new_font = NULL;
-
-	if (name != NULL) {
-		new_font = gnucash_font_load (name);
-		if (new_font == NULL) {
-			PWARN("Cannot load font: %s\n", name);
-		}
-	}
-
-	if (new_font == NULL)
-	{
-		name = gnucash_style_get_default_register_hint_font_name ();
-		new_font = gnucash_font_load (name);
-		if (new_font == NULL) {
-			FATAL("Cannot load fallback font: %s\n", name);
-			return;
-		}
-	}
-
-	if (gnucash_register_hint_font != NULL)
-		gdk_font_unref (gnucash_register_hint_font);
-	if (register_hint_font_name != NULL)
-		g_free (register_hint_font_name);
-
-	gnucash_register_hint_font = new_font;
-	gdk_font_ref (gnucash_register_hint_font);
-	register_hint_font_name = g_strdup (name);
-
-	g_assert (gnucash_register_hint_font != NULL);
-}
-
 typedef struct
 {
         char *cell_name;
@@ -1025,14 +947,7 @@ gnucash_sheet_set_header_widths (GnucashSheet *sheet,
 gboolean
 gnucash_style_init (void)
 {
-        if (gnucash_register_font == NULL)
-                gnucash_style_set_register_font_name(NULL);
-
-        if (gnucash_register_hint_font == NULL)
-                gnucash_style_set_register_hint_font_name(NULL);
-
-	return ((gnucash_register_font != NULL) &&
-		(gnucash_register_hint_font != NULL));
+	return TRUE;
 }
 
 

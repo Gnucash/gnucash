@@ -33,7 +33,6 @@
 #include "Query.h"
 #include "Transaction.h"
 #include "guid.h"
-#include "guile-mappings.h"
 #include "qofbook.h"
 #include "qofsession.h"
 

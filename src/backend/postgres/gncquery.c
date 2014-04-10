@@ -44,18 +44,18 @@
 #include "Account.h"
 #include "Transaction.h"
 #include "gnc-engine.h"
-#include "gnc-engine-util.h"
-
-#include "qofquery.h"
+/** \todo Code dependent on the private query headers 
+qofquery-p.h and qofquerycore-p.h may need to be modified.
+These files are temporarily exported for QOF 0.6.0 but
+cannot be considered "standard" or public parts of QOF. */
 #include "qofquery-p.h"
 #include "qofquerycore-p.h"
-#include "qofclass.h"
 
 #include "gncquery.h"
 #include "builder.h"
 #include "escape.h"
 
-static short module = MOD_BACKEND;
+static QofLogModule log_module = GNC_MOD_BACKEND;
 
 
 struct _gnc_query {
@@ -519,8 +519,8 @@ kvp_left_operand(KvpValue * value)
 
         case KVP_TYPE_NUMERIC:{
             gnc_numeric n = kvp_value_get_numeric(value);
-            return g_strdup_printf("(%lld::int8 * %s.num::int8)",
-                                   (long long int)n.denom, kvptable);
+            return g_strdup_printf("(%" G_GINT64_FORMAT "::int8 * %s.num::int8)",
+                                   n.denom, kvptable);
         }
 
         default:
@@ -542,14 +542,14 @@ kvp_right_operand(sqlQuery * sq, KvpValue * value)
 
     switch (value_t) {
         case KVP_TYPE_GINT64:
-            return g_strdup_printf("%lld",
-                                   (long long int)
+            return g_strdup_printf("%" G_GINT64_FORMAT,
                                    kvp_value_get_gint64(value));
 
         case KVP_TYPE_DOUBLE:
             return g_strdup_printf(SQL_DBL_FMT, kvp_value_get_double(value));
 
         case KVP_TYPE_GUID:{
+            /* THREAD-UNSAFE */
             const char *guid = guid_to_string(kvp_value_get_guid(value));
             char *s = g_strdup_printf("'%s'", guid);
             return s;
@@ -569,8 +569,8 @@ kvp_right_operand(sqlQuery * sq, KvpValue * value)
 
         case KVP_TYPE_NUMERIC:{
             gnc_numeric n = kvp_value_get_numeric(value);
-            return g_strdup_printf("(%lld::int8 * %s.denom::int8)",
-                                   (long long int)n.num, kvptable);
+            return g_strdup_printf("(%" G_GINT64_FORMAT "::int8 * %s.denom::int8)",
+                                   n.num, kvptable);
         }
 
         default:

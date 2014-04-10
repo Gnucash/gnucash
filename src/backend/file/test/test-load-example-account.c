@@ -1,3 +1,25 @@
+/***************************************************************************
+ *            test-load-example-account.c
+ *
+ *  Thu Sep 29 22:52:32 2005
+ *  Copyright  2005  GnuCash team
+ ****************************************************************************/
+/*
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ */
+ 
 #include <glib.h>
 #include <libguile.h>
 #include <string.h>
@@ -9,10 +31,8 @@
 #include <dirent.h>
 
 #include "gnc-module.h"
-#include "gnc-engine-util.h"
-#include "io-gncxml-v2.h"
 #include "gnc-engine.h"
-#include "gnc-book.h"
+#include "io-gncxml-v2.h"
 
 #include "io-example-account.h"
 
@@ -23,7 +43,7 @@
 static const gchar *da_ending = ".gnucash-xea";
 
 static void
-test_load_file(GNCBook *book, const char *filename)
+test_load_file(QofBook *book, const char *filename)
 {
     GncExampleAccount *gea;
 
@@ -47,7 +67,7 @@ guile_main (void *closure, int argc, char **argv)
     const char *location = getenv("GNC_ACCOUNT_PATH");
     GSList *list = NULL;
     DIR *ea_dir;
-    GNCBook *book;
+    QofBook *book;
 
     if (!location)
     {
@@ -57,7 +77,7 @@ guile_main (void *closure, int argc, char **argv)
     gnc_module_system_init();
     gnc_module_load("gnucash/engine", 0);
 
-    book = gnc_book_new ();
+    book = qof_book_new ();
 
     if((ea_dir = opendir(location)) == NULL)
     {

@@ -29,7 +29,7 @@
 #include <string.h>
 
 #include "gnc-xml-helper.h"
-#include "gnc-engine-util.h"
+#include "qof.h"
 
 #include "sixtp.h"
 #include "sixtp-utils.h"
@@ -154,8 +154,8 @@ gnc_freqSpec_dom_tree_create( FreqSpec *fs )
         xmlNodePtr                ret;
         xmlNodePtr                xmlSub;
 
-        ret = xmlNewNode( NULL, "gnc:freqspec" );
-        xmlSetProp( ret, "version", freqspec_version_string );
+        ret = xmlNewNode( NULL, BAD_CAST "gnc:freqspec" );
+        xmlSetProp( ret, BAD_CAST "version", BAD_CAST freqspec_version_string );
 
         xmlAddChild( ret, guid_to_dom_tree( "fs:id", &fs->entity.guid ) );
 
@@ -166,11 +166,11 @@ gnc_freqSpec_dom_tree_create( FreqSpec *fs )
         switch( fs->type ) {
 
         case INVALID: {
-                xmlSub = xmlNewNode( NULL, "fs:none" );
+                xmlSub = xmlNewNode( NULL, BAD_CAST "fs:none" );
         } break;
 
         case ONCE: {
-                xmlSub = xmlNewNode( NULL, "fs:once" );
+                xmlSub = xmlNewNode( NULL, BAD_CAST "fs:once" );
                 xmlAddChild( xmlSub, 
                              gdate_to_dom_tree( "fs:date", 
                                                 &fs->s.once.date ) );
@@ -178,7 +178,7 @@ gnc_freqSpec_dom_tree_create( FreqSpec *fs )
         } break;
 
         case DAILY: {
-                        xmlSub = xmlNewNode( NULL, "fs:daily" );
+                        xmlSub = xmlNewNode( NULL, BAD_CAST "fs:daily" );
                         xmlAddChild( xmlSub, 
                                      guint_to_dom_tree(
                                              "fs:interval", 
@@ -193,7 +193,7 @@ gnc_freqSpec_dom_tree_create( FreqSpec *fs )
         } break;
         
         case WEEKLY: {
-                xmlSub = xmlNewNode( NULL, "fs:weekly" );
+                xmlSub = xmlNewNode( NULL, BAD_CAST "fs:weekly" );
                 xmlAddChild( xmlSub, 
                              guint_to_dom_tree( 
                                      "fs:interval", 
@@ -208,7 +208,7 @@ gnc_freqSpec_dom_tree_create( FreqSpec *fs )
         } break;
         
         case MONTHLY: {
-                xmlSub = xmlNewNode( NULL, "fs:monthly" );
+                xmlSub = xmlNewNode( NULL, BAD_CAST "fs:monthly" );
                 xmlAddChild( xmlSub, 
                              guint_to_dom_tree( 
                                      "fs:interval", 
@@ -228,7 +228,7 @@ gnc_freqSpec_dom_tree_create( FreqSpec *fs )
         } break;
         
         case MONTH_RELATIVE: {
-                xmlSub = xmlNewNode( NULL, "fs:month_relative" );
+                xmlSub = xmlNewNode( NULL, BAD_CAST "fs:month_relative" );
                 xmlAddChild( xmlSub, 
                              guint_to_dom_tree( 
                                      "fs:interval", 
@@ -255,7 +255,7 @@ gnc_freqSpec_dom_tree_create( FreqSpec *fs )
         case COMPOSITE: {
                 GList *subelts;
                 xmlNodePtr xmlComposites;
-                xmlComposites = xmlNewNode( NULL, "fs:composite" );
+                xmlComposites = xmlNewNode( NULL, BAD_CAST "fs:composite" );
                 subelts = fs->s.composites.subSpecs;
                 while( subelts ) {
                         xmlAddChild( xmlComposites,

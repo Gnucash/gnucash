@@ -31,26 +31,8 @@
 #include <glib.h>
 
 #include "messages.h"
-#include "gnc-numeric.h"
 #include "gnc-engine.h"
-#include "gnc-engine-util.h"
-#include "qofquerycore.h"
-#include "gnc-event-p.h"
-#include "kvp_frame.h"
-
-#include "qof-be-utils.h"
-#include "qofbook.h"
-#include "qofclass.h"
-#include "qofid.h"
-#include "qofid-p.h"
-#include "qofinstance.h"
-#include "qofinstance-p.h"
-#include "qofobject.h"
-#include "qofquery.h"
-
-#include "gncBusiness.h"
 #include "gncBillTermP.h"
-
 
 struct _gncBillTerm 
 {
@@ -80,12 +62,9 @@ struct _book_info
   GList *         terms;        /* visible terms */
 };
 
-static short        module = MOD_BUSINESS;
+static QofLogModule log_module = GNC_MOD_BUSINESS;
 
 #define _GNC_MOD_NAME        GNC_ID_BILLTERM
-
-#define CACHE_INSERT(str) g_cache_insert(gnc_engine_get_string_cache(), (gpointer)(str));
-#define CACHE_REMOVE(str) g_cache_remove(gnc_engine_get_string_cache(), (str));
 
 #define SET_STR(obj, member, str) { \
         char * tmp; \
@@ -96,6 +75,9 @@ static short        module = MOD_BUSINESS;
         CACHE_REMOVE (member); \
         member = tmp; \
         }
+
+AS_STRING_DEC(GncBillTermType, ENUM_TERMS_TYPE)
+FROM_STRING_DEC(GncBillTermType, ENUM_TERMS_TYPE)
 
 /* ============================================================== */
 /* Misc inline utilities */
@@ -295,6 +277,18 @@ void gncBillTermSetType (GncBillTerm *term, GncBillTermType type)
   gncBillTermCommitEdit (term);
 }
 
+/** \brief Convert bill term types from text. */
+FROM_STRING_FUNC(GncBillTermType, ENUM_TERMS_TYPE)
+
+static
+void qofBillTermSetType (GncBillTerm *term, const char *type_label)
+{
+	GncBillTermType type;
+
+	type = GncBillTermTypefromString(type_label);
+	gncBillTermSetType(term, type);
+}
+
 void gncBillTermSetDueDays (GncBillTerm *term, gint days)
 {
   if (!term) return;
@@ -466,6 +460,16 @@ GncBillTermType gncBillTermGetType (GncBillTerm *term)
 {
   if (!term) return 0;
   return term->type;
+}
+
+/** \brief Convert bill term types to text. */
+AS_STRING_FUNC(GncBillTermType, ENUM_TERMS_TYPE)
+
+static
+const char* qofBillTermGetType (GncBillTerm *term)
+{
+	if (!term) { return NULL; }
+	return GncBillTermTypeasString(term->type);
 }
 
 gint gncBillTermGetDueDays (GncBillTerm *term)
@@ -678,7 +682,7 @@ static QofObject gncBillTermDesc =
   interface_version:   QOF_OBJECT_VERSION,
   e_type:              _GNC_MOD_NAME,
   type_label:          "Billing Term",
-  create:              NULL,
+  create:              (gpointer)gncBillTermCreate,
   book_begin:          _gncBillTermCreate,
   book_end:            _gncBillTermDestroy,
   is_dirty:            qof_collection_is_dirty,
@@ -691,8 +695,16 @@ static QofObject gncBillTermDesc =
 gboolean gncBillTermRegister (void)
 {
   static QofParam params[] = {
-    { QOF_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)qof_instance_get_book, NULL },
-    { QOF_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)qof_instance_get_guid, NULL },
+	{ GNC_BILLTERM_NAME, 		QOF_TYPE_STRING,  (QofAccessFunc)gncBillTermGetName,			(QofSetterFunc)gncBillTermSetName },
+	{ GNC_BILLTERM_DESC, 		QOF_TYPE_STRING,  (QofAccessFunc)gncBillTermGetDescription,		(QofSetterFunc)gncBillTermSetDescription },
+	{ GNC_BILLTERM_TYPE, QOF_TYPE_STRING, (QofAccessFunc)qofBillTermGetType, (QofSetterFunc)qofBillTermSetType },
+	{ GNC_BILLTERM_DUEDAYS, 	QOF_TYPE_INT32,   (QofAccessFunc)gncBillTermGetDueDays, 		(QofSetterFunc)gncBillTermSetDueDays },
+	{ GNC_BILLTERM_DISCDAYS, 	QOF_TYPE_INT32,   (QofAccessFunc)gncBillTermGetDiscountDays,	(QofSetterFunc)gncBillTermSetDiscountDays },
+	{ GNC_BILLTERM_DISCOUNT, 	QOF_TYPE_NUMERIC, (QofAccessFunc)gncBillTermGetDiscount,		(QofSetterFunc)gncBillTermSetDiscount },
+	{ GNC_BILLTERM_CUTOFF, 		QOF_TYPE_INT32,   (QofAccessFunc)gncBillTermGetCutoff, 			(QofSetterFunc)gncBillTermSetCutoff },
+	{ GNC_BILLTERM_REFCOUNT, 	QOF_TYPE_INT64,   (QofAccessFunc)gncBillTermGetRefcount, 		NULL },
+	{ QOF_PARAM_BOOK, 			QOF_ID_BOOK, 	  (QofAccessFunc)qof_instance_get_book, 		NULL },
+    { QOF_PARAM_GUID, 			QOF_TYPE_GUID, 	  (QofAccessFunc)qof_instance_get_guid, 		NULL },
     { NULL },
   };
 

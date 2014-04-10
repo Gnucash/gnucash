@@ -33,29 +33,44 @@
 
 typedef struct _gncBillTerm GncBillTerm;
 
-#include "gnc-date.h"
-#include "gnc-numeric.h"
-#include "qofbook.h"
-#include "qofid.h"
-#include "qofinstance.h"
+#include "qof.h"
+#ifdef GNUCASH_MAJOR_VERSION
 #include "gncBusiness.h"
-
+#endif
 #define GNC_ID_BILLTERM       "gncBillTerm"
 #define GNC_IS_BILLTERM(obj)  (QOF_CHECK_TYPE((obj), GNC_ID_BILLTERM))
 #define GNC_BILLTERM(obj)     (QOF_CHECK_CAST((obj), GNC_ID_BILLTERM, GncBillTerm))
+
+/** @name BillTerm parameter names
+ @{ */
+#define GNC_BILLTERM_NAME 		"name"
+#define GNC_BILLTERM_DESC 		"description"
+#define GNC_BILLTERM_DUEDAYS 	"number of days due"
+#define GNC_BILLTERM_DISCDAYS 	"number of discounted days"
+#define GNC_BILLTERM_CUTOFF 	"cut off"
+#define GNC_BILLTERM_TYPE 		"bill type"
+#define GNC_BILLTERM_DISCOUNT	"amount of discount"
+#define GNC_BILLTERM_REFCOUNT	"reference count"
+/** @} */
 
 /**
  * How to interpret the amount.
  * You can interpret it as a VALUE or a PERCENT.
  * ??? huh?
  */
-typedef enum {
+#define ENUM_TERMS_TYPE(_)  \
+ _(GNC_TERM_TYPE_DAYS,) \
+ _(GNC_TERM_TYPE_PROXIMO,)
+
+DEFINE_ENUM(GncBillTermType, ENUM_TERMS_TYPE)
+
+/*typedef enum {
   GNC_TERM_TYPE_DAYS = 1,
   GNC_TERM_TYPE_PROXIMO,
 } GncBillTermType;
-
-/** @name Create/Destroy Functions */
-/** @{ */
+*/
+/** @name Create/Destroy Functions 
+ @{ */
 GncBillTerm * gncBillTermCreate (QofBook *book);
 void gncBillTermDestroy (GncBillTerm *term);
 void gncBillTermIncRef (GncBillTerm *term);
@@ -66,7 +81,9 @@ void gncBillTermBeginEdit (GncBillTerm *term);
 void gncBillTermCommitEdit (GncBillTerm *term);
 /** @} */
 
-/** @name Set Functions */
+/** @name Set Functions 
+@{
+*/
 void gncBillTermSetName (GncBillTerm *term, const char *name);
 void gncBillTermSetDescription (GncBillTerm *term, const char *name);
 void gncBillTermSetType (GncBillTerm *term, GncBillTermType type);
@@ -77,8 +94,8 @@ void gncBillTermSetCutoff (GncBillTerm *term, gint cutoff);
 
 /** @} */
 
-/** @name Get Functions */
-/** @{ */
+/** @name Get Functions 
+ @{ */
 /** Return a pointer to the instance gncBillTerm that is identified
  *  by the guid, and is residing in the book. Returns NULL if the 
  *  instance can't be found.

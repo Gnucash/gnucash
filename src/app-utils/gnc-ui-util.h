@@ -20,8 +20,10 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-/** @addtogroup UI
+/** @addtogroup GUI
     @{ */
+/** @addtogroup GuiUtility Utility functions for the GnuCash GUI
+ * @{ */
 /** @file gnc-ui-util.h 
     @brief  utility functions for the GnuCash UI
     @author Copyright (C) 2000 Dave Peticolas <dave@krondo.com>
@@ -36,7 +38,6 @@
 #include <locale.h>
 
 #include "Account.h"
-#include "gnc-engine.h"
 #include "Group.h"
 #include "qofbook.h"
 #include "qofsession.h"
@@ -45,9 +46,10 @@
 typedef QofSession * (*QofSessionCB) (void);
 
 
-/* User Settings ****************************************************/
-gboolean gnc_color_deficits (void);
-
+/** Returns the account separation character chosen by the user.
+ *
+ *  @return The character to use.
+ */
 char gnc_get_account_separator (void);
 
 gboolean gnc_reverse_balance(Account *account);
@@ -57,6 +59,22 @@ gboolean gnc_reverse_balance_type(GNCAccountType type);
 /* Default directories **********************************************/
 
 void gnc_init_default_directory (char **dirname);
+/** 
+ * Extracts the directory part of the given 'filename' into the char
+ * pointer variable '*dirname'. If the 'filename' is NULL or does not
+ * contain any directory separator '/', then '*dirname' will be set to
+ * NULL.
+ * 
+ * WATCH OUT: If '*dirname' (i.e. the underlying char pointer
+ * variable) is non-NULL, then it will be free()'d. Make sure that you
+ * have initialized it to NULL, or otherwise you will get a bogus
+ * free() or a double-free() here. FIXME: This is probably not-so-good
+ * behaviour and should be changed (2005-10-08, cstim).
+ *
+ * Again watch out: The caller takes ownership of the char buffer
+ * '*dirname', i.e. the caller has to do a g_free(*dirname) when that
+ * buffer is no longer in use.
+*/
 void gnc_extract_directory (char **dirname, const char *filename);
 
 
@@ -66,53 +84,29 @@ AccountGroup * gnc_get_current_group (void);
 gnc_commodity_table * gnc_get_current_commodities (void);
 
 /*
- * These values are order according to the way they should appear in
- * the register.  If you change this enum, you must also change the
- * acct_tree_defaults data structure in gnc-account-tree.c.
- */
-typedef enum
-{
-  ACCOUNT_NAME = 0,
-  ACCOUNT_TYPE,
-  ACCOUNT_COMMODITY,
-  ACCOUNT_CODE,
-  ACCOUNT_DESCRIPTION,
-  ACCOUNT_PRESENT,
-  ACCOUNT_PRESENT_REPORT,
-  ACCOUNT_BALANCE,        /* with sign reversal */
-  ACCOUNT_BALANCE_REPORT, /* ACCOUNT_BALANCE in default report currency */
-  ACCOUNT_CLEARED,
-  ACCOUNT_CLEARED_REPORT,
-  ACCOUNT_RECONCILED,
-  ACCOUNT_RECONCILED_REPORT,
-  ACCOUNT_FUTURE_MIN,
-  ACCOUNT_FUTURE_MIN_REPORT,
-  ACCOUNT_TOTAL,          /* balance + children's balance with sign reversal */
-  ACCOUNT_TOTAL_REPORT,   /* ACCOUNT_TOTAL in default report currency */
-  ACCOUNT_NOTES,
-  ACCOUNT_TAX_INFO,
-  NUM_ACCOUNT_FIELDS
-} AccountFieldCode;
-
-/**
- * This routine retrives the content for any given field in the
- * account tree data structure.  The account specifies the "row" and
- * the field parameter specifies the "column".  In essence, this is
- * one giant accessor routine for the Account object where all the
- * results are string values.
+ * This is a wrapper routine around an xaccGetBalanceInCurrency
+ * function that handles additional needs of the gui.
  *
- * @param account  The account to retrieve data about.
- * @param field    An indicator of which field in the account tree to return
- * @param negative An indicator that the result was a negative numeric
- *                 value.  May be used by the caller for colorization of the
- *                 returned string.
- * @return         The textual string representing the requested field.
- *
- * @note The caller must free the returned string when done with it.
+ * @param fn        The underlying function in Account.c to call to retrieve
+ *                  a specific balance from the account.
+ * @param account   The account to retrieve data about.
+ * @param recurse   Include all sub-accounts of this account.
+ * @param negative  An indication of whether or not the returned value
+ *                  is negative.  This can be used by the caller to
+ *                  easily decode whether or not to color the output.
+ * @param commodity The commodity in which the account balance should
+ *                  be returned. If NULL, the value will be returned in
+ *                  the commodity of the account. This is normally used
+ *                  to specify a currency, which forces the conversion
+ *                  of things like stock account values from share
+ *                  values to an amount the requested currency.
  */
-char * gnc_ui_account_get_field_value_string (Account *account,
-                                              AccountFieldCode field,
-					      gboolean *negative);
+gnc_numeric
+gnc_ui_account_get_balance_full (xaccGetBalanceInCurrencyFn fn,
+				 Account *account,
+				 gboolean recurse,
+				 gboolean *negative,
+				 gnc_commodity *commodity);
 
 /**
  * This routine retrives the total balance in an account, possibly
@@ -136,6 +130,47 @@ gnc_numeric gnc_ui_account_get_balance_in_currency (Account *account,
  */
 gnc_numeric gnc_ui_account_get_reconciled_balance(Account *account,
                                                   gboolean include_children);
+
+/**
+ * Wrapper around gnc_ui_account_get_balance_internal that converts
+ * the resulting number to a character string.  The number is
+ * formatted according to the specification of the account currency.
+ *
+ * @param fn        The underlying function in Account.c to call to retrieve
+ *                  a specific balance from the account.
+ * @param account   The account to retrieve data about.
+ * @param recurse   Include all sub-accounts of this account.
+ * @param negative  An indication of whether or not the returned value
+ *                  is negative.  This can be used by the caller to
+ *                  easily decode whether or not to color the output.
+ */
+gchar *
+gnc_ui_account_get_print_balance (xaccGetBalanceInCurrencyFn fn,
+				  Account *account,
+				  gboolean recurse,
+				  gboolean *negative);
+
+/**
+ * Wrapper around gnc_ui_account_get_balance_internal that converts
+ * the resulting number to a character string.  The number is
+ * formatted according to the specification of the default reporting
+ * currency.
+ *
+ * @param fn        The underlying function in Account.c to call to retrieve
+ *                  a specific balance from the account.
+ * @param account   The account to retrieve data about.
+ * @param recurse   Include all sub-accounts of this account.
+ * @param negative  An indication of whether or not the returned value
+ *                  is negative.  This can be used by the caller to
+ *                  easily decode whether or not to color the output.
+ */
+gchar *
+gnc_ui_account_get_print_report_balance (xaccGetBalanceInCurrencyFn fn,
+					 Account *account,
+					 gboolean recurse,
+					 gboolean *negative);
+
+char *gnc_ui_account_get_tax_info_string (Account *account);
 
 gnc_numeric gnc_ui_account_get_balance_as_of_date (Account *account,
                                                    time_t date,
@@ -182,6 +217,25 @@ gnc_commodity * gnc_locale_default_currency (void);
 
 /* Returns the default ISO currency string of the current locale. */
 const char * gnc_locale_default_iso_currency_code (void);
+
+
+/** Return the default currency set by the user.  If the user's
+ *  preference is invalid, then this routine will return the default
+ *  currency for the user's locale.
+ *
+ *  @return A pointer to a currency.
+ */
+gnc_commodity * gnc_default_currency (void);
+
+
+/** Return the default currency for use in reports, as set by the
+ *  user.  If the user's preference is invalid, then this routine will
+ *  return the default currency for the user's locale.
+ *
+ *  @return A pointer to a currency.
+ */
+gnc_commodity * gnc_default_report_currency (void);
+
 
 /* Returns the number of decimal place to print in the current locale */
 int gnc_locale_decimal_places (void);
@@ -265,8 +319,9 @@ gboolean xaccParseAmount (const char * in_str, gboolean monetary,
  * caller must provide all the locale-specific information.
  *
  * Note: if group is NULL, no group-size verification will take place.
- * 	 ignore_list is a list of characters that are completely ignored
- *	 while processing the input string.  If NULL, nothing is ignored.
+ * ignore_list is a list of characters that are completely ignored
+ * while processing the input string.  If ignore_list is NULL, nothing
+ * is ignored.
  */
 gboolean
 xaccParseAmountExtended (const char * in_str, gboolean monetary,
@@ -274,14 +329,9 @@ xaccParseAmountExtended (const char * in_str, gboolean monetary,
 			 char group_separator, char *group, char *ignore_list,
 			 gnc_numeric *result, char **endstr);
 
-/* Automatic decimal place conversion *******************************/
+/* Initialization ***************************************************/
 
-/* enable/disable the auto decimal option */
-void gnc_set_auto_decimal_enabled(gboolean enabled);
-
-/* set how many auto decimal places to use */
-void gnc_set_auto_decimal_places(int places);
-
+void gnc_ui_util_init (void);
 
 /* Missing functions ************************************************/
 
@@ -291,4 +341,5 @@ int iswlower (gint32 wc);
 #endif
 
 #endif
+/** @} */
 /** @} */

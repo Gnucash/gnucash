@@ -40,20 +40,10 @@
 #define XACC_ACCOUNT_P_H
 
 #include "config.h"
-
 #include "Account.h"
 #include "gnc-commodity.h"
 #include "gnc-engine.h"
-#include "gnc-numeric.h"
-#include "kvp_frame.h"
 #include "policy.h"
-
-#include "qofbackend.h"
-#include "qofbook.h"
-#include "qofid.h"
-#include "qofinstance.h"
-#include "qofinstance-p.h"
-
 
 /** STRUCTS *********************************************************/
 
@@ -62,6 +52,8 @@
  * This is the *private* header for the account structure.
  * No one outside of the engine should ever include this file.
 */
+
+/** \struct Account */
 struct account_s
 {
   QofInstance inst;

@@ -1,8 +1,6 @@
-
-docdir = ${GNC_DOC_INSTALL_DIR}
-
 SUBDIRS = examples
 
+docdir = ${GNC_DOC_INSTALL_DIR}
 doc_DATA = \
   README.francais \
   README.german \
@@ -12,6 +10,9 @@ doc_DATA = \
 man_MANS = \
   gnc-prices.1 \
   gnucash.1
+
+tipsdir = $(GNC_SHAREDIR)
+tips_DATA = tip_of_the_day.list
 
 EXTRA_DIST = \
   .cvsignore \
@@ -30,7 +31,8 @@ EXTRA_DIST = \
   generic_objects.txt \
   gnome-hackers.txt \
   gnc-prices.1.in \
-  gnucash.1.in
+  gnucash.1.in \
+  tip_of_the_day.list.in
 
 ## We borrow guile's convention and use @-...-@ as the substitution
 ## brackets here, instead of the usual @...@.  This prevents autoconf
@@ -52,4 +54,9 @@ gnucash.1: gnucash.1.in
 	chmod +x $@.tmp
 	mv $@.tmp $@
 
-DISTCLEANFILES = gnc-prices.1 gnucash.1
+tip_of_the_day.list: tip_of_the_day.list.in
+	gcc -E -P -x c -D'N_(x)=x' -o $@.tmp $<
+	cat -s $@.tmp | sed -e 's/^ *\"\(.*\)\" *$$/\1/m' > $@
+	rm -f $@.tmp
+
+DISTCLEANFILES = gnc-prices.1 gnucash.1 tip_of_the_day.list

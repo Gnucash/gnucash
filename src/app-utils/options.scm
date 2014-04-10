@@ -121,7 +121,7 @@
 (define (gnc:option-value-validator option)  
   (vector-ref option 11))
 (define (gnc:option-data option)
-    (vector-ref option 12))
+  (vector-ref option 12))
 (define (gnc:option-data-fns option)
   (vector-ref option 13))
 
@@ -301,6 +301,55 @@
       (lambda (x) (list #t x))
       #f #f #f #f)))
 
+;; budget option
+;; TODO: need to double-check this proc
+(define (gnc:make-budget-option
+	 section
+	 name
+	 sort-tag
+         documentation-string)
+
+  (define (budget->guid budget)
+    (if (string? budget)
+        budget
+        (gnc:budget-get-guid budget)))
+
+  (define (guid->budget budget)
+    (if (string? budget)
+        (gnc:budget-lookup budget (gnc:get-current-book))
+        budget))
+
+  (let* ((default-value (gnc:budget-get-default (gnc:get-current-book)))
+         (value (budget->guid default-value))
+         (option-set #f)
+         (value->string (lambda ()
+                          (string-append
+                           "'" (gnc:value->string (if option-set option #f)))))
+
+         )
+    (gnc:make-option
+     section name sort-tag 'budget documentation-string
+     ;; the getter should always return a budget pointer
+     (lambda () (guid->budget  ;; getter
+                 (if option-set
+                     value
+                     default-value))
+             )
+
+     (lambda (x) (set! value (budget->guid x))
+             (set! option-set #t)) ;; setter
+     (lambda ()
+       (guid->budget
+        (gnc:budget-get-default (gnc:get-current-book)))) ;; default-getter
+     (gnc:restore-form-generator value->string) ;; ??
+     (lambda (f p) (gnc:kvp-frame-set-slot-path f value p))
+     (lambda (f p)
+       (let ((v (gnc:kvp-frame-get-slot-path f p)))
+         (if (and v (string? v))
+             (set! value v))))
+     (lambda (x) (list #t x)) ;; value-validator
+     #f #f #f #f)))
+
 ;; commodity options use a specialized widget for entering commodities
 ;; in the GUI implementation.
 (define (gnc:make-commodity-option
@@ -427,7 +476,9 @@
              (list #f "pixmap-option: not a string"))))
      #f #f #f #f)))
 
-;; subtype should be on of 'relative 'absolute or 'both
+;; show-time is boolean
+;; subtype should be one of 'relative 'absolute or 'both
+;; if subtype is 'absolute then relative-date-list should be #f
 ;; relative-date-list should be the list of relative dates permitted
 ;; gnc:all-relative-dates contains a list of all relative dates.
 

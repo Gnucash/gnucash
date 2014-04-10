@@ -31,9 +31,10 @@
  * gnc_stock_split_dialog                                           *
  *   opens up a window to record a stock split                      *
  *                                                                  * 
- * Args:   initial - the initial account to use                     *
+ * Args:   parent  - the parent ofthis window                       *
+ *         initial - the initial account to use                     *
  * Return: nothing                                                  *
 \********************************************************************/
-void gnc_stock_split_dialog (Account * initial);
+void gnc_stock_split_dialog (GtkWidget *parent, Account * initial);
 
 #endif

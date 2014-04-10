@@ -1,5 +1,5 @@
 
-SUBDIRS = intl  m4  macros doc lib src intl-scm po rpm accounts
+SUBDIRS = doc lib src intl-scm po rpm accounts
 
 docdir = ${GNC_DOC_INSTALL_DIR}
 
@@ -33,9 +33,7 @@ m4data_DATA = gnucash.m4
 # Don't list any directories or you'll get *everything*, including the
 # CVS dirs.
 
-EXTRA_DIST = config.rpath  \
-  .cvsignore \
-  ChangeLog.1 \
+EXTRA_DIST = ChangeLog.1 \
   HACKING \
   README.patches \
   gnucash.lsm \
@@ -43,7 +41,12 @@ EXTRA_DIST = config.rpath  \
   gnucash-config.in \
   make-gnucash-patch.in \
   make-gnucash-potfiles.in \
-  po/.cvsignore \
+  macros/aqbanking.m4 \
+  macros/as-scrub-include.m4 \
+  macros/autogen.sh \
+  macros/compiler-flags.m4 \
+  macros/gnome-guile-checks.m4 \
+  macros/legacy_macros.m4 \
   po/README \
   po/glossary/da.po \
   po/glossary/de.po \
@@ -63,14 +66,14 @@ CLEANFILES = gnucash-config
 ## brackets here, instead of the usual @...@.  This prevents autoconf
 ## from substituting the values directly into the left-hand sides of
 ## the sed substitutions.
-make-gnucash-patch: make-gnucash-patch.in
+make-gnucash-patch: make-gnucash-patch.in Makefile
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
             -e 's:@-PERL-@:${PERL}:g'
 	chmod +x $@.tmp
 	mv $@.tmp $@
 
-make-gnucash-potfiles: make-gnucash-potfiles.in
+make-gnucash-potfiles: make-gnucash-potfiles.in Makefile
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
             -e 's:@-PERL-@:${PERL}:g'
@@ -94,12 +97,12 @@ etags:
         # make sure etags.files is up to date.
 	${MAKE} -f Makefile.TAGS etags.files
         # now use the contents of etags.files to re-make TAGS if needed.
-	${MAKE} -f Makefile.TAGS etags
+	${MAKE} -f Makefile.TAGS TAGS
 
 else
 
 etags:
-	@echo "You must ./configure with --enable-etags to use ctags."
+	@echo "You must ./configure with --enable-etags to use etags."
 
 endif
 
@@ -109,7 +112,7 @@ ctags:
         # make sure etags.files is up to date.
 	${MAKE} -f Makefile.TAGS etags.files
         # now use the contents of etags.files to re-make TAGS if needed.
-	${MAKE} -f Makefile.TAGS ctags
+	${MAKE} -f Makefile.TAGS tags
 
 else
 
@@ -120,7 +123,7 @@ endif
 
 .PHONY: etags ctags
 
-ACLOCAL_AMFLAGS = -I m4
+ACLOCAL_AMFLAGS = -I macros -I m4
 
 .PHONY: doc
 doc:

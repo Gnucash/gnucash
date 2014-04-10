@@ -45,9 +45,10 @@
 #include "gnc-date.h"
 #include "escape.h"
 #include "builder.h"
+#include "gnc-engine.h"
 #include "gnc-engine-util.h"
 
-static short module = MOD_BACKEND;
+static QofLogModule log_module = GNC_MOD_BACKEND; 
 
 /* ================================================ */
 
@@ -272,7 +273,7 @@ sqlBuild_Set_Int64 (sqlBuilder *b, const char *tag, gint64 nval)
    char val[100];
    if (!b || !tag) return;
 
-   snprintf (val, 100, "%lld", (long long int) nval);
+   snprintf (val, 100, "%" G_GINT64_FORMAT, nval);
    if (b->tag_need_comma) b->ptag = stpcpy(b->ptag, ", ");
    b->tag_need_comma = 1;
 

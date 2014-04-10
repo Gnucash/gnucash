@@ -17,65 +17,94 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
  *                                                                  *
 \********************************************************************/
-/** @addtogroup QOF
+/** @addtogroup SchedXaction
     @{ */
 /** @addtogroup FreqSpec Specifying Recurring Dates (Periods)
-    @{ */
+
+ Frequency specifications include how to let an event recur on a
+ predictable frequency, from a core of once, daily, weekly, monthly or annually.
+ More complex frequencies like twice weekly, quarterly, bi-annually and
+ custom frequencies consisting of a series of distinct dates are built from
+ the core types.
+ 
+ Although defined, MONTH_RELATIVE is not yet supported.
+
+ Scheduled transactions have a frequency defined by a frequency
+ specifier.  This specifier, given a start date, end date [present
+ in the scheduled transaction] and last occurance date [possibly not
+ present] can be used to determine that a s.transaction should be
+ instantiated on a given date [the given query date].
+
+ There is a split between the UIFreqType and the 'internal' FreqType
+ to reduce the complexity of some of the code involved.
+
+ This still needs to deal with:
+ . exceptions
+ . 13 periods: (4 weeks/period 4x13=52 weeks/year)
+ . yearly 360/365?
+ . re-based frequencies [based around a non-standard [read:
+   not-Jan-1-based/fiscal] year]
+ . "business days" -- m-f sans holidays [per-user list thereof]
+
+ \todo  add month-relative getter 
+
+@{ */
 /** @file FreqSpec.h
     @brief Period / Date Frequency Specification
     @author Copyright (C) 2001 Joshua Sled <jsled@asynchronous.org>
-    @author Copyright (C) 2001 Ben Stanley <bds02@uow.edu.au>  
+    @author Copyright (C) 2001 Ben Stanley <bds02@uow.edu.au>
+    @author Copyright (c) 2005 Neil Williams <linux@codehelp.co.uk>
 */
 
 #ifndef XACC_FREQSPEC_H
 #define XACC_FREQSPEC_H
 
 #include "config.h"
-
+#include "gnc-engine.h"
 #include <glib.h>
+#include "qof.h"
 
-#include "qofid.h"
-#include "guid.h"
-#include "qofbook.h"
+#define ENUM_LIST_TYPE(_) \
+        _(INVALID,) \
+        _(ONCE,) \
+        _(DAILY,) \
+        _(WEEKLY,) /**< Hmmm... This is sort of DAILY[7]... */ \
+        _(MONTHLY,) \
+        _(MONTH_RELATIVE,) \
+        _(COMPOSITE,)
 
-/**
- * Frequency specification.
- *
- **/
-typedef enum gncp_FreqType {
-        INVALID,
-        ONCE,
-        DAILY,
-        WEEKLY, /* Hmmm... This is sort of DAILY[7]... */
-        /* BI_WEEKLY: weekly[2] */
-        /* SEMI_MONTHLY: use composite */
-        MONTHLY,
-        MONTH_RELATIVE,
-        /* YEARLY: monthly[12] */
-        COMPOSITE,
-} FreqType;
+DEFINE_ENUM(FreqType, ENUM_LIST_TYPE) /**< \enum Frequency specification.
 
-/**
+For BI_WEEKLY, use weekly[2] 
+ SEMI_MONTHLY, use composite 
+ YEARLY, monthly[12] */
+
+AS_STRING_DEC(FreqType, ENUM_LIST_TYPE)
+FROM_STRING_DEC(FreqType, ENUM_LIST_TYPE)
+
+#define ENUM_LIST_UI(_) \
+        _(UIFREQ_NONE,) /**< no frequency */ \
+        _(UIFREQ_ONCE,) /**< Just occurs once */ \
+        _(UIFREQ_DAILY,) /**< Repeat every day. */ \
+        _(UIFREQ_DAILY_MF,) /**< Repeat Monday to Friday, skip weekend. */ \
+        _(UIFREQ_WEEKLY,) /**< Repeat once each week. */ \
+        _(UIFREQ_BI_WEEKLY,) /**< Repeat twice a week. */ \
+        _(UIFREQ_SEMI_MONTHLY,) /**< Repeat twice a month. */ \
+        _(UIFREQ_MONTHLY,) /**< Repeat once a month. */ \
+        _(UIFREQ_QUARTERLY,) /**< Repeat every quarter. */ \
+        _(UIFREQ_TRI_ANUALLY,) /**< Repeat three times a year. */ \
+        _(UIFREQ_SEMI_YEARLY,) /**< Repeat twice a year. */ \
+        _(UIFREQ_YEARLY,) /**< Repeat once a year. */ \
+        _(UIFREQ_NUM_UI_FREQSPECS,) 
+
+DEFINE_ENUM( UIFreqType, ENUM_LIST_UI) /**< \enum UIFreqType
+
  * The user's conception of the frequency.  It is expected that this
- * list will grow, while the former [FreqType] will not.
- *
- * Ideally this is not here, but what can you do?
- **/
-typedef enum gncp_UIFreqType {
-        UIFREQ_NONE,
-        UIFREQ_ONCE,
-        UIFREQ_DAILY,
-        UIFREQ_DAILY_MF,
-        UIFREQ_WEEKLY,
-        UIFREQ_BI_WEEKLY,
-        UIFREQ_SEMI_MONTHLY,
-        UIFREQ_MONTHLY,
-        UIFREQ_QUARTERLY,
-        UIFREQ_TRI_ANUALLY,
-        UIFREQ_SEMI_YEARLY,
-        UIFREQ_YEARLY,
-        UIFREQ_NUM_UI_FREQSPECS
-} UIFreqType;
+ * list will grow, while the former ::FreqType will not. */
+
+AS_STRING_DEC(UIFreqType, ENUM_LIST_UI) 
+FROM_STRING_DEC(UIFreqType, ENUM_LIST_UI)
+
 
 /**
  * Forward declaration of FreqSpec type for storing
@@ -84,7 +113,6 @@ typedef enum gncp_UIFreqType {
 
 struct gncp_freq_spec;
 typedef struct gncp_freq_spec FreqSpec;
-
 
 /** PROTOTYPES ******************************************************/
 
@@ -233,6 +261,29 @@ void xaccFreqSpecGetNextInstance( FreqSpec *fs,
  **/
 int gnc_freq_spec_compare( FreqSpec *a, FreqSpec *b );
 
+/** \name QOF handling.
+
+QOF requires parameters to use get and set routines individually -
+one parameter, one set routine, one get routine. QOF also passes
+parameter values directly and expects to receive the parameter value
+directly. These functions provide this mechanism. Note that in each
+case, where the xacc.. function uses a *int, QOF uses the int.
+
+In keeping with the rest of QOF, dates are handled as Timespec.
+@{
+*/
+#define QOF_ID_FREQSPEC       "FreqSpec"
+#define FS_UI_TYPE            "fs-frequency"
+#define FS_REPEAT             "fs-repeat"
+#define FS_BASE_DATE          "fs-initial-date"
+#define FS_MONTH_DAY          "fs-day-of-month"
+#define FS_MONTH_OFFSET       "fs-month-offset"
+
+/** \todo Need support for monthly and weekly extra values and composite. */
+gboolean FreqSpecRegister(void);
+
+/** @} */
+/** @} */
+/** @} */
+
 #endif /* XACC_FREQSPEC_H */
-/**@}*/
-/**@}*/

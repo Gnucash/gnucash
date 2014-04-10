@@ -31,33 +31,50 @@
 #ifndef GNC_CUSTOMER_H_
 #define GNC_CUSTOMER_H_
 
+/** @struct GncCustomer
+
+credit, discount and shipaddr are unique to GncCustomer\n
+id, name, notes, terms, addr, currency, taxtable, taxtable_override
+taxincluded, active and jobs are identical to ::GncVendor.
+
+@param	QofInstance     inst;
+@param	char *          id;
+@param	char *          name;
+@param	char *          notes;
+@param	GncBillTerm *   terms;
+@param	GncAddress *    addr;
+@param	gnc_commodity * currency;
+@param	GncTaxTable*    taxtable;
+@param	gboolean        taxtable_override;
+@param	GncTaxIncluded  taxincluded;
+@param	gboolean        active;
+@param	GList *         jobs;
+@param	gnc_numeric     credit;
+@param	gnc_numeric     discount;
+@param	GncAddress *    shipaddr;
+
+*/
 typedef struct _gncCustomer GncCustomer;
 
-#include "qofbook.h"
-#include "qofid.h"
-#include "qofinstance.h"
 #include "gncAddress.h"
 #include "gncBillTerm.h"
 #include "gncTaxTable.h"
 #include "gncJob.h"
 
-#include "gnc-numeric.h"
-#include "kvp_frame.h"
-
 #define GNC_ID_CUSTOMER       "gncCustomer"
 #define GNC_IS_CUSTOMER(obj)  (QOF_CHECK_TYPE((obj), GNC_ID_CUSTOMER))
 #define GNC_CUSTOMER(obj)     (QOF_CHECK_CAST((obj), GNC_ID_CUSTOMER, GncCustomer))
 
-/** @name Create/Destroy Functions */
-/** @{ */
+/** @name Create/Destroy Functions 
+ @{ */
 GncCustomer *gncCustomerCreate (QofBook *book);
 void gncCustomerDestroy (GncCustomer *customer);
 void gncCustomerBeginEdit (GncCustomer *customer);
 void gncCustomerCommitEdit (GncCustomer *customer);
 /** @} */
 
-/** @name Set Functions */
-/** @{ */
+/** @name Set Functions 
+ @{ */
 
 void gncCustomerSetID (GncCustomer *customer, const char *id);
 void gncCustomerSetName (GncCustomer *customer, const char *name);
@@ -74,10 +91,11 @@ void gncCustomerSetTaxTable (GncCustomer *customer, GncTaxTable *table);
 
 void gncCustomerAddJob (GncCustomer *customer, GncJob *job);
 void gncCustomerRemoveJob (GncCustomer *customer, GncJob *job);
+
 /** @} */
 
-/** @name Get Functions */
-/** @{ */
+/** @name Get Functions 
+ @{ */
 /** Return a pointer to the instance gncCustomer that is identified
  *  by the guid, and is residing in the book. Returns NULL if the 
  *  instance can't be found.
@@ -106,15 +124,21 @@ KvpFrame *gncCustomerGetSlots (GncCustomer *customer);
 GList * gncCustomerGetJoblist (GncCustomer *customer, gboolean show_all);
 /** @} */
 
-
-
 gboolean gncCustomerIsDirty (GncCustomer *customer);
 int gncCustomerCompare (GncCustomer *a, GncCustomer *b);
 
-#define CUSTOMER_ID	"id"
-#define CUSTOMER_NAME	"name"
-#define CUSTOMER_ADDR	"addr"
+#define CUSTOMER_ID			"id"
+#define CUSTOMER_NAME		"name"
+#define CUSTOMER_ADDR		"addr"
 #define CUSTOMER_SHIPADDR	"shipaddr"
+#define CUSTOMER_NOTES 		"notes"
+#define CUSTOMER_DISCOUNT 	"amount of discount"
+#define CUSTOMER_CREDIT 	"amount of credit"
+#define CUSTOMER_TT_OVER 	"tax table override"
+#define CUSTOMER_TAX_INC    "customer_tax_included"
+#define CUSTOMER_TERMS      "customer_terms"
+#define CUSTOMER_ACTIVE     "customer_is_active"
+#define CUSTOMER_SLOTS      "customer_values"
 
 /** @deprecated functions, should be removed */
 #define gncCustomerGetGUID(x) qof_instance_get_guid(QOF_INSTANCE(x))

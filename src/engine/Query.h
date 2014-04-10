@@ -27,14 +27,8 @@
 #include <sys/types.h>
 #include <time.h>
 #include <glib.h>
-
-#include "gnc-date.h" 
-#include "gnc-engine.h" 
-#include "guid.h" 
-#include "kvp_frame.h" 
-
-#include "qofquery.h"
-#include "qofquerycore.h"
+#include "qof.h"
+#include "Account.h"
 
 /*
  * This function defines a compatibility API from the old Query API to
@@ -76,7 +70,7 @@ typedef enum {
 
 /* After the query has been set up, call one of these to run the query. 
  *    XXX The routines below should be replaced by a query
- *    that explicitly asks for a list of the desied item.
+ *    that explicitly asks for a list of the desired item.
  *
  * The xaccQueryGetSplits() routine returns all splits matching the 
  *    query.  Any given split will appear at most once in the result;
@@ -188,6 +182,13 @@ void xaccQueryAddDateMatchTT(Query * q,
                              int use_start, time_t stt, 
                              int use_end, time_t ett,
                              QofQueryOp op);
+void xaccQueryGetDateMatchTS (Query * q, 
+			      Timespec * sts,
+			      Timespec * ets);
+void xaccQueryGetDateMatchTT (Query * q, 
+			      time_t * stt,
+			      time_t * ett);
+
 typedef enum {
   CLEARED_NONE       = 0x0000,
   CLEARED_NO         = 0x0001,

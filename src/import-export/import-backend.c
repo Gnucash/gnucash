@@ -34,31 +34,32 @@
 
 #include <stdlib.h> 
 #include <math.h>
+#include "gnc-gconf-utils.h"
 #include "import-backend.h"
 #include "import-utilities.h"
 #include "Account.h"
 #include "dialog-utils.h"
-#include "global-options.h"
+#include "Query.h"
 
-#include "gnc-engine-util.h"
+#include "gnc-engine.h"
 
 #include "gnc-ui-util.h"
 
-#define IMPORT_PAGE	"Online Banking & Importing" /* from app-utils/prefs.scm */
-#define BAYES_OPTION	"Use Bayesian Matching?"
+#define GCONF_SECTION "dialogs/import/generic_matcher"
+#define BAYES_OPTION  "use_bayes"
 
 /********************************************************************\
  *   Constants   *
 \********************************************************************/
 
-static short module = MOD_IMPORT;
+static QofLogModule log_module = GNC_MOD_IMPORT;
 
 /********************************************************************\
  *   Constants, should idealy be defined a user preference dialog    *
 \********************************************************************/
 
 static const int MATCH_DATE_THRESHOLD=4; /*within 4 days*/
-static const int MATCH_DATE_NOT_THRESHOLD = 21;
+static const int MATCH_DATE_NOT_THRESHOLD = 14;
 /**Transaction's who have an online_id kvp frame have been downloaded 
   online can probably be skipped in the match list, since it is very 
   unlikely that they would match a transaction downloaded at a later
@@ -105,7 +106,7 @@ struct _matchinfo
 {
   Transaction * trans;
   Split * split;
-  //GNC_match_probability probability;
+  /*GNC_match_probability probability;*/
   gint probability;
 };
 
@@ -129,7 +130,7 @@ gboolean
 gnc_import_TransInfo_is_balanced (const GNCImportTransInfo *info)
 {
  g_assert (info);
- if(gnc_numeric_equal(xaccTransGetImbalance(gnc_import_TransInfo_get_trans(info)),gnc_numeric_zero()))
+ if(gnc_numeric_zero_p(xaccTransGetImbalance(gnc_import_TransInfo_get_trans(info))))
    {
      return TRUE;
    }
@@ -241,8 +242,8 @@ void gnc_import_TransInfo_delete (GNCImportTransInfo *info)
 {
   if (info) {
     g_list_free (info->match_list);
-    /*If the transaction is still open, it must be destroyed*/
-    if(xaccTransIsOpen(info->trans)==TRUE)
+    /*If the transaction exists and is still open, it must be destroyed*/
+    if(info->trans && xaccTransIsOpen(info->trans))
       {
         xaccTransDestroy(info->trans);
         xaccTransCommitEdit(info->trans);
@@ -281,6 +282,7 @@ GdkPixmap* gen_probability_pixmap(gint score_original, GNCImportSettings *settin
   gchar * red_color_str = g_strdup_printf("r c red");
   gchar * black_color_str = g_strdup_printf("b c black");
   gchar * xpm[2+num_colors+height];
+  gint add_threshold, clear_threshold;
 
   g_assert(settings);
   g_assert(widget);
@@ -301,7 +303,9 @@ GdkPixmap* gen_probability_pixmap(gint score_original, GNCImportSettings *settin
   xpm[3]=yellow_color_str;
   xpm[4]=red_color_str; 
   xpm[5]=black_color_str;
-  
+  add_threshold = gnc_import_Settings_get_add_threshold(settings);
+  clear_threshold = gnc_import_Settings_get_clear_threshold(settings);
+
   for(i=0;i<height;i++)
     {
       xpm[num_colors+1+i]= g_new0(char,(width_each_bar*score)+width_first_bar+1);
@@ -324,11 +328,11 @@ GdkPixmap* gen_probability_pixmap(gint score_original, GNCImportSettings *settin
 		{
 		  strcat(xpm[num_colors+1+i],black_first_bar);
 		}
-	      else if (j<=gnc_import_Settings_get_add_threshold(settings))
+	      else if (j <= add_threshold)
 		{
 		  strcat(xpm[num_colors+1+i],red_bar);
 		}
-	      else if (j>=gnc_import_Settings_get_clear_threshold(settings))
+	      else if (j >= clear_threshold)
 		{
 		  strcat(xpm[num_colors+1+i],green_bar);
 		}
@@ -460,7 +464,7 @@ matchmap_find_destination (GncImportMatchMap *matchmap, GNCImportTransInfo *info
 	     (xaccSplitGetAccount
 	      (gnc_import_TransInfo_get_fsplit (info))));
 
-  useBayes = gnc_lookup_boolean_option(IMPORT_PAGE, BAYES_OPTION, TRUE);
+  useBayes = gnc_gconf_get_bool(GCONF_SECTION, BAYES_OPTION, NULL);
   if(useBayes)
     {
       /* get the tokens for this transaction* */
@@ -529,7 +533,7 @@ matchmap_store_destination (GncImportMatchMap *matchmap,
 		   (gnc_import_TransInfo_get_fsplit (trans_info))));
 
   /* see what matching system we are currently using */
-  useBayes = gnc_lookup_boolean_option(IMPORT_PAGE, BAYES_OPTION, TRUE);
+  useBayes = gnc_gconf_get_bool(GCONF_SECTION, BAYES_OPTION, NULL);
   if(useBayes)
     {
       /* tokenize this transaction */
@@ -585,6 +589,7 @@ static void split_find_match (GNCImportTransInfo * trans_info,
       double downloaded_split_amount, match_split_amount;
       time_t match_time, download_time;
       int datediff_day;
+      Transaction *new_trans = gnc_import_TransInfo_get_trans (trans_info);
     
       /* Matching heuristics */
     
@@ -595,9 +600,11 @@ static void split_find_match (GNCImportTransInfo * trans_info,
       /*DEBUG(" downloaded_split_amount=%f", downloaded_split_amount);*/
       match_split_amount = gnc_numeric_to_double(xaccSplitGetAmount(split));
       /*DEBUG(" match_split_amount=%f", match_split_amount);*/
-      if(gnc_numeric_equal(xaccSplitGetAmount
-			   (gnc_import_TransInfo_get_fsplit (trans_info)),
-			   xaccSplitGetAmount(split)))
+      if(downloaded_split_amount == match_split_amount)
+	/*if (gnc_numeric_equal(xaccSplitGetAmount
+	  (gnc_import_TransInfo_get_fsplit (trans_info)),
+	  xaccSplitGetAmount(split))) 
+	  -- gnc_numeric_equal is an expensive function call */
 	{
 	  prob = prob+3;
 	  /*DEBUG("heuristics:  probability + 3 (amount)");*/
@@ -615,15 +622,14 @@ static void split_find_match (GNCImportTransInfo * trans_info,
 	{
 	  /* If a transaction's amount doesn't match within the
 	     threshold, it's very unlikely to be the same transaction
-	     so we give it an extra -1 penality */
-	  prob = prob-1;
+	     so we give it an extra -5 penality */
+	  prob = prob-5;
 	  /* DEBUG("heuristics:  probability - 1 (amount)"); */
 	}
       
       /* Date heuristics */
       match_time = xaccTransGetDate (xaccSplitGetParent (split));
-      download_time = 
-	xaccTransGetDate (gnc_import_TransInfo_get_trans (trans_info));
+      download_time = xaccTransGetDate (new_trans);
       datediff_day = abs(match_time - download_time)/86400;
       /* Sorry, there are not really functions around at all that
 	 provide for less hacky calculation of days of date
@@ -643,23 +649,32 @@ static void split_find_match (GNCImportTransInfo * trans_info,
 	}
       else if (datediff_day > MATCH_DATE_NOT_THRESHOLD)
 	{
-	  /* Extra penalty if that split lies awfully far away
-	     from the given one. */
-	  prob = prob-10;
-	  /*DEBUG("heuristics:  probability - 10 (date)"); */
+	  /* Extra penalty if that split lies awfully far away from
+	     the given one. */
+	  prob = prob-5;
+	  /*DEBUG("heuristics:  probability - 5 (date)"); */
+	  /* Changed 2005-02-21: Revert the hard-limiting behaviour
+	     back to the previous large penalty. (Changed 2004-11-27:
+	     The penalty is so high that we can forget about this
+	     split anyway and skip the rest of the tests.) */
 	}
       
       /* Check number heuristics */  
-      if(strlen(xaccTransGetNum(gnc_import_TransInfo_get_trans (trans_info)))!=0)
+      if(strlen(xaccTransGetNum(new_trans))!=0)
 	{     
-	  if((strcmp(xaccTransGetNum
-		     (gnc_import_TransInfo_get_trans (trans_info)),
+	  if((strcmp(xaccTransGetNum (new_trans),
 		     xaccTransGetNum(xaccSplitGetParent(split)))
 	      ==0))
 	    {	
-	      /*An exact match of the Check number gives a +5 */
-	      prob = prob+5;
+	      /*An exact match of the Check number gives a +4 */
+	      prob = prob+4;
 	      /*DEBUG("heuristics:  probability + 5 (Check number)");*/
+	    }
+	  else if(strlen(xaccTransGetNum(new_trans)) > 0 &&
+		  strlen(xaccTransGetNum(xaccSplitGetParent(split))) > 0)
+	    {
+	      /* If both number are not empty yet do not match, add a little extre penality */
+	      prob = prob-2;
 	    }
 	}
       
@@ -689,10 +704,9 @@ static void split_find_match (GNCImportTransInfo * trans_info,
 	}
 
       /* Description heuristics */  
-      if(strlen(xaccTransGetDescription(gnc_import_TransInfo_get_trans (trans_info)))!=0)
+      if(strlen(xaccTransGetDescription(new_trans))!=0)
 	{
-	  if((strcmp(xaccTransGetDescription
-		     (gnc_import_TransInfo_get_trans (trans_info)),
+	  if((strcmp(xaccTransGetDescription (new_trans),
 		     xaccTransGetDescription(xaccSplitGetParent(split)))
 	      ==0))
 	    {	
@@ -700,11 +714,9 @@ static void split_find_match (GNCImportTransInfo * trans_info,
 	      prob = prob+2;
 	      /*DEBUG("heuristics:  probability + 2 (description)");*/
 	    }
-	  else if((strncmp(xaccTransGetDescription
-			   (gnc_import_TransInfo_get_trans (trans_info)),
-			   xaccTransGetDescription(xaccSplitGetParent(split)),
-			   strlen(xaccTransGetDescription
-				  (gnc_import_TransInfo_get_trans (trans_info)))/2)
+	  else if((strncmp(xaccTransGetDescription (new_trans),
+			   xaccTransGetDescription (xaccSplitGetParent(split)),
+			   strlen(xaccTransGetDescription (new_trans))/2)
 		   ==0))
 	    {
 	      /* Very primitive fuzzy match worth +1.  This matches the
@@ -755,16 +767,46 @@ static void split_find_match (GNCImportTransInfo * trans_info,
    transaction, and find all matching splits there. */
 void gnc_import_find_split_matches(GNCImportTransInfo *trans_info,
 				   gint process_threshold, 
-				   double fuzzy_amount_difference)
+				   double fuzzy_amount_difference,
+				   gint match_date_hardlimit)
 {
   GList * list_element;
+  Query *query = xaccMallocQuery();
   g_assert (trans_info);
   
   /* Get list of splits of the originating account. */
-  list_element = 
-    g_list_first
-    (xaccAccountGetSplitList
-     (xaccSplitGetAccount (gnc_import_TransInfo_get_fsplit (trans_info))));
+  {
+    /* We used to traverse *all* splits of the account by using
+       xaccAccountGetSplitList, which is a bad idea because 90% of these
+       splits are outside the date range that is interesting. We should
+       rather use a query according to the date region, which is
+       implemented here. 
+    */
+    Account *importaccount = 
+      xaccSplitGetAccount (gnc_import_TransInfo_get_fsplit (trans_info));
+    time_t download_time = xaccTransGetDate (gnc_import_TransInfo_get_trans (trans_info));
+
+    xaccQuerySetBook (query, gnc_get_current_book());
+    xaccQueryAddSingleAccountMatch (query, importaccount,			    
+				    QOF_QUERY_AND);
+    xaccQueryAddDateMatchTT (query,
+			     TRUE, download_time - match_date_hardlimit*86400,
+			     TRUE, download_time + match_date_hardlimit*86400,
+			     QOF_QUERY_AND);
+    list_element = xaccQueryGetSplits (query);
+    /* Sigh. Doesnt help too much. We still create and run one query
+       for each imported transaction. Maybe it would improve
+       performance further if there is one single (master-)query at
+       the beginning, matching the full date range and all accounts in
+       question. However, this doesnt quite work because this function
+       here is called from each gnc_gen_trans_list_add_trans(), which
+       is called one at a time. Therefore the whole importer would
+       have to change its behaviour: Accept the imported txns via
+       gnc_gen_trans_list_add_trans(), and only when
+       gnc_gen_trans_list_run() is called, then calculate all the
+       different match candidates. Thats too much work for now.
+    */
+  }
 
   /* Traverse that list, calling split_find_match on each one. Note
      that xaccAccountForEachSplit is declared in Account.h but
@@ -775,6 +817,8 @@ void gnc_import_find_split_matches(GNCImportTransInfo *trans_info,
 			process_threshold, fuzzy_amount_difference);
       list_element = g_list_next (list_element);
     }
+
+  xaccFreeQuery (query);
 }
 
 
@@ -855,7 +899,7 @@ gnc_import_process_trans_clist (GtkCList *clist,
 	  if(gnc_import_MatchInfo_get_split 
 	     (gnc_import_TransInfo_get_selected_match (trans_info)) ==NULL)
 	    {
-	      PERR("The split I am trying to reconcile is NULL, shouldn't happen!")
+                PERR("The split I am trying to reconcile is NULL, shouldn't happen!");
 	    }
 	  else
 	    {
@@ -893,10 +937,12 @@ gnc_import_process_trans_clist (GtkCList *clist,
 	      xaccTransDestroy(trans_info->trans);
 	      /*DEBUG("CommitEdit trans")*/
 	      xaccTransCommitEdit(trans_info->trans);
+	      /* Very important: Make sure the freed transaction is not freed again! */
+	      trans_info->trans = NULL;
 	    }
 	  break;
 	case GNCImport_EDIT:
-	    PERR("EDIT action is UNSUPPORTED!")
+	    PERR("EDIT action is UNSUPPORTED!");
 	  break;
 	default:
 	  DEBUG("Invalid GNCImportAction for this imported transaction.");
@@ -940,7 +986,7 @@ static gint check_trans_online_id(Transaction *trans1, void *user_data)
     }
   else
     {
-      //printf("test_trans_online_id(): Duplicate found\n");
+      /*printf("test_trans_online_id(): Duplicate found\n");*/
       return 1;
     }
 }
@@ -1028,7 +1074,8 @@ gnc_import_TransInfo_init_matches (GNCImportTransInfo *trans_info,
   /* Find all split matches in originating account. */
   gnc_import_find_split_matches(trans_info,  
 				gnc_import_Settings_get_display_threshold (settings),
-				gnc_import_Settings_get_fuzzy_amount (settings));
+				gnc_import_Settings_get_fuzzy_amount (settings),
+				gnc_import_Settings_get_match_date_hardlimit (settings));
   
   if (trans_info->match_list != NULL) 
     {

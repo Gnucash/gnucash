@@ -23,10 +23,7 @@
 
   (gw:wrapset-set-guile-module! ws '(g-wrapped gw-gnome-utils))
 
-  (gw:wrap-value ws 'gnc:window-name-main '(<gw:mchars> callee-owned const) "WINDOW_NAME_MAIN")
-  (gw:wrap-value ws 'gnc:window-name-register '(<gw:mchars> callee-owned const) "WINDOW_NAME_REGISTER")
-  (gw:wrap-value ws 'gnc:window-name-invoice '(<gw:mchars> callee-owned const) "WINDOW_NAME_INVOICE")
-  (gw:wrap-value ws 'gnc:window-name-all '(<gw:mchars> callee-owned const) "WINDOW_NAME_ALL")
+  (gw:wrap-value ws 'gnc:additional-menus-placeholder '(<gw:mchars> callee-owned const) "ADDITIONAL_MENUS_PLACEHOLDER")
 
   (gw:wrapset-add-cs-declarations!
    ws
@@ -38,11 +35,15 @@
       "#include <gtk/gtk.h>\n"
       "#include <gnc-amount-edit.h>\n"
       "#include <gnc-date-edit.h>\n"
+      "#include <gnc-file.h>\n"
+      "#include <gnc-gconf-utils.h>\n"
       "#include <gnc-gnome-utils.h>\n"
       "#include <gnc-gui-query.h>\n"
       "#include <gnc-html.h>\n"
-      "#include <gnc-mdi-utils.h>\n"
+      "#include <gnc-main-window.h>\n"
+      "#include <gnc-window.h>\n"
       "#include <gnc-menu-extensions.h>\n"
+      "#include <gnc-plugin-file-history.h>\n"
       "#include <gnc-ui.h>\n"
       "#include <print-session.h>\n"
       )))
@@ -68,10 +69,12 @@
    "Shutdown the GnuCash gnome system.")
 
   (gw:wrap-as-wct ws '<gtk:Widget*> "GtkWidget*" "const GtkWidget*")
+  (gw:wrap-as-wct ws '<gtk:Window*> "GtkWindow*" "const GtkWindow*")
   (gw:wrap-as-wct ws '<gnc:UIWidget> "gncUIWidget" "const gncUIWidget")
-  (gw:wrap-as-wct ws '<gnc:mdi-info*> "GNCMDIInfo*" "const GNCMDIInfo*")
   (gw:wrap-as-wct ws '<gnc:OptionWin*> "GNCOptionWin*" "const GNCOptionWin*")
   (gw:wrap-as-wct ws '<gnc:url-type> "URLType" "const URLType")
+  (gw:wrap-as-wct ws '<gnc:Window*> "GncWindow *" "const GncWindow *")
+  (gw:wrap-as-wct ws '<gnc:MainWindow*> "GncMainWindow *" "const GncMainWindow *")
 
   ;;
   ;; URLTypes
@@ -88,7 +91,6 @@
   (gw:wrap-value ws 'gnc:url-type-scheme '<gnc:url-type> "URL_TYPE_SCHEME")
   (gw:wrap-value ws 'gnc:url-type-help '<gnc:url-type> "URL_TYPE_HELP")
   (gw:wrap-value ws 'gnc:url-type-xmldata '<gnc:url-type> "URL_TYPE_XMLDATA")
-  (gw:wrap-value ws 'gnc:url-type-action '<gnc:url-type> "URL_TYPE_ACTION")
   (gw:wrap-value ws 'gnc:url-type-price '<gnc:url-type> "URL_TYPE_PRICE")
   (gw:wrap-value ws 'gnc:url-type-other '<gnc:url-type> "URL_TYPE_OTHER")
 
@@ -98,7 +100,7 @@
    'gnc:option-dialog-new
    '<gnc:OptionWin*>
    "gnc_options_dialog_new"
-   '((<gw:bool> make-toplevel) ((<gw:mchars> caller-owned) title))
+   '(((<gw:mchars> caller-owned) title))
    "Create a new option dialog")
 
   (gw:wrap-function
@@ -125,42 +127,8 @@
    '((<gnc:OptionWin*> option-window) (<gw:scm> apply-cb) (<gw:scm> close-cb))
    "Setup callbacks for the option window.")
 
-  (gw:wrap-function
-   ws
-   'gnc:mdi-has-apps?
-   '<gw:bool>
-   "gnc_mdi_has_apps"
-   '()
-   "Return true if there are gnc mdi app windows open.")
-
-  (gw:wrap-function
-   ws
-   'gnc:mdi-get-current
-   '<gnc:mdi-info*>
-   "gnc_mdi_get_current"
-   '()
-   "Return the main window data structure for the application.")
-
-  (gw:wrap-function
-   ws
-   'gnc:mdi-save 
-   '<gw:void>
-   "gnc_mdi_save" '((<gnc:mdi-info*> mi) 
-                    ((<gw:mchars> caller-owned) bookname))
-   "Save the MDI window configuration for the specified book")
-
-  (gw:wrap-function
-   ws
-   'gnc:mdi-restore
-   '<gw:void>
-   "gnc_mdi_restore" '((<gnc:mdi-info*> mi) 
-                       ((<gw:mchars> caller-owned const) bookname))
-   "Restore MDI window configuration for the specified book")
-
 
   (gw:wrap-as-wct ws '<gnc:PrintSession*> "PrintSession*" "const PrintSession*")
-  (gw:wrap-as-wct ws '<gnc:PrintDialog*> "PrintDialog*" "const PrintDialog*")
-  (gw:wrap-as-wct ws '<gnc:PaperDialog*> "PaperDialog*" "const PaperDialog*")
 
   (gw:wrap-function
    ws
@@ -168,7 +136,8 @@
    '<gnc:PrintSession*>
    "gnc_print_session_create"
    '((<gw:bool> yes_is_default))
-   "Start a new print session.")
+   "Start a new print session.  This will display a dialog asking for "
+   "number of copies, print vs. preview, etc.")
 
   (gw:wrap-function
    ws
@@ -231,17 +200,8 @@
    'gnc:print-session-done
    '<gw:void>
    "gnc_print_session_done"
-   '((<gnc:PrintSession*> p)
-     (<gw:bool> yes_is_default))
-   "Let the print context know you're finished with it.")
-
-  (gw:wrap-function
-   ws
-   'gnc:print-session-print
-   '<gw:void>
-   "gnc_print_session_print"
    '((<gnc:PrintSession*> p))
-   "Show the GNOME print dialog to start printing.")
+   "Let the print context know you're finished with it.")
 
   (gw:wrap-function
    ws
@@ -438,34 +398,7 @@ be left empty")
   ;; druid-utils.h
   (gw:wrap-as-wct ws '<gnc:GnomeDruid> "GnomeDruid*" "const GnomeDruid*")
 
-  (gw:wrap-function
-   ws
-   'gnc:druid-set-title-image
-   '<gw:void>
-   "gnc_druid_set_title_image"
-   '((<gnc:GnomeDruid> druid)
-     ((<gw:mchars> caller-owned) image-path))
-   "Set the title image of a druid.")
-
-  (gw:wrap-function
-   ws
-   'gnc:druid-set-logo-image
-   '<gw:void>
-   "gnc_druid_set_logo_image"
-   '((<gnc:GnomeDruid> druid)
-     ((<gw:mchars> caller-owned) logo-path))
-   "Set the logo image of a druid.")
-
-  (gw:wrap-function
-   ws
-   'gnc:druid-set-watermark-image
-   '<gw:void>
-   "gnc_druid_set_watermark_image"
-   '((<gnc:GnomeDruid> druid)
-     ((<gw:mchars> caller-owned) watermark-path))
-   "Set the watermark image of a druid.")
-
-  (gw:wrap-function
+ (gw:wrap-function
    ws
    'gnc:druid-set-colors
    '<gw:void>
@@ -498,15 +431,6 @@ be left empty")
 
   (gw:wrap-function
    ws
-   'gnc:mdi-show-progress
-   '<gw:void>
-   "gnc_mdi_show_progress"
-   '(((<gw:mchars> caller-owned const) message)
-     (<gw:double> percentage))
-   "Show progress bar with the associated percentage (from 0 to 100).")
-
-  (gw:wrap-function
-   ws
    'gnc:set-busy-cursor
    '<gw:void>
    "gnc_set_busy_cursor"
@@ -521,6 +445,71 @@ be left empty")
    "gnc_unset_busy_cursor"
    '((<gtk:Widget*> window))
    "Remove a busy cursor for a specific window. If null, the busy cursor will be removed on all windows.")
+
+  (gw:wrap-function
+   ws
+   'gnc:gconf-get-bool
+   '<gw:bool>
+   "gnc_gconf_get_bool_no_error"
+   '(((<gw:mchars> caller-owned) section)
+     ((<gw:mchars> caller-owned) name))
+   "Get a boolean value from gconf.")
+
+  (gw:wrap-function
+   ws
+   'gnc:file-query-save
+   '<gw:bool>
+   "gnc_file_query_save"
+   '()
+   "Query the user whether to save the current file, and save
+if they say 'Yes'. The return is false if the user says 'Cancel'.")
+
+  (gw:wrap-function
+   ws
+   'gnc:file-quit
+   '<gw:void>
+   "gnc_file_quit"
+   '()
+   "Stop working with the current file.")
+
+  (gw:wrap-function
+   ws
+   'gnc:file-open-file
+   '<gw:bool>
+   "gnc_file_open_file"
+   '(((<gw:mchars> caller-owned const) filename))
+   "Open filename.")
+
+  (gw:wrap-function
+   ws
+   'gnc:history-get-last
+   '(<gw:mchars> caller-owned)
+   "gnc_history_get_last"
+   '()
+   "Get the last file opened by the user.")
+
+  (gw:wrap-function
+   ws
+   'gnc:main-window-set-progressbar-window
+   '<gw:void>
+   "gnc_main_window_set_progressbar_window"
+   '((<gnc:MainWindow*> window))
+   "Set the progressbar window from the given GncMainWindow; does the cast. :p")
+
+  (gw:wrap-function
+   ws
+   'gnc:window-set-progressbar-window
+   '<gw:void>
+   "gnc_window_set_progressbar_window"
+   '((<gnc:Window*> window))
+   "Set the progressbar window from the given GncWindow.")
+
+  (gw:wrap-function
+   ws
+   'gnc:window-show-progress
+   '<gw:void>
+   "gnc_window_show_progress"
+   '(((<gw:mchars> caller-owned const) message)
+     (<gw:double> percentage))
+   "Set the progressbar window from the given GncWindow.")
 )
-
-

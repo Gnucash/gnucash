@@ -1,11 +1,13 @@
 
 AM_CFLAGS = \
+  -I${top_srcdir} \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/gnc-module \
   -I${top_srcdir}/src/test-core \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/engine/test-core \
   ${GUILE_INCS} \
+  ${QOF_CFLAGS} \
   ${GLIB_CFLAGS} 
 
 LDADD = \
@@ -16,6 +18,7 @@ LDADD = \
   ../libgw-kvp.la \
   ../test-core/libgncmod-test-engine.la \
   ${GLIB_LIBS} \
+  ${QOF_LIBS} \
   -lltdl
 
 # these tests are ordered kind more or less in the order
@@ -25,6 +28,7 @@ TESTS = \
   test-link \
   test-load-engine \
   test-guid \
+  test-numeric \
   test-date \
   test-object \
   test-commodities \
@@ -39,8 +43,11 @@ TESTS = \
   test-transaction-reversal \
   test-transaction-voiding \
   test-freq-spec \
-  test-scm-query
-
+  test-recurrence \
+  test-scm-query \
+  test-book-merge 
+  
+ 
 GNC_TEST_DEPS := \
   --gnc-module-dir ${top_builddir}/src/gnc-module \
   --gnc-module-dir ${top_builddir}/src/engine \
@@ -59,10 +66,13 @@ noinst_PROGRAMS = \
   test-commodities \
   test-date \
   test-freq-spec \
+  test-recurrence \
   test-guid \
   test-group-vs-book \
   test-load-engine \
   test-lots \
+  test-numeric \
+  test-book-merge \
   test-object \
   test-period \
   test-query \
@@ -74,7 +84,7 @@ noinst_PROGRAMS = \
   test-transaction-voiding
 
 test_link_SOURCES = test-link.c
-test_link_LDADD = ../libgncmod-engine.la 
+test_link_LDADD = ../libgncmod-engine.la ${QOF_LIBS}
 
 EXTRA_DIST = \
   test-create-account \

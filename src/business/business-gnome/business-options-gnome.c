@@ -37,19 +37,6 @@
 #include "business-options-gnome.h"
 #include "business-gnome-utils.h"
 #include "dialog-invoice.h"
-#include "guile-mappings.h"
-
-static int
-option_changed_cb (GtkWidget *widget, gpointer data)
-{
-  GNCOption *option = data;
-
-  gnc_option_set_changed (option, TRUE);
-  gnc_option_call_option_widget_changed_proc (option);
-  gnc_options_dialog_changed_internal (widget);
-
-  return FALSE;
-}
 
 static GtkWidget *
 create_owner_widget (GNCOption *option, GncOwnerType type, GtkWidget *hbox)
@@ -78,8 +65,8 @@ create_owner_widget (GNCOption *option, GncOwnerType type, GtkWidget *hbox)
 				    gnc_get_current_book (), &owner);
   gnc_option_set_widget (option, widget);
 
-  gtk_signal_connect (GTK_OBJECT (widget), "changed", 
-		      GTK_SIGNAL_FUNC (option_changed_cb), option);
+  g_signal_connect (G_OBJECT (widget), "changed", 
+		    G_CALLBACK (gnc_option_changed_option_cb), option);
 
   return widget;
 }
@@ -374,8 +361,8 @@ create_invoice_widget (GNCOption *option, GtkWidget *hbox)
 
   gtk_box_pack_start (GTK_BOX (hbox), widget, FALSE, FALSE, 0);
   gnc_option_set_widget (option, widget);
-  gtk_signal_connect (GTK_OBJECT (widget), "changed", 
-		      GTK_SIGNAL_FUNC (option_changed_cb), option);
+  g_signal_connect (G_OBJECT (widget), "changed", 
+		    G_CALLBACK (gnc_option_changed_option_cb), option);
 
   return widget;
 }
@@ -449,7 +436,7 @@ create_taxtable_widget (GNCOption *option, GtkWidget *hbox)
   gnc_option_set_widget (option, widget);
 
   gnc_ui_optionmenu_set_changed_callback (widget,
-					  (void(*)(GtkWidget*,gpointer))option_changed_cb,
+					  (void(*)(GtkWidget*,gpointer))gnc_option_changed_option_cb,
 					  option);
 
   return widget;

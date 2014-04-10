@@ -22,7 +22,7 @@
 #include <config.h>
 #endif
 
-#include <gnome.h>
+#include <gtk/gtk.h>
 
 #include "gnc-amount-edit.h"
 #include "QueryCore.h"
@@ -31,7 +31,7 @@
 
 #define d(x)
 
-static void editable_enters (GNCSearchCoreType *fe, GnomeDialog *dialog);
+static void editable_enters (GNCSearchCoreType *fe);
 static void grab_focus (GNCSearchCoreType *fe);
 static GNCSearchCoreType *gncs_clone(GNCSearchCoreType *fe);
 static gboolean gncs_validate (GNCSearchCoreType *fe);
@@ -40,7 +40,7 @@ static QueryPredData_t gncs_get_predicate (GNCSearchCoreType *fe);
 
 static void gnc_search_numeric_class_init	(GNCSearchNumericClass *class);
 static void gnc_search_numeric_init	(GNCSearchNumeric *gspaper);
-static void gnc_search_numeric_finalise	(GtkObject *obj);
+static void gnc_search_numeric_finalize	(GObject *obj);
 
 #define _PRIVATE(x) (((GNCSearchNumeric *)(x))->priv)
 
@@ -52,31 +52,27 @@ struct _GNCSearchNumericPrivate {
 
 static GNCSearchCoreTypeClass *parent_class;
 
-enum {
-  LAST_SIGNAL
-};
-
-#if LAST_SIGNAL > 0
-static guint signals[LAST_SIGNAL] = { 0 };
-#endif
-
 guint
 gnc_search_numeric_get_type (void)
 {
   static guint type = 0;
 	
   if (!type) {
-    GtkTypeInfo type_info = {
-      "GNCSearchNumeric",
-      sizeof(GNCSearchNumeric),
-      sizeof(GNCSearchNumericClass),
-      (GtkClassInitFunc)gnc_search_numeric_class_init,
-      (GtkObjectInitFunc)gnc_search_numeric_init,
-      (GtkArgSetFunc)NULL,
-      (GtkArgGetFunc)NULL
+    GTypeInfo type_info = {
+      sizeof(GNCSearchNumericClass),    /* class_size */
+      NULL,   				/* base_init */
+      NULL,				/* base_finalize */
+      (GClassInitFunc)gnc_search_numeric_class_init,
+      NULL,				/* class_finalize */
+      NULL,				/* class_data */
+      sizeof(GNCSearchNumeric),		/* */
+      0,				/* n_preallocs */
+      (GInstanceInitFunc)gnc_search_numeric_init,
     };
 		
-    type = gtk_type_unique(gnc_search_core_type_get_type (), &type_info);
+    type = g_type_register_static (GNC_TYPE_SEARCH_CORE_TYPE,
+				   "GNCSearchNumeric",
+				   &type_info, 0);
   }
 	
   return type;
@@ -85,13 +81,13 @@ gnc_search_numeric_get_type (void)
 static void
 gnc_search_numeric_class_init (GNCSearchNumericClass *class)
 {
-  GtkObjectClass *object_class;
+  GObjectClass *object_class;
   GNCSearchCoreTypeClass *gnc_search_core_type = (GNCSearchCoreTypeClass *)class;
 
-  object_class = (GtkObjectClass *)class;
-  parent_class = gtk_type_class(gnc_search_core_type_get_type ());
+  object_class = G_OBJECT_CLASS (class);
+  parent_class = g_type_class_peek_parent (class);
 
-  object_class->finalize = gnc_search_numeric_finalise;
+  object_class->finalize = gnc_search_numeric_finalize;
 
   /* override methods */
   gnc_search_core_type->editable_enters = editable_enters;
@@ -100,11 +96,6 @@ gnc_search_numeric_class_init (GNCSearchNumericClass *class)
   gnc_search_core_type->get_widget = gncs_get_widget;
   gnc_search_core_type->get_predicate = gncs_get_predicate;
   gnc_search_core_type->clone = gncs_clone;
-
-  /* signals */
-#if LAST_SIGNAL > 0
-  gtk_object_class_add_signals(object_class, signals, LAST_SIGNAL);
-#endif
 }
 
 static void
@@ -117,14 +108,14 @@ gnc_search_numeric_init (GNCSearchNumeric *o)
 }
 
 static void
-gnc_search_numeric_finalise (GtkObject *obj)
+gnc_search_numeric_finalize (GObject *obj)
 {
   GNCSearchNumeric *o = (GNCSearchNumeric *)obj;
   g_assert (IS_GNCSEARCH_NUMERIC (o));
 
   g_free(o->priv);
 	
-  ((GtkObjectClass *)(parent_class))->finalize(obj);
+  G_OBJECT_CLASS (parent_class)->finalize(obj);
 }
 
 /**
@@ -137,7 +128,7 @@ gnc_search_numeric_finalise (GtkObject *obj)
 GNCSearchNumeric *
 gnc_search_numeric_new (void)
 {
-  GNCSearchNumeric *o = (GNCSearchNumeric *)gtk_type_new(gnc_search_numeric_get_type ());
+  GNCSearchNumeric *o = g_object_new(gnc_search_numeric_get_type (), NULL);
   return o;
 }
 
@@ -151,7 +142,7 @@ gnc_search_numeric_new (void)
 GNCSearchNumeric *
 gnc_search_numeric_debcred_new (void)
 {
-  GNCSearchNumeric *o = (GNCSearchNumeric *)gtk_type_new(gnc_search_numeric_get_type ());
+  GNCSearchNumeric *o = g_object_new(gnc_search_numeric_get_type (), NULL);
   o->priv->is_debcred = TRUE;
   return o;
 }
@@ -199,14 +190,14 @@ static void
 how_option_changed (GtkWidget *widget, GNCSearchNumeric *fe)
 {
   fe->how = (query_compare_t)
-    gtk_object_get_data (GTK_OBJECT (widget), "option");
+    g_object_get_data (G_OBJECT (widget), "option");
 }
 
 static void
 option_changed (GtkWidget *widget, GNCSearchNumeric *fe)
 {
   fe->option = (query_compare_t)
-    gtk_object_get_data (GTK_OBJECT (widget), "option");
+    g_object_get_data (G_OBJECT (widget), "option");
 }
 
 static void
@@ -217,11 +208,11 @@ entry_changed (GNCAmountEdit *entry, GNCSearchNumeric *fe)
 
 static GtkWidget *
 add_menu_item (GtkWidget *menu, gpointer user_data, char *label,
-	       query_compare_t option, GtkSignalFunc fcn)
+	       query_compare_t option, GCallback fcn)
 {
   GtkWidget *item = gtk_menu_item_new_with_label (label);
-  gtk_object_set_data (GTK_OBJECT (item), "option", (gpointer) option);
-  gtk_signal_connect (GTK_OBJECT (item), "activate", fcn, user_data);
+  g_object_set_data (G_OBJECT (item), "option", (gpointer) option);
+  g_signal_connect (G_OBJECT (item), "activate", fcn, user_data);
   gtk_menu_append (GTK_MENU (menu), item);
   gtk_widget_show (item);
   return item;
@@ -244,30 +235,30 @@ make_how_menu (GNCSearchCoreType *fe)
 
   ADD_MENU_ITEM (fi->how, (fi->priv->is_debcred ?
 			   _("less than") : _("is less than")),
-		 COMPARE_LT, how_option_changed);
+		 COMPARE_LT, G_CALLBACK (how_option_changed));
   first = item;			/* Force one */
   ADD_MENU_ITEM (fi->how, (fi->priv->is_debcred ?
 			   _("less than or equal to") :
 			   _("is less than or equal to")),
-		 COMPARE_LTE, how_option_changed);
+		 COMPARE_LTE, G_CALLBACK (how_option_changed));
   ADD_MENU_ITEM (fi->how, (fi->priv->is_debcred ?
 			   _("equal to") : _("equals")),
-		 COMPARE_EQUAL, how_option_changed);
+		 COMPARE_EQUAL, G_CALLBACK (how_option_changed));
   ADD_MENU_ITEM (fi->how, (fi->priv->is_debcred ?
 			   _("not equal to") : _("does not equal")),
-		 COMPARE_NEQ, how_option_changed);
+		 COMPARE_NEQ, G_CALLBACK (how_option_changed));
   ADD_MENU_ITEM (fi->how, (fi->priv->is_debcred ?
 			   _("greater than") : _("is greater than")),
-		 COMPARE_GT, how_option_changed);
+		 COMPARE_GT, G_CALLBACK (how_option_changed));
   ADD_MENU_ITEM (fi->how, (fi->priv->is_debcred ?
 			   _("greater than or equal to") :
 			   _("is greater than or equal to")),
-		 COMPARE_GTE, how_option_changed);
+		 COMPARE_GTE, G_CALLBACK (how_option_changed));
 
   opmenu = gtk_option_menu_new ();
   gtk_option_menu_set_menu (GTK_OPTION_MENU (opmenu), menu);
 
-  gtk_signal_emit_by_name (GTK_OBJECT (first), "activate", fe);
+  g_signal_emit_by_name (G_OBJECT (first), "activate", fe);
   gtk_option_menu_set_history (GTK_OPTION_MENU (opmenu), current);
 
   return opmenu;
@@ -283,17 +274,17 @@ make_option_menu (GNCSearchCoreType *fe)
   menu = gtk_menu_new ();
 
   ADD_MENU_ITEM (fi->option, _("has credits or debits"), NUMERIC_MATCH_ANY,
-		 option_changed);
+		G_CALLBACK (option_changed));
   first = item;			/* Force one */
   ADD_MENU_ITEM (fi->option, _("has debits"), NUMERIC_MATCH_DEBIT,
-		 option_changed);
+		 G_CALLBACK (option_changed));
   ADD_MENU_ITEM (fi->option, _("has credits"), NUMERIC_MATCH_CREDIT,
-		 option_changed);
+		 G_CALLBACK (option_changed));
 
   opmenu = gtk_option_menu_new ();
   gtk_option_menu_set_menu (GTK_OPTION_MENU (opmenu), menu);
 
-  gtk_signal_emit_by_name (GTK_OBJECT (first), "activate", fe);
+  g_signal_emit_by_name (G_OBJECT (first), "activate", fe);
   gtk_option_menu_set_history (GTK_OPTION_MENU (opmenu), current);
 
   return opmenu;
@@ -312,16 +303,15 @@ grab_focus (GNCSearchCoreType *fe)
 }
 
 static void
-editable_enters (GNCSearchCoreType *fe, GnomeDialog *dialog)
+editable_enters (GNCSearchCoreType *fe)
 {
   GNCSearchNumeric *fi = (GNCSearchNumeric *)fe;
 
   g_return_if_fail (fi);
   g_return_if_fail (IS_GNCSEARCH_NUMERIC (fi));
-  g_return_if_fail (dialog);
 
   if (fi->priv->entry)
-    gnome_dialog_editable_enters (dialog, GTK_EDITABLE (fi->priv->entry));
+    gtk_entry_set_activates_default(GTK_ENTRY (fi->priv->entry), TRUE);
 }
 
 static GtkWidget *
@@ -347,7 +337,7 @@ gncs_get_widget (GNCSearchCoreType *fe)
   /* Build and connect the entry window */
   entry = gnc_amount_edit_new ();
   gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (entry), fi->value);
-  gtk_signal_connect (GTK_OBJECT (entry), "amount_changed", entry_changed, fe);
+  g_signal_connect (G_OBJECT (entry), "amount_changed", G_CALLBACK (entry_changed), fe);
   gtk_box_pack_start (GTK_BOX (box), entry, FALSE, FALSE, 3);
   fi->priv->gae = GNC_AMOUNT_EDIT (entry);
   fi->priv->entry = gnc_amount_edit_gtk_entry (GNC_AMOUNT_EDIT (entry));

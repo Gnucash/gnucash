@@ -30,6 +30,12 @@
 #define DIALOG_SCHEDXACTION_CM_CLASS "dialog-scheduledtransactions"
 #define DIALOG_SCHEDXACTION_EDITOR_CM_CLASS "dialog-scheduledtransaction-editor"
 
+#define SXED_GCONF_SECTION "dialogs/scheduled_trans/transaction_editor"
+#define KEY_CREATE_AUTO	"create_auto"
+#define KEY_NOTIFY	"notify"
+#define KEY_CREATE_DAYS	"create_days"
+#define KEY_REMIND_DAYS	"remind_days"
+
 struct _SchedXactionDialog;
 struct _SchedXactionEditorDialog;
 
@@ -49,5 +55,11 @@ gnc_ui_scheduled_xaction_editor_dialog_create( SchedXactionDialog *sxd,
                                                gboolean newSX );
 
 void gnc_ui_scheduled_xaction_editor_dialog_destroy( SchedXactionEditorDialog *sxd );
+
+/**
+ * Sets up a book opened hook.  The function called may open a "since
+ * last run" dialog based upon the user's preferences.
+ **/
+void gnc_ui_sx_initialize (void);
 
 #endif

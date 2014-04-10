@@ -1,5 +1,5 @@
 /********************************************************************
- * gnc-pricedb-xml-v1.c -- xml routines for price db                *
+ * gnc-pricedb-xml-v2.c -- xml routines for price db                *
  * Copyright (C) 2001 Gnumatic, Inc.                                *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
@@ -25,8 +25,6 @@
 
 #include <string.h>
 
-#include "gnc-engine-util.h"
-
 #include "gnc-xml.h"
 #include "sixtp.h"
 #include "sixtp-utils.h"
@@ -39,7 +37,7 @@
 #include "gnc-pricedb-p.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */
-static short module = MOD_IO;
+static QofLogModule log_module = GNC_MOD_IO;
 
 /* Read and Write the pricedb as XML -- something like this:
 
@@ -92,34 +90,34 @@ price_parse_xml_sub_node(GNCPrice *p, xmlNodePtr sub_node, QofBook *book)
   if(!p || !sub_node) return FALSE;
 
   gnc_price_begin_edit (p);
-  if(safe_strcmp("price:id", sub_node->name) == 0) {
+  if(safe_strcmp("price:id", (char*)sub_node->name) == 0) {
     GUID *c = dom_tree_to_guid(sub_node);
     if(!c) return FALSE; 
     gnc_price_set_guid(p, c);
     g_free(c);
-  } else if(safe_strcmp("price:commodity", sub_node->name) == 0) {
+  } else if(safe_strcmp("price:commodity", (char*)sub_node->name) == 0) {
     gnc_commodity *c = dom_tree_to_commodity_ref(sub_node, book);
     if(!c) return FALSE;
     gnc_price_set_commodity(p, c);
-  } else if(safe_strcmp("price:currency", sub_node->name) == 0) {
+  } else if(safe_strcmp("price:currency", (char*)sub_node->name) == 0) {
     gnc_commodity *c = dom_tree_to_commodity_ref(sub_node, book);
     if(!c) return FALSE;
     gnc_price_set_currency(p, c);
-  } else if(safe_strcmp("price:time", sub_node->name) == 0) {
+  } else if(safe_strcmp("price:time", (char*)sub_node->name) == 0) {
     Timespec t = dom_tree_to_timespec(sub_node);
-    if(!is_valid_timespec(t)) return FALSE;
+    if (!dom_tree_valid_timespec(&t, sub_node->name)) return FALSE;
     gnc_price_set_time(p, t);
-  } else if(safe_strcmp("price:source", sub_node->name) == 0) {
+  } else if(safe_strcmp("price:source", (char*)sub_node->name) == 0) {
     char *text = dom_tree_to_text(sub_node);
     if(!text) return FALSE;
     gnc_price_set_source(p, text);
     g_free(text);
-  } else if(safe_strcmp("price:type", sub_node->name) == 0) {
+  } else if(safe_strcmp("price:type", (char*)sub_node->name) == 0) {
     char *text = dom_tree_to_text(sub_node);
     if(!text) return FALSE;
     gnc_price_set_type(p, text);
     g_free(text);
-  } else if(safe_strcmp("price:value", sub_node->name) == 0) {
+  } else if(safe_strcmp("price:value", (char*)sub_node->name) == 0) {
     gnc_numeric *value = dom_tree_to_gnc_numeric(sub_node);
     if(!value) return FALSE;
     gnc_price_set_value(p, *value);
@@ -233,6 +231,7 @@ pricedb_start_handler(GSList* sibling_data,
   QofBook *book = gdata->bookdata;
   GNCPriceDB *db = gnc_pricedb_create(book);
   g_return_val_if_fail(db, FALSE);
+  gnc_pricedb_set_bulk_update(db, TRUE);
   *result = db;
   return(TRUE);
 }
@@ -307,6 +306,8 @@ pricedb_v2_end_handler(
     gdata->cb(tag, gdata->parsedata, db);
     *result = NULL;
 
+    gnc_pricedb_set_bulk_update(db, FALSE);
+
     return TRUE;
 }
 
@@ -366,7 +367,7 @@ add_child_or_kill_parent(xmlNodePtr parent, xmlNodePtr child)
 }
 
 static xmlNodePtr
-gnc_price_to_dom_tree(const char *tag, GNCPrice *price)
+gnc_price_to_dom_tree(const xmlChar *tag, GNCPrice *price)
 {  
   xmlNodePtr price_xml;
   const gchar *typestr, *sourcestr;
@@ -424,7 +425,7 @@ xml_add_gnc_price_adapter(GNCPrice *p, gpointer data)
   xmlNodePtr xml_node = (xmlNodePtr) data;
   
   if(p) {
-    xmlNodePtr price_xml = gnc_price_to_dom_tree("price", p);
+    xmlNodePtr price_xml = gnc_price_to_dom_tree(BAD_CAST "price", p);
     if(!price_xml) return FALSE;
     xmlAddChild(xml_node, price_xml);
     return TRUE;
@@ -434,7 +435,7 @@ xml_add_gnc_price_adapter(GNCPrice *p, gpointer data)
 }
 
 static xmlNodePtr
-gnc_pricedb_to_dom_tree(const char *tag, GNCPriceDB *db)
+gnc_pricedb_to_dom_tree(const xmlChar *tag, GNCPriceDB *db)
 {
   xmlNodePtr db_xml = NULL;
 
@@ -443,7 +444,7 @@ gnc_pricedb_to_dom_tree(const char *tag, GNCPriceDB *db)
   db_xml= xmlNewNode(NULL, tag);
   if(!db_xml) return NULL;
 
-  xmlSetProp(db_xml, "version", "1");
+  xmlSetProp(db_xml, BAD_CAST "version", BAD_CAST "1");
 
   if(!gnc_pricedb_foreach_price(db, xml_add_gnc_price_adapter, db_xml, TRUE))
   {
@@ -464,5 +465,5 @@ gnc_pricedb_to_dom_tree(const char *tag, GNCPriceDB *db)
 xmlNodePtr
 gnc_pricedb_dom_tree_create(GNCPriceDB *db)
 {
-    return gnc_pricedb_to_dom_tree("gnc:pricedb", db);
+    return gnc_pricedb_to_dom_tree(BAD_CAST "gnc:pricedb", db);
 }

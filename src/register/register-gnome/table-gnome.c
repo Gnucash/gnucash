@@ -45,20 +45,22 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "global-options.h"
 #include "gnucash-sheet.h"
 #include "gnucash-style.h"
 #include "table-allgui.h"
 #include "table-gnome.h"
 #include "guile-mappings.h"
+#include "gnc-gconf-utils.h"
 
+#define GCONF_SECTION "window/pages/register"
 
 void
 gnc_table_save_state (Table *table)
 {
         GnucashSheet *sheet;
         GNCHeaderWidths widths;
-        SCM alist;
+	GList *node;
+	gchar *key;
 
         if (!table)
                 return;
@@ -66,41 +68,32 @@ gnc_table_save_state (Table *table)
         if (table->ui_data == NULL)
                 return;
 
+	if (!gnc_gconf_get_bool(GCONF_GENERAL, KEY_SAVE_GEOMETRY, NULL))
+		return;
+
         sheet = GNUCASH_SHEET (table->ui_data);
 
         widths = gnc_header_widths_new ();
 
-        if (!GTK_OBJECT_DESTROYED(GTK_OBJECT(sheet)))
-                gnucash_sheet_get_header_widths (sheet, widths);
+        gnucash_sheet_get_header_widths (sheet, widths);
 
-        alist = SCM_EOL;
-        if (gnc_lookup_boolean_option("_+Advanced", "Save Window Geometry", TRUE))
-        {
-                GList *node = gnc_table_layout_get_cells (table->layout);
+	node = gnc_table_layout_get_cells (table->layout);
+	for (; node; node = node->next) {
+		BasicCell *cell = node->data;
+		int width;
 
-                for (; node; node = node->next)
-                {
-                        BasicCell *cell = node->data;
-                        int width;
-                        SCM assoc;
+		width = gnc_header_widths_get_width (widths, cell->cell_name);
+		if (width <= 0)
+			continue;
 
-                        width = gnc_header_widths_get_width (widths,
-                                                             cell->cell_name);
-                        if (width <= 0)
-                                continue;
+		if (cell->expandable)
+			continue;
 
-                        if (cell->expandable)
-                                continue;
-
-                        assoc = scm_cons (scm_makfrom0str(cell->cell_name),
-					  scm_int2num(width));
-
-                        alist = scm_cons (assoc, alist);
-                }
-        }
-
-        if (!SCM_NULLP (alist))
-                gnc_set_option ("__gui", "reg_column_widths", alist);
+		/* Remember whether the column is visible */
+		key = g_strdup_printf("%s_width", cell->cell_name);
+		gnc_gconf_set_int(GCONF_SECTION, key, width, NULL);
+		g_free(key);
+	}
 
         gnc_header_widths_destroy (widths);
 }
@@ -134,7 +127,7 @@ table_destroy_cb (Table *table)
 
         sheet = GNUCASH_SHEET (table->ui_data);
 
-        gtk_widget_unref (GTK_WIDGET(sheet));
+        g_object_unref (sheet);
 
         table->ui_data = NULL;
 }
@@ -146,7 +139,9 @@ gnc_table_init_gui (gncUIWidget widget, void *data)
         GnucashSheet *sheet;
         GnucashRegister *greg;
         Table *table;
-        SCM alist;
+	GList *node;
+	gchar *key;
+	guint value;
 
         g_return_if_fail (widget != NULL);
         g_return_if_fail (GNUCASH_IS_REGISTER (widget));
@@ -160,37 +155,28 @@ gnc_table_init_gui (gncUIWidget widget, void *data)
         table->gui_handlers.destroy = table_destroy_cb;
         table->ui_data = sheet;
 
-        gtk_widget_ref (GTK_WIDGET(sheet));
+        g_object_ref (sheet);
 
         /* config the cell-block styles */
 
         widths = gnc_header_widths_new ();
 
-        if (gnc_lookup_boolean_option("_+Advanced", "Save Window Geometry", TRUE))
-                alist = gnc_lookup_option ("__gui", "reg_column_widths",
-                                           SCM_EOL);
-        else
-                alist = SCM_EOL;
+	if (gnc_gconf_get_bool(GCONF_GENERAL, KEY_SAVE_GEOMETRY, NULL)) {
+		node = gnc_table_layout_get_cells (table->layout);
+		for (; node; node = node->next) {
+			BasicCell *cell = node->data;
 
-        while (SCM_LISTP (alist) && !SCM_NULLP (alist))
-        {
-                char *name;
-                SCM assoc;
+			if (cell->expandable)
+				continue;
 
-                assoc = SCM_CAR (alist);
-                alist = SCM_CDR (alist);
-
-                name = gh_scm2newstr(SCM_CAR (assoc), NULL);
-                if (!name)
-                        continue;
-
-                gnc_header_widths_set_width (widths, name,
-                                             scm_num2int(SCM_CDR (assoc),
-							 SCM_ARG1,
-							 __FUNCTION__));
-
-                free (name);
-        }
+			/* Remember whether the column is visible */
+			key = g_strdup_printf("%s_width", cell->cell_name);
+			value = gnc_gconf_get_int(GCONF_SECTION, key, NULL);
+			if (value != 0)
+				gnc_header_widths_set_width (widths, cell->cell_name, value);
+			g_free(key);
+		}
+	}
 
         gnucash_sheet_create_styles (sheet);
 

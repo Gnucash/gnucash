@@ -43,9 +43,7 @@
 
 #include "gnc-address-xml-v2.h"
 
-#include "gnc-engine-util.h"
-
-static short module = MOD_IO;
+static QofLogModule log_module = GNC_MOD_IO;
 
 const gchar *address_version_string = "2.0.0";
 
@@ -72,8 +70,8 @@ gnc_address_to_dom_tree (const char *tag, GncAddress *addr)
 {
     xmlNodePtr ret;
 
-    ret = xmlNewNode(NULL, tag);
-    xmlSetProp(ret, "version", address_version_string);
+    ret = xmlNewNode(NULL, BAD_CAST tag);
+    xmlSetProp(ret, BAD_CAST "version", BAD_CAST address_version_string);
 
     maybe_add_string (ret, addr_name_string, gncAddressGetName (addr));
     
@@ -210,4 +208,30 @@ gnc_dom_tree_to_address (xmlNodePtr node, GncAddress *address)
     }
 
     return successful;
+}
+
+static void
+address_ns(FILE *out)
+{
+  g_return_if_fail(out);
+  gnc_xml2_write_namespace_decl(out, "addr");
+}
+
+void
+gnc_address_xml_initialize (void)
+{
+  static GncXmlDataType_t be_data = {
+    GNC_FILE_BACKEND_VERS,
+    "gnc:Address",
+    NULL,			/* parser_create */
+    NULL,			/* add_item */
+    NULL,			/* get_count */
+    NULL,			/* write */
+    NULL,			/* scrub */
+    address_ns,
+  };
+
+  qof_object_register_backend ("gnc:Address",
+			    GNC_FILE_BACKEND,
+			    &be_data);
 }

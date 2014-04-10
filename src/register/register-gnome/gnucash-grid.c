@@ -38,8 +38,8 @@ static GnomeCanvasItem *gnucash_grid_parent_class;
 
 /* Our arguments */
 enum {
-        ARG_0,
-        ARG_SHEET
+        PROP_0,
+        PROP_SHEET
 };
 
 
@@ -115,9 +115,6 @@ gnucash_grid_update (GnomeCanvasItem *item, double *affine,
         item->y1 = 0;
         item->x2 = INT_MAX/2 -1;
         item->y2 = INT_MAX/2 -1;
-
-        gnome_canvas_group_child_bounds (GNOME_CANVAS_GROUP (item->parent),
-					 item);
 }
 
 
@@ -259,7 +256,7 @@ draw_cell_line (GdkDrawable *drawable,
                 int x1, int y1, int x2, int y2,
                 PhysicalCellBorderLineStyle style);
 
-G_INLINE_FUNC void
+void
 draw_cell_line (GdkDrawable *drawable,
                 GdkGC *gc, GdkColor *bg_color,
                 int x1, int y1, int x2, int y2,
@@ -364,18 +361,28 @@ draw_cell (GnucashGrid *grid,
         Table *table = grid->sheet->table;
         PhysicalCellBorders borders;
         const char *text;
-        GdkFont *font;
+	PangoLayout *layout;
+	PangoContext *context;
+	PangoFontDescription *font;
+	PangoRectangle ink_rect;
         GdkColor *bg_color;
         GdkColor *fg_color;
-        gint x_offset, y_offset;
+/*        gint x_offset, y_offset;*/
         GdkRectangle rect;
         gboolean hatching;
-        guint32 argb;
+        guint32 argb, color_type;
+        int x_offset;
 
         gdk_gc_set_background (grid->gc, &gn_white);
 
-        argb = gnc_table_get_bg_color (table, virt_loc, &hatching);
-        bg_color = gnucash_color_argb_to_gdk (argb);
+	if (grid->sheet->use_theme_colors) {
+		color_type = gnc_table_get_gtkrc_bg_color (table, virt_loc,
+							   &hatching);
+		bg_color = get_gtkrc_color(grid->sheet, color_type);
+	} else {
+		argb = gnc_table_get_bg_color (table, virt_loc, &hatching);
+		bg_color = gnucash_color_argb_to_gdk (argb);
+	}
 
         gdk_gc_set_foreground (grid->gc, bg_color);
         gdk_draw_rectangle (drawable, grid->gc, TRUE,
@@ -448,65 +455,86 @@ draw_cell (GnucashGrid *grid,
 
         text = gnc_table_get_entry (table, virt_loc);
 
-        font = grid->normal_font;
+	layout = gtk_widget_create_pango_layout (GTK_WIDGET (grid->sheet), text);
+	// We don't need word wrap or line wrap
+	pango_layout_set_width (layout, -1);
+        context = pango_layout_get_context (layout);
+	font = pango_font_description_copy (pango_context_get_font_description (context));
 
         argb = gnc_table_get_fg_color (table, virt_loc);
         fg_color = gnucash_color_argb_to_gdk (argb);
 
         gdk_gc_set_foreground (grid->gc, fg_color);
 
+	/* If this is the currently open transaction and
+	   there is no text in this cell */
         if ((table->current_cursor_loc.vcell_loc.virt_row ==
              virt_loc.vcell_loc.virt_row) &&
 	    (!text || strlen(text) == 0)) {
-                font = grid->italic_font;
-                gdk_gc_set_foreground (grid->gc, &gn_light_gray);
                 text = gnc_table_get_label (table, virt_loc);
-        }
+		if ((text == NULL) || (*text == '\0'))
+			goto exit;
+                gdk_gc_set_foreground (grid->gc, &gn_light_gray);
+		pango_layout_set_text (layout, text, strlen (text));
+		pango_font_description_set_style (font, PANGO_STYLE_ITALIC);
+		pango_context_set_font_description (context, font);
+	}
 
-        if ((text == NULL) || (*text == '\0'))
-                return;
+        if ((text == NULL) || (*text == '\0')) {
+                goto exit;
+	}
 
-        y_offset = ((height / 2) +
+        /*y_offset = ((height / 2) +
                     (((font->ascent + font->descent) / 2) - font->descent));
-        y_offset++;
+        y_offset++;*/
 
-        switch (gnc_table_get_align (table, virt_loc))
-        {
-                default:
-                case CELL_ALIGN_LEFT:
-                        x_offset = CELL_HPADDING;
-                        break;
-
-                case CELL_ALIGN_RIGHT:
-                        x_offset = width - CELL_HPADDING
-                                - gdk_string_measure (font, text);
-                        break;
-
-                case CELL_ALIGN_CENTER:
-                        if (width < gdk_string_measure (font, text))
-                                x_offset = CELL_HPADDING;
-                        else {
-                                x_offset = width / 2;
-                                x_offset -= gdk_string_measure(font, text) / 2;
-                        }
-                        break;
-                }
+	pango_layout_get_pixel_extents(layout,
+				       &ink_rect,
+				       NULL);
 
         rect.x      = x + CELL_HPADDING;
-        rect.y      = y + 1;
+        rect.y      = y + CELL_VPADDING;
         rect.width  = MAX (0, width - (2 * CELL_HPADDING));
         rect.height = height - 2;
 
         gdk_gc_set_clip_rectangle (grid->gc, &rect);
 
-        gdk_draw_string (drawable,
-                         font,
+
+        switch (gnc_table_get_align (table, virt_loc))
+        {
+                default:
+                case CELL_ALIGN_LEFT:
+			x_offset = 0;
+                        break;
+
+                case CELL_ALIGN_RIGHT:
+			x_offset = width - 2 * CELL_HPADDING - ink_rect.width;
+                        break;
+
+                case CELL_ALIGN_CENTER:
+			if (ink_rect.width > width - 2 * CELL_HPADDING)
+				x_offset = 0;
+			else
+				x_offset = (width - 2 * CELL_HPADDING - 
+					    ink_rect.width) / 2;
+                        break;
+	}
+
+
+
+        gdk_draw_layout (drawable,
                          grid->gc,
-                         x + x_offset,
-                         y + y_offset,
-                         text);
+                         x + CELL_HPADDING + x_offset,
+                         y + 1,
+                         layout);
 
         gdk_gc_set_clip_rectangle (grid->gc, NULL);
+
+ exit:
+	pango_font_description_set_style (font, PANGO_STYLE_NORMAL);
+	pango_context_set_font_description (context, font);
+	pango_font_description_free (font);
+	g_object_unref (layout);
 }
 
 static void
@@ -604,17 +632,6 @@ gnucash_grid_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
 
 
 static void
-gnucash_grid_destroy (GtkObject *object)
-{
-	GNUCASH_GRID(object);
-
-        if (GTK_OBJECT_CLASS (gnucash_grid_parent_class)->destroy)
-                (*GTK_OBJECT_CLASS
-		 (gnucash_grid_parent_class)->destroy)(object);
-}
-
-
-static void
 gnucash_grid_init (GnucashGrid *grid)
 {
         GnomeCanvasItem *item = GNOME_CANVAS_ITEM (grid);
@@ -627,75 +644,109 @@ gnucash_grid_init (GnucashGrid *grid)
         grid->top_block  = 0;
         grid->top_offset = 0;
         grid->left_offset = 0;
-
-        grid->normal_font = gnucash_register_font;
-        grid->italic_font = gnucash_register_hint_font;
 }
 
 
 static void
-gnucash_grid_set_arg (GtkObject *o, GtkArg *arg, guint arg_id)
+gnucash_grid_set_property (GObject         *object,
+                             guint            prop_id,
+                             const GValue    *value,
+                             GParamSpec      *pspec)
 {
         GnomeCanvasItem *item;
         GnucashGrid *grid;
 
-        item = GNOME_CANVAS_ITEM (o);
-        grid = GNUCASH_GRID (o);
+        item = GNOME_CANVAS_ITEM (object);
+        grid = GNUCASH_GRID (object);
 
-        switch (arg_id){
-        case ARG_SHEET:
-                grid->sheet = GTK_VALUE_POINTER (*arg);
-                break;
+        switch (prop_id){
+                case PROP_SHEET:
+                        grid->sheet = 
+                                GNUCASH_SHEET (g_value_get_object (value));
+                        break;
+                default:
+                        break;
         }
 }
 
 
 static void
-gnucash_grid_class_init (GnucashGridClass *grid_class)
+gnucash_grid_get_property (GObject         *object,
+                             guint            prop_id,
+                             GValue          *value,
+                             GParamSpec      *pspec)
 {
-        GtkObjectClass  *object_class;
+        GnomeCanvasItem *item;
+        GnucashGrid *grid;
+
+        item = GNOME_CANVAS_ITEM (object);
+        grid = GNUCASH_GRID (object);
+
+        switch (prop_id){
+                case PROP_SHEET:
+                        g_value_set_object (value, grid->sheet);
+                        break;
+                default:
+                        break;
+        }
+}
+
+
+static void
+gnucash_grid_class_init (GnucashGridClass *class)
+{
+        GObjectClass  *object_class;
         GnomeCanvasItemClass *item_class;
 
-        gnucash_grid_parent_class =
-		gtk_type_class (gnome_canvas_item_get_type());
+        object_class = G_OBJECT_CLASS (class);
+        item_class = GNOME_CANVAS_ITEM_CLASS (class);
 
-        object_class = (GtkObjectClass *) grid_class;
-        item_class = (GnomeCanvasItemClass *) grid_class;
+        gnucash_grid_parent_class = g_type_class_peek_parent (class);
 
-        gtk_object_add_arg_type ("GnucashGrid::Sheet", GTK_TYPE_POINTER,
-                                 GTK_ARG_WRITABLE, ARG_SHEET);
-
-        object_class->set_arg = gnucash_grid_set_arg;
-        object_class->destroy = gnucash_grid_destroy;
+        /* GObject method overrides */
+        object_class->set_property = gnucash_grid_set_property;
+        object_class->get_property = gnucash_grid_get_property;
 
         /* GnomeCanvasItem method overrides */
         item_class->update      = gnucash_grid_update;
         item_class->realize     = gnucash_grid_realize;
         item_class->unrealize   = gnucash_grid_unrealize;
         item_class->draw        = gnucash_grid_draw;
+        
+        /* properties */
+        g_object_class_install_property 
+                        (object_class,
+                         PROP_SHEET,
+                         g_param_spec_object ("sheet",
+                                              "Sheet Value",
+                                              "Sheet Value",
+                                              GNUCASH_TYPE_SHEET,
+                                              G_PARAM_READWRITE));
 }
 
 
-GtkType
+GType
 gnucash_grid_get_type (void)
 {
-        static GtkType gnucash_grid_type = 0;
+        static GType gnucash_grid_type = 0;
 
         if (!gnucash_grid_type) {
-                GtkTypeInfo gnucash_grid_info = {
-                        "GnucashGrid",
-                        sizeof (GnucashGrid),
+                static const GTypeInfo gnucash_grid_info = {
                         sizeof (GnucashGridClass),
-                        (GtkClassInitFunc) gnucash_grid_class_init,
-                        (GtkObjectInitFunc) gnucash_grid_init,
-                        NULL, /* reserved_1 */
-                        NULL, /* reserved_2 */
-                        (GtkClassInitFunc) NULL
+			NULL,		/* base_init */
+			NULL,		/* base_finalize */
+                        (GClassInitFunc) gnucash_grid_class_init,
+			NULL,		/* class_finalize */
+			NULL,		/* class_data */
+                        sizeof (GnucashGrid),
+			0,		/* n_preallocs */
+                        (GInstanceInitFunc) gnucash_grid_init
                 };
 
                 gnucash_grid_type =
-			gtk_type_unique (gnome_canvas_item_get_type (),
-					 &gnucash_grid_info);
+			g_type_register_static (gnome_canvas_item_get_type (),
+						"GnucashGrid",
+						&gnucash_grid_info, 0);
         }
 
         return gnucash_grid_type;

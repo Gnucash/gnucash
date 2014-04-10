@@ -8,7 +8,7 @@ AM_CFLAGS = -I${top_builddir} ${GLIB_CFLAGS}
 # directories in their path can still invoke these commands via their
 # full path, say /some/dir/not/in/path/gnucash and still have the
 # right thing happen (i.e. they'll still get the right guile, and the
-# right scripts if the sub-exec anything from their scripts).  If you
+# right scripts if they sub-exec anything from their scripts).  If you
 # want to add another gnucash script, please add the name here (which
 # will cause the bindir wrapper to be created, and then put the actual
 # code in a script of the same name in ./overrides.  Oh, and don't
@@ -20,15 +20,26 @@ AM_CFLAGS = -I${top_builddir} ${GLIB_CFLAGS}
 # by these top-level "common" scripts.
 gnc_common_scripts = gnucash gnucash-env gnucash-run-script gnucash-make-guids
 
-bin_SCRIPTS = ${gnc_common_scripts}
+bin_SCRIPTS = ${gnc_common_scripts} update-gnucash-gconf
 
 # if you change gncoverridedir, make sure you change ./overrides/Makefile.am too.
 gncoverridesdir = ${GNC_LIBEXECDIR}/overrides
 
-EXTRA_DIST = .cvsignore generate-gnc-script
+EXTRA_DIST = .cvsignore generate-gnc-script update-gnucash-gconf.in
 
 ## Gnucash scripts -- real code is in overrides, these just get you there.
 ${gnc_common_scripts}: generate-gnc-script
 	${srcdir}/generate-gnc-script $@ "${gncoverridesdir}"
 
-CLEANFILES = ${gnc_common_scripts}
+CLEANFILES = ${gnc_common_scripts} update-gnucash-gconf
+
+## We borrow guile's convention and use @-...-@ as the substitution
+## brackets here, instead of the usual @...@.  This prevents autoconf
+## from substituting the values directly into the left-hand sides of
+## the sed substitutions.
+update-gnucash-gconf: update-gnucash-gconf.in ${top_builddir}/config.status
+	rm -f $@.tmp
+	sed < $< > $@.tmp \
+	    -e 's:@-GCONF_SCHEMA_FILE_DIR-@:${GCONF_SCHEMA_FILE_DIR}:g'
+	mv $@.tmp $@
+	chmod +x $@

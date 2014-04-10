@@ -3,6 +3,7 @@ Makefile.in
 .deps
 .libs
 *.diff
+*.gladep
 *.lo
 *.la
 .scm-links

@@ -24,12 +24,12 @@
 #include <gnome.h>
 
 
-#define GNUCASH_TYPE_HEADER     (gnucash_header_get_type ())
-#define GNUCASH_HEADER(obj)     (GTK_CHECK_CAST((obj), GNUCASH_TYPE_HEADER, GnucashHeader))
-#define GNUCASH_HEADER_CLASS(k) (GTK_CHECK_CLASS_CAST ((k), GNUCASH_TYPE_HEADER))
-#define GNUCASH_IS_HEADER(o)    (GTK_CHECK_TYPE((o), GNUCASH_TYPE_HEADER))
+#define GNC_TYPE_HEADER     (gnc_header_get_type ())
+#define GNC_HEADER(o)       (G_TYPE_CHECK_INSTANCE_CAST((o), GNC_TYPE_HEADER, GncHeader))
+#define GNC_HEADER_CLASS(k) (G_TYPE_CHECK_CLASS_CAST ((k), GNC_TYPE_HEADER, GncHeaderClass))
+#define GNC_IS_HEADER(o)    (G_TYPE_CHECK_INSTANCE_TYPE((o), GNC_TYPE_HEADER))
 
-GtkType    gnucash_header_get_type (void);
+GType    gnc_header_get_type (void);
 
 typedef struct {
         GnomeCanvasItem canvas_item;
@@ -54,18 +54,18 @@ typedef struct {
         GdkGC *gc;
         GdkCursor *normal_cursor;
         GdkCursor *resize_cursor;
-} GnucashHeader;
+} GncHeader;
 
 
 typedef struct {
         GnomeCanvasItemClass parent_class;
-} GnucashHeaderClass;
+} GncHeaderClass;
 
 
-GtkWidget *gnucash_header_new (GnucashSheet *sheet);
-void gnucash_header_reconfigure (GnucashHeader *header);
+GtkWidget *gnc_header_new (GnucashSheet *sheet);
+void gnc_header_reconfigure (GncHeader *header);
 
-void gnucash_header_set_header_rows (GnucashHeader *header,
+void gnc_header_set_header_rows (GncHeader *header,
                                      int num_phys_rows);
 
 #endif /* GNUCASH_HEADER_H */

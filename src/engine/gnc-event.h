@@ -21,6 +21,14 @@
  *                                                                  *
  ********************************************************************/
 
+/** @addtogroup Event
+@{
+*/
+/** @file gnc-event.h
+    @brief engine event handling interface
+	@author Copyright 2000 Dave Peticolas <dave@krondo.com>
+*/
+
 #ifndef GNC_EVENT_H
 #define GNC_EVENT_H
 
@@ -35,41 +43,64 @@ typedef enum
   GNC_EVENT_CREATE  = 1 << 0,
   GNC_EVENT_MODIFY  = 1 << 1,
   GNC_EVENT_DESTROY = 1 << 2,
+  GNC_EVENT_ADD     = 1 << 3,
+  GNC_EVENT_REMOVE  = 1 << 4,
   GNC_EVENT_ALL     = 0xff
 } GNCEngineEventType;
 
 
-/* GNCEngineEventHandler
+/** GNCEngineEventHandler
+
  *   Handler invoked when an engine event occurs.
  *
- * entity:      GUID of entity generating event
- * type:	QofIdType of the entity generating the event
- * event_type:  one of the single-bit GNCEngineEventTypes, not a combination
- * user_data:   user_data supplied when handler was registered.
+ * @param entity:      GUID of entity generating event
+ * @param type:	QofIdType of the entity generating the event
+ * @param event_type:  one of the single-bit GNCEngineEventTypes, not a combination
+ * @param user_data:   user_data supplied when handler was registered.
  */
 typedef void (*GNCEngineEventHandler) (GUID *entity, QofIdType type,
                                        GNCEngineEventType event_type,
                                        gpointer user_data);
 
-/* gnc_engine_register_event_handler
+/** gnc_engine_register_event_handler
+
  *   Register a handler for engine events.
  *
- * handler:   handler to register
- * user_data: data provided when handler is invoked
+ * @param handler:   handler to register
+ * @param user_data: data provided when handler is invoked
  *
- * Returns: id identifying handler
+ * @return id identifying handler
  */
 gint gnc_engine_register_event_handler (GNCEngineEventHandler handler,
                                         gpointer user_data);
 
-/* gnc_engine_unregister_event_handler
+/** gnc_engine_unregister_event_handler
+
  *   Unregister an engine event handler.
  *
- * handler_id: the id of the handler to unregister
+ * @param handler_id: the id of the handler to unregister
  */
 void gnc_engine_unregister_event_handler (gint handler_id);
 
-/* gnc_engine_suspend_events
+/** gnc_engine_generate_event
+
+ *   Invoke all registered event handlers using the given arguments.
+ *
+ *   GNC_EVENT_CREATE events should be generated after the object
+ *     has been created and registered in the engine entity table.
+ *   GNC_EVENT_MODIFY events should be generated whenever any data
+ *     member or submember (i.e., splits) is changed.
+ *   GNC_EVENT_DESTROY events should be called before the object
+ *     has been destroyed or removed from the entity table.
+ *
+ * @param entity:     the GUID of the entity generating the event
+ * @param event_type: the type of event -- this should be one of the
+ *             single-bit GNCEngineEventType values, not a combination.
+ */
+void gnc_engine_gen_event (QofEntity *entity,
+                                GNCEngineEventType event_type);
+/** gnc_engine_suspend_events
+
  *   Suspend all engine events. This function may be
  *   called multiple times. To resume event generation,
  *   an equal number of calls to gnc_engine_resume_events
@@ -77,9 +108,11 @@ void gnc_engine_unregister_event_handler (gint handler_id);
  */
 void gnc_engine_suspend_events (void);
 
-/* gnc_engine_resume_events
+/** gnc_engine_resume_events
+
  *   Resume engine event generation.
  */
 void gnc_engine_resume_events (void);
 
 #endif
+/** @} */

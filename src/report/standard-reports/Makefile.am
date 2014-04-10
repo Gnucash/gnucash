@@ -5,8 +5,6 @@ pkglib_LTLIBRARIES = libgncmod-standard-reports.la
 libgncmod_standard_reports_la_SOURCES = \
   gncmod-standard-reports.c 
 
-libgncmod_standard_reports_la_LDFLAGS = -module
-
 AM_CFLAGS = \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/gnc-module \
@@ -28,14 +26,19 @@ gncscmmod_DATA = \
    average-balance.scm \
    balance-sheet.scm \
    cash-flow.scm \
+   budget.scm \
    category-barchart.scm \
    daily-reports.scm \
+   equity-statement.scm \
    net-barchart.scm \
-   pnl.scm \
+   income-statement.scm \
    portfolio.scm \
    price-scatter.scm \
    register.scm \
    standard-reports.scm \
+   trial-balance.scm \
+   general-journal.scm \
+   general-ledger.scm \
    transaction.scm 
 
 EXTRA_DIST = ${gncscmmod_DATA}

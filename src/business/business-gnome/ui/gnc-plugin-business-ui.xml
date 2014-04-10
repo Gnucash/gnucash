@@ -1,0 +1,67 @@
+<ui>
+  <menubar>
+    <placeholder name="AdditionalMenusPlaceholder">
+      <menu name="Business" action="BusinessAction">
+	<menu name="CustomerMenu" action="CustomerMenuAction">
+	  <menuitem name="CustomerNewCustomerOpen"  action="CustomerNewCustomerOpenAction"/>
+	  <menuitem name="CustomerFindCustomerOpen" action="CustomerFindCustomerOpenAction"/>
+	  <menuitem name="CustomerNewInvoiceOpen"   action="CustomerNewInvoiceOpenAction"/>
+	  <menuitem name="CustomerFindInvoiceOpen"  action="CustomerFindInvoiceOpenAction"/>
+	  <menuitem name="CustomerNewJobOpen"       action="CustomerNewJobOpenAction"/>
+	  <menuitem name="CustomerFindJobOpen"      action="CustomerFindJobOpenAction"/>
+	  <menuitem name="CustomerProcessPayment"   action="CustomerProcessPaymentAction"/>
+	</menu>
+
+	<menu name="VendorMenu" action="VendorMenuAction">
+	  <menuitem name="VendorNewVendorOpen"  action="VendorNewVendorOpenAction"/>
+	  <menuitem name="VendorFindVendorOpen" action="VendorFindVendorOpenAction"/>
+	  <menuitem name="VendorNewBillOpen"    action="VendorNewBillOpenAction"/>
+	  <menuitem name="VendorFindBillOpen"   action="VendorFindBillOpenAction"/>
+	  <menuitem name="VendorNewJobOpen"     action="VendorNewJobOpenAction"/>
+	  <menuitem name="VendorFindJobOpen"    action="VendorFindJobOpenAction"/>
+	  <menuitem name="VendorProcessPayment" action="VendorProcessPaymentAction"/>
+	</menu>
+
+	<menu name="EmployeeMenu" action="EmployeeMenuAction">
+	  <menuitem name="EmployeeNewEmployeeOpen"  action="EmployeeNewEmployeeOpenAction"/>
+	  <menuitem name="EmployeeFindEmployeeOpen" action="EmployeeFindEmployeeOpenAction"/>
+	  <menuitem name="EmployeeNewExpenseOpen"   action="EmployeeNewExpenseVoucherOpenAction"/>
+	  <menuitem name="EmployeeFindExpenseOpen"  action="EmployeeFindExpenseVoucherOpenAction"/>
+	  <menuitem name="EmployeeProcessPayment"   action="EmployeeProcessPaymentAction"/>
+	</menu>
+
+        <placeholder name="BusinessPlaceholderTop"/>
+        <separator name="Sep1"/>
+
+	<menuitem name="TaxTablesOpen" action="TaxTablesOpenAction"/>
+	<menuitem name="BillingTermsOpen" action="BillingTermsOpenAction"/>
+	<menuitem name="BillsDueReminderOpen" action="BillsDueReminderOpenAction"/>
+
+        <placeholder name="BusinessPlaceholderMiddle"/>
+        <separator name="Sep2"/>
+
+	<menu name="ExportMenu" action="ExportMenuAction">
+	  <menuitem name="QSFInvoice" action="QSFInvoiceAction"/>
+	  <menuitem name="QSFCustomer" action="QSFCustomerAction"/>
+	  <menuitem name="QSFVendor" action="QSFVendorAction"/>
+	  <menuitem name="QSFEmployee" action="QSFEmployeeAction"/>
+	</menu>
+        <placeholder name="BusinessPlaceholderBottom"/>
+
+      </menu>
+    </placeholder>
+
+    <menu name="Extensions" action="ExtensionsAction">
+      <placeholder name="ExtensionsPlaceholder">
+      	<menu name="BusinessTest" action="BusinessTestAction">
+      	  <menuitem name="BusinessTestSearch" action="BusinessTestSearchAction"/>
+      	  <menuitem name="BusinessTestReloadInvoice" action="BusinessTestReloadInvoiceAction"/>
+      	  <menuitem name="BusinessTestReloadOwner" action="BusinessTestReloadOwnerAction"/>
+      	  <menuitem name="BusinessTestReloadReceivable" action="BusinessTestReloadReceivableAction"/>
+      	  <menuitem name="BusinessTestInitData" action="BusinessTestInitDataAction"/>
+      	</menu>
+      </placeholder>
+    </menu>
+
+  </menubar>
+</ui>

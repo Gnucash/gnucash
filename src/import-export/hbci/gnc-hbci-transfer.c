@@ -25,8 +25,7 @@
 #include "config.h"
 #include "gnc-hbci-transfer.h"
 
-#include <openhbci2/api.h>
-#include <openhbci2/outboxjob.h>
+#include <aqbanking/banking.h>
 
 #include "gnc-ui.h"
 #include "gnc-numeric.h"
@@ -48,24 +47,20 @@ void
 gnc_hbci_maketrans (GtkWidget *parent, Account *gnc_acc,
 		    GNC_HBCI_Transtype trans_type)
 {
-  HBCI_API *api = NULL;
-  HBCI_Outbox *outbox = NULL;
-  const gnc_HBCI_Account *h_acc = NULL;
+  AB_BANKING *api = NULL;
+  const AB_ACCOUNT *h_acc = NULL;
   GNCInteractor *interactor = NULL;
-  const HBCI_Customer *customer = NULL;
-  GList *hbci_accountlist = NULL;
   
   g_assert(parent);
   g_assert(gnc_acc);
 
   /* Get API */
-  api = gnc_hbci_api_new_currentbook (parent, &interactor, &hbci_accountlist);
+  api = gnc_AB_BANKING_new_currentbook (parent, &interactor);
   if (api == NULL) {
     printf("gnc_hbci_maketrans: Couldn't get HBCI API. Nothing will happen.\n");
     return;
   }
   g_assert (interactor);
-  outbox = HBCI_Outbox_new();
 
   /* Get HBCI account */
   h_acc = gnc_hbci_get_hbci_acc (api, gnc_acc);
@@ -74,27 +69,22 @@ gnc_hbci_maketrans (GtkWidget *parent, Account *gnc_acc,
     return;
   }
   /*printf("gnc_hbci_maketrans: HBCI account no. %s found.\n",
-    gnc_HBCI_Account_accountId (h_acc));*/
+    AB_ACCOUNT_accountId (h_acc));*/
   
-  /* Get the customer that should be doing this job. */
-  customer = gnc_hbci_get_first_customer(h_acc);
-  if (!customer) 
-    return;
-
   {
     GList *template_list = 
       gnc_trans_templ_glist_from_kvp_glist
       ( gnc_hbci_get_book_template_list
 	( xaccAccountGetBook(gnc_acc)));
     int result;
-    gboolean successful;
+    gboolean successful = FALSE;
     HBCITransDialog *td;
 
     /* Now open the HBCI_trans_dialog, which also calls
-       HBCI_API_executeQueue. */
+       AB_BANKING_executeQueue. */
       
     /* Create new HBCIDialogTrans */
-    td = gnc_hbci_dialog_new(parent, h_acc, customer, gnc_acc, 
+    td = gnc_hbci_dialog_new(parent, h_acc, gnc_acc, 
 			     trans_type, template_list);
 	
     /* Repeat until HBCI action was successful or user pressed cancel */
@@ -117,23 +107,51 @@ gnc_hbci_maketrans (GtkWidget *parent, Account *gnc_acc,
       gnc_hbci_dialog_hide(td);
 
       {
-	HBCI_OutboxJob *job = 
-	  gnc_hbci_trans_dialog_enqueue(td, api, outbox, customer, 
-					(gnc_HBCI_Account *)h_acc, trans_type);
+	AB_JOB *job = 
+	  gnc_hbci_trans_dialog_enqueue(td, api,
+					(AB_ACCOUNT *)h_acc, trans_type);
+
+	/* Check whether we really got a job */
+	if (!job) {
+	  /* Oops, no job, probably not supported by bank. */
+	  if (gnc_verify_dialog
+	      (parent, 
+	       FALSE,
+	       "%s",
+	       _("The backend found an error during the preparation \n"
+		 "of the job. It is not possible to execute this job. \n"
+		 "\n"
+		 "Most probable the bank does not support your chosen \n"
+		 "job or your HBCI account does not have the permission \n"
+		 "to execute this job. More error messages might be \n"
+		 "visible on your console log.\n"
+		 "\n"
+		 "Do you want to enter the job again?")))
+	    continue;
+	  else
+	    /* job is NULL anyway, so it doesn't have to be cleaned up */
+	    break;
+	}
       
 	/* HBCI Transaction has been created and enqueued, so now open
 	 * the gnucash transaction dialog and fill in all values. */
 	successful = gnc_hbci_maketrans_final (td, gnc_acc, trans_type);
 
 	/* User pressed cancel? Then go back to HBCI transaction */
-	if (!successful)
+	if (!successful) {
+	  AB_Banking_DequeueJob (api, job);
+	  AB_Job_free (job);
 	  continue;
+	}
 
-	if (result == 0) {
+	/* Result of run_until_ok: 1 == execute now, 3 == scheduled
+	   for later execution (currently unimplemented); 2 ==
+	   cancel */
+	if (result == 1) {
 
 	  /* If the user pressed "execute now", then execute this job
 	     now. This function already delete()s the job. */
-	  successful = gnc_hbci_trans_dialog_execute(td, api, outbox, 
+	  successful = gnc_hbci_trans_dialog_execute(td, api, 
 						     job, interactor);
 
 	  if (!successful) {
@@ -144,12 +162,13 @@ gnc_hbci_maketrans (GtkWidget *parent, Account *gnc_acc,
 	    xaccTransCommitEdit(gtrans);
 	  }
 	  
-	} /* result == 0 */
+	  gnc_hbci_cleanup_job(api, job);
+	} /* result == 1 */
 	else {
 	  /* huh? Only result == 0 should be possible. Simply ignore
 	     this case. */
 	  break;
-	} /* result == 0 */
+	} /* result == 1 */
 	  
       } /* Create a do-transaction (transfer) job */
 	
@@ -163,9 +182,7 @@ gnc_hbci_maketrans (GtkWidget *parent, Account *gnc_acc,
       }*/
 
     /* Just to be on the safe side, clear queue once again. */
-    HBCI_Outbox_removeByStatus (outbox, HBCI_JOB_STATUS_NONE);
-    HBCI_Outbox_delete(outbox);
-    gnc_hbci_api_save (api);
+    gnc_AB_BANKING_fini (api);
     gnc_hbci_dialog_delete(td);
     gnc_trans_templ_delete_glist (template_list);
     
@@ -201,7 +218,7 @@ gnc_hbci_maketrans_final(HBCITransDialog *td, Account *gnc_acc,
 {
   gnc_numeric amount;
   XferDialog *transdialog;
-  const HBCI_Transaction *h_trans;
+  const AB_TRANSACTION *h_trans;
   gboolean run_until_done = TRUE;
   g_assert(td);
 
@@ -215,6 +232,8 @@ gnc_hbci_maketrans_final(HBCITransDialog *td, Account *gnc_acc,
   switch (trans_type) {
   case SINGLE_DEBITNOTE:
     gnc_xfer_dialog_set_title (transdialog, _("Online HBCI Direct Debit Note"));
+  case SINGLE_INTERNAL_TRANSFER:
+    gnc_xfer_dialog_set_title (transdialog, _("Online HBCI Bank-Internal Transfer"));
   case SINGLE_TRANSFER:
   default:
     gnc_xfer_dialog_set_title (transdialog, _("Online HBCI Transaction"));
@@ -222,7 +241,7 @@ gnc_hbci_maketrans_final(HBCITransDialog *td, Account *gnc_acc,
       
   /* Amount */
   amount = double_to_gnc_numeric 
-    (HBCI_Value_getValue (HBCI_Transaction_value (h_trans)),
+    (AB_Value_GetValue (AB_Transaction_GetValue (h_trans)),
      xaccAccountGetCommoditySCU(gnc_acc),
      GNC_RND_ROUND); 
   /*switch (trans_type) {

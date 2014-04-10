@@ -1,36 +1,45 @@
+/***************************************************************************
+ *            test-load-engine.c
+ *
+ *  Tue Sep 27 19:35:28 2005
+ *  Copyright  2005  GnuCash team
+ ****************************************************************************/
+/*
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ */
+ 
 #include <stdio.h>
 #include <stdlib.h>
-#include <libguile.h>
-
-#include "gnc-module.h"
+#include "qof.h"
+#include "cashobjects.h"
+#include "test-stuff.h"
 
 static void
-guile_main (void *closure, int argc, char ** argv)
+run_test(void)
 {
-  GNCModule engine;
-
-  printf("  test-load-engine.c: loading/unloading engine module ... ");
-
-  gnc_module_system_init();
-  engine = gnc_module_load("gnucash/engine", 0);
-  
-  if(!engine) {
-    printf("  Failed to load engine\n");
-    exit(-1);
-  }
-  
-  if(!gnc_module_unload(engine)) {
-    printf("  Failed to unload engine\n");
-    exit(-1);
-  }
-  printf(" successful.\n");
-
-  exit(0);
+	do_test(TRUE, "test engine loaded OK");
 }
 
 int
 main (int argc, char ** argv)
 {
-  scm_boot_guile(argc, argv, guile_main, NULL);
+	qof_init();
+	if(cashobjects_register()) {
+		run_test ();
+		print_test_results();
+	}
+	qof_close();
   return 0;
 }

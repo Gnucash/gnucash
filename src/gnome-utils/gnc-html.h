@@ -42,9 +42,9 @@ typedef char * URLType;
 #define URL_TYPE_SCHEME	"scheme"     /* for scheme code evaluation */
 #define URL_TYPE_HELP	"help"       /* for a gnucash help window */
 #define URL_TYPE_XMLDATA	"xmldata"    /* links to gnucash XML data files */ 
-#define URL_TYPE_ACTION	"action"     /* for special SUBMIT actions */ 
 #define URL_TYPE_PRICE	"price"      /* for price editor popups */
 #define URL_TYPE_OTHER	"other"
+#define URL_TYPE_BUDGET "budget"
 
 #include "gnc-html-history.h"
 
@@ -81,15 +81,17 @@ typedef void (* GncHTMLLoadCB)(gnc_html * html, URLType type,
                                gpointer data);
 typedef int  (* GncHTMLButtonCB)(gnc_html * html, GdkEventButton * event,
                                  gpointer data);
+//#if 0
 typedef int  (* GncHTMLObjectCB)(gnc_html * html, GtkHTMLEmbedded * eb,
                                  gpointer data); 
+//#endif
 typedef int  (* GncHTMLActionCB)(gnc_html * html, const char * method,
                                  const char * action, GHashTable * form_data);
 typedef gboolean (* GncHTMLStreamCB)(const char *location, char **data, int *datalen);
 typedef gboolean (* GncHTMLUrlCB)(const char *location, const char *label,
                                   gboolean new_window, GNCURLResult * result);
 
-gnc_html    * gnc_html_new(void);
+gnc_html    * gnc_html_new(GtkWindow *parent);
 void          gnc_html_destroy(gnc_html * html);
 void          gnc_html_show_url(gnc_html * html, 
                                 URLType type,
@@ -116,8 +118,10 @@ gboolean      gnc_html_register_urltype (URLType type, const char *protocol);
 
 /* object handlers deal with <object classid="foo"> objects in HTML.
  * the handlers are looked up at object load time. */
+//#if 0
 void          gnc_html_register_object_handler(const char * classid, 
                                                GncHTMLObjectCB hand);
+//#endif
 void          gnc_html_unregister_object_handler(const char * classid);
 
 /* action handlers deal with submitting forms of the type 

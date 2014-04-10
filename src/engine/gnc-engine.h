@@ -37,7 +37,33 @@
 #define GNC_ENGINE_H
 
 #include <glib.h>
-#include "qofid.h"
+#include "qof.h"
+
+/** \name QofLogModule identifiers */
+// @{
+#define GNC_MOD_ENGINE    "gnucash-engine-objects"
+#define GNC_MOD_ACCOUNT   "gnucash-account"
+#define GNC_MOD_SX        "gnucash-schedX"
+#define GNC_MOD_QUERY     "gnucash-query"
+#define GNC_MOD_SCRUB     "gnucash-scrub"
+#define GNC_MOD_LOT       "gnucash-lots"
+#define GNC_MOD_COMMODITY "gnucash-commodity"
+#define GNC_MOD_BACKEND   "gnucash-backend-general"
+#define GNC_MOD_PRICE     "gnucash-pricedb"
+#define GNC_MOD_BUSINESS  "gnucash-business"
+#define GNC_MOD_IO        "gnucash-inputoutput"
+#define GNC_MOD_BOOK      "gnucash-book-period"
+#define GNC_MOD_GUI       "gnucash-gui"
+#define GNC_MOD_GUILE     "gnucash-guile"
+#define GNC_MOD_LEDGER    "gnucash-ledger"
+#define GNC_MOD_REGISTER  "gnucash-register"
+#define GNC_MOD_HTML      "gnucash-html"
+#define GNC_MOD_PREFS     "gnucash-preferences"
+#define GNC_MOD_IMPORT    "gnucash-import-export"
+#define GNC_MOD_DRUID     "gnucash-druids"
+#define GNC_MOD_TEST      "gnucash-tests"
+#define GNC_MOD_BUDGET    "gnucash-budget"
+//@}
 
 /** @brief IDENTIFIERS
  *  GUID Identifiers can be used to reference Accounts, Transactions, 
@@ -63,6 +89,7 @@
 
 #define GNC_ID_ACCOUNT        "Account"
 #define GNC_ID_COMMODITY      "Commodity"
+#define GNC_ID_COMMODITY_NAMESPACE "CommodityNamespace"
 #define GNC_ID_COMMODITY_TABLE "CommodityTable"
 #define GNC_ID_FREQSPEC       "FreqSpec"
 #define GNC_ID_GROUP          "AccountGroup"
@@ -72,11 +99,29 @@
 #define GNC_ID_PRICEDB        "PriceDB"
 #define GNC_ID_SPLIT          "Split"
 #define GNC_ID_SCHEDXACTION   "SchedXaction"
+#define GNC_ID_BUDGET         "Budget"
 #define GNC_ID_SXTG           "SXTGroup"
 #define GNC_ID_SXTT           "SXTTrans"
 #define GNC_ID_TRANS          "Trans"
                                                                                 
 /* TYPES **********************************************************/
+
+/* CAS: ISTM, it would make more sense to put the typedefs in their
+   corresponding header files, (e.g. Account.h), and to #include all
+   the engine API header files right here.  After all, when I jump to
+   the definition "Account", I want to end up in Account.h, not this
+   file, like I do now.
+
+   Also, as it is now, if I want to use the engine api, I need to
+   include this header, plus all the other engine headers for the
+   types whose functions I call, so this header is providing almost no
+   benefit of aggregation.  But, if it included all the headers I
+   could just include this file.  Or would that cause a massive
+   recompile everytime one engine header changed?
+   Even if including all the headers here doesn't make sense, I think
+   distributing the stuff in the "Types" section does.
+*/
+
 
 /** @brief Account in Gnucash. 
  * This is the typename for an account. The actual structure is
@@ -128,10 +173,13 @@ typedef struct transaction_s         Transaction;
  * the functions in gnc-commodity.h .*/
 typedef struct gnc_commodity_s       gnc_commodity;
 
+/** @brief A gnc_commodity_namespace is an collection of commodities. */
+typedef struct gnc_commodity_namespace_s gnc_commodity_namespace;
+
 /** @brief A gnc_commodity_table is a database of commodity info. */
 typedef struct gnc_commodity_table_s gnc_commodity_table;
 
-/** @breif Identifies that something sold at one time was bought at another.
+/** @brief Identifies that something sold at one time was bought at another.
  * A GNCLot provides a way of tracking physical items as they are 
  * bought and sold in different transactions.  By identifying 
  * the individual, underlying physical objects, it provides the
@@ -142,7 +190,7 @@ typedef struct gnc_commodity_table_s gnc_commodity_table;
  */
 typedef struct gnc_lot_struct        GNCLot;
 
-/** @breif Price of commodity on a given date.
+/** @brief Price of commodity on a given date.
  * A GNCPrice encapsulates price information: the cost of a commodity
  * expressed as a currency, on a given date.  It also holds info about 
  * the provenance of the price: where it came from, its general validity.
@@ -181,16 +229,28 @@ unsigned int gnucash_minor_version (void);
 /** GnuCash version number infomation. */
 unsigned int gnucash_micro_version (void);
 
-/** gnc_engine_init MUST be called before gnc engine functions can 
- * be used. */
+/** gnc_engine_init should be called before gnc engine
+ * functions can be used - see also ::qof_init for a
+ * method that does not require Guile. */
 void gnc_engine_init(int argc, char ** argv);
 
-/** Called to shutdown the engine */
+/** Called to shutdown the engine, see also ::qof_close
+ * for use without Guile. */
 void gnc_engine_shutdown (void);
+
+/** check the engine is fully initialized */
+gboolean gnc_engine_is_initialized(void);
 
 /** Pass a function pointer to gnc_engine_add_init_hook and 
  * it will be called during the evaluation of gnc_engine_init */
 void gnc_engine_add_init_hook(gnc_engine_init_hook_t hook);
+
+gboolean
+qof_session_export (QofSession *tmp_session,
+                    QofSession *real_session,
+                    QofPercentageFunc percentage_func);
+
+void gnc_run_rpc_server(void);
 
 #endif
 /** @} */

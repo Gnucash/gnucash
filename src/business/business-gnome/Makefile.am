@@ -1,10 +1,11 @@
-SUBDIRS = . glade
+SUBDIRS = . glade schemas ui
 PWD := $(shell pwd)
 
 pkglib_LTLIBRARIES = libgncmod-business-gnome.la libgw-business-gnome.la
 
 AM_CFLAGS = \
   -I${top_srcdir}/src \
+  -I${top_srcdir}/src/core-utils \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/gnc-module \
   -I${top_srcdir}/src/gnome-utils \
@@ -16,13 +17,14 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/business/business-ledger \
   -I${top_srcdir}/src/business/dialog-tax-table \
   ${GNOME_PRINT_CFLAGS} \
-  ${GNOME_INCLUDEDIR} \
+  ${GNOME_CFLAGS} \
   ${GLADE_CFLAGS} \
   ${GTKHTML_CFLAGS} \
   ${GDK_PIXBUF_CFLAGS} \
   ${GLIB_CFLAGS} \
   ${G_WRAP_COMPILE_ARGS} \
   ${GUILE_INCS} \
+  ${QOF_CFLAGS} \
   -I${top_srcdir}/src/register/register-core \
   -I${top_srcdir}/src/register/register-gnome \
   -I${top_srcdir}/src/register/ledger-core
@@ -41,6 +43,8 @@ libgncmod_business_gnome_la_SOURCES = \
   dialog-order.c \
   dialog-payment.c \
   dialog-vendor.c \
+  gnc-plugin-business.c \
+  gnc-plugin-page-invoice.c \
   search-owner.c
 
 noinst_HEADERS = \
@@ -56,24 +60,27 @@ noinst_HEADERS = \
   dialog-order.h \
   dialog-payment.h \
   dialog-vendor.h \
+  gnc-plugin-business.h \
+  gnc-plugin-page-invoice.h \
   search-owner.h \
   gw-business-gnome.h
-
-libgncmod_business_gnome_la_LDFLAGS = -module
 
 libgncmod_business_gnome_la_LIBADD = \
   ${top_builddir}/src/business/business-core/libgncmod-business-core.la \
   ${top_builddir}/src/business/business-ledger/libgnc-business-ledger.la \
+  ${top_builddir}/src/core-utils/libcore-utils.la \
   ${top_builddir}/src/gnc-module/libgncmodule.la \
   ${GUILE_LIBS} \
-  ${GNOMEUI_LIBS} \
+  ${GNOME_LIBS} \
   ${G_WRAP_LINK_ARGS} \
   ${GLIB_LIBS} \
+  ${QOF_LIBS} \
   ${EFENCE_LIBS}
 
 
 libgw_business_gnome_la_SOURCES = gw-business-gnome.c
-libgw_business_gnome_la_LDFLAGS = -module ${G_WRAP_LINK_ARGS}
+
+libgw_business_gnome_la_LDFLAGS = ${G_WRAP_LINK_ARGS}
 libgw_business_gnome_la_LIBADD  = libgncmod-business-gnome.la
 
 # For Business Reports

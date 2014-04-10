@@ -1,19 +1,34 @@
+/***************************************************************************
+ *            test-transaction-reversal.c
+ *
+ *  Modified to run without Guile: Mon Aug 22 11:19:56 2005
+ *  Copyright  2005  Neil Williams
+ *  linux@codehelp.co.uk
+ ****************************************************************************/
+/*
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ */
+ 
 #include <glib.h>
-#include <libguile.h>
 #include <string.h>
-
+#include "cashobjects.h"
+#include "Transaction.h"
 #include "Account.h"
 #include "TransLog.h"
-#include "Transaction.h"
-#include "gnc-engine.h"
-#include "gnc-module.h"
-#include "qofsession.h"
 #include "test-engine-stuff.h"
 #include "test-stuff.h"
-#include "Transaction.h"
-#include "guid.h"
-
-
 
 #define print_gnc_numeric(num) fprintf(stderr, "%s\n", gnc_numeric_to_string(num))
 
@@ -49,12 +64,17 @@ run_test (void)
   if (!acc1 || !acc2)
   {
     failure("accounts not created");
+    return;
   }
 
+  /* Find a transaction that isn't voided */
   do
   {
+    gboolean voyd;
+    
     transaction = get_random_transaction (book);
-    if (xaccTransGetVoidStatus (transaction))
+    voyd = xaccTransGetVoidStatus (transaction);
+    if (voyd)
     {
       xaccTransBeginEdit (transaction);
       xaccTransDestroy (transaction);
@@ -62,13 +82,14 @@ run_test (void)
       transaction = NULL;
     }
   } while (!transaction);
-
   transaction_set_splits_to_accounts(transaction, acc1, acc2);
   xaccTransSortSplits(transaction);
 
   new_trans = xaccTransClone(transaction);
   if (!xaccTransEqual(transaction, new_trans, FALSE, TRUE, FALSE, TRUE))
+  {
     failure("xaccTransClone failed.");
+  }
 
   xaccTransReverse(new_trans);
   for (i = 0; i < 2; i++) 
@@ -78,7 +99,7 @@ run_test (void)
     result = gnc_numeric_add(old, new, GNC_DENOM_AUTO, GNC_DENOM_FIXED);
     if (gnc_numeric_eq(old, gnc_numeric_neg(new))) 
     {
-      msg = g_strdup_printf("Amount of split %d wrong after reversal", i);
+      msg = g_strdup_printf("Amount of split %d wrong after reversal\n", i);
       failure(msg);
     }
 
@@ -87,7 +108,7 @@ run_test (void)
     result = gnc_numeric_add(old, new, GNC_DENOM_AUTO, GNC_DENOM_FIXED);
     if (gnc_numeric_eq(old, gnc_numeric_neg(new))) 
     {
-      msg = g_strdup_printf("Value of split %d wrong after reversal", i);
+      msg = g_strdup_printf("Value of split %d wrong after reversal\n", i);
       failure(msg);
     }
 
@@ -95,24 +116,16 @@ run_test (void)
   return;
 }
 
-static void
-main_helper (void *closure, int argc, char **argv)
-{
-  gnc_module_load("gnucash/engine", 0);
-
-  xaccLogDisable ();
-
-  run_test ();
-
-  success("transaction voiding seems OK");
-
-  print_test_results();
-  exit(get_rv());
-}
-
 int
 main (int argc, char **argv)
 {
-  scm_boot_guile (argc, argv, main_helper, NULL);
+	qof_init();
+	if(cashobjects_register()) {
+  set_success_print (TRUE);
+  run_test ();
+  success("transaction voiding seems OK");
+  print_test_results();
+	}
+	qof_close();
   return 0;
 }

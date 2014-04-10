@@ -26,37 +26,35 @@
 #include "QueryNew.h"
 #include "search-param.h"
 
-#define GNCSEARCH_CORE_TYPE(obj)	GTK_CHECK_CAST (obj, gnc_search_core_type_get_type (), GNCSearchCoreType)
-#define GNCSEARCH_CORE_TYPE_CLASS(klass)	GTK_CHECK_CLASS_CAST (klass, gnc_search_core_type_get_type (), GNCSearchCoreTypeClass)
-#define IS_GNCSEARCH_CORE_TYPE(obj)      GTK_CHECK_TYPE (obj, gnc_search_core_type_get_type ())
+#define GNC_TYPE_SEARCH_CORE_TYPE		(gnc_search_core_type_get_type ())
+#define GNC_SEARCH_CORE_TYPE(o)			(G_TYPE_CHECK_INSTANCE_CAST ((o), GNC_TYPE_SEARCH_CORE_TYPE, GNCSearchCoreType))
+#define GNC_SEARCH_CORE_TYPE_CLASS(k)		(G_TYPE_CHECK_CLASS_CAST ((k), GNC_TYPE_SEARCH_CORE_TYPE, GNCSearchCoreTypeClass))
+#define GNC_IS_SEARCH_CORE_TYPE(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), GNC_TYPE_SEARCH_CORE_TYPE)
+#define GNC_SEARCH_CORE_TYPE_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), GNC_TYPE_SEARCH_CORE_TYPE, GNCSearchCoreTypeClass))
 
-typedef struct _GNCSearchCoreType	GNCSearchCoreType;
-typedef struct _GNCSearchCoreTypeClass	GNCSearchCoreTypeClass;
-
-struct _GNCSearchCoreType {
+typedef struct {
   GtkObject parent;
   struct _GNCSearchCoreTypePrivate *priv;
 
   GNCSearchParam *	param;
-};
+} GNCSearchCoreType;
 
-struct _GNCSearchCoreTypeClass {
-  GtkObjectClass parent_class;
+typedef struct {
+  GObjectClass parent_class;
 
   /* virtual methods */
   void			(*grab_focus) (GNCSearchCoreType *fe);
-  void			(*editable_enters) (GNCSearchCoreType *fe,
-					    GnomeDialog *dialog);
+  void			(*editable_enters) (GNCSearchCoreType *fe);
   gboolean		(*validate) (GNCSearchCoreType *fe);
   GNCSearchCoreType *	(*clone) (GNCSearchCoreType *fe);
   GtkWidget *		(*get_widget) (GNCSearchCoreType *);
   QueryPredData_t	(*get_predicate) (GNCSearchCoreType *);
 
   /* signals */
-};
+} GNCSearchCoreTypeClass;
 
 /* These are internal functions */
-guint			gnc_search_core_type_get_type (void);
+GType			gnc_search_core_type_get_type (void);
 GNCSearchCoreType *	gnc_search_core_type_new (void);
 
 /* Create a new search core_type */
@@ -64,8 +62,7 @@ GNCSearchCoreType *	gnc_search_core_type_new_type_name (const char *type);
 
 /* methods */
 void			gnc_search_core_type_grab_focus (GNCSearchCoreType *fe);
-void			gnc_search_core_type_editable_enters (GNCSearchCoreType *fe,
-							      GnomeDialog *dialog);
+void			gnc_search_core_type_editable_enters (GNCSearchCoreType *fe);
 gboolean        	gnc_search_core_type_validate (GNCSearchCoreType *fe);
 GNCSearchCoreType *	gnc_search_core_type_clone (GNCSearchCoreType *fe);
 GtkWidget *		gnc_search_core_type_get_widget (GNCSearchCoreType *fe);

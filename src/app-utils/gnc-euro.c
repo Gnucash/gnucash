@@ -26,7 +26,6 @@
 #include <string.h>
 
 #include "gnc-commodity.h"
-#include "gnc-engine.h"
 #include "gnc-euro.h"
 #include "gnc-ui-util.h"
 

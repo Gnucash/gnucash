@@ -9,10 +9,10 @@
 #include <stdio.h>
 #include <glib.h>
 #include <libguile.h>
-#include "guile-mappings.h"
 
 #include "gnc-module.h"
 #include "gnc-module-api.h"
+#include "gnc-plugin-stylesheets.h"
 
 /* version of the gnc module system interface we require */
 int libgncmod_stylesheets_LTX_gnc_module_system_interface = 0;
@@ -51,6 +51,9 @@ libgncmod_stylesheets_LTX_gnc_module_init(int refcount) {
      SCM_BOOL_F) {
     return FALSE;
   }
+  
+  /* Add menu items with C callbacks */
+  gnc_plugin_stylesheets_create_plugin();
   
   return TRUE;
 }

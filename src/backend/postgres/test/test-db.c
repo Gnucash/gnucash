@@ -1,5 +1,20 @@
+/*
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ */
+ 
 #include <glib.h>
-#include <libguile.h>
 #include <libpq-fe.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -7,21 +22,19 @@
 #include <unistd.h>
 
 #include "AccountP.h"
-#include "qofbackend.h"
+#include "qof.h"
 #include "PostgresBackend.h"
 #include "TransactionP.h"
 #include "TransLog.h"
-#include "qofbook.h"
 #include "gnc-engine.h"
-#include "gnc-engine-util.h"
-#include "gnc-module.h"
-#include "qofsession-p.h"
 #include "gncquery.h"
-#include "qofquery.h"
 #include "test-stuff.h"
 #include "test-engine-stuff.h"
 
-static short module = MOD_TEST;
+#define PG_LIB_NAME "libgnc-backend-postgres.la"
+#define PG_LIB_INIT "pgend_provider_init"
+
+static QofLogModule log_module = GNC_MOD_TEST;
 
 struct _dbinfo {
     char *host;
@@ -140,6 +153,7 @@ static gboolean
 load_db_file(QofSession * session, DbInfo *dbinfo, gboolean end_session)
 {
     QofBackendError io_err;
+    QofBook *book;
     PGBackend *be;
     char *filename;
 
@@ -148,8 +162,8 @@ load_db_file(QofSession * session, DbInfo *dbinfo, gboolean end_session)
     filename = db_file_url(dbinfo);
 
     qof_session_begin(session, filename, FALSE, FALSE);
-    
-    be = (PGBackend *)qof_session_get_backend(session);
+    book = qof_session_get_book(session);
+    be = (PGBackend *)qof_book_get_backend(book);
     dbinfo->conn = be->connection;
 
     io_err = qof_session_get_error(session);
@@ -485,16 +499,17 @@ test_raw_query(QofSession * session, Query * q)
 {
     const char *sql_query_string;
     PGresult *result;
+    QofBook *book;
     PGBackend *be;
     sqlQuery *sq;
     gboolean ok;
     QofQuery *qn = q;
 
     g_return_val_if_fail(session && q, FALSE);
+    book = qof_session_get_book(session);
+    be = (PGBackend *) qof_book_get_backend(book);
 
-    be = (PGBackend *) qof_session_get_backend(session);
-
-    if (gnc_should_log(module, GNC_LOG_DETAIL))
+    if (gnc_should_log(log_module, GNC_LOG_DETAIL))
         qof_query_print(qn);
 
     sq = sqlQuery_new();
@@ -1074,14 +1089,15 @@ test_performance(DbInfo *dbinfo)
 }
 #endif
 
-static void
-guile_main (void *closure, int argc, char **argv)
+int
+main (int argc, char **argv)
 {
     DbInfo *dbinfo;
     
-    GNCModule *mod;
-    gnc_module_system_init();
-    mod = gnc_module_load("gnucash/engine", 0);
+    qof_init();
+    do_test(
+	qof_load_backend_library (QOF_LIB_DIR, PG_LIB_NAME, PG_LIB_INIT),
+	" loading gnc-backend-postgres GModule failed");
 
     dbinfo = g_new0(DbInfo, 1);
     
@@ -1126,12 +1142,6 @@ guile_main (void *closure, int argc, char **argv)
     run_test(dbinfo);
 
     print_test_results();
-    exit(get_rv());
-}
 
-int
-main (int argc, char **argv)
-{
-    scm_boot_guile(argc, argv, guile_main, NULL);
     return 0;
 }

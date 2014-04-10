@@ -25,9 +25,6 @@
 #define XACC_SCHEDXACTION_P_H
 
 #include "SchedXaction.h"
-#include "qofid.h"
-#include "qofid-p.h"
-#include "qofinstance-p.h"
 
 /**
  * A single scheduled transaction.

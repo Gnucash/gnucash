@@ -28,10 +28,9 @@
 #include "config.h"
 
 #include <glib.h>
-
+#include "qof.h"
 #include "SchedXaction.h"
 #include "Account.h"
-#include "gnc-numeric.h"
 #include "gnc-commodity.h"
 
 typedef struct TTInfo_s TTInfo;

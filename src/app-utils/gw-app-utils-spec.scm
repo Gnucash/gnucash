@@ -26,9 +26,6 @@
    ws
    (lambda (wrapset client-wrapset) 
      (list 
-      "#include <global-options.h>\n"
-      "#include <option-util.h>\n"
-      "#include <global-options.h>\n"
       "#include <option-util.h>\n"
       "#include <gnc-euro.h>\n"
       "#include <gnc-exp-parser.h>\n"
@@ -136,32 +133,6 @@
 
   (gw:wrap-function
    ws
-   'gnc:c-options-init
-   '<gw:void>
-   "gnc_options_init"
-   '()
-   "Initialize the C side options code.")
-
-  (gw:wrap-function
-   ws
-   'gnc:c-options-shutdown
-   '<gw:void>
-   "gnc_options_shutdown"
-   '()
-   "Shutdown the C side options code.")
-
-  (gw:wrap-function
-   ws
-   'gnc:set-option-selectable-by-name
-   '<gw:void>
-   "gnc_set_option_selectable_by_name"
-   '(((<gw:mchars> caller-owned const) section)
-     ((<gw:mchars> caller-owned const) name)
-     (<gw:bool> selectable))
-   "Set the appropriate option widget to be selectable or not selectable, depending on if <gw:bool> selectable is true or false respectively.")
-
-  (gw:wrap-function
-   ws
    'gnc:option-db-set-option-selectable-by-name
    '<gw:void>
    "gnc_option_db_set_option_selectable_by_name"
@@ -196,14 +167,6 @@
      (<gnc:print-amount-info-scm> info))
    "Print amount using current locale. The info argument
 determines formatting details.")
-
-  (gw:wrap-function
-   ws
-   'gnc:option-refresh-ui
-   '<gw:void>
-   "gncp_option_refresh_ui"
-   '((<gw:scm> option))
-   "Refresh the gui option with the current values.")
 
   (gw:wrap-function
    ws

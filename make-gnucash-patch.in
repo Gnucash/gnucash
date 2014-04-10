@@ -6,6 +6,13 @@
 # mailing list gnucash-patches@gnucash.org. For more info
 # consult the README.
 #
+# WARNING: By default, this script will checkout an entire
+# up to date copy of the source tree in ../tmp/gnucash/.
+#
+# In order to prevent patches which reverse recent changes
+# made in CVS, make sure to "cvs update" in both
+# directories before running make-gnucash-patch.
+#
 # This script requires the programs 'makepatch', 'gzip',
 # a 'diff' work-a-like, and 'uuencode'.
 #

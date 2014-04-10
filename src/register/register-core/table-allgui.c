@@ -43,7 +43,7 @@
 #include "table-allgui.h"
 #include "cellblock.h"
 #include "dialog-utils.h"
-#include "gnc-engine-util.h"
+#include "gnc-engine.h"
 
 
 /** Static Globals *****************************************************/
@@ -51,7 +51,7 @@
 static TableGUIHandlers default_gui_handlers;
 
 /* This static indicates the debugging module that this .o belongs to. */
-static short module = MOD_REGISTER;
+static QofLogModule log_module = GNC_MOD_REGISTER;
 
 
 /** Prototypes *********************************************************/
@@ -383,6 +383,30 @@ gnc_table_get_bg_color (Table *table, VirtualLocation virt_loc,
 
   bg_color_handler = gnc_table_model_get_bg_color_handler (table->model,
                                                            cell_name);
+  if (!bg_color_handler)
+    return 0xffffff;
+
+  return bg_color_handler (virt_loc, hatching,
+                           table->model->handler_user_data);
+}
+
+guint32
+gnc_table_get_gtkrc_bg_color (Table *table, VirtualLocation virt_loc,
+			      gboolean *hatching)
+{
+  TableGetBGColorHandler bg_color_handler;
+  const char *cell_name;
+
+  if (hatching)
+    *hatching = FALSE;
+
+  if (!table || !table->model)
+    return 0xffffff; /* white */
+
+  cell_name = gnc_table_get_cell_name (table, virt_loc);
+
+  bg_color_handler = gnc_table_model_get_bg_color_handler (table->model,
+                                                           "gtkrc");
   if (!bg_color_handler)
     return 0xffffff;
 
@@ -1184,9 +1208,9 @@ gnc_table_confirm_change (Table *table, VirtualLocation virt_loc)
 const char *
 gnc_table_modify_update (Table *table,
                          VirtualLocation virt_loc,
-                         const GdkWChar *change,
+                         const char *change,
                          int change_len,
-                         const GdkWChar *newval,
+                         const char *newval,
                          int newval_len,
                          int *cursor_position,
                          int *start_selection,
@@ -1242,9 +1266,7 @@ gnc_table_modify_update (Table *table,
         cursor_position, start_selection, end_selection);
   else
   {
-    char *newval_mb = gnc_wcstombs (newval);
-    gnc_basic_cell_set_value (cell, newval_mb);
-    g_free (newval_mb);
+    gnc_basic_cell_set_value (cell, newval);
   }
 
   if (safe_strcmp (old_value, cell->value) != 0)

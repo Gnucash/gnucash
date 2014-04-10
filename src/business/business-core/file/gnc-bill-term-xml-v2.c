@@ -46,14 +46,11 @@
 #include "gnc-bill-term-xml-v2.h"
 #include "gnc-engine-util.h"
 
-#include "qofinstance.h"
-#include "qofobject.h"
-
 #include "xml-helpers.h"
 
 #define _GNC_MOD_NAME	GNC_ID_BILLTERM
 
-static short module = MOD_IO;
+static QofLogModule log_module = GNC_MOD_IO;
 
 const gchar *billterm_version_string = "2.0.0";
 
@@ -84,8 +81,8 @@ billterm_dom_tree_create (GncBillTerm *term)
 {
     xmlNodePtr ret, data, kvpnode;
 
-    ret = xmlNewNode(NULL, gnc_billterm_string);
-    xmlSetProp(ret, "version", billterm_version_string);
+    ret = xmlNewNode(NULL, BAD_CAST gnc_billterm_string);
+    xmlSetProp(ret, BAD_CAST "version", BAD_CAST billterm_version_string);
 
     maybe_add_guid(ret, billterm_guid_string, QOF_INSTANCE(term));
     xmlAddChild(ret, text_to_dom_tree (billterm_name_string,
@@ -113,7 +110,7 @@ billterm_dom_tree_create (GncBillTerm *term)
 
     switch (gncBillTermGetType (term)) {
     case GNC_TERM_TYPE_DAYS:
-      data = xmlNewChild (ret, NULL, gnc_daystype_string, NULL);
+      data = xmlNewChild (ret, NULL, BAD_CAST gnc_daystype_string, NULL);
       maybe_add_int (data, days_duedays_string, gncBillTermGetDueDays (term));
       maybe_add_int (data, days_discdays_string,
 		     gncBillTermGetDiscountDays (term));
@@ -122,7 +119,7 @@ billterm_dom_tree_create (GncBillTerm *term)
       break;
 
     case GNC_TERM_TYPE_PROXIMO:
-      data = xmlNewChild (ret, NULL, gnc_proximotype_string, NULL);
+      data = xmlNewChild (ret, NULL, BAD_CAST gnc_proximotype_string, NULL);
       maybe_add_int (data, prox_dueday_string, gncBillTermGetDueDays (term));
       maybe_add_int (data, prox_discday_string,
 		     gncBillTermGetDiscountDays (term));
@@ -140,7 +137,7 @@ billterm_dom_tree_create (GncBillTerm *term)
 struct billterm_pdata
 {
   GncBillTerm *term;
-  GNCBook *book;
+  QofBook *book;
 };
 
 static gboolean
@@ -416,7 +413,7 @@ static struct dom_tree_handler billterm_handlers_v2[] = {
 };
 
 static GncBillTerm*
-dom_tree_to_billterm (xmlNodePtr node, GNCBook *book)
+dom_tree_to_billterm (xmlNodePtr node, QofBook *book)
 {
   struct billterm_pdata billterm_pdata;
   gboolean successful;
@@ -449,7 +446,7 @@ gnc_billterm_end_handler(gpointer data_for_children,
     GncBillTerm *term;
     xmlNodePtr tree = (xmlNodePtr)data_for_children;
     gxpf_data *gdata = (gxpf_data*)global_data;
-    GNCBook *book = gdata->bookdata;
+    QofBook *book = gdata->bookdata;
 
     successful = TRUE;
 
@@ -492,7 +489,7 @@ do_count (QofEntity *term_p, gpointer count_p)
 }
 
 static int
-billterm_get_count (GNCBook *book)
+billterm_get_count (QofBook *book)
 {
   int count = 0;
   qof_object_foreach (_GNC_MOD_NAME, book, do_count, (gpointer) &count);
@@ -513,7 +510,7 @@ xml_add_billterm (QofEntity *term_p, gpointer out_p)
 }
 
 static void
-billterm_write (FILE *out, GNCBook *book)
+billterm_write (FILE *out, QofBook *book)
 {
   qof_object_foreach (_GNC_MOD_NAME, book, xml_add_billterm, (gpointer) out);
 }
@@ -658,15 +655,15 @@ billterm_reset_refcount (gpointer key, gpointer value, gpointer notused)
   gint32 count = GPOINTER_TO_INT(value);
 
   if (count != gncBillTermGetRefcount(term) && !gncBillTermGetInvisible(term)) {
-    PWARN("Fixing refcount on billterm %s (%lld -> %d)\n",
+    PWARN("Fixing refcount on billterm %s (%" G_GINT64_FORMAT " -> %d)\n",
 	  guid_to_string(qof_instance_get_guid(QOF_INSTANCE(term))),
-	  gncBillTermGetRefcount(term), count)
+	  gncBillTermGetRefcount(term), count);
       gncBillTermSetRefcount(term, count);
   }
 }
 
 static void
-billterm_scrub (GNCBook *book)
+billterm_scrub (QofBook *book)
 {
   GList *list = NULL;
   GList *node;
@@ -701,6 +698,15 @@ billterm_scrub (GNCBook *book)
   g_hash_table_destroy(ht);
 }
 
+static void
+billterm_ns(FILE *out)
+{
+  g_return_if_fail(out);
+  gnc_xml2_write_namespace_decl(out, "billterm");
+  gnc_xml2_write_namespace_decl(out, "bt-days");
+  gnc_xml2_write_namespace_decl(out, "bt-prox");
+}
+
 void
 gnc_billterm_xml_initialize (void)
 {
@@ -712,6 +718,7 @@ gnc_billterm_xml_initialize (void)
     billterm_get_count,
     billterm_write,
     billterm_scrub,
+    billterm_ns,
   };
 
   qof_object_register_backend (_GNC_MOD_NAME,

@@ -11,7 +11,7 @@ use strict;
 use File::Basename;
 
 my @cvsignores = `find src -name '.cvsignore'`;
-my @possible_files = `find src -name '*.c' -o -name '*.glade' -o -name '*.desktop.in' -o -name '*.keys.in'`;
+my @possible_files = `find src -name '*.c' -o -name '*.glade' -o -name '*.desktop.in' -o -name '*.keys.in' -o -name '*.pl' |sort`;
 
 chomp(my $cwd = `pwd`);
 
@@ -52,3 +52,4 @@ foreach my $file (@possible_files) {
 }
 
 print "intl-scm/guile-strings.c\n";
+print "doc/tip_of_the_day.list.in"

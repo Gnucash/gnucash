@@ -22,9 +22,9 @@
  *                                                                  *
 \********************************************************************/
 
-/*
+/**
  * @file io-gncxml.h
- * @breif api for Version 1 XML-based file format
+ * @brief api for Version 1 XML-based file format
  *
  * Initial code by Rob L. Browning 4Q 2000
  * Tuneups by James LewisMoss Dec 2000

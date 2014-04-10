@@ -49,12 +49,10 @@
 #include "ScrubP.h"
 #include "Transaction.h"
 #include "TransactionP.h"
-#include "gnc-engine-util.h"
 #include "messages.h"
 #include "gnc-commodity.h"
-#include "gnc-trace.h"
 
-static short module = MOD_SCRUB;
+static QofLogModule log_module = GNC_MOD_SCRUB;
 
 /* ================================================================ */
 
@@ -137,6 +135,8 @@ void
 xaccTransScrubOrphans (Transaction *trans)
 {
   SplitList *node;
+  QofBook *book = NULL;
+  AccountGroup *root = NULL;
   for (node = trans->splits; node; node = node->next)
   {
     Split *split = node->data;
@@ -144,9 +144,19 @@ xaccTransScrubOrphans (Transaction *trans)
     if (split->acc)
     {
       TransScrubOrphansFast (trans, xaccAccountGetRoot(split->acc));
-      break;
+      return;
     }
   }
+
+  /* If we got to here, then *none* of the splits belonged to an 
+   * account.  Not a happy situation.  We should dig an account
+   * out of the book the transaction belongs to.
+   * XXX we should probably *always* to this, instead of the above loop!
+   */
+  PINFO ("Free Floating Transaction!");
+  book = xaccTransGetBook (trans);
+  root = xaccGetAccountGroup (book);
+  TransScrubOrphansFast (trans, root);
 }
 
 /* ================================================================ */
@@ -188,13 +198,22 @@ xaccAccountScrubSplits (Account *account)
 void
 xaccTransScrubSplits (Transaction *trans)
 {
+  gnc_commodity *currency;
   GList *node;
 
-  if (!trans)
-    return;
+  if (!trans) return;
+
+  /* The split scrub expects the transaction to have a currency! */
+  currency = xaccTransGetCurrency (trans);
+  if (!currency) 
+  {
+    PERR ("Transaction doesn't have a currency!");
+  }
 
   for (node = trans->splits; node; node = node->next)
+  {
     xaccSplitScrub (node->data);
+  }
 }
 
 void
@@ -202,11 +221,12 @@ xaccSplitScrub (Split *split)
 {
   Account *account;
   Transaction *trans;
-  gnc_numeric value;
+  gnc_numeric value, amount;
   gnc_commodity *currency;
   int scu;
 
   if (!split) return;
+  ENTER ("(split=%p)", split);
 
   trans = xaccSplitGetParent (split);
   if (!trans) return;
@@ -232,6 +252,21 @@ xaccSplitScrub (Split *split)
     return;  
   }
 
+  /* Split amounts and values should be valid numbers */
+  value = xaccSplitGetValue (split);
+  if (gnc_numeric_check (value))
+  {
+    value = gnc_numeric_zero();
+    xaccSplitSetValue (split, value);
+  }
+
+  amount = xaccSplitGetAmount (split);
+  if (gnc_numeric_check (amount))
+  {
+    amount = gnc_numeric_zero();
+    xaccSplitSetAmount (split, amount);
+  }
+
   currency = xaccTransGetCurrency (trans);
 
   /* If the account doesn't have a commodity, 
@@ -241,16 +276,17 @@ xaccSplitScrub (Split *split)
   {
     xaccAccountScrubCommodity (account);
   }
-  if (!account->commodity || !gnc_commodity_equiv (account->commodity, currency))
+  if (!account->commodity || 
+      !gnc_commodity_equiv (account->commodity, currency))
+  {
+    LEAVE ("(split=%p) inequiv currency", split);
     return;
+  }
 
   scu = MIN (xaccAccountGetCommoditySCU (account),
              gnc_commodity_get_fraction (currency));
 
-  value = xaccSplitGetValue (split);
-
-  if (gnc_numeric_same (xaccSplitGetAmount (split),
-                        value, scu, GNC_RND_ROUND))
+  if (gnc_numeric_same (amount, value, scu, GNC_HOW_RND_ROUND))
   {
     return;
   }
@@ -262,13 +298,14 @@ xaccSplitScrub (Split *split)
   PINFO ("Adjusted split with mismatched values, desc=\"%s\" memo=\"%s\"" 
          " old amount %s %s, new amount %s",
             trans->description, split->memo,
-            gnc_numeric_to_string (xaccSplitGetAmount(split)),
+            gnc_num_dbg_to_string (xaccSplitGetAmount(split)),
             gnc_commodity_get_mnemonic (currency),
-            gnc_numeric_to_string (xaccSplitGetValue(split)));
+            gnc_num_dbg_to_string (xaccSplitGetValue(split)));
 
   xaccTransBeginEdit (trans);
   xaccSplitSetAmount (split, value);
   xaccTransCommitEdit (trans);
+  LEAVE ("(split=%p)", split);
 }
 
 /* ================================================================ */
@@ -324,12 +361,14 @@ xaccTransScrubImbalance (Transaction *trans, AccountGroup *root,
                          Account *parent)
 {
   Split *balance_split = NULL;
+  QofBook *book = NULL;
   gnc_numeric imbalance;
   Account *account;
   SplitList *node, *slist;
 
   if (!trans) return;
 
+  ENTER ("()");
   xaccTransScrubSplits (trans);
 
   /* If the transaction is balanced, nothing more to do */
@@ -344,7 +383,27 @@ xaccTransScrubImbalance (Transaction *trans, AccountGroup *root,
     if (!root) 
     { 
        Split *s = slist->data; 
+       if (NULL == s->acc)
+       {
+          /* This should never occur, since xaccTransScrubSplits()
+           * above should have fixed things up.  */
+          PERR ("Split is not assigned to any account");
+       }
        root = xaccAccountGetRoot (s->acc);
+       if (NULL == root)
+       {
+          /* This should never occur, accounts are always 
+           * in an account group */
+          PERR ("Can't find root account");
+          book = xaccTransGetBook (trans);
+          root = xaccGetAccountGroup (book);
+       }
+       if (NULL == root)
+       {
+          /* This can't occur, things should be in books */
+          PERR ("Bad data corruption, no root account in book");
+          return;
+       }
     }
     account = xaccScrubUtilityGetOrMakeAccount (root, 
         trans->common_currency, _("Imbalance"));
@@ -398,7 +457,7 @@ xaccTransScrubImbalance (Transaction *trans, AccountGroup *root,
      * of the denominators might already be reduced.  */
     new_value = gnc_numeric_sub (old_value, imbalance,
              gnc_commodity_get_fraction(currency), 
-             GNC_RND_ROUND);
+             GNC_HOW_RND_ROUND);
 
     xaccSplitSetValue (balance_split, new_value);
 
@@ -412,6 +471,7 @@ xaccTransScrubImbalance (Transaction *trans, AccountGroup *root,
     xaccSplitScrub (balance_split);
     xaccTransCommitEdit (trans);
   }
+  LEAVE ("()");
 }
 
 /* ================================================================ */
@@ -511,16 +571,21 @@ xaccTransFindOldCommonCurrency (Transaction *trans, QofBook *book)
   }
   else if (!gnc_commodity_equiv (retval,trans->common_currency))
   {
-    PWARN ("expected common currency %s but found %s\n",
+    char guid_str[GUID_ENCODING_LENGTH+1];
+    guid_to_string_buff(xaccTransGetGUID(trans), guid_str);
+    PWARN ("expected common currency %s but found %s in txn %s\n",
            gnc_commodity_get_unique_name (trans->common_currency),
-           gnc_commodity_get_unique_name (retval));
+           gnc_commodity_get_unique_name (retval), guid_str);
   }
 
   if (NULL == retval)
   {
      /* In every situation I can think of, this routine should return 
       * common currency.  So make note of this ... */
-     PWARN ("unable to find a common currency, and that is strange.");
+     char guid_str[GUID_ENCODING_LENGTH+1];
+     guid_to_string_buff(xaccTransGetGUID(trans), guid_str);
+     PWARN ("unable to find a common currency in txn %s, and that is strange.",
+	    guid_str);
   }
 
   return retval;
@@ -561,7 +626,11 @@ xaccTransScrubCurrency (Transaction *trans)
     else
     {
       SplitList *node;
-      PWARN ("no common transaction currency found for trans=\"%s\"", trans->description);
+      char guid_str[GUID_ENCODING_LENGTH+1];
+      guid_to_string_buff(xaccTransGetGUID(trans), guid_str);
+      PWARN ("no common transaction currency found for trans=\"%s\" (%s)",
+	     trans->description, guid_str);
+
       for (node=trans->splits; node; node=node->next)
       {
         Split *split = node->data;
@@ -608,9 +677,9 @@ xaccTransScrubCurrency (Transaction *trans)
         PWARN ("Adjusted split with mismatched values, desc=\"%s\" memo=\"%s\"" 
                " old amount %s %s, new amount %s",
                trans->description, sp->memo,
-               gnc_numeric_to_string (xaccSplitGetAmount(sp)),
+               gnc_num_dbg_to_string (xaccSplitGetAmount(sp)),
                gnc_commodity_get_mnemonic (currency),
-               gnc_numeric_to_string (xaccSplitGetValue(sp)));
+               gnc_num_dbg_to_string (xaccSplitGetValue(sp)));
         xaccTransBeginEdit (trans);
         xaccSplitSetAmount (sp, xaccSplitGetValue(sp));
         xaccTransCommitEdit (trans);
@@ -619,9 +688,9 @@ xaccTransScrubCurrency (Transaction *trans)
       {
         PINFO ("Ok: Split '%s' Amount %s %s, value %s %s",
         xaccSplitGetMemo (sp),
-        gnc_numeric_to_string (amount),
+        gnc_num_dbg_to_string (amount),
         gnc_commodity_get_mnemonic (currency),
-        gnc_numeric_to_string (value),
+        gnc_num_dbg_to_string (value),
         gnc_commodity_get_mnemonic (acc_currency));
       }*/
     }
@@ -754,7 +823,7 @@ xaccGroupScrubQuoteSources (AccountGroup *group, gnc_commodity_table *table)
   ENTER(" ");
 
   if (!group || !table) {
-    LEAVE("Oops")
+    LEAVE("Oops");
     return;
   }
 

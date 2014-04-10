@@ -11,7 +11,6 @@
 
 #include <stdio.h>
 #include <libguile.h>
-#include "guile-mappings.h"
 #include <glib.h>
 
 #include "gnc-module.h"
@@ -59,10 +58,6 @@ libgncmod_report_gnome_LTX_gnc_module_init(int refcount) {
   }
 
   if(!gnc_module_load("gnucash/gnome-utils", 0)) {
-    return FALSE;
-  }
-
-  if(!gnc_module_load("gnucash/app-file", 0)) {
     return FALSE;
   }
 

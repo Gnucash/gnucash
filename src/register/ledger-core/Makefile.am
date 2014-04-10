@@ -23,8 +23,9 @@ noinst_HEADERS = \
   split-register-model-save.h \
   split-register-p.h
 
-libgncmod_ledger_core_la_LDFLAGS = -module
 libgncmod_ledger_core_la_LIBADD = \
+  ${QOF_LIBS} \
+  ${top_builddir}/src/core-utils/libcore-utils.la \
   ${top_builddir}/src/gnome-utils/libgncmod-gnome-utils.la \
   ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
   ${top_builddir}/src/register/register-core/libgncmod-register-core.la \
@@ -34,11 +35,13 @@ AM_CFLAGS = \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/gnc-module \
+  -I${top_srcdir}/src/core-utils \
   -I${top_srcdir}/src/app-utils \
   -I${top_srcdir}/src/gnome-utils \
   -I${top_srcdir}/src/register/register-core \
   -I${top_srcdir}/src/register/register-gnome \
   ${GUILE_INCS} \
   ${GLADE_CFLAGS} \
-  ${GNOME_INCLUDEDIR} \
+  ${GNOME_CFLAGS} \
+  ${QOF_CFLAGS} \
   ${GLIB_CFLAGS}

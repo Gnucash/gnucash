@@ -37,12 +37,13 @@
 #include <libpq-fe.h>
 
 #include "Group.h"
-#include "guid.h"
+#include "qof.h"
 #include "Transaction.h"
 
 #include "builder.h"
-#include "qofbackend-p.h"
-#include "qofbook.h"
+#include "qof.h"
+
+#define GNC_MOD_TXN    "gnucash-postgres-transaction"
 
 typedef struct _pgend PGBackend;
 
@@ -130,5 +131,7 @@ QofBook * pgendGetBook(PGBackend *pbe);
 
 void pgendDisable (PGBackend *be);
 void pgendEnable (PGBackend *be);
+
+void pgend_provider_init(void);
 
 #endif /* POSTGRES_BACKEND_H */

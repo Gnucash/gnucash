@@ -32,7 +32,6 @@
 #include "Account.h"
 #include "Transaction.h"
 #include "gnc-lot.h"
-#include "qofid-p.h"
 
 gboolean gncInvoiceRegister (void);
 gint64 gncInvoiceNextID (QofBook *book);

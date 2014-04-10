@@ -1,8 +1,9 @@
 /*********************************************************************
  * test-employee.c
- * Test the employee object.
+ * Test the employee object (without Guile).
  * 
  * Copyright (c) 2001 Derek Atkins <warlord@MIT.EDU>
+ * Copyright (c) 2005 Neil Williams <linux@codehelp.co.uk>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -24,16 +25,11 @@
  *********************************************************************/
 
 #include <glib.h>
-#include <libguile.h>
-
-#include "guid.h"
-#include "gnc-module.h"
-#include "gnc-engine-util.h"
-#include "qofinstance.h"
-#include "qofobject.h"
-
-#include "gncEmployee.h"
+#include "qof.h"
 #include "gncEmployeeP.h"
+#include "gncCustomerP.h"
+#include "gncJobP.h"
+#include "gncInvoiceP.h"
 #include "test-stuff.h"
 
 static int count = 0;
@@ -60,21 +56,21 @@ test_gint_fcn (QofBook *book, const char *message,
 	       gint (*get) (GncEmployee *));
 #endif
 
-extern QofBackend * libgncmod_backend_file_LTX_gnc_backend_new(void);
-
 static void
 test_employee (void)
 {
-  QofBackend *fbe;
+  QofBackend *be;
   QofBook *book;
+  QofSession *session;
   GncEmployee *employee;
 
-  book = qof_book_new ();
-
+  session = qof_session_new();
+  qof_session_begin(session, QOF_STDOUT, FALSE, FALSE);
+  book = qof_session_get_book(session);
   /* The book *must* have a backend to pass the test of the 'dirty' flag */
   /* See the README file for details */
-  fbe = libgncmod_backend_file_LTX_gnc_backend_new();
-  qof_book_set_backend (book, fbe);
+  
+  be = qof_book_get_backend (book);
 
   /* Test creation/destruction */
   {
@@ -151,7 +147,7 @@ test_string_fcn (QofBook *book, const char *message,
   set (employee, str);
   do_test (gncEmployeeIsDirty (employee), "test dirty later");
   gncEmployeeCommitEdit (employee);
-  do_test (!gncEmployeeIsDirty (employee), "test dirty after commit");
+  do_test (gncEmployeeIsDirty (employee), "test dirty after commit");
   do_test (safe_strcmp (get (employee), str) == 0, message);
   gncEmployeeSetActive (employee, FALSE);
   count++;
@@ -170,7 +166,7 @@ test_numeric_fcn (QofBook *book, const char *message,
   set (employee, num);
   do_test (gncEmployeeIsDirty (employee), "test dirty later");
   gncEmployeeCommitEdit (employee);
-  do_test (!gncEmployeeIsDirty (employee), "test dirty after commit");
+  do_test (gncEmployeeIsDirty (employee), "test dirty after commit");
   do_test (gnc_numeric_equal (get (employee), num), message);
   gncEmployeeSetActive (employee, FALSE);
   count++;
@@ -191,7 +187,7 @@ test_bool_fcn (QofBook *book, const char *message,
   set (employee, num);
   do_test (gncEmployeeIsDirty (employee), "test dirty later");
   gncEmployeeCommitEdit (employee);
-  do_test (!gncEmployeeIsDirty (employee), "test dirty after commit");
+  do_test (gncEmployeeIsDirty (employee), "test dirty after commit");
   do_test (get (employee) == num, message);
   gncEmployeeSetActive (employee, FALSE);
   count++;
@@ -218,18 +214,21 @@ test_gint_fcn (QofBook *book, const char *message,
 }
 #endif
 
-static void
-main_helper (void *closure, int argc, char **argv)
-{
-  gnc_module_load("gnucash/business-core", 0);
-  test_employee();
-  print_test_results();
-  exit(get_rv());
-}
-
 int
 main (int argc, char **argv)
 {
-  scm_boot_guile (argc, argv, main_helper, NULL);
+  guid_init ();
+  qof_query_init ();
+  qof_object_initialize ();
+  qof_book_register ();
+  do_test (gncInvoiceRegister(), "Cannot register GncInvoice");
+  do_test (gncJobRegister (),  "Cannot register GncJob");
+  do_test (gncCustomerRegister(), "Cannot register GncCustomer");
+  do_test (gncEmployeeRegister(), "Cannot register GncEmployee");
+  test_employee();
+  print_test_results();
+  qof_query_shutdown();
+  guid_shutdown();
+  qof_object_shutdown ();
   return 0;
 }

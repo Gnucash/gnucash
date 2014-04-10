@@ -23,17 +23,15 @@
 
 #include "config.h"
 
-#include <gnome.h>
+#include <gtk/gtk.h>
 
 #include "dialog-utils.h"
-#include "global-options.h"
 #include "gnc-component-manager.h"
 #include "gnc-ui.h"
 #include "gnc-gui-query.h"
 #include "gnc-ui-util.h"
 #include "gnc-engine-util.h"
 #include "gnucash-sheet.h"
-#include "window-help.h"
 #include "dialog-search.h"
 #include "search-param.h"
 
@@ -50,6 +48,15 @@
 #define DIALOG_NEW_ORDER_CM_CLASS "dialog-new-order"
 #define DIALOG_EDIT_ORDER_CM_CLASS "dialog-edit-order"
 #define DIALOG_VIEW_ORDER_CM_CLASS "dialog-view-order"
+
+#define GCONF_SECTION_SEARCH "dialogs/business/order_search"
+
+void gnc_order_window_ok_cb (GtkWidget *widget, gpointer data);
+void gnc_order_window_cancel_cb (GtkWidget *widget, gpointer data);
+void gnc_order_window_help_cb (GtkWidget *widget, gpointer data);
+void gnc_order_window_invoice_cb (GtkWidget *widget, gpointer data);
+void gnc_order_window_close_order_cb (GtkWidget *widget, gpointer data);
+void gnc_order_window_destroy_cb (GtkWidget *widget, gpointer data);
 
 typedef enum
 {
@@ -106,6 +113,9 @@ ow_get_order (OrderWindow *ow)
 
 static void gnc_ui_to_order (OrderWindow *ow, GncOrder *order)
 {
+  GtkTextBuffer* text_buffer;
+  GtkTextIter start, end;
+  gchar *text;
   Timespec ts;
   time_t tt;
 
@@ -118,8 +128,12 @@ static void gnc_ui_to_order (OrderWindow *ow, GncOrder *order)
   
   gncOrderSetID (order, gtk_editable_get_chars
 		 (GTK_EDITABLE (ow->id_entry), 0, -1));
-  gncOrderSetNotes (order, gtk_editable_get_chars
-		    (GTK_EDITABLE (ow->notes_text), 0, -1));
+
+  text_buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW(ow->notes_text));
+  gtk_text_buffer_get_bounds (text_buffer, &start, &end);
+  text = gtk_text_buffer_get_text (text_buffer, &start, &end, FALSE);
+  gncOrderSetNotes (order, text);
+
   gncOrderSetReference (order, gtk_editable_get_chars
 			(GTK_EDITABLE (ow->ref_entry), 0, -1));
 
@@ -184,7 +198,7 @@ gnc_order_window_ok_save (OrderWindow *ow)
   return TRUE;
 }
 
-static void
+void
 gnc_order_window_ok_cb (GtkWidget *widget, gpointer data)
 {
   OrderWindow *ow = data;
@@ -198,7 +212,7 @@ gnc_order_window_ok_cb (GtkWidget *widget, gpointer data)
   gnc_close_gui_component (ow->component_id);
 }
 
-static void
+void
 gnc_order_window_cancel_cb (GtkWidget *widget, gpointer data)
 {
   OrderWindow *ow = data;
@@ -206,15 +220,13 @@ gnc_order_window_cancel_cb (GtkWidget *widget, gpointer data)
   gnc_close_gui_component (ow->component_id);
 }
 
-static void
+void
 gnc_order_window_help_cb (GtkWidget *widget, gpointer data)
 {
-  char *help_file = HH_ORDER;
-
-  helpWindow(NULL, NULL, help_file);
+  gnc_gnome_help(HF_USAGE, NULL);
 }
 
-static void
+void
 gnc_order_window_invoice_cb (GtkWidget *widget, gpointer data)
 {
   OrderWindow *ow = data;
@@ -230,7 +242,7 @@ gnc_order_window_invoice_cb (GtkWidget *widget, gpointer data)
   gnc_order_update_window (ow);
 }
 
-static void
+void
 gnc_order_window_close_order_cb (GtkWidget *widget, gpointer data)
 {
   OrderWindow *ow = data;
@@ -300,7 +312,7 @@ gnc_order_window_close_order_cb (GtkWidget *widget, gpointer data)
   gnc_order_update_window (ow);
 }
 
-static void
+void
 gnc_order_window_destroy_cb (GtkWidget *widget, gpointer data)
 {
   OrderWindow *ow = data;
@@ -364,7 +376,7 @@ gnc_order_window_close_handler (gpointer user_data)
 {
   OrderWindow *ow = user_data;
 
-  gnome_dialog_close (GNOME_DIALOG (ow->dialog));
+  gtk_widget_destroy (ow->dialog);
 }
 
 static void
@@ -388,39 +400,6 @@ gnc_order_window_refresh_handler (GHashTable *changes, gpointer user_data)
       return;
     }
   }
-}
-
-static void
-gnc_configure_register_colors (void)
-{
-  GncEntryLedgerColors reg_colors;
-
-  reg_colors.header_bg_color =
-    gnc_lookup_color_option_argb("Register Colors",
-                                 "Header color",
-                                 0xffffff);
-
-  reg_colors.primary_bg_color =
-    gnc_lookup_color_option_argb("Register Colors",
-                                 "Primary color",
-                                 0xffffff);
-
-  reg_colors.secondary_bg_color =
-    gnc_lookup_color_option_argb("Register Colors",
-                                 "Secondary color",
-                                 0xffffff);
-
-  reg_colors.primary_active_bg_color =
-    gnc_lookup_color_option_argb("Register Colors",
-                                 "Primary active color",
-                                 0xffffff);
-
-  reg_colors.secondary_active_bg_color =
-    gnc_lookup_color_option_argb("Register Colors",
-                                 "Secondary active color",
-                                 0xffffff);
-
-  gnc_entry_ledger_set_colors (reg_colors);
 }
 
 static void
@@ -459,18 +438,17 @@ gnc_order_update_window (OrderWindow *ow)
   gtk_widget_show_all (ow->dialog);
 
   {
+    GtkTextBuffer* text_buffer;
     const char *string;
     Timespec ts, ts_zero = {0,0};
     time_t tt;
-    gint pos = 0;
 
     gtk_entry_set_text (GTK_ENTRY (ow->ref_entry),
 			gncOrderGetReference (order));
 
     string = gncOrderGetNotes (order);
-    gtk_editable_delete_text (GTK_EDITABLE (ow->notes_text), 0, -1);
-    gtk_editable_insert_text (GTK_EDITABLE (ow->notes_text), string,
-			      strlen (string), &pos);
+    text_buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW(ow->notes_text));
+    gtk_text_buffer_set_text (text_buffer, string, -1);
 
     ts = gncOrderGetDateOpened (order);
     if (timespec_equal (&ts, &ts_zero)) {
@@ -550,7 +528,6 @@ gnc_order_new_window (GNCBook *bookp, OrderDialogType type,
   GladeXML *xml;
   GtkWidget *vbox, *regWidget;
   GncEntryLedger *entry_ledger = NULL;
-  GnomeDialog *owd;
   const char * class_name;
 
   switch (type) {
@@ -582,8 +559,6 @@ gnc_order_new_window (GNCBook *bookp, OrderDialogType type,
   /*
    * No existing order window found.  Build a new one.
    */
-  gnc_configure_register_colors ();
-
   ow = g_new0 (OrderWindow, 1);
   ow->book = bookp;
   ow->dialog_type = type;
@@ -594,9 +569,6 @@ gnc_order_new_window (GNCBook *bookp, OrderDialogType type,
   /* Find the dialog */
   ow->xml = xml = gnc_glade_xml_new ("order.glade", "Order Entry Dialog");
   ow->dialog = glade_xml_get_widget (xml, "Order Entry Dialog");
-  owd = GNOME_DIALOG (ow->dialog);
-
-  gtk_object_set_data (GTK_OBJECT (ow->dialog), "dialog_info", ow);
 
   /* Grab the widgets */
   ow->id_entry = glade_xml_get_widget (xml, "id_entry");
@@ -607,10 +579,6 @@ gnc_order_new_window (GNCBook *bookp, OrderDialogType type,
   ow->active_check = glade_xml_get_widget (xml, "active_check");
   ow->owner_box = glade_xml_get_widget (xml, "owner_hbox");
   ow->owner_label = glade_xml_get_widget (xml, "owner_label");
-
-  /* default to ok */
-  gnome_dialog_editable_enters (owd, GTK_EDITABLE (ow->id_entry));
-  gnome_dialog_set_default (owd, 0);
 
   /* Build the ledger */
   switch (type) {
@@ -645,20 +613,10 @@ gnc_order_new_window (GNCBook *bookp, OrderDialogType type,
   // gtk_box_pack_start (GTK_BOX(vbox), toolbar, FALSE, FALSE, 2);
   gtk_box_pack_start (GTK_BOX(vbox), regWidget, TRUE, TRUE, 2);
 
-  gtk_signal_connect (GTK_OBJECT (ow->dialog), "destroy",
-		      GTK_SIGNAL_FUNC(gnc_order_window_destroy_cb), ow);
-
-  gnome_dialog_button_connect (owd, 0,
-			       GTK_SIGNAL_FUNC(gnc_order_window_ok_cb), ow);
-  gnome_dialog_button_connect (owd, 1,
-			       GTK_SIGNAL_FUNC(gnc_order_window_help_cb), ow);
-
-  gnome_dialog_button_connect
-    (owd, 2, GTK_SIGNAL_FUNC(gnc_order_window_invoice_cb), ow);
-
-  gnome_dialog_button_connect
-    (owd, 3, GTK_SIGNAL_FUNC(gnc_order_window_close_order_cb), ow);
-
+  /* Setup signals */
+  glade_xml_signal_autoconnect_full( xml,
+                                     gnc_glade_autoconnect_full_func,
+                                     ow);
   /* Setup initial values */
   ow->order_guid = *gncOrderGetGUID (order);
 
@@ -686,8 +644,8 @@ gnc_order_window_new_order (GNCBook *bookp, GncOwner *owner)
 {
   OrderWindow *ow;
   GladeXML *xml;
-  GnomeDialog *owd;
   GncOrder *order;
+  gchar *string;
 
   ow = g_new0 (OrderWindow, 1);
   ow->book = bookp;
@@ -702,7 +660,6 @@ gnc_order_window_new_order (GNCBook *bookp, GncOwner *owner)
   /* Find the dialog */
   xml = gnc_glade_xml_new ("order.glade", "New Order Dialog");
   ow->dialog = glade_xml_get_widget (xml, "New Order Dialog");
-  owd = GNOME_DIALOG (ow->dialog);
 
   gtk_object_set_data (GTK_OBJECT (ow->dialog), "dialog_info", ow);
 
@@ -714,24 +671,16 @@ gnc_order_window_new_order (GNCBook *bookp, GncOwner *owner)
   ow->owner_box = glade_xml_get_widget (xml, "owner_hbox");
   ow->owner_label = glade_xml_get_widget (xml, "owner_label");
 
-  /* default to ok */
-  gnome_dialog_editable_enters (owd, GTK_EDITABLE (ow->id_entry));
-  gnome_dialog_set_default (owd, 0);
-
-  gtk_signal_connect (GTK_OBJECT (ow->dialog), "destroy",
-		      GTK_SIGNAL_FUNC(gnc_order_window_destroy_cb), ow);
-
-  gnome_dialog_button_connect (owd, 0,
-			       GTK_SIGNAL_FUNC(gnc_order_window_ok_cb), ow);
-  gnome_dialog_button_connect (owd, 1,
-			       GTK_SIGNAL_FUNC(gnc_order_window_cancel_cb), ow);
-  gnome_dialog_button_connect (owd, 2,
-			       GTK_SIGNAL_FUNC(gnc_order_window_help_cb), ow);
-
+  /* Setup signals */
+  glade_xml_signal_autoconnect_full( xml,
+                                     gnc_glade_autoconnect_full_func,
+                                     ow);
   /* Setup initial values */
   ow->order_guid = *gncOrderGetGUID (order);
-  gtk_entry_set_text (GTK_ENTRY (ow->id_entry),
-		      g_strdup_printf ("%.6lld", gncOrderNextID(bookp)));
+  string = g_strdup_printf ("%.6" G_GINT64_FORMAT,
+			    gncOrderNextID(bookp));
+  gtk_entry_set_text (GTK_ENTRY (ow->id_entry), string);
+  g_free(string);
       
   ow->component_id =
     gnc_register_gui_component (DIALOG_NEW_ORDER_CM_CLASS,
@@ -933,7 +882,7 @@ gnc_order_search (GncOrder *start, GncOwner *owner, GNCBook *book)
 
   return gnc_search_dialog_create (type, params, columns, q, q2,
 				   buttons, NULL, new_order_cb,
-				   sw, free_order_cb);
+				   sw, free_order_cb, GCONF_SECTION_SEARCH);
 }
 
 GNCSearchWindow *

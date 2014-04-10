@@ -7,23 +7,17 @@
 # i.e. TAGS: etags.files $(shell cat etags.files) doesn't work right
 # because etags.files contents are expanded before it's re-generated.
 
-# The $(shell find . -type d) dependency seems to be pointless -- it
-# always fires.  It appears that someone's always touching something.
-etags.files: $(shell find . -type d)
-	find . -path './debian' -prune -o -name '*.[ch]' -print -o -name '*.scm' -print | sort > etags.files.tmp
-	@if cmp --quiet etags.files etags.files.tmp; \
-        then \
-          echo "TAGS file list hasn't changed."; \
-          rm -f etags.files.tmp; \
-        else \
-          echo "TAGS file list has changed."; \
-          mv etags.files.tmp etags.files; \
-        fi
+etags.files: $(shell find . -mindepth 1 -type d ! -name CVS ! -path "*/.*")
+	find . -path '*/.*' -prune -o \( -name '*.[ch]' -o -name '*.scm' \) \
+		-print | sort > etags.files.tmp
+	cmp -s etags.files etags.files.tmp || cp etags.files.tmp etags.files
+	rm -f etags.files.tmp
+	touch etags.files
 
 # we don't need an etags.files dep here b/c you always call this after
 # re-generating etags.files if needed from the top-level Makefile.am.
-etags: $(shell cat etags.files)
+TAGS: $(shell cat etags.files)
 	etags `cat etags.files`
 
-ctags: $(shell cat etags.files)
+tags: $(shell cat etags.files)
 	ctags `cat etags.files`

@@ -1,310 +1,213 @@
-/********************************************************************\
- * dialog-totd.c -- Dialog to display a "tip of the day"            *
- * Copyright (C) 2000 Robert Merkel <rgmerk@mira.net>               *
- * Large fractions borrowed from gnome-hint (Copyright (C) 2000)    *
- * Free Software Foundation                                         *
- *                                                                  *
- * This program is free software; you can redistribute it and/or    *
- * modify it under the terms of the GNU General Public License as   *
- * published by the Free Software Foundation; either version 2 of   *
- * the License, or (at your option) any later version.              *
- *                                                                  *
- * This program is distributed in the hope that it will be useful,  *
- * but WITHOUT ANY WARRANTY; without even the implied warranty of   *
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    *
- * GNU General Public License for more details.                     *
- *                                                                  *
- * You should have received a copy of the GNU General Public License*
- * along with this program; if not, contact:                        *
- *                                                                  *
- * Free Software Foundation           Voice:  +1-617-542-5942       *
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
- * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
-\********************************************************************/
+/*
+ * dialog-totd.c : dialog to display a "tip of the day"
+ *
+ * Copyright (c) 2005 David Hampton <hampton@employees.org>
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation; either version 2 of
+ * the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, contact:
+ *
+ * Free Software Foundation           Voice:  +1-617-542-5942
+ * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652
+ * Boston, MA  02111-1307,  USA       gnu@gnu.org
+ */ 
 
 #include "config.h"
 
-#include <gnome.h>
+#include <gtk/gtk.h>
+#include <glade/glade-xml.h>
 
 #include "dialog-totd.h"
-#include "dialog-utils.h"	/* remove with GTK 2.0 */
-#include "global-options.h"
-#include "gnc-gui-query.h"
-#include "gnc-ui.h"
+#include "dialog-utils.h"
+#include "gnc-gconf-utils.h"
+#include "gnc-gnome-utils.h"
+#include "gnc-engine.h"
 #include "messages.h"
-#include "tip-of-the-day.h"
 
+
+#define GCONF_SECTION   "dialogs/tip_of_the_day"
+#define KEY_CURRENT_TIP "current_tip"
+#define KEY_SHOW_TIPS   "show_at_startup"
+
+
+/* Callbacks */
+void gnc_totd_dialog_close(GtkButton *button, gpointer user_data);
+void gnc_totd_dialog_next(GtkButton *button, gpointer user_data);
+void gnc_totd_dialog_previous(GtkButton *button, gpointer user_data);
+void gnc_totd_dialog_startup_toggled (GtkToggleButton *button, gpointer user_data);
+
+/* The Tips */
+static gchar **tip_list;
+static gint tip_count = -1;
+static gint current_tip_number = -1;
 
 /* This static indicates the debugging module that this .o belongs to.  */
-/* static short module = MOD_GUI; */
-
-static GtkWidget *win = NULL;
-static GtkWidget *disable_cb = NULL;
-static GtkWidget *canvas = NULL;
-static GtkWidget *scrollwin = NULL;
-
-static GnomeCanvasItem *hint_item;
-static GnomeCanvasItem *blue_background;
-static GnomeCanvasItem *white_background;
-static gboolean old_enabled;
-
-static int width = 400, height = 200;
+static QofLogModule log_module = GNC_MOD_GUI;
 
 
-/** Prototypes *********************************************************/
-static void draw_on_canvas(GtkWidget *canvas, char *hint);
-static void grow_text_if_necessary(void);
-static GtkWidget *gnc_ui_totd_dialog_create(void);
-static void totd_previous_cb(GtkWidget *widget, gpointer data);
-static void totd_next_cb(GtkWidget * widget, gpointer data);
-static void totd_close_cb(GtkWidget *widget, gpointer data);
+/*********************/
+/* Utility Functions */
+/*********************/
 
-/** Implementations ***************************************************/
-
-/************************************************************************\
- * gnc_ui_totd_dialog_create_and_run                                    *
- *   display and run the "Tip of the Day" dialog                        *
- *                                                                      *
- * Returns: nothing                                                     *
-\************************************************************************/
-
-void gnc_ui_totd_dialog_create_and_run(void)
-{
-  if(win == NULL)
-  {
-    gnc_ui_totd_dialog_create();
-    gtk_widget_show_all(win);
-  }
-  else
-  {
-    gtk_window_present(GTK_WINDOW(win));
-  }
-  return;
-}
-
-static GtkWidget *
-gnc_ui_totd_dialog_create(void)
-{
-  char *new_hint;
-
-  win = gnome_dialog_new(_("Tip of the Day"), 
-			 GNOME_STOCK_BUTTON_PREV, 
-			 GNOME_STOCK_BUTTON_NEXT, 
-			 GNOME_STOCK_BUTTON_CLOSE, 
-			 NULL);	
-
-  gnome_dialog_set_default(GNOME_DIALOG(win), 2);
-  gnome_dialog_close_hides(GNOME_DIALOG(win), FALSE);
-			   
-  scrollwin = gtk_scrolled_window_new(NULL, NULL);
-  gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scrollwin),
-				 GTK_POLICY_NEVER,
-				 GTK_POLICY_NEVER);
-  gtk_box_pack_start(GTK_BOX(GNOME_DIALOG(win)->vbox),
-                     scrollwin, TRUE, TRUE, 0);
-  canvas = gnome_canvas_new();
-  gnome_canvas_set_scroll_region(GNOME_CANVAS(canvas),
-  				 0.0,0.0,width,height);
-  gtk_widget_set_usize(canvas,width,height);
-  gtk_widget_ensure_style(canvas);
-  gtk_container_add(GTK_CONTAINER(scrollwin), canvas);
-  new_hint = gnc_get_current_tip();
-  draw_on_canvas(canvas, new_hint);
-  free(new_hint);
-  gtk_widget_show_all(scrollwin);
-
-  old_enabled = gnc_lookup_boolean_option("General",
-					  "Display \"Tip of the Day\"",
-					  TRUE);
-  {
-    const char *message = _("Display this dialog next time");
-    disable_cb = gtk_check_button_new_with_label(message);
-  }
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (disable_cb), old_enabled);
-
-  gtk_box_pack_start(GTK_BOX(GNOME_DIALOG(win)->vbox),
-                     disable_cb, TRUE, TRUE, 0);
-  gtk_widget_show(disable_cb);
-
-  gnome_dialog_button_connect(GNOME_DIALOG(win), 0,
-			      GTK_SIGNAL_FUNC(totd_previous_cb), NULL);
-  gnome_dialog_button_connect(GNOME_DIALOG(win), 1,
-			      GTK_SIGNAL_FUNC(totd_next_cb), NULL);
-  gnome_dialog_button_connect(GNOME_DIALOG(win), 2,
-			      GTK_SIGNAL_FUNC(totd_close_cb), NULL);
-  gtk_signal_connect(GTK_OBJECT(win), "close",
-		     GTK_SIGNAL_FUNC(totd_close_cb), NULL);
-
-  return win;
-}
-
+/** This function should be called to change the tip number.  It
+ *  handles clamping the number to the range of tips available, saving
+ *  the number in the GConf database, and updating the dialog window
+ *  with the text of the newly selected tip.
+ *
+ *  @param widget A pointer to any widget in the dialog.  This widget
+ *  is used as a starting point to find the GtkTextView widget that
+ *  holds the text of the tip.
+ *
+ *  @param offset Which tip to show.  If the value is zero then the
+ *  current tip will be shown.  If the value is negative the previous
+ *  tip will be shown.  If the value is positive the next tip will be
+ *  shown.
+ */
 static void
-totd_previous_cb(GtkWidget *widget, gpointer data)
+gnc_new_tip_number (GtkWidget *widget,
+		    gint offset)
 {
-  char *new_hint;
-  gnc_decrement_tip();
-  new_hint = gnc_get_current_tip();
-  gnome_canvas_item_set(hint_item,
-			"text",new_hint,
-			NULL);
-  grow_text_if_necessary();
-  free(new_hint);
-  return;
-}
+  GtkWidget *textview;
 
-static void
-totd_next_cb(GtkWidget * widget, gpointer data)
-{
-  char *new_hint;
-  gnc_increment_tip();
-  new_hint = gnc_get_current_tip();
-  gnome_canvas_item_set(hint_item,
-			"text", new_hint, NULL);
-  grow_text_if_necessary();
-  free(new_hint);
-  return;
-}
+  ENTER("widget %p, offset %d", widget, offset);
+  current_tip_number += offset;
+  DEBUG("clamp %d to '0 <= x < %d'", current_tip_number, tip_count);
+  if (current_tip_number < 0)
+    current_tip_number = tip_count - 1;
+  if (current_tip_number >= tip_count)
+    current_tip_number = 0;
+  gnc_gconf_set_int(GCONF_SECTION, KEY_CURRENT_TIP, current_tip_number, NULL);
 
-static void
-totd_close_cb(GtkWidget *widget, gpointer data)
-{
-  gboolean new_enabled =
-    gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(disable_cb));
-
-  gnc_increment_tip();
-
-  gtk_widget_destroy(GTK_WIDGET(win));
-  win = NULL;
-  if (new_enabled != old_enabled)
-  {
-    gnc_set_boolean_option("General", 
-			   "Display \"Tip of the Day\"",
-			   new_enabled);
-    gnc_option_refresh_ui_by_name("General", "Display \"Tip of the Day\"");
-  }
-  return;
+  textview = gnc_glade_lookup_widget(widget, "tip_textview");
+  gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(textview)),
+			   _(tip_list[current_tip_number]), -1);
+  LEAVE("");
 }
 
 
-/* increases the size of the canvas and enables scrolling if the text
-   gets big enough */
+/********************/
+/*    Callbacks     */
+/********************/
 
-static void
-grow_text_if_necessary(void)
+void
+gnc_totd_dialog_close (GtkButton *button,
+		       gpointer user_data)
 {
-  double w,h;
-  int ww,hh;
-  int changed = FALSE;
+  GtkWidget *dialog;
 
-  gtk_object_get(GTK_OBJECT(hint_item),
-		 "text_width",&w,
-		 "text_height",&h,
-		 NULL);
-  /*add border, and 10 pixels around*/
-  w+=75+10;
-  h+=50+10;
-  /*some sanity limits*/
-  /*if(w>800) w = 800;
-    if(h>600) h = 600;*/
+  ENTER("button %p, dialog %p", button, user_data);
+  dialog = GTK_WIDGET(user_data);
+  gnc_save_window_size(GCONF_SECTION, GTK_WINDOW(dialog));
+  gtk_widget_destroy(dialog);
+  LEAVE("");
+}
 
-  if(w>width) {
-    width = w;
-    changed = TRUE;
+void
+gnc_totd_dialog_next (GtkButton *button,
+		      gpointer user_data)
+{
+  gnc_new_tip_number(GTK_WIDGET(button), 1);
+}
+
+void
+gnc_totd_dialog_previous (GtkButton *button,
+			  gpointer user_data)
+{
+  gnc_new_tip_number(GTK_WIDGET(button), -1);
+}
+
+void
+gnc_totd_dialog_startup_toggled (GtkToggleButton *button,
+				 gpointer user_data)
+{
+  gboolean active;
+
+  active = gtk_toggle_button_get_active(button);
+  gnc_gconf_set_bool(GCONF_SECTION, KEY_SHOW_TIPS, active, NULL);
+}
+
+/********************/
+/*     Parser       */
+/********************/
+
+static gboolean
+gnc_totd_initialize (void)
+{
+  gchar *filename, *contents, *new;
+  gsize length;
+  GError *error;
+
+  /* Find the file */
+  filename = gnc_gnome_locate_data_file("tip_of_the_day.list");
+  if (!filename)
+    return FALSE;
+
+  /* Read it */
+  if (!g_file_get_contents(filename, &contents, &length, &error)) {
+    printf("Unable to read file: %s\n", error->message);
+    g_error_free(error);
+    g_free(filename);
+    return FALSE;
   }
-  if(h>height) {
-    height = h;
-    changed = TRUE;
+
+  /* Split into multiple strings */
+  tip_list = g_strsplit(contents, "\n\n", 0);
+
+  /* Convert any escaped characters while counting the strings */
+  for (tip_count = 0; tip_list[tip_count] != NULL; tip_count++) {
+
+//  new = g_strdelimit(string, "\n", ' ');
+    new = g_strcompress(g_strdelimit(tip_list[tip_count], "\n", ' '));
+    g_free(tip_list[tip_count]);
+    tip_list[tip_count] = new;
   }
 
-  if(!changed)
+  g_free(contents);
+  g_free(filename);
+  return TRUE;
+}
+
+/********************/
+/*      Main        */
+/********************/
+
+void
+gnc_totd_dialog (GtkWindow *parent, gboolean startup)
+{
+  GladeXML *xml;
+  GtkWidget *dialog, *button;
+  gboolean show_tips;
+
+  show_tips = gnc_gconf_get_bool(GCONF_SECTION, KEY_SHOW_TIPS, NULL);
+  if (startup && !show_tips)
     return;
 
-  /*limits on size*/
-  ww = width; hh = height;
-  if(ww>720) ww = 720;
-  if(hh>450) hh = 450;
+  if (tip_count == -1) {
+    if (!gnc_totd_initialize())
+      return;
+    current_tip_number =  gnc_gconf_get_int(GCONF_SECTION, KEY_CURRENT_TIP, NULL);
+  }
 
-  if(ww != width || hh != height)
-    gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scrollwin),
-				   GTK_POLICY_AUTOMATIC,
-				   GTK_POLICY_AUTOMATIC);
-  else
-    gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scrollwin),
-				   GTK_POLICY_NEVER,
-				   GTK_POLICY_NEVER);
+  xml = gnc_glade_xml_new ("totd.glade", "totd_dialog");
+  dialog  = glade_xml_get_widget (xml, "totd_dialog");
+  gtk_window_set_transient_for(GTK_WINDOW (dialog), parent);
+  glade_xml_signal_autoconnect_full(xml, gnc_glade_autoconnect_full_func,
+				    dialog);
 
-  /*here we grow the canvas*/
-  gtk_widget_set_usize(canvas,ww,hh);
-  gnome_canvas_set_scroll_region(GNOME_CANVAS(canvas),
-				 0.0,0.0,width,height);
+  gnc_new_tip_number(dialog, 0);
 
-  gnome_canvas_item_set(blue_background,
-			"x2",(double)width,
-			"y2",(double)height,
-			NULL);
-  gnome_canvas_item_set(white_background,
-			"x2",(double)width,
-			"y2",(double)height,
-			NULL);
-  gnome_canvas_item_set(hint_item,
-			"x",(double)(((width-75)/2)+75),
-			"y",(double)(((height-50)/2)+50),
-			"clip_width",(double)(width-75),
-			"clip_height",(double)(height-50),
-			NULL);
+  button = glade_xml_get_widget(xml, "show_checkbutton");
+  gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON (button), show_tips);
+
+  gnc_restore_window_size(GCONF_SECTION, GTK_WINDOW(dialog));
+  gtk_widget_show(GTK_WIDGET (dialog));
 }
-
-/* places items on the canvas to make up the tip of the day */
-
-static void
-draw_on_canvas(GtkWidget *canvas, char *hint)
-{
-  GnomeCanvasItem *item;
-
-  blue_background = gnome_canvas_item_new(
-    gnome_canvas_root(GNOME_CANVAS(canvas)),
-    gnome_canvas_rect_get_type(),
-    "x1",(double)0.0,
-    "y1",(double)0.0,
-    "x2",(double)400.0,
-    "y2",(double)200.0,
-    "fill_color","sea green",
-    NULL);
-
-  white_background = gnome_canvas_item_new(
-    gnome_canvas_root(GNOME_CANVAS(canvas)),
-    gnome_canvas_rect_get_type(),
-    "x1",(double)75.0,
-    "y1",(double)50.0,
-    "x2",(double)400.0,
-    "y2",(double)200.0,
-    "fill_color","white",
-    NULL);
-
-  hint_item = gnome_canvas_item_new(
-    gnome_canvas_root(GNOME_CANVAS(canvas)),
-    gnome_canvas_text_get_type(),
-    "x",(double)237.5,
-    "y",(double)125.0,
-    "fill_color","black",
-    "font_gdk",canvas->style->font,
-    "clip_width",(double)325.0,
-    "clip_height",(double)150.0,
-    "clip",TRUE,
-    "text",hint,
-    NULL);
-
-  item = gnome_canvas_item_new(
-    gnome_canvas_root(GNOME_CANVAS(canvas)),
-    gnome_canvas_text_get_type(),
-    "x",(double)200.0,
-    "y",(double)25.0,
-    "fill_color","white",
-    "font",_("-*-helvetica-bold-r-normal-*-*-180-*-*-p-*-*-*"),
-    "text",_("Tip of the Day:"),
-    NULL);
-
-  grow_text_if_necessary();
-}
-/********************** END OF FILE *********************************\
-\********************************************************************/

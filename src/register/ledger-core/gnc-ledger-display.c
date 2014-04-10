@@ -32,11 +32,11 @@
 #include "QueryNew.h"
 #include "SX-book.h"
 #include "Transaction.h"
-#include "global-options.h"
 #include "gnc-component-manager.h"
 #include "gnc-book.h"
 #include "gnc-date.h"
-#include "gnc-engine-util.h"
+#include "gnc-engine.h"
+#include "gnc-gconf-utils.h"
 #include "gnc-ledger-display.h"
 #include "gnc-ui-util.h"
 #include "split-register-control.h"
@@ -72,7 +72,7 @@ struct gnc_ledger_display
 
 
 /** GLOBALS *********************************************************/
-static short module = MOD_LEDGER;
+static QofLogModule log_module = GNC_MOD_LEDGER;
 
 
 /** Declarations ****************************************************/
@@ -225,16 +225,14 @@ gnc_get_default_register_style (GNCAccountType type)
 #endif
 
   default:
-    style_string = gnc_lookup_multichoice_option("Register", 
-                                                 "Default Register Style",
-                                                 "ledger");
-
-    if (safe_strcmp(style_string, "ledger") == 0)
-      new_style = REG_STYLE_LEDGER;
+    style_string = gnc_gconf_get_string(GCONF_GENERAL_REGISTER,
+					"default_style", NULL);
+    if (safe_strcmp(style_string, "journal") == 0)
+      new_style = REG_STYLE_JOURNAL;
     else if (safe_strcmp(style_string, "auto_ledger") == 0)
       new_style = REG_STYLE_AUTO_LEDGER;
-    else if (safe_strcmp(style_string, "journal") == 0)
-      new_style = REG_STYLE_JOURNAL;
+    else
+      new_style = REG_STYLE_LEDGER;
     
     if (style_string != NULL)
       free(style_string);
@@ -377,7 +375,7 @@ gboolean
 gnc_ledger_display_default_double_line (GNCLedgerDisplay *gld)
 {
   return (gld->use_double_line_default ||
-          gnc_lookup_boolean_option ("Register", "Double Line Mode", FALSE));
+          gnc_gconf_get_bool(GCONF_GENERAL_REGISTER, "double_line_mode", NULL));
 }
 
 /* Opens up a register window to display a single account */
@@ -613,7 +611,7 @@ close_handler (gpointer user_data)
 
 static void
 gnc_ledger_display_make_query (GNCLedgerDisplay *ld,
-                               gboolean show_all,
+                               gint limit,
                                SplitRegisterType type)
 {
   Account *leader;
@@ -643,8 +641,8 @@ gnc_ledger_display_make_query (GNCLedgerDisplay *ld,
    * configurable, or maybe we should go back a time range instead
    * of picking a number, or maybe we should be able to exclude
    * based on reconciled status. Anyway, this works for now. */
-  if (!show_all && (type != SEARCH_LEDGER))
-    xaccQuerySetMaxSplits (ld->query, 30);
+  if ((limit != 0) && (type != SEARCH_LEDGER))
+    xaccQuerySetMaxSplits (ld->query, limit);
 
   xaccQuerySetBook (ld->query, gnc_get_current_book());
 
@@ -681,7 +679,7 @@ gnc_ledger_display_internal (Account *lead_account, Query *q,
                              gboolean is_template )
 {
   GNCLedgerDisplay *ld;
-  gboolean show_all;
+  gint limit;
   const char *class;
   GList *splits;
 
@@ -761,15 +759,13 @@ gnc_ledger_display_internal (Account *lead_account, Query *q,
   ld->get_parent = NULL;
   ld->user_data = NULL;
 
-  show_all = gnc_lookup_boolean_option ("_+Advanced",
-                                        "Show All Transactions",
-                                        TRUE);
+  limit = gnc_gconf_get_float(GCONF_GENERAL_REGISTER, "max_transactions", NULL);
 
   /* set up the query filter */
   if (q)
     ld->query = xaccQueryCopy (q);
   else
-    gnc_ledger_display_make_query (ld, show_all, reg_type);
+    gnc_ledger_display_make_query (ld, limit, reg_type);
 
   ld->component_id = gnc_register_gui_component (class,
                                                  refresh_handler,
@@ -825,12 +821,11 @@ gnc_ledger_display_refresh_internal (GNCLedgerDisplay *ld, GList *splits)
   if (!ld || ld->loading)
     return;
 
-  if (!gnc_split_register_full_refresh_ok (ld->reg))
-  {
     gnc_split_register_load_xfer_cells (ld->reg,
                                         gnc_ledger_display_leader (ld));
+
+  if (!gnc_split_register_full_refresh_ok (ld->reg))
     return;
-  }
 
   ld->loading = TRUE;
 

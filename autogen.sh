@@ -14,4 +14,5 @@ PKG_NAME="gnucash"
     exit 1
 }
 
+USE_GNOME2_MACROS=1
 . $srcdir/macros/autogen.sh

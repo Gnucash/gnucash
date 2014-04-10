@@ -39,20 +39,13 @@
 #include <glib.h>
 
 #include "gnc-engine.h"
-#include "gnc-trace.h"
 #include "Group.h"
 #include "GroupP.h"
 #include "SchedXaction.h"
 #include "SX-book.h"
 #include "SX-book-p.h"
 
-#include "qofbook.h"
-#include "qofbook-p.h"
-#include "qofinstance.h"
-#include "qofinstance-p.h"
-#include "qofobject.h"
-
-static short module = MOD_SX;
+static QofLogModule log_module = GNC_MOD_SX;
 
 /* XXX this whole file is crufty, it doesn't really use entities
  * in the most efficient/best way */
@@ -75,7 +68,8 @@ gnc_book_get_template_group( QofBook *book )
 }
 
 void
-gnc_collection_set_template_group (QofCollection *col, AccountGroup *templateGroup)
+gnc_collection_set_template_group (QofCollection *col,
+                                   AccountGroup *templateGroup)
 {
   AccountGroup *old_grp;
   if (!col) return;

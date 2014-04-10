@@ -32,13 +32,12 @@
 #define GNC_GENERAL_SELECT_H
 
 #include <gnome.h>
+#include <glib.h>
 
-BEGIN_GNOME_DECLS
-
-
-#define GNC_GENERAL_SELECT(obj)          GTK_CHECK_CAST (obj, gnc_general_select_get_type(), GNCGeneralSelect)
-#define GNC_GENERAL_SELECT_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass, gnc_general_select_get_type(), GNCGeneralSelectClass)
-#define GNC_IS_GENERAL_SELECT(obj)       GTK_CHECK_TYPE (obj, gnc_general_select_get_type ())
+#define GNC_TYPE_GENERAL_SELECT          (gnc_general_select_get_type ())
+#define GNC_GENERAL_SELECT(obj)          G_TYPE_CHECK_INSTANCE_CAST (obj, gnc_general_select_get_type(), GNCGeneralSelect)
+#define GNC_GENERAL_SELECT_CLASS(klass)  G_TYPE_CHECK_CLASS_CAST (klass, gnc_general_select_get_type(), \ GNCGeneralSelectClass)
+#define GNC_IS_GENERAL_SELECT(obj)       G_TYPE_CHECK_INSTANCE_TYPE (obj, gnc_general_select_get_type ())
 
 typedef const char *	(*GNCGeneralSelectGetStringCB) (gpointer);
 typedef gpointer 	(*GNCGeneralSelectNewSelectCB) (gpointer cbarg, gpointer default_selection, GtkWidget *parent);
@@ -60,6 +59,8 @@ typedef struct {
   GNCGeneralSelectGetStringCB	get_string;
   GNCGeneralSelectNewSelectCB	new_select;
   gpointer			cb_arg;
+
+  int disposed; /* private */
 } GNCGeneralSelect;
 
 typedef struct {
@@ -78,10 +79,7 @@ void       gnc_general_select_set_selected   (GNCGeneralSelect *gsl,
 gpointer   gnc_general_select_get_selected   (GNCGeneralSelect *gsl);
 const char *gnc_general_select_get_printname (GNCGeneralSelect *gsl,
 					      gpointer selection);
-guint      gnc_general_select_get_type       (void);
-
-
-END_GNOME_DECLS
+GType      gnc_general_select_get_type       (void);
 
 #endif
 

@@ -7,17 +7,28 @@ AM_CFLAGS = \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/gnc-module \
   -I${top_srcdir}/src/calculation \
+  -I${top_srcdir}/src/core-utils \
   -I${top_srcdir}/src/engine \
+  -I${top_srcdir}/lib/glib26 \
   ${GUILE_INCS} \
   ${G_WRAP_COMPILE_ARGS} \
   ${GLIB_CFLAGS} \
-  ${GNOME_INCLUDEDIR}
+  ${QOF_CFLAGS} \
+  ${GNOME_CFLAGS}
 
 libgncmod_app_utils_la_SOURCES = \
   file-utils.c \
   gfec.c \
-  global-options.c \
+  gnc-accounting-period.c \
   gnc-component-manager.c \
+  gnc-druid.c \
+  gnc-druid-cb.c \
+  gnc-druid-provider.c \
+  gnc-druid-provider-desc.c \
+  gnc-druid-provider-desc-edge.c \
+  gnc-druid-provider-desc-file.c \
+  gnc-druid-provider-desc-multifile.c \
+  gnc-druid-provider-file-cb.c \
   gnc-err-popup.c \
   gnc-euro.c \
   gnc-exp-parser.c \
@@ -32,8 +43,17 @@ gncincludedir = ${GNC_INCLUDE_DIR}
 gncinclude_HEADERS = \
   file-utils.h \
   gfec.h \
-  global-options.h \
+  gnc-basic-gobject.h \
+  gnc-accounting-period.h \
   gnc-component-manager.h \
+  gnc-druid.h \
+  gnc-druid-cb.h \
+  gnc-druid-provider.h \
+  gnc-druid-provider-desc.h \
+  gnc-druid-provider-desc-edge.h \
+  gnc-druid-provider-desc-file.h \
+  gnc-druid-provider-desc-multifile.h \
+  gnc-druid-provider-file-cb.h \
   gnc-err-popup.h \
   gnc-euro.h \
   gnc-exp-parser.h \
@@ -48,17 +68,17 @@ gncinclude_HEADERS = \
 noinst_HEADERS = \
   gw-app-utils.h
 
-libgncmod_app_utils_la_LDFLAGS = -module
-
 libgncmod_app_utils_la_LIBADD = \
   ${top_builddir}/src/gnc-module/libgncmodule.la \
   ${top_builddir}/src/engine/libgncmod-engine.la \
   ${top_builddir}/src/calculation/libgncmod-calculation.la \
+  ${top_builddir}/src/core-utils/libcore-utils.la \
+  ${top_builddir}/lib/glib26/libgncglib.la \
   ${GUILE_LIBS} \
+  ${QOF_LIBS} \
   ${GLIB_LIBS}
 
 libgw_app_utils_la_SOURCES = gw-app-utils.c
-libgw_app_utils_la_LDFLAGS = -module
 
 gncmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash
 gncmod_DATA = app-utils.scm 

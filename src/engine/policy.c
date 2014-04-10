@@ -20,7 +20,7 @@
 \********************************************************************/
 
 /** @file policy.c
- *  @breif Implement FIFO Accounting Policy.
+ *  @brief Implement FIFO Accounting Policy.
  *  @author Created by Linas Vepstas August 2003
  *  @author Copyright (c) 2003,2004 Linas Vepstas <linas@linas.org>
  *
@@ -40,11 +40,10 @@
 #include "gnc-engine.h"
 #include "gnc-lot.h"
 #include "gnc-lot-p.h"
-#include "gnc-trace.h"
 #include "policy.h"
 #include "policy-p.h"
 
-/* static short module = MOD_LOT; */
+//static QofLogModule log_module = GNC_MOD_LOT;
 
 static Split * 
 DirectionPolicyGetSplit (GNCPolicy *pcy, GNCLot *lot, short reverse)
@@ -55,11 +54,11 @@ DirectionPolicyGetSplit (GNCPolicy *pcy, GNCLot *lot, short reverse)
    gboolean want_positive;
    gnc_numeric baln;
 
-	if (!pcy || !lot || !lot->account || !lot->splits) return NULL;
+   if (!pcy || !lot || !lot->account || !lot->splits) return NULL;
 
    /* Recomputing the balance re-evaluates the lot closure */
    baln = gnc_lot_get_balance (lot);
-	if (gnc_lot_is_closed(lot)) return NULL;
+   if (gnc_lot_is_closed(lot)) return NULL;
 
    want_positive = gnc_numeric_negative_p (baln);
 
@@ -84,9 +83,12 @@ DirectionPolicyGetSplit (GNCPolicy *pcy, GNCLot *lot, short reverse)
       if (split->lot) goto donext;
 
       /* Allow equiv currencies */
-		is_match = gnc_commodity_equiv (common_currency, 
+      is_match = gnc_commodity_equiv (common_currency, 
                                       split->parent->common_currency);
-		if (FALSE == is_match) goto donext;
+      if (FALSE == is_match) goto donext;
+
+      /* Disallow zero-amount splits in general. */
+      if (gnc_numeric_zero_p(split->amount)) goto donext;
 
       is_positive = gnc_numeric_positive_p (split->amount);
       if ((want_positive && is_positive) ||

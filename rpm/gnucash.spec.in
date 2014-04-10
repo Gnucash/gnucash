@@ -1,3 +1,15 @@
+#
+# WATCH OUT: These spec file(s) might be heavily out of date and/or
+# absolutely NOT SUITED to your distribution! They are particularly
+# matched for the RedHat-8 distribution, but DO NOT USE THEM if you
+# don't have exactly that distribution! Your own distribution probably
+# has its own source RPM of gnucash, and this source RPM includes a
+# spec file that is much better suited to your distribution.
+#
+#  I repeat: DO NOT USE THIS SPEC file unless you either have Red Hat 8
+#  or you really know how you can modify it to suit your distribution.
+#
+#
 # Check whether GnuCash should build optional modules.
 # To modify parameters, edit the .spec file, 0 is off, 1 is on
 %define _with_postgres 0
@@ -19,10 +31,10 @@ Source:    	http://www.gnucash.org/pub/gnucash/sources/stable/gnucash-%{version}
 BuildRoot: 	%{_tmppath}/%{name}-%{version}-root
 Requires:  	gnome-libs >= 1.2.0, gdk-pixbuf >= 0.2.5, gnome-print >= 0.21
 Requires:	guile >= 1.3.4, gtkhtml >= 0.8, Guppi >= 0.35.3
-Requires:	g-wrap >= 1.3.4, umb-scheme >= 3.2, gal >= 0.8
+Requires:	g-wrap >= 1.3.4, gal >= 0.8
 BuildPrereq: 	g-wrap-devel >= 1.3.4, gtkhtml-devel >= 0.8
 BuildPrereq: 	Guppi-devel, gal-devel, libxml-devel
-BuildPrereq: 	libglade-devel, libghttp-devel, python-devel, libtermcap-devel
+BuildPrereq: 	libglade-devel, libghttp-devel, libtermcap-devel
 BuildPrereq: 	readline-devel
 Prereq: 	/sbin/ldconfig /sbin/install-info
 
@@ -62,8 +74,8 @@ import OFX files.
 %package hbci
 Summary: Enables HBCI importing in GnuCash
 Group: Applications/Finance
-Requires: gnucash = %{version} openhbci >= 0.9.6
-BuildPrereq: openhbci
+Requires: gnucash = %{version} aqbanking >= 0.9.8
+BuildPrereq: aqbanking-devel
 
 %description hbci
 This package adds HBCI file import support to the base

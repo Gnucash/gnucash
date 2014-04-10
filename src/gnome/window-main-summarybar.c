@@ -3,6 +3,7 @@
  * Copyright (C) 1998,1999 Jeremy Collins	                    *
  * Copyright (C) 1998,1999,2000 Linas Vepstas                       *
  * Copyright (C) 2001 Bill Gribble                                  *
+ * Copyright (C) 2005 Joshua Sled <jsled@asynchronous.org>          *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -30,36 +31,50 @@
 #include "Account.h"
 #include "Group.h"
 #include "dialog-utils.h"
-#include "global-options.h"
+#include "gnc-accounting-period.h"
 #include "gnc-component-manager.h"
 #include "gnc-engine-util.h"
 #include "gnc-euro.h"
+#include "gnc-gconf-utils.h"
 #include "gnc-ui-util.h"
 #include "gnc-ui.h"
-#include "gtkselect.h"
 #include "messages.h"
 #include "option-util.h"
+#include "qofbook.h"
 #include "top-level.h"
 #include "window-main-summarybar.h"
-#include "window-main.h"
 
 typedef struct {
   GtkWidget * hbox;
   GtkWidget * totals_combo;
-  GList     * totals_list; 
+  GtkListStore *datamodel;
   int       component_id;
-  SCM       callback_id;
+  int       cnxn_id;
 } GNCMainSummary;
 
 #define WINDOW_SUMMARYBAR_CM_CLASS "summary-bar"
 
-/* An accumulator for a given currency.
+#define GCONF_SECTION    "window/pages/account_tree/summary"
+#define KEY_GRAND_TOTAL  "grand_total"
+#define KEY_NON_CURRENCY "non_currency"
+#define KEY_START_CHOICE "start_choice"
+#define KEY_START_DATE   "start_date"
+#define KEY_START_PERIOD "start_period"
+#define KEY_END_CHOICE 	 "end_choice"
+#define KEY_END_DATE   	 "end_date"
+#define KEY_END_PERIOD 	 "end_period"
+
+/**
+ * An accumulator for a given currency.
  *
  * This is used during the update to the status bar to contain the
  * accumulation for a single currency. These are placed in a GList and
  * kept around for the duration of the calculation. There may, in fact
- * be better ways to do this, but none occurred. */
-
+ * be better ways to do this, but none occurred.
+ *
+ * @todo This structure and the non-GUI code that computes it's values
+ * should move into the engine.
+ **/
 typedef struct {
   gnc_commodity * currency;
   gnc_numeric assets;
@@ -68,34 +83,14 @@ typedef struct {
 } GNCCurrencyAcc;
 
 
-/* An item to appear in the selector box in the status bar.
- *
- * This is maintained for the duration, where there is one per
- * currency, plus (eventually) one for the default currency
- * accumulation (like the EURO) or grand total or non currency
- * commodities total. */
-
-typedef struct  {
-  char *namespace;
-  char *mnemonic;
-  GtkWidget *listitem;
-  GtkWidget *assets_label;
-  GtkWidget *profits_label;
-  gint touched : 1;
-  gint total_mode;
-} GNCCurrencyItem;
-
-
 /* defines for total_mode in GNCCurrencyAcc and GNCCurrencyItem */
-
 #define TOTAL_SINGLE           0
 #define TOTAL_CURR_TOTAL       1
 #define TOTAL_NON_CURR_TOTAL   2
 #define TOTAL_GRAND_TOTAL      3
 
 
-/* options for summarybar */
-
+/** options for summarybar **/
 typedef struct {
   gnc_commodity *default_currency;
   gboolean euro;
@@ -105,156 +100,20 @@ typedef struct {
   time_t end_date;
 } GNCSummarybarOptions;
 
-
-/* Build a single currency item.
- *
- * This function handles the building of a single currency item for
- * the selector. It looks like the old code in the update function,
- * but now only handles a single currency.  */
-
-static GNCCurrencyItem *
-gnc_ui_build_currency_item(gnc_commodity * currency, gint total_mode)
-{
-  GtkWidget *label;
-  GtkWidget *topbox;
-  GtkWidget *hbox;
-  GtkWidget *listitem;
-  GNCCurrencyItem *item;
-  const char *mnemonic;
-  char *label_str;
-  struct lconv *lc;
-
-  lc = gnc_localeconv();
-
-  item = g_new0 (GNCCurrencyItem, 1);
-
-  item->namespace = g_strdup (gnc_commodity_get_namespace (currency));
-  item->mnemonic = g_strdup (gnc_commodity_get_mnemonic (currency));
-
-  item->total_mode = total_mode;
-
-  listitem = gtk_list_item_new();
-  item->listitem = listitem;
-
-  topbox = gtk_hbox_new(FALSE, 2);
-  gtk_widget_show(topbox);
-  gtk_container_add(GTK_CONTAINER(listitem), topbox);
-
-  if (gnc_commodity_equiv (currency, gnc_locale_default_currency ()))
-    mnemonic = lc->currency_symbol;
-  else
-    mnemonic = gnc_commodity_get_mnemonic (currency);
-
-  if (mnemonic == NULL)
-    mnemonic = "";
-
-  hbox = gtk_hbox_new(FALSE, 2);
-  gtk_widget_show(hbox);
-  gtk_box_pack_start(GTK_BOX(topbox), hbox, FALSE, FALSE, 5);
-
-  switch(total_mode)
-  {
-  case TOTAL_CURR_TOTAL:
-    label_str = g_strdup_printf ("%s (%s):", _("Net Assets total"),
-                                 mnemonic ? mnemonic : "");
-    break;
-  case TOTAL_NON_CURR_TOTAL:
-    label_str = g_strdup_printf ("%s (%s):", _("Net Assets non currency commodities total"),
-                                 mnemonic ? mnemonic : "");
-    break;
-  case TOTAL_GRAND_TOTAL:
-    label_str = g_strdup_printf ("%s (%s):", _("Net Assets grand total"),
-                                 mnemonic ? mnemonic : "");
-    break;
-  case TOTAL_SINGLE:
-  default:
-    label_str = g_strdup_printf ("%s (%s):", _("Net Assets"),
-                                 mnemonic ? mnemonic : "");
-    break;
-  }
-  label = gtk_label_new(label_str);
-  gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
-  gtk_widget_show(label);
-  gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
-  g_free (label_str);
-
-  label = gtk_label_new("");
-  gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
-  gtk_box_pack_end(GTK_BOX(hbox), label, FALSE, FALSE, 0);
-  gtk_widget_show(label);
-  item->assets_label = label;
-
-  hbox = gtk_hbox_new(FALSE, 2);
-  gtk_widget_show(hbox);
-  gtk_box_pack_start(GTK_BOX(topbox), hbox, FALSE, FALSE, 5);
-
-  switch(total_mode)
-  {
-  case TOTAL_CURR_TOTAL:
-    label_str = g_strdup_printf ("%s (%s):", _("Profits total"),
-				 mnemonic ? mnemonic : "");
-    break;
-  case TOTAL_NON_CURR_TOTAL:
-    label_str = g_strdup_printf ("%s (%s):", _("Profits non currency commodities total"),
-				 mnemonic ? mnemonic : "");
-    break;
-  case TOTAL_GRAND_TOTAL:
-    label_str = g_strdup_printf ("%s (%s):", _("Profits grand total"),
-				 mnemonic ? mnemonic : "");
-    break;
-  case TOTAL_SINGLE:
-  default:
-    label_str = g_strdup_printf ("%s (%s):", _("Profits"),
-				 mnemonic ? mnemonic : "");
-    break;
-  }
-  label = gtk_label_new(label_str);
-  gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
-  gtk_widget_show(label);
-  gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
-  g_free (label_str);
-
-  label = gtk_label_new("");
-  gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
-  gtk_widget_show(label);
-  gtk_box_pack_end(GTK_BOX(hbox), label, FALSE, FALSE, 0);
-  item->profits_label = label;
-
-  gtk_widget_show(item->listitem);
-
-  return item;
-}
-
-static void
-gnc_ui_currency_item_destroy (GNCCurrencyItem *item)
-{
-  if (!item) return;
-
-  g_free (item->namespace);
-  g_free (item->mnemonic);
-
-  item->namespace = NULL;
-  item->mnemonic = NULL;
-
-  g_free (item);
-}
-
-/* Get a currency accumulator.
- *
- * This will search the given list, and if no accumulator is found,
- * will allocate a fresh one. */
+/**
+ * Get the existing currency accumulator matching the given currency and
+ * total-mode, or create a new one.
+ **/
 static GNCCurrencyAcc *
-gnc_ui_get_currency_accumulator(GList **list, gnc_commodity * currency,
-				gint total_mode)
+gnc_ui_get_currency_accumulator(GList **list, gnc_commodity * currency, gint total_mode)
 {
   GList *current;
   GNCCurrencyAcc *found;
 
-  for (current = g_list_first(*list); current;
-       current = g_list_next(current)) {
+  for (current = g_list_first(*list); current; current = g_list_next(current)) {
     found = current->data;
-    if ((gnc_commodity_equiv(currency, found->currency)) &&
-        (found->total_mode == total_mode)) {
+    if ((gnc_commodity_equiv(currency, found->currency))
+        && (found->total_mode == total_mode)) {
       return found;
     }
   }
@@ -269,57 +128,9 @@ gnc_ui_get_currency_accumulator(GList **list, gnc_commodity * currency,
   return found;
 }
 
-static gboolean
-gnc_ui_currency_item_match (const GNCCurrencyItem *item,
-                            const gnc_commodity *commodity,
-			    gint total_mode)
-{
-  if (!item || !commodity) return FALSE;
-
-  return
-    (safe_strcmp (item->namespace,
-                  gnc_commodity_get_namespace (commodity)) == 0) &&
-    (safe_strcmp (item->mnemonic,
-                  gnc_commodity_get_mnemonic (commodity)) == 0) &&
-    (item->total_mode == total_mode);
-
-}
-
-/* Get a currency item.
- *
- * This will search the given list, and if no accumulator is found, will
- * create a fresh one.
- *
- * It looks just like the function above, with some extra stuff to get
- * the item into the list. */
-
-static GNCCurrencyItem *
-gnc_ui_get_currency_item (GList **list,
-                          gnc_commodity * currency,
-                          gint total_mode,
-                          GtkWidget *holder)
-{
-  GList *current;
-  GNCCurrencyItem *found;
-
-  for (current = g_list_first(*list); current;
-       current = g_list_next(current))
-  {
-    found = current->data;
-
-    if (gnc_ui_currency_item_match (found, currency, total_mode))
-      return found;
-  }
-
-  found = gnc_ui_build_currency_item(currency, total_mode);
-  *list = g_list_append(*list, found);
-
-  current = g_list_append(NULL, found->listitem);
-  gtk_select_append_items(GTK_SELECT(holder), current);
-
-  return found;
-}
-
+/**
+ * @fixme Move this non-GUI code into the engine.
+ **/
 static void
 gnc_ui_accounts_recurse (AccountGroup *group, GList **currency_list,
                          GNCSummarybarOptions options)
@@ -499,6 +310,85 @@ gnc_ui_accounts_recurse (AccountGroup *group, GList **currency_list,
   }
 }
 
+static char*
+get_total_mode_label(const char *mnemonic, int total_mode)
+{
+  char *label_str;
+  // i.e., "$, grand total," [profits: $12,345.67, assets: $23,456.78]
+  switch(total_mode)
+  {
+  case TOTAL_CURR_TOTAL:
+    label_str = g_strdup_printf( _("%s, total:"), mnemonic );
+    break;
+  case TOTAL_NON_CURR_TOTAL:
+    label_str = g_strdup_printf( _("%s, non currency commodities total:"), mnemonic );
+    break;
+  case TOTAL_GRAND_TOTAL:
+    label_str = g_strdup_printf( _("%s, grand total:"), mnemonic );
+    break;
+  case TOTAL_SINGLE:
+  default:
+    label_str = g_strdup_printf( _("%s:"), mnemonic );
+    break;
+  }
+  return label_str;
+}
+
+enum {
+  COLUMN_MNEMONIC_TYPE,
+  COLUMN_ASSETS,
+  COLUMN_ASSETS_VALUE,
+  COLUMN_PROFITS,
+  COLUMN_PROFITS_VALUE,
+  N_COLUMNS,
+};
+
+static time_t
+lookup_start_date_option(const gchar *section,
+			 const gchar *key_choice,
+			 const gchar *key_absolute,
+			 const gchar *key_relative,
+			 GDate *fy_end)
+{
+  const gchar *choice;
+  time_t time;
+  int which;
+
+  choice = gnc_gconf_get_string(section, key_choice, NULL);
+  if (choice && strcmp(choice, "absolute") == 0) {
+    time = gnc_gconf_get_int(section, key_absolute, NULL);
+  } else {
+    which = gnc_gconf_get_int(section, key_relative, NULL);
+    time = gnc_accounting_period_start_timet(which, fy_end, NULL);
+  }
+  return time;
+}
+
+
+static time_t
+lookup_end_date_option(const gchar *section,
+		       const gchar *key_choice,
+		       const gchar *key_absolute,
+		       const gchar *key_relative,
+		       GDate *fy_end)
+{
+  const gchar *choice;
+  time_t time;
+  int which;
+
+  choice = gnc_gconf_get_string(section, key_choice, NULL);
+  if (choice && strcmp(choice, "absolute") == 0) {
+    time = gnc_gconf_get_int(section, key_absolute, NULL);
+  } else {
+    which = gnc_gconf_get_int(section, key_relative, NULL);
+    time = gnc_accounting_period_end_timet(which, fy_end, NULL);
+  }
+  if (time == 0)
+    time = -1;
+  return time;
+}
+
+
 /* The gnc_main_window_summary_refresh() subroutine redraws summary
  * information. The statusbar includes two fields, titled 'profits'
  * and 'assets'. The total assets equal the sum of all of the
@@ -523,29 +413,38 @@ gnc_main_window_summary_refresh (GNCMainSummary * summary)
   char asset_string[256];
   char profit_string[256];
   GNCCurrencyAcc *currency_accum;
-  GNCCurrencyItem *currency_item;
   GList *currency_list;
   GList *current;
   GNCSummarybarOptions options;
+  QofBook *book;
+  KvpFrame *book_frame;
+  gint64 month, day;
+  GDate *fy_end = NULL;
 
+  book = gnc_get_current_book();
+  book_frame = qof_book_get_slots(book);
+  month = kvp_frame_get_gint64(book_frame, "/book/fyear_end/month");
+  day = kvp_frame_get_gint64(book_frame, "/book/fyear_end/day");
+  if (g_date_valid_dmy(day, month, 2005 /* not leap year */))
+    fy_end = g_date_new_dmy(day, month, G_DATE_BAD_YEAR);
 
   options.default_currency = gnc_default_report_currency ();
 
-  options.euro = gnc_lookup_boolean_option("International",
-					   "Enable EURO support",
-					   FALSE);
-  options.grand_total = gnc_lookup_boolean_option("Summarybar",
-						  "Show grand total",
-						  TRUE);
-  options.non_currency = gnc_lookup_boolean_option("Summarybar",
-						   "Show non currency commodities",
-						   TRUE);
+  options.euro = gnc_gconf_get_bool(GCONF_GENERAL, KEY_ENABLE_EURO, NULL);
+  options.grand_total =
+    gnc_gconf_get_bool(GCONF_SECTION, KEY_GRAND_TOTAL, NULL);
+  options.non_currency =
+    gnc_gconf_get_bool(GCONF_SECTION, KEY_NON_CURRENCY, NULL);
   /* we will need the balance of the last transaction before the start
      date, so subtract 1 from start date */
-  options.start_date = gnc_lookup_date_option("Summarybar", "Start date", NULL,
-					      NULL, NULL, NULL) - 1;
-  options.end_date = gnc_lookup_date_option("Summarybar", "End date", NULL,
-					    NULL, NULL, NULL);
+  options.start_date =
+    lookup_start_date_option(GCONF_SECTION, KEY_START_CHOICE,
+			     KEY_START_DATE, KEY_START_PERIOD, fy_end);
+  options.end_date =
+    lookup_end_date_option(GCONF_SECTION, KEY_END_CHOICE,
+			   KEY_END_DATE, KEY_END_PERIOD, fy_end);
+  if (fy_end)
+    g_date_free(fy_end);
 
   currency_list = NULL;
 
@@ -561,125 +460,124 @@ gnc_main_window_summary_refresh (GNCMainSummary * summary)
   group = gnc_get_current_group ();
   gnc_ui_accounts_recurse(group, &currency_list, options);
 
-  for (current = g_list_first(summary->totals_list); current;
-       current = g_list_next(current)) {
-    currency_item = current->data;
-    currency_item->touched = 0;
-  }
-  
-  for (current = g_list_first(currency_list); current;
-       current = g_list_next(current)) {
-    currency_accum = current->data;
-    currency_item = gnc_ui_get_currency_item(&summary->totals_list,
-       					     currency_accum->currency,
-					     currency_accum->total_mode,
-					     summary->totals_combo);
-    currency_item->touched = 1;
-    
-    *asset_string= '\0';
-    xaccSPrintAmount(asset_string, currency_accum->assets,
-                     gnc_commodity_print_info(currency_accum->currency, TRUE));
-    gtk_label_set_text(GTK_LABEL(currency_item->assets_label), asset_string);
-    gnc_set_label_color(currency_item->assets_label, currency_accum->assets);
+  {
+    GtkTreeIter iter;
+    char asset_amount_string[256], profit_amount_string[256];
+    struct lconv *lc;
 
-    *profit_string= '\0';
-    xaccSPrintAmount(profit_string, currency_accum->profits,
-                     gnc_commodity_print_info(currency_accum->currency, TRUE));
-    gtk_label_set_text(GTK_LABEL(currency_item->profits_label), profit_string);
-    gnc_set_label_color(currency_item->profits_label, currency_accum->profits);
+    lc = gnc_localeconv();
 
-    g_free(currency_accum);
-    current->data = NULL;
-  }
+    gtk_list_store_clear(summary->datamodel);
+    for (current = g_list_first(currency_list); current; current = g_list_next(current)) {
+      const char *mnemonic;
 
-  g_list_free(currency_list);
-  currency_list = NULL;
-  
-  current = g_list_first(summary->totals_list);
-  while (current) {
-    GList *next = current->next;
-    
-    currency_item = current->data;
-    if (currency_item->touched == 0 &&
-        !gnc_ui_currency_item_match(currency_item, options.default_currency,
-				    TOTAL_SINGLE)) {
-      currency_list = g_list_prepend(currency_list, currency_item->listitem);
-      summary->totals_list = g_list_remove_link(summary->totals_list,
-                                                current);
-      gnc_ui_currency_item_destroy(currency_item);
-      current->data = NULL;
-      g_list_free_1(current);
+      currency_accum = current->data;
+
+      if (gnc_commodity_equiv (currency_accum->currency, gnc_locale_default_currency ()))
+        mnemonic = lc->currency_symbol;
+      else
+        mnemonic = gnc_commodity_get_mnemonic (currency_accum->currency);
+      
+      if (mnemonic == NULL)
+        mnemonic = "";
+
+      *asset_string= '\0';
+      xaccSPrintAmount(asset_amount_string,
+                       currency_accum->assets,
+                       gnc_commodity_print_info(currency_accum->currency, TRUE));
+
+      *profit_string= '\0';
+      xaccSPrintAmount(profit_amount_string,
+                       currency_accum->profits,
+                       gnc_commodity_print_info(currency_accum->currency, TRUE));
+
+      gtk_list_store_append(summary->datamodel, &iter);
+      gtk_list_store_set(summary->datamodel, &iter,
+                         COLUMN_MNEMONIC_TYPE, get_total_mode_label(mnemonic, currency_accum->total_mode),
+                         COLUMN_ASSETS,        _("Assets:"),
+                         COLUMN_ASSETS_VALUE,  asset_amount_string,
+                         COLUMN_PROFITS,       _("Profits:"),
+                         COLUMN_PROFITS_VALUE, profit_amount_string,
+                         -1);
     }
-    
-    current = next;
-  }
-  
-  if (currency_list) {
-    gtk_select_remove_items(GTK_SELECT(summary->totals_combo),
-                            currency_list);
-    g_list_free(currency_list);
+
+    gtk_combo_box_set_active( GTK_COMBO_BOX(summary->totals_combo), 0 );
   }
 }
 
 static void
-gnc_main_window_summary_destroy_cb(GtkObject * obj, gpointer data) {
+gnc_main_window_summary_destroy_cb(GtkObject * obj, gpointer data)
+{
   GNCMainSummary * summary = data;
-  gnc_unregister_option_change_callback_id(summary->callback_id);
+  gnc_gconf_remove_anon_notification(GCONF_SECTION, summary->cnxn_id);
   gnc_unregister_gui_component(summary->component_id);
-  g_list_free(summary->totals_list);
   g_free(summary);
 }
 
 static void
-summarybar_refresh_handler(GHashTable * changes, gpointer user_data) {
+summarybar_refresh_handler(GHashTable * changes, gpointer user_data)
+{
   GNCMainSummary * summary = user_data;
   gnc_main_window_summary_refresh(summary);
 }
 
 static void
-summarybar_option_change_handler(gpointer user_data) {
+gconf_client_notify_cb (GConfClient *client,
+			guint cnxn_id,
+			GConfEntry *entry,
+			gpointer user_data)
+{
   GNCMainSummary * summary = user_data;
   gnc_main_window_summary_refresh(summary);
 }
 
 GtkWidget *
-gnc_main_window_summary_new (void) {
+gnc_main_window_summary_new (void)
+{
   GNCMainSummary  * retval = g_new0(GNCMainSummary, 1);
-  GNCCurrencyItem * def_item;
-  gnc_commodity   * default_currency = gnc_default_report_currency ();
+  GtkCellRenderer *textRenderer;
+  int i;
+  // These options lead to a better looking layout for the combo-box, where
+  // the "Assets: $####.##" and "Profit: $####.##" values are visually next
+  // to each other.
+  gboolean expandOptions[] = { TRUE, FALSE, TRUE, FALSE, TRUE };
   
-  retval->hbox         = gtk_hbox_new (FALSE, 5);  
-  retval->totals_combo = gtk_select_new ();
-  retval->totals_list  = NULL;
+  retval->datamodel = gtk_list_store_new( N_COLUMNS,
+                                          G_TYPE_STRING,
+                                          G_TYPE_STRING,
+                                          G_TYPE_STRING,
+                                          G_TYPE_STRING,
+                                          G_TYPE_STRING );
+
+  retval->hbox         = gtk_hbox_new (FALSE, 5);
+  retval->totals_combo = gtk_combo_box_new_with_model( GTK_TREE_MODEL(retval->datamodel) );
   retval->component_id = gnc_register_gui_component(WINDOW_SUMMARYBAR_CM_CLASS,
                                                     summarybar_refresh_handler,
                                                     NULL, retval);
-  retval->callback_id  = gnc_register_option_change_callback(summarybar_option_change_handler,
-							     retval,
-							     "Summarybar",
-							     NULL);
   gnc_gui_component_watch_entity_type (retval->component_id,
                                        GNC_ID_ACCOUNT,
                                        GNC_EVENT_MODIFY | GNC_EVENT_DESTROY);
 
-  def_item = gnc_ui_get_currency_item (&retval->totals_list,
-                                       default_currency,
-				       TOTAL_SINGLE,
-                                       retval->totals_combo);
-  
-  
+  for ( i = 0; i < N_COLUMNS; i++ )
+  {
+    textRenderer = GTK_CELL_RENDERER(gtk_cell_renderer_text_new());
+    gtk_cell_layout_pack_start( GTK_CELL_LAYOUT(retval->totals_combo), textRenderer, expandOptions[i] );
+    gtk_cell_layout_add_attribute(GTK_CELL_LAYOUT(retval->totals_combo), textRenderer, "text", i );
+  }
+
   gtk_container_set_border_width (GTK_CONTAINER (retval->hbox), 2);
-  gtk_select_select_child (GTK_SELECT(retval->totals_combo), 
-                           def_item->listitem);
-  gtk_box_pack_start (GTK_BOX(retval->hbox), retval->totals_combo, 
-                      FALSE, FALSE, 5);
+  gtk_box_pack_start (GTK_BOX(retval->hbox), retval->totals_combo, TRUE, TRUE, 5);
   gtk_widget_show (retval->totals_combo);
   gtk_widget_show (retval->hbox);
 
-  gtk_signal_connect(GTK_OBJECT(retval->hbox), "destroy",
-                     gnc_main_window_summary_destroy_cb, retval);
+  g_signal_connect(G_OBJECT(retval->hbox), "destroy",
+                   G_CALLBACK(gnc_main_window_summary_destroy_cb), retval);
 
   gnc_main_window_summary_refresh(retval);
+
+  retval->cnxn_id =  gnc_gconf_add_anon_notification(GCONF_SECTION,
+						     gconf_client_notify_cb,
+						     retval);
 
   return retval->hbox;
 }

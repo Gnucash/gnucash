@@ -41,9 +41,7 @@
 #define QOF_BOOK_H
 
 #include <glib.h>
-
 #include "qofid.h"
-#include "qofbackend.h"
 #include "kvp_frame.h"
 
 /** @brief Encapsulates all the information about a dataset
@@ -62,6 +60,7 @@
   (c_type *) val;                                           \
 })
 
+/** \brief QofBook reference */
 typedef struct _QofBook       QofBook;
                                                                                 
 /** GList of QofBook */
@@ -80,7 +79,21 @@ QofBook * qof_book_new (void);
     associated with it. */
 void      qof_book_destroy (QofBook *book);
 
-/** \return The table of entities of the given type. 
+/** Close a book to editing.
+
+It is up to the application to check this flag,
+and once marked closed, books cannnot be marked as open.
+*/
+void qof_book_mark_closed (QofBook *book);
+
+/** \return The table of entities of the given type.  
+ *
+ *  When an object's constructor calls qof_instance_init(), a
+ *  reference to the object is stored in the book.  The book stores
+ *  all the references to initialized instances, sorted by type.  This
+ *  function returns a collection of the references for the specified
+ *  type.
+ * 
  *  If the collection doesn't yet exist for the indicated type,
  *  it is created.  Thus, this routine is gaurenteed to return
  *  a non-NULL value.  (Unless the system malloc failed (out of 
@@ -93,11 +106,11 @@ typedef void (*QofCollectionForeachCB) (QofCollection *, gpointer user_data);
 void qof_book_foreach_collection (QofBook *, QofCollectionForeachCB, gpointer);
 
 /** \return The kvp data for the book.
- *  Note that the boom KVP data is persistant, and is stored/retrevied
+ *  Note that the book KVP data is persistant, and is stored/retrieved
  *  from the file/database.  Thus, the book KVP is the correct place to
  *  store data that needs to be persistant accross sessions (or shared
  *  between multiple users).  To store application runtime data, use
- *  qof_book_set_data() isntead.
+ *  qof_book_set_data() instead.
  */
 #define qof_book_get_slots(book) qof_instance_get_slots(QOF_INSTANCE(book))
 
@@ -117,15 +130,11 @@ void qof_book_set_data (QofBook *book, const char *key, gpointer data);
  *  when the book is destroyed.  The argument to the callback will be 
  *  the book followed by the data pointer.
  */
-void qof_book_set_data_fin (QofBook *book, const char *key, gpointer data, QofBookFinalCB);
+void qof_book_set_data_fin (QofBook *book, const char *key, gpointer data,
+                            QofBookFinalCB);
 
-/** Retreives arbitrary pointers to structs stored by qof_book_set_data. */
+/** Retrieves arbitrary pointers to structs stored by qof_book_set_data. */
 gpointer qof_book_get_data (QofBook *book, const char *key);
-
-/** DOCUMENT ME! */
-QofBackend *qof_book_get_backend (QofBook *book);
-
-void qof_book_set_backend (QofBook *book, QofBackend *);
 
 /** Is the book shutting down? */
 gboolean qof_book_shutting_down (QofBook *book);
@@ -136,9 +145,16 @@ gboolean qof_book_shutting_down (QofBook *book);
  *    anything about saving.  Its just that whenever data is modified,
  *    the 'dirty' flag is set.  This routine returns the value of the 
  *    'dirty' flag.  Its up to the backend to periodically reset this 
- *    flag, when it acutally does save the data.)
+ *    flag, when it actually does save the data.)
  */
 gboolean qof_book_not_saved (QofBook *book);
+
+/** The qof_book_mark_saved() routine marks the book as having been
+ *    saved (to a file, to a database). Used by backends to mark the
+ *    notsaved flag as FALSE just after loading.  Also used by the
+ *    main window code when the used has said to abandon any changes.
+ */
+void qof_book_mark_saved(QofBook *book);
 
 /** Call this function when you change the book kvp, to make sure the book
  * is marked 'dirty'. */

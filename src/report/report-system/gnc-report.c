@@ -27,14 +27,13 @@
 #include <libguile.h>
 #include <stdio.h>
 #include <string.h>
-#include "guile-mappings.h"
 
 #include "gnc-report.h"
 
 gboolean
 gnc_run_report (int report_id, char ** data)
 {
-  char *free_data;
+  const gchar *free_data;
   SCM run_report;
   SCM scm_text;
 
@@ -47,9 +46,8 @@ gnc_run_report (int report_id, char ** data)
   if (!SCM_STRINGP (scm_text))
     return FALSE;
 
-  free_data = gh_scm2newstr (scm_text, NULL);
+  free_data = SCM_STRING_CHARS (scm_text);
   *data = g_strdup (free_data);
-  if (free_data) free (free_data);
 
   return TRUE;
 }
@@ -71,3 +69,20 @@ gnc_run_report_id_string (const char * id_string, char **data)
 
   return gnc_run_report (report_id, data);
 }
+
+gchar*
+gnc_report_name( SCM report )
+{
+  SCM    get_name = scm_c_eval_string("gnc:report-name");
+  SCM    value;
+  
+  if (report == SCM_BOOL_F)
+    return NULL;
+
+  value = scm_call_1(get_name, report);
+  if (!SCM_STRINGP(value))
+    return NULL;
+
+  return g_strdup(SCM_STRING_CHARS(value));
+}
+

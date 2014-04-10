@@ -84,10 +84,10 @@ void
 gnc_session_scm_set_callback (SCM percentage_cb)
 {
   if (gnc_session_scm_gui_cb != SCM_BOOL_F)
-    scm_unprotect_object(gnc_session_scm_gui_cb);
+    scm_gc_unprotect_object(gnc_session_scm_gui_cb);
 
   gnc_session_scm_gui_cb = percentage_cb;
   if (gnc_session_scm_gui_cb != SCM_BOOL_F)
-    scm_protect_object(gnc_session_scm_gui_cb);
+    scm_gc_protect_object(gnc_session_scm_gui_cb);
 }
 

@@ -47,14 +47,10 @@
 #include "gncTaxTableP.h"
 #include "gnc-entry-xml-v2.h"
 #include "gnc-owner-xml-v2.h"
-#include "gnc-engine-util.h"
-
-#include "qofinstance.h"
-#include "qofobject.h"
 
 #define _GNC_MOD_NAME	GNC_ID_ENTRY
 
-static short module = MOD_IO;
+static QofLogModule log_module = GNC_MOD_IO;
 
 const gchar *entry_version_string = "2.0.0";
 
@@ -120,8 +116,8 @@ entry_dom_tree_create (GncEntry *entry)
     GncOrder *order;
     GncInvoice *invoice;
 
-    ret = xmlNewNode(NULL, gnc_entry_string);
-    xmlSetProp(ret, "version", entry_version_string);
+    ret = xmlNewNode(NULL, BAD_CAST gnc_entry_string);
+    xmlSetProp(ret, BAD_CAST "version", BAD_CAST entry_version_string);
 
     xmlAddChild(ret, guid_to_dom_tree(entry_guid_string,
 				      qof_instance_get_guid(QOF_INSTANCE(entry))));
@@ -221,7 +217,7 @@ entry_dom_tree_create (GncEntry *entry)
 struct entry_pdata
 {
   GncEntry *entry;
-  GNCBook *book;
+  QofBook *book;
   Account *acc;
 };
 
@@ -242,7 +238,7 @@ set_timespec(xmlNodePtr node, GncEntry* entry,
            void (*func)(GncEntry *entry, Timespec ts))
 {
   Timespec ts = dom_tree_to_timespec (node);
-  g_return_val_if_fail(is_valid_timespec(ts), FALSE);
+  if (!dom_tree_valid_timespec(&ts, node->name)) return FALSE;
     
   func(entry, ts);
   return TRUE;
@@ -708,7 +704,7 @@ static struct dom_tree_handler entry_handlers_v2[] = {
 };
 
 static GncEntry*
-dom_tree_to_entry (xmlNodePtr node, GNCBook *book)
+dom_tree_to_entry (xmlNodePtr node, QofBook *book)
 {
     struct entry_pdata entry_pdata;
     gboolean successful;
@@ -749,7 +745,7 @@ gnc_entry_end_handler(gpointer data_for_children,
     GncEntry *entry;
     xmlNodePtr tree = (xmlNodePtr)data_for_children;
     gxpf_data *gdata = (gxpf_data*)global_data;
-    GNCBook *book = gdata->bookdata;
+    QofBook *book = gdata->bookdata;
 
     successful = TRUE;
 
@@ -792,7 +788,7 @@ do_count (QofEntity * entry_p, gpointer count_p)
 }
 
 static int
-entry_get_count (GNCBook *book)
+entry_get_count (QofBook *book)
 {
   int count = 0;
   qof_object_foreach (_GNC_MOD_NAME, book, do_count, (gpointer) &count);
@@ -818,9 +814,16 @@ xml_add_entry (QofEntity * entry_p, gpointer out_p)
 }
 
 static void
-entry_write (FILE *out, GNCBook *book)
+entry_write (FILE *out, QofBook *book)
 {
   qof_object_foreach (_GNC_MOD_NAME, book, xml_add_entry, (gpointer) out);
+}
+
+static void
+entry_ns(FILE *out)
+{
+  g_return_if_fail(out);
+  gnc_xml2_write_namespace_decl(out, "entry");
 }
 
 void
@@ -834,6 +837,7 @@ gnc_entry_xml_initialize (void)
     entry_get_count,
     entry_write,
     NULL,			/* scrub */
+    entry_ns,
   };
 
   qof_object_register_backend (_GNC_MOD_NAME,

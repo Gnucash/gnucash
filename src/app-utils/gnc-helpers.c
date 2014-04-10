@@ -28,14 +28,11 @@
 #include <string.h>
 #include <g-wrap-wct.h>
 
-#include "gnc-engine-util.h"
+#include "gnc-engine.h"
 #include "engine-helpers.h"
 #include "gnc-helpers.h"
 #include "gnc-ui-util.h"
-#include "global-options.h"
 
-
-static short module = MOD_SX;
 
 /* Type converters for GNCPrintAmountInfo */
 SCM
@@ -99,8 +96,7 @@ gnc_scm2printinfo(SCM info_scm)
 int
 gnc_printinfo_p(SCM info_scm)
 {
-  char *symbol;
-  int retval;
+  const gchar *symbol;
 
   if (!SCM_LISTP(info_scm) || SCM_NULLP(info_scm))
     return 0;
@@ -109,15 +105,11 @@ gnc_printinfo_p(SCM info_scm)
   if (!SCM_SYMBOLP (info_scm))
     return 0;
 
-  symbol = gh_symbol2newstr (info_scm, NULL);
+  symbol = SCM_SYMBOL_CHARS (info_scm);
   if (symbol == NULL)
     return 0;
 
-  retval = strcmp (symbol, "print-info") == 0;
-
-  free (symbol);
-
-  return retval;
+  return (strcmp (symbol, "print-info") == 0);
 }
 
 /* This is a scaled down version of the routine that would be needed
@@ -185,26 +177,4 @@ gnc_parse_amount_helper (const char * string, gboolean monetary)
     return SCM_BOOL_F;
 
   return gnc_numeric_to_scm (result);
-}
-
-gint
-g_date_equals( gconstpointer gda, gconstpointer gdb )
-{
-  if ( !g_date_valid( (GDate*)gda )
-       || !g_date_valid( (GDate*)gdb ) ) {
-    DEBUG( "invalid: %p(%s), %p(%s)",
-           gda, ( g_date_valid((GDate*)gda) ? "" : "*" ),
-           gdb, ( g_date_valid((GDate*)gdb) ? "" : "*" ) );
-  }
-  return ( g_date_compare( (GDate*)gda, (GDate*)gdb )
-           == 0 ? TRUE : FALSE );
-}
-
-guint
-g_date_hash( gconstpointer gd )
-{
-  gint val = (g_date_year( (GDate*)gd ) * 10000)
-    + (g_date_month( (GDate*)gd ) * 100)
-    + g_date_day( (GDate*)gd );
-  return g_int_hash( &val );
 }

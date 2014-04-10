@@ -5,6 +5,7 @@ test-kvp-frames
 test-string-converters
 test-xml-account
 test-xml2-is-file
+test-load-backend
 test-load-xml2
 test-load-example-account
 test-xml-commodity
@@ -16,3 +17,5 @@ test-save-in-lang
 Makefile.in
 *.la
 *.lo
+test_file_*
+translog.*.log

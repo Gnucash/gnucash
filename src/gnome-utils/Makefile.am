@@ -1,22 +1,60 @@
-SUBDIRS = . test
+SUBDIRS = schemas . test ui
 PWD := $(shell pwd)
 
 pkglib_LTLIBRARIES = libgncmod-gnome-utils.la libgw-gnome-utils.la
 
+# Note that src/gnome-utils CANNOT depend on src/gnome!
+if USE_LIBGOFFICE
 AM_CFLAGS = \
+  -DPREFIX=\"${prefix}\" \
+  -DSYSCONFDIR=\"${GNC_CONFIGDIR}\" \
+  -DDATADIR=\"${GNC_SHAREDIR}\" \
+  -DLIBDIR=\"${GNC_LIBDIR}\" \
+  -I${top_srcdir}/src/core-utils \
   -I${top_srcdir}/src/gnc-module \
   -I${top_srcdir}/src/engine \
+  -I${top_srcdir}/src/backend/file \
   -I${top_srcdir}/src/network-utils \
   -I${top_srcdir}/src/app-utils \
   -I${top_srcdir}/src \
-  ${GUILE_INCS} \
   ${LIBGUPPI_CFLAGS} \
   ${GLIB_CFLAGS} \
   ${GLADE_CFLAGS} \
   ${GNOME_PRINT_CFLAGS} \
-  ${GNOME_INCLUDEDIR} \
+  ${GNOME_CFLAGS} \
   ${GTKHTML_CFLAGS} \
-  ${G_WRAP_COMPILE_ARGS}
+  ${GUILE_INCS} \
+  ${G_WRAP_COMPILE_ARGS} \
+  ${GSF_CFLAGS} \
+  ${QOF_CFLAGS} \
+  ${LIBGOFFICE_CFLAGS}
+else
+AM_CFLAGS = \
+  -DPREFIX=\"${prefix}\" \
+  -DSYSCONFDIR=\"${GNC_CONFIGDIR}\" \
+  -DDATADIR=\"${GNC_SHAREDIR}\" \
+  -DLIBDIR=\"${GNC_LIBDIR}\" \
+  -I${top_srcdir}/src/core-utils \
+  -I${top_srcdir}/src/gnc-module \
+  -I${top_srcdir}/src/engine \
+  -I${top_srcdir}/src/backend/file \
+  -I${top_srcdir}/src/network-utils \
+  -I${top_srcdir}/src/app-utils \
+  -I${top_srcdir}/lib/goffice \
+  -I${top_srcdir}/lib/goffice/split \
+  -I${top_srcdir}/lib \
+  -I${top_srcdir}/src \
+  ${LIBGUPPI_CFLAGS} \
+  ${GNOME_CFLAGS} \
+  ${GTKHTML_CFLAGS} \
+  ${GLIB_CFLAGS} \
+  ${GLADE_CFLAGS} \
+  ${GUILE_INCS} \
+  ${GNOME_PRINT_CFLAGS} \
+  ${G_WRAP_COMPILE_ARGS} \
+  ${QOF_CFLAGS} \
+  ${GSF_CFLAGS}
+endif
 
 libgncmod_gnome_utils_la_SOURCES = \
   QuickFill.c \
@@ -26,12 +64,14 @@ libgncmod_gnome_utils_la_SOURCES = \
   dialog-account.c \
   dialog-commodity.c \
   dialog-options.c \
+  dialog-preferences.c \
   dialog-query-list.c \
+  dialog-reset-warnings.c \
   dialog-transfer.c \
   dialog-utils.c \
   druid-utils.c \
+  druid-gconf-setup.c \
   gnc-account-sel.c \
-  gnc-account-tree.c \
   gnc-amount-edit.c \
   gnc-commodity-edit.c \
   gnc-currency-edit.c \
@@ -39,23 +79,50 @@ libgncmod_gnome_utils_la_SOURCES = \
   gnc-date-edit.c \
   gnc-date-format.c \
   gnc-dense-cal.c \
+  gnc-druid-gnome.c \
+  gnc-druid-provider-edge-gnome.c \
+  gnc-druid-provider-file-gnome.c \
+  gnc-druid-provider-multifile-gnome.c \
+  gnc-embedded-window.c \
+  gnc-file.c \
   gnc-frequency.c \
+  gnc-recurrence.c \
   gnc-general-select.c \
   gnc-gnome-utils.c \
   gnc-gui-query.c \
-  gnc-html-history.c \
+  gnc-html-graph-gog.c \
   gnc-html-guppi.c \
+  gnc-html-history.c \
   gnc-html.c \
-  gnc-mdi-utils.c \
+  gnc-icons.c \
+  gnc-main-window.c \
   gnc-menu-extensions.c \
+  gnc-plugin-file-history.c \
+  gnc-plugin-manager.c \
+  gnc-plugin-menu-additions.c \
+  gnc-plugin-page.c \
+  gnc-plugin.c \
+  gnc-period-select.c \
   gnc-query-list.c \
   gnc-splash.c \
+  gnc-tree-model.c \
+  gnc-tree-model-account-types.c \
+  gnc-tree-model-account.c \
+  gnc-tree-model-commodity.c \
+  gnc-tree-model-example-account.c \
+  gnc-tree-model-price.c \
+  gnc-tree-model-selection.c \
+  gnc-tree-view-account.c \
+  gnc-tree-view-commodity.c \
+  gnc-tree-view-price.c \
+  gnc-tree-view.c \
+  gnc-window.c \
   gncmod-gnome-utils.c \
-  gtkselect.c \
   misc-gnome-utils.c \
   print-session.c \
   search-param.c \
-  window-help.c
+  gnc-dialog.c \
+  gnc-tree-model-budget.c
 
 gncincludedir = ${GNC_INCLUDE_DIR}
 gncinclude_HEADERS = \
@@ -63,13 +130,15 @@ gncinclude_HEADERS = \
   account-quickfill.h \
   dialog-account.h \
   dialog-commodity.h \
+  dialog-preferences.h \
   dialog-options.h \
   dialog-query-list.h \
+  dialog-reset-warnings.h \
   dialog-transfer.h \
   dialog-utils.h \
   druid-utils.h \
+  druid-gconf-setup.h \
   gnc-account-sel.h \
-  gnc-account-tree.h \
   gnc-amount-edit.h \
   gnc-commodity-edit.h \
   gnc-currency-edit.h \
@@ -77,51 +146,104 @@ gncinclude_HEADERS = \
   gnc-date-edit.h \
   gnc-date-format.h \
   gnc-dense-cal.h \
+  gnc-druid-gnome-ui.h \
+  gnc-embedded-window.h \
+  gnc-file.h \
   gnc-frequency.h \
+  gnc-recurrence.h \
   gnc-general-select.h \
   gnc-gnome-utils.h \
   gnc-gui-query.h \
-  gnc-html-history.h \
+  gnc-html-graph-gog.h \
   gnc-html-guppi.h \
+  gnc-html-history.h \
   gnc-html.h \
-  gnc-mdi-utils.h \
+  gnc-icons.h \
+  gnc-main-window.h \
   gnc-menu-extensions.h \
+  gnc-plugin-file-history.h \
+  gnc-plugin-manager.h \
+  gnc-plugin-menu-additions.h \
+  gnc-plugin-page.h \
+  gnc-plugin.h \
+  gnc-period-select.h \
   gnc-query-list.h \
   gnc-splash.h \
-  gtkselect.h \
+  gnc-tree-model.h \
+  gnc-tree-model-account-types.h \
+  gnc-tree-model-account.h \
+  gnc-tree-model-commodity.h \
+  gnc-tree-model-example-account.h \
+  gnc-tree-model-price.h \
+  gnc-tree-model-selection.h \
+  gnc-tree-view-account.h \
+  gnc-tree-view-commodity.h \
+  gnc-tree-view-price.h \
+  gnc-tree-view.h \
+  gnc-window.h \
   misc-gnome-utils.h \
   print-session.h \
-  window-help.h
+  gnc-dialog.h \
+  gnc-tree-model-budget.h
 
 noinst_HEADERS = \
   argv-list-converters.h \
   gnc-dir.h \
+  gnc-druid-gnome.h \
+  gnc-druid-provider-edge-gnome.h \
+  gnc-druid-provider-file-gnome.h \
+  gnc-druid-provider-multifile-gnome.h \
   gnc-version.h \
   gw-gnome-utils.h \
   search-param.h
 
-libgncmod_gnome_utils_la_LDFLAGS = -module
-
+if USE_LIBGOFFICE
 libgncmod_gnome_utils_la_LIBADD = \
+  ${top_builddir}/src/core-utils/libcore-utils.la \
   ${top_builddir}/src/gnc-module/libgncmodule.la \
   ${top_builddir}/src/engine/libgncmod-engine.la \
   ${top_builddir}/src/calculation/libgncmod-calculation.la \
   ${top_builddir}/src/network-utils/libgncmod-network-utils.la \
   ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
-  ${GUILE_LIBS} \
   ${LIBGUPPI_LIBS} \
-  ${GNOMEUI_LIBS} \
-  ${GNOME_LIBDIR} \
+  ${GNOME_LIBS} \
   ${GNOME_PRINT_LIBS} \
   ${GTKHTML_LIBS} \
+  ${GUILE_LIBS} \
   ${GDK_PIXBUF_LIBS} \
   ${GLADE_LIBS} \
   ${GUILE_LIBS} \
   ${GLIB_LIBS} \
-  ${DB_LIBS}
+  ${DB_LIBS} \
+  ${GSF_LIBS} \
+  ${QOF_LIBS} \
+  ${LIBGOFFICE_LIBS} \
+  ${XML_LIBS}
+else
+libgncmod_gnome_utils_la_LIBADD = \
+  ${top_builddir}/src/core-utils/libcore-utils.la \
+  ${top_builddir}/src/gnc-module/libgncmodule.la \
+  ${top_builddir}/src/engine/libgncmod-engine.la \
+  ${top_builddir}/src/calculation/libgncmod-calculation.la \
+  ${top_builddir}/src/network-utils/libgncmod-network-utils.la \
+  ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
+  ${top_builddir}/lib/goffice/libgoffice.la \
+  ${LIBGUPPI_LIBS} \
+  ${GNOME_LIBS} \
+  ${GNOME_PRINT_LIBS} \
+  ${GTKHTML_LIBS} \
+  ${GUILE_LIBS} \
+  ${GDK_PIXBUF_LIBS} \
+  ${GLADE_LIBS} \
+  ${GUILE_LIBS} \
+  ${GLIB_LIBS} \
+  ${DB_LIBS} \
+  ${GSF_LIBS} \
+  ${QOF_LIBS} \
+  ${XML_LIBS}
+endif
 
 libgw_gnome_utils_la_SOURCES = gw-gnome-utils.c
-libgw_gnome_utils_la_LDFLAGS = -module
 
 gwmoddir = ${GNC_GWRAP_LIBDIR}
 gwmod_DATA = gw-gnome-utils.scm gw-gnome-utils-spec.scm
@@ -136,8 +258,13 @@ gladedir = $(GNC_GLADE_DIR)
 glade_DATA = \
   commodity.glade \
   dialog-query-list.glade \
+  dialog-reset-warnings.glade \
+  druid-provider-multifile.glade \
   exchange-dialog.glade \
+  druid-gconf-setup.glade \
   gnc-date-format.glade \
+  gnc-gui-query.glade \
+  preferences.glade \
   transfer.glade
 
 EXTRA_DIST = \
@@ -157,7 +284,7 @@ gnc-dir.h: gnc-dir.h.in ${top_builddir}/config.status
 	sed < $< > $@.tmp \
 	    -e 's:@-GNC_ACCOUNTS_DIR-@:${GNC_ACCOUNTS_DIR}:g' \
 	    -e 's:@-GNC_GLADE_DIR-@:${GNC_GLADE_DIR}:g' \
-	    -e 's:@-GNC_PIXMAP_DIR-@:${GNC_PIXMAP_DIR}:g'
+	    -e 's:@-GCONF_SCHEMA_CONFIG_SOURCE_DIRONLY-@:${GCONF_SCHEMA_CONFIG_SOURCE_DIRONLY}:g'
 	mv $@.tmp $@
 
 gnc-version.h: _gnc-version.h
@@ -207,3 +334,14 @@ gw-gnome-utils.scm gw-gnome-utils.c gw-gnome-utils.h: \
 BUILT_SOURCES += gw-gnome-utils.scm gw-gnome-utils.c gw-gnome-utils.h
 DISTCLEANFILES = gnucash g-wrapped .scm-links ${SCM_FILE_LINKS} \
                  gw-gnome-utils.html
+
+#
+# I hate inconsistent standards. Autotools puts help files into
+# ${datadir}/gnome/help/${program} while the gnome2 libraries expect
+# them in ${pkgdatadir}/gnome/help/${program}.
+#
+install-data-hook:
+	ln -sf ../gnome ${DESTDIR}/${pkgdatadir}
+
+uninstall-hook:
+	rm -f ${DESTDIR}/${pkgdatadir}/gnome

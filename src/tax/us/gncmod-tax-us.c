@@ -9,10 +9,11 @@
 #include <stdio.h>
 #include <glib.h>
 #include <libguile.h>
+#include <locale.h>
+#include <string.h>
 
 #include "gnc-module.h"
 #include "gnc-module-api.h"
-#include "guile-mappings.h"
 
 /* version of the gnc module system interface we require */
 int libgncmod_tax_us_LTX_gnc_module_system_interface = 0;
@@ -31,7 +32,13 @@ int libgncmod_tax_us_LTX_gnc_module_end(int refcount);
 
 char *
 libgncmod_tax_us_LTX_gnc_module_path(void) {
-  return g_strdup("gnucash/tax/us");
+#ifdef LOCALE_SPECIFIC_TAX
+  const char *thislocale = setlocale(LC_ALL, NULL);
+  if (strncmp(thislocale, "de_DE", 5) == 0)
+    return g_strdup("gnucash/tax/de_DE");
+  else
+#endif
+    return g_strdup("gnucash/tax/us");
 }
 
 char * 
@@ -49,7 +56,16 @@ lmod(char * mn)
 
 int
 libgncmod_tax_us_LTX_gnc_module_init(int refcount) {
-  lmod("(gnucash tax us)");
+  /* This is a very simple hack that loads the (new, special) German
+     tax definition file in a German locale, or (default) loads the
+     previous US tax file. */
+#ifdef LOCALE_SPECIFIC_TAX
+  const char *thislocale = setlocale(LC_ALL, NULL);
+  if (strncmp(thislocale, "de_DE", 5) == 0)
+    lmod("(gnucash tax de_DE)");
+  else
+#endif
+    lmod("(gnucash tax us)");
   return TRUE;
 }
 

@@ -1,0 +1,74 @@
+<ui>
+  <menubar>
+    <menu name="Transaction" action="TransactionAction">
+      <menuitem name="CutTransaction"     	action="CutTransactionAction"/>
+      <menuitem name="CopyTransaction"    	action="CopyTransactionAction"/>
+      <menuitem name="PasteTransaction"   	action="PasteTransactionAction"/>
+      <separator name="TransactionSep2"/>
+      <menuitem name="VoidTransaction"    	action="VoidTransactionAction"/>
+      <menuitem name="UnvoidTransaction"  	action="UnvoidTransactionAction"/>
+      <menuitem name="ReverseTransaction" 	action="ReverseTransactionAction"/>
+    </menu>
+
+    <menu name="View" action="ViewAction">
+      <placeholder name="ViewContentPlaceholder">
+        <menuitem name="ViewStyleBasic"        	action="ViewStyleBasicAction"/>
+        <menuitem name="ViewStyleAutoSplit"    	action="ViewStyleAutoSplitAction"/>
+        <menuitem name="ViewStyleJournal"      	action="ViewStyleJournalAction"/>
+        <separator name="ViewSep65"/>
+        <menuitem name="ViewStyleDoubleLine"   	action="ViewStyleDoubleLineAction"/>
+        <separator name="ViewSep66"/>
+      </placeholder>
+      <placeholder name="ViewSortPlaceholder">
+        <menuitem name="ViewSortBy"             action="ViewSortByAction"/>
+      </placeholder>
+    </menu>
+
+    <menu name="Actions" action="ActionsAction">
+      <placeholder name="ActionsPlaceholder">
+        <separator name="ActionsSep3"/>
+        <menuitem name="RecordTransaction"       action="RecordTransactionAction"/>
+        <menuitem name="CancelTransaction"       action="CancelTransactionAction"/>
+        <menuitem name="DeleteTransaction"       action="DeleteTransactionAction"/>
+        <menuitem name="BlankTransaction"        action="BlankTransactionAction"/>
+        <separator name="ActionsSep4"/>
+        <menuitem name="DuplicateTransaction"    action="DuplicateTransactionAction"/>
+        <menuitem name="RemoveTransactionSplits" action="RemoveTransactionSplitsAction"/>
+        <menuitem name="EditExchangeRate"        action="EditExchangeRateAction"/>
+        <menuitem name="JumpTransaction"         action="JumpTransactionAction"/>
+      </placeholder>
+    </menu>
+  </menubar>
+
+  <toolbar name="DefaultToolbar">
+    <placeholder name="DefaultToolbarPlaceholder">
+      <toolitem name="ToolbarRecordTransaction"    action="RecordTransactionAction"/>
+      <toolitem name="ToolbarCancelTransaction"    action="CancelTransactionAction"/>
+      <toolitem name="ToolbarDeleteTransaction"    action="DeleteTransactionAction"/>
+      <separator name="ToolbarSep66"/>
+      <toolitem name="ToolbarDuplicateTransaction" action="DuplicateTransactionAction"/>
+      <toolitem name="ToolbarScheduleTransaction"  action="ScheduleTransactionAction"/>
+      <separator name="ToolbarSep67"/>
+      <toolitem name="ToolbarSplitTransaction"     action="SplitTransactionAction"/>
+      <toolitem name="ToolbarBlankTransaction"     action="BlankTransactionAction"/>
+      <toolitem name="ToolbarJumpTransaction"      action="JumpTransactionAction"/>
+      <separator name="ToolbarSep68"/>
+      <toolitem name="ToolbarTransfer"             action="ActionsTransferAction"/>
+    </placeholder>
+  </toolbar>
+
+  <popup name="RegisterPopup"                action="FakeToplevel">
+    <menuitem name="ViewSortBy"              action="ViewSortByAction"/>
+    <separator name="PopupSep1"/>
+    <menuitem name="RecordTransaction"       action="RecordTransactionAction"/>
+    <menuitem name="CancelTransaction"       action="CancelTransactionAction"/>
+    <menuitem name="DeleteTransaction"       action="DeleteTransactionAction"/>
+    <menuitem name="BlankTransaction"        action="BlankTransactionAction"/>
+    <separator name="PopupSep1"/>
+    <menuitem name="DuplicateTransaction"    action="DuplicateTransactionAction"/>
+    <menuitem name="RemoveTransactionSplits" action="RemoveTransactionSplitsAction"/>
+    <menuitem name="SplitTransaction"        action="SplitTransactionAction"/>
+    <menuitem name="EditExchangeRate"        action="EditExchangeRateAction"/>
+    <menuitem name="JumpTransaction"         action="JumpTransactionAction"/>
+  </popup>
+</ui>

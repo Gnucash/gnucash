@@ -4,7 +4,6 @@
 #include "config.h"
 #include <stdio.h>
 #include <libguile.h>
-#include "guile-mappings.h"
 
 #include "gnc-module.h"
 #include "gnc-module-api.h"

@@ -18,3 +18,8 @@ gw-kvp.c
 gw-kvp.h
 gw-kvp.html
 iso-4217-currencies.c
+test-link
+.DS_Store
+qofla-dir.h
+gncla-dir.h
+

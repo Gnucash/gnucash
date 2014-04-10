@@ -13,15 +13,15 @@ define(`account', `gncAccount, Account, Account, a,
        commodity,      , char *, gnc_commodity_get_unique_name(xaccAccountGetCommodity(ptr)),
        version,        , int32,  xaccAccountGetVersion(ptr),
        iguid,          , int32,  ptr->idata,
-       bookGUID,       , GUID *, qof_book_get_guid(xaccAccountGetBook(ptr)),
+       bookGUID,       , GUID *, qof_entity_get_guid((QofEntity*)xaccAccountGetBook(ptr)),
        parentGUID,     , GUID *, xaccAccountGetGUID(xaccAccountGetParentAccount(ptr)),
        accountGUID, KEY, GUID *, xaccAccountGetGUID(ptr),
        ')
 
 define(`book', `gncBook, Book, QofBook, b,
-       book_open,      , char,   ptr->book_open,
-       version,        , int32,  ptr->version,
-       iguid,          , int32,  ptr->idata,
+       book_open,      , char,   qof_book_get_open_marker(ptr),
+       version,        , int32,  qof_book_get_version(ptr),
+       iguid,          , int32,  qof_book_get_idata(ptr),
        bookGUID,    KEY, GUID *, qof_book_get_guid(ptr),
        ')
 

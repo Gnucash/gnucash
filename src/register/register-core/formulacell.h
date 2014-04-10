@@ -50,7 +50,7 @@ typedef struct _FormulaCell
   GNCPrintAmountInfo print_info;
 
   /** The user-entered formula. **/
-  GdkWChar *formula;
+  char *formula;
 } FormulaCell;
 
 /* installs a callback to handle date recording */

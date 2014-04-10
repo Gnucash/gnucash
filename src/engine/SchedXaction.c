@@ -33,20 +33,12 @@
 #include "SX-ttinfo.h"
 #include "SchedXactionP.h"
 #include "Transaction.h"
-#include "gnc-date.h"
 #include "gnc-engine.h"
-#include "gnc-engine-util.h"
-#include "gnc-event-p.h"
-#include "gnc-trace.h"
-#include "guid.h"
 #include "messages.h"
-#include "qofbook.h"
-#include "qofbook-p.h"
-#include "qofid-p.h"
 
-static short module = MOD_SX;
+static QofLogModule log_module = GNC_MOD_SX;
 
-/** Local Prototypes *****/
+/* Local Prototypes *****/
 
 void sxprivtransactionListMapDelete( gpointer data, gpointer user_data );
 
@@ -73,10 +65,13 @@ xaccSchedXactionInit( SchedXaction *sx, QofBook *book)
 
    /* create a new template account for our splits */
    sx->template_acct = xaccMallocAccount(book);
-   xaccAccountSetName( sx->template_acct, guid_to_string( &sx->inst.entity.guid ));
+   /* THREAD-UNSAFE */
+   xaccAccountSetName( sx->template_acct,
+                       guid_to_string( &sx->inst.entity.guid ));
    xaccAccountSetCommodity
      (sx->template_acct,
-      gnc_commodity_new( "template", "template",
+      gnc_commodity_new( book,
+			 "template", "template",
                          "template", "template", 1 ) );
    xaccAccountSetType( sx->template_acct, BANK );
    ag = gnc_book_get_template_group( book );
@@ -730,3 +725,40 @@ gnc_sx_get_defer_instances( SchedXaction *sx )
    return sx->deferredList;
 }
 
+static QofObject SXDesc = 
+{
+	interface_version : QOF_OBJECT_VERSION,
+	e_type            : GNC_SX_ID,
+	type_label        : "Scheduled Transaction",
+	create            : (gpointer)xaccSchedXactionMalloc,
+	book_begin        : NULL,
+	book_end          : NULL,
+	is_dirty          : NULL,
+	mark_clean        : NULL,
+	foreach           : qof_collection_foreach,
+	printable         : NULL,
+	version_cmp       : (int (*)(gpointer, gpointer)) qof_instance_version_cmp,
+};
+
+gboolean SXRegister (void)
+{
+	static QofParam params[] = {
+	 { GNC_SX_FREQ_SPEC, QOF_ID_FREQSPEC, (QofAccessFunc)xaccSchedXactionGetFreqSpec,
+		 (QofSetterFunc)xaccSchedXactionSetFreqSpec },
+	 { GNC_SX_NAME, QOF_TYPE_STRING, (QofAccessFunc)xaccSchedXactionGetName,
+		 (QofSetterFunc)xaccSchedXactionSetName },
+	 { GNC_SX_START_DATE, QOF_TYPE_DATE, (QofAccessFunc)xaccSchedXactionGetStartDate,
+		 (QofSetterFunc)xaccSchedXactionSetStartDate },
+	 { GNC_SX_LAST_DATE, QOF_TYPE_DATE, (QofAccessFunc)xaccSchedXactionGetLastOccurDate,
+		 (QofSetterFunc)xaccSchedXactionSetLastOccurDate },
+	 { GNC_SX_NUM_OCCUR, QOF_TYPE_INT64, (QofAccessFunc)xaccSchedXactionGetNumOccur,
+		 (QofSetterFunc)xaccSchedXactionSetNumOccur },
+	 { GNC_SX_REM_OCCUR, QOF_TYPE_INT64, (QofAccessFunc)xaccSchedXactionGetRemOccur,
+		 (QofSetterFunc)xaccSchedXactionSetRemOccur },
+	 { QOF_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)qof_instance_get_book, NULL },
+	 { QOF_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)qof_instance_get_guid, NULL },
+	 { NULL },
+	};
+	qof_class_register(GNC_SX_ID, NULL, params);
+	return qof_object_register(&SXDesc);
+}

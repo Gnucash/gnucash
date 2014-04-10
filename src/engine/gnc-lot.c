@@ -39,22 +39,13 @@
  */
 
 #include "Account.h"
-#include "gnc-engine-util.h"
-#include "gnc-event.h"
-#include "gnc-event-p.h"
 #include "gnc-lot.h"
 #include "gnc-lot-p.h"
-#include "gnc-trace.h"
 #include "Transaction.h"
 #include "TransactionP.h"
-#include "qofbook.h"
-#include "qofbook-p.h"
-#include "qofclass.h"
-#include "qofid-p.h"
-#include "qofquery.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */
-static short module = MOD_LOT;
+static QofLogModule log_module = GNC_MOD_LOT;
 
 /* ============================================================= */
 
@@ -247,7 +238,10 @@ gnc_lot_add_split (GNCLot *lot, Split *split)
    Account * acc;
    if (!lot || !split) return;
 
-   ENTER ("(lot=%p, split=%p)", lot, split);
+   ENTER ("(lot=%p, split=%p) %s amt=%s val=%s", lot, split,
+        gnc_lot_get_title (lot), 
+        gnc_num_dbg_to_string (split->amount),
+        gnc_num_dbg_to_string (split->value));
    acc = xaccSplitGetAccount (split);
    if (NULL == lot->account)
    {
@@ -305,7 +299,7 @@ gnc_lot_get_earliest_split (GNCLot *lot)
    Timespec ts;
    Split *earliest = NULL;
 
-   ts.tv_sec = 1000000LL * ((long long) LONG_MAX);
+   ts.tv_sec = ((long long) LONG_MAX);
    ts.tv_nsec = 0;
    if (!lot) return NULL;
 
@@ -334,7 +328,7 @@ gnc_lot_get_latest_split (GNCLot *lot)
    Timespec ts;
    Split *latest = NULL;
 
-   ts.tv_sec = -1000000LL * ((long long) LONG_MAX);
+   ts.tv_sec = -((long long) LONG_MAX);
    ts.tv_nsec = 0;
    if (!lot) return NULL;
 
@@ -358,9 +352,29 @@ gnc_lot_get_latest_split (GNCLot *lot)
 
 /* ============================================================= */
 
-void gnc_lot_register (void)
+/* Should the object description be enabled?. */
+/*
+static QofObject gncLotDesc =
+{
+interface_version:  QOF_OBJECT_VERSION,
+e_type:             GNC_ID_LOT,
+type_label:         "Lot",
+create:             (gpointer)gnc_lot_new,
+book_begin:         NULL,
+book_end:           NULL,
+is_dirty:           NULL,
+mark_clean:         NULL,
+foreach:            qof_collection_foreach,
+printable:          NULL,
+version_cmp:        (int (*)(gpointer,gpointer))qof_instance_version_cmp,
+};
+*/
+
+gboolean gnc_lot_register (void)
 {
   static const QofParam params[] = {
+   { LOT_TITLE, QOF_TYPE_STRING, (QofAccessFunc)gnc_lot_get_title, (QofSetterFunc)gnc_lot_set_title },
+   { LOT_NOTES,	QOF_TYPE_STRING, (QofAccessFunc)gnc_lot_get_notes, (QofSetterFunc)gnc_lot_set_notes },
     { QOF_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)qof_entity_get_guid, NULL },
     { QOF_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)gnc_lot_get_book, NULL },
     { LOT_IS_CLOSED, QOF_TYPE_BOOLEAN, (QofAccessFunc)gnc_lot_is_closed, NULL },
@@ -369,6 +383,9 @@ void gnc_lot_register (void)
   };
 
   qof_class_register (GNC_ID_LOT, NULL, params);
+  return TRUE;
+//  return qof_object_register(&gncLotDesc);
+
 }
 
 /* ========================== END OF FILE ========================= */

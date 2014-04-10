@@ -1,16 +1,31 @@
+/***************************************************************************
+ *            test-object.c
+ *
+ *  Tue Sep 27 19:37:28 2005
+ *  Copyright  2005  GnuCash team
+ ****************************************************************************/
 /*
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ */
+ /*
  * Lightly test the QofObject infrastructure.
  */
 #include <glib.h>
-#include <libguile.h>
-
-#include "guid.h"
-#include "gnc-module.h"
-#include "gnc-engine-util.h"
+#include "qof.h"
+#include "cashobjects.h"
 #include "messages.h"
-#include "qofbook.h"
-#include "qofobject.h"
-
 #include "test-stuff.h"
 
 #define TEST_MODULE_NAME "object-test"
@@ -128,18 +143,14 @@ test_printable (const char *name, gpointer obj)
   do_test (res != NULL, "object: Printable: mod_name, object");
 }
 
-static void
-main_helper (void *closure, int argc, char **argv)
-{
-  gnc_module_load("gnucash/engine", 0);
-  test_object();
-  print_test_results();
-  exit(get_rv());
-}
-
 int
 main (int argc, char **argv)
 {
-  scm_boot_guile (argc, argv, main_helper, NULL);
+	qof_init();
+	if(cashobjects_register()) {
+		test_object();
+		print_test_results();
+	}
+	qof_close();
   return 0;
 }

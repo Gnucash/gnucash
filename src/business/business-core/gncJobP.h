@@ -30,7 +30,6 @@
 #define GNC_JOBP_H_
 
 #include "gncJob.h"
-#include "qofid-p.h"
 
 gboolean gncJobRegister (void);
 gint64 gncJobNextID (QofBook *book);

@@ -40,7 +40,7 @@
 #include <time.h>
 
 #include "basiccell.h"
-#include "gnc-engine-util.h"
+#include "gnc-engine.h"
 #include "checkboxcell.h"
 
 

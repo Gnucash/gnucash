@@ -24,7 +24,7 @@
  */
 
 #include "config.h"
-#include <gnome.h>
+#include <gtk/gtk.h>
 
 #include "gnc-book.h"
 #include "QueryNew.h"
@@ -99,7 +99,7 @@ gnc_dialog_query_list_button_clicked (GtkButton *button, DialogQueryList *dql)
   if (!current)
     return;
 
-  cb = gtk_object_get_data (GTK_OBJECT (button), "data");
+  cb = g_object_get_data (G_OBJECT (button), "data");
   g_return_if_fail (cb);
 
   gnc_dialog_query_run_callback (cb, current, dql);
@@ -120,13 +120,31 @@ gnc_dialog_query_list_double_click_entry (GNCQueryList *list, gpointer item,
   gnc_dialog_query_run_callback (dql->buttons, item, dql);
 }
 
+static int
+gnc_dialog_query_list_delete_cb (GtkDialog *dialog, GdkEvent  *event, DialogQueryList *dql)
+{
+  g_return_val_if_fail (dql, TRUE);
+
+  gnc_unregister_gui_component (dql->component_id);
+
+  /* XXX: Clear/destroy the param_list? */  
+
+  /* destroy the book list */
+  dql_clear_booklist (dql);
+
+  /* Destroy and exit */
+  gtk_widget_destroy(dql->dialog);
+  g_free (dql);
+  return FALSE;
+}
+
 static void
 close_handler (gpointer data)
 {
   DialogQueryList * dql = data;
 
   g_return_if_fail (dql);
-  gnome_dialog_close (GNOME_DIALOG (dql->dialog));
+  gnc_dialog_query_list_delete_cb (GTK_DIALOG(dql->dialog), NULL, dql);
 }
 
 static void
@@ -140,7 +158,7 @@ gnc_dialog_query_list_refresh_handler (GHashTable *changes, gpointer user_data)
   {
     for (node = dql->books; node; node = node->next)
     {
-      info = gnc_gui_get_entity_events (changes, (GUID*)(node->data));
+      info = gnc_gui_get_entity_events (changes, (const GUID*)(node->data));
       if (info && (info->event_mask & GNC_EVENT_DESTROY))
       {
 	gnc_close_gui_component (dql->component_id);
@@ -148,23 +166,6 @@ gnc_dialog_query_list_refresh_handler (GHashTable *changes, gpointer user_data)
       }
     }
   }
-}
-
-static int
-gnc_dialog_query_list_close_cb (GnomeDialog *dialog, DialogQueryList *dql)
-{
-  g_return_val_if_fail (dql, TRUE);
-
-  gnc_unregister_gui_component (dql->component_id);
-
-  /* XXX: Clear/destroy the param_list? */  
-
-  /* destroy the book list */
-  dql_clear_booklist (dql);
-
-  /* Destroy and exit */
-  g_free (dql);
-  return FALSE;
 }
 
 static void
@@ -190,7 +191,7 @@ gnc_dialog_query_list_new (GList *param_list, Query *q)
 
   /* Grab the dialog, save the dialog info */
   dql->dialog = glade_xml_get_widget (xml, "Query List Dialog");
-  gtk_object_set_data (GTK_OBJECT (dql->dialog), "dialog-info", dql);
+  g_object_set_data (G_OBJECT (dql->dialog), "dialog-info", dql);
 
   /* grab the widgets */
   dql->label = glade_xml_get_widget (xml, "dialog_label");
@@ -203,17 +204,17 @@ gnc_dialog_query_list_new (GList *param_list, Query *q)
   gtk_container_add (GTK_CONTAINER (scroller), dql->qlist);
 
   /* connect the double-click signal of the qlist */
-  gtk_signal_connect (GTK_OBJECT (dql->qlist), "double_click_entry",
-		      gnc_dialog_query_list_double_click_entry, dql);
+  g_signal_connect (G_OBJECT (dql->qlist), "double_click_entry",
+		    G_CALLBACK(gnc_dialog_query_list_double_click_entry), dql);
   
 
   /* connect to the close button */
-  gtk_signal_connect (GTK_OBJECT (close), "clicked",
-		      GTK_SIGNAL_FUNC (gnc_dialog_query_list_close), dql);
+  g_signal_connect (G_OBJECT (close), "clicked",
+		    G_CALLBACK (gnc_dialog_query_list_close), dql);
 
   /* connect to the cleanup */
-  gtk_signal_connect (GTK_OBJECT (dql->dialog), "close",
-		      GTK_SIGNAL_FUNC (gnc_dialog_query_list_close_cb), dql);
+  g_signal_connect (G_OBJECT (dql->dialog), "delete_event",
+		    G_CALLBACK (gnc_dialog_query_list_delete_cb), dql);
 
 
   /* register ourselves */
@@ -261,9 +262,9 @@ void gnc_dialog_query_list_set_buttons (DialogQueryList *dql,
   /* build up the buttons */
   for (i = 0; buttons[i].label; i++) {
     button = gtk_button_new_with_label (buttons[i].label);
-    gtk_object_set_data (GTK_OBJECT (button), "data", &(dql->buttons[i]));
-    gtk_signal_connect (GTK_OBJECT (button), "clicked",
-			gnc_dialog_query_list_button_clicked, dql);
+    g_object_set_data (G_OBJECT (button), "data", &(dql->buttons[i]));
+    g_signal_connect (G_OBJECT (button), "clicked",
+		      G_CALLBACK(gnc_dialog_query_list_button_clicked), dql);
     gtk_box_pack_start (GTK_BOX (dql->button_box), button, FALSE, FALSE, 3);
   }
 }

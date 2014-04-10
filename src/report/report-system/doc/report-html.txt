@@ -202,7 +202,7 @@ We have three different kinds of style control information available:
      
        - the HTML tag to render (specified by 'tag).  Note that this
          may be different from the tag used to look up the style (the
-         one passed to html-markup).
+         one passed to html-markup). (See NB below.)
        - Any attributes to be used inside the start tag (listed 
          individually as 'attribute (list name value))
        - The font face to use in the body ('font-face)
@@ -259,6 +259,7 @@ We have three different kinds of style control information available:
        ;; object is rendered.
        (gnc:html-text-set-style! txt 
          "bigred" 'tag "" 'font-color "ff0000" 'font-size 7)
+       ;; ^^ NB: "bigred" is the tag. 'tag "" is the info in the style table.
 
        (gnc:html-document-add-object! doc txt)
        (gnc:html-document-render doc))

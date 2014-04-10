@@ -38,18 +38,23 @@
 #include "Account.h"
 #include "Transaction.h"
 #include "TransactionP.h"
-#include "global-options.h"
 #include "gnc-log-replay.h"
-#include "gnc-file-dialog.h"
+#include "gnc-file.h"
 #include "gnc-engine-util.h"
 #include "gnc-book.h"
 #include "gnc-ui-util.h"
+#include "gnc-gconf-utils.h"
 
 #include "dialog-utils.h"
 
 
-/*static short module = MOD_IMPORT;*/
-static short module = MOD_TEST;
+#define GCONF_SECTION "dialogs/log_replay"
+
+/* NW: If you want a new log_module, just define
+a unique string either in gnc-engine.h or
+locally.*/
+/*static QofLogModule log_module = GNC_MOD_IMPORT;*/
+static QofLogModule log_module = GNC_MOD_TEST;
 
 /* fprintf (trans_log, "mod	guid	time_now	" \
    "date_entered	date_posted	" \
@@ -101,12 +106,6 @@ typedef struct _split_record
  * gnc_file_log_replay_import
  * Entry point
 \********************************************************************/
-
-SCM  scm_gnc_file_log_replay ()
-{
-  gnc_file_log_replay();
-  return SCM_EOL;
-}
 
 static char *olds;
 /* This version of strtok will only match SINGLE occurence of delim,
@@ -497,7 +496,7 @@ static void  process_trans_record(  FILE *log_file)
 
 void gnc_file_log_replay (void)
 {
-  const char *selected_filename;
+  char *selected_filename;
   char *default_dir;
   char read_buf[256];
   char *read_retval;
@@ -505,21 +504,23 @@ void gnc_file_log_replay (void)
   char * expected_header = "mod	trans_guid	split_guid	time_now	date_entered	date_posted	acc_guid	acc_name	num	description	notes	memo	action	reconciled	amount	value	date_reconciled";
   char * record_start_str = "===== START";
 
-  gnc_set_log_level(MOD_IMPORT, GNC_LOG_DEBUG);
+  gnc_set_log_level(GNC_MOD_IMPORT, GNC_LOG_DEBUG);
   ENTER(" ");
 
-  default_dir = gnc_lookup_string_option("__paths", "Log Files", NULL);
+  default_dir = gnc_gconf_get_string(GCONF_SECTION, KEY_LAST_PATH, NULL);
   if (default_dir == NULL)
     gnc_init_default_directory(&default_dir);
   selected_filename = gnc_file_dialog(_("Select a .log file to replay"),
 				      NULL,
-				      default_dir);
+				      default_dir,
+				      GNC_FILE_DIALOG_OPEN);
+  g_free(default_dir);
 
   if(selected_filename!=NULL)
     {
       /* Remember the directory as the default. */
       gnc_extract_directory(&default_dir, selected_filename);
-      gnc_set_string_option("__paths", "Log Files", default_dir);
+      gnc_gconf_set_string(GCONF_SECTION, KEY_LAST_PATH, default_dir, NULL);
       g_free(default_dir);
 
       /*strncpy(file,selected_filename, 255);*/
@@ -559,6 +560,7 @@ void gnc_file_log_replay (void)
 	    }
 	  fclose(log_file);
 	}
+      g_free(selected_filename);
     }
   
 }

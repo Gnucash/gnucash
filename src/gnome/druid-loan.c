@@ -37,22 +37,22 @@
 #include "SX-book.h"
 #include "SX-book-p.h"
 #include "SX-ttinfo.h"
+#include "druid-utils.h"
 #include "gnc-book.h"
 #include "gnc-amount-edit.h"
 #include "gnc-account-sel.h"
 #include "gnc-date.h"
 #include "gnc-exp-parser.h"
 #include "gnc-component-manager.h"
-#include "global-options.h"
 #include "dialog-utils.h"
 #include "Account.h"
 #include "FreqSpec.h"
 #include "gnc-ui.h"
-#include "gnc-helpers.h"
+#include "gnc-gdate-utils.h"
 #include "gnc-gui-query.h"
 #include "gnc-ui-util.h"
 #include "gnc-frequency.h"
-#include "gnc-engine-util.h"
+#include "gnc-engine.h"
 
 #define DIALOG_LOAN_DRUID_CM_CLASS "druid-loan-setup"
 
@@ -63,7 +63,6 @@
 #define PG_INTRO "loan_intro_pg"
 #define PG_INFO "loan_info_pg"
 #  define PARAM_TABLE      "param_table"
-#  define ORIG_PRINC_GNE   "orig_princ_gne"
 #  define ORIG_PRINC_ENTRY "orig_princ_ent"
 #  define IRATE_SPIN       "irate_spin"
 #  define VAR_CONTAINER    "type_freq_frame"
@@ -81,7 +80,6 @@
 #  define FREQ_CONTAINER "freq_frame"
 #define PG_PAYMENT "payment_pg"
 #  define PAY_TXN_TITLE      "pay_txn_title"
-#  define PAY_AMT_GNE        "pay_amt_gne"
 #  define PAY_AMT_ENTRY      "pay_amt_ent"
 #  define PAY_TABLE          "pay_table"
 #  define PAY_USE_ESCROW     "pay_use_escrow"
@@ -97,6 +95,7 @@
 #  define REV_DATE_FRAME     "rev_date_frame"
 #  define REV_RANGE_OPT      "rev_range_opt"
 #  define REV_RANGE_TABLE    "rev_date_range_table"
+#define PG_COMMIT "commit_pg"
 
 #define OPT_VBOX_SPACING 2
 
@@ -107,7 +106,7 @@ typedef enum {
         CUSTOM
 } REV_RANGE_OPTS;
 
-static short module = MOD_SX;
+static QofLogModule log_module = GNC_MOD_SX;
 
 /**
  * TODO/fixme:
@@ -279,7 +278,6 @@ typedef struct LoanDruidData_ {
 
         /* pay = payment[s] */
         GtkEntry         *payTxnName;
-        GnomeNumberEntry *payAmtGNE;
         GtkEntry         *payAmtEntry;
         GNCAccountSel    *payAcctFromGAS;
         GNCAccountSel    *payAcctEscToGAS;
@@ -388,7 +386,10 @@ static gboolean ld_pay_back ( GnomeDruidPage *gdp, gpointer arg1, gpointer ud );
 static gboolean ld_rev_next ( GnomeDruidPage *gdp, gpointer arg1, gpointer ud );
 static void     ld_rev_prep ( GnomeDruidPage *gdp, gpointer arg1, gpointer ud );
 static gboolean ld_rev_back ( GnomeDruidPage *gdp, gpointer arg1, gpointer ud );
-static void     ld_rev_fin  ( GnomeDruidPage *gdp, gpointer arg1, gpointer ud );
+static gboolean ld_com_next ( GnomeDruidPage *gdp, gpointer arg1, gpointer ud );
+static void     ld_com_prep ( GnomeDruidPage *gdp, gpointer arg1, gpointer ud );
+static gboolean ld_com_back ( GnomeDruidPage *gdp, gpointer arg1, gpointer ud );
+static void     ld_com_fin  ( GnomeDruidPage *gdp, gpointer arg1, gpointer ud );
 
 static void ld_create_sxes( LoanDruidData *ldd );
 static gint ld_find_ttsplit_with_acct( gconstpointer elt,
@@ -410,6 +411,7 @@ gnc_ui_sx_loan_druid_create(void)
         ldd->dialog = glade_xml_get_widget( ldd->gxml, LOAN_DRUID_WIN_GLADE_NAME );
         ldd->druid  = GNOME_DRUID(glade_xml_get_widget( ldd->gxml,
                                                         LOAN_DRUID_GLADE_NAME ));
+	gnc_druid_set_colors (ldd->druid);
 
         /* get pointers to the various widgets */
         gnc_loan_druid_get_widgets( ldd );
@@ -549,7 +551,7 @@ gnc_ui_sx_loan_druid_create(void)
                         GtkAlignment *a;
                         GNCOptionInfo typeOptInfo[] = {
                                 { _("Fixed"), _("A Fixed-Rate loan"), ld_prm_type_changed, ldd },
-				/* Translators: ARM = Adjustable Rate Mortgage */
+                                /* Translators: ARM = Adjustable Rate Mortgage */
                                 { _("3/1 Year"),   _("A 3/1 Year ARM"),         ld_prm_type_changed, ldd },
                                 { _("5/1 Year"),   _("A 5/1 Year ARM"),         ld_prm_type_changed, ldd },
                                 { _("7/1 Year"),   _("A 7/1 Year ARM"),         ld_prm_type_changed, ldd },
@@ -636,8 +638,8 @@ gnc_ui_sx_loan_druid_create(void)
 
                                 /* Add payment checkbox. */
 
-				/* Translators: %s is "Taxes",
-				 * "Insurance", or similar. */
+                                /* Translators: %s is "Taxes",
+                                 * "Insurance", or similar. */
                                 g_string_sprintf( str, _("... pay \"%s\"?"),
                                                   rouid->optData->name );
                                 rouid->optCb =
@@ -741,7 +743,8 @@ gnc_ui_sx_loan_druid_create(void)
                         { PG_OPTS,      ld_opts_tran, ld_opts_prep, ld_opts_tran, NULL },
                         { PG_REPAYMENT, ld_rep_next,  ld_rep_prep,  ld_rep_back,  NULL },
                         { PG_PAYMENT,   ld_pay_next,  ld_pay_prep,  ld_pay_back,  NULL },
-                        { PG_REVIEW,    ld_rev_next,  ld_rev_prep,  ld_rev_back,  ld_rev_fin },
+                        { PG_REVIEW,    ld_rev_next,  ld_rev_prep,  ld_rev_back,  NULL },
+                        { PG_COMMIT,    ld_com_next,  ld_com_prep,  ld_com_back,  ld_com_fin },
                         { NULL }
                 };
 
@@ -794,7 +797,7 @@ gnc_ui_sx_loan_druid_create(void)
                             GTK_SIGNAL_FUNC(ld_destroy),
                             ldd );
 
-	gnome_window_icon_set_from_default (GTK_WINDOW (ldd->dialog));
+        gnome_window_icon_set_from_default (GTK_WINDOW (ldd->dialog));
         gtk_widget_show_all( ldd->dialog );
         return ldd;
 }
@@ -859,7 +862,7 @@ gnc_loan_druid_get_widgets( LoanDruidData *ldd )
 
         /* Get all widgets */
 #define GET_CASTED_WIDGET( cast, name ) \
-	(cast( glade_xml_get_widget( ldd->gxml, name ) ))
+        (cast( glade_xml_get_widget( ldd->gxml, name ) ))
 
         /* prm = params */
         ldd->prmTable =
@@ -897,8 +900,6 @@ gnc_loan_druid_get_widgets( LoanDruidData *ldd )
         /* pay = payment[s] */
         ldd->payTxnName =
                 GET_CASTED_WIDGET( GTK_ENTRY,          PAY_TXN_TITLE );
-        ldd->payAmtGNE =
-                GET_CASTED_WIDGET( GNOME_NUMBER_ENTRY, PAY_AMT_GNE );
         ldd->payAmtEntry =
                 GET_CASTED_WIDGET( GTK_ENTRY,          PAY_AMT_ENTRY );
         ldd->payTable =
@@ -1168,7 +1169,7 @@ ld_info_save( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
         ldd->ld.primaryAcct = gnc_account_sel_get_account( ldd->prmAccountGAS );
         if ( ldd->ld.primaryAcct == NULL ) {
                 gnc_info_dialog( ldd->dialog,
-				 _("Please select a valid loan account.") );
+                                 _("Please select a valid loan account.") );
                 return TRUE;
         } 
         if ( ! ldd->ld.repPriAcct ) {
@@ -1255,8 +1256,8 @@ ld_opts_save_state( LoanDruidData *ldd )
                         gnc_account_sel_get_account( ldd->optEscrowGAS );
                 if ( ldd->ld.escrowAcct == NULL ) {
                         gnc_info_dialog( ldd->dialog,
-					 _("Please select a valid "
-					   "Escrow Account.") );
+                                         _("Please select a valid "
+                                           "Escrow Account.") );
                         return TRUE;
                 }
                 
@@ -1321,22 +1322,22 @@ ld_rep_save( LoanDruidData *ldd )
                 gnc_account_sel_get_account( ldd->repAssetsFromGAS );
         if ( ldd->ld.repFromAcct == NULL ) {
                 gnc_info_dialog( ldd->dialog,
-				 _("Please select a valid \"from\" account."));
+                                 _("Please select a valid \"from\" account."));
                 return TRUE;
         }
         ldd->ld.repPriAcct =
                 gnc_account_sel_get_account( ldd->repPrincToGAS );
         if ( ldd->ld.repPriAcct == NULL ) {
                 gnc_info_dialog( ldd->dialog,
-				 _("Please select a valid \"to\" account.") );
+                                 _("Please select a valid \"to\" account.") );
                 return TRUE;
         }
         ldd->ld.repIntAcct =
                 gnc_account_sel_get_account( ldd->repIntToGAS );
         if ( ldd->ld.repIntAcct == NULL ) {
                 gnc_info_dialog( ldd->dialog,
-				 _("Please select a valid "
-				   "\"interest\" account.") );
+                                 _("Please select a valid "
+                                   "\"interest\" account.") );
                 return TRUE;
         }
         gnc_frequency_save_state( ldd->repGncFreq,
@@ -1446,7 +1447,7 @@ ld_pay_prep( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
 
         rod = ldd->ld.repayOpts[ldd->currentIdx];
         str = g_string_sized_new( 32 );
-	/* Translators: %s is "Taxes", or "Insurance", or similar */
+        /* Translators: %s is "Taxes", or "Insurance", or similar */
         g_string_sprintf( str, _("Payment: \"%s\""), rod->name );
         gnome_druid_page_standard_set_title( GNOME_DRUID_PAGE_STANDARD(gdp),
                                              str->str );
@@ -1540,8 +1541,8 @@ ld_pay_save_current( LoanDruidData *ldd )
                 rod->from = gnc_account_sel_get_account( ldd->payAcctFromGAS );
                 if ( rod->from == NULL ) {
                         gnc_info_dialog( ldd->dialog,
-					 _("Please select a valid "
-					   "\"from\" account.") );
+                                         _("Please select a valid "
+                                           "\"from\" account.") );
                         return TRUE;
                 }
         }
@@ -1549,8 +1550,8 @@ ld_pay_save_current( LoanDruidData *ldd )
         rod->to   = gnc_account_sel_get_account( ldd->payAcctToGAS );
         if ( rod->to == NULL ) {
                 gnc_info_dialog( ldd->dialog,
-				 _("Please select a valid "
-				   "\"to\" account.") );
+                                 _("Please select a valid "
+                                   "\"to\" account.") );
                 return TRUE;
         }
         
@@ -1739,7 +1740,13 @@ static
 gboolean
 ld_rev_next( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
 {
-        g_assert( FALSE );
+        LoanDruidData *ldd;
+
+        ldd = (LoanDruidData*)ud;
+        gnome_druid_set_page( ldd->druid,
+                              GNOME_DRUID_PAGE(
+                                      glade_xml_get_widget( ldd->gxml,
+                                                            PG_COMMIT ) ) );
         return TRUE;
 }
 
@@ -1754,7 +1761,6 @@ ld_rev_prep( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
         int i;
 
         ldd = (LoanDruidData*)ud;
-        gnome_druid_set_show_finish( ldd->druid, TRUE );
 
         /* Cleanup old clist */
         if ( ldd->revCL != NULL ) {
@@ -1830,8 +1836,6 @@ ld_rev_back( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
         LoanDruidData *ldd = (LoanDruidData*)ud;
         int i;
 
-        gnome_druid_set_show_finish( ldd->druid, FALSE );
-
         /* Get the correct page based on the repayment state. */
         /* go back through opts list and select next enabled options. */
         for ( i = ldd->currentIdx;
@@ -1854,8 +1858,34 @@ ld_rev_back( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
 }
 
 static
+gboolean
+ld_com_next( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
+{
+        g_assert( FALSE );
+        return TRUE;
+}
+
+static
 void
-ld_rev_fin( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
+ld_com_prep( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
+{
+}
+
+static
+gboolean
+ld_com_back( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
+{
+        LoanDruidData *ldd = (LoanDruidData*)ud;
+        gnome_druid_set_page( ldd->druid,
+                              GNOME_DRUID_PAGE(
+                                      glade_xml_get_widget( ldd->gxml,
+                                                            PG_REVIEW ) ) );
+        return TRUE;
+}
+
+static
+void
+ld_com_fin( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
 {
         LoanDruidData *ldd = (LoanDruidData*)ud;
         ld_create_sxes( ldd );
@@ -2233,7 +2263,7 @@ ld_create_sxes( LoanDruidData *ldd )
         paymentSX->name  = g_strdup(ldd->ld.repMemo);
         paymentSX->start = *ldd->ld.startDate;
         paymentSX->last  = *ldd->ld.repStartDate;
-	g_date_subtract_months( &paymentSX->last, 1 );
+        g_date_subtract_months( &paymentSX->last, 1 );
         {
                 paymentSX->end = *ldd->ld.repStartDate;
                 g_date_add_months( &paymentSX->end, ldd->ld.numMonRemain - 1);
@@ -2585,8 +2615,9 @@ ld_rev_hash_to_list( gpointer key, gpointer val, gpointer user_data )
         RevRepaymentRow *rrr = g_new0( RevRepaymentRow, 1 );
         if ( !key || !val ) {
                 DEBUG( "%.8x, %.8x",
-                       (unsigned int)key,
-                       (unsigned int)val );
+                       GPOINTER_TO_UINT(key),
+                       GPOINTER_TO_UINT(val));
+                return;
         }
         rrr->date = *(GDate*)key;
         rrr->numCells = (gnc_numeric*)val;
@@ -2803,7 +2834,7 @@ ld_rev_update_clist( LoanDruidData *ldd, GDate *start, GDate *end )
                 if ( g_date_compare( &rrr->date, end ) > 0 )
                         continue; /* though we can probably return, too. */
 
-                printGDate( tmpBuf, &rrr->date );
+                qof_print_gdate( tmpBuf, MAX_DATE_LENGTH, &rrr->date );
                 rowText[0] = g_strdup( tmpBuf );
 
                 for ( i=0; i<ldd->ld.revNumPmts; i++ )

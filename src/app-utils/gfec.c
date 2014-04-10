@@ -32,16 +32,15 @@ gfec_catcher(void *data, SCM tag, SCM throw_args)
   {
     result = scm_call_2(func, tag, throw_args);
     if (SCM_STRINGP(result))
-      msg = gh_scm2newstr(result, NULL);
+      msg = SCM_STRING_CHARS(result);
   }
 
   if (msg == NULL)
   {
-    msg = strdup("Error running guile function.");
-    assert(msg != NULL);
+    msg = "Error running guile function.";
   }
 
-  *(char**)data = msg;
+  *(char**)data = strdup(msg);
 
   return SCM_UNDEFINED;
 }
@@ -61,7 +60,7 @@ gfec_file_helper(void *data)
 {
   char *file = data;
 
-  return gh_eval_file(file);
+  return scm_c_primitive_load(file);
 }
 
 SCM

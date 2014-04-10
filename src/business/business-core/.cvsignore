@@ -9,3 +9,6 @@ gw-business-core.c
 gw-business-core.h
 gw-business-core.html
 gw-business-core.scm
+.DS_Store
+*.loT
+

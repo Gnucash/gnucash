@@ -71,10 +71,21 @@ gboolean gnc_import_exists_online_id (Transaction *trans);
  * @param fuzzy_amount_difference For fuzzy amount matching, a certain
  * fuzzyness in the matching amount is allowed up to this value. May
  * be e.g. 3.00 dollars for ATM fees, or 0.0 if you only want to allow
- * exact matches. */
+ * exact matches. 
+ *
+ * @param match_date_hardlimit The number of days that a matching
+ * split may differ from the given transaction before it is discarded
+ * immediately. In other words, any split that is more distant from
+ * the given transaction than this match_date_hardlimit days will be
+ * ignored altogether. For use cases without paper checks (e.g. HBCI),
+ * values like 14 (days) might be appropriate, whereas for use cases
+ * with paper checks (e.g. OFX, QIF), values like 42 (days) seem more
+ * appropriate. 
+ */
 void gnc_import_find_split_matches(GNCImportTransInfo *transaction_info,
 				   gint process_threshold, 
-				   double fuzzy_amount_difference);
+				   double fuzzy_amount_difference,
+				   gint match_date_hardlimit);
 
 /** Iterates through all splits of the originating account of
  * trans_info. Sorts the resulting list and sets the selected_match
@@ -83,21 +94,8 @@ void gnc_import_find_split_matches(GNCImportTransInfo *transaction_info,
  * @param trans_info The TransInfo for which the matches should be
  * found, sorted, and selected. 
  *
- * @param clear_threshold If the heuristics of the best matching split
- * is higher or equal this value, 'clear' is selected as default
- * action. 
- *
- * @param add_threshold If the heuristics of the best matching split
- * is lesser or equal this value, 'add' is selected as default
- * action. 
- *
- * @paran process_threshold Each potential match whose heuristics are
- * smaller than this value is totally ignored. 
- *
- * @param fuzzy_amount_difference For fuzzy amount matching, a certain
- * fuzzyness in the matching amount is allowed up to this value. May
- * be e.g. 3.00 dollars for ATM fees, or 0.0 if you only want to allow
- * exact matches. */
+ * @param settings The structure that holds all the user preferences.
+ */
 void 
 gnc_import_TransInfo_init_matches (GNCImportTransInfo *trans_info,
 				   GNCImportSettings *settings);

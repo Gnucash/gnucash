@@ -1,206 +1,213 @@
-<?xml version="1.0"?>
-<GTK-Interface>
+<?xml version="1.0" standalone="no"?> <!--*- mode: xml -*-->
+<!DOCTYPE glade-interface SYSTEM "http://glade.gnome.org/glade-2.0.dtd">
 
-<project>
-  <name>Glade</name>
-  <program_name>glade</program_name>
-  <directory></directory>
-  <source_directory></source_directory>
-  <pixmaps_directory></pixmaps_directory>
-  <language>C</language>
-  <gnome_support>True</gnome_support>
-  <gettext_support>True</gettext_support>
-  <output_main_file>False</output_main_file>
-  <output_support_files>False</output_support_files>
-  <output_build_files>False</output_build_files>
-  <backup_source_files>False</backup_source_files>
-</project>
+<glade-interface>
+<requires lib="gnome"/>
 
-<widget>
-  <class>GnomeDialog</class>
-  <name>QIF Import Account Picker</name>
-  <title>Select Account</title>
-  <type>GTK_WINDOW_TOPLEVEL</type>
-  <position>GTK_WIN_POS_NONE</position>
-  <modal>False</modal>
-  <default_width>300</default_width>
-  <default_height>400</default_height>
-  <allow_shrink>True</allow_shrink>
-  <allow_grow>True</allow_grow>
-  <auto_shrink>True</auto_shrink>
-  <auto_close>False</auto_close>
-  <hide_on_close>False</hide_on_close>
+<widget class="GtkDialog" id="QIF Import Account Picker">
+  <property name="visible">True</property>
+  <property name="title" translatable="yes">Select Account</property>
+  <property name="type">GTK_WINDOW_TOPLEVEL</property>
+  <property name="window_position">GTK_WIN_POS_NONE</property>
+  <property name="modal">False</property>
+  <property name="default_width">300</property>
+  <property name="default_height">400</property>
+  <property name="resizable">True</property>
+  <property name="destroy_with_parent">False</property>
+  <property name="decorated">True</property>
+  <property name="skip_taskbar_hint">False</property>
+  <property name="skip_pager_hint">False</property>
+  <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
+  <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
+  <property name="has_separator">True</property>
 
-  <widget>
-    <class>GtkVBox</class>
-    <child_name>GnomeDialog:vbox</child_name>
-    <name>vbox1</name>
-    <homogeneous>False</homogeneous>
-    <spacing>8</spacing>
-    <child>
-      <padding>1</padding>
-      <expand>True</expand>
-      <fill>True</fill>
-    </child>
+  <child internal-child="vbox">
+    <widget class="GtkVBox" id="vbox1">
+      <property name="visible">True</property>
+      <property name="homogeneous">False</property>
+      <property name="spacing">8</property>
 
-    <widget>
-      <class>GtkHButtonBox</class>
-      <child_name>GnomeDialog:action_area</child_name>
-      <name>hbuttonbox1</name>
-      <layout_style>GTK_BUTTONBOX_SPREAD</layout_style>
-      <spacing>8</spacing>
-      <child_min_width>85</child_min_width>
-      <child_min_height>27</child_min_height>
-      <child_ipad_x>7</child_ipad_x>
-      <child_ipad_y>0</child_ipad_y>
-      <child>
-	<padding>0</padding>
-	<expand>False</expand>
-	<fill>False</fill>
-	<pack>GTK_PACK_END</pack>
-      </child>
+      <child internal-child="action_area">
+	<widget class="GtkHButtonBox" id="hbuttonbox1">
+	  <property name="visible">True</property>
+	  <property name="layout_style">GTK_BUTTONBOX_END</property>
 
-      <widget>
-	<class>GtkButton</class>
-	<name>button1</name>
-	<can_default>True</can_default>
-	<can_focus>True</can_focus>
-	<stock_button>GNOME_STOCK_BUTTON_OK</stock_button>
-      </widget>
-
-      <widget>
-	<class>GtkButton</class>
-	<name>button2</name>
-	<can_default>True</can_default>
-	<can_focus>True</can_focus>
-	<stock_button>GNOME_STOCK_BUTTON_CANCEL</stock_button>
-      </widget>
-    </widget>
-
-    <widget>
-      <class>GtkVBox</class>
-      <name>vbox2</name>
-      <homogeneous>False</homogeneous>
-      <spacing>0</spacing>
-      <child>
-	<padding>0</padding>
-	<expand>True</expand>
-	<fill>True</fill>
-      </child>
-
-      <widget>
-	<class>GtkFrame</class>
-	<name>frame1</name>
-	<label>Select or add a GnuCash account</label>
-	<label_xalign>0</label_xalign>
-	<shadow_type>GTK_SHADOW_ETCHED_IN</shadow_type>
-	<child>
-	  <padding>0</padding>
-	  <expand>True</expand>
-	  <fill>True</fill>
-	</child>
-
-	<widget>
-	  <class>GtkScrolledWindow</class>
-	  <name>scrolledwindow24</name>
-	  <hscrollbar_policy>GTK_POLICY_AUTOMATIC</hscrollbar_policy>
-	  <vscrollbar_policy>GTK_POLICY_AUTOMATIC</vscrollbar_policy>
-	  <hupdate_policy>GTK_UPDATE_CONTINUOUS</hupdate_policy>
-	  <vupdate_policy>GTK_UPDATE_CONTINUOUS</vupdate_policy>
-
-	  <widget>
-	    <class>GtkCTree</class>
-	    <name>account_tree</name>
-	    <can_focus>True</can_focus>
-	    <columns>2</columns>
-	    <column_widths>214,48</column_widths>
-	    <selection_mode>GTK_SELECTION_SINGLE</selection_mode>
-	    <show_titles>True</show_titles>
-	    <shadow_type>GTK_SHADOW_IN</shadow_type>
-
-	    <widget>
-	      <class>GtkLabel</class>
-	      <child_name>CTree:title</child_name>
-	      <name>label847711</name>
-	      <label>Account</label>
-	      <justify>GTK_JUSTIFY_CENTER</justify>
-	      <wrap>False</wrap>
-	      <xalign>0.5</xalign>
-	      <yalign>0.5</yalign>
-	      <xpad>0</xpad>
-	      <ypad>0</ypad>
+	  <child>
+	    <widget class="GtkButton" id="newbutton">
+	      <property name="visible">True</property>
+	      <property name="can_default">True</property>
+	      <property name="can_focus">True</property>
+	      <property name="label" translatable="yes">gnc-new-account</property>
+	      <property name="use_underline">True</property>
+	      <property name="relief">GTK_RELIEF_NORMAL</property>
+	      <property name="focus_on_click">True</property>
+	      <property name="response_id">1</property>
+	      <signal name="clicked" handler="gnc_ui_qif_account_picker_new_cb" last_modification_time="Sat, 25 Oct 2003 19:44:39 GMT"/>
 	    </widget>
+	  </child>
 
-	    <widget>
-	      <class>GtkLabel</class>
-	      <child_name>CTree:title</child_name>
-	      <name>label847712</name>
-	      <label>New?</label>
-	      <justify>GTK_JUSTIFY_CENTER</justify>
-	      <wrap>False</wrap>
-	      <xalign>0.5</xalign>
-	      <yalign>0.5</yalign>
-	      <xpad>0</xpad>
-	      <ypad>0</ypad>
+	  <child>
+	    <widget class="GtkButton" id="cancelbutton">
+	      <property name="visible">True</property>
+	      <property name="can_default">True</property>
+	      <property name="can_focus">True</property>
+	      <property name="label">gtk-cancel</property>
+	      <property name="use_stock">True</property>
+	      <property name="relief">GTK_RELIEF_NORMAL</property>
+	      <property name="focus_on_click">True</property>
+	      <property name="response_id">-6</property>
 	    </widget>
-	  </widget>
+	  </child>
+
+	  <child>
+	    <widget class="GtkButton" id="okbutton">
+	      <property name="visible">True</property>
+	      <property name="can_default">True</property>
+	      <property name="can_focus">True</property>
+	      <property name="label">gtk-ok</property>
+	      <property name="use_stock">True</property>
+	      <property name="relief">GTK_RELIEF_NORMAL</property>
+	      <property name="focus_on_click">True</property>
+	      <property name="response_id">-5</property>
+	    </widget>
+	  </child>
 	</widget>
-      </widget>
-    </widget>
+	<packing>
+	  <property name="padding">0</property>
+	  <property name="expand">False</property>
+	  <property name="fill">False</property>
+	  <property name="pack_type">GTK_PACK_END</property>
+	</packing>
+      </child>
 
-    <widget>
-      <class>GtkButton</class>
-      <name>button78</name>
-      <can_focus>True</can_focus>
-      <signal>
-	<name>clicked</name>
-	<handler>gnc_ui_qif_account_picker_new_cb</handler>
-	<data>QIF_Import_Account_Picker</data>
-	<last_modification_time>Sat, 10 Feb 2001 21:26:10 GMT</last_modification_time>
-      </signal>
-      <label>New Account (child of selected) ...</label>
-      <relief>GTK_RELIEF_NORMAL</relief>
       <child>
-	<padding>0</padding>
-	<expand>False</expand>
-	<fill>False</fill>
+	<widget class="GtkVBox" id="vbox2">
+	  <property name="visible">True</property>
+	  <property name="homogeneous">False</property>
+	  <property name="spacing">0</property>
+
+	  <child>
+	    <widget class="GtkFrame" id="frame1">
+	      <property name="visible">True</property>
+	      <property name="label_xalign">0</property>
+	      <property name="label_yalign">0.5</property>
+	      <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
+
+	      <child>
+		<widget class="GtkScrolledWindow" id="scrolledwindow24">
+		  <property name="visible">True</property>
+		  <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+		  <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+		  <property name="shadow_type">GTK_SHADOW_IN</property>
+		  <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
+
+		  <child>
+		    <widget class="GtkCTree" id="account_tree">
+		      <property name="visible">True</property>
+		      <property name="can_focus">True</property>
+		      <property name="n_columns">2</property>
+		      <property name="column_widths">214,48</property>
+		      <property name="selection_mode">GTK_SELECTION_SINGLE</property>
+		      <property name="show_titles">True</property>
+		      <property name="shadow_type">GTK_SHADOW_IN</property>
+
+		      <child>
+			<widget class="GtkLabel" id="label847711">
+			  <property name="label" translatable="yes">Account</property>
+			  <property name="use_underline">False</property>
+			  <property name="use_markup">False</property>
+			  <property name="justify">GTK_JUSTIFY_CENTER</property>
+			  <property name="wrap">False</property>
+			  <property name="selectable">False</property>
+			  <property name="xalign">0.5</property>
+			  <property name="yalign">0.5</property>
+			  <property name="xpad">0</property>
+			  <property name="ypad">0</property>
+			</widget>
+		      </child>
+
+		      <child>
+			<widget class="GtkLabel" id="label847712">
+			  <property name="label" translatable="yes">New?</property>
+			  <property name="use_underline">False</property>
+			  <property name="use_markup">False</property>
+			  <property name="justify">GTK_JUSTIFY_CENTER</property>
+			  <property name="wrap">False</property>
+			  <property name="selectable">False</property>
+			  <property name="xalign">0.5</property>
+			  <property name="yalign">0.5</property>
+			  <property name="xpad">0</property>
+			  <property name="ypad">0</property>
+			</widget>
+		      </child>
+		    </widget>
+		  </child>
+		</widget>
+	      </child>
+
+	      <child>
+		<widget class="GtkLabel" id="label1">
+		  <property name="visible">True</property>
+		  <property name="label" translatable="yes">Select or add a GnuCash account</property>
+		  <property name="use_underline">False</property>
+		  <property name="use_markup">False</property>
+		  <property name="justify">GTK_JUSTIFY_LEFT</property>
+		  <property name="wrap">False</property>
+		  <property name="selectable">False</property>
+		  <property name="xalign">0.5</property>
+		  <property name="yalign">0.5</property>
+		  <property name="xpad">0</property>
+		  <property name="ypad">0</property>
+		</widget>
+		<packing>
+		  <property name="type">label_item</property>
+		</packing>
+	      </child>
+	    </widget>
+	    <packing>
+	      <property name="padding">0</property>
+	      <property name="expand">True</property>
+	      <property name="fill">True</property>
+	    </packing>
+	  </child>
+	</widget>
+	<packing>
+	  <property name="padding">0</property>
+	  <property name="expand">True</property>
+	  <property name="fill">True</property>
+	</packing>
       </child>
     </widget>
-  </widget>
+  </child>
 </widget>
 
-<widget>
-  <class>GtkWindow</class>
-  <name>QIF Import Druid</name>
-  <title>QIF Import</title>
-  <type>GTK_WINDOW_TOPLEVEL</type>
-  <position>GTK_WIN_POS_NONE</position>
-  <modal>False</modal>
-  <allow_shrink>False</allow_shrink>
-  <allow_grow>True</allow_grow>
-  <auto_shrink>True</auto_shrink>
+<widget class="GtkWindow" id="QIF Import Druid">
+  <property name="visible">True</property>
+  <property name="title" translatable="yes">QIF Import</property>
+  <property name="type">GTK_WINDOW_TOPLEVEL</property>
+  <property name="window_position">GTK_WIN_POS_NONE</property>
+  <property name="modal">False</property>
+  <property name="resizable">True</property>
+  <property name="destroy_with_parent">False</property>
+  <property name="decorated">True</property>
+  <property name="skip_taskbar_hint">False</property>
+  <property name="skip_pager_hint">False</property>
+  <property name="type_hint">GDK_WINDOW_TYPE_HINT_NORMAL</property>
+  <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
 
-  <widget>
-    <class>GnomeDruid</class>
-    <name>qif_import_druid</name>
-    <signal>
-      <name>cancel</name>
-      <handler>gnc_ui_qif_import_cancel_cb</handler>
-      <data>QIF_Import_Druid</data>
-      <last_modification_time>Wed, 30 Aug 2000 15:11:02 GMT</last_modification_time>
-    </signal>
+  <child>
+    <widget class="GnomeDruid" id="qif_import_druid">
+      <property name="border_width">4</property>
+      <property name="visible">True</property>
+      <property name="show_help">False</property>
+      <signal name="cancel" handler="gnc_ui_qif_import_cancel_cb"/>
 
-    <widget>
-      <class>GnomeDruidPageStart</class>
-      <name>start_page</name>
-      <signal>
-	<name>next</name>
-	<handler>gnc_ui_qif_import_generic_next_cb</handler>
-	<data>QIF_Import_Druid</data>
-	<last_modification_time>Tue, 06 Feb 2001 17:04:30 GMT</last_modification_time>
-      </signal>
-      <title>Import QIF files</title>
-      <text>GnuCash can import financial data from QIF (Quicken 
+      <child>
+	<widget class="GnomeDruidPageEdge" id="start_page">
+	  <property name="visible">True</property>
+	  <property name="position">GNOME_EDGE_START</property>
+	  <property name="title" translatable="yes">Import QIF files</property>
+	  <property name="text" translatable="yes">GnuCash can import financial data from QIF (Quicken 
 Interchange Format) files written by Quicken/QuickBooks,
 MS Money, Moneydance, and many other programs. 
 
@@ -208,175 +215,149 @@ The import process has several steps. Your GnuCash
 accounts will not be changed until you click &quot;Finish&quot;
 at the end of the process. 
 
-Click &quot;Next&quot; to start loading your QIF data, or &quot;Cancel&quot;
-to abort the process. </text>
-      <title_color>255,255,255</title_color>
-      <text_color>0,0,0</text_color>
-      <background_color>153,191,153</background_color>
-      <logo_background_color>255,255,255</logo_background_color>
-      <textbox_color>255,255,255</textbox_color>
-    </widget>
+Click &quot;Forward&quot; to start loading your QIF data, or &quot;Cancel&quot;
+to abort the process. </property>
+	  <signal name="next" handler="gnc_ui_qif_import_generic_next_cb"/>
+	</widget>
+      </child>
 
-    <widget>
-      <class>GnomeDruidPageStandard</class>
-      <name>load_file_page</name>
-      <signal>
-	<name>next</name>
-	<handler>gnc_ui_qif_import_load_file_next_cb</handler>
-	<data>QIF_Import_Druid</data>
-	<last_modification_time>Wed, 30 Aug 2000 14:30:37 GMT</last_modification_time>
-      </signal>
-      <signal>
-	<name>back</name>
-	<handler>gnc_ui_qif_import_load_file_back_cb</handler>
-	<data>QIF_Import_Druid</data>
-	<last_modification_time>Sat, 04 Jan 2003 05:05:30 GMT</last_modification_time>
-      </signal>
-      <title>Select a QIF file to load</title>
-      <title_color>255,255,255</title_color>
-      <background_color>153,191,154</background_color>
-      <logo_background_color>255,255,255</logo_background_color>
+      <child>
+	<widget class="GnomeDruidPageStandard" id="load_file_page">
+	  <property name="visible">True</property>
+	  <property name="title" translatable="yes">Select a QIF file to load</property>
+	  <property name="title_foreground">#f5f5f5f5f5f5</property>
+	  <signal name="next" handler="gnc_ui_qif_import_load_file_next_cb"/>
+	  <signal name="back" handler="gnc_ui_qif_import_load_file_back_cb"/>
 
-      <widget>
-	<class>GtkVBox</class>
-	<child_name>GnomeDruidPageStandard:vbox</child_name>
-	<name>druid-vbox8</name>
-	<border_width>25</border_width>
-	<homogeneous>False</homogeneous>
-	<spacing>0</spacing>
-	<child>
-	  <padding>0</padding>
-	  <expand>True</expand>
-	  <fill>True</fill>
-	</child>
+	  <child internal-child="vbox">
+	    <widget class="GtkVBox" id="druid-vbox8">
+	      <property name="border_width">25</property>
+	      <property name="visible">True</property>
+	      <property name="homogeneous">False</property>
+	      <property name="spacing">0</property>
 
-	<widget>
-	  <class>GtkLabel</class>
-	  <name>label822</name>
-	  <label>Please select a file to load. When you click &quot;Next&quot;, the file will be loaded
+	      <child>
+		<widget class="GtkLabel" id="label822">
+		  <property name="visible">True</property>
+		  <property name="label" translatable="yes">Please select a file to load. When you click &quot;Forward&quot;, the file will be loaded
 and analyzed. You may need to answer some questions about the account(s)
 in the file.
 
 You will have the opportunity to load as many files as you wish, so don't 
 worry if your data is in multiple files. 
-</label>
-	  <justify>GTK_JUSTIFY_LEFT</justify>
-	  <wrap>False</wrap>
-	  <xalign>0.5</xalign>
-	  <yalign>0.5</yalign>
-	  <xpad>0</xpad>
-	  <ypad>0</ypad>
-	  <child>
-	    <padding>5</padding>
-	    <expand>False</expand>
-	    <fill>False</fill>
+</property>
+		  <property name="use_underline">False</property>
+		  <property name="use_markup">False</property>
+		  <property name="justify">GTK_JUSTIFY_LEFT</property>
+		  <property name="wrap">False</property>
+		  <property name="selectable">False</property>
+		  <property name="xalign">0.5</property>
+		  <property name="yalign">0.5</property>
+		  <property name="xpad">0</property>
+		  <property name="ypad">0</property>
+		</widget>
+		<packing>
+		  <property name="padding">5</property>
+		  <property name="expand">False</property>
+		  <property name="fill">False</property>
+		</packing>
+	      </child>
+
+	      <child>
+		<widget class="GtkHBox" id="hbox69">
+		  <property name="visible">True</property>
+		  <property name="homogeneous">False</property>
+		  <property name="spacing">0</property>
+
+		  <child>
+		    <widget class="GtkLabel" id="label821">
+		      <property name="visible">True</property>
+		      <property name="label" translatable="yes">QIF Filename:</property>
+		      <property name="use_underline">False</property>
+		      <property name="use_markup">False</property>
+		      <property name="justify">GTK_JUSTIFY_CENTER</property>
+		      <property name="wrap">False</property>
+		      <property name="selectable">False</property>
+		      <property name="xalign">1</property>
+		      <property name="yalign">0.5</property>
+		      <property name="xpad">0</property>
+		      <property name="ypad">0</property>
+		    </widget>
+		    <packing>
+		      <property name="padding">4</property>
+		      <property name="expand">False</property>
+		      <property name="fill">False</property>
+		    </packing>
+		  </child>
+
+		  <child>
+		    <widget class="GtkEntry" id="qif_filename_entry">
+		      <property name="visible">True</property>
+		      <property name="can_default">True</property>
+		      <property name="has_default">True</property>
+		      <property name="can_focus">True</property>
+		      <property name="editable">True</property>
+		      <property name="visibility">True</property>
+		      <property name="max_length">0</property>
+		      <property name="text" translatable="yes"></property>
+		      <property name="has_frame">True</property>
+		      <property name="invisible_char" translatable="yes">*</property>
+		      <property name="activates_default">False</property>
+		    </widget>
+		    <packing>
+		      <property name="padding">0</property>
+		      <property name="expand">True</property>
+		      <property name="fill">True</property>
+		    </packing>
+		  </child>
+
+		  <child>
+		    <widget class="GtkButton" id="button71">
+		      <property name="visible">True</property>
+		      <property name="can_focus">True</property>
+		      <property name="label" translatable="yes">Select...</property>
+		      <property name="use_underline">True</property>
+		      <property name="relief">GTK_RELIEF_NORMAL</property>
+		      <property name="focus_on_click">True</property>
+		      <signal name="clicked" handler="gnc_ui_qif_import_select_file_cb"/>
+		    </widget>
+		    <packing>
+		      <property name="padding">3</property>
+		      <property name="expand">False</property>
+		      <property name="fill">False</property>
+		    </packing>
+		  </child>
+		</widget>
+		<packing>
+		  <property name="padding">0</property>
+		  <property name="expand">False</property>
+		  <property name="fill">False</property>
+		</packing>
+	      </child>
+	    </widget>
 	  </child>
 	</widget>
+      </child>
 
-	<widget>
-	  <class>GtkHBox</class>
-	  <name>hbox69</name>
-	  <homogeneous>False</homogeneous>
-	  <spacing>0</spacing>
-	  <child>
-	    <padding>0</padding>
-	    <expand>False</expand>
-	    <fill>False</fill>
-	  </child>
+      <child>
+	<widget class="GnomeDruidPageStandard" id="date_format_page">
+	  <property name="visible">True</property>
+	  <property name="title" translatable="yes">Set a date format for this QIF file</property>
+	  <property name="title_foreground">#f5f5f5f5f5f5</property>
+	  <signal name="next" handler="gnc_ui_qif_import_date_format_next_cb"/>
+	  <signal name="back" handler="gnc_ui_qif_import_default_acct_back_cb"/>
 
-	  <widget>
-	    <class>GtkLabel</class>
-	    <name>label821</name>
-	    <label>QIF Filename:</label>
-	    <justify>GTK_JUSTIFY_CENTER</justify>
-	    <wrap>False</wrap>
-	    <xalign>1</xalign>
-	    <yalign>0.5</yalign>
-	    <xpad>0</xpad>
-	    <ypad>0</ypad>
-	    <child>
-	      <padding>4</padding>
-	      <expand>False</expand>
-	      <fill>False</fill>
-	    </child>
-	  </widget>
+	  <child internal-child="vbox">
+	    <widget class="GtkVBox" id="druid-vbox22">
+	      <property name="border_width">25</property>
+	      <property name="visible">True</property>
+	      <property name="homogeneous">False</property>
+	      <property name="spacing">0</property>
 
-	  <widget>
-	    <class>GtkEntry</class>
-	    <name>qif_filename_entry</name>
-	    <can_default>True</can_default>
-	    <has_default>True</has_default>
-	    <can_focus>True</can_focus>
-	    <editable>True</editable>
-	    <text_visible>True</text_visible>
-	    <text_max_length>0</text_max_length>
-	    <text></text>
-	    <child>
-	      <padding>0</padding>
-	      <expand>True</expand>
-	      <fill>True</fill>
-	    </child>
-	  </widget>
-
-	  <widget>
-	    <class>GtkButton</class>
-	    <name>button71</name>
-	    <can_focus>True</can_focus>
-	    <signal>
-	      <name>clicked</name>
-	      <handler>gnc_ui_qif_import_select_file_cb</handler>
-	      <data>QIF_Import_Druid</data>
-	      <last_modification_time>Wed, 30 Aug 2000 17:33:50 GMT</last_modification_time>
-	    </signal>
-	    <label>Select...</label>
-	    <relief>GTK_RELIEF_NORMAL</relief>
-	    <child>
-	      <padding>3</padding>
-	      <expand>False</expand>
-	      <fill>False</fill>
-	    </child>
-	  </widget>
-	</widget>
-      </widget>
-    </widget>
-
-    <widget>
-      <class>GnomeDruidPageStandard</class>
-      <name>date_format_page</name>
-      <signal>
-	<name>next</name>
-	<handler>gnc_ui_qif_import_date_format_next_cb</handler>
-	<data>QIF_Import_Druid</data>
-	<last_modification_time>Wed, 04 Oct 2000 15:56:16 GMT</last_modification_time>
-      </signal>
-      <signal>
-	<name>back</name>
-	<handler>gnc_ui_qif_import_default_acct_back_cb</handler>
-	<data>QIF_Import_Druid</data>
-	<last_modification_time>Wed, 04 Jul 2001 22:27:27 GMT</last_modification_time>
-      </signal>
-      <title>Set a date format for this QIF file</title>
-      <title_color>255,255,255</title_color>
-      <background_color>153,191,154</background_color>
-      <logo_background_color>255,255,255</logo_background_color>
-
-      <widget>
-	<class>GtkVBox</class>
-	<child_name>GnomeDruidPageStandard:vbox</child_name>
-	<name>druid-vbox22</name>
-	<border_width>25</border_width>
-	<homogeneous>False</homogeneous>
-	<spacing>0</spacing>
-	<child>
-	  <padding>0</padding>
-	  <expand>True</expand>
-	  <fill>True</fill>
-	</child>
-
-	<widget>
-	  <class>GtkLabel</class>
-	  <name>label841</name>
-	  <label>The QIF file format does not specify which order the day, month, and 
+	      <child>
+		<widget class="GtkLabel" id="label841">
+		  <property name="visible">True</property>
+		  <property name="label" translatable="yes">The QIF file format does not specify which order the day, month, and 
 year components of a date are printed.  In most cases, it is possible 
 to automatically determine which format is in use in a particular file.
 However, in the file you have just imported there exist more than one
@@ -385,388 +366,412 @@ possible format that fits the data.
 Please select a date format for the file.  QIF files created by European
 software are likely  to be in &quot;d-m-y&quot; or day-month-year format, where
 US QIF files are likely to be &quot;m-d-y&quot; or month-year-day.    
-</label>
-	  <justify>GTK_JUSTIFY_LEFT</justify>
-	  <wrap>False</wrap>
-	  <xalign>0.5</xalign>
-	  <yalign>0.5</yalign>
-	  <xpad>0</xpad>
-	  <ypad>0</ypad>
-	  <child>
-	    <padding>0</padding>
-	    <expand>False</expand>
-	    <fill>False</fill>
+</property>
+		  <property name="use_underline">False</property>
+		  <property name="use_markup">False</property>
+		  <property name="justify">GTK_JUSTIFY_LEFT</property>
+		  <property name="wrap">False</property>
+		  <property name="selectable">False</property>
+		  <property name="xalign">0.5</property>
+		  <property name="yalign">0.5</property>
+		  <property name="xpad">0</property>
+		  <property name="ypad">0</property>
+		</widget>
+		<packing>
+		  <property name="padding">0</property>
+		  <property name="expand">False</property>
+		  <property name="fill">False</property>
+		</packing>
+	      </child>
+
+	      <child>
+		<widget class="GtkCombo" id="date_format_combo">
+		  <property name="visible">True</property>
+		  <property name="value_in_list">True</property>
+		  <property name="allow_empty">False</property>
+		  <property name="case_sensitive">False</property>
+		  <property name="enable_arrow_keys">True</property>
+		  <property name="enable_arrows_always">False</property>
+
+		  <child internal-child="entry">
+		    <widget class="GtkEntry" id="date_format_entry">
+		      <property name="visible">True</property>
+		      <property name="can_focus">True</property>
+		      <property name="editable">False</property>
+		      <property name="visibility">True</property>
+		      <property name="max_length">0</property>
+		      <property name="text" translatable="yes"></property>
+		      <property name="has_frame">True</property>
+		      <property name="invisible_char" translatable="yes">*</property>
+		      <property name="activates_default">False</property>
+		    </widget>
+		  </child>
+
+		  <child internal-child="list">
+		    <widget class="GtkList" id="convertwidget3">
+		      <property name="visible">True</property>
+		      <property name="selection_mode">GTK_SELECTION_BROWSE</property>
+
+		      <child>
+			<widget class="GtkListItem" id="convertwidget4">
+			  <property name="visible">True</property>
+
+			  <child>
+			    <widget class="GtkLabel" id="convertwidget5">
+			      <property name="visible">True</property>
+			      <property name="label" translatable="yes"></property>
+			      <property name="use_underline">False</property>
+			      <property name="use_markup">False</property>
+			      <property name="justify">GTK_JUSTIFY_LEFT</property>
+			      <property name="wrap">False</property>
+			      <property name="selectable">False</property>
+			      <property name="xalign">0</property>
+			      <property name="yalign">0.5</property>
+			      <property name="xpad">0</property>
+			      <property name="ypad">0</property>
+			    </widget>
+			  </child>
+			</widget>
+		      </child>
+		    </widget>
+		  </child>
+		</widget>
+		<packing>
+		  <property name="padding">0</property>
+		  <property name="expand">False</property>
+		  <property name="fill">False</property>
+		</packing>
+	      </child>
+
+	      <child>
+		<widget class="GtkLabel" id="label847713">
+		  <property name="visible">True</property>
+		  <property name="label" translatable="yes">Click &quot;Back&quot; to cancel the loading of this file and choose another.</property>
+		  <property name="use_underline">False</property>
+		  <property name="use_markup">False</property>
+		  <property name="justify">GTK_JUSTIFY_CENTER</property>
+		  <property name="wrap">False</property>
+		  <property name="selectable">False</property>
+		  <property name="xalign">0.5</property>
+		  <property name="yalign">0.5</property>
+		  <property name="xpad">0</property>
+		  <property name="ypad">0</property>
+		</widget>
+		<packing>
+		  <property name="padding">0</property>
+		  <property name="expand">False</property>
+		  <property name="fill">False</property>
+		  <property name="pack_type">GTK_PACK_END</property>
+		</packing>
+	      </child>
+	    </widget>
 	  </child>
 	</widget>
+      </child>
 
-	<widget>
-	  <class>GtkCombo</class>
-	  <name>date_format_combo</name>
-	  <value_in_list>True</value_in_list>
-	  <ok_if_empty>False</ok_if_empty>
-	  <case_sensitive>False</case_sensitive>
-	  <use_arrows>True</use_arrows>
-	  <use_arrows_always>False</use_arrows_always>
-	  <items></items>
-	  <child>
-	    <padding>0</padding>
-	    <expand>False</expand>
-	    <fill>False</fill>
-	  </child>
+      <child>
+	<widget class="GnomeDruidPageStandard" id="account_name_page">
+	  <property name="visible">True</property>
+	  <property name="title" translatable="yes">Set the default QIF account name</property>
+	  <property name="title_foreground">#f5f5f5f5f5f5</property>
+	  <signal name="next" handler="gnc_ui_qif_import_default_acct_next_cb"/>
+	  <signal name="back" handler="gnc_ui_qif_import_default_acct_back_cb"/>
 
-	  <widget>
-	    <class>GtkEntry</class>
-	    <child_name>GtkCombo:entry</child_name>
-	    <name>date_format_entry</name>
-	    <can_focus>True</can_focus>
-	    <editable>False</editable>
-	    <text_visible>True</text_visible>
-	    <text_max_length>0</text_max_length>
-	    <text></text>
-	  </widget>
-	</widget>
+	  <child internal-child="vbox">
+	    <widget class="GtkVBox" id="druid-vbox9">
+	      <property name="border_width">25</property>
+	      <property name="visible">True</property>
+	      <property name="homogeneous">False</property>
+	      <property name="spacing">0</property>
 
-	<widget>
-	  <class>GtkLabel</class>
-	  <name>label847713</name>
-	  <label>Click &quot;Back&quot; to cancel the loading of this file and choose another.</label>
-	  <justify>GTK_JUSTIFY_CENTER</justify>
-	  <wrap>False</wrap>
-	  <xalign>0.5</xalign>
-	  <yalign>0.5</yalign>
-	  <xpad>0</xpad>
-	  <ypad>0</ypad>
-	  <child>
-	    <padding>0</padding>
-	    <expand>False</expand>
-	    <fill>False</fill>
-	    <pack>GTK_PACK_END</pack>
-	  </child>
-	</widget>
-      </widget>
-    </widget>
-
-    <widget>
-      <class>GnomeDruidPageStandard</class>
-      <name>account_name_page</name>
-      <signal>
-	<name>next</name>
-	<handler>gnc_ui_qif_import_default_acct_next_cb</handler>
-	<data>QIF_Import_Druid</data>
-	<last_modification_time>Fri, 08 Sep 2000 14:03:17 GMT</last_modification_time>
-      </signal>
-      <signal>
-	<name>back</name>
-	<handler>gnc_ui_qif_import_default_acct_back_cb</handler>
-	<data>QIF_Import_Druid</data>
-	<last_modification_time>Mon, 18 Sep 2000 16:36:41 GMT</last_modification_time>
-      </signal>
-      <title>Set the default QIF account name</title>
-      <title_color>255,255,255</title_color>
-      <background_color>153,191,154</background_color>
-      <logo_background_color>255,255,255</logo_background_color>
-
-      <widget>
-	<class>GtkVBox</class>
-	<child_name>GnomeDruidPageStandard:vbox</child_name>
-	<name>druid-vbox9</name>
-	<border_width>25</border_width>
-	<homogeneous>False</homogeneous>
-	<spacing>0</spacing>
-	<child>
-	  <padding>0</padding>
-	  <expand>True</expand>
-	  <fill>True</fill>
-	</child>
-
-	<widget>
-	  <class>GtkLabel</class>
-	  <name>label823</name>
-	  <label>The QIF file that you just loaded appears to contain transactions for just 
+	      <child>
+		<widget class="GtkLabel" id="label823">
+		  <property name="visible">True</property>
+		  <property name="label" translatable="yes">The QIF file that you just loaded appears to contain transactions for just 
 one account, but the file does not specify a name for that account.  
 
 Please enter a name for the account. If the file was exported from another
 accounting program, you should use the same account name that was used 
 in that program.
-</label>
-	  <justify>GTK_JUSTIFY_LEFT</justify>
-	  <wrap>False</wrap>
-	  <xalign>0.5</xalign>
-	  <yalign>0.5</yalign>
-	  <xpad>0</xpad>
-	  <ypad>0</ypad>
-	  <child>
-	    <padding>4</padding>
-	    <expand>False</expand>
-	    <fill>False</fill>
-	  </child>
-	</widget>
+</property>
+		  <property name="use_underline">False</property>
+		  <property name="use_markup">False</property>
+		  <property name="justify">GTK_JUSTIFY_LEFT</property>
+		  <property name="wrap">False</property>
+		  <property name="selectable">False</property>
+		  <property name="xalign">0.5</property>
+		  <property name="yalign">0.5</property>
+		  <property name="xpad">0</property>
+		  <property name="ypad">0</property>
+		</widget>
+		<packing>
+		  <property name="padding">4</property>
+		  <property name="expand">False</property>
+		  <property name="fill">False</property>
+		</packing>
+	      </child>
 
-	<widget>
-	  <class>GtkHBox</class>
-	  <name>hbox70</name>
-	  <homogeneous>False</homogeneous>
-	  <spacing>0</spacing>
-	  <child>
-	    <padding>0</padding>
-	    <expand>False</expand>
-	    <fill>False</fill>
-	  </child>
+	      <child>
+		<widget class="GtkHBox" id="hbox70">
+		  <property name="visible">True</property>
+		  <property name="homogeneous">False</property>
+		  <property name="spacing">0</property>
 
-	  <widget>
-	    <class>GtkLabel</class>
-	    <name>label824</name>
-	    <label>Account name:</label>
-	    <justify>GTK_JUSTIFY_CENTER</justify>
-	    <wrap>False</wrap>
-	    <xalign>1</xalign>
-	    <yalign>0.5</yalign>
-	    <xpad>0</xpad>
-	    <ypad>0</ypad>
-	    <child>
-	      <padding>4</padding>
-	      <expand>False</expand>
-	      <fill>False</fill>
-	    </child>
-	  </widget>
+		  <child>
+		    <widget class="GtkLabel" id="label824">
+		      <property name="visible">True</property>
+		      <property name="label" translatable="yes">Account name:</property>
+		      <property name="use_underline">False</property>
+		      <property name="use_markup">False</property>
+		      <property name="justify">GTK_JUSTIFY_CENTER</property>
+		      <property name="wrap">False</property>
+		      <property name="selectable">False</property>
+		      <property name="xalign">1</property>
+		      <property name="yalign">0.5</property>
+		      <property name="xpad">0</property>
+		      <property name="ypad">0</property>
+		    </widget>
+		    <packing>
+		      <property name="padding">4</property>
+		      <property name="expand">False</property>
+		      <property name="fill">False</property>
+		    </packing>
+		  </child>
 
-	  <widget>
-	    <class>GtkEntry</class>
-	    <name>qif_account_entry</name>
-	    <can_focus>True</can_focus>
-	    <editable>True</editable>
-	    <text_visible>True</text_visible>
-	    <text_max_length>0</text_max_length>
-	    <text></text>
-	    <child>
-	      <padding>0</padding>
-	      <expand>True</expand>
-	      <fill>True</fill>
-	    </child>
-	  </widget>
-	</widget>
+		  <child>
+		    <widget class="GtkEntry" id="qif_account_entry">
+		      <property name="visible">True</property>
+		      <property name="can_focus">True</property>
+		      <property name="editable">True</property>
+		      <property name="visibility">True</property>
+		      <property name="max_length">0</property>
+		      <property name="text" translatable="yes"></property>
+		      <property name="has_frame">True</property>
+		      <property name="invisible_char" translatable="yes">*</property>
+		      <property name="activates_default">False</property>
+		    </widget>
+		    <packing>
+		      <property name="padding">0</property>
+		      <property name="expand">True</property>
+		      <property name="fill">True</property>
+		    </packing>
+		  </child>
+		</widget>
+		<packing>
+		  <property name="padding">0</property>
+		  <property name="expand">False</property>
+		  <property name="fill">False</property>
+		</packing>
+	      </child>
 
-	<widget>
-	  <class>GtkLabel</class>
-	  <name>label847714</name>
-	  <label>Click &quot;Back&quot; to cancel the loading of this file and choose another.</label>
-	  <justify>GTK_JUSTIFY_CENTER</justify>
-	  <wrap>False</wrap>
-	  <xalign>0.5</xalign>
-	  <yalign>0.5</yalign>
-	  <xpad>0</xpad>
-	  <ypad>0</ypad>
-	  <child>
-	    <padding>0</padding>
-	    <expand>False</expand>
-	    <fill>False</fill>
-	    <pack>GTK_PACK_END</pack>
-	  </child>
-	</widget>
-      </widget>
-    </widget>
-
-    <widget>
-      <class>GnomeDruidPageStandard</class>
-      <name>loaded_files_page</name>
-      <signal>
-	<name>prepare</name>
-	<handler>gnc_ui_qif_import_loaded_files_prepare_cb</handler>
-	<data>QIF_Import_Druid</data>
-	<last_modification_time>Wed, 30 Aug 2000 22:42:22 GMT</last_modification_time>
-      </signal>
-      <signal>
-	<name>next</name>
-	<handler>gnc_ui_qif_import_generic_next_cb</handler>
-	<data>QIF_Import_Druid</data>
-	<last_modification_time>Fri, 09 Feb 2001 17:04:25 GMT</last_modification_time>
-      </signal>
-      <signal>
-	<name>back</name>
-	<handler>gnc_ui_qif_import_generic_back_cb</handler>
-	<data>QIF_Import_Druid</data>
-	<last_modification_time>Tue, 06 Feb 2001 17:08:05 GMT</last_modification_time>
-      </signal>
-      <title>QIF files you have loaded</title>
-      <title_color>255,255,255</title_color>
-      <background_color>153,191,153</background_color>
-      <logo_background_color>255,255,255</logo_background_color>
-
-      <widget>
-	<class>GtkVBox</class>
-	<child_name>GnomeDruidPageStandard:vbox</child_name>
-	<name>druid-vbox1</name>
-	<border_width>25</border_width>
-	<homogeneous>False</homogeneous>
-	<spacing>4</spacing>
-	<child>
-	  <padding>0</padding>
-	  <expand>True</expand>
-	  <fill>True</fill>
-	</child>
-
-	<widget>
-	  <class>GtkFrame</class>
-	  <name>frame33</name>
-	  <label>QIF Files</label>
-	  <label_xalign>0</label_xalign>
-	  <shadow_type>GTK_SHADOW_ETCHED_IN</shadow_type>
-	  <child>
-	    <padding>0</padding>
-	    <expand>True</expand>
-	    <fill>True</fill>
-	  </child>
-
-	  <widget>
-	    <class>GtkScrolledWindow</class>
-	    <name>scrolledwindow10</name>
-	    <hscrollbar_policy>GTK_POLICY_ALWAYS</hscrollbar_policy>
-	    <vscrollbar_policy>GTK_POLICY_AUTOMATIC</vscrollbar_policy>
-	    <hupdate_policy>GTK_UPDATE_CONTINUOUS</hupdate_policy>
-	    <vupdate_policy>GTK_UPDATE_CONTINUOUS</vupdate_policy>
-
-	    <widget>
-	      <class>GtkCList</class>
-	      <name>selected_file_list</name>
-	      <can_focus>True</can_focus>
-	      <signal>
-		<name>select_row</name>
-		<handler>gnc_ui_qif_import_select_loaded_file_cb</handler>
-		<data>QIF_Import_Druid</data>
-		<last_modification_time>Wed, 30 Aug 2000 23:00:57 GMT</last_modification_time>
-	      </signal>
-	      <columns>1</columns>
-	      <column_widths>80</column_widths>
-	      <selection_mode>GTK_SELECTION_SINGLE</selection_mode>
-	      <show_titles>False</show_titles>
-	      <shadow_type>GTK_SHADOW_IN</shadow_type>
-
-	      <widget>
-		<class>GtkLabel</class>
-		<child_name>CList:title</child_name>
-		<name>label827</name>
-		<label>label827</label>
-		<justify>GTK_JUSTIFY_CENTER</justify>
-		<wrap>False</wrap>
-		<xalign>0.5</xalign>
-		<yalign>0.5</yalign>
-		<xpad>0</xpad>
-		<ypad>0</ypad>
-	      </widget>
+	      <child>
+		<widget class="GtkLabel" id="label847714">
+		  <property name="visible">True</property>
+		  <property name="label" translatable="yes">Click &quot;Back&quot; to cancel the loading of this file and choose another.</property>
+		  <property name="use_underline">False</property>
+		  <property name="use_markup">False</property>
+		  <property name="justify">GTK_JUSTIFY_CENTER</property>
+		  <property name="wrap">False</property>
+		  <property name="selectable">False</property>
+		  <property name="xalign">0.5</property>
+		  <property name="yalign">0.5</property>
+		  <property name="xpad">0</property>
+		  <property name="ypad">0</property>
+		</widget>
+		<packing>
+		  <property name="padding">0</property>
+		  <property name="expand">False</property>
+		  <property name="fill">False</property>
+		  <property name="pack_type">GTK_PACK_END</property>
+		</packing>
+	      </child>
 	    </widget>
-	  </widget>
+	  </child>
 	</widget>
+      </child>
 
-	<widget>
-	  <class>GtkLabel</class>
-	  <name>label816</name>
-	  <label>Click &quot;Load another file&quot; if you have more data to import at this time.
+      <child>
+	<widget class="GnomeDruidPageStandard" id="loaded_files_page">
+	  <property name="visible">True</property>
+	  <property name="title" translatable="yes">QIF files you have loaded</property>
+	  <property name="title_foreground">#f5f5f5f5f5f5</property>
+	  <signal name="prepare" handler="gnc_ui_qif_import_loaded_files_prepare_cb"/>
+	  <signal name="next" handler="gnc_ui_qif_import_generic_next_cb"/>
+	  <signal name="back" handler="gnc_ui_qif_import_generic_back_cb"/>
+
+	  <child internal-child="vbox">
+	    <widget class="GtkVBox" id="druid-vbox1">
+	      <property name="border_width">25</property>
+	      <property name="visible">True</property>
+	      <property name="homogeneous">False</property>
+	      <property name="spacing">4</property>
+
+	      <child>
+		<widget class="GtkFrame" id="frame33">
+		  <property name="visible">True</property>
+		  <property name="label_xalign">0</property>
+		  <property name="label_yalign">0.5</property>
+		  <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
+
+		  <child>
+		    <widget class="GtkScrolledWindow" id="scrolledwindow10">
+		      <property name="visible">True</property>
+		      <property name="hscrollbar_policy">GTK_POLICY_ALWAYS</property>
+		      <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+		      <property name="shadow_type">GTK_SHADOW_IN</property>
+		      <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
+
+		      <child>
+			<widget class="GtkCList" id="selected_file_list">
+			  <property name="visible">True</property>
+			  <property name="can_focus">True</property>
+			  <property name="n_columns">1</property>
+			  <property name="column_widths">80</property>
+			  <property name="selection_mode">GTK_SELECTION_SINGLE</property>
+			  <property name="show_titles">False</property>
+			  <property name="shadow_type">GTK_SHADOW_IN</property>
+			  <signal name="select_row" handler="gnc_ui_qif_import_select_loaded_file_cb"/>
+
+			  <child>
+			    <widget class="GtkLabel" id="label827">
+			      <property name="label" translatable="yes">labe82l7</property>
+			      <property name="use_underline">False</property>
+			      <property name="use_markup">False</property>
+			      <property name="justify">GTK_JUSTIFY_CENTER</property>
+			      <property name="wrap">False</property>
+			      <property name="selectable">False</property>
+			      <property name="xalign">0.5</property>
+			      <property name="yalign">0.5</property>
+			      <property name="xpad">0</property>
+			      <property name="ypad">0</property>
+			    </widget>
+			  </child>
+			</widget>
+		      </child>
+		    </widget>
+		  </child>
+
+		  <child>
+		    <widget class="GtkLabel" id="label847715">
+		      <property name="visible">True</property>
+		      <property name="label" translatable="yes">QIF Files</property>
+		      <property name="use_underline">False</property>
+		      <property name="use_markup">False</property>
+		      <property name="justify">GTK_JUSTIFY_LEFT</property>
+		      <property name="wrap">False</property>
+		      <property name="selectable">False</property>
+		      <property name="xalign">0.5</property>
+		      <property name="yalign">0.5</property>
+		      <property name="xpad">0</property>
+		      <property name="ypad">0</property>
+		    </widget>
+		    <packing>
+		      <property name="type">label_item</property>
+		    </packing>
+		  </child>
+		</widget>
+		<packing>
+		  <property name="padding">0</property>
+		  <property name="expand">True</property>
+		  <property name="fill">True</property>
+		</packing>
+	      </child>
+
+	      <child>
+		<widget class="GtkLabel" id="label816">
+		  <property name="visible">True</property>
+		  <property name="label" translatable="yes">Click &quot;Load another file&quot; if you have more data to import at this time.
 Do this if you have saved your accounts to separate QIF files.
 
-Click &quot;Next&quot; to finish loading files and move to the next step 
-of the QIF import process. </label>
-	  <justify>GTK_JUSTIFY_LEFT</justify>
-	  <wrap>False</wrap>
-	  <xalign>0.5</xalign>
-	  <yalign>0.5</yalign>
-	  <xpad>0</xpad>
-	  <ypad>0</ypad>
-	  <child>
-	    <padding>3</padding>
-	    <expand>False</expand>
-	    <fill>False</fill>
+Click &quot;Forward&quot; to finish loading files and move to the next step 
+of the QIF import process. </property>
+		  <property name="use_underline">False</property>
+		  <property name="use_markup">False</property>
+		  <property name="justify">GTK_JUSTIFY_LEFT</property>
+		  <property name="wrap">False</property>
+		  <property name="selectable">False</property>
+		  <property name="xalign">0.5</property>
+		  <property name="yalign">0.5</property>
+		  <property name="xpad">0</property>
+		  <property name="ypad">0</property>
+		</widget>
+		<packing>
+		  <property name="padding">3</property>
+		  <property name="expand">False</property>
+		  <property name="fill">False</property>
+		</packing>
+	      </child>
+
+	      <child>
+		<widget class="GtkHBox" id="hbox68">
+		  <property name="visible">True</property>
+		  <property name="homogeneous">False</property>
+		  <property name="spacing">0</property>
+
+		  <child>
+		    <widget class="GtkButton" id="button69">
+		      <property name="visible">True</property>
+		      <property name="can_focus">True</property>
+		      <property name="label" translatable="yes">Load another file</property>
+		      <property name="use_underline">True</property>
+		      <property name="relief">GTK_RELIEF_NORMAL</property>
+		      <property name="focus_on_click">True</property>
+		      <signal name="clicked" handler="gnc_ui_qif_import_load_another_cb"/>
+		    </widget>
+		    <packing>
+		      <property name="padding">0</property>
+		      <property name="expand">True</property>
+		      <property name="fill">True</property>
+		    </packing>
+		  </child>
+
+		  <child>
+		    <widget class="GtkButton" id="button70">
+		      <property name="visible">True</property>
+		      <property name="can_focus">True</property>
+		      <property name="label" translatable="yes">Unload selected file</property>
+		      <property name="use_underline">True</property>
+		      <property name="relief">GTK_RELIEF_NORMAL</property>
+		      <property name="focus_on_click">True</property>
+		      <signal name="clicked" handler="gnc_ui_qif_import_unload_file_cb"/>
+		    </widget>
+		    <packing>
+		      <property name="padding">0</property>
+		      <property name="expand">True</property>
+		      <property name="fill">True</property>
+		    </packing>
+		  </child>
+		</widget>
+		<packing>
+		  <property name="padding">0</property>
+		  <property name="expand">False</property>
+		  <property name="fill">False</property>
+		</packing>
+	      </child>
+	    </widget>
 	  </child>
 	</widget>
+      </child>
 
-	<widget>
-	  <class>GtkHBox</class>
-	  <name>hbox68</name>
-	  <homogeneous>False</homogeneous>
-	  <spacing>0</spacing>
-	  <child>
-	    <padding>0</padding>
-	    <expand>False</expand>
-	    <fill>False</fill>
-	  </child>
+      <child>
+	<widget class="GnomeDruidPageStandard" id="account_doc_page">
+	  <property name="visible">True</property>
+	  <property name="title" translatable="yes">Accounts and stock holdings</property>
+	  <property name="title_foreground">#f5f5f5f5f5f5</property>
+	  <signal name="next" handler="gnc_ui_qif_import_generic_next_cb"/>
+	  <signal name="back" handler="gnc_ui_qif_import_generic_back_cb"/>
 
-	  <widget>
-	    <class>GtkButton</class>
-	    <name>button69</name>
-	    <can_focus>True</can_focus>
-	    <signal>
-	      <name>clicked</name>
-	      <handler>gnc_ui_qif_import_load_another_cb</handler>
-	      <data>QIF_Import_Druid</data>
-	      <last_modification_time>Wed, 30 Aug 2000 15:32:12 GMT</last_modification_time>
-	    </signal>
-	    <label>Load another file</label>
-	    <relief>GTK_RELIEF_NORMAL</relief>
-	    <child>
-	      <padding>0</padding>
-	      <expand>True</expand>
-	      <fill>True</fill>
-	    </child>
-	  </widget>
+	  <child internal-child="vbox">
+	    <widget class="GtkVBox" id="druid-vbox13">
+	      <property name="border_width">25</property>
+	      <property name="visible">True</property>
+	      <property name="homogeneous">False</property>
+	      <property name="spacing">0</property>
 
-	  <widget>
-	    <class>GtkButton</class>
-	    <name>button70</name>
-	    <can_focus>True</can_focus>
-	    <signal>
-	      <name>clicked</name>
-	      <handler>gnc_ui_qif_import_unload_file_cb</handler>
-	      <data>QIF_Import_Druid</data>
-	      <last_modification_time>Wed, 30 Aug 2000 15:34:33 GMT</last_modification_time>
-	    </signal>
-	    <label>Unload selected file</label>
-	    <relief>GTK_RELIEF_NORMAL</relief>
-	    <child>
-	      <padding>0</padding>
-	      <expand>True</expand>
-	      <fill>True</fill>
-	    </child>
-	  </widget>
-	</widget>
-      </widget>
-    </widget>
-
-    <widget>
-      <class>GnomeDruidPageStandard</class>
-      <name>account_doc_page</name>
-      <signal>
-	<name>next</name>
-	<handler>gnc_ui_qif_import_generic_next_cb</handler>
-	<data>QIF_Import_Druid</data>
-	<last_modification_time>Tue, 06 Feb 2001 17:08:41 GMT</last_modification_time>
-      </signal>
-      <signal>
-	<name>back</name>
-	<handler>gnc_ui_qif_import_generic_back_cb</handler>
-	<data>QIF_Import_Druid</data>
-	<last_modification_time>Tue, 06 Feb 2001 17:08:52 GMT</last_modification_time>
-      </signal>
-      <title>Accounts and stock holdings</title>
-      <title_color>255,255,255</title_color>
-      <background_color>153,191,153</background_color>
-      <logo_background_color>255,255,255</logo_background_color>
-
-      <widget>
-	<class>GtkVBox</class>
-	<child_name>GnomeDruidPageStandard:vbox</child_name>
-	<name>druid-vbox13</name>
-	<border_width>25</border_width>
-	<homogeneous>False</homogeneous>
-	<spacing>0</spacing>
-	<child>
-	  <padding>0</padding>
-	  <expand>True</expand>
-	  <fill>True</fill>
-	</child>
-
-	<widget>
-	  <class>GtkLabel</class>
-	  <name>label830</name>
-	  <label>On the next page, the accounts in your QIF files and any stocks or mutual funds
+	      <child>
+		<widget class="GtkLabel" id="label830">
+		  <property name="visible">True</property>
+		  <property name="label" translatable="yes">On the next page, the accounts in your QIF files and any stocks or mutual funds
 you own will be matched with GnuCash accounts. If a GnuCash account already
 exists with the same name, or a similar name and compatible type, that account
 will be used as a match; otherwise, GnuCash will create a new account with the
@@ -779,187 +784,161 @@ you own, separate accounts for the brokerage commissions, special &quot;Equity&q
 accounts (subaccounts of Retained Earnings, by default) which are the source
 of your opening balances, etc. All of these accounts will appear on the next 
 page so you can change them if you want to, but it is safe to leave them alone.
-</label>
-	  <justify>GTK_JUSTIFY_LEFT</justify>
-	  <wrap>False</wrap>
-	  <xalign>0.5</xalign>
-	  <yalign>0.5</yalign>
-	  <xpad>0</xpad>
-	  <ypad>0</ypad>
-	  <child>
-	    <padding>0</padding>
-	    <expand>False</expand>
-	    <fill>False</fill>
+</property>
+		  <property name="use_underline">False</property>
+		  <property name="use_markup">False</property>
+		  <property name="justify">GTK_JUSTIFY_LEFT</property>
+		  <property name="wrap">False</property>
+		  <property name="selectable">False</property>
+		  <property name="xalign">0.5</property>
+		  <property name="yalign">0.5</property>
+		  <property name="xpad">0</property>
+		  <property name="ypad">0</property>
+		</widget>
+		<packing>
+		  <property name="padding">0</property>
+		  <property name="expand">False</property>
+		  <property name="fill">False</property>
+		</packing>
+	      </child>
+	    </widget>
 	  </child>
 	</widget>
-      </widget>
-    </widget>
+      </child>
 
-    <widget>
-      <class>GnomeDruidPageStandard</class>
-      <name>account_match_page</name>
-      <signal>
-	<name>prepare</name>
-	<handler>gnc_ui_qif_import_accounts_prepare_cb</handler>
-	<data>QIF_Import_Druid</data>
-	<last_modification_time>Thu, 31 Aug 2000 14:19:54 GMT</last_modification_time>
-      </signal>
-      <signal>
-	<name>next</name>
-	<handler>gnc_ui_qif_import_generic_next_cb</handler>
-	<data>QIF_Import_Druid</data>
-	<last_modification_time>Tue, 06 Feb 2001 17:09:25 GMT</last_modification_time>
-      </signal>
-      <signal>
-	<name>back</name>
-	<handler>gnc_ui_qif_import_generic_back_cb</handler>
-	<data>QIF_Import_Druid</data>
-	<last_modification_time>Tue, 06 Feb 2001 17:09:37 GMT</last_modification_time>
-      </signal>
-      <title>Match QIF accounts with GnuCash accounts</title>
-      <title_color>255,255,255</title_color>
-      <background_color>153,191,153</background_color>
-      <logo_background_color>255,255,255</logo_background_color>
+      <child>
+	<widget class="GnomeDruidPageStandard" id="account_match_page">
+	  <property name="visible">True</property>
+	  <property name="title" translatable="yes">Match QIF accounts with GnuCash accounts</property>
+	  <property name="title_foreground">#f5f5f5f5f5f5</property>
+	  <signal name="prepare" handler="gnc_ui_qif_import_accounts_prepare_cb"/>
+	  <signal name="next" handler="gnc_ui_qif_import_generic_next_cb"/>
+	  <signal name="back" handler="gnc_ui_qif_import_generic_back_cb"/>
 
-      <widget>
-	<class>GtkVBox</class>
-	<child_name>GnomeDruidPageStandard:vbox</child_name>
-	<name>druid-vbox3</name>
-	<border_width>25</border_width>
-	<homogeneous>False</homogeneous>
-	<spacing>0</spacing>
-	<child>
-	  <padding>0</padding>
-	  <expand>True</expand>
-	  <fill>True</fill>
-	</child>
+	  <child internal-child="vbox">
+	    <widget class="GtkVBox" id="druid-vbox3">
+	      <property name="border_width">25</property>
+	      <property name="visible">True</property>
+	      <property name="homogeneous">False</property>
+	      <property name="spacing">0</property>
 
-	<widget>
-	  <class>GtkScrolledWindow</class>
-	  <name>scrolledwindow11</name>
-	  <hscrollbar_policy>GTK_POLICY_NEVER</hscrollbar_policy>
-	  <vscrollbar_policy>GTK_POLICY_AUTOMATIC</vscrollbar_policy>
-	  <hupdate_policy>GTK_UPDATE_CONTINUOUS</hupdate_policy>
-	  <vupdate_policy>GTK_UPDATE_CONTINUOUS</vupdate_policy>
-	  <child>
-	    <padding>0</padding>
-	    <expand>True</expand>
-	    <fill>True</fill>
-	  </child>
+	      <child>
+		<widget class="GtkScrolledWindow" id="scrolledwindow11">
+		  <property name="visible">True</property>
+		  <property name="hscrollbar_policy">GTK_POLICY_NEVER</property>
+		  <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+		  <property name="shadow_type">GTK_SHADOW_IN</property>
+		  <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
 
-	  <widget>
-	    <class>GtkCList</class>
-	    <name>account_page_list</name>
-	    <can_focus>True</can_focus>
-	    <signal>
-	      <name>select_row</name>
-	      <handler>gnc_ui_qif_import_account_line_select_cb</handler>
-	      <data>QIF_Import_Druid</data>
-	      <last_modification_time>Thu, 07 Sep 2000 22:35:06 GMT</last_modification_time>
-	    </signal>
-	    <columns>3</columns>
-	    <column_widths>281,242,53</column_widths>
-	    <selection_mode>GTK_SELECTION_SINGLE</selection_mode>
-	    <show_titles>True</show_titles>
-	    <shadow_type>GTK_SHADOW_IN</shadow_type>
+		  <child>
+		    <widget class="GtkCList" id="account_page_list">
+		      <property name="visible">True</property>
+		      <property name="can_focus">True</property>
+		      <property name="n_columns">3</property>
+		      <property name="column_widths">281,242,53</property>
+		      <property name="selection_mode">GTK_SELECTION_SINGLE</property>
+		      <property name="show_titles">True</property>
+		      <property name="shadow_type">GTK_SHADOW_IN</property>
+		      <signal name="select_row" handler="gnc_ui_qif_import_account_line_select_cb"/>
 
-	    <widget>
-	      <class>GtkLabel</class>
-	      <child_name>CList:title</child_name>
-	      <name>label834</name>
-	      <label>QIF account name</label>
-	      <justify>GTK_JUSTIFY_CENTER</justify>
-	      <wrap>False</wrap>
-	      <xalign>0.5</xalign>
-	      <yalign>0.5</yalign>
-	      <xpad>0</xpad>
-	      <ypad>0</ypad>
+		      <child>
+			<widget class="GtkLabel" id="label834">
+			  <property name="label" translatable="yes">QIF account name</property>
+			  <property name="use_underline">False</property>
+			  <property name="use_markup">False</property>
+			  <property name="justify">GTK_JUSTIFY_CENTER</property>
+			  <property name="wrap">False</property>
+			  <property name="selectable">False</property>
+			  <property name="xalign">0.5</property>
+			  <property name="yalign">0.5</property>
+			  <property name="xpad">0</property>
+			  <property name="ypad">0</property>
+			</widget>
+		      </child>
+
+		      <child>
+			<widget class="GtkLabel" id="label835">
+			  <property name="label" translatable="yes">GnuCash account name</property>
+			  <property name="use_underline">False</property>
+			  <property name="use_markup">False</property>
+			  <property name="justify">GTK_JUSTIFY_CENTER</property>
+			  <property name="wrap">False</property>
+			  <property name="selectable">False</property>
+			  <property name="xalign">0.5</property>
+			  <property name="yalign">0.5</property>
+			  <property name="xpad">0</property>
+			  <property name="ypad">0</property>
+			</widget>
+		      </child>
+
+		      <child>
+			<widget class="GtkLabel" id="label836">
+			  <property name="label" translatable="yes">New?</property>
+			  <property name="use_underline">False</property>
+			  <property name="use_markup">False</property>
+			  <property name="justify">GTK_JUSTIFY_CENTER</property>
+			  <property name="wrap">False</property>
+			  <property name="selectable">False</property>
+			  <property name="xalign">0.5</property>
+			  <property name="yalign">0.5</property>
+			  <property name="xpad">0</property>
+			  <property name="ypad">0</property>
+			</widget>
+		      </child>
+		    </widget>
+		  </child>
+		</widget>
+		<packing>
+		  <property name="padding">0</property>
+		  <property name="expand">True</property>
+		  <property name="fill">True</property>
+		</packing>
+	      </child>
+
+	      <child>
+		<widget class="GtkLabel" id="label828">
+		  <property name="visible">True</property>
+		  <property name="label" translatable="yes">Click &quot;Forward&quot; to check matchings for QIF categories. </property>
+		  <property name="use_underline">False</property>
+		  <property name="use_markup">False</property>
+		  <property name="justify">GTK_JUSTIFY_CENTER</property>
+		  <property name="wrap">False</property>
+		  <property name="selectable">False</property>
+		  <property name="xalign">0.5</property>
+		  <property name="yalign">0.5</property>
+		  <property name="xpad">0</property>
+		  <property name="ypad">0</property>
+		</widget>
+		<packing>
+		  <property name="padding">3</property>
+		  <property name="expand">False</property>
+		  <property name="fill">False</property>
+		</packing>
+	      </child>
 	    </widget>
-
-	    <widget>
-	      <class>GtkLabel</class>
-	      <child_name>CList:title</child_name>
-	      <name>label835</name>
-	      <label>GnuCash account name</label>
-	      <justify>GTK_JUSTIFY_CENTER</justify>
-	      <wrap>False</wrap>
-	      <xalign>0.5</xalign>
-	      <yalign>0.5</yalign>
-	      <xpad>0</xpad>
-	      <ypad>0</ypad>
-	    </widget>
-
-	    <widget>
-	      <class>GtkLabel</class>
-	      <child_name>CList:title</child_name>
-	      <name>label836</name>
-	      <label>New?</label>
-	      <justify>GTK_JUSTIFY_CENTER</justify>
-	      <wrap>False</wrap>
-	      <xalign>0.5</xalign>
-	      <yalign>0.5</yalign>
-	      <xpad>0</xpad>
-	      <ypad>0</ypad>
-	    </widget>
-	  </widget>
-	</widget>
-
-	<widget>
-	  <class>GtkLabel</class>
-	  <name>label828</name>
-	  <label>Click &quot;Next&quot; to check matchings for QIF categories. </label>
-	  <justify>GTK_JUSTIFY_CENTER</justify>
-	  <wrap>False</wrap>
-	  <xalign>0.5</xalign>
-	  <yalign>0.5</yalign>
-	  <xpad>0</xpad>
-	  <ypad>0</ypad>
-	  <child>
-	    <padding>3</padding>
-	    <expand>False</expand>
-	    <fill>False</fill>
 	  </child>
 	</widget>
-      </widget>
-    </widget>
+      </child>
 
-    <widget>
-      <class>GnomeDruidPageStandard</class>
-      <name>category_doc_page</name>
-      <signal>
-	<name>next</name>
-	<handler>gnc_ui_qif_import_generic_next_cb</handler>
-	<data>QIF_Import_Druid</data>
-	<last_modification_time>Tue, 06 Feb 2001 17:10:09 GMT</last_modification_time>
-      </signal>
-      <signal>
-	<name>back</name>
-	<handler>gnc_ui_qif_import_generic_back_cb</handler>
-	<data>QIF_Import_Druid</data>
-	<last_modification_time>Tue, 06 Feb 2001 17:10:35 GMT</last_modification_time>
-      </signal>
-      <title>Income and Expense categories</title>
-      <title_color>255,255,255</title_color>
-      <background_color>153,191,154</background_color>
-      <logo_background_color>255,255,255</logo_background_color>
+      <child>
+	<widget class="GnomeDruidPageStandard" id="category_doc_page">
+	  <property name="visible">True</property>
+	  <property name="title" translatable="yes">Income and Expense categories</property>
+	  <property name="title_foreground">#f5f5f5f5f5f5</property>
+	  <signal name="next" handler="gnc_ui_qif_import_generic_next_cb"/>
+	  <signal name="back" handler="gnc_ui_qif_import_generic_back_cb"/>
 
-      <widget>
-	<class>GtkVBox</class>
-	<child_name>GnomeDruidPageStandard:vbox</child_name>
-	<name>druid-vbox18</name>
-	<border_width>25</border_width>
-	<homogeneous>False</homogeneous>
-	<spacing>0</spacing>
-	<child>
-	  <padding>0</padding>
-	  <expand>True</expand>
-	  <fill>True</fill>
-	</child>
+	  <child internal-child="vbox">
+	    <widget class="GtkVBox" id="druid-vbox18">
+	      <property name="border_width">25</property>
+	      <property name="visible">True</property>
+	      <property name="homogeneous">False</property>
+	      <property name="spacing">0</property>
 
-	<widget>
-	  <class>GtkLabel</class>
-	  <name>label840</name>
-	  <label>GnuCash uses separate Income and Expense accounts rather than categories
+	      <child>
+		<widget class="GtkLabel" id="label840">
+		  <property name="visible">True</property>
+		  <property name="label" translatable="yes">GnuCash uses separate Income and Expense accounts rather than categories
 to classify your transactions. Each of the categories in your QIF file will be 
 converted to a GnuCash account. 
 
@@ -968,187 +947,161 @@ between QIF categories and GnuCash accounts. You may change matches
 that you do not like by clicking on the line containing the category name.
 
 If you change your mind later, you can reorganize the account structure safely
-within GnuCash.</label>
-	  <justify>GTK_JUSTIFY_LEFT</justify>
-	  <wrap>False</wrap>
-	  <xalign>0.5</xalign>
-	  <yalign>0.5</yalign>
-	  <xpad>0</xpad>
-	  <ypad>0</ypad>
-	  <child>
-	    <padding>0</padding>
-	    <expand>False</expand>
-	    <fill>False</fill>
+within GnuCash.</property>
+		  <property name="use_underline">False</property>
+		  <property name="use_markup">False</property>
+		  <property name="justify">GTK_JUSTIFY_LEFT</property>
+		  <property name="wrap">False</property>
+		  <property name="selectable">False</property>
+		  <property name="xalign">0.5</property>
+		  <property name="yalign">0.5</property>
+		  <property name="xpad">0</property>
+		  <property name="ypad">0</property>
+		</widget>
+		<packing>
+		  <property name="padding">0</property>
+		  <property name="expand">False</property>
+		  <property name="fill">False</property>
+		</packing>
+	      </child>
+	    </widget>
 	  </child>
 	</widget>
-      </widget>
-    </widget>
+      </child>
 
-    <widget>
-      <class>GnomeDruidPageStandard</class>
-      <name>category_match_page</name>
-      <signal>
-	<name>prepare</name>
-	<handler>gnc_ui_qif_import_categories_prepare_cb</handler>
-	<data>QIF_Import_Druid</data>
-	<last_modification_time>Thu, 31 Aug 2000 14:21:48 GMT</last_modification_time>
-      </signal>
-      <signal>
-	<name>next</name>
-	<handler>gnc_ui_qif_import_generic_next_cb</handler>
-	<data>QIF_Import_Druid</data>
-	<last_modification_time>Fri, 09 Feb 2001 17:04:56 GMT</last_modification_time>
-      </signal>
-      <signal>
-	<name>back</name>
-	<handler>gnc_ui_qif_import_generic_back_cb</handler>
-	<data>QIF_Import_Druid</data>
-	<last_modification_time>Tue, 06 Feb 2001 17:12:18 GMT</last_modification_time>
-      </signal>
-      <title>Match QIF categories with GnuCash accounts</title>
-      <title_color>255,255,255</title_color>
-      <background_color>154,191,154</background_color>
-      <logo_background_color>255,255,255</logo_background_color>
+      <child>
+	<widget class="GnomeDruidPageStandard" id="category_match_page">
+	  <property name="visible">True</property>
+	  <property name="title" translatable="yes">Match QIF categories with GnuCash accounts</property>
+	  <property name="title_foreground">#f5f5f5f5f5f5</property>
+	  <signal name="prepare" handler="gnc_ui_qif_import_categories_prepare_cb"/>
+	  <signal name="next" handler="gnc_ui_qif_import_generic_next_cb"/>
+	  <signal name="back" handler="gnc_ui_qif_import_generic_back_cb"/>
 
-      <widget>
-	<class>GtkVBox</class>
-	<child_name>GnomeDruidPageStandard:vbox</child_name>
-	<name>druid-vbox4</name>
-	<border_width>25</border_width>
-	<homogeneous>False</homogeneous>
-	<spacing>0</spacing>
-	<child>
-	  <padding>0</padding>
-	  <expand>True</expand>
-	  <fill>True</fill>
-	</child>
+	  <child internal-child="vbox">
+	    <widget class="GtkVBox" id="druid-vbox4">
+	      <property name="border_width">25</property>
+	      <property name="visible">True</property>
+	      <property name="homogeneous">False</property>
+	      <property name="spacing">0</property>
 
-	<widget>
-	  <class>GtkScrolledWindow</class>
-	  <name>scrolledwindow12</name>
-	  <hscrollbar_policy>GTK_POLICY_AUTOMATIC</hscrollbar_policy>
-	  <vscrollbar_policy>GTK_POLICY_AUTOMATIC</vscrollbar_policy>
-	  <hupdate_policy>GTK_UPDATE_CONTINUOUS</hupdate_policy>
-	  <vupdate_policy>GTK_UPDATE_CONTINUOUS</vupdate_policy>
-	  <child>
-	    <padding>0</padding>
-	    <expand>True</expand>
-	    <fill>True</fill>
-	  </child>
+	      <child>
+		<widget class="GtkScrolledWindow" id="scrolledwindow12">
+		  <property name="visible">True</property>
+		  <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+		  <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+		  <property name="shadow_type">GTK_SHADOW_IN</property>
+		  <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
 
-	  <widget>
-	    <class>GtkCList</class>
-	    <name>category_page_list</name>
-	    <can_focus>True</can_focus>
-	    <signal>
-	      <name>select_row</name>
-	      <handler>gnc_ui_qif_import_category_line_select_cb</handler>
-	      <data>QIF_Import_Druid</data>
-	      <last_modification_time>Thu, 07 Sep 2000 22:35:38 GMT</last_modification_time>
-	    </signal>
-	    <columns>3</columns>
-	    <column_widths>243,250,72</column_widths>
-	    <selection_mode>GTK_SELECTION_SINGLE</selection_mode>
-	    <show_titles>True</show_titles>
-	    <shadow_type>GTK_SHADOW_IN</shadow_type>
+		  <child>
+		    <widget class="GtkCList" id="category_page_list">
+		      <property name="visible">True</property>
+		      <property name="can_focus">True</property>
+		      <property name="n_columns">3</property>
+		      <property name="column_widths">243,250,72</property>
+		      <property name="selection_mode">GTK_SELECTION_SINGLE</property>
+		      <property name="show_titles">True</property>
+		      <property name="shadow_type">GTK_SHADOW_IN</property>
+		      <signal name="select_row" handler="gnc_ui_qif_import_category_line_select_cb"/>
 
-	    <widget>
-	      <class>GtkLabel</class>
-	      <child_name>CList:title</child_name>
-	      <name>label837</name>
-	      <label>QIF category name</label>
-	      <justify>GTK_JUSTIFY_CENTER</justify>
-	      <wrap>False</wrap>
-	      <xalign>0.5</xalign>
-	      <yalign>0.5</yalign>
-	      <xpad>0</xpad>
-	      <ypad>0</ypad>
+		      <child>
+			<widget class="GtkLabel" id="label837">
+			  <property name="label" translatable="yes">QIF category name</property>
+			  <property name="use_underline">False</property>
+			  <property name="use_markup">False</property>
+			  <property name="justify">GTK_JUSTIFY_CENTER</property>
+			  <property name="wrap">False</property>
+			  <property name="selectable">False</property>
+			  <property name="xalign">0.5</property>
+			  <property name="yalign">0.5</property>
+			  <property name="xpad">0</property>
+			  <property name="ypad">0</property>
+			</widget>
+		      </child>
+
+		      <child>
+			<widget class="GtkLabel" id="label838">
+			  <property name="label" translatable="yes">GnuCash account name</property>
+			  <property name="use_underline">False</property>
+			  <property name="use_markup">False</property>
+			  <property name="justify">GTK_JUSTIFY_CENTER</property>
+			  <property name="wrap">False</property>
+			  <property name="selectable">False</property>
+			  <property name="xalign">0.5</property>
+			  <property name="yalign">0.5</property>
+			  <property name="xpad">0</property>
+			  <property name="ypad">0</property>
+			</widget>
+		      </child>
+
+		      <child>
+			<widget class="GtkLabel" id="label839">
+			  <property name="label" translatable="yes">New?</property>
+			  <property name="use_underline">False</property>
+			  <property name="use_markup">False</property>
+			  <property name="justify">GTK_JUSTIFY_CENTER</property>
+			  <property name="wrap">False</property>
+			  <property name="selectable">False</property>
+			  <property name="xalign">0.5</property>
+			  <property name="yalign">0.5</property>
+			  <property name="xpad">0</property>
+			  <property name="ypad">0</property>
+			</widget>
+		      </child>
+		    </widget>
+		  </child>
+		</widget>
+		<packing>
+		  <property name="padding">0</property>
+		  <property name="expand">True</property>
+		  <property name="fill">True</property>
+		</packing>
+	      </child>
+
+	      <child>
+		<widget class="GtkLabel" id="label829">
+		  <property name="visible">True</property>
+		  <property name="label" translatable="yes">Click &quot;Forward&quot; to enter information about the currency used in your QIF files.</property>
+		  <property name="use_underline">False</property>
+		  <property name="use_markup">False</property>
+		  <property name="justify">GTK_JUSTIFY_CENTER</property>
+		  <property name="wrap">False</property>
+		  <property name="selectable">False</property>
+		  <property name="xalign">0.5</property>
+		  <property name="yalign">0.5</property>
+		  <property name="xpad">0</property>
+		  <property name="ypad">0</property>
+		</widget>
+		<packing>
+		  <property name="padding">3</property>
+		  <property name="expand">False</property>
+		  <property name="fill">False</property>
+		</packing>
+	      </child>
 	    </widget>
-
-	    <widget>
-	      <class>GtkLabel</class>
-	      <child_name>CList:title</child_name>
-	      <name>label838</name>
-	      <label>GnuCash account name</label>
-	      <justify>GTK_JUSTIFY_CENTER</justify>
-	      <wrap>False</wrap>
-	      <xalign>0.5</xalign>
-	      <yalign>0.5</yalign>
-	      <xpad>0</xpad>
-	      <ypad>0</ypad>
-	    </widget>
-
-	    <widget>
-	      <class>GtkLabel</class>
-	      <child_name>CList:title</child_name>
-	      <name>label839</name>
-	      <label>New?</label>
-	      <justify>GTK_JUSTIFY_CENTER</justify>
-	      <wrap>False</wrap>
-	      <xalign>0.5</xalign>
-	      <yalign>0.5</yalign>
-	      <xpad>0</xpad>
-	      <ypad>0</ypad>
-	    </widget>
-	  </widget>
-	</widget>
-
-	<widget>
-	  <class>GtkLabel</class>
-	  <name>label829</name>
-	  <label>Click &quot;Next&quot; to enter information about the currency used in your QIF files.</label>
-	  <justify>GTK_JUSTIFY_CENTER</justify>
-	  <wrap>False</wrap>
-	  <xalign>0.5</xalign>
-	  <yalign>0.5</yalign>
-	  <xpad>0</xpad>
-	  <ypad>0</ypad>
-	  <child>
-	    <padding>3</padding>
-	    <expand>False</expand>
-	    <fill>False</fill>
 	  </child>
 	</widget>
-      </widget>
-    </widget>
+      </child>
 
-    <widget>
-      <class>GnomeDruidPageStandard</class>
-      <name>memo_doc_page</name>
-      <signal>
-	<name>next</name>
-	<handler>gnc_ui_qif_import_generic_next_cb</handler>
-	<data>QIF_Import_Druid</data>
-	<last_modification_time>Fri, 09 Feb 2001 16:17:27 GMT</last_modification_time>
-      </signal>
-      <signal>
-	<name>back</name>
-	<handler>gnc_ui_qif_import_generic_back_cb</handler>
-	<data>QIF_Import_Druid</data>
-	<last_modification_time>Fri, 09 Feb 2001 16:17:45 GMT</last_modification_time>
-      </signal>
-      <title>Payees and memos</title>
-      <title_color>255,255,255</title_color>
-      <background_color>153,191,154</background_color>
-      <logo_background_color>255,255,255</logo_background_color>
+      <child>
+	<widget class="GnomeDruidPageStandard" id="memo_doc_page">
+	  <property name="visible">True</property>
+	  <property name="title" translatable="yes">Payees and memos</property>
+	  <property name="title_foreground">#f5f5f5f5f5f5</property>
+	  <signal name="next" handler="gnc_ui_qif_import_generic_next_cb"/>
+	  <signal name="back" handler="gnc_ui_qif_import_generic_back_cb"/>
 
-      <widget>
-	<class>GtkVBox</class>
-	<child_name>GnomeDruidPageStandard:vbox</child_name>
-	<name>druid-vbox39</name>
-	<border_width>25</border_width>
-	<homogeneous>False</homogeneous>
-	<spacing>0</spacing>
-	<child>
-	  <padding>0</padding>
-	  <expand>True</expand>
-	  <fill>True</fill>
-	</child>
+	  <child internal-child="vbox">
+	    <widget class="GtkVBox" id="druid-vbox39">
+	      <property name="border_width">25</property>
+	      <property name="visible">True</property>
+	      <property name="homogeneous">False</property>
+	      <property name="spacing">0</property>
 
-	<widget>
-	  <class>GtkLabel</class>
-	  <name>label847707</name>
-	  <label>QIF files downloaded from banks and other financial institutions may not have
+	      <child>
+		<widget class="GtkLabel" id="label847707">
+		  <property name="visible">True</property>
+		  <property name="label" translatable="yes">QIF files downloaded from banks and other financial institutions may not have
 information about Accounts and Categories which would allow them to be
 correctly assigned to GnuCash accounts.  
 
@@ -1156,279 +1109,268 @@ In the following page, you will see the text that appears in the Payee and
 Memo fields of transactions with no QIF Account or Category. By default
 these transactions are assigned to the 'Unspecified' account in GnuCash.
 If you select a different account, it will be remembered for future QIF 
-files. </label>
-	  <justify>GTK_JUSTIFY_LEFT</justify>
-	  <wrap>False</wrap>
-	  <xalign>0.5</xalign>
-	  <yalign>0.5</yalign>
-	  <xpad>0</xpad>
-	  <ypad>0</ypad>
-	  <child>
-	    <padding>0</padding>
-	    <expand>False</expand>
-	    <fill>False</fill>
+files. </property>
+		  <property name="use_underline">False</property>
+		  <property name="use_markup">False</property>
+		  <property name="justify">GTK_JUSTIFY_LEFT</property>
+		  <property name="wrap">False</property>
+		  <property name="selectable">False</property>
+		  <property name="xalign">0.5</property>
+		  <property name="yalign">0.5</property>
+		  <property name="xpad">0</property>
+		  <property name="ypad">0</property>
+		</widget>
+		<packing>
+		  <property name="padding">0</property>
+		  <property name="expand">False</property>
+		  <property name="fill">False</property>
+		</packing>
+	      </child>
+	    </widget>
 	  </child>
 	</widget>
-      </widget>
-    </widget>
+      </child>
 
-    <widget>
-      <class>GnomeDruidPageStandard</class>
-      <name>memo_match_page</name>
-      <signal>
-	<name>next</name>
-	<handler>gnc_ui_qif_import_memo_next_cb</handler>
-	<data>QIF_Import_Druid</data>
-	<last_modification_time>Fri, 09 Feb 2001 17:05:14 GMT</last_modification_time>
-      </signal>
-      <signal>
-	<name>back</name>
-	<handler>gnc_ui_qif_import_generic_back_cb</handler>
-	<data>QIF_Import_Druid</data>
-	<last_modification_time>Fri, 09 Feb 2001 16:18:32 GMT</last_modification_time>
-      </signal>
-      <signal>
-	<name>prepare</name>
-	<handler>gnc_ui_qif_import_memo_prepare_cb</handler>
-	<data>QIF_Import_Druid</data>
-	<last_modification_time>Fri, 09 Feb 2001 16:39:58 GMT</last_modification_time>
-      </signal>
-      <title>Match payees/memos to GnuCash accounts</title>
-      <title_color>255,255,255</title_color>
-      <background_color>153,191,154</background_color>
-      <logo_background_color>255,255,255</logo_background_color>
+      <child>
+	<widget class="GnomeDruidPageStandard" id="memo_match_page">
+	  <property name="visible">True</property>
+	  <property name="title" translatable="yes">Match payees/memos to GnuCash accounts</property>
+	  <property name="title_foreground">#f5f5f5f5f5f5</property>
+	  <signal name="next" handler="gnc_ui_qif_import_memo_next_cb"/>
+	  <signal name="back" handler="gnc_ui_qif_import_generic_back_cb"/>
+	  <signal name="prepare" handler="gnc_ui_qif_import_memo_prepare_cb"/>
 
-      <widget>
-	<class>GtkVBox</class>
-	<child_name>GnomeDruidPageStandard:vbox</child_name>
-	<name>druid-vbox40</name>
-	<border_width>25</border_width>
-	<homogeneous>False</homogeneous>
-	<spacing>0</spacing>
-	<child>
-	  <padding>0</padding>
-	  <expand>True</expand>
-	  <fill>True</fill>
-	</child>
+	  <child internal-child="vbox">
+	    <widget class="GtkVBox" id="druid-vbox40">
+	      <property name="border_width">25</property>
+	      <property name="visible">True</property>
+	      <property name="homogeneous">False</property>
+	      <property name="spacing">0</property>
 
-	<widget>
-	  <class>GtkScrolledWindow</class>
-	  <name>scrolledwindow25</name>
-	  <hscrollbar_policy>GTK_POLICY_AUTOMATIC</hscrollbar_policy>
-	  <vscrollbar_policy>GTK_POLICY_AUTOMATIC</vscrollbar_policy>
-	  <hupdate_policy>GTK_UPDATE_CONTINUOUS</hupdate_policy>
-	  <vupdate_policy>GTK_UPDATE_CONTINUOUS</vupdate_policy>
-	  <child>
-	    <padding>0</padding>
-	    <expand>True</expand>
-	    <fill>True</fill>
+	      <child>
+		<widget class="GtkScrolledWindow" id="scrolledwindow25">
+		  <property name="visible">True</property>
+		  <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+		  <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+		  <property name="shadow_type">GTK_SHADOW_IN</property>
+		  <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
+
+		  <child>
+		    <widget class="GtkCList" id="memo_page_list">
+		      <property name="visible">True</property>
+		      <property name="can_focus">True</property>
+		      <property name="n_columns">3</property>
+		      <property name="column_widths">285,228,72</property>
+		      <property name="selection_mode">GTK_SELECTION_SINGLE</property>
+		      <property name="show_titles">True</property>
+		      <property name="shadow_type">GTK_SHADOW_IN</property>
+		      <signal name="select_row" handler="gnc_ui_qif_import_memo_line_select_cb"/>
+
+		      <child>
+			<widget class="GtkLabel" id="label847708">
+			  <property name="label" translatable="yes">QIF payee/memo</property>
+			  <property name="use_underline">False</property>
+			  <property name="use_markup">False</property>
+			  <property name="justify">GTK_JUSTIFY_CENTER</property>
+			  <property name="wrap">False</property>
+			  <property name="selectable">False</property>
+			  <property name="xalign">0.5</property>
+			  <property name="yalign">0.5</property>
+			  <property name="xpad">0</property>
+			  <property name="ypad">0</property>
+			</widget>
+		      </child>
+
+		      <child>
+			<widget class="GtkLabel" id="label847709">
+			  <property name="label" translatable="yes">GnuCash account name</property>
+			  <property name="use_underline">False</property>
+			  <property name="use_markup">False</property>
+			  <property name="justify">GTK_JUSTIFY_CENTER</property>
+			  <property name="wrap">False</property>
+			  <property name="selectable">False</property>
+			  <property name="xalign">0.5</property>
+			  <property name="yalign">0.5</property>
+			  <property name="xpad">0</property>
+			  <property name="ypad">0</property>
+			</widget>
+		      </child>
+
+		      <child>
+			<widget class="GtkLabel" id="label847710">
+			  <property name="label" translatable="yes">New?</property>
+			  <property name="use_underline">False</property>
+			  <property name="use_markup">False</property>
+			  <property name="justify">GTK_JUSTIFY_CENTER</property>
+			  <property name="wrap">False</property>
+			  <property name="selectable">False</property>
+			  <property name="xalign">0.5</property>
+			  <property name="yalign">0.5</property>
+			  <property name="xpad">0</property>
+			  <property name="ypad">0</property>
+			</widget>
+		      </child>
+		    </widget>
+		  </child>
+		</widget>
+		<packing>
+		  <property name="padding">0</property>
+		  <property name="expand">True</property>
+		  <property name="fill">True</property>
+		</packing>
+	      </child>
+	    </widget>
 	  </child>
-
-	  <widget>
-	    <class>GtkCList</class>
-	    <name>memo_page_list</name>
-	    <can_focus>True</can_focus>
-	    <signal>
-	      <name>select_row</name>
-	      <handler>gnc_ui_qif_import_memo_line_select_cb</handler>
-	      <data>QIF_Import_Druid</data>
-	      <last_modification_time>Fri, 09 Feb 2001 16:28:31 GMT</last_modification_time>
-	    </signal>
-	    <columns>3</columns>
-	    <column_widths>285,228,72</column_widths>
-	    <selection_mode>GTK_SELECTION_SINGLE</selection_mode>
-	    <show_titles>True</show_titles>
-	    <shadow_type>GTK_SHADOW_IN</shadow_type>
-
-	    <widget>
-	      <class>GtkLabel</class>
-	      <child_name>CList:title</child_name>
-	      <name>label847708</name>
-	      <label>QIF payee/memo</label>
-	      <justify>GTK_JUSTIFY_CENTER</justify>
-	      <wrap>False</wrap>
-	      <xalign>0.5</xalign>
-	      <yalign>0.5</yalign>
-	      <xpad>0</xpad>
-	      <ypad>0</ypad>
-	    </widget>
-
-	    <widget>
-	      <class>GtkLabel</class>
-	      <child_name>CList:title</child_name>
-	      <name>label847709</name>
-	      <label>GnuCash account name</label>
-	      <justify>GTK_JUSTIFY_CENTER</justify>
-	      <wrap>False</wrap>
-	      <xalign>0.5</xalign>
-	      <yalign>0.5</yalign>
-	      <xpad>0</xpad>
-	      <ypad>0</ypad>
-	    </widget>
-
-	    <widget>
-	      <class>GtkLabel</class>
-	      <child_name>CList:title</child_name>
-	      <name>label847710</name>
-	      <label>New?</label>
-	      <justify>GTK_JUSTIFY_CENTER</justify>
-	      <wrap>False</wrap>
-	      <xalign>0.5</xalign>
-	      <yalign>0.5</yalign>
-	      <xpad>0</xpad>
-	      <ypad>0</ypad>
-	    </widget>
-	  </widget>
 	</widget>
-      </widget>
-    </widget>
+      </child>
 
-    <widget>
-      <class>GnomeDruidPageStandard</class>
-      <name>currency_page</name>
-      <signal>
-	<name>next</name>
-	<handler>gnc_ui_qif_import_currency_next_cb</handler>
-	<data>QIF_Import_Druid</data>
-	<last_modification_time>Wed, 06 Sep 2000 15:12:05 GMT</last_modification_time>
-      </signal>
-      <signal>
-	<name>back</name>
-	<handler>gnc_ui_qif_import_generic_back_cb</handler>
-	<data>QIF_Import_Druid</data>
-	<last_modification_time>Tue, 06 Feb 2001 17:12:42 GMT</last_modification_time>
-      </signal>
-      <title>Enter the currency used for new accounts</title>
-      <title_color>255,255,255</title_color>
-      <background_color>153,191,154</background_color>
-      <logo_background_color>255,255,255</logo_background_color>
+      <child>
+	<widget class="GnomeDruidPageStandard" id="currency_page">
+	  <property name="visible">True</property>
+	  <property name="title" translatable="yes">Enter the currency used for new accounts</property>
+	  <property name="title_foreground">#f5f5f5f5f5f5</property>
+	  <signal name="next" handler="gnc_ui_qif_import_currency_next_cb"/>
+	  <signal name="back" handler="gnc_ui_qif_import_generic_back_cb"/>
 
-      <widget>
-	<class>GtkVBox</class>
-	<child_name>GnomeDruidPageStandard:vbox</child_name>
-	<name>druid-vbox16</name>
-	<border_width>25</border_width>
-	<homogeneous>False</homogeneous>
-	<spacing>0</spacing>
-	<child>
-	  <padding>0</padding>
-	  <expand>True</expand>
-	  <fill>True</fill>
-	</child>
+	  <child internal-child="vbox">
+	    <widget class="GtkVBox" id="druid-vbox16">
+	      <property name="border_width">25</property>
+	      <property name="visible">True</property>
+	      <property name="homogeneous">False</property>
+	      <property name="spacing">0</property>
 
-	<widget>
-	  <class>GtkLabel</class>
-	  <name>label831</name>
-	  <label>The QIF importer cannot currently handle multi-currency QIF files. All the 
+	      <child>
+		<widget class="GtkLabel" id="label831">
+		  <property name="visible">True</property>
+		  <property name="label" translatable="yes">The QIF importer cannot currently handle multi-currency QIF files. All the 
 accounts in the QIF file(s) you are importing must be denominated in the
 same currency. This limitation should be removed soon.
 
 Select the currency to use for transactions imported from your QIF files:
-</label>
-	  <justify>GTK_JUSTIFY_LEFT</justify>
-	  <wrap>False</wrap>
-	  <xalign>0.5</xalign>
-	  <yalign>0.5</yalign>
-	  <xpad>0</xpad>
-	  <ypad>0</ypad>
-	  <child>
-	    <padding>0</padding>
-	    <expand>False</expand>
-	    <fill>False</fill>
+</property>
+		  <property name="use_underline">False</property>
+		  <property name="use_markup">False</property>
+		  <property name="justify">GTK_JUSTIFY_LEFT</property>
+		  <property name="wrap">False</property>
+		  <property name="selectable">False</property>
+		  <property name="xalign">0.5</property>
+		  <property name="yalign">0.5</property>
+		  <property name="xpad">0</property>
+		  <property name="ypad">0</property>
+		</widget>
+		<packing>
+		  <property name="padding">0</property>
+		  <property name="expand">False</property>
+		  <property name="fill">False</property>
+		</packing>
+	      </child>
+
+	      <child>
+		<widget class="GtkCombo" id="currency_combo">
+		  <property name="visible">True</property>
+		  <property name="value_in_list">True</property>
+		  <property name="allow_empty">False</property>
+		  <property name="case_sensitive">False</property>
+		  <property name="enable_arrow_keys">True</property>
+		  <property name="enable_arrows_always">False</property>
+
+		  <child internal-child="entry">
+		    <widget class="GtkEntry" id="currency_entry">
+		      <property name="visible">True</property>
+		      <property name="can_focus">True</property>
+		      <property name="editable">True</property>
+		      <property name="visibility">True</property>
+		      <property name="max_length">0</property>
+		      <property name="text" translatable="yes"></property>
+		      <property name="has_frame">True</property>
+		      <property name="invisible_char" translatable="yes">*</property>
+		      <property name="activates_default">False</property>
+		    </widget>
+		  </child>
+
+		  <child internal-child="list">
+		    <widget class="GtkList" id="convertwidget14">
+		      <property name="visible">True</property>
+		      <property name="selection_mode">GTK_SELECTION_BROWSE</property>
+
+		      <child>
+			<widget class="GtkListItem" id="convertwidget15">
+			  <property name="visible">True</property>
+
+			  <child>
+			    <widget class="GtkLabel" id="convertwidget16">
+			      <property name="visible">True</property>
+			      <property name="label" translatable="yes"></property>
+			      <property name="use_underline">False</property>
+			      <property name="use_markup">False</property>
+			      <property name="justify">GTK_JUSTIFY_LEFT</property>
+			      <property name="wrap">False</property>
+			      <property name="selectable">False</property>
+			      <property name="xalign">0</property>
+			      <property name="yalign">0.5</property>
+			      <property name="xpad">0</property>
+			      <property name="ypad">0</property>
+			    </widget>
+			  </child>
+			</widget>
+		      </child>
+		    </widget>
+		  </child>
+		</widget>
+		<packing>
+		  <property name="padding">0</property>
+		  <property name="expand">False</property>
+		  <property name="fill">False</property>
+		</packing>
+	      </child>
+
+	      <child>
+		<widget class="GtkLabel" id="label832">
+		  <property name="visible">True</property>
+		  <property name="label" translatable="yes">Click &quot;Forward&quot; to enter information about stocks and
+mutual funds in the imported data.</property>
+		  <property name="use_underline">False</property>
+		  <property name="use_markup">False</property>
+		  <property name="justify">GTK_JUSTIFY_CENTER</property>
+		  <property name="wrap">False</property>
+		  <property name="selectable">False</property>
+		  <property name="xalign">0.5</property>
+		  <property name="yalign">0.5</property>
+		  <property name="xpad">0</property>
+		  <property name="ypad">0</property>
+		</widget>
+		<packing>
+		  <property name="padding">0</property>
+		  <property name="expand">False</property>
+		  <property name="fill">False</property>
+		  <property name="pack_type">GTK_PACK_END</property>
+		</packing>
+	      </child>
+	    </widget>
 	  </child>
 	</widget>
+      </child>
 
-	<widget>
-	  <class>GtkCombo</class>
-	  <name>currency_combo</name>
-	  <value_in_list>True</value_in_list>
-	  <ok_if_empty>False</ok_if_empty>
-	  <case_sensitive>False</case_sensitive>
-	  <use_arrows>True</use_arrows>
-	  <use_arrows_always>False</use_arrows_always>
-	  <items></items>
-	  <child>
-	    <padding>0</padding>
-	    <expand>False</expand>
-	    <fill>False</fill>
-	  </child>
+      <child>
+	<widget class="GnomeDruidPageStandard" id="commodity_doc_page">
+	  <property name="visible">True</property>
+	  <property name="title" translatable="yes">Tradable commodities</property>
+	  <property name="title_foreground">#f5f5f5f5f5f5</property>
+	  <signal name="prepare" handler="gnc_ui_qif_import_commodity_prepare_cb"/>
+	  <signal name="next" handler="gnc_ui_qif_import_generic_next_cb"/>
+	  <signal name="back" handler="gnc_ui_qif_import_generic_back_cb"/>
 
-	  <widget>
-	    <class>GtkEntry</class>
-	    <child_name>GtkCombo:entry</child_name>
-	    <name>currency_entry</name>
-	    <can_focus>True</can_focus>
-	    <editable>True</editable>
-	    <text_visible>True</text_visible>
-	    <text_max_length>0</text_max_length>
-	    <text></text>
-	  </widget>
-	</widget>
+	  <child internal-child="vbox">
+	    <widget class="GtkVBox" id="druid-vbox17">
+	      <property name="border_width">25</property>
+	      <property name="visible">True</property>
+	      <property name="homogeneous">False</property>
+	      <property name="spacing">0</property>
 
-	<widget>
-	  <class>GtkLabel</class>
-	  <name>label832</name>
-	  <label>Click &quot;Next&quot; to enter information about stocks and
-mutual funds in the imported data.</label>
-	  <justify>GTK_JUSTIFY_CENTER</justify>
-	  <wrap>False</wrap>
-	  <xalign>0.5</xalign>
-	  <yalign>0.5</yalign>
-	  <xpad>0</xpad>
-	  <ypad>0</ypad>
-	  <child>
-	    <padding>0</padding>
-	    <expand>False</expand>
-	    <fill>False</fill>
-	    <pack>GTK_PACK_END</pack>
-	  </child>
-	</widget>
-      </widget>
-    </widget>
-
-    <widget>
-      <class>GnomeDruidPageStandard</class>
-      <name>commodity_doc_page</name>
-      <signal>
-	<name>prepare</name>
-	<handler>gnc_ui_qif_import_commodity_prepare_cb</handler>
-	<data>QIF_Import_Druid</data>
-	<last_modification_time>Wed, 06 Sep 2000 17:24:11 GMT</last_modification_time>
-      </signal>
-      <signal>
-	<name>next</name>
-	<handler>gnc_ui_qif_import_generic_next_cb</handler>
-	<data>QIF_Import_Druid</data>
-	<last_modification_time>Tue, 06 Feb 2001 17:13:29 GMT</last_modification_time>
-      </signal>
-      <signal>
-	<name>back</name>
-	<handler>gnc_ui_qif_import_generic_back_cb</handler>
-	<data>QIF_Import_Druid</data>
-	<last_modification_time>Tue, 06 Feb 2001 17:13:38 GMT</last_modification_time>
-      </signal>
-      <title>Tradable commodities</title>
-      <title_color>255,255,255</title_color>
-      <background_color>153,191,154</background_color>
-      <logo_background_color>255,255,255</logo_background_color>
-
-      <widget>
-	<class>GtkVBox</class>
-	<child_name>GnomeDruidPageStandard:vbox</child_name>
-	<name>druid-vbox17</name>
-	<border_width>25</border_width>
-	<homogeneous>False</homogeneous>
-	<spacing>0</spacing>
-	<child>
-	  <padding>0</padding>
-	  <expand>True</expand>
-	  <fill>True</fill>
-	</child>
-
-	<widget>
-	  <class>GtkLabel</class>
-	  <name>label833</name>
-	  <label>In the next pages, you will be asked to provide information about stocks, 
+	      <child>
+		<widget class="GtkLabel" id="label833">
+		  <property name="visible">True</property>
+		  <property name="label" translatable="yes">In the next pages, you will be asked to provide information about stocks, 
 mutual funds, and other tradable commodities that appear in the QIF file(s)
 you are importing. GnuCash requires more information about tradable 
 commodities than the QIF format can represent. 
@@ -1440,59 +1382,47 @@ etc), a full name, and an abbreviation.
 Check to see if there is an existing Type that is appropriate; if not, you can
 enter a new Type name by hand in the box. Make sure that the abbreviation
 you enter matches the ticker symbol used for the commodity on the exchange
-or listing for its type.</label>
-	  <justify>GTK_JUSTIFY_LEFT</justify>
-	  <wrap>False</wrap>
-	  <xalign>0.5</xalign>
-	  <yalign>0.5</yalign>
-	  <xpad>0</xpad>
-	  <ypad>0</ypad>
-	  <child>
-	    <padding>0</padding>
-	    <expand>False</expand>
-	    <fill>False</fill>
+or listing for its type.</property>
+		  <property name="use_underline">False</property>
+		  <property name="use_markup">False</property>
+		  <property name="justify">GTK_JUSTIFY_LEFT</property>
+		  <property name="wrap">False</property>
+		  <property name="selectable">False</property>
+		  <property name="xalign">0.5</property>
+		  <property name="yalign">0.5</property>
+		  <property name="xpad">0</property>
+		  <property name="ypad">0</property>
+		</widget>
+		<packing>
+		  <property name="padding">0</property>
+		  <property name="expand">False</property>
+		  <property name="fill">False</property>
+		</packing>
+	      </child>
+	    </widget>
 	  </child>
 	</widget>
-      </widget>
-    </widget>
+      </child>
 
-    <widget>
-      <class>GnomeDruidPageStandard</class>
-      <name>match_doc_page</name>
-      <signal>
-	<name>next</name>
-	<handler>gnc_ui_qif_import_generic_next_cb</handler>
-	<data>QIF_Import_Druid</data>
-	<last_modification_time>Tue, 06 Feb 2001 20:54:18 GMT</last_modification_time>
-      </signal>
-      <signal>
-	<name>back</name>
-	<handler>gnc_ui_qif_import_generic_back_cb</handler>
-	<data>QIF_Import_Druid</data>
-	<last_modification_time>Tue, 06 Feb 2001 17:14:04 GMT</last_modification_time>
-      </signal>
-      <title>Match duplicate transactions</title>
-      <title_color>255,255,255</title_color>
-      <background_color>153,191,154</background_color>
-      <logo_background_color>255,255,255</logo_background_color>
+      <child>
+	<widget class="GnomeDruidPageStandard" id="match_doc_page">
+	  <property name="visible">True</property>
+	  <property name="title" translatable="yes">Match duplicate transactions</property>
+	  <property name="title_foreground">#f5f5f5f5f5f5</property>
+	  <signal name="next" handler="gnc_ui_qif_import_generic_next_cb"/>
+	  <signal name="back" handler="gnc_ui_qif_import_generic_back_cb"/>
 
-      <widget>
-	<class>GtkVBox</class>
-	<child_name>GnomeDruidPageStandard:vbox</child_name>
-	<name>druid-vbox34</name>
-	<border_width>5</border_width>
-	<homogeneous>False</homogeneous>
-	<spacing>0</spacing>
-	<child>
-	  <padding>0</padding>
-	  <expand>True</expand>
-	  <fill>True</fill>
-	</child>
+	  <child internal-child="vbox">
+	    <widget class="GtkVBox" id="druid-vbox34">
+	      <property name="border_width">5</property>
+	      <property name="visible">True</property>
+	      <property name="homogeneous">False</property>
+	      <property name="spacing">0</property>
 
-	<widget>
-	  <class>GtkLabel</class>
-	  <name>label847694</name>
-	  <label>If you are importing a QIF file downloaded from a bank or other financial
+	      <child>
+		<widget class="GtkLabel" id="label847694">
+		  <property name="visible">True</property>
+		  <property name="label" translatable="yes">If you are importing a QIF file downloaded from a bank or other financial
 institution, some of the information in the QIF file may duplicate information
 already in your GnuCash accounts.  GnuCash will try to detect duplicates 
 of existing transactions.  
@@ -1507,255 +1437,283 @@ correct one by clicking in the &quot;Dup?&quot; column of the correct transactio
 You can control the rules used by GnuCash to find duplicate transactions 
 in the &quot;QIF Import&quot; section of the GnuCash Preferences dialog.
 
-Click &quot;Next&quot; to find duplicate transactions. </label>
-	  <justify>GTK_JUSTIFY_LEFT</justify>
-	  <wrap>False</wrap>
-	  <xalign>0.5</xalign>
-	  <yalign>0.5</yalign>
-	  <xpad>0</xpad>
-	  <ypad>0</ypad>
-	  <child>
-	    <padding>0</padding>
-	    <expand>False</expand>
-	    <fill>False</fill>
+Click &quot;Forward&quot; to find duplicate transactions. </property>
+		  <property name="use_underline">False</property>
+		  <property name="use_markup">False</property>
+		  <property name="justify">GTK_JUSTIFY_LEFT</property>
+		  <property name="wrap">False</property>
+		  <property name="selectable">False</property>
+		  <property name="xalign">0.5</property>
+		  <property name="yalign">0.5</property>
+		  <property name="xpad">0</property>
+		  <property name="ypad">0</property>
+		</widget>
+		<packing>
+		  <property name="padding">0</property>
+		  <property name="expand">False</property>
+		  <property name="fill">False</property>
+		</packing>
+	      </child>
+	    </widget>
 	  </child>
 	</widget>
-      </widget>
-    </widget>
+      </child>
 
-    <widget>
-      <class>GnomeDruidPageStandard</class>
-      <name>match_duplicates_page</name>
-      <signal>
-	<name>next</name>
-	<handler>gnc_ui_qif_import_generic_next_cb</handler>
-	<data>QIF_Import_Druid</data>
-	<last_modification_time>Tue, 06 Feb 2001 17:15:14 GMT</last_modification_time>
-      </signal>
-      <signal>
-	<name>back</name>
-	<handler>gnc_ui_qif_import_generic_back_cb</handler>
-	<data>QIF_Import_Druid</data>
-	<last_modification_time>Tue, 06 Feb 2001 17:15:23 GMT</last_modification_time>
-      </signal>
-      <title>Select possible duplicates</title>
-      <title_color>255,255,255</title_color>
-      <background_color>153,191,154</background_color>
-      <logo_background_color>255,255,255</logo_background_color>
+      <child>
+	<widget class="GnomeDruidPageStandard" id="match_duplicates_page">
+	  <property name="visible">True</property>
+	  <property name="title" translatable="yes">Select possible duplicates</property>
+	  <property name="title_foreground">#f5f5f5f5f5f5</property>
+	  <signal name="next" handler="gnc_ui_qif_import_generic_next_cb"/>
+	  <signal name="back" handler="gnc_ui_qif_import_generic_back_cb"/>
 
-      <widget>
-	<class>GtkVBox</class>
-	<child_name>GnomeDruidPageStandard:vbox</child_name>
-	<name>druid-vbox35</name>
-	<border_width>5</border_width>
-	<homogeneous>False</homogeneous>
-	<spacing>0</spacing>
-	<child>
-	  <padding>0</padding>
-	  <expand>True</expand>
-	  <fill>True</fill>
-	</child>
+	  <child internal-child="vbox">
+	    <widget class="GtkVBox" id="druid-vbox35">
+	      <property name="border_width">5</property>
+	      <property name="visible">True</property>
+	      <property name="homogeneous">False</property>
+	      <property name="spacing">0</property>
 
-	<widget>
-	  <class>GtkHBox</class>
-	  <name>hbox94</name>
-	  <homogeneous>True</homogeneous>
-	  <spacing>2</spacing>
-	  <child>
-	    <padding>0</padding>
-	    <expand>True</expand>
-	    <fill>True</fill>
+	      <child>
+		<widget class="GtkHBox" id="hbox94">
+		  <property name="visible">True</property>
+		  <property name="homogeneous">True</property>
+		  <property name="spacing">2</property>
+
+		  <child>
+		    <widget class="GtkFrame" id="frame45">
+		      <property name="visible">True</property>
+		      <property name="label_xalign">0</property>
+		      <property name="label_yalign">0.5</property>
+		      <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
+
+		      <child>
+			<widget class="GtkScrolledWindow" id="scrolledwindow22">
+			  <property name="visible">True</property>
+			  <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+			  <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+			  <property name="shadow_type">GTK_SHADOW_IN</property>
+			  <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
+
+			  <child>
+			    <widget class="GtkCList" id="new_transaction_list">
+			      <property name="visible">True</property>
+			      <property name="can_focus">True</property>
+			      <property name="n_columns">3</property>
+			      <property name="column_widths">53,172,56</property>
+			      <property name="selection_mode">GTK_SELECTION_SINGLE</property>
+			      <property name="show_titles">True</property>
+			      <property name="shadow_type">GTK_SHADOW_IN</property>
+			      <signal name="select_row" handler="gnc_ui_qif_import_duplicate_new_select_cb"/>
+
+			      <child>
+				<widget class="GtkLabel" id="label847700">
+				  <property name="label" translatable="yes">Date</property>
+				  <property name="use_underline">False</property>
+				  <property name="use_markup">False</property>
+				  <property name="justify">GTK_JUSTIFY_CENTER</property>
+				  <property name="wrap">False</property>
+				  <property name="selectable">False</property>
+				  <property name="xalign">0.5</property>
+				  <property name="yalign">0.5</property>
+				  <property name="xpad">0</property>
+				  <property name="ypad">0</property>
+				</widget>
+			      </child>
+
+			      <child>
+				<widget class="GtkLabel" id="label847700">
+				  <property name="label" translatable="yes">Description</property>
+				  <property name="use_underline">False</property>
+				  <property name="use_markup">False</property>
+				  <property name="justify">GTK_JUSTIFY_CENTER</property>
+				  <property name="wrap">False</property>
+				  <property name="selectable">False</property>
+				  <property name="xalign">0.5</property>
+				  <property name="yalign">0.5</property>
+				  <property name="xpad">0</property>
+				  <property name="ypad">0</property>
+				</widget>
+			      </child>
+
+			      <child>
+				<widget class="GtkLabel" id="label847702">
+				  <property name="label" translatable="yes">Amount</property>
+				  <property name="use_underline">False</property>
+				  <property name="use_markup">False</property>
+				  <property name="justify">GTK_JUSTIFY_CENTER</property>
+				  <property name="wrap">False</property>
+				  <property name="selectable">False</property>
+				  <property name="xalign">0.5</property>
+				  <property name="yalign">0.5</property>
+				  <property name="xpad">0</property>
+				  <property name="ypad">0</property>
+				</widget>
+			      </child>
+			    </widget>
+			  </child>
+			</widget>
+		      </child>
+
+		      <child>
+			<widget class="GtkLabel" id="label847716">
+			  <property name="visible">True</property>
+			  <property name="label" translatable="yes">Imported transactions with duplicates</property>
+			  <property name="use_underline">False</property>
+			  <property name="use_markup">False</property>
+			  <property name="justify">GTK_JUSTIFY_LEFT</property>
+			  <property name="wrap">False</property>
+			  <property name="selectable">False</property>
+			  <property name="xalign">0.5</property>
+			  <property name="yalign">0.5</property>
+			  <property name="xpad">0</property>
+			  <property name="ypad">0</property>
+			</widget>
+			<packing>
+			  <property name="type">label_item</property>
+			</packing>
+		      </child>
+		    </widget>
+		    <packing>
+		      <property name="padding">0</property>
+		      <property name="expand">True</property>
+		      <property name="fill">True</property>
+		    </packing>
+		  </child>
+
+		  <child>
+		    <widget class="GtkFrame" id="frame46">
+		      <property name="visible">True</property>
+		      <property name="label_xalign">0</property>
+		      <property name="label_yalign">0.5</property>
+		      <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
+
+		      <child>
+			<widget class="GtkScrolledWindow" id="scrolledwindow23">
+			  <property name="visible">True</property>
+			  <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+			  <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+			  <property name="shadow_type">GTK_SHADOW_IN</property>
+			  <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
+
+			  <child>
+			    <widget class="GtkCList" id="old_transaction_list">
+			      <property name="visible">True</property>
+			      <property name="can_focus">True</property>
+			      <property name="n_columns">4</property>
+			      <property name="column_widths">50,133,55,32</property>
+			      <property name="selection_mode">GTK_SELECTION_SINGLE</property>
+			      <property name="show_titles">True</property>
+			      <property name="shadow_type">GTK_SHADOW_IN</property>
+			      <signal name="select_row" handler="gnc_ui_qif_import_duplicate_old_select_cb"/>
+
+			      <child>
+				<widget class="GtkLabel" id="label847703">
+				  <property name="label" translatable="yes">Date</property>
+				  <property name="use_underline">False</property>
+				  <property name="use_markup">False</property>
+				  <property name="justify">GTK_JUSTIFY_CENTER</property>
+				  <property name="wrap">False</property>
+				  <property name="selectable">False</property>
+				  <property name="xalign">0.5</property>
+				  <property name="yalign">0.5</property>
+				  <property name="xpad">0</property>
+				  <property name="ypad">0</property>
+				</widget>
+			      </child>
+
+			      <child>
+				<widget class="GtkLabel" id="label847704">
+				  <property name="label" translatable="yes">Description</property>
+				  <property name="use_underline">False</property>
+				  <property name="use_markup">False</property>
+				  <property name="justify">GTK_JUSTIFY_CENTER</property>
+				  <property name="wrap">False</property>
+				  <property name="selectable">False</property>
+				  <property name="xalign">0.5</property>
+				  <property name="yalign">0.5</property>
+				  <property name="xpad">0</property>
+				  <property name="ypad">0</property>
+				</widget>
+			      </child>
+
+			      <child>
+				<widget class="GtkLabel" id="label847705">
+				  <property name="label" translatable="yes">Amount</property>
+				  <property name="use_underline">False</property>
+				  <property name="use_markup">False</property>
+				  <property name="justify">GTK_JUSTIFY_CENTER</property>
+				  <property name="wrap">False</property>
+				  <property name="selectable">False</property>
+				  <property name="xalign">0.5</property>
+				  <property name="yalign">0.5</property>
+				  <property name="xpad">0</property>
+				  <property name="ypad">0</property>
+				</widget>
+			      </child>
+
+			      <child>
+				<widget class="GtkLabel" id="label847706">
+				  <property name="label" translatable="yes">Dup?</property>
+				  <property name="use_underline">False</property>
+				  <property name="use_markup">False</property>
+				  <property name="justify">GTK_JUSTIFY_CENTER</property>
+				  <property name="wrap">False</property>
+				  <property name="selectable">False</property>
+				  <property name="xalign">0.5</property>
+				  <property name="yalign">0.5</property>
+				  <property name="xpad">0</property>
+				  <property name="ypad">0</property>
+				</widget>
+			      </child>
+			    </widget>
+			  </child>
+			</widget>
+		      </child>
+
+		      <child>
+			<widget class="GtkLabel" id="label847717">
+			  <property name="visible">True</property>
+			  <property name="label" translatable="yes">Possible duplicates for selected new transaction</property>
+			  <property name="use_underline">False</property>
+			  <property name="use_markup">False</property>
+			  <property name="justify">GTK_JUSTIFY_LEFT</property>
+			  <property name="wrap">False</property>
+			  <property name="selectable">False</property>
+			  <property name="xalign">0.5</property>
+			  <property name="yalign">0.5</property>
+			  <property name="xpad">0</property>
+			  <property name="ypad">0</property>
+			</widget>
+			<packing>
+			  <property name="type">label_item</property>
+			</packing>
+		      </child>
+		    </widget>
+		    <packing>
+		      <property name="padding">0</property>
+		      <property name="expand">True</property>
+		      <property name="fill">True</property>
+		    </packing>
+		  </child>
+		</widget>
+		<packing>
+		  <property name="padding">0</property>
+		  <property name="expand">True</property>
+		  <property name="fill">True</property>
+		</packing>
+	      </child>
+	    </widget>
 	  </child>
-
-	  <widget>
-	    <class>GtkFrame</class>
-	    <name>frame45</name>
-	    <label>Imported transactions with duplicates</label>
-	    <label_xalign>0</label_xalign>
-	    <shadow_type>GTK_SHADOW_ETCHED_IN</shadow_type>
-	    <child>
-	      <padding>0</padding>
-	      <expand>True</expand>
-	      <fill>True</fill>
-	    </child>
-
-	    <widget>
-	      <class>GtkScrolledWindow</class>
-	      <name>scrolledwindow22</name>
-	      <hscrollbar_policy>GTK_POLICY_AUTOMATIC</hscrollbar_policy>
-	      <vscrollbar_policy>GTK_POLICY_AUTOMATIC</vscrollbar_policy>
-	      <hupdate_policy>GTK_UPDATE_CONTINUOUS</hupdate_policy>
-	      <vupdate_policy>GTK_UPDATE_CONTINUOUS</vupdate_policy>
-
-	      <widget>
-		<class>GtkCList</class>
-		<name>new_transaction_list</name>
-		<can_focus>True</can_focus>
-		<signal>
-		  <name>select_row</name>
-		  <handler>gnc_ui_qif_import_duplicate_new_select_cb</handler>
-		  <data>QIF_Import_Druid</data>
-		  <last_modification_time>Mon, 05 Feb 2001 18:28:49 GMT</last_modification_time>
-		</signal>
-		<columns>3</columns>
-		<column_widths>53,172,56</column_widths>
-		<selection_mode>GTK_SELECTION_SINGLE</selection_mode>
-		<show_titles>True</show_titles>
-		<shadow_type>GTK_SHADOW_IN</shadow_type>
-
-		<widget>
-		  <class>GtkLabel</class>
-		  <child_name>CList:title</child_name>
-		  <name>label847700</name>
-		  <label>Date</label>
-		  <justify>GTK_JUSTIFY_CENTER</justify>
-		  <wrap>False</wrap>
-		  <xalign>0.5</xalign>
-		  <yalign>0.5</yalign>
-		  <xpad>0</xpad>
-		  <ypad>0</ypad>
-		</widget>
-
-		<widget>
-		  <class>GtkLabel</class>
-		  <child_name>CList:title</child_name>
-		  <name>label847701</name>
-		  <label>Description</label>
-		  <justify>GTK_JUSTIFY_CENTER</justify>
-		  <wrap>False</wrap>
-		  <xalign>0.5</xalign>
-		  <yalign>0.5</yalign>
-		  <xpad>0</xpad>
-		  <ypad>0</ypad>
-		</widget>
-
-		<widget>
-		  <class>GtkLabel</class>
-		  <child_name>CList:title</child_name>
-		  <name>label847702</name>
-		  <label>Amount</label>
-		  <justify>GTK_JUSTIFY_CENTER</justify>
-		  <wrap>False</wrap>
-		  <xalign>0.5</xalign>
-		  <yalign>0.5</yalign>
-		  <xpad>0</xpad>
-		  <ypad>0</ypad>
-		</widget>
-	      </widget>
-	    </widget>
-	  </widget>
-
-	  <widget>
-	    <class>GtkFrame</class>
-	    <name>frame46</name>
-	    <label>Possible duplicates for selected new transaction</label>
-	    <label_xalign>0</label_xalign>
-	    <shadow_type>GTK_SHADOW_ETCHED_IN</shadow_type>
-	    <child>
-	      <padding>0</padding>
-	      <expand>True</expand>
-	      <fill>True</fill>
-	    </child>
-
-	    <widget>
-	      <class>GtkScrolledWindow</class>
-	      <name>scrolledwindow23</name>
-	      <hscrollbar_policy>GTK_POLICY_AUTOMATIC</hscrollbar_policy>
-	      <vscrollbar_policy>GTK_POLICY_AUTOMATIC</vscrollbar_policy>
-	      <hupdate_policy>GTK_UPDATE_CONTINUOUS</hupdate_policy>
-	      <vupdate_policy>GTK_UPDATE_CONTINUOUS</vupdate_policy>
-
-	      <widget>
-		<class>GtkCList</class>
-		<name>old_transaction_list</name>
-		<can_focus>True</can_focus>
-		<signal>
-		  <name>select_row</name>
-		  <handler>gnc_ui_qif_import_duplicate_old_select_cb</handler>
-		  <data>QIF_Import_Druid</data>
-		  <last_modification_time>Mon, 05 Feb 2001 18:29:59 GMT</last_modification_time>
-		</signal>
-		<columns>4</columns>
-		<column_widths>50,133,55,32</column_widths>
-		<selection_mode>GTK_SELECTION_SINGLE</selection_mode>
-		<show_titles>True</show_titles>
-		<shadow_type>GTK_SHADOW_IN</shadow_type>
-
-		<widget>
-		  <class>GtkLabel</class>
-		  <child_name>CList:title</child_name>
-		  <name>label847703</name>
-		  <label>Date</label>
-		  <justify>GTK_JUSTIFY_CENTER</justify>
-		  <wrap>False</wrap>
-		  <xalign>0.5</xalign>
-		  <yalign>0.5</yalign>
-		  <xpad>0</xpad>
-		  <ypad>0</ypad>
-		</widget>
-
-		<widget>
-		  <class>GtkLabel</class>
-		  <child_name>CList:title</child_name>
-		  <name>label847704</name>
-		  <label>Description</label>
-		  <justify>GTK_JUSTIFY_CENTER</justify>
-		  <wrap>False</wrap>
-		  <xalign>0.5</xalign>
-		  <yalign>0.5</yalign>
-		  <xpad>0</xpad>
-		  <ypad>0</ypad>
-		</widget>
-
-		<widget>
-		  <class>GtkLabel</class>
-		  <child_name>CList:title</child_name>
-		  <name>label847705</name>
-		  <label>Amount</label>
-		  <justify>GTK_JUSTIFY_CENTER</justify>
-		  <wrap>False</wrap>
-		  <xalign>0.5</xalign>
-		  <yalign>0.5</yalign>
-		  <xpad>0</xpad>
-		  <ypad>0</ypad>
-		</widget>
-
-		<widget>
-		  <class>GtkLabel</class>
-		  <child_name>CList:title</child_name>
-		  <name>label847706</name>
-		  <label>Dup?</label>
-		  <justify>GTK_JUSTIFY_CENTER</justify>
-		  <wrap>False</wrap>
-		  <xalign>0.5</xalign>
-		  <yalign>0.5</yalign>
-		  <xpad>0</xpad>
-		  <ypad>0</ypad>
-		</widget>
-	      </widget>
-	    </widget>
-	  </widget>
 	</widget>
-      </widget>
-    </widget>
+      </child>
 
-    <widget>
-      <class>GnomeDruidPageFinish</class>
-      <name>end_page</name>
-      <signal>
-	<name>finish</name>
-	<handler>gnc_ui_qif_import_finish_cb</handler>
-	<data>QIF_Import_Druid</data>
-	<last_modification_time>Wed, 30 Aug 2000 15:07:20 GMT</last_modification_time>
-      </signal>
-      <signal>
-	<name>back</name>
-	<handler>gnc_ui_qif_import_generic_back_cb</handler>
-	<data>QIF_Import_Druid</data>
-	<last_modification_time>Tue, 06 Feb 2001 17:16:05 GMT</last_modification_time>
-      </signal>
-      <title>Update your GnuCash accounts</title>
-      <text>Click &quot;Finish&quot; to import data from the staging area and update
+      <child>
+	<widget class="GnomeDruidPageEdge" id="end_page">
+	  <property name="visible">True</property>
+	  <property name="position">GNOME_EDGE_FINISH</property>
+	  <property name="title" translatable="yes">Update your GnuCash accounts</property>
+	  <property name="text" translatable="yes">Click &quot;Finish&quot; to import data from the staging area and update
 your GnuCash accounts. The account and category matching
 information you have entered will be saved and used for
 defaults the next time you use the QIF import  facility. 
@@ -1764,14 +1722,87 @@ Click &quot;Back&quot; to review your account and category matchings,
 to change currency and security settings for new accounts, 
 or to add more files to the staging area.
 
-Click &quot;Cancel&quot; to abort the QIF import process.</text>
-      <background_color>154,191,154</background_color>
-      <logo_background_color>255,255,255</logo_background_color>
-      <textbox_color>255,255,255</textbox_color>
-      <text_color>1,1,1</text_color>
-      <title_color>255,255,255</title_color>
+Click &quot;Cancel&quot; to abort the QIF import process.</property>
+	  <signal name="finish" handler="gnc_ui_qif_import_finish_cb"/>
+	  <signal name="back" handler="gnc_ui_qif_import_generic_back_cb"/>
+	</widget>
+      </child>
     </widget>
-  </widget>
+  </child>
 </widget>
 
-</GTK-Interface>
+<widget class="GtkWindow" id="Preferences">
+  <property name="visible">True</property>
+  <property name="title" translatable="yes">Preferences</property>
+  <property name="type">GTK_WINDOW_TOPLEVEL</property>
+  <property name="window_position">GTK_WIN_POS_NONE</property>
+  <property name="modal">False</property>
+  <property name="resizable">True</property>
+  <property name="destroy_with_parent">False</property>
+  <property name="decorated">True</property>
+  <property name="skip_taskbar_hint">False</property>
+  <property name="skip_pager_hint">False</property>
+  <property name="type_hint">GDK_WINDOW_TYPE_HINT_NORMAL</property>
+  <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
+
+  <child>
+    <widget class="GtkTable" id="prefs_table">
+      <property name="visible">True</property>
+      <property name="n_rows">2</property>
+      <property name="n_columns">4</property>
+      <property name="homogeneous">False</property>
+      <property name="row_spacing">0</property>
+      <property name="column_spacing">0</property>
+
+      <child>
+	<widget class="GtkLabel" id="label847718">
+	  <property name="visible">True</property>
+	  <property name="label" translatable="yes">&lt;b&gt;QIF Import&lt;/b&gt;</property>
+	  <property name="use_underline">False</property>
+	  <property name="use_markup">True</property>
+	  <property name="justify">GTK_JUSTIFY_LEFT</property>
+	  <property name="wrap">False</property>
+	  <property name="selectable">False</property>
+	  <property name="xalign">0</property>
+	  <property name="yalign">0.5</property>
+	  <property name="xpad">0</property>
+	  <property name="ypad">0</property>
+	</widget>
+	<packing>
+	  <property name="left_attach">0</property>
+	  <property name="right_attach">1</property>
+	  <property name="top_attach">0</property>
+	  <property name="bottom_attach">1</property>
+	  <property name="x_options">fill</property>
+	  <property name="y_options"></property>
+	</packing>
+      </child>
+
+      <child>
+	<widget class="GtkCheckButton" id="gconf/dialogs/import/qif/show_doc">
+	  <property name="visible">True</property>
+	  <property name="tooltip" translatable="yes">Show some documentation-only pages in QIF Import druid.</property>
+	  <property name="can_focus">True</property>
+	  <property name="label" translatable="yes">Show documentation</property>
+	  <property name="use_underline">True</property>
+	  <property name="relief">GTK_RELIEF_NORMAL</property>
+	  <property name="focus_on_click">True</property>
+	  <property name="active">False</property>
+	  <property name="inconsistent">False</property>
+	  <property name="draw_indicator">True</property>
+	</widget>
+	<packing>
+	  <property name="left_attach">0</property>
+	  <property name="right_attach">4</property>
+	  <property name="top_attach">1</property>
+	  <property name="bottom_attach">2</property>
+	  <property name="x_padding">12</property>
+	  <property name="x_options">fill</property>
+	  <property name="y_options"></property>
+	</packing>
+      </child>
+    </widget>
+  </child>
+</widget>
+
+</glade-interface>

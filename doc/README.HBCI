@@ -14,7 +14,11 @@ README.HBCI
 
 Since the beta release 1.7.2, GnuCash features HBCI online banking
 support. This makes it the world's first *free* HBCI-enabled personal
-finance manager.
+finance manager. 
+
+Many additional information about GnuCash and HBCI can be found on
+http://linuxwiki.de/GnuCash, http://linuxwiki.de/AqBanking, and
+http://linuxwiki.de/OpenHBCI.
 
 HBCI (Home Banking Computer Interface) is a standard used by German
 banks for offering online banking service. Through this standard,
@@ -35,12 +39,22 @@ HBCI for now.
 2. Requirements
 ------------
 
-OpenHBCI 0.9.3 or later 
-http://sourceforge.net/projects/openhbci
+AqBanking 0.9.7 and AqHBCI 0.9.13, or any later version: Get
+aqbanking, aqbanking-devel from
+http://sourceforge.net/projects/aqbanking, then aqhbci, aqhbci-devel
+and wizard-kde from http://sourceforge.net/projects/aqhbci/
+(Historical note: Until gnucash-1.8.9, the library "openhbci" had been
+used, but with gnucash-1.8.10, gnucash switched to the successor of
+openhbci which is aqbanking/aqhbci.)
 
-which in turn requires:
-Libchipcard 0.6 or later, http://sourceforge.net/projects/libchipcard
-and OpenSSL any 0.9.x, http://www.openssl.org
+which in turn requires: 
+Gwenhywfar 1.1.0, http://sourceforge.net/projects/gwenhywfar, which in
+turn requires OpenSSL any 0.9.x, http://www.openssl.org
+
+For chipcard support, you also need plugin-ddvcard from
+http://sourceforge.net/projects/aqhbci, which in turn requires
+Libchipcard2 version 1.9.1 or later,
+http://sourceforge.net/projects/libchipcard
 
 Then you can build GnuCash 1.7.x/1.8.x with:
    ./configure --enable-hbci --with-openhbci-prefix=/your/openhbci/prefix 
@@ -56,8 +70,9 @@ HBCI support is accessible through a few new menu items:
 
 * Setup: In the main window with the account hierarchy, the "Tools" menu 
 (German: "Werkzeuge") now contains the item "HBCI Setup" ("HBCI 
-Einrichtung"). This menu item opens the HBCI Setup druid which will 
-guide you through the setup.
+Einrichtung"). This menu item opens the HBCI Setup druid which will
+guide you through the setup. (Note: With the new aqbanking/aqhbci, the
+Setup druid is an external program provided by the aqhbci authors.)
 
    - Chip card users will need to run this only once. (see 6. Known
      Problems below if this doesn't work)
@@ -164,11 +179,11 @@ smallest improvements.
 7. Credits
 -------
 
-The excellent OpenHBCI library is written by Fabian Kaiser 
-<fabian.kaiser@gmx.de>, Martin Preuss <openhbci@aquamaniac.de>, and 
-Christian Stimming <stimming@tuhh.de>. Libchipcard is written by Martin 
-Preuss <openhbci@aquamaniac.de>.
+The excellent AqBanking/AqHBCI library is written by Martin Preuss
+<openhbci@aquamaniac.de> and Christian Stimming
+<stimming@tuhh.de>. Libchipcard is written by Martin Preuss
+<openhbci@aquamaniac.de>.
 
 By Christian Stimming <stimming@tuhh.de>
-Saturday, Feb 1, 2003
+October 30th, 2004
 

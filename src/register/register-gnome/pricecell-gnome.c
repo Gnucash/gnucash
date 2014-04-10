@@ -48,9 +48,11 @@ gnc_price_cell_direct_update (BasicCell *bcell,
     GdkEventKey *event = gui_data;
     char decimal_point;
     struct lconv *lc;
-    GdkWChar *newval;
+    GString *newval_gs;
     gboolean is_return;
     int i;
+    const char *c;
+    gunichar uc;
 
     if (event->type != GDK_KEY_PRESS)
 	return FALSE;
@@ -118,27 +120,38 @@ gnc_price_cell_direct_update (BasicCell *bcell,
 
     /* allocate space for newval_ptr : oldval + one letter ( the
        decimal_point ) */
-    newval = g_new (GdkWChar, bcell->value_len + 2);
-
+    newval_gs = g_string_new("");
     /* copy oldval up to the cursor position */
-    for (i = 0; i < *cursor_position; i++)
-        newval[i] = bcell->value_w[i];
+    i = 0;
+    c = bcell->value;
+    while (*c && (i < *cursor_position))
+    {
+        uc = g_utf8_get_char (c);
+        g_string_append_unichar (newval_gs, uc);
+        c = g_utf8_next_char (c);
+        i++;
+    }
 
     /* insert the decimal_point at cursor position */
-    newval[*cursor_position] = decimal_point;
-
-    for (i = *cursor_position + 1; i < bcell->value_len + 1; i++)
-        newval[i] = bcell->value_w[i - 1];
-
-    newval[bcell->value_len + 1] = 0;
+    g_string_append_c (newval_gs, decimal_point);
+    i++;
+    c = g_utf8_next_char (c);
+    
+    /* copy oldval after cursor position */
+    while (*c) 
+    {
+        uc = g_utf8_get_char (c);
+        g_string_append_unichar (newval_gs, uc);
+        c = g_utf8_next_char (c);
+    }
 
     /* update the cursor position */
     (*cursor_position)++;
 
-    gnc_basic_cell_set_wcvalue_internal (bcell, newval);
+    gnc_basic_cell_set_value_internal (bcell, newval_gs->str);
 
-    g_free (newval);
-
+    g_string_free (newval_gs, TRUE);
+    
     cell->need_to_parse = TRUE;
 
     return TRUE;

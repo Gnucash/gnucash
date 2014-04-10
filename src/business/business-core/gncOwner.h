@@ -26,6 +26,7 @@
 /** @file gncOwner.h
     @brief Business Interface:  Object OWNERs
     @author Copyright (C) 2001,2002 Derek Atkins <warlord@MIT.EDU>
+    @author Copyright (c) 2005 Neil Williams <linux@codehelp.co.uk>
 */
 
 #ifndef GNC_OWNER_H_
@@ -35,45 +36,77 @@ typedef struct gnc_owner_s GncOwner;
 
 #define GNC_ID_OWNER   "gncOwner"
 
+#include "qof.h"
 #include "gncCustomer.h"
 #include "gncJob.h"
 #include "gncVendor.h"
 #include "gncEmployee.h"
 #include "gnc-lot.h" 
 
-typedef enum {
-  GNC_OWNER_NONE,
-  GNC_OWNER_UNDEFINED,
-  GNC_OWNER_CUSTOMER,
-  GNC_OWNER_JOB,
-  GNC_OWNER_VENDOR,
-  GNC_OWNER_EMPLOYEE
-} GncOwnerType;
+typedef enum { 
+	GNC_OWNER_NONE , 
+	GNC_OWNER_UNDEFINED , 
+	GNC_OWNER_CUSTOMER , 
+	GNC_OWNER_JOB , 
+	GNC_OWNER_VENDOR , 
+	GNC_OWNER_EMPLOYEE , 
+}GncOwnerType;
 
+/** \name QOF handling
+
+Whilst GncOwner is not a formal QOF object, these functions
+are still expected to be useful in making GncOwner transparent
+to QOF as they can be used by objects like GncInvoice.
+@{
+*/
+/** return the type for the collection. */
+QofIdType qofOwnerGetType(GncOwner *owner);
+/** return the owner itself as an entity. */
+QofEntity* qofOwnerGetOwner (GncOwner *owner);
+/** set the owner from the entity. */
+void qofOwnerSetEntity (GncOwner *owner, QofEntity *ent);
+
+/** \brief Set the parent owner. */
+void qofOwnerSetEndOwner (GncOwner *owner, GncOwner *parent);
+GncOwner* qofOwnerCreate (QofBook *book);
+
+gboolean
+gncOwnerRegister(void);
+
+/** @} */
+
+/** \struct GncOwner */
 struct gnc_owner_s {
-  GncOwnerType     type;
+  GncOwnerType     type;      /**< Customer, Job, Vendor, Employee or Undefined. */
   union {
     gpointer       undefined;
     GncCustomer *  customer;
     GncJob *       job;
     GncVendor *    vendor;
     GncEmployee *  employee;
-  } owner;
+  } owner;                   /**< holds the pointer to the owner object. */
+  gpointer         qof_temp; /**< Set type independently of the owner. */
 };
 
+/** \name Setup routines
+@{
+*/
 void gncOwnerInitUndefined (GncOwner *owner, gpointer obj);
 void gncOwnerInitCustomer (GncOwner *owner, GncCustomer *customer);
 void gncOwnerInitJob (GncOwner *owner, GncJob *job);
 void gncOwnerInitVendor (GncOwner *owner, GncVendor *vendor);
 void gncOwnerInitEmployee (GncOwner *owner, GncEmployee *employee);
-
+/** @} */
+/** \name Get routines.
+@{
+*/
 GncOwnerType gncOwnerGetType (const GncOwner *owner);
 gpointer gncOwnerGetUndefined (const GncOwner *owner);
 GncCustomer * gncOwnerGetCustomer (const GncOwner *owner);
 GncJob * gncOwnerGetJob (const GncOwner *owner);
 GncVendor * gncOwnerGetVendor (const GncOwner *owner);
 GncEmployee * gncOwnerGetEmployee (const GncOwner *owner);
-
+/** @} */
 void gncOwnerCopy (const GncOwner *src, GncOwner *dest);
 gboolean gncOwnerEqual (const GncOwner *a, const GncOwner *b);
 int gncOwnerCompare (const GncOwner *a, const GncOwner *b);
@@ -103,6 +136,7 @@ void gncOwnerAttachToLot (GncOwner *owner, GNCLot *lot);
 gboolean gncOwnerGetOwnerFromLot (GNCLot *lot, GncOwner *owner);
 
 #define OWNER_TYPE        "type"
+#define OWNER_TYPE_STRING "type-string"  /**< Allows the type to be handled externally. */
 #define OWNER_CUSTOMER    "customer"
 #define OWNER_JOB         "job"
 #define OWNER_VENDOR      "vendor"

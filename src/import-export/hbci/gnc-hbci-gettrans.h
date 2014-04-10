@@ -24,7 +24,7 @@
 #define GNC_HBCI_GETTRANS_H
 
 #include <gnome.h>
-#include <openhbci2/outboxjob.h>
+#include <aqbanking/jobgettransactions.h>
 #include "Account.h"
 
 /** Start a GetTrans job. */
@@ -36,7 +36,7 @@ gnc_hbci_gettrans (GtkWidget *parent, Account *gnc_acc);
 gboolean
 gnc_hbci_gettrans_final(GtkWidget *parent, 
 			Account *gnc_acc, 
-			const HBCI_OutboxJob *trans_job,
+			const AB_JOB *trans_job,
 			gboolean run_until_done);
 
 

@@ -35,7 +35,6 @@
 #include "sixtp.h"
 
 #include "gnc-engine.h"
-#include "gnc-engine-util.h"
 #include "gnc-xml.h"
 #include "io-example-account.h"
 #include "io-gncxml-gen.h"
@@ -48,7 +47,7 @@
 #include "Scrub.h"
 #include "TransLog.h"
 
-static short module = MOD_IO;
+static QofLogModule log_module = GNC_MOD_IO;
 
 #define GNC_ACCOUNT_STRING "gnc-account-example"
 #define GNC_ACCOUNT_SHORT "gnc-act:short-description"
@@ -92,7 +91,7 @@ gnc_destroy_example_account(GncExampleAccount *gea)
 static void
 clear_up_account_commodity(
     gnc_commodity_table *tbl, Account *act,
-    gnc_commodity * (*getter) (Account *account),
+    gnc_commodity * (*getter) (const Account *account),
     void (*setter) (Account *account, gnc_commodity *comm))
 {
     gnc_commodity *gcom;
@@ -121,8 +120,8 @@ clear_up_account_commodity(
     }
     else
     {
-        gnc_commodity_destroy(com);
         setter(act, gcom);
+        gnc_commodity_destroy(com);
     }
 }
 

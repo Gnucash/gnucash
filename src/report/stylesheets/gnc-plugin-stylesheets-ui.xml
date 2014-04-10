@@ -1,0 +1,9 @@
+<ui>
+  <menubar>
+    <menu name="Edit" action="EditAction">
+      <placeholder name="EditStyleSheetsPlaceholder">
+        <menuitem name="EditStyleSheets" action="EditStyleSheetsAction"/>
+      </placeholder>
+    </menu>
+  </menubar>
+</ui>

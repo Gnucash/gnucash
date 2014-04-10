@@ -1,0 +1,8 @@
+*.diff
+*.la
+*.lo
+.deps
+.libs
+.scm-links
+Makefile
+Makefile.in

@@ -33,11 +33,6 @@
 #include "qofquerycore-p.h"
 #include "gnc-engine-util.h"
 
-#define CACHE_INSERT(str)  \
-    g_cache_insert(gnc_engine_get_string_cache(), (gpointer)(str))
-#define CACHE_REMOVE(str)  \
-    g_cache_remove(gnc_engine_get_string_cache(), (gpointer)(str))
-
 /* =========================================================== */
 
 #define GET_TEXT(node)  ({                                   \
@@ -182,11 +177,15 @@
 static QofQueryPredData *                                       \
 SUBRNAME (xmlNodePtr root)                                      \
 {                                                               \
-	xmlNodePtr xp = root->xmlChildrenNode;                       \
+	QofQueryPredData *pred;                                      \
+	xmlNodePtr xp;												\
 	xmlNodePtr node;                                             \
+	QofQueryCompare how;										\
+	CTYPE val;													\
+	xp = root->xmlChildrenNode;									\
                                                                 \
-	QofQueryCompare how = QOF_COMPARE_EQUAL;                     \
-	CTYPE val = 0;                                               \
+	how = QOF_COMPARE_EQUAL;									\
+	val = 0;                                               \
                                                                 \
 	for (node=xp; node; node = node->next)                       \
 	{                                                            \
@@ -197,7 +196,6 @@ SUBRNAME (xmlNodePtr root)                                      \
 		{}                                                        \
 	}                                                            \
                                                                 \
-	QofQueryPredData *pred;                                      \
 	pred = PRED (how, val);                                      \
 	return pred;                                                 \
 }
@@ -245,12 +243,17 @@ static void wrap_new_timespec(KvpValue **v, Timespec value) {
 static QofQueryPredData *
 qof_query_pred_kvp_from_xml (xmlNodePtr root)
 {
-	xmlNodePtr xp = root->xmlChildrenNode;
+	QofQueryCompare how;
+	GSList *path;
+	KvpValue *value;
+	QofQueryPredData *pred;
+	xmlNodePtr xp;
 	xmlNodePtr node;
 
-	QofQueryCompare how = QOF_COMPARE_EQUAL;
-	GSList *path = NULL;
-	KvpValue *value = NULL;
+	how = QOF_COMPARE_EQUAL;
+	xp = root->xmlChildrenNode;
+	path = NULL;
+	value = NULL;
 
 	for (node=xp; node; node = node->next)
 	{
@@ -271,7 +274,6 @@ qof_query_pred_kvp_from_xml (xmlNodePtr root)
 		GET_DATE(&value,    wrap_new_timespec, "qofquery:date");
 	}
 
-	QofQueryPredData *pred;
 	pred = qof_query_kvp_predicate (how, path, value);
 	g_slist_free (path);
 	return pred;
@@ -282,12 +284,18 @@ qof_query_pred_kvp_from_xml (xmlNodePtr root)
 static QofQueryPredData *
 qof_query_pred_guid_from_xml (xmlNodePtr root)
 {
-	xmlNodePtr xp = root->xmlChildrenNode;
+	GList *guid_list, *n;
+	const char *str;
+	GUID *guid;
+	gboolean decode;
+	QofQueryPredData *pred;
+	QofGuidMatch sm;
+	xmlNodePtr xp;
 	xmlNodePtr node;
-   GList *guid_list = NULL;
+	guid_list = NULL;
 
-	QofGuidMatch sm = QOF_GUID_MATCH_ANY;
-
+	sm = QOF_GUID_MATCH_ANY;
+	xp = root->xmlChildrenNode;
 	for (node=xp; node; node = node->next)
 	{
 		if (node->type != XML_ELEMENT_NODE) continue;
@@ -298,9 +306,9 @@ qof_query_pred_guid_from_xml (xmlNodePtr root)
 
 		if (0 == strcmp ("qofquery:guid", node->name))
 		{
-			const char *str = GET_TEXT (node);
-			GUID *guid = guid_malloc ();
-			gboolean decode = string_to_guid (str, guid);
+			str = GET_TEXT (node);
+			guid = guid_malloc ();
+			decode = string_to_guid (str, guid);
 			if (decode)
 			{
 				guid_list = g_list_append (guid_list, guid);
@@ -313,11 +321,9 @@ qof_query_pred_guid_from_xml (xmlNodePtr root)
 		}
 	}
 
-	QofQueryPredData *pred;
 	pred = qof_query_guid_predicate (sm, guid_list);
 
 	/* The predicate made a copy of everything, so free our stuff */
-   GList *n;
 	for (n=guid_list; n; n=n->next)
 	{
 		guid_free (n->data);
@@ -331,11 +337,15 @@ qof_query_pred_guid_from_xml (xmlNodePtr root)
 static QofQueryPredData *
 qof_query_pred_char_from_xml (xmlNodePtr root)
 {
-	xmlNodePtr xp = root->xmlChildrenNode;
+	QofQueryPredData *pred;
+	QofCharMatch sm;
+	const char * char_list;
+	xmlNodePtr xp;
 	xmlNodePtr node;
 
-	QofCharMatch sm = QOF_CHAR_MATCH_ANY;
-   const char * char_list = NULL;
+    char_list = NULL;
+	xp = root->xmlChildrenNode;
+	sm = QOF_CHAR_MATCH_ANY;
 
 	for (node=xp; node; node = node->next)
 	{
@@ -348,7 +358,6 @@ qof_query_pred_char_from_xml (xmlNodePtr root)
 		{}
 	}
 
-	QofQueryPredData *pred;
 	pred = qof_query_char_predicate (sm, char_list);
 	return pred;
 }
@@ -358,12 +367,16 @@ qof_query_pred_char_from_xml (xmlNodePtr root)
 static QofQueryPredData *
 qof_query_pred_numeric_from_xml (xmlNodePtr root)
 {
-	xmlNodePtr xp = root->xmlChildrenNode;
+	QofQueryPredData *pred;
 	xmlNodePtr node;
-
-	QofQueryCompare how = QOF_COMPARE_EQUAL;
-	QofNumericMatch sm = QOF_NUMERIC_MATCH_ANY;
+	QofQueryCompare how;
+	QofNumericMatch sm;
    gnc_numeric num;
+	xmlNodePtr xp;
+	
+	xp = root->xmlChildrenNode;
+	how = QOF_COMPARE_EQUAL;
+	sm = QOF_NUMERIC_MATCH_ANY;
 
 	for (node=xp; node; node = node->next)
 	{
@@ -376,7 +389,6 @@ qof_query_pred_numeric_from_xml (xmlNodePtr root)
 		{}
 	}
 
-	QofQueryPredData *pred;
 	pred = qof_query_numeric_predicate (how, sm, num);
 	return pred;
 }
@@ -386,12 +398,18 @@ qof_query_pred_numeric_from_xml (xmlNodePtr root)
 static QofQueryPredData *
 qof_query_pred_date_from_xml (xmlNodePtr root)
 {
-	xmlNodePtr xp = root->xmlChildrenNode;
+	xmlNodePtr xp;
 	xmlNodePtr node;
+	QofQueryCompare how;
+	QofDateMatch sm;
+	Timespec date;
+	QofQueryPredData *pred;
+	
+	xp = root->xmlChildrenNode;
 
-	QofQueryCompare how = QOF_COMPARE_EQUAL;
-	QofDateMatch sm = QOF_DATE_MATCH_ROUNDED;
-	Timespec date = {0,0};
+	how = QOF_COMPARE_EQUAL;
+	sm = QOF_DATE_MATCH_DAY;
+	date = (Timespec){0,0};
 
 	for (node=xp; node; node = node->next)
 	{
@@ -399,12 +417,11 @@ qof_query_pred_date_from_xml (xmlNodePtr root)
 
 		GET_HOW (how, "qofquery:compare", LT, LTE, EQUAL, GT, GTE, NEQ);
 		GET_MATCH2 (sm, "qofquery:date-match", 
-		            DATE_MATCH, NORMAL, ROUNDED);
+		            DATE_MATCH, NORMAL, DAY);
 		GET_DATE (0, date=, "qofquery:date");
 		{}
 	}
 
-	QofQueryPredData *pred;
 	pred = qof_query_date_predicate (how, sm, date);
 	return pred;
 }
@@ -414,13 +431,19 @@ qof_query_pred_date_from_xml (xmlNodePtr root)
 static QofQueryPredData *
 qof_query_pred_string_from_xml (xmlNodePtr root)
 {
-	xmlNodePtr xp = root->xmlChildrenNode;
+	QofQueryPredData *pred;
+	xmlNodePtr xp;
 	xmlNodePtr node;
-
-	QofQueryCompare how = QOF_COMPARE_EQUAL;
-	QofStringMatch sm = QOF_STRING_MATCH_CASEINSENSITIVE;
-	gboolean is_regex = FALSE;
-	const char *pstr = NULL;
+	QofQueryCompare how;
+	QofStringMatch sm;
+	gboolean is_regex;
+	const char *pstr;
+	
+	xp = root->xmlChildrenNode;
+	how = QOF_COMPARE_EQUAL;
+	sm = QOF_STRING_MATCH_CASEINSENSITIVE;
+	is_regex = FALSE;
+	pstr = NULL;
 
 	for (node=xp; node; node = node->next)
 	{
@@ -433,8 +456,6 @@ qof_query_pred_string_from_xml (xmlNodePtr root)
 		            STRING_MATCH, NORMAL, CASEINSENSITIVE);
 		{}
 	}
-
-	QofQueryPredData *pred;
 	pred = qof_query_string_predicate (how, pstr, sm , is_regex);
 	return pred;
 }
@@ -444,9 +465,12 @@ qof_query_pred_string_from_xml (xmlNodePtr root)
 static GSList * 
 qof_query_param_path_from_xml (xmlNodePtr root)
 {
-	xmlNodePtr pterms = root->xmlChildrenNode;
-	GSList *plist = NULL;
+	xmlNodePtr pterms;
+	GSList *plist;
 	xmlNodePtr node;
+
+	pterms = root->xmlChildrenNode;
+	plist = NULL;
 	for (node=pterms; node; node = node->next)
 	{
 		if (node->type != XML_ELEMENT_NODE) continue;
@@ -454,6 +478,7 @@ qof_query_param_path_from_xml (xmlNodePtr root)
 		if (0 == strcmp (node->name, "qofquery:param"))
 		{
 			const char *str = GET_TEXT (node);
+                        /* BUG? I can't find the matching cache removal. */
 			plist = g_slist_append (plist, CACHE_INSERT(str));
 		}
 	}
@@ -466,18 +491,23 @@ static void
 qof_query_term_from_xml (QofQuery *q, xmlNodePtr root)
 {
 	xmlNodePtr node;
-	xmlNodePtr term = root->xmlChildrenNode;
-	QofQueryPredData *pred = NULL;
-	GSList *path = NULL;
-
+	xmlNodePtr term;
+	QofQueryPredData *pred;
+	GSList *path;
+	QofQuery *qt;
+	QofQuery *qinv;
+	
+	pred = NULL;
+	path = NULL;
+	term = root->xmlChildrenNode;
 	for (node=term; node; node = node->next)
 	{
 		if (node->type != XML_ELEMENT_NODE) continue;
 		if (0 == strcmp (node->name, "qofquery:invert"))
 		{
-			QofQuery *qt = qof_query_create();
+			qt = qof_query_create();
 			qof_query_term_from_xml (qt, node);
-			QofQuery *qinv = qof_query_invert (qt);
+			qinv = qof_query_invert (qt);
 			qof_query_merge_in_place (q, qinv, QOF_QUERY_AND);
 			qof_query_destroy (qinv);
 			qof_query_destroy (qt);
@@ -553,8 +583,10 @@ qof_query_term_from_xml (QofQuery *q, xmlNodePtr root)
 static void 
 qof_query_and_terms_from_xml (QofQuery *q, xmlNodePtr root)
 {
-	xmlNodePtr andterms = root->xmlChildrenNode;
+	xmlNodePtr andterms;
 	xmlNodePtr node;
+	
+	andterms = root->xmlChildrenNode;
 	for (node=andterms; node; node = node->next)
 	{
 		if (node->type != XML_ELEMENT_NODE) continue;
@@ -571,16 +603,18 @@ qof_query_and_terms_from_xml (QofQuery *q, xmlNodePtr root)
 static void 
 qof_query_or_terms_from_xml (QofQuery *q, xmlNodePtr root)
 {
-	xmlNodePtr andterms = root->xmlChildrenNode;
+	xmlNodePtr andterms;
 	xmlNodePtr node;
+	QofQuery *qand;
 
+	andterms = root->xmlChildrenNode;
 	for (node=andterms; node; node = node->next)
 	{
 		if (node->type != XML_ELEMENT_NODE) continue;
 
 		if (0 == strcmp (node->name, "qofquery:and-terms"))
 		{
-			QofQuery *qand = qof_query_create ();
+			qand = qof_query_create ();
 			qof_query_and_terms_from_xml (qand, node);
 			qof_query_merge_in_place (q, qand, QOF_QUERY_OR);
 			qof_query_destroy (qand);
@@ -594,10 +628,13 @@ QofQuery *
 qof_query_from_xml (xmlNodePtr root)
 {
 	QofQuery *q;
+	xmlChar *version;
+	xmlNodePtr qpart;
+	xmlNodePtr node;
 
 	if (!root) return NULL;
 
-	xmlChar * version = xmlGetProp(root, "version");
+	version = xmlGetProp(root, "version");
    if (!root->name || strcmp ("qof:qofquery", root->name))
    {
 		// XXX something is wrong. warn ... 
@@ -606,8 +643,7 @@ qof_query_from_xml (xmlNodePtr root)
 
 	q = qof_query_create ();
 
-	xmlNodePtr qpart = root->xmlChildrenNode;
-	xmlNodePtr node;
+	qpart = root->xmlChildrenNode;
 	for (node=qpart; node; node = node->next)
 	{
 		if (node->type != XML_ELEMENT_NODE) continue;
@@ -643,6 +679,7 @@ int main (int argc, char * argv[])
 {
 	QofQuery *q, *qnew;
 	QofSqlQuery *sq;
+	xmlNodePtr topnode;
 
 	guid_init();
 	qof_query_init();

@@ -25,15 +25,16 @@
 
 #include "GNCId.h"
 
-#define GNCSEARCH_PARAM(obj)	GTK_CHECK_CAST (obj, gnc_search_param_get_type (), GNCSearchParam)
-#define GNCSEARCH_PARAM_CLASS(klass)	GTK_CHECK_CLASS_CAST (klass, gnc_search_param_get_type (), GNCSearchParamClass)
-#define IS_GNCSEARCH_PARAM(obj)      GTK_CHECK_TYPE (obj, gnc_search_param_get_type ())
+#define GNC_TYPE_SEARCH_PARAM	 (gnc_search_param_get_type ())
+#define GNC_SEARCH_PARAM(o)	 (G_TYPE_CHECK_INSTANCE_CAST ((o), GNC_TYPE_SEARCH_PARAM, GNCSearchParam))
+#define GNCSEARCH_PARAM_CLASS(k) (G_TYPE_CHECK_CLASS_CAST ((k), GNC_TYPE_SEARCH_PARAM, GNCSearchParamClass)
+#define GNC_IS_SEARCH_PARAM(o)	 (G_TYPE_CHECK_INSTANCE_TYPE ((o), GNC_TYPE_SEARCH_PARAM))
 
 typedef struct _GNCSearchParam	GNCSearchParam;
 typedef struct _GNCSearchParamClass	GNCSearchParamClass;
 
 struct _GNCSearchParam {
-  GtkObject parent;
+  GObject parent;
   struct _GNCSearchParamPrivate *priv;
 
   const char *		title;
@@ -43,7 +44,7 @@ struct _GNCSearchParam {
 };
 
 struct _GNCSearchParamClass {
-  GtkObjectClass parent_class;
+  GObjectClass parent_class;
 
   /* virtual methods */
 
@@ -51,7 +52,7 @@ struct _GNCSearchParamClass {
 };
 
 /* These are internal functions */
-guint			gnc_search_param_get_type (void);
+GType			gnc_search_param_get_type (void);
 
 /* Create a new search param */
 GNCSearchParam *	gnc_search_param_new (void);
@@ -60,7 +61,7 @@ GNCSearchParam *	gnc_search_param_clone (GNCSearchParam *param);
 /* use the param_path for this parameter.  This will automatically
  * compute the parameter type and the converter functions.
  */
-void		gnc_search_param_set_param_path (GNCSearchParam *param,
+void			gnc_search_param_set_param_path (GNCSearchParam *param,
 						 GNCIdTypeConst search_type,
 						 GSList *param_path);
 
@@ -88,7 +89,7 @@ GSList *		gnc_search_param_get_converters (GNCSearchParam *param);
  * it could result in an invalid Query Term, where the path and the predicate
  * don't match types properly.
  */
-void	gnc_search_param_override_param_type (GNCSearchParam *param,
+void			gnc_search_param_override_param_type (GNCSearchParam *param,
 					      GNCIdTypeConst param_type);
 
 
@@ -97,13 +98,13 @@ void	gnc_search_param_override_param_type (GNCSearchParam *param,
  */
 
 /* Create a paramter and prepend it to a GSList */
-GList *		gnc_search_param_prepend (GList *list, char const *title,
+GList *			gnc_search_param_prepend (GList *list, char const *title,
 					  GNCIdTypeConst type_override,
 					  GNCIdTypeConst search_type,
 					  const char *param, ...);
 					  
 
-GList *	gnc_search_param_prepend_with_justify (GList *list, char const *title,
+GList *			gnc_search_param_prepend_with_justify (GList *list, char const *title,
 					       GtkJustification justify,
 					       GNCIdTypeConst type_override,
 					       GNCIdTypeConst search_type,

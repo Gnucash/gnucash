@@ -1,10 +1,31 @@
-
+/***************************************************************************
+ *            test-load-xml2.c
+ *
+ *  Fri Oct  7 20:51:46 2005
+ *  Copyright  2005  Neil Williams
+ *  linux@codehelp.co.uk
+ ****************************************************************************/
+/*
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ */
+ 
 /* @file test-load-xml2.c
- * @breif test the loading of a vrsion-2 gnucash XML file
+ * @brief test the loading of a version-2 gnucash XML file
  */
 
 #include <glib.h>
-#include <libguile.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <sys/types.h>
@@ -12,19 +33,19 @@
 #include <unistd.h>
 #include <dirent.h>
 #include <string.h>
-
-#include "qofsession.h"
+#include "cashobjects.h"
 #include "Group.h"
 #include "TransLog.h"
 #include "gnc-engine.h"
 #include "gnc-backend-file.h"
-#include "qofsession-p.h"
-#include "gnc-module.h"
 #include "io-gncxml-v2.h"
 
 #include "test-stuff.h"
 #include "test-engine-stuff.h"
 #include "test-file-stuff.h"
+
+#define GNC_LIB_NAME "libgnc-backend-file.la"
+#define GNC_LIB_INIT "gnc_provider_init"
 
 static void
 remove_files_pattern(const char *begining, const char *ending)
@@ -54,21 +75,21 @@ test_load_file(const char *filename)
 {
     QofSession *session;
     QofBook *book;
-    QofBackend *be;
+    AccountGroup *grp;
     gboolean ignore_lock;
 
     session = qof_session_new();
 
     remove_locks(filename);
 
-    ignore_lock = (strcmp(getenv("SRCDIR"), ".") != 0);
+    ignore_lock = (safe_strcmp(getenv("SRCDIR"), ".") != 0);
     qof_session_begin(session, filename, ignore_lock, FALSE);
 
+    qof_session_load(session, NULL);
     book = qof_session_get_book (session);
-    be = qof_session_get_backend (session);
-    qof_session_load_from_xml_file_v2((FileBackend *)be, book);
 
-    do_test (xaccGroupGetBook (xaccGetAccountGroup (book)) == book,
+    grp = xaccGetAccountGroup(book);
+    do_test (xaccGroupGetBook (grp) == book,
              "book and group don't match");
 
     do_test_args(
@@ -76,22 +97,26 @@ test_load_file(const char *filename)
         "session load xml2", __FILE__, __LINE__, "%d for file %s",
         qof_session_get_error(session), filename);
 
-    qof_session_destroy(session);
+    qof_session_end(session);
 }
 
-static void
-guile_main (void *closure, int argc, char **argv)
+int
+main (int argc, char ** argv)
 {
     const char *location = getenv("GNC_TEST_FILES");
     DIR *xml2_dir;
+
+	qof_init();
+	cashobjects_register();
+	do_test(
+		qof_load_backend_library ("../", GNC_LIB_NAME, GNC_LIB_INIT),
+		" loading gnc-backend-file GModule failed");
 
     if (!location)
     {
         location = "test-files/xml2";
     }
 
-    gnc_module_system_init();
-    gnc_module_load("gnucash/engine", 0);
 
     xaccLogDisable();
     
@@ -129,15 +154,6 @@ guile_main (void *closure, int argc, char **argv)
     closedir(xml2_dir);
 
     print_test_results();
-    exit(get_rv());
-}
-
-int
-main (int argc, char ** argv)
-{
-  /*  getchar (); */
-
-  scm_boot_guile(argc, argv, guile_main, NULL);
-
-  return 0;
+    qof_close();
+    return 0;
 }

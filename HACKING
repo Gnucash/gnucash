@@ -76,7 +76,7 @@ Starting Gnucash from the build tree:
 
 To run gnucash from your build tree:
 -- edit ./src/bin/overrides/gnucash and replace gnucash-env with
-   gnucash-build-env
+   ./src/bin/overrides/gnucash-build-env
 -- then start gnucash by saying ./src/bin/overrides/gnucash
 -- Make sure you undo this change before installing gnucash
 
@@ -107,6 +107,33 @@ To run gdb on the version in your build tree:
     [gdb output]
     % gdb> run -e main -s ./src/bin/overrides/gnucash --g-fatal-warnings
 
+To run gdb on an opt-style-install from your build tree:
+
+   $ ./gnucash-env gdb /usr/bin/guile
+   [gdb output]
+   gdb> run -e main -s ../libexec/overrides/gnucash --g-fatal-warning
+
+You'll also probably want to know about these:
+
+    % gdb> catch fork
+    % gdb> set follow-fork-mode child
+
+-----
+It may be the case that running GDB from within emacs doesn't work for you,
+with the following error:
+
+[C-u M-x gdb /opt/gnucash-cvs/bin/gnucash-env gdb /usr/bin/guile...
+ ...in buffer *gud-gdb*:]
+
+/opt/gnucash-cvs/libexec/gnucash/overrides/gnucash-env: line 28: exec: -d: invalid option
+exec: usage: exec [-cl] [-a name] file [redirection ...]
+
+jsled needed to re-define a gud.el function as such:
+
+  (defun gud-gdb-massage-args (file args)
+    (let ((l (copy-list args)))
+      (nconc l (list "-cd" (expand-file-name default-directory) "-fullname"))))
+
 
 Using Electric Fence with GnuCash
 ---------------------------------
@@ -126,10 +153,10 @@ Using Valgrind with GnuCash
 -- run ./src/bin/overrides/gnucash-valgrind
 
 However, I did not find valgrind to be useful.  It reported a bunch of
-guile bugs, some g_has_table bugs, and then the program exited prematurely 
+guile bugs, some g_hash_table bugs, and then the program exited prematurely 
 for no appearenet reason. :-( 
 
-For the moment, use the supressions in lib/gnucash_valgrind.supp.
+For the moment, use the supressions in src/valgrind-gnucash.supp
 
 This file needs to be cleaned up in two ways:
 

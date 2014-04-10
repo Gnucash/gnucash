@@ -32,21 +32,18 @@
 #ifndef GNC_GENERAL_SEARCH_H
 #define GNC_GENERAL_SEARCH_H
 
-#include <gnome.h>
+#include <gtk/gtk.h>
 #include "dialog-search.h"
 #include "gnc-book.h"
 
-BEGIN_GNOME_DECLS
-
-
 #define GNC_GENERAL_SEARCH(obj) \
-	GTK_CHECK_CAST (obj, gnc_general_search_get_type(), GNCGeneralSearch)
+	G_TYPE_CHECK_INSTANCE_CAST (obj, gnc_general_search_get_type(), GNCGeneralSearch)
 
 #define GNC_GENERAL_SEARCH_CLASS(klass) \
-	GTK_CHECK_CLASS_CAST (klass, gnc_general_search_get_type(), \
+	G_TYPE_CLASS_CAST (klass, gnc_general_search_get_type(), \
 				GNCGeneralSearchClass)
 #define GNC_IS_GENERAL_SEARCH(obj) \
-	GTK_CHECK_TYPE (obj, gnc_general_search_get_type ())
+	G_TYPE_CHECK_INSTANCE_TYPE (obj, gnc_general_search_get_type ())
 
 /*
  * If this returns NULL, then do nothing (probably an edit window).  If
@@ -86,9 +83,6 @@ void       gnc_general_search_set_selected   (GNCGeneralSearch *gsl,
 gpointer   gnc_general_search_get_selected   (GNCGeneralSearch *gsl);
 
 guint      gnc_general_search_get_type       (void);
-
-
-END_GNOME_DECLS
 
 #endif
 

@@ -68,9 +68,6 @@ gboolean gnucash_style_init (void);
 
 void gnucash_sheet_style_init(void);
 
-void gnucash_style_set_register_font_name(const char *name);
-void gnucash_style_set_register_hint_font_name(const char *name);
-
 gint gnucash_style_col_is_resizable (SheetBlockStyle *style, int col);
 
 CellDimensions * gnucash_style_get_cell_dimensions (SheetBlockStyle *style,
@@ -111,8 +108,6 @@ void gnucash_sheet_style_get_cell_pixel_rel_coords (SheetBlockStyle *style,
 void gnucash_style_ref   (SheetBlockStyle *style);
 void gnucash_style_unref (SheetBlockStyle *style);
 
-void gnucash_style_config_register_borders (gboolean use_vertical_lines,
-                                            gboolean use_horizontal_lines);
 void gnucash_sheet_get_borders (GnucashSheet *sheet, VirtualLocation virt_loc,
                                 PhysicalCellBorders *borders);
 
@@ -130,10 +125,6 @@ void gnucash_sheet_get_header_widths (GnucashSheet *sheet,
                                       GNCHeaderWidths widths);
 void gnucash_sheet_set_header_widths (GnucashSheet *sheet,
                                       GNCHeaderWidths widths);
-
-
-extern GdkFont *gnucash_register_font;
-extern GdkFont *gnucash_register_hint_font;
 
 #endif
 

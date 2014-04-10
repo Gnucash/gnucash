@@ -46,16 +46,12 @@
 #include "gncTaxTableP.h"
 #include "gnc-customer-xml-v2.h"
 #include "gnc-address-xml-v2.h"
-#include "gnc-engine-util.h"
-
-#include "qofobject.h"
-#include "qofinstance.h"
 
 #include "xml-helpers.h"
 
 #define _GNC_MOD_NAME	GNC_ID_CUSTOMER
 
-static short module = MOD_IO;
+static QofLogModule log_module = GNC_MOD_IO;
 
 const gchar *customer_version_string = "2.0.0";
 
@@ -85,8 +81,8 @@ customer_dom_tree_create (GncCustomer *cust)
     GncBillTerm *term;
     GncTaxTable *taxtable;
 
-    ret = xmlNewNode(NULL, gnc_customer_string);
-    xmlSetProp(ret, "version", customer_version_string);
+    ret = xmlNewNode(NULL, BAD_CAST gnc_customer_string);
+    xmlSetProp(ret, BAD_CAST "version", BAD_CAST customer_version_string);
 
     xmlAddChild(ret, guid_to_dom_tree(cust_guid_string,
 				      qof_instance_get_guid(QOF_INSTANCE(cust))));
@@ -147,7 +143,7 @@ customer_dom_tree_create (GncCustomer *cust)
 struct customer_pdata
 {
   GncCustomer *customer;
-  GNCBook *book;
+  QofBook *book;
 };
 
 static gboolean
@@ -397,7 +393,7 @@ static struct dom_tree_handler customer_handlers_v2[] = {
 };
 
 static GncCustomer*
-dom_tree_to_customer (xmlNodePtr node, GNCBook *book)
+dom_tree_to_customer (xmlNodePtr node, QofBook *book)
 {
     struct customer_pdata cust_pdata;
     gboolean successful;
@@ -431,7 +427,7 @@ gnc_customer_end_handler(gpointer data_for_children,
     GncCustomer *cust;
     xmlNodePtr tree = (xmlNodePtr)data_for_children;
     gxpf_data *gdata = (gxpf_data*)global_data;
-    GNCBook *book = gdata->bookdata;
+    QofBook *book = gdata->bookdata;
 
     successful = TRUE;
 
@@ -488,7 +484,7 @@ do_count (QofEntity * cust_p, gpointer count_p)
 }
 
 static int
-customer_get_count (GNCBook *book)
+customer_get_count (QofBook *book)
 {
   int count = 0;
   qof_object_foreach (_GNC_MOD_NAME, book, do_count, (gpointer) &count);
@@ -512,9 +508,16 @@ xml_add_customer (QofEntity * cust_p, gpointer out_p)
 }
 
 static void
-customer_write (FILE *out, GNCBook *book)
+customer_write (FILE *out, QofBook *book)
 {
   qof_object_foreach (_GNC_MOD_NAME, book, xml_add_customer, (gpointer) out);
+}
+
+static void
+customer_ns(FILE *out)
+{
+  g_return_if_fail(out);
+  gnc_xml2_write_namespace_decl(out, "cust");
 }
 
 void
@@ -528,6 +531,7 @@ gnc_customer_xml_initialize (void)
     customer_get_count,
     customer_write,
     NULL,			/* scrub */
+    customer_ns,
   };
 
   qof_object_register_backend (_GNC_MOD_NAME,

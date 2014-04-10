@@ -31,6 +31,8 @@
 #include "gnc-date.h"
 
 typedef enum {
+  GNCIF_NONE		= 0,
+
   /* number formats */
   GNCIF_NUM_PERIOD	= (1 << 1),
   GNCIF_NUM_COMMA	= (1 << 2),

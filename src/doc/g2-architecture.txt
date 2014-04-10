@@ -1,0 +1,161 @@
+/** \page gnome2 GnuCash Gnome2 architecture
+
+\section gnome2names Naming
+
+g1 - The gtk1 and gnome1 libraries.
+
+g2 - The gtk2 and gnome2 libraries.
+
+\section gnome2primer GTK2 Primer
+
+In gtk2, an "action" is a g_object that represents some action that
+the user might want to perform.  This object could represent opening a
+file, toggling the toolbar, etc.  The action itself has *no* gui
+component.  There is no way to directly display an action to the user.
+To do that, you assign the action to one or more proxy items.  These
+proxy items are the regular menu items, toolbar buttons, etc. that you
+are familiar working with.  There are several advantages to this new
+system.  The first is that you no longer have to write multiple action
+routines; one for a menu selection and another for a button click.
+There is a single code fragment written for when the action fires,
+regardless of how it fired.  The second advantage is that you no
+longer have to enable/disable the individual menu items and buttons.
+Enabling/disabling the action itself causes all proxy items to assume
+the same state.  For example, if an account isn't selected in the
+account tree window, a single function call disables the "Open
+Account" command in the main application menus, the "Open Account"
+popup menu command, and the "Open Account" toolbar button.
+
+A gtk2 "menu merge" takes descriptions of two sets of menus and merges
+them into a single menu that is displayed on the screen.  The first
+menu must contain attachment points in it.  These attachment points
+are specified in the seconds set of menus and control where in the
+combined menu the items from the second menu appear.  This second
+"merged" set of menus can easily be removed at any time.
+
+Gtk2 has deprecated the clist and ctree widgets.  The replacement is a
+combination of a GtkTreeModel/GtkTreeView pair of objects.
+
+In G1, most objects were based on a gtk_object, and were created,
+destroyed, signaled, etc. using functions on this base object.  In g2
+the base object was moved from gtk2 to glib2, so most objects now need
+to be based on the g_object object.  There are still compatibility
+functions on in gtk_object but you cannot mix and match calls to
+g_object and gtk_object.  You must use one function set or the other
+for any given item.
+
+\section gnome2windows  Windowing Architecture
+
+In the gtk1/gnome1 (hereafter g1) version of Gnucash, the windowing
+was based on the "Multiple Document Interface" of g1.  This code was
+hard to use in the first place, and has been deprecated in g2.
+
+The g2 version of gnucash is a series of plugin modules designed
+around the g2 concepts of "actions" and "menu merging".  These
+concepts will be integrated into gtk2.4 release.
+
+The first level of this architecture is an object representing a
+"pluggable" window.  This object is responsible for:
+
+-# the window itself
+-# providing a framework for plugins
+-# providing a base set of menus (and actions)
+
+Plugins can be one of two types.  The first type is simply called a
+"plugin" (e.g. gnc-plugin-register.c) and is used to add functionality
+to the base window.  This plugin provides only a menu/toolbar
+description, and a way to create the second type of plugin.  The
+second type of plugin is called a "plugin page"
+(e.g. gnc-plugin-page-register.c) and provides both a menu/toolbar
+description, but also a widget that is displayed in the containing
+window.  This widget may be an account tree, a register, etc.  The
+plugin page must also provide a standard set of functions to interact
+with the plugin manager code.
+
+\section gnome2model Model/View Architecture
+
+API: \ref GuiTreeModel
+
+As mentioned above, the ctree widget has been deprecated in g2.  Some
+parts of gnucash have been converted to the new style using either a
+GtkTreeModel/GtkTreeView pair of widgets, or using a
+GtkTreeModel/GtkTreeModelFilter/GtkTreeModelSort/GtkTreeView set of
+stacked widgets.  The account tree is presented here as example of the
+latter.
+
+In gnucash, all the accounts are stored in the engine.  The account
+tree "model" (a GtkTreeModel) provides a representation of these
+accounts that can be used by one or more views presented on the user's
+screen.  This code is designed so that there is only one single model
+for the accounts in a given book, and this single model drives all
+views.  (This code should be easily expandable to multiple sets of
+books once engine support is added.)  The filters and views are
+completely independent of each other, even though they share a common
+model, so you may see different accounts in each view, have different
+accounts selected in each view, etc.
+
+The account tree model is designed as a tree and contains a "pseudo"
+account that is the root node of this tree.  Whether the root node is
+visible is a per-view setting.  Also in the model is code to display
+the contents of any row/column intersection in the tree.  The
+GtkTreeView code drives the actual display, and pulls numbers from the
+account tree model as necessary to display them.  For all intents and
+purposes, the model is the sole gui representation of the account
+tree.  The overlaying filters and views simply limit what the user
+sees to some subset of the information in the model.  There are very,
+very few instances where code interacts directly with the account tree
+model.  All interaction should be done through the account tree view
+described later.
+
+The next layer in the account tree is the GtkTreeModelFilter.  This
+filter is automatically created when the account tree view is created.
+In most instances, this filter is used to install a "virtual root" on
+the model that hides the top level "pseudo" account from the user.  At
+the time of this writing, only the account edit dialog leave this top
+node visible (so the user can create a new "top level" account.)  This
+filter level is use in several places to install a visibility filter
+onto the model, controlling which accounts are visible to the user and
+which are hidden.  These visibility decisions are made in real time as
+the user clicks the disclosure triangle on an account to see what
+sub-accounts it contains.  This callback function for the visibility
+filter is the only place where the code should interact directly with
+the account tree model, and the only interaction should be to take the
+provided model/iter pair and ask the account tree model for the
+corresponding account.  After that the callback may do whatever it
+wants on the account and then return TRUE if it wants the account to
+be visible, FALSE if not.
+
+The next layer in the account tree is the GtkTreeModelSort.  This
+layer provides the capabilities needed by a GtkTreeView to allow
+sorting by clicking on column headers.  If a column has a
+non-alphanumeric sort, the GtkTreeView implementation must provide a
+sort function for each different type of sort.  This function will be
+called by the GtkTreeSortModel for each pair of items it needs to
+sort.  The account tree model provides seven different sort functions
+that are used by various columns.
+
+The top layer of the account tree is the account tree view.  The
+underlying GtkTreeView object provides all the standard tree
+manipulation functions; opening accounts to see sub-accounts, selecting
+an item, etc.  The account tree view is the programming interface that
+should be used to manipulate an account tree.  It provides the
+functions to create a new view, to set a filter on an existing view to
+control the visible rows, to configure the columns visible in the
+view, to get/set the selected account(s) in the view, etc.  There is
+also a selection callback function available from the view, that may
+be used to decide whether or not the user can select an account in the
+view.  It is used in the new account dialog, for instance, to limit
+the accounts the user may select for the opening balance to an account
+that has the same currency as the account being created.
+
+\section gnome2ref References
+
+http://developer.gnome.org/dotplan/porting/index.html
+
+http://developer.gnome.org/doc/API/2.0/glib/index.html
+
+http://developer.gnome.org/doc/API/2.0/gobject/index.html
+
+http://developer.gnome.org/doc/API/2.0/gtk/index.html
+
+*/

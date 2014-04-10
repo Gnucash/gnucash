@@ -38,9 +38,7 @@ typedef struct _gncOrder GncOrder;
 
 #include "gncEntry.h"
 #include "gncOwner.h"
-#include "qofbook.h"
-#include "qofid.h"
-#include "qofinstance.h"
+#include "qof.h"
 
 #define GNC_ID_ORDER "gncOrder"
 #define GNC_IS_ORDER(obj)  (QOF_CHECK_TYPE((obj), GNC_ID_ORDER))

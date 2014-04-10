@@ -358,6 +358,7 @@
 (define (make-qif-acct)
   (let ((retval (make-simple-obj <qif-acct>)))
     (qif-acct:set-type! retval "Bank")
+    (qif-acct:set-name! retval "Default Account")
     retval))
 
 (define qif-acct? 

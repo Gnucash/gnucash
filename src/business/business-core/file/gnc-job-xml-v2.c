@@ -44,14 +44,11 @@
 #include "gncJobP.h"
 #include "gnc-job-xml-v2.h"
 #include "gnc-owner-xml-v2.h"
-#include "gnc-engine-util.h"
-
-#include "qofobject.h"
 #include "xml-helpers.h"
 
 #define _GNC_MOD_NAME	GNC_ID_JOB
 
-static short module = MOD_IO;
+static QofLogModule log_module = GNC_MOD_IO;
 
 const gchar *job_version_string = "2.0.0";
 
@@ -70,8 +67,8 @@ job_dom_tree_create (GncJob *job)
 {
     xmlNodePtr ret;
 
-    ret = xmlNewNode(NULL, gnc_job_string);
-    xmlSetProp(ret, "version", job_version_string);
+    ret = xmlNewNode(NULL, BAD_CAST gnc_job_string);
+    xmlSetProp(ret, BAD_CAST "version", BAD_CAST job_version_string);
 
     xmlAddChild(ret, guid_to_dom_tree(job_guid_string,
 				      qof_instance_get_guid (QOF_INSTANCE (job))));
@@ -98,7 +95,7 @@ job_dom_tree_create (GncJob *job)
 struct job_pdata
 {
   GncJob *job;
-  GNCBook *book;
+  QofBook *book;
 };
 
 static gboolean
@@ -208,7 +205,7 @@ static struct dom_tree_handler job_handlers_v2[] = {
 };
 
 static GncJob*
-dom_tree_to_job (xmlNodePtr node, GNCBook *book)
+dom_tree_to_job (xmlNodePtr node, QofBook *book)
 {
     struct job_pdata job_pdata;
     gboolean successful;
@@ -242,7 +239,7 @@ gnc_job_end_handler(gpointer data_for_children,
     GncJob *job;
     xmlNodePtr tree = (xmlNodePtr)data_for_children;
     gxpf_data *gdata = (gxpf_data*)global_data;
-    GNCBook *book = gdata->bookdata;
+    QofBook *book = gdata->bookdata;
 
     successful = TRUE;
 
@@ -299,7 +296,7 @@ do_count (QofEntity * job_p, gpointer count_p)
 }
 
 static int
-job_get_count (GNCBook *book)
+job_get_count (QofBook *book)
 {
   int count = 0;
   qof_object_foreach (_GNC_MOD_NAME, book, do_count, (gpointer) &count);
@@ -323,9 +320,16 @@ xml_add_job (QofEntity * job_p, gpointer out_p)
 }
 
 static void
-job_write (FILE *out, GNCBook *book)
+job_write (FILE *out, QofBook *book)
 {
   qof_object_foreach (_GNC_MOD_NAME, book, xml_add_job, (gpointer) out);
+}
+
+static void
+job_ns(FILE *out)
+{
+  g_return_if_fail(out);
+  gnc_xml2_write_namespace_decl(out, "job");
 }
 
 void
@@ -339,6 +343,7 @@ gnc_job_xml_initialize (void)
     job_get_count,
     job_write,
     NULL,			/* scrub */
+    job_ns,
   };
 
   qof_object_register_backend (_GNC_MOD_NAME,

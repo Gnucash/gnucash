@@ -1,6 +1,7 @@
 SUBDIRS = . test
 
 AM_CFLAGS = \
+   -I${top_srcdir}/lib/libc \
    -I${top_srcdir}/src \
    -I${top_srcdir}/src/core-utils \
    ${GLIB_CFLAGS} ${G_WRAP_COMPILE_ARGS} ${GUILE_INCS}
@@ -9,15 +10,16 @@ lib_LTLIBRARIES = libgncmodule.la
 pkglib_LTLIBRARIES = libgw-gnc-module.la
 
 libgncmodule_la_SOURCES = gnc-module.c
-libgncmodule_la_LDFLAGS = -module
+
 libgncmodule_la_LIBADD = \
   ../core-utils/libcore-utils.la \
   ${G_WRAP_LINK_ARGS} \
+ ${top_builddir}/lib/libc/libc-missing.la \
   ${GLIB_LIBS} \
   -lltdl
 
 libgw_gnc_module_la_SOURCES = gw-gnc-module.c
-libgw_gnc_module_la_LDFLAGS = -module 
+
 libgw_gnc_module_la_LIBADD = libgncmodule.la \
   ${G_WRAP_LINK_ARGS} \
   ${GUILE_LIBS} \

@@ -81,13 +81,13 @@ libgncmod_business_core_LTX_gnc_module_init(int refcount)
   if(refcount == 0) 
   {
     /* initialize known types */
-    gncAddressRegister ();
-    gncBillTermRegister ();
-    gncCustomerRegister ();
-    gncEmployeeRegister ();
-    gncEntryRegister ();
     gncInvoiceRegister ();
     gncJobRegister ();
+    gncBillTermRegister ();
+    gncCustomerRegister ();
+    gncAddressRegister ();
+    gncEmployeeRegister ();
+    gncEntryRegister ();
     gncOrderRegister ();
     gncOwnerRegister ();
     gncTaxTableRegister ();
@@ -104,4 +104,3 @@ int
 libgncmod_business_core_LTX_gnc_module_end(int refcount) {
   return TRUE;
 }
-

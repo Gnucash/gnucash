@@ -181,11 +181,7 @@ gnc_fill_account_select_combo (GtkWidget *combo, GNCBook *book,
   g_return_if_fail (acct_types);
 
   /* Figure out if anything is set in the combo */
-  text = gtk_entry_get_text (GTK_ENTRY ((GTK_COMBO (combo))->entry));
-  if (text && strcmp (text, ""))
-    text = g_strdup (text);
-  else
-    text = NULL;
+  text = gtk_editable_get_chars (GTK_EDITABLE ((GTK_COMBO (combo))->entry), 0, -1);
 
   list = xaccGroupGetSubAccounts (gnc_book_get_group (book));
 
@@ -292,9 +288,9 @@ add_menu_item (GtkWidget *menu, const char *label, OpMenuData *omd,
 	       gpointer this_item)
 {
   GtkWidget *item = gtk_menu_item_new_with_label (label);
-  gtk_object_set_data (GTK_OBJECT (item), "this_item", this_item);
-  gtk_signal_connect (GTK_OBJECT (item), "activate",
-		      business_option_changed, omd);
+  g_object_set_data (G_OBJECT (item), "this_item", this_item);
+  g_signal_connect (G_OBJECT (item), "activate",
+		    G_CALLBACK (business_option_changed), omd);
   gtk_menu_append (GTK_MENU (menu), item);
   gtk_widget_show (item);
 }
@@ -387,8 +383,8 @@ make_generic_optionmenu (GtkWidget *omenu, GNCBook *book,
 					   type_name,
 					   GNC_EVENT_MODIFY | GNC_EVENT_DESTROY);
     
-    gtk_signal_connect (GTK_OBJECT (omenu), "destroy",
-			generic_omenu_destroy_cb, omd);
+    g_signal_connect (G_OBJECT (omenu), "destroy",
+		      G_CALLBACK (generic_omenu_destroy_cb), omd);
 
   }
 

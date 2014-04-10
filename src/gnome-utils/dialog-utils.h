@@ -2,6 +2,7 @@
  * dialog-utils.h -- utility functions for creating dialogs         *
  *                   for GnuCash                                    *
  * Copyright (C) 1999-2000 Linas Vepstas                            *
+ * Copyright (C) 2005 David Hampton <hampton@employees.org>         *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -26,8 +27,7 @@
 #define DIALOG_UTILS_H
 
 #include <glade/glade.h>
-#include <gnome.h>
-
+#include <gnome.h> 
 #include "Account.h"
 
 
@@ -52,26 +52,7 @@ GtkWidget * gnc_build_option_menu (GNCOptionInfo *option_info,
 				   gint num_options);
 
 
-/********************************************************************\
- * Returns a GnomePixmap widget given a pixmap filename             *
- *                                                                  *
- * Args: Filename of pixmap file                                    *
- * Returns: GnomePixmap widget or NULL if there was a problem       *
- \*******************************************************************/
-GtkWidget * gnc_get_pixmap (const char *name);
-
-/********************************************************************\
- * Returns a GdkImlibImage object given a pixmap filename           *
- *                                                                  *
- * Args: Filename of pixmap file                                    *
- * Returns: GdkImlibImage or NULL if there was a problem            *
- \*******************************************************************/
-GdkImlibImage * gnc_get_gdk_imlib_image (const char *name);
-
-
 GtkToolbarStyle gnc_get_toolbar_style (void);
-GnomeMDIMode    gnc_get_mdi_mode(void);
-
 void gnc_get_deficit_color (GdkColor *color);
 void gnc_set_label_color (GtkWidget *label, gnc_numeric value);
 
@@ -85,7 +66,7 @@ void gnc_set_label_color (GtkWidget *label, gnc_numeric value);
  *       height - pointer to height                                 *
  * Returns: nothing                                                 *
  \*******************************************************************/
-void gnc_get_window_size (const char *prefix, int *width, int *height);
+void gnc_restore_window_size (const char *prefix, GtkWindow *window);
 
 /********************************************************************\
  * Save the window size into options whose names are determined     *
@@ -96,7 +77,7 @@ void gnc_get_window_size (const char *prefix, int *width, int *height);
  *       height - height of the window to save                      *
  * Returns: nothing                                                 *
 \********************************************************************/
-void gnc_save_window_size (const char *prefix, int width, int height);
+void gnc_save_window_size (const char *section, GtkWindow *window);
 
 
 /********************************************************************\
@@ -111,7 +92,7 @@ void gnc_fill_menu_with_data (GnomeUIInfo *info, gpointer data);
 
 void gnc_option_menu_init (GtkWidget * option_menu);
 void gnc_option_menu_init_w_signal(GtkWidget * w,
-				   GtkSignalFunc f,
+				   GCallback f,
 				   gpointer cb_data);
 int  gnc_option_menu_get_active (GtkWidget * option_menu);
 
@@ -122,8 +103,6 @@ int  gnc_option_menu_get_active (GtkWidget * option_menu);
  * Returns: nothing                                                 *
 \********************************************************************/
 void gnc_window_adjust_for_screen (GtkWindow * window);
-
-void gtk_window_present (GtkWindow * window); /* Remove me for GTK 2.0 */
 
 
 gboolean gnc_handle_date_accelerator (GdkEventKey *event,
@@ -150,33 +129,12 @@ void gnc_clist_columns_autosize (GtkCList *list);
 GladeXML * gnc_glade_xml_new (const char *filename, const char *root);
 GtkWidget * gnc_glade_lookup_widget (GtkWidget *widget, const char *name);
 void gnc_glade_autoconnect_full_func(const gchar *handler_name,
-				     GtkObject *signal_object,
+				     GObject *signal_object,
 				     const gchar *signal_name,
 				     const gchar *signal_data,
-				     GtkObject *connect_object,
+				     GObject *connect_object,
 				     gboolean after,
 				     gpointer user_data);
 
-/* Multibyte/wide char string helper functions. */
-
-/** Allocate new wide char string in dest_p. Return number of
- * wide chars or < 0 if error.  When the string is no longer
- * needed, free it with g_free().
- */
-gint         gnc_mbstowcs (GdkWChar **dest_p, const char *src);
-
-/** Return new multibyte string or NULL if failure. 
- * XXX how are we supposed to free this?? 
- * with g_free or something else ??
- */
-char *       gnc_wcstombs (const GdkWChar *src);
-
-/** Len of wide char string in chars */
-gint         gnc_wcslen   (const GdkWChar *src);
-
-/** Duplicate wide char string. 
- *  When the string is no longer needed, free it with g_free().
- */
-GdkWChar *   gnc_wcsdup   (const GdkWChar *src);
 
 #endif

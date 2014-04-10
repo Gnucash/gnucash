@@ -23,15 +23,12 @@
 #include "config.h"
 
 #include <glib.h>
-#include <string.h>
 
-#include "global-options.h"
-#include "gnc-engine-util.h"
 #include "pricecell.h"
 #include "split-register-p.h"
 
 
-static short module = MOD_LEDGER;
+static QofLogModule log_module = GNC_MOD_LEDGER;
 
 
 /* The routines below create, access, and destroy the SRInfo structure
@@ -49,10 +46,10 @@ gnc_split_register_init_info (SplitRegister *reg)
 
   info = g_new0 (SRInfo, 1);
 
-  info->blank_split_guid = *xaccGUIDNULL ();
-  info->pending_trans_guid = *xaccGUIDNULL ();
-  info->default_account = *xaccGUIDNULL ();
-  info->template_account = *xaccGUIDNULL ();
+  info->blank_split_guid = *guid_null ();
+  info->pending_trans_guid = *guid_null ();
+  info->default_account = *guid_null ();
+  info->template_account = *guid_null ();
 
   info->last_date_entered = gnc_timet_get_today_start ();
 

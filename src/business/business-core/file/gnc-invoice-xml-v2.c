@@ -45,14 +45,10 @@
 #include "gncInvoiceP.h"
 #include "gnc-invoice-xml-v2.h"
 #include "gnc-owner-xml-v2.h"
-#include "gnc-engine-util.h"
-
-#include "qofinstance.h"
-#include "qofobject.h"
 
 #define _GNC_MOD_NAME	GNC_ID_INVOICE
 
-static short module = MOD_IO;
+static QofLogModule log_module = GNC_MOD_IO;
 
 const gchar *invoice_version_string = "2.0.0";
 
@@ -101,8 +97,8 @@ invoice_dom_tree_create (GncInvoice *invoice)
     GncOwner *billto;
     gnc_numeric amt;
 
-    ret = xmlNewNode(NULL, gnc_invoice_string);
-    xmlSetProp(ret, "version", invoice_version_string);
+    ret = xmlNewNode(NULL, BAD_CAST gnc_invoice_string);
+    xmlSetProp(ret, BAD_CAST "version", BAD_CAST invoice_version_string);
 
     xmlAddChild(ret, guid_to_dom_tree(invoice_guid_string,
 				      qof_instance_get_guid(QOF_INSTANCE(invoice))));
@@ -167,7 +163,7 @@ invoice_dom_tree_create (GncInvoice *invoice)
 struct invoice_pdata
 {
   GncInvoice *invoice;
-  GNCBook *book;
+  QofBook *book;
 };
 
 static inline gboolean
@@ -188,7 +184,7 @@ set_timespec(xmlNodePtr node, GncInvoice* invoice,
            void (*func)(GncInvoice *invoice, Timespec ts))
 {
   Timespec ts = dom_tree_to_timespec(node);
-  g_return_val_if_fail(is_valid_timespec(ts), FALSE);
+  if (!dom_tree_valid_timespec(&ts, node->name)) return FALSE;
     
   func(invoice, ts);
   return TRUE;
@@ -428,7 +424,7 @@ static struct dom_tree_handler invoice_handlers_v2[] = {
 };
 
 static GncInvoice*
-dom_tree_to_invoice (xmlNodePtr node, GNCBook *book)
+dom_tree_to_invoice (xmlNodePtr node, QofBook *book)
 {
     struct invoice_pdata invoice_pdata;
     gboolean successful;
@@ -462,7 +458,7 @@ gnc_invoice_end_handler(gpointer data_for_children,
     GncInvoice *invoice;
     xmlNodePtr tree = (xmlNodePtr)data_for_children;
     gxpf_data *gdata = (gxpf_data*)global_data;
-    GNCBook *book = gdata->bookdata;
+    QofBook *book = gdata->bookdata;
 
     successful = TRUE;
 
@@ -519,7 +515,7 @@ do_count (QofEntity * invoice_p, gpointer count_p)
 }
 
 static int
-invoice_get_count (GNCBook *book)
+invoice_get_count (QofBook *book)
 {
   int count = 0;
   qof_object_foreach (_GNC_MOD_NAME, book, do_count, (gpointer) &count);
@@ -543,9 +539,16 @@ xml_add_invoice (QofEntity * invoice_p, gpointer out_p)
 }
 
 static void
-invoice_write (FILE *out, GNCBook *book)
+invoice_write (FILE *out, QofBook *book)
 {
   qof_object_foreach (_GNC_MOD_NAME, book, xml_add_invoice, (gpointer) out);
+}
+
+static void
+invoice_ns(FILE *out)
+{
+  g_return_if_fail(out);
+  gnc_xml2_write_namespace_decl(out, "invoice");
 }
 
 void
@@ -559,6 +562,7 @@ gnc_invoice_xml_initialize (void)
     invoice_get_count,
     invoice_write,
     NULL,			/* scrub */
+    invoice_ns,
   };
 
   qof_object_register_backend (_GNC_MOD_NAME,

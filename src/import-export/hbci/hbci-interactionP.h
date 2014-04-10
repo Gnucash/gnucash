@@ -24,8 +24,9 @@
 #ifndef HBCI_INTERACTIONP_H
 #define HBCI_INTERACTIONP_H
 
-#include <openhbci2/interactor.h>
+#include <aqbanking/banking.h>
 #include <gnome.h>
+#include <iconv.h>
 
 
 typedef enum {
@@ -45,6 +46,8 @@ struct _inter_data
   GtkWidget *job_entry;
   GtkWidget *action_entry;
   GtkWidget *action_progress;
+  /* Counters for progress bar */
+  double action_max;
 
   /* Log window */
   GtkWidget *log_text;
@@ -57,32 +60,34 @@ struct _inter_data
   const char *format_pin_user_bank;
   const char *format_pin_min_char;
 
-  /* PinKeypad dialog, if used */
-  GtkWidget *pin_keypad_dialog;
-  
+  /* The iconv handler for utf8 -> latin1 conversion */
+  iconv_t gnc_iconv_handler;
+
   /* Flags to keep track on whether an HBCI action is running or
      not. */
   gboolean keepAlive;
   PMon_state state;
 
-  /* Counters for progress bar */
-  int jobs;
-  int current_job;
-  int actions;
-  int current_act;
-
   /* Flag on Whether the PIN should be cached. */
   gboolean cache_pin;
-  /* The cached PIN and the HBCI_User it's cached for. */
-  char *pw;
-  const HBCI_User *user;
-  /* Whether this PIN is really valid or not. */
-  gboolean cache_valid;
+
+  /* Dialogs */
+  int showbox_id;
+  GHashTable *showbox_hash; 
+  GtkWidget *showbox_last;
+
+  /* Flag whether the last dialog showed any error */
+  gboolean msgBoxError;
 };
 
 void delete_GNCInteractor (GNCInteractor *data);
 
-HBCI_Interactor *
-gnc_hbci_new_interactor(GNCInteractor *data);
+void
+gnc_hbci_add_callbacks(AB_BANKING *ba, GNCInteractor *data);
+
+/* Performs the full conversion from the (aaarg) utf8-combi-texts
+   passed from aqbanking into a "latin1-normal-text" format for
+   us. The returned string is owned by the caller. */
+gchar *gnc_hbci_utf8ToLatin1(GNCInteractor *data, const char *utf);
 
 #endif

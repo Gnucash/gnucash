@@ -6,6 +6,14 @@ TESTS = \
   test-scm-query-string \
   test-print-parse-amount
 
+test_exp_parser_SOURCES = \
+  ${top_builddir}/src/core-utils/gnc-gconf-utils.c \
+  test-exp-parser.c
+
+test_print_parse_amount_SOURCES = \
+  ${top_builddir}/src/core-utils/gnc-gconf-utils.c \
+  test-print-parse-amount.c
+
 GNC_TEST_DEPS := @GNC_TEST_SRFI_LOAD_CMD@ \
   --gnc-module-dir ${top_builddir}/src/gnc-module \
   --gnc-module-dir ${top_builddir}/src/engine \
@@ -26,13 +34,16 @@ TESTS_ENVIRONMENT := \
   $(shell ${top_srcdir}/src/gnc-test-env --no-exports ${GNC_TEST_DEPS})
 
 LDADD = \
-   ../../engine/libgncmod-engine.la \
-   ../../gnc-module/libgncmodule.la \
-   ../libgncmod-app-utils.la \
-   ../../engine/libgw-engine.la \
+   ${top_builddir}/src/engine/libgncmod-engine.la \
+   ${top_builddir}/src/gnc-module/libgncmodule.la \
+   ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
+   ${top_builddir}/src/engine/libgw-engine.la \
    ${top_builddir}/src/test-core/libgncmod-test.la \
    ${top_builddir}/src/engine/test-core/libgncmod-test-engine.la \
-   ${GUILE_LIBS}
+   ${top_builddir}/src/core-utils/libcore-utils.la \
+   ${GUILE_LIBS} \
+   ${QOF_LIBS} \
+   ${GCONF_LIBS}
 
 noinst_PROGRAMS = \
   test-link-module \
@@ -52,5 +63,8 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/engine/test-core \
   -I${top_srcdir}/src/app-utils \
   -I${top_srcdir}/src/gnc-module \
+  -I${top_srcdir}/src/core-utils \
   ${GUILE_INCS} \
-  ${GLIB_CFLAGS}
+  ${GLIB_CFLAGS} \
+  ${QOF_CFLAGS} \
+  ${GCONF_CFLAGS}

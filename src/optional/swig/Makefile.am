@@ -36,7 +36,7 @@ DISTFILES = $(DIST_COMMON) helperfuncs.c $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 
 AM_CFLAGS = \
   -I@PERLINCL@/CORE \
-  ${GNOME_INCLUDEDIR} \
+  ${GNOME_CFLAGS} \
   -I${top_srcdir}/src/engine
 
 #

@@ -25,14 +25,14 @@
 #include <string.h>
 #include <sys/types.h>
 #include <regex.h>
-#include <gnome.h>
+#include <gtk/gtk.h>
 
 #include "search-string.h"
 #include "QueryCore.h"
 
 #define d(x)
 
-static void editable_enters (GNCSearchCoreType *fe, GnomeDialog *dialog);
+static void editable_enters (GNCSearchCoreType *fe);
 static void grab_focus (GNCSearchCoreType *fe);
 static GNCSearchCoreType *gncs_clone(GNCSearchCoreType *fe);
 static gboolean gncs_validate (GNCSearchCoreType *fe);
@@ -41,7 +41,7 @@ static QueryPredData_t gncs_get_predicate (GNCSearchCoreType *fe);
 
 static void gnc_search_string_class_init	(GNCSearchStringClass *class);
 static void gnc_search_string_init	(GNCSearchString *gspaper);
-static void gnc_search_string_finalise	(GtkObject *obj);
+static void gnc_search_string_finalize	(GObject *obj);
 
 #define _PRIVATE(x) (((GNCSearchString *)(x))->priv)
 
@@ -51,31 +51,27 @@ struct _GNCSearchStringPrivate {
 
 static GNCSearchCoreTypeClass *parent_class;
 
-enum {
-  LAST_SIGNAL
-};
-
-#if LAST_SIGNAL > 0
-static guint signals[LAST_SIGNAL] = { 0 };
-#endif
-
 guint
 gnc_search_string_get_type (void)
 {
   static guint type = 0;
 	
   if (!type) {
-    GtkTypeInfo type_info = {
-      "GNCSearchString",
-      sizeof(GNCSearchString),
-      sizeof(GNCSearchStringClass),
-      (GtkClassInitFunc)gnc_search_string_class_init,
-      (GtkObjectInitFunc)gnc_search_string_init,
-      (GtkArgSetFunc)NULL,
-      (GtkArgGetFunc)NULL
+    GTypeInfo type_info = {
+      sizeof(GNCSearchStringClass),     /* class_size */
+      NULL,   				/* base_init */
+      NULL,				/* base_finalize */
+      (GClassInitFunc)gnc_search_string_class_init,
+      NULL,				/* class_finalize */
+      NULL,				/* class_data */
+      sizeof(GNCSearchString),		/* */
+      0,				/* n_preallocs */
+      (GInstanceInitFunc)gnc_search_string_init,
     };
 		
-    type = gtk_type_unique(gnc_search_core_type_get_type (), &type_info);
+    type = g_type_register_static (GNC_TYPE_SEARCH_CORE_TYPE,
+				   "GNCSearchString",
+				   &type_info, 0);
   }
 	
   return type;
@@ -84,13 +80,13 @@ gnc_search_string_get_type (void)
 static void
 gnc_search_string_class_init (GNCSearchStringClass *class)
 {
-  GtkObjectClass *object_class;
+  GObjectClass *object_class;
   GNCSearchCoreTypeClass *gnc_search_core_type = (GNCSearchCoreTypeClass *)class;
 
-  object_class = (GtkObjectClass *)class;
-  parent_class = gtk_type_class(gnc_search_core_type_get_type ());
+  object_class = G_OBJECT_CLASS (class);
+  parent_class = g_type_class_peek_parent (class);
 
-  object_class->finalize = gnc_search_string_finalise;
+  object_class->finalize = gnc_search_string_finalize;
 
   /* override methods */
   gnc_search_core_type->editable_enters = editable_enters;
@@ -99,11 +95,6 @@ gnc_search_string_class_init (GNCSearchStringClass *class)
   gnc_search_core_type->get_widget = gncs_get_widget;
   gnc_search_core_type->get_predicate = gncs_get_predicate;
   gnc_search_core_type->clone = gncs_clone;
-
-  /* signals */
-#if LAST_SIGNAL > 0
-  gtk_object_class_add_signals(object_class, signals, LAST_SIGNAL);
-#endif
 }
 
 static void
@@ -116,7 +107,7 @@ gnc_search_string_init (GNCSearchString *o)
 }
 
 static void
-gnc_search_string_finalise (GtkObject *obj)
+gnc_search_string_finalize (GObject *obj)
 {
   GNCSearchString *o = (GNCSearchString *)obj;
   g_assert (IS_GNCSEARCH_STRING (o));
@@ -124,7 +115,7 @@ gnc_search_string_finalise (GtkObject *obj)
   g_free (o->value);
   g_free(o->priv);
 	
-  ((GtkObjectClass *)(parent_class))->finalize(obj);
+  G_OBJECT_CLASS (parent_class)->finalize(obj);
 }
 
 /**
@@ -137,7 +128,7 @@ gnc_search_string_finalise (GtkObject *obj)
 GNCSearchString *
 gnc_search_string_new (void)
 {
-  GNCSearchString *o = (GNCSearchString *)gtk_type_new(gnc_search_string_get_type ());
+  GNCSearchString *o = g_object_new(gnc_search_string_get_type (), NULL);
   return o;
 }
 
@@ -180,8 +171,13 @@ gncs_validate (GNCSearchCoreType *fe)
 	
   if (!fi->value || *(fi->value) == '\0') {
     GtkWidget *dialog;
-    dialog = gnome_ok_dialog (_("You need to enter a string value"));
-    gnome_dialog_run_and_close (GNOME_DIALOG (dialog));
+    dialog = gtk_message_dialog_new (NULL,
+				     GTK_DIALOG_MODAL,
+				     GTK_MESSAGE_ERROR,
+				     GTK_BUTTONS_OK,
+				     _("You need to enter a string value"));
+    gtk_dialog_run (GTK_DIALOG (dialog));
+    gtk_widget_destroy(dialog);
     return FALSE;
   }
 
@@ -210,10 +206,13 @@ gncs_validate (GNCSearchCoreType *fe)
 				fi->value, regmsg);
       g_free (regmsg);
 			
-      dialog = gnome_ok_dialog (errmsg);
-			
-      gnome_dialog_run_and_close (GNOME_DIALOG (dialog));
-			
+      dialog = gtk_message_dialog_new (NULL,
+				       GTK_DIALOG_MODAL,
+				       GTK_MESSAGE_ERROR,
+				       GTK_BUTTONS_OK,
+				       errmsg);
+      gtk_dialog_run (GTK_DIALOG (dialog));
+      gtk_widget_destroy(dialog);
       g_free (errmsg);
       valid = FALSE;
     }
@@ -234,13 +233,13 @@ static void
 option_changed (GtkWidget *widget, GNCSearchString *fe)
 {
   fe->how = (GNCSearchString_Type)
-    gtk_object_get_data (GTK_OBJECT (widget), "option");
+    g_object_get_data (G_OBJECT (widget), "option");
 }
 
 static void
 entry_changed (GtkEntry *entry, GNCSearchString *fe)
 {
-  char *new;
+  const char *new;
 	
   new = gtk_entry_get_text(entry);
   gnc_search_string_set_value (fe, new);
@@ -251,8 +250,8 @@ add_menu_item (GtkWidget *menu, gpointer user_data, char *label,
 	       GNCSearchString_Type option)
 {
   GtkWidget *item = gtk_menu_item_new_with_label (label);
-  gtk_object_set_data (GTK_OBJECT (item), "option", (gpointer) option);
-  gtk_signal_connect (GTK_OBJECT (item), "activate", option_changed, user_data);
+  g_object_set_data (G_OBJECT (item), "option", (gpointer) option);
+  g_signal_connect (G_OBJECT (item), "activate", G_CALLBACK (option_changed), user_data);
   gtk_menu_append (GTK_MENU (menu), item);
   gtk_widget_show (item);
   return item;
@@ -286,7 +285,7 @@ make_menu (GNCSearchCoreType *fe)
   opmenu = gtk_option_menu_new ();
   gtk_option_menu_set_menu (GTK_OPTION_MENU (opmenu), menu);
 
-  gtk_signal_emit_by_name (GTK_OBJECT (first), "activate", fe);
+  g_signal_emit_by_name (G_OBJECT (first), "activate", fe);
   gtk_option_menu_set_history (GTK_OPTION_MENU (opmenu), current);
 
   return opmenu;
@@ -305,16 +304,15 @@ grab_focus (GNCSearchCoreType *fe)
 }
 
 static void
-editable_enters (GNCSearchCoreType *fe, GnomeDialog *dialog)
+editable_enters (GNCSearchCoreType *fe)
 {
   GNCSearchString *fi = (GNCSearchString *)fe;
 
   g_return_if_fail (fi);
   g_return_if_fail (IS_GNCSEARCH_STRING (fi));
-  g_return_if_fail (dialog);
 
   if (fi->priv->entry)
-    gnome_dialog_editable_enters (dialog, GTK_EDITABLE (fi->priv->entry));
+    gtk_entry_set_activates_default(GTK_ENTRY (fi->priv->entry), TRUE);
 }
 
 static GtkWidget *
@@ -336,14 +334,14 @@ gncs_get_widget (GNCSearchCoreType *fe)
   entry = gtk_entry_new ();
   if (fi->value)
     gtk_entry_set_text (GTK_ENTRY (entry), fi->value);
-  gtk_signal_connect (GTK_OBJECT (entry), "changed", entry_changed, fe);
+  g_signal_connect (G_OBJECT (entry), "changed", G_CALLBACK (entry_changed), fe);
   gtk_box_pack_start (GTK_BOX (box), entry, FALSE, FALSE, 3);
   fi->priv->entry = entry;
 
   /* Build and connect the toggle button */
   toggle = gtk_toggle_button_new_with_label (_("Case Insensitive?"));
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (toggle), fi->ign_case);
-  gtk_signal_connect (GTK_OBJECT(toggle), "toggled", toggle_changed, fe);
+  g_signal_connect (G_OBJECT(toggle), "toggled", G_CALLBACK (toggle_changed), fe);
   gtk_box_pack_start (GTK_BOX (box), toggle, FALSE, FALSE, 3);
 
   /* And return the box */

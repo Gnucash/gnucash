@@ -24,7 +24,7 @@
 
 #include <gnome.h>
 
-#include "dialog-utils.h"
+#include "gnc-gnome-utils.h"
 #include "gnc-splash.h"
 #include "gnc-version.h"
 
@@ -51,7 +51,9 @@ gnc_show_splash_screen (void)
 
   if (splash) return;
 
-  splash = gtk_window_new (GTK_WINDOW_DIALOG);
+  splash = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  gtk_window_set_type_hint (GTK_WINDOW (splash), GDK_WINDOW_TYPE_HINT_SPLASHSCREEN);
+  gtk_window_set_skip_taskbar_hint (GTK_WINDOW (splash), TRUE);
 
   gtk_signal_connect (GTK_OBJECT (splash), "destroy",
                       GTK_SIGNAL_FUNC (splash_destroy_cb), NULL);
@@ -59,7 +61,7 @@ gnc_show_splash_screen (void)
   gtk_window_set_title (GTK_WINDOW (splash), "GnuCash");
   gtk_window_set_position (GTK_WINDOW (splash), GTK_WIN_POS_CENTER);
 
-  pixmap = gnc_get_pixmap ("gnucash_splash.png");
+  pixmap = gnc_gnome_get_pixmap ("gnucash_splash.png");
 
   if (!pixmap)
   {
@@ -88,7 +90,9 @@ gnc_show_splash_screen (void)
   gtk_box_pack_start (GTK_BOX (vbox), progress, FALSE, FALSE, 0);
   gtk_container_add (GTK_CONTAINER (splash), vbox);
 
+  gtk_window_set_auto_startup_notification (FALSE);
   gtk_widget_show_all (splash);
+  gtk_window_set_auto_startup_notification (TRUE);
 
   /* make sure splash is up */
   while (gtk_events_pending ())

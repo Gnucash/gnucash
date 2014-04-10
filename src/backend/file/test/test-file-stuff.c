@@ -1,3 +1,25 @@
+/***************************************************************************
+ *            test-file-stuff.c
+ *
+ *  Thu Sep 29 22:50:50 2005
+ *  Copyright  2005  GnuCash team
+ ****************************************************************************/
+/*
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ */
+ 
 #include "config.h"
 
 #include <unistd.h>
@@ -10,7 +32,7 @@
 #include <string.h>
 #include <glib.h>
 
-#include "gnc-engine-util.h"
+#include "gnc-engine.h"
 #include "sixtp-dom-parsers.h"
 #include "sixtp-parsers.h"
 #include "test-file-stuff.h"
@@ -97,7 +119,7 @@ check_dom_tree_version(xmlNodePtr node, gchar *verstr)
     g_return_val_if_fail(node->properties->xmlAttrPropertyValue->content,
                          FALSE);
 
-    verteststr = node->properties->xmlAttrPropertyValue->content;
+    verteststr = (char*) node->properties->xmlAttrPropertyValue->content;
     if(safe_strcmp(verstr, verteststr) == 0)
     {
         return TRUE;
@@ -335,7 +357,7 @@ test_load_file(const char *filename, gxpf_callback cb,
         return;
     }
 
-    if(!gnc_xml_parse_file(top_parser, filename, cb, node->childs, book))
+    if(!gnc_xml_parse_file(top_parser, filename, cb, node->children, book))
     {
         failure_args("failure to parse file", __FILE__, __LINE__,
                      "%s", filename);

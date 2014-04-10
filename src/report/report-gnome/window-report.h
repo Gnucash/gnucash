@@ -27,40 +27,23 @@
 #include <libguile.h>
 
 #include "gnc-html.h"
-#include "gnc-mdi-utils.h"
   
 typedef struct gnc_report_window_s gnc_report_window;
 
 /** PROTOTYPES ******************************************************/
 
-gnc_report_window * gnc_report_window_new(GNCMDIChildInfo * mc);
-void       gnc_report_window_destroy(gnc_report_window * rep);
-void       gnc_report_window_show_report(gnc_report_window * rw, int id);
-void       gnc_report_window_reload(gnc_report_window * rw);
-gnc_html   * gnc_report_window_get_html(gnc_report_window * rw);
-GtkWidget  * gnc_report_window_get_container(gnc_report_window * rw);
-SCM        gnc_report_window_get_report(gnc_report_window * rw);
-
-void       gnc_report_window_create_menu(gnc_report_window * report, 
-                                         GNCMDIChildInfo * child);
-void       gnc_report_window_create_toolbar(gnc_report_window * report, 
-                                            GNCMDIChildInfo * child);
-
+// scm-exposed
 GtkWidget * gnc_report_window_default_params_editor(SCM options, SCM report);
 
-void       gnc_main_window_open_report (int report_id, gint toplevel);
-void       gnc_main_window_open_report_url (const char * url, gint toplevel);
-
-GnomeMDIChild * gnc_report_window_create_child(const gchar * url);
+// called from multiple places
+// [business-gnome/dialog-invoice.c;gnome/window-register.c]; and
+// scm-exposed; 3-liner which calls gnc_main_window_open_report after handling busy-cursor.
 void       reportWindow(int id);
+// window-register; scm-exposed
 void       gnc_print_report (int report_id);
-
-void       gnc_report_window_add_edited_report(gnc_report_window * win, 
-                                               SCM report);
-void       gnc_report_window_remove_edited_report(gnc_report_window * win, 
-                                                  SCM report);
+// scm-exposed; ~priv
 void       gnc_report_raise_editor(SCM report);
-
+// module[/plugin]-init
 void       gnc_report_init (void);
 
 #endif

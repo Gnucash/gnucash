@@ -18,8 +18,11 @@
 
 (define (default-interest-acct brokerage security) 
   (string-append (_ "Interest") (gnc:account-separator-char) 
-                 brokerage (gnc:account-separator-char)  
-                 security))
+                 brokerage
+		 (if (string=? security "")
+		  ""
+		  (string-append (gnc:account-separator-char)  
+				  security))))
 
 (define (default-capital-return-acct brokerage security) 
   (string-append (_ "Cap Return") (gnc:account-separator-char) 
@@ -607,6 +610,7 @@
                       (gnc:get-current-group)
                       (qif-map-entry:gnc-name map-entry)
                       separator))
+		    (book (gnc:group-get-book (gnc:get-current-group)))
                     (existing-type 
                      (gnc:account-get-type existing-gnc-acct)))
                (if (and existing-gnc-acct 
@@ -626,7 +630,8 @@
                      (set! names (cons stock-name names))
                      (hash-set! 
                       stock-hash stock-name 
-                      (gnc:commodity-create stock-name
+                      (gnc:commodity-create book
+					    stock-name
                                             GNC_COMMODITY_NS_NYSE
                                             ticker-symbol
                                             ""

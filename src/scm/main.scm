@@ -20,7 +20,7 @@
 (use-modules (ice-9 slib))
 
 (use-modules (g-wrap gw-wct))
-
+(use-modules (g-wrapped gw-core-utils))
 (use-modules (g-wrapped gw-gnc))
 
 ;; Load the srfis (eventually, we should see where these are needed
@@ -48,19 +48,23 @@
 (export gnc:debug)
 (export build-path)
 (export gnc:use-module-here!)
-(export hash-fold)
 (export item-list->hash!)
-(export string-split)
 (export string-join)
 (export gnc:backtrace-if-exception)
 (export gnc:find-file)
 (export gnc:find-localized-file)
 (export gnc:main)
 (export gnc:safe-strcmp) ;; only used by aging.scm atm...
+(export gnc:reload-module)
+
+(re-export hash-fold)
+(re-export string-split)
 
 ;; from path.scm
 (export gnc:make-home-dir)
 (export gnc:current-config-auto)
+(export gnc:current-saved-reports)
+(export gnc:current-saved-stylesheets)
 
 ;; from command-line.scm
 (export gnc:*config-path*)
@@ -77,15 +81,11 @@
 (export gnc:make-new-acct-tree-window)  
 (export gnc:free-acct-tree-window)
 (export gnc:main-window-save-state)
+(export gnc:main-window-properties-cb)
 
 ;; from printing/print-check.scm
 (export make-print-check-format)
 (export gnc:print-check)
-
-;; from tip-of-the-day.scm
-(export gnc:get-current-tip)
-(export gnc:increment-tip-number)
-(export gnc:decrement-tip-number)
 
 ;; Get the Makefile.am/configure.in generated variables.
 (load-from-path "build-config.scm")
@@ -106,7 +106,8 @@
 ;; to print out various 'development version' strings throughout the code.
 ;; #t == development version, #f == stable version
 ;;
-;; NOTE: You still need to comment out the message in tip-list.scm by hand!
+;; NOTE: You still need to comment out the message in
+;; tip_of_the_day.list.in by hand!
 ;;
 (define gnc:*is-development-version?* #t)
 
@@ -167,6 +168,11 @@
         (a 1)
         (b -1)
         (else 0)))))
+
+(define (gnc:reload-module name)
+  (let ((m (current-module)))
+    (load-from-path name)
+    (set-current-module m)))
 
 (if (not (defined? 'hash-fold))
     (define (hash-fold proc init table)
@@ -355,8 +361,8 @@ string and 'directories' must be a list of strings."
      (_ "This is a development version. It may or may not work.\n")
      (_ "Report bugs and other problems to gnucash-devel@gnucash.org.\n")
      (_ "You can also lookup and file bug reports at http://bugzilla.gnome.org\n")
-     (_ "The last stable version was ") "GnuCash 1.8.9" "\n"
-     (_ "The next stable version will be ") "GnuCash 1.10 or 2.0"
+     (_ "The last stable version was ") "GnuCash 1.8.12" "\n"
+     (_ "The next stable version will be ") "GnuCash 2.0"
      "\n\n"))))
 
 (define (gnc:startup-pass-1)
@@ -421,7 +427,6 @@ string and 'directories' must be a list of strings."
     ;; Hopefully we can gradually make them autoloading.
     (load-module "gnucash/engine" 0 #f)
 
-    (load-module "gnucash/app-file" 0 #f)
     (load-module "gnucash/register/ledger-core" 0 #f)
     (load-module "gnucash/register/register-core" 0 #f)
     (load-module "gnucash/register/register-gnome" 0 #f)
@@ -443,7 +448,6 @@ string and 'directories' must be a list of strings."
     ;; they're "well behaved" (these should probably be in modules
     ;; eventually)
     (load-from-path "main-window.scm")  ;; depends on app-utils (N_, etc.)...
-    (load-from-path "tip-of-the-day.scm") ;; depends on app-utils (config-var...)
     (load-from-path "printing/print-check.scm") ;; depends on simple-obj...
     ;; +jsled - 2002.07.08
     (load-from-path "fin.scm")
@@ -454,27 +458,7 @@ string and 'directories' must be a list of strings."
       (if (list? sources)
 	  (gnc:quote-source-set-fq-installed sources)))
 
-    (gnc:update-splash-screen (_ "Loading tip-of-the-day..."))
-    (gnc:initialize-tip-of-the-day)
-
     (set-current-module original-module))
-
-  (gnc:hook-add-dangler gnc:*book-opened-hook*
-                        (lambda (session)
-                          (if ((gnc:option-getter
-                                (gnc:lookup-global-option
-                                 "Scheduled Transactions"
-                                 "Run on GnuCash start" )))
-                              (gnc:sx-since-last-run-wrapper
-			       (gnc:session-get-url session)))))
-
-  (gnc:hook-add-dangler gnc:*new-book-hook*
-                        (lambda ()
-                          (let ((option (gnc:lookup-global-option
-                                         "General"
-                                         "No account list setup on new file")))
-                            (if (and option (not (gnc:option-value option)))
-                                (gnc:ui-hierarchy-druid)))))
 
   ;; Load the system configs
   (gnc:update-splash-screen (_ "Loading configs..."))
@@ -484,28 +468,16 @@ string and 'directories' must be a list of strings."
   ;; Load the user configs
   (gnc:load-user-config-if-needed)
 
-  ;; Clear the change flags caused by loading the configs
-  (gnc:global-options-clear-changes)
-
   (gnc:report-menu-setup)
-
-  ;; add the menu option to edit style sheets 
-  (gnc:add-extension
-   (gnc:make-menu-item 
-    (N_ "_Style Sheets...")
-    (N_ "Edit report style sheets.")
-    (list gnc:window-name-main "_Edit" "_Preferences...")
-    (lambda ()
-      (gnc:style-sheet-dialog-open))))
 
   ;; the Welcome to GnuCash "extravaganza" report
   (gnc:add-extension 
    (gnc:make-menu-item 
     (N_ "Welcome Sample Report")
     (N_ "Welcome-to-GnuCash report screen")
-    (list gnc:window-name-main gnc:menuname-reports gnc:menuname-utility "")
-    (lambda ()
-      (gnc:main-window-open-report (gnc:make-welcome-report) #f))))
+    (list gnc:menuname-reports gnc:menuname-utility "")
+    (lambda (window)
+      (gnc:main-window-open-report (gnc:make-welcome-report) window))))
 
   (gnc:hook-run-danglers gnc:*startup-hook*)
 
@@ -584,7 +556,7 @@ string and 'directories' must be a list of strings."
 	  (gnc:update-splash-screen (_ "Loading data..."))
 	  (and (not (gnc:file-open-file file))
 	       (gnc:hook-run-danglers gnc:*book-opened-hook* #f)))
-        (gnc:hook-run-danglers gnc:*book-opened-hook* #f))))
+        (and (gnc:hook-run-danglers gnc:*book-opened-hook* #f)))))
 
 (define (gnc:main)
 
@@ -628,23 +600,26 @@ string and 'directories' must be a list of strings."
       ;; We're not in batch mode; we can go ahead and do the normal thing.
       (begin
         (gnc:hook-add-dangler gnc:*ui-shutdown-hook* gnc:gui-finish)
-        (set! gnc:*command-line-remaining*
-              (gnc:gui-init gnc:*command-line-remaining*))
-        (if (and
-             (not (gnc:account-file-to-load))
-             (not (string? (gnc:history-get-last)))
-             (gnc:option-value
-              (gnc:lookup-global-option "__new_user" "first_startup")))
-            (begin
-	      (gnc:destroy-splash-screen)
-	      (gnc:new-user-dialog))
-            (begin
-	      (gnc:load-account-file)
-	      (gnc:destroy-splash-screen)))
-	(gnc:hook-run-danglers gnc:*ui-post-startup-hook*)
-        (gnc:start-ui-event-loop)
-        (gnc:hook-remove-dangler gnc:*ui-shutdown-hook* gnc:gui-finish))
-
+        (let* ((init-window-cons-rest (gnc:gui-init gnc:*command-line-remaining*))
+               (main-window (car init-window-cons-rest)))
+          (set! gnc:*command-line-remaining* (cdr init-window-cons-rest))
+          (if (and
+               (not (gnc:account-file-to-load))
+               (not (string? (gnc:history-get-last)))
+	       (gnc:gconf-get-bool "dialogs/new_user" "first_startup"))
+              (begin
+                (gnc:destroy-splash-screen)
+                (gnc:new-user-dialog))
+              (begin
+                (gnc:destroy-splash-screen)
+                (gnc:main-window-set-progressbar-window main-window)
+                (gnc:load-account-file)
+                ))
+          ;; no matter how or what we loaded, ensure the main-window title is valid...
+          (gnc:hook-run-danglers gnc:*ui-post-startup-hook*)
+          (gnc:start-ui-event-loop)
+          (gnc:hook-remove-dangler gnc:*ui-shutdown-hook* gnc:gui-finish)))
+        
       ;; else: we're in batch mode.  Just do what the user said on the
       ;; command line
       (map handle-batch-mode-item (reverse gnc:*batch-mode-things-to-do*)))

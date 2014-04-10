@@ -1,9 +1,10 @@
 PWD := $(shell pwd)
 
-pkglib_LTLIBRARIES = libgncmod-gnome-search.la libgw-gnome-search.la
+pkglib_LTLIBRARIES = libgncmod-gnome-search.la
 
 AM_CFLAGS = \
   -I${top_srcdir}/src \
+  -I${top_srcdir}/src/core-utils \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/app-utils \
   -I${top_srcdir}/src/gnome-utils \
@@ -14,8 +15,10 @@ AM_CFLAGS = \
   ${GTKHTML_CFLAGS} \
   ${GDK_PIXBUF_CFLAGS} \
   ${GLADE_CFLAGS} \
-  ${GNOME_INCLUDEDIR} \
-  ${GLIB_CFLAGS} 
+  ${GNOME_CFLAGS} \
+  ${GLIB_CFLAGS} \
+  ${QOF_CFLAGS} \
+  ${GNOME_PRINT_CFLAGS}
 
 libgncmod_gnome_search_la_SOURCES = \
   gncmod-gnome-search.c \
@@ -45,68 +48,24 @@ noinst_HEADERS = \
   search-int64.h \
   search-numeric.h \
   search-reconciled.h \
-  search-string.h \
-  gw-gnome-search.h
-
-libgncmod_gnome_search_la_LDFLAGS = -module
+  search-string.h
 
 libgncmod_gnome_search_la_LIBADD = \
   ${top_builddir}/src/gnc-module/libgncmodule.la \
+  ${top_builddir}/src/core-utils/libcore-utils.la \
   ${GUILE_LIBS} \
-  ${GNOME_LIBDIR} \
-  ${GNOMEUI_LIBS} \
+  ${GNOME_LIBS} \
   ${GTKHTML_LIBS} \
   ${GLADE_LIBS} \
-  ${GLIB_LIBS}
-
-libgw_gnome_search_la_SOURCES = gw-gnome-search.c
-libgw_gnome_search_la_LDFLAGS = -module ${G_WRAP_LINK_ARGS}
-
-gncmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash
-gncmod_DATA = gnome-search.scm
+  ${GLIB_LIBS} \
+  ${QOF_LIBS} \
+  ${GNOME_PRINT_LIBS}
 
 gladedir = $(GNC_GLADE_DIR)
 glade_DATA = \
   search.glade
 
-gwmoddir = ${GNC_GWRAP_LIBDIR}
-gwmod_DATA = \
-  gw-gnome-search.scm \
-  gw-gnome-search-spec.scm
-
 EXTRA_DIST = \
   .cvsignore \
-  ${glade_DATA} \
-  ${gncmod_DATA} \
-  ${gwmod_DATA}
+  ${glade_DATA}
 
-if GNUCASH_SEPARATE_BUILDDIR
-#Only needed when srcdir and builddir are different
-SCM_FILE_LINKS = gw-gnome-search-spec.scm
-endif
-
-.scm-links: 
-	rm -f gnucash g-wrapped
-	ln -sf . gnucash 
-	ln -sf . g-wrapped 
-if GNUCASH_SEPARATE_BUILDDIR
-	for X in ${SCM_FILE_LINKS} ; do \
-	  ln -sf ${srcdir}/$$X . ; \
-	done
-endif
-	touch .scm-links
-
-gw-gnome-search.scm gw-gnome-search.c gw-gnome-search.h: \
-  .scm-links gw-gnome-search-spec.scm ${top_builddir}/config.status
-	FLAVOR=gnome guile -c \
-	 "(set! %load-path (cons \"${G_WRAP_MODULE_DIR}\" %load-path)) \
-	 (set! %load-path (cons \"${PWD}\" %load-path)) \
-	 (set! %load-path (cons \"../engine\" %load-path)) \
-	 (set! %load-path (cons \"../app-utils\" %load-path)) \
-	 (set! %load-path (cons \"../gnome-utils\" %load-path)) \
-	 (primitive-load \"./gw-gnome-search-spec.scm\") \
-	 (gw:generate-wrapset \"gw-gnome-search\")"
-
-BUILT_SOURCES = gw-gnome-search.scm gw-gnome-search.c gw-gnome-search.h
-DISTCLEANFILES = gnucash g-wrapped .scm-links ${SCM_FILE_LINKS} \
-                 gw-gnome-search.html

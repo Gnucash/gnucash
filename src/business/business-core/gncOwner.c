@@ -23,6 +23,7 @@
 /*
  * Copyright (C) 2001, 2002 Derek Atkins
  * Copyright (C) 2003 Linas Vepstas <linas@linas.org>
+ * Copyright (c) 2005 Neil Williams <linux@codehelp.co.uk>
  * Author: Derek Atkins <warlord@MIT.EDU>
  */
 
@@ -30,11 +31,6 @@
 
 #include <glib.h>
 #include <string.h>		/* for memcpy() */
-
-#include "qofbook.h"
-#include "qofclass.h"
-#include "qofquerycore.h"
-#include "qofquery.h"
 
 #include "gncCustomerP.h"
 #include "gncEmployeeP.h"
@@ -51,7 +47,9 @@
 
 GncOwner * gncOwnerCreate (void)
 {
-  GncOwner *o = g_new0 (GncOwner, 1);
+  GncOwner *o;
+
+  o = g_new0 (GncOwner, 1);
   o->type = GNC_OWNER_NONE;
   return o;
 }
@@ -101,6 +99,103 @@ GncOwnerType gncOwnerGetType (const GncOwner *owner)
 {
   if (!owner) return GNC_OWNER_NONE;
   return owner->type;
+}
+
+QofIdType
+qofOwnerGetType(GncOwner *owner)
+{
+	QofIdType type;
+
+	type = NULL;
+	switch(owner->type)
+	{
+		case GNC_OWNER_NONE : {
+			type = NULL;
+			break;
+		}
+		case GNC_OWNER_UNDEFINED : {
+			type = NULL;
+			break;
+		}
+		case GNC_OWNER_CUSTOMER : {
+			type = GNC_ID_CUSTOMER;
+			break;
+		}
+		case GNC_OWNER_JOB : {
+			type = GNC_ID_JOB;
+			break;
+		}
+		case GNC_OWNER_VENDOR : {
+			type = GNC_ID_VENDOR;
+			break;
+		}
+		case GNC_OWNER_EMPLOYEE : {
+			type = GNC_ID_EMPLOYEE;
+			break;
+		}
+	}
+	return type;
+}
+
+QofEntity*
+qofOwnerGetOwner (GncOwner *owner)
+{
+	QofEntity *ent;
+
+	if(!owner) { return NULL; }
+	ent = NULL;
+	switch(owner->type)
+	{
+		case GNC_OWNER_NONE : {
+			break;
+		}
+		case GNC_OWNER_UNDEFINED : {
+			break;
+		}
+		case GNC_OWNER_CUSTOMER : {
+			ent = (QofEntity*)owner->owner.customer;
+			break;
+		}
+		case GNC_OWNER_JOB : {
+			ent = (QofEntity*)owner->owner.job;
+			break;
+		}
+		case GNC_OWNER_VENDOR : {
+			ent = (QofEntity*)owner->owner.vendor;
+			break;
+		}
+		case GNC_OWNER_EMPLOYEE : {
+			ent = (QofEntity*)owner->owner.employee;
+			break;
+		}
+	}
+	return ent;
+}
+
+void
+qofOwnerSetEntity (GncOwner *owner, QofEntity *ent)
+{
+	if(!owner || !ent) { return; }
+	if(0 == safe_strcmp(ent->e_type, GNC_ID_CUSTOMER))
+	{
+		owner->type = GNC_OWNER_CUSTOMER;
+		gncOwnerInitCustomer(owner, (GncCustomer*)ent);
+	}
+	if(0 == safe_strcmp(ent->e_type, GNC_ID_JOB))
+	{
+		owner->type = GNC_OWNER_JOB;
+		gncOwnerInitJob(owner, (GncJob*)ent);
+	}
+	if(0 == safe_strcmp(ent->e_type, GNC_ID_VENDOR))
+	{
+		owner->type = GNC_OWNER_VENDOR;
+		gncOwnerInitVendor(owner, (GncVendor*)ent);
+	}
+	if(0 == safe_strcmp(ent->e_type, GNC_ID_EMPLOYEE))
+	{
+		owner->type = GNC_OWNER_EMPLOYEE;
+		gncOwnerInitEmployee(owner, (GncEmployee*)ent);
+	}
 }
 
 gpointer gncOwnerGetUndefined (const GncOwner *owner)
@@ -397,20 +492,19 @@ reg_lot (void)
 gboolean gncOwnerRegister (void)
 {
   static QofParam params[] = {
-    { OWNER_TYPE, QOF_TYPE_INT64, (QofAccessFunc)gncOwnerGetType, NULL },
-    { OWNER_CUSTOMER, GNC_ID_CUSTOMER,
-      (QofAccessFunc)gncOwnerGetCustomer, NULL },
-    { OWNER_JOB, GNC_ID_JOB, (QofAccessFunc)gncOwnerGetJob, NULL },
-    { OWNER_VENDOR, GNC_ID_VENDOR, (QofAccessFunc)gncOwnerGetVendor, NULL },
-    { OWNER_EMPLOYEE, GNC_ID_EMPLOYEE, (QofAccessFunc)gncOwnerGetEmployee, NULL },
-    { OWNER_PARENT, GNC_ID_OWNER, (QofAccessFunc)gncOwnerGetEndOwner, NULL },
-    { OWNER_PARENTG, QOF_TYPE_GUID, (QofAccessFunc)gncOwnerGetEndGUID, NULL },
-    { OWNER_NAME, QOF_TYPE_STRING, (QofAccessFunc)gncOwnerGetName, NULL },
-    { QOF_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)gncOwnerGetGUID, NULL },
+    { OWNER_TYPE, QOF_TYPE_INT64,      (QofAccessFunc)gncOwnerGetType,          NULL },
+    { OWNER_CUSTOMER, GNC_ID_CUSTOMER, (QofAccessFunc)gncOwnerGetCustomer,      NULL },
+    { OWNER_JOB, GNC_ID_JOB,           (QofAccessFunc)gncOwnerGetJob,           NULL },
+    { OWNER_VENDOR, GNC_ID_VENDOR,     (QofAccessFunc)gncOwnerGetVendor,        NULL },
+    { OWNER_EMPLOYEE, GNC_ID_EMPLOYEE, (QofAccessFunc)gncOwnerGetEmployee,      NULL },
+    { OWNER_PARENT, GNC_ID_OWNER,      (QofAccessFunc)gncOwnerGetEndOwner,      NULL },
+    { OWNER_PARENTG, QOF_TYPE_GUID,    (QofAccessFunc)gncOwnerGetEndGUID,       NULL },
+    { OWNER_NAME, QOF_TYPE_STRING,     (QofAccessFunc)gncOwnerGetName, NULL },
+    { QOF_PARAM_GUID, QOF_TYPE_GUID,   (QofAccessFunc)gncOwnerGetGUID, NULL },
     { NULL },
   };
 
-  qof_class_register (_GNC_MOD_NAME, (QofSortFunc)gncOwnerCompare, params);
+  qof_class_register (GNC_ID_OWNER, (QofSortFunc)gncOwnerCompare, params);
   reg_lot ();
 
   return TRUE;

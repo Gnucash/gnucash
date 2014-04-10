@@ -23,7 +23,7 @@
 
 #include "Group.h"
 #include "gnc-component-manager.h"
-#include "gnc-engine-util.h"
+#include "qof.h"
 #include "gnc-ui-util.h"
 
 
@@ -64,7 +64,8 @@ typedef struct
 
 /** Static Variables ************************************************/
 static guint  suspend_counter = 0;
-static gint   next_component_id = 0;
+/* Some code foolishly uses 0 instead of NO_COMPONENT, so we start with 1. */
+static gint   next_component_id = 1;
 static GList *components = NULL;
 
 static ComponentEventInfo changes = { NULL, NULL, FALSE };
@@ -72,7 +73,7 @@ static ComponentEventInfo changes_backup = { NULL, NULL, FALSE };
 
 
 /* This static indicates the debugging module that this .o belongs to.  */
-static short module = MOD_GUI;
+static QofLogModule log_module = GNC_MOD_GUI;
 
 
 /** Prototypes ******************************************************/
@@ -127,9 +128,7 @@ clear_mask_hash (GHashTable *hash)
 static gboolean
 destroy_mask_hash_helper (gpointer key, gpointer value, gpointer user_data)
 {
-  GCache *gc = gnc_engine_get_string_cache ();
-
-  g_cache_remove (gc, key);
+  gnc_string_cache_remove (key);
   g_free (value);
 
   return TRUE;
@@ -246,8 +245,7 @@ add_event_type (ComponentEventInfo *cei, GNCIdTypeConst entity_type,
   mask = g_hash_table_lookup (cei->event_masks, entity_type);
   if (!mask)
   {
-    char * key = g_cache_insert (gnc_engine_get_string_cache (),
-                                 (gpointer) entity_type);
+    char * key = gnc_string_cache_insert ((gpointer) entity_type);
     mask = g_new0 (GNCEngineEventType, 1);
     g_hash_table_insert (cei->event_masks, key, mask);
   }
@@ -392,10 +390,17 @@ gnc_register_gui_component_internal (const char * component_class)
   /* look for a free handler id */
   component_id = next_component_id;
 
+  /* design warning: if we ever get 2^32-1 components, 
+     this loop is infinite.  Instead of fixing it, we'll just 
+     complain when (if) we get half way there (probably never).
+  */ 
   while (find_component (component_id))
     if (++component_id == NO_COMPONENT)
       component_id++;
 
+  if (component_id < 0) 
+    PERR("Amazing! Half way to running out of component_ids.");
+  
   /* found one, add the handler */
   ci = g_new0 (ComponentInfo, 1);
 
@@ -466,10 +471,10 @@ gnc_register_gui_component_scm (const char * component_class,
   g_return_val_if_fail (ci, NO_COMPONENT);
 
   ci->refresh_handler_scm = refresh_handler;
-  scm_protect_object (refresh_handler);
+  scm_gc_protect_object (refresh_handler);
 
   ci->close_handler_scm = close_handler;
-  scm_protect_object (close_handler);
+  scm_gc_protect_object (close_handler);
 
   return ci->component_id;
 }
@@ -520,7 +525,7 @@ gnc_gui_component_watch_entity_type (gint component_id,
 }
 
 const EventInfo *
-gnc_gui_get_entity_events (GHashTable *changes, GUID *entity)
+gnc_gui_get_entity_events (GHashTable *changes, const GUID *entity)
 {
   if (!changes || !entity)
     return GNC_EVENT_NONE;
@@ -575,11 +580,11 @@ gnc_unregister_gui_component (gint component_id)
   ci->component_class = NULL;
 
   if (ci->refresh_handler_scm != SCM_BOOL_F)
-    scm_unprotect_object (ci->refresh_handler_scm);
+    scm_gc_unprotect_object (ci->refresh_handler_scm);
   ci->refresh_handler_scm = SCM_BOOL_F;
 
   if (ci->close_handler_scm != SCM_BOOL_F)
-    scm_unprotect_object (ci->close_handler_scm);
+    scm_gc_unprotect_object (ci->close_handler_scm);
   ci->close_handler_scm = SCM_BOOL_F;
 
   g_free (ci);

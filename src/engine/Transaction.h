@@ -20,6 +20,62 @@
 /** @addtogroup Engine
     @{ */
 /** @addtogroup Transaction Financial Transactions
+    A good overview of transactions, splits and accounts can be 
+    found in the texinfo documentation, together with an overview of
+    how to use this API.
+
+Splits, or "Ledger Entries" are the fundamental
+accounting units. Each Split consists of an amount (number of dollar
+bills, number of shares, etc.), the value of that amount expressed in
+a (possibly) different currency than the amount, a Memo, a pointer to
+the parent Transaction, a pointer to the debited Account, a reconciled
+flag and timestamp, an "Action" field, and a key-value frame which can
+store arbitrary data.
+                                                                              
+Transactions embody the notion of "double entry" accounting. 
+A Transaction consists of a date, a description, an ID number, 
+a list of one or more Splits, and a key-value frame.  The transaction
+also specifies the currency with which all of the splits will be valued.
+When double-entry rules are enforced, the sum total value of the splits 
+are zero.  If there are only two splits, then the value of one must be 
+positive, the other negative: this denotes that one account is debited, 
+and another is credited by an equal amount.  By forcing the value of the
+splits to always 'add up' to zero, we can guarantee that the balances
+of the accounts are always correctly balanced.
+
+The engine does not enforce double-entry accounting, but provides an API
+to enable user-code to find unbalanced transactions and 'repair' them so
+that they are in balance. 
+
+Note the sum of the values of Splits in a Transaction is always computed
+with respect to a currency; thus splits can be balanced even when they
+are in different currencies, as long as they share a common currency.
+This feature allows currency-trading accounts to be established.
+                                                                              
+Every Split must point to its parent Transaction, and that Transaction
+must in turn include that Split in the Transaction's list of Splits. A
+Split can belong to at most one Transaction. These relationships are
+enforced by the engine. The engine user cannnot accidentally destroy
+this relationship as long as they stick to using the API and never
+access internal structures directly.
+
+Splits are grouped into Accounts which are also known
+as "Ledgers" in accounting practice. Each Account consists of a list of
+Splits that debit that Account. To ensure consistency, if a Split points
+to an Account, then the Account must point to the Split, and vice-versa.
+A Split can belong to at most one Account. Besides merely containing a
+list of Splits, the Account structure also gives the Account a name, a
+code number, description and notes fields, a key-value frame, a pointer
+to the commodity that is used for all splits in this account. The
+commodity can be the name of anything traded and tradable: a stock 
+(e.g. "IBM", "McDonald's"), a currency (e.g. "USD", "GBP"), or anything
+added to the commodity table.  
+
+Accounts can be arranged in a hierarchical tree. The nodes of the tree
+are called "Account Groups". By accounting
+convention, the value of an Account is equal to the value of all of its
+Splits plus the value of all of its sub-Accounts.
+
     @{ */
 /** @file Transaction.h 
     @brief API for Transactions and Splits (journal entries)
@@ -41,31 +97,34 @@
 #include "qofinstance.h"
 
 /** @name Split Reconciled field values
+
     If you change these
     be sure to change gnc-ui-util.c:gnc_get_reconciled_str() and
     associated functions
+
+@{
 */
-/**@{*/
 #define CREC 'c'              /**< The Split has been cleared    */
 #define YREC 'y'              /**< The Split has been reconciled */
 #define FREC 'f'              /**< frozen into accounting period */
 #define NREC 'n'              /**< not reconciled or cleared     */
 #define VREC 'v'              /**< split is void                 */
-/**@}*/
+/** @} */
 
-/** @name Transaction Type field values */
-/**@{*/
+/** @name Transaction Type field values
+@{
+*/
 #define TXN_TYPE_NONE	 '\0' /**< No transaction type       */
 #define TXN_TYPE_INVOICE 'I'  /**< Transaction is an invoice */
 #define TXN_TYPE_PAYMENT 'P'  /**< Transaction is a payment  */
-/**@}*/
+/** @} */
 
-/***************************************************************
- * Transaction
- */
+/* --------------------------------------------------------------- */
+/* Transactions */
 
-/** @name Transaction creation and editing */
-/**@{*/
+/** @name Transaction creation and editing
+ @{
+*/
 /** 
  The xaccMallocTransaction() will malloc memory and initialize it.
  Once created, it is usually unsafe to merely "free" this memory;
@@ -157,11 +216,12 @@ Transaction * xaccTransLookup (const GUID *guid, QofBook *book);
  */
 guint gnc_book_count_transactions(QofBook *book);
 
-/**@}*/
+/** @} */
 
 
-/** @name Transaction general getters/setters */
-/**@{*/
+/** @name Transaction general getters/setters
+ @{
+*/
 
 /** Sorts the splits in a transaction, putting the debits first,
  *  followed by the credits.
@@ -174,11 +234,11 @@ void          xaccTransDump (Transaction *trans, const char *tag);
 
 /** Set the  Transaction Type
  *
- * See #define TXN_TYPE_NONE, TXN_TYPE_INVOICE and TXN_TYPE_PAYMENT */
+ * See #TXN_TYPE_NONE, #TXN_TYPE_INVOICE and #TXN_TYPE_PAYMENT */
 void	      xaccTransSetTxnType (Transaction *trans, char type);
 /** Returns the  Transaction Type
  *
- * See #define TXN_TYPE_NONE, TXN_TYPE_INVOICE and TXN_TYPE_PAYMENT */
+ * See #TXN_TYPE_NONE, #TXN_TYPE_INVOICE and #TXN_TYPE_PAYMENT */
 char	      xaccTransGetTxnType (const Transaction *trans);
 
 
@@ -298,11 +358,12 @@ gnc_numeric xaccTransGetAccountValue (const Transaction *trans,
  */
 int  xaccTransOrder     (const Transaction *ta, const Transaction *tb);
 
-/**@}*/
+/** @} */
 
 
-/** @name Transaction date setters/getters */
-/**@{*/
+/** @name Transaction date setters/getters
+@{
+*/
    
 /** The xaccTransSetDate() method does the same thing as
     xaccTransSetDate[Posted]Secs(), but takes a convenient
@@ -366,16 +427,16 @@ Timespec      xaccTransRetDateEnteredTS (const Transaction *trans);
 Timespec      xaccTransRetDateDueTS (const Transaction *trans);
 /** Dates and txn-type for A/R and A/P "invoice" postings */
 void	      xaccTransGetDateDueTS (const Transaction *trans, Timespec *ts);
-
-/**@}*/
+/** @} */
 
 
 /*-----------------------------------------------------------------------
  * Splits
  *-----------------------------------------------------------------------*/
 
-/** @name Split general getters/setters */
-/*@{*/
+/** @name Split general getters/setters
+@{
+*/
 
 /** Constructor. */
 Split       * xaccMallocSplit (QofBook *book);
@@ -448,10 +509,11 @@ void          xaccSplitSetAction (Split *split, const char *action);
 
 /** Returns the action string. */
 const char *  xaccSplitGetAction (const Split *split);
-/**@}*/
+/** @} */
 
-/** @name Split Date getters/setters */
-/**@{*/
+/** @name Split Date getters/setters
+@{
+*/
 /** Set the reconcile flag. The Reconcile flag is a single char, whose
  * values are typically are 'n', 'y', 'c'.  In Transaction.h, macros
  * are defined for typical values (e.g. CREC, YREC). */
@@ -472,7 +534,7 @@ void          xaccSplitGetDateReconciledTS (const Split *split,
 /** Returns the date (as Timespec) on which this split was reconciled. */
 Timespec      xaccSplitRetDateReconciledTS (const Split *split);
 
-/**@}*/
+/** @} */
 
 
 /** @name Split amount getters/setters 
@@ -480,8 +542,8 @@ Timespec      xaccSplitRetDateReconciledTS (const Split *split);
  * 'value' vs. 'amount' of a Split: The 'value' is the amount of the
  * _transaction_ balancing commodity (i.e. currency) involved,
  * 'amount' is the amount of the _account's_ commodity involved.
+@{
 */
-/*@{*/
 
 /** The xaccSplitSetAmount() method sets the amount in the account's 
  * commodity that the split should have.
@@ -590,12 +652,11 @@ gnc_numeric xaccSplitGetClearedBalance (const Split *split);
  */
 gnc_numeric xaccSplitGetReconciledBalance (const Split *split);
 
-/**@}*/
+/** @} */
 
-
-
-/** @name Split utility functions */
-/**@{*/
+/** @name Split utility functions 
+@{
+*/
 
 /** Equality.
  *
@@ -703,18 +764,19 @@ const char * xaccSplitGetCorrAccountName(const Split *sa);
 /** document me */
 const char * xaccSplitGetCorrAccountCode(const Split *sa);
 
-/*@}*/
+/** @} */
 
 
 
-/** @name Split deprecated functions */
-/*@{*/
+/** @name Split deprecated functions 
+@{
+*/
 
 /** @deprecated The xaccSplitSetSharePrice() method sets the price of the
  * split. DEPRECATED - set the value and amount instead. */
 void         xaccSplitSetSharePrice (Split *split, gnc_numeric price);
 
-/*@}*/
+/** @} */
 
 
 /********************************************************************\
@@ -733,8 +795,9 @@ Account * xaccGetAccountByFullName (Transaction *trans,
                                     const char separator);
 
 
-/** @name Transaction voiding */
-/*@{*/
+/** @name Transaction voiding
+@{
+*/
 /** xaccTransVoid voids a transaction.  A void transaction has no
  *  values, is unaffected by reconciliation, and, by default is not
  *  included in any queries.  A voided transaction may not be altered.
@@ -805,22 +868,23 @@ gnc_numeric xaccSplitVoidFormerValue(const Split *split);
 
 /** Returns the time that a transaction was voided.
  *
- *  @param split The transaction in question.
+ *  @param tr The transaction in question.
  *
  *  @return A Timespec containing the time that this transaction was
  *  voided. Returns a time of zero upon error.
  */
 Timespec xaccTransGetVoidTime(const Transaction *tr);
-/**@}*/
+/** @} */
 
 /** @name Split Parameter names
+
  * Note, if you want to get the equivalent of "ACCT_MATCH_ALL" you
  * need to create a search on the following parameter list:
  * SPLIT->SPLIT_TRANS->TRANS_SPLITLIST->SPLIT_ACCOUNT_GUID.  If you do
  * this, you might want to use the ACCOUNT_MATCH_ALL_TYPE as the
  * override so the gnome-search dialog displays the right type.
- */
-/**@{*/
+ @{
+*/
 #define SPLIT_KVP		"kvp"
 
 #define SPLIT_DATE_RECONCILED	"date-reconciled"
@@ -844,10 +908,11 @@ Timespec xaccTransGetVoidTime(const Transaction *tr);
 #define SPLIT_ACCT_FULLNAME	"acct-fullname"
 #define SPLIT_CORR_ACCT_NAME	"corr-acct-fullname"
 #define SPLIT_CORR_ACCT_CODE	"corr-acct-code"
-/**@}*/
+/** @} */
 
-/** @name Transaction Parameter names */
-/**@{*/
+/** @name Transaction Parameter names
+@{
+*/
 #define TRANS_KVP		"kvp"
 #define TRANS_NUM		"num"
 #define TRANS_DESCRIPTION	"desc"
@@ -866,12 +931,17 @@ Timespec xaccTransGetVoidTime(const Transaction *tr);
 
 #define RECONCILED_MATCH_TYPE	"reconciled-match"
 
-/** deprecated rouitines */
+/** \deprecated */
 #define xaccSplitGetGUID(X)      qof_entity_get_guid(QOF_ENTITY(X))
+/** \deprecated */
 #define xaccSplitReturnGUID(X) (X ? *(qof_entity_get_guid(QOF_ENTITY(X))) : *(guid_null()))
+/** \deprecated */
 #define xaccTransGetBook(X)      qof_instance_get_book (QOF_INSTANCE(X))
+/** \deprecated */
 #define xaccTransGetGUID(X)      qof_entity_get_guid(QOF_ENTITY(X))
+/** \deprecated */
 #define xaccTransReturnGUID(X) (X ? *(qof_entity_get_guid(QOF_ENTITY(X))) : *(guid_null()))
+/** \deprecated */
 #define xaccTransGetSlots(X)     qof_instance_get_slots (QOF_INSTANCE(X))
 
 #endif /* XACC_TRANSACTION_H */

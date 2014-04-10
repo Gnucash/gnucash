@@ -1,0 +1,468 @@
+<?xml version="1.0"?>
+<gconfschemafile>
+  <schemalist>
+
+    <schema>
+      <key>/schemas/apps/gnucash/general/save_window_geometry</key>
+      <applyto>/apps/gnucash/general/save_window_geometry</applyto>
+      <owner>gnucash</owner>
+      <type>bool</type>
+      <default>TRUE</default>
+      <locale name="C">
+        <short>Save window sizes and locations.</short>
+        <long>
+	  Save the size and location of each dialog window when it is
+	  closed.  The sizes and locations of content windows will be
+	  remembered when you quit gnucash.
+	</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnucash/general/account_separator</key>
+      <applyto>/apps/gnucash/general/account_separator</applyto>
+      <owner>gnucash</owner>
+      <type>string</type>
+      <default>colon</default>
+      <locale name="C">
+        <short>What character to use between account names</short>
+        <long>
+	  This setting determines the character that will be used
+	  between components of an account name.  The legal settings
+	  are "colon" "slash", "backslash", "dash" and "period".
+	</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnucash/general/file_compression</key>
+      <applyto>/apps/gnucash/general/file_compression</applyto>
+      <owner>gnucash</owner>
+      <type>bool</type>
+      <default>TRUE</default>
+      <locale name="C">
+        <short>Compress the data file.</short>
+        <long>Compress the data file.</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnucash/general/negative_in_red</key>
+      <applyto>/apps/gnucash/general/negative_in_red</applyto>
+      <owner>gnucash</owner>
+      <type>bool</type>
+      <default>TRUE</default>
+      <locale name="C">
+        <short>Display negative amounts in red</short>
+        <long>Display negative amounts in red</long>
+      </locale>
+    </schema>
+
+    <schema>
+
+      <key>/schemas/apps/gnucash/general/enable_euro</key>
+      <applyto>/apps/gnucash/general/enable_euro</applyto>
+      <owner>gnucash</owner>
+      <type>bool</type>
+      <default>TRUE</default>
+      <locale name="C">
+        <short>Enables support for the European Union EURO currency.</short>
+        <long>Enables support for the European Union EURO currency.</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnucash/general/auto_decimal_point</key>
+      <applyto>/apps/gnucash/general/auto_decimal_point</applyto>
+      <owner>gnucash</owner>
+      <type>bool</type>
+      <default>FALSE</default>
+      <locale name="C">
+        <short>Automatically insert a decimal point.</short>
+        <long>
+	  If TRUE, Gnucash will automatically insert a decimal point
+	  into values that are entered without one.  If FALSE, Gnucash
+	  will not modify entered numbers.
+	</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnucash/general/auto_decimal_places</key>
+      <applyto>/apps/gnucash/general/auto_decimal_places</applyto>
+      <owner>gnucash</owner>
+      <type>float</type>
+      <default>2.0</default>
+      <locale name="C">
+        <short>How many automatic decimal places will be filled in.</short>
+        <long>How many automatic decimal places will be filled in.</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnucash/general/retain_days</key>
+      <applyto>/apps/gnucash/general/retain_days</applyto>
+      <owner>gnucash</owner>
+      <type>float</type>
+      <default>30.0</default>
+      <locale name="C">
+        <short>Delete old log/backup files after this many days (0 = never).</short>
+        <long>Delete old log/backup files after this many days (0 = never).</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnucash/general/reversed_accounts</key>
+      <applyto>/apps/gnucash/general/reversed_accounts</applyto>
+      <owner>gnucash</owner>
+      <type>string</type>
+      <default>credit</default>
+      <locale name="C">
+        <short>Accounts to reverse the balance</short>
+        <long>
+	  This setting allows certain accounts to have their balances
+	  reversed in sign from positive to negative, or vice versa.
+	  The setting "income_expense" is for users who like to see
+	  negative expenses and positive income.  The setting of
+	  "credit" is for users who want to see balances reflect the
+	  debit/credit status of the account.  The setting "none"
+	  doesn't reverse the sign on any balances.
+	</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnucash/general/toolbar_style</key>
+      <applyto>/apps/gnucash/general/toolbar_style</applyto>
+      <owner>gnucash</owner>
+      <type>string</type>
+      <default>system</default>
+      <locale name="C">
+        <short>How to draw the toolbar.</short>
+        <long>
+	  This setting controls how the toolbar is drawn.  If set to
+	  "system" then GnuCash will use the desktop setting for how
+	  to draw toolbar buttons.  If set to "icon" then only icons
+	  will be show on toolbar buttons..  If set to "text" only the
+	  labels will be shown.  If set to "both" then both icons and
+	  labels will be shown.  If set to "both-horiz" then icons
+	  will be shown for all buttons with labels added on important
+	  buttons.
+	</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnucash/general/use_accounting_labels</key>
+      <applyto>/apps/gnucash/general/use_accounting_labels</applyto>
+      <owner>gnucash</owner>
+      <type>bool</type>
+      <default>FALSE</default>
+      <locale name="C">
+        <short>Use formal account labels.</short>
+        <long>
+	  Setting this value to TRUE tells Gnucash to use the formal
+	  accounting labels "Credit" and "Debit" when designating
+	  fields on screen.  If false, Gnucash will use informal
+	  labels such as Increase/Decrease, "Funds In"/"Funds Out",
+	  etc.
+	</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnucash/general/tab_close_buttons</key>
+      <applyto>/apps/gnucash/general/tab_close_buttons</applyto>
+      <owner>gnucash</owner>
+      <type>bool</type>
+      <default>FALSE</default>
+      <locale name="C">
+        <short>Show close buttons on notebook tabs.</short>
+        <long>
+	  Setting this value to TRUE tells Gnucash to show a "close"
+	  button on any notebook tab that may be closed.  If FALSE,
+	  pages must be closed via the "close" menu item or the
+	  "close" button on toolbar.
+	</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnucash/general/currency_choice</key>
+      <applyto>/apps/gnucash/general/currency_choice</applyto>
+      <owner>gnucash</owner>
+      <type>string</type>
+      <default>locale</default>
+      <locale name="C">
+        <short>Use system currency.</short>
+        <long>
+	  This setting controls the default currency used for new
+	  accounts.  If set to "locale" then GnuCash will retrieve the
+	  default currency from the user's locale setting.  If set to
+	  "other", Gnucash will use the setting specified by the
+	  currency_other key.
+	</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnucash/general/currency_other</key>
+      <applyto>/apps/gnucash/general/currency_other</applyto>
+      <owner>gnucash</owner>
+      <type>string</type>
+      <locale name="C">
+        <short>Default currency.</short>
+        <long>
+	  This setting controls the default currency used for new
+	  accounts if the currency_choice key is set to "other".  This
+	  field should contain the three letter ISO 4217 code for a
+	  currency (e.g. USD, GBP, RUB).
+	</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnucash/general/24hour_clock</key>
+      <applyto>/apps/gnucash/general/24hour_clock</applyto>
+      <owner>gnucash</owner>
+      <type>bool</type>
+      <default>FALSE</default>
+      <locale name="C">
+        <short>Use a 24 hour (instead of a 12 hour) time format.</short>
+        <long>Use a 24 hour (instead of a 12 hour) time format.</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnucash/general/date_format</key>
+      <applyto>/apps/gnucash/general/date_format</applyto>
+      <owner>gnucash</owner>
+      <type>string</type>
+      <default>locale</default>
+      <locale name="C">
+        <short>Set the format used to display dates.</short>
+        <long>
+	  This setting controls the way dates are displayed in
+	  GnuCash.  Legal values for this setting are "locale" to use
+	  the system locale setting, "ce" for Continental Europe style
+	  dates, "iso" for ISO 8601 standard dates , "uk" for United
+	  Kingdom style dates, and "us" for United States style dates.
+	</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnucash/general/register/use_theme_colors</key>
+      <applyto>/apps/gnucash/general/register/use_theme_colors</applyto>
+      <owner>gnucash</owner>
+      <type>bool</type>
+      <default>FALSE</default>
+      <locale name="C">
+        <short>Color the register as specified by the system theme</short>
+        <long>
+	  A value of TRUE says to color the register as specified by
+	  the system theme.  This can be overridden to provide custom
+	  colors by editing the gtkrc file in the users home
+	  directory.  A value of FALSE says to show the standard
+	  register colors that GnuCash has always used.
+	</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnucash/general/register/enter_moves_to_end</key>
+      <applyto>/apps/gnucash/general/register/enter_moves_to_end</applyto>
+      <owner>gnucash</owner>
+      <type>bool</type>
+      <default>FALSE</default>
+      <locale name="C">
+        <short>"Enter" key moves to bottom of register.</short>
+        <long>
+	  If set to TRUE, pressing the enter key will move to the
+	  bottom of the register.
+	</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnucash/general/register/auto_raise_lists</key>
+      <applyto>/apps/gnucash/general/register/auto_raise_lists</applyto>
+      <owner>gnucash</owner>
+      <type>bool</type>
+      <default>TRUE</default>
+      <locale name="C">
+        <short>Automatically raise the list of accounts or actions during input.</short>
+        <long>Automatically raise the list of accounts or actions during input.</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnucash/general/register/use_new_window</key>
+      <applyto>/apps/gnucash/general/register/use_new_window</applyto>
+      <owner>gnucash</owner>
+      <type>bool</type>
+      <default>FALSE</default>
+      <locale name="C">
+        <short>Create a new window for each new register.</short>
+        <long>
+	  Set this value to TRUE to have gnucash open each new
+	  register in its own window.  Set to FALSE to have gnucash
+	  open new registers as tabs in the front window.
+	</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnucash/general/register/alternate_color_by_transaction</key>
+      <applyto>/apps/gnucash/general/register/alternate_color_by_transaction</applyto>
+      <owner>gnucash</owner>
+      <type>bool</type>
+      <default>FALSE</default>
+      <locale name="C">
+        <short>Color all lines of a transaction the same.</short>
+        <long>
+	 If TRUE all lines that make up a single transaction will use
+	 the same color for their background.  If FALSE, the
+	 background colors are alternated on each line.
+	</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnucash/general/register/draw_horizontal_lines</key>
+      <applyto>/apps/gnucash/general/register/draw_horizontal_lines</applyto>
+      <owner>gnucash</owner>
+      <type>bool</type>
+      <default>TRUE</default>
+      <locale name="C">
+        <short>Show horizontal borders in a register.</short>
+        <long>
+	 Show horizontal borders between cells in a register.  If TRUE
+	 the border between cells will be indicated with a heavy line.
+	 If FALSE, the border between cells will not be marked.
+	</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnucash/general/register/draw_vertical_lines</key>
+      <applyto>/apps/gnucash/general/register/draw_vertical_lines</applyto>
+      <owner>gnucash</owner>
+      <type>bool</type>
+      <default>TRUE</default>
+      <locale name="C">
+        <short>Show vertical borders in a register.</short>
+        <long>
+	 Show vertical borders between cells in a register.  If TRUE
+	 the border between cells will be indicated with a heavy line.
+	 If FALSE, the border between cells will not be marked.
+	</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnucash/general/register/default_style</key>
+      <applyto>/apps/gnucash/general/register/default_style</applyto>
+      <owner>gnucash</owner>
+      <type>string</type>
+      <default>ledger</default>
+      <locale name="C">
+        <short>Use this style when opening a new register.</short>
+        <long>
+	  This field specifies the type of ledger to use when first
+	  opening a register window.  Legal values are "ledger",
+	  "auto-ledger" and "journal".  The ledger setting says to
+	  show each transaction on one or two lines.  The auto-ledger
+	  setting does the same, but also expands only the current
+	  transaction to show all splits.  The journal setting shows
+	  all transactions in expanded form.
+	</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnucash/general/register/double_line_mode</key>
+      <applyto>/apps/gnucash/general/register/double_line_mode</applyto>
+      <owner>gnucash</owner>
+      <type>bool</type>
+      <default>FALSE</default>
+      <locale name="C">
+        <short>Show two lines of information for each transaction.</short>
+        <long>
+	  Show two lines of information for each transaction in a
+	  register.  This is the default setting for when a register
+	  is first opened.  The setting can be changed at any time via
+	  the "View->Double Line" menu item.
+	</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnucash/general/register/number_of_rows</key>
+      <applyto>/apps/gnucash/general/register/number_of_rows</applyto>
+      <owner>gnucash</owner>
+      <type>float</type>
+      <default>10.0</default>
+      <locale name="C">
+        <short>The number of rows in an invoice.</short>
+        <long>
+	  This field sets the number of rows to show in a register.
+	  It does not actually affect the display of the contents of
+	  the window.  It is only used to set the size of the window
+	  when first opened.
+	</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnucash/general/report/use_new_window</key>
+      <applyto>/apps/gnucash/general/report/use_new_window</applyto>
+      <owner>gnucash</owner>
+      <type>bool</type>
+      <default>FALSE</default>
+      <locale name="C">
+        <short>Create a new window for each new report.</short>
+        <long>
+	  Set this value to TRUE to have gnucash open each new
+	  report in its own window.  Set to FALSE to have gnucash
+	  open new registers as tabs in the front window.
+	</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnucash/general/report/currency_choice</key>
+      <applyto>/apps/gnucash/general/report/currency_choice</applyto>
+      <owner>gnucash</owner>
+      <type>string</type>
+      <default>locale</default>
+      <locale name="C">
+        <short>Use system currency.</short>
+        <long>
+	  This setting controls the default currency used for
+	  reports. If set to "locale" then GnuCash will retrieve the
+	  default currency from the user's locale setting.  If set to
+	  "other", Gnucash will use the setting specified by the
+	  currency_other key.
+	</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnucash/general/report/currency_other</key>
+      <applyto>/apps/gnucash/general/report/currency_other</applyto>
+      <owner>gnucash</owner>
+      <type>string</type>
+      <locale name="C">
+        <short>Default currency.</short>
+        <long>
+	  This setting controls the default currency used for reports
+	  if the currency_choice key is set to "other".  This field
+	  should contain the three letter ISO 4217 code for a currency
+	  (e.g. USD, GBP, RUB).
+	</long>
+      </locale>
+    </schema>
+
+  </schemalist>
+</gconfschemafile>

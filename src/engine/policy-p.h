@@ -20,7 +20,7 @@
 \********************************************************************/
 
 /** @file policy-p.h
- *  @breif Implement Accounting Policy Private header File.
+ *  @brief Implement Accounting Policy Private header File.
  *  @author Created by Linas Vepstas August 2003
  *  @author Copyright (c) 2003 Linas Vepstas <linas@linas.org>
  *

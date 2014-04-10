@@ -26,9 +26,8 @@
 #include <glib.h>
 #include <libguile.h>
 
-#include "guid.h"
+#include "qof.h"
 #include "gnc-module.h"
-#include "gnc-engine-util.h"
 #include "messages.h"
 
 #include "gncBusiness.h"

@@ -35,9 +35,12 @@
 #include "SX-book.h"
 #include "Transaction.h"
 #include "dialog-find-transactions.h"
-#include "window-register.h"
+#include "gnc-main-window.h"
+#include "gnc-plugin-page-register.h"
 #include "messages.h"
 #include "search-param.h"
+
+#define GCONF_SECTION "dialogs/find"
 
 struct _ftd_data {
   QueryNew *		q;
@@ -51,6 +54,7 @@ do_find_cb (QueryNew *query, gpointer user_data, gpointer *result)
   struct _ftd_data *ftd = user_data;
   GNCLedgerDisplay *ledger;
   gboolean new_ledger = FALSE;
+  GncPluginPage *page;
 
   ledger = gnc_ledger_display_find_by_query (ftd->ledger_q);
   if(!ledger) {
@@ -63,8 +67,10 @@ do_find_cb (QueryNew *query, gpointer user_data, gpointer *result)
 
   gnc_ledger_display_refresh (ledger);
 
-  if (new_ledger)
-    regWindowLedger(ledger);
+  if (new_ledger) {
+    page = gnc_plugin_page_register_new_ledger (ledger);
+    gnc_main_window_open_page (NULL, page);
+  }
 
   gncQueryDestroy (ftd->q);
 
@@ -92,36 +98,36 @@ gnc_ui_find_transactions_dialog_create(GNCLedgerDisplay * orig_ledg)
 
   /* Build parameter list in reverse order */
   if (params == NULL) {
-    params = gnc_search_param_prepend (params, "All Accounts",
+    params = gnc_search_param_prepend (params, N_("All Accounts"),
 				       ACCOUNT_MATCH_ALL_TYPE,
 				       type, SPLIT_TRANS, TRANS_SPLITLIST,
 				       SPLIT_ACCOUNT_GUID, NULL);
-    params = gnc_search_param_prepend (params, "Account", GNC_ID_ACCOUNT,
+    params = gnc_search_param_prepend (params, N_("Account"), GNC_ID_ACCOUNT,
 				       type, SPLIT_ACCOUNT, QUERY_PARAM_GUID,
 				       NULL);
-    params = gnc_search_param_prepend (params, "Balanced", NULL,
+    params = gnc_search_param_prepend (params, N_("Balanced"), NULL,
 				       type, SPLIT_TRANS, TRANS_IS_BALANCED,
 				       NULL);
-    params = gnc_search_param_prepend (params, "Reconcile", RECONCILED_MATCH_TYPE,
+    params = gnc_search_param_prepend (params, N_("Reconcile"), RECONCILED_MATCH_TYPE,
 				       type, SPLIT_RECONCILE, NULL);
-    params = gnc_search_param_prepend (params, "Share Price", NULL,
+    params = gnc_search_param_prepend (params, N_("Share Price"), NULL,
 				       type, SPLIT_SHARE_PRICE, NULL);
-    params = gnc_search_param_prepend (params, "Shares", NULL,
+    params = gnc_search_param_prepend (params, N_("Shares"), NULL,
 				       type, SPLIT_AMOUNT, NULL);
-    params = gnc_search_param_prepend (params, "Value", NULL,
+    params = gnc_search_param_prepend (params, N_("Value"), NULL,
 				       type, SPLIT_VALUE, NULL);
-    params = gnc_search_param_prepend (params, "Date Posted", NULL,
+    params = gnc_search_param_prepend (params, N_("Date Posted"), NULL,
 				       type, SPLIT_TRANS, TRANS_DATE_POSTED,
 				       NULL);
-    params = gnc_search_param_prepend (params, "Notes", NULL,
+    params = gnc_search_param_prepend (params, N_("Notes"), NULL,
 				       type, SPLIT_TRANS, TRANS_NOTES, NULL);
-    params = gnc_search_param_prepend (params, "Action", NULL,
+    params = gnc_search_param_prepend (params, N_("Action"), NULL,
 				       type, SPLIT_ACTION, NULL);
-    params = gnc_search_param_prepend (params, "Number", NULL,
+    params = gnc_search_param_prepend (params, N_("Number"), NULL,
 				       type, SPLIT_TRANS, TRANS_NUM, NULL);
-    params = gnc_search_param_prepend (params, "Memo", NULL,
+    params = gnc_search_param_prepend (params, N_("Memo"), NULL,
 				       type, SPLIT_MEMO, NULL);
-    params = gnc_search_param_prepend (params, "Description", NULL,
+    params = gnc_search_param_prepend (params, N_("Description"), NULL,
 				       type, SPLIT_TRANS, TRANS_DESCRIPTION,
 				       NULL);
   }
@@ -164,7 +170,7 @@ gnc_ui_find_transactions_dialog_create(GNCLedgerDisplay * orig_ledg)
 
   ftd->sw = gnc_search_dialog_create (type, params, NULL, start_q, show_q,
 				      NULL, do_find_cb, NULL,
-				      ftd, free_ftd_cb);
+				      ftd, free_ftd_cb, GCONF_SECTION);
 
   if (!ftd->sw) {
     free_ftd_cb (ftd);

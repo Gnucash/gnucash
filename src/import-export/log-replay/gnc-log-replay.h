@@ -30,5 +30,4 @@
  *     is selected the the .log file is opened and read.  It's contents
  *     are then silently merged in the current log file. */
 void              gnc_file_log_replay (void);
-SCM  scm_gnc_file_log_replay (void);
 #endif

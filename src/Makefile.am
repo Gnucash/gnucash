@@ -16,14 +16,12 @@ GUI_SUBDIRS_1 = \
   tax \
   app-utils \
   gnome-utils \
-  gnome-search \
-  app-file
+  gnome-search
 
 GUI_SUBDIRS_2 = \
   register \
   gnome \
   import-export \
-  experimental \
   business \
   optional 
 
@@ -45,4 +43,5 @@ EXTRA_DIST = \
   .cvsignore \
   README.modules \
   gnc-test-env \
-  valgrind-gnucash.supp
+  valgrind-gnucash.supp \
+  guile-mappings.h

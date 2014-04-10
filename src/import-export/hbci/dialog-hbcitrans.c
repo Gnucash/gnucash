@@ -27,8 +27,19 @@
 #endif
 
 #include <gnome.h>
-#include <openhbci2/bank.h>
-#include <openhbci2.h>
+#include <aqbanking/version.h>
+#include <aqbanking/account.h>
+#include <aqbanking/jobsingletransfer.h>
+#include <aqbanking/jobsingledebitnote.h>
+#if ((AQBANKING_VERSION_MAJOR > 1) || \
+     ((AQBANKING_VERSION_MAJOR == 1) && \
+      ((AQBANKING_VERSION_MINOR > 6) || \
+       ((AQBANKING_VERSION_MINOR == 6) && \
+        ((AQBANKING_VERSION_PATCHLEVEL > 0) || \
+	 (AQBANKING_VERSION_BUILD > 2))))))
+# include <aqbanking/jobinternaltransfer.h>
+#endif
+#include <iconv.h>
 
 #include "dialog-utils.h"
 #include "gnc-ui.h"
@@ -65,12 +76,14 @@ struct _trans_data
   /* Purpose, description */
   GtkWidget *purpose_entry;
   GtkWidget *purpose_cont_entry;
+  GtkWidget *purpose_cont2_entry;
+  GtkWidget *purpose_cont3_entry;
 
   /* Recipient's bank name (may be filled in automatically sometime later) */
   GtkWidget *recp_bankname_label;
 
   /* The template choosing GtkList */
-  GtkWidget *template_gtk_list;
+  GtkWidget *template_gtktreeview;
 
   /* The selected template in the list */
   GtkWidget *selected_template;
@@ -82,7 +95,7 @@ struct _trans_data
   gboolean templ_changed;
   
   /* The HBCI transaction that got created here */
-  HBCI_Transaction *hbci_trans;
+  AB_TRANSACTION *hbci_trans;
   
   /* The gnucash transaction dialog where the user specifies the gnucash transaction. */
   XferDialog *gnc_trans_dialog;
@@ -104,11 +117,12 @@ void gnc_hbci_dialog_delete(HBCITransDialog *td)
   if (td->gnc_trans_dialog)
     gnc_xfer_dialog_set_txn_cb(td->gnc_trans_dialog, NULL, NULL);
   if (td->hbci_trans)
-    HBCI_Transaction_delete (td->hbci_trans);
+    AB_Transaction_free (td->hbci_trans);
 
   td->selected_template = NULL;
-    
-  gtk_widget_destroy (GTK_WIDGET (td->dialog));
+
+  if (td->dialog)
+    gtk_widget_destroy (GTK_WIDGET (td->dialog));
 #if HAVE_KTOBLZCHECK_H
   AccountNumberCheck_delete(td->blzcheck);
 #endif    
@@ -124,7 +138,7 @@ GtkWidget *gnc_hbci_dialog_get_parent(const HBCITransDialog *td)
   g_assert(td);
   return td->parent;
 }
-const HBCI_Transaction *gnc_hbci_dialog_get_htrans(const HBCITransDialog *td)
+const AB_TRANSACTION *gnc_hbci_dialog_get_htrans(const HBCITransDialog *td)
 {
   g_assert(td);
   return td->hbci_trans;
@@ -155,11 +169,11 @@ void gnc_hbci_dialog_show(HBCITransDialog *td)
 /* Prototypes; callbacks for dialog function */
 /* -------------------------------------- */
 
-HBCI_Transaction *
-hbci_trans_fill_values(const gnc_HBCI_Account *h_acc, HBCITransDialog *td);
+AB_TRANSACTION *
+hbci_trans_fill_values(const AB_ACCOUNT *h_acc, HBCITransDialog *td);
 gboolean
 check_ktoblzcheck(GtkWidget *parent, const HBCITransDialog *td, 
-		  const HBCI_Transaction *trans);
+		  const AB_TRANSACTION *trans);
 
 void on_template_list_select_child(GtkList  *list, GtkWidget  *widget, gpointer  user_data);
 void on_template_list_selection_changed(GtkList *list, gpointer  user_data);
@@ -189,7 +203,7 @@ void blz_changed_cb(GtkEditable *e, gpointer user_data);
 static void fill_template_list_func(gpointer data, gpointer user_data)
 {
   GNCTransTempl *templ = data;
-  GtkList *list = user_data;
+  GtkTreeView *list = user_data;
   GtkWidget *item;
 
   g_assert(templ);
@@ -204,14 +218,13 @@ static void fill_template_list_func(gpointer data, gpointer user_data)
 
 HBCITransDialog *
 gnc_hbci_dialog_new (GtkWidget *parent,
-		const gnc_HBCI_Account *h_acc,
-		const HBCI_Customer *customer,
+		const AB_ACCOUNT *h_acc,
 		Account *gnc_acc,
 		GNC_HBCI_Transtype trans_type,
 		GList *templates)
 {
   GladeXML *xml;
-  const HBCI_Bank *bank;
+  const char *hbci_bankid, *hbci_bankname;
   HBCITransDialog *td;
 
   td = g_new0(HBCITransDialog, 1);
@@ -220,9 +233,8 @@ gnc_hbci_dialog_new (GtkWidget *parent,
   td->templ = templates;
   td->trans_type = trans_type;
   g_assert (h_acc);
-  g_assert (customer);
-  bank = gnc_HBCI_Account_bank (h_acc);
-  g_assert (bank);
+  hbci_bankid = AB_Account_GetBankCode(h_acc);
+  hbci_bankname = AB_Account_GetBankName(h_acc);
 #if HAVE_KTOBLZCHECK_H
   td->blzcheck = AccountNumberCheck_new();
 #endif
@@ -232,7 +244,8 @@ gnc_hbci_dialog_new (GtkWidget *parent,
   td->dialog = glade_xml_get_widget (xml, "HBCI_trans_dialog");
 
   if (parent)
-    gnome_dialog_set_parent (GNOME_DIALOG (td->dialog), GTK_WINDOW (parent));
+    gtk_window_set_transient_for (GTK_WINDOW (td->dialog), 
+				  GTK_WINDOW (parent));
   
   {
     GtkWidget *heading_label;
@@ -278,6 +291,10 @@ gnc_hbci_dialog_new (GtkWidget *parent,
     g_assert
       ((td->purpose_cont_entry = glade_xml_get_widget (xml, "purpose_cont_entry")) != NULL);
     g_assert
+      ((td->purpose_cont2_entry = glade_xml_get_widget (xml, "purpose_cont2_entry")) != NULL);
+    g_assert
+      ((td->purpose_cont3_entry = glade_xml_get_widget (xml, "purpose_cont3_entry")) != NULL);
+    g_assert
       ((orig_name_label = glade_xml_get_widget (xml, "orig_name_label")) != NULL);
     g_assert
       ((orig_account_label = glade_xml_get_widget (xml, "orig_account_label")) != NULL);
@@ -296,7 +313,7 @@ gnc_hbci_dialog_new (GtkWidget *parent,
     g_assert
       ((exec_later_button = glade_xml_get_widget (xml, "exec_later_button")) != NULL);
     g_assert
-      ((td->template_gtk_list = glade_xml_get_widget (xml, "template_list")) != NULL);
+      ((td->template_gtktreeview = glade_xml_get_widget (xml, "template_list")) != NULL);
     g_assert
       ((add_templ_button = glade_xml_get_widget (xml, "add_templ_button")) != NULL);
     g_assert
@@ -315,10 +332,21 @@ gnc_hbci_dialog_new (GtkWidget *parent,
     gnc_amount_edit_set_fraction (GNC_AMOUNT_EDIT (td->amount_edit),
 				  xaccAccountGetCommoditySCU (gnc_acc));
 
+    /* FIXME: Greyed out the template widgets because they are not yet
+       implemented -- need to change the GTK_LIST code to
+       GTK_TREE_VIEW */
+    gtk_widget_set_sensitive (td->template_gtktreeview, FALSE);
+    gtk_widget_set_sensitive (add_templ_button, FALSE);
+    gtk_widget_set_sensitive (moveup_templ_button, FALSE);
+    gtk_widget_set_sensitive (movedown_templ_button, FALSE);
+    gtk_widget_set_sensitive (sort_templ_button, FALSE);
+    gtk_widget_set_sensitive (del_templ_button, FALSE);
+
     /* Check for what kind of transaction this should be, and change
        the labels accordingly. */
     switch (trans_type) {
     case SINGLE_TRANSFER:
+    case SINGLE_INTERNAL_TRANSFER:
       /* all labels are already set */
       break;
     case SINGLE_DEBITNOTE:
@@ -354,21 +382,20 @@ gnc_hbci_dialog_new (GtkWidget *parent,
     
     /* Fill in the values from the objects */
     gtk_label_set_text (GTK_LABEL (orig_name_label), 
-			(strlen(HBCI_Customer_name (customer)) > 0 ?
-			 HBCI_Customer_name (customer) :
-			 HBCI_Customer_custId (customer)));
+			AB_Account_GetOwnerName (h_acc));
     gtk_label_set_text (GTK_LABEL (orig_account_label), 
-			gnc_HBCI_Account_accountId (h_acc));
+			AB_Account_GetAccountNumber (h_acc));
     gtk_label_set_text (GTK_LABEL (orig_bankname_label), 
-			(strlen(HBCI_Bank_name (bank))>0 ?
-			 HBCI_Bank_name (bank) :
+			(hbci_bankname && (strlen(hbci_bankname)>0) ?
+			 hbci_bankname :
 			 _("(unknown)")));
     gtk_label_set_text (GTK_LABEL (orig_bankcode_label), 
-			HBCI_Bank_bankCode (bank));
+			hbci_bankid);
 
     /* fill list for choosing a transaction template */
-    g_list_foreach(td->templ, fill_template_list_func, 
-		    GTK_LIST (td->template_gtk_list));
+    /* g_list_foreach(td->templ, fill_template_list_func, 
+       GTK_TREE_VIEW (td->template_gtktreeview)); */
+    /* FIXME: commented out until the GTK_TREE_VIEW is implemented! */
 
     td->selected_template = NULL;
     td->templ_changed = FALSE;
@@ -377,7 +404,9 @@ gnc_hbci_dialog_new (GtkWidget *parent,
 /*    gnc_option_menu_init_w_signal (td->template_option, 
 				   GTK_SIGNAL_FUNC(template_selection_cb),
 				   td);   */
-    gtk_signal_connect (GTK_OBJECT (td->template_gtk_list), "select_child",
+    /* FIXME: commented out until the GTK_TREE_VIEW is implemented! */
+    /*
+    gtk_signal_connect (GTK_OBJECT (td->template_gtktreeview), "select_child",
                       GTK_SIGNAL_FUNC (on_template_list_select_child),
                       td);
                       
@@ -399,20 +428,14 @@ gnc_hbci_dialog_new (GtkWidget *parent,
      gtk_signal_connect (GTK_OBJECT (del_templ_button), "clicked",
                       GTK_SIGNAL_FUNC (del_template_cb),
                       td);
-
+    */
 
     gtk_signal_connect(GTK_OBJECT (td->recp_bankcode_entry), "changed",
 		       GTK_SIGNAL_FUNC(blz_changed_cb), td);
 
     /* Default button */
-    gnome_dialog_set_default (GNOME_DIALOG (td->dialog), 0);
+    gtk_dialog_set_default_response (GTK_DIALOG (td->dialog), GTK_RESPONSE_OK);
     
-    gtk_widget_grab_focus (td->recp_name_entry);
-
-    /* Hide on close instead of destroy since we still need the values
-       from the boxes. */
-    gnome_dialog_close_hides (GNOME_DIALOG (td->dialog), TRUE);
-
   } /* GtkWidget declarations/definitions */
   
   return td;
@@ -424,10 +447,39 @@ gnc_hbci_dialog_new (GtkWidget *parent,
  */
 
 int gnc_hbci_dialog_run_until_ok(HBCITransDialog *td, 
-				 const gnc_HBCI_Account *h_acc)
+				 const AB_ACCOUNT *h_acc)
 {
-  int result;
+  gint result;
+  int max_purpose_lines;
   gboolean values_ok;
+
+  {
+    AB_JOB *job = AB_JobSingleTransfer_new((AB_ACCOUNT *)h_acc);
+    if (AB_Job_CheckAvailability(job)) {
+      printf("gnc_hbci_trans_dialog_enqueue: Oops, job not available. Aborting.\n");
+      return -1;
+    }
+#if ((AQBANKING_VERSION_MAJOR > 1) || \
+     ((AQBANKING_VERSION_MAJOR == 1) && \
+      ((AQBANKING_VERSION_MINOR > 0) || \
+       ((AQBANKING_VERSION_MINOR == 0) && \
+        (AQBANKING_VERSION_PATCHLEVEL > 6)))))
+    {
+      const AB_TRANSACTION_LIMITS *joblimits = AB_JobSingleTransfer_GetFieldLimits(job);
+      max_purpose_lines = (joblimits ?
+			   AB_TransactionLimits_GetMaxLinesPurpose (joblimits) :
+			   2);
+    }
+#else
+    max_purpose_lines = AB_JobSingleTransfer_GetMaxPurposeLines(job);
+#endif
+    /* these are the number of fields, 27 characters each. */
+    AB_Job_free(job);
+  }
+  /* gtk_widget_set_sensitive (GTK_WIDGET (td->purpose_entry), max_purpose_lines > 0); */
+  gtk_widget_set_sensitive (GTK_WIDGET (td->purpose_cont_entry), max_purpose_lines > 1);
+  gtk_widget_set_sensitive (GTK_WIDGET (td->purpose_cont2_entry), max_purpose_lines > 2);
+  gtk_widget_set_sensitive (GTK_WIDGET (td->purpose_cont3_entry), max_purpose_lines > 3);
 
   /* Repeat until entered values make sense */
   do {
@@ -436,29 +488,31 @@ int gnc_hbci_dialog_run_until_ok(HBCITransDialog *td,
     gtk_widget_show_all (td->dialog); 
 
     /* Now run the dialog until it gets closed by a button press. */
-    result = gnome_dialog_run (GNOME_DIALOG (td->dialog));
+    result = gtk_dialog_run (GTK_DIALOG (td->dialog));
     /* printf("hbci_trans: result button was %d.\n", result); */
 
     /* The dialog gets hidden anyway as soon as any button is pressed. */
     gtk_widget_hide_all (td->dialog);
 
-    /* Was cancel pressed or dialog closed? 0 == execute now, 1 ==
-       scheduled for later execution (currently unimplemented) */
-    if ((result != 0) && (result != 1)) {
+    /* Was cancel pressed or dialog closed? 1 == execute now, 3 ==
+       scheduled for later execution (currently unimplemented); 2 == cancel */
+    if (result != 1 ) { /* <- currently hard-coded response-id from glade */
+      gtk_widget_destroy (GTK_WIDGET (td->dialog));
+      td->dialog = NULL;
       return -1;
     }
 
     /* Now fill in the values from the entry fields into a new
-       HBCI_Transaction. */
+       AB_TRANSACTION. */
     td->hbci_trans = hbci_trans_fill_values(h_acc, td);
     values_ok = TRUE;
 
     /*printf("dialog-hbcitrans: Got value as %s .\n", 
-      HBCI_Value_toReadableString (HBCI_Transaction_value (trans)));*/
-    if (HBCI_Value_getValue (HBCI_Transaction_value (td->hbci_trans)) == 0.0) {
+      AB_VALUE_toReadableString (AB_TRANSACTION_value (trans)));*/
+    if (AB_Value_GetValue (AB_Transaction_GetValue (td->hbci_trans)) == 0.0) {
       gtk_widget_show_all (td->dialog); 
       values_ok = !gnc_verify_dialog
-	(GTK_WIDGET (td->dialog),
+	(td->dialog,
 	 TRUE,
 	 "%s",
 	 _("The amount is zero or the amount field could not be \n"
@@ -468,16 +522,38 @@ int gnc_hbci_dialog_run_until_ok(HBCITransDialog *td,
 	   "This does not result in a valid online transfer job.\n"
 	   "Do you want to enter the job again?"));
       if (values_ok) {
-	HBCI_Transaction_delete (td->hbci_trans);
+	AB_Transaction_free (td->hbci_trans);
+	td->hbci_trans = NULL;
 	return -1;
       }
       continue;
     } /* check Transaction_value */
 
+    {
+      char *purpose = gnc_hbci_getpurpose (td->hbci_trans);
+      if (strlen(purpose) == 0) {
+	gtk_widget_show_all (td->dialog); 
+	values_ok = !gnc_verify_dialog
+	  (GTK_WIDGET (td->dialog),
+	   TRUE,
+	   "%s",
+	   _("You did not enter any transaction purpose. A purpose is \n"
+	     "required for an online transfer.\n"
+	     "\n"
+	     "Do you want to enter the job again?"));
+	if (values_ok) {
+	  AB_Transaction_free (td->hbci_trans);
+	  td->hbci_trans = NULL;
+	  return -1;
+	}
+	continue;
+      } /* check Transaction_purpose */
+    }
+
     /* FIXME: If this is a direct debit, set the textkey/ "Textschluessel"/
        transactionCode according to some GUI selection here!! */
     /*if (td->trans_type == SINGLE_DEBITNOTE)
-      HBCI_Transaction_setTransactionCode (td->hbci_trans, 05);*/
+      AB_TRANSACTION_setTextKey (td->hbci_trans, 05);*/
 
     /* And finally check the account code, if ktoblzcheck is available. */
     values_ok = check_ktoblzcheck(GTK_WIDGET (td->dialog), td, td->hbci_trans);
@@ -487,63 +563,99 @@ int gnc_hbci_dialog_run_until_ok(HBCITransDialog *td,
   return result;
 }
 
-
-/** Create a new HBCI_Transaction, fill the values from the entry
+/** Create a new AB_TRANSACTION, fill the values from the entry
     fields into it and return it. The caller must
-    HBCI_Transaction_delete() it when finished. */
-HBCI_Transaction *
-hbci_trans_fill_values(const gnc_HBCI_Account *h_acc, HBCITransDialog *td)
+    AB_TRANSACTION_free() it when finished. */
+AB_TRANSACTION *
+hbci_trans_fill_values(const AB_ACCOUNT *h_acc, HBCITransDialog *td)
 {
-  GWEN_DB_NODE *xnode = GWEN_DB_Group_new("transaction");
   /* Fill in the user-entered values */
-  HBCI_Transaction *trans = HBCI_Transaction_new(xnode);
+  AB_TRANSACTION *trans = AB_Transaction_new();
+  gchar *tmpchar;
+
+  /* The internal source encoding is returned by
+     gnc_hbci_book_encoding(), which is hard-coded so far. This needs
+     to be fixed for the gnome2 version; the source encoding is then
+     probably utf-8 as well. iconv is also used in
+     gnc_AB_BANKING_interactors() in hbci-interaction.c. */
+  iconv_t gnc_iconv_handler =
+    iconv_open(gnc_hbci_AQBANKING_encoding(), gnc_hbci_book_encoding());
+  g_assert(gnc_iconv_handler != (iconv_t)(-1));
 	
   /* OpenHBCI newer than 0.9.8: use account's bankCode values
    * instead of the bank's ones since this is what some banks
    * require. */
-  HBCI_Transaction_setOurBankCode (trans, 
-				   gnc_HBCI_Account_bankCode (h_acc));
-  HBCI_Transaction_setOurAccountId (trans, gnc_HBCI_Account_accountId (h_acc));
+  AB_Transaction_SetLocalBankCode (trans, 
+				   AB_Account_GetBankCode (h_acc));
+  AB_Transaction_SetLocalAccountNumber (trans, AB_Account_GetAccountNumber (h_acc));
+  AB_Transaction_SetLocalCountry (trans, "DE");
 	
-  HBCI_Transaction_setOtherBankCode 
+  AB_Transaction_SetRemoteBankCode
     (trans, gtk_entry_get_text (GTK_ENTRY (td->recp_bankcode_entry)));
   /* printf("Got otherBankCode %s.\n",
-     HBCI_Transaction_otherBankCode (trans)); */
-  HBCI_Transaction_setOtherAccountId
+     AB_Transaction_otherBankCode (trans)); */
+  AB_Transaction_SetRemoteAccountNumber
     (trans, gtk_entry_get_text (GTK_ENTRY (td->recp_account_entry)));
   /* printf("Got otherAccountId %s.\n",
-     HBCI_Transaction_otherAccountId (trans)); */
-  HBCI_Transaction_addOtherName
-    (trans, gtk_entry_get_text (GTK_ENTRY (td->recp_name_entry)));
+     AB_Transaction_otherAccountId (trans)); */
+  AB_Transaction_SetRemoteCountry (trans, "DE");
+
+  /* Convert the result of GTK_ENTRY into UTF-8 */
+  tmpchar = gnc_call_iconv(gnc_iconv_handler, 
+			   gtk_entry_get_text (GTK_ENTRY (td->recp_name_entry)));
+  AB_Transaction_AddRemoteName (trans, tmpchar, FALSE);
+  g_free (tmpchar);
 	
-  HBCI_Transaction_addDescription
-    (trans, gtk_entry_get_text (GTK_ENTRY (td->purpose_entry)));
-  HBCI_Transaction_addDescription
-    (trans, gtk_entry_get_text (GTK_ENTRY (td->purpose_cont_entry)));
+  /* The last argument means: If TRUE, then the string will be only be
+     appended if it doesn't exist yet. */
+  /* Convert the result of GTK_ENTRY into UTF-8 */
+  tmpchar = gnc_call_iconv(gnc_iconv_handler, 
+			   gtk_entry_get_text (GTK_ENTRY (td->purpose_entry)));
+  AB_Transaction_AddPurpose (trans, tmpchar, FALSE);
+  g_free (tmpchar);
+  tmpchar = gnc_call_iconv(gnc_iconv_handler, 
+			   gtk_entry_get_text (GTK_ENTRY (td->purpose_cont_entry)));
+  if (strlen(tmpchar) > 0)
+    AB_Transaction_AddPurpose (trans, tmpchar, FALSE);
+  g_free (tmpchar);
+  tmpchar = gnc_call_iconv(gnc_iconv_handler, 
+			   gtk_entry_get_text (GTK_ENTRY (td->purpose_cont2_entry)));
+  if (strlen(tmpchar) > 0)
+    AB_Transaction_AddPurpose (trans, tmpchar, FALSE);
+  g_free (tmpchar);
+  tmpchar = gnc_call_iconv(gnc_iconv_handler, 
+			   gtk_entry_get_text (GTK_ENTRY (td->purpose_cont3_entry)));
+  if (strlen(tmpchar) > 0)
+    AB_Transaction_AddPurpose (trans, tmpchar, FALSE);
+  g_free (tmpchar);
 	
   /* FIXME: Replace "EUR" by account-dependent string here. */
-  HBCI_Transaction_setValue 
-    (trans, HBCI_Value_new_double 
+  AB_Transaction_SetValue 
+    (trans, AB_Value_new
      (gnc_amount_edit_get_damount (GNC_AMOUNT_EDIT (td->amount_edit)), "EUR"));
 
   /* If this is a direct debit, a textkey/ "Textschluessel"/
      transactionCode different from the default has to be set. */
   switch(td->trans_type) {
   case SINGLE_DEBITNOTE:
-    HBCI_Transaction_setTransactionCode (trans, 05);
+    /* AB_Transaction_SetTransactionCode (trans, 05); */
+    AB_Transaction_SetTextKey (trans, 05);
+    break;
   default:
-    HBCI_Transaction_setTransactionCode (trans, 51);
+    /* AB_Transaction_SetTransactionCode (trans, 51); */
+    AB_Transaction_SetTextKey (trans, 51);
   }
 
+  iconv_close(gnc_iconv_handler);
   return trans;
 }
 
-/** Checks the account code in the HBCI_Transaction, if the
+/** Checks the account code in the AB_TRANSACTION, if the
     ktoblzcheck package is available. Returns TRUE if everything is
     fine, or FALSE if this transaction should be entered again. */
 gboolean
 check_ktoblzcheck(GtkWidget *parent, const HBCITransDialog *td, 
-		  const HBCI_Transaction *trans)	
+		  const AB_TRANSACTION *trans)	
 {
 #if HAVE_KTOBLZCHECK_H
   int blzresult;
@@ -552,8 +664,8 @@ check_ktoblzcheck(GtkWidget *parent, const HBCITransDialog *td,
   
   blzresult = AccountNumberCheck_check
     (td->blzcheck, 
-     HBCI_Transaction_otherBankCode (trans),
-     HBCI_Transaction_otherAccountId (trans));
+     AB_Transaction_GetRemoteBankCode (trans),
+     AB_Transaction_GetRemoteAccountNumber (trans));
   switch (blzresult) {
   case 2:
     gtk_widget_show_all (parent); 
@@ -564,8 +676,8 @@ check_ktoblzcheck(GtkWidget *parent, const HBCITransDialog *td,
 	 "at the specified bank with bank code '%s' failed. This means \n"
 	 "the account number might contain an error. Should the online \n"
 	 "transfer job be sent with this account number anyway?"),
-       HBCI_Transaction_otherAccountId (trans),
-       HBCI_Transaction_otherBankCode (trans));
+       AB_Transaction_GetRemoteAccountNumber (trans),
+       AB_Transaction_GetRemoteBankCode (trans));
     blztext = "Kontonummer wahrscheinlich falsch";
     break;
   case 0:
@@ -588,73 +700,85 @@ check_ktoblzcheck(GtkWidget *parent, const HBCITransDialog *td,
 #endif    
 }
 
-HBCI_OutboxJob *
-gnc_hbci_trans_dialog_enqueue(HBCITransDialog *td, HBCI_API *api,
-			      HBCI_Outbox *outbox,
-			      const HBCI_Customer *customer, 
-			      gnc_HBCI_Account *h_acc, 
+AB_JOB *
+gnc_hbci_trans_dialog_enqueue(HBCITransDialog *td, AB_BANKING *api,
+			      AB_ACCOUNT *h_acc, 
 			      GNC_HBCI_Transtype trans_type) 
 {
-  HBCI_OutboxJob *job;
-  const char *jobname;
+  AB_JOB *job;
 
   /* Create a Do-Transaction (Transfer) job. */
   switch (trans_type) {
   case SINGLE_DEBITNOTE:
-    { 
-      jobname = "JobSingleDebitNote";
-    }
+    job = AB_JobSingleDebitNote_new(h_acc);
     break;
-  case SINGLE_TRANSFER:
-    {
-      jobname = "JobSingleTransfer";
-    }
+  case SINGLE_INTERNAL_TRANSFER:
+#if ((AQBANKING_VERSION_MAJOR > 1) || \
+     ((AQBANKING_VERSION_MAJOR == 1) && \
+      ((AQBANKING_VERSION_MINOR > 6) || \
+       ((AQBANKING_VERSION_MINOR == 6) && \
+        ((AQBANKING_VERSION_PATCHLEVEL > 0) || \
+	 (AQBANKING_VERSION_BUILD > 2))))))
+    job = AB_JobInternalTransfer_new(h_acc);
     break;
+#endif
   default:
-    {
-      /*printf("dialog-hbcitrans: Oops, unknown GNC_HBCI_Transtype %d.\n",
-	trans_type);*/
-      jobname = "JobSingleTransfer";
-    }
+  case SINGLE_TRANSFER:
+    job = AB_JobSingleTransfer_new(h_acc);
+  };
+  if (AB_Job_CheckAvailability(job)) {
+    printf("gnc_hbci_trans_dialog_enqueue: Oops, job not available. Aborting.\n");
+    return NULL;
   }
-  job = HBCI_OutboxJob_new(jobname, (HBCI_Customer *)customer, 
-			   gnc_HBCI_Account_accountId(h_acc));
-  HBCI_Job_addRequestData(HBCI_OutboxJob_Job(job), 
-			  "", HBCI_Transaction_node(td->hbci_trans));
 
-  /* Make really sure there is no other job in the queue */
-  HBCI_Outbox_removeByStatus (outbox, HBCI_JOB_STATUS_NONE);
+  switch (trans_type) {
+  case SINGLE_DEBITNOTE:
+    AB_JobSingleDebitNote_SetTransaction(job, td->hbci_trans);
+    break;
+  case SINGLE_INTERNAL_TRANSFER:
+#if ((AQBANKING_VERSION_MAJOR > 1) || \
+     ((AQBANKING_VERSION_MAJOR == 1) && \
+      ((AQBANKING_VERSION_MINOR > 6) || \
+       ((AQBANKING_VERSION_MINOR == 6) && \
+        ((AQBANKING_VERSION_PATCHLEVEL > 0) || \
+	 (AQBANKING_VERSION_BUILD > 2))))))
+    AB_JobInternalTransfer_SetTransaction(job, td->hbci_trans);
+    break;
+#endif
+  default:
+  case SINGLE_TRANSFER:
+    AB_JobSingleTransfer_SetTransaction(job, td->hbci_trans);
+  };
 
   /* Add job to queue */
-  HBCI_Outbox_addJob(outbox, job);
+  AB_Banking_EnqueueJob(api, job);
 
   return job;
 }
 
 gboolean 
-gnc_hbci_trans_dialog_execute(HBCITransDialog *td, HBCI_API *api, 
-			      HBCI_Outbox *outbox,
-			      HBCI_OutboxJob *job, GNCInteractor *interactor)
+gnc_hbci_trans_dialog_execute(HBCITransDialog *td, AB_BANKING *api, 
+			      AB_JOB *job, GNCInteractor *interactor)
 {
   gboolean successful;
   g_assert(td);
   g_assert(api);
   g_assert(job);
 
-  successful = gnc_hbci_api_execute (td->parent, api, outbox, job, interactor);
+  successful = gnc_AB_BANKING_execute (td->parent, api, job, interactor);
 
   /*printf("dialog-hbcitrans: Ok, result of api_execute was %d.\n", 
     successful);*/
 	  
   if (!successful) {
-    /* HBCI_API_executeOutbox failed. */
-    if ((HBCI_OutboxJob_status (job) == HBCI_JOB_STATUS_DONE) &&
-	(HBCI_OutboxJob_result (job) == HBCI_JOB_RESULT_FAILED)) 
+    /* AB_BANKING_executeOutbox failed. */
+    if ((AB_Job_GetStatus (job) == AB_Job_StatusPending) ||
+	(AB_Job_GetStatus (job) == AB_Job_StatusError)) 
       successful = !gnc_verify_dialog
 	(td->parent, 
 	 FALSE,
 	 "%s",
-	 _("The job was successfully sent to the bank, but the \n"
+	 _("The job was sent to the bank successfully, but the \n"
 	   "bank is refusing to execute the job. Please check \n"
 	   "the log window for the exact error message of the \n"
 	   "bank. The line with the error message contains a \n"
@@ -662,12 +786,15 @@ gnc_hbci_trans_dialog_execute(HBCITransDialog *td, HBCI_API *api,
 	   "\n"
 	   "Do you want to enter the job again?"));
 
-    HBCI_Transaction_delete (td->hbci_trans);
+    if (AB_Job_GetStatus (job) == AB_Job_StatusPending)
+      AB_Banking_DelPendingJob(api, job);
+
+    AB_Transaction_free (td->hbci_trans);
     td->hbci_trans = NULL;
   }
   /* Watch out! The job *has* to be removed from the queue
      here because otherwise it might be executed again. */
-  HBCI_Outbox_removeByStatus (outbox, HBCI_JOB_STATUS_NONE);
+  /* FIXME: need to do AB_Banking_DequeueJob(api, job); */
   return successful;
 }
 
@@ -739,8 +866,19 @@ void blz_changed_cb(GtkEditable *e, gpointer user_data)
   
   if (record) {
     const char *bankname = AccountNumberCheck_Record_bankName (record);
+    GError *error = NULL;
+    gchar *utf8_bankname = g_convert (bankname, strlen(bankname), 
+				      "UTF-8", "ISO-8859-15",
+				      NULL, NULL, &error);
+    if (error != NULL) {
+      printf ("Error convertion bankname \"%s\" to UTF-8\n", bankname);
+      g_error_free (error);
+      utf8_bankname = g_strdup (bankname);
+    }
     gtk_label_set_text (GTK_LABEL (td->recp_bankname_label),
-			(strlen(bankname)>0 ? bankname : _("(unknown)")));
+			(strlen(utf8_bankname)>0 ? 
+			 utf8_bankname : _("(unknown)")));
+    g_free (utf8_bankname);
     gtk_widget_show_all (td->recp_bankname_label);
 
     /*printf("blz_changed_cb: KtoBlzCheck said check is bank is '%s' at '%s'.\n",
@@ -800,7 +938,7 @@ void add_template_cb(GtkButton *b,
   if (td->selected_template) {
     t = gtk_object_get_user_data(GTK_OBJECT(td->selected_template));
 
-    index = 1+gtk_list_child_position(GTK_LIST(td->template_gtk_list), td->selected_template);
+    index = 1+gtk_list_child_position(GTK_LIST(td->template_gtktreeview), td->selected_template);
     }
   else index = 0;
   
@@ -808,16 +946,16 @@ void add_template_cb(GtkButton *b,
     
   td->templ_changed = TRUE;
 
-  gtk_list_clear_items(GTK_LIST(td->template_gtk_list), 0, -1);
+  gtk_list_clear_items(GTK_LIST(td->template_gtktreeview), 0, -1);
 
   /* fill list for choosing a transaction template */
   g_list_foreach(td->templ, fill_template_list_func,
-		    GTK_LIST (td->template_gtk_list));
+		 GTK_TREE_VIEW (td->template_gtktreeview));
 
-  gtk_list_select_item(GTK_LIST(td->template_gtk_list), index);
+  gtk_list_select_item(GTK_LIST(td->template_gtktreeview), index);
 
   /* the show_all is necessary since otherwise the new item doesn't show up */
-  gtk_widget_show_all (GTK_WIDGET ( GTK_LIST (td->template_gtk_list)));
+  gtk_widget_show_all (GTK_WIDGET ( GTK_LIST (td->template_gtktreeview)));
   }
 }
 
@@ -834,22 +972,22 @@ moveup_template_cb(GtkButton       *button,
   if (td->selected_template) {
     t = gtk_object_get_user_data(GTK_OBJECT(td->selected_template));
 
-    index = gtk_list_child_position(GTK_LIST(td->template_gtk_list), td->selected_template);
+    index = gtk_list_child_position(GTK_LIST(td->template_gtktreeview), td->selected_template);
 
     if (index > 0) {
       td->templ =  g_list_remove( td->templ, t);
       td->templ =  g_list_insert( td->templ, t, index-1);
 
       td->templ_changed = TRUE;
-      gtk_list_clear_items(GTK_LIST(td->template_gtk_list), 0, -1);
+      gtk_list_clear_items(GTK_LIST(td->template_gtktreeview), 0, -1);
 
       /* fill list for choosing a transaction template */
       g_list_foreach(td->templ, fill_template_list_func,
-		    GTK_LIST (td->template_gtk_list));
+		     GTK_TREE_VIEW (td->template_gtktreeview));
 
-      gtk_list_select_item(GTK_LIST(td->template_gtk_list), index-1);
+      gtk_list_select_item(GTK_LIST(td->template_gtktreeview), index-1);
 
-      gtk_widget_show_all (GTK_WIDGET ( GTK_LIST (td->template_gtk_list)));
+      gtk_widget_show_all (GTK_WIDGET ( GTK_LIST (td->template_gtktreeview)));
       }
     }
 }
@@ -867,22 +1005,22 @@ movedown_template_cb(GtkButton       *button,
   if (td->selected_template) {
     t = gtk_object_get_user_data(GTK_OBJECT(td->selected_template));
 
-    index = gtk_list_child_position(GTK_LIST(td->template_gtk_list), td->selected_template);
+    index = gtk_list_child_position(GTK_LIST(td->template_gtktreeview), td->selected_template);
 
     if (index < g_list_length(td->templ)-1) {
       td->templ =  g_list_remove( td->templ, t);
       td->templ =  g_list_insert( td->templ, t, index+1);
 
       td->templ_changed = TRUE;
-      gtk_list_clear_items(GTK_LIST(td->template_gtk_list), 0, -1);
+      gtk_list_clear_items(GTK_LIST(td->template_gtktreeview), 0, -1);
 
       /* fill list for choosing a transaction template */
       g_list_foreach(td->templ, fill_template_list_func,
-		    GTK_LIST (td->template_gtk_list));
+		     GTK_TREE_VIEW (td->template_gtktreeview));
 
-      gtk_list_select_item(GTK_LIST(td->template_gtk_list), index+1);
+      gtk_list_select_item(GTK_LIST(td->template_gtktreeview), index+1);
 
-      gtk_widget_show_all (GTK_WIDGET ( GTK_LIST (td->template_gtk_list)));
+      gtk_widget_show_all (GTK_WIDGET ( GTK_LIST (td->template_gtktreeview)));
       }
     }
 }
@@ -909,15 +1047,15 @@ sort_template_cb(GtkButton       *button,
   
     td->templ_changed = TRUE;
 
-    gtk_list_clear_items(GTK_LIST(td->template_gtk_list), 0, -1);
+    gtk_list_clear_items(GTK_LIST(td->template_gtktreeview), 0, -1);
 
     /* fill list for choosing a transaction template */
     g_list_foreach(td->templ, fill_template_list_func,
-		    GTK_LIST (td->template_gtk_list));
+		   GTK_TREE_VIEW (td->template_gtktreeview));
 
-    gtk_list_unselect_all ( GTK_LIST (td->template_gtk_list) );
+    gtk_list_unselect_all ( GTK_LIST (td->template_gtktreeview) );
    
-    gtk_widget_show_all (GTK_WIDGET ( GTK_LIST (td->template_gtk_list)));
+    gtk_widget_show_all (GTK_WIDGET ( GTK_LIST (td->template_gtktreeview)));
   }
 }
 
@@ -936,21 +1074,21 @@ del_template_cb(GtkButton       *button,
 
     t = gtk_object_get_user_data(GTK_OBJECT(td->selected_template));
 
-    index = gtk_list_child_position(GTK_LIST(td->template_gtk_list), td->selected_template);
+    index = gtk_list_child_position(GTK_LIST(td->template_gtktreeview), td->selected_template);
 
     if (gnc_verify_dialog (td->parent,
           FALSE, _("Do you really want to delete the template '%s'?"),
           gnc_trans_templ_get_name(g_list_nth_data(td->templ, index)))) {
-      gtk_list_clear_items(GTK_LIST(td->template_gtk_list), index, index+1);
+      gtk_list_clear_items(GTK_LIST(td->template_gtktreeview), index, index+1);
             
       td->templ =  g_list_remove( td->templ, t);
       td->templ_changed = TRUE;
 
       gnc_trans_templ_delete(t);
 
-      gtk_list_unselect_all ( GTK_LIST (td->template_gtk_list) );
+      gtk_list_unselect_all ( GTK_LIST (td->template_gtktreeview) );
 
-      gtk_widget_show_all (GTK_WIDGET ( GTK_LIST (td->template_gtk_list)));
+      gtk_widget_show_all (GTK_WIDGET ( GTK_LIST (td->template_gtktreeview)));
     
       }
     }

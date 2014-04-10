@@ -52,6 +52,14 @@ gint gnc_hbci_get_account_countrycode (Account *a);
  * will be marked as "dirty". */
 void gnc_hbci_set_account_countrycode (Account *a, gint code);
 
+/** Returns the unique id for the AB_BANKING account in the Account
+ * a. */
+gint gnc_hbci_get_account_uid (Account *a);
+/** Set the unique id for the AB_BANKING account in the Account a. The
+    Account will be marked as "dirty". */
+void gnc_hbci_set_account_uid (Account *a, gint uid);
+
+
 /** Returns the time of last online transaction retrieval */
 Timespec gnc_hbci_get_account_trans_retrieval (Account *a);
 /** Set the time of last online transaction retrieval. The account
@@ -75,11 +83,13 @@ void gnc_hbci_set_book_configfile (GNCBook *b, const char *filename);
 GList *gnc_hbci_get_book_template_list (GNCBook *b);
 void gnc_hbci_set_book_template_list (GNCBook *b, GList *template_list);
 
+#if 0
 /** Returns a non-copied pointer to the GList of kvp_frames which
  * eventually are the available HBCI accounts, stored in the given
  * book. */
 GList *gnc_hbci_get_book_account_list (GNCBook *b);
 void gnc_hbci_set_book_account_list (GNCBook *b, GList *account_list);
+#endif
 
 /* lowlevel */
 

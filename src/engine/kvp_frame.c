@@ -32,9 +32,9 @@
 #include <math.h>
 
 #include "gnc-date.h"
+#include "gnc-trace.h"
 #include "gnc-engine-util.h"
 #include "gnc-numeric.h"
-#include "gnc-trace.h"
 #include "guid.h"
 #include "kvp_frame.h"
 
@@ -42,6 +42,8 @@
  /* Note that we keep the keys for this hash table in a GCache
   * (gnc_string_cache), as it is very likely we will see the 
   * same keys over and over again  */
+
+/* TODO: set the cache handling functions with hash_table_new_full */
 
 struct _KvpFrame 
 {
@@ -72,7 +74,7 @@ struct _KvpValue
 };
 
 /* This static indicates the debugging module that this .o belongs to.  */
-static short module = MOD_KVP;
+static QofLogModule log_module = QOF_MOD_KVP;
 
 /********************************************************************
  * KvpFrame functions
@@ -113,7 +115,7 @@ kvp_frame_new(void)
 static void
 kvp_frame_delete_worker(gpointer key, gpointer value, gpointer user_data) 
 {
-  g_cache_remove(gnc_engine_get_string_cache(), key);
+  gnc_string_cache_remove(key);
   kvp_value_delete((KvpValue *)value);  
 }
 
@@ -148,7 +150,7 @@ kvp_frame_copy_worker(gpointer key, gpointer value, gpointer user_data)
 {
   KvpFrame * dest = (KvpFrame *)user_data;
   g_hash_table_insert(dest->hash,
-                      (gpointer)g_cache_insert(gnc_engine_get_string_cache(), key), 
+                      gnc_string_cache_insert(key),
                       (gpointer)kvp_value_copy(value));
 }
 
@@ -189,7 +191,7 @@ kvp_frame_replace_slot_nc (KvpFrame * frame, const char * slot,
   if(key_exists) 
   {
     g_hash_table_remove(frame->hash, slot);
-    g_cache_remove(gnc_engine_get_string_cache(), orig_key);
+    gnc_string_cache_remove(orig_key);
   }
   else
   {
@@ -199,8 +201,7 @@ kvp_frame_replace_slot_nc (KvpFrame * frame, const char * slot,
   if(new_value) 
   {
     g_hash_table_insert(frame->hash,
-                        g_cache_insert(gnc_engine_get_string_cache(),
-                                       (gpointer) slot),
+                        gnc_string_cache_insert((gpointer) slot),
                         new_value);
   }
 
@@ -311,16 +312,16 @@ kvp_frame_get_frame_or_null_slash_trash (const KvpFrame *frame, char *key_path)
  */
 
 static inline KvpFrame *
-get_trailer_make (KvpFrame * frame, const char * key_path, char **end_key)
+get_trailer_make (KvpFrame * frame, const char * key_path, const char **end_key)
 {
-  char *last_key;
+  const char *last_key;
 
   if (!frame || !key_path || (0 == key_path[0])) return NULL;
 
   last_key = strrchr (key_path, '/');
   if (NULL == last_key)
   {
-    last_key = (char *) key_path;
+    last_key = key_path;
   }
   else if (last_key == key_path)
   {
@@ -353,16 +354,16 @@ get_trailer_make (KvpFrame * frame, const char * key_path, char **end_key)
  */
 
 static inline const KvpFrame *
-get_trailer_or_null (const KvpFrame * frame, const char * key_path, char **end_key)
+get_trailer_or_null (const KvpFrame * frame, const char * key_path, const char **end_key)
 {
-  char *last_key;
+  const char *last_key;
 
   if (!frame || !key_path || (0 == key_path[0])) return NULL;
 
   last_key = strrchr (key_path, '/');
   if (NULL == last_key)
   {
-    last_key = (char *) key_path;
+    last_key = key_path;
   }
   else if (last_key == key_path)
   {
@@ -409,7 +410,7 @@ kvp_frame_set_double(KvpFrame * frame, const char * path, double dval)
 }
 
 void
-kvp_frame_set_gnc_numeric(KvpFrame * frame, const char * path, gnc_numeric nval) 
+kvp_frame_set_numeric(KvpFrame * frame, const char * path, gnc_numeric nval) 
 {
   KvpValue *value;
   value = kvp_value_new_gnc_numeric (nval);
@@ -418,7 +419,7 @@ kvp_frame_set_gnc_numeric(KvpFrame * frame, const char * path, gnc_numeric nval)
 }
 
 void
-kvp_frame_set_str(KvpFrame * frame, const char * path, const char* str) 
+kvp_frame_set_string(KvpFrame * frame, const char * path, const char* str) 
 {
   KvpValue *value;
   value = kvp_value_new_string (str);
@@ -468,7 +469,7 @@ KvpFrame *
 kvp_frame_set_value_nc (KvpFrame * frame, const char * key_path, 
                         KvpValue * value) 
 {
-  char *last_key;
+  const char *last_key;
 
   frame = get_trailer_make (frame, key_path, &last_key);
   if (!frame) return NULL;
@@ -481,7 +482,7 @@ kvp_frame_set_value (KvpFrame * frame, const char * key_path,
                      const KvpValue * value) 
 {
   KvpValue *new_value = NULL;
-  char *last_key;
+  const char *last_key;
 
   frame = get_trailer_make (frame, key_path, &last_key);
   if (!frame) return NULL;
@@ -496,8 +497,9 @@ kvp_frame_replace_value_nc (KvpFrame * frame, const char * key_path,
                             KvpValue * new_value) 
 {
   KvpValue * old_value;
-  char *last_key;
+  const char *last_key;
 
+  last_key = NULL;
   if (new_value)
   {
      frame = get_trailer_make (frame, key_path, &last_key);
@@ -517,7 +519,7 @@ kvp_frame_replace_value_nc (KvpFrame * frame, const char * key_path,
 KvpFrame *
 kvp_frame_add_value_nc(KvpFrame * frame, const char * path, KvpValue *value) 
 {
-  char *key = NULL;
+  const char *key = NULL;
   KvpValue *oldvalue;
 
   frame = (KvpFrame *) get_trailer_or_null (frame, path, &key);
@@ -584,7 +586,7 @@ kvp_frame_add_double(KvpFrame * frame, const char * path, double dval)
 }
 
 void
-kvp_frame_add_gnc_numeric(KvpFrame * frame, const char * path, gnc_numeric nval) 
+kvp_frame_add_numeric(KvpFrame * frame, const char * path, gnc_numeric nval) 
 {
   KvpValue *value;
   value = kvp_value_new_gnc_numeric (nval);
@@ -593,7 +595,7 @@ kvp_frame_add_gnc_numeric(KvpFrame * frame, const char * path, gnc_numeric nval)
 }
 
 void
-kvp_frame_add_str(KvpFrame * frame, const char * path, const char* str) 
+kvp_frame_add_string(KvpFrame * frame, const char * path, const char* str) 
 {
   KvpValue *value;
   value = kvp_value_new_string (str);
@@ -667,9 +669,11 @@ kvp_frame_set_slot_nc(KvpFrame * frame, const char * slot,
 KvpValue * 
 kvp_frame_get_slot(const KvpFrame * frame, const char * slot) 
 {
+  KvpValue *v;
   if (!frame) return NULL;
   if (!frame->hash) return NULL;  /* Error ... */
-  return (KvpValue *)g_hash_table_lookup(frame->hash, slot);
+  v = g_hash_table_lookup(frame->hash, slot);
+  return v;
 }
 
 /* ============================================================ */
@@ -851,7 +855,7 @@ kvp_frame_add_url_encoding (KvpFrame *frame, const char *enc)
 gint64
 kvp_frame_get_gint64(const KvpFrame *frame, const char *path)
 {
-  char *key = NULL;
+  const char *key = NULL;
   frame = get_trailer_or_null (frame, path, &key);
   return kvp_value_get_gint64(kvp_frame_get_slot (frame, key));
 }
@@ -859,7 +863,7 @@ kvp_frame_get_gint64(const KvpFrame *frame, const char *path)
 double      
 kvp_frame_get_double(const KvpFrame *frame, const char *path)
 {
-  char *key = NULL;
+  const char *key = NULL;
   frame = get_trailer_or_null (frame, path, &key);
   return kvp_value_get_double(kvp_frame_get_slot (frame, key));
 }
@@ -867,7 +871,7 @@ kvp_frame_get_double(const KvpFrame *frame, const char *path)
 gnc_numeric 
 kvp_frame_get_numeric(const KvpFrame *frame, const char *path)
 {
-  char *key = NULL;
+  const char *key = NULL;
   frame = get_trailer_or_null (frame, path, &key);
   return kvp_value_get_numeric(kvp_frame_get_slot (frame, key));
 }
@@ -875,7 +879,7 @@ kvp_frame_get_numeric(const KvpFrame *frame, const char *path)
 char * 
 kvp_frame_get_string(const KvpFrame *frame, const char *path)
 {
-  char *key = NULL;
+  const char *key = NULL;
   frame = get_trailer_or_null (frame, path, &key);
   return kvp_value_get_string(kvp_frame_get_slot (frame, key));
 }
@@ -883,7 +887,7 @@ kvp_frame_get_string(const KvpFrame *frame, const char *path)
 GUID *
 kvp_frame_get_guid(const KvpFrame *frame, const char *path)
 {
-  char *key = NULL;
+  const char *key = NULL;
   frame = get_trailer_or_null (frame, path, &key);
   return kvp_value_get_guid(kvp_frame_get_slot (frame, key));
 }
@@ -892,7 +896,7 @@ void *
 kvp_frame_get_binary(const KvpFrame *frame, const char *path,
                                    guint64 * size_return)
 {
-  char *key = NULL;
+  const char *key = NULL;
   frame = get_trailer_or_null (frame, path, &key);
   return kvp_value_get_binary(kvp_frame_get_slot (frame, key), size_return);
 }
@@ -900,7 +904,7 @@ kvp_frame_get_binary(const KvpFrame *frame, const char *path,
 Timespec
 kvp_frame_get_timespec(const KvpFrame *frame, const char *path)
 {
-  char *key = NULL;
+  const char *key = NULL;
   frame = get_trailer_or_null (frame, path, &key);
   return kvp_value_get_timespec(kvp_frame_get_slot (frame, key));
 }
@@ -908,7 +912,7 @@ kvp_frame_get_timespec(const KvpFrame *frame, const char *path)
 KvpFrame *
 kvp_frame_get_frame(const KvpFrame *frame, const char *path)
 {
-  char *key = NULL;
+  const char *key = NULL;
   frame = get_trailer_or_null (frame, path, &key);
   return kvp_value_get_frame(kvp_frame_get_slot (frame, key));
 }
@@ -916,7 +920,7 @@ kvp_frame_get_frame(const KvpFrame *frame, const char *path)
 KvpValue *
 kvp_frame_get_value(const KvpFrame *frame, const char *path)
 {
-  char *key = NULL;
+  const char *key = NULL;
   frame = get_trailer_or_null (frame, path, &key);
   return kvp_frame_get_slot (frame, key);
 }
@@ -1128,7 +1132,7 @@ kvp_value_new_double(double value)
 }
 
 KvpValue *
-kvp_value_new_gnc_numeric(gnc_numeric value) 
+kvp_value_new_numeric(gnc_numeric value) 
 {
   KvpValue * retval    = g_new0(KvpValue, 1);
   retval->type          = KVP_TYPE_NUMERIC;
@@ -1601,7 +1605,7 @@ binary_to_string(const void *data, guint32 size)
     
     for(i = 0; i < size; i++)
     {
-        g_string_sprintfa(output, "%02x", (unsigned int) (data_str[i]));
+        g_string_append_printf(output, "%02x", (unsigned int) (data_str[i]));
     }
 
     return output->str;
@@ -1634,6 +1638,81 @@ kvp_value_glist_to_string(const GList *list)
 }
 
 gchar*
+kvp_value_to_bare_string(const KvpValue *val)
+{
+    gchar *tmp1;
+    gchar *tmp2;
+    const gchar *ctmp;
+    
+    g_return_val_if_fail(val, NULL);
+    
+    switch(kvp_value_get_type(val))
+    {
+    case KVP_TYPE_GINT64:
+        return g_strdup_printf("%" G_GINT64_FORMAT, kvp_value_get_gint64(val));
+        break;
+
+    case KVP_TYPE_DOUBLE:
+        return g_strdup_printf("(%g)", kvp_value_get_double(val));
+        break;
+
+    case KVP_TYPE_NUMERIC:
+        tmp1 = gnc_numeric_to_string(kvp_value_get_numeric(val));
+        tmp2 = g_strdup_printf("%s", tmp1 ? tmp1 : "");
+        g_free(tmp1);
+        return tmp2;
+        break;
+
+    case KVP_TYPE_STRING:
+        tmp1 = kvp_value_get_string (val);
+        return g_strdup_printf("%s", tmp1 ? tmp1 : "");
+        break;
+
+    case KVP_TYPE_GUID:
+        ctmp = guid_to_string(kvp_value_get_guid(val));
+        tmp2 = g_strdup_printf("%s", ctmp ? ctmp : "");
+        return tmp2;
+        break;
+
+    case KVP_TYPE_TIMESPEC:
+        tmp1 = g_new0 (char, 40);
+        gnc_timespec_to_iso8601_buff (kvp_value_get_timespec (val), tmp1);
+        tmp2 = g_strdup_printf("%s", tmp1);
+        g_free(tmp1);
+        return tmp2;
+        break;
+
+    case KVP_TYPE_BINARY:
+    {
+        guint64 len;
+        void *data;
+        data = kvp_value_get_binary(val, &len);
+        tmp1 = binary_to_string(data, len);
+        return g_strdup_printf("%s", tmp1 ? tmp1 : "");
+    }
+        break;
+ 
+    case KVP_TYPE_GLIST:
+        tmp1 = kvp_value_glist_to_string(kvp_value_get_glist(val));
+        tmp2 = g_strdup_printf("%s", tmp1 ? tmp1 : "");
+        g_free(tmp1);
+        return tmp2;
+        break;
+
+    case KVP_TYPE_FRAME:
+        tmp1 = kvp_frame_to_string(kvp_value_get_frame(val));
+        tmp2 = g_strdup_printf("%s", tmp1 ? tmp1 : "");
+        g_free(tmp1);
+        return tmp2;
+        break;
+
+    default:
+        return g_strdup_printf(" ");
+        break;
+    }
+}
+
+gchar*
 kvp_value_to_string(const KvpValue *val)
 {
     gchar *tmp1;
@@ -1645,8 +1724,8 @@ kvp_value_to_string(const KvpValue *val)
     switch(kvp_value_get_type(val))
     {
     case KVP_TYPE_GINT64:
-        return g_strdup_printf("KVP_VALUE_GINT64(%lld)",
-                               (long long int) kvp_value_get_gint64(val));
+        return g_strdup_printf("KVP_VALUE_GINT64(%" G_GINT64_FORMAT ")",
+                               kvp_value_get_gint64(val));
         break;
 
     case KVP_TYPE_DOUBLE:
@@ -1667,6 +1746,7 @@ kvp_value_to_string(const KvpValue *val)
         break;
 
     case KVP_TYPE_GUID:
+        /* THREAD-UNSAFE */
         ctmp = guid_to_string(kvp_value_get_guid(val));
         tmp2 = g_strdup_printf("KVP_VALUE_GUID(%s)", ctmp ? ctmp : "");
         return tmp2;

@@ -19,7 +19,11 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
  *                                                                  *
 \********************************************************************/
-/** @addtogroup Account_Quickfill Quickfill Account Names
+/** @addtogroup QuickFill auto-complete typed user input.
+   @{
+*/
+/** @addtogroup Account_QuickFill Account Names
+
     For systems with a large number of accounts (>500), the creation 
     of the account name quickfill can take a significant amount of 
     time (tens of seconds in bad cases).  This routine will build 
@@ -72,4 +76,5 @@ QuickFill * gnc_get_shared_account_name_quickfill (AccountGroup *group,
 
 #endif
 
+/** @} */
 /** @} */

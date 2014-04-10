@@ -1,0 +1,100 @@
+<?xml version="1.0"?>
+<gconfschemafile>
+  <schemalist>
+
+    <schema>
+      <key>/schemas/apps/gnucash/dialogs/scheduled_trans/since_last_run/show_at_file_open</key>
+      <applyto>/apps/gnucash/dialogs/scheduled_trans/since_last_run/show_at_file_open</applyto>
+      <owner>gnucash</owner>
+      <type>bool</type>
+      <default>TRUE</default>
+      <locale name="C">
+        <short>Show "since last run" dialog when a file is opened.</short>
+        <long>
+	  Whether or not to show scheduled transactions "since last
+	  run" dialog when a data file is opened.  This includes the
+	  initial data file open when GnuCash starts.  A value of TRUE
+	  says to show the dialog; FALSE says not to show the dialog.
+	</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnucash/dialogs/scheduled_trans/transaction_editor/create_auto</key>
+      <applyto>/apps/gnucash/dialogs/scheduled_trans/transaction_editor/create_auto</applyto>
+      <owner>gnucash</owner>
+      <type>bool</type>
+      <default>FALSE</default>
+      <locale name="C">
+        <short>Set the "auto create" flag by default</short>
+        <long>
+	  If set to TRUE then any newly created scheduled transactions
+	  will have its 'auto create' flag set by default.  The user
+	  can change this pre-transaction flag during transaction
+	  creation, or at any later time by editing the transaction.
+	</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnucash/dialogs/scheduled_trans/transaction_editor/create_days</key>
+      <applyto>/apps/gnucash/dialogs/scheduled_trans/transaction_editor/create_days</applyto>
+      <owner>gnucash</owner>
+      <type>float</type>
+      <default>0</default>
+      <locale name="C">
+        <short>How many days in advance to notify the user.</short>
+        <long>How many days in advance to notify the user.</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnucash/dialogs/scheduled_trans/transaction_editor/notify</key>
+      <applyto>/apps/gnucash/dialogs/scheduled_trans/transaction_editor/notify</applyto>
+      <owner>gnucash</owner>
+      <type>bool</type>
+      <default>TRUE</default>
+      <locale name="C">
+        <short>Set the "notify" flag by default</short>
+        <long>
+	  If set to TRUE then any newly created scheduled transactions
+	  will have its 'notify' flag set by default.  The user can
+	  change this pre-transaction flag during transaction
+	  creation, or at any later time by editing the transaction.
+	  This setting only has meaning of the create_auto setting is
+	  TRUE.
+	</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnucash/dialogs/scheduled_trans/transaction_editor/remind_days</key>
+      <applyto>/apps/gnucash/dialogs/scheduled_trans/transaction_editor/remind_days</applyto>
+      <owner>gnucash</owner>
+      <type>float</type>
+      <default>0</default>
+      <locale name="C">
+        <short>How many days in advance to remind the user.</short>
+        <long>How many days in advance to remind the user.</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnucash/dialogs/scheduled_trans/transaction_editor/number_of_rows</key>
+      <applyto>/apps/gnucash/dialogs/scheduled_trans/transaction_editor/number_of_rows</applyto>
+      <owner>gnucash</owner>
+      <type>float</type>
+      <default>6.0</default>
+      <locale name="C">
+        <short>The number of rows in an scheduled transaction.</short>
+        <long>
+	  This field sets the number of rows to show in a scheduled
+	  transaction.  It does not actually affect the display of the
+	  contents of the window.  It is only used to set the size of
+	  the dialog when first opened.
+	</long>
+      </locale>
+    </schema>
+
+  </schemalist>
+</gconfschemafile>

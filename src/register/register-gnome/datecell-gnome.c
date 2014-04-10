@@ -32,7 +32,6 @@
 
 #include "config.h"
 
-#include <ctype.h>
 #include <gnome.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -52,7 +51,7 @@
 typedef struct _PopBox
 {
   GnucashSheet  *sheet;
-  ItemEdit      *item_edit;
+  GncItemEdit      *item_edit;
   GNCDatePicker *date_picker;
 
   gboolean signals_connected; /* date picker signals connected? */
@@ -72,9 +71,9 @@ static void gnc_date_cell_move (BasicCell *bcell);
 static void gnc_date_cell_gui_destroy (BasicCell *bcell);
 static void gnc_date_cell_destroy (BasicCell *bcell);
 static void gnc_date_cell_modify_verify (BasicCell *_cell,
-                                         const GdkWChar *change,
+                                         const char *change,
                                          int change_len,
-                                         const GdkWChar *newval,
+                                         const char *newval,
                                          int newval_len,
                                          int *cursor_position,
                                          int *start_selection,
@@ -99,7 +98,7 @@ gnc_parse_date (struct tm *parsed, const char * datestr)
   if (!parsed) return;
   if (!datestr) return;
 
-  scanDate (datestr, &day, &month, &year);
+  qof_scan_date (datestr, &day, &month, &year);
 
   parsed->tm_mday = day;
   parsed->tm_mon  = month - 1;
@@ -116,7 +115,7 @@ gnc_date_cell_print_date (DateCell *cell, char *buff)
 {
   PopBox *box = cell->cell.gui_private;
 
-  printDate (buff,
+  qof_print_date_dmy_buff (buff, MAX_DATE_LENGTH,
              box->date.tm_mday,
              box->date.tm_mon + 1,
              box->date.tm_year+1900);
@@ -183,13 +182,13 @@ date_picked_cb (GNCDatePicker *gdp, gpointer data)
 
   gtk_calendar_get_date (gdp->calendar, &year, &month, &day);
 
-  printDate (buffer, day, month + 1, year);
+  qof_print_date_dmy_buff (buffer, MAX_DATE_LENGTH, day, month + 1, year);
 
   box->in_date_select = TRUE;
   gnucash_sheet_modify_current_cell (box->sheet, buffer);
   box->in_date_select = FALSE;
 
-  item_edit_hide_popup (box->item_edit);
+  gnc_item_edit_hide_popup (box->item_edit);
   box->calendar_popped = FALSE;
 }
 
@@ -203,7 +202,7 @@ date_selected_cb (GNCDatePicker *gdp, gpointer data)
 
   gtk_calendar_get_date (gdp->calendar, &year, &month, &day);
 
-  printDate (buffer, day, month + 1, year);
+  qof_print_date_dmy_buff (buffer, MAX_DATE_LENGTH, day, month + 1, year);
 
   box->in_date_select = TRUE;
   gnucash_sheet_modify_current_cell (box->sheet, buffer);
@@ -219,7 +218,7 @@ key_press_item_cb (GNCDatePicker *gdp, GdkEventKey *event, gpointer data)
   switch(event->keyval)
   {
     case GDK_Escape:
-      item_edit_hide_popup (box->item_edit);
+      gnc_item_edit_hide_popup (box->item_edit);
       box->calendar_popped = FALSE;
       break;
 
@@ -237,9 +236,6 @@ date_picker_disconnect_signals (DateCell *cell)
   if (!box->signals_connected)
     return;
 
-  if (GTK_OBJECT_DESTROYED (GTK_OBJECT (box->date_picker)))
-    return;
-
   gtk_signal_disconnect_by_data (GTK_OBJECT (box->date_picker), cell);
 
   box->signals_connected = FALSE;
@@ -251,9 +247,6 @@ date_picker_connect_signals (DateCell *cell)
   PopBox *box = cell->cell.gui_private;
 
   if (box->signals_connected)
-    return;
-
-  if (GTK_OBJECT_DESTROYED (GTK_OBJECT (box->date_picker)))
     return;
 
   gtk_signal_connect (GTK_OBJECT(box->date_picker), "date_selected",
@@ -301,7 +294,7 @@ gnc_date_cell_gui_destroy (BasicCell *bcell)
     if (box != NULL && box->date_picker != NULL)
     {
       date_picker_disconnect_signals (cell);
-      gtk_object_unref (GTK_OBJECT (box->date_picker));
+      g_object_unref (box->date_picker);
       box->date_picker = NULL;
     }
 
@@ -346,7 +339,7 @@ gnc_date_cell_set_value (DateCell *cell, int day, int mon, int year)
   box->date.tm_mon  = dada.tm_mon;
   box->date.tm_year = dada.tm_year;
 
-  printDate (buff, dada.tm_mday, dada.tm_mon + 1, dada.tm_year + 1900);
+  qof_print_date_dmy_buff (buff, MAX_DATE_LENGTH, dada.tm_mday, dada.tm_mon + 1, dada.tm_year + 1900);
 
   gnc_basic_cell_set_value_internal (&cell->cell, buff);
 
@@ -368,7 +361,7 @@ gnc_date_cell_set_value_secs (DateCell *cell, time_t secs)
   stm = localtime (&secs);
   box->date = *stm;
 
-  printDate (buff,
+  qof_print_date_dmy_buff (buff, MAX_DATE_LENGTH,
              box->date.tm_mday, 
              box->date.tm_mon + 1, 
              box->date.tm_year + 1900);
@@ -397,7 +390,7 @@ gnc_date_cell_commit (DateCell *cell)
 
   gnc_parse_date (&(box->date), cell->cell.value);
 
-  printDate (buff,
+  qof_print_date_dmy_buff (buff, MAX_DATE_LENGTH,
              box->date.tm_mday, 
              box->date.tm_mon + 1,
              box->date.tm_year + 1900);
@@ -430,7 +423,7 @@ gnc_date_cell_direct_update (BasicCell *bcell,
   if (!gnc_handle_date_accelerator (event, &(box->date), bcell->value))
     return FALSE;
 
-  printDate (buff,
+  qof_print_date_dmy_buff (buff, MAX_DATE_LENGTH,
              box->date.tm_mday,
              box->date.tm_mon + 1,
              box->date.tm_year + 1900);
@@ -455,9 +448,9 @@ gnc_date_cell_direct_update (BasicCell *bcell,
 
 static void
 gnc_date_cell_modify_verify (BasicCell *_cell,
-                             const GdkWChar *change,
+                             const char *change,
                              int change_len,
-                             const GdkWChar *newval,
+                             const char *newval,
                              int newval_len,
                              int *cursor_position,
                              int *start_selection,
@@ -469,9 +462,7 @@ gnc_date_cell_modify_verify (BasicCell *_cell,
 
   if (box->in_date_select)
   {
-    char *newval_mb = gnc_wcstombs (newval);
-    gnc_basic_cell_set_value (_cell, newval_mb);
-    g_free (newval_mb);
+    gnc_basic_cell_set_value (_cell, newval);
     return;
   }
 
@@ -482,26 +473,40 @@ gnc_date_cell_modify_verify (BasicCell *_cell,
     accept = TRUE;
   else
   {
-    int i, count = 0;
+    int count = 0;
     unsigned char separator = dateSeparator ();
     gboolean ok = TRUE;
-
-    for (i = 0; i < change_len; i++)
+    const gchar *c;
+    gunichar uc;
+    
+    /* accept only numbers or a date separator. Note that the
+     * separator of '-' (for DATE_FORMAT_ISO) takes precedence
+     * over the accelerator below! */      
+    c = change;
+    while (*c)
     {
-      /* accept only numbers or a date separator. Note that the
-       * separator of '-' (for DATE_FORMAT_ISO) takes precedence
-       * over the accelerator below! */
-      if (!isdigit (change[i]) && (separator != change[i]))
+      uc = g_utf8_get_char (c);
+        
+      if (!g_unichar_isdigit (uc) && (separator != uc))
         ok = FALSE;
 
-      if (separator == change[i])
+      if (separator == uc)
         count++;
+      
+      c = g_utf8_next_char (c);
+    }      
+    
+    c = _cell->value;
+    while (*c)
+    {
+      uc = g_utf8_get_char (c);
+        
+      if (separator == uc)
+        count++;
+
+      c = g_utf8_next_char (c);
     }
-
-    for (i = 0; i < _cell->value_len; i++)
-      if (separator == _cell->value_w[i])
-        count++;
-
+     
     if (2 < count)
       ok = FALSE;
 
@@ -512,11 +517,9 @@ gnc_date_cell_modify_verify (BasicCell *_cell,
   /* keep a copy of the new value */
   if (accept)
   {
-    char *newval_mb = gnc_wcstombs (newval);
 
-    gnc_basic_cell_set_wcvalue_internal (&cell->cell, newval);
-    gnc_parse_date (&(box->date), newval_mb);
-    g_free (newval_mb);
+    gnc_basic_cell_set_value_internal (&cell->cell, newval);
+    gnc_parse_date (&(box->date), newval);
 
     if (!box->date_picker)
       return;
@@ -535,15 +538,15 @@ gnc_date_cell_realize (BasicCell *bcell, gpointer data)
 {
   GnucashSheet *sheet = data;
   GnomeCanvasItem *item = sheet->item_editor;
-  ItemEdit *item_edit = ITEM_EDIT (item);
+  GncItemEdit *item_edit = GNC_ITEM_EDIT (item);
   DateCell *cell = (DateCell *) bcell;
   PopBox *box = cell->cell.gui_private;
 
   /* initialize gui-specific, private data */
   box->sheet = sheet;
   box->item_edit = item_edit;
-  box->date_picker = item_edit_new_date_picker (box->item_edit);
-  gtk_object_ref (GTK_OBJECT(box->date_picker));
+  box->date_picker = gnc_item_edit_new_date_picker (box->item_edit);
+  g_object_ref (box->date_picker);
   gtk_object_sink (GTK_OBJECT(box->date_picker));
 
   /* to mark cell as realized, remove the realize method */
@@ -560,7 +563,7 @@ gnc_date_cell_move (BasicCell *bcell)
 
   date_picker_disconnect_signals ((DateCell *) bcell);
 
-  item_edit_set_popup (box->item_edit, NULL, NULL,
+  gnc_item_edit_set_popup (box->item_edit, NULL, NULL,
                        NULL, NULL, NULL, NULL, NULL);
 
   box->calendar_popped = FALSE;
@@ -599,7 +602,7 @@ gnc_date_cell_enter (BasicCell *bcell,
   DateCell *cell = (DateCell *) bcell;
   PopBox *box = bcell->gui_private;
 
-  item_edit_set_popup (box->item_edit, GNOME_CANVAS_ITEM (box->date_picker),
+  gnc_item_edit_set_popup (box->item_edit, GNOME_CANVAS_ITEM (box->date_picker),
                        get_popup_height, NULL, popup_set_focus,
                        NULL, NULL, NULL);
 
@@ -626,7 +629,7 @@ gnc_date_cell_leave (BasicCell *bcell)
 
   date_picker_disconnect_signals ((DateCell *) bcell);
 
-  item_edit_set_popup (box->item_edit, NULL, NULL,
+  gnc_item_edit_set_popup (box->item_edit, NULL, NULL,
                        NULL, NULL, NULL, NULL, NULL);
 
   box->calendar_popped = FALSE;
@@ -659,7 +662,7 @@ gnc_date_cell_set_value_internal (BasicCell *_cell, const char *str)
 
   gnc_parse_date (&(box->date), str);
 
-  printDate (buff,
+  qof_print_date_dmy_buff (buff, MAX_DATE_LENGTH,
              box->date.tm_mday, 
              box->date.tm_mon + 1, 
              box->date.tm_year + 1900);

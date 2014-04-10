@@ -41,7 +41,7 @@
 #include "dialog-commodity.h"
 #include "dialog-utils.h"
 
-#include "gnc-engine-util.h"
+#include "gnc-engine.h"
 
 #include "gnc-ui-util.h"
 
@@ -54,7 +54,7 @@
  *   Constants, should ideally be defined a user preference dialog    *
 \********************************************************************/
 
-static short module = MOD_IMPORT;
+static QofLogModule log_module = GNC_MOD_IMPORT;
 
 
 

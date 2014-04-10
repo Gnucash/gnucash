@@ -31,8 +31,6 @@
 #include "dialog-utils.h"
 #include "druid-stock-split.h"
 #include "druid-utils.h"
-#include "global-options.h"
-#include "gnc-account-tree.h"
 #include "gnc-amount-edit.h"
 #include "gnc-book.h"
 #include "gnc-component-manager.h"
@@ -41,13 +39,13 @@
 #include "gnc-engine-util.h"
 #include "gnc-exp-parser.h"
 #include "gnc-gui-query.h"
+#include "gnc-tree-view-account.h"
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"
 #include "messages.h"
 
 
 #define DRUID_STOCK_SPLIT_CM_CLASS "druid-stock-split"
-
 
 /** structures *********************************************************/
 typedef struct
@@ -74,9 +72,32 @@ typedef struct
 } StockSplitInfo;
 
 
-/** implementations ****************************************************/
-static void
-window_destroy_cb (GtkObject *object, gpointer data)
+/** declarations *******************************************************/
+void     gnc_stock_split_druid_window_destroy_cb (GtkObject *object, gpointer data);
+gboolean gnc_stock_split_druid_account_next      (GnomeDruidPage *druidpage,
+						  gpointer arg1,
+						  gpointer user_data);
+void     gnc_stock_split_druid_details_prepare   (GnomeDruidPage *druidpage,
+						  gpointer arg1,
+						  gpointer user_data);
+gboolean gnc_stock_split_druid_details_next      (GnomeDruidPage *druidpage,
+						  gpointer arg1,
+						  gpointer user_data);
+void     gnc_stock_split_druid_cash_prepare      (GnomeDruidPage *druidpage,
+						  gpointer arg1,
+						  gpointer user_data);
+gboolean gnc_stock_split_druid_cash_next         (GnomeDruidPage *druidpage,
+						  gpointer arg1,
+						  gpointer user_data);
+void     gnc_stock_split_druid_finish            (GnomeDruidPage *druidpage,
+						  gpointer arg1,
+						  gpointer user_data);
+void     gnc_stock_split_druid_cancel_druid      (GnomeDruid *druid,
+						  gpointer user_data);
+
+/******* implementations ***********************************************/
+void
+gnc_stock_split_druid_window_destroy_cb (GtkObject *object, gpointer data)
 {
   StockSplitInfo *info = data;
 
@@ -171,7 +192,11 @@ clist_select_row (GtkCList *clist,
   Account *account;
 
   account = gtk_clist_get_row_data (clist, row);
-  
+
+  /* Happens when the first row is inserted, before the row data can be added */
+  if (account == NULL)
+    return;
+
   info->acct = account;
 }
 
@@ -197,10 +222,10 @@ refresh_details_page (StockSplitInfo *info)
      xaccAccountGetCommodity (account));
 }
 
-static gboolean
-account_next (GnomeDruidPage *druidpage,
-              gpointer arg1,
-              gpointer user_data)
+gboolean
+gnc_stock_split_druid_account_next (GnomeDruidPage *druidpage,
+				    gpointer arg1,
+				    gpointer user_data)
 {
   StockSplitInfo *info = user_data;
 
@@ -229,8 +254,8 @@ gnc_parse_error_dialog (StockSplitInfo *info, const char *error_string)
 		    parse_error_string);
 }
 
-static void
-details_prepare (GnomeDruidPage *druidpage,
+void
+gnc_stock_split_druid_details_prepare (GnomeDruidPage *druidpage,
 		 gpointer arg1,
 		 gpointer user_data)
 {
@@ -239,10 +264,10 @@ details_prepare (GnomeDruidPage *druidpage,
   gtk_widget_grab_focus(info->distribution_edit);
 }
 
-static gboolean
-details_next (GnomeDruidPage *druidpage,
-              gpointer arg1,
-              gpointer user_data)
+gboolean
+gnc_stock_split_druid_details_next (GnomeDruidPage *druidpage,
+				    gpointer arg1,
+				    gpointer user_data)
 {
   StockSplitInfo *info = user_data;
   gnc_numeric amount;
@@ -284,28 +309,29 @@ details_next (GnomeDruidPage *druidpage,
   return FALSE;
 }
 
-static void
-cash_prepare (GnomeDruidPage *druidpage,
-              gpointer arg1,
-              gpointer user_data)
+void
+gnc_stock_split_druid_cash_prepare (GnomeDruidPage *druidpage,
+				    gpointer arg1,
+				    gpointer user_data)
 {
   StockSplitInfo *info = user_data;
+  GtkTreeSelection *selection;
 
-  gnc_account_tree_refresh (GNC_ACCOUNT_TREE (info->income_tree));
-  gnc_account_tree_expand_all (GNC_ACCOUNT_TREE (info->income_tree));
-  gtk_clist_select_row (GTK_CLIST (info->income_tree), 0, 0);
+  gtk_tree_view_expand_all (GTK_TREE_VIEW(info->income_tree));
+  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(info->income_tree));
+  gtk_tree_selection_unselect_all (selection);
 
-  gnc_account_tree_refresh (GNC_ACCOUNT_TREE (info->asset_tree));
-  gnc_account_tree_expand_all (GNC_ACCOUNT_TREE (info->asset_tree));
-  gtk_clist_select_row (GTK_CLIST (info->asset_tree), 0, 0);
+  gtk_tree_view_expand_all (GTK_TREE_VIEW(info->asset_tree));
+  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(info->asset_tree));
+  gtk_tree_selection_unselect_all (selection);
 
   gtk_widget_grab_focus(info->cash_edit);
 }
 
-static gboolean
-cash_next (GnomeDruidPage *druidpage,
-           gpointer arg1,
-           gpointer user_data)
+gboolean
+gnc_stock_split_druid_cash_next (GnomeDruidPage *druidpage,
+				 gpointer arg1,
+				 gpointer user_data)
 {
   StockSplitInfo *info = user_data;
   gnc_numeric amount;
@@ -331,8 +357,7 @@ cash_next (GnomeDruidPage *druidpage,
   {
     Account *account;
 
-    account = gnc_account_tree_get_current_account
-      (GNC_ACCOUNT_TREE (info->income_tree));
+    account = gnc_tree_view_account_get_selected_account (GNC_TREE_VIEW_ACCOUNT(info->income_tree));
     if (!account)
     {
       const char *message = _("You must select an income account\n"
@@ -341,8 +366,7 @@ cash_next (GnomeDruidPage *druidpage,
       return TRUE;
     }
 
-    account = gnc_account_tree_get_current_account
-      (GNC_ACCOUNT_TREE (info->asset_tree));
+    account = gnc_tree_view_account_get_selected_account (GNC_TREE_VIEW_ACCOUNT(info->asset_tree));
     if (!account)
     {
       const char *message = _("You must select an asset account\n"
@@ -355,10 +379,10 @@ cash_next (GnomeDruidPage *druidpage,
   return FALSE;
 }
 
-static void
-stock_split_finish (GnomeDruidPage *druidpage,
-                    gpointer arg1,
-                    gpointer user_data)
+void
+gnc_stock_split_druid_finish (GnomeDruidPage *druidpage,
+			      gpointer arg1,
+			      gpointer user_data)
 {
   StockSplitInfo *info = user_data;
   GList *account_commits;
@@ -450,8 +474,7 @@ stock_split_finish (GnomeDruidPage *druidpage,
     memo = gtk_entry_get_text (GTK_ENTRY (info->memo_entry));
 
     /* asset split */
-    account = gnc_account_tree_get_current_account
-      (GNC_ACCOUNT_TREE (info->asset_tree));
+    account = gnc_tree_view_account_get_selected_account (GNC_TREE_VIEW_ACCOUNT(info->asset_tree));
 
     split = xaccMallocSplit (gnc_get_current_book ());
 
@@ -469,8 +492,7 @@ stock_split_finish (GnomeDruidPage *druidpage,
 
 
     /* income split */
-    account = gnc_account_tree_get_current_account
-      (GNC_ACCOUNT_TREE (info->income_tree));
+    account = gnc_tree_view_account_get_selected_account (GNC_TREE_VIEW_ACCOUNT(info->income_tree));
 
     split = xaccMallocSplit (gnc_get_current_book ());
 
@@ -498,36 +520,51 @@ stock_split_finish (GnomeDruidPage *druidpage,
   gnc_close_gui_component_by_data (DRUID_STOCK_SPLIT_CM_CLASS, info);
 }
 
-static void
-druid_cancel (GnomeDruid *druid, gpointer user_data)
+void
+gnc_stock_split_druid_cancel_druid (GnomeDruid *druid, gpointer user_data)
 {
   StockSplitInfo *info = user_data;
 
   gnc_close_gui_component_by_data (DRUID_STOCK_SPLIT_CM_CLASS, info);
 }
 
+static gboolean
+gnc_stock_split_druid_view_filter_income (Account  *account,
+					  gpointer  data)
+{
+  GNCAccountType type;
+
+  type = xaccAccountGetType(account);
+  return (type == INCOME);
+}
+
+static gboolean
+gnc_stock_split_druid_view_filter_asset (Account  *account,
+					 gpointer  data)
+{
+  GNCAccountType type;
+
+  type = xaccAccountGetType(account);
+  return ((type == BANK) || (type == CASH) || (type == ASSET));
+}
+
 static void
 gnc_stock_split_druid_create (StockSplitInfo *info)
 {
-  GtkWidget *page;
   GladeXML *xml;
 
   xml = gnc_glade_xml_new ("stocks.glade", "Stock Split Druid");
-
   info->window = glade_xml_get_widget (xml, "Stock Split Druid");
-
   info->druid = glade_xml_get_widget (xml, "stock_split_druid");
 
-  gtk_signal_connect (GTK_OBJECT (info->window), "destroy",
-                      GTK_SIGNAL_FUNC (window_destroy_cb), info);
+  glade_xml_signal_autoconnect_full(xml, gnc_glade_autoconnect_full_func, info);
 
-  gtk_signal_connect (GTK_OBJECT (info->druid), "cancel",
-                      GTK_SIGNAL_FUNC (druid_cancel), info);
+  /* libglade2 is broken. It should read these from the glade file. */
+  gnc_druid_set_colors (GNOME_DRUID(info->druid));
+  gnc_druid_set_watermark_images (GNOME_DRUID(info->druid),
+				  "stock_split_title.png",
+				  "stock_split_watermark.png");
 
-  gnc_druid_set_title_image (GNOME_DRUID(info->druid),
-                             "stock_split_title.png");
-  gnc_druid_set_watermark_image (GNOME_DRUID(info->druid),
-                                 "stock_split_watermark.png");
 
   /* account list */
   {
@@ -541,11 +578,6 @@ gnc_stock_split_druid_create (StockSplitInfo *info)
 
     gtk_signal_connect (GTK_OBJECT (clist), "select_row",
                         GTK_SIGNAL_FUNC (clist_select_row), info);
-
-    page = glade_xml_get_widget (xml, "account_page");
-
-    gtk_signal_connect (GTK_OBJECT (page), "next",
-                        GTK_SIGNAL_FUNC (account_next), info);
   }
 
   /* info widgets */
@@ -579,19 +611,10 @@ gnc_stock_split_druid_create (StockSplitInfo *info)
     ce = gnc_currency_edit_new ();
     gtk_box_pack_start (GTK_BOX (box), ce, TRUE, TRUE, 0);
     info->price_currency_edit = ce;
-
-    page = glade_xml_get_widget (xml, "details_page");
-
-    gtk_signal_connect (GTK_OBJECT (page), "prepare",
-                        GTK_SIGNAL_FUNC (details_prepare), info);
-    gtk_signal_connect (GTK_OBJECT (page), "next",
-                        GTK_SIGNAL_FUNC (details_next), info);
   }
 
   /* Cash in Lieu page */
   {
-    AccountViewInfo view_info;
-    GNCAccountType type;
     GtkWidget *box;
     GtkWidget *tree;
     GtkWidget *amount;
@@ -605,18 +628,12 @@ gnc_stock_split_druid_create (StockSplitInfo *info)
     info->memo_entry = glade_xml_get_widget (xml, "memo_entry");
 
     /* income tree */
-    tree = gnc_account_tree_new ();
+    tree = GTK_WIDGET(gnc_tree_view_account_new (FALSE));
     info->income_tree = tree;
-    gtk_clist_column_titles_hide (GTK_CLIST (tree));
-    gtk_clist_set_selection_mode (GTK_CLIST (tree), GTK_SELECTION_BROWSE);
-    gnc_account_tree_hide_all_but_name (GNC_ACCOUNT_TREE (tree));
-
-    gnc_account_tree_get_view_info (GNC_ACCOUNT_TREE (tree), &view_info);
-
-    for (type = 0; type < NUM_ACCOUNT_TYPES; type++)
-      view_info.include_type[type] = (type == INCOME);
-
-    gnc_account_tree_set_view_info (GNC_ACCOUNT_TREE (tree), &view_info);
+    gnc_tree_view_account_set_filter (GNC_TREE_VIEW_ACCOUNT (tree),
+				      gnc_stock_split_druid_view_filter_income,
+				      NULL, /* user data */
+				      NULL  /* destroy callback */);
 
     gtk_widget_show (tree);
 
@@ -625,38 +642,18 @@ gnc_stock_split_druid_create (StockSplitInfo *info)
 
 
     /* asset tree */
-    tree = gnc_account_tree_new ();
+    tree = GTK_WIDGET(gnc_tree_view_account_new (FALSE));
     info->asset_tree = tree;
-    gtk_clist_column_titles_hide (GTK_CLIST (tree));
-    gtk_clist_set_selection_mode (GTK_CLIST (tree), GTK_SELECTION_BROWSE);
-    gnc_account_tree_hide_all_but_name (GNC_ACCOUNT_TREE (tree));
-
-    gnc_account_tree_get_view_info (GNC_ACCOUNT_TREE (tree), &view_info);
-
-    for (type = 0; type < NUM_ACCOUNT_TYPES; type++)
-      view_info.include_type[type] =
-        (type == BANK) || (type == CASH) || (type == ASSET);
-
-    gnc_account_tree_set_view_info (GNC_ACCOUNT_TREE (tree), &view_info);
+    gnc_tree_view_account_set_filter (GNC_TREE_VIEW_ACCOUNT (tree),
+				      gnc_stock_split_druid_view_filter_asset,
+				      NULL /* user data */,
+				      NULL /* destroy callback */);
 
     gtk_widget_show (tree);
 
     scroll = glade_xml_get_widget (xml, "asset_scroll");
     gtk_container_add (GTK_CONTAINER (scroll), tree);
-
-    page = glade_xml_get_widget (xml, "cash_page");
-
-    gtk_signal_connect (GTK_OBJECT (page), "prepare",
-                        GTK_SIGNAL_FUNC (cash_prepare), info);
-
-    gtk_signal_connect (GTK_OBJECT (page), "next",
-                        GTK_SIGNAL_FUNC (cash_next), info);
   }
-
-  page = glade_xml_get_widget (xml, "finish_page");
-
-  gtk_signal_connect (GTK_OBJECT (page), "finish",
-                      GTK_SIGNAL_FUNC (stock_split_finish), info);
 }
 
 static void
@@ -695,11 +692,12 @@ close_handler (gpointer user_data)
  * gnc_stock_split_dialog                                           *
  *   opens up a window to record a stock split                      *
  *                                                                  * 
- * Args:   initial - the initial account to use                     *
+ * Args:   parent  - the parent ofthis window                       *
+ *         initial - the initial account to use                     *
  * Return: nothing                                                  *
 \********************************************************************/
 void
-gnc_stock_split_dialog (Account * initial)
+gnc_stock_split_dialog (GtkWidget *parent, Account * initial)
 {
   StockSplitInfo *info;
   gint component_id;
@@ -720,8 +718,7 @@ gnc_stock_split_dialog (Account * initial)
 
   if (fill_account_list (info, initial) == 0)
   {
-    gnc_warning_dialog (gnc_ui_get_toplevel(),
-			_("You don't have any stock accounts with balances!"));
+    gnc_warning_dialog (parent, _("You don't have any stock accounts with balances!"));
     gnc_close_gui_component_by_data (DRUID_STOCK_SPLIT_CM_CLASS, info);
     return;
   }

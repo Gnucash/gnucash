@@ -1,0 +1,443 @@
+# -*- reStructuredText -*-
+
+Intro
+-----
+
+This is a ad-hoc list of what works and doesn't work in the g2
+port of gnucash.  The plan is to finish porting those parts of gnucash
+that have already been started (i.e. new windowing system, account
+tree, commodities tree, etc.), but not to port any additional features
+unless absolutely required.  The clist/ctree widgets *do* still exist
+in gtk2 and can be used, even though they've been marked as deprecated
+and will disappear in a future release.  Its important to get this
+release out the door and not stall it until all the deprecated
+functionality has been removed.
+
++--------------------------------------+
+|  Last sync with HEAD on 2005-10-31   |
++--------------------------------------+
+
+========================================
+              DONE
+========================================
+
+Help
+Financial Calculator
+Commodity Editor
+Price Editor
+Reconcile
+Transfer
+View Toolbar
+View Statusbar
+Properties Dialog
+QIF Import
+OFX Import
+HBCI Actions
+Export Accounts
+Stock Split Dialog
+
+    +-----
+    | Can someone who comes across this note and wants to help please go
+    | through 1.8.9 and create a list of stuff missing from 2.0?
+    +------------
+
+========================================
+            General Notes
+========================================
+
+Resources
+---------
+- Porting applications to the GNOME 2.0 Platform -- http://developer.gnome.org/dotplan/porting/
+  - Should switch from `gnome_config` to gconf...
+    - Introduction to GConf -- http://developer.gnome.org/feature/archive/gconf/gconf.html
+
+- General
+
+  - Printing
+
+    - Tested? Reporting?  Accounts?
+
+  - Startup CRITICAL errors...
+
+    [jsled@phoenix:~/stuff/proj/gnucash/src-g2/gnucash]$ /opt/gnc-g2-unstable/bin/gnucash
+    (gnucash:7823): GLib-GObject-CRITICAL **: file gvaluetypes.c: line 741 (g_value_set_string): assertion `G_VALUE_HOLDS_STRING (value)' failed
+    (gnucash:7823): GLib-GObject-CRITICAL **: file gobject.c: line 1239 (g_object_set_property): assertion `G_IS_VALUE (value)' failed
+    (gnucash:7823): GLib-GObject-CRITICAL **: file gvalue.c: line 149 (g_value_unset): assertion `G_IS_VALUE (value)' failed
+    (gnucash:7823): GLib-GObject-CRITICAL **: file gvaluetypes.c: line 741 (g_value_set_string): assertion `G_VALUE_HOLDS_STRING (value)' failed
+    (gnucash:7823): GLib-GObject-CRITICAL **: file gobject.c: line 1239 (g_object_set_property): assertion `G_IS_VALUE (value)' failed
+    (gnucash:7823): GLib-GObject-CRITICAL **: file gvalue.c: line 149 (g_value_unset): assertion `G_IS_VALUE (value)' failed
+    (gnucash:7823): GLib-GObject-CRITICAL **: file gvaluetypes.c: line 741 (g_value_set_string): assertion `G_VALUE_HOLDS_STRING (value)' failed
+    (gnucash:7823): GLib-GObject-CRITICAL **: file gobject.c: line 1239 (g_object_set_property): assertion `G_IS_VALUE (value)' failed
+    (gnucash:7823): GLib-GObject-CRITICAL **: file gvalue.c: line 149 (g_value_unset): assertion `G_IS_VALUE (value)' failed
+    Use of deprecated SAXv1 function getLineNumber
+
+  - Window size/position not being saved or used.
+
+    - Dialog window positions are now saved.  Saving position of the
+      main window is in progress.  Please annotate this file with any
+      windows whose positions are not saved but you think they should be.
+
+    - The main windows do not yet support saving position/size
+      information.  (On my list - DRH)
+
+  - Open pages are no longer open after reopening file.
+
+  - Weird pango_layout_set_text "string not UTF-8" issues reported by Neil Williams:
+    
+    - http://lists.gnucash.org/pipermail/gnucash-devel/2005-March/012797.html
+
+    - http://lists.gnucash.org/pipermail/gnucash-devel/2005-March/012824.html
+
+- Register Core - mostly functional
+
+  - mouse wheel up/down events only work if mouse-focused on scroll bar / are
+    not passed from the sheet to the scroll.
+
+  - (fixed, notes) Completion has problems.  It does complete when a
+    character is typed but it fails to select the inserted text.  This means
+    that the next character typed is inserted instead of continuing to test
+    for completion
+
+    - This is better, but by hacking around GTK... it appears that both
+      2.4(.14) and 2.6(.8) disallow the editable's selection to be set in the
+      char-insert callback/handler.  Instead, we register a one-shot
+      immediate callback for the idle loop to do the selection.
+
+  - doesn't remember custom check formats.
+
+  - duplicate-transaction dialog is not initialized with transaction number
+
+- Reconcile
+
+  - Crash after initial value-prompting dialog:
+
+        #0  0x400f65e8 in waitpid () from /lib/libpthread.so.0
+        #1  0x405e8a90 in ?? () from /usr/lib/libgnomeui-2.so.0
+        #2  0x405ab116 in libgnomeui_module_info_get () from /usr/lib/libgnomeui-2.so.0
+        #3  0x400f5393 in __pthread_clock_settime () from /lib/libpthread.so.0
+        #4  <signal handler called>
+        #5  0x40d88809 in gnc_xfer_dialog_show_inc_exp_visible_cb (account=0x84d8cc8, data=0x8522a28) at dialog-transfer.c:414
+        #6  0x40dc0877 in gnc_tree_view_account_filter_helper (model=0x855e828, iter=0xbfffdc70, data=0x855e828) at gnc-tree-view-account.c:718
+        #7  0x40430d46 in egg_tree_model_filter_visible (filter=0x854bce0, child_iter=0xbfffdc70) at eggtreemodelfilter.c:618
+        #8  0x404341de in egg_tree_model_filter_row_changed (c_model=0x84aa138, c_path=0x8620470, c_iter=0x8640c60, data=0x84d8cc8) at eggtreemodelfilter.c:990
+        #9  0x40a7e185 in _gtk_marshal_VOID__BOXED_BOXED () from /usr/lib/libgtk-x11-2.0.so.0
+        #10 0x40313310 in g_closure_invoke () from /usr/lib/libgobject-2.0.so.0
+        #11 0x40327076 in g_signal_emit_by_name () from /usr/lib/libgobject-2.0.so.0
+        #12 0x40326047 in g_signal_emit_valist () from /usr/lib/libgobject-2.0.so.0
+
+- Reporting / Graphing [mostly functional]
+
+  - Menus added in reverse order.
+
+     - Probably a detail of gtk-ui-manager merging; should be controllable in
+       gnc-menu-extensions.c.
+
+  - Graphing working, with some known issue; see top
+    of src/gnome-utils/gnc-html-graph-gog.c for more detail.
+
+    - colors
+
+    - axis-label string rotation
+
+    - Known issue with height/width bug in libgtkhtml 3.3.2 (on FC3).
+
+  - When rendering, progress bar always says "Rendering 'Untitled' report...".
+
+    - warlord reports this was true in 1.8 as well.
+
+- Importing
+
+  - HBCI - Transaction templates eventually need to be converted from a GTK_CLIST
+    to a GTK_TREE_VIEW.  Currently working as a GtkClist. 
+
+
+- Notebook tabs
+
+  - When opening multiple report tabs, all reports get tab title of
+    first report. [FIXED]
+
+  - Account Tree tab title is unaffected by "Name of Account View" option.
+
+  - Also, changing that option doesn't affect dirty status of options
+    dialog. [ FIXED ]
+
+
+- Budgeting
+
+  - Budget Report
+
+    - the default account selection isn't very reasonable, Inc & Exp
+      would be better
+
+    - sometimes negative numbers render on two lines in their table-cell
+
+  - Budget GUI
+
+    - default account filter doesn't take effect until options are
+      opened, should take effect as soon as view is opened
+
+    - it might be nice to disallow some of the more unusual recurrences
+
+    - better if budget list dialog allowed double click to open
+
+    - need help text
+
+    - should displaying zero values be optional?
+
+    - it'd be nice if there was a summary column at the far right
+
+  - Budget Engine
+
+    - Do budgets play nice with QSF?
+
+    - Still a lot of dead legacy code hanging around
+
+- New Account Hierarchy - somewhat works
+
+  - Simply invoking, even if cancelled, trashes current book state?
+
+  - Sometimes crashes when loading account data.
+
+  - Main account selection layout is too (visually) compressed
+ 
+    - Should have two columns: left={category(80%) + detailed-description(20%)}, right={category-accounts(100%)}
+
+    - See 'relayout Hierarchy' in src/gnome/glade/account.glade.
+
+  - Account tree's only column (account name) is relatively thin, truncating
+    some titles.
+
+    - It seems that gnc_tree_view_add_text_column sets column-width based on
+      an example string, whereas in this use-case the best would be to set to
+      '0'(=autosize).
+
+- Account Hierarchy Merge - BROKEN
+
+  - Bad integration with Account Hierarchy druid
+
+  - Static variables used for process/window state.
+
+  - Misc errors with no apparent cause
+
+    - (gnucash:27485): Gtk-CRITICAL **: gtk_widget_event: assertion `WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+
+    - (gnucash:27485): Gtk-CRITICAL **: gtk_widget_event: assertion `WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+
+  - Doesn't let you complete the conflict resolution process, thus you can never complete the druid.
+
+    - (jsled) actually, it just doesn't display the 1-conflict -> 0-conflict
+      transition in the UI correctly, but it does allow you to finish.
+
+  - conflict-resolution process/display issues.
+
+- Backend
+
+  - price_lookup awaits a solution - as a query instead of a backend operation.
+
+- Scheduled Transactions
+
+  - Since Last Run dialog spews console-crap on init, generally broken?
+
+  - SX Editor
+
+    - "Register Lines" preference not respected.
+
+    - When tabbing from memo to account on the second split with the same
+      name as the first, the account will be auto-populated with a GUID
+      (instead of an account name), but not a valid one.
+
+    - Template-register Cut/Copy/Paste not connected.
+
+    - Template-register View > {Basic, Auto-Split} options have no effect.
+
+  - Open SX Editor, close it; open Register Preferences, change "Draw
+    {horiz,vert} lines" => crash.
+
+  - Entering a value (e.g. '20.00') without entering an account or a memo for
+    the first split causes everything else entered so far to be reset when
+    tabbing to the second split.
+
+  - Font hard-coded (dense-cal), especially broken for non-ISO8859-1 locales.
+
+    - http://bugzilla.gnome.org/show_bug.cgi?id=303180
+
+========================================
+              ENHANCEMENTS
+========================================
+
+- New icons
+
+  - Add account.
+
+  - Register
+
+  - Report
+
+    - "Report options", especially, since it often confuses users.
+
+- In-place editing
+
+  - Provide in-place editing where feasable.  Eg.  Editing the account code
+    or the account name, but not being able to re-parent the account.  (Maybe
+    add DND support for this in long-term?)
+
+- File Menu
+
+  - Rename "New Account Tree" to "Display Account Tree" as "New" gives the
+    impression that a creation of something will occur.  PJK
+
+- Find
+
+  - There's no way to edit/refine a search.
+    [There's no way to do so in 1.8, either...]
+
+- Main Window
+
+  - Change Notebook tabs to include an 'x' to act as the "close tab" method,
+    and then remove the "Close" button from the toolbar.  Then we can also
+    decide if we want to allow a user to 'close' the account tree.
+
+-----------------------------------------
+<#GOG> ----------------------------------
+
+These are notes jsled was using during the GOG hack-porting effort.
+
+[dc:created 2004-12-17]
+
+gog-guru.c
+ \- gog-guru.h
+    \- goffice-graph.h
+       \- <glib.h>
+       \- data-structures
+    \- command-context.h
+ \- <goffice/goffice-config.h>
+    \- <gnumeric-config.h> + "When the module splits we'll make this a real file"
+ \- <goffice/graph/gog-object.h>
+    \- <goffice/graph/goffice-graph.h>
+    \- <glib-object.h>
+    \- <command-context.h> /* for GnmCmdContext */
+    \- <libart_lgpl/art_rect.h>
+ \- <goffice/graph/gog-graph.h>
+    \- [nothing new]
+ \- <goffice/graph/gog-object.h>
+    \- [nothing new]
+ \- <goffice/graph/gog-chart.h>
+ \- <goffice/graph/gog-plot.h>
+    \- <goffice/utils/goffice-utils.h>
+       \- <glib.h>
+       \- decls
+ \- <goffice/graph/gog-view.h>
+ \- <goffice/graph/gog-plot-engine.h>
+ \- <goffice/graph/gog-data-allocator.h>
+ \- <goffice/graph/gog-control-foocanvas.h>
+    \- <goffice/graph/gog-renderer-pixbuf.h>
+ \- <gui-util.h>
+    \- "workbook-control-gui.h"
+    \- "error-info.h"
+    \- "command-context.h"
+    \- "gutils.h"
+
+
+<#goffice/graph> :depOn [ :module <#libart> ].
+
+<file:gog-plot-engine.c>
+ :depOn [ :module <#gsf>; :how "entirely [?] for GSF_CLASS macros" ]
+       ,[ :module <#gnumeric-plugin>; :how "plot-engine loading" ].
+
+<file:gog-graph.c>
+ :depOn [ :module <#gsf>; :how "entirely [?] for GSF_CLASS macros." ].
+
+<file:gog-view.c>
+ :depOn [ :module <#gsf> ].
+
+<file:gog-object.c> :depOn [ :module <#gsf> ].
+
+<file:gog-renderer.c>
+  :depOn [ :module <utils/go-math.h>; :how "basic math aliasing." ]
+        ,[ :module <utils/go-units.h>; :how "basic unit-typing/aliasing." ]
+        ,[ :module <utils/go-font.h>; :how "font aliasing; pango, mostly." ]
+
+<file:gog-renderer-impl.h>
+  :depOn [ :module <#go-line> ].
+
+<#go-line> :depOn [ :module <#gui-utils> ].
+
+<file:gog-renderer-pixbuf.c>
+  :depOn [ :module <#gsf>; :how "weakly" ]
+        ,[ :module <#pango> ]
+        ,[ :module <#libart> ]
+        ,[ :module <#gnumeric-app>; :how "for the `gnm_app_display_dpi_get(...)` call, apparently." ]
+.
+
+<file:gog-control-foocanvas.c>
+  :depOn [ :module <#gnm-libfoocanvas-copy>; :note "we can do without this." ].
+
+<file:gog-axis.c>
+  :depOn [ :module <#gnm-widget-format-selector>; :how "??" ]
+        ,[ :module <#gnm-gui-util>; :how "`number_format_selector_set_style_format`" ]
+        ,[ :module <#gnm-format.h>; :how "`style_format_is_general`" ]
+.
+
+
+------------------------------
+
+[jsled@phoenix:~/stuff/programming/projects/gnucash-budget/src-gnome2/gnucash/lib/goffice]$ nm -a .libs/libgoffice.a | ./symbols.py | egrep -v "(xml|gtk_|g_|gdk_|pango_|gsf_|art_|gnome_|glade_)" | sort
+# some manual cleanup of the results results in the list here:
+error_info_free
+error_info_print
+ - provided by error-info.[hc]
+font_selector_get_pango
+font_selector_get_type
+font_selector_new
+font_selector_set_from_pango
+ - used by gog-style.c:gog_style_editor.
+ - gog_styled_object_editor, however, is called from gog-{axis,label,legend,series}.
+format_value
+ - seems straightforward, but depends on format logic.
+gnm_app_display_dpi_get
+ - thin wrapper over configuration; should be easy to stub out.
+gnm_app_get_pixbuf
+ - called by go_action_combo_color_new, which isn't called in lib...
+gnm_font_find_closest_from_weight_slant
+ - depends on gnome print, but nicely seperable.
+gnm_measure_string
+ - nicely seperable; depends on pango.
+gnm_pixbuf_intelligent_scale
+ - nicely seperable; depends on GdkPixbuf.
+gnm_plugin_get_dir_name
+gnm_plugin_use_ref
+gnm_plugin_use_unref
+ - split/plugin.[hc]; seems to wrap plugin_* stuff...
+gnm_setup_label_atk
+ - seperable
+gnm_widget_disable_focus
+ - seperable
+gnumeric_button_new_with_stock_image
+ - looks seperable [being stolen from gtkedit]
+gnumeric_load_pixbuf
+ - depends weakly on gnumeric configuration path.
+go_nan
+ - text symbol
+gui_image_file_select
+ - used to select [fill] image file by gog-style ... do we need the UI
+   elements of gog-style here?
+number_format_selector_get_type
+number_format_selector_new
+number_format_selector_set_style_format
+plugin_service_define
+plugin_service_get_description
+plugin_service_get_plugin
+plugin_service_get_type
+plugin_service_gobject_loader_get_type
+plugin_service_load
+plugin_service_simple_get_type
+style_format_as_XL
+style_format_default_date
+style_format_default_money
+style_format_default_percentage
+style_format_default_time
+style_format_equal
+style_format_general
+style_format_new_XL
+style_format_ref
+style_format_unref

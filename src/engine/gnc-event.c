@@ -23,7 +23,6 @@
 
 #include "config.h"
 
-#include "gnc-engine-util.h"
 #include "gnc-event-p.h"
 #include "gnc-trace.h"
 
@@ -41,11 +40,11 @@ typedef struct
 
 /** Static Variables ************************************************/
 static guint  suspend_counter = 0;
-static gint   next_handler_id = 0;
+static gint   next_handler_id = 1;
 static GList *handlers = NULL;
 
 /* This static indicates the debugging module that this .o belongs to.  */
-static short module = MOD_ENGINE;
+static QofLogModule log_module = QOF_MOD_ENGINE;
 
 
 /** Implementations *************************************************/
@@ -157,6 +156,7 @@ gnc_engine_generate_event_internal (QofEntity *entity,
 				    GNCEngineEventType event_type)
 {
   GList *node;
+  GList *next_node = NULL;
 
   g_return_if_fail(entity);
 
@@ -168,6 +168,8 @@ gnc_engine_generate_event_internal (QofEntity *entity,
     case GNC_EVENT_CREATE:
     case GNC_EVENT_MODIFY:
     case GNC_EVENT_DESTROY:
+    case GNC_EVENT_ADD:
+    case GNC_EVENT_REMOVE:
       break;
 
     default:
@@ -175,10 +177,11 @@ gnc_engine_generate_event_internal (QofEntity *entity,
       return;
   }
 
-  for (node = handlers; node; node = node->next)
+  for (node = handlers; node; node = next_node)
   {
     HandlerInfo *hi = node->data;
 
+    next_node = node->next;
     PINFO ("id=%d hi=%p han=%p", hi->handler_id, hi, hi->handler);
     if (hi->handler)
       hi->handler ((GUID *)&entity->guid, entity->e_type, event_type, hi->user_data);

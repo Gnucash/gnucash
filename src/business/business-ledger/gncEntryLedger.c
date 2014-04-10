@@ -277,6 +277,7 @@ GncEntryLedger * gnc_entry_ledger_new (GNCBook *book, GncEntryLedgerType type)
   ledger->type = type;
   ledger->book = book;
   ledger->traverse_to_new = TRUE;
+  ledger->gconf_section = NULL;
 
   /* Orders and Invoices are "invoices" for lookups */
   switch (type) {
@@ -802,11 +803,11 @@ gnc_entry_ledger_duplicate_current_entry (GncEntryLedger *ledger)
   if (changed) {
     const char *message = _("The current entry has been changed.\n"
 			  "Would you like to save it?");
-    GNCVerifyResult result;
+    gint result;
 
     result = gnc_ok_cancel_dialog (ledger->parent, GTK_RESPONSE_OK, message);
 
-    if (result == GTK_RESPONSE_CANCEL) {
+    if (result != GTK_RESPONSE_OK) {
       gnc_resume_gui_refresh ();
       return;
     }
@@ -840,4 +841,13 @@ gnc_entry_ledger_get_query (GncEntryLedger *ledger)
     return NULL;
 
   return ledger->query;
+}
+
+void
+gnc_entry_ledger_set_gconf_section (GncEntryLedger *ledger, const gchar *string)
+{
+  if (!ledger)
+    return;
+
+  ledger->gconf_section = string;
 }

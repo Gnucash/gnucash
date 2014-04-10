@@ -6,4 +6,5 @@ test-db
 test-escape
 test_file_*
 test-period
+test-load-backend
 .libs

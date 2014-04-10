@@ -26,15 +26,49 @@
  *  This file implements the various routines to automatically
  *  compute and handle Cap Gains/Losses resulting from trading 
  *  activities.  Some of these routines might have broader 
- *  applicability, for handling depreciation *  & etc. 
+ *  applicability, for handling depreciation & etc. 
  *
- *  This code is under development, and is 'alpha': many important
- *  routines are missing, many existing routines are not called 
- *  from inside the engine as needed, and routines may be buggy.
+ *  This code is under development, and is 'beta': we think we're
+ *  mostly done, and we've tested and "things work for us", but there
+ *  may still be something missing, and there might still be some 
+ *  bugs.
  *
  *  This code does not currently handle tax distinctions, e.g
  *  the different tax treatment that short-term and long-term 
  *  cap gains have. 
+ * 
+ * The computation of (Realized) Gains/Losses is performed automatically by
+ * the lot "scrub" routines, using a "double-balance" algorithm. Every
+ * split has two numbers associated with it: an "amount", which is the
+ * number of items that a split describes, and the "value", which is the
+ * cost of those items. In a closed lot, the grand-total amount of items in
+ * the lot is zero: the number of items bought equals the number of items
+ * sold; thus the amount-balance is zero. But since the purchase/sale of
+ * the items in the lot typically happen at different prices, there will
+ * typically be a gain/loss. This gain/loss is the grand-total value of all
+ * the items in the lot (total costs minus total income). 
+ * 
+ * In order to properly account for the gains/losses, an "adjusting split"
+ * is added that brings the total gains/losses back to exactly zero (this
+ * is the second "balance" of "double balance"). This adjusting split will
+ * have an amount of zero (no items are involved) but have a non-zero value
+ * (equal to the total gain/loss). This split can then participate in a
+ * "gains transaction" which records the gains in another account. Thus,
+ * for example, if you record $300 in your bank account due to the purchase
+ * and then the sale of some item, the "gains transaction" will record $300
+ * in income in an income account. Thus, the change in the bank balance is
+ * always reflected by an equal change in income, assuring that the books
+ * are balanced. 
+ *
+ * Notes about auto-recompute:  If the amount in a split is changed, 
+ * then the lot has to be recomputed.
+ * This has a potential trickle-through effect on all later lots. 
+ * Ideally, later lots are dissolved, and recomputed.  However, some 
+ * lots may have been user-hand-built. These should be left alone.
+ *
+ToDo:
+ o XXX Need to create a data-integrity scrubber, tht makes sure that
+   the various flags, and pointers & etc. match. 
  *     @{ */
 
 /** @file cap-gains.h

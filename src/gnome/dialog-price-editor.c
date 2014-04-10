@@ -27,7 +27,6 @@
 #include <time.h>
 
 #include "dialog-utils.h"
-#include "global-options.h"
 #include "gnc-amount-edit.h"
 #include "gnc-commodity-edit.h"
 #include "gnc-general-select.h"
@@ -44,6 +43,7 @@
 
 
 #define DIALOG_PRICE_EDIT_CM_CLASS "dialog-price-edit"
+#define GCONF_SECTION "dialogs/price_editor"
 
 /* This static indicates the debugging module that this .o belongs to.  */
 /* static short module = MOD_GUI; */
@@ -216,35 +216,28 @@ price_window_destroy_cb (GtkWidget *widget, gpointer data)
 }
 
 static void
-price_ok_clicked (GtkWidget *widget, gpointer data)
+pedit_dialog_response (GtkDialog *dialog, gint response, gpointer data)
 {
   PriceEditDialog *pedit_dialog = data;
   GNCBook *book = gnc_get_current_book ();
   GNCPriceDB *pdb = gnc_book_get_pricedb (book);
   const char *error_str;
 
-  error_str = gui_to_price (pedit_dialog);
-  if (error_str) {
-    gnc_warning_dialog (pedit_dialog->dialog, error_str);
-    return;
+  if (response == GTK_RESPONSE_OK) {
+    error_str = gui_to_price (pedit_dialog);
+    if (error_str) {
+      gnc_warning_dialog (pedit_dialog->dialog, error_str);
+      return;
+    }
+
+    pedit_dialog->changed = FALSE;
+    if (TRUE == pedit_dialog->new)
+      gnc_pricedb_add_price (pdb, pedit_dialog->price);
+  
+    gnc_gui_refresh_all ();
   }
 
-  pedit_dialog->changed = FALSE;
-  if (TRUE == pedit_dialog->new)
-    gnc_pricedb_add_price (pdb, pedit_dialog->price);
-  
-  gnc_gui_refresh_all ();
-
-  gnome_dialog_close (GNOME_DIALOG (pedit_dialog->dialog));
-}
-
-static void
-price_cancel_clicked (GtkWidget *widget, gpointer data)
-{
-  PriceEditDialog *pedit_dialog = data;
-
-  /* price_window_destroy_cb will unref the price */
-  gnome_dialog_close (GNOME_DIALOG (pedit_dialog->dialog));
+  gtk_widget_destroy (GTK_WIDGET (pedit_dialog->dialog));
 }
 
 static void
@@ -321,8 +314,8 @@ type_menu_changed (GtkButton *button, gpointer data)
 static void
 connect_type_menu_item (GtkWidget *item, gpointer data)
 {
-  gtk_signal_connect (GTK_OBJECT(item), "activate",
-                      GTK_SIGNAL_FUNC (type_menu_changed), data);
+  g_signal_connect (G_OBJECT(item), "activate",
+                      G_CALLBACK (type_menu_changed), data);
 }
 
 static void
@@ -351,19 +344,14 @@ gnc_price_pedit_dialog_create (GtkWidget * parent, PriceEditDialog *pedit_dialog
 
   /* parent */
   if (parent != NULL)
-    gnome_dialog_set_parent (GNOME_DIALOG (dialog), GTK_WINDOW (parent));
+	  gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (parent));
 
-  gnome_dialog_button_connect (GNOME_DIALOG (dialog), 0,
-                               GTK_SIGNAL_FUNC (price_ok_clicked),
-                               pedit_dialog);
+  g_signal_connect (G_OBJECT (dialog), "response",
+		    G_CALLBACK (pedit_dialog_response), pedit_dialog);
 
-  gnome_dialog_button_connect (GNOME_DIALOG (dialog), 1,
-                               GTK_SIGNAL_FUNC (price_cancel_clicked),
-                               pedit_dialog);
-
-  gtk_signal_connect (GTK_OBJECT (dialog), "destroy",
-		      GTK_SIGNAL_FUNC (price_window_destroy_cb),
-		      pedit_dialog);
+  g_signal_connect (G_OBJECT (dialog), "destroy",
+		    G_CALLBACK (price_window_destroy_cb),
+		    pedit_dialog);
 
   box = glade_xml_get_widget (xml, "commodity_box");
   w = gnc_general_select_new (GNC_GENERAL_SELECT_TYPE_SELECT,
@@ -373,8 +361,8 @@ gnc_price_pedit_dialog_create (GtkWidget * parent, PriceEditDialog *pedit_dialog
   pedit_dialog->commodity_edit = w;
   gtk_box_pack_start (GTK_BOX (box), w, TRUE, TRUE, 0);
   gtk_widget_show (w);
-  gtk_signal_connect (GTK_OBJECT (w), "changed",
-                      GTK_SIGNAL_FUNC (commodity_changed_cb), pedit_dialog);
+  g_signal_connect (G_OBJECT (w), "changed",
+                    G_CALLBACK (commodity_changed_cb), pedit_dialog);
 
 
   box = glade_xml_get_widget (xml, "currency_box");
@@ -384,21 +372,19 @@ gnc_price_pedit_dialog_create (GtkWidget * parent, PriceEditDialog *pedit_dialog
   pedit_dialog->currency_edit = w;
   gtk_box_pack_start (GTK_BOX (box), w, TRUE, TRUE, 0);
   gtk_widget_show (w);
-  gtk_signal_connect (GTK_OBJECT (GTK_COMBO(w)->entry), "changed",
-                      GTK_SIGNAL_FUNC (currency_changed_cb), pedit_dialog);
-  gnome_dialog_editable_enters(GNOME_DIALOG(dialog),
-			       GTK_EDITABLE(GTK_COMBO(w)->entry));
+  g_signal_connect (G_OBJECT (GTK_COMBO_BOX(w)), "changed",
+                    G_CALLBACK (currency_changed_cb), pedit_dialog);
 
   box = glade_xml_get_widget (xml, "date_box");
   w = gnc_date_edit_new (time (NULL), FALSE, FALSE);
   pedit_dialog->date_edit = w;
   gtk_box_pack_start (GTK_BOX (box), w, TRUE, TRUE, 0);
   gtk_widget_show (w);
-  gtk_signal_connect (GTK_OBJECT (w), "date_changed",
-                      GTK_SIGNAL_FUNC (date_changed_cb), pedit_dialog);
-  gtk_signal_connect (GTK_OBJECT (GNC_DATE_EDIT (w)->date_entry), "changed",
-                      GTK_SIGNAL_FUNC (date_entry_changed_cb), pedit_dialog);
-  gnc_date_editable_enters(GNOME_DIALOG(dialog), GNC_DATE_EDIT(w));
+  g_signal_connect (G_OBJECT (w), "date_changed",
+                    G_CALLBACK (date_changed_cb), pedit_dialog);
+  g_signal_connect (G_OBJECT (GNC_DATE_EDIT (w)->date_entry), "changed",
+                    G_CALLBACK (date_entry_changed_cb), pedit_dialog);
+  gtk_entry_set_activates_default(GTK_ENTRY(GNC_DATE_EDIT(w)->date_entry), TRUE);
 
 
   w = glade_xml_get_widget (xml, "source_entry");
@@ -421,12 +407,12 @@ gnc_price_pedit_dialog_create (GtkWidget * parent, PriceEditDialog *pedit_dialog
   print_info = gnc_default_price_print_info ();
   gnc_amount_edit_set_print_info (GNC_AMOUNT_EDIT (w), print_info);
   gnc_amount_edit_set_fraction (GNC_AMOUNT_EDIT (w), 1000000);
-  gnome_dialog_editable_enters(GNOME_DIALOG(dialog), GTK_EDITABLE(w));
+  gtk_entry_set_activates_default(GTK_ENTRY(w), TRUE);
   gtk_widget_show (w);
 
   entry = gnc_amount_edit_gtk_entry (GNC_AMOUNT_EDIT (w));
-  gtk_signal_connect (GTK_OBJECT (entry), "changed",
-                      GTK_SIGNAL_FUNC (amount_changed_cb), pedit_dialog);
+  g_signal_connect (G_OBJECT (entry), "changed",
+                      G_CALLBACK (amount_changed_cb), pedit_dialog);
 }
 
 static void
@@ -450,12 +436,8 @@ close_handler (gpointer user_data)
 {
   PriceEditDialog *pedit_dialog = user_data;
 
-  //  gdk_window_get_geometry (GTK_WIDGET(pedit_dialog->dialog)->window,
-  //                           NULL, NULL, &last_width, &last_height, NULL);
-
-  //  gnc_save_window_size ("prices_win", last_width, last_height);
-
-  gnome_dialog_close (GNOME_DIALOG (pedit_dialog->dialog));
+  gnc_save_window_size(GCONF_SECTION, GTK_WINDOW(pedit_dialog->dialog));
+  gtk_widget_destroy (GTK_WIDGET (pedit_dialog->dialog));
 }
 
 static void
@@ -500,6 +482,7 @@ gnc_price_edit_dialog (GtkWidget * parent, GNCPrice * price, GNCPriceEditType ty
 
   pedit_dialog = g_new0 (PriceEditDialog, 1);
   gnc_price_pedit_dialog_create (parent, pedit_dialog);
+  gnc_restore_window_size(GCONF_SECTION, GTK_WINDOW(pedit_dialog->dialog));
 
   switch (type) {
    case GNC_PRICE_NEW:

@@ -99,7 +99,6 @@
 #include "table-layout.h"
 #include "table-model.h"
 
-
 /* The VirtualCell structure holds information about each virtual cell. */
 typedef struct
 {
@@ -205,6 +204,8 @@ guint32        gnc_table_get_fg_color (Table *table, VirtualLocation virt_loc);
 
 guint32        gnc_table_get_bg_color (Table *table, VirtualLocation virt_loc,
                                        gboolean *hatching);
+guint32        gnc_table_get_gtkrc_bg_color (Table *table, VirtualLocation virt_loc,
+					     gboolean *hatching);
 
 void           gnc_table_get_borders (Table *table, VirtualLocation virt_loc,
                                       PhysicalCellBorders *borders);
@@ -344,9 +345,9 @@ gboolean     gnc_table_confirm_change(Table *table, VirtualLocation virt_loc);
 
 const char * gnc_table_modify_update(Table *table,
                                      VirtualLocation virt_loc,
-                                     const GdkWChar *change,
+                                     const char *change,
                                      int change_len,
-                                     const GdkWChar *newval,
+                                     const char *newval,
                                      int newval_len,
                                      int *cursor_position,
                                      int *start_selection,

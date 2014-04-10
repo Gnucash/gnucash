@@ -15,6 +15,7 @@
 (export-syntax N_)
 (export gnc:make-string-database)
 
+;; options.scm
 (export gnc:make-option)
 (export gnc:option-section)
 (export gnc:option-name)
@@ -52,6 +53,7 @@
 (export gnc:make-complex-boolean-option)
 (export gnc:make-pixmap-option)
 (export gnc:make-date-option)
+(export gnc:make-budget-option)
 (export gnc:get-rd-option-data-subtype)
 (export gnc:get-rd-option-data-show-time)
 (export gnc:get-rd-option-data-rd-list)
@@ -118,16 +120,11 @@
 (export gnc:config-var-value-is-default?)
 
 ;; prefs.scm
-(export gnc:register-configuration-option)
-(export gnc:lookup-global-option)
-(export gnc:send-global-options)
-(export gnc:global-options-clear-changes)
-(export gnc:save-all-options)
 (export gnc:get-debit-string)
 (export gnc:get-credit-string)
-(export gnc:*options-entries*)
-(export gnc:config-file-format-version)
-(export gnc:*save-options-hook*)
+
+;; gw-engine-spec.scm
+(re-export gnc:*save-options-hook*)
 
 ;; date-utilities.scm
 
@@ -137,16 +134,22 @@
 (export gnc:timepair->date)
 (export gnc:date->timepair)
 (export gnc:date-get-year)
+(export gnc:date-get-quarter)
 (export gnc:date-get-month-day)
 (export gnc:date-get-month)
 (export gnc:date-get-week-day)
 (export gnc:date-get-year-day)
 (export gnc:timepair-get-year)
+(export gnc:timepair-get-quarter)
 (export gnc:timepair-get-month-day)
 (export gnc:timepair-get-month)
 (export gnc:timepair-get-week-day)
 (export gnc:timepair-get-year-day)
+(export gnc:date-get-year-string)
+(export gnc:date-get-quarter-string)
+(export gnc:date-get-quarter-year-string)
 (export gnc:date-get-month-string)
+(export gnc:date-get-month-year-string)
 (export gnc:leap-year?)
 (export gnc:days-in-year)
 (export gnc:days-in-month)
@@ -225,26 +228,19 @@
 (export gnc:reldate-initialize)
 
 ;; hooks 
-(export gnc:hook-define)
-(export gnc:hook-danglers-get)
-(export gnc:hook-danglers-set!)
-(export gnc:hook-danglers->list)
-(export gnc:hook-replace-danglers)
-(export gnc:hook-run-danglers)
-(export gnc:hook-lookup)
-(export gnc:hook-add-dangler)
-(export gnc:hook-remove-dangler)
-(export gnc:hook-description-get)
-(export gnc:hook-name-get)
-(export gnc:*startup-hook*)
-(export gnc:*shutdown-hook*)
-(export gnc:*ui-startup-hook*)
-(export gnc:*ui-post-startup-hook*)
-(export gnc:*ui-shutdown-hook*)
-(export gnc:*book-opened-hook*)
-(export gnc:*new-book-hook*)
-(export gnc:*book-closed-hook*)
-(export gnc:*report-hook*)
+(re-export gnc:hook-define)
+(export gnc:hook-run-danglers)		;; from hooks.scm
+(re-export gnc:hook-add-dangler)
+(re-export gnc:hook-remove-dangler)
+(re-export gnc:*startup-hook*)
+(re-export gnc:*shutdown-hook*)
+(re-export gnc:*ui-startup-hook*)
+(re-export gnc:*ui-post-startup-hook*)
+(re-export gnc:*ui-shutdown-hook*)
+(re-export gnc:*book-opened-hook*)
+(re-export gnc:*new-book-hook*)
+(re-export gnc:*book-closed-hook*)
+(re-export gnc:*report-hook*)
 
 ;; simple-obj
 (export make-simple-class)
@@ -275,10 +271,6 @@
 (gnc:hook-add-dangler gnc:*startup-hook*
                       (lambda ()
                         (begin
-                          ;; Initialize the C side options code.
-                          ;; Must come after the scheme options are loaded.
-                          (gnc:c-options-init)
-
                           ;; Initialize the expression parser.
                           ;; Must come after the C side options initialization.
                           (gnc:exp-parser-init))))
@@ -290,13 +282,5 @@
                           ;; Shutdown the expression parser
                           (gnc:exp-parser-shutdown)
 
-                          ;; This saves global options plus (for the
-                          ;; moment) saved report and account tree
-                          ;; window parameters. Reports and parameters
-                          ;; should probably be in a separate file,
-                          ;; with the main data file, or something
-                          ;; else.
-                          (gnc:save-all-options)
-
-                          ;; Shut down the C side options code
-                          (gnc:c-options-shutdown))))
+                          ;; This saves options. E.G. Stylesheets.
+			  (gnc:hook-run-danglers gnc:*save-options-hook*))))

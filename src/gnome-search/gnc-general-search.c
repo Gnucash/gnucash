@@ -81,50 +81,30 @@ gnc_general_search_get_type (void)
 	static guint general_search_type = 0;
 
 	if (!general_search_type){
-		GtkTypeInfo general_search_info = {
-			"GNCGeneralSearch",
-			sizeof (GNCGeneralSearch),
-			sizeof (GNCGeneralSearchClass),
-			(GtkClassInitFunc) gnc_general_search_class_init,
-			(GtkObjectInitFunc) gnc_general_search_init,
-			NULL,
-			NULL,
+		static const GTypeInfo our_info = {
+			sizeof (GNCGeneralSearchClass),    /* class_size */
+			NULL,   			   /* base_init */
+			NULL,				   /* base_finalize */
+			(GClassInitFunc) gnc_general_search_class_init,
+			NULL,				   /* class_finalize */
+			NULL,				   /* class_data */
+			sizeof (GNCGeneralSearch),	   /* */
+			0,				   /* n_preallocs */
+			(GInstanceInitFunc) gnc_general_search_init,
 		};
 
-		general_search_type = gtk_type_unique (gtk_hbox_get_type (),
-						       &general_search_info);
+		general_search_type = g_type_register_static (GTK_TYPE_HBOX,
+							      "GNCGeneralSearch",
+							      &our_info, 0);
 	}
 
 	return general_search_type;
 }
 
 static void
-gnc_general_search_forall (GtkContainer *container, gboolean include_internals,
-                           GtkCallback callback, gpointer callback_data)
-{
-	g_return_if_fail (container != NULL);
-	g_return_if_fail (GNC_IS_GENERAL_SEARCH (container));
-	g_return_if_fail (callback != NULL);
-
-	/* Let GtkBox handle things only if the internal widgets need
-	 * to be poked. */
-	if (!include_internals)
-		return;
-
-	if (!GTK_CONTAINER_CLASS (parent_class)->forall)
-		return;
-
-	GTK_CONTAINER_CLASS (parent_class)->forall (container,
-						    include_internals,
-						    callback,
-						    callback_data);
-}
-
-static void
 gnc_general_search_class_init (GNCGeneralSearchClass *klass)
 {
 	GtkObjectClass *object_class = (GtkObjectClass *) klass;
-	GtkContainerClass *container_class = (GtkContainerClass *) klass;
 
 	object_class = (GtkObjectClass*) klass;
 
@@ -133,17 +113,11 @@ gnc_general_search_class_init (GNCGeneralSearchClass *klass)
 	general_search_signals[SELECTION_CHANGED] =
 		gtk_signal_new("changed",
 			       GTK_RUN_FIRST,
-			       object_class->type,
+			       GTK_CLASS_TYPE(object_class),
 			       GTK_SIGNAL_OFFSET(GNCGeneralSearchClass,
 						 changed),
 			       gtk_marshal_NONE__NONE,
 			       GTK_TYPE_NONE, 0);
-
-	gtk_object_class_add_signals(object_class,
-				     general_search_signals,
-				     LAST_SIGNAL);
-
-	container_class->forall = gnc_general_search_forall;
 
 	object_class->destroy = gnc_general_search_destroy;
 
@@ -170,19 +144,22 @@ gnc_general_search_destroy (GtkObject *object)
 	gsl->entry = NULL;
 	gsl->button = NULL;
 
-	if (gsl->priv->sw) {
+	if (gsl->priv) {
 		/* Clear the callbacks */
-		gnc_search_dialog_set_select_cb (gsl->priv->sw, NULL,
-						 NULL, FALSE);
-		gnc_search_dialog_disconnect (gsl->priv->sw, gsl);
-		gsl->priv->sw = NULL;
+		if (gsl->priv->sw) {
+			gnc_search_dialog_set_select_cb (gsl->priv->sw, NULL,
+							 NULL, FALSE);
+			gnc_search_dialog_disconnect (gsl->priv->sw, gsl);
+			gsl->priv->sw = NULL;
+		}
+
+		/* Unregister ourselves */
+		gnc_unregister_gui_component (gsl->priv->component_id);
+
+		/* And let go */
+		g_free (gsl->priv);
+		gsl->priv = NULL;
 	}
-
-	/* Unregister ourselves */
-	gnc_unregister_gui_component (gsl->priv->component_id);
-
-	/* And let go */
-	g_free (gsl->priv);
 
 	if (GTK_OBJECT_CLASS (parent_class)->destroy)
 		GTK_OBJECT_CLASS (parent_class)->destroy (object);
@@ -229,7 +206,7 @@ new_item_selected_cb (gpointer item, gpointer user_data)
 
 /* The search dialog has closed; let's forget about her */
 static int
-on_close_cb (GnomeDialog *dialog, gpointer user_data)
+on_close_cb (GtkDialog *dialog, gpointer user_data)
 {
 	GNCGeneralSearch *gsl = user_data;
 	gsl->priv->sw = NULL;
@@ -277,8 +254,8 @@ create_children (GNCGeneralSearch *gsl, const char *label)
 
 	gsl->button = gtk_button_new_with_label (label);
 	gtk_box_pack_start (GTK_BOX (gsl), gsl->button, FALSE, FALSE, 0);
-	gtk_signal_connect (GTK_OBJECT (gsl->button), "clicked",
-			    search_cb, gsl);
+	g_signal_connect (G_OBJECT (gsl->button), "clicked",
+			  G_CALLBACK (search_cb), gsl);
 	gtk_widget_show (gsl->button);
 }
 
@@ -302,7 +279,7 @@ gnc_general_search_new (GNCIdTypeConst type, const char *label,
 	get_guid = qof_class_get_parameter (type, QOF_PARAM_GUID);
 	g_return_val_if_fail (get_guid, NULL);
 
-	gsl = gtk_type_new (gnc_general_search_get_type ());
+	gsl = g_object_new (gnc_general_search_get_type (), NULL);
 
 	create_children (gsl, label);
 
@@ -336,7 +313,7 @@ gnc_general_search_set_selected (GNCGeneralSearch *gsl, gpointer selection)
 		gsl->selected_item = selection;
 		reset_selection_text (gsl);
 		gtk_signal_emit(GTK_OBJECT(gsl),
-				general_search_signals[SELECTION_CHANGED]);
+			      general_search_signals[SELECTION_CHANGED]);
 	}
 
 	gnc_gui_component_clear_watches (gsl->priv->component_id);

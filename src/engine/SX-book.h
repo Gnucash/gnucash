@@ -41,10 +41,7 @@
 #include "config.h"
 
 #include <glib.h>
-
-#include "gnc-engine.h"
-#include "qofbook.h"
-#include "qofid.h"
+#include "qof.h"
 
 typedef struct xaccSchedXactionsDef SchedXactions;
 
