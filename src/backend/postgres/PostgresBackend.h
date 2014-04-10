@@ -41,7 +41,7 @@
 #include "Transaction.h"
 
 #include "builder.h"
-#include "BackendP.h"
+#include "qofbackend-p.h"
 
 typedef struct _pgend PGBackend;
 
@@ -56,7 +56,7 @@ typedef enum {
 #define MAX_VERSION_AGE 10
 
 struct _pgend {
-   Backend be;
+   QofBackend be;
 
    /* session mode */
    AccessMode session_mode;
@@ -78,7 +78,7 @@ struct _pgend {
    /* counter used to nest callback disables */
    int nest_count;
    /* callback hooks are saved in snr during disables */
-   Backend snr;    
+   QofBackend snr;    
 
    /* my postgres backend pid, used for telling apart notifies */
    int my_pid;
@@ -109,9 +109,9 @@ struct _pgend {
    int ipath_max;
 
    /* engine data caches */
-   GNCSession *session;
-   GNCBook *book;  /* the currently open book -- XXX -- depricate ???*/
-   BookList *blist;  /* list of books in this db */
+   QofSession *session;
+   QofBook *book;  /* the currently open book -- XXX -- depricate ???*/
+   QofBookList *blist;  /* list of books in this db */
 
    GList *tmp_return;
 };
@@ -119,12 +119,12 @@ struct _pgend {
 /*
  * pgendNew creates a new postgres backend
  */
-Backend * pgendNew (void);
+QofBackend * pgendNew (void);
 
 Account * pgendAccountLookup (PGBackend *be, const GUID *acct_guid);
 Transaction * pgendTransLookup (PGBackend *be, const GUID *txn_guid);
 Split * pgendSplitLookup (PGBackend *be, const GUID *split_guid);
-GNCIdType pgendGUIDType (PGBackend *be, const GUID *guid);
+QofIdType pgendGUIDType (PGBackend *be, const GUID *guid);
 
 void pgendDisable (PGBackend *be);
 void pgendEnable (PGBackend *be);

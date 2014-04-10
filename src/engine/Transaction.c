@@ -1194,14 +1194,8 @@ xaccTransEqual(const Transaction *ta, const Transaction *tb,
 
         if (!node_b)
         {
-          char *str_a;
-
-          str_a = guid_to_string (xaccSplitGetGUID (split_a));
-
-          PWARN ("first has split %s and second does not", str_a);
-
-          g_free (str_a);
-
+          PWARN ("first has split %s and second does not",
+		 guid_to_string (xaccSplitGetGUID (split_a)));
           return(FALSE);
         }
 
@@ -1209,16 +1203,13 @@ xaccTransEqual(const Transaction *ta, const Transaction *tb,
 
         if (!xaccSplitEqual (split_a, split_b, check_guids, check_balances, FALSE))
         {
-          char *str_a, *str_b;
+          char str_a[GUID_ENCODING_LENGTH+1];
+          char str_b[GUID_ENCODING_LENGTH+1];
 
-          str_a = guid_to_string (xaccSplitGetGUID (split_a));
-          str_b = guid_to_string (xaccSplitGetGUID (split_b));
+          guid_to_string_buff (xaccSplitGetGUID (split_a), str_a);
+	  guid_to_string_buff (xaccSplitGetGUID (split_b), str_b);
 
           PWARN ("splits %s and %s differ", str_a, str_b);
-
-          g_free (str_a);
-          g_free (str_b);
-
           return(FALSE);
         }
       }

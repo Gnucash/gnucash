@@ -34,8 +34,8 @@
 #include <glib.h> 
 #include <libpq-fe.h>  
 #include <stdlib.h>  
-#include "Backend.h"
-#include "BackendP.h"
+#include "qofbackend.h"
+#include "qofbackend-p.h"
 #include "gnc-engine-util.h" 
 #include "PostgresBackend.h"
 
@@ -60,8 +60,8 @@ int sendQuery(PGBackend *be,char * buff) {
       gchar * msg = (gchar *)PQerrorMessage(be->connection);
       PERR("send query failed:\n"
            "\t%s", msg);
-      xaccBackendSetMessage(&be->be, msg);
-      xaccBackendSetError (&be->be, ERR_BACKEND_SERVER_ERR);
+      qof_backend_set_message(&be->be, msg);
+      qof_backend_set_error (&be->be, ERR_BACKEND_SERVER_ERR);
       return ERR_BACKEND_SERVER_ERR;
    }
    LEAVE("PQsendQuery rc = %d", rc);
@@ -102,8 +102,8 @@ int finishQuery(PGBackend *be) {
          gchar * msg = (gchar *)PQerrorMessage(be->connection);
          PERR("finish query failed:\n\t%s", msg);
          PQclear(result);
-         xaccBackendSetMessage(&be->be, msg);
-         xaccBackendSetError (&be->be, ERR_BACKEND_SERVER_ERR);
+         qof_backend_set_message(&be->be, msg);
+         qof_backend_set_error (&be->be, ERR_BACKEND_SERVER_ERR);
          break; 
       }
       PQclear(result);

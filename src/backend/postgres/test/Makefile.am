@@ -40,6 +40,7 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/engine/test-core \
   -I.. \
   -I${srcdir}/.. \
+  -I/usr/include/postgresql \
   ${PGSQL_CFLAGS} \
   ${GLIB_CFLAGS} \
   ${GUILE_INCS} 

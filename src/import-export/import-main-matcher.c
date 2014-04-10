@@ -563,7 +563,7 @@ refresh_clist_row (GNCImportMainMatcher *gui,
   /*Date*/
 
   text[DOWNLOADED_CLIST_DATE] = 
-    g_strdup( xaccPrintDateSecs ( xaccTransGetDate( gnc_import_TransInfo_get_trans(info) ) ));
+    xaccPrintDateSecs ( xaccTransGetDate( gnc_import_TransInfo_get_trans(info) ) );
   gtk_clist_set_text (GTK_CLIST (gui->clist), row_number, 
 		      DOWNLOADED_CLIST_DATE, 
 		      text[DOWNLOADED_CLIST_DATE]);

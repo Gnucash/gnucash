@@ -118,8 +118,8 @@ file_session_begin(QofBackend *be_start, QofSession *session, const char *book_i
             return;
         }
         rc = stat (be->fullpath, &statbuf);
-        if (rc != 0 || S_ISDIR(statbuf.st_mode))
-        {
+        if (rc == 0 && S_ISDIR(statbuf.st_mode))
+       {
             qof_backend_set_error (be_start, ERR_FILEIO_UNKNOWN_FILE_TYPE);
             g_free (be->fullpath); be->fullpath = NULL;
             g_free (be->dirname); be->dirname = NULL;

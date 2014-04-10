@@ -44,13 +44,13 @@
 
 #include "Account.h"
 #include "AccountP.h"
-#include "Backend.h"
-#include "BackendP.h"
+#include "qofbackend.h"
+#include "qofbackend-p.h"
 #include "Group.h"
 #include "gnc-commodity.h"
 #include "gnc-engine-util.h"
 #include "guid.h"
-#include "GNCId.h"
+#include "qofid.h"
 
 #include "builder.h"
 #include "checkpoint.h"
@@ -219,8 +219,6 @@ done:
                   "NOTIFY gncCheckpoint;\n");
    SEND_QUERY (be,be->buff, );
    FINISH_QUERY(be->connection);
-
-   g_free ((gpointer) guid_string);
 }
 
 /* ============================================================= */

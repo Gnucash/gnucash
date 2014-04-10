@@ -339,20 +339,20 @@ add_multiple_book_support (PGBackend *be)
  
    p = buff;
    p = stpcpy (p, "UPDATE gncAccount SET bookGuid = '");
-   p = guid_to_string_buff (gnc_book_get_guid (be->book), p);
+   p = guid_to_string_buff (qof_book_get_guid (be->book), p);
    p = stpcpy (p, "';\n");
    p = stpcpy (p, "UPDATE gncAccountTrail SET bookGuid = '");
-   p = guid_to_string_buff (gnc_book_get_guid (be->book), p);
+   p = guid_to_string_buff (qof_book_get_guid (be->book), p);
    p = stpcpy (p, "';\n");
    SEND_QUERY (be,buff, );
    FINISH_QUERY(be->connection);
 
    p = buff;
    p = stpcpy (p, "UPDATE gncPrice SET bookGuid = '");
-   p = guid_to_string_buff (gnc_book_get_guid (be->book), p);
+   p = guid_to_string_buff (qof_book_get_guid (be->book), p);
    p = stpcpy (p, "';\n");
    p = stpcpy (p, "UPDATE gncPriceTrail SET bookGuid = '");
-   p = guid_to_string_buff (gnc_book_get_guid (be->book), p);
+   p = guid_to_string_buff (qof_book_get_guid (be->book), p);
    p = stpcpy (p, "';\n");
    SEND_QUERY (be,buff, );
    FINISH_QUERY(be->connection);
@@ -360,7 +360,7 @@ add_multiple_book_support (PGBackend *be)
    p = buff;
    p = stpcpy (p, "INSERT INTO gncBook (bookGuid, book_open, version, iguid) "
                   "VALUES ('");
-   p = guid_to_string_buff (gnc_book_get_guid (be->book), p);
+   p = guid_to_string_buff (qof_book_get_guid (be->book), p);
    p = stpcpy (p, "', 'y', 1, 0);");
    SEND_QUERY (be,buff, );
    FINISH_QUERY(be->connection);
@@ -387,7 +387,7 @@ pgendDBVersionIsCurrent (PGBackend *be)
 
    if (1 > vers.major)
    {
-      xaccBackendSetError (&be->be, ERR_BACKEND_DATA_CORRUPT);
+      qof_backend_set_error (&be->be, ERR_BACKEND_DATA_CORRUPT);
       return -1;
    }
 
@@ -397,7 +397,7 @@ pgendDBVersionIsCurrent (PGBackend *be)
    /* check to see if this client can connect */
    if (PGEND_CURRENT_MAJOR_VERSION < vers.major)
    {
-      xaccBackendSetError (&be->be, ERR_BACKEND_TOO_NEW);
+      qof_backend_set_error (&be->be, ERR_BACKEND_TOO_NEW);
       return -1;
    }
 

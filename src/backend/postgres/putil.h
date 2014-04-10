@@ -40,11 +40,11 @@
 
 #include <libpq-fe.h>  
 
-#include "Backend.h"
-#include "BackendP.h"
+#include "qofbackend.h"
+#include "qofbackend-p.h"
 #include "gnc-engine-util.h"
 #include "guid.h"
-#include "GNCId.h"
+#include "qofid.h"
 
 #include "PostgresBackend.h"
 
@@ -66,7 +66,7 @@ gpointer pgendGetResults (PGBackend *be,
 /* The gnc_string_to_commodity() routine finds the commodity by
  *     parsing a string of the form NAMESPACE::MNEMONIC
  */
-gnc_commodity * gnc_string_to_commodity (const char *str, GNCBook *book);
+gnc_commodity * gnc_string_to_commodity (const char *str, QofBook *book);
 
 int sendQuery(PGBackend *be,char * buff);
 int finishQuery(PGBackend *be);
@@ -95,8 +95,8 @@ int finishQuery(PGBackend *be);
       gchar * msg = (gchar *)PQerrorMessage(be->connection);    \
       /* hack alert -- we need kinder, gentler error handling */\
       PERR("send query failed:\n\t%s", msg);                    \
-      xaccBackendSetMessage (&be->be, msg);                     \
-      xaccBackendSetError (&be->be, ERR_BACKEND_SERVER_ERR);    \
+      qof_backend_set_message (&be->be, msg);                     \
+      qof_backend_set_error (&be->be, ERR_BACKEND_SERVER_ERR);    \
       return retval;                                            \
    }                                                            \
 }                                                               \
@@ -124,8 +124,8 @@ int finishQuery(PGBackend *be);
          msg = PQresultErrorMessage(result);                    \
          PERR("finish query failed:\n\t%s", msg);               \
          PQclear(result);                                       \
-         xaccBackendSetMessage (&be->be, msg);                  \
-         xaccBackendSetError (&be->be, ERR_BACKEND_SERVER_ERR); \
+         qof_backend_set_message (&be->be, msg);                  \
+         qof_backend_set_error (&be->be, ERR_BACKEND_SERVER_ERR); \
          break;                                                 \
       }                                                         \
       PQclear(result);                                          \
@@ -151,8 +151,8 @@ int finishQuery(PGBackend *be);
    {                                                        \
       PERR("failed to get result to query:\n\t%s", msg);    \
       PQclear (result);                                     \
-      xaccBackendSetMessage (&be->be, msg);                 \
-      xaccBackendSetError (&be->be, ERR_BACKEND_SERVER_ERR);\
+      qof_backend_set_message (&be->be, msg);                 \
+      qof_backend_set_error (&be->be, ERR_BACKEND_SERVER_ERR);\
       break;                                                \
    }                                                        \
 }                                                           \
@@ -182,8 +182,8 @@ int finishQuery(PGBackend *be);
       if (result)                                           \
         PQclear (result);                                   \
       result = NULL;                                        \
-      xaccBackendSetMessage (&be->be, msg);                 \
-      xaccBackendSetError (&be->be, ERR_BACKEND_SERVER_ERR);\
+      qof_backend_set_message (&be->be, msg);                 \
+      qof_backend_set_error (&be->be, ERR_BACKEND_SERVER_ERR);\
    }                                                        \
 }                                                           \
 
@@ -202,7 +202,7 @@ int finishQuery(PGBackend *be);
    }								\
    if (1 < nrows) {						\
       PERR ("unexpected duplicate records");			\
-      xaccBackendSetError (&be->be, ERR_BACKEND_DATA_CORRUPT);	\
+      qof_backend_set_error (&be->be, ERR_BACKEND_DATA_CORRUPT);	\
       break;							\
    } else if (1 == nrows) 
 

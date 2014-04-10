@@ -48,8 +48,8 @@ void pgendCopySplitsToEngine (PGBackend *be, Transaction *trans);
 void pgendStoreAllTransactions (PGBackend *be, AccountGroup *grp);
 void pgendStoreTransactionNoLock (PGBackend *be, Transaction *trans, gboolean do_check_version);
 
-void pgend_trans_commit_edit (Backend * bend, Transaction * trans, Transaction * oldtrans);
-void pgend_trans_rollback_edit (Backend * bend, Transaction * trans);
+void pgend_trans_commit_edit (QofBackend * bend, Transaction * trans, Transaction * oldtrans);
+void pgend_trans_rollback_edit (QofBackend * bend, Transaction * trans);
 
 
 

@@ -2413,7 +2413,7 @@ xaccAccountHasAncestor (Account *account, Account * ancestor)
 
 #define GNC_RETURN_ENUM_AS_STRING(x) case (x): return #x;
 
-char *
+const char *
 xaccAccountTypeEnumAsString(GNCAccountType type) 
 {
   switch(type) 

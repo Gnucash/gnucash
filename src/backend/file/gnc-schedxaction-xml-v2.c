@@ -635,7 +635,7 @@ gnc_schedXaction_end_handler(gpointer data_for_children,
     if ( sx->template_acct == NULL )
     {
             AccountGroup *ag = NULL;
-            char *id = NULL;
+            const char *id = NULL;
             Account *acct = NULL;
             sixtp_gdv2 *sixdata = gdata->parsedata;
             QofBook *book;

@@ -32,12 +32,12 @@
 #include <libpq-fe.h>  
  
 #include "AccountP.h"
-#include "Backend.h"
-#include "BackendP.h"
+#include "qofbackend.h"
+#include "qofbackend-p.h"
 #include "Group.h"
 #include "GroupP.h"
-#include "gnc-book.h"
-#include "gnc-book-p.h"
+#include "qofbook.h"
+#include "qofbook-p.h"
 #include "gnc-commodity.h"
 #include "gnc-engine-util.h"
 #include "gnc-event.h"
@@ -259,7 +259,7 @@ typedef struct
 
 typedef struct
 {
-  GNCBook * book;
+  QofBook * book;
   GList * resolve_info;
 } GetAccountData;
 
@@ -274,7 +274,7 @@ static gpointer
 get_account_cb (PGBackend *be, PGresult *result, int j, gpointer data)
 {
    GetAccountData * gad = data;
-   GNCBook * book = gad->book;
+   QofBook * book = gad->book;
    Account *parent;
    Account *acc;
    GUID acct_guid;
@@ -325,7 +325,7 @@ get_account_cb (PGBackend *be, PGresult *result, int j, gpointer data)
    PINFO ("parent GUID=%s", DB_GET_VAL("parentGUID",j));
    acct_guid = nullguid;  /* just in case the read fails ... */
    string_to_guid (DB_GET_VAL("parentGUID",j), &acct_guid);
-   if (guid_equal(xaccGUIDNULL(), &acct_guid)) 
+   if (guid_equal(guid_null(), &acct_guid)) 
    {
       /* if the parent guid is null, then this
        * account belongs in the top group */
@@ -361,7 +361,7 @@ get_account_cb (PGBackend *be, PGresult *result, int j, gpointer data)
 }
 
 static void
-pgendGetAccounts (PGBackend *be, GNCBook *book)
+pgendGetAccounts (PGBackend *be, QofBook *book)
 {
   GetAccountData gad;
 
@@ -430,7 +430,7 @@ pgendGetAccounts (PGBackend *be, GNCBook *book)
 void
 pgendGetAllAccounts (PGBackend *be)
 {
-   BookList *node;
+   QofBookList *node;
    char * bufp;
 
    ENTER ("be=%p", be);
@@ -449,7 +449,7 @@ pgendGetAllAccounts (PGBackend *be)
 
    for (node=be->blist; node; node=node->next)
    {
-      GNCBook *book = node->data;
+      QofBook *book = node->data;
       AccountGroup *topgrp = gnc_book_get_group (book);
       pgendGetAllAccountKVP (be, topgrp);
 
@@ -463,7 +463,7 @@ pgendGetAllAccounts (PGBackend *be)
 }
 
 void
-pgendGetAllAccountsInBook (PGBackend *be, GNCBook *book)
+pgendGetAllAccountsInBook (PGBackend *be, QofBook *book)
 {
    char *p, buff[400];
    AccountGroup *topgrp;
@@ -478,7 +478,7 @@ pgendGetAllAccountsInBook (PGBackend *be, GNCBook *book)
 
    p = buff;
    p = stpcpy (p, "SELECT * FROM gncAccount WHERE bookGuid='");
-   p = guid_to_string_buff (gnc_book_get_guid(book), p);
+   p = guid_to_string_buff (qof_book_get_guid(book), p);
    p = stpcpy (p, "';");
    SEND_QUERY (be, buff, );
    pgendGetAccounts (be, book);
@@ -574,12 +574,12 @@ pgendCopyAccountToEngine (PGBackend *be, const GUID *acct_guid)
 /* ============================================================= */
 
 void
-pgend_account_commit_edit (Backend * bend, 
+pgend_account_commit_edit (QofBackend * bend, 
                            Account * acct)
 {
    AccountGroup *parent;
    char *p;
-   GNCBackendError err;
+   QofBackendError err;
    PGBackend *be = (PGBackend *)bend;
 
    ENTER ("be=%p, acct=%p", be, acct);
@@ -617,7 +617,7 @@ pgend_account_commit_edit (Backend * bend,
       PWARN(" account data in engine is newer\n"
             " account must be rolled back.  This function\n"
             " is not completely implemented !! \n");
-      xaccBackendSetError (&be->be, ERR_BACKEND_MODIFIED);
+      qof_backend_set_error (&be->be, ERR_BACKEND_MODIFIED);
       LEAVE ("rolled back");
       return;
    }

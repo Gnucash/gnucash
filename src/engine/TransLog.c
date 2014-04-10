@@ -168,7 +168,8 @@ void
 xaccTransWriteLog (Transaction *trans, char flag)
 {
    GList *node;
-   char *trans_guid_str, *split_guid_str;
+   char trans_guid_str[GUID_ENCODING_LENGTH+1];
+   char split_guid_str[GUID_ENCODING_LENGTH+1];
    const char *trans_notes; 
    char dnow[100], dent[100], dpost[100], drecn[100]; 
    Timespec ts;
@@ -185,24 +186,27 @@ xaccTransWriteLog (Transaction *trans, char flag)
    timespecFromTime_t(&ts,trans->date_posted.tv_sec);
    gnc_timespec_to_iso8601_buff (ts, dpost);
 
-   trans_guid_str = guid_to_string (xaccTransGetGUID(trans));
+   guid_to_string_buff (xaccTransGetGUID(trans), trans_guid_str);
    trans_notes = xaccTransGetNotes(trans);
    fprintf (trans_log, "===== START\n");
 
    for (node = trans->splits; node; node = node->next) {
       Split *split = node->data;
       const char * accname = "";
-      char * acc_guid_str = NULL;
+      char acc_guid_str[GUID_ENCODING_LENGTH+1];
 
       if (xaccSplitGetAccount(split)){
         accname = xaccAccountGetName (xaccSplitGetAccount(split));
-	acc_guid_str = guid_to_string (xaccAccountGetGUID(xaccSplitGetAccount(split)));
+	guid_to_string_buff(xaccAccountGetGUID(xaccSplitGetAccount(split)),
+			    acc_guid_str);
+      } else {
+	acc_guid_str[0] = '\0';
       }
       
          timespecFromTime_t(&ts,split->date_reconciled.tv_sec);
 	 gnc_timespec_to_iso8601_buff (ts, drecn);
 
-      split_guid_str = guid_to_string (xaccSplitGetGUID(split));
+      guid_to_string_buff (xaccSplitGetGUID(split), split_guid_str);
       /* use tab-separated fields */
       fprintf (trans_log,
                "%c\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t"
@@ -212,7 +216,7 @@ xaccTransWriteLog (Transaction *trans, char flag)
                dnow ? dnow : "",
                dent ? dent : "", 
                dpost ? dpost : "", 
-	       acc_guid_str ? acc_guid_str : "",
+	       acc_guid_str,
                accname ? accname : "",
                trans->num ? trans->num : "", 
                trans->description ? trans->description : "",
@@ -225,13 +229,9 @@ xaccTransWriteLog (Transaction *trans, char flag)
                (long long int) gnc_numeric_num(split->value), 
                (long long int) gnc_numeric_denom(split->value),
                drecn ? drecn : "");
-
-      g_free (split_guid_str);
    }
 
    fprintf (trans_log, "===== END\n");
-
-   g_free (trans_guid_str);
 
    /* get data out to the disk */
    fflush (trans_log);

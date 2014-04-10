@@ -103,9 +103,9 @@ downloaded_transaction_append(GNCImportMatchPicker * matcher,
   
   /*Date*/
   clist_text[DOWNLOADED_CLIST_DATE] = 
-    g_strdup ( xaccPrintDateSecs 
-	       ( xaccTransGetDate
-		 ( gnc_import_TransInfo_get_trans(transaction_info) ) ));
+    xaccPrintDateSecs 
+    ( xaccTransGetDate
+      ( gnc_import_TransInfo_get_trans(transaction_info) ) );
   
   /*Amount*/
   clist_text[DOWNLOADED_CLIST_AMOUNT] =
@@ -171,10 +171,10 @@ downloaded_transaction_select_cb (GtkCList *clist,
       
       /* Date */
       clist_text[MATCHER_CLIST_DATE]=
-	g_strdup( xaccPrintDateSecs 
-		  ( xaccTransGetDate
-		    ( xaccSplitGetParent
-		      ( gnc_import_MatchInfo_get_split(match_info) ) )));
+	xaccPrintDateSecs 
+	( xaccTransGetDate
+	  ( xaccSplitGetParent
+	    ( gnc_import_MatchInfo_get_split(match_info) ) ));
       
       /* Amount */
       clist_text[MATCHER_CLIST_AMOUNT]=

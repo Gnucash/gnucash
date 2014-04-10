@@ -281,7 +281,7 @@ add_kvp_value_node(xmlNodePtr node, gchar *tag, kvp_value* val)
         break;
     case KVP_TYPE_GUID:
         add_text_to_node(val_node,"guid",
-                         guid_to_string(kvp_value_get_guid(val)));
+                         g_strdup(guid_to_string(kvp_value_get_guid(val))));
         break;
     case KVP_TYPE_TIMESPEC:
     {

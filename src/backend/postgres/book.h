@@ -24,19 +24,19 @@
 #ifndef POSTGRES_BOOK_H
 #define POSTGRES_BOOK_H
 
-#include "gnc-book.h"
+#include "qofbook.h"
 #include "gnc-engine.h"
 #include "guid.h"
 
 #include "PostgresBackend.h"
 
-BookList * pgendGetAllBooks (PGBackend *be, BookList *);
+QofBookList * pgendGetAllBooks (PGBackend *be, QofBookList *);
 
-void pgendGetBook (PGBackend *be, GNCBook *book);
-void pgendStoreBookNoLock (PGBackend *be, GNCBook *book, int do_check_version);
-void pgendStoreBook (PGBackend *be, GNCBook *book);
+void pgendGetBook (PGBackend *be, QofBook *book);
+void pgendStoreBookNoLock (PGBackend *be, QofBook *book, int do_check_version);
+void pgendStoreBook (PGBackend *be, QofBook *book);
 
-void pgend_book_transfer_begin (Backend *, GNCBook*);
-void pgend_book_transfer_commit (Backend *, GNCBook*);
+void pgend_book_transfer_begin (QofBackend *, QofBook*);
+void pgend_book_transfer_commit (QofBackend *, QofBook*);
 
 #endif /* POSTGRES_BOOK_H */

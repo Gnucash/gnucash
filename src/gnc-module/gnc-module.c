@@ -219,6 +219,7 @@ gnc_module_system_refresh(void)
           g_free(fullpath);
         }
       }
+      closedir(d);
     }
   }
   /* free the search dir strings */

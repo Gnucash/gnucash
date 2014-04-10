@@ -64,10 +64,10 @@ void pgendKVPInit (PGBackend *);
  *    use as a GUID cache index.
  */
 
-void pgendKVPStore (PGBackend *, guint32 iguid, kvp_frame *);
+void pgendKVPStore (PGBackend *, guint32 iguid, KvpFrame *);
 void pgendKVPDelete (PGBackend *, guint32 iguid);
 
-kvp_frame * pgendKVPFetch (PGBackend *, guint32 iguid, kvp_frame *);
+KvpFrame * pgendKVPFetch (PGBackend *, guint32 iguid, KvpFrame *);
 
 guint32 pgendNewGUIDidx (PGBackend *be);
 

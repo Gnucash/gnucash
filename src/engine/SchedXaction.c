@@ -53,7 +53,6 @@ static void
 xaccSchedXactionInit( SchedXaction *sx, QofBook *book)
 {
    AccountGroup        *ag;
-   char                *name;
 
    sx->entity_table = qof_book_get_entity_table (book);
 
@@ -78,13 +77,11 @@ xaccSchedXactionInit( SchedXaction *sx, QofBook *book)
 
    /* create a new template account for our splits */
    sx->template_acct = xaccMallocAccount(book);
-   name = guid_to_string( &sx->guid );
-   xaccAccountSetName( sx->template_acct, name );
+   xaccAccountSetName( sx->template_acct, guid_to_string( &sx->guid ));
    xaccAccountSetCommodity
      (sx->template_acct,
       gnc_commodity_new( "template", "template",
                          "template", "template", 1 ) );
-	g_free( name );
    xaccAccountSetType( sx->template_acct, BANK );
    ag = gnc_book_get_template_group( book );
    xaccGroupInsertAccount( ag, sx->template_acct );

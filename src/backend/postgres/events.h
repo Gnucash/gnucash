@@ -34,11 +34,11 @@
 #ifndef POSTGRES_EVENTS_H
 #define POSTGRES_EVENTS_H
 
-#include "Backend.h"
+#include "qofbackend.h"
 #include "PostgresBackend.h"
 
-gboolean pgendEventsPending (Backend *);
-gboolean pgendProcessEvents (Backend *);
+gboolean pgendEventsPending (QofBackend *);
+gboolean pgendProcessEvents (QofBackend *);
 
 void pgendSessionGetPid (PGBackend *);
 void pgendSessionSetupNotifies (PGBackend *);

@@ -1103,6 +1103,7 @@ kvp_value_to_string(const KvpValue *val)
 {
     gchar *tmp1;
     gchar *tmp2;
+    const gchar *ctmp;
     
     g_return_val_if_fail(val, NULL);
     
@@ -1131,9 +1132,8 @@ kvp_value_to_string(const KvpValue *val)
         break;
 
     case KVP_TYPE_GUID:
-        tmp1 = guid_to_string(kvp_value_get_guid(val));
-        tmp2 = g_strdup_printf("KVP_VALUE_GUID(%s)", tmp1 ? tmp1 : "");
-        g_free(tmp1);
+        ctmp = guid_to_string(kvp_value_get_guid(val));
+        tmp2 = g_strdup_printf("KVP_VALUE_GUID(%s)", ctmp ? ctmp : "");
         return tmp2;
         break;
 
