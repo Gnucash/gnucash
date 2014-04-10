@@ -3179,18 +3179,9 @@ xaccTransReverse (Transaction *trans)
 
 /********************************************************************\
 \********************************************************************/
-/* gncObject function implementation */
+/* QofObject function implementation */
 
-static void
-split_foreach (QofBook *book, QofForeachCB fcn, gpointer user_data)
-{
-  QofCollection *col;
-  g_return_if_fail (book);
-  col = qof_book_get_collection (book, GNC_ID_SPLIT);
-  qof_collection_foreach (col, (QofEntityForeachCB) fcn, user_data);
-}
-
-/* Hook into the gncObject registry */
+/* Hook into the QofObject registry */
 
 static QofObject split_object_def = {
   interface_version:       QOF_OBJECT_VERSION,
@@ -3200,7 +3191,7 @@ static QofObject split_object_def = {
   book_end:                NULL,
   is_dirty:                NULL,
   mark_clean:              NULL,
-  foreach:                 split_foreach,
+  foreach:                 qof_collection_foreach,
   printable:               (const char* (*)(gpointer)) xaccSplitGetMemo
 };
 
@@ -3284,15 +3275,6 @@ gboolean xaccSplitRegister (void)
   return qof_object_register (&split_object_def);
 }
 
-static void
-trans_foreach (QofBook *book, QofForeachCB fcn, gpointer user_data)
-{
-  QofCollection *col;
-  g_return_if_fail (book);
-  col = qof_book_get_collection (book, GNC_ID_TRANS);
-  qof_collection_foreach (col, (QofEntityForeachCB) fcn, user_data);
-}
-
 static QofObject trans_object_def = {
   interface_version:   QOF_OBJECT_VERSION,
   e_type:              GNC_ID_TRANS,
@@ -3301,7 +3283,7 @@ static QofObject trans_object_def = {
   book_end:            NULL,
   is_dirty:            NULL,
   mark_clean:          NULL,
-  foreach:             trans_foreach,
+  foreach:             qof_collection_foreach,
   printable:           (const char* (*)(gpointer)) xaccTransGetDescription
 };
 

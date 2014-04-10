@@ -27,9 +27,9 @@
 
 #include <stdio.h>
 
-#include "gnc-book.h"
 #include "Group.h"
 #include "io-gncxml-v2.h"
+#include "qofbook.h"
 
 void write_account_group(FILE *out, AccountGroup *grp, sixtp_gdv2 *gd);
 void write_accounts(FILE *out, QofBook *book, sixtp_gdv2 *gd);

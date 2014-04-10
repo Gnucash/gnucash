@@ -15,10 +15,10 @@ typedef struct _employee_window EmployeeWindow;
 
 /* Functions to edit and create employees */
 EmployeeWindow * gnc_ui_employee_edit (GncEmployee *employee);
-EmployeeWindow * gnc_ui_employee_new (GNCBook *book);
+EmployeeWindow * gnc_ui_employee_new (QofBook *book);
 
 /* Search for an employee */
-GNCSearchWindow * gnc_employee_search (GncEmployee *start, GNCBook *book);
+GNCSearchWindow * gnc_employee_search (GncEmployee *start, QofBook *book);
 
 /*
  * These callbacks are for use with the gnc_general_search widget

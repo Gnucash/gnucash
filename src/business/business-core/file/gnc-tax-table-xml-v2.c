@@ -49,7 +49,7 @@
 #include "qofobject.h"
 #include "qofinstance.h"
 
-#define _GNC_MOD_NAME	GNC_TAXTABLE_MODULE_NAME
+#define _GNC_MOD_NAME	GNC_ID_TAXTABLE
 
 static short module = MOD_IO;
 
@@ -449,7 +449,7 @@ taxtable_sixtp_parser_create(void)
 }
 
 static void
-do_count (gpointer table_p, gpointer count_p)
+do_count (QofEntity * table_p, gpointer count_p)
 {
   int *count = count_p;
   (*count)++;
@@ -464,10 +464,10 @@ taxtable_get_count (GNCBook *book)
 }
 
 static void
-xml_add_taxtable (gpointer table_p, gpointer out_p)
+xml_add_taxtable (QofEntity * table_p, gpointer out_p)
 {
   xmlNodePtr node;
-  GncTaxTable *table = table_p;
+  GncTaxTable *table = (GncTaxTable *) table_p;
   FILE *out = out_p;
 
   node = taxtable_dom_tree_create (table);
@@ -524,9 +524,9 @@ taxtable_find_senior (GncTaxTable *table)
 
 /* build a list of tax tables that are grandchildren or bogus (empty entry list). */
 static void
-taxtable_scrub_cb (gpointer table_p, gpointer list_p)
+taxtable_scrub_cb (QofEntity * table_p, gpointer list_p)
 {
-  GncTaxTable *table = table_p;
+  GncTaxTable *table = GNC_TAXTABLE(table_p);
   GList **list = list_p;
 
   if (taxtable_is_grandchild(table) || gncTaxTableGetEntries(table) == NULL)
@@ -537,10 +537,10 @@ taxtable_scrub_cb (gpointer table_p, gpointer list_p)
  * grandchildren, then fix them to point to the most senior child
  */
 static void
-taxtable_scrub_entries (gpointer entry_p, gpointer ht_p)
+taxtable_scrub_entries (QofEntity * entry_p, gpointer ht_p)
 {
   GHashTable *ht = ht_p;
-  GncEntry *entry = entry_p;
+  GncEntry *entry = GNC_ENTRY(entry_p);
   GncTaxTable *table, *new_tt;
   gint32 count;
 
@@ -582,10 +582,10 @@ taxtable_scrub_entries (gpointer entry_p, gpointer ht_p)
 }
 
 static void
-taxtable_scrub_cust (gpointer cust_p, gpointer ht_p)
+taxtable_scrub_cust (QofEntity * cust_p, gpointer ht_p)
 {
   GHashTable *ht = ht_p;
-  GncCustomer *cust = cust_p;
+  GncCustomer *cust = GNC_CUSTOMER(cust_p);
   GncTaxTable *table;
   gint32 count;
   
@@ -598,10 +598,10 @@ taxtable_scrub_cust (gpointer cust_p, gpointer ht_p)
 }
 
 static void
-taxtable_scrub_vendor (gpointer vendor_p, gpointer ht_p)
+taxtable_scrub_vendor (QofEntity * vendor_p, gpointer ht_p)
 {
   GHashTable *ht = ht_p;
-  GncVendor *vendor = vendor_p;
+  GncVendor *vendor = GNC_VENDOR(vendor_p);
   GncTaxTable *table;
   gint32 count;
 
@@ -635,10 +635,10 @@ taxtable_scrub (GNCBook *book)
   GncTaxTable *parent, *table;
   GHashTable *ht = g_hash_table_new(g_direct_hash, g_direct_equal);
 
-  qof_object_foreach (GNC_ENTRY_MODULE_NAME, book, taxtable_scrub_entries, ht);
-  qof_object_foreach (GNC_CUSTOMER_MODULE_NAME, book, taxtable_scrub_cust, ht);
-  qof_object_foreach (GNC_VENDOR_MODULE_NAME, book, taxtable_scrub_vendor, ht);
-  qof_object_foreach (_GNC_MOD_NAME, book, taxtable_scrub_cb, &list);
+  qof_object_foreach (GNC_ID_ENTRY, book, taxtable_scrub_entries, ht);
+  qof_object_foreach (GNC_ID_CUSTOMER, book, taxtable_scrub_cust, ht);
+  qof_object_foreach (GNC_ID_VENDOR, book, taxtable_scrub_vendor, ht);
+  qof_object_foreach (GNC_ID_TAXTABLE, book, taxtable_scrub_cb, &list);
 
   /* destroy the list of "grandchildren" tax tables */
   for (node = list; node; node = node->next) {

@@ -1,0 +1,15 @@
+
+
+This directory contains unit test cases for the core business objects.
+
+TODO
+----
+Some of these test casees are failing on the 'dirty' test.  
+That's because the test cases are not setting up a backend.
+An object cannot be marked 'clean' unless it has actually
+been saved to a file or sql db.  Until its saved, it lives in
+perpetual dirtiness.  Thus, the test cases need to specify
+a backend, then do the commit, then test the dirty flag.
+
+
+

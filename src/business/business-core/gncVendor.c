@@ -71,7 +71,7 @@ struct _gncVendor
 
 static short        module = MOD_BUSINESS;
 
-#define _GNC_MOD_NAME        GNC_VENDOR_MODULE_NAME
+#define _GNC_MOD_NAME        GNC_ID_VENDOR
 
 /* ============================================================ */
 /* Misc inline funcs */
@@ -84,7 +84,7 @@ G_INLINE_FUNC void
 mark_vendor (GncVendor *vendor)
 {
   vendor->inst.dirty = TRUE;
-  gncBusinessSetDirtyFlag (vendor->inst.book, _GNC_MOD_NAME, TRUE);
+  qof_collection_mark_dirty (vendor->inst.entity.collection);
   gnc_engine_gen_event (&vendor->inst.entity, GNC_EVENT_MODIFY);
 }
 
@@ -179,13 +179,6 @@ void gncVendorSetNotes (GncVendor *vendor, const char *notes)
   SET_STR(vendor,vendor->notes, notes);
   mark_vendor (vendor);
   gncVendorCommitEdit (vendor);
-}
-
-void gncVendorSetGUID (GncVendor *vendor, const GUID *guid)
-{
-  if (!vendor || !guid) return;
-
-  qof_entity_set_guid(&vendor->inst.entity, guid);
 }
 
 void gncVendorSetTerms (GncVendor *vendor, GncBillTerm *terms)
@@ -411,11 +404,6 @@ GList * gncVendorGetJoblist (GncVendor *vendor, gboolean show_all)
   }
 }
 
-GncVendor * gncVendorLookup (QofBook *book, const GUID *guid)
-{
-  ELOOKUP (GncVendor);
-}
-
 gboolean gncVendorIsDirty (GncVendor *vendor)
 {
   if (!vendor) return FALSE;
@@ -425,52 +413,24 @@ gboolean gncVendorIsDirty (GncVendor *vendor)
 /* ============================================================== */
 /* Package-Private functions */
 
-static void _gncVendorCreate (QofBook *book)
-{
-  gncBusinessCreate (book, _GNC_MOD_NAME);
-}
-
-static void _gncVendorDestroy (QofBook *book)
-{
-  gncBusinessDestroy (book, _GNC_MOD_NAME);
-}
-
-static gboolean _gncVendorIsDirty (QofBook *book)
-{
-  return gncBusinessIsDirty (book, _GNC_MOD_NAME);
-}
-
-static void _gncVendorMarkClean (QofBook *book)
-{
-  gncBusinessSetDirtyFlag (book, _GNC_MOD_NAME, FALSE);
-}
-
-static void _gncVendorForeach (QofBook *book, QofForeachCB cb,
-                               gpointer user_data)
-{
-  gncBusinessForeach (book, _GNC_MOD_NAME, cb, user_data);
-}
-
 static const char * _gncVendorPrintable (gpointer item)
 {
-  GncVendor *v;
-
+  GncVendor *v = item;
   if (!item) return NULL;
-
-  v = item;
   return v->name;
 }
 
-static QofObject gncVendorDesc = {
-  QOF_OBJECT_VERSION,
-  _GNC_MOD_NAME,
-  "Vendor",
-  _gncVendorCreate,
-  _gncVendorDestroy,
-  _gncVendorIsDirty,
-  _gncVendorMarkClean,
-  _gncVendorForeach,
-  _gncVendorPrintable
+static QofObject gncVendorDesc = 
+{
+  interface_version:  QOF_OBJECT_VERSION,
+  e_type:             _GNC_MOD_NAME,
+  type_label:         "Vendor",
+  book_begin:         NULL,
+  book_end:           NULL,
+  is_dirty:           qof_collection_is_dirty,
+  mark_clean:         qof_collection_mark_clean,
+  foreach:            qof_collection_foreach,
+  printable:          _gncVendorPrintable
 };
 
 gboolean gncVendorRegister (void)
@@ -492,5 +452,5 @@ gboolean gncVendorRegister (void)
 
 gint64 gncVendorNextID (QofBook *book)
 {
-  return gnc_book_get_counter (book, _GNC_MOD_NAME);
+  return qof_book_get_counter (book, _GNC_MOD_NAME);
 }

@@ -36,7 +36,6 @@
 
 gboolean gncInvoiceRegister (void);
 gint64 gncInvoiceNextID (QofBook *book);
-void gncInvoiceSetDirty (GncInvoice *invoice, gboolean dirty);
 void gncInvoiceSetPostedAcc (GncInvoice *invoice, Account *acc);
 void gncInvoiceSetPostedTxn (GncInvoice *invoice, Transaction *txn);
 void gncInvoiceSetPostedLot (GncInvoice *invoice, GNCLot *lot);

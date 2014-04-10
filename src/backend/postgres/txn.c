@@ -178,7 +178,7 @@ pgendStoreTransactionNoLock (PGBackend *be, Transaction *trans,
         {
           Split *s = split_node->data;
 
-          if (s && guid_equal (&s->guid, &dti->guid))
+          if (s && guid_equal (&s->entity.guid, &dti->guid))
           {
             pgendStoreAuditSplit (be, s, SQL_DELETE);
             break;
@@ -218,8 +218,8 @@ pgendStoreTransactionNoLock (PGBackend *be, Transaction *trans,
    /* Update the rest */
    start = xaccTransGetSplitList(trans);
 
-   PINFO ("split-list=%p, do_free=%d", start, trans->do_free);
-   if ((start) && !(trans->do_free))
+   PINFO ("split-list=%p, do_free=%d", start, trans->inst.do_free);
+   if ((start) && !(trans->inst.do_free))
    {
       gnc_commodity *com;
 
@@ -255,7 +255,7 @@ pgendStoreTransactionNoLock (PGBackend *be, Transaction *trans,
       if (trans->idata)
       {
         pgendKVPDelete (be, trans->idata);
-        pgendKVPStore (be, trans->idata, trans->kvp_data);
+        pgendKVPStore (be, trans->idata, trans->inst.kvp_data);
       }
    }
    else
@@ -473,7 +473,7 @@ pgendCopySplitsToEngine (PGBackend *be, Transaction *trans)
             s = pgendSplitLookup (be, &guid);
             if (!s)
             {
-               s = xaccMallocSplit(trans->book);
+               s = xaccMallocSplit(trans->inst.book);
                xaccSplitSetGUID(s, &guid);
             }
 
@@ -809,13 +809,13 @@ pgendCopyTransactionToEngine (PGBackend *be, const GUID *trans_guid)
 
    if (0 != trans->idata)
    {
-      if (!kvp_frame_is_empty (trans->kvp_data))
+      if (!kvp_frame_is_empty (trans->inst.kvp_data))
       {
-        kvp_frame_delete (trans->kvp_data);
-        trans->kvp_data = kvp_frame_new ();
+        kvp_frame_delete (trans->inst.kvp_data);
+        trans->inst.kvp_data = kvp_frame_new ();
       }
 
-      trans->kvp_data = pgendKVPFetch (be, trans->idata, trans->kvp_data);
+      trans->inst.kvp_data = pgendKVPFetch (be, trans->idata, trans->inst.kvp_data);
    }
 
    engine_splits = xaccTransGetSplitList(trans);
@@ -1003,7 +1003,7 @@ pgend_trans_commit_edit (QofBackend * bend,
                   "\ttransaction is '%s' %s\n",
                   xaccTransGetDescription (trans), buf);
             rollback = 0;
-            trans->do_free = TRUE;
+            trans->inst.do_free = TRUE;
          }
          else
          {

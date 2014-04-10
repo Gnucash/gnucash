@@ -50,7 +50,7 @@
 #include "qofinstance.h"
 #include "qofobject.h"
 
-#define _GNC_MOD_NAME	GNC_INVOICE_MODULE_NAME
+#define _GNC_MOD_NAME	GNC_ID_INVOICE
 
 static short module = MOD_IO;
 
@@ -511,10 +511,10 @@ invoice_should_be_saved (GncInvoice *invoice)
 }
 
 static void
-do_count (gpointer invoice_p, gpointer count_p)
+do_count (QofEntity * invoice_p, gpointer count_p)
 {
   int *count = count_p;
-  if (invoice_should_be_saved (invoice_p))
+  if (invoice_should_be_saved ((GncInvoice *)invoice_p))
     (*count)++;
 }
 
@@ -527,10 +527,10 @@ invoice_get_count (GNCBook *book)
 }
 
 static void
-xml_add_invoice (gpointer invoice_p, gpointer out_p)
+xml_add_invoice (QofEntity * invoice_p, gpointer out_p)
 {
   xmlNodePtr node;
-  GncInvoice *invoice = invoice_p;
+  GncInvoice *invoice = (GncInvoice *) invoice_p;
   FILE *out = out_p;
 
   if (!invoice_should_be_saved (invoice))

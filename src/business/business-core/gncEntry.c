@@ -1,5 +1,26 @@
+/********************************************************************\
+ * gncEntry.c -- the Core Business Entry Interface                  *
+ *                                                                  *
+ * This program is free software; you can redistribute it and/or    *
+ * modify it under the terms of the GNU General Public License as   *
+ * published by the Free Software Foundation; either version 2 of   *
+ * the License, or (at your option) any later version.              *
+ *                                                                  *
+ * This program is distributed in the hope that it will be useful,  *
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of   *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    *
+ * GNU General Public License for more details.                     *
+ *                                                                  *
+ * You should have received a copy of the GNU General Public License*
+ * along with this program; if not, contact:                        *
+ *                                                                  *
+ * Free Software Foundation           Voice:  +1-617-542-5942       *
+ * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
+ * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ *                                                                  *
+\********************************************************************/
+
 /*
- * gncEntry.c -- the Core Business Entry Interface
  * Copyright (C) 2001,2002 Derek Atkins
  * Author: Derek Atkins <warlord@MIT.EDU>
  */
@@ -148,7 +169,7 @@ gboolean gncEntryPaymentStringToType (const char *str, GncEntryPaymentType *type
 }
 #undef GNC_RETURN_ON_MATCH
 
-#define _GNC_MOD_NAME	GNC_ENTRY_MODULE_NAME
+#define _GNC_MOD_NAME	GNC_ID_ENTRY
 
 #define CACHE_INSERT(str) g_cache_insert(gnc_engine_get_string_cache(), (gpointer)(str));
 #define CACHE_REMOVE(str) g_cache_remove(gnc_engine_get_string_cache(), (str));
@@ -168,8 +189,7 @@ G_INLINE_FUNC void
 mark_entry (GncEntry *entry)
 {
   entry->inst.dirty = TRUE;
-  gncBusinessSetDirtyFlag (entry->inst.book, _GNC_MOD_NAME, TRUE);
-
+  qof_collection_mark_dirty (entry->inst.entity.collection);
   gnc_engine_gen_event (&entry->inst.entity, GNC_EVENT_MODIFY);
 }
 
@@ -238,14 +258,6 @@ static void gncEntryFree (GncEntry *entry)
 }
 
 /* Set Functions */
-
-void gncEntrySetGUID (GncEntry *entry, const GUID *guid)
-{
-  if (!entry || !guid) return;
-  if (guid_equal (guid, &entry->inst.entity.guid)) return;
-
-  qof_entity_set_guid (&entry->inst.entity, guid);
-}
 
 void gncEntrySetDate (GncEntry *entry, Timespec date)
 {
@@ -733,11 +745,6 @@ GncOrder * gncEntryGetOrder (GncEntry *entry)
   return entry->order;
 }
 
-GncEntry * gncEntryLookup (QofBook *book, const GUID *guid)
-{
-  ELOOKUP(GncEntry);
-}
-
 /*
  * This is the logic of computing the total for an Entry, so you know
  * what values to put into various Splits or to display in the ledger.
@@ -1125,43 +1132,20 @@ int gncEntryCompare (GncEntry *a, GncEntry *b)
   return guid_compare (&(a->inst.entity.guid), &(b->inst.entity.guid));
 }
 
-/* Package-Private functions */
-static void _gncEntryCreate (QofBook *book)
-{
-  gncBusinessCreate (book, _GNC_MOD_NAME);
-}
+/* ============================================================= */
+/* Object declaration */
 
-static void _gncEntryDestroy (QofBook *book)
+static QofObject gncEntryDesc = 
 {
-  gncBusinessDestroy (book, _GNC_MOD_NAME);
-}
-
-static gboolean _gncEntryIsDirty (QofBook *book)
-{
-  return gncBusinessIsDirty (book, _GNC_MOD_NAME);
-}
-
-static void _gncEntryMarkClean (QofBook *book)
-{
-  gncBusinessSetDirtyFlag (book, _GNC_MOD_NAME, FALSE);
-}
-
-static void _gncEntryForeach (QofBook *book, QofForeachCB cb,
-			      gpointer user_data)
-{
-  gncBusinessForeach (book, _GNC_MOD_NAME, cb, user_data);
-}
-
-static QofObject gncEntryDesc = {
-  QOF_OBJECT_VERSION,
-  _GNC_MOD_NAME,
-  "Order/Invoice/Bill Entry",
-  _gncEntryCreate,
-  _gncEntryDestroy,
-  _gncEntryIsDirty,
-  _gncEntryMarkClean,
-  _gncEntryForeach,
-  NULL				/* printable */
+  interface_version:  QOF_OBJECT_VERSION,
+  e_type:             _GNC_MOD_NAME,
+  type_label:         "Order/Invoice/Bill Entry",
+  book_begin:         NULL,
+  book_end:           NULL,
+  is_dirty:           qof_collection_is_dirty,
+  mark_clean:         qof_collection_mark_clean,
+  foreach:            qof_collection_foreach,
+  printable:          NULL,
 };
 
 gboolean gncEntryRegister (void)
@@ -1175,11 +1159,11 @@ gboolean gncEntryRegister (void)
     { ENTRY_QTY, QOF_TYPE_NUMERIC, (QofAccessFunc)gncEntryGetQuantity, NULL },
     { ENTRY_IPRICE, QOF_TYPE_NUMERIC, (QofAccessFunc)gncEntryGetInvPrice, NULL },
     { ENTRY_BPRICE, QOF_TYPE_NUMERIC, (QofAccessFunc)gncEntryGetBillPrice, NULL },
-    { ENTRY_INVOICE, GNC_INVOICE_MODULE_NAME, (QofAccessFunc)gncEntryGetInvoice, NULL },
-    { ENTRY_BILL, GNC_INVOICE_MODULE_NAME, (QofAccessFunc)gncEntryGetBill, NULL },
+    { ENTRY_INVOICE, GNC_ID_INVOICE, (QofAccessFunc)gncEntryGetInvoice, NULL },
+    { ENTRY_BILL, GNC_ID_INVOICE, (QofAccessFunc)gncEntryGetBill, NULL },
     { ENTRY_BILLABLE, QOF_TYPE_BOOLEAN, (QofAccessFunc)gncEntryGetBillable, NULL },
-    { ENTRY_BILLTO, GNC_OWNER_MODULE_NAME, (QofAccessFunc)gncEntryGetBillTo, NULL },
-    { ENTRY_ORDER, GNC_ORDER_MODULE_NAME, (QofAccessFunc)gncEntryGetOrder, NULL },
+    { ENTRY_BILLTO, GNC_ID_OWNER, (QofAccessFunc)gncEntryGetBillTo, NULL },
+    { ENTRY_ORDER, GNC_ID_ORDER, (QofAccessFunc)gncEntryGetOrder, NULL },
     { QOF_QUERY_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)qof_instance_get_book, NULL },
     { QOF_QUERY_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)qof_instance_get_guid, NULL },
     { NULL },

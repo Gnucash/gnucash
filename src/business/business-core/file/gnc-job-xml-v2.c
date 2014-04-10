@@ -49,7 +49,7 @@
 #include "qofobject.h"
 #include "xml-helpers.h"
 
-#define _GNC_MOD_NAME	GNC_JOB_MODULE_NAME
+#define _GNC_MOD_NAME	GNC_ID_JOB
 
 static short module = MOD_IO;
 
@@ -291,10 +291,10 @@ job_should_be_saved (GncJob *job)
 }
 
 static void
-do_count (gpointer job_p, gpointer count_p)
+do_count (QofEntity * job_p, gpointer count_p)
 {
   int *count = count_p;
-  if (job_should_be_saved (job_p))
+  if (job_should_be_saved ((GncJob *)job_p))
     (*count)++;
 }
 
@@ -307,10 +307,10 @@ job_get_count (GNCBook *book)
 }
 
 static void
-xml_add_job (gpointer job_p, gpointer out_p)
+xml_add_job (QofEntity * job_p, gpointer out_p)
 {
   xmlNodePtr node;
-  GncJob *job = job_p;
+  GncJob *job = (GncJob *) job_p;
   FILE *out = out_p;
 
   if (!job_should_be_saved (job))

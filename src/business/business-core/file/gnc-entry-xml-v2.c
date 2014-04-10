@@ -52,7 +52,7 @@
 #include "qofinstance.h"
 #include "qofobject.h"
 
-#define _GNC_MOD_NAME	GNC_ENTRY_MODULE_NAME
+#define _GNC_MOD_NAME	GNC_ID_ENTRY
 
 static short module = MOD_IO;
 
@@ -785,7 +785,7 @@ entry_sixtp_parser_create(void)
 }
 
 static void
-do_count (gpointer entry_p, gpointer count_p)
+do_count (QofEntity * entry_p, gpointer count_p)
 {
   int *count = count_p;
   (*count)++;
@@ -800,10 +800,10 @@ entry_get_count (GNCBook *book)
 }
 
 static void
-xml_add_entry (gpointer entry_p, gpointer out_p)
+xml_add_entry (QofEntity * entry_p, gpointer out_p)
 {
   xmlNodePtr node;
-  GncEntry *entry = entry_p;
+  GncEntry *entry = (GncEntry *) entry_p;
   FILE *out = out_p;
 
   /* Don't save non-attached entries! */

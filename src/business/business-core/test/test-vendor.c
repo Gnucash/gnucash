@@ -4,7 +4,7 @@
 #include "guid.h"
 #include "gnc-module.h"
 #include "gnc-engine-util.h"
-#include "gncObject.h"
+#include "qofobject.h"
 
 #include "gncVendor.h"
 #include "gncVendorP.h"
@@ -13,25 +13,25 @@
 static int count = 0;
 
 static void
-test_string_fcn (GNCBook *book, const char *message,
+test_string_fcn (QofBook *book, const char *message,
 		 void (*set) (GncVendor *, const char *str),
 		 const char * (*get)(GncVendor *));
 
 #if 0
 static void
-test_numeric_fcn (GNCBook *book, const char *message,
+test_numeric_fcn (QofBook *book, const char *message,
 		  void (*set) (GncVendor *, gnc_numeric),
 		  gnc_numeric (*get)(GncVendor *));
 #endif
 
 static void
-test_bool_fcn (GNCBook *book, const char *message,
+test_bool_fcn (QofBook *book, const char *message,
 		  void (*set) (GncVendor *, gboolean),
 		  gboolean (*get) (GncVendor *));
 
 #if 0
 static void
-test_gint_fcn (GNCBook *book, const char *message,
+test_gint_fcn (QofBook *book, const char *message,
 	       void (*set) (GncVendor *, gint),
 	       gint (*get) (GncVendor *));
 #endif
@@ -39,10 +39,10 @@ test_gint_fcn (GNCBook *book, const char *message,
 static void
 test_vendor (void)
 {
-  GNCBook *book;
+  QofBook *book;
   GncVendor *vendor;
 
-  book = gnc_book_new ();
+  book = qof_book_new ();
 
   /* Test creation/destruction */
   {
@@ -81,12 +81,12 @@ test_vendor (void)
   {
     GList *list;
 
-    list = gncBusinessGetList (book, GNC_VENDOR_MODULE_NAME, TRUE);
+    list = gncBusinessGetList (book, GNC_ID_VENDOR, TRUE);
     do_test (list != NULL, "getList all");
     do_test (g_list_length (list) == count, "correct length: all");
     g_list_free (list);
 
-    list = gncBusinessGetList (book, GNC_VENDOR_MODULE_NAME, FALSE);
+    list = gncBusinessGetList (book, GNC_ID_VENDOR, FALSE);
     do_test (list != NULL, "getList active");
     do_test (g_list_length (list) == 1, "correct length: active");
     g_list_free (list);
@@ -97,14 +97,14 @@ test_vendor (void)
     const char *res;
 
     gncVendorSetName (vendor, str);
-    res = gncObjectPrintable (GNC_VENDOR_MODULE_NAME, vendor);
+    res = qof_object_printable (GNC_ID_VENDOR, vendor);
     do_test (res != NULL, "Printable NULL?");
     do_test (safe_strcmp (str, res) == 0, "Printable equals");
   }    
 }
 
 static void
-test_string_fcn (GNCBook *book, const char *message,
+test_string_fcn (QofBook *book, const char *message,
 		 void (*set) (GncVendor *, const char *str),
 		 const char * (*get)(GncVendor *))
 {
@@ -123,7 +123,7 @@ test_string_fcn (GNCBook *book, const char *message,
 
 #if 0
 static void
-test_numeric_fcn (GNCBook *book, const char *message,
+test_numeric_fcn (QofBook *book, const char *message,
 		  void (*set) (GncVendor *, gnc_numeric),
 		  gnc_numeric (*get)(GncVendor *))
 {
@@ -142,7 +142,7 @@ test_numeric_fcn (GNCBook *book, const char *message,
 #endif
 
 static void
-test_bool_fcn (GNCBook *book, const char *message,
+test_bool_fcn (QofBook *book, const char *message,
 	       void (*set) (GncVendor *, gboolean),
 	       gboolean (*get) (GncVendor *))
 {
@@ -163,7 +163,7 @@ test_bool_fcn (GNCBook *book, const char *message,
 
 #if 0
 static void
-test_gint_fcn (GNCBook *book, const char *message,
+test_gint_fcn (QofBook *book, const char *message,
 	       void (*set) (GncVendor *, gint),
 	       gint (*get) (GncVendor *))
 {

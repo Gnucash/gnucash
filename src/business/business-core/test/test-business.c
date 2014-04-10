@@ -13,10 +13,10 @@
 #define TEST_MODULE_DESC "Test Business"
 
 #if 0
-static GList * get_list (GNCBook *, gboolean show_all);
+static GList * get_list (QofBook *, gboolean show_all);
 static const char * printable (gpointer obj);
 static void test_printable (const char *name, gpointer obj);
-static void test_get_list (GNCBook *, const char *);
+static void test_get_list (QofBook *, const char *);
 
 static GncBusinessObject bus_obj = {
   GNC_BUSINESS_VERSION,
@@ -45,12 +45,12 @@ static void test_business (void)
 	     "test description return");
   }
 
-  test_get_list ((GNCBook*)1, TEST_MODULE_NAME);
+  test_get_list ((QofBook*)1, TEST_MODULE_NAME);
   test_printable (TEST_MODULE_NAME, (gpointer)1);
 }
 
 static GList *
-get_list (GNCBook *book, gboolean show_all)
+get_list (QofBook *book, gboolean show_all)
 {
   do_test (book != NULL, "get_list: NULL business");
   success ("called get_list callback");
@@ -66,7 +66,7 @@ printable (gpointer obj)
 }
 
 static void
-test_get_list (GNCBook *book, const char *name)
+test_get_list (QofBook *book, const char *name)
 {
   GList *res;
 

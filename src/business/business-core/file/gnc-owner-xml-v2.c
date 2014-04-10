@@ -67,16 +67,16 @@ gnc_owner_to_dom_tree (const char *tag, GncOwner *owner)
 
     switch (gncOwnerGetType (owner)) {
     case GNC_OWNER_CUSTOMER:
-      type_str = GNC_CUSTOMER_MODULE_NAME;
+      type_str = GNC_ID_CUSTOMER;
       break;
     case GNC_OWNER_JOB:
-      type_str = GNC_JOB_MODULE_NAME;
+      type_str = GNC_ID_JOB;
       break;
     case GNC_OWNER_VENDOR:
-      type_str = GNC_VENDOR_MODULE_NAME;
+      type_str = GNC_ID_VENDOR;
       break;
     case GNC_OWNER_EMPLOYEE:
-      type_str = GNC_EMPLOYEE_MODULE_NAME;
+      type_str = GNC_ID_EMPLOYEE;
       break;
     default:
       PWARN ("Invalid owner type: %d", gncOwnerGetType (owner));
@@ -108,13 +108,13 @@ owner_type_handler (xmlNodePtr node, gpointer owner_pdata)
   char* txt = dom_tree_to_text(node);
   g_return_val_if_fail(txt, FALSE);
 
-  if (!safe_strcmp (txt, GNC_CUSTOMER_MODULE_NAME))
+  if (!safe_strcmp (txt, GNC_ID_CUSTOMER))
     gncOwnerInitCustomer (pdata->owner, NULL);
-  else if (!safe_strcmp (txt, GNC_JOB_MODULE_NAME))
+  else if (!safe_strcmp (txt, GNC_ID_JOB))
     gncOwnerInitJob (pdata->owner, NULL);
-  else if (!safe_strcmp (txt, GNC_VENDOR_MODULE_NAME))
+  else if (!safe_strcmp (txt, GNC_ID_VENDOR))
     gncOwnerInitVendor (pdata->owner, NULL);
-  else if (!safe_strcmp (txt, GNC_EMPLOYEE_MODULE_NAME))
+  else if (!safe_strcmp (txt, GNC_ID_EMPLOYEE))
     gncOwnerInitEmployee (pdata->owner, NULL);
   else {
     PWARN ("Unknown owner type: %s", txt);

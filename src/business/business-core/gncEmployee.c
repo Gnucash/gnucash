@@ -1,5 +1,26 @@
+/********************************************************************\
+ * gncEmployee.c -- the Core Employee Interface                     *
+ *                                                                  *
+ * This program is free software; you can redistribute it and/or    *
+ * modify it under the terms of the GNU General Public License as   *
+ * published by the Free Software Foundation; either version 2 of   *
+ * the License, or (at your option) any later version.              *
+ *                                                                  *
+ * This program is distributed in the hope that it will be useful,  *
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of   *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    *
+ * GNU General Public License for more details.                     *
+ *                                                                  *
+ * You should have received a copy of the GNU General Public License*
+ * along with this program; if not, contact:                        *
+ *                                                                  *
+ * Free Software Foundation           Voice:  +1-617-542-5942       *
+ * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
+ * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ *                                                                  *
+\********************************************************************/
+
 /*
- * gncEmployee.c -- the Core Employee Interface
  * Copyright (C) 2001,2002 Derek Atkins
  * Author: Derek Atkins <warlord@MIT.EDU>
  */
@@ -11,12 +32,12 @@
 
 #include "guid.h"
 #include "messages.h"
-#include "gnc-book.h"
 #include "gnc-commodity.h"
 #include "gnc-engine-util.h"
 #include "gnc-event-p.h"
 #include "gnc-be-utils.h"
 
+#include "qofbook.h"
 #include "qofclass.h"
 #include "qofid.h"
 #include "qofid-p.h"
@@ -50,7 +71,7 @@ struct _gncEmployee
 
 static short        module = MOD_BUSINESS;
 
-#define _GNC_MOD_NAME        GNC_EMPLOYEE_MODULE_NAME
+#define _GNC_MOD_NAME        GNC_ID_EMPLOYEE
 
 #define CACHE_INSERT(str) g_cache_insert(gnc_engine_get_string_cache(), (gpointer)(str));
 #define CACHE_REMOVE(str) g_cache_remove(gnc_engine_get_string_cache(), (str));
@@ -60,8 +81,7 @@ G_INLINE_FUNC void
 mark_employee (GncEmployee *employee)
 {
   employee->inst.dirty = TRUE;
-  gncBusinessSetDirtyFlag (employee->inst.book, _GNC_MOD_NAME, TRUE);
-
+  qof_collection_mark_dirty (employee->inst.entity.collection);
   gnc_engine_gen_event (&employee->inst.entity, GNC_EVENT_MODIFY);
 }
 
@@ -150,14 +170,6 @@ void gncEmployeeSetLanguage (GncEmployee *employee, const char *language)
   SET_STR(employee, employee->language, language);
   mark_employee (employee);
   gncEmployeeCommitEdit (employee);
-}
-
-void gncEmployeeSetGUID (GncEmployee *employee, const GUID *guid)
-{
-  if (!employee || !guid) return;
-  if (guid_equal (guid, &employee->inst.entity.guid)) return;
-  
-  qof_entity_set_guid (&employee->inst.entity, guid);
 }
 
 void gncEmployeeSetAcl (GncEmployee *employee, const char *acl)
@@ -282,11 +294,6 @@ Account * gncEmployeeGetCCard (GncEmployee *employee)
   return employee->ccard_acc;
 }
 
-GncEmployee * gncEmployeeLookup (QofBook *book, const GUID *guid)
-{
-  ELOOKUP(GncEmployee);
-}
-
 gboolean gncEmployeeIsDirty (GncEmployee *employee)
 {
   if (!employee) return FALSE;
@@ -335,52 +342,25 @@ int gncEmployeeCompare (GncEmployee *a, GncEmployee *b)
 }
 
 /* Package-Private functions */
-static void _gncEmployeeCreate (QofBook *book)
-{
-  gncBusinessCreate (book, _GNC_MOD_NAME);
-}
-
-static void _gncEmployeeDestroy (QofBook *book)
-{
-  gncBusinessDestroy (book, _GNC_MOD_NAME);
-}
-
-static gboolean _gncEmployeeIsDirty (QofBook *book)
-{
-  return gncBusinessIsDirty (book, _GNC_MOD_NAME);
-}
-
-static void _gncEmployeeMarkClean (QofBook *book)
-{
-  gncBusinessSetDirtyFlag (book, _GNC_MOD_NAME, FALSE);
-}
-
-static void _gncEmployeeForeach (QofBook *book, QofForeachCB cb,
-                                 gpointer user_data)
-{
-  gncBusinessForeach (book, _GNC_MOD_NAME, cb, user_data);
-}
 
 static const char * _gncEmployeePrintable (gpointer item)
 {
-  GncEmployee *v;
-
+  GncEmployee *v = item;
   if (!item) return NULL;
-
-  v = item;
   return gncAddressGetName(v->addr);
 }
 
-static QofObject gncEmployeeDesc = {
-  QOF_OBJECT_VERSION,
-  _GNC_MOD_NAME,
-  "Employee",
-  _gncEmployeeCreate,
-  _gncEmployeeDestroy,
-  _gncEmployeeIsDirty,
-  _gncEmployeeMarkClean,
-  _gncEmployeeForeach,
-  _gncEmployeePrintable
+static QofObject gncEmployeeDesc = 
+{
+  interface_version:  QOF_OBJECT_VERSION,
+  e_type:             _GNC_MOD_NAME,
+  type_label:         "Employee",
+  book_begin:         NULL,
+  book_end:           NULL,
+  is_dirty:           qof_collection_is_dirty,
+  mark_clean:         qof_collection_mark_clean,
+  foreach:            qof_collection_foreach,
+  printable:          _gncEmployeePrintable,
 };
 
 gboolean gncEmployeeRegister (void)
@@ -402,5 +382,5 @@ gboolean gncEmployeeRegister (void)
 
 gint64 gncEmployeeNextID (QofBook *book)
 {
-  return gnc_book_get_counter (book, _GNC_MOD_NAME);
+  return qof_book_get_counter (book, _GNC_MOD_NAME);
 }

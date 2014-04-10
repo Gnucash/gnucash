@@ -15,10 +15,10 @@ typedef struct _vendor_window VendorWindow;
 
 /* Create or Edit Vendors */
 VendorWindow * gnc_ui_vendor_edit (GncVendor *vendor);
-VendorWindow * gnc_ui_vendor_new (GNCBook *book);
+VendorWindow * gnc_ui_vendor_new (QofBook *book);
 
 /* Search for vendors */
-GNCSearchWindow * gnc_vendor_search (GncVendor *start, GNCBook *book);
+GNCSearchWindow * gnc_vendor_search (GncVendor *start, QofBook *book);
 
 /*
  * These callbacks are for use with the gnc_general_search widget

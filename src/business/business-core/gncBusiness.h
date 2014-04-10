@@ -1,44 +1,21 @@
 /*
  * gncBusiness.h -- Business Helper Functions
- * Copyright (C) 2002 Derek Atkins
- * Author: Derek Atkins <warlord@MIT.EDU>
+ * Currently mostly not used ... 
  */
 
 #ifndef GNC_BUSINESS_H_
 #define GNC_BUSINESS_H_
 
-#include <glib.h>
 
-#include "qofbook.h"
-#include "qofid.h"
-
-/* XXXX this is to be replaced by QofCollection shortly,
- * which should provide the dirty flag, as well as defualt 
- * for-each'es.
- * */
-typedef struct _gncBookInfo {
-  gboolean	is_dirty;
-} GncBookInfo;
-
-
-#define gncBusinessForeach(book,mod_name,cb,userdata) \
-  qof_collection_foreach(qof_book_get_collection((book), (mod_name)), ((QofEntityForeachCB)(cb)), (userdata))
-
-/** another temporary hack for entity lookup */
-
-#define ELOOKUP(c_type) { \
-  QofCollection *col; \
-  if (!guid || !book) return NULL; \
-  col = qof_book_get_collection (book, _GNC_MOD_NAME); \
-  return (c_type *) qof_collection_lookup_entity (col, guid); \
-}
-
-
-void gncBusinessCreate (QofBook *book, QofIdType mod_name);
-void gncBusinessDestroy (QofBook *book, QofIdType mod_name);
-gboolean gncBusinessIsDirty (QofBook *book, QofIdType mod_name);
-void gncBusinessSetDirtyFlag (QofBook *book, QofIdType mod_name,
-			      gboolean is_dirty);
-
+/* deprecated backwards-compat definitions */
+#define GNC_BILLTERM_MODULE_NAME GNC_ID_BILLTERM
+#define GNC_CUSTOMER_MODULE_NAME GNC_ID_CUSTOMER
+#define GNC_EMPLOYEE_MODULE_NAME GNC_ID_EMPLOYEE
+#define GNC_ENTRY_MODULE_NAME    GNC_ID_ENTRY
+#define GNC_INVOICE_MODULE_NAME  GNC_ID_INVOICE
+#define GNC_ORDER_MODULE_NAME    GNC_ID_ORDER
+#define GNC_OWNER_MODULE_NAME    GNC_ID_OWNER
+#define GNC_TAXTABLE_MODULE_NAME GNC_ID_TAXTABLE
+#define GNC_VENDOR_MODULE_NAME   GNC_ID_VENDOR
 
 #endif /* GNC_BUSINESS_H_ */

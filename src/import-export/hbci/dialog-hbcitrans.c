@@ -50,6 +50,9 @@ struct _trans_data
   GtkWidget *dialog;
   GtkWidget *parent;
 
+  /* Whether this is a transfer or a direct debit */
+  GNC_HBCI_Transtype trans_type;
+
   /* Recipient */
   GtkWidget *recp_name_entry;
   GtkWidget *recp_account_entry;
@@ -192,6 +195,7 @@ gnc_hbci_dialog_new (GtkWidget *parent,
   
   td->parent = parent;
   td->templ = templates;
+  td->trans_type = trans_type;
   g_assert (h_acc);
   g_assert (customer);
   bank = HBCI_Account_bank (h_acc);
@@ -411,6 +415,11 @@ int gnc_hbci_dialog_run_until_ok(HBCITransDialog *td,
       continue;
     } /* check Transaction_value */
 
+    /* FIXME: If this is a direct debit, set the textkey/ "Textschluessel"/
+       transactionCode according to some GUI selection here!! */
+    /*if (td->trans_type == SINGLE_DEBITNOTE)
+      HBCI_Transaction_setTransactionCode (td->hbci_trans, 05);*/
+
     /* And finally check the account code, if ktoblzcheck is available. */
     values_ok = check_ktoblzcheck(GTK_WIDGET (td->dialog), td, td->hbci_trans);
 
@@ -460,6 +469,11 @@ hbci_trans_fill_values(const HBCI_Account *h_acc, HBCITransDialog *td)
   HBCI_Transaction_setValue 
     (trans, HBCI_Value_new_double 
      (gnc_amount_edit_get_damount (GNC_AMOUNT_EDIT (td->amount_edit)), "EUR"));
+
+  /* If this is a direct debit, a textkey/ "Textschluessel"/
+     transactionCode different from the default has to be set. */
+  if (td->trans_type == SINGLE_DEBITNOTE)
+    HBCI_Transaction_setTransactionCode (trans, 05);
 
   return trans;
 }

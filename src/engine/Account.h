@@ -32,6 +32,8 @@
 #include "guid.h"
 #include "kvp_frame.h"
 #include "qofbook.h"
+#include "qofid.h"
+#include "qofinstance.h"
 
 
 typedef gnc_numeric (*xaccGetBalanceFn)( Account *account );

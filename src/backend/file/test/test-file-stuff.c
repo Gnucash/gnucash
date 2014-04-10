@@ -181,7 +181,7 @@ equals_node_val_vs_guid(xmlNodePtr node, const GUID *id)
 }
 
 gboolean
-equals_node_val_vs_commodity(xmlNodePtr node, const gnc_commodity *com, GNCBook *book)
+equals_node_val_vs_commodity(xmlNodePtr node, const gnc_commodity *com, QofBook *book)
 {
     gnc_commodity *cmpcom;
 
@@ -301,7 +301,7 @@ grab_file_doc(const char *filename)
 static void
 test_load_file(const char *filename, gxpf_callback cb,
                sixtp *parser, const char *parser_tag,
-               GNCBook *book)
+               QofBook *book)
 {
     xmlNodePtr node;
     sixtp *main_parser;
@@ -347,7 +347,7 @@ test_load_file(const char *filename, gxpf_callback cb,
 void
 test_files_in_dir(int argc, char **argv, gxpf_callback cb,
                   sixtp *parser, const char *parser_tag,
-                  GNCBook *book)
+                  QofBook *book)
 {
     int count;
 

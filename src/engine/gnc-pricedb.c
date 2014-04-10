@@ -678,29 +678,43 @@ gnc_pricedb_destroy(GNCPriceDB *db)
 
 /* ==================================================================== */
 
-#define GNC_PRICEDB "gnc_pricedb"
+GNCPriceDB *
+gnc_collection_get_pricedb(QofCollection *col)
+{
+  return qof_collection_get_data (col);
+}
 
 GNCPriceDB *
 gnc_pricedb_get_db(QofBook *book)
 {
+  QofCollection *col;
   if (!book) return NULL;
-  return qof_book_get_data (book, GNC_PRICEDB);
+  col = qof_book_get_collection (book, GNC_ID_PRICE);
+  return gnc_collection_get_pricedb (col);
+}
+
+void
+gnc_collection_set_pricedb(QofCollection *col, GNCPriceDB *db)
+{
+  GNCPriceDB *old_db;
+  
+  if(!col) return;
+  
+  old_db = qof_collection_get_data (col);
+  if (db == old_db) return;
+  
+  qof_collection_set_data (col, db);
+  gnc_pricedb_destroy (old_db);
 }
 
 void
 gnc_pricedb_set_db(QofBook *book, GNCPriceDB *db)
 {
-  GNCPriceDB *old_db;
-  
+  QofCollection *col;
   if(!book) return;
-  
-  old_db = gnc_pricedb_get_db (book);
-  if (db == old_db) return;
-  
-  qof_book_set_data (book, GNC_PRICEDB, db);
+  col = qof_book_get_collection (book, GNC_ID_PRICE);
+  gnc_collection_set_pricedb (col, db);
   if (db) db->book = book;
-
-  gnc_pricedb_destroy (old_db);
 }
 
 /* ==================================================================== */
@@ -1942,15 +1956,15 @@ pricedb_book_end (QofBook *book)
 }
 
 static gboolean
-pricedb_is_dirty (QofBook *book)
+pricedb_is_dirty (QofCollection *col)
 {
-  return gnc_pricedb_dirty(gnc_pricedb_get_db(book));
+  return gnc_pricedb_dirty(gnc_collection_get_pricedb(col));
 }
 
 static void
-pricedb_mark_clean(QofBook *book)
+pricedb_mark_clean(QofCollection *col)
 {
-  gnc_pricedb_mark_clean(gnc_pricedb_get_db(book));
+  gnc_pricedb_mark_clean(gnc_collection_get_pricedb(col));
 }
 
 /* ==================================================================== */
@@ -2002,9 +2016,9 @@ void_unstable_price_traversal(GNCPriceDB *db,
 }
 
 static void 
-pricedb_foreach(QofBook *book, QofForeachCB cb, gpointer data)
+pricedb_foreach(QofCollection *col, QofEntityForeachCB cb, gpointer data)
 {
-  GNCPriceDB *db = gnc_pricedb_get_db(book);
+  GNCPriceDB *db = gnc_collection_get_pricedb(col);
   void_unstable_price_traversal(db, 
                        (void (*)(GNCPrice *, gpointer)) cb,
                        data);

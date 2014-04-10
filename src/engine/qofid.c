@@ -39,10 +39,11 @@ static short module = MOD_ENGINE;
 
 struct QofCollection_s
 {
-  QofIdType   e_type;
-  gboolean    is_dirty;
+  QofIdType    e_type;
+  gboolean     is_dirty;
   
   GHashTable * hash_of_entities;
+  gpointer     data;       /* place where object class can hang arbitrari data */
 };
 
 /* =============================================================== */
@@ -152,6 +153,7 @@ qof_collection_new (QofIdType type)
   col = g_new0(QofCollection, 1);
   col->e_type = CACHE_INSERT (type);
   col->hash_of_entities = g_hash_table_new (id_hash, id_compare);
+  col->data = NULL;
   return col;
 }
 
@@ -162,6 +164,7 @@ qof_collection_destroy (QofCollection *col)
   g_hash_table_destroy(col->hash_of_entities);
   col->e_type = NULL;
   col->hash_of_entities = NULL;
+  col->data = NULL;   /** XXX there should be a destroy notifier for this */
   g_free (col);
 }
 
@@ -203,6 +206,45 @@ qof_collection_lookup_entity (QofCollection *col, const GUID * guid)
   if (guid == NULL) return NULL;
   ent = g_hash_table_lookup (col->hash_of_entities, guid->data);
   return ent;
+}
+
+/* =============================================================== */
+
+gboolean 
+qof_collection_is_dirty (QofCollection *col)
+{
+   if (!col) return FALSE;
+   return col->is_dirty;
+}
+
+void 
+qof_collection_mark_clean (QofCollection *col)
+{
+   if (!col) return;
+   col->is_dirty = FALSE;
+}
+
+void 
+qof_collection_mark_dirty (QofCollection *col)
+{
+   if (!col) return;
+   col->is_dirty = TRUE;
+}
+
+/* =============================================================== */
+
+gpointer 
+qof_collection_get_data (QofCollection *col)
+{
+   if (!col) return NULL;
+   return col->data;
+}
+
+void 
+qof_collection_set_data (QofCollection *col, gpointer user_data)
+{
+   if (!col) return;
+   col->data = user_data;
 }
 
 /* =============================================================== */

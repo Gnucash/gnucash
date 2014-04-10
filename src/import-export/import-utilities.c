@@ -32,13 +32,11 @@
 
 #include <stdlib.h>
 #include "import-utilities.h"
+#include "kvp_frame.h"
 #include "Account.h"
 #include "Transaction.h"
 
 #include "gnc-engine-util.h"
-
-
-static short module = MOD_IMPORT;
 
 /********************************************************************\
  * Setter and getter functions for the online_id kvp frame in
@@ -57,7 +55,7 @@ void gnc_import_set_acc_online_id(Account * account,
 {
   kvp_frame * frame;
   frame = xaccAccountGetSlots(account);
-  kvp_frame_set_string(frame, "online_id", string_value);
+  kvp_frame_set_str(frame, "online_id", string_value);
 }
 
 const gchar * gnc_import_get_trans_online_id(Transaction * transaction)
@@ -72,7 +70,7 @@ void gnc_import_set_trans_online_id(Transaction * transaction,
 {
   kvp_frame * frame;
   frame = xaccTransGetSlots(transaction);
-  kvp_frame_set_string (frame, "online_id", string_value);
+  kvp_frame_set_str (frame, "online_id", string_value);
 }
 
 /* @} */

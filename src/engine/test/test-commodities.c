@@ -3,10 +3,10 @@
 
 #include "gnc-engine-util.h"
 
-#include "gnc-book.h"
 #include "gnc-commodity.h"
 #include "gnc-engine.h"
 #include "gnc-module.h"
+#include "qofbook.h"
 #include "test-engine-stuff.h"
 #include "test-stuff.h"
 
@@ -108,7 +108,7 @@ test_commodity(void)
         gnc_commodity *coms[20];
         QofBook *book;
 
-        book = gnc_book_new ();
+        book = qof_book_new ();
         tbl = gnc_commodity_table_new ();
 
         do_test(gnc_commodity_table_get_size(tbl) == 0,

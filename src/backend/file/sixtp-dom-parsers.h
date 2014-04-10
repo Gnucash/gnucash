@@ -31,11 +31,11 @@
 #include "gnc-xml-helper.h"
 
 #include "FreqSpec.h"
-#include "GNCId.h"
-#include "gnc-book.h"
 #include "gnc-commodity.h"
 #include "gnc-date.h"
 #include "kvp_frame.h"
+#include "qofbook.h"
+#include "qofid.h"
 
 
 GUID* dom_tree_to_guid(xmlNodePtr node);

@@ -29,10 +29,10 @@
 #include <glib.h>
 
 #include "Group.h"
-#include "gnc-book.h"
 #include "gnc-xml.h"
 #include "gnc-xml.h"
 #include "io-utils.h"
+#include "qofbook.h"
 
 /*
   <!-- Local variables: -->

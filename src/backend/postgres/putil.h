@@ -348,25 +348,25 @@ int finishQuery(PGBackend *be);
 
 /* --------------------------------------------------------------- */
 
-#define FIND_BOOK(book) {					\
-   if (NULL == book)						\
-   {								\
-      GList *node;						\
-      GUID book_guid;						\
-								\
-      /* Find the book that holds this item */			\
-      book_guid = nullguid;  /* just in case the read fails */	\
-      string_to_guid (DB_GET_VAL("bookGUID",j), &book_guid);	\
-								\
-      book = NULL;						\
-      for (node=be->blist; node; node=node->next)		\
-      {								\
-         book = node->data;					\
-         if (guid_equal (&book->guid, &book_guid)) break;	\
-         book = NULL;						\
-      }								\
-      if (!book) return data;					\
-   }								\
+#define FIND_BOOK(book) {                                        \
+   if (NULL == book)                                             \
+   {                                                             \
+      GList *node;                                               \
+      GUID book_guid;                                            \
+                                                                 \
+      /* Find the book that holds this item */                   \
+      book_guid = nullguid;  /* just in case the read fails */   \
+      string_to_guid (DB_GET_VAL("bookGUID",j), &book_guid);     \
+                                                                 \
+      book = NULL;                                               \
+      for (node=be->blist; node; node=node->next)                \
+      {                                                          \
+         book = node->data;                                      \
+         if (guid_equal (&book->entity.guid, &book_guid)) break; \
+         book = NULL;                                            \
+      }                                                          \
+      if (!book) return data;                                    \
+   }                                                             \
 }
 
 

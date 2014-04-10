@@ -100,6 +100,8 @@ typedef struct gnc_price_lookup_helper_s
 #define  gnc_price_set_guid(P,G)  qof_entity_set_guid(QOF_ENTITY(P),(G))
 
 void     gnc_pricedb_set_db(QofBook *book, GNCPriceDB *db);
+void     gnc_collection_set_pricedb(QofCollection *col, GNCPriceDB *db);
+
 
 void     gnc_pricedb_mark_clean(GNCPriceDB *db);
 void     gnc_pricedb_substitute_commodity(GNCPriceDB *db,
